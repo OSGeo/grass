@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,8 +73,8 @@ msgstr ""
 #: ../raster/r.volume/main.c:177 ../raster/r.what.color/main.c:246
 #: ../raster/r.what/main.c:280 ../temporal/t.connect/main.c:181
 #: ../vector/v.category/main.c:264 ../vector/v.category/main.c:333
-#: ../vector/v.class/main.c:223 ../vector/v.class/main.c:264
-#: ../vector/v.class/main.c:271 ../vector/v.db.connect/main.c:148
+#: ../vector/v.class/main.c:230 ../vector/v.class/main.c:271
+#: ../vector/v.class/main.c:278 ../vector/v.db.connect/main.c:148
 #: ../vector/v.db.select/main.c:356 ../vector/v.db.select/main.c:391
 #: ../vector/v.distance/main.c:310 ../vector/v.info/print.c:903
 #: ../vector/v.profile/main.c:296 ../vector/v.vect.stats/main.c:284
@@ -93,7 +93,7 @@ msgstr ""
 #: ../raster/r.regression.multi/main.c:696
 #: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:448
 #: ../raster3d/r3.info/main.c:993 ../temporal/t.connect/main.c:217
-#: ../vector/v.class/main.c:379 ../vector/v.db.connect/main.c:430
+#: ../vector/v.class/main.c:389 ../vector/v.db.connect/main.c:430
 #: ../vector/v.profile/main.c:885 ../vector/v.vect.stats/main.c:863
 #: ../vector/v.what.rast/main.c:694 ../vector/v.what/main.c:321
 msgid "Failed to serialize JSON to pretty format."
@@ -348,7 +348,7 @@ msgstr ""
 #: ../raster/r.univar/stats.c:439 ../raster/r.volume/main.c:409
 #: ../raster/r.what.color/main.c:52 ../raster3d/r3.info/main.c:153
 #: ../temporal/t.connect/main.c:32 ../vector/v.category/main.c:942
-#: ../vector/v.class/main.c:257 ../vector/v.class/main.c:348
+#: ../vector/v.class/main.c:264 ../vector/v.class/main.c:358
 #: ../vector/v.db.connect/main.c:302 ../vector/v.db.connect/main.c:395
 #: ../vector/v.db.select/main.c:338 ../vector/v.db.select/main.c:349
 #: ../vector/v.db.select/main.c:366 ../vector/v.distance/main.c:1578
@@ -1920,7 +1920,7 @@ msgstr ""
 #: ../raster/r.out.png/main.c:110 ../raster/r.out.pov/main.c:111
 #: ../raster/r.out.ppm/main.c:52 ../raster/r.out.ppm3/main.c:57
 #: ../raster/r.out.vrml/main.c:44 ../raster/r.out.vtk/main.c:59
-#: ../raster/r.param.scale/interface.c:52 ../raster/r.patch/main.c:68
+#: ../raster/r.param.scale/interface.c:54 ../raster/r.patch/main.c:68
 #: ../raster/r.path/main.c:150 ../raster/r.profile/main.c:57
 #: ../raster/r.proj/main.c:149 ../raster/r.quant/main.c:48
 #: ../raster/r.quantile/main.c:297 ../raster/r.random.cells/main.c:49
@@ -2114,6 +2114,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:2
 #: ../locale/scriptstrings/v.db.update_to_translate.c:2
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:2
+#: ../locale/scriptstrings/v.geometry_to_translate.c:2
 #: ../locale/scriptstrings/v.import_to_translate.c:2
 #: ../locale/scriptstrings/v.in.e00_to_translate.c:2
 #: ../locale/scriptstrings/v.in.geonames_to_translate.c:2
@@ -2341,7 +2342,7 @@ msgstr ""
 #: ../vector/v.overlay/main.c:238 ../vector/v.parallel/main.c:151
 #: ../vector/v.patch/main.c:348 ../vector/v.patch/main.c:353
 #: ../vector/v.perturb/main.c:170 ../vector/v.profile/main.c:595
-#: ../vector/v.proj/main.c:481 ../vector/v.qcount/main.c:127
+#: ../vector/v.proj/main.c:486 ../vector/v.qcount/main.c:127
 #: ../vector/v.random/main.c:227 ../vector/v.reclass/main.c:117
 #: ../vector/v.rectify/main.c:219 ../vector/v.sample/main.c:159
 #: ../vector/v.segment/main.c:113 ../vector/v.select/main.c:157
@@ -2698,7 +2699,7 @@ msgstr ""
 #: ../raster/r.proj/main.c:563 ../raster/r.proj/main.c:607
 #: ../raster/r.proj/main.c:688 ../raster/r.sun/main.c:819
 #: ../raster/r.sunhours/main.c:237 ../raster/r.sunmask/g_solposition.c:125
-#: ../vector/v.proj/main.c:353
+#: ../vector/v.proj/main.c:358
 msgid "Unable to initialize coordinate transformation"
 msgstr ""
 
@@ -3421,7 +3422,7 @@ msgstr ""
 
 #: ../display/d.linegraph/main.c:504
 #, c-format
-msgid "Color <%s> cannot for option %s be parsed"
+msgid "Color <%s> for option <%s> cannot be parsed"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:540
@@ -3436,7 +3437,7 @@ msgstr ""
 
 #: ../display/d.linegraph/main.c:598
 #, c-format
-msgid "Number of widths (%d) is lower then the number of files (%d)"
+msgid "Number of widths (%d) is lower than the number of files (%d)"
 msgstr ""
 
 #: ../display/d.linegraph/main.c:652
@@ -4154,6 +4155,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.list_to_translate.c:8
 #: ../locale/scriptstrings/t.list_to_translate.c:14
 #: ../locale/scriptstrings/t.list_to_translate.c:15
+#: ../locale/scriptstrings/t.list_to_translate.c:19
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:10
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:11
 #: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:7
@@ -4830,12 +4832,12 @@ msgstr ""
 msgid "Classification of %s into %i classes\n"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:517 ../vector/v.class/main.c:297
+#: ../display/d.vect.thematic/main.c:517 ../vector/v.class/main.c:307
 #, c-format
 msgid "Using algorithm: *** %s ***\n"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:518 ../vector/v.class/main.c:299
+#: ../display/d.vect.thematic/main.c:518 ../vector/v.class/main.c:309
 #, c-format
 msgid "Mean: %f\tStandard deviation = %f\n"
 msgstr ""
@@ -4845,7 +4847,7 @@ msgstr ""
 msgid "Last chi2 = %f\n"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:524 ../vector/v.class/main.c:306
+#: ../display/d.vect.thematic/main.c:524 ../vector/v.class/main.c:316
 #, c-format
 msgid "Stdev multiplied by %.4f to define step\n"
 msgstr ""
@@ -5362,8 +5364,7 @@ msgstr ""
 #: ../scripts/r.buffer.lowmem/r.buffer.lowmem.py:85
 #: ../scripts/r.fillnulls/r.fillnulls.py:152 ../scripts/r.grow/r.grow.py:124
 #: ../scripts/r.mask/r.mask.py:151 ../scripts/r.pack/r.pack.py:74
-#: ../scripts/r.reclass.area/r.reclass.area.py:101
-#: ../scripts/r.reclass.area/r.reclass.area.py:222 ../scripts/r.rgb/r.rgb.py:55
+#: ../scripts/r.reclass.area/r.reclass.area.py:345 ../scripts/r.rgb/r.rgb.py:55
 #: ../scripts/v.rast.stats/v.rast.stats.py:154 ../vector/v.colors/main.c:317
 #: ../vector/v.vol.rst/main.c:604
 #, c-format, python-format
@@ -7147,9 +7148,9 @@ msgstr ""
 #: ../general/g.region/printwindow.c:837 ../raster/r.latlong/main.c:134
 #: ../raster/r.sun/main.c:1900 ../raster/r.sunhours/main.c:306
 #: ../raster/r.sunhours/main.c:404 ../raster/r.sunmask/g_solposition.c:133
-#: ../vector/v.proj/main.c:419 ../vector/v.proj/main.c:432
-#: ../vector/v.proj/main.c:448 ../vector/v.proj/main.c:464
-#: ../vector/v.proj/main.c:547 ../vector/v.proj/main.c:554
+#: ../vector/v.proj/main.c:424 ../vector/v.proj/main.c:437
+#: ../vector/v.proj/main.c:453 ../vector/v.proj/main.c:469
+#: ../vector/v.proj/main.c:552 ../vector/v.proj/main.c:559
 #, c-format
 msgid "Error in %s (projection of input coordinate pair)"
 msgstr ""
@@ -10550,6 +10551,7 @@ msgstr ""
 #: ../imagery/i.ortho.photo/i.ortho.photo/menu.c:47
 #: ../imagery/i.rectify/main.c:85
 #: ../locale/scriptstrings/i.image.mosaic_to_translate.c:3
+#: ../locale/scriptstrings/v.geometry_to_translate.c:3
 #: ../locale/scriptstrings/v.report_to_translate.c:3
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:3
 #: ../raster/r.circle/main.c:51 ../raster/r.patch/main.c:69
@@ -12045,8 +12047,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 #: ../imagery/i.svm.predict/main.c:60 ../imagery/i.svm.train/main.c:62
 msgid "Maps with feature values (attributes)"
 msgstr ""
@@ -12363,7 +12365,7 @@ msgid ""
 " manually enter the variables"
 msgstr ""
 
-#: ../imagery/i.topo.corr/main.c:47 ../raster/r.param.scale/interface.c:54
+#: ../imagery/i.topo.corr/main.c:47 ../raster/r.param.scale/interface.c:56
 #: ../raster/r.relief/main.c:107 ../raster/r.slope.aspect/main.c:167
 msgid "terrain"
 msgstr ""
@@ -12988,7 +12990,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.in.aster_to_translate.c:6
 #: ../locale/scriptstrings/r.plane_to_translate.c:3
 #: ../locale/scriptstrings/r.shade_to_translate.c:3
-#: ../raster/r.param.scale/interface.c:55 ../raster/r.relief/main.c:105
+#: ../raster/r.param.scale/interface.c:57 ../raster/r.relief/main.c:105
 msgid "elevation"
 msgstr ""
 
@@ -14533,30 +14535,52 @@ msgid "aggregation"
 msgstr ""
 
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:5
-msgid "Value option that sets the area size limit (in hectares)"
+msgid "Value option that sets the area size limit (in hectares) (deprecated)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:6
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:8
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:10
+#: ../locale/scriptstrings/r.reclass.area_to_translate.c:12
+#: ../locale/scriptstrings/r.reclass.area_to_translate.c:14
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:8
 msgid "Area"
 msgstr ""
 
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:7
-msgid "Lesser or greater than specified value"
+msgid "Keep only areas lesser or greater than specified value (deprecated)"
 msgstr ""
 
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:9
-msgid "Method used for reclassification"
+msgid "Value for the lower area size limit (in hectares). Pixel clumps with areas below this value are removed."
 msgstr ""
 
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:11
+msgid "Value for the upper area size limit (in hectares). Pixel clumps with areas above this value are removed."
+msgstr ""
+
+#: ../locale/scriptstrings/r.reclass.area_to_translate.c:13
+msgid "Method used for area size filtering"
+msgstr ""
+
+#: ../locale/scriptstrings/r.reclass.area_to_translate.c:15
 msgid "Input map is clumped"
 msgstr ""
 
-#: ../locale/scriptstrings/r.reclass.area_to_translate.c:12
-msgid "Clumps including diagonal neighbors"
+#: ../locale/scriptstrings/r.reclass.area_to_translate.c:16
+msgid "Generate clumps including diagonal neighbors"
+msgstr ""
+
+#: ../locale/scriptstrings/r.reclass.area_to_translate.c:17
+msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgstr ""
+
+#: ../locale/scriptstrings/r.reclass.area_to_translate.c:18
+msgid "Apply lower area threshold as \"minsize\" during clumping"
+msgstr ""
+
+#: ../locale/scriptstrings/r.reclass.area_to_translate.c:19
+msgid "Output vector map, do not convert back to raster (only for method 'rmarea')"
 msgstr ""
 
 #: ../locale/scriptstrings/r.rgb_to_translate.c:1
@@ -15090,8 +15114,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.list_to_translate.c:11
 #: ../locale/scriptstrings/t.list_to_translate.c:17
-#: ../locale/scriptstrings/t.list_to_translate.c:19
 #: ../locale/scriptstrings/t.list_to_translate.c:21
+#: ../locale/scriptstrings/t.list_to_translate.c:23
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:8
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:15
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:17
@@ -15142,6 +15166,10 @@ msgid "plain;Plain text output;line;Comma separated list of dataset names;json;J
 msgstr ""
 
 #: ../locale/scriptstrings/t.list_to_translate.c:18
+msgid "Name of mapsets to list ('.' for current, '*' for all mapsets)"
+msgstr ""
+
+#: ../locale/scriptstrings/t.list_to_translate.c:20
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:16
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:12
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:15
@@ -15152,7 +15180,7 @@ msgstr ""
 msgid "Field separator character between the output columns"
 msgstr ""
 
-#: ../locale/scriptstrings/t.list_to_translate.c:20
+#: ../locale/scriptstrings/t.list_to_translate.c:22
 #: ../locale/scriptstrings/t.sample_to_translate.c:11
 msgid "Print the column names as first row"
 msgstr ""
@@ -15610,8 +15638,7 @@ msgid "Imports space time raster dataset."
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.import_to_translate.c:9
-#: ../locale/scriptstrings/t.vect.import_to_translate.c:9
-msgid "Path to the extraction directory"
+msgid "Path to the extraction directory (default is .tmp in the current mapset)"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.import_to_translate.c:12
@@ -15872,10 +15899,12 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:6
 #: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:7
+#: ../locale/scriptstrings/v.geometry_to_translate.c:5
 #: ../raster/r.horizon/main.c:182 ../raster/r.mfilter/main.c:69
-#: ../raster/r.neighbors/main.c:188 ../raster/r.patch/main.c:75
-#: ../raster/r.resamp.filter/main.c:437 ../raster/r.resamp.interp/main.c:92
-#: ../raster/r.series/main.c:156 ../raster/r.sim/r.sim.sediment/main.c:119
+#: ../raster/r.neighbors/main.c:188 ../raster/r.param.scale/interface.c:59
+#: ../raster/r.patch/main.c:75 ../raster/r.resamp.filter/main.c:437
+#: ../raster/r.resamp.interp/main.c:92 ../raster/r.series/main.c:156
+#: ../raster/r.sim/r.sim.sediment/main.c:119
 #: ../raster/r.sim/r.sim.water/main.c:118 ../raster/r.slope.aspect/main.c:171
 #: ../raster/r.smooth.edgepreserve/main.c:49 ../raster/r.sun/main.c:245
 #: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:169
@@ -16269,6 +16298,10 @@ msgstr ""
 msgid "Imports a space time vector dataset from a GRASS specific archive file."
 msgstr ""
 
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:9
+msgid "Path to the extraction directory"
+msgstr ""
+
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:12
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
 msgstr ""
@@ -16638,6 +16671,30 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:23
 msgid "sql;Uses SQL attribute database;univar;Uses v.db.univar"
+msgstr ""
+
+#: ../locale/scriptstrings/v.geometry_to_translate.c:1
+msgid "Prints geometry metrics of vector features."
+msgstr ""
+
+#: ../locale/scriptstrings/v.geometry_to_translate.c:4
+msgid "metric"
+msgstr ""
+
+#: ../locale/scriptstrings/v.geometry_to_translate.c:6
+msgid "Geometry metric(s) to compute"
+msgstr ""
+
+#: ../locale/scriptstrings/v.geometry_to_translate.c:7
+msgid "area;area size;perimeter;perimeter length of an area;length;line length;count;number of features for each category;compactness;compactness of an area, calculated as perimeter / (2 * sqrt(PI * area));fractal_dimension;fractal dimension of boundary defining a polygon, calculated as 2 * (log(perimeter) / log(area));slope;slope steepness of vector line or boundary;sinuosity;line sinuosity, calculated as line length / distance between end points;azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode;coordinates;point coordinates, X,Y or X,Y,Z;start;line/boundary starting point coordinates, X,Y or X,Y,Z;end;line/boundary end point coordinates, X,Y or X,Y,Z;bbox;bounding box of area, N,S,E,W"
+msgstr ""
+
+#: ../locale/scriptstrings/v.geometry_to_translate.c:8
+msgid "Units (one per metric, positional; unspecified metrics use defaults)"
+msgstr ""
+
+#: ../locale/scriptstrings/v.geometry_to_translate.c:9
+msgid "plain;Plain text with pipe separator by default;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 #: ../locale/scriptstrings/v.import_to_translate.c:1
@@ -21504,7 +21561,7 @@ msgid "Band(s) to select (default is all bands)"
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:134 ../raster/r.in.gdal/main.c:256
-#: ../scripts/i.spectral/i.spectral.py:216
+#: ../scripts/i.spectral/i.spectral.py:213
 msgid "Bands"
 msgstr ""
 
@@ -23356,10 +23413,11 @@ msgid "Parallel execution is not supported with rand() function"
 msgstr ""
 
 #: ../raster/r.mapcalc/main.c:260 ../raster/r.mfilter/main.c:127
-#: ../raster/r.neighbors/main.c:304 ../raster/r.patch/main.c:108
-#: ../raster/r.resamp.filter/main.c:488 ../raster/r.resamp.interp/main.c:126
-#: ../raster/r.series/main.c:225 ../raster/r.slope.aspect/main.c:303
-#: ../raster/r.texture/main.c:318 ../raster/r.univar/r.univar_main.c:247
+#: ../raster/r.neighbors/main.c:304 ../raster/r.param.scale/interface.c:141
+#: ../raster/r.patch/main.c:108 ../raster/r.resamp.filter/main.c:488
+#: ../raster/r.resamp.interp/main.c:126 ../raster/r.series/main.c:225
+#: ../raster/r.slope.aspect/main.c:303 ../raster/r.texture/main.c:318
+#: ../raster/r.univar/r.univar_main.c:247
 #, c-format
 msgid "<%d> is not valid number of nprocs."
 msgstr ""
@@ -24520,7 +24578,7 @@ msgstr ""
 msgid "Elevation bias"
 msgstr ""
 
-#: ../raster/r.out.pov/main.c:141 ../raster/r.param.scale/interface.c:119
+#: ../raster/r.out.pov/main.c:141 ../raster/r.param.scale/interface.c:124
 msgid "Vertical scaling factor"
 msgstr ""
 
@@ -24771,63 +24829,63 @@ msgstr ""
 msgid "write_vtk_vector_data: Writing VTK-vector data"
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:53
+#: ../raster/r.param.scale/interface.c:55
 msgid "geomorphology"
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:56
+#: ../raster/r.param.scale/interface.c:58
 msgid "landform"
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:57
+#: ../raster/r.param.scale/interface.c:60
 msgid "Extracts terrain parameters from a DEM."
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:58
+#: ../raster/r.param.scale/interface.c:61
 msgid "Uses a multi-scale approach by taking fitting quadratic parameters to any size window (via least squares)."
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:79
+#: ../raster/r.param.scale/interface.c:84
 msgid "Name for output raster map containing morphometric parameter"
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:83
+#: ../raster/r.param.scale/interface.c:88
 msgid "Slope tolerance that defines a 'flat' surface (degrees)"
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:90
+#: ../raster/r.param.scale/interface.c:95
 msgid "Curvature tolerance that defines 'planar' surface"
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:97
+#: ../raster/r.param.scale/interface.c:102
 msgid "Size of processing window (odd number only)"
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:105
+#: ../raster/r.param.scale/interface.c:110
 msgid "Morphometric parameter in 'size' window to calculate"
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:113
+#: ../raster/r.param.scale/interface.c:118
 msgid "Exponent for distance weighting (0.0-4.0)"
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:125
+#: ../raster/r.param.scale/interface.c:130
 msgid "Constrain model through central window cell"
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:167
+#: ../raster/r.param.scale/interface.c:177
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr ""
 
-#: ../raster/r.param.scale/interface.c:175
+#: ../raster/r.param.scale/interface.c:185
 msgid "Inappropriate window size (too big or even)"
 msgstr ""
 
-#: ../raster/r.param.scale/main.c:39
+#: ../raster/r.param.scale/main.c:40
 msgid "Lat/Long projects are not supported by this module"
 msgstr ""
 
-#: ../raster/r.param.scale/process.c:74
+#: ../raster/r.param.scale/process.c:43
 msgid "E-W and N-S grid resolutions are different. Taking average."
 msgstr ""
 
@@ -32937,7 +32995,7 @@ msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk
 msgstr ""
 
 #: ../raster3d/r3.out.vtk/writeVTKData.c:453
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:51
@@ -33445,7 +33503,7 @@ msgid "Branch <{branch}> not found in repository <{url}>"
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:387
-#: ../scripts/g.extension/g.extension.py:2868
+#: ../scripts/g.extension/g.extension.py:2867
 #, python-brace-format
 msgid ""
 "Failed to get addons files list from the Git repository <{repo_path}>.\n"
@@ -33597,195 +33655,195 @@ msgstr ""
 msgid "Unable to parse '%s': {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1527
+#: ../scripts/g.extension/g.extension.py:1529
 #, python-brace-format
 msgid "No metadata available for module '{name}': {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1596
+#: ../scripts/g.extension/g.extension.py:1598
 msgid "Downloading precompiled GRASS Addons <{}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1689
+#: ../scripts/g.extension/g.extension.py:1691
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1696
-#: ../scripts/g.extension/g.extension.py:1730
+#: ../scripts/g.extension/g.extension.py:1698
+#: ../scripts/g.extension/g.extension.py:1732
 #, python-format
 msgid "GRASS Addons <%s> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1819
+#: ../scripts/g.extension/g.extension.py:1821
 #, python-brace-format
 msgid "ZIP file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1849
-#: ../scripts/r.unpack/r.unpack.py:119 ../scripts/v.unpack/v.unpack.py:131
-msgid "Extracting may be unsafe; consider updating Python"
+#: ../scripts/g.extension/g.extension.py:1844
+#: ../scripts/r.unpack/r.unpack.py:113 ../scripts/v.unpack/v.unpack.py:125
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1855
+#: ../scripts/g.extension/g.extension.py:1850
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1872
+#: ../scripts/g.extension/g.extension.py:1867
 #, python-brace-format
 msgid "Type of source identified as '{source}'."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1875
-#: ../scripts/g.extension/g.extension.py:1884
-#: ../scripts/g.extension/g.extension.py:1891
+#: ../scripts/g.extension/g.extension.py:1870
+#: ../scripts/g.extension/g.extension.py:1879
+#: ../scripts/g.extension/g.extension.py:1886
 #, python-brace-format
 msgid "Fetching <{name}> from <{url}> (be patient)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1906
+#: ../scripts/g.extension/g.extension.py:1901
 #, python-brace-format
 msgid "Expected default branch not found. Trying again from <{url}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1914
+#: ../scripts/g.extension/g.extension.py:1909
 #, python-brace-format
 msgid "Extension <{name}> not found. Please check 'url' and 'branch' options"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1919
+#: ../scripts/g.extension/g.extension.py:1914
 msgid "Extension <{}> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1947
+#: ../scripts/g.extension/g.extension.py:1942
 #, python-brace-format
 msgid "Unknown extension (addon) source type '{0}'. Please report this to the grass-user mailing list."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1976
+#: ../scripts/g.extension/g.extension.py:1971
 msgid "Path to the source code:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1998
+#: ../scripts/g.extension/g.extension.py:1993
 msgid "Module name not found. Check module Makefile syntax (PGM variable)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2150
+#: ../scripts/g.extension/g.extension.py:2145
 msgid "To compile run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2152
+#: ../scripts/g.extension/g.extension.py:2147
 msgid "To install run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2160
+#: ../scripts/g.extension/g.extension.py:2155
 msgid "Compiling..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2162
+#: ../scripts/g.extension/g.extension.py:2157
 msgid "Please install GRASS development package"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2165
-#: ../scripts/g.extension/g.extension.py:2168
+#: ../scripts/g.extension/g.extension.py:2160
+#: ../scripts/g.extension/g.extension.py:2163
 msgid "Compilation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2182
+#: ../scripts/g.extension/g.extension.py:2177
 msgid "Installing..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2273
+#: ../scripts/g.extension/g.extension.py:2268
 msgid "List of removed files:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2275
+#: ../scripts/g.extension/g.extension.py:2270
 msgid "Files to be removed:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2281
+#: ../scripts/g.extension/g.extension.py:2276
 msgid "Updating addons metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2285
+#: ../scripts/g.extension/g.extension.py:2280
 #, python-format
 msgid "Extension <%s> successfully uninstalled."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2288
+#: ../scripts/g.extension/g.extension.py:2283
 #, python-format
 msgid "Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2293
+#: ../scripts/g.extension/g.extension.py:2288
 #, python-format
 msgid "Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2342
+#: ../scripts/g.extension/g.extension.py:2337
 #, python-format
 msgid "Extension <%s> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2446
+#: ../scripts/g.extension/g.extension.py:2442
 #, python-brace-format
 msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2465
+#: ../scripts/g.extension/g.extension.py:2461
 #, python-format
 msgid "Unable to create '%s': %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2493
+#: ../scripts/g.extension/g.extension.py:2490
 #, python-format
 msgid "Manual page for <%s> updated"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2500
+#: ../scripts/g.extension/g.extension.py:2497
 #, python-format
 msgid "Unable to read manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2545
+#: ../scripts/g.extension/g.extension.py:2544
 #, python-format
 msgid "Unable for write manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2565
+#: ../scripts/g.extension/g.extension.py:2564
 msgid "GRASS_ADDON_BASE is not defined, installing to {}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2572
+#: ../scripts/g.extension/g.extension.py:2571
 #, python-brace-format
 msgid "You don't have permission to install extension to <{0}>. Try to run {1} with administrator rights (su or sudo)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2664
+#: ../scripts/g.extension/g.extension.py:2663
 #, python-brace-format
 msgid "Identified {0} as known hosting service"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2669
+#: ../scripts/g.extension/g.extension.py:2668
 #, python-brace-format
 msgid "Not using {service} as known hosting service because the URL ends with '{suffix}'"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2686
+#: ../scripts/g.extension/g.extension.py:2685
 #, python-brace-format
 msgid "Will use the following URL for download: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2717
+#: ../scripts/g.extension/g.extension.py:2716
 #, python-brace-format
 msgid "Cannot open URL <{url}>: {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2923
+#: ../scripts/g.extension/g.extension.py:2922
 msgid "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
 msgstr ""
 
-#: ../scripts/g.extension/testsuite/test_addons_download.py:236
+#: ../scripts/g.extension/testsuite/test_addons_download.py:240
 msgid "No metadata available for module '{}':"
 msgstr ""
 
@@ -34040,48 +34098,48 @@ msgstr ""
 msgid "Histogram matching..."
 msgstr ""
 
-#: ../scripts/i.spectral/i.spectral.py:118
+#: ../scripts/i.spectral/i.spectral.py:115
 #, python-format
 msgid "Programmer error (%s)"
 msgstr ""
 
-#: ../scripts/i.spectral/i.spectral.py:187
+#: ../scripts/i.spectral/i.spectral.py:184
 msgid "Supported monitor isn't running. Please launch one of the monitors {}."
 msgstr ""
 
-#: ../scripts/i.spectral/i.spectral.py:196
+#: ../scripts/i.spectral/i.spectral.py:193
 msgid "Supported monitor isn't selected. Please select one of the monitors {}."
 msgstr ""
 
-#: ../scripts/i.spectral/i.spectral.py:204
+#: ../scripts/i.spectral/i.spectral.py:201
 msgid "{} monitor is used, output file {}"
 msgstr ""
 
-#: ../scripts/i.spectral/i.spectral.py:215
+#: ../scripts/i.spectral/i.spectral.py:212
 msgid "Spectral signatures"
 msgstr ""
 
-#: ../scripts/i.spectral/i.spectral.py:217
+#: ../scripts/i.spectral/i.spectral.py:214
 msgid "DN Value"
 msgstr ""
 
-#: ../scripts/i.spectral/i.spectral.py:236
+#: ../scripts/i.spectral/i.spectral.py:233
 msgid "Either group= or raster= is required"
 msgstr ""
 
-#: ../scripts/i.spectral/i.spectral.py:239
+#: ../scripts/i.spectral/i.spectral.py:236
 msgid "group= and raster= are mutually exclusive"
 msgstr ""
 
-#: ../scripts/i.spectral/i.spectral.py:243
+#: ../scripts/i.spectral/i.spectral.py:240
 msgid "Writing to text file requires output=filename"
 msgstr ""
 
-#: ../scripts/i.spectral/i.spectral.py:247
+#: ../scripts/i.spectral/i.spectral.py:244
 msgid "gnuplot required, please install first"
 msgstr ""
 
-#: ../scripts/i.spectral/i.spectral.py:272
+#: ../scripts/i.spectral/i.spectral.py:269
 msgid "No data returned from query"
 msgstr ""
 
@@ -34877,63 +34935,58 @@ msgstr ""
 msgid "azimuth must be between 0 and 360"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:97
-#: ../scripts/r.reclass.area/r.reclass.area.py:214
-msgid "xy-locations are not supported"
+#: ../scripts/r.reclass.area/r.reclass.area.py:151
+msgid ""
+"xy-locations are not supported\n"
+"Need projected data with grids in meters"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:98
-msgid "Need projected data with grids in meters"
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:104
-msgid "flags c and d are mutually exclusive"
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:114
-#, python-format
-msgid "Temporary raster map <%s> exists"
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:117
-msgid "Generating a clumped raster file including diagonal neighbors..."
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:121
-msgid "Generating a clumped raster file ..."
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:127
-#, python-format
-msgid "Generating a reclass map with area size less than or equal to %f hectares..."
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:135
-#, python-format
-msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:166
-#, python-format
-msgid "No areas of size less than or equal to %f hectares found."
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:170
-#, python-format
-msgid "No areas of size greater than or equal to %f hectares found."
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:212
+#: ../scripts/r.reclass.area/r.reclass.area.py:157
 msgid "Latitude-longitude locations are not supported"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:219
-msgid "You have to specify mode='lesser' with method='rmarea'"
+#: ../scripts/r.reclass.area/r.reclass.area.py:159
+msgid "xy-locations are not supported"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:229
+#: ../scripts/r.reclass.area/r.reclass.area.py:177
+msgid "Generating a clumped raster file"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:179
+msgid " including diagonal neighbors"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:181
 #, python-format
-msgid "Generating output raster map <%s>..."
+msgid " with minimum %s pixels"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:204
+msgid "Generating a reclass map with area size"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:209
+#, python-format
+msgid " larger than or equal to %f hectares..."
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:217
+#, python-format
+msgid " smaller than or equal to %f hectares..."
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:257
+msgid "No areas of size "
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:275
+#, python-format
+msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:354
+msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
 msgstr ""
 
 #: ../scripts/r.semantic.label/r.semantic.label.py:67
@@ -35005,8 +35058,8 @@ msgstr ""
 msgid "File {name} not found."
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:81 ../scripts/r.unpack/r.unpack.py:135
-#: ../scripts/v.unpack/v.unpack.py:82 ../scripts/v.unpack/v.unpack.py:142
+#: ../scripts/r.unpack/r.unpack.py:81 ../scripts/r.unpack/r.unpack.py:129
+#: ../scripts/v.unpack/v.unpack.py:82 ../scripts/v.unpack/v.unpack.py:136
 msgid "Pack file unreadable"
 msgstr ""
 
@@ -35024,38 +35077,38 @@ msgstr ""
 msgid "Raster map <{name}> already exists and will be overwritten"
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:129
+#: ../scripts/r.unpack/r.unpack.py:123
 #, python-brace-format
 msgid "This GRASS pack file contains vector data. Use v.unpack to unpack <{name}>"
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:140
+#: ../scripts/r.unpack/r.unpack.py:134
 msgid "Overriding projection check (using current project's CRS)."
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:153
+#: ../scripts/r.unpack/r.unpack.py:147
 msgid "PROJ_INFO file is missing, unpack raster map in XY (unprojected) project."
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:177 ../scripts/v.unpack/v.unpack.py:184
+#: ../scripts/r.unpack/r.unpack.py:171 ../scripts/v.unpack/v.unpack.py:178
 #, python-brace-format
 msgid ""
 "Difference between PROJ_INFO file of packed map and of current project:\n"
 "{diff}"
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:184 ../scripts/v.unpack/v.unpack.py:191
+#: ../scripts/r.unpack/r.unpack.py:178 ../scripts/v.unpack/v.unpack.py:185
 #, python-brace-format
 msgid ""
 "Difference between PROJ_UNITS file of packed map and of current project:\n"
 "{diff}"
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:190 ../scripts/v.unpack/v.unpack.py:197
+#: ../scripts/r.unpack/r.unpack.py:184 ../scripts/v.unpack/v.unpack.py:191
 msgid "Coordinate reference system of dataset does not appear to match current project. In case of no significant differences in the CRS definitions, use the -o flag to ignore them and use current project definition."
 msgstr ""
 
-#: ../scripts/r.unpack/r.unpack.py:244
+#: ../scripts/r.unpack/r.unpack.py:238
 #, python-brace-format
 msgid "Raster map <{name}> unpacked"
 msgstr ""
@@ -35487,6 +35540,18 @@ msgid ""
 "{error}"
 msgstr ""
 
+#: ../scripts/v.geometry/v.geometry.py:171
+msgid "Cannot mix metrics from different feature types: {}. Results are merged by category, so combining e.g. line and area metrics would produce misleading records. Run v.geometry separately for each feature type."
+msgstr ""
+
+#: ../scripts/v.geometry/v.geometry.py:187
+msgid "More units ({}) than metrics ({}) specified"
+msgstr ""
+
+#: ../scripts/v.geometry/v.geometry.py:202
+msgid "A standard CSV separator (delimiter) is only one character long, got: {}"
+msgstr ""
+
 #: ../scripts/v.import/v.import.py:207
 #, python-format
 msgid "Missing value for parameter <%s>"
@@ -35798,40 +35863,40 @@ msgstr ""
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:138
+#: ../scripts/v.unpack/v.unpack.py:132
 #, python-format
 msgid "This GRASS pack file contains raster data. Use r.unpack to unpack <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:153
+#: ../scripts/v.unpack/v.unpack.py:147
 msgid "PROJ_INFO file is missing, unpack vector map in XY (unprojected) project."
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:179
+#: ../scripts/v.unpack/v.unpack.py:173
 msgid "Projection information does not match. Proceeding..."
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:237
+#: ../scripts/v.unpack/v.unpack.py:231
 #, python-format
 msgid "Coping table <%s> as table <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:252
+#: ../scripts/v.unpack/v.unpack.py:246
 #, python-format
 msgid "Unable to copy table <%s> as table <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:257
+#: ../scripts/v.unpack/v.unpack.py:251
 #, python-format
 msgid "Connect table <%s> to vector map <%s> at layer <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:276
+#: ../scripts/v.unpack/v.unpack.py:270
 #, python-format
 msgid "Unable to connect table <%s> to vector map <%s>"
 msgstr ""
 
-#: ../scripts/v.unpack/v.unpack.py:280
+#: ../scripts/v.unpack/v.unpack.py:274
 #, python-format
 msgid "Vector map <%s> successfully unpacked"
 msgstr ""
@@ -36232,7 +36297,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: ../vector/v.build.polylines/main.c:243 ../vector/v.category/main.c:1001
-#: ../vector/v.net/main.c:159 ../vector/v.proj/main.c:607
+#: ../vector/v.net/main.c:159 ../vector/v.proj/main.c:612
 #: ../vector/v.rectify/main.c:280 ../vector/v.transform/main.c:314
 #: ../vector/v.type/main.c:152
 msgid "Failed to copy attribute table to output map"
@@ -36488,34 +36553,41 @@ msgstr ""
 msgid "The 'list' format can only be used with the -b flag. Please use -b to enable list output."
 msgstr ""
 
-#: ../vector/v.class/main.c:181
+#: ../vector/v.class/main.c:178 ../vector/v.reclass/main.c:239
+#: ../vector/v.to.rast/support.c:118 ../vector/v.to.rast/support.c:287
+#: ../vector/v.to.rast/support.c:517 ../vector/v.to.rast/vect2rast.c:77
+#, c-format
+msgid "No records selected from table <%s>"
+msgstr ""
+
+#: ../vector/v.class/main.c:184
 msgid "Unable to sort array of values"
 msgstr ""
 
-#: ../vector/v.class/main.c:212
+#: ../vector/v.class/main.c:217
 msgid "The discontinuities algorithm indicates that some class breaks are not statistically significant at alpha=0.05. You are advised to reduce the number of classes."
 msgstr ""
 
-#: ../vector/v.class/main.c:295
+#: ../vector/v.class/main.c:305
 #, c-format
 msgid ""
 "\n"
 "Classification of %s into %i classes\n"
 msgstr ""
 
-#: ../vector/v.class/main.c:303
+#: ../vector/v.class/main.c:313
 #, c-format
 msgid "Lowest chi2 = %f\n"
 msgstr ""
 
-#: ../vector/v.class/main.c:309
+#: ../vector/v.class/main.c:319
 #, c-format
 msgid ""
 "%15s%15s%15s\n"
 "\n"
 msgstr ""
 
-#: ../vector/v.class/main.c:322
+#: ../vector/v.class/main.c:332
 #, c-format
 msgid ""
 "\n"
@@ -44865,36 +44937,36 @@ msgstr ""
 msgid "Vector map <%s> in project <%s> mapset <%s> not found"
 msgstr ""
 
-#: ../vector/v.proj/main.c:303 ../vector/v.proj/main.c:387
-#: ../vector/v.proj/main.c:518 ../vector/v.rectify/main.c:238
+#: ../vector/v.proj/main.c:308 ../vector/v.proj/main.c:392
+#: ../vector/v.proj/main.c:523 ../vector/v.rectify/main.c:238
 msgid "Reading input vector map"
 msgstr ""
 
-#: ../vector/v.proj/main.c:326 ../vector/v.proj/main.c:410
+#: ../vector/v.proj/main.c:331 ../vector/v.proj/main.c:415
 #, c-format
 msgid "Input vector map <%s> is empty"
 msgstr ""
 
-#: ../vector/v.proj/main.c:360
+#: ../vector/v.proj/main.c:365
 #, c-format
 msgid "Mapset <%s> in input project <%s> - permission denied"
 msgstr ""
 
-#: ../vector/v.proj/main.c:363
+#: ../vector/v.proj/main.c:368
 #, c-format
 msgid "Mapset <%s> in input project <%s> not found"
 msgstr ""
 
-#: ../vector/v.proj/main.c:509
+#: ../vector/v.proj/main.c:514
 msgid "Reprojecting primitives ..."
 msgstr ""
 
-#: ../vector/v.proj/main.c:579 ../vector/v.proj/main.c:596
+#: ../vector/v.proj/main.c:584 ../vector/v.proj/main.c:601
 #, c-format
 msgid "Unable to re-project vector map <%s> from <%s>"
 msgstr ""
 
-#: ../vector/v.proj/main.c:616
+#: ../vector/v.proj/main.c:621
 msgid "Try to disable wrapping to -180,180 if topological errors occurred"
 msgstr ""
 
@@ -45041,13 +45113,6 @@ msgstr ""
 #: ../vector/v.surf.idw/read_sites.c:53
 #, c-format
 msgid "Database connection not defined for layer %s"
-msgstr ""
-
-#: ../vector/v.reclass/main.c:239 ../vector/v.to.rast/support.c:118
-#: ../vector/v.to.rast/support.c:287 ../vector/v.to.rast/support.c:517
-#: ../vector/v.to.rast/vect2rast.c:77
-#, c-format
-msgid "No records selected from table <%s>"
 msgstr ""
 
 #: ../vector/v.reclass/main.c:253
