@@ -37,11 +37,6 @@ import wx
 # during start up, remove when not needed
 import wx.adv
 
-try:
-    import wx.lib.agw.advancedsplash as SC
-except ImportError:
-    SC = None
-
 
 class GMApp(wx.App):
     def __init__(self, workspace=None):

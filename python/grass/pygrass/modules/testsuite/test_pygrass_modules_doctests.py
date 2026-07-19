@@ -8,7 +8,7 @@ import grass.gunittest.case
 import grass.gunittest.main
 import grass.gunittest.utils
 
-from grass.pygrass.modules import shortcuts, grid, interface
+from grass.pygrass.modules import grid, interface
 
 
 # doctest does not allow changing the base classes of test case, skip test case
