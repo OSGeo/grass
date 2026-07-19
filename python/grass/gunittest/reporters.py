@@ -306,7 +306,7 @@ def get_html_test_authors_table(directory, tests_authors) -> str:
         "<table><tbody>"
         "<tr><td>Test authors:</td><td>{file_authors}</td></tr>"
         "<tr><td>Authors of tested code:</td><td>{code_authors}</td></tr>"
-        "<tr><td>Authors owing tests:</td><td>{not_testing}</td></tr>"
+        "<tr><td>Authors owning tests:</td><td>{not_testing}</td></tr>"
         "</tbody></table>".format(
             file_authors=", ".join(sorted(tests_authors)),
             code_authors=", ".join(sorted(tested_dir_authors)),
