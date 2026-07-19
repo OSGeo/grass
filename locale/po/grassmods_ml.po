@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Malayalam <https://weblate.osgeo.org/projects/grass-gis/grassmods/ml/>\n"
@@ -1755,7 +1755,7 @@ msgid "Cannot find/open symbol: '%s'"
 msgstr ""
 
 #, c-format
-msgid "Color <%s> cannot for option %s be parsed"
+msgid "Color <%s> for option <%s> cannot be parsed"
 msgstr ""
 
 #, c-format
@@ -1767,7 +1767,7 @@ msgid "Number of widths (%d) is higher then the number of files (%d)"
 msgstr ""
 
 #, c-format
-msgid "Number of widths (%d) is lower then the number of files (%d)"
+msgid "Number of widths (%d) is lower than the number of files (%d)"
 msgstr ""
 
 #, c-format
@@ -7645,8 +7645,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 msgid "Maps with feature values (attributes)"
 msgstr ""
 
@@ -9285,22 +9285,37 @@ msgstr ""
 msgid "aggregation"
 msgstr ""
 
-msgid "Value option that sets the area size limit (in hectares)"
+msgid "Value option that sets the area size limit (in hectares) (deprecated)"
 msgstr ""
 
 msgid "Area"
 msgstr ""
 
-msgid "Lesser or greater than specified value"
+msgid "Keep only areas lesser or greater than specified value (deprecated)"
 msgstr ""
 
-msgid "Method used for reclassification"
+msgid "Value for the lower area size limit (in hectares). Pixel clumps with areas below this value are removed."
+msgstr ""
+
+msgid "Value for the upper area size limit (in hectares). Pixel clumps with areas above this value are removed."
+msgstr ""
+
+msgid "Method used for area size filtering"
 msgstr ""
 
 msgid "Input map is clumped"
 msgstr ""
 
-msgid "Clumps including diagonal neighbors"
+msgid "Generate clumps including diagonal neighbors"
+msgstr ""
+
+msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgstr ""
+
+msgid "Apply lower area threshold as \"minsize\" during clumping"
+msgstr ""
+
+msgid "Output vector map, do not convert back to raster (only for method 'rmarea')"
 msgstr ""
 
 msgid "Splits a raster map into red, green and blue maps."
@@ -9538,6 +9553,9 @@ msgid "Columns to be printed to stdout"
 msgstr ""
 
 msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
+msgid "Name of mapsets to list ('.' for current, '*' for all mapsets)"
 msgstr ""
 
 msgid "Field separator character between the output columns"
@@ -9816,7 +9834,7 @@ msgstr ""
 msgid "Imports space time raster dataset."
 msgstr ""
 
-msgid "Path to the extraction directory"
+msgid "Path to the extraction directory (default is .tmp in the current mapset)"
 msgstr ""
 
 msgid "Create a new project and import the data into it."
@@ -10254,6 +10272,9 @@ msgstr ""
 msgid "Imports a space time vector dataset from a GRASS specific archive file."
 msgstr ""
 
+msgid "Path to the extraction directory"
+msgstr ""
+
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
 msgstr ""
 
@@ -10507,6 +10528,24 @@ msgid "Default is sql unless the provided aggregate methods are for univar"
 msgstr ""
 
 msgid "sql;Uses SQL attribute database;univar;Uses v.db.univar"
+msgstr ""
+
+msgid "Prints geometry metrics of vector features."
+msgstr ""
+
+msgid "metric"
+msgstr ""
+
+msgid "Geometry metric(s) to compute"
+msgstr ""
+
+msgid "area;area size;perimeter;perimeter length of an area;length;line length;count;number of features for each category;compactness;compactness of an area, calculated as perimeter / (2 * sqrt(PI * area));fractal_dimension;fractal dimension of boundary defining a polygon, calculated as 2 * (log(perimeter) / log(area));slope;slope steepness of vector line or boundary;sinuosity;line sinuosity, calculated as line length / distance between end points;azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode;coordinates;point coordinates, X,Y or X,Y,Z;start;line/boundary starting point coordinates, X,Y or X,Y,Z;end;line/boundary end point coordinates, X,Y or X,Y,Z;bbox;bounding box of area, N,S,E,W"
+msgstr ""
+
+msgid "Units (one per metric, positional; unspecified metrics use defaults)"
+msgstr ""
+
+msgid "plain;Plain text with pipe separator by default;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
@@ -22442,7 +22481,7 @@ msgstr ""
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr ""
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
 msgstr ""
 
 msgid "Unable to close the 3D raster map"
@@ -22968,7 +23007,7 @@ msgstr ""
 msgid "ZIP file is unreadable: {0}"
 msgstr ""
 
-msgid "Extracting may be unsafe; consider updating Python"
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
 msgstr ""
 
 #, python-brace-format
@@ -23933,49 +23972,46 @@ msgstr ""
 msgid "azimuth must be between 0 and 360"
 msgstr ""
 
-msgid "xy-locations are not supported"
-msgstr ""
-
-msgid "Need projected data with grids in meters"
-msgstr ""
-
-msgid "flags c and d are mutually exclusive"
-msgstr ""
-
-#, python-format
-msgid "Temporary raster map <%s> exists"
-msgstr ""
-
-msgid "Generating a clumped raster file including diagonal neighbors..."
-msgstr ""
-
-msgid "Generating a clumped raster file ..."
-msgstr ""
-
-#, python-format
-msgid "Generating a reclass map with area size less than or equal to %f hectares..."
-msgstr ""
-
-#, python-format
-msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
-msgstr ""
-
-#, python-format
-msgid "No areas of size less than or equal to %f hectares found."
-msgstr ""
-
-#, python-format
-msgid "No areas of size greater than or equal to %f hectares found."
+msgid ""
+"xy-locations are not supported\n"
+"Need projected data with grids in meters"
 msgstr ""
 
 msgid "Latitude-longitude locations are not supported"
 msgstr ""
 
-msgid "You have to specify mode='lesser' with method='rmarea'"
+msgid "xy-locations are not supported"
+msgstr ""
+
+msgid "Generating a clumped raster file"
+msgstr ""
+
+msgid " including diagonal neighbors"
 msgstr ""
 
 #, python-format
-msgid "Generating output raster map <%s>..."
+msgid " with minimum %s pixels"
+msgstr ""
+
+msgid "Generating a reclass map with area size"
+msgstr ""
+
+#, python-format
+msgid " larger than or equal to %f hectares..."
+msgstr ""
+
+#, python-format
+msgid " smaller than or equal to %f hectares..."
+msgstr ""
+
+msgid "No areas of size "
+msgstr ""
+
+#, python-format
+msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
+msgstr ""
+
+msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
 msgstr ""
 
 msgid "No semantic label assigned to <{}>"
@@ -24397,6 +24433,15 @@ msgstr ""
 msgid ""
 "A processing step failed. Check the above error messages and see the following details:\n"
 "{error}"
+msgstr ""
+
+msgid "Cannot mix metrics from different feature types: {}. Results are merged by category, so combining e.g. line and area metrics would produce misleading records. Run v.geometry separately for each feature type."
+msgstr ""
+
+msgid "More units ({}) than metrics ({}) specified"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long, got: {}"
 msgstr ""
 
 #, python-format
@@ -25149,6 +25194,10 @@ msgid "CSV format cannot be used with the -b flag. Please use the -b flag with t
 msgstr ""
 
 msgid "The 'list' format can only be used with the -b flag. Please use -b to enable list output."
+msgstr ""
+
+#, c-format
+msgid "No records selected from table <%s>"
 msgstr ""
 
 msgid "Unable to sort array of values"
@@ -31517,10 +31566,6 @@ msgstr ""
 
 #, c-format
 msgid "Database connection not defined for layer %s"
-msgstr ""
-
-#, c-format
-msgid "No records selected from table <%s>"
 msgstr ""
 
 msgid "Key column type is not integer"

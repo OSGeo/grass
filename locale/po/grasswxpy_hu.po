@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hungarian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hu/>\n"
@@ -5443,8 +5443,7 @@ msgid ""
 "{messages}"
 msgstr ""
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Zoom to scatter plot extend"
@@ -5507,6 +5506,295 @@ msgstr ""
 msgid "Remove selected class"
 msgstr ""
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS GIS database directory"
+msgid "Select notebook directory"
+msgstr "1. Válasszon GRASS adatbázis könyvtárat"
+
+#, fuzzy
+msgid "Save in project: {}"
+msgstr "Átvetítés"
+
+msgid "Options"
+msgstr "Beállítások"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "Tallózás"
+
+#, fuzzy
+#| msgid "PDF generated"
+msgid "Integrated"
+msgstr "PDF elkészült"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "Párbeszédablak lezárás"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "Hiba"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "Hiba"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr "Sikertelen fájl olvasás %s."
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import"
+msgid "Import file"
+msgstr "Import"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "Átnevezés"
+
+#, fuzzy
+#| msgid "No data source selected."
+msgid "No page for export is currently selected."
+msgstr "Nem választott adatforrást."
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export file is missing."
+msgid "Export file as..."
+msgstr "Export fájl hiányzik."
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "A modellt exportáltam <%s>"
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr "Sikertelen fájl olvasás %s."
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "Az új térképcsoport neve:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create location"
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "Nem tudom létrehozni a helyet"
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+#, fuzzy
+#| msgid ""
+#| "%d files created:\n"
+#| "%s"
+msgid "New file '{}' created."
+msgstr ""
+"%d fájlt létrehoztam:\n"
+"%s"
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr ""
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+msgid "Server URL: {}"
+msgstr ""
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to display legend."
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr "Nem tudom a jelmagyarázatot megjeleníteni."
+
+#, fuzzy
+#| msgid "Property does not exist: %s"
+msgid "Notebook storage does not exist: {}"
+msgstr "A tulajdonság nem létezik: %s"
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File %s not found"
+msgid "File not found: {}"
+msgstr "%s fájlt nem találom"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "A fájl már létezik"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "A fájl már létezik"
+
+msgid "Stop server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "Új modell létrehozás"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to:"
+msgid "Export notebook"
+msgstr "Exportálás ebbe:"
+
 #, fuzzy
 msgid "GRASS"
 msgstr "GRASS súgó"
@@ -5535,6 +5823,30 @@ msgstr ""
 
 msgid "Console"
 msgstr "Konzol"
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "3D nézet nem lehetséges"
 
 #, fuzzy
 msgid "Map Swipe Tool"
@@ -5687,6 +5999,11 @@ msgstr "Térkép réteg eltávolítás"
 
 msgid "Quit GRASS GUI"
 msgstr "Kilépés a GRASS GUI-ból"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
@@ -6019,12 +6336,13 @@ msgstr ""
 msgid "Cartographic Composer"
 msgstr ""
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "Grfikus modellező"
+
 msgid "Launch user-defined script"
 msgstr "Felhasználói szkript indítása"
-
-#, fuzzy
-msgid "New display"
-msgstr "Képernyő törlés"
 
 #, fuzzy
 msgid "Python code editor"
@@ -6421,6 +6739,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 #, fuzzy
@@ -7075,9 +7399,6 @@ msgstr ""
 
 msgid "List of extensions - double-click to install"
 msgstr "Kiterjesztések listája - dupla kattintás a telepítéshez"
-
-msgid "Options"
-msgstr "Beállítások"
 
 msgid "&Install"
 msgstr "Telepít"
@@ -9718,7 +10039,7 @@ msgstr "Kiválasztott hely letöltése"
 msgid "Do you want to cancel dataset download?"
 msgstr "Meg akarja szakítani a hely letöltést?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr ""
 
 msgid "Timeline Tool"
@@ -9816,8 +10137,7 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "Idővonal eszközök"
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Temporal Plot Tool"
@@ -11295,6 +11615,10 @@ msgid ""
 "\n"
 msgstr ""
 
+#, fuzzy
+#~ msgid "New display"
+#~ msgstr "Képernyő törlés"
+
 #~ msgid "Generate random seed for rand()"
 #~ msgstr "Véletlen mag generálás rand()-hoz"
 
@@ -11843,9 +12167,6 @@ msgstr ""
 #~ msgid "Hydrologic modeling"
 #~ msgstr "Hidrológiai modellezés"
 
-#~ msgid "Import"
-#~ msgstr "Import"
-
 #~ msgid "Import 3-dimensional Vis5D files."
 #~ msgstr "3-dimenziós Vis5D fájlok importálása."
 
@@ -12320,9 +12641,6 @@ msgstr ""
 
 #~ msgid "USLE R-factor"
 #~ msgstr "USLE R-faktor"
-
-#~ msgid "Unable to create location"
-#~ msgstr "Nem tudom létrehozni a helyet"
 
 #~ msgid "Unable to delete location"
 #~ msgstr "Nem tudom törölni a helyet"
