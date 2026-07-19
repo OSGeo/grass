@@ -204,7 +204,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         self,
         maplistA,
         maplistB=None,
-        topolist=["EQUAL"],
+        topolist=None,
         assign_val: bool = False,
         count_map: bool = False,
         compare_bool: bool = False,
@@ -220,7 +220,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
         :param maplistA: List of maps.
         :param maplistB: List of maps.
-        :param topolist: List of strings of temporal relations.
+        :param topolist: List of strings of temporal relations. If None, defaults to ["EQUAL"] internally.
         :param assign_val: Boolean for assigning a boolean map value based on
                         the map_values from the compared map list by
                         topological relationships.
@@ -275,6 +275,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         a9@B
 
         """
+        if topolist is None:
+            topolist = ["EQUAL"]
         if self.debug:
             print(
                 topolist,
@@ -418,8 +420,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         map_i,
         compop,
         aggregate,
-        temporal_topo_list=["EQUAL"],
-        spatial_topo_list=[],
+        temporal_topo_list=None,
+        spatial_topo_list=None,
         convert: bool = False,
     ):
         """Function to evaluate two map lists with boolean values by boolean
@@ -437,8 +439,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         :param map_i: Map object with temporal extent.
         :param compop: Comparison operator, && or ||.
         :param aggregate: Aggregation operator for relation map list, & or \\|.
-        :param temporal_topo_list: List of strings for given temporal relations.
-        :param spatial_topo_list: List of strings for given spatial relations.
+        :param temporal_topo_list: List of strings for given temporal relations. If None,
+                                  defaults to ["EQUAL"] internally.
+        :param spatial_topo_list: List of strings for given spatial relations. If None,
+                                 defaults to empty list internally.
         :param convert: Boolean if conditional values should be converted to
                         r.mapcalc command strings.
 
@@ -447,6 +451,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         """
         # Build command list list with elements from related maps and given relation
         # operator.
+        if temporal_topo_list is None:
+            temporal_topo_list = ["EQUAL"]
+        if spatial_topo_list is None:
+            spatial_topo_list = []
         if convert and "condition_value" in dir(map_i):
             if map_i.condition_value != []:
                 cmdstring = str(int(map_i.condition_value[0]))
@@ -500,7 +508,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             return cmd_value_str
 
     def operator_cmd_value(
-        self, map_i, operator, temporal_topo_list=["EQUAL"], spatial_topo_list=[]
+        self, map_i, operator, temporal_topo_list=None, spatial_topo_list=None
     ):
         """Function to evaluate two map lists by given arithmetic operator.
 
@@ -512,7 +520,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         :return: Map object with command list with operators that has been
                     evaluated by implicit aggregation.
         """
-
+        if temporal_topo_list is None:
+            temporal_topo_list = ["EQUAL"]
+        if spatial_topo_list is None:
+            spatial_topo_list = []
         temporal_relations = map_i.get_temporal_relations()
 
         # Build comandlist list with elements from related maps and given relation
@@ -553,7 +564,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     def set_temporal_extent_list(
         self,
         maplist,
-        topolist=["EQUAL"],
+        topolist=None,
         temporal="l",
         cmd_bool: bool = False,
         cmd_type=None,
@@ -564,7 +575,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
         :param maplist: List of map objects for which relations has been build
                         correctly.
-        :param topolist: List of strings of temporal relations.
+        :param topolist: List of strings of temporal relations. If None,
+                         defaults to ["EQUAL"] internally.
         :param temporal: The temporal operator specifying the temporal
                          extent operation (intersection, union, disjoint
                          union, right reference, left reference).
@@ -575,6 +587,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
         :return: Map list with specified temporal extent and optional command string.
         """
+        if topolist is None:
+            topolist = ["EQUAL"]
         resultdict = {}
         temporal_topo_list, spatial_topo_list = self._check_topology(topolist=topolist)
 
@@ -643,8 +657,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         iflist,
         thenlist,
         elselist=None,
-        condition_topolist=["EQUAL"],
-        conclusion_topolist=["EQUAL"],
+        condition_topolist=None,
+        conclusion_topolist=None,
         temporal="l",
         null: bool = False,
     ):
@@ -657,9 +671,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         :param elselist: Map list with temporal extents and command list or numeric
                          string.
         :param condition_topolist: List of strings for given temporal relations between
-                                   conditions and conclusions.
+                                   conditions and conclusions. If None, defaults to ["EQUAL"] internally.
         :param conclusion_topolist: List of strings for given temporal relations between
-                                    conditions (then and else).
+                                    conditions (then and else). If None, defaults to ["EQUAL"] internally.
         :param temporal: The temporal operator specifying the temporal
                          extent operation (intersection, union, disjoint
                          union, right reference, left reference).
@@ -667,6 +681,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
         :return: map list with resulting command string for given condition type.
         """
+        if condition_topolist is None:
+            condition_topolist = ["EQUAL"]
+        if conclusion_topolist is None:
+            conclusion_topolist = ["EQUAL"]
         resultlist = []
         # First merge conclusion command maplists or strings.
         # Check if alternative conclusion map list is given.
