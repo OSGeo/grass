@@ -201,12 +201,9 @@ def main():
     line_output = []
     first = True
 
-    # Replace separate "if outpath" and "else" blocks with a unified context manager:
     with (
-        open(outpath, "w")
-        if (outpath and outpath != "-")
-        else nullcontext(sys.stdout) as out_file
-    ):
+        open(outpath, "w") if (outpath and outpath != "-") else nullcontext(sys.stdout)
+    ) as out_file:
         for ttype in temporal_type.split(","):
             time = "absolute time" if ttype == "absolute" else "relative time"
             stds_list = tgis.get_dataset_list(
@@ -216,15 +213,16 @@ def main():
             for mapset in dbif.tgis_mapsets:
                 rows = stds_list.get(mapset)
                 if rows:
-                    if len(stds_type) > 1 and output_format == "plain":
+                    if output_format == "plain":
                         rows_by_type = {}
                         for r in rows:
-                            rows_by_type.setdefault(r.get("type"), []).append(r)
-                        target_types = rows_by_type.items()
+                            rows_by_type.setdefault(r["type"], []).append(r)
+                        groups = rows_by_type.items()
                     else:
-                        target_types = [(stds_type[0], rows)]
+                        # Process all rows together
+                        groups = [(rows[0]["type"], rows)]
 
-                    for type_label, current_rows in target_types:
+                    for dtype, current_rows in groups:
                         if (
                             gs.verbosity() > 0
                             and (not outpath or outpath == "-")
@@ -233,13 +231,13 @@ def main():
                             sys.stderr.write(
                                 "----------------------------------------------\n"
                             )
-                            if type_label in {"raster", "raster_3d", "vector"}:
+                            if dtype in {"raster", "raster_3d", "vector"}:
                                 sys.stderr.write(
                                     _(
                                         "Time stamped maps of type <%s> with %s "
                                         "available in mapset <%s>:\n"
                                     )
-                                    % (type_label, time, mapset)
+                                    % (dtype, time, mapset)
                                 )
                             else:
                                 sys.stderr.write(
@@ -247,7 +245,7 @@ def main():
                                         "Space time datasets of type <%s> with %s "
                                         "available in mapset <%s>:\n"
                                     )
-                                    % (type_label, time, mapset)
+                                    % (dtype, time, mapset)
                                 )
 
                         if output_format == "json":
@@ -255,7 +253,10 @@ def main():
 
                         elif output_format == "line":
                             line_output.extend(
-                                [str(v) for row in current_rows for v in row.values()]
+                                str(v)
+                                for row in current_rows
+                                for k, v in row.items()
+                                if k != "type"
                             )
 
                         else:

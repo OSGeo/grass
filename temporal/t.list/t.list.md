@@ -153,11 +153,10 @@ t.list type=raster format=json columns=id,start_time
 ```
 
 To list multiple dataset types at once, specify a comma-separated list of
-types.
+types (e.g., `type=strds,stvds`).
 
-**Note:** When multiple types are requested (e.g., `type=strds,stvds`), the
-`type` column is automatically included in **csv** and **json** outputs to
-clearly identify the dataset type of each record:
+**Note:** The `type` column is automatically included in the **csv** and
+**json** output formats to clearly identify the dataset type of each record.
 
 ```sh
 t.list type=strds,stvds columns=id format=json

@@ -61,16 +61,19 @@ def test_t_list_json(space_time_dataset):
             "name": "temp_1",
             "start_time": "2026-01-01 00:00:00",
             "end_time": "2026-02-01 00:00:00",
+            "type": "raster",
         },
         {
             "name": "temp_2",
             "start_time": "2026-02-01 00:00:00",
             "end_time": "2026-03-01 00:00:00",
+            "type": "raster",
         },
         {
             "name": "temp_3",
             "start_time": "2026-03-01 00:00:00",
             "end_time": "2026-04-01 00:00:00",
+            "type": "raster",
         },
     ]
 
@@ -91,10 +94,10 @@ def test_t_list_csv(space_time_dataset, separator):
     )
 
     expected_lines = [
-        f"name{separator}start_time",
-        f"{space_time_dataset.map_names[0]}{separator}2026-01-01 00:00:00",
-        f"{space_time_dataset.map_names[1]}{separator}2026-02-01 00:00:00",
-        f"{space_time_dataset.map_names[2]}{separator}2026-03-01 00:00:00",
+        f"name{separator}start_time{separator}type",
+        f"{space_time_dataset.map_names[0]}{separator}2026-01-01 00:00:00{separator}raster",
+        f"{space_time_dataset.map_names[1]}{separator}2026-02-01 00:00:00{separator}raster",
+        f"{space_time_dataset.map_names[2]}{separator}2026-03-01 00:00:00{separator}raster",
     ]
     expected = "\n".join(expected_lines)
 
