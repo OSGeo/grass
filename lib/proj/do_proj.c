@@ -1431,8 +1431,17 @@ void GPJ_clone_transform(const struct pj_info *src,
                          struct gpj_transform_clone *clone)
 {
     clone->ctx = proj_context_create();
+    /* r.proj calls this in each worker thread, so a fatal here ends the whole
+     * process from inside the parallel region. That is intended: a clone
+     * failure leaves the thread with no usable transform. */
+    if (clone->ctx == NULL)
+        G_fatal_error(_("proj_context_create() failed for a per-thread "
+                        "transform clone"));
     clone->info = *src;
     clone->info.pj = proj_clone(clone->ctx, src->pj);
+    if (clone->info.pj == NULL)
+        G_fatal_error(_("proj_clone() failed for a per-thread transform "
+                        "clone"));
 }
 
 /*!
