@@ -1119,12 +1119,20 @@ int main(int argc, char **argv)
         }
     }
 
-    /* Pole footprint fix: a tile whose interior holds a geographic pole has an
-     * input-row extremum the perimeter walk misses. Precompute each in-range
-     * pole's output coordinate and input row (lat/lon input only, where a pole
-     * is at latitude +/- 90). On transform failure or a non-finite result the
-     * pole is skipped and the strip under-size guard stays the backstop. Uses
-     * the adjusted incellhd, matching what band_input_row_span sees. */
+    /* Pole footprint fix: a tile whose interior projects onto a geographic pole
+     * has an input-row extremum the perimeter walk misses. This happens both
+     * when the pole lies inside the input map and when the pole is outside the
+     * input's latitude coverage but its projection still falls inside the
+     * output frame (a pole-centered frame reading an input truncated below the
+     * pole): the highest reachable input latitude is then the input's own edge
+     * row, reached at the frame-center-proximal interior. So project both poles
+     * (lat/lon input only, where a pole is at latitude +/- 90) and fold in the
+     * pole's input row clamped to the input's edge row [0, rows-1]. The
+     * point-in-rect test in band_input_row_span keeps this a no-op for frames
+     * that do not image a pole. On transform failure or a non-finite result
+     * (e.g. a cylindrical projection sending the pole to infinity) the pole is
+     * skipped and the strip under-size guard stays the backstop. Uses the
+     * adjusted incellhd, matching what band_input_row_span sees. */
     struct pole_set poles;
 
     poles.n = 0;
@@ -1134,16 +1142,18 @@ int main(int argc, char **argv)
         for (int p = 0; p < 2; p++) {
             double px = 0.0, py = polelat[p];
 
-            if (polelat[p] > incellhd.north + 0.5 * incellhd.ns_res ||
-                polelat[p] < incellhd.south - 0.5 * incellhd.ns_res)
-                continue;
             if (GPJ_transform(&oproj, &iproj, &tproj, PJ_INV, &px, &py, NULL) <
                     0 ||
                 !isfinite(px) || !isfinite(py))
                 continue;
+            double ri = (incellhd.north - polelat[p]) / incellhd.ns_res;
+            if (ri < 0)
+                ri = 0;
+            else if (ri > incellhd.rows - 1)
+                ri = incellhd.rows - 1;
             poles.ox[poles.n] = px;
             poles.oy[poles.n] = py;
-            poles.ri[poles.n] = (incellhd.north - polelat[p]) / incellhd.ns_res;
+            poles.ri[poles.n] = ri;
             poles.n++;
         }
     }
