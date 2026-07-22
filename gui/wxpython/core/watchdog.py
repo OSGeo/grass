@@ -19,6 +19,7 @@ This program is free software under the GNU General Public License
 
 import os
 import time
+import weakref
 
 from pathlib import Path
 
@@ -140,55 +141,72 @@ class MapsetWatchdog:
     :param str patterns: map watchdog patterns with default value "*" all
     """
 
+    _shared_observer = None
+    _instances = weakref.WeakSet()
+
     def __init__(self, elements_dirs, evt_handler, giface, patterns="*"):
         self._elements_dirs = elements_dirs
         self._evt_handler = evt_handler
         self._patterns = patterns
         self._giface = giface
-        self._observer = None
+        self._scheduled_mapset = None
+        MapsetWatchdog._instances.add(self)
 
     def ScheduleWatchCurrentMapset(self):
         """Using watchdog library, sets up watching of current mapset folder
         to detect changes not captured by other means (e.g. from command line).
-        Schedules 1 watches (raster).
-        If watchdog observers are active, it restarts the observers in
-        current mapset.
+        If watchdog observers are active, it restarts the shared observer
+        in current mapset, scheduling watches for all registered instances.
         """
         global watchdog_used
         if not watchdog_used:
             return
 
-        if self._observer and self._observer.is_alive():
-            self._observer.stop()
-            self._observer.join()
-            self._observer.unschedule_all()
-        self._observer = Observer()
-
         gisenv = grass.gisenv()
         mapset_path = os.path.join(
             gisenv["GISDBASE"], gisenv["LOCATION_NAME"], gisenv["MAPSET"]
         )
+
+        if (
+            MapsetWatchdog._shared_observer
+            and MapsetWatchdog._shared_observer.is_alive()
+            and self._scheduled_mapset == mapset_path
+        ):
+            return
+
+        if (
+            MapsetWatchdog._shared_observer
+            and MapsetWatchdog._shared_observer.is_alive()
+        ):
+            MapsetWatchdog._shared_observer.stop()
+            MapsetWatchdog._shared_observer.join()
+            MapsetWatchdog._shared_observer.unschedule_all()
+        MapsetWatchdog._shared_observer = Observer()
+
         rcfile = os.environ["GISRC"]
-        self._observer.schedule(
-            CurrentMapsetWatch(rcfile, mapset_path, self._evt_handler),
-            os.path.dirname(rcfile),
-            recursive=False,
-        )
-        for element, directory in self._elements_dirs:
-            path = os.path.join(mapset_path, directory)
-            if not Path(path).exists():
-                try:
-                    Path(path).mkdir()
-                except OSError:
-                    pass
-            if Path(path).exists():
-                self._observer.schedule(
-                    MapWatch(self._patterns, element, self._evt_handler),
-                    path=path,
-                    recursive=False,
-                )
+
+        for instance in MapsetWatchdog._instances:
+            instance._scheduled_mapset = mapset_path
+            MapsetWatchdog._shared_observer.schedule(
+                CurrentMapsetWatch(rcfile, mapset_path, instance._evt_handler),
+                os.path.dirname(rcfile),
+                recursive=False,
+            )
+            for element, directory in instance._elements_dirs:
+                path = os.path.join(mapset_path, directory)
+                if not Path(path).exists():
+                    try:
+                        Path(path).mkdir()
+                    except OSError:
+                        pass
+                if Path(path).exists():
+                    MapsetWatchdog._shared_observer.schedule(
+                        MapWatch(instance._patterns, element, instance._evt_handler),
+                        path=path,
+                        recursive=False,
+                    )
         try:
-            self._observer.start()
+            MapsetWatchdog._shared_observer.start()
         except OSError:
             # in case inotify on linux exceeds limits
             watchdog_used = False
