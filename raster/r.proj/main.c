@@ -320,18 +320,17 @@ static int est_worst_tile_strip_rows(
  * width whose worst input strip fits (setting *acc_tilew to that width, via the
  * same upper-tier estimate then lower-tier exact validation the search uses);
  * 0 if no width fits or the output buffer alone exceeds the cap. */
-static int phase2_width_fit(const struct Cell_head *ohd,
-                            const struct Cell_head *ihd,
-                            const struct pj_info *oproj,
-                            const struct pj_info *iproj,
-                            const struct pj_info *tproj, const double *y_center,
-                            int obr0, int h, size_t cap_bytes, int cell_size,
-                            int *acc_tilew, const struct pole_set *poles)
+static int
+phase2_width_fit(const struct Cell_head *ohd, const struct Cell_head *ihd,
+                 const struct pj_info *oproj, const struct pj_info *iproj,
+                 const struct pj_info *tproj, const double *y_center, int obr0,
+                 int h, size_t cap_bytes, int cell_size, int out_mult,
+                 int *acc_tilew, const struct pole_set *poles)
 {
     size_t out_bytes = (size_t)h * ohd->cols * cell_size;
     int tilew, est_fit;
 
-    if (out_bytes > cap_bytes)
+    if (out_mult * out_bytes > cap_bytes)
         return 0;
     tilew = ohd->cols;
     est_fit = 0;
@@ -340,7 +339,7 @@ static int phase2_width_fit(const struct Cell_head *ohd,
             est_worst_tile_strip_rows(ohd, ihd, oproj, iproj, tproj, y_center,
                                       obr0, obr0 + h, tilew, TILE_PROBE, poles);
         size_t est_bytes = est > 0 ? (size_t)est * ihd->cols * cell_size : 0;
-        if (est_bytes + out_bytes <= cap_bytes) {
+        if (est_bytes + out_mult * out_bytes <= cap_bytes) {
             est_fit = 1;
             break;
         }
@@ -355,7 +354,7 @@ static int phase2_width_fit(const struct Cell_head *ohd,
                                       obr0, obr0 + h, tilew, poles);
             size_t strip_bytes =
                 worst > 0 ? (size_t)worst * ihd->cols * cell_size : 0;
-            if (strip_bytes + out_bytes <= cap_bytes) {
+            if (strip_bytes + out_mult * out_bytes <= cap_bytes) {
                 *acc_tilew = tilew;
                 return 1;
             }
@@ -376,19 +375,19 @@ static int phase1_fits(const struct Cell_head *ohd, const struct Cell_head *ihd,
                        const struct pj_info *oproj, const struct pj_info *iproj,
                        const struct pj_info *tproj, const double *y_center,
                        int obr0, int h, size_t cap_bytes, int cell_size,
-                       const struct pole_set *poles)
+                       int out_mult, const struct pole_set *poles)
 {
     int imin, imax, strip_rows;
     size_t out_bytes = (size_t)h * ohd->cols * cell_size, strip_bytes;
 
-    if (out_bytes > cap_bytes)
+    if (out_mult * out_bytes > cap_bytes)
         return 0;
     band_input_row_span(ohd, ihd, oproj, iproj, tproj, y_center, obr0, obr0 + h,
                         0, ohd->cols, &imin, &imax, poles, NULL);
     strip_rows = imax - imin + 1;
     strip_bytes =
         strip_rows > 0 ? (size_t)strip_rows * ihd->cols * cell_size : 0;
-    return strip_bytes + out_bytes <= cap_bytes;
+    return strip_bytes + out_mult * out_bytes <= cap_bytes;
 }
 
 /* Serial tile-cache fallback for the large-halo/oblique corner: when even a
@@ -443,6 +442,23 @@ fallback_serial_cache(int fdi, int fdo, int cell_type, int method,
 
     release_cache(ibuffer);
     G_free(obuffer);
+}
+
+/* Write the deferred band, if any, in order and release it. Used by the last
+ * band and the fallback bails so every path writes the deferred band the same
+ * way. */
+static void flush_pending_band(int fdo, int cell_type, int cols, int cell_size,
+                               void **pending, int r0, int r1)
+{
+    if (*pending == NULL)
+        return;
+    for (int wr = r0; wr < r1; wr++)
+        Rast_put_row(fdo,
+                     (unsigned char *)*pending +
+                         (size_t)(wr - r0) * cols * cell_size,
+                     cell_type);
+    G_free(*pending);
+    *pending = NULL;
 }
 
 int main(int argc, char **argv)
@@ -1088,6 +1104,11 @@ int main(int argc, char **argv)
      * instead of the whole input map (Path A). */
     double cap_mb = atof(memory->answer);
     size_t cap_bytes = (size_t)(cap_mb * 1024.0 * 1024.0);
+    /* Under write_overlap the overlapped writes run inside the compute region,
+     * so their wall time falls in t_compute. t_write then covers the
+     * non-overlapped writes only: the last band's flush (timed at
+     * fallback_done) and every band at N=1. Fallback bail flushes are untimed,
+     * but a fallback run reports fallback=1 rather than this phase split. */
     double t_size = 0.0, t_fill = 0.0, t_compute = 0.0, t_write = 0.0;
     int n_bands = 0;
     int max_tiles = 1;          /* most column tiles used by any single band */
@@ -1162,16 +1183,24 @@ int main(int argc, char **argv)
 
     int used_fallback = 0; /* set when the serial tile-cache fallback runs */
     int force_tilecache = getenv("R_PROJ_FORCE_TILECACHE") != NULL;
-    /* Rolling-window input residency (Anna review item 1): keep one band's
-     * input strip resident and slide it down between consecutive single-tile
-     * bands, reading only the rows a band adds rather than re-reading its whole
-     * [imin,imax]. win holds input rows [win_imin, win_imax]; win_imax <
-     * win_imin marks the window empty/invalid (forces a full read). win_cap is
-     * the allocated byte size. Freed at fallback_done and after the band loop.
-     */
+    /* Rolling input-strip window. win holds input rows [win_imin, win_imax].
+     * win_imax < win_imin marks it empty and forces a full read. win_cap is
+     * its allocated byte size, and win is freed once at fallback_done. */
     unsigned char *win = NULL;
     size_t win_cap = 0;
     int win_imin = 0, win_imax = -1;
+    /* One predicate for output double-buffering. The compute region runs
+     * want_nprocs threads (omp_get_max_threads(), not the masked read_nprocs),
+     * so overlap is possible only with more than one compute thread. out_mult
+     * reserves two output bands in the fit search and the omp single writer
+     * engages on the same flag, so the budget and the writer cannot diverge. */
+    int write_overlap = want_nprocs > 1;
+    int out_mult = write_overlap ? 2 : 1;
+    /* Previous band's output buffer, written by one thread while the next
+     * band computes. NULL when nothing is pending; rows
+     * [pending_r0, pending_r1). */
+    void *pending_out = NULL;
+    int pending_r0 = 0, pending_r1 = 0;
     int obr0 = 0;
     while (obr0 < outcellhd.rows) {
         /* Fit search. Phase 1 (fast path, unchanged): halve the band height
@@ -1209,6 +1238,10 @@ int main(int argc, char **argv)
                           cap_mb, worst1,
                           (double)(strip1 + out1) / (1024.0 * 1024.0), obr0,
                           outcellhd.rows - 1, needed_mb);
+                /* Flush the deferred band before the fallback writes from obr0
+                 * (in-order). */
+                flush_pending_band(fdo, cell_type, outcellhd.cols, cell_size,
+                                   &pending_out, pending_r0, pending_r1);
                 fallback_serial_cache(fdi, fdo, cell_type, method, &oproj,
                                       &iproj, &tproj, &incellhd, &outcellhd,
                                       y_center, obr0, memory->answer);
@@ -1236,7 +1269,7 @@ int main(int argc, char **argv)
             while ((gs + 1) / 2 > seed_h1)
                 gs = (gs + 1) / 2;
             if (!phase1_fits(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                             y_center, obr0, gs, cap_bytes, cell_size,
+                             y_center, obr0, gs, cap_bytes, cell_size, out_mult,
                              &poles)) {
                 band_orows = (gs + 1) / 2;
                 p1_seeded = 1;
@@ -1251,7 +1284,8 @@ int main(int argc, char **argv)
                 strip_rows > 0 ? (size_t)strip_rows * incellhd.cols * cell_size
                                : 0;
             size_t out_bytes = (size_t)band_orows * outcellhd.cols * cell_size;
-            if (!force_tilecache && strip_bytes + out_bytes <= cap_bytes)
+            if (!force_tilecache &&
+                strip_bytes + out_mult * out_bytes <= cap_bytes)
                 break;
             if (band_orows == 1)
                 break; /* height exhausted: fall through to column splitting */
@@ -1286,7 +1320,7 @@ int main(int argc, char **argv)
                     gs = (gs + 1) / 2;
                 if (!phase2_width_fit(&outcellhd, &incellhd, &oproj, &iproj,
                                       &tproj, y_center, obr0, gs, cap_bytes,
-                                      cell_size, &w, &poles)) {
+                                      cell_size, out_mult, &w, &poles)) {
                     start_h = (gs + 1) / 2;
                     seed_hits++;
                 }
@@ -1296,7 +1330,8 @@ int main(int argc, char **argv)
                 if (!force_tilecache &&
                     phase2_width_fit(&outcellhd, &incellhd, &oproj, &iproj,
                                      &tproj, y_center, obr0, band_orows,
-                                     cap_bytes, cell_size, &tilew, &poles))
+                                     cap_bytes, cell_size, out_mult, &tilew,
+                                     &poles))
                     break;
                 if (band_orows == 1) {
                     /* Single output row at minimum width still over cap =
@@ -1333,6 +1368,12 @@ int main(int argc, char **argv)
                             (double)(strip_bytes + out1) / (1024.0 * 1024.0),
                             obr0, outcellhd.rows - 1, needed_mb);
                     }
+                    /* Flush the deferred band before the fallback writes from
+                     * obr0 (in-order). This band's compute region did not run,
+                     * so its omp single did not write the previous band. */
+                    flush_pending_band(fdo, cell_type, outcellhd.cols,
+                                       cell_size, &pending_out, pending_r0,
+                                       pending_r1);
                     fallback_serial_cache(fdi, fdo, cell_type, method, &oproj,
                                           &iproj, &tproj, &incellhd, &outcellhd,
                                           y_center, obr0, memory->answer);
@@ -1389,27 +1430,20 @@ int main(int argc, char **argv)
             if (strip_rows > 0) {
                 size_t need = (size_t)strip_rows * incellhd.cols * cell_size;
                 size_t row_bytes = (size_t)incellhd.cols * cell_size;
-                /* Slide only for a serial-read, single-tile band whose window
-                 * is valid and whose rows advance forward and still overlap the
-                 * new span. read_nprocs == 1 is required: the parallel read
-                 * chunks a full [imin, imax] span across per-thread fds, which
-                 * this change does not re-certify for a partial tail (N>1 stays
-                 * a full read). Tiled bands (spans jump per tile) and backward
-                 * steps or gaps (pole/inverted frames) fall back to a full
-                 * read, exactly today's behavior. */
+                /* Slide only for a serial-read single-tile band whose rows
+                 * advance forward and still overlap the window. Anything else
+                 * does a full read, same as before. */
                 int can_slide = read_nprocs == 1 && n_tiles == 1 &&
                                 win_imax >= 0 && imin >= win_imin &&
                                 imin <= win_imax + 1;
                 int read_from = imin;
-                /* Grow FIRST, then memmove, then read the tail. G_realloc may
-                 * move the buffer, so growing must precede the memmove that
-                 * repositions the retained overlap inside it; realloc preserves
-                 * the old rows at their old offsets, which the memmove then
-                 * shifts to the new imin origin. When the span SHRINKS
-                 * (imax < win_imax) the resident rows beyond imax are dropped
-                 * from the window's accounting below, not kept -- a deliberate,
-                 * conservative choice: a later band that needs them re-reads,
-                 * and the window never claims rows it is not tracking. */
+                /* Grow first, then memmove, then read the tail. G_realloc may
+                 * move the buffer, so it must run before the memmove that
+                 * repositions the retained overlap. Realloc preserves the old
+                 * rows at their old offsets, and the memmove shifts them to the
+                 * new imin origin. If the span shrinks (imax < win_imax), the
+                 * rows past imax are dropped from win_imax below rather than
+                 * kept, so a later band that needs them re-reads them. */
                 if (need > win_cap) {
                     win = G_realloc(win, need);
                     win_cap = need;
@@ -1454,10 +1488,10 @@ int main(int argc, char **argv)
                     G_switch_env(); /* -> output */
                 }
                 t_fill += rproj_wtime() - t0;
-                /* Record what the window now tracks. A tiled band leaves win
-                 * holding only its last tile, so invalidate BOTH fields to
-                 * force the next band's full read; validity then never depends
-                 * on && short-circuit order. */
+                /* Record what the window now holds. A tiled band leaves win
+                 * with only its last tile, so invalidate both fields to force
+                 * the next band's full read. Setting both keeps validity
+                 * independent of && short-circuit order. */
                 if (n_tiles == 1) {
                     win_imin = imin;
                     win_imax = imax;
@@ -1481,6 +1515,20 @@ int main(int argc, char **argv)
             {
                 struct gpj_transform_clone tproj_local;
                 GPJ_clone_transform(&tproj, &tproj_local);
+
+#pragma omp single nowait
+                {
+                    /* One thread writes the previous band's rows in order while
+                     * the rest compute this band. First tile only, and
+                     * pending_out is non-NULL only under write_overlap. */
+                    if (obc0 == 0 && pending_out)
+                        for (int wr = pending_r0; wr < pending_r1; wr++)
+                            Rast_put_row(fdo,
+                                         (unsigned char *)pending_out +
+                                             (size_t)(wr - pending_r0) *
+                                                 outcellhd.cols * cell_size,
+                                         cell_type);
+                }
 
 #pragma omp for private(row, col) schedule(dynamic)
                 for (row = obr0; row < obr1; row++) {
@@ -1515,28 +1563,47 @@ int main(int argc, char **argv)
                 GPJ_free_transform_clone(&tproj_local);
             }
             t_compute += rproj_wtime() - t1;
-            /* strip aliases the persistent window buffer (win); it is not freed
-             * per tile -- freed once at fallback_done and after the band loop.
-             */
+            /* strip aliases the persistent window buffer win, so it is not
+             * freed per tile. win is freed once at fallback_done. */
         }
 
-        /* Serial in-order write of the band's rows once all tiles filled
-         * band_out (Rast_put_row sequential). */
-        double t2 = rproj_wtime();
-        for (row = obr0; row < obr1; row++)
-            Rast_put_row(fdo,
-                         (unsigned char *)band_out +
-                             (size_t)(row - obr0) * outcellhd.cols * cell_size,
-                         cell_type);
-        t_write += rproj_wtime() - t2;
+        /* Defer this band so the next band's compute region writes it (via the
+         * omp single above). The previous pending was written in this band's
+         * compute region and completed at that region's barrier, so free it
+         * now. Non-overlap bands write and free in order here. */
+        if (write_overlap) {
+            if (pending_out)
+                G_free(pending_out);
+            pending_out = band_out;
+            pending_r0 = obr0;
+            pending_r1 = obr1;
+        }
+        else {
+            double t2 = rproj_wtime();
+            for (row = obr0; row < obr1; row++)
+                Rast_put_row(fdo,
+                             (unsigned char *)band_out + (size_t)(row - obr0) *
+                                                             outcellhd.cols *
+                                                             cell_size,
+                             cell_type);
+            t_write += rproj_wtime() - t2;
+            G_free(band_out);
+        }
 
         G_percent(obr1, outcellhd.rows, 5);
-
-        G_free(band_out);
         obr0 = obr1;
     }
 
 fallback_done:
+    /* Flush the last band's deferred write on normal completion, timed into
+     * t_write. The fallback bails flush before fallback_serial_cache, so
+     * pending_out is NULL here on those paths. */
+    {
+        double tw = rproj_wtime();
+        flush_pending_band(fdo, cell_type, outcellhd.cols, cell_size,
+                           &pending_out, pending_r0, pending_r1);
+        t_write += rproj_wtime() - tw;
+    }
     G_free(y_center);
     /* Single free site for the rolling window: the band loop's only exits are
      * normal completion (falls through to here) and the two goto fallback_done
