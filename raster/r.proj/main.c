@@ -1162,6 +1162,16 @@ int main(int argc, char **argv)
 
     int used_fallback = 0; /* set when the serial tile-cache fallback runs */
     int force_tilecache = getenv("R_PROJ_FORCE_TILECACHE") != NULL;
+    /* Rolling-window input residency (Anna review item 1): keep one band's
+     * input strip resident and slide it down between consecutive single-tile
+     * bands, reading only the rows a band adds rather than re-reading its whole
+     * [imin,imax]. win holds input rows [win_imin, win_imax]; win_imax <
+     * win_imin marks the window empty/invalid (forces a full read). win_cap is
+     * the allocated byte size. Freed at fallback_done and after the band loop.
+     */
+    unsigned char *win = NULL;
+    size_t win_cap = 0;
+    int win_imin = 0, win_imax = -1;
     int obr0 = 0;
     while (obr0 < outcellhd.rows) {
         /* Fit search. Phase 1 (fast path, unchanged): halve the band height
@@ -1373,42 +1383,93 @@ int main(int argc, char **argv)
 
             /* Serial strip load (single fd -> get_row not thread-safe). EMPTY
              * TILE: strip_rows <= 0 -> projects outside input, no read; cells
-             * become NULL via interpolate_strip's out-of-map path. */
+             * become NULL via interpolate_strip's out-of-map path, and the
+             * window is invalidated so the next band re-reads in full. */
             void *strip = NULL;
             if (strip_rows > 0) {
-                strip =
-                    G_malloc((size_t)strip_rows * incellhd.cols * cell_size);
+                size_t need = (size_t)strip_rows * incellhd.cols * cell_size;
+                size_t row_bytes = (size_t)incellhd.cols * cell_size;
+                /* Slide only for a serial-read, single-tile band whose window
+                 * is valid and whose rows advance forward and still overlap the
+                 * new span. read_nprocs == 1 is required: the parallel read
+                 * chunks a full [imin, imax] span across per-thread fds, which
+                 * this change does not re-certify for a partial tail (N>1 stays
+                 * a full read). Tiled bands (spans jump per tile) and backward
+                 * steps or gaps (pole/inverted frames) fall back to a full
+                 * read, exactly today's behavior. */
+                int can_slide = read_nprocs == 1 && n_tiles == 1 &&
+                                win_imax >= 0 && imin >= win_imin &&
+                                imin <= win_imax + 1;
+                int read_from = imin;
+                /* Grow FIRST, then memmove, then read the tail. G_realloc may
+                 * move the buffer, so growing must precede the memmove that
+                 * repositions the retained overlap inside it; realloc preserves
+                 * the old rows at their old offsets, which the memmove then
+                 * shifts to the new imin origin. When the span SHRINKS
+                 * (imax < win_imax) the resident rows beyond imax are dropped
+                 * from the window's accounting below, not kept -- a deliberate,
+                 * conservative choice: a later band that needs them re-reads,
+                 * and the window never claims rows it is not tracking. */
+                if (need > win_cap) {
+                    win = G_realloc(win, need);
+                    win_cap = need;
+                }
+                if (can_slide && win_imax >= imin) {
+                    memmove(win, win + (size_t)(imin - win_imin) * row_bytes,
+                            (size_t)(win_imax - imin + 1) * row_bytes);
+                    read_from = win_imax + 1; /* only new rows hit disk */
+                }
+                strip = win;
                 double t0 = rproj_wtime();
-                G_switch_env(); /* -> input */
-                if (read_nprocs > 1) {
+                if (read_from <= imax) {
+                    G_switch_env(); /* -> input */
+                    if (read_nprocs > 1) {
 #ifdef _OPENMP
-                    /* Parallel read: each thread reads a contiguous, disjoint
-                     * block of strip rows through its OWN fd into its own
-                     * disjoint strip slice. No two threads share an fd/row. */
+                        /* Parallel read (full-span only; can_slide is false
+                         * here): each thread reads a contiguous, disjoint block
+                         * of rows through its OWN fd into its own disjoint
+                         * strip slice. No two threads share an fd/row. */
 #pragma omp parallel num_threads(read_nprocs)
-                    {
-                        int t = omp_get_thread_num();
+                        {
+                            int t = omp_get_thread_num();
 #pragma omp for schedule(static)
-                        for (int r = imin; r <= imax; r++)
-                            Rast_get_row(fd_read[t],
+                            for (int r = read_from; r <= imax; r++)
+                                Rast_get_row(fd_read[t],
+                                             (unsigned char *)strip +
+                                                 (size_t)(r - imin) *
+                                                     incellhd.cols * cell_size,
+                                             r, cell_type);
+                        }
+#endif
+                    }
+                    else {
+                        /* Serial read of the (possibly partial) tail. */
+                        for (int r = read_from; r <= imax; r++)
+                            Rast_get_row(fdi,
                                          (unsigned char *)strip +
                                              (size_t)(r - imin) *
                                                  incellhd.cols * cell_size,
                                          r, cell_type);
                     }
-#endif
+                    G_switch_env(); /* -> output */
+                }
+                t_fill += rproj_wtime() - t0;
+                /* Record what the window now tracks. A tiled band leaves win
+                 * holding only its last tile, so invalidate BOTH fields to
+                 * force the next band's full read; validity then never depends
+                 * on && short-circuit order. */
+                if (n_tiles == 1) {
+                    win_imin = imin;
+                    win_imax = imax;
                 }
                 else {
-                    /* Serial fallback (nprocs==1, mask, or no OpenMP). */
-                    for (int r = imin; r <= imax; r++)
-                        Rast_get_row(fdi,
-                                     (unsigned char *)strip +
-                                         (size_t)(r - imin) * incellhd.cols *
-                                             cell_size,
-                                     r, cell_type);
+                    win_imin = 0;
+                    win_imax = -1;
                 }
-                G_switch_env(); /* -> output */
-                t_fill += rproj_wtime() - t0;
+            }
+            else {
+                win_imin = 0;
+                win_imax = -1; /* empty tile: nothing resident */
             }
 
             double t1 = rproj_wtime();
@@ -1454,9 +1515,9 @@ int main(int argc, char **argv)
                 GPJ_free_transform_clone(&tproj_local);
             }
             t_compute += rproj_wtime() - t1;
-
-            if (strip)
-                G_free(strip);
+            /* strip aliases the persistent window buffer (win); it is not freed
+             * per tile -- freed once at fallback_done and after the band loop.
+             */
         }
 
         /* Serial in-order write of the band's rows once all tiles filled
@@ -1477,6 +1538,13 @@ int main(int argc, char **argv)
 
 fallback_done:
     G_free(y_center);
+    /* Single free site for the rolling window: the band loop's only exits are
+     * normal completion (falls through to here) and the two goto fallback_done
+     * bails (band-0 early-out, Phase-2 width bust), all converging on this
+     * label, so one free covers every path crossing the window's live range.
+     * win is NULL if a bail fired before any band allocated it. */
+    if (win)
+        G_free(win);
 
     if (used_fallback)
         G_debug(1, "PHASE_TIMERS fallback=1 fallback_from_row=%d", obr0);
