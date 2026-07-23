@@ -3,9 +3,8 @@
  *
  * \brief Point in region functions.
  *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+*
  * \author Hamish Bowman. (c) Hamish Bowman, and the GRASS Development Team
  *
  * \date February 2007
