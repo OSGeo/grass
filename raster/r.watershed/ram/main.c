@@ -60,6 +60,8 @@ char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX],
 char wat_name[GNAME_MAX], asp_name[GNAME_MAX], tci_name[GNAME_MAX],
     spi_name[GNAME_MAX];
 char arm_name[GNAME_MAX], dis_name[GNAME_MAX];
+char wat_input_name[GNAME_MAX], asp_input_name[GNAME_MAX];
+char wat_input_flag = 0, asp_input_flag = 0;
 char ele_flag, pit_flag, run_flag, dis_flag, ob_flag, flat_flag;
 char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, rtn_flag;
 char bas_flag, seg_flag, haf_flag, er_flag, tci_flag, spi_flag, atanb_flag;
@@ -69,13 +71,21 @@ FILE *fp;
 int main(int argc, char *argv[])
 {
     init_vars(argc, argv);
-    do_astar();
-    if (mfd) {
-        do_cum_mfd();
+
+    if (!wat_input_flag || !asp_input_flag) {
+        do_astar();
+        if (mfd) {
+            do_cum_mfd();
+        }
+        else {
+            do_cum();
+        }
     }
     else {
-        do_cum();
+        G_message(
+            _("Skipping A* search and flow accumulation - using input maps"));
     }
+
     if (sg_flag || ls_flag) {
         sg_factor();
     }
