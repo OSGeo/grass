@@ -22,6 +22,10 @@ platforms and resolutions. Both rasters are 50x50 to stay well under the CI
 time budget.
 """
 
+# Duplicated from the companion test-split PR (branch fix-rproj-tests),
+# which owns this file alongside the method reference tests. Drop this copy
+# when that PR merges into main; the fixtures are identical.
+
 import os
 
 import pytest
