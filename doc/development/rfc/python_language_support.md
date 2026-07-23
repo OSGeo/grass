@@ -35,12 +35,18 @@ be raised in the [requirements](https://github.com/OSGeo/grass/blob/main/REQUIRE
 file if the current minimum Python version reaches end of life or there are any
 important technical reasons.
 
-At the same time, we raise the minimal Python version for a matching branch
-in grass-addons.
+Given that addons need to work at least with the latest release and the
+development version, the minimal Python version in grass-addons is not raised
+together with the development version. It is raised only after the next
+release.
 
-For example, when Python 3.8 goes end-of-life before the release of 8.4.0, we
-raise the minimal Python version for 8.4.0 to 3.9. We also raise the minimal
-Python version for grass8 branch in grass-addons repo to Python 3.9.
+For example, suppose the latest release is GRASS 8.3 with a minimal Python
+version of 3.8, 8.4 is the development version, and Python 3.8 reaches end of
+life before 8.4.0 is released. We raise the minimal Python version for 8.4.0 to
+3.9 in the requirements file right away. The grass8 branch in grass-addons repo
+has to keep working with the 8.3 release and with the development version, so
+its minimal Python version stays at 3.8 until 8.4.0 is released and is raised to
+3.9 only then.
 
 ### References
 
