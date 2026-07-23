@@ -90,6 +90,14 @@
 # % description: Title for resultant raster map
 # % guisection: Metadata
 # %end
+# %option
+# % key: srcnodata
+# % key_desc: NoData in data source
+# % type: string
+# % required: no
+# % description: The value representing NoData in the data source (only set this if not given in the data source)
+# % guisection: Optional
+# %end
 # %flag
 # % key: e
 # % description: Estimate resolution only
@@ -137,6 +145,8 @@ def cleanup():
         gs.try_rmdir(os.path.join(GISDBASE, TMPLOC))
     if SRCGISRC:
         gs.try_remove(SRCGISRC)
+    if "TMP_VRT" in locals():
+        gs.try_remove(TMP_VRT)
     if (
         TMP_REG_NAME
         and gs.find_file(
@@ -158,8 +168,37 @@ def is_projection_matching(GDALdatasource):
         return False
 
 
+def createvrt(dst, src, nodata=None, region=None, bandlist=None, s_crs=None):
+    # Lazy import
+    from osgeo import gdal
+
+    if not nodata and not region:
+        gs.fatal(_("Either NoData or extent must begiven to create VRT."))
+    params = {"format": "VRT"}
+    if nodata:
+        for nd in nodata.split(","):
+            if not nd.isdigit():
+                gs.fatal(_("Invalid NoData format"))
+        params["noData"] = nodata
+
+    if bandlist:
+        for band in bandlist.split(","):
+            if not band.isdigit():
+                gs.fatal(_("Invalid band number format"))
+        params["bandList"] = bandlist.replace(",", " ").split(" ")
+
+    if region:
+        params["projWinSRS"] = s_crs
+        params["projWin"] = "{w} {n} {e} {s}".format(**region).split(" ")
+
+    indata = gdal.Open(src)
+    vrt = gdal.Translate(dst, indata, options=gdal.TranslateOptions(**params))
+    vrt = None
+    indata = None
+
+
 def main():
-    global TMPLOC, SRCGISRC, GISDBASE, TMP_REG_NAME
+    global TMPLOC, SRCGISRC, GISDBASE, TMP_REG_NAME, TMP_VRT
 
     GDALdatasource = options["input"]
     output = options["output"]
@@ -168,6 +207,8 @@ def main():
     bands = options["band"]
     tgtres = options["resolution"]
     title = options["title"]
+    srcnodata = options["srcnodata"]
+
     if flags["e"] and not output:
         output = "rimport_tmp"  # will be removed with the entire tmp location
     if options["resolution_value"]:
@@ -279,7 +320,6 @@ def main():
     parameters = {
         "input": GDALdatasource,
         "output": output,
-        "memory": memory,
         "flags": "ak" + additional_flags,
     }
     if bands:
@@ -293,10 +333,26 @@ def main():
             output=tgtregion,
             env=src_env,
         )
-        gs.run_command("g.region", vector=tgtregion, env=src_env)
-        parameters["flags"] += region_flag
+        region = gs.parse_command("g.region", vector=tgtregion, flags="g", env=src_env)
+        parameters["flags"] = parameters["flags"].replace("r", "")
+        s_crs = gs.read_command("g.proj", flags="j").strip()
+    else:
+        region = None
+        s_crs = None
+
+    if "r" in region_flag or srcnodata or bands:
+        TMP_VRT = gs.tempfile()
+        parameters["input"] = TMP_VRT
+        createvrt(
+            TMP_VRT,
+            GDALdatasource,
+            nodata=srcnodata,
+            region=region,
+            bandlist=bands,
+            s_crs=s_crs,
+        )
     try:
-        gs.run_command("r.in.gdal", env=src_env, **parameters)
+        gs.run_command("r.external", env=src_env, **parameters)
     except CalledModuleError:
         gs.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
 
