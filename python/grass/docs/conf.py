@@ -16,9 +16,44 @@ from datetime import date
 import string
 from shutil import copy
 
-# The grass package is imported from GISBASE, which the build puts on PYTHONPATH.
-if not os.getenv("GISBASE"):
-    sys.exit("GISBASE not defined")
+# If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+if not os.getenv("GRASS_PYDIR"):
+    sys.exit("GRASS_PYDIR not defined")
+sys.path.insert(0, os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass")))
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "ctypes")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "exceptions")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "gunittest")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "imaging")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "pydispatch")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "pygrass")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "script")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "temporal")),
+)
 
 from grass.script import core  # noqa: E402
 

@@ -360,8 +360,8 @@ def get_desc(cmd):
 
 arch_dist_dir = os.environ["ARCH_DISTDIR"]
 rest_dir = os.path.join(arch_dist_dir, "docs", "rest")
-gisbase = os.environ["GISBASE"]
-ver = read_file(os.path.join(gisbase, "etc", "VERSIONNUMBER"))
+grass_etc_dir = os.environ["GRASS_ETCDIR"]
+ver = read_file(os.path.join(grass_etc_dir, "VERSIONNUMBER"))
 try:
     grass_version = ver.split()[0].strip()
 except IndexError:

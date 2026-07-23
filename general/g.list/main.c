@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
         if (flag.full->answer) {
             char lister[GPATH_MAX];
 
-            snprintf(lister, sizeof(lister), "%s/etc/lister/%s", G_gisbase(),
+            snprintf(lister, sizeof(lister), "%s/lister/%s", G_etcbin_dir(),
                      elem->element[0]);
 
             G_debug(3, "lister CMD: %s", lister);

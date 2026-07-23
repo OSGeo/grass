@@ -476,7 +476,7 @@ def get_tgis_database_string() -> str | None:
 
 
 def get_sql_template_path() -> str:
-    return str(Path(os.getenv("GISBASE"), "etc", "sql"))
+    return str(Path(os.getenv("GRASS_ETCDIR"), "sql"))
 
 
 ###############################################################################
