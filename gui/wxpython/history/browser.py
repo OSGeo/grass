@@ -36,22 +36,46 @@ from grass.pydispatch.signal import Signal
 from core.gcmd import GError
 
 
-TRANSLATION_KEYS = {
+GENERAL_INFO_LABELS = {
     "timestamp": _("Timestamp:"),
     "runtime": _("Runtime duration:"),
     "status": _("Status:"),
     "mask2d": _("Mask 2D:"),
     "mask3d": _("Mask 3D:"),
-    "n": _("North:"),
-    "s": _("South:"),
-    "w": _("West:"),
-    "e": _("East:"),
-    "nsres": _("North-south resolution:"),
-    "ewres": _("East-west resolution:"),
-    "rows": _("Number of rows:"),
-    "cols": _("Number of columns:"),
-    "cells": _("Number of cells:"),
 }
+
+REGION_2D_LABELS = (
+    ("n", _("North:")),
+    ("s", _("South:")),
+    ("w", _("West:")),
+    ("e", _("East:")),
+    ("nsres", _("North-south resolution:")),
+    ("ewres", _("East-west resolution:")),
+    ("rows", _("Number of rows:")),
+    ("cols", _("Number of columns:")),
+    ("cells", _("Number of cells:")),
+)
+
+REGION_3D_LABELS = (
+    ("t", _("Top:")),
+    ("b", _("Bottom:")),
+    ("tbres", _("Top-bottom resolution:")),
+    ("rows3", _("Number of rows:")),
+    ("cols3", _("Number of columns:")),
+    ("depths", _("Number of depths:")),
+    ("nsres3", _("North-south resolution:")),
+    ("ewres3", _("East-west resolution:")),
+    ("cells3", _("Number of cells:")),
+)
+
+TRANSLATION_KEYS = {
+    **GENERAL_INFO_LABELS,
+    **dict(REGION_2D_LABELS),
+    **dict(REGION_3D_LABELS),
+}
+
+REGION_2D_KEYS = {key for key, _label in REGION_2D_LABELS}
+REGION_3D_KEYS = {key for key, _label in REGION_3D_LABELS}
 
 
 def get_translated_value(key, value):
@@ -109,6 +133,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.icons = {
             "check": MetaIcon(img="success").GetBitmap(bmpsize),
             "cross": MetaIcon(img="cross").GetBitmap(bmpsize),
+            "unknown": MetaIcon(img="question-mark").GetBitmap(bmpsize),
         }
 
     def _createGeneralInfoBox(self):
@@ -151,7 +176,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
         self.sizer_region_settings_grid = wx.GridBagSizer(hgap=0, vgap=0)
         self.sizer_region_settings_grid.SetCols(2)
-        self.sizer_region_settings_grid.SetRows(9)
+        self.sizer_region_settings_grid.SetRows(25)
 
         self.sizer_region_settings.Add(
             self.sizer_region_settings_grid,
@@ -168,7 +193,15 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         return key in filter_keys or ((key in {"mask2d", "mask3d"}) and value is True)
 
     def _region_settings_filter(self, key):
-        return key not in {"projection", "zone", "cells"}
+        return key not in {
+            "projection",
+            "zone",
+            "cells",
+            "cells3",
+            "rows3",
+            "cols3",
+            "depths",
+        }
 
     def _updateGeneralInfoBox(self, command_info):
         """Update a static box for displaying general info about the command.
@@ -214,11 +247,36 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         :param dict command_info: command info entry for update
         """
         self.sizer_region_settings_grid.Clear(True)
-
         self.region_settings = command_info["region"]
         idx = 0
+
+        separator_top = wx.StaticLine(self.region_settings_box, style=wx.LI_HORIZONTAL)
+        self.sizer_region_settings_grid.Add(
+            separator_top,
+            flag=wx.EXPAND | wx.TOP | wx.BOTTOM,
+            border=4,
+            pos=(idx, 0),
+            span=(1, 2),
+        )
+        idx += 1
+
+        header_2d = StaticText(
+            parent=self.region_settings_box,
+            id=wx.ID_ANY,
+            label=_("2D parameters"),
+            style=wx.ALIGN_LEFT,
+        )
+        self.sizer_region_settings_grid.Add(
+            header_2d,
+            flag=wx.ALIGN_LEFT | wx.ALL,
+            border=5,
+            pos=(idx, 0),
+            span=(1, 2),
+        )
+        idx += 1
+
         for key, value in self.region_settings.items():
-            if self._region_settings_filter(key):
+            if key in REGION_2D_KEYS:
                 self.sizer_region_settings_grid.Add(
                     StaticText(
                         parent=self.region_settings_box,
@@ -243,30 +301,103 @@ class HistoryInfoPanel(SP.ScrolledPanel):
                 )
                 idx += 1
 
+        separator = wx.StaticLine(self.region_settings_box, style=wx.LI_HORIZONTAL)
+        self.sizer_region_settings_grid.Add(
+            separator,
+            flag=wx.EXPAND | wx.TOP | wx.BOTTOM,
+            border=4,
+            pos=(idx, 0),
+            span=(1, 2),
+        )
+        idx += 1
+
+        header_3d = StaticText(
+            parent=self.region_settings_box,
+            id=wx.ID_ANY,
+            label=_("3D parameters"),
+            style=wx.ALIGN_LEFT,
+        )
+        self.sizer_region_settings_grid.Add(
+            header_3d,
+            flag=wx.ALIGN_LEFT | wx.ALL,
+            border=5,
+            pos=(idx, 0),
+            span=(1, 2),
+        )
+        idx += 1
+
+        if self._history_entry_has_3d_region():
+            for key, value in self.region_settings.items():
+                if key in REGION_3D_KEYS:
+                    self.sizer_region_settings_grid.Add(
+                        StaticText(
+                            parent=self.region_settings_box,
+                            id=wx.ID_ANY,
+                            label=make_label(key),
+                            style=wx.ALIGN_LEFT,
+                        ),
+                        flag=wx.ALIGN_LEFT | wx.ALL,
+                        border=5,
+                        pos=(idx, 0),
+                    )
+                    self.sizer_region_settings_grid.Add(
+                        StaticText(
+                            parent=self.region_settings_box,
+                            id=wx.ID_ANY,
+                            label=str(value),
+                            style=wx.ALIGN_LEFT,
+                        ),
+                        flag=wx.ALIGN_LEFT | wx.ALL,
+                        border=5,
+                        pos=(idx, 1),
+                    )
+                    idx += 1
+        else:
+            self.sizer_region_settings_grid.Add(
+                StaticText(
+                    parent=self.region_settings_box,
+                    id=wx.ID_ANY,
+                    label=_("Unavailable for this history entry"),
+                ),
+                flag=wx.ALIGN_LEFT | wx.ALL,
+                border=5,
+                pos=(idx, 0),
+                span=(1, 2),
+            )
+
         self.region_settings_box.Show()
 
     def _updateRegionSettingsMatch(self):
         """Update text, icon and button dealing with region update"""
         self.sizer_region_settings_match.Clear(True)
 
-        # Region condition
-        history_region = self.region_settings
-        current_region = self._get_current_region()
-        region_matches = history_region == current_region
-
         # Icon and button according to the condition
-        if region_matches:
-            icon = self.icons["check"]
-            button_label = None
+        history_entry_has_3d_region = self._history_entry_has_3d_region()
+
+        if history_entry_has_3d_region:
+            history_region = self.region_settings
+            current_region = self._get_current_region()
+            region_matches = history_region == current_region
+            icon = self.icons["check"] if region_matches else self.icons["cross"]
+            show_button = not region_matches
+            tooltip_text = (
+                _("Region matches current region")
+                if region_matches
+                else _("Region does not match current region")
+            )
         else:
-            icon = self.icons["cross"]
-            button_label = _("Update current region")
+            icon = self.icons["unknown"]
+            show_button = False
+            tooltip_text = _(
+                "Region comparison with current region is incomplete"
+                " (missing stored 3D parameters)"
+            )
 
         # Static text
         textRegionMatch = StaticText(
             parent=self.region_settings_box,
             id=wx.ID_ANY,
-            label=_("Region match"),
+            label=_("Region match:"),
         )
         self.sizer_region_settings_match.Add(
             textRegionMatch,
@@ -277,6 +408,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
         # Static bitmap for icon
         iconRegionMatch = wx.StaticBitmap(self.region_settings_box, bitmap=icon)
+        iconRegionMatch.SetToolTip(tooltip_text)
         self.sizer_region_settings_match.Add(
             iconRegionMatch,
             proportion=0,
@@ -284,7 +416,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
             border=10,
         )
 
-        if button_label:
+        if show_button:
             # Button for region update
             buttonUpdateRegion = Button(self.region_settings_box, id=wx.ID_ANY)
             buttonUpdateRegion.SetLabel(_("Update current region"))
@@ -321,21 +453,28 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.region_settings_box.Hide()
 
     def _get_current_region(self):
-        """Get current computational region settings."""
-        return gs.region()
+        """Get current computational region settings, including 3D values."""
+        return gs.region(region3d=True)
 
-    def _get_history_region(self):
-        """Get computational region settings of executed command."""
-        return {
+    def _history_entry_has_3d_region(self):
+        """Return True when the current history entry contains stored 3D region data.
+
+        Older history JSON entries (before 3D support) stored only the 2D part
+        of the computational region, so this can be False for valid old records.
+        """
+        return bool(
+            self.region_settings
+            and any(key in REGION_3D_KEYS for key in self.region_settings)
+        )
+
+    def OnUpdateRegion(self, event):
+        """Set current region to the region of executed command."""
+        filtered_region_settings = {
             key: value
             for key, value in self.region_settings.items()
             if self._region_settings_filter(key)
         }
-
-    def OnUpdateRegion(self, event):
-        """Set current region to the region of executed command."""
-        history_region = self._get_history_region()
-        gs.run_command("g.region", **history_region)
+        gs.run_command("g.region", **filtered_region_settings)
         self.giface.updateMap.emit(render=False, renderVector=False)
         self._updateRegionSettingsMatch()
         self.Layout()
