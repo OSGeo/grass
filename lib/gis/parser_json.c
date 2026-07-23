@@ -26,7 +26,6 @@ char *check_mapset_in_layer_name(char *, int);
 static char *str_json_escape(const char *str);
 static char *str_replace_free_buffer(char *buffer, const char old_char,
                                      const char *new_str);
-
 /*!
    \brief This function generates actinia JSON process chain building blocks
    from the command line arguments that can be used in the actinia processing
@@ -229,7 +228,6 @@ char *G__json(void)
     /* Count input and output options */
     if (st->n_opts) {
         struct Option *opt;
-
         for (opt = &st->first_option; opt; opt = opt->next_opt) {
             if (opt->answer) {
                 if (opt->gisprompt) {
@@ -254,6 +252,23 @@ char *G__json(void)
 
     fprintf(fp, "{\n");
     fprintf(fp, "  \"module\": \"%s\",\n", G_program_name());
+    if (st->overwrite || getenv("GRASS_OVERWRITE")) {
+        fprintf(fp, "  \"overwrite\": true,\n");
+    }
+
+    if (st->module_info.verbose == G_verbose_max() ||
+        G_verbose() == G_verbose_max()) {
+        fprintf(fp, "  \"verbose\": true,\n");
+    }
+
+    if (st->quiet == 1 || (G_verbose() == G_verbose_min() && !st->superquiet)) {
+        fprintf(fp, "  \"quiet\": true,\n");
+    }
+
+    if (st->superquiet || G_verbose() == -1) {
+        fprintf(fp, "  \"superquiet\": true,\n");
+    }
+
     fprintf(fp, "  \"id\": \"%s_%i\"", G_program_name(), random_int);
 
     if (st->n_flags && num_flags > 0) {
@@ -336,10 +351,10 @@ char *G__json(void)
                 }
             }
         }
-        fprintf(fp, "   ]\n");
+        fprintf(fp, "   ]");
     }
 
-    fprintf(fp, "}\n");
+    fprintf(fp, "\n}\n");
     fclose(fp);
 
     /* Print the file content to stdout */
