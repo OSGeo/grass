@@ -219,6 +219,15 @@ jobs:
             cp -rv "${name}" addons
           done
 
+      - name: Make links within doc relative
+        run: |
+          python grass/utils/replace_links.py \
+            --target-dirs "" addons \
+            --new-base-url "" \
+            --verbose \
+            https://grass.osgeo.org/grass-stable/manuals \
+            "$MKDOCS_DIR/source/"
+
       - name: Get mkdocs
         run: |
           pip install -r "grass/man/mkdocs/requirements.txt"
