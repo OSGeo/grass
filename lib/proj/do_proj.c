@@ -39,8 +39,6 @@
         }                         \
     } while (0)
 
-static double METERS_in = 1.0, METERS_out = 1.0;
-
 int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
                 double *ymin, double *ymax)
 {
@@ -878,6 +876,7 @@ int GPJ_transform(const struct pj_info *info_in, const struct pj_info *info_out,
 
     int in_is_ll, out_is_ll, in_deg2rad, out_rad2deg;
     PJ_COORD c;
+    double METERS_in = 1.0, METERS_out = 1.0;
 
     if (info_in->pj == NULL)
         G_fatal_error(_("No input projection"));
@@ -1040,6 +1039,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
     /* PROJ 5+ variant */
     int in_is_ll, out_is_ll, in_deg2rad, out_rad2deg;
     PJ_COORD c;
+    double METERS_in = 1.0, METERS_out = 1.0;
 
     if (info_trans->pj == NULL)
         G_fatal_error(_("No transformation object"));
@@ -1236,6 +1236,7 @@ int pj_do_proj(double *x, double *y, const struct pj_info *info_in,
 
     struct pj_info info_trans;
     PJ_COORD c;
+    double METERS_in = 1.0, METERS_out = 1.0;
 
     if (GPJ_init_transform(info_in, info_out, &info_trans) < 0) {
         return -1;
@@ -1325,6 +1326,7 @@ int pj_do_transform(int count, double *x, double *y, double *h,
 
     struct pj_info info_trans;
     PJ_COORD c;
+    double METERS_in = 1.0, METERS_out = 1.0;
 
     if (GPJ_init_transform(info_in, info_out, &info_trans) < 0) {
         return -1;
