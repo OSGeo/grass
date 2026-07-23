@@ -383,28 +383,46 @@ if(WITH_DOCS)
     )
 endif()
 
+# The thumbnails in gui/images are used by the GUI at runtime (the color
+# table selection widget), so they are generated regardless of WITH_DOCS;
+# the documentation trees get their own copies.
 add_custom_target(
     r_colors_thumbnails
     ALL
     COMMAND
         ${CMAKE_COMMAND} -E make_directory
-        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+        ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/colortables
     COMMAND
         ${grass_env_command} ${PYTHON_EXECUTABLE} ${THUMBNAILS_PY}
-        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
-    COMMAND
-        ${CMAKE_COMMAND} -E copy_directory
-        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
-        ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/colortables
-    BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+        ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/colortables
+    BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/colortables
     COMMENT "Creating thumbnails"
     DEPENDS ALL_MODULES
 )
 set_target_properties(r_colors_thumbnails PROPERTIES FOLDER Misc)
 install(
-    DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
-    DESTINATION ${GRASS_INSTALL_DOCDIR}
+    DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/colortables
+    DESTINATION ${GRASS_INSTALL_GUIDIR}/images
 )
+if(WITH_DOCS)
+    add_custom_command(
+        TARGET r_colors_thumbnails
+        POST_BUILD
+        COMMAND
+            ${CMAKE_COMMAND} -E copy_directory
+            ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/colortables
+            ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+        COMMAND
+            ${CMAKE_COMMAND} -E copy_directory
+            ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/colortables
+            ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/colortables
+        COMMENT "Copying thumbnails to the documentation trees"
+    )
+    install(
+        DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+        DESTINATION ${GRASS_INSTALL_DOCDIR}
+    )
+endif()
 
 set(misc_files
     AUTHORS
