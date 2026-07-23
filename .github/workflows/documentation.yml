@@ -168,7 +168,7 @@ jobs:
             grass/html
             !grass/html/**.map
             !grass/html/**.md5
-          retention-days: 3
+          retention-days: 15
 
       - name: Make the doxygen results available (latex)
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -179,7 +179,7 @@ jobs:
             grass/latex
             !grass/latex/**.map
             !grass/latex/**.md5
-          retention-days: 3
+          retention-days: 15
       - name: Compile addons
         run: |
           ./grass-addons/utils/cronjobs_osgeo_lxd/compile_addons_git.sh \
@@ -256,7 +256,7 @@ jobs:
           name: grass-addon-build-logs
           if-no-files-found: error
           path: addons-build-dir/logs
-          retention-days: 3
+          retention-days: 15
 
       - name: Make the result available
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -264,4 +264,4 @@ jobs:
           name: mkdocs-site
           if-no-files-found: error
           path: ${{ env.MKDOCS_DIR }}/site
-          retention-days: 3
+          retention-days: 15
