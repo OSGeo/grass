@@ -633,12 +633,12 @@ class DatasetBase(SQLDatabaseInterface):
     def __init__(
         self,
         table=None,
-        ident=None,
+        ident: str | None = None,
         name: str | None = None,
-        mapset=None,
-        creator=None,
-        ctime=None,
-        ttype=None,
+        mapset: str | None = None,
+        creator: str | None = None,
+        ctime: datetime | None = None,
+        ttype: str | None = None,
     ) -> None:
         """Constructor
 
@@ -662,15 +662,17 @@ class DatasetBase(SQLDatabaseInterface):
 
         self.set_id(ident)
         if ident is not None and name is None and mapset is None:
-            if ident.find("@") >= 0:
-                name, mapset = ident.split("@")
-            if name.find(":") >= 0:
-                name, layer = ident.split(":")
+            if "@" in ident:
+                name, mapset = ident.split("@", 1)
+            if ":" in name:
+                name, layer = ident.split(":", 1)
         self.set_name(name)
         self.set_mapset(mapset)
         self.set_creator(creator)
         self.set_ctime(ctime)
         self.set_ttype(ttype)
+        self._readonly = False
+        self.set_readonly()
 
     def set_id(self, ident) -> None:
         """Convenient method to set the unique identifier (primary key)
@@ -684,14 +686,14 @@ class DatasetBase(SQLDatabaseInterface):
         name = ""
 
         if ident is not None:
-            if ident.find("@") >= 0:
-                name, mapset = ident.split("@")
+            if "@" in ident:
+                name, mapset = ident.split("@", 1)
                 self.set_mapset(mapset)
                 self.set_name(name)
             else:
                 self.msgr.fatal(_("Wrong identifier, the mapset is missing"))
-            if name.find(":") >= 0:
-                name, layer = ident.split(":")
+            if ":" in name:
+                name, layer = name.split(":", 1)
                 self.set_layer(layer)
             self.set_name(name)
 
@@ -747,16 +749,14 @@ class DatasetBase(SQLDatabaseInterface):
         else:
             self.D["temporal_type"] = ttype
 
-    def get_id(self):
+    def get_id(self) -> str | None:
         """Convenient method to get the unique identifier (primary key)
 
         :return: None if not found
         """
-        if "id" in self.D:
-            return self.D["id"]
-        return None
+        return self.D.get("id")
 
-    def get_map_id(self):
+    def get_map_id(self) -> str | None:
         """Convenient method to get the unique map identifier
         without layer information
 
@@ -764,67 +764,65 @@ class DatasetBase(SQLDatabaseInterface):
                or None in case the id was not set
         """
         if self.id:
-            if self.id.find(":") >= 0:
+            if ":" in self.id:
                 # Remove the layer identifier from the id
-                return self.id.split("@")[0].split(":")[0] + "@" + self.id.split("@")[1]
+                return f"{self.id.split('@')[0].split(':')[0]}@{self.id.split('@')[1]}"
             return self.id
         return None
 
-    def get_layer(self):
+    def get_layer(self) -> str | None:
         """Convenient method to get the layer of the map (part of primary key)
 
         Layer are currently supported for vector maps
 
         :return: None if not found
         """
-        if "layer" in self.D:
-            return self.D["layer"]
-        return None
+        return self.D.get("layer")
 
-    def get_name(self):
+    def get_name(self) -> str | None:
         """Get the name of the dataset
 
         :return: None if not found
         """
-        if "name" in self.D:
-            return self.D["name"]
-        return None
+        return self.D.get("name")
 
-    def get_mapset(self):
+    def get_mapset(self) -> str | None:
         """Get the name of mapset of this dataset
 
         :return: None if not found
         """
-        if "mapset" in self.D:
-            return self.D["mapset"]
-        return None
+        return self.D.get("mapset")
 
-    def get_creator(self):
+    def get_creator(self) -> str | None:
         """Get the creator of the dataset
 
         :return: None if not found
         """
-        if "creator" in self.D:
-            return self.D["creator"]
-        return None
+        return self.D.get("creator")
 
-    def get_ctime(self):
+    def get_ctime(self) -> datetime | None:
         """Get the creation time of the dataset, datatype is datetime
 
         :return: None if not found
         """
-        if "creation_time" in self.D:
-            return self.D["creation_time"]
-        return None
+        return self.D.get("creation_time")
 
-    def get_ttype(self):
+    def get_ttype(self) -> str | None:
         """Get the temporal type of the map
 
         :return: None if not found
         """
-        if "temporal_type" in self.D:
-            return self.D["temporal_type"]
-        return None
+        return self.D.get("temporal_type")
+
+    def set_readonly(self) -> None:
+        """Set the readonly flag for this object"""
+        self._readonly = bool(
+            self.get_mapset() and self.get_mapset() != get_current_mapset()
+        )
+
+    def get_readonly(self) -> bool:
+        """Get the readonly flag for this object"""
+        return self._readonly
 
     # Properties of this class
     id = property(fget=get_id, fset=set_id)
@@ -834,6 +832,7 @@ class DatasetBase(SQLDatabaseInterface):
     ctime = property(fget=get_ctime, fset=set_ctime)
     ttype = property(fget=get_ttype, fset=set_ttype)
     creator = property(fget=get_creator, fset=set_creator)
+    readonly = property(fget=get_readonly)
 
     def print_info(self) -> None:
         """Print information about this class in human readable style"""
@@ -1032,9 +1031,7 @@ class STDSBase(DatasetBase):
 
         :return: None if not found
         """
-        if "semantic_type" in self.D:
-            return self.D["semantic_type"]
-        return None
+        return self.D.get("semantic_type")
 
     def get_mtime(self):
         """Get the modification time of the space time dataset, datatype is
@@ -1042,9 +1039,7 @@ class STDSBase(DatasetBase):
 
         :return: None if not found
         """
-        if "modification_time" in self.D:
-            return self.D["modification_time"]
-        return None
+        return self.D.get("modification_time")
 
     semantic_type = property(fget=get_semantic_type, fset=set_semantic_type)
 
@@ -1204,9 +1199,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
 
         :return: None if not found
         """
-        if "id" in self.D:
-            return self.D["id"]
-        return None
+        return self.D.get("id")
 
     def get_registered_stds(self):
         """Get the comma separated list of space time datasets ids
@@ -1214,9 +1207,7 @@ class AbstractSTDSRegister(SQLDatabaseInterface):
 
         :return: None if not found
         """
-        if "registered_stds" in self.D:
-            return self.D["registered_stds"]
-        return None
+        return self.D.get("registered_stds")
 
     # Properties of this class
     id = property(fget=get_id, fset=set_id)
