@@ -33,6 +33,7 @@ strip-check:
 install:
 	@ echo $(ARCH_BINDIR)/$(GRASS_NAME)
 	$(MAKE) install-check-built
+	$(MAKE) build-mkdocs
 ifeq ($(strip $(MACOSX_APP)),1)
 	$(MAKE) install-macosx
 else
@@ -47,6 +48,23 @@ install-check-built:
 		echo "ERROR: GRASS has not been compiled. Try \"make\" first."; \
 		echo "  Installation aborted, exiting Make."; \
 		exit; \
+	fi
+
+# The documentation site ships with the installation: build it into the dist
+# tree so the install copy includes it. When mkdocs is not available (e.g.
+# it is in a user environment but the install runs under sudo), a site built
+# earlier by "make -C man build-mkdocs" is still installed; otherwise the
+# site is skipped with a warning and the help system uses its fallbacks.
+build-mkdocs:
+	@ if command -v mkdocs >/dev/null 2>&1 ; then \
+		$(MAKE) -C man build-mkdocs || \
+		echo "WARNING: mkdocs build failed, the documentation site will be incomplete or missing." >&2 ; \
+	elif [ -d "$(MDDIR)/site" ] ; then \
+		echo "mkdocs not found; using the previously built documentation site." ; \
+	else \
+		echo "WARNING: mkdocs not found, the documentation site will not be" >&2 ; \
+		echo "  installed. To include it, install the Python packages listed" >&2 ; \
+		echo "  in man/mkdocs/requirements.txt and run make install again." >&2 ; \
 	fi
 
 install-check-parent: | $(DESTDIR)
@@ -187,6 +205,7 @@ install-strip:
 	$(MAKE) install
 
 bindist:
+	$(MAKE) build-mkdocs
 ifeq ($(strip $(MACOSX_APP)),1)
 	$(MAKE) bindist-macosx
 else
@@ -254,5 +273,5 @@ srclibsdist: distclean
 
 .PHONY: strip strip-check
 .PHONY: install-check-built install-check-parent install-check-writable install-check-prefix
-.PHONY: install real-install install-strip install-macosx
+.PHONY: install real-install install-strip install-macosx build-mkdocs
 .PHONY: bindist real-bindist bindist-macosx srcdist srclibsdist
