@@ -36,12 +36,11 @@ GRASS Development Team</a>, GRASS ${grass_version} Documentation</p>
 )
 
 grass_version = core.version()["version"]
-# Doc URLs use the short "grassMAJORMINOR" prefix (e.g. grass86) that matches the
-# published numbered manuals tree, not the full dev version string (see #5935).
-grass_short_version = "".join(grass_version.split(".")[:2])
-grass_docs_baseurl = (
-    f"https://grass.osgeo.org/grass{grass_short_version}/manuals/libpython/"
-)
+# Canonical doc URLs point to the stable manuals tree, matching the MkDocs core
+# manuals (man/mkdocs/mkdocs.yml site_url = .../grass-stable/manuals/). Keeping an
+# absolute stable base here keeps every libpython canonical + sitemap <loc> on the
+# always-published grass-stable tree; CI rewrites it for dev builds (see #5935).
+grass_docs_baseurl = "https://grass.osgeo.org/grass-stable/manuals/libpython/"
 today = date.today().strftime("%B %d, %Y")
 
 copy("_templates/layout.html.template", "_templates/layout.html")
@@ -470,7 +469,7 @@ todo_include_todos = True
 # sphinx-sitemap extension config
 # https://sphinx-sitemap.readthedocs.io/en/latest/advanced-configuration.html
 # Each <loc> is html_baseurl + {link}, so the sitemap URLs match the canonical
-# URLs exactly; the version prefix is already part of html_baseurl (see #5935).
+# URLs exactly; the grass-stable base is already part of html_baseurl (see #5935).
 sitemap_filename = "sitemap.xml"
 sitemap_url_scheme = "{link}"
 
