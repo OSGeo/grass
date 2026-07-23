@@ -76,43 +76,23 @@ To contribute effectively, please familiarize yourself with our
 If you use an AI assistant or agent, see [`AGENTS.md`](./AGENTS.md) for
 project-specific instructions and conventions.
 
-### Testing changes
+To test your changes, you may need to compile the source code.
+For compilation, see [instructions for building with CMake](./doc/development/building_with_cmake.md)
+or [instructions for GNU Autoools](./INSTALL.md).
+Further notes for various platforms can be found on a dedicated
+[wiki page](https://grasswiki.osgeo.org/wiki/Compile_and_Install).
 
-Testing helps to ensure that the changes work well with the rest
-of the project. While there are many different ways to test,
-usually you will want to compile the source code (see below),
-add test code (using _grass.gunittest_ or pytest), and run code
-linters (automated code quality checks).
+Before creating a PR, please test your changes.
+Refer to [testing README](./testsuite/README.md) for details.
+Once you create a PR, a series of automated checks which will run on your pull request.
+This is a part of the standard iterative process of integrating
+changes into the main code, so if that happens,
+just see the error messages, go back to your code and try again.
+If you are not sure what to do, let others know in a pull request comment.
 
-There is a series of automated checks which will run on your pull request
-after you create one. You don't need to run all these
-checks locally and, indeed, some of them may fail for your code. This is a part
-of the standard iterative process of integrating changes into the main code,
-so if that happens, just see the error messages, go back to your code
-and try again. If you are not sure what to do, let others know in a pull
-request comment.
-
-Note that there are some steps you can do locally to improve your code.
-For Python, run `ruff format` to apply standardized formatting. You can
-also run linter tools such as `ruff check` or Pylint which will suggest
-different improvements to your code.
-
-## Compilation
-
-More often than not, in order to test the changes, you need to create
-a runnable binary program from the source code,
-using the so-called "compilation step". While the
-source code consists of thousands of C and Python files (plus HTML
-documentation and other files), the included "makefiles" tell the build system to
-generate binaries from the source code in the correct order, render the
-manual pages, etc.
-
-The way to install the compiler tools and Python depends on the operating
-system. To make this easier, we have collected copy-paste instructions
-to install dependencies and compile GRASS source code for most operating systems.
-Please see our dedicated wiki:
-
-[Compile and install instructions](https://grasswiki.osgeo.org/wiki/Compile_and_Install)
+In addition to testing, please use
+[pre-commit](doc/development/style_guide.md#using-pre-commit)
+to apply standardized formatting.
 
 ## About source code
 
