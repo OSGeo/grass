@@ -4,29 +4,14 @@
    Thomas Huld from JRC in Ispra a new version of r.sun was prepared using
    ESRA solar radiation formulas.  See the manual page for details.
 
-  (C) 2002 Copyright Jaro Hofierka, Gresaka 22, 085 01 Bardejov, Slovakia,
-               and GeoModel, s.r.o., Bratislava, Slovakia
-  email: hofierka at geomodel.sk, marcel.suri at jrc.it, suri at geomodel.sk
+  SPDX-FileCopyrightText: 2002 Jaro Hofierka
+  SPDX-FileCopyrightText: 2002 GeoModel, s.r.o.
+  SPDX-FileCopyrightText: 2011 Hamish Bowman
+  SPDX-FileCopyrightText: Other GRASS authors
+  SPDX-License-Identifier: GPL-2.0-or-later
 
   (C) 2011 by Hamish Bowman, and the GRASS Development Team
 ****************************************************************************/
-/*
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the
- *   Free Software Foundation, Inc.,
- *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
-
 /*v. 2.0 July 2002, NULL data handling, JH */
 /*v. 2.1 January 2003, code optimization by Thomas Huld, JH */
 
