@@ -1,22 +1,22 @@
 """Parallel-correctness tests for r.proj.
 
-r.proj has no nprocs= option; its thread count comes from OMP_NUM_THREADS.
-Every run below is given its OWN environment dict, a copy of the session
-env with OMP_NUM_THREADS (and, for the fallback test, R_PROJ_FORCE_TILECACHE)
-set on the copy for that run only. Nothing shared is mutated, so the serial
-and parallel runs of a test cannot leak thread or path state into each other.
+r.proj takes a nprocs= option that sets the compute thread count, so each run
+below passes nprocs= for that run, and the fallback test also sets
+R_PROJ_FORCE_TILECACHE on its own env copy. Nothing shared is mutated, so the
+serial and parallel runs of a test cannot leak thread or path state into each
+other.
 
-The baseline is the module's own single-thread run (OMP_NUM_THREADS=1), not
-an external serial binary. The question these tests answer is whether adding
+The baseline is the module's own single-thread run at nprocs=1 rather than an
+external serial binary. The question these tests answer is whether adding
 threads, or taking the tile-cache fallback, changes the output of this same
-binary. That comparison is exact and reproducible in CI; an external oracle
-would not be.
+binary. That comparison is exact and reproducible in CI where an external
+oracle would not be.
 
-Correctness rule: nearest is asserted bitwise (abs diff max == 0). Bilinear
-is asserted bitwise too, because each output cell is interpolated
-independently in a fixed operation order, so threading does not reorder its
-arithmetic. The epsilon-1e-6 fallback from the proposal may be invoked only
-on an actual CI reordering failure, naming the platform that showed it.
+Nearest is asserted bitwise with an absolute diff max of zero. Bilinear is
+asserted bitwise too because each output cell is interpolated independently in
+a fixed operation order, so threading does not reorder its arithmetic. The
+epsilon-1e-6 fallback from the proposal may be invoked only on an actual CI
+reordering failure, naming the platform that showed it.
 """
 
 import grass.script as gs
@@ -106,8 +106,8 @@ def test_bilinear_parallel_matches_serial(session_3857):
     base = _env(session)
     _set_region_from_source(base, INPUT_MID, "bilinear")
 
-    _project(_env(session, OMP_NUM_THREADS=1), INPUT_MID, "bilin_serial", "bilinear")
-    _project(_env(session, OMP_NUM_THREADS=1), INPUT_MID, "nearest_ref", "nearest")
+    _project(base, INPUT_MID, "bilin_serial", "bilinear", nprocs=1)
+    _project(base, INPUT_MID, "nearest_ref", "nearest", nprocs=1)
     gs.run_command(
         "r.mapcalc",
         expression="dispatch_live = abs(bilin_serial - nearest_ref)",
@@ -118,7 +118,7 @@ def test_bilinear_parallel_matches_serial(session_3857):
         "bilinear output equals nearest; dispatch may have fallen back"
     )
 
-    _project(_env(session, OMP_NUM_THREADS=4), INPUT_MID, "bilin_parallel", "bilinear")
+    _project(base, INPUT_MID, "bilin_parallel", "bilinear", nprocs=4)
     _assert_bitwise_identical(base, "bilin_serial", "bilin_parallel", "bilin_diff")
 
 
@@ -129,10 +129,8 @@ def test_nearest_memory_banding(session_3857):
     base = _env(session)
     _set_region_from_source(base, INPUT_MID, "nearest")
 
-    _project(_env(session, OMP_NUM_THREADS=1), INPUT_MID, "mem_serial", "nearest")
-    _project(
-        _env(session, OMP_NUM_THREADS=4), INPUT_MID, "mem_banded", "nearest", memory=5
-    )
+    _project(base, INPUT_MID, "mem_serial", "nearest", nprocs=1)
+    _project(base, INPUT_MID, "mem_banded", "nearest", nprocs=4, memory=5)
     _assert_bitwise_identical(base, "mem_serial", "mem_banded", "mem_diff")
 
 
@@ -153,8 +151,8 @@ def test_pole_nearest_parallel_matches_serial(session_pole):
         env=base,
     )
 
-    _project(_env(session, OMP_NUM_THREADS=1), INPUT_POLAR, "pole_serial", "nearest")
-    _project(_env(session, OMP_NUM_THREADS=4), INPUT_POLAR, "pole_parallel", "nearest")
+    _project(base, INPUT_POLAR, "pole_serial", "nearest", nprocs=1)
+    _project(base, INPUT_POLAR, "pole_parallel", "nearest", nprocs=4)
     _assert_bitwise_identical(base, "pole_serial", "pole_parallel", "pole_diff")
 
 
@@ -168,10 +166,11 @@ def test_forced_fallback_matches_banded(session_3857):
     _set_region_from_source(base, INPUT_MID, "nearest")
 
     _project(
-        _env(session, OMP_NUM_THREADS=1, R_PROJ_FORCE_TILECACHE=1),
+        _env(session, R_PROJ_FORCE_TILECACHE=1),
         INPUT_MID,
         "fallback_tilecache",
         "nearest",
+        nprocs=1,
     )
-    _project(_env(session, OMP_NUM_THREADS=4), INPUT_MID, "banded", "nearest")
+    _project(base, INPUT_MID, "banded", "nearest", nprocs=4)
     _assert_bitwise_identical(base, "fallback_tilecache", "banded", "fallback_diff")

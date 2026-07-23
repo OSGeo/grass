@@ -93,12 +93,11 @@ struct menu menu[] = {
 static char *make_ipol_list(void);
 static char *make_ipol_desc(void);
 
-/* Nearest read from an in-RAM input STRIP holding input rows [imin, imax].
- * col_idx/row_idx are full-map input indices; the strip is addressed relative
- * to imin. A sample inside the full input map but outside the loaded strip
- * means the band footprint was under-sized: this is the stop-on-divergence
- * trip (must never fire if band_input_row_span is correct). Lock-free: reads
- * only, disjoint output slots per thread. */
+/* Nearest-neighbor read from an in-RAM strip holding input rows [imin, imax].
+ * The col_idx and row_idx values are full-map indices and the strip is
+ * addressed relative to imin. A sample that lands inside the input map but
+ * outside the loaded strip means the band was under-sized, which the guard
+ * below catches. */
 static void interpolate_strip(void *strip, void *obufptr, int cell_type,
                               double col_idx, double row_idx,
                               struct Cell_head *incellhd, int imin, int imax)
@@ -107,18 +106,15 @@ static void interpolate_strip(void *strip, void *obufptr, int cell_type,
     int r = (int)floor(row_idx);
     int cell_size = Rast_cell_size(cell_type);
 
-    /* Outside the full input map: legitimate NULL (same as p_nearest). */
+    /* A sample outside the input map is a legitimate NULL, like p_nearest. */
     if (r < 0 || r >= incellhd->rows || c < 0 || c >= incellhd->cols) {
         Rast_set_null_value(obufptr, 1, cell_type);
         return;
     }
 
-    /* This input row is inside the input map (the check above already handled
-     * coordinates that fall outside it), but it is not among the rows we
-     * preloaded into this band's strip. That cannot happen if the band's
-     * footprint estimate was right, so it means the estimate was wrong: a bug
-     * in band sizing, not a normal case. Fail loudly rather than write a NULL
-     * and silently produce wrong output. */
+    /* The band footprint was under-sized when a needed input row lies inside
+     * the input map but outside the loaded strip, so it fails loudly rather
+     * than emit a wrong NULL. */
     if (r < imin || r > imax)
         G_fatal_error(_("Band strip under-sized: input row %d outside loaded "
                         "range [%d, %d] at column %d"),
@@ -130,37 +126,33 @@ static void interpolate_strip(void *strip, void *obufptr, int cell_type,
     memcpy(obufptr, src, cell_size);
 }
 
-/* Strip-based kernels for the banded compute path, in the same order as menu[]:
- * slot i is the strip counterpart of menu[i].method. Slot 0 is nearest
- * (interpolate_strip above); slots 1-6 are the interp_strip.c kernels. */
+/* Strip kernels in the same order as menu[], so slot i is the strip counterpart
+ * of menu[i].method. Slot 0 is nearest above and slots 1 to 6 come from
+ * interp_strip.c. */
 static const strip_func strip_kernels[] = {
     interpolate_strip, strip_bilinear, strip_cubic,    strip_lanczos,
     strip_bilinear_f,  strip_cubic_f,  strip_lanczos_f};
 
-/* Geographic poles within the input map's latitude coverage.
- * band_input_row_span samples only the tile perimeter, so a tile whose interior
- * holds a pole has an input-row (latitude) extremum the perimeter misses; the
- * pole's row is folded into that tile's span. Each pole is stored as its
- * output-CRS coordinate (for a point-in-tile test) and its input row. Filled
- * once per map, and empty (n == 0) whenever no pole is in frame, so pole
- * handling is a no-op on such maps. Assumes a pole maps to a single output
- * point (azimuthal/stereographic); for a projection that images a pole as a
- * line or arc, the under-size guard remains the backstop. */
+/* Geographic poles inside the input's latitude coverage. band_input_row_span
+ * walks only the tile perimeter, so a pole in a tile's interior is a latitude
+ * extremum the walk misses, and the pole's row is folded into that tile's span.
+ * Each pole is stored as its output-CRS coordinate and its input row. The set
+ * is empty when no pole is in frame. This assumes a pole maps to one output
+ * point as in azimuthal and stereographic projections, and otherwise the
+ * under-size guard stays the backstop. */
 struct pole_set {
     int n;               /* active poles, 0..2 */
     double ox[2], oy[2]; /* pole coordinates in the output CRS */
     double ri[2];        /* pole input row index */
 };
 
-/* Dense edge-walk of an output tile's rectangle [obr0, obr1) x [obc0, obc1)
- * projected into input space; returns the min/max INPUT ROW touched, plus a
- * 2-cell margin, clamped to the input map. Samples the tile's top and bottom
- * rows across its columns [obc0, obc1) and its left and right columns across
- * its rows (bordwalk-style), so a curved transform's interior-edge extremum is
- * caught -- corner-only sampling can under-size the strip. A full-width band is
- * the case obc0=0, obc1=cols. Called serially, before the parallel region, so
- * the shared tproj is safe here. Returns imax < imin for a tile that projects
- * entirely outside the input. */
+/* Edge-walk of an output tile [obr0, obr1) by [obc0, obc1) projected into input
+ * space, returning the min and max input row it touches plus a 2-cell margin,
+ * clamped to the input map. It walks the tile perimeter of top and bottom rows
+ * and left and right columns so a curved transform's interior-edge extremum is
+ * caught, which corner-only sampling would miss. It runs serially before the
+ * parallel region, so the shared tproj is safe. It returns imax below imin when
+ * the tile projects entirely outside the input. */
 static void
 band_input_row_span(const struct Cell_head *ohd, const struct Cell_head *ihd,
                     const struct pj_info *oproj, const struct pj_info *iproj,
@@ -204,12 +196,11 @@ band_input_row_span(const struct Cell_head *ohd, const struct Cell_head *ihd,
         }
     }
 
-    /* Fold in any pole whose output point lies in this tile's rect: the
-     * perimeter walk cannot see an interior latitude extremum. A pole exactly
-     * on a tile edge (inclusive test) is caught by both adjacent tiles, which
-     * is harmless -- it only widens a strip that is loaded anyway. Placed
-     * before the empty-tile check so a pole inside an otherwise-outside tile
-     * still yields a valid span. */
+    /* Fold in any pole whose output point lies in this tile, since the
+     * perimeter walk cannot see an interior latitude extremum. A pole on a tile
+     * edge is caught by both adjacent tiles, which only widens a strip that is
+     * loaded anyway. This comes before the empty-tile check so a pole inside an
+     * otherwise outside tile still yields a valid span. */
     if (poles) {
         double x_lo = ohd->west + obc0 * ohd->ew_res;
         double x_hi = ohd->west + obc1 * ohd->ew_res;
@@ -246,13 +237,11 @@ band_input_row_span(const struct Cell_head *ohd, const struct Cell_head *ihd,
     *imax = hi;
 }
 
-/* Largest input-row strip (in rows) among the column tiles of width tilew that
- * partition output columns [0, ohd->cols) for the band [obr0, obr1). Tiles are
- * loaded one at a time, so peak strip memory is set by the worst tile, not the
- * union of the band's tiles; the fit search sizes this against the cap. Every
- * call is a full tile edge-walk, so this is O(tiles * perimeter) -- paid in the
- * serial size phase, and only when column splitting is actually entered.
- * Returns 0 if every tile projects entirely outside the input. */
+/* Largest input-row strip among the width-tilew column tiles that partition the
+ * band [obr0, obr1). Tiles load one at a time, so peak strip memory is the
+ * worst tile rather than the union of the band's tiles, and the fit search
+ * sizes this against the cap. It returns 0 when every tile projects entirely
+ * outside the input. */
 static int worst_tile_strip_rows(const struct Cell_head *ohd,
                                  const struct Cell_head *ihd,
                                  const struct pj_info *oproj,
@@ -280,11 +269,11 @@ static int worst_tile_strip_rows(const struct Cell_head *ohd,
 
 #define TILE_PROBE 16 /* tiles sampled by the Phase-2 width-search estimate */
 
-/* Cheap estimate of worst_tile_strip_rows: the largest input-row strip among
- * at most `probe` column tiles, evenly spaced across the band width and always
- * including the first and last. A subset max is a LOWER bound on the true
- * worst, so it only PRUNES the Phase-2 search; the chosen width is exact-
- * validated by worst_tile_strip_rows before use. */
+/* Cheap lower-bound estimate of worst_tile_strip_rows, taking the largest strip
+ * among at most probe column tiles that are evenly spaced across the band width
+ * and always include the first and last. A subset max only prunes the Phase-2
+ * search, and the chosen width is exact-validated by worst_tile_strip_rows
+ * before use. */
 static int est_worst_tile_strip_rows(
     const struct Cell_head *ohd, const struct Cell_head *ihd,
     const struct pj_info *oproj, const struct pj_info *iproj,
@@ -315,11 +304,10 @@ static int est_worst_tile_strip_rows(
     return worst;
 }
 
-/* Exact per-height fit test for the Phase-2 height search: 1 iff a band of
- * height h at obr0 has an output buffer within the cap AND some column-tile
- * width whose worst input strip fits (setting *acc_tilew to that width, via the
- * same upper-tier estimate then lower-tier exact validation the search uses);
- * 0 if no width fits or the output buffer alone exceeds the cap. */
+/* Phase-2 fit test that returns 1 when a band of height h at obr0 fits the cap
+ * at some column-tile width, setting acc_tilew to that width through the same
+ * estimate then exact-validate steps the search uses. It returns 0 when no
+ * width fits or the output buffer alone exceeds the cap. */
 static int
 phase2_width_fit(const struct Cell_head *ohd, const struct Cell_head *ihd,
                  const struct pj_info *oproj, const struct pj_info *iproj,
@@ -366,11 +354,9 @@ phase2_width_fit(const struct Cell_head *ohd, const struct Cell_head *ihd,
     return 0;
 }
 
-/* Full-width fit test for the Phase-1 height search: 1 iff a band of height h
- * at obr0 has its full-width input strip plus output buffer within the cap.
- * Short-circuits on the output buffer alone (no edge walk) when it already
- * exceeds the cap. Used only by the seed peek; the walk keeps its inline test,
- * so the miss path is byte-for-byte today's execution. */
+/* Phase-1 fit test that returns 1 when a band of height h at obr0 fits its
+ * full-width input strip plus output buffer inside the cap. It short-circuits
+ * on the output buffer alone and is used only by the seed peek. */
 static int phase1_fits(const struct Cell_head *ohd, const struct Cell_head *ihd,
                        const struct pj_info *oproj, const struct pj_info *iproj,
                        const struct pj_info *tproj, const double *y_center,
@@ -390,21 +376,12 @@ static int phase1_fits(const struct Cell_head *ohd, const struct Cell_head *ihd,
     return strip_bytes + out_mult * out_bytes <= cap_bytes;
 }
 
-/* Serial tile-cache fallback for the large-halo/oblique corner: when even a
- * single output row's full-width input strip busts the memory cap (the bail in
- * the band loop), the banded strip path cannot proceed. This finishes the run
- * from output row obr0 onward using the classic readcell block cache (faults
- * blocks on demand, bounded by the same memory option via nblocks) and the
- * CVAL cache kernels (menu[].method), exactly as the serial r.proj does.
- *
- * Runs strictly serially: get_block mutates shared cache state and is not
- * thread-safe. Rows [0, obr0) were already written by the banded path; each
- * output row is independent of the others, so the banded prefix followed by
- * this serial suffix is bit-identical to a pure serial run. y_center supplies
- * the same output-row northings the banded prefix used (and that serial's
- * ycoord2 recurrence produces), so the seam at obr0 is seamless. A transform
- * failure sets NULL here (matching the banded strip path) rather than the old
- * serial fatal; identical on data where transforms succeed. */
+/* Serial tile-cache fallback for the oblique and large-halo corner. When even
+ * one output row's full-width strip busts the cap, this finishes the run from
+ * row obr0 with the classic readcell cache and CVAL kernels, exactly as serial
+ * r.proj does. It stays serial because get_block mutates shared cache state,
+ * and since the banded path already wrote the earlier rows the result matches
+ * a pure serial run. */
 static void
 fallback_serial_cache(int fdi, int fdo, int cell_type, int method,
                       const struct pj_info *oproj, const struct pj_info *iproj,
@@ -444,7 +421,7 @@ fallback_serial_cache(int fdi, int fdo, int cell_type, int method,
     G_free(obuffer);
 }
 
-/* Write the deferred band, if any, in order and release it. Used by the last
+/* Write the deferred band, if any, in order and release it. Shared by the last
  * band and the fallback bails so every path writes the deferred band the same
  * way. */
 static void flush_pending_band(int fdo, int cell_type, int cols, int cell_size,
@@ -459,6 +436,14 @@ static void flush_pending_band(int fdo, int cell_type, int cols, int cell_size,
                      cell_type);
     G_free(*pending);
     *pending = NULL;
+}
+
+/* Thread count for compute and write overlap, where nprocs above zero
+ * overrides OMP_NUM_THREADS. Set before the fit search so the write overlap's
+ * two reserved output buffers match the band sizing. */
+static int compute_nprocs(struct Option *nprocs)
+{
+    return G_set_omp_num_threads(nprocs);
 }
 
 int main(int argc, char **argv)
@@ -508,6 +493,7 @@ int main(int argc, char **argv)
         *indbase,           /* name of input database       */
         *interpol,          /* interpolation method         */
         *memory,            /* amount of memory for cache   */
+        *nprocs,            /* number of compute threads    */
         *res,               /* resolution of target map     */
         *format;            /* output format                */
 
@@ -564,6 +550,13 @@ int main(int argc, char **argv)
     interpol->descriptions = make_ipol_desc();
 
     memory = G_define_standard_option(G_OPT_MEMORYMB);
+
+    nprocs = G_define_standard_option(G_OPT_M_NPROCS);
+    nprocs->description = _(
+        "Number of threads for parallel computing. 0, the default, uses the "
+        "OpenMP default and honors OMP_NUM_THREADS if set. A value above zero "
+        "overrides OMP_NUM_THREADS, and a value below zero leaves that many "
+        "cores free");
 
     res = G_define_option();
     res->key = "resolution";
@@ -1040,9 +1033,9 @@ int main(int argc, char **argv)
     G_message(_("NS-res: %f"), outcellhd.ns_res);
     G_message(" ");
 
-    /* Open the input map (input location env). Banding loads only per-band
-     * input strips, not the whole map, so fdi stays open across the band loop.
-     */
+    /* Open the input map in the input env. Banding loads only per-band input
+     * strips rather than the whole map, so fdi stays open across the band
+     * loop. */
     G_switch_env();
     Rast_set_input_window(&incellhd);
     fdi = Rast_open_old(inmap->answer, setname);
@@ -1051,24 +1044,16 @@ int main(int argc, char **argv)
         cell_type = FCELL_TYPE;
     cell_size = Rast_cell_size(cell_type);
 
-    /* Parallel input reads: decide the read-thread count here, in the INPUT
-     * env, so the mask guard checks the source mapset's mask (the mask that
-     * would apply to Rast_get_row on fdi). Rast_disable_omp_on_mask returns 1
-     * (serial) if a mask is present or without OpenMP, and does NOT touch the
-     * thread count when no mask exists (lib/raster/mask_info.c:226-231), so the
-     * compute region's threads are unperturbed in the common case. When
-     * read_nprocs > 1 we open that many FRESH read fds (one per thread); fdi is
-     * used only by the serial fallback.
-     * INFERRED-safe (not yet runtime-verified; the gate converts it):
-     * concurrent Rast_open_old fds on the same map across locations is sound
-     * from the r.neighbors same-location precedent (in_fd[t]) plus the Stage 1
-     * fcb analysis (each fd carries its own cur_row/data/data_fd; reads depend
-     * only on the fcb and R__.rd_window). */
-#ifdef _OPENMP
-    int want_nprocs = omp_get_max_threads();
-#else
-    int want_nprocs = 1;
-#endif
+    /* The read-thread count is decided here in the input env so the mask guard
+     * checks the source mapset's mask. Rast_disable_omp_on_mask returns 1 and
+     * forces serial under a mask or without OpenMP, and leaves the count
+     * untouched otherwise (lib/raster/mask_info.c lines 226-231). When
+     * read_nprocs is above one, each thread opens its own fresh fd and fdi
+     * serves only the serial fallback. Concurrent fds on the same map across
+     * locations follow the r.neighbors in_fd[] precedent, where each fd carries
+     * its own cur_row, data, and data_fd. */
+    /* Runs before the fit search. See compute_nprocs(). */
+    int want_nprocs = compute_nprocs(nprocs);
     int read_nprocs = Rast_disable_omp_on_mask(want_nprocs);
     int *fd_read = NULL;
     if (read_nprocs > 1) {
@@ -1077,10 +1062,9 @@ int main(int argc, char **argv)
             fd_read[t] = Rast_open_old(inmap->answer, setname);
     }
 
-    /* Back to the output location: set output window, init transform, open
-     * output map. Both fds now stay open; rd_window/wr_window are set and
-     * survive env switches, so reads/writes use the right windows throughout.
-     */
+    /* Back in the output env, set the output window, init the transform, and
+     * open the output map. Both fds stay open and their windows survive env
+     * switches, so reads and writes use the right window throughout. */
     G_switch_env();
     Rast_set_output_window(&outcellhd);
     G_unset_window();
@@ -1098,17 +1082,15 @@ int main(int argc, char **argv)
     else
         fdo = Rast_open_fp_new(mapname);
 
-    /* Banding (r.neighbors two-level structure): outer serial band loop ->
-     * serial strip load -> parallel compute into a per-band buffer -> serial
-     * in-order per-band write -> next band. Bounds peak memory by the cap
-     * instead of the whole input map (Path A). */
+    /* Banding runs a serial band loop of serial strip load, parallel compute
+     * into a per-band buffer, and an in-order per-band write. This bounds peak
+     * memory by the cap rather than the whole input map. */
     double cap_mb = atof(memory->answer);
     size_t cap_bytes = (size_t)(cap_mb * 1024.0 * 1024.0);
     /* Under write_overlap the overlapped writes run inside the compute region,
-     * so their wall time falls in t_compute. t_write then covers the
-     * non-overlapped writes only: the last band's flush (timed at
-     * fallback_done) and every band at N=1. Fallback bail flushes are untimed,
-     * but a fallback run reports fallback=1 rather than this phase split. */
+     * so their time falls in t_compute. t_write then covers only the
+     * non-overlapped writes, which are the last band's flush and every band at
+     * one thread. The fallback bail flushes are untimed. */
     double t_size = 0.0, t_fill = 0.0, t_compute = 0.0, t_write = 0.0;
     int n_bands = 0;
     int max_tiles = 1;          /* most column tiles used by any single band */
@@ -1117,20 +1099,11 @@ int main(int argc, char **argv)
     int seed_h1 = 0;               /* previous Phase-1 band's accepted height */
     int p1_hits = 0, p1_bands = 0; /* seed hit rate on the Phase-1 path */
 
-    /* Output-row center northings, precomputed once by the serial version's
-     * recurrence: ycoord2 = north - ns_res/2, then ycoord2 -= ns_res per row.
-     * The banded fill loop and the strip-sizing perimeter walk both read these
-     * instead of computing north - ns_res/2 - row*ns_res directly. The direct
-     * multiply and the accumulated subtraction differ by up to one ULP when
-     * ns_res is not exactly representable; for non-nearest interpolation that
-     * shifts the sampling weights and diverges from the serial result by up to
-     * one FCELL ULP. The recurrence is reproduced here deliberately
-     * (bug-compatible rounding) so the parallel output stays bitwise identical
-     * to the serial reference; the direct multiply is the numerically cleaner
-     * form, so any future change away from the recurrence should be made in
-     * both code paths as an explicit accuracy decision. Both the fill loop and
-     * the sizing walk read these values, so sizing and fill stay on the same y
-     * and the loaded strip covers exactly the rows fill probes. */
+    /* Output-row center northings from the serial recurrence, starting at north
+     * minus ns_res/2 and subtracting ns_res per row. The direct form differs by
+     * up to one ULP when ns_res is not exactly representable, so the recurrence
+     * is kept to stay bitwise identical to serial. The fill loop and the sizing
+     * walk share these values. */
     double *y_center = G_malloc((size_t)outcellhd.rows * sizeof(double));
     {
         double yc = outcellhd.north - (outcellhd.ns_res / 2);
@@ -1140,20 +1113,16 @@ int main(int argc, char **argv)
         }
     }
 
-    /* Pole footprint fix: a tile whose interior projects onto a geographic pole
-     * has an input-row extremum the perimeter walk misses. This happens both
-     * when the pole lies inside the input map and when the pole is outside the
-     * input's latitude coverage but its projection still falls inside the
-     * output frame (a pole-centered frame reading an input truncated below the
-     * pole): the highest reachable input latitude is then the input's own edge
-     * row, reached at the frame-center-proximal interior. So project both poles
-     * (lat/lon input only, where a pole is at latitude +/- 90) and fold in the
-     * pole's input row clamped to the input's edge row [0, rows-1]. The
-     * point-in-rect test in band_input_row_span keeps this a no-op for frames
-     * that do not image a pole. On transform failure or a non-finite result
-     * (e.g. a cylindrical projection sending the pole to infinity) the pole is
-     * skipped and the strip under-size guard stays the backstop. Uses the
-     * adjusted incellhd, matching what band_input_row_span sees. */
+    /* Pole footprint fix. A tile that projects onto a geographic pole has an
+     * input-row extremum the perimeter walk misses. This happens when the pole
+     * lies inside the input map, and also when the pole is outside the input's
+     * latitude coverage but still projects into the output frame, as with a
+     * pole-centered frame reading an input truncated below the pole, where the
+     * highest reachable input latitude is the input's own edge row. So it
+     * projects both poles for lat/lon input and folds in the pole's input row
+     * clamped to [0, rows-1]. The point-in-rect test keeps this a no-op for
+     * frames that image no pole, and a transform failure or non-finite result
+     * skips the pole and leaves the under-size guard as the backstop. */
     struct pole_set poles;
 
     poles.n = 0;
@@ -1189,37 +1158,34 @@ int main(int argc, char **argv)
     unsigned char *win = NULL;
     size_t win_cap = 0;
     int win_imin = 0, win_imax = -1;
-    /* One predicate for output double-buffering. The compute region runs
-     * want_nprocs threads (omp_get_max_threads(), not the masked read_nprocs),
-     * so overlap is possible only with more than one compute thread. out_mult
-     * reserves two output bands in the fit search and the omp single writer
-     * engages on the same flag, so the budget and the writer cannot diverge. */
+    /* Output double-buffer predicate. The compute region runs want_nprocs
+     * threads rather than the masked read_nprocs, so overlap needs more than
+     * one compute thread. out_mult reserves two output bands in the fit search
+     * on the same flag the writer uses, so the budget and the writer stay in
+     * step. */
     int write_overlap = want_nprocs > 1;
     int out_mult = write_overlap ? 2 : 1;
-    /* Previous band's output buffer, written by one thread while the next
-     * band computes. NULL when nothing is pending; rows
+    /* Previous band's output buffer, written by one thread while the next band
+     * computes. It is NULL when nothing is pending and holds rows
      * [pending_r0, pending_r1). */
     void *pending_out = NULL;
     int pending_r0 = 0, pending_r1 = 0;
     int obr0 = 0;
     while (obr0 < outcellhd.rows) {
-        /* Fit search. Phase 1 (fast path, unchanged): halve the band height
-         * until the FULL-WIDTH strip plus the band output buffer fit the cap;
-         * the span is re-run per candidate height. Phase 2 (oblique fallback):
-         * only if a single full-width output row still busts the cap, split the
-         * row into column tiles and halve tile WIDTH until the worst tile's
-         * strip fits. Strips are full input width (the raster API reads whole
-         * rows), so width splitting shrinks a tile's input ROW span, not its
+        /* Fit search. Phase 1 halves the band height until the full-width strip
+         * plus output buffer fit the cap. Phase 2 runs only when a single
+         * full-width row still busts the cap, splitting the row into column
+         * tiles and halving tile width until the worst tile's strip fits.
+         * Strips are full input width because the raster API reads whole rows,
+         * so width splitting shrinks a tile's input row span rather than its
          * width. Easy pairs never leave Phase 1. */
         double ts = rproj_wtime();
-        /* Band-0 early-out for the wide-input corner: if a single output row at
-         * the finest tiling already busts the cap, take the serial fallback now
-         * instead of running the height/width search only to bail. Uses the
-         * same worst_tile_strip_rows(obr0, obr0+1, 1) the Phase-2 bail uses,
-         * probed only at the first band so its O(cols) cost is paid once, not
-         * per band. Later-band (pole) busts still fall through to the Phase-2
-         * bail. force_tilecache is deliberately not handled here, so the forced
-         * override keeps routing through that bail unchanged. */
+        /* Band-0 early-out for the wide-input corner. When a single output row
+         * at the finest tiling already busts the cap, take the serial fallback
+         * now instead of running the search only to bail. This is probed once
+         * at the first band. Later-band pole busts still fall through to the
+         * Phase-2 bail, and force_tilecache is deliberately not handled here so
+         * the override keeps routing through that bail. */
         if (obr0 == 0) {
             size_t out1 = (size_t)outcellhd.cols * cell_size;
             int worst1 = worst_tile_strip_rows(&outcellhd, &incellhd, &oproj,
@@ -1251,16 +1217,14 @@ int main(int argc, char **argv)
         }
         int tilew = outcellhd.cols;
         int imin = 0, imax = -1;
-        /* Phase-1 neighbor seed (hit path): seed_h1 (previous Phase-1 accepted
-         * height) is close to this band's. Take g_seed, the grid height just
-         * ABOVE seed_h1 on this band's descending lattice; if it does not fit
-         * then (height-monotone span) nothing taller fits, so the tallest
-         * fitting height is at or below (g_seed+1)/2 and the walk can start
-         * there, skipping the tall full-width edge walks. Any miss (no seed,
-         * seed_h1 too tall, or g_seed fits) starts from the full remaining
-         * height -- byte-for-byte the walk below. Same lattice, same acceptance
-         * line -> identical accepted height and partition; the hit only skips
-         * heights it has shown cannot fit. */
+        /* Phase-1 neighbor seed. seed_h1 is the previous accepted height and is
+         * close to this band's. Take g_seed, the grid height just above
+         * seed_h1, and if it does not fit then nothing taller fits, so the walk
+         * starts at (g_seed+1)/2 and skips the tall full-width edge walks. Any
+         * miss starts from the full remaining height. The lattice and
+         * acceptance line are the same, so the accepted height and partition
+         * are identical and the hit only skips heights already shown not to
+         * fit. */
         int band_orows = outcellhd.rows - obr0;
         int p1_seeded = 0;
         if (seed_h1 > 0 && seed_h1 < band_orows) {
@@ -1288,7 +1252,7 @@ int main(int argc, char **argv)
                 strip_bytes + out_mult * out_bytes <= cap_bytes)
                 break;
             if (band_orows == 1)
-                break; /* height exhausted: fall through to column splitting */
+                break; /* height exhausted, fall through to column splitting */
             band_orows = (band_orows + 1) / 2; /* halve (round up), re-sample */
         }
         if (band_orows > 1) { /* Phase-1 accepted a full-width band */
@@ -1298,19 +1262,14 @@ int main(int argc, char **argv)
                 p1_hits++;
         }
         if (band_orows == 1) {
-            /* Phase 2 (oblique only): find the tallest band height on the
-             * descending grid whose worst column tile fits the cap, then that
-             * height's widest fitting tile width. Neighbor seed (hit path): the
-             * previous Phase-2 band's height (seed_h) is close to this band's
-             * H*. Take g_seed, the grid height just ABOVE seed_h; if it does
-             * not fit then (for an input-row span monotone in band height)
-             * nothing taller fits, so H* is at or below g_seed and the walk can
-             * start there, skipping the tall no-fit heights. On a miss (no
-             * seed, seed_h too tall, or g_seed fits) start from the full
-             * remaining height -- byte-for-byte the unseeded walk. Both starts
-             * lie on the same grid and accept via the same phase2_width_fit, so
-             * H*, W* and the partition are identical; the hit path only skips
-             * heights it has shown cannot fit. */
+            /* Phase 2, oblique only, finds the tallest grid height whose worst
+             * column tile fits, then that height's widest fitting tile width.
+             * seed_h is the previous Phase-2 height and is close to H*. Take
+             * g_seed just above seed_h, and if it does not fit then nothing
+             * taller fits, so the walk starts at (g_seed+1)/2. A miss starts
+             * from the full remaining height. The grid and phase2_width_fit
+             * acceptance are the same, so H*, W*, and the partition are
+             * identical. */
             phase2_bands++;
             int start_h = outcellhd.rows - obr0;
             if (seed_w > 0 && seed_h < start_h) {
@@ -1334,11 +1293,11 @@ int main(int argc, char **argv)
                                      &poles))
                     break;
                 if (band_orows == 1) {
-                    /* Single output row at minimum width still over cap =
-                     * singular/large-halo; take the serial tile-cache path.
-                     * Also reached from band 0 when R_PROJ_FORCE_TILECACHE is
-                     * set, which routes normal data through this identical
-                     * block for testing. */
+                    /* A single output row at minimum width still over the cap
+                     * is a singular or large-halo case, so take the serial
+                     * tile-cache path. This is also reached from band 0 when
+                     * R_PROJ_FORCE_TILECACHE routes normal data here for
+                     * testing. */
                     if (force_tilecache) {
                         G_warning(
                             _("R_PROJ_FORCE_TILECACHE is set: taking the "
@@ -1369,8 +1328,8 @@ int main(int argc, char **argv)
                             obr0, outcellhd.rows - 1, needed_mb);
                     }
                     /* Flush the deferred band before the fallback writes from
-                     * obr0 (in-order). This band's compute region did not run,
-                     * so its omp single did not write the previous band. */
+                     * obr0. This band's compute region did not run, so its
+                     * writer never fired. */
                     flush_pending_band(fdo, cell_type, outcellhd.cols,
                                        cell_size, &pending_out, pending_r0,
                                        pending_r1);
@@ -1393,23 +1352,22 @@ int main(int argc, char **argv)
         if (n_tiles > max_tiles)
             max_tiles = n_tiles;
 
-        /* Per-band output buffer, lock-free disjoint row slots, filled column
-         * tile by column tile and written once after all tiles. Full width
-         * regardless of tiling. */
+        /* Per-band output buffer at full width, filled tile by tile and written
+         * once after all tiles. The row slots are disjoint, so compute is
+         * lock-free. */
         void *band_out =
             G_malloc((size_t)band_orows * outcellhd.cols * cell_size);
 
-        /* Column tiles processed one at a time: only the current tile's strip
-         * is resident, so peak strip memory is the worst tile, not the band's
-         * union. tilew == cols is the single-tile fast path (obc0=0,
-         * obc1=cols), identical to un-tiled banding. */
+        /* Column tiles are processed one at a time, so peak strip memory is the
+         * worst tile rather than the band's union. A tilew equal to cols is the
+         * single-tile fast path. */
         for (int obc0 = 0; obc0 < outcellhd.cols; obc0 += tilew) {
             int obc1 = obc0 + tilew;
             if (obc1 > outcellhd.cols)
                 obc1 = outcellhd.cols;
 
-            /* Per-tile input row span (full-width strip: the raster API reads
-             * whole rows, so columns are not cropped). */
+            /* Per-tile input row span. The strip is full input width because
+             * the raster API reads whole rows, so columns are not cropped. */
             int pole_widened = 0;
 
             band_input_row_span(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
@@ -1422,10 +1380,11 @@ int main(int argc, char **argv)
                     (int)poles.ri[pole_widened - 1], obr0, obr1, obc0, obc1);
             int strip_rows = imax - imin + 1;
 
-            /* Serial strip load (single fd -> get_row not thread-safe). EMPTY
-             * TILE: strip_rows <= 0 -> projects outside input, no read; cells
-             * become NULL via interpolate_strip's out-of-map path, and the
-             * window is invalidated so the next band re-reads in full. */
+            /* Serial strip load, since a single fd makes get_row unsafe to
+             * share. An empty tile with strip_rows at or below zero projects
+             * outside the input and is not read, its cells become NULL through
+             * interpolate_strip's out-of-map path, and the window is
+             * invalidated so the next band re-reads in full. */
             void *strip = NULL;
             if (strip_rows > 0) {
                 size_t need = (size_t)strip_rows * incellhd.cols * cell_size;
@@ -1437,13 +1396,12 @@ int main(int argc, char **argv)
                                 win_imax >= 0 && imin >= win_imin &&
                                 imin <= win_imax + 1;
                 int read_from = imin;
-                /* Grow first, then memmove, then read the tail. G_realloc may
-                 * move the buffer, so it must run before the memmove that
+                /* Grow, then memmove, then read the tail. G_realloc may move
+                 * the buffer, so it must run before the memmove that
                  * repositions the retained overlap. Realloc preserves the old
-                 * rows at their old offsets, and the memmove shifts them to the
-                 * new imin origin. If the span shrinks (imax < win_imax), the
-                 * rows past imax are dropped from win_imax below rather than
-                 * kept, so a later band that needs them re-reads them. */
+                 * rows at their old offsets and the memmove shifts them to the
+                 * new imin origin. Rows past a shrunk imax are dropped through
+                 * win_imax below and re-read if a later band needs them. */
                 if (need > win_cap) {
                     win = G_realloc(win, need);
                     win_cap = need;
@@ -1459,10 +1417,11 @@ int main(int argc, char **argv)
                     G_switch_env(); /* -> input */
                     if (read_nprocs > 1) {
 #ifdef _OPENMP
-                        /* Parallel read (full-span only; can_slide is false
-                         * here): each thread reads a contiguous, disjoint block
-                         * of rows through its OWN fd into its own disjoint
-                         * strip slice. No two threads share an fd/row. */
+                        /* Parallel read of the full span only, since can_slide
+                         * is false here. Each thread reads a contiguous
+                         * disjoint block of rows through its own fd into its
+                         * own strip slice, so no two threads share an fd or a
+                         * row. */
 #pragma omp parallel num_threads(read_nprocs)
                         {
                             int t = omp_get_thread_num();
@@ -1491,7 +1450,7 @@ int main(int argc, char **argv)
                 /* Record what the window now holds. A tiled band leaves win
                  * with only its last tile, so invalidate both fields to force
                  * the next band's full read. Setting both keeps validity
-                 * independent of && short-circuit order. */
+                 * independent of the && short-circuit order. */
                 if (n_tiles == 1) {
                     win_imin = imin;
                     win_imax = imax;
@@ -1503,13 +1462,13 @@ int main(int argc, char **argv)
             }
             else {
                 win_imin = 0;
-                win_imax = -1; /* empty tile: nothing resident */
+                win_imax = -1; /* empty tile, nothing resident */
             }
 
             double t1 = rproj_wtime();
-            /* One parallel region per tile. Not nested: the "omp for" divides
-             * the band's output rows among this region's threads. Separate
-             * directives so each thread clones its PROJ context before the row
+            /* One parallel region per tile. The omp for divides the band's
+             * output rows among this region's threads. The directives are
+             * separate so each thread clones its PROJ context before the row
              * loop and destroys it after. */
 #pragma omp parallel
             {
@@ -1519,8 +1478,8 @@ int main(int argc, char **argv)
 #pragma omp single nowait
                 {
                     /* One thread writes the previous band's rows in order while
-                     * the rest compute this band. First tile only, and
-                     * pending_out is non-NULL only under write_overlap. */
+                     * the rest compute this band. This is the first tile only,
+                     * and pending_out is non-NULL only under write_overlap. */
                     if (obc0 == 0 && pending_out)
                         for (int wr = pending_r0; wr < pending_r1; wr++)
                             Rast_put_row(fdo,
@@ -1567,10 +1526,10 @@ int main(int argc, char **argv)
              * freed per tile. win is freed once at fallback_done. */
         }
 
-        /* Defer this band so the next band's compute region writes it (via the
-         * omp single above). The previous pending was written in this band's
-         * compute region and completed at that region's barrier, so free it
-         * now. Non-overlap bands write and free in order here. */
+        /* Defer this band so the next band's compute region writes it through
+         * the omp single above. The previous pending completed at this band's
+         * compute barrier, so free it now. Non-overlap bands write and free in
+         * order here. */
         if (write_overlap) {
             if (pending_out)
                 G_free(pending_out);
@@ -1596,8 +1555,8 @@ int main(int argc, char **argv)
 
 fallback_done:
     /* Flush the last band's deferred write on normal completion, timed into
-     * t_write. The fallback bails flush before fallback_serial_cache, so
-     * pending_out is NULL here on those paths. */
+     * t_write. The fallback bails already flushed, so pending_out is NULL on
+     * those paths. */
     {
         double tw = rproj_wtime();
         flush_pending_band(fdo, cell_type, outcellhd.cols, cell_size,
@@ -1605,11 +1564,9 @@ fallback_done:
         t_write += rproj_wtime() - tw;
     }
     G_free(y_center);
-    /* Single free site for the rolling window: the band loop's only exits are
-     * normal completion (falls through to here) and the two goto fallback_done
-     * bails (band-0 early-out, Phase-2 width bust), all converging on this
-     * label, so one free covers every path crossing the window's live range.
-     * win is NULL if a bail fired before any band allocated it. */
+    /* Single free site for the rolling window. Normal completion and both
+     * fallback_done bails converge here, so one free covers every path. win is
+     * NULL when a bail fired before any band allocated it. */
     if (win)
         G_free(win);
 
