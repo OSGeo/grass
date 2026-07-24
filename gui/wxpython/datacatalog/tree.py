@@ -24,6 +24,7 @@ import re
 import copy
 from multiprocessing import Process, Queue
 from pathlib import Path
+import importlib.util
 
 import wx
 
@@ -66,8 +67,10 @@ from grass.grassdb.manage import rename_mapset, rename_location
 from grass.pydispatch.signal import Signal
 
 import grass.script as gs
+import grass.temporal as tgis
+from grass.tools import Tools, ToolError
 from grass.script import gisenv
-from grass.grassdb.data import map_exists
+from grass.grassdb.data import map_exists, stds_exists
 from grass.grassdb.checks import (
     get_mapset_owner,
     is_mapset_locked,
@@ -76,9 +79,41 @@ from grass.grassdb.checks import (
 )
 from grass.exceptions import CalledModuleError
 
+STDS_TYPES = {"strds", "stvds", "str3ds"}
+STDS_TO_MAP_TYPE = {"strds": "raster", "stvds": "vector", "str3ds": "raster_3d"}
+
+
+HAS_MATPLOTLIB = importlib.util.find_spec("matplotlib") is not None
+
+
+def getDatasetTree(ds_type, dataset_name, grassdb, location, mapset, queue):
+    """Fetches items for a spatio-temporal dataset (STDS) using a background process."""
+    try:
+        gisrc, env = gs.create_environment(grassdb, location, mapset)
+        tools = Tools()
+
+        stds_list_cmd = {
+            "strds": "t_rast_list",
+            "stvds": "t_vect_list",
+            "str3ds": "t_rast3d_list",
+        }
+        list_cmd = stds_list_cmd[ds_type]
+        items = getattr(tools, list_cmd)(
+            input=f"{dataset_name}@{mapset}",
+            columns="id,name",
+            format="json",
+            quiet=True,
+            env=env,
+        ).json
+
+        queue.put((items, None))
+        gs.try_remove(gisrc)
+    except ToolError as e:
+        queue.put((None, str(e)))
+
 
 def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
-    """Creates dictionary with mapsets, elements, layers for given location.
+    """Creates dictionary with mapsets, stds, elements, layers for given location.
     Returns tuple with the dictionary and error (or None)"""
     tmp_gisrc_file, env = gs.create_environment(gisdbase, location, "PERMANENT")
     env["GRASS_SKIP_MAPSET_OWNER_CHECK"] = "1"
@@ -134,6 +169,58 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
             name, mapset = wholename.split("@", maxsplit=1)
             maps_dict[mapset].append({"name": name, "type": ltype})
 
+    try:
+        conns = (
+            Tools()
+            .t_connect(
+                flags="p", format="json", mapset=",".join(mapsets), quiet=True, env=env
+            )
+            .json
+        )
+        tgis_mapsets = [c["mapset"] for c in conns if c.get("driver")]
+    except ToolError:
+        queue.put(
+            (
+                maps_dict,
+                _("Failed to read temporal datasets from project <{l}>.").format(
+                    l=location
+                ),
+            )
+        )
+        gs.try_remove(tmp_gisrc_file)
+        return
+
+    if tgis_mapsets:
+        # We must update os.environ so grass.temporal knows which temporary gisrc to use.
+        # This may be removed later when we have the option of passing env to tgis.init()
+        os.environ.update(env)
+
+        tgis.init(raise_fatal_error=True, skip_db_init=True)
+
+        dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=",".join(tgis_mapsets))
+        dbif.connect()
+
+        stds_by_mapset = tgis.tlist_grouped("stds", group_type=True, dbif=dbif)
+        reg_maps = tgis.registered_maps_grouped(dbif=dbif)
+
+        for m_set, types_dict in stds_by_mapset.items():
+            if m_set in maps_dict:
+                maps_dict[m_set].extend(
+                    [
+                        {
+                            "name": d_name,
+                            "type": t_type,
+                            "registered_maps": reg_maps.get(t_type, {}).get(
+                                f"{d_name}@{m_set}", []
+                            ),
+                        }
+                        for t_type, stds_names in types_dict.items()
+                        for d_name in stds_names
+                    ]
+                )
+
+        dbif.close()
+
     queue.put((maps_dict, None))
     gs.try_remove(tmp_gisrc_file)
 
@@ -151,7 +238,26 @@ class NameEntryDialog(TextEntryDialog):
         new = self.GetValue()
         if not new:
             return
-        if map_exists(new, self._element, env=self._env, mapset=self._mapset):
+        exists = False
+        if self._element in STDS_TYPES:
+            exists = stds_exists(new, self._element, env=self._env, mapset=self._mapset)
+        else:
+            exists = map_exists(new, self._element, env=self._env, mapset=self._mapset)
+
+        if exists:
+            if self._element in STDS_TYPES:
+                dlg = wx.MessageDialog(
+                    self,
+                    message=_(
+                        "Space time dataset of type {elem} <{name}> already exists "
+                        "in mapset <{mapset}>."
+                    ).format(elem=self._element, name=new, mapset=self._mapset),
+                    caption=_("Error"),
+                    style=wx.OK | wx.ICON_ERROR,
+                )
+                dlg.ShowModal()
+                dlg.Destroy()
+                return
             dlg = wx.MessageDialog(
                 self,
                 message=_(
@@ -258,6 +364,7 @@ class DataCatalogTree(TreeView):
 
         self._giface = giface
         self._restricted = False
+        self.tools = Tools()
 
         self.showNotification = Signal("Tree.showNotification")
         self.showImportDataInfo = Signal("Tree.showImportDataInfo")
@@ -271,6 +378,9 @@ class DataCatalogTree(TreeView):
             "grassdb",
             "location",
             "mapset",
+            "strds",
+            "stvds",
+            "str3ds",
             "raster",
             "vector",
             "raster_3d",
@@ -345,6 +455,8 @@ class DataCatalogTree(TreeView):
         """Reset variables related to item selection."""
         self.selected_grassdb = []
         self.selected_layer = []
+        self.selected_stds = []
+        self.selected_stds_map = []
         self.selected_mapset = []
         self.selected_location = []
         self.mixed = False
@@ -437,6 +549,50 @@ class DataCatalogTree(TreeView):
         )
 
         UserSettings.SaveToFile(grassdbSettings)
+
+    def _reloadDatasetNode(self, dataset_node, mapset_node):
+        """Recursively reload the model of a specific temporal dataset node"""
+        if dataset_node.children:
+            del dataset_node.children[:]
+
+        dataset_name = dataset_node.data["name"]
+        mapset_name = mapset_node.data["name"]
+
+        # Traverse the tree via node.parent instead of using
+        # self.selected_location[0] or self.selected_grassdb[0].
+        # In standalone mode (when a user runs `g.gui.datacatalog`),
+        # the selection arrays are empty and will throw an IndexError.
+        location_node = mapset_node.parent
+        grassdb_node = location_node.parent
+
+        ds_type = dataset_node.data["type"]
+        child_type = STDS_TO_MAP_TYPE[ds_type]
+
+        q = Queue()
+        p = Process(
+            target=getDatasetTree,
+            args=(
+                ds_type,
+                dataset_name,
+                grassdb_node.data["name"],
+                location_node.data["name"],
+                mapset_name,
+                q,
+            ),
+        )
+        p.start()
+
+        items, error = q.get()
+        if items:
+            for item in items.get("data", []):
+                data = {
+                    "type": child_type,
+                    "name": item["name"],
+                    "map_id": item["id"],
+                }
+                self._model.AppendNode(parent=dataset_node, data=data)
+            self._orig_model = copy.deepcopy(self._model)
+        return error
 
     def _reloadMapsetNode(self, mapset_node):
         """Recursively reload the model of a specific mapset node"""
@@ -724,8 +880,10 @@ class DataCatalogTree(TreeView):
             EVT_CURRENT_MAPSET_CHANGED, lambda evt: self._updateAfterMapsetChanged()
         )
 
-    def GetDbNode(self, grassdb, location=None, mapset=None, map=None, map_type=None):
-        """Returns node representing db/location/mapset/map or None if not found."""
+    def GetDbNode(
+        self, grassdb, location=None, mapset=None, element_name=None, element_type=None
+    ):
+        """Returns node representing db/location/mapset/map(or stds) or None if not found."""
         grassdb_nodes = self._model.SearchNodes(name=grassdb, type="grassdb")
         if grassdb_nodes:
             if not location:
@@ -740,10 +898,10 @@ class DataCatalogTree(TreeView):
                     parent=location_nodes[0], name=mapset, type="mapset"
                 )
                 if mapset_nodes:
-                    if not map:
+                    if not element_name:
                         return mapset_nodes[0]
                     map_nodes = self._model.SearchNodes(
-                        parent=mapset_nodes[0], name=map, type=map_type
+                        parent=mapset_nodes[0], name=element_name, type=element_type
                     )
                     if map_nodes:
                         return map_nodes[0]
@@ -835,8 +993,32 @@ class DataCatalogTree(TreeView):
         self.RefreshNode(self.current_mapset_node, recursive=True)
 
     def _populateMapsetItem(self, mapset_node, data):
+        registered_maps_set = set()
         for item in data:
-            self._model.AppendNode(parent=mapset_node, data=dict(**item))
+            if "registered_maps" in item:
+                child_type = STDS_TO_MAP_TYPE[item["type"]]
+                registered_maps_set.update(
+                    (r_map["id"].split("@")[0], child_type)
+                    for r_map in item["registered_maps"]
+                )
+
+        for item in data:
+            if (item["name"], item.get("type")) in registered_maps_set:
+                continue
+
+            registered_maps = item.pop("registered_maps", [])
+            node = self._model.AppendNode(parent=mapset_node, data=dict(**item))
+            if registered_maps:
+                child_type = STDS_TO_MAP_TYPE[item["type"]]
+                for r_map in registered_maps:
+                    self._model.AppendNode(
+                        parent=node,
+                        data={
+                            "type": child_type,
+                            "name": r_map["id"].split("@")[0],
+                            "map_id": r_map["id"],
+                        },
+                    )
         self._model.SortChildren(mapset_node)
 
     def _initImages(self):
@@ -845,6 +1027,9 @@ class DataCatalogTree(TreeView):
             "grassdb": MetaIcon(img="grassdb").GetBitmap(bmpsize),
             "location": MetaIcon(img="location").GetBitmap(bmpsize),
             "mapset": MetaIcon(img="mapset").GetBitmap(bmpsize),
+            "strds": MetaIcon(img="strds").GetBitmap(bmpsize),
+            "stvds": MetaIcon(img="stvds").GetBitmap(bmpsize),
+            "str3ds": MetaIcon(img="str3ds").GetBitmap(bmpsize),
             "raster": MetaIcon(img="raster").GetBitmap(bmpsize),
             "vector": MetaIcon(img="vector").GetBitmap(bmpsize),
             "raster_3d": MetaIcon(img="raster3d").GetBitmap(bmpsize),
@@ -865,25 +1050,54 @@ class DataCatalogTree(TreeView):
         for item in selected:
             type = item.data["type"]
             if type in {"raster", "raster_3d", "vector"}:
-                self.selected_layer.append(item)
+                if item.parent.data["type"] in STDS_TYPES:
+                    self.selected_layer.append(item)
+                    self.selected_stds.append(None)
+                    self.selected_stds_map.append(item)
+                    mixed.append("stds_map")
+                else:
+                    self.selected_layer.append(item)
+                    self.selected_stds.append(None)
+                    self.selected_stds_map.append(None)
+                    mixed.append("layer")
+
+                parent_node = item.parent
+                while parent_node and parent_node.data["type"] != "mapset":
+                    parent_node = parent_node.parent
+
+                self.selected_mapset.append(parent_node)
+                self.selected_location.append(parent_node.parent)
+                self.selected_grassdb.append(parent_node.parent.parent)
+
+            elif type in STDS_TYPES:
+                self.selected_layer.append(None)
+                self.selected_stds.append(item)
+                self.selected_stds_map.append(None)
+
                 self.selected_mapset.append(item.parent)
                 self.selected_location.append(item.parent.parent)
                 self.selected_grassdb.append(item.parent.parent.parent)
-                mixed.append("layer")
+                mixed.append("stds")
             elif type == "mapset":
                 self.selected_layer.append(None)
+                self.selected_stds.append(None)
+                self.selected_stds_map.append(None)
                 self.selected_mapset.append(item)
                 self.selected_location.append(item.parent)
                 self.selected_grassdb.append(item.parent.parent)
                 mixed.append("mapset")
             elif type == "location":
                 self.selected_layer.append(None)
+                self.selected_stds.append(None)
+                self.selected_stds_map.append(None)
                 self.selected_mapset.append(None)
                 self.selected_location.append(item)
                 self.selected_grassdb.append(item.parent)
                 mixed.append("location")
             elif type == "grassdb":
                 self.selected_layer.append(None)
+                self.selected_stds.append(None)
+                self.selected_stds_map.append(None)
                 self.selected_mapset.append(None)
                 self.selected_location.append(None)
                 self.selected_grassdb.append(item)
@@ -902,10 +1116,20 @@ class DataCatalogTree(TreeView):
             self._popupMenuEmpty()
             return
 
-        if not self.selected_layer:
+        if not self.selected_layer and not self.selected_stds:
             self._popupMenuEmpty()
+        elif self.selected_stds_map[0]:
+            self._popupMenuStdsMap()
         elif self.selected_layer[0]:
             self._popupMenuLayer()
+        elif self.selected_stds[0] and len(self.selected_stds) == 1:
+            self._popupMenuStds()
+        elif (
+            self.selected_stds[0]
+            and len(self.selected_stds) > 1
+            and not self.selected_layer[0]
+        ):
+            self._popupMenuMultipleStds()
         elif self.selected_mapset[0] and len(self.selected_mapset) == 1:
             self._popupMenuMapset()
         elif (
@@ -979,7 +1203,20 @@ class DataCatalogTree(TreeView):
         if node.data["type"] == "mapset" and not node.children:
             self._reloadMapsetNode(node)
             self.RefreshNode(node, recursive=True)
-        if node.data["type"] in {"mapset", "location", "grassdb"}:
+
+        if node.data["type"] in STDS_TYPES and not node.children:
+            self._reloadDatasetNode(node, node.parent)
+            self.RefreshNode(node, recursive=True)
+
+        if (
+            node.data["type"]
+            in {
+                "mapset",
+                "location",
+                "grassdb",
+            }
+            | STDS_TYPES
+        ):
             # expand/collapse location/mapset...
             if self.IsNodeExpanded(node):
                 self.CollapseNode(node, recursive=False)
@@ -1060,7 +1297,7 @@ class DataCatalogTree(TreeView):
         """Expand current mapset"""
         if self.current_mapset_node:
             self.Select(self.current_mapset_node, select=True)
-            self.ExpandNode(self.current_mapset_node, recursive=True)
+            self.ExpandNode(self.current_mapset_node, recursive=False)
 
     def SetRestriction(self, restrict):
         self._restricted = restrict
@@ -1145,6 +1382,15 @@ class DataCatalogTree(TreeView):
         """Create new mapset"""
         self.CreateMapset(self.selected_grassdb[0], self.selected_location[0])
 
+    def OnCreateStds(self, event):
+        """Launch t.create dialog to create a new temporal dataset"""
+        mapset_node = self.selected_mapset[0]
+
+        self._giface.RunCmd(
+            ["t.create", "--ui"],
+            onDone=lambda e: wx.CallAfter(lambda: self._reloadMapsetNode(mapset_node)),
+        )
+
     def CreateLocation(self, grassdb_node):
         """
         Creates new location interactively and adds it to the tree and switch
@@ -1192,6 +1438,51 @@ class DataCatalogTree(TreeView):
                 action="rename",
                 newname=newmapset,
             )
+
+    def OnRenameStds(self, event):
+        """Rename temporal dataset natively using t.rename"""
+        old_name = self.selected_stds[0].data["name"]
+        stds_type = self.selected_stds[0].data["type"]
+
+        gisrc, env = gs.create_environment(
+            self.selected_grassdb[0].data["name"],
+            self.selected_location[0].data["name"],
+            self.selected_mapset[0].data["name"],
+        )
+
+        new_name = self._getNewMapName(
+            _("New name"),
+            _("Rename dataset"),
+            old_name,
+            env=env,
+            mapset=self.selected_mapset[0].data["name"],
+            element=stds_type,
+        )
+
+        if new_name:
+            label = _("Renaming dataset <{old}> to <{new}>...").format(
+                old=old_name, new=new_name
+            )
+            self.showNotification.emit(message=label)
+
+            renamed, cmd = self._runCommand(
+                "t.rename", input=old_name, output=new_name, type=stds_type, env=env
+            )
+
+            if renamed == 0:
+                self.showNotification.emit(
+                    message=_("{cmd} -- completed").format(cmd=cmd)
+                )
+                self._giface.grassdbChanged.emit(
+                    grassdb=self.selected_grassdb[0].data["name"],
+                    location=self.selected_location[0].data["name"],
+                    mapset=self.selected_mapset[0].data["name"],
+                    map=old_name,
+                    element=stds_type,
+                    newname=new_name,
+                    action="rename",
+                )
+        gs.try_remove(gisrc)
 
     def OnRenameLocation(self, event):
         """
@@ -1505,7 +1796,7 @@ class DataCatalogTree(TreeView):
                 )
                 if dlg.ShowModal() == wx.ID_CANCEL:
                     return
-        self.ExpandNode(self.selected_mapset[0], recursive=True)
+        self.ExpandNode(self.selected_mapset[0], recursive=False)
         self._resetCopyVariables()
 
     def _onDoneReprojection(
@@ -1523,7 +1814,7 @@ class DataCatalogTree(TreeView):
             self._removeMapAfterCopy(cLayer, cMapset, iEnv)
         gs.try_remove(iGisrc)
         gs.try_remove(oGisrc)
-        self.ExpandNode(sMapset, recursive=True)
+        self.ExpandNode(sMapset, recursive=False)
 
     def _removeMapAfterCopy(self, cLayer, cMapset, env):
         removed, cmd = self._runCommand(
@@ -1611,51 +1902,195 @@ class DataCatalogTree(TreeView):
         return grassdb_node
 
     def OnDeleteMap(self, event):
-        """Delete layer or mapset"""
+        """Delete selected layers/maps"""
         names = [
-            self.selected_layer[i].data["name"]
-            + "@"
-            + self.selected_mapset[i].data["name"]
+            "{name}@{mapset}".format(
+                name=self.selected_layer[i].data["name"],
+                mapset=self.selected_mapset[i].data["name"],
+            )
             for i in range(len(self.selected_layer))
         ]
-        if len(names) < 10:
-            question = _("Do you really want to delete map(s) <{m}>?").format(
+
+        # Check which maps are registered in temporal datasets
+        registered_maps = set()
+        status_tools = Tools(errors="ignore", consistent_return_value=True)
+        for i in range(len(self.selected_layer)):
+            map_name = names[i]
+            map_type = self.selected_layer[i].data["type"]
+            gisrc, env = gs.create_environment(
+                self.selected_grassdb[i].data["name"],
+                self.selected_location[i].data["name"],
+                self.selected_mapset[i].data["name"],
+            )
+            try:
+                if (
+                    status_tools.t_info(
+                        type=map_type,
+                        input=map_name,
+                        env=env,
+                        quiet=True,
+                    ).returncode
+                    == 0
+                ):
+                    registered_maps.add(map_name)
+            finally:
+                gs.try_remove(gisrc)
+
+        if len(names) == 1:
+            question = _("Do you really want to delete map <{m}>?").format(m=names[0])
+        elif len(names) <= 10:
+            question = _("Do you really want to delete maps <{m}>?").format(
                 m=", ".join(names)
             )
         else:
             question = _("Do you really want to delete {n} maps?").format(n=len(names))
-        if self._confirmDialog(question, title=_("Delete map")) == wx.ID_YES:
-            label = _("Deleting {name}...").format(name=names)
-            self.showNotification.emit(message=label)
-            for i in range(len(self.selected_layer)):
-                gisrc, env = gs.create_environment(
-                    self.selected_grassdb[i].data["name"],
-                    self.selected_location[i].data["name"],
-                    self.selected_mapset[i].data["name"],
-                )
-                removed, cmd = self._runCommand(
-                    "g.remove",
-                    flags="f",
-                    type=self.selected_layer[i].data["type"],
-                    name=self.selected_layer[i].data["name"],
-                    env=env,
-                )
-                gs.try_remove(gisrc)
-                if removed == 0:
-                    self._giface.grassdbChanged.emit(
-                        grassdb=self.selected_grassdb[i].data["name"],
-                        location=self.selected_location[i].data["name"],
-                        mapset=self.selected_mapset[i].data["name"],
-                        element=self.selected_layer[i].data["type"],
-                        map=self.selected_layer[i].data["name"],
-                        action="delete",
+
+        if registered_maps:
+            if len(registered_maps) == 1:
+                question += "\n\n" + _(
+                    "Warning: Map <{map}> is registered in temporal dataset(s) "
+                    "and will be unregistered first."
+                ).format(map=list(registered_maps)[0])
+            elif len(registered_maps) < 6:
+                question += "\n\n" + _(
+                    "Warning: Maps <{maps}> are registered in temporal dataset(s) "
+                    "and will be unregistered first."
+                ).format(maps=">, <".join(registered_maps))
+            else:
+                question += "\n\n" + _(
+                    "Warning: {n} maps are registered in temporal dataset(s) "
+                    "and will be unregistered first."
+                ).format(n=len(registered_maps))
+            dlg = wx.MessageDialog(self, question, _("Delete map"), wx.YES_NO)
+            dlg.SetYesNoLabels(_("Unregister and delete"), _("Cancel"))
+        else:
+            dlg = wx.MessageDialog(self, question, _("Delete map"), wx.YES_NO)
+
+        if dlg.ShowModal() != wx.ID_YES:
+            dlg.Destroy()
+            return
+        dlg.Destroy()
+
+        if len(names) <= 10:
+            label = _("Deleting {name}...").format(name=", ".join(names))
+        else:
+            label = _("Deleting {n} maps...").format(n=len(names))
+
+        self.showNotification.emit(message=label)
+        for i in range(len(self.selected_layer)):
+            gisrc, env = gs.create_environment(
+                self.selected_grassdb[i].data["name"],
+                self.selected_location[i].data["name"],
+                self.selected_mapset[i].data["name"],
+            )
+
+            # Unregister from temporal database before deleting
+            if names[i] in registered_maps:
+                map_type = self.selected_layer[i].data["type"]
+                try:
+                    self.tools.t_unregister(
+                        type=map_type,
+                        maps=names[i],
+                        env=env,
+                        quiet=True,
                     )
+                except ToolError as e:
                     Debug.msg(
-                        1, "LAYER " + self.selected_layer[i].data["name"] + " DELETED"
+                        1,
+                        "Failed to unregister {name}: {err}".format(
+                            name=names[i], err=e
+                        ),
                     )
 
-            self.UnselectAll()
-            self.showNotification.emit(message=_("g.remove completed"))
+            removed, cmd = self._runCommand(
+                "g.remove",
+                flags="f",
+                type=self.selected_layer[i].data["type"],
+                name=self.selected_layer[i].data["name"],
+                env=env,
+            )
+            gs.try_remove(gisrc)
+            if removed == 0:
+                self._giface.grassdbChanged.emit(
+                    grassdb=self.selected_grassdb[i].data["name"],
+                    location=self.selected_location[i].data["name"],
+                    mapset=self.selected_mapset[i].data["name"],
+                    element=self.selected_layer[i].data["type"],
+                    map=self.selected_layer[i].data["name"],
+                    action="delete",
+                )
+                Debug.msg(
+                    1, "LAYER " + self.selected_layer[i].data["name"] + " DELETED"
+                )
+
+        self.UnselectAll()
+        self.showNotification.emit(message=_("g.remove completed"))
+
+    def OnDeleteStds(self, event):
+        """Delete one or multiple temporal datasets using t.remove"""
+        names = [stds.data["name"] for stds in self.selected_stds]
+
+        if len(names) == 1:
+            question = _("Do you really want to delete dataset <{m}>?").format(
+                m=names[0]
+            )
+        elif len(names) <= 10:
+            question = _("Do you really want to delete datasets <{m}>?").format(
+                m=", ".join(names)
+            )
+        else:
+            question = _("Do you really want to delete {n} datasets?").format(
+                n=len(names)
+            )
+
+        dlg = wx.RichMessageDialog(
+            self, question, _("Delete dataset"), wx.YES_NO | wx.NO_DEFAULT
+        )
+        dlg.ShowCheckBox(_("Also unregister maps from temporal database"), checked=True)
+
+        if dlg.ShowModal() != wx.ID_YES:
+            dlg.Destroy()
+            return
+
+        unregister_maps = dlg.IsCheckBoxChecked()
+        dlg.Destroy()
+
+        self.showNotification.emit(message=_("Deleting datasets..."))
+
+        for stds_node, grassdb_node, location_node, mapset_node in zip(
+            self.selected_stds,
+            self.selected_grassdb,
+            self.selected_location,
+            self.selected_mapset,
+            strict=True,
+        ):
+            stds_type = stds_node.data["type"]
+            stds_name = stds_node.data["name"]
+
+            gisrc, env = gs.create_environment(
+                grassdb_node.data["name"],
+                location_node.data["name"],
+                mapset_node.data["name"],
+            )
+
+            flags = "rf" if unregister_maps else "f"
+            removed, cmd = self._runCommand(
+                "t.remove", inputs=stds_name, type=stds_type, flags=flags, env=env
+            )
+            gs.try_remove(gisrc)
+
+            if removed == 0:
+                self._giface.grassdbChanged.emit(
+                    grassdb=grassdb_node.data["name"],
+                    location=location_node.data["name"],
+                    mapset=mapset_node.data["name"],
+                    element=stds_type,
+                    map=stds_name,
+                    action="delete",
+                )
+
+        self.UnselectAll()
+        self.showNotification.emit(message=_("t.remove completed"))
 
     def OnDeleteMapset(self, event):
         """
@@ -1772,12 +2207,14 @@ class DataCatalogTree(TreeView):
         all_names = []
         names = {"raster": [], "vector": [], "raster_3d": []}
         for i in range(len(self.selected_layer)):
-            name = (
-                self.selected_layer[i].data["name"]
-                + "@"
-                + self.selected_mapset[i].data["name"]
+            if self.selected_layer[i] is None:
+                continue
+            item_data = self.selected_layer[i].data
+            name = item_data.get(
+                "map_id", f"{item_data['name']}@{self.selected_mapset[i].data['name']}"
             )
-            names[self.selected_layer[i].data["type"]].append(name)
+
+            names[item_data["type"]].append(name)
             all_names.append(name)
         # if self.selected_location[0].data['name'] == gisenv()['LOCATION_NAME'] and
         # self.selected_mapset[0]:
@@ -1948,8 +2385,8 @@ class DataCatalogTree(TreeView):
                     grassdb=grassdb,
                     location=location,
                     mapset=mapset,
-                    map=map,
-                    map_type=element,
+                    element_name=map,
+                    element_type=element,
                 )
                 if node:
                     self._model.RemoveNode(node)
@@ -1959,8 +2396,38 @@ class DataCatalogTree(TreeView):
                     grassdb=grassdb,
                     location=location,
                     mapset=mapset,
-                    map=map,
-                    map_type=element,
+                    element_name=map,
+                    element_type=element,
+                )
+                if node:
+                    self._renameNode(node, newname)
+
+        elif element in STDS_TYPES:
+            if action == "new":
+                node = self.GetDbNode(grassdb=grassdb, location=location, mapset=mapset)
+                if node:
+                    self._reloadMapsetNode(node)
+                    self.RefreshNode(node, recursive=True)
+
+            elif action == "delete":
+                node = self.GetDbNode(
+                    grassdb=grassdb,
+                    location=location,
+                    mapset=mapset,
+                    element_name=map,
+                    element_type=element,
+                )
+                if node:
+                    self._model.RemoveNode(node)
+                    self.RefreshNode(node.parent, recursive=True)
+
+            elif action == "rename":
+                node = self.GetDbNode(
+                    grassdb=grassdb,
+                    location=location,
+                    mapset=mapset,
+                    element_name=map,
+                    element_type=element,
                 )
                 if node:
                     self._renameNode(node, newname)
@@ -1999,13 +2466,12 @@ class DataCatalogTree(TreeView):
                 cmd = ["v.info"]
             elif self.selected_layer[i].data["type"] == "raster_3d":
                 cmd = ["r3.info"]
-            cmd.append(
-                "map=%s@%s"
-                % (
-                    self.selected_layer[i].data["name"],
-                    self.selected_mapset[i].data["name"],
-                )
+            map_name = self.selected_layer[i].data.get(
+                "map_id",
+                f"{self.selected_layer[i].data['name']}@{self.selected_mapset[i].data['name']}",
             )
+
+            cmd.append(f"map={map_name}")
 
             gisrc, env = gs.create_environment(
                 self.selected_grassdb[i].data["name"],
@@ -2015,6 +2481,24 @@ class DataCatalogTree(TreeView):
             # print output to command log area
             # temp gisrc file must be deleted onDone
             self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
+
+    def OnMetadataStds(self, event):
+        """Show metadata natively using t.info"""
+
+        def done(event):
+            gs.try_remove(event.userData)
+
+        stds_type = self.selected_stds[0].data["type"]
+        stds_name = self.selected_stds[0].data["name"]
+        mapset_name = self.selected_mapset[0].data["name"]
+
+        cmd = ["t.info", f"type={stds_type}", f"input={stds_name}@{mapset_name}"]
+        gisrc, env = gs.create_environment(
+            self.selected_grassdb[0].data["name"],
+            self.selected_location[0].data["name"],
+            mapset_name,
+        )
+        self._giface.RunCmd(cmd, env=env, onDone=done, userData=gisrc)
 
     def OnShowProjection(self, event):
         """Show projection info of selected project (location)"""
@@ -2050,13 +2534,11 @@ class DataCatalogTree(TreeView):
             do = wx.TextDataObject()
             text = []
             for i in range(len(self.selected_layer)):
-                text.append(
-                    "%s@%s"
-                    % (
-                        self.selected_layer[i].data["name"],
-                        self.selected_mapset[i].data["name"],
-                    )
+                map_name = self.selected_layer[i].data.get(
+                    "map_id",
+                    f"{self.selected_layer[i].data['name']}@{self.selected_mapset[i].data['name']}",
                 )
+                text.append(map_name)
             do.SetText(",".join(text))
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
@@ -2141,6 +2623,163 @@ class DataCatalogTree(TreeView):
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
 
+    def OnRegisterStds(self, event):
+        """Launch t.register dialog pre-filled with selected dataset"""
+        stds_node = self.selected_stds[0]
+        mapset_node = self.selected_mapset[0]
+        stds_type = STDS_TO_MAP_TYPE[stds_node.data["type"]]
+
+        self._giface.RunCmd(
+            [
+                "t.register",
+                "--ui",
+                f"input={stds_node.data['name']}@{mapset_node.data['name']}",
+                f"type={stds_type}",
+            ],
+            onDone=lambda e: wx.CallAfter(
+                lambda: (
+                    self._reloadDatasetNode(stds_node, mapset_node),
+                    self.RefreshNode(stds_node, recursive=True),
+                )
+            ),
+        )
+
+    def OnUnregisterStds(self, event):
+        """Launch t.unregister dialog pre-filled with selected dataset"""
+        stds_node = self.selected_stds[0]
+        mapset_node = self.selected_mapset[0]
+        stds_type = STDS_TO_MAP_TYPE[stds_node.data["type"]]
+
+        self._giface.RunCmd(
+            [
+                "t.unregister",
+                "--ui",
+                f"input={stds_node.data['name']}@{mapset_node.data['name']}",
+                f"type={stds_type}",
+            ],
+            onDone=lambda e: wx.CallAfter(
+                lambda: (
+                    self._reloadDatasetNode(stds_node, mapset_node),
+                    self.RefreshNode(stds_node, recursive=True),
+                )
+            ),
+        )
+
+    def OnUnregisterStdsMap(self, event):
+        """Unregister selected maps from their temporal datasets natively"""
+        stds_groups = {}
+        for map_node in self.selected_stds_map:
+            stds_node = map_node.parent
+            if stds_node not in stds_groups:
+                stds_groups[stds_node] = []
+            stds_groups[stds_node].append(map_node)
+
+        num_maps = len(self.selected_stds_map)
+        if num_maps == 1:
+            question = _("Do you really want to unregister map <{m}>?").format(
+                m=self.selected_stds_map[0].data["name"]
+            )
+        else:
+            question = _("Do you really want to unregister {n} maps?").format(
+                n=num_maps
+            )
+
+        if self._confirmDialog(question, title=_("Unregister map")) != wx.ID_YES:
+            return
+
+        if num_maps == 1:
+            msg = _("Unregistering map...")
+        else:
+            msg = _("Unregistering {c} maps...").format(c=num_maps)
+        self.showNotification.emit(message=msg)
+
+        success_count = 0
+
+        for stds_node, map_nodes in stds_groups.items():
+            mapset_node = stds_node.parent
+            location_node = mapset_node.parent
+            grassdb_node = location_node.parent
+
+            mapset_name = mapset_node.data["name"]
+            stds_name = stds_node.data["name"]
+            map_type = map_nodes[0].data["type"]
+
+            maps = ",".join([n.data["map_id"] for n in map_nodes])
+
+            gisrc, env = gs.create_environment(
+                grassdb_node.data["name"],
+                location_node.data["name"],
+                mapset_name,
+            )
+
+            unregistered, cmd = self._runCommand(
+                "t.unregister",
+                input=stds_name,
+                type=map_type,
+                maps=maps,
+                env=env,
+            )
+
+            gs.try_remove(gisrc)
+
+            if unregistered == 0:
+                success_count += len(map_nodes)
+                for node in map_nodes:
+                    self._model.RemoveNode(node)
+                self.RefreshNode(stds_node, recursive=True)
+
+        if success_count > 0:
+            if success_count == 1:
+                msg = _("Successfully unregistered map")
+            else:
+                msg = _("Successfully unregistered {c} maps").format(c=success_count)
+            self.showNotification.emit(message=msg)
+            self.UnselectAll()
+
+    def OnPlotTimeline(self, event):
+        """Launch g.gui.timeline for one or more selected datasets"""
+        inputs = [
+            f"{n.data['name']}@{m.data['name']}"
+            for n, m in zip(self.selected_stds, self.selected_mapset, strict=True)
+        ]
+        self._giface.RunCmd(["g.gui.timeline", f"inputs={','.join(inputs)}"])
+
+    def OnModifyMetadata(self, event):
+        """Launch t.support dialog to modify dataset metadata"""
+        stds_node = self.selected_stds[0]
+        mapset_node = self.selected_mapset[0]
+        stds_type = stds_node.data["type"]
+
+        self._giface.RunCmd(
+            [
+                "t.support",
+                "--ui",
+                f"input={stds_node.data['name']}@{mapset_node.data['name']}",
+                f"type={stds_type}",
+            ]
+        )
+
+    def OnMergeStds(self, event):
+        """Launch t.merge dialog pre-filled with selected datasets"""
+        stds_types = {node.data["type"] for node in self.selected_stds}
+        if len(stds_types) > 1:
+            GMessage(
+                _("Cannot merge temporal datasets of different types."), parent=self
+            )
+            return
+
+        stds_type = list(stds_types)[0]
+        mapset_node = self.selected_mapset[0]
+        inputs = [
+            f"{n.data['name']}@{m.data['name']}"
+            for n, m in zip(self.selected_stds, self.selected_mapset, strict=True)
+        ]
+
+        self._giface.RunCmd(
+            ["t.merge", "--ui", f"inputs={','.join(inputs)}", f"type={stds_type}"],
+            onDone=lambda e: wx.CallAfter(lambda: self._reloadMapsetNode(mapset_node)),
+        )
+
     def OnReloadGrassdb(self, event):
         """Reload all mapsets in selected grass db"""
         node = self.selected_grassdb[0]
@@ -2203,6 +2842,97 @@ class DataCatalogTree(TreeView):
                         break
             return currentGrassDb, currentLocation, currentMapset
         return True, True, True
+
+    def _popupMenuStds(self):
+        """Create dedicated popup menu for space time datasets"""
+        menu = Menu()
+
+        is_active = self.selected_mapset[0] == self.current_mapset_node
+
+        try:
+            path_output = self.tools.g_mapsets(format="json", flags="p", quiet=True)
+            accessible = set(path_output["mapsets"])
+        except ToolError:
+            accessible = set()
+
+        is_accessible = self.selected_mapset[0].data["name"] in accessible
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Register maps"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnRegisterStds, item)
+        item.Enable(is_active)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Unregister maps"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnUnregisterStds, item)
+        item.Enable(is_active)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Modify metadata"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnModifyMetadata, item)
+        item.Enable(is_active)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Plot &timeline"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnPlotTimeline, item)
+        item.Enable(HAS_MATPLOTLIB and is_accessible)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename dataset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnRenameStds, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete dataset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteStds, item)
+
+        menu.AppendSeparator()
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show &metadata"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnMetadataStds, item)
+
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def _popupMenuStdsMap(self):
+        """Create popup menu for maps inside a temporal dataset"""
+        menu = Menu()
+        genv = gisenv()
+        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Copy &name"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyName, item)
+
+        if not isinstance(self._giface, StandaloneGrassInterface):
+            if all(
+                each.data["name"] == genv["LOCATION_NAME"]
+                for each in self.selected_location
+            ):
+                if len(self.selected_layer) > 1:
+                    item = wx.MenuItem(menu, wx.ID_ANY, _("&Display layers"))
+                else:
+                    item = wx.MenuItem(menu, wx.ID_ANY, _("&Display layer"))
+                menu.AppendItem(item)
+                self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Show &metadata"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnMetadata, item)
+
+        menu.AppendSeparator()
+
+        if len(self.selected_layer) > 1:
+            item = wx.MenuItem(menu, wx.ID_ANY, _("&Unregister maps"))
+        else:
+            item = wx.MenuItem(menu, wx.ID_ANY, _("&Unregister map"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnUnregisterStdsMap, item)
+        if not currentMapset:
+            item.Enable(False)
+
+        self.PopupMenu(menu)
+        menu.Destroy()
 
     def _popupMenuLayer(self):
         """Create popup menu for layers"""
@@ -2267,6 +2997,12 @@ class DataCatalogTree(TreeView):
         genv = gisenv()
         currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Create &temporal dataset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCreateStds, item)
+        if self.selected_mapset[0] != self.current_mapset_node:
+            item.Enable(False)
+
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
@@ -2295,7 +3031,7 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load maps"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadMapset, item)
 
@@ -2331,7 +3067,7 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load maps"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load project"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadLocation, item)
 
@@ -2400,7 +3136,7 @@ class DataCatalogTree(TreeView):
         if self._restricted:
             item.Enable(False)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load maps"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load database"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnReloadGrassdb, item)
 
@@ -2458,6 +3194,35 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopyMapsetPath, item)
+
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def _popupMenuMultipleStds(self):
+        """Create popup menu for multiple selected space time datasets"""
+        menu = Menu()
+
+        try:
+            path_output = self.tools.g_mapsets(format="json", flags="p", quiet=True)
+            accessible = set(path_output["mapsets"])
+        except ToolError:
+            accessible = set()
+
+        is_accessible = all(m.data["name"] in accessible for m in self.selected_mapset)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Plot &timeline"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnPlotTimeline, item)
+        item.Enable(HAS_MATPLOTLIB and is_accessible)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Merge datasets"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnMergeStds, item)
+        item.Enable(is_accessible)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete datasets"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteStds, item)
 
         self.PopupMenu(menu)
         menu.Destroy()
