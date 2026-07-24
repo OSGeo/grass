@@ -521,6 +521,7 @@ AC_CHECK_HEADERS(sys/ioctl.h sys/mtio.h sys/resource.h sys/time.h)
 AC_CHECK_HEADERS(sys/timeb.h sys/types.h sys/utsname.h)
 AC_CHECK_HEADERS(libintl.h iconv.h)
 AC_CHECK_HEADERS(langinfo.h)
+AC_CHECK_HEADERS(stdatomic.h threads.h complex.h)
 
 AC_TYPE_OFF_T
 AC_TYPE_UID_T
@@ -1861,6 +1862,10 @@ LOC_CHECK_LIB_PATH(pthread,POSIX threads,PTHREADLIBPATH)
 
 LOC_CHECK_FUNC(pthread_create,POSIX threads functions,PTHREADLIB,,,,,[
 LOC_CHECK_LIBS(pthread,pthread_create,POSIX threads,$PTHREADLIBPATH,PTHREADLIB,,,)
+])
+
+LOC_CHECK_FUNC(sched_yield,POSIX threads functions,PTHREADLIB,,,,,[
+LOC_CHECK_LIBS(pthread,sched_yield,POSIX threads,$PTHREADLIBPATH,PTHREADLIB,,,)
 ])
 
 if test -n "$PTHREADLIB" ; then
