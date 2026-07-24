@@ -391,7 +391,8 @@ int main(int argc, char **argv)
         /* Fill cat_array with list of valid random numbers */
         while (cat_count < nrandom) {
             /* Random number in range from 0 to largest CAT value */
-            prnd = (int)floor(G_math_rand() * (ucat_array[ucat_count - 1] + 1));
+            prnd = (int)floor((double)G_math_rand() *
+                              (ucat_array[ucat_count - 1] + 1));
             qsort(cat_array, cat_count, sizeof(int), cmp);
             /* Check if generated number isn't already in
                final list and is in list of existing CATs */

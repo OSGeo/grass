@@ -374,8 +374,8 @@ int main(int argc, char *argv[])
         dmin = ew_res / 2;
     else
         dmin = ns_res / 2;
-    disk = n_rows * n_cols * sizeof(int);
-    sdisk = n_rows * n_cols * sizeof(short int);
+    disk = (size_t)n_rows * n_cols * sizeof(int);
+    sdisk = (size_t)n_rows * n_cols * sizeof(short int);
     snprintf(dmaxchar, sizeof(dmaxchar), "%f", dmin * 5);
     snprintf(dminchar, sizeof(dminchar), "%f", dmin);
 

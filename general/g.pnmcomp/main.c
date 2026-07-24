@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
     if (opt.bg->answer)
         erase(out_buf, opt.bg->answer);
 
-    memset(out_mask_buf, 0, width * height);
+    memset(out_mask_buf, 0, (size_t)width * height);
 
     for (i = 0; opt.in->answers[i]; i++) {
         char *infile = opt.in->answers[i];
@@ -363,7 +363,7 @@ int main(int argc, char *argv[])
         }
         else {
             read_pnm(infile, out_buf, 3);
-            memset(out_mask_buf, 255, width * height);
+            memset(out_mask_buf, 255, (size_t)width * height);
         }
     }
 

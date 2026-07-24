@@ -16,7 +16,7 @@ int report(time_t rectify, int ok)
     minutes = seconds / 60;
     hours = minutes / 60;
     minutes -= hours * 60;
-    ncells = target_window.rows * target_window.cols;
+    ncells = (long)target_window.rows * target_window.cols;
     G_verbose_message(_("%d rows, %d cols (%ld cells) completed in"),
                       target_window.rows, target_window.cols, ncells);
     if (hours)
