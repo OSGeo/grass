@@ -50,6 +50,9 @@ theme:
 # Customization
 extra:
   homepage: index.html
+  # Development builds set GRASS_DOCS_NOINDEX=true so dev pages emit
+  # robots noindex and do not compete with grass-stable in search (see #5935).
+  noindex: !ENV [GRASS_DOCS_NOINDEX, "false"]
   social:
     - icon: simple/opencollective
       link: https://opencollective.com/grass

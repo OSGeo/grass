@@ -1,5 +1,6 @@
 {% extends "!layout.html" %}
 {% block extrahead %}
 <link rel="stylesheet" href="{{ pathto('_static/pygrass.css', 1) }}" type="text/css" />
+{% if grass_noindex %}<meta name="robots" content="noindex, follow" />{% endif %}
 {{ super() }}
 {% endblock %}

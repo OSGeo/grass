@@ -230,6 +230,13 @@ jobs:
           cd ..
           export SITE_NAME="GRASS ${MAJOR}.${MINOR} Documentation"
           export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS $VERSION Documentation"
+          # Development builds (micro ends in "dev") are marked noindex so the dev
+          # manuals do not compete with the grass-stable canonical (see #5935).
+          if [[ "${MICRO}" == *dev ]]; then
+            export GRASS_DOCS_NOINDEX="true"
+          else
+            export GRASS_DOCS_NOINDEX="false"
+          fi
           cd "${MKDOCS_DIR}" || exit
           mkdocs build
 
