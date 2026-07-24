@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_zh\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 16:17+0000\n"
+"POT-Creation-Date: 2026-07-18 09:37+0000\n"
 "PO-Revision-Date: 2026-06-25 11:56+0000\n"
 "Last-Translator: Jietao Wang <quaternary@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/zh_Hans/>\n"
@@ -7690,8 +7690,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 #, fuzzy
 msgid "Maps with feature values (attributes)"
 msgstr "打印的份数"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 16:17+0000\n"
+"POT-Creation-Date: 2026-07-18 09:37+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -7810,8 +7810,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 #, fuzzy
 msgid "Maps with feature values (attributes)"
 msgstr "Número de quantiles"

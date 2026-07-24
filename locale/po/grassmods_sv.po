@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 16:17+0000\n"
+"POT-Creation-Date: 2026-07-18 09:37+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -7689,8 +7689,8 @@ msgstr "Förutsägelser med SVM"
 msgid "Predict with a Support Vector Machine"
 msgstr "Förutsägelser med en stödvektormaskin"
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 msgid "Maps with feature values (attributes)"
 msgstr "Kartor med funktionsvärden (attribut)"
 
