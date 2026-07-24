@@ -12,7 +12,6 @@ for details.
 
 import sys
 from ctypes import CFUNCTYPE, c_void_p
-from multiprocessing import Lock, Pipe, Process
 
 import grass.lib.gis as libgis
 from grass.exceptions import FatalError
@@ -22,7 +21,7 @@ from grass.pygrass.raster import RasterRow, raster2numpy_img
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.basic import Bbox
 
-from .base import RPCServerBase
+from .base import MP_CONTEXT, RPCServerBase
 
 ###############################################################################
 ###############################################################################
@@ -249,9 +248,9 @@ class DataProvider(RPCServerBase):
 
     def start_server(self):
         """This function must be re-implemented in the subclasses"""
-        self.client_conn, self.server_conn = Pipe(True)
-        self.lock = Lock()
-        self.server = Process(
+        self.client_conn, self.server_conn = MP_CONTEXT.Pipe(True)
+        self.lock = MP_CONTEXT.Lock()
+        self.server = MP_CONTEXT.Process(
             target=data_provider_server, args=(self.lock, self.server_conn)
         )
         self.server.daemon = True
