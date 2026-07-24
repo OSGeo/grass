@@ -10,11 +10,9 @@
 # PURPOSE:      Import E00 data into a GRASS vector map
 # 		Imports single and split E00 files (.e00, .e01, .e02 ...)
 #
-# COPYRIGHT:    (c) 2004, 2005 GDF Hannover bR, http://www.gdf-hannover.de
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2004, 2005 GDF Hannover bR, http://www.gdf-hannover.de
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 #
