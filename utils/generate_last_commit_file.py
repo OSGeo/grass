@@ -56,7 +56,7 @@ def get_last_commit(src_dir):
         if ".html{}".format(join_sep) not in join_sep.join(files) + join_sep:
             continue
         rel_path = os.path.relpath(root)
-        process_result = subprocess.run(
+        process_result = subprocess.run(  # nosec B607: fixed external tool "git" with no portable absolute path
             [
                 "git",
                 "log",
