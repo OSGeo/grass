@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_zh\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: 2026-06-25 11:49+0000\n"
 "Last-Translator: Jietao Wang <quaternary@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/zh_Hans/>\n"
@@ -25,6 +25,9 @@ msgstr ""
 #, c-format
 msgid "Unknown algorithm '%s'"
 msgstr "未知算法 '%s'"
+
+msgid "Cannot classify an empty set of values"
+msgstr ""
 
 msgid "Classification algorithm failed"
 msgstr "分类算法失败"
@@ -5075,7 +5078,7 @@ msgstr[0] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 
 msgid "Building areas..."

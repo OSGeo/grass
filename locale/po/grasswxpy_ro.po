@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Romanian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ro/>\n"
@@ -5492,8 +5492,7 @@ msgid ""
 "{messages}"
 msgstr ""
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Zoom to scatter plot extend"
@@ -5556,6 +5555,291 @@ msgstr ""
 msgid "Remove selected class"
 msgstr ""
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "Choose GRASS data directory:"
+msgid "Select notebook directory"
+msgstr "Alegeți directorul de date GIS:"
+
+#, fuzzy
+msgid "Save in project: {}"
+msgstr "Creați tabel?"
+
+msgid "Options"
+msgstr "Opțiuni"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "Caută"
+
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Integrated"
+msgstr "Intermediar"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "Închide caseta de dialog"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "Eroare"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "Eroare"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr "Citirea fișierului a eșuat %s."
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import file"
+msgstr "&Import"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "Redenumește"
+
+msgid "No page for export is currently selected."
+msgstr ""
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save file as..."
+msgid "Export file as..."
+msgstr "Salvează fișierul ca..."
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "Model exportat ca <%s>"
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr "Citirea fișierului a eșuat %s."
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "Introduceți nume pentru mapset nou:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create location"
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "Nu s-a putut crea locația"
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "No files generated."
+msgid "New file '{}' created."
+msgstr "Nici un fișier generat."
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr ""
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "Server:"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Directory %s does not exist."
+msgid "Notebook storage does not exist: {}"
+msgstr "Directorul %s nu există."
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File <%s> not found."
+msgid "File not found: {}"
+msgstr "Fișierul <%s> nu este găsit."
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "Fișierul există deja"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "Fișierul există deja"
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "Server:"
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "Crează model nou"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to Python"
+msgid "Export notebook"
+msgstr "Exportă ca Python"
+
 #, fuzzy
 msgid "GRASS"
 msgstr "Ajutor GRASS"
@@ -5584,6 +5868,30 @@ msgstr ""
 
 msgid "Console"
 msgstr ""
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "Modul de vizualizare 3D nu este disponibil"
 
 #, fuzzy
 msgid "Map Swipe Tool"
@@ -5737,6 +6045,11 @@ msgstr "Elimină strat"
 
 msgid "Quit GRASS GUI"
 msgstr "Închide GRASS GUI"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr "Rezoluția eranului nu este în prezent limitată de setările de calcul. Este recomandat să limitați harta la geometria regiunii. Doriți să limitați rezoluția?"
@@ -6068,12 +6381,13 @@ msgstr "Georectificare"
 msgid "Cartographic Composer"
 msgstr "Compoziție Cartografică"
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "Modelare Grafică"
+
 msgid "Launch user-defined script"
 msgstr ""
-
-#, fuzzy
-msgid "New display"
-msgstr "Curăță ecran"
 
 #, fuzzy
 msgid "Python code editor"
@@ -6468,6 +6782,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 #, fuzzy
@@ -7119,9 +7439,6 @@ msgstr "Obține & Instalează extensie de la GRASS Addons"
 
 msgid "List of extensions - double-click to install"
 msgstr ""
-
-msgid "Options"
-msgstr "Opțiuni"
 
 msgid "&Install"
 msgstr "&Instalează"
@@ -9775,7 +10092,7 @@ msgstr "Redenumește mapsetul selectat"
 msgid "Do you want to cancel dataset download?"
 msgstr "Doriți să ștergeți definitiv data?%s"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr ""
 
 msgid "Timeline Tool"
@@ -9871,8 +10188,7 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr ""
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Temporal Plot Tool"
@@ -11336,6 +11652,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~ msgid "New display"
+#~ msgstr "Curăță ecran"
+
+#, fuzzy
 #~ msgid "Do you want to create a new project (also known as location)?"
 #~ msgstr "Doriți să creați locația GRASS <%s>?"
 
@@ -12148,9 +12468,6 @@ msgstr ""
 
 #~ msgid "Export raster map"
 #~ msgstr "Exportă harta raster"
-
-#~ msgid "Export to Python"
-#~ msgstr "Exportă ca Python"
 
 #~ msgid "Export to image"
 #~ msgstr "Exportă ca imagine"
@@ -13504,9 +13821,6 @@ msgstr ""
 
 #~ msgid "Traveling salesman analysis"
 #~ msgstr "Analiză de tip 'vânzător călător'"
-
-#~ msgid "Unable to create location"
-#~ msgstr "Nu s-a putut crea locația"
 
 #~ msgid "Unable to delete location"
 #~ msgstr "Nu s-a putut șterge locația"

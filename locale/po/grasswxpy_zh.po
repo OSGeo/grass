@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: 2026-07-01 04:35+0000\n"
 "Last-Translator: Jietao Wang <quaternary@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
@@ -5382,8 +5382,7 @@ msgstr ""
 "v.to.rast操作失败:\n"
 "{messages}"
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Zoom to scatter plot extend"
@@ -5446,6 +5445,285 @@ msgstr ""
 msgid "Remove selected class"
 msgstr ""
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS GIS database directory"
+msgid "Select notebook directory"
+msgstr "1. 选择GRASS数据库目录"
+
+#, fuzzy
+msgid "Save in project: {}"
+msgstr "创建图层包"
+
+msgid "Options"
+msgstr "选项"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "浏览"
+
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Integrated"
+msgstr "临时数据"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "关闭对话框"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "错误"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "错误"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to display legend."
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr "显示图例失败。"
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import"
+msgid "Import file"
+msgstr "导入"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "重命名"
+
+msgid "No page for export is currently selected."
+msgstr ""
+
+msgid "Notebook Export Error"
+msgstr ""
+
+msgid "Export file as..."
+msgstr ""
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "模型已导出到 <%s>"
+
+#, fuzzy
+#| msgid "Failed to run d.to.rast:\n"
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr "运行d.to.rast失败：\n"
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "输入要创建的新地图集名称："
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create location"
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "无法创建地点"
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+msgid "New file '{}' created."
+msgstr ""
+
+#, fuzzy
+#| msgid "Do you really want to activate snapping and overwrite it?"
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr "确定激活快照模式并覆盖吗?"
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+msgid "Server URL: {}"
+msgstr ""
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to display legend."
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr "显示图例失败。"
+
+msgid "Notebook storage does not exist: {}"
+msgstr ""
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File %s not found"
+msgid "File not found: {}"
+msgstr "未找到文件 %s"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "文件已存在"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "文件已存在"
+
+msgid "Stop server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "创建新模型"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export animation"
+msgid "Export notebook"
+msgstr "导出动画"
+
 #, fuzzy
 msgid "GRASS"
 msgstr "GRASS帮助文件"
@@ -5473,6 +5751,28 @@ msgid "Close Map Display {}"
 msgstr ""
 
 msgid "Console"
+msgstr ""
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "Integrated Mode Not Available"
 msgstr ""
 
 #, fuzzy
@@ -5624,6 +5924,11 @@ msgstr "移除图层"
 
 msgid "Quit GRASS GUI"
 msgstr "退出GRASS"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
@@ -5955,12 +6260,13 @@ msgstr "地理校正"
 msgid "Cartographic Composer"
 msgstr "制图窗口"
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "建模器图形界面"
+
 msgid "Launch user-defined script"
 msgstr "启动自定义脚本"
-
-#, fuzzy
-msgid "New display"
-msgstr "清屏"
 
 #, fuzzy
 msgid "Python code editor"
@@ -6352,6 +6658,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 #, fuzzy
@@ -6996,9 +7308,6 @@ msgstr "从GRASS插件获取并安装扩展"
 
 msgid "List of extensions - double-click to install"
 msgstr ""
-
-msgid "Options"
-msgstr "选项"
 
 msgid "&Install"
 msgstr ""
@@ -9609,7 +9918,7 @@ msgstr "重命名选中的地图集"
 msgid "Do you want to cancel dataset download?"
 msgstr "永久删除数据%s?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr ""
 
 msgid "Timeline Tool"
@@ -9709,8 +10018,7 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "时间表工具"
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Temporal Plot Tool"
@@ -11186,6 +11494,10 @@ msgstr ""
 "\n"
 
 #, fuzzy
+#~ msgid "New display"
+#~ msgstr "清屏"
+
+#, fuzzy
 #~ msgid "Do you want to create a new project (also known as location)?"
 #~ msgstr "创建GRASS地点<%s>?"
 
@@ -12395,9 +12707,6 @@ msgstr ""
 
 #~ msgid "Identify and remove outliers"
 #~ msgstr "查找移除异常值"
-
-#~ msgid "Import"
-#~ msgstr "导入"
 
 #~ msgid "Import 3-dimensional Vis5D files."
 #~ msgstr "导入三维Vis5D文件。"
@@ -13680,9 +13989,6 @@ msgstr ""
 
 #~ msgid "USLE R-factor"
 #~ msgstr "USLE降雨侵蚀力指标R"
-
-#~ msgid "Unable to create location"
-#~ msgstr "无法创建地点"
 
 #~ msgid "Unable to delete location"
 #~ msgstr "无法删除地点"

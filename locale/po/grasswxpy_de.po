@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/de/>\n"
@@ -5559,8 +5559,7 @@ msgid ""
 "{messages}"
 msgstr ""
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Zoom to scatter plot extend"
@@ -5624,6 +5623,292 @@ msgstr "Klasse hinzufügen"
 msgid "Remove selected class"
 msgstr ""
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS GIS database directory"
+msgid "Select notebook directory"
+msgstr "1. Wählen Sie das GRASS GIS Datenverzeichnis"
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Save in project: {}"
+msgstr "Neues Mapset erstellen"
+
+msgid "Options"
+msgstr "Optionen"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "Blättern"
+
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Integrated"
+msgstr "Temporär"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "Dialog schließen"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "Fehler"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "Fehler"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr "Kann Datei %s nicht lesen."
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import"
+msgid "Import file"
+msgstr "Import"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "Umbenennen"
+
+msgid "No page for export is currently selected."
+msgstr ""
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export file is missing."
+msgid "Export file as..."
+msgstr "Exportdatei fehlt."
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "Modell exportiert in <%s>"
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr "Kann Datei %s nicht lesen."
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "Geben Sie ein Namen für das neue Mapset ein:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create location"
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "Kann die Location nicht erzeugen"
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "No files generated."
+msgid "New file '{}' created."
+msgstr "Keine Dateien erzeugt."
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr ""
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "Server:"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Directory %s does not exist."
+msgid "Notebook storage does not exist: {}"
+msgstr "Verzeichnis %s existiert nicht."
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File %s not found."
+msgid "File not found: {}"
+msgstr "Datei %s nicht gefunden."
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "Die Datei existiert bereits."
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "Die Datei existiert bereits."
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "Server:"
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "Neues Modell erstellen"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to:"
+msgid "Export notebook"
+msgstr "Export nach:"
+
 #, fuzzy
 msgid "GRASS"
 msgstr "GRASS Hilfe"
@@ -5652,6 +5937,30 @@ msgstr ""
 
 msgid "Console"
 msgstr ""
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "3D Ansicht nicht verfügbar"
 
 #, fuzzy
 msgid "Map Swipe Tool"
@@ -5802,6 +6111,11 @@ msgstr "Entferne Kartenebene"
 
 msgid "Quit GRASS GUI"
 msgstr "GRASS GUI schließen"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr "Die Auflösung des Kartenfensters stimmt nicht mit dem Arbeitsbereich überein. Wir schlagen vor, dass Sie das Kartenfenster auf den Arbeitsbereich beschränken. Wollen Sie die Auflösung beschränken?"
@@ -6135,12 +6449,13 @@ msgstr "Georektifizieren"
 msgid "Cartographic Composer"
 msgstr "Kartenlayout"
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "Grafischer Modellierer"
+
 msgid "Launch user-defined script"
 msgstr ""
-
-#, fuzzy
-msgid "New display"
-msgstr "Leere Kartenfenster"
 
 #, fuzzy
 msgid "Python code editor"
@@ -6550,6 +6865,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 #, fuzzy
@@ -7202,9 +7523,6 @@ msgstr "Abruf und Installation einer neuen Erweiterung aus den GRASS Addons"
 
 msgid "List of extensions - double-click to install"
 msgstr ""
-
-msgid "Options"
-msgstr "Optionen"
 
 msgid "&Install"
 msgstr "&Installiere"
@@ -9878,7 +10196,7 @@ msgstr "Ausgewähltes Mapset umbenennen"
 msgid "Do you want to cancel dataset download?"
 msgstr "Wollen sie die Daten dauerhaft löschen?%s"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr ""
 
 msgid "Timeline Tool"
@@ -9976,8 +10294,7 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr ""
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Temporal Plot Tool"
@@ -11448,6 +11765,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~ msgid "New display"
+#~ msgstr "Leere Kartenfenster"
+
+#, fuzzy
 #~ msgid "&Copy paths to mapsets"
 #~ msgstr "&Mapset erstellen"
 
@@ -12604,9 +12925,6 @@ msgstr ""
 #~ msgid "IDW from vector points"
 #~ msgstr "IDW aus Vektorpunkten"
 
-#~ msgid "Import"
-#~ msgstr "Import"
-
 #~ msgid "Import 3D raster data"
 #~ msgstr "Importiere 3D Rasterdaten"
 
@@ -13695,9 +14013,6 @@ msgstr ""
 
 #~ msgid "USLE R-factor"
 #~ msgstr "USLE R-Faktor"
-
-#~ msgid "Unable to create location"
-#~ msgstr "Kann die Location nicht erzeugen"
 
 #~ msgid "Unable to delete location"
 #~ msgstr "Kann Location niht löschen"
