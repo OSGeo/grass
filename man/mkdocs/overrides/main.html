@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{#
+  Development builds (GRASS_DOCS_NOINDEX=true, set in documentation.yml when the
+  VERSION micro ends in "dev") emit robots noindex so the dev manuals do not
+  compete with the grass-stable canonical in search. Stable and release builds
+  leave the flag "false" and stay indexable. See OSGeo/grass#5935.
+#}
+{% block extrahead %}
+  {{ super() }}
+  {% if config.extra.noindex == "true" %}
+  <meta name="robots" content="noindex, follow">
+  {% endif %}
+{% endblock %}
