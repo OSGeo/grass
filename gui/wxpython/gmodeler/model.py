@@ -740,7 +740,10 @@ class Model:
                     if ret:
                         vlist = ret.splitlines()
                 else:
-                    vlist = eval(condText)
+                    # The loop condition is part of the model authored by the
+                    # user, so evaluating it is equivalent to running the
+                    # model itself.
+                    vlist = eval(condText)  # nosec B307
 
                 if "variables" not in params:
                     params["variables"] = {"params": []}

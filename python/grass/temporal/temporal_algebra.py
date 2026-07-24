@@ -1690,6 +1690,12 @@ class TemporalAlgebraParser:
         # Build conditional list with elements from related maps and given relation
         # operator.
         leftbool = map_i.condition_value[0]
+        # The seed value and every value appended in the loop below must be a
+        # bool, so the joined string contains only bool literals and grammar
+        # tokens (see the eval justification below).
+        if not isinstance(leftbool, bool):
+            msg = "Condition value must be a bool, got {}".format(type(leftbool))
+            raise TypeError(msg)
         condition_value_list = [leftbool]
         count = 0
         for topo in temporal_topo_list:
@@ -1723,7 +1729,10 @@ class TemporalAlgebraParser:
         condition_value_str = "".join(map(str, condition_value_list))
         if self.debug:
             print(condition_value_str)
-        resultbool = eval(condition_value_str)
+        # condition_value_str is built above solely from bool values (the seed
+        # and loop values are all checked to be bool) joined with grammar
+        # tokens, so evaluating it does not run arbitrary input.
+        resultbool = eval(condition_value_str)  # nosec B307
         if self.debug:
             print(resultbool)
         # Add boolean value to result list.
@@ -2094,22 +2103,30 @@ class TemporalAlgebraParser:
             #              "supported for absolute time." % (str(map.get_id()))))
         return tvardict
 
-    def eval_datetime_str(self, tfuncval, comp, value):
-        # Evaluate date object comparison expression.
+    def compare_values(self, left, comp, right):
+        """Compare two values with the given comparison operator."""
         if comp == "<":
-            boolname = eval(str(tfuncval < value))
-        elif comp == ">":
-            boolname = eval(str(tfuncval > value))
-        elif comp == "==":
-            boolname = eval(str(tfuncval == value))
-        elif comp == "<=":
-            boolname = eval(str(tfuncval <= value))
-        elif comp == ">=":
-            boolname = eval(str(tfuncval >= value))
-        elif comp == "!=":
-            boolname = eval(str(tfuncval != value))
+            return left < right
+        if comp == ">":
+            return left > right
+        if comp == "==":
+            return left == right
+        if comp == "<=":
+            return left <= right
+        if comp == ">=":
+            return left >= right
+        if comp == "!=":
+            return left != right
+        msg = "Unknown comparison operator: {}".format(comp)
+        raise ValueError(msg)
 
-        return boolname
+    def eval_datetime_str(self, tfuncval, comp, value):
+        """Compare two values with the given comparison operator.
+
+        .. deprecated:: 8.6.0
+            Use :func:`compare_values` instead.
+        """
+        return self.compare_values(tfuncval, comp, value)
 
     def eval_global_var(self, gvar, maplist):
         """This function evaluates a global variable expression for a map list.
@@ -2143,9 +2160,9 @@ class TemporalAlgebraParser:
             }:
                 timeobj = string_to_datetime(value.replace('"', ""))
                 value = timeobj.date()
-                boolname = self.eval_datetime_str(tfuncval, comp_op, value)
-            else:
-                boolname = eval(str(tfuncval) + comp_op + str(value))
+            # value is already an int/float here (from t_INT/t_FLOAT) or a date
+            # from the branch above, so it is compared without coercion.
+            boolname = self.compare_values(tfuncval, comp_op, value)
             # Add conditional boolean value to the map.
             if "condition_value" in dir(map_i):
                 map_i.condition_value.append(boolname)
@@ -2824,18 +2841,19 @@ class TemporalAlgebraParser:
         if self.run:
             maplist = self.check_stds(t[1])
             comp_op = t[2]
-            value = str(t[3])
+            # t[3] is already an int/float from the lexer (t_INT/t_FLOAT).
+            value = t[3]
             for map_i in maplist:
                 # Evaluate time differences and hash operator statements for each map.
                 try:
                     td = map_i.map_value[0].td
-                    boolname = eval(str(td) + comp_op + value)
+                    boolname = self.compare_values(td, comp_op, value)
                     # Add conditional boolean value to the map.
                     if "condition_value" in dir(map_i):
                         map_i.condition_value.append(boolname)
                     else:
                         map_i.condition_value = boolname
-                except (IndexError, AttributeError, SyntaxError):
+                except (IndexError, AttributeError, TypeError):
                     self.msgr.fatal(
                         "Error: the given expression does not contain a correct time "
                         "difference object."
