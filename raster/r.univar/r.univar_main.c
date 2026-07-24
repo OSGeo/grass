@@ -4,14 +4,11 @@
  *  Calculates univariate statistics from the non-null cells of a GRASS raster
  *  map
  *
- *   Copyright (C) 2004-2006, 2012 by the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2004-2006, 2012 Other GRASS authors
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author(s): Hamish Bowman, University of Otago, New Zealand
  *              Extended stats: Martin Landa
  *              Zonal stats: Markus Metz
- *
- *      This program is free software under the GNU General Public
- *      License (>=v2). Read the file COPYING that comes with GRASS
- *      for details.
  *
  *   This program is a replacement for the r.univar shell script
  */

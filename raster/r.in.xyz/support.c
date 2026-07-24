@@ -1,10 +1,9 @@
 /*
  * r.in.xyz support fns.
- *   Copyright 2006 by M. Hamish Bowman, and the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2006 M. Hamish Bowman
+ *   SPDX-FileCopyrightText: Other GRASS authors
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author: M. Hamish Bowman, University of Otago, Dunedin, New Zealand
- *
- *   This program is free software licensed under the GPL (>=v2).
- *   Read the COPYING file that comes with GRASS for details.
  *
  */
 

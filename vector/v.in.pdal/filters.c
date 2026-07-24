@@ -1,13 +1,12 @@
 /*
  * v.in.lidar filtering functions
  *
- * Copyright 2011-2015 by Markus Metz, and the GRASS Development Team
+ * SPDX-FileCopyrightText: 2011-2015 Markus Metz
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  * Authors:
  *  Markus Metz (r.in.lidar)
  *  Vaclav Petras (move code to a separate files)
- *
- * This program is free software licensed under the GPL (>=v2).
- * Read the COPYING file that comes with GRASS for details.
  *
  */
 

@@ -1,11 +1,10 @@
 /*
  * r.in.pdal Functions printing out various information on input LAS files
  *
- *   Copyright 2021 by Maris Nartiss, and the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2021 Maris Nartiss
+ *   SPDX-FileCopyrightText: Other GRASS authors
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author: Maris Nartiss
- *
- *   This program is free software licensed under the GPL (>=v2).
- *   Read the COPYING file that comes with GRASS for details.
  *
  */
 
