@@ -470,6 +470,11 @@ class GMFrame(wx.Frame):
             # set map display properties
             self._setUpMapDisplay(mapdisplay)
 
+            # extend shortcuts and create frame accelerator table
+            mapdisplay.shortcuts_table.append(
+                (self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11)
+            )
+            mapdisplay._initShortcuts()
             return mapdisplay
 
         # create layer tree (tree control for managing GIS layers)  and put on
@@ -506,6 +511,67 @@ class GMFrame(wx.Frame):
         self.displayIndex += 1
 
         return self.GetMapDisplay()
+
+    def ShowFullScreen(self, mapdisplay):
+        """Switch Map Display frame to full-screen mode
+
+        :param object mapdisplay: current Map Display page instance
+
+        :return bool: True if statusbar pane is shown
+        """
+        for toolbar in mapdisplay.toolbars.keys():
+            pane = mapdisplay._mgr.GetPane(mapdisplay.toolbars[toolbar])
+            pane.Show(not pane.IsShown())
+        if self.statusbar:
+            pane = mapdisplay._mgr.GetPane("statusbar")
+            pane.Show(not pane.IsShown())
+        mapdisplay._mgr.Update()
+        return not pane.IsShown()
+
+    def ShowPanes(self, minimize):
+        """Minimize/restore docked datacatalog, layers, tools, console,
+        history, python pane
+
+        :param bool minimize: True if the pane is minimized
+        """
+        # Notebooks panes
+        notebooks = self._auimgr.GetNotebooks()
+        for notebook in notebooks:
+            pane = self._auimgr.GetPane(notebook)
+            if minimize:
+                self._auimgr.MinimizePane(pane)
+            else:
+                self._auimgr.RestoreMinimizedPane(pane)
+
+        panes = [
+            "datacatalog",
+            "layers",
+            "tools",
+            "console",
+            "history",
+            "python",
+        ]
+        for pane in panes:
+            pane = self._auimgr.GetPane(pane)
+            if (
+                pane.dock_direction != aui.AUI_DOCK_NOTEBOOK_PAGE
+                and not pane.IsFloating()
+            ):
+                if minimize:
+                    self._auimgr.MinimizePane(pane)
+                else:
+                    self._auimgr.RestoreMinimizedPane(pane)
+
+    def OnFullScreen(self, event):
+        """Switches Map Display frame to full-screen mode, hides toolbars,
+        statusbar and panes
+        """
+        mapdisplay = self.mapnotebook.GetCurrentPage()
+        minimize = self.ShowFullScreen(
+            mapdisplay=mapdisplay,
+        )
+        self.ShowPanes(minimize)
+        event.Skip()
 
     def _setUpMapDisplay(self, mapdisplay):
         """Set up Map Display properties"""
