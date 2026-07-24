@@ -172,7 +172,7 @@ else:
 
 import grass.script as gs
 from grass.script import task as gtask
-from grass.script.utils import try_rmdir
+from grass.script.utils import check_url_scheme, try_rmdir
 from grass.app.runtime import RuntimePaths
 
 # temp dir
@@ -484,8 +484,9 @@ def urlretrieve(url, filename, *args, **kwargs):
     """Same function as 'urlretrieve', but with the ability to
     define headers.
     """
+    check_url_scheme(url)
     request = urlrequest.Request(url, headers=HEADERS)
-    response = urlrequest.urlopen(request, *args, **kwargs)
+    response = urlrequest.urlopen(request, *args, **kwargs)  # nosec B310
     Path(filename).write_bytes(response.read())
 
 
@@ -493,8 +494,9 @@ def urlopen(url, *args, **kwargs):
     """Wrapper around urlopen. Same function as 'urlopen', but with the
     ability to define headers.
     """
+    check_url_scheme(url)
     request = urlrequest.Request(url, headers=HEADERS)
-    return urlrequest.urlopen(request, *args, **kwargs)
+    return urlrequest.urlopen(request, *args, **kwargs)  # nosec B310
 
 
 def get_version_branch(major_version):
@@ -550,7 +552,8 @@ def get_default_branch(full_url):
     # full_url does not belong to an implemented hosting service or b) if the rate
     # limit of the API is exceeded
     try:
-        req = urlrequest.urlopen(api_calls.get(url_parts.netloc))
+        # api_calls holds fixed https API URLs
+        req = urlrequest.urlopen(api_calls.get(url_parts.netloc))  # nosec B310
         content = json.loads(req.read())
         # For github and gitlab
         default_branch = content.get("default_branch")
