@@ -42,11 +42,11 @@ class SeriesMap(BaseSeriesMap):
 
     def __init__(
         self,
-        width=None,
-        height=None,
-        env=None,
-        use_region=False,
-        saved_region=None,
+        width: int = 600,
+        height: int = 400,
+        env: dict | None = None,
+        use_region: bool = False,
+        saved_region: str | None = None,
     ):
         """Creates an instance of the SeriesMap visualizations class.
 
