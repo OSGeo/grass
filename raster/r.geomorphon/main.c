@@ -282,6 +282,15 @@ int main(int argc, char **argv)
         row_radius_size =
             meters ? ceil(search_radius / ns_resolution) : search_radius;
         row_buffer_size = row_radius_size * 2 + 1;
+        /* open_map fills the row buffer by reading row_buffer_size + 1 rows
+         * from the map, so a region with fewer rows than that would die
+         * partway through that read with a confusing low level error. */
+        if (nrows < row_buffer_size + 1)
+            G_fatal_error(
+                _("The current region has only %d rows but search=%s needs "
+                  "at least %d rows. Make the region taller with g.region "
+                  "or use a smaller search value."),
+                nrows, par_search_radius->answer, row_buffer_size + 1);
         search_distance =
             (meters) ? search_radius : ns_resolution * search_cells;
 
