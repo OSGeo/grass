@@ -3,6 +3,7 @@ Configuration and fixtures for t.list pytest suite.
 """
 
 import os
+from io import StringIO
 from types import SimpleNamespace
 
 import pytest
@@ -13,11 +14,11 @@ from grass.tools import Tools
 
 @pytest.fixture(scope="module")
 def space_time_dataset(tmp_path_factory):
-    """Start an isolated session and create a raster time series.
+    """Start an isolated session and create raster and vector time series.
 
-    Returns an object with attributes about the dataset.
+    Returns an object with attributes about the datasets.
     """
-    tmp_path = tmp_path_factory.mktemp("raster_time_series")
+    tmp_path = tmp_path_factory.mktemp("time_series")
     project = tmp_path / "test_project"
     gs.create_project(project)
 
@@ -51,20 +52,47 @@ def space_time_dataset(tmp_path_factory):
             flags="i",
         )
 
+        vector_names = [f"vect_{i}" for i in range(1, 3)]
+        coords = [f"{i * 10}|{i * 10}" for i in range(1, 3)]
+        for name, coord in zip(vector_names, coords, strict=True):
+            tools.v_in_ascii(
+                input=StringIO(coord),
+                output=name,
+                format="point",
+            )
+        stvds_name = "vector_dataset"
+        tools.t_create(
+            type="stvds",
+            temporaltype="absolute",
+            output=stvds_name,
+            title="Vector dataset",
+            description="Vector series generated for tests",
+        )
+        vector_file = tmp_path / "vector_names.txt"
+        vector_file.write_text("\n".join(vector_names))
+        tools.t_register(
+            type="vector",
+            input=stvds_name,
+            file=vector_file,
+            start="2026-01-01",
+            increment="1 month",
+            flags="i",
+        )
+
         gs.run_command("g.mapset", mapset="user1", flags="c", env=session.env)
 
-        user_dataset_name = "precipitation_dataset"
+        raster_dataset_name = "precipitation_dataset"
         tools.r_mapcalc(expression="precip_1 = 2", overwrite=True)
         tools.t_create(
             type="strds",
             temporaltype="absolute",
-            output=user_dataset_name,
+            output=raster_dataset_name,
             title="Precip",
             description="user1 Dataset",
         )
         tools.t_register(
             type="raster",
-            input=user_dataset_name,
+            input=raster_dataset_name,
             maps="precip_1",
             start="2026-01-01",
             increment="1 month",
@@ -76,8 +104,12 @@ def space_time_dataset(tmp_path_factory):
         yield SimpleNamespace(
             session=session,
             name=dataset_name,
+            raster_dataset1=dataset_name,
+            raster_dataset2=raster_dataset_name,
             map_names=names,
-            user_dataset=user_dataset_name,
+            raster_dataset=raster_dataset_name,
+            stvds_name=stvds_name,
+            vector_names=vector_names,
         )
 
 

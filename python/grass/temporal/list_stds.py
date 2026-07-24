@@ -46,10 +46,12 @@ def get_dataset_list(
     This method returns a dictionary, the keys are the available mapsets,
     the values are the rows from the SQL database query.
 
-    :param type: The type of the datasets (strds, str3ds, stvds, raster,
-                 raster_3d, vector)
+    :param type: The dataset type(s) (strds, str3ds, stvds, raster,
+                 raster_3d, vector) as a string with a single dataset type
+                 (e.g. "strds") or a list of strings with dataset types (e.g.
+                 ["strds", "stvds"])
     :param temporal_type: The temporal type of the datasets (absolute,
-                          relative)
+                          relative) as a string or a list of strings
     :param columns: A comma separated list of columns that will be selected
     :param where: A where statement for selected listing without "WHERE"
     :param order: A comma separated list of columns to order the
@@ -99,33 +101,42 @@ def get_dataset_list(
     """
     dbif, connection_state_changed = init_dbif(dbif)
 
+    stds_type = [type] if isinstance(type, str) else type
+    if isinstance(temporal_type, str):
+        temporal_type = [temporal_type]
+
     result = {}
 
-    for mapset in dbif.tgis_mapsets:
-        if temporal_type == "absolute":
-            table = type + "_view_abs_time"
-        else:
-            table = type + "_view_rel_time"
+    for ttype in temporal_type:
+        for dtype in stds_type:
+            for mapset in dbif.tgis_mapsets:
+                if ttype == "absolute":
+                    table = dtype + "_view_abs_time"
+                else:
+                    table = dtype + "_view_rel_time"
 
-        if columns and columns.find("all") == -1:
-            sql = "SELECT " + str(columns) + " FROM " + table
-        else:
-            sql = "SELECT * FROM " + table
+                if columns and columns.find("all") == -1:
+                    sql = "SELECT " + columns + " FROM " + table
+                else:
+                    sql = "SELECT * FROM " + table
 
-        if where:
-            sql += " WHERE " + where
-            sql += " AND mapset = '%s'" % (mapset)
-        else:
-            sql += " WHERE mapset = '%s'" % (mapset)
+                if where:
+                    sql += " WHERE " + where
+                    sql += " AND mapset = '%s'" % (mapset)
+                else:
+                    sql += " WHERE mapset = '%s'" % (mapset)
 
-        if order:
-            sql += " ORDER BY " + order
+                if order:
+                    sql += " ORDER BY " + order
 
-        dbif.execute(sql, mapset=mapset)
-        rows = dbif.fetchall(mapset=mapset)
+                dbif.execute(sql, mapset=mapset)
+                rows = dbif.fetchall(mapset=mapset)
 
-        if rows:
-            result[mapset] = rows
+                if rows:
+                    if mapset not in result:
+                        result[mapset] = []
+                    for row in rows:
+                        result[mapset].append({**dict(row), "type": dtype})
 
     if connection_state_changed:
         dbif.close()
