@@ -27,6 +27,12 @@ struct cache {
 typedef void (*func)(struct cache *, void *, int, double, double,
                      struct Cell_head *);
 
+/* Strip-based interpolation kernels (interp_strip.c) for the banded compute
+ * path read an in-RAM FCELL strip holding input rows [imin, imax] instead of
+ * the readcell block cache, so they take imin/imax in place of struct cache. */
+typedef void (*strip_func)(void *, void *, int, double, double,
+                           struct Cell_head *, int, int);
+
 struct menu {
     func method; /* routine to interpolate new value      */
     char *name;  /* method name                           */
@@ -66,6 +72,20 @@ extern void p_lanczos(struct cache *, void *, int, double, double,
                       struct Cell_head *);
 extern void p_lanczos_f(struct cache *, void *, int, double, double,
                         struct Cell_head *);
+
+/* interp_strip.c - strip variants for the banded compute path */
+extern void strip_bilinear(void *, void *, int, double, double,
+                           struct Cell_head *, int, int);
+extern void strip_cubic(void *, void *, int, double, double, struct Cell_head *,
+                        int, int);
+extern void strip_lanczos(void *, void *, int, double, double,
+                          struct Cell_head *, int, int);
+extern void strip_bilinear_f(void *, void *, int, double, double,
+                             struct Cell_head *, int, int);
+extern void strip_cubic_f(void *, void *, int, double, double,
+                          struct Cell_head *, int, int);
+extern void strip_lanczos_f(void *, void *, int, double, double,
+                            struct Cell_head *, int, int);
 
 #if 1
 
