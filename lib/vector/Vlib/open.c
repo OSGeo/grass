@@ -540,21 +540,17 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
         char file_path[GPATH_MAX];
 
         Vect__get_element_path(file_path, Map, GV_TOPO_ELEMENT);
-        if (access(file_path, F_OK) == 0) /* topo file exists? */
-            unlink(file_path);
+        unlink(file_path); /* delete topo file if it exists */
 
         Vect__get_element_path(file_path, Map, GV_SIDX_ELEMENT);
-        if (access(file_path, F_OK) == 0) /* sidx file exists? */
-            unlink(file_path);
+        unlink(file_path); /* delete sidx file if it exists */
 
         Vect__get_element_path(file_path, Map, GV_CIDX_ELEMENT);
-        if (access(file_path, F_OK) == 0) /* cidx file exists? */
-            unlink(file_path);
+        unlink(file_path); /* delete cidx file if it exists */
 
         if (format == GV_FORMAT_OGR || format == GV_FORMAT_POSTGIS) {
             Vect__get_element_path(file_path, Map, GV_FIDX_ELEMENT);
-            if (access(file_path, F_OK) == 0) /* fidx file exists? */
-                unlink(file_path);
+            unlink(file_path); /* delete fidx file if it exists */
         }
         Map->support_updated = TRUE;
     }
