@@ -36,6 +36,10 @@ GRASS Development Team</a>, GRASS ${grass_version} Documentation</p>
 )
 
 grass_version = core.version()["version"]
+# Development builds (e.g. 8.6.0dev) are marked noindex so the dev libpython docs
+# do not compete with the grass-stable canonical in search; stable and release
+# builds stay indexable. Consumed by _templates/layout.html.template (see #5935).
+grass_noindex = grass_version.endswith("dev")
 # Canonical doc URLs point to the stable manuals tree, matching the MkDocs core
 # manuals (man/mkdocs/mkdocs.yml site_url = .../grass-stable/manuals/). Keeping an
 # absolute stable base here keeps every libpython canonical + sitemap <loc> on the
@@ -235,6 +239,9 @@ html_favicon = "_static/favicon.ico"
 # to indicate the location of document using the Canonical Link Relation, and
 # also as the base for the sphinx-sitemap URLs below (they must stay in sync).
 html_baseurl = grass_docs_baseurl
+
+# Expose the noindex flag to layout.html (dev builds emit robots noindex).
+html_context = {"grass_noindex": grass_noindex}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
