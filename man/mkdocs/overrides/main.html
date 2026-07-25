@@ -8,7 +8,7 @@
 #}
 {% block extrahead %}
   {{ super() }}
-  {% if config.extra.noindex == "true" %}
+  {% if config.extra.noindex %}
   <meta name="robots" content="noindex, follow">
   {% endif %}
 {% endblock %}
