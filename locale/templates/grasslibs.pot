@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 16:34+0000\n"
+"POT-Creation-Date: 2026-07-25 16:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4661,171 +4661,170 @@ msgstr ""
 msgid "Error in datum table file <%s>, line %d"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:101 ../lib/proj/do_proj.c:110
-#: ../lib/proj/do_proj.c:460 ../lib/proj/do_proj.c:466
-#: ../lib/proj/do_proj.c:511 ../lib/proj/do_proj.c:518
-#: ../lib/proj/do_proj.c:838
+#: ../lib/proj/do_proj.c:99 ../lib/proj/do_proj.c:108 ../lib/proj/do_proj.c:458
+#: ../lib/proj/do_proj.c:464 ../lib/proj/do_proj.c:509
+#: ../lib/proj/do_proj.c:516 ../lib/proj/do_proj.c:836
 #, c-format
 msgid "proj_create() failed for '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:196
+#: ../lib/proj/do_proj.c:194
 #, c-format
 msgid "Invalid west longitude %g"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:200
+#: ../lib/proj/do_proj.c:198
 #, c-format
 msgid "Invalid east longitude %g"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:204
+#: ../lib/proj/do_proj.c:202
 #, c-format
 msgid "Invalid south latitude %g"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:208
+#: ../lib/proj/do_proj.c:206
 #, c-format
 msgid "Invalid north latitude %g"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:212
+#: ../lib/proj/do_proj.c:210
 #, c-format
 msgid "South %g is larger than north %g"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:326
+#: ../lib/proj/do_proj.c:324
 #, c-format
 msgid "Unrecognized SRID '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:340
+#: ../lib/proj/do_proj.c:338
 #, c-format
 msgid "Unrecognized WKT '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:358
+#: ../lib/proj/do_proj.c:356
 msgid "Unable to create PROJ object"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:430
+#: ../lib/proj/do_proj.c:428
 msgid "Input coordinate system is NULL"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:433
+#: ../lib/proj/do_proj.c:431
 msgid "Input coordinate system definition is NULL"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:452
+#: ../lib/proj/do_proj.c:450
 msgid "A custom pipeline requires input and output projection info"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:480
+#: ../lib/proj/do_proj.c:478
 #, c-format
 msgid "The transformation pipeline contains an '%s' step. Remove this step if easting and northing are swapped in the output."
 msgstr ""
 
-#: ../lib/proj/do_proj.c:545
+#: ../lib/proj/do_proj.c:543
 #, c-format
 msgid "Unable to determine area of interest for '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:566
+#: ../lib/proj/do_proj.c:564
 #, c-format
 msgid "Input CRS not available for '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:587
+#: ../lib/proj/do_proj.c:585
 #, c-format
 msgid "Output CRS not available for '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:613
+#: ../lib/proj/do_proj.c:611
 #, c-format
 msgid "Found %d possible transformations"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:625
+#: ../lib/proj/do_proj.c:623
 #, c-format
 msgid "proj_normalize_for_visualization() failed for operation %d"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:637
+#: ../lib/proj/do_proj.c:635
 #, c-format
 msgid "Operation %d:"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:639
+#: ../lib/proj/do_proj.c:637
 #, c-format
 msgid "Description: %s"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:644
+#: ../lib/proj/do_proj.c:642
 #, c-format
 msgid "Area of use: %s"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:648
+#: ../lib/proj/do_proj.c:646
 #, c-format
 msgid "Accuracy within area of use: %g m"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:655
+#: ../lib/proj/do_proj.c:653
 #, c-format
 msgid "Remarks: %s"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:660
+#: ../lib/proj/do_proj.c:658
 #, c-format
 msgid "Scope: %s"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:666
+#: ../lib/proj/do_proj.c:664
 msgid "PROJ string:"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:673
+#: ../lib/proj/do_proj.c:671
 msgid "See also output of:"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:676
+#: ../lib/proj/do_proj.c:674
 #, c-format
 msgid "Please provide the appropriate PROJ string with the %s option"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:799
+#: ../lib/proj/do_proj.c:797
 #, c-format
 msgid "proj_normalize_for_visualization() failed for '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:812
+#: ../lib/proj/do_proj.c:810
 #, c-format
 msgid "No PROJ definition for normalized version of '%s'"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:817
+#: ../lib/proj/do_proj.c:815
 msgid "Selected PROJ pipeline:"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:818
+#: ../lib/proj/do_proj.c:816
 #, c-format
 msgid "%s"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:883
+#: ../lib/proj/do_proj.c:882
 msgid "No input projection"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:886 ../lib/proj/do_proj.c:1045
+#: ../lib/proj/do_proj.c:885 ../lib/proj/do_proj.c:1045
 msgid "No transformation object"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:975 ../lib/proj/do_proj.c:1205
+#: ../lib/proj/do_proj.c:974 ../lib/proj/do_proj.c:1205
 #, c-format
 msgid "proj_trans() failed: %s"
 msgstr ""
 
-#: ../lib/proj/do_proj.c:1290 ../lib/proj/do_proj.c:1411
+#: ../lib/proj/do_proj.c:1291 ../lib/proj/do_proj.c:1413
 #, c-format
 msgid "proj_trans() failed: %d"
 msgstr ""
@@ -6653,7 +6652,7 @@ msgstr[1] ""
 #: ../lib/vector/Vlib/build_sfa.c:665
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 
