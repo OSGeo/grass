@@ -82,7 +82,7 @@ jobs:
 
       - name: ccache (do not use for release artifacts)
         uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
-        if: ${{ !contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
+        if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
         with:
           create-symlink: true
           verbose: 2
@@ -98,7 +98,7 @@ jobs:
           pip install -r grass-addons/.github/workflows/requirements.txt
 
       - uses: rui314/setup-mold@9c9c13bf4c3f1adef0cc596abc155580bcb04444 # v1
-        if: ${{ !contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
+        if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
 
       - name: Create installation directory
         run: |
@@ -168,7 +168,7 @@ jobs:
             grass/html
             !grass/html/**.map
             !grass/html/**.md5
-          retention-days: 3
+          retention-days: 15
 
       - name: Make the doxygen results available (latex)
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -179,7 +179,7 @@ jobs:
             grass/latex
             !grass/latex/**.map
             !grass/latex/**.md5
-          retention-days: 3
+          retention-days: 15
       - name: Compile addons
         run: |
           ./grass-addons/utils/cronjobs_osgeo_lxd/compile_addons_git.sh \
@@ -230,6 +230,13 @@ jobs:
           cd ..
           export SITE_NAME="GRASS ${MAJOR}.${MINOR} Documentation"
           export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS $VERSION Documentation"
+          # Development builds (micro ends in "dev") are marked noindex so the dev
+          # manuals do not compete with the grass-stable canonical (see #5935).
+          if [[ "${MICRO}" == *dev ]]; then
+            export GRASS_DOCS_NOINDEX="true"
+          else
+            export GRASS_DOCS_NOINDEX="false"
+          fi
           cd "${MKDOCS_DIR}" || exit
           mkdocs build
 
@@ -248,7 +255,7 @@ jobs:
             --mkdocs-sitemap "${MKDOCS_DIR}/site/sitemap.xml" \
             --sphinx-sitemap "${MKDOCS_DIR}/site/libpython/sitemap.xml" \
             --output "${MKDOCS_DIR}/site/sitemap.xml" \
-            --version "${VERSION}" -o
+            -o
 
       - name: Make logs available
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -256,7 +263,7 @@ jobs:
           name: grass-addon-build-logs
           if-no-files-found: error
           path: addons-build-dir/logs
-          retention-days: 3
+          retention-days: 15
 
       - name: Make the result available
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -264,4 +271,4 @@ jobs:
           name: mkdocs-site
           if-no-files-found: error
           path: ${{ env.MKDOCS_DIR }}/site
-          retention-days: 3
+          retention-days: 15

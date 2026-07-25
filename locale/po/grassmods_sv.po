@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -1771,8 +1771,9 @@ msgstr "Maximalt antal 10 Y-datafiler överskrids"
 msgid "Cannot find/open symbol: '%s'"
 msgstr "Kan inte hitta/öppna symbolen: '%s'"
 
-#, c-format
-msgid "Color <%s> cannot for option %s be parsed"
+#, fuzzy, c-format
+#| msgid "Color <%s> cannot for option %s be parsed"
+msgid "Color <%s> for option <%s> cannot be parsed"
 msgstr "Färg <%s> kan inte analyseras för alternativ %s"
 
 #, c-format
@@ -1783,8 +1784,9 @@ msgstr "Endast <%d> färger anges för <%d> linjer"
 msgid "Number of widths (%d) is higher then the number of files (%d)"
 msgstr "Antalet bredder (%d) är högre än antalet filer (%d)"
 
-#, c-format
-msgid "Number of widths (%d) is lower then the number of files (%d)"
+#, fuzzy, c-format
+#| msgid "Number of widths (%d) is lower then the number of files (%d)"
+msgid "Number of widths (%d) is lower than the number of files (%d)"
 msgstr "Antalet bredder (%d) är lägre än antalet filer (%d)"
 
 #, c-format
@@ -7695,8 +7697,8 @@ msgstr "Förutsägelser med SVM"
 msgid "Predict with a Support Vector Machine"
 msgstr "Förutsägelser med en stödvektormaskin"
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 msgid "Maps with feature values (attributes)"
 msgstr "Kartor med funktionsvärden (attribut)"
 
@@ -9338,23 +9340,46 @@ msgstr "Omklassificerar en rasterkarta som är större eller mindre än använda
 msgid "aggregation"
 msgstr "sammanställning"
 
-msgid "Value option that sets the area size limit (in hectares)"
+#, fuzzy
+#| msgid "Value option that sets the area size limit (in hectares)"
+msgid "Value option that sets the area size limit (in hectares) (deprecated)"
 msgstr "Värdealternativ som anger gränsen för områdets storlek (i hektar)"
 
 msgid "Area"
 msgstr "Område"
 
-msgid "Lesser or greater than specified value"
+#, fuzzy
+#| msgid "Lesser or greater than specified value"
+msgid "Keep only areas lesser or greater than specified value (deprecated)"
 msgstr "Lägre eller högre än angivet värde"
 
-msgid "Method used for reclassification"
+msgid "Value for the lower area size limit (in hectares). Pixel clumps with areas below this value are removed."
+msgstr ""
+
+msgid "Value for the upper area size limit (in hectares). Pixel clumps with areas above this value are removed."
+msgstr ""
+
+#, fuzzy
+#| msgid "Method used for reclassification"
+msgid "Method used for area size filtering"
 msgstr "Metod som använts för omklassificering"
 
 msgid "Input map is clumped"
 msgstr "Inmatningskartan är klumpad"
 
-msgid "Clumps including diagonal neighbors"
+#, fuzzy
+#| msgid "Clumps including diagonal neighbors"
+msgid "Generate clumps including diagonal neighbors"
 msgstr "Klumpar inklusive diagonala grannar"
+
+msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgstr ""
+
+msgid "Apply lower area threshold as \"minsize\" during clumping"
+msgstr ""
+
+msgid "Output vector map, do not convert back to raster (only for method 'rmarea')"
+msgstr ""
 
 msgid "Splits a raster map into red, green and blue maps."
 msgstr "Delar upp en rasterkarta i röda, gröna och blå kartor."
@@ -9594,6 +9619,11 @@ msgstr "Kolumner som ska skrivas ut till stdout"
 #| msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
 msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
 msgstr "vanlig;mänsklig läsbar textutmatning;skal;textutmatning i skalskriptstil;json;JSON (JavaScript Object Notation);"
+
+#, fuzzy
+#| msgid "Name of mapset to list (default: current search path)"
+msgid "Name of mapsets to list ('.' for current, '*' for all mapsets)"
+msgstr "Namn på den kartuppsättning som ska listas (standard: aktuell sökväg)"
 
 msgid "Field separator character between the output columns"
 msgstr "Fältavgränsningstecken mellan utdatakolumnerna"
@@ -9871,8 +9901,10 @@ msgstr "Tilldela start- och sluttid för rasterdatasetet för rymdtid till utdat
 msgid "Imports space time raster dataset."
 msgstr "Importerar rasterdataset för rymdtid."
 
-msgid "Path to the extraction directory"
-msgstr "Sökväg till extraktionskatalogen"
+#, fuzzy
+#| msgid "Path to the work directory, default is /tmp"
+msgid "Path to the extraction directory (default is .tmp in the current mapset)"
+msgstr "Sökväg till arbetskatalogen, standard är /tmp"
 
 #, fuzzy
 #| msgid "Create a new empty vector map and exit. Nothing is read from input."
@@ -10319,6 +10351,9 @@ msgstr "Registrera tomma kartor"
 msgid "Imports a space time vector dataset from a GRASS specific archive file."
 msgstr "Importerar en vektordatauppsättning för rymdtid från en GRASS-specifik arkivfil."
 
+msgid "Path to the extraction directory"
+msgstr "Sökväg till extraktionskatalogen"
+
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
 msgstr "Skapa ett nytt projekt (plats) och importera data till det. Kör inte denna modul parallellt eller avbryt den när ett nytt projekt ska skapas"
 
@@ -10573,6 +10608,30 @@ msgstr "Standard är sql om inte de angivna aggregeringsmetoderna är för univa
 
 msgid "sql;Uses SQL attribute database;univar;Uses v.db.univar"
 msgstr "sql;Använder SQL-attributdatabas;univar;Använder v.db.univar"
+
+#, fuzzy
+#| msgid "Changes type of vector features."
+msgid "Prints geometry metrics of vector features."
+msgstr "Ändrar typ av vektorfunktioner."
+
+#, fuzzy
+#| msgid "Metric"
+msgid "metric"
+msgstr "Metriska"
+
+msgid "Geometry metric(s) to compute"
+msgstr ""
+
+msgid "area;area size;perimeter;perimeter length of an area;length;line length;count;number of features for each category;compactness;compactness of an area, calculated as perimeter / (2 * sqrt(PI * area));fractal_dimension;fractal dimension of boundary defining a polygon, calculated as 2 * (log(perimeter) / log(area));slope;slope steepness of vector line or boundary;sinuosity;line sinuosity, calculated as line length / distance between end points;azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode;coordinates;point coordinates, X,Y or X,Y,Z;start;line/boundary starting point coordinates, X,Y or X,Y,Z;end;line/boundary end point coordinates, X,Y or X,Y,Z;bbox;bounding box of area, N,S,E,W"
+msgstr ""
+
+msgid "Units (one per metric, positional; unspecified metrics use defaults)"
+msgstr ""
+
+#, fuzzy
+#| msgid "plain;Human readable text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation);"
+msgid "plain;Plain text with pipe separator by default;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr "vanlig;Mänskligt läsbar textutmatning;csv;CSV (kommaseparerade värden);json;JSON (JavaScript Object Notation);"
 
 msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
 msgstr "Importerar vektordata till en GRASS-vektorkarta med hjälp av OGR-biblioteket och reprojicerar i farten."
@@ -22610,7 +22669,9 @@ msgstr "write_vtk_unstructured_grid_cells: Skriva cellerna"
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr "skriva_vtk_data: Skriver Celldata %s med rader %i kol %i djup %i till vtk-ascii-fil"
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+#, fuzzy
+#| msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
 msgstr "Fel värden för 3D-rasterkarta! Värdena ska ligga mellan 0 och 255!"
 
 msgid "Unable to close the 3D raster map"
@@ -23144,7 +23205,9 @@ msgstr "GRASS Addons <%s> hittades inte"
 msgid "ZIP file is unreadable: {0}"
 msgstr "ZIP-filen är oläslig: {0}"
 
-msgid "Extracting may be unsafe; consider updating Python"
+#, fuzzy
+#| msgid "Extracting may be unsafe; consider updating Python"
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
 msgstr "Extrahering kan vara osäkert; överväg att uppdatera Python"
 
 #, python-brace-format
@@ -24147,50 +24210,60 @@ msgstr "dip måste ligga mellan -90 och 90."
 msgid "azimuth must be between 0 and 360"
 msgstr "azimut måste vara mellan 0 och 360"
 
-msgid "xy-locations are not supported"
-msgstr "xy-lokaliseringar stöds inte"
-
-msgid "Need projected data with grids in meters"
+#, fuzzy
+#| msgid "Need projected data with grids in meters"
+msgid ""
+"xy-locations are not supported\n"
+"Need projected data with grids in meters"
 msgstr "Behöver projicerade data med rutnät i meter"
-
-msgid "flags c and d are mutually exclusive"
-msgstr "flaggorna c och d utesluter varandra"
-
-#, python-format
-msgid "Temporary raster map <%s> exists"
-msgstr "Temporär rasterkarta <%s> finns"
-
-msgid "Generating a clumped raster file including diagonal neighbors..."
-msgstr "Generering av en klumpad rasterfil med diagonala grannar..."
-
-msgid "Generating a clumped raster file ..."
-msgstr "Generering av en klumpad rasterfil ..."
-
-#, python-format
-msgid "Generating a reclass map with area size less than or equal to %f hectares..."
-msgstr "Generera en reclass-karta med en områdesstorlek som är mindre än eller lika med %f hektar..."
-
-#, python-format
-msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
-msgstr "Generera en reclass-karta med en områdesstorlek som är större än eller lika med %f hektar..."
-
-#, python-format
-msgid "No areas of size less than or equal to %f hectares found."
-msgstr "Inga områden med en storlek mindre än eller lika med %f hektar hittades."
-
-#, python-format
-msgid "No areas of size greater than or equal to %f hectares found."
-msgstr "Inga områden med en storlek större än eller lika med %f hektar hittades."
 
 msgid "Latitude-longitude locations are not supported"
 msgstr "Latitud-longitud-placeringar stöds inte"
 
-msgid "You have to specify mode='lesser' with method='rmarea'"
-msgstr "Du måste ange mode='lesser' med method='rmarea'"
+msgid "xy-locations are not supported"
+msgstr "xy-lokaliseringar stöds inte"
+
+#, fuzzy
+#| msgid "Generating a clumped raster file ..."
+msgid "Generating a clumped raster file"
+msgstr "Generering av en klumpad rasterfil ..."
+
+#, fuzzy
+#| msgid "Clumps including diagonal neighbors"
+msgid " including diagonal neighbors"
+msgstr "Klumpar inklusive diagonala grannar"
 
 #, python-format
-msgid "Generating output raster map <%s>..."
-msgstr "Genererar rasterkarta för utdata <%s>..."
+msgid " with minimum %s pixels"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generating reclass maps"
+msgid "Generating a reclass map with area size"
+msgstr "Generera kartor över omklassificering"
+
+#, fuzzy, python-format
+#| msgid "No areas of size greater than or equal to %f hectares found."
+msgid " larger than or equal to %f hectares..."
+msgstr "Inga områden med en storlek större än eller lika med %f hektar hittades."
+
+#, fuzzy, python-format
+#| msgid "No areas of size less than or equal to %f hectares found."
+msgid " smaller than or equal to %f hectares..."
+msgstr "Inga områden med en storlek mindre än eller lika med %f hektar hittades."
+
+#, fuzzy
+#| msgid "area size"
+msgid "No areas of size "
+msgstr "områdets storlek"
+
+#, fuzzy, python-format
+#| msgid "Raster map <%s> is of type FCELL_TYPE -- precision may be lost"
+msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
+msgstr "Rasterkartan <%s> är av typen FCELL_TYPE -- precisionen kan gå förlorad"
+
+msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
+msgstr ""
 
 msgid "No semantic label assigned to <{}>"
 msgstr "Ingen semantisk etikett har tilldelats <{}>"
@@ -24624,6 +24697,15 @@ msgid ""
 msgstr ""
 "Ett bearbetningssteg misslyckades. Kontrollera ovanstående felmeddelanden och se följande detaljer:\n"
 "{error}"
+
+msgid "Cannot mix metrics from different feature types: {}. Results are merged by category, so combining e.g. line and area metrics would produce misleading records. Run v.geometry separately for each feature type."
+msgstr ""
+
+msgid "More units ({}) than metrics ({}) specified"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long, got: {}"
+msgstr ""
 
 #, python-format
 msgid "Missing value for parameter <%s>"
@@ -25395,6 +25477,10 @@ msgstr "CSV-format kan inte användas med flaggan -b. Använd istället flaggan 
 
 msgid "The 'list' format can only be used with the -b flag. Please use -b to enable list output."
 msgstr "Formatet 'list' kan endast användas med flaggan -b. Använd -b för att aktivera listutmatning."
+
+#, c-format
+msgid "No records selected from table <%s>"
+msgstr "Inga poster valda från tabell <%s>"
 
 msgid "Unable to sort array of values"
 msgstr "Det går inte att sortera en matris med värden"
@@ -31838,10 +31924,6 @@ msgstr "Antingen '%s' eller '%s' måste anges"
 msgid "Database connection not defined for layer %s"
 msgstr "Databasanslutning inte definierad för lagret %s"
 
-#, c-format
-msgid "No records selected from table <%s>"
-msgstr "Inga poster valda från tabell <%s>"
-
 msgid "Key column type is not integer"
 msgstr "Nyckelkolumnens typ är inte heltal"
 
@@ -33969,6 +34051,31 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 
 msgid "Image file"
 msgstr "Bildfil"
+
+#~ msgid "flags c and d are mutually exclusive"
+#~ msgstr "flaggorna c och d utesluter varandra"
+
+#, python-format
+#~ msgid "Temporary raster map <%s> exists"
+#~ msgstr "Temporär rasterkarta <%s> finns"
+
+#~ msgid "Generating a clumped raster file including diagonal neighbors..."
+#~ msgstr "Generering av en klumpad rasterfil med diagonala grannar..."
+
+#, python-format
+#~ msgid "Generating a reclass map with area size less than or equal to %f hectares..."
+#~ msgstr "Generera en reclass-karta med en områdesstorlek som är mindre än eller lika med %f hektar..."
+
+#, python-format
+#~ msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
+#~ msgstr "Generera en reclass-karta med en områdesstorlek som är större än eller lika med %f hektar..."
+
+#~ msgid "You have to specify mode='lesser' with method='rmarea'"
+#~ msgstr "Du måste ange mode='lesser' med method='rmarea'"
+
+#, python-format
+#~ msgid "Generating output raster map <%s>..."
+#~ msgstr "Genererar rasterkarta för utdata <%s>..."
 
 #~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
 #~ msgstr "Rasterkarta med zoner att beräkna statistik för (måste vara CELL)"

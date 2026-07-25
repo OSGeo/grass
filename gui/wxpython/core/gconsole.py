@@ -201,7 +201,7 @@ class CmdThread(threading.Thread):
                 if args[0][0] == "r.mapcalc":
                     try:
                         mapName = args[0][1].split("=", 1)[0].strip()
-                    except KeyError:
+                    except (IndexError, AttributeError):
                         pass
                 else:
                     moduleInterface = GUI(show=None).ParseCommand(args[0])
