@@ -32,7 +32,6 @@
 typedef struct {
     char elevname[150];
     RASTER_MAP_TYPE raster_type;
-    FCELL **elev;
     int fd; /* file descriptor */
 } MAPS;
 
@@ -76,8 +75,8 @@ GLOBAL enum { ANGLEV1, ANGLEV2, ANGLEV2_DISTANCE } compmode;
 
 /* memory */
 int open_map(MAPS *rast);
-int shift_buffers(int row);
-int free_map(FCELL **map, int n);
+int load_strip(int fd, RASTER_MAP_TYPE rtype, void *tmp_buf, FCELL **rows,
+               int abs_first, int count);
 int write_form_cat_colors(char *raster);
 int write_contrast_colors(char *);
 const char *form_short_name(const FORMS);
@@ -85,7 +84,7 @@ const char *form_long_name(const FORMS);
 
 /* pattern */
 int calc_pattern(PATTERN *pattern, int row, int cur_row, int col, const int,
-                 double search_distance, double flat_distance);
+                 double search_distance, double flat_distance, FCELL **rows);
 extern const char *direction_name[];
 
 /* geom */

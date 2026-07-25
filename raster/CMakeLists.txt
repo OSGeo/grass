@@ -244,6 +244,7 @@ build_program_in_subdir(
 build_program_in_subdir(
     r.geomorphon
     DEPENDS ${LIBM} grass_gis grass_gmath grass_parson grass_raster
+    OPTIONAL_DEPENDS OpenMP::OpenMP_C
 )
 
 build_program_in_subdir(r.grow.distance DEPENDS grass_gis grass_raster ${LIBM})
