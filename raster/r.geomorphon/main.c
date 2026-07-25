@@ -99,6 +99,7 @@ int main(int argc, char **argv)
     int nrows;
     int pattern_size;
     int search_cells;
+    double search_distance, flat_distance;
     double skip_distance;
     double max_resolution;
     double oneoff_easting, oneoff_northing;
@@ -425,32 +426,34 @@ int main(int argc, char **argv)
                 {
                     FORMS cur_form;
                     FORMS orig_form;
+                    /* effective search and flatness distances for this cell,
+                     * possibly reduced by the extended correction below */
+                    double eff_search = search_dist;
+                    double eff_flat = flat_dist;
 
-                    search_distance = search_dist;
                     skip_distance = skip_dist;
-                    flat_distance = flat_dist;
-                    pattern_size =
-                        calc_pattern(&patterns[0], row, cur_row, col, oneoff);
+                    pattern_size = calc_pattern(&patterns[0], row, cur_row, col,
+                                                oneoff, eff_search, eff_flat);
                     pattern = &patterns[0];
                     cur_form = orig_form = determine_form(
                         pattern->num_negatives, pattern->num_positives);
 
                     /* correction of forms */
-                    if (extended && search_distance > 10 * max_resolution) {
+                    if (extended && eff_search > 10 * max_resolution) {
                         /* 1) remove extensive innatural forms: ridges, peaks,
                          * shoulders and footslopes */
                         if ((cur_form == SH || cur_form == FS ||
                              cur_form == PK || cur_form == RI)) {
                             FORMS small_form;
 
-                            search_distance =
-                                (search_dist / 2. < 4 * max_resolution)
-                                    ? 4 * max_resolution
-                                    : search_dist / 2.;
+                            eff_search = (search_dist / 2. < 4 * max_resolution)
+                                             ? 4 * max_resolution
+                                             : search_dist / 2.;
                             skip_distance = 0;
-                            flat_distance = 0;
-                            pattern_size = calc_pattern(&patterns[1], row,
-                                                        cur_row, col, 0);
+                            eff_flat = 0;
+                            pattern_size =
+                                calc_pattern(&patterns[1], row, cur_row, col, 0,
+                                             eff_search, eff_flat);
                             pattern = &patterns[1];
                             small_form = determine_form(pattern->num_negatives,
                                                         pattern->num_positives);
@@ -475,12 +478,12 @@ int main(int argc, char **argv)
                         prof_sso("computation_parameters");
                         prof_dbl("easting", oneoff_easting);
                         prof_dbl("northing", oneoff_northing);
-                        prof_mtr("search_m", search_distance);
+                        prof_mtr("search_m", eff_search);
                         prof_int("search_cells", search_cells);
                         prof_mtr("skip_m", skip_distance);
                         prof_int("skip_cells", skip_cells);
                         prof_dbl("flat_thresh_deg", RAD2DEGREE(flat_threshold));
-                        prof_mtr("flat_distance_m", flat_distance);
+                        prof_mtr("flat_distance_m", eff_flat);
                         prof_mtr("flat_height_m", flat_threshold_height);
                         prof_bln("extended_correction", extended);
                         prof_eso(); /* computation_parameters */

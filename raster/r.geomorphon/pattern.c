@@ -68,7 +68,7 @@ static int compare_multi(const double nadir_angle, const double zenith_angle,
 }
 
 int calc_pattern(PATTERN *pattern, int row, int cur_row, int col,
-                 const int oneoff)
+                 const int oneoff, double search_distance, double flat_distance)
 {
     /* calculate parameters of geomorphons and store it in the struct pattern */
     int i, j, pattern_size = 0;
