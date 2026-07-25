@@ -12,7 +12,7 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
- ****************************************************************************/
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
@@ -86,21 +86,47 @@ static int method;
 static const void *closure;
 static int row_scale, col_scale;
 static double quantile;
-
-/* ----- GLOBAL PARALLEL VARIABLES ----- */
 static int nprocs;
 static int memory_mb;
+
+/* one input file descriptor per thread */
 static int *in_fd;
-/* ------------------------------------- */
+
+/* Number of output rows to buffer: what is left of the memory budget after
+ * the per-thread input row buffers, at least one row per thread and at most
+ * the whole map. Follows the memory budgeting of r.resamp.filter. */
+static int compute_chunk_size(void)
+{
+    size_t in_buf_size =
+        (size_t)nprocs * src_w.cols * sizeof(DCELL) * row_scale;
+    size_t total_mem_bytes = (size_t)memory_mb * 1024 * 1024;
+    size_t out_buf_size;
+    int chunk_size;
+
+    /* size_t is unsigned, check if any memory is left for the output buffer */
+    if (total_mem_bytes <= in_buf_size)
+        out_buf_size = 0;
+    else
+        out_buf_size = total_mem_bytes - in_buf_size;
+
+    chunk_size = out_buf_size / (dst_w.cols * sizeof(DCELL));
+    if (chunk_size < nprocs)
+        chunk_size = nprocs;
+    if (chunk_size > dst_w.rows)
+        chunk_size = dst_w.rows;
+
+    G_verbose_message(_("Using %d thread(s), %d buffered output rows"), nprocs,
+                      chunk_size);
+
+    return chunk_size;
+}
 
 static void resamp_unweighted(void)
 {
     stat_func *method_fn;
     int *col_map, *row_map;
-    int row, col;
-    int i, t, k;
     int chunk_size;
-    int row_start;
+    int computed_row = 0;
     DCELL *chunk_buf;
     DCELL **t_values;
     DCELL ***t_bufs;
@@ -110,104 +136,69 @@ static void resamp_unweighted(void)
     col_map = G_malloc((dst_w.cols + 1) * sizeof(int));
     row_map = G_malloc((dst_w.rows + 1) * sizeof(int));
 
-    /* Pre-calculate coordinate maps (serial) */
-    for (col = 0; col <= dst_w.cols; col++) {
+    for (int col = 0; col <= dst_w.cols; col++) {
         double x = Rast_col_to_easting(col, &dst_w);
 
+        /* col_map[col] = (int)floor(Rast_easting_to_col(x, &src_w) + 0.5); */
         col_map[col] = (int)floor((x - src_w.west) / src_w.ew_res + 0.5);
     }
-    for (row = 0; row <= dst_w.rows; row++) {
+    for (int row = 0; row <= dst_w.rows; row++) {
         double y = Rast_row_to_northing(row, &dst_w);
 
         row_map[row] = (int)floor(Rast_northing_to_row(y, &src_w) + 0.5);
     }
 
-    /* Calculate chunk size: subtract per-thread input buffer cost first
-     * (following r.resamp.filter memory budgeting logic) */
-    {
-        size_t in_buf_size =
-            (size_t)nprocs * src_w.cols * sizeof(DCELL) * row_scale;
-        size_t total_mem_bytes = (size_t)memory_mb * 1024 * 1024;
-        size_t out_buf_size;
-
-        /* safety check: if input buffers exceed budget, set output to 0 */
-        if (total_mem_bytes <= in_buf_size)
-            out_buf_size = 0;
-        else
-            out_buf_size = total_mem_bytes - in_buf_size;
-
-        chunk_size = out_buf_size / (dst_w.cols * sizeof(DCELL));
-    }
-    if (chunk_size < nprocs)
-        chunk_size = nprocs;
-    if (chunk_size > dst_w.rows)
-        chunk_size = dst_w.rows;
-
-    G_message(_("Parallel processing: Using %d threads, chunk size %d rows"),
-              nprocs, chunk_size);
-
-    /* Allocate the output chunk buffer */
+    chunk_size = compute_chunk_size();
     chunk_buf = G_malloc((size_t)chunk_size * dst_w.cols * sizeof(DCELL));
 
-    /* Pre-allocate per-thread buffers */
+    /* Pre-allocate per-thread buffers, allocating inside the parallel loop
+     * would dominate the run time */
     t_values = G_malloc(nprocs * sizeof(DCELL *));
     t_bufs = G_malloc(nprocs * sizeof(DCELL **));
-    for (t = 0; t < nprocs; t++) {
-        t_values[t] = G_malloc(row_scale * col_scale * sizeof(DCELL));
+    for (int t = 0; t < nprocs; t++) {
+        t_values[t] = G_malloc((size_t)row_scale * col_scale * sizeof(DCELL));
         t_bufs[t] = G_malloc(row_scale * sizeof(DCELL *));
-        for (k = 0; k < row_scale; k++)
+        for (int k = 0; k < row_scale; k++)
             t_bufs[t][k] = Rast_allocate_d_input_buf();
     }
 
-    /* Main chunking loop */
-    for (row_start = 0; row_start < dst_w.rows; row_start += chunk_size) {
+    for (int row_start = 0; row_start < dst_w.rows; row_start += chunk_size) {
         int current_chunk_rows = chunk_size;
 
         if (row_start + current_chunk_rows > dst_w.rows)
             current_chunk_rows = dst_w.rows - row_start;
 
-        G_percent(row_start, dst_w.rows, 2);
-
-/* PARALLEL REGION */
-#pragma omp parallel for private(row, col, i, t, k) schedule(static)
-        for (i = 0; i < current_chunk_rows; i++) {
+#pragma omp parallel for schedule(static)
+        for (int i = 0; i < current_chunk_rows; i++) {
             int global_row = row_start + i;
-            int maprow0, maprow1, count;
-            int my_infile;
-            int mapcol0, mapcol1;
-            int null, n, r, c;
+            int maprow0 = row_map[global_row + 0];
+            int maprow1 = row_map[global_row + 1];
+            int count = maprow1 - maprow0;
+            int t = 0;
             DCELL *values;
             DCELL **local_bufs;
-            DCELL *out_row_ptr;
+            DCELL *out_row_ptr = &chunk_buf[(size_t)i * dst_w.cols];
 
 #if defined(_OPENMP)
             t = omp_get_thread_num();
-#else
-            t = 0;
 #endif
 
             values = t_values[t];
             local_bufs = t_bufs[t];
-            my_infile = in_fd[t];
 
-            maprow0 = row_map[global_row + 0];
-            maprow1 = row_map[global_row + 1];
-            count = maprow1 - maprow0;
+            G_percent(computed_row, dst_w.rows, 4);
 
-            /* Read input rows into pre-allocated per-thread buffers */
-            for (k = 0; k < count; k++)
-                Rast_get_d_row(my_infile, local_bufs[k], maprow0 + k);
+            for (int k = 0; k < count; k++)
+                Rast_get_d_row(in_fd[t], local_bufs[k], maprow0 + k);
 
-            out_row_ptr = &chunk_buf[(size_t)i * dst_w.cols];
+            for (int col = 0; col < dst_w.cols; col++) {
+                int mapcol0 = col_map[col + 0];
+                int mapcol1 = col_map[col + 1];
+                int null = 0;
+                int n = 0;
 
-            for (col = 0; col < dst_w.cols; col++) {
-                mapcol0 = col_map[col + 0];
-                mapcol1 = col_map[col + 1];
-                null = 0;
-                n = 0;
-
-                for (r = 0; r < count; r++) {
-                    for (c = mapcol0; c < mapcol1; c++) {
+                for (int r = 0; r < count; r++) {
+                    for (int c = mapcol0; c < mapcol1; c++) {
                         DCELL *src = &local_bufs[r][c];
                         DCELL *dst = &values[n++];
 
@@ -215,9 +206,8 @@ static void resamp_unweighted(void)
                             Rast_set_d_null_value(dst, 1);
                             null = 1;
                         }
-                        else {
+                        else
                             *dst = *src;
-                        }
                     }
                 }
 
@@ -226,16 +216,18 @@ static void resamp_unweighted(void)
                 else
                     (*method_fn)(&out_row_ptr[col], values, n, closure);
             }
-        } /* End parallel for */
+#pragma omp atomic update
+            computed_row++;
+        }
 
-        /* Sequential write to disk */
-        for (i = 0; i < current_chunk_rows; i++)
+        /* Rows must reach the output map in order, so write them outside of
+         * the parallel region */
+        for (int i = 0; i < current_chunk_rows; i++)
             Rast_put_d_row(outfile, &chunk_buf[(size_t)i * dst_w.cols]);
     }
 
-    /* Free per-thread buffers */
-    for (t = 0; t < nprocs; t++) {
-        for (k = 0; k < row_scale; k++)
+    for (int t = 0; t < nprocs; t++) {
+        for (int k = 0; k < row_scale; k++)
             G_free(t_bufs[t][k]);
         G_free(t_bufs[t]);
         G_free(t_values[t]);
@@ -251,10 +243,8 @@ static void resamp_weighted(void)
 {
     stat_func_w *method_fn;
     double *col_map, *row_map;
-    int row, col;
-    int i, t, k;
     int chunk_size;
-    int row_start;
+    int computed_row = 0;
     DCELL *chunk_buf;
     DCELL(**t_values)[2];
     DCELL ***t_bufs;
@@ -264,117 +254,78 @@ static void resamp_weighted(void)
     col_map = G_malloc((dst_w.cols + 1) * sizeof(double));
     row_map = G_malloc((dst_w.rows + 1) * sizeof(double));
 
-    /* Pre-calculate coordinate maps (serial) */
-    for (col = 0; col <= dst_w.cols; col++) {
+    for (int col = 0; col <= dst_w.cols; col++) {
         double x = Rast_col_to_easting(col, &dst_w);
 
+        /* col_map[col] = Rast_easting_to_col(x, &src_w); */
         col_map[col] = (x - src_w.west) / src_w.ew_res;
     }
-    for (row = 0; row <= dst_w.rows; row++) {
+    for (int row = 0; row <= dst_w.rows; row++) {
         double y = Rast_row_to_northing(row, &dst_w);
 
         row_map[row] = Rast_northing_to_row(y, &src_w);
     }
 
-    /* Calculate chunk size: subtract per-thread input buffer cost first
-     * (following r.resamp.filter memory budgeting logic) */
-    {
-        size_t in_buf_size =
-            (size_t)nprocs * src_w.cols * sizeof(DCELL) * row_scale;
-        size_t total_mem_bytes = (size_t)memory_mb * 1024 * 1024;
-        size_t out_buf_size;
-
-        /* safety check: if input buffers exceed budget, set output to 0 */
-        if (total_mem_bytes <= in_buf_size)
-            out_buf_size = 0;
-        else
-            out_buf_size = total_mem_bytes - in_buf_size;
-
-        chunk_size = out_buf_size / (dst_w.cols * sizeof(DCELL));
-    }
-    if (chunk_size < nprocs)
-        chunk_size = nprocs;
-    if (chunk_size > dst_w.rows)
-        chunk_size = dst_w.rows;
-
-    G_message(
-        _("Weighted parallel processing: Using %d threads, chunk size %d rows"),
-        nprocs, chunk_size);
-
-    /* Allocate output buffer */
+    chunk_size = compute_chunk_size();
     chunk_buf = G_malloc((size_t)chunk_size * dst_w.cols * sizeof(DCELL));
 
-    /* Pre-allocate per-thread buffers */
+    /* Pre-allocate per-thread buffers, allocating inside the parallel loop
+     * would dominate the run time */
     t_values = G_malloc(nprocs * sizeof(DCELL(*)[2]));
     t_bufs = G_malloc(nprocs * sizeof(DCELL **));
-    for (t = 0; t < nprocs; t++) {
-        t_values[t] = G_malloc(row_scale * col_scale * 2 * sizeof(DCELL));
+    for (int t = 0; t < nprocs; t++) {
+        t_values[t] =
+            G_malloc((size_t)row_scale * col_scale * 2 * sizeof(DCELL));
         t_bufs[t] = G_malloc(row_scale * sizeof(DCELL *));
-        for (k = 0; k < row_scale; k++)
+        for (int k = 0; k < row_scale; k++)
             t_bufs[t][k] = Rast_allocate_d_input_buf();
     }
 
-    /* Main chunking loop */
-    for (row_start = 0; row_start < dst_w.rows; row_start += chunk_size) {
+    for (int row_start = 0; row_start < dst_w.rows; row_start += chunk_size) {
         int current_chunk_rows = chunk_size;
 
         if (row_start + current_chunk_rows > dst_w.rows)
             current_chunk_rows = dst_w.rows - row_start;
 
-        G_percent(row_start, dst_w.rows, 2);
-
-/* PARALLEL REGION */
-#pragma omp parallel for private(row, col, i, t, k) schedule(static)
-        for (i = 0; i < current_chunk_rows; i++) {
+#pragma omp parallel for schedule(static)
+        for (int i = 0; i < current_chunk_rows; i++) {
             int global_row = row_start + i;
-            double y0, y1;
-            int maprow0, maprow1, count;
-            int my_infile;
-            int mapcol0, mapcol1;
-            int null, n, r, c;
-            double x0, x1;
+            double y0 = row_map[global_row + 0];
+            double y1 = row_map[global_row + 1];
+            int maprow0 = (int)floor(y0);
+            int maprow1 = (int)ceil(y1);
+            int count = maprow1 - maprow0;
+            int t = 0;
             DCELL(*values)[2];
             DCELL **local_bufs;
-            DCELL *out_row_ptr;
+            DCELL *out_row_ptr = &chunk_buf[(size_t)i * dst_w.cols];
 
 #if defined(_OPENMP)
             t = omp_get_thread_num();
-#else
-            t = 0;
 #endif
 
             values = t_values[t];
             local_bufs = t_bufs[t];
-            my_infile = in_fd[t];
 
-            y0 = row_map[global_row + 0];
-            y1 = row_map[global_row + 1];
-            maprow0 = (int)floor(y0);
-            maprow1 = (int)ceil(y1);
-            count = maprow1 - maprow0;
+            G_percent(computed_row, dst_w.rows, 4);
 
-            /* Read input rows into pre-allocated per-thread buffers */
-            for (k = 0; k < count; k++)
-                Rast_get_d_row(my_infile, local_bufs[k], maprow0 + k);
+            for (int k = 0; k < count; k++)
+                Rast_get_d_row(in_fd[t], local_bufs[k], maprow0 + k);
 
-            out_row_ptr = &chunk_buf[(size_t)i * dst_w.cols];
+            for (int col = 0; col < dst_w.cols; col++) {
+                double x0 = col_map[col + 0];
+                double x1 = col_map[col + 1];
+                int mapcol0 = (int)floor(x0);
+                int mapcol1 = (int)ceil(x1);
+                int null = 0;
+                int n = 0;
 
-            for (col = 0; col < dst_w.cols; col++) {
-                x0 = col_map[col + 0];
-                x1 = col_map[col + 1];
-                mapcol0 = (int)floor(x0);
-                mapcol1 = (int)ceil(x1);
-                null = 0;
-                n = 0;
-
-                for (r = maprow0; r < maprow1; r++) {
-                    /* Calculate Y overlap weight */
+                for (int r = maprow0; r < maprow1; r++) {
                     double ky = (r == maprow0)       ? 1 - (y0 - maprow0)
                                 : (r == maprow1 - 1) ? 1 - (maprow1 - y1)
                                                      : 1;
 
-                    for (c = mapcol0; c < mapcol1; c++) {
-                        /* Calculate X overlap weight */
+                    for (int c = mapcol0; c < mapcol1; c++) {
                         double kx = (c == mapcol0)       ? 1 - (x0 - mapcol0)
                                     : (c == mapcol1 - 1) ? 1 - (mapcol1 - x1)
                                                          : 1;
@@ -388,7 +339,7 @@ static void resamp_weighted(void)
                         }
                         else {
                             dst[0] = *src;
-                            dst[1] = kx * ky; /* Store weight */
+                            dst[1] = kx * ky;
                         }
                     }
                 }
@@ -398,16 +349,18 @@ static void resamp_weighted(void)
                 else
                     (*method_fn)(&out_row_ptr[col], values, n, closure);
             }
-        } /* End parallel for */
+#pragma omp atomic update
+            computed_row++;
+        }
 
-        /* Sequential write to disk */
-        for (i = 0; i < current_chunk_rows; i++)
+        /* Rows must reach the output map in order, so write them outside of
+         * the parallel region */
+        for (int i = 0; i < current_chunk_rows; i++)
             Rast_put_d_row(outfile, &chunk_buf[(size_t)i * dst_w.cols]);
     }
 
-    /* Free per-thread buffers */
-    for (t = 0; t < nprocs; t++) {
-        for (k = 0; k < row_scale; k++)
+    for (int t = 0; t < nprocs; t++) {
+        for (int k = 0; k < row_scale; k++)
             G_free(t_bufs[t][k]);
         G_free(t_bufs[t]);
         G_free(t_values[t]);
@@ -479,16 +432,14 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    /* --- PARALLEL SETUP --- */
     nprocs = G_set_omp_num_threads(parm.nprocs);
     nprocs = Rast_disable_omp_on_mask(nprocs);
     if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
 
     memory_mb = atoi(parm.memory->answer);
-    if (memory_mb <= 0)
-        memory_mb = 300;
-    /* ---------------------------- */
+    if (memory_mb < 0)
+        memory_mb = 0;
 
     nulls = flag.nulls->answer;
 
@@ -497,7 +448,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unknown method <%s>"), parm.method->answer);
 
     if (menu[method].method == c_quant) {
-        quantile = atof(parm.quantile->answer);
+        quantile = atoi(parm.quantile->answer);
         closure = &quantile;
     }
 
@@ -561,7 +512,6 @@ int main(int argc, char *argv[])
 
     G_percent(dst_w.rows, dst_w.rows, 2);
 
-    /* Close all input file descriptors */
     for (i = 0; i < nprocs; i++)
         Rast_close(in_fd[i]);
     G_free(in_fd);

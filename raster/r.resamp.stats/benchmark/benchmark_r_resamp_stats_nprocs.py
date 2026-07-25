@@ -22,27 +22,7 @@ def main():
     for ratio in [5, 10, 15, 30]:
         benchmark(5000, ratio, f"r.resamp.stats_25M_{ratio}x", results)
 
-    try:
-        bm.nprocs_plot(results, filename="r_resamp_stats_benchmark_nprocs.svg")
-        print("\nPlot saved to: r_resamp_stats_benchmark_nprocs.svg")
-    except ImportError:
-        print(
-            "\nmatplotlib not available — text summary only.\n"
-            "Install with: pip install matplotlib"
-        )
-
-    # Always print text summary regardless of matplotlib
-    print("\n--- Benchmark Summary ---")
-    for r in results:
-        serial_time = r.times[0]
-        best_time = min(r.times)
-        best_nprocs = r.nprocs[r.times.index(best_time)]
-        speedup = serial_time / best_time
-        print(
-            f"{r.label}: serial={serial_time:.2f}s, "
-            f"best={best_time:.2f}s ({best_nprocs} threads), "
-            f"speedup={speedup:.2f}x"
-        )
+    bm.nprocs_plot(results, filename="r_resamp_stats_benchmark_nprocs.svg")
 
 
 def benchmark(size, ratio, label, results):

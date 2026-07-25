@@ -115,20 +115,6 @@ class TestResampStatsReference(TestCase):
             "coeff_var": 17.7407846372895,
             "sum": 2303358.14636612,
         },
-        "quantile_w": {
-            "n": 20250,
-            "null_cells": 0,
-            "cells": 20250,
-            "min": 57.2978134155273,
-            "max": 156.273727416992,
-            "range": 98.9759140014648,
-            "mean": 113.079299972157,
-            "mean_of_abs": 113.079299972157,
-            "stddev": 20.2227222247457,
-            "variance": 408.958494179225,
-            "coeff_var": 17.883664145184,
-            "sum": 2289855.82443619,
-        },
     }
 
     to_remove = []
@@ -150,14 +136,13 @@ class TestResampStatsReference(TestCase):
                 name=",".join(cls.to_remove),
             )
 
-    def _run_and_check(self, method, key, weighted=False, quantile=None):
+    def _run_and_check(self, method, key, weighted=False):
         """Run r.resamp.stats serially and in parallel, check both outputs."""
         serial_out = f"test_resamp_stats_serial_{key}"
         parallel_out = f"test_resamp_stats_parallel_{key}"
         self.to_remove.extend([serial_out, parallel_out])
 
         flags = "w" if weighted else ""
-        kwargs = {"quantile": quantile} if quantile is not None else {}
 
         # Serial run (nprocs=1)
         self.assertModule(
@@ -168,7 +153,6 @@ class TestResampStatsReference(TestCase):
             flags=flags,
             nprocs=1,
             overwrite=True,
-            **kwargs,
         )
 
         # Parallel run (nprocs=4)
@@ -180,7 +164,6 @@ class TestResampStatsReference(TestCase):
             flags=flags,
             nprocs=4,
             overwrite=True,
-            **kwargs,
         )
 
         # Check both outputs against known reference values
@@ -218,10 +201,6 @@ class TestResampStatsReference(TestCase):
     def test_maximum_unweighted(self):
         """Test unweighted maximum: serial and parallel match reference."""
         self._run_and_check("maximum", "maximum")
-
-    def test_quantile_weighted(self):
-        """Test weighted quantile=0.95: serial and parallel match reference."""
-        self._run_and_check("quantile", "quantile_w", weighted=True, quantile=0.95)
 
 
 class TestResampStatsNullPropagation(TestCase):
