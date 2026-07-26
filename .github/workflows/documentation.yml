@@ -256,6 +256,9 @@ jobs:
             --sphinx-sitemap "${MKDOCS_DIR}/site/libpython/sitemap.xml" \
             --output "${MKDOCS_DIR}/site/sitemap.xml" \
             -o
+          # The libpython URLs are now in the merged manuals sitemap; drop the
+          # standalone libpython sitemap so each URL is listed only once (#5935).
+          rm -f "${MKDOCS_DIR}/site/libpython/sitemap.xml"
 
       - name: Make logs available
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
