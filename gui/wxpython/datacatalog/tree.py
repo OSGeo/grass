@@ -41,6 +41,7 @@ from core.watchdog import (
 from gui_core.dialogs import TextEntryDialog
 from core.giface import StandaloneGrassInterface
 from core.treemodel import TreeModel, DictFilterNode
+from grass.script.utils import naturally_sort
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
 from datacatalog.dialogs import CatalogReprojectionDialog
@@ -334,6 +335,21 @@ class DataCatalogNode(DictFilterNode):
         return _("{name}").format(**data)
 
 
+class DataCatalogTreeModel(TreeModel):
+    """Data catalog-specific tree model with STDS pinning."""
+
+    def SortChildren(self, node):
+        """Sort children naturally, pinning temporal datasets to the top."""
+        if node.children:
+
+            def sort_key(n):
+                if n.data.get("type") in STDS_TYPES:
+                    return "0_" + n.label
+                return "1_" + n.label
+
+            naturally_sort(node.children, key=sort_key)
+
+
 class DataCatalogTree(TreeView):
     """Tree structure visualizing and managing grass database.
     Uses virtual tree and model defined in core/treemodel.py.
@@ -358,7 +374,7 @@ class DataCatalogTree(TreeView):
         | wx.TR_MULTIPLE,
     ):
         """Location Map Tree constructor."""
-        self._model = TreeModel(DataCatalogNode)
+        self._model = DataCatalogTreeModel(DataCatalogNode)
         self._orig_model = self._model
         super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
 
@@ -2092,6 +2108,22 @@ class DataCatalogTree(TreeView):
         self.UnselectAll()
         self.showNotification.emit(message=_("t.remove completed"))
 
+    def OnExportStds(self, event):
+        """Export a space time dataset"""
+        stds_node = self.selected_stds[0]
+        mapset_node = self.selected_mapset[0]
+        stds_type = stds_node.data["type"]
+
+        cmd = {"strds": "t.rast.export", "stvds": "t.vect.export"}.get(stds_type)
+        if cmd:
+            self._giface.RunCmd(
+                [
+                    cmd,
+                    "--ui",
+                    f"input={stds_node.data['name']}@{mapset_node.data['name']}",
+                ]
+            )
+
     def OnDeleteMapset(self, event):
         """
         Delete selected mapset or mapsets
@@ -2744,8 +2776,8 @@ class DataCatalogTree(TreeView):
         ]
         self._giface.RunCmd(["g.gui.timeline", f"inputs={','.join(inputs)}"])
 
-    def OnModifyMetadata(self, event):
-        """Launch t.support dialog to modify dataset metadata"""
+    def OnUpdateMetadata(self, event):
+        """Launch t.support dialog to update dataset metadata"""
         stds_node = self.selected_stds[0]
         mapset_node = self.selected_mapset[0]
         stds_type = stds_node.data["type"]
@@ -2867,9 +2899,9 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnUnregisterStds, item)
         item.Enable(is_active)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Modify metadata"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Update metadata"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnModifyMetadata, item)
+        self.Bind(wx.EVT_MENU, self.OnUpdateMetadata, item)
         item.Enable(is_active)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Plot &timeline"))
@@ -2885,6 +2917,12 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteStds, item)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Export dataset"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnExportStds, item)
+        stds_type = self.selected_stds[0].data["type"]
+        item.Enable(stds_type in {"strds", "stvds"})
+
         menu.AppendSeparator()
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Show &metadata"))
@@ -2899,6 +2937,10 @@ class DataCatalogTree(TreeView):
         menu = Menu()
         genv = gisenv()
         currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnCopyMap, item)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Copy &name"))
         menu.AppendItem(item)
