@@ -287,10 +287,11 @@ int main(int argc, char **argv)
          * partway through that read with a confusing low level error. */
         if (nrows < row_buffer_size + 1)
             G_fatal_error(
-                _("The current region has only %d rows but search=%s needs "
-                  "at least %d rows. Make the region taller with g.region "
-                  "or use a smaller search value."),
-                nrows, par_search_radius->answer, row_buffer_size + 1);
+                _("The outer search radius (search=%s) exceeds what the "
+                  "north-south extent of the current region (%d rows) can "
+                  "handle. At least %d rows are needed. Set the computational "
+                  "region with g.region or use a smaller search value."),
+                par_search_radius->answer, nrows, row_buffer_size + 1);
         search_distance =
             (meters) ? search_radius : ns_resolution * search_cells;
 
