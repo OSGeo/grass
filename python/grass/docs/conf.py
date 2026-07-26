@@ -36,10 +36,11 @@ GRASS Development Team</a>, GRASS ${grass_version} Documentation</p>
 )
 
 grass_version = core.version()["version"]
-# Development builds (e.g. 8.6.0dev) are marked noindex so the dev libpython docs
-# do not compete with the grass-stable canonical in search; stable and release
-# builds stay indexable. Consumed by _templates/layout.html.template (see #5935).
-grass_noindex = grass_version.endswith("dev")
+# Development builds on  the main branch are marked noindex so the dev
+# libpython docs do not compete with the grass-stable canonical in search;
+# stable and release builds stay indexable.
+# Consumed by _templates/layout.html.template (see #5935).
+grass_noindex = os.environ.get("GRASS_DOCS_NOINDEX", "false") == "true"
 # Canonical doc URLs point to the stable manuals tree, matching the MkDocs core
 # manuals (man/mkdocs/mkdocs.yml site_url = .../grass-stable/manuals/). Keeping an
 # absolute stable base here keeps every libpython canonical + sitemap <loc> on the
