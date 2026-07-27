@@ -133,7 +133,6 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.icons = {
             "check": MetaIcon(img="success").GetBitmap(bmpsize),
             "cross": MetaIcon(img="cross").GetBitmap(bmpsize),
-            "unknown": MetaIcon(img="question-mark").GetBitmap(bmpsize),
         }
 
     def _createGeneralInfoBox(self):
@@ -374,23 +373,30 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         # Icon and button according to the condition
         history_entry_has_3d_region = self._history_entry_has_3d_region()
 
+        history_region = self.region_settings
+        current_region = self._get_current_region()
+        keys_to_compare = (
+            REGION_2D_KEYS | REGION_3D_KEYS
+            if history_entry_has_3d_region
+            else REGION_2D_KEYS
+        )
+        region_matches = all(
+            history_region[key] == current_region[key] for key in keys_to_compare
+        )
+
+        icon = self.icons["check"] if region_matches else self.icons["cross"]
+        show_button = not region_matches
         if history_entry_has_3d_region:
-            history_region = self.region_settings
-            current_region = self._get_current_region()
-            region_matches = history_region == current_region
-            icon = self.icons["check"] if region_matches else self.icons["cross"]
-            show_button = not region_matches
             tooltip_text = (
                 _("Region matches current region")
                 if region_matches
                 else _("Region does not match current region")
             )
         else:
-            icon = self.icons["unknown"]
-            show_button = False
-            tooltip_text = _(
-                "Region comparison with current region is incomplete"
-                " (missing stored 3D parameters)"
+            tooltip_text = (
+                _("2D region matches current region (3D not available)")
+                if region_matches
+                else _("2D region does not match current region (3D not available)")
             )
 
         # Static text
