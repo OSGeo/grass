@@ -88,10 +88,7 @@ static int get_cell(int col, float *buf_row, void *buf,
     return 0;
 }
 
-/* Load count absolute rows starting at abs_first into rows[0..count-1],
- * converting each cell to FCELL. The fd and the conversion scratch tmp_buf are
- * passed in so each thread can load its own chunk through its own descriptor
- * and its own scratch. */
+/* Load count rows from abs_first into rows[], converted to FCELL. */
 int load_strip(int fd, RASTER_MAP_TYPE rtype, void *tmp_buf, FCELL **rows,
                int abs_first, int count)
 {

@@ -195,6 +195,26 @@ elevation difference of at least 136 m is required to be noticed as
 non-flat. Flatness distance threshold may be helpful to avoid this
 problem.
 
+### Performance
+
+To enable parallel processing, the user can specify the number of threads
+with the **nprocs** parameter (default 1). The **memory** parameter
+(default 300, in MB) sets how much memory the computation may use for its
+buffers. The region is processed in horizontal bands whose height is
+derived from this value, so a larger setting gives taller bands and fewer
+passes over the input. Very small values still produce the same result but
+re-read the search window halo more often. To take advantage of the
+parallelization, GRASS needs to be compiled with OpenMP enabled.
+
+On an 8 core Apple M3, the forms output scales by roughly 1.9x on 2
+threads, 3.5x on 4 threads and 5.3x on 8 threads, measured as the median
+of repeated runs on maps from 10 to 100 million cells. The benchmark
+script used for these numbers is in the module source directory.
+
+Actual memory use can slightly exceed the **memory** value because each
+thread keeps a small per thread scratch row and the shared input strip
+holds one extra row beyond the band and its halo.
+
 ## EXAMPLES
 
 ### Geomorphon calculation: extraction of terrestrial landforms
