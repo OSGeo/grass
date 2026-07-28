@@ -30,8 +30,6 @@
 #define MAIN
 #include "local_proto.h"
 
-#define WINDOW_THRESHOLD 100000000
-
 typedef enum {
     o_forms,
     o_ternary,
@@ -48,10 +46,8 @@ typedef enum {
     o_size
 } outputs;
 
-/* Compute the geomorphon pattern and landform for one cell, including the
- * extended-form correction. Shared by the parallel raster path and the serial
- * one-off path. The effective search, skip and flatness distances are returned
- * for the one-off profile; the raster path ignores them. */
+/* Compute one cell's pattern and landform, shared by the raster and one-off
+ * paths. */
 static void compute_forms(FCELL **rows, int cur_row, int row, int col,
                           double search_dist, double skip_dist,
                           double flat_dist, int extended, double max_resolution,
@@ -355,10 +351,7 @@ int main(int argc, char **argv)
                   "At least %d rows are needed. Set larger computational "
                   "region with g.region or use a smaller search value."),
                 par_search_radius->answer, nrows, row_buffer_size + 1);
-        /* Band height from the memory cap. The shared input strip is
-         * (brows + 2 * row_radius_size) rows and each requested output adds a
-         * brows-row band, so both terms scale with brows. CELL and FCELL are
-         * both four bytes. */
+        /* Band height from the memory cap. */
         memory = atoi(par_memory->answer);
         nprocs = G_set_omp_num_threads(par_nprocs);
         nprocs = Rast_disable_omp_on_mask(nprocs);
@@ -371,7 +364,9 @@ int main(int argc, char **argv)
             size_t budget;
 
             if (cap <= fixed) {
-                long need = (long)((fixed + per_row + (1 << 20) - 1) >> 20);
+                long need = (long)((fixed + (size_t)ncols * sizeof(FCELL) +
+                                    (size_t)nprocs * per_row + (1 << 20) - 1) >>
+                                   20);
 
                 G_warning(
                     _("Requested memory=%d MB is too small for search=%s. "
@@ -391,8 +386,7 @@ int main(int argc, char **argv)
             if (brows < nprocs)
                 brows = nprocs;
         }
-        /* One-off profiles a single cell (oneoff was set above), so a single
-         * band on its row suffices and there is no need to size for memory. */
+        /* One-off needs only its own row, so a single band suffices. */
         if (oneoff)
             brows = 1;
         search_distance =
@@ -438,18 +432,6 @@ int main(int argc, char **argv)
          * to the cell boundary). And also perhaps another "-r" flag to
          * restore the region afterwards.
          */
-        if (oneoff) {
-            unsigned long window_square = nrows * ncols;
-            unsigned long search_square = 4 * search_cells * search_cells;
-
-            if (window_square > WINDOW_THRESHOLD &&
-                window_square / search_square > 10)
-                G_warning(
-                    _("There may be a notable processing delay because the "
-                      "computational region is %lu times larger than "
-                      "necessary"),
-                    window_square / search_square);
-        }
     }
 
     generate_ternary_codes();
@@ -465,8 +447,7 @@ int main(int argc, char **argv)
         double area_of_octagon =
             4 * (search_distance * search_distance) * sin(DEGREE2RAD(45.));
         unsigned char oneoff_done = 0;
-        /* One shared input strip (band rows plus halo), reused for every band.
-         */
+        /* Shared input strip, reused for every band. */
         int strip_cap = brows + 2 * row_radius_size + 1;
         FCELL *strip_block =
             (FCELL *)G_malloc((size_t)strip_cap * ncols * sizeof(FCELL));
@@ -586,8 +567,7 @@ int main(int argc, char **argv)
             G_free(tmp_buf);
         }
         else {
-            /* Parallel raster path: per-thread descriptors and scratch, one
-             * shared strip loaded in disjoint chunks, then computed. */
+            /* Parallel raster path, one shared strip loaded by all threads. */
             int *fd_thread = G_malloc(sizeof(int) * nprocs);
             void **tmp_thread = G_malloc(sizeof(void *) * nprocs);
             int computed = 0;
@@ -633,8 +613,7 @@ int main(int argc, char **argv)
                     tid = omp_get_thread_num();
                     nth = omp_get_num_threads();
 #endif
-                    /* Each thread loads a disjoint chunk of the strip rows
-                     * through its own descriptor and scratch. */
+                    /* Each thread loads a disjoint chunk of the strip. */
                     ls = strip_rows * tid / nth;
                     le = strip_rows * (tid + 1) / nth;
                     if (le > ls)
@@ -642,8 +621,8 @@ int main(int argc, char **argv)
                                    tmp_thread[tid], &strip_ptr[ls],
                                    strip_lo + ls, le - ls);
 
-                    /* Every thread's strip writes must be visible to all before
-                     * any thread reads the shared strip for computation. */
+                    /* Barrier so all strip writes are visible before any thread
+                     * reads. */
 #pragma omp barrier
 
                     /* Split this band's output rows across threads. */
@@ -719,6 +698,10 @@ int main(int argc, char **argv)
                                     max_resolution, 0, patterns, &pattern,
                                     &pattern_size, &cur_form, &orig_form,
                                     &eff_search, &eff_skip, &eff_flat);
+                                /* The extended correction only changes the
+                                 * forms output. Every other output is computed
+                                 * from the original full search pattern,
+                                 * exactly like the serial code does. */
                                 pattern = &patterns[0];
                                 if (opt_output[o_forms]->answer)
                                     ((CELL *)rasters[o_forms]
