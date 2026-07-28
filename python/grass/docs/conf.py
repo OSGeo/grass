@@ -16,62 +16,9 @@ from datetime import date
 import string
 from shutil import copy
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
+# The grass package is imported from GISBASE, which the build puts on PYTHONPATH.
 if not os.getenv("GISBASE"):
     sys.exit("GISBASE not defined")
-sys.path.insert(
-    0, os.path.abspath(os.path.join(os.environ["GISBASE"], "etc", "python", "grass"))
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "ctypes")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "exceptions")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "gunittest")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "imaging")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "pydispatch")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "pygrass")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "script")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "temporal")
-    ),
-)
 
 from grass.script import core  # noqa: E402
 
@@ -89,6 +36,16 @@ GRASS Development Team</a>, GRASS ${grass_version} Documentation</p>
 )
 
 grass_version = core.version()["version"]
+# Development builds on  the main branch are marked noindex so the dev
+# libpython docs do not compete with the grass-stable canonical in search;
+# stable and release builds stay indexable.
+# Consumed by _templates/layout.html.template (see #5935).
+grass_noindex = os.environ.get("GRASS_DOCS_NOINDEX", "false") == "true"
+# Canonical doc URLs point to the stable manuals tree, matching the MkDocs core
+# manuals (man/mkdocs/mkdocs.yml site_url = .../grass-stable/manuals/). Keeping an
+# absolute stable base here keeps every libpython canonical + sitemap <loc> on the
+# always-published grass-stable tree; CI rewrites it for dev builds (see #5935).
+grass_docs_baseurl = "https://grass.osgeo.org/grass-stable/manuals/libpython/"
 today = date.today().strftime("%B %d, %Y")
 
 copy("_templates/layout.html.template", "_templates/layout.html")
@@ -116,17 +73,13 @@ extensions = [
 
 
 # Skip temporal lexer rule methods because their regex docstrings are not intended
-# for reStructuredText parsing and only serve PLY token definitions. The modules
-# are checked under both names because the sys.path entries above make them
-# importable both as grass.temporal.* and as temporal.*.
+# for reStructuredText parsing and only serve PLY token definitions.
 def skip_member(app, what, name, obj, skip, options):
     if name.startswith("t_"):
         mod = getattr(obj, "__module__", None)
         if mod in {
             "grass.temporal.temporal_algebra",
             "grass.temporal.temporal_operator",
-            "temporal.temporal_algebra",
-            "temporal.temporal_operator",
         }:
             return True
     return None
@@ -257,7 +210,7 @@ html_theme_options = {
             "internal": True,
         },
         {
-            "href": "exceptions",
+            "href": "grass.exceptions",
             "title": "Exceptions",
             "internal": True,
         },
@@ -284,8 +237,12 @@ logo_url = "_static/grass_logo.svg"
 html_favicon = "_static/favicon.ico"
 
 # The base URL which points to the root of the HTML documentation. It is used
-# to indicate the location of document using the Canonical Link Relation.
-html_baseurl = "https://grass.osgeo.org/grass-stable/manuals/libpython/"
+# to indicate the location of document using the Canonical Link Relation, and
+# also as the base for the sphinx-sitemap URLs below (they must stay in sync).
+html_baseurl = grass_docs_baseurl
+
+# Expose the noindex flag to layout.html (dev builds emit robots noindex).
+html_context = {"grass_noindex": grass_noindex}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -519,9 +476,10 @@ todo_include_todos = True
 
 # sphinx-sitemap extension config
 # https://sphinx-sitemap.readthedocs.io/en/latest/advanced-configuration.html
+# Each <loc> is html_baseurl + {link}, so the sitemap URLs match the canonical
+# URLs exactly; the grass-stable base is already part of html_baseurl (see #5935).
 sitemap_filename = "sitemap.xml"
-html_baseurl = "https://grass.osgeo.org/"
-sitemap_url_scheme = "grass{version}manuals/libpython/{link}"
+sitemap_url_scheme = "{link}"
 
 sitemap_excludes = [
     "search.html",
