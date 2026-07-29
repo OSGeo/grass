@@ -480,6 +480,11 @@ todo_include_todos = True
 # URLs exactly; the grass-stable base is already part of html_baseurl (see #5935).
 sitemap_filename = "sitemap.xml"
 sitemap_url_scheme = "{link}"
+# Emit <lastmod> for each page, taken from the git commit date via the
+# sphinx_last_updated_by_git extension (sphinx-sitemap sets it up when this is
+# True). Without it sphinx-sitemap defaults to no lastmod, so libpython entries
+# in the merged manuals sitemap had none while the MkDocs entries did.
+sitemap_show_lastmod = True
 
 sitemap_excludes = [
     "search.html",
