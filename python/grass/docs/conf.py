@@ -93,11 +93,17 @@ def _apidoc_lastmod_from_source(app, env):
     (untracked), so sphinx_last_updated_by_git leaves them undated. Fill the gap
     from the newest git commit in the matching python/grass source directory.
     """
+    import shutil
     import subprocess
 
     git_last_updated = getattr(env, "git_last_updated", None)
     if git_last_updated is None:
         return
+
+    git = shutil.which("git")
+    if git is None:
+        return
+
     confdir = os.path.dirname(os.path.abspath(__file__))
     for docname in env.found_docs:
         if docname != "grass" and not docname.startswith("grass."):
@@ -110,7 +116,7 @@ def _apidoc_lastmod_from_source(app, env):
             continue
         try:
             ts = subprocess.run(
-                ["git", "log", "-1", "--format=%ct", "--", src],
+                [git, "log", "-1", "--format=%ct", "--", src],
                 cwd=confdir,
                 capture_output=True,
                 text=True,
