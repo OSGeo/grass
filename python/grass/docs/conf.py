@@ -489,6 +489,10 @@ sitemap_show_lastmod = True
 sitemap_excludes = [
     "search.html",
     "genindex.html",
+    "py-modindex.html",
+    # viewcode source-view pages: low search value and no datable source, so keep
+    # them off the sitemap (they remain reachable from the API pages' [source] links)
+    "_modules/*",
 ]
 
 # Intersphinx config
