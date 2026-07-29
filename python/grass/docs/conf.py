@@ -15,6 +15,7 @@ import os
 from datetime import date
 import string
 from shutil import copy
+import pathlib
 
 # The grass package is imported from GISBASE, which the build puts on PYTHONPATH.
 if not os.getenv("GISBASE"):
@@ -85,8 +86,47 @@ def skip_member(app, what, name, obj, skip, options):
     return None
 
 
+def _apidoc_lastmod_from_source(app, env):
+    """Stamp sitemap lastmod on generated grass.* API pages.
+
+    autodoc records their dependency against the GISBASE-installed modules
+    (untracked), so sphinx_last_updated_by_git leaves them undated. Fill the gap
+    from the newest git commit in the matching python/grass source directory.
+    """
+    import subprocess
+
+    git_last_updated = getattr(env, "git_last_updated", None)
+    if git_last_updated is None:
+        return
+    confdir = os.path.dirname(os.path.abspath(__file__))
+    for docname in env.found_docs:
+        if docname != "grass" and not docname.startswith("grass."):
+            continue
+        current = git_last_updated.get(docname)
+        if current and current[0]:
+            continue  # keep real dates from the git extension
+        src = os.path.join(confdir, "..", *docname.split(".")[1:])
+        if not pathlib.Path(src).exists():
+            continue
+        try:
+            ts = subprocess.run(
+                ["git", "log", "-1", "--format=%ct", "--", src],
+                cwd=confdir,
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout.strip()
+        except (subprocess.CalledProcessError, OSError):
+            continue
+        if ts:
+            git_last_updated[docname] = (int(ts), True)
+
+
 def setup(app):
     app.connect("autodoc-skip-member", skip_member)
+    # Run after sphinx_last_updated_by_git (default priority 500) so we only fill
+    # the gaps it leaves for generated apidoc pages, never clobber real dates.
+    app.connect("env-updated", _apidoc_lastmod_from_source, priority=900)
 
 
 # Add any paths that contain templates here, relative to this directory.
