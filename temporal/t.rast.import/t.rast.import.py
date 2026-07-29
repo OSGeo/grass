@@ -46,8 +46,8 @@
 
 # %option G_OPT_M_DIR
 # % key: directory
-# % description: Path to the extraction directory
-# % answer: /tmp
+# % description: Path to the extraction directory (default is .tmp in the current mapset)
+# % required: no
 # %end
 
 # %option
@@ -69,7 +69,7 @@
 # %option
 # % key: project
 # % type: string
-# % description: Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created
+# % description: Create a new project and import the data into it.
 # % required: no
 # % multiple: no
 # %end

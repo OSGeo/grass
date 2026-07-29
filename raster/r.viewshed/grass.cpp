@@ -972,7 +972,7 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
 
         Rast_get_row(elevfd, elevrast, i, elev_data_type);
 
-        for (j = 0; j < Rast_window_cols(); j++) {
+        for (j = 0; j < (dimensionType)ncols; j++) {
 
             /* read the current elevation value */
             // int isNull = 0;

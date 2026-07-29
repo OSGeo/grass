@@ -670,7 +670,7 @@ void gsd_litvert_func(float *norm, unsigned long col, float *pt)
    \param col [unused]
    \param pt
  */
-void gsd_litvert_func2(float *norm, unsigned long col UNUSED, float *pt)
+void gsd_litvert_func2(float *norm, unsigned long col G_UNUSED, float *pt)
 {
     glNormal3fv(norm);
     glVertex3fv(pt);
@@ -1150,7 +1150,7 @@ void gsd_endlist(void)
    \param listno
    \param range [unused]
  */
-void gsd_deletelist(GLuint listno, int range UNUSED)
+void gsd_deletelist(GLuint listno, int range G_UNUSED)
 {
     unsigned int i;
 
@@ -1182,7 +1182,7 @@ void gsd_calllist(int listno)
 
    \param listno [unused]
  */
-void gsd_calllists(int listno UNUSED)
+void gsd_calllists(int listno G_UNUSED)
 {
     int i;
 

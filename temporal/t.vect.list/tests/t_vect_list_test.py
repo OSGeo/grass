@@ -14,7 +14,6 @@ except ImportError:
 from grass.tools import Tools
 
 
-@pytest.mark.needs_solo_run
 def test_defaults(space_time_vector_dataset):
     """Check that the module runs with default parameters"""
     tools = Tools(session=space_time_vector_dataset.session)
@@ -22,7 +21,6 @@ def test_defaults(space_time_vector_dataset):
     assert result.returncode == 0
 
 
-@pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
     ("separator", "delimiter"),
     [(None, ","), (",", ","), ("pipe", "|")],
@@ -36,11 +34,10 @@ def test_line(space_time_vector_dataset, separator, delimiter):
         columns="name",
         separator=separator,
     )
-    names = result.stdout.strip().split(delimiter)
+    names = result.text_split(delimiter)
     assert names == space_time_vector_dataset.vector_names
 
 
-@pytest.mark.needs_solo_run
 def test_json(space_time_vector_dataset):
     """Check JSON can be parsed and contains the right values"""
     tools = Tools(session=space_time_vector_dataset.session)
@@ -59,7 +56,6 @@ def test_json(space_time_vector_dataset):
 
 
 @pytest.mark.skipif(yaml is None, reason="PyYAML package not available")
-@pytest.mark.needs_solo_run
 def test_yaml(space_time_vector_dataset):
     """Check YAML can be parsed and contains the right values"""
     tools = Tools(session=space_time_vector_dataset.session)
@@ -82,7 +78,6 @@ def test_yaml(space_time_vector_dataset):
     assert times == space_time_vector_dataset.start_times
 
 
-@pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
     ("separator", "delimiter"),
     [(None, ","), (",", ","), (";", ";"), ("tab", "\t"), ("pipe", "|")],
@@ -112,7 +107,6 @@ def test_csv(space_time_vector_dataset, separator, delimiter):
         assert len(row) == len(columns)
 
 
-@pytest.mark.needs_solo_run
 @pytest.mark.parametrize(
     "output_format",
     [
@@ -128,7 +122,7 @@ def test_csv(space_time_vector_dataset, separator, delimiter):
 def test_separator_rejected(space_time_vector_dataset, output_format):
     """Check that the separator option is rejected"""
     tools = Tools(session=space_time_vector_dataset.session)
-    returncode = tools.t_rast_list(
+    returncode = tools.t_vect_list(
         input=space_time_vector_dataset.name,
         format=output_format,
         separator=",",

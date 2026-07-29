@@ -18,6 +18,8 @@ This program is free software under the GNU General Public License
 @author Python exports Ondrej Pesek <pesej.ondrek gmail.com>
 """
 
+from __future__ import annotations
+
 import os
 import time
 import stat
@@ -45,7 +47,7 @@ from core.gconsole import GConsole, EVT_CMD_RUN, EVT_CMD_DONE, EVT_CMD_PREPARE
 from core.debug import Debug
 from core.gcmd import GMessage, GException, GWarning, GError
 from core.settings import UserSettings
-from core.giface import Notification
+from core.giface import Notification, StandaloneGrassInterface
 
 from gui_core.widgets import GNotebook
 from gui_core.goutput import GConsoleWindow
@@ -147,7 +149,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         )
         self.canvas.SetCursor(self.cursors["default"])
 
-        self.model = Model(giface=self._giface, canvas=self.canvas)
+        self.model: Model = Model(giface=self._giface, canvas=self.canvas)
 
         self.variablePanel = VariablePanel(parent=self)
 
@@ -408,23 +410,37 @@ class ModelerPanel(wx.Panel, MainPageBase):
         # delete intermediate data
         self._deleteIntermediateData()
 
-        # display data if required
+        # store resolved variables
+        run_params = self.model.GetRunParams()
+        resolved = {}
+        if run_params and "variables" in run_params:
+            for p in run_params["variables"]["params"]:
+                name = p.get("name", "")
+                value = p.get("value", "")
+                if name and value:
+                    resolved[name] = value
+
+        # display data if required and is possible
+        if isinstance(self._giface, StandaloneGrassInterface):
+            return
+
+        layer_list = self._giface.GetLayerList()
         for data in self.model.GetData():
             if not data.HasDisplay():
                 continue
 
             # remove existing map layers first
-            layers = self._giface.GetLayerList().GetLayersByName(data.GetValue())
+            layers = layer_list.GetLayersByName(data.GetResolvedValue(resolved))
             if layers:
                 for layer in layers:
-                    self._giface.GetLayerList().DeleteLayer(layer)
+                    layer_list.DeleteLayer(layer)
 
             # add new map layer
-            self._giface.GetLayerList().AddLayer(
+            layer_list.AddLayer(
                 ltype=data.GetPrompt(),
-                name=data.GetValue(),
+                name=data.GetResolvedValue(resolved),
                 checked=True,
-                cmd=data.GetDisplayCmd(),
+                cmd=data.GetDisplayCmd(resolved),
             )
 
     def _switchPageHandler(self, event, notification):
@@ -1698,11 +1714,18 @@ class PythonPanel(wx.Panel):
                 return False
 
         grassAPI = UserSettings.Get(group="modeler", key="grassAPI", subkey="selection")
+        if grassAPI == 0:
+            grassAPIStr = "script"
+        elif grassAPI == 1:
+            grassAPIStr = "pygrass"
+        else:
+            grassAPIStr = "tools"
+
         with tempfile.TemporaryFile(mode="r+") as fd:
             self.write_object(
                 fd,
                 self.parent.GetModel(),
-                grassAPI="script" if grassAPI == 0 else "pygrass",
+                grassAPI=grassAPIStr,
             )
             fd.seek(0)
             self.body.SetText(fd.read())
@@ -1800,6 +1823,40 @@ class PythonPanel(wx.Panel):
         """Python script finished"""
         try_remove(self.filename)
         self.filename = None
+
+        # store resolved variables
+        model = self.parent.GetModel()
+        run_params = model.GetRunParams()
+        resolved = {}
+        if run_params and "variables" in run_params:
+            for p in run_params["variables"]["params"]:
+                name = p.get("name", "")
+                value = p.get("value", "")
+                if name and value:
+                    resolved[name] = value
+
+        # display data if required and is possible
+        if isinstance(self.parent._giface, StandaloneGrassInterface):
+            return
+
+        layer_list = self.parent._giface.GetLayerList()
+        for data in model.GetData():
+            if not data.HasDisplay():
+                continue
+
+            # remove existing map layers first
+            layers = layer_list.GetLayersByName(data.GetResolvedValue(resolved))
+            if layers:
+                for layer in layers:
+                    layer_list.DeleteLayer(layer)
+
+            # add new map layer
+            layer_list.AddLayer(
+                ltype=data.GetPrompt(),
+                name=data.GetResolvedValue(resolved),
+                checked=True,
+                cmd=data.GetDisplayCmd(resolved),
+            )
 
     def OnChangeScriptType(self, event):
         new_script_type = self.script_type_box.GetStringSelection()

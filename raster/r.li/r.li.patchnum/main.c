@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
                           output->answer);
 }
 
-int patch_number(int fd, char **par UNUSED, struct area_entry *ad,
+int patch_number(int fd, char **par G_UNUSED, struct area_entry *ad,
                  double *result)
 {
     int ris = RLI_OK;

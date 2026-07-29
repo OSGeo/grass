@@ -340,7 +340,7 @@ void write_vtk_data(FILE *fp, RASTER3D_Map *map, RASTER3D_Region region,
     depths = region.depths;
 
     /*the nullvalue */
-    if (!sscanf(param.null_val->answer, "%lf", &nullvalue)) {
+    if (sscanf(param.null_val->answer, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -451,7 +451,7 @@ void write_vtk_rgb_data(RASTER3D_Map *map_r, RASTER3D_Map *map_g,
                      */
                     if (value > 255 || value < 0) {
                         G_warning(_("Wrong 3D raster map values! Values should "
-                                    "in between 0 and 255!"));
+                                    "be in between 0 and 255!"));
                         fprintf(fp, "0 ");
                     }
                     else {

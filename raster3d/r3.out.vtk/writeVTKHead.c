@@ -30,7 +30,7 @@
 /* Writes the structured points Header ************************************* */
 
 /* ************************************************************************* */
-void write_vtk_structured_point_header(FILE *fp, char *vtkFile UNUSED,
+void write_vtk_structured_point_header(FILE *fp, char *vtkFile G_UNUSED,
                                        RASTER3D_Region region, int dp,
                                        double scale)
 {
@@ -94,7 +94,7 @@ void write_vtk_structured_point_header(FILE *fp, char *vtkFile UNUSED,
 /* Writes the strcutured grid header **************************************** */
 
 /* ************************************************************************* */
-void write_vtk_structured_grid_header(FILE *fp, char *vtkFile UNUSED,
+void write_vtk_structured_grid_header(FILE *fp, char *vtkFile G_UNUSED,
                                       RASTER3D_Region region)
 {
     G_debug(
@@ -117,7 +117,7 @@ void write_vtk_structured_grid_header(FILE *fp, char *vtkFile UNUSED,
 /* Writes the unstrcutured grid header ************************************* */
 
 /* ************************************************************************* */
-void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile UNUSED,
+void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile G_UNUSED,
                                         RASTER3D_Region region)
 {
     G_debug(3, "write_vtk_unstructured_grid_header: Writing "

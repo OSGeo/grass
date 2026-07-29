@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-14 15:46+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/lv/>\n"
@@ -743,6 +743,19 @@ msgstr "Rediģēt izvēlēto ierakstu"
 msgid "Display selected"
 msgstr ""
 
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "Rīki"
+
+#, fuzzy
+msgid "Script API"
+msgstr "Vienkārš r&edaktors"
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "Iziet no GRASS"
+
 msgid "Classic (labels only)"
 msgstr ""
 
@@ -809,6 +822,11 @@ msgstr ""
 #, fuzzy
 msgid "PyGRASS"
 msgstr "Iziet no GRASS"
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS Tools"
+msgstr "GRASS palīdzība"
 
 #, fuzzy, python-brace-format
 msgid ""
@@ -1315,7 +1333,12 @@ msgid "Re&load maps"
 msgstr "Pārlādēt"
 
 #, fuzzy
-msgid "&Copy path to mapset"
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "Rādīt aprēķinu reģiona apjomu"
+
+#, fuzzy
+msgid "&Copy path"
 msgstr "&Izveidot jaunu karšu kopu"
 
 msgid "&Create mapset"
@@ -1328,6 +1351,16 @@ msgstr "&Dzēst karšu kopu"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Pā&rsaukt karšu kopu"
+
+#, fuzzy
+#| msgid "Map projections"
+msgid "Show projection info"
+msgstr "Kartes projekcijas"
+
+#, fuzzy
+#| msgid "Copy &name"
+msgid "Copy path"
+msgstr "Kopēt &nosaukumu"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1363,11 +1396,15 @@ msgstr "1. Izvēlieties GRASS datubāzes mapi"
 msgid "&Delete projects (locations)"
 msgstr "&Dzēst novietojumu"
 
+#, fuzzy
+msgid "Copy paths"
+msgstr "&Izveidot jaunu karšu kopu"
+
 msgid "&Delete mapsets"
 msgstr "&Dzēst karšu kopas"
 
 #, fuzzy
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "&Izveidot jaunu karšu kopu"
 
 #, python-brace-format
@@ -3207,10 +3244,35 @@ msgstr ""
 msgid "Run the command (Ctrl+R)"
 msgstr ""
 
+#, fuzzy
+#| msgid "Copy all to clipboard"
+msgid "Copy as Shell command"
+msgstr "Kopēt visu"
+
+#, fuzzy
+#| msgid "Copy &name"
+msgid "Copy as Python"
+msgstr "Kopēt &nosaukumu"
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "Vektoru kartes iestatījumi"
+
 msgid "Copy"
 msgstr "Kopēt"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "Eksportēt populāros formātos"
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "Rastra kartes iestatījumi"
+
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr ""
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3225,9 +3287,71 @@ msgstr "Aizvērt dialogu, kad darbs ir pabeigts"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python skripts"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Python skripts"
+
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr ""
+
+#, fuzzy
+#| msgid "Copy coordinates to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "Kopēt koordinātas uz starpliktuvi"
+
+#, fuzzy
+#| msgid "Copy coordinates to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "Kopēt koordinātas uz starpliktuvi"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Modules"
+msgid "Module Mismatch"
+msgstr "Moduļi"
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "Nederīgs nosaukums"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Kļūda"
+
+#, fuzzy, python-format
+#| msgid "Copy coordinates to clipboard"
+msgid "%s copied to clipboard"
+msgstr "Kopēt koordinātas uz starpliktuvi"
 
 msgid "Required"
 msgstr "Obligāti"
@@ -3841,6 +3965,9 @@ msgid "Allow interactive input"
 msgstr ""
 
 msgid "Verbosity level:"
+msgstr ""
+
+msgid "Default Python API for copied commands:"
 msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
@@ -5289,8 +5416,7 @@ msgid ""
 "{messages}"
 msgstr ""
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Zoom to scatter plot extend"
@@ -5353,6 +5479,286 @@ msgstr ""
 msgid "Remove selected class"
 msgstr ""
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS GIS database directory"
+msgid "Select notebook directory"
+msgstr "1. Izvēlieties GRASS datubāzes mapi"
+
+#, fuzzy
+msgid "Save in project: {}"
+msgstr "Izveidot jaunu novietojumu?"
+
+msgid "Options"
+msgstr "Opcijas"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "Pārlūkot"
+
+#, fuzzy
+#| msgid "Generate grid"
+msgid "Integrated"
+msgstr "Ģenerēt tīklu"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "Aizvērt dialogu"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "Kļūda"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "Kļūda"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import"
+msgid "Import file"
+msgstr "Importēt"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "Pārsaukt"
+
+#, fuzzy
+#| msgid "No data source selected."
+msgid "No page for export is currently selected."
+msgstr "Nav izvēlēts datu avots."
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save file as..."
+msgid "Export file as..."
+msgstr "Saglabāt failu kā..."
+
+msgid "File {} exported to {}."
+msgstr ""
+
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "Jaunās karšu kopas nosaukums:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to create new raster map."
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "Nebija iespējams izveidot jaunu rastra karti."
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+msgid "New file '{}' created."
+msgstr ""
+
+#, fuzzy
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "Serveris:"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Property does not exist: %s"
+msgid "Notebook storage does not exist: {}"
+msgstr "Īpašība %s neeksistē"
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File %s not found"
+msgid "File not found: {}"
+msgstr "Datne %s nav atrasta"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "Datne jau eksistē"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "Datne jau eksistē"
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "Serveris:"
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "Veidot jaunu modeli"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to:"
+msgid "Export notebook"
+msgstr "Eksportēt uz:"
+
 #, fuzzy
 msgid "GRASS"
 msgstr "Iziet no GRASS"
@@ -5382,6 +5788,28 @@ msgstr "Aizvērt kartes skatu {}"
 
 msgid "Console"
 msgstr "Konsole"
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "Integrated Mode Not Available"
+msgstr ""
 
 #, fuzzy
 msgid "Map Swipe Tool"
@@ -5529,6 +5957,11 @@ msgstr "Noņemt kartes slāni"
 
 msgid "Quit GRASS GUI"
 msgstr "Iziet no GRASS GUI"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
@@ -5766,6 +6199,14 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "Saglabāt rastra karti"
 
+#, fuzzy
+#| msgid "custom"
+msgid "Custom CRS"
+msgstr "pielāgots"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""
 
@@ -5855,12 +6296,13 @@ msgstr ""
 msgid "Cartographic Composer"
 msgstr "Kartogrāfisko salikumu veidotājs"
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "Grafiskais modelētājs"
+
 msgid "Launch user-defined script"
 msgstr "Darbināt lietotāja definētu skriptu"
-
-#, fuzzy
-msgid "New display"
-msgstr "Dzēst ekrānu"
 
 #, fuzzy
 msgid "Python code editor"
@@ -6245,6 +6687,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 #, fuzzy
@@ -6896,9 +7344,6 @@ msgstr ""
 msgid "List of extensions - double-click to install"
 msgstr ""
 
-msgid "Options"
-msgstr "Opcijas"
-
 msgid "&Install"
 msgstr "&Instalēt"
 
@@ -7098,6 +7543,9 @@ msgstr "Saglabāt izteiksmi failā"
 
 msgid "Load expression from file"
 msgstr "Ielādēt izteiksmi no datnes"
+
+msgid "Copy the current command string to the clipboard"
+msgstr ""
 
 msgid "exponent"
 msgstr "eksponente"
@@ -9517,7 +9965,7 @@ msgstr "Lejupielādēt izvēlēto novietojumu"
 msgid "Do you want to cancel dataset download?"
 msgstr "Vai vēlaties pārtraukt novietojuma lejupielādi?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr ""
 
 #, fuzzy
@@ -9615,8 +10063,7 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "Animācijas rīkjosla"
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Temporal Plot Tool"
@@ -11084,6 +11531,14 @@ msgid ""
 "\n"
 msgstr ""
 
+#, fuzzy
+#~ msgid "New display"
+#~ msgstr "Dzēst ekrānu"
+
+#, fuzzy
+#~ msgid "&Copy paths to mapsets"
+#~ msgstr "&Izveidot jaunu karšu kopu"
+
 #~ msgid "Generate random seed for rand()"
 #~ msgstr "Ģenerēt rand() sēklu automātiski"
 
@@ -11530,9 +11985,6 @@ msgstr ""
 #~ msgid "GRASS GIS %s Startup%s"
 #~ msgstr "GRASS GIS %s palaišana %s"
 
-#~ msgid "GRASS help"
-#~ msgstr "GRASS palīdzība"
-
 #~ msgid "GRASS working environment"
 #~ msgstr "GRASS darba vide"
 
@@ -11559,9 +12011,6 @@ msgstr ""
 
 #~ msgid "Generate from database"
 #~ msgstr "Ģenerēt no datubāzes"
-
-#~ msgid "Generate grid"
-#~ msgstr "Ģenerēt tīklu"
 
 #~ msgid "Generate points"
 #~ msgstr "Ģenerēt punktus"
@@ -11607,9 +12056,6 @@ msgstr ""
 
 #~ msgid "IDW from vector points"
 #~ msgstr "IDW no vektoru punktiem"
-
-#~ msgid "Import"
-#~ msgstr "Importēt"
 
 #~ msgid "Import 3D raster data"
 #~ msgstr "Importēt 3D rastra datus"
@@ -11741,9 +12187,6 @@ msgstr ""
 #~ msgid "Map legend"
 #~ msgstr "Kartes leģenda"
 
-#~ msgid "Map projections"
-#~ msgstr "Kartes projekcijas"
-
 #~ msgid "Map type conversions"
 #~ msgstr "Kartes tipa konvertēšana"
 
@@ -11761,9 +12204,6 @@ msgstr ""
 
 #~ msgid "Modis quality control"
 #~ msgstr "Modis kvalitātes kontrole"
-
-#~ msgid "Modules"
-#~ msgstr "Moduļi"
 
 #~ msgid "Name for output vector map"
 #~ msgstr "Izvades vektordatu kartes nosaukums"

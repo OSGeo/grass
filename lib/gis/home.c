@@ -107,14 +107,19 @@ const char *G_config_path(void)
         return config_path;
 
     config_dir = getenv("GRASS_CONFIG_DIR");
-    if (!config_dir)
+    if (!config_dir) {
 #ifdef __MINGW32__
         config_dir = getenv("APPDATA");
 #else
         config_dir = G_home();
 #endif
-
+    }
+#if defined(__APPLE__)
+    snprintf(buf, GPATH_MAX, "%s%c%s%c%s", config_dir, HOST_DIRSEP, "Library",
+             HOST_DIRSEP, CONFIG_DIR);
+#else
     snprintf(buf, GPATH_MAX, "%s%c%s", config_dir, HOST_DIRSEP, CONFIG_DIR);
+#endif
     config_path = G_store(buf);
 
 #if 0

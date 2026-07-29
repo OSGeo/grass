@@ -2,7 +2,7 @@
 #include <grass/raster.h>
 #include <grass/stats.h>
 
-void c_intr(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+void c_intr(DCELL *result, DCELL *values, int n, const void *closure G_UNUSED)
 {
     DCELL center;
     int count;

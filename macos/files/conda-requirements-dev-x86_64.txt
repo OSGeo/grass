@@ -1,7 +1,9 @@
 boost
 cairo
-clangxx_osx-64
+clang
 clang_osx-64
+clangxx
+clangxx_osx-64
 cmake
 expat
 fftw
@@ -19,6 +21,7 @@ libgdal-arrow-parquet
 libgdal-core
 libgdal-hdf4
 libgdal-hdf5
+libgdal-jp2openjpeg
 libgdal-netcdf
 libgdal-pdf
 libgdal-pg
@@ -44,5 +47,5 @@ python.app
 python<3.13
 setuptools
 sqlite
-wxpython=4.2.2
+wxpython
 zstd
