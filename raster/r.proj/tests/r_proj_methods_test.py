@@ -1,23 +1,7 @@
-"""Reference-value test for r.proj across interpolation methods.
+"""These are the reference value tests for r.proj across the interpolation methods.
 
-For every interpolation method, r.proj is run at OMP_NUM_THREADS=1 on the
-generated input_mid raster reprojected into EPSG:3857, and its univariate
-statistics are compared against reference values. This verifies that changes
-such as the OpenMP parallelization do not change the serial output.
-
-Reference provenance: values captured from r.proj.serial (md5
-cde07de7d7b2e2798fb203fc01b27714), the frozen main-branch serial binary, run
-at OMP_NUM_THREADS=1 on the session_3857 / input_mid fixture data with the
-output region set from r.proj -g. The single-thread run matches the
-single-thread reference. All seven references are pairwise distinct, and every
-pairwise method swap is catchable at the primary rel=1e-7 tolerance (the
-input_mid curvature term is chosen so bilinear_f and bicubic_f diverge past
-1e-7).
-
-The rel=1e-6 relaxation pre-registered below, if ever invoked on a CI
-floating-point flutter, sacrifices the bilinear_f/bicubic_f swap detection
-(their means differ by only ~2.6e-7 relative, under 1e-6) -- so relaxing is a
-visible trade, not a silent one.
+Each method reprojects input_mid into EPSG:3857. The method's r.univar stats
+must also match the references taken from the serial r.proj on the main branch.
 """
 
 import pytest
@@ -137,9 +121,6 @@ def test_method_matches_serial_reference(session_3857, method):
 
     assert int(stats["n"]) == reference["n"]
     assert int(stats["null_cells"]) == reference["null_cells"]
-    # Primary tolerance rel=1e-7. The only permitted relaxation, on an actual
-    # CI floating-point flutter (naming the platform that showed it), is Anna's
-    # r.param.scale tolerance rel=1e-6, abs=5e-8; see the module docstring for
-    # the bilinear_f/bicubic_f detection it trades away.
+    # Value statistics compared at a relative tolerance of 1e-7.
     for field in ("min", "max", "mean", "stddev"):
         assert float(stats[field]) == pytest.approx(reference[field], rel=1e-7)
