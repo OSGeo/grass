@@ -1,4 +1,4 @@
-"""Reference and landform tests for r.geomorphon on a deterministic DEM."""
+"""This is a pytest for r.geomorphon using a deterministic DEM. It covers reference tests, landform tests and a profile check."""
 
 import json
 
