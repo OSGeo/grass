@@ -239,12 +239,17 @@ def main():
                                     % (dtype, time, mapset)
                                 )
                             else:
+                                type_desc = {
+                                    "strds": "raster",
+                                    "stvds": "vector",
+                                    "str3ds": "3D raster",
+                                }.get(dtype, dtype)
                                 sys.stderr.write(
                                     _(
                                         "Space time %s datasets with %s available"
                                         " in mapset <%s>:\n"
                                     )
-                                    % (dtype, time, mapset)
+                                    % (type_desc, time, mapset)
                                 )
 
                         if output_format == "json":
@@ -268,7 +273,10 @@ def main():
                             csv_output.extend(current_rows)
 
                         else:
-                            if (colhead or output_format == "csv") and first:
+                            print_header = (output_format == "csv" and first) or (
+                                output_format == "plain" and colhead
+                            )
+                            if print_header:
                                 output = separator.join(
                                     str(k)
                                     for k in current_rows[0].keys()
