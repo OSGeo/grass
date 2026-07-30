@@ -1,26 +1,4 @@
-"""Fixtures for the r.proj parallel-correctness pytest.
-
-Builds one GISDBASE holding an EPSG:4326 source project with two small
-generated input rasters, plus EPSG:3857 and EPSG:3413 (north polar
-stereographic) destination projects. r.proj reprojects from the source
-into the active destination session; the tests compare the module's own
-serial and parallel runs.
-
-The input is integer CELL with values well below 2^24
-(row()*100 + col() + (row()*row()+col()*col())%13, max ~5058), so it survives
-a float32 round-trip losslessly. This is deliberate: the forced tile-cache
-path reads through the FCELL readcell cache while the banded nearest path
-reads the native type, so only a float32-exact input keeps the forced-fallback
-bitwise assert valid (a DCELL input would diverge by float32 quantization
-alone). The (row()*row()+col()*col())%13 term gives the surface enough
-curvature that bilinear and bicubic interpolation diverge past the reference
-test's rel=1e-7 tolerance (a linear ramp, or a milder term, leaves their
-statistics identical or within tolerance), which the method reference test
-relies on to catch an _f-kernel dispatch swap. Values depend on
-grid position only (no trig, no random), so they are bit-identical across
-platforms and resolutions. Both rasters are 50x50 to stay well under the CI
-time budget.
-"""
+"""This is a source project with two small rasters and two destination sessions."""
 
 import os
 
@@ -31,7 +9,7 @@ import grass.script as gs
 INPUT_EXPRESSION = "row() * 100 + col() + (row() * row() + col() * col()) % 13"
 
 SRC_PROJECT = "src4326"
-# Mid-latitude box for the 3857 identity/fallback cases.
+# Mid-latitude box for the 3857 tests.
 INPUT_MID = "input_mid"
 # High-latitude, full-longitude box so a north-polar frame has data to read.
 INPUT_POLAR = "input_polar"
