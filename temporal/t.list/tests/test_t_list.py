@@ -61,19 +61,16 @@ def test_t_list_json(space_time_dataset):
             "name": "temp_1",
             "start_time": "2026-01-01 00:00:00",
             "end_time": "2026-02-01 00:00:00",
-            "type": "raster",
         },
         {
             "name": "temp_2",
             "start_time": "2026-02-01 00:00:00",
             "end_time": "2026-03-01 00:00:00",
-            "type": "raster",
         },
         {
             "name": "temp_3",
             "start_time": "2026-03-01 00:00:00",
             "end_time": "2026-04-01 00:00:00",
-            "type": "raster",
         },
     ]
 
@@ -94,10 +91,10 @@ def test_t_list_csv(space_time_dataset, separator):
     )
 
     expected_lines = [
-        f"name{separator}start_time{separator}type",
-        f"{space_time_dataset.map_names[0]}{separator}2026-01-01 00:00:00{separator}raster",
-        f"{space_time_dataset.map_names[1]}{separator}2026-02-01 00:00:00{separator}raster",
-        f"{space_time_dataset.map_names[2]}{separator}2026-03-01 00:00:00{separator}raster",
+        f"name{separator}start_time",
+        f"{space_time_dataset.map_names[0]}{separator}2026-01-01 00:00:00",
+        f"{space_time_dataset.map_names[1]}{separator}2026-02-01 00:00:00",
+        f"{space_time_dataset.map_names[2]}{separator}2026-03-01 00:00:00",
     ]
     expected = "\n".join(expected_lines)
 
@@ -222,6 +219,13 @@ def test_t_list_multiple_types_line_error(space_time_dataset):
         tools.t_list(type="strds,stvds", columns="id", format="line")
 
 
+def test_t_list_line_columns_all_error(space_time_dataset):
+    """Check that line format with columns=all raises an error."""
+    tools = Tools(session=space_time_dataset.session)
+    with pytest.raises(ToolError, match="Only one column is allowed for line format"):
+        tools.t_list(type="strds", format="line", columns="all")
+
+
 def test_t_list_cross_category_types_error(space_time_dataset):
     """Check that mixing space time datasets and time stamped maps raises an error."""
     tools = Tools(session=space_time_dataset.session)
@@ -230,3 +234,19 @@ def test_t_list_cross_category_types_error(space_time_dataset):
         match="Combinations across space time datasets and time stamped maps",
     ):
         tools.t_list(type="strds,raster", columns="id")
+
+
+def test_t_list_multiple_types_csv(space_time_dataset):
+    """Check that CSV with multiple types includes only shared columns."""
+    tools = Tools(session=space_time_dataset.session)
+    result = tools.t_list(type="strds,stvds", mapset=".", format="csv", columns="all")
+    lines = result.text_split("\n")
+    header = lines[0].split(",")
+
+    assert "id" in header
+    assert "name" in header
+    assert "type" in header
+
+    # Header should NOT include dataset-specific columns
+    assert "raster_register" not in header
+    assert "vector_register" not in header

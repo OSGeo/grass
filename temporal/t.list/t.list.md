@@ -156,7 +156,9 @@ To list multiple dataset types at once, specify a comma-separated list of
 types (e.g., `type=strds,stvds`).
 
 **Note:** The `type` column is automatically included in the **csv** and
-**json** output formats to clearly identify the dataset type of each record.
+**json** output formats when multiple types are requested to clearly identify
+the dataset type of each record. It can also be explicitly requested for
+single types using `columns=id,type`.
 
 ```sh
 t.list type=strds,stvds columns=id format=json

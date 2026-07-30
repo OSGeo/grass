@@ -58,8 +58,11 @@ def get_dataset_list(
                   datasets by category
     :param dbif: The database interface to be used
 
-    :return: A dictionary with the rows of the SQL query for each
-             available mapset
+    :return: A dictionary with mapsets as keys. When *type* is a string,
+             values are raw database row objects (preserving backward
+             compatibility). When *type* is a list, values are plain
+             dicts with an additional ``"type"`` key identifying the
+             dataset type of each record.
 
     .. code-block:: pycon
 
@@ -101,6 +104,7 @@ def get_dataset_list(
     """
     dbif, connection_state_changed = init_dbif(dbif)
 
+    is_list_input = isinstance(type, list)
     stds_type = [type] if isinstance(type, str) else type
     if isinstance(temporal_type, str):
         temporal_type = [temporal_type]
@@ -135,8 +139,11 @@ def get_dataset_list(
                 if rows:
                     if mapset not in result:
                         result[mapset] = []
-                    for row in rows:
-                        result[mapset].append({**dict(row), "type": dtype})
+                    if is_list_input:
+                        for row in rows:
+                            result[mapset].append({**dict(row), "type": dtype})
+                    else:
+                        result[mapset].extend(rows)
 
     if connection_state_changed:
         dbif.close()
