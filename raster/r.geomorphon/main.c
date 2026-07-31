@@ -54,50 +54,7 @@ static void compute_forms(FCELL **rows, int cur_row, int row, int col,
                           int oneoff, PATTERN *patterns, PATTERN **pattern_out,
                           int *pattern_size_out, FORMS *cur_form_out,
                           FORMS *orig_form_out, double *eff_search_out,
-                          double *eff_skip_out, double *eff_flat_out)
-{
-    double eff_search = search_dist;
-    double eff_skip = skip_dist;
-    double eff_flat = flat_dist;
-    PATTERN *pattern;
-    int pattern_size;
-    FORMS cur_form, orig_form;
-
-    pattern_size = calc_pattern(&patterns[0], row, cur_row, col, oneoff,
-                                eff_search, eff_flat, rows);
-    pattern = &patterns[0];
-    cur_form = orig_form =
-        determine_form(pattern->num_negatives, pattern->num_positives);
-
-    if (extended && eff_search > 10 * max_resolution) {
-        if ((cur_form == SH || cur_form == FS || cur_form == PK ||
-             cur_form == RI)) {
-            FORMS small_form;
-
-            eff_search = (search_dist / 2. < 4 * max_resolution)
-                             ? 4 * max_resolution
-                             : search_dist / 2.;
-            eff_skip = 0;
-            eff_flat = 0;
-            pattern_size = calc_pattern(&patterns[1], row, cur_row, col, 0,
-                                        eff_search, eff_flat, rows);
-            pattern = &patterns[1];
-            small_form =
-                determine_form(pattern->num_negatives, pattern->num_positives);
-            if (cur_form == SH || cur_form == FS)
-                cur_form = (small_form == FL) ? FL : cur_form;
-            if (cur_form == PK || cur_form == RI)
-                cur_form = small_form;
-        }
-    }
-    *pattern_out = pattern;
-    *pattern_size_out = pattern_size;
-    *cur_form_out = cur_form;
-    *orig_form_out = orig_form;
-    *eff_search_out = eff_search;
-    *eff_skip_out = eff_skip;
-    *eff_flat_out = eff_flat;
-}
+                          double *eff_skip_out, double *eff_flat_out);
 
 int main(int argc, char **argv)
 {
@@ -827,4 +784,55 @@ int main(int argc, char **argv)
 
         exit(EXIT_SUCCESS);
     }
+}
+
+static void compute_forms(FCELL **rows, int cur_row, int row, int col,
+                          double search_dist, double skip_dist,
+                          double flat_dist, int extended, double max_resolution,
+                          int oneoff, PATTERN *patterns, PATTERN **pattern_out,
+                          int *pattern_size_out, FORMS *cur_form_out,
+                          FORMS *orig_form_out, double *eff_search_out,
+                          double *eff_skip_out, double *eff_flat_out)
+{
+    double eff_search = search_dist;
+    double eff_skip = skip_dist;
+    double eff_flat = flat_dist;
+    PATTERN *pattern;
+    int pattern_size;
+    FORMS cur_form, orig_form;
+
+    pattern_size = calc_pattern(&patterns[0], row, cur_row, col, oneoff,
+                                eff_search, eff_flat, rows);
+    pattern = &patterns[0];
+    cur_form = orig_form =
+        determine_form(pattern->num_negatives, pattern->num_positives);
+
+    if (extended && eff_search > 10 * max_resolution) {
+        if ((cur_form == SH || cur_form == FS || cur_form == PK ||
+             cur_form == RI)) {
+            FORMS small_form;
+
+            eff_search = (search_dist / 2. < 4 * max_resolution)
+                             ? 4 * max_resolution
+                             : search_dist / 2.;
+            eff_skip = 0;
+            eff_flat = 0;
+            pattern_size = calc_pattern(&patterns[1], row, cur_row, col, 0,
+                                        eff_search, eff_flat, rows);
+            pattern = &patterns[1];
+            small_form =
+                determine_form(pattern->num_negatives, pattern->num_positives);
+            if (cur_form == SH || cur_form == FS)
+                cur_form = (small_form == FL) ? FL : cur_form;
+            if (cur_form == PK || cur_form == RI)
+                cur_form = small_form;
+        }
+    }
+    *pattern_out = pattern;
+    *pattern_size_out = pattern_size;
+    *cur_form_out = cur_form;
+    *orig_form_out = orig_form;
+    *eff_search_out = eff_search;
+    *eff_skip_out = eff_skip;
+    *eff_flat_out = eff_flat;
 }
