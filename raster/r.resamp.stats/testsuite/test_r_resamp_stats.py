@@ -1,21 +1,30 @@
 """Test r.resamp.stats serial and parallel correctness
 
 Verifies that r.resamp.stats output matches known reference values (from
-r.univar) for several aggregation methods, both unweighted and weighted,
-and that parallel (nprocs=4) output matches serial (nprocs=1) output.
+r.univar) for several aggregation methods, unweighted at res=100 and
+area-weighted at res=25, that the -n flag propagates NULLs from partially
+NULL source blocks, and that parallel (nprocs=4) output matches serial
+(nprocs=1) output.
 
 Adapted from r.resamp.filter test pattern using assertRasterFitsUnivar.
 
-Uses the nc_spm_08_grass7 dataset (elevation map at res=100).
+Uses the nc_spm_08_grass7 dataset (elevation map, native resolution 10 m).
 
-@author Vinay Chopra
+@author Vinay Kumar Chopra
 """
-
-import math
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.main import test
+
+
+def univar_stats(case, raster):
+    """Return the r.univar -g output of a raster as a dict of raw strings."""
+    module = SimpleModule("r.univar", map=raster, flags="g")
+    case.runModule(module)
+    return dict(
+        line.split("=", 1) for line in module.outputs.stdout.strip().splitlines()
+    )
 
 
 class TestResampStatsReference(TestCase):
@@ -32,20 +41,6 @@ class TestResampStatsReference(TestCase):
     # Reference values computed with res=100 on nc_spm_08_grass7
     test_options = {
         "average": {
-            "n": 20250,
-            "null_cells": 0,
-            "cells": 20250,
-            "min": 57.1003440475464,
-            "max": 155.728766784668,
-            "range": 98.6284227371216,
-            "mean": 110.375440275606,
-            "mean_of_abs": 110.375440275606,
-            "stddev": 20.2166675908506,
-            "variance": 408.713648478948,
-            "coeff_var": 18.3162735662661,
-            "sum": 2235102.66558102,
-        },
-        "average_w": {
             "n": 20250,
             "null_cells": 0,
             "cells": 20250,
@@ -122,7 +117,7 @@ class TestResampStatsReference(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        # Coarsen by ~10x from the native 10m resolution to 100m
+        # Coarsen by 10x from the native 10m resolution to 100m
         cls.runModule("g.region", raster=cls.input_map, res=100)
 
     @classmethod
@@ -136,13 +131,11 @@ class TestResampStatsReference(TestCase):
                 name=",".join(cls.to_remove),
             )
 
-    def _run_and_check(self, method, key, weighted=False):
+    def _run_and_check(self, method, key):
         """Run r.resamp.stats serially and in parallel, check both outputs."""
         serial_out = f"test_resamp_stats_serial_{key}"
         parallel_out = f"test_resamp_stats_parallel_{key}"
         self.to_remove.extend([serial_out, parallel_out])
-
-        flags = "w" if weighted else ""
 
         # Serial run (nprocs=1)
         self.assertModule(
@@ -150,7 +143,6 @@ class TestResampStatsReference(TestCase):
             input=self.input_map,
             output=serial_out,
             method=method,
-            flags=flags,
             nprocs=1,
             overwrite=True,
         )
@@ -161,7 +153,6 @@ class TestResampStatsReference(TestCase):
             input=self.input_map,
             output=parallel_out,
             method=method,
-            flags=flags,
             nprocs=4,
             overwrite=True,
         )
@@ -182,10 +173,6 @@ class TestResampStatsReference(TestCase):
         """Test unweighted average: serial and parallel match reference."""
         self._run_and_check("average", "average")
 
-    def test_average_weighted(self):
-        """Test weighted average: serial and parallel match reference."""
-        self._run_and_check("average", "average_w", weighted=True)
-
     def test_median_unweighted(self):
         """Test unweighted median: serial and parallel match reference."""
         self._run_and_check("median", "median")
@@ -203,6 +190,133 @@ class TestResampStatsReference(TestCase):
         self._run_and_check("maximum", "maximum")
 
 
+class TestResampStatsWeighted(TestCase):
+    """Test area-weighted aggregation (-w) with fractional cell overlap.
+
+    The target resolution of 25m is 2.5x the native 10m resolution of the
+    input, so the source cells along the edge of a destination cell are only
+    half covered and contribute with a weight of 0.5. At an integer
+    coarsening ratio every weight would be 1 and -w would reduce to the
+    unweighted algorithm, leaving the weighting arithmetic untested.
+
+    Used dataset: nc_spm_08_grass7
+    """
+
+    input_map = "elevation"
+
+    # Reference values for method=average with -w at res=25 on nc_spm_08_grass7
+    reference = {
+        "n": 324000,
+        "null_cells": 0,
+        "cells": 324000,
+        "min": 56.0787606811523,
+        "max": 156.254379272461,
+        "range": 100.175618591309,
+        "mean": 110.375440275606,
+        "mean_of_abs": 110.375440275606,
+        "stddev": 20.3042465367039,
+        "variance": 412.262427423253,
+        "coeff_var": 18.3956199730706,
+        "sum": 35761642.6492963,
+    }
+
+    to_remove = []
+
+    @classmethod
+    def setUpClass(cls):
+        cls.use_temp_region()
+        # 25m divides the extent of the elevation map evenly (540x600 cells),
+        # so the destination grid is exact while the overlap with the 10m
+        # source cells is fractional.
+        cls.runModule("g.region", raster=cls.input_map, res=25)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.del_temp_region()
+        if cls.to_remove:
+            cls.runModule(
+                "g.remove",
+                flags="f",
+                type="raster",
+                name=",".join(cls.to_remove),
+            )
+
+    def test_average_weighted(self):
+        """Test weighted average: serial and parallel match reference."""
+        serial_out = "test_resamp_stats_weighted_serial"
+        parallel_out = "test_resamp_stats_weighted_parallel"
+        self.to_remove.extend([serial_out, parallel_out])
+
+        self.assertModule(
+            "r.resamp.stats",
+            input=self.input_map,
+            output=serial_out,
+            method="average",
+            flags="w",
+            nprocs=1,
+            overwrite=True,
+        )
+        self.assertModule(
+            "r.resamp.stats",
+            input=self.input_map,
+            output=parallel_out,
+            method="average",
+            flags="w",
+            nprocs=4,
+            overwrite=True,
+        )
+
+        self.assertRasterFitsUnivar(
+            raster=serial_out,
+            reference=self.reference,
+            precision=1e-5,
+        )
+        # Each output row is computed independently, so threading must not
+        # change a single cell
+        self.assertRastersNoDifference(
+            actual=parallel_out,
+            reference=serial_out,
+            precision=0,
+        )
+
+    def test_weighted_differs_from_unweighted(self):
+        """Test that -w changes the result when the cell overlap is partial."""
+        weighted_out = "test_resamp_stats_weighted_only"
+        unweighted_out = "test_resamp_stats_unweighted_only"
+        difference = "test_resamp_stats_weight_difference"
+        self.to_remove.extend([weighted_out, unweighted_out, difference])
+
+        self.assertModule(
+            "r.resamp.stats",
+            input=self.input_map,
+            output=weighted_out,
+            method="average",
+            flags="w",
+            overwrite=True,
+        )
+        self.assertModule(
+            "r.resamp.stats",
+            input=self.input_map,
+            output=unweighted_out,
+            method="average",
+            overwrite=True,
+        )
+
+        self.runModule(
+            "r.mapcalc",
+            expression=f"{difference} = abs({weighted_out} - {unweighted_out})",
+            overwrite=True,
+        )
+        # The largest difference on this dataset is about 2.8 m; requiring
+        # more than 1 m keeps the test far above floating point noise while
+        # failing outright if -w ever degenerates to the unweighted result.
+        self.assertGreater(
+            float(univar_stats(self, difference)["max"]),
+            1.0,
+            msg="Weighted and unweighted average must differ at res=25",
+        )
+
+
 class TestResampStatsNullPropagation(TestCase):
     """Test that the -n flag correctly propagates NULLs.
 
@@ -211,26 +325,41 @@ class TestResampStatsNullPropagation(TestCase):
 
     input_map = "elevation"
     null_input = "test_resamp_null_input"
+
+    # The input NULL pattern below assigns each 10x10 source block that makes
+    # up one res=100 destination cell to one of three classes by
+    # (block_row + block_col) % 3: class 0 has no NULLs, class 1 has a single
+    # NULL source row (partially NULL) and class 2 is entirely NULL. The
+    # destination grid is 135x150 = 20250 cells and 135 is a multiple of 3,
+    # so each class covers exactly one third of the destination cells.
+    cells_per_class = 6750
+
     to_remove = []
 
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        # Use native resolution for null input creation (sparse NULLs)
+        # row() and col() below are resolved in the current region, so the
+        # NULL pattern has to be built at the native resolution of the input
         cls.runModule("g.region", raster=cls.input_map)
-        # Created elevation with scattered NULLs (every 3rd cell in a
-        # checkerboard pattern). This ensures that when resampled to
-        # res=100, some destination cells have a MIX of NULL/non-NULL
-        # sources, so -n flag produces more NULLs than default.
+        # 0-based indices of the res=100 destination cell a source cell
+        # belongs to, given that both regions share the same north and west
+        # edge and 100m is exactly 10 source cells
+        block_row = "int((row() - 1) / 10)"
+        block_col = "int((col() - 1) / 10)"
+        block_class = f"(({block_row} + {block_col}) % 3)"
+        first_row_of_block = "(row() - 1) % 10 == 0"
         cls.runModule(
             "r.mapcalc",
             expression=(
-                f"{cls.null_input} = if((row() + col()) % 3 == 0, null(), elevation)"
+                f"{cls.null_input} = if({block_class} == 2, null(), "
+                f"if({block_class} == 1 && {first_row_of_block}, null(), "
+                f"{cls.input_map}))"
             ),
             overwrite=True,
         )
         cls.to_remove.append(cls.null_input)
-        # Now setting the output region to coarse for resampling tests
+        # Now set the output region to coarse for the resampling tests
         cls.runModule("g.region", raster=cls.input_map, res=100)
 
     @classmethod
@@ -245,12 +374,12 @@ class TestResampStatsNullPropagation(TestCase):
             )
 
     def test_null_propagation_flag(self):
-        """Test that -n flag produces NULLs where input has NULLs."""
+        """Test that -n turns partially NULL source blocks into NULLs."""
         output_with_n = "test_resamp_null_propagate"
         output_without_n = "test_resamp_null_ignore"
         self.to_remove.extend([output_with_n, output_without_n])
 
-        # With -n: NULL cells should propagate
+        # With -n: a single NULL source cell makes the destination cell NULL
         self.assertModule(
             "r.resamp.stats",
             input=self.null_input,
@@ -260,7 +389,7 @@ class TestResampStatsNullPropagation(TestCase):
             nprocs=1,
             overwrite=True,
         )
-        # Without -n: NULL cells should be ignored
+        # Without -n: NULL source cells are ignored
         self.assertModule(
             "r.resamp.stats",
             input=self.null_input,
@@ -270,25 +399,30 @@ class TestResampStatsNullPropagation(TestCase):
             overwrite=True,
         )
 
-        # With -n should have more null_cells than without
-        univar_with_n = SimpleModule("r.univar", map=output_with_n, flags="g")
-        self.runModule(univar_with_n)
-        info_with_n = dict(
-            line.split("=", 1)
-            for line in univar_with_n.outputs.stdout.strip().splitlines()
-        )
-
-        univar_without_n = SimpleModule("r.univar", map=output_without_n, flags="g")
-        self.runModule(univar_without_n)
-        info_without_n = dict(
-            line.split("=", 1)
-            for line in univar_without_n.outputs.stdout.strip().splitlines()
-        )
-
-        self.assertGreater(
-            int(info_with_n["null_cells"]),
+        # Without -n only the entirely NULL class 2 blocks are NULL, with -n
+        # the partially NULL class 1 blocks become NULL as well
+        info_without_n = univar_stats(self, output_without_n)
+        self.assertEqual(
             int(info_without_n["null_cells"]),
-            msg="With -n flag, null_cells should be greater",
+            self.cells_per_class,
+            msg="Without -n only entirely NULL source blocks give NULL",
+        )
+        self.assertEqual(
+            int(info_without_n["n"]),
+            2 * self.cells_per_class,
+            msg="Without -n partially NULL source blocks still give a value",
+        )
+
+        info_with_n = univar_stats(self, output_with_n)
+        self.assertEqual(
+            int(info_with_n["null_cells"]),
+            2 * self.cells_per_class,
+            msg="With -n partially NULL source blocks must give NULL",
+        )
+        self.assertEqual(
+            int(info_with_n["n"]),
+            self.cells_per_class,
+            msg="With -n source blocks without any NULL must keep their value",
         )
 
     def test_null_parallel_matches_serial(self):
@@ -316,39 +450,21 @@ class TestResampStatsNullPropagation(TestCase):
             overwrite=True,
         )
 
-        # Check serial and parallel produce same stats
-        univar_serial = SimpleModule("r.univar", map=serial_out, flags="g")
-        self.runModule(univar_serial)
-        serial_info = dict(
-            line.split("=", 1)
-            for line in univar_serial.outputs.stdout.strip().splitlines()
-        )
-
-        univar_parallel = SimpleModule("r.univar", map=parallel_out, flags="g")
-        self.runModule(univar_parallel)
-        parallel_info = dict(
-            line.split("=", 1)
-            for line in univar_parallel.outputs.stdout.strip().splitlines()
-        )
-
+        # A difference raster is NULL wherever either input is NULL, so the
+        # NULL cells have to be compared separately
+        serial_info = univar_stats(self, serial_out)
+        parallel_info = univar_stats(self, parallel_out)
         for key in ("n", "null_cells", "cells"):
             self.assertEqual(
                 serial_info[key],
                 parallel_info[key],
                 msg=f"Mismatch for '{key}' between serial and parallel with -n flag",
             )
-        # For numeric stats, handle potential NaN values
-        for key in ("min", "max", "mean", "sum"):
-            s_val = float(serial_info.get(key, "0"))
-            p_val = float(parallel_info.get(key, "0"))
-            if math.isnan(s_val) and math.isnan(p_val):
-                continue  # both NaN — OK
-            self.assertAlmostEqual(
-                s_val,
-                p_val,
-                places=6,
-                msg=f"Mismatch for '{key}' between serial and parallel with -n flag",
-            )
+        self.assertRastersNoDifference(
+            actual=parallel_out,
+            reference=serial_out,
+            precision=0,
+        )
 
 
 if __name__ == "__main__":

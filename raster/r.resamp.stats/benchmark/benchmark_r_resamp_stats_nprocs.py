@@ -1,10 +1,10 @@
 """Benchmarking of r.resamp.stats
 
 Benchmarks r.resamp.stats with a 25M cell input (5000x5000) at multiple
-coarsening ratios (5x, 10x, 15x, 30x) to evaluate parallel efficiency
+coarsening ratios (5x, 10x, 20x, 25x) to evaluate parallel efficiency
 under different resolution scenarios.
 
-@author Vinay Chopra
+@author Vinay Kumar Chopra
 """
 
 from grass.exceptions import CalledModuleError
@@ -19,7 +19,9 @@ def main():
 
     # Benchmark at different coarsening ratios with 25M cell input (5000x5000)
     # Using 5000 instead of 10000 to keep runtime manageable on laptops.
-    for ratio in [5, 10, 15, 30]:
+    # Every ratio divides 5000, so no destination cell is only partially
+    # covered by the input map.
+    for ratio in [5, 10, 20, 25]:
         benchmark(5000, ratio, f"r.resamp.stats_25M_{ratio}x", results)
 
     bm.nprocs_plot(results, filename="r_resamp_stats_benchmark_nprocs.svg")
@@ -30,9 +32,9 @@ def benchmark(size, ratio, label, results):
     output = "benchmark_r_resamp_stats_output"
 
     generate_map(rows=size, cols=size, fname=reference)
-
-    # Set coarser output region for resampling
-    Module("g.region", flags="p", rows=size // ratio, cols=size // ratio)
+    # Keep the extent of the input map and only coarsen the resolution, so
+    # each output cell aggregates ratio x ratio input cells
+    Module("g.region", flags="p", s=0, n=size, w=0, e=size, res=ratio)
 
     module = Module(
         "r.resamp.stats",
@@ -56,7 +58,7 @@ def benchmark(size, ratio, label, results):
 
 
 def generate_map(rows, cols, fname):
-    Module("g.region", flags="p", rows=rows, cols=cols, res=1)
+    Module("g.region", flags="p", s=0, n=rows, w=0, e=cols, res=1)
     # Generate using r.surf.fractal if available, fall back to r.random.surface
     try:
         print("Generating reference map using r.surf.fractal...")

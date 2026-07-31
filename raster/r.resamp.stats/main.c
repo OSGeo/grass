@@ -4,7 +4,8 @@
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com> (original
  *               contributor)
  *               Hamish Bowman <hamish_b yahoo.com>
- *                Chopra (OpenMP parallelization)
+ *               Vinay Kumar Chopra <chopravinaykumarchopra gmail.com>
+ *               (OpenMP parallelization)
  * PURPOSE:
  * COPYRIGHT:    (C) 2006-2007 by the GRASS Development Team
  *
@@ -101,7 +102,9 @@ static int compute_chunk_size(void)
         (size_t)nprocs * src_w.cols * sizeof(DCELL) * row_scale;
     size_t total_mem_bytes = (size_t)memory_mb * 1024 * 1024;
     size_t out_buf_size;
-    int chunk_size;
+    /* A large memory option can make this exceed the range of int, so clamp
+     * it to the map height before narrowing it */
+    size_t chunk_size;
 
     /* size_t is unsigned, check if any memory is left for the output buffer */
     if (total_mem_bytes <= in_buf_size)
@@ -110,15 +113,15 @@ static int compute_chunk_size(void)
         out_buf_size = total_mem_bytes - in_buf_size;
 
     chunk_size = out_buf_size / (dst_w.cols * sizeof(DCELL));
-    if (chunk_size < nprocs)
+    if (chunk_size < (size_t)nprocs)
         chunk_size = nprocs;
-    if (chunk_size > dst_w.rows)
+    if (chunk_size > (size_t)dst_w.rows)
         chunk_size = dst_w.rows;
 
     G_verbose_message(_("Using %d thread(s), %d buffered output rows"), nprocs,
-                      chunk_size);
+                      (int)chunk_size);
 
-    return chunk_size;
+    return (int)chunk_size;
 }
 
 static void resamp_unweighted(void)
