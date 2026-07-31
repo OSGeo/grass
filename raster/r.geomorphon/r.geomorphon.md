@@ -207,9 +207,10 @@ re-read the search window halo more often. To take advantage of the
 parallelization, GRASS needs to be compiled with OpenMP enabled.
 
 On an 8 core Apple M3, the forms output scales by roughly 1.9x on 2
-threads, 3.5x on 4 threads and 5.3x on 8 threads, measured as the median
-of repeated runs on maps from 10 to 100 million cells. The benchmark
-script used for these numbers is in the module source directory.
+threads, 3.5x on 4 threads and 5.3x on 8 threads on maps from 10 to 100
+million cells. These numbers are medians from cooldown-controlled runs on
+that machine; the benchmark script in the module source directory reports
+averages instead.
 
 Actual memory use can slightly exceed the **memory** value because each
 thread keeps a small per thread scratch row and the shared input strip
