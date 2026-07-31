@@ -320,17 +320,17 @@ int main(int argc, char **argv)
             size_t per_row = (size_t)ncols * sizeof(FCELL) * (1 + num_outputs);
             size_t budget;
 
-            if (cap <= fixed) {
-                long need = (long)((fixed + (size_t)ncols * sizeof(FCELL) +
-                                    (size_t)nprocs * per_row + (1 << 20) - 1) >>
-                                   20);
+            size_t need_bytes = fixed + (size_t)ncols * sizeof(FCELL) +
+                                (size_t)nprocs * per_row;
+            if (cap < need_bytes) {
+                long need = (long)((need_bytes + (1 << 20) - 1) >> 20);
 
                 G_warning(
-                    _("Requested memory=%d MB is too small for search=%s. "
-                      "At least %ld MB is needed. Proceeding with a larger "
-                      "buffer than requested."),
-                    memory, par_search_radius->answer, need);
-                budget = 0;
+                    _("memory=%d MB is below the %ld MB minimum for "
+                      "search=%s. This run will finish with the minimum MB "
+                      "needed instead."),
+                    memory, need, par_search_radius->answer);
+                budget = (cap > fixed) ? cap - fixed : 0;
             }
             else
                 budget = cap - fixed;
