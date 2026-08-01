@@ -308,8 +308,6 @@ int main(int argc, char **argv)
         memory = atoi(par_memory->answer);
         nprocs = G_set_omp_num_threads(par_nprocs);
         nprocs = Rast_disable_omp_on_mask(nprocs);
-        if (nprocs < 1)
-            G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
         {
             size_t fixed = (size_t)2 * row_radius_size * ncols * sizeof(FCELL);
             size_t cap = (size_t)memory * (1 << 20);
@@ -528,7 +526,8 @@ int main(int argc, char **argv)
             int band_start, t;
 
             for (t = 0; t < nprocs; ++t) {
-                fd_thread[t] = Rast_open_old(elevation.elevname, "");
+                fd_thread[t] = (t == 0) ? elevation.fd
+                                        : Rast_open_old(elevation.elevname, "");
                 tmp_thread[t] = Rast_allocate_buf(elevation.raster_type);
             }
             for (i = o_forms; i < o_size; ++i)
