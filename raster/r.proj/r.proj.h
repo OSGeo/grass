@@ -63,6 +63,11 @@ extern void fg_span(const struct footprint_grid *g, int obr0, int obr1,
 extern int fg_band_height(const struct footprint_grid *g, int obr0,
                           size_t cap_bytes, int out_mult, int cell_size,
                           int in_cols);
+extern int fg_num_blocks(const struct footprint_grid *g);
+extern int fg_block_start(const struct footprint_grid *g, int b);
+extern int fg_tile_blocks(const struct footprint_grid *g, int obr0, int obr1,
+                          size_t cap_bytes, int out_mult, int cell_size,
+                          int in_cols, int *worst_block_rows);
 extern void fg_compare_variants(const struct footprint_grid *b,
                                 const struct footprint_grid *e);
 extern void fg_apply_sampling_margin(struct footprint_grid *g);
