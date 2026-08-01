@@ -133,18 +133,59 @@ static const strip_func strip_kernels[] = {
     interpolate_strip, strip_bilinear, strip_cubic,    strip_lanczos,
     strip_bilinear_f,  strip_cubic_f,  strip_lanczos_f};
 
-/* Geographic poles inside the input's latitude coverage. band_input_row_span
- * walks only the tile perimeter, so a pole in a tile's interior is a latitude
- * extremum the walk misses, and the pole's row is folded into that tile's span.
- * Each pole is stored as its output-CRS coordinate and its input row. The set
- * is empty when no pole is in frame. This assumes a pole maps to one output
- * point as in azimuthal and stereographic projections, and otherwise the
- * under-size guard stays the backstop. */
-struct pole_set {
-    int n;               /* active poles, 0..2 */
-    double ox[2], oy[2]; /* pole coordinates in the output CRS */
-    double ri[2];        /* pole input row index */
-};
+/* Footprint grid used for comparison and the counters printed at the end. */
+static struct footprint_grid *g_fg_boundary = NULL;
+static int g_fg_verify = 0;
+static long g_fg_ncmp = 0;     /* comparisons made */
+static long g_fg_fail = 0;     /* cover failures */
+static int g_fg_min_slack = 0; /* smallest margin between grid and search */
+static int g_fg_max_overread =
+    0;                          /* most extra input rows the grid would load */
+static int g_fg_have_stats = 0; /* set once a non-empty span is compared */
+
+/* Compares one search span against the grid span and records the result. Prints
+ * a line only when the grid fails to cover the search. */
+static void fg_verify_emit(int obr0, int obr1, int obc0, int obc1, int s_imin,
+                           int s_imax)
+{
+    int g_imin, g_imax, cover, low_slack, high_slack, slack, overread;
+
+    if (!g_fg_verify)
+        return;
+    fg_span(g_fg_boundary, obr0, obr1, obc0, obc1, &g_imin, &g_imax);
+    g_fg_ncmp++;
+    if (s_imax < s_imin) /* empty search span is always covered */
+        return;
+    cover = g_imin <= s_imin && g_imax >= s_imax;
+    low_slack = s_imin - g_imin;
+    high_slack = g_imax - s_imax;
+    slack = low_slack < high_slack ? low_slack : high_slack;
+    overread = (g_imax - g_imin) - (s_imax - s_imin);
+    if (!g_fg_have_stats || slack < g_fg_min_slack)
+        g_fg_min_slack = slack;
+    if (overread > g_fg_max_overread)
+        g_fg_max_overread = overread;
+    g_fg_have_stats = 1;
+    if (!cover) {
+        g_fg_fail++;
+        fprintf(
+            stderr,
+            "FG_CMP r[%d,%d) c[%d,%d) search=[%d,%d] grid=[%d,%d] cover=0\n",
+            obr0, obr1, obc0, obc1, s_imin, s_imax, g_imin, g_imax);
+    }
+}
+
+/* Prints one line with the totals from all comparisons. */
+static void fg_verify_summary(void)
+{
+    if (!g_fg_verify)
+        return;
+    fprintf(
+        stderr,
+        "FG_SUM comparisons=%ld cover_fail=%ld min_slack=%d max_overread=%d\n",
+        g_fg_ncmp, g_fg_fail, g_fg_have_stats ? g_fg_min_slack : 0,
+        g_fg_max_overread);
+}
 
 /* Edge-walk of an output tile [obr0, obr1) by [obc0, obc1) projected into input
  * space, returning the min and max input row it touches plus a 2-cell margin,
@@ -224,6 +265,7 @@ band_input_row_span(const struct Cell_head *ohd, const struct Cell_head *ihd,
     if (rmax < rmin) { /* band projects entirely outside the input */
         *imin = 0;
         *imax = -1;
+        fg_verify_emit(obr0, obr1, obc0, obc1, *imin, *imax);
         return;
     }
 
@@ -235,6 +277,7 @@ band_input_row_span(const struct Cell_head *ohd, const struct Cell_head *ihd,
         hi = ihd->rows - 1;
     *imin = lo;
     *imax = hi;
+    fg_verify_emit(obr0, obr1, obc0, obc1, *imin, *imax);
 }
 
 /* Largest input-row strip among the width-tilew column tiles that partition the
@@ -1148,6 +1191,18 @@ int main(int argc, char **argv)
         }
     }
 
+    /* Build both grids and compare them when R_PROJ_FG_VERIFY is set. */
+    struct footprint_grid *fg_exact = NULL;
+    if (getenv("R_PROJ_FG_VERIFY")) {
+        g_fg_boundary = fg_build(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
+                                 y_center, &poles, FG_BOUNDARY);
+        fg_exact = fg_build(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
+                            y_center, &poles, FG_EXACT);
+        fg_compare_variants(g_fg_boundary, fg_exact);
+        fg_apply_sampling_margin(g_fg_boundary);
+        g_fg_verify = 1;
+    }
+
     G_important_message(_("Projecting (banded, per-thread PROJ context)..."));
 
     int used_fallback = 0; /* set when the serial tile-cache fallback runs */
@@ -1564,6 +1619,11 @@ fallback_done:
         t_write += rproj_wtime() - tw;
     }
     G_free(y_center);
+    fg_verify_summary();
+    if (g_fg_boundary)
+        fg_free(g_fg_boundary);
+    if (fg_exact)
+        fg_free(fg_exact);
     /* Single free site for the rolling window. Normal completion and both
      * fallback_done bails converge here, so one free covers every path. win is
      * NULL when a bail fired before any band allocated it. */
