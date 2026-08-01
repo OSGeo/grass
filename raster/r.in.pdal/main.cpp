@@ -18,6 +18,8 @@
  *****************************************************************************/
 
 #include <cstdio>
+#include <iomanip>
+#include <sstream>
 
 #if defined(__clang__)
 #pragma clang diagnostic push
@@ -751,6 +753,15 @@ int main(int argc, char *argv[])
             las_opts.add(nosrs_opt);
         }
 #endif
+        // Let the COPC octree skip nodes outside the region; bounds are in
+        // the file's CRS, the GRASS filter still does the exact clip.
+        if (use_spatial_filter && !reproject_flag->answer &&
+            pdal_read_driver == "readers.copc") {
+            std::ostringstream bounds_str;
+            bounds_str << std::setprecision(17) << "([" << xmin << ", " << xmax
+                       << "], [" << ymin << ", " << ymax << "])";
+            las_opts.add(pdal::Option("bounds", bounds_str.str()));
+        }
         // stages created by factory are destroyed with the factory
         pdal::Stage *reader = factory.createStage(pdal_read_driver);
         if (!reader)
