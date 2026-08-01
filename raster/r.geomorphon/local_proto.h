@@ -63,6 +63,20 @@ typedef enum {
     CNT   /* counter */
 } FORMS;
 
+/* Invariant compute_forms inputs shared by every cell in a run. */
+struct geomorphon_config {
+    double search_dist, skip_dist, flat_dist, max_resolution;
+    int extended, oneoff;
+};
+
+/* Per-cell compute_forms outputs. */
+struct geomorphon_result {
+    PATTERN *pattern;
+    int pattern_size;
+    FORMS cur_form, orig_form;
+    double eff_search, eff_skip, eff_flat;
+};
+
 /* main */
 GLOBAL MAPS elevation;
 GLOBAL int ncols, row_radius_size, row_buffer_size;

@@ -49,12 +49,8 @@ typedef enum {
 /* Compute one cell's pattern and landform, shared by the raster and one-off
  * paths. */
 static void compute_forms(FCELL **rows, int cur_row, int row, int col,
-                          double search_dist, double skip_dist,
-                          double flat_dist, int extended, double max_resolution,
-                          int oneoff, PATTERN *patterns, PATTERN **pattern_out,
-                          int *pattern_size_out, FORMS *cur_form_out,
-                          FORMS *orig_form_out, double *eff_search_out,
-                          double *eff_skip_out, double *eff_flat_out);
+                          const struct geomorphon_config *cfg,
+                          PATTERN *patterns, struct geomorphon_result *res);
 
 int main(int argc, char **argv)
 {
@@ -401,6 +397,8 @@ int main(int argc, char **argv)
         double search_dist = search_distance;
         double skip_dist = skip_distance;
         double flat_dist = flat_distance;
+        struct geomorphon_config cfg = {search_dist,    skip_dist, flat_dist,
+                                        max_resolution, extended,  oneoff};
         double area_of_octagon =
             4 * (search_distance * search_distance) * sin(DEGREE2RAD(45.));
         unsigned char oneoff_done = 0;
@@ -436,18 +434,17 @@ int main(int argc, char **argv)
                   oneoff_col > ncols - (skip_cells + 2) ||
                   Rast_is_f_null_value(&rows[cur_row][oneoff_col]))) {
                 PATTERN patterns[4];
-                PATTERN *pattern;
-                int pattern_size;
-                FORMS cur_form, orig_form;
-                double eff_search, eff_skip, eff_flat;
+                struct geomorphon_result res;
                 char buf[BUFSIZ];
                 float azimuth, elongation, width;
 
-                compute_forms(rows, cur_row, oneoff_row, oneoff_col,
-                              search_dist, skip_dist, flat_dist, extended,
-                              max_resolution, 1, patterns, &pattern,
-                              &pattern_size, &cur_form, &orig_form, &eff_search,
-                              &eff_skip, &eff_flat);
+                compute_forms(rows, cur_row, oneoff_row, oneoff_col, &cfg,
+                              patterns, &res);
+                PATTERN *pattern = res.pattern;
+                int pattern_size = res.pattern_size;
+                FORMS cur_form = res.cur_form, orig_form = res.orig_form;
+                double eff_search = res.eff_search, eff_skip = res.eff_skip,
+                       eff_flat = res.eff_flat;
                 radial2cartesian(pattern);
                 shape(pattern, pattern_size, &azimuth, &elongation, &width);
                 prof_map_info();
@@ -646,15 +643,11 @@ int main(int argc, char **argv)
                                 continue;
                             } /* end null value */
                             {
-                                FORMS cur_form, orig_form;
-                                double eff_search, eff_skip, eff_flat;
+                                struct geomorphon_result res;
 
-                                compute_forms(
-                                    rows, cur_row, row, col, search_dist,
-                                    skip_dist, flat_dist, extended,
-                                    max_resolution, 0, patterns, &pattern,
-                                    &pattern_size, &cur_form, &orig_form,
-                                    &eff_search, &eff_skip, &eff_flat);
+                                compute_forms(rows, cur_row, row, col, &cfg,
+                                              patterns, &res);
+                                pattern_size = res.pattern_size;
                                 /* The extended correction only changes the
                                  * forms output. Every other output is computed
                                  * from the original full search pattern,
@@ -662,7 +655,7 @@ int main(int argc, char **argv)
                                 pattern = &patterns[0];
                                 if (opt_output[o_forms]->answer)
                                     ((CELL *)rasters[o_forms]
-                                         .buffer)[boff + col] = cur_form;
+                                         .buffer)[boff + col] = res.cur_form;
                                 if (opt_output[o_ternary]->answer)
                                     ((CELL *)rasters[o_ternary]
                                          .buffer)[boff + col] =
@@ -787,34 +780,30 @@ int main(int argc, char **argv)
 }
 
 static void compute_forms(FCELL **rows, int cur_row, int row, int col,
-                          double search_dist, double skip_dist,
-                          double flat_dist, int extended, double max_resolution,
-                          int oneoff, PATTERN *patterns, PATTERN **pattern_out,
-                          int *pattern_size_out, FORMS *cur_form_out,
-                          FORMS *orig_form_out, double *eff_search_out,
-                          double *eff_skip_out, double *eff_flat_out)
+                          const struct geomorphon_config *cfg,
+                          PATTERN *patterns, struct geomorphon_result *res)
 {
-    double eff_search = search_dist;
-    double eff_skip = skip_dist;
-    double eff_flat = flat_dist;
+    double eff_search = cfg->search_dist;
+    double eff_skip = cfg->skip_dist;
+    double eff_flat = cfg->flat_dist;
     PATTERN *pattern;
     int pattern_size;
     FORMS cur_form, orig_form;
 
-    pattern_size = calc_pattern(&patterns[0], row, cur_row, col, oneoff,
+    pattern_size = calc_pattern(&patterns[0], row, cur_row, col, cfg->oneoff,
                                 eff_search, eff_flat, rows);
     pattern = &patterns[0];
     cur_form = orig_form =
         determine_form(pattern->num_negatives, pattern->num_positives);
 
-    if (extended && eff_search > 10 * max_resolution) {
+    if (cfg->extended && eff_search > 10 * cfg->max_resolution) {
         if ((cur_form == SH || cur_form == FS || cur_form == PK ||
              cur_form == RI)) {
             FORMS small_form;
 
-            eff_search = (search_dist / 2. < 4 * max_resolution)
-                             ? 4 * max_resolution
-                             : search_dist / 2.;
+            eff_search = (cfg->search_dist / 2. < 4 * cfg->max_resolution)
+                             ? 4 * cfg->max_resolution
+                             : cfg->search_dist / 2.;
             eff_skip = 0;
             eff_flat = 0;
             pattern_size = calc_pattern(&patterns[1], row, cur_row, col, 0,
@@ -828,11 +817,11 @@ static void compute_forms(FCELL **rows, int cur_row, int row, int col,
                 cur_form = small_form;
         }
     }
-    *pattern_out = pattern;
-    *pattern_size_out = pattern_size;
-    *cur_form_out = cur_form;
-    *orig_form_out = orig_form;
-    *eff_search_out = eff_search;
-    *eff_skip_out = eff_skip;
-    *eff_flat_out = eff_flat;
+    res->pattern = pattern;
+    res->pattern_size = pattern_size;
+    res->cur_form = cur_form;
+    res->orig_form = orig_form;
+    res->eff_search = eff_search;
+    res->eff_skip = eff_skip;
+    res->eff_flat = eff_flat;
 }
