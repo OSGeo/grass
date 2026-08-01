@@ -41,6 +41,30 @@ struct menu {
 
 enum OutputFormat { PLAIN, SHELL, JSON };
 
+/* Geographic poles that fall inside the input map, folded into the input row
+ * span of the tile that contains them. Empty when no pole is in frame. */
+struct pole_set {
+    int n;               /* active poles, 0 to 2 */
+    double ox[2], oy[2]; /* pole coordinates in the output CRS */
+    double ri[2];        /* pole input row index */
+};
+
+/* Footprint grid of input row spans for the output map, built in footprint.c.
+ */
+enum fg_variant { FG_BOUNDARY, FG_EXACT };
+struct footprint_grid;
+extern struct footprint_grid *
+fg_build(const struct Cell_head *ohd, const struct Cell_head *ihd,
+         const struct pj_info *oproj, const struct pj_info *iproj,
+         const struct pj_info *tproj, const double *y_center,
+         const struct pole_set *poles, int variant);
+extern void fg_span(const struct footprint_grid *g, int obr0, int obr1,
+                    int obc0, int obc1, int *imin, int *imax);
+extern void fg_compare_variants(const struct footprint_grid *b,
+                                const struct footprint_grid *e);
+extern void fg_apply_sampling_margin(struct footprint_grid *g);
+extern void fg_free(struct footprint_grid *g);
+
 extern void bordwalk(const struct Cell_head *, struct Cell_head *,
                      const struct pj_info *, const struct pj_info *,
                      const struct pj_info *, int);
