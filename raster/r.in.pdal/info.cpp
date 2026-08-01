@@ -141,9 +141,8 @@ void print_lasinfo(struct StringList *infiles)
         pdal::PointLayoutPtr point_layout = table.layout();
         const pdal::Dimension::IdList &dims = point_layout->dims();
         pdal::SpatialReference spatial_reference = table.spatialReference();
-        /* COPC and some other readers only populate the point table SRS after
-         * execute(); fall back to reading it from the reader stages directly.
-         */
+        /* The point table SRS may not be populated before execute();
+         * read it from the reader in that case. */
         if (spatial_reference.empty()) {
             spatial_reference = las_reader.getSpatialReference();
         }
@@ -161,10 +160,6 @@ void print_lasinfo(struct StringList *infiles)
         std::cout << "Creation DOY: " << h.creationDOY() << "\n";
         std::cout << "Creation Year: " << h.creationYear() << "\n";
         std::cout << "VLR offset (header size): " << h.vlrOffset() << "\n";
-        if (!proj_wkt.empty())
-            std::cout << "Projection (WKT): " << proj_wkt << "\n";
-        else
-            std::cout << "Projection: (undefined)" << "\n";
         std::cout << "VLR Count: " << h.vlrCount() << "\n";
         std::cout << "Point format: " << (int)h.pointFormat() << "\n";
         std::cout << "Point offset: " << h.pointOffset() << "\n";
@@ -181,6 +176,10 @@ void print_lasinfo(struct StringList *infiles)
                   << h.maxZ() << "\n";
         std::cout << "Min X/Y/Z: " << h.minX() << "/" << h.minY() << "/"
                   << h.minZ() << "\n";
+        if (!proj_wkt.empty())
+            std::cout << "Projection (WKT): " << proj_wkt << "\n";
+        else
+            std::cout << "Projection: (undefined)\n";
         if (h.versionAtLeast(1, 4)) {
             std::cout << "Ext. VLR offset: " << h.eVlrOffset() << "\n";
             std::cout << "Ext. VLR count: " << h.eVlrCount() << "\n";

@@ -379,13 +379,12 @@ int main(int argc, char *argv[])
     point_table_capacity_opt->type = TYPE_INTEGER;
     point_table_capacity_opt->required = NO;
     point_table_capacity_opt->answer = const_cast<char *>("10000");
-
+    point_table_capacity_opt->options = "1-";
+    point_table_capacity_opt->label =
+        _("Number of points buffered at once during processing");
     point_table_capacity_opt->description =
-        _("Set capacity of point table used for buffering points during "
-          "processing. "
-          "Increasing this value may improve performance for large datasets, "
-          "but also increases memory usage. Default is 10,000 points, which "
-          "should be sufficient for most cases.");
+        _("Larger values may improve performance for large datasets at the "
+          "cost of memory");
     point_table_capacity_opt->guisection = _("Performance");
 
     Flag *extents_flag = G_define_flag();
@@ -822,11 +821,8 @@ int main(int argc, char *argv[])
     binning_writer.set_output_scale(output_scale);
     binning_writer.setInput(grass_filter);
     // stream_filter.setInput(*last_stage);
-    // there is no difference between 1 and 10k points in memory
-    // consumption, so using 10k in case it is faster for some cases
-    // Added user option to set point table capacity to a higher value, which
-    // may improve performance for large datasets but also increases memory
-    // usage
+    // The default capacity of 10k points takes no more memory than 1, but
+    // can be faster; larger values trade memory for speed.
     pdal::point_count_t point_table_capacity =
         atoi(point_table_capacity_opt->answer);
     pdal::FixedPointTable point_table(point_table_capacity);
@@ -1001,6 +997,10 @@ int main(int argc, char *argv[])
     G_message("Filtered return " GPOINT_COUNT_FORMAT " points.",
               grass_filter.num_return_filtered());
 
+    if (binning_writer.n_on_edge)
+        G_message("Skipped " GPOINT_COUNT_FORMAT
+                  " points on the edge of the computational region.",
+                  binning_writer.n_on_edge);
     G_message("Processed into raster " GPOINT_COUNT_FORMAT " points.",
               binning_writer.n_processed);
 
