@@ -282,123 +282,6 @@ band_input_row_span(const struct Cell_head *ohd, const struct Cell_head *ihd,
     fg_verify_emit(obr0, obr1, obc0, obc1, *imin, *imax);
 }
 
-/* Largest input-row strip among the width-tilew column tiles that partition the
- * band [obr0, obr1). Tiles load one at a time, so peak strip memory is the
- * worst tile rather than the union of the band's tiles, and the fit search
- * sizes this against the cap. It returns 0 when every tile projects entirely
- * outside the input. */
-static int worst_tile_strip_rows(const struct Cell_head *ohd,
-                                 const struct Cell_head *ihd,
-                                 const struct pj_info *oproj,
-                                 const struct pj_info *iproj,
-                                 const struct pj_info *tproj,
-                                 const double *y_center, int obr0, int obr1,
-                                 int tilew, const struct pole_set *poles)
-{
-    int worst = 0, obc0;
-
-    for (obc0 = 0; obc0 < ohd->cols; obc0 += tilew) {
-        int obc1 = obc0 + tilew;
-        int imin, imax, rows;
-
-        if (obc1 > ohd->cols)
-            obc1 = ohd->cols;
-        band_input_row_span(ohd, ihd, oproj, iproj, tproj, y_center, obr0, obr1,
-                            obc0, obc1, &imin, &imax, poles, NULL);
-        rows = imax - imin + 1; /* imax < imin (empty) -> <= 0, ignored */
-        if (rows > worst)
-            worst = rows;
-    }
-    return worst;
-}
-
-#define TILE_PROBE 16 /* tiles sampled by the Phase-2 width-search estimate */
-
-/* Cheap lower-bound estimate of worst_tile_strip_rows, taking the largest strip
- * among at most probe column tiles that are evenly spaced across the band width
- * and always include the first and last. A subset max only prunes the Phase-2
- * search, and the chosen width is exact-validated by worst_tile_strip_rows
- * before use. */
-static int est_worst_tile_strip_rows(
-    const struct Cell_head *ohd, const struct Cell_head *ihd,
-    const struct pj_info *oproj, const struct pj_info *iproj,
-    const struct pj_info *tproj, const double *y_center, int obr0, int obr1,
-    int tilew, int probe, const struct pole_set *poles)
-{
-    int ntiles = (ohd->cols + tilew - 1) / tilew;
-    int worst = 0, k;
-
-    if (probe < 1)
-        probe = 1;
-    if (probe > ntiles)
-        probe = ntiles;
-    for (k = 0; k < probe; k++) {
-        int ti = (probe == 1) ? 0 : (int)((long)k * (ntiles - 1) / (probe - 1));
-        int obc0 = ti * tilew;
-        int obc1 = obc0 + tilew;
-        int imin, imax, rows;
-
-        if (obc1 > ohd->cols)
-            obc1 = ohd->cols;
-        band_input_row_span(ohd, ihd, oproj, iproj, tproj, y_center, obr0, obr1,
-                            obc0, obc1, &imin, &imax, poles, NULL);
-        rows = imax - imin + 1;
-        if (rows > worst)
-            worst = rows;
-    }
-    return worst;
-}
-
-/* Phase-2 fit test that returns 1 when a band of height h at obr0 fits the cap
- * at some column-tile width, setting acc_tilew to that width through the same
- * estimate then exact-validate steps the search uses. It returns 0 when no
- * width fits or the output buffer alone exceeds the cap. */
-static int
-phase2_width_fit(const struct Cell_head *ohd, const struct Cell_head *ihd,
-                 const struct pj_info *oproj, const struct pj_info *iproj,
-                 const struct pj_info *tproj, const double *y_center, int obr0,
-                 int h, size_t cap_bytes, int cell_size, int out_mult,
-                 int *acc_tilew, const struct pole_set *poles)
-{
-    size_t out_bytes = (size_t)h * ohd->cols * cell_size;
-    int tilew, est_fit;
-
-    if (out_mult * out_bytes > cap_bytes)
-        return 0;
-    tilew = ohd->cols;
-    est_fit = 0;
-    for (;;) {
-        int est =
-            est_worst_tile_strip_rows(ohd, ihd, oproj, iproj, tproj, y_center,
-                                      obr0, obr0 + h, tilew, TILE_PROBE, poles);
-        size_t est_bytes = est > 0 ? (size_t)est * ihd->cols * cell_size : 0;
-        if (est_bytes + out_mult * out_bytes <= cap_bytes) {
-            est_fit = 1;
-            break;
-        }
-        if (tilew == 1)
-            break;
-        tilew = (tilew + 1) / 2;
-    }
-    if (est_fit) {
-        for (;;) {
-            int worst =
-                worst_tile_strip_rows(ohd, ihd, oproj, iproj, tproj, y_center,
-                                      obr0, obr0 + h, tilew, poles);
-            size_t strip_bytes =
-                worst > 0 ? (size_t)worst * ihd->cols * cell_size : 0;
-            if (strip_bytes + out_mult * out_bytes <= cap_bytes) {
-                *acc_tilew = tilew;
-                return 1;
-            }
-            if (tilew == 1)
-                break;
-            tilew = (tilew + 1) / 2;
-        }
-    }
-    return 0;
-}
-
 /* Serial tile-cache fallback for the oblique and large-halo corner. When even
  * one output row's full-width strip busts the cap, this finishes the run from
  * row obr0 with the classic readcell cache and CVAL kernels, exactly as serial
@@ -1116,9 +999,7 @@ int main(int argc, char **argv)
      * one thread. The fallback bail flushes are untimed. */
     double t_size = 0.0, t_fill = 0.0, t_compute = 0.0, t_write = 0.0;
     int n_bands = 0;
-    int max_tiles = 1;          /* most column tiles used by any single band */
-    int seed_h = 0, seed_w = 0; /* previous Phase-2 band's accepted sizing */
-    int seed_hits = 0, phase2_bands = 0; /* seed hit rate on the Phase-2 path */
+    int max_tiles = 1; /* most column tiles used by any single band */
 
     /* Output-row center northings from the serial recurrence, starting at north
      * minus ns_res/2 and subtracting ns_res per row. The direct form differs by
@@ -1211,40 +1092,56 @@ int main(int argc, char **argv)
     int pending_r0 = 0, pending_r1 = 0;
     int obr0 = 0;
     while (obr0 < outcellhd.rows) {
-        /* Fit search. Phase 1 halves the band height until the full-width strip
-         * plus output buffer fit the cap. Phase 2 runs only when a single
-         * full-width row still busts the cap, splitting the row into column
-         * tiles and halving tile width until the worst tile's strip fits.
-         * Strips are full input width because the raster API reads whole rows,
-         * so width splitting shrinks a tile's input row span rather than its
-         * width. Easy pairs never leave Phase 1. */
+        /* Size this band. Take the tallest full-width band that fits, and when
+         * even one full-width row does not fit split it into whole column
+         * blocks and take the widest tile that fits. */
         double ts = rproj_wtime();
-        /* Band-0 early-out for the wide-input corner. When a single output row
-         * at the finest tiling already busts the cap, take the serial fallback
-         * now instead of running the search only to bail. This is probed once
-         * at the first band. Later-band pole busts still fall through to the
-         * Phase-2 bail, and force_tilecache is deliberately not handled here so
-         * the override keeps routing through that bail. */
-        if (obr0 == 0) {
-            size_t out1 = (size_t)outcellhd.cols * cell_size;
-            int worst1 = worst_tile_strip_rows(&outcellhd, &incellhd, &oproj,
-                                               &iproj, &tproj, y_center, obr0,
-                                               obr0 + 1, 1, &poles);
-            size_t strip1 =
-                worst1 > 0 ? (size_t)worst1 * incellhd.cols * cell_size : 0;
-            if (strip1 + out1 > cap_bytes) {
-                int needed_mb =
-                    (int)ceil((double)(strip1 + out1) / (1024.0 * 1024.0)) + 1;
-                G_warning(_("Memory cap (%.1f MB) is below what one output row "
-                            "needs (input footprint %d rows, %.1f MB). Falling "
-                            "back to the serial tile-cache path for output "
-                            "rows %d-%d; this path is slower. Raise memory= to "
-                            "at least %d MB to use the parallel path."),
-                          cap_mb, worst1,
-                          (double)(strip1 + out1) / (1024.0 * 1024.0), obr0,
-                          outcellhd.rows - 1, needed_mb);
+        int imin = 0, imax = -1;
+        int band_orows =
+            force_tilecache
+                ? 1
+                : fg_band_height(g_fg_boundary, obr0, cap_bytes, out_mult,
+                                 cell_size, incellhd.cols);
+        int tile_blocks = fg_num_blocks(g_fg_boundary);
+        if (band_orows == 1) {
+            int worst_block_rows = 0;
+
+            tile_blocks =
+                force_tilecache
+                    ? 0
+                    : fg_tile_blocks(g_fg_boundary, obr0, obr0 + band_orows,
+                                     cap_bytes, out_mult, cell_size,
+                                     incellhd.cols, &worst_block_rows);
+            if (tile_blocks == 0) {
+                /* Even the finest tiling busts the cap, so finish from obr0 on
+                 * the serial tile-cache path. */
+                if (force_tilecache) {
+                    G_warning(
+                        _("R_PROJ_FORCE_TILECACHE is set: taking the serial "
+                          "tile-cache path for all output rows (testing "
+                          "override)."));
+                }
+                else {
+                    size_t out1 = (size_t)outcellhd.cols * cell_size;
+                    size_t strip_bytes = worst_block_rows > 0
+                                             ? (size_t)worst_block_rows *
+                                                   incellhd.cols * cell_size
+                                             : 0;
+                    int needed_mb = (int)ceil((double)(strip_bytes + out1) /
+                                              (1024.0 * 1024.0)) +
+                                    1;
+                    G_warning(
+                        _("Memory cap (%.1f MB) is below what one output row "
+                          "needs (input footprint %d rows, %.1f MB). Falling "
+                          "back to the serial tile-cache path for output rows "
+                          "%d-%d; this path is slower. Raise memory= to at "
+                          "least %d MB to use the parallel path."),
+                        cap_mb, worst_block_rows,
+                        (double)(strip_bytes + out1) / (1024.0 * 1024.0), obr0,
+                        outcellhd.rows - 1, needed_mb);
+                }
                 /* Flush the deferred band before the fallback writes from obr0
-                 * (in-order). */
+                 * in order. */
                 flush_pending_band(fdo, cell_type, outcellhd.cols, cell_size,
                                    &pending_out, pending_r0, pending_r1);
                 fallback_serial_cache(fdi, fdo, cell_type, method, &oproj,
@@ -1253,98 +1150,6 @@ int main(int argc, char **argv)
                 used_fallback = 1;
                 goto fallback_done;
             }
-        }
-        int tilew = outcellhd.cols;
-        int imin = 0, imax = -1;
-        /* Grow the band while the strip and output still fit the cap, then step
-         * back one. */
-        int band_orows =
-            force_tilecache
-                ? 1
-                : fg_band_height(g_fg_boundary, obr0, cap_bytes, out_mult,
-                                 cell_size, incellhd.cols);
-        if (band_orows == 1) {
-            /* Phase 2, oblique only, finds the tallest grid height whose worst
-             * column tile fits, then that height's widest fitting tile width.
-             * seed_h is the previous Phase-2 height and is close to H*. Take
-             * g_seed just above seed_h, and if it does not fit then nothing
-             * taller fits, so the walk starts at (g_seed+1)/2. A miss starts
-             * from the full remaining height. The grid and phase2_width_fit
-             * acceptance are the same, so H*, W*, and the partition are
-             * identical. */
-            phase2_bands++;
-            int start_h = outcellhd.rows - obr0;
-            if (seed_w > 0 && seed_h < start_h) {
-                int gs = start_h, w;
-
-                while ((gs + 1) / 2 > seed_h)
-                    gs = (gs + 1) / 2;
-                if (!phase2_width_fit(&outcellhd, &incellhd, &oproj, &iproj,
-                                      &tproj, y_center, obr0, gs, cap_bytes,
-                                      cell_size, out_mult, &w, &poles)) {
-                    start_h = (gs + 1) / 2;
-                    seed_hits++;
-                }
-            }
-            band_orows = start_h;
-            for (;;) {
-                if (!force_tilecache &&
-                    phase2_width_fit(&outcellhd, &incellhd, &oproj, &iproj,
-                                     &tproj, y_center, obr0, band_orows,
-                                     cap_bytes, cell_size, out_mult, &tilew,
-                                     &poles))
-                    break;
-                if (band_orows == 1) {
-                    /* A single output row at minimum width still over the cap
-                     * is a singular or large-halo case, so take the serial
-                     * tile-cache path. This is also reached from band 0 when
-                     * R_PROJ_FORCE_TILECACHE routes normal data here for
-                     * testing. */
-                    if (force_tilecache) {
-                        G_warning(
-                            _("R_PROJ_FORCE_TILECACHE is set: taking the "
-                              "serial tile-cache path for all output rows "
-                              "(testing override)."));
-                    }
-                    else {
-                        size_t out1 = (size_t)outcellhd.cols * cell_size;
-                        int worst = worst_tile_strip_rows(
-                            &outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                            y_center, obr0, obr0 + 1, 1, &poles);
-                        size_t strip_bytes =
-                            worst > 0
-                                ? (size_t)worst * incellhd.cols * cell_size
-                                : 0;
-                        int needed_mb = (int)ceil((double)(strip_bytes + out1) /
-                                                  (1024.0 * 1024.0)) +
-                                        1;
-                        G_warning(
-                            _("Memory cap (%.1f MB) is below what one output "
-                              "row needs (input footprint %d rows, %.1f MB). "
-                              "Falling back to the serial tile-cache path for "
-                              "output rows %d-%d; this path is slower. Raise "
-                              "memory= to at least %d MB to use the parallel "
-                              "path."),
-                            cap_mb, worst,
-                            (double)(strip_bytes + out1) / (1024.0 * 1024.0),
-                            obr0, outcellhd.rows - 1, needed_mb);
-                    }
-                    /* Flush the deferred band before the fallback writes from
-                     * obr0. This band's compute region did not run, so its
-                     * writer never fired. */
-                    flush_pending_band(fdo, cell_type, outcellhd.cols,
-                                       cell_size, &pending_out, pending_r0,
-                                       pending_r1);
-                    fallback_serial_cache(fdi, fdo, cell_type, method, &oproj,
-                                          &iproj, &tproj, &incellhd, &outcellhd,
-                                          y_center, obr0, memory->answer);
-                    used_fallback = 1;
-                    goto fallback_done;
-                }
-                band_orows = (band_orows + 1) / 2;
-            }
-            seed_h = band_orows;
-            seed_w = tilew;
         }
         t_size += rproj_wtime() - ts;
 
@@ -1366,7 +1171,8 @@ int main(int argc, char **argv)
 
         int obr1 = obr0 + band_orows;
         n_bands++;
-        int n_tiles = (outcellhd.cols + tilew - 1) / tilew;
+        int nb = fg_num_blocks(g_fg_boundary);
+        int n_tiles = (nb + tile_blocks - 1) / tile_blocks;
         if (n_tiles > max_tiles)
             max_tiles = n_tiles;
 
@@ -1377,25 +1183,26 @@ int main(int argc, char **argv)
             G_malloc((size_t)band_orows * outcellhd.cols * cell_size);
 
         /* Column tiles are processed one at a time, so peak strip memory is the
-         * worst tile rather than the band's union. A tilew equal to cols is the
-         * single-tile fast path. */
-        for (int obc0 = 0; obc0 < outcellhd.cols; obc0 += tilew) {
-            int obc1 = obc0 + tilew;
-            if (obc1 > outcellhd.cols)
-                obc1 = outcellhd.cols;
+         * worst tile rather than the band's union. A single tile spanning every
+         * block is the full-width fast path. */
+        for (int tb = 0; tb < nb; tb += tile_blocks) {
+            int te = tb + tile_blocks < nb ? tb + tile_blocks : nb;
+            int obc0 = fg_block_start(g_fg_boundary, tb);
+            int obc1 = fg_block_start(g_fg_boundary, te);
 
-            /* Per-tile input row span. The strip is full input width because
-             * the raster API reads whole rows, so columns are not cropped. */
-            int pole_widened = 0;
+            /* Fill spans come from the grid. The strip is full input width
+             * because the raster API reads whole rows, so columns are not
+             * cropped. */
+            fg_span(g_fg_boundary, obr0, obr1, obc0, obc1, &imin, &imax);
+            /* Under the verify flag walk the tile too so the hook checks the
+             * grid against the walk. */
+            if (g_fg_verify) {
+                int wi0, wi1;
 
-            band_input_row_span(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                                y_center, obr0, obr1, obc0, obc1, &imin, &imax,
-                                &poles, &pole_widened);
-            if (pole_widened)
-                G_verbose_message(
-                    _("Pole (input row %d) in output tile rows [%d, %d) cols "
-                      "[%d, %d): input strip extended to reach it"),
-                    (int)poles.ri[pole_widened - 1], obr0, obr1, obc0, obc1);
+                band_input_row_span(&outcellhd, &incellhd, &oproj, &iproj,
+                                    &tproj, y_center, obr0, obr1, obc0, obc1,
+                                    &wi0, &wi1, &poles, NULL);
+            }
             int strip_rows = imax - imin + 1;
 
             /* Serial strip load, since a single fd makes get_row unsafe to
@@ -1598,9 +1405,8 @@ fallback_done:
     else
         G_debug(1,
                 "PHASE_TIMERS size=%.4f fill=%.4f compute=%.4f write=%.4f "
-                "bands=%d tiles=%d seed_hits=%d phase2_bands=%d",
-                t_size, t_fill, t_compute, t_write, n_bands, max_tiles,
-                seed_hits, phase2_bands);
+                "bands=%d tiles=%d",
+                t_size, t_fill, t_compute, t_write, n_bands, max_tiles);
 
     /* Close input map in its own env, then the output map. */
     G_switch_env(); /* -> input */

@@ -260,6 +260,60 @@ int fg_band_height(const struct footprint_grid *g, int obr0, size_t cap_bytes,
     return accepted;
 }
 
+/* Number of column blocks in the grid. */
+int fg_num_blocks(const struct footprint_grid *g)
+{
+    return g->nb;
+}
+
+/* First output column of block b. Block g->nb starts at the output width. */
+int fg_block_start(const struct footprint_grid *g, int b)
+{
+    return block_c0(g, b);
+}
+
+/* Worst strip among the tiles that pack k whole blocks each across the band. */
+static int worst_ktile_rows(const struct footprint_grid *g, int obr0, int obr1,
+                            int k)
+{
+    int worst = 0, tb;
+
+    for (tb = 0; tb < g->nb; tb += k) {
+        int te = tb + k < g->nb ? tb + k : g->nb;
+        int imin, imax, rows;
+
+        fg_span(g, obr0, obr1, block_c0(g, tb), block_c0(g, te), &imin, &imax);
+        rows = imax - imin + 1;
+        if (rows > worst)
+            worst = rows;
+    }
+    return worst;
+}
+
+/* Widest tile in whole blocks whose worst strip and the output still fit the
+ * cap, or zero when even one block per tile busts. Reports the worst single
+ * block strip for the caller message. */
+int fg_tile_blocks(const struct footprint_grid *g, int obr0, int obr1,
+                   size_t cap_bytes, int out_mult, int cell_size, int in_cols,
+                   int *worst_block_rows)
+{
+    size_t out_bytes = (size_t)(obr1 - obr0) * g->ocols * cell_size;
+    int k;
+
+    *worst_block_rows = worst_ktile_rows(g, obr0, obr1, 1);
+    if (out_mult * out_bytes > cap_bytes)
+        return 0;
+    for (k = g->nb; k >= 1; k--) {
+        int worst = worst_ktile_rows(g, obr0, obr1, k);
+        size_t strip_bytes =
+            worst > 0 ? (size_t)worst * in_cols * cell_size : 0;
+
+        if (strip_bytes + out_mult * out_bytes <= cap_bytes)
+            return k;
+    }
+    return 0;
+}
+
 /* Reports how many cells the exact variant makes wider than the boundary
  * variant, with the largest widening on each side. */
 void fg_compare_variants(const struct footprint_grid *b,
