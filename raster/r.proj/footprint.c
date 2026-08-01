@@ -215,6 +215,51 @@ void fg_span(const struct footprint_grid *g, int obr0, int obr1, int obc0,
     *imax = hi;
 }
 
+/* Find the tallest band at obr0 whose strip and output still fit the cap, and
+ * never return less than one row. */
+int fg_band_height(const struct footprint_grid *g, int obr0, size_t cap_bytes,
+                   int out_mult, int cell_size, int in_cols)
+{
+    double rmin = DBL_MAX, rmax = -DBL_MAX;
+    int max_h = g->grows - obr0, accepted = 1, h, b;
+
+    for (h = 0; h < max_h; h++) {
+        int r = obr0 + h, strip_rows;
+        size_t strip_bytes, out_bytes;
+
+        for (b = 0; b < g->nb; b++) {
+            const struct fg_cell *cell = &g->cell[(size_t)r * g->nb + b];
+
+            if (cell->rmax < cell->rmin)
+                continue;
+            if (cell->rmin < rmin)
+                rmin = cell->rmin;
+            if (cell->rmax > rmax)
+                rmax = cell->rmax;
+        }
+        if (rmax < rmin) {
+            strip_rows = 0;
+        }
+        else {
+            int lo = (int)floor(rmin) - 2;
+            int hi = (int)floor(rmax) + 2;
+
+            if (lo < 0)
+                lo = 0;
+            if (hi > g->irows - 1)
+                hi = g->irows - 1;
+            strip_rows = hi - lo + 1;
+        }
+        strip_bytes =
+            strip_rows > 0 ? (size_t)strip_rows * in_cols * cell_size : 0;
+        out_bytes = (size_t)(h + 1) * g->ocols * cell_size;
+        if (!(strip_bytes + out_mult * out_bytes <= cap_bytes))
+            break;
+        accepted = h + 1;
+    }
+    return accepted;
+}
+
 /* Reports how many cells the exact variant makes wider than the boundary
  * variant, with the largest widening on each side. */
 void fg_compare_variants(const struct footprint_grid *b,
