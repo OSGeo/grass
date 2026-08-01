@@ -60,6 +60,9 @@ fg_build(const struct Cell_head *ohd, const struct Cell_head *ihd,
          const struct pole_set *poles, int variant);
 extern void fg_span(const struct footprint_grid *g, int obr0, int obr1,
                     int obc0, int obc1, int *imin, int *imax);
+extern int fg_band_height(const struct footprint_grid *g, int obr0,
+                          size_t cap_bytes, int out_mult, int cell_size,
+                          int in_cols);
 extern void fg_compare_variants(const struct footprint_grid *b,
                                 const struct footprint_grid *e);
 extern void fg_apply_sampling_margin(struct footprint_grid *g);
