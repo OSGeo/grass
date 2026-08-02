@@ -83,34 +83,7 @@ from grass.exceptions import CalledModuleError
 STDS_TYPES = {"strds", "stvds", "str3ds"}
 STDS_TO_MAP_TYPE = {"strds": "raster", "stvds": "vector", "str3ds": "raster_3d"}
 
-
 HAS_MATPLOTLIB = importlib.util.find_spec("matplotlib") is not None
-
-
-def getDatasetTree(ds_type, dataset_name, grassdb, location, mapset, queue):
-    """Fetches items for a spatio-temporal dataset (STDS) using a background process."""
-    try:
-        gisrc, env = gs.create_environment(grassdb, location, mapset)
-        tools = Tools()
-
-        stds_list_cmd = {
-            "strds": "t_rast_list",
-            "stvds": "t_vect_list",
-            "str3ds": "t_rast3d_list",
-        }
-        list_cmd = stds_list_cmd[ds_type]
-        items = getattr(tools, list_cmd)(
-            input=f"{dataset_name}@{mapset}",
-            columns="id,name",
-            format="json",
-            quiet=True,
-            env=env,
-        ).json
-
-        queue.put((items, None))
-        gs.try_remove(gisrc)
-    except ToolError as e:
-        queue.put((None, str(e)))
 
 
 def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
@@ -565,50 +538,6 @@ class DataCatalogTree(TreeView):
         )
 
         UserSettings.SaveToFile(grassdbSettings)
-
-    def _reloadDatasetNode(self, dataset_node, mapset_node):
-        """Recursively reload the model of a specific temporal dataset node"""
-        if dataset_node.children:
-            del dataset_node.children[:]
-
-        dataset_name = dataset_node.data["name"]
-        mapset_name = mapset_node.data["name"]
-
-        # Traverse the tree via node.parent instead of using
-        # self.selected_location[0] or self.selected_grassdb[0].
-        # In standalone mode (when a user runs `g.gui.datacatalog`),
-        # the selection arrays are empty and will throw an IndexError.
-        location_node = mapset_node.parent
-        grassdb_node = location_node.parent
-
-        ds_type = dataset_node.data["type"]
-        child_type = STDS_TO_MAP_TYPE[ds_type]
-
-        q = Queue()
-        p = Process(
-            target=getDatasetTree,
-            args=(
-                ds_type,
-                dataset_name,
-                grassdb_node.data["name"],
-                location_node.data["name"],
-                mapset_name,
-                q,
-            ),
-        )
-        p.start()
-
-        items, error = q.get()
-        if items:
-            for item in items.get("data", []):
-                data = {
-                    "type": child_type,
-                    "name": item["name"],
-                    "map_id": item["id"],
-                }
-                self._model.AppendNode(parent=dataset_node, data=data)
-            self._orig_model = copy.deepcopy(self._model)
-        return error
 
     def _reloadMapsetNode(self, mapset_node):
         """Recursively reload the model of a specific mapset node"""
@@ -1220,10 +1149,6 @@ class DataCatalogTree(TreeView):
             self._reloadMapsetNode(node)
             self.RefreshNode(node, recursive=True)
 
-        if node.data["type"] in STDS_TYPES and not node.children:
-            self._reloadDatasetNode(node, node.parent)
-            self.RefreshNode(node, recursive=True)
-
         if (
             node.data["type"]
             in {
@@ -1404,7 +1329,15 @@ class DataCatalogTree(TreeView):
 
         self._giface.RunCmd(
             ["t.create", "--ui"],
-            onDone=lambda e: wx.CallAfter(lambda: self._reloadMapsetNode(mapset_node)),
+            onDone=lambda e: wx.CallAfter(
+                lambda: self._giface.grassdbChanged.emit(
+                    grassdb=mapset_node.parent.parent.data["name"],
+                    location=mapset_node.parent.data["name"],
+                    mapset=mapset_node.data["name"],
+                    element="strds",
+                    action="new",
+                )
+            ),
         )
 
     def CreateLocation(self, grassdb_node):
@@ -2450,7 +2383,7 @@ class DataCatalogTree(TreeView):
                     element_type=element,
                 )
                 if node:
-                    self._model.RemoveNode(node)
+                    self._reloadMapsetNode(node.parent)
                     self.RefreshNode(node.parent, recursive=True)
 
             elif action == "rename":
@@ -2670,8 +2603,8 @@ class DataCatalogTree(TreeView):
             ],
             onDone=lambda e: wx.CallAfter(
                 lambda: (
-                    self._reloadDatasetNode(stds_node, mapset_node),
-                    self.RefreshNode(stds_node, recursive=True),
+                    self._reloadMapsetNode(mapset_node),
+                    self.RefreshNode(mapset_node, recursive=True),
                 )
             ),
         )
@@ -2691,8 +2624,8 @@ class DataCatalogTree(TreeView):
             ],
             onDone=lambda e: wx.CallAfter(
                 lambda: (
-                    self._reloadDatasetNode(stds_node, mapset_node),
-                    self.RefreshNode(stds_node, recursive=True),
+                    self._reloadMapsetNode(mapset_node),
+                    self.RefreshNode(mapset_node, recursive=True),
                 )
             ),
         )
@@ -2726,6 +2659,7 @@ class DataCatalogTree(TreeView):
         self.showNotification.emit(message=msg)
 
         success_count = 0
+        mapsets_to_reload = set()
 
         for stds_node, map_nodes in stds_groups.items():
             mapset_node = stds_node.parent
@@ -2756,11 +2690,13 @@ class DataCatalogTree(TreeView):
 
             if unregistered == 0:
                 success_count += len(map_nodes)
-                for node in map_nodes:
-                    self._model.RemoveNode(node)
-                self.RefreshNode(stds_node, recursive=True)
+                mapsets_to_reload.add(mapset_node)
 
         if success_count > 0:
+            for m_node in mapsets_to_reload:
+                self._reloadMapsetNode(m_node)
+                self.RefreshNode(m_node, recursive=True)
+
             if success_count == 1:
                 msg = _("Successfully unregistered map")
             else:
@@ -2809,7 +2745,15 @@ class DataCatalogTree(TreeView):
 
         self._giface.RunCmd(
             ["t.merge", "--ui", f"inputs={','.join(inputs)}", f"type={stds_type}"],
-            onDone=lambda e: wx.CallAfter(lambda: self._reloadMapsetNode(mapset_node)),
+            onDone=lambda e: wx.CallAfter(
+                lambda: self._giface.grassdbChanged.emit(
+                    grassdb=mapset_node.parent.parent.data["name"],
+                    location=mapset_node.parent.data["name"],
+                    mapset=mapset_node.data["name"],
+                    element=stds_type,
+                    action="new",
+                )
+            ),
         )
 
     def OnReloadGrassdb(self, event):
