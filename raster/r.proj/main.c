@@ -157,152 +157,6 @@ static const strip_func strip_kernels[] = {
 
 /* Footprint grid used for comparison and the counters printed at the end. */
 static struct footprint_grid *g_fg_boundary = NULL;
-static int g_fg_verify = 0;
-static long g_fg_ncmp = 0;     /* comparisons made */
-static long g_fg_fail = 0;     /* cover failures */
-static int g_fg_min_slack = 0; /* smallest margin between grid and search */
-static int g_fg_max_overread =
-    0;                          /* most extra input rows the grid would load */
-static int g_fg_have_stats = 0; /* set once a non-empty span is compared */
-static long g_fg_band_audit_fail =
-    0; /* bands whose grid strip came out smaller than the walk */
-
-/* Compares one search span against the grid span and records the result. Prints
- * a line only when the grid fails to cover the search. */
-static void fg_verify_emit(int obr0, int obr1, int obc0, int obc1, int s_imin,
-                           int s_imax)
-{
-    int g_imin, g_imax, cover, low_slack, high_slack, slack, overread;
-
-    if (!g_fg_verify)
-        return;
-    fg_span(g_fg_boundary, obr0, obr1, obc0, obc1, &g_imin, &g_imax);
-    g_fg_ncmp++;
-    if (s_imax < s_imin) /* empty search span is always covered */
-        return;
-    cover = g_imin <= s_imin && g_imax >= s_imax;
-    low_slack = s_imin - g_imin;
-    high_slack = g_imax - s_imax;
-    slack = low_slack < high_slack ? low_slack : high_slack;
-    overread = (g_imax - g_imin) - (s_imax - s_imin);
-    if (!g_fg_have_stats || slack < g_fg_min_slack)
-        g_fg_min_slack = slack;
-    if (overread > g_fg_max_overread)
-        g_fg_max_overread = overread;
-    g_fg_have_stats = 1;
-    if (!cover) {
-        g_fg_fail++;
-        fprintf(
-            stderr,
-            "FG_CMP r[%d,%d) c[%d,%d) search=[%d,%d] grid=[%d,%d] cover=0\n",
-            obr0, obr1, obc0, obc1, s_imin, s_imax, g_imin, g_imax);
-    }
-}
-
-/* Prints one line with the totals from all comparisons. */
-static void fg_verify_summary(void)
-{
-    if (!g_fg_verify)
-        return;
-    fprintf(stderr,
-            "FG_SUM comparisons=%ld cover_fail=%ld min_slack=%d "
-            "max_overread=%d fg_band_audit_fail=%ld\n",
-            g_fg_ncmp, g_fg_fail, g_fg_have_stats ? g_fg_min_slack : 0,
-            g_fg_max_overread, g_fg_band_audit_fail);
-}
-
-/* Edge-walk of an output tile [obr0, obr1) by [obc0, obc1) projected into input
- * space, returning the min and max input row it touches plus a 2-cell margin,
- * clamped to the input map. It walks the tile perimeter of top and bottom rows
- * and left and right columns so a curved transform's interior-edge extremum is
- * caught, which corner-only sampling would miss. It runs serially before the
- * parallel region, so the shared tproj is safe. It returns imax below imin when
- * the tile projects entirely outside the input. */
-static void
-band_input_row_span(const struct Cell_head *ohd, const struct Cell_head *ihd,
-                    const struct pj_info *oproj, const struct pj_info *iproj,
-                    const struct pj_info *tproj, const double *y_center,
-                    int obr0, int obr1, int obc0, int obc1, int *imin,
-                    int *imax, const struct pole_set *poles, int *pole_widened)
-{
-    double rmin = 1e300, rmax = -1e300;
-    int e, r, c;
-
-    /* top edge (row obr0) and bottom edge (row obr1-1), tile columns */
-    for (e = 0; e < 2; e++) {
-        int orow = (e == 0) ? obr0 : (obr1 - 1);
-        double y = y_center[orow];
-        for (c = obc0; c < obc1; c++) {
-            double x = ohd->west + (c + 0.5) * ohd->ew_res;
-            double xx = x, yy = y;
-            if (GPJ_transform(oproj, iproj, tproj, PJ_FWD, &xx, &yy, NULL) < 0)
-                continue;
-            double ri = (ihd->north - yy) / ihd->ns_res;
-            if (ri < rmin)
-                rmin = ri;
-            if (ri > rmax)
-                rmax = ri;
-        }
-    }
-    /* left edge (col obc0) and right edge (col obc1-1), all band rows */
-    for (e = 0; e < 2; e++) {
-        int ocol = (e == 0) ? obc0 : (obc1 - 1);
-        double x = ohd->west + (ocol + 0.5) * ohd->ew_res;
-        for (r = obr0; r < obr1; r++) {
-            double y = y_center[r];
-            double xx = x, yy = y;
-            if (GPJ_transform(oproj, iproj, tproj, PJ_FWD, &xx, &yy, NULL) < 0)
-                continue;
-            double ri = (ihd->north - yy) / ihd->ns_res;
-            if (ri < rmin)
-                rmin = ri;
-            if (ri > rmax)
-                rmax = ri;
-        }
-    }
-
-    /* Fold in any pole whose output point lies in this tile, since the
-     * perimeter walk cannot see an interior latitude extremum. A pole on a tile
-     * edge is caught by both adjacent tiles, which only widens a strip that is
-     * loaded anyway. This comes before the empty-tile check so a pole inside an
-     * otherwise outside tile still yields a valid span. */
-    if (poles) {
-        double x_lo = ohd->west + obc0 * ohd->ew_res;
-        double x_hi = ohd->west + obc1 * ohd->ew_res;
-        double y_lo = ohd->north - obr1 * ohd->ns_res;
-        double y_hi = ohd->north - obr0 * ohd->ns_res;
-        int k;
-
-        for (k = 0; k < poles->n; k++) {
-            if (poles->ox[k] < x_lo || poles->ox[k] > x_hi ||
-                poles->oy[k] < y_lo || poles->oy[k] > y_hi)
-                continue;
-            if (poles->ri[k] < rmin)
-                rmin = poles->ri[k];
-            if (poles->ri[k] > rmax)
-                rmax = poles->ri[k];
-            if (pole_widened)
-                *pole_widened = k + 1; /* 1-based pole index, 0 == none */
-        }
-    }
-
-    if (rmax < rmin) { /* band projects entirely outside the input */
-        *imin = 0;
-        *imax = -1;
-        fg_verify_emit(obr0, obr1, obc0, obc1, *imin, *imax);
-        return;
-    }
-
-    int lo = (int)floor(rmin) - 2; /* 2-cell margin for interp stencils */
-    int hi = (int)floor(rmax) + 2;
-    if (lo < 0)
-        lo = 0;
-    if (hi > ihd->rows - 1)
-        hi = ihd->rows - 1;
-    *imin = lo;
-    *imax = hi;
-    fg_verify_emit(obr0, obr1, obc0, obc1, *imin, *imax);
-}
 
 /* Serial tile-cache fallback for the oblique and large-halo corner. When even
  * one output row's full-width strip busts the cap, this finishes the run from
@@ -1074,21 +928,9 @@ int main(int argc, char **argv)
 
     /* Build the grid that sizes band heights. */
     g_fg_boundary = fg_build(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                             y_center, &poles, FG_BOUNDARY);
-    /* Under the verify flag build the exact grid and compare it before the
-     * margin is added. */
-    int fg_verify_env = getenv("R_PROJ_FG_VERIFY") != NULL;
-    struct footprint_grid *fg_exact = NULL;
-    if (fg_verify_env) {
-        fg_exact = fg_build(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                            y_center, &poles, FG_EXACT);
-        fg_compare_variants(g_fg_boundary, fg_exact);
-    }
+                             y_center, &poles);
     /* The margin covers what the samples can miss between columns. */
     fg_apply_sampling_margin(g_fg_boundary);
-    /* Turn on the audit once the grid is ready. */
-    if (fg_verify_env)
-        g_fg_verify = 1;
 
     G_important_message(_("Projecting (banded, per-thread PROJ context)..."));
 
@@ -1175,22 +1017,6 @@ int main(int argc, char **argv)
         }
         t_size += rproj_wtime() - ts;
 
-        /* Walk the accepted band once and flag it when the grid strip is
-         * smaller than the walk. */
-        if (g_fg_verify) {
-            int gi0, gi1, si0, si1, grid_rows, walk_rows;
-
-            fg_span(g_fg_boundary, obr0, obr0 + band_orows, 0, outcellhd.cols,
-                    &gi0, &gi1);
-            band_input_row_span(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                                y_center, obr0, obr0 + band_orows, 0,
-                                outcellhd.cols, &si0, &si1, &poles, NULL);
-            grid_rows = gi1 >= gi0 ? gi1 - gi0 + 1 : 0;
-            walk_rows = si1 >= si0 ? si1 - si0 + 1 : 0;
-            if (grid_rows < walk_rows)
-                g_fg_band_audit_fail++;
-        }
-
         int obr1 = obr0 + band_orows;
         n_bands++;
         int nb = fg_num_blocks(g_fg_boundary);
@@ -1216,15 +1042,6 @@ int main(int argc, char **argv)
              * because the raster API reads whole rows, so columns are not
              * cropped. */
             fg_span(g_fg_boundary, obr0, obr1, obc0, obc1, &imin, &imax);
-            /* Under the verify flag walk the tile too so the hook checks the
-             * grid against the walk. */
-            if (g_fg_verify) {
-                int wi0, wi1;
-
-                band_input_row_span(&outcellhd, &incellhd, &oproj, &iproj,
-                                    &tproj, y_center, obr0, obr1, obc0, obc1,
-                                    &wi0, &wi1, &poles, NULL);
-            }
             int strip_rows = imax - imin + 1;
 
             /* Serial strip load, since a single fd makes get_row unsafe to
@@ -1416,11 +1233,8 @@ fallback_done:
         t_write += rproj_wtime() - tw;
     }
     G_free(y_center);
-    fg_verify_summary();
     if (g_fg_boundary)
         fg_free(g_fg_boundary);
-    if (fg_exact)
-        fg_free(fg_exact);
     /* Single free site for the rolling window. Normal completion and both
      * fallback_done bails converge here, so one free covers every path. win is
      * NULL when a bail fired before any band allocated it. */
