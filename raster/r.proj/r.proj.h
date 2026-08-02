@@ -46,7 +46,7 @@ enum OutputFormat { PLAIN, SHELL, JSON };
 struct pole_set {
     int n;               /* active poles, 0 to 2 */
     double ox[2], oy[2]; /* pole coordinates in the output CRS */
-    double ri[2];        /* pole input row index */
+    double pole_row[2];  /* pole input row index */
 };
 
 /* Footprint grid of input row spans for the output map, built in footprint.c.

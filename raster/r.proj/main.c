@@ -120,9 +120,9 @@ static void quantize_cell_row(void *row, int cols, int cell_type)
  * addressed relative to imin. A sample that lands inside the input map but
  * outside the loaded strip means the band was under-sized, which the guard
  * below catches. */
-static void interpolate_strip(void *strip, void *obufptr, int cell_type,
-                              double col_idx, double row_idx,
-                              struct Cell_head *incellhd, int imin, int imax)
+static void strip_nearest(void *strip, void *obufptr, int cell_type,
+                          double col_idx, double row_idx,
+                          struct Cell_head *incellhd, int imin, int imax)
 {
     int c = (int)floor(col_idx);
     int r = (int)floor(row_idx);
@@ -152,11 +152,11 @@ static void interpolate_strip(void *strip, void *obufptr, int cell_type,
  * of menu[i].method. Slot 0 is nearest above and slots 1 to 6 come from
  * interp_strip.c. */
 static const strip_func strip_kernels[] = {
-    interpolate_strip, strip_bilinear, strip_cubic,    strip_lanczos,
-    strip_bilinear_f,  strip_cubic_f,  strip_lanczos_f};
+    strip_nearest,    strip_bilinear, strip_cubic,    strip_lanczos,
+    strip_bilinear_f, strip_cubic_f,  strip_lanczos_f};
 
 /* Footprint grid used for comparison and the counters printed at the end. */
-static struct footprint_grid *g_fg_boundary = NULL;
+static struct footprint_grid *band_grid = NULL;
 
 /* Serial tile-cache fallback for the oblique and large-halo corner. When even
  * one output row's full-width strip busts the cap, this finishes the run from
@@ -921,16 +921,16 @@ int main(int argc, char **argv)
                 ri = incellhd.rows - 1;
             poles.ox[poles.n] = px;
             poles.oy[poles.n] = py;
-            poles.ri[poles.n] = ri;
+            poles.pole_row[poles.n] = ri;
             poles.n++;
         }
     }
 
     /* Build the grid that sizes band heights. */
-    g_fg_boundary = fg_build(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                             y_center, &poles);
+    band_grid = fg_build(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
+                         y_center, &poles);
     /* The margin covers what the samples can miss between columns. */
-    fg_apply_sampling_margin(g_fg_boundary);
+    fg_apply_sampling_margin(band_grid);
 
     G_important_message(_("Projecting (banded, per-thread PROJ context)..."));
 
@@ -964,16 +964,16 @@ int main(int argc, char **argv)
         int band_orows =
             force_tilecache
                 ? 1
-                : fg_band_height(g_fg_boundary, obr0, cap_bytes, out_mult,
+                : fg_band_height(band_grid, obr0, cap_bytes, out_mult,
                                  cell_size, incellhd.cols);
-        int tile_blocks = fg_num_blocks(g_fg_boundary);
+        int tile_blocks = fg_num_blocks(band_grid);
         if (band_orows == 1) {
             int worst_block_rows = 0;
 
             tile_blocks =
                 force_tilecache
                     ? 0
-                    : fg_tile_blocks(g_fg_boundary, obr0, obr0 + band_orows,
+                    : fg_tile_blocks(band_grid, obr0, obr0 + band_orows,
                                      cap_bytes, out_mult, cell_size,
                                      incellhd.cols, &worst_block_rows);
             if (tile_blocks == 0) {
@@ -1019,7 +1019,7 @@ int main(int argc, char **argv)
 
         int obr1 = obr0 + band_orows;
         n_bands++;
-        int nb = fg_num_blocks(g_fg_boundary);
+        int nb = fg_num_blocks(band_grid);
         int n_tiles = (nb + tile_blocks - 1) / tile_blocks;
         if (n_tiles > max_tiles)
             max_tiles = n_tiles;
@@ -1035,19 +1035,19 @@ int main(int argc, char **argv)
          * block is the full-width fast path. */
         for (int tb = 0; tb < nb; tb += tile_blocks) {
             int te = tb + tile_blocks < nb ? tb + tile_blocks : nb;
-            int obc0 = fg_block_start(g_fg_boundary, tb);
-            int obc1 = fg_block_start(g_fg_boundary, te);
+            int obc0 = fg_block_start(band_grid, tb);
+            int obc1 = fg_block_start(band_grid, te);
 
             /* Fill spans come from the grid. The strip is full input width
              * because the raster API reads whole rows, so columns are not
              * cropped. */
-            fg_span(g_fg_boundary, obr0, obr1, obc0, obc1, &imin, &imax);
+            fg_span(band_grid, obr0, obr1, obc0, obc1, &imin, &imax);
             int strip_rows = imax - imin + 1;
 
             /* Serial strip load, since a single fd makes get_row unsafe to
              * share. An empty tile with strip_rows at or below zero projects
              * outside the input and is not read, its cells become NULL through
-             * interpolate_strip's out-of-map path, and the window is
+             * strip_nearest's out-of-map path, and the window is
              * invalidated so the next band re-reads in full. */
             void *strip = NULL;
             if (strip_rows > 0) {
@@ -1233,8 +1233,8 @@ fallback_done:
         t_write += rproj_wtime() - tw;
     }
     G_free(y_center);
-    if (g_fg_boundary)
-        fg_free(g_fg_boundary);
+    if (band_grid)
+        fg_free(band_grid);
     /* Single free site for the rolling window. Normal completion and both
      * fallback_done bails converge here, so one free covers every path. win is
      * NULL when a bail fired before any band allocated it. */

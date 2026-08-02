@@ -80,10 +80,10 @@ static void fold_poles(const struct footprint_grid *g,
         if (poles->ox[k] < x_lo || poles->ox[k] > x_hi || poles->oy[k] < y_lo ||
             poles->oy[k] > y_hi)
             continue;
-        if (poles->ri[k] < cell->rmin)
-            cell->rmin = poles->ri[k];
-        if (poles->ri[k] > cell->rmax)
-            cell->rmax = poles->ri[k];
+        if (poles->pole_row[k] < cell->rmin)
+            cell->rmin = poles->pole_row[k];
+        if (poles->pole_row[k] > cell->rmax)
+            cell->rmax = poles->pole_row[k];
     }
 }
 
