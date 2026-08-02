@@ -7,7 +7,6 @@
 
 #include <float.h>
 #include <math.h>
-#include <stdio.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -19,7 +18,6 @@ struct fg_cell {
 };
 
 struct footprint_grid {
-    int variant;          /* FG_BOUNDARY or FG_EXACT */
     int grows, nb;        /* grid rows and column blocks */
     int ocols;            /* output columns */
     int irows;            /* input rows */
@@ -89,85 +87,59 @@ static void fold_poles(const struct footprint_grid *g,
     }
 }
 
-/* Builds the grid using boundary samples or every column. */
+/* Builds the grid from block boundary samples. */
 struct footprint_grid *
 fg_build(const struct Cell_head *ohd, const struct Cell_head *ihd,
          const struct pj_info *oproj, const struct pj_info *iproj,
          const struct pj_info *tproj, const double *y_center,
-         const struct pole_set *poles, int variant)
+         const struct pole_set *poles)
 {
     struct footprint_grid *g = G_malloc(sizeof(*g));
     int r, b;
-    double *bnd = NULL;
+    double *bnd;
 
-    g->variant = variant;
     g->grows = ohd->rows;
     g->nb = ohd->cols < 32 ? ohd->cols : 32;
     g->ocols = ohd->cols;
     g->irows = ihd->rows;
     g->cell = G_malloc((size_t)g->grows * g->nb * sizeof(struct fg_cell));
-
-    if (variant == FG_BOUNDARY)
-        bnd = G_malloc((size_t)(g->nb + 1) * sizeof(double));
+    bnd = G_malloc((size_t)(g->nb + 1) * sizeof(double));
 
     for (r = 0; r < g->grows; r++) {
-        if (variant == FG_BOUNDARY) {
-            /* Sample the NB plus one block boundaries for this row. The last
-             * boundary uses the final valid column. */
-            int k;
+        /* Sample the NB plus one block boundaries for this row. The last
+         * boundary uses the final valid column. */
+        int k;
 
-            for (k = 0; k <= g->nb; k++) {
-                int c = block_c0(g, k);
+        for (k = 0; k <= g->nb; k++) {
+            int c = block_c0(g, k);
 
-                if (c > g->ocols - 1)
-                    c = g->ocols - 1;
-                if (!sample_ri(ohd, ihd, oproj, iproj, tproj, y_center, r, c,
-                               &bnd[k]))
-                    bnd[k] =
-                        DBL_MAX; /* a failed sample is left out of the range */
-            }
+            if (c > g->ocols - 1)
+                c = g->ocols - 1;
+            if (!sample_ri(ohd, ihd, oproj, iproj, tproj, y_center, r, c,
+                           &bnd[k]))
+                bnd[k] = DBL_MAX; /* a failed sample is left out of the range */
         }
         for (b = 0; b < g->nb; b++) {
             struct fg_cell *cell = &g->cell[(size_t)r * g->nb + b];
+            double lo = bnd[b] < bnd[b + 1] ? bnd[b] : bnd[b + 1];
+            double hi = bnd[b] > bnd[b + 1] ? bnd[b] : bnd[b + 1];
 
             cell->rmin = DBL_MAX;
             cell->rmax = -DBL_MAX;
-            if (variant == FG_BOUNDARY) {
-                double lo = bnd[b] < bnd[b + 1] ? bnd[b] : bnd[b + 1];
-                double hi = bnd[b] > bnd[b + 1] ? bnd[b] : bnd[b + 1];
-
-                if (bnd[b] != DBL_MAX && bnd[b + 1] != DBL_MAX) {
-                    cell->rmin = lo;
-                    cell->rmax = hi;
-                }
-                else if (bnd[b] != DBL_MAX) {
-                    cell->rmin = cell->rmax = bnd[b];
-                }
-                else if (bnd[b + 1] != DBL_MAX) {
-                    cell->rmin = cell->rmax = bnd[b + 1];
-                }
+            if (bnd[b] != DBL_MAX && bnd[b + 1] != DBL_MAX) {
+                cell->rmin = lo;
+                cell->rmax = hi;
             }
-            else {
-                /* Scan every column in the block. */
-                int c0 = block_c0(g, b), c1 = block_c0(g, b + 1), c;
-
-                for (c = c0; c < c1; c++) {
-                    double ri;
-
-                    if (!sample_ri(ohd, ihd, oproj, iproj, tproj, y_center, r,
-                                   c, &ri))
-                        continue;
-                    if (ri < cell->rmin)
-                        cell->rmin = ri;
-                    if (ri > cell->rmax)
-                        cell->rmax = ri;
-                }
+            else if (bnd[b] != DBL_MAX) {
+                cell->rmin = cell->rmax = bnd[b];
+            }
+            else if (bnd[b + 1] != DBL_MAX) {
+                cell->rmin = cell->rmax = bnd[b + 1];
             }
             fold_poles(g, ohd, poles, r, b, cell);
         }
     }
-    if (bnd)
-        G_free(bnd);
+    G_free(bnd);
     return g;
 }
 
@@ -314,43 +286,11 @@ int fg_tile_blocks(const struct footprint_grid *g, int obr0, int obr1,
     return 0;
 }
 
-/* Reports how many cells the exact variant makes wider than the boundary
- * variant, with the largest widening on each side. */
-void fg_compare_variants(const struct footprint_grid *b,
-                         const struct footprint_grid *e)
-{
-    size_t n = (size_t)b->grows * b->nb, i;
-    long differ = 0;
-    double max_lo_gap = 0.0, max_hi_gap = 0.0;
-
-    for (i = 0; i < n; i++) {
-        const struct fg_cell *cb = &b->cell[i], *ce = &e->cell[i];
-        double lo_gap, hi_gap;
-
-        if (cb->rmax < cb->rmin && ce->rmax < ce->rmin)
-            continue;
-        lo_gap = cb->rmin - ce->rmin; /* exact reaches this much lower */
-        hi_gap = ce->rmax - cb->rmax; /* exact reaches this much higher */
-        if (lo_gap > 0.0 || hi_gap > 0.0) {
-            differ++;
-            if (lo_gap > max_lo_gap)
-                max_lo_gap = lo_gap;
-            if (hi_gap > max_hi_gap)
-                max_hi_gap = hi_gap;
-        }
-    }
-    fprintf(stderr,
-            "FG_VAR cells=%ld differ=%ld max_lo_gap=%.3f max_hi_gap=%.3f\n",
-            (long)n, differ, max_lo_gap, max_hi_gap);
-}
-
-/* Widens every non-empty cell of a boundary grid by the sampling margin. */
+/* Widens every non-empty cell by the sampling margin. */
 void fg_apply_sampling_margin(struct footprint_grid *g)
 {
     size_t n = (size_t)g->grows * g->nb, i;
 
-    if (g->variant != FG_BOUNDARY)
-        return;
     for (i = 0; i < n; i++) {
         struct fg_cell *cell = &g->cell[i];
 
