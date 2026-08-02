@@ -93,6 +93,28 @@ struct menu menu[] = {
 static char *make_ipol_list(void);
 static char *make_ipol_desc(void);
 
+/* Round whole numbers through 32 bit float so every read path
+   returns the same values. */
+static void quantize_cell_row(void *row, int cols, int cell_type)
+{
+    int i;
+
+    if (cell_type == CELL_TYPE) {
+        CELL *p = row;
+
+        for (i = 0; i < cols; i++)
+            if (!Rast_is_c_null_value(&p[i]))
+                Rast_set_f_value(&p[i], (FCELL)p[i], CELL_TYPE);
+    }
+    else if (cell_type == DCELL_TYPE) {
+        DCELL *p = row;
+
+        for (i = 0; i < cols; i++)
+            if (!Rast_is_d_null_value(&p[i]))
+                Rast_set_f_value(&p[i], (FCELL)p[i], DCELL_TYPE);
+    }
+}
+
 /* Nearest-neighbor read from an in-RAM strip holding input rows [imin, imax].
  * The col_idx and row_idx values are full-map indices and the strip is
  * addressed relative to imin. A sample that lands inside the input map but
@@ -1270,6 +1292,11 @@ int main(int argc, char **argv)
                                          r, cell_type);
                     }
                     G_switch_env(); /* -> output */
+                    for (int r = read_from; r <= imax; r++)
+                        quantize_cell_row((unsigned char *)strip +
+                                              (size_t)(r - imin) *
+                                                  incellhd.cols * cell_size,
+                                          incellhd.cols, cell_type);
                 }
                 t_fill += rproj_wtime() - t0;
                 /* Record what the window now holds. A tiled band leaves win
