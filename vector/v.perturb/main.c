@@ -5,8 +5,9 @@
  *                  http://mccauley-usa.com/
  * PURPOSE:      Random location perturbations of vector points
  *
- * COPYRIGHT:    (C) 1994-2009 by James Darrell McCauley and the GRASS
- *               Development Team
+ * SPDX-FileCopyrightText: 1994-2009 James Darrell McCauley
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * Modification History:
  * 3/2006              added min and seed MN/SM ITC-irst
@@ -15,10 +16,6 @@
  * 0.2B <02 Jan 1995>  clean man page, added html page (jdm)
  * 0.3B <25 Feb 1995>  cleaned up 'gcc -Wall' warnings (jdm)
  * <13 Sept 2000>      released under GPL
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
  *
  *****************************************************************************/
 
