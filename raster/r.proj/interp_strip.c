@@ -1,9 +1,7 @@
 /*
- * interp_strip.c - strip-based interpolation kernels for the banded r.proj
- *   compute path. These mirror the cache-based kernels (bilinear.c, cubic.c,
- *   lanczos.c and their _f variants) but read an in-RAM FCELL band strip
- *   holding input rows [imin, imax] instead of the readcell block cache.
- *   Nearest is handled by interpolate_strip() in main.c and is not duplicated.
+ * interp_strip.c - strip versions of the resampling methods. They read the
+ *   input rows from a strip held in memory as floats, instead of the block
+ *   cache. Nearest is handled by strip_nearest() in main.c.
  */
 
 #include <math.h>
@@ -12,14 +10,9 @@
 #include <grass/raster.h>
 #include "r.proj.h"
 
-/* Read one FCELL from the band strip. The strip holds full-width input rows
- * [imin, imax] contiguously; input row r maps to strip row (r - imin), the same
- * addressing as interpolate_strip(). Every read is guarded by the same
- * under-size tripwire as interpolate_strip: a stencil row inside the input map
- * but outside the loaded strip means a sizing/indexing bug, so fail loudly
- * rather than read out of bounds. Each kernel runs its full-map bounds check
- * first (setting NULL for out-of-map stencils), so this tripwire only ever
- * fires on a bug. */
+/* Read one value from the strip. Input row r maps to strip row (r - imin). A
+ * row inside the input map but outside the loaded strip is a bug, so fail
+ * rather than read out of bounds. */
 static inline FCELL strip_val(const void *strip, int r, int c, int imin,
                               int imax, int cols)
 {
@@ -41,8 +34,9 @@ void strip_bilinear(void *strip, void *obufptr, int cell_type, double col_idx,
     row = (int)floor(row_idx - 0.5);
     col = (int)floor(col_idx - 0.5);
 
-    /* Full-map bounds check runs before any strip read: an out-of-map stencil
-     * sets NULL and returns, so strip_val is never reached out of range. */
+    /* Full-map bounds check runs before any strip read. A sample outside the
+     * input map is set to NULL and returned, so strip_val is never asked for a
+     * row outside the strip. */
     if (row < 0 || row + 1 >= incellhd->rows || col < 0 ||
         col + 1 >= incellhd->cols) {
         Rast_set_null_value(obufptr, 1, cell_type);
