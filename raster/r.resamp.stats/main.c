@@ -304,7 +304,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Unknown method <%s>"), parm.method->answer);
 
     if (menu[method].method == c_quant) {
-        quantile = atoi(parm.quantile->answer);
+        quantile = atof(parm.quantile->answer);
         closure = &quantile;
     }
 
