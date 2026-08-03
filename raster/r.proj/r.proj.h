@@ -27,9 +27,8 @@ struct cache {
 typedef void (*func)(struct cache *, void *, int, double, double,
                      struct Cell_head *);
 
-/* Strip-based interpolation kernels (interp_strip.c) for the banded compute
- * path read an in-RAM FCELL strip holding input rows [imin, imax] instead of
- * the readcell block cache, so they take imin/imax in place of struct cache. */
+/* Strip interpolation kernels (interp_strip.c) read the input rows imin to imax
+ * from a strip held in memory, and take imin/imax in place of struct cache. */
 typedef void (*strip_func)(void *, void *, int, double, double,
                            struct Cell_head *, int, int);
 
@@ -41,8 +40,8 @@ struct menu {
 
 enum OutputFormat { PLAIN, SHELL, JSON };
 
-/* Geographic poles that fall inside the input map, folded into the input row
- * span of the tile that contains them. Empty when no pole is in frame. */
+/* Geographic poles that land inside the output map, each stored as its output
+ * position and its input row. Empty when no pole lands inside. */
 struct pole_set {
     int n;               /* active poles, 0 to 2 */
     double ox[2], oy[2]; /* pole coordinates in the output CRS */
@@ -102,7 +101,7 @@ extern void p_lanczos(struct cache *, void *, int, double, double,
 extern void p_lanczos_f(struct cache *, void *, int, double, double,
                         struct Cell_head *);
 
-/* interp_strip.c - strip variants for the banded compute path */
+/* interp_strip.c - strip versions of the resampling methods */
 extern void strip_bilinear(void *, void *, int, double, double,
                            struct Cell_head *, int, int);
 extern void strip_cubic(void *, void *, int, double, double, struct Cell_head *,

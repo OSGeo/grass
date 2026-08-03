@@ -1423,7 +1423,7 @@ int pj_do_transform(int count, double *x, double *y, double *h,
  * into a new private context. Release it with GPJ_free_transform_clone().
  *
  * Safe to call concurrently from multiple threads with the same \p src,
- * provided \p src is not modified during the calls: each call clones into its
+ * provided \p src is not modified during the calls. Each call clones into its
  * own new context and touches no shared mutable state.
  *
  * \param src source transform (as set up by GPJ_init_transform())
@@ -1433,9 +1433,8 @@ void GPJ_clone_transform(const struct pj_info *src,
                          struct gpj_transform_clone *clone)
 {
     clone->ctx = proj_context_create();
-    /* r.proj calls this in each worker thread, so a fatal here ends the whole
-     * process from inside the parallel region. That is intended: a clone
-     * failure leaves the thread with no usable transform. */
+    /* A failed context leaves the thread with no usable transform, so this
+     * aborts the run. */
     if (clone->ctx == NULL)
         G_fatal_error(_("proj_context_create() failed for a per-thread "
                         "transform clone"));

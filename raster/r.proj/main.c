@@ -115,11 +115,8 @@ static void quantize_cell_row(void *row, int cols, int cell_type)
     }
 }
 
-/* Nearest-neighbor read from an in-RAM strip holding input rows [imin, imax].
- * The col_idx and row_idx values are full-map indices and the strip is
- * addressed relative to imin. A sample that lands inside the input map but
- * outside the loaded strip means the band was under-sized, which the guard
- * below catches. */
+/* Nearest read from the in-RAM input strip covering rows imin to imax. Indices
+ * are full-map and addressed relative to imin. */
 static void strip_nearest(void *strip, void *obufptr, int cell_type,
                           double col_idx, double row_idx,
                           struct Cell_head *incellhd, int imin, int imax)
@@ -134,9 +131,8 @@ static void strip_nearest(void *strip, void *obufptr, int cell_type,
         return;
     }
 
-    /* The band footprint was under-sized when a needed input row lies inside
-     * the input map but outside the loaded strip, so it fails loudly rather
-     * than emit a wrong NULL. */
+    /* Fail loudly when a needed input row is inside the map but outside the
+     * loaded strip. */
     if (r < imin || r > imax)
         G_fatal_error(_("Band strip under-sized: input row %d outside loaded "
                         "range [%d, %d] at column %d"),
@@ -148,22 +144,17 @@ static void strip_nearest(void *strip, void *obufptr, int cell_type,
     memcpy(obufptr, src, cell_size);
 }
 
-/* Strip kernels in the same order as menu[], so slot i is the strip counterpart
- * of menu[i].method. Slot 0 is nearest above and slots 1 to 6 come from
- * interp_strip.c. */
+/* Strip kernels in menu[] order, so slot i matches menu[i].method. */
 static const strip_func strip_kernels[] = {
     strip_nearest,    strip_bilinear, strip_cubic,    strip_lanczos,
     strip_bilinear_f, strip_cubic_f,  strip_lanczos_f};
 
-/* Footprint grid used for comparison and the counters printed at the end. */
+/* Grid that sizes band heights and column tiles. */
 static struct footprint_grid *band_grid = NULL;
 
-/* Serial tile-cache fallback for the oblique and large-halo corner. When even
- * one output row's full-width strip busts the cap, this finishes the run from
- * row obr0 with the classic readcell cache and CVAL kernels, exactly as serial
- * r.proj does. It stays serial because get_block mutates shared cache state,
- * and since the banded path already wrote the earlier rows the result matches
- * a pure serial run. */
+/* Serial tile-cache path for output rows whose input footprint is too tall to
+ * band. Finishes the run from row obr0 with the readcell cache so it matches
+ * serial r.proj. */
 static void
 fallback_serial_cache(int fdi, int fdo, int cell_type, int method,
                       const struct pj_info *oproj, const struct pj_info *iproj,
@@ -203,9 +194,8 @@ fallback_serial_cache(int fdi, int fdo, int cell_type, int method,
     G_free(obuffer);
 }
 
-/* Write the deferred band, if any, in order and release it. Shared by the last
- * band and the fallback bails so every path writes the deferred band the same
- * way. */
+/* Write the previous band's output rows that were held for the overlapped
+ * write, then free the buffer. Returns when nothing is held. */
 static void flush_pending_band(int fdo, int cell_type, int cols, int cell_size,
                                void **pending, int r0, int r1)
 {
@@ -220,9 +210,7 @@ static void flush_pending_band(int fdo, int cell_type, int cols, int cell_size,
     *pending = NULL;
 }
 
-/* Thread count for compute and write overlap, where nprocs above zero
- * overrides OMP_NUM_THREADS. Set before the fit search so the write overlap's
- * two reserved output buffers match the band sizing. */
+/* Return the compute thread count, with nprocs overriding OMP_NUM_THREADS. */
 static int compute_nprocs(struct Option *nprocs)
 {
     return G_set_omp_num_threads(nprocs);
@@ -571,7 +559,7 @@ int main(int argc, char **argv)
     if (G_verbose() > G_verbose_std())
         pj_print_proj_params(&iproj, &oproj);
 
-    /* this call causes r.proj to read the entire map into memory */
+    /* Read the input map's rows, columns, resolution, and bounds. */
     Rast_get_cellhd(inmap->answer, setname, &incellhd);
 
     if (G_projection() == PROJECTION_XY)
@@ -815,9 +803,8 @@ int main(int argc, char **argv)
     G_message(_("NS-res: %f"), outcellhd.ns_res);
     G_message(" ");
 
-    /* Open the input map in the input env. Banding loads only per-band input
-     * strips rather than the whole map, so fdi stays open across the band
-     * loop. */
+    /* Open the input map in the input env. fdi stays open across the band loop
+     * because each band reads only its own input strip. */
     G_switch_env();
     Rast_set_input_window(&incellhd);
     fdi = Rast_open_old(inmap->answer, setname);
@@ -826,15 +813,10 @@ int main(int argc, char **argv)
         cell_type = FCELL_TYPE;
     cell_size = Rast_cell_size(cell_type);
 
-    /* The read-thread count is decided here in the input env so the mask guard
-     * checks the source mapset's mask. Rast_disable_omp_on_mask returns 1 and
-     * forces serial under a mask or without OpenMP, and leaves the count
-     * untouched otherwise (lib/raster/mask_info.c lines 226-231). When
-     * read_nprocs is above one, each thread opens its own fresh fd and fdi
-     * serves only the serial fallback. Concurrent fds on the same map across
-     * locations follow the r.neighbors in_fd[] precedent, where each fd carries
-     * its own cur_row, data, and data_fd. */
-    /* Runs before the fit search. See compute_nprocs(). */
+    /* Pick the read-thread count in the input env so the mask guard checks the
+     * source mapset's mask. Rast_disable_omp_on_mask forces serial under a mask
+     * or without OpenMP. Above one thread each thread opens its own fd and fdi
+     * serves only the serial fallback. */
     int want_nprocs = compute_nprocs(nprocs);
     int read_nprocs = Rast_disable_omp_on_mask(want_nprocs);
     int *fd_read = NULL;
@@ -869,19 +851,16 @@ int main(int argc, char **argv)
      * memory by the cap rather than the whole input map. */
     double cap_mb = atof(memory->answer);
     size_t cap_bytes = (size_t)(cap_mb * 1024.0 * 1024.0);
-    /* Under write_overlap the overlapped writes run inside the compute region,
-     * so their time falls in t_compute. t_write then covers only the
-     * non-overlapped writes, which are the last band's flush and every band at
-     * one thread. The fallback bail flushes are untimed. */
+    /* Output write time that overlap the compute time  are counted in the
+     * compute time. The write time only counts the writes that run on their
+     * own. The fallback path is not timed. */
     double t_size = 0.0, t_fill = 0.0, t_compute = 0.0, t_write = 0.0;
     int n_bands = 0;
     int max_tiles = 1; /* most column tiles used by any single band */
 
-    /* Output-row center northings from the serial recurrence, starting at north
-     * minus ns_res/2 and subtracting ns_res per row. The direct form differs by
-     * up to one ULP when ns_res is not exactly representable, so the recurrence
-     * is kept to stay bitwise identical to serial. The fill loop and the sizing
-     * walk share these values. */
+    /* Holds the north-to-south coordinate of the center of each output row. It
+     * starts at the top edge and steps down one cell per row. The step uses
+     * repeated subtraction to match serial r.proj exactly. */
     double *y_center = G_malloc((size_t)outcellhd.rows * sizeof(double));
     {
         double yc = outcellhd.north - (outcellhd.ns_res / 2);
@@ -891,16 +870,11 @@ int main(int argc, char **argv)
         }
     }
 
-    /* Pole footprint fix. A tile that projects onto a geographic pole has an
-     * input-row extremum the perimeter walk misses. This happens when the pole
-     * lies inside the input map, and also when the pole is outside the input's
-     * latitude coverage but still projects into the output frame, as with a
-     * pole-centered frame reading an input truncated below the pole, where the
-     * highest reachable input latitude is the input's own edge row. So it
-     * projects both poles for lat/lon input and folds in the pole's input row
-     * clamped to [0, rows-1]. The point-in-rect test keeps this a no-op for
-     * frames that image no pole, and a transform failure or non-finite result
-     * skips the pole and leaves the under-size guard as the backstop. */
+    /* For a lat/lon input, project the north and south poles into the output
+     * and record each pole's input row, clamped to the map. A pole is the
+     * highest or lowest latitude, which the column samples can step over, so
+     * keeping its row makes sure the loaded strip reaches it. Does nothing when
+     * no pole lands inside the output map. */
     struct pole_set poles;
 
     poles.n = 0;
@@ -942,11 +916,10 @@ int main(int argc, char **argv)
     unsigned char *win = NULL;
     size_t win_cap = 0;
     int win_imin = 0, win_imax = -1;
-    /* Output double-buffer predicate. The compute region runs want_nprocs
-     * threads rather than the masked read_nprocs, so overlap needs more than
-     * one compute thread. out_mult reserves two output bands in the fit search
-     * on the same flag the writer uses, so the budget and the writer stay in
-     * step. */
+    /* Turn on output double buffering when more than one compute thread runs,
+     * so one thread can write the previous band while the next one computes.
+     * out_mult then reserves two output bands so the memory budget matches the
+     * writer. */
     int write_overlap = want_nprocs > 1;
     int out_mult = write_overlap ? 2 : 1;
     /* Previous band's output buffer, written by one thread while the next band
