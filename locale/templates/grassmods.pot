@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 16:34+0000\n"
+"POT-Creation-Date: 2026-08-01 16:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4104,6 +4104,7 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr ""
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #: ../display/d.rast.num/main.c:211 ../raster/r.thin/io.c:110
@@ -20725,36 +20726,41 @@ msgstr ""
 msgid "Search radius size must cover at least 1 cell"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:293
+#: ../raster/r.geomorphon/main.c:288
+#, c-format
+msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:301
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:299
+#: ../raster/r.geomorphon/main.c:307
 msgid "Flatness threshold must be grater than 0"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:308
+#: ../raster/r.geomorphon/main.c:316
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:335
+#: ../raster/r.geomorphon/main.c:343
 #, c-format
 msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:412
+#: ../raster/r.geomorphon/main.c:420
 msgid "Unknown output data type"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:539
+#: ../raster/r.geomorphon/main.c:547
 msgid "Profile data has been written"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:542
+#: ../raster/r.geomorphon/main.c:550
 msgid "Failed writing profile data"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:638
+#: ../raster/r.geomorphon/main.c:646
 msgid "Failed to profile the computation, please check the parameters"
 msgstr ""
 
@@ -29975,6 +29981,7 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #: ../raster/r.thin/io.c:112 ../raster/r.thin/io.c:188

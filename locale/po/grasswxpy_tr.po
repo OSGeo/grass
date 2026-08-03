@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: 2010-12-01 03:06+0200\n"
 "Last-Translator: Fatih <bounfat@gmail.com>\n"
 "Language-Team: Türkçe <grass-translations@lists.osgeo.org>\n"
@@ -5357,8 +5357,7 @@ msgid ""
 "{messages}"
 msgstr ""
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Zoom to scatter plot extend"
@@ -5421,6 +5420,277 @@ msgstr ""
 msgid "Remove selected class"
 msgstr ""
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "Choose GRASS data directory:"
+msgid "Select notebook directory"
+msgstr "GRASS veri dizinini seç:"
+
+#, fuzzy
+msgid "Save in project: {}"
+msgstr "Yeni Mevki oluşturayım mı?"
+
+msgid "Options"
+msgstr ""
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "Göz at"
+
+#, fuzzy
+#| msgid "Generate grid"
+msgid "Integrated"
+msgstr "Grid üret"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "Pencereyi kapat"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "Hata"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "Hata"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import file"
+msgstr "&İçe Aktar"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "Yeniden adlandır"
+
+msgid "No page for export is currently selected."
+msgstr ""
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save file as..."
+msgid "Export file as..."
+msgstr "Farklı Kaydet..."
+
+msgid "File {} exported to {}."
+msgstr ""
+
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "Yeni harita takımı için ad gir:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create location"
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "Mevki oluşturulamıyor"
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+msgid "New file '{}' created."
+msgstr ""
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr ""
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "Sunucu"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook storage does not exist: {}"
+msgstr ""
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+msgid "File not found: {}"
+msgstr ""
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "Dosya zaten var"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "Dosya zaten var"
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "Sunucu"
+
+#, fuzzy
+msgid "Create new notebook"
+msgstr "Yeni Mevki oluşturayım mı?"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+msgid "Export notebook"
+msgstr "Raster haritayı dışa aktar"
+
 msgid "GRASS"
 msgstr ""
 
@@ -5448,6 +5718,30 @@ msgstr ""
 
 msgid "Console"
 msgstr ""
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "3B görünüm moduna ulaşılamaz"
 
 #, fuzzy
 msgid "Map Swipe Tool"
@@ -5594,6 +5888,11 @@ msgid "Remove map layer"
 msgstr "Harita katmanını kaldır"
 
 msgid "Quit GRASS GUI"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
 msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
@@ -5923,12 +6222,13 @@ msgstr ""
 msgid "Cartographic Composer"
 msgstr ""
 
+#, fuzzy
+#| msgid "wxGUI Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "wxGUI Grafik Modelci"
+
 msgid "Launch user-defined script"
 msgstr ""
-
-#, fuzzy
-msgid "New display"
-msgstr "Görüntüyü sil"
 
 msgid "Python code editor"
 msgstr ""
@@ -6314,6 +6614,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 msgid "No project provided. Operation canceled."
@@ -6954,9 +7260,6 @@ msgid "Fetch & install extension from GRASS Addons"
 msgstr ""
 
 msgid "List of extensions - double-click to install"
-msgstr ""
-
-msgid "Options"
 msgstr ""
 
 msgid "&Install"
@@ -9555,7 +9858,7 @@ msgstr "Seçilmiş harita takımını yeniden adlandır"
 msgid "Do you want to cancel dataset download?"
 msgstr "<%s> GRASS mevkisini oluşturmak istiyormusun?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr ""
 
 msgid "Timeline Tool"
@@ -9651,8 +9954,7 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr ""
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Temporal Plot Tool"
@@ -11110,6 +11412,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~ msgid "New display"
+#~ msgstr "Görüntüyü sil"
+
+#, fuzzy
 #~ msgid "Do you want to create a new project (also known as location)?"
 #~ msgstr "<%s> GRASS mevkisini oluşturmak istiyormusun?"
 
@@ -11621,9 +11927,6 @@ msgstr ""
 
 #~ msgid "Generate from database"
 #~ msgstr "Veritabanından üret"
-
-#~ msgid "Generate grid"
-#~ msgstr "Grid üret"
 
 #~ msgid "Generate histogram of image"
 #~ msgstr "Görüntünün histogramını üret"
@@ -12276,9 +12579,6 @@ msgstr ""
 
 #~ msgid "USLE K-factor"
 #~ msgstr "USLE K-etmeni"
-
-#~ msgid "Unable to create location"
-#~ msgstr "Mevki oluşturulamıyor"
 
 #~ msgid "Unable to delete location"
 #~ msgstr "Mevki silinemiyor"

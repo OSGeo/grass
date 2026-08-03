@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sl/>\n"
@@ -22,6 +22,9 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Unknown algorithm '%s'"
 msgstr "Nepoznan \"location\""
+
+msgid "Cannot classify an empty set of values"
+msgstr ""
 
 msgid "Classification algorithm failed"
 msgstr ""
@@ -5357,7 +5360,7 @@ msgstr[3] ""
 
 #, fuzzy, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] "\r%d primitivnih enot registriranih      \n"
 msgstr[1] "\r%d primitivnih enot registriranih      \n"
 msgstr[2] ""
