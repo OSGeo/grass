@@ -214,6 +214,7 @@ def setup_runtime_env(gisbase=None, *, env=None):
     """
     from grass.app.runtime import (
         get_grass_config_dir,
+        preload_dynamic_libraries,
         set_dynamic_library_path,
         set_executable_paths,
         set_path_to_python_executable,
@@ -252,6 +253,9 @@ def setup_runtime_env(gisbase=None, *, env=None):
     set_dynamic_library_path(
         variable_name=runtime_paths.ld_library_path_var, install_path=gisbase, env=env
     )
+    # The variable set above applies only to newly started processes, so load
+    # the libraries into the current process for ctypes-based interfaces.
+    preload_dynamic_libraries(install_path=gisbase)
     set_python_path_variable(install_path=gisbase, env=env)
     set_path_to_python_executable(env=env)
 
@@ -305,10 +309,10 @@ def init(
     standard main executable grass. No GRASS modules shall be called before
     call of this function but any module or user script can be called
     afterwards because a GRASS session has been set up. GRASS Python
-    libraries are usable as well in general but the ones using C
-    libraries through ``ctypes`` are not (which is caused by library
-    path not being updated for the current process which is a common
-    operating system limitation).
+    libraries are usable as well, including the ones using C libraries
+    through ``ctypes`` (``grass.lib``) which work because the C libraries
+    are loaded into the current process (operating systems don't apply
+    a modified library search path to an already running process).
 
     When the path or specified mapset does not exist, ValueError is raised.
 
