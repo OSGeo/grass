@@ -1,14 +1,13 @@
 /*
  * r.in.pdal point binning output value calculation
  *
- * Copyright 2011-2015, 2020 by Markus Metz, and the GRASS Development Team
+ * SPDX-FileCopyrightText: 2011-2015, 2020 Markus Metz
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  * Authors:
  *  Markus Metz (r.in.lidar)
  *  Vaclav Petras (move code to separate functions)
  *  Maris Nartiss (refactoring for r.in.pdal)
- *
- * This program is free software licensed under the GPL (>=v2).
- * Read the COPYING file that comes with GRASS for details.
  *
  */
 

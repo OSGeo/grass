@@ -2,9 +2,9 @@
  *    Draws a histogram along the left side of a smooth gradient legend
  *    (stats fetching code adapted from d.histogram)
  *
- *    Copyright (C) 2014 by Hamish Bowman, and the GRASS Development Team*
- *    This program is free software under the GPL (>=v2)
- *    Read the COPYING file that comes with GRASS for details.
+ *    SPDX-FileCopyrightText: 2014 Hamish Bowman
+ *    SPDX-FileCopyrightText: Other GRASS authors
+ *    SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <grass/gis.h>

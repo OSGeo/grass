@@ -1,14 +1,11 @@
 /*
  *  Calculates univariate statistics from the non-null cells
  *
- *   Copyright (C) 2004-2010 by the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2004-2010 Other GRASS authors
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author(s): Soeren Gebbert
  *              Based on r.univar from Hamish Bowman, University of Otago, New
  *              Zealand and Martin Landa zonal loop by Markus Metz
- *
- *      This program is free software under the GNU General Public
- *      License (>=v2). Read the file COPYING that comes with GRASS
- *      for details.
  *
  */
 

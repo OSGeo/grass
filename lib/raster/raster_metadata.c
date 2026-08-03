@@ -4,11 +4,10 @@
    \brief Raster library - Functions to read and write raster "units",
    "semantic label" and "vertical datum" meta-data info
 
-   (C) 2007-2009, 2021 by Hamish Bowman, Maris Nartiss,
-   and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2007-2009, 2021 Hamish Bowman
+   SPDX-FileCopyrightText: 2007-2009, 2021 Maris Nartiss
+   SPDX-FileCopyrightText: Other GRASS authors
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Hamish Bowman
  */

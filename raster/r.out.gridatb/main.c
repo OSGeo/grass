@@ -3,13 +3,11 @@
  *
  * GRIDATB.FOR Author: Keith Beven <k.beven@lancaster.ac.uk>
  *
- *      Copyright (C) 2000 by the GRASS Development Team
+ *      SPDX-FileCopyrightText: 2000 Other GRASS authors
+ *      SPDX-License-Identifier: GPL-2.0-or-later
  *      Author: Huidae Cho <grass4u@gmail.com>
  *              Hydro Laboratory, Kyungpook National University
  *              South Korea
- *
- *      This program is free software under the GPL (>=v2)
- *      Read the file COPYING coming with GRASS for details.
  *
  */
 

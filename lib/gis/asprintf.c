@@ -8,11 +8,9 @@
  * Rewritten by Glynn Clements, Sat, 6 Feb 2010
  * Assumes that vsnprintf() is available
  *
- * (C) 2002-2014 by the GRASS Development Team
- * (C) 2010 by Glynn Clements
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2010 Glynn Clements
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #define _GNU_SOURCE /* enable asprintf */

@@ -1,11 +1,10 @@
 /*
  * r.smooth.edgepreserve
  *
- *   Copyright 2025 by Maris Nartiss, and The GRASS Development Team
+ *   SPDX-FileCopyrightText: 2025 Maris Nartiss
+ *   SPDX-FileCopyrightText: Other GRASS authors
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author: Maris Nartiss
- *
- *   This program is free software licensed under the GPL (>=v2).
- *   Read the COPYING file that comes with GRASS for details.
  *
  */
 

@@ -4,10 +4,9 @@
  * background. With do_bg=0 compute position of all legend graphic item and draw
  * all.
  *
- * Copyright (C) 2016 by Adam Laza, GSoC 2016, and the GRASS Development Team
- *
- * This program is free software under the GPL (>=v2) Read the COPYING
- * file that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2016 Adam Laza, GSoC 2016
+ * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <string.h>

@@ -5,17 +5,13 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
+   SPDX-FileCopyrightText: 1999-2008 Other GRASS authors
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    - added little/big endian test Markus Neteler
    - modified to PPM by Bob Covill <bcovill@tekmap.ns.ca>
    - changed 10/99 Jaro
    - Created new function GS_write_tif based on RGB dump
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
 
    \author Bill Brown USACERL, GMSL/University of Illinois
    \author Markus Neteler
