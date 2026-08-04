@@ -68,9 +68,8 @@ from grass.grassdb.manage import rename_mapset, rename_location
 from grass.pydispatch.signal import Signal
 
 import grass.script as gs
-import grass.temporal as tgis
-from grass.tools import Tools, ToolError
 from grass.script import gisenv
+from grass.tools import Tools, ToolError
 from grass.grassdb.data import map_exists, stds_exists
 from grass.grassdb.checks import (
     get_mapset_owner,
@@ -87,8 +86,11 @@ HAS_MATPLOTLIB = importlib.util.find_spec("matplotlib") is not None
 
 
 def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
-    """Creates dictionary with mapsets, stds, elements, layers for given location.
-    Returns tuple with the dictionary and error (or None)"""
+    """Creates a dictionary containing mapsets, temporal datasets, data elements,
+    and layers for a given location.
+
+    Returns a tuple with the dictionary and an error message (or None if successful).
+    """
     tmp_gisrc_file, env = gs.create_environment(gisdbase, location, "PERMANENT")
     env["GRASS_SKIP_MAPSET_OWNER_CHECK"] = "1"
 
@@ -167,33 +169,41 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
     if tgis_mapsets:
         # We must update os.environ so grass.temporal knows which temporary gisrc to use.
         # This may be removed later when we have the option of passing env to tgis.init()
-        os.environ.update(env)
+        old_env = os.environ.copy()
 
-        tgis.init(raise_fatal_error=True, skip_db_init=True)
+        import grass.temporal as tgis
 
-        dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=",".join(tgis_mapsets))
-        dbif.connect()
+        try:
+            os.environ.update(env)
 
-        stds_by_mapset = tgis.tlist_grouped("stds", group_type=True, dbif=dbif)
-        reg_maps = tgis.registered_maps_grouped(dbif=dbif)
+            tgis.init(raise_fatal_error=True, skip_db_init=True)
 
-        for m_set, types_dict in stds_by_mapset.items():
-            if m_set in maps_dict:
-                maps_dict[m_set].extend(
-                    [
-                        {
-                            "name": d_name,
-                            "type": t_type,
-                            "registered_maps": reg_maps.get(t_type, {}).get(
-                                f"{d_name}@{m_set}", []
-                            ),
-                        }
-                        for t_type, stds_names in types_dict.items()
-                        for d_name in stds_names
-                    ]
-                )
+            dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=",".join(tgis_mapsets))
+            dbif.connect()
 
-        dbif.close()
+            stds_by_mapset = tgis.tlist_grouped("stds", group_type=True, dbif=dbif)
+            reg_maps = tgis.registered_maps_grouped(dbif=dbif)
+
+            for m_set, types_dict in stds_by_mapset.items():
+                if m_set in maps_dict:
+                    maps_dict[m_set].extend(
+                        [
+                            {
+                                "name": d_name,
+                                "type": t_type,
+                                "registered_maps": reg_maps.get(t_type, {}).get(
+                                    f"{d_name}@{m_set}", []
+                                ),
+                            }
+                            for t_type, stds_names in types_dict.items()
+                            for d_name in stds_names
+                        ]
+                    )
+
+            dbif.close()
+        finally:
+            os.environ.clear()
+            os.environ.update(old_env)
 
     queue.put((maps_dict, None))
     gs.try_remove(tmp_gisrc_file)
@@ -828,7 +838,7 @@ class DataCatalogTree(TreeView):
     def GetDbNode(
         self, grassdb, location=None, mapset=None, element_name=None, element_type=None
     ):
-        """Returns node representing db/location/mapset/map(or stds) or None if not found."""
+        """Returns the node representing a database, location, mapset, map, temporal dataset, or None if not found."""
         grassdb_nodes = self._model.SearchNodes(name=grassdb, type="grassdb")
         if grassdb_nodes:
             if not location:
@@ -1860,31 +1870,6 @@ class DataCatalogTree(TreeView):
             for i in range(len(self.selected_layer))
         ]
 
-        # Check which maps are registered in temporal datasets
-        registered_maps = set()
-        status_tools = Tools(errors="ignore", consistent_return_value=True)
-        for i in range(len(self.selected_layer)):
-            map_name = names[i]
-            map_type = self.selected_layer[i].data["type"]
-            gisrc, env = gs.create_environment(
-                self.selected_grassdb[i].data["name"],
-                self.selected_location[i].data["name"],
-                self.selected_mapset[i].data["name"],
-            )
-            try:
-                if (
-                    status_tools.t_info(
-                        type=map_type,
-                        input=map_name,
-                        env=env,
-                        quiet=True,
-                    ).returncode
-                    == 0
-                ):
-                    registered_maps.add(map_name)
-            finally:
-                gs.try_remove(gisrc)
-
         if len(names) == 1:
             question = _("Do you really want to delete map <{m}>?").format(m=names[0])
         elif len(names) <= 10:
@@ -1894,27 +1879,7 @@ class DataCatalogTree(TreeView):
         else:
             question = _("Do you really want to delete {n} maps?").format(n=len(names))
 
-        if registered_maps:
-            if len(registered_maps) == 1:
-                question += "\n\n" + _(
-                    "Warning: Map <{map}> is registered in temporal dataset(s) "
-                    "and will be unregistered first."
-                ).format(map=list(registered_maps)[0])
-            elif len(registered_maps) < 6:
-                question += "\n\n" + _(
-                    "Warning: Maps <{maps}> are registered in temporal dataset(s) "
-                    "and will be unregistered first."
-                ).format(maps=">, <".join(registered_maps))
-            else:
-                question += "\n\n" + _(
-                    "Warning: {n} maps are registered in temporal dataset(s) "
-                    "and will be unregistered first."
-                ).format(n=len(registered_maps))
-            dlg = wx.MessageDialog(self, question, _("Delete map"), wx.YES_NO)
-            dlg.SetYesNoLabels(_("Unregister and delete"), _("Cancel"))
-        else:
-            dlg = wx.MessageDialog(self, question, _("Delete map"), wx.YES_NO)
-
+        dlg = wx.MessageDialog(self, question, _("Delete map"), wx.YES_NO)
         if dlg.ShowModal() != wx.ID_YES:
             dlg.Destroy()
             return
@@ -1932,24 +1897,6 @@ class DataCatalogTree(TreeView):
                 self.selected_location[i].data["name"],
                 self.selected_mapset[i].data["name"],
             )
-
-            # Unregister from temporal database before deleting
-            if names[i] in registered_maps:
-                map_type = self.selected_layer[i].data["type"]
-                try:
-                    self.tools.t_unregister(
-                        type=map_type,
-                        maps=names[i],
-                        env=env,
-                        quiet=True,
-                    )
-                except ToolError as e:
-                    Debug.msg(
-                        1,
-                        "Failed to unregister {name}: {err}".format(
-                            name=names[i], err=e
-                        ),
-                    )
 
             removed, cmd = self._runCommand(
                 "g.remove",

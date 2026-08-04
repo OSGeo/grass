@@ -814,9 +814,12 @@ class GConsole(wx.EvtHandler):
             return
 
         name = task.get_name()
+        stds_prompts = {"stds", "strds", "stvds", "str3ds"}
         for p in task.get_options()["params"]:
             prompt = p.get("prompt", "")
-            if prompt in {"raster", "vector", "raster_3d"} and p.get("value", None):
+            if prompt in {"raster", "vector", "raster_3d"} | stds_prompts and p.get(
+                "value", None
+            ):
                 if p.get("age", "old") == "new" or name in {
                     "r.colors",
                     "r3.colors",
@@ -837,17 +840,32 @@ class GConsole(wx.EvtHandler):
                     for lname in lnames:
                         if "@" not in lname:
                             lname += "@" + gs.gisenv()["MAPSET"]
-                        if gs.find_file(lname, element=p.get("element"))["fullname"]:
-                            self.mapCreated.emit(
-                                name=lname, ltype=prompt, add=event.addLayer
+                        map_name, map_mapset = lname.split("@", 1)
+
+                        # For STDS use stds_exists, not find_file
+                        if prompt in stds_prompts:
+                            from grass.grassdb.data import stds_exists
+
+                            exists = stds_exists(map_name, prompt, map_mapset)
+                        else:
+                            exists = bool(
+                                gs.find_file(lname, element=p.get("element"))[
+                                    "fullname"
+                                ]
                             )
+
+                        if exists:
+                            if prompt not in stds_prompts:
+                                self.mapCreated.emit(
+                                    name=lname, ltype=prompt, add=event.addLayer
+                                )
                             gisenv = gs.gisenv()
                             self._giface.grassdbChanged.emit(
                                 grassdb=gisenv["GISDBASE"],
                                 location=gisenv["LOCATION_NAME"],
                                 mapset=gisenv["MAPSET"],
                                 action="new",
-                                map=lname.split("@")[0],
+                                map=map_name,
                                 element=prompt,
                             )
         if name == "r.mask":
