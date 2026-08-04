@@ -37,7 +37,7 @@ def _parse_id(ident: str) -> tuple[str, str | None, str | None, str | None]:
 
     :param ident: The id of a space time dataset
 
-    :return: Tuple with ID componenets: name, mapset, semantic_lablel, layer
+    :return: Tuple with ID components: name, mapset, semantic_label, layer
     """
     name = ident
 
@@ -66,7 +66,7 @@ def open_old_stds(name, type, dbif=None):
     :param name: The name of the space time dataset, if the name does not
                  contain the mapset (name@mapset) then the space time dataset
                  is searched first in the current mapset, then on the search
-                 path. The mapset of the first match  will be used to identify
+                 path. The mapset of the first match will be used to identify
                  the space time dataset.
     :param type: The type of the space time dataset (strd, str3ds, stvds,
                  raster, vector, raster3d)
