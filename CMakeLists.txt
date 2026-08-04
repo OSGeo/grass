@@ -209,38 +209,11 @@ if(WITH_FHS)
             ${RUNTIME_GISBASE}/demolocation
         SYMBOLIC
     )
-    file(
-        CREATE_LINK ${OUTDIR}/${GRASS_INSTALL_FONTSDIR} ${RUNTIME_GISBASE}/fonts
-        SYMBOLIC
-    )
+    file(MAKE_DIRECTORY "${RUNTIME_GISBASE}/gui/wxpython")
     file(
         CREATE_LINK
-            ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/colors
-            ${RUNTIME_GISBASE}/etc/colors
-        SYMBOLIC
-    )
-    file(
-        CREATE_LINK
-            ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/colors.desc
-            ${RUNTIME_GISBASE}/etc/colors.desc
-        SYMBOLIC
-    )
-    file(
-        CREATE_LINK
-            ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/element_list
-            ${RUNTIME_GISBASE}/etc/element_list
-        SYMBOLIC
-    )
-    file(
-        CREATE_LINK
-            ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/renamed_options
-            ${RUNTIME_GISBASE}/etc/renamed_options
-        SYMBOLIC
-    )
-    file(
-        CREATE_LINK
-            ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/VERSIONNUMBER
-            ${RUNTIME_GISBASE}/etc/VERSIONNUMBER
+            ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/wxpython/xml
+            ${RUNTIME_GISBASE}/gui/wxpython/xml
         SYMBOLIC
     )
 endif()
@@ -286,6 +259,17 @@ if(WIN32)
         "GISRC=${GISRC}"
         "LC_ALL=C"
         "LANG=C"
+        "GRASS_COLORSDIR=${RUNTIME_GRASS_COLORSDIR}"
+        "GRASS_DOCDIR=${RUNTIME_GRASS_DOCDIR}"
+        "GRASS_ETCDIR=${RUNTIME_GRASS_ETCDIR}"
+        "GRASS_FONTSDIR=${RUNTIME_GRASS_FONTSDIR}"
+        "GRASS_GRAPHICSDIR=${RUNTIME_GRASS_GRAPHICSDIR}"
+        "GRASS_GUIRESDIR=${RUNTIME_GRASS_GUIRESDIR}"
+        "GRASS_GUISCRIPTDIR=${RUNTIME_GRASS_GUISCRIPTDIR}"
+        "GRASS_GUIWXDIR=${GUI_WXPYTHON_DIR}"
+        "GRASS_LOCALEDIR=${RUNTIME_GRASS_LOCALEDIR}"
+        "GRASS_MISCDIR=${RUNTIME_GRASS_MISCDIR}"
+        "GRASS_MKDOCSDIR=${RUNTIME_GRASS_MKDOCSDIR}"
         "ARCH=${BUILD_ARCH}"
         "ARCH_DISTDIR=${RUN_GISBASE_NATIVE}"
         "LANGUAGE=C"
@@ -310,6 +294,17 @@ else()
         "GISRC=${GISRC}"
         "LC_ALL=C"
         "LANG=C"
+        "GRASS_COLORSDIR=${RUNTIME_GRASS_COLORSDIR}"
+        "GRASS_DOCDIR=${RUNTIME_GRASS_DOCDIR}"
+        "GRASS_ETCDIR=${RUNTIME_GRASS_ETCDIR}"
+        "GRASS_FONTSDIR=${RUNTIME_GRASS_FONTSDIR}"
+        "GRASS_GRAPHICSDIR=${RUNTIME_GRASS_GRAPHICSDIR}"
+        "GRASS_GUIRESDIR=${RUNTIME_GRASS_GUIRESDIR}"
+        "GRASS_GUISCRIPTDIR=${RUNTIME_GRASS_GUISCRIPTDIR}"
+        "GRASS_GUIWXDIR=${GUI_WXPYTHON_DIR}"
+        "GRASS_LOCALEDIR=${RUNTIME_GRASS_LOCALEDIR}"
+        "GRASS_MISCDIR=${RUNTIME_GRASS_MISCDIR}"
+        "GRASS_MKDOCSDIR=${RUNTIME_GRASS_MKDOCSDIR}"
         "ARCH=${BUILD_ARCH}"
         "ARCH_DISTDIR=${RUN_GISBASE_NATIVE}"
         "LANGUAGE=C"
@@ -388,23 +383,29 @@ add_custom_target(
     ALL
     COMMAND
         ${CMAKE_COMMAND} -E make_directory
-        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+        ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/colortables
     COMMAND
         ${grass_env_command} ${PYTHON_EXECUTABLE} ${THUMBNAILS_PY}
-        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+        ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/colortables
     COMMAND
         ${CMAKE_COMMAND} -E copy_directory
-        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+        ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/colortables
         ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/colortables
-    BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
+    BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/colortables
     COMMENT "Creating thumbnails"
     DEPENDS ALL_MODULES
 )
 set_target_properties(r_colors_thumbnails PROPERTIES FOLDER Misc)
 install(
-    DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/colortables
-    DESTINATION ${GRASS_INSTALL_DOCDIR}
+    DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/colortables
+    DESTINATION ${GRASS_INSTALL_GRAPHICSDIR}
 )
+if(WITH_FHS AND WITH_DOCS)
+    install(
+        DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/colortables
+        DESTINATION ${GRASS_INSTALL_DOCDIR}
+    )
+endif()
 
 set(misc_files
     AUTHORS

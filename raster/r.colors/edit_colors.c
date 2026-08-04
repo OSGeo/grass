@@ -471,7 +471,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
             /* check if this style is a percentage style */
             /* don't bother with native dirsep as not needed for backwards
              * compatibility */
-            snprintf(path, GPATH_MAX, "%s/etc/colors/%s", G_gisbase(), style);
+            snprintf(path, GPATH_MAX, "%s/%s", G_colors_dir(), style);
             rule_is_percent = check_percent_rule(path);
             do_scale = 1;
         }
@@ -491,7 +491,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
 
             /* don't bother with native dirsep as not needed for backwards
              * compatibility */
-            snprintf(path, GPATH_MAX, "%s/etc/colors/%s", G_gisbase(), rules);
+            snprintf(path, GPATH_MAX, "%s/%s", G_colors_dir(), rules);
 
             if (!Rast_load_fp_colors(&colors, path, min, max))
                 G_fatal_error(_("Unable to load rules file <%s>"), rules);
