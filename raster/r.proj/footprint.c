@@ -187,51 +187,6 @@ void fg_span(const struct footprint_grid *g, int obr0, int obr1, int obc0,
     *imax = hi;
 }
 
-/* Find the tallest band at obr0 whose strip and output still fit the cap, and
- * never return less than one row. */
-int fg_band_height(const struct footprint_grid *g, int obr0, size_t cap_bytes,
-                   int out_mult, int cell_size, int in_cols)
-{
-    double rmin = DBL_MAX, rmax = -DBL_MAX;
-    int max_h = g->grows - obr0, accepted = 1, h, b;
-
-    for (h = 0; h < max_h; h++) {
-        int r = obr0 + h, strip_rows;
-        size_t strip_bytes, out_bytes;
-
-        for (b = 0; b < g->nb; b++) {
-            const struct fg_cell *cell = &g->cell[(size_t)r * g->nb + b];
-
-            if (cell->rmax < cell->rmin)
-                continue;
-            if (cell->rmin < rmin)
-                rmin = cell->rmin;
-            if (cell->rmax > rmax)
-                rmax = cell->rmax;
-        }
-        if (rmax < rmin) {
-            strip_rows = 0;
-        }
-        else {
-            int lo = (int)floor(rmin) - 2;
-            int hi = (int)floor(rmax) + 2;
-
-            if (lo < 0)
-                lo = 0;
-            if (hi > g->irows - 1)
-                hi = g->irows - 1;
-            strip_rows = hi - lo + 1;
-        }
-        strip_bytes =
-            strip_rows > 0 ? (size_t)strip_rows * in_cols * cell_size : 0;
-        out_bytes = (size_t)(h + 1) * g->ocols * cell_size;
-        if (!(strip_bytes + out_mult * out_bytes <= cap_bytes))
-            break;
-        accepted = h + 1;
-    }
-    return accepted;
-}
-
 /* Number of column blocks in the grid. */
 int fg_num_blocks(const struct footprint_grid *g)
 {
@@ -262,17 +217,15 @@ static int worst_ktile_rows(const struct footprint_grid *g, int obr0, int obr1,
     return worst;
 }
 
-/* Widest tile in whole blocks whose worst strip and the output still fit the
- * cap, or zero when even one block per tile busts. Reports the worst single
- * block strip for the caller message. */
-int fg_tile_blocks(const struct footprint_grid *g, int obr0, int obr1,
-                   size_t cap_bytes, int out_mult, int cell_size, int in_cols,
-                   int *worst_block_rows)
+/* Widest tile in whole blocks whose worst strip and the output fit the cap, or
+ * zero when even one block per tile busts. */
+static int tile_blocks_for_band(const struct footprint_grid *g, int obr0,
+                                int obr1, size_t cap_bytes, int out_mult,
+                                int cell_size, int in_cols)
 {
     size_t out_bytes = (size_t)(obr1 - obr0) * g->ocols * cell_size;
     int k;
 
-    *worst_block_rows = worst_ktile_rows(g, obr0, obr1, 1);
     if (out_mult * out_bytes > cap_bytes)
         return 0;
     for (k = g->nb; k >= 1; k--) {
@@ -284,6 +237,61 @@ int fg_tile_blocks(const struct footprint_grid *g, int obr0, int obr1,
             return k;
     }
     return 0;
+}
+
+/* Grows the band height by doubling, preferring full-width bands and tiling
+ * only when even one full-width row busts the cap, and takes the last fitting
+ * height with its widest tile. Reports the finest tile strip the fallback
+ * message needs and returns zero when even one tiled row busts. */
+int fg_band_geometry(const struct footprint_grid *g, int obr0, size_t cap_bytes,
+                     int out_mult, int cell_size, int in_cols,
+                     int *tile_blocks_out, int *worst_block_rows)
+{
+    int remaining = g->grows - obr0;
+    int best_h = 0, best_k = 0, h_cand;
+
+    *worst_block_rows = worst_ktile_rows(g, obr0, obr0 + 1, 1);
+
+    /* Prefer full-width bands, growing the height while the whole row still
+     * fits the cap as a single tile. */
+    for (h_cand = 1;; h_cand *= 2) {
+        int h = h_cand < remaining ? h_cand : remaining;
+        int worst = worst_ktile_rows(g, obr0, obr0 + h, g->nb);
+        size_t strip_bytes =
+            worst > 0 ? (size_t)worst * in_cols * cell_size : 0;
+        size_t out_bytes = (size_t)h * g->ocols * cell_size;
+
+        if (strip_bytes + out_mult * out_bytes > cap_bytes)
+            break;
+        best_h = h;
+        if (h == remaining)
+            break;
+    }
+    if (best_h > 0) {
+        *tile_blocks_out = g->nb;
+        return best_h;
+    }
+
+    /* One full-width row busts the cap, so grow while the exhaustive scan finds
+     * any fitting whole-block tile. */
+    for (h_cand = 1;; h_cand *= 2) {
+        int h = h_cand < remaining ? h_cand : remaining;
+        int k = tile_blocks_for_band(g, obr0, obr0 + h, cap_bytes, out_mult,
+                                     cell_size, in_cols);
+
+        if (k == 0)
+            break;
+        best_h = h;
+        best_k = k;
+        if (h == remaining)
+            break;
+    }
+    if (best_h == 0) {
+        *tile_blocks_out = 0;
+        return 0;
+    }
+    *tile_blocks_out = best_k;
+    return best_h;
 }
 
 /* Widens every non-empty cell by the sampling margin. */
