@@ -32,13 +32,14 @@ from .factory import dataset_factory
 ###############################################################################
 
 
-def _parse_id(ident: str) -> tuple[str, str | None, str | None, str | None]:
+def _parse_id(ident: str) -> tuple[str, str | None, str | None]:
     """Parse parts of a user given dataset name.
 
     :param ident: The id of a space time dataset
 
-    :return: Tuple with ID components: name, mapset, semantic_label, layer
+    :return: Tuple with ID components: name, mapset, semantic_label
     """
+    msgr = get_tgis_message_interface()
     name = ident
 
     mapset = None
@@ -48,11 +49,10 @@ def _parse_id(ident: str) -> tuple[str, str | None, str | None, str | None]:
     semantic_label = None
     if "." in name:
         name, semantic_label = name.split(".", 1)
+        if "." in semantic_label:
+            msgr.fatal(_("Invalid semantic_label <%s>") % semantic_label)
 
-    layer = None
-    if ":" in name:
-        name, layer = name.split(":", 1)
-    return name, mapset, semantic_label, layer
+    return name, mapset, semantic_label
 
 
 def open_old_stds(name, type, dbif=None):
@@ -107,13 +107,13 @@ def open_old_stds(name, type, dbif=None):
             if semantic_label:
                 sp.set_semantic_label(semantic_label)
 
-        with contextlib.suppress(Exception):
+        with contextlib.suppress(SystemExit):
             if sp.is_in_db(dbif):
                 return sp
         return None
 
     # Check if the dataset name contains the mapset and the semantic label as well
-    name, mapset, semantic_label, _layer = _parse_id(name)
+    name, mapset, semantic_label = _parse_id(name)
 
     dbif, connection_state_changed = init_dbif(dbif)
 
@@ -177,10 +177,9 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
     stds_type = type
     # Get the current mapset to create the id of the space time dataset
 
-    mapset = get_current_mapset()
     msgr = get_tgis_message_interface()
 
-    name, mapset, _semantic_label, _layer = _parse_id(name)
+    name, mapset, _semantic_label = _parse_id(name)
     if mapset:
         if mapset != get_current_mapset():
             msgr.fatal(
@@ -191,11 +190,6 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
         id = f"{name}@{get_current_mapset()}"
 
     if stds_type in {"strds", "rast", "raster"}:
-        if "." in name:
-            # a dot is used as a separator for semantic label filtering
-            msgr.fatal(
-                _("Illegal dataset name <{}>. Character '.' not allowed.").format(name),
-            )
         sp = dataset_factory("strds", id)
     elif stds_type in {"str3ds", "raster3d", "rast3d ", "raster_3d"}:
         sp = dataset_factory("str3ds", id)
