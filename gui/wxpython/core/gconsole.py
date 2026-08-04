@@ -743,8 +743,9 @@ class GConsole(wx.EvtHandler):
     def OnCmdDone(self, event):
         """Command done (or aborted)
 
-        Sends signal mapCreated if map is recognized in output
-        parameters or for specific modules (as r.colors).
+        Sends signal mapCreated if map is recognized in output parameters.
+        Sends signal grassdbChanged if a temporal dataset (STDS) is modified
+        or created. Also handles explicitly tracked modules (e.g., r.colors, t.register).
         """
         # Process results here
         try:
@@ -814,6 +815,8 @@ class GConsole(wx.EvtHandler):
             return
 
         name = task.get_name()
+        # Defines all possible parameter prompts associated with space-time datasets.
+        # This allows us to intercept STDS creations/modifications alongside standard maps.
         stds_prompts = {"stds", "strds", "stvds", "str3ds"}
         for p in task.get_options()["params"]:
             prompt = p.get("prompt", "")
@@ -826,6 +829,8 @@ class GConsole(wx.EvtHandler):
                     "v.colors",
                     "v.proj",
                     "r.proj",
+                    "t.register",
+                    "t.unregister",
                 }:
                     # if multiple maps (e.g. r.series.interp), we need add each
                     if p.get("multiple", False):
@@ -840,13 +845,23 @@ class GConsole(wx.EvtHandler):
                     for lname in lnames:
                         if "@" not in lname:
                             lname += "@" + gs.gisenv()["MAPSET"]
-                        map_name, map_mapset = lname.split("@", 1)
+                        element_name, element_mapset = lname.split("@", 1)
 
                         # For STDS use stds_exists, not find_file
                         if prompt in stds_prompts:
                             from grass.grassdb.data import stds_exists
 
-                            exists = stds_exists(map_name, prompt, map_mapset)
+                            if prompt == "stds":
+                                exists = False
+                                for t in ("strds", "stvds", "str3ds"):
+                                    if stds_exists(element_name, t, element_mapset):
+                                        prompt = t
+                                        exists = True
+                                        break
+                            else:
+                                exists = stds_exists(
+                                    element_name, prompt, element_mapset
+                                )
                         else:
                             exists = bool(
                                 gs.find_file(lname, element=p.get("element"))[
@@ -865,7 +880,7 @@ class GConsole(wx.EvtHandler):
                                 location=gisenv["LOCATION_NAME"],
                                 mapset=gisenv["MAPSET"],
                                 action="new",
-                                map=map_name,
+                                map=element_name,
                                 element=prompt,
                             )
         if name == "r.mask":

@@ -44,6 +44,7 @@ from core.treemodel import TreeModel, DictFilterNode
 from grass.script.utils import naturally_sort
 from gui_core.treeview import TreeView
 from gui_core.wrap import Menu
+from gui_core.forms import GUI
 from datacatalog.dialogs import CatalogReprojectionDialog
 from icons.icon import MetaIcon
 from core.settings import UserSettings
@@ -1335,20 +1336,7 @@ class DataCatalogTree(TreeView):
 
     def OnCreateStds(self, event):
         """Launch t.create dialog to create a new temporal dataset"""
-        mapset_node = self.selected_mapset[0]
-
-        self._giface.RunCmd(
-            ["t.create", "--ui"],
-            onDone=lambda e: wx.CallAfter(
-                lambda: self._giface.grassdbChanged.emit(
-                    grassdb=mapset_node.parent.parent.data["name"],
-                    location=mapset_node.parent.data["name"],
-                    mapset=mapset_node.data["name"],
-                    element="strds",
-                    action="new",
-                )
-            ),
-        )
+        GUI(parent=self, giface=self._giface).ParseCommand(cmd=["t.create"])
 
     def CreateLocation(self, grassdb_node):
         """
@@ -1996,10 +1984,9 @@ class DataCatalogTree(TreeView):
 
         cmd = {"strds": "t.rast.export", "stvds": "t.vect.export"}.get(stds_type)
         if cmd:
-            self._giface.RunCmd(
-                [
+            GUI(parent=self, giface=self._giface).ParseCommand(
+                cmd=[
                     cmd,
-                    "--ui",
                     f"input={stds_node.data['name']}@{mapset_node.data['name']}",
                 ]
             )
@@ -2539,42 +2526,28 @@ class DataCatalogTree(TreeView):
         """Launch t.register dialog pre-filled with selected dataset"""
         stds_node = self.selected_stds[0]
         mapset_node = self.selected_mapset[0]
-        stds_type = STDS_TO_MAP_TYPE[stds_node.data["type"]]
+        map_type = STDS_TO_MAP_TYPE[stds_node.data["type"]]
 
-        self._giface.RunCmd(
-            [
+        GUI(parent=self, giface=self._giface).ParseCommand(
+            cmd=[
                 "t.register",
-                "--ui",
                 f"input={stds_node.data['name']}@{mapset_node.data['name']}",
-                f"type={stds_type}",
-            ],
-            onDone=lambda e: wx.CallAfter(
-                lambda: (
-                    self._reloadMapsetNode(mapset_node),
-                    self.RefreshNode(mapset_node, recursive=True),
-                )
-            ),
+                f"type={map_type}",
+            ]
         )
 
     def OnUnregisterStds(self, event):
         """Launch t.unregister dialog pre-filled with selected dataset"""
         stds_node = self.selected_stds[0]
         mapset_node = self.selected_mapset[0]
-        stds_type = STDS_TO_MAP_TYPE[stds_node.data["type"]]
+        map_type = STDS_TO_MAP_TYPE[stds_node.data["type"]]
 
-        self._giface.RunCmd(
-            [
+        GUI(parent=self, giface=self._giface).ParseCommand(
+            cmd=[
                 "t.unregister",
-                "--ui",
                 f"input={stds_node.data['name']}@{mapset_node.data['name']}",
-                f"type={stds_type}",
-            ],
-            onDone=lambda e: wx.CallAfter(
-                lambda: (
-                    self._reloadMapsetNode(mapset_node),
-                    self.RefreshNode(mapset_node, recursive=True),
-                )
-            ),
+                f"type={map_type}",
+            ]
         )
 
     def OnUnregisterStdsMap(self, event):
@@ -2665,10 +2638,9 @@ class DataCatalogTree(TreeView):
         mapset_node = self.selected_mapset[0]
         stds_type = stds_node.data["type"]
 
-        self._giface.RunCmd(
-            [
+        GUI(parent=self, giface=self._giface).ParseCommand(
+            cmd=[
                 "t.support",
-                "--ui",
                 f"input={stds_node.data['name']}@{mapset_node.data['name']}",
                 f"type={stds_type}",
             ]
@@ -2684,23 +2656,13 @@ class DataCatalogTree(TreeView):
             return
 
         stds_type = list(stds_types)[0]
-        mapset_node = self.selected_mapset[0]
         inputs = [
             f"{n.data['name']}@{m.data['name']}"
             for n, m in zip(self.selected_stds, self.selected_mapset, strict=True)
         ]
 
-        self._giface.RunCmd(
-            ["t.merge", "--ui", f"inputs={','.join(inputs)}", f"type={stds_type}"],
-            onDone=lambda e: wx.CallAfter(
-                lambda: self._giface.grassdbChanged.emit(
-                    grassdb=mapset_node.parent.parent.data["name"],
-                    location=mapset_node.parent.data["name"],
-                    mapset=mapset_node.data["name"],
-                    element=stds_type,
-                    action="new",
-                )
-            ),
+        GUI(parent=self, giface=self._giface).ParseCommand(
+            cmd=["t.merge", f"inputs={','.join(inputs)}", f"type={stds_type}"]
         )
 
     def OnReloadGrassdb(self, event):
