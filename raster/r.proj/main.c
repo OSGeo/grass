@@ -929,64 +929,52 @@ int main(int argc, char **argv)
     int pending_r0 = 0, pending_r1 = 0;
     int obr0 = 0;
     while (obr0 < outcellhd.rows) {
-        /* Size this band. Take the tallest full-width band that fits, and when
-         * even one full-width row does not fit split it into whole column
-         * blocks and take the widest tile that fits. */
+        /* Co-size this band's height and tile width from the grid. A zero
+         * height means even one row busts the cap so the run finishes from obr0
+         * on the serial tile-cache path. */
         double ts = rproj_wtime();
         int imin = 0, imax = -1;
+        int tile_blocks = 0, worst_block_rows = 0;
         int band_orows =
             force_tilecache
-                ? 1
-                : fg_band_height(band_grid, obr0, cap_bytes, out_mult,
-                                 cell_size, incellhd.cols);
-        int tile_blocks = fg_num_blocks(band_grid);
-        if (band_orows == 1) {
-            int worst_block_rows = 0;
-
-            tile_blocks =
-                force_tilecache
-                    ? 0
-                    : fg_tile_blocks(band_grid, obr0, obr0 + band_orows,
-                                     cap_bytes, out_mult, cell_size,
-                                     incellhd.cols, &worst_block_rows);
-            if (tile_blocks == 0) {
-                /* Even the finest tiling busts the cap, so finish from obr0 on
-                 * the serial tile-cache path. */
-                if (force_tilecache) {
-                    G_warning(
-                        _("R_PROJ_FORCE_TILECACHE is set: taking the serial "
-                          "tile-cache path for all output rows (testing "
-                          "override)."));
-                }
-                else {
-                    size_t out1 = (size_t)outcellhd.cols * cell_size;
-                    size_t strip_bytes = worst_block_rows > 0
-                                             ? (size_t)worst_block_rows *
-                                                   incellhd.cols * cell_size
-                                             : 0;
-                    int needed_mb = (int)ceil((double)(strip_bytes + out1) /
-                                              (1024.0 * 1024.0)) +
-                                    1;
-                    G_warning(
-                        _("Memory cap (%.1f MB) is below what one output row "
-                          "needs (input footprint %d rows, %.1f MB). Falling "
-                          "back to the serial tile-cache path for output rows "
-                          "%d-%d; this path is slower. Raise memory= to at "
-                          "least %d MB to use the parallel path."),
-                        cap_mb, worst_block_rows,
-                        (double)(strip_bytes + out1) / (1024.0 * 1024.0), obr0,
-                        outcellhd.rows - 1, needed_mb);
-                }
-                /* Flush the deferred band before the fallback writes from obr0
-                 * in order. */
-                flush_pending_band(fdo, cell_type, outcellhd.cols, cell_size,
-                                   &pending_out, pending_r0, pending_r1);
-                fallback_serial_cache(fdi, fdo, cell_type, method, &oproj,
-                                      &iproj, &tproj, &incellhd, &outcellhd,
-                                      y_center, obr0, memory->answer);
-                used_fallback = 1;
-                goto fallback_done;
+                ? 0
+                : fg_band_geometry(band_grid, obr0, cap_bytes, out_mult,
+                                   cell_size, incellhd.cols, &tile_blocks,
+                                   &worst_block_rows);
+        if (band_orows == 0) {
+            if (force_tilecache) {
+                G_warning(_("R_PROJ_FORCE_TILECACHE is set: taking the serial "
+                            "tile-cache path for all output rows (testing "
+                            "override)."));
             }
+            else {
+                size_t out1 = (size_t)outcellhd.cols * cell_size;
+                size_t strip_bytes =
+                    worst_block_rows > 0
+                        ? (size_t)worst_block_rows * incellhd.cols * cell_size
+                        : 0;
+                int needed_mb = (int)ceil((double)(strip_bytes + out1) /
+                                          (1024.0 * 1024.0)) +
+                                1;
+                G_warning(
+                    _("Memory cap (%.1f MB) is below what one output row "
+                      "needs (input footprint %d rows, %.1f MB). Falling "
+                      "back to the serial tile-cache path for output rows "
+                      "%d-%d; this path is slower. Raise memory= to at "
+                      "least %d MB to use the parallel path."),
+                    cap_mb, worst_block_rows,
+                    (double)(strip_bytes + out1) / (1024.0 * 1024.0), obr0,
+                    outcellhd.rows - 1, needed_mb);
+            }
+            /* Flush the deferred band before the fallback writes from obr0 in
+             * order. */
+            flush_pending_band(fdo, cell_type, outcellhd.cols, cell_size,
+                               &pending_out, pending_r0, pending_r1);
+            fallback_serial_cache(fdi, fdo, cell_type, method, &oproj, &iproj,
+                                  &tproj, &incellhd, &outcellhd, y_center, obr0,
+                                  memory->answer);
+            used_fallback = 1;
+            goto fallback_done;
         }
         t_size += rproj_wtime() - ts;
 
