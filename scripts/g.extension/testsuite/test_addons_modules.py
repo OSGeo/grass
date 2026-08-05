@@ -188,7 +188,7 @@ class TestModulesWxGuiToolsTreeAddonsNodeAddonsRegistration(TestCase):
             self.parse_wxgui_tools_tree_addons_modules_xml_file(),
         )
 
-    def test_simple_multi_addons_registration(self):
+    def test_multi_addons_registration(self):
         """Testing if multi addona are registered in the wxGUI Tools tree Addons node
         if it is used addons custom base dir
         """
