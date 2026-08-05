@@ -1,5 +1,7 @@
 """Tests of g.gisenv"""
 
+import pathlib
+
 import pytest
 
 from grass.tools import ToolError
@@ -80,3 +82,27 @@ def test_store_mapset_is_separate_from_gisrc(tools):
         tools.g_gisenv(get="TESTVAR")
 
     assert tools.g_gisenv(get="TESTVAR", store="mapset").text == "hello"
+
+
+def test_set_stores_variable_in_gisrc_file(tools, session):
+    """set= (default store=gisrc) writes the variable into the session's gisrc file"""
+    tools.g_gisenv(set="FOO=bar")
+
+    gisrc_file = pathlib.Path(session.env["GISRC"])
+
+    assert gisrc_file.exists()
+    assert "FOO: bar" in gisrc_file.read_text(encoding="utf-8")
+
+
+def test_set_store_mapset_stores_variable_in_var_file(tools):
+    """store=mapset writes the variable into the mapset's VAR file on disk"""
+    gisdbase = tools.g_gisenv(get="GISDBASE").text
+    location = tools.g_gisenv(get="LOCATION_NAME").text
+    mapset = tools.g_gisenv(get="MAPSET").text
+
+    tools.g_gisenv(set="TESTVAR=hello", store="mapset")
+
+    var_file = pathlib.Path(gisdbase, location, mapset, "VAR")
+
+    assert var_file.exists()
+    assert "TESTVAR: hello" in var_file.read_text(encoding="utf-8")
