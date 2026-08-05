@@ -68,6 +68,32 @@ def test_set_and_read_time_of_day(session_tools, raster, time_of_day):
     assert result.text == f"18 Feb 2005 {time_of_day}"
 
 
+@pytest.mark.parametrize("time_of_day", ["00:00", "12:00"], ids=["midnight", "noon"])
+def test_set_and_read_midnight_and_noon(session_tools, raster, time_of_day):
+    """Midnight and noon round-trip correctly
+
+    These are the two hours where a naive 24h-to-12h conversion classically
+    breaks (0 % 12 == 12 % 12 == 0), so they are worth pinning down
+    explicitly rather than relying on an arbitrary hour value.
+    """
+    date = f"18 feb 2005 {time_of_day}"
+    session_tools.r_timestamp(map=raster, date=date)
+    result = session_tools.r_timestamp(map=raster)
+    assert result.text == f"18 Feb 2005 {time_of_day}"
+
+
+@pytest.mark.parametrize("date", ["18 feb 2005 2:30 pm", "18 feb 2005 02:30 PM"])
+def test_twelve_hour_am_pm_suffix_is_rejected(session_tools, raster, date):
+    """12-hour clock notation with an am/pm suffix is not accepted
+
+    The timestamp format is documented as 24-hour only (hour 0-23). This
+    guards against a future change silently accepting am/pm notation and
+    misinterpreting it.
+    """
+    with pytest.raises(ToolError):
+        session_tools.r_timestamp(map=raster, date=date)
+
+
 @pytest.mark.parametrize("timezone", ["+0100", "-0500"])
 def test_set_and_read_timezone(session_tools, raster, timezone):
     """A timezone offset on a timestamp round-trips correctly
