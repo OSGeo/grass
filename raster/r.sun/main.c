@@ -1806,10 +1806,12 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
         setTimeOffset(0.);
     }
     int shadowoffset_base = shadowoffset;
+    GProgressContext *ctx = G_progress_context_create(m, 2);
 
     for (j = 0; j < m; j++) {
+#ifndef G_USE_PROGRESS_NG
         G_percent(j, m - 1, 2);
-
+#endif
         if (j % (numRows) == 0) {
             INPUT_part(j, &zmax);
             arrayOffset = 0;
@@ -2008,7 +2010,9 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
             }
         }
         arrayOffset++;
+        G_progress_update(ctx);
     }
+    G_progress_context_destroy(ctx);
 
     /* re-use &hist, but try all to initiate it for any case */
     /*   note this will result in incorrect map titles       */
