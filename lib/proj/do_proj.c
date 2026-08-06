@@ -1414,3 +1414,46 @@ int pj_do_transform(int count, double *x, double *y, double *h,
     }
     return ok;
 }
+
+/*!
+ * \brief Clone a transform into a fresh per-thread PROJ context
+ *
+ * PROJ transformation objects are not safe for concurrent use, so each thread
+ * needs its own. This fills \p clone with a copy of \p src whose PJ is cloned
+ * into a new private context. Release it with GPJ_free_transform_clone().
+ *
+ * Safe to call concurrently from multiple threads with the same \p src,
+ * provided \p src is not modified during the calls. Each call clones into its
+ * own new context and touches no shared mutable state.
+ *
+ * \param src source transform (as set up by GPJ_init_transform())
+ * \param[out] clone receives the per-thread clone (info plus private context)
+ */
+void GPJ_clone_transform(const struct pj_info *src,
+                         struct gpj_transform_clone *clone)
+{
+    clone->ctx = proj_context_create();
+    /* A failed context leaves the thread with no usable transform, so this
+     * aborts the run. */
+    if (clone->ctx == NULL)
+        G_fatal_error(_("proj_context_create() failed for a per-thread "
+                        "transform clone"));
+    clone->info = *src;
+    clone->info.pj = proj_clone(clone->ctx, src->pj);
+    if (clone->info.pj == NULL)
+        G_fatal_error(_("proj_clone() failed for a per-thread transform "
+                        "clone"));
+}
+
+/*!
+ * \brief Free a per-thread transform clone and its context
+ *
+ * \param clone clone filled by GPJ_clone_transform(); its cloned PJ is set to
+ *              NULL after release
+ */
+void GPJ_free_transform_clone(struct gpj_transform_clone *clone)
+{
+    proj_destroy(clone->info.pj);
+    proj_context_destroy(clone->ctx);
+    clone->info.pj = NULL;
+}

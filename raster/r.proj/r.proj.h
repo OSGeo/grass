@@ -27,6 +27,11 @@ struct cache {
 typedef void (*func)(struct cache *, void *, int, double, double,
                      struct Cell_head *);
 
+/* Strip interpolation kernels (interp_strip.c) read the input rows imin to imax
+ * from a strip held in memory, and take imin/imax in place of struct cache. */
+typedef void (*strip_func)(void *, void *, int, double, double,
+                           struct Cell_head *, int, int);
+
 struct menu {
     func method; /* routine to interpolate new value      */
     char *name;  /* method name                           */
@@ -34,6 +39,33 @@ struct menu {
 };
 
 enum OutputFormat { PLAIN, SHELL, JSON };
+
+/* Geographic poles that land inside the output map, each stored as its output
+ * position and its input row. Empty when no pole lands inside. */
+struct pole_set {
+    int n;               /* active poles, 0 to 2 */
+    double ox[2], oy[2]; /* pole coordinates in the output CRS */
+    double pole_row[2];  /* pole input row index */
+};
+
+/* Footprint grid of input row spans for the output map, built in footprint.c.
+ */
+struct footprint_grid;
+extern struct footprint_grid *
+fg_build(const struct Cell_head *ohd, const struct Cell_head *ihd,
+         const struct pj_info *oproj, const struct pj_info *iproj,
+         const struct pj_info *tproj, const double *y_center,
+         const struct pole_set *poles);
+extern void fg_span(const struct footprint_grid *g, int obr0, int obr1,
+                    int obc0, int obc1, int *imin, int *imax);
+extern int fg_num_blocks(const struct footprint_grid *g);
+extern int fg_block_start(const struct footprint_grid *g, int b);
+extern int fg_band_geometry(const struct footprint_grid *g, int obr0,
+                            size_t cap_bytes, int out_mult, int cell_size,
+                            int in_cols, int *tile_blocks_out,
+                            int *worst_block_rows);
+extern void fg_apply_sampling_margin(struct footprint_grid *g);
+extern void fg_free(struct footprint_grid *g);
 
 extern void bordwalk(const struct Cell_head *, struct Cell_head *,
                      const struct pj_info *, const struct pj_info *,
@@ -67,7 +99,19 @@ extern void p_lanczos(struct cache *, void *, int, double, double,
 extern void p_lanczos_f(struct cache *, void *, int, double, double,
                         struct Cell_head *);
 
-#if 1
+/* interp_strip.c - strip versions of the resampling methods */
+extern void strip_bilinear(void *, void *, int, double, double,
+                           struct Cell_head *, int, int);
+extern void strip_cubic(void *, void *, int, double, double, struct Cell_head *,
+                        int, int);
+extern void strip_lanczos(void *, void *, int, double, double,
+                          struct Cell_head *, int, int);
+extern void strip_bilinear_f(void *, void *, int, double, double,
+                             struct Cell_head *, int, int);
+extern void strip_cubic_f(void *, void *, int, double, double,
+                          struct Cell_head *, int, int);
+extern void strip_lanczos_f(void *, void *, int, double, double,
+                            struct Cell_head *, int, int);
 
 #define BKIDX(c, y, x) ((y) * (c)->stride + (x))
 #define BKPTR(c, y, x) ((c)->grid[BKIDX((c), (y), (x))])
@@ -75,29 +119,5 @@ extern void p_lanczos_f(struct cache *, void *, int, double, double,
     (BKPTR((c), (y), (x)) ? BKPTR((c), (y), (x)) \
                           : get_block((c), BKIDX((c), (y), (x))))
 #define CVAL(c, y, x) ((*BLOCK((c), HI((y)), HI((x))))[LO((y))][LO((x))])
-
-#else
-
-static inline int BKIDX(const struct cache *c, int y, int x)
-{
-    return y * c->stride + x;
-}
-
-static inline block *BKPTR(const struct cache *c, int y, int x)
-{
-    return c->grid[BKIDX(c, y, x)];
-}
-
-static inline block *BLOCK(struct cache *c, int y, int x)
-{
-    return BKPTR(c, y, x) ? BKPTR(c, y, x) : get_block(c, BKIDX(c, y, x));
-}
-
-static inline FCELL *CPTR(struct cache *c, int y, int x)
-{
-    return &(*BLOCK(c, HI(y), HI(x)))[LO(y)][LO(x)];
-}
-
-#endif
 
 #endif
