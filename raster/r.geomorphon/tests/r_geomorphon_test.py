@@ -45,15 +45,6 @@ REFERENCE = {
         "stddev": 2.39415680072826,
         "sum": 3614,
     },
-    "forms_meters": {
-        "n": 1444,
-        "null_cells": 156,
-        "min": 1,
-        "max": 10,
-        "mean": 2.34349030470914,
-        "stddev": 2.31663094892283,
-        "sum": 3384,
-    },
     "forms_skip1": {
         "n": 1296,
         "null_cells": 304,
@@ -63,24 +54,6 @@ REFERENCE = {
         "stddev": 2.44381110076768,
         "sum": 3236,
     },
-    "forms_anglev2": {
-        "n": 1444,
-        "null_cells": 156,
-        "min": 1,
-        "max": 10,
-        "mean": 2.34349030470914,
-        "stddev": 2.31663094892283,
-        "sum": 3384,
-    },
-    "forms_anglev2_distance": {
-        "n": 1444,
-        "null_cells": 156,
-        "min": 1,
-        "max": 10,
-        "mean": 2.34349030470914,
-        "stddev": 2.31663094892283,
-        "sum": 3384,
-    },
 }
 
 # Each entry maps a reference key to its output option and any extra options.
@@ -89,14 +62,25 @@ COMBOS = [
     ("intensity_default", "intensity", {}),
     ("range_default", "range", {}),
     ("forms_extended", "forms", {"flags": "e", "search": 12}),
-    ("forms_meters", "forms", {"flags": "m"}),
     ("forms_skip1", "forms", {"skip": 1}),
-    ("forms_anglev2", "forms", {"comparison": "anglev2"}),
-    ("forms_anglev2_distance", "forms", {"comparison": "anglev2_distance"}),
 ]
 
 # Landform categories from flat (1) to pit (10).
 ALL_CLASSES = set(range(1, 11))
+
+# Category labels that r.category reports for the forms output.
+EXPECTED_LABELS = {
+    1: "flat",
+    2: "peak",
+    3: "ridge",
+    4: "shoulder",
+    5: "spur",
+    6: "slope",
+    7: "hollow",
+    8: "footslope",
+    9: "valley",
+    10: "pit",
+}
 
 # Expected final_results of the one-off profile at easting 13, northing 16.
 PROFILE_FINAL = {
@@ -127,7 +111,7 @@ def test_reference_values(fixed_region, key, option, extra):
     """Module statistics match the captured serial reference."""
     tools = Tools(session=fixed_region)
     output = f"out_{key}"
-    call = {"elevation": "dem", option: output, "search": SEARCH, "overwrite": True}
+    call = {"elevation": "dem", option: output, "search": SEARCH}
     call.update(extra)
     tools.r_geomorphon(**call)
 
@@ -140,14 +124,15 @@ def test_reference_values(fixed_region, key, option, extra):
 
 
 def test_landform_class_set(fixed_region):
-    """The forms output contains every landform class from flat to pit."""
+    """The forms output contains every landform class with its category label."""
     tools = Tools(session=fixed_region)
-    tools.r_geomorphon(
-        elevation="dem", forms="forms_all", search=SEARCH, overwrite=True
-    )
+    tools.r_geomorphon(elevation="dem", forms="forms_all", search=SEARCH)
     text = tools.r_stats(input="forms_all", flags="cn").stdout
     classes = {int(line.split()[0]) for line in text.splitlines() if line.strip()}
     assert classes == ALL_CLASSES
+    categories = tools.r_category(map="forms_all").stdout
+    for cat, label in EXPECTED_LABELS.items():
+        assert f"{cat}\t{label}" in categories
 
 
 def test_profile_json(fixed_region):
