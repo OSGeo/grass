@@ -354,9 +354,10 @@ class AnimationFrame(wx.Frame):
         RunCommand("g.manual", quiet=True, entry="wxGUI.animation")
 
     def OnCloseWindow(self, event):
-        if self.controller.timer.IsRunning():
-            self.controller.timer.Stop()
-        CleanUp(TMP_DIR)()
+        self.close(event)
+
+    def close(self, event=None):
+        self.__del__()  # noqa: PLC2801, C2801
         self._mgr.UnInit()
         self.Destroy()
 
@@ -366,6 +367,7 @@ class AnimationFrame(wx.Frame):
             if self.controller.timer.IsRunning():
                 self.controller.timer.Stop()
         CleanUp(TMP_DIR)()
+        tgis.stop_subprocesses()
 
 
 class AnimationsPanel(wx.Panel):
