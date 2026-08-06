@@ -22,12 +22,10 @@ import wx
 
 from grass.pydispatch.signal import Signal
 
-try:
-    from PIL import Image  # noqa: F401
+import importlib.util
 
-    hasPIL = True
-except ImportError:
-    hasPIL = False
+hasPIL = importlib.util.find_spec("PIL") is not None
+
 from gui_core.wrap import NewId
 
 

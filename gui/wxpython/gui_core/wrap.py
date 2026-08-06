@@ -55,10 +55,13 @@ else:
     ComboPopup = wx.combo.ComboPopup
     wxComboCtrl = wx.combo.ComboCtrl
 
-if wxPythonPhoenix and CheckWxVersion([4, 0, 3, 0]):
-    from wx import NewIdRef as NewId
-else:
-    from wx import NewId  # noqa: F401
+
+# Provide NewId for API compatibility
+def NewId():
+    """Return a new wx ID, compatible with both wxPython Classic and Phoenix."""
+    if wxPythonPhoenix:
+        return wx.NewIdRef().Id
+    return wx.NewId()
 
 
 def convertToInt(argsOrKwargs, roundVal=False):
