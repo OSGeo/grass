@@ -317,6 +317,7 @@ def print_vector_dataset_univar_statistics(
     extended,
     no_header: bool = False,
     fs: str = "|",
+    format: str = "plain",
 ) -> None:
     """Print univariate statistics for a space time vector dataset
 
@@ -331,6 +332,7 @@ def print_vector_dataset_univar_statistics(
     :param extended: If True compute extended statistics
     :param no_header: Suppress the printing of column names
     :param fs: Field separator
+    :param format: Output format ("plain", "csv", or "json"). Default is "plain".
     """
 
     # We need a database interface
@@ -367,7 +369,7 @@ def print_vector_dataset_univar_statistics(
         )
 
     string = ""
-    if no_header is False:
+    if no_header is False and format != "json":
         string += (
             "id"
             + fs
@@ -421,19 +423,46 @@ def print_vector_dataset_univar_statistics(
         else:
             out_file.write(string + "\n")
 
+    json_records = []
+
     for row in rows:
         id = row["name"] + "@" + row["mapset"]
         start = row["start_time"]
         end = row["end_time"]
         mylayer = row["layer"]
 
+        if not mylayer:
+            mylayer = layer
+
+        if format == "json":
+            json_output = gs.read_command(
+                "v.univar",
+                map=id,
+                where=where,
+                column=column,
+                layer=mylayer,
+                type=type,
+                flags="e" if extended else "",
+                format="json",
+            )
+            try:
+                stats = json.loads(json_output)
+            except ValueError:
+                gs.warning(_("Unable to get statistics for vector map <%s>") % id)
+                continue
+            record = {
+                "id": id,
+                "start": str(start) if start else None,
+                "end": str(end) if end else None,
+            }
+            record.update(stats)
+            json_records.append(record)
+            continue
+
         flags = "g"
 
         if extended is True:
             flags += "e"
-
-        if not mylayer:
-            mylayer = layer
 
         stats = gs.parse_command(
             "v.univar",
@@ -516,6 +545,13 @@ def print_vector_dataset_univar_statistics(
             print(string)
         else:
             out_file.write(string + "\n")
+
+    if format == "json":
+        output_str = json.dumps(json_records, indent=4)
+        if output is None:
+            print(output_str)
+        else:
+            out_file.write(output_str + "\n")
 
     dbif.close()
 
