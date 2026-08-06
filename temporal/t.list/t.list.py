@@ -166,8 +166,18 @@ def main():
                 "(e.g., raster and strds) are not allowed"
             )
         )
+    if columns and "type" in columns.split(","):
+        cols_list = [c.strip() for c in columns.split(",") if c.strip() != "type"]
+        if not cols_list:
+            gs.fatal(_("Column 'type' cannot be requested alone"))
+        columns_for_db = ",".join(cols_list)
+    else:
+        columns_for_db = columns
 
-    include_type = len(stds_type) > 1 or (columns and "type" in columns.split(","))
+    # If only one type is requested and 'type' is not in columns, pass it as a string
+    # so get_dataset_list doesn't implicitly inject the 'type' column.
+    if len(stds_type) == 1 and not (columns and "type" in columns.split(",")):
+        stds_type = stds_type[0]
 
     # Lazy import and initialize TGIS
     import grass.temporal as tgis
@@ -197,7 +207,6 @@ def main():
 
     json_output = []
     line_output = []
-    csv_output = []
     first = True
 
     with (
@@ -206,20 +215,30 @@ def main():
         for ttype in temporal_type.split(","):
             time = "absolute time" if ttype == "absolute" else "relative time"
             stds_list = tgis.get_dataset_list(
-                stds_type, ttype, columns, where, order, dbif=dbif
+                stds_type, ttype, columns_for_db, where, order, dbif=dbif
             )
 
             for mapset in dbif.tgis_mapsets:
                 rows = stds_list.get(mapset)
                 if rows:
                     if output_format == "plain":
-                        rows_by_type = {}
-                        for r in rows:
-                            rows_by_type.setdefault(r["type"], []).append(r)
-                        groups = rows_by_type.items()
+                        if isinstance(stds_type, str):
+                            groups = [(stds_type, rows)]
+                        else:
+                            rows_by_type = {}
+                            for r in rows:
+                                rows_by_type.setdefault(r["type"], []).append(r)
+                            groups = rows_by_type.items()
                     else:
                         # Process all rows together
-                        groups = [(rows[0]["type"], rows)]
+                        groups = [
+                            (
+                                rows[0]["type"]
+                                if not isinstance(stds_type, str)
+                                else stds_type,
+                                rows,
+                            )
+                        ]
 
                     for dtype, current_rows in groups:
                         if (
@@ -253,24 +272,14 @@ def main():
                                 )
 
                         if output_format == "json":
-                            if include_type:
-                                json_output.extend(current_rows)
-                            else:
-                                json_output.extend(
-                                    {k: v for k, v in row.items() if k != "type"}
-                                    for row in current_rows
-                                )
+                            json_output.extend([dict(row) for row in current_rows])
 
                         elif output_format == "line":
                             line_output.extend(
                                 str(v)
                                 for row in current_rows
-                                for k, v in row.items()
-                                if k != "type"
+                                for v in dict(row).values()
                             )
-
-                        elif output_format == "csv" and include_type:
-                            csv_output.extend(current_rows)
 
                         else:
                             print_header = (output_format == "csv" and first) or (
@@ -278,20 +287,20 @@ def main():
                             )
                             if print_header:
                                 output = separator.join(
-                                    str(k)
-                                    for k in current_rows[0].keys()
-                                    if include_type or k != "type"
+                                    str(k) for k in current_rows[0].keys()
                                 )
                                 out_file.write(f"{output}\n")
-                                first = False
+                                if output_format == "csv":
+                                    first = False
+                                else:
+                                    colhead = False
 
                             for row in current_rows:
                                 output = separator.join(
                                     ("" if output_format == "csv" else "None")
                                     if v is None
                                     else str(v)
-                                    for k, v in row.items()
-                                    if include_type or k != "type"
+                                    for v in dict(row).values()
                                 )
                                 out_file.write(f"{output}\n")
 
@@ -301,23 +310,6 @@ def main():
         elif output_format == "line":
             if line_output:
                 out_file.write(separator.join(line_output) + "\n")
-        elif csv_output:
-            # Compute shared keys across all rows for mixed-type CSV
-            shared_keys = None
-            for row in csv_output:
-                row_keys = set(row.keys())
-                if shared_keys is None:
-                    shared_keys = row_keys
-                else:
-                    shared_keys &= row_keys
-            # Preserve original column order from the first row
-            ordered_keys = [k for k in csv_output[0].keys() if k in shared_keys]
-            out_file.write(separator.join(ordered_keys) + "\n")
-            for row in csv_output:
-                output = separator.join(
-                    "" if row.get(k) is None else str(row[k]) for k in ordered_keys
-                )
-                out_file.write(f"{output}\n")
 
     dbif.close()
 

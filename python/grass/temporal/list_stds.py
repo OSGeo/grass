@@ -102,6 +102,8 @@ def get_dataset_list(
         >>> check = sp.delete()
 
     """
+    msgr = get_tgis_message_interface()
+
     dbif, connection_state_changed = init_dbif(dbif)
 
     is_list_input = isinstance(type, list)
@@ -112,6 +114,64 @@ def get_dataset_list(
     result = {}
 
     for ttype in temporal_type:
+        mapset_for_schema = (
+            list(dbif.tgis_mapsets.keys())[0] if dbif.tgis_mapsets else None
+        )
+        if not mapset_for_schema:
+            continue
+
+        type_schemas = []
+        for dtype in stds_type:
+            table = (
+                dtype + "_view_abs_time"
+                if ttype == "absolute"
+                else dtype + "_view_rel_time"
+            )
+            dbif.execute(f"SELECT * FROM {table} WHERE 0=1", mapset=mapset_for_schema)
+            type_schemas.append(
+                [d[0] for d in dbif.connections[mapset_for_schema].cursor.description]
+            )
+
+        common_columns = [
+            col
+            for col in type_schemas[0]
+            if all(col in schema for schema in type_schemas[1:])
+        ]
+        valid_columns_set = set(common_columns)
+
+        if columns and columns.find("all") == -1:
+            requested_columns = [
+                col.strip() for col in columns.split(",") if col != "type"
+            ]
+            for col in requested_columns:
+                if col not in valid_columns_set:
+                    if connection_state_changed:
+                        dbif.close()
+                    if len(stds_type) == 1:
+                        msgr.fatal(
+                            _(
+                                "Column '%s' is not available for the requested dataset type"
+                            )
+                            % col
+                        )
+                    else:
+                        msgr.fatal(
+                            _(
+                                "Column '%s' is not available for the requested combination of dataset types"
+                            )
+                            % col
+                        )
+            final_columns = requested_columns
+        else:
+            final_columns = common_columns
+
+        if not final_columns:
+            if connection_state_changed:
+                dbif.close()
+            msgr.fatal(_("No valid database columns were requested"))
+
+        columns_to_query = ",".join(final_columns)
+
         for dtype in stds_type:
             for mapset in dbif.tgis_mapsets:
                 if ttype == "absolute":
@@ -119,10 +179,7 @@ def get_dataset_list(
                 else:
                     table = dtype + "_view_rel_time"
 
-                if columns and columns.find("all") == -1:
-                    sql = "SELECT " + columns + " FROM " + table
-                else:
-                    sql = "SELECT * FROM " + table
+                sql = f"SELECT {columns_to_query} FROM {table}"
 
                 if where:
                     sql += " WHERE " + where
