@@ -154,6 +154,187 @@ class VirtualAttributeList(
         self.Bind(wx.EVT_LIST_COL_CLICK, self.OnColumnSort)
         self.Bind(wx.EVT_LIST_COL_RIGHT_CLICK, self.OnColumnMenu)
 
+    def _colExist(self, colName):
+        """Checking if table column exist and update
+        hidden columns settings
+
+        :param str colName: column name
+
+        :return bool: True if column exist
+        """
+        exist = colName in self.columns.keys()
+        if not exist:
+            self._updateHiddenColsSettings(
+                colName,
+                removeCol=True,
+            )
+        return exist
+
+    def _getHiddenColsSettings(self, currentVectMap=True):
+        """Get attribute table manager hidden columns settings
+
+        :param bool currentVectMap: True for the getting current vector map
+                                    hidden columns settings or False for getting
+                                    all vector maps hidden columns settings for
+                                    the current mapset path
+
+        :return dict: Current vector map hidden columns settings
+                      or all vector maps hidden columns settings
+                      for current mapset path
+        """
+        UserSettings.ReadSettingsFile()
+        settings = UserSettings.Get(group="atm", key="hiddenCols")
+        if settings:
+            mapsetPath = self._getMapsetPath()
+            mapsetPathHiddenColsSettings = settings.get(mapsetPath)
+            if currentVectMap:
+                return mapsetPathHiddenColsSettings.get(self.dbMgrData["vectName"])
+            return mapsetPathHiddenColsSettings
+
+    def _getMapsetPath(self):
+        """Get mapset path"""
+        gisEnv = gs.gisenv()
+        return f"{gisEnv['GISDBASE']}/{gisEnv['LOCATION_NAME']}/{gisEnv['MAPSET']}"
+
+    def _hideCol(self):
+        """Hide column"""
+        currentVectMapsHiddenColsSettings = self._getHiddenColsSettings()
+        if currentVectMapsHiddenColsSettings:
+            currentTableColsSettings = currentVectMapsHiddenColsSettings.get(
+                self.mapDBInfo.layers[self.layer]["table"]
+            )
+            for colName in currentTableColsSettings:
+                if self._colExist(colName):
+                    # Get column order
+                    colOrder = self.GetColOrder(colName)
+                    # Delete column data
+                    self.DeleteColumnWithData(colOrder)
+
+    def _showAllCols(self):
+        """Show all columns"""
+        self.Update()
+
+    def _updateHiddenColsSettings(
+        self,
+        colName=None,
+        colOrder=None,
+        removeCol=False,
+        remove=False,
+    ):
+        """Update atribute table manager hidden columns settings
+
+        :param str colName: column name, with default None value
+        :param int colOrder: column order, with default None value
+        :param bool removeCol: True for removing hidden column from the
+                               settings, default value is False
+        :param bool remove: True for removing hidden column settings key,
+                            default value is False
+        """
+        hiddenColsKey = "hiddenCols"
+        atmKey = "atm"
+        curentTableHiddenCols = []
+        otherTablesHiddenCols = {}
+        currentVectMapsHiddenColsSettings = None
+
+        if not removeCol and not remove:
+            curentTableHiddenCols = [colName]
+
+        allVectMapsHiddenColsSettings = self._getHiddenColsSettings(
+            currentVectMap=False
+        )
+        if allVectMapsHiddenColsSettings:
+            currentVectMapsHiddenColsSettings = allVectMapsHiddenColsSettings.get(
+                self.dbMgrData["vectName"],
+                None,
+            )
+        if currentVectMapsHiddenColsSettings:
+            # Update hidden col settings with existed hidden cols
+            currentVectMapTable = currentVectMapsHiddenColsSettings.pop(
+                self.mapDBInfo.layers[self.layer]["table"], {}
+            )
+            curentTableHiddenCols.extend(currentVectMapTable)
+            otherTablesHiddenCols.update(currentVectMapsHiddenColsSettings)
+
+            # Remove column if was dropped from the table
+            if removeCol:
+                curentTableHiddenCols.remove(colName)
+
+        if remove:
+            if otherTablesHiddenCols:
+                # Remove current vector map table settings dict key
+                UserSettings.Append(
+                    dict=UserSettings.userSettings,
+                    group=atmKey,
+                    key=hiddenColsKey,
+                    subkey=[
+                        self._getMapsetPath(),
+                        self.dbMgrData["vectName"],
+                    ],
+                    value=otherTablesHiddenCols,
+                )
+            elif len(
+                [
+                    mapName
+                    for mapName in allVectMapsHiddenColsSettings
+                    if mapName != self.dbMgrData["vectName"]
+                ]
+                > 0
+            ):
+                # Remove curent vector map settings dict key
+                del UserSettings.userSettings[atmKey][hiddenColsKey][
+                    self._getMapsetPath()
+                ][self.dbMgrData["vectName"]]
+            else:
+                # Remove current mapset path settings dict key
+                del UserSettings.userSettings[atmKey][hiddenColsKey][
+                    self._getMapsetPath()
+                ]
+        else:
+            # Append new hidden column
+            UserSettings.Append(
+                dict=UserSettings.userSettings,
+                group=atmKey,
+                key=hiddenColsKey,
+                subkey=[
+                    self._getMapsetPath(),
+                    self.dbMgrData["vectName"],
+                ],
+                value=dict(
+                    {self.mapDBInfo.layers[self.layer]["table"]: curentTableHiddenCols},
+                    **otherTablesHiddenCols,
+                ),
+            )
+
+        jsonSettings = {}
+        UserSettings.ReadSettingsFile(settings=jsonSettings)
+        jsonSettings[atmKey][hiddenColsKey] = UserSettings.Get(
+            group=atmKey,
+            key=hiddenColsKey,
+            settings_type="user",
+        )
+        UserSettings.SaveToFile(settings=jsonSettings)
+
+    def GetColOrder(self, colName):
+        """Get column order
+
+        :param str colName: column name
+
+        :return int: columnn order
+        """
+        return {
+            self.GetColumn(colIdx).GetText(): colIdx
+            for colIdx in range(self.GetColumnCount())
+        }.pop(colName, None)
+
+    def DeleteColumnWithData(self, colOrder):
+        """Delete column with data
+
+        :param int colOrder: column order
+        """
+        for row in range(self.GetItemCount()):
+            del self.itemDataMap[row][colOrder]
+        self.DeleteColumn(colOrder)
+
     def Update(self, mapDBInfo=None):
         """Update list according new mapDBInfo description"""
         if mapDBInfo:
@@ -370,6 +551,14 @@ class VirtualAttributeList(
             self.SetColumnWidth(col=i, width=width)
             i += 1
 
+        # Hide column
+        if UserSettings.Get(
+            group="atm",
+            key="enableHiddenCols",
+            subkey="enabled",
+        ):
+            self._hideCol()
+
         self.SendSizeEvent()
 
         self.log.write(_("Number of loaded records: %d") % self.GetItemCount())
@@ -492,6 +681,11 @@ class VirtualAttributeList(
     def OnColumnMenu(self, event):
         """Column heading right mouse button -> pop-up menu"""
         self._col = event.GetColumn()
+        enableHiddenCols = UserSettings.Get(
+            group="atm",
+            key="enableHiddenCols",
+            subkey="enabled",
+        )
 
         popupMenu = Menu()
 
@@ -511,6 +705,13 @@ class VirtualAttributeList(
                 "calculator": NewId(),
                 "stats": NewId(),
             }
+            if enableHiddenCols:
+                self.popupId.update(
+                    {
+                        "hideCol": NewId(),
+                        "showAllCols": NewId(),
+                    }
+                )
 
         popupMenu.Append(self.popupId["sortAsc"], _("Sort ascending"))
         popupMenu.Append(self.popupId["sortDesc"], _("Sort descending"))
@@ -522,6 +723,14 @@ class VirtualAttributeList(
         )
         popupMenu.Append(self.popupId["calculator"], _("Field calculator"))
         popupMenu.AppendSeparator()
+        if enableHiddenCols:
+            catKeyCol = self.GetMapCatKeyColumn()
+            if self._col != catKeyCol["index"]:
+                popupMenu.Append(self.popupId["hideCol"], _("Hide column"))
+            currentVectMapHiddenCols = self._getHiddenColsSettings()
+            if currentVectMapHiddenCols:
+                popupMenu.Append(self.popupId["showAllCols"], _("Show all columns"))
+            popupMenu.AppendSeparator()
         popupMenu.Append(self.popupId["stats"], _("Statistics"))
 
         if not self.pages["manageTable"]:
@@ -555,6 +764,12 @@ class VirtualAttributeList(
         self.Bind(wx.EVT_MENU, self.OnColumnSortAsc, id=self.popupId["sortAsc"])
         self.Bind(wx.EVT_MENU, self.OnColumnSortDesc, id=self.popupId["sortDesc"])
         self.Bind(wx.EVT_MENU, self.OnFieldCalculator, id=self.popupId["calculator"])
+        if enableHiddenCols:
+            self.Bind(wx.EVT_MENU, self.OnHideColumn, id=self.popupId["hideCol"])
+            if currentVectMapHiddenCols:
+                self.Bind(
+                    wx.EVT_MENU, self.OnShowColumn, id=self.popupId["showAllCols"]
+                )
         self.Bind(wx.EVT_MENU, self.OnFieldStatistics, id=self.popupId["stats"])
         if not self.pages["manageTable"]:
             self.Bind(wx.EVT_MENU, self.OnAddColumn, id=self.popupId["addCol"])
@@ -686,6 +901,22 @@ class VirtualAttributeList(
                 name=data["name"], ctype=data["ctype"], length=data["length"]
             )
         dlg.Destroy()
+
+    def OnHideColumn(self, event):
+        """Hide column"""
+        # Get column order
+        colOrder = self.GetColOrder(colName=self.GetColumn(self._col).GetText())
+
+        self._updateHiddenColsSettings(
+            colName=self.GetColumn(self._col).GetText(),
+            colOrder=self._col,
+        )
+        self.DeleteColumnWithData(colOrder)
+
+    def OnShowColumn(self, event):
+        """Show column"""
+        self._updateHiddenColsSettings(remove=True)
+        self._showAllCols()
 
     def SortItems(self, sorter=cmp):
         """Sort items"""
