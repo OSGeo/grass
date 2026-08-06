@@ -4,10 +4,8 @@
    \brief Low level OGR SQL driver
 
    (C) 2011 by the GRASS Development Team
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
-
-   \author Martin Landa <landa.martin gmail.com> (2011/07)
+    SPDX-License-Identifier: GPL-2.0-or-later
+\author Martin Landa <landa.martin gmail.com> (2011/07)
  */
 
 #include <stdlib.h>

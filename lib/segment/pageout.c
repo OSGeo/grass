@@ -3,9 +3,8 @@
  *
  * \brief Segment page-out routines.
  *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+*
  * \author GRASS Development Team
  *
  * \date 2005-2009
