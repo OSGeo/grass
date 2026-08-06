@@ -23,7 +23,7 @@ class Buffer(np.ndarray):
         if self.dtype in FCELL:
             return "FCELL"
         if self.dtype in DCELL:
-            return DCELL
+            return "DCELL"
         err = "Raster type: %r not supported by GRASS."
         raise TypeError(err % self.dtype)
 
