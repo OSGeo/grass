@@ -1,23 +1,6 @@
-"""Parallel-correctness tests for r.proj.
-
-r.proj takes a nprocs= option that sets the compute thread count, so each run
-below passes nprocs= for that run, and the fallback test also sets
-R_PROJ_FORCE_TILECACHE on its own env copy. Nothing shared is mutated, so the
-serial and parallel runs of a test cannot leak thread or path state into each
-other.
-
-The baseline is the module's own single-thread run at nprocs=1 rather than an
-external serial binary. The question these tests answer is whether adding
-threads, or taking the tile-cache fallback, changes the output of this same
-binary. That comparison is exact and reproducible in CI where an external
-oracle would not be.
-
-Nearest is asserted bitwise with an absolute diff max of zero. Bilinear is
-asserted bitwise too because each output cell is interpolated independently in
-a fixed operation order, so threading does not reorder its arithmetic. The
-epsilon-1e-6 fallback from the proposal may be invoked only on an actual CI
-reordering failure, naming the platform that showed it.
-"""
+"""Parallel correctness tests for r.proj. Each test compares the
+module's own nprocs=1 run against a multithreaded run, and the fallback
+test forces the tile cache path."""
 
 import grass.script as gs
 
@@ -36,10 +19,7 @@ def _env(session, **overrides):
 
 
 def _set_region_from_source(env, input_raster, method):
-    """Set the output region to r.proj's suggested bounds for the input.
-
-    r.proj -g prints the whole region as space-separated key=value pairs on
-    one line, so split on whitespace first, then on '='."""
+    """Set the output region to r.proj's suggested bounds for the input."""
     text = gs.read_command(
         "r.proj",
         project=SRC_PROJECT,
@@ -82,8 +62,7 @@ def _stats(env, raster):
 
 
 def _assert_bitwise_identical(env, a, b, diff):
-    """Assert a and b are bitwise identical: equal counts, equal null
-    pattern, and a zero-valued absolute difference over a non-empty map."""
+    """Check a and b are bitwise identical and have the same null cells."""
     gs.run_command(
         "r.mapcalc", expression=f"{diff} = abs({a} - {b})", overwrite=True, env=env
     )
@@ -97,11 +76,9 @@ def _assert_bitwise_identical(env, a, b, diff):
 
 
 def test_bilinear_parallel_matches_serial(session_3857):
-    """Bilinear: parallel output must equal the serial output bitwise.
-
-    A dispatch-liveness guard runs first: bilinear must differ from nearest
-    on the same frame, so a silent fallback to nearest cannot make the
-    identity assert pass vacuously (the Bug A regression guard)."""
+    """Bilinear method needs to match serial bitwise. It first checks that
+    bilinear and nearest outputs differ, so a silent fallback to nearest
+    cannot happen."""
     session = session_3857
     base = _env(session)
     _set_region_from_source(base, INPUT_MID, "bilinear")
@@ -123,8 +100,8 @@ def test_bilinear_parallel_matches_serial(session_3857):
 
 
 def test_nearest_memory_banding(session_3857):
-    """Nearest with a constrained memory cap (memory=5, OMP=4) must match the
-    default-memory serial run bitwise, exercising band sizing at a small cap."""
+    """The nearest method at a small memory cap (memory=5, nprocs=4) has to
+    match the default memory serial run bitwise."""
     session = session_3857
     base = _env(session)
     _set_region_from_source(base, INPUT_MID, "nearest")
@@ -135,8 +112,7 @@ def test_nearest_memory_banding(session_3857):
 
 
 def test_pole_nearest_parallel_matches_serial(session_pole):
-    """Nearest into a frame centered on the north pole: the warped access
-    pattern near the pole must still give bitwise-identical parallel output."""
+    """Nearest at the north pole matches serial bitwise."""
     session = session_pole
     base = _env(session)
     # Fixed 1200 km box centered on the pole (EPSG:3413 meters), 50x50.
@@ -157,10 +133,8 @@ def test_pole_nearest_parallel_matches_serial(session_pole):
 
 
 def test_forced_fallback_matches_banded(session_3857):
-    """The forced serial tile-cache path must equal the banded parallel path
-    bitwise. R_PROJ_FORCE_TILECACHE=1 takes the readcell tile-cache route
-    (a different algorithm), so this is a cross-path check, not just a
-    thread-count one."""
+    """Forcing the tile cache with R_PROJ_FORCE_TILECACHE=1 gives the same
+    output as the banded path."""
     session = session_3857
     base = _env(session)
     _set_region_from_source(base, INPUT_MID, "nearest")

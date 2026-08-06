@@ -1,14 +1,9 @@
-"""Benchmarking of r.proj thread scaling
-raster (2D)
+"""This is a benchmark script for r.proj thread scaling with grass.benchmark.
 
-This follows the r.param.scale benchmark structure, sweeping raster size at a
-fixed memory and then memory at a fixed raster size, and plotting the time,
-speedup, and efficiency metrics with grass.benchmark. r.proj sweeps its compute
-thread count through the nprocs= option. Each cell generates a source raster in
-an EPSG:4326 project and reprojects it into EPSG:3857 in a temporary database,
-so the script is self-contained. Run it with
-grass --exec python benchmark_r_proj.py or from any GRASS session.
-"""
+This script sweeps through a raster size at a fixed memory setting, and then
+memory at a fixed size. It then plots time, speedup, and efficiency. Creates
+its own source raster and projects, so it runs standalone with
+grass --exec python benchmark_r_proj.py."""
 
 import os
 import tempfile
@@ -104,10 +99,8 @@ def benchmark(gisdbase, size, memory, label, results):
 
 
 def generate_input(gisdbase, size):
-    """Generate the size by size source raster in the EPSG:4326 project,
-    mirroring the r.param.scale benchmark by trying r.surf.fractal and falling
-    back to r.random.surface when fractal is unavailable, for example in a build
-    without FFTW."""
+    """Generate the source raster in the EPSG:4326 project. Uses
+    r.surf.fractal, or r.random.surface when FFTW is unavailable."""
     with gs.setup.init(
         os.path.join(gisdbase, SRC_PROJECT), env=os.environ.copy()
     ) as session:
