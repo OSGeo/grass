@@ -150,7 +150,7 @@ def main(argv=None):
         try:
             opts, args = getopt.getopt(argv[1:], "hw:", ["help", "workspace"])
         except getopt.error as msg:
-            raise Usage(msg)
+            raise Usage(msg) from None
     except Usage as err:
         print(err.msg, file=sys.stderr)
         print(sys.stderr, "for help use --help", file=sys.stderr)

@@ -152,7 +152,7 @@ def main():
         if columns == "all" or len(columns_list) > 1:
             gs.fatal(_("Only one column is allowed for line format"))
 
-    elif not separator:  # output_format == "plain"
+    elif not separator:
         separator = "|"
 
     if set(stds_type) & {"raster", "raster_3d", "vector"} and set(stds_type) & {

@@ -67,9 +67,9 @@ void gsd_def_cplane(int num, float *pt, float *norm)
     ppt[1] = (pt[1] + Cp_pt[1]) * sy;
     ppt[2] = (pt[2] + Cp_pt[2] - zmin) * sz;
 
-    params[0] = norm[0] * sx;
-    params[1] = norm[1] * sy;
-    params[2] = norm[2] * sz;
+    params[0] = (double)norm[0] * sx;
+    params[1] = (double)norm[1] * sy;
+    params[2] = (double)norm[2] * sz;
     GS_dv3norm(params);
     params[3] = -ppt[0] * params[0] - ppt[1] * params[1] - ppt[2] * params[2];
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-07-18 16:34+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasslibs/hi/>\n"
@@ -21,6 +21,9 @@ msgstr ""
 #, c-format
 msgid "Unknown algorithm '%s'"
 msgstr "अज्ञात एल्गोरिदम '%s'"
+
+msgid "Cannot classify an empty set of values"
+msgstr ""
 
 msgid "Classification algorithm failed"
 msgstr "वर्गीकरण एल्गोरिथ्म विफल रहा"
@@ -5123,7 +5126,7 @@ msgstr[1] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 

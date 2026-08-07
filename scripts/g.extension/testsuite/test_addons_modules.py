@@ -67,6 +67,7 @@ class TestModulesFromDifferentSources(TestCase):
     files = [
         os.path.join(install_prefix, "scripts", "r.plus.example"),
         os.path.join(install_prefix, "docs", "html", "r.plus.example.html"),
+        os.path.join(install_prefix, "docs", "mkdocs", "source", "r.plus.example.md"),
     ]
     # to create archives from the source, the following was used:
     # zip r.plus.example.zip r.plus.example/*

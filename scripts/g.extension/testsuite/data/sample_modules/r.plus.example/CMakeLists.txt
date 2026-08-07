@@ -5,9 +5,7 @@ project(r.plus.example)
 include(build_addon)
 
 build_addon(
-  ${PROJECT_NAME}
-  SOURCES
-    r.plus.example.py
-  DOCFILES
-    r.plus.example.html
-    r.plus.example.md)
+    ${PROJECT_NAME}
+    SOURCES r.plus.example.py
+    DOCFILES r.plus.example.html r.plus.example.md
+)
