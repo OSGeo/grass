@@ -113,7 +113,7 @@ def extract_zip(name, directory, tmpdir):
             extract_dir=extract_dir, target_dir=directory, files=files
         )
     except zipfile.BadZipfile as error:
-        raise DownloadError(_("ZIP file is unreadable: {0}").format(error))
+        raise DownloadError(_("ZIP file is unreadable: {0}").format(error)) from error
 
 
 # modified copy from g.extension

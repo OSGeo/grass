@@ -282,6 +282,14 @@ int main(int argc, char **argv)
         row_radius_size =
             meters ? ceil(search_radius / ns_resolution) : search_radius;
         row_buffer_size = row_radius_size * 2 + 1;
+        // open_map fills the row buffer by reading row_buffer_size + 1 rows
+        if (nrows < row_buffer_size + 1)
+            G_fatal_error(
+                _("The outer search radius (search=%s) exceeds the "
+                  "north-south extent of the current region (%d rows). "
+                  "At least %d rows are needed. Set larger computational "
+                  "region with g.region or use a smaller search value."),
+                par_search_radius->answer, nrows, row_buffer_size + 1);
         search_distance =
             (meters) ? search_radius : ns_resolution * search_cells;
 

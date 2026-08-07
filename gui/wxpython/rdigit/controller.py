@@ -467,8 +467,8 @@ class RDigitController(wx.EvtHandler):
                     ).strip()
                     if values:
                         self.uploadMapCategories.emit(values=values.split("\n"))
-        except CalledModuleError:
-            raise ScriptError
+        except CalledModuleError as e:
+            raise ScriptError(e.msg) from e
         self._backupRaster(name)
 
         name = name + "@" + gcore.gisenv()["MAPSET"]
@@ -494,8 +494,8 @@ class RDigitController(wx.EvtHandler):
         backup = name + "_backupcopy_" + str(os.getpid())
         try:
             gcore.run_command("g.copy", raster=[name, backup], quiet=True)
-        except CalledModuleError:
-            raise ScriptError
+        except CalledModuleError as e:
+            raise ScriptError(e.msg) from e
 
         self._backupRasterName = backup
 
