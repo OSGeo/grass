@@ -53,7 +53,7 @@ from urllib.request import urlopen
 
 import webbrowser
 
-from grass.script.utils import basename
+from grass.script.utils import basename, check_url_scheme
 from grass.script import core as grass
 
 
@@ -72,7 +72,8 @@ def start_browser(entry):
             minor,
             entry,
         )
-        if urlopen(url_path).getcode() != 200:
+        check_url_scheme(url_path)
+        if urlopen(url_path).getcode() != 200:  # nosec B310
             url_path = "https://grass.osgeo.org/grass%s%s/manuals/addons/%s.html" % (
                 major,
                 minor,

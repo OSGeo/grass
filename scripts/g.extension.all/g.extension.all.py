@@ -47,6 +47,7 @@ from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
 
 import grass.script as gs
+from grass.script.utils import check_url_scheme
 from grass.exceptions import CalledModuleError
 
 HEADERS = {
@@ -88,8 +89,9 @@ def urlopen(url, *args, **kwargs):
     """Wrapper around urlopen. Same function as 'urlopen', but with the
     ability to define headers.
     """
+    check_url_scheme(url)
     request = urlrequest.Request(url, headers=HEADERS)
-    return urlrequest.urlopen(request, *args, **kwargs)
+    return urlrequest.urlopen(request, *args, **kwargs)  # nosec B310
 
 
 def download_modules_xml_file(url, response_format, *args, **kwargs):
