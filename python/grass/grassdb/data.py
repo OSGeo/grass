@@ -10,6 +10,7 @@ for details.
 """
 
 import grass.script as gs
+from grass.tools import Tools, ToolError
 
 
 def map_exists(name, element, mapset=None, env=None) -> bool:
@@ -43,3 +44,26 @@ def map_exists(name, element, mapset=None, env=None) -> bool:
     # file is the key questioned in grass.script.core find_file()
     # return code should be equivalent to checking the output
     return bool(info["file"])
+
+
+def stds_exists(name, element, mapset, env=None) -> bool:
+    """Check if a space time dataset (STDS) is present in the temporal database.
+
+    :param name: Name of the space time dataset
+    :param element: STDS type ('strds', 'stvds', 'str3ds')
+    :param mapset: Mapset name where the dataset is located
+    :param env: Environment created by function grass.script.create_environment
+    """
+    tools = Tools(env=env)
+    try:
+        output = tools.t_list(
+            type=element,
+            columns="name",
+            where=f"name='{name}'",
+            mapset=mapset,
+            format="json",
+            quiet=True,
+        )
+        return bool(output.json)
+    except ToolError:
+        return False
