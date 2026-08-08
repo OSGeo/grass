@@ -414,7 +414,7 @@ int main(int argc, char *argv[])
     z_orig = current_region.bottom;
 
     dmin = amin1(ew_res, ns_res) / 2;
-    disk = n_rows * n_cols * sizeof(float);
+    disk = (size_t)n_rows * n_cols * sizeof(float);
     snprintf(dminchar, sizeof(dminchar), "%lf", dmin);
 
     nsizr = n_rows;
