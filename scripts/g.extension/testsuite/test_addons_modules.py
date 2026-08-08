@@ -12,13 +12,17 @@ COPYRIGHT: (C) 2015 Vaclav Petras, and by the GRASS Development Team
            for details.
 """
 
+import os
+import xml.etree.ElementTree as ET
+import unittest
+
+from pathlib import Path
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.utils import silent_rmtree, xfail_windows
 from grass.script.utils import decode
-import os
-from pathlib import Path
 
 
 MODULES_OUTPUT = """\
@@ -138,6 +142,83 @@ class TestModulesFromDifferentSources(TestCase):
         )
         for file in self.files:
             self.assertFileExists(os.path.join(file))
+
+
+class TestModulesWxGuiToolsTreeAddonsNodeAddonsRegistration(TestCase):
+    # MS Windows install function requires absolute paths
+    install_prefix = Path("gextension_test_install_path").absolute()
+    registered_modules_xml_file = install_prefix / "modules.xml"
+
+    def setUp(self):
+        """Make sure we are not dealing with some old files"""
+        if self.install_prefix.exists():
+            files = [path.name for path in self.install_prefix.iterdir()]
+            if files:
+                msg = f"Install prefix path '{self.install_prefix}' \
+                    contains files {','.join(files)}"
+                raise RuntimeError(msg)
+
+    def tearDown(self):
+        """Remove created files"""
+        silent_rmtree(str(self.install_prefix))
+
+    def parse_wxgui_tools_tree_addons_modules_xml_file(self):
+        """Parse wxGUI Tools tree Addons modules.xml file
+
+        :return list registered_modules: list of registered addons names
+        """
+        tree = ET.parse(self.registered_modules_xml_file)
+        root = tree.getroot()
+        registered_modules = []
+        for submodule in root.findall("task"):
+            registered_modules.append(submodule.attrib["name"])
+        return registered_modules
+
+    def test_simple_addon_registration(self):
+        """Testing if simple addon is registered in the wxGUI Tools tree Addons node
+        if it is used addons custom base dir
+        """
+        extension = "db.join"
+        self.assertModule(
+            "g.extension",
+            extension=extension,
+            prefix=str(self.install_prefix),
+        )
+        self.assertIn(
+            extension,
+            self.parse_wxgui_tools_tree_addons_modules_xml_file(),
+        )
+
+    @unittest.skip("Missing multi addons wx.metadata external Python libs in the CI.")
+    def test_multi_addons_registration(self):
+        """Testing if multi addona are registered in the wxGUI Tools tree Addons node
+        if it is used addons custom base dir
+        """
+        extension = "wx.metadata"
+        extension_modules = (
+            "db.csw.admin",
+            "db.csw.harvest",
+            "db.csw.run",
+            "g.gui.cswbrowser",
+            "g.gui.metadata",
+            "m.csw.update",
+            "r.info.iso",
+            "t.info.iso",
+            "v.info.iso",
+        )
+        self.assertModule(
+            "g.extension",
+            extension=extension,
+            prefix=str(self.install_prefix),
+        )
+        registered_extension_modules = (
+            self.parse_wxgui_tools_tree_addons_modules_xml_file()
+        )
+        for addon in extension_modules:
+            self.assertIn(
+                addon,
+                registered_extension_modules,
+            )
 
 
 if __name__ == "__main__":
