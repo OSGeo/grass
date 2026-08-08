@@ -132,18 +132,18 @@ char *G_get_projwkt(void)
     int c;
 
     G_file_name(path, "", WKT_FILE, "PERMANENT");
-    if (access(path, 0) != 0) {
-        if (G_projection() != PROJECTION_XY) {
-            G_debug(1, "<%s> file not found for location <%s>", WKT_FILE,
-                    G_location());
-        }
-        return NULL;
-    }
-
     fp = fopen(path, "r");
-    if (!fp)
+    if (!fp) {
+        if (errno == ENOENT) {
+            if (G_projection() != PROJECTION_XY) {
+                G_debug(1, "<%s> file not found for location <%s>", WKT_FILE,
+                        G_location());
+            }
+            return NULL;
+        }
         G_fatal_error(_("Unable to open input file <%s>: %s"), path,
                       strerror(errno));
+    }
 
     wktstring = G_malloc(1024 * sizeof(char));
     nalloc = 1024;
@@ -241,7 +241,11 @@ char *G_get_projsrid(void)
     int c;
 
     G_file_name(path, "", SRID_FILE, "PERMANENT");
-    if (access(path, 0) != 0) {
+    fp = fopen(path, "r");
+    if (!fp) {
+        if (errno != ENOENT)
+            G_fatal_error(_("Unable to open input file <%s>: %s"), path,
+                          strerror(errno));
         if (G_projection() != PROJECTION_XY) {
             struct Key_Value *projepsg;
             const char *epsg_num;
@@ -264,11 +268,6 @@ char *G_get_projsrid(void)
         }
         return NULL;
     }
-
-    fp = fopen(path, "r");
-    if (!fp)
-        G_fatal_error(_("Unable to open input file <%s>: %s"), path,
-                      strerror(errno));
 
     sridstring = G_malloc(1024 * sizeof(char));
     nalloc = 1024;

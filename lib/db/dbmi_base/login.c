@@ -12,6 +12,7 @@
    \author Joel Jones (CERL/UIUC), Radim Blazek
  */
 
+#include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -154,21 +155,33 @@ static int write_file(LOGIN *login)
     int i;
     const char *file;
     FILE *fd;
+#ifndef _MSC_VER
+    int fdes;
+#endif
 
     file = login_filename();
 
     G_debug(3, "write_file(): DB login file = <%s>", file);
 
+#ifdef _MSC_VER
     fd = fopen(file, "w");
+#else
+    /* open with owner-only permissions from the start, so the file never
+     * exists with wider permissions */
+    fdes = open(file, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+    fd = fdes < 0 ? NULL : fdopen(fdes, "w");
+#endif
     if (fd == NULL) {
         G_warning(_("Unable to write file '%s'"), file);
         return -1;
     }
 
-    /* fchmod is not available on Windows */
-    /* fchmod ( fileno(fd), S_IRUSR | S_IWUSR ); */
 #ifndef _MSC_VER
-    chmod(file, S_IRUSR | S_IWUSR);
+    /* Tighten permissions of a pre-existing file (a newly created one already
+     * has them from open() above). Operate on the descriptor rather than the
+     * path to avoid a time-of-check/time-of-use race. fchmod is not available
+     * on Windows, where the file is created with fopen() above. */
+    fchmod(fdes, S_IRUSR | S_IWUSR);
 #endif
     for (i = 0; i < login->n; i++) {
         fprintf(fd, "%s|%s", login->data[i].driver, login->data[i].database);

@@ -121,12 +121,10 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
     if (Map->dig_fp.file == NULL)
         return -1;
 
-    /* if overwrite OK, any existing files have already been deleted by
-     * Vect_open_new(): remove this check ? */
-    /* check to see if dig_plus file exists and if so, remove it */
+    /* remove topo file if it exists (if overwrite is set, any existing
+     * files have already been deleted by Vect_open_new()) */
     Vect__get_element_path(path, Map, GV_TOPO_ELEMENT);
-    if (access(path, F_OK) == 0)
-        unlink(path); /* remove topo file if exists */
+    unlink(path);
 
     /* set conversion matrices */
     dig_init_portable(&(Map->head.port), dig__byte_order_out());
