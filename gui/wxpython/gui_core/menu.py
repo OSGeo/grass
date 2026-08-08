@@ -118,7 +118,7 @@ class MenuBase:
             ):
                 menuItem.Enable(False)
 
-        rhandler = eval("self.class_handler." + handler)  # nosec B307
+        rhandler = getattr(self.class_handler, handler)
         self.parent.Bind(wx.EVT_MENU, rhandler, menuItem)
 
     def GetData(self):
@@ -279,12 +279,12 @@ class SearchModuleWindow(wx.Panel):
             return
 
         # extract name of the handler and create a new call
-        handler = "self._handlerObj." + data["handler"].lstrip("self.")
+        handler = getattr(self._handlerObj, data["handler"].removeprefix("self."))
 
         if data["command"]:
-            eval(handler)(event=None, cmd=data["command"].split())
+            handler(event=None, cmd=data["command"].split())
         else:
-            eval(handler)(event=None)
+            handler(event=None)
 
     def Help(self, node=None):
         """Show documentation for a module"""
