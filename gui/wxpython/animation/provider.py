@@ -24,15 +24,23 @@ import os
 import sys
 import wx
 import tempfile
+from functools import partial
 from multiprocessing import Process, Queue
 from pathlib import Path
+from queue import Empty
 
 from core.gcmd import GException, DecodeString
 from core.settings import UserSettings
 from core.debug import Debug
 from core.utils import autoCropImageFromFile
 
-from animation.utils import HashCmd, HashCmds, GetFileFromCmd, GetFileFromCmds
+from animation.utils import (
+    HashCmd,
+    HashCmds,
+    GetFileFromCmd,
+    GetFileFromCmds,
+    getCpuCount,
+)
 from gui_core.wrap import EmptyBitmap, BitmapFromImage
 
 import grass.script.core as gcore
@@ -222,6 +230,10 @@ class BitmapProvider:
         :param bgcolor: background color as a tuple of 3 values 0 to 255
         :param nprocs: number of procs to be used for rendering
         """
+        if nprocs < 1:
+            # The setting defaults to -1 (autodetect) and is resolved only when
+            # the animation preferences are opened, so it can arrive unresolved.
+            nprocs = getCpuCount()
         Debug.msg(
             2,
             "BitmapProvider.Load: force={f}, bgcolor={b}, nprocs={n}".format(
@@ -340,6 +352,61 @@ class BitmapProvider:
         raise GException(messages)
 
 
+def _waitForRenderedFile(proc, fileQueue, checkStop):
+    """Waits for a rendering process to report the file it created.
+
+    The queue is read with a timeout rather than blocking, so that the GUI
+    stays responsive and a process which never finishes can be cancelled.
+    Reading before joining also avoids the deadlock which happens when a
+    process is joined while its result is still buffered in the queue.
+
+    :param proc: rendering process to wait for
+    :param fileQueue: queue the process reports the created file in
+    :param checkStop: called while waiting, returns True if the user
+                      requested to stop
+
+    :return: name of the created file, or None if the process failed,
+             produced nothing or was stopped
+    """
+    while True:
+        try:
+            return fileQueue.get(timeout=0.05)
+        except Empty:
+            pass
+        if not proc.is_alive():
+            # The process is gone, but it may have reported the file just
+            # before exiting.
+            try:
+                return fileQueue.get_nowait()
+            except Empty:
+                if proc.exitcode != 0:
+                    gcore.warning(
+                        _("Rendering process failed with exit code {code}.").format(
+                            code=proc.exitcode
+                        )
+                    )
+                return None
+        if checkStop():
+            # The process can be stuck in a command which never returns, so it
+            # has to be killed instead of waited for.
+            proc.terminate()
+            return None
+
+
+def _finishProcesses(proc_list):
+    """Ends processes which were started but never waited for.
+
+    Rendering can be cancelled in the middle of a batch. Without this, the
+    remaining processes keep running after the GUI is closed.
+
+    :param proc_list: the processes to end
+    """
+    for proc in proc_list:
+        if proc.is_alive():
+            proc.terminate()
+        proc.join()
+
+
 class BitmapRenderer:
     """Class which renders 2D and 3D images to files."""
 
@@ -369,7 +436,6 @@ class BitmapRenderer:
         # Variables for parallel rendering
         proc_count = 0
         proc_list = []
-        queue_list = []
         cmd_list = []
 
         filteredCmdList = []
@@ -389,73 +455,106 @@ class BitmapRenderer:
             filteredCmdList.append((cmd, region))
 
         mapNum = len(filteredCmdList)
+        rendered = 0
         stopped = False
         self._isRendering = True
-        for cmd, region in filteredCmdList:
-            count += 1
 
-            # Queue object for interprocess communication
-            q = Queue()
-            # The separate render process
-            if cmd[0] == "m.nviz.image":
-                p = Process(
-                    target=RenderProcess3D,
-                    args=(
-                        self.imageWidth,
-                        self.imageHeight,
-                        self._tempDir,
-                        cmd,
-                        regionFor3D,
-                        bgcolor,
-                        q,
-                    ),
-                )
-            else:
-                p = Process(
-                    target=RenderProcess2D,
-                    args=(
-                        self.imageWidth,
-                        self.imageHeight,
-                        self._tempDir,
-                        cmd,
-                        region,
-                        bgcolor,
-                        q,
-                    ),
-                )
-            p.start()
+        # One queue per parallel slot, reused by every batch. A queue per map
+        # would allocate a pipe and POSIX semaphores for each of them and
+        # exhaust the process limits on datasets with many maps.
+        queue_list = [Queue() for _ in range(min(nprocs, mapNum))]
+        try:
+            for cmd, region in filteredCmdList:
+                count += 1
 
-            queue_list.append(q)
-            proc_list.append(p)
-            cmd_list.append((cmd, region))
-
-            proc_count += 1
-            # Wait for all running processes and read/store the created images
-            if proc_count == nprocs or count == mapNum:
-                for i in range(len(cmd_list)):
-                    proc_list[i].join()
-                    filename = queue_list[i].get()
-                    self._mapFilesPool[HashCmd(cmd_list[i][0], cmd_list[i][1])] = (
-                        filename
+                q = queue_list[proc_count]
+                # The separate render process
+                if cmd[0] == "m.nviz.image":
+                    p = Process(
+                        target=RenderProcess3D,
+                        args=(
+                            self.imageWidth,
+                            self.imageHeight,
+                            self._tempDir,
+                            cmd,
+                            regionFor3D,
+                            bgcolor,
+                            q,
+                        ),
                     )
-                    self._mapFilesPool.SetSize(
-                        HashCmd(cmd_list[i][0], cmd_list[i][1]),
-                        (self.imageWidth, self.imageHeight),
+                else:
+                    p = Process(
+                        target=RenderProcess2D,
+                        args=(
+                            self.imageWidth,
+                            self.imageHeight,
+                            self._tempDir,
+                            cmd,
+                            region,
+                            bgcolor,
+                            q,
+                        ),
                     )
+                p.start()
 
-                proc_count = 0
-                proc_list = []
-                queue_list = []
-                cmd_list = []
+                proc_list.append(p)
+                cmd_list.append((cmd, region))
 
-            self.renderingContinues.emit(current=count, text=_("Rendering map layers"))
-            if self._stopRendering:
-                self._stopRendering = False
-                stopped = True
-                break
+                proc_count += 1
+                # Wait for all running processes and read/store the created
+                # images. Compared with >= so that an unexpected nprocs cannot
+                # let the batch grow without a bound.
+                if proc_count >= nprocs or count == mapNum:
+                    for i in range(len(cmd_list)):
+                        filename = _waitForRenderedFile(
+                            proc_list[i],
+                            queue_list[i],
+                            partial(self._checkStopWhileWaiting, rendered),
+                        )
+                        proc_list[i].join()
+                        # A map which failed to render is not stored, the
+                        # composition then reports it as failed.
+                        if filename is not None:
+                            key = HashCmd(*cmd_list[i])
+                            self._mapFilesPool[key] = filename
+                            self._mapFilesPool.SetSize(
+                                key, (self.imageWidth, self.imageHeight)
+                            )
+                        # Progress counts finished maps, not started ones.
+                        rendered += 1
+                        self.renderingContinues.emit(
+                            current=rendered, text=_("Rendering map layers")
+                        )
 
-        self._isRendering = False
+                    proc_count = 0
+                    proc_list = []
+                    cmd_list = []
+
+                if self._stopRendering:
+                    self._stopRendering = False
+                    stopped = True
+                    break
+        finally:
+            _finishProcesses(proc_list)
+            for q in queue_list:
+                q.close()
+            self._isRendering = False
+
         return not stopped
+
+    def _checkStopWhileWaiting(self, rendered):
+        """Keeps the GUI alive while waiting for a rendering process.
+
+        The progress dialog reports a click on Cancel only when it is updated,
+        so the progress is re-emitted while waiting.
+
+        :param rendered: number of maps rendered so far
+
+        :return: True if the user requested to stop rendering
+        """
+        self.renderingContinues.emit(current=rendered, text=_("Rendering map layers"))
+        wx.GetApp().Yield()
+        return self._stopRendering
 
     def RequestStopRendering(self):
         """Requests to stop rendering."""
@@ -494,7 +593,6 @@ class BitmapComposer:
         # Variables for parallel rendering
         proc_count = 0
         proc_list = []
-        queue_list = []
         cmd_lists = []
 
         filteredCmdLists = []
@@ -514,65 +612,90 @@ class BitmapComposer:
             filteredCmdLists.append((cmdList, region))
 
         num = len(filteredCmdLists)
+        composed = 0
 
         self._isComposing = True
-        for cmdList, region in filteredCmdLists:
-            count += 1
-            # Queue object for interprocess communication
-            q = Queue()
-            # The separate render process
-            p = Process(
-                target=CompositeProcess,
-                args=(
-                    self.imageWidth,
-                    self.imageHeight,
-                    self._tempDir,
-                    cmdList,
-                    region,
-                    opacityList,
-                    bgcolor,
-                    q,
-                ),
-            )
-            p.start()
 
-            queue_list.append(q)
-            proc_list.append(p)
-            cmd_lists.append((cmdList, region))
+        # Reused for the same reason as in BitmapRenderer.Render.
+        queue_list = [Queue() for _ in range(min(nprocs, num))]
+        try:
+            for cmdList, region in filteredCmdLists:
+                count += 1
+                q = queue_list[proc_count]
+                # The separate render process
+                p = Process(
+                    target=CompositeProcess,
+                    args=(
+                        self.imageWidth,
+                        self.imageHeight,
+                        self._tempDir,
+                        cmdList,
+                        region,
+                        opacityList,
+                        bgcolor,
+                        q,
+                    ),
+                )
+                p.start()
 
-            proc_count += 1
+                proc_list.append(p)
+                cmd_lists.append((cmdList, region))
 
-            # Wait for all running processes and read/store the created images
-            if proc_count == nprocs or count == num:
-                for i in range(len(cmd_lists)):
-                    proc_list[i].join()
-                    filename = queue_list[i].get()
-                    if filename is None:
-                        self._bitmapPool[HashCmds(cmd_lists[i][0], cmd_lists[i][1])] = (
-                            createNoDataBitmap(
+                proc_count += 1
+
+                # Wait for all running processes and read/store the created
+                # images
+                if proc_count >= nprocs or count == num:
+                    for i in range(len(cmd_lists)):
+                        filename = _waitForRenderedFile(
+                            proc_list[i],
+                            queue_list[i],
+                            partial(self._checkStopWhileWaiting, composed),
+                        )
+                        proc_list[i].join()
+                        key = HashCmds(*cmd_lists[i])
+                        if filename is None:
+                            self._bitmapPool[key] = createNoDataBitmap(
                                 self.imageWidth,
                                 self.imageHeight,
                                 text="Failed to render",
                             )
+                        else:
+                            self._bitmapPool[key] = BitmapFromImage(wx.Image(filename))
+                            os.remove(filename)
+                        # Progress counts finished maps, see
+                        # BitmapRenderer.Render.
+                        composed += 1
+                        self.compositionContinues.emit(
+                            current=composed, text=_("Overlaying map layers")
                         )
-                    else:
-                        self._bitmapPool[HashCmds(cmd_lists[i][0], cmd_lists[i][1])] = (
-                            BitmapFromImage(wx.Image(filename))
-                        )
-                        os.remove(filename)
-                proc_count = 0
-                proc_list = []
-                queue_list = []
-                cmd_lists = []
+                    proc_count = 0
+                    proc_list = []
+                    cmd_lists = []
 
-            self.compositionContinues.emit(
-                current=count, text=_("Overlaying map layers")
-            )
-            if self._stopComposing:
-                self._stopComposing = False
-                break
+                if self._stopComposing:
+                    self._stopComposing = False
+                    break
+        finally:
+            _finishProcesses(proc_list)
+            for q in queue_list:
+                q.close()
+            self._isComposing = False
 
-        self._isComposing = False
+    def _checkStopWhileWaiting(self, composed):
+        """Keeps the GUI alive while waiting for a composition process.
+
+        See BitmapRenderer._checkStopWhileWaiting.
+
+        :param composed: number of maps composed so far
+
+        :return: True if the user requested to stop the composition
+        """
+        self.compositionContinues.emit(
+            current=composed, text=_("Overlaying map layers")
+        )
+        wx.GetApp().Yield()
+        return self._stopComposing
 
     def RequestStopComposing(self):
         """Requests to stop the composition."""
@@ -729,6 +852,9 @@ class DictRefCounter:
         return key in self.dictionary
 
     def __delitem__(self, key):
+        if key not in self.referenceCount:
+            # Nothing was stored, the rendering failed or was cancelled.
+            return
         self.referenceCount[key] -= 1
         Debug.msg(5, "DictRefCounter.__delitem__: -1 for key {k}".format(k=key))
 
@@ -756,7 +882,12 @@ class MapFilesPool(DictRefCounter):
         self.size[key] = size
 
     def GetSize(self, key):
-        return self.size[key]
+        """Returns size of the stored image, None if nothing is stored.
+
+        A cancelled rendering can leave a file behind without registering it,
+        so the size tells whether that file can be reused.
+        """
+        return self.size.get(key)
 
     def Clear(self):
         """Removes files which are not needed anymore.
