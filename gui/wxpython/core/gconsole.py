@@ -42,6 +42,7 @@ from grass.script import task as gtask
 from grass.pydispatch.signal import Signal
 
 from grass.grassdb import history
+from grass.grassdb.data import stds_exists
 from grass.grassdb.history import Status
 
 from core import globalvar
@@ -743,9 +744,10 @@ class GConsole(wx.EvtHandler):
     def OnCmdDone(self, event):
         """Command done (or aborted)
 
-        Sends signal mapCreated if map is recognized in output parameters.
-        Sends signal grassdbChanged if a temporal dataset (STDS) is modified
-        or created. Also handles explicitly tracked modules (e.g., r.colors, t.register).
+        Sends signal mapCreated if map is recognized in output parameters
+        and signal grassdbChanged for maps and space time datasets, either
+        recognized in output parameters or for specific modules (as r.colors
+        or t.register) which modify their input.
         """
         # Process results here
         try:
@@ -815,8 +817,8 @@ class GConsole(wx.EvtHandler):
             return
 
         name = task.get_name()
-        # Defines all possible parameter prompts associated with space-time datasets.
-        # This allows us to intercept STDS creations/modifications alongside standard maps.
+        # Parameter prompts used by space time datasets. The generic "stds" one
+        # is used where a parameter accepts any of the three dataset types.
         stds_prompts = {"stds", "strds", "stvds", "str3ds"}
         for p in task.get_options()["params"]:
             prompt = p.get("prompt", "")
@@ -847,21 +849,22 @@ class GConsole(wx.EvtHandler):
                             lname += "@" + gs.gisenv()["MAPSET"]
                         element_name, element_mapset = lname.split("@", 1)
 
-                        # For STDS use stds_exists, not find_file
-                        if prompt in stds_prompts:
-                            from grass.grassdb.data import stds_exists
-
-                            if prompt == "stds":
-                                exists = False
-                                for t in ("strds", "stvds", "str3ds"):
-                                    if stds_exists(element_name, t, element_mapset):
-                                        prompt = t
-                                        exists = True
-                                        break
-                            else:
-                                exists = stds_exists(
-                                    element_name, prompt, element_mapset
-                                )
+                        # The generic stds prompt does not say which dataset
+                        # type this map is, so it is resolved by lookup.
+                        if prompt == "stds":
+                            prompt = next(
+                                (
+                                    stds_type
+                                    for stds_type in ("strds", "stvds", "str3ds")
+                                    if stds_exists(
+                                        element_name, stds_type, element_mapset
+                                    )
+                                ),
+                                None,
+                            )
+                            exists = prompt is not None
+                        elif prompt in stds_prompts:
+                            exists = stds_exists(element_name, prompt, element_mapset)
                         else:
                             exists = bool(
                                 gs.find_file(lname, element=p.get("element"))[

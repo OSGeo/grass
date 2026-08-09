@@ -148,63 +148,62 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
 
     try:
         conns = (
-            Tools()
-            .t_connect(
-                flags="p", format="json", mapset=",".join(mapsets), quiet=True, env=env
-            )
+            Tools(env=env)
+            .t_connect(flags="p", format="json", mapset=",".join(mapsets), quiet=True)
             .json
         )
-        tgis_mapsets = [c["mapset"] for c in conns if c.get("driver")]
-    except ToolError:
+        tgis_mapsets = ",".join(c["mapset"] for c in conns if c.get("driver"))
+
+        if tgis_mapsets:
+            # grass.temporal takes the session from os.environ, so the temporary
+            # gisrc has to go there. This may be removed later when we have the
+            # option of passing env to tgis.init().
+            old_env = os.environ.copy()
+
+            import grass.temporal as tgis
+
+            try:
+                os.environ.update(env)
+                tgis.init(raise_fatal_error=True, skip_db_init=True)
+
+                dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=tgis_mapsets)
+                dbif.connect()
+                try:
+                    stds_by_mapset = tgis.tlist_grouped(
+                        "stds", group_type=True, dbif=dbif
+                    )
+                    reg_maps = tgis.registered_maps_grouped(dbif=dbif)
+                finally:
+                    dbif.close()
+            finally:
+                os.environ.clear()
+                os.environ.update(old_env)
+
+            for mapset, stds_by_type in stds_by_mapset.items():
+                if mapset not in maps_dict:
+                    continue
+                maps_dict[mapset].extend(
+                    {
+                        "name": name,
+                        "type": stds_type,
+                        "registered_maps": reg_maps.get(stds_type, {}).get(
+                            f"{name}@{mapset}", []
+                        ),
+                    }
+                    for stds_type, names in stds_by_type.items()
+                    for name in names
+                )
+    except Exception as error:
         queue.put(
             (
                 maps_dict,
-                _("Failed to read temporal datasets from project <{l}>.").format(
-                    l=location
+                _("Failed to read temporal datasets from project <{l}>: {e}").format(
+                    l=location, e=error
                 ),
             )
         )
         gs.try_remove(tmp_gisrc_file)
         return
-
-    if tgis_mapsets:
-        # We must update os.environ so grass.temporal knows which temporary gisrc to use.
-        # This may be removed later when we have the option of passing env to tgis.init()
-        old_env = os.environ.copy()
-
-        import grass.temporal as tgis
-
-        try:
-            os.environ.update(env)
-
-            tgis.init(raise_fatal_error=True, skip_db_init=True)
-
-            dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=",".join(tgis_mapsets))
-            dbif.connect()
-
-            stds_by_mapset = tgis.tlist_grouped("stds", group_type=True, dbif=dbif)
-            reg_maps = tgis.registered_maps_grouped(dbif=dbif)
-
-            for m_set, types_dict in stds_by_mapset.items():
-                if m_set in maps_dict:
-                    maps_dict[m_set].extend(
-                        [
-                            {
-                                "name": d_name,
-                                "type": t_type,
-                                "registered_maps": reg_maps.get(t_type, {}).get(
-                                    f"{d_name}@{m_set}", []
-                                ),
-                            }
-                            for t_type, stds_names in types_dict.items()
-                            for d_name in stds_names
-                        ]
-                    )
-
-            dbif.close()
-        finally:
-            os.environ.clear()
-            os.environ.update(old_env)
 
     queue.put((maps_dict, None))
     gs.try_remove(tmp_gisrc_file)
@@ -320,16 +319,19 @@ class DataCatalogNode(DictFilterNode):
 
 
 class DataCatalogTreeModel(TreeModel):
-    """Data catalog-specific tree model with STDS pinning."""
+    """Tree model listing space time datasets before the individual maps."""
 
     def SortChildren(self, node):
-        """Sort children naturally, pinning temporal datasets to the top."""
+        """Sort children naturally, space time datasets first
+
+        Natural sort compares the key as text, so the group a node belongs to
+        is expressed as a numeric prefix rather than as a separate sort field.
+        """
         if node.children:
 
-            def sort_key(n):
-                if n.data.get("type") in STDS_TYPES:
-                    return "0_" + n.label
-                return "1_" + n.label
+            def sort_key(child):
+                group = "0" if child.data.get("type") in STDS_TYPES else "1"
+                return f"{group}_{child.label}"
 
             naturally_sort(node.children, key=sort_key)
 
@@ -949,21 +951,20 @@ class DataCatalogTree(TreeView):
         self.RefreshNode(self.current_mapset_node, recursive=True)
 
     def _populateMapsetItem(self, mapset_node, data):
-        registered_maps_set = set()
-        for item in data:
-            if "registered_maps" in item:
-                child_type = STDS_TO_MAP_TYPE[item["type"]]
-                registered_maps_set.update(
-                    (r_map["id"].split("@")[0], child_type)
-                    for r_map in item["registered_maps"]
-                )
+        mapset_name = mapset_node.data["name"]
+        registered_map_ids = {
+            (r_map["id"], STDS_TO_MAP_TYPE[item["type"]])
+            for item in data
+            if "registered_maps" in item
+            for r_map in item["registered_maps"]
+        }
 
         for item in data:
-            if (item["name"], item.get("type")) in registered_maps_set:
+            if (f"{item['name']}@{mapset_name}", item["type"]) in registered_map_ids:
                 continue
 
             registered_maps = item.pop("registered_maps", [])
-            node = self._model.AppendNode(parent=mapset_node, data=dict(**item))
+            node = self._model.AppendNode(parent=mapset_node, data=dict(item))
             if registered_maps:
                 child_type = STDS_TO_MAP_TYPE[item["type"]]
                 for r_map in registered_maps:
@@ -1911,7 +1912,20 @@ class DataCatalogTree(TreeView):
         self.showNotification.emit(message=_("g.remove completed"))
 
     def OnDeleteStds(self, event):
-        """Delete one or multiple temporal datasets using t.remove"""
+        """Delete selected temporal datasets, keeping their registered maps"""
+        self._deleteStds(delete_maps=False)
+
+    def OnDeleteStdsAndMaps(self, event):
+        """Delete selected temporal datasets together with their registered maps"""
+        self._deleteStds(delete_maps=True)
+
+    def _deleteStds(self, delete_maps):
+        """Delete one or multiple temporal datasets using t.remove
+
+        Deleting a dataset always unregisters its maps from it. With
+        delete_maps they are removed from the mapset as well, otherwise they
+        stay there and reappear in the map list of the mapset.
+        """
         names = [stds.data["name"] for stds in self.selected_stds]
 
         if len(names) == 1:
@@ -1927,19 +1941,21 @@ class DataCatalogTree(TreeView):
                 n=len(names)
             )
 
-        dlg = wx.RichMessageDialog(
-            self, question, _("Delete dataset"), wx.YES_NO | wx.NO_DEFAULT
-        )
-        dlg.ShowCheckBox(_("Also unregister maps from temporal database"), checked=True)
+        if delete_maps:
+            title = _("Delete dataset and maps")
+            question += "\n\n" + (
+                _("All maps registered in the dataset will be deleted as well.")
+                if len(names) == 1
+                else _("All maps registered in the datasets will be deleted as well.")
+            )
+        else:
+            title = _("Delete dataset")
 
-        if dlg.ShowModal() != wx.ID_YES:
-            dlg.Destroy()
+        if self._confirmDialog(question, title=title) != wx.ID_YES:
             return
 
-        unregister_maps = dlg.IsCheckBoxChecked()
-        dlg.Destroy()
-
         self.showNotification.emit(message=_("Deleting datasets..."))
+        self.busy = wx.BusyCursor()
 
         for stds_node, grassdb_node, location_node, mapset_node in zip(
             self.selected_stds,
@@ -1957,9 +1973,12 @@ class DataCatalogTree(TreeView):
                 mapset_node.data["name"],
             )
 
-            flags = "rf" if unregister_maps else "f"
             removed, cmd = self._runCommand(
-                "t.remove", inputs=stds_name, type=stds_type, flags=flags, env=env
+                "t.remove",
+                inputs=stds_name,
+                type=stds_type,
+                flags="df" if delete_maps else "f",
+                env=env,
             )
             gs.try_remove(gisrc)
 
@@ -1972,6 +1991,8 @@ class DataCatalogTree(TreeView):
                     map=stds_name,
                     action="delete",
                 )
+
+        del self.busy
 
         self.UnselectAll()
         self.showNotification.emit(message=_("t.remove completed"))
@@ -2624,7 +2645,7 @@ class DataCatalogTree(TreeView):
             self.showNotification.emit(message=msg)
             self.UnselectAll()
 
-    def OnPlotTimeline(self, event):
+    def OnDisplayTemporalExtent(self, event):
         """Launch g.gui.timeline for one or more selected datasets"""
         inputs = [
             f"{n.data['name']}@{m.data['name']}"
@@ -2728,19 +2749,28 @@ class DataCatalogTree(TreeView):
             return currentGrassDb, currentLocation, currentMapset
         return True, True, True
 
+    def _getMapsetsInSearchPath(self):
+        """Names of the mapsets in the current search path
+
+        Tools reading a dataset (t.merge, g.gui.timeline) only see datasets
+        of these mapsets. Returns an empty set when the search path cannot
+        be read, which disables those tools rather than letting them fail.
+        """
+        try:
+            return set(
+                self.tools.g_mapsets(format="json", flags="p", quiet=True)["mapsets"]
+            )
+        except ToolError:
+            return set()
+
     def _popupMenuStds(self):
         """Create dedicated popup menu for space time datasets"""
         menu = Menu()
 
         is_active = self.selected_mapset[0] == self.current_mapset_node
-
-        try:
-            path_output = self.tools.g_mapsets(format="json", flags="p", quiet=True)
-            accessible = set(path_output["mapsets"])
-        except ToolError:
-            accessible = set()
-
-        is_accessible = self.selected_mapset[0].data["name"] in accessible
+        is_accessible = (
+            self.selected_mapset[0].data["name"] in self._getMapsetsInSearchPath()
+        )
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Register maps"))
         menu.AppendItem(item)
@@ -2757,18 +2787,22 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnUpdateMetadata, item)
         item.Enable(is_active)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Plot &timeline"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Display &temporal extent"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnPlotTimeline, item)
+        self.Bind(wx.EVT_MENU, self.OnDisplayTemporalExtent, item)
         item.Enable(HAS_MATPLOTLIB and is_accessible)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename dataset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameStds, item)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete dataset"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete dataset only"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteStds, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Delete dataset and maps"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteStdsAndMaps, item)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Export dataset"))
         menu.AppendItem(item)
@@ -3097,17 +3131,12 @@ class DataCatalogTree(TreeView):
         """Create popup menu for multiple selected space time datasets"""
         menu = Menu()
 
-        try:
-            path_output = self.tools.g_mapsets(format="json", flags="p", quiet=True)
-            accessible = set(path_output["mapsets"])
-        except ToolError:
-            accessible = set()
-
+        accessible = self._getMapsetsInSearchPath()
         is_accessible = all(m.data["name"] in accessible for m in self.selected_mapset)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("Plot &timeline"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Display &temporal extent"))
         menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnPlotTimeline, item)
+        self.Bind(wx.EVT_MENU, self.OnDisplayTemporalExtent, item)
         item.Enable(HAS_MATPLOTLIB and is_accessible)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Merge datasets"))
@@ -3115,9 +3144,13 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnMergeStds, item)
         item.Enable(is_accessible)
 
-        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete datasets"))
+        item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete datasets only"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteStds, item)
+
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Delete datasets and maps"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDeleteStdsAndMaps, item)
 
         self.PopupMenu(menu)
         menu.Destroy()

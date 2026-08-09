@@ -10,6 +10,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
+from datetime import datetime
+
 import grass.script as gs
 from grass.exceptions import ScriptError
 
@@ -190,7 +192,11 @@ def registered_maps_grouped(dbif=None):
         # mutually comparable; maps without a start time are listed last.
         def sort_key(map_info):
             start = map_info["start_time"]
-            return (start is None, 0 if start is None else start)
+            if start is None:
+                return (2, 0)
+            if isinstance(start, datetime):
+                return (0, start)
+            return (1, start)
 
         for datasets in result.values():
             for maps in datasets.values():
