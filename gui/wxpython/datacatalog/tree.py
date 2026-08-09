@@ -978,6 +978,30 @@ class DataCatalogTree(TreeView):
                     )
         self._model.SortChildren(mapset_node)
 
+    def _unhideMapsInMapset(self, mapset_node, map_ids, map_type):
+        """Add maps back to the map list of a mapset after unregistration
+
+        A registered map is listed under the datasets it belongs to instead
+        of under the mapset, so it returns to the map list only once no
+        dataset of this mapset holds it anymore. Maps of other mapsets are
+        listed in their own mapset and are left alone.
+        """
+        mapset_name = mapset_node.data["name"]
+        still_registered = {
+            child.data["map_id"]
+            for node in mapset_node.children
+            if node.data["type"] in STDS_TYPES
+            for child in node.children
+        }
+        for map_id in map_ids:
+            name, map_mapset = map_id.split("@", 1)
+            if map_mapset != mapset_name or map_id in still_registered:
+                continue
+            self._model.AppendNode(
+                parent=mapset_node, data={"type": map_type, "name": name}
+            )
+        self._model.SortChildren(mapset_node)
+
     def _initImages(self):
         bmpsize = (16, 16)
         icons = {
@@ -1957,42 +1981,43 @@ class DataCatalogTree(TreeView):
         self.showNotification.emit(message=_("Deleting datasets..."))
         self.busy = wx.BusyCursor()
 
-        for stds_node, grassdb_node, location_node, mapset_node in zip(
-            self.selected_stds,
-            self.selected_grassdb,
-            self.selected_location,
-            self.selected_mapset,
-            strict=True,
-        ):
-            stds_type = stds_node.data["type"]
-            stds_name = stds_node.data["name"]
+        try:
+            for stds_node, grassdb_node, location_node, mapset_node in zip(
+                self.selected_stds,
+                self.selected_grassdb,
+                self.selected_location,
+                self.selected_mapset,
+                strict=True,
+            ):
+                stds_type = stds_node.data["type"]
+                stds_name = stds_node.data["name"]
 
-            gisrc, env = gs.create_environment(
-                grassdb_node.data["name"],
-                location_node.data["name"],
-                mapset_node.data["name"],
-            )
-
-            removed, cmd = self._runCommand(
-                "t.remove",
-                inputs=stds_name,
-                type=stds_type,
-                flags="df" if delete_maps else "f",
-                env=env,
-            )
-            gs.try_remove(gisrc)
-
-            if removed == 0:
-                self._giface.grassdbChanged.emit(
-                    grassdb=grassdb_node.data["name"],
-                    location=location_node.data["name"],
-                    mapset=mapset_node.data["name"],
-                    element=stds_type,
-                    map=stds_name,
-                    action="delete",
+                gisrc, env = gs.create_environment(
+                    grassdb_node.data["name"],
+                    location_node.data["name"],
+                    mapset_node.data["name"],
                 )
 
-        del self.busy
+                removed, cmd = self._runCommand(
+                    "t.remove",
+                    inputs=stds_name,
+                    type=stds_type,
+                    flags="df" if delete_maps else "f",
+                    env=env,
+                )
+                gs.try_remove(gisrc)
+
+                if removed == 0:
+                    self._giface.grassdbChanged.emit(
+                        grassdb=grassdb_node.data["name"],
+                        location=location_node.data["name"],
+                        mapset=mapset_node.data["name"],
+                        element=stds_type,
+                        map=stds_name,
+                        action="delete",
+                    )
+        finally:
+            del self.busy
 
         self.UnselectAll()
         self.showNotification.emit(message=_("t.remove completed"))
@@ -2600,7 +2625,7 @@ class DataCatalogTree(TreeView):
         self.showNotification.emit(message=msg)
 
         success_count = 0
-        mapsets_to_reload = set()
+        mapsets_to_refresh = set()
 
         for stds_node, map_nodes in stds_groups.items():
             mapset_node = stds_node.parent
@@ -2631,11 +2656,17 @@ class DataCatalogTree(TreeView):
 
             if unregistered == 0:
                 success_count += len(map_nodes)
-                mapsets_to_reload.add(mapset_node)
+                # The unregistered maps are known here, so the tree is
+                # updated in place instead of reloading the mapset again.
+                for map_node in map_nodes:
+                    self._model.RemoveNode(map_node)
+                self._unhideMapsInMapset(
+                    mapset_node, [n.data["map_id"] for n in map_nodes], map_type
+                )
+                mapsets_to_refresh.add(mapset_node)
 
         if success_count > 0:
-            for m_node in mapsets_to_reload:
-                self._reloadMapsetNode(m_node)
+            for m_node in mapsets_to_refresh:
                 self.RefreshNode(m_node, recursive=True)
 
             if success_count == 1:

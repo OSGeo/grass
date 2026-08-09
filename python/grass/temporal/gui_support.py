@@ -190,6 +190,8 @@ def registered_maps_grouped(dbif=None):
 
         # A dataset is homogeneous in temporal type, so its start times are
         # mutually comparable; maps without a start time are listed last.
+        # A dataset holding both absolute and relative time maps is ordered by
+        # absolute time first, then relative time, then maps without a start time.
         def sort_key(map_info):
             start = map_info["start_time"]
             if start is None:
