@@ -245,7 +245,6 @@ class TplotFrame(wx.Frame):
         self.controlPanelSizerRaster.Add(self.linRegRaster, flag=wx.EXPAND)
 
         self.controlPanelRaster.SetSizer(self.controlPanelSizerRaster)
-        self.controlPanelSizerRaster.Fit(self)
         self.ntb.AddPage(page=self.controlPanelRaster, text=_("STRDS"), name="STRDS")
 
         # ------------ITEMS IN NOTEBOOK PAGE (VECTOR)------------------------
@@ -314,7 +313,6 @@ class TplotFrame(wx.Frame):
         self.controlPanelSizerVector.Add(self.linRegVector, flag=wx.EXPAND)
 
         self.controlPanelVector.SetSizer(self.controlPanelSizerVector)
-        self.controlPanelSizerVector.Fit(self)
         self.ntb.AddPage(page=self.controlPanelVector, text=_("STVDS"), name="STVDS")
 
         # ------------ITEMS IN NOTEBOOK PAGE (LABELS)------------------------
@@ -357,7 +355,6 @@ class TplotFrame(wx.Frame):
         self.controlPanelSizerLabels.Add(self.yLabel, flag=wx.EXPAND)
         self.controlPanelSizerLabels.Add(self.y, flag=wx.EXPAND)
         self.controlPanelLabels.SetSizer(self.controlPanelSizerLabels)
-        self.controlPanelSizerLabels.Fit(self)
         self.ntb.AddPage(page=self.controlPanelLabels, text=_("Labels"), name="Labels")
 
         # ------------ITEMS IN NOTEBOOK PAGE (EXPORT)------------------------
@@ -391,8 +388,6 @@ class TplotFrame(wx.Frame):
         self.controlPanelSizerExport.Add(self.csvButton)
         self.controlPanelSizerExport.Add(self.controlPanelSizerCheck)
         self.controlPanelExport.SetSizer(self.controlPanelSizerExport)
-        self.controlPanelSizerCheck.Fit(self)
-        self.controlPanelSizerExport.Fit(self)
         self.ntb.AddPage(page=self.controlPanelExport, text=_("Export"), name="Export")
 
         # ------------Buttons on the bottom(draw,help)------------
@@ -407,11 +402,17 @@ class TplotFrame(wx.Frame):
         self.vButtSizer.Add(self.helpButton)
         self.vButtPanel.SetSizer(self.vButtSizer)
 
-        self.mainPanel.SetSizer(self.vbox)
         self.vbox.Add(self.ntb, flag=wx.EXPAND)
         self.vbox.Add(self.vButtPanel, flag=wx.EXPAND)
-        self.vbox.Fit(self)
-        self.mainPanel.Fit()
+        self.mainPanel.SetSizer(self.vbox)
+
+        # Lay the panel out through a frame sizer so that resizing the window
+        # reaches the canvas, the only item in vbox allowed to grow.
+        frameSizer = wx.BoxSizer(wx.VERTICAL)
+        frameSizer.Add(self.mainPanel, proportion=1, flag=wx.EXPAND)
+        self.SetSizer(frameSizer)
+        frameSizer.Fit(self)
+        self.SetMinSize(wx.Size(400, 400))
 
     def _getSTRDdata(self, timeseries):
         """Load data and read properties
