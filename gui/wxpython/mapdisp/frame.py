@@ -45,6 +45,7 @@ from gui_core.query import PrepareQueryResults, QueryDialog
 from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
 from gui_core.wrap import Menu
 from main_window.page import MainPageBase
+from main_window.notebook import MainNotebook
 from mapdisp import statusbar as sb
 from mapdisp.gprint import PrintOptions
 from mapdisp.toolbars import MapToolbar, NvizIcons
@@ -506,6 +507,8 @@ class MapPanel(SingleMapPanel, MainPageBase):
             self.MapWindow3D.UpdateView(None)
             self.MapWindow3D.overlayActivated.connect(self._activateOverlay)
             self.MapWindow3D.overlayRemoved.connect(self.RemoveOverlay)
+            if isinstance(self.parent, MainNotebook):
+                self.parent.dockPage.connect(self.MapWindow3D.dockPage)
         else:
             self._switchMapWindow(self.MapWindow3D)
             os.environ["GRASS_REGION"] = self.Map.SetRegion(windres=True, windres3=True)
