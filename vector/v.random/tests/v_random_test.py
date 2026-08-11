@@ -40,9 +40,9 @@ def test_points_are_3d(session):
     tools = Tools(session=session)
     tools.v_random(output="points", npoints=NPOINTS, zmin=10, zmax=120, flags="z")
 
-topology = tools.v_info(map="points", flags="t", format="json").json
-assert topology["points"] == NPOINTS
-assert topology["map3d"] == 1
+    topology = tools.v_info(map="points", flags="t", format="json").json
+    assert topology["points"] == NPOINTS
+    assert topology["map3d"] == 1
 
 
 def test_restrict_to_area(session):
