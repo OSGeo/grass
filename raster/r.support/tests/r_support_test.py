@@ -23,9 +23,8 @@ def session(tmp_path):
 
 def test_semantic_label_and_removal_are_exclusive(session):
     """Setting and removing a semantic label in one call must fail."""
-    tools = Tools(session=session)
     with pytest.raises(CalledModuleError):
-        tools.r_support(map="test", semantic_label=SEMANTIC_LABEL, b=True)
+        tools.r_support(map="test", semantic_label=SEMANTIC_LABEL, flags="b")
 
 
 def test_invalid_semantic_label_is_rejected(session):
