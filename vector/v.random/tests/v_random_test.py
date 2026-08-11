@@ -18,7 +18,7 @@ def session(tmp_path):
     project = tmp_path / "v_random_project"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
-        tools = Tools(session=session, overwrite=True)
+        tools = Tools(session=session)
         tools.g_region(n=100, s=0, e=100, w=0, res=1)
         tools.g_region(n=80, s=20, e=80, w=20)
         tools.v_in_region(output="restrict_area")
