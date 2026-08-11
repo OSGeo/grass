@@ -304,6 +304,8 @@ def rmarea(
         edit_vector = cleanfile
 
     # Apply upper threshold
+    # contrary to the lower threshold, areas larger than threshold are
+    # not merged with a neighbour, but deleted
     if upper:
         tools.v_to_db(
             map=edit_vector,
@@ -355,7 +357,16 @@ def main() -> None:
                 "Use 'lower' and/or 'upper'.",
             ),
         )
-        options["lower" if options["mode"] == "greater" else "upper"] = options["value"]
+        # backwards compatibility for mixed-up logic in previous version
+        # of r.reclass.area
+        if options["method"] == "rmarea":
+            options["lower" if options["mode"] == "lesser" else "upper"] = options[
+                "value"
+            ]
+        else:
+            options["lower" if options["mode"] == "greater" else "upper"] = options[
+                "value"
+            ]
 
     # Define filter thresholds
     lower = float(options["lower"]) if options["lower"] else None

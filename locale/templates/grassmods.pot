@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-25 16:39+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1930,7 +1930,7 @@ msgstr ""
 #: ../raster/r.regression.multi/main.c:137 ../raster/r.relief/main.c:104
 #: ../raster/r.report/main.c:67 ../raster/r.resamp.bspline/main.c:77
 #: ../raster/r.resamp.filter/main.c:422 ../raster/r.resamp.interp/main.c:85
-#: ../raster/r.resamp.rst/main.c:144 ../raster/r.resamp.stats/main.c:262
+#: ../raster/r.resamp.rst/main.c:144 ../raster/r.resamp.stats/main.c:396
 #: ../raster/r.resample/main.c:53 ../raster/r.rescale.eq/main.c:53
 #: ../raster/r.rescale/main.c:48 ../raster/r.ros/main.c:207
 #: ../raster/r.series.accumulate/main.c:76 ../raster/r.series.interp/main.c:72
@@ -5365,7 +5365,7 @@ msgstr ""
 #: ../scripts/r.buffer.lowmem/r.buffer.lowmem.py:85
 #: ../scripts/r.fillnulls/r.fillnulls.py:152 ../scripts/r.grow/r.grow.py:124
 #: ../scripts/r.mask/r.mask.py:151 ../scripts/r.pack/r.pack.py:74
-#: ../scripts/r.reclass.area/r.reclass.area.py:345 ../scripts/r.rgb/r.rgb.py:55
+#: ../scripts/r.reclass.area/r.reclass.area.py:347 ../scripts/r.rgb/r.rgb.py:55
 #: ../scripts/v.rast.stats/v.rast.stats.py:154 ../vector/v.colors/main.c:317
 #: ../vector/v.vol.rst/main.c:604
 #, c-format, python-format
@@ -14529,7 +14529,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:3
 #: ../raster/r.in.lidar/main.c:115 ../raster/r.in.pdal/main.cpp:95
 #: ../raster/r.in.xyz/main.c:157 ../raster/r.neighbors/main.c:184
-#: ../raster/r.patch/main.c:73 ../raster/r.resamp.stats/main.c:265
+#: ../raster/r.patch/main.c:73 ../raster/r.resamp.stats/main.c:399
 #: ../raster/r.series/main.c:154 ../raster3d/r3.in.lidar/main.c:164
 #: ../raster3d/r3.neighbors/main.c:208 ../vector/v.neighbors/main.c:122
 msgid "aggregation"
@@ -15750,7 +15750,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:15
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:8
-#: ../raster/r.neighbors/main.c:268 ../raster/r.resamp.stats/main.c:285
+#: ../raster/r.neighbors/main.c:268 ../raster/r.resamp.stats/main.c:420
 #: ../raster/r.series/main.c:187 ../raster3d/r3.neighbors/main.c:124
 msgid "Quantile to calculate for method=quantile"
 msgstr ""
@@ -15837,7 +15837,7 @@ msgid "Do not assign the space time raster dataset start and end time to the out
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:12
-#: ../raster/r.resamp.filter/main.c:480 ../raster/r.resamp.stats/main.c:291
+#: ../raster/r.resamp.filter/main.c:480 ../raster/r.resamp.stats/main.c:429
 #: ../raster/r.series.accumulate/main.c:160 ../raster/r.series/main.c:210
 msgid "Propagate NULLs"
 msgstr ""
@@ -15904,8 +15904,8 @@ msgstr ""
 #: ../raster/r.horizon/main.c:182 ../raster/r.mfilter/main.c:69
 #: ../raster/r.neighbors/main.c:188 ../raster/r.param.scale/interface.c:59
 #: ../raster/r.patch/main.c:75 ../raster/r.resamp.filter/main.c:437
-#: ../raster/r.resamp.interp/main.c:92 ../raster/r.series/main.c:156
-#: ../raster/r.sim/r.sim.sediment/main.c:119
+#: ../raster/r.resamp.interp/main.c:92 ../raster/r.resamp.stats/main.c:400
+#: ../raster/r.series/main.c:156 ../raster/r.sim/r.sim.sediment/main.c:119
 #: ../raster/r.sim/r.sim.water/main.c:118 ../raster/r.slope.aspect/main.c:171
 #: ../raster/r.smooth.edgepreserve/main.c:49 ../raster/r.sun/main.c:245
 #: ../raster/r.texture/main.c:101 ../raster/r.univar/r.univar_main.c:169
@@ -16899,7 +16899,7 @@ msgid "Calculates univariate statistics from a raster map based on a vector map 
 msgstr ""
 
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:5
-#: ../raster/r.resamp.stats/main.c:264 ../raster/r.univar/r.univar_main.c:167
+#: ../raster/r.resamp.stats/main.c:398 ../raster/r.univar/r.univar_main.c:167
 #: ../raster/r.univar/r3.univar_main.c:120 ../vector/v.univar/main.c:96
 #: ../vector/v.vect.stats/main.c:139
 msgid "univariate statistics"
@@ -20726,36 +20726,41 @@ msgstr ""
 msgid "Search radius size must cover at least 1 cell"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:293
+#: ../raster/r.geomorphon/main.c:288
+#, c-format
+msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
+msgstr ""
+
+#: ../raster/r.geomorphon/main.c:301
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:299
+#: ../raster/r.geomorphon/main.c:307
 msgid "Flatness threshold must be grater than 0"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:308
+#: ../raster/r.geomorphon/main.c:316
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:335
+#: ../raster/r.geomorphon/main.c:343
 #, c-format
 msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:412
+#: ../raster/r.geomorphon/main.c:420
 msgid "Unknown output data type"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:539
+#: ../raster/r.geomorphon/main.c:547
 msgid "Profile data has been written"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:542
+#: ../raster/r.geomorphon/main.c:550
 msgid "Failed writing profile data"
 msgstr ""
 
-#: ../raster/r.geomorphon/main.c:638
+#: ../raster/r.geomorphon/main.c:646
 msgid "Failed to profile the computation, please check the parameters"
 msgstr ""
 
@@ -23416,9 +23421,9 @@ msgstr ""
 #: ../raster/r.mapcalc/main.c:260 ../raster/r.mfilter/main.c:127
 #: ../raster/r.neighbors/main.c:304 ../raster/r.param.scale/interface.c:141
 #: ../raster/r.patch/main.c:108 ../raster/r.resamp.filter/main.c:488
-#: ../raster/r.resamp.interp/main.c:126 ../raster/r.series/main.c:225
-#: ../raster/r.slope.aspect/main.c:303 ../raster/r.texture/main.c:318
-#: ../raster/r.univar/r.univar_main.c:247
+#: ../raster/r.resamp.interp/main.c:126 ../raster/r.resamp.stats/main.c:441
+#: ../raster/r.series/main.c:225 ../raster/r.slope.aspect/main.c:303
+#: ../raster/r.texture/main.c:318 ../raster/r.univar/r.univar_main.c:247
 #, c-format
 msgid "<%d> is not valid number of nprocs."
 msgstr ""
@@ -23615,7 +23620,7 @@ msgid "%s: Unable to read category labels"
 msgstr ""
 
 #: ../raster/r.mode/main.c:142 ../raster/r.resamp.filter/main.c:679
-#: ../raster/r.resamp.interp/main.c:464 ../raster/r.resamp.stats/main.c:401
+#: ../raster/r.resamp.interp/main.c:464 ../raster/r.resamp.stats/main.c:544
 #: ../raster/r.tile/main.c:208
 #, c-format
 msgid "Unable to read color table for %s"
@@ -23625,7 +23630,7 @@ msgstr ""
 msgid "reading r.stats output"
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:112 ../raster/r.resamp.stats/main.c:304
+#: ../raster/r.neighbors/main.c:112 ../raster/r.resamp.stats/main.c:451
 #: ../raster/r.series/main.c:110 ../raster3d/r3.neighbors/main.c:92
 #, c-format
 msgid "Unknown method <%s>"
@@ -26358,7 +26363,7 @@ msgstr ""
 
 #: ../raster/r.resamp.bspline/main.c:79 ../raster/r.resamp.filter/main.c:423
 #: ../raster/r.resamp.interp/main.c:86 ../raster/r.resamp.rst/main.c:145
-#: ../raster/r.resamp.stats/main.c:263 ../raster/r.resample/main.c:54
+#: ../raster/r.resamp.stats/main.c:397 ../raster/r.resample/main.c:54
 msgid "resample"
 msgstr ""
 
@@ -26803,15 +26808,20 @@ msgstr ""
 msgid "Error writing temporary file <%s>"
 msgstr ""
 
-#: ../raster/r.resamp.stats/main.c:267
+#: ../raster/r.resamp.stats/main.c:121
+#, c-format
+msgid "Using %d thread(s), %d buffered output rows"
+msgstr ""
+
+#: ../raster/r.resamp.stats/main.c:402
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr ""
 
-#: ../raster/r.resamp.stats/main.c:277
+#: ../raster/r.resamp.stats/main.c:412
 msgid "Aggregation method"
 msgstr ""
 
-#: ../raster/r.resamp.stats/main.c:295
+#: ../raster/r.resamp.stats/main.c:433
 msgid "Weight according to area (slower)"
 msgstr ""
 
@@ -34987,7 +34997,7 @@ msgstr ""
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:354
+#: ../scripts/r.reclass.area/r.reclass.area.py:356
 msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
 msgstr ""
 
