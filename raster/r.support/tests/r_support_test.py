@@ -15,7 +15,7 @@ def session(tmp_path):
     project = tmp_path / "r_support_project"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
-        tools = Tools(session=session, overwrite=True)
+        tools = Tools(session=session)
         tools.g_region(n=1, s=0, e=1, w=0, res=1)
         tools.r_mapcalc(expression="test = 1")
         yield session
