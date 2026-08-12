@@ -21,6 +21,13 @@ areas outside the given thresholds using [v.clean](v.clean.md) and
 [v.edit](v.edit.md). With the **-v** flag the **output** is the
 filtered vector map instead of a raster.
 
+An important difference between the two methods with regard to the
+**lower** area size threshold is that **method=reclass** deletes
+these areas, whereas **method=rmarea** tries to merge these small
+areas with a neighbouring larger area if existing. Details are
+explained in [v.clean](v.clean.md) describing the behaviour of
+**tool=rmarea**.
+
 ## EXAMPLES
 
 In this example, the ZIP code map in the North Carolina sample dataset
