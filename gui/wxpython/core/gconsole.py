@@ -741,6 +741,24 @@ class GConsole(wx.EvtHandler):
         )
         event.Skip()
 
+    @staticmethod
+    def _getStdsTypeCandidates(task):
+        """Space time dataset types a generic stds parameter of a tool can be
+
+        The type option of the tool names either the dataset type
+        (G_OPT_STDS_TYPE) or the type of the maps it holds (G_OPT_MAP_TYPE),
+        which leaves a single type to look up instead of all three.
+        """
+        stds_types = ("strds", "stvds", "str3ds")
+        map_types = {"raster": "strds", "vector": "stvds", "raster_3d": "str3ds"}
+        option = task.get_param(value="type", raiseError=False)
+        value = (option.get("value") or option.get("default")) if option else None
+        if value in stds_types:
+            return (value,)
+        if value in map_types:
+            return (map_types[value],)
+        return stds_types
+
     def OnCmdDone(self, event):
         """Command done (or aborted)
 
@@ -820,6 +838,7 @@ class GConsole(wx.EvtHandler):
         # Parameter prompts used by space time datasets. The generic "stds" one
         # is used where a parameter accepts any of the three dataset types.
         stds_prompts = {"stds", "strds", "stvds", "str3ds"}
+        stds_candidates = self._getStdsTypeCandidates(task)
         for p in task.get_options()["params"]:
             prompt = p.get("prompt", "")
             if prompt in {"raster", "vector", "raster_3d"} | stds_prompts and p.get(
@@ -850,19 +869,22 @@ class GConsole(wx.EvtHandler):
                         element_name, element_mapset = lname.split("@", 1)
 
                         # The generic stds prompt does not say which dataset
-                        # type this map is, so it is resolved by lookup.
+                        # type this map is, so it is resolved per map. Keep it
+                        # apart from prompt, which describes every value of
+                        # the parameter and must stay the same for all of them.
+                        element = prompt
                         if prompt == "stds":
-                            prompt = next(
+                            element = next(
                                 (
                                     stds_type
-                                    for stds_type in ("strds", "stvds", "str3ds")
+                                    for stds_type in stds_candidates
                                     if stds_exists(
                                         element_name, stds_type, element_mapset
                                     )
                                 ),
                                 None,
                             )
-                            exists = prompt is not None
+                            exists = element is not None
                         elif prompt in stds_prompts:
                             exists = stds_exists(element_name, prompt, element_mapset)
                         else:
@@ -873,9 +895,9 @@ class GConsole(wx.EvtHandler):
                             )
 
                         if exists:
-                            if prompt not in stds_prompts:
+                            if element not in stds_prompts:
                                 self.mapCreated.emit(
-                                    name=lname, ltype=prompt, add=event.addLayer
+                                    name=lname, ltype=element, add=event.addLayer
                                 )
                             gisenv = gs.gisenv()
                             self._giface.grassdbChanged.emit(
@@ -884,7 +906,7 @@ class GConsole(wx.EvtHandler):
                                 mapset=gisenv["MAPSET"],
                                 action="new",
                                 map=element_name,
-                                element=prompt,
+                                element=element,
                             )
         if name == "r.mask":
             action = "new"

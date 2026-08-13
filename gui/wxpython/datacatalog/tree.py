@@ -950,10 +950,20 @@ class DataCatalogTree(TreeView):
         self._reloadMapsetNode(self.current_mapset_node)
         self.RefreshNode(self.current_mapset_node, recursive=True)
 
+    @staticmethod
+    def _mapIdWithoutLayer(map_id):
+        """Id of a registered map without the layer of a vector
+
+        A vector registered by layer has a "name:layer@mapset" id, a form
+        the map tools do not accept and which is not listed separately.
+        """
+        name, mapset = map_id.split("@", 1)
+        return f"{name.split(':', 1)[0]}@{mapset}"
+
     def _populateMapsetItem(self, mapset_node, data):
         mapset_name = mapset_node.data["name"]
         registered_map_ids = {
-            (r_map["id"], STDS_TO_MAP_TYPE[item["type"]])
+            (self._mapIdWithoutLayer(r_map["id"]), STDS_TO_MAP_TYPE[item["type"]])
             for item in data
             if "registered_maps" in item
             for r_map in item["registered_maps"]
@@ -967,13 +977,23 @@ class DataCatalogTree(TreeView):
             node = self._model.AppendNode(parent=mapset_node, data=dict(item))
             if registered_maps:
                 child_type = STDS_TO_MAP_TYPE[item["type"]]
+                # A vector registered with several layers has one id per
+                # layer. Layers are not listed separately, so the map gets a
+                # single node which keeps the ids it is registered with, the
+                # form t.unregister needs.
+                registered_ids = {}
                 for r_map in registered_maps:
+                    registered_ids.setdefault(
+                        self._mapIdWithoutLayer(r_map["id"]), []
+                    ).append(r_map["id"])
+                for map_id, ids in registered_ids.items():
                     self._model.AppendNode(
                         parent=node,
                         data={
                             "type": child_type,
-                            "name": r_map["id"].split("@")[0],
-                            "map_id": r_map["id"],
+                            "name": map_id.split("@", 1)[0],
+                            "map_id": map_id,
+                            "registered_ids": ids,
                         },
                     )
         self._model.SortChildren(mapset_node)
@@ -987,15 +1007,17 @@ class DataCatalogTree(TreeView):
         listed in their own mapset and are left alone.
         """
         mapset_name = mapset_node.data["name"]
+        # A raster and a vector of the same name share an id, so the type is
+        # part of the key, as it is when the maps are hidden.
         still_registered = {
-            child.data["map_id"]
+            (child.data["map_id"], child.data["type"])
             for node in mapset_node.children
             if node.data["type"] in STDS_TYPES
             for child in node.children
         }
         for map_id in map_ids:
             name, map_mapset = map_id.split("@", 1)
-            if map_mapset != mapset_name or map_id in still_registered:
+            if map_mapset != mapset_name or (map_id, map_type) in still_registered:
                 continue
             self._model.AppendNode(
                 parent=mapset_node, data={"type": map_type, "name": name}
@@ -1270,11 +1292,15 @@ class DataCatalogTree(TreeView):
                 font.SetWeight(wx.FONTWEIGHT_NORMAL)
         return font
 
-    def ExpandCurrentMapset(self):
-        """Expand current mapset"""
+    def ExpandCurrentMapset(self, recursive=False):
+        """Expand current mapset
+
+        Maps registered in a space time dataset are one level deeper than
+        the map list of the mapset and need recursive to be reached.
+        """
         if self.current_mapset_node:
             self.Select(self.current_mapset_node, select=True)
-            self.ExpandNode(self.current_mapset_node, recursive=False)
+            self.ExpandNode(self.current_mapset_node, recursive=recursive)
 
     def SetRestriction(self, restrict):
         self._restricted = restrict
@@ -1892,11 +1918,8 @@ class DataCatalogTree(TreeView):
         else:
             question = _("Do you really want to delete {n} maps?").format(n=len(names))
 
-        dlg = wx.MessageDialog(self, question, _("Delete map"), wx.YES_NO)
-        if dlg.ShowModal() != wx.ID_YES:
-            dlg.Destroy()
+        if self._confirmDialog(question, title=_("Delete map")) != wx.ID_YES:
             return
-        dlg.Destroy()
 
         if len(names) <= 10:
             label = _("Deleting {name}...").format(name=", ".join(names))
@@ -1981,6 +2004,7 @@ class DataCatalogTree(TreeView):
         self.showNotification.emit(message=_("Deleting datasets..."))
         self.busy = wx.BusyCursor()
 
+        deleted = []
         try:
             for stds_node, grassdb_node, location_node, mapset_node in zip(
                 self.selected_stds,
@@ -1989,9 +2013,6 @@ class DataCatalogTree(TreeView):
                 self.selected_mapset,
                 strict=True,
             ):
-                stds_type = stds_node.data["type"]
-                stds_name = stds_node.data["name"]
-
                 gisrc, env = gs.create_environment(
                     grassdb_node.data["name"],
                     location_node.data["name"],
@@ -2000,22 +2021,31 @@ class DataCatalogTree(TreeView):
 
                 removed, cmd = self._runCommand(
                     "t.remove",
-                    inputs=stds_name,
-                    type=stds_type,
+                    inputs=stds_node.data["name"],
+                    type=stds_node.data["type"],
                     flags="df" if delete_maps else "f",
                     env=env,
                 )
                 gs.try_remove(gisrc)
 
                 if removed == 0:
-                    self._giface.grassdbChanged.emit(
-                        grassdb=grassdb_node.data["name"],
-                        location=location_node.data["name"],
-                        mapset=mapset_node.data["name"],
-                        element=stds_type,
-                        map=stds_name,
-                        action="delete",
+                    deleted.append(
+                        (grassdb_node, location_node, mapset_node, stds_node)
                     )
+
+            # The signals are sent once every dataset is gone from the
+            # temporal database. The first one makes the handler read the
+            # mapset again, which drops all of them from the tree at once,
+            # so the later signals find nothing left to reload.
+            for grassdb_node, location_node, mapset_node, stds_node in deleted:
+                self._giface.grassdbChanged.emit(
+                    grassdb=grassdb_node.data["name"],
+                    location=location_node.data["name"],
+                    mapset=mapset_node.data["name"],
+                    element=stds_node.data["type"],
+                    map=stds_node.data["name"],
+                    action="delete",
+                )
         finally:
             del self.busy
 
@@ -2509,7 +2539,10 @@ class DataCatalogTree(TreeView):
 
         self.UpdateCurrentDbLocationMapsetNode()
         self.RefreshItems()
-        self.ExpandCurrentMapset()
+        # A match can be a map registered in a space time dataset, which is
+        # not reached by expanding the mapset alone. Expanding everything
+        # below the mapset is only affordable while a filter is active.
+        self.ExpandCurrentMapset(recursive=bool(name))
         if self._model.GetLeafCount(self._model.root) <= 50:
             self.ExpandAll()
 
@@ -2636,7 +2669,13 @@ class DataCatalogTree(TreeView):
             stds_name = stds_node.data["name"]
             map_type = map_nodes[0].data["type"]
 
-            maps = ",".join([n.data["map_id"] for n in map_nodes])
+            # A vector shown as one node can be registered with several
+            # layers, and each of those ids has to be unregistered.
+            maps = ",".join(
+                registered_id
+                for node in map_nodes
+                for registered_id in node.data["registered_ids"]
+            )
 
             gisrc, env = gs.create_environment(
                 grassdb_node.data["name"],
@@ -2794,14 +2833,34 @@ class DataCatalogTree(TreeView):
         except ToolError:
             return set()
 
+    def _selectedStdsAreAccessible(self):
+        """Whether the current session can read all the selected datasets
+
+        Tools started without an environment (t.merge, g.gui.timeline,
+        t.rast.export) run in the current project and see only the mapsets
+        of its search path. The mapset name alone does not decide this,
+        because mapset names can repeat across projects.
+        """
+        genv = gisenv()
+        accessible = self._getMapsetsInSearchPath()
+        return all(
+            grassdb.data["name"] == genv["GISDBASE"]
+            and location.data["name"] == genv["LOCATION_NAME"]
+            and mapset.data["name"] in accessible
+            for grassdb, location, mapset in zip(
+                self.selected_grassdb,
+                self.selected_location,
+                self.selected_mapset,
+                strict=True,
+            )
+        )
+
     def _popupMenuStds(self):
         """Create dedicated popup menu for space time datasets"""
         menu = Menu()
 
         is_active = self.selected_mapset[0] == self.current_mapset_node
-        is_accessible = (
-            self.selected_mapset[0].data["name"] in self._getMapsetsInSearchPath()
-        )
+        is_accessible = self._selectedStdsAreAccessible()
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Register maps"))
         menu.AppendItem(item)
@@ -2839,7 +2898,7 @@ class DataCatalogTree(TreeView):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnExportStds, item)
         stds_type = self.selected_stds[0].data["type"]
-        item.Enable(stds_type in {"strds", "stvds"})
+        item.Enable(is_accessible and stds_type in {"strds", "stvds"})
 
         menu.AppendSeparator()
 
@@ -3162,8 +3221,7 @@ class DataCatalogTree(TreeView):
         """Create popup menu for multiple selected space time datasets"""
         menu = Menu()
 
-        accessible = self._getMapsetsInSearchPath()
-        is_accessible = all(m.data["name"] in accessible for m in self.selected_mapset)
+        is_accessible = self._selectedStdsAreAccessible()
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Display &temporal extent"))
         menu.AppendItem(item)
