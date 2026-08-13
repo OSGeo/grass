@@ -183,7 +183,10 @@ def test_profile_json(fixed_region):
 
 def _assert_pairs_identical(tools, pairs):
     """Check that the two rasters in each pair match everywhere, both in value and in which cells are null."""
-    value_expr = " + ".join(f"abs(double({a}) - double({b}))" for a, b in pairs)
+    value_expr = " + ".join(
+        f"abs(if(isnull({a}), 0, double({a})) - if(isnull({b}), 0, double({b})))"
+        for a, b in pairs
+    )
     null_expr = " + ".join(f"(isnull({a}) != isnull({b}))" for a, b in pairs)
     tools.r_mapcalc(expression=f"_vdiff = {value_expr}", overwrite=True)
     tools.r_mapcalc(expression=f"_ndiff = {null_expr}", overwrite=True)
@@ -192,35 +195,39 @@ def _assert_pairs_identical(tools, pairs):
     assert tools.r_univar(map="_vdiff", format="json")["max"] == 0
 
 
+def run_all_outputs(tools, suffix, nprocs, extra=None):
+    """Produce all twelve outputs in one call at the given thread count."""
+    call = {"elevation": "dem", "search": SEARCH, "nprocs": nprocs}
+    for out in OUTPUTS:
+        call[out] = f"{out}_{suffix}"
+    if extra:
+        call.update(extra)
+    tools.r_geomorphon(**call)
+
+
+@pytest.fixture(scope="module")
+def serial_baseline(geomorphon_session):
+    """Serial outputs for all twelve rasters, computed once and shared by the threaded tests."""
+    tools = Tools(session=geomorphon_session)
+    # Match the DEM's 40 by 40 extent.
+    tools.g_region(s=0, n=40, w=0, e=40, res=1)
+    run_all_outputs(tools, "s", 1)
+    return [f"{o}_s" for o in OUTPUTS]
+
+
 class TestParallelIdentity:
     """Threaded output must equal serial output exactly."""
 
-    def _run_all(self, tools, suffix, nprocs, extra=None):
-        # One call produces all twelve outputs at the given thread count.
-        call = {
-            "elevation": "dem",
-            "search": SEARCH,
-            "nprocs": nprocs,
-            "overwrite": True,
-        }
-        for out in OUTPUTS:
-            call[out] = f"{out}_{suffix}"
-        if extra:
-            call.update(extra)
-        tools.r_geomorphon(**call)
-
-    def test_threads_1_vs_4(self, fixed_region):
+    def test_threads_1_vs_4(self, fixed_region, serial_baseline):
         """All twelve outputs match between nprocs=1 and nprocs=4."""
         tools = Tools(session=fixed_region)
-        self._run_all(tools, "s", 1)
-        self._run_all(tools, "p", 4)
+        run_all_outputs(tools, "p", 4)
         _assert_pairs_identical(tools, [(f"{o}_s", f"{o}_p") for o in OUTPUTS])
 
-    def test_band_seam_identity(self, fixed_region):
+    def test_band_seam_identity(self, fixed_region, serial_baseline):
         """memory=0 forces multiple bands and the output still matches serial."""
         tools = Tools(session=fixed_region)
-        self._run_all(tools, "s", 1)
-        self._run_all(tools, "b", 4, extra={"memory": 0})
+        run_all_outputs(tools, "b", 4, extra={"memory": 0})
         _assert_pairs_identical(tools, [(f"{o}_s", f"{o}_b") for o in OUTPUTS])
 
     def test_min_legal_height(self, geomorphon_session):
