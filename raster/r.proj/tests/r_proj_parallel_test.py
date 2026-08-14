@@ -148,3 +148,53 @@ def test_forced_fallback_matches_banded(session_3857):
     )
     _project(base, INPUT_MID, "banded", "nearest", nprocs=4)
     _assert_bitwise_identical(base, "fallback_tilecache", "banded", "fallback_diff")
+
+
+def _project_capture(env, input_raster, output, method, **extra):
+    """Run r.proj and return the messages it writes to stderr."""
+    env = dict(env, GRASS_VERBOSE="3")
+    proc = gs.start_command(
+        "r.proj",
+        project=SRC_PROJECT,
+        mapset="PERMANENT",
+        input=input_raster,
+        output=output,
+        method=method,
+        overwrite=True,
+        env=env,
+        stderr=gs.PIPE,
+        **extra,
+    )
+    stderr = proc.communicate()[1]
+    if isinstance(stderr, bytes):
+        stderr = stderr.decode()
+    assert proc.returncode == 0, stderr
+    return stderr
+
+
+def test_forced_reload_matches_serial(session_3857):
+    """FG_SHRINK_SPAN shrinks each band so the reload runs, and the reloaded run
+    still matches the nprocs=1 run bitwise."""
+    session = session_3857
+    base = _env(session)
+    _set_region_from_source(base, INPUT_MID, "nearest")
+
+    _project(base, INPUT_MID, "reload_serial", "nearest", nprocs=1)
+
+    shrunk = _project_capture(
+        _env(session, FG_SHRINK_SPAN=2),
+        INPUT_MID,
+        "reload_shrunk",
+        "nearest",
+        nprocs=4,
+    )
+    # The shrunk strips leave out rows the projection needs, so r.proj reloads
+    # and logs it here. Without this marker the run never hit the reload path.
+    assert "Reloading band strip" in shrunk
+
+    # The full-size strips already cover every needed row, so this run never
+    # reloads. That is what ties the marker above to the shrink.
+    unshrunk = _project_capture(base, INPUT_MID, "reload_unshrunk", "nearest", nprocs=4)
+    assert "Reloading band strip" not in unshrunk
+
+    _assert_bitwise_identical(base, "reload_serial", "reload_shrunk", "reload_diff")
