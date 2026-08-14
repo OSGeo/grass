@@ -17,6 +17,7 @@ Data Catalog allows you to:
   between different projects
 - set labels for a GRASS database (directory with GRASS projects) with
   long paths for easier identification
+- see the full path of a GRASS database in a tooltip when hovering over it
 - drag and drop maps for copying and moving
 - searching and filtering maps using regular expressions
 - display map in current project
