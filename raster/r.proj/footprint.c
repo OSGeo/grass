@@ -39,7 +39,7 @@ struct footprint {
 /* Returns the first output column of block b. */
 static int block_c0(const struct footprint *g, int b)
 {
-    return (int)((long)b * g->ocols / g->nb);
+    return (int)((long long)b * g->ocols / g->nb);
 }
 
 /* Returns the block that contains output column c. */
@@ -63,7 +63,8 @@ static int sample_ri(const struct Cell_head *ohd, const struct Cell_head *ihd,
     double xx = ohd->west + (c + 0.5) * ohd->ew_res;
     double yy = y_center[r];
 
-    if (GPJ_transform(oproj, iproj, tproj, PJ_FWD, &xx, &yy, NULL) < 0)
+    if (GPJ_transform(oproj, iproj, tproj, PJ_FWD, &xx, &yy, NULL) < 0 ||
+        !isfinite(yy))
         return 0;
     *ri = (ihd->north - yy) / ihd->ns_res;
     return 1;
@@ -314,7 +315,8 @@ int fp_band_geometry(const struct footprint *g, int obr0, size_t cap_bytes,
 
     /* Prefer full-width bands, growing the height while the whole row still
      * fits the cap as a single tile. */
-    for (h_cand = 1;; h_cand *= 2) {
+    for (h_cand = 1;;
+         h_cand = h_cand > remaining / 2 ? remaining : h_cand * 2) {
         int h = h_cand < remaining ? h_cand : remaining;
         int worst = worst_ktile_rows(g, obr0, obr0 + h, g->nb);
         size_t strip_bytes =
@@ -334,7 +336,8 @@ int fp_band_geometry(const struct footprint *g, int obr0, size_t cap_bytes,
 
     /* One full-width row busts the cap, so grow while the exhaustive scan finds
      * any fitting whole-block tile. */
-    for (h_cand = 1;; h_cand *= 2) {
+    for (h_cand = 1;;
+         h_cand = h_cand > remaining / 2 ? remaining : h_cand * 2) {
         int h = h_cand < remaining ? h_cand : remaining;
         int k = tile_blocks_for_band(g, obr0, obr0 + h, cap_bytes, out_mult,
                                      cell_size, in_cols);

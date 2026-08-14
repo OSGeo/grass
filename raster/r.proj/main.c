@@ -166,7 +166,10 @@ fallback_serial_cache(int fdi, int fdo, int cell_type, int method,
                       struct Cell_head *outcellhd, const double *y_center,
                       int obr0, const char *memory)
 {
+    /* readcell reads the input map, so it runs in the input env. */
+    G_switch_env(); /* -> input */
     struct cache *ibuffer = readcell(fdi, memory);
+    G_switch_env(); /* -> output */
     func interpolate = menu[method].method;
     void *obuffer = Rast_allocate_output_buf(cell_type);
     int cell_size = Rast_cell_size(cell_type);
@@ -992,10 +995,10 @@ int main(int argc, char **argv)
             int strip_rows = imax - imin + 1;
 
             /* Serial strip load, since a single fd makes get_row unsafe to
-             * share. An empty tile with strip_rows at or below zero projects
-             * outside the input and is not read, its cells become NULL through
-             * strip_nearest's out-of-map path, and the window is
-             * invalidated so the next band re-reads in full. */
+             * share. An empty tile with strip_rows at or below zero is not
+             * read. Its cells project outside the input and the kernel sets
+             * them NULL, and the window is invalidated so the next band
+             * re-reads in full. */
             void *strip = NULL;
             if (strip_rows > 0) {
                 size_t need = (size_t)strip_rows * incellhd.cols * cell_size;
