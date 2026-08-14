@@ -117,9 +117,10 @@ static void quantize_cell_row(void *row, int cols, int cell_type)
 
 /* Nearest read from the in-RAM input strip covering rows imin to imax. Indices
  * are full-map and addressed relative to imin. */
-static void strip_nearest(void *strip, void *obufptr, int cell_type,
+static void strip_nearest(const struct strip *s, void *obufptr, int cell_type,
                           double col_idx, double row_idx,
-                          struct Cell_head *incellhd, int imin, int imax)
+                          struct Cell_head *incellhd, int *need_lo,
+                          int *need_hi)
 {
     int c = (int)floor(col_idx);
     int r = (int)floor(row_idx);
@@ -131,16 +132,19 @@ static void strip_nearest(void *strip, void *obufptr, int cell_type,
         return;
     }
 
-    /* Fail loudly when a needed input row is inside the map but outside the
-     * loaded strip. */
-    if (r < imin || r > imax)
-        G_fatal_error(_("Band strip under-sized: input row %d outside loaded "
-                        "range [%d, %d] at column %d"),
-                      r, imin, imax, c);
+    /* A row inside the map but outside the loaded strip records the needed row
+     * and nulls the cell, so the band reloads and recomputes. */
+    if (r < s->imin || r > s->imax) {
+        if (r < s->imin && r < *need_lo)
+            *need_lo = r;
+        if (r > s->imax && r > *need_hi)
+            *need_hi = r;
+        Rast_set_null_value(obufptr, 1, cell_type);
+        return;
+    }
 
-    unsigned char *src =
-        (unsigned char *)strip +
-        (((size_t)(r - imin) * incellhd->cols + c) * cell_size);
+    unsigned char *src = (unsigned char *)s->data +
+                         (((size_t)(r - s->imin) * s->cols + c) * cell_size);
     memcpy(obufptr, src, cell_size);
 }
 
@@ -910,6 +914,11 @@ int main(int argc, char **argv)
 
     int used_fallback = 0; /* set when the serial tile-cache fallback runs */
     int force_tilecache = getenv("R_PROJ_FORCE_TILECACHE") != NULL;
+    /* For tests only. FG_SHRINK_SPAN=N loads each band N rows too short at the
+     * top and bottom, so the reload path runs. Zero leaves the strip full
+     * size. */
+    const char *shrink_env = getenv("FG_SHRINK_SPAN");
+    int shrink_span = shrink_env ? atoi(shrink_env) : 0;
     /* Rolling input-strip window. win holds input rows [win_imin, win_imax].
      * win_imax < win_imin marks it empty and forces a full read. win_cap is
      * its allocated byte size, and win is freed once at fallback_done. */
@@ -1003,6 +1012,14 @@ int main(int argc, char **argv)
              * because the raster API reads whole rows, so columns are not
              * cropped. */
             fg_span(band_grid, obr0, obr1, obc0, obc1, &imin, &imax);
+            /* The test hook shortens the span so the reload path runs. */
+            if (shrink_span > 0 && imax >= imin) {
+                imin += shrink_span;
+                imax -= shrink_span;
+            }
+            int reloaded = 0; /* set once the span is widened and reread */
+
+        reload_tile:;
             int strip_rows = imax - imin + 1;
 
             /* Serial strip load, since a single fd makes get_row unsafe to
@@ -1095,6 +1112,11 @@ int main(int argc, char **argv)
                 win_imax = -1; /* empty tile, nothing resident */
             }
 
+            struct strip sd = {strip, imin, imax, incellhd.cols};
+            /* Widest input rows a kernel wants below imin and above imax. The
+             * reduction leaves them at imin and imax when the strip covered
+             * every sample. */
+            int need_lo = imin, need_hi = imax;
             double t1 = rproj_wtime();
             /* One parallel region per tile. The omp for divides the band's
              * output rows among this region's threads. The directives are
@@ -1108,18 +1130,23 @@ int main(int argc, char **argv)
 #pragma omp single nowait
                 {
                     /* One thread writes the previous band's rows in order while
-                     * the rest compute this band. This is the first tile only,
-                     * and pending_out is non-NULL only under write_overlap. */
-                    if (obc0 == 0 && pending_out)
+                     * the rest compute this band, then frees it. Only the first
+                     * tile has a pending band, and clearing it keeps a reload
+                     * from writing the same rows twice. */
+                    if (obc0 == 0 && pending_out) {
                         for (int wr = pending_r0; wr < pending_r1; wr++)
                             Rast_put_row(fdo,
                                          (unsigned char *)pending_out +
                                              (size_t)(wr - pending_r0) *
                                                  outcellhd.cols * cell_size,
                                          cell_type);
+                        G_free(pending_out);
+                        pending_out = NULL;
+                    }
                 }
 
-#pragma omp for private(row, col) schedule(dynamic)
+#pragma omp for private(row, col) schedule(dynamic) reduction(min : need_lo) \
+    reduction(max : need_hi)
                 for (row = obr0; row < obr1; row++) {
                     void *out_row =
                         (unsigned char *)band_out +
@@ -1143,8 +1170,8 @@ int main(int argc, char **argv)
                                 (x1 - incellhd.west) / incellhd.ew_res;
                             double r_idx =
                                 (incellhd.north - y1) / incellhd.ns_res;
-                            interp(strip, obufptr, cell_type, c_idx, r_idx,
-                                   &incellhd, imin, imax);
+                            interp(&sd, obufptr, cell_type, c_idx, r_idx,
+                                   &incellhd, &need_lo, &need_hi);
                         }
                     }
                 }
@@ -1154,15 +1181,48 @@ int main(int argc, char **argv)
             t_compute += rproj_wtime() - t1;
             /* strip aliases the persistent window buffer win, so it is not
              * freed per tile. win is freed once at fallback_done. */
+
+            /* Reload once and recompute if a kernel needed an input row the
+             * strip left out. */
+            if (need_lo < imin || need_hi > imax) {
+                if (reloaded)
+                    G_fatal_error(_("Band strip still short after a reload, "
+                                    "input rows [%d, %d] but [%d, %d] needed"),
+                                  imin, imax, need_lo, need_hi);
+                size_t widened =
+                    (size_t)(need_hi - need_lo + 1) * incellhd.cols * cell_size;
+                size_t out_bytes =
+                    (size_t)band_orows * outcellhd.cols * cell_size;
+                /* If the widened strip no longer fits the memory cap, finish
+                 * from obr0 on the serial tile-cache path, the same path the
+                 * band sizing falls back to. */
+                if (widened + (size_t)out_mult * out_bytes > cap_bytes) {
+                    G_free(band_out);
+                    flush_pending_band(fdo, cell_type, outcellhd.cols,
+                                       cell_size, &pending_out, pending_r0,
+                                       pending_r1);
+                    fallback_serial_cache(fdi, fdo, cell_type, method, &oproj,
+                                          &iproj, &tproj, &incellhd, &outcellhd,
+                                          y_center, obr0, memory->answer);
+                    used_fallback = 1;
+                    goto fallback_done;
+                }
+                G_verbose_message(_("Reloading band strip for output rows "
+                                    "%d-%d, input rows [%d, %d] widen to "
+                                    "[%d, %d]"),
+                                  obr0, obr1 - 1, imin, imax, need_lo, need_hi);
+                imin = need_lo;
+                imax = need_hi;
+                reloaded = 1;
+                goto reload_tile;
+            }
         }
 
         /* Defer this band so the next band's compute region writes it through
-         * the omp single above. The previous pending completed at this band's
-         * compute barrier, so free it now. Non-overlap bands write and free in
-         * order here. */
+         * the omp single above. The previous pending band was written and freed
+         * there, so pending_out is already clear. Non-overlap bands write in
+         * order below. */
         if (write_overlap) {
-            if (pending_out)
-                G_free(pending_out);
             pending_out = band_out;
             pending_r0 = obr0;
             pending_r1 = obr1;

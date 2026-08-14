@@ -10,22 +10,28 @@
 #include <grass/raster.h>
 #include "r.proj.h"
 
-/* Read one value from the strip. Input row r maps to strip row (r - imin). A
- * row inside the input map but outside the loaded strip is a bug, so fail
- * rather than read out of bounds. */
-static inline FCELL strip_val(const void *strip, int r, int c, int imin,
-                              int imax, int cols)
+/* Reads one value from the strip. A row outside the loaded range records the
+ * needed row through need_lo/need_hi and returns a null, so the caller nulls
+ * the cell and the band reloads and recomputes. */
+static inline FCELL strip_val(const struct strip *s, int r, int c, int *need_lo,
+                              int *need_hi)
 {
-    if (r < imin || r > imax)
-        G_fatal_error(_("Band strip under-sized: input row %d outside loaded "
-                        "range [%d, %d] at column %d"),
-                      r, imin, imax, c);
-    return ((const FCELL *)strip)[(size_t)(r - imin) * cols + c];
+    if (r < s->imin || r > s->imax) {
+        FCELL null_val;
+
+        if (r < s->imin && r < *need_lo)
+            *need_lo = r;
+        if (r > s->imax && r > *need_hi)
+            *need_hi = r;
+        Rast_set_f_null_value(&null_val, 1);
+        return null_val;
+    }
+    return ((const FCELL *)s->data)[(size_t)(r - s->imin) * s->cols + c];
 }
 
-void strip_bilinear(void *strip, void *obufptr, int cell_type, double col_idx,
-                    double row_idx, struct Cell_head *incellhd, int imin,
-                    int imax)
+void strip_bilinear(const struct strip *s, void *obufptr, int cell_type,
+                    double col_idx, double row_idx, struct Cell_head *incellhd,
+                    int *need_lo, int *need_hi)
 {
     int row, col, i, j;
     FCELL t, u, result;
@@ -36,7 +42,7 @@ void strip_bilinear(void *strip, void *obufptr, int cell_type, double col_idx,
 
     /* Full-map bounds check runs before any strip read. A sample outside the
      * input map is set to NULL and returned, so strip_val is never asked for a
-     * row outside the strip. */
+     * row outside the map. */
     if (row < 0 || row + 1 >= incellhd->rows || col < 0 ||
         col + 1 >= incellhd->cols) {
         Rast_set_null_value(obufptr, 1, cell_type);
@@ -45,8 +51,7 @@ void strip_bilinear(void *strip, void *obufptr, int cell_type, double col_idx,
 
     for (i = 0; i < 2; i++)
         for (j = 0; j < 2; j++) {
-            const FCELL cell =
-                strip_val(strip, row + i, col + j, imin, imax, incellhd->cols);
+            const FCELL cell = strip_val(s, row + i, col + j, need_lo, need_hi);
 
             if (Rast_is_f_null_value(&cell)) {
                 Rast_set_null_value(obufptr, 1, cell_type);
@@ -63,8 +68,9 @@ void strip_bilinear(void *strip, void *obufptr, int cell_type, double col_idx,
     Rast_set_f_value(obufptr, result, cell_type);
 }
 
-void strip_cubic(void *strip, void *obufptr, int cell_type, double col_idx,
-                 double row_idx, struct Cell_head *incellhd, int imin, int imax)
+void strip_cubic(const struct strip *s, void *obufptr, int cell_type,
+                 double col_idx, double row_idx, struct Cell_head *incellhd,
+                 int *need_lo, int *need_hi)
 {
     int row, col, i, j;
     FCELL t, u, result;
@@ -83,8 +89,8 @@ void strip_cubic(void *strip, void *obufptr, int cell_type, double col_idx,
 
     for (i = 0; i < 4; i++)
         for (j = 0; j < 4; j++) {
-            const FCELL cell = strip_val(strip, row - 1 + i, col - 1 + j, imin,
-                                         imax, incellhd->cols);
+            const FCELL cell =
+                strip_val(s, row - 1 + i, col - 1 + j, need_lo, need_hi);
 
             if (Rast_is_f_null_value(&cell)) {
                 Rast_set_null_value(obufptr, 1, cell_type);
@@ -107,9 +113,9 @@ void strip_cubic(void *strip, void *obufptr, int cell_type, double col_idx,
     Rast_set_f_value(obufptr, result, cell_type);
 }
 
-void strip_lanczos(void *strip, void *obufptr, int cell_type, double col_idx,
-                   double row_idx, struct Cell_head *incellhd, int imin,
-                   int imax)
+void strip_lanczos(const struct strip *s, void *obufptr, int cell_type,
+                   double col_idx, double row_idx, struct Cell_head *incellhd,
+                   int *need_lo, int *need_hi)
 {
     int row, col, i, j, k;
     double t, u;
@@ -129,8 +135,8 @@ void strip_lanczos(void *strip, void *obufptr, int cell_type, double col_idx,
     k = 0;
     for (i = 0; i < 5; i++) {
         for (j = 0; j < 5; j++) {
-            const FCELL cell = strip_val(strip, row - 2 + i, col - 2 + j, imin,
-                                         imax, incellhd->cols);
+            const FCELL cell =
+                strip_val(s, row - 2 + i, col - 2 + j, need_lo, need_hi);
 
             if (Rast_is_f_null_value(&cell)) {
                 Rast_set_null_value(obufptr, 1, cell_type);
@@ -148,9 +154,9 @@ void strip_lanczos(void *strip, void *obufptr, int cell_type, double col_idx,
     Rast_set_f_value(obufptr, result, cell_type);
 }
 
-void strip_bilinear_f(void *strip, void *obufptr, int cell_type, double col_idx,
-                      double row_idx, struct Cell_head *incellhd, int imin,
-                      int imax)
+void strip_bilinear_f(const struct strip *s, void *obufptr, int cell_type,
+                      double col_idx, double row_idx,
+                      struct Cell_head *incellhd, int *need_lo, int *need_hi)
 {
     int row, col;
     FCELL cell;
@@ -163,23 +169,23 @@ void strip_bilinear_f(void *strip, void *obufptr, int cell_type, double col_idx,
         return;
     }
 
-    cell = strip_val(strip, row, col, imin, imax, incellhd->cols);
+    cell = strip_val(s, row, col, need_lo, need_hi);
     /* if nearest is null, all the other interps will be null */
     if (Rast_is_f_null_value(&cell)) {
         Rast_set_null_value(obufptr, 1, cell_type);
         return;
     }
 
-    strip_bilinear(strip, obufptr, cell_type, col_idx, row_idx, incellhd, imin,
-                   imax);
+    strip_bilinear(s, obufptr, cell_type, col_idx, row_idx, incellhd, need_lo,
+                   need_hi);
     /* fallback to nearest if bilinear is null */
     if (Rast_is_f_null_value(obufptr))
         Rast_set_f_value(obufptr, cell, cell_type);
 }
 
-void strip_cubic_f(void *strip, void *obufptr, int cell_type, double col_idx,
-                   double row_idx, struct Cell_head *incellhd, int imin,
-                   int imax)
+void strip_cubic_f(const struct strip *s, void *obufptr, int cell_type,
+                   double col_idx, double row_idx, struct Cell_head *incellhd,
+                   int *need_lo, int *need_hi)
 {
     int row, col;
     FCELL cell;
@@ -192,28 +198,28 @@ void strip_cubic_f(void *strip, void *obufptr, int cell_type, double col_idx,
         return;
     }
 
-    cell = strip_val(strip, row, col, imin, imax, incellhd->cols);
+    cell = strip_val(s, row, col, need_lo, need_hi);
     /* if nearest is null, all the other interps will be null */
     if (Rast_is_f_null_value(&cell)) {
         Rast_set_null_value(obufptr, 1, cell_type);
         return;
     }
 
-    strip_cubic(strip, obufptr, cell_type, col_idx, row_idx, incellhd, imin,
-                imax);
+    strip_cubic(s, obufptr, cell_type, col_idx, row_idx, incellhd, need_lo,
+                need_hi);
     /* fallback to bilinear if cubic is null */
     if (Rast_is_f_null_value(obufptr)) {
-        strip_bilinear(strip, obufptr, cell_type, col_idx, row_idx, incellhd,
-                       imin, imax);
+        strip_bilinear(s, obufptr, cell_type, col_idx, row_idx, incellhd,
+                       need_lo, need_hi);
         /* fallback to nearest if bilinear is null */
         if (Rast_is_f_null_value(obufptr))
             Rast_set_f_value(obufptr, cell, cell_type);
     }
 }
 
-void strip_lanczos_f(void *strip, void *obufptr, int cell_type, double col_idx,
-                     double row_idx, struct Cell_head *incellhd, int imin,
-                     int imax)
+void strip_lanczos_f(const struct strip *s, void *obufptr, int cell_type,
+                     double col_idx, double row_idx, struct Cell_head *incellhd,
+                     int *need_lo, int *need_hi)
 {
     int row, col;
     FCELL cell;
@@ -226,23 +232,23 @@ void strip_lanczos_f(void *strip, void *obufptr, int cell_type, double col_idx,
         return;
     }
 
-    cell = strip_val(strip, row, col, imin, imax, incellhd->cols);
+    cell = strip_val(s, row, col, need_lo, need_hi);
     /* if nearest is null, all the other interps will be null */
     if (Rast_is_f_null_value(&cell)) {
         Rast_set_null_value(obufptr, 1, cell_type);
         return;
     }
 
-    strip_lanczos(strip, obufptr, cell_type, col_idx, row_idx, incellhd, imin,
-                  imax);
+    strip_lanczos(s, obufptr, cell_type, col_idx, row_idx, incellhd, need_lo,
+                  need_hi);
     /* fallback to bicubic if lanczos is null */
     if (Rast_is_f_null_value(obufptr)) {
-        strip_cubic(strip, obufptr, cell_type, col_idx, row_idx, incellhd, imin,
-                    imax);
+        strip_cubic(s, obufptr, cell_type, col_idx, row_idx, incellhd, need_lo,
+                    need_hi);
         /* fallback to bilinear if cubic is null */
         if (Rast_is_f_null_value(obufptr)) {
-            strip_bilinear(strip, obufptr, cell_type, col_idx, row_idx,
-                           incellhd, imin, imax);
+            strip_bilinear(s, obufptr, cell_type, col_idx, row_idx, incellhd,
+                           need_lo, need_hi);
             /* fallback to nearest if bilinear is null */
             if (Rast_is_f_null_value(obufptr))
                 Rast_set_f_value(obufptr, cell, cell_type);

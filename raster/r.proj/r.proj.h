@@ -27,10 +27,20 @@ struct cache {
 typedef void (*func)(struct cache *, void *, int, double, double,
                      struct Cell_head *);
 
-/* Strip interpolation kernels (interp_strip.c) read the input rows imin to imax
- * from a strip held in memory, and take imin/imax in place of struct cache. */
-typedef void (*strip_func)(void *, void *, int, double, double,
-                           struct Cell_head *, int, int);
+/* One input strip resident in memory, addressed by full-map input row. Rows
+ * outside imin to imax are not loaded. A kernel that needs one records it
+ * through the need arguments so the band reloads and recomputes. */
+struct strip {
+    void *data;     /* input rows imin to imax at full input width */
+    int imin, imax; /* loaded input row range */
+    int cols;       /* input columns, the row stride */
+};
+
+/* Strip interpolation kernels (interp_strip.c) read from an in-memory strip.
+ * The last two arguments carry the widest input rows a kernel wanted below imin
+ * and above imax, left unchanged when the strip covered every sample. */
+typedef void (*strip_func)(const struct strip *, void *, int, double, double,
+                           struct Cell_head *, int *, int *);
 
 struct menu {
     func method; /* routine to interpolate new value      */
@@ -100,18 +110,18 @@ extern void p_lanczos_f(struct cache *, void *, int, double, double,
                         struct Cell_head *);
 
 /* interp_strip.c - strip versions of the resampling methods */
-extern void strip_bilinear(void *, void *, int, double, double,
-                           struct Cell_head *, int, int);
-extern void strip_cubic(void *, void *, int, double, double, struct Cell_head *,
-                        int, int);
-extern void strip_lanczos(void *, void *, int, double, double,
-                          struct Cell_head *, int, int);
-extern void strip_bilinear_f(void *, void *, int, double, double,
-                             struct Cell_head *, int, int);
-extern void strip_cubic_f(void *, void *, int, double, double,
-                          struct Cell_head *, int, int);
-extern void strip_lanczos_f(void *, void *, int, double, double,
-                            struct Cell_head *, int, int);
+extern void strip_bilinear(const struct strip *, void *, int, double, double,
+                           struct Cell_head *, int *, int *);
+extern void strip_cubic(const struct strip *, void *, int, double, double,
+                        struct Cell_head *, int *, int *);
+extern void strip_lanczos(const struct strip *, void *, int, double, double,
+                          struct Cell_head *, int *, int *);
+extern void strip_bilinear_f(const struct strip *, void *, int, double, double,
+                             struct Cell_head *, int *, int *);
+extern void strip_cubic_f(const struct strip *, void *, int, double, double,
+                          struct Cell_head *, int *, int *);
+extern void strip_lanczos_f(const struct strip *, void *, int, double, double,
+                            struct Cell_head *, int *, int *);
 
 #define BKIDX(c, y, x) ((y) * (c)->stride + (x))
 #define BKPTR(c, y, x) ((c)->grid[BKIDX((c), (y), (x))])
