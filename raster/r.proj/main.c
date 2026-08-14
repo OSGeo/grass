@@ -154,7 +154,7 @@ static const strip_func strip_kernels[] = {
     strip_bilinear_f, strip_cubic_f,  strip_lanczos_f};
 
 /* Grid that sizes band heights and column tiles. */
-static struct footprint_grid *band_grid = NULL;
+static struct footprint *band_grid = NULL;
 
 /* Serial tile-cache path for output rows whose input footprint is too tall to
  * band. Finishes the run from row obr0 with the readcell cache so it matches
@@ -874,41 +874,10 @@ int main(int argc, char **argv)
         }
     }
 
-    /* For a lat/lon input, project the north and south poles into the output
-     * and record each pole's input row, clamped to the map. A pole is the
-     * highest or lowest latitude, which the column samples can step over, so
-     * keeping its row makes sure the loaded strip reaches it. Does nothing when
-     * no pole lands inside the output map. */
-    struct pole_set poles;
-
-    poles.n = 0;
-    if (incellhd.proj == PROJECTION_LL) {
-        double polelat[2] = {90.0, -90.0};
-
-        for (int p = 0; p < 2; p++) {
-            double px = 0.0, py = polelat[p];
-
-            if (GPJ_transform(&oproj, &iproj, &tproj, PJ_INV, &px, &py, NULL) <
-                    0 ||
-                !isfinite(px) || !isfinite(py))
-                continue;
-            double ri = (incellhd.north - polelat[p]) / incellhd.ns_res;
-            if (ri < 0)
-                ri = 0;
-            else if (ri > incellhd.rows - 1)
-                ri = incellhd.rows - 1;
-            poles.ox[poles.n] = px;
-            poles.oy[poles.n] = py;
-            poles.pole_row[poles.n] = ri;
-            poles.n++;
-        }
-    }
-
-    /* Build the grid that sizes band heights. */
-    band_grid = fg_build(&outcellhd, &incellhd, &oproj, &iproj, &tproj,
-                         y_center, &poles);
-    /* The margin covers what the samples can miss between columns. */
-    fg_apply_sampling_margin(band_grid);
+    /* Build the footprint that sizes the bands. It also projects any poles into
+     * the output and applies the sampling margin. */
+    band_grid =
+        fp_create(&outcellhd, &incellhd, &oproj, &iproj, &tproj, y_center);
 
     G_important_message(_("Projecting (banded, per-thread PROJ context)..."));
 
@@ -947,7 +916,7 @@ int main(int argc, char **argv)
         int band_orows =
             force_tilecache
                 ? 0
-                : fg_band_geometry(band_grid, obr0, cap_bytes, out_mult,
+                : fp_band_geometry(band_grid, obr0, cap_bytes, out_mult,
                                    cell_size, incellhd.cols, &tile_blocks,
                                    &worst_block_rows);
         if (band_orows == 0) {
@@ -989,7 +958,7 @@ int main(int argc, char **argv)
 
         int obr1 = obr0 + band_orows;
         n_bands++;
-        int nb = fg_num_blocks(band_grid);
+        int nb = fp_num_blocks(band_grid);
         int n_tiles = (nb + tile_blocks - 1) / tile_blocks;
         if (n_tiles > max_tiles)
             max_tiles = n_tiles;
@@ -1005,13 +974,13 @@ int main(int argc, char **argv)
          * block is the full-width fast path. */
         for (int tb = 0; tb < nb; tb += tile_blocks) {
             int te = tb + tile_blocks < nb ? tb + tile_blocks : nb;
-            int obc0 = fg_block_start(band_grid, tb);
-            int obc1 = fg_block_start(band_grid, te);
+            int obc0 = fp_block_start(band_grid, tb);
+            int obc1 = fp_block_start(band_grid, te);
 
             /* Fill spans come from the grid. The strip is full input width
              * because the raster API reads whole rows, so columns are not
              * cropped. */
-            fg_span(band_grid, obr0, obr1, obc0, obc1, &imin, &imax);
+            fp_span(band_grid, obr0, obr1, obc0, obc1, &imin, &imax);
             /* The test hook shortens the span so the reload path runs. */
             if (shrink_span > 0 && imax >= imin) {
                 imin += shrink_span;
@@ -1255,7 +1224,7 @@ fallback_done:
     }
     G_free(y_center);
     if (band_grid)
-        fg_free(band_grid);
+        fp_free(band_grid);
     /* Single free site for the rolling window. Normal completion and both
      * fallback_done bails converge here, so one free covers every path. win is
      * NULL when a bail fired before any band allocated it. */

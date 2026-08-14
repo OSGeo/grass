@@ -50,32 +50,22 @@ struct menu {
 
 enum OutputFormat { PLAIN, SHELL, JSON };
 
-/* Geographic poles that land inside the output map, each stored as its output
- * position and its input row. Empty when no pole lands inside. */
-struct pole_set {
-    int n;               /* active poles, 0 to 2 */
-    double ox[2], oy[2]; /* pole coordinates in the output CRS */
-    double pole_row[2];  /* pole input row index */
-};
-
-/* Footprint grid of input row spans for the output map, built in footprint.c.
- */
-struct footprint_grid;
-extern struct footprint_grid *
-fg_build(const struct Cell_head *ohd, const struct Cell_head *ihd,
-         const struct pj_info *oproj, const struct pj_info *iproj,
-         const struct pj_info *tproj, const double *y_center,
-         const struct pole_set *poles);
-extern void fg_span(const struct footprint_grid *g, int obr0, int obr1,
-                    int obc0, int obc1, int *imin, int *imax);
-extern int fg_num_blocks(const struct footprint_grid *g);
-extern int fg_block_start(const struct footprint_grid *g, int b);
-extern int fg_band_geometry(const struct footprint_grid *g, int obr0,
+/* Footprint of input row spans for the output map, built in footprint.c. The
+ * struct is private to footprint.c. */
+struct footprint;
+extern struct footprint *
+fp_create(const struct Cell_head *ohd, const struct Cell_head *ihd,
+          const struct pj_info *oproj, const struct pj_info *iproj,
+          const struct pj_info *tproj, const double *y_center);
+extern void fp_span(const struct footprint *g, int obr0, int obr1, int obc0,
+                    int obc1, int *imin, int *imax);
+extern int fp_num_blocks(const struct footprint *g);
+extern int fp_block_start(const struct footprint *g, int b);
+extern int fp_band_geometry(const struct footprint *g, int obr0,
                             size_t cap_bytes, int out_mult, int cell_size,
                             int in_cols, int *tile_blocks_out,
                             int *worst_block_rows);
-extern void fg_apply_sampling_margin(struct footprint_grid *g);
-extern void fg_free(struct footprint_grid *g);
+extern void fp_free(struct footprint *g);
 
 extern void bordwalk(const struct Cell_head *, struct Cell_head *,
                      const struct pj_info *, const struct pj_info *,

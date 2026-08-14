@@ -13,29 +13,37 @@
 
 #include "r.proj.h"
 
-struct fg_cell {
+/* Geographic poles that land inside the output map, each stored as its output
+ * position and its input row. Empty when no pole lands inside. */
+struct pole_set {
+    int n;               /* active poles, 0 to 2 */
+    double ox[2], oy[2]; /* pole coordinates in the output CRS */
+    double pole_row[2];  /* pole input row index */
+};
+
+struct fp_cell {
     double rmin, rmax; /* rmax below rmin marks an empty cell */
 };
 
-struct footprint_grid {
+struct footprint {
     int grows, nb;        /* grid rows and column blocks */
     int ocols;            /* output columns */
     int irows;            /* input rows */
-    struct fg_cell *cell; /* grows by nb cells in row major order */
+    struct fp_cell *cell; /* grows by nb cells in row major order */
 };
 
 /* The samples can miss a curve between columns by a fraction of a row, so each
  * cell is widened by one row. */
-#define FG_SAMPLING_MARGIN 1.0
+#define FP_SAMPLING_MARGIN 1.0
 
 /* Returns the first output column of block b. */
-static int block_c0(const struct footprint_grid *g, int b)
+static int block_c0(const struct footprint *g, int b)
 {
     return (int)((long)b * g->ocols / g->nb);
 }
 
 /* Returns the block that contains output column c. */
-static int block_of_col(const struct footprint_grid *g, int c)
+static int block_of_col(const struct footprint *g, int c)
 {
     int b;
 
@@ -63,10 +71,9 @@ static int sample_ri(const struct Cell_head *ohd, const struct Cell_head *ihd,
 
 /* Widens cell (r, b) to include any pole whose output point falls inside the
  * cell rectangle. */
-static void fold_poles(const struct footprint_grid *g,
-                       const struct Cell_head *ohd,
+static void fold_poles(const struct footprint *g, const struct Cell_head *ohd,
                        const struct pole_set *poles, int r, int b,
-                       struct fg_cell *cell)
+                       struct fp_cell *cell)
 {
     int c0 = block_c0(g, b), c1 = block_c0(g, b + 1), k;
     double x_lo = ohd->west + c0 * ohd->ew_res;
@@ -87,22 +94,74 @@ static void fold_poles(const struct footprint_grid *g,
     }
 }
 
-/* Builds the grid from block boundary samples. */
-struct footprint_grid *
-fg_build(const struct Cell_head *ohd, const struct Cell_head *ihd,
-         const struct pj_info *oproj, const struct pj_info *iproj,
-         const struct pj_info *tproj, const double *y_center,
-         const struct pole_set *poles)
+/* For a lat/lon input, projects the north and south poles into the output and
+ * records each pole's input row, clamped to the map. A pole is the highest or
+ * lowest latitude, which the column samples can step over, so keeping its row
+ * makes sure the loaded strip reaches it. Leaves the set empty when no pole
+ * lands inside the output map. */
+static void build_pole_set(const struct Cell_head *ihd,
+                           const struct pj_info *oproj,
+                           const struct pj_info *iproj,
+                           const struct pj_info *tproj, struct pole_set *poles)
 {
-    struct footprint_grid *g = G_malloc(sizeof(*g));
+    poles->n = 0;
+    if (ihd->proj != PROJECTION_LL)
+        return;
+    double polelat[2] = {90.0, -90.0};
+
+    for (int p = 0; p < 2; p++) {
+        double px = 0.0, py = polelat[p];
+
+        if (GPJ_transform(oproj, iproj, tproj, PJ_INV, &px, &py, NULL) < 0 ||
+            !isfinite(px) || !isfinite(py))
+            continue;
+        double ri = (ihd->north - polelat[p]) / ihd->ns_res;
+        if (ri < 0)
+            ri = 0;
+        else if (ri > ihd->rows - 1)
+            ri = ihd->rows - 1;
+        poles->ox[poles->n] = px;
+        poles->oy[poles->n] = py;
+        poles->pole_row[poles->n] = ri;
+        poles->n++;
+    }
+}
+
+/* Widens every non-empty cell by the sampling margin. */
+static void apply_sampling_margin(struct footprint *g)
+{
+    size_t n = (size_t)g->grows * g->nb, i;
+
+    for (i = 0; i < n; i++) {
+        struct fp_cell *cell = &g->cell[i];
+
+        if (cell->rmax >= cell->rmin) {
+            cell->rmin -= FP_SAMPLING_MARGIN;
+            cell->rmax += FP_SAMPLING_MARGIN;
+        }
+    }
+}
+
+/* Builds the footprint from block boundary samples, folds in any poles, and
+ * applies the sampling margin. */
+struct footprint *fp_create(const struct Cell_head *ohd,
+                            const struct Cell_head *ihd,
+                            const struct pj_info *oproj,
+                            const struct pj_info *iproj,
+                            const struct pj_info *tproj, const double *y_center)
+{
+    struct footprint *g = G_malloc(sizeof(*g));
+    struct pole_set poles;
     int r, b;
     double *bnd;
+
+    build_pole_set(ihd, oproj, iproj, tproj, &poles);
 
     g->grows = ohd->rows;
     g->nb = ohd->cols < 32 ? ohd->cols : 32;
     g->ocols = ohd->cols;
     g->irows = ihd->rows;
-    g->cell = G_malloc((size_t)g->grows * g->nb * sizeof(struct fg_cell));
+    g->cell = G_malloc((size_t)g->grows * g->nb * sizeof(struct fp_cell));
     bnd = G_malloc((size_t)(g->nb + 1) * sizeof(double));
 
     for (r = 0; r < g->grows; r++) {
@@ -120,7 +179,7 @@ fg_build(const struct Cell_head *ohd, const struct Cell_head *ihd,
                 bnd[k] = DBL_MAX; /* a failed sample is left out of the range */
         }
         for (b = 0; b < g->nb; b++) {
-            struct fg_cell *cell = &g->cell[(size_t)r * g->nb + b];
+            struct fp_cell *cell = &g->cell[(size_t)r * g->nb + b];
             double lo = bnd[b] < bnd[b + 1] ? bnd[b] : bnd[b + 1];
             double hi = bnd[b] > bnd[b + 1] ? bnd[b] : bnd[b + 1];
 
@@ -136,10 +195,11 @@ fg_build(const struct Cell_head *ohd, const struct Cell_head *ihd,
             else if (bnd[b + 1] != DBL_MAX) {
                 cell->rmin = cell->rmax = bnd[b + 1];
             }
-            fold_poles(g, ohd, poles, r, b, cell);
+            fold_poles(g, ohd, &poles, r, b, cell);
         }
     }
     G_free(bnd);
+    apply_sampling_margin(g);
     return g;
 }
 
@@ -147,8 +207,8 @@ fg_build(const struct Cell_head *ohd, const struct Cell_head *ihd,
  * block the rectangle touches and adds a two cell margin. The grid holds one
  * row per output row, so every output row in the rectangle indexes a grid row.
  */
-void fg_span(const struct footprint_grid *g, int obr0, int obr1, int obc0,
-             int obc1, int *imin, int *imax)
+void fp_span(const struct footprint *g, int obr0, int obr1, int obc0, int obc1,
+             int *imin, int *imax)
 {
     double rmin = DBL_MAX, rmax = -DBL_MAX;
     int b_lo = block_of_col(g, obc0), b_hi = block_of_col(g, obc1 - 1);
@@ -161,7 +221,7 @@ void fg_span(const struct footprint_grid *g, int obr0, int obr1, int obc0,
 
     for (r = obr0; r < obr1; r++)
         for (b = b_lo; b <= b_hi; b++) {
-            const struct fg_cell *cell = &g->cell[(size_t)r * g->nb + b];
+            const struct fp_cell *cell = &g->cell[(size_t)r * g->nb + b];
 
             if (cell->rmax < cell->rmin)
                 continue; /* empty cell */
@@ -188,19 +248,19 @@ void fg_span(const struct footprint_grid *g, int obr0, int obr1, int obc0,
 }
 
 /* Number of column blocks in the grid. */
-int fg_num_blocks(const struct footprint_grid *g)
+int fp_num_blocks(const struct footprint *g)
 {
     return g->nb;
 }
 
 /* First output column of block b. Block g->nb starts at the output width. */
-int fg_block_start(const struct footprint_grid *g, int b)
+int fp_block_start(const struct footprint *g, int b)
 {
     return block_c0(g, b);
 }
 
 /* Worst strip among the tiles that pack k whole blocks each across the band. */
-static int worst_ktile_rows(const struct footprint_grid *g, int obr0, int obr1,
+static int worst_ktile_rows(const struct footprint *g, int obr0, int obr1,
                             int k)
 {
     int worst = 0, tb;
@@ -209,7 +269,7 @@ static int worst_ktile_rows(const struct footprint_grid *g, int obr0, int obr1,
         int te = tb + k < g->nb ? tb + k : g->nb;
         int imin, imax, rows;
 
-        fg_span(g, obr0, obr1, block_c0(g, tb), block_c0(g, te), &imin, &imax);
+        fp_span(g, obr0, obr1, block_c0(g, tb), block_c0(g, te), &imin, &imax);
         rows = imax - imin + 1;
         if (rows > worst)
             worst = rows;
@@ -219,9 +279,9 @@ static int worst_ktile_rows(const struct footprint_grid *g, int obr0, int obr1,
 
 /* Widest tile in whole blocks whose worst strip and the output fit the cap, or
  * zero when even one block per tile busts. */
-static int tile_blocks_for_band(const struct footprint_grid *g, int obr0,
-                                int obr1, size_t cap_bytes, int out_mult,
-                                int cell_size, int in_cols)
+static int tile_blocks_for_band(const struct footprint *g, int obr0, int obr1,
+                                size_t cap_bytes, int out_mult, int cell_size,
+                                int in_cols)
 {
     size_t out_bytes = (size_t)(obr1 - obr0) * g->ocols * cell_size;
     int k;
@@ -243,7 +303,7 @@ static int tile_blocks_for_band(const struct footprint_grid *g, int obr0,
  * only when even one full-width row busts the cap, and takes the last fitting
  * height with its widest tile. Reports the finest tile strip the fallback
  * message needs and returns zero when even one tiled row busts. */
-int fg_band_geometry(const struct footprint_grid *g, int obr0, size_t cap_bytes,
+int fp_band_geometry(const struct footprint *g, int obr0, size_t cap_bytes,
                      int out_mult, int cell_size, int in_cols,
                      int *tile_blocks_out, int *worst_block_rows)
 {
@@ -294,22 +354,7 @@ int fg_band_geometry(const struct footprint_grid *g, int obr0, size_t cap_bytes,
     return best_h;
 }
 
-/* Widens every non-empty cell by the sampling margin. */
-void fg_apply_sampling_margin(struct footprint_grid *g)
-{
-    size_t n = (size_t)g->grows * g->nb, i;
-
-    for (i = 0; i < n; i++) {
-        struct fg_cell *cell = &g->cell[i];
-
-        if (cell->rmax >= cell->rmin) {
-            cell->rmin -= FG_SAMPLING_MARGIN;
-            cell->rmax += FG_SAMPLING_MARGIN;
-        }
-    }
-}
-
-void fg_free(struct footprint_grid *g)
+void fp_free(struct footprint *g)
 {
     if (!g)
         return;
