@@ -2,6 +2,8 @@
 module's own nprocs=1 run against a multithreaded run, and the fallback
 test forces the tile cache path."""
 
+import pytest
+
 import grass.script as gs
 
 # Mirror of the names created in conftest.py.
@@ -18,18 +20,25 @@ def _env(session, **overrides):
     return env
 
 
+# The suggested bounds depend only on the input, not the method, so cache them
+# per input and avoid an r.proj -g call in every test.
+_region_cache = {}
+
+
 def _set_region_from_source(env, input_raster, method):
     """Set the output region to r.proj's suggested bounds for the input."""
-    text = gs.read_command(
-        "r.proj",
-        project=SRC_PROJECT,
-        mapset="PERMANENT",
-        input=input_raster,
-        method=method,
-        flags="g",
-        env=env,
-    )
-    region = dict(token.split("=") for token in text.split())
+    if input_raster not in _region_cache:
+        text = gs.read_command(
+            "r.proj",
+            project=SRC_PROJECT,
+            mapset="PERMANENT",
+            input=input_raster,
+            method=method,
+            flags="g",
+            env=env,
+        )
+        _region_cache[input_raster] = dict(token.split("=") for token in text.split())
+    region = _region_cache[input_raster]
     gs.run_command(
         "g.region",
         n=region["n"],
@@ -62,9 +71,15 @@ def _stats(env, raster):
 
 
 def _assert_bitwise_identical(env, a, b, diff):
-    """Check a and b are bitwise identical and have the same null cells."""
+    """Check a and b are bitwise identical and null in the same cells."""
     gs.run_command(
         "r.mapcalc", expression=f"{diff} = abs({a} - {b})", overwrite=True, env=env
+    )
+    gs.run_command(
+        "r.mapcalc",
+        expression=f"{diff}_null = if(isnull({a}) != isnull({b}), 1, 0)",
+        overwrite=True,
+        env=env,
     )
     sa = _stats(env, a)
     sb = _stats(env, b)
@@ -73,6 +88,9 @@ def _assert_bitwise_identical(env, a, b, diff):
     assert int(sa["n"]) == int(sb["n"])
     assert int(sa["null_cells"]) == int(sb["null_cells"])
     assert float(sd["max"]) == 0.0
+    # abs(a - b) is null wherever either map is null, so a swapped null hides
+    # from sd. The null map catches a null that moved.
+    assert float(_stats(env, f"{diff}_null")["max"]) == 0.0
 
 
 def test_bilinear_parallel_matches_serial(session_3857):
@@ -99,16 +117,17 @@ def test_bilinear_parallel_matches_serial(session_3857):
     _assert_bitwise_identical(base, "bilin_serial", "bilin_parallel", "bilin_diff")
 
 
-def test_nearest_memory_banding(session_3857):
-    """The nearest method at a small memory cap (memory=5, nprocs=4) has to
-    match the default memory serial run bitwise."""
+def test_nearest_low_memory_matches_serial(session_3857):
+    """The nearest method at a small memory cap (memory=5, nprocs=4) matches the
+    default memory serial run bitwise. The 50x50 fixture fits one band even at
+    this cap, so this checks the low-memory path rather than multi-band."""
     session = session_3857
     base = _env(session)
     _set_region_from_source(base, INPUT_MID, "nearest")
 
     _project(base, INPUT_MID, "mem_serial", "nearest", nprocs=1)
-    _project(base, INPUT_MID, "mem_banded", "nearest", nprocs=4, memory=5)
-    _assert_bitwise_identical(base, "mem_serial", "mem_banded", "mem_diff")
+    _project(base, INPUT_MID, "mem_low", "nearest", nprocs=4, memory=5)
+    _assert_bitwise_identical(base, "mem_serial", "mem_low", "mem_diff")
 
 
 def test_pole_nearest_parallel_matches_serial(session_pole):
@@ -132,27 +151,29 @@ def test_pole_nearest_parallel_matches_serial(session_pole):
     _assert_bitwise_identical(base, "pole_serial", "pole_parallel", "pole_diff")
 
 
-def test_forced_fallback_matches_banded(session_3857):
-    """Forcing the tile cache with R_PROJ_FORCE_TILECACHE=1 gives the same
-    output as the banded path."""
+@pytest.mark.parametrize("method", ["nearest", "bilinear", "lanczos"])
+def test_forced_fallback_matches_banded(session_3857, method):
+    """Forcing the tile cache with R_PROJ_FORCE_TILECACHE=1 gives the same output
+    as the banded path. One method per kernel family keeps the suite fast. This
+    pairs the legacy p_ cache kernels against the strip kernels."""
     session = session_3857
     base = _env(session)
-    _set_region_from_source(base, INPUT_MID, "nearest")
+    _set_region_from_source(base, INPUT_MID, method)
 
     _project(
         _env(session, R_PROJ_FORCE_TILECACHE=1),
         INPUT_MID,
         "fallback_tilecache",
-        "nearest",
+        method,
         nprocs=1,
     )
-    _project(base, INPUT_MID, "banded", "nearest", nprocs=4)
+    _project(base, INPUT_MID, "banded", method, nprocs=4)
     _assert_bitwise_identical(base, "fallback_tilecache", "banded", "fallback_diff")
 
 
 def _project_capture(env, input_raster, output, method, **extra):
     """Run r.proj and return the messages it writes to stderr."""
-    env = dict(env, GRASS_VERBOSE="3")
+    env = dict(env, GRASS_VERBOSE="3", LC_ALL="C")
     proc = gs.start_command(
         "r.proj",
         project=SRC_PROJECT,
