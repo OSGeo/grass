@@ -1,12 +1,13 @@
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 # Jietao Wang <quaternary@163.com>, 2026.
+# Liuxs <liuxspro@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-07-18 09:37+0000\n"
-"PO-Revision-Date: 2026-07-01 07:03+0000\n"
-"Last-Translator: Jietao Wang <quaternary@163.com>\n"
+"PO-Revision-Date: 2026-07-27 14:32+0000\n"
+"Last-Translator: Liuxs <liuxspro@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy-8-5/zh_Hans/>\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
@@ -301,10 +302,10 @@ msgid "File format:"
 msgstr ""
 
 msgid "Directory:"
-msgstr ""
+msgstr "目录:"
 
 msgid "Choose directory for export"
-msgstr ""
+msgstr "选择导出目录"
 
 msgid "GIF file:"
 msgstr ""
