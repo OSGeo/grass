@@ -9,6 +9,7 @@ MODULES = \
 	setup \
 	map \
 	interactivemap \
+	legend \
 	region \
 	map3d \
 	seriesmap \
