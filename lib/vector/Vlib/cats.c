@@ -493,7 +493,7 @@ int Vect_cat_list_to_array(const struct cat_list *list, int **vals, int *nvals)
 
     G_debug(1, "Vect_cat_list_to_array()");
 
-    *nvals = n_cats = 0;
+    *nvals = n_cats = n_ucats = 0;
     cats = NULL;
     for (i = 0; i < list->n_ranges; i++) {
         n = list->max[i] - list->min[i] + 1;
@@ -511,13 +511,16 @@ int Vect_cat_list_to_array(const struct cat_list *list, int **vals, int *nvals)
         n_cats += n;
     }
 
-    /* sort array */
-    qsort(cats, n_cats, sizeof(int), cmp);
+    if (cats) {
+        /* sort array */
+        qsort(cats, n_cats, sizeof(int), cmp);
 
-    /* skip duplicated values */
-    ucats = G_malloc(sizeof(int) * n_cats);
-    last_cat = ucats[0] = cats[0];
-    n_ucats = 1;
+        /* skip duplicated values */
+        ucats = G_malloc(sizeof(int) * n_cats);
+        last_cat = ucats[0] = cats[0];
+        n_ucats = 1;
+    }
+
     for (i = 1; i < n_cats; i++) {
         if (last_cat == cats[i])
             continue;
