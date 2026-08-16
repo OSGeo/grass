@@ -531,7 +531,7 @@ int kdtree_knn(struct kdtree *t, double *c, int *uid, double *d, int k,
     if (skip)
         sn.uid = *skip;
 
-    maxdist = INFINITY;
+    sscanf("inf", "%lf", &maxdist);
     found = 0;
 
     /* go down */
