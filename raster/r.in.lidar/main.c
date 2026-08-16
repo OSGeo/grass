@@ -645,7 +645,7 @@ int main(int argc, char *argv[])
             G_debug(2, "filling base raster array");
             for (row = 0; row < rows; row++) {
                 Rast_get_row(base_raster,
-                             base_array +
+                             (double *)base_array +
                                  ((size_t)row * cols *
                                   Rast_cell_size(base_raster_data_type)),
                              row, base_raster_data_type);
