@@ -208,7 +208,6 @@ static avl_node *avl_individua(const avl_tree root, const generic_cell k,
     switch (ris) {
     case GC_EQUAL: {
         return root;
-        break;
     }
     case GC_HIGHER: {
         *father = root;
@@ -227,6 +226,7 @@ static avl_node *avl_individua(const avl_tree root, const generic_cell k,
         G_fatal_error("\avl.c: avl_individua: error");
     }
     }
+    return NULL;
 }
 
 static int avl_height(const avl_tree root)
