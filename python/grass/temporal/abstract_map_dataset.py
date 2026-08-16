@@ -167,6 +167,10 @@ class AbstractMapDataset(AbstractDataset):
         """
         return self.base.get_map_id()
 
+    def get_readonly(self) -> bool:
+        """Return True if this map is read-only (belongs to a foreign mapset)"""
+        return self.base.get_readonly()
+
     @staticmethod
     def split_name(name: str, layer=None, mapset=None):
         """Convenient method to split a map name into three potentially
@@ -358,7 +362,7 @@ class AbstractMapDataset(AbstractDataset):
         :return: The SQL insert statement in case execute=False, or an
                  empty string otherwise
         """
-        if get_enable_timestamp_write():
+        if get_enable_timestamp_write() and not self.get_readonly():
             self.write_timestamp_to_grass()
         return AbstractDataset.insert(self, dbif=dbif, execute=execute)
 
@@ -377,7 +381,7 @@ class AbstractMapDataset(AbstractDataset):
         :return: The SQL insert statement in case execute=False, or an
                  empty string otherwise
         """
-        if get_enable_timestamp_write():
+        if get_enable_timestamp_write() and not self.get_readonly():
             self.write_timestamp_to_grass()
         return AbstractDataset.update(self, dbif, execute)
 
@@ -397,7 +401,7 @@ class AbstractMapDataset(AbstractDataset):
                  empty string otherwise
 
         """
-        if get_enable_timestamp_write():
+        if get_enable_timestamp_write() and not self.get_readonly():
             self.write_timestamp_to_grass()
         return AbstractDataset.update_all(self, dbif, execute)
 
@@ -536,7 +540,7 @@ class AbstractMapDataset(AbstractDataset):
             if connection_state_changed:
                 dbif.close()
 
-            if get_enable_timestamp_write():
+            if get_enable_timestamp_write() and not self.get_readonly():
                 self.write_timestamp_to_grass()
 
     def set_relative_time(self, start_time, end_time, unit) -> bool:
@@ -657,7 +661,7 @@ class AbstractMapDataset(AbstractDataset):
             if connection_state_changed:
                 dbif.close()
 
-            if get_enable_timestamp_write():
+            if get_enable_timestamp_write() and not self.get_readonly():
                 self.write_timestamp_to_grass()
 
     def set_temporal_extent(self, extent) -> None:
