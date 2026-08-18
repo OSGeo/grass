@@ -1,7 +1,6 @@
 """Test of gis library lrand48 PRNG thread-safety
 
 @author Maris Nartiss
-@author Gemini
 
 @copyright 2025 by the GRASS Development Team
 
@@ -10,7 +9,6 @@ Read the file COPYING that comes with GRASS
 for details
 """
 
-import ctypes
 import threading
 
 from grass.gunittest.case import TestCase
@@ -30,26 +28,11 @@ class Lrand48ThreadSafetyTestCase(TestCase):
         num_threads = 4
         values_per_thread = num_values // num_threads
 
-        self.assertEqual(
-            num_values % num_threads,
-            0,
-            "Total number of values must be divisible by the number of threads.",
-        )
-
-        # --- Define ctypes function signatures ---
-        G_srand48.argtypes = [ctypes.c_long]
-        G_srand48.restype = None
-
-        G_lrand48.argtypes = []
-        G_lrand48.restype = ctypes.c_long
-
-        # --- 1. Single-threaded execution ---
         list_single = []
         G_srand48(seed)
         for _ in range(num_values):
             list_single.append(G_lrand48())
 
-        # --- 2. Multi-threaded execution ---
         list_multi_raw = []
         lock = threading.Lock()
 
@@ -57,14 +40,15 @@ class Lrand48ThreadSafetyTestCase(TestCase):
             """Calls G_lrand48 and appends the result to a shared list."""
             local_results = []
             for _ in range(values_per_thread):
-                # G_lrand48() itself is protected by a C-level mutex
                 local_results.append(G_lrand48())
 
-            # Use a Python-level lock to safely extend the shared list
+            # The lock protects only the Python result list, not the C
+            # generator under test (list.extend is atomic under the GIL,
+            # but that is a CPython implementation detail).
             with lock:
                 list_multi_raw.extend(local_results)
 
-        # Reset the seed to ensure the sequence starts from the beginning
+        # Reset the seed to ensure the sequence starts from the beginning.
         G_srand48(seed)
 
         threads = []
@@ -76,30 +60,17 @@ class Lrand48ThreadSafetyTestCase(TestCase):
         for thread in threads:
             thread.join()
 
-        # --- 3. Verification ---
-        self.assertEqual(
-            len(list_single),
-            len(list_multi_raw),
-            "Single-threaded and multi-threaded runs produced a different number of values.",
-        )
-
-        # Check for duplicates in the multi-threaded list. The presence of duplicates
-        # would indicate that the C-level mutex failed and multiple threads
-        # received the same random number.
-        self.assertEqual(
-            len(list_multi_raw),
-            len(set(list_multi_raw)),
-            "Duplicate values found in multi-threaded run, indicating a race condition.",
-        )
-
-        # The sorted lists of numbers must be identical.
-        # This confirms that although threads ran in parallel, the C-level mutex
-        # correctly serialized access to the PRNG, yielding the exact same
-        # block of numbers.
+        # The generator serializes state updates, so the threads together
+        # must consume exactly the single-threaded sequence; only the
+        # distribution of values between threads may differ. Sorting both
+        # lists removes the scheduling-dependent order before comparison.
+        # A set-based comparison would not work, because a correct
+        # sequence can contain legitimate duplicates.
         self.assertListEqual(
             sorted(list_single),
             sorted(list_multi_raw),
-            "The set of generated numbers differs between single-threaded and multi-threaded runs.",
+            "The set of generated numbers differs between "
+            "single-threaded and multi-threaded runs.",
         )
 
 
