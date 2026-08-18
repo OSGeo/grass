@@ -868,10 +868,8 @@ class GConsole(wx.EvtHandler):
                             lname += "@" + gs.gisenv()["MAPSET"]
                         element_name, element_mapset = lname.split("@", 1)
 
-                        # The generic stds prompt does not say which dataset
-                        # type this map is, so it is resolved per map. Keep it
-                        # apart from prompt, which describes every value of
-                        # the parameter and must stay the same for all of them.
+                        # The generic stds prompt does not say which type
+                        # this dataset is, so it is resolved per dataset.
                         element = prompt
                         if prompt == "stds":
                             element = next(

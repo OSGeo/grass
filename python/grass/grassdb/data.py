@@ -54,9 +54,8 @@ def stds_exists(name, element, mapset, env=None) -> bool:
     :param mapset: Mapset name where the dataset is located
     :param env: Environment created by function grass.script.create_environment
     """
-    # The where clause goes to SQL as it is. A quote is written twice inside
-    # a SQL string literal, which the database reads back as a single one,
-    # so the name still matches itself instead of ending the literal early.
+    # The where clause goes to SQL as it is, and a quote inside a SQL string
+    # literal has to be written twice to not end the literal early.
     escaped_name = name.replace("'", "''")
     tools = Tools(env=env)
     try:

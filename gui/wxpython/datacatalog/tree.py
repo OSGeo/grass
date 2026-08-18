@@ -952,10 +952,11 @@ class DataCatalogTree(TreeView):
 
     @staticmethod
     def _mapIdWithoutLayer(map_id):
-        """Id of a registered map without the layer of a vector
+        """Return the map id as "name@mapset"
 
-        A vector registered by layer has a "name:layer@mapset" id, a form
-        the map tools do not accept and which is not listed separately.
+        Vector maps registered in a space time dataset by layer have a
+        "name:layer@mapset" id, which is not the name of a map, so the
+        part after the colon is dropped.
         """
         name, mapset = map_id.split("@", 1)
         return f"{name.split(':', 1)[0]}@{mapset}"
@@ -978,9 +979,8 @@ class DataCatalogTree(TreeView):
             if registered_maps:
                 child_type = STDS_TO_MAP_TYPE[item["type"]]
                 # A vector registered with several layers has one id per
-                # layer. Layers are not listed separately, so the map gets a
-                # single node which keeps the ids it is registered with, the
-                # form t.unregister needs.
+                # layer. Group the ids by map so that each map gets a single
+                # node, storing the per-layer ids t.unregister needs.
                 registered_ids = {}
                 for r_map in registered_maps:
                     registered_ids.setdefault(
@@ -2033,10 +2033,8 @@ class DataCatalogTree(TreeView):
                         (grassdb_node, location_node, mapset_node, stds_node)
                     )
 
-            # The signals are sent once every dataset is gone from the
-            # temporal database. The first one makes the handler read the
-            # mapset again, which drops all of them from the tree at once,
-            # so the later signals find nothing left to reload.
+            # Sent after all the removals, so that the mapset is read again
+            # once for the whole selection and not once per dataset.
             for grassdb_node, location_node, mapset_node, stds_node in deleted:
                 self._giface.grassdbChanged.emit(
                     grassdb=grassdb_node.data["name"],
