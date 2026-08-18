@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Mohammed Rashad <rashadkm@gmail.com>\n"
 "Language-Team: Malayalam <grass-translations@lists.osgeo.org>\n"
@@ -738,6 +738,15 @@ msgstr ""
 msgid "Display selected"
 msgstr ""
 
+msgid "Tools API"
+msgstr ""
+
+msgid "Script API"
+msgstr ""
+
+msgid "PyGRASS API"
+msgstr ""
+
 msgid "Classic (labels only)"
 msgstr ""
 
@@ -802,6 +811,9 @@ msgid "Script package"
 msgstr ""
 
 msgid "PyGRASS"
+msgstr ""
+
+msgid "GRASS Tools"
 msgstr ""
 
 #, python-brace-format
@@ -1281,7 +1293,10 @@ msgstr ""
 msgid "Re&load maps"
 msgstr ""
 
-msgid "&Copy path to mapset"
+msgid "Show computational region"
+msgstr ""
+
+msgid "&Copy path"
 msgstr ""
 
 msgid "&Create mapset"
@@ -1293,6 +1308,12 @@ msgstr ""
 #, fuzzy
 msgid "&Rename project"
 msgstr "നാമം മാറ്റുക"
+
+msgid "Show projection info"
+msgstr ""
+
+msgid "Copy path"
+msgstr ""
 
 msgid "Change Label"
 msgstr ""
@@ -1323,11 +1344,18 @@ msgstr ""
 msgid "&Delete projects (locations)"
 msgstr "തിരഞ്ഞെടുത്ത ലൊക്കെഷൻ എടുത്തുകളയുക"
 
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Copy paths"
+msgstr "കാറ്റഗറിയുടെ പതിപ്പ് ഉണ്ടാക്കുക"
+
 msgid "&Delete mapsets"
 msgstr ""
 
-msgid "&Copy paths to mapsets"
-msgstr ""
+#, fuzzy
+#| msgid "Copy categories"
+msgid "&Copy paths"
+msgstr "കാറ്റഗറിയുടെ പതിപ്പ് ഉണ്ടാക്കുക"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -3135,10 +3163,30 @@ msgstr ""
 msgid "Run the command (Ctrl+R)"
 msgstr "ആജ്ന നടപക്കുക(Ctrl+R)"
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Copy as Python"
+msgstr "കാറ്റഗറിയുടെ പതിപ്പ് ഉണ്ടാക്കുക"
+
+#, fuzzy
+#| msgid "Change settings"
+msgid "Copy as JSON settings"
+msgstr "സജ്ജീകരണം മാറ്റുക"
+
 msgid "Copy"
 msgstr ""
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+msgid "Paste JSON settings"
+msgstr "സജ്ജീകരണം കാണിക്കുക"
+
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr ""
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3153,8 +3201,59 @@ msgstr ""
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+msgid "Copy as Python (Script API)"
+msgstr ""
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr ""
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr ""
+
+msgid "Python code copied to clipboard"
+msgstr ""
+
+msgid "JSON copied to clipboard"
+msgstr ""
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Input Data"
+msgid "Invalid Data"
+msgstr "നിക്ഷേപിക്കപ്പെട്ട ഡാറ്റാ"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "തെറ്റ്"
+
+#, python-format
+msgid "%s copied to clipboard"
 msgstr ""
 
 msgid "Required"
@@ -3757,6 +3856,9 @@ msgid "Allow interactive input"
 msgstr ""
 
 msgid "Verbosity level:"
+msgstr ""
+
+msgid "Default Python API for copied commands:"
 msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
@@ -5187,8 +5289,7 @@ msgid ""
 "{messages}"
 msgstr ""
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Zoom to scatter plot extend"
@@ -5251,6 +5352,258 @@ msgstr ""
 msgid "Remove selected class"
 msgstr ""
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+msgid "Select notebook directory"
+msgstr ""
+
+#, fuzzy
+msgid "Save in project: {}"
+msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കുക"
+
+msgid "Options"
+msgstr ""
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+msgid "Browser"
+msgstr ""
+
+msgid "Integrated"
+msgstr ""
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close workspace file"
+msgid "Close page"
+msgstr "വർക്സ്പേസ് ഫയൽ അടയ്ക്കുക"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "തെറ്റ്"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "തെറ്റ്"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook Import Error"
+msgstr ""
+
+msgid "Import file"
+msgstr ""
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "&Rename"
+msgid "Rename File"
+msgstr "നാമം മാറ്റുക"
+
+msgid "No page for export is currently selected."
+msgstr ""
+
+msgid "Notebook Export Error"
+msgstr ""
+
+msgid "Export file as..."
+msgstr ""
+
+msgid "File {} exported to {}."
+msgstr ""
+
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "പുതിയ മാപ്പ്സെറ്റിൻടേ പേർ എഴുതുക"
+
+msgid "New Notebook"
+msgstr ""
+
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+msgid "New file '{}' created."
+msgstr ""
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr ""
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+msgid "Server URL: {}"
+msgstr ""
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook storage does not exist: {}"
+msgstr ""
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+msgid "File not found: {}"
+msgstr ""
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+msgid "Target file already exists: {}"
+msgstr "മാപ്പ് <%s> കണ്മനില്ല"
+
+#, fuzzy
+msgid "File '{}' already exists"
+msgstr "മാപ്പ് <%s> കണ്മനില്ല"
+
+msgid "Stop server"
+msgstr ""
+
+#, fuzzy
+msgid "Create new notebook"
+msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കുക"
+
+msgid "Import notebook"
+msgstr ""
+
+msgid "Export notebook"
+msgstr ""
+
 msgid "GRASS"
 msgstr ""
 
@@ -5277,6 +5630,28 @@ msgid "Close Map Display {}"
 msgstr ""
 
 msgid "Console"
+msgstr ""
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "Integrated Mode Not Available"
 msgstr ""
 
 msgid "Map Swipe Tool"
@@ -5427,6 +5802,11 @@ msgstr "മാപ്പ് ലയെർ കളയുക"
 
 msgid "Quit GRASS GUI"
 msgstr "പുറത്ത് കടക്കുക"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
@@ -5661,6 +6041,12 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "അഗ്രം എടുത്തു കളയുക"
 
+msgid "Custom CRS"
+msgstr ""
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr ""
 
@@ -5746,12 +6132,11 @@ msgstr ""
 msgid "Cartographic Composer"
 msgstr ""
 
-msgid "Launch user-defined script"
+msgid "Open Graphical Modeler"
 msgstr ""
 
-#, fuzzy
-msgid "New display"
-msgstr "മാപ്പ് മായിച്ചു കളയുക"
+msgid "Launch user-defined script"
+msgstr ""
 
 msgid "Python code editor"
 msgstr ""
@@ -6132,6 +6517,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 msgid "No project provided. Operation canceled."
@@ -6772,9 +7163,6 @@ msgstr ""
 msgid "List of extensions - double-click to install"
 msgstr ""
 
-msgid "Options"
-msgstr ""
-
 msgid "&Install"
 msgstr ""
 
@@ -6972,6 +7360,9 @@ msgid "Save expression to file"
 msgstr ""
 
 msgid "Load expression from file"
+msgstr ""
+
+msgid "Copy the current command string to the clipboard"
 msgstr ""
 
 msgid "exponent"
@@ -9370,7 +9761,7 @@ msgstr "തിരഞ്ഞെടുത്ത മാപ്പ്സെറ്റ�
 msgid "Do you want to cancel dataset download?"
 msgstr "വർക്സ്പേസിലെ വിവരങ്ങൾ സംഭരിച്ചുവെക്കുക വെക്കണമൊ ?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr ""
 
 msgid "Timeline Tool"
@@ -9466,8 +9857,7 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr ""
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Temporal Plot Tool"
@@ -10923,6 +11313,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~ msgid "New display"
+#~ msgstr "മാപ്പ് മായിച്ചു കളയുക"
+
+#, fuzzy
 #~ msgid "Create project?"
 #~ msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കുക"
 
@@ -10961,9 +11355,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Change project (location) and mapset"
 #~ msgstr "പ്രൊജക്റ്റിന്റെ ലൊക്കെഷനും മാപ്പ്സെറ്റും തിരഞ്ഞെടുക്കുക"
-
-#~ msgid "Change settings"
-#~ msgstr "സജ്ജീകരണം മാറ്റുക"
 
 #~ msgid "Choose GRC file to load"
 #~ msgstr "തുറക്കെണ്ട GRC ഫയൽ തിരഞെടുക്കുക"
@@ -11007,9 +11398,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Hide {overlay}"
 #~ msgstr "ഗ്രിഡ് അല്ലെങ്കിൽ മേലെ വയ്ക്കുന്ന വെക്റ്റർ ലേബെൽ ചേർക്കുക"
-
-#~ msgid "Input Data"
-#~ msgstr "നിക്ഷേപിക്കപ്പെട്ട ഡാറ്റാ"
 
 #, fuzzy
 #~ msgid "List raster3D dataset maps"
@@ -11104,10 +11492,6 @@ msgstr ""
 #~ "ലൊക്കെഷൻ പേർ മാറ്റാൻ പറ്റുനില്ല\n"
 #~ "\n"
 #~ "%s"
-
-#, fuzzy
-#~ msgid "Vector map %s already exists. "
-#~ msgstr "മാപ്പ് <%s> കണ്മനില്ല"
 
 #, fuzzy
 #~ msgid ""

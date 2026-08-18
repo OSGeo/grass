@@ -23,7 +23,12 @@ for details.
 """
 
 from .base import SQLDatabaseInterface
-from .core import SQLDatabaseInterfaceConnection, get_tgis_db_version_from_metadata
+from .core import (
+    SQLDatabaseInterfaceConnection,
+    get_tgis_database_string,
+    get_tgis_db_version,
+    get_tgis_db_version_from_metadata,
+)
 
 ###############################################################################
 
@@ -1457,7 +1462,15 @@ class STRDSMetadata(STDSRasterMetadataBase):
             self, "strds_metadata", ident, title, description
         )
 
-        if get_tgis_db_version_from_metadata() > 2:
+        # TGIS metadata is only available with an accessible temporal database
+        # initialized with tgis.init(). Initialization with tgis.init(skip_db_init=True)
+        # will result in an empty tgis_database_string is empty, fall back to a global
+        # tgis_db_version if tgis is not fully initialized.
+        if get_tgis_database_string() is not None:
+            tgis_db_version_ = get_tgis_db_version_from_metadata()
+        else:
+            tgis_db_version_ = get_tgis_db_version()
+        if tgis_db_version_ > 2:
             self.D["number_of_semantic_labels"] = None
 
         self.set_raster_register(raster_register)

@@ -163,3 +163,27 @@ def test_region_manager_env_activate_deactivate(session_2x2):
     # Deactivate twice is harmless
     manager.deactivate()
     assert "GRASS_REGION" not in session_2x2.env
+
+
+def test_region_manager_save(session_2x2):
+    """Test RegionManager can persist the temporarily modified region explicitly."""
+
+    with gs.RegionManager(n=6, s=0, e=6, w=0, res=1, env=session_2x2.env) as manager:
+        manager.save("saved_region")
+
+    with gs.RegionManager(region="saved_region", env=session_2x2.env):
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 6
+        assert region["cols"] == 6
+
+
+def test_region_manager_env_save(session_2x2):
+    """Test RegionManagerEnv can persist the temporarily modified region explicitly."""
+
+    with gs.RegionManagerEnv(n=6, s=0, e=6, w=0, res=1, env=session_2x2.env) as manager:
+        manager.save("saved_region_env")
+
+    with gs.RegionManagerEnv(region="saved_region_env", env=session_2x2.env):
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 6
+        assert region["cols"] == 6

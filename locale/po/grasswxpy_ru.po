@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
 "PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ru/>\n"
@@ -752,6 +752,19 @@ msgstr "Редактировать выбранную запись"
 msgid "Display selected"
 msgstr "Отобразить выбранные объекты"
 
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "Инструменты"
+
+#, fuzzy
+msgid "Script API"
+msgstr "Простой &редактор"
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "ГИС GRASS"
+
 msgid "Classic (labels only)"
 msgstr "Классический (только подписи)"
 
@@ -818,6 +831,11 @@ msgstr ""
 #, fuzzy
 msgid "PyGRASS"
 msgstr "ГИС GRASS"
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS Tools"
+msgstr "Справка GRASS"
 
 #, python-brace-format
 msgid ""
@@ -1346,7 +1364,12 @@ msgid "Re&load maps"
 msgstr "Пере&загрузить карты"
 
 #, fuzzy
-msgid "&Copy path to mapset"
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "Показать размер расчётного фрагмента"
+
+#, fuzzy
+msgid "&Copy path"
 msgstr "&Создать набор"
 
 msgid "&Create mapset"
@@ -1359,6 +1382,16 @@ msgstr "&Удалить набор"
 #, fuzzy
 msgid "&Rename project"
 msgstr "&Переименовать набор"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "Выберите проекцию"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy path"
+msgstr "Путь к CVS"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1393,11 +1426,15 @@ msgstr "&Удалить базу данных GRASS с диска"
 msgid "&Delete projects (locations)"
 msgstr "&Удалить области"
 
+#, fuzzy
+msgid "Copy paths"
+msgstr "&Создать набор"
+
 msgid "&Delete mapsets"
 msgstr "&Удалить наборы"
 
 #, fuzzy
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "&Создать набор"
 
 #, fuzzy, python-brace-format
@@ -3296,10 +3333,37 @@ msgstr "Закрыть это окно без выполнения команд�
 msgid "Run the command (Ctrl+R)"
 msgstr "Запустить команду (Ctrl+R)"
 
+#, fuzzy
+#| msgid "Copy all to clipboard"
+msgid "Copy as Shell command"
+msgstr "Скопировать всё в буфер обмена"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy as Python"
+msgstr "Путь к CVS"
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "Параметры векторной карты"
+
 msgid "Copy"
 msgstr "Копировать"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "Экспортировать распространённые форматы"
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "Параметры растровой карты"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Копировать текущую командную строку в буфер обмена"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3314,8 +3378,70 @@ msgstr "Закрыть окно после окончания операции"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "Закрыть диалоговое окно при успешном завершении команды. Этипараметры можно настроить в диалоговом окне «Параметры» (вкладка «Команда»)."
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Сценарий Python"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Сценарий Python"
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "«%s» скопировано в буфер обмена"
+
+#, fuzzy
+#| msgid "'{cmd}' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "«{cmd}» скопировано в буфер обмена"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "«%s» скопировано в буфер обмена"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+#, fuzzy
+#| msgid "%d modules match"
+msgid "Module Mismatch"
+msgstr "Число совпадений по модулям: %d"
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "Недопустимое имя"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Ошибка"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "«%s» скопировано в буфер обмена"
 
 msgid "Required"
@@ -3939,6 +4065,9 @@ msgstr "Разрешить интерактивный ввод"
 
 msgid "Verbosity level:"
 msgstr "Уровень избыточности информации:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
@@ -5490,8 +5619,9 @@ msgstr ""
 "Ошибка v.to.rast:\n"
 "%s"
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "Для использования инструмента диаграммы рассеяния необходимо установить пакет «matplotlib» (python-matplotlib). {0}"
 
 msgid "Zoom to scatter plot extend"
@@ -5554,6 +5684,297 @@ msgstr "Добавить класс"
 msgid "Remove selected class"
 msgstr "Удалить выбранный класс"
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS GIS database directory"
+msgid "Select notebook directory"
+msgstr "1. Выбрать каталог базы данных ГИС GRASS"
+
+#, fuzzy
+msgid "Save in project: {}"
+msgstr "Создание области"
+
+msgid "Options"
+msgstr "Параметры"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "Обзор"
+
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Integrated"
+msgstr "Промежуточный"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "Закрыть диалоговое окно"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "Ошибка"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "Ошибка"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr "Не удалось прочитать файл %s."
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import"
+msgid "Import file"
+msgstr "Импорт"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "Переименовать"
+
+#, fuzzy
+#| msgid "No scatter plots selected."
+msgid "No page for export is currently selected."
+msgstr "Диаграммы рассеяния не выбраны."
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export file is missing."
+msgid "Export file as..."
+msgstr "Отсутствует файл экспорта."
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "Модель экспортирована в <%s>"
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr "Не удалось прочитать файл %s."
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "Введите имя для нового набора:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to create new raster map."
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "Не удалось создать новую растровую карту."
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "No files generated."
+msgid "New file '{}' created."
+msgstr "Файлы не созданы."
+
+#, fuzzy
+#| msgid "Do you really want to activate snapping and overwrite it?"
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr "Активировать привязку и перезаписать карту?"
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "Сервер:"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to display legend."
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr "Не удалось отобразить легенду."
+
+#, fuzzy
+#| msgid "Property does not exist: %s"
+msgid "Notebook storage does not exist: {}"
+msgstr "Свойство не существует: %s"
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File %s not found"
+msgid "File not found: {}"
+msgstr "Файл %s не найден"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "Файл уже существует"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "Файл уже существует"
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "Сервер:"
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "Создать новую модель"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to:"
+msgid "Export notebook"
+msgstr "Экспортировать в:"
+
 #, fuzzy
 msgid "GRASS"
 msgstr "ГИС GRASS"
@@ -5582,6 +6003,30 @@ msgstr "Закрыть отображение карты {}"
 
 msgid "Console"
 msgstr "Консоль"
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "Трёхмерный вид недоступен"
 
 #, fuzzy
 msgid "Map Swipe Tool"
@@ -5737,6 +6182,11 @@ msgstr "Удалить слой карты"
 
 msgid "Quit GRASS GUI"
 msgstr "Завершить работу графического интерфейса GRASS"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr "Разрешение отображения в данный момент не ограничено параметрами вычисления. Рекомендуется ограничить карту геометрией фрагмента. Ограничить разрешение?"
@@ -5976,6 +6426,16 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "Сохранить растровую карту"
 
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Заданный минимум"
+
+#, fuzzy
+#| msgid "Please select first the raster map"
+msgid "Left mouse click to print detailed projection info"
+msgstr "Сначала выберите растровую карту"
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Создать новый проект (Ctrl+N)"
 
@@ -6065,12 +6525,13 @@ msgstr "Инструмент геопривязки"
 msgid "Cartographic Composer"
 msgstr "Компоновщик карт"
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "Средство графического моделирования"
+
 msgid "Launch user-defined script"
 msgstr "Запустить сценарий, указанный пользователем"
-
-#, fuzzy
-msgid "New display"
-msgstr "Очистить отображение"
 
 #, fuzzy
 msgid "Python code editor"
@@ -6476,6 +6937,12 @@ msgstr "Отсутствует строка в формате WKT."
 
 msgid "There were some issues when loading menu or Tools:"
 msgstr "При загрузке меню или панелей управления возникли проблемы:"
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
 
 #, fuzzy
 msgid "No project provided. Operation canceled."
@@ -7141,9 +7608,6 @@ msgstr "Получить и установить расширение из до�
 msgid "List of extensions - double-click to install"
 msgstr "Список расширений — установка выполняется двойным щелчком мыши"
 
-msgid "Options"
-msgstr "Параметры"
-
 msgid "&Install"
 msgstr "&Установить"
 
@@ -7346,6 +7810,9 @@ msgstr "Сохранить выражение в файл"
 
 msgid "Load expression from file"
 msgstr "Загрузить выражение из файла"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Копировать текущую командную строку в буфер обмена"
 
 msgid "exponent"
 msgstr "возвести в степень"
@@ -9878,7 +10345,9 @@ msgstr "Загрузить выбранную область"
 msgid "Do you want to cancel dataset download?"
 msgstr "Отменить загрузку области?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+#, fuzzy
+#| msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr "Инструмент временной шкалы требует установки пакета \"matplotlib\" (python-matplotlib, а на некоторых системах также и пакета python-matplotlib-wx). {}"
 
 msgid "Timeline Tool"
@@ -9978,8 +10447,9 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "Временная шкала — ГИС GRASS"
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "Для работы инструмента отображения временных данных необходимо установить пакет «matplotlib» (python-matplotlib). {0}"
 
 msgid "Temporal Plot Tool"
@@ -11488,6 +11958,14 @@ msgstr ""
 "Уравнение регрессии для растровых карт <%(rast1)s> и <%(rast2)s>:\n"
 "\n"
 
+#, fuzzy
+#~ msgid "New display"
+#~ msgstr "Очистить отображение"
+
+#, fuzzy
+#~ msgid "&Copy paths to mapsets"
+#~ msgstr "&Создать набор"
+
 #~ msgid "Generate random seed for rand()"
 #~ msgstr "Сгенерируйте случайное значение для rand()"
 
@@ -11524,10 +12002,6 @@ msgstr ""
 
 #~ msgid " Feature type: "
 #~ msgstr " Тип объекта: "
-
-#, python-format
-#~ msgid "%d modules match"
-#~ msgstr "Число совпадений по модулям: %d"
 
 #, python-format
 #~ msgid "%s. cleaning tool moved down"
@@ -12092,9 +12566,6 @@ msgstr ""
 
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "Выберите метод определения параметров привязки"
-
-#~ msgid "Choose projection"
-#~ msgstr "Выберите проекцию"
 
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "Классификация атрибутивных данных. Например, для тематического отображения"
@@ -13125,9 +13596,6 @@ msgstr ""
 #~ msgid "GRASS GIS Attribute Table Manager"
 #~ msgstr "Менеджер атрибутивных таблиц ГИС GRASS"
 
-#~ msgid "GRASS help"
-#~ msgstr "Справка GRASS"
-
 #~ msgid "GRASS raster map layer data resampling capability."
 #~ msgstr "Функция пересчёта данных растрового слоя карты GRASS."
 
@@ -13325,9 +13793,6 @@ msgstr ""
 
 #~ msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
 #~ msgstr "Алгоритм слияния изображений для повышения резкости многоспектральных панхроматических каналов высокого разрешения"
-
-#~ msgid "Import"
-#~ msgstr "Импорт"
 
 #~ msgid "Import 3-dimensional Vis5D files."
 #~ msgstr "Импорт трёхмерных файлов Vis5D."

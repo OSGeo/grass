@@ -37,7 +37,7 @@ def main():
     layers = options["map"].split(",")
 
     if len(layers) < 2:
-        gcore.error(_("At least 2 maps are required"))
+        gcore.fatal(_("At least 2 maps are required"))
 
     tmpfile = gcore.tempfile()
 
@@ -55,7 +55,7 @@ def main():
     os.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
 
     colors = ["red", "black", "blue", "green", "gray", "violet"]
-    line = 2
+    text_line = 2
     iloop = 0
     jloop = 0
     for iloop, i in enumerate(layers):
@@ -65,9 +65,13 @@ def main():
                 colors = colors[1:]
                 colors.append(color)
                 gcore.write_command(
-                    "d.text", color=color, size=4, line=line, stdin="%s %s" % (i, j)
+                    "d.text",
+                    color=color,
+                    size=4,
+                    line=text_line,
+                    stdin="%s %s" % (i, j),
                 )
-                line += 1
+                text_line += 1
 
                 ofile = open(tmpfile, "w")
                 gcore.run_command("r.stats", flags="cnA", input=(i, j), stdout=ofile)

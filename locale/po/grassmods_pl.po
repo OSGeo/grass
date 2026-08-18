@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-28 15:43+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Polish <https://weblate.osgeo.org/projects/grass-gis/grassmods/pl/>\n"
@@ -1775,7 +1775,7 @@ msgid "Cannot find/open symbol: '%s'"
 msgstr ""
 
 #, c-format
-msgid "Color <%s> cannot for option %s be parsed"
+msgid "Color <%s> for option <%s> cannot be parsed"
 msgstr ""
 
 #, c-format
@@ -1787,7 +1787,7 @@ msgid "Number of widths (%d) is higher then the number of files (%d)"
 msgstr ""
 
 #, c-format
-msgid "Number of widths (%d) is lower then the number of files (%d)"
+msgid "Number of widths (%d) is lower than the number of files (%d)"
 msgstr ""
 
 #, c-format
@@ -7781,8 +7781,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 #, fuzzy
 msgid "Maps with feature values (attributes)"
 msgstr "Liczba klatek"
@@ -9447,22 +9447,38 @@ msgstr ""
 msgid "aggregation"
 msgstr ""
 
-msgid "Value option that sets the area size limit (in hectares)"
+msgid "Value option that sets the area size limit (in hectares) (deprecated)"
 msgstr ""
 
 msgid "Area"
 msgstr ""
 
-msgid "Lesser or greater than specified value"
+msgid "Keep only areas lesser or greater than specified value (deprecated)"
 msgstr ""
 
-msgid "Method used for reclassification"
+msgid "Value for the lower area size limit (in hectares). Pixel clumps with areas below this value are removed."
 msgstr ""
+
+msgid "Value for the upper area size limit (in hectares). Pixel clumps with areas above this value are removed."
+msgstr ""
+
+#, fuzzy
+msgid "Method used for area size filtering"
+msgstr "Użyj tekstu jako tytułu mapy"
 
 msgid "Input map is clumped"
 msgstr ""
 
-msgid "Clumps including diagonal neighbors"
+msgid "Generate clumps including diagonal neighbors"
+msgstr ""
+
+msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgstr ""
+
+msgid "Apply lower area threshold as \"minsize\" during clumping"
+msgstr ""
+
+msgid "Output vector map, do not convert back to raster (only for method 'rmarea')"
 msgstr ""
 
 msgid "Splits a raster map into red, green and blue maps."
@@ -9699,6 +9715,12 @@ msgid "Formatting"
 msgstr "Formatowanie"
 
 msgid "Columns to be printed to stdout"
+msgstr ""
+
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
+msgid "Name of mapsets to list ('.' for current, '*' for all mapsets)"
 msgstr ""
 
 msgid "Field separator character between the output columns"
@@ -9977,10 +9999,10 @@ msgstr ""
 msgid "Imports space time raster dataset."
 msgstr ""
 
-msgid "Path to the extraction directory"
+msgid "Path to the extraction directory (default is .tmp in the current mapset)"
 msgstr ""
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+msgid "Create a new project and import the data into it."
 msgstr ""
 
 msgid "Set the current region from the last map that was imported"
@@ -10150,6 +10172,9 @@ msgstr ""
 msgid "Raster map used for zoning, must be of type CELL"
 msgstr ""
 
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 msgid "Calculate extended statistics"
 msgstr ""
 
@@ -10218,8 +10243,8 @@ msgid "Raster map with zones to compute statistics for"
 msgstr "Kalkulator map rastrowych."
 
 #, fuzzy
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Kalkulator map rastrowych."
+msgid "3D raster map with zones"
+msgstr "Punkty wektorowe"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr ""
@@ -10386,6 +10411,9 @@ msgstr ""
 msgid "select"
 msgstr ""
 
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 msgid "Exports a space time vector dataset as GRASS specific archive file."
 msgstr ""
 
@@ -10411,6 +10439,9 @@ msgid "Register empty maps"
 msgstr ""
 
 msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr ""
+
+msgid "Path to the extraction directory"
 msgstr ""
 
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
@@ -10672,6 +10703,28 @@ msgid "Default is sql unless the provided aggregate methods are for univar"
 msgstr ""
 
 msgid "sql;Uses SQL attribute database;univar;Uses v.db.univar"
+msgstr ""
+
+#, fuzzy
+#| msgid "Performs transformation of 2D vector features to 3D."
+msgid "Prints geometry metrics of vector features."
+msgstr "Transformuje obiekty wektorowe 2D do obiektów 3D."
+
+#, fuzzy
+#| msgid "Metric"
+msgid "metric"
+msgstr "Wratości metryczne"
+
+msgid "Geometry metric(s) to compute"
+msgstr ""
+
+msgid "area;area size;perimeter;perimeter length of an area;length;line length;count;number of features for each category;compactness;compactness of an area, calculated as perimeter / (2 * sqrt(PI * area));fractal_dimension;fractal dimension of boundary defining a polygon, calculated as 2 * (log(perimeter) / log(area));slope;slope steepness of vector line or boundary;sinuosity;line sinuosity, calculated as line length / distance between end points;azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode;coordinates;point coordinates, X,Y or X,Y,Z;start;line/boundary starting point coordinates, X,Y or X,Y,Z;end;line/boundary end point coordinates, X,Y or X,Y,Z;bbox;bounding box of area, N,S,E,W"
+msgstr ""
+
+msgid "Units (one per metric, positional; unspecified metrics use defaults)"
+msgstr ""
+
+msgid "plain;Plain text with pipe separator by default;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
@@ -13588,6 +13641,10 @@ msgstr ""
 msgid "Search radius size must cover at least 1 cell"
 msgstr ""
 
+#, c-format
+msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
@@ -13619,6 +13676,9 @@ msgstr ""
 
 #, c-format
 msgid "Internal error in %s()"
+msgstr ""
+
+msgid "JSON nesting exceeds maximum depth"
 msgstr ""
 
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
@@ -18096,6 +18156,10 @@ msgstr ""
 msgid "Error writing temporary file <%s>"
 msgstr ""
 
+#, c-format
+msgid "Using %d thread(s), %d buffered output rows"
+msgstr ""
+
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr "Próbkuje warstwę mapy rastrowej do grubszej siatki z użyciem agregacji."
 
@@ -18489,7 +18553,7 @@ msgstr ""
 msgid "Number of walkers"
 msgstr ""
 
-msgid "Time used for iterations [minutes]"
+msgid "Duration of the simulated water flow [minutes]"
 msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
@@ -22785,8 +22849,10 @@ msgstr "write_vtk_unstructured_grid_cells: Zapis komórek"
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr "write_vtk_data: Zapis danych komórkowych %s o %i wierszach, %i kolumnach, %i głebokościach do pliku VTK ASCII"
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
-msgstr ""
+#, fuzzy
+#| msgid "Wrong map values! Values should in between 0 and 255!\n"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
+msgstr "Błędne wartości mapy! Wartości wpowinny zawierać się pomiędzy 0 a 255!\n"
 
 msgid "Unable to close the 3D raster map"
 msgstr ""
@@ -23314,7 +23380,7 @@ msgstr ""
 msgid "ZIP file is unreadable: {0}"
 msgstr ""
 
-msgid "Extracting may be unsafe; consider updating Python"
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
 msgstr ""
 
 #, python-brace-format
@@ -23786,7 +23852,7 @@ msgstr ""
 msgid "Filled raster map is: %s"
 msgstr ""
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 msgid "Output can be written only to the current mapset"
@@ -24292,49 +24358,50 @@ msgstr ""
 msgid "azimuth must be between 0 and 360"
 msgstr ""
 
-msgid "xy-locations are not supported"
-msgstr ""
-
-msgid "Need projected data with grids in meters"
-msgstr ""
-
-msgid "flags c and d are mutually exclusive"
-msgstr ""
-
-#, python-format
-msgid "Temporary raster map <%s> exists"
-msgstr ""
-
-msgid "Generating a clumped raster file including diagonal neighbors..."
-msgstr ""
-
-msgid "Generating a clumped raster file ..."
-msgstr ""
-
-#, python-format
-msgid "Generating a reclass map with area size less than or equal to %f hectares..."
-msgstr ""
-
-#, python-format
-msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
-msgstr ""
-
-#, python-format
-msgid "No areas of size less than or equal to %f hectares found."
-msgstr ""
-
-#, python-format
-msgid "No areas of size greater than or equal to %f hectares found."
+msgid ""
+"xy-locations are not supported\n"
+"Need projected data with grids in meters"
 msgstr ""
 
 msgid "Latitude-longitude locations are not supported"
 msgstr ""
 
-msgid "You have to specify mode='lesser' with method='rmarea'"
+msgid "xy-locations are not supported"
+msgstr ""
+
+#, fuzzy
+msgid "Generating a clumped raster file"
+msgstr "Tworzenie nowego pliku kategorii..."
+
+msgid " including diagonal neighbors"
+msgstr ""
+
+#, fuzzy, python-format
+msgid " with minimum %s pixels"
+msgstr "Wielkość czcionki jest wysokością w pikselach"
+
+#, fuzzy
+msgid "Generating a reclass map with area size"
+msgstr "Wczytywanie mapy hipsometrycznej:"
+
+#, python-format
+msgid " larger than or equal to %f hectares..."
 msgstr ""
 
 #, python-format
-msgid "Generating output raster map <%s>..."
+msgid " smaller than or equal to %f hectares..."
+msgstr ""
+
+#, fuzzy
+#| msgid "No record for category [%d]"
+msgid "No areas of size "
+msgstr "Brak rekordu dla categorii [%d]"
+
+#, python-format
+msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
+msgstr ""
+
+msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
 msgstr ""
 
 msgid "No semantic label assigned to <{}>"
@@ -24762,6 +24829,15 @@ msgid ""
 "{error}"
 msgstr ""
 
+msgid "Cannot mix metrics from different feature types: {}. Results are merged by category, so combining e.g. line and area metrics would produce misleading records. Run v.geometry separately for each feature type."
+msgstr ""
+
+msgid "More units ({}) than metrics ({}) specified"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long, got: {}"
+msgstr ""
+
 #, python-format
 msgid "Missing value for parameter <%s>"
 msgstr ""
@@ -25070,11 +25146,24 @@ msgstr ""
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr ""
 
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
-msgid "Print current connection parameter in shell style and exit"
+#, fuzzy
+#| msgid "Name of raster map(s) to include in group"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Nazwa rastra(ów) do włączenia do grupy"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
 msgstr ""
+
+#, fuzzy
+#| msgid "This option requires one column"
+msgid "The mapset option requires format=json."
+msgstr "Opcja ta wymaga 1 kolumny"
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr ""
@@ -25516,6 +25605,10 @@ msgid "CSV format cannot be used with the -b flag. Please use the -b flag with t
 msgstr ""
 
 msgid "The 'list' format can only be used with the -b flag. Please use -b to enable list output."
+msgstr ""
+
+#, c-format
+msgid "No records selected from table <%s>"
 msgstr ""
 
 msgid "Unable to sort array of values"
@@ -31429,6 +31522,11 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
+#, fuzzy, c-format
+#| msgid "Removing raster maps from group <%s>..."
+msgid "Removing areas smaller than %g sqm..."
+msgstr "Usuwanie map rastrowych z grupy <%s>..."
+
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr "Odpytywanie mapy wektorowej <%s>..."
@@ -31507,6 +31605,13 @@ msgid "Snapping threshold for boundaries"
 msgstr ""
 
 msgid "Disable snapping with snap <= 0"
+msgstr ""
+
+#, fuzzy
+msgid "Minimum size of areas to keep in square meters"
+msgstr "Minimalna liczba pikseli w klasie"
+
+msgid "Enable with minsize > 0"
 msgstr ""
 
 #, c-format
@@ -31609,6 +31714,11 @@ msgstr ""
 msgid "Missing attribute table for vector map <%s>"
 msgstr ""
 
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy the table"
+msgstr "Zbyt dużo nazw kolmun"
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr ""
@@ -31662,6 +31772,11 @@ msgstr ""
 #, c-format
 msgid "%d vector maps patched"
 msgstr ""
+
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy records"
+msgstr "Zbyt dużo nazw kolmun"
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"
@@ -32005,10 +32120,6 @@ msgstr ""
 
 #, c-format
 msgid "Database connection not defined for layer %s"
-msgstr ""
-
-#, c-format
-msgid "No records selected from table <%s>"
 msgstr ""
 
 msgid "Key column type is not integer"
@@ -33747,9 +33858,6 @@ msgstr "Kopiowanie tablicy nie powiodło się"
 msgid "Pass %d"
 msgstr ""
 
-msgid "Node is outside any input area"
-msgstr ""
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -34179,6 +34287,10 @@ msgstr ""
 
 msgid "Image file"
 msgstr "Plik obrazu"
+
+#, fuzzy
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Kalkulator map rastrowych."
 
 #~ msgid ""
 #~ "WGS84 output not possible as this location does not contain\n"
@@ -36004,10 +36116,6 @@ msgstr "Plik obrazu"
 #~ msgstr "Nie można ustawić projekcji"
 
 #, fuzzy
-#~ msgid "Metric to use for weighting"
-#~ msgstr "Użyj tekstu jako tytułu mapy"
-
-#, fuzzy
 #~ msgid "Minimum distance among plants [m]"
 #~ msgstr "Maksymalna odległość lub -1 przy braku ograniczeń"
 
@@ -36042,10 +36150,6 @@ msgstr "Plik obrazu"
 #, fuzzy
 #~ msgid "Minimum size of a patch in meters squared"
 #~ msgstr "Minimalny rozmiar dla każdej komórki"
-
-#, fuzzy
-#~ msgid "Minimum size of areas in map units"
-#~ msgstr "Minimalna liczba pikseli w klasie"
 
 #, fuzzy
 #~ msgid "Minimum size of tiles in map units"
@@ -38449,10 +38553,6 @@ msgstr "Plik obrazu"
 #~ msgstr "Przebudowuje topologię dla wszystkich map wektorowych w bieżącym mapsecie."
 
 #, fuzzy
-#~ msgid "Renaming reclass maps"
-#~ msgstr "Wczytywanie mapy hipsometrycznej:"
-
-#, fuzzy
 #~ msgid "Rendered output file"
 #~ msgstr "Nazwa dla pliku wyjściowego"
 
@@ -39014,10 +39114,6 @@ msgstr "Plik obrazu"
 #~ msgstr "Wielkość czcionki jest wysokością w pikselach"
 
 #, fuzzy
-#~ msgid "Tile width in pixels"
-#~ msgstr "Wielkość czcionki jest wysokością w pikselach"
-
-#, fuzzy
 #~ msgid "Time increment"
 #~ msgstr "Przyrost kategorii"
 
@@ -39056,10 +39152,6 @@ msgstr "Plik obrazu"
 #, fuzzy
 #~ msgid "Training parameters"
 #~ msgstr "Parametr napięcia"
-
-#, fuzzy
-#~ msgid "Training set update file"
-#~ msgstr "Tworzenie nowego pliku kategorii..."
 
 #, fuzzy
 #~ msgid "Training vector map (attribut table required)"
@@ -39519,10 +39611,6 @@ msgstr "Plik obrazu"
 #, fuzzy
 #~ msgid "calibration"
 #~ msgstr "Ozdobnik"
-
-#, fuzzy
-#~ msgid "categorical map with zones"
-#~ msgstr "Punkty wektorowe"
 
 #, fuzzy
 #~ msgid "centerpoint"

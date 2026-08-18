@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
 "PO-Revision-Date: 2025-12-22 12:47+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -750,6 +750,21 @@ msgstr "Redigera vald post"
 msgid "Display selected"
 msgstr "Display vald"
 
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "Verktyg"
+
+#, fuzzy
+#| msgid "Script editor"
+msgid "Script API"
+msgstr "Skriptredigerare"
+
+#, fuzzy
+#| msgid "GRASS API:"
+msgid "PyGRASS API"
+msgstr "GRASS API:"
+
 msgid "Classic (labels only)"
 msgstr "Classic (endast etiketter)"
 
@@ -815,6 +830,11 @@ msgstr "Skriptpaket"
 
 msgid "PyGRASS"
 msgstr "PyGRASS"
+
+#, fuzzy
+#| msgid "Tools"
+msgid "GRASS Tools"
+msgstr "Verktyg"
 
 #, python-brace-format
 msgid ""
@@ -1313,7 +1333,14 @@ msgstr "&Rename mapset"
 msgid "Re&load maps"
 msgstr "U&ppdatera kartor"
 
-msgid "&Copy path to mapset"
+#, fuzzy
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "Visa beräkningsregionens omfattning"
+
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr "&Kopiera sökväg till mapset"
 
 msgid "&Create mapset"
@@ -1324,6 +1351,16 @@ msgstr "&Avsluta projekt"
 
 msgid "&Rename project"
 msgstr "&Rename-projekt"
+
+#, fuzzy
+#| msgid "Source projection:"
+msgid "Show projection info"
+msgstr "Källa projektion:"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy path"
+msgstr "CVS sökväg"
 
 #, fuzzy
 #| msgid "Change"
@@ -1355,11 +1392,18 @@ msgstr "&Radera GRASS-databasen från hårddisken"
 msgid "&Delete projects (locations)"
 msgstr "&Avveckla projekt (platser)"
 
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "Copy paths"
+msgstr "&Kopiera sökväg till mapset"
+
 msgid "&Delete mapsets"
 msgstr "&Radera kartor"
 
-msgid "&Copy paths to mapsets"
-msgstr "&Kopiera sökvägar till kartor"
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "&Copy paths"
+msgstr "&Kopiera sökväg till mapset"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -3229,10 +3273,37 @@ msgstr "Stäng detta fönster utan att utföra kommandot (Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "Kör kommandot (Ctrl+R)"
 
+#, fuzzy
+#| msgid "Copy all to clipboard"
+msgid "Copy as Shell command"
+msgstr "Kopiera allt till urklipp"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy as Python"
+msgstr "CVS sökväg"
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "Inställningar för vektorkartor"
+
 msgid "Copy"
 msgstr "Kopiera"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "Exportera vanliga format"
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "Inställningar för Raster-karta"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Kopiera den aktuella kommandosträngen till urklipp"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3247,8 +3318,68 @@ msgstr "Stäng dialogrutan när du är klar"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "Stäng dialogrutan när kommandot är slutfört. Ändra dessa inställningar i dialogrutan Inställningar (fliken \"Kommando\")."
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Python-skript"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Python-skript"
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' kopierat till urklipp"
+
+#, fuzzy
+#| msgid "'{cmd}' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'{cmd}' kopierat till urklipp"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' kopierat till urklipp"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "Ogiltigt namn"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Fel"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' kopierat till urklipp"
 
 msgid "Required"
@@ -3858,6 +3989,9 @@ msgstr "Tillåt interaktiv input"
 
 msgid "Verbosity level:"
 msgstr "Ordstyrka nivå:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr "Antal trådar för parallell databehandling (endast verktyg som stöds):"
@@ -5356,8 +5490,9 @@ msgstr ""
 "v.to.rast misslyckades:\n"
 "{messages}"
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "Scatterplot Tool kräver att paketet \"matplotlib\" (python-matplotlib) är installerat. {0}"
 
 msgid "Zoom to scatter plot extend"
@@ -5420,6 +5555,298 @@ msgstr "Lägg till klass"
 msgid "Remove selected class"
 msgstr "Ta bort vald klass"
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS database directory"
+msgid "Select notebook directory"
+msgstr "1. Välj katalog för GRASS-databas"
+
+#, fuzzy
+#| msgid "Create new project"
+msgid "Save in project: {}"
+msgstr "Skapa ett nytt projekt"
+
+msgid "Options"
+msgstr "Alternativ"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "Bläddra"
+
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Integrated"
+msgstr "Hemmakock"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "Stäng dialogrutan"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "Fel"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "Fel"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr "Misslyckades med att läsa filen %s."
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import file"
+msgstr "&Import"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "Byt namn"
+
+#, fuzzy
+#| msgid "No scatter plots selected."
+msgid "No page for export is currently selected."
+msgstr "Inga spridningsdiagram valda."
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export file is missing."
+msgid "Export file as..."
+msgstr "Exportfil saknas."
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "Modellen exporteras till <%s>"
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr "Misslyckades med att läsa filen %s."
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "Ange namn för ny mapset:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to create new raster map."
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "Misslyckades med att skapa en ny rasterkarta."
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "No files generated."
+msgid "New file '{}' created."
+msgstr "Inga filer genererade."
+
+#, fuzzy
+#| msgid "Do you really want to activate snapping and overwrite it?"
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr "Vill du verkligen aktivera snapping och skriva över det?"
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "Server:"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to display legend."
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr "Misslyckades med att visa legend."
+
+#, fuzzy
+#| msgid "Property does not exist: %s"
+msgid "Notebook storage does not exist: {}"
+msgstr "Fastigheten existerar inte: %s"
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File %s not found"
+msgid "File not found: {}"
+msgstr "Filen %s hittades inte"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "Filen finns redan"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "Filen finns redan"
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "Server:"
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "Skapa ny modell"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to:"
+msgid "Export notebook"
+msgstr "Exportera till:"
+
 msgid "GRASS"
 msgstr "GRASS"
 
@@ -5447,6 +5874,30 @@ msgstr "Stäng kartvisning {}"
 
 msgid "Console"
 msgstr "Konsol"
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "3D-visningsläge inte tillgängligt"
 
 msgid "Map Swipe Tool"
 msgstr "Verktyg för svepande kartor"
@@ -5601,6 +6052,11 @@ msgstr "Ta bort kartlager"
 
 msgid "Quit GRASS GUI"
 msgstr "Avsluta GRASS GUI"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr "Skärmupplösningen är för närvarande inte begränsad till beräkningsinställningarna. Det föreslås att kartan begränsas till regiongeometri. Vill du begränsa upplösningen?"
@@ -5835,6 +6291,16 @@ msgstr "Är du säker på att du vill ta bort den aktuella rastermasken?"
 msgid "Remove raster mask"
 msgstr "Ta bort rastermask"
 
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Anpassad min"
+
+#, fuzzy
+#| msgid "Left mouse click to remove the raster mask"
+msgid "Left mouse click to print detailed projection info"
+msgstr "Vänster musklick för att ta bort rastermasken"
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Skapa en ny arbetsyta (Ctrl+N)"
 
@@ -5916,11 +6382,13 @@ msgstr "Georektifierare"
 msgid "Cartographic Composer"
 msgstr "Kartografisk kompositör"
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "Grafisk modellerare"
+
 msgid "Launch user-defined script"
 msgstr "Starta användardefinierat skript"
-
-msgid "New display"
-msgstr "Ny display"
 
 msgid "Python code editor"
 msgstr "Python kodredigerare"
@@ -6312,6 +6780,12 @@ msgstr "WKT-sträng saknas."
 
 msgid "There were some issues when loading menu or Tools:"
 msgstr "Det uppstod vissa problem vid inläsning av meny eller verktyg:"
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
 
 msgid "No project provided. Operation canceled."
 msgstr "Inget projekt tillhandahållet. Operation avbruten."
@@ -6965,9 +7439,6 @@ msgstr "Hämta och installera tillägg från GRASS Addons"
 msgid "List of extensions - double-click to install"
 msgstr "Lista över tillägg - dubbelklicka för att installera"
 
-msgid "Options"
-msgstr "Alternativ"
-
 msgid "&Install"
 msgstr "&Installera"
 
@@ -7170,6 +7641,9 @@ msgstr "Spara uttryck till fil"
 
 msgid "Load expression from file"
 msgstr "Läs in uttryck från fil"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Kopiera den aktuella kommandosträngen till urklipp"
 
 msgid "exponent"
 msgstr "exponent"
@@ -9668,7 +10142,9 @@ msgstr "Hämta ner utvalt dataset"
 msgid "Do you want to cancel dataset download?"
 msgstr "Vill du avbryta hämtningen av dataset?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+#, fuzzy
+#| msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr "Timeline Tool kräver att paketet \"matplotlib\" (python-matplotlib och på vissa system även python-matplotlib-wx) installeras. {}"
 
 msgid "Timeline Tool"
@@ -9766,8 +10242,9 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "Verktyg för tidslinje - GRASS"
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "Temporal Plot Tool kräver att paketet \"matplotlib\" (python-matplotlib) är installerat. {0}"
 
 msgid "Temporal Plot Tool"
@@ -11241,6 +11718,12 @@ msgid ""
 msgstr ""
 "Regressionsekvation för rasterkartan <%(rast1)s> vs. <%(rast2)s>:\n"
 "\n"
+
+#~ msgid "New display"
+#~ msgstr "Ny display"
+
+#~ msgid "&Copy paths to mapsets"
+#~ msgstr "&Kopiera sökvägar till kartor"
 
 #~ msgid "Generate random seed for rand()"
 #~ msgstr "Generera slumpmässigt frö för rand()"

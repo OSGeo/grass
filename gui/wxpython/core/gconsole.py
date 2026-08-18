@@ -201,7 +201,7 @@ class CmdThread(threading.Thread):
                 if args[0][0] == "r.mapcalc":
                     try:
                         mapName = args[0][1].split("=", 1)[0].strip()
-                    except KeyError:
+                    except (IndexError, AttributeError):
                         pass
                 else:
                     moduleInterface = GUI(show=None).ParseCommand(args[0])
@@ -410,11 +410,7 @@ class GConsole(wx.EvtHandler):
             sys.stdout = self.cmdStdOut
             sys.stderr = self.cmdStdErr
         else:
-            try:
-                # Python >= 3.11
-                enc = locale.getencoding()
-            except AttributeError:
-                enc = locale.getdefaultlocale()[1]
+            enc = locale.getencoding()
             if enc:
                 # https://stackoverflow.com/questions/4374455/how-to-set-sys-stdout-encoding-in-python-3
                 sys.stdout = codecs.getwriter(enc)(sys.__stdout__.detach())

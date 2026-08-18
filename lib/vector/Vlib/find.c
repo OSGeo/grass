@@ -324,7 +324,9 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
         G_debug(3, "    area = %d Vect_point_in_area_outer_ring() = %d", area,
                 ret);
 
-        if (ret >= 1) {
+        /* the point must be really inside (ret = 1), not on the boundary (ret =
+         * 2) */
+        if (ret == 1) {
             /* check if in islands */
             Area = Plus->Area[area];
             for (j = 0; j < Area->n_isles; j++) {

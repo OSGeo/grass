@@ -38,9 +38,9 @@ int main(int argc, char *argv[])
     int ofield;
     int nrec, ctype, nbclass, nbreaks, *frequencies;
     int ret, i;
-    double finfo;
+    double finfo = 0;
     double *classbreaks, min, max, *data;
-    struct GASTATS stats;
+    struct GASTATS stats = {0};
     char *desc, *fs;
     enum OutputFormat format;
     G_JSON_Value *root_value = NULL, *intervals_value = NULL,
@@ -174,6 +174,9 @@ int main(int argc, char *argv[])
     if (nrec < 0)
         G_fatal_error(_("Unable to select data from table"));
 
+    if (nrec == 0)
+        G_warning(_("No records selected from table <%s>"), Fi->table);
+
     db_close_database_shutdown_driver(Driver);
 
     ret = db_CatValArray_sort_by_value(&Cvarr);
@@ -203,15 +206,19 @@ int main(int argc, char *argv[])
 
     /* Get classbreaks for given algorithm and number of classbreaks.
      * finfo takes any info coming from the classification algorithms
-     * equ algorithm can alter number of class breaks */
-    finfo = AS_class_apply_algorithm(AS_option_to_algorithm(algo_opt), data,
-                                     nrec, &nbreaks, classbreaks);
+     * equ algorithm can alter number of class breaks.
+     * With no data there is nothing to classify and the class breaks stay
+     * at zero. */
+    if (nrec > 0) {
+        finfo = AS_class_apply_algorithm(AS_option_to_algorithm(algo_opt), data,
+                                         nrec, &nbreaks, classbreaks);
 
-    if (G_strcasecmp(algo_opt->answer, "dis") == 0 && finfo < 3.84148)
-        G_warning(
-            _("The discontinuities algorithm indicates that some "
-              "class breaks are not statistically significant at "
-              "alpha=0.05. You are advised to reduce the number of classes."));
+        if (G_strcasecmp(algo_opt->answer, "dis") == 0 && finfo < 3.84148)
+            G_warning(_("The discontinuities algorithm indicates that some "
+                        "class breaks are not statistically significant at "
+                        "alpha=0.05. You are advised to reduce the number of "
+                        "classes."));
+    }
 
     /*output to be piped to other modules ? */
     if (breaks_flag->answer) {
@@ -280,12 +287,15 @@ int main(int argc, char *argv[])
         for (i = 0; i < nbreaks + 1; i++)
             frequencies[i] = 0;
 
-        ret =
-            AS_class_frequencies(data, nrec, nbreaks, classbreaks, frequencies);
-        AS_basic_stats(data, nrec, &stats);
+        min = max = 0;
+        if (nrec > 0) {
+            ret = AS_class_frequencies(data, nrec, nbreaks, classbreaks,
+                                       frequencies);
+            AS_basic_stats(data, nrec, &stats);
 
-        min = data[0];
-        max = data[nrec - 1];
+            min = data[0];
+            max = data[nrec - 1];
+        }
 
         /* as equ algorithm can modify number of breaks we recalculate number of
          * classes

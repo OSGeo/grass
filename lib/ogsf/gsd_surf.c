@@ -309,8 +309,8 @@ int gsd_surf_map_old(geosurf *surf)
 
         y1 = ymax - row * yres;
         y2 = ymax - (row + 1) * yres;
-        y1off = row * ymod * surf->cols;
-        y2off = (row + 1) * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
+        y2off = (long)(row + 1) * ymod * surf->cols;
 
         gsd_bgntmesh();
 
@@ -869,8 +869,8 @@ int gsd_surf_const(geosurf *surf, float k)
 
         y1 = ymax - row * yres;
         y2 = ymax - (row + 1) * yres;
-        y1off = row * ymod * surf->cols;
-        y2off = (row + 1) * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
+        y2off = (long)(row + 1) * ymod * surf->cols;
 
         gsd_bgntmesh();
 
@@ -1087,7 +1087,7 @@ int gsd_surf_const(geosurf *surf, float k)
 
    \return 1
  */
-int gsd_surf_func(geosurf *gs UNUSED, int (*user_func)(void) UNUSED)
+int gsd_surf_func(geosurf *gs G_UNUSED, int (*user_func)(void) G_UNUSED)
 {
 
     return (1);
@@ -1894,8 +1894,8 @@ int gsd_norm_arrows(geosurf *surf)
 
         y1 = ymax - row * yres;
         y2 = ymax - (row + 1) * yres;
-        y1off = row * ymod * surf->cols;
-        y2off = (row + 1) * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
+        y2off = (long)(row + 1) * ymod * surf->cols;
 
         zeros = 0;
         dr1 = dr2 = dr3 = dr4 = 1;
@@ -2241,9 +2241,9 @@ int gsd_surf_map(geosurf *surf)
         y2 = ymax - (row - (step_val / 2)) * yres;
         y3 = ymax - (row + (step_val / 2)) * yres;
 
-        y1off = row * ymod * surf->cols;
-        y2off = (row - (step_val / 2)) * ymod * surf->cols;
-        y3off = (row + (step_val / 2)) * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
+        y2off = (long)(row - (step_val / 2)) * ymod * surf->cols;
+        y3off = (long)(row + (step_val / 2)) * ymod * surf->cols;
 
         for (col = start_val; col < xcnt; col += step_val) {
             datacol1 = col * xmod;

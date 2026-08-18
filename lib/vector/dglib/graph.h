@@ -56,28 +56,28 @@
 /*
  * Node Status bitmask - returned by dglNodeGet_Status()
  */
-#define DGL_NS_HEAD                0x1 /* node exists as at least one edge's head (static) */
-#define DGL_NS_TAIL                0x2 /* node exists as at least one edge's tail (static) */
-#define DGL_NS_ALONE               0x4 /* node is a component */
+#define DGL_NS_HEAD  0x1 /* node exists as at least one edge's head (static) */
+#define DGL_NS_TAIL  0x2 /* node exists as at least one edge's tail (static) */
+#define DGL_NS_ALONE 0x4 /* node is a component */
 
 /*
  * Edge Status bitmask - returned by dglEdgeGet_Status()
  */
-#define DGL_ES_DIRECTED            0x1 /* force edge to be directed */
+#define DGL_ES_DIRECTED   0x1 /* force edge to be directed */
 
 /*
  * Endianness Values - returned by dglGet_Endianess() function
  */
-#define DGL_ENDIAN_BIG             1
-#define DGL_ENDIAN_LITTLE          2
+#define DGL_ENDIAN_BIG    1
+#define DGL_ENDIAN_LITTLE 2
 
 /*
  * miscellaneous
  */
 /* add-edge/add-node flags */
-#define DGL_STRONGCONNECT          0x1
-#define DGL_ALONE                  0x2
-#define DGL_MERGE_EDGE             0x4
+#define DGL_STRONGCONNECT 0x1
+#define DGL_ALONE         0x2
+#define DGL_MERGE_EDGE    0x4
 /* */
 
 /*

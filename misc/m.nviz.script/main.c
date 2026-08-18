@@ -327,7 +327,7 @@ int main(int argc, char *argv[])
  * Calculate camera and eye coordinates
  **************************************/
 int do_profile(double e1, double e2, double n1, double n2,
-               const char *name UNUSED, int fd, int data_type)
+               const char *name G_UNUSED, int fd, int data_type)
 {
     float rows, cols, LEN;
     double Y, X, AZI;

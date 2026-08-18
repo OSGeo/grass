@@ -37,7 +37,7 @@
 #include "pg_local_proto.h"
 #define NOPG_UNUSED
 #else
-#define NOPG_UNUSED UNUSED
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 static int copy_lines_1(struct Map_info *, int, struct Map_info *);
