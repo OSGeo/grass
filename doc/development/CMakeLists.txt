@@ -1,4 +1,9 @@
-set(web_only_doc_files github_guide investigating_history style_guide)
+set(web_only_doc_files
+    github_guide
+    investigating_history
+    style_guide
+    building_with_cmake
+)
 
 add_custom_target(
     ADD_DOC_DEV_DOCS
