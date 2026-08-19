@@ -155,12 +155,26 @@ def getLocationTree(gisdbase, location, queue, mapsets=None, lazy=False):
         tgis_mapsets = ",".join(c["mapset"] for c in conns if c.get("driver"))
 
         if tgis_mapsets:
+            try:
+                import grass.temporal as tgis
+            except ImportError as error:
+                # PyGRASS (ctypes) is the likely cause
+                queue.put(
+                    (
+                        maps_dict,
+                        _(
+                            "Unable to import the temporal framework: {e}\n"
+                            "Space time datasets will not be listed"
+                        ).format(e=error),
+                    )
+                )
+                gs.try_remove(tmp_gisrc_file)
+                return
+
             # grass.temporal takes the session from os.environ, so the temporary
             # gisrc has to go there. This may be removed later when we have the
             # option of passing env to tgis.init().
             old_env = os.environ.copy()
-
-            import grass.temporal as tgis
 
             try:
                 os.environ.update(env)
