@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 16:34+0000\n"
-"PO-Revision-Date: 2026-07-04 16:20+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"PO-Revision-Date: 2026-08-09 16:49+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -5469,9 +5469,8 @@ msgstr ""
 "v.to.rast a échoué :\n"
 "{messages}"
 
-#, fuzzy
 msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
-msgstr "L'outil Scatterplot nécessite que le paquet \"matplotlib\" (python-matplotlib) soit installé."
+msgstr "L'outil Scatterplot nécessite l'installation du paquet « matplotlib » (python-matplotlib)."
 
 msgid "Zoom to scatter plot extend"
 msgstr "Zoomer sur l'étendue du nuage de points"
@@ -5534,295 +5533,265 @@ msgid "Remove selected class"
 msgstr "Supprimer la classe sélectionnée"
 
 msgid "Start Jupyter Notebook"
-msgstr ""
+msgstr "Démarrer le carnet Jupyter"
 
 msgid "Where to Save Notebooks"
-msgstr ""
+msgstr "Où enregistrer les carnets"
 
 msgid "Choose custom directory (leave empty for current directory):"
-msgstr ""
+msgstr "Choisissez un répertoire personnalisé (laissez vide pour utiliser le répertoire actuel) :"
 
-#, fuzzy
-#| msgid "1. Select GRASS database directory"
 msgid "Select notebook directory"
-msgstr "1. Choisir le répertoire des données de GRASS"
+msgstr "Sélectionner le répertoire du carnet"
 
-#, fuzzy
-#| msgid "Create new project"
 msgid "Save in project: {}"
-msgstr "Créer un nouveau projet"
+msgstr "Enregistrer dans le projet : {}"
 
 msgid "Options"
 msgstr "Options"
 
 msgid "Create welcome notebook"
-msgstr ""
+msgstr "Créer un carnet de bienvenue"
 
 msgid ""
 "If selected, a welcome notebook ({}) will be created,\n"
 "but only if the selected directory contains no .ipynb files."
 msgstr ""
+"Si sélectionné, un carnet de bienvenue ({}) sera créé, \n"
+"mais uniquement si le répertoire sélectionné ne contient pas de fichiers .ipynb."
 
 msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
-msgstr ""
+msgstr "Note : Le carnet de bienvenue sera créé uniquement si le répertoire ne contient aucun fichier .ipynb."
 
 msgid "Open Notebook in Browser"
-msgstr ""
+msgstr "Ouvrir le carnet dans le navigateur"
 
 msgid "Open Integrated Notebook"
-msgstr ""
+msgstr "Ouvrir le carnet intégré"
 
 msgid "Cannot create or write to the selected directory."
-msgstr ""
+msgstr "Impossible de créer ou d'écrire dans le répertoire sélectionné."
 
 msgid ""
 "Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
 "\n"
 "Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
+"Le mode intégré a échoué : wx.html2.WebView ne fonctionne pas sur ce système.\n"
+"\n"
+"Souhaitez-vous ouvrir Jupyter carnet dans votre navigateur externe à la place ?"
 
 msgid "WebView Not Supported"
-msgstr ""
+msgstr "WebView non pris en charge"
 
-#, fuzzy
-#| msgid "Browse"
 msgid "Browser"
-msgstr "Parcourir"
+msgstr "Navigateur"
 
-#, fuzzy
-#| msgid "Intermediate"
 msgid "Integrated"
-msgstr "Intermédiaire"
+msgstr "Intégré"
 
 msgid "Jupyter Notebook ({}) - {}"
-msgstr ""
+msgstr "Carnet Jupyter ({}) - {}"
 
 msgid "Jupyter Notebook"
-msgstr ""
+msgstr "Carnet Jupyter"
 
 msgid "Really close page '{}'?"
-msgstr ""
+msgstr "Voulez-vous vraiment fermer la page '{}' ?"
 
-#, fuzzy
-#| msgid "Close dialog"
 msgid "Close page"
-msgstr "Fermer la boîte de dialogue"
+msgstr "Fermer la page"
 
 msgid ""
 "Failed to start Jupyter environment:\n"
 "{}"
 msgstr ""
+"Échec du démarrage de l'environnement Jupyter :\n"
+"{}"
 
-#, fuzzy
-#| msgid "Error"
 msgid "Startup Error"
-msgstr "Erreur"
+msgstr "Erreur de démarrage"
 
 msgid ""
 "Failed to get Jupyter server URL:\n"
 "{}"
 msgstr ""
+"Échec de l'obtention de l'URL du serveur Jupyter :\n"
+"{}"
 
 #, python-brace-format
 msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
-msgstr ""
+msgstr "Serveur Jupyter en cours d'exécution à l'adresse {url} (PID : {pid}) | Stockage : {storage}"
 
-#, fuzzy
-#| msgid "Error"
 msgid "URL Error"
-msgstr "Erreur"
+msgstr "Erreur d'URL"
 
 msgid "File '{}' is already opened."
-msgstr ""
+msgstr "Le fichier « {} » est déjà ouvert."
 
 msgid "File '{}' opened."
-msgstr ""
+msgstr "Fichier « {} » ouvert."
 
 msgid "File '{}' imported and opened."
-msgstr ""
+msgstr "Fichier '{}' importé et ouvert."
 
-#, fuzzy
-#| msgid "Failed to read file %s."
 msgid ""
 "Failed to import file:\n"
 "{}"
-msgstr "Impossible de lire le fichier %s."
+msgstr ""
+"Échec de l'importation du fichier :\n"
+"{}"
 
 msgid "Notebook Import Error"
-msgstr ""
+msgstr "Erreur d'importation du carnet"
 
-#, fuzzy
-#| msgid "Import"
 msgid "Import file"
-msgstr "Importer"
+msgstr "Importer un fichier"
 
 msgid ""
 "File '{}' already exists in notebook storage.\n"
 "Please enter a new name:"
 msgstr ""
+"Le fichier « {} » existe déjà dans l'espace de stockage du carnet.\n"
+"Veuillez saisir un nouveau nom :"
 
-#, fuzzy
-#| msgid "Rename"
 msgid "Rename File"
-msgstr "Renommer"
+msgstr "Renommer le fichier"
 
-#, fuzzy
-#| msgid "No scatter plots selected."
 msgid "No page for export is currently selected."
-msgstr "Aucun nuage de points sélectionné."
+msgstr "Aucune page n'est actuellement sélectionnée pour l'exportation."
 
 msgid "Notebook Export Error"
-msgstr ""
+msgstr "Erreur d'exportation du carnet"
 
-#, fuzzy
-#| msgid "Export file is missing."
 msgid "Export file as..."
-msgstr "Le fichier d'export est manquant."
+msgstr "Exporter le fichier sous..."
 
-#, fuzzy
-#| msgid "Model exported to <%s>"
 msgid "File {} exported to {}."
-msgstr "Modèle exporté vers <%s>"
+msgstr "Fichier {} exporté vers {}."
 
-#, fuzzy
-#| msgid "Failed to read file %s."
 msgid ""
 "Failed to export file:\n"
 "{}"
-msgstr "Impossible de lire le fichier %s."
+msgstr ""
+"Échec de l'exportation du fichier :\n"
+"{}"
 
-#, fuzzy
-#| msgid "Enter name for new mapset:"
 msgid "Enter a name for the new notebook:"
-msgstr "Entrer le nom du nouveau jeu de cartes :"
+msgstr "Entrez un nom pour le nouveau carnet :"
 
 msgid "New Notebook"
-msgstr ""
+msgstr "Nouveau carnet"
 
-#, fuzzy
-#| msgid "Failed to create new raster map."
 msgid ""
 "Failed to create notebook:\n"
 "{}"
-msgstr "Échec de création de la nouvelle carte raster."
+msgstr ""
+"Échec de la création du carnet :\n"
+"{}"
 
 msgid "Notebook Creation Error"
-msgstr ""
+msgstr "Erreur de création du carnet"
 
-#, fuzzy
-#| msgid "No files generated."
 msgid "New file '{}' created."
-msgstr "Pas de fichier généré."
+msgstr "Nouveau fichier « {} » créé."
 
-#, fuzzy
-#| msgid "Do you really want to activate snapping and overwrite it?"
 msgid "Do you really want to close this tab and stop the Jupyter server?"
-msgstr "Voulez-vous vraiment activer le magnétisme et l'écraser ?"
+msgstr "Voulez-vous vraiment fermer cet onglet et arrêter le serveur Jupyter ?"
 
 msgid "Confirm Close"
-msgstr ""
+msgstr "Confirmer la fermeture"
 
 #, python-brace-format
 msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
-msgstr ""
+msgstr "Le serveur Jupyter accessible à l'adresse {url} (PID : {pid}) a été arrêté"
 
 msgid ""
 "Failed to stop Jupyter server:\n"
 "{}"
 msgstr ""
+"Échec de l'arrêt du serveur Jupyter : \n"
+"{}"
 
 msgid "Jupyter Notebook has been opened in your default browser."
-msgstr ""
+msgstr "Le carnet Jupyter a été ouvert dans votre navigateur par défaut."
 
 msgid "Open in Browser Again"
-msgstr ""
+msgstr "Ouvrir à nouveau dans le navigateur"
 
 msgid "Stop Jupyter Server"
-msgstr ""
+msgstr "Arrêter le serveur Jupyter"
 
-#, fuzzy
-#| msgid "Server:"
 msgid "Server URL: {}"
-msgstr "Serveur :"
+msgstr "URL du serveur : {}"
 
 msgid "Process ID: {}"
-msgstr ""
+msgstr "Identifiant du processus : {}"
 
 msgid "Notebook Storage: {}"
-msgstr ""
+msgstr "Stockage du carnet : {}"
 
-#, fuzzy
 msgid ""
 "Failed to stop server:\n"
 "{}"
-msgstr "Échec à l'ouverture de '{}'"
+msgstr ""
+"Échec de l'arrêt du serveur :\n"
+"{}"
 
-#, fuzzy
-#| msgid "Property does not exist: %s"
 msgid "Notebook storage does not exist: {}"
-msgstr "La propriété n'existe pas : %s"
+msgstr "Le stockage du carnet n'existe pas : {}"
 
 msgid "Notebook storage is not writable: {}"
-msgstr ""
+msgstr "L'espace de stockage du carnet n'est pas accessible en écriture : {}"
 
 msgid "Server is already running on port {}"
-msgstr ""
+msgstr "Le serveur est déjà en cours d'exécution sur le port {}"
 
 msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
-msgstr ""
+msgstr "Échec du démarrage du serveur Jupyter. Vérifiez que toutes les dépendances sont installées et accessibles : {}"
 
 msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
-msgstr ""
+msgstr "Échec du démarrage du serveur Jupyter. Vérifiez s'il y a des conflits de ports, des dépendances manquantes ou des droits d'accès insuffisants."
 
 msgid "Error stopping Jupyter server (PID {}): {}"
-msgstr ""
+msgstr "Erreur lors de l'arrêt du serveur Jupyter (PID {}) : {}"
 
 msgid "Server URL is not set. Start the server first."
-msgstr ""
+msgstr "L'URL du serveur n'est pas définie. Veuillez d'abord démarrer le serveur."
 
 msgid "Jupyter server has stopped unexpectedly."
-msgstr ""
+msgstr "Le serveur Jupyter s'est arrêté de manière inattendue."
 
 msgid ""
 "Some Jupyter servers failed to stop:\n"
 "{}"
 msgstr ""
+"Certains serveurs Jupyter n'ont pas pu être arrêtés:\n"
+"{}"
 
-#, fuzzy
-#| msgid "File %s not found"
 msgid "File not found: {}"
-msgstr "Fichier %s non trouvé"
+msgstr "Fichier introuvable : {}"
 
 msgid "Source file must have .ipynb extension: {}"
-msgstr ""
+msgstr "Le fichier source doit avoir l’extension .ipynb : {}"
 
-#, fuzzy
-#| msgid "File already exists"
 msgid "Target file already exists: {}"
-msgstr "Le fichier existe déjà"
+msgstr "Le fichier cible existe déjà : {}"
 
-#, fuzzy
-#| msgid "File already exists"
 msgid "File '{}' already exists"
-msgstr "Le fichier existe déjà"
+msgstr "Le fichier « {} » existe déjà"
 
-#, fuzzy
-#| msgid "Server:"
 msgid "Stop server"
-msgstr "Serveur :"
+msgstr "Arrêter le serveur"
 
-#, fuzzy
-#| msgid "Create new model"
 msgid "Create new notebook"
-msgstr "Créer un nouveau modèle"
+msgstr "Créer un nouveau carnet"
 
 msgid "Import notebook"
-msgstr ""
+msgstr "Importer un carnet"
 
-#, fuzzy
-#| msgid "Export to:"
 msgid "Export notebook"
-msgstr "Exporter vers :"
+msgstr "Exporter le carnet"
 
 msgid "GRASS"
 msgstr "GRASS"
@@ -5859,12 +5828,18 @@ msgid ""
 "\n"
 "This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
 msgstr ""
+"Le mode intégré nécessite wx.html2.WebView, qui n'est pas disponible sur ce système.\n"
+"\n"
+"Cela peut se produire si wxPython ou wxWidgets ont été compilés sans prise en charge de HTML2/WebView."
 
 msgid ""
 "Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
 "\n"
 "It is missing or not properly configured on this system."
 msgstr ""
+"Le mode intégré nécessite le moteur d'exécution Microsoft Edge WebView2 sous Windows.\n"
+"\n"
+"Celui-ci est absent ou n'est pas correctement configuré sur ce système."
 
 #, python-brace-format
 msgid ""
@@ -5872,11 +5847,12 @@ msgid ""
 "\n"
 "Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
+"{message}\n"
+"\n"
+"Souhaitez-vous plutôt ouvrir le carnet Jupyter dans votre navigateur externe ?"
 
-#, fuzzy
-#| msgid "3D view mode not available"
 msgid "Integrated Mode Not Available"
-msgstr "Vue 3D non disponible"
+msgstr "Mode intégré non disponible"
 
 msgid "Map Swipe Tool"
 msgstr "Outil de balayage de carte"
@@ -6037,6 +6013,8 @@ msgid ""
 "Failed to stop Jupyter servers:\n"
 "{}"
 msgstr ""
+"Échec de l'arrêt des serveurs Jupyter :\n"
+"{}"
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr "La résolution de l'affichage n'est actuellement pas contrainte aux limite de la région de calculs. Il est suggéré de contraindre les cartes aux limites de la région. Voulez-vous contraindre la résolution ?"
@@ -6362,10 +6340,8 @@ msgstr "Géorectifier"
 msgid "Cartographic Composer"
 msgstr "Composeur de cartes"
 
-#, fuzzy
-#| msgid "Graphical Modeler"
 msgid "Open Graphical Modeler"
-msgstr "Modeleur graphique"
+msgstr "Ouvrir le modélisateur graphique"
 
 msgid "Launch user-defined script"
 msgstr "Lancer un script"
@@ -6762,6 +6738,9 @@ msgid ""
 "\n"
 "Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
+"Le mode intégré n'est pas pris en charge sur ce système.\n"
+"\n"
+"Souhaitez-vous ouvrir le carnet Jupyter dans votre navigateur externe à la place ?"
 
 msgid "No project provided. Operation canceled."
 msgstr "Aucun projet fourni. Opération annulée."
@@ -10079,9 +10058,8 @@ msgstr "Télécharger jeux de données sélectionné"
 msgid "Do you want to cancel dataset download?"
 msgstr "Voulez-vous annuler le téléchargement du jeu de données ?"
 
-#, fuzzy
 msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
-msgstr "L'outil temporel nécessite que le paquet \"matplotlib\" (python-matplotlib) soit installé. {}"
+msgstr "L'outil chronologie nécessite l'installation du paquet « matplotlib » (python-matplotlib et, sur certains systèmes, également python-matplotlib-wx)."
 
 msgid "Timeline Tool"
 msgstr ""
@@ -10178,9 +10156,8 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "Outil de chronologie - GRASS"
 
-#, fuzzy
 msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
-msgstr "L'outil temporel nécessite que le paquet \"matplotlib\" (python-matplotlib) soit installé."
+msgstr "L'outil de graphiques temporels nécessite que le paquet 'matplotlib' (python-matplotlib) soit installé."
 
 #, fuzzy
 msgid "Temporal Plot Tool"

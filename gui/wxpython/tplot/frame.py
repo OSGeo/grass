@@ -179,6 +179,10 @@ class TplotFrame(wx.Frame):
         self.vbox.Add(self.toolbar, 0, wx.EXPAND)
         # self.vbox.AddSpacer(10)
 
+        # Spacing used by control panel below.
+        headFlag = wx.EXPAND | wx.ALL
+        itemFlag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM
+
         # ------------ADD NOTEBOOK------------
         self.ntb = GNotebook(parent=self.mainPanel, style=FN.FNB_NODRAG)
 
@@ -190,7 +194,7 @@ class TplotFrame(wx.Frame):
             id=wx.ID_ANY,
             label=_(
                 "Raster temporal "
-                "dataset (strds)\n"
+                "dataset (strds)\n\n"
                 "Press ENTER after"
                 " typing the name or select"
                 " with the combobox"
@@ -237,15 +241,13 @@ class TplotFrame(wx.Frame):
         # self.controlPanelSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
         # label=_("Select space time raster dataset(s):")),
         # pos=(0, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
-        self.controlPanelSizerRaster.Add(self.datasetSelectLabelR, flag=wx.EXPAND)
-        self.controlPanelSizerRaster.Add(self.datasetSelectR, flag=wx.EXPAND)
-
-        self.controlPanelSizerRaster.Add(self.coor, flag=wx.EXPAND)
-        self.controlPanelSizerRaster.Add(self.coorval, flag=wx.EXPAND)
-        self.controlPanelSizerRaster.Add(self.linRegRaster, flag=wx.EXPAND)
+        self.controlPanelSizerRaster.Add(self.datasetSelectLabelR, 0, headFlag, 4)
+        self.controlPanelSizerRaster.Add(self.datasetSelectR, 0, itemFlag, 4)
+        self.controlPanelSizerRaster.Add(self.coor, 0, headFlag, 4)
+        self.controlPanelSizerRaster.Add(self.coorval, 0, itemFlag, 4)
+        self.controlPanelSizerRaster.Add(self.linRegRaster, 0, headFlag, 4)
 
         self.controlPanelRaster.SetSizer(self.controlPanelSizerRaster)
-        self.controlPanelSizerRaster.Fit(self)
         self.ntb.AddPage(page=self.controlPanelRaster, text=_("STRDS"), name="STRDS")
 
         # ------------ITEMS IN NOTEBOOK PAGE (VECTOR)------------------------
@@ -255,7 +257,7 @@ class TplotFrame(wx.Frame):
             id=wx.ID_ANY,
             label=_(
                 "Vector temporal "
-                "dataset (stvds)\n"
+                "dataset (stvds)\n\n"
                 "Press ENTER after"
                 " typing the name or select"
                 " with the combobox"
@@ -303,18 +305,15 @@ class TplotFrame(wx.Frame):
         # self.controlPanelSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
         # label=_("Select space time raster dataset(s):")),
         # pos=(0, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
-        self.controlPanelSizerVector.Add(self.datasetSelectLabelV, flag=wx.EXPAND)
-        self.controlPanelSizerVector.Add(self.datasetSelectV, flag=wx.EXPAND)
-
-        self.controlPanelSizerVector.Add(self.attributeLabel, flag=wx.EXPAND)
-        self.controlPanelSizerVector.Add(self.attribute, flag=wx.EXPAND)
-
-        self.controlPanelSizerVector.Add(self.catsLabel, flag=wx.EXPAND)
-        self.controlPanelSizerVector.Add(self.cats, flag=wx.EXPAND)
-        self.controlPanelSizerVector.Add(self.linRegVector, flag=wx.EXPAND)
+        self.controlPanelSizerVector.Add(self.datasetSelectLabelV, 0, headFlag, 4)
+        self.controlPanelSizerVector.Add(self.datasetSelectV, 0, itemFlag, 4)
+        self.controlPanelSizerVector.Add(self.attributeLabel, 0, headFlag, 4)
+        self.controlPanelSizerVector.Add(self.attribute, 0, itemFlag, 4)
+        self.controlPanelSizerVector.Add(self.catsLabel, 0, headFlag, 4)
+        self.controlPanelSizerVector.Add(self.cats, 0, itemFlag, 4)
+        self.controlPanelSizerVector.Add(self.linRegVector, 0, headFlag, 4)
 
         self.controlPanelVector.SetSizer(self.controlPanelSizerVector)
-        self.controlPanelSizerVector.Fit(self)
         self.ntb.AddPage(page=self.controlPanelVector, text=_("STVDS"), name="STVDS")
 
         # ------------ITEMS IN NOTEBOOK PAGE (LABELS)------------------------
@@ -350,14 +349,13 @@ class TplotFrame(wx.Frame):
             size=globalvar.DIALOG_TEXTCTRL_SIZE,
         )
         self.controlPanelSizerLabels = wx.BoxSizer(wx.VERTICAL)
-        self.controlPanelSizerLabels.Add(self.titleLabel, flag=wx.EXPAND)
-        self.controlPanelSizerLabels.Add(self.title, flag=wx.EXPAND)
-        self.controlPanelSizerLabels.Add(self.xLabel, flag=wx.EXPAND)
-        self.controlPanelSizerLabels.Add(self.x, flag=wx.EXPAND)
-        self.controlPanelSizerLabels.Add(self.yLabel, flag=wx.EXPAND)
-        self.controlPanelSizerLabels.Add(self.y, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.titleLabel, 0, headFlag, 4)
+        self.controlPanelSizerLabels.Add(self.title, 0, itemFlag, 4)
+        self.controlPanelSizerLabels.Add(self.xLabel, 0, headFlag, 4)
+        self.controlPanelSizerLabels.Add(self.x, 0, itemFlag, 4)
+        self.controlPanelSizerLabels.Add(self.yLabel, 0, headFlag, 4)
+        self.controlPanelSizerLabels.Add(self.y, 0, itemFlag, 4)
         self.controlPanelLabels.SetSizer(self.controlPanelSizerLabels)
-        self.controlPanelSizerLabels.Fit(self)
         self.ntb.AddPage(page=self.controlPanelLabels, text=_("Labels"), name="Labels")
 
         # ------------ITEMS IN NOTEBOOK PAGE (EXPORT)------------------------
@@ -384,15 +382,15 @@ class TplotFrame(wx.Frame):
         )
         self.headerCheck = wx.CheckBox(parent=self.controlPanelExport, id=wx.ID_ANY)
         self.controlPanelSizerCheck = wx.BoxSizer(wx.HORIZONTAL)
-        self.controlPanelSizerCheck.Add(self.headerCheck)
-        self.controlPanelSizerCheck.Add(self.headerLabel)
+        self.controlPanelSizerCheck.Add(self.headerCheck, 0, wx.ALIGN_CENTER_VERTICAL)
+        self.controlPanelSizerCheck.Add(
+            self.headerLabel, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 4
+        )
         self.controlPanelSizerExport = wx.BoxSizer(wx.VERTICAL)
-        self.controlPanelSizerExport.Add(self.csvLabel)
-        self.controlPanelSizerExport.Add(self.csvButton)
-        self.controlPanelSizerExport.Add(self.controlPanelSizerCheck)
+        self.controlPanelSizerExport.Add(self.csvLabel, 0, headFlag, 4)
+        self.controlPanelSizerExport.Add(self.csvButton, 0, itemFlag, 4)
+        self.controlPanelSizerExport.Add(self.controlPanelSizerCheck, 0, headFlag, 4)
         self.controlPanelExport.SetSizer(self.controlPanelSizerExport)
-        self.controlPanelSizerCheck.Fit(self)
-        self.controlPanelSizerExport.Fit(self)
         self.ntb.AddPage(page=self.controlPanelExport, text=_("Export"), name="Export")
 
         # ------------Buttons on the bottom(draw,help)------------
@@ -403,15 +401,21 @@ class TplotFrame(wx.Frame):
         self.drawButton.Bind(wx.EVT_BUTTON, self.OnRedraw)
         self.helpButton = Button(self.vButtPanel, id=wx.ID_ANY, label=_("Help"))
         self.helpButton.Bind(wx.EVT_BUTTON, self.OnHelp)
-        self.vButtSizer.Add(self.drawButton)
-        self.vButtSizer.Add(self.helpButton)
+        self.vButtSizer.Add(self.drawButton, 0, wx.ALL, 4)
+        self.vButtSizer.Add(self.helpButton, 0, wx.ALL, 4)
         self.vButtPanel.SetSizer(self.vButtSizer)
 
-        self.mainPanel.SetSizer(self.vbox)
         self.vbox.Add(self.ntb, flag=wx.EXPAND)
         self.vbox.Add(self.vButtPanel, flag=wx.EXPAND)
-        self.vbox.Fit(self)
-        self.mainPanel.Fit()
+        self.mainPanel.SetSizer(self.vbox)
+
+        # Lay the panel out through a frame sizer so that resizing the window
+        # reaches the canvas, the only item in vbox allowed to grow.
+        frameSizer = wx.BoxSizer(wx.VERTICAL)
+        frameSizer.Add(self.mainPanel, proportion=1, flag=wx.EXPAND)
+        self.SetSizer(frameSizer)
+        frameSizer.Fit(self)
+        self.SetMinSize(wx.Size(400, 400))
 
     def _getSTRDdata(self, timeseries):
         """Load data and read properties

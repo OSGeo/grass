@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 16:34+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -5028,7 +5028,7 @@ msgstr[1] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 

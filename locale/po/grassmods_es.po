@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 16:34+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -2259,6 +2259,7 @@ msgstr "Número de dígitos significativos (coma flotante solamente)"
 msgid "Get text color from cell color value"
 msgstr "Obtener color de texto del valor de color de la celda"
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -13751,6 +13752,10 @@ msgstr ""
 msgid "Search radius size must cover at least 1 cell"
 msgstr ""
 
+#, c-format
+msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
@@ -18296,6 +18301,10 @@ msgstr "No ha sido posible escribir mapas ráster -- intente incrementando tama�
 msgid "Error writing temporary file <%s>"
 msgstr "Error al escribir archivo temporal <%s>"
 
+#, c-format
+msgid "Using %d thread(s), %d buffered output rows"
+msgstr ""
+
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr "Vuelve a muestrear capas de mapa raster en una malla más gruesa usando agregación."
 
@@ -20695,6 +20704,7 @@ msgstr "Demasiadas categorías (encontradas: %i, máximo: %i). Intente rescalar 
 msgid "Input raster must be of type CELL."
 msgstr "Mapa ráster de entrada debe ser de tipo CELL."
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
