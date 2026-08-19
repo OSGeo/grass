@@ -22,22 +22,28 @@ struct pole_set {
 };
 
 struct fp_cell {
+    /* lowest and highest input row one block of one output row needs */
     double rmin, rmax; /* rmax below rmin marks an empty cell */
 };
 
 struct footprint {
-    int grows, nb;        /* grid rows and column blocks */
+    int orows;            /* output rows, one grid row per output row */
+    int nb;               /* output column blocks, at most 32 */
     int ocols;            /* output columns */
-    int irows;            /* input rows */
-    struct fp_cell *cell; /* grows by nb cells in row major order */
+    int irows;            /* number of rows in the input map */
+    struct fp_cell *cell; /* orows by nb cells in row major order */
 };
 
-/* The samples can miss a curve between columns by a fraction of a row, so each
- * cell is widened by one row. */
+/* A block's input row range comes from projecting just its first and last
+   column. A straight line between them would be exact, but projection
+   bends a little, so a column in the middle can land a fraction of a row
+   above or below those two points. The one row margin covers that. */
 #define FP_SAMPLING_MARGIN 1.0
 
+/* When ocols does not divide evenly by nb, the extra columns are spread
+   out so no two blocks differ by more than one column. */
 /* Returns the first output column of block b. */
-static int block_c0(const struct footprint *g, int b)
+static int block_first_col(const struct footprint *g, int b)
 {
     return (int)((long long)b * g->ocols / g->nb);
 }
@@ -45,12 +51,7 @@ static int block_c0(const struct footprint *g, int b)
 /* Returns the block that contains output column c. */
 static int block_of_col(const struct footprint *g, int c)
 {
-    int b;
-
-    for (b = 0; b < g->nb - 1; b++)
-        if (c < block_c0(g, b + 1))
-            return b;
-    return g->nb - 1;
+    return (int)(((long long)(c + 1) * g->nb - 1) / g->ocols);
 }
 
 /* Projects the center of output cell (r, c) to an input row index. Returns 0 on
@@ -76,7 +77,7 @@ static void fold_poles(const struct footprint *g, const struct Cell_head *ohd,
                        const struct pole_set *poles, int r, int b,
                        struct fp_cell *cell)
 {
-    int c0 = block_c0(g, b), c1 = block_c0(g, b + 1), k;
+    int c0 = block_first_col(g, b), c1 = block_first_col(g, b + 1), k;
     double x_lo = ohd->west + c0 * ohd->ew_res;
     double x_hi = ohd->west + c1 * ohd->ew_res;
     double y_lo = ohd->north - (r + 1) * ohd->ns_res;
@@ -131,7 +132,7 @@ static void build_pole_set(const struct Cell_head *ihd,
 /* Widens every non-empty cell by the sampling margin. */
 static void apply_sampling_margin(struct footprint *g)
 {
-    size_t n = (size_t)g->grows * g->nb, i;
+    size_t n = (size_t)g->orows * g->nb, i;
 
     for (i = 0; i < n; i++) {
         struct fp_cell *cell = &g->cell[i];
@@ -158,20 +159,20 @@ struct footprint *fp_create(const struct Cell_head *ohd,
 
     build_pole_set(ihd, oproj, iproj, tproj, &poles);
 
-    g->grows = ohd->rows;
+    g->orows = ohd->rows;
     g->nb = ohd->cols < 32 ? ohd->cols : 32;
     g->ocols = ohd->cols;
     g->irows = ihd->rows;
-    g->cell = G_malloc((size_t)g->grows * g->nb * sizeof(struct fp_cell));
+    g->cell = G_malloc((size_t)g->orows * g->nb * sizeof(struct fp_cell));
     bnd = G_malloc((size_t)(g->nb + 1) * sizeof(double));
 
-    for (r = 0; r < g->grows; r++) {
+    for (r = 0; r < g->orows; r++) {
         /* Sample the NB plus one block boundaries for this row. The last
          * boundary uses the final valid column. */
         int k;
 
         for (k = 0; k <= g->nb; k++) {
-            int c = block_c0(g, k);
+            int c = block_first_col(g, k);
 
             if (c > g->ocols - 1)
                 c = g->ocols - 1;
@@ -215,10 +216,10 @@ void fp_span(const struct footprint *g, int obr0, int obr1, int obc0, int obc1,
     int b_lo = block_of_col(g, obc0), b_hi = block_of_col(g, obc1 - 1);
     int r, b;
 
-    if (obr1 > g->grows)
+    if (obr1 > g->orows)
         G_fatal_error(_("Footprint grid has %d rows but output row %d was "
                         "requested"),
-                      g->grows, obr1 - 1);
+                      g->orows, obr1 - 1);
 
     for (r = obr0; r < obr1; r++)
         for (b = b_lo; b <= b_hi; b++) {
@@ -257,7 +258,7 @@ int fp_num_blocks(const struct footprint *g)
 /* First output column of block b. Block g->nb starts at the output width. */
 int fp_block_start(const struct footprint *g, int b)
 {
-    return block_c0(g, b);
+    return block_first_col(g, b);
 }
 
 /* Worst strip among the tiles that pack k whole blocks each across the band. */
@@ -270,7 +271,8 @@ static int worst_ktile_rows(const struct footprint *g, int obr0, int obr1,
         int te = tb + k < g->nb ? tb + k : g->nb;
         int imin, imax, rows;
 
-        fp_span(g, obr0, obr1, block_c0(g, tb), block_c0(g, te), &imin, &imax);
+        fp_span(g, obr0, obr1, block_first_col(g, tb), block_first_col(g, te),
+                &imin, &imax);
         rows = imax - imin + 1;
         if (rows > worst)
             worst = rows;
@@ -308,7 +310,7 @@ int fp_band_geometry(const struct footprint *g, int obr0, size_t cap_bytes,
                      int out_mult, int cell_size, int in_cols,
                      int *tile_blocks_out, int *worst_block_rows)
 {
-    int remaining = g->grows - obr0;
+    int remaining = g->orows - obr0;
     int best_h = 0, best_k = 0, h_cand;
 
     *worst_block_rows = worst_ktile_rows(g, obr0, obr0 + 1, 1);
