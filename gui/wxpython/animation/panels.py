@@ -5,6 +5,10 @@
 
 Classes:
  - panels::AnimationPanel
+ - panels::AnimationsPanel
+ - panels::AnimationSliderBase
+ - panels::SimpleAnimationSlider
+ - panels::TimeAnimationSlider
 
 (C) 2026 by the GRASS Development Team
 
@@ -222,6 +226,10 @@ class AnimationPanel(wx.Panel, MainPageBase):
         )
 
     def SetAnimations(self, layerLists):
+        """Set animation data
+
+        :param layerLists: list of layerLists
+        """
         self.controller.SetAnimations(layerLists)
 
     def OnAddAnimation(self, event):
@@ -348,9 +356,8 @@ class AnimationPanel(wx.Panel, MainPageBase):
 
     def OnCloseWindow(self, event=None):
         """Clean up resources and close the panel."""
-        if hasattr(self, "controller") and hasattr(self.controller, "timer"):
-            if self.controller.timer.IsRunning():
-                self.controller.timer.Stop()
+        if self.controller.timer.IsRunning():
+            self.controller.timer.Stop()
         CleanUp(self.TMP_DIR)()
         self._mgr.UnInit()
         self._onCloseWindow(event)
