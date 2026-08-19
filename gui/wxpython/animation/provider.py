@@ -34,13 +34,7 @@ from core.settings import UserSettings
 from core.debug import Debug
 from core.utils import autoCropImageFromFile
 
-from animation.utils import (
-    HashCmd,
-    HashCmds,
-    GetFileFromCmd,
-    GetFileFromCmds,
-    getCpuCount,
-)
+from animation.utils import HashCmd, HashCmds, GetFileFromCmd, GetFileFromCmds
 from gui_core.wrap import EmptyBitmap, BitmapFromImage
 
 import grass.script.core as gcore
@@ -230,10 +224,6 @@ class BitmapProvider:
         :param bgcolor: background color as a tuple of 3 values 0 to 255
         :param nprocs: number of procs to be used for rendering
         """
-        if nprocs < 1:
-            # The setting defaults to -1 (autodetect) and is resolved only when
-            # the animation preferences are opened, so it can arrive unresolved.
-            nprocs = getCpuCount()
         Debug.msg(
             2,
             "BitmapProvider.Load: force={f}, bgcolor={b}, nprocs={n}".format(
@@ -374,10 +364,9 @@ def _takeRenderedFile(proc, fileQueue):
         pass
     if proc.is_alive():
         return _RUNNING
-    # put() only hands the value over to a feeder thread, so a result can
-    # still be on its way while the queue looks empty. That thread is joined
-    # before the process exits, so once the process is gone the queue is final
-    # and this second read is the authoritative one.
+    # put() only hands the value to a feeder thread, so a result can still be
+    # on its way while the queue looks empty. That thread is joined before the
+    # process exits, so once it is gone this read is the authoritative one.
     try:
         return fileQueue.get_nowait()
     except Empty:
@@ -404,8 +393,8 @@ def _renderInParallel(items, nprocs, startProcess, handleResult, reportProgress)
                          it created in fileQueue
     :param handleResult: handleResult(item, filename) takes the result of a
                          finished item, filename is None if it produced none
-    :param reportProgress: shows the progress and returns True if the user
-                           requested to stop
+    :param reportProgress: reportProgress(finished) shows how many items are
+                           done and returns True if the user requested to stop
 
     :return: True if all items were rendered, False if the user stopped it
     """
@@ -441,23 +430,21 @@ def _renderInParallel(items, nprocs, startProcess, handleResult, reportProgress)
                 remaining -= 1
                 idle = False
                 handleResult(item, filename)
-                stopped = reportProgress()
+                stopped = reportProgress(len(items) - remaining)
                 if stopped:
                     break
 
             if idle:
-                # Nothing finished this pass, which is the usual case while the
-                # processes run. Taking a result does not block, so wait here
-                # rather than spin, and keep reporting so that a click on
-                # Cancel is noticed while nothing finishes.
-                stopped = reportProgress()
+                # Taking a result does not block, so wait rather than spin, and
+                # keep reporting so that Cancel is noticed while nothing
+                # finishes.
+                stopped = reportProgress(len(items) - remaining)
                 sleep(0.05)
     finally:
-        # Processes are still running when the user stopped the rendering or
-        # when one of the calls above raised. They can be stuck in a command
-        # which never returns, so they are killed rather than waited for.
-        # Only the processes are killed, the commands they started are left
-        # to finish.
+        # Processes still running here were stopped by the user or left behind
+        # by an exception. They can be stuck in a command which never returns,
+        # so they are killed rather than waited for. Only the processes are
+        # killed, the commands they started are left to finish.
         for slot in slots:
             if slot is None:
                 continue
@@ -465,8 +452,6 @@ def _renderInParallel(items, nprocs, startProcess, handleResult, reportProgress)
             if proc.is_alive():
                 proc.terminate()
             proc.join()
-        for fileQueue in fileQueues:
-            fileQueue.close()
 
     return not stopped
 
@@ -482,7 +467,6 @@ class BitmapRenderer:
 
         self.renderingContinues = Signal("BitmapRenderer.renderingContinues")
         self._stopRendering = False
-        self._isRendering = False
 
     def Render(self, cmdList, regions, regionFor3D, bgcolor, force, nprocs):
         """Renders all maps and stores files.
@@ -511,8 +495,6 @@ class BitmapRenderer:
                 self._mapFilesPool[HashCmd(cmd, region)] = filename
                 continue
             filteredCmdList.append((cmd, region))
-
-        rendered = 0
 
         def startProcess(cmdAndRegion, fileQueue):
             """Starts rendering one map into the given queue."""
@@ -549,7 +531,7 @@ class BitmapRenderer:
             proc.start()
             return proc
 
-        def reportProgress():
+        def reportProgress(rendered):
             """Shows the progress and tells whether the user cancelled.
 
             The progress dialog reports a click on Cancel only when it is
@@ -562,29 +544,25 @@ class BitmapRenderer:
             return self._stopRendering
 
         def handleResult(cmdAndRegion, filename):
-            """Stores one rendered map, counting it as finished."""
-            nonlocal rendered
-            # A map which failed to render is not stored, the composition
-            # then reports it as failed.
+            """Stores one rendered map.
+
+            A map which failed to render is not stored, the composition then
+            reports it as failed.
+            """
             if filename is not None:
                 key = HashCmd(*cmdAndRegion)
                 self._mapFilesPool[key] = filename
                 self._mapFilesPool.SetSize(key, (self.imageWidth, self.imageHeight))
-            rendered += 1
 
-        self._isRendering = True
-        try:
-            return _renderInParallel(
-                filteredCmdList, nprocs, startProcess, handleResult, reportProgress
-            )
-        finally:
-            self._stopRendering = False
-            self._isRendering = False
+        # A stop requested while nothing was rendering must not stop this run.
+        self._stopRendering = False
+        return _renderInParallel(
+            filteredCmdList, nprocs, startProcess, handleResult, reportProgress
+        )
 
     def RequestStopRendering(self):
         """Requests to stop rendering."""
-        if self._isRendering:
-            self._stopRendering = True
+        self._stopRendering = True
 
 
 class BitmapComposer:
@@ -599,7 +577,6 @@ class BitmapComposer:
 
         self.compositionContinues = Signal("BitmapComposer.composingContinues")
         self._stopComposing = False
-        self._isComposing = False
 
     def Compose(self, cmdLists, regions, opacityList, bgcolor, force, nprocs):
         """Performs the composition of ppm/pgm files.
@@ -629,8 +606,6 @@ class BitmapComposer:
                 continue
             filteredCmdLists.append((cmdList, region))
 
-        composed = 0
-
         def startProcess(cmdListAndRegion, fileQueue):
             """Starts composing one map into the given queue."""
             cmdList, region = cmdListAndRegion
@@ -651,7 +626,7 @@ class BitmapComposer:
             proc.start()
             return proc
 
-        def reportProgress():
+        def reportProgress(composed):
             """Shows the progress."""
             self.compositionContinues.emit(
                 current=composed, text=_("Overlaying map layers")
@@ -660,8 +635,7 @@ class BitmapComposer:
             return self._stopComposing
 
         def handleResult(cmdListAndRegion, filename):
-            """Stores one composed map, counting it as finished."""
-            nonlocal composed
+            """Stores one composed map."""
             key = HashCmds(*cmdListAndRegion)
             if filename is None:
                 self._bitmapPool[key] = createNoDataBitmap(
@@ -670,21 +644,16 @@ class BitmapComposer:
             else:
                 self._bitmapPool[key] = BitmapFromImage(wx.Image(filename))
                 os.remove(filename)
-            composed += 1
 
-        self._isComposing = True
-        try:
-            _renderInParallel(
-                filteredCmdLists, nprocs, startProcess, handleResult, reportProgress
-            )
-        finally:
-            self._stopComposing = False
-            self._isComposing = False
+        # A stop requested while nothing was composing must not stop this run.
+        self._stopComposing = False
+        _renderInParallel(
+            filteredCmdLists, nprocs, startProcess, handleResult, reportProgress
+        )
 
     def RequestStopComposing(self):
         """Requests to stop the composition."""
-        if self._isComposing:
-            self._stopComposing = True
+        self._stopComposing = True
 
 
 def RenderProcess2D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, fileQueue):
