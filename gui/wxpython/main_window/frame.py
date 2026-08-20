@@ -2014,9 +2014,9 @@ class GMFrame(wx.Frame):
 
         :return: the animation panel, so that a caller can load data into it
         """
-        from animation.panels import AnimationPanel
+        from animation.panels import AnimationToolPanel
 
-        animation_panel = AnimationPanel(
+        animation_panel = AnimationToolPanel(
             parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
         )
         animation_panel.SetUpPage(self, self.mainnotebook)

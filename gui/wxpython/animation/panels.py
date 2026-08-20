@@ -4,7 +4,7 @@
 @brief Animation Panel
 
 Classes:
- - panels::AnimationPanel
+ - panels::AnimationToolPanel
  - panels::AnimationsPanel
  - panels::AnimationSliderBase
  - panels::SimpleAnimationSlider
@@ -40,7 +40,7 @@ MAX_COUNT = 4
 gs.set_raise_on_error(True)
 
 
-class AnimationPanel(wx.Panel, MainPageBase):
+class AnimationToolPanel(wx.Panel, MainPageBase):
     def __init__(
         self,
         parent,

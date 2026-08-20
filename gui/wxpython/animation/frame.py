@@ -18,14 +18,11 @@ import os
 
 import wx
 
-import grass.script as gs
 from core import globalvar
 
-from animation.panels import AnimationPanel, MAX_COUNT
+from animation.panels import AnimationToolPanel, MAX_COUNT
 
 __all__ = ["MAX_COUNT", "AnimationFrame"]
-
-gs.set_raise_on_error(True)
 
 
 class AnimationFrame(wx.Frame):
@@ -55,7 +52,7 @@ class AnimationFrame(wx.Frame):
         )
 
         self.statusbar = self.CreateStatusBar(number=1, style=0)
-        self.panel = AnimationPanel(
+        self.panel = AnimationToolPanel(
             parent=self,
             giface=giface,
             statusbar=self.statusbar,
