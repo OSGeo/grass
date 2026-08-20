@@ -49,7 +49,8 @@ class RegionManagerForInteractiveMap:
             self._set_bbox(self._src_env)
         if self._saved_region:
             self._src_env["GRASS_REGION"] = gs.region_env(
-                region=self._saved_region, env=self._src_env
+                region=self._saved_region,
+                env=self._src_env,
             )
             set_target_region(src_env=self._src_env, tgt_env=self._tgt_env)
             self._resolution = self._get_psmerc_region_resolution()
@@ -145,7 +146,8 @@ class RegionManagerFor2D:
 
     def set_region_from_env(self, env):
         """Copies GRASS_REGION from provided environment
-        to local environment to set the computational region"""
+        to local environment to set the computational region
+        """
         if "GRASS_REGION" in env:
             self._env["GRASS_REGION"] = env["GRASS_REGION"]
 
@@ -177,7 +179,8 @@ class RegionManagerFor2D:
         """
         if self._saved_region:
             self._env["GRASS_REGION"] = gs.region_env(
-                region=self._saved_region, env=self._env
+                region=self._saved_region,
+                env=self._env,
             )
             return
         if self._use_region:
@@ -194,7 +197,8 @@ class RegionManagerFor2D:
             if module.startswith("d.vect"):
                 if not self._resolution_set and not self._extent_set:
                     self._env["GRASS_REGION"] = gs.region_env(
-                        vector=name, env=self._env
+                        vector=name,
+                        env=self._env,
                     )
                     self._extent_set = True
             elif not self._resolution_set and not self._extent_set:
@@ -243,7 +247,8 @@ class RegionManagerForSeries:
         """
         if self._saved_region:
             self._env["GRASS_REGION"] = gs.region_env(
-                region=self._saved_region, env=self._env
+                region=self._saved_region,
+                env=self._env,
             )
             return
         if self._use_region:
@@ -267,7 +272,8 @@ class RegionManagerForSeries:
         """
         if self._saved_region:
             self._env["GRASS_REGION"] = gs.region_env(
-                region=self._saved_region, env=self._env
+                region=self._saved_region,
+                env=self._env,
             )
             return
         if self._use_region:
@@ -334,7 +340,7 @@ class RegionManagerForTimeSeries:
         self._use_region = use_region
         self._saved_region = saved_region
 
-    def set_region_from_timeseries(self, timeseries, element_type="strds"):
+    def set_region_from_timeseries(self, stds: object | None = None) -> None:
         """Sets computational region for rendering.
 
         This function sets the computation region from the extent of
@@ -346,24 +352,25 @@ class RegionManagerForTimeSeries:
         """
         if self._saved_region:
             self._env["GRASS_REGION"] = gs.region_env(
-                region=self._saved_region, env=self._env
+                region=self._saved_region,
+                env=self._env,
             )
             return
         if self._use_region:
             # use current
             return
-        # Get extent, resolution from space time dataset
-        info = gs.parse_command(
-            "t.info", input=timeseries, type=element_type, flags="g", env=self._env
-        )
-        # Set grass region from extent
+        if not stds:
+            raise RuntimeError(_("No SpaceTimeDataset provided to set region from."))
+        # Set grass region from STDS extent
         params = {
-            "n": info["north"],
-            "s": info["south"],
-            "e": info["east"],
-            "w": info["west"],
+            "n": stds.spatial_extent.north,
+            "s": stds.spatial_extent.south,
+            "e": stds.spatial_extent.east,
+            "w": stds.spatial_extent.west,
         }
-        if "nsres_min" in info:
-            params["nsres"] = info["nsres_min"]
-            params["ewres"] = info["ewres_min"]
+        region_dict = stds.metadata.__dict__["D"]
+        for resolution in ("nsres", "ewres"):
+            resolution_value = region_dict.get(f"{resolution}_min")
+            if resolution_value:
+                params[resolution] = resolution_value
         self._env["GRASS_REGION"] = gs.region_env(**params, env=self._env)
