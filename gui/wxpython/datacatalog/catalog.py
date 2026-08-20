@@ -362,6 +362,20 @@ class DataCatalog(wx.Panel):
         self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("v.in.ascii"), item)
 
         menu.AppendSeparator()
+
+        item = wx.MenuItem(
+            menu, wx.ID_ANY, _("Import space time raster dataset  [t.rast.import]")
+        )
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("t.rast.import"), item)
+
+        item = wx.MenuItem(
+            menu, wx.ID_ANY, _("Import space time vector dataset  [t.vect.import]")
+        )
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("t.vect.import"), item)
+
+        menu.AppendSeparator()
         menu.AppendMenu(wx.ID_ANY, _("Link external data"), subMenu)
 
         menu.AppendSeparator()
