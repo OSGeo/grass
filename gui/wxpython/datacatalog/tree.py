@@ -1334,8 +1334,6 @@ class DataCatalogTree(TreeView):
         self._hoveredDb = bool(path)
         event.Skip()
 
-    def ExpandCurrentMapset(self):
-        """Expand current mapset"""
     def ExpandCurrentMapset(self, recursive=False):
         """Expand current mapset
 
