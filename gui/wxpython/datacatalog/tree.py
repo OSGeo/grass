@@ -465,6 +465,10 @@ class DataCatalogTree(TreeView):
         )
         self.startEdit.connect(self.OnStartEditLabel)
         self.endEdit.connect(self.OnEditLabel)
+
+        self._hoveredDb = False
+        self.Bind(wx.EVT_MOTION, self.OnMotion)
+
         self.EnableWatchingMapset()
 
     def _resetSelectVariables(self):
@@ -1305,6 +1309,30 @@ class DataCatalogTree(TreeView):
             else:
                 font.SetWeight(wx.FONTWEIGHT_NORMAL)
         return font
+
+    def OnMotion(self, event):
+        """Show full path of a database the mouse points at in a tooltip.
+
+        Long paths are shortened and a database can have a user defined label,
+        so the full path is often not visible in the tree itself. The tooltip
+        is set through CallAfter because the tree control overwrites it with
+        the item label while handling the same event, which is what shows up
+        when the label does not fit in the window.
+        """
+        path = None
+        item = self.HitTest(event.GetPosition())[0]
+        # Databases are the top level items. Checking the parent first avoids
+        # looking up the node for every map the mouse passes over.
+        if item and self.GetItemParent(item) == self.GetRootItem():
+            node = self._model.GetNodeByIndex(self.GetIndexOfItem(item))
+            if node.data["type"] == "grassdb":
+                path = node.data["name"]
+        if path:
+            wx.CallAfter(self.SetToolTip, path)
+        elif self._hoveredDb:
+            wx.CallAfter(self.UnsetToolTip)
+        self._hoveredDb = bool(path)
+        event.Skip()
 
     def ExpandCurrentMapset(self, recursive=False):
         """Expand current mapset
