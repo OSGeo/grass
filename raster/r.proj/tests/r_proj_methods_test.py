@@ -7,6 +7,7 @@ must also match the references taken from the serial r.proj on the main branch.
 import pytest
 
 import grass.script as gs
+from grass.tools import Tools
 
 SRC_PROJECT = "src4326"
 INPUT_MID = "input_mid"
@@ -75,25 +76,22 @@ METHODS = list(REFERENCE)
 
 def _set_region_from_source(env):
     """Set the output region to r.proj's suggested bounds (method-independent)."""
-    text = gs.read_command(
-        "r.proj",
+    tools = Tools(env=env)
+    bounds = tools.r_proj(
         project=SRC_PROJECT,
         mapset="PERMANENT",
         input=INPUT_MID,
         method="nearest",
-        flags="g",
-        env=env,
-    )
-    region = dict(token.split("=") for token in text.split())
-    gs.run_command(
-        "g.region",
-        n=region["n"],
-        s=region["s"],
-        e=region["e"],
-        w=region["w"],
-        rows=region["rows"],
-        cols=region["cols"],
-        env=env,
+        flags="p",
+        format="json",
+    ).json
+    tools.g_region(
+        n=bounds["north"],
+        s=bounds["south"],
+        e=bounds["east"],
+        w=bounds["west"],
+        rows=bounds["rows"],
+        cols=bounds["cols"],
     )
 
 
@@ -101,7 +99,6 @@ def _set_region_from_source(env):
 def test_method_matches_serial_reference(session_3857, method):
     """r.proj serial output stats must match the captured serial reference."""
     env = dict(session_3857.env)
-    env["OMP_NUM_THREADS"] = "1"
     _set_region_from_source(env)
 
     output = f"ref_{method}"

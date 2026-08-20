@@ -15,7 +15,7 @@ INPUT_MID = "input_mid"
 INPUT_POLAR = "input_polar"
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def gisdbase_with_source(tmp_path_factory):
     """GISDBASE containing src4326 with the mid and polar input rasters."""
     gisdbase = tmp_path_factory.mktemp("rproj_parallel")
@@ -33,21 +33,11 @@ def gisdbase_with_source(tmp_path_factory):
     return gisdbase
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def session_3857(gisdbase_with_source):
     """Active session in an EPSG:3857 destination project."""
     gs.create_project(gisdbase_with_source / "dst3857", epsg="3857")
     with gs.setup.init(
         gisdbase_with_source / "dst3857", env=os.environ.copy()
-    ) as session:
-        yield session
-
-
-@pytest.fixture(scope="module")
-def session_pole(gisdbase_with_source):
-    """Active session in an EPSG:3413 (north polar stereographic) project."""
-    gs.create_project(gisdbase_with_source / "dst_pole", epsg="3413")
-    with gs.setup.init(
-        gisdbase_with_source / "dst_pole", env=os.environ.copy()
     ) as session:
         yield session
