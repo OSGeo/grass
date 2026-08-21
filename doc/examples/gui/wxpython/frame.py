@@ -22,7 +22,7 @@ import wx
 
 # this enables to run application standalone (> python example/frame.py )
 if __name__ == "__main__":
-    sys.path.append(os.path.join(os.environ["GISBASE"], "etc", "gui", "wxpython"))
+    sys.path.append(os.environ["GRASS_GUIWXDIR"])
 
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.

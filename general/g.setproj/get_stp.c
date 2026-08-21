@@ -51,7 +51,7 @@ int get_stp_code(int code, char *string, char *paramfile)
     int gotit = 0, stp;
     FILE *fp;
 
-    snprintf(nad27, sizeof(nad27), "%s%s", G_gisbase(), paramfile);
+    snprintf(nad27, sizeof(nad27), "%s/%s", G_etc_dir(), paramfile);
     fp = fopen(nad27, "r");
     if (fp == NULL) {
         snprintf(buff, sizeof(buff), "Can not open NAD27 file %s", nad27);
@@ -84,7 +84,7 @@ int get_stp_num(void)
     int record, icode, reccnt = 0, special_case;
     char STabbr[50], COname[50];
 
-    snprintf(FIPSfile, sizeof(FIPSfile), "%s/etc/proj/FIPS.code", G_gisbase());
+    snprintf(FIPSfile, sizeof(FIPSfile), "%s/proj/FIPS.code", G_etc_dir());
 
     for (;;) {
 

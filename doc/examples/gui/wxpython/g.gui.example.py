@@ -38,7 +38,7 @@ import sys
 import grass.script.core as gcore
 
 if __name__ == "__main__":
-    wxbase = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython")
+    wxbase = os.environ["GRASS_GUIWXDIR"]
     if wxbase not in sys.path:
         sys.path.append(wxbase)
 
