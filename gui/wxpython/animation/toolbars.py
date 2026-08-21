@@ -266,25 +266,35 @@ class MiscToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        return self._getToolbarData(
+        data = (
             (
+                ("settings", BaseIcons["settings"].label),
+                BaseIcons["settings"],
+                self.parent.OnPreferences,
+            ),
+            (
+                ("help", BaseIcons["help"].label),
+                BaseIcons["help"],
+                self.parent.OnHelp,
+            ),
+        )
+        if self.parent.IsDockable():
+            data += (
                 (
-                    ("settings", BaseIcons["settings"].label),
-                    BaseIcons["settings"],
-                    self.parent.OnPreferences,
-                ),
-                (
-                    ("help", BaseIcons["help"].label),
-                    BaseIcons["help"],
-                    self.parent.OnHelp,
-                ),
-                (
-                    ("quit", BaseIcons["quit"].label),
-                    BaseIcons["quit"],
-                    self.parent.OnCloseWindow,
+                    ("docking", BaseIcons["docking"].label),
+                    BaseIcons["docking"],
+                    self.parent.OnDockUndock,
+                    wx.ITEM_CHECK,
                 ),
             )
+        data += (
+            (
+                ("quit", BaseIcons["quit"].label),
+                BaseIcons["quit"],
+                self.parent.OnCloseWindow,
+            ),
         )
+        return self._getToolbarData(data)
 
 
 class AnimSimpleLmgrToolbar(SimpleLmgrToolbar):

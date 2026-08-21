@@ -69,7 +69,7 @@ def replace_in_file(file_path, pattern, repl) -> None:
     os.remove(file_path)
     # replace old file by new file
     # TODO: this can fail in some (random) cases on MS Windows
-    os.rename(tmp_file_path, file_path)
+    Path(tmp_file_path).rename(file_path)
 
 
 class NoopFileAnonymizer:
@@ -475,10 +475,10 @@ def html_file_preview(filename):
     before = "<pre>"
     after = "</pre>"
     if not Path(filename).is_file():
-        return '<p style="color: red>File %s does not exist</p>' % filename
+        return '<p style="color: red">File %s does not exist</p>' % filename
     size = Path(filename).stat().st_size
     if not size:
-        return '<p style="color: red>File %s is empty</p>' % filename
+        return '<p style="color: red">File %s is empty</p>' % filename
     max_size = 10000
     html = StringIO()
     html.write(before)
@@ -495,7 +495,7 @@ def html_file_preview(filename):
         for line in tail(filename, 50):
             html.write(color_error_line(html_escape(line)))
     else:
-        return '<p style="color: red>File %s is too large to show</p>' % filename
+        return '<p style="color: red">File %s is too large to show</p>' % filename
     html.write(after)
     return html.getvalue()
 
@@ -1117,7 +1117,7 @@ class TestsuiteDirReporter:
                     self.total += summary["total"]
 
                     dir_failures += summary["failures"]
-                    dir_errors += summary["failures"]
+                    dir_errors += summary["errors"]
                     dir_skipped += summary["skipped"]
                     dir_successes += summary["successes"]
                     dir_expected_failures += summary["expected_failures"]

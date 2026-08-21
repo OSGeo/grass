@@ -164,6 +164,8 @@ int G_str_to_color(const char *str, int *red, int *grn, int *blu)
    \param[out] h pointer to store the calculated hue
    \param[out] s pointer to store the calculated saturation
    \param[out] v pointer to store the calculated value
+
+   \since version 8.5
  */
 void G_rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
 {
@@ -206,6 +208,8 @@ void G_rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
    \param b blue component of RGB color
    \param clr_frmt color format to be used (RGB, HEX, HSV, TRIPLET).
    \param[out] str color string
+
+   \since version 8.5
  */
 void G_color_to_str(int r, int g, int b, ColorFormat clr_frmt, char *str)
 {
@@ -250,6 +254,8 @@ void G_color_to_str(int r, int g, int b, ColorFormat clr_frmt, char *str)
    \param option pointer to color format option
 
    \return allocated ColorFormat
+
+   \since version 8.5
  */
 ColorFormat G_option_to_color_format(const struct Option *option)
 {

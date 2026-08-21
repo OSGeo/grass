@@ -179,7 +179,7 @@ void com_par_const(double longitTime, struct SunGeometryConstDay *sungeom,
 void com_par(struct SunGeometryConstDay *sungeom,
              struct SunGeometryVarDay *sunVarGeom,
              struct GridGeometry *gridGeom, double latitude,
-             double longitude UNUSED)
+             double longitude G_UNUSED)
 {
     double pom, xpom, ypom;
     double costimeAngle;

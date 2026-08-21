@@ -317,7 +317,7 @@ int gs_init_normbuff(geosurf *gs)
         G_free(gs->norms);
     }
 
-    size = gs->rows * gs->cols * sizeof(unsigned long);
+    size = (long)gs->rows * gs->cols * sizeof(unsigned long);
 
     gs->norms = (unsigned long *)G_malloc(size); /* G_fatal_error */
     if (!gs->norms) {

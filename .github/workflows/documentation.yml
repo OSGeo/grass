@@ -24,10 +24,15 @@ jobs:
       PYTHONWARNINGS: always
       # renovate: datasource=python-version depName=python
       PYTHON_VERSION: "3.14"
+      # Only release-branch builds deploy to the indexable stable trees
+      # (grass-stable / grassNN); everything else (the grass-devel mainline, PRs,
+      # dispatch builds) is noindexed so it never competes with stable in search.
+      # Replaces the fragile version-micro check (see #5935, #7772).
+      GRASS_DOCS_NOINDEX: ${{ !startsWith(github.ref_name, 'releasebranch_') }}
 
     steps:
       - name: Checkout core
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: grass
           fetch-depth: 0
@@ -49,14 +54,14 @@ jobs:
 
       - name: Set up Python (with cache)
         if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip # zizmor: ignore[cache-poisoning] Assuming push event is not used for tags
 
       - name: Set up Python (no cache, use for release artifacts)
         if: ${{ !contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -72,7 +77,7 @@ jobs:
           } >> "${GITHUB_ENV}"
 
       - name: Checkout addons
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OSGeo/grass-addons
           ref: grass${{ env.MAJOR }}
@@ -81,8 +86,8 @@ jobs:
           persist-credentials: false
 
       - name: ccache (do not use for release artifacts)
-        uses: hendrikmuhs/ccache-action@5ebbd400eff9e74630f759d94ddd7b6c26299639 # v1.2.20
-        if: ${{ !contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
+        uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
+        if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
         with:
           create-symlink: true
           verbose: 2
@@ -97,8 +102,8 @@ jobs:
           pip install -r grass/.github/workflows/python_requirements.txt
           pip install -r grass-addons/.github/workflows/requirements.txt
 
-      - uses: rui314/setup-mold@725a8794d15fc7563f59595bd9556495c0564878 # v1
-        if: ${{ !contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
+      - uses: rui314/setup-mold@9c9c13bf4c3f1adef0cc596abc155580bcb04444 # v1
+        if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
 
       - name: Create installation directory
         run: |
@@ -160,7 +165,7 @@ jobs:
           make htmldocs
 
       - name: Make the doxygen results available (html)
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: doxygen-site
           if-no-files-found: error
@@ -168,10 +173,10 @@ jobs:
             grass/html
             !grass/html/**.map
             !grass/html/**.md5
-          retention-days: 3
+          retention-days: 15
 
       - name: Make the doxygen results available (latex)
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: doxygen-site-latex
           if-no-files-found: error
@@ -179,7 +184,7 @@ jobs:
             grass/latex
             !grass/latex/**.map
             !grass/latex/**.md5
-          retention-days: 3
+          retention-days: 15
       - name: Compile addons
         run: |
           ./grass-addons/utils/cronjobs_osgeo_lxd/compile_addons_git.sh \
@@ -228,7 +233,7 @@ jobs:
           cd grass || exit
           eval "$(./utils/update_version.py status --bash)"
           cd ..
-          export SITE_NAME="GRASS $VERSION Documentation"
+          export SITE_NAME="GRASS ${MAJOR}.${MINOR} Documentation"
           export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS $VERSION Documentation"
           cd "${MKDOCS_DIR}" || exit
           mkdocs build
@@ -248,20 +253,23 @@ jobs:
             --mkdocs-sitemap "${MKDOCS_DIR}/site/sitemap.xml" \
             --sphinx-sitemap "${MKDOCS_DIR}/site/libpython/sitemap.xml" \
             --output "${MKDOCS_DIR}/site/sitemap.xml" \
-            --version "${VERSION}" -o
+            -o
+          # The libpython URLs are now in the merged manuals sitemap; drop the
+          # standalone libpython sitemap so each URL is listed only once (#5935).
+          rm -f "${MKDOCS_DIR}/site/libpython/sitemap.xml"
 
       - name: Make logs available
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: grass-addon-build-logs
           if-no-files-found: error
           path: addons-build-dir/logs
-          retention-days: 3
+          retention-days: 15
 
       - name: Make the result available
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: mkdocs-site
           if-no-files-found: error
           path: ${{ env.MKDOCS_DIR }}/site
-          retention-days: 3
+          retention-days: 15

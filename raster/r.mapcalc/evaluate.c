@@ -240,7 +240,7 @@ static void evaluate_constant(expression *e)
     }
 }
 
-static void evaluate_variable(expression *e UNUSED)
+static void evaluate_variable(expression *e G_UNUSED)
 {
     /* this is a no-op */
 }
@@ -357,7 +357,7 @@ static expr_list *exprs;
 
 /****************************************************************************/
 
-static void error_handler(void *p UNUSED)
+static void error_handler(void *p G_UNUSED)
 {
     expr_list *l;
 

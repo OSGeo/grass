@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-21 15:56+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
@@ -1759,8 +1759,9 @@ msgstr "अधिकतम 10 Y डेटा फ़ाइलें पार ह
 msgid "Cannot find/open symbol: '%s'"
 msgstr "प्रतीक नहीं खोजा/खोला जा सका: '%s'"
 
-#, c-format
-msgid "Color <%s> cannot for option %s be parsed"
+#, fuzzy, c-format
+#| msgid "Color <%s> cannot for option %s be parsed"
+msgid "Color <%s> for option <%s> cannot be parsed"
 msgstr "विकल्प %s के लिए रंग <%s> को पार्स नहीं किया जा सकता"
 
 #, c-format
@@ -1771,8 +1772,9 @@ msgstr "<%d> लाइनों के लिए केवल <%d> रंग द
 msgid "Number of widths (%d) is higher then the number of files (%d)"
 msgstr "चौड़ाई की संख्या (%d) फ़ाइलों की संख्या (%d) से अधिक है"
 
-#, c-format
-msgid "Number of widths (%d) is lower then the number of files (%d)"
+#, fuzzy, c-format
+#| msgid "Number of widths (%d) is lower then the number of files (%d)"
+msgid "Number of widths (%d) is lower than the number of files (%d)"
 msgstr "चौड़ाई की संख्या (%d) फ़ाइलों की संख्या (%d) से कम है"
 
 #, c-format
@@ -2664,7 +2666,7 @@ msgstr "माध्य: %f\tमानक विचलन = %f\n"
 msgid "Last chi2 = %f\n"
 msgstr "अंतिम chi2 = %f\n"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Stdev multiplied by %.4f to define step\n"
 msgstr ""
 "चरण\n"
@@ -3741,7 +3743,7 @@ msgstr "G_spawn() विफल रहा"
 msgid "execl() failed"
 msgstr "execl() विफल रहा"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Unknown flag \"-%c\" in rule\n"
 msgstr "अज्ञात ध्वज \\\"-%c\\\" नियम में\n"
 
@@ -3749,7 +3751,7 @@ msgstr "अज्ञात ध्वज \\\"-%c\\\" नियम में\n"
 msgid "Unknown option \"%s\" in rule\n"
 msgstr "नियम में अज्ञात विकल्प \\\"%s\\\"।\n"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Unknown rule type \"%s\" at line %d\n"
 msgstr "अज्ञात नियम पंक्ति %d पर \\\"%s\\\" टाइप करें\n"
 
@@ -3828,7 +3830,7 @@ msgstr "प्रक्षेपण फ़ाइलें बनाने मे
 msgid "Unable to create project <%s>"
 msgstr "प्रोजेक्ट <%s> बनाने में असमर्थ"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "You can switch to the new project by\n"
 "`%s=%s`"
@@ -7677,8 +7679,8 @@ msgstr "एक एसवीएम के साथ भविष्यवाण�
 msgid "Predict with a Support Vector Machine"
 msgstr "एक सपोर्ट वेक्टर मशीन से भविष्यवाणी करें"
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 msgid "Maps with feature values (attributes)"
 msgstr "फ़ीचर मान (विशेषताएँ) वाले मानचित्र"
 
@@ -9317,23 +9319,46 @@ msgstr "उपयोगकर्ता द्वारा निर्दिष�
 msgid "aggregation"
 msgstr "एकत्रीकरण"
 
-msgid "Value option that sets the area size limit (in hectares)"
+#, fuzzy
+#| msgid "Value option that sets the area size limit (in hectares)"
+msgid "Value option that sets the area size limit (in hectares) (deprecated)"
 msgstr "मान विकल्प जो क्षेत्र आकार सीमा निर्धारित करता है (हेक्टेयर में)"
 
 msgid "Area"
 msgstr "क्षेत्र"
 
-msgid "Lesser or greater than specified value"
+#, fuzzy
+#| msgid "Lesser or greater than specified value"
+msgid "Keep only areas lesser or greater than specified value (deprecated)"
 msgstr "निर्दिष्ट मान से कम या अधिक"
 
-msgid "Method used for reclassification"
+msgid "Value for the lower area size limit (in hectares). Pixel clumps with areas below this value are removed."
+msgstr ""
+
+msgid "Value for the upper area size limit (in hectares). Pixel clumps with areas above this value are removed."
+msgstr ""
+
+#, fuzzy
+#| msgid "Method used for reclassification"
+msgid "Method used for area size filtering"
 msgstr "पुनर्वर्गीकरण के लिए प्रयुक्त विधि"
 
 msgid "Input map is clumped"
 msgstr "इनपुट मानचित्र गुच्छित है"
 
-msgid "Clumps including diagonal neighbors"
+#, fuzzy
+#| msgid "Clumps including diagonal neighbors"
+msgid "Generate clumps including diagonal neighbors"
 msgstr "विकर्ण पड़ोसियों सहित झुरमुट"
+
+msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgstr ""
+
+msgid "Apply lower area threshold as \"minsize\" during clumping"
+msgstr ""
+
+msgid "Output vector map, do not convert back to raster (only for method 'rmarea')"
+msgstr ""
 
 msgid "Splits a raster map into red, green and blue maps."
 msgstr "रैस्टर मानचित्र को लाल, हरे और नीले मानचित्रों में विभाजित करता है।"
@@ -9568,6 +9593,16 @@ msgstr "का प्रारूपण"
 
 msgid "Columns to be printed to stdout"
 msgstr "स्टडआउट करने के लिए कॉलम मुद्रित किए जाने हैं"
+
+#, fuzzy
+#| msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr "सादा; सादा पाठ आउटपुट; लाइन; मानचित्र नामों की अल्पविराम से अलग की गई सूची; json; JSON (जावास्क्रिप्ट ऑब्जेक्ट नोटेशन); yaml; YAML (YAML मार्कअप भाषा नहीं है); csv; CSV (अल्पविराम से अलग किए गए मान);"
+
+#, fuzzy
+#| msgid "Name of mapset to list (default: current search path)"
+msgid "Name of mapsets to list ('.' for current, '*' for all mapsets)"
+msgstr "सूची में मैपसेट का नाम (डिफ़ॉल्ट: वर्तमान खोज पथ)"
 
 msgid "Field separator character between the output columns"
 msgstr "आउटपुट कॉलम के बीच फ़ील्ड विभाजक चरित्र"
@@ -9845,11 +9880,15 @@ msgstr "आउटपुट मैप पर स्पेस टाइम रै�
 msgid "Imports space time raster dataset."
 msgstr "स्पेस टाइम रैस्टर डेटासेट आयात करता है।"
 
-msgid "Path to the extraction directory"
-msgstr "निष्कर्षण निर्देशिका का पथ"
+#, fuzzy
+#| msgid "Path to the work directory, default is /tmp"
+msgid "Path to the extraction directory (default is .tmp in the current mapset)"
+msgstr "कार्य निर्देशिका का पथ, डिफ़ॉल्ट /tmp है"
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
-msgstr "एक नया प्रोजेक्ट बनाएं और उसमें डेटा आयात करें। जब कोई नया प्रोजेक्ट बनाया जाए तो इस मॉड्यूल को समानांतर में न चलाएं या इसे बाधित न करें"
+#, fuzzy
+#| msgid "Create a new empty vector map and exit. Nothing is read from input."
+msgid "Create a new project and import the data into it."
+msgstr "एक नया खाली वेक्टर मानचित्र बनाएं और बाहर निकलें। इनपुट से कुछ भी नहीं पढ़ा जाता है।"
 
 msgid "Set the current region from the last map that was imported"
 msgstr "आयातित किए गए अंतिम मानचित्र से वर्तमान क्षेत्र सेट करें"
@@ -10016,6 +10055,11 @@ msgstr "समानांतर"
 msgid "Raster map used for zoning, must be of type CELL"
 msgstr "ज़ोनिंग के लिए उपयोग किया जाने वाला रेखापुंज मानचित्र, सेल प्रकार का होना चाहिए"
 
+#, fuzzy
+#| msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr "सादा; सादा पाठ आउटपुट; लाइन; मानचित्र नामों की अल्पविराम से अलग की गई सूची; json; JSON (जावास्क्रिप्ट ऑब्जेक्ट नोटेशन); yaml; YAML (YAML मार्कअप भाषा नहीं है); csv; CSV (अल्पविराम से अलग किए गए मान);"
+
 msgid "Calculate extended statistics"
 msgstr "विस्तारित आँकड़ों की गणना करें"
 
@@ -10082,8 +10126,10 @@ msgstr "स्पेस टाइम 3डी रैस्टर डेटास�
 msgid "Raster map with zones to compute statistics for"
 msgstr "आँकड़ों की गणना करने के लिए क्षेत्रों के साथ रेखापुंज मानचित्र"
 
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "आँकड़ों की गणना के लिए क्षेत्रों के साथ रेखापुंज मानचित्र (सेल होना आवश्यक है)"
+#, fuzzy
+#| msgid "3D raster map with reference values"
+msgid "3D raster map with zones"
+msgstr "संदर्भ मानों के साथ 3डी रेखापुंज मानचित्र"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr "टाइमस्टैम्प निर्दिष्ट करता है और स्पेस टाइम डेटासेट में रैस्टर, वेक्टर और रैस्टर3डी मानचित्रों को पंजीकृत करता है।"
@@ -10250,6 +10296,11 @@ msgstr "स्पेस टाइम वेक्टर डेटासेट �
 msgid "select"
 msgstr "चुनना"
 
+#, fuzzy
+#| msgid "plain;Human readable text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation);"
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr "सादा; मानव पठनीय पाठ आउटपुट; सीएसवी; सीएसवी (अल्पविराम से अलग किए गए मान); जेएसओएन; जेएसओएन (जावास्क्रिप्ट ऑब्जेक्ट नोटेशन);"
+
 msgid "Exports a space time vector dataset as GRASS specific archive file."
 msgstr "GRASS विशिष्ट संग्रह फ़ाइल के रूप में एक स्पेस टाइम वेक्टर डेटासेट निर्यात करता है।"
 
@@ -10276,6 +10327,9 @@ msgstr "खाली मानचित्र पंजीकृत करें
 
 msgid "Imports a space time vector dataset from a GRASS specific archive file."
 msgstr "GRASS विशिष्ट संग्रह फ़ाइल से स्पेस टाइम वेक्टर डेटासेट आयात करता है।"
+
+msgid "Path to the extraction directory"
+msgstr "निष्कर्षण निर्देशिका का पथ"
 
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
 msgstr "एक नया प्रोजेक्ट (स्थान) बनाएं और उसमें डेटा आयात करें। जब कोई नया प्रोजेक्ट बनाया जाए तो इस मॉड्यूल को समानांतर में न चलाएं या इसे बाधित न करें"
@@ -10531,6 +10585,30 @@ msgstr "डिफ़ॉल्ट एसक्यूएल है जब तक �
 
 msgid "sql;Uses SQL attribute database;univar;Uses v.db.univar"
 msgstr "sql; SQL विशेषता डेटाबेस का उपयोग करता है; univar; v.db.univar का उपयोग करता है"
+
+#, fuzzy
+#| msgid "Changes type of vector features."
+msgid "Prints geometry metrics of vector features."
+msgstr "वेक्टर सुविधाओं का प्रकार बदलता है।"
+
+#, fuzzy
+#| msgid "Metric"
+msgid "metric"
+msgstr "मीट्रिक"
+
+msgid "Geometry metric(s) to compute"
+msgstr ""
+
+msgid "area;area size;perimeter;perimeter length of an area;length;line length;count;number of features for each category;compactness;compactness of an area, calculated as perimeter / (2 * sqrt(PI * area));fractal_dimension;fractal dimension of boundary defining a polygon, calculated as 2 * (log(perimeter) / log(area));slope;slope steepness of vector line or boundary;sinuosity;line sinuosity, calculated as line length / distance between end points;azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode;coordinates;point coordinates, X,Y or X,Y,Z;start;line/boundary starting point coordinates, X,Y or X,Y,Z;end;line/boundary end point coordinates, X,Y or X,Y,Z;bbox;bounding box of area, N,S,E,W"
+msgstr ""
+
+msgid "Units (one per metric, positional; unspecified metrics use defaults)"
+msgstr ""
+
+#, fuzzy
+#| msgid "plain;Plain text with pipe separator;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgid "plain;Plain text with pipe separator by default;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr "सादा; पाइप विभाजक के साथ सादा पाठ; सीएसवी; सीएसवी (अल्पविराम से अलग किए गए मान); जेएसओएन; जेएसओएन (जावास्क्रिप्ट ऑब्जेक्ट नोटेशन)"
 
 msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
 msgstr "OGR लाइब्रेरी का उपयोग करके GRASS वेक्टर मानचित्र में वेक्टर डेटा आयात करता है और तुरंत पुन: प्रोजेक्ट करता है।"
@@ -12174,7 +12252,7 @@ msgstr "नियम दर्ज करें, पूरा होने पर
 msgid "fp: Data range is %s to %s\n"
 msgstr "fp: डेटा रेंज %s से %s\\n है\n"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Data range is %ld to %ld\n"
 msgstr "डेटा रेंज %ld से %ld\\n है\n"
 
@@ -13429,6 +13507,10 @@ msgstr "आउटपुट फ़ाइल खोलने में विफ�
 msgid "Search radius size must cover at least 1 cell"
 msgstr "खोज त्रिज्या का आकार कम से कम 1 सेल को कवर करना चाहिए"
 
+#, c-format
+msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr "छोड़ें त्रिज्या का आकार त्रिज्या से कम से कम 1 सेल कम होना चाहिए"
 
@@ -13461,6 +13543,9 @@ msgstr "क्षेत्र रिज़ॉल्यूशन मानचि�
 #, c-format
 msgid "Internal error in %s()"
 msgstr "%s() में आंतरिक त्रुटि"
+
+msgid "JSON nesting exceeds maximum depth"
+msgstr ""
 
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
 msgstr "एक रेखापुंज मानचित्र तैयार करता है जिसमें निकटतम रेखापुंज सुविधाओं की दूरी और/या निकटतम गैर-शून्य सेल का मान शामिल होता है।"
@@ -17152,7 +17237,7 @@ msgstr "नियम(नियमों) को दर्ज करें, प�
 msgid "FCELL: Data range is %.7g to %.7g\n"
 msgstr "एफसीईएल: डेटा रेंज %.7g से %.7g है\n"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "DCELL: Data range is %.15g to %.15g\n"
 msgstr "DCELL: डेटा रेंज % .15g से .15g\\n है\n"
 
@@ -17869,6 +17954,10 @@ msgstr "रेखापुंज मानचित्र लिखने मे
 #, c-format
 msgid "Error writing temporary file <%s>"
 msgstr "अस्थायी फ़ाइल <%s> लिखने में त्रुटि"
+
+#, c-format
+msgid "Using %d thread(s), %d buffered output rows"
+msgstr ""
 
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr "एकत्रीकरण का उपयोग करके रेखापुंज मानचित्र परतों को एक मोटे ग्रिड में पुन: नमूना करता है।"
@@ -19913,7 +20002,7 @@ msgstr "[%s] एक अन्य मानचित्र का पुनर्
 msgid "Writing new null file for [%s]... "
 msgstr "[%s] के लिए नई शून्य फ़ाइल लिख रहा हूँ... "
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Removing null file for [%s]...\n"
 msgstr "[%s]... के लिए शून्य फ़ाइल हटाई जा रही है\n"
 
@@ -20393,13 +20482,11 @@ msgstr "2डी और 3डी क्षेत्र सेटिंग्स �
 msgid "Extracting areas..."
 msgstr "क्षेत्र निकाले जा रहे हैं..।"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "write_bnd:  line terminated unexpectedly\n"
 "previous (%d) point %d (%d,%d,%d) %p %p"
-msgstr ""
-"राइट_बीएनडी: लाइन अप्रत्याशित रूप से समाप्त हो गई\\n"
-"पिछला (%d) बिंदु %d (%d,%d,%d) %p %p"
+msgstr "राइट_बीएनडी: लाइन अप्रत्याशित रूप से समाप्त हो गई\\nपिछला (%d) बिंदु %d (%d,%d,%d) %p %p"
 
 msgid "Writing areas..."
 msgstr "लेखन क्षेत्र..।"
@@ -20447,7 +20534,7 @@ msgstr "एक्सटेंड_लाइन्स: क्यू बैक प�
 msgid "write_line:  found half a loop!"
 msgstr "राइट_लाइन: आधा लूप मिला!"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "write_line: line terminated unexpectedly\n"
 "  previous (%d) point %d (%d,%d,%d) %p %p"
@@ -20990,7 +21077,7 @@ msgstr ""
 "\n"
 "<%s> रेखापुंज मानचित्र पर क्लंप का उपयोग करके <%s> से डेटा पर वॉल्यूम रिपोर्ट"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Category   Average   Data   # Cells        Centroid             Total\n"
 msgstr "श्रेणी औसत डेटा # सेल सेंट्रोइड कुल\n"
 
@@ -21284,7 +21371,7 @@ msgstr "अनुभाग %d: जलसंभर निर्धारण।"
 msgid "SECTION 4: RUSLE LS and/or S factor determination."
 msgstr "धारा 4: रुसल एलएस और/या एस कारक निर्धारण।"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "USAGE for basin delineation:\n"
 "%s -4 elevation=elevation_map threshold=swale_threshold [flow=overland_flow_map] [drainage=drain_direction_map] [depression=depression_map] [accumulation=accumulation_map] [basin=watershed_basin_map] [retention=retention_map] [stream=stream_segment_map]\n"
@@ -21294,8 +21381,7 @@ msgid ""
 "%s [-4] elevation=elevation_map threshold=swale_threshold [flow=overland_flow_map] [drainage=drain_direction_map] [depression=depression_map] [accumulation=accumulation_map] [basin=watershed_basin_map] [stream=stream_segment_map] [half_basin=half_basin_map] [retention=retention_map] ar=ARMSED_file_name\n"
 "\n"
 msgstr ""
-"बेसिन चित्रण के लिए उपयोग:\\n%s -4 ऊंचाई=ऊंचाई_मानचित्र सीमा=स्वेल_थ्रेसहोल्ड [प्रवाह=ओवरलैंड_फ्लो_मैप] [ड्रेनेज=ड्रेन_दिशा_मानचित्र] [अवसाद=अवसाद_मानचित्र] [संचय=संचय_मानचित्र] [बेसिन=वाटरशेड_बेसिन_मानचित्र] [प्रतिधारण=प्रतिधारण_मानचित्र] [धारा=धारा_खंड_मानचित्र]\\n\\n"
-"ढलान की लंबाई के लिए उपयोग निर्धारण:\\n%s [-4] ऊंचाई=ऊंचाई_मानचित्र सीमा=स्वले_दहलीज [जल निकासी=ड्रेन_दिशा_मानचित्र] [अवसाद=अवसाद_मानचित्र] [संचय=संचय_मानचित्र] [प्रतिधारण=प्रतिधारण_मानचित्र] [अधिकतम ढलान_लंबाई=अधिकतम ढलान_लंबाई] [अवरुद्ध=ओवरलैंड_अवरुद्ध_मानचित्र] [ढलान_खड़ीपन=ढलान_खड़ीपन_मानचित्र] लंबाई_ढलान=लंबाई_ढलान_मानचित्र [परेशान_भूमि=रिल_क्षरण_मानचित्र] [ढलान_जमाव=ढलान_जमाव मान या नक्शा]सशस्त्र फ़ाइल निर्माण के लिए उपयोग:\\n%s [-4] ऊंचाई=ऊंचाई_नक्शा सीमा=स्वेल_दहलीज [प्रवाह=ओवरलैंड_प्रवाह_मानचित्र] [ड्रेनेज=ड्रेन_डायरेक्शन_मैप] [डिप्रेशन=डिप्रेशन_मैप] [संचय=संचय_मैप] [बेसिन=वाटरशेड_बेसिन_मैप] [स्ट्रीम=स्ट्रीम_सेगमेंट_मैप] [आधा_बेसिन=आधा_बेसिन_मैप] [रिटेंशन=रिटेंशन_मैप] ar=ARMSED_file_name\\n\\n\n"
+"बेसिन चित्रण के लिए उपयोग:\\n%s -4 ऊंचाई=ऊंचाई_मानचित्र सीमा=स्वेल_थ्रेसहोल्ड [प्रवाह=ओवरलैंड_फ्लो_मैप] [ड्रेनेज=ड्रेन_दिशा_मानचित्र] [अवसाद=अवसाद_मानचित्र] [संचय=संचय_मानचित्र] [बेसिन=वाटरशेड_बेसिन_मानचित्र] [प्रतिधारण=प्रतिधारण_मानचित्र] [धारा=धारा_खंड_मानचित्र]\\n\\nढलान की लंबाई के लिए उपयोग निर्धारण:\\n%s [-4] ऊंचाई=ऊंचाई_मानचित्र सीमा=स्वले_दहलीज [जल निकासी=ड्रेन_दिशा_मानचित्र] [अवसाद=अवसाद_मानचित्र] [संचय=संचय_मानचित्र] [प्रतिधारण=प्रतिधारण_मानचित्र] [अधिकतम ढलान_लंबाई=अधिकतम ढलान_लंबाई] [अवरुद्ध=ओवरलैंड_अवरुद्ध_मानचित्र] [ढलान_खड़ीपन=ढलान_खड़ीपन_मानचित्र] लंबाई_ढलान=लंबाई_ढलान_मानचित्र [परेशान_भूमि=रिल_क्षरण_मानचित्र] [ढलान_जमाव=ढलान_जमाव मान या नक्शा]सशस्त्र फ़ाइल निर्माण के लिए उपयोग:\\n%s [-4] ऊंचाई=ऊंचाई_नक्शा सीमा=स्वेल_दहलीज [प्रवाह=ओवरलैंड_प्रवाह_मानचित्र] [ड्रेनेज=ड्रेन_डायरेक्शन_मैप] [डिप्रेशन=डिप्रेशन_मैप] [संचय=संचय_मैप] [बेसिन=वाटरशेड_बेसिन_मैप] [स्ट्रीम=स्ट्रीम_सेगमेंट_मैप] [आधा_बेसिन=आधा_बेसिन_मैप] [रिटेंशन=रिटेंशन_मैप] ar=ARMSED_file_name\\n\\n\n"
 "\n"
 
 msgid "Closing accumulation map"
@@ -21354,7 +21440,7 @@ msgstr "खंड 1बी: ऑफमैप प्रवाह का निर�
 msgid "SECTION 5: RUSLE LS and/or S factor determination."
 msgstr "धारा 5: रुसल एलएस और/या एस कारक निर्धारण।"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "USAGE for basin delineation:\n"
 "%s -4 elevation=elevation_map threshold=swale_threshold [flow=overland_flow_map] [drainage=drain_direction_map] [depression=depression_map] [accumulation=accumulation_map] [basin=watershed_basin_map] [stream=stream_segment_map]\n"
@@ -21364,8 +21450,7 @@ msgid ""
 "%s [-4] elevation=elevation_map threshold=swale_threshold [flow=overland_flow_map] [drainage=drain_direction_map] [depression=depression_map] [accumulation=accumulation_map] [basin=watershed_basin_map] [stream=stream_segment_map] [half_basin=half_basin_map] ar=ARMSED_file_name\n"
 "\n"
 msgstr ""
-"बेसिन चित्रण के लिए उपयोग:\\n%s -4 ऊंचाई=ऊंचाई_मानचित्र सीमा=स्वले_थ्रेशोल्ड [प्रवाह=ओवरलैंड_फ्लो_मैप] [ड्रेनेज=ड्रेन_दिशा_मानचित्र] [अवसाद=अवसाद_मानचित्र] [संचय=संचय_मानचित्र] [बेसिन=वाटरशेड_बेसिन_मैप] [स्ट्रीम=स्ट्रीम_सेगमेंट_मैप]\\n\\n"
-"ढलान लंबाई निर्धारण के लिए उपयोग:\\n%s [-4] ऊंचाई=ऊंचाई_मानचित्र सीमा=स्वले_दहलीज [जल निकासी=जल निकासी_दिशा_मानचित्र] [अवसाद=अवसाद_मानचित्र] [संचय=संचय_मानचित्र] [अधिकतम_ढलान_लंबाई=अधिकतम_ढलान_लंबाई] [अवरुद्ध=ओवरलैंड_अवरुद्ध_मानचित्र] [ढलान_खड़ीपन=ढलान_धीरता_मानचित्र] लंबाई_ढलान=लंबाई_ढलान_मानचित्र [डिस्टर्ब्ड_लैंड=रिल_एरोशन_मैप] [स्लोप_डिपोजिशन=स्लोप_डिपोजिशन वैल्यू या मैप] आर्मस्ड फ़ाइल निर्माण के लिए उपयोग:\\n%s [-4] एलिवेशन=एलिवेशन_मैप थ्रेशोल्ड=स्वेल_थ्रेशोल्ड [फ्लो=ओवरलैंड_फ्लो_मैप] [ड्रेनेज=ड्रेन_डायरेक्शन_मैप] [डिप्रेशन=डिप्रेशन_मैप] [संचय=संचय_मैप] [बेसिन=वाटरशेड_बेसिन_मैप] [स्ट्रीम=स्ट्रीम_सेगमेंट_मैप] [आधा_बेसिन=आधा_बेसिन_मैप] ar=ARMSED_file_name\\n\\n\n"
+"बेसिन चित्रण के लिए उपयोग:\\n%s -4 ऊंचाई=ऊंचाई_मानचित्र सीमा=स्वले_थ्रेशोल्ड [प्रवाह=ओवरलैंड_फ्लो_मैप] [ड्रेनेज=ड्रेन_दिशा_मानचित्र] [अवसाद=अवसाद_मानचित्र] [संचय=संचय_मानचित्र] [बेसिन=वाटरशेड_बेसिन_मैप] [स्ट्रीम=स्ट्रीम_सेगमेंट_मैप]\\n\\nढलान लंबाई निर्धारण के लिए उपयोग:\\n%s [-4] ऊंचाई=ऊंचाई_मानचित्र सीमा=स्वले_दहलीज [जल निकासी=जल निकासी_दिशा_मानचित्र] [अवसाद=अवसाद_मानचित्र] [संचय=संचय_मानचित्र] [अधिकतम_ढलान_लंबाई=अधिकतम_ढलान_लंबाई] [अवरुद्ध=ओवरलैंड_अवरुद्ध_मानचित्र] [ढलान_खड़ीपन=ढलान_धीरता_मानचित्र] लंबाई_ढलान=लंबाई_ढलान_मानचित्र [डिस्टर्ब्ड_लैंड=रिल_एरोशन_मैप] [स्लोप_डिपोजिशन=स्लोप_डिपोजिशन वैल्यू या मैप] आर्मस्ड फ़ाइल निर्माण के लिए उपयोग:\\n%s [-4] एलिवेशन=एलिवेशन_मैप थ्रेशोल्ड=स्वेल_थ्रेशोल्ड [फ्लो=ओवरलैंड_फ्लो_मैप] [ड्रेनेज=ड्रेन_डायरेक्शन_मैप] [डिप्रेशन=डिप्रेशन_मैप] [संचय=संचय_मैप] [बेसिन=वाटरशेड_बेसिन_मैप] [स्ट्रीम=स्ट्रीम_सेगमेंट_मैप] [आधा_बेसिन=आधा_बेसिन_मैप] ar=ARMSED_file_name\\n\\n\n"
 "\n"
 
 msgid ""
@@ -22556,7 +22641,9 @@ msgstr "राइट_वीटीके_अनस्ट्रक्चर्ड_
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr "write_vtk_data: सेलडेटा %s को पंक्तियों %i cols %i गहराई %i से vtk-ascii फ़ाइल में लिखना"
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+#, fuzzy
+#| msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
 msgstr "ग़लत 3D रेखापुंज मानचित्र मान! मान 0 और 255 के बीच होना चाहिए!"
 
 msgid "Unable to close the 3D raster map"
@@ -23090,7 +23177,9 @@ msgstr "GRASS Addons <%s> नहीं मिला"
 msgid "ZIP file is unreadable: {0}"
 msgstr "ज़िप फ़ाइल अपठनीय है: {0}"
 
-msgid "Extracting may be unsafe; consider updating Python"
+#, fuzzy
+#| msgid "Extracting may be unsafe; consider updating Python"
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
 msgstr "निकालना असुरक्षित हो सकता है; पायथन को अपडेट करने पर विचार करें"
 
 #, python-brace-format
@@ -23561,7 +23650,9 @@ msgstr "शून्य क्षेत्रों में डेटा भ�
 msgid "Filled raster map is: %s"
 msgstr "भरा हुआ रेखापुंज मानचित्र है: %s"
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+#, fuzzy
+#| msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr "निम्नलिखित छेद जहां नहीं भरे गए हैं। अधूरे छिद्रों की जांच की अनुमति देने के लिए अस्थायी मानचित्र छोड़े गए हैं"
 
 msgid "Output can be written only to the current mapset"
@@ -24071,50 +24162,60 @@ msgstr "डिप -90 और 90 के बीच होना चाहिए।
 msgid "azimuth must be between 0 and 360"
 msgstr "अज़ीमुथ 0 और 360 के बीच होना चाहिए"
 
-msgid "xy-locations are not supported"
-msgstr "xy-स्थान समर्थित नहीं हैं"
-
-msgid "Need projected data with grids in meters"
+#, fuzzy
+#| msgid "Need projected data with grids in meters"
+msgid ""
+"xy-locations are not supported\n"
+"Need projected data with grids in meters"
 msgstr "मीटर में ग्रिड के साथ अनुमानित डेटा की आवश्यकता है"
-
-msgid "flags c and d are mutually exclusive"
-msgstr "झंडे सी और डी परस्पर अनन्य हैं"
-
-#, python-format
-msgid "Temporary raster map <%s> exists"
-msgstr "अस्थायी रेखापुंज मानचित्र <%s> मौजूद है"
-
-msgid "Generating a clumped raster file including diagonal neighbors..."
-msgstr "विकर्ण पड़ोसियों सहित एक गुच्छित रेखापुंज फ़ाइल उत्पन्न कर रहा है..।"
-
-msgid "Generating a clumped raster file ..."
-msgstr "एक गुच्छित रेखापुंज फ़ाइल उत्पन्न हो रही है..।"
-
-#, python-format
-msgid "Generating a reclass map with area size less than or equal to %f hectares..."
-msgstr "%f हेक्टेयर से कम या उसके बराबर क्षेत्र आकार वाला एक पुनर्वर्गीकृत मानचित्र तैयार किया जा रहा है..।"
-
-#, python-format
-msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
-msgstr "%f हेक्टेयर से अधिक या उसके बराबर क्षेत्र आकार वाला एक पुनर्वर्गीकृत मानचित्र तैयार किया जा रहा है..।"
-
-#, python-format
-msgid "No areas of size less than or equal to %f hectares found."
-msgstr "%f हेक्टेयर से कम या उसके बराबर आकार का कोई क्षेत्र नहीं मिला।"
-
-#, python-format
-msgid "No areas of size greater than or equal to %f hectares found."
-msgstr "%f हेक्टेयर से अधिक या उसके बराबर आकार का कोई क्षेत्र नहीं मिला।"
 
 msgid "Latitude-longitude locations are not supported"
 msgstr "अक्षांश-देशांतर स्थान समर्थित नहीं हैं"
 
-msgid "You have to specify mode='lesser' with method='rmarea'"
-msgstr "आपको mode='rmarea' के साथ mode='lesser' निर्दिष्ट करना होगा"
+msgid "xy-locations are not supported"
+msgstr "xy-स्थान समर्थित नहीं हैं"
+
+#, fuzzy
+#| msgid "Generating a clumped raster file ..."
+msgid "Generating a clumped raster file"
+msgstr "एक गुच्छित रेखापुंज फ़ाइल उत्पन्न हो रही है..।"
+
+#, fuzzy
+#| msgid "Clumps including diagonal neighbors"
+msgid " including diagonal neighbors"
+msgstr "विकर्ण पड़ोसियों सहित झुरमुट"
 
 #, python-format
-msgid "Generating output raster map <%s>..."
-msgstr "आउटपुट रैस्टर मैप जेनरेट किया जा रहा है <%s>..।"
+msgid " with minimum %s pixels"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generating reclass maps"
+msgid "Generating a reclass map with area size"
+msgstr "पुनर्वर्गीकृत मानचित्र तैयार करना"
+
+#, fuzzy, python-format
+#| msgid "No areas of size greater than or equal to %f hectares found."
+msgid " larger than or equal to %f hectares..."
+msgstr "%f हेक्टेयर से अधिक या उसके बराबर आकार का कोई क्षेत्र नहीं मिला।"
+
+#, fuzzy, python-format
+#| msgid "No areas of size less than or equal to %f hectares found."
+msgid " smaller than or equal to %f hectares..."
+msgstr "%f हेक्टेयर से कम या उसके बराबर आकार का कोई क्षेत्र नहीं मिला।"
+
+#, fuzzy
+#| msgid "area size"
+msgid "No areas of size "
+msgstr "क्षेत्र का आकार"
+
+#, fuzzy, python-format
+#| msgid "Raster map <%s> is of type FCELL_TYPE -- precision may be lost"
+msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
+msgstr "रेखापुंज मानचित्र <%s> FCELL_TYPE प्रकार का है - सटीकता खो सकती है"
+
+msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
+msgstr ""
 
 msgid "No semantic label assigned to <{}>"
 msgstr "<{}> को कोई सिमेंटिक लेबल नहीं सौंपा गया"
@@ -24537,6 +24638,15 @@ msgid ""
 "{error}"
 msgstr "एक प्रसंस्करण चरण विफल रहा. उपरोक्त त्रुटि संदेशों की जाँच करें और निम्नलिखित विवरण देखें:\\n{error}"
 
+msgid "Cannot mix metrics from different feature types: {}. Results are merged by category, so combining e.g. line and area metrics would produce misleading records. Run v.geometry separately for each feature type."
+msgstr ""
+
+msgid "More units ({}) than metrics ({}) specified"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long, got: {}"
+msgstr ""
+
 #, python-format
 msgid "Missing value for parameter <%s>"
 msgstr "पैरामीटर <%s> के लिए गुम मान"
@@ -24845,11 +24955,28 @@ msgstr "वेक्टर मानचित्र <%s> और रेखाप�
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr "वर्तमान मैपसेट के लिए सामान्य टेम्पोरल जीआईएस डेटाबेस कनेक्शन प्रिंट/सेट करता है।"
 
+#, fuzzy
+#| msgid "plain;Plain text output;shell;shell script style output;json;JSON (JavaScript Object Notation);"
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr "सादा; सादा पाठ आउटपुट; शेल; शेल स्क्रिप्ट शैली आउटपुट; json; JSON (जावास्क्रिप्ट ऑब्जेक्ट नोटेशन);"
+
 msgid "Overwrite current settings if initialized"
 msgstr "यदि प्रारंभ किया गया है तो वर्तमान सेटिंग्स को अधिलेखित करें"
 
-msgid "Print current connection parameter in shell style and exit"
-msgstr "वर्तमान कनेक्शन पैरामीटर को शेल शैली में प्रिंट करें और बाहर निकलें"
+#, fuzzy
+#| msgid "Name of raster map(s) to include in group"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "समूह में शामिल करने के लिए रेखापुंज मानचित्र(मानचित्रों) का नाम"
+
+#, fuzzy
+#| msgid "'.' for current mapset; '*' for all mapsets in location"
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr "'.' वर्तमान मैपसेट के लिए; स्थान के सभी मैपसेट के लिए '*'"
+
+#, fuzzy
+#| msgid "This option requires four columns"
+msgid "The mapset option requires format=json."
+msgstr "इस विकल्प के लिए चार कॉलम की आवश्यकता है"
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr "टेम्पोरल जीआईएस डेटाबेस कनेक्शन परिभाषित नहीं है। टी.कनेक्ट चलाएँ।"
@@ -25279,6 +25406,10 @@ msgstr "सीएसवी प्रारूप का उपयोग -बी 
 
 msgid "The 'list' format can only be used with the -b flag. Please use -b to enable list output."
 msgstr "'सूची' प्रारूप का उपयोग केवल -b ध्वज के साथ किया जा सकता है। कृपया सूची आउटपुट सक्षम करने के लिए -b का उपयोग करें।"
+
+#, c-format
+msgid "No records selected from table <%s>"
+msgstr "तालिका <%s> से कोई रिकॉर्ड चयनित नहीं"
 
 msgid "Unable to sort array of values"
 msgstr "मानों की सारणी को क्रमबद्ध करने में असमर्थ"
@@ -31065,6 +31196,11 @@ msgid_plural "%d boundaries snapped"
 msgstr[0] ""
 msgstr[1] ""
 
+#, fuzzy, c-format
+#| msgid "Merging segments smaller than %d cells..."
+msgid "Removing areas smaller than %g sqm..."
+msgstr "%d कोशिकाओं से छोटे खंडों को विलय करना..।"
+
 #, c-format
 msgid "Querying vector map <%s>..."
 msgstr "वेक्टर मानचित्र को क्वेरी करना <%s>..।"
@@ -31144,6 +31280,14 @@ msgstr "सीमाओं के लिए तड़क-भड़क वाल�
 
 msgid "Disable snapping with snap <= 0"
 msgstr "स्नैप <= 0 के साथ स्नैपिंग अक्षम करें"
+
+#, fuzzy
+#| msgid "Minimum size of area to be imported (square meters)"
+msgid "Minimum size of areas to keep in square meters"
+msgstr "आयात किए जाने वाले क्षेत्र का न्यूनतम आकार (वर्ग मीटर)"
+
+msgid "Enable with minsize > 0"
+msgstr ""
 
 #, c-format
 msgid "Unknown operator '%s'"
@@ -31245,6 +31389,11 @@ msgstr "फ़ाइलों को मौजूदा फ़ाइल मे�
 msgid "Missing attribute table for vector map <%s>"
 msgstr "वेक्टर मानचित्र <%s> के लिए अनुपलब्ध विशेषता तालिका"
 
+#, fuzzy
+#| msgid "Too many units to place"
+msgid "Too many columns to copy the table"
+msgstr "रखने के लिए बहुत सारी इकाइयाँ"
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr "<%s> के लिए गुम तालिका"
@@ -31298,6 +31447,11 @@ msgstr "हेडर जानकारी को भी संपादित �
 #, c-format
 msgid "%d vector maps patched"
 msgstr "%d वेक्टर मानचित्र पैच किए गए"
+
+#, fuzzy
+#| msgid "Too many column names"
+msgid "Too many columns to copy records"
+msgstr "बहुत सारे स्तंभ नाम"
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"
@@ -31640,10 +31794,6 @@ msgstr "या तो '%s' या '%s' निर्दिष्ट किया 
 #, c-format
 msgid "Database connection not defined for layer %s"
 msgstr "परत %s के लिए डेटाबेस कनेक्शन परिभाषित नहीं है"
-
-#, c-format
-msgid "No records selected from table <%s>"
-msgstr "तालिका <%s> से कोई रिकॉर्ड चयनित नहीं"
 
 msgid "Key column type is not integer"
 msgstr "कुंजी स्तंभ प्रकार पूर्णांक नहीं है"
@@ -33360,9 +33510,6 @@ msgstr "तालिका की प्रतिलिपि नहीं ब�
 msgid "Pass %d"
 msgstr "पास %d"
 
-msgid "Node is outside any input area"
-msgstr "नोड किसी भी इनपुट क्षेत्र के बाहर है"
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -33740,6 +33887,43 @@ msgstr "पीएनजी ड्राइवर से बीएमपी छ�
 
 msgid "Image file"
 msgstr "छवि फ़ाइल"
+
+#~ msgid "flags c and d are mutually exclusive"
+#~ msgstr "झंडे सी और डी परस्पर अनन्य हैं"
+
+#, python-format
+#~ msgid "Temporary raster map <%s> exists"
+#~ msgstr "अस्थायी रेखापुंज मानचित्र <%s> मौजूद है"
+
+#~ msgid "Generating a clumped raster file including diagonal neighbors..."
+#~ msgstr "विकर्ण पड़ोसियों सहित एक गुच्छित रेखापुंज फ़ाइल उत्पन्न कर रहा है..।"
+
+#, python-format
+#~ msgid "Generating a reclass map with area size less than or equal to %f hectares..."
+#~ msgstr "%f हेक्टेयर से कम या उसके बराबर क्षेत्र आकार वाला एक पुनर्वर्गीकृत मानचित्र तैयार किया जा रहा है..।"
+
+#, python-format
+#~ msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
+#~ msgstr "%f हेक्टेयर से अधिक या उसके बराबर क्षेत्र आकार वाला एक पुनर्वर्गीकृत मानचित्र तैयार किया जा रहा है..।"
+
+#~ msgid "You have to specify mode='lesser' with method='rmarea'"
+#~ msgstr "आपको mode='rmarea' के साथ mode='lesser' निर्दिष्ट करना होगा"
+
+#, python-format
+#~ msgid "Generating output raster map <%s>..."
+#~ msgstr "आउटपुट रैस्टर मैप जेनरेट किया जा रहा है <%s>..।"
+
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "आँकड़ों की गणना के लिए क्षेत्रों के साथ रेखापुंज मानचित्र (सेल होना आवश्यक है)"
+
+#~ msgid "Print current connection parameter in shell style and exit"
+#~ msgstr "वर्तमान कनेक्शन पैरामीटर को शेल शैली में प्रिंट करें और बाहर निकलें"
+
+#~ msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+#~ msgstr "एक नया प्रोजेक्ट बनाएं और उसमें डेटा आयात करें। जब कोई नया प्रोजेक्ट बनाया जाए तो इस मॉड्यूल को समानांतर में न चलाएं या इसे बाधित न करें"
+
+#~ msgid "Node is outside any input area"
+#~ msgstr "नोड किसी भी इनपुट क्षेत्र के बाहर है"
 
 #~ msgid "Time used for iterations [minutes]"
 #~ msgstr "पुनरावृत्तियों के लिए उपयोग किया गया समय [मिनट]"

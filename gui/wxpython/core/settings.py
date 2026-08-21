@@ -272,6 +272,9 @@ class Settings:
                 "interactiveInput": {
                     "enabled": True,
                 },
+                "pythonAPI": {
+                    "selection": 0,
+                },
             },
             #
             # d.rast
@@ -802,6 +805,12 @@ class Settings:
             "quiet",
         )
 
+        self.internalSettings["cmd"]["pythonAPI"]["choices"] = (
+            _("Tools API"),
+            _("Script API"),
+            _("PyGRASS API"),
+        )
+
         self.internalSettings["appearance"]["iconTheme"]["choices"] = ("grass",)
         self.internalSettings["appearance"]["menustyle"]["choices"] = (
             _("Classic (labels only)"),
@@ -884,6 +893,7 @@ class Settings:
         self.internalSettings["modeler"]["grassAPI"]["choices"] = (
             _("Script package"),
             _("PyGRASS"),
+            _("GRASS Tools"),
         )
 
     def ReadSettingsFile(self, settings=None):
@@ -992,12 +1002,12 @@ class Settings:
             with open(self.filePath, "w") as f:
                 json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)
         except OSError as e:
-            raise GException(e)
+            raise GException(e) from e
         except Exception as e:
             raise GException(
                 _("Writing settings to file <%(file)s> failed.\n\nDetails: %(detail)s")
                 % {"file": self.filePath, "detail": e}
-            )
+            ) from e
         return self.filePath
 
     def _parseValue(self, value, read=False):
@@ -1099,10 +1109,10 @@ class Settings:
             settings[group][key][subkey] = value
             return
 
-        except KeyError:
+        except KeyError as e:
             raise GException(
                 "%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey)
-            )
+            ) from e
 
     def Append(self, dict, group, key, subkey, value, overwrite=True):
         """Set value of key/subkey
