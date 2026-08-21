@@ -23,7 +23,7 @@ import grass.script as gs
 import grass.temporal as tgis
 from grass.exceptions import FatalError
 from main_window.page import MainPageBase
-from core.gcmd import RunCommand, GException, GWarning
+from core.gcmd import RunCommand, GWarning
 from gui_core.widgets import IntegerValidator
 from gui_core.wrap import StaticText, TextCtrl, Slider
 
@@ -124,11 +124,12 @@ class AnimationToolPanel(wx.Panel, MainPageBase):
     def OnSize(self, event):
         """Lay the managed panes out again when the panel is resized.
 
-        Dragging the notebook tab moves and reparents the panel. Without this
-        the panes keep the layout they had before the drag until some other
-        event happens to force an update.
+        The panes do not follow on their own when the notebook tab is dragged.
+        The check is needed because a resize can still arrive after
+        OnCloseWindow has called UnInit() on the manager.
         """
-        self._mgr.Update()
+        if self._mgr.GetManagedWindow():
+            self._mgr.Update()
         event.Skip()
 
     def SetStatusText(self, text):
@@ -374,32 +375,6 @@ class AnimationToolPanel(wx.Panel, MainPageBase):
                 self.controller.timer.Stop()
         if hasattr(self, "TMP_DIR"):
             CleanUp(self.TMP_DIR)()
-
-    def LoadDataset(self, stds_type, dataset):
-        """Load a space time dataset into the first animation slot."""
-        if stds_type == "str3ds":
-            GWarning(
-                parent=self,
-                message=_("3D raster animation is not supported."),
-            )
-            return
-
-        from animation.data import AnimLayer
-        from core.layerlist import LayerList
-
-        layerList = LayerList()
-        layer = AnimLayer()
-        layer.mapType = stds_type
-        try:
-            layer.name = dataset
-        except GException as e:
-            GWarning(parent=self, message=str(e))
-            return
-
-        layer.cmd = ["d.rast", "map="] if stds_type == "strds" else ["d.vect", "map="]
-        layerList.AddLayer(layer)
-
-        self.SetAnimations([layerList] + [None] * (MAX_COUNT - 1))
 
 
 class AnimationsPanel(wx.Panel):

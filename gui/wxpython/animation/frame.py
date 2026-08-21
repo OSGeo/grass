@@ -28,9 +28,8 @@ __all__ = ["MAX_COUNT", "AnimationFrame"]
 class AnimationFrame(wx.Frame):
     """Window hosting the animation panel.
 
-    Used when the tool runs on its own, that is from g.gui.animation and from
-    the multi-window layout. The Single-Window layout adds the panel to its
-    notebook instead, see main_window.frame.MainFrame.OnAnimationTool.
+    Used by g.gui.animation, a separate process, and by multi-window mode,
+    a separate window. Single-window mode puts the panel in its notebook.
     """
 
     def __init__(
