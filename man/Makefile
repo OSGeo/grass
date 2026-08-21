@@ -33,6 +33,7 @@ DSTFILES := \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
 	$(MDDIR)/source/index.md \
+	$(MDDIR)/overrides/main.html \
 	$(MDDIR)/overrides/partials/copyright.html \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
@@ -295,6 +296,12 @@ $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(M
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/scripts:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/main.html: mkdocs/overrides/main.html | $(MDDIR)/overrides
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides:
 	$(MKDIR) $@
 
 $(MDDIR)/overrides/partials/copyright.html: mkdocs/overrides/partials/copyright.html | $(MDDIR)/overrides/partials
