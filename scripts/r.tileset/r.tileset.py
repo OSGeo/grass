@@ -9,11 +9,10 @@
 #
 # PURPOSE:      To produce tilings of regions in other projections.
 #
-# COPYRIGHT:    (C) 2006-2009 by Cedric Shoc, Martin Landa, and GRASS development team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2006-2009 Cedric Shoc
+# SPDX-FileCopyrightText: 2006-2009 Martin Landa
+# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
