@@ -23,10 +23,12 @@ import grass.script as gs
 import grass.temporal as tgis
 from grass.exceptions import FatalError
 from main_window.page import MainPageBase
-from core.gcmd import RunCommand, GWarning
+from core.gcmd import RunCommand, GError, GWarning
+from core.layerlist import LayerList
 from gui_core.widgets import IntegerValidator
 from gui_core.wrap import StaticText, TextCtrl, Slider
 
+from animation.data import AnimLayer
 from animation.mapwindow import AnimationWindow
 from animation.provider import BitmapProvider, BitmapPool, MapFilesPool, CleanUp
 from animation.controller import AnimationController
@@ -232,6 +234,26 @@ class AnimationToolPanel(wx.Panel, MainPageBase):
         :param layerLists: list of layerLists
         """
         self.controller.SetAnimations(layerLists)
+
+    def AnimateStds(self, name, stds_type):
+        """Animate a space time dataset, replacing the current animations
+
+        :param name: name of the dataset including the mapset
+        :param stds_type: type of the dataset, 'strds' or 'stvds'
+        """
+        layer = AnimLayer()
+        layer.mapType = stds_type
+        try:
+            layer.name = name
+        except ValueError as e:
+            GError(parent=self, message=str(e), showTraceback=False)
+            return
+
+        layer.cmd = [{"strds": "d.rast", "stvds": "d.vect"}[stds_type], "map="]
+
+        layerList = LayerList()
+        layerList.AddLayer(layer)
+        self.SetAnimations([layerList] + [None] * (MAX_COUNT - 1))
 
     def OnAddAnimation(self, event):
         self.controller.AddAnimation()
