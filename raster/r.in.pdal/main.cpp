@@ -662,12 +662,6 @@ int main(int argc, char *argv[])
         /* align to current region */
         Rast_align_window(&region, &loc_wind);
     }
-    if (base_rast_res_flag->answer) {
-        Rast_get_cellhd(base_raster_opt->answer, "", &input_region);
-        region.ns_res = input_region.ns_res;
-        region.ew_res = input_region.ew_res;
-        G_adjust_Cell_head(&region, 0, 0);
-    }
 
     Rast_set_output_window(&region);
     rows = region.rows;
