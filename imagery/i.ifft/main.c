@@ -124,13 +124,13 @@ int main(int argc, char *argv[])
     /* get the rows and columns in the current window */
     rows = Rast_window_rows();
     cols = Rast_window_cols();
-    totsize = rows * cols;
+    totsize = (long)rows * cols;
 
     /* Allocate appropriate memory for the structure containing
        the real and complex components of the FFT.  DATA[0] will
        contain the real, and DATA[1] the complex component.
      */
-    data = G_malloc(rows * cols * 2 * sizeof(double));
+    data = G_malloc((size_t)rows * cols * 2 * sizeof(double));
 
     /* allocate the space for one row of cell map data */
     cell_real = Rast_allocate_d_buf();
