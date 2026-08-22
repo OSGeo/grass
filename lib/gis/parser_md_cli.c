@@ -5,10 +5,8 @@
 
    (C) 2025 by the GRASS Development Team
 
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
-
-   \author Vaclav Petras
+    SPDX-License-Identifier: GPL-2.0-or-later
+\author Vaclav Petras
  */
 #include <stdio.h>
 #include <string.h>

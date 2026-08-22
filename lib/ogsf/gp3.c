@@ -7,10 +7,8 @@
 
    (C) 1999-2008, 2011 by the GRASS Development Team
 
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
-
-   \author Bill Brown USACERL, GMSL/University of Illinois (January 1994)
+    SPDX-License-Identifier: GPL-2.0-or-later
+\author Bill Brown USACERL, GMSL/University of Illinois (January 1994)
    \author Updated by Martin Landa <landa.martin gmail.com>
    (doxygenized in May 2008, thematic mapping in June 2011)
  */
