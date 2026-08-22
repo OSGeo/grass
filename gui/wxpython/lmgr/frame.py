@@ -1778,7 +1778,10 @@ class GMFrame(wx.Frame):
         win.Show()
 
     def OnAnimationTool(self, event=None, cmd=None):
-        """Launch Animation tool. See OnIClass documentation."""
+        """Launch Animation tool. See OnIClass documentation.
+
+        :return: the animation window, so that a caller can load data into it
+        """
         from animation.frame import AnimationFrame
 
         frame = AnimationFrame(parent=self, giface=self._giface)
@@ -1803,6 +1806,8 @@ class GMFrame(wx.Frame):
                 layer.cmd = ["d.rast", "map="]
                 layerList.AddLayer(layer)
                 frame.SetAnimations([layerList, None, None, None])
+
+        return frame
 
     def OnTimelineTool(self, event=None, cmd=None):
         """Launch Timeline Tool"""

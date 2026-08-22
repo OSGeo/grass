@@ -69,6 +69,14 @@ class AnimationFrame(wx.Frame):
         """
         self.panel.SetAnimations(layerLists)
 
+    def AnimateStds(self, name, stds_type):
+        """Animate a space time dataset, replacing the current animations
+
+        :param name: name of the dataset including the mapset
+        :param stds_type: type of the dataset, 'strds' or 'stvds'
+        """
+        self.panel.AnimateStds(name, stds_type)
+
     def OnCloseWindow(self, event):
         """Clean up and close.
 

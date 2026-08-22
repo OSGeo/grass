@@ -2763,6 +2763,27 @@ class DataCatalogTree(TreeView):
         ]
         self._giface.RunCmd(["g.gui.timeline", f"inputs={','.join(inputs)}"])
 
+    def OnDisplayAnimation(self, event):
+        """Animate the selected dataset in the Animation Tool"""
+        stds_node = self.selected_stds[0]
+        mapset_node = self.selected_mapset[0]
+
+        if isinstance(self._giface, StandaloneGrassInterface):
+            # There is no main window to add a page to, so the tool gets its
+            # own window, the same way as when started by g.gui.animation.
+            from animation.frame import AnimationFrame
+
+            animation = AnimationFrame(parent=self, giface=self._giface)
+            animation.CentreOnScreen()
+            animation.Show()
+        else:
+            animation = self._giface.lmgr.OnAnimationTool()
+
+        animation.AnimateStds(
+            f"{stds_node.data['name']}@{mapset_node.data['name']}",
+            stds_node.data["type"],
+        )
+
     def OnUpdateMetadata(self, event):
         """Launch t.support dialog to update dataset metadata"""
         stds_node = self.selected_stds[0]
@@ -2901,6 +2922,7 @@ class DataCatalogTree(TreeView):
 
         is_active = self.selected_mapset[0] == self.current_mapset_node
         is_accessible = self._selectedStdsAreAccessible()
+        stds_type = self.selected_stds[0].data["type"]
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Register maps"))
         menu.AppendItem(item)
@@ -2922,6 +2944,15 @@ class DataCatalogTree(TreeView):
         self.Bind(wx.EVT_MENU, self.OnDisplayTemporalExtent, item)
         item.Enable(HAS_MATPLOTLIB and is_accessible)
 
+        item = wx.MenuItem(menu, wx.ID_ANY, _("Display &animation"))
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, self.OnDisplayAnimation, item)
+        item.Enable(
+            is_accessible
+            and stds_type in {"strds", "stvds"}
+            and bool(self.selected_stds[0].children)
+        )
+
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename dataset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameStds, item)
@@ -2937,7 +2968,6 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Export dataset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnExportStds, item)
-        stds_type = self.selected_stds[0].data["type"]
         item.Enable(is_accessible and stds_type in {"strds", "stvds"})
 
         menu.AppendSeparator()
