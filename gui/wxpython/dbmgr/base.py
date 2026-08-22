@@ -185,7 +185,7 @@ class VirtualAttributeList(
         if settings:
             mapsetPath = self._getMapsetPath()
             mapsetPathHiddenColsSettings = settings.get(mapsetPath)
-            if currentVectMap:
+            if currentVectMap and mapsetPathHiddenColsSettings:
                 return mapsetPathHiddenColsSettings.get(self.dbMgrData["vectName"])
             return mapsetPathHiddenColsSettings
 
