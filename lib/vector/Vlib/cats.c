@@ -511,6 +511,14 @@ int Vect_cat_list_to_array(const struct cat_list *list, int **vals, int *nvals)
         n_cats += n;
     }
 
+    /* an empty list yields an empty array; without this, cats is still
+       NULL here and cats[0] below is a null pointer dereference */
+    if (n_cats == 0) {
+        *vals = NULL;
+        *nvals = 0;
+        return 0;
+    }
+
     /* sort array */
     qsort(cats, n_cats, sizeof(int), cmp);
 
