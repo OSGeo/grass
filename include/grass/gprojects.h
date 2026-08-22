@@ -48,6 +48,15 @@ struct pj_info {
     char *wkt;
 };
 
+/* Per-thread clone of a transform, filled by GPJ_clone_transform() and
+ * released by GPJ_free_transform_clone(). Bundles the cloned transform with
+ * the private PROJ context it was cloned into, so ownership is a single unit.
+ */
+struct gpj_transform_clone {
+    struct pj_info info;
+    PJ_CONTEXT *ctx;
+};
+
 struct gpj_datum {
     char *name, *longname, *ellps;
     double dx, dy, dz;

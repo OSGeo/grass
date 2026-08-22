@@ -41,3 +41,13 @@ def session_3857(gisdbase_with_source):
         gisdbase_with_source / "dst3857", env=os.environ.copy()
     ) as session:
         yield session
+
+
+@pytest.fixture(scope="session")
+def session_pole(gisdbase_with_source):
+    """Active session in an EPSG:3413 (north polar stereographic) project."""
+    gs.create_project(gisdbase_with_source / "dst_pole", epsg="3413")
+    with gs.setup.init(
+        gisdbase_with_source / "dst_pole", env=os.environ.copy()
+    ) as session:
+        yield session
