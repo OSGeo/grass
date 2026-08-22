@@ -205,8 +205,9 @@ class VirtualAttributeList(
                 if self._colExist(colName):
                     # Get column order
                     colOrder = self.GetColOrder(colName)
-                    # Delete column data
-                    self.DeleteColumnWithData(colOrder)
+                    if colOrder:
+                        # Delete column data
+                        self.DeleteColumnWithData(colOrder)
 
     def ShowAllCols(self):
         """Show all columns"""
@@ -906,12 +907,12 @@ class VirtualAttributeList(
         """Hide column"""
         # Get column order
         colOrder = self.GetColOrder(colName=self.GetColumn(self._col).GetText())
-
-        self._updateHiddenColsSettings(
-            colName=self.GetColumn(self._col).GetText(),
-            colOrder=self._col,
-        )
-        self.DeleteColumnWithData(colOrder)
+        if colOrder:
+            self._updateHiddenColsSettings(
+                colName=self.GetColumn(self._col).GetText(),
+                colOrder=self._col,
+            )
+            self.DeleteColumnWithData(colOrder)
 
     def OnShowColumn(self, event):
         """Show column"""
