@@ -255,6 +255,13 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # cplanes cannot be initialized now
         wx.CallLater(1000, self.InitCPlanes)
 
+    def dockPage(self):
+        """Prevent show 'window must be shown' error message during
+        docking undocked 3D view window
+        """
+        self.Unbind(wx.EVT_SIZE)
+        wx.CallLater(1000, self.Bind, wx.EVT_SIZE, self.OnSize)
+
     def _warningDepthBuffer(self):
         if not self.initView:
             message = _(
