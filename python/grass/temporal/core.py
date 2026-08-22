@@ -642,6 +642,7 @@ def init(
     # Set defaults for the TGIS DB (overwritten later if initialized)
     tgis_backend = "sqlite"
     tgis_database_string = None
+    tgis_dbmi_paramstyle = "qmark"
 
     # Set the global variable for faster access
     current_mapset = new_mapset
@@ -1170,6 +1171,31 @@ class SQLDatabaseInterfaceConnection:
             self.unique_connections[key].close()
 
         self.connected = False
+
+    def add_mapset(self, mapset):
+        """Ensure the temporal database of the given mapset is part of this
+        connection, so datasets can be accessed by fully qualified name
+        (name@mapset) even when the mapset is not on the current search path.
+
+        The method is idempotent: mapsets already known to the connection are
+        left untouched. If the mapset has no accessible temporal database, it
+        is not added and a later query against it fails with the usual error.
+        """
+        mapset = decode(mapset)
+        if mapset in self.tgis_mapsets:
+            return
+        new_mapsets = get_available_temporal_mapsets(mapset)
+        if mapset not in new_mapsets:
+            return
+        driver, dbstring = new_mapsets[mapset]
+        self.tgis_mapsets[mapset] = (driver, dbstring)
+        if dbstring not in self.unique_connections:
+            self.unique_connections[dbstring] = DBConnection(
+                backend=driver, dbstring=dbstring
+            )
+        self.connections[mapset] = self.unique_connections[dbstring]
+        if self.connected and not self.connections[mapset].is_connected():
+            self.connections[mapset].connect(dbstring)
 
     def mogrify_sql_statement(self, content, mapset=None):
         """Return the SQL statement and arguments as executable SQL string
