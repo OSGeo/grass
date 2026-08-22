@@ -257,7 +257,7 @@ class Settings:
                 "encoding": {
                     "value": "",
                 },
-                "enableHiddenCols": {"enabled": False},
+                "enableHiddenCols": {"enabled": True},
                 "hiddenCols": {},
             },
             #
