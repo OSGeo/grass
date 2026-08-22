@@ -34,6 +34,7 @@
 # % description: Type of the space time dataset or map, default is strds
 # % guisection: Selection
 # % required: no
+# % multiple: yes
 # % options: strds, str3ds, stvds, raster, raster_3d, vector
 # % answer: strds
 # %end
@@ -64,7 +65,7 @@
 # % guisection: Selection
 # % required: no
 # % multiple: yes
-# % options: id,name,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
+# % options: id,name,type,semantic_type,semantic_label,creator,mapset,number_of_maps,creation_time,start_time,end_time,north,south,west,east,granularity,all
 # % answer:
 # %end
 
@@ -112,7 +113,7 @@ import grass.script as gs
 def main():
 
     # Get the options
-    stds_type = options["type"]
+    stds_type = options["type"].split(",")
     temporal_type = options["temporaltype"]
     columns = options["columns"]
     order = options["order"]
@@ -143,18 +144,40 @@ def main():
     elif output_format == "line":
         if colhead:
             gs.fatal(_("Column names are not allowed with line format"))
+        if len(stds_type) > 1:
+            gs.fatal(_("Only one type is allowed for line format"))
         if not separator:
             separator = ","
         columns_list = columns.split(",") if columns else []
-        if len(columns_list) > 1:
-            gs.fatal(
-                _(
-                    "Only one column is allowed for line format (not {num_columns})"
-                ).format(num_columns=len(columns_list))
-            )
+        if columns == "all" or len(columns_list) > 1:
+            gs.fatal(_("Only one column is allowed for line format"))
 
     elif not separator:
         separator = "|"
+
+    if set(stds_type) & {"raster", "raster_3d", "vector"} and set(stds_type) & {
+        "strds",
+        "str3ds",
+        "stvds",
+    }:
+        gs.fatal(
+            _(
+                "Combinations across space time datasets and time stamped maps "
+                "(e.g., raster and strds) are not allowed"
+            )
+        )
+    if columns and "type" in columns.split(","):
+        cols_list = [c.strip() for c in columns.split(",") if c.strip() != "type"]
+        if not cols_list:
+            gs.fatal(_("Column 'type' cannot be requested alone"))
+        columns_for_db = ",".join(cols_list)
+    else:
+        columns_for_db = columns
+
+    # If only one type is requested and 'type' is not in columns, pass it as a string
+    # so get_dataset_list doesn't implicitly inject the 'type' column.
+    if len(stds_type) == 1 and not (columns and "type" in columns.split(",")):
+        stds_type = stds_type[0]
 
     # Lazy import and initialize TGIS
     import grass.temporal as tgis
@@ -186,86 +209,102 @@ def main():
     line_output = []
     first = True
 
-    if gs.verbosity() > 0 and not outpath and output_format == "plain":
-        sys.stderr.write("----------------------------------------------\n")
-
-    # Replace separate "if outpath" and "else" blocks with a unified context manager:
     with (
-        open(outpath, "w")
-        if (outpath and outpath != "-")
-        else nullcontext(sys.stdout) as out_file
-    ):
+        open(outpath, "w") if (outpath and outpath != "-") else nullcontext(sys.stdout)
+    ) as out_file:
         for ttype in temporal_type.split(","):
             time = "absolute time" if ttype == "absolute" else "relative time"
             stds_list = tgis.get_dataset_list(
-                stds_type, ttype, columns, where, order, dbif=dbif
+                stds_type, ttype, columns_for_db, where, order, dbif=dbif
             )
 
             for mapset in dbif.tgis_mapsets:
                 rows = stds_list.get(mapset)
                 if rows:
-                    if (
-                        gs.verbosity() > 0
-                        and (not outpath or outpath == "-")
-                        and output_format == "plain"
-                    ):
-                        if stds_type in {"raster", "raster_3d", "vector"}:
-                            sys.stderr.write(
-                                _(
-                                    "Time stamped %s maps with %s available in mapset "
-                                    "<%s>:\n"
-                                )
-                                % (stds_type, time, mapset)
-                            )
+                    if output_format == "plain":
+                        if isinstance(stds_type, str):
+                            groups = [(stds_type, rows)]
                         else:
+                            rows_by_type = {}
+                            for r in rows:
+                                rows_by_type.setdefault(r["type"], []).append(r)
+                            groups = rows_by_type.items()
+                    else:
+                        # Process all rows together
+                        groups = [
+                            (
+                                rows[0]["type"]
+                                if not isinstance(stds_type, str)
+                                else stds_type,
+                                rows,
+                            )
+                        ]
+
+                    for dtype, current_rows in groups:
+                        if (
+                            gs.verbosity() > 0
+                            and (not outpath or outpath == "-")
+                            and output_format == "plain"
+                        ):
                             sys.stderr.write(
-                                _(
-                                    "Space time %s datasets with %s available in "
-                                    "mapset <%s>:\n"
+                                "----------------------------------------------\n"
+                            )
+                            if dtype in {"raster", "raster_3d", "vector"}:
+                                sys.stderr.write(
+                                    _(
+                                        "Time stamped %s maps with %s available"
+                                        " in mapset <%s>:\n"
+                                    )
+                                    % (dtype, time, mapset)
                                 )
-                                % (
-                                    stds_type,
-                                    time,
-                                    mapset,
+                            else:
+                                type_desc = {
+                                    "strds": "raster",
+                                    "stvds": "vector",
+                                    "str3ds": "3D raster",
+                                }.get(dtype, dtype)
+                                sys.stderr.write(
+                                    _(
+                                        "Space time %s datasets with %s available"
+                                        " in mapset <%s>:\n"
+                                    )
+                                    % (type_desc, time, mapset)
                                 )
+
+                        if output_format == "json":
+                            json_output.extend([dict(row) for row in current_rows])
+
+                        elif output_format == "line":
+                            line_output.extend(
+                                str(v)
+                                for row in current_rows
+                                for v in dict(row).values()
                             )
 
-                    if output_format == "json":
-                        for row in rows:
-                            json_output.append(dict(row))
-
-                    elif output_format == "line":
-                        line_output.extend([str(row[0]) for row in rows])
-
-                    else:
-                        if (colhead or output_format == "csv") and first:
-                            output = ""
-                            count = 0
-                            for col_key in rows[0].keys():
-                                output += (separator if count > 0 else "") + str(
-                                    col_key
+                        else:
+                            print_header = (output_format == "csv" and first) or (
+                                output_format == "plain" and colhead
+                            )
+                            if print_header:
+                                output = separator.join(
+                                    str(k) for k in current_rows[0].keys()
                                 )
-                                count += 1
-                            out_file.write(f"{output}\n")
-                            first = False
-
-                        for row in rows:
-                            output = ""
-                            count = 0
-                            for col in row:
-                                # If the database value is None, make it an empty string for csv
-                                if col is None:
-                                    cell_value = (
-                                        "" if output_format == "csv" else "None"
-                                    )
+                                out_file.write(f"{output}\n")
+                                if output_format == "csv":
+                                    first = False
                                 else:
-                                    cell_value = str(col)
+                                    colhead = False
 
-                                output += (separator if count > 0 else "") + cell_value
-                                count += 1
-                            out_file.write("{st}\n".format(st=output))
+                            for row in current_rows:
+                                output = separator.join(
+                                    ("" if output_format == "csv" else "None")
+                                    if v is None
+                                    else str(v)
+                                    for v in dict(row).values()
+                                )
+                                out_file.write(f"{output}\n")
 
-        # Dump the collected JSON and line data
+        # Dump the collected output
         if output_format == "json":
             out_file.write(json.dumps(json_output, indent=4, default=str) + "\n")
         elif output_format == "line":
