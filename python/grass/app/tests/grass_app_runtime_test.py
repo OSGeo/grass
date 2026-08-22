@@ -10,7 +10,12 @@ from pathlib import Path
 import pytest
 
 from grass.app import resource_paths
-from grass.app.runtime import RuntimePaths
+from grass.app.runtime import (
+    RuntimePaths,
+    set_dynamic_library_path,
+    set_executable_paths,
+    set_python_path_variable,
+)
 from grass.script.setup import get_install_path
 
 
@@ -201,3 +206,86 @@ def test_passing_non_existent_path(path_type):
     This is a non-FHS oriented test.
     """
     assert get_install_path(path_type("/does/not/exist")) == get_install_path()
+
+
+def test_executable_paths_added_once(tmp_path):
+    """Repeated calls do not add the executable paths again
+
+    A long-lived process such as a pytest run or a Jupyter kernel calls the
+    setup repeatedly on the same environment, and the variable used to grow
+    with every call.
+    """
+    env = {"PATH": "/usr/bin"}
+    set_executable_paths(str(tmp_path), str(tmp_path / "config"), env=env)
+    after_first = env["PATH"]
+    assert after_first != "/usr/bin"
+    assert after_first.endswith("/usr/bin")
+
+    set_executable_paths(str(tmp_path), str(tmp_path / "config"), env=env)
+    assert env["PATH"] == after_first
+
+
+def test_executable_paths_of_another_installation_are_added_in_front(tmp_path):
+    """Switching to another installation still puts its paths first"""
+    env = {"PATH": "/usr/bin"}
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    set_executable_paths(str(first), str(tmp_path / "config"), env=env)
+    set_executable_paths(str(second), str(tmp_path / "config"), env=env)
+
+    entries = env["PATH"].split(os.pathsep)
+    assert str(second / "bin") in entries
+    assert entries.index(str(second / "bin")) < entries.index(str(first / "bin"))
+
+
+def test_dynamic_library_path_added_once(tmp_path):
+    """Repeated calls do not add the library path again"""
+    env = {}
+    set_dynamic_library_path("LD_LIBRARY_PATH", str(tmp_path), env=env)
+    after_first = env["LD_LIBRARY_PATH"]
+
+    set_dynamic_library_path("LD_LIBRARY_PATH", str(tmp_path), env=env)
+    assert env["LD_LIBRARY_PATH"] == after_first
+
+
+def test_dynamic_library_path_has_no_empty_entry(tmp_path):
+    """An unset variable does not gain a leading empty entry
+
+    An empty entry in a library path is the current directory, which is not
+    what the setup means to add.
+    """
+    env = {}
+    set_dynamic_library_path("LD_LIBRARY_PATH", str(tmp_path), env=env)
+    assert env["LD_LIBRARY_PATH"] == os.path.join(str(tmp_path), "lib")
+    assert "" not in env["LD_LIBRARY_PATH"].split(os.pathsep)
+
+
+def test_dynamic_library_path_keeps_existing_value(tmp_path):
+    """An existing value is kept and the library path is added to it"""
+    env = {"LD_LIBRARY_PATH": "/existing/lib"}
+    set_dynamic_library_path("LD_LIBRARY_PATH", str(tmp_path), env=env)
+    assert env["LD_LIBRARY_PATH"].split(os.pathsep) == [
+        "/existing/lib",
+        os.path.join(str(tmp_path), "lib"),
+    ]
+
+
+def test_python_path_variable_added_once(tmp_path):
+    """Repeated calls do not add the Python path again"""
+    env = {}
+    set_python_path_variable(str(tmp_path), env=env)
+    after_first = env["PYTHONPATH"]
+    assert after_first == os.path.join(str(tmp_path), "etc", "python")
+
+    set_python_path_variable(str(tmp_path), env=env)
+    assert env["PYTHONPATH"] == after_first
+
+
+def test_python_path_variable_keeps_existing_value(tmp_path):
+    """An existing value is kept and the Python path is added in front"""
+    env = {"PYTHONPATH": "/existing/python"}
+    set_python_path_variable(str(tmp_path), env=env)
+    assert env["PYTHONPATH"].split(os.pathsep) == [
+        os.path.join(str(tmp_path), "etc", "python"),
+        "/existing/python",
+    ]

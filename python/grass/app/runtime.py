@@ -260,14 +260,25 @@ def append_left_addon_paths(paths, config_dir, env):
 
 
 def set_executable_paths(install_path, grass_config_dir, env):
-    """Add paths with executables to PATH in _env_"""
+    """Add paths with executables to PATH in _env_
+
+    Paths already present are not added again, so calling this repeatedly on
+    the same environment does not grow the variable. Paths from another
+    installation are still added in front of the existing ones.
+    """
     paths = collections.deque()
     # Addons
     append_left_addon_paths(paths, grass_config_dir, env=env)
     # Standard installation
     append_left_main_executable_paths(paths, install_path=install_path)
 
-    paths.append(env.get("PATH"))
+    existing = env.get("PATH") or ""
+    present = existing.split(os.pathsep) if existing else []
+    paths = [path for path in paths if path not in present]
+    if not paths:
+        return
+    if existing:
+        paths.append(existing)
     env["PATH"] = os.pathsep.join(paths)
 
 
@@ -323,16 +334,28 @@ def set_man_path(install_path, addon_base, env):
 
 
 def set_dynamic_library_path(variable_name, install_path, env):
-    """Define path to dynamic libraries (LD_LIBRARY_PATH on Linux)"""
-    if variable_name not in env:
-        env[variable_name] = ""
-    env[variable_name] += os.pathsep + os.path.join(install_path, "lib")
+    """Define path to dynamic libraries (LD_LIBRARY_PATH on Linux)
+
+    The path is not added again if it is already there, so calling this
+    repeatedly on the same environment does not grow the variable.
+    """
+    library_path = os.path.join(install_path, "lib")
+    existing = env.get(variable_name) or ""
+    if library_path in existing.split(os.pathsep):
+        return
+    # Assigning rather than appending to an empty value avoids a leading
+    # separator, which would be an empty entry meaning the current directory.
+    env[variable_name] = (
+        existing + os.pathsep + library_path if existing else library_path
+    )
 
 
 def set_python_path_variable(install_path, env):
     """Set PYTHONPATH to find GRASS Python package in subprocesses"""
     path = env.get("PYTHONPATH")
     etcpy = os.path.join(install_path, "etc", "python")
+    if path and etcpy in path.split(os.pathsep):
+        return
     path = etcpy + os.pathsep + path if path else etcpy
     env["PYTHONPATH"] = path
 
