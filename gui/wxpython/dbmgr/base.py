@@ -972,6 +972,21 @@ class VirtualAttributeList(
         """
         self._colSortFlag.extend([0] * (len(self.columns) - len(self._colSortFlag)))
 
+    def RefreshListMixColsLength(self):
+        currentVectMapsHiddenColsSettings = self._getHiddenColsSettings()
+        if currentVectMapsHiddenColsSettings:
+            currentTableColsSettings = currentVectMapsHiddenColsSettings.get(
+                self.mapDBInfo.layers[self.layer]["table"]
+            )
+            listmix.ColumnSorterMixin.SetColumnCount(
+                self,
+                len(self.columns) - len(currentTableColsSettings),
+            )
+
+    def SortListItems(self, *args, **kwargs):
+        self.RefreshListMixColsLength()
+        return super().SortListItems(*args, **kwargs)
+
 
 class DbMgrBase:
     def __init__(
