@@ -57,11 +57,11 @@ extern struct footprint *
 fp_create(const struct Cell_head *ohd, const struct Cell_head *ihd,
           const struct pj_info *oproj, const struct pj_info *iproj,
           const struct pj_info *tproj, const double *y_center);
-extern void fp_span(const struct footprint *g, int obr0, int obr1, int obc0,
-                    int obc1, int *imin, int *imax);
+extern void fp_span(const struct footprint *g, int first_row, int end_row,
+                    int first_col, int end_col, int *imin, int *imax);
 extern int fp_num_blocks(const struct footprint *g);
 extern int fp_block_start(const struct footprint *g, int b);
-extern int fp_band_geometry(const struct footprint *g, int obr0,
+extern int fp_band_geometry(const struct footprint *g, int first_row,
                             size_t cap_bytes, int out_mult, int cell_size,
                             int in_cols, int *tile_blocks_out,
                             int *worst_block_rows);

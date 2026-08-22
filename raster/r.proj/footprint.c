@@ -13,6 +13,10 @@
 
 #include "r.proj.h"
 
+/* The output is cut into nb column slices called blocks. A band is a
+   chunk of consecutive output rows processed together. A tile is one
+   band tall and k blocks wide and each tile is read as one strip. */
+
 /* Geographic poles that land inside the output map, each stored as its output
  * position and its input row. Empty when no pole lands inside. */
 struct pole_set {
@@ -34,10 +38,11 @@ struct footprint {
     struct fp_cell *cell; /* orows by nb cells in row major order */
 };
 
-/* A block's input row range comes from projecting just its first and last
-   column. A straight line between them would be exact, but projection
-   bends a little, so a column in the middle can land a fraction of a row
-   above or below those two points. The one row margin covers that. */
+/* A block's input row range comes from projecting its first and last
+   column. Those two samples give the exact range only when the input
+   row changes monotonically across the block. When it does not, a
+   middle column can sit a fraction of a row outside the two samples.
+   The margin below and the strip reload in main.c cover that case. */
 #define FP_SAMPLING_MARGIN 1.0
 
 /* When ocols does not divide evenly by nb, the extra columns are spread
@@ -56,10 +61,12 @@ static int block_of_col(const struct footprint *g, int c)
 
 /* Projects the center of output cell (r, c) to an input row index. Returns 0 on
  * a failed transform and leaves ri unchanged. */
-static int sample_ri(const struct Cell_head *ohd, const struct Cell_head *ihd,
-                     const struct pj_info *oproj, const struct pj_info *iproj,
-                     const struct pj_info *tproj, const double *y_center, int r,
-                     int c, double *ri)
+static int sample_row_index(const struct Cell_head *ohd,
+                            const struct Cell_head *ihd,
+                            const struct pj_info *oproj,
+                            const struct pj_info *iproj,
+                            const struct pj_info *tproj, const double *y_center,
+                            int r, int c, double *ri)
 {
     double xx = ohd->west + (c + 0.5) * ohd->ew_res;
     double yy = y_center[r];
@@ -77,14 +84,15 @@ static void fold_poles(const struct footprint *g, const struct Cell_head *ohd,
                        const struct pole_set *poles, int r, int b,
                        struct fp_cell *cell)
 {
+    if (!poles)
+        return;
+
     int c0 = block_first_col(g, b), c1 = block_first_col(g, b + 1), k;
     double x_lo = ohd->west + c0 * ohd->ew_res;
     double x_hi = ohd->west + c1 * ohd->ew_res;
     double y_lo = ohd->north - (r + 1) * ohd->ns_res;
     double y_hi = ohd->north - r * ohd->ns_res;
 
-    if (!poles)
-        return;
     for (k = 0; k < poles->n; k++) {
         if (poles->ox[k] < x_lo || poles->ox[k] > x_hi || poles->oy[k] < y_lo ||
             poles->oy[k] > y_hi)
@@ -117,6 +125,11 @@ static void build_pole_set(const struct Cell_head *ihd,
         if (GPJ_transform(oproj, iproj, tproj, PJ_INV, &px, &py, NULL) < 0 ||
             !isfinite(px) || !isfinite(py))
             continue;
+        /* The pole sits outside the input's latitude range while its
+           projected position still ends up inside an output cell. The two edge
+           samples of that cell never reach the top of the input, so this line
+           forces the first or last input row into the cell's range. Without
+           this the strip for the cell holding the pole is too short. */
         double ri = (ihd->north - polelat[p]) / ihd->ns_res;
         if (ri < 0)
             ri = 0;
@@ -137,6 +150,8 @@ static void apply_sampling_margin(struct footprint *g)
     for (i = 0; i < n; i++) {
         struct fp_cell *cell = &g->cell[i];
 
+        /* A cell stays empty when both of its boundary columns fail to
+           transform. */
         if (cell->rmax >= cell->rmin) {
             cell->rmin -= FP_SAMPLING_MARGIN;
             cell->rmax += FP_SAMPLING_MARGIN;
@@ -152,7 +167,7 @@ struct footprint *fp_create(const struct Cell_head *ohd,
                             const struct pj_info *iproj,
                             const struct pj_info *tproj, const double *y_center)
 {
-    struct footprint *g = G_malloc(sizeof(*g));
+    struct footprint *g = G_malloc(sizeof *g);
     struct pole_set poles;
     int r, b;
     double *bnd;
@@ -160,30 +175,29 @@ struct footprint *fp_create(const struct Cell_head *ohd,
     build_pole_set(ihd, oproj, iproj, tproj, &poles);
 
     g->orows = ohd->rows;
-    g->nb = ohd->cols < 32 ? ohd->cols : 32;
+    g->nb = MIN(ohd->cols, 32);
     g->ocols = ohd->cols;
     g->irows = ihd->rows;
-    g->cell = G_malloc((size_t)g->orows * g->nb * sizeof(struct fp_cell));
-    bnd = G_malloc((size_t)(g->nb + 1) * sizeof(double));
+    g->cell = G_malloc(sizeof *g->cell * (size_t)g->orows * g->nb);
+    /* nb blocks need nb plus 1 boundary columns. */
+    bnd = G_malloc(sizeof *bnd * ((size_t)g->nb + 1));
 
     for (r = 0; r < g->orows; r++) {
-        /* Sample the NB plus one block boundaries for this row. The last
-         * boundary uses the final valid column. */
+        /* Sample the number of blocks (g->nb) plus one boundary columns for
+         * this row. The last boundary is the final column. */
         int k;
 
         for (k = 0; k <= g->nb; k++) {
-            int c = block_first_col(g, k);
+            int c = k < g->nb ? block_first_col(g, k) : g->ocols - 1;
 
-            if (c > g->ocols - 1)
-                c = g->ocols - 1;
-            if (!sample_ri(ohd, ihd, oproj, iproj, tproj, y_center, r, c,
-                           &bnd[k]))
+            if (!sample_row_index(ohd, ihd, oproj, iproj, tproj, y_center, r, c,
+                                  &bnd[k]))
                 bnd[k] = DBL_MAX; /* a failed sample is left out of the range */
         }
         for (b = 0; b < g->nb; b++) {
             struct fp_cell *cell = &g->cell[(size_t)r * g->nb + b];
-            double lo = bnd[b] < bnd[b + 1] ? bnd[b] : bnd[b + 1];
-            double hi = bnd[b] > bnd[b + 1] ? bnd[b] : bnd[b + 1];
+            double lo = MIN(bnd[b], bnd[b + 1]);
+            double hi = MAX(bnd[b], bnd[b + 1]);
 
             cell->rmin = DBL_MAX;
             cell->rmax = -DBL_MAX;
@@ -205,23 +219,25 @@ struct footprint *fp_create(const struct Cell_head *ohd,
     return g;
 }
 
-/* Returns the input row span covering the output rectangle. Includes every
- * block the rectangle touches and adds a two cell margin. The grid holds one
- * row per output row, so every output row in the rectangle indexes a grid row.
- */
-void fp_span(const struct footprint *g, int obr0, int obr1, int obc0, int obc1,
-             int *imin, int *imax)
+/* Fills *imin and *imax with the input rows needed for the given output
+   rows and columns. end_row is one past the last row and end_col is one
+   past the last column, same as the loop bounds, so the last band ends
+   with end_row equal to orows. Looks at every grid cell in that rectangle,
+   skips the empty ones, takes the min and max, then adds two pad rows for
+   the bicubic and lanczos method reads. */
+void fp_span(const struct footprint *g, int first_row, int end_row,
+             int first_col, int end_col, int *imin, int *imax)
 {
     double rmin = DBL_MAX, rmax = -DBL_MAX;
-    int b_lo = block_of_col(g, obc0), b_hi = block_of_col(g, obc1 - 1);
+    int b_lo = block_of_col(g, first_col), b_hi = block_of_col(g, end_col - 1);
     int r, b;
 
-    if (obr1 > g->orows)
+    if (end_row > g->orows)
         G_fatal_error(_("Footprint grid has %d rows but output row %d was "
                         "requested"),
-                      g->orows, obr1 - 1);
+                      g->orows, end_row - 1);
 
-    for (r = obr0; r < obr1; r++)
+    for (r = first_row; r < end_row; r++)
         for (b = b_lo; b <= b_hi; b++) {
             const struct fp_cell *cell = &g->cell[(size_t)r * g->nb + b];
 
@@ -233,14 +249,19 @@ void fp_span(const struct footprint *g, int obr0, int obr1, int obc0, int obc1,
                 rmax = cell->rmax;
         }
 
-    if (rmax < rmin) { /* every touched cell empty */
+    if (rmax < rmin) {
+        /* An empty span reads as zero rows because the caller computes imax
+           minus imin plus one. */
         *imin = 0;
         *imax = -1;
         return;
     }
+    /* Two pad rows each way keep the bicubic and lanczos neighbor reads inside
+       the strip. */
     int lo = (int)floor(rmin) - 2;
     int hi = (int)floor(rmax) + 2;
 
+    /* The pad can step past the first or last input row near the map edges. */
     if (lo < 0)
         lo = 0;
     if (hi > g->irows - 1)
@@ -249,50 +270,55 @@ void fp_span(const struct footprint *g, int obr0, int obr1, int obc0, int obc1,
     *imax = hi;
 }
 
-/* Number of column blocks in the grid. */
+/* Block count for main.c's tile loop. */
 int fp_num_blocks(const struct footprint *g)
 {
     return g->nb;
 }
 
-/* First output column of block b. Block g->nb starts at the output width. */
+/* First output column of block b. b equal to nb gives the output width. */
 int fp_block_start(const struct footprint *g, int b)
 {
     return block_first_col(g, b);
 }
 
-/* Worst strip among the tiles that pack k whole blocks each across the band. */
-static int worst_ktile_rows(const struct footprint *g, int obr0, int obr1,
-                            int k)
+/* Largest number of input rows any k block wide tile of this band needs. */
+static int tallest_tile_rows(const struct footprint *g, int first_row,
+                             int end_row, int k)
 {
-    int worst = 0, tb;
+    int tallest = 0, tile_start;
 
-    for (tb = 0; tb < g->nb; tb += k) {
-        int te = tb + k < g->nb ? tb + k : g->nb;
+    for (tile_start = 0; tile_start < g->nb; tile_start += k) {
+        int tile_end = MIN(tile_start + k, g->nb);
         int imin, imax, rows;
 
-        fp_span(g, obr0, obr1, block_first_col(g, tb), block_first_col(g, te),
-                &imin, &imax);
+        fp_span(g, first_row, end_row, block_first_col(g, tile_start),
+                block_first_col(g, tile_end), &imin, &imax);
         rows = imax - imin + 1;
-        if (rows > worst)
-            worst = rows;
+        if (rows > tallest)
+            tallest = rows;
     }
-    return worst;
+    return tallest;
 }
 
-/* Widest tile in whole blocks whose worst strip and the output fit the cap, or
- * zero when even one block per tile busts. */
-static int tile_blocks_for_band(const struct footprint *g, int obr0, int obr1,
-                                size_t cap_bytes, int out_mult, int cell_size,
-                                int in_cols)
+/* Finds the widest tile, counted in whole blocks, whose input strip plus
+   output buffers fit under cap_bytes. Returns zero when even a single block
+   tile is too big. first_row and end_row are the band's rows, with end_row
+   one past the last. cell_size is the bytes per cell and in_cols is the
+   input map width. out_mult is how many output band buffers exist at once.
+   It is two when the previous band's write overlaps the next band's
+   compute, otherwise one. */
+static int tile_blocks_for_band(const struct footprint *g, int first_row,
+                                int end_row, size_t cap_bytes, int out_mult,
+                                int cell_size, int in_cols)
 {
-    size_t out_bytes = (size_t)(obr1 - obr0) * g->ocols * cell_size;
+    size_t out_bytes = (size_t)(end_row - first_row) * g->ocols * cell_size;
     int k;
 
     if (out_mult * out_bytes > cap_bytes)
         return 0;
     for (k = g->nb; k >= 1; k--) {
-        int worst = worst_ktile_rows(g, obr0, obr1, k);
+        int worst = tallest_tile_rows(g, first_row, end_row, k);
         size_t strip_bytes =
             worst > 0 ? (size_t)worst * in_cols * cell_size : 0;
 
@@ -306,49 +332,58 @@ static int tile_blocks_for_band(const struct footprint *g, int obr0, int obr1,
  * only when even one full-width row busts the cap, and takes the last fitting
  * height with its widest tile. Reports the finest tile strip the fallback
  * message needs and returns zero when even one tiled row busts. */
-int fp_band_geometry(const struct footprint *g, int obr0, size_t cap_bytes,
+int fp_band_geometry(const struct footprint *g, int first_row, size_t cap_bytes,
                      int out_mult, int cell_size, int in_cols,
                      int *tile_blocks_out, int *worst_block_rows)
 {
-    int remaining = g->orows - obr0;
-    int best_h = 0, best_k = 0, h_cand;
+    int remaining = g->orows - first_row;
+    int best_h = 0, best_k = 0, try_height;
 
-    *worst_block_rows = worst_ktile_rows(g, obr0, obr0 + 1, 1);
+    /* Measures the single first row as a one block tile, the smallest read the
+       module could ever do. If even that does not fit the cap, this number is
+       used to tell the user how much memory the parallel path would need
+       before the serial tile cache takes over. */
+    *worst_block_rows = tallest_tile_rows(g, first_row, first_row + 1, 1);
 
-    /* Prefer full-width bands, growing the height while the whole row still
-     * fits the cap as a single tile. */
-    for (h_cand = 1;;
-         h_cand = h_cand > remaining / 2 ? remaining : h_cand * 2) {
-        int h = h_cand < remaining ? h_cand : remaining;
-        int worst = worst_ktile_rows(g, obr0, obr0 + h, g->nb);
+    /* Growing a band can only add input rows, never remove them. So once a
+       height is too big, every bigger height is too big as well. That means
+       only the first height that fails matters, and doubling finds it in a
+       few tries instead of counting up one at a time. The step after
+       remaining / 2 goes straight to remaining instead of past it. */
+    for (try_height = 1;;
+         try_height = try_height > remaining / 2 ? remaining : try_height * 2) {
+        /* band_h is the band height in rows. */
+        int band_h = MIN(try_height, remaining);
+        int worst = tallest_tile_rows(g, first_row, first_row + band_h, g->nb);
         size_t strip_bytes =
             worst > 0 ? (size_t)worst * in_cols * cell_size : 0;
-        size_t out_bytes = (size_t)h * g->ocols * cell_size;
+        size_t out_bytes = (size_t)band_h * g->ocols * cell_size;
 
         if (strip_bytes + out_mult * out_bytes > cap_bytes)
             break;
-        best_h = h;
-        if (h == remaining)
+        best_h = band_h;
+        if (band_h == remaining)
             break;
     }
     if (best_h > 0) {
+        /* tile_blocks is nb here, meaning one full width tile. */
         *tile_blocks_out = g->nb;
         return best_h;
     }
 
     /* One full-width row busts the cap, so grow while the exhaustive scan finds
      * any fitting whole-block tile. */
-    for (h_cand = 1;;
-         h_cand = h_cand > remaining / 2 ? remaining : h_cand * 2) {
-        int h = h_cand < remaining ? h_cand : remaining;
-        int k = tile_blocks_for_band(g, obr0, obr0 + h, cap_bytes, out_mult,
-                                     cell_size, in_cols);
+    for (try_height = 1;;
+         try_height = try_height > remaining / 2 ? remaining : try_height * 2) {
+        int band_h = MIN(try_height, remaining);
+        int k = tile_blocks_for_band(g, first_row, first_row + band_h,
+                                     cap_bytes, out_mult, cell_size, in_cols);
 
         if (k == 0)
             break;
-        best_h = h;
+        best_h = band_h;
         best_k = k;
-        if (h == remaining)
+        if (band_h == remaining)
             break;
     }
     if (best_h == 0) {
