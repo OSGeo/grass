@@ -103,7 +103,7 @@
 
 import os
 import atexit
-import subprocess
+import errno
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -556,26 +556,19 @@ def main():
                     )
                 )
 
-    # check if method is different from rst to use r.resamp.bspline
     if method != "rst":
         gs.message(_("Using %s bspline interpolation") % method)
 
-        # clone current region
         gs.use_temp_region()
         gs.run_command("g.region", align=input)
 
         reg = gs.region()
-        # launch r.resamp.bspline
         tmp_rmaps.append(prefix + "filled")
-        # If there are no NULL cells, r.resamp.bslpine call
-        # will end with an error although for our needs it's fine
-        # Only problem - this state must be read from stderr
-        new_env = dict(os.environ)
-        new_env["LC_ALL"] = "C"
-        if usermask:
-            try:
+
+        try:
+            if usermask:
                 with gs.MaskManager():
-                    p = gs.core.start_command(
+                    gs.run_command(
                         "r.resamp.bspline",
                         input=input,
                         mask=usermask,
@@ -586,30 +579,9 @@ def main():
                         lambda_=lambda_,
                         memory=memory,
                         flags="n",
-                        stderr=subprocess.PIPE,
-                        env=new_env,
                     )
-                    stderr = gs.decode(p.communicate()[1])
-                if "No NULL cells found" in stderr:
-                    gs.run_command(
-                        "g.copy", raster="%s,%sfilled" % (input, prefix), overwrite=True
-                    )
-                    p.returncode = 0
-                    gs.warning(
-                        _(
-                            "Input map <%s> has no holes. Copying to output without "
-                            "modification."
-                        )
-                        % (input,)
-                    )
-            except CalledModuleError:
-                gs.fatal(
-                    _("Failure during bspline interpolation. Error message: %s")
-                    % stderr
-                )
-        else:
-            try:
-                p = gs.core.start_command(
+            else:
+                gs.run_command(
                     "r.resamp.bspline",
                     input=input,
                     output=prefix + "filled",
@@ -619,27 +591,25 @@ def main():
                     lambda_=lambda_,
                     memory=memory,
                     flags="n",
-                    stderr=subprocess.PIPE,
-                    env=new_env,
                 )
-                stderr = gs.decode(p.communicate()[1])
-                if "No NULL cells found" in stderr:
-                    gs.run_command(
-                        "g.copy", raster="%s,%sfilled" % (input, prefix), overwrite=True
+
+        except CalledModuleError as e:
+            # r.resamp.bspline sets exit status to errno (EINVAL) for "no NULL cells"
+            if e.returncode == errno.EINVAL:
+                gs.warning(
+                    _(
+                        "Input map <%s> has no holes. Copying to output without "
+                        "modification."
                     )
-                    p.returncode = 0
-                    gs.warning(
-                        _(
-                            "Input map <%s> has no holes. Copying to output without "
-                            "modification."
-                        )
-                        % (input,)
-                    )
-            except CalledModuleError:
-                gs.fatal(
-                    _("Failure during bspline interpolation. Error message: %s")
-                    % stderr
+                    % (input,)
                 )
+                gs.run_command(
+                    "g.copy",
+                    raster="%s,%sfilled" % (input, prefix),
+                    overwrite=True,
+                )
+            else:
+                raise
 
     # set region to original extents, align to input
     gs.run_command(
