@@ -473,6 +473,33 @@ class PreferencesDialog(PreferencesBaseDialog):
         )
         border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
         #
+        # Attribute manager settings
+        #
+        box = StaticBox(
+            parent=panel,
+            id=wx.ID_ANY,
+            label=" %s " % _("Attribute table manager settings"),
+        )
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        hiddenColumnsAttributeManager = wx.CheckBox(
+            parent=panel,
+            label=_("Enable hide/show column"),
+            name="IsChecked",
+        )
+        hiddenColumnsAttributeManager.SetValue(
+            self.settings.Get(group="atm", key="enableHiddenCols", subkey="enabled")
+        )
+        self.winId["atm:enableHiddenCols:enabled"] = (
+            hiddenColumnsAttributeManager.GetId()
+        )
+        sizer.Add(
+            hiddenColumnsAttributeManager,
+            proportion=1,
+            flag=wx.ALL | wx.EXPAND,
+            border=5,
+        )
+        border.Add(sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
+        #
         # workspace
         #
         box = StaticBox(
