@@ -324,10 +324,14 @@ parameter is provided.
 
 The typical file extensions for the LAS format are .las and .laz
 (compressed). The compressed LAS (.laz) format can be imported only if
-libLAS has been compiled with LASzip support. It is also recommended to
-compile libLAS with GDAL which is used to test if the LAS coordinate
-reference system matches that of the GRASS project (previously called
-location).
+PDAL has been compiled with LASzip support. Cloud Optimized Point
+Clouds (COPC, .copc.laz) are supported as well. When importing a COPC
+file into a computational region smaller than the point cloud extent,
+the COPC spatial index is used to skip data outside the region, which
+speeds up the import. The coordinate reference system of the input is
+expected to match that of the GRASS project; use the **-o** flag to
+override the projection check or the **-w** flag to reproject the
+points during import.
 
 ### Memory consumption
 
@@ -355,6 +359,10 @@ memory use for these also depends on the number of data points.
 
 The default map **type**=`FCELL` is intended as compromise between
 preserving data precision and limiting system resource consumption.
+
+The **point_table_capacity** option controls how many points PDAL
+buffers at once while streaming the input. Larger values may speed up
+the import of large files at the cost of additional memory.
 
 ### Trim option
 
