@@ -31,6 +31,7 @@ import random
 import string
 
 from pathlib import Path
+from urllib.parse import urlparse
 from typing import TYPE_CHECKING, AnyStr, TypeVar, cast, overload
 
 
@@ -734,3 +735,23 @@ def append_random(name, suffix_length=None, total_length=None):
     # The following can be shorter with random.choices from Python 3.6.
     suffix = "".join(random.choice(allowed_chars) for _ in range(suffix_length))
     return "{name}_{suffix}".format(**locals())
+
+
+def check_url_scheme(url, allowed_schemes=("http", "https")):
+    """Check that a URL uses one of the allowed schemes.
+
+    Raises :class:`ValueError` if the scheme of *url* is not in
+    *allowed_schemes*. This guards calls such as
+    :func:`urllib.request.urlopen` against opening URLs with unexpected
+    schemes (e.g. ``file:``, which would read the local filesystem) when the
+    URL is expected to reference a remote service.
+
+    :param url: URL to check
+    :param allowed_schemes: iterable of accepted scheme names (lowercase)
+    """
+    scheme = urlparse(url).scheme.lower()
+    if scheme not in allowed_schemes:
+        msg = "URL scheme '{0}' is not allowed; expected one of: {1}".format(
+            scheme, ", ".join(allowed_schemes)
+        )
+        raise ValueError(msg)
