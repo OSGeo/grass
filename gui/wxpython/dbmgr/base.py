@@ -208,7 +208,7 @@ class VirtualAttributeList(
                     # Delete column data
                     self.DeleteColumnWithData(colOrder)
 
-    def _showAllCols(self):
+    def ShowAllCols(self):
         """Show all columns"""
         self.Update()
 
@@ -914,7 +914,7 @@ class VirtualAttributeList(
     def OnShowColumn(self, event):
         """Show column"""
         self._updateHiddenColsSettings(remove=True)
-        self._showAllCols()
+        self.ShowAllCols()
 
     def SortItems(self, sorter=cmp):
         """Sort items"""
@@ -1404,14 +1404,18 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         )
         listSizer = wx.StaticBoxSizer(listBox, wx.VERTICAL)
 
-        win = VirtualAttributeList(panel, self.log, self.dbMgrData, layer, self.pages)
-        if win.IsEmpty():
+        self.virtualAttributeListWin = VirtualAttributeList(
+            panel, self.log, self.dbMgrData, layer, self.pages
+        )
+        if self.virtualAttributeListWin.IsEmpty():
             panel.Destroy()
             return False
 
         self.layers.append(layer)
 
-        win.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.OnDataItemActivated)
+        self.virtualAttributeListWin.Bind(
+            wx.EVT_LIST_ITEM_ACTIVATED, self.OnDataItemActivated
+        )
 
         self.layerPage[layer] = {"browsePage": panel.GetId()}
 
@@ -1439,16 +1443,29 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         sqlSizer = wx.StaticBoxSizer(sqlBox, wx.VERTICAL)
 
-        win.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnDataRightUp)  # wxMSW
-        win.Bind(wx.EVT_RIGHT_UP, self.OnDataRightUp)  # wxGTK
+        self.virtualAttributeListWin.Bind(
+            wx.EVT_COMMAND_RIGHT_CLICK, self.OnDataRightUp
+        )  # wxMSW
+        self.virtualAttributeListWin.Bind(wx.EVT_RIGHT_UP, self.OnDataRightUp)  # wxGTK
         if UserSettings.Get(group="atm", key="leftDbClick", subkey="selection") == 0:
-            win.Bind(wx.EVT_LEFT_DCLICK, self.OnDataItemEdit)
-            win.Bind(wx.EVT_COMMAND_LEFT_DCLICK, self.OnDataItemEdit)
+            self.virtualAttributeListWin.Bind(wx.EVT_LEFT_DCLICK, self.OnDataItemEdit)
+            self.virtualAttributeListWin.Bind(
+                wx.EVT_COMMAND_LEFT_DCLICK, self.OnDataItemEdit
+            )
         else:
-            win.Bind(wx.EVT_LEFT_DCLICK, self.OnDataDrawSelected)
-            win.Bind(wx.EVT_COMMAND_LEFT_DCLICK, self.OnDataDrawSelected)
+            self.virtualAttributeListWin.Bind(
+                wx.EVT_LEFT_DCLICK, self.OnDataDrawSelected
+            )
+            self.virtualAttributeListWin.Bind(
+                wx.EVT_COMMAND_LEFT_DCLICK, self.OnDataDrawSelected
+            )
 
-        listSizer.Add(win, proportion=1, flag=wx.EXPAND | wx.ALL, border=3)
+        listSizer.Add(
+            self.virtualAttributeListWin,
+            proportion=1,
+            flag=wx.EXPAND | wx.ALL,
+            border=3,
+        )
 
         # sql statement box
         sqlNtb = GNotebook(
@@ -1588,7 +1605,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         sqlNtb.Bind(wx.EVT_SIZE, self.OnSqlQuerySizeWrap(layer))
 
-        self.layerPage[layer]["data"] = win.GetId()
+        self.layerPage[layer]["data"] = self.virtualAttributeListWin.GetId()
         self.layerPage[layer]["sqlNtb"] = sqlNtb.GetId()
         self.layerPage[layer]["whereColumn"] = sqlWhereColumn.GetId()
         self.layerPage[layer]["whereOperator"] = sqlWhereCond.GetId()
