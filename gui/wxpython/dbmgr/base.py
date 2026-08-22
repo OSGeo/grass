@@ -270,12 +270,14 @@ class VirtualAttributeList(
                     ],
                     value=otherTablesHiddenCols,
                 )
-            elif len(
-                [
-                    mapName
-                    for mapName in allVectMapsHiddenColsSettings
-                    if mapName != self.dbMgrData["vectName"]
-                ]
+            elif (
+                len(
+                    [
+                        mapName
+                        for mapName in allVectMapsHiddenColsSettings
+                        if mapName != self.dbMgrData["vectName"]
+                    ]
+                )
                 > 0
             ):
                 # Remove curent vector map settings dict key
