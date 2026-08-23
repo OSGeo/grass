@@ -90,6 +90,9 @@ struct menu menu[] = {
     {p_lanczos_f, "lanczos_f", "lanczos filter with fallback"},
     {NULL, NULL, NULL}};
 
+/* menu ends with a NULL row, so it has one more slot than methods. */
+enum { N_METHODS = sizeof menu / sizeof *menu - 1 };
+
 static char *make_ipol_list(void);
 static char *make_ipol_desc(void);
 
@@ -152,6 +155,10 @@ static void strip_nearest(const struct strip *s, void *obufptr, int cell_type,
 static const strip_func strip_kernels[] = {
     strip_nearest,    strip_bilinear, strip_cubic,    strip_lanczos,
     strip_bilinear_f, strip_cubic_f,  strip_lanczos_f};
+
+/* The two tables must stay in step, one strip kernel per menu entry. */
+_Static_assert(sizeof strip_kernels / sizeof *strip_kernels == N_METHODS,
+               "strip_kernels and menu must have one entry per method");
 
 /* Grid that sizes band heights and column tiles. */
 static struct footprint *band_grid = NULL;
