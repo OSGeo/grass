@@ -673,7 +673,7 @@ void G_unset_percent_routine(void);
 void G_popen_clear(struct Popen *);
 FILE *G_popen_write(struct Popen *, const char *, const char **);
 FILE *G_popen_read(struct Popen *, const char *, const char **);
-void G_popen_close(struct Popen *);
+int G_popen_close(struct Popen *);
 
 /* plot.c */
 void G_setup_plot(double, double, double, double, int (*)(int, int),
