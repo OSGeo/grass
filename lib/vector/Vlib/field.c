@@ -35,7 +35,7 @@
 #ifdef HAVE_POSTGRES
 #define NOPG_UNUSED
 #else
-#define NOPG_UNUSED UNUSED
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 /*!

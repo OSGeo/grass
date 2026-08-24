@@ -41,15 +41,13 @@ def rename_mapset(database, location, old_name, new_name):
     """Rename mapset from *old_name* to *new_name*"""
     if old_name == "PERMANENT":
         raise ValueError(_("Mapset PERMANENT cannot be renamed"))
-    location_path = os.path.join(database, location)
-    os.rename(
-        os.path.join(location_path, old_name), os.path.join(location_path, new_name)
-    )
+    location_path = Path(database, location)
+    (location_path / old_name).rename(location_path / new_name)
 
 
 def rename_location(database, old_name, new_name):
     """Rename location from *old_name* to *new_name*"""
-    os.rename(os.path.join(database, old_name), os.path.join(database, new_name))
+    Path(database, old_name).rename(Path(database, new_name))
 
 
 class MapsetPath:

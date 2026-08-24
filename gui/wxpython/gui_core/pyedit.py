@@ -453,10 +453,8 @@ class PyEditController:
         else:
             self.SaveAs()
 
-        if self.filename:
-            self.recent_files.AddFileToHistory(
-                filename=self.filename,
-            )
+        if self.filename and self.recent_files:
+            self.recent_files.AddFileToHistory(filename=self.filename)
 
     def IsModified(self):
         """Check if python script has been modified"""
@@ -492,10 +490,8 @@ class PyEditController:
         """Handle open event but ask about replacing content first"""
         if self.CanReplaceContent("file"):
             self.Open()
-            if self.filename:
-                self.recent_files.AddFileToHistory(
-                    filename=self.filename,
-                )
+            if self.filename and self.recent_files:
+                self.recent_files.AddFileToHistory(filename=self.filename)
 
     def OpenRecentFile(self, path, file_exists, file_history):
         """Try open recent file and read content

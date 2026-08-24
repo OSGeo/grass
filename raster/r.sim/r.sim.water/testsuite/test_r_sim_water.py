@@ -132,6 +132,7 @@ class TestRSimWater(TestCase):
             depth=self.depth,
             discharge=self.discharge,
             random_seed=1,
+            nprocs=1,
         )
 
         # Assert that the output rasters exist
@@ -172,7 +173,7 @@ class TestRSimWater(TestCase):
             infil=self.infil,
             depth=self.depth,
             discharge=self.discharge,
-            niterations=15,
+            duration=15,
             output_step=5,
             diffusion_coeff=0.9,
             hmax=0.25,

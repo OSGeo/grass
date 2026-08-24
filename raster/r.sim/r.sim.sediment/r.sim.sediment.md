@@ -31,7 +31,7 @@ almost immediately and can be viewed while the simulation continues.
 Sediment flow rate raster map *sediment_flux* \[kg/ms\], and net
 erosion/deposition raster map \[kg/m^2s\] can take longer time
 depending on time step and simulation time. Simulation time is
-controlled by *niterations* \[minutes\] parameter. If the resulting
+controlled by *duration* \[minutes\] parameter. If the resulting
 erosion/deposition map is noisy, higher number of walkers, given by
 *nwalkers* should be used.  
 

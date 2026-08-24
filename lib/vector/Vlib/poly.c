@@ -20,6 +20,12 @@
 #include <grass/linkm.h>
 #include <grass/glocale.h>
 
+/* numerically safe floating point average
+ * works best with A < B */
+#define FP_AVG(A, B)                                                   \
+    (((A) > 0 && (B) < 0) || ((A) < 0 && (B) > 0) ? (((A) + (B)) / 2.) \
+                                                  : ((A) + ((B) - (A)) / 2.))
+
 struct Slink {
     struct Slink *next;
     double x;
@@ -128,7 +134,7 @@ int Vect__intersect_y_line_with_poly(const struct line_pnts *Points, double y,
 {
     int i;
     double a, b, c, d, x;
-    double perc;
+    double p;
 
     for (i = 1; i < Points->n_points; i++) {
         a = Points->y[i - 1];
@@ -137,12 +143,24 @@ int Vect__intersect_y_line_with_poly(const struct line_pnts *Points, double y,
         c = Points->x[i - 1];
         d = Points->x[i];
 
+        /* sort for numerical stability
+         * ray along X for given Y -> sort by Y */
+        if (b < a || (b == a && d < c)) {
+            p = d;
+            d = c;
+            c = p;
+
+            p = a;
+            a = b;
+            b = p;
+        }
+
         if (V__within(a, y, b)) {
             if (a == b)
                 continue;
 
-            perc = (y - a) / (b - a);
-            x = perc * (d - c) + c; /* interp X */
+            p = (y - a) / (b - a); /* always within [0, 1] */
+            x = c + p * (d - c);
 
             if (0 > Vect_append_point(Inter, x, y, 0))
                 return -1;
@@ -171,7 +189,7 @@ int Vect__intersect_x_line_with_poly(const struct line_pnts *Points, double x,
 {
     int i;
     double a, b, c, d, y;
-    double perc;
+    double p;
 
     for (i = 1; i < Points->n_points; i++) {
         a = Points->x[i - 1];
@@ -180,12 +198,24 @@ int Vect__intersect_x_line_with_poly(const struct line_pnts *Points, double x,
         c = Points->y[i - 1];
         d = Points->y[i];
 
+        /* sort for numerical stability
+         * ray along Y for given X -> sort by X */
+        if (b < a || (b == a && d < c)) {
+            p = d;
+            d = c;
+            c = p;
+
+            p = a;
+            a = b;
+            b = p;
+        }
+
         if (V__within(a, x, b)) {
             if (a == b)
                 continue;
 
-            perc = (x - a) / (b - a);
-            y = perc * (d - c) + c; /* interp Y */
+            p = (x - a) / (b - a); /* always within [0, 1] */
+            y = c + p * (d - c);
 
             if (0 > Vect_append_point(Inter, x, y, 0))
                 return -1;
@@ -391,6 +421,74 @@ int Vect_find_poly_centroid(const struct line_pnts *points, double *cent_x,
     return 0;
 }
 
+/*!
+   \brief Get centroid of polygon
+
+   Calculate the center of gravity of the area considering any islands
+
+   \param Points polygon
+   \param IPoints isles (list of isle boundaries)
+   \param n_isles number of isles
+   \param[out] cent_x,cent_y centroid coordinates
+
+   \return 0 on success
+   \return -1 on error
+
+   \since version 8.6
+ */
+int Vect_find_poly_centroid_cog(const struct line_pnts *Points,
+                                const struct line_pnts **IPoints, int n_isles,
+                                double *cent_x, double *cent_y)
+{
+    struct bound_box box;
+    double x, y, meanx, meany;
+    double *xp, *yp;
+    double w, tot_w;
+    int i, isle;
+
+    /* surveyor's / shoelace formula */
+    /* the surveyor should not be too far away (fp precision limit) */
+    /* surveyor's position: */
+    Vect_line_box(Points, &box);
+    x = (box.W + box.E) / 2.;
+    y = (box.S + box.N) / 2.;
+    meanx = meany = 0.;
+    tot_w = 0.;
+
+    *cent_x = x;
+    *cent_y = y;
+
+    xp = Points->x;
+    yp = Points->y;
+    for (i = 1; i < Points->n_points; i++) {
+        w = (x - xp[i - 1]) * (yp[i] - y) - (x - xp[i]) * (yp[i - 1] - y);
+
+        meanx += (xp[i - 1] + xp[i] + x) * w;
+        meany += (yp[i - 1] + yp[i] + y) * w;
+        tot_w += w;
+    }
+
+    for (isle = 0; isle < n_isles; isle++) {
+        xp = IPoints[isle]->x;
+        yp = IPoints[isle]->y;
+        for (i = 1; i < IPoints[isle]->n_points; i++) {
+            w = (x - xp[i - 1]) * (yp[i] - y) - (x - xp[i]) * (yp[i - 1] - y);
+
+            meanx += (xp[i - 1] + xp[i] + x) * w;
+            meany += (yp[i - 1] + yp[i] + y) * w;
+            tot_w += w;
+        }
+    }
+    if (tot_w != 0) {
+        *cent_x = meanx / (tot_w * 3);
+        *cent_y = meany / (tot_w * 3);
+    }
+    else
+        return -1;
+
+    return 0;
+}
+
 /*
  ** returns true if point is in any of islands /w in area
  ** returns 0 if not
@@ -461,6 +559,7 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
     int point_in_sles = 0;
     double diff;
     int ret;
+    bool success = true;
 
     G_debug(3, "Vect_get_point_in_poly_isl(): n_isles = %d", n_isles);
 
@@ -469,7 +568,12 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
         first_time = 0;
     }
 
-    if (Points->n_points < 3) { /* test */
+    /* need an outer ring with at least 4 vertices for
+     * areas with a size > 0 */
+    if (Points->n_points < 4) {
+        G_debug(
+            3,
+            "Vect_get_point_in_poly_isl(): outer ring with less than 4 points");
         if (Points->n_points > 0) {
             *att_x = Points->x[0];
             *att_y = Points->y[0];
@@ -478,9 +582,35 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
         return -1;
     }
 
-    /* get centroid */
+    /* get centroid, center of gravity of the polygon line, not the area */
+    /* original version, does not consider isles
+     * the centroid can be inside an isle or completely outside of the area
+     * for very thin polygons, the centroid might be on the boundary */
     Vect_find_poly_centroid(Points, &cent_x, &cent_y);
     /* is it w/in poly? */
+    point_in_sles = 0;
+    if (Vect_point_in_poly(cent_x, cent_y, Points) == 1) {
+        /* if the point is inside the polygon */
+        for (i = 0; i < n_isles; i++) {
+            if (Vect_point_in_poly(cent_x, cent_y, IPoints[i]) >= 1) {
+                point_in_sles = 1;
+                break;
+            }
+        }
+        if (!point_in_sles) {
+            *att_x = cent_x;
+            *att_y = cent_y;
+            return 0;
+        }
+    }
+
+    /* get centroid, center of gravity of the area */
+    /* new version, considers isles
+     * the centroid can still be inside an isle or completely outside of the
+     * area for very thin polygons, the centroid might be on the boundary */
+    Vect_find_poly_centroid_cog(Points, IPoints, n_isles, &cent_x, &cent_y);
+    /* is it w/in poly? */
+    point_in_sles = 0;
     if (Vect_point_in_poly(cent_x, cent_y, Points) == 1) {
         /* if the point is inside the polygon */
         for (i = 0; i < n_isles; i++) {
@@ -496,6 +626,7 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
         }
     }
     /* guess we have to do it the hard way... */
+    G_debug(3, "Vect_get_point_in_poly_isl(): the hard way");
 
     /* first find att_y close to cent_y so that no points lie on the line */
     /* find the point closest to line from below, and point close to line
@@ -557,65 +688,81 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
         }
     }
 
-    if (lo_y == hi_y)
-        return (-1); /* area is empty */
-
-    *att_y = (hi_y + lo_y) / 2.0;
-
-    Intersects->n_points = 0;
-    Vect__intersect_y_line_with_poly(Points, *att_y, Intersects);
-
-    /* add in intersections w/ holes */
-    for (i = 0; i < n_isles; i++) {
-        if (0 >
-            Vect__intersect_y_line_with_poly(IPoints[i], *att_y, Intersects))
-            return -1;
+    /* try y intersect */
+    if (lo_y == hi_y) {
+        G_debug(3, "Vect_get_point_in_poly_isl(): lo_y == hi_y");
+        /* don't give up yet */
+        success = false;
     }
+    if (success) {
+        *att_y = FP_AVG(lo_y, hi_y);
 
-    if (Intersects->n_points < 2) /* test */
-        return -1;
+        Intersects->n_points = 0;
+        if (0 > Vect__intersect_y_line_with_poly(Points, *att_y, Intersects))
+            return -1;
 
-    qsort(Intersects->x, (size_t)Intersects->n_points, sizeof(double),
-          comp_double);
+        /* add in intersections w/ holes */
+        for (i = 0; i < n_isles; i++) {
+            if (0 > Vect__intersect_y_line_with_poly(IPoints[i], *att_y,
+                                                     Intersects))
+                return -1;
+        }
 
-    max = 0;
-    maxpos = 0;
-
-    /* find area of MAX distance */
-    for (i = 0; i < Intersects->n_points; i += 2) {
-        diff = Intersects->x[i + 1] - Intersects->x[i];
-
-        if (diff > max) {
-            max = diff;
-            maxpos = i;
+        if (Intersects->n_points < 2) { /* test */
+            G_debug(3, "Vect_get_point_in_poly_isl(): no x intersections");
+            /* don't give up yet */
+            success = false;
         }
     }
-    /* ULP single precision 23, double 52 bits, here 42 */
-    /* if the difference is too small, the point will be on a line
-     * ULP double is too small, ULP single too large */
-    fa = fabs(Intersects->x[maxpos]);
-    fb = fabs(Intersects->x[maxpos + 1]);
-    if (fa > fb)
-        dmax = frexp(fa, &exp);
-    else
-        dmax = frexp(fb, &exp);
-    exp -= 42;
-    dmax = ldexp(dmax, exp);
+    if (success) {
+        qsort(Intersects->x, (size_t)Intersects->n_points, sizeof(double),
+              comp_double);
 
-    if (max > dmax) {
-        *att_x = (Intersects->x[maxpos] + Intersects->x[maxpos + 1]) / 2.;
+        max = 0;
+        maxpos = 0;
+
+        /* find area of MAX distance */
+        for (i = 0; i < Intersects->n_points; i += 2) {
+            diff = Intersects->x[i + 1] - Intersects->x[i];
+
+            if (diff > max) {
+                max = diff;
+                maxpos = i;
+            }
+        }
+        /* ULP single precision 23, double 52 bits, here 42 */
+        /* if the difference is too small, the point will be on a line
+         * ULP double is too small, ULP single too large */
+        fa = fabs(Intersects->x[maxpos]);
+        fb = fabs(Intersects->x[maxpos + 1]);
+        if (fa > fb)
+            dmax = frexp(fa, &exp);
+        else
+            dmax = frexp(fb, &exp);
+        exp -= 42;
+        dmax = ldexp(dmax, exp);
+
+        if (max > dmax) {
+            *att_x = FP_AVG(Intersects->x[maxpos], Intersects->x[maxpos + 1]);
+        }
+        else
+            success = false;
     }
-    else {
+    if (!success) {
         /* try x intersect */
         G_debug(3, "Vect_get_point_in_poly_isl(): trying x intersect");
 
-        if (lo_x == hi_x)
-            return (-1); /* area is empty */
+        if (lo_x == hi_x) {
+            G_debug(3, "Vect_get_point_in_poly_isl(): lo_x == hi_x");
 
-        *att_x = (hi_x + lo_x) / 2.0;
+            return (-1); /* area is empty */
+        }
+
+        *att_x = FP_AVG(lo_x, hi_x);
 
         Intersects->n_points = 0;
-        Vect__intersect_x_line_with_poly(Points, *att_x, Intersects);
+        if (0 > Vect__intersect_x_line_with_poly(Points, *att_x, Intersects))
+            return -1;
 
         /* add in intersections w/ holes */
         for (i = 0; i < n_isles; i++) {
@@ -624,8 +771,11 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
                 return -1;
         }
 
-        if (Intersects->n_points < 2) /* test */
+        if (Intersects->n_points < 2) { /* test */
+            G_debug(3, "Vect_get_point_in_poly_isl(): no y intersections");
+
             return -1;
+        }
 
         qsort(Intersects->y, (size_t)Intersects->n_points, sizeof(double),
               comp_double);
@@ -652,7 +802,7 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
         exp -= 42;
         dmax = ldexp(dmax, exp);
         if (max > dmax) {
-            *att_y = (Intersects->y[maxpos] + Intersects->y[maxpos + 1]) / 2.;
+            *att_y = FP_AVG(Intersects->y[maxpos], Intersects->y[maxpos + 1]);
         }
         else {
             /* area was (nearly) empty: example ((x1,y1), (x2,y2), (x1,y1)) */
@@ -666,6 +816,8 @@ int Vect_get_point_in_poly_isl(const struct line_pnts *Points,
     cent_y = *att_y;
     point_in_sles = 0;
 
+    /* even if this test succeeds, the centroid might be assigned to
+     * a different area later on by Vect_find_area() */
     ret = Vect_point_in_poly(cent_x, cent_y, Points);
     if (ret == 2) {
         /* point on outer ring, should not happen because of ULP test above */
@@ -794,6 +946,9 @@ static int segments_x_ray(double X, double Y, const struct line_pnts *Points)
              * intersection */
             x_inter = dig_x_intersect(x1, x2, y1, y2, Y);
             G_debug(3, "x_inter = %f", x_inter);
+            /* what if x_inter is not quite but nearly identical to X
+             * and x_inter - X is so small that calculations can lead to
+             * fp precision errors? */
             if (x_inter == X)
                 return -1; /* point on segment, do not assume inside/outside */
             else if (x_inter > X)
@@ -855,11 +1010,7 @@ int Vect_point_in_area_outer_ring(double X, double Y, struct Map_info *Map,
                                   int area, struct bound_box *box)
 {
     static int first = 1;
-    int n_intersects, inter;
-    int i, line;
     static struct line_pnts *Points;
-    const struct Plus_head *Plus;
-    struct P_area *Area;
 
     /* keep in sync with Vect_point_in_island() */
 
@@ -871,41 +1022,14 @@ int Vect_point_in_area_outer_ring(double X, double Y, struct Map_info *Map,
         first = 0;
     }
 
-    Plus = &(Map->plus);
-    Area = Plus->Area[area];
-
     /* First it must be in box */
     if (X < box->W || X > box->E || Y > box->N || Y < box->S)
         return 0;
 
-    n_intersects = 0;
-    for (i = 0; i < Area->n_lines; i++) {
-        line = abs(Area->lines[i]);
+    if (0 > Vect_get_area_points(Map, area, Points))
+        return 0;
 
-        Vect_read_line(Map, Points, NULL, line);
-
-        /* if the bbox of the line would be available,
-         * the bbox could be used for a first check: */
-
-        /* Vect_line_box(Points, &lbox);
-         * do not check lines that obviously do not intersect with test ray */
-        /* if ((lbox.N < Y) || (lbox.S > Y) || (lbox.E < X))
-           continue;
-         */
-
-        /* retrieving the bbox from the spatial index or
-         * calculating the box from the vertices is slower than
-         * just feeding the line to segments_x_ray() */
-
-        inter = segments_x_ray(X, Y, Points);
-        if (inter == -1)
-            return 2;
-        n_intersects += inter;
-    }
-
-    /* odd number of intersections: inside, return 1
-     * even number of intersections: outside, return 0 */
-    return (n_intersects & 1);
+    return Vect_point_in_poly(X, Y, Points);
 }
 
 /*!
@@ -924,11 +1048,7 @@ int Vect_point_in_island(double X, double Y, struct Map_info *Map, int isle,
                          struct bound_box *box)
 {
     static int first = 1;
-    int n_intersects, inter;
-    int i, line;
     static struct line_pnts *Points;
-    const struct Plus_head *Plus;
-    struct P_isle *Isle;
 
     /* keep in sync with Vect_point_in_area_outer_ring() */
 
@@ -939,39 +1059,12 @@ int Vect_point_in_island(double X, double Y, struct Map_info *Map, int isle,
         first = 0;
     }
 
-    Plus = &(Map->plus);
-    Isle = Plus->Isle[isle];
-
     /* First it must be in box */
     if (X < box->W || X > box->E || Y > box->N || Y < box->S)
         return 0;
 
-    n_intersects = 0;
-    for (i = 0; i < Isle->n_lines; i++) {
-        line = abs(Isle->lines[i]);
+    if (0 > Vect_get_isle_points(Map, isle, Points))
+        return 0;
 
-        Vect_read_line(Map, Points, NULL, line);
-
-        /* if the bbox of the line would be available,
-         * the bbox could be used for a first check: */
-
-        /* Vect_line_box(Points, &lbox);
-         * don't check lines that obviously do not intersect with test ray */
-        /* if ((lbox.N < Y) || (lbox.S > Y) || (lbox.E < X))
-           continue;
-         */
-
-        /* retrieving the bbox from the spatial index or
-         * calculating the box from the vertices is slower than
-         * just feeding the line to segments_x_ray() */
-
-        inter = segments_x_ray(X, Y, Points);
-        if (inter == -1)
-            return 2;
-        n_intersects += inter;
-    }
-
-    /* odd number of intersections: inside, return 1
-     * even number of intersections: outside, return 0 */
-    return (n_intersects & 1);
+    return Vect_point_in_poly(X, Y, Points);
 }

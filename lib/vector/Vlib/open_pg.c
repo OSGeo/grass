@@ -57,7 +57,7 @@ static int remap_line(const struct Plus_head *, off_t, int);
 
 #define NOPG_UNUSED
 #else
-#define NOPG_UNUSED UNUSED
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 /*!
@@ -1759,7 +1759,7 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
 
    Print out NOTICE message only on verbose level
  */
-void notice_processor(void *arg UNUSED, const char *message)
+void notice_processor(void *arg G_UNUSED, const char *message)
 {
     if (G_verbose() > G_verbose_std()) {
         fprintf(stderr, "%s", message);

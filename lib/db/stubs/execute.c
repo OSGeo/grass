@@ -1,7 +1,7 @@
 #include <grass/dbmi.h>
 #include <grass/dbstubs.h>
 
-int db__driver_execute_immediate(dbString *SQLstatement UNUSED)
+int db__driver_execute_immediate(dbString *SQLstatement G_UNUSED)
 {
     db_procedure_not_implemented("db_execute_immediate");
     return DB_FAILED;

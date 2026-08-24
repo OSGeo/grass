@@ -140,8 +140,8 @@ int **imatrix(int nrl, int nrh, int ncl, int nch)
 }
 
 /* point a submatrix [newrl..][newcl..] to a[oldrl..oldrh][oldcl..oldch] */
-float **submatrix(float **a, int oldrl, int oldrh, int oldcl, int oldch UNUSED,
-                  int newrl, int newcl)
+float **submatrix(float **a, int oldrl, int oldrh, int oldcl,
+                  int oldch G_UNUSED, int newrl, int newcl)
 {
     int i, j, nrow = oldrh - oldrl + 1, ncol = oldcl - newcl;
     float **m;
@@ -219,73 +219,75 @@ float ***f3tensor(int nrl, int nrh, int ncl, int nch, int ndl, int ndh)
 }
 
 /* free a float vector allocated with vector() */
-void free_vector(float *v, int nl, int nh UNUSED)
+void free_vector(float *v, int nl, int nh G_UNUSED)
 {
     G_free((FREE_ARG)(v + nl - NR_END));
 }
 
 /* free an int vector allocated with ivector() */
-void free_ivector(int *v, int nl, int nh UNUSED)
+void free_ivector(int *v, int nl, int nh G_UNUSED)
 {
     G_free((FREE_ARG)(v + nl - NR_END));
 }
 
 /* free an unsigned char vector allocated with cvector() */
-void free_cvector(unsigned char *v, int nl, int nh UNUSED)
+void free_cvector(unsigned char *v, int nl, int nh G_UNUSED)
 {
     G_free((FREE_ARG)(v + nl - NR_END));
 }
 
 /* free an unsigned long vector allocated with lvector() */
-void free_lvector(unsigned long *v, int nl, int nh UNUSED)
+void free_lvector(unsigned long *v, int nl, int nh G_UNUSED)
 {
     G_free((FREE_ARG)(v + nl - NR_END));
 }
 
 /* free a double vector allocated with dvector() */
-void free_dvector(double *v, int nl, int nh UNUSED)
+void free_dvector(double *v, int nl, int nh G_UNUSED)
 {
     G_free((FREE_ARG)(v + nl - NR_END));
 }
 
 /* free a float matrix allocated by matrix() */
-void free_matrix(float **m, int nrl, int nrh UNUSED, int ncl, int nch UNUSED)
+void free_matrix(float **m, int nrl, int nrh G_UNUSED, int ncl,
+                 int nch G_UNUSED)
 {
     G_free((FREE_ARG)(m[nrl] + ncl - NR_END));
     G_free((FREE_ARG)(m + nrl - NR_END));
 }
 
 /* free a double matrix allocated by dmatrix() */
-void free_dmatrix(double **m, int nrl, int nrh UNUSED, int ncl, int nch UNUSED)
+void free_dmatrix(double **m, int nrl, int nrh G_UNUSED, int ncl,
+                  int nch G_UNUSED)
 {
     G_free((FREE_ARG)(m[nrl] + ncl - NR_END));
     G_free((FREE_ARG)(m + nrl - NR_END));
 }
 
 /* free an int matrix allocated by imatrix() */
-void free_imatrix(int **m, int nrl, int nrh UNUSED, int ncl, int nch UNUSED)
+void free_imatrix(int **m, int nrl, int nrh G_UNUSED, int ncl, int nch G_UNUSED)
 {
     G_free((FREE_ARG)(m[nrl] + ncl - NR_END));
     G_free((FREE_ARG)(m + nrl - NR_END));
 }
 
 /* free a submatrix allocated by submatrix() */
-void free_submatrix(float **b, int nrl, int nrh UNUSED, int ncl UNUSED,
-                    int nch UNUSED)
+void free_submatrix(float **b, int nrl, int nrh G_UNUSED, int ncl G_UNUSED,
+                    int nch G_UNUSED)
 {
     G_free((FREE_ARG)(b + nrl - NR_END));
 }
 
 /* free a matrix allocated by convert_matrix() */
-void free_convert_matrix(float **b, int nrl, int nrh UNUSED, int ncl UNUSED,
-                         int nch UNUSED)
+void free_convert_matrix(float **b, int nrl, int nrh G_UNUSED, int ncl G_UNUSED,
+                         int nch G_UNUSED)
 {
     G_free((FREE_ARG)(b + nrl - NR_END));
 }
 
 /* free a float f3tensor allocated by f3tensor() */
-void free_f3tensor(float ***t, int nrl, int nrh UNUSED, int ncl, int nch UNUSED,
-                   int ndl, int ndh UNUSED)
+void free_f3tensor(float ***t, int nrl, int nrh G_UNUSED, int ncl,
+                   int nch G_UNUSED, int ndl, int ndh G_UNUSED)
 {
     G_free((FREE_ARG)(t[nrl][ncl] + ndl - NR_END));
     G_free((FREE_ARG)(t[nrl] + ncl - NR_END));
