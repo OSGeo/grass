@@ -753,7 +753,13 @@ int main(int argc, char *argv[])
         // getting projection is possible only after prepare
         if (!over_flag->answer) {
             pdal::PointTable table;
-            reader->prepare(table);
+            try {
+                reader->prepare(table);
+            }
+            catch (const std::exception &err) {
+                G_fatal_error(_("PDAL error while reading <%s>: %s"), infile,
+                              err.what());
+            }
             pdal::SpatialReference spatial_reference =
                 reader->getSpatialReference();
             if (spatial_reference.empty())

@@ -72,14 +72,23 @@ void get_extent(struct StringList *infiles, double *min_x, double *max_x,
         max_x_ = las_header.maxX();
         max_y_ = las_header.maxY();
         max_z_ = las_header.maxZ();
+        bool srs_known =
+            spatial_reference.valid() && !spatial_reference.empty();
 #ifdef R_IN_PDAL_USE_NOSRS
-        bool need_to_reproject = !nosrs && !proj_match &&
-                                 spatial_reference.valid() &&
-                                 !spatial_reference.empty();
+        bool check_srs = !nosrs;
 #else
-        bool need_to_reproject = !proj_match && spatial_reference.valid() &&
-                                 !spatial_reference.empty();
+        bool check_srs = true;
 #endif
+        bool need_to_reproject = check_srs && !proj_match && srs_known;
+
+        // The extent of a file without a CRS cannot be reprojected, so its
+        // header values are reported as they are. Unlike the import, which
+        // fails in this case, printing the extent continues, because the
+        // user may still need the numbers to set up the project.
+        if (check_srs && !srs_known)
+            G_warning(_("The input dataset <%s> has undefined CRS, "
+                        "its extent is reported as stored in the file"),
+                      infile);
 
         if (need_to_reproject) {
             get_reprojected_extent(spatial_reference, &min_x_, &max_x_, &min_y_,
@@ -171,8 +180,14 @@ void get_reprojected_extent(pdal::SpatialReference &spatial_reference,
     reproject_options.add("out_srs", location_projection_as_wkt(false));
     reproject->setOptions(reproject_options);
     reproject->setInput(reader);
-    reproject->prepare(table);
-    reproject->execute(table);
+    try {
+        reproject->prepare(table);
+        reproject->execute(table);
+    }
+    catch (const std::exception &err) {
+        G_fatal_error(_("Reprojection of the data extent failed: %s"),
+                      err.what());
+    }
 
     for (pdal::PointId i = 0; i < view->size(); ++i) {
         double x = view->getFieldAs<double>(pdal::Dimension::Id::X, i);
