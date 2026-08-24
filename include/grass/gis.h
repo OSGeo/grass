@@ -631,6 +631,14 @@ struct Popen {
     int pid;
 };
 
+/*!
+  \brief Returned by G_popen_close() when there was no child to wait for
+
+  Distinct from the values G_wait() can return, so a caller can tell this
+  apart from a child that failed and from a failed wait.
+*/
+#define G_POPEN_NO_CHILD (-2)
+
 typedef int CELL;
 typedef double DCELL;
 typedef float FCELL;
