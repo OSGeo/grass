@@ -219,6 +219,17 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
                 goto cleanup_exit;
             }
 
+            /* Vect_cat_set() has its range check commented out, so an
+               out-of-range value read here would be stored and only cause
+               trouble later, for example on export. */
+            if (catn < 1 || cat < 0) {
+                G_warning(_("Layer number or category number out of range: "
+                            "[%s]"),
+                          buff);
+                n_lines = -1;
+                goto cleanup_exit;
+            }
+
             Vect_cat_set(Cats, catn, cat);
         }
 
