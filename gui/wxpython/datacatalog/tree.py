@@ -2769,7 +2769,7 @@ class DataCatalogTree(TreeView):
         mapset_node = self.selected_mapset[0]
 
         map_count = len(stds_node.children)
-        if map_count > 1000:
+        if map_count > 500:
             question = _(
                 "Dataset <{n}> has {c} maps. All of them are rendered before "
                 "the animation starts, which can take a long time and a lot "
@@ -2787,7 +2787,7 @@ class DataCatalogTree(TreeView):
             animation.CentreOnScreen()
             animation.Show()
         else:
-            animation = self._giface.lmgr.OnAnimationTool()
+            animation = self._giface.lmgr.OpenAnimationTool()
 
         animation.AnimateStds(
             f"{stds_node.data['name']}@{mapset_node.data['name']}",
