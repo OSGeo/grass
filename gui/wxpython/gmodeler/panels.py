@@ -18,6 +18,8 @@ This program is free software under the GNU General Public License
 @author Python exports Ondrej Pesek <pesej.ondrek gmail.com>
 """
 
+from __future__ import annotations
+
 import os
 import time
 import stat
@@ -147,7 +149,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
         )
         self.canvas.SetCursor(self.cursors["default"])
 
-        self.model = Model(giface=self._giface, canvas=self.canvas)
+        self.model: Model = Model(giface=self._giface, canvas=self.canvas)
 
         self.variablePanel = VariablePanel(parent=self)
 

@@ -806,11 +806,7 @@ def GetDefaultEncoding(forceUTF8: bool = False) -> str:
 
     :return: system encoding (can be None)
     """
-    try:
-        # Python >= 3.11
-        enc = locale.getencoding()
-    except AttributeError:
-        enc = locale.getdefaultlocale()[1]
+    enc = locale.getencoding()
     if forceUTF8 and (enc is None or enc == "UTF8"):
         return "UTF-8"
 
