@@ -11,7 +11,7 @@
 
 UPDATE strds_metadata
    SET
-       -- Update the min and max values
+       -- Update the number of registered semantic labels
        number_of_semantic_labels = number_of_semantic_labels_new,
        -- Update the min and max values
        min_min = new_stats.min_min_new,

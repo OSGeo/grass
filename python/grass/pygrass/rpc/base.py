@@ -206,8 +206,13 @@ class RPCServerBase:
                     ]
                 )
             self.server.terminate()
+            # A process still starting up reopens the lock semaphore by name,
+            # so it must be gone before the reference is dropped below.
+            self.server.join(timeout=5)
         if self.client_conn is not None:
             self.client_conn.close()
+        # Dropping the reference unlinks the semaphore now, not at exit.
+        self.lock = None
         self.stopped = True
 
 
