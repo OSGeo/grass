@@ -2768,6 +2768,16 @@ class DataCatalogTree(TreeView):
         stds_node = self.selected_stds[0]
         mapset_node = self.selected_mapset[0]
 
+        map_count = len(stds_node.children)
+        if map_count > 1000:
+            question = _(
+                "Dataset <{n}> has {c} maps. All of them are rendered before "
+                "the animation starts, which can take a long time and a lot "
+                "of memory.\n\nDo you really want to animate it?"
+            ).format(n=stds_node.data["name"], c=map_count)
+            if self._confirmDialog(question, title=_("Display animation")) != wx.ID_YES:
+                return
+
         if isinstance(self._giface, StandaloneGrassInterface):
             # There is no main window to add a page to, so the tool gets its
             # own window, the same way as when started by g.gui.animation.
