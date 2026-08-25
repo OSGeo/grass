@@ -6,7 +6,6 @@ from grass.pygrass.raster import RasterRow
 
 
 class RasterRowTestCase(TestCase):
-
     name = "RasterRowTestCase_map"
 
     @classmethod
@@ -22,7 +21,7 @@ class RasterRowTestCase(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """Remove the generated vector map, if exist"""
+        """Remove the generated vector map, if exists"""
         cls.runModule("g.remove", flags="f", type="raster", name=cls.name)
         cls.del_temp_region()
 

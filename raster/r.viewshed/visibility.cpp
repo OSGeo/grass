@@ -17,7 +17,7 @@
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
- * terrain. The terrain is NOT viewed as a tesselation of flat cells,
+ * terrain. The terrain is NOT viewed as a tessellation of flat cells,
  * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
@@ -238,7 +238,7 @@ float angleVisibilityOutput(float x)
 /* ------------------------------------------------------------ */
 /* visgrid is the structure that records the visibility information
    after the sweep is done.  Use it to write the visibility output
-   grid and then distroy it.
+   grid and then destroy it.
  */
 void save_inmem_visibilitygrid(MemoryVisibilityGrid *visgrid,
                                ViewOptions viewOptions, Viewpoint vp)

@@ -1,10 +1,11 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define GET_PARENT(c) ((((GW_LARGE_INT)(c)-2) >> 3) + 1)
+#define GET_PARENT(c) ((((GW_LARGE_INT)(c) - 2) >> 3) + 1)
 #define GET_CHILD(p)  (((GW_LARGE_INT)(p) << 3) - 6)
 
 HEAP_PNT heap_drop(void);
@@ -60,12 +61,12 @@ int do_astar(void)
     while (heap_size > 0) {
         G_percent(count++, n_points, 1);
         if (count > n_points)
-            G_fatal_error(_("%" PRI_OFF_T " surplus points"), heap_size);
+            G_fatal_error(_("%" PRId64 " surplus points"), heap_size);
 
         if (heap_size > n_points)
-            G_fatal_error(_("Too many points in heap %" PRI_OFF_T
-                            ", should be %" PRI_OFF_T ""),
-                          heap_size, n_points);
+            G_fatal_error(
+                _("Too many points in heap %" PRId64 ", should be %" PRId64 ""),
+                heap_size, n_points);
 
         heap_p = heap_drop();
 

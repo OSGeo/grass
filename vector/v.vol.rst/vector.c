@@ -61,10 +61,10 @@ int point_save(double xmm, double ymm, double zmm, double err)
     Vect_write_line(&Map, GV_POINT, Pnts, Cats);
 
     db_zero_string(&sql);
-    sprintf(buf, "insert into %s values ( %d ", f->table, cat);
+    snprintf(buf, sizeof(buf), "insert into %s values ( %d ", f->table, cat);
     db_append_string(&sql, buf);
 
-    sprintf(buf, ", %f", err);
+    snprintf(buf, sizeof(buf), ", %f", err);
     db_append_string(&sql, buf);
     db_append_string(&sql, ")");
     G_debug(3, "%s", db_get_string(&sql));

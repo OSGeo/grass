@@ -1,7 +1,7 @@
 /*
  * r.in.lidar projection-related functions
  *
- * Copyright 2011-2015 by Markus Metz, and The GRASS Development Team
+ * Copyright 2011-2015 by Markus Metz, and the GRASS Development Team
  * Authors:
  *  Markus Metz (r.in.lidar)
  *  Vaclav Petras (move code to separate functions)

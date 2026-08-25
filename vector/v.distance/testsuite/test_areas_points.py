@@ -160,7 +160,7 @@ class TestPointsAndAreas(TestCase):
 
     def test_area_attrs_to_2d_points(self):
         """Check that values are uploaded to 2D points in areas (dmax=0)"""
-        # using call_module because PyGRASS doen't accept form_
+        # using call_module because PyGRASS doesn't accept form_
         call_module(
             "v.distance",
             from_=self.points,

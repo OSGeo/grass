@@ -20,7 +20,10 @@
 #define __R_DIST_DEFS_H__
 
 #include <grass/gis.h>
+#include <grass/gjson.h>
 #include <grass/raster.h>
+
+enum OutputFormat { PLAIN, CSV, JSON };
 
 struct EdgeList /* keep track of edge cells */
 {
@@ -52,6 +55,8 @@ struct Parms {
     int sort;              /* 0: sort by cat1,cat2 (default)
                               1: sort by distance in ascending order
                               2: sort by distance in descending order */
+    enum OutputFormat
+        format; /* output format for results: PLAIN, CSV, or JSON */
 };
 
 /* distance.c */

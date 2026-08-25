@@ -8,41 +8,44 @@
 Read the file COPYING that comes with GRASS
 for details
 """
-import os
-import stat
+
 import ctypes
+import os
 import shutil
+import stat
+from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import tempname
-from grass.pygrass import utils
-from grass.pygrass.gis import Mapset
-
 from grass.lib.gis import G_mapset_path
-from grass.lib.raster import Rast_write_semantic_label
 from grass.lib.imagery import (
-    Signature,
-    Ref,
-    I_init_signatures,
-    I_new_signature,
+    I_add_file_to_group_ref,
     I_fopen_signature_file_new,
-    I_write_signatures,
     I_fopen_signature_file_old,
-    I_read_signatures,
-    I_sort_signatures_by_semantic_label,
+    I_free_group_ref,
     I_free_signatures,
     I_init_group_ref,
-    I_add_file_to_group_ref,
-    I_free_group_ref,
+    I_init_signatures,
+    I_new_signature,
+    I_read_signatures,
+    I_sort_signatures_by_semantic_label,
+    I_write_signatures,
+    Ref,
+    Signature,
 )
+from grass.lib.raster import Rast_write_semantic_label
+from grass.pygrass import utils
+from grass.pygrass.gis import Mapset
+from grass.script.core import tempname
 
 
 class SignatureFileTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
         cls.sig_name = tempname(10)
@@ -58,7 +61,7 @@ class SignatureFileTestCase(TestCase):
 
     def test_roundtrip_signature_v1_norgb_one_label(self):
         """Test writing and reading back signature file (v1)
-        wiht a single label"""
+        with a single label"""
 
         # Create signature struct
         So = Signature()
@@ -79,7 +82,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -135,7 +138,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -187,7 +190,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -276,7 +279,7 @@ class SignatureFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_signature_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_write_signatures(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -330,7 +333,10 @@ class SignatureFileTestCase(TestCase):
 class SortSignaturesBysemantic_labelTest(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mapset = Mapset().name
         cls.map1 = tempname(10)
         cls.semantic_label1 = "The_Doors"
@@ -348,9 +354,12 @@ class SortSignaturesBysemantic_labelTest(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map1)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map2)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map3)
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(cls.map1, cls.map2, cls.map3),
+        )
 
     def test_symmetric_complete_difference(self):
         # Prepare imagery group reference struct
@@ -383,9 +392,9 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(ref_err, "The_Doors")
 
         # Clean up memory to help track memory leaks when run by valgrind
-        S.semantic_labels[
-            0
-        ] = None  # C should not call free() on memory allocated by python
+        S.semantic_labels[0] = (
+            None  # C should not call free() on memory allocated by python
+        )
         I_free_signatures(ctypes.byref(S))
         I_free_group_ref(ctypes.byref(R))
         if ret:
@@ -472,10 +481,10 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(
             sig_err,
             "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>",
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>",
         )
         self.assertEqual(ref_err, f"The_Doors,{self.map3}")
 

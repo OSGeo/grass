@@ -109,15 +109,15 @@ int main(int argc, char *argv[])
     G_message(_("Rescale %s[%ld,%ld] to %s[%ld,%ld]"), old_name, old_min,
               old_max, new_name, new_min, new_max);
 
-    sprintf(input, "input=%s", old_name);
-    sprintf(output, "output=%s", new_name);
+    snprintf(input, sizeof(input), "input=%s", old_name);
+    snprintf(output, sizeof(output), "output=%s", new_name);
 
     if (parm.title->answer)
-        sprintf(title, "title=%s", parm.title->answer);
+        snprintf(title, sizeof(title), "title=%s", parm.title->answer);
     else
-        sprintf(title, "title=rescale of %s", old_name);
+        snprintf(title, sizeof(title), "title=rescale of %s", old_name);
 
-    sprintf(rules, "rules=-");
+    snprintf(rules, sizeof(rules), "rules=-");
 
     args[0] = "r.reclass";
     args[1] = input;

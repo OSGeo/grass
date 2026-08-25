@@ -74,7 +74,7 @@ int Rast_read_colors(const char *name, const char *mapset,
         Rast_mark_colors_as_fp(colors);
 
     /* first look for secondary color table in current mapset */
-    sprintf(buf, "colr2/%s", mapset);
+    snprintf(buf, sizeof(buf), "colr2/%s", mapset);
     if (Rast__read_colors(buf, name, G_mapset(), colors) >= 0)
         return 1;
 

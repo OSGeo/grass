@@ -888,7 +888,7 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
     double mindist;
     int rdir, ordir, dir;
     int ld, rd;
-    struct kdnode *n, *rn, * or ;
+    struct kdnode *n, *rn, *or;
     struct kdstack {
         struct kdnode *n;
         int dir;
@@ -914,8 +914,8 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
     rdir = 1;
 
     or = r;
-    ld = (! or->child[0] ? -1 : or->child[0]->depth);
-    rd = (! or->child[1] ? -1 : or->child[1]->depth);
+    ld = (!or->child[0] ? -1 : or->child[0]->depth);
+    rd = (!or->child[1] ? -1 : or->child[1]->depth);
 
     if (ld > rd) {
         rdir = 0;
@@ -925,7 +925,7 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
      * repeat until replacement is leaf */
     ordir = rdir;
     is_leaf = 0;
-    s[0].n = or ;
+    s[0].n = or;
     s[0].dir = ordir;
     top2 = 1;
     mindist = -1;
@@ -938,7 +938,7 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
 
         n = s[top].n;
         rn = n;
-        mindist = or->c[(int) or->dim] - n->c[(int) or->dim];
+        mindist = or->c[(int)or->dim] - n->c[(int)or->dim];
         if (ordir)
             mindist = -mindist;
 
@@ -963,15 +963,15 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
                 n = s[top].n;
                 if ((cmp(rn, n, or->dim) > 0) == ordir) {
                     rn = n;
-                    mindist = or->c[(int) or->dim] - n->c[(int) or->dim];
+                    mindist = or->c[(int)or->dim] - n->c[(int)or->dim];
                     if (ordir)
                         mindist = -mindist;
                 }
 
                 /* look on the other side ? */
                 dir = s[top].dir;
-                if (n->dim != or->dim && mindist >= fabs(n->c[(int)n->dim] -
-                                                         n->c[(int)n->dim])) {
+                if (n->dim != or->dim &&
+                    mindist >= fabs(n->c[(int)n->dim] - n->c[(int)n->dim])) {
                     /* go down the other side */
                     top++;
                     s[top].n = n->child[!dir];
@@ -992,10 +992,10 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
 #ifdef KD_DEBUG
         if (!rn)
             G_fatal_error("No replacement");
-        if (ordir && or->c[(int) or->dim] > rn->c[(int) or->dim])
+        if (ordir && or->c[(int)or->dim] > rn->c[(int)or->dim])
             G_fatal_error("rn is smaller");
 
-        if (!ordir && or->c[(int) or->dim] < rn->c[(int) or->dim])
+        if (!ordir && or->c[(int)or->dim] < rn->c[(int)or->dim])
             G_fatal_error("rn is larger");
 
         if (or->child[1]) {
@@ -1072,8 +1072,8 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
 
             /* pick a subtree */
             ordir = 1;
-            ld = (! or->child[0] ? -1 : or->child[0]->depth);
-            rd = (! or->child[1] ? -1 : or->child[1]->depth);
+            ld = (!or->child[0] ? -1 : or->child[0]->depth);
+            rd = (!or->child[1] ? -1 : or->child[1]->depth);
             if (ld > rd) {
                 ordir = 0;
             }
@@ -1128,7 +1128,7 @@ static int kdtree_replace(struct kdtree *t, struct kdnode *r)
 
 static int kdtree_balance(struct kdtree *t, struct kdnode *r, int bmode)
 {
-    struct kdnode * or ;
+    struct kdnode *or;
     int dir;
     int rd, ld;
     int old_depth;

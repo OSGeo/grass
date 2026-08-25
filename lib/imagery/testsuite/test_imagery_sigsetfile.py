@@ -8,42 +8,45 @@
 Read the file COPYING that comes with GRASS
 for details
 """
-import os
-import stat
+
 import ctypes
+import os
 import shutil
+import stat
+from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import tempname
-from grass.pygrass import utils
-from grass.pygrass.gis import Mapset
-
 from grass.lib.gis import G_mapset_path
-from grass.lib.raster import Rast_write_semantic_label
 from grass.lib.imagery import (
-    SigSet,
+    I_add_file_to_group_ref,
+    I_fopen_sigset_file_new,
+    I_fopen_sigset_file_old,
+    I_free_group_ref,
+    I_init_group_ref,
     I_InitSigSet,
     I_NewClassSig,
     I_NewSubSig,
-    I_WriteSigSet,
     I_ReadSigSet,
     I_SortSigSetBySemanticLabel,
-    I_fopen_sigset_file_new,
-    I_fopen_sigset_file_old,
+    I_WriteSigSet,
     Ref,
-    I_init_group_ref,
-    I_add_file_to_group_ref,
-    I_free_group_ref,
     ReturnString,
+    SigSet,
 )
+from grass.lib.raster import Rast_write_semantic_label
+from grass.pygrass import utils
+from grass.pygrass.gis import Mapset
+from grass.script.core import tempname
 
 
 class SigSetFileTestCase(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mpath = utils.decode(G_mapset_path())
         cls.mapset_name = Mapset().name
         cls.sig_name = tempname(10)
@@ -83,7 +86,7 @@ class SigSetFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_sigset_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_WriteSigSet(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -138,7 +141,7 @@ class SigSetFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_sigset_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_WriteSigSet(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -182,7 +185,7 @@ class SigSetFileTestCase(TestCase):
 
         # Write signatures to file
         p_new_sigfile = I_fopen_sigset_file_new(self.sig_name)
-        sig_stat = os.stat(f"{self.sig_dir}/sig")
+        sig_stat = Path(self.sig_dir, "sig").stat()
         self.assertTrue(stat.S_ISREG(sig_stat.st_mode))
         I_WriteSigSet(p_new_sigfile, ctypes.byref(So))
         self.libc.fclose(p_new_sigfile)
@@ -223,7 +226,10 @@ class SigSetFileTestCase(TestCase):
 class SortSigSetBySemanticLabelTest(TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
+        if os.name == "nt":
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("msvcrt"))
+        else:
+            cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.mapset = Mapset().name
         cls.map1 = tempname(10)
         cls.semantic_label1 = "The_Doors"
@@ -241,9 +247,12 @@ class SortSigSetBySemanticLabelTest(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map1)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map2)
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.map3)
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name=(cls.map1, cls.map2, cls.map3),
+        )
 
     def test_symmetric_complete_difference(self):
         # Prepare imagery group reference struct
@@ -369,10 +378,10 @@ class SortSigSetBySemanticLabelTest(TestCase):
         self.assertEqual(
             sig_err,
             "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>",
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>",
         )
         self.assertEqual(ref_err, f"The_Doors,{self.map3}")
 

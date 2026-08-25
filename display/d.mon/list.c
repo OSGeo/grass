@@ -14,11 +14,13 @@ char *get_path(const char *name, int fpath)
     char tmpdir[GPATH_MAX];
 
     G_temp_element(tmpdir);
-    strcat(tmpdir, "/");
-    strcat(tmpdir, "MONITORS");
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "MONITORS", sizeof(tmpdir));
     if (name) {
-        strcat(tmpdir, "/");
-        strcat(tmpdir, name);
+        (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+        if (G_strlcat(tmpdir, name, sizeof(tmpdir)) >= sizeof(tmpdir)) {
+            G_fatal_error(_("Failed to append <%s> to path"), name);
+        }
     }
 
     if (fpath) {
@@ -80,11 +82,14 @@ void print_list(FILE *fd)
         G_message(_("List of running monitors:"));
     else {
         G_important_message(_("No monitors running"));
-        return;
     }
 
     for (i = 0; i < n; i++)
         fprintf(fd, "%s\n", list[i]);
+
+    for (i = 0; i < n; i++)
+        G_free(list[i]);
+    G_free(list);
 }
 
 /* check if monitor is running */
@@ -92,14 +97,21 @@ int check_mon(const char *name)
 {
     char **list;
     int i, n;
+    int ret = FALSE;
 
     list_mon(&list, &n);
 
     for (i = 0; i < n; i++)
-        if (G_strcasecmp(list[i], name) == 0)
-            return TRUE;
+        if (G_strcasecmp(list[i], name) == 0) {
+            ret = TRUE;
+            break;
+        }
 
-    return FALSE;
+    for (i = 0; i < n; i++)
+        G_free(list[i]);
+    G_free(list);
+
+    return ret;
 }
 
 /* list related commands for given monitor */
@@ -132,10 +144,13 @@ void list_files(const char *name, FILE *fd_out)
     DIR *dirp;
 
     G_temp_element(tmpdir);
-    strcat(tmpdir, "/");
-    strcat(tmpdir, "MONITORS");
-    strcat(tmpdir, "/");
-    strcat(tmpdir, name);
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "MONITORS", sizeof(tmpdir));
+    (void)G_strlcat(tmpdir, "/", sizeof(tmpdir));
+
+    if (G_strlcat(tmpdir, name, sizeof(tmpdir)) >= sizeof(tmpdir)) {
+        G_fatal_error(_("Failed to append <%s> to path"), name);
+    }
 
     G_file_name(mon_path, tmpdir, NULL, G_mapset());
     fprintf(fd_out, "path=%s\n", mon_path);
@@ -156,4 +171,5 @@ void list_files(const char *name, FILE *fd_out)
 
         fprintf(fd_out, "%s=%s%c%s\n", p, mon_path, HOST_DIRSEP, dp->d_name);
     }
+    closedir(dirp);
 }

@@ -24,7 +24,7 @@ If the <b>directory</b> option is provided, the paths to files can (and
 should) be only relative paths to these files. While this is not recommended
 for scripting, it can be advantageous when typing the paths
 manually. For example when all files are stored in the directory
-<tt>/home/john/data</tt>, the user can provide the following in the command
+<code>/home/john/data</code>, the user can provide the following in the command
 line:
 
 <div class="code"><pre>
@@ -42,12 +42,12 @@ Colors specified by <b>y_color</b> option are used for drawing the lines
 in the graph. If multiple Y data files are used, an equal number of
 colors may be used to control the colors of the lines. Colors will be
 assigned to Y data in respect to the sequence of instantiation on the
-command line. It can be one of GRASS GIS named colors or the RGB
+command line. It can be one of GRASS named colors or the RGB
 values from 0-255 separated by colons (RRR:GGG:BBB).
 
 <p>
 Alternatively, the user can use the <b>color_table</b> option to specify one
-of the GRASS GIS predefined color tables.
+of the GRASS predefined color tables.
 
 <p>
 By default, a series of colors will be chosen by the module if none are
@@ -60,8 +60,8 @@ reproducible results.
 <p>
 The color to be used for titles, axis lines, tics, and scale numbers
 is determined by the <b>title_color</b> option. The user can provide
-one of the GRASS GIS named colors (such as gray, white, or black)
-or use the GRASS GIS colon-separated format for RGB (RRR:GGG:BBB).
+one of the GRASS named colors (such as gray, white, or black)
+or use the GRASS colon-separated format for RGB (RRR:GGG:BBB).
 
 <h3>Titles, labels, and tics</h3>
 
@@ -105,7 +105,7 @@ multiplied by a factor of 10 before graphing).
 Depending on the user's needs, it might be easier or more appropriate
 to use a 3rd party tool such as xgraph, gnuplot, Matplotlib in Python,
 or R instead of <em>d.linegraph</em>.
-For a more general solution for plotting in GRASS GIS, the user is
+For a more general solution for plotting in GRASS, the user is
 advised to use the <em><a href="d.graph.html">d.graph</a></em> module.
 
 <h2>EXAMPLE</h2>
@@ -145,7 +145,7 @@ d.erase  # previous image is not cleaned
 -->
 
 <p>
-The next command sequence creates a file <tt>plot.png</tt> in the current
+The next command sequence creates a file <code>plot.png</code> in the current
 directory which is the drawing made by <em>d.linegraph</em>.
 
 <div class="code"><pre>

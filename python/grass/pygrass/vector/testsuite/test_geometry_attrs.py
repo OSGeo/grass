@@ -3,26 +3,17 @@ Created on Thu Jun 19 14:13:53 2014
 
 @author: pietro
 """
-import sys
-import unittest
-import numpy as np
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-import grass.lib.vector as libvect
-from grass.script.core import run_command
-
 from grass.pygrass.vector import VectorTopo
 
 
 class GeometryAttrsTestCase(TestCase):
-
     tmpname = "GeometryAttrsCase_map"
 
     @classmethod
     def setUpClass(cls):
-
         from grass.pygrass import utils
 
         utils.create_test_vector_map(cls.tmpname)
@@ -41,7 +32,7 @@ class GeometryAttrsTestCase(TestCase):
             cls.vect.close()
             cls.c_mapinfo = None
 
-        """Remove the generated vector map, if exist"""
+        # Remove the generated vector map, if exists
         cls.runModule("g.remove", flags="f", type="vector", name=cls.tmpname)
 
     def test_getitem(self):
@@ -53,7 +44,7 @@ class GeometryAttrsTestCase(TestCase):
         with self.assertRaises(ValueError) as cm:
             self.attrs["not_existing_column_name"]
 
-        self.assertTrue("not_existing_column_name" in str(cm.exception))
+        self.assertIn("not_existing_column_name", str(cm.exception))
 
     def test_setitem(self):
         """Test __setitem__ magic method"""
@@ -61,11 +52,11 @@ class GeometryAttrsTestCase(TestCase):
         newvalue = 100.0
         newpairs = ("setitem_point_2", 1000.0)
 
-        self.attrs.__setitem__("name", newname)
+        self.attrs.__setitem__("name", newname)  # noqa: PLC2801
         self.assertEqual(self.attrs["name"], newname)
-        self.attrs.__setitem__("value", newvalue)
+        self.attrs.__setitem__("value", newvalue)  # noqa: PLC2801
         self.assertEqual(self.attrs["value"], newvalue)
-        self.attrs.__setitem__(("name", "value"), newpairs)
+        self.attrs.__setitem__(("name", "value"), newpairs)  # noqa: PLC2801
         self.assertEqual(self.attrs["name", "value"], newpairs)
 
 

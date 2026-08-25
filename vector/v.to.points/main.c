@@ -200,11 +200,12 @@ int main(int argc, char **argv)
         db_set_error_handler_driver(driver);
 
         if (field == -1)
-            sprintf(buf, "create table %s ( cat int, along double precision )",
-                    Fi->table);
+            snprintf(buf, sizeof(buf),
+                     "create table %s ( cat int, along double precision )",
+                     Fi->table);
         else
-            sprintf(
-                buf,
+            snprintf(
+                buf, sizeof(buf),
                 "create table %s ( cat int, lcat int, along double precision )",
                 Fi->table);
         db_append_string(&stmt, buf);

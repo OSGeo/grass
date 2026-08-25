@@ -37,17 +37,18 @@
    \param tucfield field with unique categories used in the turntable
    \param afcol column with forward costs for arc
    \param abcol column with backward costs for arc (if NULL, back costs =
-   forward costs), \param ncol column with costs for nodes (if NULL, do not use
-   node costs), \param geo use geodesic calculation for length (LL), \param
-   algorithm not used (in future code for algorithm)
+          forward costs)
+   \param ncol column with costs for nodes (if NULL, do not use
+          node costs)
+   \param geo use geodesic calculation for length (LL)
+   \param algorithm not used (in future code for algorithm)
 
    \return 0 on success, 1 on error
  */
-
 int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                              int nfield, int tfield, int tucfield,
                              const char *afcol, const char *abcol,
-                             const char *ncol, int geo, int algorithm)
+                             const char *ncol, int geo, int algorithm G_UNUSED)
 {
     /* TODO very long function, split into smaller ones */
     int i, j, from, to, line, nlines, nnodes, ret, type, cat, skipped, cfound;
@@ -58,12 +59,12 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
     dglGraph_s *gr;
     dglInt32_t opaqueset[16] = {360000, 0, 0, 0, 0, 0, 0, 0,
                                 0,      0, 0, 0, 0, 0, 0, 0};
-    struct field_info *Fi;
+    struct field_info *Fi = NULL;
     dbDriver *driver = NULL;
     dbDriver *ttbdriver = NULL;
     dbHandle handle;
     dbString stmt;
-    dbColumn *Column;
+    dbColumn *Column = NULL;
     dbCatValArray fvarr, bvarr;
     int fctype = 0, bctype = 0, nrec, nturns;
 
@@ -165,6 +166,7 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                           tcols[i], Fi->table);
 
         tctype[i] = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
+        db_free_column(Column);
 
         if ((tctype[i] == DB_C_TYPE_INT || tctype[i] == DB_C_TYPE_DOUBLE) &&
             !strcmp(tcols[i], "cost"))
@@ -181,6 +183,8 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                                        NULL, &tvarrs[i]);
         ++i;
     }
+
+    Vect_destroy_field_info(Fi);
 
     G_debug(1, "forward costs: nrec = %d", nturns);
 
@@ -210,6 +214,7 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                           Fi->table);
 
         fctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
+        db_free_column(Column);
 
         if (fctype != DB_C_TYPE_INT && fctype != DB_C_TYPE_DOUBLE)
             G_fatal_error(
@@ -221,6 +226,7 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
         nrec = db_select_CatValArray(driver, Fi->table, Fi->key, ncol, NULL,
                                      &fvarr);
         G_debug(1, "node costs: nrec = %d", nrec);
+        Vect_destroy_field_info(Fi);
 
         tucfield_idx = Vect_cidx_get_field_index(Map, tucfield);
     }
@@ -502,6 +508,7 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                           Fi->table);
 
         fctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
+        db_free_column(Column);
 
         if (fctype != DB_C_TYPE_INT && fctype != DB_C_TYPE_DOUBLE)
             G_fatal_error(
@@ -519,6 +526,7 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                               Fi->table);
 
             bctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
+            db_free_column(Column);
 
             if (bctype != DB_C_TYPE_INT && bctype != DB_C_TYPE_DOUBLE)
                 G_fatal_error(_("Data type of column <%s> not supported (must "
@@ -530,6 +538,7 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                                          NULL, &bvarr);
             G_debug(1, "backward costs: nrec = %d", nrec);
         }
+        Vect_destroy_field_info(Fi);
     }
 
     skipped = 0;
@@ -592,7 +601,7 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                     }
                     if (ret != DB_OK) {
                         G_warning(_("Database record for line %d (cat = %d, "
-                                    "backword direction) not found"
+                                    "backward direction) not found"
                                     "(cost was set to 0)"),
                                   i, cat);
                     }
@@ -664,6 +673,7 @@ int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
     dglInitializeSPCache(gr, &(Map->dgraph.spCache));
 
     G_message(_("Graph was built"));
+
     return 0;
 }
 
@@ -705,11 +715,11 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
     dglInt32_t dgl_cost;
     dglInt32_t opaqueset[16] = {360000, 0, 0, 0, 0, 0, 0, 0,
                                 0,      0, 0, 0, 0, 0, 0, 0};
-    struct field_info *Fi;
+    struct field_info *Fi = NULL;
     dbDriver *driver = NULL;
     dbHandle handle;
     dbString stmt;
-    dbColumn *Column;
+    dbColumn *Column = NULL;
     dbCatValArray fvarr, bvarr;
     int fctype = 0, bctype = 0, nrec;
 
@@ -795,6 +805,7 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
                           Fi->table);
 
         fctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
+        db_free_column(Column);
 
         if (fctype != DB_C_TYPE_INT && fctype != DB_C_TYPE_DOUBLE)
             G_fatal_error(
@@ -812,6 +823,7 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
                               Fi->table);
 
             bctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
+            db_free_column(Column);
 
             if (bctype != DB_C_TYPE_INT && bctype != DB_C_TYPE_DOUBLE)
                 G_fatal_error(_("Data type of column <%s> not supported (must "
@@ -823,6 +835,7 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
                                          NULL, &bvarr);
             G_debug(1, "backward costs: nrec = %d", nrec);
         }
+        Vect_destroy_field_info(Fi);
     }
 
     skipped = 0;
@@ -874,7 +887,7 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
                     }
                     if (ret != DB_OK) {
                         G_warning(_("Database record for line %d (cat = %d, "
-                                    "backword direction) not found"
+                                    "backward direction) not found"
                                     "(direction of line skipped)"),
                                   i, cat);
                         dobw = 0;
@@ -968,6 +981,7 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
                           Fi->table);
 
         fctype = db_sqltype_to_Ctype(db_get_column_sqltype(Column));
+        db_free_column(Column);
 
         if (fctype != DB_C_TYPE_INT && fctype != DB_C_TYPE_DOUBLE)
             G_fatal_error(
@@ -978,6 +992,7 @@ int Vect_net_build_graph(struct Map_info *Map, int ltype, int afield,
         nrec = db_select_CatValArray(driver, Fi->table, Fi->key, ncol, NULL,
                                      &fvarr);
         G_debug(1, "node costs: nrec = %d", nrec);
+        Vect_destroy_field_info(Fi);
 
         for (i = 1; i <= nnodes; i++) {
             /* TODO: what happens if we set attributes of not existing node

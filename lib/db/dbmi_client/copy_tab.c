@@ -174,10 +174,10 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
             if (p) {
                 char buf[GNAME_MAX];
 
-                sprintf(buf, "%s.%s",
-                        connection.schemaName ? connection.schemaName
-                                              : "public",
-                        to_tblname);
+                snprintf(buf, sizeof(buf), "%s.%s",
+                         connection.schemaName ? connection.schemaName
+                                               : "public",
+                         to_tblname);
                 if (strcmp(buf, tbl) == 0)
                     tblname_i = G_store(p + 1); /* skip dot */
             }
@@ -346,7 +346,7 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
         if (!more)
             break;
 
-        sprintf(buf, "insert into %s values ( ", to_tblname);
+        snprintf(buf, sizeof(buf), "insert into %s values ( ", to_tblname);
         db_set_string(&sql, buf);
         select = 1;
         for (col = 0; col < ncols; col++) {
@@ -476,7 +476,7 @@ int db_copy_table_where(const char *from_drvname, const char *from_dbname,
 
    \param from_drvname name of driver from table is copied
    \param from_dbname name of database from table is copied
-   \param from_dbname name of table to be copied
+   \param from_tblname name of table to be copied
    \param to_drvname name of driver to - where table is copied to
    \param to_dbname name of database to - where table is copied to
    \param to_tblname name of copied table
@@ -503,9 +503,10 @@ int db_copy_table_select(const char *from_drvname, const char *from_dbname,
    \param to_drvname name of driver to - where table is copied to
    \param to_dbname name of database to - where table is copied to
    \param to_tblname name of copied table
-   \param selcol name of column used to select records by values in ivals or
-   NULL \param ivals pointer to array of integer values or NULL \param nvals
-   number of values in ivals
+   \param selcol name of column used to select records by values
+                 in ivals or NULL
+   \param ivals pointer to array of integer values or NULL
+   \param nvals number of values in ivals
 
    \return DB_OK on success
    \return DB_FAILED on failure

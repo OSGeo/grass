@@ -228,8 +228,20 @@ int main(int argc, char *argv[])
     N_read_rast3d_to_array_3d(param.hc_z->answer, data->hc_z,
                               param.mask->answer);
     N_convert_array_3d_null_to_zero(data->hc_z);
-    N_read_rast3d_to_array_3d(param.q->answer, data->q, param.mask->answer);
-    N_convert_array_3d_null_to_zero(data->q);
+    if (param.q->answer != NULL) {
+        N_read_rast3d_to_array_3d(param.q->answer, data->q, param.mask->answer);
+        N_convert_array_3d_null_to_zero(data->q);
+    }
+    else {
+        G_message(_("No sink map provided. Initializing zero sink..."));
+        for (z = 0; z < geom->depths; z++) {
+            for (y = 0; y < geom->rows; y++) {
+                for (x = 0; x < geom->cols; x++) {
+                    N_put_array_3d_d_value(data->q, x, y, z, 0.0);
+                }
+            }
+        }
+    }
     N_read_rast3d_to_array_3d(param.s->answer, data->s, param.mask->answer);
     N_convert_array_3d_null_to_zero(data->s);
 
@@ -301,7 +313,7 @@ int main(int argc, char *argv[])
         N_write_array_3d_to_rast3d(budget, param.budget->answer, 1);
     }
 
-    /*Compute the the velocity field if required and write the result into three
+    /*Compute the velocity field if required and write the result into three
      * rast3d maps */
     if (param.vector_x->answer || param.vector_y->answer ||
         param.vector_z->answer) {

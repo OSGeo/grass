@@ -1,7 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 
-void c_min(DCELL *result, DCELL *values, int n, const void *closure)
+void c_min(DCELL *result, DCELL *values, int n, const void *closure G_UNUSED)
 {
     DCELL min;
     int i;
@@ -22,7 +22,8 @@ void c_min(DCELL *result, DCELL *values, int n, const void *closure)
         *result = min;
 }
 
-void w_min(DCELL *result, DCELL (*values)[2], int n, const void *closure)
+void w_min(DCELL *result, DCELL (*values)[2], int n,
+           const void *closure G_UNUSED)
 {
     DCELL min;
     int i;

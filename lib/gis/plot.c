@@ -140,11 +140,11 @@ void G_setup_fill(int gap)
         st->row_fill = row_solid_fill;
 }
 
-#define X(e)     (st->left + st->xconv * ((e)-st->window.west))
+#define X(e)     (st->left + st->xconv * ((e) - st->window.west))
 #define Y(n)     (st->top + st->yconv * (st->window.north - (n)))
 
-#define EAST(x)  (st->window.west + ((x)-st->left) / st->xconv)
-#define NORTH(y) (st->window.north - ((y)-st->top) / st->yconv)
+#define EAST(x)  (st->window.west + ((x) - st->left) / st->xconv)
+#define NORTH(y) (st->window.north - ((y) - st->top) / st->yconv)
 
 /*!
  * \brief Converts east,north to x,y
@@ -174,7 +174,6 @@ void G_plot_where_xy(double east, double north, int *x, int *y)
  * \param east easting
  * \param north northing
  */
-
 void G_plot_where_en(int x, int y, double *east, double *north)
 {
     *east = G_adjust_easting(EAST(x), &st->window);
@@ -240,7 +239,6 @@ static void fastline(double x1, double y1, double x2, double y2)
  *   the output window (left, right, top, bottom) should already
  *   be adjusted for this: left=-0.5; right = window.cols-0.5;
  */
-
 static void slowline(double x1, double y1, double x2, double y2)
 {
     double dx, dy;

@@ -16,6 +16,7 @@
  *
  *****************************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>
@@ -98,10 +99,9 @@ int main(int argc, char *argv[])
 
     flag.o = G_define_flag();
     flag.o->key = 'o';
-    flag.o->label =
-        _("Override projection check (use current location's projection)");
-    flag.o->description = _(
-        "Assume that the dataset has same projection as the current location");
+    flag.o->label = _("Override projection check (use current project's CRS)");
+    flag.o->description = _("Assume that the dataset has the same coordinate "
+                            "reference system as the current project");
 
     flag.j = G_define_flag();
     flag.j->key = 'j';
@@ -190,7 +190,7 @@ int main(int argc, char *argv[])
         if (!cwd)
             G_fatal_error(_("Unable to get current working directory"));
 
-        G_snprintf(path, GPATH_MAX, "%s%c%s", cwd, HOST_DIRSEP, input);
+        snprintf(path, GPATH_MAX, "%s%c%s", cwd, HOST_DIRSEP, input);
         input = G_store(path);
         CPLFree(cwd);
     }

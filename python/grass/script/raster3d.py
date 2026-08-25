@@ -1,11 +1,11 @@
 """
 Raster3d related functions to be used in Python scripts.
 
-Usage:
-
-::
+:Usage:
+  .. code-block:: python
 
     from grass.script import raster3d as grass
+
     grass.raster3d_info(map)
 
 
@@ -18,7 +18,6 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 .. sectionauthor:: Soeren Gebbert <soeren.gebbert gmail.com>
 """
-from __future__ import absolute_import
 
 import os
 import time
@@ -30,14 +29,16 @@ from grass.exceptions import CalledModuleError
 
 
 def raster3d_info(map, env=None):
-    """Return information about a raster3d map (interface to `r3.info`).
-    Example:
+    """Return information about a raster3d map (interface to ``r3.info``).
 
-    >>> mapcalc3d('volume = row() + col() + depth()')
-    >>> raster3d_info('volume') # doctest: +ELLIPSIS
-    {'vertical_units': '"units"', 'tbres': 1.0, ... 'south': 185000.0}
-    >>> run_command('g.remove', flags='f', type='raster_3d', name='volume')
-    0
+    :Example:
+      .. code-block:: pycon
+
+        >>> mapcalc3d("volume = row() + col() + depth()")
+        >>> raster3d_info("volume")  # doctest: +ELLIPSIS
+        {'vertical_units': '"units"', 'tbres': 1.0, ... 'south': 185000.0}
+        >>> run_command("g.remove", flags="f", type="raster_3d", name="volume")
+        0
 
     :param str map: map name
     :param env: environment
@@ -48,8 +49,7 @@ def raster3d_info(map, env=None):
     def float_or_null(s):
         if s == "NULL":
             return None
-        else:
-            return float(s)
+        return float(s)
 
     s = read_command("r3.info", flags="rg", map=map, env=env)
     kv = parse_key_val(s)
@@ -69,16 +69,24 @@ def raster3d_info(map, env=None):
 
 
 def mapcalc3d(
-    exp, quiet=False, verbose=False, overwrite=False, seed=None, env=None, **kwargs
+    exp,
+    quiet=False,
+    superquiet=False,
+    verbose=False,
+    overwrite=False,
+    seed=None,
+    env=None,
+    **kwargs,
 ):
     """Interface to r3.mapcalc.
 
     :param str exp: expression
-    :param bool quiet: True to run quietly (<tt>--q</tt>)
-    :param bool verbose: True to run verbosely (<tt>--v</tt>)
-    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
+    :param bool quiet: True to run quietly (``--q``)
+    :param bool superquiet: True to run extra quietly (``--qq``)
+    :param bool verbose: True to run verbosely (``--v``)
+    :param bool overwrite: True to enable overwriting the output (``--o``)
     :param seed: an integer used to seed the random-number generator for the
-                 rand() function, or 'auto' to generate a random seed
+                 :py:func:`rand()` function, or 'auto' to generate a random seed
     :param dict env: dictionary of environment variables for child process
     :param kwargs:
     """
@@ -97,10 +105,12 @@ def mapcalc3d(
             env=env,
             seed=seed,
             quiet=quiet,
+            superquiet=superquiet,
             verbose=verbose,
             overwrite=overwrite,
         )
     except CalledModuleError:
         fatal(
-            _("An error occurred while running r3.mapcalc" " with expression: %s") % e
+            _("An error occurred while running r3.mapcalc with expression: %s") % e,
+            env=env,
         )

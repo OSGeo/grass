@@ -10,7 +10,7 @@
 
 void path_finder(int row, int col, int backrow, int backcol)
 {
-    int data, new_backrow, new_backcol;
+    int data = 0, new_backrow = 0, new_backcol = 0;
     extern char *value;
     extern int nrows, ncols;
     extern SEGMENT in_row_seg, in_col_seg, out_seg;

@@ -63,7 +63,7 @@ int Vect_overlay(struct Map_info *AMap, int atype, struct ilist *AList,
                  struct ilist *AAList, /* map A */
                  struct Map_info *BMap, int btype, struct ilist *BList,
                  struct ilist *BAList, /* map B */
-                 int operator, struct Map_info * OMap)
+                 int operator, struct Map_info *OMap)
 { /* output map */
     switch (operator) {
     case GV_O_AND:
@@ -98,10 +98,11 @@ int Vect_overlay(struct Map_info *AMap, int atype, struct ilist *AList,
    \return 1 on success
    \return 0 on error
  */
-int Vect_overlay_and(struct Map_info *AMap, int atype, struct ilist *AList,
-                     struct ilist *AAList, struct Map_info *BMap, int btype,
-                     struct ilist *BList, struct ilist *BAList,
-                     struct Map_info *OMap)
+int Vect_overlay_and(struct Map_info *AMap, int atype,
+                     struct ilist *AList G_UNUSED,
+                     struct ilist *AAList G_UNUSED, struct Map_info *BMap,
+                     int btype, struct ilist *BList G_UNUSED,
+                     struct ilist *BAList G_UNUSED, struct Map_info *OMap)
 {
     int i, j, k, line, altype, bltype, oltype, area, centr;
     struct line_pnts *Points;

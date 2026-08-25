@@ -3,6 +3,7 @@ Created on Thu Jun 28 17:44:45 2012
 
 @author: pietro
 """
+
 import ctypes
 import grass.lib.raster as libraster
 import datetime
@@ -10,7 +11,7 @@ from grass.script.utils import encode
 from grass.pygrass.utils import decode
 
 
-class History(object):
+class History:
     """History class help to manage all the metadata of a raster map"""
 
     def __init__(
@@ -56,13 +57,9 @@ class History(object):
 
     def __del__(self):
         """Rast_free_history"""
-        pass
 
     def __eq__(self, hist):
-        for attr in self.attrs:
-            if getattr(self, attr) != getattr(hist, attr):
-                return False
-        return True
+        return all(getattr(self, attr) == getattr(hist, attr) for attr in self.attrs)
 
     def __len__(self):
         return self.length()

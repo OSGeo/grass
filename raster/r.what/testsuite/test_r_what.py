@@ -11,7 +11,8 @@ Licence:    This program is free software under the GNU General Public
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-import os
+import json
+from pathlib import Path
 
 
 class TestRasterWhat(TestCase):
@@ -437,6 +438,25 @@ class TestRasterWhat(TestCase):
 332533.5941495|242831.139883875||121
 """
 
+    @staticmethod
+    def convert_plain_to_json(plain):
+        data = []
+        lines = plain.split("\n")
+        for line in lines:
+            line = line.strip()
+            if line:
+                parts = line.split("|")
+                item = {
+                    "easting": float(parts[0]),
+                    "northing": float(parts[1]),
+                    "site_name": parts[2],
+                    "boundary_county_500m": {"value": int(parts[3])},
+                }
+                if len(parts) == 5:
+                    item["boundary_county_500m"]["color"] = parts[4]
+                data.append(item)
+        return data
+
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
@@ -445,8 +465,7 @@ class TestRasterWhat(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        if os.path.isfile("result.csv"):
-            os.remove("result.csv")
+        Path("result.csv").unlink(missing_ok=True)
 
     def test_raster_what_points(self):
         """Testing r.what runs successfully with input coordinates given as a vector points map"""
@@ -489,15 +508,13 @@ class TestRasterWhat(TestCase):
             flags="n",
         )
         self.assertFileExists(filename="result.csv", msg="CSV file was not created")
-        if os.path.isfile("result.csv"):
-            file = open("result.csv", "r")
-            fileData = file.read()
+        if (result_path := Path("result.csv")).is_file():
+            fileData = result_path.read_text()
             self.assertLooksLike(
                 actual=fileData,
                 reference=self.refrence_csv,
                 msg="test_raster_what_csv did't run successfully",
             )
-            file.close()
 
     def test_raster_what_points_flag_i(self):
         """Testing r.what runs successfully with flag i"""
@@ -539,6 +556,32 @@ class TestRasterWhat(TestCase):
             actual=str(module.outputs.stdout),
             reference=self.refrence_cache,
             msg="test_raster_what_cats did't run successfully",
+        )
+
+    def test_raster_what_json(self):
+        """Testing r.what runs successfully with input coordinates given as a vector points map and JSON output"""
+        reference = self.convert_plain_to_json(self.refrence_points)
+        module = SimpleModule(
+            "r.what", map=self.map1, points=self.points, format="json"
+        )
+        module.run()
+        self.assertListEqual(
+            json.loads(str(module.outputs.stdout)),
+            reference,
+            "test_raster_what_points did't run successfully",
+        )
+
+    def test_raster_what_points_flag_r_json(self):
+        """Testing r.what runs successfully with flag r and json output"""
+        reference = self.convert_plain_to_json(self.refrence_flag_r)
+        module = SimpleModule(
+            "r.what", map=self.map1, points=self.points, flags="r", format="json"
+        )
+        module.run()
+        self.assertListEqual(
+            json.loads(str(module.outputs.stdout)),
+            reference,
+            "test_raster_what_cats did't run successfully",
         )
 
 

@@ -403,7 +403,7 @@ int main(int argc, char **argv)
     geo_f = G_define_flag();
     geo_f->key = 'g';
     geo_f->description =
-        _("Use geodesic calculation for longitude-latitude locations");
+        _("Use geodesic calculation for longitude-latitude projects");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
@@ -422,7 +422,7 @@ int main(int argc, char **argv)
     tfield = atoi(tfield_opt->answer);
     Vect_str_to_cat_list(term_opt->answer, Clist);
 
-    G_debug(1, "Imput categories:\n");
+    G_debug(1, "Input categories:\n");
     for (i = 0; i < Clist->n_ranges; i++) {
         G_debug(1, "%d - %d\n", Clist->min[i], Clist->max[i]);
     }

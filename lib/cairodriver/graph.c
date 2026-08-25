@@ -8,7 +8,7 @@
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
-   \author Lars Ahlzen <lars ahlzen.com> (original contibutor)
+   \author Lars Ahlzen <lars ahlzen.com> (original contributor)
    \author Glynn Clements
  */
 
@@ -29,7 +29,7 @@
 #endif
 
 #include <unistd.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -73,7 +73,7 @@ static void init_xlib(void)
     }
 
     p = getenv("GRASS_RENDER_CAIRO_VISUAL");
-    if (!p || sscanf(p, "%li", &xid) != 1) {
+    if (!p || sscanf(p, "%lu", &xid) != 1) {
         G_debug(1, "cairo: GRASS_RENDER_CAIRO_VISUAL=%s", p);
         xid = DefaultVisual(ca.dpy, scrn)->visualid;
     }
@@ -389,18 +389,23 @@ static int ends_with(const char *string, const char *suffix)
 
 static void map_file(void)
 {
-#ifndef __MINGW32__
-    size_t size = HEADER_SIZE + ca.width * ca.height * sizeof(unsigned int);
+#ifndef _WIN32
+    size_t size =
+        HEADER_SIZE + (size_t)ca.width * ca.height * sizeof(unsigned int);
     void *ptr;
     int fd;
 
     fd = open(ca.file_name, O_RDWR);
-    if (fd < 0)
+    if (fd < 0) {
+        G_warning(_("Unable to open file: %s"), ca.file_name);
         return;
+    }
 
     ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, (off_t)0);
-    if (ptr == MAP_FAILED)
+    if (ptr == MAP_FAILED) {
+        close(fd);
         return;
+    }
 
     if (ca.grid) {
         cairo_destroy(cairo);

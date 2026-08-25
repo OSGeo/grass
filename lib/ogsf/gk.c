@@ -172,8 +172,8 @@ void gk_follow_frames(Viewnode *view, int numsteps, Keylist *keys, int step,
 
         GS_get_from(tmp);
         G_debug(3, "gk_follow_frames():");
-        G_debug(3, "  MASK: %lx", mask);
-        G_debug(3, "  FROM: %f %f %f", tmp[X], tmp[Y], tmp[Z]);
+        G_debug(3, "  mask: %lx", mask);
+        G_debug(3, "  from: %f %f %f", tmp[X], tmp[Y], tmp[Z]);
 
         /* ACS 1 line: was      GS_get_focus(tmp);
            with this kanimator works also for flythrough navigation
@@ -207,7 +207,7 @@ void gk_follow_frames(Viewnode *view, int numsteps, Keylist *keys, int step,
             GS_set_fov((int)v->fields[KF_FOV]);
         }
 
-        /* Initilaize lights before drawing */
+        /* Initialize lights before drawing */
         num = 1;
         GS_getlight_position(num, &x, &y, &z, &w);
         GS_setlight_position(num, x, y, z, w);
@@ -536,7 +536,7 @@ double get_key_neighbors(int nvk, double time, double range, int loop,
 /*!
    \brief Linear interpolation
 
-   \param dt coeficient
+   \param dt coefficient
    \param val2 value 2
    \param val1 value 1
 
@@ -561,8 +561,9 @@ double lin_interp(float dt, float val1, float val2)
 
    \return interval value
  */
-double get_2key_neighbors(int nvk, float time, float range, int loop,
-                          Keylist *karray[], Keylist **km1, Keylist **kp1)
+double get_2key_neighbors(int nvk, float time, float range G_UNUSED,
+                          int loop G_UNUSED, Keylist *karray[], Keylist **km1,
+                          Keylist **kp1)
 {
     int i;
     double len;
@@ -599,13 +600,13 @@ double get_2key_neighbors(int nvk, float time, float range, int loop,
    Here we use linear interpolation. Loop variable isn't used, but left
    in for use in possible "linear interp with smoothing" version.
 
-   \param kesy keyframe list
+   \param keys keyframe list
    \param keysteps step value
    \param newsteps new step value
    \param loop loop indicator
 
-   \param pointer to viewnode struct
-   \param NULL on failure
+   \return pointer to viewnode struct
+   \return NULL on failure
  */
 Viewnode *gk_make_linear_framesfromkeys(Keylist *keys, int keysteps,
                                         int newsteps, int loop)

@@ -1,27 +1,27 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.out.ogr</em> converts GRASS vector map layer to any of the
-supported <a href="http://www.gdal.org/">OGR</a> vector formats
+supported <a href="https://gdal.org/">OGR</a> vector formats
 (including OGC GeoPackage, ESRI Shapefile, SpatiaLite or GML).
 
 <p>
 OGR (Simple Features Library) is part of the
-<a href="http://www.gdal.org">GDAL</a> library, so you need to
+<a href="https://gdal.org">GDAL</a> library, so you need to
 install this library to use <em>v.out.ogr</em>.
 
 <p>
 The OGR library supports many various formats including:
 
 <ul>
-  <li><a href="http://www.gdal.org/drv_geopackage.html">OGC GeoPackage</a></li>
-  <li><a href="http://www.gdal.org/drv_shapefile.html">ESRI Shapefile</a></li>
-  <li><a href="http://www.gdal.org/drv_pg.html">PostGIS</a></li>
-  <li><a href="http://www.gdal.org/drv_sqlite.html">SpatiaLite</a></li>
-  <li><a href="http://www.gdal.org/drv_csv.html">CSV</a></li>
-  <li><a href="http://www.gdal.org/drv_gml.html">GML</a></li>
-  <li><a href="http://www.gdal.org/drv_kml.html">KML</a></li>
-  <li><a href="http://www.gdal.org/drv_mitab.html">Mapinfo File</a></li>
-  <li><a href="http://www.gdal.org/drv_tiger.html">TIGER</a></li>
+  <li><a href="https://gdal.org/en/stable/drivers/vector/gpkg.html">OGC GeoPackage</a></li>
+  <li><a href="https://gdal.org/en/stable/drivers/vector/shapefile.html">ESRI Shapefile</a></li>
+  <li><a href="https://gdal.org/en/stable/drivers/vector/pg.html">PostGIS</a></li>
+  <li><a href="https://gdal.org/en/stable/drivers/vector/sqlite.html">SpatiaLite</a></li>
+  <li><a href="https://gdal.org/en/stable/drivers/vector/csv.html">CSV</a></li>
+  <li><a href="https://gdal.org/en/stable/drivers/vector/gml.html">GML</a></li>
+  <li><a href="https://gdal.org/en/stable/drivers/vector/kml.html">KML</a></li>
+  <li><a href="https://gdal.org/en/stable/drivers/vector/mitab.html">Mapinfo File</a></li>
+  <li><a href="https://gdal.org/en/stable/drivers/vector/tiger.html">TIGER</a></li>
   <li>... and many others</li>
 </ul>
 
@@ -29,7 +29,7 @@ The list of supported formats is printed with the <em>-l</em> flag.
 
 <p>
 For further available other supported formats go
-<a href="https://gdal.org/drivers/vector/">here</a>.
+<a href="https://gdal.org/en/stable/drivers/vector/">here</a>.
 
 <h2>NOTES</h2>
 
@@ -63,7 +63,7 @@ column names may not be longer than 10 characters.
 
 <p>
 Performance: export to SQLite based formats including OGC GeoPackage may
-become faster with the environmental variable <tt>OGR_SQLITE_CACHE=1024</tt>
+become faster with the environmental variable <code>OGR_SQLITE_CACHE=1024</code>
 being set (value depends on available RAM, see
 <a href="https://trac.osgeo.org/gdal/wiki/ConfigOptions#OGR_SQLITE_CACHE">OGR ConfigOptions</a>).
 
@@ -193,7 +193,7 @@ v.out.ogr input=random3d_hull output=random3d_hull.kml format=KML type=face dsco
 <h2>REFERENCES</h2>
 
 <ul>
-<li><a href="http://www.gdal.org/">OGR vector library</a></li>
+<li><a href="https://gdal.org/">OGR vector library</a></li>
 <li><a href="https://gdal.org/api/">OGR vector library C API</a>
   documentation</li>
 </ul>

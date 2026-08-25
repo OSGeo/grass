@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     basename = G_store(outputfile->answer);
     G_basename(basename, "mat");
     outfile = G_malloc(strlen(basename) + 5);
-    sprintf(outfile, "%s.mat", basename);
+    snprintf(outfile, (strlen(basename) + 5), "%s.mat", basename);
 
     fd = Rast_open_old(infile, "");
 

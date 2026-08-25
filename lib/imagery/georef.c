@@ -43,7 +43,7 @@ struct MATRIX {
 
 /* CALCULATE OFFSET INTO ARRAY BASED ON R/C */
 
-#define M(row, col) m->v[(((row)-1) * (m->n)) + (col)-1]
+#define M(row, col) m->v[(((row) - 1) * (m->n)) + (col) - 1]
 
 #define MSUCCESS    1  /* SUCCESS */
 #define MNPTERR     0  /* NOT ENOUGH POINTS */

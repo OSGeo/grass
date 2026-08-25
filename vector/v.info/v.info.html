@@ -23,7 +23,7 @@ v.info map=geology
  +----------------------------------------------------------------------------+
  | Name:            geology                                                   |
  | Mapset:          PERMANENT                                                 |
- | Location:        nc_spm_08                                                 |
+ | Project:         nc_spm_08                                                 |
  | Database:        /home/martin/grassdata                                    |
  | Title:           North Carolina geology map (polygon map)                  |
  | Map scale:       1:1                                                       |
@@ -68,12 +68,16 @@ area without category: 0.000000e+00 (0 areas)
 ---------------------------------------------------------------------------------
 </pre></div>
 
+Note that while "project" is used by <em>v.info</em> elsewhere, history output
+uses the legacy term "location" because "LOCATION" is currently a part of the
+native vector format.
+
 <h3>Attribute columns for given layer</h3>
 
 <div class="code"><pre>
 v.info -c map=geology
 
-Displaying column types/names for database connection of layer <1>:
+Displaying column types/names for database connection of layer &lt;1&gt;:
 INTEGER|cat
 DOUBLE PRECISION|onemap_pro
 DOUBLE PRECISION|PERIMETER
@@ -91,7 +95,7 @@ v.info -get map=geology
 
 name=geology
 mapset=PERMANENT
-location=nc_spm_08
+project=nc_spm_08
 database=/home/martin/grassdata
 title=North Carolina geology map (polygon map)
 scale=1:1
@@ -132,6 +136,49 @@ top=0.000000
 bottom=0.000000
 </pre></div>
 
+<h3>Output in JSON format</h3>
+<div class="code"><pre>
+{
+    "name": "geology",
+    "mapset": "PERMANENT",
+    "project": "nc_spm_08_grass7",
+    "database": "\/grassdata",
+    "title": "North Carolina geology map (polygon map)",
+    "scale": 1,
+    "creator": "helena",
+    "organization": "NC OneMap",
+    "source_date": "Mon Nov  6 15:48:53 2006",
+    "timestamp": null,
+    "format": "native",
+    "level": 2,
+    "num_dblinks": 1,
+    "attribute_layer_number": 1,
+    "attribute_layer_name": "geology",
+    "attribute_database": "\/grassdata\/nc_spm_08_grass7\/PERMANENT\/sqlite\/sqlite.db",
+    "attribute_database_driver": "sqlite",
+    "attribute_table": "geology",
+    "attribute_primary_key": "cat",
+    "projection": "Lambert Conformal Conic",
+    "digitization_threshold": 0,
+    "comment": "",
+    "north": 318117.43741634465,
+    "south": 10875.827232091688,
+    "east": 930172.31282271142,
+    "west": 123971.19498978264,
+    "top": 0,
+    "bottom": 0,
+    "nodes": 2724,
+    "points": 0,
+    "lines": 0,
+    "boundaries": 3649,
+    "centroids": 1832,
+    "areas": 1832,
+    "islands": 907,
+    "primitives": 5481,
+    "map3d": false
+}
+</pre></div>
+
 <h2>PYTHON</h2>
 
 See <em><a href="https://grass.osgeo.org/grass-stable/manuals/libpython/">Python
@@ -145,6 +192,21 @@ import grass.script as gcore
 
 gcore.vector_columns('geology')   # for `v.info -c`
 gcore.vector_info_topo('geology') # for `v.info shell=topo`
+</pre></div>
+
+Here is an example of how the JSON output format can be used to integrate Grass with other python libraries easily.
+<div class="code"><pre>
+import grass.script as gs
+import pandas as pd
+
+# Run v.info command
+busstops = gs.run_command("v.info", map="busstopsall", format="json")
+
+# Load data into dataframe
+df = pd.DataFrame([busstops])
+
+# Display the DataFrame
+print(df)
 </pre></div>
 
 <h2>SEE ALSO</h2>

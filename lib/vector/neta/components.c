@@ -1,7 +1,7 @@
 /*!
    \file vector/neta/components.c
 
-   \brief Network Analysis library - graph componets
+   \brief Network Analysis library - graph components
 
    Computes strongly and weakly connected components.
 

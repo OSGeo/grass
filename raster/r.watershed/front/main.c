@@ -30,11 +30,13 @@ static int new_argc;
 static void do_opt(const struct Option *opt)
 {
     char *buf;
+    size_t len;
 
     if (!opt->answer)
         return;
-    buf = G_malloc(strlen(opt->key) + 1 + strlen(opt->answer) + 1);
-    snprintf(buf, GPATH_MAX, "%s=%s", opt->key, opt->answer);
+    len = strlen(opt->key) + 1 + strlen(opt->answer) + 1;
+    buf = G_malloc(len);
+    snprintf(buf, len, "%s=%s", opt->key, opt->answer);
     new_argv[new_argc++] = buf;
 }
 

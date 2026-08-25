@@ -3,7 +3,7 @@
 # MODULE:       Test of v.db.select
 # AUTHOR(S):    Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:      Test parsing and structure of CSV and JSON outputs
-# COPYRIGHT:    (C) 2021 by Vaclav Petras the GRASS Development Team
+# COPYRIGHT:    (C) 2021-2023 by Vaclav Petras the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -91,7 +91,7 @@ class DifficultValueTest(TestCase):
             map=cls.vector_points,
             layer=1,
             column="place_name",
-            query_column='"Joan\'s Place"',
+            value="Joan''s Place",
             where="owner_id = 5",
         )
         # Pipe
@@ -173,11 +173,44 @@ class DifficultValueTest(TestCase):
         """Load JSON with difficult values"""
         text = gs.read_command("v.db.select", map=self.vector_points, format="json")
         data = json.loads(text)
+
+        column_info = data["info"]["columns"]
+        self.assertEqual(column_info[0]["name"], "cat")
+        self.assertEqual(column_info[0]["sql_type"], "INTEGER")
+        self.assertEqual(column_info[0]["is_number"], True)
+        self.assertEqual(column_info[1]["name"], "x")
+        self.assertEqual(column_info[1]["sql_type"], "DOUBLE PRECISION")
+        self.assertEqual(column_info[1]["is_number"], True)
+        self.assertEqual(column_info[4]["name"], "owner_id")
+        self.assertEqual(column_info[4]["sql_type"], "INTEGER")
+        self.assertEqual(column_info[4]["is_number"], True)
+        self.assertEqual(column_info[5]["name"], "place_name")
+        self.assertEqual(column_info[5]["sql_type"], "TEXT")
+        self.assertEqual(column_info[5]["is_number"], False)
+
         data = data["records"]
         self.assertIsNone(data[2]["place_name"])
         self.assertEqual(data[3]["place_name"], 'The "Great" Place')
         self.assertEqual(data[7]["place_name"], "Building: GeoLab[5]")
         self.assertEqual(data[8]["place_name"], "892 Long Street\nRaleigh NC 29401")
+
+    def test_json_extent_loads(self):
+        """Test that -r flag with JSON format returns valid extent structure and values"""
+        text = gs.read_command(
+            "v.db.select",
+            map=self.vector_points,
+            flags="r",
+            format="json",
+        )
+        data = json.loads(text)
+        self.assertIn("extent", data)
+        extent = data["extent"]
+        self.assertAlmostEqual(extent["n"], 18.67346939, places=4)
+        self.assertAlmostEqual(extent["s"], 10.67346939, places=4)
+        self.assertAlmostEqual(extent["w"], 15.91836735, places=4)
+        self.assertAlmostEqual(extent["e"], 20.93877551, places=4)
+        self.assertEqual(extent["t"], 143)
+        self.assertEqual(extent["b"], 125)
 
 
 if __name__ == "__main__":

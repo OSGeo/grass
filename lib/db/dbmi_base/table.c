@@ -107,7 +107,7 @@ const char *db_get_table_name(dbTable *table)
    \brief Set the description of the table
 
    \param table pointer to dbTable
-   \param name description of the table
+   \param description description of the table
 
    \return DB_OK
  */
@@ -417,7 +417,7 @@ dbTable *db_clone_table(dbTable *src)
 }
 
 /*!
-   \brief Create SQL CREATE sring from table definition
+   \brief Create SQL CREATE string from table definition
 
    \param table pointer to dbTable
    \param sql dbString to store the SQL CREATE string
@@ -460,7 +460,8 @@ int db_table_to_sql(dbTable *table, dbString *sql)
          * INTEGER, NUMERIC, REAL, SMALLINT, VARCHAR, CHAR */
         switch (sqltype) {
         case DB_SQL_TYPE_CHARACTER:
-            sprintf(buf, "varchar(%d)", db_get_column_length(column));
+            snprintf(buf, sizeof(buf), "varchar(%d)",
+                     db_get_column_length(column));
             db_append_string(sql, buf);
             break;
         case DB_SQL_TYPE_TEXT:

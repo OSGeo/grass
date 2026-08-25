@@ -71,7 +71,7 @@ evi, ndvi, population, slope, srtm, and terrain) only make sense for data with
 certain ranges.
 
 One can get a rough idea of the applicability of a colour table by reading the
-corresponding rules file (<tt>$GISBASE/etc/colors/&lt;name&gt;</tt>).
+corresponding rules file (<code>$GISBASE/etc/colors/&lt;name&gt;</code>).
 For example the <em>slope</em> rule is defined as:
 
 <div class="code"><pre>
@@ -231,14 +231,14 @@ end
 
 <h2>NOTES</h2>
 
-All color tables are stored in <tt>$GISBASE/etc/colors/</tt>. Further
+All color tables are stored in <code>$GISBASE/etc/colors/</code>. Further
 user-defined color tables can also be stored in this directory for
 access from the <em>color</em> parameter or in a user defined directory.
 See also <em>r.colors.out</em> for printing color tables easily to the
 terminal.
 <p>
 The color table assigned to a raster map is stored in
-<tt>$GISDBASE/location/mapset/colr/</tt>.
+<code>$GISDBASE/location/mapset/colr/</code>.
 
 <h2>EXAMPLES</h2>
 
@@ -309,7 +309,7 @@ r.colors map=current_raster -n rast=current_raster
 page <a href="https://grasswiki.osgeo.org/wiki/Color_tables">Color
 tables</a> (from GRASS User Wiki)
 
-<p><a href="http://colorbrewer.org">ColorBrewer</a> is an online tool designed to
+<p><a href="https://colorbrewer2.org">ColorBrewer</a> is an online tool designed to
 help people select good color schemes for maps and other graphics.
 
 <h2>AUTHORS</h2>

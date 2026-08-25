@@ -19,7 +19,7 @@ This program is free software under the GNU General Public License
 from grass.script import core as gcore
 
 
-class LayerList(object):
+class LayerList:
     """Non GUI class managing list of layers.
 
     It provides API for handling layers. In the future,
@@ -38,8 +38,9 @@ class LayerList(object):
         layers = []
         for layer in self._list:
             if layer.IsSelected():
-                if activeOnly and layer.IsActive():
-                    layers.append(layer)
+                if activeOnly:
+                    if layer.IsActive():
+                        layers.append(layer)
                 else:
                     layers.append(layer)
         return layers
@@ -63,11 +64,7 @@ class LayerList(object):
 
         :param mapTypes: list of types
         """
-        layers = []
-        for layer in self._list:
-            if layer.mapType in mapTypes:
-                layers.append(layer)
-        return layers
+        return [layer for layer in self._list if layer.mapType in mapTypes]
 
     def AddNewLayer(
         self,
@@ -125,7 +122,7 @@ class LayerList(object):
         .. warning::
             Avoid using this method, it might be removed in the future.
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     def GetLayerIndex(self, layer):
         """Get index of layer."""
@@ -146,8 +143,7 @@ class LayerList(object):
             self._list.insert(idx + 1, lr)
 
     def __iter__(self):
-        for layer in self._list:
-            yield layer
+        yield from self._list
 
     def __getitem__(self, index):
         return self._list[index]
@@ -162,7 +158,7 @@ class LayerList(object):
         return text
 
 
-class Layer(object):
+class Layer:
     """Object representing layer.
 
     Properties of the object are checked during setting.
@@ -176,12 +172,12 @@ class Layer(object):
         Traceback (most recent call last):
         ...
         ValueError: Opacity must be an integer between 0 and 100, not 0.1.
-        >>> layer.name = 'blablabla'
+        >>> layer.name = "blablabla"
         Traceback (most recent call last):
         ...
         ValueError: To set layer name, the type of layer must be specified.
-        >>> layer.mapType = 'raster'
-        >>> layer.name = 'blablabla'
+        >>> layer.mapType = "raster"
+        >>> layer.name = "blablabla"
         Traceback (most recent call last):
         ...
         ValueError: Map <blablabla> not found.
@@ -223,15 +219,15 @@ class Layer(object):
                 len(fullName) == 1 and self._mapType != "rgb"
             ):  # skip checking rgb maps for now
                 if self._mapType is None:
-                    raise ValueError(
-                        "To set layer name, the type of layer must be specified."
-                    )
+                    msg = "To set layer name, the type of layer must be specified."
+                    raise ValueError(msg)
 
                 res = gcore.find_file(
                     name=fullName, element=self._internalTypes[self._mapType]
                 )
                 if not res["mapset"]:
-                    raise ValueError("Map <{name}> not found.".format(name=name))
+                    msg = "Map <{name}> not found.".format(name=name)
+                    raise ValueError(msg)
                 self._name = name + "@" + res["mapset"]
             else:
                 self._name = name
@@ -264,7 +260,8 @@ class Layer(object):
         :param mapType: can be 'raster', 'vector', 'raster_3d'
         """
         if mapType not in self._mapTypes:
-            raise ValueError("Wrong map type used: {mtype}".format(mtype=mapType))
+            msg = "Wrong map type used: {mtype}".format(mtype=mapType)
+            raise ValueError(msg)
 
         self._mapType = mapType
 
@@ -283,9 +280,8 @@ class Layer(object):
         :param float opacity: value between 0 and 1
         """
         if not (0 <= opacity <= 1):
-            raise ValueError(
-                "Opacity value must be between 0 and 1, not {op}.".format(op=opacity)
-            )
+            msg = "Opacity value must be between 0 and 1, not {op}.".format(op=opacity)
+            raise ValueError(msg)
         self._opacity = opacity
 
     opacity = property(fget=GetOpacity, fset=SetOpacity)

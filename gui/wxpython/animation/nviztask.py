@@ -14,12 +14,7 @@ This program is free software under the GNU General Public License
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-from __future__ import print_function
-
-try:
-    import xml.etree.ElementTree as etree
-except ImportError:
-    import elementtree.ElementTree as etree  # Python <= 2.4
+import xml.etree.ElementTree as ET
 
 from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException
@@ -38,15 +33,15 @@ class NvizTask:
         self.task = gtask.grassTask("m.nviz.image")
         self.filename = filename
         try:
-            gxwXml = ProcessWorkspaceFile(etree.parse(self.filename))
-        except Exception:
+            gxwXml = ProcessWorkspaceFile(ET.parse(self.filename))
+        except Exception as e:
             raise GException(
                 _(
                     "Reading workspace file <%s> failed.\n"
                     "Invalid file, unable to parse XML document."
                 )
                 % filename
-            )
+            ) from e
         # for display in gxwXml.displays:
         # pprint(display)
         # for layer in gxwXml.layers:
@@ -108,7 +103,7 @@ class NvizTask:
             ("shininess_map", "shininess_value"),
             ("transparency_map", "transparency_value"),
         )
-        for attr, params in zip(attributes, parameters):
+        for attr, params in zip(attributes, parameters, strict=True):
             mapname = None
             const = None
             if attr in surface["attribute"]:
@@ -116,11 +111,10 @@ class NvizTask:
                     mapname = surface["attribute"][attr]["value"]
                 else:
                     const = surface["attribute"][attr]["value"]
-            else:
-                if attr == "transp":
-                    const = 0
-                elif attr == "color":
-                    mapname = mapName
+            elif attr == "transp":
+                const = 0
+            elif attr == "color":
+                mapname = mapName
 
             if mapname:
                 self._setMultiTaskParam(params[0], mapname)
@@ -136,15 +130,13 @@ class NvizTask:
         self._setMultiTaskParam("wire_color", value)
         # resolution
         for mode1, mode2 in zip(
-            ("coarse", "fine"), ("resolution_coarse", "resolution_fine")
+            ("coarse", "fine"), ("resolution_coarse", "resolution_fine"), strict=True
         ):
             value = surface["draw"]["resolution"][mode1]
             self._setMultiTaskParam(mode2, value)
 
         # position
-        pos = []
-        for coor in ("x", "y", "z"):
-            pos.append(str(surface["position"][coor]))
+        pos = [str(surface["position"][coor]) for coor in ("x", "y", "z")]
         value = ",".join(pos)
         self._setMultiTaskParam("surface_position", value)
 
@@ -191,7 +183,7 @@ class NvizTask:
                     ("isosurf_shininess_map", "isosurf_shininess_value"),
                     ("isosurf_transparency_map", "isosurf_transparency_value"),
                 )
-                for attr, params in zip(attributes, parameters):
+                for attr, params in zip(attributes, parameters, strict=True):
                     mapname = None
                     const = None
                     if attr in isosurface:
@@ -199,21 +191,19 @@ class NvizTask:
                             mapname = isosurface[attr]["value"]
                         else:
                             const = float(isosurface[attr]["value"])
-                    else:
-                        if attr == "transp":
-                            const = 0
-                        elif attr == "color":
-                            mapname = mapName
+                    elif attr == "transp":
+                        const = 0
+                    elif attr == "color":
+                        mapname = mapName
 
                     if mapname:
                         self._setMultiTaskParam(params[0], mapname)
+                    elif attr == "topo":
+                        # TODO: we just assume it's the first volume, what
+                        # to do else?
+                        self._setMultiTaskParam(params[1], "1:" + str(const))
                     else:
-                        if attr == "topo":
-                            # TODO: we just assume it's the first volume, what
-                            # to do else?
-                            self._setMultiTaskParam(params[1], "1:" + str(const))
-                        else:
-                            self._setMultiTaskParam(params[1], const)
+                        self._setMultiTaskParam(params[1], const)
                 if isosurface["inout"]["value"]:
                     self.task.set_flag("n", True)
         # slices
@@ -293,11 +283,8 @@ class NvizTask:
         toJoin = filter(self._ignore, toJoin)
         return delim.join(map(str, toJoin))
 
-    def _ignore(self, value):
-        if value == "" or value is None:
-            return False
-        else:
-            return True
+    def _ignore(self, value) -> bool:
+        return not (value == "" or value is None)
 
     def ListMapParameters(self):
         # params = self.task.get_list_params()
@@ -312,12 +299,11 @@ class NvizTask:
 
         if len(layerList) > 1:
             raise GException(_("Please add only one layer in the list."))
-            return
+            return None
         layer = layerList[0]
-        if hasattr(layer, "maps"):
-            series = layer.maps
-        else:
+        if not hasattr(layer, "maps"):
             raise GException(_("No map series nor space-time dataset is added."))
+        series = layer.maps
 
         for value in series:
             self.task.set_param(paramName, value)
@@ -364,5 +350,4 @@ def test():
 
 
 if __name__ == "__main__":
-
     test()

@@ -5,4 +5,4 @@
 
 #define SEG_INDEX(s, r, c)                                                    \
     (int)(((((r) >> RAMSEGBITS) * (s) + ((c) >> RAMSEGBITS)) << DOUBLEBITS) + \
-          (((r)&SEGLENLESS) << RAMSEGBITS) + ((c)&SEGLENLESS))
+          (((r) & SEGLENLESS) << RAMSEGBITS) + ((c) & SEGLENLESS))

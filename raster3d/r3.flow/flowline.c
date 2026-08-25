@@ -44,14 +44,15 @@ static void write_segment_db(struct field_info *finfo, dbDriver *driver,
 {
     char buf[200];
 
-    sprintf(buf, "insert into %s values (%d, %e", finfo->table, cat, velocity);
+    snprintf(buf, sizeof(buf), "insert into %s values (%d, %e", finfo->table,
+             cat, velocity);
     db_set_string(sql, buf);
     if (write_scalar) {
-        sprintf(buf, ", %e", scalar_value);
+        snprintf(buf, sizeof(buf), ", %e", scalar_value);
         db_append_string(sql, buf);
     }
     if (use_sampled_map) {
-        sprintf(buf, ", %e", sampled_map_value);
+        snprintf(buf, sizeof(buf), ", %e", sampled_map_value);
         db_append_string(sql, buf);
     }
     db_append_string(sql, ")");

@@ -7,31 +7,12 @@
 #include <ogr_api.h>
 #include <cpl_string.h>
 
-/* switch to new GDAL API with GDAL 2.2+ */
-#if GDAL_VERSION_NUM >= 2020000
-typedef GDALDatasetH ds_t;
-typedef GDALDriverH dr_t;
-
-#define get_driver_by_name        GDALGetDriverByName
-#define get_driver                GDALGetDriver
-#define ds_getlayerbyindex(ds, i) GDALDatasetGetLayer((ds), (i))
-#define ds_close(ds)              GDALClose(ds)
-#else
-typedef OGRDataSourceH ds_t;
-typedef OGRSFDriverH dr_t;
-
-#define get_driver_by_name        OGRGetDriverByName
-#define get_driver                OGRGetDriver
-#define ds_getlayerbyindex(ds, i) OGR_DS_GetLayer((ds), (i))
-#define ds_close(ds)              OGR_DS_Destroy(ds)
-#endif
-
 /* some hard limits */
 #define SQL_BUFFER_SIZE 2000
 
 struct Options {
     struct Option *input, *dsn, *layer, *type, *format, *field, *dsco, *lco,
-        *otype;
+        *otype, *method;
 };
 
 struct Flags {
@@ -42,9 +23,13 @@ struct Flags {
 /* args.c */
 void parse_args(int, char **, struct Options *, struct Flags *);
 
-/* attributes.c */
+/* attrb.c */
 int mk_att(int, struct field_info *, dbDriver *, int, int *, const char **, int,
            int, OGRFeatureH, int *);
+
+/* attrb_fast.c */
+int mk_att_fast(int, struct field_info *, int, int *, const char **, int, int,
+                OGRFeatureH, int *, dbCursor *, int *, int *, int);
 
 /* dsn.c */
 char *get_datasource_name(const char *, int);
@@ -65,7 +50,18 @@ int export_lines(struct Map_info *, int, int, int, int, int, OGRFeatureDefnH,
                  OGRLayerH, struct field_info *, dbDriver *, int, int *,
                  const char **, int, int, int *, int *);
 
+/* export_lines_fast.c */
+int export_lines_fast(struct Map_info *, int, int, int, int, int,
+                      OGRFeatureDefnH, OGRLayerH, struct field_info *,
+                      dbDriver *, int, int *, const char **, int, int, int *,
+                      int *);
+
 /* export_areas.c */
 int export_areas(struct Map_info *, int, int, int, OGRFeatureDefnH, OGRLayerH,
                  struct field_info *, dbDriver *, int, int *, const char **,
                  int, int, int *, int *, int);
+
+/* export_areas_fast.c */
+int export_areas_fast(struct Map_info *, int, int, int, OGRFeatureDefnH,
+                      OGRLayerH, struct field_info *, dbDriver *, int, int *,
+                      const char **, int, int, int *, int *, int);

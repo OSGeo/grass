@@ -1,29 +1,23 @@
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 import contextlib
 import os
-import sys
 import multiprocessing as mltp
 import subprocess as sub
 import shutil as sht
 from math import ceil
+from pathlib import Path
 
 from grass.script.setup import write_gisrc
-from grass.script import append_node_pid, legalize_vector_name
+from grass.script import Popen, append_node_pid, available_cpus, legalize_vector_name
 
 from grass.pygrass.gis import Mapset, Location
 from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
 from grass.pygrass.utils import get_mapset_raster, findmaps
 
-from grass.pygrass.modules.grid.split import split_region_tiles
+from grass.pygrass.modules.grid.split import (
+    split_region_tiles,
+    split_region_in_overlapping_tiles,
+)
 from grass.pygrass.modules.grid.patch import rpatch_map, rpatch_map_r_patch_backend
 
 
@@ -37,21 +31,19 @@ def select(parms, ptype):
     :type ptype: str
     :returns: An iterator with the value of the parameter.
 
-    >>> slp = Module('r.slope.aspect',
-    ...              elevation='ele', slope='slp', aspect='asp',
-    ...              run_=False)
-    >>> for rast in select(slp.outputs, 'raster'):
+    >>> slp = Module(
+    ...     "r.slope.aspect", elevation="ele", slope="slp", aspect="asp", run_=False
+    ... )
+    >>> for rast in select(slp.outputs, "raster"):
     ...     print(rast)
-    ...
     slp
     asp
     """
     for k in parms:
         par = parms[k]
-        if par.type == ptype or par.typedesc == ptype and par.value:
+        if par.type == ptype or (par.typedesc == ptype and par.value):
             if par.multiple:
-                for val in par.value:
-                    yield val
+                yield from par.value
             else:
                 yield par.value
 
@@ -80,20 +72,20 @@ def copy_mapset(mapset, path):
 
 
     >>> from grass.script.core import gisenv
-    >>> mname = gisenv()['MAPSET']
+    >>> mname = gisenv()["MAPSET"]
     >>> mset = Mapset()
     >>> mset.name == mname
     True
     >>> import tempfile as tmp
     >>> import os
-    >>> path = os.path.join(tmp.gettempdir(), 'my_loc', 'my_mset')
-    >>> copy_mapset(mset, path)                           # doctest: +ELLIPSIS
+    >>> path = os.path.join(tmp.gettempdir(), "my_loc", "my_mset")
+    >>> copy_mapset(mset, path)  # doctest: +ELLIPSIS
     Mapset(...)
-    >>> sorted(os.listdir(path))                          # doctest: +ELLIPSIS
+    >>> sorted(os.listdir(path))  # doctest: +ELLIPSIS
     [...'PERMANENT'...]
-    >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
-    ['DEFAULT_WIND', 'PROJ_INFO', 'PROJ_UNITS', 'VAR', 'WIND']
-    >>> sorted(os.listdir(os.path.join(path, mname)))   # doctest: +ELLIPSIS
+    >>> sorted(os.listdir(os.path.join(path, "PERMANENT")))
+    ['DEFAULT_WIND', 'PROJ_INFO', 'PROJ_SRID', 'PROJ_UNITS', 'PROJ_WKT', 'VAR', 'WIND']
+    >>> sorted(os.listdir(os.path.join(path, mname)))  # doctest: +ELLIPSIS
     [...'WIND'...]
     >>> import shutil
     >>> shutil.rmtree(path)
@@ -102,10 +94,8 @@ def copy_mapset(mapset, path):
     per_new = os.path.join(path, "PERMANENT")
     map_old = mapset.path()
     map_new = os.path.join(path, mapset.name)
-    if not os.path.isdir(per_new):
-        os.makedirs(per_new)
-    if not os.path.isdir(map_new):
-        os.mkdir(map_new)
+    Path(per_new).mkdir(parents=True, exist_ok=True)
+    Path(map_new).mkdir(exist_ok=True)
     copy_special_mapset_files(per_old, per_new)
     copy_special_mapset_files(map_old, map_new)
     gisdbase, location = os.path.split(path)
@@ -123,15 +113,14 @@ def read_gisrc(gisrc):
     >>> import os
     >>> from grass.script.core import gisenv
     >>> genv = gisenv()
-    >>> (read_gisrc(os.environ['GISRC']) == (genv['MAPSET'],
-    ...                                      genv['LOCATION_NAME'],
-    ...                                      genv['GISDBASE']))
+    >>> (
+    ...     read_gisrc(os.environ["GISRC"])
+    ...     == (genv["MAPSET"], genv["LOCATION_NAME"], genv["GISDBASE"])
+    ... )
     True
     """
-    with open(gisrc, "r") as gfile:
-        gis = dict(
-            [(k.strip(), v.strip()) for k, v in [row.split(":", 1) for row in gfile]]
-        )
+    with open(gisrc) as gfile:
+        gis = {k.strip(): v.strip() for k, v in [row.split(":", 1) for row in gfile]}
     return gis["MAPSET"], gis["LOCATION_NAME"], gis["GISDBASE"]
 
 
@@ -149,19 +138,19 @@ def get_mapset(gisrc_src, gisrc_dst):
     mdst, ldst, gdst = read_gisrc(gisrc_dst)
     path_src = os.path.join(gsrc, lsrc, msrc)
     path_dst = os.path.join(gdst, ldst, mdst)
-    if not os.path.isdir(path_dst):
-        os.makedirs(path_dst)
+    if not Path(path_dst).is_dir():
+        Path(path_dst).mkdir(parents=True)
         copy_special_mapset_files(path_src, path_dst)
     src = Mapset(msrc, lsrc, gsrc)
     dst = Mapset(mdst, ldst, gdst)
-    visible = [m for m in src.visible]
+    visible = list(src.visible)
     if src.name not in visible:
         visible.append(src.name)
     dst.visible.extend(visible)
     return src, dst
 
 
-def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
+def copy_groups(groups, gisrc_src, gisrc_dst, processes, region=None):
     """Copy group from one mapset to another, crop the raster to the region
 
     :param groups: a list of strings with the group that must be copied
@@ -171,9 +160,9 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
     :type gisrc_src: str
     :param gisrc_dst: path of the GISRC file where the groups will be created
     :type gisrc_dst: str
+    :param processes: number of processes for parallel execution
     :param region: a region like object or a dictionary with the region
-                   parameters that will be used to crop the rasters of the
-                   groups
+                   parameters that will be used to crop the rasters of the groups
     :type region: Region object or dictionary
     :returns: None
 
@@ -190,18 +179,20 @@ def copy_groups(groups, gisrc_src, gisrc_dst, region=None):
 
     src = read_gisrc(gisrc_src)
     dst = read_gisrc(gisrc_dst)
-    rm = True if src[2] != dst[2] else False
+    rm = src[2] != dst[2]
     all_rasts = [r[0] for r in findmaps("raster", location=dst[1], gisdbase=dst[2])]
     for grp in groups:
         # change gisdbase to src
         env["GISRC"] = gisrc_src
         get_grp(group=grp, env_=env)
-        rasts = [r for r in get_grp.outputs.stdout.split()]
+        rasts = list(get_grp.outputs.stdout.split())
         # change gisdbase to dst
         env["GISRC"] = gisrc_dst
         rast2cp = [r for r in rasts if rmloc(r) not in all_rasts]
         if rast2cp:
-            copy_rasters(rast2cp, gisrc_src, gisrc_dst, region=region)
+            copy_rasters(
+                rast2cp, gisrc_src, gisrc_dst, processes=processes, region=region
+            )
         set_grp(
             group=grp,
             input=[rmloc(r) for r in rasts] if rast2cp or rm else rasts,
@@ -213,8 +204,7 @@ def set_region(region, gisrc_src, gisrc_dst, env):
     """Set a region into two different mapsets.
 
     :param region: a region like object or a dictionary with the region
-                   parameters that will be used to crop the rasters of the
-                   groups
+                   parameters that will be used to crop the rasters of the groups
     :type region: Region object or dictionary
     :param gisrc_src: path of the GISRC file from where we want to copy the groups
     :type gisrc_src: str
@@ -224,19 +214,23 @@ def set_region(region, gisrc_src, gisrc_dst, env):
     :type env:
     :returns: None
     """
-    reg_str = (
-        "g.region n=%(north)r s=%(south)r "
-        "e=%(east)r w=%(west)r "
-        "nsres=%(nsres)r ewres=%(ewres)r"
-    )
-    reg_cmd = reg_str % dict(region.items())
+    region_dict = dict(region.items())
+    reg_cmd = [
+        "g.region",
+        "n=%r" % region_dict["north"],
+        "s=%r" % region_dict["south"],
+        "e=%r" % region_dict["east"],
+        "w=%r" % region_dict["west"],
+        "nsres=%r" % region_dict["nsres"],
+        "ewres=%r" % region_dict["ewres"],
+    ]
     env["GISRC"] = gisrc_src
-    sub.Popen(reg_cmd, shell=True, env=env)
+    Popen(reg_cmd, env=env)
     env["GISRC"] = gisrc_dst
-    sub.Popen(reg_cmd, shell=True, env=env)
+    Popen(reg_cmd, env=env)
 
 
-def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
+def copy_rasters(rasters, gisrc_src, gisrc_dst, processes, region=None):
     """Copy rasters from one mapset to another, crop the raster to the region.
 
     :param rasters: a list of strings with the raster map that must be copied
@@ -246,9 +240,9 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
     :type gisrc_src: str
     :param gisrc_dst: path of the GISRC file where the groups will be created
     :type gisrc_dst: str
+    :param processes: number of processes for parallel execution
     :param region: a region like object or a dictionary with the region
-                   parameters that will be used to crop the rasters of the
-                   groups
+                   parameters that will be used to crop the rasters of the groups
     :type region: Region object or dictionary
     :returns: None
     """
@@ -270,14 +264,19 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
         # change gisdbase to src
         env["GISRC"] = gisrc_src
         name = nam % rast_clean
-        mpclc(expression="%s=%s" % (name, rast), overwrite=True, env_=env)
+        mpclc(
+            expression="%s=%s" % (name, rast),
+            nprocs=processes,
+            overwrite=True,
+            env_=env,
+        )
         file_dst = "%s.pack" % os.path.join(path_dst, name)
         rpck(input=name, output=file_dst, overwrite=True, env_=env)
         remove(flags="f", type="raster", name=name, env_=env)
         # change gisdbase to dst
         env["GISRC"] = gisrc_dst
         rupck(input=file_dst, output=rast_clean, overwrite=True, env_=env)
-        os.remove(file_dst)
+        Path(file_dst).unlink()
 
 
 def copy_vectors(vectors, gisrc_src, gisrc_dst):
@@ -311,7 +310,7 @@ def copy_vectors(vectors, gisrc_src, gisrc_dst):
         # change gisdbase to dst
         env["GISRC"] = gisrc_dst
         vupck(input=file_dst, output=vect, overwrite=True, env_=env)
-        os.remove(file_dst)
+        Path(file_dst).unlink()
 
 
 def get_cmd(cmdd):
@@ -322,18 +321,21 @@ def get_cmd(cmdd):
     :param cmdd: a module dictionary with all the parameters
     :type cmdd: dict
 
-    >>> slp = Module('r.slope.aspect',
-    ...              elevation='ele', slope='slp', aspect='asp',
-    ...              overwrite=True, run_=False)
+    >>> slp = Module(
+    ...     "r.slope.aspect",
+    ...     elevation="ele",
+    ...     slope="slp",
+    ...     aspect="asp",
+    ...     overwrite=True,
+    ...     run_=False,
+    ... )
     >>> get_cmd(slp.get_dict())  # doctest: +ELLIPSIS
     ['r.slope.aspect', 'elevation=ele', 'format=degrees', ..., '--o']
     """
-    cmd = [
+    return [
         cmdd["name"],
-    ]
-    cmd.extend(("%s=%s" % (k, v) for k, v in cmdd["inputs"] if not isinstance(v, list)))
-    cmd.extend(
-        (
+        *("%s=%s" % (k, v) for k, v in cmdd["inputs"] if not isinstance(v, list)),
+        *(
             "%s=%s"
             % (
                 k,
@@ -341,21 +343,16 @@ def get_cmd(cmdd):
             )
             for k, vals in cmdd["inputs"]
             if isinstance(vals, list)
-        )
-    )
-    cmd.extend(
-        ("%s=%s" % (k, v) for k, v in cmdd["outputs"] if not isinstance(v, list))
-    )
-    cmd.extend(
-        (
+        ),
+        *("%s=%s" % (k, v) for k, v in cmdd["outputs"] if not isinstance(v, list)),
+        *(
             "%s=%s" % (k, ",".join([repr(v) for v in vals]))
             for k, vals in cmdd["outputs"]
             if isinstance(vals, list)
-        )
-    )
-    cmd.extend(("-%s" % (flg) for flg in cmdd["flags"] if len(flg) == 1))
-    cmd.extend(("--%s" % (flg[0]) for flg in cmdd["flags"] if len(flg) > 1))
-    return cmd
+        ),
+        *(f"-{flg}" for flg in cmdd["flags"] if len(flg) == 1),
+        *(f"--{flg[0]}" for flg in cmdd["flags"] if len(flg) > 1),
+    ]
 
 
 def cmd_exe(args):
@@ -383,7 +380,6 @@ def cmd_exe(args):
     src, dst = get_mapset(gisrc_src, gisrc_dst)
     env = os.environ.copy()
     env["GISRC"] = gisrc_dst
-    shell = True if sys.platform == "win32" else False
     if mapnames:
         inputs = dict(cmd["inputs"])
         # reset the inputs to
@@ -391,23 +387,20 @@ def cmd_exe(args):
             inputs[key] = mapnames[key]
         cmd["inputs"] = inputs.items()
         # set the region to the tile
-        sub.Popen(["g.region", "raster=%s" % key], shell=shell, env=env).wait()
+        Popen(["g.region", "raster=%s" % key], env=env).wait()
     else:
         # set the computational region
-        lcmd = [
-            "g.region",
-        ]
-        lcmd.extend(["%s=%s" % (k, v) for k, v in bbox.items()])
-        sub.Popen(lcmd, shell=shell, env=env).wait()
+        lcmd = ["g.region", *["%s=%s" % (k, v) for k, v in bbox.items()]]
+        Popen(lcmd, env=env).wait()
     if groups:
-        copy_groups(groups, gisrc_src, gisrc_dst)
+        copy_groups(groups, gisrc_src, gisrc_dst, processes=1)
     # run the grass command
-    sub.Popen(get_cmd(cmd), shell=shell, env=env).wait()
+    Popen(get_cmd(cmd), env=env).wait()
     # remove temp GISRC
-    os.remove(gisrc_dst)
+    Path(gisrc_dst).unlink()
 
 
-class GridModule(object):
+class GridModule:
     # TODO maybe also i.* could be supported easily
     """Run GRASS raster commands in a multiprocessing mode.
 
@@ -420,15 +413,15 @@ class GridModule(object):
     :param overlap: overlap between tiles, in pixel.
     :type overlap: int
     :param processes: number of threads, default value is equal to the number
-                      of processor available.
+                      of processors available.
     :param split: if True use r.tile to split all the inputs.
     :type split: bool
     :param mapset_prefix: if specified created mapsets start with this prefix
     :type mapset_prefix: str
     :param patch_backend: "r.patch", "RasterRow", or None for for default
     :type patch_backend: None or str
-    :param run_: if False only instantiate the object
-    :type run_: bool
+    :param run\\_: if False only instantiate the object
+    :type run\\_: bool
     :param args: give all the parameters to the command
     :param kargs: give all the parameters to the command
 
@@ -436,11 +429,18 @@ class GridModule(object):
     When patch_backend is "r.patch", r.patch is used with nprocs=processes.
     r.patch can only be used when overlap is 0.
 
-    >>> grd = GridModule('r.slope.aspect',
-    ...                  width=500, height=500, overlap=2,
-    ...                  processes=None, split=False,
-    ...                  elevation='elevation',
-    ...                  slope='slope', aspect='aspect', overwrite=True)
+    >>> grd = GridModule(
+    ...     "r.slope.aspect",
+    ...     width=500,
+    ...     height=500,
+    ...     overlap=2,
+    ...     processes=None,
+    ...     split=False,
+    ...     elevation="elevation",
+    ...     slope="slope",
+    ...     aspect="aspect",
+    ...     overwrite=True,
+    ... )
     >>> grd.run()
 
     Temporary mapsets created start with a generated prefix which is unique for each
@@ -476,7 +476,7 @@ class GridModule(object):
         self.height = height
         self.overlap = overlap
         self.processes = processes
-        self.region = region if region else Region()
+        self.region = region or Region()
         self.start_row = start_row
         self.start_col = start_col
         self.out_prefix = out_prefix
@@ -486,7 +486,7 @@ class GridModule(object):
         # if overlap > 0, r.patch won't work properly
         if not patch_backend:
             self.patch_backend = "RasterRow"
-        elif patch_backend not in ("r.patch", "RasterRow"):
+        elif patch_backend not in {"r.patch", "RasterRow"}:
             raise RuntimeError(
                 _("Parameter patch_backend must be 'r.patch' or 'RasterRow'")
             )
@@ -504,18 +504,28 @@ class GridModule(object):
             self.gisrc_dst = write_gisrc(
                 self.n_mset.gisdbase, self.n_mset.location, self.n_mset.name
             )
-            rasters = [r for r in select(self.module.inputs, "raster")]
+            rasters = list(select(self.module.inputs, "raster"))
             if rasters:
                 copy_rasters(
-                    rasters, self.gisrc_src, self.gisrc_dst, region=self.region
+                    rasters,
+                    self.gisrc_src,
+                    self.gisrc_dst,
+                    processes=self.processes,
+                    region=self.region,
                 )
-            vectors = [v for v in select(self.module.inputs, "vector")]
+            vectors = list(select(self.module.inputs, "vector"))
             if vectors:
                 copy_vectors(vectors, self.gisrc_src, self.gisrc_dst)
-            groups = [g for g in select(self.module.inputs, "group")]
+            groups = list(select(self.module.inputs, "group"))
             if groups:
-                copy_groups(groups, self.gisrc_src, self.gisrc_dst, region=self.region)
-        self.bboxes = split_region_tiles(
+                copy_groups(
+                    groups,
+                    self.gisrc_src,
+                    self.gisrc_dst,
+                    processes=self.processes,
+                    region=self.region,
+                )
+        self.bboxes = split_region_in_overlapping_tiles(
             region=region, width=self.width, height=self.height, overlap=overlap
         )
         if mapset_prefix:
@@ -531,7 +541,7 @@ class GridModule(object):
     def __del__(self):
         if self.gisrc_dst:
             # remove GISRC file
-            os.remove(self.gisrc_dst)
+            Path(self.gisrc_dst).unlink()
 
     def clean_location(self, location=None):
         """Remove all created mapsets.
@@ -578,20 +588,25 @@ class GridModule(object):
         region = Region()
         if self.width and self.height:
             return
+        # Estimation requires number of processes, but it can be None
+        # so we try to estimate the number here as number of CPUs available
+        processes = self.processes
+        if processes is None:
+            processes = available_cpus()
         if self.width:
             n_tiles_x = ceil(region.cols / self.width)
-            n_tiles_y = ceil(self.processes / n_tiles_x)
+            n_tiles_y = ceil(processes / n_tiles_x)
             self.height = ceil(region.rows / n_tiles_y)
         elif self.height:
             n_tiles_y = ceil(region.rows / self.height)
-            n_tiles_x = ceil(self.processes / n_tiles_y)
+            n_tiles_x = ceil(processes / n_tiles_y)
             self.width = ceil(region.cols / n_tiles_x)
         else:
             self.width = region.cols
-            self.height = ceil(region.rows / self.processes)
+            self.height = ceil(region.rows / processes)
 
     def get_works(self):
-        """Return a list of tuble with the parameters for cmd_exe function"""
+        """Return a list of tuples with the parameters for cmd_exe function"""
         works = []
         reg = Region()
         if self.move:
@@ -599,20 +614,24 @@ class GridModule(object):
         else:
             ldst, gdst = self.mset.location, self.mset.gisdbase
         cmd = self.module.get_dict()
-        groups = [g for g in select(self.module.inputs, "group")]
+        groups = list(select(self.module.inputs, "group"))
         for row, box_row in enumerate(self.bboxes):
             for col, box in enumerate(box_row):
                 inms = None
                 if self.inlist:
                     inms = {}
                     cols = len(box_row)
+
+                    indx = row * cols + col
                     for key in self.inlist:
-                        indx = row * cols + col
                         inms[key] = "%s@%s" % (self.inlist[key][indx], self.mset.name)
                 # set the computational region, prepare the region parameters
-                bbox = dict([(k[0], str(v)) for k, v in box.items()[:-2]])
-                bbox["nsres"] = "%f" % reg.nsres
-                bbox["ewres"] = "%f" % reg.ewres
+                bbox = {
+                    **{k[0]: str(v) for k, v in box.items()[:-2]},
+                    "nsres": "%f" % reg.nsres,
+                    "ewres": "%f" % reg.ewres,
+                }
+
                 new_mset = (
                     self.msetstr % (self.start_row + row, self.start_col + col),
                 )
@@ -632,10 +651,10 @@ class GridModule(object):
         """Add the mapset information to the input maps"""
         for inmap in self.module.inputs:
             inm = self.module.inputs[inmap]
-            if inm.type in ("raster", "vector") and inm.value:
+            if inm.type in {"raster", "vector"} and inm.value:
                 if "@" not in inm.value:
                     mset = get_mapset_raster(inm.value)
-                    inm.value = inm.value + "@%s" % mset
+                    inm.value += "@%s" % mset
 
     def run(self, patch=True, clean=True):
         """Run the GRASS command
@@ -682,7 +701,9 @@ class GridModule(object):
                 routputs = [
                     self.out_prefix + o for o in select(self.module.outputs, "raster")
                 ]
-                copy_rasters(routputs, self.gisrc_dst, self.gisrc_src)
+                copy_rasters(
+                    routputs, self.gisrc_dst, self.gisrc_src, processes=self.processes
+                )
             else:
                 self.patch()
 
@@ -696,8 +717,7 @@ class GridModule(object):
                 par = self.module.outputs[k]
                 if par.typedesc == "raster" and par.value:
                     dirpath = os.path.join(tmpdir, par.name)
-                    if not os.path.isdir(dirpath):
-                        os.makedirs(dirpath)
+                    Path(dirpath).mkdir(parents=True, exist_ok=True)
                     fil = open(os.path.join(dirpath, self.out_prefix + par.value), "w+")
                     fil.close()
 
@@ -709,7 +729,7 @@ class GridModule(object):
             gisdbase, location = os.path.split(self.move)
             self.clean_location(Location(location, gisdbase))
             # rm temporary gis_rc
-            os.remove(self.gisrc_dst)
+            Path(self.gisrc_dst).unlink()
             self.gisrc_dst = None
             sht.rmtree(os.path.join(self.move, "PERMANENT"))
             sht.rmtree(os.path.join(self.move, self.mset.name))

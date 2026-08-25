@@ -8,9 +8,10 @@ for details.
 :authors: Luca Delucchi
 """
 
+import os
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-import os
 
 
 class TestRasterExtraction(TestCase):
@@ -23,7 +24,6 @@ class TestRasterExtraction(TestCase):
         for i in range(1, 101):
             cls.runModule(
                 "r.mapcalc",
-                flags="s",
                 overwrite=True,
                 expression="a_mapcalc{nu} = rand(1,10)".format(nu=i),
             )
@@ -61,8 +61,7 @@ class TestRasterExtraction(TestCase):
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="df", type="strds", inputs="B")
-        self.runModule("t.remove", flags="df", type="strds", inputs="C")
+        self.runModule("t.remove", flags="df", type="strds", inputs="B,C")
 
     def test_simple(self):
         self.assertModule(

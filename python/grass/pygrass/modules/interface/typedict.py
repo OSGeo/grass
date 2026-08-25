@@ -3,21 +3,9 @@ Created on Tue Apr  2 18:37:02 2013
 
 @author: pietro
 """
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
-from copy import deepcopy
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    from grass.pygrass.orderdict import OrderedDict
+from collections import OrderedDict
+from copy import deepcopy
 
 from grass.pygrass.modules.interface.docstring import docstring_property
 
@@ -25,7 +13,7 @@ from grass.pygrass.modules.interface.docstring import docstring_property
 class TypeDict(OrderedDict):
     def __init__(self, dict_type, *args, **kargs):
         self._type = dict_type
-        super(TypeDict, self).__init__(*args, **kargs)
+        super().__init__(*args, **kargs)
 
     def __getattr__(self, key):
         if key in self:
@@ -42,11 +30,10 @@ class TypeDict(OrderedDict):
         return self.keys()
 
     def __setitem__(self, key, value):
-        if isinstance(value, self._type):
-            super(TypeDict, self).__setitem__(key, value)
-        else:
+        if not isinstance(value, self._type):
             str_err = "The value: %r is not a %s instance."
             raise TypeError(str_err % (value, self._type.__name__))
+        super().__setitem__(key, value)
 
     @docstring_property(__doc__)
     def __doc__(self):
@@ -74,8 +61,4 @@ class TypeDict(OrderedDict):
         )
 
     def used(self):
-        key_dict = {}
-        for key in self:
-            if self.__getattr__(key):
-                key_dict[key] = self.__getattr__(key)
-        return key_dict
+        return {key: getattr(self, key) for key in self if getattr(self, key)}

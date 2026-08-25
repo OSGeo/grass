@@ -5,7 +5,7 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 
 DSTDIR = $(ETC)/python/grass/grassdb
 
-MODULES = checks create data manage config
+MODULES = checks create data manage config history
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

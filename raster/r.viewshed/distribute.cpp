@@ -17,7 +17,7 @@
  * considered visible to each other if the cells where they belong are
  * visible to each other.  Two cells are visible to each other if the
  * line-of-sight that connects their centers does not intersect the
- * terrain. The terrain is NOT viewed as a tesselation of flat cells,
+ * terrain. The terrain is NOT viewed as a tessellation of flat cells,
  * i.e. if the line-of-sight does not pass through the cell center,
  * elevation is determined using bilinear interpolation.
  * The viewshed algorithm is efficient both in
@@ -502,7 +502,8 @@ void distribute_bnd_events(AMI_STREAM<AEvent> *bndEvents,
    solved by switching to radial sweep.  */
 unsigned long solve_in_memory(AMI_STREAM<AEvent> *eventList,
                               AMI_STREAM<AEvent> *enterBndEvents,
-                              double start_angle, double end_angle,
+                              double start_angle G_UNUSED,
+                              double end_angle G_UNUSED,
                               IOVisibilityGrid *visgrid, GridHeader *hd,
                               Viewpoint *vp, const ViewOptions &viewOptions)
 {
@@ -1088,7 +1089,7 @@ int is_center_gradient_occluded(AEvent *e, double gradient, Viewpoint *vp)
 }
 
 /***********************************************************************
-called when dropping an event e, high is the highest gradiant value
+called when dropping an event e, high is the highest gradient value
 //in its sector*/
 void print_dropped(AEvent *e, Viewpoint *vp, double high)
 {

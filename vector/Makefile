@@ -22,6 +22,7 @@ SUBDIRS = \
 	v.edit \
 	v.extract \
 	v.extrude \
+	v.fill.holes \
 	v.generalize \
 	v.hull \
 	v.info \
@@ -70,6 +71,7 @@ SUBDIRS = \
 	v.parallel \
 	v.patch \
 	v.perturb \
+	v.ppa \
 	v.split \
 	v.qcount \
 	v.profile \
@@ -101,7 +103,6 @@ SUBDIRS = \
 	v.out.ogr \
 	v.in.ogr \
 	v.external \
-	v.in.dwg \
 	v.in.lidar \
 	v.external.out
 

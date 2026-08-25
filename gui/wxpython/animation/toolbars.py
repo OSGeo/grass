@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import wx
 from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon import MetaIcon
@@ -73,7 +74,7 @@ class MainToolbar(BaseToolbar):
     def _toolbarData(self):
         """Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
-        # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
+        # to reuse icons in gui/icons/grass or add new ones there.
         icons = ganimIcons
         return self._getToolbarData(
             (
@@ -119,7 +120,7 @@ class AnimationToolbar(BaseToolbar):
     def _toolbarData(self):
         """Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
-        # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
+        # to reuse icons in gui/icons/grass or add new ones there.
         icons = ganimIcons
         return self._getToolbarData(
             (
@@ -245,7 +246,7 @@ class AnimationToolbar(BaseToolbar):
         self.ToggleTool(self.bothDirectionReplay, both)
 
     def EnableAnimTools(self, enable):
-        """Enable or diable animation tools"""
+        """Enable or disable animation tools"""
         self.EnableTool(self.playForward, enable)
         self.EnableTool(self.playBack, enable)
         self.EnableTool(self.pause, enable)
@@ -265,25 +266,35 @@ class MiscToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        return self._getToolbarData(
+        data = (
             (
+                ("settings", BaseIcons["settings"].label),
+                BaseIcons["settings"],
+                self.parent.OnPreferences,
+            ),
+            (
+                ("help", BaseIcons["help"].label),
+                BaseIcons["help"],
+                self.parent.OnHelp,
+            ),
+        )
+        if self.parent.IsDockable():
+            data += (
                 (
-                    ("settings", BaseIcons["settings"].label),
-                    BaseIcons["settings"],
-                    self.parent.OnPreferences,
-                ),
-                (
-                    ("help", BaseIcons["help"].label),
-                    BaseIcons["help"],
-                    self.parent.OnHelp,
-                ),
-                (
-                    ("quit", BaseIcons["quit"].label),
-                    BaseIcons["quit"],
-                    self.parent.OnCloseWindow,
+                    ("docking", BaseIcons["docking"].label),
+                    BaseIcons["docking"],
+                    self.parent.OnDockUndock,
+                    wx.ITEM_CHECK,
                 ),
             )
+        data += (
+            (
+                ("quit", BaseIcons["quit"].label),
+                BaseIcons["quit"],
+                self.parent.OnCloseWindow,
+            ),
         )
+        return self._getToolbarData(data)
 
 
 class AnimSimpleLmgrToolbar(SimpleLmgrToolbar):

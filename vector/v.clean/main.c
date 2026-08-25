@@ -127,7 +127,8 @@ int main(int argc, char *argv[])
     opt.thresh->type = TYPE_DOUBLE;
     opt.thresh->required = NO;
     opt.thresh->multiple = YES;
-    opt.thresh->label = _("Threshold in map units, one value for each tool");
+    opt.thresh->label =
+        _("One value for each tool; for threshold units, see each tool");
     opt.thresh->description = _("Default: 0.0[,0.0,...])");
 
     flag.no_build = G_define_flag();
@@ -340,29 +341,15 @@ int main(int argc, char *argv[])
      */
 
     for (i = 0; i < ntools; i++) {
+        G_message(_("Rebuilding parts of topology..."));
         if (tools[i] == TOOL_RMDAC || tools[i] == TOOL_PRUNE ||
             tools[i] == TOOL_RMAREA) {
-            if (Vect_get_built(&Out) >= GV_BUILD_CENTROIDS) {
-                Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
-                G_message(SEP);
-            }
-            else {
-                G_important_message(_("Rebuilding parts of topology..."));
-                Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
-                G_message(SEP);
-            }
+            Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
         }
         else {
-            if (Vect_get_built(&Out) >= GV_BUILD_BASE) {
-                Vect_build_partial(&Out, GV_BUILD_BASE);
-                G_message(SEP);
-            }
-            else {
-                G_important_message(_("Rebuilding parts of topology..."));
-                Vect_build_partial(&Out, GV_BUILD_BASE);
-                G_message(SEP);
-            }
+            Vect_build_partial(&Out, GV_BUILD_BASE);
         }
+        G_message(SEP);
 
         switch (tools[i]) {
         case TOOL_BREAK:

@@ -12,7 +12,7 @@
  * \author USACERL and many others
  */
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -51,7 +51,7 @@ static void sync_and_close(int fd, char *element, char *name)
      * after you are done writing all your data.
      */
 
-#ifndef __MINGW32__
+#ifndef _WIN32
     if (fsync(fd)) {
         G_warning(_("Unable to flush file %s for raster map %s: %s"), element,
                   name, strerror(errno));
@@ -171,7 +171,7 @@ static int close_old(int fd)
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     /* if R__.auto_mask was only allocated for reading map rows to create
-       non-existant null rows, and not for actuall mask, free R__.mask_row
+       non-existent null rows, and not for actual mask, free R__.mask_row
        if(R__.auto_mask <=0)
        G_free (R__.mask_buf);
        This is obsolete since now the mask_bus is always allocated
@@ -396,6 +396,11 @@ static int close_new(int fd, int ok)
         if (fcb->null_row_ptr) { /* compressed nulls */
             fcb->null_row_ptr[fcb->cellhd.rows] =
                 lseek(fcb->null_fd, 0L, SEEK_CUR);
+            if (fcb->null_row_ptr[fcb->cellhd.rows] == -1) {
+                int err = errno;
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
+            }
             Rast__write_null_row_ptrs(fd, fcb->null_fd);
         }
 
@@ -433,10 +438,15 @@ static int close_new(int fd, int ok)
         else {
             remove(fcb->null_temp_name);
             remove(path); /* again ? */
-        }                 /* null_cur_row > 0 */
+        } /* null_cur_row > 0 */
 
         if (fcb->open_mode == OPEN_NEW_COMPRESSED) { /* auto compression */
             fcb->row_ptr[fcb->cellhd.rows] = lseek(fcb->data_fd, 0L, SEEK_CUR);
+            if (fcb->row_ptr[fcb->cellhd.rows] == -1) {
+                int err = errno;
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
+            }
             Rast__write_row_ptrs(fd);
         }
 
@@ -531,6 +541,11 @@ void Rast__close_null(int fd)
 
     if (fcb->null_row_ptr) { /* compressed nulls */
         fcb->null_row_ptr[fcb->cellhd.rows] = lseek(fcb->null_fd, 0L, SEEK_CUR);
+        if (fcb->null_row_ptr[fcb->cellhd.rows] == -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
         Rast__write_null_row_ptrs(fd, fcb->null_fd);
         G_free(fcb->null_row_ptr);
     }

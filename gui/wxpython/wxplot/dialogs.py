@@ -79,7 +79,6 @@ class ProfileRasterDialog(wx.Dialog):
         self._do_layout()
 
     def _do_layout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(hgap=3, vgap=3)
@@ -172,7 +171,6 @@ class ScatterRasterDialog(wx.Dialog):
         self._do_layout()
 
     def _do_layout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(hgap=3, vgap=3)
@@ -273,13 +271,13 @@ class ScatterRasterDialog(wx.Dialog):
 
     def GetRasterPairs(self):
         """Get raster pairs"""
-        pairsList = list()
-        pair = list()
+        pairsList = []
+        pair = []
         for r in self.rasterList:
             pair.append(r)
             if len(pair) == 2:
                 pairsList.append(tuple(pair))
-                pair = list()
+                pair = []
 
         return list(pairsList)
 
@@ -415,7 +413,6 @@ class HistRasterDialog(wx.Dialog):
         self._do_layout()
 
     def _do_layout(self):
-
         sizer = wx.BoxSizer(wx.VERTICAL)
 
         box = wx.GridBagSizer(hgap=3, vgap=3)
@@ -467,9 +464,8 @@ class HistRasterDialog(wx.Dialog):
         )
         if self.rasterRadio.GetValue():
             self.gselection.Disable()
-        else:
-            if self.group is not None:
-                self.gselection.SetValue(self.group)
+        elif self.group is not None:
+            self.gselection.SetValue(self.group)
         box.Add(self.gselection, pos=(2, 1))
 
         #
@@ -538,7 +534,7 @@ class HistRasterDialog(wx.Dialog):
         sizer.Fit(self)
 
     def OnHistMap(self, event):
-        """Hander for radio buttons to choose between histogramming a
+        """Handler for radio buttons to choose between histogramming a
         single raster and an imagery group
         """
         if self.rasterRadio.GetValue() is True:
@@ -551,8 +547,6 @@ class HistRasterDialog(wx.Dialog):
             self.gselection.Enable()
             self.rselection.Disable()
             self.rselection.SetValue("")
-        else:
-            pass
 
     def OnRasterSelection(self, event):
         """Handler for selecting a single raster map"""
@@ -817,7 +811,8 @@ class TextDialog(wx.Dialog):
         btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         btnSave.SetToolTip(
             _(
-                "Apply and save changes to user settings file (default for next sessions)"
+                "Apply and save changes to user settings file (default for next "
+                "sessions)"
             )
         )
         btnCancel.SetToolTip(_("Close dialog and ignore changes"))
@@ -989,9 +984,7 @@ class OptDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=5, hgap=5)
 
         row = 0
-        choicelist = []
-        for i in self.rasterList:
-            choicelist.append(str(i))
+        choicelist = [str(i) for i in self.rasterList]
 
         self.mapchoice = Choice(
             parent=self, id=wx.ID_ANY, size=(300, -1), choices=choicelist
@@ -1212,7 +1205,8 @@ class OptDialog(wx.Dialog):
             type.SetStringSelection(prop["type"])
             type.SetToolTip(
                 _(
-                    "Automatic axis scaling, custom max and min, or scale matches data range (min)"
+                    "Automatic axis scaling, custom max and min, or scale matches data "
+                    "range (min)"
                 )
             )
             self.wxId[atype]["type"] = type.GetId()
@@ -1326,7 +1320,8 @@ class OptDialog(wx.Dialog):
         btnOk.SetToolTip(_("Apply changes for the current session and close dialog"))
         btnSave.SetToolTip(
             _(
-                "Apply and save changes to user settings file (default for next sessions)"
+                "Apply and save changes to user settings file (default for next "
+                "sessions)"
             )
         )
         btnCancel.SetToolTip(_("Close dialog and ignore changes"))
@@ -1473,8 +1468,8 @@ class OptDialog(wx.Dialog):
             self.wxId["grid"]["enabled"]
         ).IsChecked()
 
-        # this makes more sense in the text properties, including for settings update. But will need to change
-        # layout for controls to text dialog too.
+        # this makes more sense in the text properties, including for settings update.
+        # But will need to change layout for controls to text dialog too.
         self.properties["font"]["prop"]["legendSize"] = self.FindWindowById(
             self.wxId["font"]["legendSize"]
         ).GetValue()

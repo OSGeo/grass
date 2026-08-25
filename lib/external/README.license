@@ -17,3 +17,7 @@ comments carefully.
  * shapelib/ (MIT/X)
    Shapefile read/write functions.
    Copyright (c) 2007, Frank Warmerdam
+
+ * parson/ (MIT/X)
+   JSON parsing and encoding functions version 1.5.2.
+   Copyright (c) 2022, Krzysztof Gabis

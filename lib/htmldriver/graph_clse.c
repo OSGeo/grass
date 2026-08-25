@@ -33,7 +33,7 @@ void HTML_Graph_close(void)
     int inside;
 
     /*
-     * exmaine the list of polygons, if a polygon wholly exists inside of
+     * examine the list of polygons, if a polygon wholly exists inside of
      * another polygon, then remove it.
      *
      */

@@ -7,13 +7,13 @@ additional array variables.<br>
 <br>
 Specifically, the following array variables are created:<br>
 <ul>
-  <li><b> map_data</b>
-  <li><b> map_name</b>
-  <li><b> map_title</b> (if it exists)
-  <li><b> map_northern_edge</b>
-  <li><b> map_southern_edge</b>
-  <li><b> map_eastern_edge</b>
-  <li><b> map_western_edge</b>
+  <li><b> map_data</b></li>
+  <li><b> map_name</b></li>
+  <li><b> map_title</b> (if it exists)</li>
+  <li><b> map_northern_edge</b></li>
+  <li><b> map_southern_edge</b></li>
+  <li><b> map_eastern_edge</b></li>
+  <li><b> map_western_edge</b></li>
 </ul>
 
 <br>
@@ -31,13 +31,13 @@ Everything should be Endian safe, so the resultant file can be simply
 copied between different system architectures without binary translation.
 <br><br>
 
-As there is no IEEE value for <tt>NaN</tt> for integer maps, GRASS's null
+As there is no IEEE value for <code>NaN</code> for integer maps, GRASS's null
 value is used to represent it within these maps. You'll have to do something
 like this to clean them once the map is loaded into Matlab:
 <div class="code"><pre>    map_data(find(map_data &lt; -1e9)) = NaN;</pre></div>
 
 Null values in maps containing either floating point or double-precision
-floating point data should translate into <tt>NaN</tt> values as expected.
+floating point data should translate into <code>NaN</code> values as expected.
 <br><br>
 
 

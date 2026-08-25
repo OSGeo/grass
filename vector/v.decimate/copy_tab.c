@@ -3,7 +3,7 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-void copy_tabs(const struct Map_info *In, struct Map_info *Out)
+void copy_tabs(struct Map_info *In, struct Map_info *Out)
 {
     int nlines, line, i;
     int ttype, ntabs;

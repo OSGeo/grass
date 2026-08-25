@@ -15,10 +15,10 @@ Interface) with its integrated drivers. At time of this writing
 following DBMI drivers for attribute storage are available:
 
  - DBF: xBase files (default)
- - ODBC: to interface from http://www.unixodbc.org
- - PostgreSQL driver (note that PostgreSQL can also be accessed through ODBC): http://www.postgresql.org
+ - ODBC: to interface from https://www.unixodbc.org
+ - PostgreSQL driver (note that PostgreSQL can also be accessed through ODBC): https://www.postgresql.org
  - mySQL: http://mysql.com/
- - SQLite: http://www.sqlite.org
+ - SQLite: https://www.sqlite.org
 
 These drivers are compiled depending on present DB related libraries
 and 'configure' settings. Only the DBF driver is always compiled. The

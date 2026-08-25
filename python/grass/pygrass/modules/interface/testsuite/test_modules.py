@@ -3,8 +3,10 @@ Created on Tue Jun 24 09:43:53 2014
 
 @author: pietro
 """
-import sys
+
 from fnmatch import fnmatch
+from io import BytesIO
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -12,33 +14,14 @@ from grass.script.core import get_commands
 from grass.exceptions import ParameterError
 from grass.pygrass.modules.interface import Module
 
-PY2 = sys.version_info[0] == 2
-if PY2:
-    from StringIO import StringIO
-else:
-    from io import BytesIO as StringIO
-
 
 SKIP = [
     "g.parser",
 ]
 
 
-# taken from six
-def with_metaclass(meta, *bases):
-    """Create a base class with a metaclass."""
-    # This requires a bit of explanation: the basic idea is to make a dummy
-    # metaclass for one level of class instantiation that replaces itself with
-    # the actual metaclass.
-    class metaclass(meta):
-        def __new__(cls, name, this_bases, d):
-            return meta(name, bases, d)
-
-    return type.__new__(metaclass, "temporary_class", (), {})
-
-
 class ModulesMeta(type):
-    def __new__(mcs, name, bases, dict):
+    def __new__(cls, name, bases, dict):
         def gen_test(cmd):
             def test(self):
                 Module(cmd)
@@ -53,10 +36,10 @@ class ModulesMeta(type):
         for cmd in cmds:
             test_name = "test__%s" % cmd.replace(".", "_")
             dict[test_name] = gen_test(cmd)
-        return type.__new__(mcs, name, bases, dict)
+        return type.__new__(cls, name, bases, dict)
 
 
-class TestModules(with_metaclass(ModulesMeta, TestCase)):
+class TestModules(TestCase, metaclass=ModulesMeta):
     pass
 
 
@@ -65,7 +48,7 @@ class TestModulesPickability(TestCase):
         """Test if a Module instance is pickable"""
         import pickle
 
-        out = StringIO()
+        out = BytesIO()
         pickle.dump(Module("r.sun"), out)
         out.close()
 

@@ -37,7 +37,6 @@
  *  \param fracsec
  *  \return int
  */
-
 int datetime_get_increment_type(const DateTime *dt, int *mode, int *from,
                                 int *to, int *fracsec)
 {
@@ -80,7 +79,6 @@ int datetime_get_increment_type(const DateTime *dt, int *mode, int *from,
  *  \param incr
  *  \return int
  */
-
 int datetime_set_increment_type(const DateTime *src, DateTime *incr)
 {
     int mode, from, to, fracsec;

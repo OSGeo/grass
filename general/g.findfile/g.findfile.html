@@ -7,7 +7,7 @@ and <em><a href="i.group.html">imagery</a></em> groups.
 <p>The list of <b>element</b> names to search for is not fixed; any
 subdirectory of the mapset directory is a valid <b>element</b> name.
 <p>However, the user can find the list of standard GRASS <b>element</b>
-names in the file <tt>$GISBASE/etc/element_list</tt>. This is the file
+names in the file <code>$GISBASE/etc/element_list</code>. This is the file
 which <em><a href="g.remove.html">g.remove</a></em>, <em><a href="g.rename.html">g.rename</a></em>
 and <em><a href="g.copy.html">g.copy</a></em> use to determine which files
 need to be deleted/renamed/copied for a given entity type.
@@ -68,7 +68,7 @@ fi
 <div class="code"><pre>
 eval `g.findfile element=vector file="$G_OPT_V_INPUT"`
 if [ ! "$file" ] ; then
-   g.message -e "Vector map <$G_OPT_V_INPUT> not found"
+   g.message -e "Vector map &lt;$G_OPT_V_INPUT&gt; not found"
    exit 1
 fi
 </pre></div>

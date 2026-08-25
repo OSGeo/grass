@@ -99,7 +99,7 @@ int find_table(char *table)
 
 int load_table_head(int t)
 {
-    int i, ncol, dtype, type, width, decimals;
+    int i, ncol, dtype, type = 0, width, decimals;
     DBFHandle dbf;
     char fname[20];
 
@@ -244,7 +244,7 @@ int save_table(int t)
 
     /* Construct our temp name because shapelib doesn't like '.' in name */
     G_temp_element(element);
-    sprintf(fname, "%d.dbf", getpid());
+    snprintf(fname, sizeof(fname), "%d.dbf", getpid());
     G_file_name(name, element, fname, G_mapset());
     G_debug(2, "Write table to tempfile: '%s'", name);
 

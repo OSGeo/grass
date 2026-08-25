@@ -37,7 +37,8 @@ static void read_ppm(const char *filename)
     if (fscanf(input, "P6 %d %d %d", &width, &height, &maxval) != 3)
         G_fatal_error(_("Invalid input file %s"), filename);
 
-    fgetc(input);
+    if (fgetc(input) == EOF)
+        G_fatal_error(_("Invalid input file %s"), filename);
 
     buf = G_malloc(width * height * 3);
 

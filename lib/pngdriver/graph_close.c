@@ -16,7 +16,7 @@
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #else
 #include <sys/mman.h>
@@ -27,13 +27,14 @@
 
 static void unmap_file(void)
 {
-    size_t size = HEADER_SIZE + png.width * png.height * sizeof(unsigned int);
+    size_t size =
+        HEADER_SIZE + (size_t)png.width * png.height * sizeof(unsigned int);
     void *ptr = (char *)png.grid - HEADER_SIZE;
 
     if (!png.mapped)
         return;
 
-#ifdef __MINGW32__
+#ifdef _WIN32
     UnmapViewOfFile(ptr);
     CloseHandle(png.handle);
 #else

@@ -17,16 +17,13 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
 
 static int cache_feature(struct Map_info *, OGRGeometryH, int);
-static int read_line(const struct Map_info *, OGRGeometryH, long,
-                     struct line_pnts *);
-static int get_line_type(const struct Map_info *, long);
+static int read_line(struct Map_info *, OGRGeometryH, long, struct line_pnts *);
+static int get_line_type(struct Map_info *, long);
 static int read_next_line_ogr(struct Map_info *, struct line_pnts *,
                               struct line_cats *, int);
-#endif
 
 /*!
    \brief Read next feature from OGR layer.
@@ -50,12 +47,7 @@ static int read_next_line_ogr(struct Map_info *, struct line_pnts *,
 int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
                           struct line_cats *line_c)
 {
-#ifdef HAVE_OGR
     return read_next_line_ogr(Map, line_p, line_c, FALSE);
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -76,7 +68,6 @@ int V1_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
                           struct line_cats *line_c)
 {
-#ifdef HAVE_OGR
     int line, ret;
     struct P_line *Line;
     struct bound_box lbox, mbox;
@@ -154,10 +145,6 @@ int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 
         return ret;
     }
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -180,7 +167,6 @@ int V2_read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
 int V1_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
                      struct line_cats *line_c, off_t offset)
 {
-#ifdef HAVE_OGR
     long fid;
     int type;
     OGRGeometryH hGeom;
@@ -236,13 +222,8 @@ int V1_read_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
     }
 
     return type;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
-#ifdef HAVE_OGR
 /*!
    \brief Recursively read feature and add all elements to points_cache and
    types_cache.
@@ -446,12 +427,12 @@ int read_next_line_ogr(struct Map_info *Map, struct line_pnts *line_p,
    \param Map pointer to Map_info structure
    \param hGeom OGR geometry
    \param offset given offset
-   \param[out] Points container used to store line pointes within
+   \param[out] Points container used to store line points within
 
    \return feature type
    \return -1 on error
  */
-int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
+int read_line(struct Map_info *Map, OGRGeometryH hGeom, long offset,
               struct line_pnts *Points)
 {
     int i, nPoints;
@@ -524,12 +505,12 @@ int read_line(const struct Map_info *Map, OGRGeometryH hGeom, long offset,
    \param Map pointer to Map_info structure
    \param hGeom OGR geometry
    \param offset given offset
-   \param[out] Points container used to store line pointes within
+   \param[out] Points container used to store line points within
 
    \return feature type
    \return -1 on error
  */
-int get_line_type(const struct Map_info *Map, long fid)
+int get_line_type(struct Map_info *Map, long fid)
 {
     int eType;
 
@@ -580,4 +561,3 @@ int get_line_type(const struct Map_info *Map, long fid)
 
     return -1;
 }
-#endif

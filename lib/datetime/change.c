@@ -50,7 +50,6 @@ static void make_incr(DateTime *, int, int, DateTime *);
  *  \param round
  *  \return int
  */
-
 int datetime_change_from_to(DateTime *dt, int from, int to, int round)
 {
     DateTime dummy, incr;

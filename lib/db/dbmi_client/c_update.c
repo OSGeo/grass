@@ -1,7 +1,7 @@
 /*!
  * \file db/dbmi_client/c_update.c
  *
- * \brief DBMI Library (client) - update statemets
+ * \brief DBMI Library (client) - update statements
  *
  * (C) 1999-2008 by the GRASS Development Team
  *

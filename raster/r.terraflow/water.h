@@ -40,11 +40,11 @@ protected:
     cclabel_type label;
 
 public:
-    labelElevType() : label(LABEL_UNDEF){};
+    labelElevType() : label(LABEL_UNDEF) {};
 
     labelElevType(dimension_type gi, dimension_type gj, elevation_type gel,
                   cclabel_type glabel)
-        : ijBaseType(gi, gj), el(gel), label(glabel){};
+        : ijBaseType(gi, gj), el(gel), label(glabel) {};
 
     cclabel_type getLabel() const { return label; };
 
@@ -95,7 +95,7 @@ protected:
     cclabel_type label2;
 
 public:
-    boundaryType() : label2(LABEL_UNDEF){};
+    boundaryType() : label2(LABEL_UNDEF) {};
 
     boundaryType(dimension_type gi, dimension_type gj, elevation_type gel,
                  cclabel_type glabel1, cclabel_type glabel2)
@@ -203,7 +203,7 @@ protected:
     bfs_depth_type depth;
 
 public:
-    fillPriority() : ijBaseType(-1, -1), el(-1), depth(DEPTH_INITIAL){};
+    fillPriority() : ijBaseType(-1, -1), el(-1), depth(DEPTH_INITIAL) {};
     fillPriority(elevation_type gel, bfs_depth_type gdepth, dimension_type gi,
                  dimension_type gj)
         : ijBaseType(gi, gj), el(gel), depth(gdepth)
@@ -226,7 +226,7 @@ class fillPLabel : public fillPriority {
     cclabel_type label;
 
 public:
-    fillPLabel() : label(LABEL_UNDEF){};
+    fillPLabel() : label(LABEL_UNDEF) {};
     fillPLabel(const fillPriority &gpriority, const cclabel_type glabel)
         : fillPriority(gpriority), label(glabel)
     {
@@ -257,10 +257,10 @@ public:
     direction_type dir;
     bfs_depth_type depth;
     waterWindowBaseType()
-        : el(nodataType::ELEVATION_NODATA), dir(0), depth(DEPTH_INITIAL){};
+        : el(nodataType::ELEVATION_NODATA), dir(0), depth(DEPTH_INITIAL) {};
     waterWindowBaseType(elevation_type gel, direction_type gdir,
                         bfs_depth_type gdepth)
-        : el(gel), dir(gdir), depth(gdepth){};
+        : el(gel), dir(gdir), depth(gdepth) {};
     friend int operator==(const waterWindowBaseType &a,
                           const waterWindowBaseType &b)
     {
@@ -290,7 +290,7 @@ protected:
     cclabel_type label;
 
 public:
-    waterType() : label(LABEL_UNDEF){}; /* needed to sort */
+    waterType() : label(LABEL_UNDEF) {}; /* needed to sort */
     waterType(dimension_type gi, dimension_type gj, direction_type gdir,
               cclabel_type glabel = LABEL_UNDEF,
               bfs_depth_type gdepth = DEPTH_INITIAL)
@@ -299,7 +299,7 @@ public:
     }
     waterType(plateauType &data)
         : ijBaseType(data.i, data.j), dir(data.dir), depth(DEPTH_INITIAL),
-          label(data.cclabel){};
+          label(data.cclabel) {};
     direction_type getDirection() const { return dir; }
     bfs_depth_type getDepth() const { return depth; }
     cclabel_type getLabel() const { return label; }
@@ -334,7 +334,7 @@ protected:
     cclabel_type label;
 
 public:
-    waterGridType() : label(LABEL_UNDEF){};
+    waterGridType() : label(LABEL_UNDEF) {};
     waterGridType(elevation_type gel, direction_type gdir = DIRECTION_UNDEF,
                   cclabel_type glabel = LABEL_UNDEF,
                   bfs_depth_type gdepth = DEPTH_INITIAL)
@@ -361,7 +361,7 @@ protected:
     unsigned char value;
 
 public:
-    packed8bit() : value(0){};
+    packed8bit() : value(0) {};
     void setBit(int k, int v = 1) { value = (int)value | ((v ? 1 : 0) << k); };
     void resetBit(int k) { value &= ~(0x1 << k); };
     int getBit(int k) const { return (value >> k) & 1; };
@@ -442,7 +442,7 @@ protected:
 
 public:
     compressedWaterWindowType()
-        : compressedWaterWindowBaseType(), label(LABEL_UNDEF){};
+        : compressedWaterWindowBaseType(), label(LABEL_UNDEF) {};
     compressedWaterWindowType(dimension_type gi, dimension_type gj,
                               cclabel_type glabel, waterWindowBaseType *a,
                               waterWindowBaseType *b, waterWindowBaseType *c)

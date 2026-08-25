@@ -46,12 +46,14 @@ int write_GRASS(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
                     fprintf(fp, "%d", *((CELL *)ptr));
 
                 else if (out_type == FCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((FCELL *)ptr));
+                    snprintf(cell_buf, sizeof(cell_buf), "%.*f", dp,
+                             *((FCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }
                 else if (out_type == DCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((DCELL *)ptr));
+                    snprintf(cell_buf, sizeof(cell_buf), "%.*f", dp,
+                             *((DCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }
@@ -62,6 +64,7 @@ int write_GRASS(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
         }
         fprintf(fp, "\n");
     }
+    G_free(raster);
 
     return (0);
 }
@@ -118,6 +121,7 @@ int write_MODFLOW(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
         if (colcnt > 0)
             fprintf(fp, "\n");
     }
+    G_free(raster);
 
     return (0);
 }
@@ -180,12 +184,14 @@ int write_GSGRID(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
                 if (out_type == CELL_TYPE)
                     fprintf(fp, "%d", *((CELL *)ptr));
                 else if (out_type == FCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((FCELL *)ptr));
+                    snprintf(cell_buf, sizeof(cell_buf), "%.*f", dp,
+                             *((FCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }
                 else if (out_type == DCELL_TYPE) {
-                    sprintf(cell_buf, "%.*f", dp, *((DCELL *)ptr));
+                    snprintf(cell_buf, sizeof(cell_buf), "%.*f", dp,
+                             *((DCELL *)ptr));
                     G_trim_decimal(cell_buf);
                     fprintf(fp, "%s", cell_buf);
                 }
@@ -204,6 +210,27 @@ int write_GSGRID(int fd, FILE *fp, int nrows, int ncols, int out_type, int dp,
             fprintf(fp, "\n");
         fprintf(fp, "\n");
     }
+    G_free(raster);
 
     return (0);
+}
+
+/* write the LISFLOOD ASCII heading */
+int writeLISFLOODheader(FILE *fp, char *nodataval)
+{
+    struct Cell_head region;
+    char buf[128];
+
+    G_get_window(&region);
+    fprintf(fp, "ncols\t\t%d\n", region.cols);
+    fprintf(fp, "nrows\t\t%d\n", region.rows);
+    G_format_easting(region.west, buf, region.proj);
+    fprintf(fp, "xllcorner\t%s\n", buf);
+    G_format_northing(region.south, buf, region.proj);
+    fprintf(fp, "yllcorner\t%s\n", buf);
+    fprintf(fp, "cellsize\t%.f\n", region.ew_res);
+
+    fprintf(fp, "NODATA_value\t%s\n", nodataval);
+
+    return 0;
 }

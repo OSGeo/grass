@@ -12,7 +12,6 @@
  *  This routine is based on a routine found in Andrei Rogers, "Matrix
  *  Methods in Urban and Regional Analysis", (1971), pp. 143-153.
  */
-
 int inverse(MATRIX *a, MATRIX *b)
 {
     int i, j, k, l, ir = 0, ic = 0, nr, nc;

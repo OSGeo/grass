@@ -8,6 +8,7 @@ int cseg_open(CSEG *cseg, int srows, int scols, int nsegs_in_memory)
 {
     char *filename;
     int errflag;
+    int ret = 0;
 
     cseg->filename = NULL;
     cseg->fd = -1;
@@ -20,31 +21,33 @@ int cseg_open(CSEG *cseg, int srows, int scols, int nsegs_in_memory)
                                     sizeof(CELL), nsegs_in_memory))) {
         if (errflag == -1) {
             G_warning(_("File name is invalid"));
-            return -1;
+            ret = -1;
         }
         else if (errflag == -2) {
             G_warning(_("File write error"));
-            return -2;
+            ret = -2;
         }
         else if (errflag == -3) {
             G_warning(_("Illegal parameters are passed"));
-            return -3;
+            ret = -3;
         }
         else if (errflag == -4) {
             G_warning(_("File could not be re-opened"));
-            return -4;
+            ret = -4;
         }
         else if (errflag == -5) {
             G_warning(_("Prepared file could not be read"));
-            return -5;
+            ret = -5;
         }
         else if (errflag == -6) {
             G_warning(_("Out of memory"));
-            return -6;
+            ret = -6;
         }
+        G_free(filename);
+        return ret;
     }
 
     cseg->filename = filename;
 
-    return 0;
+    return ret;
 }

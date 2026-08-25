@@ -79,7 +79,7 @@ extern void point_list_add(POINT_LIST *l, POINT p);
  * return 0 on success, -1 on out of memory
  */
 extern int point_list_copy_to_line_pnts(POINT_LIST l, struct line_pnts *Points);
-/*free the momory occupied by the list at l.next */
+/*free the memory occupied by the list at l.next */
 extern void point_list_free(POINT_LIST l);
 
 /*delete the p->next element and set the pointers appropriatelly */

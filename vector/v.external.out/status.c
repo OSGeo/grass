@@ -124,7 +124,7 @@ void check_required_options(struct Key_Value *key_val, int use_ogr)
             G_fatal_error(_("PG connection info (conninfo) not defined"));
 
         /* add dsn for compatibility */
-        sprintf(dsn_name, "PG:%s", p);
+        snprintf(dsn_name, sizeof(dsn_name), "PG:%s", p);
         G_set_key_value("dsn", dsn_name, key_val);
     }
 }

@@ -37,7 +37,6 @@ static int get_double(const char **, double *, int *, int *);
  *  \param buf
  *  \return int
  */
-
 int datetime_scan(DateTime *dt, const char *buf)
 {
     if (is_relative(buf)) {

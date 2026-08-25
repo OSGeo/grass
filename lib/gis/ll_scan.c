@@ -56,7 +56,7 @@ int G_llres_scan(const char *buf, double *res)
 {
     char tbuf[100];
 
-    sprintf(tbuf, "%se", buf);
+    snprintf(tbuf, sizeof(tbuf), "%se", buf);
     return scan_ll(tbuf, "we", res, 0);
 }
 
@@ -70,7 +70,8 @@ static int scan_ll(const char *buf, const char *dir, double *result, int max)
     double pm = 0.0;
     char tbuf[100];
 
-    sprintf(tbuf, "%s%c", buf, MARKER); /* add a marker at end of string */
+    snprintf(tbuf, sizeof(tbuf), "%s%c", buf,
+             MARKER); /* add a marker at end of string */
     buf = tbuf;
 
     if (sscanf(buf, "%d:%d:%d.%[0123456789]%[^\n]", &d, &m, &s, ps, h) == 5) {

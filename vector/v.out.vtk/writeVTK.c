@@ -452,7 +452,7 @@ int write_vtk_cells(FILE *ascii, struct Map_info *Map, VTKInfo *info,
 /* This function writes the categories as vtk cell data ******************** */
 /* ************************************************************************* */
 int write_vtk_cat_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
-                       int layer, int *types, int typenum, int dp)
+                       int layer, int *types, int typenum, int dp G_UNUSED)
 {
     int type, cat, i, k, centroid;
     static struct line_pnts *Points;
@@ -556,7 +556,7 @@ int write_vtk_cat_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
    by the caller.
  */
 char *get_att(char *name, int cat, struct field_info *Fi, dbDriver *Driver,
-              int ncol)
+              int ncol G_UNUSED)
 {
     char buf[2000];
     int more;
@@ -572,8 +572,8 @@ char *get_att(char *name, int cat, struct field_info *Fi, dbDriver *Driver,
         first = 0;
     }
 
-    sprintf(buf, "SELECT %s FROM %s WHERE %s = %d", name, Fi->table, Fi->key,
-            cat);
+    snprintf(buf, sizeof(buf), "SELECT %s FROM %s WHERE %s = %d", name,
+             Fi->table, Fi->key, cat);
 
     db_set_string(&dbstring, buf);
 
@@ -605,7 +605,7 @@ char *get_att(char *name, int cat, struct field_info *Fi, dbDriver *Driver,
 /* This function writes numerical attribute table fields as VTK scalars **** */
 /* ************************************************************************* */
 int write_vtk_db_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
-                      int layer, int *types, int typenum, int dp)
+                      int layer, int *types, int typenum, int dp G_UNUSED)
 {
     int type, cat, i, k, centroid;
     struct line_cats *Cats;
@@ -841,6 +841,7 @@ int write_vtk_db_data(FILE *ascii, struct Map_info *Map, VTKInfo *info,
     return 1;
 }
 
+#if 0
 /* ************************************************************************* */
 /* This function writes attribute table fields as VTK labels            **** */
 /* ************************************************************************* */
@@ -849,12 +850,14 @@ int write_vtk_db_labels(FILE *ascii, struct Map_info *Map, VTKInfo *info,
 {
     return 1;
 }
+#endif
 
 /* ************************************************************************* */
 /* This function writes the point coordinates and the geometric feature **** */
 /* ************************************************************************* */
 int write_vtk(FILE *ascii, struct Map_info *Map, int layer, int *types,
-              int typenum, int dp, double scale, int numatts, int labels)
+              int typenum, int dp, double scale, int numatts,
+              int labels G_UNUSED)
 {
     VTKInfo *info;
     VTKTypeInfo **typeinfo;

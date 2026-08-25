@@ -23,9 +23,7 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
-#endif
 
 #include "local_proto.h"
 
@@ -43,7 +41,7 @@ int main(int argc, char *argv[])
     char buf[GPATH_MAX], *dsn, *layer;
     const char *output;
     struct Cell_head cellhd;
-    ds_t Ogr_ds;
+    GDALDatasetH Ogr_ds;
 
     G_gisinit(argv[0]);
 
@@ -66,32 +64,23 @@ int main(int argc, char *argv[])
     if (options.dsn->answer &&
         G_strncasecmp(options.dsn->answer, "PG:", 3) == 0) {
         /* -> PostgreSQL */
-#if defined HAVE_OGR && defined HAVE_POSTGRES
+#if defined(HAVE_POSTGRES)
         if (getenv("GRASS_VECTOR_OGR"))
-            use_ogr = TRUE;
+            G_warning(_("Environment variable GRASS_VECTOR_OGR is defined, "
+                        "using OGR-PostgreSQL driver instead of native "
+                        "GRASS-PostGIS data driver."));
         else
             use_ogr = FALSE;
-#else
-#ifdef HAVE_POSTGRES
-        if (getenv("GRASS_VECTOR_OGR"))
-            G_warning(_("Environment variable GRASS_VECTOR_OGR defined, "
-                        "but GRASS is compiled with OGR support. "
-                        "Using GRASS-PostGIS data driver instead."));
-        use_ogr = FALSE;
 #else  /* -> force using OGR */
         G_warning(_("GRASS is not compiled with PostgreSQL support. "
                     "Using OGR-PostgreSQL driver instead of native "
                     "GRASS-PostGIS data driver."));
-        use_ogr = TRUE;
 #endif /* HAVE_POSTRES */
-#endif /* HAVE_OGR && HAVE_POSTGRES */
     }
 
-#ifdef HAVE_OGR
     /* GDAL drivers must be registered since check_projection()
      * depends on it (even use_ogr is false)*/
     OGRRegisterAll();
-#endif
 
     if (flags.format->answer) {
         /* list formats */
@@ -141,12 +130,8 @@ int main(int argc, char *argv[])
     /* open OGR DSN */
     Ogr_ds = NULL;
     if (strlen(options.dsn->answer) > 0) {
-#if GDAL_VERSION_NUM >= 2020000
         Ogr_ds =
             GDALOpenEx(options.dsn->answer, GDAL_OF_VECTOR, NULL, NULL, NULL);
-#else
-        Ogr_ds = OGROpen(dsn, FALSE, NULL);
-#endif
     }
     if (Ogr_ds == NULL)
         G_fatal_error(_("Unable to open data source <%s>"), dsn);
@@ -173,7 +158,7 @@ int main(int argc, char *argv[])
     /* check projection match */
     check_projection(&cellhd, Ogr_ds, ilayer, NULL, NULL, 0,
                      flags.override->answer, flags.proj->answer);
-    ds_close(Ogr_ds);
+    GDALClose(Ogr_ds);
 
     /* create new vector map */
     putenv("GRASS_VECTOR_EXTERNAL_IGNORE=1");
@@ -187,15 +172,15 @@ int main(int argc, char *argv[])
 
     /* Vect_open_new created 'head', 'coor', 'hist'
        -> delete 'coor' and create 'frmt' */
-    sprintf(buf, "%s/%s/%s/%s/coor", G_location_path(), G_mapset(),
-            GV_DIRECTORY, output);
+    snprintf(buf, sizeof(buf), "%s/%s/%s/%s/coor", G_location_path(),
+             G_mapset(), GV_DIRECTORY, output);
     G_debug(2, "Delete '%s'", buf);
     if (unlink(buf) == -1) {
         G_fatal_error(_("Unable to delete '%s'"), buf);
     }
 
     /* create frmt file */
-    sprintf(buf, "%s/%s", GV_DIRECTORY, output);
+    snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, output);
     fd = G_fopen_new(buf, GV_FRMT_ELEMENT);
     if (fd == NULL)
         G_fatal_error(_("Unable to create file '%s/%s'"), buf, GV_FRMT_ELEMENT);

@@ -59,14 +59,18 @@ void G_get_window(struct Cell_head *window)
     if (regvar) {
         char **tokens = G_tokenize(regvar, ";");
 
-        G__read_Cell_head_array(tokens, &st->dbwindow, 0);
+        G__read_Cell_head_array(tokens, &st->dbwindow);
         G_free_tokens(tokens);
     }
     else {
         char *wind = getenv("WIND_OVERRIDE");
 
-        if (wind)
-            G_get_element_window(&st->dbwindow, "windows", wind, G_mapset());
+        if (wind) {
+            char wind_env[GNAME_MAX] = {0};
+            snprintf(wind_env, GNAME_MAX, "%s", wind);
+            G_get_element_window(&st->dbwindow, "windows", wind_env,
+                                 G_mapset());
+        }
         else
             G_get_element_window(&st->dbwindow, "", "WIND", G_mapset());
     }
@@ -125,7 +129,7 @@ void G_get_element_window(struct Cell_head *window, const char *element,
         G_fatal_error(_("Region file %s/%s/%s is empty"), mapset, element,
                       name);
     G_fseek(fp, 0, SEEK_SET);
-    G__read_Cell_head(fp, window, 0);
+    G__read_Cell_head(fp, window);
     fclose(fp);
 }
 

@@ -7,7 +7,6 @@ from grass.gunittest.main import test
 
 
 class TestBasicOperations(TestCase):
-
     # TODO: replace by unified handing of maps
     to_remove = []
 
@@ -30,7 +29,7 @@ class TestBasicOperations(TestCase):
 
     def test_difference_of_the_same_map_double(self):
         """Test zero difference of map with itself"""
-        self.runModule("r3.mapcalc", flags="s", expression="a = rand(1.0, 200)")
+        self.runModule("r3.mapcalc", expression="a = rand(1.0, 200)")
         self.to_remove.append("a")
         self.assertModule("r3.mapcalc", expression="diff_a_a = a - a")
         self.to_remove.append("diff_a_a")
@@ -38,7 +37,7 @@ class TestBasicOperations(TestCase):
 
     def test_difference_of_the_same_map_float(self):
         """Test zero difference of map with itself"""
-        self.runModule("r3.mapcalc", flags="s", expression="af = rand(float(1), 200)")
+        self.runModule("r3.mapcalc", expression="af = rand(float(1), 200)")
         self.to_remove.append("af")
         self.assertModule("r3.mapcalc", expression="diff_af_af = af - af")
         self.to_remove.append("diff_af_af")
@@ -55,7 +54,7 @@ class TestBasicOperations(TestCase):
 
     def test_nrows_ncols_ndepths_sum(self):
         """Test if sum of nrows, ncols and ndepths matches one
-        expected from current region settigs"""
+        expected from current region settings"""
         self.assertModule(
             "r3.mapcalc",
             expression="nrows_ncols_ndepths_sum = nrows() + ncols() + ndepths()",

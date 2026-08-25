@@ -38,10 +38,10 @@
 # %end
 
 import os
-import grass.script as grass
+import grass.script as gs
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     image = options["image"]
     percent = options["percent"]
     python = os.getenv("GRASS_PYTHON", "python")

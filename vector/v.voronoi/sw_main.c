@@ -71,7 +71,7 @@ struct Site *nextone(void)
         return ((struct Site *)NULL);
 }
 
-/* removes duplicate sites that would break the voronoi alghoritm */
+/* removes duplicate sites that would break the voronoi algorithm */
 void removeDuplicates(void)
 {
     int i, j;

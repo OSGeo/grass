@@ -262,13 +262,13 @@ void elev_raster_to_g3d(Database db, RASTER3D_Region region)
 
             G_debug(
                 4,
-                "Caluclating position in 3d region -> height %g with value %g",
+                "Calculating position in 3d region -> height %g with value %g",
                 height, inval);
 
             /* Calculate if the RASTER3D cell is lower or upper the elevation
              * map and set the value.*/
             if (db.count == 0) {
-                /*Use this method if the 3d raster map was not touched befor */
+                /*Use this method if the 3d raster map was not touched before */
                 for (z = 0; z < depths; z++) {
 
                     /*Upper cells */
@@ -408,7 +408,7 @@ int main(int argc, char *argv[])
 
     /*Set the upper value */
     if (param.upper->answer) {
-        if (sscanf(param.upper->answer, "%lf", &db.upper))
+        if (sscanf(param.upper->answer, "%lf", &db.upper) == 1)
             db.useUpperVal = 2;
         else
             G_fatal_error(_("The upper value is not valid"));
@@ -419,7 +419,7 @@ int main(int argc, char *argv[])
 
     /*Set the lower value */
     if (param.lower->answer) {
-        if (sscanf(param.lower->answer, "%lf", &db.lower))
+        if (sscanf(param.lower->answer, "%lf", &db.lower) == 1)
             db.useLowerVal = 2;
         else
             G_fatal_error(_("The lower value is not valid"));

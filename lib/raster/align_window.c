@@ -37,7 +37,6 @@
  *
  * \return NULL on success
  */
-
 void Rast_align_window(struct Cell_head *window, const struct Cell_head *ref)
 {
     G_debug(1, "Rast_align_window()");

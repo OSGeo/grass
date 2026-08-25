@@ -162,11 +162,14 @@ BLASINC             = @BLASINC@
 LAPACKLIB           = @LAPACKLIB@
 LAPACKINC           = @LAPACKINC@
 
+#LIBSVM
+LIBSVM_LIB          = @LIBSVM_LIB@
+LIBSVM_INC          = @LIBSVM_INC@
+USE_LIBSVM          = @USE_LIBSVM@
+
 #GDAL/OGR
 GDALLIBS            = @GDAL_LIBS@
 GDALCFLAGS          = @GDAL_CFLAGS@
-USE_GDAL            = @USE_GDAL@
-USE_OGR             = @USE_OGR@
 
 #NetCDF
 NETCDFLIBS          = @NETCDF_LIBS@
@@ -197,12 +200,6 @@ FTLIB               = @FTLIB@
 PROJINC             = @PROJINC@
 PROJLIB             = @PROJLIB@
 PROJSHARE           = @PROJSHARE@
-
-#OPENDWG:
-OPENDWGINCPATH      = @OPENDWGINCPATH@
-OPENDWGLIBPATH      = @OPENDWGLIBPATH@
-OPENDWGLIB          = @OPENDWGLIB@
-USE_OPENDWG         = @USE_OPENDWG@
 
 #cairo
 CAIROINC                  = @CAIROINC@

@@ -9,10 +9,12 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
-import os
+import shutil
+import unittest
+from pathlib import Path
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import unittest
 
 POINTS = """\
 17.46938776,18.67346939,143,1,1,2
@@ -81,8 +83,7 @@ class FilterTest(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region and generated data"""
         cls.runModule("g.remove", flags="f", type="vector", name=cls.vector_points)
-        if os.path.isfile(cls.las_file):
-            os.remove(cls.las_file)
+        Path(cls.las_file).unlink(missing_ok=True)
         cls.del_temp_region()
 
     def tearDown(self):
@@ -101,7 +102,7 @@ class FilterTest(TestCase):
         self.assertModule("v.in.pdal", input=self.las_file, output=self.imported_points)
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=19)
+            vector=self.imported_points, reference={"points": 19}
         )
 
     @unittest.skipIf(shutil.which("v.in.pdal") is None, "Cannot find v.in.pdal")
@@ -115,7 +116,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=npoints)
+            vector=self.imported_points, reference={"points": npoints}
         )
 
     @unittest.skipIf(shutil.which("v.in.pdal") is None, "Cannot find v.in.pdal")
@@ -144,7 +145,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=npoints)
+            vector=self.imported_points, reference={"points": npoints}
         )
 
     @unittest.skipIf(shutil.which("v.in.pdal") is None, "Cannot find v.in.pdal")
@@ -179,7 +180,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=npoints)
+            vector=self.imported_points, reference={"points": npoints}
         )
 
     @unittest.skipIf(shutil.which("v.in.pdal") is None, "Cannot find v.in.pdal")
@@ -200,7 +201,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=npoints)
+            vector=self.imported_points, reference={"points": npoints}
         )
 
     @unittest.skipIf(shutil.which("v.in.pdal") is None, "Cannot find v.in.pdal")
@@ -228,7 +229,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=4)
+            vector=self.imported_points, reference={"points": 4}
         )
 
     @unittest.skipIf(shutil.which("v.in.pdal") is None, "Cannot find v.in.pdal")
@@ -243,7 +244,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=2)
+            vector=self.imported_points, reference={"points": 2}
         )
 
 

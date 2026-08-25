@@ -59,7 +59,6 @@ void Vect_break_lines(struct Map_info *Map, int type, struct Map_info *Err)
 
    \return number of intersections
  */
-
 int Vect_break_lines_list(struct Map_info *Map, struct ilist *List_break,
                           struct ilist *List_ref, int type,
                           struct Map_info *Err)
@@ -213,7 +212,7 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
     /* To find intersection of two lines (Vect_line_intersection) is quite slow.
      * Fortunately usual lines/boundaries in GIS often forms a network where
      * lines are connected by end points, and touch by MBR. This function checks
-     * and occasionaly skips such cases. This is currently done for 2D only
+     * and occasionally skips such cases. This is currently done for 2D only
      */
 
     /* Go through all lines in vector, for each select lines which overlap MBR
@@ -572,7 +571,7 @@ int break_lines(struct Map_info *Map, struct ilist *List_break,
             nlines = Vect_get_num_lines(Map);
         }
         G_debug(3, "nlines =  %d", nlines);
-    }                             /* for each line */
+    } /* for each line */
     G_percent(nlines, nlines, 1); /* finish it */
 
     G_verbose_message(_("Intersections: %d"), nbreaks);

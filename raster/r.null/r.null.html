@@ -41,7 +41,7 @@ r.mapcalc "newmap = reclass"
 
 By default no data files (i.e., NULL files) are not compressed unless a
 specific environment variable is set. The NULL file compression must be
-explicitly turned on with <tt>export GRASS_COMPRESS_NULLS=1</tt>.<br>
+explicitly turned on with <code>export GRASS_COMPRESS_NULLS=1</code>.<br>
 Warning: such raster maps can then only be opened with GRASS GIS 7.2.0 or
 later. NULL file compression can be managed with <b>r.null -z</b>.
 
@@ -49,10 +49,12 @@ later. NULL file compression can be managed with <b>r.null -z</b>.
 From the <a href="r.external.html">r.external</a> documentation: GDAL-linked
 (<em>r.external</em>) maps do not have or use a NULL bitmap, hence <em>r.null</em> cannot
 manipulate them directly. Here NULL cells are those whose value matches
-the value reported by the GDALGetRasterNoDataValue() function. To apply the
-GDAL-linked the user need to either create a MASK (e.g. with <em>r.mask</em>) and
-then "apply" it using e.g. <em>r.resample</em>, or use <em>r.mapcalc</em> to create a copy
-with the appropriate categories changed to NULL (<tt>if()</tt> condition).
+the value reported by the GDALGetRasterNoDataValue() function.
+To introduce additional NULL values to a computation based on a GDAL-linked
+raster, the user needs to either create a mask with with <em>r.mask</em> and
+then "apply" it using e.g. <em>r.resample</em> or <em>r.mapcalc</em>,
+or use <em>r.mapcalc</em> to create a copy with the appropriate categories
+changed to NULL (<code>if()</code> condition).
 
 <h2>EXAMPLES</h2>
 

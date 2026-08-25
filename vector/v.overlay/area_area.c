@@ -25,8 +25,8 @@ static int cmp_int(const void *a, const void *b)
 
 int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
               struct Map_info *Out, struct field_info *Fi, dbDriver *driver,
-              int operator, int * ofield, ATTRIBUTES *attr, struct ilist *BList,
-              double snap)
+              int operator, int *ofield, ATTRIBUTES *attr, struct ilist *BList,
+              double snap, double area_minsize)
 {
     int ret, input, line, nlines, area, nareas;
     int in_centr, out_cat;
@@ -79,6 +79,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
             Vect_select_lines_by_box(Tmp, &box, GV_BOUNDARY, boxlist);
 
             if (boxlist->n_values > 0) {
+                int npoints_org;
+
                 Vect_reset_list(reflist);
                 for (j = 0; j < boxlist->n_values; j++) {
                     int aline = boxlist->id[j];
@@ -90,17 +92,26 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                 }
 
                 /* snap bline to alines */
+                npoints_org = Points->n_points;
                 if (Vect_snap_line(Tmp, reflist, Points, snap, 0, NULL, NULL)) {
-                    /* rewrite bline */
+                    Vect_line_prune(Points);
+                    if (Points->n_points < 2) {
+                        G_message(_("Line with %d points reduced to %d point, "
+                                    "deleting line."),
+                                  npoints_org, Points->n_points);
+                        Vect_delete_line(Tmp, line);
+                    }
+                    else {
+                        /* rewrite bline */
 #if 0
-                    Vect_delete_line(Tmp, line);
-                    ret = Vect_write_line(Tmp, GV_BOUNDARY, Points, Cats);
-                    G_ilist_add(BList, ret);
+                        Vect_delete_line(Tmp, line);
+                        ret = Vect_write_line(Tmp, GV_BOUNDARY, Points, Cats);
+                        G_ilist_add(BList, ret);
 #else
-                    ret =
-                        Vect_rewrite_line(Tmp, line, GV_BOUNDARY, Points, Cats);
+                        ret = Vect_rewrite_line(Tmp, line, GV_BOUNDARY, Points,
+                                                Cats);
 #endif
-
+                    }
                     snapped_lines++;
                     G_debug(3, "line %d snapped", line);
                 }
@@ -161,10 +172,19 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
         Vect_remove_bridges(Tmp, NULL, NULL, NULL);
     }
 
-    G_set_verbose(0);
-    Vect_build_partial(Tmp, GV_BUILD_NONE);
-    Vect_build_partial(Tmp, GV_BUILD_BASE);
-    G_set_verbose(verbose);
+    if (area_minsize > 0) {
+        Vect_build_partial(Tmp, GV_BUILD_CENTROIDS);
+        G_message(_("Removing areas smaller than %g sqm..."), area_minsize);
+        Vect_remove_small_areas(Tmp, area_minsize, NULL, NULL);
+        Vect_build_partial(Tmp, GV_BUILD_BASE);
+    }
+    else {
+        G_set_verbose(0);
+        Vect_build_partial(Tmp, GV_BUILD_NONE);
+        Vect_build_partial(Tmp, GV_BUILD_BASE);
+        G_set_verbose(verbose);
+    }
+
     G_message(_("Merging lines..."));
     Vect_merge_lines(Tmp, GV_BOUNDARY, NULL, NULL);
 
@@ -194,6 +214,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
     Vect_spatial_index_init(&si, 0);
     ncentr = nareas;
     for (ocentr = 1; ocentr <= ncentr; ocentr++) {
+        if (!Centr[ocentr].valid)
+            continue;
         box.N = box.S = Centr[ocentr].y;
         box.E = box.W = Centr[ocentr].x;
         box.T = box.B = 0;
@@ -213,8 +235,9 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 
     /* Query input maps */
     for (input = 0; input < 2; input++) {
-        G_message(_("Querying vector map <%s>..."),
-                  Vect_get_full_name(&(In[input])));
+        const char *mname = Vect_get_full_name(&(In[input]));
+        G_message(_("Querying vector map <%s>..."), mname);
+        G_free((void *)mname);
 
         nareas = Vect_get_num_areas(&(In[input]));
         G_percent(0, nareas, 1);
@@ -299,6 +322,9 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 
         G_percent(area, nareas, 1);
 
+        if (!Centr[area].valid)
+            continue;
+
         /* check the condition */
         switch (operator) {
         case OP_AND:
@@ -350,8 +376,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                     if (driver) {
                         ATTR *at;
 
-                        sprintf(buf, "insert into %s values ( %d", Fi->table,
-                                out_cat);
+                        snprintf(buf, sizeof(buf), "insert into %s values ( %d",
+                                 Fi->table, out_cat);
                         db_set_string(&stmt, buf);
 
                         /* cata */
@@ -369,8 +395,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[0].null_values);
                             }
                             else {
-                                sprintf(buf, ", %d",
-                                        Centr[area].cat[0]->cat[i]);
+                                snprintf(buf, sizeof(buf), ", %d",
+                                         Centr[area].cat[0]->cat[i]);
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -379,7 +405,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                 db_append_string(&stmt, attr[0].null_values);
                             }
                             else {
-                                sprintf(buf, ", null");
+                                snprintf(buf, sizeof(buf), ", null");
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -399,8 +425,8 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                                      attr[1].null_values);
                             }
                             else {
-                                sprintf(buf, ", %d",
-                                        Centr[area].cat[1]->cat[j]);
+                                snprintf(buf, sizeof(buf), ", %d",
+                                         Centr[area].cat[1]->cat[j]);
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -409,7 +435,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
                                 db_append_string(&stmt, attr[1].null_values);
                             }
                             else {
-                                sprintf(buf, ", null");
+                                snprintf(buf, sizeof(buf), ", null");
                                 db_append_string(&stmt, buf);
                             }
                         }
@@ -491,6 +517,15 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
         if (centr[0] || centr[1])
             Vect_write_line(Out, GV_BOUNDARY, Points, Cats);
     }
+    G_free(Centr);
+    if (IPoints) {
+        for (isle = 0; isle < nisles_alloc; isle++) {
+            if (IPoints[isle])
+                Vect_destroy_line_struct(IPoints[isle]);
+        }
+        G_free(IPoints);
+    }
+    Vect_destroy_line_struct(APoints);
 
     return 0;
 }

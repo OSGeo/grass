@@ -16,6 +16,7 @@
  * PARTICULAR PURPOSE.
  */
 
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -192,17 +193,22 @@ void write_ppm(char *tr, char *tg, char *tb, int nrows, int ncols, int *y_rows,
 
 /*******************************************************/
 void write_params(char *mpfilename, char *yfiles[], char *outfile, int frames,
-                  int quality, int y_rows, int y_cols, int fly)
+                  int quality, int y_rows G_UNUSED, int y_cols G_UNUSED,
+                  int fly)
 {
     FILE *fp;
     char dir[1000], *enddir;
     int i, dirlen = 0;
+    size_t len;
 
     if (NULL == (fp = fopen(mpfilename, "w")))
         G_fatal_error(_("Unable to create temporary files."));
 
     if (!fly) {
-        strcpy(dir, yfiles[0]);
+        len = G_strlcpy(dir, yfiles[0], sizeof(dir));
+        if (len >= sizeof(dir)) {
+            G_fatal_error(_("Directory <%s> too long"), yfiles[0]);
+        }
         enddir = strrchr(dir, '/');
 
         if (enddir) {
@@ -313,8 +319,18 @@ void write_params(char *mpfilename, char *yfiles[], char *outfile, int frames,
 void clean_files(char *file, char *files[], int num)
 {
     int i;
-
-    remove(file);
-    for (i = 0; i < num; i++)
-        remove(files[i]);
+    if (file) {
+        if (remove(file) != 0) {
+            int e = errno;
+            G_warning(_("Failed to remove temporary file <%s>: %s"), file,
+                      strerror(e));
+        }
+    }
+    for (i = 0; i < num; i++) {
+        if (remove(files[i]) != 0) {
+            int e = errno;
+            G_warning(_("Failed to remove temporary file <%s>: %s"), files[i],
+                      strerror(e));
+        }
+    }
 }

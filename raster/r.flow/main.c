@@ -32,7 +32,7 @@
 #include <grass/glocale.h>
 #include "r.flow.h"
 #include "mem.h"
-#include "io.h"
+#include "flow_io.h"
 #include "aspect.h"
 #include "precomp.h"
 
@@ -484,28 +484,31 @@ int main(int argc, char *argv[])
     larger = ((region.cols < region.rows) ? region.rows : region.cols);
     default_skip = (larger < 50) ? 1 : (int)(larger / 50);
 
-    default_skip_ans =
-        G_calloc((int)log10((double)default_skip) + 2, sizeof(char));
-    skip_opt = G_calloc((int)log10((double)larger) + 4, sizeof(char));
+    size_t default_skip_ans_size = (size_t)log10((double)default_skip) + 2;
+    size_t skip_opt_size = (size_t)log10((double)larger) + 4;
+    default_skip_ans = G_calloc(default_skip_ans_size, sizeof(char));
+    skip_opt = G_calloc(skip_opt_size, sizeof(char));
 
-    sprintf(default_skip_ans, "%d", default_skip);
-    sprintf(skip_opt, "1-%d", larger);
+    snprintf(default_skip_ans, default_skip_ans_size, "%d", default_skip);
+    snprintf(skip_opt, skip_opt_size, "1-%d", larger);
 
     default_bound = (int)(4. * hypot((double)region.rows, (double)region.cols));
-    default_bound_ans =
-        G_calloc((int)log10((double)default_bound) + 4, sizeof(char));
-    sprintf(default_bound_ans, "0-%d", default_bound);
+    size_t default_bound_ans_size = (size_t)log10((double)default_bound) + 4;
+    default_bound_ans = G_calloc(default_bound_ans_size, sizeof(char));
+    snprintf(default_bound_ans, default_bound_ans_size, "0-%d", default_bound);
 
 #ifdef OFFSET
     /* below fix changed from 0.0 to 1.0 and its effect disabled in
      * calc.c, Helena June 2005 */
 
     default_offset = 1.0; /* fixed 20. May 2001 Helena */
-    default_offset_ans = G_calloc((int)log10(default_offset) + 2, sizeof(char));
-    sprintf(default_offset_ans, "%f", default_offset);
+    size_t default_offset_ans_size = (size_t)log10(default_offset) + 2;
+    default_offset_ans = G_calloc(default_offset_ans_size, sizeof(char));
+    snprintf(default_offset_ans, default_offset_ans_size, "%f", default_offset);
 
-    offset_opt = G_calloc((int)log10(default_offset) + 4, sizeof(char));
-    sprintf(offset_opt, "0.0-500.0");
+    size_t offset_opt_size = (size_t)log10(default_offset) + 4;
+    offset_opt = G_calloc(offset_opt_size, sizeof(char));
+    snprintf(offset_opt, offset_opt_size, "0.0-500.0");
 #endif
 
     if (!pskip->answer)

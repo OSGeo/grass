@@ -27,7 +27,7 @@
 #   DERIVATION OF A TASSELED CAP TRANSFORMATION BASED ON LANDSAT 7 AT-SATELLITE REFLECTANCE
 #   Chengquan Huang, Bruce Wylie, Limin Yang, Collin Homer and Gregory Zylstra Raytheon ITSS,
 #   USGS EROS Data Center Sioux Falls, SD 57198, USA
-#   http://landcover.usgs.gov/pdf/tasseled.pdf
+#   https://digitalcommons.unl.edu/usgsstaffpub/621/
 #
 #  This is published as well in INT. J. OF RS, 2002, VOL 23, NO. 8, 1741-1748.
 #  Compare discussion:
@@ -82,7 +82,7 @@
 # % options: landsat4_tm,landsat5_tm,landsat7_etm,landsat8_oli,modis,sentinel2,worldview2
 # %end
 
-import grass.script as grass
+import grass.script as gs
 
 
 # weights for 6 Landsat bands: TM4, TM5, TM7, OLI
@@ -236,7 +236,7 @@ def calc1bands6(out, bands, k1, k2, k3, k4, k5, k6, k0=0):
         "$out = $k1 * $in1band + $k2 * $in2band + $k3 * $in3band + "
         "$k4 * $in4band + $k5 * $in5band + $k6 * $in6band + $k0"
     )
-    grass.mapcalc(
+    gs.mapcalc(
         equation, out=out, k1=k1, k2=k2, k3=k3, k4=k4, k5=k5, k6=k6, k0=k0, **bands
     )
 
@@ -250,7 +250,7 @@ def calc1bands7(out, bands, k1, k2, k3, k4, k5, k6, k7):
         "$k4 * $in4band + $k5 * $in5band + $k6 * $in6band + $k7 * "
         "$in7band"
     )
-    grass.mapcalc(
+    gs.mapcalc(
         equation, out=out, k1=k1, k2=k2, k3=k3, k4=k4, k5=k5, k6=k6, k7=k7, **bands
     )
 
@@ -264,7 +264,7 @@ def calc1bands8(out, bands, k1, k2, k3, k4, k5, k6, k7, k8):
         "$k4 * $in4band + $k5 * $in5band + $k6 * $in6band + $k7 * "
         "$in7band + $k8 * $in8band"
     )
-    grass.mapcalc(
+    gs.mapcalc(
         equation,
         out=out,
         k1=k1,
@@ -289,7 +289,7 @@ def calc1bands13(out, bands, k1, k2, k3, k4, k5, k6, k7, k8, k9, k10, k11, k12, 
         "$in7band + $k8 * $in8band + $k9 * $in9band + $k10 * $in10band + "
         "$k11 * $in11band + $k12 * $in12band + $k13 * $in13band"
     )
-    grass.mapcalc(
+    gs.mapcalc(
         equation,
         out=out,
         k1=k1,
@@ -314,7 +314,7 @@ def calcN(outpre, bands, satel):
     Calculating Tasseled Cap components
     """
     i = satellites.index(satel)
-    grass.message(_("Satellite %s...") % satel)
+    gs.message(_("Satellite %s...") % satel)
 
     for j, p in enumerate(parms[i]):
         out = "%s.%d" % (outpre, j + 1)
@@ -322,22 +322,22 @@ def calcN(outpre, bands, satel):
         name = " (%s)" % names[j]
         message = "Calculating {ordinal} TC component {outprefix}{outname} ..."
         message = message.format(ordinal=ord, outprefix=out, outname=name)
-        grass.message(_(message))
+        gs.message(_(message))
         bands_num = used_bands[i]
 
         # use combination function suitable for used number of bands
         eval("calc1bands%d(out, bands, *p)" % bands_num)
-        grass.run_command("r.colors", map=out, color="grey", quiet=True)
+        gs.run_command("r.colors", map=out, color="grey", quiet=True)
 
 
 def main():
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     satellite = options["sensor"]
     output_basename = options["output"]
     inputs = options["input"].split(",")
     num_of_bands = used_bands[satellites.index(satellite)]
     if len(inputs) != num_of_bands:
-        grass.fatal(
+        gs.fatal(
             _("The number of input raster maps (bands) should be %s") % num_of_bands
         )
 
@@ -345,22 +345,22 @@ def main():
     for i, band in enumerate(inputs):
         band_num = i + 1
         bands["in" + str(band_num) + "band"] = band
-    grass.debug(bands, 1)
+    gs.debug(bands, 1)
 
     # core tasseled cap components computation
     calcN(output_basename, bands, satellite)
 
     # assign "Data Description" field in all four component maps
     num_comp = len(parms[satellites.index(satellite)])
-    for i in range(0, num_comp):
+    for i in range(num_comp):
         comp = names[i]
-        grass.run_command(
+        gs.run_command(
             "r.support",
             map="%s.%d" % (output_basename, i + 1),
             description="Tasseled Cap %d: %s" % (i + 1, comp),
         )
 
-    grass.message(_("Tasseled Cap components calculated"))
+    gs.message(_("Tasseled Cap components calculated"))
 
 
 if __name__ == "__main__":

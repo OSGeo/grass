@@ -4,7 +4,7 @@
  *
  * AUTHOR(S):    Original author Center for Space Research (Uni. of TX)
  *               Rewritten by Brad Douglas <rez touchofmadness com>
- *               NULL value/MASK handling and speed up by Markus Metz
+ *               NULL value/mask handling and speed up by Markus Metz
  *
  * PURPOSE:      Principal Component Analysis transform of raster data.
  *
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < bands; i++) {
         char tmpbuf[GNAME_MAX];
 
-        sprintf(tmpbuf, "%s.%d", opt_out->answer, i + 1);
+        snprintf(tmpbuf, sizeof(tmpbuf), "%s.%d", opt_out->answer, i + 1);
         G_check_input_output_name(ref.file[i].name, tmpbuf, G_FATAL_EXIT);
 
         inp_fd[i] = Rast_open_old(ref.file[i].name, ref.file[i].mapset);
@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
         /* close input files */
         Rast_unopen(inp_fd[i]);
 
-        sprintf(outname, "%s.%d", opt_out->answer, i + 1);
+        snprintf(outname, sizeof(outname), "%s.%d", opt_out->answer, i + 1);
 
         /* write colors and history to file */
         if (flag_filt->answer)
@@ -314,6 +314,7 @@ static int calc_mu_cov(int *fds, double **covar, double *mu, double *stddev,
     DCELL **rowbuf = (DCELL **)G_malloc(bands * sizeof(DCELL *));
     double **sum2 = (double **)G_calloc(bands, sizeof(double *));
     double *sumsq, *sd, *sum;
+    int ret = 1;
 
     if (stddev) {
         sumsq = (double *)G_calloc(bands, sizeof(double));
@@ -358,8 +359,10 @@ static int calc_mu_cov(int *fds, double **covar, double *mu, double *stddev,
     }
     G_percent(1, 1, 1);
 
-    if (count < 2)
-        return 0;
+    if (count < 2) {
+        ret = 0;
+        goto free_exit;
+    }
 
     for (i = 0; i < bands; i++) {
         if (stddev) {
@@ -378,22 +381,21 @@ static int calc_mu_cov(int *fds, double **covar, double *mu, double *stddev,
             if (j != i)
                 covar[j][i] = covar[i][j];
         }
-
-        G_free(sum2[i]);
-        G_free(rowbuf[i]);
     }
     for (i = 0; i < bands; i++)
         mu[i] = sum[i] / count;
 
+free_exit:
+    for (i = 0; i < bands; i++) {
+        G_free(sum2[i]);
+        G_free(rowbuf[i]);
+    }
     G_free(rowbuf);
-
     G_free(sum2);
-    if (sd)
-        G_free(sd);
-    if (sumsq)
-        G_free(sumsq);
+    G_free(sd);
+    G_free(sumsq);
 
-    return 1;
+    return ret;
 }
 
 static int write_pca(double **eigmat, double *mu, double *stddev, int *inp_fd,
@@ -429,7 +431,7 @@ static int write_pca(double **eigmat, double *mu, double *stddev, int *inp_fd,
         char name[GNAME_MAX];
 
         /* open output raster maps */
-        sprintf(name, "%s.%d", out_basename, i + 1);
+        snprintf(name, sizeof(name), "%s.%d", out_basename, i + 1);
         out_fd[i] = Rast_open_new(name, outmap_type);
 
         inbuf[i] = Rast_allocate_d_buf();
@@ -571,6 +573,8 @@ static int write_pca(double **eigmat, double *mu, double *stddev, int *inp_fd,
     G_free(min);
     G_free(max);
     G_free(old_range);
+    G_free(pcs);
+    G_free(out_fd);
 
     return 0;
 }

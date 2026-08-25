@@ -34,9 +34,9 @@ T = a*delta_S + b*delta_H_uphill + c*delta_H_moderate_downhill + d*delta_H_steep
 
 where:
 <ul>
-  <li><tt>T</tt> is time of movement in seconds,</li>
-  <li><tt>delta S</tt> is the horizontal distance covered in meters,</li>
-  <li><tt>delta H</tt> is the altitude difference in meters.</li>
+  <li><code>T</code> is time of movement in seconds,</li>
+  <li><code>delta S</code> is the horizontal distance covered in meters,</li>
+  <li><code>delta H</code> is the altitude difference in meters.</li>
 </ul>
 
 <p>
@@ -64,6 +64,9 @@ standard conditions.
 
 <p>The <b>friction</b> cost parameter represents a time penalty in seconds
 of additional walking time to cross 1 meter distance.
+Friction cost can be any floating point value &ge; 0.
+A friction map is a required parameter; if no friction costs are desired,
+a friction map should be a raster in which all cells have a value of 0.
 <p>The <b>lambda</b> parameter is a dimensionless scaling factor of the friction cost:
 
 <div class="code"><pre>
@@ -152,17 +155,24 @@ r.walk -k elevation=elev_ned_30m friction=friction output=walkcost \
 r.contour walkcost output=walkcost step=1000
 </pre></div>
 
+<div align="center" style="margin: 10px">
+<a href="r_walk.png">
+<img src="r_walk.png" width="600" height="600" alt="r.walk example" border="0">
+</a><br>
+<i>Figure: Walkshed over a cost surface derived from topography and landcover</i>
+</div>
+
 <h2>REFERENCES</h2>
 
 <ul>
 <li>Aitken, R. 1977. Wilderness areas in Scotland. Unpublished Ph.D. thesis.
- University of Aberdeen.
+ University of Aberdeen.</li>
 <li> Steno Fontanari, University of Trento, Italy, Ingegneria per l'Ambiente e
- il Territorio, 2000-2001.
+ il Territorio, 2000-2001.</li>
  Svilluppo di metodologie GIS per la determinazione dell'accessibilit&agrave;
  territoriale come supporto alle decisioni nella gestione ambientale.
 <li>Langmuir, E. 1984. Mountaincraft and leadership. The Scottish
- Sports Council/MLTB. Cordee, Leicester.
+ Sports Council/MLTB. Cordee, Leicester.</li>
 </ul>
 
 <h2>SEE ALSO</h2>

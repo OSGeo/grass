@@ -45,7 +45,7 @@ int make_coin(void)
     G_message(_("Tabulating Coincidence between '%s' and '%s'"), map1name,
               map2name);
 
-    sprintf(input, "input=%s,%s", map1name, map2name);
+    snprintf(input, sizeof(input), "input=%s,%s", map1name, map2name);
 
     args[0] = "r.stats";
     args[1] = "-anrc";
@@ -73,6 +73,12 @@ int make_coin(void)
     }
 
     G_popen_close(&child);
+
+    /* Without this, an empty result reaches collapse(), which counts from one
+       and reports a single category, and that category is then read from a
+       zero length allocation. */
+    if (count == 0)
+        G_fatal_error(_("No data returned from r.stats"));
 
     fclose(stat_fp);
 

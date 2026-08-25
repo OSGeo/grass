@@ -44,6 +44,9 @@
 # % answer: equal
 # %end
 
+# %option G_OPT_T_WHERE
+# %end
+
 # %option G_OPT_STRDS_OUTPUT
 # %end
 
@@ -73,8 +76,7 @@
 # % description: Check the spatial topology of temporally related maps and process only spatially related maps
 # %end
 
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -92,6 +94,7 @@ def main():
     nprocs = int(options["nprocs"])
     register_null = flags["n"]
     spatial = flags["s"]
+    where = options.get("where")
 
     # Create the method list
     method = method.split(",")
@@ -109,11 +112,12 @@ def main():
         nprocs,
         register_null,
         spatial,
+        where,
     )
 
 
 ###############################################################################
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

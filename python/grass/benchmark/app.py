@@ -2,7 +2,7 @@
 #
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Benchmarking for GRASS GIS modules
+# PURPOSE:   Benchmarking for GRASS modules
 #
 # COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
 #
@@ -39,19 +39,16 @@ class CliUsageError(ValueError):
 def join_results_cli(args):
     """Translate CLI parser result to API calls."""
     if args.prefixes and len(args.results) != len(args.prefixes):
-        raise CliUsageError(
+        msg = (
             f"Number of prefixes ({len(args.prefixes)}) needs to be the same"
             f" as the number of input result files ({len(args.results)})"
         )
+        raise CliUsageError(msg)
 
     def select_only(result):
         return result.label == args.only
 
-    if args.only:
-        select_function = select_only
-    else:
-        select_function = None
-
+    select_function = select_only if args.only else None
     results = join_results_from_files(
         source_filenames=args.results,
         prefixes=args.prefixes,
@@ -69,6 +66,7 @@ def plot_nprocs_cli(args):
         results.results,
         filename=args.output,
         title=args.title,
+        metric=args.metric,
     )
 
 
@@ -94,19 +92,6 @@ def get_executable_name():
     return f"{executable} -m grass.benchmark"
 
 
-class ExtendAction(argparse.Action):
-    """Support for agrparse action="extend" before Python 3.8
-
-    Each parser instance needs the action to be registered.
-    """
-
-    # pylint: disable=too-few-public-methods
-    def __call__(self, parser, namespace, values, option_string=None):
-        items = getattr(namespace, self.dest) or []
-        items.extend(values)
-        setattr(namespace, self.dest, items)
-
-
 def add_subcommand_parser(subparsers, name, description):
     """Add parser for a subcommand into subparsers."""
     # help is in parent's help, description in subcommand's help.
@@ -121,9 +106,6 @@ def add_subparsers(parser, dest):
 
     The *dest* should be 'command', 'subcommand', etc. with appropriate nesting.
     """
-    if sys.version_info < (3, 7):
-        # required as parameter is only in >=3.7.
-        return parser.add_subparsers(title="subcommands", dest=dest)
     return parser.add_subparsers(title="subcommands", required=True, dest=dest)
 
 
@@ -137,8 +119,6 @@ def add_results_subcommand(parent_subparsers):
     join = main_subparsers.add_parser("join", help="Join results")
     join.add_argument("results", help="Files with results", nargs="*", metavar="file")
     join.add_argument("output", help="Output file", metavar="output_file")
-    if sys.version_info < (3, 8):
-        join.register("action", "extend", ExtendAction)
     join.add_argument(
         "--prefixes",
         help="Add prefixes to result labels per file",
@@ -161,9 +141,17 @@ def add_results_subcommand(parent_subparsers):
 
 def add_plot_io_arguments(parser):
     """Add input and output arguments to *parser*."""
-    parser.add_argument("input", help="file with results (JSON)", metavar="input_file")
     parser.add_argument(
-        "output", help="output file (e.g., PNG)", nargs="?", metavar="output_file"
+        "input", help="file with results (e.g. results.json)", metavar="input_file"
+    )
+    parser.add_argument(
+        "output",
+        help=(
+            "output file with extension (e.g., figure.png)."
+            " If not provided, the plot will be opened in a new window."
+        ),
+        nargs="?",
+        metavar="output_file",
     )
 
 
@@ -173,6 +161,16 @@ def add_plot_title_argument(parser):
         "--title",
         help="Title for the plot",
         metavar="text",
+    )
+
+
+def add_plot_metric_argument(parser):
+    """Add metric argument to *parser*."""
+    parser.add_argument(
+        "--metric",
+        help="Metric for the plot (default: time)",
+        default="time",
+        choices=["time", "speedup", "efficiency"],
     )
 
 
@@ -198,6 +196,7 @@ def add_plot_subcommand(parent_subparsers):
     )
     add_plot_io_arguments(nprocs)
     add_plot_title_argument(nprocs)
+    add_plot_metric_argument(nprocs)
     nprocs.set_defaults(handler=plot_nprocs_cli)
 
 
@@ -206,6 +205,7 @@ def define_arguments():
     parser = argparse.ArgumentParser(
         description="Process results from module benchmarks.",
         prog=get_executable_name(),
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     subparsers = add_subparsers(parser, dest="command")
 

@@ -6,7 +6,7 @@
    Higher level functions for reading/writing/manipulating vectors.
 
    See read_ogr.c (OGR interface) and read_pg.c (PostGIS interface)
-   for imlementation issues.
+   for implementation issues.
 
    (C) 2011-2012 by the GRASS Development Team
 
@@ -40,7 +40,6 @@
 int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
                      struct line_cats *line_c, int line)
 {
-#if defined HAVE_OGR || defined HAVE_POSTGRES
     int type;
     struct P_line *Line;
 
@@ -122,8 +121,4 @@ int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
     }
 
     return type;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR/PostgreSQL support"));
-    return -1;
-#endif
 }

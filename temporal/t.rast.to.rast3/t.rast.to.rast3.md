@@ -1,0 +1,161 @@
+## DESCRIPTION
+
+*t.rast.to.rast3* is designed to convert a space time raster dataset
+(STRDS) into a space time voxel cube. A space time voxel cube is a 3
+dimensional raster map layer (3D raster map or voxel map layer) that as
+time as unit for the z-dimension.
+
+A space time raster dataset that should be converted into a space time
+voxel cube must have a valid temporal topology. Hence, overlapping or
+inclusion of time stamps is not allowed. The granularity of the STRDS is
+used to set the resolution of the 3D raster map layer and to sample the
+registered time stamped raster map layers.
+
+Gaps between raster map layer in the STRDS will be represented by NULL
+values in the voxel map layer.
+
+## NOTES
+
+The reference time for all space time voxel cubes is 1900-01-0100:00:00.
+This allows the alignment space time voxel cubes with different
+granularities.
+
+Be aware that the granularity of a STRDS is used to sample time stamped
+map layers! If you have gaps between monthly intervals that have the
+size of a second, the monthly intervals will be sampled by a second
+based granularity as well. This may result in millions of space time
+voxel cube layers!
+
+### Management of open file limits
+
+The maximum number of raster maps that can be processed is given by the
+per-user limit of the operating system. For example, both the hard
+and soft limit for users is typically 1024. The soft limit can be
+changed with e.g. ulimit -n 4096 (UNIX-based operating systems) but not
+higher than the hard limit. If the latter is too low, you can as
+superuser add an entry in
+
+```sh
+/etc/security/limits.conf
+# <domain>      <type>  <item>         <value>
+your_username  hard    nofile          4096
+```
+
+This will raise the hard limit to 4096 files. Also have a look at the
+overall limit of the operating system
+
+```sh
+cat /proc/sys/fs/file-max
+```
+
+which, on modern Linux systems, is several 100,000 files.
+
+## EXAMPLE
+
+To create a voxel map layer from a subset of the *tempmean_monthly*
+space time dataset, run:
+
+```sh
+# create the subset for 2012 data
+t.rast.extract input=tempmean_monthly output=tempmean_monthly_later_2012 \
+               where="start_time >= '2012-01-01'"
+
+# set the right 3D region
+g.region -p3 res3=500
+
+# convert to 3D raster map
+t.rast.to.rast3 input=tempmean_monthly_later_2012@climate_2009_2012 output=tempmean_monthly_2012
+
+t.info type=raster_3d input=tempmean_monthly_2012
+ +-------------------- 3D Raster Dataset -------------------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ tempmean_monthly_2012@climate_2009_2012
+ | Name: ...................... tempmean_monthly_2012
+ | Mapset: .................... climate_2009_2012
+ | Creator: ................... lucadelu
+ | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-28 11:10:51.679294
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2012-01-01 00:00:00
+ | End time:................... 2013-01-01 00:00:00
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 320000.0
+ | South:...................... 10000.0
+ | East:.. .................... 935000.0
+ | West:....................... 120000.0
+ | Top:........................ 1357.0
+ | Bottom:..................... 1345.0
+ +-------------------- Metadata information ----------------------------------+
+ | Datatype:................... DCELL
+ | Number of columns:.......... 620
+ | Number of rows:............. 1630
+ | Number of cells:............ 12127200
+ | North-South resolution:..... 500.0
+ | East-west resolution:....... 500.0
+ | Minimum value:.............. -0.534994
+ | Maximum value:.............. 28.794653
+ | Number of depths:........... 12
+ | Top-Bottom resolution:...... 1.0
+ | Registered datasets ........
+ +----------------------------------------------------------------------------+
+
+
+r3.info tempmean_monthly_2012
+ +----------------------------------------------------------------------------+
+ | Layer:    tempmean_monthly_2012          Date: Fri Nov 28 11:10:50 2014    |
+ | Mapset:   climate_2009_2012              Login of Creator: lucadelu        |
+ | Project: nc_spm_temporal_workshop                                         |
+ | DataBase: /grassdata                                                       |
+ | Title:    Space time voxel cube                                            |
+ | Units:    none                                                             |
+ | Vertical unit: months                                                      |
+ | Timestamp: none                                                            |
+ |----------------------------------------------------------------------------|
+ |                                                                            |
+ |   Type of Map:  3d cell              Number of Categories: 0               |
+ |   Data Type:    DCELL                                                      |
+ |   Rows:         620                                                        |
+ |   Columns:      1630                                                       |
+ |   Depths:       12                                                         |
+ |   Total Cells:  12127200                                                   |
+ |   Total size:           28414287 Bytes                                     |
+ |   Number of tiles:      4230                                               |
+ |   Mean tile size:       6717 Bytes                                         |
+ |   Tile size in memory:  23520 Bytes                                        |
+ |   Number of tiles in x, y and  z:   47, 45, 2                              |
+ |   Dimension of a tile in x, y, z:   35, 14, 6                              |
+ |                                                                            |
+ |        Projection: Lambert Conformal Conic (zone 0)                        |
+ |            N:     320000    S:      10000   Res:   500                     |
+ |            E:     935000    W:     120000   Res:   500                     |
+ |            T:       1357    B:       1345   Res:     1                     |
+ |   Range of data:   min = -0.53499434 max = 28.79465315                     |
+ |                                                                            |
+ |   Data Source:                                                             |
+ |                                                                            |
+ |                                                                            |
+ |                                                                            |
+ |   Data Description:                                                        |
+ |    This space time voxel cube was created with t.rast.to.rast3             |
+ |                                                                            |
+ |   Comments:                                                                |
+ |    r.to.rast3 input="2012_01_tempmean@climate_2009_2012,2012_02_tempmea\   |
+ |    n@climate_2009_2012,2012_03_tempmean@climate_2009_2012,2012_04_tempm\   |
+ |    ean@climate_2009_2012,2012_05_tempmean@climate_2009_2012,2012_06_tem\   |
+ |    pmean@climate_2009_2012,2012_07_tempmean@climate_2009_2012,2012_08_t\   |
+ |    empmean@climate_2009_2012,2012_09_tempmean@climate_2009_2012,2012_10\   |
+ |    _tempmean@climate_2009_2012,2012_11_tempmean@climate_2009_2012,2012_\   |
+ |    12_tempmean@climate_2009_2012" output="tempmean_monthly_2012" tilesi\   |
+ |    ze=32                                                                   |
+ |                                                                            |
+ +----------------------------------------------------------------------------+
+```
+
+## SEE ALSO
+
+*[r3.mapcalc](r3.mapcalc.md), [r3.info](r3.info.md)*
+
+## AUTHOR
+
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

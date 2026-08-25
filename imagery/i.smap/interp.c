@@ -59,7 +59,7 @@ static void seq_MAP_routine(
     double tmp[3];   /* temporary transition probability parameters */
     double diff1;    /* change in parameter estimates */
     double diff2;    /* change in log likelihood */
-    struct Region *regionary; /* array of region stuctures */
+    struct Region *regionary; /* array of region structures */
 
     /* determine number of resolutions */
     D = levels_reg(region);
@@ -211,8 +211,8 @@ static void interp(
     double cost, mincost;  /* cost of class selection; minimum cost */
     int best = 0;          /* class of minimum cost selection */
     double Constant, tmp;
-    double *pdf; /* propability density function of class selections */
-    double Z;    /* normalizing costant for pdf */
+    double *pdf; /* probability density function of class selections */
+    double Z;    /* normalizing constant for pdf */
     double alpha0, alpha1, alpha2; /* transition probabilities */
     double log_tbl[2][3][2];       /* log of transition probability */
 
@@ -314,7 +314,7 @@ void MLE(                       /* computes maximum likelihood classification */
 }
 
 static int up_char(
-    /* Computes list of pointers to nieghbors at next coarser resolution. *
+    /* Computes list of pointers to neighbors at next coarser resolution. *
      * Returns flag when on boundary.                                     */
     int i, int j,          /* fine resolution pixel location */
     struct Region *region, /* fine resolution image region */

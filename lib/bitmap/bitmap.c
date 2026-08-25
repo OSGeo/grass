@@ -38,7 +38,7 @@
 #include <grass/bitmap.h>
 
 #define BM_col_to_byte(x) ((x) >> 3) /* x / 8 */
-#define BM_col_to_bit(x)  ((x)&7)    /* x % 8 */
+#define BM_col_to_bit(x)  ((x) & 7)  /* x % 8 */
 
 static int Mode = BM_FLAT;
 static int Size = 1;
@@ -54,7 +54,6 @@ static int Size = 1;
  *  \return pointer to struct BM
  *  \return NULL on error
  */
-
 struct BM *BM_create(int x, int y)
 {
     struct BM *map;
@@ -143,7 +142,6 @@ int BM_destroy(struct BM *map)
  *  \param size
  *  \return int
  */
-
 int BM_set_mode(int mode, int size)
 {
     int ret = 0;
@@ -152,6 +150,7 @@ int BM_set_mode(int mode, int size)
     case BM_FLAT:
     case BM_SPARSE:
         Mode = mode;
+        break;
     default:
         fprintf(stderr, "BM_set_mode:  Unknown mode: %d\n", mode);
         ret--;
@@ -180,7 +179,6 @@ int BM_set_mode(int mode, int size)
  *  \param val
  *  \return int
  */
-
 int BM_set(struct BM *map, int x, int y, int val)
 {
     unsigned char byte;
@@ -212,7 +210,6 @@ int BM_set(struct BM *map, int x, int y, int val)
  *  \param y
  *  \return int
  */
-
 int BM_get(struct BM *map, int x, int y)
 {
     unsigned char byte;
@@ -236,7 +233,6 @@ int BM_get(struct BM *map, int x, int y)
  *  \param map
  *  \return int
  */
-
 size_t BM_get_map_size(struct BM *map)
 {
     if (map->sparse)
@@ -259,7 +255,6 @@ size_t BM_get_map_size(struct BM *map)
  *  \param map
  *  \return int
  */
-
 int BM_file_write(FILE *fp, struct BM *map)
 {
     char c;
@@ -301,7 +296,6 @@ int BM_file_write(FILE *fp, struct BM *map)
  *  \param fp
  *  \return struct BM
  */
-
 struct BM *BM_file_read(FILE *fp)
 {
     struct BM *map;
@@ -314,8 +308,11 @@ struct BM *BM_file_read(FILE *fp)
     if (NULL == (map = (struct BM *)malloc(sizeof(struct BM))))
         return (NULL);
 
-    if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char))
+    if (fread(&c, sizeof(char), sizeof(char), fp) != sizeof(char)) {
+        free(map);
         return NULL;
+    }
+
     if (c != BM_MAGIC) {
         free(map);
         return NULL;

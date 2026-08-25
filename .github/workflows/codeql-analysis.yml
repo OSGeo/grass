@@ -6,59 +6,86 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
     paths-ignore:
-      - '**/*.html'
-      - '**/*.md'
-      - '**/*.txt'
+      - "**/*.html"
+      - "**/*.md"
+      - "**/*.txt"
   schedule:
     # Check every Saturday at 18:36
     - cron: 36 18 * * 6
 
+permissions: {}
+
 jobs:
   analyze:
-    name: ${{ matrix.language }}
-    runs-on: ubuntu-22.04
+    name: Analyze
+    runs-on: ubuntu-24.04
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
 
     strategy:
       fail-fast: false
       matrix:
-        # C is included in cpp, no separate C language available on CodeQL
         language:
-          - cpp
+          - c-cpp
           - python
+          - actions
+
+    concurrency:
+      group: ${{ github.workflow }}-${{
+        github.event_name == 'pull_request' &&
+        github.head_ref || github.sha }}-${{ matrix.language }}
+      cancel-in-progress: true
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.x"
+      - name: Install non-Python dependencies
+        if: ${{ matrix.language == 'c-cpp' }}
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y wget git gawk findutils
+          LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+          sudo apt-get update -y
+          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+              sudo apt-get install -y --no-install-recommends --no-install-suggests
+      - uses: rui314/setup-mold@9c9c13bf4c3f1adef0cc596abc155580bcb04444 # v1
+        if: ${{ matrix.language == 'c-cpp' }}
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4.37.0
         with:
           languages: ${{ matrix.language }}
           config-file: ./.github/codeql/codeql-config.yml
 
-      - name: Get dependencies
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y wget git gawk findutils
-          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
-              sudo apt-get install -y --no-install-recommends --no-install-suggests
-
       - name: Create installation directory
         run: |
-          mkdir $HOME/install
+          mkdir "${HOME}/install"
 
       - name: Set LD_LIBRARY_PATH for compilation
         run: |
-          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=${HOME}/install/lib" >> "${GITHUB_ENV}"
+
+      - name: Set number of cores for compilation
+        run: |
+          echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
 
       - name: Build
+        if: ${{ matrix.language == 'c-cpp' }}
         env:
-          CFLAGS: -std=gnu11
-          CXXFLAGS: -std=c++11
-        run: .github/workflows/build_ubuntu-22.04.sh $HOME/install
+          CFLAGS: -std=gnu17
+          CXXFLAGS: -std=c++17
+        run: .github/workflows/build_ubuntu-24.04.sh "${HOME}/install"
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4.37.0
+        with:
+          category: "/language:${{matrix.language}}"

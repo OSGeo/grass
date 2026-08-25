@@ -39,19 +39,19 @@ The <b>output</b> parameter is a basename (prefix) for all generated
 raster maps and each map gets a unique suffix:
 
 <ul>
-  <li><tt>.base</tt> for the base (perpendicular) ROS (cm/minute)
-  <li><tt>.max</tt> for the maximum (forward) ROS (cm/minute),
-  <li><tt>.maxdir</tt> for the direction of the maximum
-    ROS, clockwise from north (degree), and optionally
-  <li><tt>.spotdist</tt> for the maximum potential
-    spotting distance (meters).
+  <li><code>.base</code> for the base (perpendicular) ROS (cm/minute)</li>
+  <li><code>.max</code> for the maximum (forward) ROS (cm/minute),</li>
+  <li><code>.maxdir</code> for the direction of the maximum
+    ROS, clockwise from north (degree), and optionally</li>
+  <li><code>.spotdist</code> for the maximum potential
+    spotting distance (meters).</li>
 </ul>
 
 <p>
-So, if the output parameter is <tt>blackforest_ros</tt>, <em>r.ros</em> creates
-<tt>blackforest_ros.base</tt>, <tt>blackforest_ros.max</tt>,
-<tt>blackforest_ros.maxdir</tt>,
-and (optionally) <tt>blackforest_ros.spotdist</tt> raster maps.
+So, if the output parameter is <code>blackforest_ros</code>, <em>r.ros</em> creates
+<code>blackforest_ros.base</code>, <code>blackforest_ros.max</code>,
+<code>blackforest_ros.maxdir</code>,
+and (optionally) <code>blackforest_ros.spotdist</code> raster maps.
 
 <p>If only one or two of the options <b>moisture_1h</b>, <b>moisture_10h</b>,
 and <b>moisture_100h</b> are given, the module will assign
@@ -91,9 +91,9 @@ r.ros -s model=fire_model moisture_1h=1hour_moisture moisture_live=live_moisture
   <li><em>r.ros</em> is supposed to be run before running
     <em><a href="r.spread.html">r.spread</a></em> module.
     The combination of these two modules forms
-    a simulation of the spread of wildfires.
+    a simulation of the spread of wildfires.</li>
   <li>The user should be sure that the inputs to
-    <em>r.ros</em> are in proper units.
+    <em>r.ros</em> are in proper units.</li>
   <li>The output units for the base and maximum ROSes are in cm/minute
     rather than ft/minute, which is due to that a possible zero ft/minute base
     ROS value and a positive integer ft/minute maximum ROS would result in
@@ -102,7 +102,7 @@ r.ros -s model=fire_model moisture_1h=1hour_moisture moisture_live=live_moisture
     <!-- This is caused by usage of CELL instead of FCELL/DCELL. ? -->
     As far as the user just use <em>r.ros</em> together with
     <em><a href="r.spread.html">r.spread</a></em>, there is no need to
-    concern about these output units.
+    concern about these output units.</li>
 </ol>
 
 <h2>REFERENCES</h2>
@@ -141,7 +141,7 @@ r.ros -s model=fire_model moisture_1h=1hour_moisture moisture_live=live_moisture
 </em>
 
 Sample data download: <a href="https://grass.osgeo.org/sampledata/firedemo_grass7.sh">firedemo.sh</a>
-(run this script within the "Fire simulation data set" location).
+(run this script within the "Fire simulation data set" project).
 
 <h2>AUTHOR</h2>
 

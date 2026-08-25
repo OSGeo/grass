@@ -76,10 +76,10 @@ int db_convert_value_to_string(dbValue *value, int sqltype, dbString *string)
     else {
         switch (db_sqltype_to_Ctype(sqltype)) {
         case DB_C_TYPE_INT:
-            sprintf(buf, "%d", db_get_value_int(value));
+            snprintf(buf, sizeof(buf), "%d", db_get_value_int(value));
             break;
         case DB_C_TYPE_DOUBLE:
-            sprintf(buf, "%.15g", db_get_value_double(value));
+            snprintf(buf, sizeof(buf), "%.15g", db_get_value_double(value));
             G_trim_decimal(buf);
             break;
         case DB_C_TYPE_STRING:

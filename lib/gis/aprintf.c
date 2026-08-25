@@ -199,11 +199,11 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                 while (*++c && *q != *c)
                     ;
                 if (*c) {
-                    va_list ap_copy;
+                    va_list aq;
                     char tmp;
 
                     /* copy ap for ovprintf() */
-                    va_copy(ap_copy, ap);
+                    va_copy(aq, ap);
 
                     /* found a conversion specifier */
                     if (*c == 's') {
@@ -254,7 +254,7 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         }
                         if (*p_spec) {
                             /* illegal string specifier? */
-                            va_end(ap_copy);
+                            va_end(aq);
                             *(q + 1) = 0;
                             G_fatal_error(
                                 _("Failed to parse string specifier: %s"), p);
@@ -290,7 +290,7 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         if (use_ovprintf) {
                             tmp = *(q + 1);
                             *(q + 1) = 0;
-                            nbytes += ovprintf(opts, p, ap_copy);
+                            nbytes += ovprintf(opts, p, aq);
                             *(q + 1) = tmp;
                         }
                     }
@@ -298,7 +298,7 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                         /* else use ovprintf() for non-string specifiers */
                         tmp = *(q + 1);
                         *(q + 1) = 0;
-                        nbytes += ovprintf(opts, p, ap_copy);
+                        nbytes += ovprintf(opts, p, aq);
                         *(q + 1) = tmp;
 
                         /* once ap is passed to another function that calls
@@ -345,7 +345,7 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
                             /* otherwise, no argument is required for m% */
                         }
                     }
-                    va_end(ap_copy);
+                    va_end(aq);
                     break;
                 }
                 else if (p_spec - spec < SPEC_BUF_SIZE - 2)

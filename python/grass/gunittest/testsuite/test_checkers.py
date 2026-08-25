@@ -11,7 +11,6 @@ for details.
 @author Vaclav Petras
 """
 
-
 from grass.script.utils import parse_key_val, try_remove
 
 from grass.gunittest.case import TestCase
@@ -25,6 +24,7 @@ from grass.gunittest.checkers import (
     file_md5,
     text_file_md5,
 )
+from grass.gunittest.utils import xfail_windows
 
 
 class TestValuesEqual(TestCase):
@@ -228,7 +228,7 @@ cells=60020100
 R_UNIVAR_KEYVAL_INT_DICT = {"n": 2025000, "null_cells": 57995100, "cells": 60020100}
 
 
-class TestComapreProjections(TestCase):
+class TestCompareProjections(TestCase):
     def test_compare_proj_info(self):
         self.assertTrue(proj_info_equals(PROJ_INFO_TEXT_1, PROJ_INFO_TEXT_2))
         self.assertTrue(proj_units_equals(PROJ_UNITS_TEXT_1, PROJ_UNITS_TEXT_2))
@@ -236,7 +236,6 @@ class TestComapreProjections(TestCase):
 
 class TestParseKeyvalue(TestCase):
     def test_shell_script_style(self):
-
         self.assertDictEqual(
             parse_key_val(R_UNIVAR_KEYVAL_INT, val_type=int), R_UNIVAR_KEYVAL_INT_DICT
         )
@@ -351,7 +350,7 @@ class TestMd5Sums(TestCase):
 
     To create MD5 which is used for testing use:
 
-    .. code: sh
+    .. code:: sh
     $ cat > test.txt << EOF
     null_cells=57995100
     cells=60020100
@@ -370,17 +369,14 @@ class TestMd5Sums(TestCase):
     @classmethod
     def setUpClass(cls):
         with open(cls.correct_file_name_platform_nl, "w") as f:
-            for line in CORRECT_LINES:
-                # \n should be converted to platform newline
-                f.write(line + "\n")
+            # \n should be converted to platform newline
+            f.writelines(line + "\n" for line in CORRECT_LINES)
         with open(cls.correct_file_name_unix_nl, "w") as f:
-            for line in CORRECT_LINES:
-                # binary mode will write pure \n
-                f.write(line + "\n")
+            # binary mode will write pure \n
+            f.writelines(line + "\n" for line in CORRECT_LINES)
         with open(cls.wrong_file_name, "w") as f:
-            for line in INCORRECT_LINES:
-                # \n should be converted to platform newline
-                f.write(line + "\n")
+            # \n should be converted to platform newline
+            f.writelines(line + "\n" for line in INCORRECT_LINES)
 
     @classmethod
     def tearDownClass(cls):
@@ -388,6 +384,7 @@ class TestMd5Sums(TestCase):
         try_remove(cls.correct_file_name_unix_nl)
         try_remove(cls.wrong_file_name)
 
+    @xfail_windows
     def test_text_file_binary(self):
         r"""File with ``\n`` (LF) newlines as binary (MD5 has ``\n``)."""
         self.assertEqual(

@@ -14,7 +14,7 @@ FILE *run_stats(struct Popen *child, const char *basemap, const char *covermap,
     const char *argv[5];
     FILE *fp;
 
-    sprintf(input, "input=%s,%s", basemap, covermap);
+    snprintf(input, sizeof(input), "input=%s,%s", basemap, covermap);
 
     argv[0] = "r.stats";
     argv[1] = mode;
@@ -39,8 +39,8 @@ FILE *run_reclass(struct Popen *child, const char *basemap,
     const char *argv[5];
     FILE *fp;
 
-    sprintf(input, "input=%s", basemap);
-    sprintf(output, "output=%s", outputmap);
+    snprintf(input, sizeof(input), "input=%s", basemap);
+    snprintf(output, sizeof(output), "output=%s", outputmap);
 
     argv[0] = "r.reclass";
     argv[1] = input;

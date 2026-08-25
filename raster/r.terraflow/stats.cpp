@@ -16,11 +16,14 @@
  *
  *****************************************************************************/
 
+#include <cinttypes>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
+#ifndef _MSC_VER
 #include <sys/time.h>
-#ifndef __MINGW32__
+#endif
+#ifndef _WIN32
 #include <sys/resource.h>
 #endif
 #include <stdio.h>
@@ -115,9 +118,10 @@ char *noclobberFileName(char *fname)
             if (rename(fname, buf) != 0) {
                 G_fatal_error("%s", fname);
             }
-            close(fd);
         }
     }
+    if (fd >= 0)
+        close(fd);
     return fname;
 }
 
@@ -173,19 +177,19 @@ void statsRecorder::comment(const int n)
 char *formatNumber(char *buf, off_t val)
 {
     if (val > (1 << 30)) {
-        snprintf(buf, BUFSIZ, "%.2fG (%" PRI_OFF_T ")", (double)val / (1 << 30),
+        snprintf(buf, BUFSIZ, "%.2fG (%" PRId64 ")", (double)val / (1 << 30),
                  val);
     }
     else if (val > (1 << 20)) {
-        snprintf(buf, BUFSIZ, "%.2fM (%" PRI_OFF_T ")", (double)val / (1 << 20),
+        snprintf(buf, BUFSIZ, "%.2fM (%" PRId64 ")", (double)val / (1 << 20),
                  val);
     }
     else if (val > (1 << 10)) {
-        snprintf(buf, BUFSIZ, "%.2fK (%" PRI_OFF_T ")", (double)val / (1 << 10),
+        snprintf(buf, BUFSIZ, "%.2fK (%" PRId64 ")", (double)val / (1 << 10),
                  val);
     }
     else {
-        snprintf(buf, BUFSIZ, "%" PRI_OFF_T, val);
+        snprintf(buf, BUFSIZ, "%" PRId64, val);
     }
     return buf;
 }

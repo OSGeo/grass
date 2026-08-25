@@ -13,6 +13,7 @@ This program is free software under the GNU General Public License
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
+
 import os
 import wx
 
@@ -32,6 +33,7 @@ from animation.utils import (
     WxImageToPil,
     sampleCmdMatrixAndCreateNames,
     layerListToCmdsMatrix,
+    getCpuCount,
     HashCmds,
 )
 from animation.data import AnimationData
@@ -59,7 +61,7 @@ class AnimationController(wx.EvtHandler):
         self.bitmapPool = bitmapPool
         self.mapFilesPool = mapFilesPool
         self.bitmapProvider = provider
-        for anim, win in zip(self.animations, self.mapwindows):
+        for anim, win in zip(self.animations, self.mapwindows, strict=False):
             anim.SetCallbackUpdateFrame(
                 lambda index, dataId, win=win: self.UpdateFrame(index, win, dataId)
             )
@@ -92,7 +94,7 @@ class AnimationController(wx.EvtHandler):
         self._timeTick = value
         if self.timer.IsRunning():
             self.timer.Stop()
-            self.timer.Start(self._timeTick)
+            self.timer.Start(int(self._timeTick))
         self.DisableSliderIfNeeded()
 
     timeTick = property(fget=GetTimeTick, fset=SetTimeTick)
@@ -110,7 +112,7 @@ class AnimationController(wx.EvtHandler):
                 anim.NextFrameIndex()
             anim.Start()
         if not self.timer.IsRunning():
-            self.timer.Start(self.timeTick)
+            self.timer.Start(int(self.timeTick))
             self.DisableSliderIfNeeded()
 
     def PauseAnimation(self, paused):
@@ -118,9 +120,9 @@ class AnimationController(wx.EvtHandler):
             if self.timer.IsRunning():
                 self.timer.Stop()
                 self.DisableSliderIfNeeded()
-        else:
+        else:  # noqa: PLR5501
             if not self.timer.IsRunning():
-                self.timer.Start(self.timeTick)
+                self.timer.Start(int(self.timeTick))
                 self.DisableSliderIfNeeded()
 
         for anim in self.animations:
@@ -300,7 +302,7 @@ class AnimationController(wx.EvtHandler):
                     anim.SetLayerList(layerLists[i])
                     animationData.append(anim)
 
-        except (GException, ValueError, IOError) as e:
+        except (GException, ValueError, OSError) as e:
             GError(
                 parent=self.frame,
                 message=str(e),
@@ -367,10 +369,7 @@ class AnimationController(wx.EvtHandler):
                 if anim.viewMode == "3d":
                     regions = [None] * len(regions)
                 self.animations[i].SetFrames(
-                    [
-                        HashCmds(cmdList, region)
-                        for cmdList, region in zip(anim.cmdMatrix, regions)
-                    ]
+                    list(map(HashCmds, anim.cmdMatrix, regions))
                 )
                 self.animations[i].SetActive(True)
         else:
@@ -402,6 +401,17 @@ class AnimationController(wx.EvtHandler):
             ):
                 self.frame.RemoveWindow(windowIndex)
 
+    def _getNprocs(self):
+        """Returns the number of processes to render with.
+
+        The setting is -1 (autodetect) until the animation preferences are
+        opened, and None when it is missing.
+        """
+        nprocs = UserSettings.Get(group="animation", key="nprocs", subkey="value")
+        if not nprocs or nprocs < 1:
+            return getCpuCount()
+        return nprocs
+
     def _updateBitmapData(self):
         # unload previous data
         self.bitmapProvider.Unload()
@@ -414,7 +424,7 @@ class AnimationController(wx.EvtHandler):
                 self._load3DData(animData)
             self._loadLegend(animData)
         color = UserSettings.Get(group="animation", key="bgcolor", subkey="color")
-        cpus = UserSettings.Get(group="animation", key="nprocs", subkey="value")
+        cpus = self._getNprocs()
         self.bitmapProvider.Load(nprocs=cpus, bgcolor=color)
         # clear pools
         self.bitmapPool.Clear()
@@ -459,16 +469,14 @@ class AnimationController(wx.EvtHandler):
         for anim in animationData:
             for layer in anim.layerList:
                 if layer.active and hasattr(layer, "maps"):
-                    if layer.mapType in ("strds", "stvds", "str3ds"):
+                    if layer.mapType in {"strds", "stvds", "str3ds"}:
                         stds += 1
                     else:
                         maps += 1
                     mapCount.add(len(layer.maps))
             windowIndex.append(anim.windowIndex)
 
-        if maps and stds:
-            temporalMode = TemporalMode.NONTEMPORAL
-        elif maps:
+        if (maps and stds) or maps:
             temporalMode = TemporalMode.NONTEMPORAL
         elif stds:
             temporalMode = TemporalMode.TEMPORAL
@@ -496,7 +504,7 @@ class AnimationController(wx.EvtHandler):
         self.EndAnimation()
 
         color = UserSettings.Get(group="animation", key="bgcolor", subkey="color")
-        cpus = UserSettings.Get(group="animation", key="nprocs", subkey="value")
+        cpus = self._getNprocs()
         self.bitmapProvider.Load(nprocs=cpus, bgcolor=color, force=True)
 
         self.EndAnimation()
@@ -531,7 +539,9 @@ class AnimationController(wx.EvtHandler):
         animWinIndex = []
         legends = [anim.legendCmd for anim in self.animationData]
         # determine position and sizes of bitmaps
-        for i, (win, anim) in enumerate(zip(self.mapwindows, self.animations)):
+        for i, (win, anim) in enumerate(
+            zip(self.mapwindows, self.animations, strict=False)
+        ):
             if anim.IsActive():
                 pos = win.GetPosition()
                 animWinPos.append(pos)
@@ -556,9 +566,8 @@ class AnimationController(wx.EvtHandler):
                     if frameId is not None:
                         bitmap = self.bitmapProvider.GetBitmap(frameId)
                         lastBitmaps[i] = bitmap
-                    else:
-                        if i not in lastBitmaps:
-                            lastBitmaps[i] = wx.NullBitmap()
+                    elif i not in lastBitmaps:
+                        lastBitmaps[i] = wx.NullBitmap()
                 else:
                     bitmap = self.bitmapProvider.GetBitmap(frameId)
                     lastBitmaps[i] = bitmap
@@ -582,8 +591,8 @@ class AnimationController(wx.EvtHandler):
             # paste decorations
             for decoration in decorations:
                 # add image
-                x = decoration["pos"][0] / 100.0 * size[0]
-                y = decoration["pos"][1] / 100.0 * size[1]
+                x = int(decoration["pos"][0] / 100.0 * size[0])
+                y = int(decoration["pos"][1] / 100.0 * size[1])
                 if decoration["name"] == "image":
                     decImage = wx.Image(decoration["file"])
                 elif decoration["name"] == "time":
@@ -594,17 +603,15 @@ class AnimationController(wx.EvtHandler):
                             "dash": "\u2013",
                             "to": timeLabel[1],
                         }
+                    elif (
+                        self.temporalManager.GetTemporalType() == TemporalType.ABSOLUTE
+                    ):
+                        text = timeLabel[0]
                     else:
-                        if (
-                            self.temporalManager.GetTemporalType()
-                            == TemporalType.ABSOLUTE
-                        ):
-                            text = timeLabel[0]
-                        else:
-                            text = _("%(start)s %(unit)s") % {
-                                "start": timeLabel[0],
-                                "unit": timeLabel[2],
-                            }
+                        text = _("%(start)s %(unit)s") % {
+                            "start": timeLabel[0],
+                            "unit": timeLabel[2],
+                        }
 
                     decImage = RenderText(
                         text, decoration["font"], bgcolor, fgcolor
@@ -633,7 +640,6 @@ class AnimationController(wx.EvtHandler):
                 del self.busy
                 if error:
                     GError(parent=self.frame, message=error)
-                    return
 
             if exportInfo["method"] == "sequence":
                 filename = os.path.join(
@@ -671,5 +677,5 @@ class AnimationController(wx.EvtHandler):
             del self.busy
             GError(parent=self.frame, message=str(e))
             return
-        if exportInfo["method"] in ("sequence", "gif", "swf"):
+        if exportInfo["method"] in {"sequence", "gif", "swf"}:
             del self.busy

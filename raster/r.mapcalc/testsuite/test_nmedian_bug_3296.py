@@ -81,7 +81,7 @@ class TestNmedianBug(TestCase):
 
     def tearDown(self):
         self.del_temp_region()
-        if 0 and self.to_remove:
+        if 0 and self.to_remove:  # noqa: SIM223
             self.runModule(
                 "g.remove",
                 flags="f",
@@ -119,6 +119,41 @@ class TestNmedianBug(TestCase):
             o=self.output, i=self.input
         )
         self.assertModule("r.mapcalc", expression=expression, overwrite=True)
+        self.assertRasterExists(self.output)
+        self.to_remove.append(self.output)
+        self.assertRastersNoDifference(
+            actual=self.output, reference=self.output_ref, precision=0
+        )
+
+    def test_cell_nprocs1(self):
+        expression = "{o}=nmedian(({i}[0,-1] - {i})^2,({i}[0,1] - {i})^2)".format(
+            o=self.output, i=self.input
+        )
+        self.assertModule("r.mapcalc", expression=expression, nprocs=1, overwrite=True)
+        self.assertRasterExists(self.output)
+        self.to_remove.append(self.output)
+        self.assertRastersNoDifference(
+            actual=self.output, reference=self.output_cell, precision=0
+        )
+
+    def test_fcell_nprocs1(self):
+        expression = (
+            "{o}=nmedian(float(({i}[0,-1] - {i})^2), float(({i}[0,1] - {i})^2))".format(
+                o=self.output, i=self.input
+            )
+        )
+        self.assertModule("r.mapcalc", expression=expression, nprocs=1, overwrite=True)
+        self.assertRasterExists(self.output)
+        self.to_remove.append(self.output)
+        self.assertRastersNoDifference(
+            actual=self.output, reference=self.output_ref, precision=0
+        )
+
+    def test_dcell_nprocs1(self):
+        expression = "{o}=nmedian(double(({i}[0,-1] - {i})^2), double(({i}[0,1] - {i})^2))".format(
+            o=self.output, i=self.input
+        )
+        self.assertModule("r.mapcalc", expression=expression, nprocs=1, overwrite=True)
         self.assertRasterExists(self.output)
         self.to_remove.append(self.output)
         self.assertRastersNoDifference(

@@ -65,7 +65,7 @@ def generate_map(rows, cols, fname):
         for r in fname:
             Module(
                 "r.random.surface",
-                maximum=255,
+                high=255,
                 output=temp,
                 overwrite=True,
             )

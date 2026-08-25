@@ -35,11 +35,8 @@ static int get_cell(int, float *, void *, RASTER_MAP_TYPE);
 
 int open_map(MAPS *rast)
 {
-
-    int row, col;
     char *mapset;
     struct Cell_head cellhd;
-    void *tmp_buf;
 
     mapset = (char *)G_find_raster2(rast->elevname, "");
 
@@ -53,21 +50,10 @@ int open_map(MAPS *rast)
     if (window.ew_res + 1e-10 < cellhd.ew_res ||
         window.ns_res + 1e-10 < cellhd.ns_res)
         G_warning(
-            _("Region resolution shoudn't be lesser than map %s resolution. "
+            _("Region resolution shouldn't be lesser than map %s resolution. "
               "Run g.region raster=%s to set proper resolution"),
             rast->elevname, rast->elevname);
 
-    tmp_buf = Rast_allocate_buf(rast->raster_type);
-    rast->elev = (FCELL **)G_malloc((row_buffer_size + 1) * sizeof(FCELL *));
-
-    for (row = 0; row < row_buffer_size + 1; ++row) {
-        rast->elev[row] = Rast_allocate_buf(FCELL_TYPE);
-        Rast_get_row(rast->fd, tmp_buf, row, rast->raster_type);
-        for (col = 0; col < ncols; ++col)
-            get_cell(col, rast->elev[row], tmp_buf, rast->raster_type);
-    } /* end elev */
-
-    G_free(tmp_buf);
     return 0;
 }
 
@@ -102,38 +88,17 @@ static int get_cell(int col, float *buf_row, void *buf,
     return 0;
 }
 
-int shift_buffers(int row)
+/* Load count rows from abs_first into rows[], converted to FCELL. */
+int load_strip(int fd, RASTER_MAP_TYPE rtype, void *tmp_buf, FCELL **rows,
+               int abs_first, int count)
 {
-    int i;
-    int col;
-    void *tmp_buf;
-    FCELL *tmp_elev_buf;
+    int k, col;
 
-    tmp_buf = Rast_allocate_buf(elevation.raster_type);
-    tmp_elev_buf = elevation.elev[0];
-
-    for (i = 1; i < row_buffer_size + 1; ++i)
-        elevation.elev[i - 1] = elevation.elev[i];
-
-    elevation.elev[row_buffer_size] = tmp_elev_buf;
-    Rast_get_row(elevation.fd, tmp_buf, row + row_radius_size + 1,
-                 elevation.raster_type);
-
-    for (col = 0; col < ncols; ++col)
-        get_cell(col, elevation.elev[row_buffer_size], tmp_buf,
-                 elevation.raster_type);
-
-    G_free(tmp_buf);
-    return 0;
-}
-
-int free_map(FCELL **map, int n)
-{
-    int i;
-
-    for (i = 0; i < n; ++i)
-        G_free(map[i]);
-    G_free(map);
+    for (k = 0; k < count; ++k) {
+        Rast_get_row(fd, tmp_buf, abs_first + k, rtype);
+        for (col = 0; col < ncols; ++col)
+            get_cell(col, rows[k], tmp_buf, rtype);
+    }
     return 0;
 }
 

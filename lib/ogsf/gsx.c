@@ -47,7 +47,7 @@ void GS_set_cancel(int c)
 /*!
    \brief Set cxl function
 
-   \param pointer to function
+   \param f pointer to function
  */
 void GS_set_cxl_func(void (*f)(void))
 {

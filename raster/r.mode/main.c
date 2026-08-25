@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("%s: Unable to read category labels"), covermap);
     }
 
-    sprintf(input, "input=%s,%s", basemap, covermap);
+    snprintf(input, sizeof(input), "input=%s,%s", basemap, covermap);
 
     args[0] = "r.stats";
     args[1] = "-an";
@@ -98,8 +98,8 @@ int main(int argc, char *argv[])
 
     stats = G_popen_read(&stats_child, "r.stats", args);
 
-    sprintf(input, "input=%s", basemap);
-    sprintf(output, "output=%s", outmap);
+    snprintf(input, sizeof(input), "input=%s", basemap);
+    snprintf(output, sizeof(output), "output=%s", outmap);
 
     args[0] = "r.reclass";
     args[1] = input;

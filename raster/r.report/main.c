@@ -52,6 +52,8 @@ int maskfd;
 CELL *mask;
 CELL NULL_CELL;
 
+enum OutputFormat format;
+
 char fs[2];
 struct Categories *labels;
 

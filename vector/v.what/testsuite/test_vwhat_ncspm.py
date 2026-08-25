@@ -171,6 +171,32 @@ Layer: 1
 Category: 217
 """
 
+out5 = {
+    "Coordinates": {"East": "636661", "North": "226489"},
+    "Maps": [
+        {"Map": "schools", "Mapset": "PERMANENT"},
+        {
+            "Map": "roadsmajor",
+            "Mapset": "PERMANENT",
+            "Type": "Line",
+            "Id": 231,
+            "Length": 2321.407296,
+            "Categories": [{"Layer": 1, "Category": 231}],
+        },
+        {"Map": "elev_points", "Mapset": "PERMANENT"},
+        {
+            "Map": "geology",
+            "Mapset": "PERMANENT",
+            "Type": "Area",
+            "Sq_Meters": 261215323.454,
+            "Hectares": 26121.532,
+            "Acres": 64547.712,
+            "Sq_Miles": 100.8558,
+            "Categories": [{"Layer": 1, "Category": 217}],
+        },
+    ],
+}
+
 
 class TestNCMaps(TestCase):
     def setUp(self):
@@ -186,6 +212,11 @@ class TestNCMaps(TestCase):
         self.assertModule(self.vwhat)
         self.assertMultiLineEqual(first=out1, second=self.vwhat.outputs.stdout)
 
+        # Test with explicit 'plain' format
+        self.vwhat.inputs["format"].value = "plain"
+        self.assertModule(self.vwhat)
+        self.assertMultiLineEqual(first=out1, second=self.vwhat.outputs.stdout)
+
     def test_print_options(self):
         self.vwhat.flags["a"].value = True
         self.assertModule(self.vwhat)
@@ -195,8 +226,25 @@ class TestNCMaps(TestCase):
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
 
+        self.vwhat.flags["g"].value = False
+
+        # Test with explicit 'plain' format
+        self.vwhat.inputs["format"].value = "plain"
+        self.assertModule(self.vwhat)
+        self.assertLooksLike(reference=out2, actual=self.vwhat.outputs.stdout)
+
+        # Test with explicit 'shell' format
+        self.vwhat.inputs["format"].value = "shell"
+        self.assertModule(self.vwhat)
+        self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
+
     def test_threshold(self):
         self.vwhat.inputs["distance"].value = 100
+        self.assertModule(self.vwhat)
+        self.assertLooksLike(reference=out4, actual=self.vwhat.outputs.stdout)
+
+        # Test with explicit 'plain' format
+        self.vwhat.inputs["format"].value = "plain"
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out4, actual=self.vwhat.outputs.stdout)
 
@@ -206,7 +254,8 @@ class TestNCMaps(TestCase):
         self.vwhat.flags["j"].value = True
         self.assertModule(self.vwhat)
         try:
-            json.loads(self.vwhat.outputs.stdout)
+            result = json.loads(self.vwhat.outputs.stdout)
+            self.assertEqual(result, out5)
         except ValueError:
             self.fail(
                 msg="No JSON object could be decoded:\n" + self.vwhat.outputs.stdout

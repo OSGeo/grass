@@ -120,18 +120,10 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&dst_w);
 
-    sscanf(nprocs->answer, "%d", &threads);
-    if (threads < 1) {
-        G_fatal_error(_("<%d> is not valid number of threads."), threads);
-    }
-#if defined(_OPENMP)
-    omp_set_num_threads(threads);
-#else
-    if (threads != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    threads = 1;
-#endif
+    threads = G_set_omp_num_threads(nprocs);
+    threads = Rast_disable_omp_on_mask(threads);
+    if (threads < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), threads);
 
     bufrows = atoi(memory->answer) * (((1 << 20) / sizeof(DCELL)) / dst_w.cols);
     /* set the output buffer rows to be at most covering the entire map */
@@ -246,10 +238,13 @@ int main(int argc, char *argv[])
 
                         if (Rast_is_d_null_value(&c)) {
                             Rast_set_d_null_value(
-                                &outbuf[(row - start) * dst_w.cols + col], 1);
+                                &outbuf[(size_t)(row - start) * dst_w.cols +
+                                        col],
+                                1);
                         }
                         else {
-                            outbuf[(row - start) * dst_w.cols + col] = c;
+                            outbuf[(size_t)(row - start) * dst_w.cols + col] =
+                                c;
                         }
                     }
 
@@ -288,10 +283,12 @@ int main(int argc, char *argv[])
                             Rast_is_d_null_value(&c10) ||
                             Rast_is_d_null_value(&c11)) {
                             Rast_set_d_null_value(
-                                &outbuf[(row - start) * dst_w.cols + col], 1);
+                                &outbuf[(size_t)(row - start) * dst_w.cols +
+                                        col],
+                                1);
                         }
                         else {
-                            outbuf[(row - start) * dst_w.cols + col] =
+                            outbuf[(size_t)(row - start) * dst_w.cols + col] =
                                 Rast_interp_bilinear(u, v, c00, c01, c10, c11);
                         }
                     }
@@ -361,10 +358,12 @@ int main(int argc, char *argv[])
                             Rast_is_d_null_value(&c32) ||
                             Rast_is_d_null_value(&c33)) {
                             Rast_set_d_null_value(
-                                &outbuf[(row - start) * dst_w.cols + col], 1);
+                                &outbuf[(size_t)(row - start) * dst_w.cols +
+                                        col],
+                                1);
                         }
                         else {
-                            outbuf[(row - start) * dst_w.cols + col] =
+                            outbuf[(size_t)(row - start) * dst_w.cols + col] =
                                 Rast_interp_bicubic(u, v, c00, c01, c02, c03,
                                                     c10, c11, c12, c13, c20,
                                                     c21, c22, c23, c30, c31,
@@ -419,7 +418,7 @@ int main(int argc, char *argv[])
                         }
 
                         if (do_lanczos) {
-                            outbuf[(row - start) * dst_w.cols + col] =
+                            outbuf[(size_t)(row - start) * dst_w.cols + col] =
                                 Rast_interp_lanczos(u, v, c);
                         }
                     }
@@ -433,7 +432,8 @@ int main(int argc, char *argv[])
 
         /* write to output map */
         for (row = start; row < end; row++) {
-            Rast_put_d_row(outfile, &outbuf[(row - start) * dst_w.cols]);
+            Rast_put_d_row(outfile,
+                           &outbuf[(size_t)(row - start) * dst_w.cols]);
         }
         written = end;
     }
@@ -445,7 +445,8 @@ int main(int argc, char *argv[])
     Rast_close(outfile);
 
     /* record map metadata/history info */
-    sprintf(title, "Resample by %s interpolation", method->answer);
+    snprintf(title, sizeof(title), "Resample by %s interpolation",
+             method->answer);
     Rast_put_cell_title(rastout->answer, title);
 
     Rast_short_history(rastout->answer, "raster", &history);

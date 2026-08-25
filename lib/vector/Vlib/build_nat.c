@@ -169,8 +169,10 @@ int Vect_build_nat(struct Map_info *Map, int build)
         plus->built = GV_BUILD_AREAS;
     }
 
-    if (build < GV_BUILD_ATTACH_ISLES)
+    if (build < GV_BUILD_ATTACH_ISLES) {
+        Vect_destroy_cats_struct(Cats);
         return 1;
+    }
 
     /* Attach isles to areas */
     if (plus->built < GV_BUILD_ATTACH_ISLES) {
@@ -186,8 +188,10 @@ int Vect_build_nat(struct Map_info *Map, int build)
         plus->built = GV_BUILD_ATTACH_ISLES;
     }
 
-    if (build < GV_BUILD_CENTROIDS)
+    if (build < GV_BUILD_CENTROIDS) {
+        Vect_destroy_cats_struct(Cats);
         return 1;
+    }
 
     /* Attach centroids to areas */
     if (plus->built < GV_BUILD_CENTROIDS) {
@@ -233,7 +237,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 
     /* Add areas to category index */
     /* add message and G_percent() ?
-     * it seems fast enough, no message / precent needed */
+     * it seems fast enough, no message / percent needed */
     for (i = 1; i <= plus->n_areas; i++) {
         int c;
 

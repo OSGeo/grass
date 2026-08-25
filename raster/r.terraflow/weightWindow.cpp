@@ -219,8 +219,8 @@ void weightWindow::compute(const dimension_type i, const dimension_type j,
             if (dirwin.get(di, dj) == true) {
                 computeWeight(di, dj, elev_crt, elev_neighb);
             }
-        }        /* for dj */
-    }            /* for di */
+        } /* for dj */
+    } /* for di */
     normalize(); /* normalize the weights */
 
 #ifdef CHECK_WEIGHTS
@@ -229,13 +229,15 @@ void weightWindow::compute(const dimension_type i, const dimension_type j,
         cout << form("%3.2f ", weight.get(l));
     cout << "]\n";
 #endif
-};
+}
 
 /* Find the dominant direction. Set corresponding weight to 1, and
    sets all other weights to 0. Set sumweight and sumcontour.*/
-void weightWindow::makeD8(const dimension_type i, const dimension_type j,
+void weightWindow::makeD8(const dimension_type i G_UNUSED,
+                          const dimension_type j G_UNUSED,
                           const genericWindow<elevation_type> &elevwin,
-                          const direction_type dir, const bool trustdir)
+                          const direction_type dir,
+                          const bool trustdir G_UNUSED)
 {
 
     elevation_type elev_crt;

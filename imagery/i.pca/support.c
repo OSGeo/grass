@@ -55,18 +55,19 @@ static void write_history(int bands, char *outname, double **eigmat,
     for (i = 0; i < bands; i++) {
         char tmpeigen[2048], tmpa[80]; /* (bands*8)+30 instead of 2048? */
 
-        sprintf(tmpeigen, "PC%d %9.2f (", i + 1, eigval[i]);
+        snprintf(tmpeigen, sizeof(tmpeigen), "PC%d %9.2f (", i + 1, eigval[i]);
         for (j = 0; j < bands; j++) {
-            sprintf(tmpa, "%7.4f", eigmat[i][j]);
+            snprintf(tmpa, sizeof(tmpa), "%7.4f", eigmat[i][j]);
             strcat(tmpeigen, tmpa);
             if (j < (bands - 1)) {
-                sprintf(tmpa, ",");
+                snprintf(tmpa, sizeof(tmpa), ",");
                 strcat(tmpeigen, tmpa);
             }
         }
         strcat(tmpeigen, ") ");
 
-        sprintf(tmpa, "[%5.2f%%]", eigval[i] * 100 / eigval_total);
+        snprintf(tmpa, sizeof(tmpa), "[%5.2f%%]",
+                 eigval[i] * 100 / eigval_total);
         strcat(tmpeigen, tmpa);
 
         Rast_append_history(&hist, tmpeigen);

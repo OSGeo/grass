@@ -974,15 +974,15 @@ current region.
 Reads a row from NULL value bitmap file for the raster map open for
 read. If there is no bitmap file, then this routine simulates the read
 as follows: non-zero values in the raster map correspond to non-NULL;
-zero values correspond to NULL. When MASK exists, masked cells are set
-to null.
+zero values correspond to NULL. When raster mask is active, masked cells
+are set to null.
 
 \subsection Floating_point_and_type_independent_functions Floating-point and type-independent functions
 
  - Rast_maskfd()
 
-Test for current maskreturns file descriptor number if MASK is in use
-and -1 if no MASK is in use.
+Test for current mask returns a file descriptor number if mask is in use
+and -1 if no mask is in use.
 
  - Rast_map_is_fp()
 
@@ -1083,7 +1083,7 @@ assigning DCELL values to raster cells of any type.
 
 Retrieves the value of raster type, converts it to CELL type and
 returns the result. If null value is stored, returns CELL null
-value. Used for retreiving CELL values from raster cells of any type.
+value. Used for retrieving CELL values from raster cells of any type.
 
 Note: when data_type != CELL_TYPE, no quantization is used, only type conversion.
 
@@ -1091,13 +1091,13 @@ Note: when data_type != CELL_TYPE, no quantization is used, only type conversion
 
 Retrieves the value of raster type, converts it to FCELL type and
 returns the result. If null value is stored, returns FCELL null
-value. Used for retreiving FCELL values from raster cells of any type.
+value. Used for retrieving FCELL values from raster cells of any type.
 
  - Rast_get_value_d()
 
 Retrieves the value of raster type, converts it to DCELL type and
 returns the result. If null value is stored, returns DCELL null
-value. Used for retreiving DCELL values from raster cells of any type.
+value. Used for retrieving DCELL values from raster cells of any type.
 
  - Rast_get_row ()
 
@@ -1560,7 +1560,7 @@ New functions to support quantization of floating-point to integer:
 Writes the <tt>f_quant</tt> file for the raster map. If
 mapset==Rast_mapset() i.e. the map is in current mapset, then the
 original quant file in <tt>cell_misc/map/f_quant</tt> is
-written. Othewise is written into <tt>quant2/mapset/name</tt> (much
+written. Otherwise is written into <tt>quant2/mapset/name</tt> (much
 like colr2 element). This results in map&#64;mapset being read using
 quant rules stored Rast_mapset(). See Rast_read_quant() for detailes.
 
@@ -1823,8 +1823,8 @@ first marked cat label.
  - Rast_init_cats()
 
 Same as existing Rast_init_cats() only ncats argument is
-missign. ncats has no meaning in new Categories structure and only
-stores (int) largets data value for backwards compatibility.
+missing. ncats has no meaning in new Categories structure and only
+stores (int) largest data value for backwards compatibility.
 
  - Rast_set_cats_fmt()
 

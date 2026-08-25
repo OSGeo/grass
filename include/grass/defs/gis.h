@@ -72,25 +72,6 @@
 #define RELDIR "?"
 #endif
 
-/* GDAL < 2.3 does not define HAVE_LONG_LONG when compiled with
- * Visual Studio as for OSGeo4W, even though long long is available,
- * and GIntBig falls back to long which is on Windows always 4 bytes.
- * This patch ensures that GIntBig is defined as long long (8 bytes)
- * if GDAL is compiled with Visual Studio and GRASS is compiled with
- * MinGW. This patch must be applied before other GDAL/OGR headers are
- * included, as done by gprojects.h and vector.h */
-#if defined(__MINGW32__) && HAVE_GDAL
-#include <gdal_version.h>
-#if GDAL_VERSION_NUM < 2030000
-#include <cpl_config.h>
-/* HAVE_LONG_LONG_INT comes from GRASS
- * HAVE_LONG_LONG comes from GDAL */
-#if HAVE_LONG_LONG_INT && !defined(HAVE_LONG_LONG)
-#define HAVE_LONG_LONG 1
-#endif
-#endif
-#endif
-
 /* adj_cellhd.c */
 void G_adjust_Cell_head(struct Cell_head *, int, int);
 void G_adjust_Cell_head3(struct Cell_head *, int, int, int);
@@ -100,10 +81,55 @@ int G_adjust_window_ll(struct Cell_head *cellhd);
 #define G_incr_void_ptr(ptr, size) \
     ((void *)((const unsigned char *)(ptr) + (size)))
 
-void *G__malloc(const char *, int, size_t);
-void *G__calloc(const char *, int, size_t, size_t);
-void *G__realloc(const char *, int, void *, size_t);
-void G_free(void *);
+// Improve diagnostic capabilities for compilers and/or static analyzers
+
+#ifndef __has_attribute
+#define __has_attribute(x) 0
+#endif
+
+#if __has_attribute(malloc) && defined(__GNUC__) && (__GNUC__ >= 11)
+#define G_ATTR_MALLOC __attribute__((malloc, malloc(G_free, 1)))
+#elif __has_attribute(malloc)
+#define G_ATTR_MALLOC __attribute__((malloc))
+#else
+#define G_ATTR_MALLOC
+#endif
+
+#if __has_attribute(returns_nonnull)
+#define G_ATTR_RET_NONNULL __attribute__((returns_nonnull))
+#else
+#define G_ATTR_RET_NONNULL
+#endif
+
+#if __has_attribute(alloc_size)
+#define G_ATTR_ALLOC_SIZE1(N)    __attribute__((alloc_size(N)))
+#define G_ATTR_ALLOC_SIZE2(N, M) __attribute__((alloc_size(N, M)))
+#else
+#define G_ATTR_ALLOC_SIZE1(N)
+#define G_ATTR_ALLOC_SIZE2(N, M)
+#endif
+
+// Clang Static Analyzer ownership annotations
+#if defined(__clang__) && __has_attribute(ownership_returns) && \
+    __has_attribute(ownership_takes)
+#define G_ATTR_OWNSHIP_RET  __attribute__((ownership_returns(malloc)))
+#define G_ATTR_OWNSHIP_TAKE __attribute__((ownership_takes(malloc, 1)))
+#else
+#define G_ATTR_OWNSHIP_RET
+#define G_ATTR_OWNSHIP_TAKE
+#endif
+
+#define G_MALLOC_ATTR \
+    G_ATTR_MALLOC G_ATTR_ALLOC_SIZE1(3) G_ATTR_OWNSHIP_RET G_ATTR_RET_NONNULL
+#define G_CALLOC_ATTR \
+    G_ATTR_MALLOC G_ATTR_ALLOC_SIZE2(3, 4) G_ATTR_OWNSHIP_RET G_ATTR_RET_NONNULL
+#define G_REALLOC_ATTR G_ATTR_ALLOC_SIZE1(4) G_ATTR_RET_NONNULL
+#define G_FREE_ATTR    G_ATTR_OWNSHIP_TAKE
+
+void G_free(void *) G_FREE_ATTR;
+void *G__malloc(const char *, int, size_t) G_MALLOC_ATTR;
+void *G__calloc(const char *, int, size_t, size_t) G_CALLOC_ATTR;
+void *G__realloc(const char *, int, void *, size_t) G_REALLOC_ATTR;
 
 #ifndef G_incr_void_ptr
 void *G_incr_void_ptr(const void *, size_t);
@@ -170,6 +196,12 @@ int G_vaprintf(const char *, va_list);
 int G_vfaprintf(FILE *, const char *, va_list);
 int G_vsaprintf(char *, const char *, va_list);
 int G_vsnaprintf(char *, size_t, const char *, va_list);
+
+/* strlcat.c */
+size_t G_strlcat(char *, const char *, size_t);
+
+/* strlcpy.c */
+size_t G_strlcpy(char *, const char *, size_t);
 
 /* basename.c */
 char *G_basename(char *, const char *);
@@ -498,7 +530,7 @@ void G_ls(const char *, FILE *);
 void G_ls_format(char **, int, int, FILE *);
 
 /* ls_filter.c */
-#ifdef HAVE_REGEX_H
+#if defined(HAVE_REGEX_H) || defined(HAVE_PCRE_H)
 void *G_ls_regex_filter(const char *, int, int, int);
 void *G_ls_glob_filter(const char *, int, int);
 void G_free_ls_filter(void *);
@@ -563,6 +595,9 @@ void G_newlines_to_spaces(char *);
 int G_name_is_fully_qualified(const char *, char *, char *);
 char *G_fully_qualified_name(const char *, const char *);
 int G_unqualified_name(const char *, const char *, char *, char *);
+
+/* omp_threads.c */
+int G_set_omp_num_threads(struct Option *);
 
 /* open.c */
 int G_open_new(const char *, const char *);
@@ -690,8 +725,8 @@ double G_transverse_radius_of_curvature(double, double, double);
 double G_radius_of_conformal_tangent_sphere(double, double, double);
 
 /* rd_cellhd.c */
-void G__read_Cell_head(FILE *, struct Cell_head *, int);
-void G__read_Cell_head_array(char **, struct Cell_head *, int);
+void G__read_Cell_head(FILE *, struct Cell_head *);
+void G__read_Cell_head_array(char **, struct Cell_head *);
 
 /* remove.c */
 int G_remove(const char *, const char *);
@@ -818,7 +853,7 @@ int G_set_verbose(int);
 /* view.c */
 void G_3dview_warning(int);
 int G_get_3dview_defaults(struct G_3dview *, struct Cell_head *);
-int G_put_3dview(const char *, const char *, const struct G_3dview *,
+int G_put_3dview(const char *, const struct G_3dview *,
                  const struct Cell_head *);
 int G_get_3dview(const char *, const char *, struct G_3dview *);
 

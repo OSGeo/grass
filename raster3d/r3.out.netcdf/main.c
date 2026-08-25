@@ -17,7 +17,7 @@
  *       here:
  *       http://cf-pcmdi.llnl.gov/documents/cf-conventions/1.6/cf-conventions.html#coordinate-system
  *       https://cf-pcmdi.llnl.gov/trac/wiki/Cf2CrsWkt
- *       http://trac.osgeo.org/gdal/wiki/NetCDF_ProjectionTestingStatus
+ *       https://trac.osgeo.org/gdal/wiki/NetCDF_ProjectionTestingStatus
  *
  *****************************************************************************/
 
@@ -30,6 +30,10 @@
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
 #include <grass/gprojects.h>
+
+// Constant to string conversion
+#define STR_HELPER(x)   #x
+#define STR(x)          STR_HELPER(x)
 
 #define NDIMS           3
 #define LONG_NAME       "long_name"
@@ -51,8 +55,9 @@
 #define UNITS           "units"
 #define DEGREES_EAST    "degrees_east"
 #define DEGREES_NORTH   "degrees_north"
-#define HISTORY_TEXT    "GRASS GIS 8 netCDF export of r3.out.netcdf"
-#define CF_SUPPORT      "CF-1.5"
+#define HISTORY_TEXT \
+    "GRASS GIS " STR(GRASS_VERSION_MAJOR) " netCDF export of r3.out.netcdf"
+#define CF_SUPPORT "CF-1.5"
 
 #define ERR(e)                      \
     {                               \
@@ -158,12 +163,8 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
 
         pj_get_kv(&pjinfo, pkv, ukv);
         proj4 = pjinfo.def;
-#ifdef HAVE_PROJ_H
         proj_destroy(pjinfo.pj);
-#else
-        pj_free(pjinfo.pj);
-#endif
-#ifdef HAVE_OGR
+
         /* We support the CF suggestion crs_wkt and the gdal spatil_ref
          * attribute */
         if ((retval = nc_put_att_text(ncid, crs_varid, "crs_wkt",
@@ -174,7 +175,6 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
                                       strlen(GPJ_grass_to_wkt(pkv, ukv, 0, 0)),
                                       GPJ_grass_to_wkt(pkv, ukv, 0, 0))))
             ERR(retval);
-#endif
         /* Code from g.proj:
          * GRASS-style PROJ.4 strings don't include a unit factor as this is
          * handled separately in GRASS - must include it here though */
@@ -287,8 +287,8 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
             char long_name[1024];
             char time_unit[1024];
 
-            G_snprintf(long_name, 1024, "Time in %s",
-                       Rast3d_get_vertical_unit(map));
+            snprintf(long_name, 1024, "Time in %s",
+                     Rast3d_get_vertical_unit(map));
 
             if ((retval =
                      nc_def_dim(ncid, TIME_NAME, region->depths, &time_dimid)))
@@ -306,21 +306,20 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
                 /* Days since datum in ISO norm */
                 if (datetime_is_absolute(&ts.dt[0])) {
                     is_absolute_time = 1;
-                    G_snprintf(time_unit, 1024,
-                               "%s since %d-%02d-%02d %02d:%02d:%02.0f",
-                               Rast3d_get_vertical_unit(map), ts.dt[0].year,
-                               ts.dt[0].month, ts.dt[0].day, ts.dt[0].hour,
-                               ts.dt[0].minute, ts.dt[0].second);
+                    snprintf(time_unit, 1024,
+                             "%s since %d-%02d-%02d %02d:%02d:%02.0f",
+                             Rast3d_get_vertical_unit(map), ts.dt[0].year,
+                             ts.dt[0].month, ts.dt[0].day, ts.dt[0].hour,
+                             ts.dt[0].minute, ts.dt[0].second);
                 }
                 else {
-                    G_snprintf(time_unit, 1024, "%s",
-                               Rast3d_get_vertical_unit(map));
+                    snprintf(time_unit, 1024, "%s",
+                             Rast3d_get_vertical_unit(map));
                 }
             }
             else {
-                G_snprintf(time_unit, 1024, "%s since %s",
-                           Rast3d_get_vertical_unit(map),
-                           "1900-01-01 00:00:00");
+                snprintf(time_unit, 1024, "%s since %s",
+                         Rast3d_get_vertical_unit(map), "1900-01-01 00:00:00");
             }
 
             if ((retval = nc_put_att_text(ncid, time_varid, UNITS,

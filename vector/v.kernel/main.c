@@ -635,7 +635,8 @@ int main(int argc, char **argv)
 }
 
 /* Read points to array return number of points */
-int read_points(struct Map_info *In, double ***coordinate, double dsize)
+int read_points(struct Map_info *In, double ***coordinate,
+                double dsize G_UNUSED)
 {
     int line, nlines, npoints, ltype, i = 0;
     double **xySites;
@@ -769,7 +770,9 @@ double compute_all_net_distances(struct Map_info *In, struct Map_info *Net,
             G_debug(3, "  kk = %d", kk);
         }
     }
-
+    Vect_destroy_line_struct(APoints);
+    Vect_destroy_line_struct(BPoints);
+    Vect_destroy_boxlist(List);
     return (kk);
 }
 

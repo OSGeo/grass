@@ -30,7 +30,7 @@
 /**
  * The coordinates of the points from the map that is to be converted
  * are placed in ax[] and ay[].
- * Those cooresponding points in the other coordinate system
+ * Those corresponding points in the other coordinate system
  * are placed in bx[], by[].
  *
  * The use[] contains a true if that point is to be used by the transform

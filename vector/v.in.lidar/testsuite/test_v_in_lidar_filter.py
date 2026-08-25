@@ -9,7 +9,7 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
-import os
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -81,8 +81,7 @@ class FilterTest(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region and generated data"""
         cls.runModule("g.remove", flags="f", type="vector", name=cls.vector_points)
-        if os.path.isfile(cls.las_file):
-            os.remove(cls.las_file)
+        Path(cls.las_file).unlink(missing_ok=True)
         cls.del_temp_region()
 
     def tearDown(self):
@@ -102,7 +101,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=19)
+            vector=self.imported_points, reference={"points": 19}
         )
 
     def return_filter(self, name, npoints):
@@ -116,7 +115,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=npoints)
+            vector=self.imported_points, reference={"points": npoints}
         )
 
     def test_first_return_filter(self):
@@ -142,7 +141,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=npoints)
+            vector=self.imported_points, reference={"points": npoints}
         )
 
     def test_class_2_filter(self):
@@ -173,7 +172,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=npoints)
+            vector=self.imported_points, reference={"points": npoints}
         )
 
     def test_first_return_and_class_filter(self):
@@ -195,7 +194,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=npoints)
+            vector=self.imported_points, reference={"points": npoints}
         )
 
     def test_zrange_filter(self):
@@ -221,7 +220,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=4)
+            vector=self.imported_points, reference={"points": 4}
         )
 
     def test_zrange_and_return_filter(self):
@@ -236,7 +235,7 @@ class FilterTest(TestCase):
         )
         self.assertVectorExists(self.imported_points)
         self.assertVectorFitsTopoInfo(
-            vector=self.imported_points, reference=dict(points=2)
+            vector=self.imported_points, reference={"points": 2}
         )
 
 

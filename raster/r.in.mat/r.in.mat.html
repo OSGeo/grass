@@ -7,13 +7,13 @@ Attributes such as map title and bounds will also be imported if they exist.
 <br>
 Specifically, the following array variables will be read:<br>
 <ul>
-  <li><b> map_data</b>
-  <li><b> map_name</b>
-  <li><b> map_title</b>
-  <li><b> map_northern_edge</b>
-  <li><b> map_southern_edge</b>
-  <li><b> map_eastern_edge</b>
-  <li><b> map_western_edge</b>
+  <li><b> map_data</b></li>
+  <li><b> map_name</b></li>
+  <li><b> map_title</b></li>
+  <li><b> map_northern_edge</b></li>
+  <li><b> map_southern_edge</b></li>
+  <li><b> map_eastern_edge</b></li>
+  <li><b> map_western_edge</b></li>
 </ul>
 
 Any other variables in the MAT-file will be simply skipped over.<br>
@@ -21,7 +21,7 @@ Any other variables in the MAT-file will be simply skipped over.<br>
 The '<b>map_name</b>' variable is optional, if it exists, and is valid, the
 new map will be thus named. If it doesn't exist or a name is specified with
 the <b>output=</b> option, the raster map's name will be set to
-"<tt>MatFile</tt>" or the name specified respectively.
+"<code>MatFile</code>" or the name specified respectively.
 (maximum 64 characters; normal GRASS naming rules apply)
 <br>
 <br>
@@ -30,7 +30,7 @@ exists.
 <br>
 <br>
 The '<b>map_northern_edge</b>' and like variables are mandatory unless the
-user is importing to a "XY" non-georeferenced location
+user is importing to a "XY" non-georeferenced project
 (e.g. imagery data). Latitude and longitude values should be in decimal form.
 
 <h2>NOTES</h2>
@@ -43,9 +43,9 @@ Everything should be Endian safe, so the file to be imported can be simply
 copied between different system architectures without binary translation
 (caveat: see "TODO" below).<br><br>
 
-As there is no IEEE value for <tt>NaN</tt> in integer arrays, GRASS's null
+As there is no IEEE value for <code>NaN</code> in integer arrays, GRASS's null
 value may be used to represent it within these maps. Usually Matlab will save
-any integer based matrix with <tt>NaN</tt> values as a double-precision
+any integer based matrix with <code>NaN</code> values as a double-precision
 floating point array, so this usually isn't an issue. To save space, once the
 map is loaded into GRASS you can convert it back to an integer map with the
 following command:
@@ -53,7 +53,7 @@ following command:
 r.mapcalc "int_map = int(MATFile_map)"
 </pre></div>
 
-<tt>NaN</tt> values in either floating point or double-precision floating point
+<code>NaN</code> values in either floating point or double-precision floating point
 matrices should translate into null values as expected.<br><br>
 
 
@@ -73,8 +73,8 @@ be used to determine and check the map's resolution information will be correct:
 </pre></div>
 
 <br>
-Remember Matlab arrays are referenced as <tt>(row,column)</tt>,
-i.e. <tt>(y,x)</tt>.
+Remember Matlab arrays are referenced as <code>(row,column)</code>,
+i.e. <code>(y,x)</code>.
 <br><br>
 In addition, <em>r.in.mat</em> and <em>r.out.mat</em> make for a nice
 binary container format for transferring georeferenced maps around,

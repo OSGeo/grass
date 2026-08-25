@@ -24,9 +24,7 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
-#endif
 
 /*!
    \brief Open existing OGR layer on non-topological level
@@ -42,7 +40,6 @@
  */
 int V1_open_old_ogr(struct Map_info *Map, int update)
 {
-#ifdef HAVE_OGR
     int i, layer, nLayers;
 
     struct Format_info_ogr *ogr_info;
@@ -125,10 +122,6 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
     ogr_info->cache.fid = -1; /* FID >= 0 */
 
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -144,24 +137,20 @@ int V1_open_old_ogr(struct Map_info *Map, int update)
  */
 int V2_open_old_ogr(struct Map_info *Map)
 {
-#ifdef HAVE_OGR
-
     G_debug(3, "V2_open_old_ogr(): name = %s mapset = %s", Map->name,
             Map->mapset);
 
     if (Vect_open_fidx(Map, &(Map->fInfo.ogr.offset)) != 0) {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to open feature index file for vector map <%s>"),
-                  Vect_get_full_name(Map));
+                  map_name);
+        G_free((void *)map_name);
         G_zero(&(Map->fInfo.ogr.offset), sizeof(struct Format_info_offset));
     }
 
     Map->fInfo.ogr.next_line = 1; /* reset feature cache */
 
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -179,7 +168,6 @@ int V2_open_old_ogr(struct Map_info *Map)
  */
 int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
 {
-#ifdef HAVE_OGR
     int i, nlayers;
 
     struct Format_info_ogr *ogr_info;
@@ -236,10 +224,6 @@ int V1_open_new_ogr(struct Map_info *Map, const char *name, int with_z)
     }
 
     return 0;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -264,18 +248,21 @@ int Vect_open_fidx(struct Map_info *Map, struct Format_info_offset *offset)
     G_debug(1, "Vect_open_fidx(): name = %s mapset = %s format = %d", Map->name,
             Map->mapset, Map->format);
 
-    sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
+    snprintf(elem, sizeof(elem), "%s/%s", GV_DIRECTORY, Map->name);
     dig_file_init(&fp);
     fp.file = G_fopen_old(elem, GV_FIDX_ELEMENT, Map->mapset);
     if (fp.file == NULL) {
-        G_debug(1, "unable to open fidx file for vector map <%s>",
-                Vect_get_full_name(Map));
+        const char *map_name = Vect_get_full_name(Map);
+        G_debug(1, "unable to open fidx file for vector map <%s>", map_name);
+        G_free((void *)map_name);
         return -1;
     }
 
     /* Header */
-    if (0 >= dig__fread_port_C(buf, 5, &fp))
+    if (0 >= dig__fread_port_C(buf, 5, &fp)) {
+        fclose(fp.file);
         return -1;
+    }
     Version_Major = buf[0];
     Version_Minor = buf[1];
     Back_Major = buf[2];
@@ -302,23 +289,29 @@ int Vect_open_fidx(struct Map_info *Map, struct Format_info_offset *offset)
 
     /* Body */
     /* bytes 6 - 9 : header size */
-    if (0 >= dig__fread_port_L(&length, 1, &fp))
+    if (0 >= dig__fread_port_L(&length, 1, &fp)) {
+        fclose(fp.file);
         return -1;
+    }
     G_debug(4, "  header size %ld", length);
 
     G_fseek(fp.file, length, SEEK_SET);
 
     /* number of records  */
-    if (0 >= dig__fread_port_I(&(offset->array_num), 1, &fp))
+    if (0 >= dig__fread_port_I(&(offset->array_num), 1, &fp)) {
+        fclose(fp.file);
         return -1;
+    }
 
     /* alloc space */
     offset->array = (int *)G_malloc(offset->array_num * sizeof(int));
     offset->array_alloc = offset->array_num;
 
     /* offsets */
-    if (0 >= dig__fread_port_I(offset->array, offset->array_num, &fp))
+    if (0 >= dig__fread_port_I(offset->array, offset->array_num, &fp)) {
+        fclose(fp.file);
         return -1;
+    }
 
     fclose(fp.file);
 

@@ -46,8 +46,7 @@
 # % multiple: no
 # %end
 
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -71,7 +70,7 @@ def main():
 
     if check is False:
         dbif.close()
-        grass.fatal(
+        gs.fatal(
             _("Unable to temporally shift the space time %s dataset <%s>")
             % (stds.get_new_map_instance(None).get_type(), id)
         )
@@ -81,5 +80,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

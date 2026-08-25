@@ -1,8 +1,8 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.in.wms</em> handles all of downloading and importing raster data
-from <a href="http://www.opengeospatial.org/standards/wms">OGC
-WMS</a> and <a href="http://www.opengeospatial.org/standards/wmts">OGC
+from <a href="https://www.ogc.org/publications/standard/wms/">OGC
+WMS</a> and <a href="https://www.ogc.org/publications/standard/wmts/">OGC
 WMTS</a> web mapping servers. It only needs be told the
 desired data to collect (bounds and resolution) via a region, the
 server to get the data from, and the layer or layers to get. It
@@ -16,13 +16,13 @@ capabilities of the WMS server. This should be available via a capabilities
 request (see examples)
 
 <p>
-If possible, the EPSG code of the current location should be used with the
+If possible, the EPSG code of the current project should be used with the
 <b>srs</b> option to avoid unnecessary reprojection.
 
 <p>
 When using GDAL WMS driver (<b>driver=WMS_GDAL</b>), the GDAL library
 needs to be built with WMS support,
-see <a href="http://gdal.org/frmt_wms.html">GDAL WMS</a> manual page
+see <a href="https://gdal.org/en/stable/drivers/raster/wms.html">GDAL WMS</a> manual page
 for details.
 
 <h3>Tiled WMS</h3>
@@ -30,7 +30,7 @@ for details.
 Into the parameter <b>layers</b> the name of the <i>TiledGroup</i> need to
 be inserted from Tile Service file. Time variable can be specified
 in <b>urlparams</b> parameter,
-e.g: <tt>urlparams='time=2012-1-1'</tt>.
+e.g: <code>urlparams='time=2012-1-1'</code>.
 
 <h2>EXAMPLES</h2>
 
@@ -38,11 +38,11 @@ e.g: <tt>urlparams='time=2012-1-1'</tt>.
 
 <div class="code"><pre>
 # Topographic WMS with OpenStreetMap by mundialis
-r.in.wms -c url="http://ows.mundialis.de/services/service?"
-r.in.wms -c url="http://ows.mundialis.de/services/service?" | grep Name
+r.in.wms -c url="https://ows.mundialis.de/services/service?"
+r.in.wms -c url="https://ows.mundialis.de/services/service?" | grep Name
 
 # Czech WMS
-r.in.wms -c url="http://wms.cuzk.cz/wms.asp"
+r.in.wms -c url="https://wms.cuzk.cz/wms.asp"
 </pre></div>
 
 <h3>Download raster data from WMS server (GetMap request)</h3>
@@ -70,8 +70,8 @@ r.info topo
 </pre></div>
 <p>
 More OSM WMS servers can be found online, e.g. on the OSM wiki in a
-<a href="http://wiki.openstreetmap.org/wiki/WMS#Public_WMS_Servers">OSM WMS Servers list</a>
-and on the <a href="http://wiki.openstreetmap.org/wiki/OSM-WMS-EUROPE">OSM-WMS-EUROPE</a> page.
+<a href="https://wiki.openstreetmap.org/wiki/WMS#Public_WMS_Servers">OSM WMS Servers list</a>
+and on the <a href="https://wiki.openstreetmap.org/wiki/WORLD_OSM_WMS">WORLD_OSM_WMS</a> page.
 
 <h4>Countries and coastlines</h4>
 
@@ -154,14 +154,14 @@ r.info jrc_copernicus_core003_mosaik2
 
 <h2>REQUIREMENTS</h2>
 
-<em>r.in.wms</em> requires the <a href="https://gdal.org/gdalwarp.html">gdalwarp</a>
+<em>r.in.wms</em> requires the <a href="https://gdal.org/en/stable/programs/gdalwarp.html">gdalwarp</a>
 utility from the GDAL/OGR library.
 
 <h2>REFERENCES</h2>
 
 <ul>
-  <li><a href="http://www.opengeospatial.org/standards/wms">OGC WMS</a></li>
-  <li><a href="http://www.opengeospatial.org/standards/wmts">OGC WMTS</a></li>
+  <li><a href="https://www.ogc.org/publications/standard/wms/">OGC WMS</a></li>
+  <li><a href="https://www.ogc.org/publications/standard/wmts/">OGC WMTS</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>

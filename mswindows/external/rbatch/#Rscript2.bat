@@ -17,7 +17,7 @@ setlocal
 :: RUN INSTRUCTIONS:
 :: Create an R script whose first line is:
 ::  #Rscript2.bat %0 %*
-:: and give it a .bat extesion.  If it is called test.bat then call it 
+:: and give it a .bat extension.  If it is called test.bat then call it 
 :: like this (adding arguments if any):
 ::  test.bat 
 

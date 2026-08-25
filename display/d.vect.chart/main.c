@@ -13,7 +13,7 @@
  *               for details.
  *
  *****************************************************************************/
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
@@ -25,6 +25,25 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 #include "global.h"
+
+static void write_legend(FILE *fd, const char *title, char **tokens,
+                         int ntokens, const char *secondary_rgba,
+                         const COLOR *colors, int legend_symbol_size)
+{
+    int i;
+    fprintf(fd, "||||||%s\n", title);
+    for (i = 0; i < ntokens; i++) {
+        /* Primary color = fill color in RGBA, empty if none */
+        char primary_rgba[64] = {'\0'};
+        if (!colors[i].none) {
+            snprintf(primary_rgba, sizeof(primary_rgba), "%d:%d:%d:%d",
+                     colors[i].r, colors[i].g, colors[i].b, 255);
+        }
+        /* label|icon|size|ps|primary|secondary|width|topo|count */
+        fprintf(fd, "%s|legend/area|%d|ps|%s|%s|1|point|1\n", tokens[i],
+                legend_symbol_size, primary_rgba, secondary_rgba);
+    }
+}
 
 int main(int argc, char **argv)
 {
@@ -42,7 +61,10 @@ int main(int argc, char **argv)
     struct Option *field_opt;
     struct Option *ocolor_opt, *colors_opt;
     struct Option *columns_opt, *sizecol_opt;
-    struct Flag *y_center_flag, *legend_flag, *chart3d_flag;
+    struct Option *legend_title_opt;
+    struct Option *legend_symbol_size_opt;
+    struct Flag *y_center_flag, *legend_flag, *chart3d_flag, *nodraw_flag,
+        *vlegend_flag;
 
     /*   struct Flag *horizontal_bar_flag; */
     struct Map_info Map;
@@ -139,6 +161,35 @@ int main(int argc, char **argv)
     legend_flag->key = 'l';
     legend_flag->description =
         _("Create legend information and send to stdout");
+    legend_flag->guisection = _("Legend");
+
+    legend_title_opt = G_define_option();
+    legend_title_opt->key = "legend_title";
+    legend_title_opt->type = TYPE_STRING;
+    legend_title_opt->required = NO;
+    legend_title_opt->multiple = NO;
+    legend_title_opt->guisection = _("Legend");
+    legend_title_opt->description = _("Legend title");
+
+    legend_symbol_size_opt = G_define_option();
+    legend_symbol_size_opt->key = "legend_symbol_size";
+    legend_symbol_size_opt->type = TYPE_INTEGER;
+    legend_symbol_size_opt->required = NO;
+    legend_symbol_size_opt->multiple = NO;
+    legend_symbol_size_opt->answer = "20";
+    legend_symbol_size_opt->guisection = _("Legend");
+    legend_symbol_size_opt->description = _("Legend symbol size");
+
+    nodraw_flag = G_define_flag();
+    nodraw_flag->key = 'n';
+    nodraw_flag->description =
+        _("Do not draw map, only output the legend information");
+    nodraw_flag->guisection = _("Legend");
+
+    vlegend_flag = G_define_flag();
+    vlegend_flag->key = 's';
+    vlegend_flag->label = _("Do not show this layer in vector legend");
+    vlegend_flag->guisection = _("Legend");
 
     chart3d_flag = G_define_flag();
     chart3d_flag->key = '3';
@@ -225,18 +276,57 @@ int main(int argc, char **argv)
         }
     }
 
-    if (legend_flag->answer) {
+    /* Legend output (stdout and/or GRASS_LEGEND_FILE) */
+    const char *leg_file = getenv("GRASS_LEGEND_FILE");
+    if (legend_flag->answer || (leg_file && !vlegend_flag->answer)) {
         tokens = G_tokenize(columns_opt->answer, ",");
         ntokens = G_number_of_tokens(tokens);
 
-        for (i = 0; i < ntokens; i++) {
-            fprintf(stdout, "%d|%s|%d:%d:%d\n", i + 1, tokens[i], colors[i].r,
-                    colors[i].g, colors[i].b);
+        const char *title = legend_title_opt->answer ? legend_title_opt->answer
+                                                     : map_opt->answer;
+
+        /* Secondary color = outline (feature/border) color in RGBA, empty if
+         * none */
+        char secondary_rgba[64] = {'\0'};
+        if (!ocolor.none) {
+            snprintf(secondary_rgba, sizeof(secondary_rgba), "%d:%d:%d:%d",
+                     ocolor.r, ocolor.g, ocolor.b, 255);
         }
+
+        int legend_symbol_size = atoi(legend_symbol_size_opt->answer);
+        if (legend_symbol_size <= 0)
+            legend_symbol_size = 10;
+
+        /* Print legend to stdout if -l */
+        if (legend_flag->answer) {
+            write_legend(stdout, title, tokens, ntokens, secondary_rgba, colors,
+                         legend_symbol_size);
+        }
+
+        /* Write into default legend file if GUI requests and -s is NOT set */
+        if (leg_file && !vlegend_flag->answer) {
+            FILE *fd = fopen(leg_file, "a");
+            if (!fd) {
+                G_warning(
+                    _("Unable to open GRASS_LEGEND_FILE <%s> for writing"),
+                    leg_file);
+            }
+            else {
+                write_legend(fd, title, tokens, ntokens, secondary_rgba, colors,
+                             legend_symbol_size);
+                fclose(fd);
+            }
+        }
+
+        G_free_tokens(tokens);
     }
 
     size = atoi(size_opt->answer);
     scale = atof(scale_opt->answer);
+
+    if (nodraw_flag->answer) {
+        exit(EXIT_SUCCESS);
+    }
 
     /* open vector */
     Vect_set_open_level(2);

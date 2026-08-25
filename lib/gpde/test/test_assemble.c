@@ -29,7 +29,7 @@ static N_array_2d *create_value_array_2d(void);
 static N_array_3d *create_value_array_3d(void);
 
 /* *************************************************************** */
-/* Performe the les assmbling tests ****************************** */
+/* Perform the les assmbling tests ****************************** */
 /* *************************************************************** */
 int unit_test_assemble(void)
 {

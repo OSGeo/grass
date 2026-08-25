@@ -75,8 +75,14 @@ int main(int argc, char *argv[])
 
     G_get_window(&window);
 
-    strcpy(drain_name, opt.input->answer);
-    strcpy(basin_name, opt.output->answer);
+    if (G_strlcpy(drain_name, opt.input->answer, sizeof(drain_name)) >=
+        sizeof(drain_name)) {
+        G_fatal_error(_("Drain name <%s> is too long"), opt.input->answer);
+    }
+    if (G_strlcpy(basin_name, opt.output->answer, sizeof(basin_name)) >=
+        sizeof(basin_name)) {
+        G_fatal_error(_("Basin name <%s> is too long"), opt.output->answer);
+    }
 
     if (!G_scan_easting(opt.coords->answers[0], &E, G_projection()))
         G_fatal_error(_("Illegal east coordinate '%s'"),

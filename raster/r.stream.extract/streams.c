@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include <math.h>
 #include <grass/raster.h>
@@ -67,7 +68,7 @@ static int continue_stream(CELL stream_id, int r_max, int c_max, int *stream_no)
         /* debug */
         if (n_stream_nodes != *stream_no)
             G_warning(
-                _("Stream_no %d and n_stream_nodes %" PRI_OFF_T " out of sync"),
+                _("Stream_no %d and n_stream_nodes %" PRId64 " out of sync"),
                 *stream_no, n_stream_nodes);
 
         stream_node[*stream_no].n_alloc += 2;
@@ -369,7 +370,7 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
     double dx, dy;
     int r_nbr, c_nbr, r_max, c_max, ct_dir, np_side, max_side;
     int is_worked;
-    double max_acc;
+    double max_acc, min_ele;
     int edge, flat;
     int asp_r[9] = {0, -1, -1, -1, 0, 1, 1, 1, 0};
     int asp_c[9] = {0, 1, 0, -1, -1, -1, 0, 1, 1};
@@ -497,6 +498,7 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
         stream_cells = 0;
         swale_cells = 0;
         ele_val = wa.ele;
+        min_ele = wa.ele;
         edge = 0;
         flat = 1;
         /* find main drainage direction */
@@ -546,11 +548,13 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
                         mfd_cells++;
 
                         /* set main drainage direction */
-                        if (valued >= max_acc) {
+                        if (valued > max_acc ||
+                            (valued == max_acc && ele_nbr[ct_dir] < min_ele)) {
                             max_acc = valued;
                             r_max = r_nbr;
                             c_max = c_nbr;
                             max_side = ct_dir;
+                            min_ele = ele_nbr[ct_dir];
                         }
                     }
                 }
@@ -593,6 +597,14 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
             G_fatal_error("np_side < 0");
 
         /* set main drainage direction to A* path if possible */
+        if (mfd_cells > 0 && max_side != np_side) {
+            if (fabs(wat_nbr[np_side]) >= max_acc) {
+                max_acc = fabs(wat_nbr[np_side]);
+                r_max = dr;
+                c_max = dc;
+                max_side = np_side;
+            }
+        }
         if (mfd_cells == 0) {
             flat = 0;
             r_max = dr;
@@ -652,7 +664,7 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
 
             /* debug */
             if (n_stream_nodes != stream_no)
-                G_warning(_("Stream_no %d and n_stream_nodes %" PRI_OFF_T
+                G_warning(_("Stream_no %d and n_stream_nodes %" PRId64
                             " out of sync"),
                           stream_no, n_stream_nodes);
         }
@@ -686,7 +698,7 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
     G_percent(1, 1, 2);
     if (workedon)
         G_warning(_("MFD: A * path already processed when setting drainage "
-                    "direction: %" PRI_OFF_T " of %" PRI_OFF_T " cells"),
+                    "direction: %" PRId64 " of %" PRId64 " cells"),
                   workedon, n_points);
 
     G_free(dist_to_nbr);
@@ -694,8 +706,8 @@ int extract_streams(double threshold, double mont_exp, int internal_acc)
     G_free(ele_nbr);
     G_free(flag_nbr);
 
-    G_debug(1, "%" PRI_OFF_T " outlets", n_outlets);
-    G_debug(1, "%" PRI_OFF_T " nodes", n_stream_nodes);
+    G_debug(1, "%" PRId64 " outlets", n_outlets);
+    G_debug(1, "%" PRId64 " nodes", n_stream_nodes);
     G_debug(1, "%d streams", stream_no);
 
     return 1;

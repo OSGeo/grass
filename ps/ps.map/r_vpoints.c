@@ -42,7 +42,7 @@ int read_vpoints(char *name, char *mapset)
 
     vector_alloc(); /* allocate space */
 
-    sprintf(fullname, "%s in %s", name, mapset);
+    snprintf(fullname, sizeof(fullname), "%s in %s", name, mapset);
 
     Vect_set_open_level(2);
     if (2 > Vect_open_old(&Map, name, mapset)) {

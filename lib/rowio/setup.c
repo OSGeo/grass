@@ -40,7 +40,6 @@
  * \return 1 on success
  * \return -1 no memory
  */
-
 int Rowio_setup(ROWIO *R, int fd, int nrows, int len,
                 int (*getrow)(int, void *, int, int),
                 int (*putrow)(int, const void *, int, int))

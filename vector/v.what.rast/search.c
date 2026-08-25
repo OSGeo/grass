@@ -1,14 +1,14 @@
 #include "local_proto.h"
 
-/* for qsort, order list by row */
-int by_row(const void *ii, const void *jj)
+/* for qsort, order list by row and col */
+int by_row_col(const void *ii, const void *jj)
 {
     const struct order *i = ii, *j = jj;
 
-    if (i->row < j->row)
-        return -1;
+    if (i->row != j->row)
+        return i->row - j->row;
 
-    return (i->row > j->row);
+    return (i->col - j->col);
 }
 
 /* for qsort, order list by cat */

@@ -23,13 +23,14 @@ class TestRBlend(TestCase):
     mapsets_to_remove = []
     # mapset with a name is also a valid mathematical expression
     mapset_name = "1234-56-78"
-    gisenv = SimpleModule("g.gisenv", get="MAPSET")
-    TestCase.runModule(gisenv, expecting_stdout=True)
-    old_mapset = gisenv.outputs.stdout.strip()
 
     @classmethod
     def setUpClass(cls):
         """Create maps in a small region."""
+        gisenv = SimpleModule("g.gisenv", get="MAPSET")
+        TestCase.runModule(gisenv, expecting_stdout=True)
+        cls.old_mapset = gisenv.outputs.stdout.strip()
+
         # create a mapset with a name is also a valid mathematical expression
         cls.runModule("g.mapset", flags="c", mapset=cls.mapset_name)
         cls.mapsets_to_remove.append(cls.mapset_name)

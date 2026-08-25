@@ -8,7 +8,6 @@
  * driver. The entire contents of klotz0 (pointer in buff, and buff) must
  * be saved.
  */
-
 int zufallsv(double *svblk)
 {
     int i;

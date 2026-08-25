@@ -7,7 +7,7 @@
  *               Brad Douglas <rez touchofmadness.com>,
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      processes the real and imaginary Fourier
- *               components in frequency space and constract raster map
+ *               components in frequency space and construct raster map
  * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     int i, j;       /* Loop control variables */
     int rows, cols; /* number of rows & columns */
     long totsize;   /* Total number of data points */
-    double(
+    double (
         *data)[2]; /* Data structure containing real & complex values of FFT */
 
     G_gisinit(argv[0]);
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     cell_real = Rast_allocate_d_buf();
     cell_imag = Rast_allocate_d_buf();
 
-#define C(i, j) ((i)*cols + (j))
+#define C(i, j) ((i) * cols + (j))
 
     /* Read in cell map values */
     G_message(_("Reading raster maps..."));

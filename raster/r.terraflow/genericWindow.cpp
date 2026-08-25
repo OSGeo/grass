@@ -36,4 +36,4 @@ void fillPit(ElevationWindow &win)
     if (win.get(4) < min) {
         win.set(4, min);
     }
-};
+}

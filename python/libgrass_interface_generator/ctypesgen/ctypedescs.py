@@ -58,6 +58,7 @@ ctypes_type_map = {
     ("__uint64", False, 0): "c_uint64",
     ("__uint64_t", False, 0): "c_uint64",
     ("_Bool", True, 0): "c_bool",
+    ("bool", True, 0): "c_bool",
 }
 
 ctypes_type_map_python_builtin = {
@@ -123,7 +124,7 @@ def visit_type_and_collect_info(ctype):
     return structs, enums, typedefs, errors, identifiers
 
 
-# Remove one level of indirection from funtion pointer; needed for typedefs
+# Remove one level of indirection from function pointer; needed for typedefs
 # and function parameters.
 def remove_function_pointer(t):
     if type(t) == CtypesPointer and type(t.destination) == CtypesFunction:

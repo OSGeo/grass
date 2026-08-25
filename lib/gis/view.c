@@ -41,7 +41,6 @@ static int Suppress_warn = 0;
  * \param[in] b
  * \return
  */
-
 void G_3dview_warning(int b)
 {
     Suppress_warn = b ? 0 : 1;
@@ -54,7 +53,6 @@ void G_3dview_warning(int b)
  * \param[in] w
  * \return always returns 1
  */
-
 int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
 {
     if (!v || !w)
@@ -102,7 +100,7 @@ int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
 }
 
 /**
- * \brief Saves info to a 3d.view file.
+ * \brief Saves info to a 3d.view file in the current mapset.
  *
  * The address of a window (struct Cell_head *) may be passed, or if
  * NULL is passed, the Cell_head structure inside the G_3dview struct
@@ -154,15 +152,13 @@ int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
  * SURFACEONLY<br>
  *
  * \param[in] fname file name
- * \param[in] mapset
  * \param[in] View
  * \param[in] Win
  * \return 1 on success
  * \return -1 on error
  */
-
-int G_put_3dview(const char *fname, const char *mapset,
-                 const struct G_3dview *View, const struct Cell_head *Win)
+int G_put_3dview(const char *fname, const struct G_3dview *View,
+                 const struct Cell_head *Win)
 {
     FILE *fp;
 
@@ -240,7 +236,6 @@ int G_put_3dview(const char *fname, const char *mapset,
  * \return 2 if <b>fname</b> was written with this version of routine
  * \return 0 if is older format (through 4.0)
  */
-
 int G_get_3dview(const char *fname, const char *mapset, struct G_3dview *View)
 {
     struct Cell_head curwin;

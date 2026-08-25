@@ -171,6 +171,7 @@
 import sys
 import os
 import atexit
+from pathlib import Path
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
@@ -208,7 +209,7 @@ def main():
     if workers == 1 and "WORKERS" in os.environ:
         workers = int(os.environ["WORKERS"])
 
-    if not os.path.exists(infile):
+    if not Path(infile).exists():
         grass.fatal(_("Unable to read input file <%s>") % infile)
 
     addl_opts = {}
@@ -226,10 +227,7 @@ def main():
         addl_opts["flags"] = "i"
 
     if scan_only or shell_style:
-        if shell_style:
-            doShell = "g"
-        else:
-            doShell = ""
+        doShell = "g" if shell_style else ""
         grass.run_command(
             "r.in.xyz",
             flags="s" + doShell,
@@ -243,10 +241,7 @@ def main():
         )
         sys.exit()
 
-    if dtype == "float":
-        data_type = "FCELL"
-    else:
-        data_type = "DCELL"
+    data_type = "FCELL" if dtype == "float" else "DCELL"
 
     region = grass.region(region3d=True)
 

@@ -116,6 +116,7 @@ int GS_write_tif(const char *name)
     }
 
     G_free((void *)pixbuf);
+    G_free(buf);
     (void)TIFFClose(out);
 
     return (0);

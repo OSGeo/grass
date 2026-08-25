@@ -144,13 +144,10 @@ int main(int argc, char *argv[])
 
     G_gisinit(argv[0]);
 
+    G_option_required(opt.height, opt.hcolumn, opt.elevation, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
-
-    if (!opt.height->answer && !opt.hcolumn->answer) {
-        G_fatal_error(_("One of '%s' or '%s' parameters must be set"),
-                      opt.height->key, opt.hcolumn->key);
-    }
 
     sscanf(opt.zshift->answer, "%lf", &voffset);
     G_debug(1, "voffset = %f", voffset);
@@ -356,7 +353,7 @@ int main(int argc, char *argv[])
                     scale, opt.null->answer ? TRUE : FALSE, null_val, objheight,
                     voffset, &window, type, -1);
         } /* for each line */
-    }     /* else if area */
+    } /* else if area */
 
     if (driver) {
         db_close_database(driver);

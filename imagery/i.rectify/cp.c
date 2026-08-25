@@ -9,8 +9,8 @@ int get_control_points(struct Image_Group *group, int order)
     if (!I_get_control_points(group->name, &group->control_points))
         exit(0);
 
-    sprintf(msg, _("Control Point file for group <%s@%s> - "), group->name,
-            G_mapset());
+    snprintf(msg, sizeof(msg), _("Control Point file for group <%s@%s> - "),
+             group->name, G_mapset());
 
     G_verbose_message(_("Computing equations..."));
 

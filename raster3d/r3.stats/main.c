@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     rows = region.rows;
     depths = region.depths;
 
-    sscanf(steps->answer, "%i", &nsteps);
+    sscanf(steps->answer, "%u", &nsteps);
 
     /* break if the wrong number of subranges are given */
     if (nsteps <= 0)

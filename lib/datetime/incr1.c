@@ -64,7 +64,6 @@ static double _debug_decimal(DateTime * dt)
  *  \param incr
  *  \return int
  */
-
 int datetime_increment(DateTime *src, DateTime *incr)
 {
     int i, relfrom;
@@ -151,7 +150,6 @@ int datetime_increment(DateTime *src, DateTime *incr)
    already be minimized to allow borrowing from "lower" fields
 
  */
-
 static int _datetime_subtract_field(DateTime *src, DateTime *incr, int field)
 {
 
@@ -452,7 +450,7 @@ static int _datetime_carry(DateTime *dt, int absolute)
                 dt->month++;
 
         } /* end while */
-    }     /* end if */
+    } /* end if */
 
     /* undo giving year a SIGN, temporarily */
     if (!absolute && dt->mode == DATETIME_ABSOLUTE) {

@@ -62,14 +62,14 @@
           <label>Display map projection</label>
           <command>g.proj -p</command>
           <help>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</help>
-          <keywords>general,projection,create location</keywords>
+          <keywords>general,projection,create project</keywords>
           <handler>RunMenuCmd</handler>
         </menuitem>
         <menuitem>
           <label>Manage projections</label>
           <command>g.proj</command>
           <help>Prints or modifies GRASS projection information files (in various co-ordinate system descriptions). Can also be used to create new GRASS locations.</help>
-          <keywords>general,projection,create location</keywords>
+          <keywords>general,projection,create project</keywords>
           <handler>OnMenuCmd</handler>
         </menuitem>
         <separator />

@@ -9,9 +9,10 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
-import os
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 
 class BasicTest(TestCase):
@@ -51,8 +52,7 @@ class BasicTest(TestCase):
 
         This is executed after each test run.
         """
-        if os.path.isfile(self.las_file):
-            os.remove(self.las_file)
+        Path(self.las_file).unlink(missing_ok=True)
         self.runModule("g.remove", flags="f", type="vector", name=self.imported_points)
 
     def test_module_runs_output_created(self):
@@ -60,6 +60,7 @@ class BasicTest(TestCase):
         self.assertModule("v.out.lidar", input=self.vector_points, output=self.las_file)
         self.assertFileExists(self.las_file)
 
+    @xfail_windows
     def test_output_identical(self):
         """Test to see if the standard outputs are created
 

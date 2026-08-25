@@ -38,7 +38,7 @@ int Rast_remove_colors(const char *name, const char *mapset)
     }
 
     /* get rid of existing colr2, if any */
-    sprintf(element, "colr2/%s", mapset);
+    snprintf(element, sizeof(element), "colr2/%s", mapset);
     stat = G_remove(element, name);
 
     if (strcmp(mapset, G_mapset()) == 0)

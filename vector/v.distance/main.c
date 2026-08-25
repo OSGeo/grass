@@ -30,6 +30,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
+#include <grass/gjson.h>
 #include "local_proto.h"
 
 /* Supported command lines:
@@ -69,6 +70,7 @@ int main(int argc, char *argv[])
         struct Option *out, *max, *min, *table;
         struct Option *upload, *column, *to_column;
         struct Option *sep;
+        struct Option *format;
     } opt;
     struct {
         struct Flag *print, *all, *square;
@@ -112,6 +114,10 @@ int main(int argc, char *argv[])
     dbCatValArray cvarr;
     dbColumn *column;
     char *sep;
+    enum OutputFormat format;
+    G_JSON_Value *root_value = NULL, *object_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *root_object = NULL;
 
     G_gisinit(argv[0]);
 
@@ -237,6 +243,9 @@ int main(int argc, char *argv[])
     opt.sep = G_define_standard_option(G_OPT_F_SEP);
     opt.sep->label = _("Field separator for printing output to stdout");
 
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
+    opt.format->guisection = _("Print");
+
     flag.print = G_define_flag();
     flag.print->key = 'p';
     flag.print->label =
@@ -260,7 +269,8 @@ int main(int argc, char *argv[])
 
     /* GUI dependency */
     opt.from->guidependency = G_store(opt.from_field->key);
-    sprintf(buf1, "%s,%s", opt.to_field->key, opt.to_column->key);
+    snprintf(buf1, sizeof(buf1), "%s,%s", opt.to_field->key,
+             opt.to_column->key);
     opt.to->guidependency = G_store(buf1);
     opt.to_field->guidependency = G_store(opt.to_column->key);
 
@@ -292,6 +302,23 @@ int main(int argc, char *argv[])
     update_table = !print && !create_table && opt.column->answer;
     do_all = flag.all->answer;
     print_as_matrix = flag.square->answer;
+
+    if (strcmp(opt.format->answer, "json") == 0) {
+        format = JSON;
+        root_value = G_json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = G_json_array(root_value);
+    }
+    else {
+        format = PLAIN;
+    }
+
+    if (format == JSON && !print) {
+        G_fatal_error(_("The format option requires the -p flag; please re-run "
+                        "with -p to enable output."));
+    }
 
     if (do_all && update_table)
         G_fatal_error(_("Updating the from= table is not supported with -a"));
@@ -574,11 +601,12 @@ int main(int argc, char *argv[])
             sqltype = db_get_column_sqltype(column);
             switch (sqltype) {
             case DB_SQL_TYPE_CHARACTER:
-                sprintf(to_attr_sqltype, "VARCHAR(%d)",
-                        db_get_column_length(column));
+                snprintf(to_attr_sqltype, sizeof(to_attr_sqltype),
+                         "VARCHAR(%d)", db_get_column_length(column));
                 break;
             default:
-                sprintf(to_attr_sqltype, "%s", db_sqltype_name(sqltype));
+                snprintf(to_attr_sqltype, sizeof(to_attr_sqltype), "%s",
+                         db_sqltype_name(sqltype));
             }
 
             db_free_column(column);
@@ -989,7 +1017,7 @@ int main(int argc, char *argv[])
                     near->count++;
                 }
             } /* done searching 'to' */
-        }     /* next from feature */
+        } /* next from feature */
     }
 
     /* Find nearest features for 'from' areas */
@@ -1353,7 +1381,7 @@ int main(int argc, char *argv[])
                     near->count++;
                 }
             } /* done */
-        }     /* next feature */
+        } /* next feature */
     }
 
     G_debug(3, "count = %d", count);
@@ -1397,7 +1425,7 @@ int main(int argc, char *argv[])
         update_notfound = ncatexist = 0;
 
     /* Update database / print to stdout / create output map */
-    if (print) { /* print header */
+    if (print && format == PLAIN) { /* print header */
         fprintf(stdout, "from_cat");
         if (do_all)
             fprintf(stdout, "%sto_cat", sep);
@@ -1422,7 +1450,7 @@ int main(int argc, char *argv[])
 
             switch (Upload[j].upload) {
             case CAT:
-                sprintf(buf2, "%s integer", Upload[j].column);
+                snprintf(buf2, sizeof(buf2), "%s integer", Upload[j].column);
                 break;
             case DIST:
             case FROM_X:
@@ -1432,10 +1460,14 @@ int main(int argc, char *argv[])
             case FROM_ALONG:
             case TO_ALONG:
             case TO_ANGLE:
-                sprintf(buf2, "%s double precision", Upload[j].column);
+                snprintf(buf2, sizeof(buf2), "%s double precision",
+                         Upload[j].column);
                 break;
             case TO_ATTR:
-                sprintf(buf2, "%s %s", Upload[j].column, to_attr_sqltype);
+                snprintf(buf2, sizeof(buf2), "%s %s", Upload[j].column,
+                         to_attr_sqltype);
+            default:
+                break;
             }
             db_append_string(&stmt, buf2);
             j++;
@@ -1504,35 +1536,56 @@ int main(int argc, char *argv[])
         }
 
         if (print) { /* print only */
-            /*
-               input and output is the same &&
-               calculate distances &&
-               only one upload option given ->
-               print as a matrix
-             */
-            if (print_as_matrix) {
-                if (i == 0) {
-                    for (j = 0; j < nfrom; j++) {
-                        if (j == 0)
-                            fprintf(stdout, " ");
-                        fprintf(stdout, "%s%d", sep, Near[j].to_cat);
+            switch (format) {
+            case PLAIN:
+                /*
+                   input and output is the same &&
+                   calculate distances &&
+                   only one upload option given ->
+                   print as a matrix
+                 */
+                if (print_as_matrix) {
+                    if (i == 0) {
+                        for (j = 0; j < nfrom; j++) {
+                            if (j == 0)
+                                fprintf(stdout, " ");
+                            fprintf(stdout, "%s%d", sep, Near[j].to_cat);
+                        }
+                        fprintf(stdout, "\n");
                     }
-                    fprintf(stdout, "\n");
+                    if (i % nfrom == 0) {
+                        fprintf(stdout, "%d", Near[i].from_cat);
+                        for (j = 0; j < nfrom; j++) {
+                            print_upload(Near, Upload, i + j, &cvarr, catval,
+                                         sep, format, NULL);
+                        }
+                        fprintf(stdout, "\n");
+                    }
                 }
-                if (i % nfrom == 0) {
+                else {
                     fprintf(stdout, "%d", Near[i].from_cat);
-                    for (j = 0; j < nfrom; j++) {
-                        print_upload(Near, Upload, i + j, &cvarr, catval, sep);
-                    }
+                    if (do_all)
+                        fprintf(stdout, "%s%d", sep, Near[i].to_cat);
+                    print_upload(Near, Upload, i, &cvarr, catval, sep, format,
+                                 NULL);
                     fprintf(stdout, "\n");
                 }
-            }
-            else {
-                fprintf(stdout, "%d", Near[i].from_cat);
-                if (do_all)
-                    fprintf(stdout, "%s%d", sep, Near[i].to_cat);
-                print_upload(Near, Upload, i, &cvarr, catval, sep);
-                fprintf(stdout, "\n");
+                break;
+            case JSON:
+                object_value = G_json_value_init_object();
+                if (object_value == NULL) {
+                    G_fatal_error(
+                        _("Failed to initialize JSON object. Out of memory?"));
+                }
+                root_object = G_json_object(object_value);
+
+                G_json_object_set_number(root_object, "from_cat",
+                                         Near[i].from_cat);
+                G_json_object_set_number(root_object, "to_cat", Near[i].to_cat);
+                print_upload(Near, Upload, i, &cvarr, catval, sep, format,
+                             root_object);
+                G_json_array_append_value(root_array, object_value);
+                break;
             }
         }
         else if (create_table) {    /* insert new record */
@@ -1540,11 +1593,11 @@ int main(int argc, char *argv[])
                 continue;
 
             if (!Outp)
-                sprintf(buf1, "insert into %s values ( %d ", opt.table->answer,
-                        Near[i].from_cat);
+                snprintf(buf1, sizeof(buf1), "insert into %s values ( %d ",
+                         opt.table->answer, Near[i].from_cat);
             else
-                sprintf(buf1, "insert into %s values ( %d, %d ",
-                        opt.table->answer, i, Near[i].from_cat);
+                snprintf(buf1, sizeof(buf1), "insert into %s values ( %d, %d ",
+                         opt.table->answer, i, Near[i].from_cat);
 
             db_set_string(&stmt, buf1);
 
@@ -1554,58 +1607,62 @@ int main(int argc, char *argv[])
 
                 switch (Upload[j].upload) {
                 case CAT:
-                    sprintf(buf2, " %d", Near[i].to_cat);
+                    snprintf(buf2, sizeof(buf2), " %d", Near[i].to_cat);
                     break;
                 case DIST:
-                    sprintf(buf2, " %.17g", Near[i].dist);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].dist);
                     break;
                 case FROM_X:
-                    sprintf(buf2, " %.17g", Near[i].from_x);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].from_x);
                     break;
                 case FROM_Y:
-                    sprintf(buf2, " %.17g", Near[i].from_y);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].from_y);
                     break;
                 case TO_X:
-                    sprintf(buf2, " %.17g", Near[i].to_x);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_x);
                     break;
                 case TO_Y:
-                    sprintf(buf2, " %.17g", Near[i].to_y);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_y);
                     break;
                 case FROM_ALONG:
-                    sprintf(buf2, " %.17g", Near[i].from_along);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].from_along);
                     break;
                 case TO_ALONG:
-                    sprintf(buf2, " %.17g", Near[i].to_along);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_along);
                     break;
                 case TO_ANGLE:
-                    sprintf(buf2, " %.17g", Near[i].to_angle);
+                    snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_angle);
                     break;
                 case TO_ATTR:
                     if (catval) {
                         switch (cvarr.ctype) {
                         case DB_C_TYPE_INT:
-                            sprintf(buf2, " %d", catval->val.i);
+                            snprintf(buf2, sizeof(buf2), " %d", catval->val.i);
                             break;
 
                         case DB_C_TYPE_DOUBLE:
-                            sprintf(buf2, " %.17g", catval->val.d);
+                            snprintf(buf2, sizeof(buf2), " %.17g",
+                                     catval->val.d);
                             break;
 
                         case DB_C_TYPE_STRING:
                             db_set_string(&dbstr, db_get_string(catval->val.s));
                             db_double_quote_string(&dbstr);
-                            sprintf(buf2, " '%s'", db_get_string(&dbstr));
+                            snprintf(buf2, sizeof(buf2), " '%s'",
+                                     db_get_string(&dbstr));
                             break;
 
                         case DB_C_TYPE_DATETIME:
                             /* TODO: formatting datetime */
-                            sprintf(buf2, " null");
+                            snprintf(buf2, sizeof(buf2), " null");
                             break;
                         }
                     }
                     else {
-                        sprintf(buf2, " null");
+                        snprintf(buf2, sizeof(buf2), " null");
                     }
+                    break;
+                default:
                     break;
                 }
                 db_append_string(&stmt, buf2);
@@ -1632,7 +1689,7 @@ int main(int argc, char *argv[])
             }
             update_exist++;
 
-            sprintf(buf1, "update %s set", Fi->table);
+            snprintf(buf1, sizeof(buf1), "update %s set", Fi->table);
             db_set_string(&stmt, buf1);
 
             j = 0;
@@ -1640,7 +1697,7 @@ int main(int argc, char *argv[])
                 if (j > 0)
                     db_append_string(&stmt, ",");
 
-                sprintf(buf2, " %s =", Upload[j].column);
+                snprintf(buf2, sizeof(buf2), " %s =", Upload[j].column);
                 db_append_string(&stmt, buf2);
 
                 if (Near[i].count == 0) { /* no nearest found */
@@ -1652,61 +1709,69 @@ int main(int argc, char *argv[])
                     switch (Upload[j].upload) {
                     case CAT:
                         if (Near[i].to_cat > 0)
-                            sprintf(buf2, " %d", Near[i].to_cat);
+                            snprintf(buf2, sizeof(buf2), " %d", Near[i].to_cat);
                         else
-                            sprintf(buf2, " null");
+                            snprintf(buf2, sizeof(buf2), " null");
                         break;
                     case DIST:
-                        sprintf(buf2, " %.17g", Near[i].dist);
+                        snprintf(buf2, sizeof(buf2), " %.17g", Near[i].dist);
                         break;
                     case FROM_X:
-                        sprintf(buf2, " %.17g", Near[i].from_x);
+                        snprintf(buf2, sizeof(buf2), " %.17g", Near[i].from_x);
                         break;
                     case FROM_Y:
-                        sprintf(buf2, " %.17g", Near[i].from_y);
+                        snprintf(buf2, sizeof(buf2), " %.17g", Near[i].from_y);
                         break;
                     case TO_X:
-                        sprintf(buf2, " %.17g", Near[i].to_x);
+                        snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_x);
                         break;
                     case TO_Y:
-                        sprintf(buf2, " %.17g", Near[i].to_y);
+                        snprintf(buf2, sizeof(buf2), " %.17g", Near[i].to_y);
                         break;
                     case FROM_ALONG:
-                        sprintf(buf2, " %.17g", Near[i].from_along);
+                        snprintf(buf2, sizeof(buf2), " %.17g",
+                                 Near[i].from_along);
                         break;
                     case TO_ALONG:
-                        sprintf(buf2, " %.17g", Near[i].to_along);
+                        snprintf(buf2, sizeof(buf2), " %.17g",
+                                 Near[i].to_along);
                         break;
                     case TO_ANGLE:
-                        sprintf(buf2, " %.17g", Near[i].to_angle);
+                        snprintf(buf2, sizeof(buf2), " %.17g",
+                                 Near[i].to_angle);
                         break;
                     case TO_ATTR:
                         if (catval) {
                             switch (cvarr.ctype) {
                             case DB_C_TYPE_INT:
-                                sprintf(buf2, " %d", catval->val.i);
+                                snprintf(buf2, sizeof(buf2), " %d",
+                                         catval->val.i);
                                 break;
 
                             case DB_C_TYPE_DOUBLE:
-                                sprintf(buf2, " %.17g", catval->val.d);
+                                snprintf(buf2, sizeof(buf2), " %.17g",
+                                         catval->val.d);
                                 break;
 
                             case DB_C_TYPE_STRING:
                                 db_set_string(&dbstr,
                                               db_get_string(catval->val.s));
                                 db_double_quote_string(&dbstr);
-                                sprintf(buf2, " '%s'", db_get_string(&dbstr));
+                                snprintf(buf2, sizeof(buf2), " '%s'",
+                                         db_get_string(&dbstr));
                                 break;
 
                             case DB_C_TYPE_DATETIME:
                                 /* TODO: formatting datetime */
-                                sprintf(buf2, " null");
+                                snprintf(buf2, sizeof(buf2), " null");
                                 break;
                             }
                         }
                         else {
-                            sprintf(buf2, " null");
+                            snprintf(buf2, sizeof(buf2), " null");
                         }
+                        break;
+                    default:
                         break;
                     }
                     db_append_string(&stmt, buf2);
@@ -1714,7 +1779,8 @@ int main(int argc, char *argv[])
                 j++;
             }
             if (do_update) {
-                sprintf(buf2, " where %s = %d", Fi->key, Near[i].from_cat);
+                snprintf(buf2, sizeof(buf2), " where %s = %d", Fi->key,
+                         Near[i].from_cat);
                 db_append_string(&stmt, buf2);
                 G_debug(2, "SQL: %s", db_get_string(&stmt));
                 if (db_execute_immediate(driver, &stmt) == DB_OK) {
@@ -1726,6 +1792,17 @@ int main(int argc, char *argv[])
             }
         }
     }
+
+    if (format == JSON) {
+        char *serialized_string = G_json_serialize_to_string_pretty(root_value);
+        if (serialized_string == NULL) {
+            G_fatal_error(_("Failed to initialize pretty JSON string."));
+        }
+        puts(serialized_string);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
+    }
+
     G_percent(count, count, 1);
 
     if (driver)

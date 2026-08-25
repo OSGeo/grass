@@ -112,7 +112,7 @@ size_t makeRun_Block(AMI_STREAM<T> *instream, T *data, unsigned int run_size,
    once, it reads it in blocks, sorts each block and then merges the
    blocks together. Note: it is not in place! it allocates another
    array of same size as data, writes the sorted run into it and
-   deteles data, and replaces data with outdata */
+   deletes data, and replaces data with outdata */
 template <class T, class Compare>
 void makeRun(AMI_STREAM<T> *instream, T *&data, int run_size, Compare *cmp)
 {

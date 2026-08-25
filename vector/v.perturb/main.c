@@ -101,11 +101,7 @@ int main(int argc, char **argv)
     parm.min->answer = "0.0";
     parm.min->description = _("Minimum deviation in map units");
 
-    parm.seed = G_define_option();
-    parm.seed->key = "seed";
-    parm.seed->type = TYPE_INTEGER;
-    parm.seed->required = NO;
-    parm.seed->description = _("Seed for random number generation");
+    parm.seed = G_define_standard_option(G_OPT_M_SEED);
 
     parm.gen_seed = G_define_flag();
     parm.gen_seed->key = 's';

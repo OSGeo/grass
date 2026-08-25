@@ -167,15 +167,17 @@ int execute_random(struct rr_state *theState)
 
                     if (theState->docover == 1)
                         if (is_null_value(theState->cover, col))
-                            sprintf(buf,
-                                    "insert into %s values ( %d, %f, NULL )",
-                                    fi->table, cat, val);
+                            snprintf(buf, sizeof(buf),
+                                     "insert into %s values ( %d, %f, NULL )",
+                                     fi->table, cat, val);
                         else
-                            sprintf(buf, "insert into %s values ( %d, %f, %f )",
-                                    fi->table, cat, val, coverval);
+                            snprintf(buf, sizeof(buf),
+                                     "insert into %s values ( %d, %f, %f )",
+                                     fi->table, cat, val, coverval);
                     else
-                        sprintf(buf, "insert into %s values ( %d, %f )",
-                                fi->table, cat, val);
+                        snprintf(buf, sizeof(buf),
+                                 "insert into %s values ( %d, %f )", fi->table,
+                                 cat, val);
                     db_set_string(&sql, buf);
 
                     if (db_execute_immediate(driver, &sql) != DB_OK)

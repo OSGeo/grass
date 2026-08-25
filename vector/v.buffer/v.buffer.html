@@ -10,12 +10,13 @@ segments are generated).
 
 Internal buffers for areas can be generated with negative distance
 values ("inward buffer" or "negative buffer" or "shrinking").
+
 <p>
 <em>v.buffer</em> fusions the geometries of buffers by default.
 Categories and attribute table will not be transferred (this would
 not make sense as one buffer geometry can be the result of many
 different input geometries). To transfer the categories and
-attributes the user can set the <b>t</b> flag. This will result in
+attributes the user can set the <b>-t</b> flag. This will result in
 buffers being cut up where buffers of individual input geometries
 overlap.  Each part that is the result of overlapping buffers of
 multiple geometries will have multiple categories corresponding to
@@ -29,11 +30,11 @@ Buffers for lines and areas are generated using the algorithms from
 the GEOS library.
 
 <p>
-<i>For advanced users:</i> built-in buffer algorithm no longer
-desired, we use GEOS: If GRASS is not compiled with GEOS support
-or <a href="variables.html">environmental
-variable</a> <tt>GRASS_VECTOR_BUFFER</tt> is defined, then GRASS
-generates buffers using built-in buffering algorithm (which is still
+<i>For advanced users:</i> the built-in buffer algorithm is no longer
+used, as we use GEOS instead. If GRASS was not compiled with GEOS support
+or the <a href="variables.html">environmental
+variable</a> <code>GRASS_VECTOR_BUFFER</code> is defined, then GRASS
+generates buffers using the built-in buffering algorithm (which is still
 buggy for some input data).
 
 <p>
@@ -56,8 +57,8 @@ figure below):
   <img src="v_buffer_line.png">
 </center>
 
-Straight corners with caps are created by <b>-s</b> flag (red color on
-the figure below), while <b>-c</b> flag doesn't make caps at the ends of
+Straight corners with caps are created using the <b>-s</b> flag (red color on
+the figure below), while the <b>-c</b> flag doesn't make caps at the ends of
 polylines (green color on the figure below):
 
 <center>
@@ -65,8 +66,8 @@ polylines (green color on the figure below):
   <img src="v_buffer_line_c.png">
 </center>
 
-Using <b>-s</b> with a point vector map as input data, square buffers are
-created instead of round buffers.
+With a point vector map as input data, square buffers are created instead
+of round buffers by using the <b>-s</b> flag.
 
 <center>
   <img src="v_buffer_point_s.png">
@@ -154,7 +155,7 @@ a topological cleaned polygon.
 <h2>REFERENCES</h2>
 
 <ul>
-<li><a href="http://trac.osgeo.org/geos">GEOS Library</a></li>
+<li><a href="https://trac.osgeo.org/geos">GEOS Library</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>

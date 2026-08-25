@@ -28,6 +28,8 @@ email: hofierka@geomodel.sk,marcel.suri@jrc.it,suri@geomodel.sk
 /*v. 2.0 July 2002, NULL data handling, JH */
 /*v. 2.1 January 2003, code optimization by Thomas Huld, JH */
 
+#include <stdbool.h>
+
 #define EPS       1.e-4
 #define HOURANGLE M_PI / 12.
 
@@ -65,6 +67,7 @@ struct SunGeometryVarSlope {
     double lum_C33_l;
     double slope;
     double aspect;
+    bool shift12hrs;
 };
 
 struct SolarRadVar {

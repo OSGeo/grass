@@ -16,8 +16,8 @@ The data is automatically imported into the correct internal coordinate system,
 that is visualized in the following picture, independently from the specified
 ordering in the ASCII input file:
 <center>
-<img src="raster3d_layout.png" border=0><br>
-<table border=0 width=700>
+<img src="raster3d_layout.png" border="0"><br>
+<table border="0" width="700">
 <tr><td><center>
 <i>The volume coordinate system and tile layout of the imported voxel map</i>
 </center></td></tr>
@@ -47,7 +47,7 @@ and depth order of the data in the input file.
 The supported row/depth ordering is documented in the <em>r3.out.ascii</em>
 manual page. The order of the data in the input file does not specify the
 data order in the generated output 3D raster map which is in any case
-<em>north -> south, west -> east, bottom -> top</em> order.
+<em>north -&gt; south, west -&gt; east, bottom -&gt; top</em> order.
 So dependent on the order information the data is automatically imported
 into the correct internal coordinate system.
 <p>The version and order options are not mandatory. In case no version and
@@ -61,7 +61,7 @@ values are separated by <em>space</em> or <em>CR</em>.
 
 4x3x2 sample. Note in case no specific ordering is specified in the input
 file the upper-left (NW) corner of the bottom level comes first. The according
-order option is: nsbt for north -> south, bottom -> top ordering. This is
+order option is: nsbt for north -&gt; south, bottom -&gt; top ordering. This is
 identical with <em>r.in.ascii</em> for single level data. So the y coordinate
 is 0 at the northern edge.
 

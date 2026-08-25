@@ -486,7 +486,7 @@ void gsd_swapbuffers(void)
      * the back buffer becomes undefined afterward */
 #if defined(OPENGL_X11)
     glXSwapBuffers(glXGetCurrentDisplay(), glXGetCurrentDrawable());
-#elif defined(OPENGL_AQUA)
+#elif defined(OPENGL_AGL)
     aglSwapBuffers(aglGetCurrentContext());
 #elif defined(OPENGL_WINDOWS)
     SwapBuffers(wglGetCurrentDC());
@@ -574,7 +574,7 @@ void gsd_getwindow(int *window, int *viewport, double *modelMatrix,
    \brief ADD
 
    \param pt
-   \param widnow
+   \param window
    \param viewport
    \param doubleMatrix
    \param projMatrix
@@ -667,10 +667,10 @@ void gsd_litvert_func(float *norm, unsigned long col, float *pt)
    \brief ADD
 
    \param norm
-   \param col
+   \param col [unused]
    \param pt
  */
-void gsd_litvert_func2(float *norm, unsigned long col, float *pt)
+void gsd_litvert_func2(float *norm, unsigned long col G_UNUSED, float *pt)
 {
     glNormal3fv(norm);
     glVertex3fv(pt);
@@ -1148,9 +1148,9 @@ void gsd_endlist(void)
    \brief Delete list
 
    \param listno
-   \param range
+   \param range [unused]
  */
-void gsd_deletelist(GLuint listno, int range)
+void gsd_deletelist(GLuint listno, int range G_UNUSED)
 {
     unsigned int i;
 
@@ -1180,9 +1180,9 @@ void gsd_calllist(int listno)
 /*!
    \brief ADD
 
-   \param listno
+   \param listno [unused]
  */
-void gsd_calllists(int listno)
+void gsd_calllists(int listno G_UNUSED)
 {
     int i;
 

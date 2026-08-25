@@ -3,7 +3,7 @@
 <em>v.in.geonames</em> imports Geonames.org country files (Gazetteer
 data) into a GRASS vector points map. The country files can be
 downloaded from the
-<a href="http://download.geonames.org/export/dump/">GeoNames Data Dump
+<a href="https://download.geonames.org/export/dump/">GeoNames Data Dump
 Server</a>. Only original files can be processed (unzip compressed
 file first). These Geonames files are encoded in UTF-8 which is
 maintained in the GRASS database.
@@ -35,8 +35,8 @@ asciiname         : name of geographical point in plain ascii characters, varcha
 alternatenames    : alternatenames, comma separated varchar(4000)
 latitude          : latitude in decimal degrees (wgs84)
 longitude         : longitude in decimal degrees (wgs84)
-feature class     : see http://www.geonames.org/export/codes.html, char(1)
-feature code      : see http://www.geonames.org/export/codes.html, varchar(10)
+feature class     : see https://www.geonames.org/export/codes.html, char(1)
+feature code      : see https://www.geonames.org/export/codes.html, varchar(10)
 country code      : ISO-3166 2-letter country code, 2 characters
 cc2               : alternate country codes, comma separated, ISO-3166 2-letter country code, 60 characters
 admin1 code       : fipscode (subject to change to iso code), isocode for the us and ch, see file admin1Codes.txt for display names of this code; varchar(20)
@@ -46,7 +46,7 @@ admin4 code       : code for fourth level administrative division, varchar(20)
 population        : integer
 elevation         : in meters, integer
 gtopo30           : average elevation of 30'x30' (ca 900mx900m) area in meters, integer
-timezone          : the timezone id (see file http://download.geonames.org/export/dump/timeZones.txt)
+timezone          : the timezone id (see file https://download.geonames.org/export/dump/timeZones.txt)
 modification date : date of last modification in yyyy-MM-dd format
 </pre></div>
 
@@ -55,7 +55,7 @@ modification date : date of last modification in yyyy-MM-dd format
 Download and import geonames for Czech Republic.
 
 <div class="code"><pre>
-wget http://download.geonames.org/export/dump/CZ.zip
+wget https://download.geonames.org/export/dump/CZ.zip
 unzip CZ.zip
 
 v.in.geonames input=CZ.txt output=geonames_cz
@@ -64,8 +64,8 @@ v.in.geonames input=CZ.txt output=geonames_cz
 <h2>REFERENCES</h2>
 
 <ul>
-  <li><a href="http://www.geonames.org">GeoNames Web site</a></li>
-  <li><a href="http://download.geonames.org/export/dump/">GeoNames Data Dump Server</a></li>
+  <li><a href="https://www.geonames.org">GeoNames Web site</a></li>
+  <li><a href="https://download.geonames.org/export/dump/">GeoNames Data Dump Server</a></li>
 </ul>
 
 <h2>SEE ALSO</h2>
@@ -78,4 +78,4 @@ v.in.geonames input=CZ.txt output=geonames_cz
 
 <h2>AUTHOR</h2>
 
-<a href="http://www.grassbook.org/">Markus Neteler</a>
+<a href="https://grassbook.org/">Markus Neteler</a>

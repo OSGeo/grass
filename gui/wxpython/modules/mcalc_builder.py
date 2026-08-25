@@ -18,9 +18,10 @@ This program is free software under the GNU General Public License
 
 import os
 import re
+from pathlib import Path
 
 import wx
-import grass.script as grass
+import grass.script as gs
 
 from core import globalvar
 from core.gcmd import GError, RunCommand
@@ -176,7 +177,7 @@ class MapCalcFrame(wx.Frame):
         self.btn_copy = Button(parent=self.panel, id=wx.ID_ANY, label=_("Copy"))
         self.btn_copy.SetToolTip(_("Copy the current command string to the clipboard"))
 
-        self.btn = dict()
+        self.btn = {}
         self.btn["pow"] = Button(parent=self.panel, id=wx.ID_ANY, label="^")
         self.btn["pow"].SetToolTip(_("exponent"))
         self.btn["div"] = Button(parent=self.panel, id=wx.ID_ANY, label="/")
@@ -287,17 +288,13 @@ class MapCalcFrame(wx.Frame):
             UserSettings.Get(group="cmd", key="overwrite", subkey="enabled")
         )
 
-        self.randomSeed = wx.CheckBox(
-            parent=self.panel, label=_("Generate random seed for rand()")
+        self.randomSeedStaticText = StaticText(
+            parent=self.panel, label=_("Random seed:")
         )
-        self.randomSeedStaticText = StaticText(parent=self.panel, label=_("Seed:"))
         self.randomSeedText = TextCtrl(
             parent=self.panel, size=(100, -1), validator=IntegerValidator()
         )
         self.randomSeedText.SetToolTip(_("Integer seed for rand() function"))
-        self.randomSeed.SetValue(True)
-        self.randomSeedStaticText.Disable()
-        self.randomSeedText.Disable()
 
         self.addbox = wx.CheckBox(
             parent=self.panel,
@@ -330,8 +327,6 @@ class MapCalcFrame(wx.Frame):
         self.newmaptxt.Bind(wx.EVT_TEXT, self.OnUpdateStatusBar)
         self.text_mcalc.Bind(wx.EVT_TEXT, self.OnUpdateStatusBar)
         self.overwrite.Bind(wx.EVT_CHECKBOX, self.OnUpdateStatusBar)
-        self.randomSeed.Bind(wx.EVT_CHECKBOX, self.OnUpdateStatusBar)
-        self.randomSeed.Bind(wx.EVT_CHECKBOX, self.OnSeedFlag)
         self.randomSeedText.Bind(wx.EVT_TEXT, self.OnUpdateStatusBar)
 
         # bind closing to ESC
@@ -449,12 +444,6 @@ class MapCalcFrame(wx.Frame):
 
         randomSizer = wx.BoxSizer(wx.HORIZONTAL)
         randomSizer.Add(
-            self.randomSeed,
-            proportion=0,
-            flag=wx.RIGHT | wx.ALIGN_CENTER_VERTICAL,
-            border=20,
-        )
-        randomSizer.Add(
             self.randomSeedStaticText,
             proportion=0,
             flag=wx.RIGHT | wx.ALIGN_CENTER_VERTICAL,
@@ -564,13 +553,6 @@ class MapCalcFrame(wx.Frame):
         self.SetStatusText(command)
         event.Skip()
 
-    def OnSeedFlag(self, event):
-        checked = self.randomSeed.IsChecked()
-        self.randomSeedText.Enable(not checked)
-        self.randomSeedStaticText.Enable(not checked)
-
-        event.Skip()
-
     def _getCommand(self):
         """Returns entire command as string."""
         expr = self.text_mcalc.GetValue().strip().replace("\n", " ")
@@ -580,18 +562,14 @@ class MapCalcFrame(wx.Frame):
         overwrite = ""
         if self.overwrite.IsChecked():
             overwrite = " --overwrite"
-        seed_flag = seed = ""
-        if re.search(pattern="rand *\(.+\)", string=expr):
-            if self.randomSeed.IsChecked():
-                seed_flag = " -s"
-            else:
-                seed = " seed={val}".format(val=self.randomSeedText.GetValue().strip())
+        seed = ""
+        if self.randomSeedText.GetValue():
+            seed = " seed={val}".format(val=self.randomSeedText.GetValue().strip())
 
-        return '{cmd} expression="{new} = {expr}"{seed}{seed_flag}{overwrite}'.format(
+        return '{cmd} expression="{new} = {expr}"{seed}{overwrite}'.format(
             cmd=cmd,
             expr=expr,
             new=self.newmaptxt.GetValue(),
-            seed_flag=seed_flag,
             seed=seed,
             overwrite=overwrite,
         )
@@ -608,7 +586,7 @@ class MapCalcFrame(wx.Frame):
             if newmcalcstr[-1] != " ":
                 newmcalcstr += " "
                 position_offset += 1
-        except:
+        except IndexError:
             pass
 
         newmcalcstr += what
@@ -617,14 +595,14 @@ class MapCalcFrame(wx.Frame):
         try:
             if newmcalcstr[-1] != " " and mcalcstr[position] != " ":
                 newmcalcstr += " "
-        except:
+        except IndexError:
             newmcalcstr += " "
 
         newmcalcstr += mcalcstr[position:]
 
         self.text_mcalc.SetValue(newmcalcstr)
         if len(what) > 0:
-            match = re.search(pattern="\(.*\)", string=what)
+            match = re.search(pattern=r"\(.*\)", string=what)
             if match:
                 position_offset += match.start() + 1
             else:
@@ -632,7 +610,7 @@ class MapCalcFrame(wx.Frame):
                 try:
                     if newmcalcstr[position + position_offset] == " ":
                         position_offset += 1
-                except:
+                except IndexError:
                     pass
 
         self.text_mcalc.SetInsertionPoint(position + position_offset)
@@ -645,7 +623,7 @@ class MapCalcFrame(wx.Frame):
         if not name:
             GError(
                 parent=self,
-                message=_("You must enter the name of " "a new raster map to create."),
+                message=_("You must enter the name of a new raster map to create."),
             )
             return
 
@@ -658,22 +636,13 @@ class MapCalcFrame(wx.Frame):
         if not expr:
             GError(
                 parent=self,
-                message=_(
-                    "You must enter an expression " "to create a new raster map."
-                ),
+                message=_("You must enter an expression to create a new raster map."),
             )
             return
 
-        seed_flag = seed = None
-        if re.search(pattern="rand *\(.+\)", string=expr):
-            if self.randomSeed.IsChecked():
-                seed_flag = "-s"
-            else:
-                seed = self.randomSeedText.GetValue().strip()
+        seed = self.randomSeedText.GetValue().strip()
         if self.log:
             cmd = [self.cmd]
-            if seed_flag:
-                cmd.append("-s")
             if seed:
                 cmd.append("seed={val}".format(val=seed))
             if self.overwrite.IsChecked():
@@ -683,13 +652,8 @@ class MapCalcFrame(wx.Frame):
             self.log.RunCmd(cmd, onDone=self.OnDone)
             self.parent.Raise()
         else:
-            if self.overwrite.IsChecked():
-                overwrite = True
-            else:
-                overwrite = False
-            params = dict(expression="%s=%s" % (name, expr), overwrite=overwrite)
-            if seed_flag:
-                params["flags"] = "s"
+            overwrite = bool(self.overwrite.IsChecked())
+            params = {"expression": "%s=%s" % (name, expr), "overwrite": overwrite}
             if seed:
                 params["seed"] = seed
 
@@ -702,14 +666,14 @@ class MapCalcFrame(wx.Frame):
         """
         if event.returncode != 0:
             return
-        name = self.newmaptxt.GetValue().strip(' "') + "@" + grass.gisenv()["MAPSET"]
+        name = self.newmaptxt.GetValue().strip(' "') + "@" + gs.gisenv()["MAPSET"]
         ltype = "raster"
         if self.rast3d:
             ltype = "raster_3d"
         self._giface.mapCreated.emit(
             name=name, ltype=ltype, add=self.addbox.IsChecked()
         )
-        gisenv = grass.gisenv()
+        gisenv = gs.gisenv()
         self._giface.grassdbChanged.emit(
             grassdb=gisenv["GISDBASE"],
             location=gisenv["LOCATION_NAME"],
@@ -738,11 +702,7 @@ class MapCalcFrame(wx.Frame):
                 dlg.Destroy()
                 return
 
-            try:
-                fobj = open(path, "w")
-                fobj.write(mctxt)
-            finally:
-                fobj.close()
+            Path(path).write_text(mctxt)
 
         dlg.Destroy()
 
@@ -760,11 +720,7 @@ class MapCalcFrame(wx.Frame):
                 dlg.Destroy()
                 return
 
-            try:
-                fobj = open(path, "r")
-                mctxt = fobj.read()
-            finally:
-                fobj.close()
+            mctxt = Path(path).read_text()
 
             try:
                 result, exp = mctxt.split("=", 1)
@@ -802,7 +758,6 @@ class MapCalcFrame(wx.Frame):
 
 
 if __name__ == "__main__":
-
     app = wx.App(0)
     frame = MapCalcFrame(
         parent=None, cmd="r.mapcalc", giface=StandaloneGrassInterface()

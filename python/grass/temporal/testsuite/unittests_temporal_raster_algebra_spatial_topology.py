@@ -8,14 +8,16 @@ for details.
 """
 
 import datetime
-import grass.temporal as tgis
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+
+import grass.temporal as tgis
 
 
 class TestTemporalRasterAlgebraSpatialTopology(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """Initiate the temporal GIS and set the region"""
         tgis.init(True)  # Raise on error instead of exit(1)
         cls.use_temp_region()
@@ -88,18 +90,17 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
             type="raster", name=None, maps="singletmap", start="2001-01-01"
         )
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.runModule("t.remove", flags="rf", inputs="R", quiet=True)
-        pass
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         """Remove the temporary region"""
         cls.runModule("t.remove", flags="rf", inputs="A,B", quiet=True)
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
         cls.del_temp_region()
 
-    def test_equal_equivalent_sum(self):
+    def test_equal_equivalent_sum(self) -> None:
         """Spatial topology distinction with equal timestamps
 
         STRDS A and B have identical time stamps, hence the differentiation
@@ -131,7 +132,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.check_temporal_topology(), False)
         self.assertEqual(D.get_granularity(), None)
 
-    def test_equal_overlap_sum(self):
+    def test_equal_overlap_sum(self) -> None:
         """Spatial topology distinction with equal timestamps
 
         STRDS A and B have identical time stamps, hence the differentiation
@@ -161,7 +162,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.check_temporal_topology(), False)
         self.assertEqual(D.get_granularity(), None)
 
-    def test_equal_overlap_sum_with_null(self):
+    def test_equal_overlap_sum_with_null(self) -> None:
         """Spatial topology distinction with equal timestamps
 
         STRDS A and B have identical time stamps, hence the differentiation
@@ -193,7 +194,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.check_temporal_topology(), False)
         self.assertEqual(D.get_granularity(), None)
 
-    def test_equal_contain_sum(self):
+    def test_equal_contain_sum(self) -> None:
         """Spatial topology distinction with equal timestamps
 
         STRDS A and B have identical time stamps, hence the differentiation
@@ -220,7 +221,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.check_temporal_topology(), True)
         self.assertEqual(D.get_granularity(), None)
 
-    def test_equal_equivalent_contain_sum(self):
+    def test_equal_equivalent_contain_sum(self) -> None:
         """Spatial topology distinction with equal timestamps
 
         STRDS A and B have identical time stamps, hence the differentiation
@@ -255,7 +256,7 @@ class TestTemporalRasterAlgebraSpatialTopology(TestCase):
         self.assertEqual(D.check_temporal_topology(), False)
         self.assertEqual(D.get_granularity(), None)
 
-    def test_equal_equivalent_compare(self):
+    def test_equal_equivalent_compare(self) -> None:
         """Test implicit aggregation
 
         STRDS A and B have identical time stamps, hence the differentiation

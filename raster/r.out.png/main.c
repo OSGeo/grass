@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     int png_compr, /* ret, */ do_alpha;
     struct Cell_head win;
     FILEDESC cellfile = 0;
-    FILE *fp;
+    FILE *fp = NULL;
 
     /* now goes from pnmtopng.c* -A.Sh */
     /*
@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
     if (basename) {
         G_basename(basename, "png");
         outfile = G_malloc(strlen(basename) + 5);
-        sprintf(outfile, "%s.png", basename);
+        snprintf(outfile, (strlen(basename) + 5), "%s.png", basename);
     }
 
     png_compr = atoi(compr->answer);
@@ -207,20 +207,29 @@ int main(int argc, char *argv[])
         png_create_write_struct(PNG_LIBPNG_VER_STRING, &pnmtopng_jmpbuf_struct,
                                 pnmtopng_error_handler, NULL);
     if (png_ptr == NULL) {
-        fclose(fp);
+        if (fp) {
+            fclose(fp);
+            fp = NULL;
+        }
         G_fatal_error("cannot allocate LIBPNG structure");
     }
 
     info_ptr = png_create_info_struct(png_ptr);
     if (info_ptr == NULL) {
         png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
-        fclose(fp);
+        if (fp) {
+            fclose(fp);
+            fp = NULL;
+        }
         G_fatal_error("cannot allocate LIBPNG structure");
     }
 
     if (setjmp(pnmtopng_jmpbuf_struct.jmpbuf)) {
         png_destroy_write_struct(&png_ptr, &info_ptr);
-        fclose(fp);
+        if (fp) {
+            fclose(fp);
+            fp = NULL;
+        }
         G_fatal_error("setjmp returns error condition (1)");
     }
 
@@ -360,21 +369,28 @@ int main(int argc, char *argv[])
     /* G_free (info_ptr); */
     png_destroy_write_struct(&png_ptr, &info_ptr); /* al 11/2000 */
 
-    fclose(fp);
+    if (fp) {
+        fclose(fp);
+        fp = NULL;
+    }
+
+    G_free(outfile);
 
     if (wld_flag->answer) {
+        outfile = NULL;
         if (do_stdout)
             outfile = G_store("png_map.wld");
-        else
-            sprintf(outfile, "%s.wld", basename);
+        else {
+            outfile = G_malloc(strlen(basename) + 5);
+            snprintf(outfile, (strlen(basename) + 5), "%s.wld", basename);
+        }
 
         write_wld(outfile, &win);
+        G_free(outfile);
     }
 
     if (basename)
         G_free(basename);
-    if (outfile)
-        G_free(outfile);
 
     exit(EXIT_SUCCESS);
 }

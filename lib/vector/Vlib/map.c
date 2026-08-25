@@ -167,9 +167,9 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 
     i = 0;
     while (files[i]) {
-        sprintf(buf, "%s/%s", in, files[i]);
+        snprintf(buf, sizeof(buf), "%s/%s", in, files[i]);
         G_file_name(old_path, GV_DIRECTORY, buf, mapset);
-        sprintf(buf, "%s/%s", out, files[i]);
+        snprintf(buf, sizeof(buf), "%s/%s", out, files[i]);
         G_file_name(new_path, GV_DIRECTORY, buf, G_mapset());
 
         if (access(old_path, F_OK) == 0) { /* file exists? */
@@ -220,7 +220,7 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
    Attribute tables are created in the same database where input tables were
    stored.
 
-   The origial format (native/OGR) is used.
+   The original format (native/OGR) is used.
 
    Note: Output vector map is overwritten if exists!
 
@@ -349,7 +349,7 @@ int Vect_rename(const char *in, const char *out)
     }
 
     Vect_close(&Map);
-    free(fields);
+    G_free(fields);
 
     return 0;
 }
@@ -536,7 +536,7 @@ int Vect__delete(const char *map, int is_tmp)
 }
 
 /*!
-   \brief Set spatial index to be realease when vector is closed.
+   \brief Set spatial index to be released when vector is closed.
 
    By default, the memory occupied by spatial index is not released.
 

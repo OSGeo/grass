@@ -3,7 +3,7 @@
 G. Grothendieck
 
 Software and documentation is (c) 2013 GKX Associates Inc. and licensed
-under [GPL 2.0](http://www.gnu.org/licenses/gpl-2.0.html).
+under [GPL 2.0](https://www.gnu.org/licenses/gpl-2.0.html).
 
 ## Introduction ##
 
@@ -44,7 +44,7 @@ used with `vim` or other text editor.
 
 ### Purpose ###
 
-The purpose of `R.bat` is to facilitiate the use of R from the Windows `cmd`
+The purpose of `R.bat` is to facilitate the use of R from the Windows `cmd`
 line by eliminating the need to make any system changes.  There is no need to
 modify the Windows path or to set any environment variables for standard
 configurations of R.  It will automatically locate R (and Rtools and
@@ -426,9 +426,9 @@ in the future.)
 ## make-batchfiles-pdf.bat ##
 
 This batch file creates a pdf of this documentation from the markdown file
-`batchfiles.md` .  `pandoc` must be installed for this to run.  `pandoc` can be
-found [here](https://code.google.com/p/pandoc/downloads/list).  It is run
-without arguments:
+`batchfiles.md`. `pandoc` must be installed for this to run ([download pandoc here](https://pandoc.org/)).
+
+It is run without arguments:
 
 ```bash
 make-batchfiles-pdf

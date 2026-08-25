@@ -93,10 +93,12 @@
    - G_OPT_F_BIN_INPUT
    - G_OPT_F_OUTPUT
    - G_OPT_F_SEP
+   - G_OPT_F_FORMAT
 
    - colors
    - G_OPT_C
    - G_OPT_CN
+   - G_OPT_C_FORMAT
 
    - misc
    - G_OPT_M_DIR
@@ -110,6 +112,7 @@
    - G_OPT_M_REGION
    - G_OPT_M_NULL_VALUE
    - G_OPT_M_NPROCS
+   - G_OPT_M_SEED
 
    - temporal GIS framework
    - G_OPT_STDS_INPUT
@@ -129,6 +132,7 @@
    - G_OPT_MAP_INPUTS
    - G_OPT_STDS_TYPE
    - G_OPT_MAP_TYPE
+   - G_OPT_T_SUFFIX
    - G_OPT_T_TYPE
    - G_OPT_T_WHERE
 
@@ -629,6 +633,17 @@ struct Option *G_define_standard_option(int opt)
         Opt->description =
             _("Special characters: pipe, comma, space, tab, newline");
         break;
+    case G_OPT_F_FORMAT:
+        Opt->key = "format";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->label = _("Output format");
+        Opt->answer = "plain";
+        Opt->options = "plain,json";
+        Opt->descriptions = _("plain;Plain text output;"
+                              "json;JSON (JavaScript Object Notation);");
+        break;
 
         /* colors */
     case G_OPT_C:
@@ -651,6 +666,22 @@ struct Option *G_define_standard_option(int opt)
         Opt->label = _("Color");
         Opt->description =
             _("Either a standard color name, R:G:B triplet, or \"none\"");
+        break;
+    case G_OPT_C_FORMAT:
+        Opt->key = "color_format";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->multiple = NO;
+        Opt->answer = "hex";
+        Opt->options = "rgb,hex,hsv,triplet";
+        Opt->label = _("Color format");
+        Opt->description = _("Color format for output values.");
+        G_asprintf(
+            (char **)&(Opt->descriptions), "rgb;%s;hex;%s;hsv;%s;triplet;%s",
+            _("output color in RGB format"), _("output color in HEX format"),
+            _("output color in HSV format (experimental)"),
+            _("output color in colon-separated RGB format"));
         break;
 
         /* misc */
@@ -694,12 +725,12 @@ struct Option *G_define_standard_option(int opt)
         break;
 
     case G_OPT_M_LOCATION:
-        Opt->key = "location";
+        Opt->key = "project";
         Opt->type = TYPE_STRING;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->label = _("Location name");
-        Opt->description = _("Location name (not location path)");
+        Opt->label = _("Project (location) name");
+        Opt->description = _("Project name (not path to project)");
         Opt->gisprompt = "old,location,location";
         Opt->key_desc = "name";
         break;
@@ -709,8 +740,8 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_STRING;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->label = _("GRASS GIS database directory");
-        Opt->description = _("Default: path to the current GRASS GIS database");
+        Opt->label = _("GRASS database directory");
+        Opt->description = _("Default: path to the current GRASS database");
         Opt->gisprompt = "old,dbase,dbase";
         Opt->key_desc = "path";
         break;
@@ -759,14 +790,27 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_INTEGER;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->answer = "1";
+        Opt->answer = "0";
         /* start dynamic answer */
         /* check NPROCS in GISRC, set with g.gisenv */
         memstr = G_store(G_getenv_nofatal("NPROCS"));
         if (memstr && *memstr)
             Opt->answer = memstr;
         /* end dynamic answer */
-        Opt->description = _("Number of threads for parallel computing");
+        Opt->label = _("Number of threads for parallel computing");
+        Opt->description = _("0: use OpenMP default; >0: use nprocs; "
+                             "<0: use MAX-nprocs");
+        break;
+
+    case G_OPT_M_SEED:
+        Opt->key = "seed";
+        Opt->type = TYPE_INTEGER;
+        Opt->required = NO;
+        Opt->label = _("Seed value for the random number generator");
+        Opt->description =
+            _("Using the same seed ensures identical results, "
+              "while a randomly generated seed produces different outcomes "
+              "in each run.");
         break;
 
         /* Spatio-temporal modules of the temporal GIS framework */
@@ -913,6 +957,18 @@ struct Option *G_define_standard_option(int opt)
         Opt->answer = "raster";
         Opt->options = "raster,vector,raster_3d";
         Opt->description = _("Type of the input map");
+        break;
+    case G_OPT_T_SUFFIX:
+        Opt->key = "suffix";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = NO;
+        Opt->answer = "gran";
+        Opt->description = _("Suffix to add at basename: set "
+                             "'gran' for granularity, "
+                             "'time' for the full time format, "
+                             "'num' for numerical suffix with "
+                             "a specific number of digits (default %%05)");
         break;
     case G_OPT_T_TYPE:
         Opt->key = "temporaltype";

@@ -305,9 +305,9 @@ only one toolbox. The name attribute and label element are not used but should
 be filled for documentation purposes and future compatibility.
 
 If you want to base your toolbox or main menu on existing toolbox or main menu
-copy the part of existing XML file from GRASS GIS distribution (installation)
-directory or GRASS GIS source code. If you want to include some existing
-toolboxes or wxGUI items defined in GRASS GIS you need to look to these files
+copy the part of existing XML file from GRASS distribution (installation)
+directory or GRASS source code. If you want to include some existing
+toolboxes or wxGUI items defined in GRASS you need to look to these files
 too and find the proper ``name`` attributes.
 
 
@@ -370,7 +370,7 @@ You should validate your XML before running wxGUI, e.g. using ``xmllint``
 
     xmllint --noout --dtdvalid toolboxes.dtd toolboxes.xml
 
-You can find ``toolboxes.dtd`` and ``main_menu.dtd`` in your GRASS GIS directory,
+You can find ``toolboxes.dtd`` and ``main_menu.dtd`` in your GRASS directory,
 in ``etc/gui/wxpython/xml`` subdirectory. Depending on the validator,
 you might need to add DTD file to the drectory with the XML file.
 

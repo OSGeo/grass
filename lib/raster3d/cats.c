@@ -22,7 +22,6 @@
  *  \param cats
  *  \return int
  */
-
 int Rast3d_write_cats(const char *name, struct Categories *cats)
 /* adapted from Rast_write_cats */
 {
@@ -52,14 +51,14 @@ int Rast3d_write_cats(const char *name, struct Categories *cats)
         descr = Rast_get_ith_d_cat(cats, i, &val1, &val2);
         if ((cats->fmt && cats->fmt[0]) || (descr && descr[0])) {
             if (val1 == val2) {
-                sprintf(str1, "%.10f", val1);
+                snprintf(str1, sizeof(str1), "%.10f", val1);
                 G_trim_decimal(str1);
                 fprintf(fd, "%s:%s\n", str1, descr != NULL ? descr : "");
             }
             else {
-                sprintf(str1, "%.10f", val1);
+                snprintf(str1, sizeof(str1), "%.10f", val1);
                 G_trim_decimal(str1);
-                sprintf(str2, "%.10f", val2);
+                snprintf(str2, sizeof(str2), "%.10f", val2);
                 G_trim_decimal(str2);
                 fprintf(fd, "%s:%s:%s\n", str1, str2,
                         descr != NULL ? descr : "");
@@ -171,7 +170,6 @@ error:
  *  \param pcats
  *  \return int
  */
-
 int Rast3d_read_cats(const char *name, const char *mapset,
                      struct Categories *pcats)
 /* adapted from Rast_read_cats */

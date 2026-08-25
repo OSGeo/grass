@@ -23,6 +23,9 @@ int select_mon(const char *name)
             break;
         }
     }
+    for (i = 0; i < n; i++)
+        G_free(list[i]);
+    G_free(list);
 
     if (found)
         G_setenv("MONITOR", name);

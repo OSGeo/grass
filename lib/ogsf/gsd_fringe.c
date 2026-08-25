@@ -531,7 +531,7 @@ void gsd_fringe_horiz_line2(float bot, geosurf *surf, int row, int side)
         /* bottom right */
         pt[X] = surf->xmin + (col * (surf->x_mod * surf->xres));
         pt[Y] = surf->ymax - ((row + side) * (surf->y_mod * surf->yres));
-        offset = col * surf->x_mod;
+        offset = (long)col * surf->x_mod;
         GET_MAPATT(buff, offset, pt[Z]);
         pt[Z] = pt[Z] * surf->z_exag;
         gsd_vert_func(pt);

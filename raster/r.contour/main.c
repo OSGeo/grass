@@ -29,7 +29,7 @@
  *   value is added a small quantity (the smaller one that makes cell[i] +
  *   small != cell[i], I've taken into consideration double encoding)
  * o one can specify a minimum number of point for a contour line to be put
- *   into outout, so that small spurs, single points and so on won't be
+ *   into output, so that small spurs, single points and so on won't be
  *   present and the output will be more clear (that's optional anyway);
  * o in my opinion there were minor memory handling problems in r.contour,
  *   I've corrected them (Head.map_name was not guaranteed to be properly
@@ -170,8 +170,9 @@ int main(int argc, char *argv[])
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
 
-        sprintf(buf, "create table %s ( cat integer, level double precision )",
-                Fi->table);
+        snprintf(buf, sizeof(buf),
+                 "create table %s ( cat integer, level double precision )",
+                 Fi->table);
 
         db_set_string(&sql, buf);
 
@@ -204,8 +205,8 @@ int main(int argc, char *argv[])
     if (!notable->answer) {
         db_begin_transaction(Driver);
         for (i = 0; i < nlevels; i++) {
-            sprintf(buf, "insert into %s values ( %d, %e )", Fi->table, i + 1,
-                    lev[i]);
+            snprintf(buf, sizeof(buf), "insert into %s values ( %d, %e )",
+                     Fi->table, i + 1, lev[i]);
             db_set_string(&sql, buf);
 
             G_debug(3, "SQL: %s", db_get_string(&sql));

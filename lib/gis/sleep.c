@@ -1,8 +1,8 @@
 #include <grass/config.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <unistd.h>
 #endif
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #endif
 #include <grass/gis.h>
@@ -10,9 +10,9 @@
 /* Sleep */
 void G_sleep(unsigned int seconds)
 {
-#ifdef __MINGW32__
+#ifdef _WIN32
     /* note: Sleep() cannot be interrupted */
-    Sleep((seconds)*1000);
+    Sleep((seconds) * 1000);
 #else
     sleep(seconds);
 #endif

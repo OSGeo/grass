@@ -510,7 +510,11 @@ int main(int argc, char **argv)
                 thispoint = thispoint->next;
                 continue;
             }
-            lseek(fe, (off_t)thispoint->row * bsz, SEEK_SET);
+            if (lseek(fe, (off_t)thispoint->row * bsz, SEEK_SET) == -1) {
+                int err = errno;
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
+            }
             read(fe, in_buf, bsz);
             memcpy(&thispoint->value, (char *)in_buf + bpe() * thispoint->col,
                    bpe());
@@ -629,7 +633,11 @@ struct point *drain(int fd, struct point *list, int nrow, int ncol)
     while (go) {
 
         /* find flow direction at this point */
-        lseek(fd, (off_t)list->row * ncol * sizeof(CELL), SEEK_SET);
+        if (lseek(fd, (off_t)list->row * ncol * sizeof(CELL), SEEK_SET) == -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
         read(fd, dir, ncol * sizeof(CELL));
         direction = *(dir + list->col);
         go = 0;
@@ -700,7 +708,12 @@ struct point *drain_cost(int dir_fd, struct point *list, int nrow, int ncol)
          * 2) shift to cell in that direction
          */
         /* find the direction recorded at row,col */
-        lseek(dir_fd, (off_t)list->row * ncol * sizeof(DCELL), SEEK_SET);
+        if (lseek(dir_fd, (off_t)list->row * ncol * sizeof(DCELL), SEEK_SET) ==
+            -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
         read(dir_fd, dir_buf, ncol * sizeof(DCELL));
         direction = *(dir_buf + list->col);
         neighbour = direction * 10;

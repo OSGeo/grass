@@ -25,7 +25,7 @@
 
    \return DB_OK on success
  */
-int db__driver_init(int argc, char *argv[])
+int db__driver_init(int argc G_UNUSED, char *argv[] G_UNUSED)
 {
     init_error();
     return DB_OK;

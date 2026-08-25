@@ -34,7 +34,6 @@ static const int type_size[3] = {sizeof(CELL), sizeof(FCELL), sizeof(DCELL)};
  *
  * \return raster type size
  */
-
 size_t Rast_cell_size(RASTER_MAP_TYPE data_type)
 {
     return (type_size[F2I(data_type)]);
@@ -142,7 +141,7 @@ unsigned char *Rast__allocate_null_bits(int cols)
  *
  * \param cols number of columns
  *
- * \return size of null bistream
+ * \return size of null bitstream
  */
 int Rast__null_bitstream_size(int cols)
 {

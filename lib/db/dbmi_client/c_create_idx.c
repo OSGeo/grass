@@ -75,7 +75,7 @@ int db_create_index2(dbDriver *driver, const char *table_name,
     else
         tbl++;
 
-    sprintf(buf, "%s_%s", tbl, column_name);
+    snprintf(buf, sizeof(buf), "%s_%s", tbl, column_name);
     db_set_index_name(&index, buf);
 
     db_set_index_table_name(&index, table_name);

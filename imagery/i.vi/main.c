@@ -43,7 +43,7 @@ double ip_vi(double redchan, double nirchan);
 double d_vi(double redchan, double nirchan);
 double e_vi(double bluechan, double redchan, double nirchan);
 double e_vi2(double redchan, double nirchan);
-double p_vi(double redchan, double nirchan);
+double p_vi(double redchan, double nirchan, double soil_line_slope);
 double wd_vi(double redchan, double nirchan);
 double sa_vi(double redchan, double nirchan);
 double msa_vi(double redchan, double nirchan, double soil_line_slope,
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE data_type_nirchan, data_type_greenchan;
     RASTER_MAP_TYPE data_type_bluechan;
     RASTER_MAP_TYPE data_type_chan5chan, data_type_chan7chan;
-    FCELL msavip1, msavip2, msavip3, dnbits;
+    FCELL soil_slope, soil_inter, soil_noise, dnbits;
     CELL val1, val2;
 
     G_gisinit(argv[0]);
@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
     opt.sl_slope->type = TYPE_DOUBLE;
     opt.sl_slope->required = NO;
     opt.sl_slope->description =
-        _("Value of the slope of the soil line (MSAVI only)");
+        _("Value of the slope of the soil line (MSAVI and PVI only)");
     opt.sl_slope->guisection = _("MSAVI settings");
 
     opt.sl_int = G_define_option();
@@ -220,11 +220,11 @@ int main(int argc, char *argv[])
     chan5chan = opt.chan5->answer;
     chan7chan = opt.chan7->answer;
     if (opt.sl_slope->answer)
-        msavip1 = atof(opt.sl_slope->answer);
+        soil_slope = atof(opt.sl_slope->answer);
     if (opt.sl_int->answer)
-        msavip2 = atof(opt.sl_int->answer);
+        soil_inter = atof(opt.sl_int->answer);
     if (opt.sl_red->answer)
-        msavip3 = atof(opt.sl_red->answer);
+        soil_noise = atof(opt.sl_red->answer);
     if (opt.bits->answer)
         dnbits = atof(opt.bits->answer);
     result = opt.output->answer;
@@ -254,8 +254,9 @@ int main(int argc, char *argv[])
         G_fatal_error(_("dvi index requires red and nir maps"));
 
     if (!strcasecmp(viflag, "pvi") &&
-        (!(opt.red->answer) || !(opt.nir->answer)))
-        G_fatal_error(_("pvi index requires red and nir maps"));
+        (!(opt.red->answer) || !(opt.nir->answer) || !(opt.sl_slope->answer)))
+        G_fatal_error(
+            _("pvi index requires red and nir maps and soil line slope"));
 
     if (!strcasecmp(viflag, "wdvi") &&
         (!(opt.red->answer) || !(opt.nir->answer)))
@@ -517,7 +518,7 @@ int main(int argc, char *argv[])
                     outrast[col] = e_vi2(d_redchan, d_nirchan);
 
                 if (!strcasecmp(viflag, "pvi"))
-                    outrast[col] = p_vi(d_redchan, d_nirchan);
+                    outrast[col] = p_vi(d_redchan, d_nirchan, soil_slope);
 
                 if (!strcasecmp(viflag, "wdvi"))
                     outrast[col] = wd_vi(d_redchan, d_nirchan);
@@ -526,8 +527,8 @@ int main(int argc, char *argv[])
                     outrast[col] = sa_vi(d_redchan, d_nirchan);
 
                 if (!strcasecmp(viflag, "msavi"))
-                    outrast[col] =
-                        msa_vi(d_redchan, d_nirchan, msavip1, msavip2, msavip3);
+                    outrast[col] = msa_vi(d_redchan, d_nirchan, soil_slope,
+                                          soil_inter, soil_noise);
 
                 if (!strcasecmp(viflag, "msavi2"))
                     outrast[col] = msa_vi2(d_redchan, d_nirchan);
@@ -587,6 +588,16 @@ int main(int argc, char *argv[])
         const char *style = "ndvi";
 
         if (G_find_color_rule("ndvi")) {
+            Rast_make_fp_colors(&colors, style, -1.0, 1.0);
+        }
+        else
+            G_fatal_error(_("Unknown color request '%s'"), style);
+    }
+    else if (!strcasecmp(viflag, "ndwi")) {
+        /* apply predefined NDWI color table */
+        const char *style = "ndwi";
+
+        if (G_find_color_rule("ndwi")) {
             Rast_make_fp_colors(&colors, style, -1.0, 1.0);
         }
         else

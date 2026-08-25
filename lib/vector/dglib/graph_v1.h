@@ -65,7 +65,7 @@
 #define DGL_EDGESET_EDGECOUNT_v1(p)     ((p)[DGL_ILA_TOCNT_v1])
 #define DGL_EDGESET_EDGEARRAY_PTR_v1(p) ((p) + DGL_ILA_TOARR_v1)
 #define DGL_EDGESET_EDGE_PTR_v1(p, i, C) \
-    (((p) + DGL_ILA_TOARR_v1) + (i)*DGL_EDGE_WSIZE_v1(C))
+    (((p) + DGL_ILA_TOARR_v1) + (i) * DGL_EDGE_WSIZE_v1(C))
 
 /*
  * Edge macros - addresses in a flat edge

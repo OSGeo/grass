@@ -126,9 +126,10 @@ int write_boundary(struct COOR *seed)
 
 /* write_bnd - actual writing part of write_line */
 /* writes binary and ASCII digit files and supplemental file */
-static int write_bnd(struct COOR *line_begin,
-                     struct COOR *line_end, /* start and end point of line */
-                     int n                  /* number of points to write */
+static int
+write_bnd(struct COOR *line_begin,
+          struct COOR *line_end G_UNUSED, /* start and end point of line */
+          int n                           /* number of points to write */
 )
 {
     static struct line_pnts *points = NULL;
@@ -172,10 +173,10 @@ static int write_bnd(struct COOR *line_begin,
 /* writes binary and ASCII digit files and supplemental file */
 #define SNAP_THRESH 0.00001
 
-static int
-write_smooth_bnd(struct COOR *line_begin,
-                 struct COOR *line_end, /* start and end point of line */
-                 int n                  /* number of points to write */
+static int write_smooth_bnd(
+    struct COOR *line_begin,
+    struct COOR *line_end G_UNUSED, /* start and end point of line */
+    int n                           /* number of points to write */
 )
 {
     static struct line_pnts *points = NULL;
@@ -289,6 +290,10 @@ int write_area(
 
     catNum = 1;
 
+    if (centroid_flag) {
+        Vect_build_partial(&Map, GV_BUILD_ATTACH_ISLES);
+    }
+
     G_important_message(_("Writing areas..."));
     for (i = 0, p = a_list; i < n_areas; i++, p++) {
         G_percent(i, n_areas, 3);
@@ -326,6 +331,21 @@ int write_area(
                 break;
             }
 
+            if (centroid_flag) {
+                int area, ret;
+
+                area = Vect_find_area(&Map, x, y);
+                if (area == 0) {
+                    G_warning(_("No area for centroid %d"), i);
+                }
+                else {
+                    ret = Vect_get_point_in_area(&Map, area, &x, &y);
+                    if (ret < 0) {
+                        G_warning(_("Unable to calculate area centroid"));
+                    }
+                }
+            }
+
             Vect_reset_line(points);
             Vect_append_point(points, x, y, 0.0);
 
@@ -335,15 +355,16 @@ int write_area(
             Vect_write_line(&Map, GV_CENTROID, points, Cats);
 
             if (driver != NULL && !value_flag) {
-                sprintf(buf, "insert into %s values (%d, ", Fi->table, cat);
+                snprintf(buf, sizeof(buf), "insert into %s values (%d, ",
+                         Fi->table, cat);
                 db_set_string(&sql, buf);
                 switch (data_type) {
                 case CELL_TYPE:
-                    sprintf(buf, "%d", (int)p->cat);
+                    snprintf(buf, sizeof(buf), "%d", (int)p->cat);
                     break;
                 case FCELL_TYPE:
                 case DCELL_TYPE:
-                    sprintf(buf, "%f", p->cat);
+                    snprintf(buf, sizeof(buf), "%f", p->cat);
                     break;
                 }
                 db_append_string(&sql, buf);
@@ -353,7 +374,7 @@ int write_area(
 
                     db_set_string(&label, temp_buf);
                     db_double_quote_string(&label);
-                    sprintf(buf, ", '%s'", db_get_string(&label));
+                    snprintf(buf, sizeof(buf), ", '%s'", db_get_string(&label));
                     db_append_string(&sql, buf);
                 }
 
@@ -370,6 +391,7 @@ int write_area(
 
     if (equivs)
         G_free(equivs);
+    Vect_destroy_line_struct(points);
 
     return 0;
 }

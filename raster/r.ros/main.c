@@ -76,7 +76,7 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define DATA(map, r, c) (map)[(r)*ncols + (c)]
+#define DATA(map, r, c) (map)[(r) * ncols + (c)]
 
 /*measurements of the 13 fuel models, input of Rothermel equation (1972) */
 float WO[4][14] = {{0, 0.034, 0.092, 0.138, 0.230, 0.046, 0.069, 0.052, 0.069,
@@ -98,7 +98,7 @@ float SIGMA[4][14] = {
     {0, 0, 30, 0, 30, 0, 30, 30, 30, 30, 30, 30, 30, 30},
     {0, 0, 1500, 0, 1500, 1500, 0, 1500, 0, 0, 1500, 0, 0, 0}};
 
-/*fuel particale surface-area-to-volume ratio, 1/ft. */
+/*fuel particle surface-area-to-volume ratio, 1/ft. */
 float MX[] = {
     0,    0.12, 0.15, 0.25, 0.20, 0.20, 0.25, 0.40,
     0.30, 0.25, 0.25, 0.15, 0.20, 0.25}; /*moisture content of extinction */
@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
         etaM_dead,              /*dead fuel misture damping coefficient */
         etaM_live,              /*live fuel misture damping coefficient */
         xmext,                  /*live fuel moisture of extinction */
-        phi_ws,                 /*wind and slope conbined coefficient */
+        phi_ws,                 /*wind and slope combined coefficient */
         wmfd, fdmois, fined, finel;
 
     /*other local variables */
@@ -515,7 +515,7 @@ int main(int argc, char *argv[])
         class_sum = 0.0;
         wo_dead[model] = 0.0;
         sigma[model] = 0.0;
-        for (class = 0; class <= 3; class ++) {
+        for (class = 0; class <= 3; class++) {
             class_sum = class_sum + WO[class][model] * SIGMA[class][model];
             if (SIGMA[class][model] > 0.0) {
                 epsilon[class][model] = exp(-138.0 / SIGMA[class][model]);
@@ -524,18 +524,18 @@ int main(int argc, char *argv[])
                 epsilon[class][model] = 0.0;
             }
         }
-        for (class = 0; class <= 3; class ++) {
+        for (class = 0; class <= 3; class++) {
             Ffactor_all[class][model] =
                 WO[class][model] * SIGMA[class][model] / class_sum;
             sigma[model] =
                 sigma[model] + SIGMA[class][model] * Ffactor_all[class][model];
         }
         class_sum = 0.0;
-        for (class = 0; class <= 2; class ++) {
+        for (class = 0; class <= 2; class++) {
             wo_dead[model] = wo_dead[model] + WO[class][model];
             class_sum = class_sum + WO[class][model] * SIGMA[class][model];
         }
-        for (class = 0; class <= 2; class ++) {
+        for (class = 0; class <= 2; class++) {
             Ffactor_in_dead[class][model] =
                 WO[class][model] * SIGMA[class][model] / class_sum;
         }
@@ -546,7 +546,7 @@ int main(int argc, char *argv[])
         G3 = 0.0;
         G4 = 0.0;
         G5 = 0.0;
-        for (class = 0; class <= 2; class ++) {
+        for (class = 0; class <= 2; class++) {
             if (SIGMA[class][model] >= 1200)
                 G1 = G1 + Ffactor_in_dead[class][model];
             if (SIGMA[class][model] < 1200 && SIGMA[class][model] >= 192)
@@ -558,7 +558,7 @@ int main(int argc, char *argv[])
             if (SIGMA[class][model] < 48 && SIGMA[class][model] >= 16)
                 G5 = G5 + Ffactor_in_dead[class][model];
         }
-        for (class = 0; class <= 2; class ++) {
+        for (class = 0; class <= 2; class++) {
             if (SIGMA[class][model] >= 1200)
                 Gfactor_in_dead[class][model] = G1;
             if (SIGMA[class][model] < 1200 && SIGMA[class][model] >= 192)
@@ -656,7 +656,7 @@ int main(int argc, char *argv[])
             wmfd = 0.0;
             fined = 0.0;
             if (SIGMA[3][fuel[col]] > 0.0) {
-                for (class = 0; class <= 2; class ++) {
+                for (class = 0; class <= 2; class++) {
                     if (SIGMA[class][fuel[col]] == 0.0)
                         continue;
                     fined = fined + WO[class][fuel[col]] *
@@ -679,7 +679,7 @@ int main(int argc, char *argv[])
             Mf_dead = 0.0;
             wn_dead = 0.0;
             class_sum = 0.0;
-            for (class = 0; class <= 2; class ++) {
+            for (class = 0; class <= 2; class++) {
                 Mf_dead = Mf_dead +
                           moisture[class] * Ffactor_in_dead[class][fuel[col]];
                 wn_dead = wn_dead + WO[class][fuel[col]] *

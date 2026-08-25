@@ -41,12 +41,12 @@ typedef double RectReal;
  * this is LFS dependent, not good
  * on 32 bit without LFS this is 9.69
  * on 32 bit with LFS and on 64 bit this is 9 */
-#define MAXCARD          9
-#define NODECARD         MAXCARD
-#define LEAFCARD         MAXCARD
+#define MAXCARD  9
+#define NODECARD MAXCARD
+#define LEAFCARD MAXCARD
 
 /* maximum no of levels = tree depth */
-#define MAXLEVEL         20 /* 8^MAXLEVEL items are guaranteed to fit into the tree */
+#define MAXLEVEL 20 /* 8^MAXLEVEL items are guaranteed to fit into the tree */
 
 /* number of nodes buffered per level */
 #define NODE_BUFFER_SIZE 32
@@ -138,8 +138,8 @@ struct RTree {
     int rootlevel; /* root level = tree depth */
 
     /* settings for RTree building */
-    int nodecard;           /* max number of childs in node */
-    int leafcard;           /* max number of childs in leaf */
+    int nodecard;           /* max number of children in node */
+    int leafcard;           /* max number of children in leaf */
     int min_node_fill;      /* balance criteria for node removal */
     int min_leaf_fill;      /* balance criteria for leaf removal */
     int minfill_node_split; /* balance criteria for splitting */
@@ -149,7 +149,7 @@ struct RTree {
     /* free node positions for recycling */
     struct _recycle {
         int avail;  /* number of available positions */
-        int alloc;  /* number of allcoated positions in *pos */
+        int alloc;  /* number of allocated positions in *pos */
         off_t *pos; /* array of available positions */
     } free_nodes;
 

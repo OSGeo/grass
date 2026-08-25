@@ -1,5 +1,5 @@
 /*!
-   \file lib/imagery/manage_sinatures.c
+   \file lib/imagery/manage_signatures.c
 
    \brief Imagery Library - Signature file management functions
 
@@ -33,6 +33,9 @@ void I_get_signatures_dir(char *dir, I_SIGFILE_TYPE type)
     }
     else if (type == I_SIGFILE_TYPE_SIGSET) {
         sprintf(dir, "signatures%csigset", HOST_DIRSEP);
+    }
+    else if (type == I_SIGFILE_TYPE_LIBSVM) {
+        sprintf(dir, "signatures%clibsvm", HOST_DIRSEP);
     }
     else {
         G_fatal_error("Programming error: unknown signature file type");
@@ -102,9 +105,9 @@ int I_signatures_remove(I_SIGFILE_TYPE type, const char *name)
  * It is safe to pass fully qualified names.
  *
  * \param type I_SIGFILE_TYPE signature type
- * \param name of old signature
- * \param mapset of old signature
- * \param name of new signature
+ * \param old_name of old signature
+ * \param old_mapset of old signature
+ * \param new_name of new signature
  * \return 0 on success
  * \return 1 on failure
  */
@@ -147,8 +150,10 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
     G_file_name(new_path, dir, tname, G_mapset());
 
     if (G_recursive_copy(old_path, new_path) != 0) {
-        G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
-                  G_fully_qualified_name(old_name, smapset), tname);
+        char *mname = G_fully_qualified_name(old_name, smapset);
+        G_warning(_("Unable to copy <%s> to current mapset as <%s>"), mname,
+                  tname);
+        G_free(mname);
         return 1;
     }
     return 0;
@@ -161,8 +166,8 @@ int I_signatures_copy(I_SIGFILE_TYPE type, const char *old_name,
  * It is safe to pass fully qualified names.
  *
  * \param type I_SIGFILE_TYPE signature type
- * \param name of old signature
- * \param name of new signature
+ * \param old_name name of old signature
+ * \param new_name name of new signature
  * \return 0 on success
  * \return 1 on failure
  */
@@ -228,7 +233,8 @@ int I_signatures_rename(I_SIGFILE_TYPE type, const char *old_name,
  *
  * \param type I_SIGFILE_TYPE signature type
  * \param mapset optional mapset to search in or NULL
- * \param pointer to array of found signature strings or NULL if none found
+ * \param out_list pointer to array of found signature strings or NULL if none
+ *                 found
  * \return count of signature strings in the array
  */
 int I_signatures_list_by_type(I_SIGFILE_TYPE type, const char *mapset,
@@ -283,18 +289,22 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
     }
 
     dirlist = G_ls2(path, &count);
-    if (count == 0)
+    if (count == 0) {
+        G_free(dirlist);
         return count;
+    }
 
     /* Make items fully qualified names */
     int mapset_len = strlen(mapset);
 
     *out_list = (char **)G_realloc(*out_list, (base + count) * sizeof(char *));
     for (int i = 0; i < count; i++) {
-        (*out_list)[base + i] = (char *)G_malloc(
-            (strlen(dirlist[i]) + 1 + mapset_len + 1) * sizeof(char));
-        sprintf((*out_list)[base + i], "%s@%s", dirlist[i], mapset);
+        size_t len = (strlen(dirlist[i]) + 1 + mapset_len + 1) * sizeof(char);
+        (*out_list)[base + i] = (char *)G_malloc(len);
+        snprintf((*out_list)[base + i], len, "%s@%s", dirlist[i], mapset);
+        G_free(dirlist[i]);
     }
+    G_free(dirlist);
 
     return count;
 }

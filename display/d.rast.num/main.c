@@ -27,10 +27,10 @@
  *
  *   This program used Dgrid's sources as a beginning. Purpose of Dnumber
  *   is to read the cell layer displayed on the graphics monitor and number
- *   them, if the cell value is other than 0 in an acending order.
+ *   them, if the cell value is other than 0 in an ascending order.
  *   d.rast.num draws a number on the graphic display
  *   of each cell, so the cell number could be identified when using hydrologic
- *   models such AGNPS which uses the cell number for all its correspondance.
+ *   models such AGNPS which uses the cell number for all its correspondence.
  *
  */
 
@@ -137,6 +137,9 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    /* Setup driver and check important information */
+    D_open_driver();
+
     map_name = opt.map->answer;
 
     if (strcmp("none", opt.grid_color->answer) == 0)
@@ -221,10 +224,6 @@ int main(int argc, char **argv)
                         "not allowed)"));
     }
 
-    /* Setup driver and check important information */
-
-    D_open_driver();
-
     if (opt.font->answer)
         D_font(opt.font->answer);
     else if (opt.path->answer)
@@ -305,15 +304,15 @@ int draw_number(int row, int col, double number, int prec,
     /* maybe ugly, but works */
     if (map_type == CELL_TYPE) {
         if (!Rast_is_c_null_value(&cell))
-            sprintf(no, "%d", (int)number);
+            snprintf(no, sizeof(no), "%d", (int)number);
         else
-            sprintf(no, "Null");
+            snprintf(no, sizeof(no), "Null");
     }
     else {
         if (!Rast_is_d_null_value(&dcell))
-            sprintf(no, "%.*f", prec, number);
+            snprintf(no, sizeof(no), "%.*f", prec, number);
         else
-            sprintf(no, "Null");
+            snprintf(no, sizeof(no), "Null");
     }
     len = strlen(no);
 

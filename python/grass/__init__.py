@@ -10,10 +10,10 @@
 #           License (>=v2). Read the file COPYING that comes with GRASS
 #           for details.
 
-"""Top-level GRASS GIS Python package
+"""Top-level GRASS Python package
 
 Importing the package (or any subpackage) initializes translation functions
-so that the function ``_`` appears in the global namespace (as an additional build-in).
+so that the function ``_`` appears in the global namespace (as an additional built-in).
 """
 
 import builtins as _builtins
@@ -22,7 +22,7 @@ import os
 
 # Setup translations
 #
-# The translations in the GRASS GIS Python package grass, GRASS Python modules
+# The translations in the GRASS Python package grass, GRASS Python modules
 # (scripts), and the wxPython GUI (wxGUI) are handled as application translations,
 # rather than Python module or package translations. This means that that translation
 # function called `_` (underscore) is added to buildins namespace. When the grass
@@ -58,7 +58,7 @@ def _translate(text):
     """Get translated version of text
 
     The first call to this function initializes translations, i.e., simply importing
-    the package does not require the translations to be availabe. However, a first
+    the package does not require the translations to be available. However, a first
     call to translate a message will do the initialization first before translating
     the message.
     """

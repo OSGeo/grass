@@ -3,7 +3,7 @@
  * started-up, or otherwise initialized happens here.  This is called only at
  * the startup of the graphics driver.
  *
- * The external variables define the pixle limits of the graphics surface.  The
+ * The external variables define the pixel limits of the graphics surface.  The
  * coordinate system used by the applications programs has the (0,0) origin
  * in the upper left-hand corner.  Hence,
  *    screen_left < screen_right
@@ -56,7 +56,8 @@ static void write_prolog(void)
 
     strftime(date_str, sizeof(date_str), DATE_FORMAT, tm);
 
-    sprintf(prolog_file, "%s/etc/psdriver.ps", G_gisbase());
+    snprintf(prolog_file, sizeof(prolog_file), "%s/etc/psdriver.ps",
+             G_gisbase());
 
     prolog_fp = fopen(prolog_file, "r");
     if (!prolog_fp)
@@ -192,8 +193,8 @@ int PS_Graph_set(void)
     p = getenv("GRASS_RENDER_PS_TRAILER");
     ps.no_trailer = p && strcmp(p, "FALSE") == 0;
 
-    G_verbose_message(_("ps: truecolor status %s"),
-                      ps.true_color ? _("enabled") : _("disabled"));
+    G_verbose_message(ps.true_color ? _("ps: truecolor status enabled")
+                                    : _("ps: truecolor status disabled"));
 
     get_paper();
 

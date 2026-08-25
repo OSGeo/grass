@@ -125,8 +125,9 @@ int main(int argc, char *argv[])
 
     c = G_define_flag();
     c->key = 'c';
-    c->description = _("Use current region settings in target location "
-                       "(def.=calculate smallest area)");
+    c->description =
+        _("Use current region settings in target project (location) "
+          "(def.=calculate smallest area)");
 
     a = G_define_flag();
     a->key = 'a';
@@ -150,8 +151,12 @@ int main(int argc, char *argv[])
     interpolate = menu[method].method;
 
     G_strip(grp->answer);
-    strcpy(group.name, grp->answer);
-    strcpy(extension, ext->answer);
+    if (G_strlcpy(group.name, grp->answer, sizeof(group.name)) >=
+        sizeof(group.name))
+        G_fatal_error(_("Group name <%s> is too long"), grp->answer);
+    if (G_strlcpy(extension, ext->answer, sizeof(extension)) >=
+        sizeof(extension))
+        G_fatal_error(_("Extension <%s> is too long"), ext->answer);
 
     seg_mb = NULL;
     if (mem->answer) {
@@ -179,7 +184,7 @@ int main(int argc, char *argv[])
 
     /* determine the number of files in this group */
     if (!I_get_group_ref(group.name, &group.group_ref)) {
-        G_warning(_("Location: %s"), G_location());
+        G_warning(_("Project (location): %s"), G_location());
         G_warning(_("Mapset: %s"), G_mapset());
         G_fatal_error(_("Could not read REF file for group <%s>"), group.name);
     }
@@ -280,7 +285,10 @@ int main(int argc, char *argv[])
             if (!ref_list[i])
                 continue;
 
-            strcpy(result, group.group_ref.file[i].name);
+            if (G_strlcpy(result, group.group_ref.file[i].name,
+                          sizeof(result)) >= sizeof(result))
+                G_fatal_error(_("Map name <%s> is too long"),
+                              group.group_ref.file[i].name);
             strcat(result, extension);
 
             if (G_legal_filename(result) < 0)
@@ -288,8 +296,8 @@ int main(int argc, char *argv[])
 
             if (G_find_raster2(result, G_mapset())) {
                 G_warning(_("The following raster map already exists in"));
-                G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
-                          G_mapset());
+                G_warning(_("target project (location) %s, mapset %s:"),
+                          G_location(), G_mapset());
                 G_warning("<%s>", result);
                 G_fatal_error(_("Orthorectification cancelled."));
             }
@@ -297,8 +305,8 @@ int main(int argc, char *argv[])
         if (angle->answer) {
             if (G_find_raster2(angle->answer, G_mapset())) {
                 G_warning(_("The following raster map already exists in"));
-                G_warning(_("target LOCATION %s, MAPSET %s:"), G_location(),
-                          G_mapset());
+                G_warning(_("target project (location) %s, mapset %s:"),
+                          G_location(), G_mapset());
                 G_warning("<%s>", angle->answer);
                 G_fatal_error(_("Orthorectification cancelled."));
             }

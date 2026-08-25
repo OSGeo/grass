@@ -1,19 +1,11 @@
 #!/usr/bin/env python3
 
-from __future__ import (
-    nested_scopes,
-    generators,
-    division,
-    absolute_import,
-    with_statement,
-    print_function,
-    unicode_literals,
-)
 from os import listdir
-from os.path import join, isdir
+from os.path import join
 import shutil
 import ctypes as ct
 import fnmatch
+from pathlib import Path
 
 
 import grass.lib.gis as libgis
@@ -94,7 +86,7 @@ def set_current_mapset(mapset, location=None, gisdbase=None):
     """Set the current mapset as working area
 
     :param mapset: Name of the mapset
-    :type value: str
+    :type mapset: str
 
     :param location: Name of the location
     :type location: str
@@ -113,7 +105,7 @@ def make_mapset(mapset, location=None, gisdbase=None):
     """Create a new mapset
 
     :param mapset: Name of the mapset
-    :type value: str
+    :type mapset: str
 
     :param location: Name of the location
     :type location: str
@@ -122,17 +114,19 @@ def make_mapset(mapset, location=None, gisdbase=None):
     :type gisdbase: str"""
     res = libgis.G_make_mapset(gisdbase, location, mapset)
     if res == -1:
-        raise GrassError("Cannot create new mapset")
-    elif res == -2:
-        raise GrassError("Illegal name")
+        msg = "Cannot create new mapset"
+        raise GrassError(msg)
+    if res == -2:
+        msg = "Illegal name"
+        raise GrassError(msg)
 
 
-class Gisdbase(object):
+class Gisdbase:
     """Return Gisdbase object. ::
 
         >>> from grass.script.core import gisenv
         >>> gisdbase = Gisdbase()
-        >>> gisdbase.name == gisenv()['GISDBASE']
+        >>> gisdbase.name == gisenv()["GISDBASE"]
         True
 
     ..
@@ -161,7 +155,7 @@ class Gisdbase(object):
         """Return a Location object. ::
 
             >>> from grass.script.core import gisenv
-            >>> loc_env = gisenv()['LOCATION_NAME']
+            >>> loc_env = gisenv()["LOCATION_NAME"]
             >>> gisdbase = Gisdbase()
             >>> loc_py = gisdbase[loc_env]
             >>> loc_env == loc_py.name
@@ -171,8 +165,7 @@ class Gisdbase(object):
         """
         if location in self.locations():
             return Location(location, self.name)
-        else:
-            raise KeyError("Location: %s does not exist" % location)
+        raise KeyError("Location: %s does not exist" % location)
 
     def __iter__(self):
         for loc in self.locations():
@@ -181,13 +174,14 @@ class Gisdbase(object):
     # TODO remove or complete this function
     def new_location(self):
         if libgis.G_make_location() != 0:
-            raise GrassError("Cannot create new location")
+            msg = "Cannot create new location"
+            raise GrassError(msg)
 
     def locations(self):
         """Return a list of locations that are available in the gisdbase: ::
 
             >>> gisdbase = Gisdbase()
-            >>> gisdbase.locations()                     # doctest: +ELLIPSIS
+            >>> gisdbase.locations()  # doctest: +ELLIPSIS
             [...]
 
         ..
@@ -201,16 +195,16 @@ class Gisdbase(object):
         )
 
 
-class Location(object):
+class Location:
     """Location object ::
 
         >>> from grass.script.core import gisenv
         >>> location = Location()
-        >>> location                                      # doctest: +ELLIPSIS
+        >>> location  # doctest: +ELLIPSIS
         Location(...)
-        >>> location.gisdbase == gisenv()['GISDBASE']
+        >>> location.gisdbase == gisenv()["GISDBASE"]
         True
-        >>> location.name == gisenv()['LOCATION_NAME']
+        >>> location.name == gisenv()["LOCATION_NAME"]
         True
 
     ..
@@ -243,15 +237,14 @@ class Location(object):
     def __getitem__(self, mapset):
         if mapset in self.mapsets():
             return Mapset(mapset)
-        else:
-            raise KeyError("Mapset: %s does not exist" % mapset)
+        raise KeyError("Mapset: %s does not exist" % mapset)
 
     def __iter__(self):
         lpath = self.path()
         return (
             m
             for m in listdir(lpath)
-            if (isdir(join(lpath, m)) and is_valid(m, lpath, "MAPSET"))
+            if (Path(lpath, m).is_dir() and is_valid(m, lpath, "MAPSET"))
         )
 
     def __len__(self):
@@ -280,7 +273,7 @@ class Location(object):
             [...]
 
         """
-        mapsets = [mapset for mapset in self]
+        mapsets = [mapset for mapset in self]  # noqa: C416 # pylint: disable=R1721
         if permissions:
             mapsets = [
                 mapset
@@ -296,19 +289,19 @@ class Location(object):
         return join(self.gisdbase, self.name)
 
 
-class Mapset(object):
+class Mapset:
     """Mapset ::
 
         >>> from grass.script.core import gisenv
         >>> genv = gisenv()
         >>> mapset = Mapset()
-        >>> mapset                                        # doctest: +ELLIPSIS
+        >>> mapset  # doctest: +ELLIPSIS
         Mapset(...)
-        >>> mapset.gisdbase == genv['GISDBASE']
+        >>> mapset.gisdbase == genv["GISDBASE"]
         True
-        >>> mapset.location == genv['LOCATION_NAME']
+        >>> mapset.location == genv["LOCATION_NAME"]
         True
-        >>> mapset.name == genv['MAPSET']
+        >>> mapset.name == genv["MAPSET"]
         True
 
     ..
@@ -391,12 +384,11 @@ class Mapset(object):
         elist = []
         for el in clist:
             el_name = ct.cast(el, ct.c_char_p).value
-            if el_name:
-                elist.append(decode(el_name))
-            else:
+            if not el_name:
                 if pattern:
                     return fnmatch.filter(elist, pattern)
                 return elist
+            elist.append(decode(el_name))
 
     def is_current(self):
         """Check if the MAPSET is the working MAPSET"""
@@ -413,7 +405,8 @@ class Mapset(object):
     def delete(self):
         """Delete the mapset"""
         if self.is_current():
-            raise GrassError("The mapset is in use.")
+            msg = "The mapset is in use."
+            raise GrassError(msg)
         shutil.rmtree(self.path())
 
     def path(self):
@@ -421,7 +414,7 @@ class Mapset(object):
         return join(self.gisdbase, self.location, self.name)
 
 
-class VisibleMapset(object):
+class VisibleMapset:
     """VisibleMapset object"""
 
     def __init__(self, mapset, location="", gisdbase=""):
@@ -434,13 +427,12 @@ class VisibleMapset(object):
         return repr(self.read())
 
     def __iter__(self):
-        for mapset in self.read():
-            yield mapset
+        yield from self.read()
 
     def read(self):
         """Return the mapsets in the search path"""
         try:
-            with open(self.spath, "r") as f:
+            with open(self.spath) as f:
                 lines = f.readlines()
                 if lines:
                     return [line.strip() for line in lines]
@@ -467,11 +459,11 @@ class VisibleMapset(object):
         :param mapset: a mapset's name
         :type mapset: str
         """
-        if mapset not in self.read() and mapset in self.location:
-            with open(self.spath, "a+") as f:
-                f.write("%s\n" % mapset)
-        else:
-            raise TypeError("Mapset not found")
+        if mapset in self.read() or mapset not in self.location:
+            msg = "Mapset not found"
+            raise TypeError(msg)
+        with open(self.spath, "a+") as f:
+            f.write("%s\n" % mapset)
 
     def remove(self, mapset):
         """Remove mapset to the search path
@@ -513,10 +505,11 @@ if __name__ == "__main__":
 
     doctest.testmod()
 
-    # Remove the generated vector map, if exist
     mset = utils.get_mapset_vector(test_vector_name, mapset="")
     if mset:
+        # Remove the generated vector map, if exists
         run_command("g.remove", flags="f", type="vector", name=test_vector_name)
     mset = utils.get_mapset_raster(test_raster_name, mapset="")
     if mset:
+        # Remove the generated raster map, if exists
         run_command("g.remove", flags="f", type="raster", name=test_raster_name)

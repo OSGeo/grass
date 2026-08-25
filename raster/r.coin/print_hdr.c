@@ -29,28 +29,28 @@ int print_coin_hdr(int Conformat)
 
     switch (Conformat) {
     case 'a':
-        sprintf(unit_type, "acres");
+        snprintf(unit_type, sizeof(unit_type), "acres");
         break;
     case 'h':
-        sprintf(unit_type, "hectares");
+        snprintf(unit_type, sizeof(unit_type), "hectares");
         break;
     case 'k':
-        sprintf(unit_type, "square kilometers");
+        snprintf(unit_type, sizeof(unit_type), "square kilometers");
         break;
     case 'm':
-        sprintf(unit_type, "square miles");
+        snprintf(unit_type, sizeof(unit_type), "square miles");
         break;
     case 'p':
-        sprintf(unit_type, "percent cover");
+        snprintf(unit_type, sizeof(unit_type), "percent cover");
         break;
     case 'x':
-        sprintf(unit_type, "percent of cols");
+        snprintf(unit_type, sizeof(unit_type), "percent of cols");
         break;
     case 'y':
-        sprintf(unit_type, "percent of rows");
+        snprintf(unit_type, sizeof(unit_type), "percent of rows");
         break;
     default:
-        sprintf(unit_type, "cells");
+        snprintf(unit_type, sizeof(unit_type), "cells");
         break;
     }
 

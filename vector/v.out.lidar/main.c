@@ -210,7 +210,8 @@ static void get_color_column_value(dbCatValArray *cvarr, int cat, int *red,
 
     /* read RGB colors from db for current area # */
     if (cvarr && db_CatValArray_get_value(cvarr, cat, &value) == DB_OK) {
-        sprintf(colorstring, "%s", db_get_string(value->val.s));
+        snprintf(colorstring, sizeof(colorstring), "%s",
+                 db_get_string(value->val.s));
         if (*colorstring != '\0') {
             G_debug(5, "element: colorstring: %s", colorstring);
             if (G_str_to_color(colorstring, red, green, blue) == 1) {

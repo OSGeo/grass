@@ -48,9 +48,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *omapopt, *mapopt, *isetopt, *ilocopt, *ibaseopt, *smax;
 
-#ifdef HAVE_PROJ_H
     struct Option *pipeline; /* name of custom PROJ pipeline */
-#endif
     struct Key_Value *in_proj_keys = NULL, *in_unit_keys = NULL;
     struct Key_Value *out_proj_keys, *out_unit_keys;
     struct line_pnts *Points, *Points2;
@@ -74,14 +72,14 @@ int main(int argc, char *argv[])
     G_add_keyword(_("projection"));
     G_add_keyword(_("transformation"));
     G_add_keyword(_("import"));
-    module->description = _(
-        "Re-projects a vector map from one location to the current location.");
+    module->description =
+        _("Re-projects a vector map from one project to the current project.");
 
     /* set up the options and flags for the command line parser */
 
     ilocopt = G_define_standard_option(G_OPT_M_LOCATION);
     ilocopt->required = YES;
-    ilocopt->label = _("Location containing input vector map");
+    ilocopt->label = _("Project (location) containing input vector map");
     ilocopt->guisection = _("Source");
 
     isetopt = G_define_standard_option(G_OPT_M_MAPSET);
@@ -96,7 +94,7 @@ int main(int argc, char *argv[])
     mapopt->guisection = _("Source");
 
     ibaseopt = G_define_standard_option(G_OPT_M_DBASE);
-    ibaseopt->label = _("Path to GRASS database of input location");
+    ibaseopt->label = _("Path to GRASS database of input project");
 
     smax = G_define_option();
     smax->key = "smax";
@@ -113,13 +111,11 @@ int main(int argc, char *argv[])
     omapopt->description = _("Name for output vector map (default: input)");
     omapopt->guisection = _("Target");
 
-#ifdef HAVE_PROJ_H
     pipeline = G_define_option();
     pipeline->key = "pipeline";
     pipeline->type = TYPE_STRING;
     pipeline->required = NO;
     pipeline->description = _("PROJ pipeline for coordinate transformation");
-#endif
 
     flag.list = G_define_flag();
     flag.list->key = 'l';
@@ -176,7 +172,7 @@ int main(int argc, char *argv[])
         gbase = G_store(G_gisdbase());
 
     if (!ibaseopt->answer && strcmp(iloc_name, G_location()) == 0)
-        G_fatal_error(_("Input and output locations can not be the same"));
+        G_fatal_error(_("Input and output projects can not be the same"));
 
     lmax = atof(smax->answer);
     if (lmax < 0)
@@ -204,11 +200,9 @@ int main(int argc, char *argv[])
     info_out.wkt = G_get_projwkt();
 
     info_trans.def = NULL;
-#ifdef HAVE_PROJ_H
     if (pipeline->answer) {
         info_trans.def = G_store(pipeline->answer);
     }
-#endif
 
     /* Initialize the Point / Cat structure */
     Points = Vect_new_line_struct();
@@ -228,8 +222,8 @@ int main(int argc, char *argv[])
         if (flag.list->answer) {
             char **list;
 
-            G_verbose_message(_("Checking location <%s> mapset <%s>"),
-                              iloc_name, iset_name);
+            G_verbose_message(_("Checking project <%s> mapset <%s>"), iloc_name,
+                              iset_name);
             list = G_list(G_ELEMENT_VECTOR, G_getenv_nofatal("GISDBASE"),
                           G_getenv_nofatal("LOCATION_NAME"), iset_name);
             if (list[0]) {
@@ -253,7 +247,7 @@ int main(int argc, char *argv[])
         mapset = G_find_vector2(map_name, iset_name);
         if (mapset == NULL)
             G_fatal_error(
-                _("Vector map <%s> in location <%s> mapset <%s> not found"),
+                _("Vector map <%s> in project <%s> mapset <%s> not found"),
                 map_name, iloc_name, iset_name);
 
         /*** Get projection info for input mapset ***/
@@ -289,15 +283,19 @@ int main(int argc, char *argv[])
         if (Vect_open_old(&Map, map_name, mapset) < 0)
             G_fatal_error(_("Unable to open vector map <%s>"), map_name);
 
-#if PROJ_VERSION_MAJOR >= 6
         /* need to set the region to the input vector
          * for PROJ to select the appropriate pipeline */
         {
             int first = 1, counter = 0;
             struct Cell_head inwindow;
 
-            G_unset_window();
-            G_get_window(&inwindow);
+            // Initialize from the source projects's default region, not the
+            // current region, because G_get_window() honors WIND_OVERRIDE /
+            // GRASS_REGION, but those refer to a region in the target's mapset,
+            // not in the source project we just switched into. Every spatial
+            // field below is overwritten from the input vector's extent anyway,
+            // so the default window is a sufficient and side-effect-free seed.
+            G_get_default_window(&inwindow);
 
             /* Cycle through all lines */
             Vect_rewind(&Map);
@@ -356,7 +354,6 @@ int main(int argc, char *argv[])
         }
         /* GPJ_init_transform() must be called only after the region has been
          * set */
-#endif
         if (GPJ_init_transform(&info_in, &info_out, &info_trans) < 0)
             G_fatal_error(_("Unable to initialize coordinate transformation"));
     }
@@ -365,10 +362,10 @@ int main(int argc, char *argv[])
         /* need to be able to read from others */
         if (stat == 0)
             G_fatal_error(
-                _("Mapset <%s> in input location <%s> - permission denied"),
+                _("Mapset <%s> in input project <%s> - permission denied"),
                 iset_name, iloc_name);
         else
-            G_fatal_error(_("Mapset <%s> in input location <%s> not found"),
+            G_fatal_error(_("Mapset <%s> in input project <%s> not found"),
                           iset_name, iloc_name);
     }
 
@@ -498,13 +495,13 @@ int main(int argc, char *argv[])
     Vect_set_zone(&Out_Map, G_zone());
 
     /* Read and write header info */
-    sprintf(date, "%s", G_date());
+    snprintf(date, sizeof(date), "%s", G_date());
     sscanf(date, "%*s%s%d%*s%d", mon, &day, &yr);
     if (yr < 2000)
         yr = yr - 1900;
     else
         yr = yr - 2000;
-    sprintf(date, "%s %d %d", mon, day, yr);
+    snprintf(date, sizeof(date), "%s %d %d", mon, day, yr);
     Vect_set_date(&Out_Map, date);
 
     /* line densification works only with vector topology */

@@ -28,7 +28,6 @@ void vrml_end(FILE *vout)
    decrease the level of indentation.  For better storage,
    just comment out the tab printing.
  */
-
 void vrml_putline(int indent, FILE *vout, char *str)
 {
     static int ind = 0;

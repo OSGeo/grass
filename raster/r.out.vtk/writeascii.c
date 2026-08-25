@@ -64,7 +64,7 @@ double get_raster_value_as_double(int MapType, void *ptr, double nullval)
 }
 
 /* ************************************************************************* */
-/* Write the default VTK Header, Elevation  is not supportet *************** */
+/* Write the default VTK Header, Elevation  is not supported *************** */
 /* ************************************************************************* */
 void write_vtk_normal_header(FILE *fp, struct Cell_head region,
                              double elevation, int type)
@@ -73,7 +73,8 @@ void write_vtk_normal_header(FILE *fp, struct Cell_head region,
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS 7 Export\n");
+    /* The header line describes the data. */
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_POINTS\n"); /*We are using the structured
                                                    point dataset. */
@@ -96,7 +97,7 @@ void write_vtk_normal_header(FILE *fp, struct Cell_head region,
 }
 
 /* ************************************************************************* */
-/* Write the Elevation VTK Header, Elevation is supportet ****************** */
+/* Write the Elevation VTK Header, Elevation is supported ****************** */
 /* ************************************************************************* */
 void write_vtk_structured_elevation_header(FILE *fp, struct Cell_head region)
 {
@@ -104,7 +105,7 @@ void write_vtk_structured_elevation_header(FILE *fp, struct Cell_head region)
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS 7 Export\n");
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_GRID\n"); /*We are using the structured grid
                                                  dataset. */
@@ -114,7 +115,7 @@ void write_vtk_structured_elevation_header(FILE *fp, struct Cell_head region)
 }
 
 /* ************************************************************************* */
-/* Write the Rectilinear Elevtaion VTK Header, Elevation is supportet ****** */
+/* Write the Rectilinear Elevtaion VTK Header, Elevation is supported ****** */
 /* ************************************************************************* */
 void write_vtk_polygonal_elevation_header(FILE *fp, struct Cell_head region)
 {
@@ -122,7 +123,7 @@ void write_vtk_polygonal_elevation_header(FILE *fp, struct Cell_head region)
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS 7 Export\n");
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET POLYDATA\n"); /*We are using polydataset. */
     fprintf(fp, "POINTS %i float\n", region.cols * region.rows);
@@ -149,7 +150,7 @@ void write_vtk_pointdata_header(FILE *fp, struct Cell_head region)
 /* ************************************************************************* */
 /* Write the VTK Structured Coordinates ************************************ */
 /* ************************************************************************* */
-void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname,
+void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname G_UNUSED,
                                       struct Cell_head region, int out_type,
                                       char *null_value, double scale, int dp)
 {
@@ -164,7 +165,7 @@ void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname,
     G_debug(3, _("write_vtk_structured_coordinates: Writing Coordinates"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -194,13 +195,14 @@ void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname,
         }
         rowcount++;
     }
+    G_free(raster);
     return;
 }
 
 /* ************************************************************************* */
 /* Write Polygonal Coordinates ********************************************* */
 /* ************************************************************************* */
-void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname,
+void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname G_UNUSED,
                                      struct Cell_head region, int out_type,
                                      char *null_value, double scale,
                                      int polytype, int dp)
@@ -218,7 +220,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname,
             _("write_vtk_polygonal_coordinates: Writing VTK Polygonal data"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -254,12 +256,12 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname,
     /*Now we need to write the Connectivity between the points */
 
     if (polytype == QUADS) { /*The default */
-        /*If Datafiltering should be supportet, we use Polygons to represent the
+        /*If Datafiltering should be supported, we use Polygons to represent the
          * grid */
         fprintf(fp, "POLYGONS %i %i\n", (region.rows - 1) * (region.cols - 1),
                 5 * (region.rows - 1) * (region.cols - 1));
 
-        /*We creat a grid of quads, the corners of the quads are the datapoints
+        /*We create a grid of quads, the corners of the quads are the datapoints
          */
         for (i = 0; i < region.rows - 1; i++) {
             for (j = 0; j < region.cols - 1; j++) {
@@ -271,7 +273,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname,
     }
 
     if (polytype == TRIANGLE_STRIPS) {
-        /*TriangleStrips, take a look ate www.vtk.org for the definition of
+        /*TriangleStrips, take a look at https://vtk.org/ for the definition of
          * triangle_strips in vtk */
         /*If we use triangelestrips, the number of points per strip is equal to
          * the double number of cols we have */
@@ -309,7 +311,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname,
             fprintf(fp, "\n");
         }
     }
-
+    G_free(raster);
     return;
 }
 
@@ -328,7 +330,7 @@ void write_vtk_data(int fd, FILE *fp, char *varname, struct Cell_head region,
     G_debug(3, _("write_vtk_data: Writing VTK-Data"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -351,6 +353,7 @@ void write_vtk_data(int fd, FILE *fp, char *varname, struct Cell_head region,
         }
         fprintf(fp, "\n");
     }
+    G_free(raster);
     return;
 }
 
@@ -407,6 +410,9 @@ void write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE *fp,
             }
         }
     }
+    G_free(redraster);
+    G_free(greenraster);
+    G_free(blueraster);
     return;
 }
 
@@ -453,5 +459,8 @@ void write_vtk_vector_data(int xfd, int yfd, int zfd, FILE *fp,
             fprintf(fp, "%.*f %.*f %.*f \n", dp, x, dp, y, dp, z);
         }
     }
+    G_free(xraster);
+    G_free(yraster);
+    G_free(zraster);
     return;
 }

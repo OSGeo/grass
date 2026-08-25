@@ -23,7 +23,7 @@ static char *G__find_etc(const char *name)
         int i;
 
         for (i = 0; dirs[i]; i++) {
-            sprintf(path, "%s/%s", dirs[i], name);
+            snprintf(path, sizeof(path), "%s/%s", dirs[i], name);
 
             if (access(path, 0) == 0) {
                 result = G_store(path);
@@ -40,7 +40,7 @@ static char *G__find_etc(const char *name)
     /*
      * check application etc dir
      */
-    sprintf(path, "%s/etc/%s", G_gisbase(), name);
+    snprintf(path, sizeof(path), "%s/etc/%s", G_gisbase(), name);
     if (access(path, 0) == 0)
         return G_store(path);
 

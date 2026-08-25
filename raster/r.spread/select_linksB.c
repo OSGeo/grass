@@ -28,7 +28,7 @@
 #define PI M_PI
 #endif
 
-#define DATA(map, r, c) (map)[(r)*ncols + (c)]
+#define DATA(map, r, c) (map)[(r) * ncols + (c)]
 
 /*#define DEBUG */
 

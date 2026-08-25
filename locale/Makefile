@@ -32,10 +32,14 @@ WXPYDOMAIN = grasswxpy
 DOMAINS = $(LIBDOMAIN) $(MODDOMAIN) $(WXPYDOMAIN)
 
 LIB_POTFILES = find ../lib \( -name "*.c" -o -name "*.py" \) | xargs grep -l "_(\"\|n_(\""
-MOD_POTFILES = find ../ -name '*.c' | grep -v '../lib' | xargs grep -l "_(\"\|n_(\""
+MOD_POTFILES = find ../ \( -name "*.c" -o -name "*.cpp" \) | grep -v '../lib' | xargs grep -l "_(\"\|n_(\""
 WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\"\|n_(\""
 #For Python script module messages
 MOD_PYFILES = find ../scripts -name '*.py' | xargs grep -l "_(\"\|n_(\""
+
+XGETTEXT_ARGS = --no-wrap --sort-by-file
+MSGMERGE_ARGS = --no-wrap --sort-by-file --previous
+MSGUNIQ_ARGS = --no-wrap --sort-by-file
 
 define po_stats
 GISBASE="$(RUN_GISBASE)" $(PYTHON) ./grass_po_stats.py
@@ -50,14 +54,14 @@ pot:
 	fi
 	@rm -f ./templates/*.pot
 	@echo "Generating $(LIBDOMAIN)..."
-	xgettext --from-code=utf-8 --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(LIBDOMAIN).pot `$(LIB_POTFILES)`
+	xgettext $(XGETTEXT_ARGS) --from-code=utf-8 --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(LIBDOMAIN).pot `$(LIB_POTFILES)`
 	@echo "Generating $(MODDOMAIN)..."
-	xgettext --from-code=utf-8 --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(MODDOMAIN).pot `$(MOD_POTFILES)`
-	xgettext --from-code=utf-8 -j --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(MODDOMAIN).pot `$(MOD_PYFILES)`
+	xgettext $(XGETTEXT_ARGS) --from-code=utf-8 --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(MODDOMAIN).pot `$(MOD_POTFILES)`
+	xgettext $(XGETTEXT_ARGS) --from-code=utf-8 -j --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(MODDOMAIN).pot `$(MOD_PYFILES)`
 	@echo "Generating $(WXPYDOMAIN)..."
-	xgettext --from-code=utf-8 --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(WXPYDOMAIN).pot `$(WXPY_POTFILES)`
+	xgettext $(XGETTEXT_ARGS) --from-code=utf-8 --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(WXPYDOMAIN).pot `$(WXPY_POTFILES)`
 
-#merge already existing translations with new messages in POT template file and create new po files:
+#merge already existing translations with new messages in POT template file, deduplicate it and create new po files:
 update-po:
 	@for i in $(DOMAINS) ; do \
 		if [ "`ls ./po/$$i\_*.po 2>/dev/null`" = "" ] ; then \
@@ -71,11 +75,12 @@ update-po:
 		suffix=`echo $$po | cut -d'_' -f2-`; \
 		lingua=`basename $$suffix .po`; \
 		prefix=`echo $$po | cut -d'_' -f1`; \
-		if msgmerge -o $$prefix\_$$suffix.new $$prefix\_$$suffix ../templates/$$prefix.pot; then\
-		  mv $$prefix\_$$suffix.new $$prefix\_$$suffix; \
+		if msgmerge $(MSGMERGE_ARGS) -o $$prefix\_$$suffix.new $$prefix\_$$suffix ../templates/$$prefix.pot; then\
+		  msguniq $(MSGUNIQ_ARGS) --use-first $$prefix\_$$suffix.new > $$prefix\_$$suffix; \
+		  rm -f $$prefix\_$$suffix.new; \
 		  echo "Merged new messages into $$prefix\_$$suffix" ; \
 		else \
-		    echo "Merging failed"; \
+		  echo "Merging failed"; \
 		fi \
 		done
 	@echo "Be careful with git commits as .po file updates must be synchronized with the individual translators."

@@ -2,19 +2,28 @@
 
 <em>t.rast.neighbors</em> performs <a href="r.neighbors.html">r.neighbors</a>
 computations on the maps of a space time raster dataset (STRDS). This
-module supports a subset of options that are available in
-<a href="r.neighbors.html">r.neighbors</a>. The size of the neighborhood
-and the aggregation method can be chosen.
+module supports the options that are available in
+<a href="r.neighbors.html">r.neighbors</a>.
+
 <p>
 The user must provide an input and an output space time raster dataset and
 the basename of the resulting raster maps. The resulting STRDS will have
-the same temporal resolution as the input dataset.
-All maps will be processed using the current region settings.
+the same temporal resolution as the input dataset. With the <b>-e</b> flag,
+resulting maps can be registered in an existing STRDS, that e.g. may have
+been created with a previous run of <em>t.rast.neighbors</em>.
+All maps will be processed using the current region settings unless the
+<b>-r</b> flag is selected. In the latter case, the computaional region
+is set to each raster map selected from the input STRDS.
+
 <p>
 The user can select a subset of the input space time raster dataset for
-processing using a SQL WHERE statement. The number of CPU's to be used
-for parallel processing can be specified with the <em>nprocs</em>
-option to speedup the computation on multi-core system.
+processing using a SQL WHERE statement or using the <b>region_relation</b>
+for spatial selection of raster maps. For the spatial map selection the
+current computational region is used, even when the <b>-r</b> flag is
+given. The number of CPU's to be used for parallel processing can be
+specified with the <em>nprocs</em> option to speedup the computation on
+multi-core system.
+
 <p>
 Semantic labels are needed to relate output raster maps to input raster
 maps. E.g. with <em>method=stddev</em>, the user needs to know the

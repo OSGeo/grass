@@ -12,7 +12,6 @@
  & \param[in] sigma
  * \return double
  */
-
 double G_math_rand_gauss(double sigma)
 {
     double x, y, r2;

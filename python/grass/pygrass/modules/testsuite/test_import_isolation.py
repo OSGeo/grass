@@ -9,7 +9,6 @@ Copyright: (C) 2015 pietro
 
 Created on  Wed Jul 15 11:34:32 2015
 """
-from __future__ import absolute_import
 
 import sys
 import fnmatch
@@ -37,14 +36,17 @@ class TestImportIsolation(TestCase):
             isolate, check(*self.patterns), msg="Test isolation before any import."
         )
         # same import done in __init__ file
-        from grass.pygrass.modules.interface import Module, ParallelModuleQueue
-        from grass.pygrass.modules import shortcuts
+        from grass.pygrass.modules.interface import (
+            Module,  # noqa: F401
+            ParallelModuleQueue,  # noqa: F401
+        )
+        from grass.pygrass.modules import shortcuts  # noqa: F401
 
         self.assertEqual(
             isolate, check(*self.patterns), msg="Test isolation after import Module."
         )
         # test the other way round
-        from grass.pygrass.vector import VectorTopo
+        from grass.pygrass.vector import VectorTopo  # noqa: F401
 
         self.assertNotEqual(
             isolate,

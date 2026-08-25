@@ -93,7 +93,8 @@ static void find_fonts(const char *dirpath)
         if (cur_entry->d_name[0] == '.')
             continue; /* Skip hidden files */
 
-        sprintf(filepath, "%s%c%s", dirpath, HOST_DIRSEP, cur_entry->d_name);
+        snprintf(filepath, sizeof(filepath), "%s%c%s", dirpath, HOST_DIRSEP,
+                 cur_entry->d_name);
 
         if (stat(filepath, &info))
             continue; /* File is unreadable */

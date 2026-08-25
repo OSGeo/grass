@@ -16,6 +16,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "pngdriver.h"
 
 void read_ppm(void)
@@ -36,7 +37,8 @@ void read_ppm(void)
     if (fscanf(input, "P6 %d %d %d", &i_width, &i_height, &maxval) != 3)
         G_fatal_error("PNG: invalid input file %s", png.file_name);
 
-    fgetc(input);
+    if (fgetc(input) == EOF)
+        G_fatal_error(_("PNG: invalid input file %s"), png.file_name);
 
     if (i_width != png.width || i_height != png.height)
         G_fatal_error("PNG: input file has incorrect dimensions: expected: "
@@ -86,7 +88,8 @@ void read_pgm(void)
     if (fscanf(input, "P5 %d %d %d", &i_width, &i_height, &maxval) != 3)
         G_fatal_error("PNG: invalid input mask file %s", mask_name);
 
-    fgetc(input);
+    if (fgetc(input) == EOF)
+        G_fatal_error(_("PNG: invalid input mask file %s"), mask_name);
 
     if (i_width != png.width || i_height != png.height)
         G_fatal_error("PNG: input mask file has incorrect dimensions: "

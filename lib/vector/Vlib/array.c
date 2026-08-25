@@ -35,7 +35,6 @@ static int in_array(int *cats, size_t ncats, int cat);
    \return pointer to new struct varray
    \return NULL if failed
  */
-
 struct varray *Vect_new_varray(int size)
 {
     struct varray *p;
@@ -76,7 +75,7 @@ struct varray *Vect_new_varray(int size)
    \return number of items set
    \return -1 on error
  */
-int Vect_set_varray_from_cat_string(const struct Map_info *Map, int field,
+int Vect_set_varray_from_cat_string(struct Map_info *Map, int field,
                                     const char *cstring, int type, int value,
                                     struct varray *varray)
 {
@@ -121,7 +120,7 @@ int Vect_set_varray_from_cat_string(const struct Map_info *Map, int field,
    \return number of items set
    \return -1 on error
  */
-int Vect_set_varray_from_cat_list(const struct Map_info *Map, int field,
+int Vect_set_varray_from_cat_list(struct Map_info *Map, int field,
                                   struct cat_list *clist, int type, int value,
                                   struct varray *varray)
 {
@@ -145,6 +144,7 @@ int Vect_set_varray_from_cat_list(const struct Map_info *Map, int field,
 
         if (n > varray->size) { /* not enough space */
             G_warning(_("Not enough space in vector array"));
+            Vect_destroy_cats_struct(Cats);
             return 0;
         }
 
@@ -168,6 +168,7 @@ int Vect_set_varray_from_cat_list(const struct Map_info *Map, int field,
 
         if (n > varray->size) { /* not enough space */
             G_warning(_("Not enough space in vector array"));
+            Vect_destroy_cats_struct(Cats);
             return 0;
         }
 
@@ -239,9 +240,8 @@ static int in_array(int *cats, size_t ncats, int cat)
    \return number of items set
    \return -1 on error
  */
-int Vect_set_varray_from_db(const struct Map_info *Map, int field,
-                            const char *where, int type, int value,
-                            struct varray *varray)
+int Vect_set_varray_from_db(struct Map_info *Map, int field, const char *where,
+                            int type, int value, struct varray *varray)
 {
     int i, n, c, centr, *cats;
     int ncats;
@@ -262,8 +262,6 @@ int Vect_set_varray_from_db(const struct Map_info *Map, int field,
         return 0;
     }
 
-    Cats = Vect_new_cats_struct();
-
     /* Select categories from DB to array */
     Fi = Vect_get_field(Map, field);
     if (Fi == NULL) {
@@ -275,6 +273,7 @@ int Vect_set_varray_from_db(const struct Map_info *Map, int field,
     if (driver == NULL) {
         G_warning(_("Unable to open database <%s> by driver <%s>"),
                   Fi->database, Fi->driver);
+        Vect_destroy_field_info(Fi);
         return -1;
     }
 
@@ -286,8 +285,11 @@ int Vect_set_varray_from_db(const struct Map_info *Map, int field,
         G_warning(
             _("Unable to select record from table <%s> (key %s, where %s)"),
             Fi->table, Fi->key, where);
+        Vect_destroy_field_info(Fi);
         return -1;
     }
+    Vect_destroy_field_info(Fi);
+    Cats = Vect_new_cats_struct();
 
     if (type & GV_AREA) { /* Areas */
         n = Vect_get_num_areas(Map);
@@ -298,6 +300,8 @@ int Vect_set_varray_from_db(const struct Map_info *Map, int field,
            it for all features. */
         if (n > varray->size) { /* not enough space */
             G_warning(_("Not enough space in vector array"));
+            Vect_destroy_cats_struct(Cats);
+            G_free(cats);
             return 0;
         }
 
@@ -330,6 +334,8 @@ int Vect_set_varray_from_db(const struct Map_info *Map, int field,
 
         if (n > varray->size) { /* not enough space */
             G_warning(_("Not enough space in vector array"));
+            Vect_destroy_cats_struct(Cats);
+            G_free(cats);
             return 0;
         }
 

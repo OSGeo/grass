@@ -18,7 +18,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import copy
-import six
+from pathlib import Path
 
 import wx
 
@@ -42,16 +42,13 @@ iconPath = iconPathDefault
 
 # join paths
 try:
-    if iconPath and not os.path.exists(iconPath):
+    if iconPath and not Path(iconPath).exists():
         raise OSError
 
-    for key, img in six.iteritems(iconSet):
-        if key not in iconSet or iconSet[key] is None:  # add key
-            iconSet[key] = img
-
-        iconSet[key] = os.path.join(iconPath, iconSet[key])
+    for key, img in iconSet.items():
+        iconSet[key] = os.path.join(iconPath, img)
 except Exception as e:
-    sys.exit(_("Unable to load icon theme. Reason: %s. Quiting wxGUI...") % e)
+    sys.exit(_("Unable to load icon theme. Reason: %s. Quitting wxGUI...") % e)
 
 
 class MetaIcon:
@@ -61,11 +58,10 @@ class MetaIcon:
         self.imagepath = iconSet.get(img, wx.ART_MISSING_IMAGE)
         if not self.imagepath:
             self.type = "unknown"
+        elif self.imagepath.find("wxART_") > -1:
+            self.type = "wx"
         else:
-            if self.imagepath.find("wxART_") > -1:
-                self.type = "wx"
-            else:
-                self.type = "img"
+            self.type = "img"
 
         self.label = label
 
@@ -85,7 +81,7 @@ class MetaIcon:
                 id=self.imagepath, client=wx.ART_TOOLBAR, size=size
             )
         elif self.type == "img":
-            if os.path.isfile(self.imagepath) and os.path.getsize(self.imagepath):
+            if Path(self.imagepath).is_file() and Path(self.imagepath).stat().st_size:
                 if size and len(size) == 2:
                     image = wx.Image(name=self.imagepath)
                     image.Rescale(size[0], size[1])

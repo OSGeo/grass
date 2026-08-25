@@ -4,14 +4,15 @@ dispatcher is the core of the PyDispatcher system,
 providing the primary API and the core logic for the
 system.
 
-Module attributes of note:
+Module attributes of note::
 
     Any -- Singleton used to signal either "Any Sender" or
         "Any Signal".  See documentation of the _Any class.
     Anonymous -- Singleton used to signal "Anonymous Sender"
         See documentation of the _Anonymous class.
 
-Internal attributes:
+Internal attributes::
+
     WEAKREF_TYPES -- tuple of types/classes which represent
         weak references to receivers, and thus must be de-
         referenced on retrieval to retrieve the callable
@@ -25,13 +26,9 @@ Internal attributes:
         deletion, (considerably speeds up the cleanup process
         vs. the original code.)
 """
-from __future__ import generators
-import weakref
-from grass.pydispatch import saferef, robustapply, errors
 
-__author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
-__cvsid__ = "Id: dispatcher.py,v 1.1 2010/03/30 15:45:55 mcfletch Exp"
-__version__ = "Revision: 1.1"
+import weakref
+from grass.pydispatch import errors, saferef, robustapply
 
 
 class _Parameter:
@@ -64,7 +61,7 @@ class _Anonymous(_Parameter):
     with anonymous will only send messages to those receivers
     registered for Any or Anonymous.
 
-    Note:
+    .. note::
         The default sender for connect is Any, while the
         default sender for send is Anonymous.  This has
         the effect that if you do not specify any senders
@@ -100,8 +97,8 @@ def connect(receiver, signal=Any, sender=Any, weak=True):
         subsets of the sent arguments to apply to a given
         receiver.
 
-        Note:
-            if receiver is itself a weak reference (a callable),
+        .. note::
+            If receiver is itself a weak reference (a callable),
             it will be de-referenced by the system's machinery,
             so *generally* weak references are not suitable as
             receivers, though some use might be found for the
@@ -197,7 +194,7 @@ def disconnect(receiver, signal=Any, sender=Any, weak=True):
     (The actual process is slightly more complex
     but the semantics are basically the same).
 
-    Note:
+    .. note::
         Using disconnect is not required to cleanup
         routing when an object is deleted, the framework
         will remove routes for deleted objects
@@ -217,18 +214,18 @@ def disconnect(receiver, signal=Any, sender=Any, weak=True):
     try:
         signals = connections[senderkey]
         receivers = signals[signal]
-    except KeyError:
+    except KeyError as e:
         raise errors.DispatcherKeyError(
             """No receivers found for signal %r from sender %r""" % (signal, sender)
-        )
+        ) from e
     try:
         # also removes from receivers
         _removeOldBackRefs(senderkey, signal, receiver, receivers)
-    except ValueError:
+    except ValueError as e:
         raise errors.DispatcherKeyError(
             """No connection to receiver %s for signal %s from sender %s"""
             % (receiver, signal, sender)
-        )
+        ) from e
     _cleanupConnections(senderkey, signal)
 
 
@@ -239,8 +236,8 @@ def getReceivers(sender=Any, signal=Any):
     raw list of receivers from the connections table
     for the given sender and signal pair.
 
-    Note:
-        there is no guarantee that this is the actual list
+    .. note::
+        There is no guarantee that this is the actual list
         stored in the connections table, so the value
         should be treated as a simple iterable/truth value
         rather than, for instance a list to which you
@@ -443,8 +440,7 @@ def _removeBackrefs(senderkey):
 
         def allReceivers():
             for signal, set in items:
-                for item in set:
-                    yield item
+                yield from set
 
         for receiver in allReceivers():
             _killBackref(receiver, senderkey)
@@ -470,7 +466,7 @@ def _removeOldBackRefs(senderkey, signal, receiver, receivers):
         found = 0
         signals = connections.get(signal)
         if signals is not None:
-            for sig, recs in connections.get(signal, {}).iteritems():
+            for sig, recs in connections.get(signal, {}).items():
                 if sig != signal:
                     for rec in recs:
                         if rec is oldReceiver:

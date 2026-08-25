@@ -19,15 +19,16 @@ const char *rast_out_name; /* Name of the raster output file.      */
 int constrained;           /* Flag that forces quadtratic through  */
 
 /* the central cell of the window.      */
-int fd_in,  /* File descriptor for input and        */
-    fd_out, /* output raster files.                 */
+int fd_out, /* File descriptor for output raster.   */
     wsize,  /* Size of local processing window.     */
-    mparam; /* Morphometric parameter to calculate. */
+    mparam, /* Morphometric parameter to calculate. */
+    nprocs, /* Number of threads in process.        */
+    memory; /* Memory cap in MB for row buffering.  */
 
 double resoln, /* Planimetric resolution.              */
     exponent,  /* Distance weighting exponent.         */
     zscale,    /* Vertical scaling factor.             */
-    slope_tol, /* Vertical tolerences for surface      */
+    slope_tol, /* Vertical tolerances for surface      */
     curve_tol; /* feature identification.              */
 
 int main(int argc, char **argv)
@@ -36,7 +37,7 @@ int main(int argc, char **argv)
 
     /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))
-        G_fatal_error(_("Lat/Long locations are not supported by this module"));
+        G_fatal_error(_("Lat/Long projects are not supported by this module"));
 
     open_files();
 

@@ -9,7 +9,7 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
-import os
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
@@ -158,12 +158,35 @@ out_where = """1076|366545504|324050.96875|1077|1076|Zwe|366545512.376|324050.97
 1290|63600420|109186.835938|1291|1290|Zwe|63600422.4739|109186.832069
 """
 
+out_extent = """n=201971.859459
+s=148158.109538
+w=123971.194990
+e=209096.266022
+"""
+
 out_sep = """1076,366545504,324050.96875,1077,1076,Zwe,366545512.376,324050.97237
 1123,1288.555298,254.393951,1124,1123,Zwe,1288.546525,254.393964
 1290,63600420,109186.835938,1291,1290,Zwe,63600422.4739,109186.832069
 """
 
-out_json = """{"records":[
+out_sep_csv = """1076,366545504,324050.96875,1077,1076,"Zwe",366545512.376,324050.97237
+1123,1288.555298,254.393951,1124,1123,"Zwe",1288.546525,254.393964
+1290,63600420,109186.835938,1291,1290,"Zwe",63600422.4739,109186.832069
+"""
+
+out_json = """\
+{"info":
+{"columns":[
+{"name":"cat","sql_type":"INTEGER","is_number":true},
+{"name":"onemap_pro","sql_type":"DOUBLE PRECISION","is_number":true},
+{"name":"PERIMETER","sql_type":"DOUBLE PRECISION","is_number":true},
+{"name":"GEOL250_","sql_type":"INTEGER","is_number":true},
+{"name":"GEOL250_ID","sql_type":"INTEGER","is_number":true},
+{"name":"GEO_NAME","sql_type":"CHARACTER","is_number":false},
+{"name":"SHAPE_area","sql_type":"DOUBLE PRECISION","is_number":true},
+{"name":"SHAPE_len","sql_type":"DOUBLE PRECISION","is_number":true}
+]},
+"records":[
 {"cat":1,"onemap_pro":963738.75,"PERIMETER":4083.97998,"GEOL250_":2,"GEOL250_ID":1,"GEO_NAME":"Zml","SHAPE_area":963738.608571,"SHAPE_len":4083.979839},
 {"cat":2,"onemap_pro":22189124,"PERIMETER":26628.261719,"GEOL250_":3,"GEOL250_ID":2,"GEO_NAME":"Zmf","SHAPE_area":22189123.2296,"SHAPE_len":26628.261112},
 {"cat":3,"onemap_pro":579286.875,"PERIMETER":3335.55835,"GEOL250_":4,"GEOL250_ID":3,"GEO_NAME":"Zml","SHAPE_area":579286.829631,"SHAPE_len":3335.557182},
@@ -199,8 +222,7 @@ class SelectTest(TestCase):
         """This function checks if the output file is written correctly"""
         self.runModule("v.db.select", map=self.invect, file=self.outfile)
         self.assertFileExists(self.outfile)
-        if os.path.isfile(self.outfile):
-            os.remove(self.outfile)
+        Path(self.outfile).unlink(missing_ok=True)
 
     def testGroup(self):
         """Testing v.db.select with group option"""
@@ -220,6 +242,17 @@ class SelectTest(TestCase):
         )
         sel.run()
         self.assertLooksLike(reference=out_where, actual=sel.outputs.stdout)
+
+    def testExtent(self):
+        """Testing v.db.select extent output with -r flag"""
+        sel = SimpleModule(
+            "v.db.select",
+            flags="r",
+            map=self.invect,
+            where="{col}='{val}'".format(col=self.col, val=self.val),
+        )
+        sel.run()
+        self.assertLooksLike(reference=out_extent, actual=sel.outputs.stdout)
 
     def testSeparator(self):
         sel = SimpleModule(
@@ -243,6 +276,18 @@ class SelectTest(TestCase):
         sel.run()
         self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout)
 
+    def testFormatCsv(self):
+        """Test format=csv output matches expected CSV (same style as testComma)."""
+        sel = SimpleModule(
+            "v.db.select",
+            flags="c",
+            map=self.invect,
+            where="{col}='{val}'".format(col=self.col, val=self.val),
+            format="csv",
+        )
+        sel.run()
+        self.assertLooksLike(reference=out_sep_csv, actual=sel.outputs.stdout)
+
     def testJSON(self):
         """Test that JSON can be decoded and formatted exactly as expected"""
         import json
@@ -260,7 +305,7 @@ class SelectTest(TestCase):
         except ValueError:
             self.fail(msg="No JSON object could be decoded:\n" + sel.outputs.stdout)
 
-        self.assertLooksLike(reference=out_json, actual=sel.outputs.stdout)
+        self.assertEqual(json.loads(out_json), json.loads(sel.outputs.stdout))
 
 
 if __name__ == "__main__":

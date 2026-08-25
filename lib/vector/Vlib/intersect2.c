@@ -41,7 +41,7 @@
    </pre>
    Intersection points:
    <pre>
-   return  point1 breakes: point2 breaks:    distance1 on:   distance2 on:
+   return   point1 breaks: point2 breaks:     distance1 on:  distance2 on:
    0        -              -                  -              -
    1        a,b            -                  a              b
    2        a              b                  a              b
@@ -343,8 +343,8 @@ static int cross_seg(int i, int j, int b)
 #define QEVT_OUT         2
 #define QEVT_CRS         3
 
-#define GET_PARENT(p, c) ((p) = (int)(((c)-2) / 3 + 1))
-#define GET_CHILD(c, p)  ((c) = (int)(((p)*3) - 1))
+#define GET_PARENT(p, c) ((p) = (int)(((c) - 2) / 3 + 1))
+#define GET_CHILD(c, p)  ((c) = (int)(((p) * 3) - 1))
 
 struct qitem {
     int l; /* line 0 - A line , 1 - B line */
@@ -665,6 +665,8 @@ static int boq_load(struct boq *q, struct line_pnts *Pnts,
  * \param BPoints second input line or NULL
  * \param[out] ALines array of new lines created from original A line
  * \param[out] BLines array of new lines created from original B line
+ * \param pABox
+ * \param pBBox
  * \param[out] nalines number of new lines (ALines)
  * \param[out] nblines number of new lines (BLines)
  * \param with_z 3D, not supported!
@@ -768,7 +770,7 @@ int Vect_line_intersection2(struct line_pnts *APoints,
      *   /  \  c                /  \
      *
      *  Note: once we snap breaks to vertices, we have to do that for both lines
-     * A and B in the same way and because we cannot be sure that A childrens
+     * A and B in the same way and because we cannot be sure that A children
      * will not change a bit by break(s) we have to break both A and B  at once
      * i.e. in one Vect_line_intersection () call.
      */
@@ -966,7 +968,7 @@ int Vect_line_intersection2(struct line_pnts *APoints,
          * and next AB -----+----+--- A     0/4, 0/5, 1/4, 1/5 - OK
          *              \___|
          *                B
-         *  This should not inluence that break is always on first segment, see
+         *  This should not influence that break is always on first segment, see
          * below (I hope)
          */
         /* TODO: this doesn't find identical with breaks on revious/next */
@@ -1122,7 +1124,7 @@ int Vect_line_intersection2(struct line_pnts *APoints,
                 /* add first points of segments between last and current seg */
                 for (j = last_seg + 1; j <= seg; j++) {
                     G_debug(2, "  segment j = %d", j);
-                    /* skipp vertex identical to last break */
+                    /* skip vertex identical to last break */
                     if ((j == last_seg + 1) && Points->x[j] == last_x &&
                         Points->y[j] == last_y) {
                         G_debug(2, "   -> skip (identical to last break)");

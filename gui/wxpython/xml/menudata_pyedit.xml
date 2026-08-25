@@ -18,7 +18,7 @@
         <menuitem>
           <label>Quit editor</label>
           <help>Close editor window</help>
-          <handler>OnClose</handler>
+          <handler>OnCloseWindow</handler>
           <shortcut>Ctrl+W</shortcut>
         </menuitem>
       </items>
@@ -79,7 +79,7 @@
       <items>
         <menuitem>
           <label>GRASS Python Help</label>
-          <help>Display documentation for writing Python code in GRASS GIS</help>
+          <help>Display documentation for writing Python code in GRASS</help>
           <handler>OnHelp</handler>
         </menuitem>
         <menuitem>
@@ -94,17 +94,17 @@
         </menuitem>
         <menuitem>
           <label>GRASS Python code guidelines</label>
-          <help>Display guidelines for submitting Python code to GRASS GIS</help>
+          <help>Display guidelines for submitting Python code to GRASS</help>
           <handler>OnSubmittingHelp</handler>
         </menuitem>
         <menuitem>
           <label>Getting your code to GRASS Addons</label>
-          <help>Display instructions for submitting you code to GRASS GIS Addons repository</help>
+          <help>Display instructions for submitting you code to GRASS Addons repository</help>
           <handler>OnAddonsHelp</handler>
         </menuitem>
         <menuitem>
           <label>Get support</label>
-          <help>Display information about getting support for writing Python code in GRASS GIS</help>
+          <help>Display information about getting support for writing Python code in GRASS</help>
           <handler>OnSupport</handler>
         </menuitem>
       </items>

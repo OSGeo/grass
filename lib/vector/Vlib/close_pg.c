@@ -23,6 +23,9 @@
 
 #ifdef HAVE_POSTGRES
 #include "pg_local_proto.h"
+#define NOPG_UNUSED
+#else
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 /*!
@@ -33,7 +36,7 @@
    \return 0 on success
    \return non-zero on error
  */
-int V1_close_pg(struct Map_info *Map)
+int V1_close_pg(struct Map_info *Map NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     struct Format_info_pg *pg_info;
@@ -61,7 +64,7 @@ int V1_close_pg(struct Map_info *Map)
     if (pg_info->cursor_name) {
         char stmt[DB_SQL_MAX];
 
-        sprintf(stmt, "CLOSE %s", pg_info->cursor_name);
+        snprintf(stmt, sizeof(stmt), "CLOSE %s", pg_info->cursor_name);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             G_warning(_("Unable to close cursor %s"), pg_info->cursor_name);
             return -1;
@@ -110,7 +113,7 @@ int V1_close_pg(struct Map_info *Map)
    \return 0 on success
    \return non-zero on error
  */
-int V2_close_pg(struct Map_info *Map)
+int V2_close_pg(struct Map_info *Map NOPG_UNUSED)
 {
 #ifdef HAVE_POSTGRES
     G_debug(3, "V2_close_pg() name = %s mapset = %s", Map->name, Map->mapset);
@@ -127,7 +130,7 @@ int V2_close_pg(struct Map_info *Map)
         char file_path[GPATH_MAX];
 
         /* delete old support files if available */
-        sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+        snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, Map->name);
         Vect__get_element_path(file_path, Map, GV_TOPO_ELEMENT);
         if (access(file_path, F_OK) == 0) /* file exists? */
             unlink(file_path);

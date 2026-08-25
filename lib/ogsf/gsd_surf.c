@@ -58,10 +58,10 @@ static int get_point_below(Point3 **, geosurf **, int, int, int, int *);
 static int FCmode;
 
 /************************************************************************/
-/* Notes on exageration:
-   vertical exageration is of two forms:
-   1) global exageration (from geoview struct)
-   2) vertical exageration for each surface (UN-IMPLEMENTED)
+/* Notes on exaggeration:
+   vertical exaggeration is of two forms:
+   1) global exaggeration (from geoview struct)
+   2) vertical exaggeration for each surface (UN-IMPLEMENTED)
  */
 
 /************************************************************************/
@@ -228,7 +228,7 @@ int gsd_surf_map_old(geosurf *surf)
      */
     check_transp = 0;
     tratt = &(surf->att[ATT_TRANSP]);
-    ktrans = (255 << 24);
+    ktrans = (255U << 24);
     trans_src = surf->att[ATT_TRANSP].att_src;
 
     if (CONST_ATT == trans_src && surf->att[ATT_TRANSP].constant != 0.0) {
@@ -309,8 +309,8 @@ int gsd_surf_map_old(geosurf *surf)
 
         y1 = ymax - row * yres;
         y2 = ymax - (row + 1) * yres;
-        y1off = row * ymod * surf->cols;
-        y2off = (row + 1) * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
+        y2off = (long)(row + 1) * ymod * surf->cols;
 
         gsd_bgntmesh();
 
@@ -344,7 +344,7 @@ int gsd_surf_map_old(geosurf *surf)
             if (check_transp) {
                 GET_MAPATT(trbuff, offset, ttr);
                 ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                ktrans = (char)(255 - ktrans) << 24;
+                ktrans = (char)(255U - ktrans) << 24;
             }
 
             gsd_litvert_func(n, ktrans | curcolor, pt);
@@ -369,7 +369,7 @@ int gsd_surf_map_old(geosurf *surf)
             if (check_transp) {
                 GET_MAPATT(trbuff, offset, ttr);
                 ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                ktrans = (char)(255 - ktrans) << 24;
+                ktrans = (char)(255U - ktrans) << 24;
             }
 
             if (check_material) {
@@ -469,7 +469,7 @@ int gsd_surf_map_old(geosurf *surf)
                     if (check_transp) {
                         GET_MAPATT(trbuff, offset, ttr);
                         ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                        ktrans = (char)(255 - ktrans) << 24;
+                        ktrans = (char)(255U - ktrans) << 24;
                     }
 
                     if (check_material) {
@@ -524,7 +524,7 @@ int gsd_surf_map_old(geosurf *surf)
                     if (check_transp) {
                         GET_MAPATT(trbuff, offset, ttr);
                         ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                        ktrans = (char)(255 - ktrans) << 24;
+                        ktrans = (char)(255U - ktrans) << 24;
                     }
 
                     if (check_material) {
@@ -580,7 +580,7 @@ int gsd_surf_map_old(geosurf *surf)
                 if (check_transp) {
                     GET_MAPATT(trbuff, offset, ttr);
                     ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                    ktrans = (char)(255 - ktrans) << 24;
+                    ktrans = (char)(255U - ktrans) << 24;
                 }
 
                 if (check_material) {
@@ -649,7 +649,7 @@ int gsd_surf_map_old(geosurf *surf)
                 if (check_transp) {
                     GET_MAPATT(trbuff, offset, ttr);
                     ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                    ktrans = (char)(255 - ktrans) << 24;
+                    ktrans = (char)(255U - ktrans) << 24;
                 }
 
                 if (check_material) {
@@ -869,8 +869,8 @@ int gsd_surf_const(geosurf *surf, float k)
 
         y1 = ymax - row * yres;
         y2 = ymax - (row + 1) * yres;
-        y1off = row * ymod * surf->cols;
-        y2off = (row + 1) * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
+        y2off = (long)(row + 1) * ymod * surf->cols;
 
         gsd_bgntmesh();
 
@@ -1082,12 +1082,12 @@ int gsd_surf_const(geosurf *surf, float k)
 
    Not yet supported
 
-   \param gs surface (geosurf)
-   \param user_func user function
+   \param gs surface (geosurf) [unused]
+   \param user_func user function [unused]
 
    \return 1
  */
-int gsd_surf_func(geosurf *gs, int (*user_func)(void))
+int gsd_surf_func(geosurf *gs G_UNUSED, int (*user_func)(void) G_UNUSED)
 {
 
     return (1);
@@ -1734,7 +1734,7 @@ int gsd_wall(float *bgn, float *end, float *norm)
 
         if (n) {
             if (npts != npts1) {
-                G_warning(_("Cut-plane points mis-match between surfaces. "
+                G_warning(_("Cut-plane points mismatch between surfaces. "
                             "Check resolution(s)."));
                 err = 1;
                 nsurfs = n;
@@ -1894,8 +1894,8 @@ int gsd_norm_arrows(geosurf *surf)
 
         y1 = ymax - row * yres;
         y2 = ymax - (row + 1) * yres;
-        y1off = row * ymod * surf->cols;
-        y2off = (row + 1) * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
+        y2off = (long)(row + 1) * ymod * surf->cols;
 
         zeros = 0;
         dr1 = dr2 = dr3 = dr4 = 1;
@@ -2039,7 +2039,7 @@ int gsd_norm_arrows(geosurf *surf)
                 cnt++;
             }
         } /* ea col */
-    }     /* ea row */
+    } /* ea row */
     gsd_popmatrix();
 
     return (1);
@@ -2144,7 +2144,7 @@ int gsd_surf_map(geosurf *surf)
      */
     check_transp = 0;
     tratt = &(surf->att[ATT_TRANSP]);
-    ktrans = (255 << 24);
+    ktrans = (255U << 24);
     trans_src = surf->att[ATT_TRANSP].att_src;
 
     if (CONST_ATT == trans_src && surf->att[ATT_TRANSP].constant != 0.0) {
@@ -2241,9 +2241,9 @@ int gsd_surf_map(geosurf *surf)
         y2 = ymax - (row - (step_val / 2)) * yres;
         y3 = ymax - (row + (step_val / 2)) * yres;
 
-        y1off = row * ymod * surf->cols;
-        y2off = (row - (step_val / 2)) * ymod * surf->cols;
-        y3off = (row + (step_val / 2)) * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
+        y2off = (long)(row - (step_val / 2)) * ymod * surf->cols;
+        y3off = (long)(row + (step_val / 2)) * ymod * surf->cols;
 
         for (col = start_val; col < xcnt; col += step_val) {
             datacol1 = col * xmod;
@@ -2328,7 +2328,7 @@ int gsd_surf_map(geosurf *surf)
                 if (check_transp) {
                     GET_MAPATT(trbuff, offset2[ii], ttr);
                     ktrans = (char)SCALE_ATT(tratt, ttr, 0, 255);
-                    ktrans = (char)(255 - ktrans) << 24;
+                    ktrans = (char)(255U - ktrans) << 24;
                 }
 
                 if (check_material) {
@@ -2355,7 +2355,7 @@ int gsd_surf_map(geosurf *surf)
             } /* close ii loop */
             gsd_endtfan();
         } /* end col */
-    }     /* end row */
+    } /* end row */
 
     gsd_popmatrix();
     gsd_blend(0);

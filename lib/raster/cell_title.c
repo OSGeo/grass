@@ -21,7 +21,6 @@
  *  \param mapset
  *  \return char *
  */
-
 char *Rast_get_cell_title(const char *name, const char *mapset)
 {
     FILE *fd;

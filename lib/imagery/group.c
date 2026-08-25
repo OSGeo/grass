@@ -45,7 +45,7 @@ int I_get_group(char *group)
     G_suppress_warnings(0);
     if (fd == NULL)
         return 0;
-    stat = (fscanf(fd, "%s", group) == 1);
+    stat = (fscanf(fd, "%255s", group) == 1);
     fclose(fd);
     return stat;
 }
@@ -77,7 +77,7 @@ int I_get_subgroup(const char *group, char *subgroup)
     G_suppress_warnings(0);
     if (fd == NULL)
         return 0;
-    stat = (fscanf(fd, "%s", subgroup) == 1);
+    stat = (fscanf(fd, "%255s", subgroup) == 1);
     fclose(fd);
     return stat;
 }
@@ -108,7 +108,6 @@ int I_put_subgroup(const char *group, const char *subgroup)
  *  \param ref
  *  \return int
  */
-
 int I_get_group_ref(const char *group, struct Ref *ref)
 {
     return get_ref(group, "", NULL, ref);
@@ -126,7 +125,6 @@ int I_get_group_ref(const char *group, struct Ref *ref)
  *  \param ref
  *  \return int
  */
-
 int I_get_group_ref2(const char *group, const char *mapset, struct Ref *ref)
 {
     return get_ref(group, "", mapset, ref);
@@ -145,7 +143,6 @@ int I_get_group_ref2(const char *group, const char *mapset, struct Ref *ref)
  *  \param ref
  *  \return int
  */
-
 int I_get_subgroup_ref(const char *group, const char *subgroup, struct Ref *ref)
 {
     return get_ref(group, subgroup, NULL, ref);
@@ -174,7 +171,6 @@ int I_get_subgroup_ref2(const char *group, const char *subgroup,
 static int get_ref(const char *group, const char *subgroup, const char *gmapset,
                    struct Ref *ref)
 {
-    int n;
     char buf[1024];
     char name[INAME_LEN], mapset[INAME_LEN];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
@@ -200,8 +196,8 @@ static int get_ref(const char *group, const char *subgroup, const char *gmapset,
         return 0;
 
     while (G_getl2(buf, sizeof buf, fd)) {
-        n = sscanf(buf, "%255s %255s %15s", name, mapset,
-                   color); /* better use INAME_LEN */
+        int n = sscanf(buf, "%255s %255s %15s", name, mapset,
+                       color); /* better use INAME_LEN */
         if (n == 2 || n == 3) {
             I_add_file_to_group_ref(name, mapset, ref);
             if (n == 3)
@@ -262,7 +258,7 @@ int I_init_ref_color_nums(struct Ref *ref)
     ref->blu.index = NULL;
 
     if (ref->nfiles <= 0 || ref->red.n >= 0 || ref->blu.n >= 0 ||
-        ref->blu.n >= 0)
+        ref->grn.n >= 0)
         return 1;
     switch (ref->nfiles) {
     case 1:
@@ -307,7 +303,6 @@ int I_init_ref_color_nums(struct Ref *ref)
  *  \param ref
  *  \return int
  */
-
 int I_put_group_ref(const char *group, const struct Ref *ref)
 {
     return put_ref(group, "", ref);
@@ -328,7 +323,6 @@ int I_put_group_ref(const char *group, const struct Ref *ref)
  *  \param ref
  *  \return int
  */
-
 int I_put_subgroup_ref(const char *group, const char *subgroup,
                        const struct Ref *ref)
 {
@@ -383,7 +377,6 @@ static int put_ref(const char *group, const char *subgroup,
  *  \param ref
  *  \return int
  */
-
 int I_add_file_to_group_ref(const char *name, const char *mapset,
                             struct Ref *ref)
 {
@@ -426,12 +419,11 @@ int I_add_file_to_group_ref(const char *name, const char *mapset,
  * This routine is used by <i>g.gui.gcp</i> to create the REF file for a
  * subgroup.
  *
- *  \param src
+ *  \param ref2 Source
  *  \param n
- *  \param dst
- *  \return int
+ *  \param ref1 Destination
+ *  \return int 0
  */
-
 int I_transfer_group_ref_file(const struct Ref *ref2, int n, struct Ref *ref1)
 {
     int k;
@@ -463,7 +455,6 @@ int I_transfer_group_ref_file(const struct Ref *ref2, int n, struct Ref *ref1)
  *  \param ref
  *  \return int
  */
-
 int I_init_group_ref(struct Ref *ref)
 {
     ref->nfiles = 0;
@@ -481,7 +472,6 @@ int I_init_group_ref(struct Ref *ref)
  *  \param ref
  *  \return int
  */
-
 int I_free_group_ref(struct Ref *ref)
 {
     if (ref->nfiles > 0)

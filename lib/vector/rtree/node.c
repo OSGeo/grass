@@ -173,7 +173,6 @@ void RTreeNodeCover(struct RTree_Node *n, struct RTree_Rect *r, struct RTree *t)
  * area to accommodate the new rectangle, then the smallest area before,
  * to get the best resolution when searching.
  */
-
 static int RTreePickLeafBranch(struct RTree_Rect *r, struct RTree_Node *n,
                                struct RTree *t)
 {
@@ -292,7 +291,7 @@ void RTreeDestroyNode(struct RTree_Node *n, int nodes)
 {
     int i;
 
-    if (n->level > 0) { /* it is not leaf -> destroy childs */
+    if (n->level > 0) { /* it is not leaf -> destroy children */
         for (i = 0; i < nodes; i++) {
             if (n->branch[i].child.ptr) {
                 RTreeDestroyNode(n->branch[i].child.ptr, nodes);
@@ -600,7 +599,6 @@ int RTreeAddBranch(struct RTree_Branch *b, struct RTree_Node *n,
 /*
  * for debugging only: print items to stdout
  */
-
 void RTreeTabIn(int depth)
 {
     int i;

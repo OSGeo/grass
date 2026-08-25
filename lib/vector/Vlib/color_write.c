@@ -80,11 +80,11 @@ void Vect_write_colors(const char *name, const char *mapset,
      */
     if (strcmp(mapset, G_mapset()) == 0) {
         cname = GV_COLR_ELEMENT;
-        sprintf(element, "%s/%s", GV_DIRECTORY, name);
+        snprintf(element, sizeof(element), "%s/%s", GV_DIRECTORY, name);
     }
     else {
         cname = name;
-        sprintf(element, "%s/%s", GV_COLR2_DIRECTORY, mapset);
+        snprintf(element, sizeof(element), "%s/%s", GV_COLR2_DIRECTORY, mapset);
     }
 
     if (!(fd = G_fopen_new(element, cname)))

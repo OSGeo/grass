@@ -41,6 +41,7 @@
 import os
 import shutil
 import glob
+from pathlib import Path
 from grass.script.utils import try_rmdir, try_remove, basename
 from grass.script import vector as gvect
 from grass.script import core as gcore
@@ -71,7 +72,7 @@ def main():
         )
 
     # check that the user didn't use all three, which gets past the parser.
-    if type not in ["point", "line", "area"]:
+    if type not in {"point", "line", "area"}:
         gcore.fatal(_('Must specify one of "point", "line", or "area".'))
 
     e00name = basename(filename, "e00")
@@ -80,23 +81,20 @@ def main():
 
     # check if this is a split E00 file (.e01, .e02 ...):
     merging = False
-    if os.path.exists(e00name + ".e01") or os.path.exists(e00name + ".E01"):
+    if Path(e00name + ".e01").exists() or Path(e00name + ".E01").exists():
         gcore.message(
-            _("Found that E00 file is split into pieces (.e01, ...)." " Merging...")
+            _("Found that E00 file is split into pieces (.e01, ...). Merging...")
         )
         merging = True
 
-    if vect:
-        name = vect
-    else:
-        name = e00name
+    name = vect or e00name
 
     # do import
 
     # make a temporary directory
     tmpdir = gcore.tempfile()
     try_remove(tmpdir)
-    os.mkdir(tmpdir)
+    Path(tmpdir).mkdir()
 
     files = glob.glob(e00name + ".e[0-9][0-9]") + glob.glob(e00name + ".E[0-9][0-9]")
     for f in files:
@@ -105,7 +103,7 @@ def main():
     # change to temporary directory to later avoid removal problems (rm -r ...)
     os.chdir(tmpdir)
 
-    # check for binay E00 file (we can just check if import fails):
+    # check for binary E00 file (we can just check if import fails):
     # avcimport doesn't set exist status :-(
 
     if merging:
@@ -126,7 +124,7 @@ def main():
         == 1
     ):
         gcore.message(
-            _("E00 ASCII found and converted to Arc Coverage in " "current directory")
+            _("E00 ASCII found and converted to Arc Coverage in current directory")
         )
     else:
         gcore.message(_("E00 Compressed ASCII found. Will uncompress first..."))
@@ -141,8 +139,8 @@ def main():
     # let's import...
     gcore.message(_("Importing %ss...") % type)
 
-    layer = dict(point="LAB", line="ARC", area=["LAB", "ARC"])
-    itype = dict(point="point", line="line", area="centroid")
+    layer = {"point": "LAB", "line": "ARC", "area": ["LAB", "ARC"]}
+    itype = {"point": "point", "line": "line", "area": "centroid"}
 
     try:
         gcore.run_command(

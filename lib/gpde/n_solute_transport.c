@@ -370,7 +370,7 @@ N_data_star *N_callback_solute_transport_2d(void *solutedata, N_geom_data *geom,
  * ************************************************************************* *
  * ************************************************************************* */
 /*!
- * \brief Alllocate memory for the solute transport data structure in three
+ * \brief Allocate memory for the solute transport data structure in three
  * dimensions
  *
  * The solute transport data structure will be allocated including
@@ -424,7 +424,7 @@ N_solute_transport_data3d *N_alloc_solute_transport_data3d(int cols, int rows,
  * ************************************************************************* *
  * ************************************************************************* */
 /*!
- * \brief Alllocate memory for the solute transport data structure in two
+ * \brief Allocate memory for the solute transport data structure in two
  * dimensions
  *
  * The solute transport data structure will be allocated including
@@ -549,7 +549,7 @@ void N_free_solute_transport_data2d(N_solute_transport_data2d *data)
  *
  * This function calculates the transmission boundary condition
  * for each cell with status N_CELL_TRANSMISSION. The surrounding
- * gradient field is used to verfiy the flow direction. If a flow
+ * gradient field is used to verify the flow direction. If a flow
  * goes into a cell, the concentration (data->c) from the neighbour cell is
  * added to the transmission cell. If the flow from several neighbour
  * cells goes into the cell, the concentration mean is calculated.
@@ -624,12 +624,12 @@ void N_calc_solute_transport_transmission_2d(N_solute_transport_data2d *data)
  * 2d
  *
  * The dispersivity tensor is stored in the data structure.
- * To compute the dispersivity tensor, the dispersivity lentghs and the gradient
+ * To compute the dispersivity tensor, the dispersivity lengths and the gradient
  * field must be present.
  *
  * This is just a simple tensor computation which should be extended.
  *
- * \todo Change the tensor calculation to a mor realistic algorithm
+ * \todo Change the tensor calculation to a more realistic algorithm
  *
  * \param data N_solute_transport_data2d *
  * \return void *
@@ -685,12 +685,12 @@ void N_calc_solute_transport_disptensor_2d(N_solute_transport_data2d *data)
  * 3d
  *
  * The dispersivity tensor is stored in the data structure.
- * To compute the dispersivity tensor, the dispersivity lentghs and the gradient
+ * To compute the dispersivity tensor, the dispersivity lengths and the gradient
  * field must be present.
  *
  * This is just a simple tensor computation which should be extended.
  *
- * \todo Change the tensor calculation to a mor realistic algorithm
+ * \todo Change the tensor calculation to a more realistic algorithm
  *
  * \param data N_solute_transport_data3d *
  * \return void *

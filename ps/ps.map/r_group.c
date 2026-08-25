@@ -41,7 +41,8 @@ int read_group(void)
     for (i = 0; i < 3; i++) {
         if (Rast_read_colors(grp.name[i], grp.mapset[i], &(grp.colors[i])) ==
             -1) {
-            sprintf(fullname, "%s in %s", grp.name[i], grp.mapset[i]);
+            snprintf(fullname, sizeof(fullname), "%s in %s", grp.name[i],
+                     grp.mapset[i]);
             error(fullname, "", "can't read color table");
             return 0;
         }

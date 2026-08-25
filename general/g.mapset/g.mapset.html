@@ -1,11 +1,11 @@
 <h2>DESCRIPTION</h2>
 
-<em>g.mapset</em> changes the current working MAPSET, LOCATION, or GISDBASE.
-This is a fairly radical maneuver to run mid-session, take care when running
-the GUI at the same time.
+<em>g.mapset</em> changes the current working mapset, project (formerly known
+as location), or GISDBASE (directory with one or more projects).
+
 <p>
-With <em>g.mapset</em>, the shell history (i.e. <tt>.bash_history</tt> file
-of the initial location will be used to record the command history.
+With <em>g.mapset</em>, the shell history (i.e. <code>.bash_history</code> file
+of the initial project will be used to record the command history.
 
 <h2>NOTES</h2>
 
@@ -42,7 +42,7 @@ This should list all the mapsets, such as: "landsat new PERMANENT user1."
 To change the current mapset to "user1" use the following command:
 
 <div class="code"><pre>
-g.mapset mapset=user1 location=nc_spm_08_grass7
+g.mapset mapset=user1 project=nc_spm_08_grass7
 </pre></div>
 
 You should receive the following message: "Mapset switched. Your shell
@@ -52,7 +52,7 @@ continues to use the history for the old mapset."
 
 To create a new mapset, use the <b>-c</b> tag as shown below:
 <div class="code"><pre>
-g.mapset -c mapset=new location=nc_spm_08_grass7
+g.mapset -c mapset=new project=nc_spm_08_grass7
 </pre></div>
 
 <h2>SEE ALSO</h2>

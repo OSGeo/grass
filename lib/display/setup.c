@@ -106,10 +106,10 @@ void D_setup_unity(int clear)
 
   \param clear non-zero code to clear the frame
   \param fit non-zero code to adjust destination coordinate system
-  \param s_top
-  \param s_bottom
-  \param s_left
-  \param s_right
+  \param st top
+  \param sb bottom
+  \param sl left
+  \param sr right
 */
 void D_setup2(int clear, int fit, double st, double sb, double sl, double sr)
 {

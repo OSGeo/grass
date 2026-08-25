@@ -45,11 +45,11 @@
 # %end
 
 import os
-import grass.script as gscript
+import grass.script as gs
 
 
 def main():
-    options, flags = gscript.parser()
+    options, flags = gs.parser()
 
     import wx
 
@@ -74,9 +74,9 @@ def main():
 
     for mapName in [first, second]:
         if mapName:
-            gfile = gscript.find_file(name=mapName)
+            gfile = gs.find_file(name=mapName)
             if not gfile["name"]:
-                gscript.fatal(_("Raster map <%s> not found") % mapName)
+                gs.fatal(_("Raster map <%s> not found") % mapName)
 
     app = wx.App()
 
@@ -84,7 +84,7 @@ def main():
     frame = wx.Frame(
         parent=None,
         size=globalvar.MAP_WINDOW_SIZE,
-        title=_("Map Swipe Tool - GRASS GIS"),
+        title=_("Map Swipe Tool - GRASS"),
     )
     frame = SwipeMapDisplay(
         parent=frame,

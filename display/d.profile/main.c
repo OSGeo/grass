@@ -101,13 +101,13 @@ static void plot_axes(void)
     D_text_size(scale * 0.04, scale * 0.05);
 
     /* plot y-axis label (bottom) */
-    sprintf(str, "%.1f", min);
+    snprintf(str, sizeof(str), "%.1f", min);
     D_get_text_box(str, &t, &b, &l, &r);
     D_pos_abs(-0.02 - (r - l), 0 - (t - b) / 2);
     D_text(str);
 
     /* plot y-axis label (top) */
-    sprintf(str, "%.1f", max);
+    snprintf(str, sizeof(str), "%.1f", max);
     D_get_text_box(str, &t, &b, &l, &r);
     D_pos_abs(-0.02 - (r - l), 1 - (t - b) / 2);
     D_text(str);

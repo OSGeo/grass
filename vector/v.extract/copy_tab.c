@@ -5,7 +5,7 @@
 
 #include "local_proto.h"
 
-void copy_tabs(const struct Map_info *In, int field, int new_cat,
+void copy_tabs(struct Map_info *In, int field, int new_cat,
                struct Map_info *Out)
 {
     int nlines, line, i;

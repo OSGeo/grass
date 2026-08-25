@@ -44,7 +44,7 @@ void G__usage_rest(void)
         fprintf(stdout, "=");
     }
     fprintf(stdout, "\n");
-    fprintf(stdout, "%s - GRASS GIS manual\n", st->pgm_name);
+    fprintf(stdout, "%s - GRASS manual\n", st->pgm_name);
     fprintf(stdout, "=================");
     for (s = 0; s <= strlen(st->pgm_name); s++) {
         fprintf(stdout, "=");
@@ -69,7 +69,7 @@ void G__usage_rest(void)
 
     fprintf(stdout, "\n%s\n----------------------\n", _("KEYWORDS"));
     if (st->module_info.keywords) {
-        G__print_keywords(stdout, NULL);
+        G__print_keywords(stdout, NULL, FALSE);
         fprintf(stdout, "\n");
     }
     fprintf(stdout, "\n%s\n----------------------\n", _("SYNOPSIS"));

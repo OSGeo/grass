@@ -18,27 +18,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2001-2006
  */
 
 #include <grass/config.h>
 
-#if defined(HAVE_FFTW_H) || defined(HAVE_DFFTW_H) || defined(HAVE_FFTW3_H)
+#if defined(HAVE_FFTW3_H) || defined(HAVE_FFTW_H) || defined(HAVE_DFFTW_H)
 
-#ifdef HAVE_FFTW_H
-#include <fftw.h>
-#endif
-
-#ifdef HAVE_DFFTW_H
-#include <dfftw.h>
-#endif
-
-#ifdef HAVE_FFTW3_H
+#if defined(HAVE_FFTW3_H)
 #include <fftw3.h>
 #define c_re(c) ((c)[0])
 #define c_im(c) ((c)[1])
+#elif defined(HAVE_FFTW_H)
+#include <fftw.h>
+#elif defined(HAVE_DFFTW_H)
+#include <dfftw.h>
 #endif
 
 #include <stdlib.h>
@@ -53,19 +49,18 @@
  * \brief Fast Fourier Transform for two-dimensional array.
  *
  * Fast Fourier Transform for two-dimensional array.<br>
- * <bNote:</b> If passing real data to fft() forward transform
+ * <b>Note:</b> If passing real data to fft() forward transform
  * (especially when using fft() in a loop), explicitly (re-)initialize
  * the imaginary part to zero (DATA[1][i] = 0.0). Returns 0.
  *
  * \param[in] i_sign Direction of transform -1 is normal, +1 is inverse
  * \param[in,out] data Pointer to complex linear array in row major order
- * containing data and result
+ *                     containing data and result
  * \param[in] NN Value of DATA dimension (dimc * dimr)
  * \param[in] dimc Value of image column dimension (max power of 2)
  * \param[in] dimr Value of image row dimension (max power of 2)
  * \return int always returns 0
  */
-
 int fft2(int i_sign, double (*data)[2], int NN, int dimc, int dimr)
 {
 #ifdef HAVE_FFTW3_H
@@ -110,19 +105,18 @@ int fft2(int i_sign, double (*data)[2], int NN, int dimc, int dimr)
  * \brief Fast Fourier Transform for two-dimensional array.
  *
  * Fast Fourier Transform for two-dimensional array.<br>
- * <bNote:</b> If passing real data to fft() forward transform
+ * <b>Note:</b> If passing real data to fft() forward transform
  * (especially when using fft() in a loop), explicitly (re-)initialize
  * the imaginary part to zero (DATA[1][i] = 0.0). Returns 0.
  *
  * \param[in] i_sign Direction of transform -1 is normal, +1 is inverse
  * \param[in,out] DATA Pointer to complex linear array in row major order
- * containing data and result
+ *                     containing data and result
  * \param[in] NN Value of DATA dimension (dimc * dimr)
  * \param[in] dimc Value of image column dimension (max power of 2)
  * \param[in] dimr Value of image row dimension (max power of 2)
  * \return int always returns 0
  */
-
 int fft(int i_sign, double *DATA[2], int NN, int dimc, int dimr)
 {
     fftw_complex *data;

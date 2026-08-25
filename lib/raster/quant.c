@@ -73,7 +73,7 @@ void Rast_quant_free(struct Quant *q)
  *  Organizes fp_lookup table for faster (logarithmic) lookup time
  *  G_quant_organize_fp_lookup() creates a list of min and max for
  *  each quant rule, sorts this list, and stores the pointer to quant
- *  rule that should be used inbetween any 2 numbers in this list.
+ *  rule that should be used in between any 2 numbers in this list.
  *  Also it stores extreme points for 2 infinite rules, if exist.
  *  After the call to G_quant_organize_fp_lookup()
  *  instead of linearly searching through list of rules to find
@@ -124,7 +124,7 @@ int Rast__quant_organize_fp_lookup(struct Quant *q)
         qsort((char *)q->fp_lookup.vals, q->fp_lookup.nalloc, sizeof(DCELL),
               double_comp);
 
-        /* now find the rule to apply inbetween each 2 values in a list */
+        /* now find the rule to apply in between each 2 values in a list */
         for (i = 0; i < q->fp_lookup.nalloc - 1; i++) {
             /*debug
                fprintf (stderr, "%lf %lf ", q->fp_lookup.vals[i],
@@ -263,11 +263,11 @@ static void quant_update_limits(struct Quant *q, DCELL dLow, DCELL dHigh,
  * from all the rules (except the "infinite" rules) in <i>q</i> into
  * <i>dmin</i>, <i>dmax</i>, <i>cmin</i>, and <i>cmax</i>.
  *
- * \param quant pointer to Quant structure which holds quant rules info
- * \param[out] dmin minimum fp value
- * \param[out] dmax maximum fp value
- * \param[out] cmin minimum value
- * \param[out] cmax maximum value
+ * \param q pointer to Quant structure which holds quant rules info
+ * \param[out] dMin minimum fp value
+ * \param[out] dMax maximum fp value
+ * \param[out] cMin minimum value
+ * \param[out] cMax maximum value
  *
  * \return -1 if q->truncate or q->round are true or after
  * Rast_quant_init (), or any call to Rast_quant_clear () or Rast_quant_free()
@@ -680,7 +680,7 @@ CELL Rast_quant_get_cell_value(struct Quant *q, DCELL dcellVal)
                     return NO_DATA;
             }
         } /* while */
-    }     /* looking up in fp_lookup */
+    } /* looking up in fp_lookup */
 
     if (!NO_FINITE_RULE) {
         p = Rast__quant_get_rule_for_d_raster_val(q, dcellVal);

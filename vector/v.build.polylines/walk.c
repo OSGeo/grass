@@ -166,6 +166,8 @@ int walk_forward_and_pick_up_coords(struct Map_info *map, int start_line,
             next_node = n2; /* continue at end node */
         }
         else {
+            if (cats_tmp)
+                Vect_destroy_cats_struct(cats_tmp);
             return 1; /* no other line */
         }
     }

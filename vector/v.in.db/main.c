@@ -121,8 +121,15 @@ int main(int argc, char *argv[])
         char name[GNAME_MAX], mapset[GMAPSET_MAX];
 
         if (!G_name_is_fully_qualified(outvect->answer, name, mapset)) {
-            strcpy(name, outvect->answer);
-            strcpy(mapset, G_mapset());
+            if (G_strlcpy(name, outvect->answer, sizeof(name)) >=
+                sizeof(name)) {
+                G_fatal_error(_("Output vector name too long: <%s>"),
+                              outvect->answer);
+            }
+            if (G_strlcpy(mapset, G_mapset(), sizeof(mapset)) >=
+                sizeof(mapset)) {
+                G_fatal_error(_("Mapset name too long: <%s>"), G_mapset());
+            }
         }
 
         Vect_set_open_level(1); /* no topo needed */
@@ -205,21 +212,22 @@ int main(int argc, char *argv[])
     }
 
     /* Open select cursor */
-    sprintf(buf, "SELECT %s, %s", xcol_opt->answer, ycol_opt->answer);
+    snprintf(buf, sizeof(buf), "SELECT %s, %s", xcol_opt->answer,
+             ycol_opt->answer);
     db_set_string(&sql, buf);
     if (with_z) {
-        sprintf(buf, ", %s", zcol_opt->answer);
+        snprintf(buf, sizeof(buf), ", %s", zcol_opt->answer);
         db_append_string(&sql, buf);
     }
     if (keycol_opt->answer) {
-        sprintf(buf, ", %s", keycol_opt->answer);
+        snprintf(buf, sizeof(buf), ", %s", keycol_opt->answer);
         db_append_string(&sql, buf);
     }
-    sprintf(buf, " FROM %s", table_opt->answer);
+    snprintf(buf, sizeof(buf), " FROM %s", table_opt->answer);
     db_append_string(&sql, buf);
 
     if (where_opt->answer) {
-        sprintf(buf, " WHERE %s", where_opt->answer);
+        snprintf(buf, sizeof(buf), " WHERE %s", where_opt->answer);
         db_append_string(&sql, buf);
     }
     G_debug(2, "SQL: %s", db_get_string(&sql));
@@ -310,8 +318,8 @@ int main(int argc, char *argv[])
             db_set_error_handler_driver(driver);
 
             /* add key column */
-            sprintf(buf, "ALTER TABLE %s ADD COLUMN %s INTEGER", fi->table,
-                    GV_KEY_COLUMN);
+            snprintf(buf, sizeof(buf), "ALTER TABLE %s ADD COLUMN %s INTEGER",
+                     fi->table, GV_KEY_COLUMN);
             db_set_string(&sql, buf);
 
             if (db_execute_immediate(driver, &sql) != DB_OK) {
@@ -321,8 +329,8 @@ int main(int argc, char *argv[])
             }
 
             /* update key column */
-            sprintf(buf, "UPDATE %s SET %s = _ROWID_", fi->table,
-                    GV_KEY_COLUMN);
+            snprintf(buf, sizeof(buf), "UPDATE %s SET %s = _ROWID_", fi->table,
+                     GV_KEY_COLUMN);
             db_set_string(&sql, buf);
 
             if (db_execute_immediate(driver, &sql) != DB_OK) {

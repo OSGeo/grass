@@ -22,7 +22,7 @@ int read_wind(char *name, char *mapset)
     double east, west, incr;
     struct Cell_head window;
 
-    sprintf(fullname, "%s in %s", name, mapset);
+    snprintf(fullname, sizeof(fullname), "%s in %s", name, mapset);
 
     G_get_element_window(&window, "windows", name, mapset);
 
@@ -69,23 +69,27 @@ int read_wind(char *name, char *mapset)
     incr = (window.east - window.west) / 3;
     for (i = 0; i < 3; i++) {
         east = west + incr;
-        sprintf(buf, "L 0 %f %f %f %f %d %d %d %.8f", west, window.north, east,
-                window.north, color_R, color_G, color_B, width);
+        snprintf(buf, sizeof(buf), "L 0 %f %f %f %f %d %d %d %.8f", west,
+                 window.north, east, window.north, color_R, color_G, color_B,
+                 width);
         add_to_plfile(buf);
 
-        sprintf(buf, "L 0 %f %f %f %f %d %d %d %.8f", west, window.south, east,
-                window.south, color_R, color_G, color_B, width);
+        snprintf(buf, sizeof(buf), "L 0 %f %f %f %f %d %d %d %.8f", west,
+                 window.south, east, window.south, color_R, color_G, color_B,
+                 width);
         add_to_plfile(buf);
 
         west = east;
     }
 
-    sprintf(buf, "L 0 %f %f %f %f %d %d %d %.8f", window.east, window.north,
-            window.east, window.south, color_R, color_G, color_B, width);
+    snprintf(buf, sizeof(buf), "L 0 %f %f %f %f %d %d %d %.8f", window.east,
+             window.north, window.east, window.south, color_R, color_G, color_B,
+             width);
     add_to_plfile(buf);
 
-    sprintf(buf, "L 0 %f %f %f %f %d %d %d %.8f", window.west, window.north,
-            window.west, window.south, color_R, color_G, color_B, width);
+    snprintf(buf, sizeof(buf), "L 0 %f %f %f %f %d %d %d %.8f", window.west,
+             window.north, window.west, window.south, color_R, color_G, color_B,
+             width);
     add_to_plfile(buf);
 
     return 1;

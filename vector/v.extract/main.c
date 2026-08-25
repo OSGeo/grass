@@ -257,7 +257,7 @@ int main(int argc, char **argv)
     else
         dissolve = FALSE;
 
-    /* Read categoy list */
+    /* Read category list */
     cat_count = 0;
     if (opt.list->answer != NULL) {
         /* no file of categories to read, process cat list */

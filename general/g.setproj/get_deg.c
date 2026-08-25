@@ -42,6 +42,6 @@ int get_deg(char *strng, int ll_swt)
         break;
     }
     } /* end of switch */
-    sprintf(strng, "%.10f", degrees);
+    snprintf(strng, 200, "%.10f", degrees);
     return (1);
 }

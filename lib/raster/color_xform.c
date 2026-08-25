@@ -177,7 +177,6 @@ void Rast_histogram_eq_fp_colors(struct Colors *dst, struct Colors *src,
  * \param src struct containing original colors
  * \param samples number of samples
  */
-
 void Rast_log_colors(struct Colors *dst, struct Colors *src, int samples)
 {
     DCELL min, max;

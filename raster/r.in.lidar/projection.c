@@ -1,7 +1,7 @@
 /*
  * r.in.lidar metadata-related functions
  *
- * Copyright 2011-2015 by Markus Metz, and The GRASS Development Team
+ * Copyright 2011-2015 by Markus Metz, and the GRASS Development Team
  * Authors:
  *  Markus Metz (r.in.lidar)
  *  Vaclav Petras (move code to standalone functions)
@@ -29,13 +29,13 @@ void projection_mismatch_report(struct Cell_head cellhd,
     int i_value;
     char error_msg[8192];
 
-    strcpy(error_msg, _("Projection of dataset does not"
-                        " appear to match current location.\n\n"));
+    strcpy(error_msg, _("Coordinate reference system of dataset does not"
+                        " appear to match current project.\n\n"));
 
     /* TODO: output this info sorted by key: */
     if (loc_wind.proj != cellhd.proj || err != -2) {
         if (loc_proj_info != NULL) {
-            strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
+            strcat(error_msg, _("GRASS project PROJ_INFO is:\n"));
             for (i_value = 0; i_value < loc_proj_info->nitems; i_value++)
                 sprintf(error_msg + strlen(error_msg), "%s: %s\n",
                         loc_proj_info->key[i_value],
@@ -86,12 +86,12 @@ void projection_mismatch_report(struct Cell_head cellhd,
         }
     }
     sprintf(error_msg + strlen(error_msg),
-            _("\nIn case of no significant differences in the projection "
-              "definitions,"
+            _("\nIn case of no significant differences"
+              " in the coordinate reference system definitions,"
               " use the -o flag to ignore them and use"
-              " current location definition.\n"));
+              " current project definition.\n"));
     strcat(error_msg,
-           _("Consider generating a new location with 'location' parameter"
+           _("Consider generating a new project with 'project' parameter"
              " from input data set.\n"));
     G_fatal_error("%s", error_msg);
 }
@@ -132,7 +132,8 @@ void projection_check_wkt(struct Cell_head cellhd, struct Cell_head loc_wind,
                                    loc_proj_units, proj_info, proj_units, err);
     }
     else if (verbose) {
-        G_message(_("Projection of input dataset and current location "
-                    "appear to match"));
+        G_message(_(
+            "Coordinate reference system of input dataset and current project "
+            "appear to match"));
     }
 }

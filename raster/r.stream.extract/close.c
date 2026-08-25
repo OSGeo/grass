@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
@@ -180,10 +181,10 @@ int close_streamvect(char *stream_vect)
     G_debug(1, "driver: %s", Fi->driver);
     G_debug(1, "database: %s", Fi->database);
 
-    sprintf(buf,
-            "create table %s (%s integer, stream_type varchar(20), type_code "
-            "integer, network integer)",
-            Fi->table, cat_col_name);
+    snprintf(buf, sizeof(buf),
+             "create table %s (%s integer, stream_type varchar(20), type_code "
+             "integer, network integer)",
+             Fi->table, cat_col_name);
     db_set_string(&dbsql, buf);
 
     if (db_execute_immediate(driver, &dbsql) != DB_OK) {
@@ -204,10 +205,11 @@ int close_streamvect(char *stream_vect)
     /* stream nodes */
     for (i = 1; i <= n_stream_nodes; i++) {
 
-        sprintf(buf, "insert into %s values ( %" PRI_OFF_T ", \'%s\', %d, %d )",
-                Fi->table, i,
-                (stream_node[i].n_trib > 0 ? "intermediate" : "start"),
-                (stream_node[i].n_trib > 0), network_id[i]);
+        snprintf(buf, sizeof(buf),
+                 "insert into %s values ( %" PRId64 ", \'%s\', %d, %d )",
+                 Fi->table, i,
+                 (stream_node[i].n_trib > 0 ? "intermediate" : "start"),
+                 (stream_node[i].n_trib > 0), network_id[i]);
 
         db_set_string(&dbsql, buf);
 

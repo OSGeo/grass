@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     struct GParams params;
     struct Map_info Map;
     struct Map_info **BgMap; /* background vector maps */
-    int nbgmaps;             /* number of registrated background maps */
+    int nbgmaps;             /* number of registered background maps */
     enum mode action_mode;
     FILE *ascii;
 

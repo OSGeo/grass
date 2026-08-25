@@ -3,6 +3,8 @@
 @author Aaron Saw Min Sern
 """
 
+from pathlib import Path
+
 from grass.exceptions import CalledModuleError
 from grass.pygrass.modules import Module
 from grass.script import tempfile
@@ -27,9 +29,8 @@ def benchmark(size, label, results):
     reference = "r_mfilter_reference_map"
     output = "benchmark_r_mfilter_nprocs"
     filter = tempfile()
-    with open(filter, "w") as w:
-        w.write(
-            """MATRIX 9
+    Path(filter).write_text(
+        """MATRIX 9
                    1 1 1 1 1 1 1 1 1
                    1 2 1 2 1 2 1 2 1
                    1 1 3 1 3 1 3 1 1
@@ -41,7 +42,7 @@ def benchmark(size, label, results):
                    1 1 1 1 1 1 1 1 1
                    DIVISOR 81
                    TYPE    P"""
-        )
+    )
 
     generate_map(rows=size, cols=size, fname=reference)
     module = Module(
@@ -54,8 +55,7 @@ def benchmark(size, label, results):
         overwrite=True,
     )
     results.append(bm.benchmark_nprocs(module, label=label, max_nprocs=16, repeat=3))
-    Module("g.remove", quiet=True, flags="f", type="raster", name=reference)
-    Module("g.remove", quiet=True, flags="f", type="raster", name=output)
+    Module("g.remove", quiet=True, flags="f", type="raster", name=(reference, output))
 
 
 def generate_map(rows, cols, fname):

@@ -22,7 +22,6 @@ static char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
  * \param buf
  * \return int
  */
-
 int datetime_format(const DateTime *dt, char *buf)
 {
     /* Format the DateTime structure as a human-readable string */
@@ -41,7 +40,7 @@ int datetime_format(const DateTime *dt, char *buf)
 
     if (datetime_is_absolute(dt)) {
         if (datetime_get_day(dt, &n) == 0) {
-            sprintf(temp, "%d", n);
+            snprintf(temp, sizeof(temp), "%d", n);
             strcat(buf, temp);
         }
 
@@ -54,7 +53,7 @@ int datetime_format(const DateTime *dt, char *buf)
         if (datetime_get_year(dt, &n) == 0) {
             if (*buf)
                 strcat(buf, " ");
-            sprintf(temp, "%d", n);
+            snprintf(temp, sizeof(temp), "%d", n);
             strcat(buf, temp);
             if (datetime_is_negative(dt))
                 strcat(buf, " bc");
@@ -63,14 +62,14 @@ int datetime_format(const DateTime *dt, char *buf)
         if (datetime_get_hour(dt, &n) == 0) {
             if (*buf)
                 strcat(buf, " ");
-            sprintf(temp, "%02d", n);
+            snprintf(temp, sizeof(temp), "%02d", n);
             strcat(buf, temp);
         }
 
         if (datetime_get_minute(dt, &n) == 0) {
             if (*buf)
                 strcat(buf, ":");
-            sprintf(temp, "%02d", n);
+            snprintf(temp, sizeof(temp), "%02d", n);
             strcat(buf, temp);
         }
 
@@ -79,7 +78,7 @@ int datetime_format(const DateTime *dt, char *buf)
                 strcat(buf, ":");
             if (datetime_get_fracsec(dt, &n) != 0)
                 n = 0;
-            sprintf(temp, "%02.*f", n, sec);
+            snprintf(temp, sizeof(temp), "%02.*f", n, sec);
             strcat(buf, temp);
         }
 
@@ -89,7 +88,8 @@ int datetime_format(const DateTime *dt, char *buf)
             if (*buf)
                 strcat(buf, " ");
             datetime_decompose_timezone(n, &hour, &minute);
-            sprintf(temp, "%s%02d%02d", n < 0 ? "-" : "+", hour, minute);
+            snprintf(temp, sizeof(temp), "%s%02d%02d", n < 0 ? "-" : "+", hour,
+                     minute);
             strcat(buf, temp);
         }
     }
@@ -101,35 +101,35 @@ int datetime_format(const DateTime *dt, char *buf)
         if (datetime_get_year(dt, &n) == 0) {
             if (*buf)
                 strcat(buf, " ");
-            sprintf(temp, "%d year%s", n, n == 1 ? "" : "s");
+            snprintf(temp, sizeof(temp), "%d year%s", n, n == 1 ? "" : "s");
             strcat(buf, temp);
         }
 
         if (datetime_get_month(dt, &n) == 0) {
             if (*buf)
                 strcat(buf, " ");
-            sprintf(temp, "%d month%s", n, n == 1 ? "" : "s");
+            snprintf(temp, sizeof(temp), "%d month%s", n, n == 1 ? "" : "s");
             strcat(buf, temp);
         }
 
         if (datetime_get_day(dt, &n) == 0) {
             if (*buf)
                 strcat(buf, " ");
-            sprintf(temp, "%d day%s", n, n == 1 ? "" : "s");
+            snprintf(temp, sizeof(temp), "%d day%s", n, n == 1 ? "" : "s");
             strcat(buf, temp);
         }
 
         if (datetime_get_hour(dt, &n) == 0) {
             if (*buf)
                 strcat(buf, " ");
-            sprintf(temp, "%d hour%s", n, n == 1 ? "" : "s");
+            snprintf(temp, sizeof(temp), "%d hour%s", n, n == 1 ? "" : "s");
             strcat(buf, temp);
         }
 
         if (datetime_get_minute(dt, &n) == 0) {
             if (*buf)
                 strcat(buf, " ");
-            sprintf(temp, "%d minute%s", n, n == 1 ? "" : "s");
+            snprintf(temp, sizeof(temp), "%d minute%s", n, n == 1 ? "" : "s");
             strcat(buf, temp);
         }
 
@@ -138,8 +138,8 @@ int datetime_format(const DateTime *dt, char *buf)
                 strcat(buf, " ");
             if (datetime_get_fracsec(dt, &n) != 0)
                 n = 0;
-            sprintf(temp, "%.*f second%s", n, sec,
-                    (sec == 1.0 && n == 0) ? "" : "s");
+            snprintf(temp, sizeof(temp), "%.*f second%s", n, sec,
+                     (sec == 1.0 && n == 0) ? "" : "s");
             strcat(buf, temp);
         }
     }

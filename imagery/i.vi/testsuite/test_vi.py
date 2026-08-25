@@ -8,6 +8,7 @@ Licence:    This program is free software under the GNU General Public
                 License (>=v2). Read the file COPYING that comes with GRASS
                 for details.
 """
+
 from grass.gunittest.case import TestCase
 
 
@@ -25,14 +26,12 @@ class TestReport(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.runModule("g.remove", flags="f", type="raster", name="ipvi")
-        cls.runModule("g.remove", flags="f", type="raster", name="ndwi")
-        cls.runModule("g.remove", flags="f", type="raster", name="dvi")
-        cls.runModule("g.remove", flags="f", type="raster", name="sr")
-        cls.runModule("g.remove", flags="f", type="raster", name="evi")
-        cls.runModule("g.remove", flags="f", type="raster", name="evi2")
-        cls.runModule("g.remove", flags="f", type="raster", name="gari")
-        cls.runModule("g.remove", flags="f", type="raster", name="gemi")
+        cls.runModule(
+            "g.remove",
+            flags="f",
+            type="raster",
+            name="ipvi,ndwi,dvi,sr,evi,evi2,gari,gemi",
+        )
         cls.del_temp_region()
 
     def test_vinameipvi(self):

@@ -86,7 +86,7 @@ struct GFONT_CAP *parse_fontcap(void)
                 capfile);
     }
     if (fp == NULL) {
-        sprintf(file, "%s/etc/fontcap", G_gisbase());
+        snprintf(file, sizeof(file), "%s/etc/fontcap", G_gisbase());
         if ((fp = fopen(file, "r")) == NULL)
             G_warning(_("%s: No font definition file"), file);
     }

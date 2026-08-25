@@ -20,7 +20,6 @@
 
    \param fx1,fy1,fx2,fy2 rectangle coordinates
  */
-
 void PNG_Box(double fx1, double fy1, double fx2, double fy2)
 {
     int x1 = (int)floor(fx1 + 0.5);

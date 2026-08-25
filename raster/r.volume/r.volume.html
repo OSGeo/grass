@@ -8,7 +8,7 @@ calculating volumes and centroids of patches or clumps.
 from a <b>input</b> raster map sorted by category on a <b>clump</b>
 raster map, and optionally generates a vector points map of the
 centroids for each clump.  If a clump map is not specified, the
-current MASK is used. The MASK can be defined
+current raster mask is used. The raster mask can be defined
 by <em><a href="r.mask.html">r.mask</a></em>. The sum is multiplied by
 the area of a cell to give the volume occupied by that cell. See below
 for an example of the output table.
@@ -24,12 +24,12 @@ now, unless I get notification otherwise. - EP -->
 <h2>NOTES</h2>
 
 <p>
-If a clump map is not given and a MASK not set, the program exits with
-an error message.
+If a clump map is not given and a raster mask is not set, the program exits
+with an error message.
 
 <p>
 <em>r.volume</em> works in the current region and respects the current
-MASK.
+raster mask.
 
 <h3>CENTROIDS</h3>
 
@@ -43,11 +43,11 @@ at a cell center.
 Attribute table linked to the vector map with centroids contains several columns:
 
 <ul>
-  <li><tt>cat</tt> - category value (integer)</li>
-  <li><tt>volume</tt> - volume value (double precision)</li>
-  <li><tt>average</tt> - average value in the clump (double precision)</li>
-  <li><tt>sum</tt> - sum of cell values in the clump (double precision)</li>
-  <li><tt>count</tt> - number of cells with the category (integer)</li>
+  <li><code>cat</code> - category value (integer)</li>
+  <li><code>volume</code> - volume value (double precision)</li>
+  <li><code>average</code> - average value in the clump (double precision)</li>
+  <li><code>sum</code> - sum of cell values in the clump (double precision)</li>
+  <li><code>count</code> - number of cells with the category (integer)</li>
 </ul>
 
 <p>
@@ -139,8 +139,8 @@ r.volume input=elevation clump=geology_30m
 #                                                 Total Volume = 22351026655.81
 </pre></div>
 
-The <tt>Data Total</tt> column is the sum of the elevations for each
-in each of the fields.  The <tt>Total Volume</tt> is the sum
+The <code>Data Total</code> column is the sum of the elevations for each
+in each of the fields.  The <code>Total Volume</code> is the sum
 multiplied by the east-west resolution times the north-south
 resolution. Note that the units on the volume may be difficult if the
 units of cell values on the <b>input</b> raster map and the resolution

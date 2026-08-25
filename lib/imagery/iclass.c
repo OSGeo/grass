@@ -67,7 +67,7 @@ int I_iclass_analysis(IClass_statistics *statistics, struct Ref *refer,
 
     category = statistics->cat;
 
-    /* region set to current workin region */
+    /* region set to current working region */
     G_get_set_window(&band_region);
 
     /* find perimeter points from vector map */

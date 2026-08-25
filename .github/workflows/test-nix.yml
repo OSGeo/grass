@@ -1,0 +1,48 @@
+---
+name: Nix package and environment
+
+on:
+  schedule:
+    - cron: "0 1 * * 1"
+  push:
+    tags:
+      - "*"
+  pull_request:
+    paths:
+      - ".github/workflows/test-nix.yml"
+      - "flake.lock"
+      - "flake.nix"
+      - "package.nix"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  test-nix:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install nix
+        uses: DeterminateSystems/determinate-nix-action@c70cb8ae92d68c66953db28a26a63db1665bc837 # v3.21.5
+
+      - name: Setup cachix
+        uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71 # v17
+        with:
+          name: osgeo-grass
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      - name: Build package
+        run: nix build -L --accept-flake-config .#grass
+
+      - name: Test development environment
+        run: nix develop --accept-flake-config --command echo OK

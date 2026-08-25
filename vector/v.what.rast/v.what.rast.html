@@ -34,10 +34,10 @@ If the raster value is NULL, then attribute value is set to NULL.
 geometry instead, use <em><a href="v.drape.html">v.drape</a></em>.
 <p>
 Categories and values are output unsorted with the print flag. To sort them
-pipe the output of this module into the UNIX <tt>sort</tt> tool
-(<tt>sort&nbsp;-n</tt>). If you need coordinates, after sorting use
-<em><a href="v.out.ascii.html">v.out.ascii</a></em> and the UNIX <tt>paste</tt> tool
-(<tt>paste&nbsp;-d'|'</tt>). In the case of a NULL result, a "<tt>*</tt>"
+pipe the output of this module into the UNIX <code>sort</code> tool
+(<code>sort&nbsp;-n</code>). If you need coordinates, after sorting use
+<em><a href="v.out.ascii.html">v.out.ascii</a></em> and the UNIX <code>paste</code> tool
+(<code>paste&nbsp;-d'|'</code>). In the case of a NULL result, a "<code>*</code>"
 will be printed in lieu of the value.
 <p>
 The interpolation flag is only useful for continuous value raster maps,

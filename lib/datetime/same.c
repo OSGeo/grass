@@ -18,7 +18,6 @@
  *  \param dst
  *  \return int
  */
-
 int datetime_is_same(const DateTime *src, const DateTime *dst)
 {
     /* WARNING: doesn't allow for padding */

@@ -61,7 +61,7 @@ void initialize_mpf_vars()
 }
 
 /*
-   Caclulates:
+   Calculates:
    |a11-b11  a12-b12|
    |a21-b21  a22-b22|
  */
@@ -356,7 +356,7 @@ int segment_intersection_2d_e(double ax1, double ay1, double ax2, double ay2,
 #endif
 
 /* OLD */
-/* tollerance aware version */
+/* tolerance aware version */
 /* TODO: fix all ==s left */
 int segment_intersection_2d_tol(double ax1, double ay1, double ax2, double ay2,
                                 double bx1, double by1, double bx2, double by2,

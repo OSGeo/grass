@@ -31,8 +31,7 @@ except ImportError:
 from gui_core.wrap import NewId
 
 
-class OverlayController(object):
-
+class OverlayController:
     """Base class for decorations (barscale, legend) controller."""
 
     def __init__(self, renderer, giface):
@@ -127,10 +126,10 @@ class OverlayController(object):
 
     dialog = property(fget=GetDialog, fset=SetDialog)
 
-    def IsShown(self):
-        if self._overlay and self._overlay.IsActive() and self._overlay.IsRendered():
-            return True
-        return False
+    def IsShown(self) -> bool:
+        return bool(
+            self._overlay and self._overlay.IsActive() and self._overlay.IsRendered()
+        )
 
     def Show(self, show=True):
         """Activate or deactivate overlay."""
@@ -169,7 +168,7 @@ class OverlayController(object):
     def _update(self):
         self._renderer.ChangeOverlay(id=self._id, command=self._cmd)
 
-    def CmdIsValid(self):
+    def CmdIsValid(self) -> bool:
         """If command is valid"""
         return True
 
@@ -190,7 +189,7 @@ class OverlayController(object):
         for param in self._cmd:
             if not param.startswith("at"):
                 continue
-            x, y = [float(number) for number in param.split("=")[1].split(",")]
+            x, y = (float(number) for number in param.split("=")[1].split(","))
             x = int((x / 100.0) * screensize[0])
             y = int((1 - y / 100.0) * screensize[1])
 
@@ -206,18 +205,13 @@ class DtextController(OverlayController):
         self._defaultAt = "at=50,50"
         self._cmd = ["d.text", self._defaultAt]
 
-    def CmdIsValid(self):
+    def CmdIsValid(self) -> bool:
         inputs = 0
         for param in self._cmd[1:]:
             param = param.split("=")
-            if len(param) == 1:
+            if len(param) == 1 or (param[0] == "text" and len(param) == 2):
                 inputs += 1
-            else:
-                if param[0] == "text" and len(param) == 2:
-                    inputs += 1
-        if inputs >= 1:
-            return True
-        return False
+        return inputs >= 1
 
 
 class BarscaleController(OverlayController):
@@ -300,45 +294,37 @@ class LegendController(OverlayController):
         for param in self._cmd:
             if not param.startswith("at"):
                 continue
-            # if the at= is the default, we will move the legend from the center to bottom left
+            # if the at= is the default, we will move the legend from the center to
+            # bottom left
             if param == self._defaultAt:
                 b, t, l, r = 5, 50, 7, 10
             else:
-                b, t, l, r = [
+                b, t, l, r = (
                     float(number) for number in param.split("=")[1].split(",")
-                ]  # pylint: disable-msg=W0612
+                )  # pylint: disable=W0612
             x = int((l / 100.0) * screensize[0])
             y = int((1 - t / 100.0) * screensize[1])
 
             return x, y
 
-    def CmdIsValid(self):
+    def CmdIsValid(self) -> bool:
         inputs = 0
         for param in self._cmd[1:]:
             param = param.split("=")
-            if len(param) == 1:
+            if (
+                len(param) == 1
+                or (param[0] == "raster" and len(param) == 2)
+                or (param[0] == "raster_3d" and len(param) == 2)
+            ):
                 inputs += 1
-            else:
-                if param[0] == "raster" and len(param) == 2:
-                    inputs += 1
-                elif param[0] == "raster_3d" and len(param) == 2:
-                    inputs += 1
-        if inputs == 1:
-            return True
-        return False
+        return inputs == 1
 
     def ResizeLegend(self, begin, end, screenSize):
         """Resize legend according to given bbox coordinates."""
         w = abs(begin[0] - end[0])
         h = abs(begin[1] - end[1])
-        if begin[0] < end[0]:
-            x = begin[0]
-        else:
-            x = end[0]
-        if begin[1] < end[1]:
-            y = begin[1]
-        else:
-            y = end[1]
+        x = min(end[0], begin[0])
+        y = min(end[1], begin[1])
 
         at = [
             (screenSize[1] - (y + h)) / float(screenSize[1]) * 100,

@@ -350,7 +350,7 @@ RectReal RTreeRectVolume(struct RTree_Rect *R, struct RTree *t)
 #ifdef gamma
 
 /* computes the volume of an N-dimensional sphere. */
-/* derived from formule in "Regular Polytopes" by H.S.M Coxeter */
+/* derived from formula in "Regular Polytopes" by H.S.M Coxeter */
 static double sphere_volume(double dimension)
 {
     double log_gamma, log_volume;

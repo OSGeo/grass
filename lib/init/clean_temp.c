@@ -1,5 +1,6 @@
 #include <grass/config.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
 #include <time.h>
@@ -35,7 +36,6 @@
 #define SLEEP 30 /* 30 seconds */
 
 /* Recursively scan the directory pathname, removing directory and files */
-
 void clean_dir(const char *pathname, uid_t uid, pid_t pid, time_t now,
                int max_age)
 {
@@ -57,8 +57,8 @@ void clean_dir(const char *pathname, uid_t uid, pid_t pid, time_t now,
             (G_strcasecmp(cur_entry->d_name, "..") == 0))
             continue; /* Skip dir and parent dir entries */
 
-        if ((pathlen = G_snprintf(buf, BUF_MAX, "%s/%s", pathname,
-                                  cur_entry->d_name)) >= BUF_MAX)
+        if ((pathlen = snprintf(buf, BUF_MAX, "%s/%s", pathname,
+                                cur_entry->d_name)) >= BUF_MAX)
             G_fatal_error("clean_temp: exceeded maximum pathname length %d, "
                           "got %d, shouldn't happen",
                           BUF_MAX, pathlen);
@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
     G_file_name(tmppath, element, "", mapset = G_mapset());
 
     /* get user id and current time in seconds */
-#ifdef __MINGW32__
+#ifdef _WIN32
     /* TODO */
     uid = -1;
 #else
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 
 int find_process(int pid)
 {
-#ifdef __MINGW32__
+#ifdef _WIN32
     /* TODO */
     return -1;
 #else

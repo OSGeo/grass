@@ -49,7 +49,7 @@ the CELL type is currently defined as int.
 
 In the future, if we (or someone else) want to
 redefine CELL to long (say on a 16 bit machine), the application code
-will compile ok, but will not run correctly since the calling seqences
+will compile ok, but will not run correctly since the calling sequences
 (including printf and scanf) will not match anymore.
 To upgrade GRASS code for this is a big deal.
 It consists of

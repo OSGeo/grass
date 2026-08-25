@@ -70,7 +70,7 @@ static void read_header(FILE *fp, unsigned char *magic, int *maxval)
 
     read_line(buf, sizeof(buf), fp);
 
-    if (sscanf(buf, "%d %d", &ncols, &nrows) != 2)
+    if (sscanf(buf, "%u %u", &ncols, &nrows) != 2)
         G_fatal_error(_("Invalid PPM file"));
 
     if (ncols != width || nrows != height)

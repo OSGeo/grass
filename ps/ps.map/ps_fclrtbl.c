@@ -42,7 +42,7 @@ int PS_fcolortable(void)
     unsigned int max_label_length = 0;
     int label_posn, label_xref, label_yref;
 
-    /* let user know what's happenning */
+    /* let user know what's happening */
     G_message(_("Creating color table for <%s in %s>..."), ct.name, ct.mapset);
 
     /* Get color range */
@@ -261,7 +261,7 @@ int PS_fcolortable(void)
         ddig = 0;     /* we can get something like 1000000.00000000765239 */
     }
     else {
-        sprintf(buf, "%.10f", step);
+        snprintf(buf, sizeof(buf), "%.10f", step);
         k = strlen(buf) - 1;
         while (buf[k] == '0')
             k--;
@@ -292,7 +292,7 @@ int PS_fcolortable(void)
 
         fprintf(PS.fp, "D\n");
 
-        sprintf(buf, "%f", val);
+        snprintf(buf, sizeof(buf), "%f", val);
         ch = (char *)strchr(buf, '.');
         ch += ddig;
         if (ddig > 0)

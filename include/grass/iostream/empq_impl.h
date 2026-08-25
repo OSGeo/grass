@@ -212,7 +212,7 @@ em_pqueue<T, Key>::em_pqueue(long pq_sz, long buf_sz, unsigned short nb_buf,
     cout << "pqsize=" << pqsize << ", bufsize=" << bufsize
          << ", maximum allowed arity=" << mm_avail / sz_stream << endl;
     if (buf_arity * sz_stream > mm_avail) {
-        cout << "sorry - empq excedes memory limits\n";
+        cout << "sorry - empq exceeds memory limits\n";
         cout << "try again decreasing arity or pqsize/bufsize\n";
         cout.flush();
     }
@@ -1357,7 +1357,7 @@ AMI_err em_pqueue<T, Key>::merge_buffer(em_buffer<T, Key> *buf,
     // delete [] keys;
     //!!! KEYS BELONGS NOW TO MERGEHEAP, AND WILL BE DELETED BY THE
     // DESTRUCTOR OF MERGEHEAP (CALLED AUUTOMATICALLY ON FUNCTION EXIT)
-    // IF I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY
+    // IF I DELETE KEYS EXPLICITLY, THEY WILL BE DELETED AGAIN BY
     // DESTRUCTOR, AND EVERYTHING SCREWS UP..
 
     buf->put_streams();
@@ -1470,7 +1470,7 @@ AMI_err em_pqueue<T, Key>::merge_streams(ExtendedMergeStream **instreams,
     // delete [] keys;
     //!!! KEYS BELONGS NOW TO MERGEHEAP, AND WILL BE DELETED BY THE
     // DESTRUCTOR OF MERGEHEAP (CALLED AUUTOMATICALLY ON FUNCTION EXIT)
-    // IF I DELETE KEYS EXPLICITELY, THEY WILL BE DELETED AGAIN BY
+    // IF I DELETE KEYS EXPLICITLY, THEY WILL BE DELETED AGAIN BY
     // DESTRUCTOR, AND EVERYTHING SCREWS UP..
 
     MY_LOG_DEBUG_ID("merge_streams: done");

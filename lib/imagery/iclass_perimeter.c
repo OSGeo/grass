@@ -198,7 +198,7 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter *perimeter,
     first = -1;
     prev = count - 1;
     for (i = 0; i < count; prev = i++) {
-        /* non absurd polygon has vertexes with different y coordinate */
+        /* non absurd polygon has vertices with different y coordinates */
         if (tmp_points[i].y != tmp_points[prev].y) {
             first = i;
             break;
@@ -217,7 +217,7 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter *perimeter,
         (IClass_point *)G_calloc(count, sizeof(IClass_point)); /* TODO test */
     skip = 0;
     vertex_count = 0;
-    i = first; /* stmt not necssary */
+    i = first; /* stmt not necessary */
 
     do {
         if (!skip) {

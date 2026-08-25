@@ -78,7 +78,7 @@ struct Key_Value *G_get_projinfo(void)
         const char *epsgstr = G_find_key_value("epsg", in_epsg_keys);
         char buf[4096];
 
-        sprintf(buf, "EPSG:%s", epsgstr);
+        snprintf(buf, sizeof(buf), "EPSG:%s", epsgstr);
         G_set_key_value("init", buf, in_proj_keys);
         G_free_key_value(in_epsg_keys);
     }
@@ -123,7 +123,6 @@ struct Key_Value *G_get_projepsg(void)
    \return pointer to WKT string
    \return NULL when WKT is not available for the current location
  */
-
 char *G_get_projwkt(void)
 {
     char *wktstring = NULL;
@@ -233,7 +232,6 @@ char *G_get_projwkt(void)
    \return pointer to srid string
    \return NULL when srid is not available for the current location
  */
-
 char *G_get_projsrid(void)
 {
     char *sridstring = NULL;

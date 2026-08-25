@@ -393,7 +393,8 @@ int main(int argc, char *argv[])
             for (q = 0; q <= lsat.band[i].qcalmax; q++)
                 hist[q] = 0L;
 
-            sprintf(band_in, "%s%d", inputname, lsat.band[i].code);
+            snprintf(band_in, sizeof(band_in), "%s%d", inputname,
+                     lsat.band[i].code);
             Rast_get_cellhd(band_in, "", &cellhd);
             Rast_set_window(&cellhd);
             if ((infd = Rast_open_old(band_in, "")) < 0)
@@ -529,9 +530,10 @@ int main(int argc, char *argv[])
 
     G_message(_("Calculating..."));
     for (i = 0; i < lsat.bands; i++) {
-        sprintf(band_in, "%s%d", inputname,
-                (named->answer ? lsat.band[i].number : lsat.band[i].code));
-        sprintf(band_out, "%s%d", outputname, lsat.band[i].code);
+        snprintf(band_in, sizeof(band_in), "%s%d", inputname,
+                 (named->answer ? lsat.band[i].number : lsat.band[i].code));
+        snprintf(band_out, sizeof(band_out), "%s%d", outputname,
+                 lsat.band[i].code);
 
         /* set same size as original band raster */
         Rast_get_cellhd(band_in, "", &cellhd);
@@ -570,10 +572,11 @@ int main(int argc, char *argv[])
         nrows = Rast_window_rows();
         ncols = Rast_window_cols();
 
-        G_important_message(_("Writing %s of <%s> to <%s>..."),
-                            (frad->answer             ? _("radiance")
-                             : (lsat.band[i].thermal) ? _("temperature")
-                                                      : _("reflectance")),
+        G_important_message((frad->answer
+                                 ? _("Writing radiance of <%s> to <%s>...")
+                             : (lsat.band[i].thermal)
+                                 ? _("Writing temperature of <%s> to <%s>...")
+                                 : _("Writing reflectance of <%s> to <%s>...")),
                             band_in, band_out);
         for (row = 0; row < nrows; row++) {
             G_percent(row, nrows, 2);

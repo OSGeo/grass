@@ -11,7 +11,7 @@ output, see <a href="http://cairographics.org">Cairo website</a> for
 details.
 
 GRASS Cairo display %driver was originally written by Lars Ahlzen (<a
-href="http://lists.osgeo.org/pipermail/grass-dev/2007-October/033524.html">announcement</a>).
+href="https://lists.osgeo.org/pipermail/grass-dev/2007-October/033524.html">announcement</a>).
 
 \section cairofunctions List of functions
 

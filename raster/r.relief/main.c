@@ -32,7 +32,7 @@
  * z-exaggeration.
  *
  *   6/2003 fixes for Lat/Long Gordon Keith <gordon.keith@csiro.au>
- *   If n is a number then the ewres and nsres are mulitplied by that scale
+ *   If n is a number then the ewres and nsres are multiplied by that scale
  *    to calculate the shading.
  *   If n is the letter M (either case) the number of metres is degree of
  *    latitude is used as the scale.
@@ -106,7 +106,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("relief"));
     G_add_keyword(_("terrain"));
     G_add_keyword(_("hillshade"));
-    module->label = _("Creates shaded relief map from an elevation map (DEM).");
+    module->description =
+        _("Creates shaded relief map from an elevation map (DEM).");
 
     parm.elevation = G_define_standard_option(G_OPT_R_INPUT);
     parm.elevation->description =
@@ -431,7 +432,7 @@ int main(int argc, char *argv[])
     Rast_make_grey_scale_fp_colors(&colors, min, max);
     Rast_write_colors(sr_name, G_mapset(), &colors);
 
-    sprintf(buf, "Shaded relief of \"%s\"", elev_name);
+    snprintf(buf, sizeof(buf), "Shaded relief of \"%s\"", elev_name);
     Rast_put_cell_title(sr_name, buf);
 
     /* writing history file */

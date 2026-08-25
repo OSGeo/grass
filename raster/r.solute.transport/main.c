@@ -240,7 +240,7 @@ int main(int argc, char *argv[])
 
     /* Make sure that the current projection is not lat/long */
     if ((G_projection() == PROJECTION_LL))
-        G_fatal_error(_("Lat/Long location is not supported by %s. Please "
+        G_fatal_error(_("Lat/Long project is not supported by %s. Please "
                         "reproject map first."),
                       G_program_name());
 
@@ -423,7 +423,7 @@ int main(int argc, char *argv[])
     /*write the result to the output file */
     N_write_array_2d_to_rast(data->c, param.output->answer);
 
-    /*Compute the the velocity field if required and write the result into three
+    /*Compute the velocity field if required and write the result into three
      * rast maps */
     if (param.vector_x->answer || param.vector_y->answer) {
         xcomp = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);

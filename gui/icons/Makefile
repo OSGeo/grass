@@ -7,6 +7,7 @@ SRCICONS := $(wildcard grass/*.png)
 SRCFLAGS := $(wildcard flags/*.png)
 ETCICONS := $(patsubst %,$(GUIDIR)/icons/%,$(SRCICONS) $(SRCICO) $(SRCFLAGS))
 HTMLICONS := $(patsubst grass/%,$(HTMLDIR)/icons/%,$(SRCICONS))
+MDDIRICONS := $(patsubst grass/%,$(MDDIR)/source/icons/%,$(SRCICONS))
 
 DSTDIRS = \
 	$(GUIDIR) \
@@ -17,7 +18,10 @@ DSTDIRS = \
 HTMLDIRS = \
 	$(HTMLDIR)/icons
 
-default: $(ETCICONS) $(HTMLICONS)
+MDDIRS = \
+	$(MDDIR)/source/icons
+
+default: $(ETCICONS) $(HTMLICONS) $(MDDIRICONS)
 	$(MKDIR) $(ARCH_DISTDIR)/share/applications
 	$(INSTALL_DATA) grass.desktop $(ARCH_DISTDIR)/share/applications
 	$(MKDIR) $(ARCH_DISTDIR)/share/icons/hicolor/8x8/apps
@@ -66,5 +70,8 @@ $(GUIDIR)/icons/%: % | $(DSTDIRS)
 $(HTMLDIR)/icons/%: grass/% | $(HTMLDIRS)
 	$(INSTALL_DATA) $< $@
 
-$(DSTDIRS) $(HTMLDIRS): %:
+$(MDDIR)/source/icons/%: grass/% | $(MDDIRS)
+	$(INSTALL_DATA) $< $@
+
+$(DSTDIRS) $(HTMLDIRS) $(MDDIRS): %:
 	$(MKDIR) $@

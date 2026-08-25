@@ -41,7 +41,7 @@ struct _label_point {
  * This structure represents a label for a vector feature */
 struct _label {
 
-    struct line_pnts *skyline; /**< The skyline of the text, as an offest
+    struct line_pnts *skyline; /**< The skyline of the text, as an offset
                                 *  from the label point */
     struct bound_box bb;
     double size;
@@ -59,7 +59,7 @@ struct _label {
 
     int cat; /**< the cat of the feature */
 
-    int type; /**< The feture type (point, line, area) */
+    int type; /**< The feature type (point, line, area) */
 
     struct line_pnts *shape; /**< The points for the feature that this
                               *  label belongs to */
@@ -89,7 +89,7 @@ struct _label_candidate {
 };
 
 /**
- * This structire represents an intersection of two labels
+ * This structure represents an intersection of two labels
  */
 struct _label_intersection {
 
@@ -149,7 +149,7 @@ void label_candidate_overlap(label_t *labels, int n_labels);
  * more information on simulated Annealing.
  * @param labels The labels to perform annealing on
  * @param n_labels The size of the labels array
- * @param p The program parametrs.
+ * @param p The program parameters.
  */
 void simulate_annealing(label_t *labels, int n_labels, struct params *p);
 

@@ -24,7 +24,6 @@
  * \param[in,out] east1 east (x) coordinate of first point
  * \param[in,out] east2 east (x) coordinate of second point
  */
-
 void G_shortest_way(double *east1, double *east2)
 {
     if (G_projection() == PROJECTION_LL) {

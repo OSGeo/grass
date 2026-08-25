@@ -1,0 +1,163 @@
+## DESCRIPTION
+
+*t.list* lists any dataset that is registered in the temporal database.
+Datasets are raster, 3D raster and vector maps as well as their
+corresponding space time datasets (STRDS, STR3DS and STVDS). The type of
+the dataset can be specified using the *type* option, default is STRDS.
+By default all datasets with relative and absolute time are listed.
+However, the user has the ability to specify a single temporal type with
+the *temporaltype* option. The user can define the columns that should
+be printed for each dataset and the order of the datasets. In addition a
+SQL WHERE statement can be specified to select a subset of the requested
+datasets.
+
+## NOTES
+
+The SQL *where* and *sort* expression will be applied for each temporal
+database that was found in accessible mapsets. Hence sorting works only
+on mapset basis.
+
+The **mapset** option allows the user to filter the output to one
+or multiple specific mapsets, or to query all mapsets in the project regardless
+of the current search path. By default (if the **mapset** option is not provided),
+Temporal datasets are listed from all mapsets in the user's current search path
+(managed with [g.mapsets](g.mapsets.md)).
+
+The **mapset** parameter accepts the following inputs:
+`mapset='.'` lists datasets only in the current mapset.
+`mapset='*'` lists datasets in all mapsets in the project (location), bypassing
+the search path.
+`mapset=name1,name2` lists datasets strictly from the explicitly named mapsets,
+even if they are outside the current search path.
+
+## EXAMPLES
+
+Obtain the list of space time raster dataset(s) in the current search path:
+
+```sh
+t.list strds
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <climate_2000_2012>:
+tempmean_monthly@climate_2000_2012
+```
+
+Obtain the list of space time raster datasets in a specific mapset, even if it is
+not in the search path:
+
+```sh
+t.list strds mapset=modis2002lst
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <modis2002lst>:
+mini_set@modis2002lst
+```
+
+Obtain the list of space time raster datasets across all mapsets in the project
+(location) using '*':
+
+```sh
+t.list type=strds mapset='*'
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <climate_2000_2012>:
+precip_abs@climate_2000_2012
+precipitation@climate_2000_2012
+tempmean@climate_2000_2012
+Space time raster datasets with absolute time available in mapset <modis2002lst>:
+mini_set@modis2002lst
+```
+
+Obtain the list of space time raster datasets in a specific mapset (Note
+that the target mapset must be in the user's search path):
+
+```sh
+# strds in PERMANENT
+t.list strds where="mapset = 'PERMANENT'"
+----------------------------------------------
+
+# strds in climate_2000_2012
+t.list strds where="mapset = 'climate_2000_2012'"
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <climate_2000_2012>:
+precip_abs@climate_2000_2012
+precipitation@climate_2000_2012
+tempmean@climate_2000_2012
+```
+
+The *where* option can also be used to list the stds with a certain
+pattern in their name, i.e. as the pattern option in
+[g.list](g.list.md).
+
+```sh
+# strds whose name start with "precip"
+t.list type=strds where="name LIKE 'precip%'"
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <climate_1970_2012>:
+precip_abs@climate_1970_2012
+precipitation@climate_1970_2012
+```
+
+The user can also obtain the list of time stamped raster maps. These
+maps might be registered in strds or not. The output of the following
+command can vary according to the accessible mapsets specified through
+[g.mapsets](g.mapsets.md).
+
+```sh
+t.list raster
+Time stamped raster maps with absolute time available in mapset <climate_2000_2012>:
+2009_01_tempmean@climate_2000_2012
+2009_02_tempmean@climate_2000_2012
+2009_03_tempmean@climate_2000_2012
+...
+2012_10_tempmean@climate_2000_2012
+2012_11_tempmean@climate_2000_2012
+2012_12_tempmean@climate_2000_2012
+```
+
+You can also use the *format=* option with `plain` (default), `csv`, `line`, and
+`json`.
+For `plain`, `csv`, and `line`, you can also use the *separator=* option to change
+ the output delimiter.
+
+To output the list in JSON format, use `format=json`. By default, if no
+columns are specified in json format, it will output all available metadata. You
+can restrict the output using the `columns` parameter.
+
+```sh
+t.list type=raster format=json columns=id,start_time
+```
+
+```json
+[
+    {
+        "id": "2009_01_tempmean@climate_2000_2012",
+        "start_time": "2009-01-01 00:00:00"
+    },
+    {
+        "id": "2009_02_tempmean@climate_2000_2012",
+        "start_time": "2009-02-01 00:00:00"
+    },
+    {
+        "id": "2009_03_tempmean@climate_2000_2012",
+        "start_time": "2009-03-01 00:00:00"
+    },
+    ...
+    {
+        "id": "2012_11_tempmean@climate_2000_2012",
+        "start_time": "2012-11-01 00:00:00"
+    },
+    {
+        "id": "2012_12_tempmean@climate_2000_2012",
+        "start_time": "2012-12-01 00:00:00"
+    }
+]
+
+```
+
+## SEE ALSO
+
+*[g.list](g.list.md), [t.create](t.create.md), [t.info](t.info.md),
+[t.rast.list](t.rast.list.md), [t.rast3d.list](t.rast3d.list.md),
+[t.vect.list](t.vect.list.md)*
+
+## AUTHOR
+
+Sören Gebbert, Thünen Institute of Climate-Smart Agriculture

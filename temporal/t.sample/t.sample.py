@@ -66,8 +66,7 @@
 # % description: Check for spatial topological overlap
 # %end
 
-import grass.script as grass
-
+import grass.script as gs
 
 ############################################################################
 
@@ -81,7 +80,7 @@ def main():
     sampler = options["sample"]
     samtype = options["samtype"]
     intype = options["intype"]
-    separator = grass.separator(options["separator"])
+    separator = gs.separator(options["separator"])
     method = options["method"]
     header = flags["c"]
     spatial = flags["s"]
@@ -95,5 +94,5 @@ def main():
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gs.parser()
     main()

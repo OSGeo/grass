@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <grass/gjson.h>
 #include <grass/raster.h>
 #include <grass/dbmi.h>
 #include <grass/vector.h>
@@ -40,7 +41,7 @@ int main(int argc, char *argv[])
     int row, col;
     char buf[DB_SQL_MAX];
     struct {
-        struct Option *vect, *rast, *field, *type, *col, *where;
+        struct Option *vect, *rast, *field, *type, *col, *where, *sep, *format;
     } opt;
     struct Flag *interp_flag, *print_flag;
     int Cache_size;
@@ -63,6 +64,12 @@ int main(int argc, char *argv[])
     dbString stmt;
     dbDriver *driver;
     int select, norec_cnt, update_cnt, upderr_cnt, col_type;
+
+    char *sep;
+    enum OutputFormat format;
+    G_JSON_Value *root_value = NULL, *cat_value = NULL;
+    G_JSON_Array *root_array = NULL;
+    G_JSON_Object *cat_object = NULL;
 
     G_gisinit(argv[0]);
 
@@ -99,6 +106,17 @@ int main(int argc, char *argv[])
 
     opt.where = G_define_standard_option(G_OPT_DB_WHERE);
 
+    opt.sep = G_define_standard_option(G_OPT_F_SEP);
+    opt.sep->answer = "comma";
+    opt.sep->label = _("Field separator for CSV style output");
+    opt.sep->guisection = _("Print");
+
+    opt.format = G_define_standard_option(G_OPT_F_FORMAT);
+    opt.format->options = "plain,csv,json";
+    opt.format->descriptions = ("plain;Human readable text output;"
+                                "csv;CSV (Comma Separated Values);"
+                                "json;JSON (JavaScript Object Notation);");
+
     interp_flag = G_define_flag();
     interp_flag->key = 'i';
     interp_flag->description =
@@ -118,6 +136,29 @@ int main(int argc, char *argv[])
 
     if (!print_flag->answer && !opt.col->answer)
         G_fatal_error(_("Required parameter <%s> not set"), opt.col->key);
+
+    if (strcmp(opt.format->answer, "json") == 0) {
+        format = JSON;
+        root_value = G_json_value_init_array();
+        if (root_value == NULL) {
+            G_fatal_error(_("Failed to initialize JSON array. Out of memory?"));
+        }
+        root_array = G_json_array(root_value);
+    }
+    else if (strcmp(opt.format->answer, "csv") == 0) {
+        format = CSV;
+    }
+    else {
+        format = PLAIN;
+    }
+
+    sep = G_option_to_separator(opt.sep);
+
+    if (format != PLAIN && !print_flag->answer) {
+        G_json_value_free(root_value);
+        G_fatal_error(_("The format option can only be used with -%c flag"),
+                      print_flag->key);
+    }
 
     G_get_window(&window);
     Vect_region_box(&window, &box); /* T and B set to +/- PORT_DOUBLE_MAX */
@@ -169,9 +210,10 @@ int main(int argc, char *argv[])
             G_important_message(
                 _("Column <%s> not found in the table <%s>. Creating..."),
                 opt.col->answer, Fi->table);
-            sprintf(buf, "ALTER TABLE \"%s\" ADD COLUMN \"%s\" %s", Fi->table,
-                    opt.col->answer,
-                    out_type == CELL_TYPE ? "INTEGER" : "DOUBLE PRECISION");
+            snprintf(buf, sizeof(buf),
+                     "ALTER TABLE \"%s\" ADD COLUMN \"%s\" %s", Fi->table,
+                     opt.col->answer,
+                     out_type == CELL_TYPE ? "INTEGER" : "DOUBLE PRECISION");
             db_set_string(&stmt, buf);
             if (db_execute_immediate(driver, &stmt) != DB_OK)
                 G_fatal_error(_("Unable to add column <%s> to table <%s>"),
@@ -303,8 +345,8 @@ int main(int argc, char *argv[])
     if (nocat_cnt)
         G_warning(_("%d points without category were skipped"), nocat_cnt);
 
-    /* Sort cache by current region row */
-    qsort(cache, point_cnt, sizeof(struct order), by_row);
+    /* Sort cache by current region row and col */
+    qsort(cache, point_cnt, sizeof(struct order), by_row_col);
 
     /* Allocate space for raster row */
     if (out_type == CELL_TYPE)
@@ -548,11 +590,19 @@ int main(int argc, char *argv[])
 
     if (print_flag->answer) {
         dupl_cnt = 0;
-
-        if (Fi)
-            G_message("%s|value", Fi->key);
-        else
-            G_message("cat|value");
+        if (format == PLAIN) {
+            if (Fi)
+                G_message("%s|value", Fi->key);
+            else
+                G_message("cat|value");
+        }
+        else if (format == CSV) {
+            /* CSV Header */
+            if (Fi)
+                fprintf(stdout, "%s%svalue\n", Fi->key, sep);
+            else
+                fprintf(stdout, "cat%svalue\n", sep);
+        }
 
         for (point = 0; point < point_cnt; point++) {
             if (cache[point].count > 1) {
@@ -563,25 +613,91 @@ int main(int argc, char *argv[])
                 dupl_cnt++;
             }
 
-            fprintf(stdout, "%d|", cache[point].cat);
+            switch (format) {
+            case PLAIN:
+                fprintf(stdout, "%d|", cache[point].cat);
+                break;
+
+            case CSV:
+                fprintf(stdout, "%d%s", cache[point].cat, sep);
+                break;
+
+            case JSON:
+                cat_value = G_json_value_init_object();
+                if (cat_value == NULL) {
+                    G_fatal_error(_("Failed to initialize JSON object. "
+                                    "Out of memory?"));
+                }
+                cat_object = G_json_object(cat_value);
+
+                G_json_object_set_number(cat_object, "category",
+                                         cache[point].cat);
+                break;
+            }
 
             if (out_type == CELL_TYPE) {
-                if (cache[point].count > 1 ||
-                    Rast_is_c_null_value(&cache[point].value)) {
-                    fprintf(stdout, "*");
+                switch (format) {
+                case PLAIN:
+                case CSV:
+                    if (cache[point].count > 1 ||
+                        Rast_is_c_null_value(&cache[point].value)) {
+                        fprintf(stdout, "*");
+                    }
+                    else
+                        fprintf(stdout, "%d", cache[point].value);
+                    break;
+
+                case JSON:
+                    if (cache[point].count > 1 ||
+                        Rast_is_c_null_value(&cache[point].value)) {
+                        G_json_object_set_null(cat_object, "value");
+                    }
+                    else
+                        G_json_object_set_number(cat_object, "value",
+                                                 cache[point].value);
+                    break;
                 }
-                else
-                    fprintf(stdout, "%d", cache[point].value);
             }
             else { /* FCELL or DCELL */
-                if (cache[point].count > 1 ||
-                    Rast_is_d_null_value(&cache[point].dvalue)) {
-                    fprintf(stdout, "*");
+                switch (format) {
+                case PLAIN:
+                case CSV:
+                    if (cache[point].count > 1 ||
+                        Rast_is_d_null_value(&cache[point].dvalue)) {
+                        fprintf(stdout, "*");
+                    }
+                    else
+                        fprintf(stdout, "%.*g", width, cache[point].dvalue);
+                    break;
+
+                case JSON:
+                    if (cache[point].count > 1 ||
+                        Rast_is_d_null_value(&cache[point].dvalue)) {
+                        G_json_object_set_null(cat_object, "value");
+                    }
+                    else
+                        G_json_object_set_number(cat_object, "value",
+                                                 cache[point].dvalue);
+                    break;
                 }
-                else
-                    fprintf(stdout, "%.*g", width, cache[point].dvalue);
             }
-            fprintf(stdout, "\n");
+            if (format != JSON)
+                fprintf(stdout, "\n");
+            else
+                G_json_array_append_value(root_array, cat_value);
+        }
+
+        if (format == JSON) {
+            char *json_string = G_json_serialize_to_string_pretty(root_value);
+            if (!json_string) {
+                G_json_value_free(root_value);
+                G_fatal_error(_("Failed to serialize JSON to pretty format."));
+            }
+
+            puts(json_string);
+
+            G_json_free_serialized_string(json_string);
+            G_json_value_free(root_value);
         }
     }
     else {
@@ -616,33 +732,36 @@ int main(int argc, char *argv[])
                 continue;
             }
 
-            sprintf(buf, "update %s set %s = ", Fi->table, opt.col->answer);
+            snprintf(buf, sizeof(buf), "update %s set %s = ", Fi->table,
+                     opt.col->answer);
 
             db_set_string(&stmt, buf);
 
             if (out_type == CELL_TYPE) {
                 if (cache[point].count > 1 ||
                     Rast_is_c_null_value(&cache[point].value)) {
-                    sprintf(buf, "NULL");
+                    snprintf(buf, sizeof(buf), "NULL");
                 }
                 else
-                    sprintf(buf, "%d ", cache[point].value);
+                    snprintf(buf, sizeof(buf), "%d ", cache[point].value);
             }
             else { /* FCELL or DCELL */
                 if (cache[point].count > 1 ||
                     Rast_is_d_null_value(&cache[point].dvalue)) {
-                    sprintf(buf, "NULL");
+                    snprintf(buf, sizeof(buf), "NULL");
                 }
                 else
-                    sprintf(buf, "%.*g", width, cache[point].dvalue);
+                    snprintf(buf, sizeof(buf), "%.*g", width,
+                             cache[point].dvalue);
             }
             db_append_string(&stmt, buf);
 
-            sprintf(buf, " where %s = %d", Fi->key, cache[point].cat);
+            snprintf(buf, sizeof(buf), " where %s = %d", Fi->key,
+                     cache[point].cat);
             db_append_string(&stmt, buf);
             /* user provides where condition: */
             if (opt.where->answer) {
-                sprintf(buf, " AND %s", opt.where->answer);
+                snprintf(buf, sizeof(buf), " AND %s", opt.where->answer);
                 db_append_string(&stmt, buf);
             }
             G_debug(3, "%s", db_get_string(&stmt));

@@ -38,6 +38,10 @@
 # % options: -99-99
 # % answer: 0
 # %end
+# %flag
+# % key: n
+# % description: Respect NULL values while drawing
+# %end
 
 
 from grass.script import core as gcore
@@ -45,15 +49,20 @@ from grass.exceptions import CalledModuleError
 
 
 def main():
-    options, unused = gcore.parser()
+    options, flags = gcore.parser()
 
     drape_map = options["color"]
     relief_map = options["shade"]
     brighten = options["brighten"]
+    d_his_flags = "n" if flags["n"] else ""
 
     try:
         gcore.run_command(
-            "d.his", hue=drape_map, intensity=relief_map, brighten=brighten
+            "d.his",
+            hue=drape_map,
+            intensity=relief_map,
+            brighten=brighten,
+            flags=d_his_flags,
         )
     except CalledModuleError:
         gcore.fatal(_("Module %s failed. Check the above error messages.") % "d.his")

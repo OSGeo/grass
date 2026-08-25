@@ -52,6 +52,9 @@ def print_map_semantic_label(name, label_reader):
     """Print semantic label information assigned to a single raster map
 
     :param str name: raster map name
+    :param label_reader: SemanticLabelReader used to print label details
+
+    :return int: return code
     """
     from grass.pygrass.raster import RasterRow
 
@@ -59,11 +62,14 @@ def print_map_semantic_label(name, label_reader):
         with RasterRow(name) as rast:
             semantic_label = rast.info.semantic_label
             if semantic_label:
-                label_reader.print_info(semantic_label)
+                label_reader.print_info(semantic_label=semantic_label)
             else:
                 gs.info(_("No semantic label assigned to <{}>").format(name))
-    except OpenError as e:
+    except OpenError:
         gs.error(_("Map <{}> not found").format(name))
+        return 1
+
+    return 0
 
 
 def manage_map_semantic_label(name, semantic_label):
@@ -94,7 +100,7 @@ def manage_map_semantic_label(name, semantic_label):
             except GrassError as e:
                 gs.error(_("Unable to assign/dissociate semantic label. {}").format(e))
                 return 1
-    except OpenError as e:
+    except OpenError:
         gs.error(_("Map <{}> not found in current mapset").format(name))
         return 1
 
@@ -127,10 +133,10 @@ def main():
     for i in range(len(maps)):
         semantic_label = semantic_labels[i] if multi_labels else semantic_labels[0]
         if options["operation"] == "print":
-            print_map_semantic_label(maps[i], label_reader)
-        else:
-            if manage_map_semantic_label(maps[i], semantic_label) != 0:
+            if print_map_semantic_label(maps[i], label_reader) != 0:
                 ret = 1
+        elif manage_map_semantic_label(maps[i], semantic_label) != 0:
+            ret = 1
 
     return ret
 

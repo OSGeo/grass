@@ -47,7 +47,7 @@ class InstallExtensionWindow(wx.Frame):
     ):
         self.parent = parent
         self._giface = giface
-        self.options = dict()  # list of options
+        self.options = {}  # list of options
 
         wx.Frame.__init__(self, parent=parent, id=id, title=title, **kwargs)
         self.SetIcon(
@@ -84,8 +84,7 @@ class InstallExtensionWindow(wx.Frame):
         task = gtask.parse_interface("g.extension")
         ignoreFlags = ["l", "c", "g", "a", "f", "t", "help", "quiet"]
         if sys.platform == "win32":
-            ignoreFlags.append("d")
-            ignoreFlags.append("i")
+            ignoreFlags.extend(("d", "i"))
 
         for f in task.get_options()["flags"]:
             name = f.get("name", "")
@@ -186,11 +185,11 @@ class InstallExtensionWindow(wx.Frame):
         item = self.tree.GetSelected()
         if not item or "command" not in item[0].data:
             GError(_("Extension not defined"), parent=self)
-            return
+            return None
 
         name = item[0].data["command"]
 
-        flags = list()
+        flags = []
         for key in self.options.keys():
             if self.options[key].IsChecked():
                 if len(key) == 1:
@@ -240,7 +239,7 @@ class InstallExtensionWindow(wx.Frame):
 
     def OnContextMenu(self, node):
         if not hasattr(self, "popupID"):
-            self.popupID = dict()
+            self.popupID = {}
             for key in ("install", "help"):
                 self.popupID[key] = NewId()
 
@@ -301,7 +300,7 @@ class ExtensionTreeModelBuilder:
     """Tree model of available extensions."""
 
     def __init__(self):
-        self.mainNodes = dict()
+        self.mainNodes = {}
         self.model = TreeModel(ModuleNode)
         for prefix in (
             "display",
@@ -357,11 +356,7 @@ class ExtensionTreeModelBuilder:
     def Load(self, url, full=True):
         """Load list of extensions"""
         self._emptyTree()
-
-        if full:
-            flags = "g"
-        else:
-            flags = "l"
+        flags = "g" if full else "l"
         retcode, ret, msg = RunCommand(
             "g.extension", read=True, getErrorMsg=True, url=url, flags=flags, quiet=True
         )
@@ -386,26 +381,27 @@ class ExtensionTreeModelBuilder:
                     mainNode = self.mainNodes[self._expandPrefix(prefix)]
                     currentNode = self.model.AppendNode(parent=mainNode, label=value)
                     currentNode.data = {"command": value}
-                else:
-                    if currentNode is not None:
-                        currentNode.data[key] = value
-            else:
-                try:
-                    prefix, name = line.strip().split(".", 1)
-                except ValueError:
-                    prefix = ""
-                    name = line.strip()
+                elif currentNode is not None:
+                    currentNode.data[key] = value
 
-                if self._expandPrefix(prefix) == prefix:
-                    prefix = ""
-                module = prefix + "." + name
-                mainNode = self.mainNodes[self._expandPrefix(prefix)]
-                currentNode = self.model.AppendNode(parent=mainNode, label=module)
-                currentNode.data = {
-                    "command": module,
-                    "keywords": "",
-                    "description": "",
-                }
+                continue
+
+            try:
+                prefix, name = line.strip().split(".", 1)
+            except ValueError:
+                prefix = ""
+                name = line.strip()
+
+            if self._expandPrefix(prefix) == prefix:
+                prefix = ""
+            module = prefix + "." + name
+            mainNode = self.mainNodes[self._expandPrefix(prefix)]
+            currentNode = self.model.AppendNode(parent=mainNode, label=module)
+            currentNode.data = {
+                "command": module,
+                "keywords": "",
+                "description": "",
+            }
 
 
 class ManageExtensionWindow(wx.Frame):
@@ -474,7 +470,7 @@ class ManageExtensionWindow(wx.Frame):
     def _getSelectedExtensions(self):
         eList = self.extList.GetExtensions()
         if not eList:
-            GMessage(_("No extension selected. " "Operation canceled."), parent=self)
+            GMessage(_("No extension selected. Operation canceled."), parent=self)
             return []
 
         return eList
@@ -557,7 +553,7 @@ class CheckListExtension(GListCtrl):
 
     def GetExtensions(self):
         """Get extensions to be un-installed"""
-        extList = list()
+        extList = []
         for i in range(self.GetItemCount()):
             if self.IsItemChecked(i):
                 name = self.GetItemText(i)

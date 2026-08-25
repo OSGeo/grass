@@ -27,8 +27,8 @@ between features are used. Depending on the selected vector
 <li> <b>type=point</b>: point distances are considered;</li>
 <li> <b>type=line</b>: line to line distances are considered;</li>
 <li> <b>type=area</b>: not supported, use <b>type=centroid</b> instead (and see
-	<a href="v.distance.html">v.distance</a> for calculating distances
-	between areas)</li>
+     <a href="v.distance.html">v.distance</a> for calculating distances
+     between areas)</li>
 </ul>
 
 <h2>EXAMPLES</h2>
@@ -119,6 +119,41 @@ sample standard deviation: 3468.89
 sample variance: 1.20332e+07
 kurtosis: -0.605406
 skewness: 0.238688
+</pre></div>
+
+<h3>Output in JSON format</h3>
+<div class="code"><pre>
+v.univar -e samples column=heights type=point format=json
+</pre></div>
+will output the results in JSON format:
+<div class="code"><pre>
+{
+    "n": 1832,
+    "missing": 0,
+    "nnull": 0,
+    "min": 166.946991,
+    "max": 2729482.25,
+    "range": 2729315.3030090001,
+    "sum": 78876146.145385057,
+    "mean": 43054.664926520229,
+    "mean_abs": 43054.664926520229,
+    "population_stddev": 132689.08650029532,
+    "population_variance": 17606393676.282852,
+    "population_coeff_variation": 3.0818747916573215,
+    "sample_stddev": 132725.31560308655,
+    "sample_variance": 17616009401.938931,
+    "kurtosis": 139.15698418811229,
+    "skewness": 9.7065048189730767,
+    "first_quartile": 3699.3234859999998,
+    "median": 10308.4453125,
+    "third_quartile": 29259.074218999998,
+    "percentiles": [
+        {
+            "percentile": 90,
+            "value": 86449.734375
+        }
+    ]
+}
 </pre></div>
 
 <h2>SEE ALSO</h2>

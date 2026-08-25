@@ -32,7 +32,7 @@ int print_coin(int Conformat, int out_cols, int tofile)
     double colarea_no_0, rowarea_no_0;
     double area;
 
-    int addflag;
+    int addflag = 0;
     char topformat[133], midformat[133], namformat[133];
     char fillformat[133];
     const char *mapone;
@@ -60,13 +60,14 @@ int print_coin(int Conformat, int out_cols, int tofile)
         num_panels++;
 
     width = out_cols * 12 + 32;
-    sprintf(topformat, "+%%%d.%ds+", width, width);
-    sprintf(midformat, "|%%%d.%ds|", width, width);
+    snprintf(topformat, sizeof(topformat), "+%%%d.%ds+", width, width);
+    snprintf(midformat, sizeof(midformat), "|%%%d.%ds|", width, width);
     if (Conformat != 'x')
-        sprintf(namformat, "|        | %%-%ds|    Panel Row Total    |",
-                width - 34);
+        snprintf(namformat, sizeof(namformat),
+                 "|        | %%-%ds|    Panel Row Total    |", width - 34);
     else
-        sprintf(namformat, "|        | %%-%ds|", width - 34);
+        snprintf(namformat, sizeof(namformat), "|        | %%-%ds|",
+                 width - 34);
 
     for (at_panel = 0; at_panel < num_panels; at_panel++) {
         first_col = at_panel * out_cols;
@@ -76,13 +77,15 @@ int print_coin(int Conformat, int out_cols, int tofile)
             width = (last_col - first_col) * 12 + 32;
             if (Conformat == 'x')
                 width -= 24;
-            sprintf(topformat, "+%%%d.%ds+", width, width);
-            sprintf(midformat, "|%%%d.%ds|", width, width);
+            snprintf(topformat, sizeof(topformat), "+%%%d.%ds+", width, width);
+            snprintf(midformat, sizeof(midformat), "|%%%d.%ds|", width, width);
             if (Conformat != 'x')
-                sprintf(namformat, "|        | %%-%ds|    Panel Row Total    |",
-                        width - 34);
+                snprintf(namformat, sizeof(namformat),
+                         "|        | %%-%ds|    Panel Row Total    |",
+                         width - 34);
             else
-                sprintf(namformat, "|        | %%-%ds|", width - 10);
+                snprintf(namformat, sizeof(namformat), "|        | %%-%ds|",
+                         width - 10);
         }
 
         /* Determine if room enough for Table Row Total at end of last panel */
@@ -90,8 +93,8 @@ int print_coin(int Conformat, int out_cols, int tofile)
         if (at_panel == (num_panels - 1) &&
             (last_col - first_col) < (out_cols - 2)) {
             addflag = 1;
-            sprintf(fillformat, "%%1.%ds%%s",
-                    (out_cols - (last_col - first_col)) * 12 - 25);
+            snprintf(fillformat, sizeof(fillformat), "%%1.%ds%%s",
+                     (out_cols - (last_col - first_col)) * 12 - 25);
         }
         if (Conformat == 'x')
             addflag = 0;

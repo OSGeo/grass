@@ -62,7 +62,7 @@ label_t *labels_init(struct params *p, int *n_labels)
     G_debug(1, "Need to allocate %lu bytes of memory",
             sizeof(label_t) * label_sz);
     labels = (label_t *)G_malloc(sizeof(label_t) * label_sz);
-    G_debug(1, "labels=%p", labels);
+    G_debug(1, "labels=%p", (void *)labels);
 
     if (labels == NULL)
         G_fatal_error(_("Cannot allocate %lu bytes of memory"),
@@ -102,7 +102,7 @@ label_t *labels_init(struct params *p, int *n_labels)
     buffer = atof(p->isize->answer);
 
     /* use 1 point = 1 map unit */
-    if (FT_Set_Char_Size(face, (int)((font_size)*64.0), 0, 100, 100))
+    if (FT_Set_Char_Size(face, (int)((font_size) * 64.0), 0, 100, 100))
         G_fatal_error(_("Unable to set font size"));
 
     /* start reading the map */
@@ -149,8 +149,8 @@ label_t *labels_init(struct params *p, int *n_labels)
 
         sql = (char *)G_malloc(sql_len);
         /* Read label from database */
-        sprintf(sql, "select %s from %s where %s = %d", p->column->answer,
-                fi->table, fi->key, cat);
+        snprintf(sql, sql_len, "select %s from %s where %s = %d",
+                 p->column->answer, fi->table, fi->key, cat);
         G_debug(3, "SQL: %s", sql);
         db_init_string(&query);
         db_set_string(&query, sql);
@@ -216,17 +216,19 @@ label_t *labels_init(struct params *p, int *n_labels)
     G_percent(label_sz, label_sz, 10);
 
     *n_labels = i;
+    Vect_destroy_field_info(fi);
     return labels;
 }
 
 /**
  * This function calculates the skyline of a label and stores it in the label
  * structure.
- * @param face The openned FT library face to use.
- * @param The charset to use
+ * @param face The opened FT library face to use.
+ * @param The charset to use [unused]
  * @param The label to which we want to create a skyline
  */
-static int label_skyline(FT_Face face, const char *charset, label_t *label)
+static int label_skyline(FT_Face face, const char *charset G_UNUSED,
+                         label_t *label)
 {
     int i, len;
     double advance = 0.0;
@@ -331,7 +333,7 @@ void label_candidates(label_t *labels, int n_labels)
 {
     int i;
 
-    /* generate candidate location for each label based on feture type
+    /* generate candidate location for each label based on feature type
      * see chapter 5 of MERL-TR-96-04 */
     fprintf(stderr, "Generating label candidates: ...");
     for (i = 0; i < n_labels; i++) {
@@ -713,6 +715,8 @@ static void label_line_candidates(label_t *label)
         label_point_candidates(label);
         label->shape = tmp_shape;
         Vect_destroy_line_struct(tmp);
+        G_free(above_candidates);
+        G_free(below_candidates);
         return;
     }
 
@@ -1026,6 +1030,7 @@ static double label_lineover(label_t *label, label_candidate_t *candidate,
     n = Vect_select_lines_by_polygon(&Map, trbb, 0, NULL, linetype, il);
 
     if (n == 0) {
+        Vect_destroy_list(il);
         return 0.0;
     }
 
@@ -1089,8 +1094,8 @@ static double label_lineover(label_t *label, label_candidate_t *candidate,
  * line.
  * @param skyline The skyline to investigate.
  * @param swathline The swath line to investigate.
- * @param p The point on the skyline which is neares to the swath line is stored
- * in this structure.
+ * @param p The point on the skyline which is nearest to the swath line is
+ * stored in this structure.
  * @return The distance in map units.
  */
 static double min_dist_2_lines(struct line_pnts *skyline,
@@ -1215,7 +1220,7 @@ void label_candidate_overlap(label_t *labels, int n_labels)
  * This function checks if the two given boxes overlap.
  * @param a Bounding box A
  * @param b Bounding box B
- * @return REtruns 1 if the two boxes overlap 0 if not.
+ * @return returns 1 if the two boxes overlap 0 if not.
  */
 static int box_overlap(struct bound_box *a, struct bound_box *b)
 {

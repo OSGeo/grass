@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 

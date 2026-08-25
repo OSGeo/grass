@@ -7,45 +7,48 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    branches:
-      - main
-      - releasebranch_*
+
+permissions: {}
 
 jobs:
   build:
     name: ${{ matrix.c }} & ${{ matrix.cpp }}
 
-    runs-on: ubuntu-22.04
+    concurrency:
+      group: >-
+        ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
+        matrix.c }}-${{ matrix.cpp }}
+      cancel-in-progress: true
+
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         include:
-          - c: gnu99
-            cpp: c++11
-          - c: gnu11
-            cpp: c++11
-          - c: gnu11
-            cpp: c++14
           - c: gnu17
             cpp: c++17
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Get dependencies
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
+          LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+          sudo apt-get update -y
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
       - name: Create installation directory
         run: |
-          mkdir $HOME/install
+          mkdir "${HOME}/install"
       - name: Ensure one core for compilation
         run: |
-          echo "MAKEFLAGS=-j1" >> $GITHUB_ENV
+          echo "MAKEFLAGS=-j1" >> "${GITHUB_ENV}"
       - name: Set LD_LIBRARY_PATH for compilation
         run: |
-          echo "LD_LIBRARY_PATH=$HOME/install/lib" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=${HOME}/install/lib" >> "${GITHUB_ENV}"
       - name: Print build environment variables
         shell: bash -el {0}
         run: |
@@ -56,8 +59,8 @@ jobs:
         env:
           # TODO: -pedantic-errors here won't go through ./configure (with GNU C)
           CFLAGS: -std=${{ matrix.c }} -fPIC -Wall -Wextra
-            -Wno-error=implicit-fallthrough -Wno-error=unused-parameter
           # TODO: -pedantic-errors here won't compile
           CXXFLAGS: -std=${{ matrix.cpp }} -fPIC -Wall -Wextra
-            -Wno-error=implicit-fallthrough -Wno-error=unused-parameter
-        run: .github/workflows/build_ubuntu-22.04.sh $HOME/install -Werror
+        run: |
+          .github/workflows/build_ubuntu-22.04.sh "${HOME}/install" \
+              -isystem/usr/include/gdal -Wpedantic -Werror

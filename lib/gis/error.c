@@ -345,7 +345,7 @@ static void log_error(const char *msg, int fatal)
 
     /* get current working directory */
     if (getcwd(cwd, sizeof(cwd)) == NULL)
-        sprintf(cwd, "%s", _("unknown"));
+        snprintf(cwd, sizeof(cwd), "%s", _("unknown"));
 
     /* write the error log file */
     if ((gisbase = G_gisbase()))
@@ -370,7 +370,7 @@ void G_init_logging(void)
     if (!logfile) {
         char buf[GPATH_MAX];
 
-        sprintf(buf, "%s/GIS_ERROR_LOG", G__home());
+        snprintf(buf, GPATH_MAX, "%s/GIS_ERROR_LOG", G__home());
         logfile = G_store(buf);
     }
 
@@ -487,19 +487,22 @@ static int print_word(FILE *fd, char **word, int *len, const int lead)
 /* Print one message, prefix inserted before each new line */
 static void print_sentence(FILE *fd, const int type, const char *msg)
 {
-    char prefix[100];
+    char prefix[100] = "";
     const char *start;
     int id = G_counter_next(&message_id);
 
     switch (type) {
     case MSG:
-        sprintf(prefix, "GRASS_INFO_MESSAGE(%d,%d): ", getpid(), id);
+        snprintf(prefix, sizeof(prefix),
+                 "GRASS_INFO_MESSAGE(%d,%d): ", getpid(), id);
         break;
     case WARN:
-        sprintf(prefix, "GRASS_INFO_WARNING(%d,%d): ", getpid(), id);
+        snprintf(prefix, sizeof(prefix),
+                 "GRASS_INFO_WARNING(%d,%d): ", getpid(), id);
         break;
     case ERR:
-        sprintf(prefix, "GRASS_INFO_ERROR(%d,%d): ", getpid(), id);
+        snprintf(prefix, sizeof(prefix), "GRASS_INFO_ERROR(%d,%d): ", getpid(),
+                 id);
         break;
     }
 

@@ -19,6 +19,7 @@
    not removed.
    --------------------------------------------------------------------
  */
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -687,6 +688,8 @@ void CleanEdges(void)
         e = edges;
         DELETE(edges, e);
     }
+    if (!edges)
+        return;
     e = edges->next;
     do {
         if (e->delete) {
@@ -711,6 +714,8 @@ void CleanFaces(void)
         f = faces;
         DELETE(faces, f);
     }
+    if (!faces)
+        return;
     f = faces->next;
     do {
         if (f->visible) {
@@ -746,6 +751,8 @@ void CleanVertices(void)
         v = vertices;
         DELETE(vertices, v);
     }
+    if (!vertices)
+        return;
     v = vertices->next;
     do {
         if (v->mark && !v->onhull) {

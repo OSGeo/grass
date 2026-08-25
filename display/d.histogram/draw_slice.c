@@ -74,7 +74,7 @@ int draw_slice(struct Colors *colors, int fill_flag, DCELL fill_color1,
     if (a2 > 15.0) {
         /* draw a label */
         arc = a1 + a2 / 2;
-        sprintf(txt, "%2.0f%s", (a2 / 360.0) * 100.0, percent);
+        snprintf(txt, sizeof(txt), "%2.0f%s", (a2 / 360.0) * 100.0, percent);
         D_get_text_box(txt, &tt, &tb, &tl, &tr);
         lx = x[0] + (r + 0.03) * (width)*cos(arc / 57.296) - (tr - tl) / 2;
         ly = y[0] - (r + 0.03) * (height)*sin(arc / 57.296) + (tb - tt) / 2;

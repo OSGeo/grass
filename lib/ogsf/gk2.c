@@ -421,7 +421,7 @@ int GK_delete_key(float pos, float precis, int justone)
    GK_add_key() will fail unless force_replace is TRUE.
 
    \param pos position
-   \param fmaks
+   \param fmask
    \param force_replace
    \param precis precision value
 

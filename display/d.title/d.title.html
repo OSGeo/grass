@@ -25,17 +25,18 @@ the user should choose a text size appropriate to this frame.
 For example, a user wishing to create a suitable TITLE for the
 Spearfish, SD <em>soils</em> map layer and to display this TITLE in the
 active display frame on the graphics monitor might type the following:
-<dl>
-<dd> <b>d.title map=</b><em>soils</em> <b>color=</b><em>red</em> <b>size=</b><em>5</em> <b>&gt; TITLE.file</b>
-<dd> <b><a href="d.text.html">d.text</a> &lt; TITLE.file</b>
-</dl>
+
+<div class="code"><pre>
+d.title map=soils color=red size=5 &gt; TITLE.file
+d.text &lt; TITLE.file
+</pre></div>
+
 Alternately, the user might pipe <em>d.title</em> output directly
 into <em><a href="d.text.html">d.text</a>:</em>
-<dl>
-<dd>
-<b>d.title map=</b><em>soils</em> <b>color=</b><em>red</em> <b>size=</b><em>5</em> |
-<a href="d.text.html">d.text</a>
-</dl>
+
+<div class="code"><pre>
+d.title map=soils color=red size=5 | d.text
+</pre></div>
 
 <p>A file created by <em>d.title</em> can be displayed
 with <em><a href="d.text.html">d.text</a></em>.
@@ -45,8 +46,10 @@ Information contained in this file takes precedence over the
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.font.html">d.font</a></em><br>
-<em><a href="d.text.html">d.text</a></em><br>
+<em>
+<a href="d.font.html">d.font</a>,
+<a href="d.text.html">d.text</a>
+</em>
 
 <h2>AUTHOR</h2>
 

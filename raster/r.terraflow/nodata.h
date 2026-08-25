@@ -47,8 +47,8 @@ public: /* struct, so members public */
                                              * this cell */
 public:
     nodataType(dimension_type gi, dimension_type gj, cclabel_type glab)
-        : ijBaseType(gi, gj), label(glab), valid(true){};
-    nodataType() : valid(false){};
+        : ijBaseType(gi, gj), label(glab), valid(true) {};
+    nodataType() : valid(false) {};
     void invalidate() { valid = false; }
     elevation_type getElevation()
     {

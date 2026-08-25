@@ -34,7 +34,7 @@ void extract_init(struct SigSet *S)
         for (i = 0; i < C->nsubclasses; i++) {
             SubS = &(C->SubSig[i]);
 
-            /* Test for symetric  matrix */
+            /* Test for symmetric  matrix */
             for (b1 = 0; b1 < nbands; b1++)
                 for (b2 = 0; b2 < nbands; b2++) {
                     if (SubS->R[b1][b2] != SubS->R[b2][b1])
@@ -141,7 +141,7 @@ void extract(DCELL ***img,          /* multispectral image, img[band][i][j] */
                         ll[i][j][m] = subll[0];
                     }
                     /* compute mixture likelihood */
-                    else {
+                    else if (C->nsubclasses > 1) {
                         /* find the most likely subclass */
                         for (k = 0; k < C->nsubclasses; k++) {
                             if (k == 0)
@@ -156,6 +156,9 @@ void extract(DCELL ***img,          /* multispectral image, img[band][i][j] */
                             subsum += exp(subll[k] - maxlike) * C->SubSig[k].pi;
 
                         ll[i][j][m] = log(subsum) + maxlike;
+                    }
+                    else {
+                        ll[i][j][m] = 0.0;
                     }
                 }
             }

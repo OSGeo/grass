@@ -89,7 +89,7 @@ void init_database(struct Map_info *Out, dbDriver **driver,
         G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                       (*Fi)->database, (*Fi)->driver);
 
-    sprintf(buf, "create table %s (%s)", (*Fi)->table, columns);
+    snprintf(buf, sizeof(buf), "create table %s (%s)", (*Fi)->table, columns);
 
     db_set_string(&sql, buf);
     G_debug(2, "%s", db_get_string(&sql));
@@ -118,8 +118,8 @@ void insert_point(dbDriver *driver, char *table, int cat, int path, int stop_id,
 
     db_init_string(&sql);
 
-    sprintf(buf, "insert into %s values (%d, %d, %d, %d, %d, %d)", table, cat,
-            path, stop_id, index, arrival_time, departure_time);
+    snprintf(buf, sizeof(buf), "insert into %s values (%d, %d, %d, %d, %d, %d)",
+             table, cat, path, stop_id, index, arrival_time, departure_time);
     db_set_string(&sql, buf);
     G_debug(3, "%s", db_get_string(&sql));
     if (db_execute_immediate(driver, &sql) != DB_OK) {
@@ -138,9 +138,9 @@ void insert_line(dbDriver *driver, char *table, int cat, int path, int from_id,
 
     db_init_string(&sql);
 
-    sprintf(buf, "insert into %s values (%d, %d, %d, %d, %d, %d, %d, %d)",
-            table, cat, path, from_id, to_id, route_id, index, from_time,
-            to_time);
+    snprintf(buf, sizeof(buf),
+             "insert into %s values (%d, %d, %d, %d, %d, %d, %d, %d)", table,
+             cat, path, from_id, to_id, route_id, index, from_time, to_time);
     db_set_string(&sql, buf);
     G_debug(3, "%s", db_get_string(&sql));
     if (db_execute_immediate(driver, &sql) != DB_OK) {
@@ -176,9 +176,7 @@ void write_subroute(struct segment *seg, struct line_pnts *line, int line_id)
     struct line_cats *Cats;
     struct ilist *list;
 
-    Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    list = Vect_new_list();
     r = seg->route;
 
     Vect_cat_set(Cats, 2, line_id);
@@ -187,6 +185,9 @@ void write_subroute(struct segment *seg, struct line_pnts *line, int line_id)
         Vect_write_line(&Out, GV_LINE, line, Cats);
         return;
     }
+
+    Points = Vect_new_line_struct();
+    list = Vect_new_list();
 
     for (i = 0; i < nnodes; i++)
         edges[i] = 0;

@@ -48,7 +48,7 @@ int db__driver_list_databases(dbString *dbpath, int npaths, dbHandle **dblist,
             pgconn.dbname, pgconn.user, pgconn.password, pgconn.host,
             pgconn.port, pgconn.options, pgconn.tty);
 
-    db_get_login2("pg", NULL, &user, &passwd, &host, &port);
+    db_get_login("pg", NULL, &user, &passwd, &host, &port);
     G_debug(1, "user = %s, passwd = %s", user, passwd ? "xxx" : "");
 
     if (user || passwd) {

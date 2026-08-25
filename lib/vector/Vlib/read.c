@@ -19,31 +19,37 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-static int read_dummy()
+static int read_dummy(struct Map_info *Map G_UNUSED,
+                      struct line_pnts *line_p G_UNUSED,
+                      struct line_cats *line_c G_UNUSED)
 {
     G_warning("Vect_read_line() %s", _("for this format/level not supported"));
     return -1;
 }
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format()
+#if !defined HAVE_POSTGRES
+static int format(struct Map_info *Map G_UNUSED,
+                  struct line_pnts *line_p G_UNUSED,
+                  struct line_cats *line_c G_UNUSED)
+{
+    G_fatal_error(_("Requested format is not compiled in this version"));
+    return 0;
+}
+
+static int format2(struct Map_info *Map G_UNUSED,
+                   struct line_pnts *line_p G_UNUSED,
+                   struct line_cats *line_c G_UNUSED, int line G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-static int (*Read_next_line_array[][3])() = {
-    {read_dummy, V1_read_next_line_nat, V2_read_next_line_nat}
-#ifdef HAVE_OGR
-    ,
+static int (*Read_next_line_array[][3])(struct Map_info *, struct line_pnts *,
+                                        struct line_cats *) = {
+    {read_dummy, V1_read_next_line_nat, V2_read_next_line_nat},
     {read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr},
     {read_dummy, V1_read_next_line_ogr, V2_read_next_line_ogr}
-#else
-    ,
-    {read_dummy, format, format},
-    {read_dummy, format, format}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {read_dummy, V1_read_next_line_pg, V2_read_next_line_pg}
@@ -53,20 +59,15 @@ static int (*Read_next_line_array[][3])() = {
 #endif
 };
 
-static int (*Read_line_array[])() = {V2_read_line_nat
-#ifdef HAVE_OGR
-                                     ,
-                                     V2_read_line_sfa, V2_read_line_sfa
-#else
-                                     ,
-                                     format, format
-#endif
+static int (*Read_line_array[])(struct Map_info *, struct line_pnts *,
+                                struct line_cats *, int) = {
+    V2_read_line_nat, V2_read_line_sfa, V2_read_line_sfa
 #ifdef HAVE_POSTGRES
-                                     ,
-                                     V2_read_line_pg
+    ,
+    V2_read_line_pg
 #else
-                                     ,
-                                     format
+    ,
+    format2
 #endif
 };
 
@@ -81,7 +82,7 @@ static int (*Read_line_array[])() = {V2_read_line_nat
    \return feature id
    \return -1 on error
  */
-int Vect_get_next_line_id(const struct Map_info *Map)
+int Vect_get_next_line_id(struct Map_info *Map)
 {
     G_debug(3, "Vect_get_next_line()");
 
@@ -114,7 +115,7 @@ int Vect_get_next_line_id(const struct Map_info *Map)
    \return -1 on error
    \return -2 nothing to read
  */
-int Vect_read_next_line(const struct Map_info *Map, struct line_pnts *line_p,
+int Vect_read_next_line(struct Map_info *Map, struct line_pnts *line_p,
                         struct line_cats *line_c)
 {
     int ret;
@@ -127,9 +128,12 @@ int Vect_read_next_line(const struct Map_info *Map, struct line_pnts *line_p,
     }
 
     ret = (*Read_next_line_array[Map->format][Map->level])(Map, line_p, line_c);
-    if (ret == -1)
+    if (ret == -1) {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to read feature %d from vector map <%s>"),
-                  Map->next_line, Vect_get_full_name(Map));
+                  Map->next_line, map_name);
+        G_free((void *)map_name);
+    }
 
     return ret;
 }
@@ -137,7 +141,7 @@ int Vect_read_next_line(const struct Map_info *Map, struct line_pnts *line_p,
 /*!
    \brief Read vector feature (topological level required)
 
-   This function implements random access. Constraits are ignored.
+   This function implements random access. Constraints are ignored.
 
    Note: Topology must be built at level >= GV_BUILD_BASE
 
@@ -152,7 +156,7 @@ int Vect_read_next_line(const struct Map_info *Map, struct line_pnts *line_p,
    \return -1 on failure
    \return -2 nothing to read
  */
-int Vect_read_line(const struct Map_info *Map, struct line_pnts *line_p,
+int Vect_read_line(struct Map_info *Map, struct line_pnts *line_p,
                    struct line_cats *line_c, int line)
 {
     int ret;
@@ -171,9 +175,12 @@ int Vect_read_line(const struct Map_info *Map, struct line_pnts *line_p,
 
     ret = (*Read_line_array[Map->format])(Map, line_p, line_c, line);
 
-    if (ret == -1)
+    if (ret == -1) {
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to read feature %d from vector map <%s>"), line,
-                  Vect_get_full_name(Map));
+                  map_name);
+        G_free((void *)map_name);
+    }
 
     return ret;
 }
@@ -189,7 +196,7 @@ int Vect_read_line(const struct Map_info *Map, struct line_pnts *line_p,
    \return 1 feature alive
    \return 0 feature is dead or index is out of range
  */
-int Vect_line_alive(const struct Map_info *Map, int line)
+int Vect_line_alive(struct Map_info *Map, int line)
 {
     if (line < 1 || line > Map->plus.n_lines) {
         G_warning(_("Line index is out of range"));
@@ -213,7 +220,7 @@ int Vect_line_alive(const struct Map_info *Map, int line)
    \return 1 node alive
    \return 0 node is dead or index is out of range
  */
-int Vect_node_alive(const struct Map_info *Map, int node)
+int Vect_node_alive(struct Map_info *Map, int node)
 {
     if (node < 1 || node > Map->plus.n_nodes) {
         G_warning(_("Node index is out of range"));
@@ -237,7 +244,7 @@ int Vect_node_alive(const struct Map_info *Map, int node)
    \return 1 area alive
    \return 0 area is dead or index is out of range
  */
-int Vect_area_alive(const struct Map_info *Map, int area)
+int Vect_area_alive(struct Map_info *Map, int area)
 {
     if (area < 1 || area > Map->plus.n_areas) {
         G_warning(_("Area index is out of range"));
@@ -261,7 +268,7 @@ int Vect_area_alive(const struct Map_info *Map, int area)
    \return 1 isle alive
    \return 0 isle is dead or index is out of range
  */
-int Vect_isle_alive(const struct Map_info *Map, int isle)
+int Vect_isle_alive(struct Map_info *Map, int isle)
 {
     if (isle < 1 || isle > Map->plus.n_isles) {
         G_warning(_("Isle index is out of range"));
@@ -287,7 +294,7 @@ int Vect_isle_alive(const struct Map_info *Map, int isle)
    \return feature offset
    \return -1 on error
  */
-off_t Vect_get_line_offset(const struct Map_info *Map, int line)
+off_t Vect_get_line_offset(struct Map_info *Map, int line)
 {
     if (line < 1 || line > Map->plus.n_lines) {
         return -1;

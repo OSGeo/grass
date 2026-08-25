@@ -15,7 +15,7 @@
 #############################################################################
 
 # %module
-# % description: Exports a vector map as GRASS GIS specific archive file
+# % description: Exports a vector map as GRASS specific archive file
 # % keyword: vector
 # % keyword: export
 # % keyword: copying
@@ -38,9 +38,11 @@ import sys
 import tarfile
 import atexit
 
+from pathlib import Path
+
 from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
-from grass.script import vector as vector
+from grass.script import vector
 
 
 def cleanup():
@@ -71,20 +73,21 @@ def main():
         infile = infile.split("@")[0]
 
     # output name
-    if options["output"]:
-        outfile = options["output"]
-    else:
-        outfile = infile + ".pack"
+    outfile = options["output"] or infile + ".pack"
 
     # check if exists the output file
-    if os.path.exists(outfile):
+    if Path(outfile).exists():
         if os.getenv("GRASS_OVERWRITE"):
             grass.warning(
                 _("Pack file <%s> already exists and will be overwritten") % outfile
             )
             try_remove(outfile)
         else:
-            grass.fatal(_("option <%s>: <%s> exists.") % ("output", outfile))
+            grass.fatal(
+                _("option <{key}>: <{value}> exists.").format(
+                    key="output", value=outfile
+                )
+            )
 
     # prepare for packing
     grass.verbose(_("Packing <%s>...") % (gfile["fullname"]))
@@ -106,7 +109,7 @@ def main():
     else:
         # for each layer connection save a table in sqlite database
         sqlitedb = os.path.join(basedir, "db.sqlite")
-        for i, dbconn in db_vect.items():
+        for dbconn in db_vect.values():
             grass.run_command(
                 "db.copy",
                 from_driver=dbconn["driver"],
@@ -124,11 +127,11 @@ def main():
         path = os.path.join(
             gisenv["GISDBASE"], gisenv["LOCATION_NAME"], "PERMANENT", "PROJ_" + support
         )
-        if os.path.exists(path):
+        if Path(path).exists():
             tar.add(path, "PROJ_" + support)
     tar.close()
 
-    grass.message(_("Pack file <%s> created") % os.path.join(os.getcwd(), outfile))
+    grass.message(_("Pack file <%s> created") % Path(outfile).resolve())
 
 
 if __name__ == "__main__":

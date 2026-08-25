@@ -221,7 +221,7 @@ int gv_set_defaults(geovect *gv)
    \param gv pointer to geovect struct
 
    \return -1 on failure
-   \return 0 on succcess
+   \return 0 on success
  */
 int gv_init_vect(geovect *gv)
 {

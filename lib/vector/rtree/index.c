@@ -40,7 +40,12 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <assert.h>
+#include <string.h>
+#include <errno.h>
+
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "index.h"
 
 /*!
@@ -134,7 +139,11 @@ struct RTree *RTreeCreateTree(int fd, off_t rootpos, int ndims)
         }
 
         /* write empty root node */
-        lseek(new_rtree->fd, rootpos, SEEK_SET);
+        if (lseek(new_rtree->fd, rootpos, SEEK_SET) == -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
         RTreeWriteNode(n, new_rtree);
         RTreeFreeNode(n);
         new_rtree->root = NULL;
@@ -223,7 +232,6 @@ void RTreeSetOverflow(struct RTree *t, char overflow)
 
    \return nothing
  */
-
 void RTreeDestroyTree(struct RTree *t)
 {
     int i;
@@ -279,7 +287,7 @@ void RTreeDestroyTree(struct RTree *t)
 /*!
    \brief Search an R*-Tree
 
-   Search in an RTree for all data retangles that overlap or touch the
+   Search in an RTree for all data rectangles that overlap or touch the
    argument rectangle.
    Return the number of qualifying data rectangles.
    The search stops if the SearchHitCallBack function returns 0 (zero)

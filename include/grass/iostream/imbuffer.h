@@ -82,7 +82,7 @@ private:
     T *data;
 
     bool sorted; // true if it is sorted; set when the buffer is sorted
-    // to prevent sorting it twice
+                 // to prevent sorting it twice
 
 public:
     // create a buffer of maxsize n
@@ -112,7 +112,7 @@ public:
     // insert an item in buffer in next free position; fail if buffer full
     bool insert(T &x);
 
-    // insert n items in buffer; return the number of items acually inserted
+    // insert n items in buffer; return the number of items actually inserted
     unsigned long insert(T *x, unsigned long n);
 
     //(quick)sort (ascending order) the buffer (in place);
@@ -196,7 +196,7 @@ private:
     // sort the buffer (recursively)
     void sort_rec(unsigned long start, unsigned long end);
 
-    // partition the buffer and return the the position of the pivot
+    // partition the buffer and return the position of the pivot
     unsigned long partition(unsigned long start, unsigned long end);
 };
 
@@ -240,7 +240,7 @@ bool im_buffer<T>::insert(T &x)
 }
 
 /************************************************************/
-// insert n items in buffer; return the number of items acually inserted
+// insert n items in buffer; return the number of items actually inserted
 template <class T>
 unsigned long im_buffer<T>::insert(T *x, unsigned long n)
 {
@@ -286,7 +286,7 @@ void im_buffer<T>::sort_rec(unsigned long start, unsigned long end)
 }
 
 /************************************************************/
-// partition the buffer in place and return the the position of the
+// partition the buffer in place and return the position of the
 // pivot
 template <class T>
 unsigned long im_buffer<T>::partition(unsigned long start, unsigned long end)
@@ -372,7 +372,7 @@ void im_buffer<T>::print_range() const
 #endif
         assert(data);
 
-        // determin min and  max
+        // determine min and  max
         T min, max;
         min = data[0];
         if (sorted) {

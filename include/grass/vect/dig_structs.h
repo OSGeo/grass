@@ -1,5 +1,5 @@
 /*!
-   \file include/vect/dig_structs.h
+   \file include/grass/vect/dig_structs.h
 
    \brief Data structures for \ref vectorlib
 
@@ -23,9 +23,7 @@
 #include <grass/rtree.h>
 #include <grass/dbmi.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
-#endif
 
 #ifdef HAVE_POSTGRES
 #include <libpq-fe.h>
@@ -399,7 +397,7 @@ struct Format_info_offset {
 
        5. ring in 3. polygon in 7. feature (multipolygon) of geometry
        collection which has FID = 123 123 (feature 123: geometry
-       colletion) 6 (7. feature in geometry collection: multiPolygon) 2
+       collection) 6 (7. feature in geometry collection: multiPolygon) 2
        (3. polygon) 4 (5. ring in the polygon)
 
        Example 2: geometry collection FID '1' containing one point, one
@@ -519,7 +517,6 @@ struct Format_info_ogr {
        \brief SQL where statement (to filter features)
      */
     char *where;
-#ifdef HAVE_OGR
     /*!
        \brief Pointer to OGRDriver
      */
@@ -532,11 +529,6 @@ struct Format_info_ogr {
        \brief Pointer to OGRLayer
      */
     OGRLayerH layer;
-#else
-    void *driver;
-    void *ds;
-    void *layer;
-#endif
 
     /*!
        \brief Open DB driver when writing attributes
@@ -565,11 +557,7 @@ struct Format_info_ogr {
 
        NULL if no feature is in cache
      */
-#ifdef HAVE_OGR
     OGRFeatureH feature_cache;
-#else
-    void *feature_cache;
-#endif
 
     /*!
        \brief Offset list used for building pseudo-topology
@@ -605,7 +593,7 @@ struct Format_info_pg {
      */
     char *table_name;
     /*!
-       \brief SQL where statement (fo filter features)
+       \brief SQL where statement (of filter features)
      */
     char *where;
     /*!
@@ -795,7 +783,7 @@ struct Plus_head {
     /*!
        \brief Offset size
 
-       Because Plus_head is available to all releveant
+       Because Plus_head is available to all relevant
        functions
      */
     int off_t_size;
@@ -1306,7 +1294,7 @@ struct Map_info {
     /*!
        \brief Support files were updated
 
-       Non-zero code to indicate that supoort file were updated
+       Non-zero code to indicate that support files were updated
      */
     int support_updated;
 

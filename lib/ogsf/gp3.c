@@ -26,6 +26,11 @@
 #include <grass/ogsf.h>
 
 /*!
+   Free linked list of geopoint objects
+ */
+static void free_geopoint_list(geopoint *top);
+
+/*!
    \brief Load to points to memory
 
    The other alternative may be to load to a tmp file.
@@ -83,13 +88,15 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
         *has_z = 1;
         ndim = 3;
     }
+    char *mname = G_fully_qualified_name(name, mapset);
 
     while (eof == 0) {
         ltype = Vect_read_next_line(&map, Points, Cats);
         switch (ltype) {
         case -1: {
-            G_warning(_("Unable to read vector map <%s>"),
-                      G_fully_qualified_name(name, mapset));
+            G_warning(_("Unable to read vector map <%s>"), mname);
+            G_free(mname);
+            free_geopoint_list(top);
             return NULL;
         }
         case -2: /* EOF */
@@ -129,6 +136,7 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
                 (geopoint *)G_malloc(sizeof(geopoint)); /* G_fatal_error */
             G_zero(gpt->next, sizeof(geopoint));
             if (!gpt->next) {
+                free_geopoint_list(top);
                 return NULL;
             }
 
@@ -146,12 +154,14 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
     if (!np) {
         G_warning(
             _("No points from vector map <%s> fall within current region"),
-            G_fully_qualified_name(name, mapset));
+            mname);
+        G_free(mname);
+        free_geopoint_list(top);
         return (NULL);
     }
     else {
-        G_message(_("Vector map <%s> loaded (%d points)"),
-                  G_fully_qualified_name(name, mapset), np);
+        G_message(_("Vector map <%s> loaded (%d points)"), mname, np);
+        G_free(mname);
     }
 
     *nsites = np;
@@ -179,8 +189,9 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
     int red, blu, grn;
     const char *str;
     const char *mapset;
+    char *fname;
 
-    dbDriver *driver;
+    dbDriver *driver = NULL;
     dbValue value;
 
     if (!gp || !gp->tstyle || !gp->filename)
@@ -208,8 +219,9 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
     }
-    G_message(_("Loading thematic points layer <%s>..."),
-              G_fully_qualified_name(gp->filename, mapset));
+    fname = G_fully_qualified_name(gp->filename, mapset);
+    G_message(_("Loading thematic points layer <%s>..."), fname);
+    G_free(fname);
     npts = nskipped = 0;
     for (gpt = gp->points; gpt; gpt = gpt->next) {
         gpt->style = (gvstyle *)G_malloc(sizeof(gvstyle));
@@ -241,13 +253,15 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
                                 ((int)((blu) << 16) & BLU_MASK);
         }
         if (gp->tstyle->color_column) {
-            nvals = db_select_value(driver, Fi->table, Fi->key, cat,
-                                    gp->tstyle->color_column, &value);
-            if (nvals < 1)
-                continue;
-            str = db_get_value_string(&value);
-            if (!str)
-                continue;
+            if (driver) {
+                nvals = db_select_value(driver, Fi->table, Fi->key, cat,
+                                        gp->tstyle->color_column, &value);
+                if (nvals < 1)
+                    continue;
+                str = db_get_value_string(&value);
+                if (!str)
+                    continue;
+            }
             if (G_str_to_color(str, &red, &grn, &blu) != 1) {
                 G_warning(_("Invalid color definition (%s)"), str);
                 gpt->style->color = gp->style->color;
@@ -295,5 +309,17 @@ int Gp_load_sites_thematic(geosite *gp, struct Colors *colors)
             _("%d points without category. "
               "Unable to determine color rules for features without category."),
             nskipped);
+    if (driver)
+        db_close_database_shutdown_driver(driver);
+    Vect_destroy_field_info(Fi);
     return npts;
+}
+
+static void free_geopoint_list(geopoint *top)
+{
+    while (top) {
+        geopoint *next = top->next;
+        G_free(top);
+        top = next;
+    }
 }

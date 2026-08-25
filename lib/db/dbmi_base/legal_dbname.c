@@ -32,7 +32,7 @@ int db_legal_tablename(const char *s)
 {
     char buf[GNAME_MAX];
 
-    sprintf(buf, "%s", s);
+    snprintf(buf, sizeof(buf), "%s", s);
 
     if (*s == '.' || *s == 0) {
         G_warning(

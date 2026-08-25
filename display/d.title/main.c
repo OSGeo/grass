@@ -124,7 +124,7 @@ int main(int argc, char **argv)
         char inarg[GPATH_MAX];
 
         fclose(fp);
-        sprintf(inarg, "input=%s", tmpfile);
+        snprintf(inarg, sizeof(inarg), "input=%s", tmpfile);
         /* note this tmp file will remain so it can survive d.redraw */
         G_spawn("d.text", "d.text", inarg, NULL);
     }

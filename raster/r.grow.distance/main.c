@@ -387,7 +387,11 @@ int main(int argc, char **argv)
 
         G_percent(row, nrows, 2);
 
-        lseek(temp_fd, offset, SEEK_SET);
+        if (lseek(temp_fd, offset, SEEK_SET) == -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
 
         if (read(temp_fd, new_x_row, ncols * sizeof(CELL)) < 0)
             G_fatal_error(_("File reading error in %s() %d:%s"), __func__,

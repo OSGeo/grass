@@ -23,7 +23,7 @@
 #
 # If 99999 or above is given for all 3 parameters, then the parameters
 # listed in this file will not be offered to the user and there
-# must be at least one set of parameters for the corrseponding datum
+# must be at least one set of parameters for the corresponding datum
 # in the datumtransform.table file
 #
 # Please comment and cite the source if you add new parameters

@@ -158,7 +158,7 @@ module does create a new vector, a new table must also be created.
 <dt>I should add features to vector map, add tables or columns only if \c
 \-\-overwrite was specified, right?</dt>
 <dd>
-The behaviour for db operations is not cleary defined in GRASS. Quite a lot
+The behaviour for db operations is not clearly defined in GRASS. Quite a lot
 works without \c \-\-overwrite. Try \gmod{v.db.update} or \gmod{v.to.db}.
 </dd>
 

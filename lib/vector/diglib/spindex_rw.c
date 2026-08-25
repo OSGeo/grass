@@ -15,6 +15,7 @@
    \author Update to GRASS 7 Markus Metz
  */
 
+#include <inttypes.h>
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
@@ -685,7 +686,6 @@ int rtree_dump_node_file(FILE *fp, off_t pos, int with_z, struct RTree *t)
    \return -1 on error
    \return offset to root node on success
  */
-
 static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
                                      struct RTree *t, int off_t_size)
 {
@@ -744,8 +744,8 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
             /* write node to sidx file */
             if (G_ftell(fp->file) != nextfreepos)
                 G_fatal_error("Unable to write spatial index. "
-                              "Wrong node position (%" PRI_OFF_T
-                              ") in file (should be %" PRI_OFF_T ").",
+                              "Wrong node position (%" PRId64
+                              ") in file (should be %" PRId64 ").",
                               G_ftell(fp->file), nextfreepos);
 
             /* write with dig__fwrite_port_* fns */
@@ -792,7 +792,6 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
    \return -1 on error
    \return offset to root node on success
  */
-
 static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
                                    struct RTree *t, int off_t_size)
 {
@@ -863,8 +862,8 @@ static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
             /* write node to sidx file */
             if (G_ftell(fp->file) != nextfreepos)
                 G_fatal_error("Unable to write spatial index. "
-                              "Wrong node position (%" PRI_OFF_T
-                              ") in file (should be %" PRI_OFF_T ").",
+                              "Wrong node position (%" PRId64
+                              ") in file (should be %" PRId64 ").",
                               G_ftell(fp->file), nextfreepos);
 
             /* write with dig__fwrite_port_* fns */
@@ -920,7 +919,6 @@ static off_t rtree_write_to_sidx(struct gvfile *fp, off_t startpos,
 
    \return pointer to root node on success
  */
-
 static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
                                  struct RTree *t, int off_t_size)
 {
@@ -1044,7 +1042,6 @@ static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
 
    \return offset to root node
  */
-
 static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
                                struct RTree *t, int off_t_size)
 {

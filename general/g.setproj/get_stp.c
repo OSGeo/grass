@@ -29,11 +29,11 @@ void get_stp_proj(char string[])
             leave(SP_NOCHANGE);
         }
         else if (strcmp(answer, "27") == 0) {
-            sprintf(buff, STP1927PARAMS);
+            snprintf(buff, sizeof(buff), STP1927PARAMS);
             break;
         }
         else if (strcmp(answer, "83") == 0) {
-            sprintf(buff, STP1983PARAMS);
+            snprintf(buff, sizeof(buff), STP1983PARAMS);
             break;
         }
         else
@@ -51,10 +51,10 @@ int get_stp_code(int code, char *string, char *paramfile)
     int gotit = 0, stp;
     FILE *fp;
 
-    sprintf(nad27, "%s%s", G_gisbase(), paramfile);
+    snprintf(nad27, sizeof(nad27), "%s%s", G_gisbase(), paramfile);
     fp = fopen(nad27, "r");
     if (fp == NULL) {
-        sprintf(buff, "Can not open NAD27 file %s", nad27);
+        snprintf(buff, sizeof(buff), "Can not open NAD27 file %s", nad27);
         G_fatal_error(buff);
     }
     while (!gotit) {
@@ -67,7 +67,7 @@ int get_stp_code(int code, char *string, char *paramfile)
                 p = strtok(NULL, "\n");
                 while (*p == ' ')
                     p++;
-                sprintf(string, "%s", p);
+                snprintf(string, sizeof(string), "%s", p);
                 gotit = 1;
             }
         }
@@ -81,10 +81,10 @@ int get_stp_num(void)
     FILE *fipsfile;
     char FIPSfile[256], buff[256];
     int NUM_ZON, sfips, cfips, SFIPS = 0, CFIPS = 0;
-    int record, icode, reccnt, special_case;
+    int record, icode, reccnt = 0, special_case;
     char STabbr[50], COname[50];
 
-    sprintf(FIPSfile, "%s/etc/proj/FIPS.code", G_gisbase());
+    snprintf(FIPSfile, sizeof(FIPSfile), "%s/etc/proj/FIPS.code", G_gisbase());
 
     for (;;) {
 
@@ -139,7 +139,7 @@ int get_stp_num(void)
 int ask_fips(FILE *fp, int *s, int *c, int *sc)
 {
     int ii, FIPS = 0, NUM_ZON, sfips, cfips;
-    char STabbr[50], STabbr_prev[50], COname[50], answer[50], buff[256];
+    char STabbr[50], STabbr_prev[50] = "", COname[50], answer[50], buff[256];
     char *Tmp_file1, *Tmp_file2, *a, *b;
     FILE *Tmp_fd1 = NULL, *Tmp_fd2 = NULL;
     int in_stat;
@@ -160,7 +160,7 @@ int ask_fips(FILE *fp, int *s, int *c, int *sc)
             fprintf(Tmp_fd1, "%4d -- %s\n", sfips, STabbr);
             fprintf(Tmp_fd2, "%d:%s\n", sfips, STabbr);
         }
-        sprintf(STabbr_prev, "%s", STabbr);
+        snprintf(STabbr_prev, sizeof(STabbr_prev), "%s", STabbr);
     }
     fclose(Tmp_fd1);
     fclose(Tmp_fd2);
@@ -192,13 +192,14 @@ int ask_fips(FILE *fp, int *s, int *c, int *sc)
                 pager = "cat";
 
             /* Always print interactive output to stderr */
-            sprintf(buff, "%s \"%s\" 1>&2", pager,
-                    G_convert_dirseps_to_host(Tmp_file1));
+            snprintf(buff, sizeof(buff), "%s \"%s\" 1>&2", pager,
+                     G_convert_dirseps_to_host(Tmp_file1));
             G_system(buff);
         }
         else {
             a = G_find_key_value(answer, sf_keys);
-            sprintf(buff, "You have chosen state %s, Correct", a);
+            snprintf(buff, sizeof(buff), "You have chosen state %s, Correct",
+                     a);
             if (a == NULL)
                 G_warning(_("Invalid State FIPS code"));
             else if (G_yes(buff, 1))
@@ -317,13 +318,14 @@ int ask_fips(FILE *fp, int *s, int *c, int *sc)
                 pager = "cat";
 
             /* Always print interactive output to stderr */
-            sprintf(buff, "%s \"%s\" 1>&2", pager,
-                    G_convert_dirseps_to_host(Tmp_file1));
+            snprintf(buff, sizeof(buff), "%s \"%s\" 1>&2", pager,
+                     G_convert_dirseps_to_host(Tmp_file1));
             G_system(buff);
         }
         else {
             b = G_find_key_value(answer, cf_keys);
-            sprintf(buff, "You have chosen %s county, correct", b);
+            snprintf(buff, sizeof(buff), "You have chosen %s county, correct",
+                     b);
             if (b == NULL)
                 G_warning(_("Invalid County FIPS code"));
             else if (G_yes(buff, 1))

@@ -160,7 +160,7 @@ int add_plines(struct Map_info *Map, int field, double textsize)
         if (field != -1 && cat < 0)
             continue;
 
-        sprintf(cat_num, "%d", cat);
+        snprintf(cat_num, sizeof(cat_num), "%d", cat);
 
         if (ltype == GV_POINT) {
             layer = "point";
@@ -195,6 +195,8 @@ int add_plines(struct Map_info *Map, int field, double textsize)
         }
         nlines_dxf++;
     }
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
 
     return nlines_dxf;
 }

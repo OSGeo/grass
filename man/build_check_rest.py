@@ -6,10 +6,10 @@
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
-from build_rest import *
+from build_rest import message_tmpl, read_file, rest_dir, rest_files
 
 os.chdir(rest_dir)
 

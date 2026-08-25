@@ -7,41 +7,53 @@ Usage:
 
     import grass.temporal as tgis
 
-    tgis.print_gridded_dataset_univar_statistics(type, input, output, where, extended, no_header, fs, rast_region)
+    tgis.print_gridded_dataset_univar_statistics(
+        type, input, output, where, extended, no_header, fs, rast_region
+    )
 
 ..
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2024 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
+
 from multiprocessing import Pool
 from subprocess import PIPE
+import json
+
+import grass.script as gs
+from grass.pygrass.modules import Module
 
 from .core import SQLDatabaseInterfaceConnection, get_current_mapset
 from .factory import dataset_factory
 from .open_stds import open_old_stds
-import grass.script as gs
-from grass.pygrass.modules import Module
 
 ###############################################################################
 
 
-def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=False):
-    """Compute univariate statistics for a map of a space time raster or raster3d dataset
+def compute_univar_stats(
+    registered_map_info,
+    stats_module,
+    fs,
+    rast_region: bool = False,
+    output_format: str | None = None,
+):
+    """Compute univariate statistics for a map of a space time raster or raster3d
+    dataset
 
     :param registered_map_info: dict or db row with tgis info for a registered map
-    :param stats_module: Pre-configured PyGRASS Module to compute univariate statistics with
+    :param stats_module: Pre-configured PyGRASS Module to compute univariate statistics
+                        with
     :param fs: Field separator
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
            Only available for strds.
+    :param output_format: Output format specification
     """
-    string = ""
     id = registered_map_info["id"]
     start = registered_map_info["start_time"]
     end = registered_map_info["end_time"]
@@ -52,7 +64,7 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
     )
 
     stats_module.inputs.map = id
-    if rast_region:
+    if rast_region and (stats_module.inputs.zones or stats_module.name == "r3.univar"):
         stats_module.env = gs.region_env(raster=id)
     stats_module.run()
 
@@ -60,45 +72,56 @@ def compute_univar_stats(registered_map_info, stats_module, fs, rast_region=Fals
 
     if not univar_stats:
         gs.warning(
-            _(
-                "Unable to get statistics for {voxel}raster map "
-                "<{rmap}>".format(
-                    rmap=id, voxel="" if stats_module.name == "r.univar" else "3d "
-                )
-            )
+            _("Unable to get statistics for raster map <%s>") % id
+            if stats_module.name == "r.univar"
+            else _("Unable to get statistics for 3d raster map <%s>") % id
         )
         return None
-    eol = ""
 
-    for idx, stats_kv in enumerate(univar_stats.split(";")):
-        stats = gs.utils.parse_key_val(stats_kv)
-        string += (
-            f"{id}{fs}{semantic_label}{fs}{start}{fs}{end}"
-            if stats_module.name == "r.univar"
-            else f"{id}{fs}{start}{fs}{end}"
-        )
-        if stats_module.inputs.zones:
-            if idx == 0:
-                zone = str(stats["zone"])
-                string = ""
-                continue
-            string += f"{fs}{zone}"
-            if "zone" in stats:
-                zone = str(stats["zone"])
-                eol = "\n"
-            else:
-                eol = ""
-        string += f'{fs}{stats["mean"]}{fs}{stats["min"]}'
-        string += f'{fs}{stats["max"]}{fs}{stats["mean_of_abs"]}'
-        string += f'{fs}{stats["stddev"]}{fs}{stats["variance"]}'
-        string += f'{fs}{stats["coeff_var"]}{fs}{stats["sum"]}'
-        string += f'{fs}{stats["null_cells"]}{fs}{stats["n"]}'
-        string += f'{fs}{stats["n"]}'
-        if "median" in stats:
-            string += f'{fs}{stats["first_quartile"]}{fs}{stats["median"]}'
-            string += f'{fs}{stats["third_quartile"]}{fs}{stats["percentile_90"]}'
-        string += eol
-    return string
+    if output_format == "json":
+        try:
+            stats = json.loads(univar_stats)
+        except ValueError:
+            gs.warning(_("Unable to parse JSON output for map <%s>") % id)
+            return None
+
+        if isinstance(stats, dict):
+            stats = [stats]
+
+        processed_stats = []
+        for s in stats:
+            new_s = {
+                "id": id,
+                "semantic_label": semantic_label
+                if stats_module.name == "r.univar" and semantic_label
+                else None,
+                "start": str(start) if start else None,
+                "end": str(end) if end else None,
+            }
+
+            new_s.update(s)
+
+            processed_stats.append(new_s)
+
+        return processed_stats
+
+    lines = univar_stats.strip().split("\n")
+    if len(lines) < 2:
+        return ""
+
+    prefix = (
+        f"{id}{fs}{semantic_label}{fs}{start}{fs}{end}"
+        if stats_module.name == "r.univar"
+        else f"{id}{fs}{start}{fs}{end}"
+    )
+
+    output_rows = []
+    for line in lines[1:]:
+        if line.strip():
+            formatted_line = line.replace(",", fs)
+            output_rows.append(f"{prefix}{fs}{formatted_line}")
+
+    return "\n".join(output_rows)
 
 
 def print_gridded_dataset_univar_statistics(
@@ -107,25 +130,39 @@ def print_gridded_dataset_univar_statistics(
     output,
     where,
     extended,
-    no_header=False,
-    fs="|",
-    rast_region=False,
+    no_header: bool = False,
+    fs: str = "|",
+    rast_region: bool = False,
+    region_relation=None,
     zones=None,
-    nprocs=1,
-):
-    """Print univariate statistics for a space time raster or raster3d dataset
+    percentile=None,
+    nprocs: int = 1,
+    format: str = "plain",
+) -> None:
+    """Print univariate statistics for a space time raster or raster3d dataset.
+
+    Returns None if the space time raster dataset is empty or if applied
+    filters (where, region_relation) do not return any maps to process.
 
     :param type: Type of Space-Time-Dataset, must be either strds or str3ds
     :param input: The name of the space time dataset
     :param output: Name of the optional output file, if None stdout is used
     :param where: A temporal database where statement
     :param extended: If True compute extended statistics
+    :param percentile: List of percentiles to compute
     :param no_header: Suppress the printing of column names
     :param fs: Field separator
     :param nprocs: Number of cores to use for processing
+    :param format: Output format ("plain", "csv", or "json"). Default is "plain".
     :param rast_region: If set True ignore the current region settings
            and use the raster map regions for univar statistical calculation.
-           Only available for strds.
+    :param region_relation: Process only maps with the given spatial relation
+           to the computational region. A string with one of the following values:
+
+           - "overlaps": maps that spatially overlap ("intersect")
+             within the provided spatial extent
+           - "is_contained": maps that are fully within the provided spatial extent
+           - "contains": maps that contain (fully cover) the provided spatial extent
     :param zones: raster map with zones to calculate statistics for
     """
     # We need a database interface
@@ -134,24 +171,40 @@ def print_gridded_dataset_univar_statistics(
 
     sp = open_old_stds(input, type, dbif)
 
-    if output is not None:
-        out_file = open(output, "w")
+    spatial_extent = None
+    if region_relation:
+        spatial_extent = gs.parse_command("g.region", flags="3gu")
 
     strds_cols = (
         "id,start_time,end_time,semantic_label"
         if type == "strds"
         else "id,start_time,end_time"
     )
-    rows = sp.get_registered_maps(strds_cols, where, "start_time", dbif)
+    rows = sp.get_registered_maps(
+        strds_cols,
+        where,
+        "start_time",
+        dbif,
+        spatial_extent=spatial_extent,
+        spatial_relation=region_relation,
+    )
 
     if not rows and rows != [""]:
         dbif.close()
-        err = "Space time %(sp)s dataset <%(i)s> is empty"
-        if where:
-            err += " or where condition is wrong"
-        gs.fatal(
-            _(err) % {"sp": sp.get_new_map_instance(None).get_type(), "i": sp.get_id()}
+        gs.verbose(
+            _(
+                "No maps found to process. "
+                "Space time {type} dataset <{id}> is either empty "
+                "or the where condition (if used) does not return any maps "
+                "or no maps with the requested spatial relation to the "
+                "computational region exist in the dataset."
+            ).format(type=sp.get_new_map_instance(None).get_type(), id=sp.get_id())
         )
+
+        return
+
+    if output is not None:
+        out_file = open(output, "w")
 
     if no_header is False:
         cols = (
@@ -160,36 +213,48 @@ def print_gridded_dataset_univar_statistics(
             else ["id", "start", "end"]
         )
         if zones:
-            cols.append("zone")
+            cols.extend(["zone", "label"])
         cols.extend(
             [
-                "mean",
+                "non_null_cells",
+                "null_cells",
                 "min",
                 "max",
+                "range",
+                "mean",
                 "mean_of_abs",
                 "stddev",
                 "variance",
                 "coeff_var",
                 "sum",
-                "null_cells",
-                "cells",
-                "non_null_cells",
+                "sum_abs",
             ]
         )
         if extended is True:
-            cols.extend(["first_quartile", "median", "third_quartile", "percentile_90"])
-        string = fs.join(cols)
+            cols.extend(["first_quartile", "median", "third_quartile"])
+            if percentile:
+                cols.extend(
+                    [
+                        "percentile_"
+                        f"{str(perc).rstrip('0').rstrip('.').replace('.', '_')}"
+                        for perc in percentile
+                    ]
+                )
+            else:
+                cols.extend(["percentile_90"])
 
-        if output is None:
-            print(string)
-        else:
-            out_file.write(string + "\n")
+        if no_header is False and format != "json":
+            string = fs.join(cols)
+            if output is None:
+                print(string)
+            else:
+                out_file.write(string + "\n")
 
     # Define flags
-    flag = "g"
+    flag = ""
     if extended is True:
         flag += "e"
-    if type == "strds" and rast_region is True:
+    if type == "strds" and rast_region is True and not zones:
         flag += "r"
 
     # Setup pygrass module to use for computation
@@ -197,29 +262,40 @@ def print_gridded_dataset_univar_statistics(
         "r.univar" if type == "strds" else "r3.univar",
         flags=flag,
         zones=zones,
+        percentile=percentile,
         stdout_=PIPE,
+        format="json" if format == "json" else "csv",
+        quiet=True,
         run_=False,
     )
 
+    nprocs = max(nprocs, 1)
     if nprocs == 1:
         strings = [
-            compute_univar_stats(
-                row,
-                univar_module,
-                fs,
-            )
+            compute_univar_stats(row, univar_module, fs, rast_region, format)
             for row in rows
         ]
     else:
         with Pool(min(nprocs, len(rows))) as pool:
             strings = pool.starmap(
-                compute_univar_stats, [(dict(row), univar_module, fs) for row in rows]
+                compute_univar_stats,
+                [(dict(row), univar_module, fs, rast_region, format) for row in rows],
             )
 
-    if output is None:
-        print("\n".join(filter(None, strings)))
+    if format == "json":
+        json_out = []
+
+        for block in filter(None, strings):
+            json_out.extend(block)
+
+        output_str = json.dumps(json_out, indent=4)
     else:
-        out_file.write("\n".join(filter(None, strings)))
+        output_str = "\n".join(filter(None, strings))
+
+    if output is None:
+        print(output_str)
+    else:
+        out_file.write(output_str + "\n")
 
     dbif.close()
 
@@ -231,8 +307,17 @@ def print_gridded_dataset_univar_statistics(
 
 
 def print_vector_dataset_univar_statistics(
-    input, output, twhere, layer, type, column, where, extended, no_header=False, fs="|"
-):
+    input,
+    output,
+    twhere,
+    layer,
+    type,
+    column,
+    where,
+    extended,
+    no_header: bool = False,
+    fs: str = "|",
+) -> None:
     """Print univariate statistics for a space time vector dataset
 
     :param input: The name of the space time dataset
@@ -257,10 +342,7 @@ def print_vector_dataset_univar_statistics(
 
     mapset = get_current_mapset()
 
-    if input.find("@") >= 0:
-        id = input
-    else:
-        id = input + "@" + mapset
+    id = input if input.find("@") >= 0 else input + "@" + mapset
 
     sp = dataset_factory("stvds", id)
 
@@ -301,7 +383,7 @@ def print_vector_dataset_univar_statistics(
             + fs
         )
         string += "min" + fs + "max" + fs + "range"
-        if type == "point" or type == "centroid":
+        if type in {"point", "centroid"}:
             string += (
                 fs
                 + "mean"
@@ -390,7 +472,7 @@ def print_vector_dataset_univar_statistics(
         else:
             string += fs + fs + fs
 
-        if type == "point" or type == "centroid":
+        if type in {"point", "centroid"}:
             if "mean" in stats:
                 string += (
                     fs

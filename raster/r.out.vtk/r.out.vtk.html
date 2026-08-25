@@ -41,16 +41,16 @@ and puts this in a simple VTK-ASCII file. Nor XML or
 binary output are supported. It is possible to choose more then one raster map
 to be written to the VTK-ASCII file. Each cell-/pointdata is named like the raster map it represents.
 You can visualize this file with the
-<em><a href="http://www.vtk.org">VTK Toolkit</a></em>,
-<em><a href="http://www.paraview.org">Paraview</a></em> and
-<em><a href="http://mayavi.sourceforge.net">MayaVi</a></em> which are based on VTK.
+<em><a href="https://vtk.org/">VTK Toolkit</a></em>,
+<em><a href="https://www.paraview.org/">Paraview</a></em> and
+<em><a href="https://github.com/enthought/mayavi">MayaVi</a></em> which are based on VTK.
 If you have a raster map with partly no data, use the threshold filter in paraview to
 visualize the valid data. Just filter all data which is greater/lesser than the
 chosen null value in the VTK-ASCII file.
 <br>
 If elevation map is chosen, a polygonal grid is created with <i>quads</i>,
 but the user can choose also <i>triangle strips</i> or <i>vertices</i>.
-These dataformats a documented at <em><a href="http://www.vtk.org">VTK Toolkit</a></em>.
+These dataformats a documented at <em><a href="https://vtk.org/">VTK Toolkit</a></em>.
 <p>
 
 If the "-c" flag is used and the data should be visualised together with other data exported via *.out.vtk
@@ -70,7 +70,7 @@ r.out.vtk can export raster cells with different representations.
    </li>
    <li>
        <i>celldata</i> -- is only provided if no elevation map is given.
-       The cells are created with the same hight and width as in GRASS. Each cell
+       The cells are created with the same height and width as in GRASS. Each cell
        can hold different values, but the user can only visualize one value at a time.
    </li>
 </ul>
@@ -90,30 +90,34 @@ r.out.vtk input=elevation.10m,slope,aspect elevation=elevation.10m output=/tmp/o
 paraview --data=/tmp/out.vtk
 </pre></div>
 
-<h3>Spearfish example with RGB data</h3>
+<h3>North Carolina sample dataset example with RGB data</h3>
 
 <div class="code"><pre>
-#set the region
-g.region n=4926990 s=4914840 w=591570 e=607800 res=30 -p
+# set the region to the statewide North Carolina elevation map
+g.region raster=elev_state_500m -p
 
-# using r.in.wms to create RGB data to get a satellite coverage
-r.in.wms layers=global_mosaic mapserver=http://wms.jpl.nasa.gov/wms.cgi \
-         output=wms_global_mosaic
+# use r.in.wms with the -b flag to fetch RGB satellite imagery from
+# NASA GIBS as separate .red, .green and .blue rasters
+r.in.wms -b layers=BlueMarble_ShadedRelief_Bathymetry \
+            url=https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi \
+            output=wms_blue_marble
 
 # export the data to VTK
-r.out.vtk rgbmaps=wms_global_mosaic.red,wms_global_mosaic.green,wms_global_mosaic.blue \
-          elevation=elevation.10m output=/tmp/out.vtk
+r.out.vtk rgbmaps=wms_blue_marble.red,wms_blue_marble.green,wms_blue_marble.blue \
+          elevation=elev_state_500m output=/tmp/out.vtk
 
 # visualize in Paraview or other VTK viewer:
 paraview --data=/tmp/out.vtk
 </pre></div>
 
-<b>Paraview RGB visualization notes</b><br>
+<b>Paraview RGB visualization notes</b>
+
+<p>
 To achieve proper RGB overlay:
 <ul>
-<li> In Paraview, click "Apply"
-<li> Select the "Display" tab and choose "Color by" to switch from input scalars to rgb scalars
-<li> Disable the "Map Scalars" check button in the display tab to avoid the use of a lookup table
+<li> In Paraview, click "Apply"</li>
+<li> Select the "Display" tab and choose "Color by" to switch from input scalars to rgb scalars</li>
+<li> Disable the "Map Scalars" check button in the display tab to avoid the use of a lookup table</li>
 </ul>
 
 <h2>SEE ALSO</h2>

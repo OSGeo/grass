@@ -219,7 +219,6 @@ class TestRasterWhat(TestCase):
         )
 
     def test_row_stdout_where_parallel(self):
-
         t_rast_what = SimpleModule(
             "t.rast.what",
             strds="A",
@@ -247,7 +246,6 @@ class TestRasterWhat(TestCase):
         self.assertLooksLike(text, str(t_rast_what.outputs.stdout))
 
     def test_row_stdout_where_parallel_cat(self):
-
         t_rast_what = SimpleModule(
             "t.rast.what",
             strds="A",

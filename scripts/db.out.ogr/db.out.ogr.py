@@ -56,6 +56,7 @@
 # %end
 
 import os
+from pathlib import Path
 
 from grass.script.utils import try_remove, basename
 from grass.script import core as gcore
@@ -67,19 +68,15 @@ def main():
     layer = options["layer"]
     format = options["format"]
     output = options["output"]
-    table = options["table"]
 
     if format.lower() == "dbf":
         format = "ESRI_Shapefile"
 
-    if format.lower() == "csv":
-        olayer = basename(output, "csv")
-    else:
-        olayer = None
+    olayer = basename(output, "csv") if format.lower() == "csv" else None
 
     # is there a simpler way of testing for --overwrite?
     dbffile = input + ".dbf"
-    if os.path.exists(dbffile) and not gcore.overwrite():
+    if Path(dbffile).exists() and not gcore.overwrite():
         gcore.fatal(_("File <%s> already exists") % dbffile)
 
     if olayer:

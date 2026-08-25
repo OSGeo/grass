@@ -75,6 +75,8 @@ for details.
 # % description: Seed for rand() function
 # % guisection: Random
 # %end
+# %option G_OPT_M_NPROCS
+# %end
 # %flag
 # % key: s
 # % description: Generate random seed (result is non-deterministic)
@@ -139,7 +141,7 @@ def main():
 
     expr = "{lhs} = {rhs}".format(lhs=output, rhs=expr)
     gs.verbose(_("Expression: {}").format(expr))
-    gs.mapcalc(expr, seed=seed)
+    gs.mapcalc(expr, seed=seed, nprocs=options["nprocs"])
     # g.message -e "Calculating $GIS_OPT_OUTFILE. Try expert mode."
 
     return 0

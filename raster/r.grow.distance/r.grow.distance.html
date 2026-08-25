@@ -60,7 +60,7 @@ where the isolines of distance from a point are squares.
 
 <p>
 The <i>Geodesic metric</i> is calculated as geodesic distance, to
-be used only in latitude-longitude locations. It is recommended
+be used only in latitude-longitude coordinate reference system. It is recommended
 to use it along with the <em>-m</em> flag in order to output
 distances in meters instead of map units.
 
@@ -91,17 +91,17 @@ r.colors map=dist_from_streams color=rainbow
 </pre></div>
 
 <div align="center" style="margin: 10px">
-<img src="r_grow_distance.png" border=0><br>
+<img src="r_grow_distance.png" border="0"><br>
 <i>Euclidean distance from the streams network in meters (map subset)</i>
 </div>
 
 <div align="center" style="margin: 10px">
-<img src="r_grow_distance_zoom.png" border=0><br>
+<img src="r_grow_distance_zoom.png" border="0"><br>
 <i>Euclidean distance from the streams network in meters (detail, numbers shown
    with d.rast.num)</i>
 </div>
 
-<h3>Distance from sea in meters in latitude-longitude location</h3>
+<h3>Distance from sea in meters in latitude-longitude CRS</h3>
 
 <div class="code"><pre>
 g.region raster=sea -p
@@ -111,7 +111,7 @@ r.colors map=dist_from_sea_geodetic color=rainbow
 
 <p>
 <center>
-<img src="r_grow_distance_sea.png" border=1><br>
+<img src="r_grow_distance_sea.png" border="1"><br>
 <i>Geodesic distances to sea in meters</i>
 </center>
 
@@ -127,9 +127,9 @@ r.colors map=dist_from_sea_geodetic color=rainbow
 
 <p>
 <em>
-<a href="http://en.wikipedia.org/wiki/Euclidean_metric">Wikipedia Entry:
+<a href="https://en.wikipedia.org/wiki/Euclidean_metric">Wikipedia Entry:
     Euclidean Metric</a><br>
-<a href="http://en.wikipedia.org/wiki/Manhattan_metric">Wikipedia Entry:
+<a href="https://en.wikipedia.org/wiki/Manhattan_metric">Wikipedia Entry:
     Manhattan Metric</a>
 </em>
 

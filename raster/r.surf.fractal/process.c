@@ -75,11 +75,9 @@ int process(void)
 
 int data_reset(double *data[2], int nn)
 {
-    register double *dptr0 = data[0], *dptr1 = data[1];
-    int total_size = nn * nn, count;
-
-    for (count = 0; count < total_size; count++)
-        *dptr0++ = *dptr1++ = 0.0;
+    size_t size = (size_t)nn * nn * sizeof(double);
+    G_zero(data[0], (int)size);
+    G_zero(data[1], (int)size);
 
     return 0;
 }

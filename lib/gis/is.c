@@ -8,7 +8,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2001-2014
  */
@@ -25,8 +25,9 @@ static int test_path_file(const char *path, const char *file)
     int ret;
     char *buf;
 
-    buf = (char *)G_malloc(strlen(path) + strlen(file) + 2);
-    sprintf(buf, "%s/%s", path, file);
+    size_t len = strlen(path) + strlen(file) + 2;
+    buf = (char *)G_malloc(len);
+    snprintf(buf, len, "%s/%s", path, file);
 
     ret = access(buf, F_OK);
     G_free(buf);
@@ -45,7 +46,6 @@ static int test_path_file(const char *path, const char *file)
  * \return 1 The directory is GISBASE
  * \return 0 The directory is not GISBASE
  */
-
 int G_is_gisbase(const char *path)
 {
     return test_path_file(path, "etc/element_list");
@@ -58,7 +58,6 @@ int G_is_gisbase(const char *path)
  * \return 1 The directory is location
  * \return 0 The directory is not location
  */
-
 int G_is_location(const char *path)
 {
     return test_path_file(path, "PERMANENT/DEFAULT_WIND");
@@ -71,7 +70,6 @@ int G_is_location(const char *path)
  * \return 1 The directory is mapset
  * \return 0 The directory is not mapset
  */
-
 int G_is_mapset(const char *path)
 {
     return test_path_file(path, "WIND");

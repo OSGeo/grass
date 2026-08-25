@@ -17,6 +17,7 @@ int parse_command_line(int argc, char *argv[])
         struct Option *nv;
         struct Option *nsteps;
         struct Option *sort;
+        struct Option *format;
     } parms;
     struct {
         struct Flag *f;
@@ -103,6 +104,9 @@ int parse_command_line(int argc, char *argv[])
                _("Sort by cell counts in descending order"));
     parms.sort->guisection = _("Formatting");
 
+    parms.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parms.format->guisection = _("Formatting");
+
     flags.h = G_define_flag();
     flags.h->key = 'h';
     flags.h->description = _("Suppress page headers");
@@ -171,6 +175,13 @@ int parse_command_line(int argc, char *argv[])
     no_nulls_all = flags.N->answer;
     cat_ranges = flags.C->answer;
     as_int = flags.i->answer;
+
+    if (strcmp(parms.format->answer, "json") == 0) {
+        format = JSON;
+    }
+    else {
+        format = PLAIN;
+    }
 
     for (i = 0; parms.cell->answers[i]; i++)
         parse_layer(parms.cell->answers[i]);

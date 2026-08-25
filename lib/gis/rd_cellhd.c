@@ -50,11 +50,10 @@ static double scan_double(const char *, double *);
 /*!
    \brief Read cell header (for internal use only)
 
-   \param fp file descriptor
+   \param fd file descriptor
    \param[out] cellhd pointer to Cell_head structure
-   \param is_cellhd ? (unused)
  */
-void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd, int is_cellhd)
+void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd)
 {
     int count;
     char **array;
@@ -77,7 +76,7 @@ void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd, int is_cellhd)
         count++;
     }
 
-    G__read_Cell_head_array(array, cellhd, is_cellhd);
+    G__read_Cell_head_array(array, cellhd);
 
     count = 0;
     while (array[count]) {
@@ -93,10 +92,8 @@ void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd, int is_cellhd)
 
    \param array array of strings
    \param[out] cellhd pointer to Cell_head structure
-   \param is_cellhd ? (unused)
  */
-void G__read_Cell_head_array(char **array, struct Cell_head *cellhd,
-                             int is_cellhd)
+void G__read_Cell_head_array(char **array, struct Cell_head *cellhd)
 {
     char *buf;
     char label[200];
@@ -116,7 +113,7 @@ void G__read_Cell_head_array(char **array, struct Cell_head *cellhd,
     cellhd->cols3 = 0;
     cellhd->depths = 1;
     cellhd->proj = -1;
-    cellhd->zone = -1;
+    cellhd->zone = 0;
     cellhd->compressed = -1;
     cellhd->ew_res = 0.0;
     cellhd->ew_res3 = 1.0;

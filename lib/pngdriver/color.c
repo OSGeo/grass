@@ -28,7 +28,6 @@
    \param g green color value
    \param b blue color value
  */
-
 void PNG_color_rgb(int r, int g, int b)
 {
     png.current_color = png_get_color(r, g, b, 0);

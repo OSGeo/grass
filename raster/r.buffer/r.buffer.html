@@ -32,10 +32,10 @@ contained in the raster map shown on the left.
 
 The user has the option of identifying up to 250 continuous zones.
 The zones are identified by specifying the upper limit of each desired
-zone (<em>r.buffer</em> assumes that <tt>0</tt> is the starting
+zone (<em>r.buffer</em> assumes that <code>0</code> is the starting
 point).  "Continuous" is used in the sense that each category zone's
 lower value is the previous zone's upper value. The first buffer zone
-always has distance <tt>0</tt> as its lower bound. Buffer distances
+always has distance <code>0</code> as its lower bound. Buffer distances
 can be specified using one of five units with the <b>units</b> parameter.
 
 <p>
@@ -51,8 +51,8 @@ category values of interest spread throughout the area.
 <p>
 <em>r.buffer</em> measures distances from center of cell to
 center of cell using Euclidean distance measure for
-planimetric locations (like UTM) and using ellipsoidal
-geodesic distance measure for latitude/longitude locations.
+planimetric coordinate reference systems (like UTM) and using ellipsoidal
+geodesic distance measure for latitude/longitude CRS.
 <p>
 <em>r.buffer</em> calculates distance zones from all cells having
 non-NULL category values in the <b>input</b> map. If the user wishes
@@ -97,7 +97,7 @@ r.category input=roads.buf
 </pre></div>
 
 <center>
-<img src="r_buffer_road.png" border=1><br>
+<img src="r_buffer_road.png" border="1"><br>
 <i>Distances to road</i>
 </center>
 

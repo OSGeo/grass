@@ -82,6 +82,6 @@ void Rast_get_cellhd(const char *name, const char *mapset,
                           name, mapset);
     }
 
-    G__read_Cell_head(fp, cellhd, 1);
+    G__read_Cell_head(fp, cellhd);
     fclose(fp);
 }

@@ -1,0 +1,3 @@
+--cov
+--cov-context=test
+--cov-append

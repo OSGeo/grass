@@ -36,7 +36,7 @@ int stop(const char *name)
     while ((dp = readdir(dirp)) != NULL) {
         if (!*dp->d_name || dp->d_name[0] == '.')
             continue;
-        sprintf(file_path, "%s/%s", mon_path, dp->d_name);
+        snprintf(file_path, sizeof(file_path), "%s/%s", mon_path, dp->d_name);
         if (unlink(file_path) == -1)
             G_warning(_("Unable to delete file <%s>"), file_path);
     }
@@ -84,5 +84,6 @@ int stop_wx(const char *name)
     }
 #endif
 
+    G_free(pid);
     return 0;
 }

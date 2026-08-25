@@ -1,6 +1,12 @@
 #include <grass/config.h>
 #include <grass/gis.h>
 
+#ifdef GRASS_CMAKE_BUILD
+#include <export/grass_gis_export.h>
+#else
+#define GRASS_GIS_EXPORT
+#endif
+
 struct G__ /*  Structure of library globals */
 {
     struct Cell_head window; /* Contains the current window          */
@@ -9,4 +15,4 @@ struct G__ /*  Structure of library globals */
     int compression_level;   /* zlib compression level               */
 };
 
-extern struct G__ G__; /* allocated in gisinit */
+GRASS_GIS_EXPORT extern struct G__ G__; /* allocated in gisinit */

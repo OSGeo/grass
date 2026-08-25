@@ -168,12 +168,13 @@ void G_finish_workers(void)
 
 /****************************************************************************/
 
-void G_begin_execute(void (*func)(void *), void *closure, void **ref, int force)
+void G_begin_execute(void (*func)(void *), void *closure, void **ref G_UNUSED,
+                     int force G_UNUSED)
 {
     (*func)(closure);
 }
 
-void G_end_execute(void **ref)
+void G_end_execute(void **ref G_UNUSED)
 {
 }
 

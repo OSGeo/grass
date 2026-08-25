@@ -6,9 +6,8 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include "ogr_api.h"
-#endif
+
 #ifdef HAVE_POSTGRES
 #include <libpq-fe.h>
 #endif
@@ -18,9 +17,7 @@ static int cmp(const void *, const void *);
 static char **format_list(int *, size_t *);
 static char *feature_type(const char *);
 
-#ifdef HAVE_OGR
 static int list_layers_ogr(FILE *, const char *, char **, int);
-#endif /* HAVE_OGR */
 #ifdef HAVE_POSTGRES
 static int list_layers_pg(FILE *, const char *, char **, int);
 #endif /* HAVE_POSTGRES */
@@ -40,7 +37,6 @@ char **format_list(int *count, size_t *len)
     if (len)
         *len = 0;
 
-#ifdef HAVE_OGR
     char buf[2000];
 
     OGRSFDriverH Ogr_driver;
@@ -56,7 +52,7 @@ char **format_list(int *count, size_t *len)
         list = G_realloc(list, ((*count) + 1) * sizeof(char *));
 
         /* chg white space to underscore in OGR driver names */
-        sprintf(buf, "%s", OGR_Dr_GetName(Ogr_driver));
+        snprintf(buf, sizeof(buf), "%s", OGR_Dr_GetName(Ogr_driver));
         G_strchg(buf, ' ', '_');
         list[(*count)++] = G_store(buf);
         if (len)
@@ -64,9 +60,9 @@ char **format_list(int *count, size_t *len)
     }
 
     /* order formats by name */
-    qsort(list, *count, sizeof(char *), cmp);
-#endif
-#if defined HAVE_POSTGRES && !defined HAVE_OGR
+    if (list)
+        qsort(list, *count, sizeof(char *), cmp);
+#if defined HAVE_POSTGRES
     list = G_realloc(list, ((*count) + 1) * sizeof(char *));
     list[(*count)++] = G_store("PostgreSQL");
     if (len)
@@ -113,11 +109,7 @@ int list_layers(FILE *fd, const char *dsn, char **layer, int print_types,
         G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
 #endif
     }
-#ifdef HAVE_OGR
     return list_layers_ogr(fd, dsn, layer, print_types);
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-#endif
 
     return -1;
 }
@@ -238,7 +230,6 @@ int list_layers_pg(FILE *fd, const char *conninfo, char **table,
 }
 #endif /* HAVE_POSTGRES */
 
-#ifdef HAVE_OGR
 int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 {
     int i, ret;
@@ -293,9 +284,6 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
     for (i = 0; i < nlayers; i++) {
         Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
         Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-#if GDAL_VERSION_NUM < 1110000
-        Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
-#endif
         layer_name = (char *)OGR_FD_GetName(Ogr_featuredefn);
 
         if (fd) {
@@ -303,9 +291,7 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
                 int proj_same, igeom;
                 OGRSpatialReferenceH Ogr_projection;
 
-#if GDAL_VERSION_NUM >= 1110000
                 OGRGeomFieldDefnH Ogr_geomdefn;
-#endif
                 /* projection check */
                 Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
                 proj_same = 0;
@@ -327,7 +313,6 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
                         proj_same = 0;
                 }
                 G_suppress_warnings(FALSE);
-#if GDAL_VERSION_NUM >= 1110000
                 for (igeom = 0;
                      igeom < OGR_FD_GetGeomFieldCount(Ogr_featuredefn);
                      igeom++) {
@@ -343,11 +328,6 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
                             feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
                             proj_same, OGR_GFld_GetNameRef(Ogr_geomdefn));
                 }
-#else
-                fprintf(fd, "%s,%s,%d,\n", layer_name,
-                        feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
-                        proj_same);
-#endif
             }
             else {
                 fprintf(fd, "%s\n", layer_name);
@@ -363,4 +343,3 @@ int list_layers_ogr(FILE *fd, const char *dsn, char **layer, int print_types)
 
     return ret;
 }
-#endif /* HAVE_OGR */

@@ -1,7 +1,7 @@
 #########################################################################
 #                         Variable names
 # xxxINCDIR  directory(ies) including header files (example: /usr/include)
-# xxxINC  cc option(s) for include directory (example: -I/usr/inlude)
+# xxxINC  cc option(s) for include directory (example: -I/usr/include)
 # xxxLIBDIR  directory(ies) containing library (example: /usr/lib)
 # xxxLIBPATH cc option for library directory (example: -L/usr/lib)
 # xxx_LIBNAME library name (example: gis)
@@ -59,6 +59,7 @@ DOCSDIR         = $(ARCH_DISTDIR)/docs
 ETC             = $(ARCH_DISTDIR)/etc
 GUIDIR          = $(ARCH_DISTDIR)/gui
 HTMLDIR         = $(ARCH_DISTDIR)/docs/html
+MDDIR           = $(ARCH_DISTDIR)/docs/mkdocs
 SCRIPTDIR       = $(ARCH_DISTDIR)/scripts
 MSG_DIR         = $(ARCH_DISTDIR)/etc/msgs
 MO_DIR          = $(ARCH_DISTDIR)/locale
@@ -97,9 +98,7 @@ YFLAGS      = -d -v
 MANSECT = 1
 MANBASEDIR = $(ARCH_DISTDIR)/docs/man
 MANDIR = $(MANBASEDIR)/man$(MANSECT)
-HTML2MAN = VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(GISBASE)/utils/g.html2man.py
-
-GDAL_LINK = $(USE_GDAL)
+MD2MAN = VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(GISBASE)/utils/g.md2man.py
 
 DEPFILE = depend.mk
 
@@ -152,6 +151,7 @@ libs = \
 	NVIZ:nviz \
 	OGSF:ogsf \
 	OPTRI:optri \
+	PARSON:parson \
 	PNGDRIVER:pngdriver \
 	PSDRIVER:psdriver \
 	QTREE:qtree \
@@ -195,7 +195,7 @@ DRIVERDEPS       = $(GISLIB) $(FTLIB) $(ICONVLIB) $(MATHLIB)
 DSPFDEPS         = $(GISLIB)
 FORMDEPS         = $(DBMILIB) $(GISLIB)
 RASTER3DDEPS     = $(RASTERLIB) $(GISLIB)
-GISDEPS          = $(DATETIMELIB) $(ZLIBLIBPATH) $(ZLIB) $(BZIP2LIBPATH) $(BZIP2LIB) $(ZSTDLIBPATH) $(ZSTDLIB) $(INTLLIB) $(REGEXLIBPATH) $(REGEXLIB) $(ICONVLIB) $(PTHREADLIBPATH) $(PTHREADLIB) $(MATHLIB)
+GISDEPS          = $(DATETIMELIB) $(ZLIBLIBPATH) $(ZLIB) $(BZIP2LIBPATH) $(BZIP2LIB) $(ZSTDLIBPATH) $(ZSTDLIB) $(INTLLIB) $(REGEXLIBPATH) $(REGEXLIB) $(ICONVLIB) $(PTHREADLIBPATH) $(PTHREADLIB) $(MATHLIB) $(PROJLIB)
 GMATHDEPS        = $(GISLIB) $(FFTWLIB) $(LAPACKLIB) $(BLASLIB) $(CCMATHLIB) $(OPENMP_CFLAGS) $(OPENMP_LIBPATH) $(OPENMP_LIB)
 GPDEDEPS         = $(RASTER3DLIB) $(RASTERLIB) $(GISLIB) $(GMATHLIB) $(OPENMP_LIBPATH) $(OPENMP_LIB) $(MATHLIB)
 GPROJDEPS        = $(GISLIB) $(GDALLIBS) $(PROJLIB) $(MATHLIB)
@@ -211,7 +211,7 @@ NVIZDEPS         = $(OGSFLIB) $(GISLIB) $(OPENGLLIB)
 OGSFDEPS         = $(BITMAPLIB) $(RASTER3DLIB) $(VECTORLIB) $(DBMILIB) $(RASTERLIB) $(GISLIB) $(TIFFLIBPATH) $(TIFFLIB) $(OPENGLLIB) $(OPENGLULIB) $(MATHLIB)
 PNGDRIVERDEPS    = $(DRIVERLIB) $(GISLIB) $(PNGLIB) $(MATHLIB)
 PSDRIVERDEPS     = $(DRIVERLIB) $(GISLIB) $(MATHLIB)
-RASTERDEPS       = $(GISLIB) $(GPROJLIB) $(MATHLIB)
+RASTERDEPS       = $(GISLIB) $(GPROJLIB) $(MATHLIB) $(PARSONLIB) $(GDALLIBS)
 RLIDEPS          = $(RASTERLIB) $(GISLIB) $(MATHLIB)
 ROWIODEPS        = $(GISLIB)
 RTREEDEPS        = $(GISLIB) $(MATHLIB)
@@ -231,10 +231,6 @@ endif
 
 ifneq ($(USE_CAIRO),)
 DISPLAYDEPS += $(CAIRODRIVERLIB)
-endif
-
-ifneq ($(GDAL_LINK),)
-RASTERDEPS += $(GDALLIBS)
 endif
 
 ifeq ($(OPENGL_WINDOWS),1)

@@ -51,7 +51,7 @@ public:
     T value;
     AMI_STREAM<T> *run;
 
-    HeapElement() : run(NULL){};
+    HeapElement() : run(NULL) {};
 
     friend ostream &operator<<(ostream &s, const HeapElement &p)
     {
@@ -101,10 +101,10 @@ protected:
 
 public:
     // allocate array mergeHeap and the runs in runList
-    ReplacementHeap<T, Compare>(size_t arity, queue<char *> *runList);
+    ReplacementHeap(size_t arity, queue<char *> *runList);
 
     // delete array mergeHeap
-    ~ReplacementHeap<T, Compare>();
+    ~ReplacementHeap();
 
     // is heap empty?
     int empty() const { return (size == 0); }
@@ -159,7 +159,7 @@ ReplacementHeap<T, Compare>::ReplacementHeap(size_t g_arity,
 
 /*****************************************************************/
 template <class T, class Compare>
-ReplacementHeap<T, Compare>::~ReplacementHeap<T, Compare>()
+ReplacementHeap<T, Compare>::~ReplacementHeap()
 {
 
     if (!empty()) {

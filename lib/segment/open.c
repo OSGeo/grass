@@ -6,7 +6,7 @@
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2018
  */
@@ -41,7 +41,6 @@
  * \return -5 if prepared file could not be read
  * \return -6 if out of memory
  */
-
 int Segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols, int srows,
                  int scols, int len, int nseg)
 {
