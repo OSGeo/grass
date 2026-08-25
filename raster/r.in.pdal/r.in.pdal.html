@@ -357,16 +357,34 @@ if more than one parameter is provided.
 
 <h3>Format and projection support</h3>
 
-The typical file extensions for the LAS format are .las and .laz
-(compressed). The compressed LAS (.laz) format can be imported only if
-PDAL has been compiled with LASzip support. Cloud Optimized Point
-Clouds (COPC, .copc.laz) are supported as well. When importing a COPC
-file into a computational region smaller than the point cloud extent,
-the COPC spatial index is used to skip data outside the region, which
-speeds up the import. The coordinate reference system of the input is
-expected to match that of the GRASS project; use the <b>-o</b> flag to
-override the projection check or the <b>-w</b> flag to reproject the
-points during import.
+<em>r.in.pdal</em> reads all point cloud formats supported by the PDAL library.
+The typical file extensions for the LAS format are <code>.las</code> and
+<code>.laz</code> (compressed). The compressed LAS (<code>.laz</code>) format
+can be imported only if PDAL has been compiled with LASzip support. Cloud
+Optimized Point Clouds (COPC, <code>.copc.laz</code>) are supported as well.
+When importing a COPC file into a computational region smaller than the point
+cloud extent, the COPC spatial index is used to skip data outside the region,
+which speeds up the import; this optimization does not apply when the points
+are reprojected.
+
+<p>
+The coordinate reference system (CRS) of the input is read from the file
+metadata and compared with the CRS of the current project (previously called
+location). When the two differ, the points are reprojected to the project's
+CRS during the import. The <b>-w</b> flag, which used to be required to allow
+the reprojection, is deprecated and has no effect.
+
+<p>
+The <b>-o</b> flag skips the CRS check and assumes that the input is already
+in the project's CRS. Use it when the file has no CRS metadata or when the
+metadata is known to be wrong; without it, the import of a file without CRS
+metadata fails.
+
+<p>
+The extent printed with the <b>-g</b> flag is reprojected as well, so that it
+matches the CRS of the current project and can be passed directly to
+<a href="g.region.html">g.region</a>. For a file without CRS metadata, the
+extent is printed as stored in the file and a warning is issued.
 
 <!--
 <h3>LAS file import preparations</h3>

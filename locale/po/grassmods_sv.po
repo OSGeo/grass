@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 16:34+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -2245,6 +2245,7 @@ msgstr "Antal signifikanta siffror (endast flyttal)"
 msgid "Get text color from cell color value"
 msgstr "Hämta textfärg från cellens färgvärde"
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -13532,6 +13533,10 @@ msgstr "Misslyckades med att öppna utdatafilen <%s>: %d (%s)"
 msgid "Search radius size must cover at least 1 cell"
 msgstr "Storleken på sökradien måste täcka minst 1 cell"
 
+#, c-format
+msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr "Skip radius size måste vara minst 1 cell lägre än radius"
 
@@ -17978,6 +17983,10 @@ msgstr "Det går inte att skriva rasterkartor - försök öka cellstorleken"
 msgid "Error writing temporary file <%s>"
 msgstr "Fel vid skrivning av temporär fil <%s>"
 
+#, c-format
+msgid "Using %d thread(s), %d buffered output rows"
+msgstr ""
+
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr "Samplar om rasterkartlager till ett grövre rutnät med hjälp av aggregering."
 
@@ -20326,6 +20335,7 @@ msgstr "För många kategorier (hittades: %i, max: %i). Försök att skala om el
 msgid "Input raster must be of type CELL."
 msgstr "Inmatningsrastret måste vara av typen CELL."
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format

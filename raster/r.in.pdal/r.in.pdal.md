@@ -322,16 +322,31 @@ parameter is provided.
 
 ### Format and projection support
 
-The typical file extensions for the LAS format are .las and .laz
-(compressed). The compressed LAS (.laz) format can be imported only if
-PDAL has been compiled with LASzip support. Cloud Optimized Point
-Clouds (COPC, .copc.laz) are supported as well. When importing a COPC
-file into a computational region smaller than the point cloud extent,
-the COPC spatial index is used to skip data outside the region, which
-speeds up the import. The coordinate reference system of the input is
-expected to match that of the GRASS project; use the **-o** flag to
-override the projection check or the **-w** flag to reproject the
-points during import.
+*r.in.pdal* reads all point cloud formats supported by the PDAL library.
+The typical file extensions for the LAS format are `.las` and `.laz`
+(compressed). The compressed LAS (`.laz`) format can be imported only if
+PDAL has been compiled with LASzip support. Cloud Optimized Point Clouds
+(COPC, `.copc.laz`) are supported as well. When importing a COPC file
+into a computational region smaller than the point cloud extent, the
+COPC spatial index is used to skip data outside the region, which speeds
+up the import; this optimization does not apply when the points are
+reprojected.
+
+The coordinate reference system (CRS) of the input is read from the file
+metadata and compared with the CRS of the current project (previously
+called location). When the two differ, the points are reprojected to the
+project's CRS during the import. The **-w** flag, which used to be
+required to allow the reprojection, is deprecated and has no effect.
+
+The **-o** flag skips the CRS check and assumes that the input is
+already in the project's CRS. Use it when the file has no CRS metadata
+or when the metadata is known to be wrong; without it, the import of a
+file without CRS metadata fails.
+
+The extent printed with the **-g** flag is reprojected as well, so that
+it matches the CRS of the current project and can be passed directly to
+*[g.region](g.region.md)*. For a file without CRS metadata, the extent
+is printed as stored in the file and a warning is issued.
 
 ### Memory consumption
 
