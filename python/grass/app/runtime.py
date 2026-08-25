@@ -330,6 +330,42 @@ def set_dynamic_library_path(variable_name, install_path, env):
     env[variable_name] += os.pathsep + os.path.join(install_path, "lib")
 
 
+# Library directories already registered with the grass.lib loader, so that
+# repeated calls do not keep growing its list of search directories.
+_registered_library_dirs = set()
+
+
+def register_library_search_path(install_path):
+    """Tell the :mod:`grass.lib` loader where the GRASS libraries are
+
+    The loader looks the libraries up using GISBASE from the global
+    environment, so registering the directory here is what makes
+    :mod:`grass.lib` work in a session which was set up with its own
+    environment (the _env_ parameter of :func:`grass.script.setup.init`).
+    """
+    lib_path = str(Path(install_path) / "lib")
+    if lib_path in _registered_library_dirs:
+        return
+    try:
+        from grass.lib.ctypes_loader import add_library_search_dirs
+    except ImportError:
+        # The grass.lib package is generated during the build and an
+        # installation may be missing it.
+        return
+    add_library_search_dirs([lib_path])
+    _registered_library_dirs.add(lib_path)
+
+
+# Every other GRASS library needs libgrass_gis and libgrass_gis needs
+# libgrass_datetime, so these two are loaded before the rest. A library loaded
+# before the GRASS libraries it needs makes the dynamic linker resolve those
+# through the process-startup search path, which may find another GRASS
+# installation and leave the process with two copies of the same library.
+# Only these two are ordered because the state which the other libraries share
+# is in libgrass_gis, so a duplicate of another library is not a problem.
+BASE_LIBRARY_NAMES = ("datetime", "gis")
+
+
 def preload_dynamic_libraries(install_path):
     """Load GRASS dynamic libraries into the current process.
 
@@ -343,29 +379,48 @@ def preload_dynamic_libraries(install_path):
 
     Libraries can be loaded only after the libraries they depend on, so
     loading is repeated until it makes no progress. Libraries which never
-    load, e.g., due to a missing optional system dependency, are silently
-    skipped; importing the corresponding :mod:`grass.lib` module fails
-    either way.
+    load, e.g., due to a missing optional system dependency, are reported
+    but do not cause an exception; importing the corresponding
+    :mod:`grass.lib` module fails either way.
 
-    On Windows, this is not needed because the loading of DLLs is driven by
-    directories from PATH, which is read when the DLL is loaded.
+    On Windows, no libraries are loaded: DLL dependencies are resolved from
+    the directories registered with :func:`os.add_dll_directory`, which the
+    :mod:`grass.lib` loader does for all directories in PATH when it is first
+    imported.
+
+    :returns: list of (path, error) pairs for libraries which failed to load
     """
     if WINDOWS:
-        return
+        return []
     lib_path = Path(install_path) / "lib"
-    remaining = sorted(lib_path.glob("libgrass_*.so")) + sorted(
-        lib_path.glob("libgrass_*.dylib")
-    )
+    # The glob patterns match both the versioned files and the unversioned
+    # symlinks pointing to them, so resolve the paths and load each file once.
+    libraries = {
+        library.resolve()
+        for pattern in ("libgrass_*.so", "libgrass_*.dylib")
+        for library in lib_path.glob(pattern)
+    }
+
+    def load_order(library):
+        name = library.name.removeprefix("libgrass_").partition(".")[0]
+        if name in BASE_LIBRARY_NAMES:
+            return (BASE_LIBRARY_NAMES.index(name), name)
+        return (len(BASE_LIBRARY_NAMES), name)
+
+    remaining = sorted(libraries, key=load_order)
     while remaining:
         failed = []
+        errors = []
         for library in remaining:
             try:
                 ctypes.CDLL(str(library))
-            except OSError:
+            except OSError as error:
                 failed.append(library)
+                errors.append((library, error))
         if len(failed) == len(remaining):
-            break
+            return errors
         remaining = failed
+    return []
 
 
 def set_python_path_variable(install_path, env):

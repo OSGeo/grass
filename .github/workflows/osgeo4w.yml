@@ -141,6 +141,15 @@ jobs:
             -k "not testsuite"
         # Obfuscated usage of GitHub Actions features, Windows CMD shell limits analysis
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[misfeature]
+      - name: Run pytest for loading C libraries into the process
+        run: |
+          call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
+          set PYTHONPATH=%GISBASE%\etc\python;%PYTHONPATH%
+          path %GISBASE%\lib;%GISBASE%\bin;%PATH%
+          pytest python/grass/script/tests/grass_script_setup_load_libs_test.py ^
+            --junitxml=pytest.load_libs.junit.xml
+        # Obfuscated usage of GitHub Actions features, Windows CMD shell limits analysis
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[misfeature]
       - name: Run pytest with a single worker (for gunittest-based tests)
         run: |
           call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
