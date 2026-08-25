@@ -16,7 +16,11 @@ def xy_points_session(tmp_path):
         Tools(session=session) as tools,
     ):
         points = tmp_path / "points.txt"
-        points.write_text("10|10|1\n20|20|2\n30|15|3\n")
+        # Deliberately off the cell boundaries: with a 1 unit resolution
+        # starting at 0, a whole-numbered coordinate falls on a cell edge,
+        # where rounding to the nearest cell and truncating to the containing
+        # cell agree. These do not, so they detect a half cell shift.
+        points.write_text("10.6|10.7|1\n20.2|20.3|2\n30.9|15.1|3\n")
         tools.g_region(s=0, n=50, w=0, e=50, res=1)
         tools.v_in_ascii(
             input=str(points),

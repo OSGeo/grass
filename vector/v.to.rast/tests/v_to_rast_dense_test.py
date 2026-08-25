@@ -11,22 +11,21 @@ from grass.tools import Tools
 
 
 def test_dense_points_match_plain_points(xy_points_session):
-    """Points rasterize the same way with and without the dense flag
+    """Points rasterize into the same cells with and without the dense flag
 
-    The flag densifies lines, so for points there is nothing to densify and both
-    runs have to produce the same cells.
+    The flag densifies lines, so for points there is nothing to densify and
+    both runs have to place every point in the same cell. The coordinates in
+    the fixture sit inside cells rather than on their edges, so a half cell
+    shift in either direction changes the row or the column and fails here.
     """
     tools = Tools(session=xy_points_session)
 
     tools.v_to_rast(input="points", output="plain", use="cat", type="point")
     tools.v_to_rast(input="points", output="dense", use="cat", type="point", flags="d")
 
-    plain = tools.r_univar(map="plain", format="json")
-    dense = tools.r_univar(map="dense", format="json")
+    plain = tools.r_stats(input="plain", flags="gn").text.splitlines()
+    dense = tools.r_stats(input="dense", flags="gn").text.splitlines()
 
-    assert dense["n"] == 3
-    assert dense["min"] == 1
-    assert dense["max"] == 3
-    assert dense["sum"] == 6
-    assert dense["n"] == plain["n"]
-    assert dense["sum"] == plain["sum"]
+    # east, north and category of the centre of the cell each point landed in
+    assert sorted(plain) == ["10.5 10.5 1", "20.5 20.5 2", "30.5 15.5 3"]
+    assert sorted(dense) == sorted(plain)

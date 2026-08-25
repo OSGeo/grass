@@ -120,17 +120,20 @@ void plot_line_dense(double east1, double north1, double east2, double north2)
     }
 }
 
-/* dense line plotting, alternative to G_bresenham_line()
- * x1, y1, x2, y2 are col, row numbers */
 /* dense point plotting, alternative to G_plot_point()
  * east, north are map coordinates.
  * Needed because dense mode never calls G_setup_plot(), so the move and cont
- * routines G_plot_point() uses are not set. */
+ * routines G_plot_point() uses are not set. The coordinate is truncated to the
+ * cell that contains it, matching what dense_line() does with its endpoints:
+ * setup_plot() frames the region by cell edges, unlike G_setup_plot(), which
+ * frames it by cell centres and therefore rounds. */
 void plot_point_dense(double east, double north)
 {
     st->dot((int)X(G_adjust_easting(east, &st->window)), (int)Y(north));
 }
 
+/* dense line plotting, alternative to G_bresenham_line()
+ * x1, y1, x2, y2 are col, row numbers */
 void dense_line(double x1, double y1, double x2, double y2,
                 int (*point)(int, int))
 {
