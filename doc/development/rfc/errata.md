@@ -1,70 +1,50 @@
-# RFC 5: GRASS GIS Errata
+# RFC 5: Errata
 
-Author of the first draft: Māris Nartišs
+Status: Draft
 
-Status: Early draft (19 Mar 2016)
+## Summary
 
-## Introduction
+Some bugs make GRASS produce results which are wrong but look plausible. Users
+who already ran an affected analysis, and published or acted on its results,
+need a way to find out. This RFC describes how such fixes are marked and how
+the resulting errata reach users.
 
-GRASS GIS is widely used in scientific, private and government sector.
-Scientific theories, environmental decisions and actions depend on the outcome
-of spatial analysis performed with GRASS GIS. Any errors in analytical modules
-might lead to erroneous conclusions and actions based on them. This RFC
-provides a framework of documenting and spreading information on analysis
-inaccuracies caused by errors in GRASS GIS code.
+## What qualifies as an erratum
 
-## Overall process
+An erratum is issued for a bug which
 
-1. Any bug reporter or developer can nominate a bug for escalating to GRASS GIS
-   erratum issue. Nomination is done by adding a notice to bug at bug tracker
-   or discussing directly at  developer mailing list. Any nomination is
-   discussed in developer mailing list to gather necessary information on it's
-   scope, impact, causes and solutions.
+* is present in an official GRASS release, and
+* causes incorrect analysis results which are not easy to notice.
 
-2. GRASS PSC evaluates nomination based on information provided by bug report,
-   discussion in developer mailing list and/or other sources. PSC makes a final
-   decision if nominated bug matches criteria of issuing a GRASS GIS erratum.
+Crashes, error messages and obviously wrong output are ordinary bugs, not
+errata, because users can see that something went wrong. Typical errata are a
+single cell shift of a raster result, loss of precision due to incorrect
+floating point handling, or a wrong conversion factor. A bug introduced and
+fixed between two releases does not need an erratum, since no release is
+affected.
 
-3. A draft of erratum text is made in a designated area of developer wiki
-   (issue tracker) holding texts of all published GRASS GIS errata.
+## Process
 
-4. After a review of at least one more person, the erratum is marked as final
-   one and spread via communication channels.
+1. The pull request fixing the bug gets the `errata` label. Anyone can add it:
+   the author, a reviewer, or whoever merges the fix. There is no separate
+   nomination or approval step. When it is not clear whether a fix qualifies,
+   it is discussed in the pull request like any other review question.
 
-### Evaluation criteria
+2. The pull request description explains the problem for users, not only for
+   developers: which tools are affected, which released versions are affected,
+   what was computed incorrectly, and how users can tell whether their own
+   results are affected. The person who fixed the bug writes this while the
+   details are fresh.
 
-* Bug must be present in an official GRASS GIS release.
-* Bug must cause generation of incorrect analysis results that are not so easy
-  to notice. Module crashes or bugs causing easy to identify incorrect results
-  should not be given an erratum. Examples of possible erratum worth bugs are
-  single cell shift of raster result, not enough randomness of expected random
-  module output, loss of output precision due to incorrect floating point
-  handling etc.
+3. The fix is backported to the supported release branches so that users
+   receive it. When it cannot be backported, the description says which
+   versions stay affected.
 
-### Content and life cycle of an Erratum
+4. The release notes of the release containing the fix get an `Errata` section
+   listing the labeled fixes, using the user-facing wording from step 2 and
+   linking to the pull request. The
+   [8.4.2 release notes](https://github.com/OSGeo/grass/releases/tag/8.4.2)
+   are an example.
 
-GRASS GIS Erratum message should contain following elements:
-
-* it's number;
-* date of issue;
-* name(s) of affected module(s);
-* information about affected release(s);
-* a short description of problem;
-* steps resulting in incorrect output (i.e. specific input parameter combination);
-* current state of problem (in progress, fixed for release x.y.z);
-* references to bug report (Trac bug number), developer mailing list thread;
-* any other information relevant to erratum.
-
-GRASS GIS errata might receive updates, if it's found to be necessary
-(i.e. notice of fixing issue, issue scope update etc.).
-
-### Spreading the word
-
-All GRASS GIS errata texts should be available at two places - developer wiki
-(Trac) and ERRATA file of any upcoming release. Errata should be listed in time
-descending order (latest on the top).
-
-If the erratum was based on a bug report in issue tracker, a notice to the
-issue report should be added.
-
-Announcement of the erratum should be sent out to XXXX mailing list.
+The list of errata across releases is the
+[merged pull requests with the errata label](https://github.com/OSGeo/grass/pulls?q=is%3Apr+is%3Amerged+label%3Aerrata).
