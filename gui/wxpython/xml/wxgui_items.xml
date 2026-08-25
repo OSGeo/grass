@@ -62,6 +62,13 @@
     <handler>OnRunScript</handler>
     <description>Launches script file.</description>
   </wxgui-item>
+  <wxgui-item name="JupyterNotebook">
+    <label>Jupyter Notebook</label>
+    <handler>OnJupyterNotebook</handler>
+    <description>Launch Jupyter Notebook interface.</description>
+    <keywords>general,gui,notebook,python,jupyter</keywords>
+    <icon>jupyter</icon>
+  </wxgui-item>
   <wxgui-item name="PyEdit">
     <label>Simple Python Editor</label>
     <handler>OnSimpleEditor</handler>

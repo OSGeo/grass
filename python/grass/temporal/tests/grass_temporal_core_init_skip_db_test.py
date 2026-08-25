@@ -12,9 +12,10 @@ from pathlib import Path
 
 import sqlite3
 
-from grass.grassdb.create import create_mapset
 import grass.script as gs
 import grass.temporal as tgis
+from grass.grassdb.create import create_mapset
+from grass.tools import Tools
 
 ds_types_dict = {
     "strds": ("strds"),
@@ -149,3 +150,37 @@ def test_stds_construction_with_tgis_db_initialization(
             assert stds.get_id() == ident
             assert stds.get_type() in valid_ds_types
             assert stds.is_in_db(dbif) is False
+
+
+def test_tools_work_in_half_initialized_mapset(simple_mapset):
+    """Check that tools still work in a half-initialized mapset."""
+
+    with gs.setup.init(simple_mapset) as session:
+        tools = Tools(session=session)
+        tools.t_connect(flags="d")
+        tgis_db_dir = simple_mapset / "tgis"
+        assert not tgis_db_dir.exists()
+        tools.t_list(type="strds")
+        tools.t_create(
+            output="test",
+            type="strds",
+            temporaltype="absolute",
+            title="test",
+            description="test",
+        )
+        assert tgis_db_dir.exists()
+        assert (tgis_db_dir / "sqlite.db").exists()
+        list_result = tools.t_list(type="strds", format="json").json
+        reference = {
+            "id": "test@c",
+            "temporal_type": "absolute",
+            "title": "test",
+            "description": "test",
+            "number_of_maps": None,
+            "start_time": None,
+            "end_time": None,
+            "mapset": "c",
+        }
+        for k, v in reference.items():
+            assert k in list_result[0]
+            assert v == list_result[0][k]

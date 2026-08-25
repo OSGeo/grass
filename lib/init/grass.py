@@ -72,11 +72,7 @@ _WXPYTHON_BASE = None
 
 GISBASE = None
 
-try:
-    # Python >= 3.11
-    ENCODING = locale.getencoding()
-except AttributeError:
-    ENCODING = locale.getdefaultlocale()[1]
+ENCODING = locale.getencoding()
 if ENCODING is None:
     ENCODING = "UTF-8"
     print("Default locale not found, using UTF-8")  # intentionally not translatable
@@ -1097,11 +1093,7 @@ def set_language(grass_config_dir: StrPath) -> None:
                 "Default locale settings are missing. GRASS running with C locale.\n"
             )
 
-        try:
-            # Python >= 3.11
-            language, encoding = locale.getlocale()
-        except AttributeError:
-            language, encoding = locale.getdefaultlocale()
+        language, encoding = locale.getlocale()
         if not language:
             sys.stderr.write(
                 "Default locale settings are missing. GRASS running with C locale.\n"

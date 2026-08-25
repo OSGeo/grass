@@ -35,7 +35,7 @@ Read more about how to work with *PyGRASS* in this documentation.
    pygrass_vector
    pygrass_modules
    pygrass_messages
-   pygrass
+   grass.pygrass
 
 
 References

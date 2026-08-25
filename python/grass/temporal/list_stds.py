@@ -279,17 +279,12 @@ def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran
         return dataset.get_registered_maps_as_objects(
             where=where, order="start_time", dbif=dbif
         )
-    if method != "gran":
-        msg = f"Invalid method '{method}'"
-        raise ValueError(msg)
-    if where:
-        msg = f"The where parameter is not supported with method={method}"
-        raise ValueError(msg)
-    if gran is not None and gran != "":
+    if method == "gran":
         return dataset.get_registered_maps_as_objects_by_granularity(
-            gran=gran, dbif=dbif
+            gran=gran, where=where, dbif=dbif
         )
-    return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
+    msg = f"Invalid method '{method}'"
+    raise ValueError(msg)
 
 
 def _get_get_registered_maps_as_objects_delta_gran(
@@ -511,6 +506,8 @@ def list_maps_of_stds(
                  dataset is used
     :param outpath: The path to file where to save output
     """
+    if gran == "":
+        gran = None
     if not output_format:
         if method == "comma":
             output_format = "line"

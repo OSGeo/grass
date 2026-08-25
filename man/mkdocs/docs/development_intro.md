@@ -28,10 +28,12 @@ The addons are maintained by the GRASS community
 and are a great way to extend the functionality of GRASS.
 
 - [Addons](https://grass.osgeo.org/grass-stable/manuals/addons/)
+- [Template for addons](https://github.com/OSGeo/grass-addon-cookiecutter)
 
 ## Contributing
 
 - [Style guide](style_guide.md)
 - [GitHub guide](github_guide.md)
+- [CMake guide](building_with_cmake.md)
 - [Investigating code history](investigating_history.md)
 - [CONTRIBUTING file on GitHub](https://github.com/OSGeo/grass/blob/main/CONTRIBUTING.md)

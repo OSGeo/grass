@@ -158,6 +158,22 @@ pass `env=session.env` explicitly. gunittest-style tests (`testsuite/`) run
 in an existing GRASS session and need neither `Tools` setup nor `env`
 passing.
 
+Always create sessions with `gs.setup.init(project, env=os.environ.copy())`,
+never `gs.setup.init(project)`. Without `env`, the session is set up in the
+global `os.environ`, and `init()` prepends the GRASS executable paths to
+`PATH` on every call without removing them again, so `PATH` keeps growing for
+the rest of the pytest process. Tests are not isolated from each other:
+pytest runs them in one process, and a later test which copies `os.environ`
+inherits whatever earlier tests left there.
+
+Some APIs, notably `grass.temporal`, still read the session from
+`os.environ` and cannot take an `env`. When a test needs one of those, create
+the session with `env=os.environ.copy()` and mirror it into `os.environ`
+using the `monkeypatch` fixture (or `pytest.MonkeyPatch.context()` in a
+fixture which is not function-scoped), so the environment is restored
+afterwards. See `python/grass/temporal/tests/grass_temporal_gui_support_test.py`
+for this pattern.
+
 With `grass.tools`, numpy arrays can be passed as raster inputs (the array
 is written to a temporary raster matching the computation region) and
 requested as outputs using the `parameter=np.array` pattern (e.g.,

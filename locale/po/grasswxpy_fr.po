@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
-"PO-Revision-Date: 2026-06-25 00:52+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"PO-Revision-Date: 2026-08-09 16:49+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -5469,9 +5469,8 @@ msgstr ""
 "v.to.rast a échoué :\n"
 "{messages}"
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "L'outil Scatterplot nécessite que le paquet \"matplotlib\" (python-matplotlib) soit installé. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
+msgstr "L'outil Scatterplot nécessite l'installation du paquet « matplotlib » (python-matplotlib)."
 
 msgid "Zoom to scatter plot extend"
 msgstr "Zoomer sur l'étendue du nuage de points"
@@ -5533,6 +5532,267 @@ msgstr "Ajouter une classe"
 msgid "Remove selected class"
 msgstr "Supprimer la classe sélectionnée"
 
+msgid "Start Jupyter Notebook"
+msgstr "Démarrer le carnet Jupyter"
+
+msgid "Where to Save Notebooks"
+msgstr "Où enregistrer les carnets"
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr "Choisissez un répertoire personnalisé (laissez vide pour utiliser le répertoire actuel) :"
+
+msgid "Select notebook directory"
+msgstr "Sélectionner le répertoire du carnet"
+
+msgid "Save in project: {}"
+msgstr "Enregistrer dans le projet : {}"
+
+msgid "Options"
+msgstr "Options"
+
+msgid "Create welcome notebook"
+msgstr "Créer un carnet de bienvenue"
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+"Si sélectionné, un carnet de bienvenue ({}) sera créé, \n"
+"mais uniquement si le répertoire sélectionné ne contient pas de fichiers .ipynb."
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr "Note : Le carnet de bienvenue sera créé uniquement si le répertoire ne contient aucun fichier .ipynb."
+
+msgid "Open Notebook in Browser"
+msgstr "Ouvrir le carnet dans le navigateur"
+
+msgid "Open Integrated Notebook"
+msgstr "Ouvrir le carnet intégré"
+
+msgid "Cannot create or write to the selected directory."
+msgstr "Impossible de créer ou d'écrire dans le répertoire sélectionné."
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+"Le mode intégré a échoué : wx.html2.WebView ne fonctionne pas sur ce système.\n"
+"\n"
+"Souhaitez-vous ouvrir Jupyter carnet dans votre navigateur externe à la place ?"
+
+msgid "WebView Not Supported"
+msgstr "WebView non pris en charge"
+
+msgid "Browser"
+msgstr "Navigateur"
+
+msgid "Integrated"
+msgstr "Intégré"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr "Carnet Jupyter ({}) - {}"
+
+msgid "Jupyter Notebook"
+msgstr "Carnet Jupyter"
+
+msgid "Really close page '{}'?"
+msgstr "Voulez-vous vraiment fermer la page '{}' ?"
+
+msgid "Close page"
+msgstr "Fermer la page"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+"Échec du démarrage de l'environnement Jupyter :\n"
+"{}"
+
+msgid "Startup Error"
+msgstr "Erreur de démarrage"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+"Échec de l'obtention de l'URL du serveur Jupyter :\n"
+"{}"
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr "Serveur Jupyter en cours d'exécution à l'adresse {url} (PID : {pid}) | Stockage : {storage}"
+
+msgid "URL Error"
+msgstr "Erreur d'URL"
+
+msgid "File '{}' is already opened."
+msgstr "Le fichier « {} » est déjà ouvert."
+
+msgid "File '{}' opened."
+msgstr "Fichier « {} » ouvert."
+
+msgid "File '{}' imported and opened."
+msgstr "Fichier '{}' importé et ouvert."
+
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr ""
+"Échec de l'importation du fichier :\n"
+"{}"
+
+msgid "Notebook Import Error"
+msgstr "Erreur d'importation du carnet"
+
+msgid "Import file"
+msgstr "Importer un fichier"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+"Le fichier « {} » existe déjà dans l'espace de stockage du carnet.\n"
+"Veuillez saisir un nouveau nom :"
+
+msgid "Rename File"
+msgstr "Renommer le fichier"
+
+msgid "No page for export is currently selected."
+msgstr "Aucune page n'est actuellement sélectionnée pour l'exportation."
+
+msgid "Notebook Export Error"
+msgstr "Erreur d'exportation du carnet"
+
+msgid "Export file as..."
+msgstr "Exporter le fichier sous..."
+
+msgid "File {} exported to {}."
+msgstr "Fichier {} exporté vers {}."
+
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr ""
+"Échec de l'exportation du fichier :\n"
+"{}"
+
+msgid "Enter a name for the new notebook:"
+msgstr "Entrez un nom pour le nouveau carnet :"
+
+msgid "New Notebook"
+msgstr "Nouveau carnet"
+
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr ""
+"Échec de la création du carnet :\n"
+"{}"
+
+msgid "Notebook Creation Error"
+msgstr "Erreur de création du carnet"
+
+msgid "New file '{}' created."
+msgstr "Nouveau fichier « {} » créé."
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr "Voulez-vous vraiment fermer cet onglet et arrêter le serveur Jupyter ?"
+
+msgid "Confirm Close"
+msgstr "Confirmer la fermeture"
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr "Le serveur Jupyter accessible à l'adresse {url} (PID : {pid}) a été arrêté"
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+"Échec de l'arrêt du serveur Jupyter : \n"
+"{}"
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr "Le carnet Jupyter a été ouvert dans votre navigateur par défaut."
+
+msgid "Open in Browser Again"
+msgstr "Ouvrir à nouveau dans le navigateur"
+
+msgid "Stop Jupyter Server"
+msgstr "Arrêter le serveur Jupyter"
+
+msgid "Server URL: {}"
+msgstr "URL du serveur : {}"
+
+msgid "Process ID: {}"
+msgstr "Identifiant du processus : {}"
+
+msgid "Notebook Storage: {}"
+msgstr "Stockage du carnet : {}"
+
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr ""
+"Échec de l'arrêt du serveur :\n"
+"{}"
+
+msgid "Notebook storage does not exist: {}"
+msgstr "Le stockage du carnet n'existe pas : {}"
+
+msgid "Notebook storage is not writable: {}"
+msgstr "L'espace de stockage du carnet n'est pas accessible en écriture : {}"
+
+msgid "Server is already running on port {}"
+msgstr "Le serveur est déjà en cours d'exécution sur le port {}"
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr "Échec du démarrage du serveur Jupyter. Vérifiez que toutes les dépendances sont installées et accessibles : {}"
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr "Échec du démarrage du serveur Jupyter. Vérifiez s'il y a des conflits de ports, des dépendances manquantes ou des droits d'accès insuffisants."
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr "Erreur lors de l'arrêt du serveur Jupyter (PID {}) : {}"
+
+msgid "Server URL is not set. Start the server first."
+msgstr "L'URL du serveur n'est pas définie. Veuillez d'abord démarrer le serveur."
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr "Le serveur Jupyter s'est arrêté de manière inattendue."
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+"Certains serveurs Jupyter n'ont pas pu être arrêtés:\n"
+"{}"
+
+msgid "File not found: {}"
+msgstr "Fichier introuvable : {}"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr "Le fichier source doit avoir l’extension .ipynb : {}"
+
+msgid "Target file already exists: {}"
+msgstr "Le fichier cible existe déjà : {}"
+
+msgid "File '{}' already exists"
+msgstr "Le fichier « {} » existe déjà"
+
+msgid "Stop server"
+msgstr "Arrêter le serveur"
+
+msgid "Create new notebook"
+msgstr "Créer un nouveau carnet"
+
+msgid "Import notebook"
+msgstr "Importer un carnet"
+
+msgid "Export notebook"
+msgstr "Exporter le carnet"
+
 msgid "GRASS"
 msgstr "GRASS"
 
@@ -5562,6 +5822,37 @@ msgstr "Fermer l’affichage de la carte {}"
 
 msgid "Console"
 msgstr "Console de commande"
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+"Le mode intégré nécessite wx.html2.WebView, qui n'est pas disponible sur ce système.\n"
+"\n"
+"Cela peut se produire si wxPython ou wxWidgets ont été compilés sans prise en charge de HTML2/WebView."
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+"Le mode intégré nécessite le moteur d'exécution Microsoft Edge WebView2 sous Windows.\n"
+"\n"
+"Celui-ci est absent ou n'est pas correctement configuré sur ce système."
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+"{message}\n"
+"\n"
+"Souhaitez-vous plutôt ouvrir le carnet Jupyter dans votre navigateur externe ?"
+
+msgid "Integrated Mode Not Available"
+msgstr "Mode intégré non disponible"
 
 msgid "Map Swipe Tool"
 msgstr "Outil de balayage de carte"
@@ -5717,6 +6008,13 @@ msgstr "Enlever la carte"
 
 msgid "Quit GRASS GUI"
 msgstr "Quitter l'interface graphique GRASS"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
+"Échec de l'arrêt des serveurs Jupyter :\n"
+"{}"
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr "La résolution de l'affichage n'est actuellement pas contrainte aux limite de la région de calculs. Il est suggéré de contraindre les cartes aux limites de la région. Voulez-vous contraindre la résolution ?"
@@ -5889,7 +6187,7 @@ msgid ""
 "Details: %s"
 msgstr ""
 "Impossible de démarrer l'outil wxGUI de numérisation de vecteur.\n"
-"Détails: %s"
+"Détails : %s"
 
 msgid "Set opacity of <{}>"
 msgstr "Régler l'opacité de <{}>"
@@ -6042,12 +6340,11 @@ msgstr "Géorectifier"
 msgid "Cartographic Composer"
 msgstr "Composeur de cartes"
 
+msgid "Open Graphical Modeler"
+msgstr "Ouvrir le modélisateur graphique"
+
 msgid "Launch user-defined script"
 msgstr "Lancer un script"
-
-#, fuzzy
-msgid "New display"
-msgstr "Nouvel affichage"
 
 msgid "Python code editor"
 msgstr "Éditeur de code Python"
@@ -6385,7 +6682,7 @@ msgid "GRASS Database:"
 msgstr "Base de données GRASS :"
 
 msgid "Project Name:"
-msgstr "Nom du projet:"
+msgstr "Nom du projet :"
 
 msgid "Projection:"
 msgstr "Projection :"
@@ -6406,9 +6703,9 @@ msgid ""
 "\n"
 "Details: %(err)s"
 msgstr ""
-"Impossible de créer le nouveau projet. Secteur <%(loc)s> non crée.\n"
+"Impossible de créer le nouveau projet. Le projet <%(loc)s> n'a pas été créé.\n"
 "\n"
-"Détails: %(err)s"
+"Détails : %(err)s"
 
 msgid "Unable to create new project"
 msgstr "Impossible de créer le nouveau projet"
@@ -6435,6 +6732,15 @@ msgstr "Chaîne WKT manquante."
 
 msgid "There were some issues when loading menu or Tools:"
 msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+"Le mode intégré n'est pas pris en charge sur ce système.\n"
+"\n"
+"Souhaitez-vous ouvrir le carnet Jupyter dans votre navigateur externe à la place ?"
 
 msgid "No project provided. Operation canceled."
 msgstr "Aucun projet fourni. Opération annulée."
@@ -6570,17 +6876,15 @@ msgstr "Afficher/cacher les limites de la région de calcul (définie avec g.reg
 msgid "Display coordinates in different CRS"
 msgstr "Afficher les coordonnées dans un différent SCR"
 
-#, fuzzy
 msgid "Reproject coordinates displayed in the statusbar. Coordinate reference system can be specified in GUI preferences dialog (tab 'Projection')"
-msgstr "Re-projeter les coordonnées affichées dans la barre d'état. La projection peut être définie dans les préférences de l'interface utilisateur (onglet 'Affichage de la carte')"
+msgstr "Reprojeter les coordonnées affichées dans la barre d'état. Le système de coordonnées de référence peut être spécifié dans la boîte de dialogue des préférences de l'interface graphique (onglet « Projection »)"
 
 #, python-brace-format
 msgid "{label} (EPSG: {epsg})"
 msgstr "{label} (EPSG : {epsg})"
 
-#, fuzzy
 msgid "Status bar"
-msgstr "Afficher la barre de status"
+msgstr "Barre d'état"
 
 msgid "Render"
 msgstr "Afficher"
@@ -7091,9 +7395,6 @@ msgstr "Récupérer et installer des extension depuis le dépôt GRASS AddOns"
 
 msgid "List of extensions - double-click to install"
 msgstr "Liste des extensions - double-clic pour installer"
-
-msgid "Options"
-msgstr "Options"
 
 msgid "&Install"
 msgstr "&Installer"
@@ -8684,7 +8985,7 @@ msgstr ""
 "en mode brouillon (seulement en mode aperçu"
 
 msgid "Outline color:"
-msgstr "Couleur de mise en valeur:"
+msgstr "Couleur de mise en valeur :"
 
 msgid "Fill color:"
 msgstr "Couleur de remplissage :"
@@ -8749,12 +9050,12 @@ msgstr "La commande ps.map a retourné le code de sortie %s"
 msgid "Program {} is not available."
 msgstr "Le programme {} n'est pas disponible."
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "{title} Please install it to create PDF.\n"
 "\n"
 msgstr ""
-"{title} Veuillez l'installer pour créer des PDF.\n"
+"{title} Veuillez l'installer pour créer des fichiers PDF.\n"
 "\n"
 
 msgid ""
@@ -9757,8 +10058,8 @@ msgstr "Télécharger jeux de données sélectionné"
 msgid "Do you want to cancel dataset download?"
 msgstr "Voulez-vous annuler le téléchargement du jeu de données ?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
-msgstr ""
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
+msgstr "L'outil chronologie nécessite l'installation du paquet « matplotlib » (python-matplotlib et, sur certains systèmes, également python-matplotlib-wx)."
 
 msgid "Timeline Tool"
 msgstr ""
@@ -9855,9 +10156,8 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "Outil de chronologie - GRASS"
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "L'outil d'affichage temporel nécessite que le paquet 'matplotlib' (python-matplotlib) soit installé. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
+msgstr "L'outil de graphiques temporels nécessite que le paquet 'matplotlib' (python-matplotlib) soit installé."
 
 #, fuzzy
 msgid "Temporal Plot Tool"
@@ -10306,9 +10606,8 @@ msgstr "Gauche : Sélectionner"
 msgid "Display/update categories (Ctrl+J)"
 msgstr "Afficher/mettre à jour les catégories (Ctrl+J)"
 
-#, fuzzy
 msgid "Edit selected line/boundary (Ctrl+E)"
-msgstr "Modifier les lignes/contours sélectionné(e)s"
+msgstr "Modifier la ligne/contour sélectionné(e) (Ctrl+E)"
 
 msgid "Move selected point(s), line(s), boundary(ies) or centroid(s) (Ctrl+M)"
 msgstr "Déplacer le(s) point(s), ligne(s), contour(s) ou centroïde(s) sélectionné(s) (Ctrl+M)"
@@ -10346,9 +10645,8 @@ msgstr "Annuler le changement précédent"
 msgid "Redo (Ctrl+Y)"
 msgstr "Rétablir (Ctrl+Y)"
 
-#, fuzzy
 msgid "Redo previous change"
-msgstr "Refaire les changements précédents"
+msgstr "Rétablir la modification précédente"
 
 msgid "No vector map is open for editing. Please select firsta vector map from the combo box."
 msgstr "Aucune carte vectorielle n'est sélectionnée pour édition. Veuillez sélectionner la première carte vectorielle dans la boîte combinée."
@@ -10451,9 +10749,9 @@ msgid ""
 "\n"
 "Reason: %s"
 msgstr ""
-"Échec d'écriture de la nouvelle entité. Opération annulée.\n"
+"Échec de l'enregistrement de la nouvelle entité. Opération annulée.\n"
 "\n"
-"Raison: %s"
+"Raison : %s"
 
 #, python-format
 msgid "Reading feature id %d failed. Operation canceled."
@@ -10871,7 +11169,7 @@ msgid "Username:"
 msgstr "Nom d'utilisateur :"
 
 msgid "Password:"
-msgstr "Mot de passe:"
+msgstr "Mot de passe :"
 
 #, python-format
 msgid "Connecting to <%s>..."
@@ -11284,7 +11582,7 @@ msgid ""
 "Reason: %s"
 msgstr ""
 "Impossible d'ouvrir le fichier <%s> en écriture.\n"
-"Raison: %s"
+"Raison : %s"
 
 #, python-format
 msgid ""
@@ -11333,6 +11631,18 @@ msgid ""
 msgstr ""
 "Équation de régression pour la carte raster <%(rast1)s> vs. <%(rast2)s> :\n"
 "\n"
+
+#, python-brace-format
+#~ msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#~ msgstr "L'outil Scatterplot nécessite que le paquet \"matplotlib\" (python-matplotlib) soit installé. {0}"
+
+#, fuzzy
+#~ msgid "New display"
+#~ msgstr "Nouvel affichage"
+
+#, python-brace-format
+#~ msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#~ msgstr "L'outil d'affichage temporel nécessite que le paquet 'matplotlib' (python-matplotlib) soit installé. {0}"
 
 #~ msgid "&Copy paths to mapsets"
 #~ msgstr "&Copier les chemins vers les jeux de cartes"
@@ -13290,9 +13600,6 @@ msgstr ""
 #~ msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
 #~ msgstr "Algorithme de fusion d'image pour améliorer la netteté des canaux multispectraux avec un canal panchromatique haute résolution."
 
-#~ msgid "Import"
-#~ msgstr "Importer"
-
 #~ msgid "Import 3-dimensional Vis5D files."
 #~ msgstr "Importer des fichiers Vis5D en 3-dimensions."
 
@@ -15029,18 +15336,6 @@ msgstr ""
 #~ msgstr "Entités de texture"
 
 #, fuzzy
-#~ msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {}"
-#~ msgstr "L'outil Scatterplot nécessite que le paquet \"matplotlib\" (python-matplotlib) soit installé."
-
-#, fuzzy
-#~ msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {}"
-#~ msgstr "L'outil temporel nécessite que le paquet \"matplotlib\" (python-matplotlib) soit installé."
-
-#, fuzzy
-#~ msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {}"
-#~ msgstr "L'outil temporel nécessite que le paquet \"matplotlib\" (python-matplotlib) soit installé. {}"
-
-#, fuzzy
 #~ msgid "The copied layer needs to be reprojected:"
 #~ msgstr "Les couches copiées  doivent être reprojetées :"
 
@@ -15468,10 +15763,6 @@ msgstr ""
 
 #~ msgid "failed to open '{0}'"
 #~ msgstr "échec à l'ouverture de '{0}'"
-
-#, fuzzy
-#~ msgid "failed to open '{}'"
-#~ msgstr "Échec à l'ouverture de '{}'"
 
 #~ msgid "layer"
 #~ msgstr "couche"

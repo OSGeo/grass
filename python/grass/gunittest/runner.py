@@ -59,7 +59,7 @@ class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult)
         durations: int | None = None,
         **kwargs,
     ) -> None:
-        """Construct a TextTestResult. Subclasses should accept **kwargs
+        """Construct a TextTestResult. Subclasses should accept ``**kwargs``
         to ensure compatibility as the interface changes."""
         super().__init__(
             stream=stream, descriptions=descriptions, verbosity=verbosity, **kwargs

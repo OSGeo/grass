@@ -27,7 +27,6 @@ from pathlib import Path
 
 import grass.script as gs
 from grass.app.data import lock_mapset, unlock_mapset, MapsetLockingException
-from grass.grassdb.create import create_mapset
 from grass.exceptions import ScriptError
 from grass.tools import Tools
 
@@ -98,6 +97,11 @@ def add_mapset_subparser(subparsers):
 
     subparser = mapset_subparsers.add_parser("create", help="create a new mapset")
     subparser.add_argument("path", help="path to the new mapset")
+    subparser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help=_("overwrite an existing mapset"),
+    )
     subparser.set_defaults(func=subcommand_mapset_create)
 
     subparser = mapset_subparsers.add_parser("lock", help="lock a mapset")
@@ -133,9 +137,10 @@ def add_mapset_subparser(subparsers):
 
 
 def subcommand_mapset_create(args) -> int:
+    """Translates args to function parameters"""
     try:
-        create_mapset(args.path)
-    except (ScriptError, OSError) as error:
+        gs.create_mapset(args.path, overwrite=args.overwrite)
+    except (ValueError, OSError) as error:
         print(_("Error creating mapset: {}").format(error), file=sys.stderr)
         return 1
     return 0
