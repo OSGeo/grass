@@ -15,7 +15,7 @@ Classes:
  - model_items::ModelCondition
  - model_items::ModelComment
 
-(C) 2010-2025 by the GRASS Development Team
+(C) 2010-2026 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -347,7 +347,8 @@ class ModelAction(ModelObject, ogl.DividedShape):
 
             # order variables by length
             for variable in sorted(variables, key=len, reverse=True):
-                pattern = re.compile("%{" + variable + "}")
+                # curly braces are optional
+                pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
                 value = ""
                 if substitute and "variables" in substitute:
                     for p in substitute["variables"]["params"]:
@@ -678,8 +679,27 @@ class ModelData(ModelObject):
         self._setPen()
         self.SetLabel()
 
-    def GetDisplayCmd(self):
-        """Get display command as list"""
+    def GetResolvedValue(self, resolved=None):
+        """Get value with model substituted variables
+        :param resolved: dict mapping variable name to resolved value,
+            or None to return the raw value
+        """
+        if not resolved:
+            return self.value
+        value = self.value
+
+        # find the variable in resolved
+        for variable, var_value in resolved.items():
+            pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
+            value = pattern.sub(var_value, value)
+        # return substituted value
+        return value
+
+    def GetDisplayCmd(self, resolved=None):
+        """Get display command as list
+        :param resolved: dict mapping variable name to resolved value,
+            or None to return the raw value
+        """
         cmd = []
         if self.prompt == "raster":
             cmd.append("d.rast")
@@ -689,7 +709,7 @@ class ModelData(ModelObject):
             msg = "Unsupported display prompt: {}".format(self.prompt)
             raise GException(msg)
 
-        cmd.append("map=" + self.value)
+        cmd.append("map=" + self.GetResolvedValue(resolved))
 
         return cmd
 

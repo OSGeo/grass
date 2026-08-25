@@ -10,7 +10,8 @@ the title can be changed with **title_font**, **title_fontsize**. Flag
 border color and border width (**border_color** and **border_width**).
 Parameter **symbol_size** defines the size of line and area symbols. The
 size of point symbols is based on currently set symbology of vector maps
-using *[d.vect](d.vect.md)* or *[d.vect.thematic](d.vect.thematic.md)*.
+using *[d.vect](d.vect.md)*, *[d.vect.thematic](d.vect.thematic.md)*, or
+*[d.vect.chart](d.vect.chart.md)*.
 
 Module *d.vect.legend* supports subtitles (see section Notes). Their
 font and font size can be set using parameters **sub_font** and
@@ -20,7 +21,8 @@ font and font size can be set using parameters **sub_font** and
 
 Symbols for vector areas and lines, and labels for individual vector
 labels can be changed in the symbology setting of each vector map in
-*[d.vect](d.vect.md)* or *[d.vect.thematic](d.vect.thematic.md)* module
+*[d.vect](d.vect.md)*, *[d.vect.thematic](d.vect.thematic.md)*, or
+*[d.vect.chart](d.vect.chart.md)* module
 (in Legend tab). Use its parameters **icon_area** and **icon_line** to
 pick from available symbols. By using parameter **legend_label** of
 *d.vect* module, users can change the default label, which is the map
@@ -28,8 +30,9 @@ name.
 
 ### Modifying the order of legend entries and omitting certain vector maps from legend
 
-Modules *[d.vect](d.vect.md)* and
-*[d.vect.thematic](d.vect.thematic.md)* have a flag **-s** which removes
+Modules *[d.vect](d.vect.md)*,
+*[d.vect.thematic](d.vect.thematic.md)*, and
+*[d.vect.chart](d.vect.chart.md)* have a flag **-s** which removes
 the particular vector or thematic vector from vector legend.
 
 The order of entries is defined by the order in Layer Manager (if used
@@ -60,7 +63,8 @@ label|symbol_name|size|color_type|feature_color|fill_color|line_width|geometry_t
 
 Color type can be 'lf' or 'ps'. Based on color type color columns are
 interpreted as line color and fill colors (lf), or primary and secondary
-colors (ps). Module d.vect always uses 'lf' and d.vect.thematic 'ps'.
+colors (ps). Module d.vect always uses 'lf', while d.vect.thematic and
+d.vect.chart use 'ps'.
 Here is an example of legend file with subtitles:
 
 ```sh
@@ -94,7 +98,7 @@ d.legend.vect -b at=2,40 title="Hospitals in North Carolina" symbol_size=26 font
 ## SEE ALSO
 
 *[d.vect](d.vect.md), [d.vect.thematic](d.vect.thematic.md),
-[d.legend](d.legend.md)*
+[d.vect.chart](d.vect.chart.md), [d.legend](d.legend.md)*
 
 Check also Python module from AddOns:
 *[d.vect.thematic2](https://grass.osgeo.org/grass8/manuals/addons/d.vect.thematic2.html)*

@@ -168,16 +168,16 @@ def discover_modules(
                             add = True  # standard case with given location
                         if not locations:
                             add = True  # count not specified as universal
-            except ImportError as e:
+            except ImportError as error:
                 if add_failed_imports:
                     add = True
                 else:
-                    raise ImportError(
-                        "Cannot import module named %s in %s (%s)"
-                        % (name, full, e.message)
+                    error.add_note(
+                        "Cannot import module named {} in {}".format(name, full)
                     )
                     # alternative is to create TestClass which will raise
                     # see unittest.loader
+                    raise
             if add:
                 modules.append(
                     GrassTestPythonModule(

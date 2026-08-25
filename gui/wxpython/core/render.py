@@ -354,7 +354,7 @@ class MapLayer(Layer):
     def __init__(self, *args, **kwargs):
         """Represents map layer in the map canvas"""
         Layer.__init__(self, *args, **kwargs)
-        if self.type in {"vector", "thememap"}:
+        if self.type in {"vector", "thememap", "themechart"}:
             self._legrow = get_tempfile_name(suffix=".legrow", create=True)
         else:
             self._legrow = ""
@@ -425,7 +425,7 @@ class RenderLayerMgr(wx.EvtHandler):
         env_cmd = env.copy()
         env_cmd.update(self._render_env)
         env_cmd["GRASS_RENDER_FILE"] = self.layer.mapfile
-        if self.layer.GetType() in {"vector", "thememap"}:
+        if self.layer.GetType() in {"vector", "thememap", "themechart"}:
             if not self.layer._legrow:
                 self.layer._legrow = grass.tempfile(create=True)
             if (p := Path(self.layer._legrow)).is_file():
@@ -704,7 +704,7 @@ class RenderMapMgr(wx.EvtHandler):
         new_legend = []
         with open(self.Map.legfile, "w") as outfile:
             for layer in reversed(self.layers):
-                if layer.GetType() not in {"vector", "thememap"}:
+                if layer.GetType() not in {"vector", "thememap", "themechart"}:
                     continue
 
                 if (p := Path(layer._legrow)).is_file() and not layer.hidden:
@@ -1416,7 +1416,7 @@ class Map:
             for f in glob.glob(basefile):
                 Path(f).unlink()
 
-        if layer.GetType() in {"vector", "thememap"}:
+        if layer.GetType() in {"vector", "thememap", "themechart"}:
             Path(layer._legrow).unlink(missing_ok=True)
 
         list_.remove(layer)

@@ -94,8 +94,8 @@ class ParameterConverter:
     def process_parameter_list(self, command):
         """Converts or at least processes parameters passed as list of strings"""
         for item in command:
-            splitted = item.split("=", maxsplit=1)
-            value = splitted[1] if len(splitted) > 1 else item
+            split_ = item.split("=", maxsplit=1)
+            value = split_[1] if len(split_) > 1 else item
             if self.import_export is None and ImporterExporter.is_recognized_file(
                 value
             ):

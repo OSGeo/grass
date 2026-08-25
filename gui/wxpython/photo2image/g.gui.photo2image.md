@@ -1,9 +1,8 @@
 ---
+title: g.gui.photo2image
 description: wxGUI GCP Manager for photo to image registration
 index: topic_GUI|GUI
 ---
-
-# wxGUI GCP Manager for photo to image registration
 
 ## DESCRIPTION
 

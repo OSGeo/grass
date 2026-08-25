@@ -477,7 +477,7 @@ def replace_shebang_win(python_file):
             out_file.write(new_line)
 
     os.remove(python_file)  # remove original
-    os.rename(tmp_name, python_file)  # rename temp to original name
+    Path(tmp_name).rename(python_file)  # rename temp to original name
 
 
 def urlretrieve(url, filename, *args, **kwargs):
@@ -1218,10 +1218,10 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
 
         # update modules metadata file
         gs.message(_("Updating extension modules metadata file..."))
-        install_module_xml(new_modules)
+        install_module_xml(new_modules, source=source)
 
         for module in new_modules:
-            update_manual_page(module)
+            update_manual_page(module, source=source)
 
         gs.message(
             _("Installation of <%s> successfully finished") % options["extension"]
@@ -1495,7 +1495,7 @@ def filter_multi_addon_addons(mlist):
     return mlist
 
 
-def install_module_xml(mlist):
+def install_module_xml(mlist, source=None):
     """Update XML files with metadata about installed modules and toolbox
     of an private addon
 
@@ -1509,7 +1509,9 @@ def install_module_xml(mlist):
     # read XML file
     tree = etree_fromfile(xml_file)
 
-    if sys.platform != "win32":
+    # Identifying multi-addon addons queries the official repository over
+    # the network, so skip it for other sources (e.g. a local directory).
+    if sys.platform != "win32" and source in {"official", "official_fork"}:
         # Filter multi-addon addons
         if len(mlist) > 1:
             mlist = filter_multi_addon_addons(
@@ -1835,19 +1837,12 @@ def extract_tar(name, directory, tmpdir):
         extract_dir = os.path.join(tmpdir, "extract_dir")
         Path(extract_dir).mkdir()
 
-        # Extraction filters were added in Python 3.12,
-        # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
-        # See
-        # https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
-        # and https://peps.python.org/pep-0706/
-        # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
-        # and in Python 3.14, `filter='data'` will be the default
-        if hasattr(tarfile, "data_filter"):
-            tar.extractall(path=extract_dir, filter="data")
-        else:
-            # Remove this when no longer needed
-            gs.warning(_("Extracting may be unsafe; consider updating Python"))
-            tar.extractall(path=extract_dir)
+        # The 'data' extraction filter was added in Python 3.12 and backported
+        # to 3.11.4 (PEP 706). Refuse to extract without it rather
+        # than extracting unsafely.
+        if not hasattr(tarfile, "data_filter"):
+            gs.fatal(_("Extracting may be unsafe; upgrade Python to 3.11.4 or newer"))
+        tar.extractall(path=extract_dir, filter="data")
 
         files = os.listdir(extract_dir)
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
@@ -2007,7 +2002,7 @@ def install_extension_std_platforms(name, source, url, branch):
                     # get the module name: project(<module name>)
                     with open(os.path.join(r, "CMakeLists.txt")) as fp:
                         for line in fp:
-                            m = re.match(r"project\((.*)\)", line)
+                            m = re.match(r"project\(\s*(\S+).*\)", line)
                             if m:
                                 try:
                                     modulename = m.group(1)
@@ -2053,7 +2048,7 @@ def install_extension_std_platforms(name, source, url, branch):
                 )
 
     if is_cmake:
-        grass_addon_base = os.getenv("GRASS_ADDON_BASE")
+        grass_addon_base = options["prefix"]
         cmake_prefix_path = (
             ";" + os.getenv("CMAKE_PREFIX_PATH")
             if os.getenv("CMAKE_PREFIX_PATH")
@@ -2064,11 +2059,25 @@ def install_extension_std_platforms(name, source, url, branch):
             if os.getenv("CMAKE_MODULE_PATH")
             else ""
         )
+        grass_cmake_prefix_path = (
+            ";" + runtime_paths.grass_cmake_prefix_path
+            if runtime_paths.grass_cmake_prefix_path
+            else ""
+        )
         g_cmake_config_dir = runtime_paths.grass_cmake_config_dir
         g_cmake_module_dir = runtime_paths.grass_cmake_module_dir
+        g_c_compiler = os.getenv("CC") or runtime_paths.grass_cmake_c_compiler
+        g_cxx_compiler = os.getenv("CXX") or runtime_paths.grass_cmake_cxx_compiler
 
-        c_prefix_path = f"{g_cmake_config_dir}{cmake_prefix_path}"
+        c_prefix_path = (
+            f"{g_cmake_config_dir}{grass_cmake_prefix_path}{cmake_prefix_path}"
+        )
         c_mod_path = f"{g_cmake_module_dir}{cmake_module_path}"
+        c_compiler = f"-DCMAKE_C_COMPILER={g_c_compiler}" if g_c_compiler else ""
+        cxx_compiler = (
+            f"-DCMAKE_CXX_COMPILER={g_cxx_compiler}" if g_cxx_compiler else ""
+        )
+
         config_cmd = [
             "cmake",
             "-B",
@@ -2077,6 +2086,9 @@ def install_extension_std_platforms(name, source, url, branch):
             f"-DCMAKE_MODULE_PATH={c_mod_path}",
             f"-DCMAKE_INSTALL_PREFIX={grass_addon_base}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
+            f"-DSOURCE_URL={url}",
+            c_compiler,
+            cxx_compiler,
         ]
         make_cmd = [
             "cmake",
@@ -2343,6 +2355,7 @@ def remove_extension_std(name, force=False):
         os.path.join(options["prefix"], "bin", name),
         os.path.join(options["prefix"], "scripts", name),
         os.path.join(options["prefix"], "docs", "html", name + ".html"),
+        os.path.join(options["prefix"], "docs", "mkdocs", "source", name + ".md"),
         os.path.join(options["prefix"], "docs", "rest", name + ".txt"),
         os.path.join(options["prefix"], "docs", "man", "man1", name + ".1"),
     ]:
@@ -2454,6 +2467,7 @@ def check_dirs():
     """Ensure that the necessary directories in prefix path exist"""
     create_dir(os.path.join(options["prefix"], "bin"))
     create_dir(os.path.join(options["prefix"], "docs", "html"))
+    create_dir(os.path.join(options["prefix"], "docs", "mkdocs", "source"))
     create_dir(os.path.join(options["prefix"], "docs", "rest"))
     check_style_file("grass_logo.png")
     check_style_file("hamburger_menu.svg")
@@ -2467,7 +2481,7 @@ def check_dirs():
 # fix file URI in manual page
 
 
-def update_manual_page(module):
+def update_manual_page(module, source=None):
     """Fix manual page for addons which are at different directory
     than core modules"""
     if module.split(".", 1)[0] == "wx":
@@ -2496,7 +2510,9 @@ def update_manual_page(module):
     # find URIs
     pattern = r"""<a href="([^"]+)">([^>]+)</a>"""
     addons = get_installed_extensions(force=True)
-    if sys.platform != "win32":
+    # Identifying multi-addon addons queries the official repository over
+    # the network, so skip it for other sources (e.g. a local directory).
+    if sys.platform != "win32" and source in {"official", "official_fork"}:
         # Multi-addon
         if len(addons) > 1:
             for a in get_multi_addon_addons_which_install_only_html_man_page():

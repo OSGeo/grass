@@ -122,8 +122,8 @@ class RasterDataset(AbstractMapDataset):
         >>> rmap.metadata.print_info()
          +-------------------- Metadata information ----------------------------------+
          | Datatype:................... CELL
-         | Number of columns:.......... 8
-         | Number of rows:............. 12
+         | Number of columns:.......... 12
+         | Number of rows:............. 8
          | Number of cells:............ 96
          | North-South resolution:..... 10.0
          | East-west resolution:....... 10.0
@@ -544,8 +544,8 @@ class Raster3DDataset(AbstractMapDataset):
         >>> r3map.metadata.print_info()
          +-------------------- Metadata information ----------------------------------+
          | Datatype:................... DCELL
-         | Number of columns:.......... 8
-         | Number of rows:............. 12
+         | Number of columns:.......... 12
+         | Number of rows:............. 8
          | Number of cells:............ 960
          | North-South resolution:..... 10.0
          | East-west resolution:....... 10.0

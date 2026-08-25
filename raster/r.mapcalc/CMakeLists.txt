@@ -12,42 +12,41 @@ set(r_mapcalc_common_SRCS
     main.c
     xrowcol.c
     ${CMAKE_CURRENT_BINARY_DIR}/mapcalc.tab.c
-    ${CMAKE_CURRENT_BINARY_DIR}/mapcalc.yy.c)
+    ${CMAKE_CURRENT_BINARY_DIR}/mapcalc.yy.c
+)
 
-set(r_mapcalc_SRCS ${r_mapcalc_common_SRCS} map.c xarea.c xcoor.c xres.c)
-set(r3_mapcalc_SRCS ${r_mapcalc_common_SRCS} map3.c xarea.c xcoor3.c xres3.c)
-
-build_program(
-  NAME
-  r.mapcalc
-  SOURCES
-  "${r_mapcalc_SRCS}"
-  DEPENDS
-  grass_btree
-  grass_calc
-  grass_gis
-  grass_raster
-  OPTIONAL_DEPENDS
-  Readline::Readline
-  Readline::History
-  Threads::Threads
-  OPENMP)
+set(r_mapcalc_SRCS
+    ${r_mapcalc_common_SRCS}
+    map.c
+    xarea.c
+    xcoor.c
+    xres.c
+)
+set(r3_mapcalc_SRCS
+    ${r_mapcalc_common_SRCS}
+    map3.c
+    xarea.c
+    xcoor3.c
+    xres3.c
+)
 
 build_program(
-  NAME
-  r3.mapcalc
-  SOURCES
-  "${r3_mapcalc_SRCS}"
-  DEPENDS
-  grass_btree
-  grass_calc
-  grass_gis
-  grass_raster
-  grass_raster3d
-  OPTIONAL_DEPENDS
-  Readline::Readline
-  Readline::History
-  Threads::Threads)
+    NAME r.mapcalc
+    SOURCES "${r_mapcalc_SRCS}"
+    DEPENDS grass_btree grass_calc grass_gis grass_raster
+    OPTIONAL_DEPENDS
+        OpenMP::OpenMP_C
+        Readline::History
+        Readline::Readline
+        Threads::Threads
+)
+
+build_program(
+    NAME r3.mapcalc
+    SOURCES "${r3_mapcalc_SRCS}"
+    DEPENDS grass_btree grass_calc grass_gis grass_raster grass_raster3d
+    OPTIONAL_DEPENDS Readline::History Readline::Readline Threads::Threads
+)
 
 # mapcalc.yy.c is attached to both targets, work around this with build
 # dependency chain

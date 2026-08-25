@@ -24,7 +24,7 @@ void unitary(Cpx *u, int n)
     double *g, *q, a;
 
     m = n * n;
-    g = (double *)calloc(n * n, sizeof(double));
+    g = (double *)calloc((size_t)n * n, sizeof(double));
     v = (Cpx *)calloc(m + n, sizeof(Cpx));
     e = v + m;
     h.re = 1.;

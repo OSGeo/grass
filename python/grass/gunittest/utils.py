@@ -19,6 +19,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from unittest import expectedFailure
 
+from grass.app.runtime import RuntimePaths
+
 if TYPE_CHECKING:
     from _typeshed import StrOrBytesPath, StrPath
 
@@ -74,6 +76,22 @@ def do_doctest_gettext_workaround() -> None:
 
 
 _MAX_LENGTH = 80
+
+
+def xfail_cmake(test_item):
+    """Marks a test as an expected failure or error only on CMake build
+    Equivalent to applying @unittest.expectedFailure only when running
+    on a CMake built GRASS.
+    """
+    runtime_paths = RuntimePaths()
+
+    if not runtime_paths.is_cmake_build:
+        return test_item
+    warnings.warn(
+        "Once the test is fixed and passing, remove the @xfail_cmake decorator",
+        stacklevel=2,
+    )
+    return expectedFailure(test_item)
 
 
 def xfail_windows(test_item):

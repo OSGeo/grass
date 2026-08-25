@@ -175,7 +175,7 @@ void D_close_driver(void)
 
   \todo To be removed
 */
-int D_save_command(const char *cmd UNUSED)
+int D_save_command(const char *cmd G_UNUSED)
 {
     return 0;
 }

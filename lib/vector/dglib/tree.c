@@ -42,7 +42,7 @@ dglTreeNode_s *dglTreeNodeAlloc(void)
     return pNode;
 }
 
-void dglTreeNodeCancel(void *pvNode, void *pvParam UNUSED)
+void dglTreeNodeCancel(void *pvNode, void *pvParam G_UNUSED)
 {
     if (((dglTreeNode_s *)pvNode)->pv)
         free(((dglTreeNode_s *)pvNode)->pv);
@@ -52,7 +52,7 @@ void dglTreeNodeCancel(void *pvNode, void *pvParam UNUSED)
 }
 
 int dglTreeNodeCompare(const void *pvNodeA, const void *pvNodeB,
-                       void *pvParam UNUSED)
+                       void *pvParam G_UNUSED)
 {
     if (((dglTreeNode_s *)pvNodeA)->nKey < ((dglTreeNode_s *)pvNodeB)->nKey)
         return -1;
@@ -94,7 +94,7 @@ dglTreeNode2_s *dglTreeNode2Alloc(void)
     return pNode2;
 }
 
-void dglTreeNode2Cancel(void *pvNode2, void *pvParam UNUSED)
+void dglTreeNode2Cancel(void *pvNode2, void *pvParam G_UNUSED)
 {
     if (((dglTreeNode2_s *)pvNode2)->pv)
         free(((dglTreeNode2_s *)pvNode2)->pv);
@@ -106,7 +106,7 @@ void dglTreeNode2Cancel(void *pvNode2, void *pvParam UNUSED)
 }
 
 int dglTreeNode2Compare(const void *pvNode2A, const void *pvNode2B,
-                        void *pvParam UNUSED)
+                        void *pvParam G_UNUSED)
 {
     if (((dglTreeNode2_s *)pvNode2A)->nKey < ((dglTreeNode2_s *)pvNode2B)->nKey)
         return -1;
@@ -149,7 +149,7 @@ dglTreeEdge_s *dglTreeEdgeAlloc(void)
     return pEdge;
 }
 
-void dglTreeEdgeCancel(void *pvEdge, void *pvParam UNUSED)
+void dglTreeEdgeCancel(void *pvEdge, void *pvParam G_UNUSED)
 {
     if (((dglTreeEdge_s *)pvEdge)->pv)
         free(((dglTreeEdge_s *)pvEdge)->pv);
@@ -157,7 +157,7 @@ void dglTreeEdgeCancel(void *pvEdge, void *pvParam UNUSED)
 }
 
 int dglTreeEdgeCompare(const void *pvEdgeA, const void *pvEdgeB,
-                       void *pvParam UNUSED)
+                       void *pvParam G_UNUSED)
 {
     if (((dglTreeEdge_s *)pvEdgeA)->nKey < ((dglTreeEdge_s *)pvEdgeB)->nKey)
         return -1;
@@ -199,13 +199,13 @@ dglTreeTouchI32_s *dglTreeTouchI32Alloc(void)
     return pTouchI32;
 }
 
-void dglTreeTouchI32Cancel(void *pvTouchI32, void *pvParam UNUSED)
+void dglTreeTouchI32Cancel(void *pvTouchI32, void *pvParam G_UNUSED)
 {
     free(pvTouchI32);
 }
 
 int dglTreeTouchI32Compare(const void *pvTouchI32A, const void *pvTouchI32B,
-                           void *pvParam UNUSED)
+                           void *pvParam G_UNUSED)
 {
     if (((dglTreeTouchI32_s *)pvTouchI32A)->nKey <
         ((dglTreeTouchI32_s *)pvTouchI32B)->nKey)
@@ -249,13 +249,13 @@ dglTreePredist_s *dglTreePredistAlloc(void)
     return pPredist;
 }
 
-void dglTreePredistCancel(void *pvPredist, void *pvParam UNUSED)
+void dglTreePredistCancel(void *pvPredist, void *pvParam G_UNUSED)
 {
     free(pvPredist);
 }
 
 int dglTreePredistCompare(const void *pvPredistA, const void *pvPredistB,
-                          void *pvParam UNUSED)
+                          void *pvParam G_UNUSED)
 {
     if (((dglTreePredist_s *)pvPredistA)->nKey <
         ((dglTreePredist_s *)pvPredistB)->nKey)
@@ -299,13 +299,13 @@ dglTreeNodePri32_s *dglTreeNodePri32Alloc(void)
     return pNodePri32;
 }
 
-void dglTreeNodePri32Cancel(void *pvNodePri32, void *pvParam UNUSED)
+void dglTreeNodePri32Cancel(void *pvNodePri32, void *pvParam G_UNUSED)
 {
     free(pvNodePri32);
 }
 
 int dglTreeNodePri32Compare(const void *pvNodePri32A, const void *pvNodePri32B,
-                            void *pvParam UNUSED)
+                            void *pvParam G_UNUSED)
 {
     if (((dglTreeNodePri32_s *)pvNodePri32A)->nKey <
         ((dglTreeNodePri32_s *)pvNodePri32B)->nKey)
@@ -349,7 +349,7 @@ dglTreeEdgePri32_s *dglTreeEdgePri32Alloc(void)
     return pEdgePri32;
 }
 
-void dglTreeEdgePri32Cancel(void *pvEdgePri32, void *pvParam UNUSED)
+void dglTreeEdgePri32Cancel(void *pvEdgePri32, void *pvParam G_UNUSED)
 {
     if (((dglTreeEdgePri32_s *)pvEdgePri32)->pnData) {
         free(((dglTreeEdgePri32_s *)pvEdgePri32)->pnData);
@@ -358,7 +358,7 @@ void dglTreeEdgePri32Cancel(void *pvEdgePri32, void *pvParam UNUSED)
 }
 
 int dglTreeEdgePri32Compare(const void *pvEdgePri32A, const void *pvEdgePri32B,
-                            void *pvParam UNUSED)
+                            void *pvParam G_UNUSED)
 {
     if (((dglTreeEdgePri32_s *)pvEdgePri32A)->nKey <
         ((dglTreeEdgePri32_s *)pvEdgePri32B)->nKey)
@@ -389,13 +389,13 @@ dglTreeEdgePri32_s *dglTreeEdgePri32Add(void *pavl, dglInt32_t nKey)
 /*
  * Our AVL allocator
  */
-static void *_tree_malloc(struct libavl_allocator *allocator UNUSED,
+static void *_tree_malloc(struct libavl_allocator *allocator G_UNUSED,
                           size_t libavl_size)
 {
     return malloc(libavl_size);
 }
 
-static void _tree_free(struct libavl_allocator *allocator UNUSED,
+static void _tree_free(struct libavl_allocator *allocator G_UNUSED,
                        void *libavl_block)
 {
     free(libavl_block);

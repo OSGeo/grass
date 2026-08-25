@@ -109,7 +109,7 @@ The output looks as follows:
             "PUMPERS": 0,
             "PUMPER_TAN": 1,
             "TANKER": 0,
-            "MINI_PUMPE": "0",
+            "MINI_PUMPE": 0,
             "RESCUE_SER": 0,
             "AERIAL": 1,
             "BRUSH": 0,
@@ -119,9 +119,9 @@ The output looks as follows:
             "BLDGCODE": "298",
             "AGENCY": "FD",
             "STATIONID": "MF2A",
-            "RECNO": "62",
+            "RECNO": 62,
             "CV_SID2": "MF2A",
-            "CVLAG": "1.4"
+            "CVLAG": 1.3999999999999999
         }
     },
     {
@@ -137,7 +137,7 @@ The output looks as follows:
             "PUMPERS": 0,
             "PUMPER_TAN": 1,
             "TANKER": 0,
-            "MINI_PUMPE": "0",
+            "MINI_PUMPE": 0,
             "RESCUE_SER": 1,
             "AERIAL": 0,
             "BRUSH": 1,
@@ -147,9 +147,9 @@ The output looks as follows:
             "BLDGCODE": "241",
             "AGENCY": "FD",
             "STATIONID": "MF1A",
-            "RECNO": "2",
+            "RECNO": 2,
             "CV_SID2": "MF1A",
-            "CVLAG": "1.4"
+            "CVLAG": 1.3999999999999999
         }
     }
 ]

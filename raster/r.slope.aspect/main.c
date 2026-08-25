@@ -573,8 +573,8 @@ int main(int argc, char *argv[])
         int end = written + range;
 
 #pragma omp parallel if (nprocs > 1)                                        \
-    firstprivate(north, east, south, west, ns_med, H, V) private(           \
-            row, col, size, slp_ptr, asp_ptr, pcurv_ptr, tcurv_ptr, dx_ptr, \
+    firstprivate(north, east, south, west, ns_med, H, V)                    \
+    private(row, col, size, slp_ptr, asp_ptr, pcurv_ptr, tcurv_ptr, dx_ptr, \
                 dxx_ptr, dxy_ptr, dy_ptr, dyy_ptr)
         {
             int t_id = FIRST_THREAD;

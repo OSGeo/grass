@@ -45,25 +45,32 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 {
     int i, l, k;
     int iblock;
-    double conn;
+    double conn = 1.0;
     double addac;
 
+    // nblock is reserved for Monte Carlo replicas. A future
+    // change will allow nblock > 1, give each replica an
+    // rwalk-sized walker subset and potentially run replicas concurrently and
+    // reduce into the shared grids after the iblock loop. The factor and
+    // conn formulas below already encode that design (factor's denominator
+    // (rwalk * nblock) equals total walkers; conn = nblock/iblock scales a
+    // sequential cumulative partial sum to an estimator of the eventual
+    // total). With nblock = 1 today, the loop is a no-op wrapper and conn
+    // collapses to 1.0. The historical auto-split based on a static MAXW
+    // cap was removed: it broke per-block walker accounting (rwalk was not
+    // actually divided), produced biased depth/discharge for users.
     int nblock = 1;
 
     double stxm = geometry->stepx * (double)(geometry->mx + 1) - geometry->xmin;
     double stym = geometry->stepy * (double)(geometry->my + 1) - geometry->ymin;
     double deldif = sqrt(setup->deltap) * settings->frac; /* diffuse factor */
 
-    if (sim->maxwa > (MAXW - geometry->mx * geometry->my)) {
-        nblock = 1 + sim->maxwa / (MAXW - geometry->mx * geometry->my);
-        sim->maxwa = sim->maxwa / nblock;
-    }
     double factor =
         setup->deltap * setup->sisum / (sim->rwalk * (double)nblock);
 
     G_debug(2, " deldif, factor %f %e", deldif, factor);
     G_debug(2, " maxwa, nblock %d %d", sim->maxwa, nblock);
-    G_debug(2, "rwalk,sisum: %f %f", sim->rwalk, setup->sisum);
+    G_debug(2, "rwalk, sisum: %f %f", sim->rwalk, setup->sisum);
 
     for (iblock = 1; iblock <= nblock; iblock++) {
         int lw = 0;
@@ -101,11 +108,15 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             }
         }
         sim->nwalk = lw;
-        G_debug(2, " nwalk, maxw %d %d", sim->nwalk, MAXW);
+        G_debug(2, " nwalk %d", sim->nwalk);
         G_debug(2, " walkwe (walk weight),frac %f %f", walkwe, settings->frac);
 
         sim->nwalka = 0;
         int nwalka = 0;
+
+        // conn scales the cumulative partial sum in gama into an estimator
+        // of the eventual total when blocks run sequentially.
+        conn = (double)nblock / (double)iblock;
 
         /* ********************************************************** */
         /*       main loop over the projection time */
@@ -130,8 +141,10 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             /*                               .... propagate one step */
             /* ************************************************************ */
 
+            // the trapezoid rule could be removed (has very little effect),
+            // still kept to not alter results
+            // but factor (not addac) is used for infiltration
             addac = factor;
-            conn = (double)nblock / (double)iblock;
             if (i == 1) {
                 addac = factor * .5;
             }
@@ -178,25 +191,36 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                         }
 
                         if (grids->zz[k][l] != UNDEF) {
-                            if (grids->inf[k][l] !=
-                                UNDEF) { /* infiltration part */
-                                if (grids->inf[k][l] - grids->si[k][l] > 0.) {
-
-                                    double decr = pow(
-                                        addac * sim->w[lw].m,
-                                        3. / 5.); /* decreasing factor in m */
-                                    if (grids->inf[k][l] > decr) {
-                                        grids->inf[k][l] -=
-                                            decr; /* decrease infilt. in cell
-                                                     and eliminate the walker */
+                            if (grids->inf[k][l] != UNDEF &&
+                                grids->inf[k][l] > 0) {
+                                // Walker's contribution to water depth in this
+                                // cell for this timestep [m]
+                                double decr = factor * sim->w[lw].m;
+                                // Compare with the depth the cell can absorb
+                                // this timestep [m]
+                                if (grids->inf[k][l] * setup->deltap > decr) {
+                                    // The cell can absorb the full walker.
+                                    // Reduce infiltration rate [m/s].
+                                    grids->inf[k][l] -= decr / setup->deltap;
+                                    // Eliminate the walker
+                                    sim->w[lw].m = 0.;
+                                    continue;
+                                }
+                                else {
+                                    // The cell can't absorb the full walker.
+                                    // Reduce the walker mass by the equivalent
+                                    // of what an infiltration-rate source would
+                                    // generate as walker weight.
+                                    sim->w[lw].m -= sim->rwalk *
+                                                    grids->inf[k][l] /
+                                                    setup->sisum;
+                                    // Cell's infiltration capacity is fully
+                                    // exhausted
+                                    grids->inf[k][l] = 0.;
+                                    // Eliminate walker if needed
+                                    if (sim->w[lw].m < 0.) {
                                         sim->w[lw].m = 0.;
-                                    }
-                                    else {
-                                        sim->w[lw].m -=
-                                            pow(grids->inf[k][l], 5. / 3.) /
-                                            addac; /* use just proportional part
-                                                      of the walker weight */
-                                        grids->inf[k][l] = 0.;
+                                        continue;
                                     }
                                 }
                             }
@@ -330,7 +354,6 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                     erod(grids->gama, setup, geometry,
                          grids); /* divergence of gama field */
 
-                conn = (double)nblock / (double)iblock;
                 int itime = (int)(i * setup->deltap * setup->timec);
                 int ii = output_data(itime, conn, setup, geometry, settings,
                                      sim, inputs, outputs, grids);
@@ -385,12 +408,18 @@ void main_loop(const Setup *setup, const Geometry *geometry,
            }
            } */
 
+        // Per-block sample for the Monte Carlo standard-deviation estimator
+        // over nblock replicas, matching the original Fortran: accumulate
+        // (gama * conn)^2 here, then finalize as sqrt(|gammas/nblock - gama^2|)
+        // after the iblock loop closes. With nblock = 1 there is only one
+        // sample and the finalized value is zero everywhere; the map becomes
+        // meaningful once nblocks > 1 will be allowed.
         if (outputs->err != NULL) {
             for (k = 0; k < geometry->my; k++) {
                 for (l = 0; l < geometry->mx; l++) {
                     if (grids->zz[k][l] != UNDEF) {
                         double d1 = grids->gama[k][l] * (double)conn;
-                        grids->gammas[k][l] += pow(d1, 3. / 5.);
+                        grids->gammas[k][l] += d1 * d1;
                     } /* DEFined area */
                 }
             }
@@ -400,9 +429,26 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     }
     /*                       ........ end of iblock loop */
 
+    // Finalize the err map as the sample standard deviation of the per-block
+    // estimators of the final field: sqrt(|E[X^2] - E[X]^2|), where each X
+    // is gama * (nblock/iblock) recorded at the end of block iblock.
+    if (outputs->err != NULL) {
+        for (k = 0; k < geometry->my; k++) {
+            for (l = 0; l < geometry->mx; l++) {
+                if (grids->zz[k][l] != UNDEF) {
+                    double mean_sq = grids->gama[k][l] * grids->gama[k][l];
+                    double mean_of_sq = grids->gammas[k][l] / (double)nblock;
+                    grids->gammas[k][l] = sqrt(fabs(mean_of_sq - mean_sq));
+                }
+            }
+        }
+    }
+
     /* Write final maps here because we know the last time stamp here */
     if (!settings->ts) {
-        conn = (double)nblock / (double)iblock;
+        // All blocks have completed; gama is the eventual cumulative total,
+        // so no extrapolation is needed.
+        conn = 1.0;
         int itime = (int)(i * setup->deltap * setup->timec);
         int ii = output_data(itime, conn, setup, geometry, settings, sim,
                              inputs, outputs, grids);

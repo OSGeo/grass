@@ -296,10 +296,10 @@ class IOValidationTest(TestCase):
             lines = rf.readlines()
             M, R = lines[0].strip().split(" ")
             self.assertTrue(float(M) > -1 and float(M) < 1)
-            self.assertTrue(float(R) <= 2)
+            self.assertLessEqual(float(R), 2)
             M, R = lines[1].strip().split(" ")
             self.assertTrue(float(M) > -1 and float(M) < 1)
-            self.assertTrue(float(R) <= 20)
+            self.assertLessEqual(float(R), 20)
 
     @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def test_fail_on_empty_raster(self):

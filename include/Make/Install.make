@@ -140,6 +140,9 @@ $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS): $(ARCH_DISTDIR)/resource_paths.py
 	-e 's#'@GISBASE_INSTALL_PATH@'##' \
 	-e 's#'@GRASS_INSTALL_CMAKECONFDIR@'##' \
 	-e 's#'@GRASS_INSTALL_CMAKEMODULEDIR@'##' \
+	-e 's#'@CMAKE_PREFIX_PATH@'##' \
+	-e 's#'@CMAKE_C_COMPILER@'##' \
+	-e 's#'@CMAKE_CXX_COMPILER@'##' \
 	-e 's#'@GRASS_PREFIX@'#$(INST_DIR)#' \
 	-e 's#'@GRASS_VERSION_GIT@'#$(GRASS_VERSION_GIT)#' \
 	-e 's#'@GRASS_VERSION_MAJOR@'#$(GRASS_VERSION_MAJOR)#' \
@@ -148,6 +151,7 @@ $(DESTDIR)$(INST_DIR)/$(RESOURCE_PATHS): $(ARCH_DISTDIR)/resource_paths.py
 	-e 's#'@LD_LIBRARY_PATH_VAR@'#$(LD_LIBRARY_PATH_VAR)#' \
 	-e 's#'@START_UP@'#$(GRASS_NAME)#' \
 	$< > $@
+	$(PYTHON) -m py_compile $@
 
 define fix_gisbase
 sed -e 's#$(GISBASE)#$(INST_DIR)#g' $< > $@
