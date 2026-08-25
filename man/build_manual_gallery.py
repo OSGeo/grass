@@ -200,7 +200,7 @@ def main(ext):
         if ext == "html":
             output.write(header_graphical_index_tmpl)
             output.write('<ul class="img-list">\n')
-        for image, filename in sorted(img_files.items(), key=operator.itemgetter(1)):
+        for image, filename in sorted(img_files.items(), key=operator.itemgetter(1, 0)):
             name = get_module_name(filename, ext)
             title = title_from_names(name, image)
             if ext == "html":
