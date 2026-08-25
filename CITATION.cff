@@ -40,6 +40,11 @@ authors:
   - given-names: Linda
     family-names: Kladivová
     email: "L.Kladivova@seznam.cz"
+  - given-names: Corey
+    family-names: White
+    affiliation: "North Carolina State University"
+    orcid: "https://orcid.org/0000-0002-2903-9924"
+    email: "smortopahri@gmail.com"
   - given-names: Caitlin
     family-names: Haedrich
     email: "caitlin.haedrich@gmail.com"
