@@ -661,15 +661,10 @@ build_program_in_subdir(
 )
 
 build_program_in_subdir(
-  v.ppa
-  DEPENDS
-  grass_btree2
-  grass_gis
-  grass_parson
-  grass_vector
-  ${LIBM}
-  OPTIONAL_DEPENDS
-  OpenMP::OpenMP_C)
+    v.ppa
+    DEPENDS ${LIBM} grass_btree2 grass_gis grass_parson grass_vector
+    OPTIONAL_DEPENDS OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(v.split DEPENDS grass_gis grass_vector ${LIBM})
 
