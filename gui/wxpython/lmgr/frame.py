@@ -1777,13 +1777,22 @@ class GMFrame(wx.Frame):
 
         win.Show()
 
-    def OnAnimationTool(self, event=None, cmd=None):
-        """Launch Animation tool. See OnIClass documentation."""
+    def OpenAnimationTool(self):
+        """Open the Animation Tool in a new window
+
+        :return: the animation window, so that a caller can load data into it
+        """
         from animation.frame import AnimationFrame
 
         frame = AnimationFrame(parent=self, giface=self._giface)
         frame.CentreOnScreen()
         frame.Show()
+
+        return frame
+
+    def OnAnimationTool(self, event=None, cmd=None):
+        """Launch Animation tool"""
+        frame = self.OpenAnimationTool()
 
         tree = self.GetLayerTree()
         if tree:
