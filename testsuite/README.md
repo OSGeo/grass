@@ -7,6 +7,8 @@ without a focus on a specific part of the code.
 
 There are two testing mechanism in place, _pytest_ which is the modern way of testing
 GRASS. Tests using _pytest_ are written just as any other Python tests.
+See the [testing documentation](../doc/development/testing.md) for the GRASS
+_pytest_ conventions, including test placement, session fixtures, and test data.
 
 In parallel, there is also custom unittest-based framework centered around
 _grass.gunittest_ package. These tests run in the NC sample datasets and can be

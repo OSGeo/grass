@@ -7,9 +7,10 @@
     4. [Documentation](#documentation)
 2. [Best Practices](#best-practices)
     1. [General](#general)
-    2. [Python scripts](#developing-python-scripts)
-    3. [GRASS Addons](#developing-grass-addons)
-    4. [GRASS GUI](#developing-grass-gui)
+    2. [Testing](#testing)
+    3. [Python scripts](#developing-python-scripts)
+    4. [GRASS Addons](#developing-grass-addons)
+    5. [GRASS GUI](#developing-grass-gui)
 
 ## Code Style and Formatting
 
@@ -491,6 +492,20 @@ multiple sentences should end with periods. Short phrases should not.
 Punctuated events, such as errors, deserve a period, e.g., _"Operation
 complete."_ Phrases which imply ongoing action should have an ellipse, e.g.,
  _"Reading raster map..."_.
+
+### Testing
+
+New code should come with tests, and a bug fix should come with a test which
+fails without the fix. When the code being fixed has no tests at all, add a
+test for its basic functionality as well.
+
+**Why?** A test which only reproduces the bug shows that the fix works, but it
+says nothing about the behavior which was already correct. A test of the basic
+functionality is what shows that the fix did not break it.
+
+Write new tests with _pytest_ and place them in a `tests` directory next to
+the code they test. See the [testing documentation](testing.md) for the
+conventions, examples, and how to run the tests.
 
 ### Developing Python scripts
 
