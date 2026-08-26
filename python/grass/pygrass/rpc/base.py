@@ -28,12 +28,12 @@ if TYPE_CHECKING:
 
 logger: logging.Logger = logging.getLogger(__name__)
 
-# Python 3.14 changed the default multiprocessing start method from "fork" to
-# "forkserver" on all platforms except macOS. The RPC worker process relies on
-# "fork" semantics: subclasses run libgis via ctypes in the worker, which must
-# inherit the initialized library state and the GRASS session environment from
-# the parent. Pin "fork" where it used to be the default; macOS and Windows
-# keep their default start method ("spawn").
+# Python 3.14 changed the default multiprocessing start method from "fork"
+# to "forkserver" (on platforms where "fork" is available, except macOS),
+# which breaks the RPC server processes. Use "fork" wherever it is available,
+# i.e. the default before 3.14, except on macOS, which has defaulted to
+# "spawn" since Python 3.8 and where "fork" is unsafe. Everywhere else
+# (Windows) keep the platform default.
 if sys.platform != "darwin" and "fork" in mp.get_all_start_methods():
     MP_CONTEXT = mp.get_context("fork")
 else:
