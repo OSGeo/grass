@@ -51,7 +51,8 @@ grass --tmp-mapset ~/grassdata/nc_spm_08_grass7/ \
 
 The test files are not executable, so `--exec` needs `python` in front of
 the file name, and some of them load data files by relative path, so run them
-from their own directory.
+from their own directory. The North Carolina sample dataset used above is
+available from <https://grass.osgeo.org/sampledata/north_carolina/>.
 
 ## Writing pytest tests
 
@@ -175,7 +176,7 @@ def test_something_which_changes_the_environment(xy_dataset_session):
 - [grass.gunittest documentation](https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html)
   for writing and running _grass.gunittest_ tests
 - [testsuite/README.md](https://github.com/OSGeo/grass/blob/main/testsuite/README.md)
-  for the sample datasets and continuous integration
+  for the root testsuite directory and continuous integration
 - [pytest documentation](https://docs.pytest.org/) for fixtures,
   `parametrize`, and `pytest.raises`
 - [AGENTS.md](https://github.com/OSGeo/grass/blob/main/AGENTS.md) for
