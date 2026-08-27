@@ -213,11 +213,10 @@ int main(int argc, char *argv[])
     Flag *reproject_flag = G_define_flag();
     reproject_flag->key = 'w';
     reproject_flag->label =
-        _("Reproject to projects's coordinate system if needed");
+        _("Reproject to project's coordinate system if needed [deprecated]");
     reproject_flag->description =
-        _("Reprojects input dataset to the coordinate system of"
-          " the GRASS project (by default only datasets with the"
-          " matching coordinate system can be imported");
+        _("This flag is deprecated and will be removed in a future release. "
+          "Input dataset will always be reprojected if needed.");
     reproject_flag->guisection = _("Projection");
 
     Flag *over_flag = G_define_flag();
@@ -264,6 +263,12 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
         return EXIT_FAILURE;
+
+    if (reproject_flag->answer) {
+        G_verbose_message(
+            _("Flag 'w' is deprecated and will be removed in a future release. "
+              "Input dataset will always be reprojected if needed."));
+    }
 
     if (access(in_opt->answer, F_OK) != 0) {
         G_fatal_error(_("Input file <%s> does not exist"), in_opt->answer);
@@ -344,13 +349,40 @@ int main(int argc, char *argv[])
                       in_opt->answer);
     reader->setOptions(las_opts);
 
+    bool need_to_reproject = false;
+    if (over_flag->answer) {
+        G_important_message(_("Overriding projection check and assuming"
+                              " that the CRS of input matches"
+                              " the project's CRS"));
+    }
+    else {
+        // getting projection is possible only after prepare
+        pdal::PointTable table;
+        try {
+            reader->prepare(table);
+        }
+        catch (const std::exception &err) {
+            G_fatal_error(_("PDAL error while reading <%s>: %s"),
+                          in_opt->answer, err.what());
+        }
+        pdal::SpatialReference spatial_reference =
+            reader->getSpatialReference();
+        if (spatial_reference.empty())
+            G_fatal_error(_("The input dataset has undefined projection"));
+        std::string dataset_wkt = spatial_reference.getWKT();
+        need_to_reproject = !is_wkt_projection_same_as_loc(dataset_wkt.c_str());
+    }
+
     pdal::Stage *last_stage = reader;
     pdal::ReprojectionFilter reprojection_filter;
 
-    // we reproject when requested regardless the input projection
-    if (reproject_flag->answer) {
-        G_message(_("Reprojecting the input to the project's CRS"));
+    if (need_to_reproject) {
         char *proj_wkt = location_projection_as_wkt(false);
+        if (!proj_wkt)
+            G_fatal_error(_("Unable to reproject the input because the current"
+                            " project has no CRS defined. Use the -o flag to"
+                            " import the data without reprojection."));
+        G_message(_("Reprojecting the input to the project's CRS"));
         pdal::Options o4;
         // TODO: try catch for user input error
         if (input_srs_opt->answer)
@@ -367,23 +399,13 @@ int main(int argc, char *argv[])
     // consumption, so using 10k in case it is faster for some cases
     pdal::point_count_t point_table_capacity = 10000;
     pdal::FixedPointTable point_table(point_table_capacity);
-    stream_filter.prepare(point_table);
-
-    // getting projection is possible only after prepare
-    if (over_flag->answer) {
-        G_important_message(_("Overriding projection check and assuming"
-                              " that the CRS of input matches"
-                              " the project's CRS"));
+    // Errors from the reprojection filter surface here, and reprojection
+    // happens without the user asking for it, so they must not escape.
+    try {
+        stream_filter.prepare(point_table);
     }
-    else if (!reproject_flag->answer) {
-        pdal::SpatialReference spatial_reference =
-            reader->getSpatialReference();
-        if (spatial_reference.empty())
-            G_fatal_error(_("The input dataset has undefined projection"));
-        std::string dataset_wkt = spatial_reference.getWKT();
-        bool proj_match = is_wkt_projection_same_as_loc(dataset_wkt.c_str());
-        if (!proj_match)
-            wkt_projection_mismatch_report(dataset_wkt.c_str());
+    catch (const std::exception &err) {
+        G_fatal_error(_("PDAL error: %s"), err.what());
     }
 
     G_important_message(_("Running PDAL algorithms..."));
