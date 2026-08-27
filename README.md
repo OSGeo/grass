@@ -12,7 +12,7 @@
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/OSGeo/grass/badge)](https://securityscorecards.dev/viewer/?uri=github.com/OSGeo/grass)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/2470/badge)](https://www.bestpractices.dev/projects/2470)
 [![Coverity](https://scan.coverity.com/projects/1038/badge.svg)](https://scan.coverity.com/projects/grass)  
-[![Translation status](https://weblate.osgeo.org/widget/grass-gis/svg-badge.svg)](https://weblate.osgeo.org/engage/grass-gis/)  
+[![Translation status](https://img.shields.io/badge/translations-Weblate-144d3f?logo=weblate)](https://weblate.osgeo.org/engage/grass-gis/)  
 [![Powered by NumFOCUS](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](http://numfocus.org)
 [![Hosted by OSGeo](https://img.shields.io/badge/hosted%20by-OSGeo-4cb05b.svg?style=flat&labelColor=00393f)](https://www.osgeo.org/)
 
