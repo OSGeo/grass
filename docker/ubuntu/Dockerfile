@@ -6,8 +6,8 @@ ARG GUI=without
 
 FROM ubuntu:26.04@sha256:53958ec7b67c2c9355df922dd08dbf0360611f8c3cdb656875e81873db9ffdba AS common_start
 
-ARG BASE_NAME="ubuntu:24.04"
-ARG PYTHON_VERSION=3.12
+ARG BASE_NAME="ubuntu:26.04"
+ARG PYTHON_VERSION=3.14
 # renovate: datasource=github-tags depName=libgeos/geos
 ARG GEOS_VERSION=3.14.1
 # renovate: datasource=github-tags depName=OSGeo/PROJ
