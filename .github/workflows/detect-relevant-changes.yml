@@ -58,20 +58,13 @@ jobs:
         id: filter
         uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
         with:
-          # An empty token forces git-based diffing instead of the GitHub
-          # REST API, which is also used by every other job in the repo and
-          # shares a single per-repository rate limit.
+          # Use empty token to force git-based diffing, not GitHub REST API
           token: ""
-          # For a pull request, compares against its base branch. For a
-          # push, compares against the previous commit on the same branch
-          # instead of the default branch, which release branches would
-          # diverge from too much for a good comparison.
+          # For a PR, compare against its base branch
+          # For a push, compares against the previous commit on the same branch
           base: >-
             ${{ github.event_name == 'pull_request' &&
             github.event.pull_request.base.ref || github.ref }}
-          # Needed so that the "!"-prefixed patterns below actually exclude
-          # files, instead of the default behavior where any pattern in the
-          # list, negated or not, can match and include a file.
           predicate-quantifier: some-with-excludes
           filters: |
             relevant:
