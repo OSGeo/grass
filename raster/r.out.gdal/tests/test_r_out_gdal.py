@@ -2,6 +2,8 @@ import os
 
 import pytest
 
+from osgeo import gdal
+
 import grass.script as gs
 from grass.tools import Tools
 
@@ -39,6 +41,32 @@ def simple_raster_map(tmp_path_factory):
         )
 
         yield "test_raster", session, tmp_path
+
+
+@pytest.fixture(scope="module")
+def larger_raster_map(tmp_path_factory):
+    """Fixture to create a basic GRASS environment with a larger raster map containing attributes.
+
+    Set up a temporary GRASS project and region and create a raster map
+    using r.mapcalc.
+
+    Yields:
+        tuple: (map name, GRASS session handle, tmp_path)
+
+    """
+    tmp_path = tmp_path_factory.mktemp("r_out_gdal_project_large")
+    project = tmp_path / "grassdata"
+    gs.create_project(project, epsg=25833)
+
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        tools = Tools(session=session, consistent_return_value=True)
+        tools.g_region(n=500, s=0, e=500, w=0, res=1)
+
+        tools.r_mapcalc(
+            expression="larger_test_raster=1",
+        )
+
+        yield "larger_test_raster", session, tmp_path
 
 
 @pytest.mark.parametrize("file_format", list(FORMAT_DICT.keys()))
@@ -108,3 +136,33 @@ def test_fast_gtiff_export(simple_raster_map):
     assert output_file.exists(), f"{mapname} not exported to {output_file}"
     # Check that nodata and data range checks are NOT performed
     assert "Checking GDAL data type and nodata value" not in export.stderr
+
+
+def test_gtiff_export_with_many_overviews(larger_raster_map):
+    """Test export of GeoTiff with > 5 overviews.
+
+    Verifies:
+    - Export of > 5 overviews works.
+    """
+    mapname, session, tmp_path = larger_raster_map
+    tools = Tools(session=session, consistent_return_value=True)
+
+    output_file = tmp_path / f"{mapname}_lzw_10_overviews.tif"
+    export = tools.r_out_gdal(
+        input=mapname,
+        output=output_file,
+        format="GTiff",
+        createopt="COMPRESS=LZW",
+        overviews=9,
+    )
+
+    # Check successful export
+    assert output_file.exists(), f"{mapname} not exported to {output_file}"
+    # Check that nodata and data range checks are performed
+    assert "Checking GDAL data type and nodata value" in export.stderr
+
+    with gdal.Open(str(output_file)) as ds:
+        assert ds is not None, f"Failed to open {output_file} with GDAL"
+        assert ds.GetRasterBand(1).GetOverviewCount() == 9, (
+            f"Expected 9 overviews, got {ds.GetRasterBand(1).GetOverviewCount()}"
+        )
