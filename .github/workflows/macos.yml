@@ -18,8 +18,18 @@ concurrency:
 permissions: {}
 
 jobs:
+  changes:
+    name: Detect changed files
+    permissions:
+      contents: read
+    uses: ./.github/workflows/detect-relevant-changes.yml
+    with:
+      own-workflow-path: .github/workflows/macos.yml
+
   macos_build:
     name: macOS build
+    needs: changes
+    if: ${{ needs.changes.outputs.run == 'true' }}
     runs-on: macos-26
     env:
       PYTHONWARNINGS: always
