@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-06 18:30+0000\n"
+"POT-Creation-Date: 2026-08-08 16:00+0000\n"
 "PO-Revision-Date: 2026-03-05 11:44+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hi/>\n"
@@ -5313,8 +5313,9 @@ msgid ""
 "{messages}"
 msgstr "v.to.rast विफल:\\n{messages}"
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "स्कैटरप्लॉट टूल को स्थापित करने के लिए \\\"matplotlib\\\" (पायथन-matplotlib) पैकेज की आवश्यकता होती है। {0}"
 
 msgid "Zoom to scatter plot extend"
@@ -5377,6 +5378,298 @@ msgstr "क्लास जोड़ें"
 msgid "Remove selected class"
 msgstr "चयनित वर्ग हटाएँ"
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS database directory"
+msgid "Select notebook directory"
+msgstr "1. GRASS डेटाबेस डायरेक्टरी चुनें"
+
+#, fuzzy
+#| msgid "Create new project"
+msgid "Save in project: {}"
+msgstr "नया प्रोजेक्ट बनाएं"
+
+msgid "Options"
+msgstr "विकल्प"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "ब्राउज़ करें"
+
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Integrated"
+msgstr "मध्यवर्ती"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "डायलॉग बंद करें"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "त्रुटि"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "त्रुटि"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr "फ़ाइल %s को पढ़ने में विफल।"
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import file"
+msgstr "&इंपोर्ट करें"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "नाम बदलें"
+
+#, fuzzy
+#| msgid "No scatter plots selected."
+msgid "No page for export is currently selected."
+msgstr "कोई स्कैटर प्लॉट चयनित नहीं।"
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export file is missing."
+msgid "Export file as..."
+msgstr "निर्यात फ़ाइल गायब है।"
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "मॉडल <%s> पर निर्यात किया गया"
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr "फ़ाइल %s को पढ़ने में विफल।"
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "नए मैपसेट के लिए नाम दर्ज करें:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to create new raster map."
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "नया रैस्टर मानचित्र बनाने में विफल।"
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "No files generated."
+msgid "New file '{}' created."
+msgstr "कोई फ़ाइल उत्पन्न नहीं हुई।"
+
+#, fuzzy
+#| msgid "Do you really want to activate snapping and overwrite it?"
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr "क्या आप सचमुच स्नैपिंग को सक्रिय करना और उसे अधिलेखित करना चाहते हैं?"
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "सर्वर:"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to display legend."
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr "लेजेंड दिखाने में फेल।"
+
+#, fuzzy
+#| msgid "Property does not exist: %s"
+msgid "Notebook storage does not exist: {}"
+msgstr "संपत्ति मौजूद नहीं है: %s"
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File %s not found"
+msgid "File not found: {}"
+msgstr "फ़ाइल %s नहीं मिली"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "फ़ाइल पहले से ही मौजूद है"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "फ़ाइल पहले से ही मौजूद है"
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "सर्वर:"
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "नया मॉडल बनाएं"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to:"
+msgid "Export notebook"
+msgstr "इसमें निर्यात करें:"
+
 msgid "GRASS"
 msgstr "घास"
 
@@ -5404,6 +5697,30 @@ msgstr "मैप डिस्प्ले {} बंद करें"
 
 msgid "Console"
 msgstr "कंसोल"
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "3D व्यू मोड उपलब्ध नहीं है"
 
 msgid "Map Swipe Tool"
 msgstr "मैप स्वाइप टूल"
@@ -5550,6 +5867,11 @@ msgstr "मानचित्र परत हटाएँ"
 
 msgid "Quit GRASS GUI"
 msgstr "घास GUI छोड़ो"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr "डिस्प्ले रिज़ॉल्यूशन वर्तमान में कम्प्यूटेशनल सेटिंग्स तक सीमित नहीं है। मानचित्र को क्षेत्र ज्यामिति तक सीमित करने का सुझाव दिया गया है। क्या आप संकल्प को बाधित करना चाहते हैं?"
@@ -5873,11 +6195,13 @@ msgstr "जियोरेक्टिफायर"
 msgid "Cartographic Composer"
 msgstr "कार्टोग्राफिक कंपोजर"
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "ग्राफ़िकल मॉडलर"
+
 msgid "Launch user-defined script"
 msgstr "उपयोगकर्ता-परिभाषित स्क्रिप्ट लॉन्च करें"
-
-msgid "New display"
-msgstr "नया प्रदर्शन"
 
 msgid "Python code editor"
 msgstr "पायथन कोड संपादक"
@@ -6254,6 +6578,12 @@ msgstr "WKT स्ट्रिंग गायब है।"
 
 msgid "There were some issues when loading menu or Tools:"
 msgstr "मेनू या टूल लोड करते समय कुछ समस्याएँ थीं:"
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
 
 msgid "No project provided. Operation canceled."
 msgstr "कोई प्रोजेक्ट उपलब्ध नहीं कराया गया. ऑपरेशन रद्द कर दिया गया।"
@@ -6889,9 +7219,6 @@ msgstr "GRASS Addons से एक्सटेंशन प्राप्त �
 
 msgid "List of extensions - double-click to install"
 msgstr "एक्सटेंशन की सूची - इंस्टॉल करने के लिए डबल-क्लिक करें"
-
-msgid "Options"
-msgstr "विकल्प"
 
 msgid "&Install"
 msgstr "&इंस्टॉल करें"
@@ -9502,7 +9829,9 @@ msgstr "चयनित डेटासेट डाउनलोड करें
 msgid "Do you want to cancel dataset download?"
 msgstr "क्या आप डेटासेट डाउनलोड रद्द करना चाहते हैं?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+#, fuzzy
+#| msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr "टाइमलाइन टूल को स्थापित करने के लिए \\\"matplotlib\\\" (पायथन-matplotlib और कुछ सिस्टम पर भी Python-matplotlib-wx) पैकेज की आवश्यकता होती है। {}"
 
 msgid "Timeline Tool"
@@ -9600,8 +9929,9 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "टाइमलाइन टूल - घास"
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "टेम्पोरल प्लॉट टूल को स्थापित करने के लिए \\\"matplotlib\\\" (पायथन-matplotlib) पैकेज की आवश्यकता होती है। {0}"
 
 msgid "Temporal Plot Tool"
@@ -11049,6 +11379,9 @@ msgid ""
 msgstr ""
 "रेखापुंज मानचित्र <%(rast1)s> बनाम <%(rast2)s> के लिए प्रतिगमन समीकरण:\\n\\n\n"
 "\n"
+
+#~ msgid "New display"
+#~ msgstr "नया प्रदर्शन"
 
 #~ msgid "&Copy paths to mapsets"
 #~ msgstr "&म्यापसेट्स के कांपी पॄंथ करें"

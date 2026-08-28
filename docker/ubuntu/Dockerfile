@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.24@sha256:87999aa3d42bdc6bea60565083ee17e86d1f3339802f543c0d03998580f9cb89
+# syntax=docker/dockerfile:1.25@sha256:0adf442eae370b6087e08edc7c50b552d80ddf261576f4ebd6421006b2461f12
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
@@ -13,7 +13,7 @@ ARG GEOS_VERSION=3.14.1
 # renovate: datasource=github-tags depName=OSGeo/PROJ
 ARG PROJ_VERSION=9.8.1
 # renovate: datasource=github-tags depName=OSGeo/gdal
-ARG GDAL_VERSION=3.13.1
+ARG GDAL_VERSION=3.13.3
 # renovate: datasource=github-tags depName=PDAL/PDAL
 ARG PDAL_VERSION=2.10.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
@@ -340,8 +340,7 @@ RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
     && apt-get install -y --no-install-recommends --no-install-suggests \
     $GRASS_GUI_PACKAGES \
     && python3 -m pip install  -U --break-system-packages --no-cache-dir --upgrade \
-    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
-    "wxpython==${WXPYTHON_VERSION}" \
+    https://github.com/wxWidgets/Phoenix/releases/download/wxPython-4.2.5/wxpython-4.2.5+ubuntu2604-cp314-cp314-linux_x86_64.whl \
     # Clean up
     && pip cache purge \
     && apt-get autoremove -y \

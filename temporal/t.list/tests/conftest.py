@@ -51,8 +51,42 @@ def space_time_dataset(tmp_path_factory):
             flags="i",
         )
 
+        gs.run_command("g.mapset", mapset="user1", flags="c", env=session.env)
+
+        user_dataset_name = "precipitation_dataset"
+        tools.r_mapcalc(expression="precip_1 = 2", overwrite=True)
+        tools.t_create(
+            type="strds",
+            temporaltype="absolute",
+            output=user_dataset_name,
+            title="Precip",
+            description="user1 Dataset",
+        )
+        tools.t_register(
+            type="raster",
+            input=user_dataset_name,
+            maps="precip_1",
+            start="2026-01-01",
+            increment="1 month",
+            flags="i",
+        )
+
+        gs.run_command("g.mapset", mapset="PERMANENT", env=session.env)
+
         yield SimpleNamespace(
             session=session,
             name=dataset_name,
             map_names=names,
+            user_dataset=user_dataset_name,
         )
+
+
+@pytest.fixture(scope="module")
+def empty_session(tmp_path_factory):
+    """Start an isolated session with no temporal database."""
+    tmp_path = tmp_path_factory.mktemp("empty_time_series")
+    project = tmp_path / "empty_project"
+    gs.create_project(project)
+
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        yield SimpleNamespace(session=session)

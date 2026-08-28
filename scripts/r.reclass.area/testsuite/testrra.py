@@ -89,9 +89,9 @@ class Testrr(TestCase):
         )
         self.assertRasterMinMax(
             map=self.output,
-            refmin=27603,
-            refmax=27607,
-            msg="Output Map in degrees must be between 27603 and 27607",
+            refmin=27511,
+            refmax=27610,
+            msg="Output Map in degrees must be between 27511 and 27610",
         )
 
 

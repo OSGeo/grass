@@ -23,9 +23,6 @@ int G_ludcmp(double **a, int n, int *indx, double *d)
 
     vv = G_alloc_vector(n);
     *d = 1.0;
-    /* this pragma works, but doesn't really help speed things up */
-    /* #pragma omp parallel for private(i, j, big, temp) shared(n, a, vv,
-     * is_singular) */
     for (i = 0; i < n; i++) {
         big = 0.0;
         for (j = 0; j < n; j++)
@@ -53,8 +50,6 @@ int G_ludcmp(double **a, int n, int *indx, double *d)
         }
 
         big = 0.0;
-        /* not very efficient, but this pragma helps speed things up a bit */
-#pragma omp parallel for private(i, k, sum, dum) shared(j, n, a, vv, big, imax)
         for (i = j; i < n; i++) {
             sum = a[i][j];
             for (k = 0; k < j; k++)

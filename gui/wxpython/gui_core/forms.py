@@ -2430,11 +2430,7 @@ class CmdPanel(wx.Panel):
                         )
                         if p.get("value", "") and Path(p["value"]).is_file():
                             ifbb.Clear()
-                            try:
-                                # Python >= 3.11
-                                enc = locale.getencoding()
-                            except AttributeError:
-                                enc = locale.getdefaultlocale()[1]
+                            enc = locale.getencoding()
                             with codecs.open(
                                 p["value"], encoding=enc, errors="ignore"
                             ) as f:
@@ -2991,11 +2987,7 @@ class CmdPanel(wx.Panel):
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
-            try:
-                # Python >= 3.11
-                enc = locale.getencoding()
-            except AttributeError:
-                enc = locale.getdefaultlocale()[1]
+            enc = locale.getencoding()
 
             with codecs.open(path, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text + os.linesep)
@@ -3017,11 +3009,7 @@ class CmdPanel(wx.Panel):
                 filename = grass.tempfile()
                 win.SetValue(filename)
 
-            try:
-                # Python >= 3.11
-                enc = locale.getencoding()
-            except AttributeError:
-                enc = locale.getdefaultlocale()[1]
+            enc = locale.getencoding()
 
             with codecs.open(filename, encoding=enc, mode="w", errors="replace") as f:
                 f.write(text)
@@ -3473,7 +3461,7 @@ class GUI:
             global _blackList
             self.grass_task = gtask.parse_interface(cmd[0], blackList=_blackList)
         except (ScriptError, ValueError) as e:
-            raise gcmd.GException(e.value)
+            raise gcmd.GException(e.value) from e
 
         # if layer parameters previously set, re-insert them into dialog
         if completed is not None:
@@ -3503,7 +3491,7 @@ class GUI:
                 # parameter
                 try:
                     key, value = option.split("=", 1)
-                except ValueError:
+                except ValueError as e:
                     if self.grass_task.firstParam:
                         if i == 0:  # add key name of first parameter if not given
                             key = self.grass_task.firstParam
@@ -3511,7 +3499,7 @@ class GUI:
                         else:
                             raise gcmd.GException(
                                 _("Unable to parse command '%s'") % " ".join(cmd)
-                            )
+                            ) from e
                     else:
                         continue
 

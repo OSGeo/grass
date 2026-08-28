@@ -33,6 +33,7 @@ from animation.utils import (
     WxImageToPil,
     sampleCmdMatrixAndCreateNames,
     layerListToCmdsMatrix,
+    getCpuCount,
     HashCmds,
 )
 from animation.data import AnimationData
@@ -400,6 +401,17 @@ class AnimationController(wx.EvtHandler):
             ):
                 self.frame.RemoveWindow(windowIndex)
 
+    def _getNprocs(self):
+        """Returns the number of processes to render with.
+
+        The setting is -1 (autodetect) until the animation preferences are
+        opened, and None when it is missing.
+        """
+        nprocs = UserSettings.Get(group="animation", key="nprocs", subkey="value")
+        if not nprocs or nprocs < 1:
+            return getCpuCount()
+        return nprocs
+
     def _updateBitmapData(self):
         # unload previous data
         self.bitmapProvider.Unload()
@@ -412,7 +424,7 @@ class AnimationController(wx.EvtHandler):
                 self._load3DData(animData)
             self._loadLegend(animData)
         color = UserSettings.Get(group="animation", key="bgcolor", subkey="color")
-        cpus = UserSettings.Get(group="animation", key="nprocs", subkey="value")
+        cpus = self._getNprocs()
         self.bitmapProvider.Load(nprocs=cpus, bgcolor=color)
         # clear pools
         self.bitmapPool.Clear()
@@ -492,7 +504,7 @@ class AnimationController(wx.EvtHandler):
         self.EndAnimation()
 
         color = UserSettings.Get(group="animation", key="bgcolor", subkey="color")
-        cpus = UserSettings.Get(group="animation", key="nprocs", subkey="value")
+        cpus = self._getNprocs()
         self.bitmapProvider.Load(nprocs=cpus, bgcolor=color, force=True)
 
         self.EndAnimation()

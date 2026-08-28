@@ -121,3 +121,67 @@ def test_t_vect_db_select_instance_where(space_time_vector_dataset):
 
     for actual, expected in zip(actual_lines, expected_lines, strict=True):
         assert actual == expected
+
+
+def test_t_vect_db_select_format_csv(space_time_vector_dataset):
+    """Verify CSV output format."""
+    tools = Tools(session=space_time_vector_dataset.session)
+
+    result = tools.t_vect_db_select(
+        input=space_time_vector_dataset.interval_name,
+        format="csv",
+        where="cat = 1",
+    )
+    assert result.returncode == 0
+
+    expected_output = """start_time,end_time,cat,observation
+2001-03-01 00:00:00,2001-04-01 00:00:00,1,100
+2001-04-01 00:00:00,2001-05-01 00:00:00,1,200
+2001-05-01 00:00:00,2001-06-01 00:00:00,1,300"""
+
+    actual_lines = result.text_split("\n")
+    expected_lines = expected_output.strip().splitlines()
+
+    for actual, expected in zip(actual_lines, expected_lines, strict=True):
+        assert actual == expected
+
+
+def test_t_vect_db_select_format_json(space_time_vector_dataset):
+    """Verify standard JSON output format."""
+    tools = Tools(session=space_time_vector_dataset.session)
+
+    result = tools.t_vect_db_select(
+        input=space_time_vector_dataset.interval_name,
+        format="json",
+        where="cat = 1",
+    )
+    assert result.returncode == 0
+
+    expected_records = [
+        {
+            "start_time": "2001-03-01 00:00:00",
+            "end_time": "2001-04-01 00:00:00",
+            "cat": 1,
+            "observation": 100,
+        },
+        {
+            "start_time": "2001-04-01 00:00:00",
+            "end_time": "2001-05-01 00:00:00",
+            "cat": 1,
+            "observation": 200,
+        },
+        {
+            "start_time": "2001-05-01 00:00:00",
+            "end_time": "2001-06-01 00:00:00",
+            "cat": 1,
+            "observation": 300,
+        },
+    ]
+
+    assert len(result) == len(expected_records)
+
+    for actual, expected in zip(result, expected_records, strict=True):
+        assert actual["start_time"] == expected["start_time"]
+        assert actual["end_time"] == expected["end_time"]
+        assert actual["cat"] == expected["cat"]
+        assert actual["observation"] == expected["observation"]

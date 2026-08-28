@@ -491,7 +491,7 @@ int main(int argc, char *argv[])
                                 *p = '\0';
                         }
                     }
-                    if (sdsdesc && *sdsdesc)
+                    if (*sdsdesc)
                         fprintf(stderr, "  Description: %s\n", sdsdesc);
                     if (sdsdim && *sdsdim)
                         fprintf(stderr, "  Dimension: %s\n", sdsdim);

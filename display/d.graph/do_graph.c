@@ -50,7 +50,7 @@ int set_graph_stuff(void)
 int set_text_size(void)
 {
     if (hsize >= 0. && vsize >= 0. && hsize <= 100. && vsize <= 100.) {
-        D_text_size(hsize * xincr, vsize * yincr);
+        D_text_size((double)hsize * xincr, (double)vsize * yincr);
         G_debug(3, "text size initialized to [%.1f,%.1f]", hsize * xincr,
                 vsize * yincr);
     }
@@ -201,7 +201,7 @@ int do_size(const char *str)
     if (xper < 0. || yper < 0. || xper > 100. || yper > 100.)
         return (-1);
 
-    D_text_size(xper * xincr, yper * yincr);
+    D_text_size((double)xper * xincr, (double)yper * yincr);
     G_debug(3, "text size set to [%.1f,%.1f]", xper * xincr, yper * yincr);
 
     return (0);

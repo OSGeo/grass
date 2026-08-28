@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ..
 
-SUBDIRS = timer g.html2man
+SUBDIRS = timer g.html2man g.md2man
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Compile.make
