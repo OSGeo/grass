@@ -61,6 +61,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install --break-system-packages -r .github/workflows/python_requirements.txt
           pip install --break-system-packages -r .github/workflows/optional_requirements.txt
+          pip install --break-system-packages GDAL=$(gdal-config --version)
           pip install --break-system-packages pytest pytest-timeout \
               pytest-github-actions-annotate-failures pytest-xdist pytest-cov
 
