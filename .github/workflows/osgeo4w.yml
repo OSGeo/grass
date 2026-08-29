@@ -88,6 +88,7 @@ jobs:
             netcdf-devel
             proj-devel
             python3-core
+            python3-gdal
             python3-jupyter
             python3-matplotlib
             python3-numpy
