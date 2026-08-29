@@ -143,6 +143,7 @@ def test_gtiff_export_with_many_overviews(larger_raster_map):
 
     Verifies:
     - Export of > 5 overviews works.
+    - GDAL handles excessive overview levels
     """
     mapname, session, tmp_path = larger_raster_map
     tools = Tools(session=session, consistent_return_value=True)
@@ -153,7 +154,7 @@ def test_gtiff_export_with_many_overviews(larger_raster_map):
         output=output_file,
         format="GTiff",
         createopt="COMPRESS=LZW",
-        overviews=9,
+        overviews=15,
     )
 
     # Check successful export
@@ -163,6 +164,7 @@ def test_gtiff_export_with_many_overviews(larger_raster_map):
 
     with gdal.Open(str(output_file)) as ds:
         assert ds is not None, f"Failed to open {output_file} with GDAL"
+        # GDAL removes excessive overviews (max is 9 for the given input size)
         assert ds.GetRasterBand(1).GetOverviewCount() == 9, (
             f"Expected 9 overviews, got {ds.GetRasterBand(1).GetOverviewCount()}"
         )
