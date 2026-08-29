@@ -55,7 +55,8 @@ def test_script_header_has_one_holder_per_line(script):
         "All SPDX-FileCopyrightText lines must precede SPDX-License-Identifier."
     )
     assert (
-        lines[max(copyright_lines)] == "# SPDX-FileCopyrightText: Other GRASS authors"
+        lines[max(copyright_lines)]
+        == "# SPDX-FileCopyrightText: GRASS Development Team"
     ), "The last copyright line must be the collective line."
     for i in copyright_lines:
         assert not re.search(r",\s+and\s|\sand\sthe\s", lines[i]), (

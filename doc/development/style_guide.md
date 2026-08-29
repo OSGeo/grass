@@ -769,7 +769,7 @@ Use the following header in your source code.
 # PURPOSE:   Provide short description of module here...
 #
 # SPDX-FileCopyrightText: 2024 John Doe
-# SPDX-FileCopyrightText: Other GRASS authors
+# SPDX-FileCopyrightText: GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 ##############################################################################
 ```
@@ -777,9 +777,10 @@ Use the following header in your source code.
 Each copyright holder gets one `SPDX-FileCopyrightText` line carrying the years
 of their own contributions. Add a line for yourself when you make a substantial
 contribution, the same threshold as an `AUTHOR(S)` entry, and leave other
-people's lines alone. The line `SPDX-FileCopyrightText: Other GRASS authors`
-comes last and covers everyone not named individually; the `COPYING` file
-defines it. The `SPDX-License-Identifier` line follows all copyright lines.
+people's lines alone. The line
+`SPDX-FileCopyrightText: GRASS Development Team` comes last and covers everyone
+not named individually; the `COPYING` file defines it. The
+`SPDX-License-Identifier` line follows all copyright lines.
 
 #### Use Standard Options in Interface
 
@@ -967,7 +968,7 @@ Please use the following docstring template:
 Classes:
  - example::ExampleClass
 
-SPDX-FileCopyrightText: 2024 Other GRASS authors
+SPDX-FileCopyrightText: 2024 GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 
 @author First Author <first somewhere.com>
@@ -1085,7 +1086,7 @@ original work remains, it must be properly cited.
  * AUTHOR(S):    John Doe <jdoe at somewhere org>
  * PURPOSE:      Provide short description of module here...
  * SPDX-FileCopyrightText: 2010 John Doe
- * SPDX-FileCopyrightText: Other GRASS authors
+ * SPDX-FileCopyrightText: GRASS Development Team
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/

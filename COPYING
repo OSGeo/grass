@@ -7,11 +7,11 @@ of the GRASS Development Team.
 Copyright notices in individual source files use SPDX tags, for example:
 
   SPDX-FileCopyrightText: 1999-2022 Jane Doe
-  SPDX-FileCopyrightText: Other GRASS authors
+  SPDX-FileCopyrightText: GRASS Development Team
   SPDX-License-Identifier: GPL-2.0-or-later
 
-Other GRASS authors denotes the authors of a file who are not named
-individually in it.
+The GRASS Development Team line stands for the authors of a file who are
+not named individually in it.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
