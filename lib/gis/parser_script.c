@@ -3,7 +3,7 @@
 
    \brief GIS Library - Argument parsing functions (script)
 
-   SPDX-FileCopyrightText: 2001-2009, 2011 Other GRASS authors
+   SPDX-FileCopyrightText: 2001-2009, 2011 GRASS Development Team
    SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
@@ -33,7 +33,7 @@ void G__script(void)
     fprintf(fp, "# PURPOSE:      Wrapper for %s\n", G_program_name());
     fprintf(fp, "# SPDX-FileCopyrightText: %s %s\n", GRASS_VERSION_DATE,
             G_whoami());
-    fprintf(fp, "# SPDX-FileCopyrightText: Other GRASS authors\n");
+    fprintf(fp, "# SPDX-FileCopyrightText: GRASS Development Team\n");
     fprintf(fp, "# SPDX-License-Identifier: GPL-2.0-or-later\n");
     fprintf(fp, "#\n");
     fprintf(fp, "##############################################################"
