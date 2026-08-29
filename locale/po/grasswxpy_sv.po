@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-22 17:13+0000\n"
 "PO-Revision-Date: 2025-12-22 12:47+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -448,26 +448,6 @@ msgstr "Ogiltig"
 msgid "Animation Tool"
 msgstr "Animeringsverktyg"
 
-msgid "Main Toolbar"
-msgstr "Huvudverktygsfält"
-
-msgid "Animation Toolbar"
-msgstr "Verktygsfält för animering"
-
-msgid "Misc Toolbar"
-msgstr "Övrigt verktygsfält"
-
-msgid "Loading data"
-msgstr "Läsar in data"
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr " ({c} av {p})"
-
-#, python-format
-msgid "to %(to)s"
-msgstr "till %(to)s"
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= och %s= är ömsesidigt uteslutande."
@@ -492,6 +472,30 @@ msgstr "Lägg bara till ett lager i listan."
 
 msgid "No map series nor space-time dataset is added."
 msgstr "Inga kartserier eller dataset för tid och rum läggs till."
+
+msgid "Main Toolbar"
+msgstr "Huvudverktygsfält"
+
+msgid "Animation Toolbar"
+msgstr "Verktygsfält för animering"
+
+msgid "Misc Toolbar"
+msgstr "Övrigt verktygsfält"
+
+msgid "Loading data"
+msgstr "Läsar in data"
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr " ({c} av {p})"
+
+#, python-format
+msgid "to %(to)s"
+msgstr "till %(to)s"
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
+msgstr ""
 
 msgid "Rendering map layers"
 msgstr "Rendering av kartlager"
@@ -1008,6 +1012,16 @@ msgstr "Skapa rasterkarta från x,y,z-data [r.in.xyz]"
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr "Skapa vektorkarta från x,y,z-data [v.in.ascii]"
 
+#, fuzzy
+#| msgid "Import raster data  [r.import]"
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "Importera rasterdata [r.import]"
+
+#, fuzzy
+#| msgid "Import vector data  [v.import]"
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "Importera vektordata [v.import]"
+
 msgid "Link external data"
 msgstr "Länka externa data"
 
@@ -1155,6 +1169,22 @@ msgid "Failed to read maps from project <{l}>."
 msgstr "Misslyckades med att läsa kartor från projekt <{l}>."
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Failed to read mapsets from project <{l}>."
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr "Misslyckades med att läsa kartor från projekt <{l}>."
+
+#, fuzzy, python-brace-format
+#| msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr "Karta av typ {elem} <{name}> finns redan i mapset <{mapset}>. Vill du skriva över den?"
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr "Karta av typ {elem} <{name}> finns redan i mapset <{mapset}>. Vill du skriva över den?"
 
@@ -1216,6 +1246,20 @@ msgstr "Nytt Namn"
 msgid "Rename map"
 msgstr "Byt namn på kartan"
 
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "Rename dataset"
+msgstr "&Rename mapset"
+
+#, fuzzy, python-brace-format
+#| msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr "Omdöpning av mapset <{oldmapset}> till <{newmapset}> slutförd"
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr "{cmd} -- slutförd"
+
 msgid "Cannot rename mapset"
 msgstr "Kan inte byta namn på mapset"
 
@@ -1233,10 +1277,6 @@ msgstr "Byte av namn på projekt <{oldlocation}> till <{newlocation}> slutfört"
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr "Byter namn på karta <{name}>..."
-
-#, python-brace-format
-msgid "{cmd} -- completed"
-msgstr "{cmd} -- slutförd"
 
 msgid "No map selected for copying."
 msgstr "Ingen karta vald för kopiering."
@@ -1271,8 +1311,14 @@ msgstr "Reprojektion är inte implementerad för 3D-raster"
 msgid "g.remove completed"
 msgstr "g.ta bort färdigställd"
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete map <{m}>?"
+msgstr "Vill du verkligen ta bort kartan/kartorna <{m}>?"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete maps <{m}>?"
 msgstr "Vill du verkligen ta bort kartan/kartorna <{m}>?"
 
 #, python-brace-format
@@ -1286,20 +1332,149 @@ msgstr "Radera karta"
 msgid "Deleting {name}..."
 msgstr "Radera {name}..."
 
+#, fuzzy, python-brace-format
+#| msgid "Deleting {name}..."
+msgid "Deleting {n} maps..."
+msgstr "Radera {name}..."
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "Vill du verkligen ta bort kartan/kartorna <{m}>?"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "Vill du verkligen ta bort kartan/kartorna <{m}>?"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete {n} maps?"
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Vill du verkligen ta bort {n} kartor?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "Ta bort vald mapset"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "Delete dataset"
+msgstr "&Radera mapset"
+
+#, fuzzy
+#| msgid "Deleting {name}..."
+msgid "Deleting datasets..."
+msgstr "Radera {name}..."
+
+#, fuzzy
+#| msgid "g.remove completed"
+msgid "t.remove completed"
+msgstr "g.ta bort färdigställd"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "För att flytta eller kopiera kartor till andra kartuppsättningar, låsa upp redigering av andra kartuppsättningar"
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr "Om du vill flytta eller kopiera kartor till ett annat projekt drar du dem till ett mapset i destinationsprojektet"
 
-msgid "&Cut"
-msgstr "&Klipp"
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "Vill du verkligen ta bort kartan/kartorna <{m}>?"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete {n} maps?"
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Vill du verkligen ta bort {n} kartor?"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister map"
+msgstr "ingen rasterkarta"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregistering map..."
+msgstr "ingen rasterkarta"
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "Rasterkartor"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister maps"
+msgstr "ingen rasterkarta"
+
+#, fuzzy
+#| msgid "Show &metadata"
+msgid "Update metadata"
+msgstr "Visa &metadata"
+
+#, fuzzy
+#| msgid "Display extent"
+msgid "Display &temporal extent"
+msgstr "Visa omfattning"
+
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "&Rename dataset"
+msgstr "&Rename mapset"
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "&Delete dataset only"
+msgstr "&Radera mapset"
+
+#, fuzzy
+#| msgid "Import data?"
+msgid "&Export dataset"
+msgstr "Importera data?"
+
+msgid "Show &metadata"
+msgstr "Visa &metadata"
 
 msgid "&Copy"
 msgstr "&Kopiera"
 
 msgid "Copy &name"
 msgstr "Kopiera &namn"
+
+msgid "&Display layers"
+msgstr "&Visa lager"
+
+msgid "&Display layer"
+msgstr "&Display lager"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister map"
+msgstr "ingen rasterkarta"
+
+msgid "&Cut"
+msgstr "&Klipp"
 
 msgid "&Paste"
 msgstr "Klistra"
@@ -1312,14 +1487,10 @@ msgstr "&Radera"
 msgid "&Rename"
 msgstr "&Rename"
 
-msgid "&Display layers"
-msgstr "&Visa lager"
-
-msgid "&Display layer"
-msgstr "&Display lager"
-
-msgid "Show &metadata"
-msgstr "Visa &metadata"
+#, fuzzy
+#| msgid "Invalid input temporal dataset"
+msgid "Create &temporal dataset"
+msgstr "Ogiltig inmatad temporär dataset"
 
 msgid "&Switch mapset"
 msgstr "&Switch mapset"
@@ -1330,7 +1501,9 @@ msgstr "&Radera mapset"
 msgid "&Rename mapset"
 msgstr "&Rename mapset"
 
-msgid "Re&load maps"
+#, fuzzy
+#| msgid "Re&load maps"
+msgid "Re&load mapset"
 msgstr "U&ppdatera kartor"
 
 #, fuzzy
@@ -1351,6 +1524,11 @@ msgstr "&Avsluta projekt"
 
 msgid "&Rename project"
 msgstr "&Rename-projekt"
+
+#, fuzzy
+#| msgid "Reload GRASS projects"
+msgid "Re&load project"
+msgstr "Uppdatera GRASS-projekt"
 
 #, fuzzy
 #| msgid "Source projection:"
@@ -1389,6 +1567,11 @@ msgstr "&Remove GRASS-databasen från datakatalogen"
 msgid "&Delete GRASS database from disk"
 msgstr "&Radera GRASS-databasen från hårddisken"
 
+#, fuzzy
+#| msgid "Reload default table"
+msgid "Re&load database"
+msgstr "Uppdatera standardtabellen"
+
 msgid "&Delete projects (locations)"
 msgstr "&Avveckla projekt (platser)"
 
@@ -1404,6 +1587,21 @@ msgstr "&Radera kartor"
 #| msgid "&Copy path to mapset"
 msgid "&Copy paths"
 msgstr "&Kopiera sökväg till mapset"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "&Merge datasets"
+msgstr "&Radera kartor"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "&Delete datasets only"
+msgstr "&Radera kartor"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "Ta bort vald mapset"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -10250,8 +10448,13 @@ msgstr "Temporal Plot Tool kräver att paketet \"matplotlib\" (python-matplotlib
 msgid "Temporal Plot Tool"
 msgstr "Verktyg för temporär plottning"
 
+#, fuzzy
+#| msgid ""
+#| "Raster temporal dataset (strds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 "Raster temporalt dataset (strds)\n"
@@ -10269,8 +10472,13 @@ msgstr "Visa enkel linjär regressionslinje"
 msgid "STRDS"
 msgstr "STRDS"
 
+#, fuzzy
+#| msgid ""
+#| "Vector temporal dataset (stvds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 "Vektor temporal dataset (stvds)\n"
