@@ -54,7 +54,7 @@ struct GFONT_CAP *find_font_from_freetypecap(const char *font)
                 capfile);
     }
     if (fp == NULL) {
-        snprintf(file, sizeof(file), "%s/etc/fontcap", G_gisbase());
+        snprintf(file, sizeof(file), "%s/fontcap", G_etc_dir());
         if ((fp = fopen(file, "r")) == NULL)
             G_warning(_("%s: No font definition file"), file);
     }

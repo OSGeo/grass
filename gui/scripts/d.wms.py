@@ -161,7 +161,7 @@ import shutil
 
 from grass.script import core as grass
 
-sys.path.append(os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms"))
+sys.path.append(os.path.join(os.getenv("GRASS_ETCBINDIR"), "r.in.wms"))
 
 
 def GetRegion():
