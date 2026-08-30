@@ -227,8 +227,8 @@ int main(int argc, char *argv[])
     threaded = nprocs > 1;
 #endif
 
-    lo = -INFINITY;
-    hi = INFINITY;
+    sscanf("-inf", "%lf", &lo);
+    sscanf("inf", "%lf", &hi);
     if (parm.range->answer) {
         lo = atof(parm.range->answers[0]);
         hi = atof(parm.range->answers[1]);
