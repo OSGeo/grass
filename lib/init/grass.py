@@ -2506,7 +2506,7 @@ def main() -> None:
             shell_process = None
 
         # start GUI and register shell PID in rc file
-        gui_process = start_gui(grass_gui) if grass_gui == "wxpython" else None
+        gui_process = start_gui(grass_gui)
 
         if shell_process:
             kv = {}
