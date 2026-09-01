@@ -319,10 +319,10 @@ CELL clump(int *in_fd, int out_fd, int diag, int minsize)
                     /* start a new clump */
                     if (label >= MAX_LABEL)
                         G_fatal_error(
-                            _("Too many clumps: the maximum number of clumps "
-                              "is %d. Reduce the extent or the resolution of "
-                              "the computational region, or use a threshold "
-                              "to merge similar cells."),
+                            _("Too many clumps: the maximum supported number "
+                              "of clumps is %d. Reduce the extent or the "
+                              "resolution of the computational region, or use "
+                              "a threshold to merge similar cells."),
                             MAX_LABEL);
                     label++;
                     cur_clump[col] = label;
@@ -656,10 +656,10 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold, int out_fd,
                     /* start a new clump */
                     if (label >= MAX_LABEL)
                         G_fatal_error(
-                            _("Too many clumps: the maximum number of clumps "
-                              "is %d. Reduce the extent or the resolution of "
-                              "the computational region, or use a threshold "
-                              "to merge similar cells."),
+                            _("Too many clumps: the maximum supported number "
+                              "of clumps is %d. Reduce the extent or the "
+                              "resolution of the computational region, or use "
+                              "a threshold to merge similar cells."),
                             MAX_LABEL);
                     label++;
                     cur_clump[col] = label;
