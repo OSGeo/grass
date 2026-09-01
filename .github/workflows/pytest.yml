@@ -139,6 +139,18 @@ jobs:
             @.github/workflows/pytest_args_cov.txt \
             @.github/workflows/pytest_args_gunittest.txt \
             --junitxml=pytest.gunittest.junit.xml
+      - name: Run pytest for loading C libraries into the process
+        run: |
+          # The installation is moved away from the prefix it was configured
+          # with, so that the libraries cannot find each other through their
+          # RUNPATH and the loading done by init is the only mechanism left.
+          mv "${HOME}/install" "${HOME}/install-relocated"
+          trap 'mv "${HOME}/install-relocated" "${HOME}/install"' EXIT
+          PYTHONPATH="${HOME}/install-relocated/etc/python"
+          export PYTHONPATH
+          pytest python/grass/script/tests/grass_script_setup_load_libs_test.py \
+            --junitxml=pytest.load_libs.junit.xml
+
       - name: Fix non-standard installed script paths in coverage data
         run: |
           PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
