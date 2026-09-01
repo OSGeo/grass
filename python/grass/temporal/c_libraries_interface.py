@@ -16,7 +16,6 @@ import logging
 import sys
 from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
 from datetime import datetime
-from multiprocessing import Lock, Pipe, Process
 from typing import TYPE_CHECKING, Any, Literal
 
 import grass.lib.date as libdate
@@ -27,7 +26,7 @@ import grass.lib.temporal as libtgis
 import grass.lib.vector as libvector
 from grass.exceptions import FatalError
 from grass.pygrass.raster import RasterRow
-from grass.pygrass.rpc.base import RPCServerBase
+from grass.pygrass.rpc.base import MP_CONTEXT, RPCServerBase
 from grass.pygrass.utils import decode
 from grass.pygrass.vector import VectorTopo
 from grass.script.utils import encode
@@ -1471,9 +1470,9 @@ class CLibrariesInterface(RPCServerBase):
         RPCServerBase.__init__(self)
 
     def start_server(self) -> None:
-        self.client_conn, self.server_conn = Pipe(True)
-        self.lock = Lock()
-        self.server = Process(
+        self.client_conn, self.server_conn = MP_CONTEXT.Pipe(True)
+        self.lock = MP_CONTEXT.Lock()
+        self.server = MP_CONTEXT.Process(
             target=c_library_server, args=(self.lock, self.server_conn)
         )
         self.server.daemon = True
