@@ -12,16 +12,22 @@ include $(MODULE_TOPDIR)/include/Make/Multi.make
 
 default: multi thumbnails
 
-thumbnails: $(BIN)/r.mapcalc$(EXE) $(BIN)/r.colors$(EXE) $(HTMLDIR)/colortables $(MDDIR)/source/colortables
+# The copy in $(GUIDIR)/images is used by the GUI at runtime (the color
+# table selection widget); the documentation trees have their own copies.
+thumbnails: $(BIN)/r.mapcalc$(EXE) $(BIN)/r.colors$(EXE) $(HTMLDIR)/colortables $(MDDIR)/source/colortables $(GUIDIR)/images/colortables
 ifndef CROSS_COMPILING
 	$(call run_grass, $(GRASS_HOME)/utils/thumbnails.py $(MDDIR)/source/colortables)
 	$(call run_grass, $(GRASS_HOME)/utils/thumbnails.py $(HTMLDIR)/colortables)
+	$(call run_grass, $(GRASS_HOME)/utils/thumbnails.py $(GUIDIR)/images/colortables)
 endif
 
 $(HTMLDIR)/colortables: $(HTMLDIR)
 	$(MKDIR) $@
 
 $(MDDIR)/source/colortables: $(MDDIR)
+	$(MKDIR) $@
+
+$(GUIDIR)/images/colortables:
 	$(MKDIR) $@
 
 .PHONY: thumbnails
