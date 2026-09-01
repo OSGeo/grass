@@ -272,13 +272,14 @@ int main(int argc, char *argv[])
     }
 
     /* Set seed point */
-    if (sdxy_opt->answer)
+    if (sdxy_opt->answer) {
         /* Check is water level higher than seed point */
         if (in_terran[start_row][start_col] >= water_level)
             G_fatal_error(
                 _("Given water level at seed point is below earth surface. "
                   "Increase water level or move seed point."));
-    out_water[start_row][start_col] = 1;
+        out_water[start_row][start_col] = 1;
+    }
 
     /* Close seed map for reading. */
     if (smap_opt->answer)
