@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-08-22 17:13+0000\n"
 "PO-Revision-Date: 2014-05-03 16:44-0400\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -444,26 +444,6 @@ msgstr "무효합니다"
 msgid "Animation Tool"
 msgstr ""
 
-msgid "Main Toolbar"
-msgstr ""
-
-msgid "Animation Toolbar"
-msgstr "애니메이션 도구 모음"
-
-msgid "Misc Toolbar"
-msgstr ""
-
-msgid "Loading data"
-msgstr ""
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr ""
-
-#, python-format
-msgid "to %(to)s"
-msgstr ""
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
@@ -487,6 +467,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr ""
+
+msgid "Animation Toolbar"
+msgstr "애니메이션 도구 모음"
+
+msgid "Misc Toolbar"
+msgstr ""
+
+msgid "Loading data"
+msgstr ""
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -981,6 +985,14 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr ""
+
+#, fuzzy
+#| msgid "Removes space time datasets from temporal database."
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "시간 데이터베이스로부터 시공간 자료세트를 제거합니다"
+
 msgid "Link external data"
 msgstr "외부 자료 연결"
 
@@ -1124,6 +1136,20 @@ msgid "Failed to read maps from project <{l}>."
 msgstr ""
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr ""
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr ""
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
@@ -1182,6 +1208,19 @@ msgstr ""
 msgid "Rename map"
 msgstr ""
 
+#, fuzzy
+#| msgid "Create database"
+msgid "Rename dataset"
+msgstr "데이터베이스 생성"
+
+#, python-brace-format
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
 msgid "Cannot rename mapset"
 msgstr ""
 
@@ -1198,10 +1237,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Renaming map <{name}>..."
-msgstr ""
-
-#, python-brace-format
-msgid "{cmd} -- completed"
 msgstr ""
 
 msgid "No map selected for copying."
@@ -1241,8 +1276,13 @@ msgstr ""
 msgid "g.remove completed"
 msgstr "g.remove를 완료했습니다"
 
+#, fuzzy, python-brace-format
+#| msgid "Do you want to permanently delete data?%s"
+msgid "Do you really want to delete map <{m}>?"
+msgstr "자료를 영구히 삭제하길 원하십니까? %s"
+
 #, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete maps <{m}>?"
 msgstr ""
 
 #, python-brace-format
@@ -1256,19 +1296,136 @@ msgstr "지도를 삭제합니다"
 msgid "Deleting {name}..."
 msgstr ""
 
+#, fuzzy, python-brace-format
+#| msgid "Delete map"
+msgid "Deleting {n} maps..."
+msgstr "지도를 삭제합니다"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "자료를 영구히 삭제하길 원하십니까? %s"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "자료를 영구히 삭제하길 원하십니까? %s"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you want to permanently delete data?%s"
+msgid "Do you really want to delete {n} datasets?"
+msgstr "자료를 영구히 삭제하길 원하십니까? %s"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "선택된 지도 세트를 삭제합니다"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+msgid "Delete dataset"
+msgstr "선택된 지도 세트를 삭제합니다"
+
+msgid "Deleting datasets..."
+msgstr ""
+
+#, fuzzy
+#| msgid "g.remove completed"
+msgid "t.remove completed"
+msgstr "g.remove를 완료했습니다"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
+#, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unpack raster map"
+msgid "Unregister map"
+msgstr "래스터 지도 풀기"
+
+msgid "Unregistering map..."
+msgstr ""
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query raster maps"
+msgid "&Register maps"
+msgstr "래스터 지도 질의"
+
+#, fuzzy
+#| msgid "Unpack raster map"
+msgid "&Unregister maps"
+msgstr "래스터 지도 풀기"
+
+#, fuzzy
+#| msgid "Update map statistics"
+msgid "Update metadata"
+msgstr "지도 통계 갱신"
+
+msgid "Display &temporal extent"
+msgstr ""
+
+#, fuzzy
+msgid "&Rename dataset"
+msgstr "이름 바꾸기(&R)"
+
+#, fuzzy
+#| msgid "Delete selected point"
+msgid "&Delete dataset only"
+msgstr "선택된 점을 삭제합니다"
+
+#, fuzzy
+#| msgid "Export database table"
+msgid "&Export dataset"
+msgstr "데이터베이스 테이블 내보내기"
+
+msgid "Show &metadata"
 msgstr ""
 
 msgid "&Copy"
 msgstr ""
 
 msgid "Copy &name"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unpack raster map"
+msgid "&Unregister map"
+msgstr "래스터 지도 풀기"
+
+msgid "&Cut"
 msgstr ""
 
 msgid "&Paste"
@@ -1282,14 +1439,10 @@ msgstr "삭제(&D)"
 msgid "&Rename"
 msgstr "이름 바꾸기(&R)"
 
-msgid "&Display layers"
-msgstr ""
-
-msgid "&Display layer"
-msgstr ""
-
-msgid "Show &metadata"
-msgstr ""
+#, fuzzy
+#| msgid "Connect temporal database"
+msgid "Create &temporal dataset"
+msgstr "시간 데이터베이스 연결"
 
 msgid "&Switch mapset"
 msgstr ""
@@ -1300,7 +1453,7 @@ msgstr ""
 msgid "&Rename mapset"
 msgstr ""
 
-msgid "Re&load maps"
+msgid "Re&load mapset"
 msgstr ""
 
 #, fuzzy
@@ -1320,6 +1473,10 @@ msgstr "레코드를 삭제합니다"
 
 #, fuzzy
 msgid "&Rename project"
+msgstr "이름 바꾸기(&R)"
+
+#, fuzzy
+msgid "Re&load project"
 msgstr "이름 바꾸기(&R)"
 
 #, fuzzy
@@ -1357,6 +1514,11 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #, fuzzy
+#| msgid "Create database"
+msgid "Re&load database"
+msgstr "데이터베이스 생성"
+
+#, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "선택된 로케이션을 삭제합니다"
 
@@ -1368,6 +1530,21 @@ msgstr ""
 
 msgid "&Copy paths"
 msgstr ""
+
+#, fuzzy
+#| msgid "Create database"
+msgid "&Merge datasets"
+msgstr "데이터베이스 생성"
+
+#, fuzzy
+#| msgid "Delete selected point"
+msgid "&Delete datasets only"
+msgstr "선택된 점을 삭제합니다"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "선택된 지도 세트를 삭제합니다"
 
 #, fuzzy, python-brace-format
 #| msgid "Removes an existing database."
@@ -5341,8 +5518,7 @@ msgid ""
 "{messages}"
 msgstr ""
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Zoom to scatter plot extend"
@@ -5405,6 +5581,264 @@ msgstr ""
 msgid "Remove selected class"
 msgstr "선택된 계층을 제거합니다"
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS GIS database directory"
+msgid "Select notebook directory"
+msgstr "1. GRASS GIS 데이터베이스 디렉토리를 선택하세요"
+
+#, fuzzy
+msgid "Save in project: {}"
+msgstr "원천 자료 투영:"
+
+msgid "Options"
+msgstr ""
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "&Browse"
+msgid "Browser"
+msgstr "찾아보기(&B)"
+
+msgid "Integrated"
+msgstr ""
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close GUI"
+msgid "Close page"
+msgstr "GUI 닫기"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+msgid "Startup Error"
+msgstr ""
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+msgid "URL Error"
+msgstr ""
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import file"
+msgstr "가져오기(&I)"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "이름 바꾸기"
+
+msgid "No page for export is currently selected."
+msgstr ""
+
+msgid "Notebook Export Error"
+msgstr ""
+
+msgid "Export file as..."
+msgstr ""
+
+msgid "File {} exported to {}."
+msgstr ""
+
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr ""
+
+msgid "Enter a name for the new notebook:"
+msgstr ""
+
+msgid "New Notebook"
+msgstr ""
+
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "No files generated."
+msgid "New file '{}' created."
+msgstr "파일이 생성되지 않았습니다."
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr ""
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+msgid "Server URL: {}"
+msgstr ""
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook storage does not exist: {}"
+msgstr ""
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+msgid "File not found: {}"
+msgstr ""
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Animation already exists"
+msgid "Target file already exists: {}"
+msgstr "애니메이션이 이미 존재합니다"
+
+#, fuzzy
+#| msgid "Animation already exists"
+msgid "File '{}' already exists"
+msgstr "애니메이션이 이미 존재합니다"
+
+msgid "Stop server"
+msgstr ""
+
+#, fuzzy
+msgid "Create new notebook"
+msgstr "원천 자료 투영:"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export animation"
+msgid "Export notebook"
+msgstr "애니메이션 내보내기"
+
 #, fuzzy
 msgid "GRASS"
 msgstr "GRASS 도움말"
@@ -5432,6 +5866,28 @@ msgid "Close Map Display {}"
 msgstr ""
 
 msgid "Console"
+msgstr ""
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "Integrated Mode Not Available"
 msgstr ""
 
 msgid "Map Swipe Tool"
@@ -5584,6 +6040,11 @@ msgid "Remove map layer"
 msgstr "지도 레이어를 제거합니다"
 
 msgid "Quit GRASS GUI"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
 msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
@@ -5911,12 +6372,13 @@ msgstr ""
 msgid "Cartographic Composer"
 msgstr "지도 작성자"
 
+#, fuzzy
+#| msgid "GRASS GIS Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "GRASS GIS 그래픽 모델러"
+
 msgid "Launch user-defined script"
 msgstr ""
-
-#, fuzzy
-msgid "New display"
-msgstr "디스플레이를 지웁니다"
 
 msgid "Python code editor"
 msgstr ""
@@ -6297,6 +6759,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 #, fuzzy
@@ -6934,9 +7402,6 @@ msgid "Fetch & install extension from GRASS Addons"
 msgstr ""
 
 msgid "List of extensions - double-click to install"
-msgstr ""
-
-msgid "Options"
 msgstr ""
 
 msgid "&Install"
@@ -9549,7 +10014,7 @@ msgstr "선택된 지도 세트를 삭제합니다"
 msgid "Do you want to cancel dataset download?"
 msgstr "자료를 영구히 삭제하길 원하십니까? %s"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr ""
 
 msgid "Timeline Tool"
@@ -9645,8 +10110,7 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr ""
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Temporal Plot Tool"
@@ -9654,6 +10118,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -9671,6 +10136,7 @@ msgstr ""
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -11102,6 +11568,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~ msgid "New display"
+#~ msgstr "디스플레이를 지웁니다"
+
+#, fuzzy
 #~ msgid "Do you want to create a new project (also known as location)?"
 #~ msgstr "자료를 영구히 삭제하길 원하십니까? %s"
 
@@ -11260,14 +11730,8 @@ msgstr ""
 #~ msgid "Concentric circles"
 #~ msgstr "동심원"
 
-#~ msgid "Connect temporal database"
-#~ msgstr "시간 데이터베이스 연결"
-
 #~ msgid "Create RGB"
 #~ msgstr "RGB 생성"
-
-#~ msgid "Create database"
-#~ msgstr "데이터베이스 생성"
 
 #, fuzzy
 #~ msgid "Create new project (location)"
@@ -11351,9 +11815,6 @@ msgstr ""
 
 #~ msgid "Export color table"
 #~ msgstr "색상 테이블 내보내기"
-
-#~ msgid "Export database table"
-#~ msgstr "데이터베이스 테이블 내보내기"
 
 #~ msgid "Export raster map"
 #~ msgstr "래스터 지도 내보내기"
@@ -11624,9 +12085,6 @@ msgstr ""
 #~ msgid "Query colors by value"
 #~ msgstr "값으로 색상 질의"
 
-#~ msgid "Query raster maps"
-#~ msgstr "래스터 지도 질의"
-
 #~ msgid "Query values by coordinates"
 #~ msgstr "좌표로 값 질의"
 
@@ -11713,9 +12171,6 @@ msgstr ""
 
 #~ msgid "Removes outliers from vector point data."
 #~ msgstr "벡터 점 자료로부터 이상치를 제거합니다."
-
-#~ msgid "Removes space time datasets from temporal database."
-#~ msgstr "시간 데이터베이스로부터 시공간 자료세트를 제거합니다"
 
 #~ msgid "Render all map displays"
 #~ msgstr "모든 지도 디스플레이 표시"
@@ -11870,17 +12325,11 @@ msgstr ""
 #~ msgid "Unknown format '{0}'."
 #~ msgstr "알려지지 않은 포맷 '{0}'."
 
-#~ msgid "Unpack raster map"
-#~ msgstr "래스터 지도 풀기"
-
 #~ msgid "Unpack vector map"
 #~ msgstr "벡터 지도 풀기"
 
 #~ msgid "Update database values from vector"
 #~ msgstr "벡터로부터 데이터베이스값 갱신"
-
-#~ msgid "Update map statistics"
-#~ msgstr "지도 통계 갱신"
 
 #~ msgid "Updates or removes installed GRASS AddOns extension(s)."
 #~ msgstr "설치된 GRASS 애드온 확장을 갱신하거나 제거합니다"

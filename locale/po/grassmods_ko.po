@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-08-22 17:13+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grassmods/ko/>\n"
@@ -1764,8 +1764,9 @@ msgstr ""
 msgid "Cannot find/open symbol: '%s'"
 msgstr "심벌을 찾거나 열 수 없습니다: '%s'"
 
-#, c-format
-msgid "Color <%s> cannot for option %s be parsed"
+#, fuzzy, c-format
+#| msgid "Color <%s> cannot for option %s be parsed"
+msgid "Color <%s> for option <%s> cannot be parsed"
 msgstr "옵션 %2$s를 위한 색상 <%1$s>를 해석할 수 없습니다"
 
 #, c-format
@@ -1777,7 +1778,7 @@ msgid "Number of widths (%d) is higher then the number of files (%d)"
 msgstr ""
 
 #, c-format
-msgid "Number of widths (%d) is lower then the number of files (%d)"
+msgid "Number of widths (%d) is lower than the number of files (%d)"
 msgstr ""
 
 #, c-format
@@ -2233,6 +2234,7 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr "셀 색상값으로부터 문자 색상 얻기"
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -9395,22 +9397,38 @@ msgstr ""
 msgid "aggregation"
 msgstr "합산"
 
-msgid "Value option that sets the area size limit (in hectares)"
+msgid "Value option that sets the area size limit (in hectares) (deprecated)"
 msgstr ""
 
 msgid "Area"
 msgstr "면적"
 
-msgid "Lesser or greater than specified value"
+msgid "Keep only areas lesser or greater than specified value (deprecated)"
 msgstr ""
 
-msgid "Method used for reclassification"
+msgid "Value for the lower area size limit (in hectares). Pixel clumps with areas below this value are removed."
 msgstr ""
+
+msgid "Value for the upper area size limit (in hectares). Pixel clumps with areas above this value are removed."
+msgstr ""
+
+#, fuzzy
+msgid "Method used for area size filtering"
+msgstr "지도 제목에 쓸 텍스트"
 
 msgid "Input map is clumped"
 msgstr ""
 
-msgid "Clumps including diagonal neighbors"
+msgid "Generate clumps including diagonal neighbors"
+msgstr ""
+
+msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgstr ""
+
+msgid "Apply lower area threshold as \"minsize\" during clumping"
+msgstr ""
+
+msgid "Output vector map, do not convert back to raster (only for method 'rmarea')"
 msgstr ""
 
 msgid "Splits a raster map into red, green and blue maps."
@@ -9651,6 +9669,11 @@ msgstr ""
 
 msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
 msgstr ""
+
+#, fuzzy
+#| msgid "Name of mapset to list (default: current search path)"
+msgid "Name of mapsets to list ('.' for current, '*' for all mapsets)"
+msgstr "나열할 지도 세트의 이름 (기본값: 현재 검색 경로)"
 
 msgid "Field separator character between the output columns"
 msgstr ""
@@ -9928,7 +9951,7 @@ msgstr "출력 지도에 시공간 래스터 자료세트의 시작과 종료 �
 msgid "Imports space time raster dataset."
 msgstr ""
 
-msgid "Path to the extraction directory"
+msgid "Path to the extraction directory (default is .tmp in the current mapset)"
 msgstr ""
 
 msgid "Create a new project and import the data into it."
@@ -10370,6 +10393,9 @@ msgstr ""
 msgid "Imports a space time vector dataset from a GRASS specific archive file."
 msgstr ""
 
+msgid "Path to the extraction directory"
+msgstr ""
+
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
 msgstr ""
 
@@ -10627,6 +10653,28 @@ msgid "Default is sql unless the provided aggregate methods are for univar"
 msgstr ""
 
 msgid "sql;Uses SQL attribute database;univar;Uses v.db.univar"
+msgstr ""
+
+#, fuzzy
+#| msgid "Reports geometry statistics for vector maps."
+msgid "Prints geometry metrics of vector features."
+msgstr "벡터 지도를 위한 지형 통계를 보고합니다."
+
+#, fuzzy
+#| msgid "Metric"
+msgid "metric"
+msgstr "지표"
+
+msgid "Geometry metric(s) to compute"
+msgstr ""
+
+msgid "area;area size;perimeter;perimeter length of an area;length;line length;count;number of features for each category;compactness;compactness of an area, calculated as perimeter / (2 * sqrt(PI * area));fractal_dimension;fractal dimension of boundary defining a polygon, calculated as 2 * (log(perimeter) / log(area));slope;slope steepness of vector line or boundary;sinuosity;line sinuosity, calculated as line length / distance between end points;azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode;coordinates;point coordinates, X,Y or X,Y,Z;start;line/boundary starting point coordinates, X,Y or X,Y,Z;end;line/boundary end point coordinates, X,Y or X,Y,Z;bbox;bounding box of area, N,S,E,W"
+msgstr ""
+
+msgid "Units (one per metric, positional; unspecified metrics use defaults)"
+msgstr ""
+
+msgid "plain;Plain text with pipe separator by default;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
@@ -13526,6 +13574,14 @@ msgstr ""
 msgid "Search radius size must cover at least 1 cell"
 msgstr ""
 
+#, c-format
+msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
+msgstr ""
+
+#, c-format
+msgid "memory=%d MB is below the %ld MB minimum for search=%s. This run will finish with the minimum MB needed instead."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
@@ -13535,18 +13591,14 @@ msgstr ""
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
-#, c-format
-msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
-msgstr ""
-
-msgid "Unknown output data type"
-msgstr "알려지지 않은 출력 자료형"
-
 msgid "Profile data has been written"
 msgstr ""
 
 msgid "Failed writing profile data"
 msgstr ""
+
+msgid "Unknown output data type"
+msgstr "알려지지 않은 출력 자료형"
 
 msgid "Failed to profile the computation, please check the parameters"
 msgstr ""
@@ -18022,6 +18074,10 @@ msgstr "래스터 지도를 쓸 수 없습니다 - 셀 크기를 증가시켜 �
 msgid "Error writing temporary file <%s>"
 msgstr "임시 파일 <%s>를 쓰는데 오류"
 
+#, c-format
+msgid "Using %d thread(s), %d buffered output rows"
+msgstr ""
+
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr ""
 
@@ -20392,6 +20448,7 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -22680,7 +22737,7 @@ msgstr ""
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr ""
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
 msgstr ""
 
 msgid "Unable to close the 3D raster map"
@@ -23212,7 +23269,7 @@ msgstr ""
 msgid "ZIP file is unreadable: {0}"
 msgstr ""
 
-msgid "Extracting may be unsafe; consider updating Python"
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
 msgstr ""
 
 #, python-brace-format
@@ -24193,49 +24250,50 @@ msgstr ""
 msgid "azimuth must be between 0 and 360"
 msgstr ""
 
-msgid "xy-locations are not supported"
-msgstr ""
-
-msgid "Need projected data with grids in meters"
-msgstr ""
-
-msgid "flags c and d are mutually exclusive"
-msgstr ""
-
-#, python-format
-msgid "Temporary raster map <%s> exists"
-msgstr ""
-
-msgid "Generating a clumped raster file including diagonal neighbors..."
-msgstr ""
-
-msgid "Generating a clumped raster file ..."
-msgstr ""
-
-#, python-format
-msgid "Generating a reclass map with area size less than or equal to %f hectares..."
-msgstr ""
-
-#, python-format
-msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
-msgstr ""
-
-#, python-format
-msgid "No areas of size less than or equal to %f hectares found."
-msgstr ""
-
-#, python-format
-msgid "No areas of size greater than or equal to %f hectares found."
+msgid ""
+"xy-locations are not supported\n"
+"Need projected data with grids in meters"
 msgstr ""
 
 msgid "Latitude-longitude locations are not supported"
 msgstr ""
 
-msgid "You have to specify mode='lesser' with method='rmarea'"
+msgid "xy-locations are not supported"
+msgstr ""
+
+#, fuzzy
+msgid "Generating a clumped raster file"
+msgstr "설정 파일을 읽을 수 없습니다"
+
+msgid " including diagonal neighbors"
 msgstr ""
 
 #, python-format
-msgid "Generating output raster map <%s>..."
+msgid " with minimum %s pixels"
+msgstr ""
+
+#, fuzzy
+msgid "Generating a reclass map with area size"
+msgstr "출력할 격자지도"
+
+#, python-format
+msgid " larger than or equal to %f hectares..."
+msgstr ""
+
+#, python-format
+msgid " smaller than or equal to %f hectares..."
+msgstr ""
+
+#, fuzzy
+#| msgid "No table for layer %d"
+msgid "No areas of size "
+msgstr "레이어 %d를 위한 테이블이 존재하지 않습니다"
+
+#, python-format
+msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
+msgstr ""
+
+msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
 msgstr ""
 
 msgid "No semantic label assigned to <{}>"
@@ -24659,6 +24717,15 @@ msgstr ""
 msgid ""
 "A processing step failed. Check the above error messages and see the following details:\n"
 "{error}"
+msgstr ""
+
+msgid "Cannot mix metrics from different feature types: {}. Results are merged by category, so combining e.g. line and area metrics would produce misleading records. Run v.geometry separately for each feature type."
+msgstr ""
+
+msgid "More units ({}) than metrics ({}) specified"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long, got: {}"
 msgstr ""
 
 #, python-format
@@ -25420,6 +25487,10 @@ msgid "CSV format cannot be used with the -b flag. Please use the -b flag with t
 msgstr ""
 
 msgid "The 'list' format can only be used with the -b flag. Please use -b to enable list output."
+msgstr ""
+
+#, c-format
+msgid "No records selected from table <%s>"
 msgstr ""
 
 msgid "Unable to sort array of values"
@@ -31763,10 +31834,6 @@ msgstr ""
 msgid "Database connection not defined for layer %s"
 msgstr ""
 
-#, c-format
-msgid "No records selected from table <%s>"
-msgstr ""
-
 msgid "Key column type is not integer"
 msgstr ""
 
@@ -35141,10 +35208,6 @@ msgstr ""
 #~ msgstr "출력할 격자지도"
 
 #, fuzzy
-#~ msgid "Metric to use for weighting"
-#~ msgstr "지도 제목에 쓸 텍스트"
-
-#, fuzzy
 #~ msgid "Minimum and maximum values of gradient"
 #~ msgstr "최소 난수값"
 
@@ -37226,10 +37289,6 @@ msgstr ""
 #~ msgstr "사용자의 현재 지도 세트 안에 있는 데이터베이스 요소파일들의 이름을 바꿉니다."
 
 #, fuzzy
-#~ msgid "Renaming reclass maps"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
 #~ msgid "Rendered output file"
 #~ msgstr "출력 파일을 위한 이름"
 
@@ -37649,10 +37708,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Training parameters"
 #~ msgstr "제곱미터 면적"
-
-#, fuzzy
-#~ msgid "Training set update file"
-#~ msgstr "설정 파일을 읽을 수 없습니다"
 
 #, fuzzy
 #~ msgid "Training vector map (attribut table required)"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-08-22 17:13+0000\n"
 "PO-Revision-Date: 2026-03-05 11:44+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hi/>\n"
@@ -444,26 +444,6 @@ msgstr "अमान्य"
 msgid "Animation Tool"
 msgstr "एनिमेशन टूल (Animation Tool)"
 
-msgid "Main Toolbar"
-msgstr "मुख्य टूलबार"
-
-msgid "Animation Toolbar"
-msgstr "एनिमेशन टूलबार (Animation Toolbar)"
-
-msgid "Misc Toolbar"
-msgstr "विविध टूलबार"
-
-msgid "Loading data"
-msgstr "डेटा लोड हो रहा है"
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr " ({c} में से {p})"
-
-#, python-format
-msgid "to %(to)s"
-msgstr "तक"
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= और %s= परस्पर अनन्य हैं।"
@@ -486,6 +466,30 @@ msgstr "कृपया सूची में केवल एक परत ज
 
 msgid "No map series nor space-time dataset is added."
 msgstr "कोई मानचित्र श्रृंखला या स्पेस-टाइम डेटासेट नहीं जोड़ा गया है।"
+
+msgid "Main Toolbar"
+msgstr "मुख्य टूलबार"
+
+msgid "Animation Toolbar"
+msgstr "एनिमेशन टूलबार (Animation Toolbar)"
+
+msgid "Misc Toolbar"
+msgstr "विविध टूलबार"
+
+msgid "Loading data"
+msgstr "डेटा लोड हो रहा है"
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr " ({c} में से {p})"
+
+#, python-format
+msgid "to %(to)s"
+msgstr "तक"
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
+msgstr ""
 
 msgid "Rendering map layers"
 msgstr "मानचित्र परतों को रेंडर किया जा रहा है"
@@ -998,6 +1002,16 @@ msgstr "x,y,z डेटा से रास्टर मैप बनाएं [
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr "x,y,z डेटा से वेक्टर मैप बनाएं [v.in.ascii]"
 
+#, fuzzy
+#| msgid "Import raster data  [r.import]"
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "रास्टर डेटा इम्पोर्ट करें [r.import]"
+
+#, fuzzy
+#| msgid "Import vector data  [v.import]"
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "वेक्टर डेटा इम्पोर्ट करें [v.import]"
+
 msgid "Link external data"
 msgstr "बाहरी डेटा लिंक करें"
 
@@ -1145,6 +1159,22 @@ msgid "Failed to read maps from project <{l}>."
 msgstr "प्रोजेक्ट <{l}> से मैप्स पढ़ने में विफल।"
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Failed to read mapsets from project <{l}>."
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr "प्रोजेक्ट <{l}> से मैपसेट्स पढ़ने में विफल।"
+
+#, fuzzy, python-brace-format
+#| msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr "{elem} प्रकार का मानचित्र <{name}> पहले से ही मैपसेट <{mapset}> में मौजूद है। क्या आप इसे ओवरराइट करना चाहते हैं?"
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr "{elem} प्रकार का मानचित्र <{name}> पहले से ही मैपसेट <{mapset}> में मौजूद है। क्या आप इसे ओवरराइट करना चाहते हैं?"
 
@@ -1206,6 +1236,20 @@ msgstr "नया नाम"
 msgid "Rename map"
 msgstr "मानचित्र का नाम बदलें"
 
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "Rename dataset"
+msgstr "&मैपसेट का नाम बदलें"
+
+#, fuzzy, python-brace-format
+#| msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr "मैपसेट <{oldmapset}> का नाम बदलकर <{newmapset}> करना पूर्ण हुआ"
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr "{cmd} -- पूर्ण हुआ"
+
 msgid "Cannot rename mapset"
 msgstr "मैपसेट का नाम नहीं बदला जा सकता"
 
@@ -1223,10 +1267,6 @@ msgstr "क्या आप वास्तव में मानचित्�
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr "मानचित्र <{name}> का नाम बदला जा रहा है..।"
-
-#, python-brace-format
-msgid "{cmd} -- completed"
-msgstr "{cmd} -- पूर्ण हुआ"
 
 msgid "No map selected for copying."
 msgstr "मानचित्रों को अन्य प्रोजेक्ट में ले जाने या कॉपी करने के लिए, कृपया उन्हें गंतव्य प्रोजेक्ट के मैपसेट में ड्रैग (drag) करें"
@@ -1261,8 +1301,14 @@ msgstr "RReepprroojjeeccttiioonn  iiss  nnoott  iimmpplleemmeenntteedd  ffoorr  
 msgid "g.remove completed"
 msgstr "gg..rreemmoovvee  पcूरoा mहpुआleted"
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete map <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete maps <{m}>?"
 msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
 
 #, python-brace-format
@@ -1276,20 +1322,149 @@ msgstr "मैप हटाएं"
 msgid "Deleting {name}..."
 msgstr "Deleting {name}..।"
 
+#, fuzzy, python-brace-format
+#| msgid "Deleting {name}..."
+msgid "Deleting {n} maps..."
+msgstr "Deleting {name}..।"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete {n} maps?"
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Do you really want to हटाएं {n} maps?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "चयनित मानचित्र-सेट (mapset) हटाएं"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "Delete dataset"
+msgstr "&मैपसेट हटाएं"
+
+#, fuzzy
+#| msgid "Deleting {name}..."
+msgid "Deleting datasets..."
+msgstr "Deleting {name}..।"
+
+#, fuzzy
+#| msgid "g.remove completed"
+msgid "t.remove completed"
+msgstr "gg..rreemmoovvee  पcूरoा mहpुआleted"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "TToo  mmoovvee  oorr  ccooppyy  mmaappss  ttoo  ootthheerr  mmaappsseettss,,  uunnlloocckk  eeddiittiinngg  ooff  ootthheerr  mmaappsseettss"
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr "TToo  mmoovvee  oorr  ccooppyy  mmaappss  ttoo  ootthheerr  पप््ररोोजजेेकक््टट,,  pplleeaassee  ddrraagg  tthheemm  ttoo  aa  ममैैपपससेेटट  iinn  tthhee  ddeessttiinnaattiioonn  पप््ररोोजजेेकक््टट"
 
-msgid "&Cut"
-msgstr "&काटें"
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete {n} maps?"
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Do you really want to हटाएं {n} maps?"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister map"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregistering map..."
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "रेखापुंज मानचित्र"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister maps"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+#, fuzzy
+#| msgid "Show &metadata"
+msgid "Update metadata"
+msgstr "SShhooww  &&mmeettaaddaattaa"
+
+#, fuzzy
+#| msgid "Display extent"
+msgid "Display &temporal extent"
+msgstr "प्रदर्शन सीमा"
+
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "&Rename dataset"
+msgstr "&मैपसेट का नाम बदलें"
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "&Delete dataset only"
+msgstr "&मैपसेट हटाएं"
+
+#, fuzzy
+#| msgid "Import data?"
+msgid "&Export dataset"
+msgstr "डेटा आयात करें?"
+
+msgid "Show &metadata"
+msgstr "SShhooww  &&mmeettaaddaattaa"
 
 msgid "&Copy"
 msgstr "&कांपी करें"
 
 msgid "Copy &name"
 msgstr "&name कॉपी करें"
+
+msgid "&Display layers"
+msgstr "&लेयर्स दिखाएं"
+
+msgid "&Display layer"
+msgstr "&लेयर दिखाएं"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister map"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+msgid "&Cut"
+msgstr "&काटें"
 
 msgid "&Paste"
 msgstr "&चिपकाएं"
@@ -1302,14 +1477,10 @@ msgstr "&हटाएं"
 msgid "&Rename"
 msgstr "&नाम बदलें"
 
-msgid "&Display layers"
-msgstr "&लेयर्स दिखाएं"
-
-msgid "&Display layer"
-msgstr "&लेयर दिखाएं"
-
-msgid "Show &metadata"
-msgstr "SShhooww  &&mmeettaaddaattaa"
+#, fuzzy
+#| msgid "Invalid input temporal dataset"
+msgid "Create &temporal dataset"
+msgstr "अमान्य इनपुट अस्थायी डेटासेट"
 
 msgid "&Switch mapset"
 msgstr "&मैपसेट बदलें"
@@ -1320,7 +1491,9 @@ msgstr "&मैपसेट हटाएं"
 msgid "&Rename mapset"
 msgstr "&मैपसेट का नाम बदलें"
 
-msgid "Re&load maps"
+#, fuzzy
+#| msgid "Re&load maps"
+msgid "Re&load mapset"
 msgstr "RRee&&llooaadd  mmaappss"
 
 #, fuzzy
@@ -1341,6 +1514,11 @@ msgstr "&प्रोजेक्ट हटाएं"
 
 msgid "&Rename project"
 msgstr "&प्रोजेक्ट का नाम बदलें"
+
+#, fuzzy
+#| msgid "Reload GRASS projects"
+msgid "Re&load project"
+msgstr "GRASS प्रोजेक्ट्स को पुनः लोड करें"
 
 #, fuzzy
 #| msgid "Source projection:"
@@ -1373,6 +1551,11 @@ msgstr "&डेटा कैटलॉग से GRASS डेटाबेस ह�
 msgid "&Delete GRASS database from disk"
 msgstr "&GRASS डेटाबेस को डिस्क से हटाएं"
 
+#, fuzzy
+#| msgid "Reload default table"
+msgid "Re&load database"
+msgstr "डिफ़ॉल्ट तालिका पुनः लोड करें"
+
 msgid "&Delete projects (locations)"
 msgstr "&प्रोजेक्ट्स (लोकेशन) हटाएं"
 
@@ -1388,6 +1571,21 @@ msgstr "&Delete mapsets"
 #| msgid "&Copy path to mapset"
 msgid "&Copy paths"
 msgstr "&म्यापसेट के पॅंथ की कांपी करें"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "&Merge datasets"
+msgstr "&Delete mapsets"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "&Delete datasets only"
+msgstr "&Delete mapsets"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "चयनित मानचित्र-सेट (mapset) हटाएं"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -5313,8 +5511,9 @@ msgid ""
 "{messages}"
 msgstr "v.to.rast विफल:\\n{messages}"
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "स्कैटरप्लॉट टूल को स्थापित करने के लिए \\\"matplotlib\\\" (पायथन-matplotlib) पैकेज की आवश्यकता होती है। {0}"
 
 msgid "Zoom to scatter plot extend"
@@ -5377,6 +5576,298 @@ msgstr "क्लास जोड़ें"
 msgid "Remove selected class"
 msgstr "चयनित वर्ग हटाएँ"
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS database directory"
+msgid "Select notebook directory"
+msgstr "1. GRASS डेटाबेस डायरेक्टरी चुनें"
+
+#, fuzzy
+#| msgid "Create new project"
+msgid "Save in project: {}"
+msgstr "नया प्रोजेक्ट बनाएं"
+
+msgid "Options"
+msgstr "विकल्प"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "ब्राउज़ करें"
+
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Integrated"
+msgstr "मध्यवर्ती"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "डायलॉग बंद करें"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "त्रुटि"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "त्रुटि"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr "फ़ाइल %s को पढ़ने में विफल।"
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import file"
+msgstr "&इंपोर्ट करें"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "नाम बदलें"
+
+#, fuzzy
+#| msgid "No scatter plots selected."
+msgid "No page for export is currently selected."
+msgstr "कोई स्कैटर प्लॉट चयनित नहीं।"
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export file is missing."
+msgid "Export file as..."
+msgstr "निर्यात फ़ाइल गायब है।"
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "मॉडल <%s> पर निर्यात किया गया"
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr "फ़ाइल %s को पढ़ने में विफल।"
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "नए मैपसेट के लिए नाम दर्ज करें:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to create new raster map."
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "नया रैस्टर मानचित्र बनाने में विफल।"
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "No files generated."
+msgid "New file '{}' created."
+msgstr "कोई फ़ाइल उत्पन्न नहीं हुई।"
+
+#, fuzzy
+#| msgid "Do you really want to activate snapping and overwrite it?"
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr "क्या आप सचमुच स्नैपिंग को सक्रिय करना और उसे अधिलेखित करना चाहते हैं?"
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "सर्वर:"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to display legend."
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr "लेजेंड दिखाने में फेल।"
+
+#, fuzzy
+#| msgid "Property does not exist: %s"
+msgid "Notebook storage does not exist: {}"
+msgstr "संपत्ति मौजूद नहीं है: %s"
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File %s not found"
+msgid "File not found: {}"
+msgstr "फ़ाइल %s नहीं मिली"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "फ़ाइल पहले से ही मौजूद है"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "फ़ाइल पहले से ही मौजूद है"
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "सर्वर:"
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "नया मॉडल बनाएं"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to:"
+msgid "Export notebook"
+msgstr "इसमें निर्यात करें:"
+
 msgid "GRASS"
 msgstr "घास"
 
@@ -5404,6 +5895,30 @@ msgstr "मैप डिस्प्ले {} बंद करें"
 
 msgid "Console"
 msgstr "कंसोल"
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "3D व्यू मोड उपलब्ध नहीं है"
 
 msgid "Map Swipe Tool"
 msgstr "मैप स्वाइप टूल"
@@ -5550,6 +6065,11 @@ msgstr "मानचित्र परत हटाएँ"
 
 msgid "Quit GRASS GUI"
 msgstr "घास GUI छोड़ो"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr "डिस्प्ले रिज़ॉल्यूशन वर्तमान में कम्प्यूटेशनल सेटिंग्स तक सीमित नहीं है। मानचित्र को क्षेत्र ज्यामिति तक सीमित करने का सुझाव दिया गया है। क्या आप संकल्प को बाधित करना चाहते हैं?"
@@ -5873,11 +6393,13 @@ msgstr "जियोरेक्टिफायर"
 msgid "Cartographic Composer"
 msgstr "कार्टोग्राफिक कंपोजर"
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "ग्राफ़िकल मॉडलर"
+
 msgid "Launch user-defined script"
 msgstr "उपयोगकर्ता-परिभाषित स्क्रिप्ट लॉन्च करें"
-
-msgid "New display"
-msgstr "नया प्रदर्शन"
 
 msgid "Python code editor"
 msgstr "पायथन कोड संपादक"
@@ -6254,6 +6776,12 @@ msgstr "WKT स्ट्रिंग गायब है।"
 
 msgid "There were some issues when loading menu or Tools:"
 msgstr "मेनू या टूल लोड करते समय कुछ समस्याएँ थीं:"
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
 
 msgid "No project provided. Operation canceled."
 msgstr "कोई प्रोजेक्ट उपलब्ध नहीं कराया गया. ऑपरेशन रद्द कर दिया गया।"
@@ -6889,9 +7417,6 @@ msgstr "GRASS Addons से एक्सटेंशन प्राप्त �
 
 msgid "List of extensions - double-click to install"
 msgstr "एक्सटेंशन की सूची - इंस्टॉल करने के लिए डबल-क्लिक करें"
-
-msgid "Options"
-msgstr "विकल्प"
 
 msgid "&Install"
 msgstr "&इंस्टॉल करें"
@@ -9502,7 +10027,9 @@ msgstr "चयनित डेटासेट डाउनलोड करें
 msgid "Do you want to cancel dataset download?"
 msgstr "क्या आप डेटासेट डाउनलोड रद्द करना चाहते हैं?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+#, fuzzy
+#| msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr "टाइमलाइन टूल को स्थापित करने के लिए \\\"matplotlib\\\" (पायथन-matplotlib और कुछ सिस्टम पर भी Python-matplotlib-wx) पैकेज की आवश्यकता होती है। {}"
 
 msgid "Timeline Tool"
@@ -9600,15 +10127,21 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "टाइमलाइन टूल - घास"
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "टेम्पोरल प्लॉट टूल को स्थापित करने के लिए \\\"matplotlib\\\" (पायथन-matplotlib) पैकेज की आवश्यकता होती है। {0}"
 
 msgid "Temporal Plot Tool"
 msgstr "टेम्पोरल प्लॉट टूल"
 
+#, fuzzy
+#| msgid ""
+#| "Raster temporal dataset (strds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr "रैस्टर टेम्पोरल डेटासेट (strds)\\nनाम टाइप करने के बाद ENTER दबाएँ या कॉम्बोबॉक्स से चयन करें"
 
@@ -9624,8 +10157,13 @@ msgstr "सरल रेखीय समाश्रयण रेखा दि�
 msgid "STRDS"
 msgstr "एसटीआरडीएस"
 
+#, fuzzy
+#| msgid ""
+#| "Vector temporal dataset (stvds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr "वेक्टर टेम्पोरल डेटासेट (stvds)\\nनाम टाइप करने के बाद ENTER दबाएँ या कॉम्बोबॉक्स से चयन करें"
 
@@ -11049,6 +11587,9 @@ msgid ""
 msgstr ""
 "रेखापुंज मानचित्र <%(rast1)s> बनाम <%(rast2)s> के लिए प्रतिगमन समीकरण:\\n\\n\n"
 "\n"
+
+#~ msgid "New display"
+#~ msgstr "नया प्रदर्शन"
 
 #~ msgid "&Copy paths to mapsets"
 #~ msgstr "&म्यापसेट्स के कांपी पॄंथ करें"

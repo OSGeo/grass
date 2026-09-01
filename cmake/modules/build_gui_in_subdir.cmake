@@ -47,6 +47,7 @@ function(build_gui_in_subdir dir_name)
             ${CMAKE_COMMAND} -E copy_if_different ${PYTHON_FILES}
             "${OUTDIR}/${GRASS_INSTALL_GUIDIR}/wxpython/${G_NAME}"
         COMMAND ${CMAKE_COMMAND} -E touch ${GUI_STAMP_FILE}
+        DEPENDS ${PYTHON_FILES}
     )
 
     set(OUT_SCRIPT_FILE

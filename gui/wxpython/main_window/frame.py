@@ -2009,13 +2009,26 @@ class GMFrame(wx.Frame):
 
         win.Show()
 
-    def OnAnimationTool(self, event=None, cmd=None):
-        """Launch Animation tool. See OnIClass documentation."""
-        from animation.frame import AnimationFrame
+    def OpenAnimationTool(self):
+        """Open the Animation Tool in a new page of the main notebook
 
-        frame = AnimationFrame(parent=self, giface=self._giface)
-        frame.CentreOnScreen()
-        frame.Show()
+        :return: the animation panel, so that a caller can load data into it
+        """
+        from animation.panels import AnimationToolPanel
+
+        animation_panel = AnimationToolPanel(
+            parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
+        )
+        animation_panel.SetUpPage(self, self.mainnotebook)
+
+        # add animation panel to notebook and make it current
+        self.mainnotebook.AddPage(animation_panel, _("Animation Tool"))
+
+        return animation_panel
+
+    def OnAnimationTool(self, event=None, cmd=None):
+        """Launch Animation tool"""
+        animation_panel = self.OpenAnimationTool()
 
         tree = self.GetLayerTree()
         if tree:
@@ -2034,7 +2047,7 @@ class GMFrame(wx.Frame):
                 layer.name = ",".join(rasters)
                 layer.cmd = ["d.rast", "map="]
                 layerList.AddLayer(layer)
-                frame.SetAnimations([layerList, None, None, None])
+                animation_panel.SetAnimations([layerList, None, None, None])
 
     def OnTimelineTool(self, event=None, cmd=None):
         """Launch Timeline Tool"""
