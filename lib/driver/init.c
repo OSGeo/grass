@@ -5,10 +5,8 @@
 
   (C) 2006-2011 by the GRASS Development Team
 
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
-
-  \author Glynn Clements <glynn gclements.plus.com> (original contributor)
+   SPDX-License-Identifier: GPL-2.0-or-later
+\author Glynn Clements <glynn gclements.plus.com> (original contributor)
   \author Huidae Cho <grass4u gmail.com>
 */
 
