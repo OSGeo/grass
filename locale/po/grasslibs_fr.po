@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
-"PO-Revision-Date: 2026-06-21 20:53+0000\n"
+"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"PO-Revision-Date: 2026-08-09 15:54+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -26,6 +26,9 @@ msgstr ""
 #, c-format
 msgid "Unknown algorithm '%s'"
 msgstr "Algorithme '%s' inconnu"
+
+msgid "Cannot classify an empty set of values"
+msgstr "Impossible de classer un ensemble vide de valeurs"
 
 msgid "Classification algorithm failed"
 msgstr "Échec de l'algorithme de classification"
@@ -2984,7 +2987,7 @@ msgid "A new mapset can be created using '-c' flag."
 msgstr "Un nouveau jeu de cartes peut être créé en utilisant l'option '-c'."
 
 msgid "Maybe you meant a different directory."
-msgstr "Vouliez-vous dire un répertoire différent?"
+msgstr "Vouliez-vous dire un répertoire différent ?"
 
 msgid "Provide CRS to create a project"
 msgstr "Fournir un SCR pour créer un projet"
@@ -5139,12 +5142,10 @@ msgid_plural "%d primitives registered"
 msgstr[0] "Une primitive référencée"
 msgstr[1] "%d primitives référencées"
 
-#, fuzzy, c-format
-#| msgid "One vertex registered"
-#| msgid_plural "%d vertices registered"
+#, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "%d sommet référencé"
+msgstr[0] "Un sommet référencé"
 msgstr[1] "%d sommets référencés"
 
 msgid "Building areas..."
