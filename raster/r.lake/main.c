@@ -238,8 +238,8 @@ int main(int argc, char *argv[])
         start_col = (int)Rast_easting_to_col(east, &window);
         start_row = (int)Rast_northing_to_row(north, &window);
 
-        if (start_row < 0 || start_row > rows || start_col < 0 ||
-            start_col > cols)
+        if (start_row < 0 || start_row >= rows || start_col < 0 ||
+            start_col >= cols)
             G_fatal_error(_("Seed point outside the current region"));
     }
 
