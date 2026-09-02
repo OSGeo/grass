@@ -53,9 +53,14 @@ struct fileinfo /* Information for opened cell files */
     struct Range range;      /* Range structure              */
     struct FPRange fp_range; /* float Range structure        */
     int want_histogram;
-    int reclass_flag;         /* Automatic reclass flag       */
-    off_t *row_ptr;           /* File row addresses           */
-    COLUMN_MAPPING *col_map;  /* Data to window col mapping   */
+    int reclass_flag;        /* Automatic reclass flag       */
+    off_t *row_ptr;          /* File row addresses           */
+    COLUMN_MAPPING *col_map; /* Data to window col mapping   */
+    /* Range of native columns (0-based, inclusive) actually needed by
+     * the current region for GDAL-linked, non-hflip'ed maps, derived
+     * from col_map. -1 if not applicable (native full-width read). */
+    COLUMN_MAPPING gdal_min_col;
+    COLUMN_MAPPING gdal_max_col;
     double C1, C2;            /* Data to window row constants */
     int cur_row;              /* Current data row in memory   */
     int null_cur_row;         /* Current null row in memory   */
