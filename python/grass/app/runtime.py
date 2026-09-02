@@ -91,6 +91,18 @@ class RuntimePaths:
         return resource_paths.GRASS_VERSION_GIT
 
     @property
+    def grass_headers_version(self):
+        return resource_paths.GRASS_HEADERS_VERSION
+
+    @property
+    def grass_headers_date(self):
+        return resource_paths.GRASS_HEADERS_DATE
+
+    @property
+    def grass_arch(self):
+        return resource_paths.GRASS_ARCH
+
+    @property
     def config_projshare(self):
         return self.env.get("GRASS_PROJSHARE", resource_paths.CONFIG_PROJSHARE)
 
