@@ -209,11 +209,7 @@ static void read_data_gdal(int fd, int row, unsigned char *data_buf,
     CPLErr err;
     /* Restrict the read to the native columns actually needed by the
      * region (computed once in Rast__create_window_mapping()) instead
-     * of always reading the full native row width. This matters a lot
-     * for maps much wider than the region, such as country-wide
-     * mosaics built from many source tiles: a full-width read touches
-     * every one of those source tiles on every row, even if the
-     * region only overlaps a couple of them. hflip'ed maps keep the
+     * of always reading the full native row width. hflip'ed maps keep the
      * original full-width behavior, to avoid also having to mirror
      * the needed column range. */
     int col_off = 0;
