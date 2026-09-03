@@ -17,7 +17,7 @@
 #############################################################################
 
 # %module
-# % description: Imports raster data into a GRASS raster map using GDAL library and reprojects on the fly.
+# % description: Imports raster data into a GRASS raster map using GDAL library and reprojects on the fly.  # noqa: E501
 # % keyword: raster
 # % keyword: import
 # % keyword: projection
@@ -48,7 +48,7 @@
 # % multiple: no
 # % options: nearest,bilinear,bicubic,lanczos,bilinear_f,bicubic_f,lanczos_f
 # % description: Resampling method to use for reprojection
-# % descriptions: nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos filter with fallback
+# % descriptions: nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos filter with fallback  # noqa: E501
 # % answer: nearest
 # % guisection: Output
 # %end
@@ -71,7 +71,7 @@
 # % answer: estimated
 # % options: estimated,value,region
 # % description: Resolution of output raster map (default: estimated)
-# % descriptions: estimated;estimated resolution;value;user-specified resolution;region;current region resolution
+# % descriptions: estimated;estimated resolution;value;user-specified resolution;region;current region resolution  # noqa: E501
 # % guisection: Output
 # %end
 # %option
@@ -79,7 +79,7 @@
 # % type: double
 # % required: no
 # % multiple: no
-# % description: Resolution of output raster map (use with option resolution=value)
+# % description: Resolution of output raster map (use with option resolution=value)  # noqa: E501
 # % guisection: Output
 # %end
 # %option
@@ -102,12 +102,12 @@
 # %end
 # %flag
 # % key: l
-# % description: Force Lat/Lon maps to fit into geographic coordinates (90N,S; 180E,W)
+# % description: Force Lat/Lon maps to fit into geographic coordinates (90N,S; 180E,W)  # noqa: E501
 # %end
 # %flag
 # % key: o
 # % label: Override projection check (use current project's CRS)
-# % description: Assume that the dataset has the same coordinate reference system (CRS) as the current project
+# % description: Assume that the dataset has the same coordinate reference system (CRS) as the current project  # noqa: E501
 # %end
 # %rules
 # % required: output,-e
@@ -152,7 +152,9 @@ def is_projection_matching(GDALdatasource):
     """Returns True if current location projection
     matches dataset projection, otherwise False"""
     try:
-        gs.run_command("r.in.gdal", input=GDALdatasource, flags="j", quiet=True)
+        gs.run_command(
+            "r.in.gdal", input=GDALdatasource, flags="j", quiet=True
+        )
         return True
     except CalledModuleError:
         return False
@@ -170,19 +172,26 @@ def main():
     title = options["title"]
     if flags["e"] and not output:
         output = "rimport_tmp"  # will be removed with the entire tmp location
-    if options["resolution_value"]:
+    if (
+        options["resolution_value"]
+    ):
         if tgtres != "value":
             gs.fatal(
-                _("To set custom resolution value, select 'value' in resolution option")
+                _(
+                    "To set custom resolution value, select"
+                    "'value' in resolution option"
+                )
             )
         tgtres_value = float(options["resolution_value"])
         if tgtres_value <= 0:
-            gs.fatal(_("Resolution value can't be smaller than 0"))
+            gs.fatal(
+                _("Resolution value can't be smaller than 0")
+            )
     elif tgtres == "value":
         gs.fatal(
             _(
-                "Please provide the resolution for the imported dataset or change to "
-                "'estimated' resolution"
+                "Please provide the resolution for the imported dataset or "
+                "change 'estimated' resolution"
             )
         )
 
@@ -217,11 +226,16 @@ def main():
 
     # make sure target is not xy
     if (
-        gs.parse_command("g.proj", flags="p", format="shell")["name"]
+        gs.parse_command(
+            "g.proj", flags="p", format="shell"
+        )["name"]
         == "xy_location_unprojected"
     ):
         gs.fatal(
-            _("Coordinate reference system not available for current project <%s>")
+            _(
+                "Coordinate reference system not available for "
+                "current project <%s>"
+            )
             % tgtloc
         )
 
@@ -262,15 +276,24 @@ def main():
     # switch to temp location
 
     # print projection at verbose level
-    gs.verbose(gs.read_command("g.proj", flags="p", env=src_env).rstrip(os.linesep))
+    gs.verbose(
+        gs.read_command("g.proj", flags="p", env=src_env).rstrip(
+            os.linesep
+        )
+    )
 
     # make sure input is not xy
     if (
-        gs.parse_command("g.proj", flags="p", format="shell", env=src_env)["name"]
+        gs.parse_command(
+            "g.proj", flags="p", format="shell", env=src_env
+        )["name"]
         == "xy_location_unprojected"
     ):
         gs.fatal(
-            _("Coordinate reference system not available for input <%s>")
+            _(
+                "Coordinate reference system not available for "
+                "input <%s>"
+            )
             % GDALdatasource
         )
 
@@ -349,25 +372,32 @@ def main():
             except CalledModuleError:
                 gs.fatal(_("Unable to get reprojected map extent"))
             try:
-                srcregion = gs.parse_key_val(tgtextents, val_type=float, vsep=" ")
+                srcregion = gs.parse_key_val(
+                    tgtextents, val_type=float, vsep=" "
+                )
                 n = srcregion["n"]
                 s = srcregion["s"]
                 e = srcregion["e"]
                 w = srcregion["w"]
             except ValueError:  # import into latlong, expect 53:39:06.894826N
-                srcregion = gs.parse_key_val(tgtextents, vsep=" ")
-                n = gs.float_or_dms(srcregion["n"][:-1]) * (
-                    -1 if srcregion["n"][-1] == "S" else 1
+                srcregion = gs.parse_key_val(
+                    tgtextents, vsep=" "
                 )
-                s = gs.float_or_dms(srcregion["s"][:-1]) * (
-                    -1 if srcregion["s"][-1] == "S" else 1
-                )
-                e = gs.float_or_dms(srcregion["e"][:-1]) * (
-                    -1 if srcregion["e"][-1] == "W" else 1
-                )
-                w = gs.float_or_dms(srcregion["w"][:-1]) * (
-                    -1 if srcregion["w"][-1] == "W" else 1
-                )
+                n = gs.float_or_dms(
+                    srcregion["n"][:-1]
+                ) * (-1 if srcregion["n"][-1] == "S" else 1)
+                
+                s = gs.float_or_dms(
+                    srcregion["s"][:-1]
+                ) * (-1 if srcregion["s"][-1] == "S" else 1)
+                
+                e = gs.float_or_dms(
+                    srcregion["e"][:-1]
+                ) * (-1 if srcregion["e"][-1] == "W" else 1)
+                
+                w = gs.float_or_dms(
+                    srcregion["w"][:-1]
+                ) * (-1 if srcregion["w"][-1] == "W" else 1)
 
             env["GRASS_REGION"] = gs.region_env(n=n, s=s, e=e, w=w)
 
@@ -387,40 +417,59 @@ def main():
                 env=src_env,
             )
             # test if v.proj created a valid area
-            if gs.vector_info_topo(vreg, env=src_env)["areas"] != 1:
+            if (
+                gs.vector_info_topo(vreg, env=src_env)["areas"]
+                != 1
+            ):
                 gs.fatal(_("Please check the 'extent' parameter"))
         except CalledModuleError:
             gs.fatal(_("Unable to reproject to source project"))
 
         # set region from region vector
-        gs.run_command("g.region", raster=outfile, env=src_env)
-        gs.run_command("g.region", vector=vreg, env=src_env)
+        gs.run_command(
+            "g.region", raster=outfile, env=src_env
+        )
+        gs.run_command(
+            "g.region", vector=vreg, env=src_env
+        )
         # align to first band
-        gs.run_command("g.region", align=outfile, env=src_env)
+        gs.run_command(
+            "g.region", align=outfile, env=src_env
+        )
         # get number of cells
         cells = gs.region(env=src_env)["cells"]
 
         estres = math.sqrt((n - s) * (e - w) / cells)
         # remove from source location for multi bands import
         gs.run_command(
-            "g.remove", type="vector", name=vreg, flags="f", quiet=True, env=src_env
+            "g.remove",
+            type="vector",
+            name=vreg, flags="f",
+            quiet=True,
+            env=src_env
         )
 
         # switch to target location
-        gs.run_command("g.remove", type="vector", name=vreg, flags="f", quiet=True)
+        gs.run_command(
+            "g.remove", type="vector", name=vreg, flags="f", quiet=True
+        )
 
         gs.message(
-            _("Estimated target resolution for input band <{out}>: {res}").format(
+            _(
+                "Estimated target resolution for input band <{out}>: {res}"
+            ).format(
                 out=outfile, res=estres
             )
-        )
+
         if flags["e"]:
             continue
 
         env = os.environ.copy()
 
         if options["extent"] == "input":
-            env["GRASS_REGION"] = gs.region_env(n=n, s=s, e=e, w=w)
+            env["GRASS_REGION"] = gs.region_env(
+                n=n, s=s, e=e, w=w
+            )
 
         res = None
         if tgtres == "estimated":

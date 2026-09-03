@@ -44,8 +44,6 @@ per-file-ignores =
     # E402 module level import not at top of file
     scripts/r.semantic.label/r.semantic.label.py: E501
     scripts/g.extension/g.extension.py: E501
-    scripts/v.unpack/v.unpack.py: E501
-    scripts/v.import/v.import.py: E501
     scripts/db.univar/db.univar.py: E501
     scripts/i.pansharpen/i.pansharpen.py: E501
     scripts/v.what.strds/v.what.strds.py: E501
