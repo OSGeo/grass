@@ -109,9 +109,7 @@ void Rast__create_window_mapping(int fd)
      */
 
     /* For GDAL-linked, non-hflip'ed maps, find the range of native
-     * columns actually needed by the current region, so that
-     * read_data_gdal() can avoid reading the full native row width when
-     * the map is much wider than the region. */
+     * columns needed by the current region. */
     fcb->gdal_min_col = -1;
     fcb->gdal_max_col = -1;
     if (fcb->gdal && !fcb->gdal->hflip) {

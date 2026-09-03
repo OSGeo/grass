@@ -208,10 +208,7 @@ static void read_data_gdal(int fd, int row, unsigned char *data_buf,
     unsigned char *buf;
     CPLErr err;
     /* Restrict the read to the native columns actually needed by the
-     * region (computed once in Rast__create_window_mapping()) instead
-     * of always reading the full native row width. hflip'ed maps keep the
-     * original full-width behavior, to avoid also having to mirror
-     * the needed column range. */
+     * region (except for hflip'ed maps). */
     int col_off = 0;
     int ncols = fcb->cellhd.cols;
 
