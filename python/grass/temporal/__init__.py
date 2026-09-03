@@ -95,9 +95,11 @@ from .metadata import (
 from .open_stds import (
     check_new_map_dataset,
     check_new_stds,
+    check_open_output_stds,
     open_new_map_dataset,
     open_new_stds,
     open_old_stds,
+    open_output_stds,
 )
 from .register import (
     assign_valid_time_to_map,
@@ -278,6 +280,7 @@ __all__ = [
     "check_granularity_string",
     "check_new_map_dataset",
     "check_new_stds",
+    "check_open_output_stds",
     "collect_map_names",
     "compute_absolute_time_granularity",
     "compute_common_absolute_time_granularity",
@@ -334,6 +337,7 @@ __all__ = [
     "open_new_map_dataset",
     "open_new_stds",
     "open_old_stds",
+    "open_output_stds",
     "print_gridded_dataset_univar_statistics",
     "print_spatio_temporal_topology_relationships",
     "print_temporal_topology_relationships",
