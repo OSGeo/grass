@@ -165,3 +165,27 @@ def test_forget_of_the_last_accessed_row_leaves_a_stale_fast_path() -> None:
 def test_fileno_returns_the_configured_descriptor() -> None:
     with rowio(2, {}) as (r, _calls):
         assert librowio.Rowio_fileno(byref(r)) == 0
+
+
+def test_get_returns_none_when_getrow_fails() -> None:
+    """A getrow() that signals failure (returns 0) makes Rowio_get()
+    return NULL rather than a buffer with whatever partial data getrow()
+    may have written"""
+
+    @GETROW
+    def failing_getrow(fd, buf, row, length):
+        return 0
+
+    @PUTROW
+    def putrow(fd, buf, row, length):
+        return 1
+
+    r = librowio.ROWIO()
+    librowio.Rowio_setup(byref(r), 0, 2, ROW_LENGTH, failing_getrow, putrow)
+    try:
+        assert not librowio.Rowio_get(byref(r), 0)
+        # The row is not left in a half-cached state: the same row can be
+        # retried rather than getting stuck returning failure forever.
+        assert not librowio.Rowio_get(byref(r), 0)
+    finally:
+        librowio.Rowio_release(byref(r))

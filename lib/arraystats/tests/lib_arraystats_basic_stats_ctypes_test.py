@@ -79,3 +79,24 @@ def test_eqdrt_returns_a_vertical_line_as_c_instead_of_a_slope() -> None:
     assert a.value == 0.0
     assert b.value == 0.0
     assert c.value == 3.0
+
+
+def test_eqdrt_treats_index_zero_as_the_origin() -> None:
+    """When i1 is 0, AS_eqdrt() forces that point to (0, 0), ignoring
+    whatever is actually stored at vectx[0]/vecty[0]
+
+    AS_class_discont(), the one caller of AS_eqdrt() in this codebase,
+    relies on this: it passes index 0 as a start-of-range sentinel while
+    its own vectx[0]/vecty[0] happen to already be 0.0, so this special
+    case is what actually makes index 0 behave as "the origin" here.
+    """
+    # vectx[0]/vecty[0] are (100, 100), but AS_eqdrt() must ignore them and
+    # use (0, 0) instead, giving the same line as through (0, 0) and (3, 6).
+    vectx = make_array([100.0, 3.0])
+    vecty = make_array([100.0, 6.0])
+    a, b, c = c_double(), c_double(), c_double()
+
+    libas.AS_eqdrt(vectx, vecty, 0, 1, byref(a), byref(b), byref(c))
+
+    assert a.value == pytest.approx(0.0)
+    assert b.value == pytest.approx(2.0)

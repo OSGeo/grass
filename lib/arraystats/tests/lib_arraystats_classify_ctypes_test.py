@@ -99,16 +99,39 @@ def test_class_discont_on_a_uniform_range() -> None:
     assert list(breaks) == pytest.approx([2.5, 5.5])
 
 
-def test_class_apply_algorithm_dispatches_by_constant() -> None:
+@pytest.mark.parametrize(
+    ("algorithm", "nbreaks", "expected_finfo", "expected_breaks"),
+    [
+        (libas.CLASS_INTERVAL, 3, 1.0, [3.25, 5.5, 7.75]),
+        (
+            libas.CLASS_STDEV,
+            3,
+            1.0,
+            [2.6277186767309857, 5.5, 8.372281323269014],
+        ),
+        (libas.CLASS_QUANT, 3, 1.0, [3.0, 5.0, 7.0]),
+        (
+            libas.CLASS_EQUIPROB,
+            3,
+            1.0,
+            [3.56264624745505, 5.5, 7.43735375254495],
+        ),
+        (libas.CLASS_DISCONT, 2, 0.12499999999999997, [2.5, 5.5]),
+    ],
+)
+def test_class_apply_algorithm_dispatches_by_constant(
+    algorithm, nbreaks, expected_finfo, expected_breaks
+) -> None:
     """AS_class_apply_algorithm() is a thin dispatcher to the AS_class_*()
-    functions above, selected by the CLASS_* constant"""
+    functions above, selected by the CLASS_* constant; each case here
+    matches the corresponding AS_class_*() test above"""
     data = make_array(TEN_VALUES)
-    breaks = (c_double * 3)()
+    breaks = (c_double * nbreaks)()
     finfo = libas.AS_class_apply_algorithm(
-        libas.CLASS_INTERVAL, data, len(TEN_VALUES), byref(c_int(3)), breaks
+        algorithm, data, len(TEN_VALUES), byref(c_int(nbreaks)), breaks
     )
-    assert finfo == 1.0
-    assert list(breaks) == pytest.approx([3.25, 5.5, 7.75])
+    assert finfo == pytest.approx(expected_finfo)
+    assert list(breaks) == pytest.approx(expected_breaks)
 
 
 @pytest.mark.parametrize(
