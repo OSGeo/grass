@@ -4,10 +4,10 @@
 #       Changes to this file must be copied over to the other file.
 ARG GUI=without
 
-FROM ubuntu:24.04@sha256:4fbb8e6a8395de5a7550b33509421a2bafbc0aab6c06ba2cef9ebffbc7092d90 AS common_start
+FROM ubuntu:26.04@sha256:53958ec7b67c2c9355df922dd08dbf0360611f8c3cdb656875e81873db9ffdba AS common_start
 
-ARG BASE_NAME="ubuntu:24.04"
-ARG PYTHON_VERSION=3.12
+ARG BASE_NAME="ubuntu:26.04"
+ARG PYTHON_VERSION=3.14
 # renovate: datasource=github-tags depName=libgeos/geos
 ARG GEOS_VERSION=3.14.1
 # renovate: datasource=github-tags depName=OSGeo/PROJ
@@ -19,7 +19,7 @@ ARG PDAL_VERSION=2.10.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=2.0.0
 # renovate: datasource=pypi depName=wxPython
-ARG WXPYTHON_VERSION=4.2.5
+ARG WXPYTHON_VERSION=4.3.1
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
@@ -45,7 +45,7 @@ ARG GRASS_RUN_PACKAGES="\
   gcc \
   git \
   language-pack-en-base \
-  libarmadillo12 \
+  libarmadillo15 \
   libcairo2 \
   libcurl4-gnutls-dev \
   libfftw3-bin \
@@ -55,7 +55,7 @@ ARG GRASS_RUN_PACKAGES="\
   libgeotiff5 \
   libgif7 \
   libgsl-dev \
-  libgsl27 \
+  libgsl28 \
   libhdf5-dev \
   libjpeg-turbo8 \
   libjson-c5 \
@@ -340,8 +340,8 @@ RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
     && apt-get install -y --no-install-recommends --no-install-suggests \
     $GRASS_GUI_PACKAGES \
     && python3 -m pip install  -U --break-system-packages --no-cache-dir --upgrade \
-    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
-    "wxpython==${WXPYTHON_VERSION}" \
+    -f https://github.com/wxWidgets/Phoenix/releases/expanded_assets/wxPython-${WXPYTHON_VERSION} \
+    "wxpython==${WXPYTHON_VERSION}+ubuntu2604" \
     # Clean up
     && pip cache purge \
     && apt-get autoremove -y \
