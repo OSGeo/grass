@@ -18,10 +18,8 @@
  *
  * The seeding functions are not thread-safe; see G_srand48().
  *
- * (C) 2014-2025 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2014-2026 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \authors Glynn Clements, Maris Nartiss (thread safety)
  */

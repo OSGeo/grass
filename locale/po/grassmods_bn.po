@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-22 17:13+0000\n"
 "PO-Revision-Date: 2026-03-14 11:20+0000\n"
 "Last-Translator: Faysal Mahmud  <faysalmahmud4300@gmail.com>\n"
 "Language-Team: Bengali <https://weblate.osgeo.org/projects/grass-gis/grassmods/bn/>\n"
@@ -7647,8 +7647,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 msgid "Maps with feature values (attributes)"
 msgstr ""
 
@@ -13440,6 +13440,10 @@ msgstr ""
 msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
 msgstr ""
 
+#, c-format
+msgid "memory=%d MB is below the %ld MB minimum for search=%s. This run will finish with the minimum MB needed instead."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
@@ -13449,17 +13453,13 @@ msgstr ""
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
-#, c-format
-msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
-msgstr ""
-
-msgid "Unknown output data type"
-msgstr ""
-
 msgid "Profile data has been written"
 msgstr ""
 
 msgid "Failed writing profile data"
+msgstr ""
+
+msgid "Unknown output data type"
 msgstr ""
 
 msgid "Failed to profile the computation, please check the parameters"

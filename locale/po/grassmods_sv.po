@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-22 17:13+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -7698,8 +7698,8 @@ msgstr "Förutsägelser med SVM"
 msgid "Predict with a Support Vector Machine"
 msgstr "Förutsägelser med en stödvektormaskin"
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 msgid "Maps with feature values (attributes)"
 msgstr "Kartor med funktionsvärden (attribut)"
 
@@ -13537,6 +13537,10 @@ msgstr "Storleken på sökradien måste täcka minst 1 cell"
 msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
 msgstr ""
 
+#, c-format
+msgid "memory=%d MB is below the %ld MB minimum for search=%s. This run will finish with the minimum MB needed instead."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr "Skip radius size måste vara minst 1 cell lägre än radius"
 
@@ -13546,18 +13550,14 @@ msgstr "Tröskelvärdet för planhet måste vara större än 0"
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr "Platthetsavståndet ska vara mellan skip och sökradie. Annars ignoreras"
 
-#, c-format
-msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
-msgstr "Det kan uppstå en betydande fördröjning i bearbetningen eftersom beräkningsområdet är %lu gånger större än nödvändigt"
-
-msgid "Unknown output data type"
-msgstr "Okänd typ av utdata"
-
 msgid "Profile data has been written"
 msgstr "Profildata har skrivits"
 
 msgid "Failed writing profile data"
 msgstr "Misslyckades med att skriva profildata"
+
+msgid "Unknown output data type"
+msgstr "Okänd typ av utdata"
 
 msgid "Failed to profile the computation, please check the parameters"
 msgstr "Misslyckades med att profilera beräkningen, kontrollera parametrarna"
@@ -34061,6 +34061,10 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 
 msgid "Image file"
 msgstr "Bildfil"
+
+#, c-format
+#~ msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
+#~ msgstr "Det kan uppstå en betydande fördröjning i bearbetningen eftersom beräkningsområdet är %lu gånger större än nödvändigt"
 
 #~ msgid "flags c and d are mutually exclusive"
 #~ msgstr "flaggorna c och d utesluter varandra"
