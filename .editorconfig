@@ -153,10 +153,8 @@ end_of_line = unset
 charset = unset
 insert_final_newline = unset
 
-# These are valid UTF-8 text but contain a few stray control characters that
-# editorconfig-checker's binary detection flags as non-utf-8.
-# configure is autoconf-generated and uses BEL (\007) as an awk field
-# separator; lib/external/ccmath is vendored third-party code; the two
-# r.drain READMEs are historical, pre-existing content.
-[{configure,raster/r.drain/README,scripts/r.drain/README,lib/external/ccmath/C01-matrix}]
+# configure is autoconf-generated and uses BEL (\007) as an awk
+# field separator, which editorconfig-checker's binary detection flags as
+# non-utf-8.
+[configure]
 charset = unset
