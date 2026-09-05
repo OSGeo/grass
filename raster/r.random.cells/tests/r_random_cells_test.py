@@ -45,7 +45,7 @@ def test_fill_some(session):
     # The exact count depends on the random sequence, so this only pins an
     # upper bound: the minimum distance between filled cells rules out more
     # than half of them being filled.
-    assert univar["max"] < N_CELLS / 2
+    assert univar["max"] <= N_CELLS // 2
 
 
 def test_fill_count(session):
