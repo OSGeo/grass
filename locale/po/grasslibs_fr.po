@@ -8,13 +8,14 @@
 # Vincent Bain <bain toraval.fr>, 2012.
 # Sylvain Maillard <sylvain.maillard@gmail.com>, 2011, 2012, 2015, 2017.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
+# Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 09:37+0000\n"
-"PO-Revision-Date: 2026-08-02 15:39+0000\n"
-"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"POT-Creation-Date: 2026-08-29 15:44+0000\n"
+"PO-Revision-Date: 2026-09-05 15:04+0000\n"
+"Last-Translator: Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -374,7 +375,7 @@ msgid "Unable select records from table <%s>"
 msgstr "Impossible de sélectionner les enregistrements depuis la table <%s>"
 
 msgid "Key column type is not integer"
-msgstr "La colonne clef n'est pas de type entier"
+msgstr "Le type de la colonne clé n'est pas un entier"
 
 #, c-format
 msgid "Table name too long: <%s>"
@@ -3326,7 +3327,7 @@ msgid "Error loading 3d raster map <%s>"
 msgstr "Erreur au chargement de la carte raster 3D <%s>"
 
 msgid "Nviz_new_map_obj(): unsupported data type"
-msgstr "Nviz_new_map_obj(): type de données non pris en charge"
+msgstr "Nviz_new_map_obj() : type de données non pris en charge"
 
 #, c-format
 msgid "Invalid color (%s), using \"white\" as default"
@@ -4295,7 +4296,7 @@ msgstr "Le fichier de quantification de la carte raster <%s> est manquant"
 msgid "Quantization file for raster map <%s> is empty"
 msgstr "Le fichier de quantification de la carte raster <%s> est vide"
 
-#, c-format
+#, fuzzy, c-format
 msgid "Unable to read fp range for raster map <%s>"
 msgstr "Impossible de lire l'intervalle fp pour la carte raster <%s>"
 
@@ -4501,7 +4502,7 @@ msgstr "Ajout d'une règle : %lf - %lf"
 
 #, c-format
 msgid "%s: illegal value spec"
-msgstr "%s : valeur non autorisée"
+msgstr "%s: spécification de valeur non valide"
 
 msgid "Rast3d_open_cell_old_no_header: error in Rast3d_mask_open_old"
 msgstr "Rast3d_open_cell_old_no_header : erreur dans Rast3d_mask_open_old"
@@ -5141,9 +5142,9 @@ msgstr[1] "%d primitives référencées"
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%<PRId64> vertices registered"
+msgid_plural "%d vertices registered"
 msgstr[0] "Un sommet référencé"
-msgstr[1] "%<PRId> sommets référencés"
+msgstr[1] "%d sommets référencés"
 
 msgid "Building areas..."
 msgstr "Construction des surfaces ..."
