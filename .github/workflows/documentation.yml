@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Checkout core
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: grass
           fetch-depth: 0
@@ -54,14 +54,14 @@ jobs:
 
       - name: Set up Python (with cache)
         if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
-        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip # zizmor: ignore[cache-poisoning] Assuming push event is not used for tags
 
       - name: Set up Python (no cache, use for release artifacts)
         if: ${{ !contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
-        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -77,7 +77,7 @@ jobs:
           } >> "${GITHUB_ENV}"
 
       - name: Checkout addons
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OSGeo/grass-addons
           ref: grass${{ env.MAJOR }}
@@ -102,7 +102,7 @@ jobs:
           pip install -r grass/.github/workflows/python_requirements.txt
           pip install -r grass-addons/.github/workflows/requirements.txt
 
-      - uses: rui314/setup-mold@9c9c13bf4c3f1adef0cc596abc155580bcb04444 # v1
+      - uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
         if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
 
       - name: Create installation directory

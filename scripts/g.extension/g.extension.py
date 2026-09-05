@@ -8,11 +8,9 @@
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
 #
-# COPYRIGHT:    (C) 2009-2025 by Markus Neteler, and the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2009-2025 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # TODO:         - update temporary workaround of using grass7 subdir of addon-repo, see
 #                 https://github.com/OSGeo/grass-addons/issues/528
@@ -291,13 +289,13 @@ class GitAdapter:
         try:
             gs.call([self._git], stdout=PIPE)
         except OSError:
-            gs.fatal(_("Could not found Git. Please install it."))
+            gs.fatal(_("Could not find Git. Please install it."))
 
     def __check_permissions(self):
         """"""
         # Create working directory if it does not exist
         self.working_directory.mkdir(parents=True, exist_ok=True)
-        # Check pemissions in case he workdir existed
+        # Check permissions in case the workdir exists
         if not os.access(self.working_directory, os.W_OK):
             gs.fatal(
                 _("Cannot write to working directory {}.").format(
