@@ -10,7 +10,7 @@ Usage:
     output = "temp_1950_2012"
     directory = "/tmp"
     title = "My new dataset"
-    descr = "May new shiny dataset"
+    descr = "My new shiny dataset"
     location = None
     link = True
     exp = True
