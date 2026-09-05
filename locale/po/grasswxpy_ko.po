@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 16:34+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2014-05-03 16:44-0400\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -444,26 +444,6 @@ msgstr "무효합니다"
 msgid "Animation Tool"
 msgstr ""
 
-msgid "Main Toolbar"
-msgstr ""
-
-msgid "Animation Toolbar"
-msgstr "애니메이션 도구 모음"
-
-msgid "Misc Toolbar"
-msgstr ""
-
-msgid "Loading data"
-msgstr ""
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr ""
-
-#, python-format
-msgid "to %(to)s"
-msgstr ""
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
@@ -487,6 +467,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr ""
+
+msgid "Animation Toolbar"
+msgstr "애니메이션 도구 모음"
+
+msgid "Misc Toolbar"
+msgstr ""
+
+msgid "Loading data"
+msgstr ""
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -981,6 +985,14 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr ""
+
+#, fuzzy
+#| msgid "Removes space time datasets from temporal database."
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "시간 데이터베이스로부터 시공간 자료세트를 제거합니다"
+
 msgid "Link external data"
 msgstr "외부 자료 연결"
 
@@ -1124,6 +1136,20 @@ msgid "Failed to read maps from project <{l}>."
 msgstr ""
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr ""
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr ""
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
@@ -1182,6 +1208,19 @@ msgstr ""
 msgid "Rename map"
 msgstr ""
 
+#, fuzzy
+#| msgid "Create database"
+msgid "Rename dataset"
+msgstr "데이터베이스 생성"
+
+#, python-brace-format
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
 msgid "Cannot rename mapset"
 msgstr ""
 
@@ -1198,10 +1237,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Renaming map <{name}>..."
-msgstr ""
-
-#, python-brace-format
-msgid "{cmd} -- completed"
 msgstr ""
 
 msgid "No map selected for copying."
@@ -1241,8 +1276,13 @@ msgstr ""
 msgid "g.remove completed"
 msgstr "g.remove를 완료했습니다"
 
+#, fuzzy, python-brace-format
+#| msgid "Do you want to permanently delete data?%s"
+msgid "Do you really want to delete map <{m}>?"
+msgstr "자료를 영구히 삭제하길 원하십니까? %s"
+
 #, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete maps <{m}>?"
 msgstr ""
 
 #, python-brace-format
@@ -1256,19 +1296,153 @@ msgstr "지도를 삭제합니다"
 msgid "Deleting {name}..."
 msgstr ""
 
+#, fuzzy, python-brace-format
+#| msgid "Delete map"
+msgid "Deleting {n} maps..."
+msgstr "지도를 삭제합니다"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "자료를 영구히 삭제하길 원하십니까? %s"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "자료를 영구히 삭제하길 원하십니까? %s"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you want to permanently delete data?%s"
+msgid "Do you really want to delete {n} datasets?"
+msgstr "자료를 영구히 삭제하길 원하십니까? %s"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "선택된 지도 세트를 삭제합니다"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+msgid "Delete dataset"
+msgstr "선택된 지도 세트를 삭제합니다"
+
+msgid "Deleting datasets..."
+msgstr ""
+
+#, fuzzy
+#| msgid "g.remove completed"
+msgid "t.remove completed"
+msgstr "g.remove를 완료했습니다"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
+#, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unpack raster map"
+msgid "Unregister map"
+msgstr "래스터 지도 풀기"
+
+msgid "Unregistering map..."
+msgstr ""
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Edit animation"
+msgid "Display animation"
+msgstr "애니메이션 편집"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query raster maps"
+msgid "&Register maps"
+msgstr "래스터 지도 질의"
+
+#, fuzzy
+#| msgid "Unpack raster map"
+msgid "&Unregister maps"
+msgstr "래스터 지도 풀기"
+
+#, fuzzy
+#| msgid "Update map statistics"
+msgid "Update metadata"
+msgstr "지도 통계 갱신"
+
+msgid "Display &temporal extent"
+msgstr ""
+
+#, fuzzy
+#| msgid "Edit animation"
+msgid "Display &animation"
+msgstr "애니메이션 편집"
+
+#, fuzzy
+msgid "&Rename dataset"
+msgstr "이름 바꾸기(&R)"
+
+#, fuzzy
+#| msgid "Delete selected point"
+msgid "&Delete dataset only"
+msgstr "선택된 점을 삭제합니다"
+
+#, fuzzy
+#| msgid "Export database table"
+msgid "&Export dataset"
+msgstr "데이터베이스 테이블 내보내기"
+
+msgid "Show &metadata"
 msgstr ""
 
 msgid "&Copy"
 msgstr ""
 
 msgid "Copy &name"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unpack raster map"
+msgid "&Unregister map"
+msgstr "래스터 지도 풀기"
+
+msgid "&Cut"
 msgstr ""
 
 msgid "&Paste"
@@ -1282,14 +1456,10 @@ msgstr "삭제(&D)"
 msgid "&Rename"
 msgstr "이름 바꾸기(&R)"
 
-msgid "&Display layers"
-msgstr ""
-
-msgid "&Display layer"
-msgstr ""
-
-msgid "Show &metadata"
-msgstr ""
+#, fuzzy
+#| msgid "Connect temporal database"
+msgid "Create &temporal dataset"
+msgstr "시간 데이터베이스 연결"
 
 msgid "&Switch mapset"
 msgstr ""
@@ -1300,7 +1470,7 @@ msgstr ""
 msgid "&Rename mapset"
 msgstr ""
 
-msgid "Re&load maps"
+msgid "Re&load mapset"
 msgstr ""
 
 #, fuzzy
@@ -1320,6 +1490,10 @@ msgstr "레코드를 삭제합니다"
 
 #, fuzzy
 msgid "&Rename project"
+msgstr "이름 바꾸기(&R)"
+
+#, fuzzy
+msgid "Re&load project"
 msgstr "이름 바꾸기(&R)"
 
 #, fuzzy
@@ -1357,6 +1531,11 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #, fuzzy
+#| msgid "Create database"
+msgid "Re&load database"
+msgstr "데이터베이스 생성"
+
+#, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "선택된 로케이션을 삭제합니다"
 
@@ -1368,6 +1547,21 @@ msgstr ""
 
 msgid "&Copy paths"
 msgstr ""
+
+#, fuzzy
+#| msgid "Create database"
+msgid "&Merge datasets"
+msgstr "데이터베이스 생성"
+
+#, fuzzy
+#| msgid "Delete selected point"
+msgid "&Delete datasets only"
+msgstr "선택된 점을 삭제합니다"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "선택된 지도 세트를 삭제합니다"
 
 #, fuzzy, python-brace-format
 #| msgid "Removes an existing database."
@@ -9941,6 +10135,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -9958,6 +10153,7 @@ msgstr ""
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -11551,14 +11747,8 @@ msgstr ""
 #~ msgid "Concentric circles"
 #~ msgstr "동심원"
 
-#~ msgid "Connect temporal database"
-#~ msgstr "시간 데이터베이스 연결"
-
 #~ msgid "Create RGB"
 #~ msgstr "RGB 생성"
-
-#~ msgid "Create database"
-#~ msgstr "데이터베이스 생성"
 
 #, fuzzy
 #~ msgid "Create new project (location)"
@@ -11642,9 +11832,6 @@ msgstr ""
 
 #~ msgid "Export color table"
 #~ msgstr "색상 테이블 내보내기"
-
-#~ msgid "Export database table"
-#~ msgstr "데이터베이스 테이블 내보내기"
 
 #~ msgid "Export raster map"
 #~ msgstr "래스터 지도 내보내기"
@@ -11915,9 +12102,6 @@ msgstr ""
 #~ msgid "Query colors by value"
 #~ msgstr "값으로 색상 질의"
 
-#~ msgid "Query raster maps"
-#~ msgstr "래스터 지도 질의"
-
 #~ msgid "Query values by coordinates"
 #~ msgstr "좌표로 값 질의"
 
@@ -12004,9 +12188,6 @@ msgstr ""
 
 #~ msgid "Removes outliers from vector point data."
 #~ msgstr "벡터 점 자료로부터 이상치를 제거합니다."
-
-#~ msgid "Removes space time datasets from temporal database."
-#~ msgstr "시간 데이터베이스로부터 시공간 자료세트를 제거합니다"
 
 #~ msgid "Render all map displays"
 #~ msgstr "모든 지도 디스플레이 표시"
@@ -12161,17 +12342,11 @@ msgstr ""
 #~ msgid "Unknown format '{0}'."
 #~ msgstr "알려지지 않은 포맷 '{0}'."
 
-#~ msgid "Unpack raster map"
-#~ msgstr "래스터 지도 풀기"
-
 #~ msgid "Unpack vector map"
 #~ msgstr "벡터 지도 풀기"
 
 #~ msgid "Update database values from vector"
 #~ msgstr "벡터로부터 데이터베이스값 갱신"
-
-#~ msgid "Update map statistics"
-#~ msgstr "지도 통계 갱신"
 
 #~ msgid "Updates or removes installed GRASS AddOns extension(s)."
 #~ msgstr "설치된 GRASS 애드온 확장을 갱신하거나 제거합니다"

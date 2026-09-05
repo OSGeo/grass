@@ -10,7 +10,7 @@ Usage:
     output = "temp_1950_2012"
     directory = "/tmp"
     title = "My new dataset"
-    descr = "May new shiny dataset"
+    descr = "My new shiny dataset"
     location = None
     link = True
     exp = True
@@ -31,10 +31,8 @@ Usage:
     )
 
 
-(C) 2012-2026 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2026 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """

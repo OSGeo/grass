@@ -83,7 +83,8 @@ Further notes for various platforms can be found on a dedicated
 [wiki page](https://grasswiki.osgeo.org/wiki/Compile_and_Install).
 
 Before creating a PR, please test your changes.
-Refer to [testing README](./testsuite/README.md) for details.
+See the [testing documentation](./doc/development/testing.md) for how to run
+the tests and how to write new ones.
 Once you create a PR, a series of automated checks which will run on your pull request.
 This is a part of the standard iterative process of integrating
 changes into the main code, so if that happens,
