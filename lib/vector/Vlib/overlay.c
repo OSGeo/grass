@@ -8,10 +8,8 @@
    This is file is just example and starting point for writing overlay
    functions!!!
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Radim Blazek
  */
@@ -99,10 +97,10 @@ int Vect_overlay(struct Map_info *AMap, int atype, struct ilist *AList,
    \return 0 on error
  */
 int Vect_overlay_and(struct Map_info *AMap, int atype,
-                     struct ilist *AList UNUSED, struct ilist *AAList UNUSED,
-                     struct Map_info *BMap, int btype,
-                     struct ilist *BList UNUSED, struct ilist *BAList UNUSED,
-                     struct Map_info *OMap)
+                     struct ilist *AList G_UNUSED,
+                     struct ilist *AAList G_UNUSED, struct Map_info *BMap,
+                     int btype, struct ilist *BList G_UNUSED,
+                     struct ilist *BAList G_UNUSED, struct Map_info *OMap)
 {
     int i, j, k, line, altype, bltype, oltype, area, centr;
     struct line_pnts *Points;

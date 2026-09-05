@@ -7,13 +7,9 @@
  *
  * PURPOSE:      Correction of the v.growing output
  *
- * COPYRIGHT:    (C) 2006 by Politecnico di Milano -
- *                             Polo Regionale di Como
- *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 Politecnico di Milano - Polo Regionale di Como
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ********************************************************************/
 
@@ -23,7 +19,7 @@
 #include <math.h>
 #include "correction.h"
 
-void P_Sparse_Correction(struct Map_info *In UNUSED, struct Map_info *Out,
+void P_Sparse_Correction(struct Map_info *In G_UNUSED, struct Map_info *Out,
                          struct Map_info *Terrain,
                          struct Cell_head *Elaboration,
                          struct bound_box General, struct bound_box Overlap,

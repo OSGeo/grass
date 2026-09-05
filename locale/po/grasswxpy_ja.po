@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ja/>\n"
@@ -449,26 +449,6 @@ msgstr ""
 msgid "Animation Tool"
 msgstr ""
 
-msgid "Main Toolbar"
-msgstr ""
-
-msgid "Animation Toolbar"
-msgstr ""
-
-msgid "Misc Toolbar"
-msgstr "マップツールバー "
-
-msgid "Loading data"
-msgstr ""
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr ""
-
-#, python-format
-msgid "to %(to)s"
-msgstr ""
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
@@ -492,6 +472,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr ""
+
+msgid "Animation Toolbar"
+msgstr ""
+
+msgid "Misc Toolbar"
+msgstr "マップツールバー "
+
+msgid "Loading data"
+msgstr ""
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -751,6 +755,19 @@ msgstr "選択レコードの修正"
 msgid "Display selected"
 msgstr "表示選択"
 
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "ツール"
+
+#, fuzzy
+msgid "Script API"
+msgstr "編集開始 "
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "GRASSのヘルプ "
+
 msgid "Classic (labels only)"
 msgstr "クラシック（ラベルのみ）"
 
@@ -816,6 +833,11 @@ msgstr ""
 
 msgid "PyGRASS"
 msgstr ""
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS Tools"
+msgstr "GRASSのヘルプ "
 
 #, python-brace-format
 msgid ""
@@ -993,6 +1015,13 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+#, fuzzy
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "元のマップセットの選択："
+
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr ""
+
 msgid "Link external data"
 msgstr ""
 
@@ -1142,6 +1171,21 @@ msgid "Failed to read maps from project <{l}>."
 msgstr "ロケーション <{l}> からマップの読み込みに失敗しました."
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr "ロケーション <{l}> からマップセットの読み込みに失敗しました."
+
+#, fuzzy, python-brace-format
+#| msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr "マップ {elem} <{name}> マップセット<{mapset}>は既に存在します. 上書きしてよろしいですか ?"
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr "マップ {elem} <{name}> マップセット<{mapset}>は既に存在します. 上書きしてよろしいですか ?"
 
@@ -1200,6 +1244,20 @@ msgstr "新しい名前"
 msgid "Rename map"
 msgstr "マップセット名変更"
 
+#, fuzzy
+#| msgid "Rename map"
+msgid "Rename dataset"
+msgstr "マップセット名変更"
+
+#, fuzzy, python-brace-format
+#| msgid "Renaming map <{name}>..."
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr "<{name}> のマップ名を変更中 ..."
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr "{cmd} -- 成功"
+
 msgid "Cannot rename mapset"
 msgstr ""
 
@@ -1217,10 +1275,6 @@ msgstr ""
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr "<{name}> のマップ名を変更中 ..."
-
-#, python-brace-format
-msgid "{cmd} -- completed"
-msgstr "{cmd} -- 成功"
 
 msgid "No map selected for copying."
 msgstr "コピーするマップが選択されていません"
@@ -1259,9 +1313,13 @@ msgstr ""
 msgid "g.remove completed"
 msgstr "g.remove が完了しました"
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete map <{m}>?"
+msgstr "変更を保存しますか? "
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
+msgstr "変更を保存しますか? "
 
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
@@ -1274,19 +1332,156 @@ msgstr "マップ削除"
 msgid "Deleting {name}..."
 msgstr "削除中 {name}..."
 
+#, fuzzy, python-brace-format
+#| msgid "Deleting {name}..."
+msgid "Deleting {n} maps..."
+msgstr "削除中 {name}..."
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "変更を保存しますか? "
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "変更を保存しますか? "
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr "変更を保存しますか? "
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "マップセットを削除"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+msgid "Delete dataset"
+msgstr "選択したマップセット名を変更する "
+
+#, fuzzy
+#| msgid "Deleting {name}..."
+msgid "Deleting datasets..."
+msgstr "削除中 {name}..."
+
+#, fuzzy
+#| msgid "g.remove completed"
+msgid "t.remove completed"
+msgstr "g.remove が完了しました"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "変更を保存しますか? "
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr "変更を保存しますか? "
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister map"
+msgstr "ラスターマップ"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregistering map..."
+msgstr "ラスターマップ"
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display animation"
+msgstr "投影法表示"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "ラスターマップ"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister maps"
+msgstr "ラスターマップ"
+
+#, fuzzy
+#| msgid "Updates vector map metadata."
+msgid "Update metadata"
+msgstr "ベクトルマップメタデータ更新"
+
+#, fuzzy
+msgid "Display &temporal extent"
+msgstr "ジオメトリ表示"
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display &animation"
+msgstr "投影法表示"
+
+#, fuzzy
+msgid "&Rename dataset"
+msgstr "投影法の管理 "
+
+#, fuzzy
+msgid "&Delete dataset only"
+msgstr "選択したマップセット名を変更する "
+
+#, fuzzy
+#| msgid "Export database table"
+msgid "&Export dataset"
+msgstr "データベーステーブルのエクスポート "
+
+msgid "Show &metadata"
 msgstr ""
 
 msgid "&Copy"
 msgstr "コピー &C"
 
 msgid "Copy &name"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr "レイヤ表示 &D"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister map"
+msgstr "ラスターマップ"
+
+msgid "&Cut"
 msgstr ""
 
 msgid "&Paste"
@@ -1300,14 +1495,10 @@ msgstr "削除 &D"
 msgid "&Rename"
 msgstr "名前変更(&R)"
 
-msgid "&Display layers"
-msgstr ""
-
-msgid "&Display layer"
-msgstr "レイヤ表示 &D"
-
-msgid "Show &metadata"
-msgstr ""
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Create &temporal dataset"
+msgstr "空のデータベースを作成する"
 
 msgid "&Switch mapset"
 msgstr "マップセット切り替え &S"
@@ -1318,11 +1509,20 @@ msgstr ""
 msgid "&Rename mapset"
 msgstr ""
 
-msgid "Re&load maps"
-msgstr ""
+#, fuzzy
+#| msgid "Name of mapset:"
+msgid "Re&load mapset"
+msgstr "マップセット名:"
 
-msgid "&Copy path to mapset"
-msgstr ""
+#, fuzzy
+#| msgid "Show computational extent"
+msgid "Show computational region"
+msgstr "計算範囲表示"
+
+#, fuzzy
+#| msgid "&Copy"
+msgid "&Copy path"
+msgstr "コピー &C"
 
 msgid "&Create mapset"
 msgstr ""
@@ -1334,6 +1534,20 @@ msgstr "レコード削除"
 #, fuzzy
 msgid "&Rename project"
 msgstr "投影法の管理 "
+
+#, fuzzy
+msgid "Re&load project"
+msgstr "GRASSロケーションの再読み込み"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "投影法の選択 "
+
+#, fuzzy
+#| msgid "Copy map"
+msgid "Copy path"
+msgstr "マップのコピー"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1365,15 +1579,39 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #, fuzzy
+#| msgid "&Database"
+msgid "Re&load database"
+msgstr "データベース(&D)"
+
+#, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "選択ロケーションを削除する"
+
+#, fuzzy
+#| msgid "Copy map"
+msgid "Copy paths"
+msgstr "マップのコピー"
 
 msgid "&Delete mapsets"
 msgstr ""
 
 #, fuzzy
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "マップセットへのアクセスを管理"
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "&Merge datasets"
+msgstr "データベース管理"
+
+#, fuzzy
+msgid "&Delete datasets only"
+msgstr "選択したマップセット名を変更する "
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "マップセットを削除"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -3242,10 +3480,33 @@ msgstr "コマンドを実行せずに画面を閉じる (Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "コマンド実行 (Ctrl+R)"
 
+msgid "Copy as Shell command"
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy map"
+msgid "Copy as Python"
+msgstr "マップのコピー"
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "ベクトル設定"
+
 msgid "Copy"
 msgstr "コピー "
 
-msgid "Copy the current command string to the clipboard"
+msgid "More copy formats"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "ラスター設定"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "クリップボードに現在のコマンド文をコピー"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3260,8 +3521,67 @@ msgstr "終了時にダイアログを閉じる"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "コマンドが成功した場合はダイアログを閉じます. ダイアログ（'コマンド'タブ）でこの設定を変更します."
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Pythonスクリプト"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Pythonスクリプト"
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' クリップボードにコピーしました"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'%s' クリップボードにコピーしました"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' クリップボードにコピーしました"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+msgid "Invalid Data"
+msgstr "間違った領域"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "エラー "
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' クリップボードにコピーしました"
 
 msgid "Required"
@@ -3872,6 +4192,9 @@ msgstr "対話形式の入力を許可"
 
 msgid "Verbosity level:"
 msgstr "冗長レベル："
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
@@ -5361,8 +5684,7 @@ msgid ""
 "{messages}"
 msgstr ""
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Zoom to scatter plot extend"
@@ -5425,6 +5747,287 @@ msgstr ""
 msgid "Remove selected class"
 msgstr ""
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "Choose GRASS data directory:"
+msgid "Select notebook directory"
+msgstr "GRASSデータディレクトリの選択："
+
+#, fuzzy
+msgid "Save in project: {}"
+msgstr "新しいロケーションを作成しますか？"
+
+msgid "Options"
+msgstr "オプション"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "参照 "
+
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Integrated"
+msgstr "中間"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "ダイアログを閉じる"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "エラー "
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "エラー "
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr " EPGSコードが読めません: %s"
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import"
+msgid "Import file"
+msgstr "インポート"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "名前変更 "
+
+msgid "No page for export is currently selected."
+msgstr ""
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save file as..."
+msgid "Export file as..."
+msgstr "名前を付けて保存する..."
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "モデルのエクスポート <%s>"
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr " EPGSコードが読めません: %s"
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "新しいマップセット名："
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create location"
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "ロケーションを作成できません"
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+msgid "New file '{}' created."
+msgstr ""
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr ""
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "サーバー:"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook storage does not exist: {}"
+msgstr ""
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File <%s> not found"
+msgid "File not found: {}"
+msgstr "ファイル <%s> は見つかりませんでした"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "ファイルはすでに存在します"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "ファイルはすでに存在します"
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "サーバー:"
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "新しいモデルの作成 "
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to Python"
+msgid "Export notebook"
+msgstr "Pythonにエキスポート"
+
 #, fuzzy
 msgid "GRASS"
 msgstr "GRASSのヘルプ "
@@ -5453,6 +6056,30 @@ msgstr ""
 
 msgid "Console"
 msgstr ""
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "3Dビューモードは使用できません"
 
 #, fuzzy
 msgid "Map Swipe Tool"
@@ -5603,6 +6230,11 @@ msgstr "マップレイヤーの削除 "
 
 msgid "Quit GRASS GUI"
 msgstr "GRASS GUI 終了 "
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
@@ -5838,6 +6470,14 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "ラスターマップの作成"
 
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "ユーザ定義最小値"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr "新しいワークスペース作成 (Ctrl+N)"
 
@@ -5927,12 +6567,13 @@ msgstr ""
 msgid "Cartographic Composer"
 msgstr "カートグラフィックコンポーザー"
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "描画モデラー"
+
 msgid "Launch user-defined script"
 msgstr ""
-
-#, fuzzy
-msgid "New display"
-msgstr "画面消去 "
 
 #, fuzzy
 msgid "Python code editor"
@@ -6325,6 +6966,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 #, fuzzy
@@ -6975,9 +7622,6 @@ msgstr "GRASSアドオンからエクステンションを取得＆インスト�
 msgid "List of extensions - double-click to install"
 msgstr ""
 
-msgid "Options"
-msgstr "オプション"
-
 msgid "&Install"
 msgstr "インストール(&I)"
 
@@ -7180,6 +7824,9 @@ msgstr "式をファイルに保存"
 
 msgid "Load expression from file"
 msgstr "式をファイルからロード"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "クリップボードに現在のコマンド文をコピー"
 
 msgid "exponent"
 msgstr "指数"
@@ -9619,7 +10266,7 @@ msgstr "選択したマップセット名を変更する "
 msgid "Do you want to cancel dataset download?"
 msgstr "GRASS ロケーションを作成しますか <%s>?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr ""
 
 msgid "Timeline Tool"
@@ -9717,8 +10364,7 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr ""
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Temporal Plot Tool"
@@ -9726,6 +10372,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -9743,6 +10390,7 @@ msgstr ""
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -11182,6 +11830,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+#~ msgid "New display"
+#~ msgstr "画面消去 "
+
+#, fuzzy
 #~ msgid "Do you want to create a new project (also known as location)?"
 #~ msgstr "GRASS ロケーションを作成しますか <%s>?"
 
@@ -11206,9 +11858,6 @@ msgstr ""
 #, python-format
 #~ msgid "%s. cleaning tool removed, will be ignored"
 #~ msgstr "%s. クリーニングツールは削除されたか, 無視されます"
-
-#~ msgid "&Database"
-#~ msgstr "データベース(&D)"
 
 #~ msgid "&Fetch"
 #~ msgstr "取得(&F)"
@@ -11546,9 +12195,6 @@ msgstr ""
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "地理参照パラメータの定義方法の選択"
 
-#~ msgid "Choose projection"
-#~ msgstr "投影法の選択 "
-
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "主題図作成等の属性データの分類"
 
@@ -11702,9 +12348,6 @@ msgstr ""
 #~ msgid "Convex hull"
 #~ msgstr "凸包 "
 
-#~ msgid "Copy map"
-#~ msgstr "マップのコピー"
-
 #~ msgid "Copy table"
 #~ msgstr "テーブルコピー"
 
@@ -11790,9 +12433,6 @@ msgstr ""
 
 #~ msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
 #~ msgstr "異なるロケーションの移動コストを各セルの情報として表現したラスターマップを作成する "
-
-#~ msgid "Creates an empty database."
-#~ msgstr "空のデータベースを作成する"
 
 #~ msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
 #~ msgstr "ベクトルマップの指定されたレイヤーに新しい属性テーブルを作成・追加"
@@ -11898,9 +12538,6 @@ msgstr ""
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "画像モデラーに関する情報表示"
 
-#~ msgid "Display map projection"
-#~ msgstr "投影法表示"
-
 #~ msgid "Display mode"
 #~ msgstr "表示モード"
 
@@ -12004,17 +12641,11 @@ msgstr ""
 #~ msgid "Export color table"
 #~ msgstr "カラーテーブルをエキスポート"
 
-#~ msgid "Export database table"
-#~ msgstr "データベーステーブルのエクスポート "
-
 #~ msgid "Export raster map"
 #~ msgstr "ラスターマップのエクスポート "
 
 #~ msgid "Export to PDF"
 #~ msgstr "PDFへエクスポート"
-
-#~ msgid "Export to Python"
-#~ msgstr "Pythonにエキスポート"
 
 #~ msgid "Export to image"
 #~ msgstr "イメージにエキスポート"
@@ -12140,9 +12771,6 @@ msgstr ""
 
 #~ msgid "GRASS GIS Vector Digitizer"
 #~ msgstr "GRASS GIS ベクトルデジタイザ"
-
-#~ msgid "GRASS help"
-#~ msgstr "GRASSのヘルプ "
 
 #~ msgid "GRASS raster map layer data resampling capability."
 #~ msgstr "ラスターマップレイヤーの再サンプリング機能 "
@@ -12271,9 +12899,6 @@ msgstr ""
 #~ msgid "IDW from vector points"
 #~ msgstr "ベクトルポイントでの加重平均補間"
 
-#~ msgid "Import"
-#~ msgstr "インポート"
-
 #~ msgid "Import 3D raster data"
 #~ msgstr "3Dラスターデータのインポート "
 
@@ -12337,10 +12962,6 @@ msgstr ""
 
 #~ msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
 #~ msgstr "テンション（ＲＳＴ）アルゴリズムによる正規化スプライン曲線を使用して3Dグリッドのポイントを補間する"
-
-#, fuzzy
-#~ msgid "Invalid input data"
-#~ msgstr "間違った領域"
 
 #, python-format
 #~ msgid "Invalid map size %d,%d\n"
@@ -12500,9 +13121,6 @@ msgstr ""
 
 #~ msgid "Manage colors"
 #~ msgstr "カラー調整 "
-
-#~ msgid "Manage databases"
-#~ msgstr "データベース管理"
 
 #~ msgid "Manage image colors"
 #~ msgstr "画像カラーの管理 "
@@ -13100,10 +13718,6 @@ msgstr ""
 #~ msgid "Select output vector map:"
 #~ msgstr "出力ベクトルマップ選択："
 
-#, fuzzy
-#~ msgid "Select space time raster dataset(s):"
-#~ msgstr "元のマップセットの選択："
-
 #~ msgid "Selects features from vector map (A) by features from other vector map (B)."
 #~ msgstr "ベクトルマップ（B）からのフィーチャによって他のベクトルマップ（A）からフィーチャを選択"
 
@@ -13337,9 +13951,6 @@ msgstr ""
 #~ msgid "Type to search database by map type or name. Use prefix 'r:', 'v:' and 'r3:'to show only raster, vector or 3D raster data, respectively. Use Python regular expressions to refine your search."
 #~ msgstr "マップタイプや名前でデータベースを検索します プレフィックス 'r:', 'v:' 及び 'r3:'を使用するとラスタ,ベクトル3Dラスタのみを表示できます.Python正規表現を使用して検索を絞り込みます."
 
-#~ msgid "Unable to create location"
-#~ msgstr "ロケーションを作成できません"
-
 #~ msgid "Unable to delete location"
 #~ msgstr "ロケーションを作成できません"
 
@@ -13414,9 +14025,6 @@ msgstr ""
 
 #~ msgid "Update raster map statistics"
 #~ msgstr "ラスターマップ統計の更新 "
-
-#~ msgid "Updates vector map metadata."
-#~ msgstr "ベクトルマップメタデータ更新"
 
 #~ msgid "Uploads raster values at positions of vector points to the table."
 #~ msgstr "ポイントの位置のラスターの値をテーブルにアップロード"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2026-03-05 11:44+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hi/>\n"
@@ -444,26 +444,6 @@ msgstr "अमान्य"
 msgid "Animation Tool"
 msgstr "एनिमेशन टूल (Animation Tool)"
 
-msgid "Main Toolbar"
-msgstr "मुख्य टूलबार"
-
-msgid "Animation Toolbar"
-msgstr "एनिमेशन टूलबार (Animation Toolbar)"
-
-msgid "Misc Toolbar"
-msgstr "विविध टूलबार"
-
-msgid "Loading data"
-msgstr "डेटा लोड हो रहा है"
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr " ({c} में से {p})"
-
-#, python-format
-msgid "to %(to)s"
-msgstr "तक"
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= और %s= परस्पर अनन्य हैं।"
@@ -486,6 +466,30 @@ msgstr "कृपया सूची में केवल एक परत ज
 
 msgid "No map series nor space-time dataset is added."
 msgstr "कोई मानचित्र श्रृंखला या स्पेस-टाइम डेटासेट नहीं जोड़ा गया है।"
+
+msgid "Main Toolbar"
+msgstr "मुख्य टूलबार"
+
+msgid "Animation Toolbar"
+msgstr "एनिमेशन टूलबार (Animation Toolbar)"
+
+msgid "Misc Toolbar"
+msgstr "विविध टूलबार"
+
+msgid "Loading data"
+msgstr "डेटा लोड हो रहा है"
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr " ({c} में से {p})"
+
+#, python-format
+msgid "to %(to)s"
+msgstr "तक"
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
+msgstr ""
 
 msgid "Rendering map layers"
 msgstr "मानचित्र परतों को रेंडर किया जा रहा है"
@@ -740,6 +744,21 @@ msgstr "चयनित रिकॉर्ड को संपादित क�
 msgid "Display selected"
 msgstr "चयनित को प्रदर्शित करें"
 
+#, fuzzy
+#| msgid "Tools"
+msgid "Tools API"
+msgstr "औजार"
+
+#, fuzzy
+#| msgid "Script editor"
+msgid "Script API"
+msgstr "स्क्रिप्ट संपादक"
+
+#, fuzzy
+#| msgid "GRASS API:"
+msgid "PyGRASS API"
+msgstr "घास एपीआई:"
+
 msgid "Classic (labels only)"
 msgstr "क्लासिक (केवल लेबल)"
 
@@ -805,6 +824,11 @@ msgstr "स्क्रिप्ट पैकेज"
 
 msgid "PyGRASS"
 msgstr "पाईग्रास"
+
+#, fuzzy
+#| msgid "Tools"
+msgid "GRASS Tools"
+msgstr "औजार"
 
 #, python-brace-format
 msgid ""
@@ -978,6 +1002,16 @@ msgstr "x,y,z डेटा से रास्टर मैप बनाएं [
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr "x,y,z डेटा से वेक्टर मैप बनाएं [v.in.ascii]"
 
+#, fuzzy
+#| msgid "Import raster data  [r.import]"
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "रास्टर डेटा इम्पोर्ट करें [r.import]"
+
+#, fuzzy
+#| msgid "Import vector data  [v.import]"
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "वेक्टर डेटा इम्पोर्ट करें [v.import]"
+
 msgid "Link external data"
 msgstr "बाहरी डेटा लिंक करें"
 
@@ -1125,6 +1159,22 @@ msgid "Failed to read maps from project <{l}>."
 msgstr "प्रोजेक्ट <{l}> से मैप्स पढ़ने में विफल।"
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Failed to read mapsets from project <{l}>."
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr "प्रोजेक्ट <{l}> से मैपसेट्स पढ़ने में विफल।"
+
+#, fuzzy, python-brace-format
+#| msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr "{elem} प्रकार का मानचित्र <{name}> पहले से ही मैपसेट <{mapset}> में मौजूद है। क्या आप इसे ओवरराइट करना चाहते हैं?"
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr "{elem} प्रकार का मानचित्र <{name}> पहले से ही मैपसेट <{mapset}> में मौजूद है। क्या आप इसे ओवरराइट करना चाहते हैं?"
 
@@ -1186,6 +1236,20 @@ msgstr "नया नाम"
 msgid "Rename map"
 msgstr "मानचित्र का नाम बदलें"
 
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "Rename dataset"
+msgstr "&मैपसेट का नाम बदलें"
+
+#, fuzzy, python-brace-format
+#| msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr "मैपसेट <{oldmapset}> का नाम बदलकर <{newmapset}> करना पूर्ण हुआ"
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr "{cmd} -- पूर्ण हुआ"
+
 msgid "Cannot rename mapset"
 msgstr "मैपसेट का नाम नहीं बदला जा सकता"
 
@@ -1203,10 +1267,6 @@ msgstr "क्या आप वास्तव में मानचित्�
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr "मानचित्र <{name}> का नाम बदला जा रहा है..।"
-
-#, python-brace-format
-msgid "{cmd} -- completed"
-msgstr "{cmd} -- पूर्ण हुआ"
 
 msgid "No map selected for copying."
 msgstr "मानचित्रों को अन्य प्रोजेक्ट में ले जाने या कॉपी करने के लिए, कृपया उन्हें गंतव्य प्रोजेक्ट के मैपसेट में ड्रैग (drag) करें"
@@ -1241,8 +1301,14 @@ msgstr "RReepprroojjeeccttiioonn  iiss  nnoott  iimmpplleemmeenntteedd  ffoorr  
 msgid "g.remove completed"
 msgstr "gg..rreemmoovvee  पcूरoा mहpुआleted"
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete map <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete maps <{m}>?"
 msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
 
 #, python-brace-format
@@ -1256,20 +1322,166 @@ msgstr "मैप हटाएं"
 msgid "Deleting {name}..."
 msgstr "Deleting {name}..।"
 
+#, fuzzy, python-brace-format
+#| msgid "Deleting {name}..."
+msgid "Deleting {n} maps..."
+msgstr "Deleting {name}..।"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete {n} maps?"
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Do you really want to हटाएं {n} maps?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "चयनित मानचित्र-सेट (mapset) हटाएं"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "Delete dataset"
+msgstr "&मैपसेट हटाएं"
+
+#, fuzzy
+#| msgid "Deleting {name}..."
+msgid "Deleting datasets..."
+msgstr "Deleting {name}..।"
+
+#, fuzzy
+#| msgid "g.remove completed"
+msgid "t.remove completed"
+msgstr "gg..rreemmoovvee  पcूरoा mहpुआleted"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "TToo  mmoovvee  oorr  ccooppyy  mmaappss  ttoo  ootthheerr  mmaappsseettss,,  uunnlloocckk  eeddiittiinngg  ooff  ootthheerr  mmaappsseettss"
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr "TToo  mmoovvee  oorr  ccooppyy  mmaappss  ttoo  ootthheerr  पप््ररोोजजेेकक््टट,,  pplleeaassee  ddrraagg  tthheemm  ttoo  aa  ममैैपपससेेटट  iinn  tthhee  ddeessttiinnaattiioonn  पप््ररोोजजेेकक््टट"
 
-msgid "&Cut"
-msgstr "&काटें"
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete {n} maps?"
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Do you really want to हटाएं {n} maps?"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister map"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregistering map..."
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display animation"
+msgstr "मानचित्र प्रदर्शित करें"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "रेखापुंज मानचित्र"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister maps"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+#, fuzzy
+#| msgid "Show &metadata"
+msgid "Update metadata"
+msgstr "SShhooww  &&mmeettaaddaattaa"
+
+#, fuzzy
+#| msgid "Display extent"
+msgid "Display &temporal extent"
+msgstr "प्रदर्शन सीमा"
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display &animation"
+msgstr "मानचित्र प्रदर्शित करें"
+
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "&Rename dataset"
+msgstr "&मैपसेट का नाम बदलें"
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "&Delete dataset only"
+msgstr "&मैपसेट हटाएं"
+
+#, fuzzy
+#| msgid "Import data?"
+msgid "&Export dataset"
+msgstr "डेटा आयात करें?"
+
+msgid "Show &metadata"
+msgstr "SShhooww  &&mmeettaaddaattaa"
 
 msgid "&Copy"
 msgstr "&कांपी करें"
 
 msgid "Copy &name"
 msgstr "&name कॉपी करें"
+
+msgid "&Display layers"
+msgstr "&लेयर्स दिखाएं"
+
+msgid "&Display layer"
+msgstr "&लेयर दिखाएं"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister map"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+msgid "&Cut"
+msgstr "&काटें"
 
 msgid "&Paste"
 msgstr "&चिपकाएं"
@@ -1282,14 +1494,10 @@ msgstr "&हटाएं"
 msgid "&Rename"
 msgstr "&नाम बदलें"
 
-msgid "&Display layers"
-msgstr "&लेयर्स दिखाएं"
-
-msgid "&Display layer"
-msgstr "&लेयर दिखाएं"
-
-msgid "Show &metadata"
-msgstr "SShhooww  &&mmeettaaddaattaa"
+#, fuzzy
+#| msgid "Invalid input temporal dataset"
+msgid "Create &temporal dataset"
+msgstr "अमान्य इनपुट अस्थायी डेटासेट"
 
 msgid "&Switch mapset"
 msgstr "&मैपसेट बदलें"
@@ -1300,10 +1508,19 @@ msgstr "&मैपसेट हटाएं"
 msgid "&Rename mapset"
 msgstr "&मैपसेट का नाम बदलें"
 
-msgid "Re&load maps"
+#, fuzzy
+#| msgid "Re&load maps"
+msgid "Re&load mapset"
 msgstr "RRee&&llooaadd  mmaappss"
 
-msgid "&Copy path to mapset"
+#, fuzzy
+#| msgid "Show computational region extent"
+msgid "Show computational region"
+msgstr "कम्प्यूटेशनल क्षेत्र की सीमा दिखाएँ"
+
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "&Copy path"
 msgstr "&म्यापसेट के पॅंथ की कांपी करें"
 
 msgid "&Create mapset"
@@ -1314,6 +1531,21 @@ msgstr "&प्रोजेक्ट हटाएं"
 
 msgid "&Rename project"
 msgstr "&प्रोजेक्ट का नाम बदलें"
+
+#, fuzzy
+#| msgid "Reload GRASS projects"
+msgid "Re&load project"
+msgstr "GRASS प्रोजेक्ट्स को पुनः लोड करें"
+
+#, fuzzy
+#| msgid "Source projection:"
+msgid "Show projection info"
+msgstr "स्रोत प्रक्षेपण:"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy path"
+msgstr "सीवीएस पथ"
 
 msgid "Change Label"
 msgstr "लेबल बदलें"
@@ -1336,14 +1568,41 @@ msgstr "&डेटा कैटलॉग से GRASS डेटाबेस ह�
 msgid "&Delete GRASS database from disk"
 msgstr "&GRASS डेटाबेस को डिस्क से हटाएं"
 
+#, fuzzy
+#| msgid "Reload default table"
+msgid "Re&load database"
+msgstr "डिफ़ॉल्ट तालिका पुनः लोड करें"
+
 msgid "&Delete projects (locations)"
 msgstr "&प्रोजेक्ट्स (लोकेशन) हटाएं"
+
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "Copy paths"
+msgstr "&म्यापसेट के पॅंथ की कांपी करें"
 
 msgid "&Delete mapsets"
 msgstr "&Delete mapsets"
 
-msgid "&Copy paths to mapsets"
-msgstr "&म्यापसेट्स के कांपी पॄंथ करें"
+#, fuzzy
+#| msgid "&Copy path to mapset"
+msgid "&Copy paths"
+msgstr "&म्यापसेट के पॅंथ की कांपी करें"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "&Merge datasets"
+msgstr "&Delete mapsets"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "&Delete datasets only"
+msgstr "&Delete mapsets"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "चयनित मानचित्र-सेट (mapset) हटाएं"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -1392,9 +1651,7 @@ msgid ""
 "Error loading attribute data. Record number: %(rec)d. Unable to convert value '%(val)s' in key column (%(key)s) to integer.\n"
 "\n"
 "Details: %(detail)s"
-msgstr ""
-"विशेषता डेटा लोड करने में त्रुटि. रिकॉर्ड संख्या: %(rec)d. कुंजी कॉलम (%(key)s) में मान '%(val)s' को पूर्णांक में परिवर्तित करने में असमर्थ।\\n\\n"
-"विवरण: %(detail)s"
+msgstr "विशेषता डेटा लोड करने में त्रुटि. रिकॉर्ड संख्या: %(rec)d. कुंजी कॉलम (%(key)s) में मान '%(val)s' को पूर्णांक में परिवर्तित करने में असमर्थ।\\n\\nविवरण: %(detail)s"
 
 msgid "Sort ascending"
 msgstr "छोटे से बड़े क्रम में क्रमबद्ध करें"
@@ -1571,9 +1828,7 @@ msgid ""
 "Invalid SQL select statement.\n"
 "\n"
 "%s"
-msgstr ""
-"विशेषता डेटा लोड करना विफल रहा.\\n"
-"अमान्य SQL चयन कथन.\\n\\n%s"
+msgstr "विशेषता डेटा लोड करना विफल रहा.\\nअमान्य SQL चयन कथन.\\n\\n%s"
 
 msgid "Database connection"
 msgstr "डेटाबेस कनेक्शन"
@@ -1626,9 +1881,7 @@ msgid ""
 "Selected columns\n"
 "%s\n"
 "will PERMANENTLY removed from table. Do you want to drop the columns?"
-msgstr ""
-"चयनित कॉलम\\n%s\\n"
-"तालिका से स्थायी रूप से हटा दिए जाएंगे। क्या आप कॉलम हटाना चाहते हैं?"
+msgstr "चयनित कॉलम\\n%s\\nतालिका से स्थायी रूप से हटा दिए जाएंगे। क्या आप कॉलम हटाना चाहते हैं?"
 
 msgid "List of layers"
 msgstr "परतों की सूची"
@@ -1706,9 +1959,7 @@ msgstr "&लेयर संशोधित करें"
 msgid ""
 "Unable to get list of tables.\n"
 "Please use db.connect to set database parameters."
-msgstr ""
-"तालिकाओं की सूची प्राप्त करने में असमर्थ।\\n"
-"कृपया डेटाबेस पैरामीटर सेट करने के लिए db.connect का उपयोग करें।"
+msgstr "तालिकाओं की सूची प्राप्त करने में असमर्थ।\\nकृपया डेटाबेस पैरामीटर सेट करने के लिए db.connect का उपयोग करें।"
 
 msgid "Unable to create new table. Table name or key column name is missing."
 msgstr "नई तालिका बनाने में असमर्थ. तालिका का नाम या कुंजी स्तंभ का नाम गुम है।"
@@ -1749,9 +2000,7 @@ msgid ""
 "No attribute table found.\n"
 "\n"
 "Do you want to create a new attribute table and defined a link to vector map <%s>?"
-msgstr ""
-"कोई विशेषता तालिका नहीं मिली.\\n\\n"
-"क्या आप एक नई विशेषता तालिका बनाना चाहते हैं और वेक्टर मानचित्र <%s> के लिए एक लिंक परिभाषित करना चाहते हैं?"
+msgstr "कोई विशेषता तालिका नहीं मिली.\\n\\nक्या आप एक नई विशेषता तालिका बनाना चाहते हैं और वेक्टर मानचित्र <%s> के लिए एक लिंक परिभाषित करना चाहते हैं?"
 
 msgid "Create table?"
 msgstr "टेबल बनाएं?"
@@ -2001,9 +2250,7 @@ msgstr "जारी रखने के लिए आपको एक स्र
 msgid ""
 "No maps in selected group <%s>.\n"
 "Please edit group or select another group."
-msgstr ""
-"चयनित समूह <%s> में कोई मानचित्र नहीं।\\n"
-"कृपया समूह संपादित करें या कोई अन्य समूह चुनें।"
+msgstr "चयनित समूह <%s> में कोई मानचित्र नहीं।\\nकृपया समूह संपादित करें या कोई अन्य समूह चुनें।"
 
 msgid "Manage Ground Control Points"
 msgstr "ग्राउंड कंट्रोल पॉइंट प्रबंधित करें"
@@ -2027,10 +2274,7 @@ msgid ""
 "\n"
 "East: %(coor0)s \n"
 "North: %(coor1)s"
-msgstr ""
-"GCP नंबर %(key)s के लिए %(coor)s निर्देशांक सेट करें? \\n\\n"
-"पूर्व: %(coor0)s \\n"
-"उत्तर: %(coor1)s"
+msgstr "GCP नंबर %(key)s के लिए %(coor)s निर्देशांक सेट करें? \\n\\nपूर्व: %(coor0)s \\nउत्तर: %(coor1)s"
 
 msgid "Writing POINTS file failed"
 msgstr "POINTS फ़ाइल लिखना विफल रहा"
@@ -2054,11 +2298,7 @@ msgid ""
 "3+ points needed for 1st order,\n"
 "6+ points for 2nd order, and\n"
 "10+ points for 3rd order."
-msgstr ""
-"चयनित सुधार विधि के लिए अपर्याप्त अंक परिभाषित और सक्रिय (जांचे गए) (क्रम: %d)।\\n"
-"पहले क्रम के लिए 3+ अंक,\\n"
-"दूसरे क्रम के लिए 6+ अंक, और\\n"
-"तीसरे क्रम के लिए 10+ अंक।"
+msgstr "चयनित सुधार विधि के लिए अपर्याप्त अंक परिभाषित और सक्रिय (जांचे गए) (क्रम: %d)।\\nपहले क्रम के लिए 3+ अंक,\\nदूसरे क्रम के लिए 6+ अंक, और\\nतीसरे क्रम के लिए 10+ अंक।"
 
 #, python-brace-format
 msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
@@ -2178,10 +2418,7 @@ msgid ""
 "Highlight GCPs with an RMS error larger than \n"
 "mean + standard deviation * given factor. \n"
 "Recommended values for this factor are between 1 and 2."
-msgstr ""
-"\\n"
-"माध्य + मानक विचलन * दिए गए कारक से बड़ी आरएमएस त्रुटि वाले जीसीपी को हाइलाइट करें। \\n"
-"इस कारक के लिए अनुशंसित मान 1 और 2 के बीच हैं।"
+msgstr "\\nमाध्य + मानक विचलन * दिए गए कारक से बड़ी आरएमएस त्रुटि वाले जीसीपी को हाइलाइट करें। \\nइस कारक के लिए अनुशंसित मान 1 और 2 के बीच हैं।"
 
 msgid "Symbol settings"
 msgstr "प्रतीक सेटिंग्स"
@@ -2237,9 +2474,7 @@ msgstr "आरएमएस थ्रेशोल्ड फैक्टर > 0 �
 msgid ""
 "RMS threshold factor is < 1\n"
 "Too many points might be highlighted"
-msgstr ""
-"आरएमएस थ्रेशोल्ड फैक्टर <1\\n"
-"बहुत सारे बिंदुओं को हाइलाइट किया जा सकता है"
+msgstr "आरएमएस थ्रेशोल्ड फैक्टर <1\\nबहुत सारे बिंदुओं को हाइलाइट किया जा सकता है"
 
 #, python-format
 msgid "GCP Manager settings saved to file '%s'."
@@ -2434,23 +2669,17 @@ msgstr "विकल्प:"
 msgid ""
 "Relation doesn't start with data item.\n"
 "Unable to add relation."
-msgstr ""
-"संबंध डेटा आइटम से प्रारंभ नहीं होता.\\n"
-"संबंध जोड़ने में असमर्थ।"
+msgstr "संबंध डेटा आइटम से प्रारंभ नहीं होता.\\nसंबंध जोड़ने में असमर्थ।"
 
 msgid ""
 "Relation doesn't point to GRASS command.\n"
 "Unable to add relation."
-msgstr ""
-"संबंध GRASS कमांड की ओर इंगित नहीं करता.\\n"
-"संबंध जोड़ने में असमर्थ।"
+msgstr "संबंध GRASS कमांड की ओर इंगित नहीं करता.\\nसंबंध जोड़ने में असमर्थ।"
 
 msgid ""
 "No relevant option found.\n"
 "Unable to add relation."
-msgstr ""
-"कोई प्रासंगिक विकल्प नहीं मिला.\\n"
-"संबंध जोड़ने में असमर्थ।"
+msgstr "कोई प्रासंगिक विकल्प नहीं मिला.\\nसंबंध जोड़ने में असमर्थ।"
 
 msgid "Condition"
 msgstr "शर्त"
@@ -2617,9 +2846,7 @@ msgid ""
 "Invalid file, unable to parse XML document.\n"
 "\n"
 "%s"
-msgstr ""
-"मॉडल फ़ाइल <%s> को पढ़ना विफल रहा।\\n"
-"अमान्य फ़ाइल, XML दस्तावेज़ को पार्स करने में असमर्थ।\\n\\n%s"
+msgstr "मॉडल फ़ाइल <%s> को पढ़ना विफल रहा।\\nअमान्य फ़ाइल, XML दस्तावेज़ को पार्स करने में असमर्थ।\\n\\n%s"
 
 msgid "Please wait, loading model..."
 msgstr "कृपया प्रतीक्षा करें, मॉडल लोड हो रहा है..।"
@@ -2775,9 +3002,7 @@ msgstr "स्क्रिप्ट को किसी फ़ाइल मे�
 msgid ""
 "Refresh the script based on the model.\n"
 "It will discard all local changes."
-msgstr ""
-"मॉडल के आधार पर स्क्रिप्ट को ताज़ा करें।\\n"
-"यह सभी स्थानीय परिवर्तनों को हटा देगा।"
+msgstr "मॉडल के आधार पर स्क्रिप्ट को ताज़ा करें।\\nयह सभी स्थानीय परिवर्तनों को हटा देगा।"
 
 msgid "Python"
 msgstr "अजगर"
@@ -2999,9 +3224,7 @@ msgstr "वेक्टर मानचित्र <%s> बनाने मे�
 msgid ""
 "Invalid or empty key column.\n"
 "Unable to create vector map <%s>."
-msgstr ""
-"अमान्य या खाली कुंजी कॉलम.\\n"
-"वेक्टर मानचित्र <%s> बनाने में असमर्थ।"
+msgstr "अमान्य या खाली कुंजी कॉलम.\\nवेक्टर मानचित्र <%s> बनाने में असमर्थ।"
 
 #, python-format
 msgid "Vector map <%s> already exists in the current mapset. Do you want to overwrite it?"
@@ -3189,10 +3412,37 @@ msgstr "कमांड निष्पादित किए बिना इ�
 msgid "Run the command (Ctrl+R)"
 msgstr "कमांड चलाएँ (Ctrl+R)"
 
+#, fuzzy
+#| msgid "Copy all to clipboard"
+msgid "Copy as Shell command"
+msgstr "सभी को क्लिपबोर्ड पर कॉपी करें"
+
+#, fuzzy
+#| msgid "CVS path"
+msgid "Copy as Python"
+msgstr "सीवीएस पथ"
+
+#, fuzzy
+#| msgid "Vector maps settings"
+msgid "Copy as JSON settings"
+msgstr "वेक्टर मानचित्र सेटिंग"
+
 msgid "Copy"
 msgstr "कॉपी करें"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "सामान्य प्रारूप निर्यात करें"
+
+#, fuzzy
+#| msgid "Raster map settings"
+msgid "Paste JSON settings"
+msgstr "रेखापुंज मानचित्र सेटिंग्स"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "वर्तमान कमांड स्ट्रिंग को क्लिपबोर्ड पर कॉपी करें"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3207,8 +3457,68 @@ msgstr "समाप्त होने पर डायलॉग बंद क�
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "कमांड सफलतापूर्वक समाप्त होने पर डायलॉग बंद करें। इस सेटिंग्स को प्राथमिकताएँ (Preferences) डायलॉग ('कमांड' टैब) में बदलें।"
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "पायथन लिपि"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "पायथन लिपि"
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' क्लिपबोर्ड पर कॉपी किया गया"
+
+#, fuzzy
+#| msgid "'{cmd}' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'{cmd}' क्लिपबोर्ड पर कॉपी किया गया"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' क्लिपबोर्ड पर कॉपी किया गया"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+msgid "Module Mismatch"
+msgstr ""
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "अमान्य नाम"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "त्रुटि"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' क्लिपबोर्ड पर कॉपी किया गया"
 
 msgid "Required"
@@ -3289,9 +3599,7 @@ msgid ""
 "Unable to load file.\n"
 "\n"
 "Reason: %s"
-msgstr ""
-"फ़ाइल लोड करने में असमर्थ.\\n\\n"
-"कारण: %s"
+msgstr "फ़ाइल लोड करने में असमर्थ.\\n\\nकारण: %s"
 
 msgid "Nothing to save."
 msgstr "बचाने के लिए कुछ भी नहीं।"
@@ -3444,9 +3752,7 @@ msgid ""
 "Unable to write file '%(path)s'.\n"
 "\n"
 "Details: %(error)s"
-msgstr ""
-"फ़ाइल '%(path)s' लिखने में असमर्थ.\\n\\n"
-"विवरण: %(error)s"
+msgstr "फ़ाइल '%(path)s' लिखने में असमर्थ.\\n\\nविवरण: %(error)s"
 
 #, python-format
 msgid "Command output saved into '%s'"
@@ -3475,9 +3781,7 @@ msgstr "अस्थायी जीआईएस त्रुटि:\\n%s"
 msgid ""
 "Unable to import pyGRASS: %s\n"
 "Some functionality will be not accessible"
-msgstr ""
-"pyGRASS आयात करने में असमर्थ: %s\\n"
-"कुछ कार्यक्षमता पहुंच योग्य नहीं होगी"
+msgstr "pyGRASS आयात करने में असमर्थ: %s\\nकुछ कार्यक्षमता पहुंच योग्य नहीं होगी"
 
 msgid "No table linked to layer <{}>."
 msgstr "परत <{}> से कोई तालिका लिंक नहीं है।"
@@ -3814,6 +4118,9 @@ msgstr "संवादात्मक इनपुट की अनुमति
 
 msgid "Verbosity level:"
 msgstr "वाचालता स्तर:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr "समानांतर कंप्यूटिंग के लिए थ्रेड्स की संख्या (केवल समर्थित उपकरण):"
@@ -4223,9 +4530,7 @@ msgid ""
 "Unable to create a new vector map.\n"
 "\n"
 "Reason: %s"
-msgstr ""
-"नया वेक्टर मानचित्र बनाने में असमर्थ.\\n\\n"
-"कारण: %s"
+msgstr "नया वेक्टर मानचित्र बनाने में असमर्थ.\\n\\nकारण: %s"
 
 msgid " (...)"
 msgstr " (...)"
@@ -4531,9 +4836,7 @@ msgid ""
 "In order to create a training area, you have to select class first.\n"
 "\n"
 "There is no class yet, do you want to create one?"
-msgstr ""
-"प्रशिक्षण क्षेत्र बनाने के लिए, आपको पहले कक्षा का चयन करना होगा।\\n\\n"
-"अभी तक कोई कक्षा नहीं है, क्या आप एक कक्षा बनाना चाहते हैं?"
+msgstr "प्रशिक्षण क्षेत्र बनाने के लिए, आपको पहले कक्षा का चयन करना होगा।\\n\\nअभी तक कोई कक्षा नहीं है, क्या आप एक कक्षा बनाना चाहते हैं?"
 
 msgid "No class selected"
 msgstr "कोई कक्षा चयनित नहीं"
@@ -4695,9 +4998,7 @@ msgid ""
 "\n"
 "Reason: Unable to import packages needed for scatter plot.\n"
 "%s"
-msgstr ""
-"स्कैटर प्लॉट कार्यक्षमता अक्षम है।\\n\\n"
-"कारण: स्कैटर प्लॉट के लिए आवश्यक पैकेज आयात करने में असमर्थ।\\n%s"
+msgstr "स्कैटर प्लॉट कार्यक्षमता अक्षम है।\\n\\nकारण: स्कैटर प्लॉट के लिए आवश्यक पैकेज आयात करने में असमर्थ।\\n%s"
 
 msgid "Loading imagery lib failed"
 msgstr "इमेजरी lib लोड करना विफल रहा"
@@ -4844,9 +5145,7 @@ msgstr "नया मैपसेट बनाएं"
 msgid ""
 "Import of <%(name)s> failed.\n"
 "Reason: %(msg)s"
-msgstr ""
-"<%(name)s> का आयात विफल.\\n"
-"कारण: %(msg)s"
+msgstr "<%(name)s> का आयात विफल.\\nकारण: %(msg)s"
 
 #, python-format
 msgid "Data file <%(name)s> imported successfully. The location's default region was set from this imported map."
@@ -4856,9 +5155,7 @@ msgid ""
 "Mapset <PERMANENT> is required for valid GRASS location.\n"
 "\n"
 "This mapset cannot be renamed."
-msgstr ""
-"मान्य GRASS स्थान के लिए मैपसेट <PERMANENT> आवश्यक है।\\n\\n"
-"इस मैपसेट का नाम नहीं बदला जा सकता।"
+msgstr "मान्य GRASS स्थान के लिए मैपसेट <PERMANENT> आवश्यक है।\\n\\nइस मैपसेट का नाम नहीं बदला जा सकता।"
 
 #, python-format
 msgid ""
@@ -4875,9 +5172,7 @@ msgid ""
 "Unable to rename mapset.\n"
 "\n"
 "Mapset <%s> already exists in location."
-msgstr ""
-"मैपसेट का नाम बदलने में असमर्थ।\\n\\n"
-"मैपसेट <%s> पहले से ही स्थान पर मौजूद है।"
+msgstr "मैपसेट का नाम बदलने में असमर्थ।\\n\\nमैपसेट <%s> पहले से ही स्थान पर मौजूद है।"
 
 #, python-format
 msgid ""
@@ -4891,9 +5186,7 @@ msgid ""
 "Unable to rename location.\n"
 "\n"
 "Location <%s> already exists in GRASS database."
-msgstr ""
-"स्थान का नाम बदलने में असमर्थ।\\n\\n"
-"स्थान <%s> पहले से ही GRASS डेटाबेस में मौजूद है।"
+msgstr "स्थान का नाम बदलने में असमर्थ।\\n\\nस्थान <%s> पहले से ही GRASS डेटाबेस में मौजूद है।"
 
 #, python-format
 msgid ""
@@ -4906,18 +5199,14 @@ msgid ""
 "Mapset <PERMANENT> is required for valid GRASS location.\n"
 "\n"
 "This mapset cannot be deleted."
-msgstr ""
-"वैध GRASS स्थान के लिए मैपसेट <PERMANENT> आवश्यक है।\\n\\n"
-"इस मैपसेट को हटाया नहीं जा सकता।"
+msgstr "वैध GRASS स्थान के लिए मैपसेट <PERMANENT> आवश्यक है।\\n\\nइस मैपसेट को हटाया नहीं जा सकता।"
 
 #, python-format
 msgid ""
 "Do you want to continue with deleting mapset <%(mapset)s> from location <%(location)s>?\n"
 "\n"
 "ALL MAPS included in this mapset will be PERMANENTLY DELETED!"
-msgstr ""
-"क्या आप स्थान <%(location)s> से मैपसेट <%(mapset)s> को हटाना जारी रखना चाहते हैं?\\n\\n"
-"इस मैपसेट में शामिल सभी मैप स्थायी रूप से हटा दिए जाएंगे!"
+msgstr "क्या आप स्थान <%(location)s> से मैपसेट <%(mapset)s> को हटाना जारी रखना चाहते हैं?\\n\\nइस मैपसेट में शामिल सभी मैप स्थायी रूप से हटा दिए जाएंगे!"
 
 #, python-format
 msgid "Unable to delete mapset: %s"
@@ -4928,9 +5217,7 @@ msgid ""
 "Do you want to continue with deleting location <%s>?\n"
 "\n"
 "ALL MAPS included in this location will be PERMANENTLY DELETED!"
-msgstr ""
-"क्या आप स्थान <%s> को हटाना जारी रखना चाहते हैं?\\n\\n"
-"इस स्थान में शामिल सभी मानचित्र स्थायी रूप से हटा दिए जाएंगे!"
+msgstr "क्या आप स्थान <%s> को हटाना जारी रखना चाहते हैं?\\n\\nइस स्थान में शामिल सभी मानचित्र स्थायी रूप से हटा दिए जाएंगे!"
 
 #, python-format
 msgid "Unable to delete location: %s"
@@ -4960,9 +5247,7 @@ msgid ""
 "Mapset <%s> is reserved for direct read access to OGR layers. Please consider to use another name for your mapset.\n"
 "\n"
 "Are you really sure that you want to create this mapset?"
-msgstr ""
-"मैपसेट <%s> OGR परतों तक सीधे पढ़ने की पहुंच के लिए आरक्षित है। कृपया अपने मैपसेट के लिए किसी अन्य नाम का उपयोग करने पर विचार करें।\\n\\n"
-"क्या आप वाकई सुनिश्चित हैं कि आप यह मैपसेट बनाना चाहते हैं?"
+msgstr "मैपसेट <%s> OGR परतों तक सीधे पढ़ने की पहुंच के लिए आरक्षित है। कृपया अपने मैपसेट के लिए किसी अन्य नाम का उपयोग करने पर विचार करें।\\n\\nक्या आप वाकई सुनिश्चित हैं कि आप यह मैपसेट बनाना चाहते हैं?"
 
 msgid "Reserved mapset name"
 msgstr "आरक्षित मैपसेट नाम"
@@ -4979,10 +5264,7 @@ msgid ""
 "Concurrent use not allowed.\n"
 "\n"
 "Do you want to try to remove .gislock (note that you need permission for this operation) and continue?"
-msgstr ""
-"GRASS पहले से ही चयनित मैपसेट <%(mapset)s>\\n(फ़ाइल %(lock)s मिल गया) में चल रहा है।\\n\\n"
-"समवर्ती उपयोग की अनुमति नहीं है।\\n\\n"
-"क्या आप .gislock को हटाने का प्रयास करना चाहते हैं (ध्यान दें कि आपको इस ऑपरेशन के लिए अनुमति की आवश्यकता है) और जारी रखें?"
+msgstr "GRASS पहले से ही चयनित मैपसेट <%(mapset)s>\\n(फ़ाइल %(lock)s मिल गया) में चल रहा है।\\n\\nसमवर्ती उपयोग की अनुमति नहीं है।\\n\\nक्या आप .gislock को हटाने का प्रयास करना चाहते हैं (ध्यान दें कि आपको इस ऑपरेशन के लिए अनुमति की आवश्यकता है) और जारी रखें?"
 
 msgid "Lock file found"
 msgstr "लॉक फ़ाइल मिली"
@@ -4998,9 +5280,7 @@ msgid ""
 "Unable to remove '%(lock)s'.\n"
 "\n"
 "Details: %(reason)s"
-msgstr ""
-"'%(lock)s' को हटाने में असमर्थ.\\n\\n"
-"विवरण: %(reason)s"
+msgstr "'%(lock)s' को हटाने में असमर्थ.\\n\\nविवरण: %(reason)s"
 
 #, python-format
 msgid "Name <%(name)s> is not a valid name for location or mapset. Please use only ASCII characters excluding %(chars)s and space."
@@ -5060,10 +5340,7 @@ msgid ""
 "Number of cells (rows*cols) <%d> in current regionis higher than maximum limit <%d>.\n"
 "\n"
 "You can reduce number of cells in current region using <g.region> command."
-msgstr ""
-"इंटरएक्टिव स्कैटर प्लॉट टूल का उपयोग नहीं किया जा सकता है।\\n"
-"वर्तमान क्षेत्र में सेल (पंक्तियों*कॉल्स) <%d> की संख्या अधिकतम सीमा <%d> से अधिक है।\\n\\n"
-"आप <g.region> कमांड का उपयोग करके वर्तमान क्षेत्र में सेल की संख्या कम कर सकते हैं।"
+msgstr "इंटरएक्टिव स्कैटर प्लॉट टूल का उपयोग नहीं किया जा सकता है।\\nवर्तमान क्षेत्र में सेल (पंक्तियों*कॉल्स) <%d> की संख्या अधिकतम सीमा <%d> से अधिक है।\\n\\nआप <g.region> कमांड का उपयोग करके वर्तमान क्षेत्र में सेल की संख्या कम कर सकते हैं।"
 
 #, python-format
 msgid ""
@@ -5072,10 +5349,7 @@ msgid ""
 " It can be done by <g.region> command.\n"
 "\n"
 "Do you want to continue using Interactive Scatter Plot Tool with this region?"
-msgstr ""
-"वर्तमान क्षेत्र में कोशिकाओं की संख्या (पंक्तियाँ*कॉल्स) <%d> अनुशंसित सीमा <%d> से अधिक है।\\n"
-"वर्तमान क्षेत्र में कोशिकाओं की संख्या अनुशंसित सीमा से कम करने की दृढ़ता से सलाह दी जाती है।\\n यह <g.region> कमांड द्वारा किया जा सकता है।\\n\\n"
-"क्या आप इस क्षेत्र के साथ इंटरएक्टिव स्कैटर प्लॉट टूल का उपयोग जारी रखना चाहते हैं?"
+msgstr "वर्तमान क्षेत्र में कोशिकाओं की संख्या (पंक्तियाँ*कॉल्स) <%d> अनुशंसित सीमा <%d> से अधिक है।\\nवर्तमान क्षेत्र में कोशिकाओं की संख्या अनुशंसित सीमा से कम करने की दृढ़ता से सलाह दी जाती है।\\n यह <g.region> कमांड द्वारा किया जा सकता है।\\n\\nक्या आप इस क्षेत्र के साथ इंटरएक्टिव स्कैटर प्लॉट टूल का उपयोग जारी रखना चाहते हैं?"
 
 msgid "Scatter plot with same band combination (regardless x y order) is already displayed."
 msgstr "समान बैंड संयोजन (x y क्रम की परवाह किए बिना) के साथ स्कैटर प्लॉट पहले से ही प्रदर्शित है।"
@@ -5091,9 +5365,7 @@ msgstr "स्कैटर प्लॉट नहीं जोड़ा जा �
 msgid ""
 "Scatter plot cannot be added.\n"
 "Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <%d>.\n"
-msgstr ""
-"स्कैटर प्लॉट नहीं जोड़ा जा सकता.\\n"
-"कई बैंड रेंज <%s:%d * %s:%d = %d> अधिकतम सीमा <%d> से अधिक है.\\n\n"
+msgstr "स्कैटर प्लॉट नहीं जोड़ा जा सकता.\\nकई बैंड रेंज <%s:%d * %s:%d = %d> अधिकतम सीमा <%d> से अधिक है.\\n\n"
 
 #, python-format
 msgid ""
@@ -5101,18 +5373,13 @@ msgid ""
 "It is strongly advised to reduce range extend of bands(e. g. using r.rescale) below recommended threshold.\n"
 "\n"
 "Do you really want to add this scatter plot?"
-msgstr ""
-"बैंड रेंज का एकाधिक मान <%s:%d * %s:%d = %d> अनुशंसित सीमा <%d> से अधिक है।\\n"
-"बैंड के रेंज विस्तार को अनुशंसित सीमा से कम करने की दृढ़ता से सलाह दी जाती है (उदाहरण के लिए r.rescale का उपयोग करके)।\\n\\n"
-"क्या आप वास्तव में इस स्कैटर प्लॉट को जोड़ना चाहते हैं?"
+msgstr "बैंड रेंज का एकाधिक मान <%s:%d * %s:%d = %d> अनुशंसित सीमा <%d> से अधिक है।\\nबैंड के रेंज विस्तार को अनुशंसित सीमा से कम करने की दृढ़ता से सलाह दी जाती है (उदाहरण के लिए r.rescale का उपयोग करके)।\\n\\nक्या आप वास्तव में इस स्कैटर प्लॉट को जोड़ना चाहते हैं?"
 
 msgid ""
 "In order to select arrea in scatter plot, you have to select class first.\n"
 "\n"
 "There is no class yet, do you want to create one?"
-msgstr ""
-"स्कैटर प्लॉट में क्षेत्रफल का चयन करने के लिए, आपको पहले वर्ग का चयन करना होगा।\\n\\n"
-"अभी तक कोई वर्ग नहीं है, क्या आप एक बनाना चाहते हैं?"
+msgstr "स्कैटर प्लॉट में क्षेत्रफल का चयन करने के लिए, आपको पहले वर्ग का चयन करना होगा।\\n\\nअभी तक कोई वर्ग नहीं है, क्या आप एक बनाना चाहते हैं?"
 
 #, python-format
 msgid ""
@@ -5261,8 +5528,9 @@ msgid ""
 "{messages}"
 msgstr "v.to.rast विफल:\\n{messages}"
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "स्कैटरप्लॉट टूल को स्थापित करने के लिए \\\"matplotlib\\\" (पायथन-matplotlib) पैकेज की आवश्यकता होती है। {0}"
 
 msgid "Zoom to scatter plot extend"
@@ -5325,6 +5593,298 @@ msgstr "क्लास जोड़ें"
 msgid "Remove selected class"
 msgstr "चयनित वर्ग हटाएँ"
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS database directory"
+msgid "Select notebook directory"
+msgstr "1. GRASS डेटाबेस डायरेक्टरी चुनें"
+
+#, fuzzy
+#| msgid "Create new project"
+msgid "Save in project: {}"
+msgstr "नया प्रोजेक्ट बनाएं"
+
+msgid "Options"
+msgstr "विकल्प"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "ब्राउज़ करें"
+
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Integrated"
+msgstr "मध्यवर्ती"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "डायलॉग बंद करें"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "त्रुटि"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "त्रुटि"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr "फ़ाइल %s को पढ़ने में विफल।"
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import file"
+msgstr "&इंपोर्ट करें"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "नाम बदलें"
+
+#, fuzzy
+#| msgid "No scatter plots selected."
+msgid "No page for export is currently selected."
+msgstr "कोई स्कैटर प्लॉट चयनित नहीं।"
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export file is missing."
+msgid "Export file as..."
+msgstr "निर्यात फ़ाइल गायब है।"
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "मॉडल <%s> पर निर्यात किया गया"
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr "फ़ाइल %s को पढ़ने में विफल।"
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "नए मैपसेट के लिए नाम दर्ज करें:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to create new raster map."
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "नया रैस्टर मानचित्र बनाने में विफल।"
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "No files generated."
+msgid "New file '{}' created."
+msgstr "कोई फ़ाइल उत्पन्न नहीं हुई।"
+
+#, fuzzy
+#| msgid "Do you really want to activate snapping and overwrite it?"
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr "क्या आप सचमुच स्नैपिंग को सक्रिय करना और उसे अधिलेखित करना चाहते हैं?"
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "सर्वर:"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to display legend."
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr "लेजेंड दिखाने में फेल।"
+
+#, fuzzy
+#| msgid "Property does not exist: %s"
+msgid "Notebook storage does not exist: {}"
+msgstr "संपत्ति मौजूद नहीं है: %s"
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File %s not found"
+msgid "File not found: {}"
+msgstr "फ़ाइल %s नहीं मिली"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "फ़ाइल पहले से ही मौजूद है"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "फ़ाइल पहले से ही मौजूद है"
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "सर्वर:"
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "नया मॉडल बनाएं"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to:"
+msgid "Export notebook"
+msgstr "इसमें निर्यात करें:"
+
 msgid "GRASS"
 msgstr "घास"
 
@@ -5352,6 +5912,30 @@ msgstr "मैप डिस्प्ले {} बंद करें"
 
 msgid "Console"
 msgstr "कंसोल"
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "3D व्यू मोड उपलब्ध नहीं है"
 
 msgid "Map Swipe Tool"
 msgstr "मैप स्वाइप टूल"
@@ -5462,9 +6046,7 @@ msgid ""
 "Unable to launch \"Supervised Classification Tool\".\n"
 "\n"
 "Reason: %s"
-msgstr ""
-"\\\"पर्यवेक्षित वर्गीकरण उपकरण\\\" लॉन्च करने में असमर्थ।\\n\\n"
-"कारण: %s"
+msgstr "\\\"पर्यवेक्षित वर्गीकरण उपकरण\\\" लॉन्च करने में असमर्थ।\\n\\nकारण: %s"
 
 msgid "Unable to start Timeline Tool."
 msgstr "टाइमलाइन टूल प्रारंभ करने में असमर्थ।"
@@ -5490,9 +6072,7 @@ msgid ""
 "Do you want to remove map layer(s)\n"
 "%s\n"
 "from layer tree?"
-msgstr ""
-"क्या आप लेयर ट्री से मैप लेयर्स\\n%s\\n"
-"हटाना चाहते हैं?"
+msgstr "क्या आप लेयर ट्री से मैप लेयर्स\\n%s\\nहटाना चाहते हैं?"
 
 msgid "Do you want to remove selected map layer(s) from layer tree?"
 msgstr "क्या आप लेयर ट्री से चयनित मानचित्र परत(परतों) को हटाना चाहते हैं?"
@@ -5502,6 +6082,11 @@ msgstr "मानचित्र परत हटाएँ"
 
 msgid "Quit GRASS GUI"
 msgstr "घास GUI छोड़ो"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr "डिस्प्ले रिज़ॉल्यूशन वर्तमान में कम्प्यूटेशनल सेटिंग्स तक सीमित नहीं है। मानचित्र को क्षेत्र ज्यामिति तक सीमित करने का सुझाव दिया गया है। क्या आप संकल्प को बाधित करना चाहते हैं?"
@@ -5672,9 +6257,7 @@ msgstr "रेखापुंज मानचित्र का हिस्ट
 msgid ""
 "Unable to start wxGUI vector digitizer.\n"
 "Details: %s"
-msgstr ""
-"wxGUI वेक्टर डिजिटाइज़र प्रारंभ करने में असमर्थ.\\n"
-"विवरण: %s"
+msgstr "wxGUI वेक्टर डिजिटाइज़र प्रारंभ करने में असमर्थ.\\nविवरण: %s"
 
 msgid "Set opacity of <{}>"
 msgstr "<{}> की अपारदर्शिता सेट करें"
@@ -5735,6 +6318,16 @@ msgstr "क्या आप वाकई वर्तमान रास्ट�
 
 msgid "Remove raster mask"
 msgstr "रैस्टर मास्क हटाएँ"
+
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "कस्टम न्यूनतम (Custom min)"
+
+#, fuzzy
+#| msgid "Left mouse click to remove the raster mask"
+msgid "Left mouse click to print detailed projection info"
+msgstr "रैस्टर मास्क को हटाने के लिए बायाँ माउस क्लिक करें"
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "नया वर्कस्पेस बनाएं (Ctrl+N)"
@@ -5817,11 +6410,13 @@ msgstr "जियोरेक्टिफायर"
 msgid "Cartographic Composer"
 msgstr "कार्टोग्राफिक कंपोजर"
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "ग्राफ़िकल मॉडलर"
+
 msgid "Launch user-defined script"
 msgstr "उपयोगकर्ता-परिभाषित स्क्रिप्ट लॉन्च करें"
-
-msgid "New display"
-msgstr "नया प्रदर्शन"
 
 msgid "Python code editor"
 msgstr "पायथन कोड संपादक"
@@ -5869,11 +6464,7 @@ msgid ""
 "Details: {details}\n"
 "\n"
 "Do you want to proceed with opening the workspace anyway?"
-msgstr ""
-"कार्यस्थान में निर्दिष्ट स्थान और मानचित्रसेट में परिवर्तन करने में असमर्थ।\\n"
-"कारण: {reason}\\n"
-"विवरण: {details}\\n\\n"
-"क्या आप कार्यस्थान को खोलने के साथ आगे बढ़ना चाहते हैं?"
+msgstr "कार्यस्थान में निर्दिष्ट स्थान और मानचित्रसेट में परिवर्तन करने में असमर्थ।\\nकारण: {reason}\\nविवरण: {details}\\n\\nक्या आप कार्यस्थान को खोलने के साथ आगे बढ़ना चाहते हैं?"
 
 msgid "Proceed with opening of the workspace?"
 msgstr "कार्यस्थल खोलने के साथ आगे बढ़ें?"
@@ -5891,10 +6482,7 @@ msgid ""
 "Reading workspace file <%s> failed.\n"
 "Invalid file, unable to parse XML document.\n"
 "Error details: %s"
-msgstr ""
-"कार्यस्थान फ़ाइल <%s> को पढ़ना विफल रहा।\\n"
-"अमान्य फ़ाइल, XML दस्तावेज़ को पार्स करने में असमर्थ।\\n"
-"त्रुटि विवरण: %s"
+msgstr "कार्यस्थान फ़ाइल <%s> को पढ़ना विफल रहा।\\nअमान्य फ़ाइल, XML दस्तावेज़ को पार्स करने में असमर्थ।\\nत्रुटि विवरण: %s"
 
 msgid "Please wait, loading workspace..."
 msgstr "कृपया प्रतीक्षा करें, कार्यक्षेत्र लोड हो रहा है..।"
@@ -5910,9 +6498,7 @@ msgstr "कार्यस्थान फ़ाइल <%s> पहले से 
 msgid ""
 "Writing current settings to workspace file <%s> failed.\n"
 "Error details: %s"
-msgstr ""
-"कार्यस्थान फ़ाइल <%s> में वर्तमान सेटिंग्स लिखना विफल रहा।\\n"
-"त्रुटि विवरण: %s"
+msgstr "कार्यस्थान फ़ाइल <%s> में वर्तमान सेटिंग्स लिखना विफल रहा।\\nत्रुटि विवरण: %s"
 
 msgid "Do you want to save changes in the workspace?"
 msgstr "क्या आप कार्यक्षेत्र में परिवर्तन सहेजना चाहते हैं?"
@@ -6180,9 +6766,7 @@ msgid ""
 "Unable to create new project. Project <%(loc)s> not created.\n"
 "\n"
 "Details: %(err)s"
-msgstr ""
-"नया प्रोजेक्ट बनाने में असमर्थ. प्रोजेक्ट <%(loc)s> नहीं बनाया गया.\\n\\n"
-"विवरण: %(err)s"
+msgstr "नया प्रोजेक्ट बनाने में असमर्थ. प्रोजेक्ट <%(loc)s> नहीं बनाया गया.\\n\\nविवरण: %(err)s"
 
 msgid "Unable to create new project"
 msgstr "नया प्रोजेक्ट बनाने में असमर्थ"
@@ -6209,6 +6793,12 @@ msgstr "WKT स्ट्रिंग गायब है।"
 
 msgid "There were some issues when loading menu or Tools:"
 msgstr "मेनू या टूल लोड करते समय कुछ समस्याएँ थीं:"
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
 
 msgid "No project provided. Operation canceled."
 msgstr "कोई प्रोजेक्ट उपलब्ध नहीं कराया गया. ऑपरेशन रद्द कर दिया गया।"
@@ -6247,11 +6837,7 @@ msgid ""
 "Switching back to 2D display mode.\n"
 "\n"
 "Details: %s"
-msgstr ""
-"3D डिस्प्ले मोड पर स्विच करने में असमर्थ।\\n"
-"Nviz पायथन एक्सटेंशन नहीं मिला या ठीक से लोड नहीं हुआ।\\n"
-"2D डिस्प्ले मोड पर वापस स्विच किया जा रहा है।\\n\\n"
-"विवरण: %s"
+msgstr "3D डिस्प्ले मोड पर स्विच करने में असमर्थ।\\nNviz पायथन एक्सटेंशन नहीं मिला या ठीक से लोड नहीं हुआ।\\n2D डिस्प्ले मोड पर वापस स्विच किया जा रहा है।\\n\\nविवरण: %s"
 
 msgid "Starting 3D view mode..."
 msgstr "3डी व्यू मोड प्रारंभ हो रहा है..।"
@@ -6557,9 +7143,7 @@ msgstr "दूरी मापना:"
 msgid ""
 "Geodesic distance calculation is not available.\n"
 "Reason: %s"
-msgstr ""
-"जियोडेसिक दूरी गणना उपलब्ध नहीं है.\\n"
-"कारण: %s"
+msgstr "जियोडेसिक दूरी गणना उपलब्ध नहीं है.\\nकारण: %s"
 
 msgid "segment"
 msgstr "खंड"
@@ -6587,9 +7171,7 @@ msgstr "क्षेत्र: {area} {unit}\n"
 msgid ""
 "Error occurred during calling of handler: %s \n"
 "Handler was unregistered."
-msgstr ""
-"हैंडलर को कॉल करने के दौरान त्रुटि हुई: %s \\n"
-"हैंडलर अपंजीकृत था।"
+msgstr "हैंडलर को कॉल करने के दौरान त्रुटि हुई: %s \\nहैंडलर अपंजीकृत था।"
 
 #, python-format
 msgid ""
@@ -6853,9 +7435,6 @@ msgstr "GRASS Addons से एक्सटेंशन प्राप्त �
 msgid "List of extensions - double-click to install"
 msgstr "एक्सटेंशन की सूची - इंस्टॉल करने के लिए डबल-क्लिक करें"
 
-msgid "Options"
-msgstr "विकल्प"
-
 msgid "&Install"
 msgstr "&इंस्टॉल करें"
 
@@ -6912,9 +7491,7 @@ msgid ""
 "%(files)s\n"
 "\n"
 "Do you want really to remove <%(ext)s> extension?"
-msgstr ""
-"हटाई जाने वाली फ़ाइलों की सूची:\\n%(files)s\\n\\n"
-"क्या आप सचमुच <%(ext)s> एक्सटेंशन हटाना चाहते हैं?"
+msgstr "हटाई जाने वाली फ़ाइलों की सूची:\\n%(files)s\\n\\nक्या आप सचमुच <%(ext)s> एक्सटेंशन हटाना चाहते हैं?"
 
 msgid "Remove extension"
 msgstr "एक्सटेंशन हटाएँ"
@@ -7056,6 +7633,9 @@ msgstr "फ़ाइल में अभिव्यक्ति सहेजे
 
 msgid "Load expression from file"
 msgstr "फ़ाइल से अभिव्यक्ति लोड करें"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "वर्तमान कमांड स्ट्रिंग को क्लिपबोर्ड पर कॉपी करें"
 
 msgid "exponent"
 msgstr "प्रतिपादक"
@@ -8027,9 +8607,7 @@ msgstr "सीमा चौड़ाई (अंक):"
 msgid ""
 "Region is set to match this map,\n"
 "raster or vector map must be added later"
-msgstr ""
-"क्षेत्र को इस मानचित्र से मिलान करने के लिए सेट किया गया है,\\n"
-"रैस्टर या वेक्टर मानचित्र को बाद में जोड़ा जाना चाहिए"
+msgstr "क्षेत्र को इस मानचित्र से मिलान करने के लिए सेट किया गया है,\\nरैस्टर या वेक्टर मानचित्र को बाद में जोड़ा जाना चाहिए"
 
 msgid "Region selection"
 msgstr "क्षेत्र चयन"
@@ -8396,9 +8974,7 @@ msgstr "डिग्री में वामावर्त (Counterclockwise)
 msgid ""
 "PIL\n"
 "missing"
-msgstr ""
-"पीआईएल\\n"
-"गायब"
+msgstr "पीआईएल\\nगायब"
 
 #, python-format
 msgid "Unable to read file %s: %s"
@@ -8464,9 +9040,7 @@ msgstr "आप एकाधिक लेबल फ़ाइलें चुन �
 msgid ""
 "Python Imaging Library is not available.\n"
 "'Preview' functionality won't work."
-msgstr ""
-"पायथन इमेजिंग लाइब्रेरी उपलब्ध नहीं है।\\n"
-"'पूर्वावलोकन' कार्यक्षमता काम नहीं करेगी।"
+msgstr "पायथन इमेजिंग लाइब्रेरी उपलब्ध नहीं है।\\n'पूर्वावलोकन' कार्यक्षमता काम नहीं करेगी।"
 
 #, python-format
 msgid "Characters on position %s are not supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
@@ -8610,41 +9184,31 @@ msgstr "निर्देश पढ़ने में विफल %s"
 msgid ""
 "Scale has changed, old value: %(old)s\n"
 "new value: %(new)s"
-msgstr ""
-"स्केल बदल गया है, पुराना मान: %(old)s\\n"
-"नया मान: %(new)s"
+msgstr "स्केल बदल गया है, पुराना मान: %(old)s\\nनया मान: %(new)s"
 
 #, python-format
 msgid ""
 "Failed to read instruction %s.\n"
 "Use 1:25000 notation."
-msgstr ""
-"अनुदेश %s पढ़ने में विफल।\\n"
-"1:25000 नोटेशन का उपयोग करें।"
+msgstr "अनुदेश %s पढ़ने में विफल।\\n1:25000 नोटेशन का उपयोग करें।"
 
 #, python-format
 msgid ""
 "Map frame position changed, old value: %(old1)s %(old2)s\n"
 "new value: %(new1)s %(new2)s"
-msgstr ""
-"मानचित्र फ़्रेम की स्थिति बदल गई, पुराना मान: %(old1)s %(old2)s\\n"
-"नया मान: %(new1)s %(new2)s"
+msgstr "मानचित्र फ़्रेम की स्थिति बदल गई, पुराना मान: %(old1)s %(old2)s\\nनया मान: %(new1)s %(new2)s"
 
 #, python-format
 msgid ""
 "Map frame size changed, old value: %(old1)s %(old2)s\n"
 "new value: %(new1)s %(new2)s"
-msgstr ""
-"मानचित्र फ़्रेम का आकार बदल गया, पुराना मान: %(old1)s %(old2)s\\n"
-"नया मान: %(new1)s %(new2)s"
+msgstr "मानचित्र फ़्रेम का आकार बदल गया, पुराना मान: %(old1)s %(old2)s\\nनया मान: %(new1)s %(new2)s"
 
 #, python-format
 msgid ""
 "Failed to read instruction %(file)s.\n"
 "Unknown format %(for)s"
-msgstr ""
-"निर्देश पढ़ने में विफल %(file)s.\\n"
-"अज्ञात प्रारूप %(for)s"
+msgstr "निर्देश पढ़ने में विफल %(file)s.\\nअज्ञात प्रारूप %(for)s"
 
 #, python-format
 msgid "Failed to read instruction %s."
@@ -9277,9 +9841,7 @@ msgid ""
 "{deletes}\n"
 "\n"
 "All maps included in these mapsets will be permanently deleted!"
-msgstr ""
-"क्या आप निम्नलिखित में से एक या अधिक मैपसेट को हटाना जारी रखना चाहते हैं?\\n\\n{deletes}\\n\\n"
-"इन मैपसेट में शामिल सभी मानचित्र स्थायी रूप से हटा दिए जाएंगे!"
+msgstr "क्या आप निम्नलिखित में से एक या अधिक मैपसेट को हटाना जारी रखना चाहते हैं?\\n\\n{deletes}\\n\\nइन मैपसेट में शामिल सभी मानचित्र स्थायी रूप से हटा दिए जाएंगे!"
 
 msgid "Delete selected mapsets"
 msgstr "चयनित मानचित्रों को हटाएं"
@@ -9294,9 +9856,7 @@ msgid ""
 "{error}\n"
 "\n"
 "Deleting of mapsets was interrupted."
-msgstr ""
-"मैपसेट को हटाते समय निम्न त्रुटि उत्पन्न हुई <{path}>:\\n\\n{error}\\n\\n"
-"मैप्ससेट को हटाना बाधित हुआ।"
+msgstr "मैपसेट को हटाते समय निम्न त्रुटि उत्पन्न हुई <{path}>:\\n\\n{error}\\n\\nमैप्ससेट को हटाना बाधित हुआ।"
 
 #, python-brace-format
 msgid ""
@@ -9322,9 +9882,7 @@ msgid ""
 "{deletes}\n"
 "\n"
 "All mapsets included in these projects will be permanently deleted!"
-msgstr ""
-"क्या आप निम्नलिखित में से एक या अधिक प्रोजेक्ट को हटाना जारी रखना चाहते हैं?\\n\\n{deletes}\\n\\n"
-"इन प्रोजेक्ट में शामिल सभी मैपसेट स्थायी रूप से हटा दिए जाएंगे!"
+msgstr "क्या आप निम्नलिखित में से एक या अधिक प्रोजेक्ट को हटाना जारी रखना चाहते हैं?\\n\\n{deletes}\\n\\nइन प्रोजेक्ट में शामिल सभी मैपसेट स्थायी रूप से हटा दिए जाएंगे!"
 
 msgid "Delete selected projects"
 msgstr "चयनित परियोजनाएँ हटाएँ"
@@ -9339,9 +9897,7 @@ msgid ""
 "{error}\n"
 "\n"
 "Deleting of projects was interrupted."
-msgstr ""
-"प्रोजेक्ट <{path}> को हटाते समय निम्न त्रुटि उत्पन्न हुई:\\n\\n{error}\\n\\n"
-"प्रोजेक्ट को हटाना बाधित हुआ।"
+msgstr "प्रोजेक्ट <{path}> को हटाते समय निम्न त्रुटि उत्पन्न हुई:\\n\\n{error}\\n\\nप्रोजेक्ट को हटाना बाधित हुआ।"
 
 #, python-brace-format
 msgid ""
@@ -9367,9 +9923,7 @@ msgid ""
 "{grassdb}\n"
 "\n"
 "The directory will be permanently deleted!"
-msgstr ""
-"क्या आप डिस्क से निम्नलिखित GRASS डेटाबेस को हटाना चाहते हैं?\\n\\n{grassdb}\\n\\n"
-"निर्देशिका स्थायी रूप से हटा दी जाएगी!"
+msgstr "क्या आप डिस्क से निम्नलिखित GRASS डेटाबेस को हटाना चाहते हैं?\\n\\n{grassdb}\\n\\nनिर्देशिका स्थायी रूप से हटा दी जाएगी!"
 
 msgid "Delete selected GRASS database"
 msgstr "चयनित GRASS डेटाबेस हटाएं"
@@ -9384,9 +9938,7 @@ msgid ""
 "{error}\n"
 "\n"
 "Deleting of GRASS database was interrupted."
-msgstr ""
-"डेटाबेस <{path}> को हटाते समय निम्न त्रुटि उत्पन्न हुई:\\n\\n{error}\\n\\n"
-"GRASS डेटाबेस को हटाना बाधित हुआ।"
+msgstr "डेटाबेस <{path}> को हटाते समय निम्न त्रुटि उत्पन्न हुई:\\n\\n{error}\\n\\nGRASS डेटाबेस को हटाना बाधित हुआ।"
 
 #, python-brace-format
 msgid ""
@@ -9396,10 +9948,7 @@ msgid ""
 "Concurrent use not allowed.\n"
 "\n"
 "Do you want to stay in the current mapset or remove .gislock and switch to selected mapset?"
-msgstr ""
-"उपयोगकर्ता {user} पहले से ही चयनित मैपसेट <{mapset}>\\n में GRASS चला रहा है (फ़ाइल {lockpath} बनाई गई {timestamp} मिली)।\\n\\n"
-"समवर्ती उपयोग की अनुमति नहीं है।\\n\\n"
-"क्या आप वर्तमान मैपसेट में रहना चाहते हैं या .gislock को हटाकर चयनित मैपसेट पर स्विच करना चाहते हैं?"
+msgstr "उपयोगकर्ता {user} पहले से ही चयनित मैपसेट <{mapset}>\\n में GRASS चला रहा है (फ़ाइल {lockpath} बनाई गई {timestamp} मिली)।\\n\\nसमवर्ती उपयोग की अनुमति नहीं है।\\n\\nक्या आप वर्तमान मैपसेट में रहना चाहते हैं या .gislock को हटाकर चयनित मैपसेट पर स्विच करना चाहते हैं?"
 
 msgid "Mapset is in use"
 msgstr "मैपसेट प्रयोग में है"
@@ -9495,7 +10044,9 @@ msgstr "चयनित डेटासेट डाउनलोड करें
 msgid "Do you want to cancel dataset download?"
 msgstr "क्या आप डेटासेट डाउनलोड रद्द करना चाहते हैं?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+#, fuzzy
+#| msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr "टाइमलाइन टूल को स्थापित करने के लिए \\\"matplotlib\\\" (पायथन-matplotlib और कुछ सिस्टम पर भी Python-matplotlib-wx) पैकेज की आवश्यकता होती है। {}"
 
 msgid "Timeline Tool"
@@ -9593,19 +10144,23 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "टाइमलाइन टूल - घास"
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "टेम्पोरल प्लॉट टूल को स्थापित करने के लिए \\\"matplotlib\\\" (पायथन-matplotlib) पैकेज की आवश्यकता होती है। {0}"
 
 msgid "Temporal Plot Tool"
 msgstr "टेम्पोरल प्लॉट टूल"
 
+#, fuzzy
+#| msgid ""
+#| "Raster temporal dataset (strds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
-msgstr ""
-"रैस्टर टेम्पोरल डेटासेट (strds)\\n"
-"नाम टाइप करने के बाद ENTER दबाएँ या कॉम्बोबॉक्स से चयन करें"
+msgstr "रैस्टर टेम्पोरल डेटासेट (strds)\\nनाम टाइप करने के बाद ENTER दबाएँ या कॉम्बोबॉक्स से चयन करें"
 
 msgid "X and Y coordinates separated by comma:"
 msgstr "X और Y निर्देशांक अल्पविराम से अलग किए गए:"
@@ -9619,12 +10174,15 @@ msgstr "सरल रेखीय समाश्रयण रेखा दि�
 msgid "STRDS"
 msgstr "एसटीआरडीएस"
 
+#, fuzzy
+#| msgid ""
+#| "Vector temporal dataset (stvds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
-msgstr ""
-"वेक्टर टेम्पोरल डेटासेट (stvds)\\n"
-"नाम टाइप करने के बाद ENTER दबाएँ या कॉम्बोबॉक्स से चयन करें"
+msgstr "वेक्टर टेम्पोरल डेटासेट (stvds)\\nनाम टाइप करने के बाद ENTER दबाएँ या कॉम्बोबॉक्स से चयन करें"
 
 msgid "Select attribute column"
 msgstr "विशेषता कॉलम चुनें"
@@ -9754,10 +10312,7 @@ msgid ""
 "Unable to add new layer/category <%(layer)s/%(category)s>.\n"
 "Layer and category number must be integer.\n"
 "Layer number must be greater than zero."
-msgstr ""
-"नई परत/श्रेणी <%(layer)s/%(category)s> जोड़ने में असमर्थ.\\n"
-"परत और श्रेणी संख्या पूर्णांक होनी चाहिए.\\n"
-"परत संख्या शून्य से अधिक होनी चाहिए।"
+msgstr "नई परत/श्रेणी <%(layer)s/%(category)s> जोड़ने में असमर्थ.\\nपरत और श्रेणी संख्या पूर्णांक होनी चाहिए.\\nपरत संख्या शून्य से अधिक होनी चाहिए।"
 
 msgid "Unable to update vector map."
 msgstr "वेक्टर मानचित्र अद्यतन करने में असमर्थ।"
@@ -10134,9 +10689,7 @@ msgstr "वेक्टर मानचित्र 3D नहीं है. ऑ�
 msgid ""
 "Topology for vector map <%s> is not available. Topology is required by digitizer.\n"
 "Do you want to rebuild topology (takes some time) and open the vector map for editing?"
-msgstr ""
-"वेक्टर मानचित्र <%s> के लिए टोपोलॉजी उपलब्ध नहीं है। डिजिटाइज़र के लिए टोपोलॉजी आवश्यक है।\\n"
-"क्या आप टोपोलॉजी का पुनर्निर्माण करना चाहते हैं (कुछ समय लगता है) और संपादन के लिए वेक्टर मानचित्र खोलना चाहते हैं?"
+msgstr "वेक्टर मानचित्र <%s> के लिए टोपोलॉजी उपलब्ध नहीं है। डिजिटाइज़र के लिए टोपोलॉजी आवश्यक है।\\nक्या आप टोपोलॉजी का पुनर्निर्माण करना चाहते हैं (कुछ समय लगता है) और संपादन के लिए वेक्टर मानचित्र खोलना चाहते हैं?"
 
 msgid "Digitizer error"
 msgstr "डिजिटाइज़र त्रुटि"
@@ -10185,9 +10738,7 @@ msgid ""
 "Writing new feature failed. Operation canceled.\n"
 "\n"
 "Reason: %s"
-msgstr ""
-"नई सुविधा लिखना विफल रहा. ऑपरेशन रद्द कर दिया गया.\\n\\n"
-"कारण: %s"
+msgstr "नई सुविधा लिखना विफल रहा. ऑपरेशन रद्द कर दिया गया.\\n\\nकारण: %s"
 
 #, python-format
 msgid "Reading feature id %d failed. Operation canceled."
@@ -10384,9 +10935,7 @@ msgstr "विश्लेषण करने में असमर्थ।"
 msgid ""
 "Temporary map '%s' with result was changed outside vector network analysis tool.\n"
 "Showed result may not correspond to original analysis result."
-msgstr ""
-"परिणाम के साथ अस्थायी मानचित्र '%s' को वेक्टर नेटवर्क विश्लेषण उपकरण के बाहर बदल दिया गया था।\\n"
-"दिखाया गया परिणाम मूल विश्लेषण परिणाम के अनुरूप नहीं हो सकता है।"
+msgstr "परिणाम के साथ अस्थायी मानचित्र '%s' को वेक्टर नेटवर्क विश्लेषण उपकरण के बाहर बदल दिया गया था।\\nदिखाया गया परिणाम मूल विश्लेषण परिणाम के अनुरूप नहीं हो सकता है।"
 
 msgid "Result changed outside"
 msgstr "बाहर नतीजा बदल गया"
@@ -10425,9 +10974,7 @@ msgstr "कृपया कम से कम दो बिंदु चुने
 msgid ""
 "Input map '%s' for analysis was changed outside vector network analysis tool.\n"
 "Topology column may not correspond to changed situation."
-msgstr ""
-"विश्लेषण के लिए इनपुट मैप '%s' को वेक्टर नेटवर्क विश्लेषण टूल के बाहर बदल दिया गया था।\\n"
-"टोपोलॉजी कॉलम बदली हुई स्थिति के अनुरूप नहीं हो सकता है।"
+msgstr "विश्लेषण के लिए इनपुट मैप '%s' को वेक्टर नेटवर्क विश्लेषण टूल के बाहर बदल दिया गया था।\\nटोपोलॉजी कॉलम बदली हुई स्थिति के अनुरूप नहीं हो सकता है।"
 
 msgid "Input changed outside"
 msgstr "बाहर इनपुट बदल गया"
@@ -10436,9 +10983,7 @@ msgstr "बाहर इनपुट बदल गया"
 msgid ""
 "Temporary map %s already exists.\n"
 "Do you want to continue in analysis and overwrite it?"
-msgstr ""
-"अस्थायी मानचित्र %s पहले से मौजूद है।\\n"
-"क्या आप विश्लेषण जारी रखना चाहते हैं और इसे अधिलेखित करना चाहते हैं?"
+msgstr "अस्थायी मानचित्र %s पहले से मौजूद है।\\nक्या आप विश्लेषण जारी रखना चाहते हैं और इसे अधिलेखित करना चाहते हैं?"
 
 msgid "Unable to use ctypes. \n"
 msgstr "Ctypes का उपयोग करने में असमर्थ. \\एन \n"
@@ -10453,9 +10998,7 @@ msgstr "क्या आप सचमुच स्नैपिंग को स�
 msgid ""
 "Temporary map '%s' was changed outside vector analysis tool.\n"
 "Do you really want to activate snapping and overwrite it? "
-msgstr ""
-"अस्थायी मानचित्र '%s' को वेक्टर विश्लेषण उपकरण के बाहर बदल दिया गया था।\\n"
-"क्या आप वास्तव में स्नैपिंग को सक्रिय करना और इसे ओवरराइट करना चाहते हैं? "
+msgstr "अस्थायी मानचित्र '%s' को वेक्टर विश्लेषण उपकरण के बाहर बदल दिया गया था।\\nक्या आप वास्तव में स्नैपिंग को सक्रिय करना और इसे ओवरराइट करना चाहते हैं? "
 
 msgid "Overwrite map"
 msgstr "मानचित्र को अधिलेखित करें"
@@ -10768,9 +11311,7 @@ msgstr "डिफ़ॉल्ट जोड़ें"
 msgid ""
 "User defined server with same name as default server <%s> already exists.\n"
 "Keeping user defined server"
-msgstr ""
-"डिफ़ॉल्ट सर्वर <%s> के समान नाम वाला उपयोगकर्ता परिभाषित सर्वर पहले से मौजूद है।\\n"
-"उपयोगकर्ता परिभाषित सर्वर को बनाए रखा जा रहा है"
+msgstr "डिफ़ॉल्ट सर्वर <%s> के समान नाम वाला उपयोगकर्ता परिभाषित सर्वर पहले से मौजूद है।\\nउपयोगकर्ता परिभाषित सर्वर को बनाए रखा जा रहा है"
 
 msgid "Draw/re-draw plot"
 msgstr "प्लॉट बनाएं/फिर से बनाएं"
@@ -11014,9 +11555,7 @@ msgstr "फ़ाइल पर सबसे ऊपर लिखना?"
 msgid ""
 "Unable to open file <%s> for writing.\n"
 "Reason: %s"
-msgstr ""
-"लिखने के लिए फ़ाइल <%s> खोलने में असमर्थ.\\n"
-"कारण: %s"
+msgstr "लिखने के लिए फ़ाइल <%s> खोलने में असमर्थ.\\nकारण: %s"
 
 #, python-format
 msgid ""
@@ -11065,3 +11604,9 @@ msgid ""
 msgstr ""
 "रेखापुंज मानचित्र <%(rast1)s> बनाम <%(rast2)s> के लिए प्रतिगमन समीकरण:\\n\\n\n"
 "\n"
+
+#~ msgid "New display"
+#~ msgstr "नया प्रदर्शन"
+
+#~ msgid "&Copy paths to mapsets"
+#~ msgstr "&म्यापसेट्स के कांपी पॄंथ करें"

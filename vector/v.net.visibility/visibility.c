@@ -4,12 +4,8 @@
  * AUTHOR(S):  Maximilian Maldacker
  *
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ * SPDX-FileCopyrightText: 2002-2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************/
 
@@ -19,8 +15,8 @@
 
 /** for all points initiate their vis line to the one directly below
  */
-void init_vis(struct Point *points, int num_points, struct Line *lines UNUSED,
-              int num_lines UNUSED)
+void init_vis(struct Point *points, int num_points, struct Line *lines G_UNUSED,
+              int num_lines G_UNUSED)
 {
     int i;
     double d;

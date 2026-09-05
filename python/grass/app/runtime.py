@@ -1,10 +1,8 @@
 """Provides functions for the main GRASS executable
 
-(C) 2024-2025 by Vaclav Petras and the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2024-2025 Vaclav Petras
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 
@@ -209,9 +207,7 @@ def get_grass_config_dir_for_version(major_version, minor_version, *, env):
     if WINDOWS:
         config_dirname = f"GRASS{major_version}"
     elif MACOS:
-        config_dirname = os.path.join(
-            "Library", "GRASS", f"{major_version}.{minor_version}"
-        )
+        config_dirname = os.path.join("Library", "GRASS", f"GRASS{major_version}")
     else:
         config_dirname = f".grass{major_version}"
 
@@ -238,7 +234,11 @@ def append_left_addon_paths(paths, config_dir, env):
     # addons (base)
     addon_base = env.get("GRASS_ADDON_BASE")
     if not addon_base:
-        name = "addons" if not MACOS else "Addons"
+        name = (
+            "addons"
+            if not MACOS
+            else f"Addons{resource_paths.GRASS_VERSION_MAJOR}.{resource_paths.GRASS_VERSION_MINOR}"
+        )
         addon_base = os.path.join(config_dir, name)
         env["GRASS_ADDON_BASE"] = addon_base
 

@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Worker functions.
  *
- * (C) 2008-2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2008-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Glynn Clements
  */
@@ -168,13 +166,13 @@ void G_finish_workers(void)
 
 /****************************************************************************/
 
-void G_begin_execute(void (*func)(void *), void *closure, void **ref UNUSED,
-                     int force UNUSED)
+void G_begin_execute(void (*func)(void *), void *closure, void **ref G_UNUSED,
+                     int force G_UNUSED)
 {
     (*func)(closure);
 }
 
-void G_end_execute(void **ref UNUSED)
+void G_end_execute(void **ref G_UNUSED)
 {
 }
 

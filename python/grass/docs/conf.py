@@ -15,63 +15,11 @@ import os
 from datetime import date
 import string
 from shutil import copy
+import pathlib
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
+# The grass package is imported from GISBASE, which the build puts on PYTHONPATH.
 if not os.getenv("GISBASE"):
     sys.exit("GISBASE not defined")
-sys.path.insert(
-    0, os.path.abspath(os.path.join(os.environ["GISBASE"], "etc", "python", "grass"))
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "ctypes")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "exceptions")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "gunittest")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "imaging")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "pydispatch")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "pygrass")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "script")
-    ),
-)
-sys.path.insert(
-    0,
-    os.path.abspath(
-        os.path.join(os.environ["GISBASE"], "etc", "python", "grass", "temporal")
-    ),
-)
 
 from grass.script import core  # noqa: E402
 
@@ -89,7 +37,17 @@ GRASS Development Team</a>, GRASS ${grass_version} Documentation</p>
 )
 
 grass_version = core.version()["version"]
-today = date.today()
+# Development builds on  the main branch are marked noindex so the dev
+# libpython docs do not compete with the grass-stable canonical in search;
+# stable and release builds stay indexable.
+# Consumed by _templates/layout.html.template (see #5935).
+grass_noindex = os.environ.get("GRASS_DOCS_NOINDEX", "false") == "true"
+# Canonical doc URLs point to the stable manuals tree, matching the MkDocs core
+# manuals (man/mkdocs/mkdocs.yml site_url = .../grass-stable/manuals/). Keeping an
+# absolute stable base here keeps every libpython canonical + sitemap <loc> on the
+# always-published grass-stable tree; CI rewrites it for dev builds (see #5935).
+grass_docs_baseurl = "https://grass.osgeo.org/grass-stable/manuals/libpython/"
+today = date.today().strftime("%B %d, %Y")
 
 copy("_templates/layout.html.template", "_templates/layout.html")
 
@@ -114,6 +72,69 @@ extensions = [
     "sphinx_sitemap",
 ]
 
+
+# Skip temporal lexer rule methods because their regex docstrings are not intended
+# for reStructuredText parsing and only serve PLY token definitions.
+def skip_member(app, what, name, obj, skip, options):
+    if name.startswith("t_"):
+        mod = getattr(obj, "__module__", None)
+        if mod in {
+            "grass.temporal.temporal_algebra",
+            "grass.temporal.temporal_operator",
+        }:
+            return True
+    return None
+
+
+def _apidoc_lastmod_from_source(app, env):
+    """Stamp sitemap lastmod on generated grass.* API pages.
+
+    autodoc records their dependency against the GISBASE-installed modules
+    (untracked), so sphinx_last_updated_by_git leaves them undated. Fill the gap
+    from the newest git commit in the matching python/grass source directory.
+    """
+    import shutil
+    import subprocess
+
+    git_last_updated = getattr(env, "git_last_updated", None)
+    if git_last_updated is None:
+        return
+
+    git = shutil.which("git")
+    if git is None:
+        return
+
+    confdir = os.path.dirname(os.path.abspath(__file__))
+    for docname in env.found_docs:
+        if docname != "grass" and not docname.startswith("grass."):
+            continue
+        current = git_last_updated.get(docname)
+        if current and current[0]:
+            continue  # keep real dates from the git extension
+        src = os.path.join(confdir, "..", *docname.split(".")[1:])
+        if not pathlib.Path(src).exists():
+            continue
+        try:
+            ts = subprocess.run(
+                [git, "log", "-1", "--format=%ct", "--", src],
+                cwd=confdir,
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout.strip()
+        except (subprocess.CalledProcessError, OSError):
+            continue
+        if ts:
+            git_last_updated[docname] = (int(ts), True)
+
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip_member)
+    # Run after sphinx_last_updated_by_git (default priority 500) so we only fill
+    # the gaps it leaves for generated apidoc pages, never clobber real dates.
+    app.connect("env-updated", _apidoc_lastmod_from_source, priority=900)
+
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
@@ -128,7 +149,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "GRASS Python Library"
-copyright = "2025, GRASS Development Team"
+copyright = "2026, GRASS Development Team"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -192,7 +213,6 @@ html_theme_options = {
     "repo_url": "https://github.com/OSGeo/grass/",
     "repo_name": "GRASS",
     "repo_type": "github",
-    "logo": "grass_logo.svg",
     # Visible levels of the global TOC; -1 means unlimited
     "globaltoc_depth": 1,
     # If False, expand all TOC entries
@@ -236,7 +256,7 @@ html_theme_options = {
             "internal": True,
         },
         {
-            "href": "exceptions",
+            "href": "grass.exceptions",
             "title": "Exceptions",
             "internal": True,
         },
@@ -263,8 +283,12 @@ logo_url = "_static/grass_logo.svg"
 html_favicon = "_static/favicon.ico"
 
 # The base URL which points to the root of the HTML documentation. It is used
-# to indicate the location of document using the Canonical Link Relation.
-html_baseurl = "https://grass.osgeo.org/grass-stable/manuals/libpython/"
+# to indicate the location of document using the Canonical Link Relation, and
+# also as the base for the sphinx-sitemap URLs below (they must stay in sync).
+html_baseurl = grass_docs_baseurl
+
+# Expose the noindex flag to layout.html (dev builds emit robots noindex).
+html_context = {"grass_noindex": grass_noindex}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -498,13 +522,23 @@ todo_include_todos = True
 
 # sphinx-sitemap extension config
 # https://sphinx-sitemap.readthedocs.io/en/latest/advanced-configuration.html
+# Each <loc> is html_baseurl + {link}, so the sitemap URLs match the canonical
+# URLs exactly; the grass-stable base is already part of html_baseurl (see #5935).
 sitemap_filename = "sitemap.xml"
-html_baseurl = "https://grass.osgeo.org/"
-sitemap_url_scheme = "grass{version}manuals/libpython/{link}"
+sitemap_url_scheme = "{link}"
+# Emit <lastmod> for each page, taken from the git commit date via the
+# sphinx_last_updated_by_git extension (sphinx-sitemap sets it up when this is
+# True). Without it sphinx-sitemap defaults to no lastmod, so libpython entries
+# in the merged manuals sitemap had none while the MkDocs entries did.
+sitemap_show_lastmod = True
 
 sitemap_excludes = [
     "search.html",
     "genindex.html",
+    "py-modindex.html",
+    # viewcode source-view pages: low search value and no datable source, so keep
+    # them off the sitemap (they remain reachable from the API pages' [source] links)
+    "_modules/*",
 ]
 
 # Intersphinx config

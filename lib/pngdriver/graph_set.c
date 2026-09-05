@@ -3,10 +3,9 @@
 
    \brief GRASS png display driver - set graphics processing
 
-   (C) 2003-2014 by Glynn Clements and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2003-2014 Glynn Clements
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Per Henrik Johansen (original contributor)
    \author Glynn Clements
@@ -33,7 +32,8 @@ struct png_state png;
 
 static void map_file(void)
 {
-    size_t size = HEADER_SIZE + png.width * png.height * sizeof(unsigned int);
+    size_t size =
+        HEADER_SIZE + (size_t)png.width * png.height * sizeof(unsigned int);
     void *ptr;
     int fd;
 
@@ -158,7 +158,8 @@ int PNG_Graph_set(void)
         map_file();
 
     if (!png.mapped)
-        png.grid = G_malloc(png.width * png.height * sizeof(unsigned int));
+        png.grid =
+            G_malloc((size_t)png.width * png.height * sizeof(unsigned int));
 
     if (!do_read) {
         PNG_Erase();

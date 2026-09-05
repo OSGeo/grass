@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_id_ID\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-28 15:43+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Indonesian <https://weblate.osgeo.org/projects/grass-gis/grassmods/id/>\n"
@@ -1755,7 +1755,7 @@ msgid "Cannot find/open symbol: '%s'"
 msgstr ""
 
 #, c-format
-msgid "Color <%s> cannot for option %s be parsed"
+msgid "Color <%s> for option <%s> cannot be parsed"
 msgstr ""
 
 #, c-format
@@ -1767,7 +1767,7 @@ msgid "Number of widths (%d) is higher then the number of files (%d)"
 msgstr ""
 
 #, c-format
-msgid "Number of widths (%d) is lower then the number of files (%d)"
+msgid "Number of widths (%d) is lower than the number of files (%d)"
 msgstr ""
 
 #, c-format
@@ -9274,22 +9274,37 @@ msgstr ""
 msgid "aggregation"
 msgstr ""
 
-msgid "Value option that sets the area size limit (in hectares)"
+msgid "Value option that sets the area size limit (in hectares) (deprecated)"
 msgstr ""
 
 msgid "Area"
 msgstr ""
 
-msgid "Lesser or greater than specified value"
+msgid "Keep only areas lesser or greater than specified value (deprecated)"
 msgstr ""
 
-msgid "Method used for reclassification"
+msgid "Value for the lower area size limit (in hectares). Pixel clumps with areas below this value are removed."
+msgstr ""
+
+msgid "Value for the upper area size limit (in hectares). Pixel clumps with areas above this value are removed."
+msgstr ""
+
+msgid "Method used for area size filtering"
 msgstr ""
 
 msgid "Input map is clumped"
 msgstr ""
 
-msgid "Clumps including diagonal neighbors"
+msgid "Generate clumps including diagonal neighbors"
+msgstr ""
+
+msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgstr ""
+
+msgid "Apply lower area threshold as \"minsize\" during clumping"
+msgstr ""
+
+msgid "Output vector map, do not convert back to raster (only for method 'rmarea')"
 msgstr ""
 
 msgid "Splits a raster map into red, green and blue maps."
@@ -9524,6 +9539,12 @@ msgid "Formatting"
 msgstr ""
 
 msgid "Columns to be printed to stdout"
+msgstr ""
+
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
+msgid "Name of mapsets to list ('.' for current, '*' for all mapsets)"
 msgstr ""
 
 msgid "Field separator character between the output columns"
@@ -9802,10 +9823,10 @@ msgstr ""
 msgid "Imports space time raster dataset."
 msgstr ""
 
-msgid "Path to the extraction directory"
+msgid "Path to the extraction directory (default is .tmp in the current mapset)"
 msgstr ""
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+msgid "Create a new project and import the data into it."
 msgstr ""
 
 msgid "Set the current region from the last map that was imported"
@@ -9973,6 +9994,9 @@ msgstr ""
 msgid "Raster map used for zoning, must be of type CELL"
 msgstr ""
 
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
 msgid "Calculate extended statistics"
 msgstr ""
 
@@ -10039,7 +10063,7 @@ msgstr ""
 msgid "Raster map with zones to compute statistics for"
 msgstr ""
 
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+msgid "3D raster map with zones"
 msgstr ""
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
@@ -10207,6 +10231,9 @@ msgstr ""
 msgid "select"
 msgstr ""
 
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 msgid "Exports a space time vector dataset as GRASS specific archive file."
 msgstr ""
 
@@ -10232,6 +10259,9 @@ msgid "Register empty maps"
 msgstr ""
 
 msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr ""
+
+msgid "Path to the extraction directory"
 msgstr ""
 
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
@@ -10487,6 +10517,24 @@ msgid "Default is sql unless the provided aggregate methods are for univar"
 msgstr ""
 
 msgid "sql;Uses SQL attribute database;univar;Uses v.db.univar"
+msgstr ""
+
+msgid "Prints geometry metrics of vector features."
+msgstr ""
+
+msgid "metric"
+msgstr ""
+
+msgid "Geometry metric(s) to compute"
+msgstr ""
+
+msgid "area;area size;perimeter;perimeter length of an area;length;line length;count;number of features for each category;compactness;compactness of an area, calculated as perimeter / (2 * sqrt(PI * area));fractal_dimension;fractal dimension of boundary defining a polygon, calculated as 2 * (log(perimeter) / log(area));slope;slope steepness of vector line or boundary;sinuosity;line sinuosity, calculated as line length / distance between end points;azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode;coordinates;point coordinates, X,Y or X,Y,Z;start;line/boundary starting point coordinates, X,Y or X,Y,Z;end;line/boundary end point coordinates, X,Y or X,Y,Z;bbox;bounding box of area, N,S,E,W"
+msgstr ""
+
+msgid "Units (one per metric, positional; unspecified metrics use defaults)"
+msgstr ""
+
+msgid "plain;Plain text with pipe separator by default;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
@@ -12007,6 +12055,9 @@ msgstr ""
 msgid "Unexpected output from r.stats"
 msgstr ""
 
+msgid "No data returned from r.stats"
+msgstr ""
+
 msgid "Unable to open tempfile"
 msgstr ""
 
@@ -13370,6 +13421,14 @@ msgstr ""
 msgid "Search radius size must cover at least 1 cell"
 msgstr ""
 
+#, c-format
+msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
+msgstr ""
+
+#, c-format
+msgid "memory=%d MB is below the %ld MB minimum for search=%s. This run will finish with the minimum MB needed instead."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
@@ -13379,17 +13438,13 @@ msgstr ""
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
-#, c-format
-msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
-msgstr ""
-
-msgid "Unknown output data type"
-msgstr ""
-
 msgid "Profile data has been written"
 msgstr ""
 
 msgid "Failed writing profile data"
+msgstr ""
+
+msgid "Unknown output data type"
 msgstr ""
 
 msgid "Failed to profile the computation, please check the parameters"
@@ -13401,6 +13456,9 @@ msgstr ""
 
 #, c-format
 msgid "Internal error in %s()"
+msgstr ""
+
+msgid "JSON nesting exceeds maximum depth"
 msgstr ""
 
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
@@ -14545,6 +14603,14 @@ msgstr ""
 msgid "PDAL error: %s"
 msgstr ""
 
+#, c-format
+msgid "The input dataset <%s> has undefined CRS, its extent is reported as stored in the file"
+msgstr ""
+
+#, c-format
+msgid "Reprojection of the data extent failed: %s"
+msgstr ""
+
 msgid "Mode value of point values in cell"
 msgstr ""
 
@@ -14572,10 +14638,10 @@ msgstr ""
 msgid "Use if output dimension is not Z or intensity"
 msgstr ""
 
-msgid "Reproject to project's coordinate system if needed"
+msgid "Reproject to project's coordinate system if needed [deprecated]"
 msgstr ""
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
+msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
 msgstr ""
 
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
@@ -14627,6 +14693,9 @@ msgstr ""
 msgid "Print data file extent in shell script style and then exit"
 msgstr ""
 
+msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr ""
+
 #, c-format
 msgid "Flag %c makes sense only with %s option or -%c flag or -%c flag"
 msgstr ""
@@ -14641,13 +14710,17 @@ msgstr ""
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr ""
 
-msgid "Reprojecting the input to the project's CRS"
+#, c-format
+msgid "PDAL error while reading <%s>: %s"
+msgstr ""
+
+msgid "The input dataset has undefined projection"
 msgstr ""
 
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr ""
 
-msgid "The input dataset has undefined projection"
+msgid "Reprojecting the input to the project's CRS"
 msgstr ""
 
 msgid "Running PDAL algorithms..."
@@ -17801,6 +17874,10 @@ msgstr ""
 msgid "Error writing temporary file <%s>"
 msgstr ""
 
+#, c-format
+msgid "Using %d thread(s), %d buffered output rows"
+msgstr ""
+
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr ""
 
@@ -18194,7 +18271,7 @@ msgstr ""
 msgid "Number of walkers"
 msgstr ""
 
-msgid "Time used for iterations [minutes]"
+msgid "Duration of the simulated water flow [minutes]"
 msgstr ""
 
 msgid "Minimum time step for the simulation [seconds]"
@@ -18331,9 +18408,6 @@ msgid "Manning's n raster map not found and manin_val undefined, choose one to b
 msgstr ""
 
 msgid "Zero value in Mannings n"
-msgstr ""
-
-msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 msgstr ""
 
 msgid "No values in the elevation raster."
@@ -22402,7 +22476,7 @@ msgstr ""
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr ""
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
 msgstr ""
 
 msgid "Unable to close the 3D raster map"
@@ -22928,7 +23002,7 @@ msgstr ""
 msgid "ZIP file is unreadable: {0}"
 msgstr ""
 
-msgid "Extracting may be unsafe; consider updating Python"
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
 msgstr ""
 
 #, python-brace-format
@@ -23399,7 +23473,7 @@ msgstr ""
 msgid "Filled raster map is: %s"
 msgstr ""
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
 msgstr ""
 
 msgid "Output can be written only to the current mapset"
@@ -23893,49 +23967,46 @@ msgstr ""
 msgid "azimuth must be between 0 and 360"
 msgstr ""
 
-msgid "xy-locations are not supported"
-msgstr ""
-
-msgid "Need projected data with grids in meters"
-msgstr ""
-
-msgid "flags c and d are mutually exclusive"
-msgstr ""
-
-#, python-format
-msgid "Temporary raster map <%s> exists"
-msgstr ""
-
-msgid "Generating a clumped raster file including diagonal neighbors..."
-msgstr ""
-
-msgid "Generating a clumped raster file ..."
-msgstr ""
-
-#, python-format
-msgid "Generating a reclass map with area size less than or equal to %f hectares..."
-msgstr ""
-
-#, python-format
-msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
-msgstr ""
-
-#, python-format
-msgid "No areas of size less than or equal to %f hectares found."
-msgstr ""
-
-#, python-format
-msgid "No areas of size greater than or equal to %f hectares found."
+msgid ""
+"xy-locations are not supported\n"
+"Need projected data with grids in meters"
 msgstr ""
 
 msgid "Latitude-longitude locations are not supported"
 msgstr ""
 
-msgid "You have to specify mode='lesser' with method='rmarea'"
+msgid "xy-locations are not supported"
+msgstr ""
+
+msgid "Generating a clumped raster file"
+msgstr ""
+
+msgid " including diagonal neighbors"
 msgstr ""
 
 #, python-format
-msgid "Generating output raster map <%s>..."
+msgid " with minimum %s pixels"
+msgstr ""
+
+msgid "Generating a reclass map with area size"
+msgstr ""
+
+#, python-format
+msgid " larger than or equal to %f hectares..."
+msgstr ""
+
+#, python-format
+msgid " smaller than or equal to %f hectares..."
+msgstr ""
+
+msgid "No areas of size "
+msgstr ""
+
+#, python-format
+msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
+msgstr ""
+
+msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
 msgstr ""
 
 msgid "No semantic label assigned to <{}>"
@@ -24359,6 +24430,15 @@ msgid ""
 "{error}"
 msgstr ""
 
+msgid "Cannot mix metrics from different feature types: {}. Results are merged by category, so combining e.g. line and area metrics would produce misleading records. Run v.geometry separately for each feature type."
+msgstr ""
+
+msgid "More units ({}) than metrics ({}) specified"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long, got: {}"
+msgstr ""
+
 #, python-format
 msgid "Missing value for parameter <%s>"
 msgstr ""
@@ -24667,10 +24747,19 @@ msgstr ""
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr ""
 
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr ""
+
 msgid "Overwrite current settings if initialized"
 msgstr ""
 
-msgid "Print current connection parameter in shell style and exit"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr ""
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr ""
+
+msgid "The mapset option requires format=json."
 msgstr ""
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
@@ -25095,6 +25184,10 @@ msgid "CSV format cannot be used with the -b flag. Please use the -b flag with t
 msgstr ""
 
 msgid "The 'list' format can only be used with the -b flag. Please use -b to enable list output."
+msgstr ""
+
+#, c-format
+msgid "No records selected from table <%s>"
 msgstr ""
 
 msgid "Unable to sort array of values"
@@ -30816,6 +30909,10 @@ msgid_plural "%d boundaries snapped"
 msgstr[0] ""
 
 #, c-format
+msgid "Removing areas smaller than %g sqm..."
+msgstr ""
+
+#, c-format
 msgid "Querying vector map <%s>..."
 msgstr ""
 
@@ -30893,6 +30990,12 @@ msgid "Snapping threshold for boundaries"
 msgstr ""
 
 msgid "Disable snapping with snap <= 0"
+msgstr ""
+
+msgid "Minimum size of areas to keep in square meters"
+msgstr ""
+
+msgid "Enable with minsize > 0"
 msgstr ""
 
 #, c-format
@@ -30995,6 +31098,9 @@ msgstr ""
 msgid "Missing attribute table for vector map <%s>"
 msgstr ""
 
+msgid "Too many columns to copy the table"
+msgstr ""
+
 #, c-format
 msgid "Missing table for <%s>"
 msgstr ""
@@ -31049,6 +31155,9 @@ msgstr ""
 msgid "%d vector maps patched"
 msgstr ""
 
+msgid "Too many columns to copy records"
+msgstr ""
+
 #, c-format
 msgid "Cannot open select cursor: '%s'"
 msgstr ""
@@ -31094,6 +31203,87 @@ msgid "normalsv: restoration of uninitialized block"
 msgstr ""
 
 msgid "normalsv: save of uninitialized block"
+msgstr ""
+
+msgid "Computing F function..."
+msgstr ""
+
+msgid "Computing G function..."
+msgstr ""
+
+msgid "Computing K function..."
+msgstr ""
+
+msgid "point pattern analysis"
+msgstr ""
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Summary function to compute"
+msgstr ""
+
+msgid "g;Nearest neighbor distance distribution function;f;Empty space function;k;Ripley's K function;l;L function (variance stabilized K function)"
+msgstr ""
+
+msgid "If omitted or '-', the results are printed to standard output"
+msgstr ""
+
+msgid "Number of distances"
+msgstr ""
+
+msgid "Number of equally spaced distances at which the function is estimated"
+msgstr ""
+
+msgid "Number of random points for the F function"
+msgstr ""
+
+msgid "Empty space distances are sampled at this many uniformly random locations"
+msgstr ""
+
+msgid "Maximum distance for the K and L functions"
+msgstr ""
+
+msgid "Default is one quarter of the shorter side of the computational region"
+msgstr ""
+
+msgid "Edge correction for the K and L functions"
+msgstr ""
+
+msgid "isotropic;Ripley's isotropic edge correction;none;No edge correction"
+msgstr ""
+
+msgid "Used for the random locations of the F function"
+msgstr ""
+
+#, c-format
+msgid "Option <%s> must be positive"
+msgstr ""
+
+#, c-format
+msgid "Option <%s> is larger than half of the shorter side of the computational region; the estimate becomes unreliable at large distances"
+msgstr ""
+
+#, c-format
+msgid "One point outside of the computational region was ignored"
+msgid_plural "%d points outside of the computational region were ignored"
+msgstr[0] ""
+
+msgid "No points found in the computational region"
+msgstr ""
+
+#, c-format
+msgid "At least 2 points are required, %d found"
+msgstr ""
+
+#, c-format
+msgid "Estimated intensity: %g"
+msgstr ""
+
+msgid "Unable to initialize JSON output"
+msgstr ""
+
+msgid "Unable to serialize JSON output"
 msgstr ""
 
 msgid "Vector map profiling tool"
@@ -31389,10 +31579,6 @@ msgstr ""
 
 #, c-format
 msgid "Database connection not defined for layer %s"
-msgstr ""
-
-#, c-format
-msgid "No records selected from table <%s>"
 msgstr ""
 
 msgid "Key column type is not integer"
@@ -33100,9 +33286,6 @@ msgstr ""
 
 #, c-format
 msgid "Pass %d"
-msgstr ""
-
-msgid "Node is outside any input area"
 msgstr ""
 
 #, c-format

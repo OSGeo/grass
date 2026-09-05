@@ -20,10 +20,8 @@
 
    Reference: http://www.opengeospatial.org/standards/sfa
 
-   (C) 2009, 2011-2013 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2009, 2011-2013 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -242,8 +240,8 @@ int Vect_sfa_line_astext(const struct line_pnts *Points, int type, int with_z,
    \return -1 feature type not supported (GV_POINT, GV_CENTROID, ...)
    \note Implementation is pending, now always returns 0
  */
-int Vect_sfa_is_line_simple(const struct line_pnts *Points UNUSED,
-                            int type UNUSED, int with_z UNUSED)
+int Vect_sfa_is_line_simple(const struct line_pnts *Points G_UNUSED,
+                            int type G_UNUSED, int with_z G_UNUSED)
 {
     /* TODO:
        SF_FeatureType sftype;

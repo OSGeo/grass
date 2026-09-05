@@ -7,11 +7,9 @@ AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 
 PURPOSE:   Test that --tmp-mapset option of grass command works
 
-COPYRIGHT: (C) 2020 Vaclav Petras and the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2020 Vaclav Petras
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import os
@@ -98,8 +96,9 @@ class TestTmpMapset(unittest.TestCase):
             [self.executable, "--tmp-mapset", self.location, "--exec", "g.proj", "-p"]
         )
         for directory in os.listdir(self.location):
-            self.assertTrue(
-                directory in self.subdirs,
+            self.assertIn(
+                directory,
+                self.subdirs,
                 msg="Directory {directory} should have been deleted".format(**locals()),
             )
 

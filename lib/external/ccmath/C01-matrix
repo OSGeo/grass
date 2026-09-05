@@ -877,8 +877,8 @@ qrbd1
             updated by the computation
        v = pointer to store of n by n orthogonal matrix V updated
            by the computation
-       m = number of rows in the U1 matrix
-       n = size of the d and e arrays, number of columns in the U1
+       m = number of rows in the U1 matrix
+       n = size of the d and e arrays, number of columns in the U1
            matrix, and the number of rows and columns in the V matrix.
       return value: N = number of QR iterations required
 

@@ -4,11 +4,8 @@
  *
  * AUTHOR(S):    Radim Blazek, Markus Metz
  *
- * COPYRIGHT:    (C) 2011 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 2011 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************/
 
@@ -28,7 +25,7 @@ int main(int argc, char *argv[])
     exit(db_driver(argc, argv));
 }
 
-int sqlite_busy_callback(void *arg UNUSED, int n_calls)
+int sqlite_busy_callback(void *arg G_UNUSED, int n_calls)
 {
     static time_t start_time = 0;
     time_t curr_time;

@@ -1269,11 +1269,11 @@ class Node:
     """
 
     def __init__(self, v_id, c_mapinfo, **kwords):
-        """Construct a Node object
+        r"""Construct a Node object
 
-        param v_id: The unique node id
-        param c_mapinfo: A valid pointer to the mapinfo object
-        param **kwords: Ignored
+        :param v_id: The unique node id
+        :param c_mapinfo: A valid pointer to the mapinfo object
+        :param \*\*kwords: Ignored
         """
         self.id = v_id  # vector id
         self.c_mapinfo = c_mapinfo

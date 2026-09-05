@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/cs/>\n"
@@ -448,26 +448,6 @@ msgstr ""
 msgid "Animation Tool"
 msgstr ""
 
-msgid "Main Toolbar"
-msgstr ""
-
-msgid "Animation Toolbar"
-msgstr ""
-
-msgid "Misc Toolbar"
-msgstr ""
-
-msgid "Loading data"
-msgstr "Načítání dat"
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr ""
-
-#, python-format
-msgid "to %(to)s"
-msgstr ""
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
@@ -493,6 +473,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr ""
+
+msgid "Animation Toolbar"
+msgstr ""
+
+msgid "Misc Toolbar"
+msgstr ""
+
+msgid "Loading data"
+msgstr "Načítání dat"
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -746,6 +750,17 @@ msgstr "Editovat vybraný záznam"
 msgid "Display selected"
 msgstr "Zobrazit vybrané"
 
+msgid "Tools API"
+msgstr ""
+
+#, fuzzy
+msgid "Script API"
+msgstr "Editor Pythonu"
+
+#, fuzzy
+msgid "PyGRASS API"
+msgstr "Nápověda GRASS"
+
 msgid "Classic (labels only)"
 msgstr ""
 
@@ -811,6 +826,11 @@ msgstr ""
 
 msgid "PyGRASS"
 msgstr ""
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS Tools"
+msgstr "Nápověda GRASS GIS"
 
 #, python-brace-format
 msgid ""
@@ -985,6 +1005,13 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+#, fuzzy
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "Vybrat zdrojový mapset:"
+
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr ""
+
 msgid "Link external data"
 msgstr "Připojit externí data"
 
@@ -1131,6 +1158,20 @@ msgid "Failed to read maps from project <{l}>."
 msgstr ""
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr ""
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr ""
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
@@ -1189,6 +1230,19 @@ msgstr ""
 msgid "Rename map"
 msgstr ""
 
+#, fuzzy
+#| msgid "Create database"
+msgid "Rename dataset"
+msgstr "Vytvořit databázi"
+
+#, python-brace-format
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
 msgid "Cannot rename mapset"
 msgstr ""
 
@@ -1205,10 +1259,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Renaming map <{name}>..."
-msgstr ""
-
-#, python-brace-format
-msgid "{cmd} -- completed"
 msgstr ""
 
 msgid "No map selected for copying."
@@ -1244,9 +1294,13 @@ msgstr ""
 msgid "g.remove completed"
 msgstr ""
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete map <{m}>?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
+msgstr "Přejete si vytvořit nový mapset?"
 
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
@@ -1259,19 +1313,155 @@ msgstr "Smazat mapu"
 msgid "Deleting {name}..."
 msgstr ""
 
+#, fuzzy, python-brace-format
+#| msgid "Delete map"
+msgid "Deleting {n} maps..."
+msgstr "Smazat mapu"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "Odstranit vybraný mapset"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+msgid "Delete dataset"
+msgstr "Přejmenovat vybraný mapset"
+
+#, fuzzy
+#| msgid "Loading data..."
+msgid "Deleting datasets..."
+msgstr "Načítám data..."
+
+#, fuzzy
+#| msgid "remove duplicates"
+msgid "t.remove completed"
+msgstr "odstranit zdvojené prvky"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy
+#| msgid "Raster map"
+msgid "Unregister map"
+msgstr "Rastrová vrstva"
+
+msgid "Unregistering map..."
+msgstr ""
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display animation"
+msgstr "Zobrazit kartografické zobrazení mapy"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "Rastrové mapy"
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Unregister maps"
+msgstr "Rastrové mapy"
+
+#, fuzzy
+#| msgid "Updates vector map metadata."
+msgid "Update metadata"
+msgstr "Aktualizuje metadata vektorové vrstvy."
+
+#, fuzzy
+msgid "Display &temporal extent"
+msgstr "Geometrie okna"
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display &animation"
+msgstr "Zobrazit kartografické zobrazení mapy"
+
+#, fuzzy
+msgid "&Rename dataset"
+msgstr "Správa kartografických zobrazení"
+
+#, fuzzy
+#| msgid "Delete selected point"
+msgid "&Delete dataset only"
+msgstr "Odstranit vybraný bod"
+
+#, fuzzy
+#| msgid "Export database table"
+msgid "&Export dataset"
+msgstr "Export databázové tabulky"
+
+msgid "Show &metadata"
 msgstr ""
 
 msgid "&Copy"
 msgstr ""
 
 msgid "Copy &name"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster map"
+msgid "&Unregister map"
+msgstr "3D rastrová mapa"
+
+msgid "&Cut"
 msgstr ""
 
 msgid "&Paste"
@@ -1285,14 +1475,10 @@ msgstr "Od&stranit"
 msgid "&Rename"
 msgstr "Pře&jmenovat"
 
-msgid "&Display layers"
-msgstr ""
-
-msgid "&Display layer"
-msgstr ""
-
-msgid "Show &metadata"
-msgstr ""
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Create &temporal dataset"
+msgstr "Vytvořit prázdnou databázi"
 
 msgid "&Switch mapset"
 msgstr ""
@@ -1303,11 +1489,19 @@ msgstr ""
 msgid "&Rename mapset"
 msgstr ""
 
-msgid "Re&load maps"
-msgstr ""
+#, fuzzy
+#| msgid "Name of mapset:"
+msgid "Re&load mapset"
+msgstr "Název mapsetu:"
 
-msgid "&Copy path to mapset"
-msgstr ""
+#, fuzzy
+#| msgid "Computational region"
+msgid "Show computational region"
+msgstr "Výpočetní region"
+
+#, fuzzy
+msgid "&Copy path"
+msgstr "Správa přístupu do mapsetů"
 
 msgid "&Create mapset"
 msgstr ""
@@ -1319,6 +1513,20 @@ msgstr "Smazat záznamy"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Správa kartografických zobrazení"
+
+#, fuzzy
+msgid "Re&load project"
+msgstr "Správa kartografických zobrazení"
+
+#, fuzzy
+#| msgid "Choose projection"
+msgid "Show projection info"
+msgstr "Vybrat kartografické zobrazení"
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy path"
+msgstr "Kopírovat tabulku"
 
 #, fuzzy
 #| msgid "Change mapset"
@@ -1350,15 +1558,40 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #, fuzzy
+#| msgid "Create database"
+msgid "Re&load database"
+msgstr "Vytvořit databázi"
+
+#, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "Odstranit vybranou lokaci"
+
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Copy paths"
+msgstr "Kopírovat kategorie"
 
 msgid "&Delete mapsets"
 msgstr ""
 
 #, fuzzy
-msgid "&Copy paths to mapsets"
+msgid "&Copy paths"
 msgstr "Správa přístupu do mapsetů"
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "&Merge datasets"
+msgstr "Správa tabulek"
+
+#, fuzzy
+#| msgid "Delete selected point"
+msgid "&Delete datasets only"
+msgstr "Odstranit vybraný bod"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "Odstranit vybraný mapset"
 
 #, fuzzy, python-brace-format
 #| msgid "Removes an existing database."
@@ -3216,10 +3449,37 @@ msgstr "Zavři toto okno bez spuštění příkazu (Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "Spustit příkaz (Ctrl+R)"
 
+#, fuzzy
+#| msgid "Copy all to clipboard"
+msgid "Copy as Shell command"
+msgstr "Kopírovat vše do schránky"
+
+#, fuzzy
+#| msgid "Copy table"
+msgid "Copy as Python"
+msgstr "Kopírovat tabulku"
+
+#, fuzzy
+#| msgid "Color settings"
+msgid "Copy as JSON settings"
+msgstr "Nastavení barev"
+
 msgid "Copy"
 msgstr "Kopírovat"
 
-msgid "Copy the current command string to the clipboard"
+#, fuzzy
+#| msgid "Export common formats"
+msgid "More copy formats"
+msgstr "Export do běžných formátů"
+
+#, fuzzy
+#| msgid "User settings"
+msgid "Paste JSON settings"
+msgstr "Uživatelské nastavení"
+
+#, fuzzy
+#| msgid "Copy the current command string to the clipboard"
+msgid "Paste parameters from JSON string in the clipboard"
 msgstr "Kopírovat příkaz jako řetězec do schránky"
 
 msgid "Show manual page of the command (Ctrl+H)"
@@ -3234,8 +3494,70 @@ msgstr "Zavřít dialog při ukončení"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr ""
 
+msgid "Copy as Python (Tools API)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (Script API)"
+msgstr "Skript Pythonu"
+
+#, fuzzy
+#| msgid "Python script"
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Skript Pythonu"
+
 #, python-format
 msgid "'%s' copied to clipboard"
+msgstr "'%s' zkopírováno do schránky"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "'%s' zkopírováno do schránky"
+
+#, fuzzy
+#| msgid "'%s' copied to clipboard"
+msgid "JSON copied to clipboard"
+msgstr "'%s' zkopírováno do schránky"
+
+msgid "Pasted data is not a valid JSON object."
+msgstr ""
+
+#, python-format
+msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Modules"
+msgid "Module Mismatch"
+msgstr "Moduly"
+
+msgid "Pasted parameters are not a valid JSON object."
+msgstr ""
+
+msgid "Parameters pasted from clipboard."
+msgstr ""
+
+msgid "No matching parameters found in clipboard."
+msgstr ""
+
+msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid name"
+msgid "Invalid Data"
+msgstr "Neplatný název"
+
+#, fuzzy
+#| msgid "Error"
+msgid "Paste Error"
+msgstr "Chyba"
+
+#, fuzzy, python-format
+#| msgid "'%s' copied to clipboard"
+msgid "%s copied to clipboard"
 msgstr "'%s' zkopírováno do schránky"
 
 msgid "Required"
@@ -3847,6 +4169,9 @@ msgstr "Povolit interaktivní vstup"
 
 msgid "Verbosity level:"
 msgstr "Úroveň upovídanosti příkazů:"
+
+msgid "Default Python API for copied commands:"
+msgstr ""
 
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr ""
@@ -5339,8 +5664,7 @@ msgid ""
 "{messages}"
 msgstr ""
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Zoom to scatter plot extend"
@@ -5403,6 +5727,285 @@ msgstr ""
 msgid "Remove selected class"
 msgstr ""
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS GIS database directory"
+msgid "Select notebook directory"
+msgstr "1. Vyberte adresář databáze GRASS GISu"
+
+#, fuzzy
+msgid "Save in project: {}"
+msgstr "Vytvořit tabulku?"
+
+msgid "Options"
+msgstr "Volby"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "Procházet"
+
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Integrated"
+msgstr "přechodné"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "Zavřít dialog "
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "Chyba"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "Chyba"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import"
+msgid "Import file"
+msgstr "Import"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "Přejmenovat"
+
+msgid "No page for export is currently selected."
+msgstr ""
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save file as..."
+msgid "Export file as..."
+msgstr "Uložit soubor jako..."
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "Model exportován do <%s>"
+
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "Vložte jméno nové mapsetu:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create location"
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "Nelze vytvořit lokaci"
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+msgid "New file '{}' created."
+msgstr ""
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr ""
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "Server:"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Input vector map does not exist."
+msgid "Notebook storage does not exist: {}"
+msgstr "Vstupní vektorová mapa neexistuje."
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File %s not found"
+msgid "File not found: {}"
+msgstr "Soubor %s nebyl nalezen"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "Soubor již existuje"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "Soubor již existuje"
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "Server:"
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "Vytvořit nový model"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to Python"
+msgid "Export notebook"
+msgstr "Export do Pythonu"
+
 #, fuzzy
 msgid "GRASS"
 msgstr "Nápověda GRASS"
@@ -5431,6 +6034,30 @@ msgstr ""
 
 msgid "Console"
 msgstr ""
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "Režim 3D zobrazení není k dispozici"
 
 #, fuzzy
 msgid "Map Swipe Tool"
@@ -5581,6 +6208,11 @@ msgstr "Odstranit mapovou vrstvu"
 
 msgid "Quit GRASS GUI"
 msgstr "Ukončit GRASS GUI"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
@@ -5816,6 +6448,14 @@ msgstr ""
 msgid "Remove raster mask"
 msgstr "Vytvořit rastrovou mapu"
 
+#, fuzzy
+#| msgid "Custom min"
+msgid "Custom CRS"
+msgstr "Volitelné minimum"
+
+msgid "Left mouse click to print detailed projection info"
+msgstr ""
+
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Vytvořit novou pracovní plochu (Ctrl+N)"
 
@@ -5905,12 +6545,13 @@ msgstr "Georektifikace"
 msgid "Cartographic Composer"
 msgstr ""
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "Grafické modelování"
+
 msgid "Launch user-defined script"
 msgstr "Spustit uživatelem definovaný skript"
-
-#, fuzzy
-msgid "New display"
-msgstr "Vymazat okno"
 
 #, fuzzy
 msgid "Python code editor"
@@ -6304,6 +6945,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 #, fuzzy
@@ -6955,9 +7602,6 @@ msgstr ""
 msgid "List of extensions - double-click to install"
 msgstr ""
 
-msgid "Options"
-msgstr "Volby"
-
 msgid "&Install"
 msgstr "&Instalovat"
 
@@ -7156,6 +7800,9 @@ msgstr "Uložit výraz do souboru"
 
 msgid "Load expression from file"
 msgstr "Načíst výraz ze souboru"
+
+msgid "Copy the current command string to the clipboard"
+msgstr "Kopírovat příkaz jako řetězec do schránky"
 
 msgid "exponent"
 msgstr "exponent"
@@ -9572,7 +10219,7 @@ msgstr "Přejmenovat vybraný mapset"
 msgid "Do you want to cancel dataset download?"
 msgstr "Chcete trvale odstranit data? %s"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr ""
 
 msgid "Timeline Tool"
@@ -9668,8 +10315,7 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr ""
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Temporal Plot Tool"
@@ -9677,6 +10323,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -9694,6 +10341,7 @@ msgstr "STRDS"
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -11139,6 +11787,10 @@ msgid ""
 "\n"
 msgstr ""
 
+#, fuzzy
+#~ msgid "New display"
+#~ msgstr "Vymazat okno"
+
 #~ msgid "Generate random seed for rand()"
 #~ msgstr "Vytvořit náhodný seed pro rand()"
 
@@ -11522,9 +12174,6 @@ msgstr ""
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "Zvolte metodu nebo specifikujte parametry georeference"
 
-#~ msgid "Choose projection"
-#~ msgstr "Vybrat kartografické zobrazení"
-
 #~ msgid "Classifies attribute data, e.g. for thematic mapping"
 #~ msgstr "Klasifikuje atributová data, například pro tématické mapy"
 
@@ -11665,9 +12314,6 @@ msgstr ""
 #~ msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
 #~ msgstr "Kopíruj tabulku. Použita může být buď volba 'from_table' (volitelně s 'where') nebo volba 'select', ale nikoliv 'from_table' a 'select' současně."
 
-#~ msgid "Copy table"
-#~ msgstr "Kopírovat tabulku"
-
 #~ msgid "Copy the current command string to the clipboard (Ctrl+C)"
 #~ msgstr "Kopírovat příkaz do schránky (Ctrl+C)"
 
@@ -11695,9 +12341,6 @@ msgstr ""
 
 #~ msgid "Create a generic Cartesian coordinate system (XY)"
 #~ msgstr "Vytvořit obecný kartézský souřadnicový systém (XY)"
-
-#~ msgid "Create database"
-#~ msgstr "Vytvořit databázi"
 
 #~ msgid "Create labels"
 #~ msgstr "Vytvořit popisky"
@@ -11759,9 +12402,6 @@ msgstr ""
 
 #~ msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
 #~ msgstr "Vytváří rastrovou vrstvu ukazující kumulativní náklady pohybu mezi různými polohami na vstupní rastrové vrstvě kde každá hodnota buňky prezentuje náklad."
-
-#~ msgid "Creates an empty database."
-#~ msgstr "Vytvořit prázdnou databázi"
 
 #~ msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
 #~ msgstr "Vytvoří a připojí novou atributovou tabulku k dané vrstvě vektorové mapy."
@@ -11873,9 +12513,6 @@ msgstr ""
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "Zobrazit informace o Grafickém modelování"
 
-#~ msgid "Display map projection"
-#~ msgstr "Zobrazit kartografické zobrazení mapy"
-
 #~ msgid "Display mode"
 #~ msgstr "Mód displeje"
 
@@ -11985,9 +12622,6 @@ msgstr ""
 #~ msgid "Export color table"
 #~ msgstr "Exportovat barevnou tabulku"
 
-#~ msgid "Export database table"
-#~ msgstr "Export databázové tabulky"
-
 #~ msgid "Export raster map"
 #~ msgstr "Export rastrové mapy"
 
@@ -11996,9 +12630,6 @@ msgstr ""
 
 #~ msgid "Export to PostScript"
 #~ msgstr "Exportovat do PostScriptu"
-
-#~ msgid "Export to Python"
-#~ msgstr "Export do Pythonu"
 
 #~ msgid "Export to image"
 #~ msgstr "Export do obrazu"
@@ -12123,9 +12754,6 @@ msgstr ""
 
 #~ msgid "GRASS GIS Vector Network Analysis Tool"
 #~ msgstr "Nástroj pro analýzu vektorové sítě GRASS GISu"
-
-#~ msgid "GRASS help"
-#~ msgstr "Nápověda GRASS GIS"
 
 #~ msgid "GRASS raster map layer data resampling capability."
 #~ msgstr "Modul pro převzorkování rastrových map."
@@ -12256,9 +12884,6 @@ msgstr ""
 
 #~ msgid "IDW from vector points"
 #~ msgstr "Interpolace IDW z vektorových bodů"
-
-#~ msgid "Import"
-#~ msgstr "Import"
 
 #~ msgid "Import 3D raster data"
 #~ msgstr "Import 3D rastrových map"
@@ -12485,9 +13110,6 @@ msgstr ""
 #~ msgid "Manage colors"
 #~ msgstr "Správa barev"
 
-#~ msgid "Manage databases"
-#~ msgstr "Správa tabulek"
-
 #~ msgid "Manage image colors"
 #~ msgstr "Správa barevné škály obrazových dat"
 
@@ -12557,9 +13179,6 @@ msgstr ""
 
 #~ msgid "Module dialog settings"
 #~ msgstr "Nastavení dialogu pro moduly"
-
-#~ msgid "Modules"
-#~ msgstr "Moduly"
 
 #~ msgid "Mosaic images"
 #~ msgstr "Vytvořit mozaiku více jak 4 sousední obrazové soubory"
@@ -13098,10 +13717,6 @@ msgstr ""
 #~ msgid "Select output vector map:"
 #~ msgstr "Vybrat výstupní vektorovou mapu:"
 
-#, fuzzy
-#~ msgid "Select space time raster dataset(s):"
-#~ msgstr "Vybrat zdrojový mapset:"
-
 #~ msgid "Selects features from vector map (A) by features from other vector map (B)."
 #~ msgstr "Vybere prvky z vektorové vrstvy (A) podle prvků z druhé vektorové vrstvy (B)"
 
@@ -13343,9 +13958,6 @@ msgstr ""
 #~ msgid "Traveling salesman analysis"
 #~ msgstr "Problém obchodního cestujícího"
 
-#~ msgid "Unable to create location"
-#~ msgstr "Nelze vytvořit lokaci"
-
 #~ msgid "Unable to delete location"
 #~ msgstr "Nelze odstranit lokaci"
 
@@ -13393,9 +14005,6 @@ msgstr ""
 
 #~ msgid "Updates a column in the attribute table connected to a vector map."
 #~ msgstr "Aktualizuje sloupec atributové tabulky připojené k vektorové vrstvě."
-
-#~ msgid "Updates vector map metadata."
-#~ msgstr "Aktualizuje metadata vektorové vrstvy."
 
 #~ msgid "Uploads raster values at positions of vector points to the table."
 #~ msgstr "Uloží hodnoty rastru pod vektorovými body do jejich atributové tabulky."
@@ -13548,9 +14157,6 @@ msgstr ""
 
 #~ msgid "remove duplicate area centroids"
 #~ msgstr "Odstranit duplicitní centroidy v ploše"
-
-#~ msgid "remove duplicates"
-#~ msgstr "odstranit zdvojené prvky"
 
 #~ msgid "remove lines/boundaries of zero length"
 #~ msgstr "Odstranit linie/hranice nulové délky"

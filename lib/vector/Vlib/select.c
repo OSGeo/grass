@@ -5,10 +5,8 @@
 
    Higher level functions for a custom spatial index.
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Radim Blazek
  */
@@ -118,7 +116,7 @@ void Vect_spatial_index_del_item(struct spatial_index *si, int id,
 
 /************************* SELECT BY BOX *********************************/
 /* This function is called by  RTreeSearch() to add selected item to the list */
-static int _add_item(int id, const struct RTree_Rect *rect UNUSED,
+static int _add_item(int id, const struct RTree_Rect *rect G_UNUSED,
                      struct ilist *list)
 {
     G_ilist_add(list, id);

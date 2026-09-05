@@ -64,17 +64,15 @@ defines the probability of particles to pass through the structure (the
 values will be 0-1).
 
 Output includes a water depth raster map **depth** in \[m\], and a water
-discharge raster map **discharge** in \[m3/s\]. Error of the numerical
-solution can be analyzed using the **error** raster map (the resulting
-water depth is an average, and err is its RMSE). The output vector
-points map **output_walkers** can be used to analyze and visualize
-spatial distribution of walkers at different simulation times (note that
-the resulting water depth is based on the density of these walkers). The
-spatial distribution of numerical error associated with path sampling
-solution can be analysed using the output error raster file \[m\]. This
-error is a function of the number of particles used in the simulation
-and can be reduced by increasing the number of walkers given by
-parameter **nwalkers**. Duration of simulation is controlled by the
+discharge raster map **discharge** in \[m3/s\]. The **error** raster map
+is a Monte Carlo standard-deviation estimator across replicas of the
+particle simulation; the simulation currently runs a single replica, so
+this map is zero everywhere and is provided for forward compatibility
+with planned multiple-replica execution. The output vector points map
+**output_walkers** can be used to analyze and visualize spatial
+distribution of walkers at different simulation times (note that the
+resulting water depth is based on the density of these walkers).
+Duration of simulation is controlled by the
 **duration** parameter. The default value is 10 minutes, reaching the
 steady-state may require much longer time, depending on the time step,
 complexity of terrain, land cover and size of the area. Output walker,
@@ -153,33 +151,21 @@ independence of sampling points. Therefore, the methods are useful both
 for everyday exploratory work using a desktop computer and for large,
 cutting-edge applications using high performance computing.
 
-**Suggested Manning's n for surface roughness**  
-from <https://baharmon.github.io/hydrology-in-grass>
+### Manning's n for surface roughness
 
-| NLCD Landcover Category       | Manning’s n value |
-|-------------------------------|-------------------|
-| Open Water                    | 0.001             |
-| Developed, Open Space         | 0.0404            |
-| Developed, Low Intensity      | 0.0678            |
-| Developed, Medium Intensity   | 0.0678            |
-| Developed, High Intensity     | 0.0404            |
-| Barren Land                   | 0.0113            |
-| Deciduous Forest              | 0.36              |
-| Evergreen Forest              | 0.32              |
-| Mixed Forest                  | 0.4               |
-| Shrub/Scrub                   | 0.4               |
-| Grassland/Herbaceuous         | 0.368             |
-| Pasture/Hay                   | 0.325             |
-| Cultivated Crops              | 0.325             |
-| Woody Wetlands                | 0.086             |
-| Emergent Herbaceuous Wetlands | 0.1825            |
+The **man** raster map can be derived from a land cover raster with the
+[r.manning](https://grass.osgeo.org/grass-stable/manuals/addons/r.manning.html)
+addon, which provides Manning's n values for the NLCD and ESA WorldCover
+land cover classifications as well as for user-defined ones:
 
-The [NLCD user
-guide](https://www.usgs.gov/centers/eros/science/annual-nlcd-science-product-user-guide)
-provides more information about the different NLCD classes.
+```sh
+g.extension extension=r.manning
+r.manning input=nlcd_landcover output=mannings_n landcover=nlcd
+```
 
-Increasing the number of threads with **nprocs** does not really speed
-up the simulation.
+For the shallow overland flow simulated here, Manning's n is generally
+higher than for deeper channel or floodplain flow, especially over
+vegetated surfaces, see the *r.manning* documentation.
 
 ## EXAMPLE
 
@@ -217,16 +203,6 @@ d.mon stop=cairo
 ![r.sim.water generated depth map](r_sim_water_water_depth.png)  
 *Figure: Simulated water depth map in the rural area of the North
 Carolina sample dataset.*
-
-## ERROR MESSAGES
-
-If the module fails with
-
-```sh
-ERROR: nwalk (7000001) > maxw (7000000)!
-```
-
-then a lower **nwalkers** parameter value has to be selected.
 
 ## REFERENCES
 
@@ -269,8 +245,9 @@ then a lower **nwalkers** parameter value has to be selected.
 
 ## SEE ALSO
 
-*[v.surf.rst](v.surf.rst.md), [r.slope.aspect](r.slope.aspect.md),
-[r.sim.sediment](r.sim.sediment.md)*
+*[r.manning](https://grass.osgeo.org/grass-stable/manuals/addons/r.manning.html)
+(addon), [r.sim.sediment](r.sim.sediment.md),
+[r.slope.aspect](r.slope.aspect.md), [v.surf.rst](v.surf.rst.md)*
 
 ## AUTHORS
 

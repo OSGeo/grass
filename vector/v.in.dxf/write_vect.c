@@ -86,7 +86,7 @@ void write_vect(struct Map_info *Map, char *layer, char *entity, char *handle,
     return;
 }
 
-int write_done(struct Map_info *Map UNUSED)
+int write_done(struct Map_info *Map G_UNUSED)
 {
     int i;
 

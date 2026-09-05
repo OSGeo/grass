@@ -5,12 +5,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008, 2018 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008, 2018 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL (January 1993)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -670,7 +666,7 @@ void gsd_litvert_func(float *norm, unsigned long col, float *pt)
    \param col [unused]
    \param pt
  */
-void gsd_litvert_func2(float *norm, unsigned long col UNUSED, float *pt)
+void gsd_litvert_func2(float *norm, unsigned long col G_UNUSED, float *pt)
 {
     glNormal3fv(norm);
     glVertex3fv(pt);
@@ -1150,7 +1146,7 @@ void gsd_endlist(void)
    \param listno
    \param range [unused]
  */
-void gsd_deletelist(GLuint listno, int range UNUSED)
+void gsd_deletelist(GLuint listno, int range G_UNUSED)
 {
     unsigned int i;
 
@@ -1182,7 +1178,7 @@ void gsd_calllist(int listno)
 
    \param listno [unused]
  */
-void gsd_calllists(int listno UNUSED)
+void gsd_calllists(int listno G_UNUSED)
 {
     int i;
 

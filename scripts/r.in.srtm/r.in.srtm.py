@@ -9,11 +9,8 @@
 #            Luca Delucchi
 # PURPOSE:   import of SRTM hgt files into GRASS
 #
-# COPYRIGHT:	(C) 2004, 2006 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2004, 2006 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # Dec 2004: merged with srtm_generate_hdr.sh (M. Neteler)
 #           corrections and refinement (W. Kyngesburye)
@@ -217,7 +214,7 @@ def main():
             gs.fatal(_("Unable to unzip file."))
 
     gs.message(_("Converting input file to BIL..."))
-    os.rename(hgtfile, bilfile)
+    Path(hgtfile).rename(bilfile)
 
     north = tile[0]
     ll_latitude = int(tile[1:3])

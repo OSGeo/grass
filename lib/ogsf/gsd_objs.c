@@ -5,12 +5,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL (October 1993)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -1279,8 +1275,8 @@ int gsd_scalebar(float *pos2, float len, GLuint fontbase, unsigned long bar_clr,
  *                 Integer representing the color to use for the text.
  * @return 1
  */
-int gsd_scalebar_v2(float *pos, float len, GLuint fontbase UNUSED,
-                    unsigned long bar_clr, unsigned long text_clr UNUSED)
+int gsd_scalebar_v2(float *pos, float len, GLuint fontbase G_UNUSED,
+                    unsigned long bar_clr, unsigned long text_clr G_UNUSED)
 {
     float base[6][3];
     float Ntop[] = {0.0, 0.0, 1.0};

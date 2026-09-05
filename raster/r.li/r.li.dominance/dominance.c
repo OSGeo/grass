@@ -7,11 +7,8 @@
  *               Rewrite: Markus Metz
  *
  * PURPOSE:      calculates dominance diversity index
- * COPYRIGHT:    (C) 2007-2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2007-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -65,7 +62,8 @@ int main(int argc, char *argv[])
                           output->answer);
 }
 
-int dominance(int fd, char **par UNUSED, struct area_entry *ad, double *result)
+int dominance(int fd, char **par G_UNUSED, struct area_entry *ad,
+              double *result)
 {
     int ris = RLI_OK;
     double indice = 0;

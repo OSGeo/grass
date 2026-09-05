@@ -3,10 +3,9 @@ Name:      vdbselect_test
 Purpose:   v.db.select decimation test
 
 Author:    Luca Delucchi
-Copyright: (C) 2015 by Luca Delucchi and the GRASS Development Team
-Licence:   This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2015 Luca Delucchi
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 from pathlib import Path
@@ -169,6 +168,11 @@ out_sep = """1076,366545504,324050.96875,1077,1076,Zwe,366545512.376,324050.9723
 1290,63600420,109186.835938,1291,1290,Zwe,63600422.4739,109186.832069
 """
 
+out_sep_csv = """1076,366545504,324050.96875,1077,1076,"Zwe",366545512.376,324050.97237
+1123,1288.555298,254.393951,1124,1123,"Zwe",1288.546525,254.393964
+1290,63600420,109186.835938,1291,1290,"Zwe",63600422.4739,109186.832069
+"""
+
 out_json = """\
 {"info":
 {"columns":[
@@ -270,6 +274,18 @@ class SelectTest(TestCase):
         )
         sel.run()
         self.assertLooksLike(reference=out_sep, actual=sel.outputs.stdout)
+
+    def testFormatCsv(self):
+        """Test format=csv output matches expected CSV (same style as testComma)."""
+        sel = SimpleModule(
+            "v.db.select",
+            flags="c",
+            map=self.invect,
+            where="{col}='{val}'".format(col=self.col, val=self.val),
+            format="csv",
+        )
+        sel.run()
+        self.assertLooksLike(reference=out_sep_csv, actual=sel.outputs.stdout)
 
     def testJSON(self):
         """Test that JSON can be decoded and formatted exactly as expected"""

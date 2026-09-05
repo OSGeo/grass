@@ -3,12 +3,8 @@
 
    \brief GIS library - color management, named color to RGB triplet
 
-   (C) 2001-2016 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 2001-2016 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -164,6 +160,8 @@ int G_str_to_color(const char *str, int *red, int *grn, int *blu)
    \param[out] h pointer to store the calculated hue
    \param[out] s pointer to store the calculated saturation
    \param[out] v pointer to store the calculated value
+
+   \since version 8.5
  */
 void G_rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
 {
@@ -206,6 +204,8 @@ void G_rgb_to_hsv(int r, int g, int b, float *h, float *s, float *v)
    \param b blue component of RGB color
    \param clr_frmt color format to be used (RGB, HEX, HSV, TRIPLET).
    \param[out] str color string
+
+   \since version 8.5
  */
 void G_color_to_str(int r, int g, int b, ColorFormat clr_frmt, char *str)
 {
@@ -250,6 +250,8 @@ void G_color_to_str(int r, int g, int b, ColorFormat clr_frmt, char *str)
    \param option pointer to color format option
 
    \return allocated ColorFormat
+
+   \since version 8.5
  */
 ColorFormat G_option_to_color_format(const struct Option *option)
 {

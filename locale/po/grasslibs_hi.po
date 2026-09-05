@@ -7,20 +7,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-21 21:15+0000\n"
-"PO-Revision-Date: 2026-03-05 11:44+0000\n"
-"Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"PO-Revision-Date: 2026-03-22 08:14+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasslibs/hi/>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Unknown algorithm '%s'"
 msgstr "अज्ञात एल्गोरिदम '%s'"
+
+msgid "Cannot classify an empty set of values"
+msgstr ""
 
 msgid "Classification algorithm failed"
 msgstr "वर्गीकरण एल्गोरिथ्म विफल रहा"
@@ -217,35 +220,36 @@ msgid ""
 "++ Running column unit tests ++"
 msgstr ""
 "\n"
-"\\n++ कॉलम यूनिट परीक्षण चलाना++"
+"++ कॉलम यूनिट परीक्षण चलाना++"
 
 msgid ""
 "\n"
 "-- column unit tests failure --"
 msgstr ""
 "\n"
-"\\n--स्तंभ इकाई परीक्षण विफलता--"
+"--स्तंभ इकाई परीक्षण विफलता--"
 
 msgid ""
 "\n"
 "-- column unit tests finished successfully --"
 msgstr ""
 "\n"
-"\\n--स्तंभ इकाई परीक्षण सफलतापूर्वक समाप्त हुआ--"
+"--स्तंभ इकाई परीक्षण सफलतापूर्वक समाप्त हुआ--"
 
+#, fuzzy
 msgid ""
 "\n"
 "++ Run test copy column ++"
 msgstr ""
 "\n"
-"\\n++ टेस्ट कॉपी कॉलम ++ चलाएँ"
+"++ टेस्ट कॉपी कॉलम ++ चलाएँ"
 
 msgid ""
 "\n"
 "++ Test copy column finished ++"
 msgstr ""
 "\n"
-"\\n++ टेस्ट कॉपी कॉलम समाप्त ++"
+"++ टेस्ट कॉपी कॉलम समाप्त ++"
 
 msgid "Choose the unit tests to run"
 msgstr "चलाने के लिए इकाई परीक्षण चुनें"
@@ -270,21 +274,21 @@ msgid ""
 "++ Running table unit tests ++"
 msgstr ""
 "\n"
-"\\n++ रनिंग टेबल यूनिट परीक्षण++"
+"++ रनिंग टेबल यूनिट परीक्षण++"
 
 msgid ""
 "\n"
 "-- Table unit tests failure --"
 msgstr ""
 "\n"
-"\\n-- टेबल यूनिट परीक्षण विफलता --"
+"-- टेबल यूनिट परीक्षण विफलता --"
 
 msgid ""
 "\n"
 "-- Table unit tests finished successfully --"
 msgstr ""
 "\n"
-"\\n-- तालिका इकाई परीक्षण सफलतापूर्वक समाप्त हुआ --"
+"-- तालिका इकाई परीक्षण सफलतापूर्वक समाप्त हुआ --"
 
 msgid "db_convert_Cstring_to_value(): unrecognized sqltype"
 msgstr "db_convert_Cstring_to_value(): अपरिचित sqltype"
@@ -444,21 +448,21 @@ msgid ""
 "++ Running gjson wrapper unit tests ++"
 msgstr ""
 "\n"
-"\\n++ gjson रैपर यूनिट परीक्षण चलाना++"
+"++ gjson रैपर यूनिट परीक्षण चलाना++"
 
 msgid ""
 "\n"
 "-- gjson wrapper unit tests failure --"
 msgstr ""
 "\n"
-"\\n-- जीजेसन रैपर इकाई परीक्षण विफलता --"
+"-- जीजेसन रैपर इकाई परीक्षण विफलता --"
 
 msgid ""
 "\n"
 "-- gjson wrapper unit tests finished successfully --"
 msgstr ""
 "\n"
-"\\n-- जीजेएसओएन रैपर यूनिट परीक्षण सफलतापूर्वक समाप्त हुआ--"
+"-- जीजेएसओएन रैपर यूनिट परीक्षण सफलतापूर्वक समाप्त हुआ--"
 
 #, c-format
 msgid "Illegal n-s resolution value: %g"
@@ -912,7 +916,7 @@ msgstr "अवैध फ़ाइल नाम <%s>. '.' से प्रार�
 
 #, c-format
 msgid "Illegal filename <%s>. Character <%c> not allowed.\n"
-msgstr "अवैध फ़ाइल नाम <%s>. वर्ण <%c> की अनुमति नहीं है.\\n\n"
+msgstr "अवैध फ़ाइल नाम <%s>. वर्ण <%c> की अनुमति नहीं है.\n"
 
 #, c-format
 msgid "Output raster map name <%s> is not valid map name"
@@ -928,15 +932,15 @@ msgstr "आउटपुट रैस्टर मैप <%s> का उपयो
 
 #, c-format
 msgid "no %s files available in current mapset\n"
-msgstr "वर्तमान मैपसेट में कोई %s फ़ाइलें उपलब्ध नहीं हैं\\n\n"
+msgstr "वर्तमान मैपसेट में कोई %s फ़ाइलें उपलब्ध नहीं हैं\n"
 
 #, c-format
 msgid "no %s files available in mapset <%s>\n"
-msgstr "मैपसेट <%s>\\n में कोई %s फ़ाइलें उपलब्ध नहीं हैं\n"
+msgstr "मैपसेट <%s> में कोई %s फ़ाइलें उपलब्ध नहीं हैं\n"
 
 #, c-format
 msgid "%s files available in mapset <%s>:\n"
-msgstr "%s फ़ाइलें मैपसेट में उपलब्ध हैं <%s>:\\n\n"
+msgstr "%s फ़ाइलें मैपसेट में उपलब्ध हैं <%s>:\n"
 
 msgid "G_list: Unknown element type"
 msgstr "G_list: अज्ञात तत्व प्रकार"
@@ -1118,11 +1122,13 @@ msgid ""
 "\tPresented as: %s"
 msgstr "पैरामीटर <%s>\\n\\tके लिए अवैध श्रेणी वाक्यविन्यास इस प्रकार प्रस्तुत किया गया है: %s"
 
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Value <%s> out of range for parameter <%s>\n"
 "\tLegal range: %s"
-msgstr "पैरामीटर <%s>\\n\\tकानूनी सीमा के लिए मान <%s> सीमा से बाहर: %s"
+msgstr ""
+"पैरामीटर <%s>\n"
+"\tकानूनी सीमा के लिए मान <%s> सीमा से बाहर: %s"
 
 #, c-format
 msgid "Missing value for parameter <%s>"
@@ -1136,19 +1142,25 @@ msgstr "पैरामीटर <%s> के लिए अमान्य मा
 msgid ""
 "Value <%s> ambiguous for parameter <%s>\n"
 "\tValid options: %s"
-msgstr "मान <%s> पैरामीटर <%s>\\n\\tमान्य विकल्पों के लिए अस्पष्ट: %s"
+msgstr ""
+"मान <%s> पैरामीटर <%s>\n"
+"\tमान्य विकल्पों के लिए अस्पष्ट: %s"
 
 #, c-format
 msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
-msgstr "आवश्यक पैरामीटर <%s> सेट नहीं है:\\n\\t(%s)"
+msgstr ""
+"आवश्यक पैरामीटर <%s> सेट नहीं है:\n"
+"\t(%s)"
 
 #, c-format
 msgid ""
 "Option <%s> must be provided in multiples of %d\n"
 "\tYou provided %d item(s): %s"
-msgstr "विकल्प <%s> को %d के गुणकों में प्रदान किया जाना चाहिए\\n\\tआपने %d आइटम प्रदान किए हैं: %s"
+msgstr ""
+"विकल्प <%s> को %d के गुणकों में प्रदान किया जाना चाहिए\n"
+"\tआपने %d आइटम प्रदान किए हैं: %s"
 
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
@@ -1262,7 +1274,7 @@ msgstr "पैरामीटर:"
 
 #, c-format
 msgid "  %*s   default: %s\n"
-msgstr "  %*s डिफ़ॉल्ट: %s\\n\n"
+msgstr "  %*s डिफ़ॉल्ट: %s\n"
 
 #, c-format
 msgid "  %*s   options: "
@@ -2109,7 +2121,7 @@ msgstr "पढ़ने के लिए %s खोलने में असम�
 
 #, c-format
 msgid "GRASS window when view was saved:\n"
-msgstr "दृश्य सहेजे जाने पर GRASS विंडो:\\n\n"
+msgstr "दृश्य सहेजे जाने पर GRASS विंडो:\n"
 
 #, c-format
 msgid " Window saved in \"%s\" is completely outside of current GRASS window."
@@ -2269,19 +2281,19 @@ msgstr "इनपुट प्रारूप त्रुटि"
 
 #, c-format
 msgid "sparse Jacobi -- iteration %5i error %g\n"
-msgstr "विरल जैकोबी--पुनरावृत्ति %5i त्रुटि %g\\n\n"
+msgstr "विरल जैकोबी--पुनरावृत्ति %5i त्रुटि %g\n"
 
 #, c-format
 msgid "sparse SOR -- iteration %5i error %g\n"
-msgstr "विरल एसओआर--पुनरावृत्ति %5i त्रुटि %g\\n\n"
+msgstr "विरल एसओआर--पुनरावृत्ति %5i त्रुटि %g\n"
 
 #, c-format
 msgid "Jacobi -- iteration %5i error %g\n"
-msgstr "जैकोबी--पुनरावृत्ति %5i त्रुटि %g\\n\n"
+msgstr "जैकोबी--पुनरावृत्ति %5i त्रुटि %g\n"
 
 #, c-format
 msgid "SOR -- iteration %5i error %g\n"
-msgstr "एसओआर--पुनरावृत्ति %5i त्रुटि %g\\n\n"
+msgstr "एसओआर--पुनरावृत्ति %5i त्रुटि %g\n"
 
 msgid "Starting direct gauss elimination solver"
 msgstr "प्रत्यक्ष गॉस उन्मूलन सॉल्वर प्रारंभ करना"
@@ -2301,139 +2313,141 @@ msgstr "पंक्ति %i और col %i पर अपघटन विफल 
 
 #, c-format
 msgid "Sparse PCG -- iteration %i error  %g\n"
-msgstr "विरल पीसीजी--पुनरावृत्ति %i त्रुटि %g\\n\n"
+msgstr "विरल पीसीजी--पुनरावृत्ति %i त्रुटि %g\n"
 
 #, c-format
 msgid "PCG -- iteration %i error  %g\n"
-msgstr "पीसीजी--पुनरावृत्ति %i त्रुटि %g\\n\n"
+msgstr "पीसीजी--पुनरावृत्ति %i त्रुटि %g\n"
 
 #, c-format
 msgid "Sparse CG -- iteration %i error  %g\n"
-msgstr "विरल सीजी - पुनरावृत्ति %i त्रुटि %g\\n\n"
+msgstr "विरल सीजी - पुनरावृत्ति %i त्रुटि %g\n"
 
 #, c-format
 msgid "CG -- iteration %i error  %g\n"
-msgstr "सीजी - पुनरावृत्ति %i त्रुटि %g\\n\n"
+msgstr "सीजी - पुनरावृत्ति %i त्रुटि %g\n"
 
 #, c-format
 msgid "Sparse BiCGStab -- iteration %i error  %g\n"
-msgstr "विरल BiCGStab -- पुनरावृत्ति %i त्रुटि %g\\n\n"
+msgstr "विरल BiCGStab -- पुनरावृत्ति %i त्रुटि %g\n"
 
 #, c-format
 msgid "BiCGStab -- iteration %i error  %g\n"
-msgstr "BiCGStab -- पुनरावृत्ति %i त्रुटि %g\\n\n"
+msgstr "BiCGStab -- पुनरावृत्ति %i त्रुटि %g\n"
 
 msgid ""
 "\n"
 "++ Running blas level 2 benchmark ++"
 msgstr ""
 "\n"
-"\\n++ रनिंग ब्लास लेवल 2 बेंचमार्क++"
+"++ रनिंग ब्लास लेवल 2 बेंचमार्क++"
 
 msgid ""
 "\n"
 "++ Running blas level 3 benchmark ++"
 msgstr ""
 "\n"
-"\\n++ रनिंग ब्लास लेवल 3 बेंचमार्क++"
+"++ रनिंग ब्लास लेवल 3 बेंचमार्क++"
 
+#, fuzzy
 msgid ""
 "\n"
 "++ Running direct solver benchmark ++"
 msgstr ""
 "\n"
-"\\n++ डायरेक्ट सॉल्वर बेंचमार्क ++ चला रहा हूं"
+"++ डायरेक्ट सॉल्वर बेंचमार्क ++ चला रहा हूं"
 
+#, fuzzy
 msgid ""
 "\n"
 "++ Running krylov solver benchmark ++"
 msgstr ""
 "\n"
-"\\n++ क्रायलोव सॉल्वर बेंचमार्क++ चला रहा है"
+"++ क्रायलोव सॉल्वर बेंचमार्क++ चला रहा है"
 
 msgid ""
 "\n"
 "++ Running blas level 1 unit tests ++"
 msgstr ""
 "\n"
-"\\n++ब्लास लेवल 1 यूनिट परीक्षण चल रहा है++"
+"++ब्लास लेवल 1 यूनिट परीक्षण चल रहा है++"
 
 msgid ""
 "\n"
 "-- blas level 1 unit tests failure --"
 msgstr ""
 "\n"
-"\\n--ब्लास लेवल 1 यूनिट परीक्षण विफलता --"
+"--ब्लास लेवल 1 यूनिट परीक्षण विफलता --"
 
 msgid ""
 "\n"
 "-- blas level 1 unit tests finished successfully --"
 msgstr ""
 "\n"
-"\\n--ब्लास लेवल 1 यूनिट परीक्षण सफलतापूर्वक समाप्त हुआ--"
+"--ब्लास लेवल 1 यूनिट परीक्षण सफलतापूर्वक समाप्त हुआ--"
 
 msgid ""
 "\n"
 "++ Running blas level 2 unit tests ++"
 msgstr ""
 "\n"
-"\\n++ब्लास लेवल 2 यूनिट परीक्षण चल रहा है++"
+"++ब्लास लेवल 2 यूनिट परीक्षण चल रहा है++"
 
 msgid ""
 "\n"
 "-- blas level 2 unit tests failure --"
 msgstr ""
 "\n"
-"\\n--ब्लास लेवल 2 यूनिट परीक्षण विफलता --"
+"--ब्लास लेवल 2 यूनिट परीक्षण विफलता --"
 
 msgid ""
 "\n"
 "-- blas level 2 unit tests finished successfully --"
 msgstr ""
 "\n"
-"\\n--ब्लास लेवल 2 यूनिट परीक्षण सफलतापूर्वक समाप्त हुए--"
+"--ब्लास लेवल 2 यूनिट परीक्षण सफलतापूर्वक समाप्त हुए--"
 
 msgid ""
 "\n"
 "++ Running blas level 3 unit tests ++"
 msgstr ""
 "\n"
-"\\n++ब्लास लेवल 3 यूनिट परीक्षण चल रहा है++"
+"++ब्लास लेवल 3 यूनिट परीक्षण चल रहा है++"
 
 msgid ""
 "\n"
 "-- blas level 3 unit tests failure --"
 msgstr ""
 "\n"
-"\\n--ब्लास लेवल 3 यूनिट परीक्षण विफलता --"
+"--ब्लास लेवल 3 यूनिट परीक्षण विफलता --"
 
 msgid ""
 "\n"
 "-- blas level 3 unit tests finished successfully --"
 msgstr ""
 "\n"
-"\\n--ब्लास लेवल 3 यूनिट परीक्षण सफलतापूर्वक समाप्त हुए--"
+"--ब्लास लेवल 3 यूनिट परीक्षण सफलतापूर्वक समाप्त हुए--"
 
 msgid ""
 "\n"
 "++ Running ccmath wrapper unit tests ++"
 msgstr ""
 "\n"
-"\\n++ सीसीमैथ रैपर यूनिट परीक्षण चलाना++"
+"++ सीसीमैथ रैपर यूनिट परीक्षण चलाना++"
 
 msgid ""
 "\n"
 "-- ccmath wrapper unit tests failure --"
 msgstr ""
 "\n"
-"\\n--सीसीमैथ रैपर इकाई परीक्षण विफलता--"
+"--सीसीमैथ रैपर इकाई परीक्षण विफलता--"
 
 msgid ""
 "\n"
 "-- ccmath wrapper unit tests finished successfully --"
 msgstr ""
 "\n"
-"\\n-- सीसीमैथ रैपर इकाई परीक्षण सफलतापूर्वक समाप्त हुआ--"
+"-- सीसीमैथ रैपर इकाई परीक्षण सफलतापूर्वक समाप्त हुआ--"
 
 msgid "The size of the matrices and vectors for benchmarking"
 msgstr "बेंचमार्किंग के लिए मैट्रिक्स और वैक्टर का आकार"
@@ -2452,42 +2466,42 @@ msgid ""
 "++ Running matrix conversion unit tests ++"
 msgstr ""
 "\n"
-"\\n++मैट्रिक्स रूपांतरण इकाई परीक्षण चलाना++"
+"++मैट्रिक्स रूपांतरण इकाई परीक्षण चलाना++"
 
 msgid ""
 "\n"
 "-- Matrix conversion unit tests failure --"
 msgstr ""
 "\n"
-"\\n-- मैट्रिक्स रूपांतरण इकाई परीक्षण विफलता --"
+"-- मैट्रिक्स रूपांतरण इकाई परीक्षण विफलता --"
 
 msgid ""
 "\n"
 "-- Matrix conversion unit tests finished successfully --"
 msgstr ""
 "\n"
-"\\n-- मैट्रिक्स रूपांतरण इकाई परीक्षण सफलतापूर्वक समाप्त हुआ --"
+"-- मैट्रिक्स रूपांतरण इकाई परीक्षण सफलतापूर्वक समाप्त हुआ --"
 
 msgid ""
 "\n"
 "++ Running solver unit tests ++"
 msgstr ""
 "\n"
-"\\n++ सॉल्वर यूनिट परीक्षण चलाना++"
+"++ सॉल्वर यूनिट परीक्षण चलाना++"
 
 msgid ""
 "\n"
 "-- Solver unit tests failure --"
 msgstr ""
 "\n"
-"\\n-- सॉल्वर इकाई परीक्षण विफलता --"
+"-- सॉल्वर इकाई परीक्षण विफलता --"
 
 msgid ""
 "\n"
 "-- Solver unit tests finished successfully --"
 msgstr ""
 "\n"
-"\\n-- सॉल्वर इकाई परीक्षण सफलतापूर्वक समाप्त हुआ --"
+"-- सॉल्वर इकाई परीक्षण सफलतापूर्वक समाप्त हुआ --"
 
 #, c-format
 msgid "Reading raster map <%s> into memory"
@@ -2526,11 +2540,11 @@ msgstr "G3D मानचित्र पर 3D सारणी लिखें <
 
 #, c-format
 msgid "The total sum of the water budget: %g\n"
-msgstr "जल बजट का कुल योग: %g\\n\n"
+msgstr "जल बजट का कुल योग: %g\n"
 
 #, c-format
 msgid "The total sum of the water budget is significantly larger then 0: %g\n"
-msgstr "जल बजट का कुल योग 0: %g\\n से काफी बड़ा है\n"
+msgstr "जल बजट का कुल योग 0: %g से काफी बड़ा है\n"
 
 msgid "The calculation time in seconds"
 msgstr "गणना का समय सेकंड में"
@@ -2703,19 +2717,19 @@ msgstr "दूषित श्रेणी रेखापुंज स्थि
 
 #, c-format
 msgid "group <%s> is empty\n"
-msgstr "समूह <%s> खाली है\\n\n"
+msgstr "समूह <%s> खाली है\n"
 
 #, c-format
 msgid "group <%s> references the following raster maps\n"
-msgstr "समूह <%s> निम्नलिखित रेखापुंज मानचित्रों का संदर्भ देता है\\n\n"
+msgstr "समूह <%s> निम्नलिखित रेखापुंज मानचित्रों का संदर्भ देता है\n"
 
 #, c-format
 msgid "subgroup <%s> of group <%s> is empty\n"
-msgstr "समूह <%s> का उपसमूह <%s> खाली है\\n\n"
+msgstr "समूह <%s> का उपसमूह <%s> खाली है\n"
 
 #, c-format
 msgid "subgroup <%s> of group <%s> references the following raster maps\n"
-msgstr "समूह <%s> का उपसमूह <%s> निम्नलिखित रेखापुंज मानचित्रों का संदर्भ देता है\\n\n"
+msgstr "समूह <%s> का उपसमूह <%s> निम्नलिखित रेखापुंज मानचित्रों का संदर्भ देता है\n"
 
 #, c-format
 msgid "%s is not in the current mapset (%s)"
@@ -2901,7 +2915,7 @@ msgstr "अस्थायी निर्देशिका <{tmpdir_name}> ब
 
 #, python-brace-format
 msgid "Invalid line in RC file ({file}): '{line}' ({error})\n"
-msgstr "RC फ़ाइल में अमान्य पंक्ति ({file}): '{line}' ({error})\\n\n"
+msgstr "RC फ़ाइल में अमान्य पंक्ति ({file}): '{line}' ({error})\n"
 
 #, python-brace-format
 msgid "Empty RC file ({file})"
@@ -2915,7 +2929,7 @@ msgid ""
 "The python command does not work as expected.\n"
 "Please check your installation or set the GRASS_PYTHON environment variable."
 msgstr ""
-"पायथन कमांड अपेक्षा के अनुरूप काम नहीं करता है।\\n"
+"पायथन कमांड अपेक्षा के अनुरूप काम नहीं करता है।\n"
 "कृपया अपने इंस्टॉलेशन की जांच करें या GRASS_PYTHON पर्यावरण चर सेट करें।"
 
 msgid "GRASS GUI not found. Please check your installation."
@@ -2925,7 +2939,7 @@ msgid ""
 "{}\n"
 "Switching to text based interface mode."
 msgstr ""
-"{}\\n"
+"{}\n"
 "टेक्स्ट आधारित इंटरफ़ेस मोड पर स्विच करना।"
 
 msgid ""
@@ -2934,8 +2948,9 @@ msgid ""
 "(DISPLAY variable is not set.)\n"
 "Switching to text based interface mode."
 msgstr ""
-"ऐसा प्रतीत होता है कि X Windows सिस्टम सक्रिय नहीं है।\\n"
-"ग्राफ़िकल आधारित उपयोगकर्ता इंटरफ़ेस समर्थित नहीं है।\\n(प्रदर्शन चर सेट नहीं है।)\\n"
+"ऐसा प्रतीत होता है कि X Windows सिस्टम सक्रिय नहीं है।\n"
+"ग्राफ़िकल आधारित उपयोगकर्ता इंटरफ़ेस समर्थित नहीं है।\n"
+"(प्रदर्शन चर सेट नहीं है।)\n"
 "पाठ आधारित इंटरफ़ेस मोड पर स्विच किया जा रहा है।"
 
 msgid "Error creating project: {}"
@@ -2992,7 +3007,7 @@ msgstr "नया GRASS मैपसेट बनाया जा रहा ह�
 msgid "GRASS database directory, project and mapset not set properly. Use GUI or command line to set them."
 msgstr "GRASS डेटाबेस निर्देशिका, प्रोजेक्ट और मैपसेट ठीक से सेट नहीं हैं। उन्हें सेट करने के लिए GUI या कमांड लाइन का उपयोग करें।"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Error reading data path information from g.gisenv.\n"
 "GISDBASE={gisdbase}\n"
@@ -3001,10 +3016,11 @@ msgid ""
 "\n"
 "Check the <{file}> file."
 msgstr ""
-"g.gisenv.\\n"
-"GISDBASE={gisdbase}\\n"
-"LOCATION_NAME={location}\\n"
-"MAPSET={mapset}\\n\\n"
+"g.gisenv.\n"
+"GISDBASE={gisdbase}\n"
+"LOCATION_NAME={location}\n"
+"MAPSET={mapset}\n"
+"\n"
 "से डेटा पथ जानकारी पढ़ने में त्रुटि <{file}> फ़ाइल की जाँच करें।"
 
 msgid "Building user fontcap..."
@@ -3025,7 +3041,9 @@ msgstr "<%s> निष्पादित किया जा रहा है..�
 msgid ""
 "Execution of <{cmd}> failed:\n"
 "{error}"
-msgstr "<{cmd}> का निष्पादन विफल:\\n{error}"
+msgstr ""
+"<{cmd}> का निष्पादन विफल:\n"
+"{error}"
 
 #, python-format
 msgid "Execution of <%s> finished."
@@ -3110,8 +3128,9 @@ msgstr "मैपसेट लॉकिंग टाइमआउट सेकं
 msgid "remove lock if present"
 msgstr "यदि लॉक मौजूद है तो उसे हटा दें"
 
+#, fuzzy
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
-msgstr "विकल्प --tmp-स्थान अप्रचलित है, इसके बजाय --tmp-project का उपयोग करें\\n\n"
+msgstr "विकल्प --tmp-स्थान अप्रचलित है, इसके बजाय --tmp-project का उपयोग करें\n"
 
 msgid "execute module or script (followed by executable with arguments)"
 msgstr "मॉड्यूल या स्क्रिप्ट निष्पादित करें (इसके बाद तर्कों के साथ निष्पादन योग्य)"
@@ -3145,9 +3164,7 @@ msgid ""
 " - Use '--help' for further options\n"
 "     {cmd_name} --help\n"
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
-msgstr ""
-"GRASS प्रारंभ करने में असमर्थ. आपके पास यह विकल्प है:\\n - '--gui' स्विच के साथ ग्राफिकल यूजर इंटरफेस लॉन्च करें\\n {cmd_name} --gui\\n - तर्क के रूप में प्रोजेक्ट/मैपसेट के पथ के साथ लॉन्च करें\\n {cmd_name} /path/to/project/mapset`\\n - '-c' के साथ एक प्रोजेक्ट बनाएं और उसके स्थायी मैपसेट में लॉन्च करें\\n {cmd_name} -c EPSG:number /path/to/project\\n {cmd_name} -c जियोफाइल /path/to/project\\n - मैन्युअल रूप से GISRC फ़ाइल बनाएं ({gisrcrc})\\n - आगे के विकल्पों के लिए '--help' का उपयोग करें\\n {cmd_name} --help\\n"
-"यह भी देखें: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+msgstr "GRASS प्रारंभ करने में असमर्थ. आपके पास यह विकल्प है:\\n - '--gui' स्विच के साथ ग्राफिकल यूजर इंटरफेस लॉन्च करें\\n {cmd_name} --gui\\n - तर्क के रूप में प्रोजेक्ट/मैपसेट के पथ के साथ लॉन्च करें\\n {cmd_name} /path/to/project/mapset`\\n - '-c' के साथ एक प्रोजेक्ट बनाएं और उसके स्थायी मैपसेट में लॉन्च करें\\n {cmd_name} -c EPSG:number /path/to/project\\n {cmd_name} -c जियोफाइल /path/to/project\\n - मैन्युअल रूप से GISRC फ़ाइल बनाएं ({gisrcrc})\\n - आगे के विकल्पों के लिए '--help' का उपयोग करें\\n {cmd_name} --help\\nयह भी देखें: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
 msgid "Starting GRASS..."
 msgstr "घास प्रारंभ करना..।"
@@ -4799,7 +4816,9 @@ msgstr "वेक्टर मानचित्र <%s> 2D है। %d 3D व�
 msgid ""
 "Unexpected data in vector header:\n"
 "[%s]"
-msgstr "वेक्टर हेडर में अप्रत्याशित डेटा:\\n[%s]"
+msgstr ""
+"वेक्टर हेडर में अप्रत्याशित डेटा:\n"
+"[%s]"
 
 #, c-format
 msgid "Unknown keyword <%s> in vector head"
@@ -5481,8 +5500,8 @@ msgid ""
 "driver: %s\n"
 "database: %s"
 msgstr ""
-"डिफ़ॉल्ट ड्राइवर/डेटाबेस इस पर सेट है:\\n"
-"ड्राइवर: %s\\n"
+"डिफ़ॉल्ट ड्राइवर/डेटाबेस इस पर सेट है:\n"
+"ड्राइवर: %s\n"
 "डेटाबेस: %s"
 
 msgid "Default driver is not set"
@@ -5759,7 +5778,7 @@ msgid ""
 "There exists more than one point on node <%d> with unique category in field  <%d>.\n"
 "The unique category layer may not be valid."
 msgstr ""
-"फ़ील्ड <%d> में अद्वितीय श्रेणी के साथ नोड <%d> पर एक से अधिक बिंदु मौजूद हैं।\\n"
+"फ़ील्ड <%d> में अद्वितीय श्रेणी के साथ नोड <%d> पर एक से अधिक बिंदु मौजूद हैं।\n"
 "अद्वितीय श्रेणी परत मान्य नहीं हो सकती है।"
 
 msgid "Wrong line direction in Vect_net_get_line_cost()"
@@ -5800,7 +5819,7 @@ msgid ""
 "There exists more than one point of node <%d> with unique category field  <%d>.\n"
 "The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
-"अद्वितीय श्रेणी फ़ील्ड <%d> के साथ नोड <%d> के एक से अधिक बिंदु मौजूद हैं।\\n"
+"अद्वितीय श्रेणी फ़ील्ड <%d> के साथ नोड <%d> के एक से अधिक बिंदु मौजूद हैं।\n"
 "अद्वितीय श्रेणी परत मान्य नहीं है इसलिए आपको संभवतः गलत परिणाम मिलेंगे।"
 
 #, c-format
@@ -5809,8 +5828,8 @@ msgid ""
 "Cost for the intersection was set to 0.\n"
 "The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
-"अद्वितीय श्रेणी फ़ील्ड <%d> में प्रतिच्छेदन <%d> का प्रतिनिधित्व करने वाला बिंदु ढूंढने में असमर्थ।\\n"
-"प्रतिच्छेदन के लिए लागत 0 पर सेट की गई थी।\\n"
+"अद्वितीय श्रेणी फ़ील्ड <%d> में प्रतिच्छेदन <%d> का प्रतिनिधित्व करने वाला बिंदु ढूंढने में असमर्थ।\n"
+"प्रतिच्छेदन के लिए लागत 0 पर सेट की गई थी।\n"
 "अद्वितीय श्रेणी परत मान्य नहीं है इसलिए आपको संभवतः गलत परिणाम मिलेंगे।"
 
 #, c-format
@@ -5819,8 +5838,8 @@ msgid ""
 "Cost for the intersection was set to 0.\n"
 "The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
-"अद्वितीय श्रेणी फ़ील्ड <%d> में प्रतिच्छेदन <%d> का प्रतिनिधित्व करने वाले बिंदु के लिए नोड ढूंढने में असमर्थ।\\n"
-"प्रतिच्छेदन के लिए लागत 0 पर सेट की गई थी।\\n"
+"अद्वितीय श्रेणी फ़ील्ड <%d> में प्रतिच्छेदन <%d> का प्रतिनिधित्व करने वाले बिंदु के लिए नोड ढूंढने में असमर्थ।\n"
+"प्रतिच्छेदन के लिए लागत 0 पर सेट की गई थी।\n"
 "अद्वितीय श्रेणी परत मान्य नहीं है इसलिए आपको संभवतः गलत परिणाम मिलेंगे।"
 
 #, c-format
@@ -5841,7 +5860,7 @@ msgid ""
 "Line with id <%d> has more unique categories defined in field <%d>.\n"
 "The unique categories layer is not valid therefore you will probably get incorrect results."
 msgstr ""
-"आईडी <%d> वाली लाइन में फ़ील्ड <%d> में अधिक विशिष्ट श्रेणियां परिभाषित हैं।\\n"
+"आईडी <%d> वाली लाइन में फ़ील्ड <%d> में अधिक विशिष्ट श्रेणियां परिभाषित हैं।\n"
 "अद्वितीय श्रेणियों की परत मान्य नहीं है इसलिए आपको संभवतः गलत परिणाम मिलेंगे।"
 
 #, c-format
@@ -6093,7 +6112,9 @@ msgstr "टोपोलॉजी से मैप बाउंडिंग ब�
 msgid ""
 "Unable to parse map bounding box:\n"
 "%s"
-msgstr "मानचित्र बाउंडिंग बॉक्स को पार्स करने में असमर्थ:\\n%s"
+msgstr ""
+"मानचित्र बाउंडिंग बॉक्स को पार्स करने में असमर्थ:\n"
+"%s"
 
 #, c-format
 msgid "Different number of nodes detected (%d, %d)"
@@ -6235,7 +6256,7 @@ msgid ""
 "Execution failed: %s (...)\n"
 "Reason: %s"
 msgstr ""
-"निष्पादन विफल: %s (...)\\n"
+"निष्पादन विफल: %s (...)\n"
 "कारण: %s"
 
 #, c-format
@@ -6243,14 +6264,16 @@ msgid ""
 "Execution failed: %s\n"
 "Reason: %s"
 msgstr ""
-"निष्पादन विफल: %s\\n"
+"निष्पादन विफल: %s\n"
 "कारण: %s"
 
 #, c-format
 msgid ""
 "Unable to read features. Reason:\n"
 "%s"
-msgstr "विशेषताएँ पढ़ने में असमर्थ. कारण:\\n%s"
+msgstr ""
+"विशेषताएँ पढ़ने में असमर्थ. कारण:\n"
+"%s"
 
 #, c-format
 msgid "Unable to construct centroid for area %d. Skipped."
@@ -6805,21 +6828,21 @@ msgid ""
 "++ Running basic unit tests ++"
 msgstr ""
 "\n"
-"\\n++ बुनियादी इकाई परीक्षण चलाना++"
+"++ बुनियादी इकाई परीक्षण चलाना++"
 
 msgid ""
 "\n"
 "-- Basic rtree unit tests failure --"
 msgstr ""
 "\n"
-"\\n-- मूल आरट्री इकाई परीक्षण विफलता --"
+"-- मूल आरट्री इकाई परीक्षण विफलता --"
 
 msgid ""
 "\n"
 "-- Basic rtree unit tests finished successfully --"
 msgstr ""
 "\n"
-"\\n-- बुनियादी आरट्री इकाई परीक्षण सफलतापूर्वक समाप्त हुए--"
+"-- बुनियादी आरट्री इकाई परीक्षण सफलतापूर्वक समाप्त हुए--"
 
 msgid "Unit tests for the vector rtree library"
 msgstr "वेक्टर आरट्री लाइब्रेरी के लिए यूनिट परीक्षण"

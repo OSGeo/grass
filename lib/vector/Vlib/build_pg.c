@@ -9,10 +9,8 @@
    - centroids   : FID
    - other types : index of the first record (which is FID) in offset array.
 
-   (C) 2012-2013 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2012-2013 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -41,7 +39,7 @@ static void build_stmt_id(const void *, int, int, const struct Plus_head *,
 static int create_simple_feature_from_topo(struct Map_info *);
 #define NOPG_UNUSED
 #else
-#define NOPG_UNUSED UNUSED
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 /*!

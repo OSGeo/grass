@@ -12,6 +12,9 @@ insert_final_newline = true
 charset = utf-8
 trim_trailing_whitespace = true
 
+[*.{cmake,cmake.in,CMakeLists.txt,CMakeLists.txt.in}]
+indent_size = 4
+
 [*.{htm,html,js,css,svg}]
 indent_size = 2
 
@@ -149,3 +152,9 @@ trim_trailing_whitespace = unset
 end_of_line = unset
 charset = unset
 insert_final_newline = unset
+
+# configure is autoconf-generated and uses BEL (\007) as an awk
+# field separator, which editorconfig-checker's binary detection flags as
+# non-utf-8.
+[configure]
+charset = unset

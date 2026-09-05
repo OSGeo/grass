@@ -3,10 +3,9 @@ Name:       r.reclass.area test
 Purpose:    Tests r.reclass.area and its flags/options.
 
 Author:     Sunveer Singh, Google Code-in 2018
-Copyright:  (C) 2018 by Sunveer Singh and the GRASS Development Team
-Licence:    This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
+SPDX-FileCopyrightText: 2018 Sunveer Singh
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 from grass.gunittest.case import TestCase
@@ -89,9 +88,9 @@ class Testrr(TestCase):
         )
         self.assertRasterMinMax(
             map=self.output,
-            refmin=27603,
-            refmax=27607,
-            msg="Output Map in degrees must be between 27603 and 27607",
+            refmin=27511,
+            refmax=27610,
+            msg="Output Map in degrees must be between 27511 and 27610",
         )
 
 

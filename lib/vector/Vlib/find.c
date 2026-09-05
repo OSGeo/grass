@@ -5,10 +5,8 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
 
  * \author Original author CERL, probably Dave Gerdes or Mike
  * Higgins.
@@ -324,7 +322,9 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
         G_debug(3, "    area = %d Vect_point_in_area_outer_ring() = %d", area,
                 ret);
 
-        if (ret >= 1) {
+        /* the point must be really inside (ret = 1), not on the boundary (ret =
+         * 2) */
+        if (ret == 1) {
             /* check if in islands */
             Area = Plus->Area[area];
             for (j = 0; j < Area->n_isles; j++) {
