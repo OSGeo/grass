@@ -7011,6 +7011,25 @@ then :
 
 fi
 
+ac_fn_c_check_header_compile "$LINENO" "stdatomic.h" "ac_cv_header_stdatomic_h" "$ac_includes_default"
+if test "x$ac_cv_header_stdatomic_h" = xyes
+then :
+  printf "%s\n" "#define HAVE_STDATOMIC_H 1" >>confdefs.h
+
+fi
+ac_fn_c_check_header_compile "$LINENO" "threads.h" "ac_cv_header_threads_h" "$ac_includes_default"
+if test "x$ac_cv_header_threads_h" = xyes
+then :
+  printf "%s\n" "#define HAVE_THREADS_H 1" >>confdefs.h
+
+fi
+ac_fn_c_check_header_compile "$LINENO" "complex.h" "ac_cv_header_complex_h" "$ac_includes_default"
+if test "x$ac_cv_header_complex_h" = xyes
+then :
+  printf "%s\n" "#define HAVE_COMPLEX_H 1" >>confdefs.h
+
+fi
+
 
 ac_fn_c_check_type "$LINENO" "off_t" "ac_cv_type_off_t" "$ac_includes_default"
 if test "x$ac_cv_type_off_t" = xyes
@@ -15220,6 +15239,90 @@ LIBS=$ac_check_lib_save_LIBS
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pthread_pthread_create" >&5
 printf "%s\n" "$ac_cv_lib_pthread_pthread_create" >&6; }
 if test "x$ac_cv_lib_pthread_pthread_create" = xyes
+then :
+  PTHREADLIB="$PTHREADLIB -lpthread "
+else case e in #(
+  e)
+LDFLAGS=${ac_save_ldflags}
+
+    as_fn_error $? "*** Unable to locate POSIX threads library." "$LINENO" 5
+
+ ;;
+esac
+fi
+
+
+
+LDFLAGS=${ac_save_ldflags}
+
+
+ ;;
+esac
+fi
+
+LIBS=${ac_save_libs}
+LDFLAGS=${ac_save_ldflags}
+
+
+
+ac_save_libs="$LIBS"
+ac_save_ldflags="$LDFLAGS"
+LIBS="  $LIBS"
+LDFLAGS=" $LDFLAGS"
+ac_fn_c_check_func "$LINENO" "sched_yield" "ac_cv_func_sched_yield"
+if test "x$ac_cv_func_sched_yield" = xyes
+then :
+
+
+    PTHREADLIB="$PTHREADLIB "
+
+
+else case e in #(
+  e)
+
+ac_save_ldflags="$LDFLAGS"
+LDFLAGS="$PTHREADLIBPATH $LDFLAGS"
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for sched_yield in -lpthread" >&5
+printf %s "checking for sched_yield in -lpthread... " >&6; }
+
+ac_check_lib_save_LIBS=$LIBS
+LIBS="-lpthread  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.
+   The 'extern "C"' is for builds by C++ compilers;
+   although this is not generally supported in C code supporting it here
+   has little cost and some practical benefit (sr 110532).  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char sched_yield (void);
+int
+main (void)
+{
+return sched_yield ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+  ac_cv_lib_pthread_sched_yield=yes
+else case e in #(
+  e) ac_cv_lib_pthread_sched_yield=no ;;
+esac
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pthread_sched_yield" >&5
+printf "%s\n" "$ac_cv_lib_pthread_sched_yield" >&6; }
+if test "x$ac_cv_lib_pthread_sched_yield" = xyes
 then :
   PTHREADLIB="$PTHREADLIB -lpthread "
 else case e in #(
