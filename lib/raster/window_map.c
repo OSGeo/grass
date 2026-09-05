@@ -106,6 +106,22 @@ void Rast__create_window_mapping(int fd)
        fprintf(stderr, "\n");
      */
 
+    /* For GDAL-linked, non-hflip'ed maps, find the range of native
+     * columns needed by the current region. */
+    fcb->gdal_min_col = -1;
+    fcb->gdal_max_col = -1;
+    if (fcb->gdal && !fcb->gdal->hflip) {
+        for (i = 0; i < R__.rd_window.cols; i++) {
+            if (!fcb->col_map[i])
+                continue;
+            if (fcb->gdal_min_col < 0 ||
+                fcb->col_map[i] - 1 < fcb->gdal_min_col)
+                fcb->gdal_min_col = fcb->col_map[i] - 1;
+            if (fcb->col_map[i] - 1 > fcb->gdal_max_col)
+                fcb->gdal_max_col = fcb->col_map[i] - 1;
+        }
+    }
+
     /* compute C1,C2 for row window mapping */
     fcb->C1 = R__.rd_window.ns_res / fcb->cellhd.ns_res;
     fcb->C2 =
