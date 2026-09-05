@@ -3,11 +3,8 @@
  * MODULE:       r.param.scale
  * AUTHOR(S):    Jo Wood, V 1.1, 11th December, 1994 (original contributor)
  * PURPOSE:      GRASS module for extracting multi-scale surface parameters.
- * COPYRIGHT:    (C) 1999-2004 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2004 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -19,10 +16,11 @@ const char *rast_out_name; /* Name of the raster output file.      */
 int constrained;           /* Flag that forces quadtratic through  */
 
 /* the central cell of the window.      */
-int fd_in,  /* File descriptor for input and        */
-    fd_out, /* output raster files.                 */
+int fd_out, /* File descriptor for output raster.   */
     wsize,  /* Size of local processing window.     */
-    mparam; /* Morphometric parameter to calculate. */
+    mparam, /* Morphometric parameter to calculate. */
+    nprocs, /* Number of threads in process.        */
+    memory; /* Memory cap in MB for row buffering.  */
 
 double resoln, /* Planimetric resolution.              */
     exponent,  /* Distance weighting exponent.         */

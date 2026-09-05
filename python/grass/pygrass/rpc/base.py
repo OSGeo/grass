@@ -2,10 +2,8 @@
 Fast and exit-safe interface to PyGRASS Raster and Vector layer
 using multiprocessing
 
-(C) 2015-2024 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2015-2024 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -186,7 +184,9 @@ class RPCServerBase:
         except (EOFError, OSError, FatalError) as e:
             # The pipe was closed by the checker thread because
             # the server process was killed
-            raise FatalError("Exception raised: " + str(e) + " Message: " + message)
+            raise FatalError(
+                "Exception raised: " + str(e) + " Message: " + message
+            ) from e
 
     def stop(self):
         """Stop the check thread, the libgis server and close the pipe
@@ -204,8 +204,13 @@ class RPCServerBase:
                     ]
                 )
             self.server.terminate()
+            # A process still starting up reopens the lock semaphore by name,
+            # so it must be gone before the reference is dropped below.
+            self.server.join(timeout=5)
         if self.client_conn is not None:
             self.client_conn.close()
+        # Dropping the reference unlinks the semaphore now, not at exit.
+        self.lock = None
         self.stopped = True
 
 

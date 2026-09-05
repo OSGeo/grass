@@ -6,11 +6,8 @@
    \author Original Author unknown, probably Soil Conservation Service
    Eric Miller, Paul Kelly, Markus Metz
 
-   (C) 2003-2008,2018 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 2003-2008,2018 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 **/
 
 #include <stdio.h>
@@ -38,8 +35,6 @@
             y[i] /= m;            \
         }                         \
     } while (0)
-
-static double METERS_in = 1.0, METERS_out = 1.0;
 
 int get_pj_area(const struct pj_info *iproj, double *xmin, double *xmax,
                 double *ymin, double *ymax)
@@ -878,6 +873,7 @@ int GPJ_transform(const struct pj_info *info_in, const struct pj_info *info_out,
 
     int in_is_ll, out_is_ll, in_deg2rad, out_rad2deg;
     PJ_COORD c;
+    double METERS_in = 1.0, METERS_out = 1.0;
 
     if (info_in->pj == NULL)
         G_fatal_error(_("No input projection"));
@@ -1040,6 +1036,7 @@ int GPJ_transform_array(const struct pj_info *info_in,
     /* PROJ 5+ variant */
     int in_is_ll, out_is_ll, in_deg2rad, out_rad2deg;
     PJ_COORD c;
+    double METERS_in = 1.0, METERS_out = 1.0;
 
     if (info_trans->pj == NULL)
         G_fatal_error(_("No transformation object"));
@@ -1117,12 +1114,12 @@ int GPJ_transform_array(const struct pj_info *info_in,
             for (i = 0; i < n; i++) {
                 if (in_deg2rad) {
                     /* convert degrees to radians */
-                    c.lpzt.lam = (*x) / RAD_TO_DEG;
-                    c.lpzt.phi = (*y) / RAD_TO_DEG;
+                    c.lpzt.lam = x[i] / RAD_TO_DEG;
+                    c.lpzt.phi = y[i] / RAD_TO_DEG;
                 }
                 else {
-                    c.lpzt.lam = (*x);
-                    c.lpzt.phi = (*y);
+                    c.lpzt.lam = x[i];
+                    c.lpzt.phi = y[i];
                 }
                 c.lpzt.z = z[i];
                 c = proj_trans(info_trans->pj, dir, c);
@@ -1143,12 +1140,12 @@ int GPJ_transform_array(const struct pj_info *info_in,
             for (i = 0; i < n; i++) {
                 if (in_deg2rad) {
                     /* convert degrees to radians */
-                    c.lpzt.lam = (*x) / RAD_TO_DEG;
-                    c.lpzt.phi = (*y) / RAD_TO_DEG;
+                    c.lpzt.lam = x[i] / RAD_TO_DEG;
+                    c.lpzt.phi = y[i] / RAD_TO_DEG;
                 }
                 else {
-                    c.lpzt.lam = (*x);
-                    c.lpzt.phi = (*y);
+                    c.lpzt.lam = x[i];
+                    c.lpzt.phi = y[i];
                 }
                 c.lpzt.z = z[i];
                 c = proj_trans(info_trans->pj, dir, c);
@@ -1236,6 +1233,7 @@ int pj_do_proj(double *x, double *y, const struct pj_info *info_in,
 
     struct pj_info info_trans;
     PJ_COORD c;
+    double METERS_in = 1.0, METERS_out = 1.0;
 
     if (GPJ_init_transform(info_in, info_out, &info_trans) < 0) {
         return -1;
@@ -1325,6 +1323,7 @@ int pj_do_transform(int count, double *x, double *y, double *h,
 
     struct pj_info info_trans;
     PJ_COORD c;
+    double METERS_in = 1.0, METERS_out = 1.0;
 
     if (GPJ_init_transform(info_in, info_out, &info_trans) < 0) {
         return -1;

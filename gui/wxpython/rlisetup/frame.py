@@ -276,7 +276,7 @@ class RLiSetupFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             res = dlg.GetValue()
             newname = "%s%s%s" % (self.rlipath, os.sep, res)
-            os.rename(os.path.join(self.rlipath, confile), newname)
+            Path(self.rlipath, confile).rename(newname)
             self.listfiles = self.ListFiles()
             self.listfileBox.Clear()
             self.listfileBox.Set(self.listfiles)
