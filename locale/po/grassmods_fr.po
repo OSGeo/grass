@@ -9,13 +9,14 @@
 # Vincent Bain <bain toraval.fr>, 2012.
 # Sylvain Maillard <sylvain.maillard@gmail.com>, 2012, 2013.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
+# Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 09:37+0000\n"
-"PO-Revision-Date: 2026-07-05 18:33+0000\n"
-"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"POT-Creation-Date: 2026-08-29 15:44+0000\n"
+"PO-Revision-Date: 2026-09-05 15:04+0000\n"
+"Last-Translator: Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2241,6 +2242,7 @@ msgstr "Nombre de chiffres significatifs (virgule flottante uniquement)"
 msgid "Get text color from cell color value"
 msgstr "Choisir la couleur du texte en fonction de la valeur de couleur de la cellule"
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -2691,7 +2693,7 @@ msgid ""
 "ERROR: vector map - can't read\n"
 msgstr ""
 "\n"
-"ERREUR: fichier vecteur - lecture impossible\n"
+"ERREUR : fichier vecteur - lecture impossible\n"
 
 #, c-format
 msgid "Error in color definition column (%s), element %d with cat %d: colorstring [%s]"
@@ -4892,7 +4894,7 @@ msgid ""
 msgstr ""
 
 msgid "none"
-msgstr ""
+msgstr "aucun"
 
 #, c-format
 msgid "The output cell map <%s.%d> has values outside the 0-255 range."
@@ -7690,8 +7692,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 msgid "Maps with feature values (attributes)"
 msgstr "Cartes avec valeurs d'entités (attributs)"
 
@@ -12033,7 +12035,7 @@ msgstr "Le titre <%s> est trop long"
 #, c-format
 msgid "%d clump."
 msgid_plural "%d clumps."
-msgstr[0] ""
+msgstr[0] "%d amas."
 msgstr[1] "%d amas."
 
 msgid "Minimum size must be larger than 1"
@@ -15390,7 +15392,7 @@ msgid "%s= and -%c are mutually exclusive"
 msgstr ""
 
 msgid "parse error"
-msgstr ""
+msgstr "erreur d'analyse"
 
 #, fuzzy
 #| msgid "Flag 't' is deprecated and will be removed in a future release. Please use format=csv instead."
@@ -15721,7 +15723,7 @@ msgstr ""
 
 #, c-format
 msgid "%s: illegal value spec"
-msgstr ""
+msgstr "%s: spécification de valeur non valide"
 
 #, c-format
 msgid "Writing new data for raster map <%s>..."
@@ -17536,9 +17538,9 @@ msgstr ""
 msgid "Only %d unit%s allowed"
 msgstr ""
 
-#, c-format
+#, fuzzy, c-format
 msgid "Unable to read fp range for raster map <%s>"
-msgstr ""
+msgstr "Impossible de lire l'intervalle fp pour la carte raster <%s>"
 
 #, c-format
 msgid "Unable to open result file <%s>"
@@ -17551,7 +17553,7 @@ msgstr ""
 #, c-format
 msgid "%d point read in region"
 msgid_plural "%d points read in region"
-msgstr[0] ""
+msgstr[0] "%d point lu dans la région"
 msgstr[1] "%d points lus dans la région"
 
 msgid "Maybe it takes too long. Consider reducing the region extents."
@@ -20288,6 +20290,7 @@ msgstr "Trop de catégories (trouvées: %i, max: %i). Essaye de rééchelonner o
 msgid "Input raster must be of type CELL."
 msgstr "Le raster d'entrée doit être de type CELL."
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -22043,7 +22046,7 @@ msgid "Error during reading seed vector map"
 msgstr "Erreur lors de la lecture de la carte vecteur graine"
 
 msgid "unit test"
-msgstr ""
+msgstr "test unitaire"
 
 msgid "Testing flow lines."
 msgstr "Test des lignes de flux."
@@ -24588,7 +24591,7 @@ msgstr ""
 
 #, python-format
 msgid "Missing value for parameter <%s>"
-msgstr ""
+msgstr "Valeur manquante pour le paramètre <%s>"
 
 #, python-format
 msgid "Unable to import <%s>"
@@ -31723,7 +31726,7 @@ msgid "No records selected from table <%s>"
 msgstr "Aucun enregistrement n'a été sélectionné dans la table <%s>."
 
 msgid "Key column type is not integer"
-msgstr ""
+msgstr "Le type de la colonne clé n'est pas un entier"
 
 #, c-format
 msgid "Cannot insert data: [%s]"
@@ -32769,7 +32772,7 @@ msgstr "Impossible d'utiliser la colonne spécifiée"
 
 #, c-format
 msgid "Get area %d failed"
-msgstr ""
+msgstr "L'obtention de la surface %d a échoué"
 
 msgid "Failed to plot polygon"
 msgstr ""
