@@ -1,10 +1,8 @@
 """Provides functions for the main GRASS executable
 
-(C) 2020-2025 by Vaclav Petras and the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2020-2025 Vaclav Petras
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 .. sectionauthor:: Linda Kladivova <l.kladivova seznam cz>
@@ -67,7 +65,7 @@ def create_database_directory():
 
     # Create "grassdata" directory
     try:
-        os.mkdir(path)
+        Path(path).mkdir()
         return path
     except OSError:
         pass
@@ -86,7 +84,7 @@ def create_database_directory():
     if Path(path).exists():
         return path
     try:
-        os.mkdir(path)
+        Path(path).mkdir()
         return path
     except OSError:
         pass

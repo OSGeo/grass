@@ -1,6 +1,6 @@
-import sys
 import os
 import re
+import sys
 
 __all__ = ["Formatter"]
 
@@ -128,7 +128,7 @@ class Formatter:
 
     def pp_li(self, content):
         if self.get("in_ul"):
-            self.fmt("\n.IP \\(bu 4n\n@", content)
+            self.fmt("\n.IP \\(bu 4n\n@", content)  # codespell:ignore bu
         else:
             idx = self.get("index")
             idx[-1] += 1
@@ -201,7 +201,7 @@ class Formatter:
         self.show("\n.TS\nexpand;\n")
         self.show(" lw1 ".join(["lw60" for i in range(cols)]) + ".\n")
         self.pp_tbody(content)
-        self.show("\n.TE\n")
+        self.show("\n.TE\n")  # codespell:ignore: TE
 
     def pp_tag(self, tag, content):
         if self.get("in_tr") and tag not in styles:

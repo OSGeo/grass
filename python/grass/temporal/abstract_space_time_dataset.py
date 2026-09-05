@@ -2,10 +2,8 @@
 The abstract_space_time_dataset module provides the AbstractSpaceTimeDataset
 class that is the base class for all space time datasets.
 
-(C) 2011-2024 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2011-2024 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -624,7 +622,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return True
 
-    def sample_by_dataset(self, stds, method=None, spatial: bool = False, dbif=None):
+    def sample_by_dataset(
+        self, stds, method=None, spatial: bool = False, dbif=None, where=None
+    ):
         """Sample this space time dataset with the temporal topology
         of a second space time dataset
 
@@ -749,6 +749,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                        The returned map objects will have temporal and
                        spatial extents
         :param dbif: The database interface to be used
+        :param where: Temporal WHERE condition to filter input STRDS
 
         :return: A list of lists of map objects or None in case nothing was
                 found None
@@ -806,8 +807,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         tb = SpatioTemporalTopologyBuilder()
         spatial = "2D" if spatial else None
 
-        mapsA = self.get_registered_maps_as_objects(dbif=dbif)
-        mapsB = stds.get_registered_maps_as_objects_with_gaps(dbif=dbif)
+        mapsA = self.get_registered_maps_as_objects(where=where, dbif=dbif)
+        mapsB = stds.get_registered_maps_as_objects_with_gaps(where=where, dbif=dbif)
         tb.build(mapsB, mapsA, spatial)
 
         obj_list = []
@@ -1101,7 +1102,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         return obj_list
 
-    def get_registered_maps_as_objects_by_granularity(self, gran=None, dbif=None):
+    def get_registered_maps_as_objects_by_granularity(
+        self, gran: str | None = None, where: str | None = None, dbif=None
+    ):
         """Return all registered maps as ordered (by start_time) object list
         with "gap" map objects (id==None) for spatio-temporal topological
         operations that require the temporal extent only.
@@ -1140,6 +1143,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     weeks, month, months, year, years". The unit of the
                     relative time granule is always the space time dataset
                     unit and can not be changed.
+        :param where: The SQL where statement to select a subset of
+                      the registered maps without "WHERE"
         :param dbif: The database interface to be used
 
         :return: ordered list of map lists. Each list represents a single
@@ -1155,16 +1160,19 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if not check:
             self.msgr.fatal(_('Wrong granularity: "%s"') % str(gran))
 
-        start, end = self.get_temporal_extent_as_tuple()
-
-        if start is None or end is None:
-            return None
-
-        maps = self.get_registered_maps_as_objects(dbif=dbif, order="start_time")
+        maps = self.get_registered_maps_as_objects(
+            dbif=dbif, order="start_time", where=where
+        )
 
         if not maps:
             return None
 
+        start = maps[0].get_temporal_extent_as_tuple()[0]
+        end_extend = maps[-1].get_temporal_extent_as_tuple()
+        end = end_extend[1] if end_extend[1] is not None else end_extend[0]
+
+        if start is None or end is None:
+            return None
         # We need to adjust the end time in case the dataset has no
         # interval time, so we can catch time instances at the end
         if self.get_map_time() != "interval":
@@ -2046,7 +2054,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     "of the database does not match the current "
                     "mapset"
                 )
-                % ({"ds": self.get_id()}, {"type": self.get_type()})
+                % {"ds": self.get_id(), "type": self.get_type()}
             )
 
         if not check_granularity_string(gran, self.get_temporal_type()):
@@ -2083,6 +2091,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         if connection_state_changed:
             dbif.close()
+        return True
 
     @staticmethod
     def snap_map_list(maps):
@@ -2221,7 +2230,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     "of the database does not match the current "
                     "mapset"
                 )
-                % ({"ds": self.get_id()}, {"type": self.get_type()})
+                % {"ds": self.get_id(), "type": self.get_type()}
             )
 
         dbif, connection_state_changed = init_dbif(dbif)
@@ -2328,7 +2337,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     "of the database does not match the current "
                     "mapset"
                 )
-                % ({"ds": self.get_id()}, {"type": self.get_type()})
+                % {"ds": self.get_id(), "type": self.get_type()}
             )
 
         dbif, connection_state_changed = init_dbif(dbif)
@@ -2824,6 +2833,19 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         dbif, connection_state_changed = init_dbif(dbif)
 
+        # The templates read below use the UPDATE-FROM syntax, which SQLite
+        # supports only since 3.33.
+        dbmi = dbif.get_dbmi()
+        if dbmi.__name__ == "sqlite3" and dbmi.sqlite_version_info < (3, 33):
+            self.msgr.fatal(
+                _(
+                    "The temporal framework requires SQLite 3.33 or later to "
+                    "update a space time dataset, but the Python sqlite3 module "
+                    "uses SQLite {version}. Please update SQLite or switch the "
+                    "temporal database to the PostgreSQL backend with t.connect."
+                ).format(version=dbmi.sqlite_version)
+            )
+
         map_time = None
 
         use_start_time = False
@@ -2837,16 +2859,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Update the spatial and temporal extent from registered maps
         # Read the SQL template
-        template_suffix = ""
-        db_backend = dbif.get_dbmi().__name__
-        old_sqlite_version = (
-            db_backend == "sqlite3" and dbif.get_dbmi().sqlite_version_info < (3, 33)
-        )
-        if old_sqlite_version:
-            template_suffix = "_old"
         sql = Path(
-            sql_path,
-            f"update_stds_spatial_temporal_extent_template{template_suffix}.sql",
+            sql_path, "update_stds_spatial_temporal_extent_template.sql"
         ).read_text()
         sql = sql.replace("GRASS_MAP", self.get_new_map_instance(None).get_type())
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
@@ -2858,25 +2872,19 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Update type specific metadata
         sql = Path(
-            sql_path,
-            f"update_{self.get_type()}_metadata_template{template_suffix}.sql",
+            sql_path, f"update_{self.get_type()}_metadata_template.sql"
         ).read_text()
 
         # Comment out update of semantic labels for DB version < 3
         if get_tgis_db_version_from_metadata() < 3:
             sql = sql.replace(
-                "strds_metadata.number_of_semantic_labels =",
-                "-- number_of_semantic_labels =",
+                "number_of_semantic_labels = number_of_semantic_labels_new,",
+                "-- number_of_semantic_labels = number_of_semantic_labels_new,",
             )
             sql = sql.replace(
                 "count(distinct semantic_label)",
                 "-- count(distinct semantic_label)",
             )
-        elif old_sqlite_version and self.get_type() == "strds":
-            semantic_label_sql = Path(
-                sql_path, "update_strds_metadata_template_v3.sql"
-            ).read_text()
-            sql = sql + "\n" + semantic_label_sql
 
         sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
         sql = sql.replace("SPACETIME_ID", self.base.get_id())
@@ -2924,7 +2932,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 # This seems to be a bug in sqlite3 Python driver
                 # datetime format can be parsed if the connection is
                 # established with: detect_types=sqlite3.PARSE_DECLTYPES
-                if db_backend == "sqlite3":
+                if dbif.get_dbmi().__name__ == "sqlite3":
                     tstring = row[0]
                     # Convert the unicode string into the datetime format
                     if self.is_time_absolute():

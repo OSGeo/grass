@@ -6,11 +6,9 @@
 # PURPOSE:   This module contains functions for interactive visualizations
 #            in Jupyter Notebooks.
 #
-# COPYRIGHT: (C) 2021-2024 Caitlin Haedrich, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2021-2024 Caitlin Haedrich
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 """Interactive visualizations map with folium or ipyleaflet"""
 
@@ -225,7 +223,7 @@ class InteractiveMap:
 
         If map_backend is not specified, InteractiveMap tries to import
         ipyleaflet first, then folium if it fails. The backend can be
-        specified explicitely with valid values "folium" and "ipyleaflet" .
+        specified explicitly with valid values "folium" and "ipyleaflet" .
 
         In case of folium backend, tiles parameter is passed directly
         to folium.Map() which supports several built-in tilesets
@@ -265,9 +263,9 @@ class InteractiveMap:
                 import folium  # pylint: disable=import-outside-toplevel
 
                 return folium
-            except ImportError as err:
+            except ImportError:
                 if error:
-                    raise err
+                    raise
                 return None
 
         def _import_ipyleaflet(error):
@@ -275,9 +273,9 @@ class InteractiveMap:
                 import ipyleaflet  # pylint: disable=import-outside-toplevel
 
                 return ipyleaflet
-            except ImportError as err:
+            except ImportError:
                 if error:
-                    raise err
+                    raise
                 return None
 
         if not map_backend:

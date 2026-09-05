@@ -26,8 +26,7 @@ class TestTerraflow(TestCase):
 
     def setUp(self):
         """Create input data for steady state groundwater flow computation"""
-        if not Path(self.testdir).exists():
-            os.mkdir(self.testdir)
+        Path(self.testdir).mkdir(exist_ok=True)
 
     def test_univar_mfd(self):
         # compute a steady state groundwater flow
@@ -111,7 +110,9 @@ variance=3.88643128378274
 coeff_var=47.8572213922083
 sum=8341670.75914752"""
 
-        # cls.assertRasterFitsUnivar(raster="terra_flooded",  reference=terra_flooded_univar,  precision=3)
+        self.assertRasterFitsUnivar(
+            raster="terra_flooded", reference=terra_flooded_univar, precision=3
+        )
         self.assertRasterFitsUnivar(
             raster="terra_flowdir", reference=terra_flowdir_univar, precision=3
         )

@@ -7,10 +7,8 @@ Usage:
 
     from grass.script import utils as gutils
 
-(C) 2014-2016 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
@@ -91,6 +89,40 @@ def separator(sep: str) -> str:
     if sep in {"newline", "\\n"}:
         return "\n"
     return sep
+
+
+def available_cpus() -> int:
+    """Number of CPUs this process may actually use.
+
+    Prefers affinity-aware sources over ``os.cpu_count()``, which reports
+    the host total and overcounts in containers and cgroup-limited jobs.
+
+    .. versionadded:: 8.6
+    """
+    if hasattr(os, "process_cpu_count"):  # Python 3.13+
+        return os.process_cpu_count() or 1
+    if hasattr(os, "sched_getaffinity"):  # Linux
+        return len(os.sched_getaffinity(0))
+    return os.cpu_count() or 1
+
+
+def resolve_nprocs(nprocs: int | str) -> int:
+    """Resolve G_OPT_M_NPROCS into a worker count.
+
+    Mirrors the semantics of ``G_set_omp_num_threads()`` in
+    ``lib/gis/omp_threads.c``: 0 means use all available cores, a positive
+    number is used as-is, a negative number means cpu_count + nprocs
+    (clamped to at least 1).
+
+    .. versionadded:: 8.6
+    """
+    n = int(nprocs)
+    if n > 0:
+        return n
+    available = available_cpus()
+    if n == 0:
+        return available
+    return max(1, available + n)
 
 
 def diff_files(
@@ -175,18 +207,14 @@ class KeyValue(dict[str, VT]):
         try:
             return self[key]
         except KeyError:
-            raise AttributeError(key)
+            raise AttributeError(key) from None
 
     def __setattr__(self, key: str, value: VT) -> None:
         self[key] = value
 
 
 def _get_encoding() -> str:
-    try:
-        # Python >= 3.11
-        encoding = locale.getencoding()
-    except AttributeError:
-        encoding = locale.getdefaultlocale()[1]
+    encoding = locale.getencoding()
     if not encoding:
         encoding = "UTF-8"
     return encoding
@@ -433,21 +461,22 @@ def naturally_sort(items, key=None):
 def get_lib_path(modname, libname=None):
     """Return the path of the libname contained in the module."""
     from os import getenv
-    from os.path import isdir, join, sep
+    from os.path import join, sep
 
-    if isdir(join(getenv("GISBASE"), "etc", modname)):
+    if Path(getenv("GISBASE"), "etc", modname).is_dir():
         path = join(os.getenv("GISBASE"), "etc", modname)
     elif (
         getenv("GRASS_ADDON_BASE")
         and libname
-        and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname, libname))
+        and Path(getenv("GRASS_ADDON_BASE"), "etc", modname, libname).is_dir()
     ) or (
         getenv("GRASS_ADDON_BASE")
-        and isdir(join(getenv("GRASS_ADDON_BASE"), "etc", modname))
+        and Path(getenv("GRASS_ADDON_BASE"), "etc", modname).is_dir()
     ):
         path = join(getenv("GRASS_ADDON_BASE"), "etc", modname)
-    elif getenv("GRASS_ADDON_BASE") and isdir(
-        join(getenv("GRASS_ADDON_BASE"), modname, modname)
+    elif (
+        getenv("GRASS_ADDON_BASE")
+        and Path(getenv("GRASS_ADDON_BASE"), modname, modname).is_dir()
     ):
         path = join(os.getenv("GRASS_ADDON_BASE"), modname, modname)
     else:
@@ -456,8 +485,19 @@ def get_lib_path(modname, libname=None):
         idx = cwd.find(modname)
         if idx < 0:
             return None
-        path = "{cwd}{sep}etc{sep}{modname}".format(
-            cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+
+        from grass.app.runtime import RuntimePaths
+
+        runtime_paths = RuntimePaths(set_env_variables=True)
+
+        path = (
+            "{cwd}{sep}build{sep}output{sep}etc{sep}{modname}".format(
+                cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+            )
+            if runtime_paths.is_cmake_build
+            else "{cwd}{sep}etc{sep}{modname}".format(
+                cwd=cwd[: idx + len(modname)], sep=sep, modname=modname
+            )
         )
         if libname:
             path += "{pathsep}{cwd}{sep}etc{sep}{modname}{sep}{libname}".format(

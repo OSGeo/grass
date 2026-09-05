@@ -3,11 +3,9 @@
 #
 # PURPOSE:   API to call GRASS tools (modules) as Python functions
 #
-# COPYRIGHT: (C) 2025 Vaclav Petras and the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2025 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 ##############################################################################
 
 """
@@ -94,8 +92,8 @@ class ParameterConverter:
     def process_parameter_list(self, command):
         """Converts or at least processes parameters passed as list of strings"""
         for item in command:
-            splitted = item.split("=", maxsplit=1)
-            value = splitted[1] if len(splitted) > 1 else item
+            split_ = item.split("=", maxsplit=1)
+            value = split_[1] if len(split_) > 1 else item
             if self.import_export is None and ImporterExporter.is_recognized_file(
                 value
             ):

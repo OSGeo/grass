@@ -6,17 +6,9 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	List registered maps of a space time vector dataset
-# COPYRIGHT:	(C) 2011-2017, Soeren Gebbert and the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2011-2017 Soeren Gebbert
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -68,8 +60,15 @@
 # % answer: cols
 # %end
 
+# %option G_OPT_F_FORMAT
+# % options: plain,line,json,yaml,csv
+# % descriptions: plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);
+# % guisection: Formatting
+# %end
+
 # %option G_OPT_F_SEP
 # % label: Field separator character between the output columns
+# % answer: {NULL}
 # % guisection: Formatting
 # %end
 
@@ -85,10 +84,39 @@
 
 import grass.script as gs
 
+
+def message_option_value_excludes_option_value(
+    option_name, option_value, excluded_option_name, excluded_option_value, reason
+):
+    return _(
+        "Combining {option_name}={option_value} and "
+        "{excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+    ).format(
+        option_name=option_name,
+        option_value=option_value,
+        excluded_option_name=excluded_option_name,
+        excluded_option_value=excluded_option_value,
+        reason=reason,
+    )
+
+
+def message_option_value_excludes_flag(option_name, option_value, flag_name, reason):
+    return _(
+        "The flag -{flag_name} is not allowed with {option_name}={option_value}."
+        " {reason}"
+    ).format(
+        flag_name=flag_name,
+        option_name=option_name,
+        option_value=option_value,
+        reason=reason,
+    )
+
+
 ############################################################################
 
 
 def main():
+    options, flags = gs.parser()
     # lazy imports
     import grass.temporal as tgis
 
@@ -101,15 +129,81 @@ def main():
     method = options["method"]
     header = flags["u"]
     output = options["output"]
+    output_format = options["format"]
+
+    if output_format == "csv":
+        if not separator:
+            separator = ","
+        elif len(separator) > 1:
+            gs.fatal(
+                message_option_value_excludes_option_value(
+                    option_name="format",
+                    option_value=output_format,
+                    excluded_option_name="separator",
+                    excluded_option_value=separator,
+                    reason=_(
+                        "A standard CSV separator (delimiter) is only one character "
+                        "long"
+                    ),
+                )
+            )
+
+    elif output_format in {"json", "yaml"}:
+        if header:
+            gs.fatal(
+                message_option_value_excludes_flag(
+                    option_name="format",
+                    option_value=output_format,
+                    flag_name="u",
+                    reason=_("Column names are always included"),
+                )
+            )
+        if separator:
+            gs.fatal(
+                message_option_value_excludes_option_value(
+                    option_name="format",
+                    option_value=output_format,
+                    excluded_option_name="separator",
+                    excluded_option_value=separator,
+                    reason=_("Separator is part of the format"),
+                )
+            )
+
+    elif output_format == "line":
+        if not separator:
+            separator = ","
+        columns_list = columns.split(",")
+        if len(columns_list) > 1:
+            gs.fatal(
+                message_option_value_excludes_option_value(
+                    option_name="format",
+                    option_value=output_format,
+                    excluded_option_name="columns",
+                    excluded_option_value=columns,
+                    reason=_("Only one column is allowed (not {num_columns})").format(
+                        num_columns=len(columns_list)
+                    ),
+                )
+            )
+    elif not separator:  # output_format = "plain"
+        separator = "|"
 
     # Make sure the temporal database exists
     tgis.init()
 
     tgis.list_maps_of_stds(
-        "stvds", input, columns, order, where, separator, method, header, outpath=output
+        "stvds",
+        input,
+        columns,
+        order,
+        where,
+        separator,
+        method,
+        header,
+        outpath=output,
+        output_format=output_format,
     )
 
 
 if __name__ == "__main__":
-    options, flags = gs.parser()
     main()

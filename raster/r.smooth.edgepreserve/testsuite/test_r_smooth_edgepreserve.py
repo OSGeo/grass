@@ -3,10 +3,9 @@ Name:      r.smooth.edgepreserve tests
 Purpose:   Test corectness of outputs
 
 Author:    Maris Nartiss
-Copyright: (C) 2025 by Maris Nartiss and the GRASS Development Team
-Licence:   This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2025 Maris Nartiss
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import os
@@ -109,7 +108,7 @@ class SmoothingTest(TestCase):
             function="exp",
             quiet=True,
         )
-        self.assertTrue(raster_info(out_map_i)["datatype"] == "CELL")
+        self.assertEqual(raster_info(out_map_i)["datatype"], "CELL")
         self.assertRastersEqual(out_map_i, self.ref_exp_i)
 
     def test_exp_f_ram(self):
@@ -132,7 +131,7 @@ class SmoothingTest(TestCase):
             function="exp",
             quiet=True,
         )
-        self.assertTrue(raster_info(out_map_f)["datatype"] == "FCELL")
+        self.assertEqual(raster_info(out_map_f)["datatype"], "FCELL")
         self.assertRastersEqual(out_map_f, self.ref_exp_f, precision=0.1)
 
     def test_exp_d_ram(self):
@@ -155,7 +154,7 @@ class SmoothingTest(TestCase):
             function="exp",
             quiet=True,
         )
-        self.assertTrue(raster_info(out_map_d)["datatype"] == "DCELL")
+        self.assertEqual(raster_info(out_map_d)["datatype"], "DCELL")
         self.assertRastersEqual(out_map_d, self.ref_exp_f, precision=0.1)
 
     def test_quad_ram(self):

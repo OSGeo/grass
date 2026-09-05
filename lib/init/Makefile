@@ -106,7 +106,7 @@ $(ETC)/VERSIONNUMBER:
 
 $(ETC)/license: $(ETC)/%: %.txt version.sed
 	rm -f $@
-	sh ./version.sed "$(GRASS_VERSION_NUMBER)" "$(GRASS_VERSION_DATE)" "$(GRASS_VERSION_UPDATE_PKG)" $< > $@
+	sh ./version.sed "$(GRASS_VERSION_NUMBER)" "$(GRASS_VERSION_DATE)" $< > $@
 	chmod +r $@
 
 $(ETC)/%: %

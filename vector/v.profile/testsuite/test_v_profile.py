@@ -4,15 +4,15 @@ Purpose:    Tests v.profile input parsing and simple output generation.
             Uses NC Basic data set.
 
 Author:     Maris Nartiss
-Copyright:  (C) 2017, 2022 by Maris Nartiss and the GRASS Development Team
-Licence:    This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
+SPDX-FileCopyrightText: 2017, 2022 Maris Nartiss
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 TODO:       Convert to synthetic dataset. It would allow to shorten output sample length.
             Cover more input/output combinations.
 """
 
-import os
+import json
+from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -177,8 +177,7 @@ class TestProfiling(TestCase):
             output=self.outfile,
         )
         self.assertFileExists(self.outfile)
-        if os.path.isfile(self.outfile):
-            os.remove(self.outfile)
+        Path(self.outfile).unlink(missing_ok=True)
 
     def testOutput(self):
         """Test correctness of output"""
@@ -233,6 +232,54 @@ class TestProfiling(TestCase):
             profile_where="cat=193",
         )
         vpro.run()
+
+    def testJsonFormat(self):
+        """Test JSON format output"""
+        vpro = SimpleModule(
+            "v.profile",
+            input=self.in_points,
+            profile_map=self.in_map,
+            buffer=200,
+            profile_where=self.where,
+            format="json",
+        )
+        vpro.run()
+
+        actual = json.loads(vpro.outputs.stdout)
+
+        expected = [
+            {
+                "category": 572,
+                "distance": 19537.97,
+                "attributes": {
+                    "featurenam": "Greshams Lake",
+                    "class": "Reservoir",
+                },
+            },
+            {
+                "category": 1029,
+                "distance": 19537.97,
+                "attributes": {
+                    "featurenam": "Greshams Lake Dam",
+                    "class": "Dam",
+                },
+            },
+        ]
+
+        # Compare key fields
+        self.assertEqual(len(actual), len(expected))
+        for i in range(len(expected)):
+            self.assertEqual(actual[i]["category"], expected[i]["category"])
+            self.assertAlmostEqual(
+                actual[i]["distance"], expected[i]["distance"], places=2
+            )
+            self.assertEqual(
+                actual[i]["attributes"]["featurenam"],
+                expected[i]["attributes"]["featurenam"],
+            )
+            self.assertEqual(
+                actual[i]["attributes"]["class"], expected[i]["attributes"]["class"]
+            )
 
     def testMultiCrossing(self):
         """If profile crosses single line multiple times, all crossings

@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 
 # generates docs/html/index.html
-# (C) 2003-2009 Markus Neteler and the GRASS Development Team
+# SPDX-FileCopyrightText: 2003-2009 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Authors:
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
 from build import (
-    write_header,
+    grass_version,
+    replace_file,
     write_cmd_overview,
     write_footer,
-    replace_file,
-    grass_version,
+    write_header,
 )
 
 year = None

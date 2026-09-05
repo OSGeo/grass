@@ -66,7 +66,7 @@ class TestIRectify(TestCase):
         cls.group_path = os.path.join(
             env["GISDBASE"], env["LOCATION_NAME"], env["MAPSET"], "group", cls.group
         )
-        os.makedirs(cls.group_path, exist_ok=True)
+        Path(cls.group_path).mkdir(exist_ok=True, parents=True)
         cls.points_path = os.path.join(cls.group_path, "POINTS")
         cls.runModule(
             "i.target",

@@ -17,6 +17,7 @@ Classes:
  - widgets::EmailValidator
  - widgets::TimeISOValidator
  - widgets::MapValidator
+ - widgets::MapNameValidator
  - widgets::NTCValidator
  - widgets::SimpleValidator
  - widgets::GenericValidator
@@ -35,10 +36,8 @@ Classes:
 @todo:
  - move validators to a separate file gui_core/validators.py
 
-(C) 2008-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2008-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Enhancements by Michael Barton <michael.barton asu.edu>
@@ -888,6 +887,31 @@ class MapValidator(GenericValidator):
             GError(message, caption=_("Invalid name"))
 
         GenericValidator.__init__(self, grass.legal_name, _mapNameValidationFailed)
+
+
+class MapNameValidator(BaseValidator):
+    """Validator for map name input
+
+    See G_legal_filename()
+    """
+
+    def __init__(self):
+        BaseValidator.__init__(self)
+
+    def _validate(self, win):
+        """Validate input"""
+        text = win.GetValue()
+        if text:
+            if not grass.legal_name(text):
+                self._notvalid()
+                return False
+
+        self._valid()
+        return True
+
+    def Clone(self):
+        """Clone validator"""
+        return MapNameValidator()
 
 
 class GenericMultiValidator(Validator):

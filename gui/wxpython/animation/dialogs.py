@@ -12,10 +12,8 @@ Classes:
  - dialogs::AddTemporalLayerDialog
 
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
@@ -1660,7 +1658,7 @@ class AddTemporalLayerDialog(wx.Dialog):
         self.tselect = Select(parent=self, type="strds")
         iconTheme = UserSettings.Get(group="appearance", key="iconTheme", subkey="type")
         bitmapPath = os.path.join(globalvar.ICONDIR, iconTheme, "layer-open.png")
-        if os.path.isfile(bitmapPath) and os.path.getsize(bitmapPath):
+        if Path(bitmapPath).is_file() and Path(bitmapPath).stat().st_size:
             bitmap = wx.Bitmap(name=bitmapPath)
         else:
             bitmap = wx.ArtProvider.GetBitmap(

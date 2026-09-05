@@ -1,8 +1,6 @@
 """
-(C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert and Thomas Leppelt
 """
@@ -22,7 +20,7 @@ class TestTemporalRaster3dAlgebra(TestCase):
         """Initiate the temporal GIS and set the region"""
         tgis.init(True)  # Raise on error instead of exit(1)
         cls.use_temp_region()
-        ret = gs.run_command(
+        gs.run_command(
             "g.region", n=80.0, s=0.0, e=120.0, w=0.0, t=100.0, b=0.0, res=10.0
         )
 

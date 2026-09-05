@@ -21,96 +21,115 @@ set(raster3d_modules_list
     r3.stats
     r3.support
     r3.timestamp
-    r3.to.rast)
+    r3.to.rast
+)
 
 if(MSVC)
-  list(REMOVE_ITEM raster3d_modules_list r3.in.v5d r3.out.v5d)
+    list(REMOVE_ITEM raster3d_modules_list r3.in.v5d r3.out.v5d)
 endif()
 
 add_custom_target(
-  ALL_RASTER3D_MODULES ALL
-  DEPENDS ${raster3d_modules_list}
-  COMMENT "All temporal modules are built.")
+    ALL_RASTER3D_MODULES
+    ALL
+    DEPENDS ${raster3d_modules_list}
+    COMMENT "All temporal modules are built."
+)
+
+set_target_properties(ALL_RASTER3D_MODULES PROPERTIES FOLDER Misc)
 
 if(WITH_DOCS)
-  generate_html(TARGET ALL_RASTER3D_MODULES NAME raster3dintro)
+    generate_docs(raster3dintro TARGET ALL_RASTER3D_MODULES)
 endif()
 
-build_program_in_subdir(r3.cross.rast DEPENDS grass_gis grass_raster
-                        grass_raster3d)
+build_program_in_subdir(
+    r3.cross.rast
+    DEPENDS grass_gis grass_raster grass_raster3d
+)
 
 add_subdirectory(r3.flow)
 
 build_program_in_subdir(r3.gradient DEPENDS grass_gis grass_raster3d ${LIBM})
 
-build_program_in_subdir(r3.gwflow DEPENDS grass_gis grass_gmath grass_raster3d
-                        grass_gpde)
+build_program_in_subdir(
+    r3.gwflow
+    DEPENDS grass_gis grass_gmath grass_gpde grass_raster3d
+)
 
-build_program_in_subdir(r3.in.ascii DEPENDS grass_gis grass_gmath grass_raster
-                        grass_raster3d)
+build_program_in_subdir(
+    r3.in.ascii
+    DEPENDS grass_gis grass_gmath grass_raster grass_raster3d
+)
 
 build_program_in_subdir(r3.in.bin DEPENDS grass_gis grass_raster grass_raster3d)
 
-build_program_in_subdir(r3.info DEPENDS grass_gis grass_raster grass_raster3d grass_parson)
+build_program_in_subdir(
+    r3.info
+    DEPENDS grass_gis grass_parson grass_raster grass_raster3d
+)
 
 build_program_in_subdir(r3.mask DEPENDS grass_gis grass_raster3d)
 
 build_program_in_subdir(r3.null DEPENDS grass_gis grass_raster3d)
 
-build_program_in_subdir(r3.neighbors DEPENDS grass_gis grass_raster3d
-                        grass_stats grass_raster)
+build_program_in_subdir(
+    r3.neighbors
+    DEPENDS grass_gis grass_raster grass_raster3d grass_stats
+)
 
 build_program_in_subdir(r3.out.ascii DEPENDS grass_gis grass_raster3d)
 
 build_program_in_subdir(r3.out.bin DEPENDS grass_gis grass_raster3d)
 
 if(NOT MSVC)
-  build_program_in_subdir(r3.out.v5d DEPENDS grass_gis grass_raster3d ${LIBM})
+    build_program_in_subdir(r3.out.v5d DEPENDS grass_gis grass_raster3d ${LIBM})
 endif()
 
 build_program_in_subdir(r3.retile DEPENDS grass_gis grass_raster grass_raster3d)
 
 build_program_in_subdir(r3.stats DEPENDS grass_gis grass_raster3d)
 
-build_program_in_subdir(r3.support DEPENDS grass_gis grass_raster
-                        grass_raster3d)
+build_program_in_subdir(
+    r3.support
+    DEPENDS grass_gis grass_raster grass_raster3d
+)
 
 build_program_in_subdir(r3.timestamp DEPENDS grass_gis grass_raster3d)
 
-build_program_in_subdir(r3.to.rast DEPENDS grass_gis grass_raster
-                        grass_raster3d)
-
-build_program_in_subdir(r3.out.vtk DEPENDS grass_gis grass_raster
-                        grass_raster3d)
-
-build_program_in_subdir(r3.mkdspf DEPENDS grass_gis grass_raster3d grass_gpde
-                        grass_dspf ${LIBM})
+build_program_in_subdir(
+    r3.to.rast
+    DEPENDS grass_gis grass_raster grass_raster3d
+)
 
 build_program_in_subdir(
-  r3.in.lidar
-  DEPENDS
-  grass_gis
-  grass_gproj
-  grass_raster
-  grass_raster3d
-  grass_segment
-  ${LIBM}
-  PRIMARY_DEPENDS
-  LIBLAS)
+    r3.out.vtk
+    DEPENDS grass_gis grass_raster grass_raster3d
+)
 
 build_program_in_subdir(
-  r3.out.netcdf
-  DEPENDS
-  grass_datetime
-  grass_gis
-  grass_gproj
-  grass_raster3d
-  PRIMARY_DEPENDS
-  NetCDF::NetCDF
-  OPTIONAL_DEPENDS
-  PROJ::proj)
+    r3.mkdspf
+    DEPENDS ${LIBM} grass_dspf grass_gis grass_gpde grass_raster3d
+)
+
+build_program_in_subdir(
+    r3.in.lidar
+    DEPENDS
+        ${LIBM}
+        grass_gis
+        grass_gproj
+        grass_raster
+        grass_raster3d
+        grass_segment
+    PRIMARY_DEPENDS LIBLAS
+)
+
+build_program_in_subdir(
+    r3.out.netcdf
+    DEPENDS grass_datetime grass_gis grass_gproj grass_raster3d
+    PRIMARY_DEPENDS NetCDF::NetCDF
+    OPTIONAL_DEPENDS PROJ::proj
+)
 
 # mode_t is not available on msvc. Discuss
 if(NOT MSVC)
-  build_program_in_subdir(r3.in.v5d DEPENDS grass_gis grass_raster3d ${LIBM})
+    build_program_in_subdir(r3.in.v5d DEPENDS grass_gis grass_raster3d ${LIBM})
 endif()

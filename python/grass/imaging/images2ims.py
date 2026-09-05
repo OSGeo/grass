@@ -33,6 +33,7 @@ Use PIL to create a series of images.
 import os
 from operator import itemgetter
 from string import digits
+from pathlib import Path
 
 try:
     import numpy as np
@@ -157,8 +158,7 @@ def writeIms(filename, images):
     dirname, filename = os.path.split(filename)
 
     # Create dir(s) if we need to
-    if not os.path.isdir(dirname):
-        os.makedirs(dirname)
+    Path(dirname).mkdir(parents=True, exist_ok=True)
 
     # Insert formatter
     filename = _getFilenameWithFormatter(filename, len(images))
@@ -198,7 +198,7 @@ def readIms(filename, asNumpy=True):
     dirname, filename = os.path.split(filename)
 
     # Check dir exists
-    if not os.path.isdir(dirname):
+    if not Path(dirname).is_dir():
         raise OSError("Directory not found: " + str(dirname))
 
     # Get two parts of the filename

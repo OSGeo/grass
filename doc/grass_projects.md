@@ -82,7 +82,8 @@ GRASS projects can be created from several types of information:
 - Use a georeferenced raster or vector file (e.g. GeoTiff or GeoPackage)
   to define the project's CRS automatically.
 
-- Create a generic cartesian system (X, Y) for simulations or non-georeferenced data.
+- Create a generic cartesian system (X, Y) for simulations
+  or non-georeferenced data.
 
 - Specify CRS using a WKT or a PROJ.4 string.
 
@@ -96,7 +97,7 @@ data file are often the most practical and convenient options.
 Projects can be created in various ways depending on the environment:
 
 - GRASS Python API: Allows creating a project programmatically with the function
-  [`create_project`](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.create_project).
+  [`create_project`](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#grass.script.core.create_project).
     This example creates a project named *my_project* with a specific EPSG code:
 
     ```python

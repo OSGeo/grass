@@ -3,10 +3,8 @@
 
 @brief Wrappers for scatter plot C backend.
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
@@ -82,7 +80,8 @@ def ApplyColormap(vals, vals_mask, colmap, out_vals):
 
 def MergeArrays(merged_arr, overlay_arr, alpha):
     if merged_arr.shape != overlay_arr.shape:
-        GException("MergeArrays: merged_arr.shape != overlay_arr.shape")
+        msg = "MergeArrays: merged_arr.shape != overlay_arr.shape"
+        raise GException(msg)
 
     c_uint8_p = POINTER(c_uint8)
     merged_p = merged_arr.ctypes.data_as(c_uint8_p)

@@ -6,10 +6,9 @@
    Computes the length of the shortest path between all pairs of nodes
    in the network.
 
-   (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2009-2010 Daniel Bundala
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Daniel Bundala (Google Summer of Code 2009)
  */
@@ -175,7 +174,7 @@ int NetA_flow(dglGraph_s *graph, struct ilist *source_list,
    \return -1 on failure
  */
 int NetA_min_cut(dglGraph_s *graph, struct ilist *source_list,
-                 struct ilist *sink_list UNUSED, int *flow, struct ilist *cut)
+                 struct ilist *sink_list G_UNUSED, int *flow, struct ilist *cut)
 {
     int nnodes, i;
     dglEdgesetTraverser_s et;

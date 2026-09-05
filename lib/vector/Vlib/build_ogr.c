@@ -8,10 +8,8 @@
    Category: FID, not all layer have FID, OGRNullFID is defined
    (5/2004) as -1, so FID should be only >= 0
 
-   (C) 2001-2010, 2012 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2010, 2012 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Radim Blazek, Piero Cavalieri
    \author Various updates for GRASS 7 by Martin Landa <landa.martin gmail.com>
@@ -23,10 +21,8 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include <ogr_api.h>
 #include <cpl_error.h>
-#endif
 
 #include "local_proto.h"
 
@@ -48,7 +44,6 @@
  */
 int Vect_build_ogr(struct Map_info *Map, int build)
 {
-#ifdef HAVE_OGR
     struct Plus_head *plus;
     struct Format_info_ogr *ogr_info;
 
@@ -97,10 +92,6 @@ int Vect_build_ogr(struct Map_info *Map, int build)
                   Vect_get_finfo_geometry_type(Map));
 
     return Vect__build_sfa(Map, build);
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return 0;
-#endif
 }
 
 /*!
@@ -115,7 +106,6 @@ int Vect_build_ogr(struct Map_info *Map, int build)
  */
 int Vect_save_fidx(struct Map_info *Map, struct Format_info_offset *offset)
 {
-#ifdef HAVE_OGR
     char fname[GPATH_MAX], elem[GPATH_MAX];
     char buf[5];
     long length;
@@ -169,8 +159,4 @@ int Vect_save_fidx(struct Map_info *Map, struct Format_info_offset *offset)
     fclose(fp.file);
 
     return 1;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR support"));
-    return 0;
-#endif
 }

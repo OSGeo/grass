@@ -6,11 +6,9 @@
 # AUTHOR(S): Glynn Clements
 # PURPOSE:   Fast replacement for r.grow using r.grow.distance
 #
-# COPYRIGHT: (C) 2008 by Glynn Clements
-#
-#   This program is free software under the GNU General Public
-#   License (>=v2). Read the file COPYING that comes with GRASS
-#   for details.
+# SPDX-FileCopyrightText: 2008 Glynn Clements
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -59,6 +57,8 @@
 # % multiple: no
 # % description: Value to write for "grown" cells
 # %end
+# %option G_OPT_M_NPROCS
+# %end
 
 import os
 import atexit
@@ -83,6 +83,7 @@ def main():
     metric = options["metric"]
     old = options["old"]
     new = options["new"]
+    nprocs = options["nprocs"]
     mapunits = flags["m"]
 
     tmp = str(os.getpid())
@@ -111,6 +112,10 @@ def main():
     if metric == "euclidean":
         metric = "squared"
         radius *= radius
+
+    radius_str = str(radius)
+    if "e" in radius_str.lower():
+        radius_str = f"{radius:.20f}".rstrip("0").rstrip(".")
 
     # check if input file exists
     if not gs.find_file(input)["file"]:
@@ -142,10 +147,11 @@ def main():
             '$output = if(!isnull("$input"),$old,if($dist < $radius,$new,null()))',
             output=output,
             input=input,
-            radius=radius,
+            radius=radius_str,
             old=old,
             new=new,
             dist=temp_dist,
+            nprocs=nprocs,
         )
     else:
         # shrink
@@ -164,9 +170,10 @@ def main():
         gs.mapcalc(
             "$output = if(isnull($dist), $old, if($dist < $radius,null(),$old))",
             output=output,
-            radius=radius,
+            radius=radius_str,
             old=old,
             dist=temp_dist,
+            nprocs=nprocs,
         )
 
     gs.run_command("r.colors", map=output, raster=input)

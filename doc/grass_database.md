@@ -4,8 +4,8 @@ description: GRASS Database
 
 # GRASS Database
 
-A GRASS Database is simply a set of directories and files with
-certain structure which GRASS works efficiently with. Project is a
+A GRASS Database is simply a set of directories and files with a
+certain structure with which GRASS works efficiently. A project is a
 directory with data related to one geographic location or a project. All
 data within one project has the same coordinate reference system. A
 project contains mapsets and each mapset contains data related to a
@@ -13,7 +13,7 @@ specific task, user or a smaller project. Within each project, a
 mandatory PERMANENT mapset exists which can contain commonly used data
 within one GRASS project such as base maps. The PERMANENT mapset also
 contains metadata related to the project such as the coordinate
-reference system. When GRASS is started it connects to a database,
+reference system. When GRASS is started, it connects to a database,
 project and mapset specified by the user.
 
 ![example: nc_spm - highway - elevation](grass_database.png)  
@@ -21,9 +21,9 @@ project and mapset specified by the user.
 
 ## GRASS Database Directory
 
-All data for GRASS must be in GRASS Database which is a
+All data for GRASS must be in a GRASS Database which is a
 directory (visible on the disk) containing subdirectories which are
-GRASS projects. User can have one or more of Databases on the disk.
+GRASS projects. A user can have one or more Databases on the disk.
 Typically users have one directory called `grassdata` in their home
 directory. In multi-user environment users often have a `grassdata`
 directory mounted as a network directory (network file system). For
@@ -33,16 +33,16 @@ file system (e.g. NFS).
 GRASS Databases can be safely copied or moved as any other
 directories. Don't be confused with (relational) databases which are
 used in GRASS to hold attribute data and might be part of the GRASS
-Database. From user point of view, GRASS Database with all its
-data in it is similar to, e.g. PostGIS, database, as it stores all
-information inside in a specific format and is accessible by specific
+Database. From the user's point of view, GRASS Database with all its
+data in it is similar to, e.g. PostGIS database, as it stores all
+information in a specific format and is accessible by specific
 tools. GRASS Database is often called GISDBASE or
 DATABASE.
 
 ## GRASS Projects
 
 A project is further organized into mapsets which are subdirectories of
-the project directory. All data in one project have the same coordinate
+the project directory. All data in one project has the same coordinate
 reference system (projection, datum). Each project contains a mapset
 called PERMANENT. Typically, a project contains all data related to one
 real-world project or a geographic area (geographic location or region).

@@ -1,7 +1,9 @@
 /*
  **  Written by David Gerdes  US Army Construction Engineering Research Lab
  **     April 1992
- **  Copyright 1992 USA-CERL   All rights reserved.
+ **  SPDX-FileCopyrightText: 1992 USA-CERL
+ **  SPDX-FileCopyrightText: GRASS Development Team
+ **  SPDX-License-Identifier: GPL-2.0-or-later
  **
  */
 
@@ -12,6 +14,9 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include <grass/linkm.h>
 
 struct link {
@@ -19,10 +24,14 @@ struct link {
     struct link *next;
 };
 
+static void add_link_rev(struct link *, struct link *);
+static void add_link(struct link *, struct link *);
+static void dumplist(struct link *);
+
 int main(int argc, char *argv[])
 {
-    register int i;
-    VOID_T *head;
+    int i;
+    struct link_head *head;
     struct link List, *tmp, *p;
     int rev = 0;
     char buf[4096];
@@ -34,9 +43,10 @@ int main(int argc, char *argv[])
     List.let = ' ';
 
     link_set_chunk_size(1);
-    head = (VOID_T *)link_init(sizeof(struct link));
+    head = link_init(sizeof(struct link));
 
-    while (NULL != gets(buf)) {
+    while (fgets(buf, sizeof(buf), stdin) != NULL) {
+        buf[strcspn(buf, "\n")] = '\0';
         for (i = 0; buf[i] != '\0'; i++) {
             tmp = (struct link *)link_new(head);
             tmp->let = buf[i];
@@ -52,7 +62,7 @@ int main(int argc, char *argv[])
 
         while (p != NULL && p->next != NULL) {
             tmp = p->next;
-            link_dispose(head, p);
+            link_dispose(head, (VOID_T *)p);
             p = tmp;
         }
         List.next = NULL;
@@ -60,10 +70,10 @@ int main(int argc, char *argv[])
 
     link_cleanup(head);
 
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
 
-void add_link_rev(struct link *List, struct link *link)
+static void add_link_rev(struct link *List, struct link *link)
 {
     struct link *p;
 
@@ -72,7 +82,7 @@ void add_link_rev(struct link *List, struct link *link)
     link->next = p;
 }
 
-void add_link(struct link *List, struct link *link)
+static void add_link(struct link *List, struct link *link)
 {
     struct link *p;
 
@@ -83,7 +93,7 @@ void add_link(struct link *List, struct link *link)
     link->next = NULL;
 }
 
-void dumplist(struct link *List)
+static void dumplist(struct link *List)
 {
     struct link *p;
 

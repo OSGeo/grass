@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Radim Blazek
    \author Update for GRASS 7 Markus Metz
@@ -71,7 +69,8 @@ typedef struct {
 static int fpoint;
 
 /* Function called from RTreeSearch for point found */
-static int srch(int id, const struct RTree_Rect *rect UNUSED, void *arg UNUSED)
+static int srch(int id, const struct RTree_Rect *rect G_UNUSED,
+                void *arg G_UNUSED)
 {
     fpoint = id;
 

@@ -1,8 +1,8 @@
 import os
-import pytest
 from pathlib import Path
 
 import grass.script as gs
+import pytest
 
 
 @pytest.fixture(scope="module")

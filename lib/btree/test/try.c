@@ -6,16 +6,15 @@
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      balanced tree - possibly duplicating libavl functionality; see
  *               http://grass.itc.it/pipermail/grass-dev/2007-April/030396.html
- * COPYRIGHT:    (C) 2002-2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2002-2007 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
 #include <grass/btree.h>
 
 static int cmp(const void *a, const void *b)
@@ -29,22 +28,24 @@ int main(void)
     void *k, *d;
     BTREE B;
 
-    btree_create(&B, strcmp, 10);
+    btree_create(&B, cmp, 10);
     while (1) {
         fprintf(stdout, "enter key (or RETURN if done): ");
-        if (!gets(key))
-            exit(0);
+        if (!fgets(key, sizeof(key), stdin))
+            exit(EXIT_SUCCESS);
+        key[strcspn(key, "\n")] = '\0';
         if (*key == 0)
             break;
         fprintf(stdout, "    ");
         if (btree_find(&B, key, &d))
-            fprintf(stdout, "%s = %s\n", key, d);
+            fprintf(stdout, "%s = %s\n", key, (const char *)d);
         else
             fprintf(stdout, "%s - not found\n", key);
         fprintf(stdout, "    ");
         fprintf(stdout, "enter new value (or RETURN if none): ");
-        if (!gets(data))
-            exit(0);
+        if (!fgets(data, sizeof(data), stdin))
+            exit(EXIT_SUCCESS);
+        data[strcspn(data, "\n")] = '\0';
         if (*data)
             btree_update(&B, key, strlen(key) + 1, data, strlen(data) + 1);
     }

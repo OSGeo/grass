@@ -6,11 +6,8 @@
  *               based on GDAL library.
  *               Replaces r.out.gdal.sh script which used the gdal_translate
  *               executable and GDAL grass-format plugin.
- * COPYRIGHT:    (C) 2006-2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -182,8 +179,8 @@ int main(int argc, char *argv[])
     supported_formats(&gdal_formats);
     if (gdal_formats)
         format->options = G_store(gdal_formats);
-        /* else
-         * G_fatal_error (_("Unknown GIS formats")); */
+    /* else
+     * G_fatal_error (_("Unknown GIS formats")); */
 #else
     gdal_formats = "AAIGrid,BMP,BSB,DTED,ELAS,ENVI,FIT,GIF,GTiff,HFA,JPEG,MEM,"
                    "MFF,MFF2,NITF,PAux,PNG,PNM,VRT,XPM";
@@ -238,7 +235,7 @@ int main(int argc, char *argv[])
     overviewopt = G_define_option();
     overviewopt->key = "overviews";
     overviewopt->type = TYPE_INTEGER;
-    overviewopt->options = "0-5";
+    overviewopt->options = "0-30";
     overviewopt->answer = "0";
     overviewopt->label =
         _("Number of overviews to create for the output dataset");
@@ -300,7 +297,6 @@ int main(int argc, char *argv[])
     struct Key_Value *projepsg = G_get_projepsg();
     char *srswkt = NULL;
 
-#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
     char *indef;
 
     if ((indef = G_get_projsrid())) {
@@ -333,11 +329,9 @@ int main(int argc, char *argv[])
         }
         OSRDestroySpatialReference(hSRS);
     }
-#endif
     if (!srswkt) {
         srswkt = GPJ_grass_to_wkt2(projinfo, projunits, projepsg, 0, 0);
 
-#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
         /* convert bound CRS */
         if (srswkt && *srswkt) {
             PJ *obj = NULL;
@@ -362,7 +356,6 @@ int main(int argc, char *argv[])
                 proj_destroy(obj);
             }
         }
-#endif
     }
 
     G_get_window(&cellhead);
@@ -754,8 +747,8 @@ int main(int argc, char *argv[])
     /* overviews */
     if (overviewopt->answer) {
         n_overviews = atoi(overviewopt->answer);
-        if (n_overviews < 0 || n_overviews > 5) {
-            G_warning(_("Number of overviews must be between 0 and 5"));
+        if (n_overviews < 0 || n_overviews > 30) {
+            G_warning(_("Number of overviews must be between 0 and 30"));
             n_overviews = 0;
         }
     }

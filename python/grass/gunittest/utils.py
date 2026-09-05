@@ -1,10 +1,8 @@
 """
 GRASS Python testing framework utilities (general and test-specific)
 
-Copyright (C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Vaclav Petras
 """
@@ -12,7 +10,6 @@ for details.
 from __future__ import annotations
 
 import errno
-import os
 import shutil
 import sys
 import warnings
@@ -20,14 +17,15 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from unittest import expectedFailure
 
+from grass.app.runtime import RuntimePaths
+
 if TYPE_CHECKING:
     from _typeshed import StrOrBytesPath, StrPath
 
 
 def ensure_dir(directory: StrOrBytesPath) -> None:
     """Create all directories in the given path if needed."""
-    if not Path(directory).exists():
-        os.makedirs(directory)
+    Path(directory).mkdir(parents=True, exist_ok=True)
 
 
 def add_gitignore_to_dir(directory: StrPath) -> None:
@@ -76,6 +74,22 @@ def do_doctest_gettext_workaround() -> None:
 
 
 _MAX_LENGTH = 80
+
+
+def xfail_cmake(test_item):
+    """Marks a test as an expected failure or error only on CMake build
+    Equivalent to applying @unittest.expectedFailure only when running
+    on a CMake built GRASS.
+    """
+    runtime_paths = RuntimePaths()
+
+    if not runtime_paths.is_cmake_build:
+        return test_item
+    warnings.warn(
+        "Once the test is fixed and passing, remove the @xfail_cmake decorator",
+        stacklevel=2,
+    )
+    return expectedFailure(test_item)
 
 
 def xfail_windows(test_item):

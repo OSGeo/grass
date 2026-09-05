@@ -9,10 +9,8 @@ List of classes:
  - wms_cap_parsers::WMTSCapabilitiesTree
  - wms_cap_parsers::OnEarthCapabilitiesTree
 
-(C) 2012 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2012 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
@@ -41,17 +39,17 @@ class BaseCapabilitiesTree(ET.ElementTree):
         if is_file:
             try:
                 ET.ElementTree.__init__(self, file=cap_file)
-            except ParseError:
-                raise ParseError(_("Unable to parse XML file"))
+            except ParseError as pe:
+                raise ParseError(_("Unable to parse XML file")) from pe
             except OSError as error:
                 raise ParseError(
                     _("Unable to open XML file '%s'.\n%s\n") % (cap_file, error)
-                )
+                ) from error
         else:
             try:
                 ET.ElementTree.__init__(self, element=ET.fromstring(cap_file))
-            except ParseError:
-                raise ParseError(_("Unable to parse XML file"))
+            except ParseError as pe:
+                raise ParseError(_("Unable to parse XML file")) from pe
 
         if self.getroot() is None:
             raise ParseError(_("Root node was not found."))
@@ -233,17 +231,17 @@ class WMSCapabilitiesTree(BaseCapabilitiesTree):
                 continue
 
             is_there = False
-            for _elem in elem:
+            for elem_ in elem:
                 cmp_text = None
                 if cmp_type == "attribute":
-                    if add_arg in _elem.attrib:
-                        cmp_text = _elem.attrib[add_arg]
+                    if add_arg in elem_.attrib:
+                        cmp_text = elem_.attrib[add_arg]
 
                 elif cmp_type == "element_content":
-                    cmp_text = _elem.text
+                    cmp_text = elem_.text
 
                 elif cmp_type == "child_element_content":
-                    cmp = _elem.find(self.xml_ns.Ns(add_arg))
+                    cmp = elem_.find(self.xml_ns.Ns(add_arg))
                     if cmp is not None:
                         cmp_text = cmp.text
 

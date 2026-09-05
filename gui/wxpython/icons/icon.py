@@ -6,10 +6,8 @@
 Classes:
  - MetaIcon
 
-(C) 2007-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
@@ -81,7 +79,7 @@ class MetaIcon:
                 id=self.imagepath, client=wx.ART_TOOLBAR, size=size
             )
         elif self.type == "img":
-            if os.path.isfile(self.imagepath) and os.path.getsize(self.imagepath):
+            if Path(self.imagepath).is_file() and Path(self.imagepath).stat().st_size:
                 if size and len(size) == 2:
                     image = wx.Image(name=self.imagepath)
                     image.Rescale(size[0], size[1])

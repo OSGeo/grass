@@ -14,10 +14,9 @@
    \todo SFA version of V2__add_area_cats_to_cidx_nat
    \todo SFA version of V2__add_line_to_topo_nat
 
-   (C) 2011-2012 by Martin Landa, and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2011-2012 Martin Landa
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -31,11 +30,9 @@
 #include "pg_local_proto.h"
 #endif
 
-#if defined HAVE_OGR || defined HAVE_POSTGRES
 static void V2__add_line_to_topo_sfa(struct Map_info *, int,
                                      const struct line_pnts *,
                                      const struct line_cats *);
-#endif
 
 /*!
    \brief Writes feature on level 2 (OGR/PostGIS interface, pseudo-topological
@@ -53,7 +50,6 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
                         const struct line_pnts *points,
                         const struct line_cats *cats)
 {
-#if defined HAVE_OGR || defined HAVE_POSTGRES
     int line;
     off_t offset;
     struct Plus_head *plus;
@@ -128,10 +124,6 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
     /* returns int line, but is defined as off_t for compatibility with
      * Write_line_array in write.c */
     return line;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR/PostgreSQL support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -161,7 +153,6 @@ off_t V2_rewrite_line_sfa(struct Map_info *Map, off_t line, int type,
         return -1;
     }
 
-#if defined HAVE_OGR || defined HAVE_POSTGRES
     if (type != V2_read_line_sfa(Map, NULL, NULL, line)) {
         G_warning(_("Unable to rewrite feature (incompatible feature types)"));
         return -1;
@@ -171,10 +162,6 @@ off_t V2_rewrite_line_sfa(struct Map_info *Map, off_t line, int type,
         return -1;
 
     return V2_write_line_sfa(Map, type, points, cats);
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR/PostgreSQL support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -192,7 +179,6 @@ off_t V2_rewrite_line_sfa(struct Map_info *Map, off_t line, int type,
  */
 int V2_delete_line_sfa(struct Map_info *Map, off_t line)
 {
-#if defined HAVE_OGR || defined HAVE_POSTGRES
     int ret, i, type, first;
     struct P_line *Line;
     struct Plus_head *plus;
@@ -272,10 +258,6 @@ int V2_delete_line_sfa(struct Map_info *Map, off_t line)
         /* maybe not needed VERIFY */
     }
     return ret;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR/PostgreSQL support"));
-    return -1;
-#endif
 }
 
 /*!
@@ -294,12 +276,7 @@ off_t V2__write_area_sfa(struct Map_info *Map, const struct line_pnts **points,
                          int nparts, const struct line_cats *cats)
 {
     if (Map->format == GV_FORMAT_OGR) {
-#ifdef HAVE_OGR
         return V2__write_area_ogr(Map, points, nparts, cats);
-#else
-        G_fatal_error(_("GRASS is not compiled with OGR support"));
-        return -1;
-#endif
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
 #ifdef HAVE_POSTGRES
@@ -315,7 +292,6 @@ off_t V2__write_area_sfa(struct Map_info *Map, const struct line_pnts **points,
     return -1;
 }
 
-#if defined HAVE_OGR || defined HAVE_POSTGRES
 /*!
    \brief Add feature to topo file (internal use only)
 
@@ -392,4 +368,3 @@ void V2__add_line_to_topo_sfa(struct Map_info *Map, int line,
 
     return;
 }
-#endif /* HAVE_OGR || HAVE_POSTGRES */

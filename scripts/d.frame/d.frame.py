@@ -6,17 +6,9 @@
 # AUTHOR(S):    Martin Landa <landa.martin gmail.com>
 #               Based on d.frame from GRASS 6
 # PURPOSE:      Manages display frames on the user's graphics monitor
-# COPYRIGHT:    (C) 2014-2015 by Martin Landa, and the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2014-2015 Martin Landa
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 ############################################################################
 # %module
@@ -67,6 +59,7 @@
 
 import os
 import sys
+from pathlib import Path
 
 from grass.script.core import (
     fatal,
@@ -109,7 +102,7 @@ def read_monitor_file(monitor, ftype="env"):
 
 def check_monitor_file(monitor, ftype="env"):
     mfile = parse_command("d.mon", flags="g").get(ftype, None)
-    if mfile is None or not os.path.isfile(mfile):
+    if mfile is None or not Path(mfile).is_file():
         fatal(_("Unable to get monitor info"))
 
     return mfile

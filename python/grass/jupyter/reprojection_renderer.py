@@ -5,11 +5,9 @@
 #            folium. Reprojects rasters to Pseudo-Mercator and vectors to WGS84.
 #            Exports reprojected rasters and vectors to PNGs and geoJSONs, respectively.
 #
-# COPYRIGHT: (C) 2022 Caitlin Haedrich, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2022 Caitlin Haedrich
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 """Reprojects rasters to Pseudo-Mercator and vectors to WGS84. Exports reprojected
 rasters and vectors to PNGs and geoJSONs, respectively."""
@@ -89,11 +87,21 @@ class ReprojectionRenderer:
 
         param str name: name of raster
         """
+        # Store original name before find_file overwrites it
+        original_name = name
         # Find full name of raster
         file_info = gs.find_file(name, element="cell", env=self._src_env)
         full_name = file_info["fullname"]
         name = file_info["name"]
         mapset = file_info["mapset"]
+
+        # Validate that raster exists
+        if not full_name:
+            msg = (
+                f"Raster map <{original_name}> not found. "
+                "Please check the raster name and ensure it exists in the current project."
+            )
+            raise ValueError(msg)
 
         self._region_manager.set_region_from_raster(full_name)
         # Reproject raster into WGS84/epsg3857 location
@@ -138,11 +146,22 @@ class ReprojectionRenderer:
         geoJSON filename.
 
         param str name: name of vector"""
+        # Store original name before find_file overwrites it
+        original_name = name
         # Find full name of vector
         file_info = gs.find_file(name, element="vector")
         full_name = file_info["fullname"]
         name = file_info["name"]
         mapset = file_info["mapset"]
+
+        # Validate that vector exists
+        if not full_name:
+            msg = (
+                f"Vector map <{original_name}> not found. "
+                "Please check the vector name and ensure it exists in the current project."
+            )
+            raise ValueError(msg)
+
         new_name = full_name.replace("@", "_")
         # set bbox
         self._region_manager.set_bbox_vector(full_name)

@@ -1,7 +1,7 @@
 """Paths to resources and and other GRASS properties, configured during build
 
-(C) 2025 by Nicklas Larsson and the GRASS Development Team
-
+SPDX-FileCopyrightText: 2025 Nicklas Larsson
+SPDX-FileCopyrightText: GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 
 
@@ -21,3 +21,8 @@ GRASS_VERSION_GIT = "@GRASS_VERSION_GIT@"
 
 GRASS_PREFIX = "@GRASS_PREFIX@"
 GISBASE = "@GISBASE_INSTALL_PATH@"
+GRASS_CMAKE_CONFIG = "@GRASS_INSTALL_CMAKECONFDIR@"
+GRASS_CMAKE_MODULES = "@GRASS_INSTALL_CMAKEMODULEDIR@"
+GRASS_CMAKE_PREFIX_PATH = "@CMAKE_PREFIX_PATH@"
+GRASS_CMAKE_C_COMPILER = "@CMAKE_C_COMPILER@"
+GRASS_CMAKE_CXX_COMPILER = "@CMAKE_CXX_COMPILER@"

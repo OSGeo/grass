@@ -7,19 +7,16 @@
 #      Earlier Bourne script version by Hamish Bowman,
 #      https://grasswiki.osgeo.org/wiki/Talk:Color_tables
 #
-#   (C) 2009-2017 by the GRASS Development Team
-#       This program is free software under the GNU General Public
-#       License (>=v2). Read the file COPYING that comes with GRASS
-#       for details.
+#   SPDX-FileCopyrightText: 2009-2017 GRASS Development Team
+#   SPDX-License-Identifier: GPL-2.0-or-later
 #
 
-import os
 import atexit
+import os
 import sys
 from pathlib import Path
 
 import grass.script as gs
-
 
 tmp_grad_abs = None
 tmp_grad_rel = None
@@ -161,8 +158,7 @@ def main():
     color_dir = os.path.join(os.environ["GISBASE"], "etc", "colors")
     output_dir = sys.argv[1]
 
-    if not Path(output_dir).exists():
-        os.makedirs(output_dir)
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
 
     pid = os.getpid()
     tmp_grad_abs = "tmp_grad_abs_%d" % pid

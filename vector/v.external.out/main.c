@@ -7,11 +7,9 @@
  * PURPOSE:      Make GRASS write vector maps utilizing the OGR library.
  *               (Partly based on r.external.out code)
  *
- * COPYRIGHT:    (C) 2010-2014 by Martin Landa and the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2010-2014 Martin Landa
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************/
 
@@ -22,9 +20,7 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
-#ifdef HAVE_OGR
 #include "ogr_api.h"
-#endif
 
 #include "local_proto.h"
 
@@ -47,9 +43,7 @@ int main(int argc, char *argv[])
     G_add_keyword("PostGIS");
     module->description = _("Defines vector output format.");
 
-#ifdef HAVE_OGR
     OGRRegisterAll();
-#endif
     parse_args(argc, argv, &options, &flags);
 
     if (flags.f->answer) {

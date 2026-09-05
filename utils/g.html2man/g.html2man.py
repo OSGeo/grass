@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-from pathlib import Path
-import sys
 import re
-from ghtml import HTMLParser
-from ggroff import Formatter
-
+import sys
 from io import StringIO
+from pathlib import Path
+
+from ggroff import Formatter
+from ghtml import HTMLParser
 
 entities = {"nbsp": " ", "bull": "*"}
 

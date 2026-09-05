@@ -19,12 +19,6 @@ class TestVDbConnect(TestCase):
             r"layer <1\/bridges> table <bridges> in database <.+sqlite\.db> through driver <sqlite> with key <cat>",
         )
 
-        # Repeat check using -c and -p flags
-        actual_plain = read_command(
-            "v.db.connect", map="bridges", flags="cp"
-        ).splitlines()
-        self.assertEqual(actual_plain, actual)
-
         # Repeat check using explicit plain format
         actual_plain = read_command(
             "v.db.connect", map="bridges", flags="p", format="plain"

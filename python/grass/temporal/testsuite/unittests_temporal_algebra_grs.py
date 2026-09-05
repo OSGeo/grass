@@ -1,8 +1,6 @@
 """
-(C) 2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert and Thomas Leppelt
 """
@@ -178,7 +176,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         """Testing the common granularity function year to month sampling."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = A : C"
-        ret = ta.setup_common_granularity(expression=expr)
+        ta.setup_common_granularity(expression=expr)
 
         ta.parse(expression=expr, basename="r", overwrite=True)
 
@@ -197,7 +195,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         """Testing the common granularity function with gaps."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = A : D"
-        ret = ta.setup_common_granularity(expression=expr)
+        ta.setup_common_granularity(expression=expr)
 
         ta.parse(expression=expr, basename="r", overwrite=True)
 
@@ -216,7 +214,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         """Testing the common granularity function year to month with gaps."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = C : D"
-        ret = ta.setup_common_granularity(expression=expr)
+        ta.setup_common_granularity(expression=expr)
 
         ta.parse(expression=expr, basename="r", overwrite=True)
 
@@ -235,7 +233,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         """Testing the common granularity function year to month with gaps."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = C : D"
-        ret = ta.setup_common_granularity(expression=expr)
+        ta.setup_common_granularity(expression=expr)
 
         ta.parse(expression=expr, basename="r", overwrite=True)
 
@@ -254,7 +252,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         """Testing the common granularity function year to month with gaps."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = A : C : D"
-        ret = ta.setup_common_granularity(expression=expr)
+        ta.setup_common_granularity(expression=expr)
 
         ta.parse(expression=expr, basename="r", overwrite=True)
 
@@ -273,7 +271,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         """Testing the common granularity function year to month with gaps."""
         ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = "R = if(start_month(A) > 2, A : C : D)"
-        ret = ta.setup_common_granularity(expression=expr)
+        ta.setup_common_granularity(expression=expr)
 
         ta.parse(expression=expr, basename="r", overwrite=True)
 

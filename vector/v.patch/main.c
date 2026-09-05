@@ -8,11 +8,8 @@
  *               Markus Neteler <neteler itc.it>,
  *               Martin Landa <landa.martin gmail.com> (bbox)
  * PURPOSE:
- * COPYRIGHT:    (C) 2002-2024 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2002-2024 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 /*
@@ -64,7 +61,7 @@ int main(int argc, char *argv[])
     int keycol = -1;
     int maxcat = 0;
     int out_is_3d = WITHOUT_Z;
-    char colnames[4096];
+    char colnames[DB_SQL_MAX];
     double snap = -1;
 
     G_gisinit(argv[0]);
@@ -239,7 +236,11 @@ int main(int argc, char *argv[])
 
                         snprintf(tmpbuf, sizeof(tmpbuf), ",%s",
                                  db_get_column_name(column_out));
-                        strcat(colnames, tmpbuf);
+                        if (G_strlcat(colnames, tmpbuf, sizeof(colnames)) >=
+                            sizeof(colnames)) {
+                            G_fatal_error(
+                                _("Too many columns to copy the table"));
+                        }
                     }
                 }
             }
@@ -612,13 +613,17 @@ int copy_records(dbDriver *driver_in, dbString *table_name_in,
     dbCursor cursor;
     dbString value_str, sql;
     dbTable *table_in;
-    char tmpbuf[4096];
+    char tmpbuf[DB_SQL_MAX];
 
     db_init_string(&value_str);
     db_init_string(&sql);
 
-    if (colnames && *colnames)
-        snprintf(tmpbuf, sizeof(tmpbuf), "select %s from ", colnames);
+    if (colnames && *colnames) {
+        if (snprintf(tmpbuf, sizeof(tmpbuf), "select %s from ", colnames) >=
+            (int)sizeof(tmpbuf)) {
+            G_fatal_error(_("Too many columns to copy records"));
+        }
+    }
     else
         snprintf(tmpbuf, sizeof(tmpbuf), "select * from ");
     db_set_string(&sql, tmpbuf);

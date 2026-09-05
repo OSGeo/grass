@@ -51,7 +51,7 @@
 #undef hz
 #endif
 
-int secpar_loop(int ngstc UNUSED, int nszc UNUSED, int i)
+int secpar_loop(int ngstc G_UNUSED, int nszc G_UNUSED, int i)
 {
     double dnorm1, ro, dx2, dy2, dz2, grad1, grad2, slp, grad, oor1, oor2, curn,
         curm, curg, dxy2, dxz2, dyz2;
@@ -253,7 +253,7 @@ int COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
        c normalization
        c
      */
-    offset1 = nsizr * nsizc;
+    offset1 = (off_t)nsizr * nsizc;
 
     stepix = ew_res / dnorm;
     stepiy = ns_res / dnorm;

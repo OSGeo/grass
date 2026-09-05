@@ -1,10 +1,8 @@
 """
 GRASS Python testing framework test case
 
-Copyright (C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Vaclav Petras
 """
@@ -645,10 +643,10 @@ class TestCase(unittest.TestCase):
             if the file is accessible for reading since we expect that user
             wants to look at created files.
         """
-        if not os.path.isfile(filename):
+        if not Path(filename).is_file():
             stdmsg = "File %s does not exist" % filename
             self.fail(self._formatMessage(msg, stdmsg))
-        if not skip_size_check and not os.path.getsize(filename):
+        if not skip_size_check and not Path(filename).stat().st_size:
             stdmsg = "File %s is empty" % filename
             self.fail(self._formatMessage(msg, stdmsg))
         if not skip_access_check and not os.access(filename, os.R_OK):
@@ -1336,7 +1334,7 @@ class TestCase(unittest.TestCase):
             # TODO: message format, parameters
             raise CalledModuleError(
                 module.name, module.get_python(), module.returncode, errors=errors
-            )
+            ) from None
         # TODO: use this also in assert and apply when appropriate
         if expecting_stdout and (not module.outputs.stdout.strip()):
             if module.outputs.stderr:

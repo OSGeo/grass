@@ -83,23 +83,33 @@ void alloc_walkers(int max_walkers, Simulation *sim, const Outputs *outputs)
 
 /* ************************************************************************* */
 /* Read all input maps and input values into memory ************************ */
-int input_data(int rows, int cols, Simulation *sim, const Inputs *inputs,
+int input_data(const Geometry *geometry, Simulation *sim, const Inputs *inputs,
                const Outputs *outputs, Grids *grids)
 {
     int max_walkers;
     double unitconv = 0.000000278; /* mm/hr to m/s */
+    int rows = geometry->my, cols = geometry->mx;
 
     G_debug(1, "Running MAR 2011 version, started modifications on 20080211");
     G_debug(1, "Reading input data");
 
-    /* Elevation and gradients are mandatory */
+    /* Elevation is mandatory */
     grids->zz = read_float_raster_map(rows, cols, inputs->elevin, 1.0);
-    grids->v1 = read_double_raster_map(rows, cols, inputs->dxin, 1.0);
-    grids->v2 = read_double_raster_map(rows, cols, inputs->dyin, 1.0);
 
-    /* Update elevation map */
-    copy_matrix_undef_double_to_float_values(rows, cols, grids->v1, grids->zz);
-    copy_matrix_undef_double_to_float_values(rows, cols, grids->v2, grids->zz);
+    if (inputs->dxin == NULL || inputs->dyin == NULL) {
+        grids->v1 = G_alloc_matrix(rows, cols);
+        grids->v2 = G_alloc_matrix(rows, cols);
+        derivatives(geometry, grids->zz, grids->v1, grids->v2);
+    }
+    else {
+        grids->v1 = read_double_raster_map(rows, cols, inputs->dxin, 1.0);
+        grids->v2 = read_double_raster_map(rows, cols, inputs->dyin, 1.0);
+
+        copy_matrix_undef_double_to_float_values(rows, cols, grids->v1,
+                                                 grids->zz);
+        copy_matrix_undef_double_to_float_values(rows, cols, grids->v2,
+                                                 grids->zz);
+    }
 
     /* Manning surface roughnes: read map or use a single value */
     if (inputs->manin != NULL) {
@@ -291,9 +301,6 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
             } /* DEFined area */
         }
     }
-    if (grids->inf != NULL && smax < infmax)
-        G_warning(_("Infiltration exceeds the rainfall rate everywhere! No "
-                    "overland flow."));
     if (n == 0) {
         G_fatal_error(_("No values in the elevation raster."));
     }
@@ -377,8 +384,6 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
                 /*if(v1[k][l]*v1[k][l]+v2[k][l]*v2[k][l] > cellsize, warning,
                  *napocitaj ak viac ako 10%a*/
                 /* THIS IS CORRECT SOLUTION currently commented out */
-                if (grids->inf)
-                    grids->inf[k][l] *= settings->timesec;
                 if (inputs->wdepth)
                     grids->gama[k][l] = 0.;
                 if (outputs->et) {

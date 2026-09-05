@@ -12,10 +12,8 @@ Classes:
  - colorrules::ThematicVectorTable
  - colorrules::BufferedWindow
 
-(C) 2008-2015 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2008-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Martin Landa <landa.martin gmail.com> (various updates, pre-defined color table)
@@ -2050,8 +2048,8 @@ class BufferedWindow(wx.Window):
         """Converts files to wx.Image"""
         if (
             self.Map.mapfile
-            and os.path.isfile(self.Map.mapfile)
-            and os.path.getsize(self.Map.mapfile)
+            and Path(self.Map.mapfile).is_file()
+            and Path(self.Map.mapfile).stat().st_size
         ):
             img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
         else:

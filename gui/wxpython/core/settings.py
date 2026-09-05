@@ -11,9 +11,8 @@ Usage:
 from core.settings import UserSettings
 @endcode
 
-(C) 2007-2017 by the GRASS Development Team
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2017 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Luca Delucchi <lucadeluge gmail.com> (language choice)
@@ -271,6 +270,9 @@ class Settings:
                 },
                 "interactiveInput": {
                     "enabled": True,
+                },
+                "pythonAPI": {
+                    "selection": 0,
                 },
             },
             #
@@ -802,6 +804,12 @@ class Settings:
             "quiet",
         )
 
+        self.internalSettings["cmd"]["pythonAPI"]["choices"] = (
+            _("Tools API"),
+            _("Script API"),
+            _("PyGRASS API"),
+        )
+
         self.internalSettings["appearance"]["iconTheme"]["choices"] = ("grass",)
         self.internalSettings["appearance"]["menustyle"]["choices"] = (
             _("Classic (labels only)"),
@@ -884,6 +892,7 @@ class Settings:
         self.internalSettings["modeler"]["grassAPI"]["choices"] = (
             _("Script package"),
             _("PyGRASS"),
+            _("GRASS Tools"),
         )
 
     def ReadSettingsFile(self, settings=None):
@@ -984,7 +993,7 @@ class Settings:
         dirPath = GetSettingsPath()
         if not Path(dirPath).exists():
             try:
-                os.mkdir(dirPath)
+                Path(dirPath).mkdir()
             except OSError:
                 GError(_("Unable to create settings directory"))
                 return None
@@ -992,12 +1001,12 @@ class Settings:
             with open(self.filePath, "w") as f:
                 json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)
         except OSError as e:
-            raise GException(e)
+            raise GException(e) from e
         except Exception as e:
             raise GException(
                 _("Writing settings to file <%(file)s> failed.\n\nDetails: %(detail)s")
                 % {"file": self.filePath, "detail": e}
-            )
+            ) from e
         return self.filePath
 
     def _parseValue(self, value, read=False):
@@ -1099,10 +1108,10 @@ class Settings:
             settings[group][key][subkey] = value
             return
 
-        except KeyError:
+        except KeyError as e:
             raise GException(
                 "%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey)
-            )
+            ) from e
 
     def Append(self, dict, group, key, subkey, value, overwrite=True):
         """Set value of key/subkey

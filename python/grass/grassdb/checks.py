@@ -1,10 +1,8 @@
 """
 Checking objects in a GRASS Spatial Database
 
-(C) 2020 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2020 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
@@ -200,7 +198,7 @@ def get_mapset_lock_info(mapset_path: str | os.PathLike[str]):
     except KeyError:
         info["owner"] = None
     info["timestamp"] = (
-        datetime.datetime.fromtimestamp(os.path.getmtime(info["lockpath"]))
+        datetime.datetime.fromtimestamp(Path(info["lockpath"]).stat().st_mtime)
     ).replace(microsecond=0)
     return info
 
