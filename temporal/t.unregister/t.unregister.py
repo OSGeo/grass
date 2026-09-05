@@ -62,19 +62,13 @@ def main():
     if not maps and not file:
         gs.fatal(_("%s= or %s= must be specified") % ("input", "file"))
 
-    mapset = gs.gisenv()["MAPSET"]
+    mapset = tgis.get_current_mapset()
 
-    dbif = tgis.SQLDatabaseInterfaceConnection()
+    dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=mapset)
     dbif.connect()
 
-    # modify a stds only if it is in the current mapset
-    # remove all connections to any other mapsets
-    # ugly hack !
-    currcon = {}
-    currcon[mapset] = dbif.connections[mapset]
-    dbif.connections = currcon
-
     # In case a space time dataset is specified
+    sp = None
     if input:
         sp = tgis.open_old_stds(input, type, dbif)
 
@@ -84,7 +78,7 @@ def main():
 
     # Map names as comma separated string
     if maps is not None and maps != "":
-        maplist = [maps] if maps.find(",") == -1 else maps.split(",")
+        maplist = maps.split(",")
 
         # Build the maplist
         for count in range(len(maplist)):
@@ -117,30 +111,30 @@ def main():
         if count % 10 == 0:
             gs.percent(count, num_maps, 1)
 
-        map = tgis.dataset_factory(type, mapid)
+        map_item = tgis.dataset_factory(type, mapid)
 
         # Unregister map if in database
-        if map.is_in_db(dbif, mapset=mapset):
+        if map_item.is_in_db(dbif, mapset=mapset):
             # Unregister from a single dataset
             if input:
                 # Collect SQL statements
-                statement += sp.unregister_map(map=map, dbif=dbif, execute=False)
+                statement += sp.unregister_map(map=map_item, dbif=dbif, execute=False)
 
             # Unregister from temporal database
             else:
                 # We need to update all datasets after the removement of maps
-                map.metadata.select(dbif)
-                datasets = map.get_registered_stds(dbif)
+                map_item.metadata.select(dbif)
+                datasets = map_item.get_registered_stds(dbif)
                 # Store all unique dataset ids in a dictionary
                 if datasets:
                     for dataset in datasets:
                         update_dict[dataset] = dataset
                 # Collect SQL statements
-                statement += map.delete(dbif=dbif, update=False, execute=False)
+                statement += map_item.delete(dbif=dbif, update=False, execute=False)
         else:
             gs.warning(
                 _("Unable to find %s map <%s> in temporal database")
-                % (map.get_type(), map.get_id())
+                % (map_item.get_type(), map_item.get_id())
             )
 
         count += 1
@@ -157,7 +151,7 @@ def main():
     else:
         gs.message(_("Unregister maps from the temporal database"))
 
-    if input:
+    if input and sp is not None:
         sp.update_from_registered_maps(dbif)
         sp.update_command_string(dbif=dbif)
     elif len(update_dict) > 0:
