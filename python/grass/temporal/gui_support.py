@@ -2,10 +2,8 @@
 GUI support functions
 
 
-(C) 2008-2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2008-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -36,7 +34,9 @@ def tlist_grouped(type, group_type: bool = False, dbif=None):
         ['precipitation', 'temperature']
 
     :param type: element type (strds, str3ds, stvds)
-    :param group_type: TBD
+    :param group_type: If True, group results by dataset type within each
+        mapset (dict of dicts); otherwise return a flat list of dataset names
+        per mapset (dict of lists).
 
     :return: directory of mapsets/elements
     """

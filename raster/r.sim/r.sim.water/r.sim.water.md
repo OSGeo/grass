@@ -151,33 +151,21 @@ independence of sampling points. Therefore, the methods are useful both
 for everyday exploratory work using a desktop computer and for large,
 cutting-edge applications using high performance computing.
 
-**Suggested Manning's n for surface roughness**  
-from <https://baharmon.github.io/hydrology-in-grass>
+### Manning's n for surface roughness
 
-| NLCD Landcover Category       | Manning’s n value |
-|-------------------------------|-------------------|
-| Open Water                    | 0.001             |
-| Developed, Open Space         | 0.0404            |
-| Developed, Low Intensity      | 0.0678            |
-| Developed, Medium Intensity   | 0.0678            |
-| Developed, High Intensity     | 0.0404            |
-| Barren Land                   | 0.0113            |
-| Deciduous Forest              | 0.36              |
-| Evergreen Forest              | 0.32              |
-| Mixed Forest                  | 0.4               |
-| Shrub/Scrub                   | 0.4               |
-| Grassland/Herbaceuous         | 0.368             |
-| Pasture/Hay                   | 0.325             |
-| Cultivated Crops              | 0.325             |
-| Woody Wetlands                | 0.086             |
-| Emergent Herbaceuous Wetlands | 0.1825            |
+The **man** raster map can be derived from a land cover raster with the
+[r.manning](https://grass.osgeo.org/grass-stable/manuals/addons/r.manning.html)
+addon, which provides Manning's n values for the NLCD and ESA WorldCover
+land cover classifications as well as for user-defined ones:
 
-The [NLCD user
-guide](https://www.usgs.gov/centers/eros/science/annual-nlcd-science-product-user-guide)
-provides more information about the different NLCD classes.
+```sh
+g.extension extension=r.manning
+r.manning input=nlcd_landcover output=mannings_n landcover=nlcd
+```
 
-Increasing the number of threads with **nprocs** does not really speed
-up the simulation.
+For the shallow overland flow simulated here, Manning's n is generally
+higher than for deeper channel or floodplain flow, especially over
+vegetated surfaces, see the *r.manning* documentation.
 
 ## EXAMPLE
 
@@ -257,8 +245,9 @@ Carolina sample dataset.*
 
 ## SEE ALSO
 
-*[v.surf.rst](v.surf.rst.md), [r.slope.aspect](r.slope.aspect.md),
-[r.sim.sediment](r.sim.sediment.md)*
+*[r.manning](https://grass.osgeo.org/grass-stable/manuals/addons/r.manning.html)
+(addon), [r.sim.sediment](r.sim.sediment.md),
+[r.slope.aspect](r.slope.aspect.md), [v.surf.rst](v.surf.rst.md)*
 
 ## AUTHORS
 
