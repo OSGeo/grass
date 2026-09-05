@@ -23,7 +23,7 @@ size_t seg_index_rc(int ramseg, size_t seg_index, int *r, int *c)
     seg_no = seg_index >> DOUBLEBITS;
     seg_remainder = seg_index - (seg_no << DOUBLEBITS);
     *r = ((seg_no / ramseg) << RAMSEGBITS) + (seg_remainder >> RAMSEGBITS);
-    *c = ((seg_no - ((*r) >> RAMSEGBITS) * ramseg) << RAMSEGBITS) +
+    *c = ((seg_no - (size_t)((*r) >> RAMSEGBITS) * ramseg) << RAMSEGBITS) +
          seg_remainder - (((*r) & SEGLENLESS) << RAMSEGBITS);
     return seg_no;
 }
