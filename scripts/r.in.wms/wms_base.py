@@ -23,6 +23,7 @@ from urllib.error import HTTPError
 
 
 import grass.script as gs
+from grass.script.utils import check_url_scheme
 from grass.exceptions import CalledModuleError
 
 
@@ -294,7 +295,8 @@ class WMSBase:
             request.add_header("Authorization", "Basic %s" % base64string)
 
         try:
-            return urlopen(request)
+            check_url_scheme(url)
+            return urlopen(request)  # nosec B310 (scheme checked above)
         except ValueError as error:
             gs.fatal("%s" % error)
 
