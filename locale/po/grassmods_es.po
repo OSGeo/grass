@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -12359,6 +12359,9 @@ msgstr "No se puede ejecutar r.stats"
 msgid "Unexpected output from r.stats"
 msgstr "Salida inesperada de r.stats"
 
+msgid "No data returned from r.stats"
+msgstr ""
+
 msgid "Unable to open tempfile"
 msgstr "No se puede abrir el archivo temporal"
 
@@ -14966,6 +14969,15 @@ msgstr "No se puede crear el archivo de reclasificación de <%s>"
 msgid "PDAL error: %s"
 msgstr "Error: %s\n"
 
+#, c-format
+msgid "The input dataset <%s> has undefined CRS, its extent is reported as stored in the file"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Connection to PostgreSQL database failed."
+msgid "Reprojection of the data extent failed: %s"
+msgstr "Falló la conexión a base de datos PostgreSQL."
+
 #, fuzzy
 msgid "Mode value of point values in cell"
 msgstr "Mediana de los valores de los puntos en la celda"
@@ -15001,10 +15013,10 @@ msgstr "Escala a aplicar a los datos Z"
 msgid "Use if output dimension is not Z or intensity"
 msgstr ""
 
-msgid "Reproject to project's coordinate system if needed"
+msgid "Reproject to project's coordinate system if needed [deprecated]"
 msgstr ""
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
+msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
 msgstr ""
 
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
@@ -15067,6 +15079,9 @@ msgstr ""
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Mostrar todos los parámetros de conexión del mapa en estilo de script de consola y salir"
 
+msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr ""
+
 #, c-format
 msgid "Flag %c makes sense only with %s option or -%c flag or -%c flag"
 msgstr ""
@@ -15082,17 +15097,22 @@ msgstr "Mapa de salida %s X %s"
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr ""
 
+#, fuzzy, c-format
+#| msgid "Error while reading history file"
+msgid "PDAL error while reading <%s>: %s"
+msgstr "Error mientras se leía archivo de historia"
+
 #, fuzzy
-msgid "Reprojecting the input to the project's CRS"
-msgstr "Proyección de destino, por omisión la proyección de esta localización"
+msgid "The input dataset has undefined projection"
+msgstr "Mapas ráster de entrada no definidos"
 
 #, fuzzy
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr "Invalida verificación de la proyección (usar la proyección de la localización actual)"
 
 #, fuzzy
-msgid "The input dataset has undefined projection"
-msgstr "Mapas ráster de entrada no definidos"
+msgid "Reprojecting the input to the project's CRS"
+msgstr "Proyección de destino, por omisión la proyección de esta localización"
 
 #, fuzzy
 msgid "Running PDAL algorithms..."
@@ -18843,9 +18863,6 @@ msgstr "No se encuentra el mapa raster <%s> y manin_val no definido, escoge uno 
 
 msgid "Zero value in Mannings n"
 msgstr "Cero valores en n de Manning"
-
-msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
-msgstr "La infiltración supera la tasa de precipitación en todas partes. No hay flujo superficial."
 
 #, fuzzy
 #| msgid "Could not open elevation raster"
@@ -32025,6 +32042,109 @@ msgstr "normalsv: restauración de bloque no inicializado"
 msgid "normalsv: save of uninitialized block"
 msgstr "normalsv: guardar bloque no inicializado"
 
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing F function..."
+msgstr "Calculando ecuaciones..."
+
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing G function..."
+msgstr "Calculando ecuaciones..."
+
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing K function..."
+msgstr "Calculando ecuaciones..."
+
+#, fuzzy
+#| msgid "point pattern"
+msgid "point pattern analysis"
+msgstr "patrón puntual"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Summary function to compute"
+msgstr ""
+
+msgid "g;Nearest neighbor distance distribution function;f;Empty space function;k;Ripley's K function;l;L function (variance stabilized K function)"
+msgstr ""
+
+#, fuzzy
+#| msgid "If no output file given report is printed to standard output"
+msgid "If omitted or '-', the results are printed to standard output"
+msgstr "Si no se da ningún archivo de salida el reporte es mostrado en la salida estándar"
+
+#, fuzzy
+msgid "Number of distances"
+msgstr "Número de profundidades"
+
+msgid "Number of equally spaced distances at which the function is estimated"
+msgstr ""
+
+#, fuzzy
+#| msgid "Number of arguments for function '%s'"
+msgid "Number of random points for the F function"
+msgstr "Número de argumentos para la función '%s'"
+
+msgid "Empty space distances are sampled at this many uniformly random locations"
+msgstr ""
+
+#, fuzzy
+msgid "Maximum distance for the K and L functions"
+msgstr "Distancia máxima a la línea más próxima"
+
+#, fuzzy
+msgid "Default is one quarter of the shorter side of the computational region"
+msgstr "Usar la resolución del ráster base en lugar de la región computacional "
+
+msgid "Edge correction for the K and L functions"
+msgstr ""
+
+msgid "isotropic;Ripley's isotropic edge correction;none;No edge correction"
+msgstr ""
+
+msgid "Used for the random locations of the F function"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Option <%s> must be positive"
+msgstr "¡Se debe especificar \"-i\" o \"-r\" o una de las opciones \"color\", \"ráster\" o \"reglas\"!"
+
+#, c-format
+msgid "Option <%s> is larger than half of the shorter side of the computational region; the estimate becomes unreliable at large distances"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "One point outside of the computational region was ignored"
+msgid_plural "%d points outside of the computational region were ignored"
+msgstr[0] "Punto seed fuera de la región actual"
+msgstr[1] "Punto seed fuera de la región actual"
+
+#, fuzzy
+msgid "No points found in the computational region"
+msgstr "Punto seed fuera de la región actual"
+
+#, fuzzy, c-format
+#| msgid "At least two points are required"
+msgid "At least 2 points are required, %d found"
+msgstr "Se necesitan al menos dos puntos"
+
+#, fuzzy, c-format
+#| msgid "Estimated point density: %.4g"
+msgid "Estimated intensity: %g"
+msgstr "Densidad de puntos estimada: %.4g"
+
+#, fuzzy
+#| msgid "Unable to initialise Freetype"
+msgid "Unable to initialize JSON output"
+msgstr "No ha sido posible inicializar Freetype"
+
+#, fuzzy
+msgid "Unable to serialize JSON output"
+msgstr "Falla al inicializar superficie de salida"
+
 msgid "Vector map profiling tool"
 msgstr "Herramienta de elaboración de perfiles de mapas vectoriales"
 
@@ -34472,6 +34592,9 @@ msgstr "Ver imágenes BMP desde el controlador PNG."
 
 msgid "Image file"
 msgstr "Archivo de imagen"
+
+#~ msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
+#~ msgstr "La infiltración supera la tasa de precipitación en todas partes. No hay flujo superficial."
 
 #~ msgid "flags c and d are mutually exclusive"
 #~ msgstr "las banderas c y d son mutuamente excluyentes"
@@ -37697,10 +37820,6 @@ msgstr "Archivo de imagen"
 #~ msgstr "Distancia máxima desde el punto a la red"
 
 #, fuzzy
-#~ msgid "Maximum distance for aerial extraction"
-#~ msgstr "Distancia máxima a la línea más próxima"
-
-#, fuzzy
 #~ msgid "Maximum distance from points to river"
 #~ msgstr "Distancia máxima desde el punto a la red"
 
@@ -39843,10 +39962,6 @@ msgstr "Archivo de imagen"
 #~ msgstr "Número de dígitos significativos (coma flotante solamente)"
 
 #, fuzzy
-#~ msgid "Number of steps"
-#~ msgstr "Número de profundidades"
-
-#, fuzzy
 #~ msgid "Number of steps to be simulated"
 #~ msgstr "Número de puntos a crear"
 
@@ -40015,10 +40130,6 @@ msgstr "Archivo de imagen"
 #, fuzzy
 #~ msgid "Option <%s> and <%s> are mutually exclusive"
 #~ msgstr "weight= y -c son excluyentes mutuamente"
-
-#, fuzzy
-#~ msgid "Option <%s> must be specified"
-#~ msgstr "¡Se debe especificar \"-i\" o \"-r\" o una de las opciones \"color\", \"ráster\" o \"reglas\"!"
 
 #, fuzzy
 #~ msgid "Option <%s> or <%s> must be specified"
@@ -41111,10 +41222,6 @@ msgstr "Archivo de imagen"
 
 #~ msgid "Requires --overwrite flag. If not given the output file is overwritten."
 #~ msgstr "Requiere la opción --overwite. Si no es dada el archivo de salida es sobrescrito."
-
-#, fuzzy
-#~ msgid "Resample input raster according to the computational region"
-#~ msgstr "Usar la resolución del ráster base en lugar de la región computacional "
 
 #, fuzzy
 #~ msgid "Resampling method to use"

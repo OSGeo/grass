@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2026-07-27 14:40+0000\n"
 "Last-Translator: Liuxs <liuxspro@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
@@ -1375,6 +1375,18 @@ msgstr ""
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display animation"
+msgstr "显示地图投影"
+
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
@@ -1394,6 +1406,11 @@ msgstr "更新元数据"
 #, fuzzy
 msgid "Display &temporal extent"
 msgstr "显示几何形状"
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display &animation"
+msgstr "显示地图投影"
 
 #, fuzzy
 #| msgid "Manage datasets"
@@ -12468,9 +12485,6 @@ msgstr ""
 
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "显示图形建模器信息"
-
-#~ msgid "Display map projection"
-#~ msgstr "显示地图投影"
 
 #~ msgid "Display mode"
 #~ msgstr "显示模式"

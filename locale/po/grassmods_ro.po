@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Romanian <https://weblate.osgeo.org/projects/grass-gis/grassmods/ro/>\n"
@@ -12197,6 +12197,9 @@ msgstr "Imposibil de rulat r.stats"
 msgid "Unexpected output from r.stats"
 msgstr "Ieșire neașteptată din r.stats"
 
+msgid "No data returned from r.stats"
+msgstr ""
+
 msgid "Unable to open tempfile"
 msgstr "Imposibil de deschis tempfile"
 
@@ -14769,6 +14772,14 @@ msgstr "Imposibil de a deschide fișierul de intrare <%s>"
 msgid "PDAL error: %s"
 msgstr ""
 
+#, c-format
+msgid "The input dataset <%s> has undefined CRS, its extent is reported as stored in the file"
+msgstr ""
+
+#, c-format
+msgid "Reprojection of the data extent failed: %s"
+msgstr ""
+
 msgid "Mode value of point values in cell"
 msgstr ""
 
@@ -14799,10 +14810,10 @@ msgstr "Imposibil de creat harta de ieșire"
 msgid "Use if output dimension is not Z or intensity"
 msgstr ""
 
-msgid "Reproject to project's coordinate system if needed"
+msgid "Reproject to project's coordinate system if needed [deprecated]"
 msgstr ""
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
+msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
 msgstr ""
 
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
@@ -14861,6 +14872,9 @@ msgstr ""
 msgid "Print data file extent in shell script style and then exit"
 msgstr ""
 
+msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr ""
+
 #, c-format
 msgid "Flag %c makes sense only with %s option or -%c flag or -%c flag"
 msgstr ""
@@ -14875,15 +14889,20 @@ msgstr ""
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr ""
 
-#, fuzzy
-msgid "Reprojecting the input to the project's CRS"
-msgstr "Restabilește interactiv parametrii proiecției locației."
+#, fuzzy, c-format
+#| msgid "Error while executing: '%s'"
+msgid "PDAL error while reading <%s>: %s"
+msgstr "Eroare în timpul executării: '%s'"
+
+msgid "The input dataset has undefined projection"
+msgstr ""
 
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr ""
 
-msgid "The input dataset has undefined projection"
-msgstr ""
+#, fuzzy
+msgid "Reprojecting the input to the project's CRS"
+msgstr "Restabilește interactiv parametrii proiecției locației."
 
 msgid "Running PDAL algorithms..."
 msgstr ""
@@ -18606,9 +18625,6 @@ msgid "Manning's n raster map not found and manin_val undefined, choose one to b
 msgstr ""
 
 msgid "Zero value in Mannings n"
-msgstr ""
-
-msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 msgstr ""
 
 #, fuzzy
@@ -31647,6 +31663,101 @@ msgstr ""
 msgid "normalsv: save of uninitialized block"
 msgstr ""
 
+#, fuzzy
+msgid "Computing F function..."
+msgstr "Scrierea vertecșilor..."
+
+#, fuzzy
+msgid "Computing G function..."
+msgstr "Scrierea vertecșilor..."
+
+#, fuzzy
+msgid "Computing K function..."
+msgstr "Scrierea vertecșilor..."
+
+#, fuzzy
+msgid "point pattern analysis"
+msgstr "rețea"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Summary function to compute"
+msgstr ""
+
+msgid "g;Nearest neighbor distance distribution function;f;Empty space function;k;Ripley's K function;l;L function (variance stabilized K function)"
+msgstr ""
+
+msgid "If omitted or '-', the results are printed to standard output"
+msgstr ""
+
+#, fuzzy
+msgid "Number of distances"
+msgstr "Număr de linii:"
+
+msgid "Number of equally spaced distances at which the function is estimated"
+msgstr ""
+
+#, fuzzy
+msgid "Number of random points for the F function"
+msgstr "Număr de puncte pentru a fi creat(e)"
+
+msgid "Empty space distances are sampled at this many uniformly random locations"
+msgstr ""
+
+#, fuzzy
+msgid "Maximum distance for the K and L functions"
+msgstr "Distanța maximă sau -1 pentru nici o limită"
+
+msgid "Default is one quarter of the shorter side of the computational region"
+msgstr ""
+
+msgid "Edge correction for the K and L functions"
+msgstr ""
+
+msgid "isotropic;Ripley's isotropic edge correction;none;No edge correction"
+msgstr ""
+
+msgid "Used for the random locations of the F function"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Layer number must be positive"
+msgid "Option <%s> must be positive"
+msgstr "Numărul de strat trebuie să fie pozitiv"
+
+#, c-format
+msgid "Option <%s> is larger than half of the shorter side of the computational region; the estimate becomes unreliable at large distances"
+msgstr ""
+
+#, c-format
+msgid "One point outside of the computational region was ignored"
+msgid_plural "%d points outside of the computational region were ignored"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, fuzzy
+msgid "No points found in the computational region"
+msgstr "Folosește setările regiunii curente:"
+
+#, c-format
+msgid "At least 2 points are required, %d found"
+msgstr ""
+
+#, c-format
+msgid "Estimated intensity: %g"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create output map"
+msgid "Unable to initialize JSON output"
+msgstr "Imposibil de creat harta de ieșire"
+
+#, fuzzy
+msgid "Unable to serialize JSON output"
+msgstr "Imposibil de creat fișierul <%s>"
+
 msgid "Vector map profiling tool"
 msgstr ""
 
@@ -35123,10 +35234,6 @@ msgstr ""
 #~ msgstr "Distanța maximă sau -1 pentru nici o limită"
 
 #, fuzzy
-#~ msgid "Maximum distance for aerial extraction"
-#~ msgstr "Distanța maximă sau -1 pentru nici o limită"
-
-#, fuzzy
 #~ msgid "Maximum distance from points to river"
 #~ msgstr "Distanța maximă sau -1 pentru nici o limită"
 
@@ -36405,10 +36512,6 @@ msgstr ""
 #~ msgid "Number of pixels to pass to the prediction method"
 #~ msgstr "Număr de puncte pentru a fi creat(e)"
 
-#, fuzzy
-#~ msgid "Number of points for the visibility"
-#~ msgstr "Număr de puncte pentru a fi creat(e)"
-
 #~ msgid "Number of points must be > 0 (%d given)"
 #~ msgstr "Numărul de puncte trebuie să fie > 0 (%d dat)"
 
@@ -36467,10 +36570,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Number of significant digits per attribute column"
 #~ msgstr "Număr de suprafețe:"
-
-#, fuzzy
-#~ msgid "Number of steps"
-#~ msgstr "Număr de linii:"
 
 #, fuzzy
 #~ msgid "Number of steps to be simulated"
@@ -37764,10 +37863,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "modelling"
 #~ msgstr "model"
-
-#, fuzzy
-#~ msgid "network analysis"
-#~ msgstr "rețea"
 
 #, fuzzy
 #~ msgid "nodata value in output files"

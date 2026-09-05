@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt_BR/>\n"
@@ -1410,6 +1410,18 @@ msgstr ""
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display animation"
+msgstr "Exibir projeção de mapa"
+
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
@@ -1430,6 +1442,11 @@ msgstr "Atualizar metadados"
 #| msgid "Plot temporal extents."
 msgid "Display &temporal extent"
 msgstr "Plotar extensões temporais."
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display &animation"
+msgstr "Exibir projeção de mapa"
 
 #, fuzzy
 #| msgid "Manage datasets"
@@ -13100,9 +13117,6 @@ msgstr ""
 
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "Exibir informações sobre Modelador Gráfico"
-
-#~ msgid "Display map projection"
-#~ msgstr "Exibir projeção de mapa"
 
 #~ msgid "Display mode"
 #~ msgstr "Modo de exibição"
