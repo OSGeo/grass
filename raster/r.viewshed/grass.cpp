@@ -27,10 +27,8 @@
  * paper: "Computing Visibility on * Terrains in External Memory" by
  * Herman Haverkort, Laura Toma and Yi Zhuang.
  *
- * COPYRIGHT: (C) 2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -972,7 +970,7 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
 
         Rast_get_row(elevfd, elevrast, i, elev_data_type);
 
-        for (j = 0; j < Rast_window_cols(); j++) {
+        for (j = 0; j < (dimensionType)ncols; j++) {
 
             /* read the current elevation value */
             // int isNull = 0;

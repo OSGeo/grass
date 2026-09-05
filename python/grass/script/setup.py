@@ -65,10 +65,8 @@ and session without using grassXY.
     session.finish()
 
 
-(C) 2010-2026 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2010-2026 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com>
@@ -485,7 +483,7 @@ class SessionHandle:
     def __init__(self, *, env, active=True, locked=False):
         self._env = env
         self._active = active
-        self._start_time = datetime.datetime.now(datetime.timezone.utc)
+        self._start_time = datetime.datetime.now(datetime.UTC)
         self._locked = locked
 
     @property
@@ -563,7 +561,7 @@ def clean_default_db(*, modified_after=None, env=None, gis_env=None):
         return
     if modified_after:
         modified_time = datetime.datetime.fromtimestamp(
-            file_stat.st_mtime, tz=datetime.timezone.utc
+            file_stat.st_mtime, tz=datetime.UTC
         )
         if modified_after >= modified_time:
             return

@@ -3,10 +3,8 @@
 
 @brief Misc utilities for wxGUI
 
-(C) 2007-2024 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2024 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Jachym Cepicky
@@ -193,7 +191,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
             if p == "layer":
                 continue
             dcmd[i] = p + "=" + v
-            if i in mapsets and mapsets[i]:
+            if mapsets.get(i):
                 dcmd[i] += "@" + mapsets[i]
 
         maps = []
@@ -471,14 +469,13 @@ def __ll_parts(value, reverse=False, precision=3):
             m = m[:-1]
             s = "0.0"
         except ValueError:
-            try:
-                d = value
-                hs = d[-1]
-                d = d[:-1]
-                m = "0"
-                s = "0.0"
-            except ValueError:
-                raise ValueError
+            # Value without minutes and seconds. Errors are passed to the caller
+            # as they are.
+            d = value
+            hs = d[-1]
+            d = d[:-1]
+            m = "0"
+            s = "0.0"
 
     if hs not in {"N", "S", "E", "W"}:
         raise ValueError

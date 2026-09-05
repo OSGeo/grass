@@ -5,12 +5,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL (January 1993)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -163,7 +159,7 @@ int gsd_wire_surf_map(geosurf *surf)
     /* would also be good to check if colormap == surfmap, to increase speed */
     for (row = 0; row < ycnt; row++) {
         pt[Y] = ymax - row * yres;
-        y1off = row * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
 
         gsd_bgnline();
         cnt = 0;
@@ -219,7 +215,7 @@ int gsd_wire_surf_map(geosurf *surf)
 
         for (row = 0; row < ycnt; row++) {
             pt[Y] = ymax - row * yres;
-            y1off = row * ymod * surf->cols;
+            y1off = (long)row * ymod * surf->cols;
             offset = x1off + y1off;
 
             if (check_mask) {
@@ -337,7 +333,7 @@ int gsd_wire_surf_const(geosurf *surf, float k)
 
     for (row = 0; row < ycnt; row++) {
         pt[Y] = ymax - row * yres;
-        y1off = row * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
 
         gsd_bgnline();
         cnt = 0;
@@ -388,7 +384,7 @@ int gsd_wire_surf_const(geosurf *surf, float k)
 
         for (row = 0; row < ycnt; row++) {
             pt[Y] = ymax - row * yres;
-            y1off = row * ymod * surf->cols;
+            y1off = (long)row * ymod * surf->cols;
             offset = x1off + y1off;
 
             if (check_mask) {
@@ -522,11 +518,11 @@ int gsd_wire_arrows(geosurf *surf)
 
     for (row = 0; row < ycnt; row++) {
         pt[Y] = ymax - row * yres;
-        y1off = row * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
 
         for (col = 0; col < xcnt; col++) {
             pt[X] = col * xres;
-            offset = col * xmod + y1off;
+            offset = (long)col * xmod + y1off;
 
             if (check_mask) {
                 if (BM_get(surf->curmask, col * xmod, row * ymod)) {
@@ -723,9 +719,9 @@ int gsd_coarse_surf_map(geosurf *surf)
         y2 = ymax - (row - (step_val / 2)) * yres;
         y3 = ymax - (row + (step_val / 2)) * yres;
 
-        y1off = row * ymod * surf->cols;
-        y2off = (row - (step_val / 2)) * ymod * surf->cols;
-        y3off = (row + (step_val / 2)) * ymod * surf->cols;
+        y1off = (long)row * ymod * surf->cols;
+        y2off = (long)(row - (step_val / 2)) * ymod * surf->cols;
+        y3off = (long)(row + (step_val / 2)) * ymod * surf->cols;
 
         for (col = start_val; col <= xcnt - start_val; col += step_val) {
 

@@ -18,11 +18,8 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2026 by the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2000-2026 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -72,11 +69,7 @@ _WXPYTHON_BASE = None
 
 GISBASE = None
 
-try:
-    # Python >= 3.11
-    ENCODING = locale.getencoding()
-except AttributeError:
-    ENCODING = locale.getdefaultlocale()[1]
+ENCODING = locale.getencoding()
 if ENCODING is None:
     ENCODING = "UTF-8"
     print("Default locale not found, using UTF-8")  # intentionally not translatable
@@ -1097,11 +1090,7 @@ def set_language(grass_config_dir: StrPath) -> None:
                 "Default locale settings are missing. GRASS running with C locale.\n"
             )
 
-        try:
-            # Python >= 3.11
-            language, encoding = locale.getlocale()
-        except AttributeError:
-            language, encoding = locale.getdefaultlocale()
+        language, encoding = locale.getlocale()
         if not language:
             sys.stderr.write(
                 "Default locale settings are missing. GRASS running with C locale.\n"
@@ -2439,7 +2428,7 @@ def main() -> None:
         fatal(e.args[0])
         sys.exit(_("Exiting..."))
 
-    start_time = datetime.datetime.now(datetime.timezone.utc)
+    start_time = datetime.datetime.now(datetime.UTC)
 
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed

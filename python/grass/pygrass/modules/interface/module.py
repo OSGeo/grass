@@ -587,7 +587,9 @@ class Module:
         #
         # extract parameters from the xml
         #
-        self.params_list = [Parameter(p) for p in tree.findall("parameter")]
+        self.params_list: list[Parameter] = [
+            Parameter(xparameter=p) for p in tree.findall("parameter")
+        ]
         self.inputs = TypeDict(Parameter)
         self.outputs = TypeDict(Parameter)
         self.required = []
@@ -604,7 +606,7 @@ class Module:
         #
         # extract flags from the xml
         #
-        flags_list = [Flag(f) for f in tree.findall("flag")]
+        flags_list = [Flag(xflag=f) for f in tree.findall("flag")]
         self.flags = TypeDict(Flag)
         for flag in flags_list:
             self.flags[flag.name] = flag
@@ -620,7 +622,7 @@ class Module:
         self.stdin = None
         self.stdout_ = None
         self.stderr_ = None
-        diz = {
+        diz: dict[str, str | bool | list | tuple | None] = {
             "name": "stdin",
             "required": False,
             "multiple": False,

@@ -7,10 +7,8 @@ Usage:
 
     from grass.script import utils as gutils
 
-(C) 2014-2016 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
@@ -209,18 +207,14 @@ class KeyValue(dict[str, VT]):
         try:
             return self[key]
         except KeyError:
-            raise AttributeError(key)
+            raise AttributeError(key) from None
 
     def __setattr__(self, key: str, value: VT) -> None:
         self[key] = value
 
 
 def _get_encoding() -> str:
-    try:
-        # Python >= 3.11
-        encoding = locale.getencoding()
-    except AttributeError:
-        encoding = locale.getdefaultlocale()[1]
+    encoding = locale.getencoding()
     if not encoding:
         encoding = "UTF-8"
     return encoding
