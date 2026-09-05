@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 16:34+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grassmods/lv/>\n"
@@ -2239,6 +2239,7 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr ""
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -7745,8 +7746,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 #, fuzzy
 msgid "Maps with feature values (attributes)"
 msgstr "Kadru skaits"
@@ -12235,6 +12236,9 @@ msgstr ""
 msgid "Unexpected output from r.stats"
 msgstr ""
 
+msgid "No data returned from r.stats"
+msgstr ""
+
 msgid "Unable to open tempfile"
 msgstr ""
 
@@ -13636,6 +13640,14 @@ msgstr "Nebija iespējams atvērt failu <%s>"
 msgid "Search radius size must cover at least 1 cell"
 msgstr ""
 
+#, c-format
+msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
+msgstr ""
+
+#, c-format
+msgid "memory=%d MB is below the %ld MB minimum for search=%s. This run will finish with the minimum MB needed instead."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
@@ -13646,19 +13658,15 @@ msgstr "2 līmeņiem jābūt norādītiem"
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
-#, c-format
-msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
-msgstr ""
-
-#, fuzzy
-msgid "Unknown output data type"
-msgstr "Drukāt tikai rastra kartes tipu"
-
 msgid "Profile data has been written"
 msgstr ""
 
 msgid "Failed writing profile data"
 msgstr ""
+
+#, fuzzy
+msgid "Unknown output data type"
+msgstr "Drukāt tikai rastra kartes tipu"
 
 msgid "Failed to profile the computation, please check the parameters"
 msgstr ""
@@ -14832,6 +14840,14 @@ msgstr "Nevar izveidot jaunu rindu: %s"
 msgid "PDAL error: %s"
 msgstr "Kļūda: %s\n"
 
+#, c-format
+msgid "The input dataset <%s> has undefined CRS, its extent is reported as stored in the file"
+msgstr ""
+
+#, c-format
+msgid "Reprojection of the data extent failed: %s"
+msgstr ""
+
 msgid "Mode value of point values in cell"
 msgstr ""
 
@@ -14863,10 +14879,10 @@ msgstr "neiespējami atvērt <%s>"
 msgid "Use if output dimension is not Z or intensity"
 msgstr ""
 
-msgid "Reproject to project's coordinate system if needed"
+msgid "Reproject to project's coordinate system if needed [deprecated]"
 msgstr ""
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
+msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
 msgstr ""
 
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
@@ -14924,6 +14940,9 @@ msgstr ""
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Drukāt statistiku komandrindas skripta stilā"
 
+msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr ""
+
 #, c-format
 msgid "Flag %c makes sense only with %s option or -%c flag or -%c flag"
 msgstr ""
@@ -14938,16 +14957,20 @@ msgstr ""
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr ""
 
-#, fuzzy
-msgid "Reprojecting the input to the project's CRS"
-msgstr "Neņemt vērā projekciju (izmantot pašreizējā novietojuma projekciju)"
+#, c-format
+msgid "PDAL error while reading <%s>: %s"
+msgstr ""
+
+msgid "The input dataset has undefined projection"
+msgstr ""
 
 #, fuzzy
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr "Neņemt vērā projekciju (izmantot pašreizējā novietojuma projekciju)"
 
-msgid "The input dataset has undefined projection"
-msgstr ""
+#, fuzzy
+msgid "Reprojecting the input to the project's CRS"
+msgstr "Neņemt vērā projekciju (izmantot pašreizējā novietojuma projekciju)"
 
 msgid "Running PDAL algorithms..."
 msgstr ""
@@ -18147,6 +18170,10 @@ msgstr ""
 msgid "Error writing temporary file <%s>"
 msgstr ""
 
+#, c-format
+msgid "Using %d thread(s), %d buffered output rows"
+msgstr ""
+
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr ""
 
@@ -18678,9 +18705,6 @@ msgid "Manning's n raster map not found and manin_val undefined, choose one to b
 msgstr ""
 
 msgid "Zero value in Mannings n"
-msgstr ""
-
-msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 msgstr ""
 
 #, fuzzy
@@ -20522,6 +20546,7 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -31869,6 +31894,100 @@ msgid "normalsv: save of uninitialized block"
 msgstr ""
 
 #, fuzzy
+msgid "Computing F function..."
+msgstr "Tabulu kopēšana"
+
+#, fuzzy
+msgid "Computing G function..."
+msgstr "Tabulu kopēšana"
+
+#, fuzzy
+msgid "Computing K function..."
+msgstr "Tabulu kopēšana"
+
+#, fuzzy
+msgid "point pattern analysis"
+msgstr "Lasam dig failu... \n"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Summary function to compute"
+msgstr ""
+
+msgid "g;Nearest neighbor distance distribution function;f;Empty space function;k;Ripley's K function;l;L function (variance stabilized K function)"
+msgstr ""
+
+msgid "If omitted or '-', the results are printed to standard output"
+msgstr ""
+
+#, fuzzy
+msgid "Number of distances"
+msgstr "Kadru skaits"
+
+msgid "Number of equally spaced distances at which the function is estimated"
+msgstr ""
+
+#, fuzzy
+msgid "Number of random points for the F function"
+msgstr "Izveidojamo punktu skaits"
+
+msgid "Empty space distances are sampled at this many uniformly random locations"
+msgstr ""
+
+#, fuzzy
+msgid "Maximum distance for the K and L functions"
+msgstr "2 līmeņiem jābūt norādītiem"
+
+#, fuzzy
+msgid "Default is one quarter of the shorter side of the computational region"
+msgstr "Drukāt tekošo reģionu pēc platuma/garuma"
+
+msgid "Edge correction for the K and L functions"
+msgstr ""
+
+msgid "isotropic;Ripley's isotropic edge correction;none;No edge correction"
+msgstr ""
+
+msgid "Used for the random locations of the F function"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Option <%s> must be positive"
+msgstr "Novietojums %s ir izveidots!"
+
+#, c-format
+msgid "Option <%s> is larger than half of the shorter side of the computational region; the estimate becomes unreliable at large distances"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "One point outside of the computational region was ignored"
+msgid_plural "%d points outside of the computational region were ignored"
+msgstr[0] "Drukāt tekošo reģionu pēc platuma/garuma"
+msgstr[1] "Drukāt tekošo reģionu pēc platuma/garuma"
+msgstr[2] "Drukāt tekošo reģionu pēc platuma/garuma"
+
+#, fuzzy
+msgid "No points found in the computational region"
+msgstr "Drukāt tekošo reģionu pēc platuma/garuma"
+
+#, fuzzy, c-format
+msgid "At least 2 points are required, %d found"
+msgstr "Vaicājuma koordinātes"
+
+#, fuzzy, c-format
+msgid "Estimated intensity: %g"
+msgstr "Maksimālā distance starp punktiem"
+
+#, fuzzy
+msgid "Unable to initialize JSON output"
+msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
+
+#, fuzzy
+msgid "Unable to serialize JSON output"
+msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
+
+#, fuzzy
 msgid "Vector map profiling tool"
 msgstr "vektora karte <%s> nav atrasta"
 
@@ -35264,10 +35383,6 @@ msgstr ""
 #~ msgstr "Izejas karte kurā tiks ierakstīti punkti"
 
 #, fuzzy
-#~ msgid "Maximum distance for aerial extraction"
-#~ msgstr "2 līmeņiem jābūt norādītiem"
-
-#, fuzzy
 #~ msgid "Maximum distance from points to river"
 #~ msgstr "Jums ir jāizvēlas vismaz viens rīks"
 
@@ -36679,10 +36794,6 @@ msgstr ""
 #~ msgstr "Izveidojamo punktu skaits"
 
 #, fuzzy
-#~ msgid "Number of points for the visibility"
-#~ msgstr "Izveidojamo punktu skaits"
-
-#, fuzzy
 #~ msgid "Number of points to use in interpolation."
 #~ msgstr "Sākuma punkta koordinātes"
 
@@ -36752,10 +36863,6 @@ msgstr ""
 #~ "\n"
 #~ "\n"
 #~ "  Punktu skaits: %d\n"
-
-#, fuzzy
-#~ msgid "Number of steps"
-#~ msgstr "Kadru skaits"
 
 #, fuzzy
 #~ msgid "Number of steps to be simulated"
@@ -37928,10 +38035,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "neighborhood matrix"
 #~ msgstr "Operācijas ar blakusšūnām"
-
-#, fuzzy
-#~ msgid "network analysis"
-#~ msgstr "Lasam dig failu... \n"
 
 #, fuzzy
 #~ msgid "number of jobs to use during the domain exploration"

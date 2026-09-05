@@ -321,6 +321,18 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>datum</term></tig></langSet>
+                <langSet xml:lang="ro"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>notebook</term></tig></langSet>
+                <langSet xml:lang="ro"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>datasets</term></tig></langSet>
+                <langSet xml:lang="ro"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>space time</term></tig></langSet>
                 <langSet xml:lang="ro"><tig><term></term></tig></langSet>
             </termEntry>
         </body>

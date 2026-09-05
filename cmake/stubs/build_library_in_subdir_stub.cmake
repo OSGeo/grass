@@ -1,8 +1,7 @@
 #[[
 AUTHOR(S):  Edouard Choinière
 PURPOSE:    Gersemi CMake formatter stub for macro build_library_in_subdir
-COPYRIGHT:  (C) 2026 by the GRASS Development Team
-
+SPDX-FileCopyrightText: 2026 GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 #]]
 function(build_library_in_subdir dir_name)

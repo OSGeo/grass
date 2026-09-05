@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 16:34+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/lv/>\n"
@@ -448,26 +448,6 @@ msgstr "Nederīgs"
 msgid "Animation Tool"
 msgstr "Animāciju rīks"
 
-msgid "Main Toolbar"
-msgstr "Galvenā rīkjosla"
-
-msgid "Animation Toolbar"
-msgstr "Animācijas rīkjosla"
-
-msgid "Misc Toolbar"
-msgstr "Dažādu rīku rīkjosla"
-
-msgid "Loading data"
-msgstr "Datu ielāde"
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr ""
-
-#, python-format
-msgid "to %(to)s"
-msgstr ""
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
@@ -490,6 +470,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr "Galvenā rīkjosla"
+
+msgid "Animation Toolbar"
+msgstr "Animācijas rīkjosla"
+
+msgid "Misc Toolbar"
+msgstr "Dažādu rīku rīkjosla"
+
+msgid "Loading data"
+msgstr "Datu ielāde"
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -996,6 +1000,14 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+#, fuzzy
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "Importēt rastra datus"
+
+#, fuzzy
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "Importēt vektordatus"
+
 msgid "Link external data"
 msgstr "Saitēt ārējos datus"
 
@@ -1152,6 +1164,20 @@ msgid "Failed to read maps from project <{l}>."
 msgstr ""
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr ""
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr ""
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
@@ -1213,6 +1239,19 @@ msgid "Rename map"
 msgstr "Pārsaukt karti"
 
 #, fuzzy
+#| msgid "&Rename mapset"
+msgid "Rename dataset"
+msgstr "Pā&rsaukt karšu kopu"
+
+#, python-brace-format
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
+#, fuzzy
 msgid "Cannot rename mapset"
 msgstr "Pā&rsaukt karšu kopu"
 
@@ -1230,10 +1269,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Renaming map <{name}>..."
-msgstr ""
-
-#, python-brace-format
-msgid "{cmd} -- completed"
 msgstr ""
 
 msgid "No map selected for copying."
@@ -1270,7 +1305,11 @@ msgid "g.remove completed"
 msgstr ""
 
 #, fuzzy, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete map <{m}>?"
+msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
 msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
 
 #, fuzzy, python-brace-format
@@ -1284,20 +1323,156 @@ msgstr "Dzēst karti"
 msgid "Deleting {name}..."
 msgstr "Dzēš {name}..."
 
+#, fuzzy, python-brace-format
+#| msgid "Deleting {name}..."
+msgid "Deleting {n} maps..."
+msgstr "Dzēš {name}..."
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "Dzēst izvēlēto karšu kopu"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "Delete dataset"
+msgstr "&Dzēst karšu kopu"
+
+#, fuzzy
+#| msgid "Deleting {name}..."
+msgid "Deleting datasets..."
+msgstr "Dzēš {name}..."
+
+#, fuzzy
+#| msgid "Remove legend"
+msgid "t.remove completed"
+msgstr "Noņemt leģendu"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
-msgstr "&Izgriezt"
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Nav iespējams izveidot jaunu karšu kopu: %s"
+
+#, fuzzy
+#| msgid "Unpack raster map"
+msgid "Unregister map"
+msgstr "Atpakot rastra karti"
+
+msgid "Unregistering map..."
+msgstr ""
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display animation"
+msgstr "Rādīt karti"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "Rastra kartes"
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Unregister maps"
+msgstr "Rastra kartes"
+
+msgid "Update metadata"
+msgstr "Atjaunināt metadatus"
+
+#, fuzzy
+msgid "Display &temporal extent"
+msgstr "Ekrāna režīms"
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display &animation"
+msgstr "Rādīt karti"
+
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "&Rename dataset"
+msgstr "Pā&rsaukt karšu kopu"
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "&Delete dataset only"
+msgstr "&Dzēst karšu kopu"
+
+#, fuzzy
+#| msgid "Export raster dataset"
+msgid "&Export dataset"
+msgstr "Eksportēt rastra datus"
+
+msgid "Show &metadata"
+msgstr "Rādīt &metadatus"
 
 msgid "&Copy"
 msgstr "&Kopēt"
 
 msgid "Copy &name"
 msgstr "Kopēt &nosaukumu"
+
+msgid "&Display layers"
+msgstr "Rā&dīt slāņus"
+
+msgid "&Display layer"
+msgstr "&Attēlot slāni"
+
+#, fuzzy
+#| msgid "Unpack raster map"
+msgid "&Unregister map"
+msgstr "Atpakot rastra karti"
+
+msgid "&Cut"
+msgstr "&Izgriezt"
 
 msgid "&Paste"
 msgstr "&Ielīmēt"
@@ -1310,14 +1485,10 @@ msgstr "&Dzēst"
 msgid "&Rename"
 msgstr "&Pārsaukt"
 
-msgid "&Display layers"
-msgstr "Rā&dīt slāņus"
-
-msgid "&Display layer"
-msgstr "&Attēlot slāni"
-
-msgid "Show &metadata"
-msgstr "Rādīt &metadatus"
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Create &temporal dataset"
+msgstr "Izveido tukšu datubāzi."
 
 msgid "&Switch mapset"
 msgstr "Pār&slēgt karšu kopu"
@@ -1329,7 +1500,7 @@ msgid "&Rename mapset"
 msgstr "Pā&rsaukt karšu kopu"
 
 #, fuzzy
-msgid "Re&load maps"
+msgid "Re&load mapset"
 msgstr "Pārlādēt"
 
 #, fuzzy
@@ -1351,6 +1522,10 @@ msgstr "&Dzēst karšu kopu"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Pā&rsaukt karšu kopu"
+
+#, fuzzy
+msgid "Re&load project"
+msgstr "Pārprojecēt"
 
 #, fuzzy
 #| msgid "Map projections"
@@ -1393,6 +1568,10 @@ msgid "&Delete GRASS database from disk"
 msgstr "1. Izvēlieties GRASS datubāzes mapi"
 
 #, fuzzy
+msgid "Re&load database"
+msgstr "Pārlādēt"
+
+#, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "&Dzēst novietojumu"
 
@@ -1406,6 +1585,21 @@ msgstr "&Dzēst karšu kopas"
 #, fuzzy
 msgid "&Copy paths"
 msgstr "&Izveidot jaunu karšu kopu"
+
+#, fuzzy
+#| msgid "Manage datasets"
+msgid "&Merge datasets"
+msgstr "Pārvaldīt datu kopas"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "&Delete datasets only"
+msgstr "&Dzēst karšu kopas"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "Dzēst izvēlēto karšu kopu"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -10071,6 +10265,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -10089,6 +10284,7 @@ msgstr ""
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -11839,9 +12035,6 @@ msgstr ""
 #~ msgid "Create/edit group"
 #~ msgstr "Veidot/rediģēt grupu"
 
-#~ msgid "Creates an empty database."
-#~ msgstr "Izveido tukšu datubāzi."
-
 #, fuzzy
 #~ msgid "Creates new mapset in the current project, changes current mapset."
 #~ msgstr "Izveidot jaunu karšu kopu izvēlētajā novietojumā"
@@ -11925,9 +12118,6 @@ msgstr ""
 
 #~ msgid "Export database table"
 #~ msgstr "Eksportēt datubāzes tabulu"
-
-#~ msgid "Export raster dataset"
-#~ msgstr "Eksportēt rastra datus"
 
 #~ msgid "Export raster map"
 #~ msgstr "Eksportēt rastra karti"
@@ -12161,9 +12351,6 @@ msgstr ""
 
 #~ msgid "Manage databases"
 #~ msgstr "Pārvaldīt datubāzes"
-
-#~ msgid "Manage datasets"
-#~ msgstr "Pārvaldīt datu kopas"
 
 #~ msgid "Manage image colors"
 #~ msgstr "Pārvaldīt attēla krāsas"
@@ -12505,17 +12692,11 @@ msgstr ""
 #~ msgid "Unable to rename selected location"
 #~ msgstr "Nav iespējams dzēst novietojumu"
 
-#~ msgid "Unpack raster map"
-#~ msgstr "Atpakot rastra karti"
-
 #~ msgid "Update area attributes from raster"
 #~ msgstr "Atjaunināt poligonu atribūtus no rastra datiem"
 
 #~ msgid "Update area attributes from vector"
 #~ msgstr "Atjaunināt poligonu atribūtus no vektordatiem"
-
-#~ msgid "Update metadata"
-#~ msgstr "Atjaunināt metadatus"
 
 #~ msgid "Update point attributes from areas"
 #~ msgstr "Atjaunināt punktu atribūtus no poligoniem"

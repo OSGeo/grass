@@ -1,13 +1,12 @@
 /*
  * projection checking
  *
- * Copyright 2011-2015 by Markus Metz, and the GRASS Development Team
+ * SPDX-FileCopyrightText: 2011-2015 Markus Metz
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  * Authors:
  *  Markus Metz (v.in.lidar)
  *  Vaclav Petras (move code to standalone functions)
- *
- * This program is free software licensed under the GPL (>=v2).
- * Read the COPYING file that comes with GRASS for details.
  *
  */
 
@@ -88,9 +87,6 @@ void projection_mismatch_report(struct Cell_head cellhd,
               " in the coordinate reference system definitions,"
               " use the -o flag to ignore them and use"
               " current project definition.\n"));
-    strcat(error_msg,
-           _("Consider generating a new project with 'project' parameter"
-             " from input data set.\n"));
     G_fatal_error("%s", error_msg);
 }
 

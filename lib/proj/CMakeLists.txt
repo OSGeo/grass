@@ -21,6 +21,19 @@ build_module(
     INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/../driver"
 )
 
+add_custom_command(
+    TARGET grass_gproj
+    POST_BUILD
+    COMMAND
+        ${CMAKE_COMMAND} -E make_directory
+        ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/proj
+    COMMAND
+        ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/desc.table
+        ${CMAKE_CURRENT_SOURCE_DIR}/parms.table
+        ${CMAKE_CURRENT_SOURCE_DIR}/units.table
+        ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/proj
+)
+
 target_include_directories(
     grass_gproj
     INTERFACE
