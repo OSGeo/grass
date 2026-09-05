@@ -8,10 +8,8 @@ Classes:
  - frame::GMFrame
  - frame::SingleWindowAuiManager
 
-(C) 2006-2021 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2021 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Jachym Cepicky (Mendel University of Agriculture)
@@ -2009,8 +2007,8 @@ class GMFrame(wx.Frame):
 
         win.Show()
 
-    def OnAnimationTool(self, event=None, cmd=None):
-        """Launch Animation tool. See OnIClass documentation.
+    def OpenAnimationTool(self):
+        """Open the Animation Tool in a new page of the main notebook
 
         :return: the animation panel, so that a caller can load data into it
         """
@@ -2023,6 +2021,12 @@ class GMFrame(wx.Frame):
 
         # add animation panel to notebook and make it current
         self.mainnotebook.AddPage(animation_panel, _("Animation Tool"))
+
+        return animation_panel
+
+    def OnAnimationTool(self, event=None, cmd=None):
+        """Launch Animation tool"""
+        animation_panel = self.OpenAnimationTool()
 
         tree = self.GetLayerTree()
         if tree:
@@ -2042,8 +2046,6 @@ class GMFrame(wx.Frame):
                 layer.cmd = ["d.rast", "map="]
                 layerList.AddLayer(layer)
                 animation_panel.SetAnimations([layerList, None, None, None])
-
-        return animation_panel
 
     def OnTimelineTool(self, event=None, cmd=None):
         """Launch Timeline Tool"""

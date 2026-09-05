@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-22 17:13+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
@@ -7679,8 +7679,8 @@ msgstr "एक एसवीएम के साथ भविष्यवाण�
 msgid "Predict with a Support Vector Machine"
 msgstr "एक सपोर्ट वेक्टर मशीन से भविष्यवाणी करें"
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 msgid "Maps with feature values (attributes)"
 msgstr "फ़ीचर मान (विशेषताएँ) वाले मानचित्र"
 
@@ -13511,6 +13511,10 @@ msgstr "खोज त्रिज्या का आकार कम से क
 msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
 msgstr ""
 
+#, c-format
+msgid "memory=%d MB is below the %ld MB minimum for search=%s. This run will finish with the minimum MB needed instead."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr "छोड़ें त्रिज्या का आकार त्रिज्या से कम से कम 1 सेल कम होना चाहिए"
 
@@ -13520,18 +13524,14 @@ msgstr "समतलता सीमा 0 से अधिक होनी च�
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr "समतलता की दूरी स्किप और खोज त्रिज्या के बीच होनी चाहिए। अन्यथा नजरअंदाज कर दिया गया"
 
-#, c-format
-msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
-msgstr "प्रसंस्करण में उल्लेखनीय देरी हो सकती है क्योंकि कम्प्यूटेशनल क्षेत्र आवश्यकता से %lu गुना बड़ा है"
-
-msgid "Unknown output data type"
-msgstr "अज्ञात आउटपुट डेटा प्रकार"
-
 msgid "Profile data has been written"
 msgstr "प्रोफ़ाइल डेटा लिखा गया है"
 
 msgid "Failed writing profile data"
 msgstr "प्रोफ़ाइल डेटा लिखने में विफल"
+
+msgid "Unknown output data type"
+msgstr "अज्ञात आउटपुट डेटा प्रकार"
 
 msgid "Failed to profile the computation, please check the parameters"
 msgstr "गणना प्रोफ़ाइल करने में विफल, कृपया पैरामीटर जांचें"
@@ -33887,6 +33887,10 @@ msgstr "पीएनजी ड्राइवर से बीएमपी छ�
 
 msgid "Image file"
 msgstr "छवि फ़ाइल"
+
+#, c-format
+#~ msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
+#~ msgstr "प्रसंस्करण में उल्लेखनीय देरी हो सकती है क्योंकि कम्प्यूटेशनल क्षेत्र आवश्यकता से %lu गुना बड़ा है"
 
 #~ msgid "flags c and d are mutually exclusive"
 #~ msgstr "झंडे सी और डी परस्पर अनन्य हैं"

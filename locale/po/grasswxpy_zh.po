@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-22 17:13+0000\n"
 "PO-Revision-Date: 2026-07-27 14:40+0000\n"
 "Last-Translator: Liuxs <liuxspro@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
@@ -447,26 +447,6 @@ msgstr ""
 msgid "Animation Tool"
 msgstr ""
 
-msgid "Main Toolbar"
-msgstr ""
-
-msgid "Animation Toolbar"
-msgstr ""
-
-msgid "Misc Toolbar"
-msgstr ""
-
-msgid "Loading data"
-msgstr ""
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr " ({p}中的{c})"
-
-#, python-format
-msgid "to %(to)s"
-msgstr "到%(to)s"
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= 和 %s= 为互斥项。"
@@ -492,6 +472,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr ""
+
+msgid "Animation Toolbar"
+msgstr ""
+
+msgid "Misc Toolbar"
+msgstr ""
+
+msgid "Loading data"
+msgstr ""
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr " ({p}中的{c})"
+
+#, python-format
+msgid "to %(to)s"
+msgstr "到%(to)s"
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -989,6 +993,16 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+#, fuzzy
+#| msgid "Converts a space time raster dataset into a 3D raster map."
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "将时空数据集转化为三维栅格图层。"
+
+#, fuzzy
+#| msgid "Import vector dataset"
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "导入矢量数据集"
+
 msgid "Link external data"
 msgstr "链接外部数据"
 
@@ -1133,6 +1147,20 @@ msgid "Failed to read maps from project <{l}>."
 msgstr ""
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr ""
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr ""
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
@@ -1191,6 +1219,19 @@ msgstr ""
 msgid "Rename map"
 msgstr ""
 
+#, fuzzy
+#| msgid "Manage datasets"
+msgid "Rename dataset"
+msgstr "数据集管理"
+
+#, python-brace-format
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
 msgid "Cannot rename mapset"
 msgstr ""
 
@@ -1207,10 +1248,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Renaming map <{name}>..."
-msgstr ""
-
-#, python-brace-format
-msgid "{cmd} -- completed"
 msgstr ""
 
 msgid "No map selected for copying."
@@ -1246,9 +1283,13 @@ msgstr ""
 msgid "g.remove completed"
 msgstr ""
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete map <{m}>?"
+msgstr "创建新地图集?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
+msgstr "创建新地图集?"
 
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
@@ -1261,19 +1302,134 @@ msgstr ""
 msgid "Deleting {name}..."
 msgstr ""
 
+#, python-brace-format
+msgid "Deleting {n} maps..."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "创建新地图集?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "创建新地图集?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr "创建新地图集?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "删除选中的地图集"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+msgid "Delete dataset"
+msgstr "重命名选中的地图集"
+
+#, fuzzy
+#| msgid "Manage datasets"
+msgid "Deleting datasets..."
+msgstr "数据集管理"
+
+#, fuzzy
+msgid "t.remove completed"
+msgstr "添加命令"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "创建新地图集?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr "创建新地图集?"
+
+#, fuzzy
+#| msgid "Unpack raster map"
+msgid "Unregister map"
+msgstr "解开栅格图层"
+
+msgid "Unregistering map..."
+msgstr ""
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "栅格地图"
+
+#, fuzzy
+#| msgid "Unregister maps from datasets"
+msgid "&Unregister maps"
+msgstr "注销地图到数据集"
+
+msgid "Update metadata"
+msgstr "更新元数据"
+
+#, fuzzy
+msgid "Display &temporal extent"
+msgstr "显示几何形状"
+
+#, fuzzy
+#| msgid "Manage datasets"
+msgid "&Rename dataset"
+msgstr "数据集管理"
+
+#, fuzzy
+msgid "&Delete dataset only"
+msgstr "重命名选中的地图集"
+
+#, fuzzy
+#| msgid "Export raster dataset"
+msgid "&Export dataset"
+msgstr "导出栅格数据集"
+
+msgid "Show &metadata"
 msgstr ""
 
 msgid "&Copy"
 msgstr ""
 
 msgid "Copy &name"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unpack raster map"
+msgid "&Unregister map"
+msgstr "解开栅格图层"
+
+msgid "&Cut"
 msgstr ""
 
 msgid "&Paste"
@@ -1287,14 +1443,10 @@ msgstr "删除(&D)"
 msgid "&Rename"
 msgstr "重命名(&R)"
 
-msgid "&Display layers"
-msgstr ""
-
-msgid "&Display layer"
-msgstr ""
-
-msgid "Show &metadata"
-msgstr ""
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Create &temporal dataset"
+msgstr "创建一个空数据库"
 
 msgid "&Switch mapset"
 msgstr ""
@@ -1305,8 +1457,10 @@ msgstr ""
 msgid "&Rename mapset"
 msgstr ""
 
-msgid "Re&load maps"
-msgstr ""
+#, fuzzy
+#| msgid "Name of mapset:"
+msgid "Re&load mapset"
+msgstr "地图集名称："
 
 #, fuzzy
 #| msgid "Computational region"
@@ -1326,6 +1480,10 @@ msgstr "删除选中项目"
 
 #, fuzzy
 msgid "&Rename project"
+msgstr "投影管理"
+
+#, fuzzy
+msgid "Re&load project"
 msgstr "投影管理"
 
 #, fuzzy
@@ -1368,6 +1526,11 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #, fuzzy
+#| msgid "Create database"
+msgid "Re&load database"
+msgstr "创建数据库"
+
+#, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "删除选定地点"
 
@@ -1382,6 +1545,20 @@ msgstr ""
 #, fuzzy
 msgid "&Copy paths"
 msgstr "设置地图集权限"
+
+#, fuzzy
+#| msgid "Manage datasets"
+msgid "&Merge datasets"
+msgstr "数据集管理"
+
+#, fuzzy
+msgid "&Delete datasets only"
+msgstr "重命名选中的地图集"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "删除选中的地图集"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -10027,6 +10204,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -10044,6 +10222,7 @@ msgstr ""
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -12053,9 +12232,6 @@ msgstr ""
 #~ msgid "Converts a raster map layer into an ESRI ARCGRID file."
 #~ msgstr "将栅格图层转换为ESRI GRID文件。"
 
-#~ msgid "Converts a space time raster dataset into a 3D raster map."
-#~ msgstr "将时空数据集转化为三维栅格图层。"
-
 #~ msgid "Converts a vector map (only points) into a 3D raster map."
 #~ msgstr "将矢量地图(仅含有数据点)转换为三维栅格地图。"
 
@@ -12111,9 +12287,6 @@ msgstr ""
 
 #~ msgid "Create a generic Cartesian coordinate system (XY)"
 #~ msgstr "创建通用笛卡尔坐标系统(XY)"
-
-#~ msgid "Create database"
-#~ msgstr "创建数据库"
 
 #~ msgid "Create labels"
 #~ msgstr "创建标签"
@@ -12178,9 +12351,6 @@ msgstr ""
 
 #~ msgid "Creates a vector map from an ASCII points file or ASCII vector file."
 #~ msgstr "从ASCII点数据文件或矢量文件创建矢量地图。"
-
-#~ msgid "Creates an empty database."
-#~ msgstr "创建一个空数据库"
 
 #, fuzzy
 #~ msgid "Creates new mapset in the current project, changes current mapset."
@@ -12405,9 +12575,6 @@ msgstr ""
 
 #~ msgid "Export instruction file"
 #~ msgstr "导出示例文件"
-
-#~ msgid "Export raster dataset"
-#~ msgstr "导出栅格数据集"
 
 #~ msgid "Export raster dataset as VTK time series"
 #~ msgstr "栅格数据集导出为VTK时间序列"
@@ -12724,9 +12891,6 @@ msgstr ""
 #~ msgid "Import raster dataset"
 #~ msgstr "导入栅格数据集"
 
-#~ msgid "Import vector dataset"
-#~ msgstr "导入矢量数据集"
-
 #~ msgid "Import, export and link data"
 #~ msgstr "导入、导出、链接数据"
 
@@ -12996,9 +13160,6 @@ msgstr ""
 
 #~ msgid "Manage databases"
 #~ msgstr "数据库管理"
-
-#~ msgid "Manage datasets"
-#~ msgstr "数据集管理"
 
 #~ msgid "Manage image colors"
 #~ msgstr "图像色彩管理"
@@ -14053,14 +14214,8 @@ msgstr ""
 #~ msgid "Univariate vector dataset statistics"
 #~ msgstr "矢量数据集一元统计量"
 
-#~ msgid "Unpack raster map"
-#~ msgstr "解开栅格图层"
-
 #~ msgid "Unpack vector map"
 #~ msgstr "解开矢量图层"
-
-#~ msgid "Unregister maps from datasets"
-#~ msgstr "注销地图到数据集"
 
 #, fuzzy
 #~ msgid "Unsupported units"
@@ -14077,9 +14232,6 @@ msgstr ""
 
 #~ msgid "Update map statistics"
 #~ msgstr "刷新地图统计"
-
-#~ msgid "Update metadata"
-#~ msgstr "更新元数据"
 
 #~ msgid "Update point attributes from areas"
 #~ msgstr "从面积更新点的属性"

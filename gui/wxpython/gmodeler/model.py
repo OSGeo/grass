@@ -8,10 +8,8 @@ Classes:
  - model::ProcessModelFile
  - model::WriteModelFile
 
-(C) 2010-2024 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2010-2024 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Ondrej Pesek <pesej.ondrek gmail.com>
@@ -740,7 +738,10 @@ class Model:
                     if ret:
                         vlist = ret.splitlines()
                 else:
-                    vlist = eval(condText)
+                    # The loop condition is part of the model authored by the
+                    # user, so evaluating it is equivalent to running the
+                    # model itself.
+                    vlist = eval(condText)  # nosec B307
 
                 if "variables" not in params:
                     params["variables"] = {"params": []}
