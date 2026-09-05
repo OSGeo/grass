@@ -31,6 +31,9 @@ class TestTmpMapset(unittest.TestCase):
     # not found when this test runs inside an existing GRASS session (e.g.
     # under grass.gunittest.main). Resolve the full path via GISBASE when
     # available and fall back to the bare name otherwise.
+    # Note: on an OSGeo4W package install, the launcher name is versioned
+    # (e.g. grass86.bat instead of grass.bat), so this resolution does not
+    # apply there; it only covers a from-source build's layout.
     _gisbase = os.environ.get("GISBASE")
     if os.name != "nt":
         executable = "grass"
