@@ -6,10 +6,8 @@
 Classes:
  - layertree::LayerTree
 
-(C) 2007-2015 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Jachym Cepicky (Mendel University of Agriculture)
@@ -199,7 +197,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self.hitCheckbox = False
         self.forceCheck = False  # force check layer if CheckItem is called
         # forms default to centering on screen, this will put on lmgr
-        self.centreFromsOnParent = True
+        self.centerFormsOnParent = True
 
         try:
             ctstyle |= CT.TR_ALIGN_WINDOWS
@@ -1104,7 +1102,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Set color table for vector map"""
         name = self.GetLayerInfo(self.layer_selected, key="maplayer").GetName()
         GUI(
-            parent=self, giface=self._giface, centreOnParent=self.centreFromsOnParent
+            parent=self, giface=self._giface, centreOnParent=self.centerFormsOnParent
         ).ParseCommand(["v.colors", "map=%s" % name])
 
     def OnCopyMap(self, event):
@@ -1764,7 +1762,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 parent=self,
                 giface=self._giface,
                 show=show,
-                centreOnParent=self.centreFromsOnParent,
+                centreOnParent=self.centerFormsOnParent,
             )
             module.ParseCommand(
                 self.GetLayerInfo(layer, key="cmd"),
@@ -1785,7 +1783,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             module = GUI(
                 parent=self,
                 giface=self._giface,
-                centreOnParent=self.centreFromsOnParent,
+                centreOnParent=self.centerFormsOnParent,
             )
             module.ParseCommand(cmd, completed=(self.GetOptData, layer, params))
 
@@ -2024,15 +2022,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if self.mapdisplay.IsPaneShown("3d"):
             if self.layer_selected.IsChecked():
                 # update Nviz tool window
-                type = self.GetLayerInfo(self.layer_selected, key="maplayer").type
+                layer_type = self.GetLayerInfo(self.layer_selected, key="maplayer").type
 
-                if type == "raster":
+                if layer_type == "raster":
                     self.lmgr.nviz.UpdatePage("surface")
                     self.lmgr.nviz.SetPage("surface")
-                elif type == "vector":
+                elif layer_type == "vector":
                     self.lmgr.nviz.UpdatePage("vector")
                     self.lmgr.nviz.SetPage("vector")
-                elif type == "raster_3d":
+                elif layer_type == "raster_3d":
                     self.lmgr.nviz.UpdatePage("volume")
                     self.lmgr.nviz.SetPage("volume")
 
@@ -2320,10 +2318,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def ChangeLayer(self, item):
         """Change layer"""
-        type = self.GetLayerInfo(item, key="type")
+        layer_type = self.GetLayerInfo(item, key="type")
         layerName = None
 
-        if type == "command":
+        if layer_type == "command":
             win = self.FindWindowById(self.GetLayerInfo(item, key="ctrl"))
             if win.GetValue() is not None:
                 cmd = win.GetValue().split(";")
@@ -2331,7 +2329,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 opac = 1.0
                 chk = self.IsItemChecked(item)
                 hidden = not self.IsVisible(item)
-        elif type != "group":
+        elif layer_type != "group":
             if self.GetPyData(item) is not None:
                 cmdlist = self.GetLayerInfo(item, key="cmd")
                 opac = self.GetLayerInfo(item, key="maplayer").GetOpacity()
@@ -2344,7 +2342,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         maplayer = self.Map.ChangeLayer(
             layer=self.GetLayerInfo(item, key="maplayer"),
-            ltype=type,
+            ltype=layer_type,
             command=cmdlist,
             name=layerName,
             active=chk,

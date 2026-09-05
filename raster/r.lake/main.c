@@ -9,11 +9,8 @@
  *               As seed You can use already existing map or
  *               X,Y coordinates.
  *
- * COPYRIGHT:    (C) 2005-2008, 2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2005-2008, 2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *  TODO:        - Option to create 3D output;
  *               - Test with lat/lon location, feet and other crap;
@@ -238,8 +235,8 @@ int main(int argc, char *argv[])
         start_col = (int)Rast_easting_to_col(east, &window);
         start_row = (int)Rast_northing_to_row(north, &window);
 
-        if (start_row < 0 || start_row > rows || start_col < 0 ||
-            start_col > cols)
+        if (start_row < 0 || start_row >= rows || start_col < 0 ||
+            start_col >= cols)
             G_fatal_error(_("Seed point outside the current region"));
     }
 
@@ -272,13 +269,14 @@ int main(int argc, char *argv[])
     }
 
     /* Set seed point */
-    if (sdxy_opt->answer)
+    if (sdxy_opt->answer) {
         /* Check is water level higher than seed point */
         if (in_terran[start_row][start_col] >= water_level)
             G_fatal_error(
                 _("Given water level at seed point is below earth surface. "
                   "Increase water level or move seed point."));
-    out_water[start_row][start_col] = 1;
+        out_water[start_row][start_col] = 1;
+    }
 
     /* Close seed map for reading. */
     if (smap_opt->answer)

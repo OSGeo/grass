@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2026-02-09 03:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/it/>\n"
@@ -451,26 +451,6 @@ msgstr "Invalido"
 msgid "Animation Tool"
 msgstr "Strumento Animazione"
 
-msgid "Main Toolbar"
-msgstr "Barra degli strumenti principale"
-
-msgid "Animation Toolbar"
-msgstr "Barra degli strumenti per l'animazione"
-
-msgid "Misc Toolbar"
-msgstr "Barra degli strumenti generale"
-
-msgid "Loading data"
-msgstr "Caricamento dati"
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr " ({c} fuori di {p})"
-
-#, python-format
-msgid "to %(to)s"
-msgstr "a %(to)s"
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= e %s= si escludono a vicenda."
@@ -497,6 +477,30 @@ msgstr "Aggiungere solo un layer nella lista."
 
 msgid "No map series nor space-time dataset is added."
 msgstr "Non è stato aggiunta nessuna serie di mappe o dataset spazio temporali."
+
+msgid "Main Toolbar"
+msgstr "Barra degli strumenti principale"
+
+msgid "Animation Toolbar"
+msgstr "Barra degli strumenti per l'animazione"
+
+msgid "Misc Toolbar"
+msgstr "Barra degli strumenti generale"
+
+msgid "Loading data"
+msgstr "Caricamento dati"
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr " ({c} fuori di {p})"
+
+#, python-format
+msgid "to %(to)s"
+msgstr "a %(to)s"
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
+msgstr ""
 
 msgid "Rendering map layers"
 msgstr "Visualizzando i layers"
@@ -1010,6 +1014,16 @@ msgstr "Crea mappa raster da dati x,y,z [r.in.xyz]"
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr "Crea mappa vettoriale da dati x,y,z [v.in.ascii]"
 
+#, fuzzy
+#| msgid "Imports space time raster dataset."
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "Importa dataset spazio temporale raster."
+
+#, fuzzy
+#| msgid "Imports space time raster dataset."
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "Importa dataset spazio temporale raster."
+
 msgid "Link external data"
 msgstr "Collega dati esterni"
 
@@ -1161,6 +1175,21 @@ msgid "Failed to read maps from project <{l}>."
 msgstr "Impossibile leggere le mappe dalla location <{l}>."
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr "Impossibile leggere il mapset dalla location <{l}>."
+
+#, fuzzy, python-brace-format
+#| msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr "La mappa di tipo {elem} <{name}> esiste già nel mapset <{mapset}>. Vuoi sovrascriverla?"
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr "La mappa di tipo {elem} <{name}> esiste già nel mapset <{mapset}>. Vuoi sovrascriverla?"
 
@@ -1219,6 +1248,20 @@ msgstr "Nuovo nome"
 msgid "Rename map"
 msgstr "Rinomina mappa"
 
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "Rename dataset"
+msgstr "&Rinomina mapset"
+
+#, fuzzy, python-brace-format
+#| msgid "Renaming map <{name}>..."
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr "Ridenominazione della mappa <{name}>..."
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr "{cmd} -- completato"
+
 msgid "Cannot rename mapset"
 msgstr "Il mapset non può essere rinominato"
 
@@ -1236,10 +1279,6 @@ msgstr ""
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr "Ridenominazione della mappa <{name}>..."
-
-#, python-brace-format
-msgid "{cmd} -- completed"
-msgstr "{cmd} -- completato"
 
 msgid "No map selected for copying."
 msgstr "Nessuna mappa selezionata per la copia"
@@ -1278,9 +1317,13 @@ msgstr "Riproiezione non è implementata per raster 3D"
 msgid "g.remove completed"
 msgstr "g.remove completato"
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete map <{m}>?"
+msgstr "Si vuole salvare i cambiamenti?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
+msgstr "Si vuole salvare i cambiamenti?"
 
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
@@ -1293,6 +1336,49 @@ msgstr "Elimina mappa"
 msgid "Deleting {name}..."
 msgstr "Cancellazione di {name}..."
 
+#, fuzzy, python-brace-format
+#| msgid "Deleting {name}..."
+msgid "Deleting {n} maps..."
+msgstr "Cancellazione di {name}..."
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "Si vuole salvare i cambiamenti?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "Si vuole salvare i cambiamenti?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Si vuole salvare i cambiamenti?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "Elimina il mapset selezionato"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "Delete dataset"
+msgstr "&Elimina mapset"
+
+#, fuzzy
+#| msgid "Deleting {name}..."
+msgid "Deleting datasets..."
+msgstr "Cancellazione di {name}..."
+
+#, fuzzy
+#| msgid "g.remove completed"
+msgid "t.remove completed"
+msgstr "g.remove completato"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "Per muovere o copiare mappe in altri mapset, sbloccare la modifica di altri mapset"
 
@@ -1300,14 +1386,110 @@ msgstr "Per muovere o copiare mappe in altri mapset, sbloccare la modifica di al
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr "Per muovere o copiare mappe in altri mapset, sbloccare la modifica di altri mapset"
 
-msgid "&Cut"
-msgstr "&Taglia"
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "Si vuole salvare i cambiamenti?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Si vuole salvare i cambiamenti?"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister map"
+msgstr "nessuna mappa raster"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregistering map..."
+msgstr "nessuna mappa raster"
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display animation"
+msgstr "Visualizza proiezione"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "Mappe raster"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister maps"
+msgstr "nessuna mappa raster"
+
+msgid "Update metadata"
+msgstr "Aggiorna metadati"
+
+#, fuzzy
+#| msgid "Plot temporal extents."
+msgid "Display &temporal extent"
+msgstr "Disegna l'estensione temporale."
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display &animation"
+msgstr "Visualizza proiezione"
+
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "&Rename dataset"
+msgstr "&Rinomina mapset"
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "&Delete dataset only"
+msgstr "&Elimina mapset"
+
+#, fuzzy
+#| msgid "Export raster dataset"
+msgid "&Export dataset"
+msgstr "Esporta dataset raster"
+
+msgid "Show &metadata"
+msgstr "Mostra &metadati"
 
 msgid "&Copy"
 msgstr "&Copia"
 
 msgid "Copy &name"
 msgstr "Copia &nome"
+
+msgid "&Display layers"
+msgstr "&Visualizza layers"
+
+msgid "&Display layer"
+msgstr "&Visualizza layer"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister map"
+msgstr "nessuna mappa raster"
+
+msgid "&Cut"
+msgstr "&Taglia"
 
 msgid "&Paste"
 msgstr "&Incolla"
@@ -1320,14 +1502,10 @@ msgstr "&Elimina"
 msgid "&Rename"
 msgstr "&Rinomina"
 
-msgid "&Display layers"
-msgstr "&Visualizza layers"
-
-msgid "&Display layer"
-msgstr "&Visualizza layer"
-
-msgid "Show &metadata"
-msgstr "Mostra &metadati"
+#, fuzzy
+#| msgid "Connect temporal database"
+msgid "Create &temporal dataset"
+msgstr "Connette un database temporale"
 
 msgid "&Switch mapset"
 msgstr "&Cambia mapset"
@@ -1338,8 +1516,10 @@ msgstr "&Elimina mapset"
 msgid "&Rename mapset"
 msgstr "&Rinomina mapset"
 
-msgid "Re&load maps"
-msgstr ""
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "Re&load mapset"
+msgstr "&Rinomina mapset"
 
 #, fuzzy
 #| msgid "Show computational region extent"
@@ -1359,6 +1539,10 @@ msgstr "&Elimina progetto"
 
 msgid "&Rename project"
 msgstr "&Rinomina progetto"
+
+#, fuzzy
+msgid "Re&load project"
+msgstr "Ricarica le location di GRASS"
 
 #, fuzzy
 #| msgid "Choose projection"
@@ -1398,6 +1582,11 @@ msgstr "&Rimuovi il database di GRASS dal catalogo dei dati"
 msgid "&Delete GRASS database from disk"
 msgstr "&Elimana di database di GRASS dal disco"
 
+#, fuzzy
+#| msgid "Reload default table"
+msgid "Re&load database"
+msgstr "Ricarica la tabella di default"
+
 msgid "&Delete projects (locations)"
 msgstr "&Elimina progetti (locations)"
 
@@ -1413,6 +1602,21 @@ msgstr "&Elimina mapsets"
 #| msgid "&Copy path to mapset"
 msgid "&Copy paths"
 msgstr "&Copia percorso al mapset"
+
+#, fuzzy
+#| msgid "Manage datasets"
+msgid "&Merge datasets"
+msgstr "Gestiosce dataset"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "&Delete datasets only"
+msgstr "&Elimina mapsets"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "Elimina il mapset selezionato"
 
 #, fuzzy, python-brace-format
 #| msgid "Removes an existing database."
@@ -5569,8 +5773,9 @@ msgstr ""
 "v.to.rast fallito:\n"
 "%s"
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "Lo Strumento Scatterplot ha bisogno che il pacchetto \"matplotlib\" (python-matplotlib) sia installato. {0}"
 
 msgid "Zoom to scatter plot extend"
@@ -5633,6 +5838,296 @@ msgstr "Aggiungi classe"
 msgid "Remove selected class"
 msgstr "Rimuove la classe selezionata"
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+#, fuzzy
+#| msgid "1. Select GRASS database directory"
+msgid "Select notebook directory"
+msgstr "1. Scegli la cartella dei dati GRASS"
+
+#, fuzzy
+#| msgid "Create project?"
+msgid "Save in project: {}"
+msgstr "Crea progetto?"
+
+msgid "Options"
+msgstr "Opzioni"
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Browse"
+msgid "Browser"
+msgstr "Naviga"
+
+#, fuzzy
+#| msgid "Intermediate"
+msgid "Integrated"
+msgstr "Intermedio"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close dialog"
+msgid "Close page"
+msgstr "Chiudi dialogo"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "Startup Error"
+msgstr "Errore"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error"
+msgid "URL Error"
+msgstr "Errore"
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr "Impossibile leggere il file %s."
+
+msgid "Notebook Import Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import"
+msgid "Import file"
+msgstr "Importa"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Rename File"
+msgstr "Rinomina"
+
+#, fuzzy
+#| msgid "No scatter plots selected."
+msgid "No page for export is currently selected."
+msgstr "Nessuno scatter plot selezionato."
+
+msgid "Notebook Export Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export file is missing."
+msgid "Export file as..."
+msgstr "Manca il file per l'esportazione"
+
+#, fuzzy
+#| msgid "Model exported to <%s>"
+msgid "File {} exported to {}."
+msgstr "Il modello esportato a <%s>"
+
+#, fuzzy
+#| msgid "Failed to read file %s."
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr "Impossibile leggere il file %s."
+
+#, fuzzy
+#| msgid "Enter name for new mapset:"
+msgid "Enter a name for the new notebook:"
+msgstr "Inserisci il nome per il nuovo mapset:"
+
+msgid "New Notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Failed to create new raster map."
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr "Impossibile creare nuovo raster."
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+#, fuzzy
+#| msgid "No files generated."
+msgid "New file '{}' created."
+msgstr "Nessun file generato."
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr ""
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Server URL: {}"
+msgstr "Server:"
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "failed to open '{0}'"
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr "fallito ad aprire '{0}'"
+
+#, fuzzy
+#| msgid "Input vector map does not exist."
+msgid "Notebook storage does not exist: {}"
+msgstr "Il vettoriale di input non esiste."
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File %s not found"
+msgid "File not found: {}"
+msgstr "File %s non trovato."
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "Target file already exists: {}"
+msgstr "Il file esiste già"
+
+#, fuzzy
+#| msgid "File already exists"
+msgid "File '{}' already exists"
+msgstr "Il file esiste già"
+
+#, fuzzy
+#| msgid "Server:"
+msgid "Stop server"
+msgstr "Server:"
+
+#, fuzzy
+#| msgid "Create new model"
+msgid "Create new notebook"
+msgstr "Crea un nuovo modello"
+
+msgid "Import notebook"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to:"
+msgid "Export notebook"
+msgstr "Esporta a:"
+
 #, fuzzy
 msgid "GRASS"
 msgstr "Aiuto su GRASS"
@@ -5661,6 +6156,30 @@ msgstr "Chiudi Visualizzatore della Mappa {}"
 
 msgid "Console"
 msgstr "Console"
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D view mode not available"
+msgid "Integrated Mode Not Available"
+msgstr "Visualizzazione 3D non disponibile"
 
 #, fuzzy
 msgid "Map Swipe Tool"
@@ -5813,6 +6332,11 @@ msgstr "Rimuovi layer"
 
 msgid "Quit GRASS GUI"
 msgstr "Esci dalla GUI di GRASS"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr ""
@@ -6149,12 +6673,13 @@ msgstr "Georettificatore"
 msgid "Cartographic Composer"
 msgstr "Compositore Cartografico"
 
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Open Graphical Modeler"
+msgstr "Modellizzatore Grafico"
+
 msgid "Launch user-defined script"
 msgstr "Lancia script definiti dall'utente"
-
-#, fuzzy
-msgid "New display"
-msgstr "Cancella display"
 
 #, fuzzy
 msgid "Python code editor"
@@ -6551,6 +7076,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 #, fuzzy
@@ -7208,9 +7739,6 @@ msgstr "Trova e installa estensione dai GRASS Addons"
 
 msgid "List of extensions - double-click to install"
 msgstr "Lista delle estensioni - doppio click per installare"
-
-msgid "Options"
-msgstr "Opzioni"
 
 msgid "&Install"
 msgstr "&Installa"
@@ -9894,8 +10422,10 @@ msgstr "Scarica la location selezionata"
 msgid "Do you want to cancel dataset download?"
 msgstr "Si vuole cancellare lo scaricamento della location? "
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
-msgstr ""
+#, fuzzy
+#| msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
+msgstr "Lo Strumento Grafici Temporali ha bisogno che il pacchetto \"matplotlib\" (python-matplotlib) sia installato. {0}"
 
 msgid "Timeline Tool"
 msgstr ""
@@ -9994,15 +10524,21 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "Strumento Animazione - GRASS"
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+#, fuzzy
+#| msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr "Lo Strumento Grafici Temporali ha bisogno che il pacchetto \"matplotlib\" (python-matplotlib) sia installato. {0}"
 
 msgid "Temporal Plot Tool"
 msgstr ""
 
+#, fuzzy
+#| msgid ""
+#| "Raster temporal dataset (strds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 "Dataset temporale di raster (strds)\n"
@@ -10020,8 +10556,13 @@ msgstr ""
 msgid "STRDS"
 msgstr "STRDS"
 
+#, fuzzy
+#| msgid ""
+#| "Vector temporal dataset (stvds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 "Dataset temporale di vettoriali (stvds)\n"
@@ -11492,6 +12033,10 @@ msgid ""
 "\n"
 msgstr ""
 
+#, fuzzy
+#~ msgid "New display"
+#~ msgstr "Cancella display"
+
 #~ msgid "&Copy paths to mapsets"
 #~ msgstr "&Copia percorsi ai mapsets"
 
@@ -12189,9 +12734,6 @@ msgstr ""
 #~ msgid "Connect"
 #~ msgstr "Connessione"
 
-#~ msgid "Connect temporal database"
-#~ msgstr "Connette un database temporale"
-
 #~ msgid "Contrast weighted edge density"
 #~ msgstr "Indice di densità dei bordi pesato sull'area"
 
@@ -12568,9 +13110,6 @@ msgstr ""
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "Visualizza informazioni sul Modellizzatore Grafico"
 
-#~ msgid "Display map projection"
-#~ msgstr "Visualizza proiezione"
-
 #~ msgid "Display mode"
 #~ msgstr "Modalità di visualizzazione"
 
@@ -12744,9 +13283,6 @@ msgstr ""
 
 #~ msgid "Export instruction file"
 #~ msgstr "Esporta file delle istruzioni"
-
-#~ msgid "Export raster dataset"
-#~ msgstr "Esporta dataset raster"
 
 #~ msgid "Export raster dataset as VTK time series"
 #~ msgstr "Esporta dataset raster come una serie temporale VTK"
@@ -13201,9 +13737,6 @@ msgstr ""
 #~ msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
 #~ msgstr "Algoritmo di fusione di immagini per intensificare i pixel multispettrali con canali pancromatici ad alta risoluzione"
 
-#~ msgid "Import"
-#~ msgstr "Importa"
-
 #~ msgid "Import 3-dimensional Vis5D files."
 #~ msgstr "Importa file Vis5D tridimensionale."
 
@@ -13293,9 +13826,6 @@ msgstr ""
 
 #~ msgid "Imports raster data into a GRASS raster map using GDAL library."
 #~ msgstr "Importa dati raster in una mappa raster di GRASS usando la libreria GDAL."
-
-#~ msgid "Imports space time raster dataset."
-#~ msgstr "Importa dataset spazio temporale raster."
 
 #~ msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
 #~ msgstr "Importa dati raster in una mappa vettoriale di GRASS usando la libreria OGR e riproiettando al volo"
@@ -13597,9 +14127,6 @@ msgstr ""
 
 #~ msgid "Manage databases"
 #~ msgstr "Gestione database"
-
-#~ msgid "Manage datasets"
-#~ msgstr "Gestiosce dataset"
 
 #~ msgid "Manage image colors"
 #~ msgstr "Gestione colori image"
@@ -13977,9 +14504,6 @@ msgstr ""
 
 #~ msgid "Please select a cleaning tool to remove"
 #~ msgstr "Seleziona uno strumento di pulizia per rimuovere"
-
-#~ msgid "Plot temporal extents."
-#~ msgstr "Disegna l'estensione temporale."
 
 #~ msgid "Plot temporal values."
 #~ msgstr "Rappresenta i valori temporali."
@@ -14999,9 +15523,6 @@ msgstr ""
 #~ msgid "Update map statistics"
 #~ msgstr "Aggiorna le statistiche della mappa"
 
-#~ msgid "Update metadata"
-#~ msgstr "Aggiorna metadati"
-
 #~ msgid "Update point attributes from areas"
 #~ msgstr "Aggiorna gli attributi del punto da aree"
 
@@ -15142,9 +15663,6 @@ msgstr ""
 
 #~ msgid "face"
 #~ msgstr "superficie"
-
-#~ msgid "failed to open '{0}'"
-#~ msgstr "fallito ad aprire '{0}'"
 
 #~ msgid "layer"
 #~ msgstr "layer"

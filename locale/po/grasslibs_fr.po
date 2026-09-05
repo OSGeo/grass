@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
-"PO-Revision-Date: 2026-06-21 20:53+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"PO-Revision-Date: 2026-08-29 15:38+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -26,6 +26,9 @@ msgstr ""
 #, c-format
 msgid "Unknown algorithm '%s'"
 msgstr "Algorithme '%s' inconnu"
+
+msgid "Cannot classify an empty set of values"
+msgstr "Impossible de classer un ensemble vide de valeurs"
 
 msgid "Classification algorithm failed"
 msgstr "Échec de l'algorithme de classification"
@@ -374,7 +377,7 @@ msgid "Unable select records from table <%s>"
 msgstr "Impossible de sélectionner les enregistrements depuis la table <%s>"
 
 msgid "Key column type is not integer"
-msgstr "La colonne clef n'est pas de type entier"
+msgstr "Le type de la colonne clé n'est pas un entier"
 
 #, c-format
 msgid "Table name too long: <%s>"
@@ -2984,7 +2987,7 @@ msgid "A new mapset can be created using '-c' flag."
 msgstr "Un nouveau jeu de cartes peut être créé en utilisant l'option '-c'."
 
 msgid "Maybe you meant a different directory."
-msgstr "Vouliez-vous dire un répertoire différent?"
+msgstr "Vouliez-vous dire un répertoire différent ?"
 
 msgid "Provide CRS to create a project"
 msgstr "Fournir un SCR pour créer un projet"
@@ -3326,7 +3329,7 @@ msgid "Error loading 3d raster map <%s>"
 msgstr "Erreur au chargement de la carte raster 3D <%s>"
 
 msgid "Nviz_new_map_obj(): unsupported data type"
-msgstr "Nviz_new_map_obj(): type de données non pris en charge"
+msgstr "Nviz_new_map_obj() : type de données non pris en charge"
 
 #, c-format
 msgid "Invalid color (%s), using \"white\" as default"
@@ -4295,7 +4298,7 @@ msgstr "Le fichier de quantification de la carte raster <%s> est manquant"
 msgid "Quantization file for raster map <%s> is empty"
 msgstr "Le fichier de quantification de la carte raster <%s> est vide"
 
-#, c-format
+#, fuzzy, c-format
 msgid "Unable to read fp range for raster map <%s>"
 msgstr "Impossible de lire l'intervalle fp pour la carte raster <%s>"
 
@@ -4501,7 +4504,7 @@ msgstr "Ajout d'une règle : %lf - %lf"
 
 #, c-format
 msgid "%s: illegal value spec"
-msgstr "%s : valeur non autorisée"
+msgstr "%s: spécification de valeur non valide"
 
 msgid "Rast3d_open_cell_old_no_header: error in Rast3d_mask_open_old"
 msgstr "Rast3d_open_cell_old_no_header : erreur dans Rast3d_mask_open_old"
@@ -5139,12 +5142,10 @@ msgid_plural "%d primitives registered"
 msgstr[0] "Une primitive référencée"
 msgstr[1] "%d primitives référencées"
 
-#, fuzzy, c-format
-#| msgid "One vertex registered"
-#| msgid_plural "%d vertices registered"
+#, c-format
 msgid "One vertex registered"
 msgid_plural "%d vertices registered"
-msgstr[0] "%d sommet référencé"
+msgstr[0] "Un sommet référencé"
 msgstr[1] "%d sommets référencés"
 
 msgid "Building areas..."

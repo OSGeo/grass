@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grassmods/it/>\n"
@@ -1781,7 +1781,7 @@ msgid "Cannot find/open symbol: '%s'"
 msgstr ""
 
 #, c-format
-msgid "Color <%s> cannot for option %s be parsed"
+msgid "Color <%s> for option <%s> cannot be parsed"
 msgstr ""
 
 #, c-format
@@ -1792,9 +1792,10 @@ msgstr "Solo <%d> colori dati per <%d> linee"
 msgid "Number of widths (%d) is higher then the number of files (%d)"
 msgstr ""
 
-#, c-format
-msgid "Number of widths (%d) is lower then the number of files (%d)"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Number of columns defined (%d) does not match number of columns (%d) in input"
+msgid "Number of widths (%d) is lower than the number of files (%d)"
+msgstr "Il numero delle colonne definite (%d) non corrisponde al numero di colonne (%d) nell'input"
 
 #, c-format
 msgid "Y input file <%s> contains fewer data points than the X input file"
@@ -2252,6 +2253,7 @@ msgstr "Numero di cifre significative (solo valori a virgola mobile)"
 msgid "Get text color from cell color value"
 msgstr ""
 
+#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -9445,22 +9447,38 @@ msgstr "Riclassifica un raster maggiore o minore della dimensione di un'area spe
 msgid "aggregation"
 msgstr "aggregazione"
 
-msgid "Value option that sets the area size limit (in hectares)"
+msgid "Value option that sets the area size limit (in hectares) (deprecated)"
 msgstr ""
 
 msgid "Area"
 msgstr "Area"
 
-msgid "Lesser or greater than specified value"
+msgid "Keep only areas lesser or greater than specified value (deprecated)"
 msgstr ""
 
-msgid "Method used for reclassification"
+msgid "Value for the lower area size limit (in hectares). Pixel clumps with areas below this value are removed."
 msgstr ""
+
+msgid "Value for the upper area size limit (in hectares). Pixel clumps with areas above this value are removed."
+msgstr ""
+
+#, fuzzy
+msgid "Method used for area size filtering"
+msgstr "Testo da usare per il titolo della mappa"
 
 msgid "Input map is clumped"
 msgstr ""
 
-msgid "Clumps including diagonal neighbors"
+msgid "Generate clumps including diagonal neighbors"
+msgstr ""
+
+msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgstr ""
+
+msgid "Apply lower area threshold as \"minsize\" during clumping"
+msgstr ""
+
+msgid "Output vector map, do not convert back to raster (only for method 'rmarea')"
 msgstr ""
 
 msgid "Splits a raster map into red, green and blue maps."
@@ -9701,6 +9719,9 @@ msgid "Columns to be printed to stdout"
 msgstr ""
 
 msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr ""
+
+msgid "Name of mapsets to list ('.' for current, '*' for all mapsets)"
 msgstr ""
 
 msgid "Field separator character between the output columns"
@@ -9979,7 +10000,7 @@ msgstr ""
 msgid "Imports space time raster dataset."
 msgstr ""
 
-msgid "Path to the extraction directory"
+msgid "Path to the extraction directory (default is .tmp in the current mapset)"
 msgstr ""
 
 #, fuzzy
@@ -10424,6 +10445,9 @@ msgstr "Registra mappe vuote"
 msgid "Imports a space time vector dataset from a GRASS specific archive file."
 msgstr ""
 
+msgid "Path to the extraction directory"
+msgstr ""
+
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
 msgstr ""
 
@@ -10682,6 +10706,26 @@ msgid "Default is sql unless the provided aggregate methods are for univar"
 msgstr ""
 
 msgid "sql;Uses SQL attribute database;univar;Uses v.db.univar"
+msgstr ""
+
+msgid "Prints geometry metrics of vector features."
+msgstr ""
+
+#, fuzzy
+#| msgid "Metric"
+msgid "metric"
+msgstr "Misura"
+
+msgid "Geometry metric(s) to compute"
+msgstr ""
+
+msgid "area;area size;perimeter;perimeter length of an area;length;line length;count;number of features for each category;compactness;compactness of an area, calculated as perimeter / (2 * sqrt(PI * area));fractal_dimension;fractal dimension of boundary defining a polygon, calculated as 2 * (log(perimeter) / log(area));slope;slope steepness of vector line or boundary;sinuosity;line sinuosity, calculated as line length / distance between end points;azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode;coordinates;point coordinates, X,Y or X,Y,Z;start;line/boundary starting point coordinates, X,Y or X,Y,Z;end;line/boundary end point coordinates, X,Y or X,Y,Z;bbox;bounding box of area, N,S,E,W"
+msgstr ""
+
+msgid "Units (one per metric, positional; unspecified metrics use defaults)"
+msgstr ""
+
+msgid "plain;Plain text with pipe separator by default;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
 msgstr ""
 
 msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
@@ -12217,6 +12261,9 @@ msgstr "impossibile eseguire r.stats"
 msgid "Unexpected output from r.stats"
 msgstr "Output inaspettato da r.stats"
 
+msgid "No data returned from r.stats"
+msgstr ""
+
 msgid "Unable to open tempfile"
 msgstr "Non è possibile aprire il file temp"
 
@@ -13604,6 +13651,14 @@ msgstr ""
 msgid "Search radius size must cover at least 1 cell"
 msgstr ""
 
+#, c-format
+msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
+msgstr ""
+
+#, c-format
+msgid "memory=%d MB is below the %ld MB minimum for search=%s. This run will finish with the minimum MB needed instead."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
@@ -13613,17 +13668,13 @@ msgstr ""
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
-#, c-format
-msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
-msgstr ""
-
-msgid "Unknown output data type"
-msgstr ""
-
 msgid "Profile data has been written"
 msgstr ""
 
 msgid "Failed writing profile data"
+msgstr ""
+
+msgid "Unknown output data type"
 msgstr ""
 
 msgid "Failed to profile the computation, please check the parameters"
@@ -14805,6 +14856,14 @@ msgstr "Impossibile creare il file di riclassificazione di <%s>"
 msgid "PDAL error: %s"
 msgstr "Errore: %s\n"
 
+#, c-format
+msgid "The input dataset <%s> has undefined CRS, its extent is reported as stored in the file"
+msgstr ""
+
+#, c-format
+msgid "Reprojection of the data extent failed: %s"
+msgstr ""
+
 #, fuzzy
 msgid "Mode value of point values in cell"
 msgstr "Conteggio di punti per cella"
@@ -14840,10 +14899,10 @@ msgstr "Scala da applicare ai dati z"
 msgid "Use if output dimension is not Z or intensity"
 msgstr ""
 
-msgid "Reproject to project's coordinate system if needed"
+msgid "Reproject to project's coordinate system if needed [deprecated]"
 msgstr ""
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
+msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
 msgstr ""
 
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
@@ -14905,6 +14964,9 @@ msgstr ""
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Stampa a video le statistiche con lo stile shell script"
 
+msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr ""
+
 #, c-format
 msgid "Flag %c makes sense only with %s option or -%c flag or -%c flag"
 msgstr ""
@@ -14919,16 +14981,21 @@ msgstr ""
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr ""
 
-#, fuzzy
-msgid "Reprojecting the input to the project's CRS"
-msgstr "Sovrascrive la proiezione (usa la proiezione della location)"
+#, fuzzy, c-format
+#| msgid "Error while reading history file"
+msgid "PDAL error while reading <%s>: %s"
+msgstr "Errore nella lettura del file della cronologia"
+
+msgid "The input dataset has undefined projection"
+msgstr ""
 
 #, fuzzy
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr "Sovrascrive la proiezione (usa la proiezione della location)"
 
-msgid "The input dataset has undefined projection"
-msgstr ""
+#, fuzzy
+msgid "Reprojecting the input to the project's CRS"
+msgstr "Sovrascrive la proiezione (usa la proiezione della location)"
 
 msgid "Running PDAL algorithms..."
 msgstr ""
@@ -18127,6 +18194,10 @@ msgstr ""
 msgid "Error writing temporary file <%s>"
 msgstr ""
 
+#, c-format
+msgid "Using %d thread(s), %d buffered output rows"
+msgstr ""
+
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr ""
 
@@ -18661,9 +18732,6 @@ msgstr "Mappa raster <%s> non trovata e manin_val non definito, sceglierne uno p
 
 msgid "Zero value in Mannings n"
 msgstr ""
-
-msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
-msgstr "L'infiltrazione eccede l'intensità di precipitazione ovunque! Nessun flusso superficiale."
 
 #, fuzzy
 #| msgid "Could not open elevation raster"
@@ -20514,6 +20582,7 @@ msgstr "Troppe categorie (trovate: %i, max: %i). Prova a riscalare o riclassific
 msgid "Input raster must be of type CELL."
 msgstr ""
 
+#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -22854,8 +22923,10 @@ msgstr "write_vtk_unstructured_grid_cells: Scrittura delle celle"
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr ""
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
-msgstr ""
+#, fuzzy
+#| msgid "Wrong map values! Values should in between 0 and 255!\n"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
+msgstr "Valori della mappa errati! Valori devono essere compresi tra 0 e 255!\n"
 
 msgid "Unable to close the 3D raster map"
 msgstr "Non è possibile chiudere la mappa raster 3D"
@@ -23383,7 +23454,7 @@ msgstr ""
 msgid "ZIP file is unreadable: {0}"
 msgstr ""
 
-msgid "Extracting may be unsafe; consider updating Python"
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
 msgstr ""
 
 #, python-brace-format
@@ -24361,49 +24432,51 @@ msgstr ""
 msgid "azimuth must be between 0 and 360"
 msgstr ""
 
-msgid "xy-locations are not supported"
-msgstr ""
-
-msgid "Need projected data with grids in meters"
-msgstr ""
-
-msgid "flags c and d are mutually exclusive"
-msgstr ""
-
-#, python-format
-msgid "Temporary raster map <%s> exists"
-msgstr ""
-
-msgid "Generating a clumped raster file including diagonal neighbors..."
-msgstr ""
-
-msgid "Generating a clumped raster file ..."
-msgstr ""
-
-#, python-format
-msgid "Generating a reclass map with area size less than or equal to %f hectares..."
-msgstr ""
-
-#, python-format
-msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
-msgstr ""
-
-#, python-format
-msgid "No areas of size less than or equal to %f hectares found."
-msgstr ""
-
-#, python-format
-msgid "No areas of size greater than or equal to %f hectares found."
+msgid ""
+"xy-locations are not supported\n"
+"Need projected data with grids in meters"
 msgstr ""
 
 msgid "Latitude-longitude locations are not supported"
 msgstr ""
 
-msgid "You have to specify mode='lesser' with method='rmarea'"
+msgid "xy-locations are not supported"
+msgstr ""
+
+#, fuzzy
+msgid "Generating a clumped raster file"
+msgstr "Creazione di una nuovo file delle categorie in corso..."
+
+msgid " including diagonal neighbors"
 msgstr ""
 
 #, python-format
-msgid "Generating output raster map <%s>..."
+msgid " with minimum %s pixels"
+msgstr ""
+
+#, fuzzy
+msgid "Generating a reclass map with area size"
+msgstr "Nome del raster di input (rosso)"
+
+#, fuzzy, python-format
+#| msgid "Width less than or equal to zero not allowed"
+msgid " larger than or equal to %f hectares..."
+msgstr "Non è permessa una larghezza minore o uguale a zero"
+
+#, python-format
+msgid " smaller than or equal to %f hectares..."
+msgstr ""
+
+#, fuzzy
+#| msgid "No record for category [%d]"
+msgid "No areas of size "
+msgstr "Nessun record per la categoria [%d]"
+
+#, python-format
+msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
+msgstr ""
+
+msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
 msgstr ""
 
 msgid "No semantic label assigned to <{}>"
@@ -24828,6 +24901,15 @@ msgstr ""
 msgid ""
 "A processing step failed. Check the above error messages and see the following details:\n"
 "{error}"
+msgstr ""
+
+msgid "Cannot mix metrics from different feature types: {}. Results are merged by category, so combining e.g. line and area metrics would produce misleading records. Run v.geometry separately for each feature type."
+msgstr ""
+
+msgid "More units ({}) than metrics ({}) specified"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long, got: {}"
 msgstr ""
 
 #, python-format
@@ -25590,6 +25672,10 @@ msgstr ""
 
 msgid "The 'list' format can only be used with the -b flag. Please use -b to enable list output."
 msgstr ""
+
+#, c-format
+msgid "No records selected from table <%s>"
+msgstr "Nessun record selezionato dalla tabella <%s>"
 
 msgid "Unable to sort array of values"
 msgstr ""
@@ -31707,6 +31793,106 @@ msgstr ""
 msgid "normalsv: save of uninitialized block"
 msgstr ""
 
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing F function..."
+msgstr "Calcolo delle equazioni in corso......"
+
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing G function..."
+msgstr "Calcolo delle equazioni in corso......"
+
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing K function..."
+msgstr "Calcolo delle equazioni in corso......"
+
+#, fuzzy
+msgid "point pattern analysis"
+msgstr "Mappa raster risultante"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Summary function to compute"
+msgstr ""
+
+msgid "g;Nearest neighbor distance distribution function;f;Empty space function;k;Ripley's K function;l;L function (variance stabilized K function)"
+msgstr ""
+
+msgid "If omitted or '-', the results are printed to standard output"
+msgstr ""
+
+#, fuzzy
+msgid "Number of distances"
+msgstr "Numero di profondità"
+
+msgid "Number of equally spaced distances at which the function is estimated"
+msgstr ""
+
+#, fuzzy
+#| msgid "Number of arguments for function '%s'"
+msgid "Number of random points for the F function"
+msgstr "Numero di argomenti per la funzione '%s'"
+
+msgid "Empty space distances are sampled at this many uniformly random locations"
+msgstr ""
+
+#, fuzzy
+msgid "Maximum distance for the K and L functions"
+msgstr "Distanza massima dal punto più vicino"
+
+#, fuzzy
+msgid "Default is one quarter of the shorter side of the computational region"
+msgstr "Il punto seed è fuori dalla regione corrente"
+
+msgid "Edge correction for the K and L functions"
+msgstr ""
+
+msgid "isotropic;Ripley's isotropic edge correction;none;No edge correction"
+msgstr ""
+
+msgid "Used for the random locations of the F function"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Option %s must be > 0"
+msgid "Option <%s> must be positive"
+msgstr "L'opzione %s dev'essere > 0"
+
+#, c-format
+msgid "Option <%s> is larger than half of the shorter side of the computational region; the estimate becomes unreliable at large distances"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "One point outside of the computational region was ignored"
+msgid_plural "%d points outside of the computational region were ignored"
+msgstr[0] "Il punto seed è fuori dalla regione corrente"
+msgstr[1] "Il punto seed è fuori dalla regione corrente"
+
+#, fuzzy
+msgid "No points found in the computational region"
+msgstr "Il punto seed è fuori dalla regione corrente"
+
+#, fuzzy, c-format
+#| msgid "At least one <%s> or <%s> required"
+msgid "At least 2 points are required, %d found"
+msgstr "Almeno uno tra <%s> o <%s> sono richiesti"
+
+#, fuzzy, c-format
+#| msgid "Estimate point density and distance"
+msgid "Estimated intensity: %g"
+msgstr "Stima la densità dei punti e la distanza"
+
+#, fuzzy
+msgid "Unable to initialize JSON output"
+msgstr "Interpretazione della larghezza come intero fallita"
+
+#, fuzzy
+msgid "Unable to serialize JSON output"
+msgstr "Interpretazione della larghezza come intero fallita"
+
 msgid "Vector map profiling tool"
 msgstr ""
 
@@ -32004,10 +32190,6 @@ msgstr ""
 #, c-format
 msgid "Database connection not defined for layer %s"
 msgstr ""
-
-#, c-format
-msgid "No records selected from table <%s>"
-msgstr "Nessun record selezionato dalla tabella <%s>"
 
 msgid "Key column type is not integer"
 msgstr "Il formato della colonna chiave non è di tipo integer"
@@ -34141,6 +34323,9 @@ msgstr "Visualizza immagini BMP dal driver PNG."
 msgid "Image file"
 msgstr "File immagine"
 
+#~ msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
+#~ msgstr "L'infiltrazione eccede l'intensità di precipitazione ovunque! Nessun flusso superficiale."
+
 #, fuzzy
 #~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
 #~ msgstr "Mappa base da quantizzare"
@@ -36075,10 +36260,6 @@ msgstr "File immagine"
 #~ msgstr "Distanza massima dal punto alla rete"
 
 #, fuzzy
-#~ msgid "Maximum distance for aerial extraction"
-#~ msgstr "Distanza massima dal punto più vicino"
-
-#, fuzzy
 #~ msgid "Maximum distance from points to river"
 #~ msgstr "Distanza massima dal punto alla rete"
 
@@ -36186,10 +36367,6 @@ msgstr "File immagine"
 #, fuzzy
 #~ msgid "Method to use for isochrone calculation"
 #~ msgstr "Non è possibile impostare la proiezione"
-
-#, fuzzy
-#~ msgid "Metric to use for weighting"
-#~ msgstr "Testo da usare per il titolo della mappa"
 
 #, fuzzy
 #~ msgid "Minimum and maximum values of gradient"
@@ -36378,10 +36555,6 @@ msgstr "File immagine"
 #, fuzzy
 #~ msgid "Name for input raster map B"
 #~ msgstr "Nome della mappa raster di input"
-
-#, fuzzy
-#~ msgid "Name for input raster map with areas"
-#~ msgstr "Nome del raster di input (rosso)"
 
 #, fuzzy
 #~ msgid "Name for mosaic output map"
@@ -37897,10 +38070,6 @@ msgstr "File immagine"
 #~ msgstr "Numero di cifre significative (solo valori a virgola mobile)"
 
 #, fuzzy
-#~ msgid "Number of steps"
-#~ msgstr "Numero di profondità"
-
-#, fuzzy
 #~ msgid "Number of steps to be simulated"
 #~ msgstr "Numero di punti da creare"
 
@@ -39412,10 +39581,6 @@ msgstr "File immagine"
 #~ msgstr "Parametri"
 
 #, fuzzy
-#~ msgid "Training set update file"
-#~ msgstr "Creazione di una nuovo file delle categorie in corso..."
-
-#, fuzzy
 #~ msgid "Training vector map (attribut table required)"
 #~ msgstr "Visualizza gli attributi della mappa vettoriale"
 
@@ -40169,10 +40334,6 @@ msgstr "File immagine"
 #, fuzzy
 #~ msgid "nearest;nearest neighbor;linear;linear interpolation;cubic;cubic convolution;lanczos;lanczos filter;linear_f;linear interpolation with fallback;cubic_f;cubic convolution with fallback;lanczos_f;lanczos filter with fallback"
 #~ msgstr "nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos filter with fallback"
-
-#, fuzzy
-#~ msgid "network analysis"
-#~ msgstr "Mappa raster risultante"
 
 #, fuzzy
 #~ msgid "nodata value in output files"

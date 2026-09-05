@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_id_ID\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2017-05-23 21:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: Indonesian (Indonesia) (https://www.transifex.com/grass-gis/teams/45198/id_ID/)\n"
@@ -443,26 +443,6 @@ msgstr ""
 msgid "Animation Tool"
 msgstr ""
 
-msgid "Main Toolbar"
-msgstr ""
-
-msgid "Animation Toolbar"
-msgstr ""
-
-msgid "Misc Toolbar"
-msgstr ""
-
-msgid "Loading data"
-msgstr ""
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr ""
-
-#, python-format
-msgid "to %(to)s"
-msgstr ""
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
@@ -484,6 +464,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr ""
+
+msgid "Animation Toolbar"
+msgstr ""
+
+msgid "Misc Toolbar"
+msgstr ""
+
+msgid "Loading data"
+msgstr ""
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -973,6 +977,12 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr ""
+
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr ""
+
 msgid "Link external data"
 msgstr ""
 
@@ -1112,6 +1122,20 @@ msgid "Failed to read maps from project <{l}>."
 msgstr ""
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr ""
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr ""
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
@@ -1170,6 +1194,17 @@ msgstr ""
 msgid "Rename map"
 msgstr ""
 
+msgid "Rename dataset"
+msgstr ""
+
+#, python-brace-format
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
 msgid "Cannot rename mapset"
 msgstr ""
 
@@ -1186,10 +1221,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Renaming map <{name}>..."
-msgstr ""
-
-#, python-brace-format
-msgid "{cmd} -- completed"
 msgstr ""
 
 msgid "No map selected for copying."
@@ -1226,7 +1257,11 @@ msgid "g.remove completed"
 msgstr ""
 
 #, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete map <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
 msgstr ""
 
 #, python-brace-format
@@ -1240,19 +1275,127 @@ msgstr ""
 msgid "Deleting {name}..."
 msgstr ""
 
+#, python-brace-format
+msgid "Deleting {n} maps..."
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr ""
+
+msgid "Delete dataset and maps"
+msgstr ""
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+msgid "Delete dataset"
+msgstr ""
+
+msgid "Deleting datasets..."
+msgstr ""
+
+msgid "t.remove completed"
+msgstr ""
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
+#, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr ""
+
+msgid "Unregister map"
+msgstr ""
+
+msgid "Unregistering map..."
+msgstr ""
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+msgid "Display animation"
+msgstr ""
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+msgid "&Register maps"
+msgstr ""
+
+msgid "&Unregister maps"
+msgstr ""
+
+msgid "Update metadata"
+msgstr ""
+
+msgid "Display &temporal extent"
+msgstr ""
+
+msgid "Display &animation"
+msgstr ""
+
+msgid "&Rename dataset"
+msgstr ""
+
+msgid "&Delete dataset only"
+msgstr ""
+
+msgid "&Export dataset"
+msgstr ""
+
+msgid "Show &metadata"
 msgstr ""
 
 msgid "&Copy"
 msgstr ""
 
 msgid "Copy &name"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr ""
+
+msgid "&Unregister map"
+msgstr ""
+
+msgid "&Cut"
 msgstr ""
 
 msgid "&Paste"
@@ -1266,13 +1409,7 @@ msgstr ""
 msgid "&Rename"
 msgstr ""
 
-msgid "&Display layers"
-msgstr ""
-
-msgid "&Display layer"
-msgstr ""
-
-msgid "Show &metadata"
+msgid "Create &temporal dataset"
 msgstr ""
 
 msgid "&Switch mapset"
@@ -1284,7 +1421,7 @@ msgstr ""
 msgid "&Rename mapset"
 msgstr ""
 
-msgid "Re&load maps"
+msgid "Re&load mapset"
 msgstr ""
 
 msgid "Show computational region"
@@ -1300,6 +1437,9 @@ msgid "&Delete project"
 msgstr ""
 
 msgid "&Rename project"
+msgstr ""
+
+msgid "Re&load project"
 msgstr ""
 
 msgid "Show projection info"
@@ -1329,6 +1469,9 @@ msgstr ""
 msgid "&Delete GRASS database from disk"
 msgstr ""
 
+msgid "Re&load database"
+msgstr ""
+
 msgid "&Delete projects (locations)"
 msgstr ""
 
@@ -1339,6 +1482,15 @@ msgid "&Delete mapsets"
 msgstr ""
 
 msgid "&Copy paths"
+msgstr ""
+
+msgid "&Merge datasets"
+msgstr ""
+
+msgid "&Delete datasets only"
+msgstr ""
+
+msgid "Delete datasets and maps"
 msgstr ""
 
 #, python-brace-format
@@ -5220,8 +5372,7 @@ msgid ""
 "{messages}"
 msgstr ""
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Zoom to scatter plot extend"
@@ -5284,6 +5435,244 @@ msgstr ""
 msgid "Remove selected class"
 msgstr ""
 
+msgid "Start Jupyter Notebook"
+msgstr ""
+
+msgid "Where to Save Notebooks"
+msgstr ""
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr ""
+
+msgid "Select notebook directory"
+msgstr ""
+
+msgid "Save in project: {}"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Create welcome notebook"
+msgstr ""
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr ""
+
+msgid "Open Notebook in Browser"
+msgstr ""
+
+msgid "Open Integrated Notebook"
+msgstr ""
+
+msgid "Cannot create or write to the selected directory."
+msgstr ""
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "WebView Not Supported"
+msgstr ""
+
+msgid "Browser"
+msgstr ""
+
+msgid "Integrated"
+msgstr ""
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr ""
+
+msgid "Jupyter Notebook"
+msgstr ""
+
+msgid "Really close page '{}'?"
+msgstr ""
+
+msgid "Close page"
+msgstr ""
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+
+msgid "Startup Error"
+msgstr ""
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr ""
+
+msgid "URL Error"
+msgstr ""
+
+msgid "File '{}' is already opened."
+msgstr ""
+
+msgid "File '{}' opened."
+msgstr ""
+
+msgid "File '{}' imported and opened."
+msgstr ""
+
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook Import Error"
+msgstr ""
+
+msgid "Import file"
+msgstr ""
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+
+msgid "Rename File"
+msgstr ""
+
+msgid "No page for export is currently selected."
+msgstr ""
+
+msgid "Notebook Export Error"
+msgstr ""
+
+msgid "Export file as..."
+msgstr ""
+
+msgid "File {} exported to {}."
+msgstr ""
+
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr ""
+
+msgid "Enter a name for the new notebook:"
+msgstr ""
+
+msgid "New Notebook"
+msgstr ""
+
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook Creation Error"
+msgstr ""
+
+msgid "New file '{}' created."
+msgstr ""
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr ""
+
+msgid "Confirm Close"
+msgstr ""
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr ""
+
+msgid "Open in Browser Again"
+msgstr ""
+
+msgid "Stop Jupyter Server"
+msgstr ""
+
+msgid "Server URL: {}"
+msgstr ""
+
+msgid "Process ID: {}"
+msgstr ""
+
+msgid "Notebook Storage: {}"
+msgstr ""
+
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr ""
+
+msgid "Notebook storage does not exist: {}"
+msgstr ""
+
+msgid "Notebook storage is not writable: {}"
+msgstr ""
+
+msgid "Server is already running on port {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr ""
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr ""
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr ""
+
+msgid "Server URL is not set. Start the server first."
+msgstr ""
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr ""
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+
+msgid "File not found: {}"
+msgstr ""
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr ""
+
+msgid "Target file already exists: {}"
+msgstr ""
+
+msgid "File '{}' already exists"
+msgstr ""
+
+msgid "Stop server"
+msgstr ""
+
+msgid "Create new notebook"
+msgstr ""
+
+msgid "Import notebook"
+msgstr ""
+
+msgid "Export notebook"
+msgstr ""
+
 msgid "GRASS"
 msgstr ""
 
@@ -5310,6 +5699,28 @@ msgid "Close Map Display {}"
 msgstr ""
 
 msgid "Console"
+msgstr ""
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+
+msgid "Integrated Mode Not Available"
 msgstr ""
 
 msgid "Map Swipe Tool"
@@ -5456,6 +5867,11 @@ msgid "Remove map layer"
 msgstr ""
 
 msgid "Quit GRASS GUI"
+msgstr ""
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
 msgstr ""
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
@@ -5776,10 +6192,10 @@ msgstr ""
 msgid "Cartographic Composer"
 msgstr ""
 
-msgid "Launch user-defined script"
+msgid "Open Graphical Modeler"
 msgstr ""
 
-msgid "New display"
+msgid "Launch user-defined script"
 msgstr ""
 
 msgid "Python code editor"
@@ -6154,6 +6570,12 @@ msgid "WKT string missing."
 msgstr ""
 
 msgid "There were some issues when loading menu or Tools:"
+msgstr ""
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
 msgstr ""
 
 msgid "No project provided. Operation canceled."
@@ -6789,9 +7211,6 @@ msgid "Fetch & install extension from GRASS Addons"
 msgstr ""
 
 msgid "List of extensions - double-click to install"
-msgstr ""
-
-msgid "Options"
 msgstr ""
 
 msgid "&Install"
@@ -9373,7 +9792,7 @@ msgstr ""
 msgid "Do you want to cancel dataset download?"
 msgstr ""
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
 msgstr ""
 
 msgid "Timeline Tool"
@@ -9469,8 +9888,7 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr ""
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
 msgstr ""
 
 msgid "Temporal Plot Tool"
@@ -9478,6 +9896,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -9495,6 +9914,7 @@ msgstr ""
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 

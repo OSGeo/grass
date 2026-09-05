@@ -7,11 +7,8 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Displays spectral response at user specified locations in
 #               group or raster images
-# COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 1999-2013 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 #
@@ -97,11 +94,8 @@ def cleanup():
 
 
 def write2textf(what, output):
-    i = 0
-    with open(output, "w") as outf:
-        for row in enumerate(what):
-            i += 1
-            outf.write("%d, %s\n" % (i, row))
+    with open(output, "w", encoding="utf-8") as outf:
+        outf.writelines("%d, %s\n" % (i + 1, row[3:]) for i, row in enumerate(what))
 
 
 def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
