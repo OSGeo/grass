@@ -100,6 +100,7 @@ href="https://grass.osgeo.org">https://grass.osgeo.org</a>
 
  - btree: \ref btree.h
  - btree2: \ref btree2
+ - octree: \ref octree (3D point octree library)
  - rtree:  \ref rtree.h (R search tree library)
 
 \subsection dblibs Database Management Libraries
