@@ -275,13 +275,7 @@ void print_lasinfo(struct StringList *infiles)
         const pdal::LasHeader &h = las_reader.header();
         pdal::PointLayoutPtr point_layout = table.layout();
         const pdal::Dimension::IdList &dims = point_layout->dims();
-        pdal::SpatialReference spatial_reference = table.spatialReference();
-        /* The point table SRS may not be populated before execute();
-         * read it from the reader in that case. */
-        if (spatial_reference.empty()) {
-            spatial_reference = las_reader.getSpatialReference();
-        }
-        std::string proj_wkt = spatial_reference.getWKT();
+        std::string proj_wkt = las_reader.getSpatialReference().getWKT();
 
         std::cout << "File: " << infile << std::endl;
         std::cout << "File version = "

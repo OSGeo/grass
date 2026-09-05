@@ -46,6 +46,25 @@ def test_copc_subregion_matches_las(session, point_cloud_files):
     assert stats["sum"] == 144
 
 
+def test_copc_full_extent(session, point_cloud_files):
+    """The -e flag imports every point of a COPC file.
+
+    The region is the extent of the data, so the reader is not given
+    bounds to prune by and nothing may be dropped at the edges.
+    """
+    tools = Tools(session=session)
+    tools.r_in_pdal(
+        input=point_cloud_files["copc"],
+        output="copc_full",
+        method="n",
+        resolution=6,
+        flags="e",
+    )
+    tools.g_region(raster="copc_full")
+    stats = tools.r_univar(map="copc_full", flags="g").keyval
+    assert stats["sum"] == 324
+
+
 def test_point_table_capacity(session, point_cloud_files):
     """Point table capacity does not change the result"""
     tools = Tools(session=session)

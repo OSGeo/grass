@@ -324,8 +324,8 @@ parameter is provided.
 
 *r.in.pdal* reads all point cloud formats supported by the PDAL library.
 The typical file extensions for the LAS format are `.las` and `.laz`
-(compressed). The compressed LAS (`.laz`) format can be imported only if
-PDAL has been compiled with LASzip support. Cloud Optimized Point Clouds
+(compressed). Reading compressed LAS (`.laz`) requires PDAL built with
+either LASzip or lazperf. Cloud Optimized Point Clouds
 (COPC, `.copc.laz`) are supported as well. When importing a COPC file
 into a computational region smaller than the point cloud extent, the
 COPC spatial index is used to skip data outside the region, which speeds

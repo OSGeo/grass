@@ -739,6 +739,7 @@ int main(int argc, char *argv[])
     pdal::StageFactory factory;
     pdal::MergeFilter merge_filter;
     bool need_to_reproject = false;
+    bool bounds_pushed_to_reader = false;
     /* loop of input files */
     for (int i = 0; i < infiles.num_items; i++) {
         const char *infile = infiles.items[i];
@@ -792,7 +793,9 @@ int main(int argc, char *argv[])
         // bounds are in the project's CRS, so this applies only when the
         // file's CRS matches. The GRASS filter still does the exact clip.
         // The option takes effect when the whole pipeline is prepared later.
-        if (use_spatial_filter && proj_match &&
+        // With -e the region is the extent of the data, so there is nothing
+        // outside it to skip.
+        if (use_spatial_filter && !extents_flag->answer && proj_match &&
             pdal_read_driver == "readers.copc") {
             std::ostringstream bounds_str;
             bounds_str << std::setprecision(17) << "([" << xmin << ", " << xmax
@@ -800,6 +803,7 @@ int main(int argc, char *argv[])
             pdal::Options bounds_opts;
             bounds_opts.add("bounds", bounds_str.str());
             reader->addOptions(bounds_opts);
+            bounds_pushed_to_reader = true;
         }
         merge_filter.setInput(*reader);
     }
@@ -992,8 +996,16 @@ int main(int argc, char *argv[])
     }
 
     G_done_msg("%s", buff);
-    G_message("Filtered spatially " GPOINT_COUNT_FORMAT " points.",
-              grass_filter.num_spatially_filtered());
+    // Points pruned by the reader's spatial index never reach the filter, so
+    // the count below is not comparable to a run without the index.
+    if (bounds_pushed_to_reader)
+        G_message("Filtered spatially " GPOINT_COUNT_FORMAT
+                  " points (excluding those skipped by the spatial index of "
+                  "the input).",
+                  grass_filter.num_spatially_filtered());
+    else
+        G_message("Filtered spatially " GPOINT_COUNT_FORMAT " points.",
+                  grass_filter.num_spatially_filtered());
     G_message("Filtered z range " GPOINT_COUNT_FORMAT " points.",
               grass_filter.num_zrange_filtered());
     G_message("Filtered i range " GPOINT_COUNT_FORMAT " points.",
