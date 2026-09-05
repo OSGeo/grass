@@ -359,7 +359,13 @@ if more than one parameter is provided.
 
 <em>r.in.pdal</em> reads all point cloud formats supported by the PDAL library.
 The typical file extensions for the LAS format are <code>.las</code> and
-<code>.laz</code> (compressed).
+<code>.laz</code> (compressed). Reading compressed LAS (<code>.laz</code>)
+requires PDAL built with either LASzip or lazperf. Cloud
+Optimized Point Clouds (COPC, <code>.copc.laz</code>) are supported as well.
+When importing a COPC file into a computational region smaller than the point
+cloud extent, the COPC spatial index is used to skip data outside the region,
+which speeds up the import; this optimization does not apply when the points
+are reprojected.
 
 <p>
 The coordinate reference system (CRS) of the input is read from the file
@@ -437,6 +443,11 @@ the number of data points.
 <p>
 The default map <b>type</b>=<code>FCELL</code> is intended as compromise between
 preserving data precision and limiting system resource consumption.
+
+<p>
+The <b>point_table_capacity</b> option controls how many points PDAL
+buffers at once while streaming the input. Larger values may speed up
+the import of large files at the cost of additional memory.
 
 <h3>Trim option</h3>
 <p>
