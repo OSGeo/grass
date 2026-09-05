@@ -1,19 +1,16 @@
 """
 Database related functions to be used in Python scripts.
 
-Usage:
-
-::
+:Usage:
+  .. code-block:: python
 
     from grass.script import db as grass
 
     grass.db_describe(table)
     ...
 
-(C) 2008-2015 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2008-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
@@ -34,14 +31,17 @@ from grass.exceptions import CalledModuleError
 
 def db_describe(table, env=None, **args):
     """Return the list of columns for a database table
-    (interface to `db.describe -c`). Example:
+    (interface to `db.describe -c`).
 
-    >>> run_command("g.copy", vector="firestations,myfirestations")
-    0
-    >>> db_describe("myfirestations")  # doctest: +ELLIPSIS
-    {'nrows': 71, 'cols': [['cat', 'INTEGER', '20'], ... 'ncols': 22}
-    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
-    0
+    :Example:
+      .. code-block:: pycon
+
+        >>> run_command("g.copy", vector="firestations,myfirestations")
+        0
+        >>> db_describe("myfirestations")  # doctest: +ELLIPSIS
+        {'nrows': 71, 'cols': [['cat', 'INTEGER', '20'], ... 'ncols': 22}
+        >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
+        0
 
     :param str table: table name
     :param list args:
@@ -53,8 +53,9 @@ def db_describe(table, env=None, **args):
         args.pop("database")
     if "driver" in args and args["driver"] == "":
         args.pop("driver")
-    s = read_command("db.describe", flags="c", table=table, env=env, **args)
-    if not s:
+    try:
+        s = read_command("db.describe", flags="c", table=table, env=env, **args)
+    except CalledModuleError:
         fatal(_("Unable to describe table <%s>") % table, env=env)
 
     cols = []
@@ -113,12 +114,15 @@ def db_table_exist(table, env=None, **args):
 
 def db_connection(force=False, env=None):
     """Return the current database connection parameters
-    (interface to `db.connect -g`). Example:
+    (interface to `db.connect -g`).
 
-    >>> db_connection()
-    {'group': '', 'schema': '', 'driver': 'sqlite', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'}
+    :Example:
+      .. code-block:: pycon
 
-    :param force True to set up default DB connection if not defined
+        >>> db_connection()
+        {'group': '', 'schema': '', 'driver': 'sqlite', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'}
+
+    :param force: True to set up default DB connection if not defined
     :param env: environment
 
     :return: parsed output of db.connect
@@ -139,22 +143,25 @@ def db_connection(force=False, env=None):
 def db_select(sql=None, filename=None, table=None, env=None, **args):
     """Perform SQL select statement
 
-    Note: one of <em>sql</em>, <em>filename</em>, or <em>table</em>
-    arguments must be provided.
+    .. note:: One of **sql**, **filename**, or **table**
+        arguments must be provided.
 
-    Examples:
+    :Example:
+      .. code-block:: pycon
 
-    >>> run_command("g.copy", vector="firestations,myfirestations")
-    0
-    >>> db_select(sql="SELECT cat,CITY FROM myfirestations WHERE cat < 4")
-    (('1', 'Morrisville'), ('2', 'Morrisville'), ('3', 'Apex'))
+        >>> run_command("g.copy", vector="firestations,myfirestations")
+        0
+        >>> db_select(sql="SELECT cat,CITY FROM myfirestations WHERE cat < 4")
+        (('1', 'Morrisville'), ('2', 'Morrisville'), ('3', 'Apex'))
 
-    Simplified usage (it performs <tt>SELECT * FROM myfirestations</tt>.)
+      Simplified usage (it performs ``SELECT * FROM myfirestations``.)
 
-    >>> db_select(table="myfirestations")  # doctest: +ELLIPSIS
-    (('1', '24', 'Morrisville #3', ... 'HS2A', '1.37'))
-    >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
-    0
+      .. code-block:: pycon
+
+        >>> db_select(table="myfirestations")  # doctest: +ELLIPSIS
+        (('1', '24', 'Morrisville #3', ... 'HS2A', '1.37'))
+        >>> run_command("g.remove", flags="f", type="vector", name="myfirestations")
+        0
 
     :param str sql: SQL statement to perform (or None)
     :param str filename: name of file with SQL statements (or None)

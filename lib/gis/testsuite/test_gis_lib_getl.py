@@ -3,10 +3,10 @@
 @author Vaclav Petras
 """
 
-import os
 import ctypes
-import pathlib
+import os
 import unittest
+from pathlib import Path
 
 import grass.lib.gis as libgis
 from grass.gunittest.case import TestCase
@@ -24,7 +24,7 @@ class TestNewlinesWithGetlFunctions(TestCase):
             cls.libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library("c"))
         cls.libc.fopen.restype = ctypes.POINTER(libgis.FILE)
         cls.libc.fopen.argtypes = [ctypes.c_char_p, ctypes.c_char_p]
-        cls.file_path = pathlib.Path("test.txt")
+        cls.file_path = Path("test.txt")
 
     def tearDown(self):
         self.file_path.unlink()

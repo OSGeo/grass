@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Pseudo-random number generation
  *
- * (C) 2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Glynn Clements
  */
@@ -47,9 +45,8 @@ static int seeded;
 /*!
  * \brief Seed the pseudo-random number generator
  *
- * \param seedval 32-bit integer used to seed the PRNG
+ * \param[in] seedval 32-bit integer used to seed the PRNG
  */
-
 void G_srand48(long seedval)
 {
     uint32 x = (uint32) * (unsigned long *)&seedval;
@@ -68,7 +65,6 @@ void G_srand48(long seedval)
  *
  * \return generated seed value passed to G_srand48()
  */
-
 long G_srand48_auto(void)
 {
     unsigned long seed;
@@ -132,7 +128,6 @@ static void G__next(void)
  *
  * \return the generated value
  */
-
 long G_lrand48(void)
 {
     uint32 r;
@@ -147,7 +142,6 @@ long G_lrand48(void)
  *
  * \return the generated value
  */
-
 long G_mrand48(void)
 {
     uint32 r;
@@ -162,7 +156,6 @@ long G_mrand48(void)
  *
  * \return the generated value
  */
-
 double G_drand48(void)
 {
     double r = 0.0;

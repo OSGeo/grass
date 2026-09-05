@@ -3,10 +3,8 @@
 
    \brief Vedit library - move primitives
 
-   (C) 2007-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2007-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
    \author Jachym Cepicky <jachym.cepicky gmail.com>
@@ -18,10 +16,12 @@
    \brief Move selected primitives
 
    \param Map pointer to Map_info
-   \param BgMap, nbgmaps list of background vector maps used for snapping
+   \param BgMap list of background vector maps used for snapping
+   \param nbgmaps Number of background vector maps in BgMap
    \param List list of primitives to be moved
    \param move_x,move_y,move_z direction (move_z used only if map is 3D)
    \param snap enable snapping (see globals.h)
+   \param thresh snapping threshold (>0)
 
    \return number of modified primitives
    \return -1 on error

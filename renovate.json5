@@ -21,9 +21,16 @@
         ":enablePreCommit",
 
         // weekly update of lock files (flake.lock)
-        ":maintainLockFilesWeekly",
+        ":maintainLockFilesMonthly",
         "group:githubArtifactActions",
-        "schedule:weekends",
+        "schedule:monthly",
+        ":prConcurrentLimitNone",
+    ],
+
+    "baseBranchPatterns" : [
+      "$default",
+      "releasebranch_8_4",
+      "releasebranch_8_5",
     ],
 
     // enable Nix lock file update (flake.lock)

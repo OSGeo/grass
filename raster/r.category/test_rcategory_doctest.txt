@@ -226,15 +226,15 @@ Some of these commands should not work and return 1.
 
 JSON Output
 ===========
->>> print(read_command('r.category', map='test', output_format='json'))
+>>> print(read_command('r.category', map='test', format='json'))
 [
     {
         "category": 1,
-        "description": "trees, very green"
+        "label": "trees, very green"
     },
     {
         "category": 2,
-        "description": "water, very deep"
+        "label": "water, very deep"
     }
 ]
 <BLANKLINE>

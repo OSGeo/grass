@@ -19,10 +19,8 @@ List of classes:
  - :class:`QuitDialog`
  - :class:`DefaultFontDialog`
 
-(C) 2008-2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2008-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com> (GroupDialog, SymbolDialog)
@@ -2015,9 +2013,7 @@ class SqlQueryFrame(wx.Frame):
 
         wx.Frame.__init__(self, parent=parent, id=id, title=title, *kwargs)
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_sql.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
         self.panel = wx.Panel(parent=self, id=wx.ID_ANY)
 
@@ -2333,7 +2329,7 @@ class QuitDialog(wx.Dialog):
     def __init__(
         self,
         parent,
-        title=_("Quit GRASS GIS"),
+        title=_("Quit GRASS"),
         id=wx.ID_ANY,
         style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
         **kwargs,
@@ -2354,19 +2350,15 @@ class QuitDialog(wx.Dialog):
         self._shell_running = is_shell_running()
 
         if self._shell_running:
-            text = _(
-                "Do you want to quit GRASS GIS including shell or just close the GUI?"
-            )
+            text = _("Do you want to quit GRASS including shell or just close the GUI?")
         else:
-            text = _("Do you want to quit GRASS GIS?")
+            text = _("Do you want to quit GRASS?")
         self.informLabel = StaticText(parent=self.panel, id=wx.ID_ANY, label=text)
         self.btnCancel = Button(parent=self.panel, id=wx.ID_CANCEL)
         if self._shell_running:
             self.btnClose = Button(parent=self.panel, id=wx.ID_NO, label=_("Close GUI"))
             self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
-        self.btnQuit = Button(
-            parent=self.panel, id=wx.ID_YES, label=_("Quit GRASS GIS")
-        )
+        self.btnQuit = Button(parent=self.panel, id=wx.ID_YES, label=_("Quit GRASS"))
         self.btnQuit.SetFocus()
         self.btnQuit.Bind(wx.EVT_BUTTON, self.OnQuit)
 

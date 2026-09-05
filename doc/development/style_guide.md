@@ -7,9 +7,10 @@
     4. [Documentation](#documentation)
 2. [Best Practices](#best-practices)
     1. [General](#general)
-    2. [Python scripts](#developing-python-scripts)
-    3. [GRASS Addons](#developing-grass-addons)
-    4. [GRASS GUI](#developing-grass-gui)
+    2. [Testing](#testing)
+    3. [Python scripts](#developing-python-scripts)
+    4. [GRASS Addons](#developing-grass-addons)
+    5. [GRASS GUI](#developing-grass-gui)
 
 ## Code Style and Formatting
 
@@ -52,10 +53,10 @@ Use Flake8 to check formatting and basic issues in all files:
 flake8 python_file.py
 ```
 
-The root directory contains [.flake8](../../.flake8) configuration file which
-contains a less strict configuration for legacy code. It will be used by default
-when running Flake8 within GRASS source code. For new files, you can use the
-default configuration:
+The root directory contains [.flake8](https://github.com/OSGeo/grass/blob/main/.flake8)
+configuration file which contains a less strict configuration for legacy code.
+It will be used by default when running Flake8 within GRASS source code.
+For new files, you can use the default configuration:
 
 ```bash
 flake8 --isolated --max-line-length=88 {path_to_python_file}
@@ -83,11 +84,11 @@ clang-format -i <new_or_modified_file.c>
 ```
 
 The ClangFormat settings for the repo are defined in
-[.clang-format](../../.clang-format).
+[.clang-format](https://github.com/OSGeo/grass/blob/main/.clang-format).
 
 If using pre-commit is not an option, for whatever reason, there is a helper
-script [grass_clang_format.sh](./utils/grass_clang_format.sh), which simplifies
-bulk reformatting.
+script [grass_clang_format.sh](https://github.com/OSGeo/grass/blob/main/utils/grass_clang_format.sh),
+which simplifies bulk reformatting.
 
 #### Order of include headers
 
@@ -166,7 +167,7 @@ pre-commit run --files raster/r.sometool/*
 ```
 
 The pre-commit hooks set is defined in
-[.pre-commit-config.yaml](../../.pre-commit-config.yaml).
+[.pre-commit-config.yaml](https://github.com/OSGeo/grass/blob/main/.pre-commit-config.yaml).
 
 It is possible to temporally disable the pre-commit hooks in the repo, e.g. while
 working on older branches:
@@ -275,7 +276,7 @@ The structure consists of several required and optional sections:
 ```
 
 Sections _Notes_, _Examples_, _References_, and _Authors_ can be also in
-singular form (e.g, _Note_).
+singular form (e.g., _Note_).
 
 Note that Markdown is converted to html using [MkDocs](https://www.mkdocs.org/).
 See also [supported Markdown elements by MkDocs](https://www.markdownguide.org/tools/mkdocs/)
@@ -336,7 +337,7 @@ Examples:
 - `v_clean_rmsa.png`
 
 **Image size:** ideally **600 pixel width** (height depends on that), use e.g.
-ImageMagic:
+ImageMagick:
 
 ```bash
 mogrify -resize 600x file.png
@@ -408,6 +409,7 @@ region.
 
 If you need to change the computational region, there are ways to change it only
 within your script, not affecting the current region.
+See [Changing computational region](#changing-computational-region) for more details.
 
 #### Mapsets
 
@@ -491,6 +493,20 @@ Punctuated events, such as errors, deserve a period, e.g., _"Operation
 complete."_ Phrases which imply ongoing action should have an ellipse, e.g.,
  _"Reading raster map..."_.
 
+### Testing
+
+New code should come with tests, and a bug fix should come with a test which
+fails without the fix. When the code being fixed has no tests at all, add a
+test for its basic functionality as well.
+
+**Why?** A test which only reproduces the bug shows that the fix works, but it
+says nothing about the behavior which was already correct. A test of the basic
+functionality is what shows that the fix did not break it.
+
+Write new tests with _pytest_ and place them in a `tests` directory next to
+the code they test. See the [testing documentation](testing.md) for the
+conventions, examples, and how to run the tests.
+
 ### Developing Python scripts
 
 #### Import Python Scripting Library
@@ -536,7 +552,35 @@ gs.try_remove(file_path)
 #### Changing computational region
 
 If a tool needs to change the computational region for part of the computation,
-temporary region in Python API is the simplest way to do it:
+use the _RegionManager_ context manager.
+This makes any changes done in the tool local for the tool without influencing
+other tools running in the same session.
+
+```python
+with gs.RegionManager(n=226000, s=222000, w=634000, e=638000):
+    stats = gs.parse_command("r.univar", map="elevation", format="json")
+```
+
+or
+
+```python
+with gs.RegionManager():
+    gs.run_command("g.region", n=226000, s=222000, w=634000, e=638000)
+    stats = gs.parse_command("r.univar", map="elevation", format="json")
+```
+
+If different subprocesses need different regions, use different environments:
+
+```python
+with gs.RegionManager(raster=input_raster, env=os.environ.copy()) as manager:
+    gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope, env=manager.env)
+```
+
+This approach makes the computational region completely safe for parallel
+processes as each subprocess has its own environment.
+
+If you can't use a context manager, you can use `gs.use_temp_region()` and
+`gs.del_temp_region()`:
 
 ```python
 gs.use_temp_region()  # From now on, use a separate region in the script.
@@ -545,27 +589,6 @@ grass.run_command('g.region', raster='input')
 gs.del_temp_region()
 # Original region applies now.
 ```
-
-This makes any changes done in the tool local for the tool without influencing
-other tools running in the same session.
-
-If you need even more control, use the GRASS_REGION environment variable which
-is passed to subprocesses. Python API has functions which help with the setup:
-
-```python
-os.environ["GRASS_REGION"] = gs.region_env(raster=input_raster)
-```
-
-If different subprocesses need different regions, use different environments:
-
-```python
-env = os.environ.copy()
-env["GRASS_REGION"] = gs.region_env(raster=input_raster)
-gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope, env=env)
-```
-
-This approach makes the computational region completely safe for parallel
-processes as no region-related files are modified.
 
 #### Changing raster mask
 
@@ -736,7 +759,7 @@ gs.fatal(_("No map found, exiting."))
 # debug output (users can use g.gisenv to enable/disable)
 # debug level is 1 to 5 (5 is most detailed)
 # debug message should not be translated
-gs.debug(f"Our calculated value is: {value}."), 3)
+gs.debug(f"Our calculated value is: {value}.", 3)
 ```
 
 Do not use the `print` function for informational output. This is reserved for
@@ -762,9 +785,7 @@ Use the following header in your source code.
 #
 # COPYRIGHT: (C) 2024 by John Doe and the GRASS Development Team
 #
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-License-Identifier: GPL-2.0-or-later
 ##############################################################################
 ```
 
@@ -880,7 +901,7 @@ These index manual pages are autogenerated during the build process of GRASS.
 
 #### Lazy import of optional dependencies
 
-A tool may use a package that is not [required](../../REQUIREMENTS.md)
+A tool may use a package that is not [required](https://github.com/OSGeo/grass/blob/main/REQUIREMENTS.md)
 by GRASS and may not be available on a user's system.
 In these cases, import only after the _gs.parser_ call. In that way the
 tool can be safely compiled even if the dependency is not installed.
@@ -905,7 +926,7 @@ d.    - display tools
 db.   - database tools
 g.    - general GIS management tools
 i.    - imagery tools
-m.    - miscellaneous tool tools
+m.    - miscellaneous tools
 ps.   - postscript tools
 r.    - raster tools
 r3.   - raster3D tools
@@ -956,8 +977,7 @@ Classes:
 
 (C) 2024 by the GRASS Development Team
 
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author First Author <first somewhere.com>
 @author Second Author <second somewhere.com>
@@ -1075,9 +1095,7 @@ original work remains, it must be properly cited.
  * PURPOSE:      Provide short description of module here...
  * COPYRIGHT:    (C) 2010 by John Doe, and the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the COPYING file that comes with GRASS
- *               for details.
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 ```

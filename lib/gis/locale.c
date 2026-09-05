@@ -3,12 +3,10 @@
  *
  * \brief GIS Library - Functions to handle locale.
  *
- * (C) 2001-2014 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 2004-2008
  */
@@ -23,7 +21,7 @@
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
 #define NO_NLS_UNUSED
 #else
-#define NO_NLS_UNUSED UNUSED
+#define NO_NLS_UNUSED G_UNUSED
 #endif
 
 void G_init_locale(void)
@@ -62,7 +60,6 @@ void G_init_locale(void)
  * \param[in] msgid
  * \retval char * Pointer to string
  */
-
 char *G_gettext(const char *package NO_NLS_UNUSED, const char *msgid)
 {
 #if defined(HAVE_LIBINTL_H) && defined(USE_NLS)
@@ -83,7 +80,6 @@ char *G_gettext(const char *package NO_NLS_UNUSED, const char *msgid)
  * \param[in] n The number
  * \retval char * Pointer to string
  */
-
 char *G_ngettext(const char *package NO_NLS_UNUSED, const char *msgids,
                  const char *msgidp, unsigned long int n)
 {

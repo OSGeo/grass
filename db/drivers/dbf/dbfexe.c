@@ -6,11 +6,8 @@
  *
  * PURPOSE:      Simple driver for reading and writing dbf files
  *
- * COPYRIGHT:    (C) 2000,2005 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2000,2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * DBF API:      http://shapelib.maptools.org/dbf_api.html
  *****************************************************************************/
@@ -343,7 +340,7 @@ void get_col_def(SQLPSTMT *st, int col, int *type, int *width, int *decimals)
     }
 }
 
-void eval_val(int tab, int row, int col UNUSED, SQLPVALUE *inval,
+void eval_val(int tab, int row, int col G_UNUSED, SQLPVALUE *inval,
               SQLPVALUE *val)
 {
 
@@ -661,12 +658,12 @@ int sel(SQLPSTMT *st, int tab, int **selset)
  */
 double eval_node(SQLPNODE *nptr, int tab, int row, SQLPVALUE *value)
 {
-    int left, right;
+    int left = NODE_FALSE, right = NODE_FALSE;
     SQLPVALUE left_value, right_value;
     int ccol;
     COLUMN *col;
     VALUE *val;
-    double left_dval, right_dval, dval;
+    double left_dval = 0.0, right_dval = 0.0, dval;
     char *rightbuf;
 
     /* Note: node types were previously checked by eval_node_type */
@@ -1010,7 +1007,7 @@ double eval_node(SQLPNODE *nptr, int tab, int row, SQLPVALUE *value)
  */
 int eval_node_type(SQLPNODE *nptr, int tab)
 {
-    int left, right;
+    int left = 0, right = 0;
     int ccol;
     COLUMN *col = NULL;
 

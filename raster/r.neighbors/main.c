@@ -14,11 +14,8 @@
  * PURPOSE:      Makes each cell category value a function of the category
  *               values assigned to the cells around it, and stores new cell
  *               values in an output raster map layer
- * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2022 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -298,22 +295,11 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Neighborhood size must be odd"));
     ncb.dist = ncb.nsize / 2;
 
-    sscanf(parm.nprocs->answer, "%d", &ncb.threads);
-    if (ncb.threads < 1) {
-        G_fatal_error(_("<%d> is not valid number of threads."), ncb.threads);
-    }
-#if defined(_OPENMP)
-    omp_set_num_threads(ncb.threads);
-#else
-    if (ncb.threads != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    ncb.threads = 1;
-#endif
-    if (ncb.threads > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        ncb.threads = 1;
-    }
+    ncb.threads = G_set_omp_num_threads(parm.nprocs);
+    ncb.threads = Rast_disable_omp_on_mask(ncb.threads);
+    if (ncb.threads < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), ncb.threads);
+
     if (strcmp(parm.weighting_function->answer, "none") && flag.circle->answer)
         G_fatal_error(_("-%c and %s= are mutually exclusive"), flag.circle->key,
                       parm.weighting_function->answer);

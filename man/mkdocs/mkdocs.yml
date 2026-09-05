@@ -29,7 +29,7 @@ theme:
     - content.code.copy
     - content.tabs.link
     - content.tooltips
-    - search.suggest
+    - search.share
     - search.highlight
     - navigation.footer
     - navigation.instant
@@ -50,6 +50,11 @@ theme:
 # Customization
 extra:
   homepage: index.html
+  # Development builds set GRASS_DOCS_NOINDEX=true so dev pages emit robots
+  # noindex and do not compete with grass-stable in search (see #5935). !ENV
+  # YAML-parses the value, so "true"/"false" become booleans; keep the default
+  # an unquoted boolean and test it as truthy in overrides/main.html.
+  noindex: !ENV [GRASS_DOCS_NOINDEX, false]
   social:
     - icon: simple/opencollective
       link: https://opencollective.com/grass
@@ -77,6 +82,9 @@ hooks:
 # Custom CSS
 extra_css:
   - grassdocs.css
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js
 
 # Plugins
 plugins:
@@ -108,6 +116,8 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.arithmatex:
+      generic: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -141,6 +151,7 @@ nav:
           - Vector digitizer: wxGUI.vdigit.md
           - Raster digitizer: wxGUI.rdigit.md
           - Graphical modeler: wxGUI.gmodeler.md
+          - Jupyter notebooks: wxGUI.jupyter.md
           - Ground control points manager: wxGUI.gcp.md
           - Network analysis: wxGUI.vnet.md
           - Visualization:
@@ -153,7 +164,7 @@ nav:
           - List of components: wxGUI.components.md
 
   - Key concepts:
-      - GRASS projects: grass_database.md
+      - GRASS projects: grass_projects.md
       - Raster overview: rasterintro.md
       - 3D raster overview: raster3dintro.md
       - Vector overview: vectorintro.md
@@ -201,3 +212,4 @@ not_in_nav: |
   grass-sqlite.md
   wxpyimgview.md
   ximgview.md
+  grass_database.md

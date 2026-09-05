@@ -9,10 +9,8 @@ Classes:
  - toolbars::IClassMapManagerToolbar
  - toolbars::IClassMiscToolbar
 
-(C) 2006-2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2006-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
@@ -264,7 +262,7 @@ class IClassToolbar(BaseToolbar):
 
     def SetCategories(self, catNames, catIdx):
         self.choice.Clear()
-        for name, idx in zip(catNames, catIdx):
+        for name, idx in zip(catNames, catIdx, strict=False):
             self.choice.Append(name, idx)
 
     def GetSelectedCategoryName(self):

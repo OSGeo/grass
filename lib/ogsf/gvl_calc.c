@@ -6,12 +6,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Tomas Paudits (February 2004)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -153,7 +149,7 @@ int iso_r_cndx(data_buffer *dbuff)
    \param isosurf
    \param desc
    \param x,y,z
-   \param[out] value
+   \param[out] v value
 
    \return 0
    \return ?
@@ -720,7 +716,8 @@ int gvl_isosurf_calc(geovol *gvol)
         }
     }
 
-    /* TODO: G_free() dbuff and need_update ??? */
+    G_free(dbuff);
+    G_free(need_update);
 
     return (1);
 }
@@ -775,19 +772,22 @@ unsigned char gvl_read_char(int pos, const unsigned char *data)
  */
 void gvl_align_data(int pos, unsigned char **data)
 {
-    unsigned char *p = *data;
-
+    if (pos <= 0) {
+        if (*data) {
+            G_free(*data);
+            *data = NULL;
+        }
+        return;
+    }
     /* realloc memory to fit in data length */
-    p = (unsigned char *)G_realloc(p, sizeof(unsigned char) *
-                                          pos); /* G_fatal_error */
+    unsigned char *p;
+    p = (unsigned char *)G_realloc(*data, sizeof(unsigned char) *
+                                              pos); /* G_fatal_error */
     if (!p) {
         return;
     }
 
     G_debug(3, "gvl_align_data(): reallocate memory finally to : %d B", pos);
-
-    if (pos == 0)
-        p = NULL;
 
     *data = p;
 

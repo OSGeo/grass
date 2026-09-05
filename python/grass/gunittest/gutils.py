@@ -1,13 +1,13 @@
 """
-Utilities related to GRASS GIS for GRASS Python testing framework
+Utilities related to GRASS for GRASS Python testing framework
 
-Copyright (C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS GIS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Vaclav Petras
 """
+
+from __future__ import annotations
 
 from grass.script.core import start_command, PIPE
 from grass.script.utils import decode
@@ -16,12 +16,12 @@ from .gmodules import call_module
 from .checkers import text_to_keyvalue
 
 
-def get_current_mapset():
+def get_current_mapset() -> str:
     """Get current mapset name as a string"""
     return call_module("g.mapset", flags="p").strip()
 
 
-def is_map_in_mapset(name, type, mapset=None) -> bool:
+def is_map_in_mapset(name, type, mapset: str | None = None) -> bool:
     """Check is map is present in the mapset (current mapset by default)
 
     This function is different from what we would expect in GRASS

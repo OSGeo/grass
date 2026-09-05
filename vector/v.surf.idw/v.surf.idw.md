@@ -79,7 +79,7 @@ Voronoi diagrams (Thiessen polygons).
 [v.surf.rst](v.surf.rst.md)*
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 ## AUTHORS
 

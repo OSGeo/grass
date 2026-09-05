@@ -3,10 +3,8 @@
 
    \brief GIS library - Determine GRASS data base file name
 
-   (C) 2001-2015 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2015 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -142,12 +140,13 @@ char *G_file_name_tmp(char *path, const char *element, const char *name,
 
    By default the GRASS temporary directory is located at
    $LOCATION/$MAPSET/.tmp/$HOSTNAME/. If basedir is provided, the
-   temporary directory is located at <basedir>/.tmp/$HOSTNAME/.
+   temporary directory is located at \<basedir\>/.tmp/$HOSTNAME/.
 
    \param[out] path buffer to hold resultant full path to file
    \param element database element (eg, "cell", "cellhd", "vector", etc)
    \param name name of file to build path to (fully qualified names allowed)
    \param mapset mapset name
+   \param basedir
 
    \return pointer to <i>path</i> buffer
  */

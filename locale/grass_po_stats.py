@@ -6,21 +6,18 @@
 #               Pietro Zambelli <peter.zamb@gmail.com>
 # PURPOSE:      Create a json file containing languages translations
 #               information and statistics.
-# COPYRIGHT:    (C) 2012 by the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2012 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
-import codecs
+from __future__ import annotations
+
 import glob
 import json
 import os
 import subprocess
 import sys
-
 from pathlib import Path
 
 
@@ -72,13 +69,14 @@ def read_msgfmt_statistics(msg, lgood, lfuzzy, lbad):
     return langdict, lgood, lfuzzy, lbad
 
 
-def langDefinition(fil):
-    f = codecs.open(fil, encoding="utf-8", errors="replace", mode="r")
-    for line in f.readlines():
-        if '"Language-Team:' in line:
-            lang = line.split(" ")[1:-1]
-            break
-    f.close()
+def langDefinition(fil: str) -> str:
+    lang: str | list[str] = ""
+    with open(fil, encoding="utf-8", errors="replace") as f:
+        for line in f:
+            if '"Language-Team:' in line:
+                lang = line.split(" ")[1:-1]
+                break
+
     if len(lang) == 2:
         return " ".join(lang)
     if len(lang) == 1:
@@ -139,10 +137,9 @@ def writejson(stats, outfile):
     # write a string with pretty style
     outjson = os.linesep.join([line.rstrip() for line in fjson.splitlines()])
     # write out file
-    fout = open(outfile, "w")
-    fout.write(outjson)
-    fout.write(os.linesep)
-    fout.close()
+    with open(outfile, "w", encoding="utf-8") as fout:
+        fout.write(outjson)
+        fout.write(os.linesep)
     try:
         os.remove("messages.mo")
     except OSError:
@@ -153,7 +150,7 @@ def main(in_dirpath, out_josonpath):
     languages = read_po_files(in_dirpath)
     stats = get_stats(languages, in_dirpath)
 
-    if os.path.exists(out_josonpath):
+    if Path(out_josonpath).exists():
         os.remove(out_josonpath)
     writejson(stats, out_josonpath)
 

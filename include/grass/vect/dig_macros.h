@@ -1,5 +1,5 @@
 /*!
-   \file include/vect/dig_macros.h
+   \file include/grass/vect/dig_macros.h
 
    \brief Macros for diglib (part of vector library
  */

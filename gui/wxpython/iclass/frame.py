@@ -9,10 +9,8 @@ Classes:
  - frame::IClassMapDisplay
  - frame::MapManager
 
-(C) 2006-2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2006-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
@@ -22,6 +20,7 @@ import copy
 import os
 import tempfile
 from ctypes import byref, pointer
+from pathlib import Path
 
 import wx
 
@@ -1252,7 +1251,7 @@ class IClassMapPanel(DoubleMapPanel):
         dlg = IClassSignatureFileDialog(self, file=self.sigFile)
 
         if dlg.ShowModal() == wx.ID_OK:
-            if os.path.exists(dlg.GetFileName(fullPath=True)):
+            if Path(dlg.GetFileName(fullPath=True)).exists():
                 qdlg = wx.MessageDialog(
                     parent=self,
                     message=_(
@@ -1433,9 +1432,7 @@ class IClassMapDisplay(FrameMixin, IClassMapPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # bindings

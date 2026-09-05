@@ -9,7 +9,7 @@ points (*arcs* operator).
 
 A GIS network consists of topologically correct lines (arcs). That is,
 the lines must be connected by shared vertices where real connections
-exist. In GRASS GIS you also can add nodes to the network. These are
+exist. In GRASS you also can add nodes to the network. These are
 specially designated vertices used for analyzing network properties or
 computing cost/distance measures. That is, **not all vertices are
 treated as nodes by default**. Only *[v.net.path](v.net.path.md)* can
@@ -116,7 +116,7 @@ For a vector map prepared for network analysis in GRASS, nodes are
 represented by the grass-internal geometry type *node* and arcs by the
 geometry type *line*. If vector editing is required to modify the graph,
 *[g.gui.vdigit](g.gui.vdigit.md)* or *[v.edit](v.edit.md)* can be used.
-See also the [Linear Referencing System](lrs.md) available in GRASS GIS.
+See also the [Linear Referencing System](lrs.md) available in GRASS.
 
 ## EXAMPLES
 

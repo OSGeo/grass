@@ -5,7 +5,6 @@
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
-from grass.gunittest.utils import xfail_windows
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.geometry import Line
 from grass.pygrass.vector.geometry import Boundary
@@ -53,8 +52,8 @@ class TestRastStats(TestCase):
         vt.open("w", tab_cols=cols)
         line1 = Line([(1, 1), (2, 1), (2, 2)])
         line2 = Line([(10, 20), (15, 22), (20, 32), (30, 40)])
-        vt.write(line1, ("first",))
-        vt.write(line2, ("second",))
+        vt.write(line1, attrs=("first",))
+        vt.write(line2, attrs=("second",))
         vt.table.conn.commit()
         vt.close()
 
@@ -68,12 +67,11 @@ class TestRastStats(TestCase):
         cent2 = Centroid(x=2.75, y=2.75)
         vt.write(area1)
         vt.write(area2)
-        vt.write(cent1, ("first",))
-        vt.write(cent2, ("second",))
+        vt.write(cent1, attrs=("first",))
+        vt.write(cent2, attrs=("second",))
         vt.table.conn.commit()
         vt.close()
 
-    @xfail_windows
     def test_1(self):
         # Output of v.rast.stats
         univar_string = """cat|value|label|a_minimum|a_maximum|a_sum
@@ -94,7 +92,6 @@ class TestRastStats(TestCase):
         self.runModule(v_db_select)
         self.assertLooksLike(univar_string, str(v_db_select.outputs.stdout))
 
-    @xfail_windows
     def test_line_d(self):
         output_str = """cat|name|a_median|a_number|a_range
 1|first|192|3|1
@@ -113,7 +110,6 @@ class TestRastStats(TestCase):
         self.runModule(v_db_select)
         self.assertLooksLike(output_str, str(v_db_select.outputs.stdout))
 
-    @xfail_windows
     def test_line(self):
         output_str = """cat|name|a_median|a_number|a_range
 1|first|192|5|2
@@ -133,7 +129,6 @@ class TestRastStats(TestCase):
         self.runModule(v_db_select)
         self.assertLooksLike(output_str, str(v_db_select.outputs.stdout))
 
-    @xfail_windows
     def test_zone_all(self):
         # Output of v.rast.stats
         univar_string = """cat|value|label|a_number|a_null_cells|a_minimum|a_maximum|a_range|a_average|a_stddev|a_variance|a_coeff_var|a_sum|a_first_quartile|a_median|a_third_quartile|a_percentile_90
@@ -149,7 +144,6 @@ class TestRastStats(TestCase):
         self.runModule(v_db_select)
         self.assertLooksLike(univar_string, str(v_db_select.outputs.stdout))
 
-    @xfail_windows
     def test_small_area_with_centroid(self):
         # Output of v.rast.stats
         univar_string = """cat|name|a_number|a_null_cells|a_minimum|a_maximum|a_range|a_average|a_stddev|a_variance|a_coeff_var|a_sum|a_first_quartile|a_median|a_third_quartile|a_percentile_90

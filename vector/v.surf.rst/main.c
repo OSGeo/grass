@@ -15,11 +15,8 @@
  *               Anna Petrasova (OpenMP version GRASS integration)
  *
  * PURPOSE:      Surface interpolation from vector point data by splines
- * COPYRIGHT:    (C) 2003-2009, 2013 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2003-2009, 2013 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -420,7 +417,7 @@ int main(int argc, char *argv[])
     omp_set_num_threads(threads);
 #else
     if (threads > 1)
-        G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
+        G_warning(_("GRASS is not compiled with OpenMP support, parallel "
                     "computation is disabled."));
 #endif
     if (threads > 1 && Rast_mask_is_present()) {

@@ -5,12 +5,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown UI-GMSL (May 1997)
    Tomas Paudits (February 2004)
@@ -846,7 +842,7 @@ int GVL_isosurf_get_att(int id, int isosurf_id, int att, int *set,
    \brief Unset isosurface attributes
 
    \param id volume set id
-   \param isosurface_id isosurface id
+   \param isosurf_id isosurface id
    \param att attribute id
 
    \return ?

@@ -6,11 +6,8 @@
 Class:
  - lmgr::WorkspaceManager
 
-(C) 2021 by the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2021 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import os
@@ -21,7 +18,6 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import wx
-import wx.aui
 
 from core.settings import UserSettings
 from core.gcmd import RunCommand, GError, GMessage
@@ -209,7 +205,7 @@ class WorkspaceManager:
                 self.lmgr.SetSize(gxwXml.layerManager["size"])
             if gxwXml.layerManager["cwd"]:
                 self.lmgr.cwdPath = gxwXml.layerManager["cwd"]
-                if os.path.isdir(self.lmgr.cwdPath):
+                if Path(self.lmgr.cwdPath).is_dir():
                     os.chdir(self.lmgr.cwdPath)
 
         #
@@ -383,7 +379,7 @@ class WorkspaceManager:
         if filename[-4:] != ".gxw":
             filename += ".gxw"
 
-        if os.path.exists(filename):
+        if Path(filename).exists():
             dlg = wx.MessageDialog(
                 self.lmgr,
                 message=_(

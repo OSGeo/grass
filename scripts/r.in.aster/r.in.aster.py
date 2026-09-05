@@ -9,11 +9,8 @@
 #               by Michael Barton and Paul Kelly
 # PURPOSE:   Rectifies, georeferences, & imports Terra-ASTER imagery
 #               using gdalwarp
-# COPYRIGHT: (C) 2008 by the GRASS Development Team
-#
-#   This program is free software under the GNU General Public
-#   License (>=v2). Read the file COPYING that comes with GRASS
-#   for details.
+# SPDX-FileCopyrightText: 2008 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 #
@@ -122,7 +119,7 @@ def main():
     tempfile = gs.read_command("g.tempfile", pid=os.getpid()).strip() + ".tif"
 
     # get projection information for current GRASS location
-    proj = gs.read_command("g.proj", flags="jf").strip()
+    proj = gs.read_command("g.proj", flags="fp", format="proj4").strip()
 
     # currently only runs in projected location
     if "XY location" in proj:

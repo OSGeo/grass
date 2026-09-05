@@ -5,12 +5,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL, GMSL/University of Illinois
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -46,9 +42,9 @@
 
    Default is meters.
 
-   \param from starting point
-   \param to ending point
-   \param units map units
+   \param[in] from starting point (X,Y)
+   \param[in] to ending point (X,Y)
+   \param[in] units map units
 
    \return distance between two geographic coordinates in current projection
  */
@@ -133,8 +129,8 @@ double GS_geodistance(double *from, double *to, const char *units)
 /*!
    \brief Calculate distance
 
-   \param from 'from' point (X,Y,Z)
-   \param to 'to' point (X,Y,Z)
+   \param[in] from 'from' point (X,Y,Z)
+   \param[in] to 'to' point (X,Y,Z)
 
    \return distance
  */
@@ -152,8 +148,8 @@ float GS_distance(float *from, float *to)
 /*!
    \brief Calculate distance in plane
 
-   \param from 'from' point (X,Y)
-   \param to 'to' point (X,Y)
+   \param[in] from 'from' point (X,Y)
+   \param[in] to 'to' point (X,Y)
 
    \return distance
  */
@@ -172,8 +168,8 @@ float GS_P2distance(float *from, float *to)
 
    v1 = v2
 
-   \param[out] v1 first vector
-   \param v2 second vector
+   \param[out] v1 first 3D vector (X,Y,Z)
+   \param[in] v2 second 3D vector (X,Y,Z)
  */
 void GS_v3eq(float *v1, float *v2)
 {
@@ -189,8 +185,8 @@ void GS_v3eq(float *v1, float *v2)
 
    v1 += v2
 
-   \param[in,out] v1 first vector
-   \param v2 second vector
+   \param[in,out] v1 first 3D vector (X,Y,Z)
+   \param[in] v2 second 3D vector (X,Y,Z)
  */
 void GS_v3add(float *v1, float *v2)
 {
@@ -206,8 +202,8 @@ void GS_v3add(float *v1, float *v2)
 
    v1 -= v2
 
-   \param[in,out] v1 first vector
-   \param v2 second vector
+   \param[in,out] v1 first 3D vector (X,Y,Z)
+   \param v2 second 3D vector (X,Y,Z)
  */
 void GS_v3sub(float *v1, float *v2)
 {
@@ -223,8 +219,8 @@ void GS_v3sub(float *v1, float *v2)
 
    v1 *= k
 
-   \param[in,out] v1 vector
-   \param k multiplicator
+   \param[in,out] v1 3D vector (X,Y,Z)
+   \param[in] k multiplicator
  */
 void GS_v3mult(float *v1, float k)
 {
@@ -236,9 +232,9 @@ void GS_v3mult(float *v1, float k)
 }
 
 /*!
-   \brief Change v1 so that it is a unit vector (2D)
+   \brief Change v1 so that it is a unit vector (3D)
 
-   \param[in,out] v1 vector
+   \param[in,out] v1 3D vector (X,Y,Z)
 
    \return 0 if magnitude of v1 is zero
    \return 1 if magnitude of v1 > 0
@@ -261,9 +257,9 @@ int GS_v3norm(float *v1)
 }
 
 /*!
-   \brief Change v1 so that it is a unit vector (3D)
+   \brief Change v1 so that it is a unit vector (2D)
 
-   \param[in,out] v1 vector
+   \param[in,out] v1 2D vector (X,Y)
 
    \return 0 if magnitude of v1 is zero
    \return 1 if magnitude of v1 > 0
@@ -287,7 +283,7 @@ int GS_v2norm(float *v1)
 /*!
    \brief Changes v1 so that it is a unit vector
 
-   \param dv1 vector
+   \param[in,out] dv1 3D vector (X,Y,Z)
 
    \return 0 if magnitude of dv1 is zero
    \return 1 if magnitude of dv1 > 0
@@ -312,8 +308,8 @@ int GS_dv3norm(double *dv1)
 /*!
    \brief Change v2 so that v1v2 is a unit vector
 
-   \param v1 first vector
-   \param v2[in,out] second vector
+   \param[in] v1 first 3D vector (X,Y,Z)
+   \param[in,out] v2 second 3D vector (X,Y,Z)
 
    \return 0 if magnitude of dx is zero
    \return 1 if magnitude of dx > 0
@@ -341,9 +337,9 @@ int GS_v3normalize(float *v1, float *v2)
 /*!
    \brief Get a normalized direction from v1 to v2, store in v3
 
-   \param v1 first vector
-   \param v2 second vector
-   \param[out] v3 output vector
+   \param[in] v1 first 3D vector (X,Y,Z)
+   \param[in] v2 second 3D vector (X,Y,Z)
+   \param[out] v3 output 3D vector (X,Y,Z)
 
    \return 0 if magnitude of dx is zero
    \return 1 if magnitude of dx > 0
@@ -372,9 +368,9 @@ int GS_v3dir(float *v1, float *v2, float *v3)
 /*!
    \brief Get a normalized direction from v1 to v2, store in v3 (2D)
 
-   \param v1 first vector
-   \param v2 second vector
-   \param[out] v3 output vector
+   \param[in] v1 first 2D vector (X,Y)
+   \param[in] v2 second 2D vector (X,Y)
+   \param[out] v3 output 2D vector (X,Y)
 
    \return 0 if magnitude of dx is zero
    \return 1 if magnitude of dx > 0
@@ -396,9 +392,9 @@ void GS_v2dir(float *v1, float *v2, float *v3)
 /*!
    \brief Get the cross product v3 = v1 cross v2
 
-   \param v1 first vector
-   \param v2 second vector
-   \param[out] v3 output vector
+   \param[in] v1 first 3D vector (X,Y,Z)
+   \param[in] v2 second 3D vector (X,Y,Z)
+   \param[out] v3 output 3D vector (X,Y,Z)
  */
 void GS_v3cross(float *v1, float *v2, float *v3)
 {
@@ -412,7 +408,7 @@ void GS_v3cross(float *v1, float *v2, float *v3)
 /*!
    \brief Magnitude of vector
 
-   \param v1 vector
+   \param[in] v1 3D vector (X,Y,Z)
    \param[out] mag magnitude value
  */
 void GS_v3mag(float *v1, float *mag)
@@ -428,9 +424,9 @@ void GS_v3mag(float *v1, float *mag)
    Initialize by calling with a number nhist to represent number of
    previous entries to check, then call with zero as nhist
 
-   \param p1 first point
-   \param p2 second point
-   \param nhist ?
+   \param[in] p1 first point
+   \param[in] p2 second point
+   \param[in] nhist ?
 
    \return -1 on error
    \return -2

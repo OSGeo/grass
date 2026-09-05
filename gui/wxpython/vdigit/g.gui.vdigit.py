@@ -4,17 +4,9 @@
 # MODULE:    g.gui.vdigit
 # AUTHOR(S): Martin Landa <landa.martin gmail.com>
 # PURPOSE:   wxGUI Vector Digitizer
-# COPYRIGHT: (C) 2007-2013 by Martin Landa, and the GRASS Development Team
-#
-#  This program is free software; you can 1redistribute it and/or
-#  modify it under the terms of the GNU General Public License as
-#  published by the Free Software Foundation; either version 2 of the
-#  License, or (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful, but
-#  WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#  General Public License for more details.
+# SPDX-FileCopyrightText: 2007-2013 Martin Landa
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 ############################################################################
 
@@ -72,7 +64,7 @@ def main():
 
             # set system icon
             parent.SetIcon(
-                wx.Icon(os.path.join(ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO)
+                wx.Icon(os.path.join(ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
             )
 
             # bindings
@@ -146,7 +138,7 @@ def main():
         id=wx.ID_ANY,
         size=(850, 600),
         style=wx.DEFAULT_FRAME_STYLE,
-        title=_("Vector Digitizer - GRASS GIS"),
+        title=_("Vector Digitizer - GRASS"),
     )
     frame = VDigitMapDisplay(parent=frame, vectorMap=options["map"])
     frame.Show()

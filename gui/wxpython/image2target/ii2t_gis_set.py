@@ -11,10 +11,8 @@ Classes:
  - gis_set::GListBox
  - gis_set::StartUp
 
-(C) 2006-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton and Jachym Cepicky (original author)
 @author Martin Landa <landa.martin gmail.com> (various updates)
@@ -119,7 +117,7 @@ class GRASSStartup(wx.Frame):
         self.gisdbase_box = StaticBox(
             parent=self.panel,
             id=wx.ID_ANY,
-            label=" %s " % _("1. Select GRASS GIS database directory"),
+            label=" %s " % _("1. Select GRASS database directory"),
         )
         self.location_box = StaticBox(
             parent=self.panel,
@@ -148,7 +146,7 @@ class GRASSStartup(wx.Frame):
         self.ldbase = StaticText(
             parent=self.gisdbase_panel,
             id=wx.ID_ANY,
-            label=_("GRASS GIS database directory contains Locations."),
+            label=_("GRASS database directory contains Locations."),
         )
 
         self.llocation = StaticWrapText(
@@ -296,7 +294,7 @@ class GRASSStartup(wx.Frame):
 
     def _set_properties(self, version, revision):
         """Set frame properties"""
-        self.SetTitle(_("GRASS GIS %s startup%s") % (version, revision))
+        self.SetTitle(_("GRASS %s startup%s") % (version, revision))
         self.SetIcon(
             wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
@@ -313,7 +311,7 @@ class GRASSStartup(wx.Frame):
         # set database
         if not self.gisdbase:
             # sets an initial path for gisdbase if nothing in GISRC
-            if os.path.isdir(os.getenv("HOME")):
+            if Path(os.getenv("HOME")).is_dir():
                 self.gisdbase = os.getenv("HOME")
             else:
                 self.gisdbase = str(Path.cwd())
@@ -331,7 +329,7 @@ class GRASSStartup(wx.Frame):
         location = self.GetRCValue("LOCATION_NAME")
         if location == "<UNKNOWN>":
             return
-        if not os.path.isdir(os.path.join(self.gisdbase, location)):
+        if not Path(os.path.join(self.gisdbase, location)).is_dir():
             location = None
 
         # list of locations
@@ -539,8 +537,8 @@ class GRASSStartup(wx.Frame):
 
         gisrc = os.getenv("GISRC")
 
-        if gisrc and os.path.isfile(gisrc):
-            with open(gisrc) as rc:
+        if gisrc and (gisrc_path := Path(gisrc)).is_file():
+            with gisrc_path.open() as rc:
                 for line in rc:
                     try:
                         key, val = line.split(":", 1)
@@ -721,9 +719,8 @@ class GRASSStartup(wx.Frame):
                 )
             else:
                 try:
-                    os.rename(
-                        os.path.join(self.gisdbase, location, mapset),
-                        os.path.join(self.gisdbase, location, newmapset),
+                    Path(self.gisdbase, location, mapset).rename(
+                        Path(self.gisdbase, location, newmapset)
                     )
                     self.OnSelectLocation(None)
                     self.lbmapsets.SetSelection(self.listOfMapsets.index(newmapset))
@@ -767,9 +764,8 @@ class GRASSStartup(wx.Frame):
                 )
             else:
                 try:
-                    os.rename(
-                        os.path.join(self.gisdbase, location),
-                        os.path.join(self.gisdbase, newlocation),
+                    Path(self.gisdbase, location).rename(
+                        Path(self.gisdbase, newlocation)
                     )
                     self.UpdateLocations(self.gisdbase)
                     self.lblocations.SetSelection(
@@ -920,8 +916,9 @@ class GRASSStartup(wx.Frame):
         disabled = []
         idx = 0
         for mapset in self.listOfMapsets:
-            if mapset not in self.listOfMapsetsSelectable or os.path.isfile(
-                os.path.join(self.gisdbase, locationName, mapset, ".gislock")
+            if (
+                mapset not in self.listOfMapsetsSelectable
+                or Path(self.gisdbase, locationName, mapset, ".gislock").is_file()
             ):
                 disabled.append(idx)
             idx += 1
@@ -952,8 +949,9 @@ class GRASSStartup(wx.Frame):
             locationName = ""
 
         for mapset in self.listOfMapsets:
-            if mapset not in self.listOfMapsetsSelectable or os.path.isfile(
-                os.path.join(self.gisdbase, locationName, mapset, ".gislock")
+            if (
+                mapset not in self.listOfMapsetsSelectable
+                or Path(self.gisdbase, locationName, mapset, ".gislock").is_file()
             ):
                 disabled.append(idx)
             idx += 1
@@ -997,7 +995,7 @@ class GRASSStartup(wx.Frame):
         """Database set"""
         gisdbase = self.tgisdbase.GetValue()
         self._hideMessage()
-        if not os.path.exists(gisdbase):
+        if not Path(gisdbase).exists():
             self._showError(_("Path '%s' doesn't exist.") % gisdbase)
             return
 
@@ -1065,7 +1063,7 @@ class GRASSStartup(wx.Frame):
         try:
             self.gisdbase = self.tgisdbase.GetValue()
             location = self.listOfLocations[self.lblocations.GetSelection()]
-            os.mkdir(os.path.join(self.gisdbase, location, mapset))
+            Path(os.path.join(self.gisdbase, location, mapset)).mkdir()
             # copy WIND file and its permissions from PERMANENT and set
             # permissions to u+rw,go+r
             shutil.copy(
@@ -1093,7 +1091,7 @@ class GRASSStartup(wx.Frame):
         mapset = self.listOfMapsets[self.lbmapsets.GetSelection()]
 
         lockfile = os.path.join(dbase, location, mapset, ".gislock")
-        if os.path.isfile(lockfile):
+        if Path(lockfile).is_file():
             dlg = wx.MessageDialog(
                 parent=self,
                 message=_(
@@ -1268,7 +1266,7 @@ class StartUp(wx.App):
 
 if __name__ == "__main__":
     if os.getenv("GISBASE") is None:
-        sys.exit("Failed to start GUI, GRASS GIS is not running.")
+        sys.exit("Failed to start GUI, GRASS is not running.")
 
     GRASSStartUp = StartUp(0)
     GRASSStartUp.MainLoop()

@@ -52,7 +52,6 @@ static int I_read_control_points(FILE *fd, struct Control_Points *cp)
  *  \param status
  *  \return int
  */
-
 int I_new_control_point(struct Control_Points *cp, double e1, double n1,
                         double e2, double n2, int status)
 {
@@ -109,7 +108,6 @@ static int I_write_control_points(FILE *fd, const struct Control_Points *cp)
  *  \param cp
  *  \return int
  */
-
 int I_get_control_points(const char *group, struct Control_Points *cp)
 {
     FILE *fd;
@@ -144,7 +142,6 @@ int I_get_control_points(const char *group, struct Control_Points *cp)
  *  \param cp
  *  \return int
  */
-
 int I_put_control_points(const char *group, const struct Control_Points *cp)
 {
     FILE *fd;

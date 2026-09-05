@@ -78,7 +78,7 @@ from .extract import (
     run_vector_extraction,
 )
 from .factory import dataset_factory
-from .gui_support import tlist, tlist_grouped
+from .gui_support import registered_maps_grouped, tlist, tlist_grouped
 from .list_stds import get_dataset_list, list_maps_of_stds
 from .mapcalc import dataset_mapcalculator
 from .metadata import (
@@ -341,6 +341,7 @@ __all__ = [
     "profile_function",
     "register_map_object_list",
     "register_maps_in_space_time_dataset",
+    "registered_maps_grouped",
     "relative_time_to_time_delta",
     "relative_time_to_time_delta_seconds",
     "run_mapcalc2d",

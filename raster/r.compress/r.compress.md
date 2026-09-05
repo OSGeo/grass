@@ -20,7 +20,7 @@ land use maps) can be greatly reduced in size. Some raster maps are
 shrunk to roughly 1% of their original sizes. All newly generated raster
 maps are automatically stored as compressed data with varying methods
 depending on the raster format (i.e., CELL: integer; FCELL: single
-precision; DCELL: double precision; see below). All GRASS GIS modules
+precision; DCELL: double precision; see below). All GRASS modules
 are able to read both compressed and uncompressed raster maps.
 
 Raster maps that are already compressed might be compressed again,
@@ -78,7 +78,7 @@ between speed and compression rate.
 
 ### COMPRESSION ALGORITHM DETAILS
 
-All GRASS GIS raster map types are by default ZSTD compressed if
+All GRASS raster map types are by default ZSTD compressed if
 available, otherwise ZLIB compressed. Through the environment variable
 `GRASS_COMPRESSOR` the compression method can be set to RLE, ZLIB, LZ4,
 BZIP2, or ZSTD.
@@ -99,7 +99,7 @@ maps are never and have never been compressed with RLE.
 
 **ZLIB**  
 ZLIB's deflate is the default compression method for all raster maps, if
-ZSTD is not available. GRASS GIS 8 uses by default 1 as ZLIB compression
+ZSTD is not available. GRASS 8 uses by default 1 as ZLIB compression
 level which is the best compromise between speed and compression ratio,
 also when compared to other available compression methods. Valid levels
 are in the range \[1, 9\] and can be set with the environment variable

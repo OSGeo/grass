@@ -13,10 +13,8 @@ Classes:
  - vnet_data::History
  - vnet_data::VNETGlobalTurnsData
 
-(C) 2013-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 @author Lukas Bocan <silent_bob centrum.cz> (turn costs support)
@@ -1053,16 +1051,11 @@ class VectMap:
             "head",
         )
         try:
-            head = open(headPath)
-            for line in head:
-                i = line.find(
-                    "MAP DATE:",
-                )
-                if i == 0:
-                    head.close()
-                    return line.split(":", 1)[1].strip()
-
-            head.close()
+            with open(headPath) as head:
+                for line in head:
+                    i = line.find("MAP DATE:")
+                    if i == 0:
+                        return line.split(":", 1)[1].strip()
             return ""
         except OSError:
             return ""

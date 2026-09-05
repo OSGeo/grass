@@ -22,7 +22,6 @@
  *  \param cats
  *  \return int
  */
-
 int Rast3d_write_cats(const char *name, struct Categories *cats)
 /* adapted from Rast_write_cats */
 {
@@ -171,7 +170,6 @@ error:
  *  \param pcats
  *  \return int
  */
-
 int Rast3d_read_cats(const char *name, const char *mapset,
                      struct Categories *pcats)
 /* adapted from Rast_read_cats */

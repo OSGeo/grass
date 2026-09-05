@@ -22,10 +22,10 @@ functionality to not work as before)
 <!-- See the following points, and put an `x` in all the boxes that apply. -->
 <!-- If you're unsure about any of these, please ask. We're here to help! -->
 - [ ] PR title provides summary of the changes and starts with one of the
-[pre-defined prefixes](../../utils/release.yml)
+[pre-defined prefixes](utils/release.yml)
 <!-- For example: "doc: Add example to db.describe documentation" -->
 <!-- or if it is a fix use "db.describe: fix JSON output format" -->
-- [ ] My code follows the [code style](../../doc/development/style_guide.md)
+- [ ] My code follows the [code style](doc/development/style_guide.md)
 of this project.
 - [ ] My change requires a change to the documentation.
 - [ ] I have updated the documentation accordingly.

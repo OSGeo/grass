@@ -154,41 +154,61 @@ void calc_metrics(void)
     }
     p0 += p0c;
     pC += pCc;
-    if (pC != 1)
-        metrics->kappa = (p0 - pC) / (1 - pC);
-    else
+    if (pC == 1.) {
+        /* A complete agreement. Variance is undefined. */
         metrics->kappa = na_value;
-
-    /* conditional user's kappa */
-    for (i = 0; i < ncat; i++) {
-        if (pi[i] == 0 || (pi[i] == 1 && pj[i] == 1))
+        metrics->kappa_variance = na_value;
+        for (i = 0; i < ncat; i++) {
             metrics->conditional_kappa[i] = na_value;
-        else
-            metrics->conditional_kappa[i] =
-                (pii[i] - pi[i] * pj[i]) / (pi[i] - pi[i] * pj[i]);
-        update_sum(&inter1, &inter1c,
-                   pii[i] * pow(((1 - pC) - (1 - p0) * (pi[i] + pj[i])), 2.));
-    }
-
-    /* kappa variance */
-    for (l = 0; l < nstats; l++) {
-        if (Gstats[l].cats[0] != Gstats[l].cats[1]) {
-            for (i = 0; i < ncat; i++) {
-                if (Gstats[l].cats[0] == rlst[i])
-                    a_i = i;
-                if (Gstats[l].cats[1] == rlst[i])
-                    b_i = i;
-            }
-            update_sum(&inter2, &inter2c,
-                       Gstats[l].count * pow((pi[a_i] + pj[b_i]), 2.) /
-                           metrics->observations);
         }
     }
-    inter1 += inter1c;
-    inter2 += inter2c;
-    metrics->kappa_variance = (inter1 + pow((1 - p0), 2.) * inter2 -
-                               pow((p0 * pC - 2 * pC + p0), 2.)) /
-                              pow((1 - pC), 4.) / metrics->observations;
+    else if (pC == 0. && p0 == 0.) {
+        /* Nothing common and thus no variance */
+        metrics->kappa = 0.;
+        metrics->kappa_variance = 0.;
+        for (i = 0; i < ncat; i++) {
+            if (pi[i] > 0)
+                metrics->conditional_kappa[i] = 0.;
+            else
+                metrics->conditional_kappa[i] = na_value;
+        }
+    }
+    else {
+        /* Typical case with some agreement. Can calculate variance */
+        metrics->kappa = (p0 - pC) / (1 - pC);
+
+        /* conditional user's kappa */
+        for (i = 0; i < ncat; i++) {
+            if (pi[i] == 0 || (pi[i] == 1 && pj[i] == 1))
+                metrics->conditional_kappa[i] = na_value;
+            else
+                metrics->conditional_kappa[i] =
+                    (pii[i] - pi[i] * pj[i]) / (pi[i] - pi[i] * pj[i]);
+            update_sum(&inter1, &inter1c,
+                       pii[i] *
+                           pow(((1 - pC) - (1 - p0) * (pi[i] + pj[i])), 2.));
+        }
+
+        /* kappa variance */
+        for (l = 0; l < nstats; l++) {
+            if (Gstats[l].cats[0] != Gstats[l].cats[1]) {
+                for (i = 0; i < ncat; i++) {
+                    if (Gstats[l].cats[0] == rlst[i])
+                        a_i = i;
+                    if (Gstats[l].cats[1] == rlst[i])
+                        b_i = i;
+                }
+                update_sum(&inter2, &inter2c,
+                           Gstats[l].count * pow((pi[a_i] + pj[b_i]), 2.) /
+                               metrics->observations);
+            }
+        }
+        inter1 += inter1c;
+        inter2 += inter2c;
+        metrics->kappa_variance = (inter1 + pow((1 - p0), 2.) * inter2 -
+                                   pow((p0 * pC - 2 * pC + p0), 2.)) /
+                                  pow((1 - pC), 4.) / metrics->observations;
+    }
     G_free(pi);
     G_free(pj);
     G_free(pii);

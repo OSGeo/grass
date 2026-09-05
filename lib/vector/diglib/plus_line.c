@@ -178,6 +178,7 @@ int dig_add_line(struct Plus_head *plus, int type,
  * \brief Restore line in Plus_head structure.
  *
  * \param[in,out] plus pointer to Plus_head structure
+ * \param lineid
  * \param type feature type
  * \param Points line geometry
  * \param box bounding box

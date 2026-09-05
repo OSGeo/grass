@@ -24,4 +24,6 @@
 #define DAY \
     ((__DATE__[4] == ' ' ? 0 : __DATE__[4] - '0') * 10 + (__DATE__[5] - '0'))
 
+enum OutputFormat { PLAIN, JSON, SHELL };
+
 #endif

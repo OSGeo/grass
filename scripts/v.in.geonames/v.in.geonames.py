@@ -12,11 +12,9 @@
 #
 #               Feature Codes: https://www.geonames.org/export/codes.html
 #
-# COPYRIGHT:    (c) 2008-2014 Markus Neteler, GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2008-2014 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # TODO: fix encoding issues for Asian fonts in 'alternatename' column (v.in.ascii)
 #       fix spurious char stuff in elevation column
@@ -44,7 +42,7 @@ def main():
     outfile = options["output"]
 
     # are we in LatLong location?
-    s = gs.read_command("g.proj", flags="j")
+    s = gs.read_command("g.proj", flags="p", format="proj4")
     kv = gs.parse_key_val(s)
     if kv["+proj"] != "longlat":
         gs.fatal(_("This module only operates in LatLong/WGS84 locations"))

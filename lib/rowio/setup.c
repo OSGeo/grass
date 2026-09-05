@@ -3,10 +3,8 @@
 
    \brief RowIO library - Setup
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -40,7 +38,6 @@
  * \return 1 on success
  * \return -1 no memory
  */
-
 int Rowio_setup(ROWIO *R, int fd, int nrows, int len,
                 int (*getrow)(int, void *, int, int),
                 int (*putrow)(int, const void *, int, int))

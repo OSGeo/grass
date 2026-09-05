@@ -1,7 +1,7 @@
 ## DESCRIPTION
 
 *g.message* prints a message, warning, progress info, or fatal error in
-the GRASS GIS way. This program is to be used in Shell/Perl/Python
+the GRASS way. This program is to be used in Shell/Perl/Python
 scripts, so the author does not need to use the `echo` program. The
 advantage of *g.message* is that it formats messages just like other
 GRASS modules do and that its functionality is influenced by the

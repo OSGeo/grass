@@ -10,11 +10,8 @@
  * PURPOSE:      Calculate TOA Radiance or Reflectance and Kinetic Temperature
  *               for Landsat 1/2/3/4/5 MS, 4/5 TM, 7 ETM+, and 8 OLI/TIRS
  *
- * COPYRIGHT:    (C) 2006-2013 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2006-2013 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -572,10 +569,11 @@ int main(int argc, char *argv[])
         nrows = Rast_window_rows();
         ncols = Rast_window_cols();
 
-        G_important_message(_("Writing %s of <%s> to <%s>..."),
-                            (frad->answer             ? _("radiance")
-                             : (lsat.band[i].thermal) ? _("temperature")
-                                                      : _("reflectance")),
+        G_important_message((frad->answer
+                                 ? _("Writing radiance of <%s> to <%s>...")
+                             : (lsat.band[i].thermal)
+                                 ? _("Writing temperature of <%s> to <%s>...")
+                                 : _("Writing reflectance of <%s> to <%s>...")),
                             band_in, band_out);
         for (row = 0; row < nrows; row++) {
             G_percent(row, nrows, 2);

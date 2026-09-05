@@ -12,10 +12,8 @@ Classes:
  - controllers::IMapDispConnection
  - controllers::IClassConnection
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
@@ -151,7 +149,7 @@ class ScattsManager:
 
         show_add = bool(self.show_add_scatt_plot)
 
-        self.all_bands_to_bands = dict(zip(bands, [-1] * len(bands)))
+        self.all_bands_to_bands = dict(zip(bands, [-1] * len(bands), strict=False))
         self.all_bands = bands
 
         self.region = GetRegion()
@@ -268,9 +266,7 @@ class ScattsManager:
                 transpose = False
                 if b_1 > b_2:
                     transpose = True
-                    tmp_band = b_2
-                    b_2 = b_1
-                    b_1 = tmp_band
+                    b_2, b_1 = b_1, b_2
 
                 b_1_id = self.all_bands_to_bands[self.all_bands[b_1]]
                 b_2_id = self.all_bands_to_bands[self.all_bands[b_2]]

@@ -83,6 +83,63 @@ r.regression.multi mapx=elevation,aspect,slope mapy=soils_Kfactor \
   residuals=soils_Kfactor.resid estimates=soils_Kfactor.estim
 ```
 
+Using the JSON format option and Python to parse the output:
+
+```python
+import grass.script as gs
+
+data = gs.parse_command(
+    "r.regression.multi",
+    mapx=["elevation", "aspect", "slope"],
+    mapy="soils_Kfactor",
+    format="json",
+)
+print(data)
+```
+
+Possible JSON Output:
+
+```json
+{
+ "n": 525000,
+ "Rsq": 0.115424,
+ "Rsqadj": 0.115419,
+ "RMSE": 0.026785,
+ "MAE": 0.020049,
+ "F": 22834.749577,
+ "b0": 0.050201,
+ "AIC": -3800909.191798,
+ "AICc": -3800909.191798,
+ "BIC": -3800864.507184,
+ "predictors": [
+  {
+   "name": "elevation",
+   "b": 0.001523,
+   "F": 64152.655957,
+   "AIC": -3740385.046757,
+   "AICc": -3740385.046757,
+   "BIC": -3740364.70445
+  },
+  {
+   "name": "aspect",
+   "b": 2.2e-05,
+   "F": 4922.480908,
+   "AIC": -3796011.607461,
+   "AICc": -3796011.607461,
+   "BIC": -3795991.265154
+  },
+  {
+   "name": "slope",
+   "b": 0.002853,
+   "F": 11927.479106,
+   "AIC": -3789117.096287,
+   "AICc": -3789117.096287,
+   "BIC": -3789096.75398
+  }
+ ]
+}
+```
+
 ## SEE ALSO
 
 *[d.correlate](d.correlate.md),

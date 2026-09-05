@@ -32,7 +32,6 @@
 typedef struct {
     char elevname[150];
     RASTER_MAP_TYPE raster_type;
-    FCELL **elev;
     int fd; /* file descriptor */
 } MAPS;
 
@@ -64,11 +63,24 @@ typedef enum {
     CNT   /* counter */
 } FORMS;
 
+/* Invariant compute_forms inputs shared by every cell in a run. */
+struct geomorphon_config {
+    double search_dist, skip_dist, flat_dist, max_resolution;
+    int extended, oneoff;
+};
+
+/* Per-cell compute_forms outputs. */
+struct geomorphon_result {
+    PATTERN *pattern;
+    int pattern_size;
+    FORMS cur_form, orig_form;
+    double eff_search, eff_skip, eff_flat;
+};
+
 /* main */
 GLOBAL MAPS elevation;
 GLOBAL int ncols, row_radius_size, row_buffer_size;
 GLOBAL int skip_cells;
-GLOBAL double search_distance, flat_distance;
 GLOBAL double flat_threshold, flat_threshold_height;
 GLOBAL struct Cell_head window;
 
@@ -77,16 +89,17 @@ GLOBAL enum { ANGLEV1, ANGLEV2, ANGLEV2_DISTANCE } compmode;
 
 /* memory */
 int open_map(MAPS *rast);
-int shift_buffers(int row);
-int free_map(FCELL **map, int n);
+int load_strip(int fd, RASTER_MAP_TYPE rtype, void *tmp_buf, FCELL **rows,
+               int abs_first, int count);
 int write_form_cat_colors(char *raster);
 int write_contrast_colors(char *);
 const char *form_short_name(const FORMS);
 const char *form_long_name(const FORMS);
 
 /* pattern */
-int calc_pattern(PATTERN *pattern, int row, int cur_row, int col, const int);
-extern const char *dirname[];
+int calc_pattern(PATTERN *pattern, int row, int cur_row, int col, const int,
+                 double search_distance, double flat_distance, FCELL **rows);
+extern const char *direction_name[];
 
 /* geom */
 void generate_ternary_codes(void);

@@ -3,10 +3,8 @@
 
    \brief Cluster library - Sum of squares
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -28,7 +26,7 @@ int I_cluster_sum2(struct Cluster *C)
     G_debug(3, "I_cluster_sum2(npoints=%d,nclasses=%d,nbands=%d)", C->npoints,
             C->nclasses, C->nbands);
 
-    for (class = 0; class < C->nclasses; class ++)
+    for (class = 0; class < C->nclasses; class++)
         for (band = 0; band < C->nbands; band++)
             C->sum2[band][class] = 0;
 

@@ -40,11 +40,11 @@ Colors specified by **y_color** option are used for drawing the lines in
 the graph. If multiple Y data files are used, an equal number of colors
 may be used to control the colors of the lines. Colors will be assigned
 to Y data in respect to the sequence of instantiation on the command
-line. It can be one of GRASS GIS named colors or the RGB values from
+line. It can be one of GRASS named colors or the RGB values from
 0-255 separated by colons (RRR:GGG:BBB).
 
 Alternatively, the user can use the **color_table** option to specify
-one of the GRASS GIS predefined color tables.
+one of the GRASS predefined color tables.
 
 By default, a series of colors will be chosen by the module if none are
 provided upon invocation. The order of default colors is red, green,
@@ -55,8 +55,8 @@ reproducible results.
 
 The color to be used for titles, axis lines, tics, and scale numbers is
 determined by the **title_color** option. The user can provide one of
-the GRASS GIS named colors (such as gray, white, or black) or use the
-GRASS GIS colon-separated format for RGB (RRR:GGG:BBB).
+the GRASS named colors (such as gray, white, or black) or use the
+GRASS colon-separated format for RGB (RRR:GGG:BBB).
 
 ### Titles, labels, and tics
 
@@ -94,7 +94,7 @@ multiplied by a factor of 10 before graphing).
 Depending on the user's needs, it might be easier or more appropriate to
 use a 3rd party tool such as xgraph, gnuplot, Matplotlib in Python, or R
 instead of *d.linegraph*. For a more general solution for plotting in
-GRASS GIS, the user is advised to use the *[d.graph](d.graph.md)*
+GRASS, the user is advised to use the *[d.graph](d.graph.md)*
 module.
 
 ## EXAMPLE

@@ -1,10 +1,8 @@
 """
 Managing existing history files included within mapset
 
-(C) 2023 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2023 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Linda Karlovska (Kladivova) linda.karlovska@seznam.cz
 """
@@ -130,8 +128,7 @@ def read(history_path):
     """Read the content of the history file.
 
     :param str history_path: path to the history log file
-    :return content_list: list of dictionaries
-    with 'command' and 'command_info' keys
+    :return content_list: list of dictionaries with 'command' and 'command_info' keys
     """
     if get_history_file_extension(history_path) == ".json":
         return _read_from_JSON(history_path)

@@ -6,12 +6,8 @@
  *
  * PURPOSE:      Spline Interpolation and cross correlation
  *
- * COPYRIGHT:    (C) 2010 GRASS development team
- *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************************/
 
@@ -23,7 +19,7 @@
 
 struct Point *P_Read_Raster_Region_masked(SEGMENT *mask_seg,
                                           struct Cell_head *Original,
-                                          struct bound_box output_box UNUSED,
+                                          struct bound_box output_box G_UNUSED,
                                           struct bound_box General,
                                           int *num_points, int dim_vect,
                                           double mean)

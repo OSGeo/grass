@@ -3,10 +3,8 @@ Tests checkers functions
 
 @brief Test of GRASS Python testing framework checkers
 
-(C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Vaclav Petras
 """
@@ -350,7 +348,7 @@ class TestMd5Sums(TestCase):
 
     To create MD5 which is used for testing use:
 
-    .. code: sh
+    .. code:: sh
     $ cat > test.txt << EOF
     null_cells=57995100
     cells=60020100

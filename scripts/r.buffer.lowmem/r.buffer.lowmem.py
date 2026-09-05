@@ -6,11 +6,9 @@
 # AUTHOR(S): Glynn Clements
 # PURPOSE:   Low-memory replacement for r.buffer using r.grow.distance
 #
-# COPYRIGHT: (C) 2008, 2010 by Glynn Clements
-#
-#   This program is free software under the GNU General Public
-#   License (>=v2). Read the file COPYING that comes with GRASS
-#   for details.
+# SPDX-FileCopyrightText: 2008, 2010 Glynn Clements
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -90,7 +88,7 @@ def main():
     distances1 = [scale * float(d) for d in distances]
     distances2 = [d * d for d in distances1]
 
-    s = gs.read_command("g.proj", flags="j")
+    s = gs.read_command("g.proj", flags="p", format="proj4")
     kv = gs.parse_key_val(s)
     metric = "geodesic" if kv["+proj"] == "longlat" else "squared"
 

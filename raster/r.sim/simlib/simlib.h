@@ -8,7 +8,6 @@
 #include <stdio.h>
 
 #define EPS         1.e-7
-#define MAXW        7000000
 #define UNDEF       -9999
 
 #define NUM_THREADS "1"
@@ -43,6 +42,7 @@ typedef struct {
 typedef struct {
     int iterout;    // Number of iterations for creating output maps
     int miter;      // Total number of iterations
+    double chmean;  // Mean Manning's n
     double si0;     // Mean rainfall excess (or sediment concentration?)
     double sisum;   // Sum of rainfall excess (or sediment concentration?)
     double vmean;   // Mean velocity
@@ -56,7 +56,7 @@ typedef struct {
     int nwalka;            // Remaining walkers in an iteration
     int nstack;            // Number of output walkers
     struct point3D *stack; // Output 3D walkers
-    int maxwa;             // Number of input walkers per block
+    int maxwa;             // Number of total walkers
     double rwalk;      // Number of input walkers per block as double precision
     struct point3D *w; // Weight of walkers
     struct point2D *vavg; // Average velocity of walkers
@@ -140,7 +140,7 @@ void alloc_grids_sediment(const Geometry *geometry, const Outputs *outputs,
 void init_grids_sediment(const Setup *setup, const Geometry *geometry,
                          const Outputs *outputs, Grids *grids);
 
-int input_data(int rows, int cols, Simulation *sim, const Inputs *inputs,
+int input_data(const Geometry *geometry, Simulation *sim, const Inputs *inputs,
                const Outputs *outputs, Grids *grids);
 int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
                const Inputs *inputs, const Outputs *outputs, Grids *grids);
@@ -148,7 +148,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                const Settings *settings, Simulation *sim,
                ObservationPoints *points, const Inputs *inputs,
                const Outputs *outputs, Grids *grids);
-int output_data(int, double, const Setup *setup, const Geometry *geometry,
+int output_data(int, double conn, const Setup *setup, const Geometry *geometry,
                 const Settings *settings, const Simulation *sim,
                 const Inputs *inputs, const Outputs *outputs,
                 const Grids *grids);
@@ -158,6 +158,8 @@ void free_walkers(Simulation *sim, const char *outwalk);
 void erod(double **, const Setup *setup, const Geometry *geometry,
           Grids *grids);
 void create_observation_points(ObservationPoints *points);
+void derivatives(const Geometry *geometry, float **elevation, double **dx,
+                 double **dy);
 
 double simwe_rand(void);
 double gasdev(void);

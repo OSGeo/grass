@@ -30,7 +30,6 @@
  * \param[in] mode
  * \return int DB_FAILED on error; DB_OK on success
  */
-
 int db__driver_open_select_cursor(dbString *sel, dbCursor *dbc, int mode)
 {
     cursor *c;

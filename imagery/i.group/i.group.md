@@ -19,7 +19,9 @@ current LOCATION_NAME.
 
 Subgroup names may not contain more than 12 characters.
 
-### EXAMPLE
+## EXAMPLES
+
+### Create a group and subgroup
 
 This example runs in the "landsat" mapset of the North Carolina sample
 dataset. The following command creates a group and subgroup containing
@@ -28,6 +30,111 @@ only the visible light bands of Landsat-7:
 ```sh
 i.group group=vis_bands subgroup=vis_bands input=lsat7_2000_10,lsat7_2000_20,lsat7_2000_30
 ```
+
+### List maps from a subgroup
+
+To list maps in the `vis_bands` subgroup under the `vis_bands` group:
+
+<!-- markdownlint-disable MD046 -->
+=== "Command line"
+
+    ```sh
+    i.group group=vis_bands subgroup=vis_bands -l
+    ```
+
+    Possible output:
+
+    ```text
+    -------------
+    <lsat7_2000_10@PERMANENT>    <lsat7_2000_20@PERMANENT>    
+    <lsat7_2000_30@PERMANENT>    
+    -------------
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    data = gs.parse_command(
+        "i.group", group="vis_bands", subgroup="vis_bands", flags="l", format="json"
+    )
+    print(data)
+    ```
+
+    Possible output:
+
+    ```text
+    ['lsat7_2000_10@PERMANENT', 'lsat7_2000_20@PERMANENT', 'lsat7_2000_30@PERMANENT']
+    ```
+
+### List maps in a group
+
+To list maps in the `vis_bands` group:
+
+=== "Command line"
+
+    ```sh
+    i.group group=vis_bands -l
+    ```
+
+    Possible output:
+
+    ```text
+    -------------
+    <lsat7_2000_10@PERMANENT>    <lsat7_2000_20@PERMANENT>    
+    <lsat7_2000_30@PERMANENT>    
+    -------------
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    data = gs.parse_command("i.group", group="vis_bands", flags="l", format="json")
+    print(data)
+    ```
+
+    Possible output:
+
+    ```text
+    ['lsat7_2000_10@PERMANENT', 'lsat7_2000_20@PERMANENT', 'lsat7_2000_30@PERMANENT']
+    ```
+
+### List subgroups in a group
+
+To list subgroups in the `vis_bands` group:
+
+=== "Command line"
+
+    ```sh
+    i.group group=vis_bands -s
+    ```
+
+    Possible output:
+
+    ```text
+    -------------
+    vis_bands    
+    -------------
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    data = gs.parse_command("i.group", group="vis_bands", flags="s", format="json")
+    print(data)
+    ```
+
+    Possible output:
+
+    ```text
+    ['vis_bands']
+    ```
+<!-- markdownlint-restore -->
 
 ## SEE ALSO
 

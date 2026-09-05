@@ -5,9 +5,8 @@
 
    Based on visualization/nviz/src/togl.c
 
-   (C) 2008, 2010, 2018 by the GRASS Development Team
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2008, 2010, 2018 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
            2008/2010)
@@ -89,7 +88,7 @@ struct render_window *Nviz_new_render_window(void)
 /*!
    \brief Initialize render window
 
-   \param win pointer to render_window struct
+   \param rwin pointer to render_window struct
  */
 void Nviz_init_render_window(struct render_window *rwin)
 {
@@ -154,8 +153,8 @@ void Nviz_destroy_render_window(struct render_window *rwin)
    \return 0 on success
    \return -1 on error
  */
-int Nviz_create_render_window(struct render_window *rwin, void *display UNUSED,
-                              int width, int height)
+int Nviz_create_render_window(struct render_window *rwin,
+                              void *display G_UNUSED, int width, int height)
 {
 #if defined(OPENGL_X11)
     int attributeList[] = {GLX_RGBA,
@@ -317,7 +316,7 @@ int Nviz_create_render_window(struct render_window *rwin, void *display UNUSED,
 /*!
    \brief Make window current for rendering
 
-   \param win pointer to render_window struct
+   \param rwin pointer to render_window struct
 
    \return 1 on success
    \return 0 on failure

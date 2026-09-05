@@ -6,12 +6,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Tomas Paudits (February 2004)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -107,6 +103,7 @@ int gvld_isosurf(geovol *gvl)
     float *kem, *ksh, pkem, pksh;
     unsigned int *ktrans, *curcolor;
     int pktransp = 0;
+    int ret = 0;
 
     int *pos, *nz, *e_dl, tmp_pos, edge_pos[13];
 
@@ -255,8 +252,8 @@ int gvld_isosurf(geovol *gvl)
             gsd_popmatrix();
             gsd_blend(0);
             gsd_zwritemask(0xffffffff);
-
-            return (-1);
+            ret = -1;
+            goto cleanup_exit;
         }
 
         for (y = 0; y < rows - 1; y++) {
@@ -396,8 +393,20 @@ int gvld_isosurf(geovol *gvl)
     gsd_popmatrix();
     gsd_blend(0);
     gsd_zwritemask(0xffffffff);
-
-    return (0);
+cleanup_exit:
+    G_free(e_dl);
+    G_free(nz);
+    G_free(pos);
+    G_free(curcolor);
+    G_free(ktrans);
+    G_free(ksh);
+    G_free(kem);
+    G_free(check_shin);
+    G_free(check_emis);
+    G_free(check_material);
+    G_free(check_transp);
+    G_free(check_color);
+    return ret;
 }
 
 /*!
@@ -407,7 +416,7 @@ int gvld_isosurf(geovol *gvl)
 
    \return 0
  */
-int gvld_wire_isosurf(geovol *gvl UNUSED)
+int gvld_wire_isosurf(geovol *gvl G_UNUSED)
 {
     return (0);
 }

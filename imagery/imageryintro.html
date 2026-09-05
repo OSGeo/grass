@@ -1,14 +1,14 @@
-<!-- meta page description: Image processing in GRASS GIS -->
+<!-- meta page description: Image processing in GRASS -->
 <!-- meta page index: imagery -->
 <h3>Image processing in general</h3>
 
-GRASS GIS provides a powerful suite of tools for the processing and
+GRASS provides a powerful suite of tools for the processing and
 analysis of geospatial raster data, including satellite imagery and
 aerial photography. Its image processing capabilities encompass a broad
 range of preprocessing operations, such as data import, georeferencing,
 radiometric calibration, and atmospheric correction. It is particularly
 suited for handling Earth observation data, enabling the analysis of
-multispectral and temporal datasets. GRASS GIS supports advanced
+multispectral and temporal datasets. GRASS supports advanced
 functionalities such as image classification, sensor fusion, and point
 cloud statistics. The calculation of vegetation indices further enables
 analyses of environmental, agricultural, and land cover dynamics. An
@@ -34,7 +34,7 @@ equation <code>(y = a * x + b)</code> to encode the radiance-at-sensor
 in 8 to 16 bits. DNs can be turned back into physical values by
 applying the reverse formula <code>(x = (y - b) / a)</code>.
 <p>
-The GRASS GIS module <a href="i.landsat.toar.html">i.landsat.toar</a>
+The GRASS module <a href="i.landsat.toar.html">i.landsat.toar</a>
 easily transforms Landsat DN to radiance-at-sensor (top of atmosphere,
 TOA). The equivalent module for ASTER data is
 <a href="i.aster.toar.html">i.aster.toar</a>.
@@ -53,7 +53,7 @@ comparability between Earth surface images taken at different
 times, atmospheric need to be removed converting at-sensor values
 which are top of atmosphere to surface reflectance values.
 <p>
-In GRASS GIS, there are two ways to apply atmospheric correction for
+In GRASS, there are two ways to apply atmospheric correction for
 satellite imagery. A simple, less accurate way for Landsat is with
 <a href="i.landsat.toar.html">i.landsat.toar</a>,
 using the DOS correction method. The more accurate way is using
@@ -64,7 +64,7 @@ which ranges theoretically from 0% to 100%. Note that this level of
 data correction is the proper level of correction to calculate
 vegetation indices.
 <p>
-In GRASS GIS, image data are identical to <a href="rasterintro.html">raster data</a>.
+In GRASS, image data are identical to <a href="rasterintro.html">raster data</a>.
 However, a couple of commands are explicitly dedicated to image
 processing. The geographic boundaries of the raster/imagery file are
 described by the north, south, east, and west fields. These values
@@ -114,7 +114,7 @@ signature files of one imagery or raster group can be used to classify
 a different group with identical semantic labels.
 
 <div align="center" style="margin: 10px">
-<img src="band_references_scheme.png" alt="GRASS GIS band references scheme" width="600" height="435" border="0"><br>
+<img src="band_references_scheme.png" alt="GRASS band references scheme" width="600" height="435" border="0"><br>
 <i>
     New enhanced classification workflow involving semantic labels.
 </i>
@@ -286,7 +286,7 @@ Several modules support the calculation of the energy balance:
 <h3>See also</h3>
 
 <ul>
-<li> GRASS GIS Wiki page: <a href="https://grasswiki.osgeo.org/wiki/Image_processing">Image processing</a></li>
+<li> GRASS Wiki page: <a href="https://grasswiki.osgeo.org/wiki/Image_processing">Image processing</a></li>
 <li>The GRASS 4
     <em><a href="https://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image
      Processing manual</a></em></li>

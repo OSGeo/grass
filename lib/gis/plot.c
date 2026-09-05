@@ -16,10 +16,8 @@
  * Note:
  *  Hopefully, cartographic style projection plotting will be added later.
  *
- * (C) 2001-2008, 2013 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2008, 2013 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -174,7 +172,6 @@ void G_plot_where_xy(double east, double north, int *x, int *y)
  * \param east easting
  * \param north northing
  */
-
 void G_plot_where_en(int x, int y, double *east, double *north)
 {
     *east = G_adjust_easting(EAST(x), &st->window);
@@ -240,7 +237,6 @@ static void fastline(double x1, double y1, double x2, double y2)
  *   the output window (left, right, top, bottom) should already
  *   be adjusted for this: left=-0.5; right = window.cols-0.5;
  */
-
 static void slowline(double x1, double y1, double x2, double y2)
 {
     double dx, dy;

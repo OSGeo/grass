@@ -24,10 +24,9 @@ python utils/generate_last_commit_file.py .
 
 import json
 import os
-import subprocess
 import shutil
+import subprocess
 import sys
-
 
 # Strict ISO 8601 format
 COMMIT_DATE_FORMAT = "%aI"

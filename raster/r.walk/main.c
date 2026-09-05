@@ -33,11 +33,8 @@
  *                 directions with bitmask encoding avoid
  *                 circular paths Markus Metz
  * PURPOSE:      anisotropic movements on cost surfaces
- * COPYRIGHT:    (C) 1999-2015 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -1012,25 +1009,25 @@ int main(int argc, char *argv[])
         old_min_cost = costs.cost_out;
         if (!Rast_is_d_null_value(&old_min_cost)) {
             if (pres_cell->min_cost > old_min_cost) {
-                delete (pres_cell);
+                delete(pres_cell);
                 pres_cell = get_lowest();
                 continue;
             }
         }
         my_dtm = costs.dtm;
         if (Rast_is_d_null_value(&my_dtm)) {
-            delete (pres_cell);
+            delete(pres_cell);
             pres_cell = get_lowest();
             continue;
         }
         my_cost = costs.cost_in;
         if (Rast_is_d_null_value(&my_cost)) {
-            delete (pres_cell);
+            delete(pres_cell);
             pres_cell = get_lowest();
             continue;
         }
         if (FLAG_GET(visited, pres_cell->row, pres_cell->col)) {
-            delete (pres_cell);
+            delete(pres_cell);
             pres_cell = get_lowest();
             continue;
         }
@@ -1595,7 +1592,7 @@ int main(int argc, char *argv[])
             break;
 
         ct = pres_cell;
-        delete (pres_cell);
+        delete(pres_cell);
         pres_cell = get_lowest();
 
         if (ct == pres_cell)

@@ -1,7 +1,7 @@
 ## DESCRIPTION
 
 *i.image.mosaic* mosaics several images or raster maps using the GRASS
-GIS map calculator, and extends the colormap to the range of all images.
+map calculator, and extends the colormap to the range of all images.
 
 ## SEE ALSO
 

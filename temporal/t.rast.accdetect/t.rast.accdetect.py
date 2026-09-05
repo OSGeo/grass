@@ -6,17 +6,8 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Detect accumulation pattern in temporally accumulated space time raster datasets created by t.rast.accumulate.
-# COPYRIGHT:    (C) 2013-2017  by the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2013-2017 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -96,13 +87,7 @@
 # % multiple: no
 # %end
 
-# %option
-# % key: suffix
-# % type: string
-# % description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'count' for numerical suffix with a specific number of digits (default %05)
-# % answer: gran
-# % required: no
-# % multiple: no
+# %option G_OPT_T_SUFFIX
 # %end
 
 # %option

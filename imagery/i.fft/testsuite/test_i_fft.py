@@ -5,7 +5,7 @@ from grass.gunittest.main import test
 
 
 class TestIFFT(TestCase):
-    """Regression tests for the i.fft GRASS GIS module."""
+    """Regression tests for the i.fft GRASS module."""
 
     input_raster = "test_input"
     real_output = "fft_real"

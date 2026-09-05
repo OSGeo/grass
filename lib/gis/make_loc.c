@@ -6,10 +6,8 @@
  * Creates a new location automatically given a "Cell_head", PROJ_INFO
  * and PROJ_UNITS information.
  *
- * (C) 2000-2013 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2000-2013 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Frank Warmerdam
  */
@@ -169,13 +167,10 @@ int G_make_location_epsg(const char *location_name, struct Cell_head *wind,
  * \param proj_units    projection units suitable to write to the PROJ_UNITS
  *                      file, or NULL.
  *
- * \param proj_epsg     EPSG code suitable to write to the PROJ_EPSG
+ * \param proj_srid     Spatial reference ID suitable to write to the PROJ_SRID
  *                      file, or NULL.
  *
  * \param proj_wkt      WKT definition suitable to write to the PROJ_WKT
- *                      file, or NULL.
- *
- * \param proj_srid     Spatial reference ID suitable to write to the PROJ_SRID
  *                      file, or NULL.
  *
  * \return 0 on success
@@ -508,7 +503,6 @@ int G_compare_projections(const struct Key_Value *proj_info1,
    \return 0 success
    \return -1 error writing
  */
-
 int G_write_projwkt(const char *location_name, const char *wktstring)
 {
     FILE *fp;
@@ -560,7 +554,6 @@ int G_write_projwkt(const char *location_name, const char *wktstring)
    \return 0 success
    \return -1 error writing
  */
-
 int G_write_projsrid(const char *location_name, const char *sridstring)
 {
     FILE *fp;

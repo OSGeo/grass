@@ -376,7 +376,7 @@ class WindowsLibraryLoader(LibraryLoader):
         super().__init__()
         for p in os.getenv("PATH").split(";"):
             if os.path.exists(p) and hasattr(os, "add_dll_directory"):
-                os.add_dll_directory(p)
+                os.add_dll_directory(os.path.abspath(p))
 
     class Lookup(LibraryLoader.Lookup):
         """Lookup class for Windows libraries..."""

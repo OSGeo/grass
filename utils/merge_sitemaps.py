@@ -6,17 +6,24 @@ Created on March 11, 2025
 @author: Corey White
 """
 
-import os
+from __future__ import annotations
+
 import argparse
-from xml.dom import minidom  # noqa: S408
 import urllib.parse
 from pathlib import Path
+from xml.dom import minidom  # noqa: S408
 
 
-def check_url_version(url: str, version: str) -> str:
+def check_url_version(url: str, version: str | None) -> str:
     """
-    Check if the version in the URL matches the provided version. If not, update it."
+    Update the first path segment of the URL to the given version.
+
+    When version is falsy (None or empty), the URL is returned unchanged so each
+    source sitemap keeps its own version prefix (see OSGeo/grass#5935).
     """
+    if not version:
+        return url
+
     # Parse the URL
     parsed = urllib.parse.urlparse(url)
     path_parts = parsed.path.split("/")
@@ -65,7 +72,7 @@ def import_nodes(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Merge XML sitemaps for GRASS GIS manual pages (MKDocs) and libpython (Sphinx)"
+        description="Merge XML sitemaps for GRASS manual pages (MKDocs) and libpython (Sphinx)"
     )
     parser.add_argument(
         "--mkdocs-sitemap",
@@ -82,8 +89,11 @@ def main():
     parser.add_argument(
         "--version",
         type=str,
-        help="The version manual, (default: %(default)s)",
-        default="grass-stable",
+        default=None,
+        help=(
+            "Rewrite the first URL path segment to this version. "
+            "If omitted, each source sitemap's URLs are kept unchanged."
+        ),
     )
     parser.add_argument(
         "--output",
@@ -96,7 +106,7 @@ def main():
     # Check arguments
     args = parser.parse_args()
     mkdocs_sitemap = args.mkdocs_sitemap
-    if not os.path.exists(mkdocs_sitemap):
+    if not Path(mkdocs_sitemap).exists():
         error_message = "MKDocs sitemap.xml does not exist"
         raise FileNotFoundError(error_message)
 

@@ -6,12 +6,8 @@
  *
  * PURPOSE:    This module computes various centrality measures
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ * SPDX-FileCopyrightText: 2002-2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************/
 
@@ -97,7 +93,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("network"));
     G_add_keyword(_("centrality measures"));
     module->description =
-        _("Computes degree, centrality, betweeness, closeness and eigenvector "
+        _("Computes degree, centrality, betweenness, closeness and eigenvector "
           "centrality measures in the network.");
 
     /* Define the different options as defined in gis.h */

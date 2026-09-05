@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Window formatting functions.
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -62,7 +60,7 @@ void G_format_easting(double east, char *buf, int projection)
  * Converts the double representation of the <i>resolution</i> to its
  * ASCII representation (into <i>buf</i>).
  *
- * \param resolution resolution value
+ * \param res resolution value
  * \param[out] buf buffer to hold formatted string
  * \param projection projection code, or -1 to force full precision FP
  */

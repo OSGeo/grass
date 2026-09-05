@@ -10,10 +10,8 @@ Classes:
  - dialogs::ManageBusyCursorMixin
  - dialogs::RenameClassDialog
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
@@ -234,7 +232,7 @@ class ExportCategoryRaster(wx.Dialog):
         """Dialog for export of category raster.
 
         :param parent: window
-        :param str rasterName name of vector layer for export
+        :param str rasterName: name of vector layer for export
         :param title: window title
         """
         wx.Dialog.__init__(self, parent, id, title, style=style, **kwargs)

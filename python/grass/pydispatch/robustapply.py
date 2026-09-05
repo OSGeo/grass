@@ -84,7 +84,7 @@ def robustApply(receiver, *arguments, **named):
         acceptable = (
             posnamed_arguments[len(arguments) - posonly_count :] + named_onlyarguments
         )
-        # fc does not have a **kwds type parameter, therefore
+        # fc does not have a **kwargs type parameter, therefore
         # remove unacceptable arguments.
         named = {k: v for k, v in named.items() if k in acceptable}
     return receiver(*arguments, **named)

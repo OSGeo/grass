@@ -5,10 +5,8 @@
  *
  * Extracted from general/manage/lib/do_copy.c
  *
- * (C) 2008-2015 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2008-2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Huidae Cho
  */
@@ -66,7 +64,6 @@
  *
  * \return 0 if successful, otherwise 1
  */
-
 int G_recursive_copy(const char *src, const char *dst)
 {
     DIR *dirp;

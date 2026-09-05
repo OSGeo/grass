@@ -54,8 +54,11 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
         list[i].trace = 0;
     }
 
-    lseek(fe, 0, SEEK_SET);
-    lseek(fb, 0, SEEK_SET);
+    if (lseek(fe, 0, SEEK_SET) == -1 || lseek(fb, 0, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
     advance_band3(fb, basins);
     advance_band3(fb, basins);
@@ -204,8 +207,11 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
     }
 
     /* fill all basins up to the elevation of their lowest bounding elevation */
-    lseek(fe, 0, SEEK_SET);
-    lseek(fb, 0, SEEK_SET);
+    if (lseek(fe, 0, SEEK_SET) == -1 || lseek(fb, 0, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
     for (i = 0; i < nl; i += 1) {
         if (read(fe, elev->b[1], elev->sz) < 0)
             G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
@@ -220,7 +226,11 @@ void ppupdate(int fe, int fb, int nl, int nbasins, struct band3 *elev,
             this_elev = elev->b[1] + j * bpe();
             memcpy(this_elev, get_max(this_elev, list[ii].pp), bpe());
         }
-        lseek(fe, -elev->sz, SEEK_CUR);
+        if (lseek(fe, -elev->sz, SEEK_CUR) == -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
         if (write(fe, elev->b[1], elev->sz) < 0)
             G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
                           errno, strerror(errno));

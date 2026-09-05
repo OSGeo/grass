@@ -68,7 +68,6 @@ sources and tools:
 
 from __future__ import annotations
 
-import os
 import zlib
 from pathlib import Path
 
@@ -90,7 +89,7 @@ text_type = str
 binary_type = bytes
 
 
-# todo: use imageio/FreeImage to support reading JPEG images from SWF?
+# TODO: use imageio/FreeImage to support reading JPEG images from SWF?
 
 
 def checkImages(images):
@@ -109,7 +108,7 @@ def checkImages(images):
             # Check and convert dtype
             if im.dtype == np.uint8:
                 images2.append(im)  # Ok
-            elif im.dtype in [np.float32, np.float64]:
+            elif im.dtype in {np.float32, np.float64}:
                 theMax = im.max()
                 if 128 < theMax < 300:
                     pass  # assume 0:255
@@ -126,7 +125,7 @@ def checkImages(images):
             if im.ndim == 2:
                 pass  # ok
             elif im.ndim == 3:
-                if im.shape[2] not in [3, 4]:
+                if im.shape[2] not in {3, 4}:
                     msg = "This array can not represent an image."
                     raise ValueError(msg)
             else:
@@ -698,7 +697,7 @@ class ShapeTag(DefinitionTag):
             bits += "0"
 
         # give information
-        # todo: nbits for fillStyle and lineStyle is hard coded.
+        # TODO: nbits for fillStyle and lineStyle is hard coded.
 
         if moveTo:
             bits += twitsToBits([moveTo[0], moveTo[1]])
@@ -904,7 +903,7 @@ def readSwf(filename, asNumpy=True):
     """
 
     # Check whether it exists
-    if not os.path.isfile(filename):
+    if not Path(filename).is_file():
         raise OSError("File not found: " + str(filename))
 
     # Check PIL

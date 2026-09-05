@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2015 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2015 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -646,7 +644,7 @@ void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
 
    \param Map pointer to Map_info struct
    \param line feature id to be removed
-   \param Points feature geometry (pointer to line_pnts struct)
+   \param points feature geometry (pointer to \ref line_pnts struct)
    \param external_routine external subroutine to execute (used by PostGIS
    Topology)
 

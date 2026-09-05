@@ -6,11 +6,9 @@
 # AUTHOR(S):   	Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      exports attribute tables into various formats
-# COPYRIGHT:    (C) 2007-2014 by Markus Neteler and the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2007-2014 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -56,6 +54,7 @@
 # %end
 
 import os
+from pathlib import Path
 
 from grass.script.utils import try_remove, basename
 from grass.script import core as gcore
@@ -75,7 +74,7 @@ def main():
 
     # is there a simpler way of testing for --overwrite?
     dbffile = input + ".dbf"
-    if os.path.exists(dbffile) and not gcore.overwrite():
+    if Path(dbffile).exists() and not gcore.overwrite():
         gcore.fatal(_("File <%s> already exists") % dbffile)
 
     if olayer:

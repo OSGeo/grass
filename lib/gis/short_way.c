@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Shortest path functions.
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -24,7 +22,6 @@
  * \param[in,out] east1 east (x) coordinate of first point
  * \param[in,out] east2 east (x) coordinate of second point
  */
-
 void G_shortest_way(double *east1, double *east2)
 {
     if (G_projection() == PROJECTION_LL) {

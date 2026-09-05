@@ -7,7 +7,7 @@ that are needed by other GRASS modules.
 GRASS is generating these support files automatically, only in rare
 cases the user has to (re)build them.
 
-Refer to [vector data processing in GRASS GIS](vectorintro.md) for more
+Refer to [vector data processing in GRASS](vectorintro.md) for more
 information on GRASS vector data model.
 
 ## NOTES
@@ -51,7 +51,7 @@ mapset.
 Dump options print topology, spatial, category or feature index to
 standard output. Such information can also be printed for vector maps
 from other mapsets. A description of the vector topology is available in
-the [GRASS GIS 8 Programmer's
+the [GRASS 8 Programmer's
 Manual](https://grass.osgeo.org/programming8/vlibTopology.html), section
 "Vector library topology management".
 

@@ -66,15 +66,15 @@ def test_clump_basic(setup_maps):
     assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
 
     category_output = gs.read_command(
-        "r.category", map="clumped_map", output_format="json", env=session.env
+        "r.category", map="clumped_map", format="json", env=session.env
     )
     category_data = json.loads(category_output)
 
     expected_categories = [
-        {"category": 1, "description": ""},
-        {"category": 2, "description": ""},
-        {"category": 3, "description": ""},
-        {"category": 4, "description": ""},
+        {"category": 1, "label": None},
+        {"category": 2, "label": None},
+        {"category": 3, "label": None},
+        {"category": 4, "label": None},
     ]
 
     assert category_data == expected_categories, (
@@ -98,14 +98,14 @@ def test_clump_diagonal(setup_maps):
     assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
 
     category_output = gs.read_command(
-        "r.category", map="clumped_map", output_format="json", env=session.env
+        "r.category", map="clumped_map", format="json", env=session.env
     )
     category_data = json.loads(category_output)
 
     expected_categories = [
-        {"category": 1, "description": ""},
-        {"category": 2, "description": ""},
-        {"category": 3, "description": ""},
+        {"category": 1, "label": None},
+        {"category": 2, "label": None},
+        {"category": 3, "label": None},
     ]
     assert category_data == expected_categories, (
         "Category data does not match expected categories"
@@ -128,13 +128,13 @@ def test_clump_minsize(setup_maps):
     assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
 
     category_output = gs.read_command(
-        "r.category", map="clumped_map", output_format="json", env=session.env
+        "r.category", map="clumped_map", format="json", env=session.env
     )
     category_data = json.loads(category_output)
 
     expected_categories = [
-        {"category": 1, "description": ""},
-        {"category": 2, "description": ""},
+        {"category": 1, "label": None},
+        {"category": 2, "label": None},
     ]
 
     assert category_data == expected_categories, (
@@ -158,14 +158,14 @@ def test_clump_threshold(setup_maps):
     assert "clumped_map" in output_maps, "Output raster map 'clumped_map' should exist"
 
     category_output = gs.read_command(
-        "r.category", map="clumped_map", output_format="json", env=session.env
+        "r.category", map="clumped_map", format="json", env=session.env
     )
     category_data = json.loads(category_output)
 
     expected_categories = [
-        {"category": 1, "description": ""},
-        {"category": 2, "description": ""},
-        {"category": 3, "description": ""},
+        {"category": 1, "label": None},
+        {"category": 2, "label": None},
+        {"category": 3, "label": None},
     ]
 
     assert category_data == expected_categories, (

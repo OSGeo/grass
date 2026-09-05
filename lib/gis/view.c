@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - 3D View functions.
  *
- * (C) 2001-2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Bill Brown - US Army CERL
  *
@@ -41,7 +39,6 @@ static int Suppress_warn = 0;
  * \param[in] b
  * \return
  */
-
 void G_3dview_warning(int b)
 {
     Suppress_warn = b ? 0 : 1;
@@ -54,7 +51,6 @@ void G_3dview_warning(int b)
  * \param[in] w
  * \return always returns 1
  */
-
 int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
 {
     if (!v || !w)
@@ -159,7 +155,6 @@ int G_get_3dview_defaults(struct G_3dview *v, struct Cell_head *w)
  * \return 1 on success
  * \return -1 on error
  */
-
 int G_put_3dview(const char *fname, const struct G_3dview *View,
                  const struct Cell_head *Win)
 {
@@ -239,7 +234,6 @@ int G_put_3dview(const char *fname, const struct G_3dview *View,
  * \return 2 if <b>fname</b> was written with this version of routine
  * \return 0 if is older format (through 4.0)
  */
-
 int G_get_3dview(const char *fname, const char *mapset, struct G_3dview *View)
 {
     struct Cell_head curwin;

@@ -5,12 +5,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL, GMSL/University of Illinois (September 1993)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -103,7 +99,7 @@ void gsbm_zero_mask(struct BM *map)
    Must be same size, ORs bitmaps & stores in bmvar
 
    \param bmvar bitmap (BM) to changed
-   \param bmcom bitmap (BM)
+   \param bmcon bitmap (BM)
    \param mask_type mask type (see mask types macros)
 
    \return -1 on failure (bitmap mispatch)
@@ -158,7 +154,7 @@ static int gsbm_masks(struct BM *bmvar, struct BM *bmcon, const int mask_type)
    Must be same size, ORs bitmaps & stores in bmvar
 
    \param bmvar bitmap (BM) to changed
-   \param bmcom bitmap (BM)
+   \param bmcon bitmap (BM)
    \param mask_type mask type (see mask types macros)
 
    \return -1 on failure (bitmap mispatch)
@@ -175,8 +171,7 @@ int gsbm_or_masks(struct BM *bmvar, struct BM *bmcon)
    Must be same size, ORNOTs bitmaps & stores in bmvar
 
    \param bmvar bitmap (BM) to changed
-   \param bmcom bitmap (BM)
-   \param mask_type mask type (see mask types macros)
+   \param bmcon bitmap (BM)
 
    \return -1 on failure (bitmap mispatch)
    \return 0 on success
@@ -192,8 +187,7 @@ int gsbm_ornot_masks(struct BM *bmvar, struct BM *bmcon)
    Must be same size, ADDs bitmaps & stores in bmvar
 
    \param bmvar bitmap (BM) to changed
-   \param bmcom bitmap (BM)
-   \param mask_type mask type (see mask types macros)
+   \param bmcon bitmap (BM)
 
    \return -1 on failure (bitmap mispatch)
    \return 0 on success
@@ -209,8 +203,7 @@ int gsbm_and_masks(struct BM *bmvar, struct BM *bmcon)
    Must be same size, XORs bitmaps & stores in bmvar
 
    \param bmvar bitmap (BM) to changed
-   \param bmcom bitmap (BM)
-   \param mask_type mask type (see mask types macros)
+   \param bmcon bitmap (BM)
 
    \return -1 on failure (bitmap mispatch)
    \return 0 on success

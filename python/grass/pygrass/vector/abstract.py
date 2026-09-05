@@ -341,7 +341,7 @@ class Info:
         :type tab_cols: list of pairs
         :param link_name: define the name of the link connection with the database
         :type link_name: str
-        :param link_key: define the name of the column that will be use as
+        :param link_key: define the name of the column that will be used as
                          vector category
         :type link_key: str
         :param link_db: define the database connection parameters

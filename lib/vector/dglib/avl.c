@@ -839,7 +839,7 @@ void(avl_assert_insert)(struct avl_table *table, void *item)
 
 /* Asserts that |avl_delete()| really removes |item| from |table|,
    and returns the removed item. */
-void *(avl_assert_delete)(struct avl_table *table, void *item)
+void *(avl_assert_delete)(struct avl_table * table, void *item)
 {
     void *p = avl_delete(table, item);
 

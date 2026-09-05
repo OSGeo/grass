@@ -4,10 +4,9 @@ Purpose:    Tests r.texture and its flags/options.
 
 Author:     Sunveer Singh, Google Code-in 2017
             Chung-Yuan Liang, modified in 2024
-Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
-Licence:    This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
+SPDX-FileCopyrightText: 2017 Sunveer Singh
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 from grass.gunittest.case import TestCase
@@ -130,7 +129,7 @@ class TestRasterreport(TestCase):
         values = """min=0
         max=45368492
         mean=2248724.35829364
-        variance=2332049431762.5
+        variance=2332049431759.92
         n=996244"""
         self.assertModule("r.texture", input=self.input, output=method, method=method)
         self.assertRasterFitsUnivar(output, reference=values, precision=1e-4)

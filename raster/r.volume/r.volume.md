@@ -19,6 +19,17 @@ exits with an error message.
 *r.volume* works in the current region and respects the current raster
 mask.
 
+The **-f** flag has been deprecated and replaced by the **format=csv**
+option.
+
+To print the volume report, use the **-p** flag along with the **format** option
+to specify the desired output format. The volume report is printed even without
+this flag to maintain backward compatibility; however, this behavior will change
+in the future.
+
+The default separator is set to **:** for backward compatibility. However,
+if **format=csv** is specified, the default separator will be a **comma**.
+
 ### CENTROIDS
 
 The centroid coordinates are the same as those stored in the vector map
@@ -71,7 +82,7 @@ r.lake elevation=elev_lid792_1m water_level=113.7 lake=mylake coordinates=638684
 #  Lake volume 648.875328 cubic meters
 
 # compute water volume
-r.volume input=elev_lid792_1m clump=mylake
+r.volume input=elev_lid792_1m clump=mylake -p
 #
 # Category   Average   Data   # Cells        Centroid             Total
 # Number     in clump  Total  in clump   Easting     Northing     Volume
@@ -95,7 +106,7 @@ dataset):
 g.region raster=elevation -p
 
 # compute volume
-r.volume input=elevation clump=geology_30m
+r.volume input=elevation clump=geology_30m -p
 #
 # Volume report on data from <elevation> using clumps on <geology_30m> raster map
 #
@@ -124,6 +135,39 @@ the fields. The `Total Volume` is the sum multiplied by the east-west
 resolution times the north-south resolution. Note that the units on the
 volume may be difficult if the units of cell values on the **input**
 raster map and the resolution units differ.
+
+### Report using JSON format and pandas DataFrame
+
+```python
+import grass.script as gs
+import pandas as pd
+
+data = gs.parse_command(
+    "r.volume", input="elevation", clump="geology_30m", flags="p", format="json"
+)
+
+df = pd.DataFrame(data)
+print(df)
+```
+
+Possible output:
+
+```text
+    category  average         sum   cells        volume  easting  northing
+0        217   118.93 86288827.99  725562 8628882798.63   635325    221535
+1        262   108.97 21650560.37  198684 2165056037.02   638935    222495
+2        270    92.23 63578874.44  689373 6357887443.53   642405    221485
+3        405   132.96 33732662.09  253710 3373266208.59   631835    224095
+4        583   139.35  3011288.22   21609  301128821.55   630205    224665
+5        720   124.30   599618.16    4824   59961816.06   634075    227995
+6        766   132.43   936791.20    7074   93679120.08   631425    227845
+7        862   118.31  7302317.47   61722  730231746.74   630505    218885
+8        910    94.20  4235816.13   44964  423581613.11   639215    216365
+9        921   135.22  1693985.23   12528  169398523.05   630755    215445
+10       945   127.24     1145.12       9     114512.03   630015    215015
+11       946    89.91   365748.34    4068   36574833.85   639085    215255
+12       948   129.02   112631.82     873   11263181.57   630185    215115
+```
 
 ## SEE ALSO
 

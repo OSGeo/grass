@@ -16,13 +16,9 @@
  * \author modified by McCauley in August 1995
  * \author modified by Mitasova in August 1995, Nov. 1996
  *
- * \copyright
- * (C) 1993-2006 by Helena Mitasova and the GRASS Development Team
- *
- * \copyright
- * This program is free software under the
- * GNU General Public License (>=v2).
- * Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1993-2006 Helena Mitasova
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdio.h>
@@ -57,7 +53,6 @@
  * Alternative description:
  * ...calculate the maximum and RMS deviation caused by smoothing.
  */
-
 int IL_check_at_points_2d_cvdev(struct interp_params *params,
                                 struct quaddata *data, /*!< current region */
                                 double *b, /*!< solution of linear equations */

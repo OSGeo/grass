@@ -345,6 +345,9 @@ int Vect_tin_get_z(struct Map_info *, double, double, double *, double *,
 
 /* int Vect_point_in_islands (struct Map_info *, int, double, double); */
 int Vect_find_poly_centroid(const struct line_pnts *, double *, double *);
+int Vect_find_poly_centroid_cog(const struct line_pnts *,
+                                const struct line_pnts **, int, double *,
+                                double *);
 int Vect__intersect_line_with_poly(const struct line_pnts *, double,
                                    struct line_pnts *);
 int Vect_get_point_in_area(struct Map_info *, int, double *, double *);

@@ -4,10 +4,8 @@
    \brief Imagery library - functions for manipulation with structures used
    by wx.iscatt (wx Interactive Scatter Plot Tool)
 
-   Copyright (C) 2013 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2013 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Stepan Turek <stepan.turek@seznam.cz> (GSoC 2013, Mentor: Martin
    Landa)
@@ -198,7 +196,7 @@ int I_sc_add_cat(struct scCats *cats)
    cats struct (SC_SCATT_DATA or SC_SCATT_CONDITIONS).
 
    \param cats pointer to scCats struct
-   \param scarr_data pointer to scdScattData struct
+   \param scatt_data pointer to scdScattData struct
    \param cat_id id number of category
    \param scatt_id id number of scatter plot
 

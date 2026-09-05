@@ -3,11 +3,8 @@
  *
  * \brief GIS Library - Error messages functions
  *
- * (C) 1999-2011 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1999-2011 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author USACERL and many others
  */
@@ -487,7 +484,7 @@ static int print_word(FILE *fd, char **word, int *len, const int lead)
 /* Print one message, prefix inserted before each new line */
 static void print_sentence(FILE *fd, const int type, const char *msg)
 {
-    char prefix[100];
+    char prefix[100] = "";
     const char *start;
     int id = G_counter_next(&message_id);
 

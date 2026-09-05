@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - file seek routines
  *
- * (C) 2009-2010 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2009-2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Glynn Clements
  */
@@ -50,14 +48,20 @@ off_t G_ftell(FILE *fp)
 void G_fseek(FILE *fp, off_t offset, int whence)
 {
 #ifdef HAVE_FSEEKO
-    if (fseeko(fp, offset, whence) != 0)
-        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+    if (fseeko(fp, offset, whence) != 0) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 #else
     long loff = (long)offset;
 
     if ((off_t)loff != offset)
         G_fatal_error(_("Seek offset out of range"));
-    if (fseek(fp, loff, whence) != 0)
-        G_fatal_error(_("Unable to seek: %s"), strerror(errno));
+    if (fseek(fp, loff, whence) != 0) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 #endif
 }

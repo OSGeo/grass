@@ -12,9 +12,8 @@ Classes:
  - SamplingAreas (define sampling area)
  - SummaryPage (show chosen options)
 
-(C) 2011 by the GRASS Development Team
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Luca Delucchi <lucadeluge gmail com>
 """
@@ -1855,11 +1854,11 @@ class VectorAreasPage(TitledPage):
             GError(
                 parent=self,
                 message=_(
-                    "The raster map <%s> already exists."
+                    "The raster map <{map_name}> already exists."
                     " Please remove or rename the maps "
-                    "with the prefix '%s' or select the "
+                    "with the prefix '{prefix}' or select the "
                     "option to overwrite existing maps"
-                ).format(self.outname, self.outpref),
+                ).format(map_name=self.outname, prefix=self.outpref),
             )
             self.parent.wizard.ShowPage(self.parent.samplingareapage)
             return

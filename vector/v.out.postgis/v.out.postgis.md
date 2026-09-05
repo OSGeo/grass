@@ -3,7 +3,7 @@
 *v.out.postgis* exports an existing GRASS vector map layer to PostGIS
 feature table. Features without category are skipped.
 
-By default GRASS GIS topological features are converted into simple
+By default GRASS topological features are converted into simple
 features (see [OGC Simple Feature
 Access](https://www.ogc.org/publications/standard/sfa/) specification
 for details). Flag **-l** allows to export vector features as

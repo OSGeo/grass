@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Temporary file functions.
  *
- * (C) 2001-2015 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -115,6 +113,7 @@ char *G_tempfile_pid(int pid)
  * See G_tempfile_basedir().
  *
  * \param pid
+ * \param basedir
  * \return pointer to string path
  */
 char *G_tempfile_pid_basedir(int pid, const char *basedir)
@@ -154,7 +153,7 @@ void G_temp_element(char *element)
  *
  * \param[out] element element name
  * \param tmp TRUE to use G_make_mapset_element_tmp() instead of
- * G_make_mapset_element()
+ *            G_make_mapset_element()
  */
 void G__temp_element(char *element, int tmp)
 {
@@ -179,8 +178,7 @@ void G__temp_element(char *element, int tmp)
  * \brief Populates element with a path string (internal use only!)
  *
  * \param[out] element element name
- * \param tmp TRUE to use G_make_mapset_element_tmp() instead of
- * G_make_mapset_element()
+ * \param basedir
  */
 void G__temp_element_basedir(char *element, const char *basedir)
 {

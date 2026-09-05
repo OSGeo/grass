@@ -7,10 +7,8 @@ in Data Catalog
 Classes:
 - infomanager::DataCatalogInfoManager
 
-(C) 2020 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2020 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Linda Kladivova
 @author Anna Petrasova <kratochanna gmail.com>
@@ -37,7 +35,7 @@ class DataCatalogInfoManager:
             (_("Learn more"), self._onLearnMore),
         ]
         message = _(
-            "GRASS GIS helps you organize your data using projects (locations) "
+            "GRASS helps you organize your data using projects (locations) "
             "which contain mapsets (subprojects). All data in one project is "
             "in the same coordinate reference system (CRS).\n\n"
             "You are currently in mapset PERMANENT in default project {loc} "
@@ -81,7 +79,7 @@ class DataCatalogInfoManager:
         """Show info when last used mapset is not usable"""
         string = self._text_from_reason_id(reason_id)
         message = _(
-            "{string} GRASS GIS has started in a temporary project. "
+            "{string} GRASS has started in a temporary project. "
             "To continue, use Data Catalog below to switch to a different project."
         ).format(
             string=string,
@@ -94,7 +92,7 @@ class DataCatalogInfoManager:
         buttons = [(_("Switch to last used mapset"), OnSwitchMapsetHandler)]
         message = _(
             "Last used mapset in path '{mapsetpath}' is currently in use. "
-            "GRASS GIS has started in a temporary project. "
+            "GRASS has started in a temporary project. "
             "To continue, use Data Catalog below to switch to a different project "
             "or remove lock file and switch to the last used mapset."
         ).format(mapsetpath=last_used_mapset_path)
@@ -120,4 +118,4 @@ class DataCatalogInfoManager:
         return reason
 
     def _onLearnMore(self, event):
-        self._giface.Help(entry="grass_database")
+        self._giface.Help(entry="grass_projects")

@@ -8,11 +8,8 @@
 #               Sync'ed to r.univar by Markus Metz
 # PURPOSE:	Calculates univariate statistics from a GRASS vector map attribute column.
 #               Based on r.univar.sh by Markus Neteler
-# COPYRIGHT:	(C) 2005, 2007, 2008 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2005, 2007, 2008 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -42,12 +39,8 @@
 # % options: 0-100
 # % multiple: yes
 # %end
-# %option
-# % key: format
-# % type: string
-# % multiple: no
+# %option G_OPT_F_FORMAT
 # % options: plain,json,shell
-# % label: Output format
 # % descriptions: plain;Plain text output;json;JSON (JavaScript Object Notation);shell;Shell script style for Bash eval
 # %end
 # %flag
@@ -56,7 +49,8 @@
 # %end
 # %flag
 # % key: g
-# % description: Print stats in shell script style
+# % label: Print stats in shell script style [deprecated]
+# % description: This flag is deprecated and will be removed in a future release. Use format=shell instead.
 # %end
 
 import sys
@@ -87,15 +81,22 @@ def main():
     database = fi["database"]
     driver = fi["driver"]
 
+    output_format = options["format"]
+    if not output_format:
+        output_format = "shell" if flags["g"] else "plain"
+    if flags["g"]:
+        # This can be a message or warning in future versions.
+        # In version 9, -g may be removed.
+        gs.verbose(
+            _(
+                "Flag 'g' is deprecated and will be removed in a future "
+                "release. Please use format=shell instead."
+            )
+        )
+
     passflags = None
     if flags["e"]:
         passflags = "e"
-    if flags["g"]:
-        if not passflags:
-            passflags = "g"
-        else:
-            passflags += "g"
-    output_format = options["format"]
 
     try:
         gs.run_command(

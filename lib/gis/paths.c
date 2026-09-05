@@ -120,7 +120,7 @@ char *G_convert_dirseps_from_host(char *path)
  * Returns information about the specified file.
  *
  * \param file_name file name
- * \param stat pointer to structure filled with file information
+ * \param buf pointer to structure filled with file information
  *
  * \return Return value from system lstat function
  **/
@@ -137,7 +137,7 @@ int G_stat(const char *file_name, struct stat *buf)
  *
  * \param file_name file name, in the case of a symbolic link, the
  *                  link itself is stat-ed, not the file that it refers to
- * \param stat pointer to structure filled with file information
+ * \param buf pointer to structure filled with file information
  *
  * \return Return value from system lstat function
  **/

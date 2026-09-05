@@ -7,7 +7,7 @@ vector and site maps, region definitions and imagery groups.
 The list of element names to search for is not fixed; any subdirectory
 of the mapset directory is a valid element name.
 
-However, the user can find the list of standard GRASS GIS element names
+However, the user can find the list of standard GRASS element names
 in the file `$GISBASE/etc/element_list`. This is the file which
 g.remove/g.rename/g.copy use to determine which files need to be
 deleted/renamed/copied for a given entity type.

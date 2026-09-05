@@ -3,10 +3,9 @@
 
    \brief GRASS png display driver - draw box
 
-   (C) 2003-2014 by Per Henrik Johansen and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2003-2014 Per Henrik Johansen
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Per Henrik Johansen (original contributor)
    \author Glynn Clements
@@ -20,7 +19,6 @@
 
    \param fx1,fy1,fx2,fy2 rectangle coordinates
  */
-
 void PNG_Box(double fx1, double fy1, double fx2, double fy2)
 {
     int x1 = (int)floor(fx1 + 0.5);

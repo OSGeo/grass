@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Sphereical area calculation routines.
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -65,7 +63,6 @@ double G_darea0_on_sphere(double lat)
  * \param[in] south
  * \return double
  */
-
 double G_area_for_zone_on_sphere(double north, double south)
 {
     return (G_darea0_on_sphere(north) - G_darea0_on_sphere(south));

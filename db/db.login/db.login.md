@@ -46,7 +46,7 @@ db.login driver=pg database=mydb user=bacava password=""
 *[db.connect](db.connect.md), [db.test](db.test.md),
 [db.tables](db.tables.md)*
 
-[SQL support in GRASS GIS](sql.md)
+[SQL support in GRASS](sql.md)
 
 ## AUTHOR
 

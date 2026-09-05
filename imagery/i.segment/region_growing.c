@@ -1382,8 +1382,8 @@ static int set_candidate_flag(struct ngbr_stats *head, int value,
     G_debug(4, "set_candidate_flag");
 
     if ((!(FLAG_GET(globals->candidate_flag, head->row, head->col))) != value) {
-        G_warning(_("Candidate flag is already %s"),
-                  value ? _("set") : _("unset"));
+        G_warning(value ? _("Candidate flag is already set")
+                        : _("Candidate flag is already unset"));
         return FALSE;
     }
 

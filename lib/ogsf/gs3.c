@@ -5,12 +5,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL, GMSL/University of Illinois (January 1993)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -71,8 +67,8 @@ typedef int FILEDESC;
 
    Uses G_distance().
 
-   \param from 'from' point (X, Y)
-   \param to 'to' point (X, Y)
+   \param[in] from 'from' point (X, Y)
+   \param[in] to 'to' point (X, Y)
 
    \return distance
  */
@@ -849,7 +845,7 @@ int Gs_get_cat_label(const char *filename, int drow, int dcol, char *catstr)
    \return -1 on error
    \return ?
  */
-int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd UNUSED,
+int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd G_UNUSED,
                    struct Cell_head *w, geosurf *defsurf)
 {
     const char *mapset;
@@ -948,7 +944,7 @@ int Gs_save_3dview(const char *vname, geoview *gv, geodisplay *gd UNUSED,
 
    \return 1
  */
-int Gs_load_3dview(const char *vname, geoview *gv, geodisplay *gd UNUSED,
+int Gs_load_3dview(const char *vname, geoview *gv, geodisplay *gd G_UNUSED,
                    struct Cell_head *w, const geosurf *defsurf)
 {
     const char *mapset;

@@ -5,4 +5,7 @@
 
 #define S_ISDIR(mode) (((mode) & S_IFMT) == S_IFDIR)
 
+#define S_IRUSR       _S_IREAD
+#define S_IWUSR       _S_IWRITE
+
 #endif

@@ -5,9 +5,8 @@
 
    Based on visualization/nviz/src/change_view.c
 
-   (C) 2008, 2010 by the GRASS Development Team
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2008, 2010 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
            2008/2010)
@@ -321,7 +320,7 @@ void Nviz_init_rotation(void)
    \param lateral type of movement
 
  */
-void Nviz_flythrough(nv_data *data UNUSED, float *fly_info, int *scale,
+void Nviz_flythrough(nv_data *data G_UNUSED, float *fly_info, int *scale,
                      int lateral)
 {
     float dir[3], from[4], cur_from[4], cur_dir[4];

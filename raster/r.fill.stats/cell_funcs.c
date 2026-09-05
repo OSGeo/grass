@@ -9,10 +9,8 @@
  *            This function pointer can later be used to work with cell data of
  *            different types without having to go through any switching logics.
  *
- * COPYRIGHT: (C) 2011 by the GRASS Development Team
- *
- *            This program is free software under the GPL (>=v2)
- *            Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2011 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************************
  */
@@ -64,7 +62,6 @@ void write_cell_value_d(void *cell_output, void *cell_input)
 /*
  * Write a double value into a cell (truncates for CELL type output).
  */
-
 void write_double_value_c(void *cell, double val)
 {
     Rast_set_c_value(cell, (CELL)val, OUT_TYPE);

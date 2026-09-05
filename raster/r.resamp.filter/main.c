@@ -4,11 +4,9 @@
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
  *               Aaron Saw Min Sern (OpenMP parallelization)
  * PURPOSE:
- * COPYRIGHT:    (C) 2010-2023 by Glynn Clements and the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2010-2023 Glynn Clements
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 #if defined(_OPENMP)
@@ -482,22 +480,11 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    sscanf(parm.nprocs->answer, "%d", &nprocs);
-    if (nprocs < 1) {
-        G_fatal_error(_("<%d> is not valid number of threads."), nprocs);
-    }
-#if defined(_OPENMP)
-    omp_set_num_threads(nprocs);
-#else
-    if (nprocs != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    nprocs = 1;
-#endif
-    if (nprocs > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        nprocs = 1;
-    }
+    nprocs = G_set_omp_num_threads(parm.nprocs);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
+    if (nprocs < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
+
     if (parm.radius->answer) {
         if (parm.x_radius->answer || parm.y_radius->answer)
             G_fatal_error(_("%s= and %s=/%s= are mutually exclusive"),

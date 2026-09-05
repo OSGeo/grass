@@ -2,14 +2,12 @@
 
 Temporal raster algebra
 
-(C) 2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Thomas Leppelt and Soeren Gebbert
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> p = TemporalRasterAlgebraLexer()
     >>> p.build()
@@ -68,7 +66,7 @@ from .temporal_granularity import compute_absolute_time_granularity
 
 
 class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
-    """Lexical analyzer for the GRASS GIS temporal algebra"""
+    """Lexical analyzer for the GRASS temporal algebra"""
 
     def __init__(self) -> None:
         TemporalAlgebraLexer.__init__(self)
@@ -231,7 +229,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         :param compare_cmd: Boolean for comparing command list values based on
                         related map list and comparison operator.
         :param compop: Comparison operator, && or ||.
-        :param aggregate: Aggregation operator for relation map list, & or |.
+        :param aggregate: Aggregation operator for relation map list, & or \\|.
         :param new: Boolean if new temporary maps should be created.
         :param convert: Boolean if conditional values should be converted to
                     r.mapcalc command strings.
@@ -435,10 +433,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         list builder for temporal raster algebra.
 
         :param map_i: Map object with temporal extent.
-        :param temporal_relations: List of temporal relation to map_i.
-        :param temporal_topo_list: List of strings for given temporal relations.
         :param compop: Comparison operator, && or ||.
-        :param aggregate: Aggregation operator for relation map list, & or |.
+        :param aggregate: Aggregation operator for relation map list, & or \\|.
+        :param temporal_topo_list: List of strings for given temporal relations.
+        :param spatial_topo_list: List of strings for given spatial relations.
         :param convert: Boolean if conditional values should be converted to
                         r.mapcalc command strings.
 
@@ -505,7 +503,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         """Function to evaluate two map lists by given arithmetic operator.
 
         :param map_i: Map object with temporal extent.
-        :param operator: Arithmetic operator, +-*/%.
+        :param operator: Arithmetic operator, +-\\*/%.
         :param temporal_topo_list: List of strings for given temporal relations.
         :param spatial_topo_list: List of strings for given spatial relations.
 

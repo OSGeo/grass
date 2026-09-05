@@ -3,11 +3,8 @@
 
    \brief DBMI Library (client) - copy table
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Joel Jones (CERL/UIUC), Radim Blazek
  */
@@ -476,7 +473,7 @@ int db_copy_table_where(const char *from_drvname, const char *from_dbname,
 
    \param from_drvname name of driver from table is copied
    \param from_dbname name of database from table is copied
-   \param from_dbname name of table to be copied
+   \param from_tblname name of table to be copied
    \param to_drvname name of driver to - where table is copied to
    \param to_dbname name of database to - where table is copied to
    \param to_tblname name of copied table
@@ -503,9 +500,10 @@ int db_copy_table_select(const char *from_drvname, const char *from_dbname,
    \param to_drvname name of driver to - where table is copied to
    \param to_dbname name of database to - where table is copied to
    \param to_tblname name of copied table
-   \param selcol name of column used to select records by values in ivals or
-   NULL \param ivals pointer to array of integer values or NULL \param nvals
-   number of values in ivals
+   \param selcol name of column used to select records by values
+                 in ivals or NULL
+   \param ivals pointer to array of integer values or NULL
+   \param nvals number of values in ivals
 
    \return DB_OK on success
    \return DB_FAILED on failure

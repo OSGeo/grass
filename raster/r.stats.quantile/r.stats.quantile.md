@@ -15,6 +15,12 @@ maps. It provides quantile calculations, which are absent from
 Quantiles are calculated following algorithm 7 from Hyndman and Fan
 (1996), which is also the default in R and numpy.
 
+The **t** flag has been deprecated and replaced by the **format=csv**
+option.
+
+The default separator will be **:** to maintain backward compatibility;
+however, if **format=csv** is given, then the default separator will be **comma**.
+
 ## EXAMPLE
 
 In this example, the raster polygon map `zipcodes` in the North Carolina
@@ -37,6 +43,58 @@ r.stats.quantile base=zipcodes cover=elevation quantiles=3 -p
 # write out percentile raster maps
 r.stats.quantile base=zipcodes cover=elevation percentiles=25,50,75 \
   output=zipcodes_elev_q25,zipcodes_elev_q50,zipcodes_elev_q75
+```
+
+Using the JSON format option and Python to parse the
+output:
+
+```python
+import grass.script as gs
+
+data = gs.parse_command(
+    "r.stats.quantile", base="zipcodes", cover="elevation", flags="p", format="json"
+)
+print(data[0])
+```
+
+Possible output:
+
+```text
+{'category': 27511, 'percentiles': [{'percentile': 50, 'value': 139.62598419189453}]}
+```
+
+The whole JSON may look like this:
+
+```json
+[
+ {
+  "category": 27511,
+  "percentiles": [
+   {
+    "percentile": 50,
+    "value": 139.62598419189453
+   }
+  ]
+ },
+ {
+  "category": 27513,
+  "percentiles": [
+   {
+    "percentile": 50,
+    "value": 143.7049102783203
+   }
+  ]
+ },
+ {
+  "category": 27518,
+  "percentiles": [
+   {
+    "percentile": 50,
+    "value": 122.53437805175781
+   }
+  ]
+ }
+]
 ```
 
 ## REFERENCES

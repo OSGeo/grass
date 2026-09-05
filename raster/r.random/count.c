@@ -2,6 +2,9 @@
 #include <float.h>
 #include <math.h>
 #include <unistd.h>
+#include <string.h>
+#include <errno.h>
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -94,11 +97,6 @@ void get_stats(struct rr_state *theState)
     }
 
     G_percent(1, 1, 1);
-
-    /* rewind the in raster map descriptor for later use */
-    lseek(theState->fd_old, 0, SEEK_SET);
-    if (theState->docover == 1)
-        lseek(theState->fd_cold, 0, SEEK_SET);
 
     /* Set the NULL value replacement */
     switch (theState->nulls.type) {

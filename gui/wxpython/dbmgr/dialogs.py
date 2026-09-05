@@ -8,10 +8,8 @@ List of classes:
  - dialogs::ModifyTableRecord
  - dialogs::AddColumnDialog
 
-(C) 2007-2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Refactoring by Stepan Turek <stepan.turek seznam.cz>
@@ -24,7 +22,7 @@ import wx.lib.scrolledpanel as scrolled
 from core.gcmd import RunCommand, GError
 from core.debug import Debug
 from dbmgr.vinfo import VectorDBInfo, GetUnicodeValue, GetDbEncoding
-from gui_core.widgets import IntegerValidator, FloatValidator
+from gui_core.widgets import IntegerValidator, FloatValidator, TimeISOValidator
 from gui_core.wrap import SpinCtrl, Button, StaticText, StaticBox, TextCtrl
 
 
@@ -664,6 +662,11 @@ class ModifyTableRecord(wx.Dialog):
                     valueWin.SetValidator(IntegerValidator())
                 elif ctype == float:
                     valueWin.SetValidator(FloatValidator())
+                elif ctype == str and ctypeStr == "date":
+                    valueWin.SetValidator(TimeISOValidator())
+                    # Date ISO8601 format hint
+                    valueWin.SetHint(_("YYYY-MM-DD"))
+
                 if not winFocus:
                     wx.CallAfter(valueWin.SetFocus)
                     winFocus = True

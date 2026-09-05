@@ -9,10 +9,8 @@ List of classes:
  - mapwindow::NvizThread
  - mapwindow::GLWindow
 
-(C) 2008-2011 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2008-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
@@ -1171,7 +1169,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             view["position"]["y"],
             iview["height"]["value"],
         ) = self._display.GetViewpointPosition()
-        for key, val in zip(("x", "y", "z"), self._display.GetViewdir()):
+        for key, val in zip(("x", "y", "z"), self._display.GetViewdir(), strict=False):
             iview["dir"][key] = val
 
         iview["dir"]["use"] = True

@@ -104,14 +104,12 @@ class TestEvapoTimeDetailed(TestCase):
             overwrite=True,
         )
         stats_short = gs.parse_command(
-            "r.univar", map="evapo_time_short", flags="g", format="json"
+            "r.univar", map="evapo_time_short", format="json"
         )
-        stats_long = gs.parse_command(
-            "r.univar", map="evapo_time_long", flags="g", format="json"
-        )
+        stats_long = gs.parse_command("r.univar", map="evapo_time_long", format="json")
         self.assertGreater(
-            stats_long[0]["sum"],
-            stats_short[0]["sum"],
+            stats_long["sum"],
+            stats_short["sum"],
             msg="Longer time period did not yield a higher cumulative ET.",
         )
 
@@ -160,9 +158,9 @@ class TestEvapoTimeDetailed(TestCase):
                 overwrite=True,
             )
             stats = gs.parse_command(
-                "r.univar", map=f"evapo_time_{suffix}", flags="g", format="json"
+                "r.univar", map=f"evapo_time_{suffix}", format="json"
             )
-            results[suffix] = stats[0]["sum"]
+            results[suffix] = stats["sum"]
         self.assertAlmostEqual(
             results["mid"] / results["low"],
             2.0,

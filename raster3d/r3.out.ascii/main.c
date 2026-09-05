@@ -8,11 +8,8 @@
  *
  * PURPOSE:      Converts a 3D raster map layer into an ASCII text file
  *
- * COPYRIGHT:    (C) 2005 - 2012 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2005 - 2012 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 #include <stdio.h>
@@ -56,7 +53,8 @@ void fatalError(char *errorMsg)
     if (map != NULL) {
         /* should unopen map here! */
         if (!Rast3d_close(map))
-            fatalError(_("Unable to close 3D raster map"));
+            Rast3d_fatal_error("%s (%s)", errorMsg,
+                               _("Unable to close 3D raster map"));
     }
 
     Rast3d_fatal_error("%s", errorMsg);

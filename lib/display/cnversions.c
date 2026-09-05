@@ -383,7 +383,6 @@ void D_get_d(double x[2][2])
  *  \param D_row y
  *  \return double
  */
-
 double D_d_to_a_row(double D_row)
 {
     return A.north + (D_row - D.north) * D_to_A_conv.y;
@@ -398,7 +397,6 @@ double D_d_to_a_row(double D_row)
  *  \param D_col x
  *  \return double
  */
-
 double D_d_to_a_col(double D_col)
 {
     return A.west + (D_col - D.west) * D_to_A_conv.x;
@@ -413,7 +411,6 @@ double D_d_to_a_col(double D_col)
  *  \param D_row y
  *  \return double
  */
-
 double D_d_to_u_row(double D_row)
 {
     return U.north + (D_row - D.north) / U_to_D_conv.y;
@@ -428,7 +425,6 @@ double D_d_to_u_row(double D_row)
  *  \param D_col x
  *  \return double
  */
-
 double D_d_to_u_col(double D_col)
 {
     return U.west + (D_col - D.west) / U_to_D_conv.x;
@@ -443,7 +439,6 @@ double D_d_to_u_col(double D_col)
  *  \param A_row row
  *  \return double
  */
-
 double D_a_to_u_row(double A_row)
 {
     return U.north + (A_row - A.north) * A_to_U_conv.y;
@@ -459,7 +454,6 @@ double D_a_to_u_row(double A_row)
  *  \param A_col column
  *  \return double
  */
-
 double D_a_to_u_col(double A_col)
 {
     return U.west + (A_col - A.west) * A_to_U_conv.x;
@@ -474,7 +468,6 @@ double D_a_to_u_col(double A_col)
  *  \param A_row row
  *  \return double
  */
-
 double D_a_to_d_row(double A_row)
 {
     return D.north + (A_row - A.north) / D_to_A_conv.y;
@@ -490,7 +483,6 @@ double D_a_to_d_row(double A_row)
  *  \param A_col column
  *  \return double
  */
-
 double D_a_to_d_col(double A_col)
 {
     return D.west + (A_col - A.west) / D_to_A_conv.x;
@@ -505,7 +497,6 @@ double D_a_to_d_col(double A_col)
  *  \param U_row north
  *  \return double
  */
-
 double D_u_to_d_row(double U_row)
 {
     return D.north + (U_row - U.north) * U_to_D_conv.y;
@@ -520,7 +511,6 @@ double D_u_to_d_row(double U_row)
  *  \param U_col east
  *  \return double
  */
-
 double D_u_to_d_col(double U_col)
 {
     return D.west + (U_col - U.west) * U_to_D_conv.x;
@@ -535,7 +525,6 @@ double D_u_to_d_col(double U_col)
  *  \param U_row north
  *  \return double
  */
-
 double D_u_to_a_row(double U_row)
 {
     return A.north + (U_row - U.north) / A_to_U_conv.y;
@@ -550,7 +539,6 @@ double D_u_to_a_row(double U_row)
  *  \param U_col east
  *  \return double
  */
-
 double D_u_to_a_col(double U_col)
 {
     return A.west + (U_col - U.west) / A_to_U_conv.x;

@@ -8,17 +8,8 @@
 # PURPOSE:      Provide temporal vector algebra to perform spatial and temporal operations
 #               for space time datasets by topological relationships to other space time
 #               datasets.
-# COPYRIGHT:    (C) 2014-2017 by the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2014-2017 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -64,19 +55,6 @@ def main():
     expression = options["expression"]
     basename = options["basename"]
     spatial = flags["s"]
-
-    # Check for PLY installation
-    try:
-        # Intentionally unused imports
-        from ply import lex  # noqa: F401
-        from ply import yacc  # noqa: F401
-    except ImportError:
-        gs.fatal(
-            _(
-                "Please install PLY (Lex and Yacc Python implementation) to use the "
-                "temporal algebra modules."
-            )
-        )
 
     tgis.init(True)
     p = tgis.TemporalVectorAlgebraParser(run=True, debug=False, spatial=spatial)

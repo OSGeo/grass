@@ -17,10 +17,8 @@ Classes:
  - statusbar::SbCompRegionExtent
  - statusbar::SbProgress
 
-(C) 2006-2011 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
@@ -546,7 +544,7 @@ class SbGoTo(SbItem):
                 raise SbException(_("Projection not defined (check the settings)"))
             # reproject values
             projIn = settings
-            projOut = RunCommand("g.proj", flags="jf", read=True)
+            projOut = RunCommand("g.proj", flags="fp", format="proj4", read=True)
             proj = projIn.split(" ")[0].split("=")[1]
             if proj in {"ll", "latlong", "longlat"}:
                 e, n = utils.DMS2Deg(e, n)

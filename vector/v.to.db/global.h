@@ -1,6 +1,6 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 enum OutputFormat { PLAIN, JSON };
 

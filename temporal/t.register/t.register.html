@@ -7,7 +7,7 @@ them within input space time datasets (stds). The existing timestamp modules
 <a href="r.timestamp.html">r.timestamp</a>,
 <a href="r3.timestamp.html">r3.timestamp</a> and
 <a href="v.timestamp.html">v.timestamp</a> do not register the maps in the
-temporal database of GRASS GIS. However, timestamps that have been created
+temporal database of GRASS. However, timestamps that have been created
 with these modules can be read and used by <em>t.register</em>. This
 works only for maps that are not already registered in the temporal
 database.
@@ -139,7 +139,10 @@ see <em><a href="i.band.library.html">i.band.library</a></em> module.
 
 <p>
 Specification of map names and absolute start time (datetime) of the time
-instances. The last column indicates related semantic label.
+instances. The last column indicates related semantic label. The
+last column is interpreted as a semantic label only when it cannot be
+read as an end time, i.e., when it is not a datetime for absolute time
+or an integer for relative time.
 
 <div class="code"><pre>
 T33UYP_20190331T094039_B01|2019-03-31 09:40:39|S2_1

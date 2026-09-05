@@ -5,10 +5,8 @@
 
    Lower level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL, probably Dave Gerdes
    \author Update to GRASS 5.7 Radim Blazek
@@ -686,7 +684,6 @@ int rtree_dump_node_file(FILE *fp, off_t pos, int with_z, struct RTree *t)
    \return -1 on error
    \return offset to root node on success
  */
-
 static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
                                      struct RTree *t, int off_t_size)
 {
@@ -793,7 +790,6 @@ static off_t rtree_write_from_memory(struct gvfile *fp, off_t startpos,
    \return -1 on error
    \return offset to root node on success
  */
-
 static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
                                    struct RTree *t, int off_t_size)
 {
@@ -921,7 +917,6 @@ static off_t rtree_write_to_sidx(struct gvfile *fp, off_t startpos,
 
    \return pointer to root node on success
  */
-
 static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
                                  struct RTree *t, int off_t_size)
 {
@@ -1045,7 +1040,6 @@ static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
 
    \return offset to root node
  */
-
 static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
                                struct RTree *t, int off_t_size)
 {

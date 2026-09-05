@@ -10,11 +10,8 @@
 #               - Based on v.db.dropcolumn
 #               - with special trick for SQLite and DBF (here the new col is
 #                 added/values copied/old col deleted)
-# COPYRIGHT:    (C) 2007 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2007 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # TODO: MySQL untested
 #############################################################################
@@ -101,7 +98,11 @@ def main():
 
     # old col there?
     if not oldcoltype:
-        gs.fatal(_("Column <%s> not found in table <%s>") % (oldcol, table))
+        gs.fatal(
+            _("Column <{column_name}> not found in table <{table_name}>").format(
+                column_name=oldcol, table_name=table
+            )
+        )
 
     # some tricks
     if driver in {"sqlite", "dbf"}:

@@ -15,8 +15,27 @@ different header) use the *-s* flag:
 r.out.ascii -s input=inname output=outname.grd [dp=value]
 ```
 
-NULL data are coded to "1.70141e+038" for SURFER ASCII GRID files
+NULL data are coded to \"1.70141e+038\" for SURFER ASCII GRID files
 (ignoring the *null=* parameter).
+
+To write a LISFLOOD .dem ASCII GRID file (with different header) use the
+*-l* flag:
+
+```sh
+r.out.ascii -l input=inname output=outname.dem
+```
+
+NULL data output are set by the user at \"-9999\" in this case, see
+below:
+
+```text
+ncols       1514
+nrows       2747
+xllcorner   212236
+yllcorner   2910116
+cellsize    120
+NODATA_value    -9999
+```
 
 ## NOTES
 

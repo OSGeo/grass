@@ -55,7 +55,7 @@ Users may experience significant performance degradation with virtual
 rasters built with *r.buildvrt* over GDAL-linked (*r.external*) raster
 maps, especially on slower file systems with latency like NFS.
 Performance degradation may also occur on local file systems, but is
-usually less severe. For such use cases consider using the GRASS GIS
+usually less severe. For such use cases consider using the GRASS
 addon
 [r.buildvrt.gdal](https://grass.osgeo.org/grass-stable/manuals/addons/r.buildvrt.gdal.html)
 or building GDAL VRTs, e.g. with *gdalbuildvrt*.

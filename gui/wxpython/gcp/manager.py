@@ -1,7 +1,7 @@
 """
 @package gcp.manager
 
-@brief Georectification module for GRASS GIS. Includes ground control
+@brief Georectification module for GRASS. Includes ground control
 point management and interactive point and click GCP creation
 
 Classes:
@@ -16,10 +16,8 @@ Classes:
  - manager::EditGCP
  - manager::GrSettingsDialog
 
-(C) 2006-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Original author Michael Barton
 @author Original version improved by Martin Landa <landa.martin gmail.com>
@@ -647,7 +645,7 @@ class GroupPage(TitledPage):
             self.grassdatabase, self.xylocation, self.xymapset, "vector"
         )
 
-        if os.path.exists(vector_dir):
+        if Path(vector_dir).exists():
             dlg = VectGroup(
                 parent=self,
                 id=wx.ID_ANY,
@@ -1104,7 +1102,7 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
         }
 
         # make a backup of the current points file
-        if os.path.exists(self.file["points"]):
+        if Path(self.file["points"]).exists():
             shutil.copy(self.file["points"], self.file["points_bak"])
 
         # polynomial order transformation for georectification
@@ -1928,10 +1926,10 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
                 self.SaveGCPs(None)
             elif ret == wx.NO:
                 # restore POINTS file from backup
-                if os.path.exists(self.file["points_bak"]):
+                if Path(self.file["points_bak"]).exists():
                     shutil.copy(self.file["points_bak"], self.file["points"])
 
-            if os.path.exists(self.file["points_bak"]):
+            if Path(self.file["points_bak"]).exists():
                 os.unlink(self.file["points_bak"])
 
             self.SrcMap.Clean()
@@ -2321,9 +2319,7 @@ class GCPDisplay(FrameMixin, GCPPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # bind to frame
@@ -2413,7 +2409,7 @@ class GCPList(ListCtrl, CheckListCtrlMixin, ListCtrlAutoWidthMixin):
         self.DeleteAllItems()
 
         self.render = False
-        if os.path.isfile(self.gcp.file["points"]):
+        if Path(self.gcp.file["points"]).is_file():
             self.gcp.ReadGCPs()
         else:
             # 3 gcp is minimum
@@ -2638,7 +2634,7 @@ class VectGroup(wx.Dialog):
         #
         self.listMap = CheckListBox(parent=self, id=wx.ID_ANY, choices=vectlist)
 
-        if os.path.isfile(self.vgrpfile):
+        if Path(self.vgrpfile).is_file():
             with open(self.vgrpfile) as f:
                 checked = []
                 for line in f:
@@ -2707,8 +2703,7 @@ class VectGroup(wx.Dialog):
 
         dirname = os.path.dirname(self.vgrpfile)
 
-        if not os.path.exists(dirname):
-            os.makedirs(dirname)
+        Path(dirname).mkdir(parents=True, exist_ok=True)
 
         with open(self.vgrpfile, mode="w") as f:
             f.writelines(vect + "\n" for vect in vgrouplist)

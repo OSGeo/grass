@@ -345,7 +345,7 @@ d.vect elevrand where="value > 94.9"
 [g.region](g.region.md)*
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 For examples of applications see [GRASS4
 implementation](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/) and [GRASS5

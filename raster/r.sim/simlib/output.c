@@ -94,9 +94,12 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
     return;
 }
 
-/* Soeren 8. Mar 2011 TODO:
- * This function needs to be refractured and splittet into smaller parts */
-int output_data(int tt, double ft UNUSED, const Setup *setup,
+/* conn is the sequential-block extrapolation factor nblock/iblock: scales
+ * the cumulative partial sum in gama into an estimator of the eventual total
+ * for snapshots taken before all blocks have run. With nblock = 1 (or after
+ * the final block) conn = 1.0 and the output formulas are unchanged. err is
+ * written from gammas, which already has conn baked into its accumulator. */
+int output_data(int tt, double conn, const Setup *setup,
                 const Geometry *geometry, const Settings *settings,
                 const Simulation *sim, const Inputs *inputs,
                 const Outputs *outputs, const Grids *grids)
@@ -234,7 +237,7 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
                 if (grids->zz[i][j] == UNDEF || grids->gama[i][j] == UNDEF)
                     Rast_set_f_null_value(depth_cell + j, 1);
                 else {
-                    a1 = pow(grids->gama[i][j], 3. / 5.);
+                    a1 = pow(grids->gama[i][j] * conn, 3. / 5.);
                     depth_cell[j] = (FCELL)a1; /* add conv? */
                     gmax = amax1(gmax, a1);
                 }
@@ -248,7 +251,7 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
                     grids->cchez[i][j] == UNDEF)
                     Rast_set_f_null_value(disch_cell + j, 1);
                 else {
-                    a2 = geometry->step * grids->gama[i][j] *
+                    a2 = geometry->step * grids->gama[i][j] * conn *
                          grids->cchez[i][j];   /* cchez incl. sqrt(sinsl) */
                     disch_cell[j] = (FCELL)a2; /* add conv? */
                     dismax = amax1(dismax, a2);
@@ -274,7 +277,7 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
                 if (grids->zz[i][j] == UNDEF || grids->gama[i][j] == UNDEF)
                     Rast_set_f_null_value(conc_cell + j, 1);
                 else {
-                    conc_cell[j] = (FCELL)grids->gama[i][j];
+                    conc_cell[j] = (FCELL)(grids->gama[i][j] * conn);
                     /*      gsmax = amax1(gsmax, gama[i][j]); */
                 }
             }
@@ -287,7 +290,7 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
                     grids->slope[i][j] == UNDEF)
                     Rast_set_f_null_value(flux_cell + j, 1);
                 else {
-                    a2 = grids->gama[i][j] * grids->slope[i][j];
+                    a2 = grids->gama[i][j] * conn * grids->slope[i][j];
                     flux_cell[j] = (FCELL)a2;
                     dismax = amax1(dismax, a2);
                 }
@@ -518,14 +521,26 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
         else
             Rast_short_history(depth0, type, &hist);
 
+        // init.walkers: Number of initial walkers in a single block
+        // maxwalk: Number of input walkers per block
+        // remaining walkers: Remaining walkers in an iteration
         Rast_append_format_history(
             &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", sim->nwalk,
             sim->maxwa, sim->nwalka);
+
+        // duration (sec.): Total simulation time in seconds
+        // time-series iteration: Number of iterations (cells)
         Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-serie iteration=%d",
+            &hist, "duration (sec.)=%d, time-series iteration=%d",
             settings->timesec, tt);
+
+        // written deltap: Time step for water (s)
+        // mean vel.: Mean velocity of water flow (m^3/s)
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    setup->deltap, setup->vmean);
+
+        // mean source (si): Mean source Rate (Rainfall Excess) (m/s)
+        // mean infiltration: Mean Infiltration Rate (m/s)
         Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
                                    setup->si0, setup->infmean);
 
@@ -558,14 +573,34 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
         else
             Rast_short_history(disch0, type, &hist);
 
+        // init.walkers: Number of initial walkers in a single block
+        // maxwalk: Number of input walkers per block
+        // remaining walkers: Remaining walkers in an iteration
         Rast_append_format_history(
             &hist, "init.walkers=%d, maxwalk=%d, rem. walkers=%d", sim->nwalk,
             sim->maxwa, sim->nwalka);
+
+        // duration (sec.): Total simulation time in seconds
+        // time-series iteration: Number of iterations (cells)
         Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-serie iteration=%d",
+            &hist, "duration (sec.)=%d, time-series iteration=%d",
             settings->timesec, tt);
+
+        // written deltap: Time step for water (s)
+        // mean vel.: Mean velocity of water flow (m^3/s)
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    setup->deltap, setup->vmean);
+
+        // Prevent potential division by zero error
+        if (setup->chmean != 0.0)
+            // mean manning: Mean Manning's n value
+            Rast_append_format_history(&hist, "mean mann=%f",
+                                       1.0 / setup->chmean);
+        else
+            Rast_append_format_history(&hist, "mean mann=undef");
+
+        // mean source (si): Mean rainfall excess (or sediment concentration?)
+        // mean infiltration: Mean Infiltration Rate (m/s)
         Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
                                    setup->si0, setup->infmean);
 
@@ -606,6 +641,17 @@ int output_data(int tt, double ft UNUSED, const Setup *setup,
             settings->timesec, tt);
         Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
                                    setup->deltap, setup->vmean);
+
+        // Prevent potential division by zero error
+        if (setup->chmean != 0.0)
+            // mean manning: Mean Manning's n value
+            Rast_append_format_history(&hist, "mean mann=%f",
+                                       1.0 / setup->chmean);
+        else
+            Rast_append_format_history(&hist, "mean mann=undef");
+
+        // mean source (si): Mean rainfall excess (or sediment concentration?)
+        // mean infiltration: Mean Infiltration Rate (m/s)
         Rast_append_format_history(&hist, "mean source (si)=%f", setup->si0);
 
         Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",

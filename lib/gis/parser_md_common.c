@@ -3,10 +3,8 @@
 
    \brief GIS Library - Argument parsing functions (Markdown output)
 
-   (C) 2023-2025 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2023-2025 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa
  */
@@ -26,17 +24,27 @@
         fputs(escaped, f);    \
         break
 
-void G__md_print_escaped(FILE *f, const char *str)
+void G__md_print_escaped(FILE *f, const char *str, const char *indent)
 {
     const char *s;
-
     for (s = str; *s; s++) {
         switch (*s) {
-            do_escape('\n', "\\\n");
-            do_escape('\t', "&nbsp;&nbsp;&nbsp;&nbsp;");
-            do_escape('<', "&lt;");
-            do_escape('>', "&gt;");
-            do_escape('*', "\\*");
+        case '\n':
+            fputs(MD_NEWLINE "\n", f);
+            fputs(indent, f);
+            break;
+        case '\t':
+            fputs("&nbsp;&nbsp;&nbsp;&nbsp;", f);
+            break;
+        case '<':
+            fputs("&lt;", f);
+            break;
+        case '>':
+            fputs("&gt;", f);
+            break;
+        case '*':
+            fputs("\\*", f);
+            break;
         default:
             fputc(*s, f);
         }

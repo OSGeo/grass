@@ -56,10 +56,8 @@
    of limited number of decimal places and for different order of
    coordinates, the results would be different)
 
-   (C) 2001-2014, 2022 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2014, 2022 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek.
@@ -665,6 +663,8 @@ static int boq_load(struct boq *q, struct line_pnts *Pnts,
  * \param BPoints second input line or NULL
  * \param[out] ALines array of new lines created from original A line
  * \param[out] BLines array of new lines created from original B line
+ * \param pABox
+ * \param pBBox
  * \param[out] nalines number of new lines (ALines)
  * \param[out] nblines number of new lines (BLines)
  * \param with_z 3D, not supported!

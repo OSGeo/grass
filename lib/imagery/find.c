@@ -17,7 +17,6 @@
  *  \param group
  *  \return int 1 if group was found, 0 otherwise
  */
-
 int I_find_group(const char *group)
 {
     if (group == NULL || *group == 0)
@@ -36,7 +35,6 @@ int I_find_group(const char *group)
  *  \param mapset
  *  \return int 1 if group was found, 0 otherwise
  */
-
 int I_find_group2(const char *group, const char *mapset)
 {
     return G_find_file2("group", group, mapset) != NULL;
@@ -63,6 +61,7 @@ int I_find_group_file(const char *group, const char *file)
  * \brief Searches for a group file in the specified mapset
  *
  * \param group
+ * \param mapset
  * \param file
  * \return int 1 if file was found, 0 otherwise
  */

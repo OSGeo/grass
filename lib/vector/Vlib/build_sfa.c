@@ -9,10 +9,8 @@
    - centroids   : FID
    - other types : index of the first record (which is FID) in offset array.
 
-   (C) 2001-2012 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2012 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Radim Blazek
    \author Piero Cavalieri
@@ -24,6 +22,8 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/glocale.h>
+
+#include <ogr_api.h>
 
 /*!
    \brief This structure keeps info about geometry parts above current
@@ -54,14 +54,10 @@ static int add_geometry_pg(struct Plus_head *, struct Format_info_pg *,
 static void build_pg(struct Map_info *, int);
 #endif
 
-#ifdef HAVE_OGR
-#include <ogr_api.h>
-
 static int add_geometry_ogr(struct Plus_head *, struct Format_info_ogr *,
                             OGRGeometryH, int, int, struct geom_parts *);
 
 static void build_ogr(struct Map_info *, int);
-#endif
 
 /*!
    \brief Init parts
@@ -391,7 +387,6 @@ void build_pg(struct Map_info *Map, int build)
 }
 #endif /* HAVE_POSTGRES */
 
-#ifdef HAVE_OGR
 /*!
    \brief Recursively add geometry (OGR) to topology
  */
@@ -677,7 +672,6 @@ void build_ogr(struct Map_info *Map, int build)
 
     free_parts(&parts);
 }
-#endif /* HAVE_OGR */
 
 /*!
    \brief Build pseudo-topology (for simple features) - internal use only
@@ -714,11 +708,7 @@ int Vect__build_sfa(struct Map_info *Map, int build)
     if (plus->built < GV_BUILD_BASE) {
         if (Map->format == GV_FORMAT_OGR ||
             Map->format == GV_FORMAT_OGR_DIRECT) {
-#ifdef HAVE_OGR
             build_ogr(Map, build);
-#else
-            G_fatal_error(_("GRASS is not compiled with OGR support"));
-#endif
         }
         else if (Map->format == GV_FORMAT_POSTGIS) {
 #ifdef HAVE_POSTGRES

@@ -6,16 +6,13 @@
 # AUTHOR(S):    Luca Delucchi, Fondazione E. Mach (Italy)
 #
 # PURPOSE:      Pack up a vector map, collect vector map elements => gzip
-# COPYRIGHT:    (C) 2011-2013 by the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2011-2013 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
 # %module
-# % description: Exports a vector map as GRASS GIS specific archive file
+# % description: Exports a vector map as GRASS specific archive file
 # % keyword: vector
 # % keyword: export
 # % keyword: copying
@@ -76,14 +73,18 @@ def main():
     outfile = options["output"] or infile + ".pack"
 
     # check if exists the output file
-    if os.path.exists(outfile):
+    if Path(outfile).exists():
         if os.getenv("GRASS_OVERWRITE"):
             grass.warning(
                 _("Pack file <%s> already exists and will be overwritten") % outfile
             )
             try_remove(outfile)
         else:
-            grass.fatal(_("option <%s>: <%s> exists.") % ("output", outfile))
+            grass.fatal(
+                _("option <{key}>: <{value}> exists.").format(
+                    key="output", value=outfile
+                )
+            )
 
     # prepare for packing
     grass.verbose(_("Packing <%s>...") % (gfile["fullname"]))
@@ -123,7 +124,7 @@ def main():
         path = os.path.join(
             gisenv["GISDBASE"], gisenv["LOCATION_NAME"], "PERMANENT", "PROJ_" + support
         )
-        if os.path.exists(path):
+        if Path(path).exists():
             tar.add(path, "PROJ_" + support)
     tar.close()
 

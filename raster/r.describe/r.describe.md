@@ -18,8 +18,6 @@ divide into the input raster map.
 
 ## NOTES
 
-### FLAGS
-
 If the user selects the **-r** flag, a range of category values found in
 the raster map layer will be printed. The range is divided into three
 groups: negative, positive, and zero. If negative values occur, the
@@ -39,46 +37,139 @@ The **-n** flag suppresses the reporting of `NULL` values.
 
 ## EXAMPLES
 
-The following examples are from the Spearfish60 sample dataset:
+The following examples are from the North Carolina sample dataset:
 
 ### Print the full list of raster map categories
 
-```sh
-r.describe landcover.30m
-* 11 21-23 31 32 41-43 51 71 81-83 85 91 92
-```
+=== "Command line"
+
+    ```sh
+    r.describe map=zipcodes
+    ```
+
+    Output:
+
+    ```text
+    27511 27513 27518 27529 27539 27601 27603-27608 27610
+    ```
+
+ === "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    ranges = gs.parse_command("r.describe", map="zipcodes")
+    ```
+
+    The JSON output looks like:
+
+    ```json
+    {
+        "has_nulls": false,
+        "ranges": [
+            {
+                "min": 27511,
+                "max": 27511
+            },
+            {
+                "min": 27513,
+                "max": 27513
+            },
+            {
+                "min": 27518,
+                "max": 27518
+            },
+            {
+                "min": 27529,
+                "max": 27529
+            },
+            {
+                "min": 27539,
+                "max": 27539
+            },
+            {
+                "min": 27601,
+                "max": 27601
+            },
+            {
+                "min": 27603,
+                "max": 27608
+            },
+            {
+                "min": 27610,
+                "max": 27610
+            }
+        ]
+    }
+    ```
 
 ### Print the raster range only
 
-```sh
-r.describe -r landcover.30m
-11 thru 92
-*
-```
+=== "Command line"
 
-### Print raster map category range, suppressing nulls
+    ```sh
+    r.describe map=zipcodes -r
+    ```
 
-```sh
-r.describe -n landcover.30m
-11 21-23 31 32 41-43 51 71 81-83 85 91 92
-```
+    Output:
+
+    ```text
+    27511 thru 27610
+    ```
+
+ === "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    gs.parse_command("r.describe", map="zipcodes", flags="r", format="json")
+    ```
+
+    The returned dictionary looks like:
+
+    ```text
+    {'has_nulls': False, 'ranges': [{'min': 27511, 'max': 27610}]}
+    ```
 
 ### Print raster map categories, one category per line
 
-```sh
-r.describe -1 geology
+=== "Command line"
 
-*
-1
-2
-3
-4
-5
-6
-7
-8
-9
-```
+    ```sh
+    r.describe map=zipcodes -1
+    ```
+
+    Output:
+
+    ```text
+    27511
+    27513
+    27518
+    27529
+    27539
+    27601
+    27603
+    27604
+    27605
+    27606
+    27607
+    27608
+    27610
+    ```
+
+ === "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    gs.parse_command("r.describe", map="zipcodes", flags="1", format="json")
+    ```
+
+    The returned dictionary looks like:
+
+    ```text
+    {'has_nulls': False, 'values': [27511, 27513, 27518, 27529, 27539, 27601, 27603, 27604, 27605, 27606, 27607, 27608, 27610]}
+    ```
 
 ## SEE ALSO
 

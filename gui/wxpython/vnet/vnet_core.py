@@ -9,10 +9,8 @@ Classes:
  - vnet_core::VNETHistory
  - vnet_core::SnappingNodes
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (GSoC 2012, mentor: Martin Landa)
 @author Lukas Bocan <silent_bob centrum.cz> (turn costs support)
@@ -226,9 +224,8 @@ class VNETManager:
                 parent=self,
                 message=_(
                     "Temporary map '%s' with result "
-                    + "was changed outside vector network analysis tool.\n"
-                    + "Showed result may not correspond "
-                    + "original analysis result."
+                    "was changed outside vector network analysis tool.\n"
+                    "Showed result may not correspond to original analysis result."
                 )
                 % resultVectMap.GetVectMapName(),
                 caption=_("Result changed outside"),
@@ -528,7 +525,8 @@ class VNETAnalyses:
                     GetNearestNodeCat(
                         e=coor[0],
                         n=coor[1],
-                        field=int(params["turn_cat_layer"], tresh=params["max_dist"]),
+                        layer=int(params["turn_cat_layer"]),
+                        tresh=params["max_dist"],
                         vectMap=params["input"],
                     )
                 )
@@ -637,8 +635,9 @@ class VNETAnalyses:
                 if len(catPts[cat[0]]) < 1:
                     GMessage(
                         parent=self,
-                        message=_("Please choose '%s' and '%s' point.")
-                        % (cats[0][1], cats[1][1]),
+                        message=_("Please choose '{0}' and '{1}' point.").format(
+                            cats[0][1], cats[1][1]
+                        ),
                     )
                     return False
         else:
@@ -928,9 +927,8 @@ class VNETHistory:
                 parent=self.guiparent,
                 message=_(
                     "Input map '%s' for analysis was changed outside "
-                    + "vector network analysis tool.\n"
-                    + "Topology column may not "
-                    + "correspond to changed situation."
+                    "vector network analysis tool.\n"
+                    "Topology column may not correspond to changed situation."
                 )
                 % inpMap,
                 caption=_("Input changed outside"),
@@ -1002,8 +1000,8 @@ class VNETHistory:
 def AddTmpMapAnalysisMsg(mapName, tmp_maps):  # TODO
     """Wraps AddTmpVectMap"""
     msg = _(
-        "Temporary map %s  already exists.\n"
-        + "Do you want to continue in analysis and overwrite it?"
+        "Temporary map %s already exists.\n"
+        "Do you want to continue in analysis and overwrite it?"
     ) % (mapName + "@" + grass.gisenv()["MAPSET"])
     return tmp_maps.AddTmpVectMap(mapName, msg)
 
@@ -1070,9 +1068,8 @@ class SnappingNodes(wx.EvtHandler):
         elif self.snapPts.VectMapState() == 0:
             dlg = wx.MessageDialog(
                 message=_(
-                    "Temporary map '%s' was changed outside "
-                    + "vector analysis tool.\n"
-                    "Do you really want to activate " + "snapping and overwrite it? "
+                    "Temporary map '%s' was changed outside vector analysis tool.\n"
+                    "Do you really want to activate snapping and overwrite it? "
                 )
                 % self.snapPts.GetVectMapName(),
                 caption=_("Overwrite map"),

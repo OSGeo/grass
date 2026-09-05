@@ -6,10 +6,8 @@
 Classes:
  - wxgui::GMApp
 
-(C) 2006-2015 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Jachym Cepicky (Mendel University of Agriculture)
@@ -36,7 +34,6 @@ import wx
 # we get annoying "Debug: Adding duplicate image handler for 'Windows bitmap file'"
 # during start up, remove when not needed
 import wx.adv
-import wx.html
 
 try:
     import wx.lib.agw.advancedsplash as SC
@@ -63,7 +60,7 @@ class GMApp(wx.App):
         :return: True
         """
         # Internal and display name of the app (if supported by/on platform)
-        self.SetAppName("GRASS GIS")
+        self.SetAppName("GRASS")
         self.SetVendorName("The GRASS Development Team")
 
         # create splash screen
@@ -151,7 +148,7 @@ def main(argv=None):
         try:
             opts, args = getopt.getopt(argv[1:], "hw:", ["help", "workspace"])
         except getopt.error as msg:
-            raise Usage(msg)
+            raise Usage(msg) from None
     except Usage as err:
         print(err.msg, file=sys.stderr)
         print(sys.stderr, "for help use --help", file=sys.stderr)

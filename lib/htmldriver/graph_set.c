@@ -3,7 +3,7 @@
  * started-up, or otherwise initialized happens here.  This is called only at
  * the startup of the graphics driver.
  *
- * The external variables define the pixle limits of the graphics surface.  The
+ * The external variables define the pixel limits of the graphics surface.  The
  * coordinate system used by the applications programs has the (0,0) origin
  * in the upper left-hand corner.  Hence,
  *    screen_left < screen_right

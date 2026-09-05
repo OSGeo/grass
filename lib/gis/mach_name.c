@@ -13,7 +13,6 @@
  * array is returned.
  *
  */
-
 const char *G__machine_name(void)
 {
     static int initialized;

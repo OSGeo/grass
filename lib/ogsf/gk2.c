@@ -5,12 +5,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL, GMSL/University of Illinois
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -421,7 +417,7 @@ int GK_delete_key(float pos, float precis, int justone)
    GK_add_key() will fail unless force_replace is TRUE.
 
    \param pos position
-   \param fmaks
+   \param fmask
    \param force_replace
    \param precis precision value
 

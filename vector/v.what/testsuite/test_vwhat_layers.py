@@ -156,6 +156,72 @@ Layer=2
 Category=4
 """
 
+out6 = {
+    "Coordinates": {"East": "634243", "North": "226193"},
+    "Maps": [
+        {
+            "Map": "test_vector",
+            "Type": "Area",
+            "Sq_Meters": 633834.281,
+            "Hectares": 63.383,
+            "Acres": 156.624,
+            "Sq_Miles": 0.2447,
+            "Categories": [
+                {
+                    "Layer": 1,
+                    "Category": 2,
+                    "Table": "t1",
+                    "Key_column": "cat_",
+                    "Attributes": {},
+                },
+                {
+                    "Layer": 1,
+                    "Category": 1,
+                    "Table": "t1",
+                    "Key_column": "cat_",
+                    "Attributes": {
+                        "cat": "1",
+                        "cat_": "1",
+                        "text": "Petrášová",
+                        "number": "6",
+                    },
+                },
+                {
+                    "Layer": 2,
+                    "Category": 3,
+                    "Table": "t2",
+                    "Key_column": "cat_",
+                    "Attributes": {},
+                },
+                {
+                    "Layer": 2,
+                    "Category": 4,
+                    "Table": "t2",
+                    "Key_column": "cat_",
+                    "Attributes": {
+                        "cat": "1",
+                        "cat_": "4",
+                        "text": "yyy",
+                        "number": "8.09",
+                    },
+                },
+            ],
+        }
+    ],
+}
+
+
+def remove_keys(obj, keys_to_remove={"Mapset", "Driver", "Database"}):
+    if isinstance(obj, dict):
+        return {
+            k: remove_keys(v, keys_to_remove)
+            for k, v in obj.items()
+            if k not in keys_to_remove
+        }
+    if isinstance(obj, list):
+        return [remove_keys(i, keys_to_remove) for i in obj]
+    return obj
+
 
 class TestMultiLayerMap(TestCase):
     @classmethod
@@ -189,6 +255,11 @@ class TestMultiLayerMap(TestCase):
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out1, actual=self.vwhat.outputs.stdout)
 
+        # Test with explicit 'plain' format
+        self.vwhat.inputs["format"].value = "plain"
+        self.assertModule(self.vwhat)
+        self.assertLooksLike(reference=out1, actual=self.vwhat.outputs.stdout)
+
     @unittest.expectedFailure
     def test_print_options(self):
         self.vwhat.flags["a"].value = True
@@ -206,7 +277,10 @@ class TestMultiLayerMap(TestCase):
         self.vwhat.flags["a"].value = True
         self.assertModule(self.vwhat)
         try:
-            json.loads(self.vwhat.outputs.stdout)
+            result = json.loads(self.vwhat.outputs.stdout)
+            # Skip exact match for keys containing "Mapset", "Driver" or "Database" because their values vary
+            result = remove_keys(result)
+            self.assertEqual(result, out6)
         except ValueError:
             self.fail(
                 msg="No JSON object could be decoded:\n" + self.vwhat.outputs.stdout

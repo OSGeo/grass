@@ -1,17 +1,12 @@
-
-/*
- * config.h.in
- */
+/* include/grass/config.h.in.  Generated from configure.ac by autoheader.  */
 
 #ifndef _config_h
 #define _config_h
 
-#define GDEBUG 1
+/* Define GDEBUG to 1 for historic reasons */
+#undef GDEBUG
 
-/* Define to 1 if you have the <ad2.h> header file. */
-#undef HAVE_AD2_H
-
-/* Define to 1 if you have the `asprintf' function. */
+/* Define to 1 if you have the 'asprintf' function. */
 #undef HAVE_ASPRINTF
 
 /* Define to 1 if you have the <bzlib.h> header file. */
@@ -32,7 +27,7 @@
 /* Define to 1 if you have the <dfftw.h> header file. */
 #undef HAVE_DFFTW_H
 
-/* Define to 1 if you have the `drand48' function. */
+/* Define to 1 if you have the 'drand48' function. */
 #undef HAVE_DRAND48
 
 /* Define to 1 if you have the <fftw3.h> header file. */
@@ -41,17 +36,11 @@
 /* Define to 1 if you have the <fftw.h> header file. */
 #undef HAVE_FFTW_H
 
-/* Define if fseeko (and presumably ftello) exists and is declared. */
-#undef HAVE_FSEEKO
-
 /* Define to 1 if you have the <ft2build.h> header file. */
 #undef HAVE_FT2BUILD_H
 
-/* Define to 1 if you have the `ftime' function. */
+/* Define to 1 if you have the 'ftime' function. */
 #undef HAVE_FTIME
-
-/* Define to 1 if GDAL is to be used. */
-#undef HAVE_GDAL
 
 /* Define to 1 if GEOS is to be used. */
 #undef HAVE_GEOS
@@ -59,10 +48,10 @@
 /* Define to 1 if you have the <geos_c.h> header file. */
 #undef HAVE_GEOS_C_H
 
-/* Define to 1 if you have the `gethostname' function. */
+/* Define to 1 if you have the 'gethostname' function. */
 #undef HAVE_GETHOSTNAME
 
-/* Define to 1 if you have the `gettimeofday' function. */
+/* Define to 1 if you have the 'gettimeofday' function. */
 #undef HAVE_GETTIMEOFDAY
 
 /* Define to 1 if you have the <GL/glu.h> header file. */
@@ -116,23 +105,20 @@
 /* Define to 1 if "long long int" is available. */
 #undef HAVE_LONG_LONG_INT
 
-/* Define to 1 if you have the `lseek' function. */
+/* Define to 1 if you have the 'lseek' function. */
 #undef HAVE_LSEEK
 
 /* Define to 1 if you have the <mysql.h> header file. */
 #undef HAVE_MYSQL_H
 
-/* Define to 1 if you have the `nanosleep' function. */
+/* Define to 1 if you have the 'nanosleep' function. */
 #undef HAVE_NANOSLEEP
 
 /* Define to 1 if NetCDF exists. */
 #undef HAVE_NETCDF
 
-/* Define to 1 if you have the `nice' function. */
+/* Define to 1 if you have the 'nice' function. */
 #undef HAVE_NICE
-
-/* Define to 1 if OGR is to be used. */
-#undef HAVE_OGR
 
 /* Define to 1 if you have the <omp.h> header file. */
 #undef HAVE_OMP_H
@@ -167,16 +153,13 @@
 /* Define to 1 if PQcmdTuples in lpq. */
 #undef HAVE_PQCMDTUPLES
 
-/* Define to 1 if you have the <proj_api.h> header file. */
-#undef HAVE_PROJ_API_H
-
-/* Define to 1 if you have the <proj.h> header file. */
-#undef HAVE_PROJ_H
+/* Define to 1 if POSIX threads are available. */
+#undef HAVE_PTHREAD
 
 /* Define to 1 if you have the <pthread.h> header file. */
 #undef HAVE_PTHREAD_H
 
-/* Define to 1 if you have the `putenv' function. */
+/* Define to 1 if you have the 'putenv' function. */
 #undef HAVE_PUTENV
 
 /* Define to 1 if you have the <readline/history.h> header file. */
@@ -188,22 +171,19 @@
 /* Define to 1 if you have the <regex.h> header file. */
 #undef HAVE_REGEX_H
 
-/* Define to 1 if you have the <pcre.h> header file. */
-#undef HAVE_PCRE_H
-
-/* Define to 1 if you have the `setenv' function. */
+/* Define to 1 if you have the 'setenv' function. */
 #undef HAVE_SETENV
 
-/* Define to 1 if you have the `seteuid' function. */
+/* Define to 1 if you have the 'seteuid' function. */
 #undef HAVE_SETEUID
 
-/* Define to 1 if you have the `setpriority' function. */
+/* Define to 1 if you have the 'setpriority' function. */
 #undef HAVE_SETPRIORITY
 
-/* Define to 1 if you have the `setreuid' function. */
+/* Define to 1 if you have the 'setreuid' function. */
 #undef HAVE_SETREUID
 
-/* Define to 1 if you have the `setruid' function. */
+/* Define to 1 if you have the 'setruid' function. */
 #undef HAVE_SETRUID
 
 /* define if socket() exists */
@@ -233,10 +213,10 @@
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
-/* Define to 1 if you have the `strlcat' function. */
+/* Define to 1 if you have the 'strlcat' function. */
 #undef HAVE_STRLCAT
 
-/* Define to 1 if you have the `strlcpy' function. */
+/* Define to 1 if you have the 'strlcpy' function. */
 #undef HAVE_STRLCPY
 
 /* Define to 1 if you have the <svm.h> header file. */
@@ -275,10 +255,10 @@
 /* Define to 1 if you have the <tiffio.h> header file. */
 #undef HAVE_TIFFIO_H
 
-/* Define to 1 if you have the `time' function. */
+/* Define to 1 if you have the 'time' function. */
 #undef HAVE_TIME
 
-/* Define to 1 if you have the `uname' function. */
+/* Define to 1 if you have the 'uname' function. */
 #undef HAVE_UNAME
 
 /* Define to 1 if you have the <unistd.h> header file. */
@@ -296,8 +276,19 @@
 /* Define to 1 if you have the <zstd.h> header file. */
 #undef HAVE_ZSTD_H
 
+#if defined(HAVE_VALUES_H) && !defined(HAVE_LIMITS_H)
+#define INT_MIN -MAXINT
+#endif
+
+
+/* Define to 1 if OpenGL uses AGL (MacOS X). */
+#undef OPENGL_AGL
+
 /* Define to 1 if OpenGL uses Aqua (MacOS X). */
 #undef OPENGL_AQUA
+
+/* Use framebuffer objects for off-screen OpenGL rendering */
+#undef OPENGL_FBO
 
 /* Define to 1 if OpenGL uses Windows. */
 #undef OPENGL_WINDOWS
@@ -323,13 +314,13 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Define to 1 if the `setpgrp' function requires zero arguments. */
+/* Define to 1 if the 'setpgrp' function requires zero arguments. */
 #undef SETPGRP_VOID
 
 /* Define to 1 for Windows static build. */
 #undef STATIC_BUILD
 
-/* Define to 1 if all of the C90 standard headers exist (not just the ones
+/* Define to 1 if all of the C89 standard headers exist (not just the ones
    required in a freestanding environment). This macro is provided for
    backward compatibility; new code need not use it. */
 #undef STDC_HEADERS
@@ -337,14 +328,11 @@
 /* Define to 1 if NLS requested. */
 #undef USE_NLS
 
-/* Define to 1 if using old PROJ version 4 API. */
-#undef USE_PROJ4API
-
 /* Define to 1 if the X Window System is missing or not being used. */
 #undef X_DISPLAY_MISSING
 
-/* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
-   `char[]'. */
+/* Define to 1 if 'lex' declares 'yytext' as a 'char *' by default, not a
+   'char[]'. */
 #undef YYTEXT_POINTER
 
 /* Number of bits in a file offset, on hosts where this is settable. */
@@ -362,80 +350,13 @@
 /* Define to 1 for _REENTRANT flag (for SunOS). */
 #undef _REENTRANT
 
-/* Define to `int' if <sys/types.h> doesn't define. */
+/* Define as 'int' if <sys/types.h> doesn't define. */
 #undef gid_t
 
-/* Define to `long int' if <sys/types.h> does not define. */
+/* Define to 'long int' if <sys/types.h> does not define. */
 #undef off_t
 
-/* Define to `int' if <sys/types.h> doesn't define. */
+/* Define as 'int' if <sys/types.h> doesn't define. */
 #undef uid_t
-
-/*
- * configuration information solely dependent on the above
- * nothing below this point should need changing
- */
-
-#if defined(HAVE_VALUES_H) && !defined(HAVE_LIMITS_H)
-#define INT_MIN -MAXINT
-#endif
-
-
-
-/*
- * Defines needed to get large file support - from cdrtools-2.01
- */
-
-/* MINGW32 LFS */
-
-/* define if we have LFS */
-#undef	HAVE_LARGEFILES
-
-#ifdef	HAVE_LARGEFILES		/* If we have working largefiles at all	   */
-				/* This is not defined with glibc-2.1.3	   */
-
-#if 0
-
-/* what to do with these four? configure comments these out */
-
-#undef _LARGEFILE_SOURCE	/* To make ftello() visible (HP-UX 10.20). */
-#undef _LARGE_FILES		/* Large file defined on AIX-style hosts.  */
-#undef _XOPEN_SOURCE		/* To make ftello() visible (glibc 2.1.3). */
-#undef _XOPEN_SOURCE_EXTENDED
-				/* XXX We don't use this because glibc2.1.3*/
-				/* XXX is bad anyway. If we define	   */
-				/* XXX _XOPEN_SOURCE we will loose caddr_t */
-
-#endif
-
-#if defined(__MINGW32__) && (!defined(_FILE_OFFSET_BITS) || (_FILE_OFFSET_BITS != 64))
-
-/* add/remove as needed */
-/* redefine off_t */
-#include <sys/types.h>
-#define off_t off64_t
-/* fseeko and ftello are safe because not defined by MINGW */
-#define HAVE_FSEEKO
-#define fseeko fseeko64
-#define ftello ftello64
-/* redefine lseek */
-#include <unistd.h>
-#define lseek lseek64
-/* redefine stat and fstat */
-/* use _stati64 compatible with MSVCRT < 6.1 */
-#include <sys/stat.h>
-#define stat _stati64
-#define fstat _fstati64
-
-#endif /* MINGW32 LFS */
-
-#endif	/* HAVE_LARGEFILES */
-
-
-/* define if langinfo.h exists */
-#undef HAVE_LANGINFO_H
-
-/* Use framebuffer objects for off-screen OpenGL rendering */
-#define OPENGL_FBO 1
 
 #endif /* _config_h */

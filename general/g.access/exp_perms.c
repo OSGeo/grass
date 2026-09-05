@@ -4,31 +4,29 @@
 char *explain_perms(int group, int other, int will)
 {
     static char buf[256];
-    char *who;
-    char *verb;
-    char *read;
+    char *msg = _("Cannot explain access permissions for mapset <%s>");
 
-    verb = _("have");
-    read = _("read ");
-    read = ""; /* remove this to have "read" appear */
     if (group && other) {
-        who = _("Everyone");
-        verb = _("has");
+        msg = will ? _("Everyone will have access to mapset <%s>")
+                   : _("Everyone now has access to mapset <%s>");
     }
     else if (group) {
-        who = _("Only users in your group");
+        msg = will ? _("Only users in your group will have access to "
+                       "mapset <%s>")
+                   : _("Only users in your group now have access to mapset "
+                       "<%s>");
     }
     else if (other) {
-        who = _("Only users outside your group");
+        msg = will ? _("Only users outside your group will have access to "
+                       "mapset <%s>")
+                   : _("Only users outside your group now have access to "
+                       "mapset <%s>");
     }
     else {
-        who = _("Only you");
-        read = "";
+        msg = will ? _("Only you will have access to mapset <%s>")
+                   : _("Only you now have access to mapset <%s>");
     }
-    if (will)
-        verb = _("have");
 
-    snprintf(buf, sizeof(buf), _("%s %s %s %saccess to mapset %s"), who,
-             will ? _("will") : _("now"), verb, read, G_mapset());
+    snprintf(buf, sizeof(buf), msg, G_mapset());
     return buf;
 }

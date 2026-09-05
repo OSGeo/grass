@@ -118,7 +118,6 @@
  * \param[in] name table name to drop
  * \return int DB_FAILED on error; DB_OK on success
  */
-
 int db__driver_drop_table(dbString *name)
 {
     char cmd[200];

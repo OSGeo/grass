@@ -44,7 +44,6 @@ void merge_threads(struct Cell_stats **thread_statf, int nprocs, int nfiles)
  * final cats/colr only if these patching layers actually
  * contributed new categories to the final result
  */
-
 int support(char **names, struct Cell_stats *statf, int nfiles,
             struct Categories *cats, int *cats_ok, struct Colors *colr,
             int *colr_ok, RASTER_MAP_TYPE out_type)

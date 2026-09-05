@@ -4,11 +4,9 @@
  * PURPOSE:      g.ppmtopng isn't meant for end users. It's an internal tool
  *               for use by the script to generate thumbnails for the r.colors
  *               manual page.
- * COPYRIGHT:    (C) 2009 by Glynn Clements and the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2009 Glynn Clements
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  */
 
@@ -37,7 +35,8 @@ static void read_ppm(const char *filename)
     if (fscanf(input, "P6 %d %d %d", &width, &height, &maxval) != 3)
         G_fatal_error(_("Invalid input file %s"), filename);
 
-    fgetc(input);
+    if (fgetc(input) == EOF)
+        G_fatal_error(_("Invalid input file %s"), filename);
 
     buf = G_malloc(width * height * 3);
 

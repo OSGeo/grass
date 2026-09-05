@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2010, 2012-2013 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2010, 2012-2013 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -31,29 +29,22 @@
 
 #define SEP "-----------------------------------\n"
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *Map UNUSED, int build UNUSED)
+#if !defined HAVE_POSTGRES
+static int format(struct Map_info *Map G_UNUSED, int build G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 #endif
 
-static int (*Build_array[])(struct Map_info *, int) = {Vect_build_nat
-#ifdef HAVE_OGR
-                                                       ,
-                                                       Vect_build_ogr,
-                                                       Vect_build_ogr
-#else
-                                                       ,
-                                                       format, format
-#endif
+static int (*Build_array[])(struct Map_info *, int) = {
+    Vect_build_nat, Vect_build_ogr, Vect_build_ogr
 #ifdef HAVE_POSTGRES
-                                                       ,
-                                                       Vect_build_pg
+    ,
+    Vect_build_pg
 #else
-                                                       ,
-                                                       format
+    ,
+    format
 #endif
 };
 
@@ -840,8 +831,8 @@ void Vect__build_downgrade(struct Map_info *Map, int build)
    - GV_BUILD_CENTROIDS - assign centroids to areas, build category index;
    - GV_BUILD_ALL - top level, the same as GV_BUILD_CENTROIDS.
 
-   If functions is called with build lower than current value of the
-   Map, the level is downgraded to requested value.
+   If the function is called with build level lower than the current value of
+   the Map, the level is downgraded to the requested value.
 
    All calls to Vect_write_line(), Vect_rewrite_line(),
    Vect_delete_line() respect the last value of build used in this

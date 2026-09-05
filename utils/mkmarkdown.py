@@ -8,33 +8,31 @@
 #               Martin Landa <landa.martin gmail.com>
 # PURPOSE:      Create Markdown manual page snippets
 #               Inspired by mkhtml.py
-# COPYRIGHT:    (C) 2024 by the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2024 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
 import os
-import sys
-import string
 import re
+import string
+import sys
 import urllib.parse as urlparse
+from pathlib import Path
 
 try:
     import grass.script as gs
 except ImportError:
-    # During compilation GRASS GIS
+    # During compilation GRASS
     gs = None
 
 from mkdocs import (
-    read_file,
-    get_version_branch,
-    get_last_git_commit,
-    top_dir,
     get_addon_path,
+    get_last_git_commit,
+    get_version_branch,
+    read_file,
     set_proxy,
+    top_dir,
 )
 
 
@@ -80,7 +78,7 @@ def parse_source(pgm):
         addon_path = get_addon_path(base_url=base_url, pgm=pgm, major_version=major)
         if addon_path:
             # Addon is installed from the local dir
-            if os.path.exists(os.getenv("SOURCE_URL")):
+            if Path(os.getenv("SOURCE_URL")).exists():
                 url_source = urlparse.urljoin(
                     addons_url,
                     addon_path,

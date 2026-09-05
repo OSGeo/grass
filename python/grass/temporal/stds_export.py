@@ -17,10 +17,8 @@ Usage:
     tgis.export_stds(input, output, compression, directory, where, format_, type_)
 
 
-(C) 2012-2021 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2021 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -328,7 +326,7 @@ def export_stds(
     :param directory: The working directory used for extraction and packing
     :param where: The temporal WHERE SQL statement to select a subset
                   of maps from the space time dataset
-    :param format_: The export format:
+    :param format\\_: The export format:
 
           - "GTiff" Geotiff format, only for raster maps
           - "AAIGrid" Arc/Info ASCII Grid format, only for raster maps
@@ -339,7 +337,7 @@ def export_stds(
           - "GPKG" GPKG file export format, only for vector maps,
                   v.out.ogr export option
 
-    :param type_: The space time dataset type
+    :param type\\_: The space time dataset type
 
           - "strds" Space time raster dataset
           - "str3ds" Space time 3D raster dataset
@@ -394,7 +392,7 @@ def export_stds(
                 _export_raster3d_maps(rows, tar, list_file, new_cwd, fs)
 
     # Write projection and metadata
-    proj = gs.read_command("g.proj", flags="j")
+    proj = gs.read_command("g.proj", flags="p", format="proj4")
 
     Path(proj_file_name).write_text(proj)
 
@@ -427,17 +425,17 @@ def export_stds(
         if type_ == "strds":
             read_file.write(
                 "This space time raster dataset was exported with "
-                "t.rast.export of GRASS GIS 8\n"
+                "t.rast.export of GRASS 8\n"
             )
         elif type_ == "stvds":
             read_file.write(
                 "This space time vector dataset was exported with "
-                "t.vect.export of GRASS GIS 8\n"
+                "t.vect.export of GRASS 8\n"
             )
         elif type_ == "str3ds":
             read_file.write(
                 "This space time 3D raster dataset was exported "
-                "with t.rast3d.export of GRASS GIS 8\n"
+                "with t.rast3d.export of GRASS 8\n"
             )
         read_file.write("\n")
         read_file.write("Files:\n")
@@ -445,7 +443,7 @@ def export_stds(
             if format_ == "GTiff":
                 # 123456789012345678901234567890
                 read_file.write("       *.tif  -- GeoTIFF raster files\n")
-                read_file.write("     *.color  -- GRASS GIS raster color rules\n")
+                read_file.write("     *.color  -- GRASS raster color rules\n")
             elif format_ == "pack":
                 read_file.write(
                     "      *.pack  -- GRASS raster files packed with r.pack\n"
@@ -466,7 +464,7 @@ def export_stds(
             "%13s -- Projection information in PROJ.4 format\n" % (proj_file_name)
         )
         read_file.write(
-            "%13s -- GRASS GIS space time %s dataset information\n"
+            "%13s -- GRASS space time %s dataset information\n"
             % (init_file_name, sp.get_new_map_instance(None).get_type())
         )
         read_file.write(

@@ -5,11 +5,8 @@
  *
  * PURPOSE:      Create new vector from db table.
  *
- * COPYRIGHT:    (C) 2000-2007, 2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2000-2007, 2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ******************************************************************************/
 #include <stdio.h>
@@ -121,8 +118,15 @@ int main(int argc, char *argv[])
         char name[GNAME_MAX], mapset[GMAPSET_MAX];
 
         if (!G_name_is_fully_qualified(outvect->answer, name, mapset)) {
-            strcpy(name, outvect->answer);
-            strcpy(mapset, G_mapset());
+            if (G_strlcpy(name, outvect->answer, sizeof(name)) >=
+                sizeof(name)) {
+                G_fatal_error(_("Output vector name too long: <%s>"),
+                              outvect->answer);
+            }
+            if (G_strlcpy(mapset, G_mapset(), sizeof(mapset)) >=
+                sizeof(mapset)) {
+                G_fatal_error(_("Mapset name too long: <%s>"), G_mapset());
+            }
         }
 
         Vect_set_open_level(1); /* no topo needed */

@@ -6,10 +6,8 @@
 Classes:
  - nviztask::NvizTask
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
@@ -34,14 +32,14 @@ class NvizTask:
         self.filename = filename
         try:
             gxwXml = ProcessWorkspaceFile(ET.parse(self.filename))
-        except Exception:
+        except Exception as e:
             raise GException(
                 _(
                     "Reading workspace file <%s> failed.\n"
                     "Invalid file, unable to parse XML document."
                 )
                 % filename
-            )
+            ) from e
         # for display in gxwXml.displays:
         # pprint(display)
         # for layer in gxwXml.layers:
@@ -103,7 +101,7 @@ class NvizTask:
             ("shininess_map", "shininess_value"),
             ("transparency_map", "transparency_value"),
         )
-        for attr, params in zip(attributes, parameters):
+        for attr, params in zip(attributes, parameters, strict=True):
             mapname = None
             const = None
             if attr in surface["attribute"]:
@@ -130,7 +128,7 @@ class NvizTask:
         self._setMultiTaskParam("wire_color", value)
         # resolution
         for mode1, mode2 in zip(
-            ("coarse", "fine"), ("resolution_coarse", "resolution_fine")
+            ("coarse", "fine"), ("resolution_coarse", "resolution_fine"), strict=True
         ):
             value = surface["draw"]["resolution"][mode1]
             self._setMultiTaskParam(mode2, value)
@@ -183,7 +181,7 @@ class NvizTask:
                     ("isosurf_shininess_map", "isosurf_shininess_value"),
                     ("isosurf_transparency_map", "isosurf_transparency_value"),
                 )
-                for attr, params in zip(attributes, parameters):
+                for attr, params in zip(attributes, parameters, strict=True):
                     mapname = None
                     const = None
                     if attr in isosurface:

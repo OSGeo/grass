@@ -1,8 +1,8 @@
 /*
- * Copyright (C) 1995.  Bill Brown <brown@gis.uiuc.edu> & Michael Shapiro
- *
- * This program is free software under the GPL (>=v2)
- * Read the file GPL.TXT coming with GRASS for details.
+ * SPDX-FileCopyrightText: 1995 Bill Brown <brown@gis.uiuc.edu>
+ * SPDX-FileCopyrightText: 1995 Michael Shapiro
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <grass/datetime.h>
 
@@ -16,7 +16,6 @@
  *  \param dt
  *  \return int
  */
-
 int datetime_is_positive(const DateTime *dt)
 {
     return dt->positive != 0;
@@ -32,7 +31,6 @@ int datetime_is_positive(const DateTime *dt)
  *  \param dt
  *  \return int
  */
-
 int datetime_is_negative(const DateTime *dt)
 {
     return dt->positive == 0;
@@ -46,7 +44,6 @@ int datetime_is_negative(const DateTime *dt)
  *  \param dt
  *  \return void
  */
-
 void datetime_set_positive(DateTime *dt)
 {
     dt->positive = 1;
@@ -60,7 +57,6 @@ void datetime_set_positive(DateTime *dt)
  *  \param dt
  *  \return void
  */
-
 void datetime_set_negative(DateTime *dt)
 {
     dt->positive = 0;
@@ -72,7 +68,6 @@ void datetime_set_negative(DateTime *dt)
  *  \param dt
  *  \return void
  */
-
 void datetime_invert_sign(DateTime *dt)
 {
     dt->positive = !dt->positive;

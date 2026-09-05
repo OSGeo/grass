@@ -4,10 +4,8 @@
    \brief OGSF library - loading and manipulating vector sets (lower level
    functions)
 
-   (C) 1999-2008, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 1999-2008, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL (December 1993)
    \author Doxygenized by Martin Landa (June 2008)
@@ -220,7 +218,7 @@ int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
             /* 3D line */
             else {
                 G_debug(5, "gvd_vect(): 3D vector line");
-                points = (Point3 *)malloc(sizeof(Point3));
+                points = (Point3 *)G_malloc(sizeof(Point3));
 
                 gsd_bgnline();
                 for (k = 0; k < gln->npts; k++) {
@@ -233,7 +231,7 @@ int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
                     gsd_vert_func(points[0]);
                 }
                 gsd_endline();
-                free(points);
+                G_free(points);
             }
         }
         /* polygon */
@@ -244,7 +242,7 @@ int gvd_vect(geovect *gv, geosurf *gs, int do_fast)
 
                 /* We want at least 3 points */
                 if (gln->npts >= 3) {
-                    points = (Point3 *)malloc(2 * sizeof(Point3));
+                    points = (Point3 *)G_malloc(2 * sizeof(Point3));
                     glEnable(GL_NORMALIZE);
 
                     glEnable(GL_COLOR_MATERIAL);

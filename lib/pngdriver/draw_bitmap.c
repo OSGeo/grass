@@ -3,10 +3,9 @@
 
    \brief GRASS png display driver - draw bitmap
 
-   (C) 2003-2014 by Per Henrik Johansen and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2003-2014 Per Henrik Johansen
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Per Henrik Johansen (original contributor)
    \author Glynn Clements
@@ -29,7 +28,6 @@
    \param threshold threshold value
    \param buf data buffer
  */
-
 void PNG_draw_bitmap(int ncols, int nrows, int threshold,
                      const unsigned char *buf)
 {

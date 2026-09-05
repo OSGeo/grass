@@ -20,14 +20,9 @@
  * \author modified by McCauley in August 1995
  * \author modified by Mitasova in August 1995, Nov. 1996
  *
- * \copyright
- * (C) 1993-1999 by Lubos Mitas and the GRASS Development Team
- *
- * \copyright
- * This program is free software under the
- * GNU General Public License (>=v2).
- * Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1993-1999 Lubos Mitas
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdio.h>
@@ -35,18 +30,18 @@
 #include <grass/gis.h>
 #include <grass/interpf.h>
 
-/* parameter description from DESCRIPTION.INTERP */
-/*!
- * Radial basis function
+/**
+ * @brief Radial basis function
  *
  * Radial basis function - completely regularized spline with tension (d=2)
  *
+ * parameter description from DESCRIPTION.INTERP
+ *
+ * @param r distance squared
+ * @param fi tension
+ * @return
  */
-
-double IL_crst(double r, /**< distance squared */
-
-               double fi /**< tension */
-)
+double IL_crst(double r, double fi)
 {
     double rfsta2 = fi * fi * r / 4.;
 
@@ -97,20 +92,18 @@ double IL_crst(double r, /**< distance squared */
     return (res);
 }
 
-/*!
- * Function for calculating derivatives (d=2)
+/**
+ * @brief Function for calculating derivatives (d=2)
  *
  * Derivatives of radial basis function - regularized spline with tension(d=2)
+ *
+ * @param r distance squared
+ * @param fi tension
+ * @param gd1 G1(r)
+ * @param gd2 G2(r)
+ * @return
  */
-
-int IL_crstg(double r, /**< distance squared */
-
-             double fi, /**< tension */
-
-             double *gd1, /**< G1(r) */
-
-             double *gd2 /**< G2(r) */
-)
+int IL_crstg(double r, double fi, double *gd1, double *gd2)
 {
     double r2 = r;
     double rfsta2 = fi * fi * r / 4.;

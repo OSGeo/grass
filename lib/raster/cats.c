@@ -60,10 +60,8 @@
  * know that i-th rule maps fp range to i, thus we know for sure
  * that cats.labels[i] corresponds to i-th quant rule
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -212,12 +210,12 @@ static CELL read_cats(const char *element, const char *name, const char *mapset,
     if (!full) {
         fclose(fd);
         if (num < 0)
-            return 0; /* coorect */
+            return 0; /* correct */
         return (CELL)num;
     }
 
     /* Read the title for the file */
-    if (G_getl(buff, sizeof buff, fd) == 0)
+    if (G_getl(buff, sizeof(buff), fd) == 0)
         goto error;
     G_strip(buff);
     /*    G_ascii_check(buff) ; */
@@ -230,10 +228,10 @@ static CELL read_cats(const char *element, const char *name, const char *mapset,
         char fmt[256];
         float m1, a1, m2, a2;
 
-        if (G_getl(fmt, sizeof fmt, fd) == 0)
+        if (G_getl(fmt, sizeof(fmt), fd) == 0)
             goto error;
         /* next line contains equation coefficients */
-        if (G_getl(buff, sizeof buff, fd) == 0)
+        if (G_getl(buff, sizeof(buff), fd) == 0)
             goto error;
         if (sscanf(buff, "%f %f %f %f", &m1, &a1, &m2, &a2) != 4)
             goto error;
@@ -244,7 +242,7 @@ static CELL read_cats(const char *element, const char *name, const char *mapset,
     for (cat1 = 0;; cat1++) {
         char label[1024];
 
-        if (G_getl(buff, sizeof buff, fd) == 0)
+        if (G_getl(buff, sizeof(buff), fd) == 0)
             break;
         if (old)
             Rast_set_c_cat(&cat1, &cat1, buff, pcats);
@@ -912,7 +910,6 @@ int Rast_set_d_cat(const DCELL *rast1, const DCELL *rast2, const char *label,
  * \return 0 if null value detected
  * \return 1 on success
  */
-
 int Rast_set_cat(const void *rast1, const void *rast2, const char *label,
                  struct Categories *pcats, RASTER_MAP_TYPE data_type)
 {

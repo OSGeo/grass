@@ -3,10 +3,8 @@
 
 @brief Global variables used by wxGUI
 
-(C) 2007-2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 """
@@ -102,7 +100,7 @@ def CheckForWx():
     except ImportError as e:
         print("ERROR: wxGUI requires wxPython. {}".format(e), file=sys.stderr)
         print(
-            "You can still use GRASS GIS modules in the command line or in Python.",
+            "You can still use GRASS modules in the command line or in Python.",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -200,7 +198,7 @@ def UpdateGRASSAddOnCommands(eList=None):
     nCmd = 0
     pathList = os.getenv("PATH", "").split(os.pathsep)
     for path in addonPath.split(os.pathsep):
-        if not os.path.exists(path) or not os.path.isdir(path):
+        if not Path(path).exists() or not Path(path).is_dir():
             continue
 
         # check if addon is in the path

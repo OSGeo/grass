@@ -5,37 +5,32 @@
 # MODULE:    build_class_graphical
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:   Build page with modules per family/class/category with images
-# COPYRIGHT: (C) 2015 by Vaclav Petras and the GRASS Development Team
-#
-#        This program is free software under the GNU General Public
-#        License (>=v2). Read the file COPYING that comes with GRASS
-#        for details.
+# SPDX-FileCopyrightText: 2015 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
-import sys
-import os
 import fnmatch
-
-from build import (
-    default_year,
-    grass_version,
-    to_title,
-    get_files,
-    check_for_desc_override,
-    write_footer,
-    replace_file,
-)
-
-from build_html import (
-    header1_tmpl,
-    modclass_intro_tmpl,
-    get_desc,
-    man_dir,
-)
+import os
+import sys
 
 import build_md
-
+from build import (
+    check_for_desc_override,
+    default_year,
+    get_files,
+    grass_version,
+    replace_file,
+    to_title,
+    write_footer,
+)
+from build_html import (
+    get_desc,
+    header1_tmpl,
+    man_dir,
+    modclass_intro_tmpl,
+)
 
 graphical_index_style = """\
 <style>

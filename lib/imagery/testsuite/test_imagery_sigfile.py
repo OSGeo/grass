@@ -9,36 +9,34 @@ Read the file COPYING that comes with GRASS
 for details
 """
 
-import stat
 import ctypes
 import os
 import shutil
+import stat
 from pathlib import Path
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import tempname
-from grass.pygrass import utils
-from grass.pygrass.gis import Mapset
-
 from grass.lib.gis import G_mapset_path
-from grass.lib.raster import Rast_write_semantic_label
 from grass.lib.imagery import (
-    Signature,
-    Ref,
-    I_init_signatures,
-    I_new_signature,
+    I_add_file_to_group_ref,
     I_fopen_signature_file_new,
-    I_write_signatures,
     I_fopen_signature_file_old,
-    I_read_signatures,
-    I_sort_signatures_by_semantic_label,
+    I_free_group_ref,
     I_free_signatures,
     I_init_group_ref,
-    I_add_file_to_group_ref,
-    I_free_group_ref,
+    I_init_signatures,
+    I_new_signature,
+    I_read_signatures,
+    I_sort_signatures_by_semantic_label,
+    I_write_signatures,
+    Ref,
+    Signature,
 )
+from grass.lib.raster import Rast_write_semantic_label
+from grass.pygrass import utils
+from grass.pygrass.gis import Mapset
+from grass.script.core import tempname
 
 
 class SignatureFileTestCase(TestCase):
@@ -483,10 +481,10 @@ class SortSignaturesBysemantic_labelTest(TestCase):
         self.assertEqual(
             sig_err,
             "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>,<semantic label missing>,"
-            + "<semantic label missing>",
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>,<semantic label missing>,"
+            "<semantic label missing>",
         )
         self.assertEqual(ref_err, f"The_Doors,{self.map3}")
 

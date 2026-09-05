@@ -8,11 +8,8 @@
 #
 # PURPOSE:      Import and reproject on the fly
 #
-# COPYRIGHT:    (C) 2015-2021 GRASS development team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2015-2021 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -118,6 +115,8 @@ import os
 import atexit
 import math
 
+from pathlib import Path
+
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
@@ -214,7 +213,10 @@ def main():
     tgtloc = grassenv["LOCATION_NAME"]
 
     # make sure target is not xy
-    if gs.parse_command("g.proj", flags="g")["name"] == "xy_location_unprojected":
+    if (
+        gs.parse_command("g.proj", flags="p", format="shell")["name"]
+        == "xy_location_unprojected"
+    ):
         gs.fatal(
             _("Coordinate reference system not available for current project <%s>")
             % tgtloc
@@ -261,7 +263,7 @@ def main():
 
     # make sure input is not xy
     if (
-        gs.parse_command("g.proj", flags="g", env=src_env)["name"]
+        gs.parse_command("g.proj", flags="p", format="shell", env=src_env)["name"]
         == "xy_location_unprojected"
     ):
         gs.fatal(
@@ -300,10 +302,10 @@ def main():
     # is output a group?
     group = False
     path = os.path.join(GISDBASE, TMPLOC, "group", output)
-    if os.path.exists(path):
+    if Path(path).exists():
         group = True
         path = os.path.join(GISDBASE, TMPLOC, "group", output, "POINTS")
-        if os.path.exists(path):
+        if Path(path).exists():
             gs.fatal(_("Input contains GCPs, rectification is required"))
 
     if "r" in region_flag:

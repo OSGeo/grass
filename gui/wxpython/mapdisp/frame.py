@@ -9,10 +9,8 @@ Can be used either from Layer Manager or as d.mon backend.
 Classes:
  - mapdisp::MapPanel
 
-(C) 2006-2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton
 @author Jachym Cepicky
@@ -1099,13 +1097,11 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 map=raster, coord=(east, north), localized=True, env=env
             )
         if vect:
-            encoding = UserSettings.Get(group="atm", key="encoding", subkey="value")
             try:
                 vectQuery = gs.vector_what(
                     map=vect,
                     coord=(east, north),
                     distance=qdist,
-                    encoding=encoding,
                     multiple=True,
                 )
             except ScriptError:
@@ -1716,9 +1712,7 @@ class MapDisplay(FrameMixin, MapPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
         # use default frame window layout
         client_disp = wx.ClientDisplayRect()

@@ -3,12 +3,10 @@
  *
  * \brief GIS Library - Comma string functions.
  *
- * (C) 2001-2014 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 1999-2014
  */
@@ -32,7 +30,6 @@
  * \return 1 if no commas inserted
  * \return 0 if commas inserted
  */
-
 int G_insert_commas(char *buf)
 {
     char number[100];
@@ -81,7 +78,6 @@ int G_insert_commas(char *buf)
  * \param[in,out] buf string
  * \return
  */
-
 void G_remove_commas(char *buf)
 {
     char *b;

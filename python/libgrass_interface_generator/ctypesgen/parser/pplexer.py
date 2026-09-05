@@ -59,7 +59,7 @@ STRING_LITERAL = '"' + string_char + '*"'
 
 # Process line-number directives from the preprocessor
 # See https://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html
-DIRECTIVE = r'\#\s+(?P<lineno>\d+)\s+"(?P<filename>[^"]+)"[ \d]*\n'
+DIRECTIVE = r'\#(?:\s+|line\s+)(?P<lineno>\d+)\s+"(?P<filename>[^"]+)".*?\n'  # Both GCC and MSVC formats
 
 
 # --------------------------------------------------------------------------

@@ -3,9 +3,9 @@
  *    Extracted from original d.legend/main.c for background purpose
  *    Moving to separate file: Adam Laza, GSoC 2016
  *
- *    Copyright (C) 2014 by Hamish Bowman, and the GRASS Development Team*
- *    This program is free software under the GPL (>=v2)
- *    Read the COPYING file that comes with GRASS for details.
+ *    SPDX-FileCopyrightText: 2014 Hamish Bowman
+ *    SPDX-FileCopyrightText: GRASS Development Team
+ *    SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdlib.h>
@@ -247,7 +247,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 "Nothing to draw! (no categories with labels? out of range?)"));
         }
 
-        /* Figure number of lines, number of pixles per line and text size */
+        /* Figure number of lines, number of pixels per line and text size */
         dots_per_line = ((y1 - y0) / lines);
 
         /* switch to a smooth legend for CELL maps with too many cats */
@@ -1098,7 +1098,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                             0.81)); /* ?? txsiz*.81=actual text width. */
             if (ScaleFactor < 1.0) {
                 txsiz = txsiz * ScaleFactor;
-                dots_per_line = (int)floor(dots_per_line * ScaleFactor);
+                dots_per_line = (int)floor((double)dots_per_line * ScaleFactor);
             }
         }
 

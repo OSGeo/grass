@@ -7,10 +7,8 @@ List of classes:
  - wms_base::GRASSImporter
  - wms_base::WMSDriversInfo
 
-(C) 2012-2019 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2012-2019 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
@@ -120,25 +118,30 @@ class WMSBase:
             self.params["proj_name"] = "SRS"
 
         # read projection info
-        self.proj_location = gs.read_command("g.proj", flags="jf").rstrip("\n")
+        self.proj_location = gs.read_command(
+            "g.proj", flags="fp", format="proj4"
+        ).rstrip("\n")
         self.proj_location = self._modifyProj(self.proj_location)
 
         self.source_epsg = str(GetEpsg(self.params["srs"]))
         self.target_epsg = None
-        target_crs = gs.parse_command("g.proj", flags="g", delimiter="=")
+        target_crs = gs.parse_command(
+            "g.proj", flags="p", format="shell", delimiter="="
+        )
         if "epsg" in target_crs.keys():
             self.target_epsg = target_crs["epsg"]
             if self.source_epsg != self.target_epsg:
                 gs.warning(
                     _(
-                        "SRS differences: WMS source EPSG %s != location EPSG %s (use "
-                        "srs=%s to adjust)"
+                        "CRS (SRS) differences:"
+                        " WMS source EPSG %s != location EPSG %s (use"
+                        " srs=%s to adjust)"
                     )
                     % (self.source_epsg, self.target_epsg, self.target_epsg)
                 )
 
         self.proj_srs = gs.read_command(
-            "g.proj", flags="jf", epsg=str(GetEpsg(self.params["srs"]))
+            "g.proj", flags="fp", format="proj4", epsg=str(GetEpsg(self.params["srs"]))
         )
         self.proj_srs = self.proj_srs.rstrip("\n")
 

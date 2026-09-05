@@ -6,7 +6,7 @@
 #endif
 
 #include <grass/raster.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 #define SORT_DEFAULT 0
 #define SORT_ASC     1
@@ -118,9 +118,9 @@ char *construct_cat_label(int, CELL);
 int print_unit(int, int, int);
 
 /* prt_json.c */
-JSON_Value *make_units(int, int);
-JSON_Value *make_category(int, int, JSON_Value *);
-JSON_Value *make_categories(int, int, int);
+G_JSON_Value *make_units(int, int);
+G_JSON_Value *make_category(int, int, G_JSON_Value *);
+G_JSON_Value *make_categories(int, int, int);
 void print_json(void);
 
 /* report.c */

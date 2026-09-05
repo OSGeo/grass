@@ -9,10 +9,8 @@ Classes:
  - goutput::GStderr
  - goutput::GConsole
 
-(C) 2007-2015 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Martin Landa <landa.martin gmail.com>
@@ -31,6 +29,7 @@ import queue as Queue
 
 import codecs
 import locale
+from pathlib import Path
 
 import wx
 from wx.lib.newevent import NewEvent
@@ -41,6 +40,7 @@ from grass.script import task as gtask
 from grass.pydispatch.signal import Signal
 
 from grass.grassdb import history
+from grass.grassdb.data import stds_exists
 from grass.grassdb.history import Status
 
 from core import globalvar
@@ -69,11 +69,11 @@ class CmdThread(threading.Thread):
 
     requestId = 0
 
-    def __init__(self, receiver, requestQ=None, resultQ=None, **kwds):
+    def __init__(self, receiver, requestQ=None, resultQ=None, **kwargs):
         """
         :param receiver: event receiver (used in PostEvent)
         """
-        threading.Thread.__init__(self, **kwds)
+        threading.Thread.__init__(self, **kwargs)
 
         if requestQ is None:
             self.requestQ = Queue.Queue()
@@ -94,18 +94,18 @@ class CmdThread(threading.Thread):
 
         self.start()
 
-    def RunCmd(self, *args, **kwds):
+    def RunCmd(self, *args, **kwargs):
         """Run command in queue
 
         :param args: unnamed command arguments
-        :param kwds: named command arguments
+        :param kwargs: named command arguments
 
         :return: request id in queue
         """
         CmdThread.requestId += 1
 
         self.requestCmd = None
-        self.requestQ.put((CmdThread.requestId, args, kwds))
+        self.requestQ.put((CmdThread.requestId, args, kwargs))
 
         return CmdThread.requestId
 
@@ -128,7 +128,7 @@ class CmdThread(threading.Thread):
                 "addLayer": None,
                 "notification": None,
             }
-            requestId, args, kwds = self.requestQ.get()
+            requestId, args, kwargs = self.requestQ.get()
             for key in (
                 "callable",
                 "onDone",
@@ -137,9 +137,9 @@ class CmdThread(threading.Thread):
                 "addLayer",
                 "notification",
             ):
-                if key in kwds:
-                    variables[key] = kwds[key]
-                    del kwds[key]
+                if key in kwargs:
+                    variables[key] = kwargs[key]
+                    del kwargs[key]
 
             if not variables["callable"]:
                 variables["callable"] = GrassCmd
@@ -166,7 +166,7 @@ class CmdThread(threading.Thread):
                 wx.PostEvent(self.receiver, event)
 
             time.sleep(0.1)
-            self.requestCmd = variables["callable"](*args, **kwds)
+            self.requestCmd = variables["callable"](*args, **kwargs)
             if self._want_abort_all and self.requestCmd is not None:
                 self.requestCmd.abort()
                 if self.requestQ.empty():
@@ -200,7 +200,7 @@ class CmdThread(threading.Thread):
                 if args[0][0] == "r.mapcalc":
                     try:
                         mapName = args[0][1].split("=", 1)[0].strip()
-                    except KeyError:
+                    except (IndexError, AttributeError):
                         pass
                 else:
                     moduleInterface = GUI(show=None).ParseCommand(args[0])
@@ -217,7 +217,7 @@ class CmdThread(threading.Thread):
                         "map=%s" % mapName,
                         "color=%s" % colorTable,
                     ]
-                    self.requestCmdColor = variables["callable"](*argsColor, **kwds)
+                    self.requestCmdColor = variables["callable"](*argsColor, **kwargs)
                     self.resultQ.put((requestId, self.requestCmdColor.run()))
 
             if self.receiver:
@@ -362,7 +362,7 @@ class GConsole(wx.EvtHandler):
     def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
         r"""
         :param guiparent: parent window for created GUI objects
-        :param lmgr: layer manager window (TODO: replace by giface)
+        :param giface: GRASS interface instance
         :param ignoredCmdPattern: regular expression specifying commands
                                   to be ignored (e.g. @c '^d\..*' for
                                   display commands)
@@ -409,11 +409,7 @@ class GConsole(wx.EvtHandler):
             sys.stdout = self.cmdStdOut
             sys.stderr = self.cmdStdErr
         else:
-            try:
-                # Python >= 3.11
-                enc = locale.getencoding()
-            except AttributeError:
-                enc = locale.getdefaultlocale()[1]
+            enc = locale.getencoding()
             if enc:
                 # https://stackoverflow.com/questions/4374455/how-to-set-sys-stdout-encoding-in-python-3
                 sys.stdout = codecs.getwriter(enc)(sys.__stdout__.detach())
@@ -607,11 +603,11 @@ class GConsole(wx.EvtHandler):
                     if sys.platform == "win32":
                         pyFile += ".py"
                     pyPath = os.path.join(os.environ["GISBASE"], "scripts", pyFile)
-                    if not os.path.exists(pyPath):
+                    if not Path(pyPath).exists():
                         pyPath = os.path.join(
                             os.environ["GRASS_ADDON_BASE"], "scripts", pyFile
                         )
-                    if not os.path.exists(pyPath):
+                    if not Path(pyPath).exists():
                         GError(
                             parent=self._guiparent,
                             message=_("Module <%s> not found.") % command[0],
@@ -743,11 +739,31 @@ class GConsole(wx.EvtHandler):
         )
         event.Skip()
 
+    @staticmethod
+    def _getStdsTypeCandidates(task):
+        """Space time dataset types a generic stds parameter of a tool can be
+
+        The type option of the tool names either the dataset type
+        (G_OPT_STDS_TYPE) or the type of the maps it holds (G_OPT_MAP_TYPE),
+        which leaves a single type to look up instead of all three.
+        """
+        stds_types = ("strds", "stvds", "str3ds")
+        map_types = {"raster": "strds", "vector": "stvds", "raster_3d": "str3ds"}
+        option = task.get_param(value="type", raiseError=False)
+        value = (option.get("value") or option.get("default")) if option else None
+        if value in stds_types:
+            return (value,)
+        if value in map_types:
+            return (map_types[value],)
+        return stds_types
+
     def OnCmdDone(self, event):
         """Command done (or aborted)
 
-        Sends signal mapCreated if map is recognized in output
-        parameters or for specific modules (as r.colors).
+        Sends signal mapCreated if map is recognized in output parameters
+        and signal grassdbChanged for maps and space time datasets, either
+        recognized in output parameters or for specific modules (as r.colors
+        or t.register) which modify their input.
         """
         # Process results here
         try:
@@ -817,15 +833,23 @@ class GConsole(wx.EvtHandler):
             return
 
         name = task.get_name()
+        # Parameter prompts used by space time datasets. The generic "stds" one
+        # is used where a parameter accepts any of the three dataset types.
+        stds_prompts = {"stds", "strds", "stvds", "str3ds"}
+        stds_candidates = self._getStdsTypeCandidates(task)
         for p in task.get_options()["params"]:
             prompt = p.get("prompt", "")
-            if prompt in {"raster", "vector", "raster_3d"} and p.get("value", None):
+            if prompt in {"raster", "vector", "raster_3d"} | stds_prompts and p.get(
+                "value", None
+            ):
                 if p.get("age", "old") == "new" or name in {
                     "r.colors",
                     "r3.colors",
                     "v.colors",
                     "v.proj",
                     "r.proj",
+                    "t.register",
+                    "t.unregister",
                 }:
                     # if multiple maps (e.g. r.series.interp), we need add each
                     if p.get("multiple", False):
@@ -840,18 +864,45 @@ class GConsole(wx.EvtHandler):
                     for lname in lnames:
                         if "@" not in lname:
                             lname += "@" + gs.gisenv()["MAPSET"]
-                        if gs.find_file(lname, element=p.get("element"))["fullname"]:
-                            self.mapCreated.emit(
-                                name=lname, ltype=prompt, add=event.addLayer
+                        element_name, element_mapset = lname.split("@", 1)
+
+                        # The generic stds prompt does not say which type
+                        # this dataset is, so it is resolved per dataset.
+                        element = prompt
+                        if prompt == "stds":
+                            element = next(
+                                (
+                                    stds_type
+                                    for stds_type in stds_candidates
+                                    if stds_exists(
+                                        element_name, stds_type, element_mapset
+                                    )
+                                ),
+                                None,
                             )
+                            exists = element is not None
+                        elif prompt in stds_prompts:
+                            exists = stds_exists(element_name, prompt, element_mapset)
+                        else:
+                            exists = bool(
+                                gs.find_file(lname, element=p.get("element"))[
+                                    "fullname"
+                                ]
+                            )
+
+                        if exists:
+                            if element not in stds_prompts:
+                                self.mapCreated.emit(
+                                    name=lname, ltype=element, add=event.addLayer
+                                )
                             gisenv = gs.gisenv()
                             self._giface.grassdbChanged.emit(
                                 grassdb=gisenv["GISDBASE"],
                                 location=gisenv["LOCATION_NAME"],
                                 mapset=gisenv["MAPSET"],
                                 action="new",
-                                map=lname.split("@")[0],
-                                element=prompt,
+                                map=element_name,
+                                element=element,
                             )
         if name == "r.mask":
             action = "new"

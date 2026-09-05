@@ -12,11 +12,8 @@
  *               OGR support by Martin Landa <landa.martin gmail.com>
  * PURPOSE:      Surface interpolation from vector point data by Inverse
  *               Distance Squared Weighting
- * COPYRIGHT:    (C) 2003-2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2003-2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 #include <stdlib.h>
@@ -165,7 +162,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    /* read the elevation points from the input sites file */
+    /* read the vector points from the input map */
     read_sites(parm.input->answer, parm.dfield->answer, parm.col->answer,
                flag.noindex->answer);
 

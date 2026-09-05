@@ -1,8 +1,7 @@
 ---
+title: MySQL Embedded Driver
 description: MySQL embedded driver
 ---
-
-# MySQL embedded driver
 
 MySQL database driver enables GRASS to store vector attributes in MySQL
 embedded database without necessity to run MySQL server.
@@ -62,4 +61,4 @@ Credits: Development of the driver was sponsored by
 
 ## SEE ALSO
 
-*[db.connect](db.connect.md), [SQL support in GRASS GIS](sql.md)*
+*[db.connect](db.connect.md), [SQL support in GRASS](sql.md)*

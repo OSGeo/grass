@@ -7,7 +7,6 @@
  * Currently, grid space is "unitized" so that the
  * largest dimension of the current region in GRASS == 1.0
  */
-
 void vrml_put_grid(FILE *vout, struct Cell_head *w, int elevfd, int colorfd,
                    struct Colors *colr, int color_ok, int rows, int cols,
                    int shh)

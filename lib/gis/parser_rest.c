@@ -3,10 +3,8 @@
 
    \brief GIS Library - Argument parsing functions (reStructuredText output)
 
-   (C) 2012 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2012 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Luca Delucchi
  */
@@ -44,7 +42,7 @@ void G__usage_rest(void)
         fprintf(stdout, "=");
     }
     fprintf(stdout, "\n");
-    fprintf(stdout, "%s - GRASS GIS manual\n", st->pgm_name);
+    fprintf(stdout, "%s - GRASS manual\n", st->pgm_name);
     fprintf(stdout, "=================");
     for (s = 0; s <= strlen(st->pgm_name); s++) {
         fprintf(stdout, "=");

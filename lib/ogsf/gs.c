@@ -6,12 +6,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL, GMSL/University of Illinois (January 1993)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -317,7 +313,7 @@ int gs_init_normbuff(geosurf *gs)
         G_free(gs->norms);
     }
 
-    size = gs->rows * gs->cols * sizeof(unsigned long);
+    size = (long)gs->rows * gs->cols * sizeof(unsigned long);
 
     gs->norms = (unsigned long *)G_malloc(size); /* G_fatal_error */
     if (!gs->norms) {
@@ -350,7 +346,7 @@ void print_frto(float (*ft)[4])
 
    \todo G_debug ?
 
-   \param ft pointer to coordinates
+   \param rt pointer to coordinates
  */
 void print_realto(float *rt)
 {
@@ -364,7 +360,7 @@ void print_realto(float *rt)
 
    \todo G_debug ?
 
-   \param ft pointer to buffer
+   \param buff pointer to buffer
  */
 void print_256lookup(int *buff)
 {
@@ -1222,7 +1218,7 @@ int gs_get_data_avg_zmax(float *azmax)
 /*!
    \brief Get data center point
 
-   \param[out] center (array X,Y,Z)
+   \param[out] cen center (array X,Y,Z)
 
    \return -1 on error
    \return 1 on success
@@ -1306,7 +1302,7 @@ int gs_setall_norm_needupdate(void)
    \brief Check if point is masked
 
    \param gs pointer to geosurf struct
-   \param pt point coordinates (X,Y,Z)
+   \param[in] pt point coordinates (X,Y,Z)
 
    \return 1 masked
    \return 0 not masked

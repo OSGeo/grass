@@ -1,8 +1,8 @@
 /*
- * Copyright (C) 1995.  Bill Brown <brown@gis.uiuc.edu> & Michael Shapiro
- *
- * This program is free software under the GPL (>=v2)
- * Read the file GPL.TXT coming with GRASS for details.
+ * SPDX-FileCopyrightText: 1995 Bill Brown <brown@gis.uiuc.edu>
+ * SPDX-FileCopyrightText: 1995 Michael Shapiro
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <grass/datetime.h>
 
@@ -17,7 +17,6 @@
  *  \param minutes
  *  \return int
  */
-
 int datetime_change_timezone(DateTime *dt, int minutes)
 { /* new timezone in minutes */
     int stat;
@@ -55,7 +54,6 @@ int datetime_change_timezone(DateTime *dt, int minutes)
  *  \param dt
  *  \return int
  */
-
 int datetime_change_to_utc(DateTime *dt)
 {
     return datetime_change_timezone(dt, 0);
@@ -78,7 +76,6 @@ int datetime_change_to_utc(DateTime *dt)
  *  \param minutes
  *  \return void
  */
-
 void datetime_decompose_timezone(int tz, int *hours, int *minutes)
 {
     if (tz < 0)

@@ -1,6 +1,6 @@
 """Tests of TemporaryMapsetSession"""
 
-import os
+from pathlib import Path
 
 import grass.script as gs
 from grass import experimental
@@ -29,17 +29,17 @@ def test_with_context_manager(xy_session):
 
         other_session_file = session.env["GISRC"]
         assert session_file != other_session_file
-        assert os.path.exists(other_session_file)
+        assert Path(other_session_file).exists()
         mapset_path = session.mapset_path
-        assert os.path.exists(session.mapset_path)
+        assert Path(session.mapset_path).exists()
     assert not session.active
-    assert not os.path.exists(mapset_path)
-    assert not os.path.exists(other_session_file)
+    assert not Path(mapset_path).exists()
+    assert not Path(other_session_file).exists()
     new_session_mapset_list = (
         gs.read_command("g.mapsets", flags="l", env=xy_session.env).strip().split(",")
     )
     assert sorted(original_session_mapset_list) == sorted(new_session_mapset_list)
-    assert os.path.exists(session_file)
+    assert Path(session_file).exists()
     assert xy_session.env["GISRC"]
 
 
@@ -58,16 +58,16 @@ def test_without_context_manager(xy_session):
 
     other_session_file = session.env["GISRC"]
     assert session_file != other_session_file
-    assert os.path.exists(other_session_file)
+    assert Path(other_session_file).exists()
     mapset_path = session.mapset_path
-    assert os.path.exists(session.mapset_path)
+    assert Path(session.mapset_path).exists()
 
     session.finish()
 
     assert not session.active
-    assert not os.path.exists(mapset_path)
-    assert not os.path.exists(other_session_file)
-    assert os.path.exists(session_file)
+    assert not Path(mapset_path).exists()
+    assert not Path(other_session_file).exists()
+    assert Path(session_file).exists()
     assert xy_session.env["GISRC"]
 
 
@@ -90,13 +90,13 @@ def test_multiple_sequential_with_context_manager(xy_session):
 
             other_session_file = session.env["GISRC"]
             assert session_file != other_session_file
-            assert os.path.exists(other_session_file)
+            assert Path(other_session_file).exists()
             mapset_path = session.mapset_path
-            assert os.path.exists(session.mapset_path)
+            assert Path(session.mapset_path).exists()
         assert not session.active
-        assert not os.path.exists(mapset_path)
-        assert not os.path.exists(other_session_file)
-        assert os.path.exists(session_file)
+        assert not Path(mapset_path).exists()
+        assert not Path(other_session_file).exists()
+        assert Path(session_file).exists()
         assert xy_session.env["GISRC"]
 
 
@@ -118,17 +118,17 @@ def test_multiple_parallel_without_context_manager(xy_session):
 
         other_session_file = session.env["GISRC"]
         assert session_file != other_session_file
-        assert os.path.exists(other_session_file)
-        assert os.path.exists(session.mapset_path)
+        assert Path(other_session_file).exists()
+        assert Path(session.mapset_path).exists()
         sessions.append(session)
 
     for session in sessions:
         session.finish()
         assert not session.active
-        assert not os.path.exists(session.mapset_path)
-        assert not os.path.exists(session.env["GISRC"])
+        assert not Path(session.mapset_path).exists()
+        assert not Path(session.env["GISRC"]).exists()
 
-    assert os.path.exists(session_file)
+    assert Path(session_file).exists()
     assert xy_session.env["GISRC"]
 
 
@@ -152,13 +152,13 @@ def test_nested_top_env(xy_session):
                     assert top_level_mapset != session_mapset
                     session_file = session.env["GISRC"]
                     assert top_level_session_file != session_file
-                    assert os.path.exists(session_file)
-                    assert os.path.exists(session.mapset_path)
+                    assert Path(session_file).exists()
+                    assert Path(session.mapset_path).exists()
     for session in [session1, session2, session3]:
         assert not session.active
-        assert not os.path.exists(session.mapset_path)
-        assert not os.path.exists(session.env["GISRC"])
-    assert os.path.exists(top_level_session_file)
+        assert not Path(session.mapset_path).exists()
+        assert not Path(session.env["GISRC"]).exists()
+    assert Path(top_level_session_file).exists()
 
 
 def test_nested_inherited_env(xy_session):
@@ -181,10 +181,10 @@ def test_nested_inherited_env(xy_session):
                     assert top_level_mapset != session_mapset
                     session_file = session.env["GISRC"]
                     assert top_level_session_file != session_file
-                    assert os.path.exists(session_file)
-                    assert os.path.exists(session.mapset_path)
+                    assert Path(session_file).exists()
+                    assert Path(session.mapset_path).exists()
     for session in [session1, session2, session3]:
         assert not session.active
-        assert not os.path.exists(session.mapset_path)
-        assert not os.path.exists(session.env["GISRC"])
-    assert os.path.exists(top_level_session_file)
+        assert not Path(session.mapset_path).exists()
+        assert not Path(session.env["GISRC"]).exists()
+    assert Path(top_level_session_file).exists()

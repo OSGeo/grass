@@ -8,6 +8,7 @@
   --gs-grass-font--medium: 'Fira Sans Medium', sans-serif;
   --gs-grass-font--bold: 'Fira Sans Bold', sans-serif;
   --gs-grass-font--light: 'Fira Sans ExtraLight', sans-serif;
+  --gs-grass-font--mono: 'Fira Sans Mono', monospace;
 
   /* Primary Color */
   --gs-primary-color: rgb(76, 176, 91);
@@ -176,7 +177,7 @@
 
   /* Mermaid colors */
   /* ----------------------------------------------------------------------------- */
-  --md-mermaid-font-family: var(--md-text-font-family), sans-serif;
+  --md-mermaid-font-family: var(--md-text-font-family);
   --md-mermaid-edge-color: var(--md-code-fg-color);
   --md-mermaid-node-bg-color: var(--md-primary-fg-color--light);
   --md-mermaid-node-fg-color: var(--md-primary-fg-color);
@@ -206,6 +207,7 @@
 
   /* Code Highlighting */
   /* ----------------------------------------------------------------------------- */
+  --md-code-font-family: var(--gs-grass-font--mono);
   --md-code-fg-color: var(--gs-secondary-color);
   --md-code-bg-color: var(--gs-grey-light-color);
   --md-code-hl-color: var(--gs-secondary-light-color);

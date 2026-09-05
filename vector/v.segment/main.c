@@ -10,11 +10,8 @@
  * PURPOSE:      Generate segments or points from input map and segments read
  *from stdin
  *
- * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2002-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************/
 
@@ -391,12 +388,13 @@ int find_line(struct Map_info *Map, int lfield, int lcat)
         Vect_field_cat_get(Cats, lfield, cats);
         if (Vect_val_in_list(cats, lcat)) {
             Vect_destroy_list(cats);
+            Vect_destroy_cats_struct(Cats);
             return i;
         }
     }
 
     Vect_destroy_list(cats);
-
+    Vect_destroy_cats_struct(Cats);
     return 0;
 }
 

@@ -3,17 +3,16 @@ Name:      basic_test
 Purpose:   v.in.pdal basic functionality test
 
 Author:    Vaclav Petras
-Copyright: (C) 2015 by Vaclav Petras and the GRASS Development Team
-Licence:   This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2015 Vaclav Petras
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
-import os
 import shutil
+import unittest
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-import unittest
 
 
 class BasicTest(TestCase):
@@ -61,8 +60,7 @@ class BasicTest(TestCase):
             type="vector",
             name=(cls.vector_points, cls.vector_generated),
         )
-        if os.path.isfile(cls.las_file):
-            os.remove(cls.las_file)
+        Path(cls.las_file).unlink(missing_ok=True)
         cls.del_temp_region()
 
     def tearDown(self):

@@ -1,10 +1,8 @@
 """
 Map layer and space time dataset classes
 
-(C) 2012-2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -74,7 +72,7 @@ class RasterDataset(AbstractMapDataset):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.script as gs
         >>> import grass.temporal as tgis
@@ -122,8 +120,8 @@ class RasterDataset(AbstractMapDataset):
         >>> rmap.metadata.print_info()
          +-------------------- Metadata information ----------------------------------+
          | Datatype:................... CELL
-         | Number of columns:.......... 8
-         | Number of rows:............. 12
+         | Number of columns:.......... 12
+         | Number of rows:............. 8
          | Number of cells:............ 96
          | North-South resolution:..... 10.0
          | East-west resolution:....... 10.0
@@ -224,7 +222,7 @@ class RasterDataset(AbstractMapDataset):
         """Return the two dimensional union as spatial_extent
         object or None in case the extents does not overlap or meet.
 
-        :param dataset :The abstract dataset to create a union with
+        :param dataset: The abstract dataset to create a union with
         :return: The union spatial extent or None
         """
         return self.spatial_extent.union_2d(dataset.spatial_extent)
@@ -486,7 +484,7 @@ class Raster3DDataset(AbstractMapDataset):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.script as gs
         >>> init()
@@ -544,8 +542,8 @@ class Raster3DDataset(AbstractMapDataset):
         >>> r3map.metadata.print_info()
          +-------------------- Metadata information ----------------------------------+
          | Datatype:................... DCELL
-         | Number of columns:.......... 8
-         | Number of rows:............. 12
+         | Number of columns:.......... 12
+         | Number of rows:............. 8
          | Number of cells:............ 960
          | North-South resolution:..... 10.0
          | East-west resolution:....... 10.0
@@ -868,7 +866,7 @@ class VectorDataset(AbstractMapDataset):
 
     Usage:
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.script as gs
         >>> init()
@@ -1198,7 +1196,7 @@ class VectorDataset(AbstractMapDataset):
 class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     """Space time raster dataset class
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -1314,7 +1312,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
 class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
     """Space time raster3d dataset class
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()
@@ -1435,7 +1433,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
 class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
     """Space time vector dataset class
 
-    .. code-block:: python
+    .. code-block:: pycon
 
         >>> import grass.temporal as tgis
         >>> tgis.init()

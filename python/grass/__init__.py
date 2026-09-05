@@ -4,13 +4,11 @@
 #
 # PURPOSE:   Top level file of the grass package and its initialization
 #
-# COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
-#
-#           This program is free software under the GNU General Public
-#           License (>=v2). Read the file COPYING that comes with GRASS
-#           for details.
+# SPDX-FileCopyrightText: 2021 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Top-level GRASS GIS Python package
+"""Top-level GRASS Python package
 
 Importing the package (or any subpackage) initializes translation functions
 so that the function ``_`` appears in the global namespace (as an additional built-in).
@@ -22,7 +20,7 @@ import os
 
 # Setup translations
 #
-# The translations in the GRASS GIS Python package grass, GRASS Python modules
+# The translations in the GRASS Python package grass, GRASS Python modules
 # (scripts), and the wxPython GUI (wxGUI) are handled as application translations,
 # rather than Python module or package translations. This means that that translation
 # function called `_` (underscore) is added to buildins namespace. When the grass

@@ -14,10 +14,8 @@
  * subdirectories. There may be more functionality desired (such as
  * deletion routines, directory globs).<br>
  *
- * (C) 2001-2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Eric G Miller - egm2 at jps net
  *
@@ -285,7 +283,6 @@ static char *_make_sublevels(const char *elems)
  * \param[in] item
  * \return Pointer to string path
  */
-
 char *G_rc_path(const char *element, const char *item)
 {
     size_t len;

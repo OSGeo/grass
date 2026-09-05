@@ -9,10 +9,8 @@ List of classes:
  - wms_drv::WMTSRequestMgr
  - wms_drv::OnEarthRequestMgr
 
-(C) 2012 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2012 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (Mentor: Martin Landa)
 """
@@ -24,6 +22,8 @@ import grass.script as gs
 
 try:
     from osgeo import gdal
+
+    gdal.DontUseExceptions()
 except ImportError:
     gs.fatal(
         _(
@@ -242,7 +242,7 @@ class WMSDrv(WMSBase):
             return temp_map
         # georeferencing and setting projection of temp_map
         projection = gs.read_command(
-            "g.proj", flags="wf", epsg=GetEpsg(self.params["srs"])
+            "g.proj", flags="fp", format="wkt", epsg=GetEpsg(self.params["srs"])
         )
         projection = projection.rstrip("\n")
         temp_map_dataset.SetProjection(projection)

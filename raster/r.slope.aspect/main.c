@@ -15,11 +15,8 @@
  * PURPOSE:      generates raster maps of slope, aspect, curvatures and
  *               first and second order partial derivatives from a raster map
  *               of true elevation values
- * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2022 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -297,22 +294,12 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    sscanf(parm.nprocs->answer, "%d", &nprocs);
+    nprocs = G_set_omp_num_threads(parm.nprocs);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
     if (nprocs < 1) {
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
     }
-#if defined(_OPENMP)
-    omp_set_num_threads(nprocs);
-#else
-    if (nprocs != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    nprocs = 1;
-#endif
-    if (nprocs > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        nprocs = 1;
-    }
+
     radians_to_degrees = 180.0 / M_PI;
     degrees_to_radians = M_PI / 180.0;
 
@@ -583,8 +570,8 @@ int main(int argc, char *argv[])
         int end = written + range;
 
 #pragma omp parallel if (nprocs > 1)                                        \
-    firstprivate(north, east, south, west, ns_med, H, V) private(           \
-            row, col, size, slp_ptr, asp_ptr, pcurv_ptr, tcurv_ptr, dx_ptr, \
+    firstprivate(north, east, south, west, ns_med, H, V)                    \
+    private(row, col, size, slp_ptr, asp_ptr, pcurv_ptr, tcurv_ptr, dx_ptr, \
                 dxx_ptr, dxy_ptr, dy_ptr, dyy_ptr)
         {
             int t_id = FIRST_THREAD;

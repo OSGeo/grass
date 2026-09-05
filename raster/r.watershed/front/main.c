@@ -6,11 +6,8 @@
  *               Hamish Bowman <hamish_b yahoo.com>
  *               Markus Metz <markus.metz.giswork gmail.com>
  * PURPOSE:      Hydrological analysis
- * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -30,11 +27,13 @@ static int new_argc;
 static void do_opt(const struct Option *opt)
 {
     char *buf;
+    size_t len;
 
     if (!opt->answer)
         return;
-    buf = G_malloc(strlen(opt->key) + 1 + strlen(opt->answer) + 1);
-    snprintf(buf, GPATH_MAX, "%s=%s", opt->key, opt->answer);
+    len = strlen(opt->key) + 1 + strlen(opt->answer) + 1;
+    buf = G_malloc(len);
+    snprintf(buf, len, "%s=%s", opt->key, opt->answer);
     new_argv[new_argc++] = buf;
 }
 

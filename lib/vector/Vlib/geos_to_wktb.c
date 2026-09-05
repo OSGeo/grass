@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2015 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2015 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Soeren Gebbert <soerengebbert googlemail.com>
  */
@@ -79,7 +77,6 @@ char *Vect_read_area_to_wkt(struct Map_info *Map, int area)
 
    \param Map pointer to Map_info structure
    \param area area id
-   \param size The size of the returned unsigned char array
    \param trim Set the number trimming option on, With trim set to true, the
                writer will strip trailing 0's from the output coordinates.
 

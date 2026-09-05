@@ -8,18 +8,14 @@
 #
 # PURPOSE:   Test script for grass.jupyter's Map3D
 #
-# COPYRIGHT: (C) 2021 by Vaclav Petras and the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2021 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
 """Test of 3D renderer"""
 
-import os
-import sys
 import unittest
 from pathlib import Path
 
@@ -74,13 +70,7 @@ class TestMap3D(TestCase):
         """After each run, remove the created files if exist"""
         for file in self.files:
             file = Path(file)
-            if sys.version_info < (3, 8):
-                try:
-                    os.remove(file)
-                except FileNotFoundError:
-                    pass
-            else:
-                file.unlink(missing_ok=True)
+            file.unlink(missing_ok=True)
 
     @xfail_windows
     def test_defaults(self):

@@ -15,10 +15,8 @@ Classes:
 Usage:
 python mapdisp/main.py monitor-identifier /path/to/map/file /path/to/command/file /path/to/env/file
 
-(C) 2006-2015 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton
 @author Jachym Cepicky
@@ -32,6 +30,7 @@ import sys
 import time
 import shutil
 import fileinput
+from pathlib import Path
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
@@ -364,7 +363,7 @@ class LayerList:
         try:
             result = items[self._index]
         except IndexError:
-            raise StopIteration
+            raise StopIteration from None
         self._index += 1
         return result
 
@@ -478,9 +477,7 @@ class DMonDisplay(FrameMixin, MapPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # bindings
@@ -616,9 +613,9 @@ class MapApp(wx.App):
         #    self.timer.Stop()
         #    return
 
-        # todo: events
+        # TODO: events
         try:
-            currentCmdFileTime = os.path.getmtime(monFile["cmd"])
+            currentCmdFileTime = Path(monFile["cmd"]).stat().st_mtime
             if currentCmdFileTime > self.cmdTimeStamp:
                 self.timer.Stop()
                 self.cmdTimeStamp = currentCmdFileTime

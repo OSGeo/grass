@@ -2,10 +2,8 @@
 The abstract_map_dataset module provides the AbstractMapDataset class
 that is the base class for all map layer.
 
-(C) 2011-2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2011-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -66,7 +64,7 @@ class AbstractMapDataset(AbstractDataset):
         """Return a new space time dataset instance that store maps with the
         type of this map object (raster, raster_3d or vector)
 
-        :param ident The identifier of the space time dataset
+        :param ident: The identifier of the space time dataset
         :return: The new space time dataset instance
         """
 
@@ -666,7 +664,7 @@ class AbstractMapDataset(AbstractDataset):
 
         :param extent: The temporal extent that should be set for this object
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import datetime
             >>> import grass.temporal as tgis
@@ -733,7 +731,7 @@ class AbstractMapDataset(AbstractDataset):
 
         Usage:
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> maps = []
@@ -845,7 +843,7 @@ class AbstractMapDataset(AbstractDataset):
 
          :param spatial_extent: An object of type SpatialExtent or its subclasses
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import datetime
             >>> import grass.temporal as tgis
@@ -869,7 +867,7 @@ class AbstractMapDataset(AbstractDataset):
                        internal variables are set
         :param dbif: The database interface to be used
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> map = tgis.RasterDataset(None)
@@ -901,7 +899,7 @@ class AbstractMapDataset(AbstractDataset):
                        internal variables are set
         :param dbif: The database interface to be used
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> map = tgis.RasterDataset(None)

@@ -5,11 +5,8 @@
  *               Updated to GRASS7 by Martin Landa <landa.martin gmail.com>
  *               Support for vector legend by Adam Laza <ad.laza32 gmail.com >
  * PURPOSE:      Display the vector map in map display
- * COPYRIGHT:    (C) 2004-2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2004-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -362,7 +359,10 @@ int main(int argc, char **argv)
         }
     }
 
-    strcpy(map_name, map_opt->answer);
+    if (G_strlcpy(map_name, map_opt->answer, sizeof(map_name)) >=
+        sizeof(map_name)) {
+        G_fatal_error(_("Map name <%s> is too long"), map_opt->answer);
+    }
 
     default_width = atoi(width_opt->answer);
     if (default_width < 0)

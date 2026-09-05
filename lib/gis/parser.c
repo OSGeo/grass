@@ -67,10 +67,8 @@
  * Overview table: <a href="parser_standard_options.html">Parser standard
  options</a>
  *
- * (C) 2001-2015 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  * \author Soeren Gebbert added Dec. 2009 WPS process_description document
@@ -136,7 +134,6 @@ static const char *get_renamed_option(const char *);
  * prompting.
  *
  */
-
 void G_disable_interactive(void)
 {
     st->no_interactive = 1;
@@ -358,7 +355,7 @@ int G_parser(int argc, char **argv)
 
         if (!opt->key)
             G_warning(_("Bug in UI description. Missing option key"));
-        if (!valid_option_name(opt->key))
+        if (opt->key && !valid_option_name(opt->key))
             G_warning(_("Bug in UI description. Option key <%s> is not valid"),
                       opt->key);
         if (!opt->label && !opt->description)
@@ -476,7 +473,7 @@ int G_parser(int argc, char **argv)
         }
 
         /* If first arg is "--interface-description" then print out
-         * a xml description of the task */
+         * an xml description of the task */
         if (strcmp(argv[1], "--interface-description") == 0) {
             G__usage_xml();
             exit(EXIT_SUCCESS);
@@ -1957,7 +1954,7 @@ FILE *G_open_option_file(const struct Option *option)
    \brief Close an input/output file returned by G_open_option_file(). If the
    file pointer is stdin, stdout, or stderr, nothing happens.
 
-   \param file pointer
+   \param fp file pointer
  */
 void G_close_option_file(FILE *fp)
 {

@@ -6,7 +6,6 @@
 /*
  * m_mult: matrix multiplication (return c = a * b)
  */
-
 int m_mult(MATRIX *a, MATRIX *b, MATRIX *c)
 {
     register int i, j, k, nr, nc, ncols;

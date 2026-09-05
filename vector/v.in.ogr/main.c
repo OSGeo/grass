@@ -9,11 +9,8 @@
  *
  * PURPOSE:      Import vector data with OGR
  *
- * COPYRIGHT:    (C) 2003-2016 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2003-2016 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * TODO: - make fixed field length of OFTIntegerList dynamic
  *       - several other TODOs below
@@ -1370,9 +1367,11 @@ int main(int argc, char *argv[])
         }
 
         if (nogeom > 0)
-            G_warning(_("%d %s without geometry in input layer <%s> skipped"),
-                      nogeom, nogeom == 1 ? _("feature") : _("features"),
-                      layer_names[layer]);
+            G_warning(
+                n_("%d feature without geometry in input layer <%s> skipped",
+                   "%d features without geometry in input layer <%s> skipped",
+                   nogeom),
+                nogeom, layer_names[layer]);
     }
 
     delete_table = Vect_maptype(&Map) != GV_FORMAT_NATIVE;

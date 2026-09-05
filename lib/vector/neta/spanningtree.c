@@ -5,10 +5,9 @@
 
    Computes minimum spanning tree in the network.
 
-   (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2009-2010 Daniel Bundala
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Daniel Bundala (Google Summer of Code 2009)
  */
@@ -82,7 +81,7 @@ static int cmp_edge(const void *pa, const void *pb)
    \brief Get number of edges in the spanning forest
 
    \param graph input graph
-   \param[out] list of edges
+   \param[out] tree_list list of edges
 
    \return number of edges
    \return -1 on failure

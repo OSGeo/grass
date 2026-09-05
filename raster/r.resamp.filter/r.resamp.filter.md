@@ -110,7 +110,7 @@ compiled with OpenMP enabled.
 [r.resamp.rst](r.resamp.rst.md), [r.resamp.stats](r.resamp.stats.md)*
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 ## AUTHOR
 

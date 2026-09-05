@@ -1,7 +1,7 @@
 General
 =======
 
-This is a library for manipulating (non-geospatial) images in GRASS GIS.
+This is a library for manipulating (non-geospatial) images in GRASS.
 
 The images2*.py files are a part of visvis library [1], specifically
 visvis.vvmovie. The files are from the visvis-1.8 version.

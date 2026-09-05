@@ -6,11 +6,8 @@
 
    \author Paul Kelly <paul-grass stjohnspoint.co.uk>
 
-   (C) 2003-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 2003-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <unistd.h>
@@ -156,7 +153,6 @@ int GPJ__get_ellipsoid_params(const struct Key_Value *proj_keys, double *a,
  * \return 1 on success
  * \return -1 if not found in table
  */
-
 int GPJ_get_ellipsoid_by_name(const char *name, struct gpj_ellps *estruct)
 {
     struct ellps_list *list, *listhead;

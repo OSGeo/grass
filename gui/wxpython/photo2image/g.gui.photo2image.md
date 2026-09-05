@@ -1,13 +1,12 @@
 ---
+title: g.gui.photo2image
 description: wxGUI GCP Manager for photo to image registration
 index: topic_GUI|GUI
 ---
 
-# wxGUI GCP Manager for photo to image registration
-
 ## DESCRIPTION
 
-This module is based on **g.gui.gcp**, the GCP manager of GRASS GIS. It
+This module is based on **g.gui.gcp**, the GCP manager of GRASS. It
 is part of i.ortho.photo suite.
 
 The aim of this module is to give absolute location values to the

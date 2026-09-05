@@ -3,12 +3,11 @@
  *
  * \brief Raster Library - Auto masking routines.
  *
- * (C) 2001-2024 by Vaclav Petras and the GRASS Development Team
+ * SPDX-FileCopyrightText: 2001-2024 Vaclav Petras
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  * \author Vaclav Petras (environmental variable and refactoring)
  */
 
@@ -84,7 +83,6 @@ int Rast__check_for_auto_masking(void)
  *
  * \return
  */
-
 void Rast_suppress_masking(void)
 {
     Rast__init();
@@ -102,7 +100,6 @@ void Rast_suppress_masking(void)
  *
  * \return
  */
-
 void Rast_unsuppress_masking(void)
 {
     Rast__init();

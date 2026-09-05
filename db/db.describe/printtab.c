@@ -1,11 +1,11 @@
 #include <grass/gis.h>
 #include <grass/dbmi.h>
 #include "local_proto.h"
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 int print_table_definition(dbDriver *driver, dbTable *table,
-                           enum OutputFormat format, JSON_Object *root_object,
-                           JSON_Array *cols_array)
+                           enum OutputFormat format, G_JSON_Object *root_object,
+                           G_JSON_Array *cols_array)
 {
     int ncols, col, nrows;
     dbColumn *column;
@@ -18,9 +18,10 @@ int print_table_definition(dbDriver *driver, dbTable *table,
         fprintf(stdout, "description:%s\n", db_get_table_description(table));
         break;
     case JSON:
-        json_object_set_string(root_object, "table", db_get_table_name(table));
-        json_object_set_string(root_object, "description",
-                               db_get_table_description(table));
+        G_json_object_set_string(root_object, "table",
+                                 db_get_table_name(table));
+        G_json_object_set_string(root_object, "description",
+                                 db_get_table_description(table));
         break;
     }
 
@@ -40,8 +41,8 @@ int print_table_definition(dbDriver *driver, dbTable *table,
         fprintf(stdout, "nrows:%d\n", nrows);
         break;
     case JSON:
-        json_object_set_number(root_object, "ncols", ncols);
-        json_object_set_number(root_object, "nrows", nrows);
+        G_json_object_set_number(root_object, "ncols", ncols);
+        G_json_object_set_number(root_object, "nrows", nrows);
         break;
     }
 
@@ -54,10 +55,10 @@ int print_table_definition(dbDriver *driver, dbTable *table,
 }
 
 int print_column_definition(dbColumn *column, int position,
-                            enum OutputFormat format, JSON_Array *cols_array)
+                            enum OutputFormat format, G_JSON_Array *cols_array)
 {
-    JSON_Object *col_object = NULL;
-    JSON_Value *col_value = NULL;
+    G_JSON_Object *col_object = NULL;
+    G_JSON_Value *col_value = NULL;
 
     dbString value_string;
 
@@ -82,45 +83,45 @@ int print_column_definition(dbColumn *column, int position,
                 db_test_column_null_allowed(column) ? "yes" : "no");
         break;
     case JSON:
-        col_value = json_value_init_object();
-        col_object = json_object(col_value);
-        json_object_set_number(col_object, "position", position);
-        json_object_set_string(col_object, "column",
-                               db_get_column_name(column));
-        json_object_set_string(col_object, "description",
-                               db_get_column_description(column));
-        json_object_set_string(col_object, "type",
-                               db_sqltype_name(db_get_column_sqltype(column)));
-        json_object_set_number(col_object, "length",
-                               db_get_column_length(column));
-        json_object_set_number(col_object, "scale",
-                               db_get_column_scale(column));
-        json_object_set_number(col_object, "precision",
-                               db_get_column_precision(column));
+        col_value = G_json_value_init_object();
+        col_object = G_json_object(col_value);
+        G_json_object_set_number(col_object, "position", position);
+        G_json_object_set_string(col_object, "column",
+                                 db_get_column_name(column));
+        G_json_object_set_string(col_object, "description",
+                                 db_get_column_description(column));
+        G_json_object_set_string(
+            col_object, "type", db_sqltype_name(db_get_column_sqltype(column)));
+        G_json_object_set_number(col_object, "length",
+                                 db_get_column_length(column));
+        G_json_object_set_number(col_object, "scale",
+                                 db_get_column_scale(column));
+        G_json_object_set_number(col_object, "precision",
+                                 db_get_column_precision(column));
         if (db_test_column_has_default_value(column)) {
             db_init_string(&value_string);
             db_convert_column_default_value_to_string(column, &value_string);
-            json_object_set_string(col_object, "default",
-                                   db_get_string(&value_string));
+            G_json_object_set_string(col_object, "default",
+                                     db_get_string(&value_string));
         }
         else {
-            json_object_set_null(col_object, "default");
+            G_json_object_set_null(col_object, "default");
         }
-        json_object_set_boolean(col_object, "nullok",
-                                db_test_column_null_allowed(column));
+        G_json_object_set_boolean(col_object, "nullok",
+                                  db_test_column_null_allowed(column));
         break;
     }
     print_priv("select", db_get_column_select_priv(column), format, col_object);
     print_priv("update", db_get_column_update_priv(column), format, col_object);
     if (format == JSON) {
-        json_array_append_value(cols_array, col_value);
+        G_json_array_append_value(cols_array, col_value);
     }
 
     return 0;
 }
 
 int print_priv(char *label, int priv, enum OutputFormat format,
-               JSON_Object *root_object)
+               G_JSON_Object *root_object)
 {
     switch (format) {
     case PLAIN:
@@ -141,13 +142,13 @@ int print_priv(char *label, int priv, enum OutputFormat format,
     case JSON:
         switch (priv) {
         case DB_GRANTED:
-            json_object_set_boolean(root_object, label, 1);
+            G_json_object_set_boolean(root_object, label, 1);
             break;
         case DB_NOT_GRANTED:
-            json_object_set_boolean(root_object, label, 0);
+            G_json_object_set_boolean(root_object, label, 0);
             break;
         default:
-            json_object_set_null(root_object, label);
+            G_json_object_set_null(root_object, label);
             break;
         }
         break;

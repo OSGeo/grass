@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 from os import listdir
-from os.path import join, isdir
+from os.path import join
 import shutil
 import ctypes as ct
 import fnmatch
+from pathlib import Path
 
 
 import grass.lib.gis as libgis
@@ -85,7 +86,7 @@ def set_current_mapset(mapset, location=None, gisdbase=None):
     """Set the current mapset as working area
 
     :param mapset: Name of the mapset
-    :type value: str
+    :type mapset: str
 
     :param location: Name of the location
     :type location: str
@@ -104,7 +105,7 @@ def make_mapset(mapset, location=None, gisdbase=None):
     """Create a new mapset
 
     :param mapset: Name of the mapset
-    :type value: str
+    :type mapset: str
 
     :param location: Name of the location
     :type location: str
@@ -243,7 +244,7 @@ class Location:
         return (
             m
             for m in listdir(lpath)
-            if (isdir(join(lpath, m)) and is_valid(m, lpath, "MAPSET"))
+            if (Path(lpath, m).is_dir() and is_valid(m, lpath, "MAPSET"))
         )
 
     def __len__(self):

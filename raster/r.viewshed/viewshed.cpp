@@ -27,10 +27,8 @@
  * paper: "Computing Visibility on * Terrains in External Memory" by
  * Herman Haverkort, Laura Toma and Yi Zhuang.
  *
- * COPYRIGHT: (C) 2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************************/
 
@@ -433,7 +431,6 @@ MemoryVisibilityGrid *viewshed_in_memory(char *inputfname, GridHeader *hd,
    runs in external memory, i.e. the input grid and the outpt grid are
    stored as streams
  */
-
 IOVisibilityGrid *viewshed_external(char *inputfname, GridHeader *hd,
                                     Viewpoint *vp, ViewOptions viewOptions)
 {

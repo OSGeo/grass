@@ -79,7 +79,7 @@ Module *r.surf.idw* works only for integer (CELL) raster maps.
 [v.surf.idw](v.surf.idw.md), [v.surf.rst](v.surf.rst.md)*
 
 Overview: [Interpolation and
-Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS GIS
+Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
 
 ## AUTHOR
 

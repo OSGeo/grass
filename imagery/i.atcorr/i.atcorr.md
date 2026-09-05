@@ -39,41 +39,43 @@ different reference system.
 
 ### A. Geometrical conditions
 
-| Code | Description                  | Details |
-|------|------------------------------|---------|
-| 1    | **meteosat** observation     | enter month, day, decimal hour (universal time-hh.ddd),  n. of column, n. of line. (full scale 5000×2500) |
-| 2    | **goes east** observation    | enter month, day, decimal hour (universal time-hh.ddd), n. of column, n. of line. (full scale 17000×12000) |
-| 3    | **goes west** observation    | enter month, day, decimal hour (universal time-hh.ddd), n. of column, n. of line. (full scale 17000×12000) |
-| 4    | **avhrr** (PM noaa)          | enter month, day, decimal hour (universal time-hh.ddd), n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
-| 5    | **avhrr** (AM noaa)          | enter month, day, decimal hour (universal time-hh.ddd), n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
-| 6    | **hrv** (spot)               | enter month, day, hh.ddd, long., lat. * |
-| 7    | **tm** (landsat)             | enter month, day, hh.ddd, long., lat. * |
-| 8    | **etm+** (landsat7)          | enter month, day, hh.ddd, long., lat. * |
-| 9    | **liss** (IRS 1C)            | enter month, day, hh.ddd, long., lat. * |
-| 10   | **aster**                    | enter month, day, hh.ddd, long., lat. * |
-| 11   | **avnir**                    | enter month, day, hh.ddd, long., lat. * |
-| 12   | **ikonos**                   | enter month, day, hh.ddd, long., lat. * |
-| 13   | **RapidEye**                 | enter month, day, hh.ddd, long., lat. * |
-| 14   | **VGT1 (SPOT4)**             | enter month, day, hh.ddd, long., lat. * |
-| 15   | **VGT2 (SPOT5)**             | enter month, day, hh.ddd, long., lat. * |
-| 16   | **WorldView 2**              | enter month, day, hh.ddd, long., lat. * |
-| 17   | **QuickBird**                | enter month, day, hh.ddd, long., lat. * |
-| 18   | **LandSat 8**                | enter month, day, hh.ddd, long., lat. * |
-| 19   | **Geoeye 1**                 | enter month, day, hh.ddd, long., lat. * |
-| 20   | **Spot6**                    | enter month, day, hh.ddd, long., lat. * |
-| 21   | **Spot7**                    | enter month, day, hh.ddd, long., lat. * |
-| 22   | **Pleiades1A**               | enter month, day, hh.ddd, long., lat. * |
-| 23   | **Pleiades1B**               | enter month, day, hh.ddd, long., lat. * |
-| 24   | **Worldview3**               | enter month, day, hh.ddd, long., lat. * |
-| 25   | **Sentinel-2A**              | enter month, day, hh.ddd, long., lat. * |
-| 26   | **Sentinel-2B**              | enter month, day, hh.ddd, long., lat. * |
-| 27   | **PlanetScope 0c 0d**        | enter month, day, hh.ddd, long., lat. * |
-| 28   | **PlanetScope 0e**           | enter month, day, hh.ddd, long., lat. * |
-| 29   | **PlanetScope 0f 10**        | enter month, day, hh.ddd, long., lat. * |
-| 30   | **Worldview4**               | enter month, day, hh.ddd, long., lat. * |
-| 31   | **AVIRIS**                   | enter month, day, hh.ddd, long., lat. * |
-| 32   | **Hyperion VNIR**            | enter month, day, hh.ddd, long., lat. * |
-| 33   | **Hyperion SWIR**            | enter month, day, hh.ddd, long., lat. * |
+<!-- markdownlint-disable MD060 -->
+| Code | Description               | Details                                 |
+|------|---------------------------|-----------------------------------------|
+| 1    | **meteosat** observation  | enter month, day, decimal hour (universal time-hh.ddd), n. of column, n. of line. (full scale 5000×2500) |
+| 2    | **goes east** observation | enter month, day, decimal hour (universal time-hh.ddd), n. of column, n. of line. (full scale 17000×12000) |
+| 3    | **goes west** observation | enter month, day, decimal hour (universal time-hh.ddd), n. of column, n. of line. (full scale 17000×12000) |
+| 4    | **avhrr** (PM noaa)       | enter month, day, decimal hour (universal time-hh.ddd), n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
+| 5    | **avhrr** (AM noaa)       | enter month, day, decimal hour (universal time-hh.ddd), n. of column(1-2048), xlonan, hna, give long.(xlonan) and overpass hour (hna) at the ascendant node at equator |
+| 6    | **hrv** (spot)            | enter month, day, hh.ddd, long., lat. * |
+| 7    | **tm** (landsat)          | enter month, day, hh.ddd, long., lat. * |
+| 8    | **etm+** (landsat7)       | enter month, day, hh.ddd, long., lat. * |
+| 9    | **liss** (IRS 1C)         | enter month, day, hh.ddd, long., lat. * |
+| 10   | **aster**                 | enter month, day, hh.ddd, long., lat. * |
+| 11   | **avnir**                 | enter month, day, hh.ddd, long., lat. * |
+| 12   | **ikonos**                | enter month, day, hh.ddd, long., lat. * |
+| 13   | **RapidEye**              | enter month, day, hh.ddd, long., lat. * |
+| 14   | **VGT1 (SPOT4)**          | enter month, day, hh.ddd, long., lat. * |
+| 15   | **VGT2 (SPOT5)**          | enter month, day, hh.ddd, long., lat. * |
+| 16   | **WorldView 2**           | enter month, day, hh.ddd, long., lat. * |
+| 17   | **QuickBird**             | enter month, day, hh.ddd, long., lat. * |
+| 18   | **LandSat 8**             | enter month, day, hh.ddd, long., lat. * |
+| 19   | **Geoeye 1**              | enter month, day, hh.ddd, long., lat. * |
+| 20   | **Spot6**                 | enter month, day, hh.ddd, long., lat. * |
+| 21   | **Spot7**                 | enter month, day, hh.ddd, long., lat. * |
+| 22   | **Pleiades1A**            | enter month, day, hh.ddd, long., lat. * |
+| 23   | **Pleiades1B**            | enter month, day, hh.ddd, long., lat. * |
+| 24   | **Worldview3**            | enter month, day, hh.ddd, long., lat. * |
+| 25   | **Sentinel-2A**           | enter month, day, hh.ddd, long., lat. * |
+| 26   | **Sentinel-2B**           | enter month, day, hh.ddd, long., lat. * |
+| 27   | **PlanetScope 0c 0d**     | enter month, day, hh.ddd, long., lat. * |
+| 28   | **PlanetScope 0e**        | enter month, day, hh.ddd, long., lat. * |
+| 29   | **PlanetScope 0f 10**     | enter month, day, hh.ddd, long., lat. * |
+| 30   | **Worldview4**            | enter month, day, hh.ddd, long., lat. * |
+| 31   | **AVIRIS**                | enter month, day, hh.ddd, long., lat. * |
+| 32   | **Hyperion VNIR**         | enter month, day, hh.ddd, long., lat. * |
+| 33   | **Hyperion SWIR**         | enter month, day, hh.ddd, long., lat. * |
+<!-- markdownlint-restore -->
 
 *NOTE*: for HRV, TM, ETM+, LISS and ASTER experiments, longitude and
 latitude are the coordinates of the scene center. Latitude must be \>
@@ -82,29 +84,31 @@ latitude are the coordinates of the scene center. Latitude must be \>
 
 ### B. Atmospheric model
 
-| Code | Meaning |
-|------|---------|
-| 0 | no gaseous absorption |
-| 1 | tropical |
-| 2 | midlatitude summer |
-| 3 | midlatitude winter |
-| 4 | subarctic summer |
-| 5 | subarctic winter |
-| 6 | us standard 62 |
-| 7 | Define your own atmospheric model as a set of the following 5 parameters per each measurement: altitude [km], pressure [mb], temperature [k], h2o density [g/m³], o3 density [g/m³]. For example: there is one radiosonde measurement for each altitude of 0-25km at a step of 1km, one measurement for each altitude of 25-50km at a step of 5km, and two single measurements for altitudes 70km and 100km. This makes 34 measurements. In that case, there are 34*5 values to input. |
-| 8 | Define your own atmospheric model providing values of the water vapor and ozone content: uw [g/cm²], uo3 [cm-atm]. The profile is taken from us62.|
+<!-- markdownlint-disable MD060 -->
+| Code | Meaning               |
+| ---- | --------------------- |
+| 0    | no gaseous absorption |
+| 1    | tropical              |
+| 2    | midlatitude summer    |
+| 3    | midlatitude winter    |
+| 4    | subarctic summer      |
+| 5    | subarctic winter      |
+| 6    | us standard 62        |
+| 7    | Define your own atmospheric model as a set of the following 5 parameters per each measurement: altitude [km], pressure [mb], temperature [k], h2o density [g/m³], o3 density [g/m³]. For example: there is one radiosonde measurement for each altitude of 0-25km at a step of 1km, one measurement for each altitude of 25-50km at a step of 5km, and two single measurements for altitudes 70km and 100km. This makes 34 measurements. In that case, there are 34*5 values to input. |
+| 8    | Define your own atmospheric model providing values of the water vapor and ozone content: uw [g/cm²], uo3 [cm-atm]. The profile is taken from us62. |
+<!-- markdownlint-restore -->
 
 ### C. Aerosols model
 
 | Code | Meaning | Details |
-|------|---------|---------|
-| 0 | no aerosols |  |
-| 1 | continental model |  |
-| 2 | maritime model |  |
-| 3 | urban model |  |
-| 4 | shettle model for background desert aerosol |  |
-| 5 | biomass burning |  |
-| 6 | stratospheric model |  |
+| ---- | ------- | ------- |
+| 0 | no aerosols | |
+| 1 | continental model | |
+| 2 | maritime model | |
+| 3 | urban model | |
+| 4 | shettle model for background desert aerosol | |
+| 5 | biomass burning | |
+| 6 | stratospheric model | |
 | 7 | define your own model | Enter the volumic percentage of each component: c(1) = volumic % of dust-like, c(2) = volumic % of water-soluble, c(3) = volumic % of oceanic, c(4) = volumic % of soot. All values should be between 0 and 1. |
 | 8 | define your own model | Size distribution function: Multimodal Log Normal (up to 4 modes). |
 | 9 | define your own model | Size distribution function: Modified gamma. |
@@ -177,7 +181,7 @@ simulation. Specifically:
   wavelength) of the spectral band for the simulation.
 
 | Code | Meaning |
-|------|---------|
+| ---- | ------- |
 | -2 | Enter wlinf, wlsup. The filter function will be equal to 1 over the whole band (as iwave=0) but step by step output will be printed. |
 | -1 | Enter wl (monochr. cond, gaseous absorption is included). |
 | 0 | Enter wlinf, wlsup. The filter function will be equal to 1 over the whole band. |
@@ -329,7 +333,7 @@ Pre-defined satellite bands:
 | 141      | Pleiades1A Red band (590nm - 722nm)                 |
 | 142      | Pleiades1A NIR band (740nm - 945nm)                 |
 | 143      | Pleiades1A Pan band (460nm - 845nm)                 |
-| 144      | **Pleiades1B** Blue band 438nm - 560nm)             |
+| 144      | **Pleiades1B** Blue band (438nm - 560nm)            |
 | 145      | Pleiades1B Green band (498nm - 615nm)               |
 | 146      | Pleiades1B Red band (608nm - 727nm)                 |
 | 147      | Pleiades1B NIR band (750nm - 945nm)                 |

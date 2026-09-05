@@ -68,7 +68,7 @@ Creating a 10x12 lat/lon grid, cells 2 arc-min a side, with lower left
 corner at 167deg 52min east, 47deg 6min south. For use with e.g. QGIS
 you can then pull this grid into a project with projected coordinate
 reference system (CRS) using *v.proj* before exporting as a vector file
-with *v.out.ogr* (within GRASS GIS you could just use *d.grid -w* from
+with *v.out.ogr* (within GRASS you could just use *d.grid -w* from
 the project with projected CRS for the same effect):
 
 ```sh

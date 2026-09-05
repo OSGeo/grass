@@ -1,20 +1,20 @@
 ---
-description: 3D raster data in GRASS GIS
+description: 3D raster data in GRASS
 index: raster3d
 ---
 
-# 3D raster data in GRASS GIS
+# 3D raster data in GRASS
 
 ## 3D raster maps in general
 
-GRASS GIS is one of the few GIS software packages with 3D raster data
+GRASS is one of the few GIS software packages with 3D raster data
 support. Data are stored as a 3D raster with 3D cells of a given volume.
 3D rasters are designed to support representations of trivariate
 continuous fields. The vertical dimension supports spatial and temporal
 units. Hence space time 3D raster with different temporal resolutions
 can be created and processed.
 
-GRASS GIS 3D raster maps use the same coordinate system as 2D raster
+GRASS 3D raster maps use the same coordinate system as 2D raster
 maps (row count from north to south) with an additional z dimension
 (depth) counting from bottom to top. The upper left corner (NW) is the
 origin. 3D rasters are stored using a tile cache based approach. This
@@ -29,7 +29,7 @@ RASTER3D library*
 
 ## Terminology and naming
 
-In GRASS GIS terminology, continuous 3D data represented by regular grid
+In GRASS terminology, continuous 3D data represented by regular grid
 or lattice is called *3D raster map*. 3D raster map works in 3D in the
 same was as (2D) raster map in 2D, so it is called the same except for
 the additional 3D. Some literature or other software may use terms such
@@ -38,7 +38,7 @@ or voxel cube. Note that terms volume and volumetric often refer to
 measuring volume (amount) of some substance which may or may not be
 related to 3D rasters.
 
-Note that GRASS GIS uses the term 3D raster map or just 3D raster for
+Note that GRASS uses the term 3D raster map or just 3D raster for
 short, rather than 3D raster layer because term map emphasizes the
 mapping of positions to values which is the purpose of 3D raster map (in
 mathematics, map or mapping is close to a term function) On the other
@@ -54,13 +54,13 @@ volumetric pixel, volume pixel, or voxel. Note that voxel can be
 sometimes used to refer to a whole 3D raster and that for example in 3D
 computer graphics, voxel can denote object with some complicated shape.
 
-Type of map and element name in GRASS GIS is called `raster_3d`. The
+Type of map and element name in GRASS is called `raster_3d`. The
 module family prefix is `r3`. Occasionally, 3D raster related things can
 be referred differently, for example according to a programming language
 standards. This might be the case of some functions or classes in
 Python.
 
-In GRASS GIS 3D rasters as stored in tiles which are hidden from user
+In GRASS, 3D rasters are stored in tiles which are hidden from user
 most of the time. When analyzing or visualizing 3D rasters user can
 create slices or cross sections. Slices can be horizontal, vertical, or
 general plains going through a 3D raster. Slices, especially the
@@ -106,7 +106,7 @@ raster map ([r.to.rast3](r.to.rast3.md)).
 
 ## 3D region settings and 3D mask
 
-GRASS GIS 3D raster map processing is always performed in the current 3D
+GRASS 3D raster map processing is always performed in the current 3D
 region settings (see [g.region](g.region.md), *-p3* flags), i.e. the
 current region extent, vertical extent and current 3D resolution are
 used. If the 3D resolution differs from that of the input raster map(s),
@@ -114,6 +114,10 @@ on-the-fly resampling is performed (nearest neighbor resampling). If
 this is not desired, the input map(s) has/have to be reinterpolated
 beforehand with one of the dedicated modules. Masks can be set
 ([r3.mask](r3.mask.md)).
+
+The 3D resolution of the computational region is distinct from its
+2D resolution. Setting one does not affect the other.
+They both share the same extent, however.
 
 ## 3D raster analyses and operations
 
@@ -152,15 +156,15 @@ spatial dimensions and temporal (vertical) dimension.
 
 ## Working with 3D visualization software
 
-GRASS GIS can be used for visualization of 3D rasters, however it has
+GRASS can be used for visualization of 3D rasters, however it has
 also tools to easily export the data into other visualization packages.
 
-GRASS GIS 3D raster maps can be exported to VTK using
+GRASS 3D raster maps can be exported to VTK using
 [r3.out.vtk](r3.out.vtk.md). VTK files can be visualized with the *[VTK
 Toolkit](https://vtk.org)*, *[Paraview](https://www.paraview.org)* and
-*[MayaVi](https://github.com/enthought/mayavi)*. Moreover, GRASS GIS 2D
+*[MayaVi](https://github.com/enthought/mayavi)*. Moreover, GRASS 2D
 raster maps can be exported to VTK with [r.out.vtk](r.out.vtk.md) and
-GRASS GIS vector maps can be exported to VTK with
+GRASS vector maps can be exported to VTK with
 [v.out.vtk](v.out.vtk.md).
 
 Alternatively, GRASS 3D raster maps can be imported and exported from/to

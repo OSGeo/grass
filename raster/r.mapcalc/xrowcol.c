@@ -1,3 +1,7 @@
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include "globals.h"
@@ -32,8 +36,13 @@ int f_col(int argc, const int *argt, void **args)
 
 int f_row(int argc, const int *argt, void **args)
 {
+    int tid = 0;
+#if defined(_OPENMP)
+    tid = omp_get_thread_num();
+#endif
+
     CELL *res = args[0];
-    int row = current_row + 1;
+    int row = current_row[tid] + 1;
     int i;
 
     if (argc > 0)

@@ -3,10 +3,8 @@
 
   \brief Display Library - Raster graphics subroutines
 
-  (C) 2001-2015 by the GRASS Development Team
-
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
+  SPDX-FileCopyrightText: 2001-2015 GRASS Development Team
+  SPDX-License-Identifier: GPL-2.0-or-later
 
   \author Original author CERL
   \author Monitors support by Martin Landa <landa.martin gmail.com>
@@ -175,7 +173,7 @@ void D_close_driver(void)
 
   \todo To be removed
 */
-int D_save_command(const char *cmd UNUSED)
+int D_save_command(const char *cmd G_UNUSED)
 {
     return 0;
 }
@@ -248,7 +246,7 @@ void D_encoding(const char *name)
   \brief Get font list
 
   \param[out] list list of font names
-  \param[out] number of items in the list
+  \param[out] count of items in the list
 */
 void D_font_list(char ***list, int *count)
 {
@@ -259,7 +257,7 @@ void D_font_list(char ***list, int *count)
   \brief Get font info
 
   \param[out] list list of font info
-  \param[out] number of items in the list
+  \param[out] count of items in the list
 */
 void D_font_info(char ***list, int *count)
 {
@@ -277,7 +275,6 @@ void D_font_info(char ***list, int *count)
  *  \param[out] r right edge of clip window
  *  \return ~
  */
-
 void D_get_clip_window(double *t, double *b, double *l, double *r)
 {
     COM_Get_window(t, b, l, r);
@@ -295,7 +292,6 @@ void D_get_clip_window(double *t, double *b, double *l, double *r)
  *  \param r right edge of clip window
  *  \return ~
  */
-
 void D_set_clip_window(double t, double b, double l, double r)
 {
     if (t < frame.t)
@@ -321,7 +317,6 @@ void D_set_clip_window(double t, double b, double l, double r)
  *  \param[out] r right edge of frame
  *  \return ~
  */
-
 void D_get_frame(double *t, double *b, double *l, double *r)
 {
     *t = frame.t;
@@ -341,7 +336,6 @@ void D_get_frame(double *t, double *b, double *l, double *r)
  *  \param[out] r right edge of screen
  *  \return ~
  */
-
 void D_get_screen(double *t, double *b, double *l, double *r)
 {
     *t = screen.t;
@@ -359,7 +353,6 @@ void D_get_screen(double *t, double *b, double *l, double *r)
  *  \param ~
  *  \return ~
  */
-
 void D_set_clip_window_to_map_window(void)
 {
     D_set_clip_window(D_get_d_north(), D_get_d_south(), D_get_d_west(),
@@ -375,7 +368,6 @@ void D_set_clip_window_to_map_window(void)
  *  \param ~
  *  \return ~
  */
-
 void D_set_clip_window_to_screen_window(void)
 {
     COM_Set_window(frame.t, frame.b, frame.l, frame.r);

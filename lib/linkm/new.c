@@ -1,7 +1,9 @@
 /*
  **  Written by David Gerdes  US Army Construction Engineering Research Lab
  **     April 1992
- **  Copyright 1992 USA-CERL   All rights reserved.
+ **  SPDX-FileCopyrightText: 1992 USA-CERL
+ **  SPDX-FileCopyrightText: GRASS Development Team
+ **  SPDX-License-Identifier: GPL-2.0-or-later
  **
  */
 
@@ -32,8 +34,8 @@ VOID_T *link_new(struct link_head *Head)
 
         /*DEBUG fprintf (stderr, "Mallocing another chunk: %d\n",
          * Head->max_ptr); */
-        if (NULL ==
-            (tmp = (VOID_T *)malloc(Head->chunk_size * Head->unit_size))) {
+        if (NULL == (tmp = (VOID_T *)malloc((size_t)Head->chunk_size *
+                                            Head->unit_size))) {
             if (Head->exit_flag)
                 link_out_of_memory();
             return NULL;

@@ -5,10 +5,9 @@
 
    Shortest path using timetables.
 
-   (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2009-2010 Daniel Bundala
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Daniel Bundala (Google Summer of Code 2009)
  */
@@ -27,8 +26,8 @@
 
    \param driver DB driver
    \param sql SQl string
-   \param[out] list of lengths
-   \param[out] list of ids
+   \param[out] lengths list of lengths
+   \param[out] ids list of ids
 
    \return number of distinct elements
    \return -1 on failure
@@ -88,6 +87,7 @@ int NetA_init_distinct(dbDriver *driver, dbString *sql, int **lengths,
         last = cur;
         count++;
     }
+    db_close_cursor(&cursor);
     return result;
 }
 
@@ -338,7 +338,7 @@ static neta_heap_data *new_heap_data(int conns, int v)
 /*!
    \brief Update Dijkstra structures
 
-   \param olc_conns old connection
+   \param old_conns old connection
    \param new_conns new connection
    \param to old 'to' node
    \param new_dst new 'to' node
@@ -350,7 +350,7 @@ static neta_heap_data *new_heap_data(int conns, int v)
    \param heap ?
  */
 void NetA_update_dijkstra(int old_conns, int new_conns, int to, int new_dst,
-                          int v, int route, int rows UNUSED, int update,
+                          int v, int route, int rows G_UNUSED, int update,
                           neta_timetable_result *result, dglHeap_s *heap)
 {
     if (result->dst[new_conns][to] == -1 ||

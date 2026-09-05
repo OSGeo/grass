@@ -1,4 +1,4 @@
-# Testing GRASS GIS source code and modules
+# Testing GRASS source code and modules
 
 For more information on the test suite and unit tests, visit:
 

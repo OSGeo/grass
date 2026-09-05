@@ -3,10 +3,8 @@
 
    \brief GIS Library - check map name
 
-   (C) 2001-2009, 2013 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009, 2013 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -19,7 +17,7 @@
 
    Returns a fully qualified name for the file <i>name</i> in
    <i>mapset</i>. Currently this string is in the form
-   <i>name@mapset</i>, but the programmer should pretend not to know this
+   <i>name\@mapset</i>, but the programmer should pretend not to know this
    and always call this routine to get the fully qualified name.
 
    Note:
@@ -69,7 +67,7 @@ int G_name_is_fully_qualified(const char *fullname, char *name, char *mapset)
 
    Returns a fully qualified name for GIS element <i>name</i> in
    <i>mapset</i>. Currently this string is in the form
-   <b>name@mapset</b>, but the programmer should pretend not to know
+   <b>name\@mapset</b>, but the programmer should pretend not to know
    this and always call this routine to get the fully qualified name.
 
    String is allocated by G_store().
@@ -96,7 +94,7 @@ int G_name_is_fully_qualified(const char *fullname, char *name, char *mapset)
    \param name element name
    \param mapset mapset name
 
-   \return pointer to full element name (map@mapset)
+   \return pointer to full element name (map\@mapset)
  */
 char *G_fully_qualified_name(const char *name, const char *mapset)
 {

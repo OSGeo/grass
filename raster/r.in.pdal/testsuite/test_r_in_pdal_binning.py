@@ -3,16 +3,15 @@ Name:      r.in.pdal binning method test
 Purpose:   Validates output of various binning methods
 
 Author:    Maris Nartiss
-Copyright: (C) 2021 by Maris Nartiss and the GRASS Development Team
-Licence:   This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2021 Maris Nartiss
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import os
-import pathlib
 import unittest
 import shutil
+from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from grass.script import core as grass
@@ -34,7 +33,7 @@ class BinningTest(TestCase):
         cls.use_temp_region()
         cls.runModule("g.region", n=18, s=0, e=18, w=0, res=6)
 
-        cls.data_dir = os.path.join(pathlib.Path(__file__).parent.absolute(), "data")
+        cls.data_dir = os.path.join(Path(__file__).parent.absolute(), "data")
         cls.point_file = os.path.join(cls.data_dir, "points.csv")
         cls.tmp_dir = TemporaryDirectory()
         cls.las_file = os.path.join(cls.tmp_dir.name, "points.las")
