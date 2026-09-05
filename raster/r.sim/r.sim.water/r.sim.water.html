@@ -163,36 +163,22 @@ machines due to the independence of sampling points. Therefore, the methods
 are useful both for everyday exploratory work using a desktop computer and
 for large, cutting-edge applications using high performance computing.
 
-<p>
-<b>Suggested Manning's n for surface roughness</b><br>
-from <a href="https://baharmon.github.io/hydrology-in-grass">https://baharmon.github.io/hydrology-in-grass</a>
-<p>
-<table border="1">
- <tr><th>NLCD Landcover Category</th><th>Manning’s n value</th></tr>
- <tr><td>Open Water</td><td>0.001</td></tr>
- <tr><td>Developed, Open Space</td><td>0.0404</td></tr>
- <tr><td>Developed, Low Intensity</td><td>0.0678</td></tr>
- <tr><td>Developed, Medium Intensity</td><td>0.0678</td></tr>
- <tr><td>Developed, High Intensity</td><td>0.0404</td></tr>
- <tr><td>Barren Land</td><td>0.0113</td></tr>
- <tr><td>Deciduous Forest</td><td>0.36</td></tr>
- <tr><td>Evergreen Forest</td><td>0.32</td></tr>
- <tr><td>Mixed Forest</td><td>0.4</td></tr>
- <tr><td>Shrub/Scrub</td><td>0.4</td></tr>
- <tr><td>Grassland/Herbaceuous</td><td>0.368</td></tr>
- <tr><td>Pasture/Hay</td><td>0.325</td></tr>
- <tr><td>Cultivated Crops</td><td>0.325</td></tr>
- <tr><td>Woody Wetlands</td><td>0.086</td></tr>
- <tr><td>Emergent Herbaceuous Wetlands</td><td>0.1825</td></tr>
-</table>
+<h3>Manning's n for surface roughness</h3>
+
+The <b>man</b> raster map can be derived from a land cover raster with the
+<a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.manning.html">r.manning</a>
+addon, which provides Manning's n values for the NLCD and ESA WorldCover
+land cover classifications as well as for user-defined ones:
+
+<div class="code"><pre>
+g.extension extension=r.manning
+r.manning input=nlcd_landcover output=mannings_n landcover=nlcd
+</pre></div>
 
 <p>
-The <a href="https://www.usgs.gov/centers/eros/science/annual-nlcd-science-product-user-guide">NLCD user guide</a>
-provides more information about the different NLCD classes.
-
-<p>
-Increasing the number of threads with <b>nprocs</b> does not really
-speed up the simulation.
+For the shallow overland flow simulated here, Manning's n is generally
+higher than for deeper channel or floodplain flow, especially over
+vegetated surfaces, see the <em>r.manning</em> documentation.
 
 <h2>EXAMPLE</h2>
 
@@ -282,9 +268,10 @@ The International Series in Engineering and Computer Science: Volume 773. Spring
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="v.surf.rst.html">v.surf.rst</a>,
+<a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.manning.html">r.manning</a> (addon),
+<a href="r.sim.sediment.html">r.sim.sediment</a>,
 <a href="r.slope.aspect.html">r.slope.aspect</a>,
-<a href="r.sim.sediment.html">r.sim.sediment</a>
+<a href="v.surf.rst.html">v.surf.rst</a>
 </em>
 
 <h2>AUTHORS</h2>
