@@ -168,8 +168,13 @@ option(WITH_FHS "Install with FHS" OFF)
 include(check_target)
 include(CheckDependentLibraries)
 
-include(get_host_arch)
-get_host_arch(BUILD_ARCH)
+# Set target architecture, as displayed by e.g. `g.version -g` or `grass --config arch`
+string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" BUILD_CPU)
+string(TOLOWER "${CMAKE_SYSTEM_NAME}" BUILD_OS)
+set(BUILD_ARCH "${BUILD_CPU}-${BUILD_OS}")
+if(CMAKE_SYSTEM_VERSION)
+    set(BUILD_ARCH "${BUILD_ARCH}${CMAKE_SYSTEM_VERSION}")
+endif()
 
 # Setup GRASS install directories
 include(GRASSInstallDirs)
