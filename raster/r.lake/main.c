@@ -31,6 +31,7 @@
  *  Kaarliit, shii programma ir veltiita Tev.
  *
  */
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -235,8 +236,8 @@ int main(int argc, char *argv[])
 
         G_scan_easting(sdxy_opt->answers[0], &east, G_projection());
         G_scan_northing(sdxy_opt->answers[1], &north, G_projection());
-        start_col = (int)Rast_easting_to_col(east, &window);
-        start_row = (int)Rast_northing_to_row(north, &window);
+        start_col = (int)floor(Rast_easting_to_col(east, &window));
+        start_row = (int)floor(Rast_northing_to_row(north, &window));
 
         if (start_row < 0 || start_row > rows || start_col < 0 ||
             start_col > cols)
