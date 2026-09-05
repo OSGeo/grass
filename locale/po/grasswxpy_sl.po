@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1339,6 +1339,16 @@ msgstr ""
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+msgid "Display animation"
+msgstr ""
+
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
@@ -1352,6 +1362,9 @@ msgid "Update metadata"
 msgstr ""
 
 msgid "Display &temporal extent"
+msgstr ""
+
+msgid "Display &animation"
 msgstr ""
 
 msgid "&Rename dataset"

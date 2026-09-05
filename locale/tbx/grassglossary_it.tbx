@@ -325,6 +325,14 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>notebook</term></tig></langSet>
+                <langSet xml:lang="it"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>datasets</term></tig></langSet>
+                <langSet xml:lang="it"><tig><term></term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>space time</term></tig></langSet>
                 <langSet xml:lang="it"><tig><term></term></tig></langSet>
             </termEntry>
         </body>

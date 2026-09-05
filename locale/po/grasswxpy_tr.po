@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2010-12-01 03:06+0200\n"
 "Last-Translator: Fatih <bounfat@gmail.com>\n"
 "Language-Team: Türkçe <grass-translations@lists.osgeo.org>\n"
@@ -1370,6 +1370,18 @@ msgstr ""
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display animation"
+msgstr "Harita görüntüle"
+
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
@@ -1391,6 +1403,11 @@ msgstr "Temel raster değişim verisi"
 #, fuzzy
 msgid "Display &temporal extent"
 msgstr "Geometriyi göster"
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display &animation"
+msgstr "Harita görüntüle"
 
 #, fuzzy
 msgid "&Rename dataset"
