@@ -15,7 +15,8 @@ title: Development Introduction
 
 ## Testing
 
-- [Testing](https://grass.osgeo.org/grass-stable/manuals/libpython/gunittest_testing.html)
+- [Testing](testing.md)
+- [grass.gunittest](https://grass.osgeo.org/grass-stable/manuals/libpython/gunittest_testing.html)
 
 ## Addons
 

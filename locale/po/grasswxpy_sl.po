@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-18 16:34+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -442,26 +442,6 @@ msgstr ""
 msgid "Animation Tool"
 msgstr ""
 
-msgid "Main Toolbar"
-msgstr ""
-
-msgid "Animation Toolbar"
-msgstr ""
-
-msgid "Misc Toolbar"
-msgstr ""
-
-msgid "Loading data"
-msgstr ""
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr ""
-
-#, python-format
-msgid "to %(to)s"
-msgstr ""
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
@@ -483,6 +463,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr ""
+
+msgid "Animation Toolbar"
+msgstr ""
+
+msgid "Misc Toolbar"
+msgstr ""
+
+msgid "Loading data"
+msgstr ""
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -972,6 +976,12 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr ""
+
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr ""
+
 msgid "Link external data"
 msgstr ""
 
@@ -1111,6 +1121,20 @@ msgid "Failed to read maps from project <{l}>."
 msgstr ""
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr ""
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr ""
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
@@ -1169,6 +1193,17 @@ msgstr ""
 msgid "Rename map"
 msgstr ""
 
+msgid "Rename dataset"
+msgstr ""
+
+#, python-brace-format
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
 msgid "Cannot rename mapset"
 msgstr ""
 
@@ -1185,10 +1220,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Renaming map <{name}>..."
-msgstr ""
-
-#, python-brace-format
-msgid "{cmd} -- completed"
 msgstr ""
 
 msgid "No map selected for copying."
@@ -1225,7 +1256,11 @@ msgid "g.remove completed"
 msgstr ""
 
 #, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete map <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
 msgstr ""
 
 #, python-brace-format
@@ -1239,19 +1274,127 @@ msgstr ""
 msgid "Deleting {name}..."
 msgstr ""
 
+#, python-brace-format
+msgid "Deleting {n} maps..."
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr ""
+
+msgid "Delete dataset and maps"
+msgstr ""
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+msgid "Delete dataset"
+msgstr ""
+
+msgid "Deleting datasets..."
+msgstr ""
+
+msgid "t.remove completed"
+msgstr ""
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
+#, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr ""
+
+msgid "Unregister map"
+msgstr ""
+
+msgid "Unregistering map..."
+msgstr ""
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+msgid "Display animation"
+msgstr ""
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+msgid "&Register maps"
+msgstr ""
+
+msgid "&Unregister maps"
+msgstr ""
+
+msgid "Update metadata"
+msgstr ""
+
+msgid "Display &temporal extent"
+msgstr ""
+
+msgid "Display &animation"
+msgstr ""
+
+msgid "&Rename dataset"
+msgstr ""
+
+msgid "&Delete dataset only"
+msgstr ""
+
+msgid "&Export dataset"
+msgstr ""
+
+msgid "Show &metadata"
 msgstr ""
 
 msgid "&Copy"
 msgstr ""
 
 msgid "Copy &name"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr ""
+
+msgid "&Unregister map"
+msgstr ""
+
+msgid "&Cut"
 msgstr ""
 
 msgid "&Paste"
@@ -1265,13 +1408,7 @@ msgstr ""
 msgid "&Rename"
 msgstr ""
 
-msgid "&Display layers"
-msgstr ""
-
-msgid "&Display layer"
-msgstr ""
-
-msgid "Show &metadata"
+msgid "Create &temporal dataset"
 msgstr ""
 
 msgid "&Switch mapset"
@@ -1283,7 +1420,7 @@ msgstr ""
 msgid "&Rename mapset"
 msgstr ""
 
-msgid "Re&load maps"
+msgid "Re&load mapset"
 msgstr ""
 
 msgid "Show computational region"
@@ -1299,6 +1436,9 @@ msgid "&Delete project"
 msgstr ""
 
 msgid "&Rename project"
+msgstr ""
+
+msgid "Re&load project"
 msgstr ""
 
 msgid "Show projection info"
@@ -1328,6 +1468,9 @@ msgstr ""
 msgid "&Delete GRASS database from disk"
 msgstr ""
 
+msgid "Re&load database"
+msgstr ""
+
 msgid "&Delete projects (locations)"
 msgstr ""
 
@@ -1338,6 +1481,15 @@ msgid "&Delete mapsets"
 msgstr ""
 
 msgid "&Copy paths"
+msgstr ""
+
+msgid "&Merge datasets"
+msgstr ""
+
+msgid "&Delete datasets only"
+msgstr ""
+
+msgid "Delete datasets and maps"
 msgstr ""
 
 #, python-brace-format
@@ -9742,6 +9894,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -9759,6 +9912,7 @@ msgstr ""
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 

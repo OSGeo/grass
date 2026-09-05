@@ -399,7 +399,7 @@ class Columns:
 
         :param col_name: the name of column to add
         :type col_name: str
-        :param col_type: the tipe of column to add
+        :param col_type: the type of column to add
         :type col_type: str
 
         >>> import sqlite3

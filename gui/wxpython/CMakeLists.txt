@@ -27,6 +27,13 @@ foreach(gui_lib_DIR ${gui_lib_DIRS})
         DIRECTORY "${OUTDIR}/${WXPYTHON_DIR}/${gui_lib_DIR}"
         DESTINATION "${WXPYTHON_DIR}"
     )
+    if(gui_lib_DIR MATCHES "jupyter_notebook")
+        install(
+            DIRECTORY
+                "${CMAKE_CURRENT_SOURCE_DIR}/${gui_lib_DIR}/template_notebooks"
+            DESTINATION "${WXPYTHON_DIR}/${gui_lib_DIR}"
+        )
+    endif()
 endforeach()
 add_custom_target(
     GUI_WXPYTHON

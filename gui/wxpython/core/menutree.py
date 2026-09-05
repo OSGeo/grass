@@ -23,10 +23,8 @@ and <i>menu</i>:
  - modeler (Graphical Modeler)
  - psmap (Cartographic Composer)
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Glynn Clements (menudata.py)
 @author Martin Landa <landa.martin gmail.com> (menudata.py)
@@ -122,7 +120,7 @@ class MenuTreeModelBuilder:
                 "" if keywords is None or keywords.text is None else keywords.text
             )
             shortcut = shortcut.text if shortcut is not None else ""
-            wxId = eval("wx." + wxId.text) if wxId is not None else wx.ID_ANY
+            wxId = getattr(wx, wxId.text, wx.ID_ANY) if wxId is not None else wx.ID_ANY
             icon = icon.text if icon is not None else ""
             label = origLabel
             if gcmd:
