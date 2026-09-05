@@ -20,7 +20,12 @@ from datetime import datetime
 import grass.script as gs
 
 from .abstract_map_dataset import AbstractMapDataset
-from .core import get_current_mapset, get_tgis_message_interface, init_dbif
+from .core import (
+    get_current_mapset,
+    get_tgis_message_interface,
+    init_dbif,
+    SQLDatabaseInterfaceConnection,
+)
 from .datetime_math import (
     check_datetime_string,
     increment_datetime_by_string,
@@ -33,15 +38,15 @@ from .open_stds import open_old_stds
 
 
 def register_maps_in_space_time_dataset(
-    type,
-    name,
+    type: str,
+    name: str | None = None,
     maps=None,
     file=None,
     start=None,
     end=None,
     unit=None,
     increment=None,
-    dbif=None,
+    dbif: SQLDatabaseInterfaceConnection | None = None,
     interval: bool = False,
     fs: str = "|",
     update_cmd_list: bool = True,
@@ -72,7 +77,8 @@ def register_maps_in_space_time_dataset(
     :param increment: Time increment between maps for time stamp creation
                      (format absolute: NNN seconds, minutes, hours, days,
                      weeks, months, years; format relative: 1.0)
-    :param dbif: The database interface to be used
+    :param dbif: The database interface to be used (deprecated,
+                will be removed in future versions)
     :param interval: If True, time intervals are created in case the start
                     time and an increment is provided
     :param fs: Field separator used in input file
@@ -117,17 +123,21 @@ def register_maps_in_space_time_dataset(
     if not maps and not file:
         msgr.fatal(_("Please specify maps or file"))
 
-    # We may need the mapset
+    if dbif is not None:
+        msgr.warning(
+            _(
+                "The dbif argument is deprecated and will be removed in future "
+                "versions. The database connection will be created automatically"
+                "only for the current mapset."
+            )
+        )
+    # Create a new DB connection only for the current mapset
     mapset = get_current_mapset()
-    dbif, connection_state_changed = init_dbif(dbif)
-
-    # create new stds only in the current mapset
-    # remove all connections to any other mapsets
-    # ugly hack !
-    currcon = {mapset: dbif.connections[mapset]}
-    dbif.connections = currcon
+    dbif = SQLDatabaseInterfaceConnection(mapsets=mapset)
+    dbif.connect()
 
     # The name of the space time dataset is optional
+    sp = None
     if name:
         sp = open_old_stds(name, type, dbif)
 
@@ -175,7 +185,7 @@ def register_maps_in_space_time_dataset(
                 # Check if last column is an end time or a semantic label.
                 # Relative timestamps are integers, absolute timestamps are
                 # datetime strings; anything else is a semantic label.
-                if sp.is_time_relative():
+                if sp is not None and sp.is_time_relative():
                     try:
                         int(line_list[2])
                     except ValueError:
@@ -251,6 +261,7 @@ def register_maps_in_space_time_dataset(
         map_object_layer = map_object.get_layer()
         map_object_type = map_object.get_type()
         if not map_object.map_exists():
+            dbif.close()
             msgr.fatal(
                 _("Unable to update {t} map <{mid}>. The map does not exist.").format(
                     t=map_object_type, mid=map_object_id
@@ -277,7 +288,7 @@ def register_maps_in_space_time_dataset(
                     msgr.fatal(
                         _(
                             "Unable to register {t} map <{mid}> with "
-                            "layer {l}. The map has timestamp and "
+                            "layer {l}. The map has no timestamp and "
                             "the start time is not set."
                         ).format(
                             t=map_object_type,
@@ -297,8 +308,10 @@ def register_maps_in_space_time_dataset(
                 # We need to check if the time is absolute and the unit was specified
                 time_object = check_datetime_string(start)
                 if isinstance(time_object, datetime) and unit:
+                    dbif.close()
                     msgr.fatal(_("unit can only be set for relative time"))
                 if not isinstance(time_object, datetime) and not unit:
+                    dbif.close()
                     msgr.fatal(_("unit must be set in case of relative time stamps"))
 
                 if unit:
@@ -375,8 +388,7 @@ def register_maps_in_space_time_dataset(
         # Try to read an existing time stamp from the grass spatial database
         # in case this map wasn't already registered in the temporal database
         # Read the spatial database time stamp only, if no time stamp was provided for
-        # this map
-        # as method argument or in the input file
+        # this map as method argument or in the input file
         if not is_in_db and not start:
             map_object.read_timestamp_from_grass()
 
@@ -457,8 +469,7 @@ def register_maps_in_space_time_dataset(
             ds.select(dbif)
             ds.update_from_registered_maps(dbif)
 
-    if connection_state_changed is True:
-        dbif.close()
+    dbif.close()
 
     msgr.percent(num_maps, num_maps, 1)
 
