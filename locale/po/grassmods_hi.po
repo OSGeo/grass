@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
@@ -7679,8 +7679,8 @@ msgstr "एक एसवीएम के साथ भविष्यवाण�
 msgid "Predict with a Support Vector Machine"
 msgstr "एक सपोर्ट वेक्टर मशीन से भविष्यवाणी करें"
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 msgid "Maps with feature values (attributes)"
 msgstr "फ़ीचर मान (विशेषताएँ) वाले मानचित्र"
 
@@ -12133,6 +12133,11 @@ msgstr "r.stats चलाने में असमर्थ"
 msgid "Unexpected output from r.stats"
 msgstr "r.stats से अप्रत्याशित आउटपुट"
 
+#, fuzzy
+#| msgid "No data returned from query"
+msgid "No data returned from r.stats"
+msgstr "क्वेरी से कोई डेटा वापस नहीं आया"
+
 msgid "Unable to open tempfile"
 msgstr "टेम्पफ़ाइल खोलने में असमर्थ"
 
@@ -13511,6 +13516,10 @@ msgstr "खोज त्रिज्या का आकार कम से क
 msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
 msgstr ""
 
+#, c-format
+msgid "memory=%d MB is below the %ld MB minimum for search=%s. This run will finish with the minimum MB needed instead."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr "छोड़ें त्रिज्या का आकार त्रिज्या से कम से कम 1 सेल कम होना चाहिए"
 
@@ -13520,18 +13529,14 @@ msgstr "समतलता सीमा 0 से अधिक होनी च�
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr "समतलता की दूरी स्किप और खोज त्रिज्या के बीच होनी चाहिए। अन्यथा नजरअंदाज कर दिया गया"
 
-#, c-format
-msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
-msgstr "प्रसंस्करण में उल्लेखनीय देरी हो सकती है क्योंकि कम्प्यूटेशनल क्षेत्र आवश्यकता से %lu गुना बड़ा है"
-
-msgid "Unknown output data type"
-msgstr "अज्ञात आउटपुट डेटा प्रकार"
-
 msgid "Profile data has been written"
 msgstr "प्रोफ़ाइल डेटा लिखा गया है"
 
 msgid "Failed writing profile data"
 msgstr "प्रोफ़ाइल डेटा लिखने में विफल"
+
+msgid "Unknown output data type"
+msgstr "अज्ञात आउटपुट डेटा प्रकार"
 
 msgid "Failed to profile the computation, please check the parameters"
 msgstr "गणना प्रोफ़ाइल करने में विफल, कृपया पैरामीटर जांचें"
@@ -14691,6 +14696,15 @@ msgstr "<%s> का इनपुट फ़ाइल प्रकार निर
 msgid "PDAL error: %s"
 msgstr "पीडीएएल त्रुटि: %s"
 
+#, c-format
+msgid "The input dataset <%s> has undefined CRS, its extent is reported as stored in the file"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Reprojection of region using m.proj failed."
+msgid "Reprojection of the data extent failed: %s"
+msgstr "m.proj का उपयोग करके क्षेत्र का पुनर्प्रक्षेपण विफल रहा।"
+
 msgid "Mode value of point values in cell"
 msgstr "सेल में बिंदु मानों का मोड मान"
 
@@ -14718,11 +14732,15 @@ msgstr "आउटपुट आयाम मानों पर लागू क�
 msgid "Use if output dimension is not Z or intensity"
 msgstr "यदि आउटपुट आयाम Z या तीव्रता नहीं है तो उपयोग करें"
 
-msgid "Reproject to project's coordinate system if needed"
+#, fuzzy
+#| msgid "Reproject to project's coordinate system if needed"
+msgid "Reproject to project's coordinate system if needed [deprecated]"
 msgstr "यदि आवश्यक हो तो परियोजना की समन्वय प्रणाली को पुनः प्रोजेक्ट करें"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
-msgstr "इनपुट डेटासेट को GRASS प्रोजेक्ट की समन्वय प्रणाली में पुन: प्रोजेक्ट करता है (डिफ़ॉल्ट रूप से केवल मिलान समन्वय प्रणाली वाले डेटासेट आयात किए जा सकते हैं)"
+#, fuzzy
+#| msgid "This flag is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
+msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr "यह ध्वज अप्रचलित है और भविष्य में रिलीज़ में हटा दिया जाएगा। सीडिंग स्वचालित है या पैरामीटर बीज का उपयोग करें।"
 
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
 msgstr "इनपुट डेटासेट प्रक्षेपण (डब्ल्यूकेटी या ईपीएसजी, उदाहरण के लिए ईपीएसजी:4326)"
@@ -14773,6 +14791,11 @@ msgstr "पीडीएएल आयाम नाम"
 msgid "Print data file extent in shell script style and then exit"
 msgstr "शेल स्क्रिप्ट शैली में डेटा फ़ाइल सीमा प्रिंट करें और फिर बाहर निकलें"
 
+#, fuzzy
+#| msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=proj4 instead."
+msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr "ध्वज 'j' को हटा दिया गया है और भविष्य में रिलीज़ में हटा दिया जाएगा। कृपया इसके बजाय format=proj4 का उपयोग करें।"
+
 #, c-format
 msgid "Flag %c makes sense only with %s option or -%c flag or -%c flag"
 msgstr "फ़्लैग %c केवल %s विकल्प या -%c फ़्लैग या -%c फ़्लैग के साथ ही समझ में आता है"
@@ -14787,14 +14810,19 @@ msgstr "आउटपुट मानचित्र प्रकार सेल
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr "पीडीएएल रीडर निर्माण विफल, <%s> का गलत प्रारूप"
 
-msgid "Reprojecting the input to the project's CRS"
-msgstr "प्रोजेक्ट के सीआरएस में इनपुट को दोबारा अस्वीकार करना"
+#, fuzzy, c-format
+#| msgid "Error while reading history file"
+msgid "PDAL error while reading <%s>: %s"
+msgstr "इतिहास फ़ाइल पढ़ते समय त्रुटि"
+
+msgid "The input dataset has undefined projection"
+msgstr "इनपुट डेटासेट में अपरिभाषित प्रक्षेपण है"
 
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr "प्रक्षेपण जांच को ओवरराइड करना और यह मानना कि इनपुट का सीआरएस प्रोजेक्ट के सीआरएस से मेल खाता है"
 
-msgid "The input dataset has undefined projection"
-msgstr "इनपुट डेटासेट में अपरिभाषित प्रक्षेपण है"
+msgid "Reprojecting the input to the project's CRS"
+msgstr "प्रोजेक्ट के सीआरएस में इनपुट को दोबारा अस्वीकार करना"
 
 msgid "Running PDAL algorithms..."
 msgstr "पीडीएएल एल्गोरिदम चल रहा है..।"
@@ -18490,9 +18518,6 @@ msgstr "मैनिंग का एन रैस्टर मानचित�
 
 msgid "Zero value in Mannings n"
 msgstr "मैनिंग्स एन में शून्य मान"
-
-msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
-msgstr "घुसपैठ हर जगह वर्षा दर से अधिक है! कोई स्थलीय प्रवाह नहीं।"
 
 msgid "No values in the elevation raster."
 msgstr "उन्नयन रेखापुंज में कोई मान नहीं।"
@@ -31500,6 +31525,116 @@ msgstr "नॉर्मल्सवी: अप्रारंभीकृत ब
 msgid "normalsv: save of uninitialized block"
 msgstr "नॉर्मल्सवी: अप्रारंभीकृत ब्लॉक को सहेजें"
 
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing F function..."
+msgstr "समीकरणों की गणना..।"
+
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing G function..."
+msgstr "समीकरणों की गणना..।"
+
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing K function..."
+msgstr "समीकरणों की गणना..।"
+
+#, fuzzy
+#| msgid "point pattern"
+msgid "point pattern analysis"
+msgstr "बिंदु पैटर्न"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Summary function to compute"
+msgstr ""
+
+msgid "g;Nearest neighbor distance distribution function;f;Empty space function;k;Ripley's K function;l;L function (variance stabilized K function)"
+msgstr ""
+
+#, fuzzy
+#| msgid "If no output file given report is printed to standard output"
+msgid "If omitted or '-', the results are printed to standard output"
+msgstr "यदि कोई आउटपुट फ़ाइल नहीं दी गई है तो रिपोर्ट मानक आउटपुट पर मुद्रित होती है"
+
+#, fuzzy
+#| msgid "Number of islands:"
+msgid "Number of distances"
+msgstr "द्वीपों की संख्या:"
+
+msgid "Number of equally spaced distances at which the function is estimated"
+msgstr ""
+
+#, fuzzy
+#| msgid "Number of arguments for function '%s'"
+msgid "Number of random points for the F function"
+msgstr "फ़ंक्शन '%s' के लिए तर्कों की संख्या"
+
+msgid "Empty space distances are sampled at this many uniformly random locations"
+msgstr ""
+
+#, fuzzy
+#| msgid "Maximum distance to the network"
+msgid "Maximum distance for the K and L functions"
+msgstr "नेटवर्क से अधिकतम दूरी"
+
+#, fuzzy
+#| msgid "The coordinates are outside of the computational region"
+msgid "Default is one quarter of the shorter side of the computational region"
+msgstr "निर्देशांक कम्प्यूटेशनल क्षेत्र के बाहर हैं"
+
+msgid "Edge correction for the K and L functions"
+msgstr ""
+
+msgid "isotropic;Ripley's isotropic edge correction;none;No edge correction"
+msgstr ""
+
+msgid "Used for the random locations of the F function"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Option %s must be positive"
+msgid "Option <%s> must be positive"
+msgstr "विकल्प %s सकारात्मक होना चाहिए"
+
+#, c-format
+msgid "Option <%s> is larger than half of the shorter side of the computational region; the estimate becomes unreliable at large distances"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Viewpoint outside of computational region"
+msgid "One point outside of the computational region was ignored"
+msgid_plural "%d points outside of the computational region were ignored"
+msgstr[0] "कम्प्यूटेशनल क्षेत्र के बाहर का दृष्टिकोण"
+msgstr[1] "कम्प्यूटेशनल क्षेत्र के बाहर का दृष्टिकोण"
+
+#, fuzzy
+#| msgid "All points fall outside of the current computational region"
+msgid "No points found in the computational region"
+msgstr "सभी बिंदु वर्तमान कम्प्यूटेशनल क्षेत्र से बाहर हैं"
+
+#, fuzzy, c-format
+#| msgid "At least two points are required"
+msgid "At least 2 points are required, %d found"
+msgstr "कम से कम दो अंक आवश्यक हैं"
+
+#, fuzzy, c-format
+#| msgid "Estimated point density: %.4g"
+msgid "Estimated intensity: %g"
+msgstr "अनुमानित बिंदु घनत्व: %.4g"
+
+#, fuzzy
+#| msgid "Unable to initialise Freetype"
+msgid "Unable to initialize JSON output"
+msgstr "फ़्रीटाइप आरंभ करने में असमर्थ"
+
+#, fuzzy
+#| msgid "Failed to serialize JSON"
+msgid "Unable to serialize JSON output"
+msgstr "JSON को क्रमबद्ध करने में विफल"
+
 msgid "Vector map profiling tool"
 msgstr "वेक्टर मानचित्र प्रोफ़ाइलिंग उपकरण"
 
@@ -33887,6 +34022,16 @@ msgstr "पीएनजी ड्राइवर से बीएमपी छ�
 
 msgid "Image file"
 msgstr "छवि फ़ाइल"
+
+#~ msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
+#~ msgstr "इनपुट डेटासेट को GRASS प्रोजेक्ट की समन्वय प्रणाली में पुन: प्रोजेक्ट करता है (डिफ़ॉल्ट रूप से केवल मिलान समन्वय प्रणाली वाले डेटासेट आयात किए जा सकते हैं)"
+
+#~ msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
+#~ msgstr "घुसपैठ हर जगह वर्षा दर से अधिक है! कोई स्थलीय प्रवाह नहीं।"
+
+#, c-format
+#~ msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
+#~ msgstr "प्रसंस्करण में उल्लेखनीय देरी हो सकती है क्योंकि कम्प्यूटेशनल क्षेत्र आवश्यकता से %lu गुना बड़ा है"
 
 #~ msgid "flags c and d are mutually exclusive"
 #~ msgstr "झंडे सी और डी परस्पर अनन्य हैं"

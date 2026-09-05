@@ -9,13 +9,14 @@
 # Vincent Bain <bain toraval.fr>, 2012.
 # Sylvain Maillard <sylvain.maillard@gmail.com>, 2012, 2013.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
+# Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
-"PO-Revision-Date: 2026-08-09 16:49+0000\n"
-"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"PO-Revision-Date: 2026-09-05 15:05+0000\n"
+"Last-Translator: Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2692,7 +2693,7 @@ msgid ""
 "ERROR: vector map - can't read\n"
 msgstr ""
 "\n"
-"ERREUR: fichier vecteur - lecture impossible\n"
+"ERREUR : fichier vecteur - lecture impossible\n"
 
 #, c-format
 msgid "Error in color definition column (%s), element %d with cat %d: colorstring [%s]"
@@ -4895,7 +4896,7 @@ msgid ""
 msgstr ""
 
 msgid "none"
-msgstr ""
+msgstr "aucun"
 
 #, c-format
 msgid "The output cell map <%s.%d> has values outside the 0-255 range."
@@ -7693,8 +7694,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 msgid "Maps with feature values (attributes)"
 msgstr "Cartes avec valeurs d'entités (attributs)"
 
@@ -12083,7 +12084,7 @@ msgstr "Le titre <%s> est trop long"
 #, c-format
 msgid "%d clump."
 msgid_plural "%d clumps."
-msgstr[0] ""
+msgstr[0] "%d amas."
 msgstr[1] "%d amas."
 
 msgid "Minimum size must be larger than 1"
@@ -12129,6 +12130,9 @@ msgid "Unable to run r.stats"
 msgstr ""
 
 msgid "Unexpected output from r.stats"
+msgstr ""
+
+msgid "No data returned from r.stats"
 msgstr ""
 
 msgid "Unable to open tempfile"
@@ -13505,6 +13509,10 @@ msgstr ""
 msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
 msgstr "Le rayon de recherche externe (search=%s) dépasse l'emprise nord-sud de la région actuelle (%d lignes). Au moins %d lignes sont nécessaires. Définissez une région de calculs plus grande à l’aide de g.region ou utilisez une valeur de recherche plus petite."
 
+#, c-format
+msgid "memory=%d MB is below the %ld MB minimum for search=%s. This run will finish with the minimum MB needed instead."
+msgstr "memory=%d Mo est inférieur au minimum requis de %ld Mo pour search=%s. Cette exécution s'achèvera donc avec le minimum de Mo requis."
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
@@ -13514,17 +13522,13 @@ msgstr ""
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
-#, c-format
-msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
-msgstr ""
-
-msgid "Unknown output data type"
-msgstr ""
-
 msgid "Profile data has been written"
 msgstr ""
 
 msgid "Failed writing profile data"
+msgstr ""
+
+msgid "Unknown output data type"
 msgstr ""
 
 msgid "Failed to profile the computation, please check the parameters"
@@ -14685,6 +14689,14 @@ msgstr "Impossible de déterminer le type du fichier d'entrée <%s>"
 msgid "PDAL error: %s"
 msgstr "Erreur de PDAL : %s"
 
+#, c-format
+msgid "The input dataset <%s> has undefined CRS, its extent is reported as stored in the file"
+msgstr ""
+
+#, c-format
+msgid "Reprojection of the data extent failed: %s"
+msgstr "La réprojection de l'emprise des données a échoué : %s"
+
 msgid "Mode value of point values in cell"
 msgstr "Mode des valeurs des points dans la cellule"
 
@@ -14718,11 +14730,11 @@ msgstr "Échelle à appliquer aux valeurs de dimension de sortie"
 msgid "Use if output dimension is not Z or intensity"
 msgstr ""
 
-msgid "Reproject to project's coordinate system if needed"
+msgid "Reproject to project's coordinate system if needed [deprecated]"
 msgstr ""
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
-msgstr ""
+msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr "Cette option est obsolète et sera retirée dans une prochaine version. Le jeu de données d’entrée sera toujours reprojeté si nécessaire."
 
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
 msgstr ""
@@ -14776,6 +14788,9 @@ msgstr ""
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Produit les statistiques à la façon d'un script shell"
 
+msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr "L'option 'w' est obsolète et sera retirée dans une prochaine version. Le jeu de données d’entrée sera toujours reprojeté si nécessaire."
+
 #, c-format
 msgid "Flag %c makes sense only with %s option or -%c flag or -%c flag"
 msgstr ""
@@ -14790,15 +14805,19 @@ msgstr ""
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr ""
 
-msgid "Reprojecting the input to the project's CRS"
-msgstr "Reprojection de l'entrée dans le SCR du projet"
+#, c-format
+msgid "PDAL error while reading <%s>: %s"
+msgstr "Erreur PDAL lors de la lecture de <%s> : %s"
+
+msgid "The input dataset has undefined projection"
+msgstr ""
 
 #, fuzzy
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr "Supplanter la vérification de la projection (utiliser la projection du secteur courant)"
 
-msgid "The input dataset has undefined projection"
-msgstr ""
+msgid "Reprojecting the input to the project's CRS"
+msgstr "Reprojection de l'entrée dans le SCR du projet"
 
 msgid "Running PDAL algorithms..."
 msgstr ""
@@ -15447,7 +15466,7 @@ msgid "%s= and -%c are mutually exclusive"
 msgstr ""
 
 msgid "parse error"
-msgstr ""
+msgstr "erreur d'analyse"
 
 #, fuzzy
 #| msgid "Flag 't' is deprecated and will be removed in a future release. Please use format=csv instead."
@@ -15778,7 +15797,7 @@ msgstr ""
 
 #, c-format
 msgid "%s: illegal value spec"
-msgstr ""
+msgstr "%s: spécification de valeur non valide"
 
 #, c-format
 msgid "Writing new data for raster map <%s>..."
@@ -17593,9 +17612,9 @@ msgstr ""
 msgid "Only %d unit%s allowed"
 msgstr ""
 
-#, c-format
+#, fuzzy, c-format
 msgid "Unable to read fp range for raster map <%s>"
-msgstr ""
+msgstr "Impossible de lire l'intervalle fp pour la carte raster <%s>"
 
 #, c-format
 msgid "Unable to open result file <%s>"
@@ -17608,7 +17627,7 @@ msgstr ""
 #, c-format
 msgid "%d point read in region"
 msgid_plural "%d points read in region"
-msgstr[0] ""
+msgstr[0] "%d point lu dans la région"
 msgstr[1] "%d points lus dans la région"
 
 msgid "Maybe it takes too long. Consider reducing the region extents."
@@ -18518,9 +18537,6 @@ msgid "Manning's n raster map not found and manin_val undefined, choose one to b
 msgstr ""
 
 msgid "Zero value in Mannings n"
-msgstr ""
-
-msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 msgstr ""
 
 msgid "No values in the elevation raster."
@@ -22106,7 +22122,7 @@ msgid "Error during reading seed vector map"
 msgstr "Erreur lors de la lecture de la carte vecteur graine"
 
 msgid "unit test"
-msgstr ""
+msgstr "test unitaire"
 
 msgid "Testing flow lines."
 msgstr "Test des lignes de flux."
@@ -24661,7 +24677,7 @@ msgstr "Un séparateur (délimiteur) CSV standard ne comporte qu'un seul caract�
 
 #, python-format
 msgid "Missing value for parameter <%s>"
-msgstr ""
+msgstr "Valeur manquante pour le paramètre <%s>"
 
 #, python-format
 msgid "Unable to import <%s>"
@@ -31526,6 +31542,94 @@ msgstr ""
 msgid "normalsv: save of uninitialized block"
 msgstr ""
 
+msgid "Computing F function..."
+msgstr "Calcul de la fonction d’espace vide F..."
+
+msgid "Computing G function..."
+msgstr "Calcul de la fonction G..."
+
+msgid "Computing K function..."
+msgstr "Calcul de la fonction K..."
+
+#, fuzzy
+msgid "point pattern analysis"
+msgstr "Afficher l'index"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Summary function to compute"
+msgstr "Fonction de synthèse à calculer"
+
+msgid "g;Nearest neighbor distance distribution function;f;Empty space function;k;Ripley's K function;l;L function (variance stabilized K function)"
+msgstr ""
+
+msgid "If omitted or '-', the results are printed to standard output"
+msgstr "Si ce paramètre est omis ou si la valeur « - » est indiquée, les résultats sont affichés sur la sortie standard"
+
+#, fuzzy
+msgid "Number of distances"
+msgstr "Nombre de profondeurs"
+
+msgid "Number of equally spaced distances at which the function is estimated"
+msgstr ""
+
+#, fuzzy
+msgid "Number of random points for the F function"
+msgstr "Nombre de points dans la cellule"
+
+msgid "Empty space distances are sampled at this many uniformly random locations"
+msgstr ""
+
+#, fuzzy
+msgid "Maximum distance for the K and L functions"
+msgstr "Distance maximum entre les points en unités carte :%f"
+
+#, fuzzy
+msgid "Default is one quarter of the shorter side of the computational region"
+msgstr "Utiliser la résolution réelle du raster plutôt que celle de la région de calcul"
+
+msgid "Edge correction for the K and L functions"
+msgstr ""
+
+msgid "isotropic;Ripley's isotropic edge correction;none;No edge correction"
+msgstr ""
+
+msgid "Used for the random locations of the F function"
+msgstr ""
+
+#, c-format
+msgid "Option <%s> must be positive"
+msgstr "L'option <%s> doit être positive"
+
+#, c-format
+msgid "Option <%s> is larger than half of the shorter side of the computational region; the estimate becomes unreliable at large distances"
+msgstr ""
+
+#, c-format
+msgid "One point outside of the computational region was ignored"
+msgid_plural "%d points outside of the computational region were ignored"
+msgstr[0] "Un point situé en dehors de la région de calculs a été ignoré"
+msgstr[1] "Les %d points situés en dehors de la région de calculs ont été ignorés"
+
+#, fuzzy
+msgid "No points found in the computational region"
+msgstr "Point de départ en dehors de la région courante"
+
+#, c-format
+msgid "At least 2 points are required, %d found"
+msgstr "Au moins 2 points sont requis, %d trouvés"
+
+#, c-format
+msgid "Estimated intensity: %g"
+msgstr "Intensité estimée : %g"
+
+msgid "Unable to initialize JSON output"
+msgstr "Impossible d'initialiser la sortie JSON"
+
+msgid "Unable to serialize JSON output"
+msgstr "Impossible de sérialiser la sortie JSON"
+
 msgid "Vector map profiling tool"
 msgstr "Outil de profilage de la carte vecteur"
 
@@ -31824,7 +31928,7 @@ msgid "Database connection not defined for layer %s"
 msgstr "Connexion à la base de données non définie pour la couche %s"
 
 msgid "Key column type is not integer"
-msgstr ""
+msgstr "Le type de la colonne clé n'est pas un entier"
 
 #, c-format
 msgid "Cannot insert data: [%s]"
@@ -32870,7 +32974,7 @@ msgstr "Impossible d'utiliser la colonne spécifiée"
 
 #, c-format
 msgid "Get area %d failed"
-msgstr ""
+msgstr "L'obtention de la surface %d a échoué"
 
 msgid "Failed to plot polygon"
 msgstr ""
@@ -36061,10 +36165,6 @@ msgstr ""
 #~ msgstr "même taille"
 
 #, fuzzy
-#~ msgid "Maximum distance for aerial extraction"
-#~ msgstr "Distance maximum entre les points en unités carte :%f"
-
-#, fuzzy
 #~ msgid "Maximum distance from points to river"
 #~ msgstr "Distance maximum entre les points en unités carte :%f"
 
@@ -37820,10 +37920,6 @@ msgstr ""
 #~ msgstr "Nombre de fois que sera répété le filtre"
 
 #, fuzzy
-#~ msgid "Number of points for the visibility"
-#~ msgstr "Nombre de points dans la cellule"
-
-#, fuzzy
 #~ msgid "Number of points to use in interpolation."
 #~ msgstr "Nombre de colonnes dans la nouvelle région"
 
@@ -37910,10 +38006,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Number of significant digits per attribute column (for columns with floating point data)"
 #~ msgstr "Nombre de chiffres significatifs (virgule flottante uniquement)"
-
-#, fuzzy
-#~ msgid "Number of steps"
-#~ msgstr "Nombre de profondeurs"
 
 #, fuzzy
 #~ msgid "Number of steps to be simulated"
@@ -38038,10 +38130,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Option <%s> and <%s> are mutually exclusive"
 #~ msgstr "les drapeaux -B & - C sont mutuellement exclusifs. Veuillez n'en choisir qu'un seul."
-
-#, fuzzy
-#~ msgid "Option <%s> must be specified"
-#~ msgstr "L'une des options \"color\", \"rast\" OU \"rules\" DOIT être spécifiée!"
 
 #, fuzzy
 #~ msgid "Optional aspect raster map"
@@ -38842,10 +38930,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Required inputs"
 #~ msgstr "Requis"
-
-#, fuzzy
-#~ msgid "Resample input raster according to the computational region"
-#~ msgstr "Utiliser la résolution réelle du raster plutôt que celle de la région de calcul"
 
 #, fuzzy
 #~ msgid "Resampling method to use"
@@ -40437,10 +40521,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "neighborhood matrix"
 #~ msgstr "Opération sur le voisinage"
-
-#, fuzzy
-#~ msgid "network analysis"
-#~ msgstr "Afficher l'index"
 
 #, fuzzy
 #~ msgid "nighttime lights"

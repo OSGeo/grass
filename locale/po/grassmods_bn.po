@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_bn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2026-03-14 11:20+0000\n"
 "Last-Translator: Faysal Mahmud  <faysalmahmud4300@gmail.com>\n"
 "Language-Team: Bengali <https://weblate.osgeo.org/projects/grass-gis/grassmods/bn/>\n"
@@ -7647,8 +7647,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 msgid "Maps with feature values (attributes)"
 msgstr ""
 
@@ -12069,6 +12069,9 @@ msgstr ""
 msgid "Unexpected output from r.stats"
 msgstr ""
 
+msgid "No data returned from r.stats"
+msgstr ""
+
 msgid "Unable to open tempfile"
 msgstr ""
 
@@ -13440,6 +13443,10 @@ msgstr ""
 msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
 msgstr ""
 
+#, c-format
+msgid "memory=%d MB is below the %ld MB minimum for search=%s. This run will finish with the minimum MB needed instead."
+msgstr ""
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr ""
 
@@ -13449,17 +13456,13 @@ msgstr ""
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr ""
 
-#, c-format
-msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
-msgstr ""
-
-msgid "Unknown output data type"
-msgstr ""
-
 msgid "Profile data has been written"
 msgstr ""
 
 msgid "Failed writing profile data"
+msgstr ""
+
+msgid "Unknown output data type"
 msgstr ""
 
 msgid "Failed to profile the computation, please check the parameters"
@@ -14618,6 +14621,14 @@ msgstr ""
 msgid "PDAL error: %s"
 msgstr ""
 
+#, c-format
+msgid "The input dataset <%s> has undefined CRS, its extent is reported as stored in the file"
+msgstr ""
+
+#, c-format
+msgid "Reprojection of the data extent failed: %s"
+msgstr ""
+
 msgid "Mode value of point values in cell"
 msgstr ""
 
@@ -14645,10 +14656,10 @@ msgstr ""
 msgid "Use if output dimension is not Z or intensity"
 msgstr ""
 
-msgid "Reproject to project's coordinate system if needed"
+msgid "Reproject to project's coordinate system if needed [deprecated]"
 msgstr ""
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
+msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
 msgstr ""
 
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
@@ -14700,6 +14711,9 @@ msgstr ""
 msgid "Print data file extent in shell script style and then exit"
 msgstr ""
 
+msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr ""
+
 #, c-format
 msgid "Flag %c makes sense only with %s option or -%c flag or -%c flag"
 msgstr ""
@@ -14714,13 +14728,17 @@ msgstr ""
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr ""
 
-msgid "Reprojecting the input to the project's CRS"
+#, c-format
+msgid "PDAL error while reading <%s>: %s"
+msgstr ""
+
+msgid "The input dataset has undefined projection"
 msgstr ""
 
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr ""
 
-msgid "The input dataset has undefined projection"
+msgid "Reprojecting the input to the project's CRS"
 msgstr ""
 
 msgid "Running PDAL algorithms..."
@@ -18412,9 +18430,6 @@ msgid "Manning's n raster map not found and manin_val undefined, choose one to b
 msgstr ""
 
 msgid "Zero value in Mannings n"
-msgstr ""
-
-msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 msgstr ""
 
 msgid "No values in the elevation raster."
@@ -31283,6 +31298,92 @@ msgstr ""
 
 msgid "normalsv: save of uninitialized block"
 msgstr ""
+
+msgid "Computing F function..."
+msgstr ""
+
+msgid "Computing G function..."
+msgstr ""
+
+msgid "Computing K function..."
+msgstr ""
+
+msgid "point pattern analysis"
+msgstr ""
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Summary function to compute"
+msgstr ""
+
+msgid "g;Nearest neighbor distance distribution function;f;Empty space function;k;Ripley's K function;l;L function (variance stabilized K function)"
+msgstr ""
+
+msgid "If omitted or '-', the results are printed to standard output"
+msgstr ""
+
+msgid "Number of distances"
+msgstr ""
+
+msgid "Number of equally spaced distances at which the function is estimated"
+msgstr ""
+
+msgid "Number of random points for the F function"
+msgstr ""
+
+msgid "Empty space distances are sampled at this many uniformly random locations"
+msgstr ""
+
+msgid "Maximum distance for the K and L functions"
+msgstr ""
+
+msgid "Default is one quarter of the shorter side of the computational region"
+msgstr ""
+
+msgid "Edge correction for the K and L functions"
+msgstr ""
+
+msgid "isotropic;Ripley's isotropic edge correction;none;No edge correction"
+msgstr ""
+
+msgid "Used for the random locations of the F function"
+msgstr ""
+
+#, c-format
+msgid "Option <%s> must be positive"
+msgstr ""
+
+#, c-format
+msgid "Option <%s> is larger than half of the shorter side of the computational region; the estimate becomes unreliable at large distances"
+msgstr ""
+
+#, c-format
+msgid "One point outside of the computational region was ignored"
+msgid_plural "%d points outside of the computational region were ignored"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No points found in the computational region"
+msgstr ""
+
+#, c-format
+msgid "At least 2 points are required, %d found"
+msgstr ""
+
+#, c-format
+msgid "Estimated intensity: %g"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to write output file <%s>"
+msgid "Unable to initialize JSON output"
+msgstr "আউটপুট ফাইল <%s> লিখতে অক্ষম"
+
+#, fuzzy
+#| msgid "Unable to write output file <%s>"
+msgid "Unable to serialize JSON output"
+msgstr "আউটপুট ফাইল <%s> লিখতে অক্ষম"
 
 msgid "Vector map profiling tool"
 msgstr ""

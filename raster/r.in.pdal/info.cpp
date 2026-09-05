@@ -1,14 +1,14 @@
 /*
  * r.in.pdal Functions printing out various information on input LAS files
  *
- *   Copyright 2021-2024 by Maris Nartiss, and the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2021-2024 Maris Nartiss
+ *   SPDX-FileCopyrightText: GRASS Development Team
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author: Maris Nartiss
- *
- *   This program is free software licensed under the GPL (>=v2).
- *   Read the COPYING file that comes with GRASS for details.
  *
  */
 #include <cmath>
+#include <utility>
 
 #include <pdal/filters/ReprojectionFilter.hpp>
 #include <pdal/io/BufferReader.hpp>
@@ -138,49 +138,49 @@ void get_reprojected_extent(pdal::SpatialReference &spatial_reference,
     // Generate points along the 4 edges of the bounding box
     // First point of each edge starts at the corner and
     // the last point is right before the corner
-    for (int i = 0; i < points_per_edge - 1; ++i) {
-        double t = i / (double)(points_per_edge - 1);
-
-        // South edge (y = min_y)
-        view->setField(pdal::Dimension::Id::X, idx,
-                       *min_x + t * (*max_x - *min_x));
-        view->setField(pdal::Dimension::Id::Y, idx, *min_y);
-        view->setField(pdal::Dimension::Id::Z, idx, *min_z);
-        idx++;
-
-        // East edge (x = max_x)
-        view->setField(pdal::Dimension::Id::X, idx, *max_x);
-        view->setField(pdal::Dimension::Id::Y, idx,
-                       *min_y + t * (*max_y - *min_y));
-        view->setField(pdal::Dimension::Id::Z, idx, *max_z);
-        idx++;
-
-        // North edge (y = max_y)
-        view->setField(pdal::Dimension::Id::X, idx,
-                       *max_x - t * (*max_x - *min_x));
-        view->setField(pdal::Dimension::Id::Y, idx, *max_y);
-        view->setField(pdal::Dimension::Id::Z, idx, *min_z);
-        idx++;
-
-        // West edge (x = min_x)
-        view->setField(pdal::Dimension::Id::X, idx, *min_x);
-        view->setField(pdal::Dimension::Id::Y, idx,
-                       *max_y - t * (*max_y - *min_y));
-        view->setField(pdal::Dimension::Id::Z, idx, *max_z);
-        idx++;
-    }
-
-    pdal::BufferReader reader;
-    reader.addView(view);
-
-    pdal::StageFactory factory;
-    pdal::Stage *reproject = factory.createStage("filters.reprojection");
-    pdal::Options reproject_options;
-    reproject_options.add("in_srs", spatial_reference.getWKT());
-    reproject_options.add("out_srs", location_projection_as_wkt(false));
-    reproject->setOptions(reproject_options);
-    reproject->setInput(reader);
     try {
+        for (int i = 0; i < points_per_edge - 1; ++i) {
+            double t = i / (double)(points_per_edge - 1);
+
+            // South edge (y = min_y)
+            view->setField(pdal::Dimension::Id::X, idx,
+                           *min_x + t * (*max_x - *min_x));
+            view->setField(pdal::Dimension::Id::Y, idx, *min_y);
+            view->setField(pdal::Dimension::Id::Z, idx, *min_z);
+            idx++;
+
+            // East edge (x = max_x)
+            view->setField(pdal::Dimension::Id::X, idx, *max_x);
+            view->setField(pdal::Dimension::Id::Y, idx,
+                           *min_y + t * (*max_y - *min_y));
+            view->setField(pdal::Dimension::Id::Z, idx, *max_z);
+            idx++;
+
+            // North edge (y = max_y)
+            view->setField(pdal::Dimension::Id::X, idx,
+                           *max_x - t * (*max_x - *min_x));
+            view->setField(pdal::Dimension::Id::Y, idx, *max_y);
+            view->setField(pdal::Dimension::Id::Z, idx, *min_z);
+            idx++;
+
+            // West edge (x = min_x)
+            view->setField(pdal::Dimension::Id::X, idx, *min_x);
+            view->setField(pdal::Dimension::Id::Y, idx,
+                           *max_y - t * (*max_y - *min_y));
+            view->setField(pdal::Dimension::Id::Z, idx, *max_z);
+            idx++;
+        }
+
+        pdal::BufferReader reader;
+        reader.addView(view);
+
+        pdal::StageFactory factory;
+        pdal::Stage *reproject = factory.createStage("filters.reprojection");
+        pdal::Options reproject_options;
+        reproject_options.add("in_srs", spatial_reference.getWKT());
+        reproject_options.add("out_srs", location_projection_as_wkt(false));
+        reproject->setOptions(std::move(reproject_options));
+        reproject->setInput(reader);
         reproject->prepare(table);
         reproject->execute(table);
     }

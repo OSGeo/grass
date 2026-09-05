@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Polish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pl/>\n"
@@ -446,26 +446,6 @@ msgstr "Niewłaściwy"
 msgid "Animation Tool"
 msgstr ""
 
-msgid "Main Toolbar"
-msgstr "Główny pasek narzędzi"
-
-msgid "Animation Toolbar"
-msgstr "Pasek narzędzi animacji"
-
-msgid "Misc Toolbar"
-msgstr "Narzędzia różne"
-
-msgid "Loading data"
-msgstr "Wczytywanie danych"
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr ""
-
-#, python-format
-msgid "to %(to)s"
-msgstr ""
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= i %s=wzajemnie się wykluczają"
@@ -491,6 +471,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr "Główny pasek narzędzi"
+
+msgid "Animation Toolbar"
+msgstr "Pasek narzędzi animacji"
+
+msgid "Misc Toolbar"
+msgstr "Narzędzia różne"
+
+msgid "Loading data"
+msgstr "Wczytywanie danych"
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -1004,6 +1008,16 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+#, fuzzy
+#| msgid "Import raster dataset"
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "Import danych rastrowych"
+
+#, fuzzy
+#| msgid "Import vector dataset"
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "Import danych wektorowych"
+
 msgid "Link external data"
 msgstr "Podłączanie zewnętrznych"
 
@@ -1155,6 +1169,20 @@ msgid "Failed to read maps from project <{l}>."
 msgstr "Nie można przeczytać Mapsetu z Lokacji <{l}>."
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr "Nie można przeczytać Mapsetów z Lokacji <{l}>."
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr ""
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
@@ -1213,6 +1241,20 @@ msgstr "Nowa nazwa"
 msgid "Rename map"
 msgstr "Zmień nazwę mapy"
 
+#, fuzzy
+#| msgid "Rename class"
+msgid "Rename dataset"
+msgstr "Zmień nazwę klasy"
+
+#, fuzzy, python-brace-format
+#| msgid "Renaming map <{name}>..."
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr "Zmiana nazwy mapy <{name}>..."
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr "{cmd} -- zakończone"
+
 msgid "Cannot rename mapset"
 msgstr ""
 
@@ -1230,10 +1272,6 @@ msgstr ""
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr "Zmiana nazwy mapy <{name}>..."
-
-#, python-brace-format
-msgid "{cmd} -- completed"
-msgstr "{cmd} -- zakończone"
 
 msgid "No map selected for copying."
 msgstr "NIe wybrano mapy wektorowej do skopiowania."
@@ -1272,9 +1310,13 @@ msgstr ""
 msgid "g.remove completed"
 msgstr ""
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete map <{m}>?"
+msgstr "Czy chcesz zapisać zmiany?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
+msgstr "Czy chcesz zapisać zmiany?"
 
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
@@ -1287,19 +1329,157 @@ msgstr "Usuń mapę"
 msgid "Deleting {name}..."
 msgstr "Usuwanie {name}..."
 
+#, fuzzy, python-brace-format
+#| msgid "Deleting {name}..."
+msgid "Deleting {n} maps..."
+msgstr "Usuwanie {name}..."
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "Czy chcesz zapisać zmiany?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "Czy chcesz zapisać zmiany?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Czy chcesz zapisać zmiany?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "Usuń wybrany mapset"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+msgid "Delete dataset"
+msgstr "Zmień nazwę wybranego mapsetu"
+
+#, fuzzy
+#| msgid "Deleting {name}..."
+msgid "Deleting datasets..."
+msgstr "Usuwanie {name}..."
+
+#, fuzzy
+#| msgid "Moving maps not implemented"
+msgid "t.remove completed"
+msgstr "Przenoszenie map nie jest zaimplementowane"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "Czy chcesz zapisać zmiany?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Czy chcesz zapisać zmiany?"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister map"
+msgstr "brak mapy rastrowej"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregistering map..."
+msgstr "brak mapy rastrowej"
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display animation"
+msgstr "Wyświetl"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "Mapy rastrowe"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister maps"
+msgstr "brak mapy rastrowej"
+
+#, fuzzy
+#| msgid "Updates vector map metadata."
+msgid "Update metadata"
+msgstr "Aktualizuje metadane mapy wektorowej."
+
+#, fuzzy
+msgid "Display &temporal extent"
+msgstr "Geometria wyświetlania"
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display &animation"
+msgstr "Wyświetl"
+
+#, fuzzy
+msgid "&Rename dataset"
+msgstr "Ustaw"
+
+#, fuzzy
+#| msgid "Delete selected point"
+msgid "&Delete dataset only"
+msgstr "Usuń wybrany punkt"
+
+#, fuzzy
+#| msgid "Export raster dataset"
+msgid "&Export dataset"
+msgstr "Eksport danych rastrowych"
+
+msgid "Show &metadata"
 msgstr ""
 
 msgid "&Copy"
 msgstr "&Kopiuj"
 
 msgid "Copy &name"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr "&Wyświetl warstwę"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister map"
+msgstr "brak mapy rastrowej"
+
+msgid "&Cut"
 msgstr ""
 
 msgid "&Paste"
@@ -1313,14 +1493,10 @@ msgstr "&Usuń"
 msgid "&Rename"
 msgstr "&Zmień nazwę"
 
-msgid "&Display layers"
-msgstr ""
-
-msgid "&Display layer"
-msgstr "&Wyświetl warstwę"
-
-msgid "Show &metadata"
-msgstr ""
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Create &temporal dataset"
+msgstr "Tworzy pustą bazę danych."
 
 msgid "&Switch mapset"
 msgstr "&Przełącz Mapset"
@@ -1331,8 +1507,10 @@ msgstr ""
 msgid "&Rename mapset"
 msgstr ""
 
-msgid "Re&load maps"
-msgstr ""
+#, fuzzy
+#| msgid "New mapset:"
+msgid "Re&load mapset"
+msgstr "Nowy mapset:"
 
 #, fuzzy
 #| msgid "Show computational extent"
@@ -1354,6 +1532,10 @@ msgstr "Usuń rekordy"
 #, fuzzy
 msgid "&Rename project"
 msgstr "Ustaw"
+
+#, fuzzy
+msgid "Re&load project"
+msgstr "Przeładuj lokacje GRASS-a"
 
 #, fuzzy
 #| msgid "Choose projection"
@@ -1394,6 +1576,11 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #, fuzzy
+#| msgid "Reload default table"
+msgid "Re&load database"
+msgstr "Przeładuj domyślną tabelę"
+
+#, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "Usuń wybraną lokację"
 
@@ -1408,6 +1595,21 @@ msgstr ""
 #, fuzzy
 msgid "&Copy paths"
 msgstr "Zarządzanie sostępem do mapsetów"
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "&Merge datasets"
+msgstr "Zarządzanie"
+
+#, fuzzy
+#| msgid "Delete selected point"
+msgid "&Delete datasets only"
+msgstr "Usuń wybrany punkt"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "Usuń wybrany mapset"
 
 #, fuzzy, python-brace-format
 #| msgid "Removes an existing database."
@@ -10178,6 +10380,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -10195,6 +10398,7 @@ msgstr ""
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -12183,9 +12387,6 @@ msgstr ""
 #~ msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
 #~ msgstr "Tworzy warstwę mapy rastrowej ukazującą skumulowany koszt przemieszczania się pomiędzy dwoma lokalizacjami geograficznymi na wejściowej warstwie rastrowej, której wartości kategorii komórek rastra reprezentują koszt."
 
-#~ msgid "Creates an empty database."
-#~ msgstr "Tworzy pustą bazę danych."
-
 #~ msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
 #~ msgstr "Tworzy i dodaje nową tabelę atrybutów do zadanej warstwy istniejącej mapy wektorowej."
 
@@ -12283,9 +12484,6 @@ msgstr ""
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "Wyświetla informacje na temat graficznego modelera."
 
-#~ msgid "Display map projection"
-#~ msgstr "Wyświetl"
-
 #~ msgid "Display mode"
 #~ msgstr "Tryb wyświetlania"
 
@@ -12381,9 +12579,6 @@ msgstr ""
 
 #~ msgid "Export instruction file"
 #~ msgstr "Eksportuj plik instrukcji"
-
-#~ msgid "Export raster dataset"
-#~ msgstr "Eksport danych rastrowych"
 
 #~ msgid "Export raster map"
 #~ msgstr "Eksport mapy rastrowej"
@@ -12659,12 +12854,6 @@ msgstr ""
 #~ msgid "Import of common formats with reprojection"
 #~ msgstr "z popularnych formatów z reprojekcją"
 
-#~ msgid "Import raster dataset"
-#~ msgstr "Import danych rastrowych"
-
-#~ msgid "Import vector dataset"
-#~ msgstr "Import danych wektorowych"
-
 #~ msgid "Import/link raster or vector data"
 #~ msgstr "Import/linkowanie danych rastrowych lub wektorowych"
 
@@ -12882,9 +13071,6 @@ msgstr ""
 
 #~ msgid "Manage colors"
 #~ msgstr "Zarządzaj kolorami"
-
-#~ msgid "Manage databases"
-#~ msgstr "Zarządzanie"
 
 #~ msgid "Manage image colors"
 #~ msgstr "Zarządzanie kolorami obrazu"
@@ -13705,9 +13891,6 @@ msgstr ""
 
 #~ msgid "Updates or removes installed GRASS AddOns extension(s)."
 #~ msgstr "Odświeża lub usuwa zainstalowane wtyczki."
-
-#~ msgid "Updates vector map metadata."
-#~ msgstr "Aktualizuje metadane mapy wektorowej."
 
 #~ msgid "Uploads raster values at positions of vector points to the table."
 #~ msgstr "Wczytuje do tabeli wartości rastra w pozycjach punktów wektorowych."

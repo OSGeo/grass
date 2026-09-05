@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/cs/>\n"
@@ -448,26 +448,6 @@ msgstr ""
 msgid "Animation Tool"
 msgstr ""
 
-msgid "Main Toolbar"
-msgstr ""
-
-msgid "Animation Toolbar"
-msgstr ""
-
-msgid "Misc Toolbar"
-msgstr ""
-
-msgid "Loading data"
-msgstr "Načítání dat"
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr ""
-
-#, python-format
-msgid "to %(to)s"
-msgstr ""
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
@@ -493,6 +473,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr ""
+
+msgid "Animation Toolbar"
+msgstr ""
+
+msgid "Misc Toolbar"
+msgstr ""
+
+msgid "Loading data"
+msgstr "Načítání dat"
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -1001,6 +1005,13 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+#, fuzzy
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "Vybrat zdrojový mapset:"
+
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr ""
+
 msgid "Link external data"
 msgstr "Připojit externí data"
 
@@ -1147,6 +1158,20 @@ msgid "Failed to read maps from project <{l}>."
 msgstr ""
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr ""
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr ""
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
@@ -1205,6 +1230,19 @@ msgstr ""
 msgid "Rename map"
 msgstr ""
 
+#, fuzzy
+#| msgid "Create database"
+msgid "Rename dataset"
+msgstr "Vytvořit databázi"
+
+#, python-brace-format
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
 msgid "Cannot rename mapset"
 msgstr ""
 
@@ -1221,10 +1259,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Renaming map <{name}>..."
-msgstr ""
-
-#, python-brace-format
-msgid "{cmd} -- completed"
 msgstr ""
 
 msgid "No map selected for copying."
@@ -1260,9 +1294,13 @@ msgstr ""
 msgid "g.remove completed"
 msgstr ""
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete map <{m}>?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
+msgstr "Přejete si vytvořit nový mapset?"
 
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
@@ -1275,19 +1313,155 @@ msgstr "Smazat mapu"
 msgid "Deleting {name}..."
 msgstr ""
 
+#, fuzzy, python-brace-format
+#| msgid "Delete map"
+msgid "Deleting {n} maps..."
+msgstr "Smazat mapu"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "Odstranit vybraný mapset"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+msgid "Delete dataset"
+msgstr "Přejmenovat vybraný mapset"
+
+#, fuzzy
+#| msgid "Loading data..."
+msgid "Deleting datasets..."
+msgstr "Načítám data..."
+
+#, fuzzy
+#| msgid "remove duplicates"
+msgid "t.remove completed"
+msgstr "odstranit zdvojené prvky"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Přejete si vytvořit nový mapset?"
+
+#, fuzzy
+#| msgid "Raster map"
+msgid "Unregister map"
+msgstr "Rastrová vrstva"
+
+msgid "Unregistering map..."
+msgstr ""
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display animation"
+msgstr "Zobrazit kartografické zobrazení mapy"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "Rastrové mapy"
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Unregister maps"
+msgstr "Rastrové mapy"
+
+#, fuzzy
+#| msgid "Updates vector map metadata."
+msgid "Update metadata"
+msgstr "Aktualizuje metadata vektorové vrstvy."
+
+#, fuzzy
+msgid "Display &temporal extent"
+msgstr "Geometrie okna"
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display &animation"
+msgstr "Zobrazit kartografické zobrazení mapy"
+
+#, fuzzy
+msgid "&Rename dataset"
+msgstr "Správa kartografických zobrazení"
+
+#, fuzzy
+#| msgid "Delete selected point"
+msgid "&Delete dataset only"
+msgstr "Odstranit vybraný bod"
+
+#, fuzzy
+#| msgid "Export database table"
+msgid "&Export dataset"
+msgstr "Export databázové tabulky"
+
+msgid "Show &metadata"
 msgstr ""
 
 msgid "&Copy"
 msgstr ""
 
 msgid "Copy &name"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster map"
+msgid "&Unregister map"
+msgstr "3D rastrová mapa"
+
+msgid "&Cut"
 msgstr ""
 
 msgid "&Paste"
@@ -1301,14 +1475,10 @@ msgstr "Od&stranit"
 msgid "&Rename"
 msgstr "Pře&jmenovat"
 
-msgid "&Display layers"
-msgstr ""
-
-msgid "&Display layer"
-msgstr ""
-
-msgid "Show &metadata"
-msgstr ""
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Create &temporal dataset"
+msgstr "Vytvořit prázdnou databázi"
 
 msgid "&Switch mapset"
 msgstr ""
@@ -1319,8 +1489,10 @@ msgstr ""
 msgid "&Rename mapset"
 msgstr ""
 
-msgid "Re&load maps"
-msgstr ""
+#, fuzzy
+#| msgid "Name of mapset:"
+msgid "Re&load mapset"
+msgstr "Název mapsetu:"
 
 #, fuzzy
 #| msgid "Computational region"
@@ -1340,6 +1512,10 @@ msgstr "Smazat záznamy"
 
 #, fuzzy
 msgid "&Rename project"
+msgstr "Správa kartografických zobrazení"
+
+#, fuzzy
+msgid "Re&load project"
 msgstr "Správa kartografických zobrazení"
 
 #, fuzzy
@@ -1382,6 +1558,11 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #, fuzzy
+#| msgid "Create database"
+msgid "Re&load database"
+msgstr "Vytvořit databázi"
+
+#, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "Odstranit vybranou lokaci"
 
@@ -1396,6 +1577,21 @@ msgstr ""
 #, fuzzy
 msgid "&Copy paths"
 msgstr "Správa přístupu do mapsetů"
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "&Merge datasets"
+msgstr "Správa tabulek"
+
+#, fuzzy
+#| msgid "Delete selected point"
+msgid "&Delete datasets only"
+msgstr "Odstranit vybraný bod"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "Odstranit vybraný mapset"
 
 #, fuzzy, python-brace-format
 #| msgid "Removes an existing database."
@@ -10127,6 +10323,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -10144,6 +10341,7 @@ msgstr "STRDS"
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -12144,9 +12342,6 @@ msgstr ""
 #~ msgid "Create a generic Cartesian coordinate system (XY)"
 #~ msgstr "Vytvořit obecný kartézský souřadnicový systém (XY)"
 
-#~ msgid "Create database"
-#~ msgstr "Vytvořit databázi"
-
 #~ msgid "Create labels"
 #~ msgstr "Vytvořit popisky"
 
@@ -12207,9 +12402,6 @@ msgstr ""
 
 #~ msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
 #~ msgstr "Vytváří rastrovou vrstvu ukazující kumulativní náklady pohybu mezi různými polohami na vstupní rastrové vrstvě kde každá hodnota buňky prezentuje náklad."
-
-#~ msgid "Creates an empty database."
-#~ msgstr "Vytvořit prázdnou databázi"
 
 #~ msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
 #~ msgstr "Vytvoří a připojí novou atributovou tabulku k dané vrstvě vektorové mapy."
@@ -12321,9 +12513,6 @@ msgstr ""
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "Zobrazit informace o Grafickém modelování"
 
-#~ msgid "Display map projection"
-#~ msgstr "Zobrazit kartografické zobrazení mapy"
-
 #~ msgid "Display mode"
 #~ msgstr "Mód displeje"
 
@@ -12432,9 +12621,6 @@ msgstr ""
 
 #~ msgid "Export color table"
 #~ msgstr "Exportovat barevnou tabulku"
-
-#~ msgid "Export database table"
-#~ msgstr "Export databázové tabulky"
 
 #~ msgid "Export raster map"
 #~ msgstr "Export rastrové mapy"
@@ -12923,9 +13109,6 @@ msgstr ""
 
 #~ msgid "Manage colors"
 #~ msgstr "Správa barev"
-
-#~ msgid "Manage databases"
-#~ msgstr "Správa tabulek"
 
 #~ msgid "Manage image colors"
 #~ msgstr "Správa barevné škály obrazových dat"
@@ -13534,10 +13717,6 @@ msgstr ""
 #~ msgid "Select output vector map:"
 #~ msgstr "Vybrat výstupní vektorovou mapu:"
 
-#, fuzzy
-#~ msgid "Select space time raster dataset(s):"
-#~ msgstr "Vybrat zdrojový mapset:"
-
 #~ msgid "Selects features from vector map (A) by features from other vector map (B)."
 #~ msgstr "Vybere prvky z vektorové vrstvy (A) podle prvků z druhé vektorové vrstvy (B)"
 
@@ -13827,9 +14006,6 @@ msgstr ""
 #~ msgid "Updates a column in the attribute table connected to a vector map."
 #~ msgstr "Aktualizuje sloupec atributové tabulky připojené k vektorové vrstvě."
 
-#~ msgid "Updates vector map metadata."
-#~ msgstr "Aktualizuje metadata vektorové vrstvy."
-
 #~ msgid "Uploads raster values at positions of vector points to the table."
 #~ msgstr "Uloží hodnoty rastru pod vektorovými body do jejich atributové tabulky."
 
@@ -13981,9 +14157,6 @@ msgstr ""
 
 #~ msgid "remove duplicate area centroids"
 #~ msgstr "Odstranit duplicitní centroidy v ploše"
-
-#~ msgid "remove duplicates"
-#~ msgstr "odstranit zdvojené prvky"
 
 #~ msgid "remove lines/boundaries of zero length"
 #~ msgstr "Odstranit linie/hranice nulové délky"

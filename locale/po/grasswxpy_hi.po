@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2026-03-05 11:44+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hi/>\n"
@@ -444,26 +444,6 @@ msgstr "अमान्य"
 msgid "Animation Tool"
 msgstr "एनिमेशन टूल (Animation Tool)"
 
-msgid "Main Toolbar"
-msgstr "मुख्य टूलबार"
-
-msgid "Animation Toolbar"
-msgstr "एनिमेशन टूलबार (Animation Toolbar)"
-
-msgid "Misc Toolbar"
-msgstr "विविध टूलबार"
-
-msgid "Loading data"
-msgstr "डेटा लोड हो रहा है"
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr " ({c} में से {p})"
-
-#, python-format
-msgid "to %(to)s"
-msgstr "तक"
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= और %s= परस्पर अनन्य हैं।"
@@ -486,6 +466,30 @@ msgstr "कृपया सूची में केवल एक परत ज
 
 msgid "No map series nor space-time dataset is added."
 msgstr "कोई मानचित्र श्रृंखला या स्पेस-टाइम डेटासेट नहीं जोड़ा गया है।"
+
+msgid "Main Toolbar"
+msgstr "मुख्य टूलबार"
+
+msgid "Animation Toolbar"
+msgstr "एनिमेशन टूलबार (Animation Toolbar)"
+
+msgid "Misc Toolbar"
+msgstr "विविध टूलबार"
+
+msgid "Loading data"
+msgstr "डेटा लोड हो रहा है"
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr " ({c} में से {p})"
+
+#, python-format
+msgid "to %(to)s"
+msgstr "तक"
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
+msgstr ""
 
 msgid "Rendering map layers"
 msgstr "मानचित्र परतों को रेंडर किया जा रहा है"
@@ -998,6 +1002,16 @@ msgstr "x,y,z डेटा से रास्टर मैप बनाएं [
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr "x,y,z डेटा से वेक्टर मैप बनाएं [v.in.ascii]"
 
+#, fuzzy
+#| msgid "Import raster data  [r.import]"
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "रास्टर डेटा इम्पोर्ट करें [r.import]"
+
+#, fuzzy
+#| msgid "Import vector data  [v.import]"
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "वेक्टर डेटा इम्पोर्ट करें [v.import]"
+
 msgid "Link external data"
 msgstr "बाहरी डेटा लिंक करें"
 
@@ -1145,6 +1159,22 @@ msgid "Failed to read maps from project <{l}>."
 msgstr "प्रोजेक्ट <{l}> से मैप्स पढ़ने में विफल।"
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Failed to read mapsets from project <{l}>."
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr "प्रोजेक्ट <{l}> से मैपसेट्स पढ़ने में विफल।"
+
+#, fuzzy, python-brace-format
+#| msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr "{elem} प्रकार का मानचित्र <{name}> पहले से ही मैपसेट <{mapset}> में मौजूद है। क्या आप इसे ओवरराइट करना चाहते हैं?"
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr "{elem} प्रकार का मानचित्र <{name}> पहले से ही मैपसेट <{mapset}> में मौजूद है। क्या आप इसे ओवरराइट करना चाहते हैं?"
 
@@ -1206,6 +1236,20 @@ msgstr "नया नाम"
 msgid "Rename map"
 msgstr "मानचित्र का नाम बदलें"
 
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "Rename dataset"
+msgstr "&मैपसेट का नाम बदलें"
+
+#, fuzzy, python-brace-format
+#| msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr "मैपसेट <{oldmapset}> का नाम बदलकर <{newmapset}> करना पूर्ण हुआ"
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr "{cmd} -- पूर्ण हुआ"
+
 msgid "Cannot rename mapset"
 msgstr "मैपसेट का नाम नहीं बदला जा सकता"
 
@@ -1223,10 +1267,6 @@ msgstr "क्या आप वास्तव में मानचित्�
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr "मानचित्र <{name}> का नाम बदला जा रहा है..।"
-
-#, python-brace-format
-msgid "{cmd} -- completed"
-msgstr "{cmd} -- पूर्ण हुआ"
 
 msgid "No map selected for copying."
 msgstr "मानचित्रों को अन्य प्रोजेक्ट में ले जाने या कॉपी करने के लिए, कृपया उन्हें गंतव्य प्रोजेक्ट के मैपसेट में ड्रैग (drag) करें"
@@ -1261,8 +1301,14 @@ msgstr "RReepprroojjeeccttiioonn  iiss  nnoott  iimmpplleemmeenntteedd  ffoorr  
 msgid "g.remove completed"
 msgstr "gg..rreemmoovvee  पcूरoा mहpुआleted"
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete map <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete maps <{m}>?"
 msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
 
 #, python-brace-format
@@ -1276,20 +1322,166 @@ msgstr "मैप हटाएं"
 msgid "Deleting {name}..."
 msgstr "Deleting {name}..।"
 
+#, fuzzy, python-brace-format
+#| msgid "Deleting {name}..."
+msgid "Deleting {n} maps..."
+msgstr "Deleting {name}..।"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete {n} maps?"
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Do you really want to हटाएं {n} maps?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "चयनित मानचित्र-सेट (mapset) हटाएं"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "Delete dataset"
+msgstr "&मैपसेट हटाएं"
+
+#, fuzzy
+#| msgid "Deleting {name}..."
+msgid "Deleting datasets..."
+msgstr "Deleting {name}..।"
+
+#, fuzzy
+#| msgid "g.remove completed"
+msgid "t.remove completed"
+msgstr "gg..rreemmoovvee  पcूरoा mहpुआleted"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "TToo  mmoovvee  oorr  ccooppyy  mmaappss  ttoo  ootthheerr  mmaappsseettss,,  uunnlloocckk  eeddiittiinngg  ooff  ootthheerr  mmaappsseettss"
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr "TToo  mmoovvee  oorr  ccooppyy  mmaappss  ttoo  ootthheerr  पप््ररोोजजेेकक््टट,,  pplleeaassee  ddrraagg  tthheemm  ttoo  aa  ममैैपपससेेटट  iinn  tthhee  ddeessttiinnaattiioonn  पप््ररोोजजेेकक््टट"
 
-msgid "&Cut"
-msgstr "&काटें"
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "DDoo  yyoouu  rreeaallllyy  wwaanntt  ttoo  हहटटााएएंं  मmानaचिpत्(र(ss))  <<{{mm}}>>??"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete {n} maps?"
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Do you really want to हटाएं {n} maps?"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister map"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregistering map..."
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display animation"
+msgstr "मानचित्र प्रदर्शित करें"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "रेखापुंज मानचित्र"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister maps"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+#, fuzzy
+#| msgid "Show &metadata"
+msgid "Update metadata"
+msgstr "SShhooww  &&mmeettaaddaattaa"
+
+#, fuzzy
+#| msgid "Display extent"
+msgid "Display &temporal extent"
+msgstr "प्रदर्शन सीमा"
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display &animation"
+msgstr "मानचित्र प्रदर्शित करें"
+
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "&Rename dataset"
+msgstr "&मैपसेट का नाम बदलें"
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "&Delete dataset only"
+msgstr "&मैपसेट हटाएं"
+
+#, fuzzy
+#| msgid "Import data?"
+msgid "&Export dataset"
+msgstr "डेटा आयात करें?"
+
+msgid "Show &metadata"
+msgstr "SShhooww  &&mmeettaaddaattaa"
 
 msgid "&Copy"
 msgstr "&कांपी करें"
 
 msgid "Copy &name"
 msgstr "&name कॉपी करें"
+
+msgid "&Display layers"
+msgstr "&लेयर्स दिखाएं"
+
+msgid "&Display layer"
+msgstr "&लेयर दिखाएं"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister map"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+msgid "&Cut"
+msgstr "&काटें"
 
 msgid "&Paste"
 msgstr "&चिपकाएं"
@@ -1302,14 +1494,10 @@ msgstr "&हटाएं"
 msgid "&Rename"
 msgstr "&नाम बदलें"
 
-msgid "&Display layers"
-msgstr "&लेयर्स दिखाएं"
-
-msgid "&Display layer"
-msgstr "&लेयर दिखाएं"
-
-msgid "Show &metadata"
-msgstr "SShhooww  &&mmeettaaddaattaa"
+#, fuzzy
+#| msgid "Invalid input temporal dataset"
+msgid "Create &temporal dataset"
+msgstr "अमान्य इनपुट अस्थायी डेटासेट"
 
 msgid "&Switch mapset"
 msgstr "&मैपसेट बदलें"
@@ -1320,7 +1508,9 @@ msgstr "&मैपसेट हटाएं"
 msgid "&Rename mapset"
 msgstr "&मैपसेट का नाम बदलें"
 
-msgid "Re&load maps"
+#, fuzzy
+#| msgid "Re&load maps"
+msgid "Re&load mapset"
 msgstr "RRee&&llooaadd  mmaappss"
 
 #, fuzzy
@@ -1341,6 +1531,11 @@ msgstr "&प्रोजेक्ट हटाएं"
 
 msgid "&Rename project"
 msgstr "&प्रोजेक्ट का नाम बदलें"
+
+#, fuzzy
+#| msgid "Reload GRASS projects"
+msgid "Re&load project"
+msgstr "GRASS प्रोजेक्ट्स को पुनः लोड करें"
 
 #, fuzzy
 #| msgid "Source projection:"
@@ -1373,6 +1568,11 @@ msgstr "&डेटा कैटलॉग से GRASS डेटाबेस ह�
 msgid "&Delete GRASS database from disk"
 msgstr "&GRASS डेटाबेस को डिस्क से हटाएं"
 
+#, fuzzy
+#| msgid "Reload default table"
+msgid "Re&load database"
+msgstr "डिफ़ॉल्ट तालिका पुनः लोड करें"
+
 msgid "&Delete projects (locations)"
 msgstr "&प्रोजेक्ट्स (लोकेशन) हटाएं"
 
@@ -1388,6 +1588,21 @@ msgstr "&Delete mapsets"
 #| msgid "&Copy path to mapset"
 msgid "&Copy paths"
 msgstr "&म्यापसेट के पॅंथ की कांपी करें"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "&Merge datasets"
+msgstr "&Delete mapsets"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "&Delete datasets only"
+msgstr "&Delete mapsets"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "चयनित मानचित्र-सेट (mapset) हटाएं"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -9937,8 +10152,13 @@ msgstr "टेम्पोरल प्लॉट टूल को स्था�
 msgid "Temporal Plot Tool"
 msgstr "टेम्पोरल प्लॉट टूल"
 
+#, fuzzy
+#| msgid ""
+#| "Raster temporal dataset (strds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr "रैस्टर टेम्पोरल डेटासेट (strds)\\nनाम टाइप करने के बाद ENTER दबाएँ या कॉम्बोबॉक्स से चयन करें"
 
@@ -9954,8 +10174,13 @@ msgstr "सरल रेखीय समाश्रयण रेखा दि�
 msgid "STRDS"
 msgstr "एसटीआरडीएस"
 
+#, fuzzy
+#| msgid ""
+#| "Vector temporal dataset (stvds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr "वेक्टर टेम्पोरल डेटासेट (stvds)\\nनाम टाइप करने के बाद ENTER दबाएँ या कॉम्बोबॉक्स से चयन करें"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ml\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Mohammed Rashad <rashadkm@gmail.com>\n"
 "Language-Team: Malayalam <grass-translations@lists.osgeo.org>\n"
@@ -444,26 +444,6 @@ msgstr ""
 msgid "Animation Tool"
 msgstr ""
 
-msgid "Main Toolbar"
-msgstr ""
-
-msgid "Animation Toolbar"
-msgstr ""
-
-msgid "Misc Toolbar"
-msgstr ""
-
-msgid "Loading data"
-msgstr ""
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr ""
-
-#, python-format
-msgid "to %(to)s"
-msgstr ""
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
@@ -485,6 +465,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr ""
+
+msgid "Animation Toolbar"
+msgstr ""
+
+msgid "Misc Toolbar"
+msgstr ""
+
+msgid "Loading data"
+msgstr ""
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -976,6 +980,13 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+#, fuzzy
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "മാപ്പ്സെറ്റിന്റ്റെ ഉറവിടം തിരഞെടുക്കുക"
+
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr ""
+
 msgid "Link external data"
 msgstr ""
 
@@ -1118,6 +1129,20 @@ msgid "Failed to read maps from project <{l}>."
 msgstr ""
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr ""
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr ""
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
@@ -1176,6 +1201,19 @@ msgstr ""
 msgid "Rename map"
 msgstr ""
 
+#, fuzzy
+#| msgid "Rename selected mapset"
+msgid "Rename dataset"
+msgstr "തിരഞ്ഞെടുത്ത മാപ്പ്സെറ്റ് പേർ മാറ്റുക"
+
+#, python-brace-format
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
 msgid "Cannot rename mapset"
 msgstr ""
 
@@ -1192,10 +1230,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Renaming map <{name}>..."
-msgstr ""
-
-#, python-brace-format
-msgid "{cmd} -- completed"
 msgstr ""
 
 msgid "No map selected for copying."
@@ -1232,7 +1266,11 @@ msgid "g.remove completed"
 msgstr ""
 
 #, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete map <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
 msgstr ""
 
 #, python-brace-format
@@ -1246,19 +1284,140 @@ msgstr ""
 msgid "Deleting {name}..."
 msgstr ""
 
+#, python-brace-format
+msgid "Deleting {n} maps..."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "വർക്സ്പേസിലെ വിവരങ്ങൾ സംഭരിച്ചുവെക്കുക വെക്കണമൊ ?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "വർക്സ്പേസിലെ വിവരങ്ങൾ സംഭരിച്ചുവെക്കുക വെക്കണമൊ ?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr "വർക്സ്പേസിലെ വിവരങ്ങൾ സംഭരിച്ചുവെക്കുക വെക്കണമൊ ?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "തിരഞ്ഞെടുത്ത മാപ്പ്സെറ്റ് എടുത്തുകളയുക"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+msgid "Delete dataset"
+msgstr "തിരഞ്ഞെടുത്ത മാപ്പ്സെറ്റ് പേർ മാറ്റുക"
+
+msgid "Deleting datasets..."
+msgstr ""
+
+#, fuzzy
+msgid "t.remove completed"
+msgstr "മാപ്പ് ലയെർ കളയുക"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
+#, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr ""
+
+msgid "Unregister map"
+msgstr ""
+
+msgid "Unregistering map..."
+msgstr ""
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display animation"
+msgstr "മാപ്പ് അവതരിപിച്ചിരിക്കുന്ന സ്ഥലം"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove vertex"
+msgid "&Register maps"
+msgstr "അഗ്രം എടുത്തു കളയുക"
+
+msgid "&Unregister maps"
+msgstr ""
+
+msgid "Update metadata"
+msgstr ""
+
+#, fuzzy
+msgid "Display &temporal extent"
+msgstr "മാപ്പ് അവതരിപിച്ചിരിക്കുന്ന സ്ഥലം"
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display &animation"
+msgstr "മാപ്പ് അവതരിപിച്ചിരിക്കുന്ന സ്ഥലം"
+
+#, fuzzy
+msgid "&Rename dataset"
+msgstr "നാമം മാറ്റുക"
+
+#, fuzzy
+msgid "&Delete dataset only"
+msgstr "തിരഞ്ഞെടുത്ത മാപ്പ്സെറ്റ് പേർ മാറ്റുക"
+
+msgid "&Export dataset"
+msgstr ""
+
+msgid "Show &metadata"
 msgstr ""
 
 msgid "&Copy"
 msgstr ""
 
 msgid "Copy &name"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr ""
+
+msgid "&Unregister map"
+msgstr ""
+
+msgid "&Cut"
 msgstr ""
 
 msgid "&Paste"
@@ -1272,14 +1431,10 @@ msgstr ""
 msgid "&Rename"
 msgstr "നാമം മാറ്റുക"
 
-msgid "&Display layers"
-msgstr ""
-
-msgid "&Display layer"
-msgstr ""
-
-msgid "Show &metadata"
-msgstr ""
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Create &temporal dataset"
+msgstr "പുതിയ മാപ്പ്സെറ്റ് ഉണ്ടാക്കുക"
 
 msgid "&Switch mapset"
 msgstr ""
@@ -1290,8 +1445,10 @@ msgstr ""
 msgid "&Rename mapset"
 msgstr ""
 
-msgid "Re&load maps"
-msgstr ""
+#, fuzzy
+#| msgid "Name of mapset:"
+msgid "Re&load mapset"
+msgstr "മാപ്പ്സെറ്റിന്റെ പേർ:"
 
 msgid "Show computational region"
 msgstr ""
@@ -1307,6 +1464,10 @@ msgstr ""
 
 #, fuzzy
 msgid "&Rename project"
+msgstr "നാമം മാറ്റുക"
+
+#, fuzzy
+msgid "Re&load project"
 msgstr "നാമം മാറ്റുക"
 
 msgid "Show projection info"
@@ -1340,6 +1501,9 @@ msgstr ""
 msgid "&Delete GRASS database from disk"
 msgstr ""
 
+msgid "Re&load database"
+msgstr ""
+
 #, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "തിരഞ്ഞെടുത്ത ലൊക്കെഷൻ എടുത്തുകളയുക"
@@ -1356,6 +1520,18 @@ msgstr ""
 #| msgid "Copy categories"
 msgid "&Copy paths"
 msgstr "കാറ്റഗറിയുടെ പതിപ്പ് ഉണ്ടാക്കുക"
+
+msgid "&Merge datasets"
+msgstr ""
+
+#, fuzzy
+msgid "&Delete datasets only"
+msgstr "തിരഞ്ഞെടുത്ത മാപ്പ്സെറ്റ് പേർ മാറ്റുക"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "തിരഞ്ഞെടുത്ത മാപ്പ്സെറ്റ് എടുത്തുകളയുക"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -9865,6 +10041,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -9882,6 +10059,7 @@ msgstr ""
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -11444,10 +11622,6 @@ msgstr ""
 #~ msgstr ""
 #~ "ഒന്നുകിൽ നിലവിലുള്ള മപ്സെറ്റൊ ലൊക്കെഷനൊ തിരഞ്ഞെടുക്കുക \n"
 #~ "അല്ലെങ്കിൽ പുതിയ ലൊക്കെഷൻ ഉണ്ടക്കുക"
-
-#, fuzzy
-#~ msgid "Select space time raster dataset(s):"
-#~ msgstr "മാപ്പ്സെറ്റിന്റ്റെ ഉറവിടം തിരഞെടുക്കുക"
 
 #~ msgid "Show settings"
 #~ msgstr "സജ്ജീകരണം കാണിക്കുക"

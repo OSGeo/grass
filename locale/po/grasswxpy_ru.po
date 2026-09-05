@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ru/>\n"
@@ -448,26 +448,6 @@ msgstr "Недопустимый"
 msgid "Animation Tool"
 msgstr "Инструмент анимации"
 
-msgid "Main Toolbar"
-msgstr "Главная панель инструментов"
-
-msgid "Animation Toolbar"
-msgstr "Панель инструментов анимации"
-
-msgid "Misc Toolbar"
-msgstr "Панель прочих инструментов"
-
-msgid "Loading data"
-msgstr "Загрузка данных"
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr " ({c} из {p})"
-
-#, python-format
-msgid "to %(to)s"
-msgstr "до %(to)s"
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= и %s= взаимно исключают друг друга."
@@ -494,6 +474,30 @@ msgstr "Добавьте только один слой в списке."
 
 msgid "No map series nor space-time dataset is added."
 msgstr "Не были добавлены ни последовательность карт, ни пространственно-временной набор данных."
+
+msgid "Main Toolbar"
+msgstr "Главная панель инструментов"
+
+msgid "Animation Toolbar"
+msgstr "Панель инструментов анимации"
+
+msgid "Misc Toolbar"
+msgstr "Панель прочих инструментов"
+
+msgid "Loading data"
+msgstr "Загрузка данных"
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr " ({c} из {p})"
+
+#, python-format
+msgid "to %(to)s"
+msgstr "до %(to)s"
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
+msgstr ""
 
 msgid "Rendering map layers"
 msgstr "Отрисовка слоёв карты"
@@ -1013,6 +1017,16 @@ msgstr "Создать растровую карту из данных x,y,z  [r
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr "Создать векторную карту из данных x,y,z  [v.in.ascii]"
 
+#, fuzzy
+#| msgid "Imports space time raster dataset."
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "Импорт пространственно-временного набора данных."
+
+#, fuzzy
+#| msgid "Import vector data  [v.import]"
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "Импортировать векторные данные  [v.import]"
+
 msgid "Link external data"
 msgstr "Создание связи с внешними данными"
 
@@ -1179,6 +1193,21 @@ msgid "Failed to read maps from project <{l}>."
 msgstr "Не удалось прочитать карты из области <{l}>."
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr "Не удалось прочитать наборы из области <{l}>."
+
+#, fuzzy, python-brace-format
+#| msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr "Карта типа {elem} <{name}> уже существует в наборе <{mapset}>. Перезаписать её?"
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr "Карта типа {elem} <{name}> уже существует в наборе <{mapset}>. Перезаписать её?"
 
@@ -1241,6 +1270,20 @@ msgstr "Новое имя"
 msgid "Rename map"
 msgstr "Переименование карты"
 
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "Rename dataset"
+msgstr "&Переименовать набор"
+
+#, fuzzy, python-brace-format
+#| msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr "Переименование набора <{oldmapset}> в <{newmapset}> завершено"
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr "{cmd} -- завершено"
+
 msgid "Cannot rename mapset"
 msgstr "Не удалось переименовать набор"
 
@@ -1258,10 +1301,6 @@ msgstr "Переименование области <{oldlocation}> в <{newloca
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr "Переименование карты <{name}>…"
-
-#, python-brace-format
-msgid "{cmd} -- completed"
-msgstr "{cmd} -- завершено"
 
 msgid "No map selected for copying."
 msgstr "Не выбраны карты для копирования."
@@ -1300,8 +1339,14 @@ msgstr "Репроекция для трёхмерных растров не в�
 msgid "g.remove completed"
 msgstr "Работа g.remove завершена"
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete map <{m}>?"
+msgstr "Удалить карту (карты) <{m}>?"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete maps <{m}>?"
 msgstr "Удалить карту (карты) <{m}>?"
 
 #, python-brace-format
@@ -1315,6 +1360,52 @@ msgstr "Удаление карты"
 msgid "Deleting {name}..."
 msgstr "Удаление {name}…"
 
+#, fuzzy, python-brace-format
+#| msgid "Deleting {name}..."
+msgid "Deleting {n} maps..."
+msgstr "Удаление {name}…"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "Удалить карту (карты) <{m}>?"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "Удалить карту (карты) <{m}>?"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete {n} maps?"
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Удалить карты: {n}?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "Удалить выбранный набор"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "Delete dataset"
+msgstr "&Удалить набор"
+
+#, fuzzy
+#| msgid "Deleting {name}..."
+msgid "Deleting datasets..."
+msgstr "Удаление {name}…"
+
+#, fuzzy
+#| msgid "g.remove completed"
+msgid "t.remove completed"
+msgstr "Работа g.remove завершена"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "Для перемещения или копирования карт в другие наборы, необходимо разблокировать возможность изменения других наборов"
 
@@ -1322,14 +1413,112 @@ msgstr "Для перемещения или копирования карт в 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr "Перемещение или копирование карт в другие области выполняется путём перетаскивания их в набор целевой области"
 
-msgid "&Cut"
-msgstr "&Вырезать"
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete map(s) <{m}>?"
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "Удалить карту (карты) <{m}>?"
+
+#, fuzzy, python-brace-format
+#| msgid "Do you really want to delete {n} maps?"
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Удалить карты: {n}?"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister map"
+msgstr "нет растровой карты"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregistering map..."
+msgstr "нет растровой карты"
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display animation"
+msgstr "Отображение проекции карты"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "Растровые карты"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister maps"
+msgstr "нет растровой карты"
+
+msgid "Update metadata"
+msgstr "Обновление метаданных"
+
+#, fuzzy
+#| msgid "Plot temporal extents."
+msgid "Display &temporal extent"
+msgstr "График временного охвата."
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display &animation"
+msgstr "Отображение проекции карты"
+
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "&Rename dataset"
+msgstr "&Переименовать набор"
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "&Delete dataset only"
+msgstr "&Удалить набор"
+
+#, fuzzy
+#| msgid "Export raster dataset"
+msgid "&Export dataset"
+msgstr "Экспорт растрового набора данных"
+
+msgid "Show &metadata"
+msgstr "Показать &метаданные"
 
 msgid "&Copy"
 msgstr "&Копировать"
 
 msgid "Copy &name"
 msgstr "Копировать &имя"
+
+msgid "&Display layers"
+msgstr "&Отобразить слои"
+
+msgid "&Display layer"
+msgstr "&Отобразить слой"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister map"
+msgstr "нет растровой карты"
+
+msgid "&Cut"
+msgstr "&Вырезать"
 
 msgid "&Paste"
 msgstr "&Вставить"
@@ -1342,14 +1531,10 @@ msgstr "&Удалить"
 msgid "&Rename"
 msgstr "&Переименовать"
 
-msgid "&Display layers"
-msgstr "&Отобразить слои"
-
-msgid "&Display layer"
-msgstr "&Отобразить слой"
-
-msgid "Show &metadata"
-msgstr "Показать &метаданные"
+#, fuzzy
+#| msgid "Connect temporal database"
+msgid "Create &temporal dataset"
+msgstr "Подключение к временной базе данных"
 
 msgid "&Switch mapset"
 msgstr "&Переключить набор"
@@ -1360,7 +1545,9 @@ msgstr "&Удалить набор"
 msgid "&Rename mapset"
 msgstr "&Переименовать набор"
 
-msgid "Re&load maps"
+#, fuzzy
+#| msgid "Re&load maps"
+msgid "Re&load mapset"
 msgstr "Пере&загрузить карты"
 
 #, fuzzy
@@ -1382,6 +1569,10 @@ msgstr "&Удалить набор"
 #, fuzzy
 msgid "&Rename project"
 msgstr "&Переименовать набор"
+
+#, fuzzy
+msgid "Re&load project"
+msgstr "Перезагрузить обновления GRASS"
 
 #, fuzzy
 #| msgid "Choose projection"
@@ -1423,6 +1614,11 @@ msgid "&Delete GRASS database from disk"
 msgstr "&Удалить базу данных GRASS с диска"
 
 #, fuzzy
+#| msgid "Reload default table"
+msgid "Re&load database"
+msgstr "Перезагрузить таблицу по умолчанию"
+
+#, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "&Удалить области"
 
@@ -1436,6 +1632,21 @@ msgstr "&Удалить наборы"
 #, fuzzy
 msgid "&Copy paths"
 msgstr "&Создать набор"
+
+#, fuzzy
+#| msgid "Manage datasets"
+msgid "&Merge datasets"
+msgstr "Управление наборами данных"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "&Delete datasets only"
+msgstr "&Удалить наборы"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "Удалить выбранный набор"
 
 #, fuzzy, python-brace-format
 #| msgid "Removes an existing database."
@@ -10455,8 +10666,13 @@ msgstr "Для работы инструмента отображения вре
 msgid "Temporal Plot Tool"
 msgstr "Инструмент отображения временных данных"
 
+#, fuzzy
+#| msgid ""
+#| "Raster temporal dataset (strds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 "Растровый временной набор данных (strds)\n"
@@ -10474,8 +10690,13 @@ msgstr "Показывать простую линию линейной регр
 msgid "STRDS"
 msgstr "STRDS"
 
+#, fuzzy
+#| msgid ""
+#| "Vector temporal dataset (stvds)\n"
+#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 "Временной векторный набор данных (stvds)\n"
@@ -12744,9 +12965,6 @@ msgstr ""
 #~ msgid "Connect"
 #~ msgstr "Подключение"
 
-#~ msgid "Connect temporal database"
-#~ msgstr "Подключение к временной базе данных"
-
 #~ msgid "Constructs flowlines. Computes flowlines, flowpath lengths, and flowaccumulation (contributing areas) from a elevation raster map."
 #~ msgstr "Создаёт линии стока. Вычисляет линии стока, длины водотокалиний стока (областей выше по склону) на базе растровой карты высот."
 
@@ -13175,9 +13393,6 @@ msgstr ""
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "Отобразить информацию о средстве графического моделирования"
 
-#~ msgid "Display map projection"
-#~ msgstr "Отображение проекции карты"
-
 #~ msgid "Display mode"
 #~ msgstr "Режим отображения"
 
@@ -13372,9 +13587,6 @@ msgstr ""
 
 #~ msgid "Export instruction file"
 #~ msgstr "Экспорт файла инструкций"
-
-#~ msgid "Export raster dataset"
-#~ msgstr "Экспорт растрового набора данных"
 
 #~ msgid "Export raster dataset as VTK time series"
 #~ msgstr "Экспорт растрового набора данных в виде динамического ряда VTK"
@@ -13872,9 +14084,6 @@ msgstr ""
 #~ msgid "Imports raster data into a GRASS raster map using GDAL library."
 #~ msgstr "Импортирует растровые данные в растровую карту GRASS с помощью библиотеки GDAL."
 
-#~ msgid "Imports space time raster dataset."
-#~ msgstr "Импорт пространственно-временного набора данных."
-
 #~ msgid "Imports vector data into a GRASS vector map using OGR library."
 #~ msgstr "Импорт векторных данных в векторную карту GRASS с применением библиотеки OGR."
 
@@ -14171,9 +14380,6 @@ msgstr ""
 
 #~ msgid "Manage databases"
 #~ msgstr "Управление базами данных"
-
-#~ msgid "Manage datasets"
-#~ msgstr "Управление наборами данных"
 
 #~ msgid "Manage image colors"
 #~ msgstr "Управление цветами изображения"
@@ -14572,9 +14778,6 @@ msgstr ""
 
 #~ msgid "Plot options"
 #~ msgstr "Параметры графика"
-
-#~ msgid "Plot temporal extents."
-#~ msgstr "График временного охвата."
 
 #~ msgid "Plot temporal values."
 #~ msgstr "График значений временных данных."
@@ -15659,9 +15862,6 @@ msgstr ""
 
 #~ msgid "Update map statistics"
 #~ msgstr "Обновление статистики карты"
-
-#~ msgid "Update metadata"
-#~ msgstr "Обновление метаданных"
 
 #~ msgid "Update point attributes from areas"
 #~ msgstr "Обновление атрибутов точек из полигонов"

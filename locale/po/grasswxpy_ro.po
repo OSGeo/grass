@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-08 16:00+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Romanian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ro/>\n"
@@ -445,26 +445,6 @@ msgstr ""
 msgid "Animation Tool"
 msgstr ""
 
-msgid "Main Toolbar"
-msgstr ""
-
-msgid "Animation Toolbar"
-msgstr ""
-
-msgid "Misc Toolbar"
-msgstr "Bara de instrumente diverse"
-
-msgid "Loading data"
-msgstr ""
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr ""
-
-#, python-format
-msgid "to %(to)s"
-msgstr ""
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
@@ -488,6 +468,30 @@ msgid "Please add only one layer in the list."
 msgstr ""
 
 msgid "No map series nor space-time dataset is added."
+msgstr ""
+
+msgid "Main Toolbar"
+msgstr ""
+
+msgid "Animation Toolbar"
+msgstr ""
+
+msgid "Misc Toolbar"
+msgstr "Bara de instrumente diverse"
+
+msgid "Loading data"
+msgstr ""
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr ""
+
+#, python-format
+msgid "to %(to)s"
+msgstr ""
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
 msgstr ""
 
 msgid "Rendering map layers"
@@ -1000,6 +1004,13 @@ msgstr ""
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr ""
 
+#, fuzzy
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "Selectează mapsetul sursă:"
+
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr ""
+
 msgid "Link external data"
 msgstr ""
 
@@ -1146,6 +1157,20 @@ msgid "Failed to read maps from project <{l}>."
 msgstr "Citirea fișierului a eșuat %s."
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr "Citirea instrucțiunilor a eșuat %s."
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr ""
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr ""
 
@@ -1204,6 +1229,19 @@ msgstr ""
 msgid "Rename map"
 msgstr ""
 
+#, fuzzy
+#| msgid "Rename selected mapset"
+msgid "Rename dataset"
+msgstr "Redenumește mapsetul selectat"
+
+#, python-brace-format
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr ""
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr ""
+
 msgid "Cannot rename mapset"
 msgstr ""
 
@@ -1220,10 +1258,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Renaming map <{name}>..."
-msgstr ""
-
-#, python-brace-format
-msgid "{cmd} -- completed"
 msgstr ""
 
 msgid "No map selected for copying."
@@ -1263,9 +1297,13 @@ msgstr ""
 msgid "g.remove completed"
 msgstr ""
 
-#, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete map <{m}>?"
+msgstr "Doriți să creați un mapset nou?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
+msgstr "Doriți să creați un mapset nou?"
 
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
@@ -1278,19 +1316,155 @@ msgstr ""
 msgid "Deleting {name}..."
 msgstr ""
 
+#, python-brace-format
+msgid "Deleting {n} maps..."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "Doriți să creați un mapset nou?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "Doriți să creați un mapset nou?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Doriți să creați un mapset nou?"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete dataset and maps"
+msgstr "Șterge mapset selectat"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr ""
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr ""
+
+#, fuzzy
+msgid "Delete dataset"
+msgstr "Redenumește mapsetul selectat"
+
+#, fuzzy
+#| msgid "Loading data..."
+msgid "Deleting datasets..."
+msgstr "Încarca data..."
+
+#, fuzzy
+#| msgid "one's complement"
+msgid "t.remove completed"
+msgstr "asemănător cu"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-msgid "&Cut"
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "Doriți să creați un mapset nou?"
+
+#, fuzzy, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Doriți să creați un mapset nou?"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister map"
+msgstr "nici o hartă raster"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregistering map..."
+msgstr "nici o hartă raster"
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr ""
+
+msgid "Successfully unregistered map"
+msgstr ""
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display animation"
+msgstr "Afișează proiecția hărții"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "&Register maps"
+msgstr "Hărți raster"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister maps"
+msgstr "nici o hartă raster"
+
+#, fuzzy
+#| msgid "Updates vector map metadata."
+msgid "Update metadata"
+msgstr "Actualizări de metadate a hărții vectoriale."
+
+#, fuzzy
+msgid "Display &temporal extent"
+msgstr "Geometria afișării"
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display &animation"
+msgstr "Afișează proiecția hărții"
+
+#, fuzzy
+msgid "&Rename dataset"
+msgstr "Gestionează proiecțiile"
+
+#, fuzzy
+msgid "&Delete dataset only"
+msgstr "Redenumește mapsetul selectat"
+
+#, fuzzy
+#| msgid "Export database table"
+msgid "&Export dataset"
+msgstr "Exportă tabela bazei de date"
+
+msgid "Show &metadata"
 msgstr ""
 
 msgid "&Copy"
 msgstr ""
 
 msgid "Copy &name"
+msgstr ""
+
+msgid "&Display layers"
+msgstr ""
+
+msgid "&Display layer"
+msgstr ""
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "&Unregister map"
+msgstr "nici o hartă raster"
+
+msgid "&Cut"
 msgstr ""
 
 msgid "&Paste"
@@ -1304,14 +1478,10 @@ msgstr ""
 msgid "&Rename"
 msgstr "&Redenumește"
 
-msgid "&Display layers"
-msgstr ""
-
-msgid "&Display layer"
-msgstr ""
-
-msgid "Show &metadata"
-msgstr ""
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Create &temporal dataset"
+msgstr "Crează mapset nou"
 
 msgid "&Switch mapset"
 msgstr ""
@@ -1322,8 +1492,10 @@ msgstr ""
 msgid "&Rename mapset"
 msgstr ""
 
-msgid "Re&load maps"
-msgstr ""
+#, fuzzy
+#| msgid "Name of mapset:"
+msgid "Re&load mapset"
+msgstr "Numele mapset-ului"
 
 #, fuzzy
 #| msgid "Show computational extent"
@@ -1343,6 +1515,10 @@ msgstr "Șterge înregistrările"
 
 #, fuzzy
 msgid "&Rename project"
+msgstr "Gestionează proiecțiile"
+
+#, fuzzy
+msgid "Re&load project"
 msgstr "Gestionează proiecțiile"
 
 #, fuzzy
@@ -1385,6 +1561,11 @@ msgid "&Delete GRASS database from disk"
 msgstr ""
 
 #, fuzzy
+#| msgid "Reload default table"
+msgid "Re&load database"
+msgstr "Reîncarcă tabelul implicit"
+
+#, fuzzy
 msgid "&Delete projects (locations)"
 msgstr "Șterge locație selectată"
 
@@ -1399,6 +1580,20 @@ msgstr ""
 #, fuzzy
 msgid "&Copy paths"
 msgstr "Gestionează accesul la mapset"
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "&Merge datasets"
+msgstr "Gestionează baza de date"
+
+#, fuzzy
+msgid "&Delete datasets only"
+msgstr "Redenumește mapsetul selectat"
+
+#, fuzzy
+#| msgid "Delete selected mapset"
+msgid "Delete datasets and maps"
+msgstr "Șterge mapset selectat"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -10196,6 +10391,7 @@ msgstr ""
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -10213,6 +10409,7 @@ msgstr ""
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 
@@ -12366,9 +12563,6 @@ msgstr ""
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "Afișează informații despre Modelare Grafică"
 
-#~ msgid "Display map projection"
-#~ msgstr "Afișează proiecția hărții"
-
 #~ msgid "Display mode"
 #~ msgstr "Modul de afișare"
 
@@ -12462,9 +12656,6 @@ msgstr ""
 
 #~ msgid "Export color table"
 #~ msgstr "Exportă tabela de culori"
-
-#~ msgid "Export database table"
-#~ msgstr "Exportă tabela bazei de date"
 
 #~ msgid "Export raster map"
 #~ msgstr "Exportă harta raster"
@@ -12941,9 +13132,6 @@ msgstr ""
 
 #~ msgid "Manage colors"
 #~ msgstr "Gestionează culori"
-
-#~ msgid "Manage databases"
-#~ msgstr "Gestionează baza de date"
 
 #~ msgid "Manage image colors"
 #~ msgstr "Gestionează culorile imaginii"
@@ -13558,10 +13746,6 @@ msgstr ""
 #~ msgid "Select output vector map:"
 #~ msgstr "Selectează harta vectorială de ieșire:"
 
-#, fuzzy
-#~ msgid "Select space time raster dataset(s):"
-#~ msgstr "Selectează mapsetul sursă:"
-
 #~ msgid "Selects features from vector map (A) by features from other vector map (B)."
 #~ msgstr "Selectează trăsături din harta vectorială (A) în funcție de trăsăturile din harta vectorială (B)."
 
@@ -13892,9 +14076,6 @@ msgstr ""
 
 #~ msgid "Update raster map statistics"
 #~ msgstr "Actualizează statistica hărții raster"
-
-#~ msgid "Updates vector map metadata."
-#~ msgstr "Actualizări de metadate a hărții vectoriale."
 
 #~ msgid "Uploads raster values at positions of vector points to the table."
 #~ msgstr "Încarcă valorile rasterului la poziția punctelor vectoriale din tabel."
