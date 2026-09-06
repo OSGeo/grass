@@ -126,9 +126,7 @@ def register_maps_in_space_time_dataset(
     if dbif is not None:
         msgr.warning(
             _(
-                "The dbif argument is deprecated and will be removed in future "
-                "versions. The database connection will be created automatically"
-                "only for the current mapset."
+                "The dbif argument is deprecated and will be removed in a future release."
             )
         )
     # Create a new DB connection only for the current mapset
