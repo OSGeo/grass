@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
 
     if (reproject_flag->answer) {
-        G_verbose_message(
+        G_warning(
             _("Flag 'w' is deprecated and will be removed in a future release. "
               "Input dataset will always be reprojected if needed."));
     }
@@ -364,7 +364,7 @@ int main(int argc, char *argv[])
         }
         pdal::SpatialReference spatial_reference =
             reader->getSpatialReference();
-        if (spatial_reference.empty())
+        if (spatial_reference.empty() && !input_srs_opt->answer)
             G_fatal_error(_("The input dataset has undefined projection"));
         std::string dataset_wkt = spatial_reference.getWKT();
         need_to_reproject = !is_wkt_projection_same_as_loc(dataset_wkt.c_str());
