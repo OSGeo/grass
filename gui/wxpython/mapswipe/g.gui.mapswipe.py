@@ -31,7 +31,7 @@
 # % key: mode
 # % description: View mode
 # % options: swipe,mirror
-# % descriptions:swipe;swiping the upper map layer to show the map layer below ;mirror;synchronized maps side by side
+# % descriptions: swipe;Reveal lower map by swiping;mirror;Synchronize maps side by side
 # % answer: swipe
 # % required: no
 # %end

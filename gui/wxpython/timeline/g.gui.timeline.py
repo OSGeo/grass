@@ -12,7 +12,7 @@
 ############################################################################
 
 # %module
-# % description: Allows comparing temporal datasets by displaying their temporal extents in a plot.
+# % description: Compares temporal datasets by plotting their temporal extents.
 # % keyword: general
 # % keyword: GUI
 # % keyword: temporal

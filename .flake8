@@ -24,15 +24,8 @@ per-file-ignores =
     man/build_html.py: E501
     doc/examples/python/m.distance.py: E501
     gui/scripts/d.wms.py: E501
-    gui/wxpython/image2target/g.gui.image2target.py: E501
-    gui/wxpython/photo2image/g.gui.photo2image.py: E501
     gui/wxpython/psmap/*: E501
-    gui/wxpython/animation/g.gui.animation.py: E501
-    gui/wxpython/tplot/g.gui.tplot.py: E501
-    gui/wxpython/iclass/g.gui.iclass.py: E501
     gui/wxpython/mapdisp/test_mapdisp.py: E501
-    gui/wxpython/mapswipe/g.gui.mapswipe.py: E501
-    gui/wxpython/timeline/g.gui.timeline.py: E501
     # Generated file
     gui/wxpython/menustrings.py: E501
     # C wrappers call libgis.G_gisinit before importing other modules.

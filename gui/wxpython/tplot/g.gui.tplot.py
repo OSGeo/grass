@@ -62,7 +62,7 @@
 # %option G_OPT_F_OUTPUT
 # % required: no
 # % label: Name for output graphical file
-# % description: Full path for output file containing the plot, ddd extension to specify format (.png, .pdf, .svg)
+# % description: Output plot path; extension sets format (.png, .pdf, or .svg)
 # %end
 
 # %option G_OPT_F_OUTPUT

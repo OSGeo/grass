@@ -13,7 +13,7 @@
 
 # %module
 # % label: Tool for supervised classification of imagery data.
-# % description: Generates spectral signatures for an image by allowing the user to outline regions of interest.
+# % description: Generates image spectral signatures from outlined regions of interest.
 # % keyword: general
 # % keyword: GUI
 # % keyword: classification

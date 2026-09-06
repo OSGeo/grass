@@ -12,7 +12,7 @@
 ############################################################################
 
 # %module
-# % description: Georectifies a map and allows managing Ground Control Points for 3D correction.
+# % description: Georectifies a map using managed 3D Ground Control Points.
 # % keyword: imagery
 # % keyword: GUI
 # % keyword: aerial

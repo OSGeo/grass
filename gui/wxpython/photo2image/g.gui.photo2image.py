@@ -43,8 +43,8 @@
 # %option
 # % key: order
 # % type: string
-# % label: The rectification order (no of Fiducial=4 -> order=1, no of Fiducial=8 -> order=2)
-# % description: The rectification order (no of Fiducial=4 -> order=1, no of Fiducial=8 -> order=2)
+# % label: Rectification order (4 fiducials: 1; 8 fiducials: 2)
+# % description: Rectification order (4 fiducials: 1; 8 fiducials: 2)
 # % required: yes
 # % answer: 1
 # %end

@@ -12,7 +12,7 @@
 ############################################################################
 
 # %module
-# % description: Tool for animating a series of raster and vector maps or a space time raster or vector dataset.
+# % description: Animates maps or space time raster and vector datasets.
 # % keyword: general
 # % keyword: GUI
 # % keyword: display
