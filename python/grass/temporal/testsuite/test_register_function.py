@@ -316,7 +316,6 @@ class TestRasterRegisterFunctions(TestCase):
             start="2001-01-01 10:30:01",
             increment="1 year",
             interval=True,
-            dbif=self.dbif,
         )
 
         map_1 = tgis.RasterDataset("elevation@PERMANENT")
@@ -340,7 +339,6 @@ class TestRasterRegisterFunctions(TestCase):
             start="2001-01-01 10:30:01",
             increment="1 year",
             interval=True,
-            dbif=self.dbif,
         )
 
         map_1 = tgis.VectorDataset("lakes@PERMANENT")
