@@ -653,7 +653,10 @@ def register_map_object_list(
     output_stds_id = output_stds.get_id() if output_stds else None
 
     register_maps_in_space_time_dataset(
-        type, output_stds_id, unit=unit, file=filename, dbif=dbif
+        type,
+        output_stds_id,
+        unit=unit,
+        file=filename,
     )
 
     # Remove empty maps and unregister them from the temporal database
