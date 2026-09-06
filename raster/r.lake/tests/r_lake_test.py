@@ -3,7 +3,7 @@ import os
 import pytest
 
 import grass.script as gs
-from grass.tools import Tools
+from grass.tools import Tools, ToolError
 
 
 @pytest.fixture
@@ -67,3 +67,56 @@ def test_seed_raster_produces_a_single_water_body(session_with_dem):
 
     info = tools.r_info(map="clumps", format="json").json
     assert info["max"] == 1
+
+
+@pytest.fixture
+def session_with_flat_terrain(tmp_path):
+    """A GRASS session with flat terrain below the water level.
+
+    The region is 50 by 50 cells with n=50, s=0, e=50, w=0 and res=1, so the
+    valid cell indices are rows 0 to 49 and columns 0 to 49.
+    """
+    project = tmp_path / "r_lake_seed_project"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        tools = Tools(session=session)
+        tools.g_region(n=50, s=0, e=50, w=0, res=1)
+        tools.r_mapcalc(expression="terrain = 5")
+        yield session
+
+
+@pytest.mark.parametrize(
+    "coordinates", [(25.5, 0), (50, 25.5), (50, 0)], ids=["south", "east", "corner"]
+)
+def test_seed_coordinates_on_region_edge_are_rejected(
+    session_with_flat_terrain, coordinates
+):
+    """Coordinates on the southern or eastern edge are outside the region.
+
+    Those edges belong to the first cell beyond the region, so they must be
+    rejected instead of being used as cell indices.
+    """
+    tools = Tools(session=session_with_flat_terrain)
+
+    with pytest.raises(ToolError) as error:
+        tools.r_lake(
+            elevation="terrain",
+            water_level=10,
+            lake="lake_out",
+            coordinates=coordinates,
+        )
+
+    assert error.value.returncode == 1
+    assert "Seed point outside the current region" in error.value.errors
+
+
+def test_seed_coordinates_in_last_row_are_accepted(session_with_flat_terrain):
+    """Coordinates in the last row are inside the region and fill it."""
+    tools = Tools(session=session_with_flat_terrain)
+
+    tools.r_lake(
+        elevation="terrain", water_level=10, lake="lake_out", coordinates=(25.5, 0.5)
+    )
+
+    stats = tools.r_univar(map="lake_out", format="json").json
+    assert stats["n"] == 2500
