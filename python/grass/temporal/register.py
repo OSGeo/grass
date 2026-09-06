@@ -349,10 +349,10 @@ def register_maps_in_space_time_dataset(
                 continue
 
             # Reload properties from database
-            map_object.select(dbif)
+            map_object.select(dbif, mapset)
 
             # Save the datasets that must be updated
-            datasets = map_object.get_registered_stds(dbif)
+            datasets = map_object.get_registered_stds(dbif, mapset)
             if datasets is not None:
                 for dataset in datasets:
                     if dataset != "":
