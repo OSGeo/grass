@@ -7,7 +7,7 @@ backing store here, and no GRASS session is needed.
 """
 
 from contextlib import contextmanager
-from ctypes import CFUNCTYPE, byref, c_int, c_void_p, memmove, string_at
+from ctypes import CFUNCTYPE, byref, c_int, c_void_p, cast, memmove, string_at
 
 from grass.lib import rowio as librowio
 
@@ -230,5 +230,39 @@ def test_get_after_a_failure_can_return_a_stale_buffer() -> None:
         assert not librowio.Rowio_get(byref(r), 7)
 
         assert get(r, 3) == b"hhhh"  # stale: row 7's data, not row 3's
+    finally:
+        librowio.Rowio_release(byref(r))
+
+
+def test_get_rejects_a_negative_row() -> None:
+    with rowio(2, {}) as (r, _calls):
+        assert not librowio.Rowio_get(byref(r), -1)
+
+
+def test_put_rejects_a_negative_row() -> None:
+    with rowio(2, {}) as (r, _calls):
+        assert librowio.Rowio_put(byref(r), b"ZZZZ", -1) == 0
+
+
+def test_read_only_mode_with_no_putrow() -> None:
+    """Rowio_setup() documents passing NULL for putrow when the file is
+    never written back; a row is only ever dirtied by Rowio_put(), so as
+    long as that's never called, pageout() never calls the NULL putrow"""
+    calls = []
+
+    @GETROW
+    def getrow(fd, buf, row, length):
+        calls.append(row)
+        memmove(buf, b"aaaa", length)
+        return 1
+
+    null_putrow = cast(None, PUTROW)
+
+    r = librowio.ROWIO()
+    assert librowio.Rowio_setup(byref(r), 0, 2, ROW_LENGTH, getrow, null_putrow) == 1
+    try:
+        assert get(r, 0) == b"aaaa"
+        librowio.Rowio_flush(byref(r))  # would call putrow(NULL) if anything were dirty
+        assert calls == [0]
     finally:
         librowio.Rowio_release(byref(r))

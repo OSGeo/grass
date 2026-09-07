@@ -76,6 +76,27 @@ def test_class_equiprob_uses_the_normal_distribution() -> None:
     assert list(breaks) == pytest.approx([3.56264624745505, 5.5, 7.43735375254495])
 
 
+def test_class_equiprob_reduces_classes_when_a_break_falls_outside_the_range() -> None:
+    """A classbreak that lands outside [min, max] is dropped rather than
+    returned out of range, and *nbreaks is written back to reflect it"""
+    data = make_array([1.0] * 9 + [100.0])
+    breaks = (c_double * 9)()
+    nbreaks = c_int(9)
+    ret = libas.AS_class_equiprob(data, 10, byref(nbreaks), breaks)
+    assert ret == 1
+    assert nbreaks.value == 6
+    assert list(breaks)[: nbreaks.value] == pytest.approx(
+        [
+            3.3755050000000004,
+            10.9,
+            18.424495,
+            26.47468,
+            35.896114,
+            48.96203499999999,
+        ]
+    )
+
+
 def test_class_frequencies_counts_values_per_class() -> None:
     data = make_array(TEN_VALUES)
     breaks = make_array([3.25, 5.5, 7.75])
@@ -124,13 +145,22 @@ def test_class_apply_algorithm_dispatches_by_constant(
 ) -> None:
     """AS_class_apply_algorithm() is a thin dispatcher to the AS_class_*()
     functions above, selected by the CLASS_* constant; each case here
-    matches the corresponding AS_class_*() test above"""
+    matches the corresponding AS_class_*() test above.
+
+    nbreaks_inout is bound to a local rather than passed as an inline
+    byref(c_int(nbreaks)) so its write-back can actually be asserted; none
+    of these cases changes it (see
+    test_class_equiprob_reduces_classes_when_a_break_falls_outside_the_range
+    for a case that does).
+    """
     data = make_array(TEN_VALUES)
     breaks = (c_double * nbreaks)()
+    nbreaks_inout = c_int(nbreaks)
     finfo = libas.AS_class_apply_algorithm(
-        algorithm, data, len(TEN_VALUES), byref(c_int(nbreaks)), breaks
+        algorithm, data, len(TEN_VALUES), byref(nbreaks_inout), breaks
     )
     assert finfo == pytest.approx(expected_finfo)
+    assert nbreaks_inout.value == nbreaks
     assert list(breaks) == pytest.approx(expected_breaks)
 
 

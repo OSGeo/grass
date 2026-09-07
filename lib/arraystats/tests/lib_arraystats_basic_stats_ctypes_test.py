@@ -31,6 +31,26 @@ def test_basic_stats_on_sorted_data() -> None:
     assert stats.stdev == pytest.approx(1.4142135623730951)
 
 
+def test_basic_stats_fills_every_field() -> None:
+    """Checks all 10 GASTATS fields, with mixed-sign data
+
+    All-positive data can't tell sum/mean apart from sumabs/meanabs, since
+    they'd be equal either way; mixed signs are needed to actually
+    distinguish them.
+    """
+    stats = basic_stats([-3.0, -1.0, 2.0, 4.0])
+    assert stats.count == 4
+    assert stats.min == -3.0
+    assert stats.max == 4.0
+    assert stats.sum == 2.0
+    assert stats.sumsq == 30.0
+    assert stats.sumabs == 10.0
+    assert stats.mean == 0.5
+    assert stats.meanabs == 2.5
+    assert stats.var == pytest.approx(7.25)
+    assert stats.stdev == pytest.approx(2.692582403567252)
+
+
 def test_basic_stats_assumes_the_data_is_already_sorted() -> None:
     """min/max read the first and last element rather than scanning
 
