@@ -204,7 +204,7 @@ int main(int argc, char **argv)
         }
         G_percent(line++, nlines, 4);
 
-        if (type & GV_POINT) {
+        if (true) {
             if (field != -1 && !Vect_cat_get(Cats, field, NULL))
                 continue;
 
@@ -214,37 +214,38 @@ int main(int argc, char **argv)
                 myrng(numbers2, 1000, rng, p1, p2);
                 i = 0;
             }
+            for (int point = 0; point < Points->n_points; ++point) {
+                G_debug(debuglevel, "x:      %f y:      %f", Points->x[0],
+                        Points->y[point]);
 
-            G_debug(debuglevel, "x:      %f y:      %f", Points->x[0],
-                    Points->y[0]);
-
-            /* perturb */
-            /* TODO: tends to concentrate in box corners when min is used */
-            if (numbers2[i] >= 0) {
-                if (numbers[i] >= 0) {
-                    G_debug(debuglevel, "deltax: %f", numbers[i] + min);
-                    Points->x[0] += numbers[i++] + min;
+                /* perturb */
+                /* TODO: tends to concentrate in box corners when min is used */
+                if (numbers2[i] >= 0) {
+                    if (numbers[i] >= 0) {
+                        G_debug(debuglevel, "deltax: %f", numbers[i] + min);
+                        Points->x[point] += numbers[i++] + min;
+                    }
+                    else {
+                        G_debug(debuglevel, "deltax: %f", numbers[i] - min);
+                        Points->x[point] += numbers[i++] - min;
+                    }
+                    Points->y[point] += numbers2[i++];
                 }
                 else {
-                    G_debug(debuglevel, "deltax: %f", numbers[i] - min);
-                    Points->x[0] += numbers[i++] - min;
+                    if (numbers[i] >= 0) {
+                        G_debug(debuglevel, "deltay: %f", numbers[i] + min);
+                        Points->y[point] += numbers[i++] + min;
+                    }
+                    else {
+                        G_debug(debuglevel, "deltay: %f", numbers[i] - min);
+                        Points->y[point] += numbers[i++] - min;
+                    }
+                    Points->x[point] += numbers2[i++];
                 }
-                Points->y[0] += numbers2[i++];
-            }
-            else {
-                if (numbers[i] >= 0) {
-                    G_debug(debuglevel, "deltay: %f", numbers[i] + min);
-                    Points->y[0] += numbers[i++] + min;
-                }
-                else {
-                    G_debug(debuglevel, "deltay: %f", numbers[i] - min);
-                    Points->y[0] += numbers[i++] - min;
-                }
-                Points->x[0] += numbers2[i++];
-            }
 
-            G_debug(debuglevel, "x_pert: %f y_pert: %f", Points->x[0],
-                    Points->y[0]);
+                G_debug(debuglevel, "x_pert: %f y_pert: %f", Points->x[point],
+                        Points->y[point]);
+            }
         }
 
         Vect_write_line(&Out, type, Points, Cats);
