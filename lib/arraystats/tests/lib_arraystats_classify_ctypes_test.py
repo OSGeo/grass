@@ -19,7 +19,8 @@ Several related functions are intentionally not covered:
 """
 
 import math
-from ctypes import byref, c_double, c_int
+from contextlib import contextmanager
+from ctypes import CFUNCTYPE, byref, c_double, c_int
 
 import pytest
 
@@ -27,6 +28,29 @@ from grass.lib import arraystats as libas
 from grass.lib import gis as libgis
 
 TEN_VALUES = list(range(1, 11))  # 1.0 .. 10.0, already sorted
+
+# G_warning()/G_fatal_error() print through machinery that needs an
+# initialized GRASS session; without one, on some platforms (observed:
+# glibc, not musl) the process is silently killed instead of the message
+# just being lost. AS_class_equiprob()'s class-reduction branch calls
+# G_warning(), so the one test that exercises it registers this handler
+# first, following the same G_set_error_routine() pattern used in
+# gui/wxpython/vdigit/wxdisplay.py and gui/wxpython/nviz/wxnviz.py.
+_ERROR_ROUTINE = CFUNCTYPE(libgis.UNCHECKED(c_int), libgis.String, c_int)
+
+
+@contextmanager
+def swallow_grass_messages():
+    @_ERROR_ROUTINE
+    def handler(message, is_fatal):
+        return 1  # non-zero: caller (this test) has handled it
+
+    libgis.G_set_error_routine(handler)
+    try:
+        yield
+    finally:
+        libgis.G_unset_error_routine()
+
 
 # Three well-separated clusters, for AS_class_discont(). It looks for
 # discontinuities, so clear gaps give it an unambiguous answer; on evenly
@@ -85,11 +109,17 @@ def test_class_equiprob_uses_the_normal_distribution() -> None:
 
 def test_class_equiprob_reduces_classes_when_a_break_falls_outside_the_range() -> None:
     """A classbreak that lands outside [min, max] is dropped rather than
-    returned out of range, and *nbreaks is written back to reflect it"""
+    returned out of range, and *nbreaks is written back to reflect it.
+
+    This is the one case in this file that reaches AS_class_equiprob()'s
+    G_warning() call, so it needs swallow_grass_messages(); see that
+    function's comment for why.
+    """
     data = make_array([1.0] * 9 + [100.0])
     breaks = (c_double * 9)()
     nbreaks = c_int(9)
-    ret = libas.AS_class_equiprob(data, 10, byref(nbreaks), breaks)
+    with swallow_grass_messages():
+        ret = libas.AS_class_equiprob(data, 10, byref(nbreaks), breaks)
     assert ret == 1
     assert nbreaks.value == 6
     assert list(breaks)[: nbreaks.value] == pytest.approx(
