@@ -86,6 +86,9 @@ def test_eqdrt_computes_the_line_through_two_points(x1, y1, x2, y2, a, b) -> Non
 
     assert ra.value == pytest.approx(a)
     assert rb.value == pytest.approx(b)
+    # c is only used to report a vertical line; a sloped line must leave it
+    # at zero, which is what AS_class_discont() branches on.
+    assert rc.value == 0.0
 
 
 def test_eqdrt_returns_a_vertical_line_as_c_instead_of_a_slope() -> None:
@@ -120,3 +123,4 @@ def test_eqdrt_treats_index_zero_as_the_origin() -> None:
 
     assert a.value == pytest.approx(0.0)
     assert b.value == pytest.approx(2.0)
+    assert c.value == 0.0

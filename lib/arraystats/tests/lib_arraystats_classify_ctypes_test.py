@@ -6,9 +6,9 @@ sorted ascending, per AS_basic_stats()) and write classbreaks into a caller
 
 Several related functions are intentionally not covered:
 
-- AS_class_discont() beyond the one regression-style case below: its
-  algorithm is complex enough that hand-verifying more cases with
-  confidence was out of scope for this first pass.
+- AS_class_discont() beyond the two cases below: its algorithm is complex
+  enough that hand-verifying more cases with confidence was out of scope
+  for this first pass.
 - Error paths that call G_fatal_error() (an unknown algorithm name in
   AS_option_to_algorithm(), more than 10 classes in AS_class_equiprob(),
   an empty array in AS_class_apply_algorithm()): G_fatal_error() calls
@@ -18,6 +18,7 @@ Several related functions are intentionally not covered:
   preconditions beforehand instead of relying on catching it.
 """
 
+import math
 from ctypes import byref, c_double, c_int
 
 import pytest
@@ -26,6 +27,12 @@ from grass.lib import arraystats as libas
 from grass.lib import gis as libgis
 
 TEN_VALUES = list(range(1, 11))  # 1.0 .. 10.0, already sorted
+
+# Three well-separated clusters, for AS_class_discont(). It looks for
+# discontinuities, so clear gaps give it an unambiguous answer; on evenly
+# spaced data such as TEN_VALUES the break it picks comes down to ~1e-17 of
+# floating point noise and moves under -ffast-math.
+CLUSTERED_VALUES = [1.0, 2.0, 3.0, 4.0, 20.0, 21.0, 22.0, 40.0, 41.0, 42.0]
 
 
 def make_array(values):
@@ -106,18 +113,40 @@ def test_class_frequencies_counts_values_per_class() -> None:
     assert list(frequencies) == [3, 2, 2, 3]
 
 
-def test_class_discont_on_a_uniform_range() -> None:
-    """Locks in the current output for one deterministic input
+def test_class_discont_splits_between_clusters() -> None:
+    """AS_class_discont() puts its breaks in the gaps between clusters
 
-    AS_class_discont()'s "natural breaks" algorithm is intricate enough
-    that this is a regression check on verified output, not a
-    hand-derivable expected value.
+    The returned chi2 is deliberately not pinned to an exact value. It is a
+    running minimum over floating point comparisons, and it changes between
+    an ordinary build and one built with -ffast-math (measured: 0.2499...
+    against 0.9349...) even though the breaks themselves stay put. The
+    breaks are the useful output here, so those are what is asserted.
     """
-    data = make_array(TEN_VALUES)
+    data = make_array(CLUSTERED_VALUES)
     breaks = (c_double * 2)()
-    chi2 = libas.AS_class_discont(data, len(TEN_VALUES), 2, breaks)
-    assert chi2 == pytest.approx(0.12499999999999997)
-    assert list(breaks) == pytest.approx([2.5, 5.5])
+    chi2 = libas.AS_class_discont(data, len(CLUSTERED_VALUES), 2, breaks)
+    assert list(breaks) == pytest.approx([4.5, 39.5])
+    # 1000 is the "found nothing" sentinel the algorithm starts from.
+    assert 0 < chi2 < 1000
+
+
+def test_class_discont_on_degenerate_input_returns_nan_breaks() -> None:
+    """All-equal input leaves AS_class_discont() with no range to work with
+
+    Standardizing by a zero range gives 0/0, so the breaks come back NaN
+    while chi2 keeps the 1000 "found nothing" sentinel it started from.
+    AS_class_apply_algorithm() only treats finfo == 0 as failure, so this
+    passes straight through it and a caller receives NaN classbreaks with
+    no error raised. Locked in as current behavior, not as a guarantee.
+
+    Only the first break is asserted: the second is NaN in an ordinary
+    build but 0 under -ffast-math.
+    """
+    data = make_array([7.0] * 5)
+    breaks = (c_double * 2)()
+    chi2 = libas.AS_class_discont(data, 5, 2, breaks)
+    assert chi2 == 1000
+    assert math.isnan(breaks[0])
 
 
 @pytest.mark.parametrize(
@@ -137,7 +166,6 @@ def test_class_discont_on_a_uniform_range() -> None:
             1.0,
             [3.56264624745505, 5.5, 7.43735375254495],
         ),
-        (libas.CLASS_DISCONT, 2, 0.12499999999999997, [2.5, 5.5]),
     ],
 )
 def test_class_apply_algorithm_dispatches_by_constant(
@@ -151,7 +179,8 @@ def test_class_apply_algorithm_dispatches_by_constant(
     byref(c_int(nbreaks)) so its write-back can actually be asserted; none
     of these cases changes it (see
     test_class_equiprob_reduces_classes_when_a_break_falls_outside_the_range
-    for a case that does).
+    for a case that does). CLASS_DISCONT is dispatched in its own test
+    below, since its return value cannot be pinned to an exact number.
     """
     data = make_array(TEN_VALUES)
     breaks = (c_double * nbreaks)()
@@ -162,6 +191,21 @@ def test_class_apply_algorithm_dispatches_by_constant(
     assert finfo == pytest.approx(expected_finfo)
     assert nbreaks_inout.value == nbreaks
     assert list(breaks) == pytest.approx(expected_breaks)
+
+
+def test_class_apply_algorithm_dispatches_to_discont() -> None:
+    """Same dispatch check as above for CLASS_DISCONT, using clustered data
+    and asserting only the breaks, for the reason given in
+    test_class_discont_splits_between_clusters"""
+    data = make_array(CLUSTERED_VALUES)
+    breaks = (c_double * 2)()
+    nbreaks_inout = c_int(2)
+    finfo = libas.AS_class_apply_algorithm(
+        libas.CLASS_DISCONT, data, len(CLUSTERED_VALUES), byref(nbreaks_inout), breaks
+    )
+    assert 0 < finfo < 1000
+    assert nbreaks_inout.value == 2
+    assert list(breaks) == pytest.approx([4.5, 39.5])
 
 
 @pytest.mark.parametrize(

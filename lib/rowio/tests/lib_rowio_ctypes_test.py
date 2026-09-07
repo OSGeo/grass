@@ -91,6 +91,13 @@ def test_flush_writes_pending_dirty_rows() -> None:
 
 
 def test_lru_evicts_the_least_recently_used_row() -> None:
+    """Note for anyone extending this: Rowio_setup() initializes each cache
+    slot's row but not its age, and Rowio_get() bumps the age of unused
+    slots too. That is harmless at nrows=2 because Rowio_get() prefers a
+    free slot and breaks out before comparing ages, so both slots here are
+    filled before any eviction happens. A case with nrows >= 3 that evicts
+    while some slot is still unused would be reading an uninitialized age.
+    """
     backing = {i: bytes([i]) * ROW_LENGTH for i in range(4)}
     with rowio(2, backing) as (r, calls):
         get(r, 0)
@@ -171,9 +178,11 @@ def test_get_returns_none_when_getrow_fails() -> None:
     """A getrow() that signals failure (returns 0) makes Rowio_get()
     return NULL, and a row that has never been successfully cached can be
     retried rather than getting stuck returning failure forever"""
+    calls = []
 
     @GETROW
     def failing_getrow(fd, buf, row, length):
+        calls.append(row)
         return 0
 
     @PUTROW
@@ -185,6 +194,9 @@ def test_get_returns_none_when_getrow_fails() -> None:
     try:
         assert not librowio.Rowio_get(byref(r), 0)
         assert not librowio.Rowio_get(byref(r), 0)
+        # Asserting the call count, not just the two NULLs: without this the
+        # test would also pass if the second get never retried at all.
+        assert calls == [0, 0]
     finally:
         librowio.Rowio_release(byref(r))
 
