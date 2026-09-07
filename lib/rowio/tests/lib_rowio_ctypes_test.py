@@ -169,8 +169,8 @@ def test_fileno_returns_the_configured_descriptor() -> None:
 
 def test_get_returns_none_when_getrow_fails() -> None:
     """A getrow() that signals failure (returns 0) makes Rowio_get()
-    return NULL rather than a buffer with whatever partial data getrow()
-    may have written"""
+    return NULL, and a row that has never been successfully cached can be
+    retried rather than getting stuck returning failure forever"""
 
     @GETROW
     def failing_getrow(fd, buf, row, length):
@@ -184,8 +184,51 @@ def test_get_returns_none_when_getrow_fails() -> None:
     librowio.Rowio_setup(byref(r), 0, 2, ROW_LENGTH, failing_getrow, putrow)
     try:
         assert not librowio.Rowio_get(byref(r), 0)
-        # The row is not left in a half-cached state: the same row can be
-        # retried rather than getting stuck returning failure forever.
         assert not librowio.Rowio_get(byref(r), 0)
+    finally:
+        librowio.Rowio_release(byref(r))
+
+
+def test_get_after_a_failure_can_return_a_stale_buffer() -> None:
+    """A failed Rowio_get() does not always leave the cache retryable
+
+    Rowio_get()'s cleanup after a failed getrow() does
+    `if (cur == R->cur) R->cur = -1;`, comparing a cache *slot index*
+    (`cur`) against a *row number* (`R->cur`, set by a prior successful
+    get to the row it holds, not to a slot index). With more than one row
+    ever having been cached, these numbers belong to different spaces and
+    the comparison essentially never matches, so `R->cur` is left pointing
+    at the row that used to occupy the now-invalidated slot. The next
+    Rowio_get() for that same row then hits Rowio_get()'s
+    `row == R->cur` fast path and returns the stale buffer directly,
+    without calling getrow() at all, rather than retrying or failing.
+
+    This is locked in here as the library's current (buggy) behavior,
+    not a guarantee; the underlying bug should be fixed in lib/rowio
+    itself in a separate change.
+    """
+    backing = {3: b"dddd"}
+
+    @GETROW
+    def getrow(fd, buf, row, length):
+        if row == 7:
+            # A getrow() that writes data before reporting failure, e.g.
+            # a partial read, is what actually leaves stale bytes behind.
+            memmove(buf, b"hhhh", length)
+            return 0
+        memmove(buf, backing.get(row, b"\x00" * length), length)
+        return 1
+
+    @PUTROW
+    def putrow(fd, buf, row, length):
+        return 1
+
+    r = librowio.ROWIO()
+    librowio.Rowio_setup(byref(r), 0, 1, ROW_LENGTH, getrow, putrow)
+    try:
+        assert get(r, 3) == b"dddd"
+        assert not librowio.Rowio_get(byref(r), 7)
+
+        assert get(r, 3) == b"hhhh"  # stale: row 7's data, not row 3's
     finally:
         librowio.Rowio_release(byref(r))
