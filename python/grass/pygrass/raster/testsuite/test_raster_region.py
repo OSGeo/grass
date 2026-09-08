@@ -39,16 +39,13 @@ class RasterRowRegionTestCase(TestCase):
 
         rast = RasterRow(self.name)
         rast.set_region(region)
-        rast.open(mode="r")
-
-        self.assertCountEqual(
-            rast[0].tolist(), [22, 22, 22, 22, 22, 32, 32, 32, 32, 32]
-        )
-        self.assertCountEqual(
-            rast[5].tolist(), [23, 23, 23, 23, 23, 33, 33, 33, 33, 33]
-        )
-
-        rast.close()
+        with rast:
+            self.assertCountEqual(
+                rast[0].tolist(), [22, 22, 22, 22, 22, 32, 32, 32, 32, 32]
+            )
+            self.assertCountEqual(
+                rast[5].tolist(), [23, 23, 23, 23, 23, 33, 33, 33, 33, 33]
+            )
 
     def test_resampling_2(self):
         region = Region()
@@ -63,21 +60,18 @@ class RasterRowRegionTestCase(TestCase):
 
         rast = RasterRow(self.name)
         rast.set_region(region)
-        rast.open(mode="r")
+        with rast:
+            # [nan, nan, nan, nan, nan, nan, nan, nan]
+            # [nan, nan, nan, nan, nan, nan, nan, nan]
+            # [nan, nan, 11.0, 21.0, 31.0, 41.0, nan, nan]
+            # [nan, nan, 12.0, 22.0, 32.0, 42.0, nan, nan]
+            # [nan, nan, 13.0, 23.0, 33.0, 43.0, nan, nan]
+            # [nan, nan, 14.0, 24.0, 34.0, 44.0, nan, nan]
+            # [nan, nan, nan, nan, nan, nan, nan, nan]
+            # [nan, nan, nan, nan, nan, nan, nan, nan]
 
-        # [nan, nan, nan, nan, nan, nan, nan, nan]
-        # [nan, nan, nan, nan, nan, nan, nan, nan]
-        # [nan, nan, 11.0, 21.0, 31.0, 41.0, nan, nan]
-        # [nan, nan, 12.0, 22.0, 32.0, 42.0, nan, nan]
-        # [nan, nan, 13.0, 23.0, 33.0, 43.0, nan, nan]
-        # [nan, nan, 14.0, 24.0, 34.0, 44.0, nan, nan]
-        # [nan, nan, nan, nan, nan, nan, nan, nan]
-        # [nan, nan, nan, nan, nan, nan, nan, nan]
-
-        self.assertCountEqual(rast[2].tolist()[2:6], [11.0, 21.0, 31.0, 41.0])
-        self.assertCountEqual(rast[5].tolist()[2:6], [14.0, 24.0, 34.0, 44.0])
-
-        rast.close()
+            self.assertCountEqual(rast[2].tolist()[2:6], [11.0, 21.0, 31.0, 41.0])
+            self.assertCountEqual(rast[5].tolist()[2:6], [14.0, 24.0, 34.0, 44.0])
 
     def test_resampling_to_numpy(self):
         region = Region()
