@@ -26,10 +26,21 @@ import unittest
 class TestTmpMapset(unittest.TestCase):
     """Tests --tmp-mapset option of grass command"""
 
-    # TODO: here we need a name of or path to the main GRASS executable
-    # TODO: support OSGeo4W executable with:
-    # executable = "grass" if os.name != "nt" else "grass86.bat"
-    executable = "grass" if os.name != "nt" else "grass.bat"
+    # On Windows, GISBASE itself (where the grass.bat launcher lives) is
+    # never added to PATH, only GISBASE\bin is, so a bare "grass.bat" is
+    # not found when this test runs inside an existing GRASS session (e.g.
+    # under grass.gunittest.main). Resolve the full path via GISBASE when
+    # available and fall back to the bare name otherwise.
+    # Note: on an OSGeo4W package install, the launcher name is versioned
+    # (e.g. grass86.bat instead of grass.bat), so this resolution does not
+    # apply there; it only covers a from-source build's layout.
+    _gisbase = os.environ.get("GISBASE")
+    if os.name != "nt":
+        executable = "grass"
+    elif _gisbase:
+        executable = os.path.join(_gisbase, "grass.bat")
+    else:
+        executable = "grass.bat"
     # an arbitrary, but identifiable and fairly unique name
     location = "test_tmp_mapset_xy"
 
