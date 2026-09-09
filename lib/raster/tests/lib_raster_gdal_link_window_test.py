@@ -2,7 +2,11 @@
 
 Rast_get_row() reads GDAL-linked maps through read_data_gdal(), which
 restricts the GDAL read to the range of native columns that overlap the
-current region instead of always reading the full native row width.
+current region instead of always reading the full native row width. That
+column restriction is skipped for maps linked with a horizontal flip, so
+the window tests below are parametrized over hflip/vflip, reusing the same
+source GeoTIFF linked with r.external's -h/-v flags instead of writing out
+an actually mirrored file.
 """
 
 import os
@@ -43,6 +47,10 @@ def linked_session(tmp_path_factory):
             input="source", output=str(tif_path), format="GTiff", type="Int32"
         )
         tools.r_external(input=str(tif_path), output="linked")
+        # Link also as flipped raster maps
+        tools.r_external(input=str(tif_path), output="linked_h", flags="h")
+        tools.r_external(input=str(tif_path), output="linked_v", flags="v")
+        tools.r_external(input=str(tif_path), output="linked_hv", flags="hv")
         yield session, tif_path
 
 
@@ -89,11 +97,25 @@ def latlon_mapset(latlon_session):
         yield mapset_session
 
 
-def expected_values(row_offset, col_offset, rows, cols):
-    """Expected 'linked' values for a region shifted by row/col_offset cells."""
-    row_values = (row_offset + np.arange(rows)) * 1000
-    col_values = col_offset + np.arange(cols)
-    return row_values[:, None] + col_values[None, :]
+def apply_flip(rows_idx, cols_idx, hflip, vflip):
+    """Map native (row, col) indices through a GDAL link's hflip/vflip.
+
+    Mirrors the row/column reversal read_data_gdal() (get_row.c) applies,
+    over the file's full row/column range, for maps linked with a flip.
+    """
+    if vflip:
+        rows_idx = ROWS - 1 - rows_idx
+    if hflip:
+        cols_idx = COLS - 1 - cols_idx
+    return rows_idx, cols_idx
+
+
+def expected_values(row_offset, col_offset, rows, cols, hflip=False, vflip=False):
+    """Expected values for a region shifted by row/col_offset cells."""
+    row_idx, col_idx = apply_flip(
+        row_offset + np.arange(rows), col_offset + np.arange(cols), hflip, vflip
+    )
+    return row_idx[:, None] * 1000 + col_idx[None, :]
 
 
 def nearest_native_index(offset, step, count):
@@ -105,7 +127,7 @@ def nearest_native_index(offset, step, count):
     return np.floor(offset + step * np.arange(count)).astype(int)
 
 
-def native_indices_for_region(north, west, res, rows, cols):
+def native_indices_for_region(north, west, res, rows, cols, hflip=False, vflip=False):
     """Native (row, col) indices 'linked' resolves to for a region."""
     step = res / FILE_RES
     native_cols = nearest_native_index(
@@ -114,7 +136,7 @@ def native_indices_for_region(north, west, res, rows, cols):
     native_rows = nearest_native_index(
         (FILE_NORTH - north + res / 2.0) / FILE_RES, step, rows
     )
-    return native_rows, native_cols
+    return apply_flip(native_rows, native_cols, hflip, vflip)
 
 
 def wrapped_native_col_indices(region_west, region_east, res, file_west, file_cols):
@@ -146,41 +168,67 @@ def wrapped_native_col_indices(region_west, region_east, res, file_west, file_co
     return native
 
 
-def test_region_fully_inside_source_extent(session):
+# Configure parametrization
+FLIP_CASES = pytest.mark.parametrize(
+    ("hflip", "vflip", "raster_name"),
+    [
+        (False, False, "linked"),
+        (True, False, "linked_h"),
+        (False, True, "linked_v"),
+        (True, True, "linked_hv"),
+    ],
+    ids=["noflip", "hflip", "vflip", "hvflip"],
+)
+
+
+@FLIP_CASES
+def test_region_fully_inside_source_extent(session, hflip, vflip, raster_name):
     """A region fully inside the file reads the correct sub-window."""
     Tools(session=session).g_region(n=15, s=8, w=12, e=25, res=1)
-    arr = np.array(garray.array("linked", null=NULL, env=session.env))
-    assert np.array_equal(arr, expected_values(5, 12, *arr.shape))
+    arr = np.array(garray.array(raster_name, null=NULL, env=session.env))
+    assert np.array_equal(
+        arr, expected_values(5, 12, *arr.shape, hflip=hflip, vflip=vflip)
+    )
 
 
-def test_region_partially_outside_source_extent(session):
+@FLIP_CASES
+def test_region_partially_outside_source_extent(session, hflip, vflip, raster_name):
     """Columns outside the file's extent read as null, the rest as data."""
     Tools(session=session).g_region(n=10, s=5, w=-5, e=10, res=1)
-    arr = np.array(garray.array("linked", null=NULL, env=session.env))
+    arr = np.array(garray.array(raster_name, null=NULL, env=session.env))
     assert np.all(arr[:, :5] == NULL)
-    assert np.array_equal(arr[:, 5:], expected_values(10, 0, arr.shape[0], 10))
+    assert np.array_equal(
+        arr[:, 5:], expected_values(10, 0, arr.shape[0], 10, hflip=hflip, vflip=vflip)
+    )
 
 
-def test_region_fully_outside_source_extent(session):
+@FLIP_CASES
+def test_region_fully_outside_source_extent(session, hflip, vflip, raster_name):
     """A region with no overlap at all reads back as entirely null."""
     Tools(session=session).g_region(n=10, s=5, w=-50, e=-40, res=1)
-    arr = np.array(garray.array("linked", null=NULL, env=session.env))
+    arr = np.array(garray.array(raster_name, null=NULL, env=session.env))
     assert np.all(arr == NULL)
 
 
-def test_region_coarser_than_source_resolution(session):
+@FLIP_CASES
+def test_region_coarser_than_source_resolution(session, hflip, vflip, raster_name):
     """A region coarser than the file's resolution reads the nearest cell."""
     Tools(session=session).g_region(n=16, s=6, w=10, e=24, res=2)
-    arr = np.array(garray.array("linked", null=NULL, env=session.env))
-    native_rows, native_cols = native_indices_for_region(16, 10, 2, *arr.shape)
+    arr = np.array(garray.array(raster_name, null=NULL, env=session.env))
+    native_rows, native_cols = native_indices_for_region(
+        16, 10, 2, *arr.shape, hflip=hflip, vflip=vflip
+    )
     assert np.array_equal(arr, native_rows[:, None] * 1000 + native_cols[None, :])
 
 
-def test_region_finer_than_source_resolution(session):
+@FLIP_CASES
+def test_region_finer_than_source_resolution(session, hflip, vflip, raster_name):
     """A region finer than the file's resolution duplicates the nearest cell."""
     Tools(session=session).g_region(n=16, s=11, w=10, e=15, res=0.5)
-    arr = np.array(garray.array("linked", null=NULL, env=session.env))
-    native_rows, native_cols = native_indices_for_region(16, 10, 0.5, *arr.shape)
+    arr = np.array(garray.array(raster_name, null=NULL, env=session.env))
+    native_rows, native_cols = native_indices_for_region(
+        16, 10, 0.5, *arr.shape, hflip=hflip, vflip=vflip
+    )
     assert np.array_equal(arr, native_rows[:, None] * 1000 + native_cols[None, :])
 
 
