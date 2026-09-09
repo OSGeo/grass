@@ -289,13 +289,13 @@ class GitAdapter:
         try:
             gs.call([self._git], stdout=PIPE)
         except OSError:
-            gs.fatal(_("Could not found Git. Please install it."))
+            gs.fatal(_("Could not find Git. Please install it."))
 
     def __check_permissions(self):
         """"""
         # Create working directory if it does not exist
         self.working_directory.mkdir(parents=True, exist_ok=True)
-        # Check pemissions in case he workdir existed
+        # Check permissions in case the workdir exists
         if not os.access(self.working_directory, os.W_OK):
             gs.fatal(
                 _("Cannot write to working directory {}.").format(

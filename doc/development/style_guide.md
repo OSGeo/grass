@@ -276,7 +276,7 @@ The structure consists of several required and optional sections:
 ```
 
 Sections _Notes_, _Examples_, _References_, and _Authors_ can be also in
-singular form (e.g, _Note_).
+singular form (e.g., _Note_).
 
 Note that Markdown is converted to html using [MkDocs](https://www.mkdocs.org/).
 See also [supported Markdown elements by MkDocs](https://www.markdownguide.org/tools/mkdocs/)
@@ -337,7 +337,7 @@ Examples:
 - `v_clean_rmsa.png`
 
 **Image size:** ideally **600 pixel width** (height depends on that), use e.g.
-ImageMagic:
+ImageMagick:
 
 ```bash
 mogrify -resize 600x file.png
@@ -759,7 +759,7 @@ gs.fatal(_("No map found, exiting."))
 # debug output (users can use g.gisenv to enable/disable)
 # debug level is 1 to 5 (5 is most detailed)
 # debug message should not be translated
-gs.debug(f"Our calculated value is: {value}."), 3)
+gs.debug(f"Our calculated value is: {value}.", 3)
 ```
 
 Do not use the `print` function for informational output. This is reserved for
@@ -926,7 +926,7 @@ d.    - display tools
 db.   - database tools
 g.    - general GIS management tools
 i.    - imagery tools
-m.    - miscellaneous tool tools
+m.    - miscellaneous tools
 ps.   - postscript tools
 r.    - raster tools
 r3.   - raster3D tools

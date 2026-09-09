@@ -338,6 +338,14 @@ https://vitrinelinguistique.oqlf.gouv.qc.ca/fiche-gdt/fiche/26579673/machine-a-v
                 <langSet xml:lang="fr"><tig><term>carnet</term></tig></langSet>
                 <note from="translator">carnet et non notebook ou bloc-notes</note>
             </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>datasets</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>jeux de données</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>space time</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>spatiotemporel</term></tig></langSet>
+            </termEntry>
         </body>
     </text>
 </martif>

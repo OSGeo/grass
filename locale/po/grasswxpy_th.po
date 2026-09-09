@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2008-01-05 15:19+0700\n"
 "Last-Translator: \n"
 "Language-Team: Thai <grass-translations@lists.osgeo.org>\n"
@@ -1352,6 +1352,17 @@ msgstr ""
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+msgid "Display animation"
+msgstr "แสดง"
+
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
@@ -1372,6 +1383,10 @@ msgstr "ปรับปรุง metadata ของแผนที่เชิ�
 
 #, fuzzy
 msgid "Display &temporal extent"
+msgstr "แสดง"
+
+#, fuzzy
+msgid "Display &animation"
 msgstr "แสดง"
 
 #, fuzzy

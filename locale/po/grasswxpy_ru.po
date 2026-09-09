@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ru/>\n"
@@ -1444,6 +1444,18 @@ msgstr ""
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display animation"
+msgstr "Отображение проекции карты"
+
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
@@ -1464,6 +1476,11 @@ msgstr "Обновление метаданных"
 #| msgid "Plot temporal extents."
 msgid "Display &temporal extent"
 msgstr "График временного охвата."
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display &animation"
+msgstr "Отображение проекции карты"
 
 #, fuzzy
 #| msgid "&Rename mapset"
@@ -13375,9 +13392,6 @@ msgstr ""
 
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "Отобразить информацию о средстве графического моделирования"
-
-#~ msgid "Display map projection"
-#~ msgstr "Отображение проекции карты"
 
 #~ msgid "Display mode"
 #~ msgstr "Режим отображения"

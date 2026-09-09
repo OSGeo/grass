@@ -41,7 +41,7 @@ r.report zipcodes unit=h
 Extract only areas greater than 2000 ha, NULL otherwise:
 
 ```sh
-r.reclass.area input=zipcodes output=zipcodes_larger2000ha greater=2000
+r.reclass.area input=zipcodes output=zipcodes_larger2000ha lower=2000
 
 r.report zipcodes_larger2000ha unit=h
 ```

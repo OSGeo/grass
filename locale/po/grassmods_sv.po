@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -12157,6 +12157,11 @@ msgstr "Det går inte att köra r.stats"
 msgid "Unexpected output from r.stats"
 msgstr "Oväntad utdata från r.stats"
 
+#, fuzzy
+#| msgid "No data returned from query"
+msgid "No data returned from r.stats"
+msgstr "Ingen data returnerad från förfrågan"
+
 msgid "Unable to open tempfile"
 msgstr "Det går inte att öppna tempfilen"
 
@@ -14717,6 +14722,15 @@ msgstr "Det går inte att fastställa typen av inmatningsfil för <%s>"
 msgid "PDAL error: %s"
 msgstr "PDAL-fel: %s"
 
+#, c-format
+msgid "The input dataset <%s> has undefined CRS, its extent is reported as stored in the file"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Reprojection of region using m.proj failed."
+msgid "Reprojection of the data extent failed: %s"
+msgstr "Reprojektion av region med hjälp av m.proj misslyckades."
+
 msgid "Mode value of point values in cell"
 msgstr "Lägesvärde för punktvärden i cell"
 
@@ -14744,11 +14758,15 @@ msgstr "Skala som ska tillämpas på utgående dimensionsvärden"
 msgid "Use if output dimension is not Z or intensity"
 msgstr "Används om utdatadimensionen inte är Z eller intensitet"
 
-msgid "Reproject to project's coordinate system if needed"
+#, fuzzy
+#| msgid "Reproject to project's coordinate system if needed"
+msgid "Reproject to project's coordinate system if needed [deprecated]"
 msgstr "Omprojicera till projektets koordinatsystem om det behövs"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
-msgstr "Reprojicerar inmatad dataset till GRASS-projektets koordinatsystem (som standard kan endast dataset med matchande koordinatsystem importeras)"
+#, fuzzy
+#| msgid "This flag is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
+msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr "Denna flagga är föråldrad och kommer att tas bort i en framtida version. Använda frö är automatiskt eller använd parametern seed."
 
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
 msgstr "Projektion av indataset (WKT eller EPSG, t.ex. EPSG:4326)"
@@ -14799,6 +14817,11 @@ msgstr "PDAL-dimensionens namn"
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Skriv ut datafilens omfattning i skalskriptstil och avsluta sedan"
 
+#, fuzzy
+#| msgid "Flag 'j' is deprecated and will be removed in a future release. Please use format=proj4 instead."
+msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr "Flaggan 'j' är föråldrad och kommer att tas bort i en framtida version. Använd format=proj4 istället."
+
 #, c-format
 msgid "Flag %c makes sense only with %s option or -%c flag or -%c flag"
 msgstr "Flagga %c är endast meningsfull med alternativet %s eller -%c flagga eller -%c flagga"
@@ -14813,14 +14836,19 @@ msgstr "Typ av utmatningskarta inställd på CELL"
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr "Skapandet av PDAL-läsare misslyckades, fel format för <%s>"
 
-msgid "Reprojecting the input to the project's CRS"
-msgstr "Återprojicering av inmatningen till projektets CRS"
+#, fuzzy, c-format
+#| msgid "Error while reading history file"
+msgid "PDAL error while reading <%s>: %s"
+msgstr "Fel vid läsning av historikfil"
+
+msgid "The input dataset has undefined projection"
+msgstr "Inmatningsdatasetet har odefinierad projektion"
 
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr "Åsidosätta projektionskontroll och anta att CRS för indata matchar projektets CRS"
 
-msgid "The input dataset has undefined projection"
-msgstr "Inmatningsdatasetet har odefinierad projektion"
+msgid "Reprojecting the input to the project's CRS"
+msgstr "Återprojicering av inmatningen till projektets CRS"
 
 msgid "Running PDAL algorithms..."
 msgstr "Kör PDAL-algoritmer..."
@@ -18518,9 +18546,6 @@ msgstr "Manning's n rasterkarta hittades inte och manin_val odefinierad, välj e
 
 msgid "Zero value in Mannings n"
 msgstr "Nollvärde i Mannings n"
-
-msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
-msgstr "Infiltrationen överstiger regnmängden överallt! Inget flöde över land."
 
 msgid "No values in the elevation raster."
 msgstr "Inga värden i höjdrastret."
@@ -31637,6 +31662,116 @@ msgstr "normalsv: återställning av oinitialiserat block"
 msgid "normalsv: save of uninitialized block"
 msgstr "normalsv: spara oinitialiserat block"
 
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing F function..."
+msgstr "Beräkning av ekvationer..."
+
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing G function..."
+msgstr "Beräkning av ekvationer..."
+
+#, fuzzy
+#| msgid "Computing equations..."
+msgid "Computing K function..."
+msgstr "Beräkning av ekvationer..."
+
+#, fuzzy
+#| msgid "point pattern"
+msgid "point pattern analysis"
+msgstr "punktmönster"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Summary function to compute"
+msgstr ""
+
+msgid "g;Nearest neighbor distance distribution function;f;Empty space function;k;Ripley's K function;l;L function (variance stabilized K function)"
+msgstr ""
+
+#, fuzzy
+#| msgid "If no output file given report is printed to standard output"
+msgid "If omitted or '-', the results are printed to standard output"
+msgstr "Om ingen utdatafil anges skrivs rapporten ut till standardutdata"
+
+#, fuzzy
+#| msgid "Number of islands:"
+msgid "Number of distances"
+msgstr "Antal öar:"
+
+msgid "Number of equally spaced distances at which the function is estimated"
+msgstr ""
+
+#, fuzzy
+#| msgid "Number of arguments for function '%s'"
+msgid "Number of random points for the F function"
+msgstr "Antal argument för funktionen '%s'"
+
+msgid "Empty space distances are sampled at this many uniformly random locations"
+msgstr ""
+
+#, fuzzy
+#| msgid "Maximum distance to the network"
+msgid "Maximum distance for the K and L functions"
+msgstr "Maximalt avstånd till nätverket"
+
+#, fuzzy
+#| msgid "The coordinates are outside of the computational region"
+msgid "Default is one quarter of the shorter side of the computational region"
+msgstr "Koordinaterna ligger utanför beräkningsregionen"
+
+msgid "Edge correction for the K and L functions"
+msgstr ""
+
+msgid "isotropic;Ripley's isotropic edge correction;none;No edge correction"
+msgstr ""
+
+msgid "Used for the random locations of the F function"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Option %s must be positive"
+msgid "Option <%s> must be positive"
+msgstr "Alternativ %s måste vara positivt"
+
+#, c-format
+msgid "Option <%s> is larger than half of the shorter side of the computational region; the estimate becomes unreliable at large distances"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Viewpoint outside of computational region"
+msgid "One point outside of the computational region was ignored"
+msgid_plural "%d points outside of the computational region were ignored"
+msgstr[0] "Utsiktspunkt utanför beräkningsområdet"
+msgstr[1] "Utsiktspunkt utanför beräkningsområdet"
+
+#, fuzzy
+#| msgid "All points fall outside of the current computational region"
+msgid "No points found in the computational region"
+msgstr "Alla punkter faller utanför den aktuella beräkningsregionen"
+
+#, fuzzy, c-format
+#| msgid "At least two points are required"
+msgid "At least 2 points are required, %d found"
+msgstr "Minst två punkter krävs"
+
+#, fuzzy, c-format
+#| msgid "Estimated point density: %.4g"
+msgid "Estimated intensity: %g"
+msgstr "Beräknad punkttäthet: %.4g"
+
+#, fuzzy
+#| msgid "Unable to initialise Freetype"
+msgid "Unable to initialize JSON output"
+msgstr "Det går inte att initiera Freetype"
+
+#, fuzzy
+#| msgid "Failed to serialize JSON to pretty format."
+msgid "Unable to serialize JSON output"
+msgstr "Misslyckades med att serialisera JSON till pretty-format."
+
 msgid "Vector map profiling tool"
 msgstr "Verktyg för profilering med vektorkarta"
 
@@ -34061,6 +34196,12 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 
 msgid "Image file"
 msgstr "Bildfil"
+
+#~ msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
+#~ msgstr "Reprojicerar inmatad dataset till GRASS-projektets koordinatsystem (som standard kan endast dataset med matchande koordinatsystem importeras)"
+
+#~ msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
+#~ msgstr "Infiltrationen överstiger regnmängden överallt! Inget flöde över land."
 
 #, c-format
 #~ msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"

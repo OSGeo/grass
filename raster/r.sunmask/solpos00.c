@@ -432,7 +432,7 @@ static void geometry(struct posdata *pdat)
 {
     float bottom; /* denominator (bottom) of the fraction */
     float c2;     /* cosine of d2 */
-    float cd;     /* cosine of the day angle or delination */
+    float cd;     /* cosine of the day angle or declination */
     float d2;     /* pdat->dayang times two */
     float delta;  /* difference between current year and 1949 */
     float s2;     /* sine of d2 */

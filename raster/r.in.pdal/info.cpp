@@ -183,35 +183,35 @@ void get_reprojected_extent(pdal::SpatialReference &spatial_reference,
         reproject->setInput(reader);
         reproject->prepare(table);
         reproject->execute(table);
+
+        for (pdal::PointId i = 0; i < view->size(); ++i) {
+            double x = view->getFieldAs<double>(pdal::Dimension::Id::X, i);
+            double y = view->getFieldAs<double>(pdal::Dimension::Id::Y, i);
+            double z = view->getFieldAs<double>(pdal::Dimension::Id::Z, i);
+            if (i == 0) {
+                *min_x = *max_x = x;
+                *min_y = *max_y = y;
+                *min_z = *max_z = z;
+            }
+            else {
+                if (*min_x > x)
+                    *min_x = x;
+                if (*min_y > y)
+                    *min_y = y;
+                if (*min_z > z)
+                    *min_z = z;
+                if (*max_x < x)
+                    *max_x = x;
+                if (*max_y < y)
+                    *max_y = y;
+                if (*max_z < z)
+                    *max_z = z;
+            }
+        }
     }
     catch (const std::exception &err) {
         G_fatal_error(_("Reprojection of the data extent failed: %s"),
                       err.what());
-    }
-
-    for (pdal::PointId i = 0; i < view->size(); ++i) {
-        double x = view->getFieldAs<double>(pdal::Dimension::Id::X, i);
-        double y = view->getFieldAs<double>(pdal::Dimension::Id::Y, i);
-        double z = view->getFieldAs<double>(pdal::Dimension::Id::Z, i);
-        if (i == 0) {
-            *min_x = *max_x = x;
-            *min_y = *max_y = y;
-            *min_z = *max_z = z;
-        }
-        else {
-            if (*min_x > x)
-                *min_x = x;
-            if (*min_y > y)
-                *min_y = y;
-            if (*min_z > z)
-                *min_z = z;
-            if (*max_x < x)
-                *max_x = x;
-            if (*max_y < y)
-                *max_y = y;
-            if (*max_z < z)
-                *max_z = z;
-        }
     }
 }
 
