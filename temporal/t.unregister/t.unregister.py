@@ -123,7 +123,7 @@ def main():
             # Unregister from temporal database
             else:
                 # We need to update all datasets after the removement of maps
-                map_item.metadata.select(dbif)
+                map_item.metadata.select(dbif, mapset=mapset)
                 datasets = map_item.get_registered_stds(dbif)
                 # Store all unique dataset ids in a dictionary
                 if datasets:
@@ -141,7 +141,7 @@ def main():
 
     # Execute the collected SQL statenents
     if statement:
-        dbif.execute_transaction(statement)
+        dbif.execute_transaction(statement, mapset=mapset)
 
     gs.percent(num_maps, num_maps, 1)
 
