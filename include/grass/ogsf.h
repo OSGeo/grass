@@ -11,7 +11,8 @@
    \author Thematic mapping enabled by Martin Landa <landa.martin gmail.com)
    (06/2011)
 
-   (C) 2011 by the GRASS Development Team
+   SPDX-FileCopyrightText: 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #ifndef GRASS_OGSF_H

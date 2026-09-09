@@ -1,5 +1,5 @@
 #[[
-COPYRIGHT: (c) 2020-2025 by the GRASS Development Team
+SPDX-FileCopyrightText: 2020-2025 GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 ]]
 

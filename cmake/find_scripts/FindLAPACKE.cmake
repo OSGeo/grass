@@ -1,5 +1,6 @@
 #[[
-COPYRIGHT: (c) 2025 Nicklas Larsson and the GRASS Development Team
+SPDX-FileCopyrightText: 2025 Nicklas Larsson
+SPDX-FileCopyrightText: GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 ]]
 
