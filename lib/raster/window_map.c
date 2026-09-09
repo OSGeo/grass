@@ -108,11 +108,12 @@ void Rast__create_window_mapping(int fd)
        fprintf(stderr, "\n");
      */
 
-    /* For GDAL-linked, non-hflip'ed maps, find the range of native
-     * columns needed by the current region. */
+    /* For GDAL-linked maps, find the range of logical (pre-flip) columns
+     * needed by the current region. read_data_gdal() (get_row.c) mirrors
+     * this range to the physical columns needed for hflip'ed maps. */
     fcb->gdal_min_col = -1;
     fcb->gdal_max_col = -1;
-    if (fcb->gdal && !fcb->gdal->hflip) {
+    if (fcb->gdal) {
         for (i = 0; i < R__.rd_window.cols; i++) {
             if (!fcb->col_map[i])
                 continue;

@@ -2,11 +2,7 @@
 
 Rast_get_row() reads GDAL-linked maps through read_data_gdal(), which
 restricts the GDAL read to the range of native columns that overlap the
-current region instead of always reading the full native row width. That
-column restriction is skipped for maps linked with a horizontal flip, so
-the window tests below are parametrized over hflip/vflip, reusing the same
-source GeoTIFF linked with r.external's -h/-v flags instead of writing out
-an actually mirrored file.
+current region instead of always reading the full native row width.
 """
 
 import os
