@@ -46,6 +46,7 @@ def register_maps_in_space_time_dataset(
     end=None,
     unit=None,
     increment=None,
+    *,
     dbif: SQLDatabaseInterfaceConnection | None = None,
     interval: bool = False,
     fs: str = "|",
@@ -363,7 +364,7 @@ def register_maps_in_space_time_dataset(
                     if map_object_layer:
                         msgr.fatal(
                             _(
-                                "Unable to update {t} map <{id}> "
+                                "Unable to update {t} map <{mid}> "
                                 "with layer {l}. The temporal types "
                                 "are different."
                             ).format(
