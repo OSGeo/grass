@@ -6,11 +6,26 @@ the produced numbers (e.g. a future reimplementation of the internal state)
 is caught here, which makes this a guard for output compatibility.
 
 The reference values below were captured from the current implementation.
+
+The tests at the end instead cover the caller-owned generator, whose
+sequences are not pinned: what matters there is that a stream depends only
+on its seed and index, and not on the presence of other threads.
 """
+
+import threading
+from ctypes import byref
 
 import pytest
 
-from grass.lib.gis import G_drand48, G_lrand48, G_mrand48, G_srand48
+from grass.lib.gis import (
+    G_drand48,
+    G_drand48_r,
+    G_lrand48,
+    G_mrand48,
+    G_srand48,
+    G_srand48_r,
+    struct_G_rand48_state,
+)
 
 # First ten outputs of each generator after G_srand48(seed). The seeds cover
 # 0, 1, two ordinary values, and the largest 32-bit seed value. Matching the
@@ -247,3 +262,106 @@ def test_srand48_is_reproducible():
     G_srand48(1337)
     second = [G_lrand48() for _ in range(20)]
     assert first == second
+
+
+def drand48_stream(seed, stream, count):
+    """Draw count values from the caller-owned generator (seed, stream)."""
+    state = struct_G_rand48_state()
+    G_srand48_r(byref(state), seed, stream)
+    return [G_drand48_r(byref(state)) for _ in range(count)]
+
+
+def test_drand48_r_is_reproducible():
+    """The same seed and stream give the same sequence."""
+    assert drand48_stream(1337, 0, 20) == drand48_stream(1337, 0, 20)
+
+
+def test_drand48_r_range():
+    """Generated values lie in [0, 1)."""
+    assert all(0.0 <= value < 1.0 for value in drand48_stream(42, 3, 1000))
+
+
+def test_drand48_r_streams_differ():
+    """Streams derived from one seed do not repeat each other.
+
+    Consecutive stream indices are the case a caller is most likely to
+    use, so checking that their first values are all distinct guards the
+    step that spaces the streams out along the generator cycle.
+    """
+    firsts = [drand48_stream(1337, stream, 1)[0] for stream in range(64)]
+    assert len(set(firsts)) == len(firsts)
+
+
+@pytest.mark.parametrize("seed", sorted(REFERENCE))
+def test_drand48_r_stream_zero_matches_shared_generator(seed):
+    """Stream 0 continues to produce what the shared generator produces.
+
+    This is what lets code switch from G_drand48() to a caller-owned
+    generator without changing its single-threaded results.
+    """
+    G_srand48(seed)
+    shared = [G_drand48() for _ in range(100)]
+    assert drand48_stream(seed, 0, 100) == shared
+
+
+def test_drand48_r_streams_do_not_run_into_each_other():
+    """Neighbouring streams stay apart over a long run.
+
+    The streams are stretches of one cycle, so the guarantee that they do
+    not overlap rests on the spacing between their starting points. Drawing
+    well past any plausible workload and finding no value of stream 1 in
+    stream 0 checks that the spacing is real.
+    """
+    count = 200000
+    first = drand48_stream(1337, 0, count)
+    second = drand48_stream(1337, 1, count)
+    assert not set(first) & set(second)
+
+
+def test_drand48_r_seeds_differ():
+    """The same stream index under different seeds gives different values."""
+    assert drand48_stream(1, 7, 10) != drand48_stream(2, 7, 10)
+
+
+def test_drand48_r_independent_of_shared_generator():
+    """Drawing from the shared generator does not disturb a caller-owned one."""
+    expected = drand48_stream(1337, 5, 10)
+
+    state = struct_G_rand48_state()
+    G_srand48_r(byref(state), 1337, 5)
+    G_srand48(99)
+    interleaved = []
+    for _ in range(10):
+        G_lrand48()
+        interleaved.append(G_drand48_r(byref(state)))
+
+    assert interleaved == expected
+
+
+def test_drand48_r_unaffected_by_threading():
+    """Each stream yields the same values whether or not threads are used.
+
+    This is the property the shared generator cannot offer: results depend
+    only on the seed and the stream index, never on how many threads run
+    or how they interleave.
+    """
+    seed = 1337
+    num_streams = 8
+    count = 5000
+
+    serial = [drand48_stream(seed, s, count) for s in range(num_streams)]
+
+    threaded = [None] * num_streams
+
+    def worker(stream):
+        threaded[stream] = drand48_stream(seed, stream, count)
+
+    threads = [
+        threading.Thread(target=worker, args=(stream,)) for stream in range(num_streams)
+    ]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+
+    assert threaded == serial

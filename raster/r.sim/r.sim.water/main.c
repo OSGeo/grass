@@ -355,7 +355,8 @@ int main(int argc, char *argv[])
     }
     else {
         /* default as it used to be */
-        G_srand48(12345);
+        seed_value = 12345;
+        G_srand48(seed_value);
     }
 
     G_get_set_window(&cellhd);
@@ -416,6 +417,7 @@ int main(int argc, char *argv[])
     sscanf(parm.hmax->answer, "%lf", &settings.hhmax);
     sscanf(parm.halpha->answer, "%lf", &settings.halpha);
     sscanf(parm.hbeta->answer, "%lf", &settings.hbeta);
+    settings.random_seed = seed_value;
 
     G_debug(3, "Parsing rain parameters");
 

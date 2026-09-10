@@ -628,6 +628,12 @@ struct Popen {
     int pid;
 };
 
+/* State of a pseudo-random number generator owned by the caller rather
+ * than shared by the program; see G_srand48_r(). */
+struct G_rand48_state {
+    unsigned long long state;
+};
+
 typedef int CELL;
 typedef double DCELL;
 typedef float FCELL;
