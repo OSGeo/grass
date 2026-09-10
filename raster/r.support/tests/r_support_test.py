@@ -99,7 +99,7 @@ def test_savehistory_and_loadhistory(session, tmp_path):
 
     history_file = tmp_path / "history.txt"
     tools.r_support(map="test", savehistory=str(history_file))
-    assert history_file.read_text().strip() == expected
+    assert history_file.read_text() == expected + "\n"
 
     tools.r_mapcalc(expression="test2 = 2")
     tools.r_support(map="test2", loadhistory=str(history_file))
