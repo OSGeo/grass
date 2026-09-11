@@ -263,6 +263,7 @@ def print_gridded_dataset_univar_statistics(
         percentile=percentile,
         stdout_=PIPE,
         format="json" if format == "json" else "csv",
+        nprocs=1,
         quiet=True,
         run_=False,
     )
