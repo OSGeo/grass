@@ -126,7 +126,6 @@ def main():
         end=end,
         unit=unit,
         increment=increment,
-        dbif=None,
         interval=interval,
         fs=separator,
     )
