@@ -27,6 +27,8 @@ class TestROutXyz(TestCase):
         """Remove temporary region"""
         cls.del_temp_region()
         Path(cls.csvFile).unlink(missing_ok=True)
+        Path("normal.csv").unlink(missing_ok=True)
+        Path("bottom.csv").unlink(missing_ok=True)
 
     def test_r_out_xyz(self):
         """ASCII text file test"""
@@ -36,6 +38,37 @@ class TestROutXyz(TestCase):
         self.assertModule(module)
 
         self.assertFileExists(filename=self.csvFile)
+
+    def test_r_out_xyz_bottom_to_top(self):
+        """Test bottom-to-top output ordering"""
+
+        normal_file = "normal.csv"
+        bottom_file = "bottom.csv"
+
+        module = SimpleModule(
+            "r.out.xyz",
+            input=self.mapName,
+            output=normal_file,
+            separator=",",
+        )
+        self.assertModule(module)
+
+        module = SimpleModule(
+            "r.out.xyz",
+            input=self.mapName,
+            output=bottom_file,
+            separator=",",
+            flags="b",
+        )
+        self.assertModule(module)
+
+        with open(normal_file, encoding="utf-8") as f:
+            normal_lines = f.read().splitlines()
+
+        with open(bottom_file, encoding="utf-8") as f:
+            bottom_lines = f.read().splitlines()
+
+        self.assertEqual(bottom_lines, list(reversed(normal_lines)))
 
 
 if __name__ == "__main__":

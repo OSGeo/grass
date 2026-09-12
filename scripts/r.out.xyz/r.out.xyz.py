@@ -37,6 +37,10 @@
 # % key: i
 # % description: Include no data values
 # %end
+# %flag
+# % key: b
+# % description: Output rows from bottom to top
+# %end
 
 import sys
 from grass.script import core as grass
@@ -47,6 +51,7 @@ def main():
     # if no output filename, output to stdout
     output = options["output"]
     donodata = flags["i"]
+    bottom_to_top = flags["b"]
 
     statsflags = "1g" if donodata else "1gn"
     parameters = {
@@ -54,14 +59,34 @@ def main():
         "input": options["input"],
         "separator": options["separator"],
     }
-    if output:
+    if output and not bottom_to_top:
         parameters.update(output=output)
 
     ret = 0
+
     try:
-        grass.run_command("r.stats", **parameters)
+        if bottom_to_top:
+            output_text = grass.read_command("r.stats", **parameters)
+
+            lines = output_text.splitlines()
+            lines.reverse()
+
+            if output_text.endswith("\n"):
+                output_text = "\n".join(lines) + "\n"
+            else:
+                output_text = "\n".join(lines)
+
+            if output:
+                with open(output, "w", encoding="utf-8") as f:
+                    f.write(output_text)
+            else:
+                print(output_text, end="")
+        else:
+            grass.run_command("r.stats", **parameters)
+
     except CalledModuleError:
         ret = 1
+
     sys.exit(ret)
 
 
