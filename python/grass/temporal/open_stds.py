@@ -24,12 +24,15 @@ if TYPE_CHECKING:
 import contextlib
 from .abstract_map_dataset import AbstractMapDataset
 from .core import get_current_mapset, get_tgis_message_interface, init_dbif
+from .exceptions import FatalError
 from .factory import dataset_factory
 
 ###############################################################################
 
 
-def _parse_id(ident: str) -> tuple[str, str | None, str | None]:
+def _parse_id(
+    ident: str, stds_type: str = "strds"
+) -> tuple[str, str | None, str | None]:
     """Parse parts of a user given dataset name.
 
     :param ident: The id of a space time dataset
@@ -44,7 +47,7 @@ def _parse_id(ident: str) -> tuple[str, str | None, str | None]:
         name, mapset = ident.split("@", 1)
 
     semantic_label = None
-    if "." in name:
+    if "." in name and stds_type == "strds":
         name, semantic_label = name.split(".", 1)
         if "." in semantic_label:
             msgr.fatal(_("Invalid semantic_label <%s>") % semantic_label)
@@ -104,13 +107,13 @@ def open_old_stds(name, type, dbif=None):
             if semantic_label:
                 sp.set_semantic_label(semantic_label)
 
-        with contextlib.suppress(SystemExit):
+        with contextlib.suppress(SystemExit, FatalError):
             if sp.is_in_db(dbif):
                 return sp
         return None
 
     # Check if the dataset name contains the mapset and the semantic label as well
-    name, mapset, semantic_label = _parse_id(name)
+    name, mapset, semantic_label = _parse_id(name, stds_type=stds_type)
 
     dbif, connection_state_changed = init_dbif(dbif)
 
@@ -176,7 +179,7 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 
     msgr = get_tgis_message_interface()
 
-    name, mapset, _semantic_label = _parse_id(name)
+    name, mapset, _semantic_label = _parse_id(name, stds_type=stds_type)
     if mapset:
         if mapset != get_current_mapset():
             msgr.fatal(
