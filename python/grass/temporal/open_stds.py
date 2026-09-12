@@ -22,9 +22,11 @@ if TYPE_CHECKING:
     from .core import SQLDatabaseInterfaceConnection
     from .abstract_space_time_dataset import AbstractSpaceTimeDataset
 import contextlib
+
+from grass.exceptions import FatalError
+
 from .abstract_map_dataset import AbstractMapDataset
 from .core import get_current_mapset, get_tgis_message_interface, init_dbif
-from .exceptions import FatalError
 from .factory import dataset_factory
 
 ###############################################################################
