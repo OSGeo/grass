@@ -1,0 +1,85 @@
+---
+name: Detect relevant changes reusable workflow
+
+# Reports whether a push or pull request touches anything that could affect
+# a build/test workflow, so that workflow can skip its expensive job. Instead
+# of using on.push.paths/on.pull_request.paths, here only the following job(s)
+# gets skipped, not the whole workflow. That way a required status check,
+# still reports success if it does not have any relevant changes.
+#
+# Usage, as the first job of a workflow:
+# ```
+# jobs:
+#   changes:
+#     uses: ./.github/workflows/detect-relevant-changes.yml
+#     with:
+#       own-workflow-path: .github/workflows/<this-file>.yml
+#   build:
+#     needs: changes
+#     if: ${{ needs.changes.outputs.run == 'true' }}
+#     ...
+# ```
+
+on:
+  workflow_call:
+    inputs:
+      own-workflow-path:
+        type: string
+        required: true
+        description: >-
+          Path of the calling workflow file, e.g. .github/workflows/pytest.yml.
+          Always treated as relevant, since other workflow files are not.
+    outputs:
+      run:
+        description: >-
+          'true' if some changed file could affect a build or test, 'false'
+          if all changed files are documentation, translations, or CI/tooling
+          config unrelated to the calling workflow.
+        value: ${{ jobs.changes.outputs.run }}
+
+permissions: {}
+
+jobs:
+  changes:
+    name: Detect changed files
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    outputs:
+      run: >-
+        ${{ steps.filter.outputs.relevant == 'true' ||
+        steps.filter.outputs.always_relevant == 'true' }}
+    steps:
+      # dorny/paths-filter needs a local git history to diff against.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Check for changes outside of irrelevant files
+        id: filter
+        uses: dorny/paths-filter@ceb8a2b8f2d89434be7ff52d3de7ec3738c5cc9d # v4.0.3
+        with:
+          # Use empty token to force git-based diffing, not GitHub REST API
+          token: ""
+          # For a PR, compare against its base branch
+          # For a push, compares against the previous commit on the same branch
+          base: >-
+            ${{ github.event_name == 'pull_request' &&
+            github.event.pull_request.base.ref || github.ref }}
+          predicate-quantifier: some-with-excludes
+          filters: |
+            relevant:
+              - "**"
+              - "!docker/**"
+              - "!Dockerfile"
+              - "!**/*.po"
+              - "!**/*.md"
+              - "!binder/**"
+              - "!.claude/**"
+              - "!renovate.json5"
+              - "!.editorconfig"
+              - "!.github/**/*.yml"
+              - "!.github/**/*.yaml"
+            always_relevant:
+              - "${{ inputs.own-workflow-path }}"
+              - ".github/workflows/detect-relevant-changes.yml"
+              - ".github/workflows/verify-success.yml"
