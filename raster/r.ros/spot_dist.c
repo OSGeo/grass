@@ -99,7 +99,7 @@ int spot_dist(int fuel, float maxros, int speed, float angle, int row0,
 
     /* get I from Byram's equation, I = R*w*h, cited in Rothermel (1991) */
     R = maxros / 60.0;
-    I = R * w[fuel] * 8000;
+    I = (double)R * w[fuel] * 8000;
 
     /* get h0 (originally z0) and z0 (e0 + h0) from Chase (1984) */
     U = 2 * speed / 88.0;
