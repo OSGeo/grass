@@ -110,12 +110,55 @@ def test_seed_coordinates_on_region_edge_are_rejected(
     assert "Seed point outside the current region" in error.value.errors
 
 
+@pytest.mark.parametrize(
+    "coordinates",
+    [(25.5, 50.5), (25.5, 50.9), (-0.5, 25.5), (-0.9, 25.5)],
+    ids=["north", "north-almost-one-cell", "west", "west-almost-one-cell"],
+)
+def test_seed_coordinates_less_than_a_cell_outside_are_rejected(
+    session_with_flat_terrain, coordinates
+):
+    """Coordinates north or west of the region are outside it.
+
+    Truncating the converted index towards zero turns the whole interval
+    between -1 and 0 into row or column 0, which hides these coordinates from
+    the check below zero.
+    """
+    tools = Tools(session=session_with_flat_terrain)
+
+    with pytest.raises(ToolError) as error:
+        tools.r_lake(
+            elevation="terrain",
+            water_level=10,
+            lake="lake_out",
+            coordinates=coordinates,
+        )
+
+    assert error.value.returncode == 1
+    assert "Seed point outside the current region" in error.value.errors
+
+
 def test_seed_coordinates_in_last_row_are_accepted(session_with_flat_terrain):
     """Coordinates in the last row are inside the region and fill it."""
     tools = Tools(session=session_with_flat_terrain)
 
     tools.r_lake(
         elevation="terrain", water_level=10, lake="lake_out", coordinates=(25.5, 0.5)
+    )
+
+    stats = tools.r_univar(map="lake_out", format="json").json
+    assert stats["n"] == 2500
+
+
+@pytest.mark.parametrize("coordinates", [(25.5, 50), (0, 25.5)], ids=["north", "west"])
+def test_seed_coordinates_on_north_and_west_edge_are_accepted(
+    session_with_flat_terrain, coordinates
+):
+    """The northern and western edges belong to the first row and column."""
+    tools = Tools(session=session_with_flat_terrain)
+
+    tools.r_lake(
+        elevation="terrain", water_level=10, lake="lake_out", coordinates=coordinates
     )
 
     stats = tools.r_univar(map="lake_out", format="json").json
