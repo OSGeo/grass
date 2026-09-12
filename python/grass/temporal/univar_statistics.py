@@ -60,6 +60,9 @@ def compute_univar_stats(
         if stats_module.name == "r3.univar" or not registered_map_info["semantic_label"]
         else registered_map_info["semantic_label"]
     )
+    # Only r.univar, not r3.univar has nprocs parameter
+    if stats_module.name == "r.univar":
+        stats_module.inputs.nprocs = 1
 
     stats_module.inputs.map = id
     if rast_region and (stats_module.inputs.zones or stats_module.name == "r3.univar"):
@@ -263,7 +266,6 @@ def print_gridded_dataset_univar_statistics(
         percentile=percentile,
         stdout_=PIPE,
         format="json" if format == "json" else "csv",
-        nprocs=1,
         quiet=True,
         run_=False,
     )
