@@ -8,14 +8,27 @@ PDAL library. *v.in.pdal* supports the following filters:
 - return filter
 - class filter
 
+## NOTES
+
+The coordinate reference system (CRS) of the input is read from the file
+metadata and compared with the CRS of the current project (previously
+called location). When the two differ, the points are reprojected to the
+project's CRS during the import. The **-w** flag, which used to be
+required to allow the reprojection, is deprecated and has no effect.
+
+The **-o** flag skips the CRS check and assumes that the input is
+already in the project's CRS. Use it when the file has no CRS metadata
+or when the metadata is known to be wrong; without it, the import of a
+file without CRS metadata fails.
+
 ## EXAMPLES
 
-Import only XYZ coordinates of points, limit the import to the current
-computational region and reproject to the current project's coordinate
-reference system during the import:
+Import only XYZ coordinates of points, limit the import to the
+current computational region. The points are reprojected to the
+project's CRS if the CRS of the input differs:
 
 ```sh
-v.in.pdal input=points.las output=points -c -r -w
+v.in.pdal input=points.las output=points -c -r
 ```
 
 ## REFERENCES
