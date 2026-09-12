@@ -2,8 +2,9 @@ from grass.script import core as grass
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.script import vector_info_topo
-import tempfile
+import math
 import os
+import tempfile
 
 
 class TestVGeneralize(TestCase):
