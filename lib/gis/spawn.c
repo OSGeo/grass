@@ -945,6 +945,21 @@ int G_spawn(const char *command, ...)
     return status;
 }
 
+/**
+ * \brief Wait for a spawned process to finish.
+ *
+ * Blocks until the process identified by \p i_pid exits, then returns the
+ * process exit code. On non-Windows platforms, if the process terminates due
+ * to a signal, the signal number is returned instead.
+ *
+ * \param[in] i_pid Process identifier returned by a spawn function.
+ * \return Process exit code on normal termination.
+ * \return Signal number if the process was terminated by a signal on
+ *   non-Windows platforms.
+ * \return -1 if the process cannot be opened, waited for, or queried.
+ * \return -0x100 (-256) if the process ended with an unsupported wait
+ *   status on non-Windows platforms.
+ */
 int G_wait(int i_pid)
 {
 #ifdef _WIN32
