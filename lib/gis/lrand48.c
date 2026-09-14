@@ -132,8 +132,6 @@ static _Atomic unsigned long long state;
 static unsigned long long state;
 #endif
 
-#endif /* LRAND48_ATOMIC */
-
 static int seeded;
 
 /*!
