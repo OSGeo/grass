@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/cs/>\n"
@@ -1388,6 +1388,18 @@ msgstr ""
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display animation"
+msgstr "Zobrazit kartografické zobrazení mapy"
+
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
@@ -1409,6 +1421,11 @@ msgstr "Aktualizuje metadata vektorové vrstvy."
 #, fuzzy
 msgid "Display &temporal extent"
 msgstr "Geometrie okna"
+
+#, fuzzy
+#| msgid "Display map projection"
+msgid "Display &animation"
+msgstr "Zobrazit kartografické zobrazení mapy"
 
 #, fuzzy
 msgid "&Rename dataset"
@@ -12495,9 +12512,6 @@ msgstr ""
 
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "Zobrazit informace o Grafickém modelování"
-
-#~ msgid "Display map projection"
-#~ msgstr "Zobrazit kartografické zobrazení mapy"
 
 #~ msgid "Display mode"
 #~ msgstr "Mód displeje"

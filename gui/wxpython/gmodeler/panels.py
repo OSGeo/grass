@@ -163,7 +163,7 @@ class ModelerPanel(wx.Panel, MainPageBase):
             lambda message: self.SetStatusText(message)
         )
 
-        # here events are binded twice
+        # here events are bound twice
         self._gconsole.Bind(
             EVT_CMD_RUN,
             lambda event: self._switchPageHandler(

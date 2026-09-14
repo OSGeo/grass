@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_si\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2017-05-23 21:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: Sinhala (https://www.transifex.com/grass-gis/teams/45198/si/)\n"
@@ -1340,6 +1340,16 @@ msgstr ""
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+msgid "Display animation"
+msgstr ""
+
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
@@ -1353,6 +1363,9 @@ msgid "Update metadata"
 msgstr ""
 
 msgid "Display &temporal extent"
+msgstr ""
+
+msgid "Display &animation"
 msgstr ""
 
 msgid "&Rename dataset"

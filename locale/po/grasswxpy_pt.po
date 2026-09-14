@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/pt/>\n"
@@ -1374,6 +1374,18 @@ msgstr ""
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display mode"
+msgid "Display animation"
+msgstr "Modo de exibição"
+
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
@@ -1395,6 +1407,11 @@ msgstr "Metadata básica de raster"
 #, fuzzy
 msgid "Display &temporal extent"
 msgstr "Mostrar lo seleccionado"
+
+#, fuzzy
+#| msgid "Display mode"
+msgid "Display &animation"
+msgstr "Modo de exibição"
 
 #, fuzzy
 msgid "&Rename dataset"
@@ -11834,9 +11851,6 @@ msgstr ""
 
 #~ msgid "Digitize"
 #~ msgstr "Digitalizar"
-
-#~ msgid "Display mode"
-#~ msgstr "Modo de exibição"
 
 #~ msgid "Displays version and copyright information."
 #~ msgstr "Exibir versão e informação do copywright."

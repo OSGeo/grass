@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2014-05-03 16:44-0400\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -1370,6 +1370,18 @@ msgstr ""
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Edit animation"
+msgid "Display animation"
+msgstr "애니메이션 편집"
+
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
@@ -1390,6 +1402,11 @@ msgstr "지도 통계 갱신"
 
 msgid "Display &temporal extent"
 msgstr ""
+
+#, fuzzy
+#| msgid "Edit animation"
+msgid "Display &animation"
+msgstr "애니메이션 편집"
 
 #, fuzzy
 msgid "&Rename dataset"

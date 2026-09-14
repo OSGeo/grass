@@ -92,7 +92,7 @@ GridHeader *read_header(char *rastName, Cell_head *region)
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    /*check for loss of prescion */
+    /*check for loss of precision */
     if (nrows <= maxDimension && ncols <= maxDimension) {
         hd->nrows = (dimensionType)nrows;
         hd->ncols = (dimensionType)ncols;
@@ -866,7 +866,7 @@ void save_io_visibilitygrid_to_GRASS(IOVisibilityGrid *visgrid, char *fname,
         for (j = 0; j < (dimensionType)ncols; j++) {
 
             if (curResult->row == i && curResult->col == j) {
-                /*cell is recodred in the visibility stream: it must be
+                /*cell is recorded in the visibility stream: it must be
                    either visible, or NODATA  */
                 if (is_visible(curResult->angle))
                     writeValue(visrast, j, fun(curResult->angle), type);
@@ -991,7 +991,7 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
             }
 
             if (curResult->row == i && curResult->col == j) {
-                /*cell is recodred in the visibility stream: it must be
+                /*cell is recorded in the visibility stream: it must be
                    either visible, or NODATA  */
                 if (is_visible(curResult->angle))
                     writeValue(visrast, j, elev - vp_elev, elev_data_type);

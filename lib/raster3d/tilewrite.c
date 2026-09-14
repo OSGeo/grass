@@ -132,7 +132,7 @@ int Rast3d_write_tile(RASTER3D_Map *map, int tileIndex, const void *tile,
     int rows, cols, depths, xRedundant, yRedundant, zRedundant, nofNum;
 
     /* valid tileIndex ? */
-    if ((tileIndex > map->nTiles) || (tileIndex < 0))
+    if ((tileIndex >= map->nTiles) || (tileIndex < 0))
         Rast3d_fatal_error("Rast3d_write_tile: tileIndex out of range");
 
     /* already written ? */

@@ -6,13 +6,14 @@
 # Vincent Bain <bain toraval.fr>, 2007, 2012.
 # Sylvain Maillard <sylvain.maillard gmail.com>, 2011-2015, 2017.
 # Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
+# Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
-"PO-Revision-Date: 2026-08-09 16:49+0000\n"
-"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"PO-Revision-Date: 2026-09-05 15:05+0000\n"
+"Last-Translator: Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -500,7 +501,7 @@ msgstr "vers %(to)s"
 
 #, python-brace-format
 msgid "Rendering process failed with exit code {code}."
-msgstr ""
+msgstr "Le processus de rendu a échoué avec le code de sortie {code}."
 
 msgid "Rendering map layers"
 msgstr "Rendu des couches"
@@ -1007,15 +1008,11 @@ msgstr "Créer une carte raster à partir de données x,y,z  [r.in.xyz]"
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr "Créer une carte vectorielle à partir de données x,y,z  [v.in.ascii]"
 
-#, fuzzy
-#| msgid "Imports space time raster dataset."
 msgid "Import space time raster dataset  [t.rast.import]"
-msgstr "Importer un jeu de données raster temporel."
+msgstr "Importer un jeu de données raster spatiotemporel  [t.rast.import]"
 
-#, fuzzy
-#| msgid "Import vector data  [v.import]"
 msgid "Import space time vector dataset  [t.vect.import]"
-msgstr "Importer des données vectorielles  [v.import]"
+msgstr "Importer un jeu de données vecteur spatiotemporel  [t.vect.import]"
 
 msgid "Link external data"
 msgstr "Lier des données externes"
@@ -1165,16 +1162,16 @@ msgid ""
 "Unable to import the temporal framework: {e}\n"
 "Space time datasets will not be listed"
 msgstr ""
+"Impossible d'importer le cadre temporel : {e}\n"
+"Les jeux de données spatiotemporels ne seront pas répertoriés"
 
-#, fuzzy, python-brace-format
-#| msgid "Failed to read mapsets from project <{l}>."
+#, python-brace-format
 msgid "Failed to read temporal datasets from project <{l}>: {e}"
-msgstr "Impossible de lire les jeux de cartes du projet {l}."
+msgstr "Impossible de lire les jeux de données temporels du projet <{l}> : {e}"
 
-#, fuzzy, python-brace-format
-#| msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
+#, python-brace-format
 msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
-msgstr "La carte <{name}> de type <{elem}> existe déjà dans le jeu de cartes <{mapset}>. Voulez-vous l'écraser ?"
+msgstr "Le jeu de données spatiotemporel de type {elem} <{name}> existe déjà dans le jeu de cartes <{mapset}>."
 
 #, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
@@ -1235,14 +1232,12 @@ msgstr "Nouveau nom"
 msgid "Rename map"
 msgstr "Renommer la carte"
 
-#, fuzzy
-#| msgid "&Rename mapset"
 msgid "Rename dataset"
-msgstr "&Renommer le jeu de cartes"
+msgstr "Renommer le jeu de données"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Renaming dataset <{old}> to <{new}>..."
-msgstr "Renommage du jeu de cartes <{oldmapset}> en <{newmapset}> terminé"
+msgstr "Renommage du jeu de données <{old}> en <{new}>..."
 
 #, python-brace-format
 msgid "{cmd} -- completed"
@@ -1299,15 +1294,13 @@ msgstr "La reprojection n'est pas implémentée pour les cartes raster 3D"
 msgid "g.remove completed"
 msgstr "g.remove terminé"
 
-#, fuzzy, python-brace-format
-#| msgid "Do you really want to delete map(s) <{m}>?"
+#, python-brace-format
 msgid "Do you really want to delete map <{m}>?"
-msgstr "Voulez-vous vraiment supprimer la ou les cartes <{m}> ?"
+msgstr "Voulez-vous vraiment supprimer la carte <{m}> ?"
 
-#, fuzzy, python-brace-format
-#| msgid "Do you really want to delete map(s) <{m}>?"
+#, python-brace-format
 msgid "Do you really want to delete maps <{m}>?"
-msgstr "Voulez-vous vraiment supprimer la ou les cartes <{m}> ?"
+msgstr "Voulez-vous vraiment supprimer les cartes <{m}> ?"
 
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
@@ -1320,51 +1313,39 @@ msgstr "Supprimer la carte"
 msgid "Deleting {name}..."
 msgstr "Suppression de {name} ..."
 
-#, fuzzy, python-brace-format
-#| msgid "Deleting {name}..."
+#, python-brace-format
 msgid "Deleting {n} maps..."
-msgstr "Suppression de {name} ..."
+msgstr "Suppression de {n} cartes…"
 
-#, fuzzy, python-brace-format
-#| msgid "Do you really want to delete map(s) <{m}>?"
+#, python-brace-format
 msgid "Do you really want to delete dataset <{m}>?"
-msgstr "Voulez-vous vraiment supprimer la ou les cartes <{m}> ?"
+msgstr "Voulez-vous vraiment supprimer le jeu de données <{m}> ?"
 
-#, fuzzy, python-brace-format
-#| msgid "Do you really want to delete map(s) <{m}>?"
+#, python-brace-format
 msgid "Do you really want to delete datasets <{m}>?"
-msgstr "Voulez-vous vraiment supprimer la ou les cartes <{m}> ?"
+msgstr "Voulez-vous vraiment supprimer les jeux de données <{m}> ?"
 
-#, fuzzy, python-brace-format
-#| msgid "Do you really want to delete {n} maps?"
+#, python-brace-format
 msgid "Do you really want to delete {n} datasets?"
-msgstr "Voulez-vous vraiment supprimer {n} cartes ?"
+msgstr "Voulez-vous vraiment supprimer {n} jeux de données ?"
 
-#, fuzzy
-#| msgid "Delete selected mapset"
 msgid "Delete dataset and maps"
-msgstr "Effacer le jeu de cartes sélectionné"
+msgstr "Supprimer le jeu de données et les cartes"
 
 msgid "All maps registered in the dataset will be deleted as well."
-msgstr ""
+msgstr "Toutes les cartes enregistrées dans le jeu de données seront également supprimées."
 
 msgid "All maps registered in the datasets will be deleted as well."
-msgstr ""
+msgstr "Toutes les cartes enregistrées dans les jeux de données seront également supprimées."
 
-#, fuzzy
-#| msgid "&Delete mapset"
 msgid "Delete dataset"
-msgstr "&Supprimer le jeu de cartes"
+msgstr "Supprimer le jeu de données"
 
-#, fuzzy
-#| msgid "Deleting {name}..."
 msgid "Deleting datasets..."
-msgstr "Suppression de {name} ..."
+msgstr "Suppression des jeux de données..."
 
-#, fuzzy
-#| msgid "g.remove completed"
 msgid "t.remove completed"
-msgstr "g.remove terminé"
+msgstr "t.remove terminé"
 
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "Pour déplacer ou copier des cartes depuis d'autres jeux de cartes, débloquez l'édition d'autres jeux de cartes"
@@ -1372,72 +1353,67 @@ msgstr "Pour déplacer ou copier des cartes depuis d'autres jeux de cartes, déb
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr "Pour déplacer ou copier des cartes vers un autre projet, veuillez les glisser vers un jeu de cartes dans le projet de destination"
 
-#, fuzzy, python-brace-format
-#| msgid "Do you really want to delete map(s) <{m}>?"
+#, python-brace-format
 msgid "Do you really want to unregister map <{m}>?"
-msgstr "Voulez-vous vraiment supprimer la ou les cartes <{m}> ?"
+msgstr "Voulez-vous vraiment désenregistrer la carte <{m}> ?"
 
-#, fuzzy, python-brace-format
-#| msgid "Do you really want to delete {n} maps?"
+#, python-brace-format
 msgid "Do you really want to unregister {n} maps?"
-msgstr "Voulez-vous vraiment supprimer {n} cartes ?"
+msgstr "Voulez-vous vraiment désenregistrer {n} cartes ?"
 
-#, fuzzy
-#| msgid "no raster map"
 msgid "Unregister map"
-msgstr "pas de carte raster"
+msgstr "Désenregistrer la carte"
 
-#, fuzzy
-#| msgid "no raster map"
 msgid "Unregistering map..."
-msgstr "pas de carte raster"
+msgstr "Désenregistrement de la carte…"
 
 #, python-brace-format
 msgid "Unregistering {c} maps..."
-msgstr ""
+msgstr "Désenregistrement de {c} cartes…"
 
 msgid "Successfully unregistered map"
-msgstr ""
+msgstr "Désenregistrement de la carte effectué avec succès"
 
 #, python-brace-format
 msgid "Successfully unregistered {c} maps"
+msgstr "Désenregistrement de {c} cartes effectué avec succès"
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
 msgstr ""
+
+msgid "Display animation"
+msgstr "Afficher l'animation"
 
 msgid "Cannot merge temporal datasets of different types."
-msgstr ""
+msgstr "Impossible de fusionner des jeux de données temporels de types différents."
 
-#, fuzzy
-#| msgid "Raster maps"
 msgid "&Register maps"
-msgstr "Cartes raster"
+msgstr "Enregistre&r les cartes"
 
-#, fuzzy
-#| msgid "no raster map"
 msgid "&Unregister maps"
-msgstr "pas de carte raster"
+msgstr "Désenregistrer les cartes"
 
 msgid "Update metadata"
 msgstr "Mettre à jour les métadonnées"
 
-#, fuzzy
-#| msgid "Plot temporal extents."
 msgid "Display &temporal extent"
-msgstr "Afficher l'emprise temporelle."
+msgstr "Afficher l'emprise &temporelle"
 
-#, fuzzy
-#| msgid "&Rename mapset"
+msgid "Display &animation"
+msgstr "Afficher l'&animation"
+
 msgid "&Rename dataset"
-msgstr "&Renommer le jeu de cartes"
+msgstr "&Renommer le jeu de données"
 
-#, fuzzy
-#| msgid "&Delete mapset"
 msgid "&Delete dataset only"
-msgstr "&Supprimer le jeu de cartes"
+msgstr "Supprimer uniquement le jeu de &données"
 
-#, fuzzy
-#| msgid "Export raster dataset"
 msgid "&Export dataset"
-msgstr "Exporter un jeu de données raster"
+msgstr "&Exporter le jeu de données"
 
 msgid "Show &metadata"
 msgstr "Montrer les &métadonnées"
@@ -1454,10 +1430,8 @@ msgstr "Afficher les couches"
 msgid "&Display layer"
 msgstr "Afficher la couche"
 
-#, fuzzy
-#| msgid "no raster map"
 msgid "&Unregister map"
-msgstr "pas de carte raster"
+msgstr "Désenregistrer la carte"
 
 msgid "&Cut"
 msgstr "&Couper"
@@ -1473,10 +1447,8 @@ msgstr "&Effacer"
 msgid "&Rename"
 msgstr "&Renommer"
 
-#, fuzzy
-#| msgid "Connect temporal database"
 msgid "Create &temporal dataset"
-msgstr "Connexion à une base de données temporelle"
+msgstr "Créer un jeu de données &temporel"
 
 msgid "&Switch mapset"
 msgstr "Changer de jeux de cartes"
@@ -1487,10 +1459,8 @@ msgstr "&Supprimer le jeu de cartes"
 msgid "&Rename mapset"
 msgstr "&Renommer le jeu de cartes"
 
-#, fuzzy
-#| msgid "Re&load maps"
 msgid "Re&load mapset"
-msgstr "Recharger &les cartes"
+msgstr "Récharger &le jeu de cartes"
 
 msgid "Show computational region"
 msgstr "Afficher la région de calculs"
@@ -1507,10 +1477,8 @@ msgstr "Supprimer le projet"
 msgid "&Rename project"
 msgstr "&Renommer le projet"
 
-#, fuzzy
-#| msgid "Reload GRASS projects"
 msgid "Re&load project"
-msgstr "Recharger les projets GRASS"
+msgstr "Recharger &le projet"
 
 msgid "Show projection info"
 msgstr "Afficher les informations de la projection"
@@ -1539,10 +1507,8 @@ msgstr "Supprimer la base de données GRASS du catalogue de données"
 msgid "&Delete GRASS database from disk"
 msgstr "&Supprimer la base de données GRASS du disque"
 
-#, fuzzy
-#| msgid "Reload default table"
 msgid "Re&load database"
-msgstr "Recharger la table par défaut"
+msgstr "Recharger &la base de données"
 
 msgid "&Delete projects (locations)"
 msgstr "Supprimer les projets (Secteurs)"
@@ -1556,20 +1522,14 @@ msgstr "Supprimer les jeux de cartes"
 msgid "&Copy paths"
 msgstr "&Copier les chemins d'accès"
 
-#, fuzzy
-#| msgid "Manage datasets"
 msgid "&Merge datasets"
-msgstr "Gérer les jeux de données"
+msgstr "Fusionner les jeux de données"
 
-#, fuzzy
-#| msgid "&Delete mapsets"
 msgid "&Delete datasets only"
-msgstr "Supprimer les jeux de cartes"
+msgstr "Supprimer uniquement les jeux de &données"
 
-#, fuzzy
-#| msgid "Delete selected mapset"
 msgid "Delete datasets and maps"
-msgstr "Effacer le jeu de cartes sélectionné"
+msgstr "Supprimer les jeux de données et les cartes"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
@@ -9276,7 +9236,7 @@ msgid "PostScript file generated"
 msgstr "Fichier PostScript généré"
 
 msgid "Generating preview, wait please"
-msgstr "Génération de l'aperçu en cours ..."
+msgstr "Génération de l'aperçu, veuillez patienter"
 
 msgid "Preview not available"
 msgstr "Aperçu non disponible"
@@ -10358,17 +10318,14 @@ msgstr "L'outil de graphiques temporels nécessite que le paquet 'matplotlib' (p
 msgid "Temporal Plot Tool"
 msgstr "Outil d'affichage temporel"
 
-#, fuzzy
-#| msgid ""
-#| "Raster temporal dataset (strds)\n"
-#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Raster temporal dataset (strds)\n"
 "\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 "Jeu de données raster temporel (strds)\n"
-"Appuyez sur ENTRÉE après avoir tapé le nom ou sélectionnez dans la boite de dialogue"
+"\n"
+"Appuyez sur ENTRÉE après avoir tapé le nom ou sélectionnez dans la liste déroulante"
 
 msgid "X and Y coordinates separated by comma:"
 msgstr "coordonnées X et Y séparées par des virgules :"
@@ -10382,17 +10339,14 @@ msgstr ""
 msgid "STRDS"
 msgstr "STRDS"
 
-#, fuzzy
-#| msgid ""
-#| "Vector temporal dataset (stvds)\n"
-#| "Press ENTER after typing the name or select with the combobox"
 msgid ""
 "Vector temporal dataset (stvds)\n"
 "\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
 "Jeu de données vecteur temporel (stvds)\n"
-"Appuyez sur ENTRÉE après avoir tapé le nom ou sélectionnez depuis la boite de dialogue"
+"\n"
+"Appuyez sur ENTRÉE après avoir tapé le nom ou sélectionnez dans la liste déroulante"
 
 msgid "Select attribute column"
 msgstr "Sélectionner la colonne d'attribut"
@@ -13090,9 +13044,6 @@ msgstr ""
 
 #~ msgid "Display information about Graphical Modeler"
 #~ msgstr "Afficher les informations concernant le Modeleur Graphique"
-
-#~ msgid "Display map projection"
-#~ msgstr "Affiche la projection de la carte"
 
 #~ msgid "Display mode"
 #~ msgstr "Mode d'affichage"

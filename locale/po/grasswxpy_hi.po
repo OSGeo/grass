@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-22 17:13+0000\n"
+"POT-Creation-Date: 2026-08-29 18:49+0000\n"
 "PO-Revision-Date: 2026-03-05 11:44+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hi/>\n"
@@ -1405,6 +1405,18 @@ msgstr ""
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display animation"
+msgstr "मानचित्र प्रदर्शित करें"
+
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
@@ -1427,6 +1439,11 @@ msgstr "SShhooww  &&mmeettaaddaattaa"
 #| msgid "Display extent"
 msgid "Display &temporal extent"
 msgstr "प्रदर्शन सीमा"
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display &animation"
+msgstr "मानचित्र प्रदर्शित करें"
 
 #, fuzzy
 #| msgid "&Rename mapset"

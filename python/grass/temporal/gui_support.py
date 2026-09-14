@@ -34,7 +34,9 @@ def tlist_grouped(type, group_type: bool = False, dbif=None):
         ['precipitation', 'temperature']
 
     :param type: element type (strds, str3ds, stvds)
-    :param group_type: TBD
+    :param group_type: If True, group results by dataset type within each
+        mapset (dict of dicts); otherwise return a flat list of dataset names
+        per mapset (dict of lists).
 
     :return: directory of mapsets/elements
     """

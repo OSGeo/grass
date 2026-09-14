@@ -10,7 +10,7 @@ Usage:
     output = "temp_1950_2012"
     directory = "/tmp"
     title = "My new dataset"
-    descr = "May new shiny dataset"
+    descr = "My new shiny dataset"
     location = None
     link = True
     exp = True
@@ -613,7 +613,6 @@ def import_stds(
             start="file",
             end="file",
             unit=relative_time_unit,
-            dbif=None,
             fs=fs,
             update_cmd_list=False,
         )

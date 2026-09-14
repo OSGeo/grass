@@ -11,15 +11,13 @@ SPDX-License-Identifier: GPL-2.0-or-later
 import os
 import json
 from pathlib import Path
-from tempfile import NamedTemporaryFile
 
 from grass.script import read_command
 from grass.script import decode
-from grass.script.core import tempname
+from grass.script.core import tempfile, tempname
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.checkers import keyvalue_equals, diff_keyvalue
-from grass.gunittest.utils import xfail_windows
 
 
 class MatrixCorrectnessTest(TestCase):
@@ -488,19 +486,18 @@ class JSONOutputTest(TestCase):
                 ),
             )
 
-    @xfail_windows
     def test_file(self):
         for i in range(len(self.references)):
-            f = NamedTemporaryFile()
+            outfile = tempfile(create=False)
             self.runModule(
                 "r.kappa",
                 reference=self.references[i],
                 classification=self.classifications[i],
-                output=f.name,
+                output=outfile,
                 format="json",
                 overwrite=True,
             )
-            json_out = json.loads(f.read())
+            json_out = json.loads(Path(outfile).read_text())
             self.assertTrue(
                 keyvalue_equals(
                     self.expected_outputs[i], json_out, precision=self.precision

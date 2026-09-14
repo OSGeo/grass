@@ -68,6 +68,7 @@ skip = [
     "utils/fix_typos.sh",
     "utils/release.yml",                  # TODO
     '*.dox',                              # TODO
+    "*.svg",                              # Embedded base64 image data
 ]
 
 [tool.ruff]
