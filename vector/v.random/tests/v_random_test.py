@@ -32,7 +32,7 @@ def test_number_of_points(session):
     tools = Tools(session=session)
     tools.v_random(output="points", npoints=NPOINTS)
 
-    topology = tools.v_info(map="points", flags="t", format="json").json
+    topology = tools.v_info(map="points", flags="t", format="json")
     assert topology["points"] == NPOINTS
 
 
@@ -52,6 +52,6 @@ def test_restrict_to_area(session):
     tools.v_random(output="points", npoints=NPOINTS, restrict="restrict_area")
     tools.v_clip(input="points", clip="restrict_area", output="clipped")
 
-    points = tools.v_info(map="points", flags="t", format="json").json
-    clipped = tools.v_info(map="clipped", flags="t", format="json").json
+    points = tools.v_info(map="points", flags="t", format="json")
+    clipped = tools.v_info(map="clipped", flags="t", format="json")
     assert points["points"] == clipped["points"] == NPOINTS
