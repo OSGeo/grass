@@ -354,7 +354,7 @@ def set_dynamic_library_path(variable_name, install_path, env):
     if library_path in existing.split(os.pathsep):
         return
     env[variable_name] = (
-        existing + os.pathsep + library_path if existing else library_path
+        (existing + os.pathsep + library_path) if existing else library_path
     )
 
 
