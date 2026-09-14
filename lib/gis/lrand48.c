@@ -47,15 +47,6 @@
 #define LRAND48_ATOMIC 0
 #endif
 
-#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L && \
-    !defined(__STDC_NO_ATOMICS__)
-#include <stdatomic.h>
-#include <stdint.h>
-#define LRAND48_ATOMIC 1
-#else
-#define LRAND48_ATOMIC 0
-#endif
-
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
@@ -136,10 +127,6 @@ static int seeded;
 
 /*!
  * \brief Seed the shared pseudo-random number generator
- *
- * This function is not thread-safe. In a multi-threaded program, call
- * `G_srand48()` once *before* starting the worker threads; it must not
- * run concurrently with another thread seeding or generating values.
  *
  * This function is not thread-safe. In a multi-threaded program, call
  * `G_srand48()` once *before* starting the worker threads; it must not
