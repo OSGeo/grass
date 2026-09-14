@@ -57,6 +57,10 @@
 # % description: Remove stds, unregister maps from temporal database and delete them from mapset
 # %end
 
+# %rules
+# % exclusive: inputs, file
+# %end
+
 import grass.script as gs
 
 # lazy imports at the end of the file
@@ -73,23 +77,28 @@ def main():
     force = flags["f"]
     clean = flags["d"]
 
-    if datasets and file:
-        gs.fatal(_("%s= and %s= are mutually exclusive") % ("input", "file"))
+    mapset = gs.gisenv()["MAPSET"]
 
-    # Make sure the temporal database exists
-    tgis.init()
+    # Initialize TGIS, the temporal database has to exist already
+    tgis.init(skip_db_init=True)
 
-    dbif = tgis.SQLDatabaseInterfaceConnection()
+    dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=mapset)
+
+    # No TGIS DB found in the current mapset
+    if not dbif.tgis_mapsets:
+        gs.message(
+            _(
+                "No temporal database found in the requested mapset(s). No datasets to list."
+            )
+        )
+        return
     dbif.connect()
 
     dataset_list = []
 
     # Dataset names as comma separated string
     if datasets:
-        if datasets.find(",") == -1:
-            dataset_list = (datasets,)
-        else:
-            dataset_list = tuple(datasets.split(","))
+        dataset_list = datasets.split(",")
 
     if file:
         line = True
@@ -132,15 +141,14 @@ def main():
                         "from spatial database:"
                     )
 
-                if recursive or clean:
-                    gs.message(msg.format(stds=sp.get_type(), gid=sp.get_id()))
+                gs.message(msg.format(stds=sp.get_type(), gid=sp.get_id()))
 
             maps = sp.get_registered_maps_as_objects(dbif=dbif)
             map_statement = ""
             count = 1
             name_list = []
             for map in maps:
-                map.select(dbif)
+                map.select(dbif, mapset=mapset)
                 # We may have multiple layer for a single map, hence we need
                 # to avoid multiple deletions of the same map,
                 # but the database entries are still present and must be removed
@@ -167,7 +175,7 @@ def main():
                     name_list = []
 
             if map_statement:
-                dbif.execute_transaction(map_statement)
+                dbif.execute_transaction(map_statement, mapset=mapset)
             if clean and name_list:
                 if type == "strds":
                     remove(type="raster", name=name_list, run_=True)
@@ -187,7 +195,7 @@ def main():
         )
     else:
         # Execute the collected SQL statenents
-        dbif.execute_transaction(statement)
+        dbif.execute_transaction(statement, mapset=mapset)
         dbif.close()
 
 
