@@ -91,10 +91,13 @@ def main():
     update = flags["u"]
     map_update = flags["m"]
 
-    # Make sure the temporal database exists
-    tgis.init()
+    mapset = gs.gisenv()["MAPSET"]
 
-    dbif = tgis.SQLDatabaseInterfaceConnection()
+    # Try initializing the temporal database in the current mapset
+    tgis.init(skip_db_init=True)
+    dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=mapset)
+    if not dbif.tgis_mapsets:
+        gs.fatal(_("No temporal database found in the current mapset."))
     dbif.connect()
 
     stds = tgis.open_old_stds(name, type, dbif)
@@ -154,7 +157,7 @@ def main():
                 statement += map.delete(dbif=dbif, update=False, execute=False)
 
         # Execute the collected SQL statements
-        dbif.execute_transaction(statement)
+        dbif.execute_transaction(statement, mapsets=mapset)
 
         # Update the effected space time datasets
         for id in dataset_dict:

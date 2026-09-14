@@ -25,9 +25,13 @@ def main():
     # lazy imports
     import grass.temporal as tgis
 
-    tgis.init(skip_db_version_check=True)
+    mapset = gs.gisenv()["MAPSET"]
+    tgis.init(skip_db_init=True, skip_db_version_check=True)
 
-    dbif = tgis.SQLDatabaseInterfaceConnection()
+    dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=mapset)
+    if not dbif.tgis_mapsets:
+        gs.message(_("No temporal database found in the current mapset."))
+        return
     dbif.connect()
 
     tgis.upgrade_temporal_database(dbif)
