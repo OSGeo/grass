@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Use this script to generate the VTK files for 3D raster visualization
 # showing cells, tiles and tile dimension.
 # VTK files can bevisualized with Paraview (www.paraview.org)
