@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Regression tests for the library drand48-family PRNG
 
 These tests pin the exact output sequence of G_lrand48, G_mrand48 and
