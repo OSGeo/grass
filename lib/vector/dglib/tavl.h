@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 1998-2002, 2004 Free Software Foundation, Inc.
+// SPDX-License-Identifier: LGPL-3.0-or-later
 /* Produced by texiweb from libavl.w. */
 
 /* libavl - library for manipulation of binary trees.

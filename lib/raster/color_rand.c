@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <time.h>   /*  For time()  */
 #include <stdio.h>  /*  For NULL */
 #include <stdlib.h> /*  For rand() and srand() */

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: David D. Gray <ddgray@armadce.demon.co.uk>
+// SPDX-License-Identifier: GPL-2.0-or-later
 /******************************************************************************
  * la.c
  * wrapper modules for linear algebra problems

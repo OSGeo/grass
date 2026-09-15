@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**************************************************************
  * Rast_histogram_eq (histo, map, min, max)
  *

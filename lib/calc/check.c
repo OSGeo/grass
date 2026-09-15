@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <grass/calc.h>
 
 int c_int0(int argc, int *argt)

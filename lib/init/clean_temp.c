@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <grass/config.h>
 #include <stdlib.h>
 #include <stdio.h>

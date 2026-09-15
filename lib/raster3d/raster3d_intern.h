@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef RASTER3D_INTERN_H
 #define RASTER3D_INTERN_H
 
