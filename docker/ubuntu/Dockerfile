@@ -320,9 +320,9 @@ RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends --no-install-suggests \
     $GRASS_GUI_PACKAGES \
-    && python3 -m pip install  -U --break-system-packages --no-cache-dir --upgrade \
-    -f https://github.com/wxWidgets/Phoenix/releases/expanded_assets/wxPython-${WXPYTHON_VERSION} \
-    "wxpython==${WXPYTHON_VERSION}+ubuntu2604" \
+    && PY_TAG=$(python3 -c "import sys; print(f'cp{sys.version_info.major}{sys.version_info.minor}')") \
+    && python3 -m pip install -U --break-system-packages --no-cache-dir \
+        "https://github.com/wxWidgets/Phoenix/releases/download/wxPython-${WXPYTHON_VERSION}/wxpython-${WXPYTHON_VERSION}%2Bubuntu2604-${PY_TAG}-${PY_TAG}-linux_x86_64.whl" \
     # Clean up
     && pip cache purge \
     && apt-get autoremove -y \
