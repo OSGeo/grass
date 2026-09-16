@@ -19,7 +19,7 @@ ARG PDAL_VERSION=2.10.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=2.0.0
 # renovate: datasource=pypi depName=wxPython
-ARG WXPYTHON_VERSION=4.2.5
+ARG WXPYTHON_VERSION=4.3.1
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"
@@ -188,7 +188,7 @@ ARG GRASS_PYTHON_PACKAGES="\
   psycopg2 \
   python-dateutil \
   python-magic \
-  setuptools==80.9.0 \
+  setuptool \
   cython \
 "
 
@@ -321,8 +321,8 @@ RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
     && apt-get install -y --no-install-recommends --no-install-suggests \
     $GRASS_GUI_PACKAGES \
     && python3 -m pip install  -U --break-system-packages --no-cache-dir --upgrade \
-    -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-24.04 \
-    "wxpython==${WXPYTHON_VERSION}" \
+    -f https://github.com/wxWidgets/Phoenix/releases/expanded_assets/wxPython-${WXPYTHON_VERSION} \
+    "wxpython==${WXPYTHON_VERSION}+ubuntu2604" \
     # Clean up
     && pip cache purge \
     && apt-get autoremove -y \
