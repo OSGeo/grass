@@ -4,12 +4,12 @@
 #       Changes to this file must be copied over to the other file.
 ARG GUI=without
 
-FROM ubuntu:24.04@sha256:4fbb8e6a8395de5a7550b33509421a2bafbc0aab6c06ba2cef9ebffbc7092d90 AS common_start
+FROM ubuntu:26.04@sha256:e5a4d6262ab5dbc25a85e60550dd7c87fd41a74fe43881534ed8288b2a7a3f8d AS common_start
 
-ARG BASE_NAME="ubuntu:24.04"
-ARG PYTHON_VERSION=3.12
+ARG BASE_NAME="ubuntu:26.04"
+ARG PYTHON_VERSION=3.14
 # renovate: datasource=github-tags depName=libgeos/geos
-ARG GEOS_VERSION=3.14.1
+ARG GEOS_VERSION=3.15.0
 # renovate: datasource=github-tags depName=OSGeo/PROJ
 ARG PROJ_VERSION=9.8.1
 # renovate: datasource=github-tags depName=OSGeo/gdal
@@ -32,6 +32,12 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 SHELL ["/bin/bash", "-c"]
 
+# If you do not use any Gnome Accessibility features, to suppress warning
+# WARNING **: Couldn't connect to accessibility bus:
+# execute programs with
+ENV NO_AT_BRIDGE=1
+
+# Install runtime-packages
 # Todo: re-consider required dev packages for addons (~400MB in dev packages)
 ARG GRASS_RUN_PACKAGES="\
   bison \
@@ -45,7 +51,7 @@ ARG GRASS_RUN_PACKAGES="\
   gcc \
   git \
   language-pack-en-base \
-  libarmadillo12 \
+  libarmadillo15 \
   libcairo2 \
   libcurl4-gnutls-dev \
   libfftw3-bin \
@@ -55,7 +61,7 @@ ARG GRASS_RUN_PACKAGES="\
   libgeotiff5 \
   libgif7 \
   libgsl-dev \
-  libgsl27 \
+  libgsl28 \
   libhdf5-dev \
   libjpeg-turbo8 \
   libjson-c5 \
@@ -68,7 +74,7 @@ ARG GRASS_RUN_PACKAGES="\
   liblapacke-dev \
   liblz4-1 \
   libmagic-mgc \
-  libmagic1 \
+  libmagic1t64 \
   libmuparser2v5 \
   libncurses6 \
   libomp-dev \
@@ -80,7 +86,7 @@ ARG GRASS_RUN_PACKAGES="\
   libpq-dev \
   libpq5 \
   libpython3-all-dev \
-  libreadline8 \
+  libreadline8t64 \
   libspatialite8t64 \
   libsqlite3-0 \
   libsqlite3-mod-spatialite \
@@ -108,24 +114,34 @@ ARG GRASS_RUN_PACKAGES="\
   zlib1g \
 "
 
-ARG GRASS_GUI_RUN_PACKAGES=" \
-  adwaita-icon-theme-full \
-  gettext \
-  libglu1-mesa \
-  libglut3.12 \
-  libgstreamer-plugins-base1.0 \
-  libgtk-3-0 \
-  libjpeg8 \
-  libnotify4 \
-  libpng16-16 \
-  librsvg2-common \
-  libsdl2-2.0-0 \
-  libsm6 \
-  libtiff6 \
-  libwebkit2gtk-4.1 \
-  libxtst6 \
-  python3-wxgtk4.0 \
-"
+# hadolint ignore=SC2086,DL3008
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
+    $GRASS_RUN_PACKAGES \
+    && apt-get autoremove -y \
+    && apt-get clean all \
+    && rm -rf /var/lib/apt/lists/*
+
+## fetch vertical datums for PDAL and store into PROJ dir
+# WORKDIR /src
+
+# Get datum grids
+# Currently using https://proj.org/en/9.3/usage/network.html#how-to-enable-network-capabilities
+# FROM ubuntu:26.04 AS datum_grids
+
+# # See: https://github.com/OSGeo/PROJ-data
+# RUN apt-get update \
+#     && apt-get install  -y --no-install-recommends --no-install-suggests \
+#     wget \
+#     && apt-get clean all \
+#     && rm -rf /var/lib/apt/lists/*
+
+# WORKDIR /tmp
+# RUN wget -q --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
+
+# Start build stage
+FROM common_start AS build_common
 
 # Define build packages
 ARG GRASS_BUILD_PACKAGES="\
@@ -134,10 +150,11 @@ ARG GRASS_BUILD_PACKAGES="\
   libbz2-dev \
   libarmadillo-dev \
   libcairo2-dev \
-  libfreetype6-dev \
+  libfreetype-dev \
   libfyba-dev \
   libgeotiff-dev \
   libgif-dev \
+  libglu1-mesa-dev \
   libjpeg-dev \
   libjson-c-dev \
   libkml-dev \
@@ -155,6 +172,7 @@ ARG GRASS_BUILD_PACKAGES="\
   libtiff-dev \
   libxerces-c-dev \
   libzstd-dev \
+  gettext \
   mesa-common-dev \
   ninja-build \
   unixodbc-dev \
@@ -163,53 +181,17 @@ ARG GRASS_BUILD_PACKAGES="\
 "
 
 ARG GRASS_PYTHON_PACKAGES="\
-    matplotlib \
-    numpy \
-    packaging>=25.0 \
-    Pillow>=10.3.0 \
-    psycopg2 \
-    python-dateutil \
-    python-magic \
-    setuptools==80.9.0 \
-    cython \
-    "
+  matplotlib \
+  numpy \
+  packaging>=25.0 \
+  Pillow>=10.3.0 \
+  psycopg2 \
+  python-dateutil \
+  python-magic \
+  setuptools==80.9.0 \
+  cython \
+"
 
-# If you do not use any Gnome Accessibility features, to suppress warning
-# WARNING **: Couldn't connect to accessibility bus:
-# execute programs with
-ENV NO_AT_BRIDGE=1
-
-# Install runtime-packages
-# hadolint ignore=SC2086,DL3008
-RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y --no-install-recommends --no-install-suggests \
-    $GRASS_RUN_PACKAGES \
-    && apt-get autoremove -y \
-    && apt-get clean all \
-    && rm -rf /var/lib/apt/lists/*
-
-## fetch vertical datums for PDAL and store into PROJ dir
-# WORKDIR /src
-
-# # Get datum grids
-# # Currently using https://proj.org/en/9.3/usage/network.html#how-to-enable-network-capabilities
-# FROM ubuntu:24.04 AS datum_grids
-
-# # See: https://github.com/OSGeo/PROJ-data
-# RUN apt-get update \
-#     && apt-get install  -y --no-install-recommends --no-install-suggests \
-#     wget \
-#     && apt-get clean all \
-#     && rm -rf /var/lib/apt/lists/*
-
-# WORKDIR /tmp
-# RUN wget -q --no-check-certificate -r -l inf -A tif https://cdn.proj.org/
-
-# Start build stage
-FROM common_start AS build_common
-
-# Add build packages
 # hadolint ignore=SC2086,DL3008,DL3013
 RUN apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests \
@@ -297,26 +279,6 @@ ARG GRASS_GUI_CONFIG="\
   --with-x \
 "
 
-# librsvg2-common \
-# (fix error (wxgui.py:7782): Gtk-WARNING **: 19:53:09.774:
-# Could not load a pixbuf from /org/gtk/libgtk/theme/Adwaita/assets/check-symbolic.svg.
-# This may indicate that pixbuf loaders or the mime database could not be found.)
-ARG GRASS_GUI_BUILD_PACKAGES=" \
-  freeglut3-dev \
-  libgl1-mesa-dev \
-  libglu1-mesa-dev \
-  libgstreamer-plugins-base1.0-dev \
-  libgtk-3-dev \
-  libjpeg-dev \
-  libnotify-dev \
-  libpng-dev \
-  libsdl2-dev \
-  libsm-dev \
-  libtiff-dev \
-  libwebkit2gtk-4.1-dev \
-  libxtst-dev \
-"
-
 COPY . /src/grass_build/
 
 # copy grass source
@@ -331,7 +293,26 @@ ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/lib" \
 FROM build_grass_config AS build_grass_with_gui
 
 ARG GRASS_CONFIG="$GRASS_CONFIG $GRASS_GUI_CONFIG"
-ARG GRASS_GUI_PACKAGES="$GRASS_GUI_RUN_PACKAGES $GRASS_GUI_BUILD_PACKAGES"
+
+# librsvg2-common \
+# (fix error (wxgui.py:7782): Gtk-WARNING **: 19:53:09.774:
+# Could not load a pixbuf from /org/gtk/libgtk/theme/Adwaita/assets/check-symbolic.svg.
+# This may indicate that pixbuf loaders or the mime database could not be found.)
+ARG GRASS_GUI_PACKAGES=" \
+  freeglut3-dev \
+  libgl1-mesa-dev \
+  libglu1-mesa-dev \
+  libgstreamer-plugins-base1.0-dev \
+  libgtk-3-dev \
+  libjpeg-dev \
+  libnotify-dev \
+  libpng-dev \
+  libsdl2-dev \
+  libsm-dev \
+  libtiff-dev \
+  libwebkit2gtk-4.1-dev \
+  libxtst-dev \
+"
 
 # hadolint ignore=DL3008
 RUN echo "Installing GRASS GUI packages: $GRASS_GUI_PACKAGES" \
@@ -416,6 +397,24 @@ RUN echo "No additional steps needed without GUI."
 
 FROM common_start AS grass_final_with_gui
 
+ARG GRASS_GUI_RUN_PACKAGES=" \
+  adwaita-icon-theme \
+  gettext \
+  libglu1-mesa \
+  libglut3.12 \
+  libgstreamer-plugins-base1.0-0 \
+  libgtk-3-0t64 \
+  libjpeg8 \
+  libnotify4 \
+  libpng16-16t64 \
+  librsvg2-common \
+  libsdl2-2.0-0 \
+  libsm6 \
+  libtiff6 \
+  libwebkit2gtk-4.1-0 \
+  libxtst6 \
+  python3-wxgtk4.0 \
+"
 # hadolint ignore=SC2086,DL3008
 RUN apt-get update \
     && apt-get upgrade -y \
