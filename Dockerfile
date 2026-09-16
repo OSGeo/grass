@@ -188,7 +188,7 @@ ARG GRASS_PYTHON_PACKAGES="\
   psycopg2 \
   python-dateutil \
   python-magic \
-  setuptool \
+  setuptools \
   cython \
 "
 
