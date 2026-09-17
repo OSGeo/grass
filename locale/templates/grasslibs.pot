@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-05 18:44+0000\n"
+"POT-Creation-Date: 2026-09-12 18:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1227,12 +1227,12 @@ msgstr ""
 msgid "LOCATION <%s> not available"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:86
+#: ../lib/gis/lrand48.c:139
 #, c-format
 msgid "gettimeofday failed: %s"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:117
+#: ../lib/gis/lrand48.c:167 ../lib/gis/lrand48.c:193
 msgid "Pseudo-random number generator not seeded"
 msgstr ""
 
@@ -3580,7 +3580,7 @@ msgstr ""
 msgid "WARNING"
 msgstr ""
 
-#: ../lib/init/grass.py:140 ../lib/init/grass.py:2429
+#: ../lib/init/grass.py:140 ../lib/init/grass.py:2407
 msgid "Exiting..."
 msgstr ""
 
@@ -3704,7 +3704,7 @@ msgstr ""
 msgid "standard flags"
 msgstr ""
 
-#: ../lib/init/grass.py:341 ../lib/init/grass.py:1911
+#: ../lib/init/grass.py:341 ../lib/init/grass.py:1889
 msgid "deprecated, use --tmp-project instead"
 msgstr ""
 
@@ -3958,75 +3958,71 @@ msgstr ""
 msgid "Goodbye from GRASS"
 msgstr ""
 
-#: ../lib/init/grass.py:1785
-msgid "Please install the GRASS development package"
-msgstr ""
-
-#: ../lib/init/grass.py:1831
+#: ../lib/init/grass.py:1809
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr ""
 
-#: ../lib/init/grass.py:1880
+#: ../lib/init/grass.py:1858
 #, python-format
 msgid "use mapset %(metavar)s"
 msgstr ""
 
-#: ../lib/init/grass.py:1886
+#: ../lib/init/grass.py:1864
 #, python-format
 msgid "use temporary mapset in project %(metavar)s"
 msgstr ""
 
-#: ../lib/init/grass.py:1894
+#: ../lib/init/grass.py:1872
 msgid "path to mapset (or project if creating one)"
 msgstr ""
 
-#: ../lib/init/grass.py:1897
+#: ../lib/init/grass.py:1875
 msgid "use temporary mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:1904
+#: ../lib/init/grass.py:1882
 #, python-format
 msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr ""
 
-#: ../lib/init/grass.py:1918
+#: ../lib/init/grass.py:1896
 msgid "mapset locking timeout in seconds"
 msgstr ""
 
-#: ../lib/init/grass.py:1924
+#: ../lib/init/grass.py:1902
 msgid "remove lock if present"
 msgstr ""
 
-#: ../lib/init/grass.py:1938
+#: ../lib/init/grass.py:1916
 msgid "Option --tmp-location is deprecated, use --tmp-project instead\n"
 msgstr ""
 
-#: ../lib/init/grass.py:1983
+#: ../lib/init/grass.py:1961
 msgid "execute module or script (followed by executable with arguments)"
 msgstr ""
 
-#: ../lib/init/grass.py:2045
+#: ../lib/init/grass.py:2023
 msgid "Flag -e requires also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:2047
+#: ../lib/init/grass.py:2025
 msgid "Flag -c requires name of project or mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:2050
+#: ../lib/init/grass.py:2028
 msgid "Either --tmp-project or --tmp-mapset can be used, not both"
 msgstr ""
 
-#: ../lib/init/grass.py:2057
+#: ../lib/init/grass.py:2035
 msgid "Coordinate reference system argument (e.g. EPSG) is needed for --tmp-project"
 msgstr ""
 
-#: ../lib/init/grass.py:2064
+#: ../lib/init/grass.py:2042
 msgid "Only one argument (e.g. EPSG) is needed for --tmp-project, mapset name <{}> provided"
 msgstr ""
 
-#: ../lib/init/grass.py:2284
+#: ../lib/init/grass.py:2262
 #, python-brace-format
 msgid ""
 "Unable to start GRASS. You have the choice to:\n"
@@ -4043,24 +4039,24 @@ msgid ""
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 msgstr ""
 
-#: ../lib/init/grass.py:2305
+#: ../lib/init/grass.py:2283
 msgid "Starting GRASS..."
 msgstr ""
 
-#: ../lib/init/grass.py:2354
+#: ../lib/init/grass.py:2332
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr ""
 
-#: ../lib/init/grass.py:2361
+#: ../lib/init/grass.py:2339
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr ""
 
-#: ../lib/init/grass.py:2466
+#: ../lib/init/grass.py:2444
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
 
-#: ../lib/init/grass.py:2504
+#: ../lib/init/grass.py:2482
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr ""

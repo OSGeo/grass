@@ -275,6 +275,7 @@ void print_lasinfo(struct StringList *infiles)
         const pdal::LasHeader &h = las_reader.header();
         pdal::PointLayoutPtr point_layout = table.layout();
         const pdal::Dimension::IdList &dims = point_layout->dims();
+        std::string proj_wkt = las_reader.getSpatialReference().getWKT();
 
         std::cout << "File: " << infile << std::endl;
         std::cout << "File version = "
@@ -304,6 +305,10 @@ void print_lasinfo(struct StringList *infiles)
                   << h.maxZ() << "\n";
         std::cout << "Min X/Y/Z: " << h.minX() << "/" << h.minY() << "/"
                   << h.minZ() << "\n";
+        if (!proj_wkt.empty())
+            std::cout << "Projection (WKT): " << proj_wkt << "\n";
+        else
+            std::cout << "Projection: (undefined)\n";
         if (h.versionAtLeast(1, 4)) {
             std::cout << "Ext. VLR offset: " << h.eVlrOffset() << "\n";
             std::cout << "Ext. VLR count: " << h.eVlrCount() << "\n";

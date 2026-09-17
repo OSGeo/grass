@@ -318,7 +318,7 @@ build_program_in_subdir(
 
 build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj)
 
-build_program_in_subdir(r.lake DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.lake DEPENDS grass_gis grass_raster ${LIBM})
 
 build_program_in_subdir(
     r.mask.status
