@@ -789,12 +789,12 @@ Use the following header in your source code.
 ##############################################################################
 ```
 
-Each copyright holder gets one `SPDX-FileCopyrightText` line carrying the years
-of their own contributions. Add a line for yourself when you make a substantial
-contribution, the same threshold as an `AUTHOR(S)` entry, and leave other
-people's lines alone. The line
-`SPDX-FileCopyrightText: GRASS Development Team` comes last and covers everyone
-not named individually; the `COPYING` file defines it. The
+Each `SPDX-FileCopyrightText` line names one copyright holder with the years
+of their contributions. The line `SPDX-FileCopyrightText: GRASS Development
+Team` is present in every file and stands for the project, as `COPYING`
+states; it carries years only when it is the sole copyright line. Add a line
+for yourself when you make a substantial contribution, the same threshold as
+an `AUTHOR(S)` entry, and leave other people's lines alone. The
 `SPDX-License-Identifier` line follows all copyright lines.
 
 #### Use Standard Options in Interface
