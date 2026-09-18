@@ -4,7 +4,7 @@
 #       Changes to this file must be copied over to the other file.
 ARG GUI=without
 
-FROM ubuntu:26.04@sha256:e5a4d6262ab5dbc25a85e60550dd7c87fd41a74fe43881534ed8288b2a7a3f8d AS common_start
+FROM ubuntu:26.04@sha256:61ebaa5cc23ca45450db85eac015435199ec569e28ec222ea13f2aed2110b8a6 AS common_start
 
 ARG BASE_NAME="ubuntu:26.04"
 ARG PYTHON_VERSION=3.14
