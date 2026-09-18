@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**************************************************************
  * Rast_put_cell_title (name, title)
  *   char *name        name of map file

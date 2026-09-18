@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef _RGBPACK_H
 #define _RGBPACK_H
 

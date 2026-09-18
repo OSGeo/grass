@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Test environment and GIS environment functions"""
 
 import json

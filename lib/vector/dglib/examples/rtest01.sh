@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 #
 # This test captures correctness of flattening/unflattening operations
 # asserting that the input graph to ./unflatten be identical to its

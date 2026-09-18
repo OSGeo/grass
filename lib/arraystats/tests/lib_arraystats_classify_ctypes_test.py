@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the classification ctypes bindings
 
 The AS_class_*() functions only read an array of doubles (assumed already

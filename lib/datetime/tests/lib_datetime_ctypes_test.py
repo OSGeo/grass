@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for scanning and formatting through the datetime library ctypes bindings
 
 datetime_scan and datetime_format are pure string parsing and formatting: they

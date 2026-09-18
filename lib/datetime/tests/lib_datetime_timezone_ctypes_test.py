@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the timezone ctypes bindings
 
 datetime_set_timezone(), datetime_change_timezone() and friends only read

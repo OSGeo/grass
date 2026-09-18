@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 #
 # 1. create graph A
 # 2. convert A to A.txt

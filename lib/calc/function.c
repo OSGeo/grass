@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <grass/calc.h>
 
 func_desc calc_func_descs[] = {{"add", c_varop, f_add},
