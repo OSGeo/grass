@@ -6,8 +6,6 @@ invalidFunctionArg:imagery/i.smap/model.c:158
 # lib
 memleakOnRealloc:lib/external/shapelib/dbfopen.c:448
 va_end_missing:lib/gis/debug.c:82
-nullPointer:lib/vector/Vlib/cats.c:513
-nullPointer:lib/vector/Vlib/cats.c:517
 
 # False positives
 # binder
