@@ -65,6 +65,29 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     double factor =
         setup->deltap * setup->sisum / (sim->rwalk * (double)nblock);
 
+    /* The walker loop below splits the walkers into one contiguous chunk
+     * per thread, and each chunk draws from a generator of its own. Chunk
+     * c always covers the same walkers, so seeding by chunk index rather
+     * than by thread makes a chunk's numbers independent of when it runs.
+     * The number of chunks is still the number of threads, so nprocs does
+     * change the result; only once the chunk count is a parameter of its
+     * own can it stop doing so.
+     *
+     * The sequential walker setup draws from chunk 0's generator, which
+     * chunk 0 then continues. With one chunk that is a single stream used
+     * in the order the tool has always used it, so a single-threaded run
+     * reproduces the results of earlier versions. */
+    int nchunks = 1;
+
+#if defined(_OPENMP)
+    nchunks = omp_get_max_threads();
+#endif
+    struct G_rand48_state *chunk_rand =
+        G_malloc((size_t)nchunks * sizeof(struct G_rand48_state));
+
+    for (int c = 0; c < nchunks; c++)
+        G_srand48_r(&chunk_rand[c], settings->random_seed, (unsigned long)c);
+
     G_debug(2, " deldif, factor %f %e", deldif, factor);
     G_debug(2, " maxwa, nblock %d %d", sim->maxwa, nblock);
     G_debug(2, "rwalk, sisum: %f %f", sim->rwalk, setup->sisum);
@@ -91,9 +114,11 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                     for (int iw = 1; iw <= mgen + 1;
                          iw++) { /* assign walkers */
                         sim->w[lw].x =
-                            x + geometry->stepx * (simwe_rand() - 0.5);
+                            x + geometry->stepx *
+                                    (simwe_rand(&chunk_rand[0]) - 0.5);
                         sim->w[lw].y =
-                            y + geometry->stepy * (simwe_rand() - 0.5);
+                            y + geometry->stepy *
+                                    (simwe_rand(&chunk_rand[0]) - 0.5);
                         sim->w[lw].m = wei;
 
                         walkwe += sim->w[lw].m;
@@ -151,19 +176,23 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 #pragma omp parallel firstprivate(l, lw, k) reduction(+ : nwalka)
             {
 #if defined(_OPENMP)
-                int steps = (int)((((double)sim->nwalk) /
-                                   ((double)omp_get_num_threads())) +
-                                  0.5);
                 int tid = omp_get_thread_num();
+                int nthreads = omp_get_num_threads();
+#else
+                int tid = 0;
+                int nthreads = 1;
+#endif
+                int steps =
+                    (int)(((double)sim->nwalk / (double)nthreads) + 0.5);
                 int min_loop = tid * steps;
                 int max_loop = ((tid + 1) * steps) > sim->nwalk
                                    ? sim->nwalk
                                    : (tid + 1) * steps;
+                /* A private copy, so that the one cache line holding
+                 * several chunk states is not written by every thread. */
+                struct G_rand48_state rand_state = chunk_rand[tid];
 
                 for (lw = min_loop; lw < max_loop; lw++) {
-#else
-                for (lw = 0; lw < sim->nwalk; lw++) {
-#endif
                     if (sim->w[lw].m > EPS) { /* check the walker weight */
                         ++(nwalka);
                         l = (int)((sim->w[lw].x + stxm) / geometry->stepx) -
@@ -228,12 +257,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 
                             double d1 = grids->gama[k][l] * conn;
                             double gaux, gauy;
-#if defined(_OPENMP)
-                            gasdev_for_paralel(&gaux, &gauy);
-#else
-                            gaux = gasdev();
-                            gauy = gasdev();
-#endif
+
+                            gasdev(&rand_state, &gaux, &gauy);
                             double hhc = pow(d1, 3. / 5.);
                             double velx, vely;
                             if (hhc > settings->hhmax &&
@@ -253,7 +278,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             if (inputs->traps != NULL &&
                                 grids->trap[k][l] != 0.) { /* traps */
 
-                                float eff = simwe_rand(); /* random generator */
+                                float eff = simwe_rand(&rand_state);
 
                                 if (eff <= grids->trap[k][l]) {
                                     velx = -0.1 *
@@ -304,6 +329,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                         }
                     }
                 } /* lw loop */
+                chunk_rand[tid] = rand_state;
             }
             /* Total remaining walkers for this iteration */
             sim->nwalka = nwalka;
@@ -457,4 +483,6 @@ void main_loop(const Setup *setup, const Geometry *geometry,
         fclose(points->output);
 
     points->is_open = 0;
+
+    G_free(chunk_rand);
 }

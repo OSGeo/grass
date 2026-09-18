@@ -518,6 +518,8 @@ long G_srand48_auto(void);
 long G_lrand48(void);
 long G_mrand48(void);
 double G_drand48(void);
+void G_srand48_r(struct G_rand48_state *, long, unsigned long);
+double G_drand48_r(struct G_rand48_state *);
 
 /* ls.c */
 void G_set_ls_filter(int (*)(const char *, void *), void *);
