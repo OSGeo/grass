@@ -20,6 +20,42 @@ precip_stations_monthly@climate_2009_2012|2012-11-01 00:00:00|2012-12-01 00:00:0
 precip_stations_monthly@climate_2009_2012|2012-12-01 00:00:00|2013-01-01 00:00:00|132|0|4|3.04325|11.6368|8.5935|8.20147|8.20147|1.78122|3.17275|0.217183|1.78801|3.19697|-0.177991|-0.501295
 </pre></div>
 
+The <b>format</b> option changes the output format. The default is
+plain text; <b>format=csv</b> prints the same columns comma separated and
+<b>format=json</b> prints one record per map with the statistics of
+<a href="v.univar.html">v.univar</a>:
+
+<div class="code"><pre>
+t.vect.univar input=precip_stations col=month format=json
+</pre></div>
+
+<div class="code"><pre>
+[
+    {
+        "id": "precip_stations_monthly@climate_2009_2012",
+        "start": "2009-01-01 00:00:00",
+        "end": "2009-02-01 00:00:00",
+        "n": 132,
+        "missing": 0,
+        "nnull": 4,
+        "min": -2.31832,
+        "max": 7.27494,
+        "range": 9.59326,
+        "sum": 454.903,
+        "mean": 3.44624,
+        "mean_abs": 3.5316,
+        "population_stddev": 1.79322,
+        "population_variance": 3.21564,
+        "population_coeff_variation": 0.520341,
+        "sample_stddev": 1.80005,
+        "sample_variance": 3.24019,
+        "kurtosis": 0.484515,
+        "skewness": -0.338519
+    },
+    ...
+]
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
