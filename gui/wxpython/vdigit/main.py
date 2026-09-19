@@ -12,8 +12,10 @@ SPDX-License-Identifier: GPL-2.0-or-later
 @author Martin Landa <landa.martin gmail.com>
 """
 
+# pylint: disable=W0611
+
 try:
-    from vdigit.wxdigit import IVDigit, GV_LINES  # noqa: F401
+    from vdigit.wxdigit import IVDigit, GV_LINES
 
     haveVDigit = True
     errorMsg = ""
