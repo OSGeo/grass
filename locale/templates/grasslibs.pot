@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-12 18:17+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1177,8 +1177,8 @@ msgstr ""
 #: ../lib/ogsf/gs3.c:116 ../lib/ogsf/gs3.c:181 ../lib/ogsf/gs3.c:257
 #: ../lib/ogsf/gs3.c:329 ../lib/ogsf/gs3.c:436 ../lib/ogsf/gs3.c:524
 #: ../lib/ogsf/gs3.c:584 ../lib/ogsf/gs3.c:642 ../lib/ogsf/gs3.c:712
-#: ../lib/ogsf/gs3.c:782 ../lib/ogsf/gsd_legend.c:234 ../lib/raster/open.c:172
-#: ../lib/raster/open.c:854 ../lib/raster/open.c:891 ../lib/raster/open.c:944
+#: ../lib/ogsf/gs3.c:782 ../lib/ogsf/gsd_legend.c:234 ../lib/raster/open.c:176
+#: ../lib/raster/open.c:858 ../lib/raster/open.c:895 ../lib/raster/open.c:948
 #: ../lib/rst/interp_float/output2d.c:264
 #: ../lib/rst/interp_float/output2d.c:351
 #: ../lib/rst/interp_float/output2d.c:425
@@ -1318,8 +1318,8 @@ msgid "G__open(write): Unable to open '%s': %s"
 msgstr ""
 
 #: ../lib/gis/open.c:194 ../lib/gis/open.c:286 ../lib/gis/open.c:319
-#: ../lib/gis/open_misc.c:160 ../lib/gis/open_misc.c:232
-#: ../lib/gis/open_misc.c:250 ../lib/gis/seek.c:53 ../lib/gis/seek.c:63
+#: ../lib/gis/open_misc.c:152 ../lib/gis/open_misc.c:224
+#: ../lib/gis/open_misc.c:242 ../lib/gis/seek.c:53 ../lib/gis/seek.c:63
 #: ../lib/raster/close.c:398 ../lib/raster/close.c:444
 #: ../lib/raster/close.c:543 ../lib/raster/format.c:195
 #: ../lib/raster/put_row.c:143 ../lib/raster/put_row.c:520
@@ -1338,12 +1338,12 @@ msgstr ""
 msgid "File read/write operation failed: %s (%d)"
 msgstr ""
 
-#: ../lib/gis/open_misc.c:46
+#: ../lib/gis/open_misc.c:38
 #, c-format
 msgid "G__open_misc(read): mapset <%s> doesn't match xmapset <%s>"
 msgstr ""
 
-#: ../lib/gis/open_misc.c:73
+#: ../lib/gis/open_misc.c:65
 #, c-format
 msgid "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
 msgstr ""
@@ -5033,7 +5033,7 @@ msgstr ""
 msgid "Unable to open GDAL file"
 msgstr ""
 
-#: ../lib/raster/gdal.c:286 ../lib/raster/open.c:603
+#: ../lib/raster/gdal.c:286 ../lib/raster/open.c:607
 #, c-format
 msgid "Invalid map type <%d>"
 msgstr ""
@@ -5108,7 +5108,7 @@ msgstr ""
 msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
 msgstr ""
 
-#: ../lib/raster/get_row.c:34 ../lib/raster/get_row.c:920
+#: ../lib/raster/get_row.c:34 ../lib/raster/get_row.c:927
 #, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
 msgstr ""
@@ -5143,32 +5143,32 @@ msgstr ""
 msgid "Error reading raster data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:233
+#: ../lib/raster/get_row.c:240
 #, c-format
 msgid "Error reading raster data via GDAL for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:844
+#: ../lib/raster/get_row.c:851
 #, c-format
 msgid "Error seeking compressed null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:851 ../lib/raster/get_row.c:863
+#: ../lib/raster/get_row.c:858 ../lib/raster/get_row.c:870
 #, c-format
 msgid "Error reading compressed null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:869
+#: ../lib/raster/get_row.c:876
 #, c-format
 msgid "Error uncompressing null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:903
+#: ../lib/raster/get_row.c:910
 #, c-format
 msgid "Error seeking null row %d for <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:906
+#: ../lib/raster/get_row.c:913
 #, c-format
 msgid "Error reading null row %d for <%s>"
 msgstr ""
@@ -5269,110 +5269,110 @@ msgstr ""
 msgid "Rast_set_null_value: wrong data type!"
 msgstr ""
 
-#: ../lib/raster/open.c:188
+#: ../lib/raster/open.c:192
 #, c-format
 msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
 msgstr ""
 
-#: ../lib/raster/open.c:193
+#: ../lib/raster/open.c:197
 #, c-format
 msgid "Error reading reclass file for raster map <%s>"
 msgstr ""
 
-#: ../lib/raster/open.c:204
+#: ../lib/raster/open.c:208
 #, c-format
 msgid "Error reading map type for raster map <%s>"
 msgstr ""
 
-#: ../lib/raster/open.c:213
+#: ../lib/raster/open.c:217
 #, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
 msgstr ""
 
-#: ../lib/raster/open.c:232
+#: ../lib/raster/open.c:236
 #, c-format
 msgid "Compression with %s is not supported in this GRASS GIS installation"
 msgstr ""
 
-#: ../lib/raster/open.c:239
+#: ../lib/raster/open.c:243
 #, c-format
 msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
 msgstr ""
 
-#: ../lib/raster/open.c:246
+#: ../lib/raster/open.c:250
 #, c-format
 msgid "Raster map <%s> is in different zone (%d) than current region (%d)"
 msgstr ""
 
-#: ../lib/raster/open.c:253
+#: ../lib/raster/open.c:257
 #, c-format
 msgid "Raster map <%s>: bytes per cell (%d) too large"
 msgstr ""
 
-#: ../lib/raster/open.c:283
+#: ../lib/raster/open.c:287
 #, c-format
 msgid "Unable to open %s file for raster map <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/open.c:322
+#: ../lib/raster/open.c:326
 #, c-format
 msgid "Error reading format for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/open.c:532
+#: ../lib/raster/open.c:536
 msgid "Unable to create GDAL link"
 msgstr ""
 
-#: ../lib/raster/open.c:608 ../lib/raster/open.c:766
+#: ../lib/raster/open.c:612 ../lib/raster/open.c:770
 #, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
 msgstr ""
 
-#: ../lib/raster/open.c:615
+#: ../lib/raster/open.c:619
 #, c-format
 msgid "<%s> is an illegal file name"
 msgstr ""
 
-#: ../lib/raster/open.c:629 ../lib/raster/open.c:712 ../lib/raster/open.c:790
+#: ../lib/raster/open.c:633 ../lib/raster/open.c:716 ../lib/raster/open.c:794
 #, c-format
 msgid "No temp files available: %s"
 msgstr ""
 
-#: ../lib/raster/open.c:762
+#: ../lib/raster/open.c:766
 #, c-format
 msgid "Raster map <%s> does not exist in the current mapset (%s)"
 msgstr ""
 
-#: ../lib/raster/open.c:829
+#: ../lib/raster/open.c:833
 msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
 msgstr ""
 
-#: ../lib/raster/open.c:888
+#: ../lib/raster/open.c:892
 #, c-format
 msgid "Raster map <%s> not found in mapset <%s>"
 msgstr ""
 
-#: ../lib/raster/open.c:950
+#: ../lib/raster/open.c:954
 #, c-format
 msgid "Unable to find '%s'"
 msgstr ""
 
-#: ../lib/raster/open.c:961
+#: ../lib/raster/open.c:965
 #, c-format
 msgid "Invalid type: field '%s' in file '%s'"
 msgstr ""
 
-#: ../lib/raster/open.c:967
+#: ../lib/raster/open.c:971
 #, c-format
 msgid "Missing type: field in file '%s'"
 msgstr ""
 
-#: ../lib/raster/open.c:972
+#: ../lib/raster/open.c:976
 #, c-format
 msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr ""
 
-#: ../lib/raster/open.c:1041
+#: ../lib/raster/open.c:1045
 msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr ""
 
