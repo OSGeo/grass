@@ -18,6 +18,7 @@ set(PYDIRS
     pygrass/shell
     pygrass/tests
     pygrass/vector
+    pytest
     script
     semantic_label
     temporal
