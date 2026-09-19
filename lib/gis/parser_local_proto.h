@@ -21,6 +21,7 @@ struct state {
     int n_keys_alloc;
     int overwrite;
     int quiet;
+    bool superquiet;
     int has_required;
     int suppress_required;
     int suppress_overwrite;
