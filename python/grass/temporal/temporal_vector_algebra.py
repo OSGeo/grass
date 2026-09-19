@@ -184,7 +184,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         self,
         maplistA,
         maplistB=None,
-        topolist=["EQUAL"],
+        topolist=None,
         assign_val: bool = False,
         count_map: bool = False,
         compare_bool: bool = False,
@@ -200,7 +200,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
         :param maplistA: List of maps.
         :param maplistB: List of maps.
-        :param topolist: List of strings of temporal relations.
+        :param topolist: List of strings of temporal relations. If None, defaults to ["EQUAL"] internally.
         :param assign_val: Boolean for assigning a boolean map value based on
                           the map_values from the compared map list by
                           topological relationships.
@@ -221,6 +221,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         :return: List of maps from maplistA that fulfil the topological relationships
                 to maplistB specified in topolist.
         """
+        if topolist is None:
+            topolist = ["EQUAL"]
         topologylist = [
             "EQUAL",
             "FOLLOWS",
@@ -283,12 +285,13 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         # Sort list of maps chronological.
         return sorted(resultlist, key=AbstractDatasetComparisonKeyStartTime)
 
-    def overlay_cmd_value(self, map_i, tbrelations, function, topolist=["EQUAL"]):
+    def overlay_cmd_value(self, map_i, tbrelations, function, topolist=None):
         """Function to evaluate two map lists by given overlay operator.
 
         :param map_i: Map object with temporal extent.
         :param tbrelations: List of temporal relation to map_i.
-        :param topolist: List of strings for given temporal relations.
+        :param topolist: List of strings for given temporal relations. If None,
+                        defaults to ["EQUAL"] internally.
         :param function: Overlay operator, &|+^~.
 
         :return: Map object with command list with  operators that has been
@@ -296,6 +299,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         """
         # Build comandlist list with elements from related maps and given relation
         # operator.
+        if topolist is None:
+            topolist = ["EQUAL"]
         resultlist = []
         # Define overlay operation dictionary.
         overlaydict = {"&": "and", "|": "or", "^": "xor", "~": "not", "+": "disor"}
@@ -343,19 +348,21 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
         return resultlist
 
-    def set_temporal_extent_list(self, maplist, topolist=["EQUAL"], temporal="l"):
+    def set_temporal_extent_list(self, maplist, topolist=None, temporal="l"):
         """Change temporal extent of map list based on temporal relations to
             other map list and given temporal operator.
 
         :param maplist: List of map objects for which relations has been build
                                     correctly.
-        :param topolist: List of strings of temporal relations.
+        :param topolist: List of strings of temporal relations. If None, defaults to ["EQUAL"] internally.
         :param temporal: The temporal operator specifying the temporal
                                         extent operation (intersection, union, disjoint
                                         union, right reference, left reference).
 
         :return: Map list with specified temporal extent.
         """
+        if topolist is None:
+            topolist = ["EQUAL"]
         resultdict = {}
 
         for map_i in maplist:
