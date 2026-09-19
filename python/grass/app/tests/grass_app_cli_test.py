@@ -4,7 +4,7 @@ import sys
 
 import pytest
 
-from grass.app.cli import main
+from grass.app.cli import main, resolve_tool_name
 
 
 def test_cli_help_runs():
@@ -55,6 +55,13 @@ def test_subcommand_run_tool_regular_run():
 def test_subcommand_run_tool_failure_run():
     """Check that a tool produces non-zero return code"""
     assert main(["run", "g.region", "raster=does_not_exist"]) == 1
+
+
+def test_resolve_tool_name_aliases():
+    """Check that experimental alias mapping resolves to module names"""
+    assert resolve_tool_name("list") == "g.list"
+    assert resolve_tool_name("slope") == "r.slope.aspect"
+    assert resolve_tool_name("r.info") == "r.info"
 
 
 @pytest.mark.skipif(
