@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
 
     m = &(m_all[0]);
     m->n = n_predictors + 1;
-    m->v = (double *)G_malloc(m->n * m->n * sizeof(double));
+    m->v = (double *)G_malloc((size_t)m->n * m->n * sizeof(double));
 
     a[0] = (double *)G_malloc(m->n * sizeof(double));
     B[0] = (double *)G_malloc(m->n * sizeof(double));
@@ -261,7 +261,7 @@ int main(int argc, char *argv[])
     for (k = 1; k <= n_predictors; k++) {
         m = &(m_all[k]);
         m->n = n_predictors;
-        m->v = (double *)G_malloc(m->n * m->n * sizeof(double));
+        m->v = (double *)G_malloc((size_t)m->n * m->n * sizeof(double));
         a[k] = (double *)G_malloc(m->n * sizeof(double));
         B[k] = (double *)G_malloc(m->n * sizeof(double));
 
