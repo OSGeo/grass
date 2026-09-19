@@ -129,4 +129,4 @@ def test_matches_reference_except_known_corner_cell(session, mode):
 
     actual_rest = np.delete(actual, np.ravel_multi_index(corner, actual.shape))
     reference_rest = np.delete(reference, np.ravel_multi_index(corner, reference.shape))
-    assert np.allclose(actual_rest, reference_rest, atol=1e-6, equal_nan=True)
+    assert np.allclose(actual_rest, reference_rest, rtol=0, atol=1e-6, equal_nan=True)
