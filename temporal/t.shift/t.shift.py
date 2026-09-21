@@ -50,13 +50,10 @@ def main():
     type = options["type"]
     gran = options["granularity"]
 
-    mapset = gs.gisenv()["MAPSET"]
+    # Make sure the temporal database exists
+    tgis.init()
 
-    # Try initializing the temporal database in the current mapset
-    tgis.init(skip_db_init=True)
-    dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=mapset)
-    if not dbif.tgis_mapsets:
-        gs.fatal(_("No temporal database found in the current mapset."))
+    dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
     stds = tgis.open_old_stds(name, type, dbif)

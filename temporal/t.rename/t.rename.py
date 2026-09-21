@@ -6,7 +6,7 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Renames a space time dataset
-# SPDX-FileCopyrightText: 2011-2026 GRASS Development Team
+# SPDX-FileCopyrightText: 2011-2017 GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
@@ -44,21 +44,20 @@ def main():
     output = options["output"]
     type = options["type"]
 
+    # Make sure the temporal database exists
+    tgis.init()
+
     # Get the current mapset to create the id of the space time dataset
     mapset = gs.gisenv()["MAPSET"]
 
-    old_id = input if "@" in input else f"{input}@{mapset}"
-    new_id = output if "@" in output else f"{output}@{mapset}"
+    old_id = input if input.find("@") >= 0 else input + "@" + mapset
+    new_id = output if output.find("@") >= 0 else output + "@" + mapset
 
     # Do not overwrite yourself
     if new_id == old_id:
         return
 
-    # Try initializing the temporal database in the current mapset
-    tgis.init(skip_db_init=True)
-    dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=mapset)
-    if not dbif.tgis_mapsets:
-        gs.fatal(_("No temporal database found in the current mapset."))
+    dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
     stds = tgis.dataset_factory(type, old_id)
@@ -73,7 +72,7 @@ def main():
             % (stds.get_new_map_instance(None).get_type(), old_id)
         )
 
-    if not stds.is_in_db(dbif=dbif, mapset=mapset):
+    if not stds.is_in_db(dbif=dbif):
         dbif.close()
         gs.fatal(
             _("Space time %s dataset <%s> not found")
@@ -83,21 +82,21 @@ def main():
     # Check if the new id is in the database
     new_stds = tgis.dataset_factory(type, new_id)
 
-    if new_stds.is_in_db(dbif=dbif, mapset=mapset):
-        if not gs.overwrite():
-            dbif.close()
-            gs.fatal(
-                _(
-                    "Unable to rename Space time %s dataset <%s>. Name <%s> "
-                    "is in use, please use the overwrite flag."
-                )
-                % (stds.get_new_map_instance(None).get_type(), old_id, new_id)
+    if new_stds.is_in_db(dbif=dbif) and not gs.overwrite():
+        dbif.close()
+        gs.fatal(
+            _(
+                "Unable to rename Space time %s dataset <%s>. Name <%s> "
+                "is in use, please use the overwrite flag."
             )
+            % (stds.get_new_map_instance(None).get_type(), old_id, new_id)
+        )
 
-        # Remove an already existing space time dataset
+    # Remove an already existing space time dataset
+    if new_stds.is_in_db(dbif=dbif):
         new_stds.delete(dbif=dbif)
 
-    stds.select(dbif=dbif, mapset=mapset)
+    stds.select(dbif=dbif)
     stds.rename(ident=new_id, dbif=dbif)
     stds.update_command_string(dbif=dbif)
 
