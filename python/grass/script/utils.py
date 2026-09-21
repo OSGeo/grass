@@ -50,13 +50,26 @@ def float_or_dms(s) -> float:
     >>> round(float_or_dms("26:0:0.1"), 5)
     26.00003
 
+    A leading minus sign or a trailing S or W hemisphere letter
+    makes the result negative:
+
+    >>> round(float_or_dms("-26:45:30"), 5)
+    -26.75833
+    >>> round(float_or_dms("26:45:30S"), 5)
+    -26.75833
+
     :param s: DMS value
 
     :return: float value
     """
-    if s[-1] in {"E", "W", "N", "S"}:
+    negative = s[-1:] in {"S", "W"}
+    if s[-1:] in {"E", "W", "N", "S"}:
         s = s[:-1]
-    return sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
+    if s[:1] in {"-", "+"}:
+        negative = negative or s[0] == "-"
+        s = s[1:]
+    value = sum(float(x) / 60**n for (n, x) in enumerate(s.split(":")))
+    return -value if negative else value
 
 
 def separator(sep: str) -> str:

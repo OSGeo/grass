@@ -26,6 +26,32 @@ def test_unrecognized_separator():
     assert gs.separator("apple") == "apple"
 
 
+@pytest.mark.parametrize(
+    ("dms", "expected"),
+    [
+        ("26:45:30", 26.758333333333333),
+        ("+26:45:30", 26.758333333333333),
+        ("-26:45:30", -26.758333333333333),
+        ("26:45:30N", 26.758333333333333),
+        ("26:45:30E", 26.758333333333333),
+        ("26:45:30S", -26.758333333333333),
+        ("26:45:30W", -26.758333333333333),
+        ("-0:30:0", -0.5),
+        ("12.5", 12.5),
+        ("-12.5", -12.5),
+    ],
+)
+def test_float_or_dms(dms, expected):
+    """Check that sign and hemisphere letters are applied to the whole value"""
+    assert gs.float_or_dms(dms) == pytest.approx(expected)
+
+
+def test_float_or_dms_empty():
+    """Check that an empty string is reported as an invalid value"""
+    with pytest.raises(ValueError, match="could not convert"):
+        gs.float_or_dms("")
+
+
 def test_KeyValue_keys():
     """Check that KeyValue class works like a Dict"""
     kv = gs.KeyValue()
