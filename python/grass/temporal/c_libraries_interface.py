@@ -14,7 +14,7 @@ import logging
 import sys
 from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
 from datetime import datetime
-from multiprocessing import Lock, Pipe, Process
+from multiprocessing import Lock, Pipe
 from typing import TYPE_CHECKING, Any, Literal
 
 import grass.lib.date as libdate
@@ -1471,7 +1471,7 @@ class CLibrariesInterface(RPCServerBase):
     def start_server(self) -> None:
         self.client_conn, self.server_conn = Pipe(True)
         self.lock = Lock()
-        self.server = Process(
+        self.server = gs.get_fork_context().Process(
             target=c_library_server, args=(self.lock, self.server_conn)
         )
         self.server.daemon = True

@@ -14,10 +14,11 @@ import logging
 import sys
 import threading
 import time
-from multiprocessing import Lock, Pipe, Process
+from multiprocessing import Lock, Pipe
 from typing import TYPE_CHECKING, NoReturn
 
 from grass.exceptions import FatalError
+from grass.script.utils import get_fork_context
 
 if TYPE_CHECKING:
     from multiprocessing.connection import Connection
@@ -142,7 +143,9 @@ class RPCServerBase:
 
         self.client_conn, self.server_conn = Pipe(True)
         self.lock = Lock()
-        self.server = Process(target=dummy_server, args=(self.lock, self.server_conn))
+        self.server = get_fork_context().Process(
+            target=dummy_server, args=(self.lock, self.server_conn)
+        )
         self.server.daemon = True
         self.server.start()
 
