@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import re
 import sys
-from multiprocessing import Process
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -207,6 +206,7 @@ def extract_dataset(
 
     # Run the mapcalc expression
     if expression:
+        mp_context = gs.get_fork_context()
         proc_count = 0
         proc_list = []
 
@@ -262,15 +262,15 @@ def extract_dataset(
             # Add process to the process list
             if type == "raster":
                 msgr.verbose(_('Applying r.mapcalc expression: "%s"') % expr)
-                proc_list.append(Process(target=run_mapcalc2d, args=(expr,)))
+                proc_list.append(mp_context.Process(target=run_mapcalc2d, args=(expr,)))
             elif type == "raster3d":
                 msgr.verbose(_('Applying r3.mapcalc expression: "%s"') % expr)
-                proc_list.append(Process(target=run_mapcalc3d, args=(expr,)))
+                proc_list.append(mp_context.Process(target=run_mapcalc3d, args=(expr,)))
             elif type == "vector":
                 msgr.verbose(_('Applying v.extract where statement: "%s"') % expression)
                 if row["layer"]:
                     proc_list.append(
-                        Process(
+                        mp_context.Process(
                             target=run_vector_extraction,
                             args=(
                                 row["name"] + "@" + row["mapset"],
@@ -283,7 +283,7 @@ def extract_dataset(
                     )
                 else:
                     proc_list.append(
-                        Process(
+                        mp_context.Process(
                             target=run_vector_extraction,
                             args=(
                                 row["name"] + "@" + row["mapset"],
