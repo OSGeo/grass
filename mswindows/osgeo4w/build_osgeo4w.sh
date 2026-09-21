@@ -37,7 +37,7 @@ CXXFLAGS="$CXXFLAGS -pipe" \
     --includedir=${OSGEO4W_ROOT_MSYS}/include \
     --libexecdir=${OSGEO4W_ROOT_MSYS}/bin \
     --prefix=${OSGEO4W_ROOT_MSYS}/apps/grass \
-    --with-blas \
+    --without-blas \
     --with-bzlib \
     --with-cairo \
     --with-cairo-includes=${OSGEO4W_ROOT_MSYS}/include/cairo \
