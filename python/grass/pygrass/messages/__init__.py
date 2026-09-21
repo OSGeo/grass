@@ -15,13 +15,15 @@ SPDX-License-Identifier: GPL-2.0-or-later
 from __future__ import annotations
 
 import sys
-from multiprocessing import Lock, Pipe, Process
+from multiprocessing import Lock, Pipe
 from typing import TYPE_CHECKING, Literal, NoReturn
 
 import grass.lib.gis as libgis
 from grass.exceptions import FatalError
+from grass.script.utils import get_fork_context
 
 if TYPE_CHECKING:
+    from multiprocessing import Process
     from multiprocessing.connection import Connection
     from multiprocessing.context import _LockLike
 
@@ -181,7 +183,9 @@ class Messenger:
         self.raise_on_error = raise_on_error
         self.client_conn, self.server_conn = Pipe()
         self.lock = Lock()
-        self.server = Process(target=message_server, args=(self.lock, self.server_conn))
+        self.server = get_fork_context().Process(
+            target=message_server, args=(self.lock, self.server_conn)
+        )
         self.server.daemon = True
         self.server.start()
 
@@ -189,7 +193,9 @@ class Messenger:
         """Start the messenger server and open the pipe"""
         self.client_conn, self.server_conn = Pipe()
         self.lock = Lock()
-        self.server = Process(target=message_server, args=(self.lock, self.server_conn))
+        self.server = get_fork_context().Process(
+            target=message_server, args=(self.lock, self.server_conn)
+        )
         self.server.daemon = True
         self.server.start()
 
