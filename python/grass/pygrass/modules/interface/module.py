@@ -912,7 +912,7 @@ class MultiModule:
 
         >>> from grass.pygrass.modules import Module
         >>> from grass.pygrass.modules import MultiModule
-        >>> from multiprocessing import Process
+        >>> from multiprocessing.process import BaseProcess
         >>> import copy
 
     Synchronous module run
@@ -950,7 +950,7 @@ class MultiModule:
         ...     sync=False,
         ... )
         >>> t = mm.run()
-        >>> isinstance(t, Process)
+        >>> isinstance(t, BaseProcess)
         True
         >>> m_list = mm.wait()
         >>> m_list[0].returncode
@@ -976,7 +976,7 @@ class MultiModule:
         >>> str(mm)
         'g.region format=plain -p ; g.region format=plain -p ; g.region format=plain -p ; g.region format=plain -p ; g.region format=plain -p'
         >>> t = mm.run()
-        >>> isinstance(t, Process)
+        >>> isinstance(t, BaseProcess)
         True
         >>> m_list = mm.wait()
         >>> m_list[0].returncode
