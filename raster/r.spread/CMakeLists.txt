@@ -12,15 +12,11 @@ set(r_spread_SRCS
     replaceHa.c
     select_linksB.c
     spot.c
-    spread.c)
+    spread.c
+)
 
 build_program(
-  NAME
-  r.spread
-  SOURCES
-  "${r_spread_SRCS}"
-  DEPENDS
-  grass_gis
-  grass_raster
-  grass_display
-  ${LIBM})
+    NAME r.spread
+    SOURCES "${r_spread_SRCS}"
+    DEPENDS ${LIBM} grass_display grass_gis grass_raster
+)

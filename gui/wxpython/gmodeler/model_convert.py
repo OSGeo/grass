@@ -9,10 +9,8 @@ Classes:
  - model_convert::ModelToPyWPS
  - model_convert::ModelToPython
 
-(C) 2010-2026 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2010-2026 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Ondrej Pesek <pesej.ondrek gmail.com>
@@ -56,7 +54,8 @@ class BaseModelConverter(ABC):
             # substitute condition
             cond = item.GetLabel()
             for variable in self.model.GetVariables():
-                pattern = re.compile("%{" + variable + "}")
+                # curly braces are optional
+                pattern = re.compile(r"%(?:\{" + variable + r"\}|" + variable + r")")
                 if pattern.search(cond):
                     value = variables[variable].get("value", "")
                     if variables[variable].get("type", "string") == "string":
@@ -895,7 +894,7 @@ def cleanup():
                 r"""    %s("g.remove", flags="f", type="raster",
                 name=%s)
 """
-                % (run_command, ",".join(f'"{x}"' for x in rast3d))
+                % (run_command, ",".join(f'"{x}"' for x in rast))
             )
         if vect:
             self.fd.write(
@@ -988,14 +987,15 @@ if __name__ == "__main__":
             # check for variables
             formattedVar = False
             for var in variables["vars"]:
-                pattern = re.compile("%{" + var + "}")
-                found = pattern.search(value)
+                # curly braces are optional
+                pattern = re.compile(r"%(?:\{" + var + r"\}|" + var + r")")
+                found = pattern.search(parameterizedValue)
                 if found:
                     foundVar = True
                     if found.end() != len(value):
                         formattedVar = True
                         parameterizedValue = pattern.sub(
-                            "{options['" + var + "']}", value
+                            "{options['" + var + "']}", parameterizedValue
                         )
                     else:
                         parameterizedValue = f'options["{var}"]'

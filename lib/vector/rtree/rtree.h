@@ -8,11 +8,8 @@
  *
  * PURPOSE:      Multidimensional index
  *
- * COPYRIGHT:    (C) 2010-2012 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2010-2012 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 #ifndef _R_TREE_H_
 #define _R_TREE_H_
@@ -41,12 +38,12 @@ typedef double RectReal;
  * this is LFS dependent, not good
  * on 32 bit without LFS this is 9.69
  * on 32 bit with LFS and on 64 bit this is 9 */
-#define MAXCARD          9
-#define NODECARD         MAXCARD
-#define LEAFCARD         MAXCARD
+#define MAXCARD  9
+#define NODECARD MAXCARD
+#define LEAFCARD MAXCARD
 
 /* maximum no of levels = tree depth */
-#define MAXLEVEL         20 /* 8^MAXLEVEL items are guaranteed to fit into the tree */
+#define MAXLEVEL 20 /* 8^MAXLEVEL items are guaranteed to fit into the tree */
 
 /* number of nodes buffered per level */
 #define NODE_BUFFER_SIZE 32

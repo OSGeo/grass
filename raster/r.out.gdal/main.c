@@ -6,11 +6,8 @@
  *               based on GDAL library.
  *               Replaces r.out.gdal.sh script which used the gdal_translate
  *               executable and GDAL grass-format plugin.
- * COPYRIGHT:    (C) 2006-2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -238,7 +235,7 @@ int main(int argc, char *argv[])
     overviewopt = G_define_option();
     overviewopt->key = "overviews";
     overviewopt->type = TYPE_INTEGER;
-    overviewopt->options = "0-5";
+    overviewopt->options = "0-30";
     overviewopt->answer = "0";
     overviewopt->label =
         _("Number of overviews to create for the output dataset");
@@ -750,8 +747,8 @@ int main(int argc, char *argv[])
     /* overviews */
     if (overviewopt->answer) {
         n_overviews = atoi(overviewopt->answer);
-        if (n_overviews < 0 || n_overviews > 5) {
-            G_warning(_("Number of overviews must be between 0 and 5"));
+        if (n_overviews < 0 || n_overviews > 30) {
+            G_warning(_("Number of overviews must be between 0 and 30"));
             n_overviews = 0;
         }
     }

@@ -11,10 +11,8 @@ Usage:
 
     gtask.command_info("r.info")
 
-(C) 2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
@@ -489,7 +487,7 @@ def get_interface_description(cmd):
                 "Unable to fetch interface description for command '<{cmd}>'."
                 "\n\nDetails: <{det}>"
             ).format(cmd=cmd, det=e)
-        )
+        ) from e
 
     desc = convert_xml_to_utf8(cmdout)
     return desc.replace(
@@ -520,7 +518,7 @@ def parse_interface(name, parser=processTask, blackList=None):
             _("Cannot parse interface description of <{name}> module: {error}").format(
                 name=name, error=error
             )
-        )
+        ) from error
     task = parser(tree, blackList=blackList).get_task()
     # if name from interface is different than the originally
     # provided name, then the provided name is likely a full path needed

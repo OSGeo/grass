@@ -7,10 +7,8 @@ Usage:
 
     from grass.script import utils as gutils
 
-(C) 2014-2016 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
@@ -91,6 +89,40 @@ def separator(sep: str) -> str:
     if sep in {"newline", "\\n"}:
         return "\n"
     return sep
+
+
+def available_cpus() -> int:
+    """Number of CPUs this process may actually use.
+
+    Prefers affinity-aware sources over ``os.cpu_count()``, which reports
+    the host total and overcounts in containers and cgroup-limited jobs.
+
+    .. versionadded:: 8.6
+    """
+    if hasattr(os, "process_cpu_count"):  # Python 3.13+
+        return os.process_cpu_count() or 1
+    if hasattr(os, "sched_getaffinity"):  # Linux
+        return len(os.sched_getaffinity(0))
+    return os.cpu_count() or 1
+
+
+def resolve_nprocs(nprocs: int | str) -> int:
+    """Resolve G_OPT_M_NPROCS into a worker count.
+
+    Mirrors the semantics of ``G_set_omp_num_threads()`` in
+    ``lib/gis/omp_threads.c``: 0 means use all available cores, a positive
+    number is used as-is, a negative number means cpu_count + nprocs
+    (clamped to at least 1).
+
+    .. versionadded:: 8.6
+    """
+    n = int(nprocs)
+    if n > 0:
+        return n
+    available = available_cpus()
+    if n == 0:
+        return available
+    return max(1, available + n)
 
 
 def diff_files(
@@ -175,18 +207,14 @@ class KeyValue(dict[str, VT]):
         try:
             return self[key]
         except KeyError:
-            raise AttributeError(key)
+            raise AttributeError(key) from None
 
     def __setattr__(self, key: str, value: VT) -> None:
         self[key] = value
 
 
 def _get_encoding() -> str:
-    try:
-        # Python >= 3.11
-        encoding = locale.getencoding()
-    except AttributeError:
-        encoding = locale.getdefaultlocale()[1]
+    encoding = locale.getencoding()
     if not encoding:
         encoding = "UTF-8"
     return encoding

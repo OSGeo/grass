@@ -46,6 +46,21 @@ cmake --build build
 cmake --install build
 ```
 
+Optional dependencies are controlled by `WITH_*` options (see
+`CMakeLists.txt`). Those enabled by default (PDAL, GEOS, etc.) are *required*:
+on a system missing one, configure fails with a "Could not find ..." error.
+Disable it (e.g. `cmake -B build -DWITH_PDAL=OFF`) or install the dependency.
+If `ccache` is installed it is used automatically; set `CCACHE_DIR` to a
+writable path if the default cache location is read-only (e.g. in a sandbox).
+GRASS uses `~/.grass8` for user config and installed addons by default; set
+`GRASS_CONFIG_DIR` to a writable directory for a sandbox, or to isolate a
+run from existing user settings. For a rootless install (e.g. a sandbox,
+where the default `/usr/local` is not writable), set the prefix at configure
+time:
+`cmake -B build -DCMAKE_INSTALL_PREFIX=<writable path>`. GRASS records this
+prefix in the install, so the configure-time value (not `cmake --install
+--prefix`) is what the installed tree uses.
+
 **Compile a single tool** (after libraries are built):
 
 ```bash
@@ -53,7 +68,12 @@ cd raster/r.slope.aspect
 make
 ```
 
-Build outputs go to `bin.$ARCH/` and `dist.$ARCH/` directories.
+With Autotools, build outputs go to `bin.$ARCH/` and `dist.$ARCH/`. With
+CMake, the runnable tree (before `cmake --install`) is under `build/output/`,
+with the binary at `build/output/bin/grass`. With a CMake-built GRASS,
+`g.extension` builds an addon with CMake and needs an *installed* GRASS
+(`cmake --install` to a prefix), not the `build/output/` tree, which omits the
+addon CMake package (`etc/cmake/build_addon.cmake`).
 
 ## Running Tests
 
@@ -66,7 +86,10 @@ If running from a local build (not a system install), add the binary directory
 to PATH first:
 
 ```bash
+# Autotools build:
 export PATH="$(pwd)/bin.$(uname -m)-pc-linux-gnu:${PATH}"
+# CMake build (before cmake --install):
+export PATH="$(pwd)/build/output/bin:${PATH}"
 ```
 
 Before running pytest, set the required environment variables:
@@ -97,41 +120,41 @@ pytest raster/r.slope.aspect/tests/r_slope_aspect_test.py
 ```
 
 **Run gunittest-style tests** (legacy `testsuite/` directories; currently the
-only way to use larger datasets like the `nc_spm` sample dataset):
+only way to use larger datasets like the `nc_spm` sample dataset) in a
+temporary mapset, which is created and removed for each run (judge by exit
+code, not the verbose output):
 
 ```bash
-python -m grass.gunittest.main --grassdata /path/to/grassdata --location location --location-type xyz
+cd raster/r.slope.aspect/testsuite
+grass --tmp-mapset ~/grassdata/nc_spm_08_grass7/ \
+    --exec python test_r_slope_aspect.py
 ```
+
+The test files are not executable, so `--exec` needs `python` in front of the
+file name. Some tests load data files by relative path, so run them from their
+own directory. Do not use `grass -c <project>/<mapset>`: it fails on the
+second run because the mapset already exists.
 
 ## Writing Tests
 
-Write new tests in pytest unless the test requires the NC SPM sample dataset
-(a real-world dataset used for integration tests).
+See `doc/development/testing.md` for the testing conventions: when to use
+pytest versus gunittest, where test files go and how they are named, how to
+get a GRASS session in a pytest test, how to use `grass.tools`, how to
+generate test data, and how to run the tests. The notes below add what is
+specific to working as an agent.
 
-Test files follow two patterns:
+When using `grass.script` in pytest, every call (`gs.run_command()`,
+`gs.parse_command()`, etc.) must pass `env=session.env` explicitly.
+gunittest-style tests (`testsuite/`) run in an existing GRASS session and need
+neither `Tools` setup nor `env` passing.
 
-- `*/tests/*_test.py` or `*/tests/test_*.py` — pytest style (use this for
-  new tests); `*_test.py` is more common
-- `*/testsuite/test_*.py` — gunittest style (use only when the test requires
-  the NC SPM sample dataset)
-
-Test file names must include the tool name with underscores
-(e.g., `r_slope_aspect` for *r.slope.aspect*). If a tool has multiple
-test files, add the tested feature or domain (e.g.,
-`r_slope_aspect_angles_test.py`, `r_slope_aspect_memory_test.py`).
-Tests of libraries, packages, and modules should have the full name of the
-unit included with the added feature or domain info if needed.
-
-pytest configuration is in `pyproject.toml`. pytest tests require a running
-GRASS session with a project/mapset; see
-`raster/r.slope.aspect/tests/conftest.py` for a representative session
-fixture. For new pytest tests, use `grass.tools` with `Tools`: the `Tools`
-object needs `session=session` (or `env=session.env`) at creation, but
-individual tool calls do not need `env`. When using `grass.script` in
-pytest, every call (`gs.run_command()`, `gs.parse_command()`, etc.) must
-pass `env=session.env` explicitly. gunittest-style tests (`testsuite/`) run
-in an existing GRASS session and need neither `Tools` setup nor `env`
-passing.
+Some APIs, notably `grass.temporal`, still read the session from
+`os.environ` and cannot take an `env`. When a test needs one of those, create
+the session with `env=os.environ.copy()` and mirror it into `os.environ`
+using the `monkeypatch` fixture (or `pytest.MonkeyPatch.context()` in a
+fixture which is not function-scoped), so the environment is restored
+afterwards. See `python/grass/temporal/tests/grass_temporal_gui_support_test.py`
+for this pattern.
 
 With `grass.tools`, numpy arrays can be passed as raster inputs (the array
 is written to a temporary raster matching the computation region) and
@@ -141,11 +164,6 @@ pass an `io.StringIO` object as the parameter value (e.g.,
 `input=StringIO(ascii_text)`); `Tools` converts it to `-` and pipes the
 content automatically.
 
-Test data can be created in several ways: `r.mapcalc` raster algebra
-expressions (e.g., `elevation = 6 - col()`), numpy arrays, GRASS tools
-that generate synthetic data (e.g., `r.surf.fractal` for elevation-like
-surfaces), and import tools like `r.in.ascii`, `v.in.ascii` (CSV
-coordinates), or standard format importers (e.g., GeoJSON for vector data).
 When the goal is to get a numpy array result in Python (rather than
 creating a named raster in the project), `r.mapcalc.simple`
 (`r_mapcalc_simple`) is easier to use than `r.mapcalc`. To convert an

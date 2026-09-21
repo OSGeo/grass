@@ -8,10 +8,8 @@ Classes:
  - ghelp::HelpWindow
  - ghelp::HelpPanel
 
-(C) 2008-2019 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2008-2019 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 """
@@ -254,11 +252,7 @@ class AboutWindow(wx.Frame):
         if not self.langUsed:
             import locale
 
-            try:
-                # Python >= 3.11
-                loc = locale.getlocale()
-            except AttributeError:
-                loc = locale.getdefaultlocale()
+            loc = locale.getlocale()
             if loc == (None, None):
                 self.langUsed = _("unknown")
             else:

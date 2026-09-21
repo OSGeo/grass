@@ -10,10 +10,8 @@ Classes:
  - toolbars::AnimSimpleLmgrToolbar
 
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
@@ -266,25 +264,35 @@ class MiscToolbar(BaseToolbar):
 
     def _toolbarData(self):
         """Toolbar data"""
-        return self._getToolbarData(
+        data = (
             (
+                ("settings", BaseIcons["settings"].label),
+                BaseIcons["settings"],
+                self.parent.OnPreferences,
+            ),
+            (
+                ("help", BaseIcons["help"].label),
+                BaseIcons["help"],
+                self.parent.OnHelp,
+            ),
+        )
+        if self.parent.IsDockable():
+            data += (
                 (
-                    ("settings", BaseIcons["settings"].label),
-                    BaseIcons["settings"],
-                    self.parent.OnPreferences,
-                ),
-                (
-                    ("help", BaseIcons["help"].label),
-                    BaseIcons["help"],
-                    self.parent.OnHelp,
-                ),
-                (
-                    ("quit", BaseIcons["quit"].label),
-                    BaseIcons["quit"],
-                    self.parent.OnCloseWindow,
+                    ("docking", BaseIcons["docking"].label),
+                    BaseIcons["docking"],
+                    self.parent.OnDockUndock,
+                    wx.ITEM_CHECK,
                 ),
             )
+        data += (
+            (
+                ("quit", BaseIcons["quit"].label),
+                BaseIcons["quit"],
+                self.parent.OnCloseWindow,
+            ),
         )
+        return self._getToolbarData(data)
 
 
 class AnimSimpleLmgrToolbar(SimpleLmgrToolbar):

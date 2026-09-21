@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdlib.h>
 #include "global.h"
 
@@ -23,14 +24,14 @@ struct Node {
     struct Node *left;
     struct Node *right;
     struct Node *list;
-    long count;
+    grass_int64 count;
     double area;
 };
 
 static struct Node **hashtable;
 static struct Node *node_list = NULL;
 static int node_count = 0;
-static long total_count = 0;
+static grass_int64 total_count = 0;
 
 int initialize_cell_stats(int n)
 {
@@ -200,7 +201,7 @@ static int node_compare(const void *pp, const void *qq)
 static int node_compare_count_asc(const void *pp, const void *qq)
 {
     struct Node *const *p = pp, *const *q = qq;
-    long a, b;
+    grass_int64 a, b;
 
     a = (*p)->count;
     b = (*q)->count;
@@ -213,7 +214,7 @@ static int node_compare_count_asc(const void *pp, const void *qq)
 static int node_compare_count_desc(const void *pp, const void *qq)
 {
     struct Node *const *p = pp, *const *q = qq;
-    long a, b;
+    grass_int64 a, b;
 
     a = (*p)->count;
     b = (*q)->count;
@@ -550,7 +551,7 @@ int print_cell_stats(char *fmt, int with_percents, int with_counts,
                     break;
                 case CSV:
                 case PLAIN:
-                    fprintf(stdout, "%s%ld", fs, (long)node->count);
+                    fprintf(stdout, "%s%" PRId64, fs, (grass_int64)node->count);
                     break;
                 }
             }

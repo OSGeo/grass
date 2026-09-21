@@ -8,11 +8,9 @@
 # PURPOSE:      Manages semantic label information assigned to a single
 #               raster map or to a list of raster maps.
 #
-# COPYRIGHT:    (C) 2019 by mundialis GmbH & Co.KG, and the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2019 mundialis GmbH & Co.KG
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -52,6 +50,9 @@ def print_map_semantic_label(name, label_reader):
     """Print semantic label information assigned to a single raster map
 
     :param str name: raster map name
+    :param label_reader: SemanticLabelReader used to print label details
+
+    :return int: return code
     """
     from grass.pygrass.raster import RasterRow
 
@@ -64,6 +65,9 @@ def print_map_semantic_label(name, label_reader):
                 gs.info(_("No semantic label assigned to <{}>").format(name))
     except OpenError:
         gs.error(_("Map <{}> not found").format(name))
+        return 1
+
+    return 0
 
 
 def manage_map_semantic_label(name, semantic_label):
@@ -127,7 +131,8 @@ def main():
     for i in range(len(maps)):
         semantic_label = semantic_labels[i] if multi_labels else semantic_labels[0]
         if options["operation"] == "print":
-            print_map_semantic_label(maps[i], label_reader)
+            if print_map_semantic_label(maps[i], label_reader) != 0:
+                ret = 1
         elif manage_map_semantic_label(maps[i], semantic_label) != 0:
             ret = 1
 

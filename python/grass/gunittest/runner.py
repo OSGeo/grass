@@ -1,10 +1,8 @@
 """
 Testing framework module for running tests in Python unittest fashion
 
-Copyright (C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Vaclav Petras
 
@@ -59,7 +57,7 @@ class TextTestResult(grass.gunittest.result.TestResult, unittest.TextTestResult)
         durations: int | None = None,
         **kwargs,
     ) -> None:
-        """Construct a TextTestResult. Subclasses should accept **kwargs
+        """Construct a TextTestResult. Subclasses should accept ``**kwargs``
         to ensure compatibility as the interface changes."""
         super().__init__(
             stream=stream, descriptions=descriptions, verbosity=verbosity, **kwargs

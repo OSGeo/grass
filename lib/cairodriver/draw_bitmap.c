@@ -3,10 +3,9 @@
 
    \brief GRASS cairo display driver - draw bitmap
 
-   (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2007-2008 Lars Ahlzen
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Lars Ahlzen <lars ahlzen.com> (original contributor)
    \author Glynn Clements
@@ -38,7 +37,7 @@ void Cairo_Bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)
 #define MULTIPLE 4
     stride = (ncols + (MULTIPLE - 1)) / MULTIPLE * MULTIPLE;
 #endif
-    data = malloc(stride * nrows);
+    data = malloc((size_t)stride * nrows);
     surf = cairo_image_surface_create_for_data(data, CAIRO_FORMAT_A8, ncols,
                                                nrows, stride);
 

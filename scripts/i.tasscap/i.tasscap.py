@@ -9,11 +9,8 @@
 #               Sentinel-2 support by Veronica Andreo
 #
 # PURPOSE:	At-satellite reflectance based tasseled cap transformation.
-# COPYRIGHT:	(C) 1997-2014 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 1997-2014 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 # References:
@@ -326,7 +323,7 @@ def calcN(outpre, bands, satel):
         bands_num = used_bands[i]
 
         # use combination function suitable for used number of bands
-        eval("calc1bands%d(out, bands, *p)" % bands_num)
+        globals()["calc1bands%d" % bands_num](out, bands, *p)
         gs.run_command("r.colors", map=out, color="grey", quiet=True)
 
 

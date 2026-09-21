@@ -202,7 +202,8 @@ void Rast3d_make_aligned_volume_file(void *map, const char *fileName,
     int x, y, z, eltLength;
     RASTER3D_Region region;
 
-    volumeBuf = Rast3d_malloc(nx * ny * nz * sizeof(Rast3d_get_file_type()));
+    volumeBuf =
+        Rast3d_malloc((size_t)nx * ny * nz * sizeof(Rast3d_get_file_type()));
     if (volumeBuf == NULL)
         Rast3d_fatal_error(
             "Rast3d_make_aligned_volume_file: error in Rast3d_malloc");

@@ -4,62 +4,66 @@ add_subdirectory(dglib)
 add_subdirectory(diglib)
 
 build_library_in_subdir(
-  Vlib
-  NAME
-  grass_vector
-  DEPENDS
-  GDAL::GDAL
-  grass_btree2
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  grass_dig2
-  grass_gis
-  grass_gproj
-  grass_dgl
-  grass_linkm
-  grass_raster
-  grass_rtree
-  OPTIONAL_DEPENDS
-  GEOS::geos_c)
+    Vlib
+    NAME grass_vector
+    DEPENDS
+        GDAL::GDAL
+        grass_btree2
+        grass_dbmibase
+        grass_dbmiclient
+        grass_dbmidriver
+        grass_dgl
+        grass_dig2
+        grass_gis
+        grass_gproj
+        grass_linkm
+        grass_raster
+        grass_rtree
+    OPTIONAL_DEPENDS GEOS::geos_c
+)
 
-target_include_directories(grass_vector
-  INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>)
+target_include_directories(
+    grass_vector
+    INTERFACE $<TARGET_PROPERTY:GDAL::GDAL,INTERFACE_INCLUDE_DIRECTORIES>
+)
 if(TARGET PostgreSQL::PostgreSQL)
-  target_link_libraries(grass_vector PRIVATE PostgreSQL::PostgreSQL)
-  target_include_directories(grass_vector
-    INTERFACE $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>)
+    target_link_libraries(grass_vector PRIVATE PostgreSQL::PostgreSQL)
+    target_include_directories(
+        grass_vector
+        INTERFACE
+            $<TARGET_PROPERTY:PostgreSQL::PostgreSQL,INTERFACE_INCLUDE_DIRECTORIES>
+    )
 endif()
 
 if(TARGET LAPACKE)
-  target_link_libraries(grass_vector PRIVATE LAPACKE)
+    target_link_libraries(grass_vector PRIVATE LAPACKE)
 endif()
 
 build_library_in_subdir(
-  vedit
-  NAME
-  grass_vedit
-  DEPENDS
-  grass_gis
-  grass_vector
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  GDAL::GDAL)
+    vedit
+    NAME grass_vedit
+    DEPENDS
+        GDAL::GDAL
+        grass_dbmibase
+        grass_dbmiclient
+        grass_dbmidriver
+        grass_gis
+        grass_vector
+)
 
 build_library_in_subdir(
-  neta
-  NAME
-  grass_neta
-  DEPENDS
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  grass_gis
-  grass_dgl
-  grass_vector
-  GDAL::GDAL)
+    neta
+    NAME grass_neta
+    DEPENDS
+        GDAL::GDAL
+        grass_dbmibase
+        grass_dbmiclient
+        grass_dbmidriver
+        grass_dgl
+        grass_gis
+        grass_vector
+)
 
 if(WITH_DOCS)
-  generate_docs(vectorascii TARGET grass_vector)
+    generate_docs(vectorascii TARGET grass_vector)
 endif()

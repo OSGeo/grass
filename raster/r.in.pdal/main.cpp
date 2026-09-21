@@ -9,15 +9,15 @@
  * PURPOSE:   Imports LAS LiDAR point clouds to a raster map using
  *            aggregate statistics.
  *
- * COPYRIGHT: (C) 2019-2024 by Vaclav Petras and the GRASS Development Team
- *
- *            This program is free software under the GNU General Public
- *            License (>=v2). Read the file COPYING that comes with
- *            GRASS for details.
+ * SPDX-FileCopyrightText: 2019-2024 Vaclav Petras
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
 #include <cstdio>
+#include <iomanip>
+#include <sstream>
 
 #if defined(__clang__)
 #pragma clang diagnostic push
@@ -250,11 +250,10 @@ int main(int argc, char *argv[])
 
     reproject_flag->key = 'w';
     reproject_flag->label =
-        _("Reproject to project's coordinate system if needed");
+        _("Reproject to project's coordinate system if needed [deprecated]");
     reproject_flag->description =
-        _("Reprojects input dataset to the coordinate system of"
-          " the GRASS project (by default only datasets with"
-          " matching coordinate system can be imported");
+        _("This flag is deprecated and will be removed in a future release. "
+          "Input dataset will always be reprojected if needed.");
     reproject_flag->guisection = _("Projection");
 
     // TODO: from the API it seems that also prj file path and proj string will
@@ -371,6 +370,20 @@ int main(int argc, char *argv[])
     user_dimension_opt->description = _("PDAL dimension name");
     user_dimension_opt->guisection = _("Selection");
 
+    Option *point_table_capacity_opt = G_define_option();
+
+    point_table_capacity_opt->key = "point_table_capacity";
+    point_table_capacity_opt->type = TYPE_INTEGER;
+    point_table_capacity_opt->required = NO;
+    point_table_capacity_opt->answer = const_cast<char *>("10000");
+    point_table_capacity_opt->options = "1-";
+    point_table_capacity_opt->label =
+        _("Number of points buffered at once during processing");
+    point_table_capacity_opt->description =
+        _("Larger values may improve performance for large datasets at the "
+          "cost of memory");
+    point_table_capacity_opt->guisection = _("Performance");
+
     Flag *extents_flag = G_define_flag();
 
     extents_flag->key = 'e';
@@ -446,7 +459,7 @@ int main(int argc, char *argv[])
 
     /* If we print extent, there is no need to validate rest of the input */
     if (print_extent_flag->answer) {
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
         print_extent(&infiles, over_flag->answer);
 #else
         print_extent(&infiles);
@@ -455,7 +468,7 @@ int main(int argc, char *argv[])
     }
 
     if (print_info_flag->answer) {
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
         print_lasinfo(&infiles, over_flag->answer);
 #else
         print_lasinfo(&infiles);
@@ -463,6 +476,11 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
+    if (reproject_flag->answer) {
+        G_verbose_message(
+            _("Flag 'w' is deprecated and will be removed in a future release. "
+              "Input dataset will always be reprojected if needed."));
+    }
     /* we could use rules but this gives more info and allows continuing */
     if (set_region_flag->answer && !(extents_flag->answer || res_opt->answer ||
                                      base_rast_res_flag->answer)) {
@@ -515,7 +533,7 @@ int main(int argc, char *argv[])
     if (extents_flag->answer) {
         double min_x, max_x, min_y, max_y, min_z, max_z;
 
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
         get_extent(&infiles, &min_x, &max_x, &min_y, &max_y, &min_z, &max_z,
                    over_flag->answer);
 #else
@@ -718,6 +736,8 @@ int main(int argc, char *argv[])
     std::vector<pdal::Stage *> readers;
     pdal::StageFactory factory;
     pdal::MergeFilter merge_filter;
+    bool need_to_reproject = false;
+    bool bounds_pushed_to_reader = false;
     /* loop of input files */
     for (int i = 0; i < infiles.num_items; i++) {
         const char *infile = infiles.items[i];
@@ -730,7 +750,7 @@ int main(int argc, char *argv[])
         pdal::Options las_opts;
         pdal::Option las_opt("filename", infile);
         las_opts.add(las_opt);
-#ifdef PDAL_USE_NOSRS
+#ifdef R_IN_PDAL_USE_NOSRS
         if (over_flag->answer) {
             pdal::Option nosrs_opt("nosrs", true);
             las_opts.add(nosrs_opt);
@@ -744,7 +764,51 @@ int main(int argc, char *argv[])
                 infile);
         reader->setOptions(las_opts);
         readers.push_back(reader);
+
+        // With the -o flag the CRS is assumed to match the project's CRS.
+        bool proj_match = true;
+        // getting projection is possible only after prepare
+        if (!over_flag->answer) {
+            pdal::PointTable table;
+            try {
+                reader->prepare(table);
+            }
+            catch (const std::exception &err) {
+                G_fatal_error(_("PDAL error while reading <%s>: %s"), infile,
+                              err.what());
+            }
+            pdal::SpatialReference spatial_reference =
+                reader->getSpatialReference();
+            if (spatial_reference.empty())
+                G_fatal_error(_("The input dataset has undefined projection"));
+            std::string dataset_wkt = spatial_reference.getWKT();
+            proj_match = is_wkt_projection_same_as_loc(dataset_wkt.c_str());
+
+            if (!proj_match)
+                need_to_reproject = true;
+        }
+        // Let the COPC octree skip nodes outside the region; the region
+        // bounds are in the project's CRS, so this applies only when the
+        // file's CRS matches. The GRASS filter still does the exact clip.
+        // The option takes effect when the whole pipeline is prepared later.
+        // With -e the region is the extent of the data, so there is nothing
+        // outside it to skip.
+        if (use_spatial_filter && !extents_flag->answer && proj_match &&
+            pdal_read_driver == "readers.copc") {
+            std::ostringstream bounds_str;
+            bounds_str << std::setprecision(17) << "([" << xmin << ", " << xmax
+                       << "], [" << ymin << ", " << ymax << "])";
+            pdal::Options bounds_opts;
+            bounds_opts.add("bounds", bounds_str.str());
+            reader->addOptions(bounds_opts);
+            bounds_pushed_to_reader = true;
+        }
         merge_filter.setInput(*reader);
+    }
+    if (over_flag->answer) {
+        G_important_message(_("Overriding projection check and assuming"
+                              " that the CRS of input matches"
+                              " the project's CRS"));
     }
 
     // we need to keep pointer to the last stage
@@ -753,8 +817,7 @@ int main(int argc, char *argv[])
     pdal::Stage *last_stage = &merge_filter;
     pdal::ReprojectionFilter reprojection_filter;
 
-    // we reproject when requested regardless of the input projection
-    if (reproject_flag->answer) {
+    if (need_to_reproject) {
         G_message(_("Reprojecting the input to the project's CRS"));
         char *proj_wkt = location_projection_as_wkt(false);
 
@@ -796,33 +859,16 @@ int main(int argc, char *argv[])
     binning_writer.set_output_scale(output_scale);
     binning_writer.setInput(grass_filter);
     // stream_filter.setInput(*last_stage);
-    //  there is no difference between 1 and 10k points in memory
-    //  consumption, so using 10k in case it is faster for some cases
-    pdal::point_count_t point_table_capacity = 10000;
+    // The default capacity of 10k points takes no more memory than 1, but
+    // can be faster; larger values trade memory for speed.
+    pdal::point_count_t point_table_capacity =
+        atoi(point_table_capacity_opt->answer);
     pdal::FixedPointTable point_table(point_table_capacity);
     try {
         binning_writer.prepare(point_table);
     }
     catch (const std::exception &err) {
         G_fatal_error(_("PDAL error: %s"), err.what());
-    }
-
-    // getting projection is possible only after prepare
-    if (over_flag->answer) {
-        G_important_message(_("Overriding projection check and assuming"
-                              " that the CRS of input matches"
-                              " the project's CRS"));
-    }
-    else if (!reproject_flag->answer) {
-        pdal::SpatialReference spatial_reference =
-            merge_filter.getSpatialReference();
-        if (spatial_reference.empty())
-            G_fatal_error(_("The input dataset has undefined projection"));
-        std::string dataset_wkt = spatial_reference.getWKT();
-        bool proj_match = is_wkt_projection_same_as_loc(dataset_wkt.c_str());
-
-        if (!proj_match)
-            wkt_projection_mismatch_report(dataset_wkt.c_str());
     }
 
     G_important_message(_("Running PDAL algorithms..."));
@@ -948,8 +994,16 @@ int main(int argc, char *argv[])
     }
 
     G_done_msg("%s", buff);
-    G_message("Filtered spatially " GPOINT_COUNT_FORMAT " points.",
-              grass_filter.num_spatially_filtered());
+    // Points pruned by the reader's spatial index never reach the filter, so
+    // the count below is not comparable to a run without the index.
+    if (bounds_pushed_to_reader)
+        G_message("Filtered spatially " GPOINT_COUNT_FORMAT
+                  " points (excluding those skipped by the spatial index of "
+                  "the input).",
+                  grass_filter.num_spatially_filtered());
+    else
+        G_message("Filtered spatially " GPOINT_COUNT_FORMAT " points.",
+                  grass_filter.num_spatially_filtered());
     G_message("Filtered z range " GPOINT_COUNT_FORMAT " points.",
               grass_filter.num_zrange_filtered());
     G_message("Filtered i range " GPOINT_COUNT_FORMAT " points.",
@@ -961,6 +1015,10 @@ int main(int argc, char *argv[])
     G_message("Filtered return " GPOINT_COUNT_FORMAT " points.",
               grass_filter.num_return_filtered());
 
+    if (binning_writer.n_on_edge)
+        G_message("Skipped " GPOINT_COUNT_FORMAT
+                  " points on the edge of the computational region.",
+                  binning_writer.n_on_edge);
     G_message("Processed into raster " GPOINT_COUNT_FORMAT " points.",
               binning_writer.n_processed);
 

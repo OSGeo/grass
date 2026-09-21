@@ -6,10 +6,8 @@
 Classes:
  - wxgui::GMApp
 
-(C) 2006-2015 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Jachym Cepicky (Mendel University of Agriculture)
@@ -150,7 +148,7 @@ def main(argv=None):
         try:
             opts, args = getopt.getopt(argv[1:], "hw:", ["help", "workspace"])
         except getopt.error as msg:
-            raise Usage(msg)
+            raise Usage(msg) from None
     except Usage as err:
         print(err.msg, file=sys.stderr)
         print(sys.stderr, "for help use --help", file=sys.stderr)

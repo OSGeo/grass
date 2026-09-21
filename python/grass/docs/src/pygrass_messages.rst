@@ -5,7 +5,7 @@ The PyGRASS message interface is a fast and exit-safe interface to the
 `GRASS C-library message functions
 <https://grass.osgeo.org/programming8/gis_2error_8c.html>`_.
 
-The :class:`~pygrass.messages.Messenger` class implements a fast and
+The :class:`~grass.pygrass.messages.Messenger` class implements a fast and
 exit-safe interface to the GRASS C-library message functions like:
 ``G_message()``, ``G_warning()``, ``G_important_message()``,
 ``G_verbose_message()``, ``G_percent()`` and ``G_debug()``.

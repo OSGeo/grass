@@ -23,12 +23,13 @@ set(PYDIRS
     temporal
     temporal/ply
     tools
-    utils)
+    utils
+)
 
 set(PYDIR_GRASS ${GRASS_INSTALL_PYDIR}/grass)
 
 foreach(pydir ${PYDIRS})
-  copy_python_files_in_subdir(${pydir} ${PYDIR_GRASS})
+    copy_python_files_in_subdir(${pydir} ${PYDIR_GRASS})
 endforeach()
 copy_python_files_in_subdir(app ${PYDIR_GRASS} EXCLUDE resource_paths.py)
 
@@ -38,13 +39,16 @@ file(TO_NATIVE_PATH ${CMAKE_BINARY_DIR}/bin BINARY_DIR)
 set(CONFIG_PROJSHARE)
 get_filename_component(PROJ_INSTALL_PREFIX ${PROJ_INCLUDE_DIRS} PATH)
 if(DEFINED ENV{PROJSHARE})
-  message(WARNING "External PROJ directory not specified; default will be used")
-  set(CONFIG_PROJSHARE "$ENV{PROJSHARE}")
+    message(
+        WARNING
+        "External PROJ directory not specified; default will be used"
+    )
+    set(CONFIG_PROJSHARE "$ENV{PROJSHARE}")
 else()
-  set(CONFIG_PROJSHARE "${PROJ_INSTALL_PREFIX}/share/proj")
-  if(EXISTS ${CONFIG_PROJSHARE}/epsg)
-    message(STATUS "PROJ directory ${CONFIG_PROJSHARE}")
-  endif()
+    set(CONFIG_PROJSHARE "${PROJ_INSTALL_PREFIX}/share/proj")
+    if(EXISTS ${CONFIG_PROJSHARE}/epsg)
+        message(STATUS "PROJ directory ${CONFIG_PROJSHARE}")
+    endif()
 endif()
 file(TO_NATIVE_PATH "${PROJ_INSTALL_PREFIX}/share/proj" PROJ_LIB)
 file(TO_NATIVE_PATH ${CONFIG_PROJSHARE} GRASS_PROJSHARE)
@@ -53,10 +57,18 @@ file(TO_NATIVE_PATH ${CONFIG_PROJSHARE} GRASS_PROJSHARE)
 set(GRASS_PREFIX ${OUTDIR})
 set(GISBASE_INSTALL_PATH ${GISBASE_DIR})
 set(START_UP ${PROJECT_NAME_LOWER})
-configure_file(app/resource_paths.py ${OUTDIR}/${PYDIR_GRASS}/app/resource_paths.py @ONLY)
+configure_file(
+    app/resource_paths.py
+    ${OUTDIR}/${PYDIR_GRASS}/app/resource_paths.py
+    @ONLY
+)
 
 set(GRASS_PREFIX ${CMAKE_INSTALL_PREFIX})
-configure_file(app/resource_paths.py ${CMAKE_CURRENT_BINARY_DIR}/resource_paths.py @ONLY)
+configure_file(
+    app/resource_paths.py
+    ${CMAKE_CURRENT_BINARY_DIR}/resource_paths.py
+    @ONLY
+)
 unset(GISBASE_INSTALL_PATH)
 unset(GRASS_PREFIX)
 unset(START_UP)
@@ -65,14 +77,16 @@ set(pydir_targets ${PYDIRS} app)
 list(TRANSFORM pydir_targets REPLACE "/" "_")
 list(TRANSFORM pydir_targets PREPEND "python_")
 
-add_custom_target(
-  LIB_PYTHON
-  VERBATIM
-  DEPENDS ${pydir_targets})
+add_custom_target(LIB_PYTHON VERBATIM DEPENDS ${pydir_targets})
 
 set_target_properties(LIB_PYTHON PROPERTIES FOLDER Misc)
 
-install(DIRECTORY ${OUTDIR}/${PYDIR_GRASS} DESTINATION ${GRASS_INSTALL_PYDIR}
-        PATTERN "*/resource_paths.py" EXCLUDE)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/resource_paths.py
-        DESTINATION ${GRASS_INSTALL_PYDIR}/grass/app)
+install(
+    DIRECTORY ${OUTDIR}/${PYDIR_GRASS}
+    DESTINATION ${GRASS_INSTALL_PYDIR}
+    PATTERN "*/resource_paths.py" EXCLUDE
+)
+install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/resource_paths.py
+    DESTINATION ${GRASS_INSTALL_PYDIR}/grass/app
+)

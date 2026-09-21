@@ -2,11 +2,11 @@
 
 *g.download.project* downloads an archived (e.g., `.zip` or `.tar.gz`)
 project (previously called location) from a given URL and unpacks it to
-a specified or current GRASS Spatial Database. URL can be also a
-local file on the disk. If the archive contains a directory which
-contains a project, the module will recognize that and use the project
-automatically. The first directory which is a project is used. Other
-projects or any other files are ignored.
+a specified or current GRASS Spatial Database. The URL can be also an
+archive on the local disk given with the `file://` scheme. If the archive
+contains a directory which contains a project, the module will recognize
+that and use the project automatically. The first directory which is a
+project is used. Other projects or any other files are ignored.
 
 ## EXAMPLES
 

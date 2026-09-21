@@ -3,10 +3,8 @@
 
    \brief Raster library - Put raster row
 
-   (C) 2003-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2003-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -52,7 +50,7 @@ static void put_raster_row(int, const void *, RASTER_MAP_TYPE, int);
    updating the range file upon close of the cell file.  HOWEVER when
    nulls are not embedded, the cells are considered 0's as far as
    updating range is concerned, even if the corresponding cell is null
-   in the resulting null file, so programmer should be carefult to set
+   in the resulting null file, so programmer should be careful to set
    all the null values using Rast_set_null_value() or
    G_insert_d_null_values() or G_insert_f_null_values().
 
@@ -115,7 +113,7 @@ void Rast_put_d_row(int fd, const DCELL *buf)
 static void write_data(int fd, int row, unsigned char *buf, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    ssize_t nwrite = fcb->nbytes * n;
+    ssize_t nwrite = (ssize_t)fcb->nbytes * n;
 
     if (write(fcb->data_fd, buf, nwrite) != nwrite)
         G_fatal_error(
@@ -411,7 +409,7 @@ static void put_data(int fd, char *null_buf, const CELL *cell, int row, int n,
         G_free(compressed_buf);
     }
     else {
-        nwrite = fcb->nbytes * n;
+        nwrite = (ssize_t)fcb->nbytes * n;
 
         if (write(fcb->data_fd, work_buf, nwrite) != nwrite)
             G_fatal_error(

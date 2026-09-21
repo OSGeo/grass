@@ -67,7 +67,7 @@ void Rast3d_copy_values(const void *src, int offsSrc, int typeSrc, void *dst,
     src = G_incr_void_ptr(src, eltLength * offsSrc);
     dst = G_incr_void_ptr(dst, eltLength * offsDst);
 
-    memcpy(dst, src, nElts * eltLength);
+    memcpy(dst, src, (size_t)nElts * eltLength);
 }
 
 /*---------------------------------------------------------------------------*/

@@ -21,24 +21,29 @@ set(font_files
     romans.hmp
     romant.hmp
     scriptc.hmp
-    scripts.hmp)
+    scripts.hmp
+)
 list(TRANSFORM font_files PREPEND fonts/)
 
 add_custom_target(fonts)
 
 add_custom_command(
-  TARGET fonts
-  PRE_BUILD
-  COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
-  BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_FONTSDIR})
+    TARGET fonts
+    PRE_BUILD
+    COMMAND
+        ${CMAKE_COMMAND} -E make_directory ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
+    BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
+)
 set_target_properties(fonts PROPERTIES FOLDER Misc)
 
 foreach(font_file ${font_files})
-  add_custom_command(
-    TARGET fonts
-    PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${font_file}
-            ${OUTDIR}/${GRASS_INSTALL_FONTSDIR})
+    add_custom_command(
+        TARGET fonts
+        PRE_BUILD
+        COMMAND
+            ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/${font_file}
+            ${OUTDIR}/${GRASS_INSTALL_FONTSDIR}
+    )
 endforeach()
 
 install(FILES ${font_files} DESTINATION ${GRASS_INSTALL_FONTSDIR})

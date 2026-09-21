@@ -1,10 +1,8 @@
 """Provides functions for the main GRASS executable
 
-(C) 2024-2025 by Vaclav Petras and the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2024-2025 Vaclav Petras
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 
@@ -89,6 +87,18 @@ class RuntimePaths:
     @property
     def grass_version_git(self):
         return resource_paths.GRASS_VERSION_GIT
+
+    @property
+    def grass_headers_version(self):
+        return resource_paths.GRASS_HEADERS_VERSION
+
+    @property
+    def grass_headers_date(self):
+        return resource_paths.GRASS_HEADERS_DATE
+
+    @property
+    def grass_arch(self):
+        return resource_paths.GRASS_ARCH
 
     @property
     def config_projshare(self):

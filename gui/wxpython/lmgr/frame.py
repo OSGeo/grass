@@ -7,10 +7,8 @@ control for display management and access to command console.
 Classes:
  - frame::GMFrame
 
-(C) 2006-2015 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Jachym Cepicky (Mendel University of Agriculture)
@@ -777,6 +775,91 @@ class GMFrame(wx.Frame):
         win = ModelerFrame(parent=self, giface=self._giface)
         win.CentreOnScreen()
         win.Show()
+
+    def OnJupyterNotebook(self, event=None):
+        """Launch Jupyter Notebook interface."""
+        from jupyter_notebook.utils import (
+            ensure_notebook_module_available,
+            ensure_webview2_backend_available,
+            is_notebook_module_available,
+            is_wx_html2_available,
+        )
+        from jupyter_notebook.dialogs import JupyterStartDialog
+
+        # global requirement (always needed)
+        if not is_notebook_module_available():
+            if not ensure_notebook_module_available(
+                parent=self,
+                report_error=GError,
+                report_info=GMessage,
+            ):
+                return
+
+        dlg = JupyterStartDialog(parent=self)
+
+        if dlg.ShowModal() != wx.ID_OK:
+            dlg.Destroy()
+            return
+
+        values = dlg.GetValues()
+        action = dlg.action
+        dlg.Destroy()
+
+        if not values:
+            return
+
+        storage = values["storage"]
+        create_template = values["create_template"]
+
+        # Check integrated mode requirements and offer fallback
+        if action == "integrated":
+            message = None
+
+            if not is_wx_html2_available():
+                message = _(
+                    "Integrated mode requires wx.html2.WebView, which is not available on this system.\n\n"
+                    "This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+                )
+            elif sys.platform.startswith("win"):
+                webview2_status = ensure_webview2_backend_available(
+                    parent=self,
+                    report_error=GError,
+                    report_info=GMessage,
+                )
+                if webview2_status == "restart-required":
+                    return
+                if webview2_status == "unavailable":
+                    message = _(
+                        "Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n\n"
+                        "It is missing or not properly configured on this system."
+                    )
+
+            if message is not None:
+                response = wx.MessageBox(
+                    _(
+                        "{message}\n\nWould you like to open Jupyter Notebook in your external browser instead?"
+                    ).format(message=message),
+                    _("Integrated Mode Not Available"),
+                    wx.ICON_WARNING | wx.YES_NO,
+                )
+
+                if response == wx.YES:
+                    action = "browser"
+                else:
+                    return
+
+        from jupyter_notebook.frame import JupyterFrame
+
+        # Create and show the Jupyter frame
+        frame = JupyterFrame(
+            parent=self,
+            giface=self._giface,
+            action=action,
+            storage=storage,
+            create_template=create_template,
+        )
+        frame.CentreOnParent()
+        frame.Show()
 
     def OnPsMap(self, event=None, cmd=None):
         """Launch Cartographic Composer. See OnIClass documentation"""
@@ -1692,13 +1775,22 @@ class GMFrame(wx.Frame):
 
         win.Show()
 
-    def OnAnimationTool(self, event=None, cmd=None):
-        """Launch Animation tool. See OnIClass documentation."""
+    def OpenAnimationTool(self):
+        """Open the Animation Tool in a new window
+
+        :return: the animation window, so that a caller can load data into it
+        """
         from animation.frame import AnimationFrame
 
         frame = AnimationFrame(parent=self, giface=self._giface)
         frame.CentreOnScreen()
         frame.Show()
+
+        return frame
+
+    def OnAnimationTool(self, event=None, cmd=None):
+        """Launch Animation tool"""
+        frame = self.OpenAnimationTool()
 
         tree = self.GetLayerTree()
         if tree:
@@ -2296,6 +2388,18 @@ class GMFrame(wx.Frame):
             if hasattr(event, "Veto"):
                 event.Veto()
             return
+
+        # Stop all running Jupyter servers before destroying the GUI
+        from jupyter_notebook.environment import JupyterEnvironment
+
+        try:
+            JupyterEnvironment.stop_all()
+        except RuntimeError as e:
+            wx.MessageBox(
+                _("Failed to stop Jupyter servers:\n{}").format(str(e)),
+                caption=_("Error"),
+                style=wx.ICON_ERROR | wx.OK,
+            )
 
         self.DisplayCloseAll()
 
