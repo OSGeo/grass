@@ -55,11 +55,13 @@ jobs:
             tar
             zip
           pacboy: >-
+            blas
             bzip2
             ccache
             fftw
             gcc
             gettext
+            lapack
             libiconv
             libsystre
             libtre
