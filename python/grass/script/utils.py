@@ -27,6 +27,7 @@ import platform
 import uuid
 import random
 import string
+import sys
 
 from pathlib import Path
 from typing import TYPE_CHECKING, AnyStr, TypeVar, cast, overload
@@ -148,7 +149,7 @@ def get_fork_context():
     """
     import multiprocessing
 
-    if "fork" in multiprocessing.get_all_start_methods():
+    if sys.platform != "darwin" and "fork" in multiprocessing.get_all_start_methods():
         return multiprocessing.get_context("fork")
     return multiprocessing.get_context()
 
