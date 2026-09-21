@@ -289,6 +289,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
                      if None a temporary connection will be established
         """
         sql = self.get_delete_statement()
+        # print(sql)
 
         # must use the temporal database of the current mapset,
         # also if the map to be deleted is in a different mapset
@@ -378,6 +379,8 @@ class SQLDatabaseInterface(DictSQLSerializer):
                      if None a temporary connection will be established
         """
         sql, args = self.get_select_statement()
+        # print(sql)
+        # print(args)
 
         # default: use the temporal database in the mapset of this map
         if mapset is None:
@@ -443,6 +446,8 @@ class SQLDatabaseInterface(DictSQLSerializer):
                      if None a temporary connection will be established
         """
         sql, args = self.get_insert_statement()
+        # print(sql)
+        # print(args)
 
         # use the temporal database in the current mapset
         mapset = get_current_mapset()
@@ -506,6 +511,8 @@ class SQLDatabaseInterface(DictSQLSerializer):
         mapset = get_current_mapset()
 
         sql, args = self.get_update_statement(ident)
+        # print(sql)
+        # print(args)
 
         if dbif:
             dbif.execute(sql, args, mapset=mapset)
@@ -560,6 +567,8 @@ class SQLDatabaseInterface(DictSQLSerializer):
         mapset = get_current_mapset()
 
         sql, args = self.get_update_all_statement(ident)
+        # print(sql)
+        # print(args)
 
         if dbif:
             dbif.execute(sql, args, mapset=mapset)

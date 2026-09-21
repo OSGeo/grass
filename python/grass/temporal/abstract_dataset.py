@@ -457,6 +457,7 @@ class AbstractDataset(
 
         if self.is_stds() is False:
             statement += self.stds_register.get_update_statement_mogrified(dbif, ident)
+
         if execute:
             dbif.execute_transaction(statement)
             if connection_state_changed:

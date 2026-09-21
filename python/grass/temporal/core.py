@@ -1262,6 +1262,7 @@ class SQLDatabaseInterfaceConnection:
                     + self._create_mapset_error_message(mapset)
                 )
             )
+
         return self.connections[mapset].execute(statement, args)
 
     def fetchone(self, mapset=None):
