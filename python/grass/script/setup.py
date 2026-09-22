@@ -219,7 +219,6 @@ def setup_runtime_env(gisbase=None, *, env=None, load_libs=False):
     from grass.app.runtime import (
         get_grass_config_dir,
         preload_dynamic_libraries,
-        register_library_search_path,
         set_dynamic_library_path,
         set_executable_paths,
         set_path_to_python_executable,
@@ -261,7 +260,6 @@ def setup_runtime_env(gisbase=None, *, env=None, load_libs=False):
     if load_libs:
         # The variable set above applies only to newly started processes, so load
         # the libraries into the current process for ctypes-based interfaces.
-        register_library_search_path(install_path=gisbase)
         preload_dynamic_libraries(install_path=gisbase)
     set_python_path_variable(install_path=gisbase, env=env)
     set_path_to_python_executable(env=env)
@@ -323,7 +321,9 @@ def init(
     running process, so the C libraries have to be loaded into the process
     explicitly. This is not done by default because it loads the whole
     GRASS C stack and its dependencies (GDAL, PROJ, ...) into the process,
-    which sessions using only tools don't need.
+    which sessions using only tools don't need. The C libraries read the
+    session from the environment of the process, so :mod:`grass.lib` works
+    only in a session set up in the global environment, i.e., without *env*.
 
     When the path or specified mapset does not exist, ValueError is raised.
 

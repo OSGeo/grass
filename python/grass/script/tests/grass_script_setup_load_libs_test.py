@@ -18,6 +18,8 @@ import pytest
 import grass.app.runtime
 import grass.script as gs
 
+WINDOWS = sys.platform.startswith("win")
+
 
 def run_in_clean_environment(code, tmp_path):
     """Run code in a subprocess without the dynamic library search path variable
@@ -38,13 +40,49 @@ def run_in_clean_environment(code, tmp_path):
         check=False,
         env=env,
     )
-    assert result.returncode == 0, result.stderr
+    assert result.returncode == 0, (
+        result.stderr
+        or f"Exit code {result.returncode} without any output (a fatal error in"
+        " the GRASS C libraries ends the process silently when they cannot see"
+        " GISBASE)"
+    )
     return json.loads(result.stdout)
 
 
 @pytest.mark.usefixtures("mock_no_session")
+def test_grass_lib_importable_with_load_libs(tmp_path):
+    """Check that grass.lib modules can be imported after init with load_libs
+
+    The import loads the libraries, which fails when the GRASS libraries they
+    depend on cannot be found.
+    """
+    project = tmp_path / "test"
+    code = f"""
+        import json
+        import grass.script as gs
+
+        gs.create_project(r"{project}")
+        with gs.setup.init(r"{project}", load_libs=True):
+            import grass.lib.gis
+            import grass.lib.raster
+        print(json.dumps({{"imported": True}}))
+    """
+    assert run_in_clean_environment(code, tmp_path=tmp_path)["imported"]
+
+
+@pytest.mark.xfail(
+    WINDOWS,
+    reason="On Windows, the C libraries (built with a different C runtime than"
+    " Python) do not see the environment variables set by init in the running"
+    " process, so they do not see the session",
+)
+@pytest.mark.usefixtures("mock_no_session")
 def test_grass_lib_usable_with_load_libs(tmp_path):
-    """Check that grass.lib is usable after init with load_libs"""
+    """Check that grass.lib sees the session and works with rasters after init
+
+    Opening a raster needs the session state held by libgrass_gis, so this
+    also fails when the process ends up with two copies of that library.
+    """
     project = tmp_path / "test"
     code = f"""
         import json
@@ -63,41 +101,6 @@ def test_grass_lib_usable_with_load_libs(tmp_path):
         print(json.dumps({{"raster_opened": True}}))
     """
     assert run_in_clean_environment(code, tmp_path=tmp_path)["raster_opened"]
-
-
-@pytest.mark.usefixtures("mock_no_session")
-def test_grass_lib_usable_with_load_libs_and_custom_env(tmp_path):
-    """Check that grass.lib is usable with load_libs and a custom environment
-
-    The grass.lib loader reads GISBASE from the global environment, so a
-    session which keeps its variables in its own environment needs the path
-    to the libraries passed to the loader directly.
-    """
-    project = tmp_path / "test"
-    code = f"""
-        import json
-        import os
-        import grass.script as gs
-
-        gs.create_project(r"{project}")
-        env = os.environ.copy()
-        with gs.setup.init(r"{project}", env=env, load_libs=True):
-            import grass.lib.gis as libgis
-
-            libgis.G_gisinit(b"test")
-        print(
-            json.dumps(
-                {{
-                    "gis_init_worked": True,
-                    "gisbase_in_global_env": "GISBASE" in os.environ,
-                }}
-            )
-        )
-    """
-    result = run_in_clean_environment(code, tmp_path=tmp_path)
-    assert result["gis_init_worked"]
-    # The session did not fall back to the global environment for the lookup.
-    assert not result["gisbase_in_global_env"]
 
 
 @pytest.mark.usefixtures("mock_no_session")
@@ -126,7 +129,7 @@ def test_preload_reports_libraries_which_cannot_be_loaded(tmp_path):
     broken = lib_path / "libgrass_notalibrary.so"
     broken.write_text("This is not a shared library.")
     failures = grass.app.runtime.preload_dynamic_libraries(install_path=tmp_path)
-    if sys.platform.startswith("win"):
+    if WINDOWS:
         assert failures == []
     else:
         # Paths are compared by name because the function resolves them and

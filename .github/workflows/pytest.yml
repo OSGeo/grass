@@ -143,9 +143,11 @@ jobs:
           # The installation is moved away from the prefix it was configured
           # with, so that the libraries cannot find each other through their
           # RUNPATH and the loading done by init is the only mechanism left.
+          # The Python package moves with it, so its path is taken beforehand.
+          python_path="$(grass --config python_path)"
           mv "${HOME}/install" "${HOME}/install-relocated"
           trap 'mv "${HOME}/install-relocated" "${HOME}/install"' EXIT
-          PYTHONPATH="${HOME}/install-relocated/etc/python"
+          PYTHONPATH="${python_path/#"${HOME}/install"/"${HOME}/install-relocated"}"
           export PYTHONPATH
           pytest python/grass/script/tests/grass_script_setup_load_libs_test.py \
             --junitxml=pytest.load_libs.junit.xml

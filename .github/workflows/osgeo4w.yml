@@ -145,7 +145,8 @@ jobs:
         run: |
           call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
           set PYTHONPATH=%GISBASE%\etc\python;%PYTHONPATH%
-          path %GISBASE%\lib;%GISBASE%\bin;%PATH%
+          REM The library directory is not added to PATH here, so that the DLLs
+          REM are found only through the PATH set by init in the tested process.
           pytest python/grass/script/tests/grass_script_setup_load_libs_test.py ^
             --junitxml=pytest.load_libs.junit.xml
         # Obfuscated usage of GitHub Actions features, Windows CMD shell limits analysis
