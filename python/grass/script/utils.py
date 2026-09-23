@@ -127,25 +127,15 @@ def resolve_nprocs(nprocs: int | str) -> int:
 
 
 def get_fork_context():
-    """Return a :mod:`multiprocessing` context using the ``fork`` start method.
+    """Return a suitable :mod:`multiprocessing` fork context.
 
-    Several GRASS Python APIs start worker processes that are expected to
-    inherit the exact environment and GRASS session state (for example
-    ``GISRC``/current mapset set by :func:`grass.script.setup.init`) of
-    their parent at the time they are started. That assumption only holds
-    for the ``fork`` start method, where the child is a copy of the parent
-    process. It does not hold for ``spawn``, and, notably, not for
-    ``forkserver`` either: its workers are forked from a long-lived helper
-    process instead of the caller, and so only see the environment that
-    existed when that helper process itself was started, which can be
-    stale. Python 3.14 made ``forkserver`` the default start method on Linux
-    (previously ``fork``), so callers that rely on this inheritance must
-    request ``fork`` explicitly.
-
-    ``fork`` is unavailable on Windows, which has always defaulted to
-    ``spawn``; the default context is returned there instead.
-
-    .. versionadded:: 8.6
+    The GRASS Python APIs does not yet support `spawn` and `forkserver`
+    start-methods for multiprocessing, which became new default in
+    Python 3.14. This function provides a temporary workaround that
+    switches back to `fork` on Linux until the new default methods are
+    supported.
+    The function should be removed as soon as the GRASS Python APIs support
+    the new default start-methods.
     """
     import multiprocessing
 
