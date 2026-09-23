@@ -21,7 +21,8 @@ static void format_double(double, char *, int);
  * its ASCII representation (into <i>buf</i>).
  *
  * \param north northing
- * \param[out] buf buffer to hold formatted string
+ * \param[out] buf buffer to hold formatted string, at least 320 bytes for
+ * a non-lat/lon projection (DBL_MAX needs 318 digits under "%.8f")
  * \param projection projection code, or -1 to force full precision FP
  */
 void G_format_northing(double north, char *buf, int projection)
@@ -41,7 +42,8 @@ void G_format_northing(double north, char *buf, int projection)
  * its ASCII representation (into <i>buf</i>).
  *
  * \param east easting
- * \param[out] buf buffer to hold formatted string
+ * \param[out] buf buffer to hold formatted string, at least 320 bytes for
+ * a non-lat/lon projection (DBL_MAX needs 318 digits under "%.8f")
  * \param projection projection code, or -1 to force full precision FP
  */
 void G_format_easting(double east, char *buf, int projection)
@@ -61,7 +63,8 @@ void G_format_easting(double east, char *buf, int projection)
  * ASCII representation (into <i>buf</i>).
  *
  * \param res resolution value
- * \param[out] buf buffer to hold formatted string
+ * \param[out] buf buffer to hold formatted string, at least 320 bytes for
+ * a non-lat/lon projection (DBL_MAX needs 318 digits under "%.8f")
  * \param projection projection code, or -1 to force full precision FP
  */
 void G_format_resolution(double res, char *buf, int projection)
