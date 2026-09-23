@@ -364,7 +364,18 @@ int main(int argc, char *argv[])
         }
         pdal::SpatialReference spatial_reference =
             reader->getSpatialReference();
-        if (spatial_reference.empty() && !input_srs_opt->answer)
+        // The CRS given by the user takes precedence over the file metadata,
+        // which may be missing or incorrect.
+        if (input_srs_opt->answer) {
+            try {
+                spatial_reference =
+                    pdal::SpatialReference(input_srs_opt->answer);
+            }
+            catch (const std::exception &err) {
+                G_fatal_error(_("Invalid input_srs: %s"), err.what());
+            }
+        }
+        if (spatial_reference.empty())
             G_fatal_error(_("The input dataset has undefined projection"));
         std::string dataset_wkt = spatial_reference.getWKT();
         need_to_reproject = !is_wkt_projection_same_as_loc(dataset_wkt.c_str());
