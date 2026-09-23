@@ -29,6 +29,7 @@ import platform
 import uuid
 import random
 import string
+import sys
 
 from pathlib import Path
 from typing import TYPE_CHECKING, AnyStr, TypeVar, cast, overload
@@ -37,6 +38,7 @@ from typing import TYPE_CHECKING, AnyStr, TypeVar, cast, overload
 if TYPE_CHECKING:
     from _typeshed import FileDescriptorOrPath, StrOrBytesPath, StrPath
     from collections.abc import Callable
+    from multiprocessing.context import BaseContext
 
 
 # Type variables
@@ -125,6 +127,29 @@ def resolve_nprocs(nprocs: int | str) -> int:
     if n == 0:
         return available
     return max(1, available + n)
+
+
+def _get_multiprocessing_context() -> BaseContext:
+    """Return the multiprocessing context to use for GRASS worker processes.
+
+    Python 3.14 changed the default multiprocessing start method from "fork"
+    to "forkserver" (on platforms where "fork" is available, except macOS).
+    GRASS worker processes rely on "fork" semantics: they inherit the
+    initialized C library state and the session environment from the parent.
+    Use "fork" wherever it is available, i.e. the default before 3.14, except
+    on macOS, which has defaulted to "spawn" since Python 3.8 and where
+    "fork" is unsafe. Everywhere else (Windows) keep the platform default.
+
+    This is a workaround until GRASS supports the "spawn" and "forkserver"
+    start methods.
+    """
+    # Imported here because grass.script is imported by every Python tool
+    # and only a few callers need multiprocessing.
+    import multiprocessing
+
+    if sys.platform != "darwin" and "fork" in multiprocessing.get_all_start_methods():
+        return multiprocessing.get_context("fork")
+    return multiprocessing.get_context()
 
 
 def diff_files(

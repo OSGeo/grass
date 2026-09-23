@@ -20,8 +20,9 @@ from grass.pygrass.gis.region import Region
 from grass.pygrass.raster import RasterRow, raster2numpy_img
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.basic import Bbox
+from grass.script.utils import _get_multiprocessing_context
 
-from .base import MP_CONTEXT, RPCServerBase
+from .base import RPCServerBase
 
 ###############################################################################
 ###############################################################################
@@ -248,9 +249,10 @@ class DataProvider(RPCServerBase):
 
     def start_server(self):
         """This function must be re-implemented in the subclasses"""
-        self.client_conn, self.server_conn = MP_CONTEXT.Pipe(True)
-        self.lock = MP_CONTEXT.Lock()
-        self.server = MP_CONTEXT.Process(
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe(True)
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
             target=data_provider_server, args=(self.lock, self.server_conn)
         )
         self.server.daemon = True

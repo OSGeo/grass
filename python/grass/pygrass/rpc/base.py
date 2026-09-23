@@ -16,10 +16,10 @@ import logging
 import sys
 import threading
 import time
-import multiprocessing as mp
 from typing import TYPE_CHECKING, NoReturn
 
 from grass.exceptions import FatalError
+from grass.script.utils import _get_multiprocessing_context
 
 if TYPE_CHECKING:
     from multiprocessing.connection import Connection
@@ -27,17 +27,6 @@ if TYPE_CHECKING:
 
 
 logger: logging.Logger = logging.getLogger(__name__)
-
-# Python 3.14 changed the default multiprocessing start method from "fork"
-# to "forkserver" (on platforms where "fork" is available, except macOS),
-# which breaks the RPC server processes. Use "fork" wherever it is available,
-# i.e. the default before 3.14, except on macOS, which has defaulted to
-# "spawn" since Python 3.8 and where "fork" is unsafe. Everywhere else
-# (Windows) keep the platform default.
-if sys.platform != "darwin" and "fork" in mp.get_all_start_methods():
-    MP_CONTEXT = mp.get_context("fork")
-else:
-    MP_CONTEXT = mp.get_context()
 
 
 ###############################################################################
@@ -153,9 +142,10 @@ class RPCServerBase:
         """This function must be re-implemented in the subclasses"""
         logger.debug("Start the libgis server")
 
-        self.client_conn, self.server_conn = MP_CONTEXT.Pipe(True)
-        self.lock = MP_CONTEXT.Lock()
-        self.server = MP_CONTEXT.Process(
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe(True)
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
             target=dummy_server, args=(self.lock, self.server_conn)
         )
         self.server.daemon = True

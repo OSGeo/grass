@@ -26,10 +26,10 @@ import grass.lib.temporal as libtgis
 import grass.lib.vector as libvector
 from grass.exceptions import FatalError
 from grass.pygrass.raster import RasterRow
-from grass.pygrass.rpc.base import MP_CONTEXT, RPCServerBase
+from grass.pygrass.rpc.base import RPCServerBase
 from grass.pygrass.utils import decode
 from grass.pygrass.vector import VectorTopo
-from grass.script.utils import encode
+from grass.script.utils import _get_multiprocessing_context, encode
 import grass.script as gs
 
 if TYPE_CHECKING:
@@ -1470,9 +1470,10 @@ class CLibrariesInterface(RPCServerBase):
         RPCServerBase.__init__(self)
 
     def start_server(self) -> None:
-        self.client_conn, self.server_conn = MP_CONTEXT.Pipe(True)
-        self.lock = MP_CONTEXT.Lock()
-        self.server = MP_CONTEXT.Process(
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe(True)
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
             target=c_library_server, args=(self.lock, self.server_conn)
         )
         self.server.daemon = True

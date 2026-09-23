@@ -17,15 +17,16 @@ for details.
 from __future__ import annotations
 
 import sys
-from multiprocessing import Lock, Pipe, Process
 from typing import TYPE_CHECKING, Literal, NoReturn
 
 import grass.lib.gis as libgis
 from grass.exceptions import FatalError
+from grass.script.utils import _get_multiprocessing_context
 
 if TYPE_CHECKING:
     from multiprocessing.connection import Connection
     from multiprocessing.context import _LockLike
+    from multiprocessing.process import BaseProcess
 
     _MessagesLiteral = Literal[
         "INFO", "IMPORTANT", "VERBOSE", "WARNING", "ERROR", "FATAL"
@@ -177,21 +178,27 @@ class Messenger:
 
     client_conn: Connection
     server_conn: Connection
-    server: Process
+    server: BaseProcess
 
     def __init__(self, raise_on_error: bool = False) -> None:
         self.raise_on_error = raise_on_error
-        self.client_conn, self.server_conn = Pipe()
-        self.lock = Lock()
-        self.server = Process(target=message_server, args=(self.lock, self.server_conn))
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe()
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
+            target=message_server, args=(self.lock, self.server_conn)
+        )
         self.server.daemon = True
         self.server.start()
 
     def start_server(self) -> None:
         """Start the messenger server and open the pipe"""
-        self.client_conn, self.server_conn = Pipe()
-        self.lock = Lock()
-        self.server = Process(target=message_server, args=(self.lock, self.server_conn))
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe()
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
+            target=message_server, args=(self.lock, self.server_conn)
+        )
         self.server.daemon = True
         self.server.start()
 
