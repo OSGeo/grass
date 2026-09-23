@@ -70,7 +70,7 @@ def test_set_metadata_fields(session):
         description="A description",
     )
 
-    info = tools.r_info(map="test", format="json").json
+    info = tools.r_info(map="test", format="json")
     assert info["title"] == "My Title"
     assert info["units"] == "meters"
     assert info["vdatum"] == "WGS84"
@@ -85,7 +85,7 @@ def test_append_history(session):
     tools.r_support(map="test", history="First history line")
     tools.r_support(map="test", history="Second history line")
 
-    info = tools.r_info(map="test", format="json").json
+    info = tools.r_info(map="test", format="json")
     assert info["comments"].endswith("First history line\nSecond history line")
 
 
@@ -95,7 +95,7 @@ def test_savehistory_and_loadhistory(session, tmp_path):
     tools = Tools(session=session)
     tools.r_support(map="test", history="Line one")
     tools.r_support(map="test", history="Line two")
-    expected = tools.r_info(map="test", format="json").json["comments"]
+    expected = tools.r_info(map="test", format="json")["comments"]
 
     history_file = tmp_path / "history.txt"
     tools.r_support(map="test", savehistory=str(history_file))
@@ -103,7 +103,7 @@ def test_savehistory_and_loadhistory(session, tmp_path):
 
     tools.r_mapcalc(expression="test2 = 2")
     tools.r_support(map="test2", loadhistory=str(history_file))
-    info = tools.r_info(map="test2", format="json").json
+    info = tools.r_info(map="test2", format="json")
     assert info["comments"] == expected
 
 
@@ -113,11 +113,11 @@ def test_reset_null_file_clears_null_cells(session):
     tools = Tools(session=session)
     tools.g_region(n=1, s=0, e=3, w=0, res=1)
     tools.r_mapcalc(expression="with_null = if(col() == 2, null(), col())")
-    before = tools.r_univar(map="with_null", format="json").json
+    before = tools.r_univar(map="with_null", format="json")
     assert before["null_cells"] == 1
 
     tools.r_support(map="with_null", flags="n")
-    after = tools.r_univar(map="with_null", format="json").json
+    after = tools.r_univar(map="with_null", format="json")
     assert after["null_cells"] == 0
 
 
@@ -128,8 +128,8 @@ def test_delete_null_file_restores_null_cells(session):
     tools.g_region(n=1, s=0, e=3, w=0, res=1)
     tools.r_mapcalc(expression="with_null = if(col() == 2, null(), col())")
     tools.r_support(map="with_null", flags="n")
-    assert tools.r_univar(map="with_null", format="json").json["null_cells"] == 0
+    assert tools.r_univar(map="with_null", format="json")["null_cells"] == 0
 
     tools.r_support(map="with_null", flags="d")
-    after = tools.r_univar(map="with_null", format="json").json
+    after = tools.r_univar(map="with_null", format="json")
     assert after["null_cells"] == 1
