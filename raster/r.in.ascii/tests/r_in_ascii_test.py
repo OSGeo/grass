@@ -7,8 +7,6 @@ import pytest
 import grass.script as gs
 from grass.tools import Tools
 
-# Loaded from stdin. Same data the original gunittest test used: every cell is
-# 1..15, so no cell matches the declared null= value (no NULL cells result).
 INPUT_FROM_STDIN = """north: 4299000.00
 south: 4247000.00
 east: 528000.00
@@ -28,8 +26,6 @@ null: -9999
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15"""
 
-# Same content as the original testsuite data file, including its trailing
-# newline. A bare * marks a NULL cell (three of them).
 INPUT_FROM_FILE = """north: 220542
 south: 220528
 east: 638492
@@ -64,11 +60,11 @@ def test_read_ascii_from_stdin(session):
 
     tools.r_in_ascii(input=io.StringIO(INPUT_FROM_STDIN), output="ascii", type="CELL")
 
-    info = tools.r_info(map="ascii", format="json").json
+    info = tools.r_info(map="ascii", format="json")
     assert info["min"] == 1
     assert info["max"] == 15
 
-    univar = tools.r_univar(map="ascii", format="json").json
+    univar = tools.r_univar(map="ascii", format="json")
     assert univar["null_cells"] == 0
 
 
@@ -79,9 +75,9 @@ def test_read_ascii_with_null_character(session):
 
     tools.r_in_ascii(input=io.StringIO(INPUT_FROM_FILE), output="ascii", type="CELL")
 
-    info = tools.r_info(map="ascii", format="json").json
+    info = tools.r_info(map="ascii", format="json")
     assert info["min"] == 1
     assert info["max"] == 5
 
-    univar = tools.r_univar(map="ascii", format="json").json
+    univar = tools.r_univar(map="ascii", format="json")
     assert univar["null_cells"] == 3
