@@ -15,6 +15,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
 @author Anna Kratochvilova <KratochAnna seznam.cz> (Google SoC 2011)
 """
 
+# pylint: disable=W0611
+
 errorMsg = ""
 
 try:
