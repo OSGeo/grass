@@ -253,28 +253,77 @@ v.in.db --interface-description
 ## JSON
 
 The flag **--json** added to a GRASS command with parameters mandatorily
-to be specified generates a module interface description in JSON.
-Example:
+to be specified generates a module interface description in JSON. The JSON
+output can be used as building blocks in actinia processing chains.
+
+actinia specific parametrization is supported for both import and export.
+
+Import of input data is denoted with a "@" as delimiter followed by a
+valid URL.
+
+Request for actinia to export a raster, vector or other file-based data
+can be invoked with a "+" behind the file-name followed by an
+actinia-format name. Currently recognized formats are:
+
+- COG
+- GTiff
+- GPKG
+- SQLite
+- GML
+- GeoJSON
+- ESRI_Shapefile
+- CSV
+- TXT
+- PDF
+- PostgreSQL
+
+Many GRASS tools produce textual output to *stdout* and actinia allows
+to export that output. However, the **--json** flag does not yet
+allow to specify export of *stdout*, so export instructions need to be
+added manually to the resulting JSON data. In an actinia processing
+chain, exporting *stdout* may be requested as follows:
+
+```json
+{
+  ...
+  'stdout': {'id': 'stats', 'format': 'kv', 'delimiter': '='},
+}
+```
+
+Please consult the
+[actinia documentation](https://actinia-org.github.io/actinia-core/tutorial_process_chain/)
+for possible export formats and settings of *stdout* results.
+
+Here is a full example for usage of the **--json** flag:
 
 ```sh
-v.in.db driver=sqlite database=mysqlite.db table=pointsfile x=x y=y z=z key=idcol out=dtmpoints --json
+r.slope.aspect --o --q -e \
+  elevation="elevation@https://storage.googleapis.com/graas-geodata/elev_ned_30m.tif" \
+  slope="slope+GTiff" aspect="aspect+GTiff" --json
 ```
 
 ```json
 {
-  "module": "v.in.db",
-  "id": "v.in.db_1804289383",
+  "module": "r.slope.aspect",
+  "overwrite": true,
+  "quiet": true,
+  "id": "r.slope.aspect_1804289383",
+  "flags":"e",
   "inputs":[
-     {"param": "table", "value": "pointsfile"},
-     {"param": "driver", "value": "sqlite"},
-     {"param": "database", "value": "mysqlite.db"},
-     {"param": "x", "value": "x"},
-     {"param": "y", "value": "y"},
-     {"param": "z", "value": "z"},
-     {"param": "key", "value": "idcol"}
+     {"import_descr": {"source":"https://storage.googleapis.com/graas-geodata/elev_ned_30m.tif", "type":"raster"},
+      "param": "elevation", "value": "elevation"},
+     {"param": "format", "value": "degrees"},
+     {"param": "precision", "value": "FCELL"},
+     {"param": "zscale", "value": "1.0"},
+     {"param": "min_slope", "value": "0.0"},
+     {"param": "nprocs", "value": "0"},
+     {"param": "memory", "value": "300"}
    ],
   "outputs":[
-     {"param": "output", "value": "dtmpoints"}
+     {"export": {"format":"GTiff", "type":"raster"},
+      "param": "slope", "value": "slope"},
+     {"export": {"format":"GTiff", "type":"raster"},
+      "param": "aspect", "value": "aspect"}
    ]
 }
 ```
