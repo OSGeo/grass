@@ -507,7 +507,7 @@ int G_write_projwkt(const char *location_name, const char *wktstring)
 {
     FILE *fp;
     char path[GPATH_MAX];
-    int err, n;
+    int err;
 
     if (!wktstring)
         return 0;
@@ -525,7 +525,7 @@ int G_write_projwkt(const char *location_name, const char *wktstring)
                       strerror(errno));
 
     err = 0;
-    n = strlen(wktstring);
+    size_t n = strlen(wktstring);
     if (wktstring[n - 1] != '\n') {
         if (n != fprintf(fp, "%s\n", wktstring))
             err = -1;
@@ -558,7 +558,7 @@ int G_write_projsrid(const char *location_name, const char *sridstring)
 {
     FILE *fp;
     char path[GPATH_MAX];
-    int err, n;
+    int err;
 
     if (!sridstring)
         return 0;
@@ -576,7 +576,7 @@ int G_write_projsrid(const char *location_name, const char *sridstring)
                       strerror(errno));
 
     err = 0;
-    n = strlen(sridstring);
+    size_t n = strlen(sridstring);
     if (sridstring[n - 1] != '\n') {
         if (n != fprintf(fp, "%s\n", sridstring))
             err = -1;
