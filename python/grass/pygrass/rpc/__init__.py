@@ -10,7 +10,6 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
 import sys
 from ctypes import CFUNCTYPE, c_void_p
-from multiprocessing import Lock, Pipe, Process
 
 import grass.lib.gis as libgis
 from grass.exceptions import FatalError
@@ -19,6 +18,7 @@ from grass.pygrass.gis.region import Region
 from grass.pygrass.raster import RasterRow, raster2numpy_img
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.basic import Bbox
+from grass.script.utils import _get_multiprocessing_context
 
 from .base import RPCServerBase
 
@@ -247,9 +247,10 @@ class DataProvider(RPCServerBase):
 
     def start_server(self):
         """This function must be re-implemented in the subclasses"""
-        self.client_conn, self.server_conn = Pipe(True)
-        self.lock = Lock()
-        self.server = Process(
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe(True)
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
             target=data_provider_server, args=(self.lock, self.server_conn)
         )
         self.server.daemon = True

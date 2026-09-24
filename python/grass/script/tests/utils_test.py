@@ -1,5 +1,8 @@
 """Test functions in grass.script.utils"""
 
+import multiprocessing
+import sys
+
 import pytest
 
 import grass.script as gs
@@ -65,3 +68,12 @@ def test_resolve_nprocs(monkeypatch):
     assert gs.resolve_nprocs(-10) == 1
     with pytest.raises(ValueError, match="invalid literal for int"):
         gs.resolve_nprocs("not-a-number")
+
+
+def test_get_multiprocessing_context():
+    """Fork is used where available and safe, the platform default elsewhere."""
+    ctx = gutils._get_multiprocessing_context()
+    if sys.platform != "darwin" and "fork" in multiprocessing.get_all_start_methods():
+        assert ctx.get_start_method() == "fork"
+    else:
+        assert ctx.get_start_method() == multiprocessing.get_start_method()
