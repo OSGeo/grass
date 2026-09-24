@@ -527,11 +527,11 @@ int G_write_projwkt(const char *location_name, const char *wktstring)
     err = 0;
     size_t n = strlen(wktstring);
     if (wktstring[n - 1] != '\n') {
-        if (n != fprintf(fp, "%s\n", wktstring))
+        if (fprintf(fp, "%s\n", wktstring) < 0)
             err = -1;
     }
     else {
-        if (n != fprintf(fp, "%s", wktstring))
+        if (fprintf(fp, "%s", wktstring) < 0)
             err = -1;
     }
 
@@ -578,11 +578,11 @@ int G_write_projsrid(const char *location_name, const char *sridstring)
     err = 0;
     size_t n = strlen(sridstring);
     if (sridstring[n - 1] != '\n') {
-        if (n != fprintf(fp, "%s\n", sridstring))
+        if (fprintf(fp, "%s\n", sridstring) < 0)
             err = -1;
     }
     else {
-        if (n != fprintf(fp, "%s", sridstring))
+        if (fprintf(fp, "%s", sridstring) < 0)
             err = -1;
     }
 
