@@ -353,18 +353,10 @@ def main():
                 w = srcregion["w"]
             except ValueError:  # import into latlong, expect 53:39:06.894826N
                 srcregion = gs.parse_key_val(tgtextents, vsep=" ")
-                n = gs.float_or_dms(srcregion["n"][:-1]) * (
-                    -1 if srcregion["n"][-1] == "S" else 1
-                )
-                s = gs.float_or_dms(srcregion["s"][:-1]) * (
-                    -1 if srcregion["s"][-1] == "S" else 1
-                )
-                e = gs.float_or_dms(srcregion["e"][:-1]) * (
-                    -1 if srcregion["e"][-1] == "W" else 1
-                )
-                w = gs.float_or_dms(srcregion["w"][:-1]) * (
-                    -1 if srcregion["w"][-1] == "W" else 1
-                )
+                n = gs.float_or_dms(srcregion["n"])
+                s = gs.float_or_dms(srcregion["s"])
+                e = gs.float_or_dms(srcregion["e"])
+                w = gs.float_or_dms(srcregion["w"])
 
             env["GRASS_REGION"] = gs.region_env(n=n, s=s, e=e, w=w)
 
