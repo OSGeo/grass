@@ -30,6 +30,7 @@ int do_lines(struct Map_info *, struct line_pnts *, dbCatValArray *, int, int,
              struct cat_list *, int, double, int, int, int *, int);
 
 void plot_line_dense(double, double, double, double);
+void plot_point(double, double);
 void setup_plot(double, double, double, double, int (*dot)(int, int));
 
 /* raster.c */
