@@ -216,9 +216,14 @@ added manually to the result from the _api_ backend.
 The script sorts them into categories defined in _utils/release.yml_.
 However, these notes need to be manually edited to collapse related items into
 one. Additionally, a _Highlights_ section needs to be added on top with manually
-identified new major features for major and minor releases. For all releases, a
-_Major_ section may need to be added showing critical fixes or breaking changes
-if there are any.
+identified new major features for major and minor releases. Breaking changes
+and updated requirements are listed there as well.
+
+For all releases, an _Errata_ section needs to be added if the release contains
+fixes of bugs which produced wrong results in an earlier release. These are the
+merged pull requests labeled `errata`; describe each one in terms of what was
+computed incorrectly, so that users can tell whether their own results are
+affected. See [RFC 5: Errata](development/rfc/errata.md).
 
 ### Modify the release draft
 
@@ -286,6 +291,7 @@ The published RC releases have the initial release notes (based on locally
 auto-generated notes) which need to be refined further:
 
 - add highlights
+- add errata
 - verify that the subsections are well sorted
 
 For the final release, edit this draft release again in order to publish it
