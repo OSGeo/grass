@@ -560,7 +560,7 @@ int G_write_projsrid(const char *location_name, const char *sridstring)
     char path[GPATH_MAX];
     int err;
 
-    if (!sridstring)
+    if (!sridstring || !*sridstring)
         return 0;
 
     if (location_name && *location_name)
