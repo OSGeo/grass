@@ -509,7 +509,7 @@ int G_write_projwkt(const char *location_name, const char *wktstring)
     char path[GPATH_MAX];
     int err;
 
-    if (!wktstring)
+    if (!wktstring || !*wktstring)
         return 0;
 
     if (location_name && *location_name)
