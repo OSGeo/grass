@@ -10,7 +10,7 @@ extern struct pj_info iproj, oproj, tproj;
 int where_am_i(char **coords, FILE *fp, int have_spheroid, int decimal,
                int dcoord)
 {
-    char buf1[50], buf2[50];
+    char buf1[320], buf2[320];
     int screen_x, screen_y;
     double east, north;
     int projection;
