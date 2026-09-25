@@ -171,11 +171,19 @@ geodetic length of a pixel). *r.proj* is then run for the raster map the
 user wants to reproject. In this case a little preparation goes a long
 way.
 
+The **nprocs** parameter sets the number of compute threads (default 1)
+and the **memory** parameter sets a limit in MB (default 300). The module
+reads the input in bands sized to fit the **memory** option, and threads
+split the output rows. A band is read as column tiles when a full row does
+not fit. When nothing fits it falls back to the serial cache with a message
+saying how much memory the map needs. The sizing table itself is small and
+is not counted against **memory**. To use the parallel path GRASS must be
+compiled with OpenMP.
+
 When reprojecting whole-world maps the user should disable map-trimming
-with the **-n** flag. Trimming is not useful here because the module has
-the whole map in memory anyway. Besides that, world "edges" are hard (or
-impossible) to find in CRSs other than latitude-longitude so results may
-be odd with trimming.
+with the **-n** flag. Trimming is not useful here because world "edges"
+are hard (or impossible) to find in CRSs other than latitude-longitude so
+results may be odd with trimming.
 
 ## EXAMPLES
 
