@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* functions to classify sorted arrays of doubles and fill a vector of
  * classbreaks */
 

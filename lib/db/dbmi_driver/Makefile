@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 MODULE_TOPDIR = ../../..
 
 EXTRA_CFLAGS = $(USE_BUFFERED_IO) -I../dbmi_base

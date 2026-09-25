@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**************************************************************
  * find intersection between two lines defined by points on the lines
  * line segment A is (ax1,ay1) to (ax2,ay2)

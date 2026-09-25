@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 set(dig2_SRCS
     allocation.c
     cindex.c

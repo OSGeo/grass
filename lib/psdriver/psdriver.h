@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __PSDRIVER_H__
 #define __PSDRIVER_H__
 

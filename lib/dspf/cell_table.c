@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 1996-2006 GRASS Development Team
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include "viz.h"
 
 CELL_ENTRY cell_table[256] = {

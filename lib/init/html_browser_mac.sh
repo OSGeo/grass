@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 # open a help file in the browser specified in GRASS_HTML_BROWSER_MACOSX.  A
 # script is used so that it operates like other platforms - all it takes
 # is the browser executable command and the file to open.  If it's a web URL,

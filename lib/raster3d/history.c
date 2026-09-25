@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /**********************************************************************
  *
  *  Rast3d_read_history (name, mapset, hist)

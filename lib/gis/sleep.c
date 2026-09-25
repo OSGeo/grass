@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <grass/config.h>
 #ifndef _WIN32
 #include <unistd.h>

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <math.h>
 #include <grass/gis.h>
 #include "pi.h"

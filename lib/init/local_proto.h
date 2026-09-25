@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* chk_dbase.c */
 int can_make_location(char *, char *);
 

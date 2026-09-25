@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <grass/gis.h>
 /* compute square of distance of point (x,y) to line segment (x1,y1 - x2,y2) */
 

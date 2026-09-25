@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the field get/set ctypes bindings (year, month, day, ...)
 
 datetime_set_year(), datetime_set_day() and friends only validate and write

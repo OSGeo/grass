@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for column-windowed reading of GDAL-linked (r.external) raster maps.
 
 Rast_get_row() reads GDAL-linked maps through read_data_gdal(), which
