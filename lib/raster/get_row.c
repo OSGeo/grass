@@ -146,7 +146,7 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
                       fcb->name);
 
     row_size = t2 - t1;
-    if (row_size > SSIZE_MAX)
+    if (row_size > INT_MAX)
         G_fatal_error(_("Compressed raster row for <%s> is too large"),
                       fcb->name);
 
