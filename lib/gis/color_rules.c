@@ -42,8 +42,8 @@ char *G_color_rules_options(void)
 {
     char *list;
     const char *name;
-    int size, len, nrules;
-    int i, n;
+    size_t size, len, n;
+    int i, nrules;
     struct colorinfo *colorinfo;
 
     list = NULL;
@@ -79,10 +79,10 @@ char *G_color_rules_options(void)
  */
 char *G_color_rules_descriptions(void)
 {
-    int result_len, result_max;
+    size_t result_len, result_max, len;
     char *result;
     const char *name, *desc;
-    int i, len, nrules;
+    int i, nrules;
     struct colorinfo *colorinfo;
 
     result_len = 0;
@@ -124,10 +124,10 @@ char *G_color_rules_descriptions(void)
  */
 char *G_color_rules_description_type(void)
 {
-    int i, len, nrules;
+    int i, nrules;
+    size_t len, result_len, result_max;
     struct colorinfo *colorinfo;
     const char *name, *desc, *type;
-    int result_len, result_max;
     char *result;
 
     colorinfo = get_colorinfo(&nrules);
@@ -142,7 +142,7 @@ char *G_color_rules_description_type(void)
         type = colorinfo[i].type;
 
         if (desc) {
-            len = strlen(name) + strlen(desc) + strlen(type) + 5;
+            len = strlen(name) + strlen(desc) + strlen(type) + (size_t)5;
             if (result_len + len >= result_max) {
                 result_max = result_len + len + 1000;
                 result = G_realloc(result, result_max);

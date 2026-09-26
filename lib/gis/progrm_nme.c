@@ -58,15 +58,13 @@ const char *G_original_program_name(void)
  */
 void G_set_program_name(const char *s)
 {
-    int i;
     char *temp;
 
     original_name = G_store(s);
 
-    i = strlen(s);
-    while (--i >= 0) {
-        if (G_is_dirsep(s[i])) {
-            s += i + 1;
+    for (size_t i = strlen(s); i > 0; i--) {
+        if (G_is_dirsep(s[i - 1])) {
+            s += i;
             break;
         }
     }

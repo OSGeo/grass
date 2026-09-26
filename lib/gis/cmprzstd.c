@@ -59,6 +59,8 @@
 
 #include <grass/config.h>
 
+#include <limits.h>
+
 #ifdef HAVE_ZSTD_H
 #include <zstd.h>
 #endif
@@ -76,7 +78,19 @@ int G_zstd_compress_bound(int src_sz)
         _("GRASS needs to be compiled with ZSTD for ZSTD compression"));
     return -1;
 #else
-    return ZSTD_compressBound(src_sz);
+    size_t compress_bound = ZSTD_compressBound(src_sz);
+
+    if (ZSTD_isError(compress_bound)) {
+        G_warning(_("ZSTD compression bound error %d: %s"), (int)compress_bound,
+                  ZSTD_getErrorName(compress_bound));
+        return -1;
+    }
+    if (compress_bound > INT_MAX) {
+        G_warning(_("ZSTD compression bound exceeds supported size"));
+        return -1;
+    }
+
+    return (int)compress_bound;
 #endif
 }
 
@@ -84,6 +98,7 @@ int G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
                     int dst_sz)
 {
     int err, nbytes, buf_sz;
+    size_t zstd_err;
     unsigned char *buf;
 
 #ifndef HAVE_ZSTD_H
@@ -114,6 +129,8 @@ int G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
     /* Output buffer has to be larger for single pass compression */
     buf = dst;
     buf_sz = G_zstd_compress_bound(src_sz);
+    if (buf_sz < 0)
+        return -1;
     if (buf_sz > dst_sz) {
         G_warning(
             "G_zstd_compress(): programmer error, destination is too small");
@@ -125,15 +142,22 @@ int G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
         buf_sz = dst_sz;
 
     /* Do single pass compression */
-    err = ZSTD_compress((char *)buf, buf_sz, (char *)src, src_sz, 3);
+    zstd_err = ZSTD_compress((char *)buf, buf_sz, (char *)src, src_sz, 3);
 
-    if (err <= 0 || ZSTD_isError(err)) {
-        G_warning(_("ZSTD compression error %d: %s"), err,
-                  ZSTD_getErrorName(err));
+    if (zstd_err == 0 || ZSTD_isError(zstd_err)) {
+        G_warning(_("ZSTD compression error %d: %s"), (int)zstd_err,
+                  ZSTD_getErrorName(zstd_err));
         if (buf != dst)
             G_free(buf);
         return -1;
     }
+    if (zstd_err > INT_MAX) {
+        G_warning(_("ZSTD compressed size exceeds supported size"));
+        if (buf != dst)
+            G_free(buf);
+        return -1;
+    }
+    err = (int)zstd_err;
     if (err >= src_sz) {
         /* compression not possible */
         if (buf != dst)
@@ -159,7 +183,8 @@ int G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
 int G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst,
                   int dst_sz)
 {
-    int err, nbytes;
+    int nbytes;
+    size_t zstd_err;
 
 #ifndef HAVE_ZSTD_H
     G_fatal_error(
@@ -187,16 +212,20 @@ int G_zstd_expand(unsigned char *src, int src_sz, unsigned char *dst,
     }
 
     /* Do single pass decompress */
-    err = ZSTD_decompress((char *)dst, dst_sz, (char *)src, src_sz);
+    zstd_err = ZSTD_decompress((char *)dst, dst_sz, (char *)src, src_sz);
 
-    if (err <= 0 || ZSTD_isError(err)) {
-        G_warning(_("ZSTD compression error %d: %s"), err,
-                  ZSTD_getErrorName(err));
+    if (zstd_err == 0 || ZSTD_isError(zstd_err)) {
+        G_warning(_("ZSTD compression error %d: %s"), (int)zstd_err,
+                  ZSTD_getErrorName(zstd_err));
+        return -1;
+    }
+    if (zstd_err > INT_MAX) {
+        G_warning(_("ZSTD uncompressed size exceeds supported size"));
         return -1;
     }
 
     /* Number of bytes inflated to output stream is return value */
-    nbytes = err;
+    nbytes = (int)zstd_err;
 
     if (nbytes != dst_sz) {
         /* TODO: it is not an error if destination is larger than needed */
