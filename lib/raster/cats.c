@@ -222,7 +222,7 @@ static CELL read_cats(const char *element, const char *name, const char *mapset,
 
     Rast_init_cats(buff, pcats);
     if (num >= 0)
-        pcats->num = num;
+        pcats->num = (CELL)num;
 
     if (!old) {
         char fmt[256];
