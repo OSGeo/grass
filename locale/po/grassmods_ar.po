@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/grassmods/ar/>\n"
@@ -16623,6 +16623,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "عدد نقاط الإستيفاء"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "طباعة إحداثيات الإتصال الحلى و الخروج"
 
@@ -18148,7 +18158,7 @@ msgid "Unable to export raster map <%s>"
 msgstr "اسم الخريطة الراسترية الناتجة"
 
 #, fuzzy
-msgid "Number of overviews must be between 0 and 5"
+msgid "Number of overviews must be between 0 and 30"
 msgstr "عدد نقاط الإستيفاء"
 
 #, fuzzy
@@ -18590,6 +18600,10 @@ msgstr "(القيمة الأسية لوزن المسافة( صفر- أربعة"
 
 msgid "Constrain model through central window cell"
 msgstr "تحجيم النموذج بخلية النافذة الوسطى"
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "عدد نقاط الإستيفاء"
 
 #, fuzzy
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
@@ -25755,8 +25769,9 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr "لم يتم تحديث الحدود"
 
-msgid "Could not found Git. Please install it."
-msgstr ""
+#, fuzzy
+msgid "Could not find Git. Please install it."
+msgstr "<%s>لم يتم العثور على الخريطة المدخلة\n"
 
 #, fuzzy
 msgid "Cannot write to working directory {}."
@@ -41949,10 +41964,6 @@ msgstr "ملف المدخل"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "اسم الخريطة الراسترية المدخلة"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "عدد نقاط الإستيفاء"
 
 #, fuzzy
 #~ msgid "Number of threads which will be used for parallel compute"

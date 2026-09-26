@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grassmods/de/>\n"
@@ -14987,6 +14987,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Anzahl der Argumente für die Funktion '%s'."
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Gebe die Statistik im Shell-Skript-Stil aus."
 
@@ -16376,8 +16386,10 @@ msgstr "Exportiere Rasterkarte <%s> (Kanal %d)..."
 msgid "Unable to export raster map <%s>"
 msgstr "Kann die Rasterkarte <%s> nicht exportieren."
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Number of points must be > 0 (%d given)"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "Anzahl der Punkte muss größer >0 sein (%d gegeben)."
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16777,6 +16789,10 @@ msgstr "Exponent für die Distanzgewichtung (0.0-4.0)"
 
 msgid "Constrain model through central window cell"
 msgstr "Einschränkungsmodell durch die zentrale Fensterzelle."
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%s=%s> Ungültige Anzahl von Punkten."
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr "Morphometrische Parameter nicht erkannt. Vermute 'Elevation'."
@@ -23356,8 +23372,10 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
-msgstr ""
+#, fuzzy
+#| msgid "Could not initialize the timetables"
+msgid "Could not find Git. Please install it."
+msgstr "Zeittabellen konnten nicht initialisiert werden."
 
 msgid "Cannot write to working directory {}."
 msgstr ""
@@ -38749,9 +38767,6 @@ msgstr "Bild-Datei"
 #~ msgid "Number of points for the visibility"
 #~ msgstr "Anzahl der zu erstellenden Punkte."
 
-#~ msgid "Number of points must be > 0 (%d given)"
-#~ msgstr "Anzahl der Punkte muss größer >0 sein (%d gegeben)."
-
 #, fuzzy
 #~ msgid "Number of points to use in interpolation."
 #~ msgstr "Anzahl der zu erstellenden Punkte."
@@ -38843,10 +38858,6 @@ msgstr "Bild-Datei"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Name der Rasterkarte mit Höheninformationen [in Meter]."
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "Anzahl der Argumente für die Funktion '%s'."
 
 #, fuzzy
 #~ msgid "Number of tile border lines in each direction"

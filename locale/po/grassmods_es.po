@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -15076,6 +15076,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Número de argumentos para la función '%s'"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Mostrar todos los parámetros de conexión del mapa en estilo de script de consola y salir"
 
@@ -16473,8 +16483,10 @@ msgstr "Exportando el mapa ráster <%s> (banda %d)..."
 msgid "Unable to export raster map <%s>"
 msgstr "No se puede exportar el mapa ráster <%s>"
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Number of vertices must be at least 2"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "El número de vertices debe ser al menos 2"
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16874,6 +16886,10 @@ msgstr "Exponente para la distancia ponderada (0.0-4.0)"
 
 msgid "Constrain model through central window cell"
 msgstr "Obligar al modelo a través de la celda central de la ventana"
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%s=%s> número de puntos no válido"
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr "Parámetro morfométrico no reconocido. Se asume 'Elevación'"
@@ -23478,7 +23494,7 @@ msgid "Failed to get Git version."
 msgstr "Ha fallao la búsqueda de segmento de intersección"
 
 #, fuzzy
-msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr "requiere gnuplot, por favor instálelo primero"
 
 #, fuzzy
@@ -39972,10 +39988,6 @@ msgstr "Archivo de imagen"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Nombre de mapa ráster de entrada de temperatura máxima del aire [C]"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "Número de argumentos para la función '%s'"
 
 #, fuzzy
 #~ msgid "Number of tile border lines in each direction"

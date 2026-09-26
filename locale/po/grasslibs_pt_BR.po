@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-08-26 13:42+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/pt_BR/>\n"
@@ -3128,11 +3128,6 @@ msgstr "Feito."
 msgid "Goodbye from GRASS"
 msgstr ""
 
-#, fuzzy
-#| msgid "Please install the GRASS GIS development package"
-msgid "Please install the GRASS development package"
-msgstr "Por favor instale o pacote de desenvolvimento GRASS"
-
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Parâmetro <%s> não suportado"
@@ -5204,7 +5199,7 @@ msgstr[1] "%d primitivas registradas"
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -6957,6 +6952,11 @@ msgstr "A área %d não tem fronteiras"
 
 msgid "Unknown query tool"
 msgstr "Ferramenta de consulta desconhecida"
+
+#, fuzzy
+#~| msgid "Please install the GRASS GIS development package"
+#~ msgid "Please install the GRASS development package"
+#~ msgstr "Por favor instale o pacote de desenvolvimento GRASS"
 
 #, c-format
 #~ msgid "Unable to create latlong equivalent for '%s'"

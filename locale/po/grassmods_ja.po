@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/grassmods/ja/>\n"
@@ -14922,6 +14922,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "のラスターマップ名"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "シェルスクリプトスタイルの統計を出力します"
 
@@ -16303,8 +16313,10 @@ msgstr ""
 msgid "Unable to export raster map <%s>"
 msgstr ""
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Fractal dimension of %.2lf must be between 2 and 3."
+msgid "Number of overviews must be between 0 and 30"
+msgstr "フラクタル次元数 %.2lf は2と3の間でなければいけません"
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16702,6 +16714,10 @@ msgstr "距離加重の指数 (0.0-4.0)  "
 
 msgid "Constrain model through central window cell"
 msgstr "中央ウインドウセルを通じてモデルを抑止します "
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "ステップの不正な数: %s"
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr "形態計測パラメーターは認識されていません. '標高' を想定しています  "
@@ -23246,7 +23262,7 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr ""
 
 msgid "Cannot write to working directory {}."
@@ -37975,10 +37991,6 @@ msgstr "画像ファイル"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "入力ラスターマップ名"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "のラスターマップ名"
 
 #, fuzzy
 #~ msgid "Number of tile border lines in each direction"

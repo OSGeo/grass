@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_zh\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2026-06-25 11:49+0000\n"
 "Last-Translator: Jietao Wang <quaternary@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grassmods/zh_Hans/>\n"
@@ -14816,6 +14816,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "打印的份数"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "以shell脚本的样式输出统计值"
 
@@ -16192,7 +16202,7 @@ msgstr ""
 msgid "Unable to export raster map <%s>"
 msgstr ""
 
-msgid "Number of overviews must be between 0 and 5"
+msgid "Number of overviews must be between 0 and 30"
 msgstr ""
 
 msgid "Building overviews ..."
@@ -16588,6 +16598,10 @@ msgstr "距离权重的指数(0.0-4.0)"
 
 msgid "Constrain model through central window cell"
 msgstr "通过中心窗口的像元限制模型"
+
+#, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr ""
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr ""
@@ -23062,7 +23076,7 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr ""
 
 msgid "Cannot write to working directory {}."
@@ -36384,10 +36398,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "输入的高程栅格图的名称[米]"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "打印的份数"
 
 #, fuzzy
 #~ msgid "Number of tiles in x direction"

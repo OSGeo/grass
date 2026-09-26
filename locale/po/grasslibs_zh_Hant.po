@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -3002,9 +3002,6 @@ msgstr ""
 msgid "Goodbye from GRASS"
 msgstr ""
 
-msgid "Please install the GRASS development package"
-msgstr ""
-
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr ""
@@ -5028,7 +5025,7 @@ msgstr[1] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 

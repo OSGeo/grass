@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-08-23 20:18+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ko/>\n"
@@ -3079,11 +3079,6 @@ msgstr "완료."
 msgid "Goodbye from GRASS"
 msgstr "GRASS를 종료합니다"
 
-#, fuzzy
-#| msgid "Please install the GRASS GIS development package"
-msgid "Please install the GRASS development package"
-msgstr "GRASS 개발 패키지를 설치하세요"
-
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "매개변수 <%s>를 지원하지 않습니다"
@@ -5119,7 +5114,7 @@ msgstr[0] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 
 msgid "Building areas..."
@@ -6841,6 +6836,11 @@ msgstr ""
 
 msgid "Unknown query tool"
 msgstr "알려지지 않은 질의 도구"
+
+#, fuzzy
+#~| msgid "Please install the GRASS GIS development package"
+#~ msgid "Please install the GRASS development package"
+#~ msgstr "GRASS 개발 패키지를 설치하세요"
 
 #, c-format
 #~ msgid "<%s> and <%s>"
