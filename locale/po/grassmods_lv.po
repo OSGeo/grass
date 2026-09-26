@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grassmods/lv/>\n"
@@ -14937,6 +14937,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Drukājamo kopiju sakits"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Drukāt statistiku komandrindas skripta stilā"
 
@@ -16313,7 +16323,7 @@ msgid "Unable to export raster map <%s>"
 msgstr ""
 
 #, fuzzy
-msgid "Number of overviews must be between 0 and 5"
+msgid "Number of overviews must be between 0 and 30"
 msgstr "Punktu skaitam jābūt lielākam par 0 (%d doti)"
 
 msgid "Building overviews ..."
@@ -16713,6 +16723,10 @@ msgstr ""
 
 msgid "Constrain model through central window cell"
 msgstr ""
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "izejas līmeņa nosaukums"
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr ""
@@ -23252,7 +23266,7 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr "Rastra kartes nosaukums"
 
-msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr ""
 
 #, fuzzy
@@ -36875,10 +36889,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "Drukājamo kopiju sakits"
 
 #, fuzzy
 #~ msgid "Number of threads which will be used for parallel compute"

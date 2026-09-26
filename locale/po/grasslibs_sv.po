@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
@@ -3096,9 +3096,6 @@ msgstr "Klar."
 msgid "Goodbye from GRASS"
 msgstr "Farväl från GRASS"
 
-msgid "Please install the GRASS development package"
-msgstr "Installera GRASS-utvecklingspaketet"
-
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Parameter <%s> stöds inte"
@@ -5138,7 +5135,7 @@ msgstr[1] "%d primitiver registrerade"
 #| msgid "One vertex registered"
 #| msgid_plural "%d vertices registered"
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] "Ett hörn registrerat"
 msgstr[1] "%d hörn registrerade"
 
@@ -6885,6 +6882,9 @@ msgstr "Område %d har inga gränser"
 
 msgid "Unknown query tool"
 msgstr "Okänt frågeverktyg"
+
+#~ msgid "Please install the GRASS development package"
+#~ msgstr "Installera GRASS-utvecklingspaketet"
 
 #, c-format
 #~ msgid "Unable to create latlong equivalent for '%s'"

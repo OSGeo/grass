@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grassmods/ko/>\n"
@@ -14875,6 +14875,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "함수 '%s'를 위한 인수의 개수"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "지역정보를 셸 스크립트 형식으로 출력합니다"
 
@@ -16258,8 +16268,10 @@ msgstr ""
 msgid "Unable to export raster map <%s>"
 msgstr ""
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Number of points to be created"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "생성될 점의 개수"
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16655,6 +16667,10 @@ msgstr ""
 
 msgid "Constrain model through central window cell"
 msgstr ""
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%s=%s> 점의 무효한 개수"
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr ""
@@ -23140,8 +23156,10 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
-msgstr ""
+#, fuzzy
+#| msgid "Could not initialize the timetables"
+msgid "Could not find Git. Please install it."
+msgstr "시간 테이블을 초기화할 수 없었습니다"
 
 #, fuzzy
 msgid "Cannot write to working directory {}."
@@ -36788,10 +36806,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "입력 표고 래스터 지도의 이름 [미터]"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "함수 '%s'를 위한 인수의 개수"
 
 #, fuzzy
 #~ msgid "Number of tile border lines in each direction"

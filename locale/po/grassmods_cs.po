@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grassmods/cs/>\n"
@@ -14964,6 +14964,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Počet argumentů pro funkci '%s'"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Vypiš statistiku ve stylu pro shell skript"
 
@@ -16352,8 +16362,10 @@ msgstr "Exportuji rastrovou mapu <%s> (část %d)... "
 msgid "Unable to export raster map <%s>"
 msgstr "Nelze exportovat rastrovou mapu <%s>"
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Number of points must be > 0 (%d given)"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "počet bodů,musí být > 0 (zadáno %d)"
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16756,6 +16768,10 @@ msgstr "Exponent pro vyvážení vzdálenosti (0.0-4.0)"
 
 msgid "Constrain model through central window cell"
 msgstr " Model omezen na centrální buňku okna"
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%s=%s>  neplatný počet bodů "
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr "Morfometrické parametry nebyly rozpoznané. Předpokládá se 'Elevation'"
@@ -23343,7 +23359,7 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr ""
 
 msgid "Cannot write to working directory {}."
@@ -38330,9 +38346,6 @@ msgstr "Soubory obrazové skupiny"
 #~ msgid "Number of points for the visibility"
 #~ msgstr "počet bodů, které mají být vytvořeny"
 
-#~ msgid "Number of points must be > 0 (%d given)"
-#~ msgstr "počet bodů,musí být > 0 (zadáno %d)"
-
 #, fuzzy
 #~ msgid "Number of points to use in interpolation."
 #~ msgstr "počet bodů, které mají být vytvořeny"
@@ -38428,10 +38441,6 @@ msgstr "Soubory obrazové skupiny"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Název vstupního souboru s digitálním modelem terénu"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "Počet argumentů pro funkci '%s'"
 
 #, fuzzy
 #~ msgid "Number of tile border lines in each direction"

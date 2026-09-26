@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
@@ -16716,6 +16716,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Število točk najbližjih točk, ki bodo upoštevane"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Izpiši trenutne parametre povezave in končaj"
 
@@ -18251,7 +18261,7 @@ msgid "Unable to export raster map <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
-msgid "Number of overviews must be between 0 and 5"
+msgid "Number of overviews must be between 0 and 30"
 msgstr "Število točk najbližjih točk, ki bodo upoštevane"
 
 #, fuzzy
@@ -18703,6 +18713,10 @@ msgstr "Eksponent za obteževanje razdalje (od 0.0 do 4.0)"
 
 msgid "Constrain model through central window cell"
 msgstr "Omejevanje modela preko osrednje celice okna"
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "Število točk najbližjih točk, ki bodo upoštevane"
 
 #, fuzzy
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
@@ -25928,8 +25942,9 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr "ne morem posodobiti meja"
 
-msgid "Could not found Git. Please install it."
-msgstr ""
+#, fuzzy
+msgid "Could not find Git. Please install it."
+msgstr "Ne morem najti vhodne datoteke <%s>\n"
 
 #, fuzzy
 msgid "Cannot write to working directory {}."
@@ -42191,10 +42206,6 @@ msgstr "Vhodni sloj"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Ime novega rastrskega sloja"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "Število točk najbližjih točk, ki bodo upoštevane"
 
 #, fuzzy
 #~ msgid "Number of threads which will be used for parallel compute"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grassmods/pt_BR/>\n"
@@ -14954,6 +14954,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Número de cópias"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Imprime todos os parâmetros de conexão do mapa no estilo shell script e sai"
 
@@ -16346,7 +16356,9 @@ msgstr "Exportando mapa raster <%s> (banda %d)..."
 msgid "Unable to export raster map <%s>"
 msgstr "Não foi possível exportar mapa raster <%s>"
 
-msgid "Number of overviews must be between 0 and 5"
+#, fuzzy
+#| msgid "Number of overviews must be between 0 and 5"
+msgid "Number of overviews must be between 0 and 30"
 msgstr "O número de visões gerais deve estar entre 0 e 5"
 
 msgid "Building overviews ..."
@@ -16746,6 +16758,10 @@ msgstr "Expoente para o peso da distância (0.0 - 0.4)"
 
 msgid "Constrain model through central window cell"
 msgstr "Restringir o modelo através da célula central da janela"
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%s> não é um nome de mapa vetorial válido"
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr ""
@@ -23274,8 +23290,10 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr "Falhou na criação da feição OGR"
 
-msgid "Could not found Git. Please install it."
-msgstr ""
+#, fuzzy
+#| msgid "Could not initialize the timetables"
+msgid "Could not find Git. Please install it."
+msgstr "Não foi possível inicializar os horários"
 
 #, fuzzy
 msgid "Cannot write to working directory {}."
@@ -37687,10 +37705,6 @@ msgstr "Arquivo de imagem"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Nome do arquivo raster de elevação para entrada (metros)"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "Número de cópias"
 
 #, fuzzy
 #~ msgid "Number of tiles in x direction"

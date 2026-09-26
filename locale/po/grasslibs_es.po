@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/es/>\n"
@@ -3116,11 +3116,6 @@ msgstr "Hecho."
 msgid "Goodbye from GRASS"
 msgstr "Salió de GRASS, hasta pronto"
 
-#, fuzzy
-#| msgid "Please install the GRASS GIS development package"
-msgid "Please install the GRASS development package"
-msgstr "Por favor instale el paquete de desarrolladores de GRASS"
-
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Parámetro <%s> no soportado"
@@ -5178,7 +5173,7 @@ msgstr[1] "%d primitivas registradas"
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -6918,6 +6913,11 @@ msgstr "Área %d no tiene contornos"
 
 msgid "Unknown query tool"
 msgstr "Herramienta de consulta desconocida"
+
+#, fuzzy
+#~| msgid "Please install the GRASS GIS development package"
+#~ msgid "Please install the GRASS development package"
+#~ msgstr "Por favor instale el paquete de desarrolladores de GRASS"
 
 #, c-format
 #~ msgid "pj_transform() failed: %s"
