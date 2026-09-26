@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 18:13+0000\n"
+"POT-Creation-Date: 2026-09-26 18:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12404,77 +12404,77 @@ msgstr ""
 msgid "Generating preview, wait please"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:526
+#: ../gui/wxpython/psmap/frame.py:525
 msgid "Preview not available"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:528
+#: ../gui/wxpython/psmap/frame.py:527
 msgid "Preview is not available probably because Ghostscript is not installed or not on PATH."
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:533
+#: ../gui/wxpython/psmap/frame.py:532
 #, python-brace-format
 msgid "You can download {program} {arch} version here."
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:549
+#: ../gui/wxpython/psmap/frame.py:548
 msgid "Preview generated"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:578
+#: ../gui/wxpython/psmap/frame.py:577
 msgid "Save file as"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:633
+#: ../gui/wxpython/psmap/frame.py:632
 #, python-format
 msgid "Failed to read file %s."
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:803
+#: ../gui/wxpython/psmap/frame.py:802
 msgid "Scalebar is not appropriate for this projection"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:1327
+#: ../gui/wxpython/psmap/frame.py:1326
 msgid "Press button with green triangle icon to generate preview."
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:1342
+#: ../gui/wxpython/psmap/frame.py:1341
 msgid "wxGUI Cartographic Composer"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:1394
+#: ../gui/wxpython/psmap/frame.py:1393
 msgid "MAP FRAME"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:1395
+#: ../gui/wxpython/psmap/frame.py:1394
 msgid "RASTER LEGEND"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:1396
+#: ../gui/wxpython/psmap/frame.py:1395
 msgid "VECTOR LEGEND"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:1397
+#: ../gui/wxpython/psmap/frame.py:1396
 msgid "MAP INFO"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:1398
+#: ../gui/wxpython/psmap/frame.py:1397
 msgid "SCALE BAR"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:1399
+#: ../gui/wxpython/psmap/frame.py:1398
 msgid "IMAGE"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:1400
+#: ../gui/wxpython/psmap/frame.py:1399
 msgid "NORTH ARROW"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:1686
+#: ../gui/wxpython/psmap/frame.py:1685
 msgid "Click and drag to resize object"
 msgstr ""
 
-#: ../gui/wxpython/psmap/frame.py:2688
+#: ../gui/wxpython/psmap/frame.py:2687
 msgid "labels: "
 msgstr ""
 
