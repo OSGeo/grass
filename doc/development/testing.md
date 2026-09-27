@@ -160,9 +160,7 @@ in a `testsuite` directory.
 
 ### Tests which use a database
 
-A vector map carries its attribute table with it, so a test which needs
-attributes only has to create the map and can read the values back with
-_v.db.select_. Nothing extra has to be set up.
+Vector geometry and attribute tables are separate. If a test needs attributes, create the map and its table (for example with _v.db.addtable_), then read the values back with _v.db.select_. Nothing else is needed once the table is linked.
 
 The temporal database is different. It has to exist before _grass.temporal_
 or any `t.*` tool will work, and by default it lives in the current mapset,
