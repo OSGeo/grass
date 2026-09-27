@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Test of raster3d library
 
 @author Soeren Gebbert

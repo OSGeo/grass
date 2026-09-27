@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __PG_LOCAL_PROTO_H__
 #define __PG_LOCAL_PROTO_H__
 

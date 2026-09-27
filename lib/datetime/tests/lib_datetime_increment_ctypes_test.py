@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the increment ctypes bindings
 
 datetime_increment() and its supporting functions only read and write

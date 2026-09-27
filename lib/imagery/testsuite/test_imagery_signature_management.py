@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# SPDX-FileCopyrightText: 2021 Maris Nartiss
+# SPDX-FileCopyrightText: GRASS Development Team
 """Test of imagery library signature management functionality
 
 @author Maris Nartiss

@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the error-state ctypes bindings
 
 datetime_error(), datetime_error_code() and datetime_error_msg() share a

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 rm -f X1 X2 X3 X1.txt X2.txt X3.txt
 

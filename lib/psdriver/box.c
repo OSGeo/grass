@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include "psdriver.h"
 
 void PS_Box(double x1, double y1, double x2, double y2)

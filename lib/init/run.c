@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /****************************************************************
 this program runs its arguments as  a  command.  it  essentially
 does what the sh would do to look for the command. if / occurs in

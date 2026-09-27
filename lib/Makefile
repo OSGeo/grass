@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 MODULE_TOPDIR = ..
 
 include $(MODULE_TOPDIR)/include/Make/Vars.make

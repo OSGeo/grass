@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <grass/imagery.h>
 #include <grass/glocale.h>
 

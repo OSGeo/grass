@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <grass/config.h>
 #ifdef HAVE_PTHREAD_H
 #define _XOPEN_SOURCE 500

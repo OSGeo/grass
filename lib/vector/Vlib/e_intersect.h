@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef GRASS_E_INTERSECT_H
 #define GRASS_E_INTERSECT_H
 

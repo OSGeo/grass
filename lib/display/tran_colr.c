@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* Takes a color name in ascii, returns the color number for that color.
  *    returns 0 if color is not known.
  */

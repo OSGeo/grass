@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 extern int db_d_add_column(void);
 extern int db_d_bind_update(void);
 extern int db_d_close_cursor(void);

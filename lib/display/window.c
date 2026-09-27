@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * D_erase()
  *   Erases the window on scree.  Does not affect window contents list.

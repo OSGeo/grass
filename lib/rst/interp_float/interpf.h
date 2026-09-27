@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * modified by Brown in June 1999 - added elatt & smatt
  * modified by Mitasova Nov. 9, 1999 - added parameter for dtens to output2d

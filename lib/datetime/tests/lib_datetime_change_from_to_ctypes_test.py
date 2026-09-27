@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the datetime_change_from_to() ctypes binding
 
 datetime_change_from_to() only reads and writes a DateTime struct already in

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2002-2014 GRASS Development Team
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __LOCAL_PROTO_H__
 #define __LOCAL_PROTO_H__
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* Author: Bill Hoff,2-114C,8645,3563478 (hoff) at uicsl */
 
 /*!

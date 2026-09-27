@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 1998, 2015 Todd C. Miller <millert@openbsd.org>
+// SPDX-License-Identifier: BSD-2-Clause
 /*!
  * \file lib/gis/strlcpy.c
  *

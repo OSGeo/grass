@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Test tile index bounds checking in Rast3d_write_tile"""
 
 import os

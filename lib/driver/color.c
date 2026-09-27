@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <grass/colors.h>
 #include "driver.h"
 #include "driverlib.h"

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /********************************************************************
  * code in this file is designed to send raster data to the graphics
  * driver. It handles raster->color lookup translation, as well as
