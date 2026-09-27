@@ -171,6 +171,52 @@ def test_something_which_changes_the_environment(xy_dataset_session):
     ...
 ```
 
+### Tests which call C functions
+
+_grass.lib_ exposes the C libraries through ctypes, and those calls run inside
+the pytest process. If the C code aborts, it takes the interpreter with it: a
+segmentation fault, or a `G_fatal_error()` which ends the process, stops the
+whole run. pytest reports nothing, because pytest is gone — there is an exit
+code, no traceback, and none of the captured output. On Windows CI that looks
+like an infrastructure problem rather than a failing test, and a run was
+restarted twice before it was traced back to one test.
+
+Calls which cannot abort are fine in the process, as in
+`lib/vector/rtree/tests/lib_vector_rtree_ctypes_test.py`, where the R-tree is a
+pure in-memory structure. When the function can crash — in particular when the
+behaviour under test _is_ a crash — run the calls in a subprocess instead:
+
+```python
+import subprocess
+import sys
+
+SCRIPT = """
+from grass.lib.vector import Vect_new_cat_list
+...
+"""
+
+
+def test_empty_cat_list(xy_dataset_session):
+    """An empty category list does not crash the library"""
+    process = subprocess.run(
+        [sys.executable, "-c", SCRIPT],
+        env=xy_dataset_session.env,
+        capture_output=True,
+        text=True,
+    )
+    assert process.returncode == 0, process.stdout + process.stderr
+```
+
+The crash then arrives as a return code, -11 for a segmentation fault on
+POSIX, in one ordinary test failure which names the test, and the rest of the
+suite still runs. Including the output in the assertion keeps whatever the
+library printed before it died.
+
+_grass.gunittest_ is not affected by any of this, because it already runs each
+test file as a subprocess in an existing session. That makes it the more
+robust choice for C code which is expected to crash, while pytest remains the
+better fit for testing small, individual functions.
+
 ## More information
 
 - [grass.gunittest documentation](https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html)
