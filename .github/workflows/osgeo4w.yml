@@ -98,6 +98,20 @@ jobs:
             sqlite3-devel
             zstd-devel
 
+      # Python in OSGeo4W bundles OpenSSL 3.0 DLLs with the same names as the
+      # OSGeo4W OpenSSL 3.5 DLLs. Once a process imports ssl, libcurl loaded
+      # later (by GDAL or PROJ) binds to the older libssl, but curl 8.22 needs
+      # SSL_get0_group_name from OpenSSL 3.2, so loading GDAL or GRASS
+      # libraries fails. OpenSSL 3 keeps its ABI across minor versions, so
+      # Python can use the newer DLLs.
+      - name: Use OSGeo4W OpenSSL DLLs in Python
+        run: |
+          Copy-Item -Path "$env:O4WROOT\bin\libssl-3-x64.dll", "$env:O4WROOT\bin\libcrypto-3-x64.dll" `
+            -Destination "$env:O4WROOT\apps\Python312\DLLs" -Force
+        shell: pwsh
+        env:
+          O4WROOT: ${{ steps.osgeo4w.outputs.root }}
+
       - name: Set number of cores for compilation
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
