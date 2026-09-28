@@ -7,49 +7,25 @@
 #include <grass/bitmap.h>
 #include <grass/linkm.h>
 
-double simwe_rand(void)
+#include <grass/simlib.h>
+
+double simwe_rand(struct G_rand48_state *state)
 {
-    return G_drand48();
+    return G_drand48_r(state);
 } /* ulec */
 
-double gasdev(void)
-{
-    /* Initialized data */
-
-    static int iset = 0;
-    static double gset = .1;
-
-    /* System generated locals */
-    double ret_val;
-
-    /* Local variables */
-    double r = 0.0, vv1 = 0.0, vv2 = 0.0, fac = 0.0;
-
-    if (iset == 0) {
-        while (r >= 1. || r == 0.) {
-            vv1 = simwe_rand() * 2. - 1.;
-            vv2 = simwe_rand() * 2. - 1.;
-            r = vv1 * vv1 + vv2 * vv2;
-        }
-        fac = sqrt(log(r) * -2. / r);
-        gset = vv1 * fac;
-        ret_val = vv2 * fac;
-        iset = 1;
-    }
-    else {
-        ret_val = gset;
-        iset = 0;
-    }
-    return ret_val;
-} /* gasdev */
-
-void gasdev_for_paralel(double *x, double *y)
+/* Two independent standard normal deviates, by the polar form of the
+ * Box-Muller transform. The method yields them in pairs, so both are
+ * returned rather than one being cached between calls: a cache would be
+ * state shared behind the caller's back, which is what the caller-owned
+ * generator exists to avoid. */
+void gasdev(struct G_rand48_state *state, double *x, double *y)
 {
     double r = 0.0, vv1 = 0.0, vv2 = 0.0, fac = 0.0;
 
     while (r >= 1. || r == 0.) {
-        vv1 = simwe_rand() * 2. - 1.;
-        vv2 = simwe_rand() * 2. - 1.;
+        vv1 = simwe_rand(state) * 2. - 1.;
+        vv2 = simwe_rand(state) * 2. - 1.;
         r = vv1 * vv1 + vv2 * vv2;
     }
     fac = sqrt(log(r) * -2. / r);

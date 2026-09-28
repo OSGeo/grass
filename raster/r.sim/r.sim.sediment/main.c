@@ -319,7 +319,8 @@ int main(int argc, char *argv[])
     }
     else {
         /* default as it used to be */
-        G_srand48(12345);
+        seed_value = 12345;
+        G_srand48(seed_value);
     }
 
     G_get_set_window(&cellhd);
@@ -392,6 +393,7 @@ int main(int argc, char *argv[])
     sscanf(parm.mintimestep->answer, "%lf", &settings.mintimestep);
     /*    sscanf(parm.density->answer, "%d", &wp.ldemo); */
     sscanf(parm.diffc->answer, "%lf", &settings.frac);
+    settings.random_seed = seed_value;
     sscanf(parm.maninval->answer, "%lf", &inputs.manin_val);
 
     /* Recompute timesec from user input in minutes

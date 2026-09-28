@@ -7,6 +7,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include <grass/gis.h>
+
 #define EPS         1.e-7
 #define UNDEF       -9999
 
@@ -37,6 +39,7 @@ typedef struct {
     int timesec;        // Time how long the simulation runs [minutes]
     bool ts;            // Time series output
     double mintimestep; // Minimum time step for the simulation [seconds]
+    long random_seed;   // Seed for the random number generators
 } Settings;
 
 typedef struct {
@@ -161,9 +164,8 @@ void create_observation_points(ObservationPoints *points);
 void derivatives(const Geometry *geometry, float **elevation, double **dx,
                  double **dy);
 
-double simwe_rand(void);
-double gasdev(void);
-void gasdev_for_paralel(double *, double *);
+double simwe_rand(struct G_rand48_state *);
+void gasdev(struct G_rand48_state *, double *, double *);
 double amax1(double, double);
 double amin1(double, double);
 int min(int, int);
