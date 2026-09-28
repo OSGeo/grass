@@ -240,14 +240,13 @@ def test_infiltration_reduces_depth(east_slope_session):
 
 
 def test_depth_increases_downstream(tmp_path):
-    """Water must be deeper in the downslope half of a uniform slope.
+    """Water must get deeper from cell to cell down a uniform slope.
 
     By continuity, discharge q(x) = R * x grows linearly with distance x
     from the divide. Manning's kinematic wave then gives h(x) proportional
     to x^(3/5), also increasing downstream.
 
-    Uses a 1-row x 6-column domain to split cleanly into an upslope half
-    (cols 0-2) and a downslope half (cols 3-5). See
+    Uses a 1-row x 6-column domain. See
     test_north_slope_depth_increases_downstream for the north-south variant.
     """
     project = tmp_path / "simwe"
@@ -260,12 +259,12 @@ def test_depth_increases_downstream(tmp_path):
         tools.r_mapcalc(expression="dx = 1.0")
         tools.r_mapcalc(expression="dy = 0.0")
 
-        flat = run_sim(session).flatten()  # shape (6,) for a 1-row raster
-        upslope_sum = float(np.sum(flat[:3]))
-        downslope_sum = float(np.sum(flat[3:]))
-        assert downslope_sum > upslope_sum, (
-            f"Downslope total depth ({downslope_sum:.3e}) should exceed "
-            f"upslope total depth ({upslope_sum:.3e})"
+        # With the default walkers a single cell can be drier than the one
+        # above it; across 13 seeds at 2000 walkers every cell exceeded the
+        # one above it by at least 4%.
+        flat = run_sim(session, nwalkers=2000).flatten()
+        assert np.all(np.diff(flat) > 0), (
+            f"Depth should increase cell by cell downstream: {flat}"
         )
 
 
@@ -956,14 +955,13 @@ def test_north_slope_rain_produces_positive_depth(tmp_path):
 
 
 def test_north_slope_depth_increases_downstream(tmp_path):
-    """Water must be deeper in the downslope (northward) half of a north-south slope.
+    """Water must get deeper from cell to cell down a north-south slope.
 
     By continuity, discharge q(y) = R * y grows linearly with distance y
     from the divide. Manning's kinematic wave then gives h(y) proportional
     to y^(3/5), increasing toward the northern boundary.
 
-    Uses a 6-row x 1-column domain to split cleanly into a downslope half
-    (rows 0-2, north) and an upslope half (rows 3-5, south). Mirrors
+    Uses a 6-row x 1-column domain with the outlet in row 0. Mirrors
     test_depth_increases_downstream with dy instead of dx.
 
     Note: dy = 1.0 because elevation increases southward (with increasing row).
@@ -979,12 +977,11 @@ def test_north_slope_depth_increases_downstream(tmp_path):
         tools.r_mapcalc(expression="dx = 0.0")
         tools.r_mapcalc(expression="dy = 1.0")
 
-        depth = run_sim(session).flatten()  # shape (6,) for a 1-column raster
-        upslope_sum = float(np.sum(depth[3:]))  # rows 3-5 (south, high elevation)
-        downslope_sum = float(np.sum(depth[:3]))  # rows 0-2 (north, low elevation)
-        assert downslope_sum > upslope_sum, (
-            f"Downslope total depth ({downslope_sum:.3e}) should exceed "
-            f"upslope total depth ({upslope_sum:.3e})"
+        # Across 13 seeds at 2000 walkers every cell exceeded the one above
+        # it (to the south) by at least 3%.
+        depth = run_sim(session, nwalkers=2000).flatten()
+        assert np.all(np.diff(depth) < 0), (
+            f"Depth should increase cell by cell toward the north: {depth}"
         )
 
 
