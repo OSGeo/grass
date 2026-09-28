@@ -42,7 +42,7 @@ up the simulation.
 
 [Mitasova, H., Thaxton, C., Hofierka, J., McLaughlin, R., Moore, A.,
 Mitas L.,
-2004,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/II.6.8_Mitasova_044.pdf)
+2004,](https://doi.org/10.1016/S0167-5648(04)80159-X)
 Path sampling method for modeling overland water flow, sediment
 transport and short term terrain evolution in Open Source GIS. In: C.T.
 Miller, M.W. Farthing, V.G. Gray, G.F. Pinder eds., Proceedings of the
@@ -50,10 +50,9 @@ XVth International Conference on Computational Methods in Water
 Resources (CMWR XV), June 13-17 2004, Chapel Hill, NC, USA, Elsevier,
 pp. 1479-1490.
 
-[Mitasova H, Mitas, L., 2000, Modeling spatial processes in multiscale
-framework: exploring duality between particles and
-fields,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/gisc00/duality.html)
-plenary talk at GIScience2000 conference, Savannah, GA.
+Mitasova H, Mitas, L., 2000, Modeling spatial processes in multiscale
+framework: exploring duality between particles and fields, plenary talk
+at GIScience2000 conference, Savannah, GA.
 
 Mitas, L., and Mitasova, H., 1998, Distributed soil erosion simulation
 for effective erosion prevention. Water Resources Research, 34(3),
@@ -61,7 +60,7 @@ for effective erosion prevention. Water Resources Research, 34(3),
 
 [Mitasova, H., Mitas, L., 2001, Multiscale soil erosion simulations for
 land use
-management,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/LLEmiterev1.pdf)
+management,](https://doi.org/10.1007/978-1-4615-0575-4_11)
 In: Landscape erosion and landscape evolution modeling, Harmon R. and
 Doe W. eds., Kluwer Academic/Plenum Publishers, pp. 321-347.
 

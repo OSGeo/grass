@@ -23,12 +23,8 @@ used to determine the direction and magnitude of water flow velocity. To
 include a predefined direction of flow, map algebra can be used to
 replace terrain-derived partial derivatives with pre-defined partial
 derivatives in selected grid cells such as man-made channels, ditches or
-culverts. Equations (2) and (3) from [this
-report](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/reports/cerl99/rep99.html)
-can be used to compute partial derivates of the predefined flow using
-its direction given by aspect and slope.
-
-The equations are
+culverts. The partial derivatives of the predefined flow are computed
+from its direction, given by aspect and slope:
 
 ```sh
 dx = tan(slope) * cos(aspect)
@@ -210,21 +206,20 @@ Carolina sample dataset.*
   Mitas L., 2004, [Path sampling method for modeling overland water
   flow, sediment transport and short term terrain evolution in Open
   Source
-  GIS.](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/II.6.8_Mitasova_044.pdf)
+  GIS.](https://doi.org/10.1016/S0167-5648(04)80159-X)
   In: C.T. Miller, M.W. Farthing, V.G. Gray, G.F. Pinder eds.,
   Proceedings of the XVth International Conference on Computational
   Methods in Water Resources (CMWR XV), June 13-17 2004, Chapel Hill,
   NC, USA, Elsevier, pp. 1479-1490.
-- Mitasova H, Mitas, L., 2000, [Modeling spatial processes in multiscale
-  framework: exploring duality between particles and
-  fields,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/gisc00/duality.html)
-  plenary talk at GIScience2000 conference, Savannah, GA.
+- Mitasova H, Mitas, L., 2000, Modeling spatial processes in multiscale
+  framework: exploring duality between particles and fields, plenary
+  talk at GIScience2000 conference, Savannah, GA.
 - Mitas, L., and Mitasova, H., 1998, Distributed soil erosion simulation
   for effective erosion prevention. Water Resources Research, 34(3),
   505-516.
 - Mitasova, H., Mitas, L., 2001, [Multiscale soil erosion simulations
   for land use
-  management,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/LLEmiterev1.pdf)
+  management,](https://doi.org/10.1007/978-1-4615-0575-4_11)
   In: Landscape erosion and landscape evolution modeling, Harmon R. and
   Doe W. eds., Kluwer Academic/Plenum Publishers, pp. 321-347.
 - Hofierka, J, Mitasova, H., Mitas, L., 2002. GRASS and modeling
