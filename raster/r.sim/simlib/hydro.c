@@ -151,9 +151,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 #pragma omp parallel firstprivate(l, lw, k) reduction(+ : nwalka)
             {
 #if defined(_OPENMP)
-                int steps = (int)((((double)sim->nwalk) /
-                                   ((double)omp_get_num_threads())) +
-                                  0.5);
+                int steps = (sim->nwalk + omp_get_num_threads() - 1) /
+                            omp_get_num_threads();
                 int tid = omp_get_thread_num();
                 int min_loop = tid * steps;
                 int max_loop = ((tid + 1) * steps) > sim->nwalk
