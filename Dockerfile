@@ -11,7 +11,7 @@ ARG PYTHON_VERSION=3.14
 # renovate: datasource=github-tags depName=libgeos/geos
 ARG GEOS_VERSION=3.15.0
 # renovate: datasource=github-tags depName=OSGeo/PROJ
-ARG PROJ_VERSION=9.8.1
+ARG PROJ_VERSION=9.9.0
 # renovate: datasource=github-tags depName=OSGeo/gdal
 ARG GDAL_VERSION=3.13.3
 # renovate: datasource=github-tags depName=PDAL/PDAL

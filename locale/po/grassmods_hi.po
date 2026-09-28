@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
@@ -14788,6 +14788,17 @@ msgstr "रैस्टर मानों के लिए उपयोग ह�
 msgid "PDAL dimension name"
 msgstr "पीडीएएल आयाम नाम"
 
+#, fuzzy
+#| msgid "Number of intermediate images to produce"
+msgid "Number of points buffered at once during processing"
+msgstr "उत्पादित की जाने वाली मध्यवर्ती छवियों की संख्या"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
 msgid "Print data file extent in shell script style and then exit"
 msgstr "शेल स्क्रिप्ट शैली में डेटा फ़ाइल सीमा प्रिंट करें और फिर बाहर निकलें"
 
@@ -16153,7 +16164,9 @@ msgstr "रेखापुंज मानचित्र <%s> (बैंड %d)
 msgid "Unable to export raster map <%s>"
 msgstr "रेखापुंज मानचित्र निर्यात करने में असमर्थ <%s>"
 
-msgid "Number of overviews must be between 0 and 5"
+#, fuzzy
+#| msgid "Number of overviews must be between 0 and 5"
+msgid "Number of overviews must be between 0 and 30"
 msgstr "ओवरव्यू की संख्या 0 और 5 के बीच होनी चाहिए"
 
 msgid "Building overviews ..."
@@ -16549,6 +16562,11 @@ msgstr "दूरी भार के लिए घातांक (0.0-4.0)"
 
 msgid "Constrain model through central window cell"
 msgstr "केंद्रीय विंडो सेल के माध्यम से मॉडल को बाधित करें"
+
+#, fuzzy, c-format
+#| msgid "<%d> is not valid number of nprocs."
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%d> nprocs की वैध संख्या नहीं है।"
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr "मॉर्फोमेट्रिक पैरामीटर पहचाना नहीं गया. 'ऊंचाई' मानते हुए"
@@ -23054,7 +23072,9 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr "Git संस्करण प्राप्त करने में विफल।"
 
-msgid "Could not found Git. Please install it."
+#, fuzzy
+#| msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr "Git नहीं मिल सका. कृपया इसे इंस्टॉल करें।"
 
 msgid "Cannot write to working directory {}."

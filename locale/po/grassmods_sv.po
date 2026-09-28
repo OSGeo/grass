@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2026-01-08 02:38+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -14814,6 +14814,17 @@ msgstr "Egen dimension (variabel) att använda för rastervärden"
 msgid "PDAL dimension name"
 msgstr "PDAL-dimensionens namn"
 
+#, fuzzy
+#| msgid "Number of intermediate images to produce"
+msgid "Number of points buffered at once during processing"
+msgstr "Antal mellanliggande bilder som ska produceras"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Skriv ut datafilens omfattning i skalskriptstil och avsluta sedan"
 
@@ -16181,7 +16192,9 @@ msgstr "Exporterar rasterkarta <%s> (band %d)..."
 msgid "Unable to export raster map <%s>"
 msgstr "Det går inte att exportera en rasterkarta <%s>"
 
-msgid "Number of overviews must be between 0 and 5"
+#, fuzzy
+#| msgid "Number of overviews must be between 0 and 5"
+msgid "Number of overviews must be between 0 and 30"
 msgstr "Antal översikter måste vara mellan 0 och 5"
 
 msgid "Building overviews ..."
@@ -16577,6 +16590,11 @@ msgstr "Exponent för avståndsvägning (0,0-4,0)"
 
 msgid "Constrain model through central window cell"
 msgstr "Begränsa modellen genom central fönstercell"
+
+#, fuzzy, c-format
+#| msgid "<%d> is not valid number of nprocs."
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%d> är inte ett giltigt antal nprocs."
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr "Morfometrisk parameter inte känd. Förutsatt att 'Elevation'"
@@ -23092,7 +23110,9 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr "Misslyckades med att hämta Git-versionen."
 
-msgid "Could not found Git. Please install it."
+#, fuzzy
+#| msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr "Kunde inte hitta Git. Installera det."
 
 msgid "Cannot write to working directory {}."
