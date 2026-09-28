@@ -379,11 +379,13 @@ def test_hollow_concentrates_more_than_spur(tmp_path):
     column (the columns beside it are), so the test compares the two
     landforms rather than columns within the spur.
     """
-    depth_hollow = landform_depth(tmp_path / "hollow", HOLLOW)
-    depth_spur = landform_depth(tmp_path / "spur", SPUR)
+    # 1000 walkers keep the depth pattern of both surfaces readable in the
+    # result at no measurable cost in runtime.
+    depth_hollow = landform_depth(tmp_path / "hollow", HOLLOW, nwalkers=1000)
+    depth_spur = landform_depth(tmp_path / "spur", SPUR, nwalkers=1000)
 
-    # The factor 2 is a regression threshold: across 13 seeds at the default
-    # walker count the measured ratio was never below 3.6.
+    # The factor 2 is a regression threshold: across 13 seeds the measured
+    # ratio was never below 3.8.
     axis_hollow = float(np.sum(depth_hollow[:, 3]))
     axis_spur = float(np.sum(depth_spur[:, 3]))
     assert axis_hollow > 2 * axis_spur, (
@@ -399,7 +401,7 @@ def test_hollow_concentrates_more_than_spur(tmp_path):
     )
 
     # The maximum depth, at the outlet end of the axis, follows the same
-    # order with the same threshold (measured ratio never below 3.7).
+    # order with the same threshold (measured ratio never below 4.8).
     max_hollow = float(np.max(depth_hollow))
     max_spur = float(np.max(depth_spur))
     assert max_hollow > 2 * max_spur, (
@@ -410,32 +412,32 @@ def test_hollow_concentrates_more_than_spur(tmp_path):
     assert_depth_pinned(
         depth_hollow,
         [
-            [0.29, 0.57, 0.64, 1.02, 0.85, 0.57, 0.29],
-            [0.43, 0.71, 0.96, 1.46, 0.91, 0.37, 0.37],
-            [0.29, 0.54, 1.21, 2.06, 1.08, 0.77, 0.49],
-            [0.52, 0.62, 1.30, 2.79, 1.52, 0.69, 0.57],
-            [0.46, 0.71, 1.36, 3.21, 1.65, 0.81, 0.37],
-            [0.25, 0.69, 1.78, 3.92, 1.69, 0.64, 0.40],
-            [0.54, 0.62, 1.51, 4.50, 1.70, 0.54, 0.57],
-            [0.25, 0.87, 1.60, 4.90, 1.74, 0.59, 0.37],
-            [0.37, 0.69, 1.97, 5.54, 1.99, 0.83, 0.62],
-            [0.57, 0.87, 2.14, 6.92, 2.76, 0.69, 0.33],
+            [0.34, 0.54, 0.79, 0.67, 0.67, 0.52, 0.36],
+            [0.41, 0.57, 0.96, 1.22, 0.90, 0.64, 0.46],
+            [0.47, 0.71, 1.25, 2.08, 1.20, 0.73, 0.37],
+            [0.41, 0.60, 1.46, 2.84, 1.33, 0.57, 0.42],
+            [0.48, 0.65, 1.46, 3.42, 1.43, 0.71, 0.46],
+            [0.38, 0.73, 1.56, 4.01, 1.56, 0.76, 0.42],
+            [0.43, 0.68, 1.77, 4.53, 1.72, 0.74, 0.39],
+            [0.46, 0.65, 1.79, 4.99, 1.68, 0.65, 0.43],
+            [0.37, 0.71, 1.87, 5.54, 1.87, 0.80, 0.42],
+            [0.43, 0.79, 2.18, 6.95, 2.21, 0.77, 0.43],
         ],
     )
 
     assert_depth_pinned(
         depth_spur,
         [
-            [0.75, 0.43, 0.59, 0.43, 0.43, 0.46, 0.71],
-            [0.73, 0.69, 0.52, 0.77, 0.49, 0.52, 0.54],
-            [1.10, 0.71, 0.49, 0.83, 0.83, 0.62, 0.81],
-            [0.96, 0.77, 0.46, 0.69, 0.73, 0.96, 0.98],
-            [1.02, 0.49, 0.59, 0.75, 0.54, 0.91, 1.26],
-            [1.03, 1.08, 0.57, 0.98, 0.62, 0.83, 1.32],
-            [1.20, 0.85, 0.67, 1.10, 0.40, 0.77, 1.13],
-            [1.20, 0.59, 0.57, 0.83, 0.79, 0.83, 0.96],
-            [1.30, 0.75, 0.57, 0.81, 0.93, 0.81, 1.15],
-            [1.24, 0.79, 0.59, 1.15, 0.69, 1.30, 1.61],
+            [0.73, 0.46, 0.29, 0.45, 0.36, 0.51, 0.55],
+            [0.74, 0.63, 0.56, 0.64, 0.45, 0.56, 0.80],
+            [0.97, 0.77, 0.64, 0.78, 0.56, 0.72, 1.09],
+            [1.08, 0.77, 0.61, 0.89, 0.54, 0.68, 1.00],
+            [1.13, 0.80, 0.64, 0.92, 0.71, 0.66, 0.98],
+            [1.08, 0.83, 0.69, 0.96, 0.67, 0.80, 1.11],
+            [1.19, 0.75, 0.77, 1.07, 0.77, 0.76, 1.16],
+            [1.14, 0.85, 0.73, 1.01, 0.81, 0.75, 1.09],
+            [1.20, 0.72, 0.81, 1.05, 0.79, 0.91, 1.26],
+            [1.40, 1.09, 0.93, 1.24, 0.81, 0.88, 1.29],
         ],
     )
 
