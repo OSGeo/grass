@@ -31,6 +31,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 from __future__ import annotations
 
 import atexit
+import multiprocessing.util  # noqa: F401
 import os
 import sqlite3
 from datetime import datetime
@@ -491,7 +492,9 @@ def stop_subprocesses() -> None:
         c_library_interface.stop()
 
 
-# We register this function to be called at exit
+# Importing multiprocessing.util registers the multiprocessing exit handler,
+# so this function, registered later, runs before it (atexit is LIFO) and stops
+# the servers before multiprocessing terminates them.
 atexit.register(stop_subprocesses)
 
 
