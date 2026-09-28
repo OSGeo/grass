@@ -378,6 +378,7 @@ void execute(expr_list *ee)
     int count, n, i;
     int num_exprs = 0;
     int threads = 1;
+    GProgressContext *ctx;
 
     exprs = ee;
     G_add_error_handler(error_handler, NULL);
@@ -459,13 +460,19 @@ void execute(expr_list *ee)
     n = 0;
 
     verbose = isatty(2);
+
+    if (verbose)
+        ctx = G_progress_context_create(count, 2);
+
     for (current_depth = 0; current_depth < depths; current_depth++) {
         int row;
 #pragma omp parallel for default(shared) schedule(static, 1) private(i) ordered
         for (row = 0; row < rows; row++) {
-            if (verbose)
+#ifndef G_USE_PROGRESS_NG
+            if (verbose) {
                 G_percent(n, count, 2);
-
+            }
+#endif
             int tid = 0;
 #if defined(_OPENMP)
             tid = omp_get_thread_num();
@@ -488,14 +495,19 @@ void execute(expr_list *ee)
             }
 #pragma omp atomic update
             n++;
+            if (verbose)
+                G_progress_update(ctx);
         }
     }
 
     G_finish_workers();
 
-    if (verbose)
+    if (verbose) {
+#ifndef G_USE_PROGRESS_NG
         G_percent(n, count, 2);
-
+#endif
+        G_progress_context_destroy(ctx);
+    }
     close_maps();
 
     for (l = ee; l; l = l->next) {
