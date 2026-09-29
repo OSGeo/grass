@@ -1176,7 +1176,6 @@ def _convert_timestamp_from_grass(ts):
 def _stop(lock: _LockLike, conn: Connection, data) -> None:
     libgis.G_debug(1, "Stop C-interface server")
     conn.close()
-    lock.release()
     sys.exit()
 
 
@@ -1196,11 +1195,9 @@ def c_library_server(lock: _LockLike, conn: Connection) -> None:
         """This function will be called in case of a fatal error in libgis"""
         # sys.stderr.write("Error handler was called\n")
         # We send an exception that will be handled in
-        # the parent process, then close the pipe
-        # and release any possible lock
+        # the parent process, then close the pipe.
         conn.send(FatalError())
         conn.close()
-        lock.release()
 
     CALLBACK = CFUNCTYPE(c_void_p, c_void_p)
     CALLBACK.restype = c_void_p
