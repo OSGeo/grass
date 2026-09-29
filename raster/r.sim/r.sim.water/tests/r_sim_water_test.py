@@ -172,8 +172,9 @@ def diffusion_low_hmax_depth(diffusion_project):
     the margins are noise-driven.
     """
     with TemporaryMapsetSession(env=diffusion_project.env) as session:
-        depth = run_sim(
-            session, rain_value=1000, man_value=0.5, hmax=0.001, nwalkers=40000
+        # Copy the result while the mapset holding its backing file exists.
+        depth = np.array(
+            run_sim(session, rain_value=1000, man_value=0.5, hmax=0.001, nwalkers=40000)
         )
     depth.flags.writeable = False
     return depth
