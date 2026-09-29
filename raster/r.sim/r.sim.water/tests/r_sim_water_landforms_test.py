@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 """Landform tests for r.sim.water (SIMWE).
 
 Each test simulates a small synthetic elevation surface, given as an array

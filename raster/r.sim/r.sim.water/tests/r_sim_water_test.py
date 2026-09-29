@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 """Minimal analytical tests for r.sim.water (SIMWE).
 
 Tests use small, hand-crafted domains where expected output can be reasoned
