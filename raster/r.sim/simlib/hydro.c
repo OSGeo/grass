@@ -221,11 +221,17 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                 }
                             }
 
-                            grids->gama[k][l] +=
-                                (addac * sim->w[lw].m); /* add walker weigh to
-                                                      water depth or conc. */
+                            /* Add walker weight to water depth or
+                             * concentration. The captured sum includes the
+                             * weights added before on any thread. */
+                            double gama;
+#pragma omp atomic capture
+                            {
+                                grids->gama[k][l] += addac * sim->w[lw].m;
+                                gama = grids->gama[k][l];
+                            }
 
-                            double d1 = grids->gama[k][l] * conn;
+                            double d1 = gama * conn;
                             double gaux, gauy;
 #if defined(_OPENMP)
                             gasdev_for_paralel(&gaux, &gauy);
