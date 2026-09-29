@@ -1,7 +1,7 @@
 """Paths to resources and and other GRASS properties, configured during build
 
-(C) 2025 by Nicklas Larsson and the GRASS Development Team
-
+SPDX-FileCopyrightText: 2025 Nicklas Larsson
+SPDX-FileCopyrightText: GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 
 
@@ -18,6 +18,9 @@ LD_LIBRARY_PATH_VAR = "@LD_LIBRARY_PATH_VAR@"
 CONFIG_PROJSHARE = "@CONFIG_PROJSHARE@"
 GRASS_EXE_NAME = "@START_UP@"
 GRASS_VERSION_GIT = "@GRASS_VERSION_GIT@"
+GRASS_HEADERS_VERSION = "@GRASS_HEADERS_GIT_HASH@"
+GRASS_HEADERS_DATE = "@GRASS_HEADERS_GIT_DATE@"
+GRASS_ARCH = "@BUILD_ARCH@"
 
 GRASS_PREFIX = "@GRASS_PREFIX@"
 GISBASE = "@GISBASE_INSTALL_PATH@"

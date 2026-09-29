@@ -28,10 +28,13 @@ set(DGL_headers
     helpers.h
     tavl.h
     tree.h
-    type.h)
+    type.h
+)
 foreach(DGL_header ${DGL_headers})
-  file(COPY ${DGL_header}
-       DESTINATION ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/dgl)
+    file(
+        COPY ${DGL_header}
+        DESTINATION ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass/dgl
+    )
 endforeach()
 # file(COPY dgl.h DESTINATION ${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}/grass)
 
@@ -43,6 +46,7 @@ set(graphlib_SRCS
     heap.c
     helpers.c
     tavl.c
-    tree.c)
+    tree.c
+)
 
 build_module(NAME grass_dgl SOURCES "${graphlib_SRCS}" HEADERS "dgl.h")

@@ -9,10 +9,8 @@ Classes:
  - goutput::GStderr
  - goutput::GConsole
 
-(C) 2007-2015 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Martin Landa <landa.martin gmail.com>
@@ -42,6 +40,7 @@ from grass.script import task as gtask
 from grass.pydispatch.signal import Signal
 
 from grass.grassdb import history
+from grass.grassdb.data import stds_exists
 from grass.grassdb.history import Status
 
 from core import globalvar
@@ -201,7 +200,7 @@ class CmdThread(threading.Thread):
                 if args[0][0] == "r.mapcalc":
                     try:
                         mapName = args[0][1].split("=", 1)[0].strip()
-                    except KeyError:
+                    except (IndexError, AttributeError):
                         pass
                 else:
                     moduleInterface = GUI(show=None).ParseCommand(args[0])
@@ -740,11 +739,31 @@ class GConsole(wx.EvtHandler):
         )
         event.Skip()
 
+    @staticmethod
+    def _getStdsTypeCandidates(task):
+        """Space time dataset types a generic stds parameter of a tool can be
+
+        The type option of the tool names either the dataset type
+        (G_OPT_STDS_TYPE) or the type of the maps it holds (G_OPT_MAP_TYPE),
+        which leaves a single type to look up instead of all three.
+        """
+        stds_types = ("strds", "stvds", "str3ds")
+        map_types = {"raster": "strds", "vector": "stvds", "raster_3d": "str3ds"}
+        option = task.get_param(value="type", raiseError=False)
+        value = (option.get("value") or option.get("default")) if option else None
+        if value in stds_types:
+            return (value,)
+        if value in map_types:
+            return (map_types[value],)
+        return stds_types
+
     def OnCmdDone(self, event):
         """Command done (or aborted)
 
-        Sends signal mapCreated if map is recognized in output
-        parameters or for specific modules (as r.colors).
+        Sends signal mapCreated if map is recognized in output parameters
+        and signal grassdbChanged for maps and space time datasets, either
+        recognized in output parameters or for specific modules (as r.colors
+        or t.register) which modify their input.
         """
         # Process results here
         try:
@@ -814,15 +833,23 @@ class GConsole(wx.EvtHandler):
             return
 
         name = task.get_name()
+        # Parameter prompts used by space time datasets. The generic "stds" one
+        # is used where a parameter accepts any of the three dataset types.
+        stds_prompts = {"stds", "strds", "stvds", "str3ds"}
+        stds_candidates = self._getStdsTypeCandidates(task)
         for p in task.get_options()["params"]:
             prompt = p.get("prompt", "")
-            if prompt in {"raster", "vector", "raster_3d"} and p.get("value", None):
+            if prompt in {"raster", "vector", "raster_3d"} | stds_prompts and p.get(
+                "value", None
+            ):
                 if p.get("age", "old") == "new" or name in {
                     "r.colors",
                     "r3.colors",
                     "v.colors",
                     "v.proj",
                     "r.proj",
+                    "t.register",
+                    "t.unregister",
                 }:
                     # if multiple maps (e.g. r.series.interp), we need add each
                     if p.get("multiple", False):
@@ -837,18 +864,45 @@ class GConsole(wx.EvtHandler):
                     for lname in lnames:
                         if "@" not in lname:
                             lname += "@" + gs.gisenv()["MAPSET"]
-                        if gs.find_file(lname, element=p.get("element"))["fullname"]:
-                            self.mapCreated.emit(
-                                name=lname, ltype=prompt, add=event.addLayer
+                        element_name, element_mapset = lname.split("@", 1)
+
+                        # The generic stds prompt does not say which type
+                        # this dataset is, so it is resolved per dataset.
+                        element = prompt
+                        if prompt == "stds":
+                            element = next(
+                                (
+                                    stds_type
+                                    for stds_type in stds_candidates
+                                    if stds_exists(
+                                        element_name, stds_type, element_mapset
+                                    )
+                                ),
+                                None,
                             )
+                            exists = element is not None
+                        elif prompt in stds_prompts:
+                            exists = stds_exists(element_name, prompt, element_mapset)
+                        else:
+                            exists = bool(
+                                gs.find_file(lname, element=p.get("element"))[
+                                    "fullname"
+                                ]
+                            )
+
+                        if exists:
+                            if element not in stds_prompts:
+                                self.mapCreated.emit(
+                                    name=lname, ltype=element, add=event.addLayer
+                                )
                             gisenv = gs.gisenv()
                             self._giface.grassdbChanged.emit(
                                 grassdb=gisenv["GISDBASE"],
                                 location=gisenv["LOCATION_NAME"],
                                 mapset=gisenv["MAPSET"],
                                 action="new",
-                                map=lname.split("@")[0],
-                                element=prompt,
+                                map=element_name,
+                                element=element,
                             )
         if name == "r.mask":
             action = "new"

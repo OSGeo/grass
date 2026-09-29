@@ -8,10 +8,8 @@ Core functions to be used in Python scripts.
 
     grass.parser()
 
-(C) 2008-2026 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2008-2026 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
@@ -1035,9 +1033,9 @@ def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
             break
         try:
             var, val = line.split(b"=", 1)
-        except ValueError:
+        except ValueError as err:
             msg = "invalid output from g.parser: {}".format(line)
-            raise SyntaxError(msg)
+            raise SyntaxError(msg) from err
         try:
             var = decode(var)
             val = decode(val)
@@ -1045,7 +1043,7 @@ def _parse_opts(lines: list) -> tuple[dict[str, str], dict[str, bool]]:
             msg = "invalid output from g.parser ({error}): {line}".format(
                 error=error, line=line
             )
-            raise SyntaxError(msg)
+            raise SyntaxError(msg) from error
         if var.startswith("flag_"):
             flags[var[5:]] = bool(int(val))
         elif var.startswith("opt_"):
@@ -2256,7 +2254,7 @@ def _set_location_description(path, location, text):
     try:
         _set_project_description(Path(path) / location, text)
     except OSError as e:
-        raise ScriptError(repr(e))
+        raise ScriptError(repr(e)) from e
 
 
 def _create_location_xy(database, location):
@@ -2273,7 +2271,7 @@ def _create_location_xy(database, location):
     try:
         create_xy_project(Path(database) / location)
     except OSError as e:
-        raise ScriptError(repr(e))
+        raise ScriptError(repr(e)) from e
 
 
 # interface to g.version

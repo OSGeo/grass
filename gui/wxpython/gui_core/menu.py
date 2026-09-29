@@ -10,10 +10,8 @@ Classes:
  - menu::SearchModuleWindow
  - menu::RecentFilesMenu
 
-(C) 2010-2024 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2010-2024 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Pawel Netzel (menu customization)
@@ -118,7 +116,7 @@ class MenuBase:
             ):
                 menuItem.Enable(False)
 
-        rhandler = eval("self.class_handler." + handler)  # nosec B307
+        rhandler = getattr(self.class_handler, handler)
         self.parent.Bind(wx.EVT_MENU, rhandler, menuItem)
 
     def GetData(self):
@@ -279,12 +277,12 @@ class SearchModuleWindow(wx.Panel):
             return
 
         # extract name of the handler and create a new call
-        handler = "self._handlerObj." + data["handler"].lstrip("self.")
+        handler = getattr(self._handlerObj, data["handler"].removeprefix("self."))
 
         if data["command"]:
-            eval(handler)(event=None, cmd=data["command"].split())
+            handler(event=None, cmd=data["command"].split())
         else:
-            eval(handler)(event=None)
+            handler(event=None)
 
     def Help(self, node=None):
         """Show documentation for a module"""

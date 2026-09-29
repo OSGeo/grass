@@ -15,7 +15,8 @@ title: Development Introduction
 
 ## Testing
 
-- [Testing](https://grass.osgeo.org/grass-stable/manuals/libpython/gunittest_testing.html)
+- [Testing](testing.md)
+- [grass.gunittest](https://grass.osgeo.org/grass-stable/manuals/libpython/gunittest_testing.html)
 
 ## Addons
 
@@ -34,5 +35,6 @@ and are a great way to extend the functionality of GRASS.
 
 - [Style guide](style_guide.md)
 - [GitHub guide](github_guide.md)
+- [CMake guide](building_with_cmake.md)
 - [Investigating code history](investigating_history.md)
 - [CONTRIBUTING file on GitHub](https://github.com/OSGeo/grass/blob/main/CONTRIBUTING.md)

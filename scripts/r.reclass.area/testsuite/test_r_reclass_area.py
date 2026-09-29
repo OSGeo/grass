@@ -3,10 +3,9 @@ Name:        r.reclass.area  test
 Purpose:    Tests  r.reclass.area.
 
 Author:     Shubham Sharma, Google Code-in 2018
-Copyright:  (C) 2018 by Shubham Sharma and the GRASS Development Team
-Licence:    This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
+SPDX-FileCopyrightText: 2018 Shubham Sharma
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 from grass.gunittest.case import TestCase
@@ -222,7 +221,7 @@ class TestReclassArea(TestCase):
         self.assertVectorFitsTopoInfo(
             vector=output_map,
             reference={"areas": 14, "primitives": 82},
-            msg=f"Toplogy of output map {output_map} does not match reference.",
+            msg=f"Topology of output map {output_map} does not match reference.",
         )
 
 

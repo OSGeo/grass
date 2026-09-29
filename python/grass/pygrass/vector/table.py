@@ -399,7 +399,7 @@ class Columns:
 
         :param col_name: the name of column to add
         :type col_name: str
-        :param col_type: the tipe of column to add
+        :param col_type: the type of column to add
         :type col_type: str
 
         >>> import sqlite3
@@ -1211,7 +1211,7 @@ class Table:
                 "The SQL statement is not correct:\n%r,\n"
                 "values: %r,\n"
                 "SQL error: %s" % (sqlc, values, str(exc))
-            )
+            ) from exc
 
     def exist(self, cursor=None):
         """Return True if the table already exists in the DB, False otherwise
