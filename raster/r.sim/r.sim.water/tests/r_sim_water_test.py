@@ -565,7 +565,6 @@ def test_duration_affects_time_series_progression(long_slope_session):
         flags="t",
     )
 
-    # 10-min run should produce 2 time-series maps (t=5, t=10)
     maps_10 = list(tools.g_list(type="raster", pattern="depth_10min*", format="json"))
     assert len(maps_10) == 2, (
         f"10-min simulation with output_step=5 should produce 2 maps, got {len(maps_10)}"
