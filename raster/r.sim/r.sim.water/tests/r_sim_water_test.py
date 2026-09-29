@@ -864,8 +864,11 @@ def test_observation_logfile(east_slope_session, tmp_path):
 def test_walkers_output(long_slope_session):
     """The walkers_output parameter must produce a vector point map.
 
-    Each surviving walker position is written as a 3D point. The number
-    of points should not exceed nwalkers.
+    Each surviving walker position is written as a 3D point. The tool gives
+    each cell one walker more than its share of nwalkers truncated to an
+    integer, so the number of points cannot exceed nwalkers plus the number
+    of cells, although the option describes nwalkers as the number of
+    walkers.
 
     Uses a large domain (200 cells) to give walkers sufficient residence
     time before exiting. High roughness (0.3) further increases walker
@@ -890,8 +893,11 @@ def test_walkers_output(long_slope_session):
     info = tools.v_info(map="walkers", flags="t", format="json")
     npoints = int(info["points"])
     assert npoints > 0, "Expected at least one walker point"
-    assert npoints <= nwalkers, (
-        f"Number of walker points ({npoints}) should not exceed nwalkers ({nwalkers})"
+    region = tools.g_region(flags="p", format="json")
+    cells = int(region["rows"]) * int(region["cols"])
+    assert npoints <= nwalkers + cells, (
+        f"Number of walker points ({npoints}) should not exceed nwalkers plus "
+        f"the number of cells ({nwalkers} + {cells})"
     )
 
 
