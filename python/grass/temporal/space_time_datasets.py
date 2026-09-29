@@ -780,7 +780,8 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _("Unable to remove timestamp for raster map <%s>") % (self.get_name())
+                _("Unable to remove timestamp for 3D raster map <%s>")
+                % (self.get_name())
             )
             return False
 
@@ -1116,9 +1117,7 @@ class VectorDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _("Unable to remove timestamp for vector map <%s>").format(
-                    self.get_name()
-                )
+                _("Unable to remove timestamp for vector map <%s>") % self.get_name()
             )
             return False
 
