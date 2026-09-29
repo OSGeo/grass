@@ -38,6 +38,76 @@ erosion/deposition map is noisy, higher number of walkers, given by
 Increasing the number of threads with **nprocs** does not really speed
 up the simulation.
 
+## NOTES
+
+### Run summary
+
+With the **-p** flag, a summary of the run is printed to standard output
+after the maps are written. The **format** option selects plain text
+(one `key: value` pair per line) or JSON. Without **-p**, nothing is
+printed to standard output regardless of **format**. The values are also
+stored in the history of the *sediment_flux* raster map under the same
+keys (see *r.info*).
+
+The keys are the same as for [r.sim.water](r.sim.water.md) with these
+differences:
+
+| Key | Meaning | Unit |
+| --- | --- | --- |
+| `time_step_sediment` | Time step derived from the sediment transport parameters; `time_step` is the smaller of this and the water time step | s |
+| `velocity_max` | Maximum flow velocity over the defined cells | m/s |
+| `sigma_max` | Maximum first order reaction coefficient (detachment to transport capacity ratio) over the defined cells | 1/m |
+| `mean_source_rate` | Mean sediment source (detachment) rate | kg/m^2s |
+| `mean_infiltration` | Not reported | |
+| `outputs` | A single entry with the `simulated_time` (s), `timestamp` and `walkers_active` at the time of writing, and the names of the `transport_capacity`, `tlimit_erosion_deposition`, `sediment_concentration`, `sediment_flux`, `erosion_deposition` and `walkers` maps, or `null` for maps which were not requested | |
+
+Summary of a run in JSON:
+
+```sh
+r.sim.sediment elevation=elevation water_depth=water_depth detachment_coeff=detachment \
+    transport_coeff=transport shear_stress=shear_stress man_value=1 \
+    sediment_flux=flux erosion_deposition=erdep transport_capacity=tc \
+    duration=1 random_seed=1 -p format=json
+```
+
+```json
+{
+    "walkers_requested": 60,
+    "walkers_generated": 78,
+    "walkers_active": 43,
+    "duration": 60,
+    "simulated_time": 54,
+    "time_step": 1.3722835778402895,
+    "time_step_sediment": 70.517234241515013,
+    "time_coefficient": 4,
+    "iterations_planned": 10,
+    "iterations_completed": 10,
+    "iterations_per_output": 21,
+    "stopped_early": false,
+    "elevation_min": 1,
+    "elevation_max": 5,
+    "mean_velocity": 0.1821780891624834,
+    "velocity_max": 0.21544346900318839,
+    "sigma_max": 0.052657639041437901,
+    "mean_mannings_n": 1,
+    "mean_source_rate": 0.56025284041612944,
+    "threads": 1,
+    "outputs": [
+        {
+            "simulated_time": 54,
+            "timestamp": "1 minutes",
+            "walkers_active": 43,
+            "transport_capacity": "tc",
+            "tlimit_erosion_deposition": null,
+            "sediment_concentration": null,
+            "sediment_flux": "flux",
+            "erosion_deposition": "erdep",
+            "walkers": null
+        }
+    ]
+}
+```
+
 ## REFERENCES
 
 [Mitasova, H., Thaxton, C., Hofierka, J., McLaughlin, R., Moore, A.,

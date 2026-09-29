@@ -20,78 +20,103 @@ void free_walkers(Simulation *sim, const char *outwalk)
         G_free(sim->stack);
 }
 
-static void output_walker_as_vector(int tt_minutes, int ndigit,
-                                    struct TimeStamp *timestamp,
-                                    const Settings *settings,
-                                    const Simulation *sim,
-                                    const Outputs *outputs);
+/* Name of the map written at simulated time tt_minutes: in time series mode
+ * the time is appended to the base name, otherwise the base name is used as
+ * is. The result is allocated and owned by the caller. */
+static char *output_name(const char *base, const Settings *settings,
+                         const char *separator, int ndigit, int tt_minutes)
+{
+    char buf[GNAME_MAX + 10];
+
+    if (!settings->ts)
+        return G_store(base);
+    snprintf(buf, sizeof(buf), "%s%s%.*d", base, separator, ndigit, tt_minutes);
+    return G_store(buf);
+}
 
 /* This function was added by Soeren 8. Mar 2011     */
 /* It replaces the site walker output implementation */
 /* Only the 3d coordinates of the walker are stored. */
-void output_walker_as_vector(int tt_minutes, int ndigit,
-                             struct TimeStamp *timestamp,
-                             const Settings *settings, const Simulation *sim,
-                             const Outputs *outputs)
+static void output_walker_as_vector(const char *name,
+                                    struct TimeStamp *timestamp,
+                                    const Simulation *sim)
 {
-    char buf[GNAME_MAX + 10];
-    char *outwalk_time = NULL;
     double x, y, z;
     struct Map_info Out;
     struct line_pnts *Points;
     struct line_cats *Cats;
     int i;
 
-    if (outputs->outwalk != NULL) {
+    if (Vect_open_new(&Out, name, WITH_Z) < 0)
+        G_fatal_error(_("Unable to create vector map <%s>"), name);
+    G_message("Writing %i walker into vector file %s", sim->nstack, name);
 
-        /* In case of time series we extent the output name with the time value
-         */
-        if (settings->ts) {
-            snprintf(buf, sizeof(buf), "%s_%.*d", outputs->outwalk, ndigit,
-                     tt_minutes);
-            outwalk_time = G_store(buf);
-            if (Vect_open_new(&Out, outwalk_time, WITH_Z) < 0)
-                G_fatal_error(_("Unable to create vector map <%s>"),
-                              outwalk_time);
-            G_message("Writing %i walker into vector file %s", sim->nstack,
-                      outwalk_time);
-        }
-        else {
-            if (Vect_open_new(&Out, outputs->outwalk, WITH_Z) < 0)
-                G_fatal_error(_("Unable to create vector map <%s>"),
-                              outputs->outwalk);
-            G_message("Writing %i walker into vector file %s", sim->nstack,
-                      outputs->outwalk);
-        }
+    Points = Vect_new_line_struct();
+    Cats = Vect_new_cats_struct();
 
-        Points = Vect_new_line_struct();
-        Cats = Vect_new_cats_struct();
+    for (i = 0; i < sim->nstack; i++) {
+        x = sim->stack[i].x;
+        y = sim->stack[i].y;
+        z = sim->stack[i].m;
 
-        for (i = 0; i < sim->nstack; i++) {
-            x = sim->stack[i].x;
-            y = sim->stack[i].y;
-            z = sim->stack[i].m;
+        Vect_reset_line(Points);
+        Vect_reset_cats(Cats);
 
-            Vect_reset_line(Points);
-            Vect_reset_cats(Cats);
-
-            Vect_cat_set(Cats, 1, i + 1);
-            Vect_append_point(Points, x, y, z);
-            Vect_write_line(&Out, GV_POINT, Points, Cats);
-        }
-        Vect_build(&Out);
-        /* Close vector file */
-        Vect_close(&Out);
-
-        Vect_destroy_line_struct(Points);
-        Vect_destroy_cats_struct(Cats);
-        if (settings->ts)
-            G_write_vector_timestamp(outwalk_time, "1", timestamp);
-        else
-            G_write_vector_timestamp(outputs->outwalk, "1", timestamp);
+        Vect_cat_set(Cats, 1, i + 1);
+        Vect_append_point(Points, x, y, z);
+        Vect_write_line(&Out, GV_POINT, Points, Cats);
     }
+    Vect_build(&Out);
+    /* Close vector file */
+    Vect_close(&Out);
 
-    return;
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
+    G_write_vector_timestamp(name, "1", timestamp);
+}
+
+/* Record the run summary in the history of a written map, using the same
+ * keys as the -p output, and set the map timestamp. */
+static void write_history(const char *name, int tt, const Setup *setup,
+                          const Settings *settings, const Simulation *sim,
+                          const Inputs *inputs, struct TimeStamp *timestamp)
+{
+    struct History hist;
+
+    Rast_short_history(name, "raster", &hist);
+
+    Rast_append_format_history(
+        &hist, "walkers_generated=%d, walkers_requested=%d, walkers_active=%d",
+        sim->nwalk, sim->maxwa, sim->nwalka);
+    Rast_append_format_history(&hist, "duration=%d, simulated_time=%d",
+                               settings->timesec, tt);
+    Rast_append_format_history(&hist, "time_step=%f, mean_velocity=%f",
+                               setup->deltap, setup->vmean);
+    if (setup->chmean != 0.0)
+        Rast_append_format_history(&hist, "mean_mannings_n=%f",
+                                   1.0 / setup->chmean);
+    else
+        Rast_append_format_history(&hist, "mean_mannings_n=undefined");
+    if (inputs->wdepth) {
+        Rast_append_format_history(&hist, "mean_source_rate=%e", setup->si0);
+        Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
+                            inputs->wdepth, inputs->dxin, inputs->dyin);
+        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s %s",
+                            inputs->manin, inputs->detin, inputs->tranin,
+                            inputs->tauin);
+    }
+    else {
+        Rast_append_format_history(&hist,
+                                   "mean_source_rate=%e, mean_infiltration=%e",
+                                   setup->si0, setup->infmean);
+        Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
+                            inputs->elevin, inputs->dxin, inputs->dyin);
+        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s",
+                            inputs->rain, inputs->infil, inputs->manin);
+    }
+    Rast_command_history(&hist);
+    Rast_write_history(name, &hist);
+    G_write_raster_timestamp(name, timestamp);
 }
 
 /* conn is the sequential-block extrapolation factor nblock/iblock: scales
@@ -102,7 +127,7 @@ void output_walker_as_vector(int tt_minutes, int ndigit,
 int output_data(int tt, double conn, const Setup *setup,
                 const Geometry *geometry, const Settings *settings,
                 const Simulation *sim, const Inputs *inputs,
-                const Outputs *outputs, const Grids *grids)
+                const Outputs *outputs, const Grids *grids, Summary *summary)
 {
 
     FCELL *depth_cell, *disch_cell, *err_cell;
@@ -112,20 +137,19 @@ int output_data(int tt, double conn, const Setup *setup,
     int i, iarc, j;
     float gsmax = 0, dismax = 0., gmax = 0., ermax = -1.e+12, ermin = 1.e+12;
     struct Colors colors;
-    struct History hist, hist1; /* hist2, hist3, hist4, hist5 */
+    struct History hist1;
     struct TimeStamp timestamp;
     char *depth0 = NULL, *disch0 = NULL, *err0 = NULL;
     char *conc0 = NULL, *flux0 = NULL;
-    char *erdep0 = NULL;
+    char *erdep0 = NULL, *outwalk0 = NULL;
     const char *mapst = NULL;
-    char *type;
-    char buf[GNAME_MAX + 10];
     char timestamp_buf[15];
     int ndigit;
     int timemin;
     int tt_minutes;
     FCELL dat1, dat2;
     float a1, a2;
+    OutputStep step = {0};
 
     timemin = (int)(settings->timesec / 60. + 0.5);
     ndigit = 2;
@@ -146,8 +170,11 @@ int output_data(int tt, double conn, const Setup *setup,
     G_scan_timestamp(&timestamp, timestamp_buf);
 
     /* Write the output walkers */
-    output_walker_as_vector(tt_minutes, ndigit, &timestamp, settings, sim,
-                            outputs);
+    if (outputs->outwalk) {
+        outwalk0 =
+            output_name(outputs->outwalk, settings, "_", ndigit, tt_minutes);
+        output_walker_as_vector(outwalk0, &timestamp, sim);
+    }
 
     /* we write in the same region as we used for reading */
 
@@ -160,74 +187,38 @@ int output_data(int tt, double conn, const Setup *setup,
 
     if (outputs->depth) {
         depth_cell = Rast_allocate_f_buf();
-        if (settings->ts) {
-            snprintf(buf, sizeof(buf), "%s.%.*d", outputs->depth, ndigit,
-                     tt_minutes);
-            depth0 = G_store(buf);
-            depth_fd = Rast_open_fp_new(depth0);
-        }
-        else
-            depth_fd = Rast_open_fp_new(outputs->depth);
+        depth0 = output_name(outputs->depth, settings, ".", ndigit, tt_minutes);
+        depth_fd = Rast_open_fp_new(depth0);
     }
 
     if (outputs->disch) {
         disch_cell = Rast_allocate_f_buf();
-        if (settings->ts) {
-            snprintf(buf, sizeof(buf), "%s.%.*d", outputs->disch, ndigit,
-                     tt_minutes);
-            disch0 = G_store(buf);
-            disch_fd = Rast_open_fp_new(disch0);
-        }
-        else
-            disch_fd = Rast_open_fp_new(outputs->disch);
+        disch0 = output_name(outputs->disch, settings, ".", ndigit, tt_minutes);
+        disch_fd = Rast_open_fp_new(disch0);
     }
 
     if (outputs->err) {
         err_cell = Rast_allocate_f_buf();
-        if (settings->ts) {
-            snprintf(buf, sizeof(buf), "%s.%.*d", outputs->err, ndigit,
-                     tt_minutes);
-            err0 = G_store(buf);
-            err_fd = Rast_open_fp_new(err0);
-        }
-        else
-            err_fd = Rast_open_fp_new(outputs->err);
+        err0 = output_name(outputs->err, settings, ".", ndigit, tt_minutes);
+        err_fd = Rast_open_fp_new(err0);
     }
 
     if (outputs->conc) {
         conc_cell = Rast_allocate_f_buf();
-        if (settings->ts) {
-            snprintf(buf, sizeof(buf), "%s.%.*d", outputs->conc, ndigit,
-                     tt_minutes);
-            conc0 = G_store(buf);
-            conc_fd = Rast_open_fp_new(conc0);
-        }
-        else
-            conc_fd = Rast_open_fp_new(outputs->conc);
+        conc0 = output_name(outputs->conc, settings, ".", ndigit, tt_minutes);
+        conc_fd = Rast_open_fp_new(conc0);
     }
 
     if (outputs->flux) {
         flux_cell = Rast_allocate_f_buf();
-        if (settings->ts) {
-            snprintf(buf, sizeof(buf), "%s.%.*d", outputs->flux, ndigit,
-                     tt_minutes);
-            flux0 = G_store(buf);
-            flux_fd = Rast_open_fp_new(flux0);
-        }
-        else
-            flux_fd = Rast_open_fp_new(outputs->flux);
+        flux0 = output_name(outputs->flux, settings, ".", ndigit, tt_minutes);
+        flux_fd = Rast_open_fp_new(flux0);
     }
 
     if (outputs->erdep) {
         erdep_cell = Rast_allocate_f_buf();
-        if (settings->ts) {
-            snprintf(buf, sizeof(buf), "%s.%.*d", outputs->erdep, ndigit,
-                     tt_minutes);
-            erdep0 = G_store(buf);
-            erdep_fd = Rast_open_fp_new(erdep0);
-        }
-        else
-            erdep_fd = Rast_open_fp_new(outputs->erdep);
+        erdep0 = output_name(outputs->erdep, settings, ".", ndigit, tt_minutes);
+        erdep_fd = Rast_open_fp_new(erdep0);
     }
 
     for (iarc = 0; iarc < geometry->my; iarc++) {
@@ -346,23 +337,12 @@ int output_data(int tt, double conn, const Setup *setup,
         dat2 = (FCELL)gmax;
         Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 0, 0, &colors);
 
-        if (settings->ts) {
-            if ((mapst = G_find_file("fcell", depth0, "")) == NULL)
-                G_fatal_error(_("FP raster map <%s> not found"), depth0);
-            Rast_write_colors(depth0, mapst, &colors);
-            Rast_quantize_fp_map_range(depth0, mapst, 0., (FCELL)gmax, 0,
-                                       (CELL)gmax);
-            Rast_free_colors(&colors);
-        }
-        else {
-            if ((mapst = G_find_file("fcell", outputs->depth, "")) == NULL)
-                G_fatal_error(_("FP raster map <%s> not found"),
-                              outputs->depth);
-            Rast_write_colors(outputs->depth, mapst, &colors);
-            Rast_quantize_fp_map_range(outputs->depth, mapst, 0., (FCELL)gmax,
-                                       0, (CELL)gmax);
-            Rast_free_colors(&colors);
-        }
+        if ((mapst = G_find_file("fcell", depth0, "")) == NULL)
+            G_fatal_error(_("FP raster map <%s> not found"), depth0);
+        Rast_write_colors(depth0, mapst, &colors);
+        Rast_quantize_fp_map_range(depth0, mapst, 0., (FCELL)gmax, 0,
+                                   (CELL)gmax);
+        Rast_free_colors(&colors);
     }
 
     if (outputs->disch) {
@@ -386,23 +366,12 @@ int output_data(int tt, double conn, const Setup *setup,
         dat2 = (FCELL)dismax;
         Rast_add_f_color_rule(&dat1, 0, 0, 255, &dat2, 0, 0, 0, &colors);
 
-        if (settings->ts) {
-            if ((mapst = G_find_file("cell", disch0, "")) == NULL)
-                G_fatal_error(_("Raster map <%s> not found"), disch0);
-            Rast_write_colors(disch0, mapst, &colors);
-            Rast_quantize_fp_map_range(disch0, mapst, 0., (FCELL)dismax, 0,
-                                       (CELL)dismax);
-            Rast_free_colors(&colors);
-        }
-        else {
-
-            if ((mapst = G_find_file("cell", outputs->disch, "")) == NULL)
-                G_fatal_error(_("Raster map <%s> not found"), outputs->disch);
-            Rast_write_colors(outputs->disch, mapst, &colors);
-            Rast_quantize_fp_map_range(outputs->disch, mapst, 0., (FCELL)dismax,
-                                       0, (CELL)dismax);
-            Rast_free_colors(&colors);
-        }
+        if ((mapst = G_find_file("cell", disch0, "")) == NULL)
+            G_fatal_error(_("Raster map <%s> not found"), disch0);
+        Rast_write_colors(disch0, mapst, &colors);
+        Rast_quantize_fp_map_range(disch0, mapst, 0., (FCELL)dismax, 0,
+                                   (CELL)dismax);
+        Rast_free_colors(&colors);
     }
 
     if (outputs->flux) {
@@ -423,23 +392,12 @@ int output_data(int tt, double conn, const Setup *setup,
         dat2 = (FCELL)dismax;
         Rast_add_f_color_rule(&dat1, 191, 127, 63, &dat2, 0, 0, 0, &colors);
 
-        if (settings->ts) {
-            if ((mapst = G_find_file("cell", flux0, "")) == NULL)
-                G_fatal_error(_("Raster map <%s> not found"), flux0);
-            Rast_write_colors(flux0, mapst, &colors);
-            Rast_quantize_fp_map_range(flux0, mapst, 0., (FCELL)dismax, 0,
-                                       (CELL)dismax);
-            Rast_free_colors(&colors);
-        }
-        else {
-
-            if ((mapst = G_find_file("cell", outputs->flux, "")) == NULL)
-                G_fatal_error(_("Raster map <%s> not found"), outputs->flux);
-            Rast_write_colors(outputs->flux, mapst, &colors);
-            Rast_quantize_fp_map_range(outputs->flux, mapst, 0., (FCELL)dismax,
-                                       0, (CELL)dismax);
-            Rast_free_colors(&colors);
-        }
+        if ((mapst = G_find_file("cell", flux0, "")) == NULL)
+            G_fatal_error(_("Raster map <%s> not found"), flux0);
+        Rast_write_colors(flux0, mapst, &colors);
+        Rast_quantize_fp_map_range(flux0, mapst, 0., (FCELL)dismax, 0,
+                                   (CELL)dismax);
+        Rast_free_colors(&colors);
     }
 
     if (outputs->erdep) {
@@ -474,204 +432,43 @@ int output_data(int tt, double conn, const Setup *setup,
         dat2 = (FCELL)ermin;
         Rast_add_f_color_rule(&dat1, 255, 0, 0, &dat2, 255, 0, 255, &colors);
 
-        if (settings->ts) {
-            if ((mapst = G_find_file("cell", erdep0, "")) == NULL)
-                G_fatal_error(_("Raster map <%s> not found"), erdep0);
-            Rast_write_colors(erdep0, mapst, &colors);
-            Rast_quantize_fp_map_range(erdep0, mapst, (FCELL)ermin,
-                                       (FCELL)ermax, (CELL)ermin, (CELL)ermax);
-            Rast_free_colors(&colors);
+        if ((mapst = G_find_file("cell", erdep0, "")) == NULL)
+            G_fatal_error(_("Raster map <%s> not found"), erdep0);
+        Rast_write_colors(erdep0, mapst, &colors);
+        Rast_quantize_fp_map_range(erdep0, mapst, (FCELL)ermin, (FCELL)ermax,
+                                   (CELL)ermin, (CELL)ermax);
+        Rast_free_colors(&colors);
 
-            type = "raster";
-            Rast_short_history(erdep0, type, &hist1);
-            Rast_append_format_history(&hist1, "The sediment flux file is %s",
-                                       flux0);
-            Rast_command_history(&hist1);
-            Rast_write_history(erdep0, &hist1);
-        }
-        else {
-
-            if ((mapst = G_find_file("cell", outputs->erdep, "")) == NULL)
-                G_fatal_error(_("Raster map <%s> not found"), outputs->erdep);
-            Rast_write_colors(outputs->erdep, mapst, &colors);
-            Rast_quantize_fp_map_range(outputs->erdep, mapst, (FCELL)ermin,
-                                       (FCELL)ermax, (CELL)ermin, (CELL)ermax);
-            Rast_free_colors(&colors);
-
-            type = "raster";
-            Rast_short_history(outputs->erdep, type, &hist1);
-            Rast_append_format_history(&hist1, "The sediment flux file is %s",
-                                       outputs->flux);
-            Rast_command_history(&hist1);
-            Rast_write_history(outputs->erdep, &hist1);
-        }
+        Rast_short_history(erdep0, "raster", &hist1);
+        Rast_append_format_history(&hist1, "The sediment flux file is %s",
+                                   flux0);
+        Rast_command_history(&hist1);
+        Rast_write_history(erdep0, &hist1);
     }
 
     /* history section */
-    if (outputs->depth) {
-        type = "raster";
-        if (!settings->ts) {
-            mapst = G_find_file("cell", outputs->depth, "");
-            if (mapst == NULL) {
-                G_warning(_("Raster map <%s> not found"), outputs->depth);
-                return -1;
-            }
-            Rast_short_history(outputs->depth, type, &hist);
-        }
-        else
-            Rast_short_history(depth0, type, &hist);
+    if (outputs->depth)
+        write_history(depth0, tt, setup, settings, sim, inputs, &timestamp);
+    if (outputs->disch)
+        write_history(disch0, tt, setup, settings, sim, inputs, &timestamp);
+    if (outputs->flux)
+        write_history(flux0, tt, setup, settings, sim, inputs, &timestamp);
 
-        // init.walkers: Number of initial walkers in a single block
-        // maxwalk: Number of input walkers per block
-        // remaining walkers: Remaining walkers in an iteration
-        Rast_append_format_history(
-            &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", sim->nwalk,
-            sim->maxwa, sim->nwalka);
-
-        // duration (sec.): Total simulation time in seconds
-        // time-series iteration: Number of iterations (cells)
-        Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-series iteration=%d",
-            settings->timesec, tt);
-
-        // written deltap: Time step for water (s)
-        // mean vel.: Mean velocity of water flow (m^3/s)
-        Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
-                                   setup->deltap, setup->vmean);
-
-        // mean source (si): Mean source Rate (Rainfall Excess) (m/s)
-        // mean infiltration: Mean Infiltration Rate (m/s)
-        Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
-                                   setup->si0, setup->infmean);
-
-        Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
-                            inputs->elevin, inputs->dxin, inputs->dyin);
-        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s",
-                            inputs->rain, inputs->infil, inputs->manin);
-
-        Rast_command_history(&hist);
-
-        if (settings->ts)
-            Rast_write_history(depth0, &hist);
-        else
-            Rast_write_history(outputs->depth, &hist);
-
-        if (settings->ts)
-            G_write_raster_timestamp(depth0, &timestamp);
-        else
-            G_write_raster_timestamp(outputs->depth, &timestamp);
-    }
-
-    if (outputs->disch) {
-        type = "raster";
-        if (!settings->ts) {
-            mapst = G_find_file("cell", outputs->disch, "");
-            if (mapst == NULL)
-                G_fatal_error(_("Raster map <%s> not found"), outputs->disch);
-            Rast_short_history(outputs->disch, type, &hist);
-        }
-        else
-            Rast_short_history(disch0, type, &hist);
-
-        // init.walkers: Number of initial walkers in a single block
-        // maxwalk: Number of input walkers per block
-        // remaining walkers: Remaining walkers in an iteration
-        Rast_append_format_history(
-            &hist, "init.walkers=%d, maxwalk=%d, rem. walkers=%d", sim->nwalk,
-            sim->maxwa, sim->nwalka);
-
-        // duration (sec.): Total simulation time in seconds
-        // time-series iteration: Number of iterations (cells)
-        Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-series iteration=%d",
-            settings->timesec, tt);
-
-        // written deltap: Time step for water (s)
-        // mean vel.: Mean velocity of water flow (m^3/s)
-        Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
-                                   setup->deltap, setup->vmean);
-
-        // Prevent potential division by zero error
-        if (setup->chmean != 0.0)
-            // mean manning: Mean Manning's n value
-            Rast_append_format_history(&hist, "mean mann=%f",
-                                       1.0 / setup->chmean);
-        else
-            Rast_append_format_history(&hist, "mean mann=undef");
-
-        // mean source (si): Mean rainfall excess (or sediment concentration?)
-        // mean infiltration: Mean Infiltration Rate (m/s)
-        Rast_append_format_history(&hist, "mean source (si)=%e, mean infil=%e",
-                                   setup->si0, setup->infmean);
-
-        Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
-                            inputs->elevin, inputs->dxin, inputs->dyin);
-        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s",
-                            inputs->rain, inputs->infil, inputs->manin);
-
-        Rast_command_history(&hist);
-
-        if (settings->ts)
-            Rast_write_history(disch0, &hist);
-        else
-            Rast_write_history(outputs->disch, &hist);
-
-        if (settings->ts)
-            G_write_raster_timestamp(disch0, &timestamp);
-        else
-            G_write_raster_timestamp(outputs->disch, &timestamp);
-    }
-
-    if (outputs->flux) {
-        type = "raster";
-        if (!settings->ts) {
-            mapst = G_find_file("cell", outputs->flux, "");
-            if (mapst == NULL)
-                G_fatal_error(_("Raster map <%s> not found"), outputs->flux);
-            Rast_short_history(outputs->flux, type, &hist);
-        }
-        else
-            Rast_short_history(flux0, type, &hist);
-
-        Rast_append_format_history(
-            &hist, "init.walk=%d, maxwalk=%d, remaining walkers=%d", sim->nwalk,
-            sim->maxwa, sim->nwalka);
-        Rast_append_format_history(
-            &hist, "duration (sec.)=%d, time-serie iteration=%d",
-            settings->timesec, tt);
-        Rast_append_format_history(&hist, "written deltap=%f, mean vel.=%f",
-                                   setup->deltap, setup->vmean);
-
-        // Prevent potential division by zero error
-        if (setup->chmean != 0.0)
-            // mean manning: Mean Manning's n value
-            Rast_append_format_history(&hist, "mean mann=%f",
-                                       1.0 / setup->chmean);
-        else
-            Rast_append_format_history(&hist, "mean mann=undef");
-
-        // mean source (si): Mean rainfall excess (or sediment concentration?)
-        // mean infiltration: Mean Infiltration Rate (m/s)
-        Rast_append_format_history(&hist, "mean source (si)=%f", setup->si0);
-
-        Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
-                            inputs->wdepth, inputs->dxin, inputs->dyin);
-        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s %s",
-                            inputs->manin, inputs->detin, inputs->tranin,
-                            inputs->tauin);
-
-        Rast_command_history(&hist);
-
-        if (settings->ts)
-            Rast_write_history(flux0, &hist);
-        else
-            Rast_write_history(outputs->flux, &hist);
-
-        if (settings->ts)
-            G_write_raster_timestamp(flux0, &timestamp);
-        else
-            G_write_raster_timestamp(outputs->flux, &timestamp);
-    }
+    /* The step record takes over the allocated names. Transport capacity and
+     * transport limited erosion/deposition are written once by output_et. */
+    step.simulated_time = tt;
+    step.walkers_active = sim->nwalka;
+    step.timestamp = G_store(timestamp_buf);
+    step.depth = depth0;
+    step.disch = disch0;
+    step.err = err0;
+    step.outwalk = outwalk0;
+    step.tc = outputs->tc ? G_store(outputs->tc) : NULL;
+    step.et = outputs->et ? G_store(outputs->et) : NULL;
+    step.conc = conc0;
+    step.flux = flux0;
+    step.erdep = erdep0;
+    add_output_step(summary, &step);
 
     return 1;
 }

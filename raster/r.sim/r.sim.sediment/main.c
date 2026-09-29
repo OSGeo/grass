@@ -59,6 +59,7 @@
 /********************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 
 #include <grass/config.h>
@@ -303,9 +304,23 @@ int main(int argc, char *argv[])
         _("Number of threads which will be used for parallel computation.");
     parm.threads->guisection = _("Parameters");
 
+    flag.print = G_define_flag();
+    flag.print->key = 'p';
+    flag.print->description = _("Print run summary to standard output");
+    flag.print->guisection = _("Print");
+
+    parm.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parm.format->guisection = _("Print");
+
     G_option_collective(parm.dxin, parm.dyin, NULL);
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    SummaryFormat summary_format = SUMMARY_NONE;
+    if (flag.print->answer)
+        summary_format = strcmp(parm.format->answer, "json") == 0
+                             ? SUMMARY_JSON
+                             : SUMMARY_PLAIN;
 
     if (flag.generateSeed->answer) {
         seed_value = G_srand48_auto();
@@ -334,6 +349,7 @@ int main(int argc, char *argv[])
     Inputs inputs = {0};
     Outputs outputs = {0};
     Grids grids = {0};
+    Summary summary = {0};
 
     geometry.conv = G_database_units_to_meters_factor();
 
@@ -385,6 +401,7 @@ int main(int argc, char *argv[])
     threads = 1;
 #endif
     G_message(_("Number of threads: %d"), threads);
+    summary.threads = threads;
 
     /*      sscanf(parm.nwalk->answer, "%d", &wp.maxwa); */
     sscanf(parm.niter->answer, "%d", &settings.timesec);
@@ -435,7 +452,9 @@ int main(int argc, char *argv[])
     init_grids_sediment(&setup, &geometry, &outputs, &grids);
     /* treba dat output pre topoerdep */
     main_loop(&setup, &geometry, &settings, &sim, &points, &inputs, &outputs,
-              &grids);
+              &grids, &summary);
+    print_summary(summary_format, &setup, &settings, &sim, &inputs, &summary);
+    free_summary(&summary);
     free_walkers(&sim, outputs.outwalk);
 
     /* Exit with Success */

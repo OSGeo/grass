@@ -306,13 +306,19 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
 
     setup->si0 = setup->sisum / cc;
     setup->vmean = vsum / cc;
+    setup->vmax = vmax;
     setup->chmean = chsum / cc;
+    setup->zmin = zmin;
+    setup->zmax = zmax;
 
     if (grids->inf)
         setup->infmean = infsum / cc;
 
-    if (inputs->wdepth)
+    if (inputs->wdepth) {
         deltaw = 0.8 / (sigmax * vmax); /*time step for sediment */
+        setup->deltaw = deltaw;
+        setup->sigmax = sigmax;
+    }
     setup->deltap =
         0.25 * sqrt(geometry->stepx * geometry->stepy) /
         (setup->vmean > EPS ? setup->vmean : EPS); /*time step for water */
