@@ -119,8 +119,9 @@ def long_slope_project(tmp_path_factory):
     with gs.setup.init(project, env=os.environ.copy()) as session:
         tools = Tools(session=session)
         tools.g_region(w=0, e=2000, s=0, n=10, res=10, flags="s")
+        # dx and dy set the slope; 0.1 matches the 1 m drop per 10 m cell.
         tools.r_mapcalc(expression="elevation = 201 - col()")
-        tools.r_mapcalc(expression="dx = 1.0")
+        tools.r_mapcalc(expression="dx = 0.1")
         tools.r_mapcalc(expression="dy = 0.0")
         yield session
 
@@ -437,7 +438,7 @@ def test_mintimestep_is_a_floor_and_harmless_within_one_cell_per_step(
     The tool computes its own step, 0.025 s on this slope. A 0.01 s floor is
     below that, so the result must be identical. A 0.1 s floor is above it
     but moves walkers only one cell per step, so depth stays the same within
-    noise, and so it does with a 1 s floor on 10 m cells.
+    noise, and so it does with a 3 s floor on 10 m cells at a slope of 0.1.
     """
     depth_default = run_sim(east_slope_session)
     np.testing.assert_array_equal(
@@ -458,13 +459,15 @@ def test_mintimestep_is_a_floor_and_harmless_within_one_cell_per_step(
     with gs.setup.init(project, env=os.environ.copy()) as session:
         tools = Tools(session=session)
         tools.g_region(w=0, e=50, s=0, n=10, res=10)
+        # dx and dy set the slope; 0.1 matches the 1 m drop per 10 m cell and
+        # gives 3.2 m/s, so a 3 s floor moves walkers about one cell per step.
         tools.r_mapcalc(expression="elevation = 6 - col()")
-        tools.r_mapcalc(expression="dx = 1.0")
+        tools.r_mapcalc(expression="dx = 0.1")
         tools.r_mapcalc(expression="dy = 0.0")
         coarse_default = float(np.sum(run_sim(session, **NO_DIFFUSION)))
-        coarse_floor = float(np.sum(run_sim(session, mintimestep=1.0, **NO_DIFFUSION)))
+        coarse_floor = float(np.sum(run_sim(session, mintimestep=3.0, **NO_DIFFUSION)))
     assert coarse_floor / coarse_default == pytest.approx(1, rel=0.1), (
-        f"A 1 s floor on 10 m cells changed depth by a factor of "
+        f"A 3 s floor on 10 m cells changed depth by a factor of "
         f"{coarse_floor / coarse_default:.3f}"
     )
 
