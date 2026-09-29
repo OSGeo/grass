@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasslibs/hi/>\n"
@@ -3097,9 +3097,6 @@ msgstr "हो गया।"
 msgid "Goodbye from GRASS"
 msgstr "घास से अलविदा"
 
-msgid "Please install the GRASS development package"
-msgstr "कृपया GRASS डेवलपमेंट पैकेज स्थापित करें"
-
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "पैरामीटर <%s> समर्थित नहीं है"
@@ -5126,7 +5123,7 @@ msgstr[1] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -6873,3 +6870,6 @@ msgstr "क्षेत्र %d की कोई सीमा नहीं ह�
 
 msgid "Unknown query tool"
 msgstr "अज्ञात क्वेरी उपकरण"
+
+#~ msgid "Please install the GRASS development package"
+#~ msgstr "कृपया GRASS डेवलपमेंट पैकेज स्थापित करें"

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grassmods/it/>\n"
@@ -14961,6 +14961,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Numero di argomenti per la funzione '%s'"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Stampa a video le statistiche con lo stile shell script"
 
@@ -16351,8 +16361,10 @@ msgstr "Esportazione della mappa raster <%s> (banda %d) in corso..."
 msgid "Unable to export raster map <%s>"
 msgstr "Non è possibile esportare la mappa raster <%s>"
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Number of points must be > 0 (%d given)"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "Il numero di punti dev'essere > 0 (%d definiti)"
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16752,6 +16764,10 @@ msgstr ""
 
 msgid "Constrain model through central window cell"
 msgstr ""
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%s=%s> numero di punti non valido"
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr ""
@@ -23310,8 +23326,10 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
-msgstr ""
+#, fuzzy
+#| msgid "Could not initialize the timetables"
+msgid "Could not find Git. Please install it."
+msgstr "Non è possibile inizializzare le tabelle dei tempi"
 
 msgid "Cannot write to working directory {}."
 msgstr ""
@@ -37986,9 +38004,6 @@ msgstr "File immagine"
 #~ msgid "Number of points for the visibility"
 #~ msgstr "Numero di punti da creare"
 
-#~ msgid "Number of points must be > 0 (%d given)"
-#~ msgstr "Il numero di punti dev'essere > 0 (%d definiti)"
-
 #, fuzzy
 #~ msgid "Number of points to use in interpolation."
 #~ msgstr "Numero di punti da creare"
@@ -38080,10 +38095,6 @@ msgstr "File immagine"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Nome della mappa raster di elevazione di input [metri]"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "Numero di argomenti per la funzione '%s'"
 
 #, fuzzy
 #~ msgid "Number of tile border lines in each direction"

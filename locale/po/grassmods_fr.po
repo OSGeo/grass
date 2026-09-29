@@ -14,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
-"PO-Revision-Date: 2026-09-05 15:05+0000\n"
-"Last-Translator: Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
+"PO-Revision-Date: 2026-09-26 12:52+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -12133,7 +12133,7 @@ msgid "Unexpected output from r.stats"
 msgstr ""
 
 msgid "No data returned from r.stats"
-msgstr ""
+msgstr "Aucune donnée renvoyée par r.stats"
 
 msgid "Unable to open tempfile"
 msgstr "Impossible d'ouvrir le fichier temporaire"
@@ -14691,7 +14691,7 @@ msgstr "Erreur de PDAL : %s"
 
 #, c-format
 msgid "The input dataset <%s> has undefined CRS, its extent is reported as stored in the file"
-msgstr ""
+msgstr "Le jeu de données d'entrée <%s> n'a pas de SCR défini, son emprise est indiquée telle qu'elle est enregistrée dans le fichier"
 
 #, c-format
 msgid "Reprojection of the data extent failed: %s"
@@ -14783,6 +14783,15 @@ msgstr "Statistiques à utiliser pour les valeurs raster"
 
 msgid "PDAL dimension name"
 msgstr ""
+
+msgid "Number of points buffered at once during processing"
+msgstr "Nombre de points mis en mémoire tampon à la fois pendant le traitement"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr "Des valeurs plus élevées peuvent améliorer les performances avec des jeux de données volumineux, au détriment de la mémoire"
+
+msgid "Performance"
+msgstr "Performance"
 
 #, fuzzy
 msgid "Print data file extent in shell script style and then exit"
@@ -16161,8 +16170,10 @@ msgstr ""
 msgid "Unable to export raster map <%s>"
 msgstr ""
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Number of vertices must be at least 2"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "Le nombre d'aperçus doit être compris entre 0 et 30"
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16557,6 +16568,10 @@ msgstr "Exponentielle pour la pondération des distances (0.0-4.0)"
 
 msgid "Constrain model through central window cell"
 msgstr "Contrainte du modèle pour la cellule centrale de la fenêtre de traitement"
+
+#, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%d> n'est pas un nombre valide de nprocs."
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr ""
@@ -23083,8 +23098,8 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
-msgstr ""
+msgid "Could not find Git. Please install it."
+msgstr "Git est introuvable. Veuillez l'installer."
 
 msgid "Cannot write to working directory {}."
 msgstr ""
@@ -31551,9 +31566,8 @@ msgstr "Calcul de la fonction G..."
 msgid "Computing K function..."
 msgstr "Calcul de la fonction K..."
 
-#, fuzzy
 msgid "point pattern analysis"
-msgstr "Afficher l'index"
+msgstr "analyse des motifs ponctuels (ppa)"
 
 msgid "Point pattern analysis using the G, F, K, and L summary functions."
 msgstr ""
@@ -31567,36 +31581,32 @@ msgstr ""
 msgid "If omitted or '-', the results are printed to standard output"
 msgstr "Si ce paramètre est omis ou si la valeur « - » est indiquée, les résultats sont affichés sur la sortie standard"
 
-#, fuzzy
 msgid "Number of distances"
-msgstr "Nombre de profondeurs"
+msgstr "Nombre de distances"
 
 msgid "Number of equally spaced distances at which the function is estimated"
-msgstr ""
+msgstr "Nombre de distances uniformément espacées auxquelles la fonction est estimée"
 
-#, fuzzy
 msgid "Number of random points for the F function"
-msgstr "Nombre de points dans la cellule"
+msgstr "Nombre de points aléatoires pour la fonction F"
 
 msgid "Empty space distances are sampled at this many uniformly random locations"
-msgstr ""
+msgstr "Les distances dans l'espace vide sont échantillonnées en ce nombre d'emplacements choisis de manière aléatoire et uniforme"
 
-#, fuzzy
 msgid "Maximum distance for the K and L functions"
-msgstr "Distance maximum entre les points en unités carte :%f"
+msgstr "Distance maximale pour les fonctions K et L"
 
-#, fuzzy
 msgid "Default is one quarter of the shorter side of the computational region"
-msgstr "Utiliser la résolution réelle du raster plutôt que celle de la région de calcul"
+msgstr "La valeur par défaut correspond à un quart du côté le plus court de la région de calculs"
 
 msgid "Edge correction for the K and L functions"
-msgstr ""
+msgstr "Correction des bords pour les fonctions K et L"
 
 msgid "isotropic;Ripley's isotropic edge correction;none;No edge correction"
 msgstr ""
 
 msgid "Used for the random locations of the F function"
-msgstr ""
+msgstr "Utilisé pour les emplacements aléatoires de la fonction F"
 
 #, c-format
 msgid "Option <%s> must be positive"
@@ -31604,7 +31614,7 @@ msgstr "L'option <%s> doit être positive"
 
 #, c-format
 msgid "Option <%s> is larger than half of the shorter side of the computational region; the estimate becomes unreliable at large distances"
-msgstr ""
+msgstr "L’option <%s> est plus grande que la moitié du côté le plus court de la région de calculs ; l'estimation devient peu fiable à de grandes distances"
 
 #, c-format
 msgid "One point outside of the computational region was ignored"
@@ -31612,9 +31622,8 @@ msgid_plural "%d points outside of the computational region were ignored"
 msgstr[0] "Un point situé en dehors de la région de calculs a été ignoré"
 msgstr[1] "Les %d points situés en dehors de la région de calculs ont été ignorés"
 
-#, fuzzy
 msgid "No points found in the computational region"
-msgstr "Point de départ en dehors de la région courante"
+msgstr "Aucun point trouvé dans la région de calculs"
 
 #, c-format
 msgid "At least 2 points are required, %d found"
@@ -38018,10 +38027,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Nom du raster d'altitudes en entrée [mètres]"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "Nombre de copies à imprimer"
 
 #, fuzzy
 #~ msgid "Number of tile border lines in each direction"

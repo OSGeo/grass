@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_vi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Vietnamese <https://weblate.osgeo.org/projects/grass-gis/grassmods/vi/>\n"
@@ -14742,6 +14742,16 @@ msgstr ""
 msgid "PDAL dimension name"
 msgstr ""
 
+#, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Số mẫu ô vuông"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
 msgid "Print data file extent in shell script style and then exit"
 msgstr ""
 
@@ -16107,7 +16117,7 @@ msgstr ""
 msgid "Unable to export raster map <%s>"
 msgstr ""
 
-msgid "Number of overviews must be between 0 and 5"
+msgid "Number of overviews must be between 0 and 30"
 msgstr ""
 
 msgid "Building overviews ..."
@@ -16500,6 +16510,10 @@ msgid "Exponent for distance weighting (0.0-4.0)"
 msgstr ""
 
 msgid "Constrain model through central window cell"
+msgstr ""
+
+#, c-format
+msgid "<%d> is not a valid number of nprocs."
 msgstr ""
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
@@ -22942,7 +22956,7 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr ""
 
 msgid "Cannot write to working directory {}."
@@ -35364,10 +35378,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Number of concurrent processes"
-#~ msgstr "Số mẫu ô vuông"
-
-#, fuzzy
-#~ msgid "Number of cores for multiprocessing"
 #~ msgstr "Số mẫu ô vuông"
 
 #, fuzzy
