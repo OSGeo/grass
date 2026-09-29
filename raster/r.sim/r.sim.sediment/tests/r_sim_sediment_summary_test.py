@@ -12,38 +12,34 @@ ELEVATION = "rows_raster"
 SEDIMENT_KEYS = {
     "walkers_requested",
     "walkers_generated",
-    "walkers_active",
+    "walkers_remaining",
     "duration",
     "simulated_time",
     "time_step",
     "time_step_sediment",
-    "time_coefficient",
     "iterations_planned",
     "iterations_completed",
-    "iterations_per_output",
     "stopped_early",
-    "elevation_min",
-    "elevation_max",
     "mean_velocity",
     "velocity_max",
     "sigma_max",
     "mean_mannings_n",
     "mean_source_rate",
     "threads",
+    "transport_capacity",
+    "tlimit_erosion_deposition",
     "outputs",
 }
 OUTPUT_KEYS = {
     "simulated_time",
     "timestamp",
-    "walkers_active",
-    "transport_capacity",
-    "tlimit_erosion_deposition",
+    "walkers_remaining",
     "sediment_concentration",
     "sediment_flux",
     "erosion_deposition",
     "walkers",
 }
-MAP_KEYS = OUTPUT_KEYS - {"simulated_time", "timestamp", "walkers_active"}
+MAP_KEYS = OUTPUT_KEYS - {"simulated_time", "timestamp", "walkers_remaining"}
 
 
 def timestamp_for(simulated_time):
@@ -93,24 +89,21 @@ def test_json_summary(session_tools, sediment_inputs):
     assert summary["walkers_requested"] == 100
     assert summary["walkers_generated"] > 0
     assert summary["duration"] == 60
-    assert summary["time_coefficient"] in {1.25, 4}
+    assert summary["time_step"] > 0
     assert summary["iterations_planned"] > 1
     assert summary["iterations_completed"] <= summary["iterations_planned"]
     assert summary["time_step_sediment"] > 0
-    assert summary["time_step"] <= summary["time_step_sediment"]
     assert summary["velocity_max"] >= summary["mean_velocity"] > 0
     assert summary["sigma_max"] > 0
-    assert summary["elevation_min"] == 1
-    assert summary["elevation_max"] == 5
     assert summary["mean_mannings_n"] == pytest.approx(1)
     assert summary["mean_source_rate"] > 0
     assert summary["threads"] == 1
+    assert summary["transport_capacity"] == "tc"
+    assert summary["tlimit_erosion_deposition"] == "et"
 
     assert len(summary["outputs"]) == 1
     output = summary["outputs"][0]
     assert set(output) == OUTPUT_KEYS
-    assert output["transport_capacity"] == "tc"
-    assert output["tlimit_erosion_deposition"] == "et"
     assert output["sediment_concentration"] == "conc"
     assert output["sediment_flux"] == "flux"
     assert output["erosion_deposition"] == "erdep"
@@ -123,9 +116,12 @@ def test_json_summary(session_tools, sediment_inputs):
 
 def test_json_summary_optional_outputs(session_tools, sediment_inputs):
     """Maps which were not requested are reported as null"""
-    output = session_tools.r_sim_sediment(
+    summary = session_tools.r_sim_sediment(
         **sediment_inputs, sediment_flux="flux", duration=1, flags="p", format="json"
-    ).json["outputs"][0]
+    ).json
+    assert summary["transport_capacity"] is None
+    assert summary["tlimit_erosion_deposition"] is None
+    output = summary["outputs"][0]
     assert output["sediment_flux"] == "flux"
     for key in MAP_KEYS - {"sediment_flux"}:
         assert output[key] is None

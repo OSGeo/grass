@@ -582,7 +582,8 @@ int main(int argc, char *argv[])
     grad_check(&setup, &geometry, &settings, &inputs, &outputs, &grids);
     main_loop(&setup, &geometry, &settings, &sim, &points, &inputs, &outputs,
               &grids, &summary);
-    print_summary(summary_format, &setup, &settings, &sim, &inputs, &summary);
+    print_summary(summary_format, &setup, &settings, &sim, &inputs, &outputs,
+                  &summary);
     free_summary(&summary);
     free_walkers(&sim, outputs.outwalk);
 

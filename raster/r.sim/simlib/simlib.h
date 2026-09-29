@@ -52,8 +52,6 @@ typedef struct {
     double deltap;  // Time step for water
     double deltaw;  // Time step for sediment (sediment only)
     double sigmax;  // Maximum first order reaction coefficient (sediment only)
-    double zmin;    // Minimum elevation
-    double zmax;    // Maximum elevation
 } Setup;
 
 typedef struct {
@@ -130,18 +128,16 @@ typedef struct {
 // Maps written by one call of output_data and the state of the simulation at
 // that moment. Names are copies owned by the record; NULL when not written.
 typedef struct {
-    int simulated_time; // Simulated time when the maps were written [seconds]
-    int walkers_active; // Walkers still in the domain at that time
-    char *timestamp;    // Timestamp written to the maps, e.g. "10 minutes"
-    char *depth;        // Water depth raster name (water flow only)
-    char *disch;        // Discharge raster name (water flow only)
-    char *err;          // Error raster name (water flow only)
-    char *outwalk;      // Output walker vector map name
-    char *tc;           // Transport capacity raster name (sediment only)
-    char *et;   // Transport limited erosion/deposition map name (sediment only)
-    char *conc; // Sediment concentration raster name (sediment only)
-    char *flux; // Sediment flux raster name (sediment only)
-    char *erdep; // Erosion/deposition raster name (sediment only)
+    int simulated_time;    // Simulated time when the maps were written [s]
+    int walkers_remaining; // Walkers still in the domain at that time
+    char *timestamp;       // Timestamp written to the maps, e.g. "10 minutes"
+    char *depth;           // Water depth raster name (water flow only)
+    char *disch;           // Discharge raster name (water flow only)
+    char *err;             // Error raster name (water flow only)
+    char *outwalk;         // Output walker vector map name
+    char *conc;            // Sediment concentration raster name (sediment only)
+    char *flux;            // Sediment flux raster name (sediment only)
+    char *erdep;           // Erosion/deposition raster name (sediment only)
 } OutputStep;
 
 // Run summary collected by main_loop and output_data for the -p flag
@@ -189,9 +185,12 @@ int output_et(const Geometry *geometry, const Outputs *outputs,
               const Grids *grids);
 void free_walkers(Simulation *sim, const char *outwalk);
 void add_output_step(Summary *summary, const OutputStep *step);
+double time_step_seconds(const Setup *setup);
+int simulated_seconds(const Setup *setup, int iterations);
 void print_summary(SummaryFormat format, const Setup *setup,
                    const Settings *settings, const Simulation *sim,
-                   const Inputs *inputs, const Summary *summary);
+                   const Inputs *inputs, const Outputs *outputs,
+                   const Summary *summary);
 void free_summary(Summary *summary);
 void erod(double **, const Setup *setup, const Geometry *geometry,
           Grids *grids);

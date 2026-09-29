@@ -54,7 +54,7 @@ after the maps are written. The <b>format</b> option selects plain text
 (one <code>key: value</code> pair per line) or JSON. Without <b>-p</b>, nothing is
 printed to standard output regardless of <b>format</b>. The values are also
 stored in the history of the <em>sediment_flux</em> raster map under the same
-keys (see <em>r.info</em>).
+keys (see <a href="r.info.html">r.info</a>).
 
 <p>
 The keys are the same as for <a href="r.sim.water.html">r.sim.water</a> with these
@@ -62,12 +62,13 @@ differences:
 
 <table border="1">
  <tr><th>Key</th><th>Meaning</th><th>Unit</th></tr>
- <tr><td><code>time_step_sediment</code></td><td>Time step derived from the sediment transport parameters; <code>time_step</code> is the smaller of this and the water time step</td><td>s</td></tr>
+ <tr><td><code>time_step_sediment</code></td><td>Time step limit derived from the sediment transport parameters, <code>null</code> when no cell exceeds the critical shear stress</td><td>s</td></tr>
  <tr><td><code>velocity_max</code></td><td>Maximum flow velocity over the defined cells</td><td>m/s</td></tr>
  <tr><td><code>sigma_max</code></td><td>Maximum first order reaction coefficient (detachment to transport capacity ratio) over the defined cells</td><td>1/m</td></tr>
  <tr><td><code>mean_source_rate</code></td><td>Mean sediment source (detachment) rate</td><td>kg/m^2s</td></tr>
  <tr><td><code>mean_infiltration</code></td><td>Not reported</td><td></td></tr>
- <tr><td><code>outputs</code></td><td>A single entry with the <code>simulated_time</code> (s), <code>timestamp</code> and <code>walkers_active</code> at the time of writing, and the names of the <code>transport_capacity</code>, <code>tlimit_erosion_deposition</code>, <code>sediment_concentration</code>, <code>sediment_flux</code>, <code>erosion_deposition</code> and <code>walkers</code> maps, or <code>null</code> for maps which were not requested</td><td></td></tr>
+ <tr><td><code>transport_capacity</code>, <code>tlimit_erosion_deposition</code></td><td>Names of these maps, which are written once before the simulation starts, or <code>null</code> when not requested</td><td></td></tr>
+ <tr><td><code>outputs</code></td><td>A single entry with the <code>simulated_time</code> (s), <code>timestamp</code> and <code>walkers_remaining</code> at the time of writing, and the names of the <code>sediment_concentration</code>, <code>sediment_flux</code>, <code>erosion_deposition</code> and <code>walkers</code> maps, or <code>null</code> for maps which were not requested</td><td></td></tr>
 </table>
 
 <p>
@@ -84,31 +85,27 @@ r.sim.sediment elevation=elevation water_depth=water_depth detachment_coeff=deta
 {
     "walkers_requested": 60,
     "walkers_generated": 78,
-    "walkers_active": 43,
+    "walkers_remaining": 43,
     "duration": 60,
     "simulated_time": 54,
-    "time_step": 1.3722835778402895,
+    "time_step": 5.4891343113611581,
     "time_step_sediment": 70.517234241515013,
-    "time_coefficient": 4,
     "iterations_planned": 10,
     "iterations_completed": 10,
-    "iterations_per_output": 21,
     "stopped_early": false,
-    "elevation_min": 1,
-    "elevation_max": 5,
     "mean_velocity": 0.1821780891624834,
     "velocity_max": 0.21544346900318839,
     "sigma_max": 0.052657639041437901,
     "mean_mannings_n": 1,
     "mean_source_rate": 0.56025284041612944,
     "threads": 1,
+    "transport_capacity": "tc",
+    "tlimit_erosion_deposition": null,
     "outputs": [
         {
             "simulated_time": 54,
             "timestamp": "1 minutes",
-            "walkers_active": 43,
-            "transport_capacity": "tc",
-            "tlimit_erosion_deposition": null,
+            "walkers_remaining": 43,
             "sediment_concentration": null,
             "sediment_flux": "flux",
             "erosion_deposition": "erdep",

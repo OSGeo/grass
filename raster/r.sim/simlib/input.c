@@ -308,8 +308,6 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
     setup->vmean = vsum / cc;
     setup->vmax = vmax;
     setup->chmean = chsum / cc;
-    setup->zmin = zmin;
-    setup->zmax = zmax;
 
     if (grids->inf)
         setup->infmean = infsum / cc;

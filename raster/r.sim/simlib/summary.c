@@ -3,15 +3,12 @@
  * MODULE:       simwe library
  * AUTHOR(S):    Corey White
  * PURPOSE:      Run summary of the SIMWE simulation printed with the -p flag
- *
- * COPYRIGHT:    (C) 2026 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2026 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
+#include <math.h>
 #include <stdio.h>
 
 #include <grass/gis.h>
@@ -32,10 +29,14 @@ void add_output_step(Summary *summary, const OutputStep *step)
     summary->nsteps++;
 }
 
-/* Simulated time reached when the main loop ended [seconds] */
-static int simulated_time(const Setup *setup, const Summary *summary)
+double time_step_seconds(const Setup *setup)
 {
-    return (int)(summary->iterations_completed * setup->deltap * setup->timec);
+    return setup->deltap * setup->timec;
+}
+
+int simulated_seconds(const Setup *setup, int iterations)
+{
+    return (int)(iterations * time_step_seconds(setup));
 }
 
 static void set_string_or_null(G_JSON_Object *object, const char *key,
@@ -47,38 +48,44 @@ static void set_string_or_null(G_JSON_Object *object, const char *key,
         G_json_object_set_null(object, key);
 }
 
+static void set_number_or_null(G_JSON_Object *object, const char *key,
+                               double value)
+{
+    if (isfinite(value))
+        G_json_object_set_number(object, key, value);
+    else
+        G_json_object_set_null(object, key);
+}
+
 static void print_json(const Setup *setup, const Settings *settings,
                        const Simulation *sim, const Inputs *inputs,
-                       const Summary *summary)
+                       const Outputs *outputs, const Summary *summary)
 {
     G_JSON_Value *root_value = G_json_value_init_object();
     G_JSON_Object *root = G_json_object(root_value);
-    G_JSON_Value *outputs_value = G_json_value_init_array();
-    G_JSON_Array *outputs = G_json_array(outputs_value);
+    G_JSON_Value *steps_value = G_json_value_init_array();
+    G_JSON_Array *steps = G_json_array(steps_value);
     bool sediment = inputs->wdepth != NULL;
     char *serialized;
     int i;
 
-    if (root_value == NULL || outputs_value == NULL)
+    if (root_value == NULL || steps_value == NULL)
         G_fatal_error(_("Failed to initialize JSON object. Out of memory?"));
 
     G_json_object_set_number(root, "walkers_requested", sim->maxwa);
     G_json_object_set_number(root, "walkers_generated", sim->nwalk);
-    G_json_object_set_number(root, "walkers_active", sim->nwalka);
+    G_json_object_set_number(root, "walkers_remaining", sim->nwalka);
     G_json_object_set_number(root, "duration", settings->timesec);
-    G_json_object_set_number(root, "simulated_time",
-                             simulated_time(setup, summary));
-    G_json_object_set_number(root, "time_step", setup->deltap);
+    G_json_object_set_number(
+        root, "simulated_time",
+        simulated_seconds(setup, summary->iterations_completed));
+    G_json_object_set_number(root, "time_step", time_step_seconds(setup));
     if (sediment)
-        G_json_object_set_number(root, "time_step_sediment", setup->deltaw);
-    G_json_object_set_number(root, "time_coefficient", setup->timec);
+        set_number_or_null(root, "time_step_sediment", setup->deltaw);
     G_json_object_set_number(root, "iterations_planned", setup->miter);
     G_json_object_set_number(root, "iterations_completed",
                              summary->iterations_completed);
-    G_json_object_set_number(root, "iterations_per_output", setup->iterout);
     G_json_object_set_boolean(root, "stopped_early", summary->stopped_early);
-    G_json_object_set_number(root, "elevation_min", setup->zmin);
-    G_json_object_set_number(root, "elevation_max", setup->zmax);
     G_json_object_set_number(root, "mean_velocity", setup->vmean);
     if (sediment) {
         G_json_object_set_number(root, "velocity_max", setup->vmax);
@@ -92,6 +99,10 @@ static void print_json(const Setup *setup, const Settings *settings,
     if (!sediment)
         G_json_object_set_number(root, "mean_infiltration", setup->infmean);
     G_json_object_set_number(root, "threads", summary->threads);
+    if (sediment) {
+        set_string_or_null(root, "transport_capacity", outputs->tc);
+        set_string_or_null(root, "tlimit_erosion_deposition", outputs->et);
+    }
 
     for (i = 0; i < summary->nsteps; i++) {
         const OutputStep *step = &summary->steps[i];
@@ -101,11 +112,9 @@ static void print_json(const Setup *setup, const Settings *settings,
         G_json_object_set_number(object, "simulated_time",
                                  step->simulated_time);
         G_json_object_set_string(object, "timestamp", step->timestamp);
-        G_json_object_set_number(object, "walkers_active",
-                                 step->walkers_active);
+        G_json_object_set_number(object, "walkers_remaining",
+                                 step->walkers_remaining);
         if (sediment) {
-            set_string_or_null(object, "transport_capacity", step->tc);
-            set_string_or_null(object, "tlimit_erosion_deposition", step->et);
             set_string_or_null(object, "sediment_concentration", step->conc);
             set_string_or_null(object, "sediment_flux", step->flux);
             set_string_or_null(object, "erosion_deposition", step->erdep);
@@ -116,9 +125,9 @@ static void print_json(const Setup *setup, const Settings *settings,
             set_string_or_null(object, "error", step->err);
         }
         set_string_or_null(object, "walkers", step->outwalk);
-        G_json_array_append_value(outputs, step_value);
+        G_json_array_append_value(steps, step_value);
     }
-    G_json_object_set_value(root, "outputs", outputs_value);
+    G_json_object_set_value(root, "outputs", steps_value);
 
     serialized = G_json_serialize_to_string_pretty(root_value);
     if (!serialized) {
@@ -130,47 +139,57 @@ static void print_json(const Setup *setup, const Settings *settings,
     G_json_value_free(root_value);
 }
 
-static void print_map_name(const char *key, const char *name)
+static void print_map_name(const char *indent, const char *key,
+                           const char *name)
 {
     if (name)
-        printf("  %s: %s\n", key, name);
+        printf("%s%s: %s\n", indent, key, name);
+}
+
+static void print_number(const char *key, double value)
+{
+    if (isfinite(value))
+        printf("%s: %g\n", key, value);
+    else
+        printf("%s: undefined\n", key);
 }
 
 static void print_plain(const Setup *setup, const Settings *settings,
                         const Simulation *sim, const Inputs *inputs,
-                        const Summary *summary)
+                        const Outputs *outputs, const Summary *summary)
 {
     bool sediment = inputs->wdepth != NULL;
     int i;
 
     printf("walkers_requested: %d\n", sim->maxwa);
     printf("walkers_generated: %d\n", sim->nwalk);
-    printf("walkers_active: %d\n", sim->nwalka);
+    printf("walkers_remaining: %d\n", sim->nwalka);
     printf("duration: %d\n", settings->timesec);
-    printf("simulated_time: %d\n", simulated_time(setup, summary));
-    printf("time_step: %g\n", setup->deltap);
+    printf("simulated_time: %d\n",
+           simulated_seconds(setup, summary->iterations_completed));
+    print_number("time_step", time_step_seconds(setup));
     if (sediment)
-        printf("time_step_sediment: %g\n", setup->deltaw);
-    printf("time_coefficient: %g\n", setup->timec);
+        print_number("time_step_sediment", setup->deltaw);
     printf("iterations_planned: %d\n", setup->miter);
     printf("iterations_completed: %d\n", summary->iterations_completed);
-    printf("iterations_per_output: %d\n", setup->iterout);
     printf("stopped_early: %s\n", summary->stopped_early ? "true" : "false");
-    printf("elevation_min: %g\n", setup->zmin);
-    printf("elevation_max: %g\n", setup->zmax);
-    printf("mean_velocity: %g\n", setup->vmean);
+    print_number("mean_velocity", setup->vmean);
     if (sediment) {
-        printf("velocity_max: %g\n", setup->vmax);
-        printf("sigma_max: %g\n", setup->sigmax);
+        print_number("velocity_max", setup->vmax);
+        print_number("sigma_max", setup->sigmax);
     }
     if (setup->chmean != 0.0)
-        printf("mean_mannings_n: %g\n", 1.0 / setup->chmean);
+        print_number("mean_mannings_n", 1.0 / setup->chmean);
     else
         printf("mean_mannings_n: undefined\n");
-    printf("mean_source_rate: %g\n", setup->si0);
+    print_number("mean_source_rate", setup->si0);
     if (!sediment)
-        printf("mean_infiltration: %g\n", setup->infmean);
+        print_number("mean_infiltration", setup->infmean);
     printf("threads: %d\n", summary->threads);
+    if (sediment) {
+        print_map_name("", "transport_capacity", outputs->tc);
+        print_map_name("", "tlimit_erosion_deposition", outputs->et);
+    }
 
     for (i = 0; i < summary->nsteps; i++) {
         const OutputStep *step = &summary->steps[i];
@@ -178,33 +197,32 @@ static void print_plain(const Setup *setup, const Settings *settings,
         printf("output:\n");
         printf("  simulated_time: %d\n", step->simulated_time);
         printf("  timestamp: %s\n", step->timestamp);
-        printf("  walkers_active: %d\n", step->walkers_active);
+        printf("  walkers_remaining: %d\n", step->walkers_remaining);
         if (sediment) {
-            print_map_name("transport_capacity", step->tc);
-            print_map_name("tlimit_erosion_deposition", step->et);
-            print_map_name("sediment_concentration", step->conc);
-            print_map_name("sediment_flux", step->flux);
-            print_map_name("erosion_deposition", step->erdep);
+            print_map_name("  ", "sediment_concentration", step->conc);
+            print_map_name("  ", "sediment_flux", step->flux);
+            print_map_name("  ", "erosion_deposition", step->erdep);
         }
         else {
-            print_map_name("depth", step->depth);
-            print_map_name("discharge", step->disch);
-            print_map_name("error", step->err);
+            print_map_name("  ", "depth", step->depth);
+            print_map_name("  ", "discharge", step->disch);
+            print_map_name("  ", "error", step->err);
         }
-        print_map_name("walkers", step->outwalk);
+        print_map_name("  ", "walkers", step->outwalk);
     }
 }
 
 void print_summary(SummaryFormat format, const Setup *setup,
                    const Settings *settings, const Simulation *sim,
-                   const Inputs *inputs, const Summary *summary)
+                   const Inputs *inputs, const Outputs *outputs,
+                   const Summary *summary)
 {
     switch (format) {
     case SUMMARY_JSON:
-        print_json(setup, settings, sim, inputs, summary);
+        print_json(setup, settings, sim, inputs, outputs, summary);
         break;
     case SUMMARY_PLAIN:
-        print_plain(setup, settings, sim, inputs, summary);
+        print_plain(setup, settings, sim, inputs, outputs, summary);
         break;
     case SUMMARY_NONE:
         break;
@@ -223,8 +241,6 @@ void free_summary(Summary *summary)
         G_free(step->disch);
         G_free(step->err);
         G_free(step->outwalk);
-        G_free(step->tc);
-        G_free(step->et);
         G_free(step->conc);
         G_free(step->flux);
         G_free(step->erdep);

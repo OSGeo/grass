@@ -21,17 +21,13 @@ SLOW_FLOW = {
 COMMON_KEYS = {
     "walkers_requested",
     "walkers_generated",
-    "walkers_active",
+    "walkers_remaining",
     "duration",
     "simulated_time",
     "time_step",
-    "time_coefficient",
     "iterations_planned",
     "iterations_completed",
-    "iterations_per_output",
     "stopped_early",
-    "elevation_min",
-    "elevation_max",
     "mean_velocity",
     "mean_mannings_n",
     "mean_source_rate",
@@ -42,7 +38,7 @@ COMMON_KEYS = {
 OUTPUT_KEYS = {
     "simulated_time",
     "timestamp",
-    "walkers_active",
+    "walkers_remaining",
     "depth",
     "discharge",
     "error",
@@ -76,23 +72,17 @@ def test_json_summary(session_tools):
     assert summary["walkers_requested"] == 100
     assert summary["walkers_generated"] > 0
     assert summary["duration"] == 60
-    # The coefficient is 4 whenever the water time step governs, which is
-    # always the case without a sediment time step.
-    assert summary["time_coefficient"] == 4
+    assert summary["time_step"] > 0
     assert summary["iterations_planned"] == int(
-        summary["duration"] / (summary["time_step"] * summary["time_coefficient"])
+        summary["duration"] / summary["time_step"]
     )
     assert summary["iterations_planned"] > 1
     assert summary["iterations_completed"] == summary["iterations_planned"]
     assert summary["simulated_time"] == int(
-        summary["iterations_completed"]
-        * summary["time_step"]
-        * summary["time_coefficient"]
+        summary["iterations_completed"] * summary["time_step"]
     )
     assert summary["stopped_early"] is False
-    assert summary["walkers_active"] > 0
-    assert summary["elevation_min"] == 1
-    assert summary["elevation_max"] == 5
+    assert summary["walkers_remaining"] > 0
     assert summary["mean_velocity"] > 0
     # The harmonic mean of a constant is the constant.
     assert summary["mean_mannings_n"] == pytest.approx(8)
@@ -108,7 +98,7 @@ def test_json_summary(session_tools):
     assert output["error"] is None
     assert output["walkers"] is None
     assert output["simulated_time"] == summary["simulated_time"]
-    assert output["walkers_active"] == summary["walkers_active"]
+    assert output["walkers_remaining"] == summary["walkers_remaining"]
     assert output["timestamp"] == timestamp_for(output["simulated_time"])
     for name in ("depth", "discharge"):
         assert session_tools.r_info(map=name, format="json")["rows"] == 5
@@ -128,9 +118,6 @@ def test_json_summary_time_series(session_tools):
     assert [output["depth"] for output in outputs] == ["depth.01", "depth.02"]
     assert outputs[0]["simulated_time"] < outputs[1]["simulated_time"]
     assert summary["simulated_time"] >= outputs[1]["simulated_time"]
-    assert summary["iterations_per_output"] == int(
-        60 / (summary["time_step"] * summary["time_coefficient"])
-    )
     for output in outputs:
         assert output["timestamp"] == timestamp_for(output["simulated_time"])
         assert output["discharge"] is None
@@ -148,7 +135,7 @@ def test_json_summary_stopped_early(session_tools):
         format="json",
     ).json
     assert summary["stopped_early"] is True
-    assert summary["walkers_active"] == 0
+    assert summary["walkers_remaining"] == 0
     assert summary["iterations_completed"] < summary["iterations_planned"]
 
 
@@ -205,7 +192,7 @@ def test_history(session_tools):
         for key in (
             "walkers_requested",
             "walkers_generated",
-            "walkers_active",
+            "walkers_remaining",
             "duration",
             "simulated_time",
         ):

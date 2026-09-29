@@ -75,6 +75,24 @@ static void output_walker_as_vector(const char *name,
     G_write_vector_timestamp(name, "1", timestamp);
 }
 
+/* Set a data source history field to the list of the given input map names,
+ * skipping inputs which were not given. */
+static void set_data_source(struct History *hist, int field,
+                            const char *const names[], int count)
+{
+    char buf[4 * (GNAME_MAX + 1) + 16];
+    int i;
+
+    G_strlcpy(buf, "input files:", sizeof(buf));
+    for (i = 0; i < count; i++) {
+        if (names[i]) {
+            G_strlcat(buf, " ", sizeof(buf));
+            G_strlcat(buf, names[i], sizeof(buf));
+        }
+    }
+    Rast_set_history(hist, field, buf);
+}
+
 /* Record the run summary in the history of a written map, using the same
  * keys as the -p output, and set the map timestamp. */
 static void write_history(const char *name, int tt, const Setup *setup,
@@ -86,33 +104,39 @@ static void write_history(const char *name, int tt, const Setup *setup,
     Rast_short_history(name, "raster", &hist);
 
     Rast_append_format_history(
-        &hist, "walkers_generated=%d, walkers_requested=%d, walkers_active=%d",
+        &hist,
+        "walkers_generated=%d, walkers_requested=%d, walkers_remaining=%d",
         sim->nwalk, sim->maxwa, sim->nwalka);
     Rast_append_format_history(&hist, "duration=%d, simulated_time=%d",
                                settings->timesec, tt);
     Rast_append_format_history(&hist, "time_step=%f, mean_velocity=%f",
-                               setup->deltap, setup->vmean);
+                               time_step_seconds(setup), setup->vmean);
     if (setup->chmean != 0.0)
         Rast_append_format_history(&hist, "mean_mannings_n=%f",
                                    1.0 / setup->chmean);
     else
         Rast_append_format_history(&hist, "mean_mannings_n=undefined");
     if (inputs->wdepth) {
+        const char *const terrain[] = {inputs->wdepth, inputs->dxin,
+                                       inputs->dyin};
+        const char *const soil[] = {inputs->manin, inputs->detin,
+                                    inputs->tranin, inputs->tauin};
+
         Rast_append_format_history(&hist, "mean_source_rate=%e", setup->si0);
-        Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
-                            inputs->wdepth, inputs->dxin, inputs->dyin);
-        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s %s",
-                            inputs->manin, inputs->detin, inputs->tranin,
-                            inputs->tauin);
+        set_data_source(&hist, HIST_DATSRC_1, terrain, 3);
+        set_data_source(&hist, HIST_DATSRC_2, soil, 4);
     }
     else {
+        const char *const terrain[] = {inputs->elevin, inputs->dxin,
+                                       inputs->dyin};
+        const char *const water[] = {inputs->rain, inputs->infil,
+                                     inputs->manin};
+
         Rast_append_format_history(&hist,
                                    "mean_source_rate=%e, mean_infiltration=%e",
                                    setup->si0, setup->infmean);
-        Rast_format_history(&hist, HIST_DATSRC_1, "input files: %s %s %s",
-                            inputs->elevin, inputs->dxin, inputs->dyin);
-        Rast_format_history(&hist, HIST_DATSRC_2, "input files: %s %s %s",
-                            inputs->rain, inputs->infil, inputs->manin);
+        set_data_source(&hist, HIST_DATSRC_1, terrain, 3);
+        set_data_source(&hist, HIST_DATSRC_2, water, 3);
     }
     Rast_command_history(&hist);
     Rast_write_history(name, &hist);
@@ -454,17 +478,14 @@ int output_data(int tt, double conn, const Setup *setup,
     if (outputs->flux)
         write_history(flux0, tt, setup, settings, sim, inputs, &timestamp);
 
-    /* The step record takes over the allocated names. Transport capacity and
-     * transport limited erosion/deposition are written once by output_et. */
+    /* The step record takes over the allocated names. */
     step.simulated_time = tt;
-    step.walkers_active = sim->nwalka;
+    step.walkers_remaining = sim->nwalka;
     step.timestamp = G_store(timestamp_buf);
     step.depth = depth0;
     step.disch = disch0;
     step.err = err0;
     step.outwalk = outwalk0;
-    step.tc = outputs->tc ? G_store(outputs->tc) : NULL;
-    step.et = outputs->et ? G_store(outputs->et) : NULL;
     step.conc = conc0;
     step.flux = flux0;
     step.erdep = erdep0;

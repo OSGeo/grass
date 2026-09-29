@@ -194,16 +194,13 @@ stored in the history of the output raster maps under the same keys (see
  <tr><th>Key</th><th>Meaning</th><th>Unit</th></tr>
  <tr><td><code>walkers_requested</code></td><td>Number of walkers from <b>nwalkers</b>, by default twice the number of cells</td><td>count</td></tr>
  <tr><td><code>walkers_generated</code></td><td>Walkers created, at least one per cell and more where the source rate is higher</td><td>count</td></tr>
- <tr><td><code>walkers_active</code></td><td>Walkers still in the domain at the end of the run</td><td>count</td></tr>
+ <tr><td><code>walkers_remaining</code></td><td>Walkers still in the domain at the end of the run</td><td>count</td></tr>
  <tr><td><code>duration</code></td><td>Requested simulation length (<b>duration</b>)</td><td>s</td></tr>
  <tr><td><code>simulated_time</code></td><td>Simulated time reached at the end of the run</td><td>s</td></tr>
- <tr><td><code>time_step</code></td><td>Time step used</td><td>s</td></tr>
- <tr><td><code>time_coefficient</code></td><td>Simulated time per iteration is <code>time_step</code> times this factor: 4 when the water time step is used, 1.25 when the sediment time step governs (<em>r.sim.sediment</em> only)</td><td></td></tr>
+ <tr><td><code>time_step</code></td><td>Simulated time per iteration</td><td>s</td></tr>
  <tr><td><code>iterations_planned</code></td><td>Iterations needed to cover <b>duration</b></td><td>count</td></tr>
  <tr><td><code>iterations_completed</code></td><td>Iterations run, fewer than planned when the run stopped early</td><td>count</td></tr>
- <tr><td><code>iterations_per_output</code></td><td>Iterations between written maps (<b>output_step</b>)</td><td>count</td></tr>
  <tr><td><code>stopped_early</code></td><td><code>true</code> when all walkers left the domain before <b>duration</b> was reached</td><td></td></tr>
- <tr><td><code>elevation_min</code>, <code>elevation_max</code></td><td>Elevation range of the defined cells</td><td>m</td></tr>
  <tr><td><code>mean_velocity</code></td><td>Mean flow velocity over the defined cells</td><td>m/s</td></tr>
  <tr><td><code>mean_mannings_n</code></td><td>Harmonic mean of Manning's n over the defined cells (the inverse of the mean of 1/n), <code>null</code> when undefined</td><td></td></tr>
  <tr><td><code>mean_source_rate</code></td><td>Mean rainfall excess</td><td>m/s</td></tr>
@@ -214,10 +211,10 @@ stored in the history of the output raster maps under the same keys (see
 
 <p>
 Each entry of <code>outputs</code> contains the <code>simulated_time</code> (s) and <code>timestamp</code>
-of the written maps, the number of <code>walkers_active</code> at that time, and the
-names of the <code>depth</code>, <code>discharge</code>, <code>error</code> and <code>walkers</code> maps, or <code>null</code>
-for maps which were not requested. Simulated times are truncated to
-whole seconds.
+of the written maps, the number of <code>walkers_remaining</code> at that time, and
+the names of the <code>depth</code>, <code>discharge</code>, <code>error</code> and <code>walkers</code> maps, or
+<code>null</code> for maps which were not requested. Simulated times are truncated
+to whole seconds.
 
 <p>
 Summary of a time series run with two output steps in JSON:
@@ -232,17 +229,13 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
 {
     "walkers_requested": 100000,
     "walkers_generated": 120000,
-    "walkers_active": 112724,
+    "walkers_remaining": 112724,
     "duration": 1200,
     "simulated_time": 1199,
-    "time_step": 0.26578203020127966,
-    "time_coefficient": 4,
+    "time_step": 1.0631281208051186,
     "iterations_planned": 1128,
     "iterations_completed": 1128,
-    "iterations_per_output": 564,
     "stopped_early": false,
-    "elevation_min": 91.686592102050781,
-    "elevation_max": 343.03448486328125,
     "mean_velocity": 9.4062040165270862,
     "mean_mannings_n": 0.050000000000000003,
     "mean_source_rate": 1.390000000000819e-05,
@@ -252,7 +245,7 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
         {
             "simulated_time": 599,
             "timestamp": "10 minutes",
-            "walkers_active": 113464,
+            "walkers_remaining": 113464,
             "depth": "depth.10",
             "discharge": "discharge.10",
             "error": null,
@@ -261,7 +254,7 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
         {
             "simulated_time": 1199,
             "timestamp": "20 minutes",
-            "walkers_active": 112724,
+            "walkers_remaining": 112724,
             "depth": "depth.20",
             "discharge": "discharge.20",
             "error": null,
@@ -285,7 +278,7 @@ summary = gs.parse_command(
     flags="p",
     format="json",
 )
-print(summary["walkers_active"], summary["outputs"][-1]["depth"])
+print(summary["walkers_remaining"], summary["outputs"][-1]["depth"])
 </pre></div>
 
 <h2>EXAMPLE</h2>
