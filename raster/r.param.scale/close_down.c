@@ -76,7 +76,7 @@ void close_down(void)
         strcpy(map_type, "Longitudinal curvature");
         Rast_append_history(&history, "Longitudinal curvature is the profile "
                                       "curvature intersecting with the");
-        Rast_append_history(&history, "plane defined by the surfacenormal and "
+        Rast_append_history(&history, "plane defined by the surface normal and "
                                       "maximum gradient direction.");
         break;
 

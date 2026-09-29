@@ -6,10 +6,8 @@
 Classes:
  - frame::AnimationFrame
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
@@ -68,6 +66,14 @@ class AnimationFrame(wx.Frame):
         :param layerLists: list of layerLists
         """
         self.panel.SetAnimations(layerLists)
+
+    def AnimateStds(self, name, stds_type):
+        """Animate a space time dataset, replacing the current animations
+
+        :param name: name of the dataset including the mapset
+        :param stds_type: type of the dataset, 'strds' or 'stvds'
+        """
+        self.panel.AnimateStds(name, stds_type)
 
     def OnCloseWindow(self, event):
         """Clean up and close.

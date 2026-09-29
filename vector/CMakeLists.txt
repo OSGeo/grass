@@ -71,6 +71,7 @@ set(vector_modules_list
     v.parallel
     v.patch
     v.perturb
+    v.ppa
     v.profile
     v.proj
     v.qcount
@@ -657,6 +658,12 @@ build_program_in_subdir(
         grass_dbmidriver
         grass_gis
         grass_vector
+)
+
+build_program_in_subdir(
+    v.ppa
+    DEPENDS ${LIBM} grass_btree2 grass_gis grass_parson grass_vector
+    OPTIONAL_DEPENDS OpenMP::OpenMP_C
 )
 
 build_program_in_subdir(v.split DEPENDS grass_gis grass_vector ${LIBM})

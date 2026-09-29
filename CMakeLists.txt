@@ -5,8 +5,7 @@
 # PURPOSE:      CMakeLists.txt root that adds options to activate/deactivate
 #               3rd party libraries
 #
-# COPYRIGHT:    (C) 2020-2025 by the GRASS Development Team
-#
+# SPDX-FileCopyrightText: 2020-2025 GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
 ################################################################################
@@ -59,7 +58,7 @@ if(MSVC)
 endif()
 
 if(NOT CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 11)
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
@@ -169,8 +168,13 @@ option(WITH_FHS "Install with FHS" OFF)
 include(check_target)
 include(CheckDependentLibraries)
 
-include(get_host_arch)
-get_host_arch(BUILD_ARCH)
+# Set target architecture, as displayed by e.g. `g.version -g` or `grass --config arch`
+string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" BUILD_CPU)
+string(TOLOWER "${CMAKE_SYSTEM_NAME}" BUILD_OS)
+set(BUILD_ARCH "${BUILD_CPU}-${BUILD_OS}")
+if(CMAKE_SYSTEM_VERSION)
+    set(BUILD_ARCH "${BUILD_ARCH}${CMAKE_SYSTEM_VERSION}")
+endif()
 
 # Setup GRASS install directories
 include(GRASSInstallDirs)
