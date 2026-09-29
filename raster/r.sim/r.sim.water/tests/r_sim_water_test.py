@@ -767,12 +767,14 @@ def test_flow_control_increases_depth(east_slope_session):
     )
 
 
-def test_time_series_output(long_slope_session):
-    """The -t flag with output_step must produce intermediate depth maps.
+def test_time_series_outputs(long_slope_session):
+    """The -t flag with output_step must write depth and walker maps per step.
 
-    With duration=10 and output_step=5, the tool should create depth
-    maps at minutes 5 and 10. The later time step should have greater or
-    equal total depth as water accumulates over time.
+    With duration=10 and output_step=5, the tool writes depth maps at
+    minutes 5 and 10 (ts_depth.05 and ts_depth.10) and, with walkers_output,
+    vector point maps with an underscore-separated suffix (walkers_05 and
+    walkers_10). Total depth at the later step is at least that of the
+    earlier one, as water accumulates over time.
 
     Uses a 200-cell domain at 10 m resolution with high roughness so that
     walkers survive the full simulation. On small or steep domains walkers
@@ -790,6 +792,7 @@ def test_time_series_output(long_slope_session):
         output_step=5,
         random_seed=SEED,
         nprocs=NPROCS,
+        walkers_output="walkers",
         flags="t",
     )
 
@@ -799,6 +802,11 @@ def test_time_series_output(long_slope_session):
     assert sum_10 >= sum_05, (
         f"Depth at t=10 ({sum_10:.3e}) should be >= depth at t=5 ({sum_05:.3e})"
     )
+
+    info_05 = tools.v_info(map="walkers_05", flags="t", format="json")
+    info_10 = tools.v_info(map="walkers_10", flags="t", format="json")
+    assert int(info_05["points"]) > 0, "Expected walker points at t=5"
+    assert int(info_10["points"]) > 0, "Expected walker points at t=10"
 
 
 def test_observation_logfile(east_slope_session, tmp_path):
@@ -886,37 +894,6 @@ def test_walkers_output(long_slope_session):
     assert npoints <= nwalkers, (
         f"Number of walker points ({npoints}) should not exceed nwalkers ({nwalkers})"
     )
-
-
-def test_walkers_output_time_series(long_slope_session):
-    """With -t, walkers_output must produce per-step vector maps.
-
-    The maps use an underscore-separated time suffix (e.g., walkers_05)
-    unlike raster outputs which use a dot (e.g., depth.05).
-
-    Uses a large domain (200 cells) with high roughness (0.3) so walkers
-    survive long enough to generate multiple time-series outputs.
-    """
-    tools = Tools(session=long_slope_session)
-    tools.r_sim_water(
-        elevation="elevation",
-        dx="dx",
-        dy="dy",
-        depth="ts_depth",
-        rain_value=RAIN,
-        man_value=0.3,
-        duration=10,
-        output_step=5,
-        random_seed=SEED,
-        nprocs=NPROCS,
-        walkers_output="walkers",
-        flags="t",
-    )
-
-    info_05 = tools.v_info(map="walkers_05", flags="t", format="json")
-    info_10 = tools.v_info(map="walkers_10", flags="t", format="json")
-    assert int(info_05["points"]) > 0, "Expected walker points at t=5"
-    assert int(info_10["points"]) > 0, "Expected walker points at t=10"
 
 
 def test_nprocs_gives_result_within_noise(east_slope_session):
