@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
     parm.traps->key = "flow_control";
     parm.traps->required = NO;
     parm.traps->description =
-        _("Name of flow controls raster map (permeability ratio 0-1)");
+        _("Name of flow controls raster map (trapping probability 0-1)");
     parm.traps->guisection = _("Input");
 
     parm.observation = G_define_standard_option(G_OPT_V_INPUT);
