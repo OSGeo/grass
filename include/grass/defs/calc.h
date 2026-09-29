@@ -3,6 +3,13 @@
 
 extern void calc_init(int);
 
+/* Set the function which gives rand() the generator state to draw from.
+ * It must return the calling thread's state, which the tool places at the
+ * start of the current unit's stream of its random number layout before
+ * evaluating the unit. Without it, or with NULL, rand() draws from the
+ * generator shared by the whole program. */
+extern void calc_set_random_state(struct G_random_state *(*)(void));
+
 extern func_t f_add;
 extern func_t f_sub;
 extern func_t f_mul;

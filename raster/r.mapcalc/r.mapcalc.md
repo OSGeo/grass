@@ -763,17 +763,28 @@ g.rename raster=newmap,oldmap
 
 The pseudo-random number generator used by the rand() function can be
 initialised to a specific value using the **seed** parameter. This can be
-used to replicate a previous calculation.
+used to replicate a previous calculation. The seed must be an integer
+between -2147483648 and 4294967295. Seeds from 0 to 1073741823 are
+recommended, since two seeds 1073741824 or 2147483648 apart give related
+values.
 
-If rand() function is used and no seed is given,
-*r.mapcalc* will generate a seed, resulting in a different result for
-each run.
+If rand() function is used and no seed is given, *r.mapcalc* generates a
+seed: the value of the environment variable `GRASS_RANDOM_SEED`, or of
+`SOURCE_DATE_EPOCH` if that one is not set, and otherwise a value
+computed from the current time and the process ID, which differs from
+run to run.
 
 In either case, the seed will be written to the map's history, and can
 be seen using *r.info*.
 
 If you want other people to be able to verify your results, it's
 preferable to use the **seed** parameter.
+
+The result for a given seed is the same as in earlier versions and the
+same for any number of threads (**nprocs**). The values for a given seed
+depend on the computational region and on all rand() calls in the
+expressions: adding or removing a rand() call can change the values of
+the others.
 
 ## EXAMPLES
 
@@ -869,7 +880,6 @@ Note: r.mapcalc may disable parallelization in certain cases, even when requeste
 
 - When a mask is active, because the current parallel implementation
  does not support it.
-- When the rand() function is used, to ensure reproducible results.
 
 ![Benchmark of r.mapcalc](r_mapcalc_benchmark_time.png)  
 *Figure: Benchmark shows execution time for different number of cells

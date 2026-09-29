@@ -12,11 +12,11 @@
 #include <omp.h>
 #endif
 
+#include <errno.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
 #include <grass/glocale.h>
 
@@ -26,8 +26,9 @@
 
 int overwrite_flag;
 
-long seed_value;
+long long seed_value;
 long seeded;
+int rand_calls;
 int region_approach;
 
 /****************************************************************************/
@@ -55,40 +56,40 @@ static expr_list *parse_file(const char *filename)
     return res;
 }
 
-static bool has_rand_expr(const expression *e)
+/* Count the rand() calls, each of which is evaluated once per row. A
+ * variable is not followed, since its binding is evaluated where it
+ * is defined, not where it is used. */
+static int count_rand_calls(const expression *e)
 {
+    int count = 0;
+
     if (!e)
         return 0;
 
     switch (e->type) {
     case expr_type_function:
         if (strcmp(e->data.func.name, "rand") == 0)
-            return 1;
+            count++;
         // args is 1-indexed (likely from yacc parser conventions)
-        for (int i = 1; i <= e->data.func.argc; i++) {
-            if (has_rand_expr(e->data.func.args[i]))
-                return 1;
-        }
-        return 0;
+        for (int i = 1; i <= e->data.func.argc; i++)
+            count += count_rand_calls(e->data.func.args[i]);
+        return count;
 
     case expr_type_binding:
-        return has_rand_expr(e->data.bind.val);
-
-    case expr_type_variable:
-        return has_rand_expr(e->data.var.bind);
+        return count_rand_calls(e->data.bind.val);
 
     default:
         return 0;
     }
 }
 
-static bool expr_list_has_rand(const expr_list *list)
+static int expr_list_count_rand_calls(const expr_list *list)
 {
-    for (; list; list = list->next) {
-        if (has_rand_expr(list->exp))
-            return 1;
-    }
-    return 0;
+    int count = 0;
+
+    for (; list; list = list->next)
+        count += count_rand_calls(list->exp);
+    return count;
 }
 
 int main(int argc, char **argv)
@@ -187,18 +188,26 @@ int main(int argc, char **argv)
     if (!result)
         G_fatal_error(_("parse error"));
 
-    bool has_rand = expr_list_has_rand(result);
+    rand_calls = expr_list_count_rand_calls(result);
     if (seed->answer) {
-        seed_value = atol(seed->answer);
-        G_srand48(seed_value);
+        struct G_random_state check;
+        char *end;
+
+        errno = 0;
+        seed_value = strtoll(seed->answer, &end, 10);
+        if (errno || end == seed->answer || *end)
+            G_fatal_error(_("Invalid random seed <%s>"), seed->answer);
+        /* Refuse a seed out of range now, before the output maps are
+         * created. */
+        G_random_seed(&check, seed_value);
         seeded = 1;
-        G_debug(3, "Read random seed from seed=: %ld", seed_value);
+        G_debug(3, "Read random seed from seed=: %lld", seed_value);
     }
     else {
-        if (has_rand) {
-            seed_value = G_srand48_auto();
+        if (rand_calls > 0) {
+            seed_value = G_random_generate_seed();
             seeded = 1;
-            G_debug(3, "Automatically generated random seed: %ld", seed_value);
+            G_debug(3, "Automatically generated random seed: %lld", seed_value);
         }
         if (random->answer) {
             G_verbose_message(_("Flag 's' is deprecated and will be removed in "
@@ -238,12 +247,6 @@ int main(int argc, char **argv)
         threads = 1;
         nprocs->answer = "1";
         G_verbose_message(_("r3.mapcalc does not support parallel execution."));
-    }
-    else if ((threads != 1) && (has_rand)) {
-        threads = 1;
-        nprocs->answer = "1";
-        G_verbose_message(
-            _("Parallel execution is not supported with rand() function"));
     }
 
     /* Ensure the proper number of threads is assigned */

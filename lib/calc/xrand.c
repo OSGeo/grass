@@ -9,8 +9,37 @@
 rand(lo,hi) random values between a and b
 ****************************************************************/
 
+/* A tool which evaluates rows on several threads sets this so that each
+ * thread draws from a state of its own, placed for the row it evaluates.
+ * Without it, rand() draws from the generator shared by the whole program
+ * as it always did, which gives the same values as before to tools which
+ * evaluate on one thread and do not set it. */
+static struct G_random_state *(*random_state)(void);
+
+void calc_set_random_state(struct G_random_state *(*get_state)(void))
+{
+    random_state = get_state;
+}
+
+/* With a state, this is the value G_mrand48() gives at the same draw, as
+ * unsigned. */
+static unsigned int draw_uint(struct G_random_state *state)
+{
+    if (state)
+        return (unsigned int)(G_random_double(state) * 4294967296.0);
+    return (unsigned int)G_mrand48();
+}
+
+static double draw_double(struct G_random_state *state)
+{
+    if (state)
+        return G_random_double(state);
+    return G_drand48();
+}
+
 int f_rand(int argc, const int *argt, void **args)
 {
+    struct G_random_state *state = random_state ? random_state() : NULL;
     int i;
 
     if (argc < 2)
@@ -25,7 +54,7 @@ int f_rand(int argc, const int *argt, void **args)
         CELL *arg2 = args[2];
 
         for (i = 0; i < columns; i++) {
-            unsigned int x = (unsigned int)G_mrand48();
+            unsigned int x = draw_uint(state);
             int lo = arg1[i];
             int hi = arg2[i];
 
@@ -45,7 +74,7 @@ int f_rand(int argc, const int *argt, void **args)
         FCELL *arg2 = args[2];
 
         for (i = 0; i < columns; i++) {
-            double x = G_drand48();
+            double x = draw_double(state);
             FCELL lo = arg1[i];
             FCELL hi = arg2[i];
 
@@ -65,7 +94,7 @@ int f_rand(int argc, const int *argt, void **args)
         DCELL *arg2 = args[2];
 
         for (i = 0; i < columns; i++) {
-            double x = G_drand48();
+            double x = draw_double(state);
             DCELL lo = arg1[i];
             DCELL hi = arg2[i];
 

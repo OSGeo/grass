@@ -690,20 +690,26 @@ g.rename raster=newmap,oldmap
 </pre></div>
 
 <h3>Random number generator initialization</h3>
-<p>The pseudo-random number generator used by the rand() function can
-be initialised to a specific value using the <b>seed</b> option.
-This can be used to replicate a previous calculation.
-<p>Alternatively, it can be initialised from the system time and the
-PID using the <b>-s</b> flag. This should result in a different seed
-being used each time.
-<p>In either case, the seed will be written to the map's history, and
-can be seen using <em>r.info</em>.
+<p>The pseudo-random number generator used by the rand() function can be
+initialised to a specific value using the <b>seed</b> parameter. This can be
+used to replicate a previous calculation. The seed must be an integer
+between -2147483648 and 4294967295. Seeds from 0 to 1073741823 are
+recommended, since two seeds 1073741824 or 2147483648 apart give related
+values.
+<p>If rand() function is used and no seed is given, <em>r.mapcalc</em> generates a
+seed: the value of the environment variable <code>GRASS_RANDOM_SEED</code>, or of
+<code>SOURCE_DATE_EPOCH</code> if that one is not set, and otherwise a value
+computed from the current time and the process ID, which differs from
+run to run.
+<p>In either case, the seed will be written to the map's history, and can
+be seen using <em>r.info</em>.
 <p>If you want other people to be able to verify your results, it's
-preferable to use the <b>seed</b> option to supply a seed which is
-either specified in the script or generated from a deterministic process
-such as a pseudo-random number generator given an explicit seed.
-<p>Note that the rand() function will generate a fatal error if neither
-the <b>seed</b> option nor the <b>-s</b> flag are given.
+preferable to use the <b>seed</b> parameter.
+<p>The result for a given seed is the same as in earlier versions and the
+same for any number of threads (<b>nprocs</b>). The values for a given seed
+depend on the computational region and on all rand() calls in the
+expressions: adding or removing a rand() call can change the values of
+the others.
 
 <h2>EXAMPLES</h2>
 
@@ -743,8 +749,7 @@ newmap = if(map&lt;5, null(), 5)
 </pre></div>
 
 <p>
-To create a map with random values in a defined range (needs either the
-usage of <b>-s</b> flag or the <em>seed</em> parameter). The precision of
+To create a map with random values in a defined range. The precision of
 the input values determines the output precision (the resulting
 <a href="rasterintro.html#raster-format">raster map type</a>):
 

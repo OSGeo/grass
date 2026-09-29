@@ -266,6 +266,11 @@ static void evaluate_function(expression *e)
     tid = omp_get_thread_num();
 #endif
 
+    /* G_begin_execute() evaluates the arguments right away, one after
+     * another, on the calling thread, because G_init_workers() is never
+     * called, so no workers exist and WORKERS has no effect. rand() relies
+     * on that order. A worker thread would also index the per-thread
+     * buffers and random states with its OpenMP thread number, 0. */
     if (e->data.func.argc > 1 && e->data.func.func != f_eval) {
         for (i = 1; i <= e->data.func.argc; i++)
             begin_evaluate(e->data.func.args[i]);
@@ -357,6 +362,46 @@ static expr_list *exprs;
 
 /****************************************************************************/
 
+/* rand() draws the values it drew when rows were evaluated one after
+ * another from one generator: every rand() call draws one value per cell,
+ * each row evaluates every call once, so every row draws the same number
+ * of values, and an exact layout with a row as its unit places each row
+ * where it started in that serial run, whichever thread computes it. A
+ * row of r3.mapcalc is numbered across the depths. */
+static struct G_random_layout rand_layout;
+static struct G_random_state *rand_state;
+
+/* Give rand() of the calc library the calling thread's state. */
+static struct G_random_state *thread_rand_state(void)
+{
+    int tid = 0;
+#if defined(_OPENMP)
+    tid = omp_get_thread_num();
+#endif
+    return &rand_state[tid];
+}
+
+static void setup_rand(void)
+{
+    G_random_init_layout_exact(&rand_layout, seed_value,
+                               (long long)depths * rows,
+                               (long long)columns * rand_calls);
+    /* Earlier versions drew these values without complaint, so this is
+     * only a warning. */
+    if (G_random_layout_runs(&rand_layout) < 1)
+        G_warning(_("rand() draws more than 2^46 random values; later "
+                    "rows repeat the values of earlier rows plus a "
+                    "constant"));
+}
+
+static void place_rand_row(int tid, int row)
+{
+    G_random_state_for_unit(&rand_state[tid], &rand_layout,
+                            (long long)current_depth * rows + row);
+}
+
+/****************************************************************************/
+
 static void error_handler(void *p G_UNUSED)
 {
     expr_list *l;
@@ -421,6 +466,8 @@ void execute(expr_list *ee)
         prepare_region_from_maps_intersect(map_list, num_maps);
 
     setup_region();
+    if (rand_calls > 0)
+        setup_rand();
 
     /* Parse each expression and initialize the maps, buffers and variables */
 
@@ -455,6 +502,10 @@ void execute(expr_list *ee)
     }
 #endif
     current_row = (int *)G_malloc(sizeof(int) * threads);
+    if (rand_calls > 0) {
+        rand_state = G_malloc(sizeof(*rand_state) * threads);
+        calc_set_random_state(thread_rand_state);
+    }
     count = rows * depths;
     n = 0;
 
@@ -472,6 +523,11 @@ void execute(expr_list *ee)
 #endif
             /* calculate through expressions row by row */
             current_row[tid] = row;
+            if (rand_calls > 0)
+                place_rand_row(tid, row);
+            /* The thread evaluates the expressions of the row in the order
+             * of a serial run, so the rand() calls of the row draw in that
+             * order too; see evaluate_function(). */
             for (i = 0; i < num_exprs; i++) {
                 expression *e = exp_arr[i];
                 evaluate(e);
@@ -530,6 +586,9 @@ void execute(expr_list *ee)
 
     /* Free the memory and make it unreachable */
     G_free(current_row);
+    calc_set_random_state(NULL);
+    G_free(rand_state);
+    rand_state = NULL;
     for (i = 0; i < num_exprs; i++) {
         expression *e = exp_arr[i];
         free_buf(e);
