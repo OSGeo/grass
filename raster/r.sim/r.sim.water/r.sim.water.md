@@ -58,10 +58,12 @@ overland flow infiltration rate map **infil** or a single value
 **infil_value** in \[mm/hr\] that control the rate of infiltration for
 the already flowing water, effectively reducing the flow depth and
 discharge. Overland flow can be further controlled by permeable check
-dams or similar type of structures, the user can provide a map of these
-structures and their permeability ratio in the map **flow_control** that
-defines the probability of particles to pass through the structure (the
-values will be 0-1).
+dams or similar types of structures. The user can provide a map of
+these structures as **flow_control** with values 0-1 that give the
+probability of a particle being trapped by the structure at each time
+step. A trapped particle is moved slightly back instead of forward, so
+a higher value means lower permeability, holding back more water and
+increasing the flow depth at the structure.
 
 Output includes a water depth raster map **depth** in \[m\], and a water
 discharge raster map **discharge** in \[m3/s\]. The **error** raster map
