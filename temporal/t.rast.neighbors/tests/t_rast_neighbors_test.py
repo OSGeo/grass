@@ -21,27 +21,40 @@ def count_history_commands(tools, dataset):
 
 
 @pytest.mark.parametrize(
-    ("method", "expected"),
-    [("average", [2, 12]), ("maximum", [3, 13]), ("minimum", [1, 11])],
+    ("suffix", "expected"),
+    [
+        ("gran", ["result_2001_01", "result_2001_02"]),
+        ("time", ["result_2001_01_01T00_00_00", "result_2001_02_01T00_00_00"]),
+        ("num", ["result_00001", "result_00002"]),
+        ("num%03", ["result_001", "result_002"]),
+    ],
 )
-def test_method(session_with_strds, method, expected):
-    """The method is applied to each map, also when processing in parallel.
+def test_suffix(session_with_strds, suffix, expected):
+    """The suffix option sets the names of the new maps."""
+    tools = Tools(session=session_with_strds)
+    tools.t_rast_neighbors(
+        input="input", output="output", basename="result", suffix=suffix
+    )
+    assert registered_maps(tools, "output") == expected
 
-    A 5x5 neighborhood covers the whole 3x3 region from every cell, so all
-    cells of a result have the same value.
-    """
+
+@pytest.mark.parametrize(
+    ("semantic_labels", "expected"),
+    [("input", ["S1", None]), ("method", ["S1_average", "average"])],
+)
+def test_semantic_labels(session_with_strds, semantic_labels, expected):
+    """The input label is copied, or combined with the method name."""
     tools = Tools(session=session_with_strds)
     tools.t_rast_neighbors(
         input="input",
         output="output",
         basename="result",
-        size=5,
-        method=method,
-        nprocs=2,
+        semantic_labels=semantic_labels,
     )
-    for name, value in zip(registered_maps(tools, "output"), expected, strict=True):
-        stats = tools.r_univar(map=name, format="json")
-        assert (stats["min"], stats["max"]) == (value, value)
+    rows = tools.t_rast_list(
+        input="output", columns="semantic_label", format="json"
+    ).json["data"]
+    assert [row["semantic_label"] for row in rows] == expected
 
 
 @pytest.mark.parametrize(
@@ -61,6 +74,18 @@ def test_null_maps(session_with_strds, flags, expected):
     assert tools.g_list(type="raster", pattern="result_*").text_split() == expected
 
 
+@pytest.mark.parametrize(("flags", "shape"), [("", (5, 5)), ("r", (3, 3))])
+def test_raster_region(session_with_strds, flags, shape):
+    """With -r, maps are processed in their own region, not the current one."""
+    tools = Tools(session=session_with_strds)
+    tools.g_region(s=0, n=5, w=0, e=5, res=1)
+    tools.t_rast_neighbors(
+        flags=flags, input="input", output="output", basename="result"
+    )
+    info = tools.r_info(map="result_2001_01", format="json")
+    assert (info["rows"], info["cols"]) == shape
+
+
 def test_overwrite_records_command_once(session_with_strds):
     """Overwriting replaces the dataset, so its history has one command."""
     tools = Tools(session=session_with_strds)
@@ -71,8 +96,8 @@ def test_overwrite_records_command_once(session_with_strds):
     assert count_history_commands(tools, "output") == 1
 
 
-def test_extend_appends_command(session_with_strds):
-    """Extending keeps the history and adds the extending command to it."""
+def test_extend(session_with_strds):
+    """Extending adds the new maps and the command to the existing dataset."""
     tools = Tools(session=session_with_strds)
     tools.t_rast_neighbors(
         input="input",
@@ -88,4 +113,5 @@ def test_extend_appends_command(session_with_strds):
         where="start_time >= '2001-02-01'",
         overwrite=True,
     )
+    assert registered_maps(tools, "output") == ["result_2001_01", "result_2001_02"]
     assert count_history_commands(tools, "output") == 2
