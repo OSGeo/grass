@@ -40,6 +40,10 @@ TRANSLATION_KEYS = {
     "status": _("Status:"),
     "mask2d": _("Mask 2D:"),
     "mask3d": _("Mask 3D:"),
+    "north": _("North:"),
+    "south": _("South:"),
+    "west": _("West:"),
+    "east": _("East:"),
     "n": _("North:"),
     "s": _("South:"),
     "w": _("West:"),
@@ -166,7 +170,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         return key in filter_keys or ((key in {"mask2d", "mask3d"}) and value is True)
 
     def _region_settings_filter(self, key):
-        return key not in {"projection", "zone", "cells"}
+        return key not in {"crs", "projection", "zone", "cells"}
 
     def _updateGeneralInfoBox(self, command_info):
         """Update a static box for displaying general info about the command.
@@ -320,12 +324,15 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
     def _get_current_region(self):
         """Get current computational region settings."""
-        return gs.region()
+        if "n" in self.region_settings:
+            return gs.region()
+        return gs.parse_command("g.region", flags="p", format="json")
 
     def _get_history_region(self):
         """Get computational region settings of executed command."""
+        parameters = {"north": "n", "south": "s", "west": "w", "east": "e"}
         return {
-            key: value
+            parameters.get(key, key): value
             for key, value in self.region_settings.items()
             if self._region_settings_filter(key)
         }
