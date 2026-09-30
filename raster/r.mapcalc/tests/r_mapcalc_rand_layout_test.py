@@ -1,8 +1,11 @@
+# SPDX-FileCopyrightText: 2026 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 """Tests of rand() in r.mapcalc and r3.mapcalc drawing from an exact layout
 
 The expected values are computed with the library's random number layouts:
 a row is a unit of an exact layout which draws columns * calls values, so
-its cell is the stretch of the single sequence of the seed which it draws
+its stream is the part of the seed's sequence which it draws
 when the rows are evaluated one after another. Each rand() call draws one
 value per cell of the row, in the order in which the expressions are
 evaluated. In 3D, the rows are numbered across the depths, so row r of
