@@ -252,7 +252,7 @@ class TestRSimWaterLarge(TestCase):
             random_seed=1,
         )
         self.assertRasterFitsUnivar(
-            self.depth, reference="sum=30423.190201", precision=1e-6
+            self.depth, reference="sum=30424.022289", precision=1e-6
         )
 
 

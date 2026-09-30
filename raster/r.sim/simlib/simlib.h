@@ -7,6 +7,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include <grass/gis.h>
+
 #define EPS         1.e-7
 #define UNDEF       -9999
 
@@ -37,6 +39,7 @@ typedef struct {
     int timesec;        // Time how long the simulation runs [minutes]
     bool ts;            // Time series output
     double mintimestep; // Minimum time step for the simulation [seconds]
+    long long seed;     // Seed of the walkers' random numbers
 } Settings;
 
 typedef struct {
@@ -62,8 +65,9 @@ typedef struct {
     int maxwa;             // Number of total walkers
     double rwalk;      // Number of input walkers per block as double precision
     struct point3D *w; // Weight of walkers
-    struct point2D *vavg; // Average velocity of walkers
-
+    struct point2D *vavg;          // Average velocity of walkers
+    struct G_random_state *states; // Random number state of each walker
+    int max_walkers; // Number of allocated walkers, maxwa plus one per cell
 } Simulation;
 
 typedef struct {
@@ -198,9 +202,8 @@ void create_observation_points(ObservationPoints *points);
 void derivatives(const Geometry *geometry, float **elevation, double **dx,
                  double **dy);
 
-double simwe_rand(void);
-double gasdev(void);
-void gasdev_for_paralel(double *, double *);
+long long simwe_seed(const struct Option *seed, const struct Flag *generate);
+void gasdev(struct G_random_state *state, double *x, double *y);
 double amax1(double, double);
 double amin1(double, double);
 int min(int, int);

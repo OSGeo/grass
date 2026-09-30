@@ -275,6 +275,37 @@ summary = gs.parse_command(
 print(summary["walkers_remaining"], summary["outputs"][-1]["depth"])
 </pre></div>
 
+<h3>Random numbers and parallel processing</h3>
+
+The walkers are placed and moved using pseudo-random numbers. The seed
+is given by <b>random_seed</b>, generated when the <b>-s</b> flag is used, and
+12345 when neither is given. The generated seed is reported with
+<b>--verbose</b>, and the environment variable <code>GRASS_RANDOM_SEED</code> sets it
+for scripts. The seed is an integer from -2147483648 to 4294967295;
+other values are an error. Each walker draws from a sequence of random
+numbers of its own, determined by the seed and the walker's number, so
+every walker receives the same random numbers whatever the number of
+threads given by <b>nprocs</b>. Results for a given seed differ from those
+of GRASS versions in which all walkers drew from one shared sequence.
+
+<p>
+With <b>nprocs=1</b>, runs with the same seed and inputs give identical
+results. With more threads, every walker's weight is added to the water
+depth, but walkers in the same cell add their weights in an order which
+depends on the threads, and the floating point sums differ slightly with
+the order. Walkers in the same cell also use up the infiltration
+capacity at the same time without synchronization. The walkers
+themselves move the same way for any <b>nprocs</b> as long as the water
+depth stays below <b>hmax</b>, above which the diffusion depends on the
+depth, and there is no infiltration. Results with <b>nprocs</b> greater
+than 1 are close to, but not identical with, those with <b>nprocs=1</b>,
+and repeated runs with the same <b>nprocs</b> may differ slightly. Use
+<b>nprocs=1</b> when results must be reproducible.
+
+<p>
+When runs with several seeds are compared, use seeds below 1073741824
+(2^30): seeds which differ by 2^30 or 2^31 give related random numbers.
+
 <h2>EXAMPLE</h2>
 
 Using the North Carolina full sample dataset:

@@ -102,7 +102,6 @@ int main(int argc, char *argv[])
     struct Cell_head cellhd;
     struct options parm;
     struct flags flag;
-    long seed_value;
 
     G_gisinit(argv[0]);
 
@@ -322,20 +321,7 @@ int main(int argc, char *argv[])
                              ? SUMMARY_JSON
                              : SUMMARY_PLAIN;
 
-    if (flag.generateSeed->answer) {
-        seed_value = G_srand48_auto();
-        G_verbose_message(_("Generated random seed (-s): %ld"), seed_value);
-    }
-    else if (parm.seed->answer) {
-        seed_value = atol(parm.seed->answer);
-        G_srand48(seed_value);
-        G_verbose_message(_("Read random seed from %s option: %ld"),
-                          parm.seed->key, seed_value);
-    }
-    else {
-        /* default as it used to be */
-        G_srand48(12345);
-    }
+    long long seed = simwe_seed(parm.seed, flag.generateSeed);
 
     G_get_set_window(&cellhd);
 
@@ -346,6 +332,7 @@ int main(int argc, char *argv[])
     ObservationPoints points = {0};
     settings.hhmax = settings.halpha = settings.hbeta = 0;
     settings.ts = false;
+    settings.seed = seed;
     Inputs inputs = {0};
     Outputs outputs = {0};
     Grids grids = {0};

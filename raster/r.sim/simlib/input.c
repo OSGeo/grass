@@ -64,6 +64,8 @@ void alloc_walkers(int max_walkers, Simulation *sim, const Outputs *outputs)
 
     sim->w = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
     sim->vavg = (struct point2D *)G_calloc(max_walkers, sizeof(struct point2D));
+    sim->states = G_calloc(max_walkers, sizeof(struct G_random_state));
+    sim->max_walkers = max_walkers;
     if (outputs->outwalk != NULL)
         sim->stack =
             (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));

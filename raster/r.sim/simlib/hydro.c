@@ -69,6 +69,26 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     G_debug(2, " maxwa, nblock %d %d", sim->maxwa, nblock);
     G_debug(2, "rwalk, sisum: %f %f", sim->rwalk, setup->sisum);
 
+    // Each walker draws from a random number state of its own, so its
+    // values depend on the seed and the walker's number, not on the
+    // thread which moves it. The bound is what a walker draws: two values
+    // when placed and, in each time step, a normal pair by the polar
+    // method (8 / pi values on average) and one more in a trap, with
+    // eight per step leaving room for the steps which draw more.
+    struct G_random_layout layout;
+
+    G_random_init_layout_bounded(&layout, settings->seed, sim->max_walkers,
+                                 2 + 8LL * setup->miter);
+    if (G_random_layout_runs(&layout) < 1)
+        G_warning(_("%d walkers over %d time steps may draw more random "
+                    "numbers than one seed provides; the random numbers "
+                    "of some walkers then repeat those of others shifted "
+                    "by a constant"),
+                  sim->max_walkers, setup->miter);
+#pragma omp parallel for
+    for (int lw = 0; lw < sim->max_walkers; lw++)
+        G_random_state_for_unit(&sim->states[lw], &layout, lw);
+
     for (iblock = 1; iblock <= nblock; iblock++) {
         int lw = 0;
         double walkwe = 0.;
@@ -90,10 +110,12 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 
                     for (int iw = 1; iw <= mgen + 1;
                          iw++) { /* assign walkers */
-                        sim->w[lw].x =
-                            x + geometry->stepx * (simwe_rand() - 0.5);
-                        sim->w[lw].y =
-                            y + geometry->stepy * (simwe_rand() - 0.5);
+                        struct G_random_state *state = &sim->states[lw];
+
+                        sim->w[lw].x = x + geometry->stepx *
+                                               (G_random_double(state) - 0.5);
+                        sim->w[lw].y = y + geometry->stepy *
+                                               (G_random_double(state) - 0.5);
                         sim->w[lw].m = wei;
 
                         walkwe += sim->w[lw].m;
@@ -235,12 +257,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 
                             double d1 = gama * conn;
                             double gaux, gauy;
-#if defined(_OPENMP)
-                            gasdev_for_paralel(&gaux, &gauy);
-#else
-                            gaux = gasdev();
-                            gauy = gasdev();
-#endif
+                            gasdev(&sim->states[lw], &gaux, &gauy);
                             double hhc = pow(d1, 3. / 5.);
                             double velx, vely;
                             /* Diffusion coefficient of this walker's move */
@@ -261,7 +278,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             if (inputs->traps != NULL &&
                                 grids->trap[k][l] != 0.) { /* traps */
 
-                                float eff = simwe_rand(); /* random generator */
+                                float eff = G_random_double(
+                                    &sim->states[lw]); /* random generator */
 
                                 if (eff <= grids->trap[k][l]) {
                                     velx = -0.1 *

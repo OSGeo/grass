@@ -1,55 +1,72 @@
 /* random.c (simlib), 20.nov.2002, JH */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <errno.h>
 #include <math.h>
+#include <stdlib.h>
+
 #include <grass/gis.h>
-#include <grass/bitmap.h>
-#include <grass/linkm.h>
+#include <grass/glocale.h>
 
-double simwe_rand(void)
+#include <grass/simlib.h>
+
+/*!
+ * \brief Return the seed of the walkers' random numbers
+ *
+ * The seed is generated with the flag, read from the option, or 12345 when
+ * neither is given. A seed which is not an integer or is outside the range
+ * the generator accepts is a fatal error, here, before any input is read.
+ *
+ * \param seed the seed option
+ * \param generate the flag to generate a seed
+ *
+ * \return the seed
+ */
+long long simwe_seed(const struct Option *seed, const struct Flag *generate)
 {
-    return G_drand48();
-} /* ulec */
+    long long value;
+    struct G_random_state check;
 
-double gasdev(void)
-{
-    /* Initialized data */
+    if (generate->answer) {
+        value = G_random_generate_seed();
+        G_verbose_message(_("Generated random seed (-s): %lld"), value);
+    }
+    else if (seed->answer) {
+        char *end;
 
-    static int iset = 0;
-    static double gset = .1;
-
-    /* System generated locals */
-    double ret_val;
-
-    /* Local variables */
-    double r = 0.0, vv1 = 0.0, vv2 = 0.0, fac = 0.0;
-
-    if (iset == 0) {
-        while (r >= 1. || r == 0.) {
-            vv1 = simwe_rand() * 2. - 1.;
-            vv2 = simwe_rand() * 2. - 1.;
-            r = vv1 * vv1 + vv2 * vv2;
-        }
-        fac = sqrt(log(r) * -2. / r);
-        gset = vv1 * fac;
-        ret_val = vv2 * fac;
-        iset = 1;
+        errno = 0;
+        value = strtoll(seed->answer, &end, 10);
+        if (end == seed->answer || *end != '\0' || errno == ERANGE)
+            G_fatal_error(_("Invalid random seed <%s>"), seed->answer);
+        G_verbose_message(_("Read random seed from %s option: %lld"), seed->key,
+                          value);
     }
     else {
-        ret_val = gset;
-        iset = 0;
+        /* default as it used to be */
+        value = 12345;
     }
-    return ret_val;
-} /* gasdev */
+    /* The layout, which refuses a seed out of range, is built only when the
+     * number of time steps is known. */
+    G_random_seed(&check, value);
+    return value;
+}
 
-void gasdev_for_paralel(double *x, double *y)
+/*!
+ * \brief Draw a pair of independent standard normal values
+ *
+ * Uses the polar method, which rejects points outside the unit circle, so
+ * the number of values drawn varies, 8 / pi on average.
+ *
+ * \param state the random number state of the walker
+ * \param[out] x the first value
+ * \param[out] y the second value
+ */
+void gasdev(struct G_random_state *state, double *x, double *y)
 {
     double r = 0.0, vv1 = 0.0, vv2 = 0.0, fac = 0.0;
 
     while (r >= 1. || r == 0.) {
-        vv1 = simwe_rand() * 2. - 1.;
-        vv2 = simwe_rand() * 2. - 1.;
+        vv1 = G_random_double(state) * 2. - 1.;
+        vv2 = G_random_double(state) * 2. - 1.;
         r = vv1 * vv1 + vv2 * vv2;
     }
     fac = sqrt(log(r) * -2. / r);
