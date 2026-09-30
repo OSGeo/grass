@@ -1,9 +1,8 @@
-/*!
-\page gislib_random_streams Random Number Streams
+# Random Number Streams {#gislib_random_streams}
 
-\tableofcontents
+[TOC]
 
-\section gislib_random_streams_overview Overview
+## Overview {#gislib_random_streams_overview}
 
 The `G_random_*()` functions give a program random number generators of its
 own, instead of the one generator shared by the whole program behind
@@ -21,10 +20,10 @@ depend on the schedule, which holds when every unit writes only its own
 output and not when threads add into shared sums. The documentation of each
 function is the reference for its arguments and for what it refuses.
 
-\section gislib_random_streams_terms Terms
+## Terms {#gislib_random_streams_terms}
 
 - **Generator**: the recurrence behind `drand48()` and `G_drand48()`. A draw
-  replaces the 48-bit state x by x' = (a * x + c) mod 2^48, with the
+  replaces the 48-bit state x by x' = (a × x + c) mod 2^48, with the
   multiplier a = 0x5DEECE66D and the increment c = 0xB, and returns
   x' / 2^48. It passes through all 2^48 states before repeating, so the
   states form one ring and every draw moves one step along it.
@@ -51,7 +50,7 @@ function is the reference for its arguments and for what it refuses.
   the next, and so the number of values a unit may draw.
   `G_random_layout_length()` returns it.
 - **Run**: one pass of the whole computation, one stream per unit. Unit u of
-  run r starts (r * units + u) * stride draws after the seed, so the runs
+  run r starts (r × units + u) × stride draws after the seed, so the runs
   follow one another along the span.
 
 \image html random_streams.svg
@@ -64,14 +63,14 @@ starting at a tick, and the black dot is a state in the stream of unit 1.
 Every seed starts at a different place on the ring, and the span is always
 the quarter after it.
 
-\section gislib_random_streams_layouts Layouts
+## Layouts {#gislib_random_streams_layouts}
 
 The three ways to initialize a layout differ in where the stride comes from:
 
 - An exact layout,
   `G_random_init_layout_exact(&layout, seed, units, draws_per_unit)`, takes
   the stride as given, the number of values every unit draws. Unit u of run 0
-  then draws values u * stride to (u + 1) * stride - 1 of the seed's
+  then draws values u × stride to (u + 1) × stride - 1 of the seed's
   sequence, counted from 0, so the units together reproduce that sequence,
   whichever order they are computed in.
 - A bounded layout,
@@ -94,7 +93,7 @@ sequence and run 1 follows; in the bounded layout, each unit draws less than
 its stride; in the spread layout, the six units take six of seven parts, one
 run covers the span, and the last part stays unused.
 
-\subsection gislib_random_streams_runs Runs
+### Runs {#gislib_random_streams_runs}
 
 Runs are appended, never reserved: where a run lies depends on nothing but
 the seed, the stride, the number of units and the run number, so a run
@@ -115,29 +114,29 @@ so a tool whose earlier versions drew the same values without complaint may
 warn and continue, as the fragments below do; what their warning says is
 explained in \ref gislib_random_streams_span.
 
-\section gislib_random_streams_usage Usage
+## Usage {#gislib_random_streams_usage}
 
 A unit is what the computation is naturally divided into and numbered by;
 the number of units is their count or an upper bound on it, and unused units
 cost nothing but their share of the span. Which pattern applies depends on
 whether a unit draws its values in one go or over many steps.
 
-\subsection gislib_random_streams_single A single sequence
+### A single sequence {#gislib_random_streams_single}
 
 One sequence has one state, seeded with `G_random_seed(&rng, seed)` and
 drawn from in a loop. It needs no layout, so there are no runs to check:
 
-\code
-/* seed: the seed, a long long; n: how many values to draw; values: where
- * they go. */
+```c
+// seed: the seed, a long long; n: how many values to draw; values: where
+// they go.
 struct G_random_state rng;
 
 G_random_seed(&rng, seed);
 for (int i = 0; i < n; i++)
     values[i] = G_random_double(&rng);
-\endcode
+```
 
-\subsection gislib_random_streams_rows Rows of a raster
+### Rows of a raster {#gislib_random_streams_rows}
 
 When a computation goes by rows of a raster and every row draws a known
 number of values, for example a fixed number for each cell, a row is a unit
@@ -147,13 +146,13 @@ and draws the row's values. Since the layout is exact, the rows together draw
 the seed's sequence, so a computation which drew from one sequence row after
 row keeps its values:
 
-\code
+```c
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-/* seed: the seed, a long long; rows, cols: the region; draws_per_value: the
- * number of random values drawn for one cell. The product is formed in
- * long long, since it may not fit an int. */
+// seed: the seed, a long long; rows, cols: the region; draws_per_value: the
+// number of random values drawn for one cell. The product is formed in
+// long long, since it may not fit an int.
 struct G_random_layout layout;
 
 G_random_init_layout_exact(&layout, seed, rows,
@@ -165,15 +164,15 @@ if (G_random_layout_runs(&layout) < 1)
 
 #pragma omp parallel
 {
-    struct G_random_state rng; /* One per thread. */
+    struct G_random_state rng; // One per thread.
 
 #pragma omp for
     for (int row = 0; row < rows; row++) {
         G_random_state_for_unit(&rng, &layout, row);
-        /* Compute the row, drawing with G_random_double(&rng). */
+        // Compute the row, drawing with G_random_double(&rng).
     }
 }
-\endcode
+```
 
 When the value is drawn in a function which does not know the row, for
 example a callback, keep each thread's state where that function can reach
@@ -188,7 +187,7 @@ such as points or objects: each item is a unit, the thread places its state
 at the item's stream when it takes the item, and a bounded layout replaces
 the exact one when the number of values varies under a known bound.
 
-\subsection gislib_random_streams_items Items drawn over time
+### Items drawn over time {#gislib_random_streams_items}
 
 When a computation goes over items, such as particles, which draw a few
 values at every one of many steps, each item is a unit which owns one state
@@ -199,13 +198,13 @@ same values in every step. The states therefore live in an array for the
 whole computation, not in the thread's loop. When the values an item draws in
 a step vary under a known bound, the item is a unit of a bounded layout:
 
-\code
+```c
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-/* seed: the seed, a long long; items, steps: the number of items and of time
- * steps, as long long; max_draws_per_step: the most values an item draws in
- * one step. */
+// seed: the seed, a long long; items, steps: the number of items and of time
+// steps, as long long; max_draws_per_step: the most values an item draws in
+// one step.
 struct G_random_layout layout;
 struct G_random_state *states = G_malloc(items * sizeof(*states));
 
@@ -218,9 +217,9 @@ if (G_random_layout_runs(&layout) < 1)
               items, steps);
 for (long long i = 0; i < items; i++)
     G_random_state_for_unit(&states[i], &layout, i);
-/* At every step, whichever thread moves item i draws from states[i]. */
+// At every step, whichever thread moves item i draws from states[i].
 G_free(states);
-\endcode
+```
 
 An item whose draws have no known bound gets the longest stride the span
 allows from a spread layout,
@@ -231,7 +230,7 @@ layout accepts, the program chooses a bound itself, from what it expects an
 item to draw, uses a bounded layout with that bound, and checks that the run
 fits as in the fragment above.
 
-\subsection gislib_random_streams_ensembles Ensembles
+### Ensembles {#gislib_random_streams_ensembles}
 
 An ensemble is many runs of the same model under one seed, meant to be
 independent replicates, and its members are the runs of the layout the
@@ -266,10 +265,10 @@ streams which share values with another member's, so the members should
 differ only in the run number and the output names. The number of members is
 limited by the runs that fit (see \ref gislib_random_streams_capacity).
 
-\section gislib_random_streams_capacity Capacity
+## Capacity {#gislib_random_streams_capacity}
 
 The number of runs that fit is the span, 2^46 draws, divided by the draws of
-one run, units * stride, rounded down; a spread layout holds one run. A
+one run, units × stride, rounded down; a spread layout holds one run. A
 million units drawing a million values each in an exact layout draw 10^12
 values per run, so 70 runs fit on one seed, and a single run could hold
 70,368,744 such units, about 70 million.
@@ -285,9 +284,9 @@ No layout and no way of seeding makes the span larger (see
 \ref gislib_random_streams_span); more than it holds needs a generator with a
 longer period behind the same calls.
 
-\section gislib_random_streams_quality Quality of the values
+## Quality of the values {#gislib_random_streams_quality}
 
-\subsection gislib_random_streams_span The generator and the span
+### The generator and the span {#gislib_random_streams_span}
 
 All the values come from the generator behind `G_drand48()`, the 48-bit
 linear congruential generator of `drand48()`: multiples of 2^-48, uniform in
@@ -298,7 +297,7 @@ cryptography.
 
 The multiplier a is 5 modulo 8, so a^(2^46) = 1 modulo 2^48 while a^(2^45) is
 not, and, with this increment, 2^46 draws take every state x to x + 2^46
-modulo 2^48. Positions 2^46, 2^47 or 3 * 2^46 draws apart therefore give
+modulo 2^48. Positions 2^46, 2^47 or 3 × 2^46 draws apart therefore give
 values which differ by exactly 0.25, 0.5 or 0.75 at every draw: the four
 quarters of the ring hold the same values shifted by 0, 0.25, 0.5 and 0.75.
 With seed 42 the generator draws 0.7445, 0.3427, 0.1111 at the seed and
@@ -328,7 +327,7 @@ each: the seed's values plus 1/4, 1/2 and 3/4, wrapping past 1. The streams
 of a layout lie within the span, the shaded quarter, and do not reach the
 position a quarter of the ring after the seed.
 
-\subsection gislib_random_streams_distance Relations by distance
+### Relations by distance {#gislib_random_streams_distance}
 
 A layout does not change the generator; it places the units' streams along
 its one sequence. Quality can therefore be lost not within a stream but
@@ -350,7 +349,7 @@ total, the distances which occur cover at most about 2T of the 2^46
 distances within the span, so counting each multiple of 2^(46 - k) below
 2^46 as occurring with a chance of 2T / 2^46 estimates how many of those
 occur, the distances with 2^k or fewer constants, at
-(2^k - 1) * 2T / 2^46. The estimate treats the distances which occur as
+(2^k - 1) × 2T / 2^46. The estimate treats the distances which occur as
 spread at random, which fits bounded and spread layouts, not run 0 of an
 exact layout, whose positions in use are the first T draws of the seed's
 sequence and so include every distance below T.
@@ -372,8 +371,8 @@ Seed 42 draws 0.7445, 0.3427, 0.1111, 0.4223, 0.0811, 0.8564, 0.4988,
 drawn that distance after the seed minus these, modulo 1, and the estimate
 above for T = 10^11.
 
-| distance | relation | values drawn this distance after seed 42 minus seed 42's first eight, modulo 1 | estimated number of multiples of this distance below 2^46 which occur, (2^k - 1) * 2T / 2^46 for T = 10^11 |
-|----------|----------|-------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| distance | relation | values drawn this distance after seed 42 minus seed 42's first eight, modulo 1 | estimated number of multiples of this distance below 2^46 which occur, (2^k - 1) × 2T / 2^46 for T = 10^11 |
+| --- | --- | --- | --- |
 | 2^46 | constant-shift twin | 0.2500 at every draw | none: no two positions in the span are this far apart |
 | 2^45 | alternating-shift twin | 0.6250, 0.1250 alternating | 0.003 |
 | 2^44 | one of 4 constants, cycling | 0.8125, 0.5625, 0.3125, 0.0625 | 0.009 |
@@ -386,11 +385,11 @@ positions 2^36 apart have the low 38 bits of their difference fixed and the
 top ten free, so their values look unrelated at the precision computations
 use, and only a comparison of the low bits of the difference finds them.
 
-\subsection gislib_random_streams_odd Odd strides
+### Odd strides {#gislib_random_streams_odd}
 
 By the rule above, a distance divisible by 2^j and by no higher power of two
 fixes the low j + 2 bits of the difference of two states. Units 2^i apart in
-number start 2^i * stride apart; with an odd stride that distance is
+number start 2^i × stride apart; with an odd stride that distance is
 divisible by 2^i and by no higher power of two, so units 1, 2 and 4 apart
 have the low 2, 3 and 4 bits of their difference fixed. With an even stride,
 say a bound of 1,024 taken as it is, every such distance carries the stride's
@@ -402,7 +401,7 @@ what the seed's sequence draws; it keeps that sequence's structure and is
 never worse than the seed's sequence it reproduces, in which the same values
 were the stride apart already.
 
-\subsection gislib_random_streams_between_seeds Relations between seeds
+### Relations between seeds {#gislib_random_streams_between_seeds}
 
 The seed occupies bits 16 to 47 of the state, so two seeds 2^30 apart start
 2^46 apart in state, and 2^46 draws add 2^46 to a state: seed 42 + 2^30
@@ -411,8 +410,8 @@ starts a quarter of the ring after seed 42 and draws 0.9945, 0.5927, 0.3611,
 0.8427, 0.6111, 0.9223, plus one half.
 
 Consecutive seeds start 2^16 apart in state. Since the step is linear, states
-x and x + d become a * x + c and a * x + a * d + c after one draw, so states
-d apart are a^t * d apart after t draws, whatever x was. Computations seeded
+x and x + d become a × x + c and a × x + a × d + c after one draw, so states
+d apart are a^t × d apart after t draws, whatever x was. Computations seeded
 seed, seed + 1, seed + 2 and so on are therefore not independent: at every
 draw, the one seeded seed + k has the value of the one seeded seed plus k
 times the same amount, modulo 1, so their values step by the same amount at
@@ -423,7 +422,7 @@ every draw: 0.8708, 0.7046, 0.7384, 0.4655 for the first four. Computations
 meant to be independent are the runs of one layout, whose streams do not
 overlap.
 
-\subsection gislib_random_streams_checking Checking two sequences
+### Checking two sequences {#gislib_random_streams_checking}
 
 All the relations above are of one kind, two sequences which are one sequence
 shifted in value and possibly in time. Draw a hundred or so values from each
@@ -446,7 +445,7 @@ The differences are exact: every value is a multiple of 2^-48, and a double
 holds the difference of two such values without rounding, so the comparison
 needs no tolerance.
 
-\section gislib_random_streams_seeds Seeds
+## Seeds {#gislib_random_streams_seeds}
 
 Any seed from -2^31 to 2^32 - 1 can be used. The generator uses the low 32
 bits of the seed, so -1 and 4294967295 are the same seed. A process which
@@ -480,7 +479,7 @@ so the shared generator and the layouts agree on what an automatic seed is.
 Record the seed the tool used, for example in the history of the output map,
 so that the computation can be repeated.
 
-\section gislib_random_streams_migrating Migrating from the shared generator
+## Migrating from the shared generator {#gislib_random_streams_migrating}
 
 The shared generator, `G_srand48()` and `G_drand48()`, is unchanged. Code
 which seeds it and draws from it gets exactly the same values, the seed's
@@ -488,16 +487,17 @@ sequence, from a state seeded with `G_random_seed()` and drawn from with
 `G_random_double()`, without moving the shared generator or being moved by
 it:
 
-\code
-/* seed: the seed, a long long; value: a double; rng: a
- * struct G_random_state. Before: the shared generator. */
+```c
+// seed: the seed, a long long; value: a double;
+// rng: a struct G_random_state.
+// Before: the shared generator.
 G_srand48(seed);
 value = G_drand48();
 
-/* After: a state of the program's own, giving the same values. */
+// After: a state of the program's own, giving the same values.
 G_random_seed(&rng, seed);
 value = G_random_double(&rng);
-\endcode
+```
 
 Parallel code which drew from the shared generator inside the parallel loop
 depended on the schedule for which unit got which values. With an exact
@@ -527,5 +527,3 @@ as a two's complement 32-bit integer, that is, with 4294967296 subtracted when
 it is 2147483648 or more; code which cast `G_mrand48()` to `unsigned int`
 gets the same value from
 `(unsigned int)(G_random_double(&rng) * 4294967296.0)`.
-
-*/
