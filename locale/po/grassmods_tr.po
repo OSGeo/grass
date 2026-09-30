@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Turkish <https://weblate.osgeo.org/projects/grass-gis/grassmods/tr/>\n"
@@ -14901,6 +14901,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "'%s' fonksiyonu için çdeğişken sayısı"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Kabuk betiği stilinde yazdır"
 
@@ -16281,8 +16291,10 @@ msgstr "<%s> raster haritası (bant %d) dışa aktarılıyor..."
 msgid "Unable to export raster map <%s>"
 msgstr "<%s> raster haritası dışa aktarılamıyor"
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Number of points to be created"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "oluşturulacak nokta sayısı"
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16682,6 +16694,10 @@ msgstr ""
 
 msgid "Constrain model through central window cell"
 msgstr ""
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%s=%s> geçersiz sayıda nokta"
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr ""
@@ -23181,7 +23197,7 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr ""
 
 msgid "Cannot write to working directory {}."
@@ -37266,10 +37282,6 @@ msgstr "Görüntü dosyası"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Girdi raster yükselti haritası adı [metre]"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "'%s' fonksiyonu için çdeğişken sayısı"
 
 #, fuzzy
 #~ msgid "Number of tile border lines in each direction"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 18:13+0000\n"
+"POT-Creation-Date: 2026-09-26 18:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -357,7 +357,7 @@ msgstr ""
 msgid "send data: invalid C-type"
 msgstr ""
 
-#: ../lib/db/dbmi_client/column.c:133 ../lib/vector/Vlib/ascii.c:438
+#: ../lib/db/dbmi_client/column.c:133 ../lib/vector/Vlib/ascii.c:449
 #: ../lib/vector/Vlib/write_pg.c:684
 #, c-format
 msgid "Unable to describe table <%s>"
@@ -369,7 +369,7 @@ msgid "Array of values to select from column <%s> is empty"
 msgstr ""
 
 #: ../lib/db/dbmi_client/copy_tab.c:106 ../lib/db/dbmi_client/copy_tab.c:126
-#: ../lib/db/dbmi_client/db.c:37 ../lib/vector/Vlib/ascii.c:414
+#: ../lib/db/dbmi_client/db.c:37 ../lib/vector/Vlib/ascii.c:425
 #: ../lib/vector/Vlib/write_ogr.c:173 ../lib/vector/Vlib/write_pg.c:3034
 #, c-format
 msgid "Unable to start driver <%s>"
@@ -378,7 +378,7 @@ msgstr ""
 #: ../lib/db/dbmi_client/copy_tab.c:111 ../lib/db/dbmi_client/copy_tab.c:132
 #: ../lib/db/dbmi_client/db.c:42 ../lib/ogsf/gp3.c:217 ../lib/ogsf/gv3.c:354
 #: ../lib/rst/interp_float/vinput2d.c:102 ../lib/vector/Vlib/array.c:270
-#: ../lib/vector/Vlib/ascii.c:420 ../lib/vector/Vlib/cats.c:601
+#: ../lib/vector/Vlib/ascii.c:431 ../lib/vector/Vlib/cats.c:601
 #: ../lib/vector/Vlib/close_nat.c:163 ../lib/vector/Vlib/map.c:337
 #: ../lib/vector/Vlib/net_build.c:156 ../lib/vector/Vlib/net_build.c:206
 #: ../lib/vector/Vlib/net_build.c:500 ../lib/vector/Vlib/net_build.c:797
@@ -4338,7 +4338,7 @@ msgstr ""
 
 #: ../lib/ogsf/gp3.c:211 ../lib/ogsf/gv3.c:348
 #: ../lib/rst/interp_float/vinput2d.c:93 ../lib/vector/Vlib/array.c:264
-#: ../lib/vector/Vlib/ascii.c:408 ../lib/vector/Vlib/cats.c:592
+#: ../lib/vector/Vlib/ascii.c:419 ../lib/vector/Vlib/cats.c:592
 #: ../lib/vector/Vlib/copy.c:647 ../lib/vector/Vlib/copy.c:762
 #: ../lib/vector/Vlib/map.c:298 ../lib/vector/Vlib/map.c:431
 #: ../lib/vector/Vlib/net_build.c:150 ../lib/vector/Vlib/net_build.c:201
@@ -6218,70 +6218,75 @@ msgstr ""
 msgid "Error reading categories: [%s]"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:229
+#: ../lib/vector/Vlib/ascii.c:224
+#, c-format
+msgid "Layer number or category number out of range: [%s]"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:240
 msgid "Unable to copy points"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:244
+#: ../lib/vector/Vlib/ascii.c:255
 #, c-format
 msgid "Vector map <%s> is 2D. %d 3D features (faces or kernels) skipped."
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:280
+#: ../lib/vector/Vlib/ascii.c:291
 #, c-format
 msgid ""
 "Unexpected data in vector header:\n"
 "[%s]"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:316
+#: ../lib/vector/Vlib/ascii.c:327
 #, c-format
 msgid "Unknown keyword <%s> in vector head"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:479
+#: ../lib/vector/Vlib/ascii.c:490
 #, c-format
 msgid "Column <%s> does not exist"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:481
+#: ../lib/vector/Vlib/ascii.c:492
 msgid "Available columns:"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:487
+#: ../lib/vector/Vlib/ascii.c:498
 msgid "Export cancelled"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:524
+#: ../lib/vector/Vlib/ascii.c:535
 #, c-format
 msgid "Unknown type of column <%s>, export cancelled"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:560
+#: ../lib/vector/Vlib/ascii.c:571
 #, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:692
+#: ../lib/vector/Vlib/ascii.c:703
 #, c-format
 msgid "Unknown feature type %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:732
+#: ../lib/vector/Vlib/ascii.c:743
 #, c-format
 msgid "Feature has more categories. Only one category (%d) is exported."
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:752
+#: ../lib/vector/Vlib/ascii.c:763
 #, c-format
 msgid "Cannot select attributes for cat = %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:757
+#: ../lib/vector/Vlib/ascii.c:768
 msgid "Unable to fetch data from table"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:791 ../lib/vector/Vlib/net_build.c:211
+#: ../lib/vector/Vlib/ascii.c:802 ../lib/vector/Vlib/net_build.c:211
 #: ../lib/vector/Vlib/net_build.c:505 ../lib/vector/Vlib/net_build.c:523
 #: ../lib/vector/Vlib/net_build.c:802 ../lib/vector/Vlib/net_build.c:820
 #: ../lib/vector/Vlib/net_build.c:978
@@ -6289,30 +6294,30 @@ msgstr ""
 msgid "Column <%s> not found in table <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:795
+#: ../lib/vector/Vlib/ascii.c:806
 #, c-format
 msgid "Column <%s>: unsupported data type"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:882
+#: ../lib/vector/Vlib/ascii.c:893
 msgid "Unknown format"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:892
+#: ../lib/vector/Vlib/ascii.c:903
 msgid "Topology not available, unable to process areas"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:905
+#: ../lib/vector/Vlib/ascii.c:916
 #, c-format
 msgid "Unable to get boundary of area id %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:919
+#: ../lib/vector/Vlib/ascii.c:930
 #, c-format
 msgid "Unable to get boundary of isle id %d (area id %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:936
+#: ../lib/vector/Vlib/ascii.c:947
 #, c-format
 msgid "%d features without category skipped. To export also features without category use '%s=-1'."
 msgstr ""

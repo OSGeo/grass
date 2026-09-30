@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 18:13+0000\n"
+"POT-Creation-Date: 2026-09-26 18:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -6500,10 +6500,10 @@ msgstr ""
 msgid "Converts between PPM/PGM and PNG image formats."
 msgstr ""
 
-#: ../general/g.proj/create.c:16 ../raster/r.external/proj.c:114
-#: ../raster/r.in.gdal/main.c:1031 ../raster/r.in.gdal/proj.c:114
-#: ../vector/v.external/proj.c:150 ../vector/v.in.lidar/main.c:521
-#: ../vector/v.in.ogr/proj.c:220
+#: ../general/g.proj/create.c:16 ../raster/r.external/proj.c:150
+#: ../raster/r.in.gdal/main.c:1031 ../raster/r.in.gdal/proj.c:150
+#: ../vector/v.external/proj.c:186 ../vector/v.in.lidar/main.c:521
+#: ../vector/v.in.ogr/proj.c:256
 #, c-format
 msgid "Project <%s> created"
 msgstr ""
@@ -7628,7 +7628,7 @@ msgstr ""
 msgid "GRASS not compiled with SQLite support"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:92 ../imagery/i.aster.toar/main.c:93
+#: ../imagery/i.albedo/main.c:95 ../imagery/i.aster.toar/main.c:93
 #: ../imagery/i.atcorr/main.cpp:464 ../imagery/i.biomass/main.c:46
 #: ../imagery/i.cca/main.c:80 ../imagery/i.cluster/main.c:71
 #: ../imagery/i.eb.eta/main.c:40 ../imagery/i.eb.evapfr/main.c:44
@@ -7667,85 +7667,94 @@ msgstr ""
 msgid "imagery"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:93
+#: ../imagery/i.albedo/main.c:96
 msgid "albedo"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:94 ../imagery/i.aster.toar/main.c:96
+#: ../imagery/i.albedo/main.c:97 ../imagery/i.aster.toar/main.c:96
 #: ../imagery/i.atcorr/main.cpp:468 ../imagery/i.landsat.toar/main.c:70
 #: ../imagery/i.modis.qc/main.c:166
 msgid "reflectance"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:95 ../imagery/i.aster.toar/main.c:98
+#: ../imagery/i.albedo/main.c:98 ../imagery/i.aster.toar/main.c:98
 #: ../imagery/i.atcorr/main.cpp:469 ../imagery/i.landsat.acca/main.c:106
 #: ../imagery/i.landsat.toar/main.c:73 ../imagery/i.modis.qc/main.c:169
 #: ../locale/scriptstrings/i.colors.enhance_to_translate.c:4
 msgid "satellite"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:96 ../imagery/i.landsat.acca/main.c:107
+#: ../imagery/i.albedo/main.c:99 ../imagery/i.landsat.acca/main.c:107
 #: ../imagery/i.landsat.toar/main.c:74
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:4
 msgid "Landsat"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:97 ../imagery/i.aster.toar/main.c:99
+#: ../imagery/i.albedo/main.c:100
+#: ../locale/scriptstrings/i.tasscap_to_translate.c:7
+msgid "Sentinel"
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:101 ../imagery/i.aster.toar/main.c:99
 #: ../locale/scriptstrings/r.in.aster_to_translate.c:5
 msgid "ASTER"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:98
+#: ../imagery/i.albedo/main.c:102
 msgid "AVHRR"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:99 ../imagery/i.modis.qc/main.c:170
+#: ../imagery/i.albedo/main.c:103 ../imagery/i.modis.qc/main.c:170
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:5
 msgid "MODIS"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:101
+#: ../imagery/i.albedo/main.c:105
 msgid "Computes broad band albedo from surface reflectance."
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:114
+#: ../imagery/i.albedo/main.c:118
 msgid "MODIS (7 input bands:1,2,3,4,5,6,7)"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:118
+#: ../imagery/i.albedo/main.c:122
 msgid "NOAA AVHRR (2 input bands:1,2)"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:122
+#: ../imagery/i.albedo/main.c:126
 msgid "Landsat 5+7 (6 input bands:1,2,3,4,5,7)"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:126
+#: ../imagery/i.albedo/main.c:130
 msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:130
+#: ../imagery/i.albedo/main.c:135
+msgid "Sentinel-2 (6 input bands: B2,B3,B4,B8,B11,B12 surface reflectance in [0,1]; Bonafoni & Sekertekin 2020 coefficients)"
+msgstr ""
+
+#: ../imagery/i.albedo/main.c:140
 msgid "ASTER (6 input bands:1,3,5,6,8,9)"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:134
+#: ../imagery/i.albedo/main.c:144
 msgid "Aggressive mode (Landsat)"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:135 ../imagery/i.albedo/main.c:142
+#: ../imagery/i.albedo/main.c:145 ../imagery/i.albedo/main.c:152
 msgid "Albedo dry run to calculate some water to beach/sand/desert stretching, a kind of simple atmospheric correction"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:141
+#: ../imagery/i.albedo/main.c:151
 msgid "Soft mode (MODIS)"
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:164 ../imagery/i.aster.toar/main.c:225
+#: ../imagery/i.albedo/main.c:175 ../imagery/i.aster.toar/main.c:225
 #, c-format
 msgid "Too many input maps. Only %d allowed."
 msgstr ""
 
-#: ../imagery/i.albedo/main.c:178
+#: ../imagery/i.albedo/main.c:189
 msgid "At least two raster maps are required"
 msgstr ""
 
@@ -11372,8 +11381,8 @@ msgstr ""
 msgid "%d-band clustering with threshold %g"
 msgstr ""
 
-#: ../imagery/i.segment/cluster.c:124 ../raster/r.clump/clump.c:222
-#: ../raster/r.clump/clump.c:484 ../raster/r.clump/minsize.c:398
+#: ../imagery/i.segment/cluster.c:124 ../raster/r.clump/clump.c:228
+#: ../raster/r.clump/clump.c:497 ../raster/r.clump/minsize.c:398
 msgid "Unable to open temp file"
 msgstr ""
 
@@ -11387,21 +11396,21 @@ msgid "Too many objects: integer overflow"
 msgstr ""
 
 #: ../imagery/i.segment/cluster.c:372 ../imagery/i.segment/cluster.c:386
-#: ../raster/r.clump/clump.c:121 ../raster/r.clump/clump.c:354
-#: ../raster/r.clump/clump.c:368 ../raster/r.clump/clump.c:658
-#: ../raster/r.clump/clump.c:672 ../raster/r.clump/minsize.c:174
+#: ../raster/r.clump/clump.c:127 ../raster/r.clump/clump.c:367
+#: ../raster/r.clump/clump.c:381 ../raster/r.clump/clump.c:678
+#: ../raster/r.clump/clump.c:692 ../raster/r.clump/minsize.c:174
 #: ../raster/r.clump/minsize.c:416
 msgid "Unable to write to temp file"
 msgstr ""
 
-#: ../imagery/i.segment/cluster.c:395 ../raster/r.clump/clump.c:50
+#: ../imagery/i.segment/cluster.c:395 ../raster/r.clump/clump.c:56
 #: ../vector/v.cluster/main.c:394 ../vector/v.cluster/main.c:604
 #: ../vector/v.cluster/main.c:963
 msgid "Generating renumbering scheme..."
 msgstr ""
 
-#: ../imagery/i.segment/cluster.c:426 ../raster/r.clump/clump.c:96
-#: ../raster/r.clump/clump.c:117 ../raster/r.clump/clump.c:148
+#: ../imagery/i.segment/cluster.c:426 ../raster/r.clump/clump.c:102
+#: ../raster/r.clump/clump.c:123 ../raster/r.clump/clump.c:154
 #: ../raster/r.clump/minsize.c:155 ../raster/r.clump/minsize.c:170
 #: ../raster/r.clump/minsize.c:264 ../raster/r.clump/minsize.c:302
 #: ../raster/r.clump/minsize.c:315 ../raster/r.clump/minsize.c:444
@@ -11455,8 +11464,8 @@ msgstr ""
 msgid "Assigning final region IDs..."
 msgstr ""
 
-#: ../imagery/i.segment/cluster.c:444 ../raster/r.clump/clump.c:100
-#: ../raster/r.clump/clump.c:160 ../raster/r.clump/minsize.c:159
+#: ../imagery/i.segment/cluster.c:444 ../raster/r.clump/clump.c:106
+#: ../raster/r.clump/clump.c:166 ../raster/r.clump/minsize.c:159
 #: ../raster/r.clump/minsize.c:268 ../raster/r.clump/minsize.c:308
 #: ../raster/r.clump/minsize.c:319 ../raster/r.clump/minsize.c:454
 #: ../raster/r.clump/minsize.c:481 ../raster/r.clump/minsize.c:557
@@ -11579,7 +11588,7 @@ msgstr ""
 
 #: ../imagery/i.segment/open_files.c:61 ../imagery/i.segment/open_files.c:233
 #: ../imagery/i.segment/open_files.c:241
-#: ../imagery/i.segment/write_output.c:117 ../raster/r.clump/clump.c:459
+#: ../imagery/i.segment/write_output.c:117 ../raster/r.clump/clump.c:472
 #, c-format
 msgid "No min/max found in raster map <%s>"
 msgstr ""
@@ -12047,8 +12056,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 #: ../imagery/i.svm.predict/main.c:58 ../imagery/i.svm.train/main.c:60
 msgid "Maps with feature values (attributes)"
 msgstr ""
@@ -13643,10 +13652,6 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:6
 msgid "Worldview"
-msgstr ""
-
-#: ../locale/scriptstrings/i.tasscap_to_translate.c:7
-msgid "Sentinel"
 msgstr ""
 
 #: ../locale/scriptstrings/i.tasscap_to_translate.c:8
@@ -18667,20 +18672,25 @@ msgstr ""
 msgid "Raster map <%s> created."
 msgstr ""
 
-#: ../raster/r.clump/clump.c:80
+#: ../raster/r.clump/clump.c:86
 msgid "Pass 2 of 2..."
 msgstr ""
 
-#: ../raster/r.clump/clump.c:130
+#: ../raster/r.clump/clump.c:136
 #, c-format
 msgid "%d initial clumps"
 msgstr ""
 
-#: ../raster/r.clump/clump.c:244 ../raster/r.clump/clump.c:499
+#: ../raster/r.clump/clump.c:250 ../raster/r.clump/clump.c:512
 msgid "Pass 1 of 2..."
 msgstr ""
 
-#: ../raster/r.clump/clump.c:435
+#: ../raster/r.clump/clump.c:319 ../raster/r.clump/clump.c:656
+#, c-format
+msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
+msgstr ""
+
+#: ../raster/r.clump/clump.c:448
 #, c-format
 msgid "%d-band clumping with threshold %g"
 msgstr ""
@@ -20078,72 +20088,83 @@ msgstr ""
 msgid "Imagery group <%s> created"
 msgstr ""
 
-#: ../raster/r.external/proj.c:31 ../raster/r.external/proj.c:50
-#: ../raster/r.external/proj.c:107 ../raster/r.in.gdal/proj.c:31
-#: ../raster/r.in.gdal/proj.c:50 ../raster/r.in.gdal/proj.c:107
-#: ../vector/v.external/proj.c:86 ../vector/v.external/proj.c:143
-#: ../vector/v.in.ogr/proj.c:156 ../vector/v.in.ogr/proj.c:213
+#: ../raster/r.external/proj.c:19 ../raster/r.in.gdal/proj.c:19
+#: ../vector/v.external/proj.c:58 ../vector/v.in.ogr/proj.c:128
+#, c-format
+msgid "Vertical CRS <%s> of the dataset is ignored"
+msgstr ""
+
+#: ../raster/r.external/proj.c:21 ../raster/r.in.gdal/proj.c:21
+#: ../vector/v.external/proj.c:60 ../vector/v.in.ogr/proj.c:130
+msgid "The vertical component of the dataset CRS is ignored"
+msgstr ""
+
+#: ../raster/r.external/proj.c:66 ../raster/r.external/proj.c:85
+#: ../raster/r.external/proj.c:143 ../raster/r.in.gdal/proj.c:66
+#: ../raster/r.in.gdal/proj.c:85 ../raster/r.in.gdal/proj.c:143
+#: ../vector/v.external/proj.c:121 ../vector/v.external/proj.c:179
+#: ../vector/v.in.ogr/proj.c:191 ../vector/v.in.ogr/proj.c:249
 msgid "Can't get WKT parameter string"
 msgstr ""
 
-#: ../raster/r.external/proj.c:45 ../raster/r.in.gdal/proj.c:45
-#: ../vector/v.external/proj.c:81 ../vector/v.in.ogr/proj.c:151
+#: ../raster/r.external/proj.c:80 ../raster/r.in.gdal/proj.c:80
+#: ../vector/v.external/proj.c:116 ../vector/v.in.ogr/proj.c:186
 msgid "Input contains an invalid CRS."
 msgstr ""
 
-#: ../raster/r.external/proj.c:53 ../raster/r.in.gdal/proj.c:53
-#: ../vector/v.external/proj.c:89 ../vector/v.in.ogr/proj.c:159
+#: ../raster/r.external/proj.c:88 ../raster/r.in.gdal/proj.c:88
+#: ../vector/v.external/proj.c:124 ../vector/v.in.ogr/proj.c:194
 msgid "WKT definition:"
 msgstr ""
 
-#: ../raster/r.external/proj.c:86 ../raster/r.in.gdal/proj.c:86
-#: ../vector/v.external/proj.c:122 ../vector/v.in.ogr/proj.c:192
+#: ../raster/r.external/proj.c:122 ../raster/r.in.gdal/proj.c:122
+#: ../vector/v.external/proj.c:158 ../vector/v.in.ogr/proj.c:228
 msgid "No projection information available"
 msgstr ""
 
-#: ../raster/r.external/proj.c:101 ../raster/r.in.gdal/proj.c:101
-#: ../vector/v.external/proj.c:137 ../vector/v.in.ogr/proj.c:207
+#: ../raster/r.external/proj.c:137 ../raster/r.in.gdal/proj.c:137
+#: ../vector/v.external/proj.c:173 ../vector/v.in.ogr/proj.c:243
 msgid "Unable to convert input map projection to GRASS format; cannot create new project."
 msgstr ""
 
-#: ../raster/r.external/proj.c:112 ../raster/r.in.gdal/main.c:1025
-#: ../raster/r.in.gdal/proj.c:112 ../vector/v.external/proj.c:148
-#: ../vector/v.in.lidar/main.c:518 ../vector/v.in.ogr/proj.c:218
+#: ../raster/r.external/proj.c:148 ../raster/r.in.gdal/main.c:1025
+#: ../raster/r.in.gdal/proj.c:148 ../vector/v.external/proj.c:184
+#: ../vector/v.in.lidar/main.c:518 ../vector/v.in.ogr/proj.c:254
 #, c-format
 msgid "Unable to create new project <%s>"
 msgstr ""
 
-#: ../raster/r.external/proj.c:142 ../raster/r.in.gdal/proj.c:142
-#: ../vector/v.external/proj.c:178 ../vector/v.in.ogr/proj.c:248
+#: ../raster/r.external/proj.c:177 ../raster/r.in.gdal/proj.c:177
+#: ../vector/v.external/proj.c:213 ../vector/v.in.ogr/proj.c:283
 msgid "Unable to convert input map projection information to GRASS format."
 msgstr ""
 
-#: ../raster/r.external/proj.c:219 ../raster/r.in.gdal/proj.c:219
+#: ../raster/r.external/proj.c:250 ../raster/r.in.gdal/proj.c:250
 #: ../raster/r.in.lidar/projection.c:125
-#: ../raster3d/r3.in.lidar/projection.c:126 ../vector/v.external/proj.c:255
-#: ../vector/v.in.lidar/projection.c:123 ../vector/v.in.ogr/proj.c:325
+#: ../raster3d/r3.in.lidar/projection.c:126 ../vector/v.external/proj.c:286
+#: ../vector/v.in.lidar/projection.c:123 ../vector/v.in.ogr/proj.c:356
 msgid "Over-riding projection check"
 msgstr ""
 
-#: ../raster/r.external/proj.c:225 ../raster/r.in.gdal/proj.c:225
-#: ../vector/v.external/proj.c:261 ../vector/v.in.ogr/proj.c:331
+#: ../raster/r.external/proj.c:256 ../raster/r.in.gdal/proj.c:256
+#: ../vector/v.external/proj.c:292 ../vector/v.in.ogr/proj.c:362
 msgid "Coordinate reference system of dataset does not appear to match current project.\n"
 msgstr ""
 
-#: ../raster/r.external/proj.c:237 ../raster/r.in.gdal/proj.c:237
-#: ../vector/v.external/proj.c:273 ../vector/v.in.ogr/proj.c:343
+#: ../raster/r.external/proj.c:268 ../raster/r.in.gdal/proj.c:268
+#: ../vector/v.external/proj.c:304 ../vector/v.in.ogr/proj.c:374
 msgid "Dataset CRS is:\n"
 msgstr ""
 
-#: ../raster/r.external/proj.c:251 ../raster/r.in.gdal/proj.c:251
-#: ../vector/v.external/proj.c:287 ../vector/v.in.ogr/proj.c:357
+#: ../raster/r.external/proj.c:282 ../raster/r.in.gdal/proj.c:282
+#: ../vector/v.external/proj.c:318 ../vector/v.in.ogr/proj.c:388
 msgid "Project CRS is:\n"
 msgstr ""
 
-#: ../raster/r.external/proj.c:265 ../raster/r.in.gdal/proj.c:265
+#: ../raster/r.external/proj.c:296 ../raster/r.in.gdal/proj.c:296
 #: ../raster/r.in.lidar/projection.c:88 ../raster/r.in.pdal/projection.c:86
-#: ../raster3d/r3.in.lidar/projection.c:89 ../vector/v.external/proj.c:301
-#: ../vector/v.in.lidar/projection.c:86 ../vector/v.in.ogr/proj.c:371
+#: ../raster3d/r3.in.lidar/projection.c:89 ../vector/v.external/proj.c:332
+#: ../vector/v.in.lidar/projection.c:86 ../vector/v.in.ogr/proj.c:402
 #: ../vector/v.in.pdal/projection.c:86
 #, c-format
 msgid ""
@@ -20151,15 +20172,15 @@ msgid ""
 "In case of no significant differences in the coordinate reference system definitions, use the -o flag to ignore them and use current project definition.\n"
 msgstr ""
 
-#: ../raster/r.external/proj.c:269 ../raster/r.in.gdal/proj.c:269
-#: ../vector/v.external/proj.c:305 ../vector/v.in.ogr/proj.c:375
+#: ../raster/r.external/proj.c:300 ../raster/r.in.gdal/proj.c:300
+#: ../vector/v.external/proj.c:336 ../vector/v.in.ogr/proj.c:406
 msgid "Consider generating a new project from the input dataset using the 'project' parameter.\n"
 msgstr ""
 
-#: ../raster/r.external/proj.c:289 ../raster/r.in.gdal/proj.c:289
+#: ../raster/r.external/proj.c:320 ../raster/r.in.gdal/proj.c:320
 #: ../raster/r.in.lidar/projection.c:135 ../raster/r.in.pdal/projection.c:130
-#: ../raster3d/r3.in.lidar/projection.c:136 ../vector/v.external/proj.c:325
-#: ../vector/v.in.lidar/projection.c:133 ../vector/v.in.ogr/proj.c:395
+#: ../raster3d/r3.in.lidar/projection.c:136 ../vector/v.external/proj.c:356
+#: ../vector/v.in.lidar/projection.c:133 ../vector/v.in.ogr/proj.c:426
 msgid "Coordinate reference system of input dataset and current project appear to match"
 msgstr ""
 
@@ -33191,8 +33212,7 @@ msgid "At least 2 maps are required"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:89 ../scripts/d.frame/d.frame.py:120
-#, python-format
-msgid "Unable to get monitor info. %s"
+msgid "Unable to get monitor info. {}"
 msgstr ""
 
 #: ../scripts/d.frame/d.frame.py:106

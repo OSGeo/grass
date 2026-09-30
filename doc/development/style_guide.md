@@ -783,11 +783,19 @@ Use the following header in your source code.
 #
 # PURPOSE:   Provide short description of module here...
 #
-# COPYRIGHT: (C) 2024 by John Doe and the GRASS Development Team
-#
+# SPDX-FileCopyrightText: 2024 John Doe
+# SPDX-FileCopyrightText: GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 ##############################################################################
 ```
+
+Each `SPDX-FileCopyrightText` line names one copyright holder with the years
+of their contributions. The line with `GRASS Development Team` is present
+in every file and stands for the project, as `COPYING` states.
+It carries years only when it is the sole copyright line. Add a line
+for yourself when you make a substantial contribution (the same threshold as
+an `AUTHOR(S)` entry), and leave other people's lines alone.
+The `SPDX-License-Identifier` line follows all copyright lines.
 
 #### Use Standard Options in Interface
 
@@ -975,8 +983,7 @@ Please use the following docstring template:
 Classes:
  - example::ExampleClass
 
-(C) 2024 by the GRASS Development Team
-
+SPDX-FileCopyrightText: 2024 GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 
 @author First Author <first somewhere.com>
@@ -1093,8 +1100,8 @@ original work remains, it must be properly cited.
  * MODULE:       g.foo
  * AUTHOR(S):    John Doe <jdoe at somewhere org>
  * PURPOSE:      Provide short description of module here...
- * COPYRIGHT:    (C) 2010 by John Doe, and the GRASS Development Team
- *
+ * SPDX-FileCopyrightText: 2010 John Doe
+ * SPDX-FileCopyrightText: GRASS Development Team
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/

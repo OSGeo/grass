@@ -120,7 +120,6 @@ typedef struct {
     float **er;      // Erosion [output]
     float **ct;      // Transport capacity coefficient [input]
     float **trap;    // Traps [input]
-    float **dif;     // Diffusion coefficient [internal]
 } Grids;
 
 struct point2D {

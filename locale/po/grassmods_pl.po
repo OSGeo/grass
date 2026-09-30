@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-09-19 18:13+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Polish <https://weblate.osgeo.org/projects/grass-gis/grassmods/pl/>\n"
@@ -14944,6 +14944,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Nazwa mapy rastrowej do nałożenia emisji"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Wyświetl statystyki w stylu skryptu shell"
 
@@ -16326,8 +16336,10 @@ msgstr "Eksportowanie mapy rastrowej <%s> (kanał %d)..."
 msgid "Unable to export raster map <%s>"
 msgstr "Nie można wyeksportować mapy rastrowej <%s>"
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Number of points to be created"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "Liczba punktów do utworzenia"
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16731,6 +16743,10 @@ msgstr "Wykładnik potęgi dla odległości wagowej (0.0-4.0)"
 
 msgid "Constrain model through central window cell"
 msgstr "Ograniczenie modelu poprzez centralną komórkę okna"
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "Niewłaściwa liczba przedziałów: %s"
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr ""
@@ -23252,7 +23268,7 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr ""
 
 msgid "Cannot write to working directory {}."
@@ -37867,10 +37883,6 @@ msgstr "Plik obrazu"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Nazwa wejściowej rastrowej mapy wysokości [metry]"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "Nazwa mapy rastrowej do nałożenia emisji"
 
 #, fuzzy
 #~ msgid "Number of tile border lines in each direction"

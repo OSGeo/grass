@@ -151,9 +151,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 #pragma omp parallel firstprivate(l, lw, k) reduction(+ : nwalka)
             {
 #if defined(_OPENMP)
-                int steps = (int)((((double)sim->nwalk) /
-                                   ((double)omp_get_num_threads())) +
-                                  0.5);
+                int steps = (sim->nwalk + omp_get_num_threads() - 1) /
+                            omp_get_num_threads();
                 int tid = omp_get_thread_num();
                 int min_loop = tid * steps;
                 int max_loop = ((tid + 1) * steps) > sim->nwalk
@@ -236,16 +235,17 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 #endif
                             double hhc = pow(d1, 3. / 5.);
                             double velx, vely;
+                            /* Diffusion coefficient of this walker's move */
+                            float dif;
                             if (hhc > settings->hhmax &&
                                 inputs->wdepth == NULL) { /* increased diffusion
                                                      if w.depth > hhmax */
-                                grids->dif[k][l] =
-                                    (settings->halpha + 1) * deldif;
+                                dif = (settings->halpha + 1) * deldif;
                                 velx = sim->vavg[lw].x;
                                 vely = sim->vavg[lw].y;
                             }
                             else {
-                                grids->dif[k][l] = deldif;
+                                dif = deldif;
                                 velx = grids->v1[k][l];
                                 vely = grids->v2[k][l];
                             }
@@ -263,10 +263,9 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                                 }
                             }
 
-                            sim->w[lw].x +=
-                                (velx +
-                                 grids->dif[k][l] * gaux); /* move the walker */
-                            sim->w[lw].y += (vely + grids->dif[k][l] * gauy);
+                            /* Move the walker. */
+                            sim->w[lw].x += (velx + dif * gaux);
+                            sim->w[lw].y += (vely + dif * gauy);
 
                             if (hhc > settings->hhmax &&
                                 inputs->wdepth == NULL) {

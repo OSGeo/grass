@@ -45,6 +45,8 @@ LOC_CHECK_USE(cxx,C++,USE_CXX)
 
 if test -n "$USE_CXX"; then
 	AC_PROG_CXX
+	m4_include([m4/ax_cxx_compile_stdcxx.m4])
+	AX_CXX_COMPILE_STDCXX([17], [ext], [mandatory])
 else
 	CXX=
 	CXXFLAGS=
