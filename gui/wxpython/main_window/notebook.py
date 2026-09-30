@@ -23,8 +23,6 @@ from core import globalvar
 from gui_core.wrap import SimpleTabArt
 from mapdisp.frame import MapPanel
 
-from grass.pydispatch.signal import Signal
-
 
 class MainPageFrame(wx.Frame):
     """Frame for independent window."""
@@ -91,8 +89,6 @@ class MainNotebook(aui.AuiNotebook):
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(aui.EVT_AUINOTEBOOK_PAGE_CLOSE, self.OnClose)
 
-        self.dockPage = Signal("MainNotebook.dockPage")
-
         # remember number of items in the menu
         self._menuCount = self.parent.menubar.GetMenuCount()
 
@@ -139,7 +135,6 @@ class MainNotebook(aui.AuiNotebook):
 
     def DockPage(self, page):
         """Dock independent MainFrame object back to Aui.Notebook"""
-        self.dockPage.emit()
         frame = page.GetParent()
         page.Reparent(self)
         page.SetDockingCallback(self.UndockPage)
