@@ -120,8 +120,8 @@ def test_json_summary_time_series(session_tools):
     assert [output["depth"] for output in outputs] == ["depth.01", "depth.02"]
     assert outputs[0]["simulated_time"] < outputs[1]["simulated_time"]
     assert summary["simulated_time"] >= outputs[1]["simulated_time"]
-    for output in outputs:
-        assert output["timestamp"] == timestamp_for(output["simulated_time"])
+    for minute, output in enumerate(outputs, start=1):
+        assert output["timestamp"] == f"{minute} minutes"
         assert output["discharge"] is None
         assert session_tools.r_info(map=output["depth"], format="json")["rows"] == 5
 
