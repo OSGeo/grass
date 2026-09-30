@@ -429,8 +429,8 @@ static void check_units(long long units)
 
 /* Fill in a layout of units of the given stride, all of one run first,
  * then those of the next run. The number of runs that fit is how many
- * times units * stride draws fit into the span. The caller has checked
- * that units * stride does not overflow. */
+ * times units * stride draws fit into the span. Callers must check
+ * beforehand that units * stride does not overflow. */
 static void init_layout(struct G_random_layout *layout, long long seed,
                         long long units, long long stride)
 {
