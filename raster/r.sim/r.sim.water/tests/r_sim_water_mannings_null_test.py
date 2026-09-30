@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Tests of r.sim.water with null cells in the Manning's n raster map."""
+"""Tests of r.sim.water with null cells in the Manning's n and infiltration maps."""
 
 import os
 
@@ -14,6 +14,8 @@ from grass.tools import Tools
 ROWS = 20
 COLS = 30
 MANNINGS_N = 0.05
+# Below the rain of 50 mm/hr, so that water remains to flow.
+INFILTRATION = 10
 row, col = np.mgrid[0:ROWS, 0:COLS]
 # A plane descending to the east and, more gently, to the north. The partial
 # derivatives have the signs of the r.slope.aspect output, positive where the
@@ -34,7 +36,7 @@ def session(tmp_path_factory):
         yield session
 
 
-def simulate(session, elevation, man):
+def simulate(session, elevation, man, **kwargs):
     """Run r.sim.water and return depth, discharge and the run summary.
 
     Nulls in the outputs are returned as NaN. The output maps are overwritten
@@ -53,7 +55,6 @@ def simulate(session, elevation, man):
         depth="depth",
         discharge="discharge",
         rain_value=50,
-        infil_value=0,
         nwalkers=2000,
         duration=2,
         random_seed=1,
@@ -61,6 +62,7 @@ def simulate(session, elevation, man):
         flags="p",
         format="json",
         overwrite=True,
+        **kwargs,
     )
     depth = garray.array("depth", null="nan", env=session.env)
     discharge = garray.array("discharge", null="nan", env=session.env)
@@ -78,11 +80,13 @@ def test_null_mannings_n_is_like_null_elevation(session):
         session,
         elevation=ELEVATION,
         man=np.where(PATCH, np.nan, MANNINGS_N),
+        infil_value=0,
     )
     null_elevation = simulate(
         session,
         elevation=np.where(PATCH, np.nan, ELEVATION),
         man=np.full((ROWS, COLS), MANNINGS_N),
+        infil_value=0,
     )
     depth, discharge, summary = null_man
     assert np.isnan(depth[PATCH]).all()
@@ -92,3 +96,29 @@ def test_null_mannings_n_is_like_null_elevation(session):
     np.testing.assert_array_equal(depth, null_elevation[0])
     np.testing.assert_array_equal(discharge, null_elevation[1])
     assert summary == null_elevation[2]
+
+
+def test_null_infiltration_is_no_infiltration(session):
+    """Null infiltration gives the same run as zero infiltration.
+
+    The outputs and the summary, including the mean infiltration, are the
+    same as with zero infiltration in the same cells.
+    """
+    man = np.full((ROWS, COLS), MANNINGS_N)
+    null_infil = simulate(
+        session,
+        elevation=ELEVATION,
+        man=man,
+        infil=np.where(PATCH, np.nan, INFILTRATION),
+    )
+    zero_infil = simulate(
+        session,
+        elevation=ELEVATION,
+        man=man,
+        infil=np.where(PATCH, 0, INFILTRATION),
+    )
+    depth, discharge, summary = null_infil
+    assert not np.isnan(depth).any()
+    np.testing.assert_array_equal(depth, zero_infil[0])
+    np.testing.assert_array_equal(discharge, zero_infil[1])
+    assert summary == zero_infil[2]
