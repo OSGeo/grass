@@ -169,6 +169,101 @@ For the shallow overland flow simulated here, Manning's n is generally
 higher than for deeper channel or floodplain flow, especially over
 vegetated surfaces, see the *r.manning* documentation.
 
+### Run summary
+
+With the **-p** flag, a summary of the run is printed to standard output
+after the last map is written. The **format** option selects plain text
+(one `key: value` pair per line) or JSON. Without **-p**, nothing is
+printed to standard output regardless of **format**. The values are also
+stored in the history of the output raster maps under the same keys (see
+[r.info](r.info.md)).
+
+| Key | Meaning | Unit |
+| --- | --- | --- |
+| `walkers_requested` | Number of walkers from **nwalkers**, by default twice the number of cells | count |
+| `walkers_generated` | Walkers created, at least one per cell and more where the source rate is higher | count |
+| `walkers_remaining` | Walkers still in the domain at the end of the run | count |
+| `duration` | Requested simulation length (**duration**) | s |
+| `simulated_time` | Simulated time reached at the end of the run | s |
+| `time_step` | Simulated time per iteration | s |
+| `iterations_planned` | Iterations needed to cover **duration** | count |
+| `iterations_completed` | Iterations run, fewer than planned when the run stopped early | count |
+| `stopped_early` | `true` when all walkers left the domain before **duration** was reached | |
+| `mean_velocity` | Mean flow velocity over the defined cells | m/s |
+| `mean_mannings_n` | Harmonic mean of Manning's n over the defined cells (the inverse of the mean of 1/n), `null` when undefined | |
+| `mean_source_rate` | Mean rainfall excess | m/s |
+| `mean_infiltration` | Mean infiltration rate, 0 without infiltration input | m/s |
+| `threads` | Threads used for the computation | count |
+| `outputs` | One entry per set of written maps: one per **output_step** with **-t**, otherwise a single entry | |
+
+Each entry of `outputs` contains the `simulated_time` (s) and `timestamp`
+of the written maps, the number of `walkers_remaining` at that time, and
+the names of the `depth`, `discharge`, `error` and `walkers` maps, or
+`null` for maps which were not requested.
+
+Summary of a time series run with two output steps in JSON:
+
+```sh
+r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
+    man_value=0.05 nwalkers=100000 duration=20 output_step=10 random_seed=3 \
+    -t -p format=json
+```
+
+```json
+{
+    "walkers_requested": 100000,
+    "walkers_generated": 120000,
+    "walkers_remaining": 112724,
+    "duration": 1200,
+    "simulated_time": 1199.2085202681737,
+    "time_step": 1.0631281208051186,
+    "iterations_planned": 1128,
+    "iterations_completed": 1128,
+    "stopped_early": false,
+    "mean_velocity": 9.4062040165270862,
+    "mean_mannings_n": 0.050000000000000003,
+    "mean_source_rate": 1.390000000000819e-05,
+    "mean_infiltration": 0,
+    "threads": 1,
+    "outputs": [
+        {
+            "simulated_time": 599.60426013408687,
+            "timestamp": "10 minutes",
+            "walkers_remaining": 113464,
+            "depth": "depth.10",
+            "discharge": "discharge.10",
+            "error": null,
+            "walkers": null
+        },
+        {
+            "simulated_time": 1199.2085202681737,
+            "timestamp": "20 minutes",
+            "walkers_remaining": 112724,
+            "depth": "depth.20",
+            "discharge": "discharge.20",
+            "error": null,
+            "walkers": null
+        }
+    ]
+}
+```
+
+Reading the summary in Python:
+
+```python
+import grass.script as gs
+
+summary = gs.parse_command(
+    "r.sim.water",
+    elevation="elevation",
+    depth="depth",
+    discharge="discharge",
+    flags="p",
+    format="json",
+)
+print(summary["walkers_remaining"], summary["outputs"][-1]["depth"])
+```
+
 ## EXAMPLE
 
 Using the North Carolina full sample dataset:

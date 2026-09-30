@@ -38,7 +38,7 @@ struct point3D;
 void main_loop(const Setup *setup, const Geometry *geometry,
                const Settings *settings, Simulation *sim,
                ObservationPoints *points, const Inputs *inputs,
-               const Outputs *outputs, Grids *grids)
+               const Outputs *outputs, Grids *grids, Summary *summary)
 {
     int i, l, k;
     int iblock;
@@ -131,8 +131,10 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                         i, setup->miter, sim->nwalk, sim->nwalka);
             }
 
-            if (sim->nwalka == 0 && i > 1)
+            if (sim->nwalka == 0 && i > 1) {
+                summary->stopped_early = true;
                 goto L_800;
+            }
 
             /* ************************************************************ */
             /*                               .... propagate one step */
@@ -174,15 +176,15 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             k < 0 || l < 0) {
 
                             G_debug(2, " k,l=%d,%d", k, l);
-                            printf("    lw,w=%d %f %f", lw, sim->w[lw].y,
-                                   sim->w[lw].m);
+                            G_debug(2, "    lw,w=%d %f %f", lw, sim->w[lw].y,
+                                    sim->w[lw].m);
                             G_debug(2, "    stxym=%f %f", stxm, stym);
-                            printf("    step=%f %f", geometry->stepx,
-                                   geometry->stepy);
+                            G_debug(2, "    step=%f %f", geometry->stepx,
+                                    geometry->stepy);
                             G_debug(2, "    m=%d %d", geometry->my,
                                     geometry->mx);
-                            printf("    nwalka,nwalk=%d %d", sim->nwalka,
-                                   sim->nwalk);
+                            G_debug(2, "    nwalka,nwalk=%d %d", sim->nwalka,
+                                    sim->nwalk);
                             G_debug(2, "  ");
                         }
 
@@ -350,9 +352,9 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                     erod(grids->gama, setup, geometry,
                          grids); /* divergence of gama field */
 
-                int itime = (int)(i * setup->deltap * setup->timec);
+                double itime = simulated_seconds(setup, i);
                 int ii = output_data(itime, conn, setup, geometry, settings,
-                                     sim, inputs, outputs, grids);
+                                     sim, inputs, outputs, grids, summary);
                 if (ii != 1)
                     G_fatal_error(_("Unable to write raster maps"));
             }
@@ -392,6 +394,10 @@ void main_loop(const Setup *setup, const Geometry *geometry,
         } /* miter */
 
     L_800:
+        // On normal completion i is miter + 1; after an early stop it is the
+        // iteration which found no walkers, so either way i - 1 were run.
+        summary->iterations_completed = i - 1;
+
         /* Soeren 8. Mar 2011: Why is this commented out? */
         /*        if (iwrib != nblock) {
            icount = icoub / iwrib;
@@ -445,9 +451,9 @@ void main_loop(const Setup *setup, const Geometry *geometry,
         // All blocks have completed; gama is the eventual cumulative total,
         // so no extrapolation is needed.
         conn = 1.0;
-        int itime = (int)(i * setup->deltap * setup->timec);
+        double itime = simulated_seconds(setup, summary->iterations_completed);
         int ii = output_data(itime, conn, setup, geometry, settings, sim,
-                             inputs, outputs, grids);
+                             inputs, outputs, grids, summary);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }
