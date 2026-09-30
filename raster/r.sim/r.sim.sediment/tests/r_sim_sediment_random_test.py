@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2026 GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """Tests of the random numbers of r.sim.sediment.
