@@ -42,8 +42,10 @@ highest water depth highlighting streams, pooling, and wet areas during
 a rainfall event.*
 
 The module automatically converts horizontal distances from feet to
-metric system using database/projection information. Rainfall excess is
-defined as rainfall intensity - infiltration rate and should be provided
+metric system using database/projection information. The module
+requires a projected coordinate system and does not run in a
+latitude-longitude project. Rainfall excess is defined as rainfall
+intensity - infiltration rate and should be provided
 in \[mm/hr\]. Rainfall intensities are usually available from
 meteorological stations. Infiltration rate depends on soil properties
 and land cover. It varies in space and time. For saturated soil and

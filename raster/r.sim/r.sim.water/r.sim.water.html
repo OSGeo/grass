@@ -46,7 +46,9 @@ dy = tan(slope) * sin(aspect)
 
 <p>
 The module automatically converts horizontal distances from feet to metric system using
-database/projection information. Rainfall excess is defined as rainfall intensity
+database/projection information. The module requires a projected coordinate
+system and does not run in a latitude-longitude project.
+Rainfall excess is defined as rainfall intensity
 - infiltration rate and should be provided in [mm/hr].
 <!-- and can be computed using several available infiltration
  models (e.g. Green-Ampt, Holtan, etc.). (<font color="#ff0000"> find
