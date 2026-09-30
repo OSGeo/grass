@@ -88,7 +88,14 @@ Output walker, water depth and discharge maps can be saved during simulation usi
 the time series flag <b>-t</b> and <b>output_step</b> parameter
 defining the time step in minutes for writing output files.
 Files are saved with a suffix representing time since the start of simulation in minutes
-(e.g. wdepth.05, wdepth.10).
+(e.g. wdepth.05, wdepth.10) and are timestamped with that time.
+The maps of an output step are written at the first iteration which reaches its time,
+so their simulated time can exceed their name by up to one time step.
+When the time step is longer than <b>output_step</b>, one iteration can reach several
+output steps and only the latest of them is written.
+The series always ends with maps named by the <b>duration</b> which hold the state
+at the end of the run, also when the duration is not a multiple of <b>output_step</b>
+or when the simulation stopped early.
 <!-- TODO add example of registering outputs into temporal framework when  #2146 is fixed -->
 Monitoring of water depth at specific points is supported. A vector map with observation points and
 a path to a logfile must be provided. For each point in the vector map which is located in
@@ -201,12 +208,12 @@ stored in the history of the output raster maps under the same keys (see
  <tr><td><code>mean_source_rate</code></td><td>Mean rainfall excess</td><td>m/s</td></tr>
  <tr><td><code>mean_infiltration</code></td><td>Mean infiltration rate, 0 without infiltration input</td><td>m/s</td></tr>
  <tr><td><code>threads</code></td><td>Threads used for the computation</td><td>count</td></tr>
- <tr><td><code>outputs</code></td><td>One entry per set of written maps: one per <b>output_step</b> with <b>-t</b>, otherwise a single entry</td><td></td></tr>
+ <tr><td><code>outputs</code></td><td>One entry per set of written maps: with <b>-t</b>, one per written output step, the last one named by <b>duration</b>, otherwise a single entry</td><td></td></tr>
 </table>
 
 <p>
-Each entry of <code>outputs</code> contains the <code>simulated_time</code> (s) and <code>timestamp</code>
-of the written maps, the number of <code>walkers_remaining</code> at that time, and
+Each entry of <code>outputs</code> contains the <code>simulated_time</code> (s) when the maps
+were written, their <code>timestamp</code>, the number of <code>walkers_remaining</code> at that time, and
 the names of the <code>depth</code>, <code>discharge</code>, <code>error</code> and <code>walkers</code> maps, or
 <code>null</code> for maps which were not requested.
 
@@ -214,6 +221,7 @@ the names of the <code>depth</code>, <code>discharge</code>, <code>error</code> 
 Summary of a time series run with two output steps in JSON:
 
 <div class="code"><pre>
+g.region n=224000 s=223000 e=637000 w=636000 res=10
 r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
     man_value=0.05 nwalkers=100000 duration=20 output_step=10 random_seed=3 \
     -t -p format=json
@@ -222,33 +230,33 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
 <div class="code"><pre>
 {
     "walkers_requested": 100000,
-    "walkers_generated": 120000,
-    "walkers_remaining": 112724,
+    "walkers_generated": 110000,
+    "walkers_remaining": 92085,
     "duration": 1200,
-    "simulated_time": 1199.2085202681737,
-    "time_step": 1.0631281208051186,
-    "iterations_planned": 1128,
-    "iterations_completed": 1128,
+    "simulated_time": 1198.8235235863349,
+    "time_step": 1.8908888384642506,
+    "iterations_planned": 634,
+    "iterations_completed": 634,
     "stopped_early": false,
-    "mean_velocity": 9.4062040165270862,
+    "mean_velocity": 5.288518180752412,
     "mean_mannings_n": 0.050000000000000003,
-    "mean_source_rate": 1.390000000000819e-05,
+    "mean_source_rate": 1.3899999999999379e-05,
     "mean_infiltration": 0,
     "threads": 1,
     "outputs": [
         {
-            "simulated_time": 599.60426013408687,
+            "simulated_time": 601.30265063163165,
             "timestamp": "10 minutes",
-            "walkers_remaining": 113464,
+            "walkers_remaining": 92121,
             "depth": "depth.10",
             "discharge": "discharge.10",
             "error": null,
             "walkers": null
         },
         {
-            "simulated_time": 1199.2085202681737,
+            "simulated_time": 1198.8235235863349,
             "timestamp": "20 minutes",
-            "walkers_remaining": 112724,
+            "walkers_remaining": 92085,
             "depth": "depth.20",
             "discharge": "discharge.20",
             "error": null,

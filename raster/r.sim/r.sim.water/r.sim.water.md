@@ -78,7 +78,15 @@ water depth and discharge maps can be saved during simulation using the
 time series flag **-t** and **output_step** parameter defining the time
 step in minutes for writing output files. Files are saved with a suffix
 representing time since the start of simulation in minutes (e.g.
-wdepth.05, wdepth.10). Monitoring of water depth at specific points is
+wdepth.05, wdepth.10) and are timestamped with that time. The maps of an
+output step are written at the first iteration which reaches its time,
+so their simulated time can exceed their name by up to one time step.
+When the time step is longer than **output_step**, one iteration can
+reach several output steps and only the latest of them is written. The
+series always ends with maps named by the **duration** which hold the
+state at the end of the run, also when the duration is not a multiple of
+**output_step** or when the simulation stopped early.
+Monitoring of water depth at specific points is
 supported. A vector map with observation points and a path to a logfile
 must be provided. For each point in the vector map which is located in
 the computational region the water depth is logged each time step in the
@@ -190,16 +198,17 @@ stored in the history of the output raster maps under the same keys (see
 | `mean_source_rate` | Mean rainfall excess | m/s |
 | `mean_infiltration` | Mean infiltration rate, 0 without infiltration input | m/s |
 | `threads` | Threads used for the computation | count |
-| `outputs` | One entry per set of written maps: one per **output_step** with **-t**, otherwise a single entry | |
+| `outputs` | One entry per set of written maps: with **-t**, one per written output step, the last one named by **duration**, otherwise a single entry | |
 
-Each entry of `outputs` contains the `simulated_time` (s) and `timestamp`
-of the written maps, the number of `walkers_remaining` at that time, and
-the names of the `depth`, `discharge`, `error` and `walkers` maps, or
-`null` for maps which were not requested.
+Each entry of `outputs` contains the `simulated_time` (s) when the maps
+were written, their `timestamp`, the number of `walkers_remaining` at
+that time, and the names of the `depth`, `discharge`, `error` and
+`walkers` maps, or `null` for maps which were not requested.
 
 Summary of a time series run with two output steps in JSON:
 
 ```sh
+g.region n=224000 s=223000 e=637000 w=636000 res=10
 r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
     man_value=0.05 nwalkers=100000 duration=20 output_step=10 random_seed=3 \
     -t -p format=json
@@ -208,33 +217,33 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
 ```json
 {
     "walkers_requested": 100000,
-    "walkers_generated": 120000,
-    "walkers_remaining": 112724,
+    "walkers_generated": 110000,
+    "walkers_remaining": 92085,
     "duration": 1200,
-    "simulated_time": 1199.2085202681737,
-    "time_step": 1.0631281208051186,
-    "iterations_planned": 1128,
-    "iterations_completed": 1128,
+    "simulated_time": 1198.8235235863349,
+    "time_step": 1.8908888384642506,
+    "iterations_planned": 634,
+    "iterations_completed": 634,
     "stopped_early": false,
-    "mean_velocity": 9.4062040165270862,
+    "mean_velocity": 5.288518180752412,
     "mean_mannings_n": 0.050000000000000003,
-    "mean_source_rate": 1.390000000000819e-05,
+    "mean_source_rate": 1.3899999999999379e-05,
     "mean_infiltration": 0,
     "threads": 1,
     "outputs": [
         {
-            "simulated_time": 599.60426013408687,
+            "simulated_time": 601.30265063163165,
             "timestamp": "10 minutes",
-            "walkers_remaining": 113464,
+            "walkers_remaining": 92121,
             "depth": "depth.10",
             "discharge": "discharge.10",
             "error": null,
             "walkers": null
         },
         {
-            "simulated_time": 1199.2085202681737,
+            "simulated_time": 1198.8235235863349,
             "timestamp": "20 minutes",
-            "walkers_remaining": 112724,
+            "walkers_remaining": 92085,
             "depth": "depth.20",
             "discharge": "discharge.20",
             "error": null,

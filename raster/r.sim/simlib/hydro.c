@@ -44,6 +44,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     int iblock;
     double conn = 1.0;
     double addac;
+    // Time of the last time series output step written [s]
+    double series_time = 0.;
 
     // nblock is reserved for Monte Carlo replicas. A future
     // change will allow nblock > 1, give each replica an
@@ -124,12 +126,6 @@ void main_loop(const Setup *setup, const Geometry *geometry,
         for (i = 1; i <= setup->miter;
              i++) { /* iteration loop depending on simulation time and deltap */
             G_percent(i, setup->miter, 1);
-            if (setup->iterout > 0 && i % setup->iterout == 0) {
-                /* nfiterw = i / iterout + 10;
-                   nfiterh = i / iterout + 40; */
-                G_debug(2, "iblock=%d i=%d miter=%d nwalk=%d nwalka=%d", iblock,
-                        i, setup->miter, sim->nwalk, sim->nwalka);
-            }
 
             if (sim->nwalka == 0 && i > 1) {
                 summary->stopped_early = true;
@@ -315,13 +311,26 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             /* Total remaining walkers for this iteration */
             sim->nwalka = nwalka;
 
+            // Output step j is written at the first iteration reaching
+            // j * output_step and named by that time. When one iteration
+            // reaches several steps, only the latest one is written.
+            bool write_series = false;
+            if (settings->ts && settings->iterout > 0) {
+                double reached =
+                    settings->iterout *
+                    floor(simulated_seconds(setup, i) / settings->iterout);
+                if (reached > series_time) {
+                    series_time = reached;
+                    write_series = true;
+                }
+            }
+
             /* Changes made by Soeren 8. Mar 2011 to replace the site walker
              * output implementation */
             /* Save all walkers located within the computational region and with
                valid z coordinates */
             if (outputs->outwalk != NULL &&
-                (i == setup->miter ||
-                 (setup->iterout > 0 && i % setup->iterout == 0))) {
+                (i == setup->miter || write_series)) {
                 sim->nstack = 0;
 
                 for (lw = 0; lw < sim->nwalk; lw++) {
@@ -352,15 +361,18 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                 } /* lw loop */
             }
 
-            if (settings->ts && setup->iterout > 0 && i % setup->iterout == 0) {
+            if (write_series) {
+                G_debug(2, "iblock=%d i=%d miter=%d nwalk=%d nwalka=%d", iblock,
+                        i, setup->miter, sim->nwalk, sim->nwalka);
                 /* call output for iteration output */
                 if (outputs->erdep != NULL)
                     erod(grids->gama, setup, geometry,
                          grids); /* divergence of gama field */
 
                 double itime = simulated_seconds(setup, i);
-                int ii = output_data(itime, conn, setup, geometry, settings,
-                                     sim, inputs, outputs, grids, summary);
+                int ii =
+                    output_data(itime, series_time, conn, setup, geometry,
+                                settings, sim, inputs, outputs, grids, summary);
                 if (ii != 1)
                     G_fatal_error(_("Unable to write raster maps"));
             }
@@ -453,13 +465,16 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     }
 
     /* Write final maps here because we know the last time stamp here */
-    if (!settings->ts) {
+    // A time series always ends with a step named by the duration, also when
+    // the duration is not a multiple of output_step or the run stopped early.
+    if (!settings->ts || series_time < settings->timesec) {
         // All blocks have completed; gama is the eventual cumulative total,
         // so no extrapolation is needed.
         conn = 1.0;
         double itime = simulated_seconds(setup, summary->iterations_completed);
-        int ii = output_data(itime, conn, setup, geometry, settings, sim,
-                             inputs, outputs, grids, summary);
+        double name_time = settings->ts ? settings->timesec : itime;
+        int ii = output_data(itime, name_time, conn, setup, geometry, settings,
+                             sim, inputs, outputs, grids, summary);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }
