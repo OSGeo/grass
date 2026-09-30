@@ -95,7 +95,7 @@ static void set_data_source(struct History *hist, int field,
 
 /* Record the run summary in the history of a written map, using the same
  * keys as the -p output, and set the map timestamp. */
-static void write_history(const char *name, int tt, const Setup *setup,
+static void write_history(const char *name, double tt, const Setup *setup,
                           const Settings *settings, const Simulation *sim,
                           const Inputs *inputs, struct TimeStamp *timestamp)
 {
@@ -107,7 +107,7 @@ static void write_history(const char *name, int tt, const Setup *setup,
         &hist,
         "walkers_generated=%d, walkers_requested=%d, walkers_remaining=%d",
         sim->nwalk, sim->maxwa, sim->nwalka);
-    Rast_append_format_history(&hist, "duration=%d, simulated_time=%d",
+    Rast_append_format_history(&hist, "duration=%d, simulated_time=%f",
                                settings->timesec, tt);
     Rast_append_format_history(&hist, "time_step=%f, mean_velocity=%f",
                                time_step_seconds(setup), setup->vmean);
@@ -148,7 +148,7 @@ static void write_history(const char *name, int tt, const Setup *setup,
  * for snapshots taken before all blocks have run. With nblock = 1 (or after
  * the final block) conn = 1.0 and the output formulas are unchanged. err is
  * written from gammas, which already has conn baked into its accumulator. */
-int output_data(int tt, double conn, const Setup *setup,
+int output_data(double tt, double conn, const Setup *setup,
                 const Geometry *geometry, const Settings *settings,
                 const Simulation *sim, const Inputs *inputs,
                 const Outputs *outputs, const Grids *grids, Summary *summary)

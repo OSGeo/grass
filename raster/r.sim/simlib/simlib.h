@@ -128,7 +128,7 @@ typedef struct {
 // Maps written by one call of output_data and the state of the simulation at
 // that moment. Names are copies owned by the record; NULL when not written.
 typedef struct {
-    int simulated_time;    // Simulated time when the maps were written [s]
+    double simulated_time; // Simulated time when the maps were written [s]
     int walkers_remaining; // Walkers still in the domain at that time
     char *timestamp;       // Timestamp written to the maps, e.g. "10 minutes"
     char *depth;           // Water depth raster name (water flow only)
@@ -177,16 +177,16 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                const Settings *settings, Simulation *sim,
                ObservationPoints *points, const Inputs *inputs,
                const Outputs *outputs, Grids *grids, Summary *summary);
-int output_data(int, double conn, const Setup *setup, const Geometry *geometry,
-                const Settings *settings, const Simulation *sim,
-                const Inputs *inputs, const Outputs *outputs,
-                const Grids *grids, Summary *summary);
+int output_data(double tt, double conn, const Setup *setup,
+                const Geometry *geometry, const Settings *settings,
+                const Simulation *sim, const Inputs *inputs,
+                const Outputs *outputs, const Grids *grids, Summary *summary);
 int output_et(const Geometry *geometry, const Outputs *outputs,
               const Grids *grids);
 void free_walkers(Simulation *sim, const char *outwalk);
 void add_output_step(Summary *summary, const OutputStep *step);
 double time_step_seconds(const Setup *setup);
-int simulated_seconds(const Setup *setup, int iterations);
+double simulated_seconds(const Setup *setup, int iterations);
 void print_summary(SummaryFormat format, const Setup *setup,
                    const Settings *settings, const Simulation *sim,
                    const Inputs *inputs, const Outputs *outputs,

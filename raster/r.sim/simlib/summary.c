@@ -34,9 +34,9 @@ double time_step_seconds(const Setup *setup)
     return setup->deltap * setup->timec;
 }
 
-int simulated_seconds(const Setup *setup, int iterations)
+double simulated_seconds(const Setup *setup, int iterations)
 {
-    return (int)(iterations * time_step_seconds(setup));
+    return iterations * time_step_seconds(setup);
 }
 
 static void set_string_or_null(G_JSON_Object *object, const char *key,
@@ -165,8 +165,8 @@ static void print_plain(const Setup *setup, const Settings *settings,
     printf("walkers_generated: %d\n", sim->nwalk);
     printf("walkers_remaining: %d\n", sim->nwalka);
     printf("duration: %d\n", settings->timesec);
-    printf("simulated_time: %d\n",
-           simulated_seconds(setup, summary->iterations_completed));
+    print_number("simulated_time",
+                 simulated_seconds(setup, summary->iterations_completed));
     print_number("time_step", time_step_seconds(setup));
     if (sediment)
         print_number("time_step_sediment", setup->deltaw);
@@ -195,7 +195,7 @@ static void print_plain(const Setup *setup, const Settings *settings,
         const OutputStep *step = &summary->steps[i];
 
         printf("output:\n");
-        printf("  simulated_time: %d\n", step->simulated_time);
+        printf("  simulated_time: %g\n", step->simulated_time);
         printf("  timestamp: %s\n", step->timestamp);
         printf("  walkers_remaining: %d\n", step->walkers_remaining);
         if (sediment) {

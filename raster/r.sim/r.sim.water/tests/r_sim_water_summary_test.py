@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 """Tests of the r.sim.water run summary (-p flag, format option)"""
 
 import re
@@ -78,7 +80,7 @@ def test_json_summary(session_tools):
     )
     assert summary["iterations_planned"] > 1
     assert summary["iterations_completed"] == summary["iterations_planned"]
-    assert summary["simulated_time"] == int(
+    assert summary["simulated_time"] == pytest.approx(
         summary["iterations_completed"] * summary["time_step"]
     )
     assert summary["stopped_early"] is False
@@ -194,9 +196,8 @@ def test_history(session_tools):
             "walkers_generated",
             "walkers_remaining",
             "duration",
-            "simulated_time",
         ):
             assert history_value(history, key) == summary[key]
-        for key in ("time_step", "mean_velocity", "mean_mannings_n"):
+        for key in ("simulated_time", "time_step", "mean_velocity", "mean_mannings_n"):
             assert history_value(history, key) == pytest.approx(summary[key], abs=1e-6)
         assert history_value(history, "mean_infiltration") == 0

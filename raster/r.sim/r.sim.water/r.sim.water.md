@@ -199,8 +199,7 @@ stored in the history of the output raster maps under the same keys (see
 Each entry of `outputs` contains the `simulated_time` (s) and `timestamp`
 of the written maps, the number of `walkers_remaining` at that time, and
 the names of the `depth`, `discharge`, `error` and `walkers` maps, or
-`null` for maps which were not requested. Simulated times are truncated
-to whole seconds.
+`null` for maps which were not requested.
 
 Summary of a time series run with two output steps in JSON:
 
@@ -216,7 +215,7 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
     "walkers_generated": 120000,
     "walkers_remaining": 112724,
     "duration": 1200,
-    "simulated_time": 1199,
+    "simulated_time": 1199.2085202681737,
     "time_step": 1.0631281208051186,
     "iterations_planned": 1128,
     "iterations_completed": 1128,
@@ -228,7 +227,7 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
     "threads": 1,
     "outputs": [
         {
-            "simulated_time": 599,
+            "simulated_time": 599.60426013408687,
             "timestamp": "10 minutes",
             "walkers_remaining": 113464,
             "depth": "depth.10",
@@ -237,7 +236,7 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
             "walkers": null
         },
         {
-            "simulated_time": 1199,
+            "simulated_time": 1199.2085202681737,
             "timestamp": "20 minutes",
             "walkers_remaining": 112724,
             "depth": "depth.20",

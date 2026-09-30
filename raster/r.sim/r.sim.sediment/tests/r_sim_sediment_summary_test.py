@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 """Tests of the r.sim.sediment run summary (-p flag, format option)"""
 
 import re
@@ -162,8 +164,8 @@ def test_history(session_tools, sediment_inputs):
         format="json",
     ).json
     history = session_tools.r_info(map="flux", flags="h").text
-    for key in ("walkers_requested", "walkers_generated", "simulated_time"):
+    for key in ("walkers_requested", "walkers_generated"):
         assert history_value(history, key) == summary[key]
-    for key in ("time_step", "mean_velocity", "mean_mannings_n"):
+    for key in ("simulated_time", "time_step", "mean_velocity", "mean_mannings_n"):
         assert history_value(history, key) == pytest.approx(summary[key], abs=1e-6)
     assert "mean_infiltration=" not in history

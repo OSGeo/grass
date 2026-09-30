@@ -352,7 +352,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                     erod(grids->gama, setup, geometry,
                          grids); /* divergence of gama field */
 
-                int itime = (int)(i * setup->deltap * setup->timec);
+                double itime = simulated_seconds(setup, i);
                 int ii = output_data(itime, conn, setup, geometry, settings,
                                      sim, inputs, outputs, grids, summary);
                 if (ii != 1)
@@ -451,7 +451,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
         // All blocks have completed; gama is the eventual cumulative total,
         // so no extrapolation is needed.
         conn = 1.0;
-        int itime = simulated_seconds(setup, summary->iterations_completed);
+        double itime = simulated_seconds(setup, summary->iterations_completed);
         int ii = output_data(itime, conn, setup, geometry, settings, sim,
                              inputs, outputs, grids, summary);
         if (ii != 1)
