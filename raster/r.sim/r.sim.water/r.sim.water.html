@@ -176,6 +176,11 @@ For the shallow overland flow simulated here, Manning's n is generally
 higher than for deeper channel or floodplain flow, especially over
 vegetated surfaces, see the <em>r.manning</em> documentation.
 
+<p>
+Cells with null values in the <b>man</b> raster map are excluded from the
+simulation. The outputs are null there and walkers which reach them
+leave the simulated area.
+
 <h3>Run summary</h3>
 
 With the <b>-p</b> flag, a summary of the run is printed to standard output

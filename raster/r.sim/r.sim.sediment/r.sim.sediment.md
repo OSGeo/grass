@@ -16,6 +16,9 @@ elevation field (*dx* and *dy* raster maps are optional), overland flow water de
 (*detachment_coeff* \[s/m\]), transport capacity coefficient
 (*transport_coeff* \[s\]), critical shear stress (*shear_stress* \[Pa\])
 and surface roughness coefficient called Manning's n (*man* raster map).
+Cells with null values in the *man* raster map are excluded from the
+simulation. The outputs are null there and walkers which reach them
+leave the simulated area.
 Partial derivatives can be computed by [v.surf.rst](v.surf.rst.md) or
 [r.slope.aspect](r.slope.aspect.md) module. The data are automatically
 converted from feet to metric system using database/projection

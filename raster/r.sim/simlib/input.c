@@ -112,6 +112,7 @@ int input_data(const Geometry *geometry, Simulation *sim, const Inputs *inputs,
     /* Manning surface roughnes: read map or use a single value */
     if (inputs->manin != NULL) {
         grids->cchez = read_float_raster_map(rows, cols, inputs->manin, 1.0);
+        copy_matrix_undef_float_values(rows, cols, grids->cchez, grids->zz);
     }
     else if (inputs->manin_val >=
              0.0) { /* If no value set its set to -999.99 */
