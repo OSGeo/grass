@@ -27,7 +27,6 @@ from grass.lib.gis import (
     G_mrand48,
     G_random_advance,
     G_random_double,
-    G_random_generate_seed,
     G_random_init_layout_bounded,
     G_random_init_layout_exact,
     G_random_init_layout_spread,
@@ -37,7 +36,6 @@ from grass.lib.gis import (
     G_random_state_for_run,
     G_random_state_for_unit,
     G_srand48,
-    G_srand48_auto,
     struct_G_random_layout,
     struct_G_random_state,
 )
@@ -951,41 +949,12 @@ def test_random_state_for_unit_is_run_zero():
     assert draw_states(state, 10) == unit_states(layout, 7, 10)
 
 
-def test_random_generate_seed_is_in_range_without_environment(monkeypatch):
-    """A seed from the time and process ID is one the generators accept."""
-    monkeypatch.delenv("GRASS_RANDOM_SEED", raising=False)
-    monkeypatch.delenv("SOURCE_DATE_EPOCH", raising=False)
-    seed = G_random_generate_seed()
-    assert 0 <= seed < 2**32
-
-
-def test_random_generate_seed_reads_environment(monkeypatch):
-    """GRASS_RANDOM_SEED takes precedence over SOURCE_DATE_EPOCH."""
-    monkeypatch.setenv("GRASS_RANDOM_SEED", "1337")
-    monkeypatch.setenv("SOURCE_DATE_EPOCH", "42")
-    assert G_random_generate_seed() == 1337
-    monkeypatch.delenv("GRASS_RANDOM_SEED")
-    assert G_random_generate_seed() == 42
-
-
-def test_srand48_auto_uses_the_generated_seed(monkeypatch):
-    """The shared generator's automatic seed is the generated seed.
-
-    The returned value seeds a generator of the program's own to the
-    sequence the shared generator then produces.
-    """
-    monkeypatch.setenv("GRASS_RANDOM_SEED", "1337")
-    seed = G_srand48_auto()
-    assert seed == 1337
-    shared = [int(G_drand48() * LCG_MODULUS) for _ in range(10)]
-    assert shared == seeded_states(seed, 10)
-
-
 GENERATE_SEED_SCRIPT = """
-from grass.lib.gis import G_random_generate_seed, G_srand48_auto
+from grass.lib.gis import G_drand48, G_random_generate_seed, G_srand48_auto
 
 print(G_random_generate_seed())
 print(G_srand48_auto())
+print(" ".join(str(int(G_drand48() * 2**48)) for _ in range(10)))
 """
 
 
@@ -1013,6 +982,45 @@ def generate_seed(session, tmp_path, **variables):
     )
 
 
+def test_random_generate_seed_is_in_range_without_environment(
+    xy_session_for_module, tmp_path
+):
+    """A seed from the time and process ID is one the generators accept."""
+    result = generate_seed(xy_session_for_module, tmp_path)
+    assert result.returncode == 0, result.stderr
+    generated, automatic = (int(value) for value in result.stdout.split()[:2])
+    assert 0 <= generated < 2**32
+    assert 0 <= automatic < 2**32
+
+
+def test_random_generate_seed_reads_environment(xy_session_for_module, tmp_path):
+    """GRASS_RANDOM_SEED takes precedence over SOURCE_DATE_EPOCH."""
+    result = generate_seed(
+        xy_session_for_module,
+        tmp_path,
+        GRASS_RANDOM_SEED="1337",
+        SOURCE_DATE_EPOCH="42",
+    )
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.split()[0] == "1337"
+    result = generate_seed(xy_session_for_module, tmp_path, SOURCE_DATE_EPOCH="42")
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.split()[0] == "42"
+
+
+def test_srand48_auto_uses_the_generated_seed(xy_session_for_module, tmp_path):
+    """The shared generator's automatic seed is the generated seed.
+
+    The returned value seeds a generator of the program's own to the
+    sequence the shared generator then produces.
+    """
+    result = generate_seed(xy_session_for_module, tmp_path, GRASS_RANDOM_SEED="1337")
+    assert result.returncode == 0, result.stderr
+    lines = result.stdout.splitlines()
+    assert lines[:2] == ["1337", "1337"]
+    assert [int(state) for state in lines[2].split()] == seeded_states(1337, 10)
+
+
 @pytest.mark.parametrize("name", ["GRASS_RANDOM_SEED", "SOURCE_DATE_EPOCH"])
 def test_random_generate_seed_reduces_large_environment_value_with_a_warning(
     xy_session_for_module, tmp_path, name
@@ -1025,7 +1033,7 @@ def test_random_generate_seed_reduces_large_environment_value_with_a_warning(
     result = generate_seed(xy_session_for_module, tmp_path, **{name: "5000000000"})
     assert result.returncode == 0, result.stderr
     reduced = str(5000000000 % 2**32)
-    assert result.stdout.split() == [reduced, reduced]
+    assert result.stdout.split()[:2] == [reduced, reduced]
     message = " ".join(result.stderr.split())
     assert f"5000000000 from {name}" in message
     assert "low 32 bits" in message
@@ -1048,7 +1056,7 @@ def test_random_generate_seed_skips_empty_variable(xy_session_for_module, tmp_pa
         xy_session_for_module, tmp_path, GRASS_RANDOM_SEED="", SOURCE_DATE_EPOCH="42"
     )
     assert result.returncode == 0, result.stderr
-    assert result.stdout.split() == ["42", "42"]
+    assert result.stdout.split()[:2] == ["42", "42"]
 
 
 @pytest.mark.parametrize(
