@@ -6,11 +6,41 @@ the produced numbers (e.g. a future reimplementation of the internal state)
 is caught here, which makes this a guard for output compatibility.
 
 The reference values below were captured from the current implementation.
+
+The tests after those cover the generators a program owns, the
+G_random_*() functions and their layouts. Their expectations are computed
+with a closed-form jump written here, independent of the library's jump,
+and the single sequence is cross-checked against the shared generator and
+the reference values.
 """
+
+import subprocess
+import sys
+import threading
+from ctypes import byref
 
 import pytest
 
-from grass.lib.gis import G_drand48, G_lrand48, G_mrand48, G_srand48
+from grass.lib.gis import (
+    G_drand48,
+    G_lrand48,
+    G_mrand48,
+    G_random_advance,
+    G_random_double,
+    G_random_generate_seed,
+    G_random_init_layout_bounded,
+    G_random_init_layout_exact,
+    G_random_init_layout_spread,
+    G_random_layout_length,
+    G_random_layout_runs,
+    G_random_seed,
+    G_random_state_for_run,
+    G_random_state_for_unit,
+    G_srand48,
+    G_srand48_auto,
+    struct_G_random_layout,
+    struct_G_random_state,
+)
 
 # First ten outputs of each generator after G_srand48(seed). The seeds cover
 # 0, 1, two ordinary values, and the largest 32-bit seed value. Matching the
@@ -247,3 +277,884 @@ def test_srand48_is_reproducible():
     G_srand48(1337)
     second = [G_lrand48() for _ in range(20)]
     assert first == second
+
+
+# The generator constants, as in lrand48.c. Changing the generator changes
+# every expectation below, so these tests are meant to fail when that
+# happens.
+LCG_A = 0x5DEECE66D
+LCG_B = 0xB
+LCG_MODULUS = 2**48
+
+# The part of the cycle the layouts place their streams in: the multiplier
+# has order 2^46, so states 2^46 apart give values differing by a constant.
+SPAN = 2**46
+
+# The most units a spread layout takes.
+SPREAD_MAX_UNITS = 2**20
+
+# Unit counts for the spread layout: small counts, powers of two, which
+# give an even stride before rounding, a hundred thousand, and the two
+# largest counts allowed.
+SPREAD_UNITS = [2, 3, 4, 6, 64, 4096, 100000, SPREAD_MAX_UNITS - 1, SPREAD_MAX_UNITS]
+
+
+def lcg_jump_reference(state, steps):
+    """Generator state after the given number of steps, in closed form
+
+    Steps compose to a^n * x + b * (a^n - 1) / (a - 1) modulo 2^48. The
+    division is exact over the integers but a - 1 has no inverse modulo
+    2^48, so a^n is computed modulo 2^48 * (a - 1), which keeps the
+    quotient correct modulo 2^48. Unlike the library, which composes the
+    affine map by repeated squaring, this takes the additive term in
+    closed form and reuses none of the library's code.
+    """
+    power = pow(LCG_A, steps, LCG_MODULUS * (LCG_A - 1))
+    return (power * state + LCG_B * ((power - 1) // (LCG_A - 1))) % LCG_MODULUS
+
+
+def seed_state(seed):
+    """Generator state which seeding with the given value produces"""
+    return ((seed & 0xFFFFFFFF) << 16) | 0x330E
+
+
+def reference_states(seed, offset, n):
+    """States of draws offset + 1 to offset + n after the seed, in closed form"""
+    start = lcg_jump_reference(seed_state(seed), offset)
+    return [lcg_jump_reference(start, i) for i in range(1, n + 1)]
+
+
+def draw_states(state, n):
+    """Draw n values from a state and return the generator states behind them
+
+    A value is its state divided by 2^48, which a double holds exactly, so
+    the multiplication recovers the state without rounding.
+    """
+    return [int(G_random_double(byref(state)) * LCG_MODULUS) for _ in range(n)]
+
+
+def seeded_states(seed, n):
+    """States of the first n draws of the single sequence of a seed"""
+    state = struct_G_random_state()
+    G_random_seed(byref(state), seed)
+    return draw_states(state, n)
+
+
+def exact_layout(seed, units, draws):
+    layout = struct_G_random_layout()
+    G_random_init_layout_exact(byref(layout), seed, units, draws)
+    return layout
+
+
+def bounded_layout(seed, units, max_draws):
+    layout = struct_G_random_layout()
+    G_random_init_layout_bounded(byref(layout), seed, units, max_draws)
+    return layout
+
+
+def spread_layout(seed, units):
+    layout = struct_G_random_layout()
+    G_random_init_layout_spread(byref(layout), seed, units)
+    return layout
+
+
+def unit_states(layout, unit, n, run=0):
+    """States of the first n draws of a unit in a run of a layout"""
+    state = struct_G_random_state()
+    G_random_state_for_run(byref(state), byref(layout), run, unit)
+    return draw_states(state, n)
+
+
+def spread_stride(units):
+    """The spread stride: the span divided by the parts, rounded down to odd.
+
+    The parts are the units, or one more when the units are even, so that
+    the unit halfway along does not start 2^45 draws after unit 0.
+    """
+    parts = units | 1
+    stride = SPAN // parts
+    return stride - 1 if parts > 1 and stride % 2 == 0 else stride
+
+
+def constant_shift(first, second, max_lag=4):
+    """Lag at which second is first plus a constant, or None if there is none.
+
+    A constant difference at some lag means the two sequences of states are
+    one sequence shifted in time and in value, which is what states a
+    multiple of 2^46 apart produce on this generator.
+    """
+    n = len(first)
+    for lag in range(-max_lag, max_lag + 1):
+        pairs = [(first[i], second[i + lag]) for i in range(n) if 0 <= i + lag < n]
+        if len({(b - a) % LCG_MODULUS for a, b in pairs}) == 1:
+            return lag
+    return None
+
+
+# Runs calls given as "function number..." in order, on one state and one
+# layout, so that a test can check which call ends in a fatal error.
+CALLS_SCRIPT = """
+import sys
+from ctypes import byref
+
+from grass.lib import gis
+
+state = gis.struct_G_random_state()
+layout = gis.struct_G_random_layout()
+gis.G_random_seed(byref(state), 1337)
+for call in sys.argv[1:]:
+    name, *numbers = call.split()
+    function = getattr(gis, name)
+    numbers = [int(number) for number in numbers]
+    if name.startswith("G_random_init_layout"):
+        function(byref(layout), *numbers)
+    elif name.startswith("G_random_state_for"):
+        function(byref(state), byref(layout), *numbers)
+    else:
+        function(byref(state), *numbers)
+print("all calls returned")
+"""
+
+
+def run_calls(session, tmp_path, *calls):
+    """Run the calls in a subprocess and return the completed process.
+
+    A fatal error exits the calling process, so the calls run in a
+    subprocess, and with a session environment because without GISBASE the
+    error message is not printed.
+    """
+    script = tmp_path / "calls.py"
+    script.write_text(CALLS_SCRIPT, encoding="utf-8")
+    return subprocess.run(
+        [sys.executable, str(script), *calls],
+        env=session.env,
+        capture_output=True,
+        text=True,
+        timeout=60,
+        check=False,
+    )
+
+
+def assert_fatal(result, message):
+    """Check that the calls ended in a fatal error containing the message.
+
+    The library wraps long messages across lines, so whitespace is
+    normalized before the comparison.
+    """
+    assert result.returncode != 0, result.stdout
+    assert "all calls returned" not in result.stdout
+    assert message in " ".join(result.stderr.split()), result.stderr
+
+
+def test_lcg_jump_reference_matches_stepping():
+    """The closed form agrees with the generator drawn step by step.
+
+    This ties the reference used below to the shared generator, whose
+    sequences are pinned in REFERENCE.
+    """
+    G_srand48(1337)
+    stepped = [int(G_drand48() * LCG_MODULUS) for _ in range(1000)]
+    assert reference_states(1337, 0, 1000) == stepped
+    assert [
+        state / LCG_MODULUS for state in reference_states(1337, 0, 10)
+    ] == REFERENCE[1337]["drand48"]
+
+
+@pytest.mark.parametrize("seed", [0, 1, 42, 1337, 2147483647, -1, 4294967295])
+def test_random_seed_matches_shared_generator(seed):
+    """G_random_seed() gives the sequence G_srand48() and G_drand48() give.
+
+    This is what lets code switch from the shared generator to one of its
+    own without changing its single-threaded results.
+    """
+    G_srand48(seed)
+    shared = [G_drand48() for _ in range(100)]
+    state = struct_G_random_state()
+    G_random_seed(byref(state), seed)
+    assert [G_random_double(byref(state)) for _ in range(100)] == shared
+    if seed in REFERENCE:
+        assert shared[:10] == REFERENCE[seed]["drand48"]
+
+
+@pytest.mark.parametrize(
+    ("negative", "equivalent"), [(-1, 4294967295), (-2147483648, 2147483648)]
+)
+def test_random_negative_seed_is_its_32_bit_value(negative, equivalent):
+    """A negative seed gives the sequence of its two's complement 32-bit value."""
+    assert seeded_states(negative, 20) == seeded_states(equivalent, 20)
+
+
+@pytest.mark.parametrize("seed", [-(2**31), 2**32 - 1])
+def test_random_seed_accepts_the_range_boundaries(seed):
+    """The seed range is inclusive at both ends."""
+    assert seeded_states(seed, 5) == reference_states(seed, 0, 5)
+
+
+@pytest.mark.parametrize("seed", [2**32, -(2**31) - 1])
+@pytest.mark.parametrize(
+    "call",
+    [
+        "G_random_seed {}",
+        "G_random_init_layout_exact {} 5 7",
+        "G_random_init_layout_bounded {} 5 7",
+        "G_random_init_layout_spread {} 5",
+    ],
+    ids=["seed", "exact", "bounded", "spread"],
+)
+def test_random_seed_outside_range_is_fatal(
+    xy_session_for_module, tmp_path, seed, call
+):
+    """A seed outside -2^31 to 2^32 - 1 is a fatal error, not used modulo 2^32."""
+    result = run_calls(xy_session_for_module, tmp_path, call.format(seed))
+    assert_fatal(result, f"seed {seed} is outside the range")
+
+
+@pytest.mark.parametrize("seed", [0, 1337, -1])
+def test_exact_layout_units_follow_the_single_sequence(seed):
+    """Units of an exact layout draw one sequence in consecutive streams.
+
+    Unit u's first value is draw u * 7 + 1 of the single sequence, and the
+    last draw of unit u is followed by the first draw of unit u + 1, so
+    the units together reproduce a serial run.
+    """
+    units, draws = 5, 7
+    layout = exact_layout(seed, units, draws)
+    single = seeded_states(seed, units * draws + 1)
+    for unit in range(units):
+        states = unit_states(layout, unit, draws + 1)
+        assert states == single[unit * draws : (unit + 1) * draws + 1], unit
+
+
+@pytest.mark.parametrize(
+    ("units", "draws"),
+    [(5, 7), (1, 1), (1000, 100), (4096, 2**34), (2**23, 2**23), (2**23, 2**23 + 1)],
+)
+def test_exact_layout_runs_and_length(units, draws):
+    """The runs that fit are the span divided by units times draws.
+
+    The last pair's product exceeds 2^46, so no run fits and runs() is 0.
+    The length is the number of draws exactly.
+    """
+    layout = exact_layout(1337, units, draws)
+    assert G_random_layout_runs(byref(layout)) == SPAN // (units * draws)
+    assert G_random_layout_length(byref(layout)) == draws
+
+
+def test_exact_layout_runs_follow_each_other():
+    """Run r's unit u starts where the single sequence has drawn (r * units + u) * draws."""
+    layout = exact_layout(1337, 5, 7)
+    assert unit_states(layout, 2, 3, run=4) == reference_states(
+        1337, (4 * 5 + 2) * 7, 3
+    )
+
+
+def test_exact_layout_which_does_not_fit_allows_run_zero(
+    xy_session_for_module, tmp_path
+):
+    """With no run fitting, run 0 is still allowed but run 1 is fatal.
+
+    A tool which warned that its layout does not fit into the span may
+    still use it, as earlier versions did.
+    """
+    units, draws = 2**23, 2**23 + 1
+    layout = exact_layout(1337, units, draws)
+    assert G_random_layout_runs(byref(layout)) == 0
+    unit = units - 1
+    assert unit_states(layout, unit, 3) == reference_states(1337, unit * draws, 3)
+    result = run_calls(
+        xy_session_for_module,
+        tmp_path,
+        f"G_random_init_layout_exact 1337 {units} {draws}",
+        "G_random_state_for_run 1 0",
+    )
+    assert_fatal(result, "run 1 is out of range")
+
+
+def test_exact_layout_run_past_the_runs_that_fit_is_fatal(
+    xy_session_for_module, tmp_path
+):
+    """A run beyond those that fit is a fatal error naming both numbers."""
+    units, draws = 4096, 2**34
+    runs = SPAN // (units * draws)
+    assert runs == 1
+    ok = run_calls(
+        xy_session_for_module,
+        tmp_path,
+        f"G_random_init_layout_exact 1337 {units} {draws}",
+        f"G_random_state_for_run {runs - 1} {units - 1}",
+    )
+    assert ok.returncode == 0, ok.stderr
+    result = run_calls(
+        xy_session_for_module,
+        tmp_path,
+        f"G_random_init_layout_exact 1337 {units} {draws}",
+        f"G_random_state_for_run {runs} 0",
+    )
+    assert_fatal(result, f"run {runs} is out of range ({runs} run fits")
+
+
+@pytest.mark.parametrize(
+    ("call", "message"),
+    [
+        ("G_random_init_layout_exact 1337 0 7", "must be positive, not 0"),
+        ("G_random_init_layout_exact 1337 -5 7", "must be positive, not -5"),
+        ("G_random_init_layout_exact 1337 5 0", "must be positive, not 0"),
+        ("G_random_init_layout_exact 1337 5 -7", "must be positive, not -7"),
+        ("G_random_init_layout_exact 1337 4294967296 4294967296", "too large"),
+        ("G_random_init_layout_bounded 1337 5 0", "must be positive, not 0"),
+        ("G_random_init_layout_bounded 1337 0 7", "must be positive, not 0"),
+        ("G_random_init_layout_bounded 1337 4294967296 4294967296", "too large"),
+        ("G_random_init_layout_spread 1337 0", "must be positive, not 0"),
+    ],
+)
+def test_layout_with_impossible_counts_is_fatal(
+    xy_session_for_module, tmp_path, call, message
+):
+    """Counts which are not positive or whose product overflows are fatal."""
+    assert_fatal(run_calls(xy_session_for_module, tmp_path, call), message)
+
+
+@pytest.mark.parametrize(("bound", "stride"), [(100, 101), (101, 101), (1, 1), (2, 3)])
+def test_bounded_layout_rounds_an_even_bound_up_to_odd(bound, stride):
+    """An even bound becomes the next odd number, an odd bound stays."""
+    layout = bounded_layout(1337, 1000, bound)
+    assert G_random_layout_length(byref(layout)) == stride
+    assert G_random_layout_runs(byref(layout)) == SPAN // (1000 * stride)
+
+
+@pytest.mark.parametrize("seed", [0, 1337, -1])
+def test_bounded_layout_unit_starts(seed):
+    """Unit u starts u * stride draws after the seed, run 1's (units + u) * stride."""
+    units, stride = 1000, 101
+    layout = bounded_layout(seed, units, 100)
+    for unit in (0, 1, 2, 999):
+        assert unit_states(layout, unit, 3) == reference_states(
+            seed, unit * stride, 3
+        ), unit
+        assert unit_states(layout, unit, 3, run=1) == reference_states(
+            seed, (units + unit) * stride, 3
+        ), unit
+
+
+@pytest.mark.parametrize("units", SPREAD_UNITS)
+def test_spread_layout_stride(units):
+    """The stride is the span divided by the parts, rounded down to odd."""
+    layout = spread_layout(1337, units)
+    stride = G_random_layout_length(byref(layout))
+    assert stride == spread_stride(units)
+    assert stride % 2 == 1
+    assert G_random_layout_runs(byref(layout)) == 1
+
+
+def test_spread_layout_of_one_unit_keeps_the_span():
+    """A single unit keeps the whole span of 2^46 draws.
+
+    Its stream is the single sequence of the seed.
+    """
+    layout = spread_layout(1337, 1)
+    assert G_random_layout_length(byref(layout)) == SPAN
+    assert G_random_layout_runs(byref(layout)) == 1
+    assert unit_states(layout, 0, 20) == seeded_states(1337, 20)
+
+
+@pytest.mark.parametrize("seed", [0, 1337, -1])
+@pytest.mark.parametrize("units", [4, 4096, 100000, SPREAD_MAX_UNITS])
+def test_spread_layout_unit_starts(seed, units):
+    """Unit u starts u * stride draws after the seed.
+
+    The first, a middle and the last unit are checked; the last one also
+    shows that the highest unit is accepted.
+    """
+    layout = spread_layout(seed, units)
+    stride = spread_stride(units)
+    for unit in sorted({0, 1, units // 2, units - 1}):
+        assert unit_states(layout, unit, 2) == reference_states(
+            seed, unit * stride, 2
+        ), unit
+
+
+def test_spread_layout_run_one_is_fatal(xy_session_for_module, tmp_path):
+    """A spread layout holds a single run."""
+    result = run_calls(
+        xy_session_for_module,
+        tmp_path,
+        "G_random_init_layout_spread 1337 4",
+        "G_random_state_for_run 1 0",
+    )
+    assert_fatal(result, "a spread layout holds a single run")
+
+
+@pytest.mark.parametrize("units", [SPREAD_MAX_UNITS + 1, 2**46 + 1, 2**62])
+def test_spread_layout_with_too_many_units_is_fatal(
+    xy_session_for_module, tmp_path, units
+):
+    """A spread layout takes at most 2^20 units."""
+    result = run_calls(
+        xy_session_for_module, tmp_path, f"G_random_init_layout_spread 1337 {units}"
+    )
+    assert_fatal(result, f"at most {SPREAD_MAX_UNITS} units, not {units}")
+
+
+def test_spread_layout_of_the_most_units():
+    """2^20 units, the most allowed, get a stride of 67,108,799 draws.
+
+    The span divided by 2^20 + 1 parts is just over 67,108,800, which is
+    even, so the stride is rounded down to the odd 67,108,799. The last
+    unit starts where the formula says.
+    """
+    layout = spread_layout(1337, SPREAD_MAX_UNITS)
+    assert G_random_layout_length(byref(layout)) == 67108799
+    assert spread_stride(SPREAD_MAX_UNITS) == 67108799
+    last = SPREAD_MAX_UNITS - 1
+    assert unit_states(layout, last, 3) == reference_states(1337, last * 67108799, 3)
+
+
+def nearest_unit_distance(units, distance):
+    """Distance of the unit start nearest to a distance, in strides.
+
+    Units start a multiple of the stride apart, so this is also the
+    nearest any two units come to being that distance apart.
+    """
+    stride = spread_stride(units)
+    nearest = distance // stride
+    return min(
+        abs(k * stride - distance) / stride
+        for k in (nearest, nearest + 1)
+        if 1 <= k < units
+    )
+
+
+def test_spread_layout_keeps_units_off_the_shifted_distances():
+    """No unit starts near 2^45 or 2^44 draws after another unit.
+
+    At those distances the values of two positions differ by two or four
+    constants in turn. Dividing the span by an even number of parts would
+    put the unit halfway along 2^45 draws after unit 0 and the unit a
+    quarter of the way along 2^44 draws after it. With an odd number of
+    parts, the nearest units are half and a quarter of a stride away from
+    those distances, less the draws lost by rounding the stride down,
+    which accumulate along the span. For every allowed number of units,
+    the nearest unit is at least 0.48 of a stride from 2^45 and 0.24 of a
+    stride from 2^44. This checks the rule; test_spread_layout_stride ties
+    the rule to the library.
+    """
+    closest_to_half = min(
+        nearest_unit_distance(units, 2**45) for units in range(2, SPREAD_MAX_UNITS + 1)
+    )
+    closest_to_quarter = min(
+        nearest_unit_distance(units, 2**44) for units in range(4, SPREAD_MAX_UNITS + 1)
+    )
+    assert closest_to_half >= 0.48
+    assert closest_to_quarter >= 0.24
+
+
+def layouts_for_span_check():
+    """Layouts with at least one run fitting, as (layout, units, stride)
+
+    The stride is computed here from the documented rules, not read from the
+    layout.
+    """
+    cases = [
+        (spread_layout(1337, units), units, spread_stride(units))
+        for units in [1, *SPREAD_UNITS]
+    ]
+    cases += [
+        (exact_layout(1337, units, draws), units, draws)
+        for units, draws in [(5, 7), (4096, 2**34), (2**23, 2**23)]
+    ]
+    cases += [
+        (bounded_layout(1337, units, bound), units, bound | 1)
+        for units, bound in [(1000, 100), (4096, 2**34 - 2), (2**23, 2**23 - 2)]
+    ]
+    return cases
+
+
+@pytest.mark.parametrize(("layout", "units", "stride"), layouts_for_span_check())
+def test_layout_lies_within_the_span(layout, units, stride):
+    """The last stream of the last run that fits ends within the span.
+
+    Every position in a stream is then less than 2^46 draws from every
+    other, so no two streams can be 2^46, 2^47 or 3 * 2^46 draws apart,
+    the distances at which this generator repeats its values plus a
+    constant.
+    """
+    runs = G_random_layout_runs(byref(layout))
+    length = G_random_layout_length(byref(layout))
+    assert length == stride
+    assert runs >= 1
+    last_start = (runs * units - 1) * stride
+    assert last_start + length <= SPAN
+
+
+def test_spread_layout_units_have_no_constant_shift():
+    """Two units of a spread layout are not one sequence shifted in value.
+
+    The first and the last unit of the largest spread layout start less
+    than 2^46 draws apart, so no lag relates their values by a constant.
+    """
+    layout = spread_layout(1337, SPREAD_MAX_UNITS)
+    first = unit_states(layout, 0, 100)
+    second = unit_states(layout, SPREAD_MAX_UNITS - 1, 100)
+    assert constant_shift(first, second) is None
+
+
+def test_states_half_a_span_apart_alternate_between_two_shifts():
+    """States 2^45 apart differ by one of two constants, alternately.
+
+    This level of relation lies within the span, and the library makes no
+    promise about it. At draw n, the difference of two states d draws
+    apart is the multiplier to the power n times the difference at the
+    start, which for d = 2^45 is 2^45 times an odd number. The multiplier
+    is 5 modulo 8, so its powers alternate between 1 and 5 modulo 8, and
+    the difference alternates between two values 2^47 apart. For seed 42
+    the values differ by 0.625 and 0.125 in turn. This is documented here,
+    not claimed away.
+    """
+    plain = reference_states(42, 0, 50)
+    advanced = reference_states(42, 2**45, 50)
+    shifts = [
+        ((a - p) % LCG_MODULUS) / LCG_MODULUS
+        for p, a in zip(plain, advanced, strict=True)
+    ]
+    assert set(shifts[0::2]) == {0.625}
+    assert set(shifts[1::2]) == {0.125}
+    state = struct_G_random_state()
+    G_random_seed(byref(state), 42)
+    G_random_advance(byref(state), 2**45)
+    assert draw_states(state, 50) == advanced
+
+
+def low_bits_relation(first, second):
+    """Low bits in which the differences of two sequences of states are constant"""
+    differences = [(b - a) % LCG_MODULUS for a, b in zip(first, second, strict=True)]
+    bits = 0
+    while bits < 48 and len({d % 2 ** (bits + 1) for d in differences}) == 1:
+        bits += 1
+    return bits
+
+
+def test_spread_layout_units_two_strides_apart_relate_three_low_bits():
+    """Units 2 * stride apart, stride odd, share only the low 3 bits of a shift.
+
+    A distance of 2^k times an odd number makes the differences of the
+    two units' states constant in their low k + 2 bits; above those bits
+    the difference varies from draw to draw.
+    """
+    layout = spread_layout(1337, 4)
+    assert spread_stride(4) % 2 == 1
+    first = unit_states(layout, 0, 200)
+    second = unit_states(layout, 2, 200)
+    assert low_bits_relation(first, second) == 3
+
+
+def test_bounded_layout_even_bound_relates_three_low_bits_too():
+    """The stride of an even bound is rounded to odd, so units two apart relate 3 bits.
+
+    Without the rounding, a stride of 100 = 4 * 25 would make units two
+    apart 8 * 25 draws apart and relate 5 low bits.
+    """
+    layout = bounded_layout(1337, 1000, 100)
+    first = unit_states(layout, 0, 200)
+    second = unit_states(layout, 2, 200)
+    assert low_bits_relation(first, second) == 3
+    unrounded = reference_states(1337, 200, 200)
+    assert low_bits_relation(first, unrounded) == 5
+
+
+def advanced_states(seed, draws, n):
+    state = struct_G_random_state()
+    G_random_seed(byref(state), seed)
+    G_random_advance(byref(state), draws)
+    return draw_states(state, n)
+
+
+def test_random_advance_equals_drawing():
+    """Advancing gives what drawing and discarding gives; 0 is a no-op."""
+    assert advanced_states(1337, 60, 40) == seeded_states(1337, 100)[60:]
+    assert advanced_states(1337, 0, 10) == seeded_states(1337, 10)
+
+
+def test_random_advance_composes():
+    """Two advances are one advance by their sum."""
+    state = struct_G_random_state()
+    G_random_seed(byref(state), 1337)
+    G_random_advance(byref(state), 25)
+    G_random_advance(byref(state), 35)
+    assert draw_states(state, 10) == advanced_states(1337, 60, 10)
+
+
+def test_random_advance_beyond_the_span():
+    """Advancing past the span gives the states the closed form gives."""
+    draws = SPAN + 12345
+    assert advanced_states(1337, draws, 10) == reference_states(1337, draws, 10)
+
+
+def test_random_advance_by_the_cycle_returns_to_the_state():
+    """After 2^48 draws, the generator's cycle, the state is the same again."""
+    assert advanced_states(1337, LCG_MODULUS, 10) == seeded_states(1337, 10)
+
+
+def test_random_advance_by_the_span_shifts_by_a_quarter():
+    """After 2^46 draws the generator repeats its values plus one quarter."""
+    plain = seeded_states(1337, 20)
+    shifted = advanced_states(1337, SPAN, 20)
+    assert shifted == reference_states(1337, SPAN, 20)
+    assert {(s - p) % LCG_MODULUS for p, s in zip(plain, shifted, strict=True)} == {
+        LCG_MODULUS // 4
+    }
+
+
+def test_random_advance_negative_is_fatal(xy_session_for_module, tmp_path):
+    """Advancing by a negative number of draws is a fatal error."""
+    result = run_calls(xy_session_for_module, tmp_path, "G_random_advance -1")
+    assert_fatal(result, "by -1 draws")
+
+
+@pytest.mark.parametrize(
+    ("layout_call", "unit", "message"),
+    [
+        ("G_random_init_layout_spread 1337 4", 4, "unit 4 is out of range"),
+        ("G_random_init_layout_spread 1337 4", -1, "unit -1 is out of range"),
+        ("G_random_init_layout_exact 1337 5 7", 5, "unit 5 is out of range"),
+        ("G_random_init_layout_bounded 1337 5 7", -1, "unit -1 is out of range"),
+    ],
+)
+def test_random_state_for_unit_out_of_range_is_fatal(
+    xy_session_for_module, tmp_path, layout_call, unit, message
+):
+    """A unit outside 0 to units - 1 is a fatal error."""
+    result = run_calls(
+        xy_session_for_module,
+        tmp_path,
+        layout_call,
+        f"G_random_state_for_unit {unit}",
+    )
+    assert_fatal(result, message)
+
+
+def test_random_state_for_run_negative_run_is_fatal(xy_session_for_module, tmp_path):
+    """A negative run is a fatal error."""
+    result = run_calls(
+        xy_session_for_module,
+        tmp_path,
+        "G_random_init_layout_exact 1337 5 7",
+        "G_random_state_for_run -1 0",
+    )
+    assert_fatal(result, "run -1 is out of range")
+
+
+def test_random_state_for_unit_is_run_zero():
+    """G_random_state_for_unit() gives run 0 of G_random_state_for_run()."""
+    layout = bounded_layout(1337, 1000, 100)
+    state = struct_G_random_state()
+    G_random_state_for_unit(byref(state), byref(layout), 7)
+    assert draw_states(state, 10) == unit_states(layout, 7, 10)
+
+
+def test_random_generate_seed_is_in_range_without_environment(monkeypatch):
+    """A seed from the time and process ID is one the generators accept."""
+    monkeypatch.delenv("GRASS_RANDOM_SEED", raising=False)
+    monkeypatch.delenv("SOURCE_DATE_EPOCH", raising=False)
+    seed = G_random_generate_seed()
+    assert 0 <= seed < 2**32
+
+
+def test_random_generate_seed_reads_environment(monkeypatch):
+    """GRASS_RANDOM_SEED takes precedence over SOURCE_DATE_EPOCH."""
+    monkeypatch.setenv("GRASS_RANDOM_SEED", "1337")
+    monkeypatch.setenv("SOURCE_DATE_EPOCH", "42")
+    assert G_random_generate_seed() == 1337
+    monkeypatch.delenv("GRASS_RANDOM_SEED")
+    assert G_random_generate_seed() == 42
+
+
+def test_srand48_auto_uses_the_generated_seed(monkeypatch):
+    """The shared generator's automatic seed is the generated seed.
+
+    The returned value seeds a generator of the program's own to the
+    sequence the shared generator then produces.
+    """
+    monkeypatch.setenv("GRASS_RANDOM_SEED", "1337")
+    seed = G_srand48_auto()
+    assert seed == 1337
+    shared = [int(G_drand48() * LCG_MODULUS) for _ in range(10)]
+    assert shared == seeded_states(seed, 10)
+
+
+GENERATE_SEED_SCRIPT = """
+from grass.lib.gis import G_random_generate_seed, G_srand48_auto
+
+print(G_random_generate_seed())
+print(G_srand48_auto())
+"""
+
+
+def generate_seed(session, tmp_path, **variables):
+    """Run G_random_generate_seed() and G_srand48_auto() in a subprocess.
+
+    The variables replace GRASS_RANDOM_SEED and SOURCE_DATE_EPOCH, which
+    are unset unless given. A warning or fatal error is written by the
+    library to the process's standard error and needs a session to be
+    printed, and a fatal error exits the process.
+    """
+    env = dict(session.env)
+    env.pop("GRASS_RANDOM_SEED", None)
+    env.pop("SOURCE_DATE_EPOCH", None)
+    env.update(variables)
+    script = tmp_path / "generate_seed.py"
+    script.write_text(GENERATE_SEED_SCRIPT, encoding="utf-8")
+    return subprocess.run(
+        [sys.executable, str(script)],
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=60,
+        check=False,
+    )
+
+
+@pytest.mark.parametrize("name", ["GRASS_RANDOM_SEED", "SOURCE_DATE_EPOCH"])
+def test_random_generate_seed_reduces_large_environment_value_with_a_warning(
+    xy_session_for_module, tmp_path, name
+):
+    """A value past 32 bits is reduced to its low 32 bits with a warning.
+
+    Both the generated seed and the shared generator's automatic seed are
+    the reduced value.
+    """
+    result = generate_seed(xy_session_for_module, tmp_path, **{name: "5000000000"})
+    assert result.returncode == 0, result.stderr
+    reduced = str(5000000000 % 2**32)
+    assert result.stdout.split() == [reduced, reduced]
+    message = " ".join(result.stderr.split())
+    assert f"5000000000 from {name}" in message
+    assert "low 32 bits" in message
+
+
+@pytest.mark.parametrize("value", ["-5", "-2147483648", "4294967295"])
+def test_random_generate_seed_keeps_value_in_range_without_warning(
+    xy_session_for_module, tmp_path, value
+):
+    """A value from -2^31 to 2^32 - 1 is the seed as it is, also when negative."""
+    result = generate_seed(xy_session_for_module, tmp_path, GRASS_RANDOM_SEED=value)
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.split()[0] == value
+    assert "WARNING" not in result.stderr
+
+
+def test_random_generate_seed_skips_empty_variable(xy_session_for_module, tmp_path):
+    """An empty GRASS_RANDOM_SEED counts as unset, so SOURCE_DATE_EPOCH is used."""
+    result = generate_seed(
+        xy_session_for_module, tmp_path, GRASS_RANDOM_SEED="", SOURCE_DATE_EPOCH="42"
+    )
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.split() == ["42", "42"]
+
+
+@pytest.mark.parametrize(
+    ("value", "message"),
+    [
+        ("abc", "is not an integer"),
+        ("1e9", "is not an integer"),
+        ("12abc", "is not an integer"),
+        ("99999999999999999999", "is too large in magnitude"),
+        ("-99999999999999999999", "is too large in magnitude"),
+    ],
+)
+def test_random_generate_seed_rejects_invalid_value(
+    xy_session_for_module, tmp_path, value, message
+):
+    """A value which is not an integer or overflows is a fatal error naming it."""
+    result = generate_seed(xy_session_for_module, tmp_path, GRASS_RANDOM_SEED=value)
+    assert result.returncode != 0
+    assert result.stdout == ""
+    stderr = " ".join(result.stderr.split())
+    assert f"{value} from GRASS_RANDOM_SEED {message}" in stderr
+
+
+def test_random_state_is_independent_of_shared_generator():
+    """Drawing from the shared generator between draws changes nothing."""
+    layout = spread_layout(1337, 4096)
+    expected = unit_states(layout, 5, 10)
+    state = struct_G_random_state()
+    G_random_state_for_unit(byref(state), byref(layout), 5)
+    G_srand48(99)
+    interleaved = []
+    for _ in range(10):
+        G_lrand48()
+        interleaved.extend(draw_states(state, 1))
+    assert interleaved == expected
+
+
+def test_random_states_are_unaffected_by_threading():
+    """Each thread drawing from its own state gets the serial values.
+
+    ctypes releases the GIL around each call, so the threads do run the C
+    code concurrently.
+    """
+    units = 4
+    n = 5000
+    layout = spread_layout(1337, units)
+    serial = [unit_states(layout, unit, n) for unit in range(units)]
+    threaded = [None] * units
+
+    def worker(unit):
+        threaded[unit] = unit_states(layout, unit, n)
+
+    threads = [threading.Thread(target=worker, args=(unit,)) for unit in range(units)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+    assert threaded == serial
+
+
+# First ten values of unit 3 with seed 1337, computed by the closed form at
+# 3 * 17175675903 draws for a spread layout of 4096 units (4097 parts) and at 3 * 101
+# draws for a bounded layout of 1000 units with bound 100. A change of the
+# engine or of the layouts changes these.
+PINNED = {
+    "spread": [
+        0.39430735545757045,
+        0.6290045178804426,
+        0.714269874034521,
+        0.5881407609385896,
+        0.7378029873502499,
+        0.712116402550361,
+        0.027046777408891387,
+        0.6296825457039468,
+        0.13697898780445428,
+        0.13722939092471265,
+    ],
+    "bounded": [
+        0.6813692756324983,
+        0.069333342334577,
+        0.21082745238814482,
+        0.03296383528511271,
+        0.4499312354256588,
+        0.5150939051932433,
+        0.6799364535715284,
+        0.4718208970400859,
+        0.8985155631446773,
+        0.6221841681079674,
+    ],
+}
+
+
+@pytest.mark.parametrize(
+    ("kind", "layout", "offset"),
+    [
+        ("spread", spread_layout(1337, 4096), 3 * 17175675903),
+        ("bounded", bounded_layout(1337, 1000, 100), 3 * 101),
+    ],
+    ids=["spread", "bounded"],
+)
+def test_layout_unit_values_are_pinned(kind, layout, offset):
+    """Unit 3's first ten values are fixed for a given seed and layout."""
+    expected = PINNED[kind]
+    assert [
+        state / LCG_MODULUS for state in reference_states(1337, offset, 10)
+    ] == expected
+    state = struct_G_random_state()
+    G_random_state_for_unit(byref(state), byref(layout), 3)
+    assert [G_random_double(byref(state)) for _ in range(10)] == expected
