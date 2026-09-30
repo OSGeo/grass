@@ -16,9 +16,6 @@ overland flow water depth (<i>water_depth</i> [m]), detachment capacity coeffici
 (<i>detachment_coeff</i> [s/m]), transport capacity coefficient (<i>transport_coeff</i> [s]),
 critical shear stress (<i>shear_stress</i> [Pa])
 and surface  roughness coefficient called Manning's n (<i>man</i> raster map).
-Cells with null values in the <i>man</i> raster map are excluded from the
-simulation. The outputs are null there and walkers which reach them
-leave the simulated area.
 Partial derivatives can be computed by <a href="v.surf.rst.html">v.surf.rst</a>
 or <a href="r.slope.aspect.html">r.slope.aspect</a>
 module. The data are automatically converted from feet to metric
@@ -49,6 +46,11 @@ Increasing the number of threads with <b>nprocs</b> does not really
 speed up the simulation.
 
 <h2>NOTES</h2>
+
+Null cells in the <b>elevation</b>, <b>dx</b>, <b>dy</b>, <b>water_depth</b>,
+<b>detachment_coeff</b>, <b>transport_coeff</b>, <b>shear_stress</b> and <b>man</b>
+raster maps are excluded from the simulation, the outputs are null
+there, and walkers that reach them leave the area.
 
 <h3>Run summary</h3>
 

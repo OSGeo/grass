@@ -149,6 +149,11 @@ independence of sampling points. Therefore, the methods are useful both
 for everyday exploratory work using a desktop computer and for large,
 cutting-edge applications using high performance computing.
 
+Null cells in the **elevation**, **dx**, **dy**, **rain** and **man**
+raster maps are excluded from the simulation, the outputs are null
+there, and walkers that reach them leave the area. Null cells in the
+**infil** raster map mean no infiltration.
+
 ### Manning's n for surface roughness
 
 The **man** raster map can be derived from a land cover raster with the
@@ -164,10 +169,6 @@ r.manning input=nlcd_landcover output=mannings_n landcover=nlcd
 For the shallow overland flow simulated here, Manning's n is generally
 higher than for deeper channel or floodplain flow, especially over
 vegetated surfaces, see the *r.manning* documentation.
-
-Cells with null values in the **man** raster map are excluded from the
-simulation. The outputs are null there and walkers which reach them
-leave the simulated area.
 
 ### Run summary
 
