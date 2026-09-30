@@ -19,10 +19,11 @@
  * The seeding functions are not thread-safe; see G_srand48().
  *
  * The G_random_*() functions instead advance generators owned by the
- * program, one struct G_random_state per unit of work, never shared. They
- * need neither atomics nor locks, behave identically on every build, and
- * give each unit a sequence fixed by the seed and the unit's number, not
- * by the thread that draws it. The library places the units within the
+ * program, one struct G_random_state per unit of work. The program keeps
+ * a state to one thread at a time; the functions then need neither
+ * atomics nor locks, behave identically on every build, and give each
+ * unit a sequence fixed by the seed and the unit's number, not by the
+ * thread that draws it. The library places the units within the
  * span, the first 2^46 draws after the seed, a quarter of the generator's
  * cycle: a layout gives every unit of every run a stream of stride draws
  * in it, and a state is put at the start of its unit's stream. See \ref
