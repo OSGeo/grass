@@ -128,6 +128,14 @@ void G_srand48(long seedval)
     seeded = 1;
 }
 
+/* The seeds the generator tells apart: G_srand48() uses the low 32 bits of
+ * the seed, and this range names every such seed once, as a signed or an
+ * unsigned 32-bit value. */
+static int seed_in_range(long long seed)
+{
+    return seed >= -(1LL << 31) && seed <= (1LL << 32) - 1;
+}
+
 /* Read a seed from an environment variable. An unset or empty variable
  * gives no seed, so that the caller can try the next source. */
 static int seed_from_environment(const char *name, long long *seed)
@@ -148,7 +156,7 @@ static int seed_from_environment(const char *name, long long *seed)
     if (end == text || *end != '\0')
         G_fatal_error(_("Random number seed %s from %s is not an integer"),
                       text, name);
-    if (value < -(1LL << 31) || value > (1LL << 32) - 1) {
+    if (!seed_in_range(value)) {
         long long reduced = (long long)((unsigned long long)value & 0xFFFFFFFF);
 
         G_warning(_("Random number seed %s from %s is used as %lld, "
@@ -405,7 +413,7 @@ static unsigned long long lcg_jump(unsigned long long x,
  * rejected rather than silently losing its high bits. */
 static void check_seed(long long seed)
 {
-    if (seed < -(1LL << 31) || seed > (1LL << 32) - 1)
+    if (!seed_in_range(seed))
         G_fatal_error(_("Random number seed %lld is outside the range from "
                         "-2147483648 to 4294967295 the generator can use"),
                       seed);
