@@ -379,7 +379,7 @@ above for T = 10^11.
 | 2^44 | one of 4 constants, cycling | 0.8125, 0.5625, 0.3125, 0.0625 | 0.009 |
 | 2^40 | one of 64 constants, cycling | 0.3633, 0.5977, 0.1445, 0.7539, ... | about 0.18 |
 | 2^36 | one of 1,024 constants, cycling | 0.7727, 0.0999, 0.2590, 0.1096, ... | about 3 |
-| 12,345 | none | 0.4802, 0.2953, 0.0471, 0.6931, ..., no pattern | not counted |
+| any odd distance | the low two bits fixed, 2^46 constants which do not repeat within the span | no pattern | about 2T, that is all the distances which occur |
 
 The coarsest relations are rare and exact, the finest common and invisible:
 positions 2^36 apart have the low 38 bits of their difference fixed and the
