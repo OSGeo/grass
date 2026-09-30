@@ -219,6 +219,52 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
     -t -p format=json
 </pre></div>
 
+In Python with grass.script:
+
+<div class="code"><pre>
+import grass.script as gs
+
+summary = gs.parse_command(
+    "r.sim.water",
+    elevation="elevation",
+    depth="depth",
+    discharge="discharge",
+    rain_value=50,
+    man_value=0.05,
+    nwalkers=100000,
+    duration=20,
+    output_step=10,
+    random_seed=3,
+    flags="tp",
+    format="json",
+)
+print(summary["walkers_remaining"], summary["outputs"][-1]["depth"])
+</pre></div>
+
+In Python with grass.tools:
+
+<div class="code"><pre>
+from grass.tools import Tools
+
+tools = Tools()
+summary = tools.r_sim_water(
+    elevation="elevation",
+    depth="depth",
+    discharge="discharge",
+    rain_value=50,
+    man_value=0.05,
+    nwalkers=100000,
+    duration=20,
+    output_step=10,
+    random_seed=3,
+    flags="tp",
+    format="json",
+)
+print(summary["walkers_remaining"], summary["outputs"][-1]["depth"])
+</pre></div>
+
+The printed summary:
+
 <div class="code"><pre>
 {
     "walkers_requested": 100000,
@@ -258,63 +304,140 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
 }
 </pre></div>
 
+<h2>EXAMPLE</h2>
+
+This example uses the
+<a href="https://doi.org/10.5281/zenodo.23017720">SIMWE sample dataset</a>
+of the NC State University Sediment and Erosion Control Research and
+Education Facility, a 52 ha area in Raleigh, North Carolina, USA, at 1 m
+resolution. It contains a lidar-based elevation map, a land cover map
+and orthophoto bands.
+
 <p>
-Reading the summary in Python:
+Set the computational region to the elevation map and derive the
+Manning's n raster map from the land cover classes with
+<em><a href="r.recode.html">r.recode</a></em>. Buildings (class 1), paved
+roads (2) and compacted roads and parking lots (3) get low roughness
+values, while herbaceous cover such as fields and lawns (4) and forest (5)
+get high values suitable for shallow overland flow. Water (6) gets a low
+value. See the
+<a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.manning.html">r.manning</a>
+addon for an explanation of Manning's n and reference values for common
+land cover classifications.
+
+<div class="code"><pre>
+g.region raster=elevation
+r.recode input=landcover output=mannings rules=- &lt;&lt;EOF
+1:1:0.012
+2:2:0.014
+3:3:0.025
+4:4:0.24
+5:5:0.35
+6:6:0.04
+EOF
+</pre></div>
+
+In Python with grass.script:
 
 <div class="code"><pre>
 import grass.script as gs
 
-summary = gs.parse_command(
-    "r.sim.water",
-    elevation="elevation",
-    depth="depth",
-    discharge="discharge",
-    flags="p",
-    format="json",
+gs.run_command("g.region", raster="elevation")
+manning = {
+    1: 0.012,  # buildings
+    2: 0.014,  # paved roads
+    3: 0.025,  # compacted roads and parking lots
+    4: 0.24,  # herbaceous cover
+    5: 0.35,  # forest
+    6: 0.04,  # water
+}
+rules = "\n".join(f"{k}:{k}:{v}" for k, v in manning.items())
+gs.write_command(
+    "r.recode", input="landcover", output="mannings", rules="-", stdin=rules
 )
-print(summary["walkers_remaining"], summary["outputs"][-1]["depth"])
 </pre></div>
 
-<h2>EXAMPLE</h2>
-
-Using the North Carolina full sample dataset:
+In Python with grass.tools:
 
 <div class="code"><pre>
-# set computational region
-g.region raster=elev_lid792_1m -p
+from io import StringIO
 
-# compute dx, dy
-r.slope.aspect elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy
+from grass.tools import Tools
 
-# simulate (this may take a minute or two)
-r.sim.water elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy depth=water_depth disch=water_discharge nwalk=10000 rain_value=100 niter=5
-</pre></div>
-
-Now, let's visualize the result using rendering to a file
-(note the further management of computational region and
-usage of <a href="d.mon.html">d.mon</a> module
-which are not needed when working in GUI):
-
-<div class="code"><pre>
-# increase the computational region by 350 meters
-g.region e=e+350
-# initiate the rendering
-d.mon start=cairo output=r_sim_water_water_depth.png
-# render raster, legend, etc.
-d.rast map=water_depth_1m
-d.legend raster=water_depth_1m title="Water depth [m]" label_step=0.10 font=sans at=20,80,70,75
-d.barscale at=67,10 length=250 segment=5 font=sans
-d.northarrow at=90,25
-# finish the rendering
-d.mon stop=cairo
+tools = Tools()
+tools.g_region(raster="elevation")
+manning = {
+    1: 0.012,  # buildings
+    2: 0.014,  # paved roads
+    3: 0.025,  # compacted roads and parking lots
+    4: 0.24,  # herbaceous cover
+    5: 0.35,  # forest
+    6: 0.04,  # water
+}
+rules = "\n".join(f"{k}:{k}:{v}" for k, v in manning.items())
+tools.r_recode(input="landcover", output="mannings", rules=StringIO(rules))
 </pre></div>
 
 <p>
 <div align="center" style="margin: 10px;">
-<img style="margin: 0.5em;" src="r_sim_water_water_depth.png" alt="r.sim.water generated depth map"><br>
-<i >
-    Figure: Simulated water depth map in the rural area of
-    the North Carolina sample dataset.
+<img style="margin: 0.5em;" src="r_sim_water_mannings.png" alt="Manning's n derived from land cover"><br>
+<i>
+    Figure: Manning's n derived from land cover with low values for
+    buildings and roads and high values for fields and forest.
+</i>
+</div>
+
+<p>
+Simulate 30 minutes of overland flow with a uniform rainfall excess of
+20 mm/hr. The random seed makes the run reproducible.
+
+<div class="code"><pre>
+r.sim.water elevation=elevation man=mannings rain_value=20 depth=depth \
+    duration=30 random_seed=1
+</pre></div>
+
+In Python with grass.script:
+
+<div class="code"><pre>
+gs.run_command(
+    "r.sim.water",
+    elevation="elevation",
+    man="mannings",
+    rain_value=20,
+    depth="depth",
+    duration=30,
+    random_seed=1,
+)
+</pre></div>
+
+In Python with grass.tools:
+
+<div class="code"><pre>
+tools.r_sim_water(
+    elevation="elevation",
+    man="mannings",
+    rain_value=20,
+    depth="depth",
+    duration=30,
+    random_seed=1,
+)
+</pre></div>
+
+<p>
+<div align="center" style="margin: 10px;">
+<img style="margin: 0.5em;" src="r_sim_water_depth.png" alt="Water depth over shaded relief"><br>
+<i>
+    Figure: Simulated water depth in meters after 30 minutes of rainfall
+    shown over shaded relief.
+</i>
+</div>
+
+<p>
+<div align="center" style="margin: 10px;">
+<img style="margin: 0.5em;" src="r_sim_water_depth_orthophoto.png" alt="Water depth over orthophoto"><br>
+<i>
+    Figure: Water depth of at least 0.1 m shown over the orthophoto, with
+    flow concentrated in ditches and channels and ponding in depressions.
 </i>
 </div>
 
