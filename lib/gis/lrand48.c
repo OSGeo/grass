@@ -31,7 +31,7 @@
  * SPDX-FileCopyrightText: 2014-2026 GRASS Development Team
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * \authors Glynn Clements, Maris Nartiss (thread safety)
+ * \authors Glynn Clements, Maris Nartiss, Vaclav Petras
  */
 
 #include <errno.h>
