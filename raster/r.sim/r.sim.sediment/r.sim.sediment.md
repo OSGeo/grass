@@ -19,10 +19,12 @@ and surface roughness coefficient called Manning's n (*man* raster map).
 Partial derivatives can be computed by [v.surf.rst](v.surf.rst.md) or
 [r.slope.aspect](r.slope.aspect.md) module. The data are automatically
 converted from feet to metric system using database/projection
-information, so the elevation always should be in meters. The water
-depth file can be computed using [r.sim.water](r.sim.water.md) module.
-Other parameters must be determined using field measurements or
-reference literature (see suggested values in Notes and References).  
+information, so the elevation always should be in meters. The module
+requires a projected coordinate system and does not run in a
+latitude-longitude project. The water depth file can be computed using
+[r.sim.water](r.sim.water.md) module. Other parameters must be
+determined using field measurements or reference literature (see
+suggested values in Notes and References).  
 
 Output includes transport capacity raster map *transport_capacity* in
 \[kg/ms\], transport capacity limited erosion/deposition raster map
