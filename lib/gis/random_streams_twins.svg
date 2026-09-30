@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="300" viewBox="0 55 640 300" font-family="sans-serif" font-size="13" fill="#222">
+  <title>The first values of seed 42 at the seed and a quarter, a half and three quarters of the ring after it</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#222"/>
+    </marker>
+  </defs>
+  <!-- The three quarters of the ring outside the span, drawn light. -->
+  <path d="M 228.1 113.1 A 130 130 0 1 1 228.1 296.9" fill="none" stroke="#bbb" stroke-width="3" stroke-dasharray="6 5"/>
+  <!-- The span: the quarter of the ring after the seed, clockwise. -->
+  <path d="M 228.1 296.9 A 130 130 0 0 1 228.1 113.1" fill="none" stroke="#ddd" stroke-width="14"/>
+  <path d="M 241.5 273.2 A 104 104 0 0 1 241.5 136.8" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="232" y="209">span</text>
+  <!-- The seed and the positions a quarter, a half and three quarters of
+       the ring after it, where the generator draws the seed's values plus
+       1/4, 1/2 and 3/4, wrapping past 1. -->
+  <circle cx="228.1" cy="296.9" r="5" fill="#c33"/>
+  <circle cx="228.1" cy="113.1" r="5" fill="#fff" stroke="#c33" stroke-width="2"/>
+  <circle cx="411.9" cy="113.1" r="5" fill="#fff" stroke="#c33" stroke-width="2"/>
+  <circle cx="411.9" cy="296.9" r="5" fill="#fff" stroke="#c33" stroke-width="2"/>
+  <text x="212" y="312" text-anchor="end">seed 42:</text>
+  <text x="212" y="328" text-anchor="end">0.7445, 0.3427, 0.1111</text>
+  <text x="212" y="92" text-anchor="end">+ 1/4:</text>
+  <text x="212" y="108" text-anchor="end">0.9945, 0.5927, 0.3611</text>
+  <text x="428" y="92">+ 1/2:</text>
+  <text x="428" y="108">0.2445, 0.8427, 0.6111</text>
+  <text x="428" y="312">+ 3/4:</text>
+  <text x="428" y="328">0.4945, 0.0927, 0.8611</text>
+</svg>

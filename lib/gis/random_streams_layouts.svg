@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 0 640 340" font-family="sans-serif" font-size="13" fill="#222">
+  <title>Exact, bounded and spread layouts of six units along the span</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#222"/>
+    </marker>
+  </defs>
+  <!-- The end of the span, 2^46 draws after the seed, for all three bars. -->
+  <line x1="600" y1="44" x2="600" y2="292" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <!-- Exact: a stride of exactly the values a unit draws; run 0 is the
+       seed's sequence and run 1 the next six units. -->
+  <text x="80" y="22">exact: G_random_init_layout_exact()</text>
+  <text x="80" y="38">stride: the values each unit draws; run 0 is the seed's sequence</text>
+  <rect x="80" y="48" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
+  <rect x="80" y="48" width="156" height="24" fill="#222"/>
+  <line x1="106" y1="48" x2="106" y2="72" stroke="#fff" stroke-width="1.5"/>
+  <line x1="132" y1="48" x2="132" y2="72" stroke="#fff" stroke-width="1.5"/>
+  <line x1="158" y1="48" x2="158" y2="72" stroke="#fff" stroke-width="1.5"/>
+  <line x1="184" y1="48" x2="184" y2="72" stroke="#fff" stroke-width="1.5"/>
+  <line x1="210" y1="48" x2="210" y2="72" stroke="#fff" stroke-width="1.5"/>
+  <text x="93" y="64.5" text-anchor="middle" fill="#fff">0</text>
+  <text x="119" y="64.5" text-anchor="middle" fill="#fff">1</text>
+  <text x="145" y="64.5" text-anchor="middle" fill="#fff">2</text>
+  <text x="171" y="64.5" text-anchor="middle" fill="#fff">3</text>
+  <text x="197" y="64.5" text-anchor="middle" fill="#fff">4</text>
+  <text x="223" y="64.5" text-anchor="middle" fill="#fff">5</text>
+  <line x1="262" y1="48" x2="262" y2="72" stroke="#222" stroke-width="1.5"/>
+  <line x1="288" y1="48" x2="288" y2="72" stroke="#222" stroke-width="1.5"/>
+  <line x1="314" y1="48" x2="314" y2="72" stroke="#222" stroke-width="1.5"/>
+  <line x1="340" y1="48" x2="340" y2="72" stroke="#222" stroke-width="1.5"/>
+  <line x1="366" y1="48" x2="366" y2="72" stroke="#222" stroke-width="1.5"/>
+  <line x1="392" y1="48" x2="392" y2="72" stroke="#222" stroke-width="1.5"/>
+  <text x="249" y="64.5" text-anchor="middle">0</text>
+  <text x="275" y="64.5" text-anchor="middle">1</text>
+  <text x="301" y="64.5" text-anchor="middle">2</text>
+  <text x="327" y="64.5" text-anchor="middle">3</text>
+  <text x="353" y="64.5" text-anchor="middle">4</text>
+  <text x="379" y="64.5" text-anchor="middle">5</text>
+  <circle cx="80" cy="60" r="5" fill="#c33"/>
+  <text x="70" y="64.5" text-anchor="end">seed</text>
+  <path d="M 80 76 L 80 80 L 236 80 L 236 76" fill="none" stroke="#222" stroke-width="1.5"/>
+  <path d="M 236 76 L 236 80 L 392 80 L 392 76" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="158" y="96" text-anchor="middle">run 0: the seed's sequence</text>
+  <text x="314" y="96" text-anchor="middle">run 1</text>
+  <!-- Bounded: a stride of the bound rounded up to odd; each unit draws
+       less than its stride, and the rest is headroom. -->
+  <text x="80" y="118">bounded: G_random_init_layout_bounded()</text>
+  <text x="80" y="134">stride: the bound rounded up to odd; a unit may draw less</text>
+  <rect x="80" y="144" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
+  <rect x="80" y="144" width="14" height="24" fill="#222"/>
+  <rect x="120" y="144" width="22" height="24" fill="#222"/>
+  <rect x="160" y="144" width="9" height="24" fill="#222"/>
+  <rect x="200" y="144" width="27" height="24" fill="#222"/>
+  <rect x="240" y="144" width="19" height="24" fill="#222"/>
+  <rect x="280" y="144" width="12" height="24" fill="#222"/>
+  <line x1="120" y1="144" x2="120" y2="168" stroke="#222" stroke-width="1.5"/>
+  <line x1="160" y1="144" x2="160" y2="168" stroke="#222" stroke-width="1.5"/>
+  <line x1="200" y1="144" x2="200" y2="168" stroke="#222" stroke-width="1.5"/>
+  <line x1="240" y1="144" x2="240" y2="168" stroke="#222" stroke-width="1.5"/>
+  <line x1="280" y1="144" x2="280" y2="168" stroke="#222" stroke-width="1.5"/>
+  <line x1="320" y1="144" x2="320" y2="168" stroke="#222" stroke-width="1.5"/>
+  <line x1="360" y1="144" x2="360" y2="168" stroke="#222" stroke-width="1.5"/>
+  <line x1="400" y1="144" x2="400" y2="168" stroke="#222" stroke-width="1.5"/>
+  <line x1="440" y1="144" x2="440" y2="168" stroke="#222" stroke-width="1.5"/>
+  <line x1="480" y1="144" x2="480" y2="168" stroke="#222" stroke-width="1.5"/>
+  <line x1="520" y1="144" x2="520" y2="168" stroke="#222" stroke-width="1.5"/>
+  <line x1="560" y1="144" x2="560" y2="168" stroke="#222" stroke-width="1.5"/>
+  <text x="113" y="160.5" text-anchor="middle">0</text>
+  <text x="153" y="160.5" text-anchor="middle">1</text>
+  <text x="193" y="160.5" text-anchor="middle">2</text>
+  <text x="233" y="160.5" text-anchor="middle">3</text>
+  <text x="273" y="160.5" text-anchor="middle">4</text>
+  <text x="313" y="160.5" text-anchor="middle">5</text>
+  <text x="340" y="160.5" text-anchor="middle">0</text>
+  <text x="380" y="160.5" text-anchor="middle">1</text>
+  <text x="420" y="160.5" text-anchor="middle">2</text>
+  <text x="460" y="160.5" text-anchor="middle">3</text>
+  <text x="500" y="160.5" text-anchor="middle">4</text>
+  <text x="540" y="160.5" text-anchor="middle">5</text>
+  <circle cx="80" cy="156" r="5" fill="#c33"/>
+  <text x="70" y="160.5" text-anchor="end">seed</text>
+  <path d="M 80 172 L 80 176 L 320 176 L 320 172" fill="none" stroke="#222" stroke-width="1.5"/>
+  <path d="M 320 172 L 320 176 L 560 176 L 560 172" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="200" y="192" text-anchor="middle">run 0</text>
+  <text x="440" y="192" text-anchor="middle">run 1</text>
+  <line x1="120" y1="208" x2="160" y2="208" stroke="#222" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="168" y="212">stride: start to start, the most a unit may draw</text>
+  <!-- Spread: the span divided into an odd number of equal parts, seven
+       for six units, and a stride of a part rounded down to odd; the six
+       units take six parts, the last part stays unused, and there is one
+       run only. -->
+  <text x="80" y="234">spread: G_random_init_layout_spread()</text>
+  <text x="80" y="250">stride: a part rounded down to odd, seven parts for six units; one run only</text>
+  <rect x="80" y="260" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
+  <rect x="80.0" y="260" width="14" height="24" fill="#222"/>
+  <rect x="154.3" y="260" width="22" height="24" fill="#222"/>
+  <rect x="228.6" y="260" width="9" height="24" fill="#222"/>
+  <rect x="302.9" y="260" width="27" height="24" fill="#222"/>
+  <rect x="377.1" y="260" width="19" height="24" fill="#222"/>
+  <rect x="451.4" y="260" width="12" height="24" fill="#222"/>
+  <line x1="154.3" y1="260" x2="154.3" y2="284" stroke="#222" stroke-width="1.5"/>
+  <line x1="228.6" y1="260" x2="228.6" y2="284" stroke="#222" stroke-width="1.5"/>
+  <line x1="302.9" y1="260" x2="302.9" y2="284" stroke="#222" stroke-width="1.5"/>
+  <line x1="377.1" y1="260" x2="377.1" y2="284" stroke="#222" stroke-width="1.5"/>
+  <line x1="451.4" y1="260" x2="451.4" y2="284" stroke="#222" stroke-width="1.5"/>
+  <line x1="525.7" y1="260" x2="525.7" y2="284" stroke="#222" stroke-width="1.5"/>
+  <text x="117.1" y="276.5" text-anchor="middle">0</text>
+  <text x="191.4" y="276.5" text-anchor="middle">1</text>
+  <text x="265.7" y="276.5" text-anchor="middle">2</text>
+  <text x="340.0" y="276.5" text-anchor="middle">3</text>
+  <text x="414.3" y="276.5" text-anchor="middle">4</text>
+  <text x="488.6" y="276.5" text-anchor="middle">5</text>
+  <text x="562.9" y="276.5" text-anchor="middle" fill="#888">unused</text>
+  <circle cx="80" cy="272" r="5" fill="#c33"/>
+  <text x="70" y="276.5" text-anchor="end">seed</text>
+  <path d="M 80 288 L 80 292 L 525.7 292 L 525.7 288" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="302.9" y="308" text-anchor="middle">run 0, the only run</text>
+  <text x="600" y="330" text-anchor="end">dark: what the units of run 0 draw; dashed: the end of the span, 2^46 draws after the seed</text>
+</svg>

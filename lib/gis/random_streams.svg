@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="310" viewBox="0 40 640 310" font-family="sans-serif" font-size="13" fill="#222">
+  <title>The ring of generator states with the seed, the span and the streams of three units</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#222"/>
+    </marker>
+  </defs>
+  <!-- The three quarters of the ring outside the span, drawn light. -->
+  <path d="M 281.0 101.0 A 140 140 0 1 1 281.0 299.0" fill="none" stroke="#bbb" stroke-width="3" stroke-dasharray="6 5"/>
+  <!-- The span: the quarter of the ring after the seed, clockwise. -->
+  <path d="M 281.0 299.0 A 140 140 0 0 1 281.0 101.0" fill="none" stroke="#ddd" stroke-width="14"/>
+  <!-- The streams of units 0, 1 and 2, each within its stride. -->
+  <path d="M 281.0 299.0 A 140 140 0 0 1 253.1 259.2" fill="none" stroke="#222" stroke-width="3"/>
+  <path d="M 248.4 247.9 A 140 140 0 0 1 240.1 195.1" fill="none" stroke="#222" stroke-width="3"/>
+  <path d="M 240.5 187.8 A 140 140 0 0 1 251.1 145.3" fill="none" stroke="#222" stroke-width="3"/>
+  <!-- Ticks one stride apart from the seed, where the units start, and
+       the end of the span. -->
+  <line x1="287.4" y1="292.6" x2="274.6" y2="305.4" stroke="#222" stroke-width="2"/>
+  <line x1="256.9" y1="244.8" x2="240.0" y2="251.0" stroke="#222" stroke-width="2"/>
+  <line x1="249.5" y1="188.6" x2="231.6" y2="187.0" stroke="#222" stroke-width="2"/>
+  <line x1="266.6" y1="134.5" x2="251.0" y2="125.5" stroke="#222" stroke-width="2"/>
+  <line x1="287.4" y1="107.4" x2="274.6" y2="94.6" stroke="#222" stroke-width="2"/>
+  <text x="243.4" y="291.5" text-anchor="middle">0</text>
+  <text x="219.4" y="225.6" text-anchor="middle">1</text>
+  <text x="225.5" y="155.8" text-anchor="middle">2</text>
+  <!-- The span with the direction of drawing. -->
+  <path d="M 238.8 327.1 A 190 190 0 0 1 241.0 70.4" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="178" y="196" text-anchor="end">span:</text>
+  <text x="178" y="212" text-anchor="end">2^46 draws</text>
+  <text x="380" y="196" text-anchor="middle">ring of</text>
+  <text x="380" y="214" text-anchor="middle">2^48 states</text>
+  <circle cx="281.0" cy="299.0" r="5" fill="#c33"/>
+  <text x="281" y="327" text-anchor="middle">seed</text>
+  <!-- A state: a position within the stream of unit 1. -->
+  <circle cx="240.3" cy="209.8" r="5" fill="#222"/>
+  <text x="256" y="214">state</text>
+</svg>
