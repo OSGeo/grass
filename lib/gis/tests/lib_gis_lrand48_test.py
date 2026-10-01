@@ -30,14 +30,14 @@ from grass.lib.gis import (
     G_mrand48,
     G_random_advance,
     G_random_double,
+    G_random_init_layout,
     G_random_init_layout_bounded,
     G_random_init_layout_exact,
-    G_random_init_layout_spread,
+    G_random_layout_batches,
     G_random_layout_length,
-    G_random_layout_runs,
-    G_random_seed,
-    G_random_state_for_run,
+    G_random_state_for_batch,
     G_random_state_for_unit,
+    G_random_state_from_seed,
     G_srand48,
     struct_G_random_layout,
     struct_G_random_state,
@@ -291,13 +291,23 @@ LCG_MODULUS = 2**48
 # has order 2^46, so states 2^46 apart give values differing by a constant.
 SPAN = 2**46
 
-# The most units a spread layout takes.
-SPREAD_MAX_UNITS = 2**20
+# The most units a layout of the whole span takes.
+WHOLE_SPAN_MAX_UNITS = 2**20
 
-# Unit counts for the spread layout: small counts, powers of two, which
+# Unit counts for the layout of the whole span: small counts, powers of two, which
 # give an even stride before rounding, a hundred thousand, and the two
 # largest counts allowed.
-SPREAD_UNITS = [2, 3, 4, 6, 64, 4096, 100000, SPREAD_MAX_UNITS - 1, SPREAD_MAX_UNITS]
+WHOLE_SPAN_UNITS = [
+    2,
+    3,
+    4,
+    6,
+    64,
+    4096,
+    100000,
+    WHOLE_SPAN_MAX_UNITS - 1,
+    WHOLE_SPAN_MAX_UNITS,
+]
 
 
 def lcg_jump_reference(state, steps):
@@ -337,7 +347,7 @@ def draw_states(state, n):
 def seeded_states(seed, n):
     """States of the first n draws of the single sequence of a seed"""
     state = struct_G_random_state()
-    G_random_seed(byref(state), seed)
+    G_random_state_from_seed(byref(state), seed)
     return draw_states(state, n)
 
 
@@ -353,21 +363,21 @@ def bounded_layout(seed, units, max_draws):
     return layout
 
 
-def spread_layout(seed, units):
+def whole_span_layout(seed, units):
     layout = struct_G_random_layout()
-    G_random_init_layout_spread(byref(layout), seed, units)
+    G_random_init_layout(byref(layout), seed, units)
     return layout
 
 
-def unit_states(layout, unit, n, run=0):
-    """States of the first n draws of a unit in a run of a layout"""
+def unit_states(layout, unit, n, batch=0):
+    """States of the first n draws of a unit in a batch of a layout"""
     state = struct_G_random_state()
-    G_random_state_for_run(byref(state), byref(layout), run, unit)
+    G_random_state_for_batch(byref(state), byref(layout), batch, unit)
     return draw_states(state, n)
 
 
-def spread_stride(units):
-    """The spread stride: the span divided by the parts, rounded down to odd.
+def whole_span_stride(units):
+    """The whole-span stride: the span divided by the parts, rounded down to odd.
 
     The parts are the units, or one more when the units are even, so that
     the unit halfway along does not start 2^45 draws after unit 0.
@@ -402,7 +412,7 @@ from grass.lib import gis
 
 state = gis.struct_G_random_state()
 layout = gis.struct_G_random_layout()
-gis.G_random_seed(byref(state), 1337)
+gis.G_random_state_from_seed(byref(state), 1337)
 for call in sys.argv[1:]:
     name, *numbers = call.split()
     function = getattr(gis, name)
@@ -463,7 +473,7 @@ def test_lcg_jump_reference_matches_stepping():
 
 @pytest.mark.parametrize("seed", [0, 1, 42, 1337, 2147483647, -1, 4294967295])
 def test_random_seed_matches_shared_generator(seed):
-    """G_random_seed() gives the sequence G_srand48() and G_drand48() give.
+    """G_random_state_from_seed() gives the sequence G_srand48() and G_drand48() give.
 
     This is what lets code switch from the shared generator to one of its
     own without changing its single-threaded results.
@@ -471,7 +481,7 @@ def test_random_seed_matches_shared_generator(seed):
     G_srand48(seed)
     shared = [G_drand48() for _ in range(100)]
     state = struct_G_random_state()
-    G_random_seed(byref(state), seed)
+    G_random_state_from_seed(byref(state), seed)
     assert [G_random_double(byref(state)) for _ in range(100)] == shared
     if seed in REFERENCE:
         assert shared[:10] == REFERENCE[seed]["drand48"]
@@ -495,12 +505,12 @@ def test_random_seed_accepts_the_range_boundaries(seed):
 @pytest.mark.parametrize(
     "call",
     [
-        "G_random_seed {}",
+        "G_random_state_from_seed {}",
         "G_random_init_layout_exact {} 5 7",
         "G_random_init_layout_bounded {} 5 7",
-        "G_random_init_layout_spread {} 5",
+        "G_random_init_layout {} 5",
     ],
-    ids=["seed", "exact", "bounded", "spread"],
+    ids=["seed", "exact", "bounded", "whole_span"],
 )
 def test_random_seed_outside_range_is_fatal(
     xy_session_for_module, tmp_path, seed, call
@@ -530,68 +540,68 @@ def test_exact_layout_units_follow_the_single_sequence(seed):
     ("units", "draws"),
     [(5, 7), (1, 1), (1000, 100), (4096, 2**34), (2**23, 2**23), (2**23, 2**23 + 1)],
 )
-def test_exact_layout_runs_and_length(units, draws):
-    """The runs that fit are the span divided by units times draws.
+def test_exact_layout_batches_and_length(units, draws):
+    """The batches that fit are the span divided by units times draws.
 
-    The last pair's product exceeds 2^46, so no run fits and runs() is 0.
+    The last pair's product exceeds 2^46, so no batch fits and batches() is 0.
     The length is the number of draws exactly.
     """
     layout = exact_layout(1337, units, draws)
-    assert G_random_layout_runs(byref(layout)) == SPAN // (units * draws)
+    assert G_random_layout_batches(byref(layout)) == SPAN // (units * draws)
     assert G_random_layout_length(byref(layout)) == draws
 
 
-def test_exact_layout_runs_follow_each_other():
-    """Run r's unit u starts where the single sequence has drawn (r * units + u) * draws."""
+def test_exact_layout_batches_follow_each_other():
+    """Unit u of batch b starts (b * units + u) * draws into the single sequence."""
     layout = exact_layout(1337, 5, 7)
-    assert unit_states(layout, 2, 3, run=4) == reference_states(
+    assert unit_states(layout, 2, 3, batch=4) == reference_states(
         1337, (4 * 5 + 2) * 7, 3
     )
 
 
-def test_exact_layout_which_does_not_fit_allows_run_zero(
+def test_exact_layout_which_does_not_fit_allows_batch_zero(
     xy_session_for_module, tmp_path
 ):
-    """With no run fitting, run 0 is still allowed but run 1 is fatal.
+    """With no batch fitting, batch 0 is still allowed but batch 1 is fatal.
 
     A tool which warned that its layout does not fit into the span may
     still use it, as earlier versions did.
     """
     units, draws = 2**23, 2**23 + 1
     layout = exact_layout(1337, units, draws)
-    assert G_random_layout_runs(byref(layout)) == 0
+    assert G_random_layout_batches(byref(layout)) == 0
     unit = units - 1
     assert unit_states(layout, unit, 3) == reference_states(1337, unit * draws, 3)
     result = run_calls(
         xy_session_for_module,
         tmp_path,
         f"G_random_init_layout_exact 1337 {units} {draws}",
-        "G_random_state_for_run 1 0",
+        "G_random_state_for_batch 1 0",
     )
-    assert_fatal(result, "run 1 is out of range")
+    assert_fatal(result, "batch 1 is out of range")
 
 
-def test_exact_layout_run_past_the_runs_that_fit_is_fatal(
+def test_exact_layout_batch_past_the_batches_that_fit_is_fatal(
     xy_session_for_module, tmp_path
 ):
-    """A run beyond those that fit is a fatal error naming both numbers."""
+    """A batch beyond those that fit is a fatal error naming both numbers."""
     units, draws = 4096, 2**34
-    runs = SPAN // (units * draws)
-    assert runs == 1
+    batches = SPAN // (units * draws)
+    assert batches == 1
     ok = run_calls(
         xy_session_for_module,
         tmp_path,
         f"G_random_init_layout_exact 1337 {units} {draws}",
-        f"G_random_state_for_run {runs - 1} {units - 1}",
+        f"G_random_state_for_batch {batches - 1} {units - 1}",
     )
     assert ok.returncode == 0, ok.stderr
     result = run_calls(
         xy_session_for_module,
         tmp_path,
         f"G_random_init_layout_exact 1337 {units} {draws}",
-        f"G_random_state_for_run {runs} 0",
+        f"G_random_state_for_batch {batches} 0",
     )
-    assert_fatal(result, f"run {runs} is out of range ({runs} run fits")
+    assert_fatal(result, f"batch {batches} is out of range ({batches} batch fits")
 
 
 @pytest.mark.parametrize(
@@ -605,7 +615,7 @@ def test_exact_layout_run_past_the_runs_that_fit_is_fatal(
         ("G_random_init_layout_bounded 1337 5 0", "must be positive, not 0"),
         ("G_random_init_layout_bounded 1337 0 7", "must be positive, not 0"),
         ("G_random_init_layout_bounded 1337 4294967296 4294967296", "too large"),
-        ("G_random_init_layout_spread 1337 0", "must be positive, not 0"),
+        ("G_random_init_layout 1337 0", "must be positive, not 0"),
     ],
 )
 def test_layout_with_impossible_counts_is_fatal(
@@ -620,93 +630,93 @@ def test_bounded_layout_rounds_an_even_bound_up_to_odd(bound, stride):
     """An even bound becomes the next odd number, an odd bound stays."""
     layout = bounded_layout(1337, 1000, bound)
     assert G_random_layout_length(byref(layout)) == stride
-    assert G_random_layout_runs(byref(layout)) == SPAN // (1000 * stride)
+    assert G_random_layout_batches(byref(layout)) == SPAN // (1000 * stride)
 
 
 @pytest.mark.parametrize("seed", [0, 1337, -1])
 def test_bounded_layout_unit_starts(seed):
-    """Unit u starts u * stride draws after the seed, run 1's (units + u) * stride."""
+    """Unit u starts u * stride draws after the seed, batch 1's (units + u) * stride."""
     units, stride = 1000, 101
     layout = bounded_layout(seed, units, 100)
     for unit in (0, 1, 2, 999):
         assert unit_states(layout, unit, 3) == reference_states(
             seed, unit * stride, 3
         ), unit
-        assert unit_states(layout, unit, 3, run=1) == reference_states(
+        assert unit_states(layout, unit, 3, batch=1) == reference_states(
             seed, (units + unit) * stride, 3
         ), unit
 
 
-@pytest.mark.parametrize("units", SPREAD_UNITS)
-def test_spread_layout_stride(units):
+@pytest.mark.parametrize("units", WHOLE_SPAN_UNITS)
+def test_whole_span_layout_stride(units):
     """The stride is the span divided by the parts, rounded down to odd."""
-    layout = spread_layout(1337, units)
+    layout = whole_span_layout(1337, units)
     stride = G_random_layout_length(byref(layout))
-    assert stride == spread_stride(units)
+    assert stride == whole_span_stride(units)
     assert stride % 2 == 1
-    assert G_random_layout_runs(byref(layout)) == 1
+    assert G_random_layout_batches(byref(layout)) == 1
 
 
-def test_spread_layout_of_one_unit_keeps_the_span():
+def test_whole_span_layout_of_one_unit_keeps_the_span():
     """A single unit keeps the whole span of 2^46 draws.
 
     Its stream is the single sequence of the seed.
     """
-    layout = spread_layout(1337, 1)
+    layout = whole_span_layout(1337, 1)
     assert G_random_layout_length(byref(layout)) == SPAN
-    assert G_random_layout_runs(byref(layout)) == 1
+    assert G_random_layout_batches(byref(layout)) == 1
     assert unit_states(layout, 0, 20) == seeded_states(1337, 20)
 
 
 @pytest.mark.parametrize("seed", [0, 1337, -1])
-@pytest.mark.parametrize("units", [4, 4096, 100000, SPREAD_MAX_UNITS])
-def test_spread_layout_unit_starts(seed, units):
+@pytest.mark.parametrize("units", [4, 4096, 100000, WHOLE_SPAN_MAX_UNITS])
+def test_whole_span_layout_unit_starts(seed, units):
     """Unit u starts u * stride draws after the seed.
 
     The first, a middle and the last unit are checked; the last one also
     shows that the highest unit is accepted.
     """
-    layout = spread_layout(seed, units)
-    stride = spread_stride(units)
+    layout = whole_span_layout(seed, units)
+    stride = whole_span_stride(units)
     for unit in sorted({0, 1, units // 2, units - 1}):
         assert unit_states(layout, unit, 2) == reference_states(
             seed, unit * stride, 2
         ), unit
 
 
-def test_spread_layout_run_one_is_fatal(xy_session_for_module, tmp_path):
-    """A spread layout holds a single run."""
+def test_whole_span_layout_batch_one_is_fatal(xy_session_for_module, tmp_path):
+    """A layout of the whole span holds a single batch."""
     result = run_calls(
         xy_session_for_module,
         tmp_path,
-        "G_random_init_layout_spread 1337 4",
-        "G_random_state_for_run 1 0",
+        "G_random_init_layout 1337 4",
+        "G_random_state_for_batch 1 0",
     )
-    assert_fatal(result, "a spread layout holds a single run")
+    assert_fatal(result, "a layout of the whole span holds a single batch")
 
 
-@pytest.mark.parametrize("units", [SPREAD_MAX_UNITS + 1, 2**46 + 1, 2**62])
-def test_spread_layout_with_too_many_units_is_fatal(
+@pytest.mark.parametrize("units", [WHOLE_SPAN_MAX_UNITS + 1, 2**46 + 1, 2**62])
+def test_whole_span_layout_with_too_many_units_is_fatal(
     xy_session_for_module, tmp_path, units
 ):
-    """A spread layout takes at most 2^20 units."""
+    """A layout of the whole span takes at most 2^20 units."""
     result = run_calls(
-        xy_session_for_module, tmp_path, f"G_random_init_layout_spread 1337 {units}"
+        xy_session_for_module, tmp_path, f"G_random_init_layout 1337 {units}"
     )
-    assert_fatal(result, f"at most {SPREAD_MAX_UNITS} units, not {units}")
+    assert_fatal(result, f"at most {WHOLE_SPAN_MAX_UNITS} units, not {units}")
 
 
-def test_spread_layout_of_the_most_units():
+def test_whole_span_layout_of_the_most_units():
     """2^20 units, the most allowed, get a stride of 67,108,799 draws.
 
     The span divided by 2^20 + 1 parts is just over 67,108,800, which is
     even, so the stride is rounded down to the odd 67,108,799. The last
     unit starts where the formula says.
     """
-    layout = spread_layout(1337, SPREAD_MAX_UNITS)
+    layout = whole_span_layout(1337, WHOLE_SPAN_MAX_UNITS)
     assert G_random_layout_length(byref(layout)) == 67108799
-    assert spread_stride(SPREAD_MAX_UNITS) == 67108799
-    last = SPREAD_MAX_UNITS - 1
+    assert whole_span_stride(WHOLE_SPAN_MAX_UNITS) == 67108799
+    last = WHOLE_SPAN_MAX_UNITS - 1
     assert unit_states(layout, last, 3) == reference_states(1337, last * 67108799, 3)
 
 
@@ -716,7 +726,7 @@ def nearest_unit_distance(units, distance):
     Units start a multiple of the stride apart, so this is also the
     nearest any two units come to being that distance apart.
     """
-    stride = spread_stride(units)
+    stride = whole_span_stride(units)
     nearest = distance // stride
     return min(
         abs(k * stride - distance) / stride
@@ -725,7 +735,7 @@ def nearest_unit_distance(units, distance):
     )
 
 
-def test_spread_layout_keeps_units_off_the_shifted_distances():
+def test_whole_span_layout_keeps_units_off_the_shifted_distances():
     """No unit starts near 2^45 or 2^44 draws after another unit.
 
     At those distances the values of two positions differ by two or four
@@ -736,28 +746,30 @@ def test_spread_layout_keeps_units_off_the_shifted_distances():
     those distances, less the draws lost by rounding the stride down,
     which accumulate along the span. For every allowed number of units,
     the nearest unit is at least 0.48 of a stride from 2^45 and 0.24 of a
-    stride from 2^44. This checks the rule; test_spread_layout_stride ties
+    stride from 2^44. This checks the rule; test_whole_span_layout_stride ties
     the rule to the library.
     """
     closest_to_half = min(
-        nearest_unit_distance(units, 2**45) for units in range(2, SPREAD_MAX_UNITS + 1)
+        nearest_unit_distance(units, 2**45)
+        for units in range(2, WHOLE_SPAN_MAX_UNITS + 1)
     )
     closest_to_quarter = min(
-        nearest_unit_distance(units, 2**44) for units in range(4, SPREAD_MAX_UNITS + 1)
+        nearest_unit_distance(units, 2**44)
+        for units in range(4, WHOLE_SPAN_MAX_UNITS + 1)
     )
     assert closest_to_half >= 0.48
     assert closest_to_quarter >= 0.24
 
 
 def layouts_for_span_check():
-    """Layouts with at least one run fitting, as (layout, units, stride)
+    """Layouts with at least one batch fitting, as (layout, units, stride)
 
     The stride is computed here from the documented rules, not read from the
     layout.
     """
     cases = [
-        (spread_layout(1337, units), units, spread_stride(units))
-        for units in [1, *SPREAD_UNITS]
+        (whole_span_layout(1337, units), units, whole_span_stride(units))
+        for units in [1, *WHOLE_SPAN_UNITS]
     ]
     cases += [
         (exact_layout(1337, units, draws), units, draws)
@@ -772,30 +784,30 @@ def layouts_for_span_check():
 
 @pytest.mark.parametrize(("layout", "units", "stride"), layouts_for_span_check())
 def test_layout_lies_within_the_span(layout, units, stride):
-    """The last stream of the last run that fits ends within the span.
+    """The last stream of the last batch that fits ends within the span.
 
     Every position in a stream is then less than 2^46 draws from every
     other, so no two streams can be 2^46, 2^47 or 3 * 2^46 draws apart,
     the distances at which this generator repeats its values plus a
     constant.
     """
-    runs = G_random_layout_runs(byref(layout))
+    batches = G_random_layout_batches(byref(layout))
     length = G_random_layout_length(byref(layout))
     assert length == stride
-    assert runs >= 1
-    last_start = (runs * units - 1) * stride
+    assert batches >= 1
+    last_start = (batches * units - 1) * stride
     assert last_start + length <= SPAN
 
 
-def test_spread_layout_units_have_no_constant_shift():
-    """Two units of a spread layout are not one sequence shifted in value.
+def test_whole_span_layout_units_have_no_constant_shift():
+    """Two units of a layout of the whole span are not one sequence shifted in value.
 
-    The first and the last unit of the largest spread layout start less
+    The first and the last unit of the largest layout of the whole span start less
     than 2^46 draws apart, so no lag relates their values by a constant.
     """
-    layout = spread_layout(1337, SPREAD_MAX_UNITS)
+    layout = whole_span_layout(1337, WHOLE_SPAN_MAX_UNITS)
     first = unit_states(layout, 0, 100)
-    second = unit_states(layout, SPREAD_MAX_UNITS - 1, 100)
+    second = unit_states(layout, WHOLE_SPAN_MAX_UNITS - 1, 100)
     assert constant_shift(first, second) is None
 
 
@@ -820,7 +832,7 @@ def test_states_half_a_span_apart_alternate_between_two_shifts():
     assert set(shifts[0::2]) == {0.625}
     assert set(shifts[1::2]) == {0.125}
     state = struct_G_random_state()
-    G_random_seed(byref(state), 42)
+    G_random_state_from_seed(byref(state), 42)
     G_random_advance(byref(state), 2**45)
     assert draw_states(state, 50) == advanced
 
@@ -834,15 +846,15 @@ def low_bits_relation(first, second):
     return bits
 
 
-def test_spread_layout_units_two_strides_apart_relate_three_low_bits():
+def test_whole_span_layout_units_two_strides_apart_relate_three_low_bits():
     """Units 2 * stride apart, stride odd, share only the low 3 bits of a shift.
 
     A distance of 2^k times an odd number makes the differences of the
     two units' states constant in their low k + 2 bits; above those bits
     the difference varies from draw to draw.
     """
-    layout = spread_layout(1337, 4)
-    assert spread_stride(4) % 2 == 1
+    layout = whole_span_layout(1337, 4)
+    assert whole_span_stride(4) % 2 == 1
     first = unit_states(layout, 0, 200)
     second = unit_states(layout, 2, 200)
     assert low_bits_relation(first, second) == 3
@@ -864,7 +876,7 @@ def test_bounded_layout_even_bound_relates_three_low_bits_too():
 
 def advanced_states(seed, draws, n):
     state = struct_G_random_state()
-    G_random_seed(byref(state), seed)
+    G_random_state_from_seed(byref(state), seed)
     G_random_advance(byref(state), draws)
     return draw_states(state, n)
 
@@ -878,7 +890,7 @@ def test_random_advance_equals_drawing():
 def test_random_advance_composes():
     """Two advances are one advance by their sum."""
     state = struct_G_random_state()
-    G_random_seed(byref(state), 1337)
+    G_random_state_from_seed(byref(state), 1337)
     G_random_advance(byref(state), 25)
     G_random_advance(byref(state), 35)
     assert draw_states(state, 10) == advanced_states(1337, 60, 10)
@@ -914,8 +926,8 @@ def test_random_advance_negative_is_fatal(xy_session_for_module, tmp_path):
 @pytest.mark.parametrize(
     ("layout_call", "unit", "message"),
     [
-        ("G_random_init_layout_spread 1337 4", 4, "unit 4 is out of range"),
-        ("G_random_init_layout_spread 1337 4", -1, "unit -1 is out of range"),
+        ("G_random_init_layout 1337 4", 4, "unit 4 is out of range"),
+        ("G_random_init_layout 1337 4", -1, "unit -1 is out of range"),
         ("G_random_init_layout_exact 1337 5 7", 5, "unit 5 is out of range"),
         ("G_random_init_layout_bounded 1337 5 7", -1, "unit -1 is out of range"),
     ],
@@ -933,19 +945,21 @@ def test_random_state_for_unit_out_of_range_is_fatal(
     assert_fatal(result, message)
 
 
-def test_random_state_for_run_negative_run_is_fatal(xy_session_for_module, tmp_path):
-    """A negative run is a fatal error."""
+def test_random_state_for_batch_negative_batch_is_fatal(
+    xy_session_for_module, tmp_path
+):
+    """A negative batch is a fatal error."""
     result = run_calls(
         xy_session_for_module,
         tmp_path,
         "G_random_init_layout_exact 1337 5 7",
-        "G_random_state_for_run -1 0",
+        "G_random_state_for_batch -1 0",
     )
-    assert_fatal(result, "run -1 is out of range")
+    assert_fatal(result, "batch -1 is out of range")
 
 
-def test_random_state_for_unit_is_run_zero():
-    """G_random_state_for_unit() gives run 0 of G_random_state_for_run()."""
+def test_random_state_for_unit_is_batch_zero():
+    """G_random_state_for_unit() gives batch 0 of G_random_state_for_batch()."""
     layout = bounded_layout(1337, 1000, 100)
     state = struct_G_random_state()
     G_random_state_for_unit(byref(state), byref(layout), 7)
@@ -1085,7 +1099,7 @@ def test_random_generate_seed_rejects_invalid_value(
 
 def test_random_state_is_independent_of_shared_generator():
     """Drawing from the shared generator between draws changes nothing."""
-    layout = spread_layout(1337, 4096)
+    layout = whole_span_layout(1337, 4096)
     expected = unit_states(layout, 5, 10)
     state = struct_G_random_state()
     G_random_state_for_unit(byref(state), byref(layout), 5)
@@ -1105,7 +1119,7 @@ def test_random_states_are_unaffected_by_threading():
     """
     units = 4
     n = 5000
-    layout = spread_layout(1337, units)
+    layout = whole_span_layout(1337, units)
     serial = [unit_states(layout, unit, n) for unit in range(units)]
     threaded = [None] * units
 
@@ -1121,11 +1135,11 @@ def test_random_states_are_unaffected_by_threading():
 
 
 # First ten values of unit 3 with seed 1337, computed by the closed form at
-# 3 * 17175675903 draws for a spread layout of 4096 units (4097 parts) and at 3 * 101
-# draws for a bounded layout of 1000 units with bound 100. A change of the
-# engine or of the layouts changes these.
+# 3 * 17175675903 draws for a layout of the whole span of 4096 units (4097
+# parts) and at 3 * 101 draws for a bounded layout of 1000 units with bound
+# 100. A change of the engine or of the layouts changes these.
 PINNED = {
-    "spread": [
+    "whole_span": [
         0.39430735545757045,
         0.6290045178804426,
         0.714269874034521,
@@ -1155,10 +1169,10 @@ PINNED = {
 @pytest.mark.parametrize(
     ("kind", "layout", "offset"),
     [
-        ("spread", spread_layout(1337, 4096), 3 * 17175675903),
+        ("whole_span", whole_span_layout(1337, 4096), 3 * 17175675903),
         ("bounded", bounded_layout(1337, 1000, 100), 3 * 101),
     ],
-    ids=["spread", "bounded"],
+    ids=["whole_span", "bounded"],
 )
 def test_layout_unit_values_are_pinned(kind, layout, offset):
     """Unit 3's first ten values are fixed for a given seed and layout."""
