@@ -3,10 +3,8 @@
 
    \brief Raster library - Get raster row
 
-   (C) 2003-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2003-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -207,26 +205,33 @@ static void read_data_gdal(int fd, int row, unsigned char *data_buf,
     struct fileinfo *fcb = &R__.fileinfo[fd];
     unsigned char *buf;
     CPLErr err;
+    /* Logical (pre-flip) column range actually needed by the region;
+     * unrestricted (full row) if the window mapping left it unset. */
+    int min_col = fcb->gdal_min_col >= 0 ? fcb->gdal_min_col : 0;
+    int max_col =
+        fcb->gdal_min_col >= 0 ? fcb->gdal_max_col : fcb->cellhd.cols - 1;
+    int ncols = max_col - min_col + 1;
+    /* hflip'ed maps store columns mirrored, so the logical range read
+     * from disk is the physical range at the opposite end of the row. */
+    int col_off = fcb->gdal->hflip ? fcb->cellhd.cols - 1 - max_col : min_col;
 
     *nbytes = fcb->nbytes;
 
     if (fcb->gdal->vflip)
         row = fcb->cellhd.rows - 1 - row;
 
-    buf = fcb->gdal->hflip ? G_malloc(fcb->cellhd.cols * fcb->cur_nbytes)
-                           : data_buf;
+    buf = fcb->gdal->hflip ? G_malloc((size_t)ncols * fcb->cur_nbytes)
+                           : data_buf + (size_t)col_off * fcb->cur_nbytes;
 
-    err =
-        Rast_gdal_raster_IO(fcb->gdal->band, GF_Read, 0, row, fcb->cellhd.cols,
-                            1, buf, fcb->cellhd.cols, 1, fcb->gdal->type, 0, 0);
+    err = Rast_gdal_raster_IO(fcb->gdal->band, GF_Read, col_off, row, ncols, 1,
+                              buf, ncols, 1, fcb->gdal->type, 0, 0);
 
     if (fcb->gdal->hflip) {
         int i;
 
-        for (i = 0; i < fcb->cellhd.cols; i++)
-            memcpy(data_buf + i * fcb->cur_nbytes,
-                   buf + (fcb->cellhd.cols - 1 - i) * fcb->cur_nbytes,
-                   fcb->cur_nbytes);
+        for (i = 0; i < ncols; i++)
+            memcpy(data_buf + (min_col + i) * fcb->cur_nbytes,
+                   buf + (ncols - 1 - i) * fcb->cur_nbytes, fcb->cur_nbytes);
         G_free(buf);
     }
 

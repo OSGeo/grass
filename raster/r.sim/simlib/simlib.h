@@ -46,9 +46,12 @@ typedef struct {
     double si0;     // Mean rainfall excess (or sediment concentration?)
     double sisum;   // Sum of rainfall excess (or sediment concentration?)
     double vmean;   // Mean velocity
+    double vmax;    // Maximum velocity
     double infmean; // Mean infiltration
     double timec;   // Time coefficient
     double deltap;  // Time step for water
+    double deltaw;  // Time step for sediment (sediment only)
+    double sigmax;  // Maximum first order reaction coefficient (sediment only)
 } Setup;
 
 typedef struct {
@@ -120,8 +123,34 @@ typedef struct {
     float **er;      // Erosion [output]
     float **ct;      // Transport capacity coefficient [input]
     float **trap;    // Traps [input]
-    float **dif;     // Diffusion coefficient [internal]
 } Grids;
+
+// Maps written by one call of output_data and the state of the simulation at
+// that moment. Names are copies owned by the record; NULL when not written.
+typedef struct {
+    double simulated_time; // Simulated time when the maps were written [s]
+    int walkers_remaining; // Walkers still in the domain at that time
+    char *timestamp;       // Timestamp written to the maps, e.g. "10 minutes"
+    char *depth;           // Water depth raster name (water flow only)
+    char *disch;           // Discharge raster name (water flow only)
+    char *err;             // Error raster name (water flow only)
+    char *outwalk;         // Output walker vector map name
+    char *conc;            // Sediment concentration raster name (sediment only)
+    char *flux;            // Sediment flux raster name (sediment only)
+    char *erdep;           // Erosion/deposition raster name (sediment only)
+} OutputStep;
+
+// Run summary collected by main_loop and output_data for the -p flag
+typedef struct {
+    int threads;              // Threads used for the computation
+    int iterations_completed; // Iterations run before the loop ended
+    bool stopped_early;       // All walkers left the domain before duration
+    int nsteps;               // Number of recorded output steps
+    int nsteps_alloc;         // Allocated output steps
+    OutputStep *steps;        // One record per call of output_data
+} Summary;
+
+typedef enum { SUMMARY_NONE, SUMMARY_PLAIN, SUMMARY_JSON } SummaryFormat;
 
 struct point2D {
     double x;
@@ -147,14 +176,22 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
 void main_loop(const Setup *setup, const Geometry *geometry,
                const Settings *settings, Simulation *sim,
                ObservationPoints *points, const Inputs *inputs,
-               const Outputs *outputs, Grids *grids);
-int output_data(int, double conn, const Setup *setup, const Geometry *geometry,
-                const Settings *settings, const Simulation *sim,
-                const Inputs *inputs, const Outputs *outputs,
-                const Grids *grids);
+               const Outputs *outputs, Grids *grids, Summary *summary);
+int output_data(double tt, double conn, const Setup *setup,
+                const Geometry *geometry, const Settings *settings,
+                const Simulation *sim, const Inputs *inputs,
+                const Outputs *outputs, const Grids *grids, Summary *summary);
 int output_et(const Geometry *geometry, const Outputs *outputs,
               const Grids *grids);
 void free_walkers(Simulation *sim, const char *outwalk);
+void add_output_step(Summary *summary, const OutputStep *step);
+double time_step_seconds(const Setup *setup);
+double simulated_seconds(const Setup *setup, int iterations);
+void print_summary(SummaryFormat format, const Setup *setup,
+                   const Settings *settings, const Simulation *sim,
+                   const Inputs *inputs, const Outputs *outputs,
+                   const Summary *summary);
+void free_summary(Summary *summary);
 void erod(double **, const Setup *setup, const Geometry *geometry,
           Grids *grids);
 void create_observation_points(ObservationPoints *points);
@@ -174,11 +211,11 @@ struct options {
         *observation, *depth, *disch, *err, *outwalk, *nwalk, *niter,
         *mintimestep, *outiter, *density, *diffc, *hmax, *halpha, *hbeta,
         *wdepth, *detin, *tranin, *tauin, *tc, *et, *conc, *flux, *erdep,
-        *rainval, *maninval, *infilval, *logfile, *seed, *threads;
+        *rainval, *maninval, *infilval, *logfile, *seed, *threads, *format;
 };
 
 struct flags {
-    struct Flag *tserie, *generateSeed;
+    struct Flag *tserie, *generateSeed, *print;
 };
 
 #endif /* __SIMLIB_H__ */

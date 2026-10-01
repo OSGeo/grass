@@ -322,12 +322,31 @@ parameter is provided.
 
 ### Format and projection support
 
-The typical file extensions for the LAS format are .las and .laz
-(compressed). The compressed LAS (.laz) format can be imported only if
-libLAS has been compiled with LASzip support. It is also recommended to
-compile libLAS with GDAL which is used to test if the LAS coordinate
-reference system matches that of the GRASS project (previously called
-location).
+*r.in.pdal* reads all point cloud formats supported by the PDAL library.
+The typical file extensions for the LAS format are `.las` and `.laz`
+(compressed). Reading compressed LAS (`.laz`) requires PDAL built with
+either LASzip or lazperf. Cloud Optimized Point Clouds
+(COPC, `.copc.laz`) are supported as well. When importing a COPC file
+into a computational region smaller than the point cloud extent, the
+COPC spatial index is used to skip data outside the region, which speeds
+up the import; this optimization does not apply when the points are
+reprojected.
+
+The coordinate reference system (CRS) of the input is read from the file
+metadata and compared with the CRS of the current project (previously
+called location). When the two differ, the points are reprojected to the
+project's CRS during the import. The **-w** flag, which used to be
+required to allow the reprojection, is deprecated and has no effect.
+
+The **-o** flag skips the CRS check and assumes that the input is
+already in the project's CRS. Use it when the file has no CRS metadata
+or when the metadata is known to be wrong; without it, the import of a
+file without CRS metadata fails.
+
+The extent printed with the **-g** flag is reprojected as well, so that
+it matches the CRS of the current project and can be passed directly to
+*[g.region](g.region.md)*. For a file without CRS metadata, the extent
+is printed as stored in the file and a warning is issued.
 
 ### Memory consumption
 
@@ -355,6 +374,10 @@ memory use for these also depends on the number of data points.
 
 The default map **type**=`FCELL` is intended as compromise between
 preserving data precision and limiting system resource consumption.
+
+The **point_table_capacity** option controls how many points PDAL
+buffers at once while streaming the input. Larger values may speed up
+the import of large files at the cost of additional memory.
 
 ### Trim option
 

@@ -73,7 +73,7 @@ def get_version_branch(major_version, addons_git_repo_url):
     """
     version_branch = f"grass{major_version}"
     if source_is_remote():
-        branch = subprocess.Popen(
+        branch = subprocess.Popen(  # nosec B607: fixed external tool "git" with no portable absolute path
             [
                 "git",
                 "ls-remote",
@@ -110,7 +110,7 @@ def has_src_code_git(src_dir):
     actual_dir = Path.cwd()
     os.chdir(src_dir)
     try:
-        process_result = subprocess.run(
+        process_result = subprocess.run(  # nosec B607: fixed external tool "git" with no portable absolute path
             [
                 "git",
                 "log",
@@ -399,7 +399,7 @@ def get_addon_path(base_url, pgm, major_version):
         try:
             with tempfile.TemporaryDirectory(dir=addons_base_dir) as tmpdir:
                 tmp_clone_path = Path(tmpdir) / "grass-addons"
-                subprocess.call(
+                subprocess.call(  # nosec B607: fixed external tool "git" with no portable absolute path
                     [
                         "git",
                         "clone",
@@ -415,7 +415,7 @@ def get_addon_path(base_url, pgm, major_version):
         except (shutil.Error, OSError):
             if not grass_addons_dir.exists():
                 raise
-    addons_file_list = subprocess.Popen(
+    addons_file_list = subprocess.Popen(  # nosec B607: fixed external tool "git" with no portable absolute path
         ["git", "ls-tree", "--name-only", "-r", addons_branch],
         cwd=grass_addons_dir,
         stdout=subprocess.PIPE,

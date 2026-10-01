@@ -3,6 +3,7 @@ set(web_only_doc_files
     investigating_history
     style_guide
     building_with_cmake
+    testing
 )
 
 add_custom_target(

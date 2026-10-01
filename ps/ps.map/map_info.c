@@ -9,7 +9,7 @@
 int map_info(void)
 {
     char buf[400];
-    char east[50], west[50], north[50], south[50];
+    char east[320], west[320], north[320], south[320];
     double x, y, k, fontsize, dy, margin;
     static char *region = "REGION:   ";
 

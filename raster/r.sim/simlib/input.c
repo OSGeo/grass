@@ -34,7 +34,6 @@ void alloc_grids_water(const Geometry *geometry, const Outputs *outputs,
     grids->gama = G_alloc_matrix(geometry->my, geometry->mx);
     if (outputs->err != NULL)
         grids->gammas = G_alloc_matrix(geometry->my, geometry->mx);
-    grids->dif = G_alloc_fmatrix(geometry->my, geometry->mx);
 }
 
 void alloc_grids_sediment(const Geometry *geometry, const Outputs *outputs,
@@ -47,7 +46,6 @@ void alloc_grids_sediment(const Geometry *geometry, const Outputs *outputs,
 
     /* memory allocation for output grids */
 
-    grids->dif = G_alloc_fmatrix(geometry->my, geometry->mx);
     if (outputs->erdep != NULL || outputs->et != NULL)
         grids->er = G_alloc_fmatrix(geometry->my, geometry->mx);
 }
@@ -114,6 +112,7 @@ int input_data(const Geometry *geometry, Simulation *sim, const Inputs *inputs,
     /* Manning surface roughnes: read map or use a single value */
     if (inputs->manin != NULL) {
         grids->cchez = read_float_raster_map(rows, cols, inputs->manin, 1.0);
+        copy_matrix_undef_float_values(rows, cols, grids->cchez, grids->zz);
     }
     else if (inputs->manin_val >=
              0.0) { /* If no value set its set to -999.99 */
@@ -143,6 +142,11 @@ int input_data(const Geometry *geometry, Simulation *sim, const Inputs *inputs,
     if (inputs->infil != NULL) {
         grids->inf =
             read_double_raster_map(rows, cols, inputs->infil, unitconv);
+        /* Null infiltration means no infiltration. */
+        for (int row = 0; row < rows; row++)
+            for (int col = 0; col < cols; col++)
+                if (grids->inf[row][col] == UNDEF)
+                    grids->inf[row][col] = 0.;
     }
     else if (inputs->infil_val >=
              0.0) { /* If no value set its set to -999.99 */
@@ -308,13 +312,17 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
 
     setup->si0 = setup->sisum / cc;
     setup->vmean = vsum / cc;
+    setup->vmax = vmax;
     setup->chmean = chsum / cc;
 
     if (grids->inf)
         setup->infmean = infsum / cc;
 
-    if (inputs->wdepth)
+    if (inputs->wdepth) {
         deltaw = 0.8 / (sigmax * vmax); /*time step for sediment */
+        setup->deltaw = deltaw;
+        setup->sigmax = sigmax;
+    }
     setup->deltap =
         0.25 * sqrt(geometry->stepx * geometry->stepy) /
         (setup->vmean > EPS ? setup->vmean : EPS); /*time step for water */

@@ -54,13 +54,14 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - uses: rui314/setup-mold@9c9c13bf4c3f1adef0cc596abc155580bcb04444 # v1
+      - uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
 
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install --break-system-packages -r .github/workflows/python_requirements.txt
           pip install --break-system-packages -r .github/workflows/optional_requirements.txt
+          pip install --break-system-packages GDAL=="$(gdal-config --version)"
           pip install --break-system-packages pytest pytest-timeout \
               pytest-github-actions-annotate-failures pytest-xdist pytest-cov
 
