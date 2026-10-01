@@ -46,7 +46,7 @@ long long simwe_seed(const struct Option *seed, const struct Flag *generate)
     }
     /* The layout, which refuses a seed out of range, is built only when the
      * number of time steps is known. */
-    G_random_seed(&check, value);
+    G_random_state_from_seed(&check, value);
     return value;
 }
 

@@ -79,7 +79,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
 
     G_random_init_layout_bounded(&layout, settings->seed, sim->max_walkers,
                                  2 + 8LL * setup->miter);
-    if (G_random_layout_runs(&layout) < 1)
+    if (G_random_layout_batches(&layout) < 1)
         G_warning(_("%d walkers over %d time steps may draw more random "
                     "numbers than one seed provides; the random numbers "
                     "of some walkers then repeat those of others shifted "
