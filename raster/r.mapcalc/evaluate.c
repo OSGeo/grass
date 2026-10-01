@@ -388,7 +388,7 @@ static void setup_rand(void)
                                (long long)columns * rand_calls);
     /* Earlier versions drew these values without complaint, so this is
      * only a warning. */
-    if (G_random_layout_runs(&rand_layout) < 1)
+    if (G_random_layout_batches(&rand_layout) < 1)
         G_warning(_("rand() draws more than 2^46 random values; later "
                     "rows repeat the values of earlier rows plus a "
                     "constant"));

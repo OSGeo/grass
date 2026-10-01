@@ -199,7 +199,7 @@ int main(int argc, char **argv)
             G_fatal_error(_("Invalid random seed <%s>"), seed->answer);
         /* Refuse a seed out of range now, before the output maps are
          * created. */
-        G_random_seed(&check, seed_value);
+        G_random_state_from_seed(&check, seed_value);
         seeded = 1;
         G_debug(3, "Read random seed from seed=: %lld", seed_value);
     }
