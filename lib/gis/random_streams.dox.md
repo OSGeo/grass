@@ -344,16 +344,22 @@ constants, cycling with period 2^k. An odd distance fixes only the low two
 bits, which every distance does, and the differences do not repeat within
 the span.
 
-A distance occurs in a layout when two positions in use, positions at which
-some unit draws, lie exactly that far apart. In a layout drawing T values in
-total, the distances which occur cover at most about 2T of the 2^46
-distances within the span, so counting each multiple of 2^(46 - k) below
-2^46 as occurring with a chance of 2T / 2^46 estimates how many of those
-occur, the distances with 2^k or fewer constants, at
-(2^k - 1) × 2T / 2^46. The estimate treats the distances which occur as
-spread at random, which fits bounded and spread layouts, not run 0 of an
-exact layout, whose positions in use are the first T draws of the seed's
-sequence and so include every distance below T.
+How often a computation meets these relations depends on how many values it
+draws. A distance occurs in a layout when two positions in use, positions at
+which some unit draws, lie exactly that far apart. The starts of two units
+are a multiple of the stride apart, and their positions in use lie that
+multiple apart give or take what a unit draws, so a layout drawing T values
+in total has at most about 2T of the 2^46 distances within the span. Taking
+those as scattered at random, any one distance occurs with a chance of
+2T / 2^46, which is 0.003, or 0.3%, for T = 10^11. The estimate in the table
+below is that chance times the number of distances with the row's relation
+or a coarser one, the 2^k - 1 multiples of 2^(46 - k) below 2^46: the number
+of such distances expected to occur, (2^k - 1) × 2T / 2^46. Well below 1, it
+reads as a chance: of a thousand computations drawing 10^11 values each,
+about three have two positions in use 2^45 draws apart. The estimate fits
+bounded and spread layouts, not run 0 of an exact layout, whose positions in
+use are the first T draws of the seed's sequence and so include every
+distance below T.
 
 A spread layout is placed by dividing the span, so its units would land
 exactly on these distances if the span were divided into an even number of
@@ -374,11 +380,11 @@ these, modulo 1, and the estimate above for T = 10^11. The row with k is the
 general rule: the rows from 2^46 down are its cases k = 0, 1, 2, 6 and 10,
 and an odd distance is its last case, k = 46.
 
-| distance | part of the ring | relation | values drawn this distance after seed 42 minus seed 42's first eight, modulo 1 | estimated number of multiples of this distance below 2^46 which occur, (2^k - 1) × 2T / 2^46 for T = 10^11 |
+| distance | part of the ring | relation | values drawn this distance after seed 42 minus seed 42's first eight, modulo 1 | distances with this relation or a coarser one expected to occur when T = 10^11 values are drawn, (2^k - 1) × 2T / 2^46 |
 | --- | --- | --- | --- | --- |
 | 2^47 | 1/2 | constant-shift twin | 0.5000 at every draw | none: no two positions in the span are this far apart |
 | 2^46 | 1/4 | constant-shift twin | 0.2500 at every draw | none: no two positions in the span are this far apart |
-| 2^45 | 1/8 | alternating-shift twin | 0.6250, 0.1250 alternating | 0.003 |
+| 2^45 | 1/8 | alternating-shift twin | 0.6250, 0.1250 alternating | 0.003, a chance of 0.3% |
 | 2^44 | 1/16 | one of 4 constants, cycling | 0.8125, 0.5625, 0.3125, 0.0625 | 0.009 |
 | 2^40 | 1/256 | one of 64 constants, cycling | 0.3633, 0.5977, 0.1445, 0.7539, ... | about 0.18 |
 | 2^36 | 1/4,096 | one of 1,024 constants, cycling | 0.7727, 0.0999, 0.2590, 0.1096, ... | about 3 |
