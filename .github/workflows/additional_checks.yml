@@ -111,7 +111,7 @@ jobs:
         id: diff-pre-commit
         # To run after pre-commit step exits with failure
         if: ${{ !cancelled() }}
-        uses: ./.github/actions/create-upload-suggestions
+        uses: $/.github/actions/create-upload-suggestions
         with:
           tool-name: pre-commit
           # To keep repo's file structure in formatted changes artifact
