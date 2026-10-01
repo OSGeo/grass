@@ -5,10 +5,10 @@
 ## Overview {#gislib_random_streams_overview}
 
 The `G_random_*()` functions give a program random number generators of its
-own and many streams of values from one seed which do not overlap. They
-serve parallel computations, the runs of an ensemble, the components of a
-model which must each be reproducible on their own, and library code which
-must not change the random numbers of its caller.
+own and many streams of values from one seed which do not overlap. They serve
+parallel computations, the members of an ensemble, the components of a model
+which must each be reproducible on their own, and library code which must not
+change the random numbers of its caller.
 
 A program builds one layout from its seed and places a state for every unit
 of work, such as a row of a raster or a particle. The values of a unit are
@@ -38,16 +38,17 @@ behind the C function `drand48()` and behind `G_drand48()` in GRASS.
 - **Layout**: a `struct G_random_layout`, holding where the seed's sequence
   starts, the number of units and the stride. A program builds it once,
   outside any parallel region, and only reads it afterwards.
-- **Unit**: a piece of work with values of its own, such as a row of a
-  raster, a particle, a point or an object, numbered from 0. Its **stream**
-  is the values of the seed's sequence it draws: at most stride values from
-  where the layout places it, one stream per unit and run.
+- **Unit**: a piece of work with values of its own, such as a row of a raster,
+  a particle, a point or an object, numbered from 0. Its **stream** is the
+  values of the seed's sequence it draws: at most stride values from where the
+  layout places it, one stream per unit and batch.
 - **Stride**: the number of draws from the start of one unit to the start of
   the next, and so the number of values a unit may draw.
   `G_random_layout_length()` returns it.
-- **Run**: one pass of the whole computation, one stream per unit. Unit u of
-  run r starts (r × units + u) × stride draws after the seed, so the runs
-  follow one another along the span.
+- **Batch**: one stream for every unit of a layout. Unit u of batch b starts
+  (b × units + u) × stride draws after the seed, so the batches follow one
+  another along the span. A computation which needs one stream per unit uses
+  batch 0 only.
 
 \image html random_streams.svg
 
@@ -61,64 +62,69 @@ the quarter after it.
 
 ## Layouts {#gislib_random_streams_layouts}
 
-The simplest layout needs no `struct G_random_layout`: a state seeded with
-`G_random_seed(&rng, seed)` is a single unit which owns the whole span and
-draws the seed's sequence. The three ways to initialize a layout for more
-units differ in where the stride comes from:
+The basic layout gives its units the whole span. With a single unit there is
+nothing to divide and no `struct G_random_layout` is needed: a state placed
+with `G_random_state_from_seed(&rng, seed)` is that unit, which owns the whole
+span and draws the seed's sequence. The three ways to initialize a layout for
+more units differ in where the stride comes from:
 
+- A whole-span layout, `G_random_init_layout(&layout, seed, units)`, divides
+  the span into an odd number of equal parts, as many as there are units or
+  one more when that number is even, and gives every unit the longest stride
+  the span allows, in a single batch. The stride is the length of a part
+  rounded down to odd (see \ref gislib_random_streams_distance and
+  \ref gislib_random_streams_odd). A single unit keeps the whole span. A
+  whole-span layout holds at most 2^20 units; a bounded layout serves more.
 - An exact layout,
   `G_random_init_layout_exact(&layout, seed, units, draws_per_unit)`, takes
-  the stride as given, the number of values every unit draws. Unit u of run 0
-  then draws values u × stride to (u + 1) × stride - 1 of the seed's
-  sequence, counted from 0, so the units together reproduce that sequence,
-  whichever order they are computed in.
+  the stride as given, the number of values every unit draws, and leaves the
+  rest of the span to further batches. Unit u of batch 0 then draws values u ×
+  stride to (u + 1) × stride - 1 of the seed's sequence, counted from 0, so
+  the units together reproduce that sequence, whichever order they are
+  computed in.
 - A bounded layout,
   `G_random_init_layout_bounded(&layout, seed, units, max_draws)`, takes a
   bound on what a unit draws and rounds it up to odd (see
   \ref gislib_random_streams_odd), for units whose draws vary. But for that
   rounding, it places the units as an exact layout with the bound as its
   stride does.
-- A spread layout, `G_random_init_layout_spread(&layout, seed, units)`,
-  divides the span into an odd number of equal parts, as many as there are
-  units or one more when that number is even, and gives every unit the
-  longest stride the span allows, for one run only. The stride is the length
-  of a part rounded down to odd (see \ref gislib_random_streams_distance and
-  \ref gislib_random_streams_odd). A single unit keeps the whole span. A
-  spread layout holds at most 2^20 units; a bounded layout serves more.
 
 \image html random_streams_layouts.svg
 
 The figure shows the single state, whose one unit owns the whole span, and
-below it the layouts of six units, with what each unit of run 0 draws in
-dark. In the exact layout, run 0 is the seed's sequence and run 1 follows.
-The bounded layout has the strides of an exact layout whose stride is the
-bound, made odd, and each unit draws less than its stride. The spread layout
-divides the span into seven parts and not six, which would put unit 3 half
-the span after unit 0 (see \ref gislib_random_streams_distance); the six
-units take six of the seven parts, one run covers the span, and the last
-part stays unused. The two bars in grey show the strides before rounding and
-are not layouts the library makes, and the draw which rounding adds to a
-bounded stride is drawn much larger than it is.
+below it the layouts of six units, with what each unit of batch 0 draws in
+dark. The whole-span layout divides the span into seven parts and not six,
+which would put unit 3 half the span after unit 0 (see
+\ref gislib_random_streams_distance); the six units take six of the seven
+parts, one batch covers the span, and the last part stays unused. In the exact
+layout, batch 0 is the seed's sequence and batch 1 follows. The bounded layout
+has the strides of an exact layout whose stride is the bound, made odd, and
+each unit draws less than its stride. The two bars in grey show the strides
+before rounding and are not layouts the library makes, and the draw which
+rounding adds to a bounded stride is drawn much larger than it is.
 
-### Runs {#gislib_random_streams_runs}
+### Batches {#gislib_random_streams_batches}
 
-Runs are appended, never reserved: where a run lies depends on nothing but
-the seed, the stride, the number of units and the run number, so a run
-computed later lands where it would have landed now.
-`G_random_state_for_run(&rng, &layout, run, unit)` places a state at the
-start of the unit's stream in that run, and
-`G_random_state_for_unit(&rng, &layout, unit)` is the same call with run 0.
+A batch is one stream for every unit, and what it stands for is up to the
+program: a member of an ensemble, one of several passes over the same units,
+or one of the processes of a model which each need a stream per unit. Batches
+are appended, never reserved: where a batch lies depends on nothing but the
+seed, the stride, the number of units and the batch number, so a batch used
+later lies where it would have lain now.
+`G_random_state_for_batch(&rng, &layout, batch, unit)` places a state at the
+start of the unit's stream in that batch, and
+`G_random_state_for_unit(&rng, &layout, unit)` is the same call with batch 0.
 Placing a state is an advance from the seed, which costs about as much as a
 few dozen draws, however far from the seed the stream starts.
 
-A layout answers two queries: `G_random_layout_runs(&layout)` returns the
-number of runs that fit into the span, which is 0 when not even one run
+A layout answers two queries: `G_random_layout_batches(&layout)` returns the
+number of batches that fit into the span, which is 0 when not even one batch
 fits, and `G_random_layout_length(&layout)` returns the stride. A program
 compares the stride with the most values any of its units can draw, not the
-average, and checks that its run fits; whether to refuse or to warn and
-continue is its decision. Run 0 can always be placed, even when no run fits,
-so a tool whose earlier versions drew the same values without complaint may
-warn and continue, as the fragments below do; what their warning says is
+average, and checks that the batches it uses fit; whether to refuse or to warn
+and continue is its decision. Batch 0 can always be placed, even when no batch
+fits, so a tool whose earlier versions drew the same values without complaint
+may warn and continue, as the fragments below do; what their warning says is
 explained in \ref gislib_random_streams_span.
 
 ## Usage {#gislib_random_streams_usage}
@@ -136,16 +142,16 @@ into shared sums.
 
 ### A single sequence {#gislib_random_streams_single}
 
-One sequence has one state, seeded with `G_random_seed(&rng, seed)` and
-drawn from in a loop. Its one unit owns the whole span, so there is no
-`struct G_random_layout` to initialize and there are no runs to check:
+One sequence has one state, placed with `G_random_state_from_seed(&rng, seed)`
+and drawn from in a loop. Its one unit owns the whole span, so there is no
+`struct G_random_layout` to initialize and there are no batches to check:
 
 ```c
 // seed: the seed, a long long; n: how many values to draw; values: where
 // they go.
 struct G_random_state rng;
 
-G_random_seed(&rng, seed);
+G_random_state_from_seed(&rng, seed);
 for (int i = 0; i < n; i++)
     values[i] = G_random_double(&rng);
 ```
@@ -171,7 +177,7 @@ struct G_random_layout layout;
 
 G_random_init_layout_exact(&layout, seed, rows,
                            (long long)cols * draws_per_value);
-if (G_random_layout_runs(&layout) < 1)
+if (G_random_layout_batches(&layout) < 1)
     G_warning(_("The computation draws more than 2^46 random values; "
                 "values beyond that repeat earlier values shifted by a "
                 "constant"));
@@ -224,7 +230,7 @@ struct G_random_state *states = G_malloc(items * sizeof(*states));
 
 G_random_init_layout_bounded(&layout, seed, items,
                              steps * max_draws_per_step);
-if (G_random_layout_runs(&layout) < 1)
+if (G_random_layout_batches(&layout) < 1)
     G_warning(_("%lld items over %lld steps may draw more than 2^46 random "
                 "values; values beyond that repeat earlier values shifted "
                 "by a constant"),
@@ -236,34 +242,33 @@ G_free(states);
 ```
 
 An item whose draws have no known bound gets the longest stride the span
-allows from a spread layout,
-`G_random_init_layout_spread(&layout, seed, items)`, placed in the same way,
-and the program warns when the stride, `G_random_layout_length(&layout)`, is
-below an estimate of what an item draws. With more items than a spread
-layout accepts, the program chooses a bound itself, from what it expects an
-item to draw, uses a bounded layout with that bound, and checks that the run
-fits as in the fragment above.
+allows from a whole-span layout, `G_random_init_layout(&layout, seed, items)`,
+placed in the same way, and the program warns when the stride,
+`G_random_layout_length(&layout)`, is below an estimate of what an item draws.
+With more items than a whole-span layout accepts, the program chooses a bound
+itself, from what it expects an item to draw, uses a bounded layout with that
+bound, and checks that the batch fits as in the fragment above.
 
 ### Ensembles {#gislib_random_streams_ensembles}
 
 An ensemble is many runs of the same model under one seed, meant to be
-independent replicates, and its members are the runs of the layout the
-program uses for a single run. Whether they are computed in one process or
-one per invocation, on one machine or many, does not change where a run lies.
+independent replicates. Each member draws from a batch of its own of the
+layout the program uses for a single run. Whether the members are computed in
+one process or one per invocation, on one machine or many, does not change
+where a batch lies.
 
-A tool which supports ensembles needs one option, `run`, the run this
-invocation computes, numbered from 1 and 1 by default, so that nothing
-changes for a user who runs the tool once. No option for the number of runs
-is needed: with an exact or bounded layout the stride is set by what a unit
-draws, so a member does not need to know the size of the ensemble. A spread
-layout holds a single run and so cannot serve an ensemble. The tool places
-unit u of its run with
-`G_random_state_for_run(&rng, &layout, run - 1, u)`, and before any work it
-refuses a run beyond `G_random_layout_runs(&layout)`, with that number in the
-message; run 1 of a layout into which no run fits is placed with the warning
-of the fragments above, as earlier versions ran. It writes the seed and the
-run into the history of its output, for example `random seed = 42, run 3`,
-so that a member can be found and repeated.
+A tool which supports ensembles needs one option, `run`, the member this
+invocation computes, numbered from 1 and 1 by default, so that nothing changes
+for a user who runs the tool once. No option for the number of runs is needed:
+with an exact or bounded layout the stride is set by what a unit draws, so a
+member does not need to know the size of the ensemble. A whole-span layout
+holds a single batch and so cannot serve an ensemble. The tool places unit u
+with `G_random_state_for_batch(&rng, &layout, run - 1, u)`, and before any
+work it refuses a run beyond `G_random_layout_batches(&layout)`, with that
+number in the message; run 1 of a layout into which no batch fits is placed
+with the warning of the fragments above, as earlier versions ran. It writes
+the seed and the run into the history of its output, for example
+`random seed = 42, run 3`, so that a member can be found and repeated.
 
 The members must share one seed, so each member must be given it explicitly.
 When `run` is given, the tool takes the seed from the seed option or, when
@@ -275,24 +280,24 @@ sources the members do not share.
 What must agree between the members is everything which decides the layout:
 the seed and whatever sets the number of units and the stride, such as the
 region and the tool's options. A member with a different layout can have
-streams which share values with another member's, so the members should
-differ only in the run number and the output names. The number of members is
-limited by the runs that fit (see \ref gislib_random_streams_capacity).
+streams which share values with another member's, so the members should differ
+only in the run number and the output names. The number of members is limited
+by the batches that fit (see \ref gislib_random_streams_capacity).
 
 ## Capacity {#gislib_random_streams_capacity}
 
-The number of runs that fit is the span, 2^46 draws, divided by the draws of
-one run, units × stride, rounded down; a spread layout holds one run. A
-million units drawing a million values each in an exact layout draw 10^12
-values per run, so 70 runs fit on one seed, and a single run could hold
-70,368,744 such units, about 70 million.
+The number of batches that fit is the span, 2^46 draws, divided by the draws
+of one batch, units × stride, rounded down; a whole-span layout holds one
+batch. A million units drawing a million values each in an exact layout draw
+10^12 values per batch, so 70 batches fit on one seed, and a single batch
+could hold 70,368,744 such units, about 70 million.
 
 The library does not limit how many values a unit draws, and cannot, since it
 does not know how many a unit will draw. A unit which draws past its stride
 continues into the next unit's stream and draws the next unit's values. Where
-the units stay within their strides, only run 0 of a layout into which no run
-fits reaches past the span; \ref gislib_random_streams_span explains what it
-draws there.
+the units stay within their strides, only batch 0 of a layout into which no
+batch fits reaches past the span; \ref gislib_random_streams_span explains
+what it draws there.
 
 No layout and no way of seeding makes the span larger (see
 \ref gislib_random_streams_span); more than it holds needs a generator with a
@@ -319,12 +324,11 @@ plus 0.25, wrapping past 1. The other three quarters add no values of their
 own, so the library places everything within the span, where no two
 positions are 2^46 draws apart.
 
-Run 0 of a layout into which no run fits reaches past the span, where the
+Batch 0 of a layout into which no batch fits reaches past the span, where the
 generator gives the values of the positions 2^46 draws earlier shifted by a
-constant. A tool which warns and continues in that case should say that
-values beyond 2^46 draws repeat earlier values shifted by a constant, not
-only that a limit was exceeded, as the fragments in
-\ref gislib_random_streams_usage do.
+constant. A tool which warns and continues in that case should say that values
+beyond 2^46 draws repeat earlier values shifted by a constant, not only that a
+limit was exceeded, as the fragments in \ref gislib_random_streams_usage do.
 
 Seeding computations separately does not give more room: more than 2^46
 values drawn in total, however they are seeded, include two positions a
@@ -358,28 +362,27 @@ the span.
 
 How often a computation meets these relations depends on how many values it
 draws. A distance occurs in a layout when two positions in use, positions at
-which some unit draws, lie exactly that far apart. The starts of two units
-are a multiple of the stride apart, and their positions in use lie that
-multiple apart give or take what a unit draws, so a layout drawing T values
-in total has at most about 2T of the 2^46 distances within the span. Taking
-those as scattered at random, any one distance occurs with a chance of
-2T / 2^46, which is 0.003, or 0.3%, for T = 10^11. The estimate in the table
-below is that chance times the number of distances with the row's relation
-or a coarser one, the 2^k - 1 multiples of 2^(46 - k) below 2^46: the number
-of such distances expected to occur, (2^k - 1) × 2T / 2^46. Well below 1, it
-reads as a chance: of a thousand computations drawing 10^11 values each,
-about three have two positions in use 2^45 draws apart. The estimate fits
-bounded and spread layouts, not run 0 of an exact layout, whose positions in
-use are the first T draws of the seed's sequence and so include every
-distance below T.
+which some unit draws, lie exactly that far apart. The starts of two units are
+a multiple of the stride apart, and their positions in use lie that multiple
+apart give or take what a unit draws, so a layout drawing T values in total
+has at most about 2T of the 2^46 distances within the span. Taking those as
+scattered at random, any one distance occurs with a chance of 2T / 2^46, which
+is 0.003, or 0.3%, for T = 10^11. The estimate in the table below is that
+chance times the number of distances with the row's relation or a coarser one,
+the 2^k - 1 multiples of 2^(46 - k) below 2^46: the number of such distances
+expected to occur, (2^k - 1) × 2T / 2^46. Well below 1, it reads as a chance:
+of a thousand computations drawing 10^11 values each, about three have two
+positions in use 2^45 draws apart. The estimate fits bounded and whole-span
+layouts, not batch 0 of an exact layout, whose positions in use are the first
+T draws of the seed's sequence and so include every distance below T.
 
-A spread layout is placed by dividing the span, so its units would land
+A whole-span layout is placed by dividing the span, so its units would land
 exactly on these distances if the span were divided into an even number of
 parts: the unit halfway along would start 2^45 draws after unit 0. With the
 odd number of parts, the unit which starts nearest to 2^45 draws after unit 0
 starts about half a stride from that position, and the unit nearest to 2^44
-about a quarter of a stride, for every number of units a spread layout
-accepts, so a spread unit meets those relations only after drawing about a
+about a quarter of a stride, for every number of units a whole-span layout
+accepts, so one of its units meets those relations only after drawing about a
 quarter of its stride. Rounding the stride down to odd leaves up to two draws
 of every part unused, and that loss accumulates along the span; the limit on
 the number of units keeps it within a few percent of a stride at 2^45 and
@@ -412,17 +415,17 @@ use, and only a comparison of the low bits of the difference finds them.
 
 By the rule above, a distance divisible by 2^j and by no higher power of two
 fixes the low j + 2 bits of the difference of two states. Units 2^i apart in
-number start 2^i × stride apart; with an odd stride that distance is
-divisible by 2^i and by no higher power of two, so units 1, 2 and 4 apart
-have the low 2, 3 and 4 bits of their difference fixed. With an even stride,
-say a bound of 1,024 taken as it is, every such distance carries the stride's
-power of two on top, and the same units have the low 12, 13 and 14 bits
-fixed. That is why the library keeps the stride odd: the spread layout rounds
-down to odd and the bounded layout rounds the bound up to odd, so no caller
-has to know the rule. An exact layout cannot round, since its units must draw
-what the seed's sequence draws; it keeps that sequence's structure and is
-never worse than the seed's sequence it reproduces, in which the same values
-were the stride apart already.
+number start 2^i × stride apart; with an odd stride that distance is divisible
+by 2^i and by no higher power of two, so units 1, 2 and 4 apart have the low
+2, 3 and 4 bits of their difference fixed. With an even stride, say a bound of
+1,024 taken as it is, every such distance carries the stride's power of two on
+top, and the same units have the low 12, 13 and 14 bits fixed. That is why the
+library keeps the stride odd: the whole-span layout rounds down to odd and the
+bounded layout rounds the bound up to odd, so no caller has to know the rule.
+An exact layout cannot round, since its units must draw what the seed's
+sequence draws; it keeps that sequence's structure and is never worse than the
+seed's sequence it reproduces, in which the same values were the stride apart
+already.
 
 ### Relations between seeds {#gislib_random_streams_between_seeds}
 
@@ -433,8 +436,8 @@ starts a quarter of the ring after seed 42 and draws 0.9945, 0.5927, 0.3611,
 0.8427, 0.6111, 0.9223, plus one half.
 
 Consecutive seeds start 2^16 apart in state. Since the step is linear, states
-x and x + d become a × x + c and a × x + a × d + c after one draw, so states
-d apart are a^t × d apart after t draws, whatever x was. Computations seeded
+x and x + d become a × x + c and a × x + a × d + c after one draw, so states d
+apart are a^t × d apart after t draws, whatever x was. Computations seeded
 seed, seed + 1, seed + 2 and so on are therefore not independent: at every
 draw, the one seeded seed + k has the value of the one seeded seed plus k
 times the same amount, modulo 1, so their values step by the same amount at
@@ -442,7 +445,7 @@ each draw instead of scattering. Seed 43 draws 0.6153, 0.0473, 0.8495, 0.8879
 and seed 44 draws 0.4861, 0.7519, 0.5880, 0.3534, nothing in common with seed
 42 at first sight, yet 43 minus 42 and 44 minus 43, modulo 1, are the same at
 every draw: 0.8708, 0.7046, 0.7384, 0.4655 for the first four. Computations
-meant to be independent are the runs of one layout, whose streams do not
+meant to be independent use the batches of one layout, whose streams do not
 overlap.
 
 ### Checking two sequences {#gislib_random_streams_checking}
@@ -476,15 +479,14 @@ uses one seed, as every ordinary execution of a tool does, needs to know
 nothing more: any seed in the range is as good as any other, and the layout
 keeps the streams apart.
 
-The relations between seeds matter only when several seeds are used
-together: an ensemble with one seed per invocation, computations compared
-after choosing their seeds by hand, or a script deriving seeds from one
-another. Keeping all the seeds from 0 to 2^30 - 1 rules out pairs a multiple
-of 2^30 apart; no range rules out seeds taken at a constant step. Seeds drawn
-at random, or hashed from names, avoid both relations as far as this
-generator allows, but not the overlap of computations seeded at random. The
-sound arrangement is one seed for all of them, each using its own run of the
-layout.
+The relations between seeds matter only when several seeds are used together:
+an ensemble with one seed per invocation, computations compared after choosing
+their seeds by hand, or a script deriving seeds from one another. Keeping all
+the seeds from 0 to 2^30 - 1 rules out pairs a multiple of 2^30 apart; no
+range rules out seeds taken at a constant step. Seeds drawn at random, or
+hashed from names, avoid both relations as far as this generator allows, but
+not the overlap of computations seeded at random. The sound arrangement is one
+seed for all of them, each using its own batch of the layout.
 
 The library does not parse a seed option. Parse it into a `long long` with
 `strtoll()`, since the parser checks an integer option only loosely and a
@@ -505,9 +507,9 @@ can be repeated.
 
 The shared generator, `G_srand48()` and `G_drand48()`, is unchanged. Code
 which seeds it and draws from it gets exactly the same values, the seed's
-sequence, from a state seeded with `G_random_seed()` and drawn from with
-`G_random_double()`, without moving the shared generator or being moved by
-it:
+sequence, from a state placed with `G_random_state_from_seed()` and drawn from
+with `G_random_double()`, without moving the shared generator or being moved
+by it:
 
 ```c
 // seed: the seed, a long long; value: a double;
@@ -517,7 +519,7 @@ G_srand48(seed);
 value = G_drand48();
 
 // After: a state of the program's own, giving the same values.
-G_random_seed(&rng, seed);
+G_random_state_from_seed(&rng, seed);
 value = G_random_double(&rng);
 ```
 
@@ -526,8 +528,8 @@ depended on the schedule for which unit got which values. With an exact
 layout, as in \ref gislib_random_streams_rows, each unit draws the values of
 the seed's sequence it drew in a single-threaded run, so those results are
 kept and no longer depend on the number of threads. Where the draws of a unit
-vary, a bounded or spread layout replaces the exact one, and the values of a
-seed change once.
+vary, a bounded or whole-span layout replaces the exact one, and the values of
+a seed change once.
 
 `G_srand48_auto()` seeds the shared generator with the seed
 `G_random_generate_seed()` returns, so code which generated a seed with it
@@ -535,11 +537,12 @@ calls `G_random_generate_seed()` instead and gets the same seed without
 seeding the shared generator, though not necessarily the same value where
 `long` has 32 bits, since `G_srand48_auto()` then returns a seed of 2^31 or
 more as a negative number. `G_srand48()` silently reduced any seed to its low
-32 bits, while the `G_random_*()` functions refuse a seed outside their
-range, so a tool which passes a user's seed through now refuses seeds it once
+32 bits, while the `G_random_*()` functions refuse a seed outside their range,
+so a tool which passes a user's seed through now refuses seeds it once
 accepted, such as 5000000000. Validate the seed right after parsing, before
 any work is done, by initializing the layout there, or, when the layout's
-counts are known only later, with `G_random_seed()` on a local state.
+counts are known only later, with `G_random_state_from_seed()` on a local
+state.
 
 The `G_random_*()` functions include no integer-returning one. To get an
 integer in [0, n), use `(long)(G_random_double(&rng) * n)`. With n = 2^31
