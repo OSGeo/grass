@@ -81,16 +81,19 @@ const char *G_datum_ellipsoid(int n)
 }
 
 /***********************************************************
- *  G_get_datumparams_from_projinfo(projinfo, datumname, params)
+ *  G_get_datumparams_from_projinfo(projinfo, datumname, datumname_size,
+ *                                   params, params_size)
  *     struct Key_Value *projinfo Set of key_value pairs containing
  *                       projection information in PROJ_INFO file
  *                       format
  *     char *datumname   Pointer into which a string containing
  *                       the datum name (if present) will be
  *                       placed.
+ *     size_t datumname_size  Size in bytes of the datumname buffer.
  *     char *params      Pointer into which a string containing
  *                       the datum parameters (if present) will
  *                       be placed.
+ *     size_t params_size  Size in bytes of the params buffer.
  *
  *  Extract the datum transformation-related parameters from a
  *  set of general PROJ_INFO parameters.
@@ -102,31 +105,37 @@ const char *G_datum_ellipsoid(int n)
  ************************************************************/
 
 int G_get_datumparams_from_projinfo(const struct Key_Value *projinfo,
-                                    char *datumname, char *params)
+                                    char *datumname, size_t datumname_size,
+                                    char *params, size_t params_size)
 {
     int returnval = -1;
 
     if (NULL != G_find_key_value("datum", projinfo)) {
-        sprintf(datumname, "%s", G_find_key_value("datum", projinfo));
+        snprintf(datumname, datumname_size, "%s",
+                 G_find_key_value("datum", projinfo));
         returnval = 1;
     }
 
     if (G_find_key_value("datumparams", projinfo) != NULL) {
-        sprintf(params, "%s", G_find_key_value("datumparams", projinfo));
+        snprintf(params, params_size, "%s",
+                 G_find_key_value("datumparams", projinfo));
         returnval = 2;
     }
     else if (G_find_key_value("nadgrids", projinfo) != NULL) {
-        sprintf(params, "nadgrids=%s", G_find_key_value("nadgrids", projinfo));
+        snprintf(params, params_size, "nadgrids=%s",
+                 G_find_key_value("nadgrids", projinfo));
         returnval = 2;
     }
     else if (G_find_key_value("towgs84", projinfo) != NULL) {
-        sprintf(params, "towgs84=%s", G_find_key_value("towgs84", projinfo));
+        snprintf(params, params_size, "towgs84=%s",
+                 G_find_key_value("towgs84", projinfo));
         returnval = 2;
     }
     else if (G_find_key_value("dx", projinfo) != NULL &&
              G_find_key_value("dy", projinfo) != NULL &&
              G_find_key_value("dz", projinfo) != NULL) {
-        sprintf(params, "towgs84=%s,%s,%s", G_find_key_value("dx", projinfo),
+        snprintf(params, params_size, "towgs84=%s,%s,%s",
+                 G_find_key_value("dx", projinfo),
                 G_find_key_value("dy", projinfo),
                 G_find_key_value("dz", projinfo));
         returnval = 2;
