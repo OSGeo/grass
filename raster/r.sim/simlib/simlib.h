@@ -63,10 +63,9 @@ typedef struct {
     int nstack;            // Number of output walkers
     struct point3D *stack; // Output 3D walkers
     int maxwa;             // Number of total walkers
-    double rwalk;      // Number of input walkers per block as double precision
-    struct point3D *w; // Weight of walkers
-    struct point2D *vavg;          // Average velocity of walkers
-    struct G_random_state *states; // Random number state of each walker
+    double rwalk;     // Number of input walkers per block as double precision
+    struct walker *w; // Walkers
+    struct point2D *vavg; // Average velocity of walkers
     int max_walkers; // Number of allocated walkers, maxwa plus one per cell
 } Simulation;
 
@@ -164,6 +163,14 @@ struct point3D {
     double x;
     double y;
     double m;
+};
+
+// A walker: position x and y, weight m, and its random number state
+struct walker {
+    double x;
+    double y;
+    double m;
+    struct G_random_state state;
 };
 
 void alloc_grids_water(const Geometry *geometry, const Outputs *outputs,

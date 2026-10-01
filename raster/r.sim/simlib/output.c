@@ -16,7 +16,6 @@ void free_walkers(Simulation *sim, const char *outwalk)
 {
     G_free(sim->w);
     G_free(sim->vavg);
-    G_free(sim->states);
     if (outwalk != NULL)
         G_free(sim->stack);
 }
