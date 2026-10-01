@@ -61,7 +61,10 @@ the quarter after it.
 
 ## Layouts {#gislib_random_streams_layouts}
 
-The three ways to initialize a layout differ in where the stride comes from:
+The simplest layout needs no `struct G_random_layout`: a state seeded with
+`G_random_seed(&rng, seed)` is a single unit which owns the whole span and
+draws the seed's sequence. The three ways to initialize a layout for more
+units differ in where the stride comes from:
 
 - An exact layout,
   `G_random_init_layout_exact(&layout, seed, units, draws_per_unit)`, takes
@@ -72,7 +75,9 @@ The three ways to initialize a layout differ in where the stride comes from:
 - A bounded layout,
   `G_random_init_layout_bounded(&layout, seed, units, max_draws)`, takes a
   bound on what a unit draws and rounds it up to odd (see
-  \ref gislib_random_streams_odd), for units whose draws vary.
+  \ref gislib_random_streams_odd), for units whose draws vary. But for that
+  rounding, it places the units as an exact layout with the bound as its
+  stride does.
 - A spread layout, `G_random_init_layout_spread(&layout, seed, units)`,
   divides the span into an odd number of equal parts, as many as there are
   units or one more when that number is even, and gives every unit the
@@ -83,11 +88,17 @@ The three ways to initialize a layout differ in where the stride comes from:
 
 \image html random_streams_layouts.svg
 
-The figure shows the three layouts of six units along the span, with what
-each unit of run 0 draws in dark. In the exact layout, run 0 is the seed's
-sequence and run 1 follows; in the bounded layout, each unit draws less than
-its stride; in the spread layout, the six units take six of seven parts, one
-run covers the span, and the last part stays unused.
+The figure shows the single state, whose one unit owns the whole span, and
+below it the layouts of six units, with what each unit of run 0 draws in
+dark. In the exact layout, run 0 is the seed's sequence and run 1 follows.
+The bounded layout has the strides of an exact layout whose stride is the
+bound, made odd, and each unit draws less than its stride. The spread layout
+divides the span into seven parts and not six, which would put unit 3 half
+the span after unit 0 (see \ref gislib_random_streams_distance); the six
+units take six of the seven parts, one run covers the span, and the last
+part stays unused. The two bars in grey show the strides before rounding and
+are not layouts the library makes, and the draw which rounding adds to a
+bounded stride is drawn much larger than it is.
 
 ### Runs {#gislib_random_streams_runs}
 
@@ -126,7 +137,8 @@ into shared sums.
 ### A single sequence {#gislib_random_streams_single}
 
 One sequence has one state, seeded with `G_random_seed(&rng, seed)` and
-drawn from in a loop. It needs no layout, so there are no runs to check:
+drawn from in a loop. Its one unit owns the whole span, so there is no
+`struct G_random_layout` to initialize and there are no runs to check:
 
 ```c
 // seed: the seed, a long long; n: how many values to draw; values: where
