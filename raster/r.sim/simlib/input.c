@@ -339,9 +339,10 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
         (int)(settings->timesec /
               (setup->deltap * setup->timec)); /* number of iterations = number
                                                   of cells to pass */
-    if (settings->ts && time_step_seconds(setup) > settings->iterout)
+    if (settings->ts && settings->iterout > 0 &&
+        time_step_seconds(setup) > settings->iterout)
         G_warning(_("Time step of %.2f s is longer than output_step of %d s, "
-                    "some output steps will be skipped"),
+                    "some output steps may be skipped"),
                   time_step_seconds(setup), settings->iterout);
 
     fprintf(stderr, "\n");
