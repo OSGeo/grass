@@ -62,12 +62,13 @@ span is always the quarter after it.
 
 ## Layouts {#gislib_random_streams_layouts}
 
-The basic layout gives its units the whole span. With a single unit there is
-nothing to divide and no `struct G_random_layout` is needed: a state placed
-with `G_random_state_from_seed(&rng, seed)` is that unit, which owns the whole
-span and draws the seed's sequence. The three ways to initialize a layout for
-more units differ in where the stride comes from:
+A layout gives every unit a stream of its own. A single sequence is the
+simplest case, and the three ways to initialize a layout for more units differ
+in where the stride comes from:
 
+- A single sequence, `G_random_state_from_seed(&rng, seed)`, is one unit which
+  owns the whole span and draws the seed's sequence. It needs no
+  `struct G_random_layout`: the function places the state at the seed.
 - A whole-span layout, `G_random_init_layout(&layout, seed, units)`, divides
   the span into an odd number of equal parts, as many as there are units or
   one more when that number is even, and gives every unit the longest stride
@@ -91,17 +92,17 @@ more units differ in where the stride comes from:
 
 \image html random_streams_layouts.svg
 
-The figure shows the single state, whose one unit owns the whole span, and
+The figure shows the single sequence, whose one unit owns the whole span, and
 below it the layouts of six units, with what each unit of batch 0 draws in
-dark. The whole-span layout divides the span into seven parts and not six,
-which would put unit 3 half the span after unit 0 (see
-\ref gislib_random_streams_distance); the six units take six of the seven
-parts, one batch covers the span, and the last part stays unused. In the exact
-layout, batch 0 is the seed's sequence and batch 1 follows. The bounded layout
-has the strides of an exact layout whose stride is the bound, made odd, and
-each unit draws less than its stride. The two bars in grey show the strides
-before rounding and are not layouts the library makes, and the draw which
-rounding adds to a bounded stride is drawn much larger than it is.
+dark. The whole-span layout divides the span into seven parts; the six units
+take six of them, one batch covers the span, and the last part stays unused.
+Without the rounding it would be six parts, the grey bar below it, and unit 3
+would start half the span after unit 0, where the values relate to those of
+unit 0 (see \ref gislib_random_streams_distance). In the exact layout, batch 0
+is the seed's sequence and batch 1 follows. The bounded layout has the strides
+of an exact layout whose stride is the bound, the grey bar below it, made odd,
+and each unit draws less than its stride; the draw which rounding adds to a
+stride is drawn much wider than one draw is.
 
 ### Batches {#gislib_random_streams_batches}
 

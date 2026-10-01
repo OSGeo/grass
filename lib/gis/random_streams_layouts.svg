@@ -1,200 +1,203 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="576" viewBox="0 0 640 576" font-family="sans-serif" font-size="13" fill="#222">
-  <title>The single state and the whole-span, exact and bounded layouts of six units along the span</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="572" viewBox="0 0 640 572" font-family="sans-serif" font-size="13" fill="#222">
+  <title>A single sequence and the whole-span, exact and bounded layouts of six units along the span</title>
   <!-- The end of the span, 2^46 draws after the seed, for all the bars. -->
-  <line x1="600" y1="42" x2="600" y2="502" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6 5"/>
-  <!-- The single state: one unit which owns the whole span and draws the
+  <line x1="600" y1="42" x2="600" y2="518" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <!-- A single sequence: one unit which owns the whole span and draws the
        seed's sequence, the values the units of batch 0 of the exact layout
        below draw together. -->
-  <text x="80" y="22">one state: G_random_state_from_seed()</text>
+  <text x="80" y="22">a single sequence: G_random_state_from_seed()</text>
   <text x="80" y="38">one unit, which owns the whole span and draws the seed's sequence</text>
   <rect x="80" y="48" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
   <rect x="80" y="48" width="216" height="24" fill="#222"/>
   <text x="188" y="64.5" text-anchor="middle" fill="#fff">the seed's sequence</text>
   <circle cx="80" cy="60" r="5" fill="#c33"/>
   <text x="70" y="64.5" text-anchor="end">seed</text>
-  <!-- Before rounding: the span divided into as many parts as there are
-       units; unit 3 starts half the span after unit 0. In grey, since the
-       library does not make this layout. -->
-  <text x="80" y="100" fill="#999">before rounding: the span divided by the number of units</text>
-  <text x="80" y="116" fill="#999">unit 3 would start half the span after unit 0</text>
-  <rect x="80" y="126" width="520" height="24" fill="none" stroke="#999" stroke-width="1.5"/>
-  <rect x="80" y="126" width="14" height="24" fill="#999"/>
-  <text x="140.667" y="142.5" text-anchor="middle" fill="#999">0</text>
-  <line x1="166.667" y1="126" x2="166.667" y2="150" stroke="#999" stroke-width="1.5"/>
-  <rect x="166.667" y="126" width="22" height="24" fill="#999"/>
-  <text x="227.333" y="142.5" text-anchor="middle" fill="#999">1</text>
-  <line x1="253.333" y1="126" x2="253.333" y2="150" stroke="#999" stroke-width="1.5"/>
-  <rect x="253.333" y="126" width="9" height="24" fill="#999"/>
-  <text x="314" y="142.5" text-anchor="middle" fill="#999">2</text>
-  <line x1="340" y1="126" x2="340" y2="150" stroke="#999" stroke-width="1.5"/>
-  <rect x="340" y="126" width="27" height="24" fill="#999"/>
-  <text x="400.667" y="142.5" text-anchor="middle" fill="#999">3</text>
-  <line x1="426.667" y1="126" x2="426.667" y2="150" stroke="#999" stroke-width="1.5"/>
-  <rect x="426.667" y="126" width="19" height="24" fill="#999"/>
-  <text x="487.333" y="142.5" text-anchor="middle" fill="#999">4</text>
-  <line x1="513.333" y1="126" x2="513.333" y2="150" stroke="#999" stroke-width="1.5"/>
-  <rect x="513.333" y="126" width="12" height="24" fill="#999"/>
-  <text x="574" y="142.5" text-anchor="middle" fill="#999">5</text>
-  <line x1="600" y1="126" x2="600" y2="150" stroke="#999" stroke-width="1.5"/>
   <!-- The whole span divided into an odd number of equal parts, seven for
        six units, and a stride of a part rounded down to odd; the six units
        take six parts, the last part stays unused, and there is one batch
        only. -->
-  <text x="80" y="174">the whole span: G_random_init_layout()</text>
-  <text x="80" y="190">stride: a part rounded down to odd, seven parts for six units; one batch only</text>
-  <rect x="80" y="200" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
-  <rect x="80" y="200" width="14" height="24" fill="#222"/>
-  <text x="132" y="216.5" text-anchor="middle">0</text>
-  <line x1="154.286" y1="200" x2="154.286" y2="224" stroke="#222" stroke-width="1.5"/>
-  <rect x="154.286" y="200" width="22" height="24" fill="#222"/>
-  <text x="206.286" y="216.5" text-anchor="middle">1</text>
-  <line x1="228.571" y1="200" x2="228.571" y2="224" stroke="#222" stroke-width="1.5"/>
-  <rect x="228.571" y="200" width="9" height="24" fill="#222"/>
-  <text x="280.571" y="216.5" text-anchor="middle">2</text>
-  <line x1="302.857" y1="200" x2="302.857" y2="224" stroke="#222" stroke-width="1.5"/>
-  <rect x="302.857" y="200" width="27" height="24" fill="#222"/>
-  <text x="354.857" y="216.5" text-anchor="middle">3</text>
-  <line x1="377.143" y1="200" x2="377.143" y2="224" stroke="#222" stroke-width="1.5"/>
-  <rect x="377.143" y="200" width="19" height="24" fill="#222"/>
-  <text x="429.143" y="216.5" text-anchor="middle">4</text>
-  <line x1="451.429" y1="200" x2="451.429" y2="224" stroke="#222" stroke-width="1.5"/>
-  <rect x="451.429" y="200" width="12" height="24" fill="#222"/>
-  <text x="503.429" y="216.5" text-anchor="middle">5</text>
-  <line x1="525.714" y1="200" x2="525.714" y2="224" stroke="#222" stroke-width="1.5"/>
-  <text x="562.857" y="216.5" text-anchor="middle" fill="#888">unused</text>
-  <circle cx="80" cy="212" r="5" fill="#c33"/>
-  <text x="70" y="216.5" text-anchor="end">seed</text>
-  <path d="M 80 228 L 80 232 L 525.714 232 L 525.714 228" fill="none" stroke="#222" stroke-width="1.5"/>
-  <text x="302.857" y="248" text-anchor="middle">batch 0, the only batch</text>
-  <!-- Half the span, 2^45 draws after the seed: the start of unit 3 with six
-       parts, the middle of its stride with seven. -->
-  <line x1="340" y1="123" x2="340" y2="157" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <line x1="340" y1="197" x2="340" y2="231" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="80" y="100">the whole span: G_random_init_layout()</text>
+  <text x="80" y="116">stride: a part rounded down to odd, seven parts for six units; one batch only</text>
+  <rect x="80" y="126" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
+  <rect x="80" y="126" width="14" height="24" fill="#222"/>
+  <text x="132" y="142.5" text-anchor="middle">0</text>
+  <line x1="154.286" y1="126" x2="154.286" y2="150" stroke="#222" stroke-width="1.5"/>
+  <rect x="154.286" y="126" width="22" height="24" fill="#222"/>
+  <text x="206.286" y="142.5" text-anchor="middle">1</text>
+  <line x1="228.571" y1="126" x2="228.571" y2="150" stroke="#222" stroke-width="1.5"/>
+  <rect x="228.571" y="126" width="9" height="24" fill="#222"/>
+  <text x="280.571" y="142.5" text-anchor="middle">2</text>
+  <line x1="302.857" y1="126" x2="302.857" y2="150" stroke="#222" stroke-width="1.5"/>
+  <rect x="302.857" y="126" width="27" height="24" fill="#222"/>
+  <text x="354.857" y="142.5" text-anchor="middle">3</text>
+  <line x1="377.143" y1="126" x2="377.143" y2="150" stroke="#222" stroke-width="1.5"/>
+  <rect x="377.143" y="126" width="19" height="24" fill="#222"/>
+  <text x="429.143" y="142.5" text-anchor="middle">4</text>
+  <line x1="451.429" y1="126" x2="451.429" y2="150" stroke="#222" stroke-width="1.5"/>
+  <rect x="451.429" y="126" width="12" height="24" fill="#222"/>
+  <text x="503.429" y="142.5" text-anchor="middle">5</text>
+  <line x1="525.714" y1="126" x2="525.714" y2="150" stroke="#222" stroke-width="1.5"/>
+  <text x="562.857" y="142.5" text-anchor="middle" fill="#888">unused</text>
+  <circle cx="80" cy="138" r="5" fill="#c33"/>
+  <text x="70" y="142.5" text-anchor="end">seed</text>
+  <line x1="340" y1="123" x2="340" y2="153" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <path d="M 80 154 L 80 158 L 525.714 158 L 525.714 154" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="228.571" y="174" text-anchor="middle">batch 0, the only batch</text>
+  <!-- Without the rounding: the span divided into as many parts as there
+       are units; unit 3 starts half the span after unit 0. In grey, since
+       the library does not make this layout. -->
+  <text x="80" y="198" fill="#999">without the rounding it would be six parts, and unit 3 would start at half the span</text>
+  <rect x="80" y="208" width="520" height="24" fill="none" stroke="#999" stroke-width="1.5"/>
+  <rect x="80" y="208" width="14" height="24" fill="#999"/>
+  <text x="140.667" y="224.5" text-anchor="middle" fill="#999">0</text>
+  <line x1="166.667" y1="208" x2="166.667" y2="232" stroke="#999" stroke-width="1.5"/>
+  <rect x="166.667" y="208" width="22" height="24" fill="#999"/>
+  <text x="227.333" y="224.5" text-anchor="middle" fill="#999">1</text>
+  <line x1="253.333" y1="208" x2="253.333" y2="232" stroke="#999" stroke-width="1.5"/>
+  <rect x="253.333" y="208" width="9" height="24" fill="#999"/>
+  <text x="314" y="224.5" text-anchor="middle" fill="#999">2</text>
+  <line x1="340" y1="208" x2="340" y2="232" stroke="#999" stroke-width="1.5"/>
+  <rect x="340" y="208" width="27" height="24" fill="#999"/>
+  <text x="400.667" y="224.5" text-anchor="middle" fill="#999">3</text>
+  <line x1="426.667" y1="208" x2="426.667" y2="232" stroke="#999" stroke-width="1.5"/>
+  <rect x="426.667" y="208" width="19" height="24" fill="#999"/>
+  <text x="487.333" y="224.5" text-anchor="middle" fill="#999">4</text>
+  <line x1="513.333" y1="208" x2="513.333" y2="232" stroke="#999" stroke-width="1.5"/>
+  <rect x="513.333" y="208" width="12" height="24" fill="#999"/>
+  <text x="574" y="224.5" text-anchor="middle" fill="#999">5</text>
+  <line x1="600" y1="208" x2="600" y2="232" stroke="#999" stroke-width="1.5"/>
+  <circle cx="80" cy="220" r="5" fill="#dba5a5"/>
+  <text x="70" y="224.5" text-anchor="end" fill="#999">seed</text>
+  <line x1="340" y1="205" x2="340" y2="235" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <!-- Half the span, 2^45 draws after the seed: the middle of the stride of
+       unit 3 with seven parts, its start with six. -->
+  <text x="340" y="254" text-anchor="middle" fill="#c33">half the span: values there differ from the seed's by two constants in turn</text>
   <!-- Exact: a stride of exactly the values a unit draws; batch 0 is the
        seed's sequence and batch 1 the next six units. -->
-  <text x="80" y="272">exact: G_random_init_layout_exact()</text>
-  <text x="80" y="288">stride: the values each unit draws; batch 0 is the seed's sequence</text>
-  <rect x="80" y="298" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
-  <rect x="80" y="298" width="216" height="24" fill="#222"/>
-  <text x="98" y="314.5" text-anchor="middle" fill="#fff">0</text>
-  <line x1="116" y1="298" x2="116" y2="322" stroke="#fff" stroke-width="1.5"/>
-  <text x="134" y="314.5" text-anchor="middle" fill="#fff">1</text>
-  <line x1="152" y1="298" x2="152" y2="322" stroke="#fff" stroke-width="1.5"/>
-  <text x="170" y="314.5" text-anchor="middle" fill="#fff">2</text>
-  <line x1="188" y1="298" x2="188" y2="322" stroke="#fff" stroke-width="1.5"/>
-  <text x="206" y="314.5" text-anchor="middle" fill="#fff">3</text>
-  <line x1="224" y1="298" x2="224" y2="322" stroke="#fff" stroke-width="1.5"/>
-  <text x="242" y="314.5" text-anchor="middle" fill="#fff">4</text>
-  <line x1="260" y1="298" x2="260" y2="322" stroke="#fff" stroke-width="1.5"/>
-  <text x="278" y="314.5" text-anchor="middle" fill="#fff">5</text>
-  <text x="314" y="314.5" text-anchor="middle">0</text>
-  <line x1="332" y1="298" x2="332" y2="322" stroke="#222" stroke-width="1.5"/>
-  <text x="350" y="314.5" text-anchor="middle">1</text>
-  <line x1="368" y1="298" x2="368" y2="322" stroke="#222" stroke-width="1.5"/>
-  <text x="386" y="314.5" text-anchor="middle">2</text>
-  <line x1="404" y1="298" x2="404" y2="322" stroke="#222" stroke-width="1.5"/>
-  <text x="422" y="314.5" text-anchor="middle">3</text>
-  <line x1="440" y1="298" x2="440" y2="322" stroke="#222" stroke-width="1.5"/>
-  <text x="458" y="314.5" text-anchor="middle">4</text>
-  <line x1="476" y1="298" x2="476" y2="322" stroke="#222" stroke-width="1.5"/>
-  <text x="494" y="314.5" text-anchor="middle">5</text>
-  <line x1="512" y1="298" x2="512" y2="322" stroke="#222" stroke-width="1.5"/>
-  <circle cx="80" cy="310" r="5" fill="#c33"/>
-  <text x="70" y="314.5" text-anchor="end">seed</text>
-  <path d="M 80 326 L 80 330 L 296 330 L 296 326" fill="none" stroke="#222" stroke-width="1.5"/>
-  <text x="188" y="346" text-anchor="middle">batch 0: the seed's sequence</text>
-  <path d="M 296 326 L 296 330 L 512 330 L 512 326" fill="none" stroke="#222" stroke-width="1.5"/>
-  <text x="404" y="346" text-anchor="middle">batch 1</text>
-  <!-- Before rounding: the bound as the stride, the strides of the exact
-       layout above; each unit draws less than the bound. In grey, since the
-       library does not make this layout. -->
-  <text x="80" y="370" fill="#999">before rounding: the bound as the stride</text>
-  <text x="80" y="386" fill="#999">the strides of the exact layout; a unit may draw less than the bound</text>
-  <rect x="80" y="396" width="520" height="24" fill="none" stroke="#999" stroke-width="1.5"/>
-  <rect x="80" y="396" width="8" height="24" fill="#999"/>
-  <text x="105.92" y="412.5" text-anchor="middle" fill="#999">0</text>
-  <line x1="116" y1="396" x2="116" y2="420" stroke="#999" stroke-width="1.5"/>
-  <rect x="116" y="396" width="13" height="24" fill="#999"/>
-  <text x="141.92" y="412.5" text-anchor="middle" fill="#999">1</text>
-  <line x1="152" y1="396" x2="152" y2="420" stroke="#999" stroke-width="1.5"/>
-  <rect x="152" y="396" width="5" height="24" fill="#999"/>
-  <text x="177.92" y="412.5" text-anchor="middle" fill="#999">2</text>
-  <line x1="188" y1="396" x2="188" y2="420" stroke="#999" stroke-width="1.5"/>
-  <rect x="188" y="396" width="16" height="24" fill="#999"/>
-  <text x="213.92" y="412.5" text-anchor="middle" fill="#999">3</text>
-  <line x1="224" y1="396" x2="224" y2="420" stroke="#999" stroke-width="1.5"/>
-  <rect x="224" y="396" width="11" height="24" fill="#999"/>
-  <text x="249.92" y="412.5" text-anchor="middle" fill="#999">4</text>
-  <line x1="260" y1="396" x2="260" y2="420" stroke="#999" stroke-width="1.5"/>
-  <rect x="260" y="396" width="7" height="24" fill="#999"/>
-  <text x="285.92" y="412.5" text-anchor="middle" fill="#999">5</text>
-  <line x1="296" y1="396" x2="296" y2="420" stroke="#999" stroke-width="1.5"/>
-  <text x="321.92" y="412.5" text-anchor="middle" fill="#999">0</text>
-  <line x1="332" y1="396" x2="332" y2="420" stroke="#999" stroke-width="1.5"/>
-  <text x="357.92" y="412.5" text-anchor="middle" fill="#999">1</text>
-  <line x1="368" y1="396" x2="368" y2="420" stroke="#999" stroke-width="1.5"/>
-  <text x="393.92" y="412.5" text-anchor="middle" fill="#999">2</text>
-  <line x1="404" y1="396" x2="404" y2="420" stroke="#999" stroke-width="1.5"/>
-  <text x="429.92" y="412.5" text-anchor="middle" fill="#999">3</text>
-  <line x1="440" y1="396" x2="440" y2="420" stroke="#999" stroke-width="1.5"/>
-  <text x="465.92" y="412.5" text-anchor="middle" fill="#999">4</text>
-  <line x1="476" y1="396" x2="476" y2="420" stroke="#999" stroke-width="1.5"/>
-  <text x="501.92" y="412.5" text-anchor="middle" fill="#999">5</text>
-  <line x1="512" y1="396" x2="512" y2="420" stroke="#999" stroke-width="1.5"/>
+  <text x="80" y="282">exact: G_random_init_layout_exact()</text>
+  <text x="80" y="298">stride: the values each unit draws; batch 0 is the seed's sequence</text>
+  <rect x="80" y="308" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
+  <rect x="80" y="308" width="216" height="24" fill="#222"/>
+  <text x="98" y="324.5" text-anchor="middle" fill="#fff">0</text>
+  <line x1="116" y1="308" x2="116" y2="332" stroke="#fff" stroke-width="1.5"/>
+  <text x="134" y="324.5" text-anchor="middle" fill="#fff">1</text>
+  <line x1="152" y1="308" x2="152" y2="332" stroke="#fff" stroke-width="1.5"/>
+  <text x="170" y="324.5" text-anchor="middle" fill="#fff">2</text>
+  <line x1="188" y1="308" x2="188" y2="332" stroke="#fff" stroke-width="1.5"/>
+  <text x="206" y="324.5" text-anchor="middle" fill="#fff">3</text>
+  <line x1="224" y1="308" x2="224" y2="332" stroke="#fff" stroke-width="1.5"/>
+  <text x="242" y="324.5" text-anchor="middle" fill="#fff">4</text>
+  <line x1="260" y1="308" x2="260" y2="332" stroke="#fff" stroke-width="1.5"/>
+  <text x="278" y="324.5" text-anchor="middle" fill="#fff">5</text>
+  <text x="314" y="324.5" text-anchor="middle">0</text>
+  <line x1="332" y1="308" x2="332" y2="332" stroke="#222" stroke-width="1.5"/>
+  <text x="350" y="324.5" text-anchor="middle">1</text>
+  <line x1="368" y1="308" x2="368" y2="332" stroke="#222" stroke-width="1.5"/>
+  <text x="386" y="324.5" text-anchor="middle">2</text>
+  <line x1="404" y1="308" x2="404" y2="332" stroke="#222" stroke-width="1.5"/>
+  <text x="422" y="324.5" text-anchor="middle">3</text>
+  <line x1="440" y1="308" x2="440" y2="332" stroke="#222" stroke-width="1.5"/>
+  <text x="458" y="324.5" text-anchor="middle">4</text>
+  <line x1="476" y1="308" x2="476" y2="332" stroke="#222" stroke-width="1.5"/>
+  <text x="494" y="324.5" text-anchor="middle">5</text>
+  <line x1="512" y1="308" x2="512" y2="332" stroke="#222" stroke-width="1.5"/>
+  <circle cx="80" cy="320" r="5" fill="#c33"/>
+  <text x="70" y="324.5" text-anchor="end">seed</text>
+  <path d="M 80 336 L 80 340 L 296 340 L 296 336" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="188" y="356" text-anchor="middle">batch 0: the seed's sequence</text>
+  <path d="M 296 336 L 296 340 L 512 340 L 512 336" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="404" y="356" text-anchor="middle">batch 1</text>
   <!-- Bounded: a stride of the bound rounded up to odd, with the added draw
-       in light grey, much wider than it is. -->
-  <text x="80" y="444">bounded: G_random_init_layout_bounded()</text>
-  <text x="80" y="460">stride: the bound rounded up to odd, which adds one draw to an even bound</text>
-  <rect x="80" y="470" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
-  <rect x="80" y="470" width="8" height="24" fill="#222"/>
-  <rect x="116" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="106" y="486.5" text-anchor="middle">0</text>
-  <line x1="120" y1="470" x2="120" y2="494" stroke="#222" stroke-width="1.5"/>
-  <rect x="120" y="470" width="13" height="24" fill="#222"/>
-  <rect x="156" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="146" y="486.5" text-anchor="middle">1</text>
-  <line x1="160" y1="470" x2="160" y2="494" stroke="#222" stroke-width="1.5"/>
-  <rect x="160" y="470" width="5" height="24" fill="#222"/>
-  <rect x="196" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="186" y="486.5" text-anchor="middle">2</text>
-  <line x1="200" y1="470" x2="200" y2="494" stroke="#222" stroke-width="1.5"/>
-  <rect x="200" y="470" width="16" height="24" fill="#222"/>
-  <rect x="236" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="226" y="486.5" text-anchor="middle">3</text>
-  <line x1="240" y1="470" x2="240" y2="494" stroke="#222" stroke-width="1.5"/>
-  <rect x="240" y="470" width="11" height="24" fill="#222"/>
-  <rect x="276" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="266" y="486.5" text-anchor="middle">4</text>
-  <line x1="280" y1="470" x2="280" y2="494" stroke="#222" stroke-width="1.5"/>
-  <rect x="280" y="470" width="7" height="24" fill="#222"/>
-  <rect x="316" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="306" y="486.5" text-anchor="middle">5</text>
-  <line x1="320" y1="470" x2="320" y2="494" stroke="#222" stroke-width="1.5"/>
-  <rect x="356" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="346" y="486.5" text-anchor="middle">0</text>
-  <line x1="360" y1="470" x2="360" y2="494" stroke="#222" stroke-width="1.5"/>
-  <rect x="396" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="386" y="486.5" text-anchor="middle">1</text>
-  <line x1="400" y1="470" x2="400" y2="494" stroke="#222" stroke-width="1.5"/>
-  <rect x="436" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="426" y="486.5" text-anchor="middle">2</text>
-  <line x1="440" y1="470" x2="440" y2="494" stroke="#222" stroke-width="1.5"/>
-  <rect x="476" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="466" y="486.5" text-anchor="middle">3</text>
-  <line x1="480" y1="470" x2="480" y2="494" stroke="#222" stroke-width="1.5"/>
-  <rect x="516" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="506" y="486.5" text-anchor="middle">4</text>
-  <line x1="520" y1="470" x2="520" y2="494" stroke="#222" stroke-width="1.5"/>
-  <rect x="556" y="471" width="4" height="22" fill="#ccc"/>
-  <text x="546" y="486.5" text-anchor="middle">5</text>
-  <line x1="560" y1="470" x2="560" y2="494" stroke="#222" stroke-width="1.5"/>
-  <circle cx="80" cy="482" r="5" fill="#c33"/>
-  <text x="70" y="486.5" text-anchor="end">seed</text>
-  <path d="M 80 498 L 80 502 L 320 502 L 320 498" fill="none" stroke="#222" stroke-width="1.5"/>
-  <text x="200" y="518" text-anchor="middle">batch 0</text>
-  <path d="M 320 498 L 320 502 L 560 502 L 560 498" fill="none" stroke="#222" stroke-width="1.5"/>
-  <text x="440" y="518" text-anchor="middle">batch 1</text>
-  <text x="600" y="544" text-anchor="end">dark: what the units of batch 0 draw; light grey: the draw added by rounding, not to scale</text>
-  <text x="600" y="562" text-anchor="end">dashed: the end of the span, 2^46 draws after the seed; red dashed: half the span</text>
+       in light grey, much wider than one draw is. -->
+  <text x="80" y="380">bounded: G_random_init_layout_bounded()</text>
+  <text x="80" y="396">stride: the bound rounded up to odd; light grey: the draw added to an even bound</text>
+  <rect x="80" y="406" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
+  <rect x="80" y="406" width="8" height="24" fill="#222"/>
+  <rect x="116" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="106" y="422.5" text-anchor="middle">0</text>
+  <line x1="120" y1="406" x2="120" y2="430" stroke="#222" stroke-width="1.5"/>
+  <rect x="120" y="406" width="13" height="24" fill="#222"/>
+  <rect x="156" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="146" y="422.5" text-anchor="middle">1</text>
+  <line x1="160" y1="406" x2="160" y2="430" stroke="#222" stroke-width="1.5"/>
+  <rect x="160" y="406" width="5" height="24" fill="#222"/>
+  <rect x="196" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="186" y="422.5" text-anchor="middle">2</text>
+  <line x1="200" y1="406" x2="200" y2="430" stroke="#222" stroke-width="1.5"/>
+  <rect x="200" y="406" width="16" height="24" fill="#222"/>
+  <rect x="236" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="226" y="422.5" text-anchor="middle">3</text>
+  <line x1="240" y1="406" x2="240" y2="430" stroke="#222" stroke-width="1.5"/>
+  <rect x="240" y="406" width="11" height="24" fill="#222"/>
+  <rect x="276" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="266" y="422.5" text-anchor="middle">4</text>
+  <line x1="280" y1="406" x2="280" y2="430" stroke="#222" stroke-width="1.5"/>
+  <rect x="280" y="406" width="7" height="24" fill="#222"/>
+  <rect x="316" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="306" y="422.5" text-anchor="middle">5</text>
+  <line x1="320" y1="406" x2="320" y2="430" stroke="#222" stroke-width="1.5"/>
+  <rect x="356" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="346" y="422.5" text-anchor="middle">0</text>
+  <line x1="360" y1="406" x2="360" y2="430" stroke="#222" stroke-width="1.5"/>
+  <rect x="396" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="386" y="422.5" text-anchor="middle">1</text>
+  <line x1="400" y1="406" x2="400" y2="430" stroke="#222" stroke-width="1.5"/>
+  <rect x="436" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="426" y="422.5" text-anchor="middle">2</text>
+  <line x1="440" y1="406" x2="440" y2="430" stroke="#222" stroke-width="1.5"/>
+  <rect x="476" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="466" y="422.5" text-anchor="middle">3</text>
+  <line x1="480" y1="406" x2="480" y2="430" stroke="#222" stroke-width="1.5"/>
+  <rect x="516" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="506" y="422.5" text-anchor="middle">4</text>
+  <line x1="520" y1="406" x2="520" y2="430" stroke="#222" stroke-width="1.5"/>
+  <rect x="556" y="407" width="4" height="22" fill="#ccc"/>
+  <text x="546" y="422.5" text-anchor="middle">5</text>
+  <line x1="560" y1="406" x2="560" y2="430" stroke="#222" stroke-width="1.5"/>
+  <circle cx="80" cy="418" r="5" fill="#c33"/>
+  <text x="70" y="422.5" text-anchor="end">seed</text>
+  <path d="M 80 434 L 80 438 L 320 438 L 320 434" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="200" y="454" text-anchor="middle">batch 0</text>
+  <path d="M 320 434 L 320 438 L 560 438 L 560 434" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="440" y="454" text-anchor="middle">batch 1</text>
+  <!-- Without the rounding: the bound as the stride, the strides of the
+       exact layout above; each unit draws less than the bound. In grey,
+       since the library does not make this layout. -->
+  <text x="80" y="478" fill="#999">without the rounding it would be the strides of the exact layout</text>
+  <rect x="80" y="488" width="520" height="24" fill="none" stroke="#999" stroke-width="1.5"/>
+  <rect x="80" y="488" width="8" height="24" fill="#999"/>
+  <text x="105.92" y="504.5" text-anchor="middle" fill="#999">0</text>
+  <line x1="116" y1="488" x2="116" y2="512" stroke="#999" stroke-width="1.5"/>
+  <rect x="116" y="488" width="13" height="24" fill="#999"/>
+  <text x="141.92" y="504.5" text-anchor="middle" fill="#999">1</text>
+  <line x1="152" y1="488" x2="152" y2="512" stroke="#999" stroke-width="1.5"/>
+  <rect x="152" y="488" width="5" height="24" fill="#999"/>
+  <text x="177.92" y="504.5" text-anchor="middle" fill="#999">2</text>
+  <line x1="188" y1="488" x2="188" y2="512" stroke="#999" stroke-width="1.5"/>
+  <rect x="188" y="488" width="16" height="24" fill="#999"/>
+  <text x="213.92" y="504.5" text-anchor="middle" fill="#999">3</text>
+  <line x1="224" y1="488" x2="224" y2="512" stroke="#999" stroke-width="1.5"/>
+  <rect x="224" y="488" width="11" height="24" fill="#999"/>
+  <text x="249.92" y="504.5" text-anchor="middle" fill="#999">4</text>
+  <line x1="260" y1="488" x2="260" y2="512" stroke="#999" stroke-width="1.5"/>
+  <rect x="260" y="488" width="7" height="24" fill="#999"/>
+  <text x="285.92" y="504.5" text-anchor="middle" fill="#999">5</text>
+  <line x1="296" y1="488" x2="296" y2="512" stroke="#999" stroke-width="1.5"/>
+  <text x="321.92" y="504.5" text-anchor="middle" fill="#999">0</text>
+  <line x1="332" y1="488" x2="332" y2="512" stroke="#999" stroke-width="1.5"/>
+  <text x="357.92" y="504.5" text-anchor="middle" fill="#999">1</text>
+  <line x1="368" y1="488" x2="368" y2="512" stroke="#999" stroke-width="1.5"/>
+  <text x="393.92" y="504.5" text-anchor="middle" fill="#999">2</text>
+  <line x1="404" y1="488" x2="404" y2="512" stroke="#999" stroke-width="1.5"/>
+  <text x="429.92" y="504.5" text-anchor="middle" fill="#999">3</text>
+  <line x1="440" y1="488" x2="440" y2="512" stroke="#999" stroke-width="1.5"/>
+  <text x="465.92" y="504.5" text-anchor="middle" fill="#999">4</text>
+  <line x1="476" y1="488" x2="476" y2="512" stroke="#999" stroke-width="1.5"/>
+  <text x="501.92" y="504.5" text-anchor="middle" fill="#999">5</text>
+  <line x1="512" y1="488" x2="512" y2="512" stroke="#999" stroke-width="1.5"/>
+  <circle cx="80" cy="500" r="5" fill="#dba5a5"/>
+  <text x="70" y="504.5" text-anchor="end" fill="#999">seed</text>
+  <text x="600" y="540" text-anchor="end">red dot: the seed; dashed line: the end of the span, 2^46 draws after the seed</text>
+  <text x="600" y="558" text-anchor="end">dark: what the units of batch 0 draw; grey bars: not layouts, shown for comparison</text>
 </svg>
