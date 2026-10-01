@@ -25,7 +25,7 @@
  * unit a sequence fixed by the seed and the unit's number, not by the
  * thread that draws it. The library places the units within the
  * span, the first 2^46 draws after the seed, a quarter of the generator's
- * cycle: a layout gives every unit of every run a stream of stride draws
+ * cycle: a layout gives every unit of every batch a stream of stride draws
  * in it, and a state is put at the start of its unit's stream. See \ref
  * gislib_random_streams for the model.
  *
@@ -66,19 +66,19 @@ typedef unsigned short uint16;
 typedef unsigned int uint32;
 typedef signed int int32;
 
-#define LCG_A            UINT64_C(0x5DEECE66D)
-#define LCG_B            UINT64_C(0xB)
-#define MASK48           UINT64_C(0xFFFFFFFFFFFF)
+#define LCG_A                UINT64_C(0x5DEECE66D)
+#define LCG_B                UINT64_C(0xB)
+#define MASK48               UINT64_C(0xFFFFFFFFFFFF)
 
 /* The multiplier has order 2^46 modulo 2^48, so two states 2^46, 2^47 or
  * 3 * 2^46 draws apart give values which differ by a constant for as long
  * as they run. The layouts therefore place all their units within the
  * first 2^46 draws after the seed, the span. */
-#define LCG_SPAN         (UINT64_C(1) << 46)
+#define LCG_SPAN             (UINT64_C(1) << 46)
 
-/* The most units a spread layout takes; see G_random_init_layout_spread()
- * for why. */
-#define SPREAD_MAX_UNITS (1LL << 20)
+/* The most units a layout of the whole span takes; see
+ * G_random_init_layout() for why. */
+#define WHOLE_SPAN_MAX_UNITS (1LL << 20)
 
 #if LRAND48_ATOMIC
 
@@ -179,9 +179,9 @@ static int seed_from_environment(const char *name, long long *seed)
  * anything else is a fatal error naming the variable. A value from -2^31
  * to 2^32 - 1 is returned as it is, and a value outside that range is
  * reduced to its low 32 bits, between 0 and 2^32 - 1, with a warning. The
- * result is therefore a seed G_random_seed(), the layout functions and
- * G_srand48() accept. Record it, for example in the history of the output
- * map, so that the run can be repeated with it as the seed.
+ * result is therefore a seed G_random_state_from_seed(), the layout
+ * functions and G_srand48() accept. Record it, for example in the history of
+ * the output map, so that the run can be repeated with it as the seed.
  *
  * The hash of the time and process ID lies between 0 and 2^32 - 1. Two
  * calls in one process within the same microsecond, or within the same
@@ -237,8 +237,8 @@ long long G_random_generate_seed(void)
  *
  * \return the seed passed to G_srand48(), between -2^31 and 2^32 - 1;
  *         where long has 32 bits, a value of 2^31 or more comes back
- *         negative, which G_srand48() and G_random_seed() read as the same
- *         seed
+ *         negative, which G_srand48() and G_random_state_from_seed() read
+ *         as the same seed
  */
 long G_srand48_auto(void)
 {
@@ -427,19 +427,19 @@ static void check_units(long long units)
                       units);
 }
 
-/* Fill in a layout of units of the given stride, all of one run first,
- * then those of the next run. The number of runs that fit is how many
+/* Fill in a layout of units of the given stride, all of one batch first,
+ * then those of the next batch. The number of batches that fit is how many
  * times units * stride draws fit into the span. Callers must check
  * beforehand that units * stride does not overflow. */
-static void init_layout(struct G_random_layout *layout, long long seed,
+static void fill_layout(struct G_random_layout *layout, long long seed,
                         long long units, long long stride)
 {
     layout->start = lcg_seed(seed);
     layout->units = units;
     layout->stride = stride;
-    layout->runs = (long long)(LCG_SPAN / ((unsigned long long)units *
-                                           (unsigned long long)stride));
-    layout->spread = 0;
+    layout->batches = (long long)(LCG_SPAN / ((unsigned long long)units *
+                                              (unsigned long long)stride));
+    layout->whole_span = 0;
 }
 
 /*!
@@ -448,8 +448,9 @@ static void init_layout(struct G_random_layout *layout, long long seed,
  * Puts the state at the seed: it then produces the sequence G_srand48()
  * followed by G_drand48() produces for the same seed, so code moving from
  * the shared generator to one of its own reproduces its existing results.
- * Use it for a single sequence; for one sequence per unit of work, use a
- * layout and G_random_state_for_unit().
+ * Use it for a single sequence, which then has the whole span to itself;
+ * for one sequence per unit of work, use a layout and
+ * G_random_state_for_unit().
  *
  * A seed outside -2^31 to 2^32 - 1 is a fatal error. A negative seed
  * means its two's complement 32-bit value, as for G_srand48().
@@ -459,7 +460,7 @@ static void init_layout(struct G_random_layout *layout, long long seed,
  * \param[out] state generator state to seed
  * \param[in] seed seed, from -2^31 to 2^32 - 1
  */
-void G_random_seed(struct G_random_state *state, long long seed)
+void G_random_state_from_seed(struct G_random_state *state, long long seed)
 {
     check_seed(seed);
     state->state = lcg_seed(seed);
@@ -470,25 +471,25 @@ void G_random_seed(struct G_random_state *state, long long seed)
  *
  * The span is cut into streams of exactly \p draws_per_unit draws, one per
  * unit, placed one after another from the seed, and then one after
- * another for the following runs. Unit u of run 0 therefore draws what a
- * single sequence from G_random_seed() draws at positions u *
- * \p draws_per_unit to (u + 1) * \p draws_per_unit - 1, so the units
+ * another for the following batches. Unit u of batch 0 therefore draws
+ * what a single sequence from G_random_state_from_seed() draws at positions
+ * u * \p draws_per_unit to (u + 1) * \p draws_per_unit - 1, so the units
  * together reproduce a serial run whatever order they are processed in.
  * A unit which draws more than \p draws_per_unit values runs into the
  * next unit's stream; when the number of draws is only bounded, use
  * G_random_init_layout_bounded().
  *
  * The stride is \p draws_per_unit. G_random_layout_length() returns it,
- * and G_random_layout_runs() returns the runs that fit, 2^46 divided by
- * \p units * \p draws_per_unit, which is 0 when one run does not fit into
- * the span. See \ref gislib_random_streams.
+ * and G_random_layout_batches() returns the batches that fit, 2^46 divided
+ * by \p units * \p draws_per_unit, which is 0 when one batch does not fit
+ * into the span. See \ref gislib_random_streams.
  *
  * A seed outside -2^31 to 2^32 - 1, a number of units or of draws which
  * is not positive, or a product of the two beyond the range of long long
  * is a fatal error.
  *
  * \param[out] layout layout to initialize
- * \param[in] seed seed, see G_random_seed()
+ * \param[in] seed seed, see G_random_state_from_seed()
  * \param[in] units number of units of work, positive
  * \param[in] draws_per_unit number of values each unit draws, positive
  */
@@ -506,7 +507,7 @@ void G_random_init_layout_exact(struct G_random_layout *layout, long long seed,
                         "each is too large (the number of draws must not "
                         "exceed %lld)"),
                       units, draws_per_unit, LLONG_MAX);
-    init_layout(layout, seed, units, draws_per_unit);
+    fill_layout(layout, seed, units, draws_per_unit);
 }
 
 /*!
@@ -520,16 +521,16 @@ void G_random_init_layout_exact(struct G_random_layout *layout, long long seed,
  * even stride would add its own power of two to that count.
  *
  * The stride is \p max_draws rounded up to odd. G_random_layout_length()
- * returns it, and G_random_layout_runs() returns the runs that fit, 2^46
- * divided by \p units times the stride, which is 0 when one run does not
- * fit into the span. See \ref gislib_random_streams.
+ * returns it, and G_random_layout_batches() returns the batches that fit,
+ * 2^46 divided by \p units times the stride, which is 0 when one batch does
+ * not fit into the span. See \ref gislib_random_streams.
  *
  * A seed outside -2^31 to 2^32 - 1, a number of units or a bound which is
  * not positive, or a product of the units and the stride beyond the range
  * of long long is a fatal error.
  *
  * \param[out] layout layout to initialize
- * \param[in] seed seed, see G_random_seed()
+ * \param[in] seed seed, see G_random_state_from_seed()
  * \param[in] units number of units of work, positive
  * \param[in] max_draws most values any unit draws, positive
  */
@@ -553,11 +554,11 @@ void G_random_init_layout_bounded(struct G_random_layout *layout,
                         "times the bound rounded up to odd must not exceed "
                         "%lld)"),
                       units, max_draws, LLONG_MAX);
-    init_layout(layout, seed, units, stride);
+    fill_layout(layout, seed, units, stride);
 }
 
 /*!
- * \brief Initialize a layout which spreads the units over the whole span
+ * \brief Initialize a layout which gives the units the whole span
  *
  * For units whose number of draws is not known in advance. The span is
  * divided into parts, as many as there are units, or one more when that
@@ -571,7 +572,8 @@ void G_random_init_layout_bounded(struct G_random_layout *layout,
  * 0.24, so a unit meets such a relation only after drawing about a
  * quarter of its stride. The odd stride puts units 2^i apart in number an
  * odd multiple of 2^i draws apart, as in a bounded layout. A single unit
- * keeps the whole span of 2^46 draws. The layout holds a single run.
+ * keeps the whole span of 2^46 draws, as a state from
+ * G_random_state_from_seed() does. The layout holds a single batch.
  *
  * The number of units is limited to 2^20: the rounded stride loses up to
  * two draws per unit, which accumulate along the span, so beyond that
@@ -579,27 +581,27 @@ void G_random_init_layout_bounded(struct G_random_layout *layout,
  * bounded layout serves any number of units.
  *
  * The stride is the length of a part. G_random_layout_length() returns
- * it, and G_random_layout_runs() returns 1.
+ * it, and G_random_layout_batches() returns 1.
  *
  * A seed outside -2^31 to 2^32 - 1, or a number of units which is not
  * positive or above 2^20, is a fatal error.
  *
  * \param[out] layout layout to initialize
- * \param[in] seed seed, see G_random_seed()
+ * \param[in] seed seed, see G_random_state_from_seed()
  * \param[in] units number of units of work, from 1 to 2^20
  */
-void G_random_init_layout_spread(struct G_random_layout *layout, long long seed,
-                                 long long units)
+void G_random_init_layout(struct G_random_layout *layout, long long seed,
+                          long long units)
 {
     unsigned long long parts, stride;
 
     check_seed(seed);
     check_units(units);
-    if (units > SPREAD_MAX_UNITS)
-        G_fatal_error(_("A spread random number layout takes at most %lld "
-                        "units, not %lld; a bounded layout serves any number "
-                        "of units"),
-                      SPREAD_MAX_UNITS, units);
+    if (units > WHOLE_SPAN_MAX_UNITS)
+        G_fatal_error(_("A random number layout of the whole span takes at "
+                        "most %lld units, not %lld; a bounded layout serves "
+                        "any number of units"),
+                      WHOLE_SPAN_MAX_UNITS, units);
     parts = (unsigned long long)units | 1;
     stride = LCG_SPAN / parts;
     if (parts > 1 && stride % 2 == 0)
@@ -607,21 +609,21 @@ void G_random_init_layout_spread(struct G_random_layout *layout, long long seed,
     layout->start = lcg_seed(seed);
     layout->units = units;
     layout->stride = (long long)stride;
-    layout->runs = 1;
-    layout->spread = 1;
+    layout->batches = 1;
+    layout->whole_span = 1;
 }
 
 /*!
- * \brief Return the number of runs that fit into the span
+ * \brief Return the number of batches that fit into the span
  *
  * \param[in] layout an initialized layout
  *
- * \return the runs that fit, 1 for a spread layout, 0 when one run of the
- *         layout does not fit into the span
+ * \return the batches that fit, 1 for a layout of the whole span, 0 when
+ *         one batch of the layout does not fit into the span
  */
-long long G_random_layout_runs(const struct G_random_layout *layout)
+long long G_random_layout_batches(const struct G_random_layout *layout)
 {
-    return layout->runs;
+    return layout->batches;
 }
 
 /*!
@@ -638,30 +640,31 @@ long long G_random_layout_length(const struct G_random_layout *layout)
 }
 
 /*!
- * \brief Put a generator state at the start of a unit's stream in a run
+ * \brief Put a generator state at the start of a unit's stream in a batch
  *
- * The stream of \p unit in \p run starts (\p run * units + \p unit) * stride
- * draws after the seed. The state is set whatever it held before, so the
- * same call always restarts the same sequence. See
- * \ref gislib_random_streams.
+ * A batch is one stream for every unit of the layout, and the batches
+ * follow one another along the span: the stream of \p unit in \p batch
+ * starts (\p batch * units + \p unit) * stride draws after the seed. The
+ * state is set whatever it held before, so the same call always restarts
+ * the same sequence. See \ref gislib_random_streams.
  *
- * A \p unit outside 0 to units - 1, a negative \p run, a \p run other
- * than 0 of a spread layout, or a \p run beyond the runs that fit is a
- * fatal error. When no run fits, run 0 is still allowed, and only run 0:
- * a tool which warned that its layout does not fit into the span may use
- * it as earlier versions did.
+ * A \p unit outside 0 to units - 1, a negative \p batch, a \p batch other
+ * than 0 of a layout of the whole span, or a \p batch beyond the batches
+ * that fit is a fatal error. When no batch fits, batch 0 is still allowed,
+ * and only batch 0: a tool which warned that its layout does not fit into
+ * the span may use it as earlier versions did.
  *
  * Thread-safe as long as no two threads use the same state; the layout
  * is only read.
  *
  * \param[out] state generator state to set
  * \param[in] layout an initialized layout
- * \param[in] run number of the run, from 0
+ * \param[in] batch number of the batch, from 0
  * \param[in] unit number of the unit, from 0 to units - 1
  */
-void G_random_state_for_run(struct G_random_state *state,
-                            const struct G_random_layout *layout, long long run,
-                            long long unit)
+void G_random_state_for_batch(struct G_random_state *state,
+                              const struct G_random_layout *layout,
+                              long long batch, long long unit)
 {
     unsigned long long offset;
 
@@ -669,31 +672,31 @@ void G_random_state_for_run(struct G_random_state *state,
         G_fatal_error(_("Random number unit %lld is out of range "
                         "(must be between 0 and %lld)"),
                       unit, layout->units - 1);
-    if (run < 0)
-        G_fatal_error(_("Random number run %lld is out of range "
+    if (batch < 0)
+        G_fatal_error(_("Random number batch %lld is out of range "
                         "(must not be negative)"),
-                      run);
-    if (run > 0 && layout->spread)
-        G_fatal_error(_("Random number run %lld is out of range "
-                        "(a spread layout holds a single run)"),
-                      run);
-    if (layout->runs >= 1 && run >= layout->runs)
-        G_fatal_error(n_("Random number run %lld is out of range "
-                         "(%lld run fits into the generator's span)",
-                         "Random number run %lld is out of range "
-                         "(%lld runs fit into the generator's span)",
-                         (unsigned long)layout->runs),
-                      run, layout->runs);
-    if (layout->runs == 0 && run > 0)
-        G_fatal_error(_("Random number run %lld is out of range "
-                        "(no run fits into the generator's span, only run 0 "
-                        "can be used)"),
-                      run);
+                      batch);
+    if (batch > 0 && layout->whole_span)
+        G_fatal_error(_("Random number batch %lld is out of range "
+                        "(a layout of the whole span holds a single batch)"),
+                      batch);
+    if (layout->batches >= 1 && batch >= layout->batches)
+        G_fatal_error(n_("Random number batch %lld is out of range "
+                         "(%lld batch fits into the generator's span)",
+                         "Random number batch %lld is out of range "
+                         "(%lld batches fit into the generator's span)",
+                         (unsigned long)layout->batches),
+                      batch, layout->batches);
+    if (layout->batches == 0 && batch > 0)
+        G_fatal_error(_("Random number batch %lld is out of range "
+                        "(no batch fits into the generator's span, only batch "
+                        "0 can be used)"),
+                      batch);
 
-    /* With run below the runs that fit, the offset is below 2^46; with
-     * run 0 of a layout which does not fit, it may reach past the span.
+    /* With batch below the batches that fit, the offset is below 2^46; with
+     * batch 0 of a layout which does not fit, it may reach past the span.
      * It is below 2^63 either way, since units times stride is. */
-    offset = ((unsigned long long)run * (unsigned long long)layout->units +
+    offset = ((unsigned long long)batch * (unsigned long long)layout->units +
               (unsigned long long)unit) *
              (unsigned long long)layout->stride;
     state->state = lcg_jump(layout->start, offset);
@@ -702,7 +705,7 @@ void G_random_state_for_run(struct G_random_state *state,
 /*!
  * \brief Put a generator state at the start of a unit's stream
  *
- * The same as G_random_state_for_run() with run 0.
+ * The same as G_random_state_for_batch() with batch 0.
  *
  * \param[out] state generator state to set
  * \param[in] layout an initialized layout
@@ -712,7 +715,7 @@ void G_random_state_for_unit(struct G_random_state *state,
                              const struct G_random_layout *layout,
                              long long unit)
 {
-    G_random_state_for_run(state, layout, 0, unit);
+    G_random_state_for_batch(state, layout, 0, unit);
 }
 
 /*!
@@ -744,8 +747,9 @@ void G_random_advance(struct G_random_state *state, long long draws)
  * G_drand48(), this needs no atomics and so behaves identically on every
  * build.
  *
- * \param[in,out] state generator state, set with G_random_seed(),
- *                G_random_state_for_unit() or G_random_state_for_run()
+ * \param[in,out] state generator state, set with
+ *                G_random_state_from_seed(), G_random_state_for_unit() or
+ *                G_random_state_for_batch()
  *
  * \return the generated value
  */

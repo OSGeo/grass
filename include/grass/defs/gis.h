@@ -518,20 +518,19 @@ long G_srand48_auto(void);
 long G_lrand48(void);
 long G_mrand48(void);
 double G_drand48(void);
-void G_random_seed(struct G_random_state *, long long);
+void G_random_state_from_seed(struct G_random_state *, long long);
 void G_random_init_layout_exact(struct G_random_layout *, long long, long long,
                                 long long);
 void G_random_init_layout_bounded(struct G_random_layout *, long long,
                                   long long, long long);
-void G_random_init_layout_spread(struct G_random_layout *, long long,
-                                 long long);
-long long G_random_layout_runs(const struct G_random_layout *);
+void G_random_init_layout(struct G_random_layout *, long long, long long);
+long long G_random_layout_batches(const struct G_random_layout *);
 long long G_random_layout_length(const struct G_random_layout *);
 void G_random_state_for_unit(struct G_random_state *,
                              const struct G_random_layout *, long long);
-void G_random_state_for_run(struct G_random_state *,
-                            const struct G_random_layout *, long long,
-                            long long);
+void G_random_state_for_batch(struct G_random_state *,
+                              const struct G_random_layout *, long long,
+                              long long);
 void G_random_advance(struct G_random_state *, long long);
 double G_random_double(struct G_random_state *);
 long long G_random_generate_seed(void);
