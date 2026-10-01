@@ -52,13 +52,13 @@ GRASS, a 48-bit linear congruential generator.
 
 \image html random_streams.svg
 
-The figure shows the ring of 2^48 states, the seed (the red dot) and the
-span, the shaded quarter after the seed, with the arrow in the direction of
-drawing. The ticks are one stride apart from the seed, and the last one marks
-the end of the span. The dark arcs are the streams of units 0, 1 and 2, each
-starting at a tick, and the black dot is a state in the stream of unit 1.
-Every seed starts at a different place on the ring, and the span is always
-the quarter after it.
+The figure shows the ring of 2^48 states, the seed (the red dot) and the span,
+the shaded quarter after the seed, with the arrow in the direction of drawing.
+The ticks are one stride apart from the seed, and the last one marks the end
+of the span. Units 0, 1 and 2 each start at a tick, the dark arcs are their
+draws so far, and the black dot is the state of unit 1, the position at which
+it draws next. Every seed starts at a different place on the ring, and the
+span is always the quarter after it.
 
 ## Layouts {#gislib_random_streams_layouts}
 
