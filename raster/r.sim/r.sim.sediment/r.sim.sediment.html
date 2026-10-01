@@ -20,6 +20,8 @@ Partial derivatives can be computed by <a href="v.surf.rst.html">v.surf.rst</a>
 or <a href="r.slope.aspect.html">r.slope.aspect</a>
 module. The data are automatically converted from feet to metric
 system using database/projection information, so the elevation always should be in meters.
+The module requires a projected coordinate system and does not run in a
+latitude-longitude project.
 The water depth file can be computed using <a href="r.sim.water.html">r.sim.water</a>
 module. Other parameters must be determined using field measurements or
 reference literature (see suggested values in Notes and References). <br>
@@ -46,6 +48,11 @@ Increasing the number of threads with <b>nprocs</b> does not really
 speed up the simulation.
 
 <h2>NOTES</h2>
+
+Null cells in the <b>elevation</b>, <b>dx</b>, <b>dy</b>, <b>water_depth</b>,
+<b>detachment_coeff</b>, <b>transport_coeff</b>, <b>shear_stress</b> and <b>man</b>
+raster maps are excluded from the simulation, the outputs are null
+there, and walkers that reach them leave the area.
 
 <h3>Run summary</h3>
 
