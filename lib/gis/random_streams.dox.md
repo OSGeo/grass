@@ -367,18 +367,22 @@ the number of units keeps it within a few percent of a stride at 2^45 and
 2^44.
 
 Seed 42 draws 0.7445, 0.3427, 0.1111, 0.4223, 0.0811, 0.8564, 0.4988,
-0.4788, and the table gives, for each distance, the relation, the values
-drawn that distance after the seed minus these, modulo 1, and the estimate
-above for T = 10^11.
+0.4788, and the table gives, for each distance, the part of the ring it
+spans, the relation, the values drawn that distance after the seed minus
+these, modulo 1, and the estimate above for T = 10^11. The row with k is the
+general rule: the rows from 2^46 down are its cases k = 0, 1, 2, 6 and 10,
+and an odd distance is its last case, k = 46.
 
-| distance | relation | values drawn this distance after seed 42 minus seed 42's first eight, modulo 1 | estimated number of multiples of this distance below 2^46 which occur, (2^k - 1) × 2T / 2^46 for T = 10^11 |
-| --- | --- | --- | --- |
-| 2^46 | constant-shift twin | 0.2500 at every draw | none: no two positions in the span are this far apart |
-| 2^45 | alternating-shift twin | 0.6250, 0.1250 alternating | 0.003 |
-| 2^44 | one of 4 constants, cycling | 0.8125, 0.5625, 0.3125, 0.0625 | 0.009 |
-| 2^40 | one of 64 constants, cycling | 0.3633, 0.5977, 0.1445, 0.7539, ... | about 0.18 |
-| 2^36 | one of 1,024 constants, cycling | 0.7727, 0.0999, 0.2590, 0.1096, ... | about 3 |
-| any odd distance | the low two bits fixed, 2^46 constants which do not repeat within the span | no pattern | about 2T, that is all the distances which occur |
+| distance | part of the ring | relation | values drawn this distance after seed 42 minus seed 42's first eight, modulo 1 | estimated number of multiples of this distance below 2^46 which occur, (2^k - 1) × 2T / 2^46 for T = 10^11 |
+| --- | --- | --- | --- | --- |
+| 2^47 | 1/2 | constant-shift twin | 0.5000 at every draw | none: no two positions in the span are this far apart |
+| 2^46 | 1/4 | constant-shift twin | 0.2500 at every draw | none: no two positions in the span are this far apart |
+| 2^45 | 1/8 | alternating-shift twin | 0.6250, 0.1250 alternating | 0.003 |
+| 2^44 | 1/16 | one of 4 constants, cycling | 0.8125, 0.5625, 0.3125, 0.0625 | 0.009 |
+| 2^40 | 1/256 | one of 64 constants, cycling | 0.3633, 0.5977, 0.1445, 0.7539, ... | about 0.18 |
+| 2^36 | 1/4,096 | one of 1,024 constants, cycling | 0.7727, 0.0999, 0.2590, 0.1096, ... | about 3 |
+| 2^(46 - k), for k from 0 to 46 | 1/2^(k + 2) | one of 2^k constants, cycling | 2^k values, then the same again | (2^k - 1) × 2T / 2^46 |
+| any odd distance | an odd multiple of 1/2^48 | the low two bits fixed, 2^46 constants which do not repeat within the span | no pattern | about 2T, that is all the distances which occur |
 
 The coarsest relations are rare and exact, the finest common and invisible:
 positions 2^36 apart have the low 38 bits of their difference fixed and the
