@@ -12,6 +12,7 @@ from __future__ import annotations
 import collections
 import os
 from pathlib import Path
+import random
 import shutil
 import subprocess
 import sys
@@ -140,7 +141,6 @@ class GrassTestFilesInvoker:
         self, module, results_dir: StrPath, gisdbase, location, timeout: float | None
     ) -> None:
         """Run one test file."""
-        self.testsuite_dirs[module.tested_dir].append(module.name)
         cwd: str = os.path.join(results_dir, module.tested_dir, module.name)
         data_dir: str = os.path.join(module.file_dir, "data")
         if Path(data_dir).exists():
@@ -284,7 +284,13 @@ class GrassTestFilesInvoker:
                 shutil.rmtree(mapset_dir, ignore_errors=True)
 
     def run_in_location(
-        self, gisdbase, location, location_type, results_dir: StrPath, exclude
+        self,
+        gisdbase,
+        location,
+        location_type,
+        results_dir: StrPath,
+        exclude,
+        random_seed: int | None = None,
     ) -> GrassTestFilesMultiReporter:
         """Run tests in a given location
 
@@ -292,6 +298,11 @@ class GrassTestFilesInvoker:
         i.e., a file-oriented reporter as opposed to testsuite-oriented one.
         Use only the attributes related to the summary, such as file_pass_per,
         not to one file as these will simply contain the last executed file.
+
+        :param random_seed: if not None, test files run in a random order
+            generated from this seed (the same seed gives the same order
+            for the same set of test files); reports still list the test
+            files in discovery order
         """
         if os.path.abspath(results_dir) == os.path.abspath(self.start_dir):
             msg = (
@@ -299,6 +310,9 @@ class GrassTestFilesInvoker:
                 " as discovery start directory"
             )
             raise RuntimeError(msg)
+        info = {"location": location, "location_type": location_type}
+        if random_seed is not None:
+            info["random_seed"] = random_seed
         self.reporter = GrassTestFilesMultiReporter(
             reporters=[
                 GrassTestFilesTextReporter(stream=sys.stderr),
@@ -306,9 +320,7 @@ class GrassTestFilesInvoker:
                     file_anonymizer=self._file_anonymizer,
                     main_page_name="testfiles.html",
                 ),
-                GrassTestFilesKeyValueReporter(
-                    info={"location": location, "location_type": location_type}
-                ),
+                GrassTestFilesKeyValueReporter(info=info),
             ]
         )
         self.testsuite_dirs = collections.defaultdict(
@@ -326,6 +338,10 @@ class GrassTestFilesInvoker:
             import_modules=False,
             exclude=exclude,
         )
+        for module in modules:
+            self.testsuite_dirs[module.tested_dir].append(module.name)
+        if random_seed is not None:
+            random.Random(random_seed).shuffle(modules)
 
         self.reporter.start(results_dir)
         for module in modules:
@@ -340,16 +356,25 @@ class GrassTestFilesInvoker:
 
         # TODO: move this to some (new?) reporter
         # TODO: add basic summary of linked files so that the page is not empty
+        if random_seed is None:
+            order_text = ""
+        else:
+            order_text = (
+                f"<p>Test files ran in random order with seed {random_seed}.</p>"
+            )
         Path(os.path.join(results_dir, "index.html")).write_text(
             "<html><body>"
             "<h1>Tests for &lt;{location}&gt;"
             " using &lt;{type}&gt; type tests</h1>"
+            "{order_text}"
             "<ul>"
             '<li><a href="testsuites.html">Results by testsuites</a>'
             " (testsuite directories)</li>"
             '<li><a href="testfiles.html">Results by test files</a></li>'
             "<ul>"
-            "</body></html>".format(location=location, type=location_type),
+            "</body></html>".format(
+                location=location, type=location_type, order_text=order_text
+            ),
             encoding="utf-8",
         )
 
