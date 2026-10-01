@@ -4,19 +4,19 @@
 
 ## Overview {#gislib_random_streams_overview}
 
-The `G_random_*()` functions give a program random number generators of its
-own and many streams of values from one seed which do not overlap. They serve
+The `G_random_*()` functions give a tool random number generators of its own
+and many streams of values from one seed which do not overlap. They serve
 parallel computations, the members of an ensemble, the components of a model
 which must each be reproducible on their own, and library code which must not
-change the random numbers of its caller.
+change the random numbers of the tool which calls it.
 
-A program builds one layout from its seed and places a state for every unit
-of work, such as a row of a raster or a particle. The values of a unit are
-then fixed by the seed, the layout and the unit's number, which allows
-parallel code to give the same result with any number of threads.
+A tool builds one layout from its seed and places a state for every unit of
+work, such as a row of a raster or a particle. The values of a unit are then
+fixed by the seed, the layout and the unit's number, which allows parallel
+code to give the same result with any number of threads.
 
-The values come from drand48, the 48-bit linear congruential generator
-behind the C function `drand48()` and behind `G_drand48()` in GRASS.
+The generator is the one of the C function `drand48()` and of `G_drand48()` in
+GRASS, a 48-bit linear congruential generator.
 
 ## Terms {#gislib_random_streams_terms}
 
@@ -36,7 +36,7 @@ behind the C function `drand48()` and behind `G_drand48()` in GRASS.
   library places everything within it (see \ref gislib_random_streams_span
   for why).
 - **Layout**: a `struct G_random_layout`, holding where the seed's sequence
-  starts, the number of units and the stride. A program builds it once,
+  starts, the number of units and the stride. A tool builds it once,
   outside any parallel region, and only reads it afterwards.
 - **Unit**: a piece of work with values of its own, such as a row of a raster,
   a particle, a point or an object, numbered from 0. Its **stream** is the
@@ -106,11 +106,11 @@ rounding adds to a bounded stride is drawn much larger than it is.
 ### Batches {#gislib_random_streams_batches}
 
 A batch is one stream for every unit, and what it stands for is up to the
-program: a member of an ensemble, one of several passes over the same units,
-or one of the processes of a model which each need a stream per unit. Batches
-are appended, never reserved: where a batch lies depends on nothing but the
-seed, the stride, the number of units and the batch number, so a batch used
-later lies where it would have lain now.
+tool: a member of an ensemble, one of several passes over the same units, or
+one of the processes of a model which each need a stream per unit. Batches are
+appended, never reserved: where a batch lies depends on nothing but the seed,
+the stride, the number of units and the batch number, so a batch used later
+lies where it would have lain now.
 `G_random_state_for_batch(&rng, &layout, batch, unit)` places a state at the
 start of the unit's stream in that batch, and
 `G_random_state_for_unit(&rng, &layout, unit)` is the same call with batch 0.
@@ -119,7 +119,7 @@ few dozen draws, however far from the seed the stream starts.
 
 A layout answers two queries: `G_random_layout_batches(&layout)` returns the
 number of batches that fit into the span, which is 0 when not even one batch
-fits, and `G_random_layout_length(&layout)` returns the stride. A program
+fits, and `G_random_layout_length(&layout)` returns the stride. A tool
 compares the stride with the most values any of its units can draw, not the
 average, and checks that the batches it uses fit; whether to refuse or to warn
 and continue is its decision. Batch 0 can always be placed, even when no batch
@@ -243,9 +243,9 @@ G_free(states);
 
 An item whose draws have no known bound gets the longest stride the span
 allows from a whole-span layout, `G_random_init_layout(&layout, seed, items)`,
-placed in the same way, and the program warns when the stride,
+placed in the same way, and the tool warns when the stride,
 `G_random_layout_length(&layout)`, is below an estimate of what an item draws.
-With more items than a whole-span layout accepts, the program chooses a bound
+With more items than a whole-span layout accepts, the tool chooses a bound
 itself, from what it expects an item to draw, uses a bounded layout with that
 bound, and checks that the batch fits as in the fragment above.
 
@@ -253,9 +253,9 @@ bound, and checks that the batch fits as in the fragment above.
 
 An ensemble is many runs of the same model under one seed, meant to be
 independent replicates. Each member draws from a batch of its own of the
-layout the program uses for a single run. Whether the members are computed in
-one process or one per invocation, on one machine or many, does not change
-where a batch lies.
+layout the tool uses for a single run. Whether the members are computed in one
+process or one per invocation, on one machine or many, does not change where a
+batch lies.
 
 A tool which supports ensembles needs one option, `run`, the member this
 invocation computes, numbered from 1 and 1 by default, so that nothing changes
@@ -307,11 +307,11 @@ longer period behind the same calls.
 
 ### The generator and the span {#gislib_random_streams_span}
 
-All the values come from drand48, the 48-bit linear congruential generator:
-multiples of 2^-48, uniform in [0, 1). A unit's stream is taken from the one
-sequence the generator has, so its values are as good as that sequence: fine
-for simulations, sampling and Monte Carlo estimates, and not for
-cryptography.
+The generator is the 48-bit linear congruential generator of `drand48()`, and
+its values are multiples of 2^-48, uniform in [0, 1). A unit's stream is taken
+from the one sequence the generator has, so its values are as good as that
+sequence: fine for simulations, sampling and Monte Carlo estimates, and not
+for cryptography.
 
 The multiplier a is 5 modulo 8, so a^(2^46) = 1 modulo 2^48 while a^(2^45) is
 not, and, with this increment, 2^46 draws take every state x to x + 2^46
@@ -421,10 +421,10 @@ by 2^i and by no higher power of two, so units 1, 2 and 4 apart have the low
 1,024 taken as it is, every such distance carries the stride's power of two on
 top, and the same units have the low 12, 13 and 14 bits fixed. That is why the
 library keeps the stride odd: the whole-span layout rounds down to odd and the
-bounded layout rounds the bound up to odd, so no caller has to know the rule.
-An exact layout cannot round, since its units must draw what the seed's
-sequence draws; it keeps that sequence's structure and is never worse than the
-seed's sequence it reproduces, in which the same values were the stride apart
+bounded layout rounds the bound up to odd, so no tool has to know the rule. An
+exact layout cannot round, since its units must draw what the seed's sequence
+draws; it keeps that sequence's structure and is never worse than the seed's
+sequence it reproduces, in which the same values were the stride apart
 already.
 
 ### Relations between seeds {#gislib_random_streams_between_seeds}
@@ -518,7 +518,7 @@ by it:
 G_srand48(seed);
 value = G_drand48();
 
-// After: a state of the program's own, giving the same values.
+// After: a state of the tool's own, giving the same values.
 G_random_state_from_seed(&rng, seed);
 value = G_random_double(&rng);
 ```
