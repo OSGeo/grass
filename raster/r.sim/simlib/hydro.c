@@ -311,14 +311,19 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             /* Total remaining walkers for this iteration */
             sim->nwalka = nwalka;
 
-            // Output step j is written at the first iteration reaching
-            // j * output_step and named by that time. When one iteration
-            // reaches several steps, only the latest one is written.
+            // Output step j is written at the iteration closest to
+            // j * output_step and named by that time. When one iteration is
+            // the closest one to several steps, only the latest one is
+            // written.
             bool write_series = false;
             if (settings->ts && settings->iterout > 0) {
+                // An iteration is the closest one to the steps up to half a
+                // time step ahead of it. No step is past the duration.
+                double ahead = fmin(simulated_seconds(setup, i) +
+                                        0.5 * time_step_seconds(setup),
+                                    settings->timesec);
                 double reached =
-                    settings->iterout *
-                    floor(simulated_seconds(setup, i) / settings->iterout);
+                    settings->iterout * floor(ahead / settings->iterout);
                 if (reached > series_time) {
                     series_time = reached;
                     write_series = true;

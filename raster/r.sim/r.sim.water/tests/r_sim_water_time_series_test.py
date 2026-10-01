@@ -54,7 +54,7 @@ def minutes_of_timestamp(tools, name):
 def check_series(tools, summary, minutes):
     """Series maps are named and timestamped by the given minutes.
 
-    Each map is written at the first iteration reaching its time, except the
+    Each map is written at the iteration closest to its time, except the
     last one which is written at the end of the run.
     """
     outputs = summary["outputs"]
@@ -65,9 +65,7 @@ def check_series(tools, summary, minutes):
     for minute, output in zip(minutes[:-1], outputs[:-1], strict=True):
         assert output["timestamp"] == f"{minute} minutes"
         assert minutes_of_timestamp(tools, output["depth"]) == minute
-        assert (
-            minute * 60 <= output["simulated_time"] < minute * 60 + summary["time_step"]
-        )
+        assert abs(output["simulated_time"] - minute * 60) <= summary["time_step"] / 2
     assert outputs[-1]["timestamp"] == f"{minutes[-1]} minutes"
     assert minutes_of_timestamp(tools, names[-1]) == minutes[-1]
     assert outputs[-1]["simulated_time"] == summary["simulated_time"]
@@ -100,12 +98,13 @@ def test_final_step_named_by_duration(slope_tools):
 
 
 def test_time_step_longer_than_output_step(slope_tools):
-    """An iteration passing several output steps writes the latest one
+    """An iteration closest to several output steps writes the latest one
 
     A minimum time step of 17.5 s makes the simulated time per iteration
     70 s (the time step times the time coefficient 4), so the iteration
-    ending at 420 s passes both 6 and 7 minutes. The old schedule wrote
-    every (int)(60 / 70) = 0 iterations, that is, no maps at all.
+    ending at 210 s is the closest one to both 3 and 4 minutes. The old
+    schedule wrote every (int)(60 / 70) = 0 iterations, that is, no maps
+    at all.
     """
     result = slope_tools.r_sim_water(
         **SLOPE,
@@ -117,7 +116,7 @@ def test_time_step_longer_than_output_step(slope_tools):
     )
     summary = result.json
     assert summary["time_step"] == 70
-    check_series(slope_tools, summary, [1, 2, 3, 4, 5, 7, 8, 9, 10])
+    check_series(slope_tools, summary, [1, 2, 4, 5, 6, 7, 8, 9, 10])
     assert "longer than output_step" in result.stderr
 
 
@@ -140,3 +139,21 @@ def test_final_step_after_early_stop(session_tools):
     assert summary["simulated_time"] < 60
     assert [output["depth"] for output in summary["outputs"]] == ["depth.02"]
     assert summary["outputs"][0]["timestamp"] == "2 minutes"
+
+
+def test_no_output_step_past_duration(slope_tools):
+    """The series ends with the duration also with a very long time step
+
+    With a time step of 290 s, the last iteration ends at 580 s and is the
+    closest one also to 11 and 12 minutes, which are past the duration.
+    """
+    summary = slope_tools.r_sim_water(
+        **SLOPE,
+        depth="dep",
+        output_step=1,
+        mintimestep=72.5,
+        flags="tp",
+        format="json",
+    ).json
+    assert summary["time_step"] == 290
+    check_series(slope_tools, summary, [7, 10])

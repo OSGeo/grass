@@ -78,14 +78,16 @@ water depth and discharge maps can be saved during simulation using the
 time series flag **-t** and **output_step** parameter defining the time
 step in minutes for writing output files. Files are saved with a suffix
 representing time since the start of simulation in minutes (e.g.
-wdepth.05, wdepth.10) and are timestamped with that time. The maps of an
-output step are written at the first iteration which reaches its time,
-so their simulated time can exceed their name by up to one time step.
-When the time step is longer than **output_step**, one iteration can
-reach several output steps and only the latest of them is written. The
-series always ends with maps named by the **duration** which hold the
-state at the end of the run, also when the duration is not a multiple of
-**output_step** or when the simulation stopped early.
+wdepth.05, wdepth.10) and are timestamped with that time. The
+simulation advances in time steps which usually do not fall exactly on
+the output times. A map holds the state at the time step closest to the
+time in its name, so at most half a time step earlier or later. When the
+time step is longer than **output_step**, one time step can be the
+closest one to several output times and only the map for the latest of
+them is written. The series always ends with maps named by the
+**duration** which hold the state at the end of the run, also when the
+duration is not a multiple of **output_step** or when the simulation
+stopped early.
 Monitoring of water depth at specific points is
 supported. A vector map with observation points and a path to a logfile
 must be provided. For each point in the vector map which is located in
@@ -232,7 +234,7 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
     "threads": 1,
     "outputs": [
         {
-            "simulated_time": 601.30265063163165,
+            "simulated_time": 599.41176179316744,
             "timestamp": "10 minutes",
             "walkers_remaining": 92121,
             "depth": "depth.10",
