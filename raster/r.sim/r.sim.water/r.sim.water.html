@@ -161,6 +161,12 @@ machines due to the independence of sampling points. Therefore, the methods
 are useful both for everyday exploratory work using a desktop computer and
 for large, cutting-edge applications using high performance computing.
 
+<p>
+Null cells in the <b>elevation</b>, <b>dx</b>, <b>dy</b>, <b>rain</b> and <b>man</b>
+raster maps are excluded from the simulation, the outputs are null
+there, and walkers that reach them leave the area. Null cells in the
+<b>infil</b> raster map mean no infiltration.
+
 <h3>Manning's n for surface roughness</h3>
 
 The <b>man</b> raster map can be derived from a land cover raster with the

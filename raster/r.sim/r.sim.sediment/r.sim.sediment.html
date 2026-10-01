@@ -49,6 +49,11 @@ speed up the simulation.
 
 <h2>NOTES</h2>
 
+Null cells in the <b>elevation</b>, <b>dx</b>, <b>dy</b>, <b>water_depth</b>,
+<b>detachment_coeff</b>, <b>transport_coeff</b>, <b>shear_stress</b> and <b>man</b>
+raster maps are excluded from the simulation, the outputs are null
+there, and walkers that reach them leave the area.
+
 <h3>Run summary</h3>
 
 With the <b>-p</b> flag, a summary of the run is printed to standard output

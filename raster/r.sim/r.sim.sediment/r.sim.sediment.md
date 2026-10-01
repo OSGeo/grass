@@ -42,6 +42,11 @@ up the simulation.
 
 ## NOTES
 
+Null cells in the **elevation**, **dx**, **dy**, **water_depth**,
+**detachment_coeff**, **transport_coeff**, **shear_stress** and **man**
+raster maps are excluded from the simulation, the outputs are null
+there, and walkers that reach them leave the area.
+
 ### Run summary
 
 With the **-p** flag, a summary of the run is printed to standard output
