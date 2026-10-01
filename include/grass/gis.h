@@ -629,23 +629,23 @@ struct Popen {
 };
 
 /* A position of a pseudo-random number generator owned by the program;
- * see G_random_seed() and G_random_state_for_unit(). The contents are
- * private to the library and may change with the generator; read and
- * advance the state only through the G_random_*() functions. It is a
- * plain value: copying it copies the generator's position. */
+ * see G_random_state_from_seed() and G_random_state_for_unit(). The
+ * contents are private to the library and may change with the generator;
+ * read and advance the state only through the G_random_*() functions. It
+ * is a plain value: copying it copies the generator's position. */
 struct G_random_state {
     unsigned long long state;
 };
 
 /* A layout: a seed and the way the generator's span is cut into streams
- * of stride draws, one per unit of work and run; see
- * G_random_init_layout_exact(). Private to the library. */
+ * of stride draws, one per unit of work and batch; see
+ * G_random_init_layout(). Private to the library. */
 struct G_random_layout {
     unsigned long long start; /* generator state at the seed */
     long long units;
     long long stride;
-    long long runs; /* runs that fit into the span, 0 when none */
-    int spread;     /* a spread layout allows a single run */
+    long long batches; /* batches that fit into the span, 0 when none */
+    int whole_span;    /* a layout of the whole span holds a single batch */
 };
 
 typedef int CELL;
