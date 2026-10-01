@@ -5,33 +5,29 @@
 ## Overview {#gislib_random_streams_overview}
 
 The `G_random_*()` functions give a program random number generators of its
-own, instead of the one generator shared by the whole program behind
-`G_drand48()`, and many streams of values from one seed which do not
-overlap. They serve parallel computations, the runs of an ensemble, the
-components of a model which must each be reproducible on their own, and
-library code which must not disturb the shared generator.
+own and many streams of values from one seed which do not overlap. They
+serve parallel computations, the runs of an ensemble, the components of a
+model which must each be reproducible on their own, and library code which
+must not change the random numbers of its caller.
 
 A program builds one layout from its seed and places a state for every unit
 of work, such as a row of a raster or a particle. The values of a unit are
-then fixed by the seed, the layout and the unit's number, whichever thread
-draws them, so parallel code draws the same values with one thread as with
-many. It also gives the same result when the rest of the computation does not
-depend on the schedule, which holds when every unit writes only its own
-output and not when threads add into shared sums. The documentation of each
-function is the reference for its arguments and for what it refuses.
+then fixed by the seed, the layout and the unit's number, which allows
+parallel code to give the same result with any number of threads.
+
+The values come from drand48, the 48-bit linear congruential generator
+behind the C function `drand48()` and behind `G_drand48()` in GRASS.
 
 ## Terms {#gislib_random_streams_terms}
 
-- **Generator**: the recurrence behind `drand48()` and `G_drand48()`. A draw
-  replaces the 48-bit state x by x' = (a × x + c) mod 2^48, with the
-  multiplier a = 0x5DEECE66D and the increment c = 0xB, and returns
-  x' / 2^48. It passes through all 2^48 states before repeating, so the
-  states form one ring and every draw moves one step along it.
+- **Generator**: drand48. A draw replaces the 48-bit state x by x' = (a × x +
+  c) mod 2^48, with the multiplier a = 0x5DEECE66D and the increment c = 0xB,
+  and returns x' / 2^48. It passes through all 2^48 states before repeating,
+  so the states form one ring and every draw moves one step along it.
 - **Seed**: the integer which picks where drawing starts. Seed s starts at the
   state whose bits 16 to 47 are the low 32 bits of s and whose low 16 bits
-  are 0x330E, as `G_srand48()` sets it. The values drawn one after another
-  from there are the seed's sequence, the values `G_drand48()` gives after
-  `G_srand48()`.
+  are 0x330E, as `srand48()` sets it. The values drawn one after another
+  from there are the seed's sequence.
 - **State**: a `struct G_random_state`, a position on the ring and nothing
   else, used by one thread at a time; copying it copies the position.
   `G_random_double()` moves it one step and returns the value there, and
@@ -120,6 +116,12 @@ A unit is what the computation is naturally divided into and numbered by;
 the number of units is their count or an upper bound on it, and unused units
 cost nothing but their share of the span. Which pattern applies depends on
 whether a unit draws its values in one go or over many steps.
+
+In every pattern, the values a unit draws do not depend on the thread which
+draws them. The result of the whole computation is then the same for any
+number of threads when nothing else in it depends on the schedule, which
+holds when every unit writes only its own output and not when threads add
+into shared sums.
 
 ### A single sequence {#gislib_random_streams_single}
 
@@ -288,10 +290,9 @@ longer period behind the same calls.
 
 ### The generator and the span {#gislib_random_streams_span}
 
-All the values come from the generator behind `G_drand48()`, the 48-bit
-linear congruential generator of `drand48()`: multiples of 2^-48, uniform in
-[0, 1). A unit's stream is taken from the one sequence the generator has, so
-its values are those of the sequence `G_drand48()` gives, and as good: fine
+All the values come from drand48, the 48-bit linear congruential generator:
+multiples of 2^-48, uniform in [0, 1). A unit's stream is taken from the one
+sequence the generator has, so its values are as good as that sequence: fine
 for simulations, sampling and Monte Carlo estimates, and not for
 cryptography.
 
@@ -478,10 +479,9 @@ empty value counting as not set, and otherwise hashes the time and the
 process ID. A value which is not an integer or does not fit a `long long` is
 a fatal error, a value from -2^31 to 2^32 - 1 is used as it is, and a value
 outside is reduced to its low 32 bits with a warning. The result is always in
-the accepted range, so it needs no validation. `G_srand48_auto()` wraps it,
-so the shared generator and the layouts agree on what an automatic seed is.
-Record the seed the tool used, for example in the history of the output map,
-so that the computation can be repeated.
+the accepted range, so it needs no validation. Record the seed the tool
+used, for example in the history of the output map, so that the computation
+can be repeated.
 
 ## Migrating from the shared generator {#gislib_random_streams_migrating}
 
@@ -511,16 +511,17 @@ kept and no longer depend on the number of threads. Where the draws of a unit
 vary, a bounded or spread layout replaces the exact one, and the values of a
 seed change once.
 
-Code which generated a seed with `G_srand48_auto()` calls
-`G_random_generate_seed()` instead; it gives the same seed without seeding
-the shared generator, though not necessarily the same value where `long` has
-32 bits, since `G_srand48_auto()` then returns a seed of 2^31 or more as a
-negative number. `G_srand48()` silently reduced any seed to its low 32 bits,
-while the `G_random_*()` functions refuse a seed outside their range, so a
-tool which passes a user's seed through now refuses seeds it once accepted,
-such as 5000000000. Validate the seed right after parsing, before any work
-is done, by initializing the layout there, or, when the layout's counts are
-known only later, with `G_random_seed()` on a local state.
+`G_srand48_auto()` seeds the shared generator with the seed
+`G_random_generate_seed()` returns, so code which generated a seed with it
+calls `G_random_generate_seed()` instead and gets the same seed without
+seeding the shared generator, though not necessarily the same value where
+`long` has 32 bits, since `G_srand48_auto()` then returns a seed of 2^31 or
+more as a negative number. `G_srand48()` silently reduced any seed to its low
+32 bits, while the `G_random_*()` functions refuse a seed outside their
+range, so a tool which passes a user's seed through now refuses seeds it once
+accepted, such as 5000000000. Validate the seed right after parsing, before
+any work is done, by initializing the layout there, or, when the layout's
+counts are known only later, with `G_random_seed()` on a local state.
 
 The `G_random_*()` functions include no integer-returning one. To get an
 integer in [0, n), use `(long)(G_random_double(&rng) * n)`. With n = 2^31
