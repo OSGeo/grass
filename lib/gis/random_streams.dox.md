@@ -391,35 +391,18 @@ the batches of one layout, whose strides do not overlap.
 
 ## Seeds {#gislib_random_streams_seeds}
 
-Any seed from -2^31 to 2^32 - 1 can be used. The generator uses the low 32
-bits of the seed, so -1 and 4294967295 are the same seed. A process which
-uses one seed, as every ordinary execution of a tool does, needs to know
-nothing more: any seed in the range is as good as any other, and the layout
-keeps the streams apart.
+Any seed from -2^31 to 2^32 - 1 can be used, and any is as good as any other.
+The generator uses the low 32 bits of the seed, so -1 and 4294967295 are the
+same seed. Computations which must be independent share one seed and use the
+batches of one layout, since seeds are related to one another (see
+\ref gislib_random_streams_between_seeds).
 
-The relations between seeds matter only when several seeds are used together:
-an ensemble with one seed per invocation, computations compared after choosing
-their seeds by hand, or a script deriving seeds from one another. Keeping all
-the seeds from 0 to 2^30 - 1 rules out pairs a multiple of 2^30 apart; no
-range rules out seeds taken at a constant step. Seeds drawn at random, or
-hashed from names, avoid both relations as far as this generator allows, but
-not the overlap of computations seeded at random. The sound arrangement is one
-seed for all of them, each using its own batch of the layout.
-
-The library does not parse a seed option. Parse it into a `long long` with
-`strtoll()`, since the parser checks an integer option only loosely and a
-`long` does not hold the range on every platform. Refuse a string which
-`strtoll()` does not consume whole, or for which it sets `errno` to `ERANGE`,
-with an error naming the option and the value given. When the user gives no
-seed, generate one with `G_random_generate_seed()`. It takes the value of
-`GRASS_RANDOM_SEED`, or of `SOURCE_DATE_EPOCH` when that one is not set, an
-empty value counting as not set, and otherwise hashes the time and the
-process ID. A value which is not an integer or does not fit a `long long` is
-a fatal error, a value from -2^31 to 2^32 - 1 is used as it is, and a value
-outside is reduced to its low 32 bits with a warning. The result is always in
-the accepted range, so it needs no validation. Record the seed the tool
-used, for example in the history of the output map, so that the computation
-can be repeated.
+A tool parses its seed option into a `long long` with `strtoll()` and refuses
+what is not an integer in the range, naming the option. When the user gives no
+seed, `G_random_generate_seed()` gives one, from `GRASS_RANDOM_SEED`, or else
+from `SOURCE_DATE_EPOCH`, or else from the time and the process ID. The tool
+records the seed it used, for example in the history of the output map, so
+that the computation can be repeated.
 
 ## Migrating from the shared generator {#gislib_random_streams_migrating}
 
