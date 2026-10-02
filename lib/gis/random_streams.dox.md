@@ -275,12 +275,11 @@ batch. A million units drawing a million values each in an exact layout draw
 10^12 values per batch, so 70 batches fit on one seed, and a single batch
 could hold 70,368,744 such units, about 70 million.
 
-The library does not limit how many values a unit draws, and cannot, since it
-does not know how many a unit will draw. A unit which draws past its stride
-continues into the next unit's stream and draws the next unit's values. Where
-the units stay within their strides, only batch 0 of a layout into which no
-batch fits reaches past the span; \ref gislib_random_streams_span explains
-what it draws there.
+The library does not check how many values a unit draws. A unit which draws
+past its stride continues into the next unit's stream and draws the next
+unit's values. Where the units stay within their strides, only batch 0 of a
+layout into which no batch fits reaches past the span;
+\ref gislib_random_streams_span explains what it draws there.
 
 No layout and no way of seeding makes the span larger (see
 \ref gislib_random_streams_span); more than it holds needs a generator with a
