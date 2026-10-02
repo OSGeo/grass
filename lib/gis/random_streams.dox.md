@@ -105,27 +105,20 @@ and \ref gislib_random_streams_odd.
 
 ### Batches {#gislib_random_streams_batches}
 
-A batch is one stream for every unit, and what it stands for is up to the
-tool: a member of an ensemble, one of several passes over the same units, or
-one of the processes of a model which each need a stream per unit. Batches are
-appended, never reserved: where a batch lies depends on nothing but the seed,
-the stride, the number of units and the batch number, so a batch used later
-lies where it would have lain now.
-`G_random_state_for_batch(&rng, &layout, batch, unit)` places a state at the
-start of the unit's stream in that batch, and
-`G_random_state_for_unit(&rng, &layout, unit)` is the same call with batch 0.
-Placing a state is an advance from the seed, which costs about as much as a
-few dozen draws, however far from the seed the stream starts.
+A batch is one stream for every unit. What it stands for is up to the tool: a
+member of an ensemble, another pass over the same units, or one of the
+processes of a model. `G_random_state_for_batch(&rng, &layout, batch, unit)`
+places a state at the start of the unit's stream in that batch, and
+`G_random_state_for_unit(&rng, &layout, unit)` does so in batch 0. A batch
+needs no reservation, since where it lies depends only on the layout and its
+number, and placing a state costs about as much as a few dozen draws wherever
+the stream starts.
 
-A layout answers two queries: `G_random_layout_batches(&layout)` returns the
-number of batches that fit into the span, which is 0 when not even one batch
-fits, and `G_random_layout_length(&layout)` returns the stride. A tool
-compares the stride with the most values any of its units can draw, not the
-average, and checks that the batches it uses fit; whether to refuse or to warn
-and continue is its decision. Batch 0 can always be placed, even when no batch
-fits, so a tool whose earlier versions drew the same values without complaint
-may warn and continue, as the fragments below do; what their warning says is
-explained in \ref gislib_random_streams_span.
+`G_random_layout_batches(&layout)` returns the number of batches that fit into
+the span and `G_random_layout_length(&layout)` the stride. A tool checks that
+no unit can draw more than the stride and that the batches it uses fit. Batch
+0 can be placed even when no batch fits, so that a tool may warn and continue,
+as the fragments below do.
 
 ## Usage {#gislib_random_streams_usage}
 
