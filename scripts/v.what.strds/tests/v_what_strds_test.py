@@ -15,12 +15,13 @@ POINTS = """5|75|1
 115|5|3
 """
 
-# Each raster is map_number * 1000 + row() * 10 + col(), so every cell holds a
-# distinct value and a shifted cell or a reordered point changes the result.
+# Each raster is map_number * 1000 + row() * 100 + col(). The row multiplier
+# is larger than the column count, so every cell of every map holds a distinct
+# value and a shifted cell or a reordered point changes the result.
 EXPECTED_ROWS = [
-    "1|1011|2011|3011|4011",
-    "2|1046|2046|3046|4046",
-    "3|1092|2092|3092|4092",
+    "1|1101|2101|3101|4101",
+    "2|1406|2406|3406|4406",
+    "3|1812|2812|3812|4812",
 ]
 
 
@@ -39,7 +40,7 @@ def session(tmp_path):
         tools = Tools(session=session)
         tools.g_region(s=0, n=80, w=0, e=120, b=0, t=50, res=10, res3=10)
         for i in range(1, 5):
-            tools.r_mapcalc(expression=f"a_{i} = {i} * 1000 + row() * 10 + col()")
+            tools.r_mapcalc(expression=f"a_{i} = {i} * 1000 + row() * 100 + col()")
         tools.v_in_ascii(
             input=StringIO(POINTS),
             output="points",
