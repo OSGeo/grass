@@ -389,29 +389,6 @@ of seed 42, with a million units of a million draws each, they show no such
 pattern. Computations meant to be independent therefore share one seed and use
 the batches of one layout, whose strides do not overlap.
 
-### Checking two sequences {#gislib_random_streams_checking}
-
-All the relations above are of one kind, two sequences which are one sequence
-shifted in value and possibly in time. Draw a hundred or so values from each
-of two sequences, and then:
-
-1. Compare at the same draw: subtract the values draw by draw, modulo 1. A
-   constant difference is a constant-shift twin, two constants alternating an
-   alternating-shift twin, and a difference which changes from draw to draw
-   but is the same for another pair of seeds equally far apart marks seeds
-   taken at a constant step.
-2. Compare at lags: shift one sequence by d draws against the other and
-   subtract again. A constant difference at lag d means the same values when
-   the constant is 0, and otherwise a constant-shift twin, which no layout
-   gives within the span.
-3. Compare against the stride: two units of one layout have no values in
-   common, at any lag, as long as each stays within its stride, and a unit
-   which draws past its stride draws exactly the next unit's values.
-
-The differences are exact: every value is a multiple of 2^-48, and a double
-holds the difference of two such values without rounding, so the comparison
-needs no tolerance.
-
 ## Seeds {#gislib_random_streams_seeds}
 
 Any seed from -2^31 to 2^32 - 1 can be used. The generator uses the low 32
