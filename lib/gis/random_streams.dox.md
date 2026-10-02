@@ -76,8 +76,9 @@ in where the stride comes from:
   when that number is even, and gives every unit the longest stride the span
   allows, in a single batch. The stride is the length of a part rounded down
   to odd (see \ref gislib_random_streams_distance and
-  \ref gislib_random_streams_odd). A whole-span layout holds at most 2^20
-  units; a bounded layout serves more.
+  \ref gislib_random_streams_odd). The layout takes at most 2^20 units, about
+  a million, so that this rounding cannot shift a unit to the positions which
+  the odd number of parts avoids; a bounded layout serves more.
 - An exact layout,
   `G_random_init_layout_exact(&layout, seed, units, draws_per_unit)`, is for
   units which all draw the same, known number of values. That number is the
@@ -279,8 +280,16 @@ The values are those of the 48-bit linear congruential generator of
 sampling, and Monte Carlo estimates, but not for cryptography. A layout keeps
 the streams of numbers of its units from overlapping. It does not make them
 independent, since positions on the ring are related by their distance. The
-sections below say what a tool should know about that and what the library
-does about it.
+table lists the issues, how the library avoids each of them, and what remains
+for a tool to keep in mind; the sections below give the details.
+
+| issue | how the library avoids it | what remains |
+| --- | --- | --- |
+| Positions a quarter of the ring, 2^46 draws, apart give the same values shifted by a constant. | Every layout lies within the span, the first 2^46 draws after the seed. | Batch 0 of a layout which does not fit into the span reaches past it; the tool warns. |
+| A unit which started half or a quarter of the span, 2^45 or 2^44 draws, after another would draw related values. | A whole-span layout divides the span into an odd number of parts. It takes at most 2^20 units, so that rounding its stride cannot move a unit to those positions. | A unit reaches those positions after drawing half or a quarter of its stride. |
+| Units an even stride apart draw related values at the same draw; with a stride divisible by 2^23, the values lie on lines. | A bounded layout rounds its bound up to odd, and a whole-span layout its stride down to odd. | The relation holds between draws whose numbers differ by one from unit to unit. An exact layout cannot round and keeps the structure of the seed's sequence. |
+| Batches an even number of draws apart do the same. | Batches start an odd number of draws apart. | The relation holds between draws whose numbers differ by one from batch to batch. |
+| Consecutive seeds give values on lines, and seeds 2^30 apart give values shifted by a constant. | One seed serves many computations through the batches of a layout. | Seeds which a user picks for separate computations. |
 
 ### The generator and the span {#gislib_random_streams_span}
 
@@ -329,26 +338,14 @@ have between the positions it uses; below 1, it reads as a chance.
 | 2^(46 - k), for k from 1 to 46 | 1/2^(k + 2) | one of 2^k constants, cycling | 2^k values, then the same again | 2^k × T / 2^46 |
 | any odd distance | an odd multiple of 1/2^48 | the low two bits fixed, 2^46 constants which do not repeat within the span | no pattern | about T, that is half of the distances which occur |
 
-What a tool should be aware of:
-
-- A relation at a large distance is easy to see in the values, but rarely
-  occurs.
-- A relation at a small distance occurs in most layouts, but cannot be seen in
-  the values at the precision computations use.
-- Batch 0 of an exact layout is the seed's sequence and has its structure, no
-  better and no worse.
-- The library moves the relations between units and between batches; it does
-  not remove them. With its odd distances they are weakest between draws which
-  carry the same number, and they remain between draws whose numbers differ
-  (see \ref gislib_random_streams_odd).
-
-What the library does about it:
-
-- Every layout lies within the span, so constant-shift twins do not occur.
-- A whole-span layout divides the span into an odd number of parts, so that no
-  unit starts at half or at a quarter of the span.
-- Bounded and whole-span layouts have odd strides, and batches start an odd
-  number of draws apart (see \ref gislib_random_streams_odd).
+A relation at a large distance is easy to see in the values but rarely occurs,
+while one at a small distance occurs in most layouts but cannot be seen in the
+values at the precision computations use. The strongest relations within the
+span are at half and at a quarter of it, and a whole-span layout keeps its
+units from starting there by dividing the span into an odd number of parts.
+Its stride is rounded down to odd, which loses up to two draws per unit; the
+limit of 2^20 units keeps those losses from adding up to a shift which would
+bring a unit to one of those positions.
 
 \image html random_streams_parts.svg
 
@@ -370,13 +367,14 @@ or of different batches, is then as unrelated as the generator allows.
 
 \image html random_streams_strides.svg
 
-The figure shows the first value of each of 64 units against the number of the
-unit. With an even stride of 2^24, which the library does not make, the values
-lie on lines. With the odd stride which the library makes of a bound of 2^24,
-they scatter. The relation is not gone, however: it holds between draws whose
-numbers fall by one from unit to unit, here draw 64 of unit 0, draw 63 of unit
-1 and so on, which the last panel shows. A tool meets it only where it
-compares or combines such draws.
+The figure shows the first value of each of 64 units, and below them of each
+of 64 batches, against its number. With an even stride of 2^24, which the
+library does not make, the values of the units lie on lines (grey). With the
+odd stride which the library makes of a bound of 2^24, they scatter (blue).
+The relation is not gone, however: it holds between draws whose numbers fall
+by one from unit to unit, here draw 64 of unit 0, draw 63 of unit 1 and so on
+(red). The same holds from batch to batch, shown for a batch of 2^25 draws. A
+tool meets the relation only where it compares or combines such draws.
 
 An exact layout cannot round its stride, since its units must draw what the
 seed's sequence draws. It keeps that sequence's structure, no better and no
@@ -396,12 +394,12 @@ of seed s plus k times one amount at every draw, modulo 1.
 \image html random_streams_seeds.svg
 
 The figure shows the first value of each of 64 computations against the number
-of the computation. Seeded 0 to 63, the values lie on straight lines, since
-every seed adds the same step to the value of the seed before it; the same
-happens at every draw. As batches 0 to 63 of one layout of seed 0, with a
-million units of a million draws each, the values scatter. Computations which
-are to be compared or combined therefore share one seed and use the batches of
-one layout.
+of the computation. Seeded 0 to 63, the values lie on straight lines (red),
+since every seed adds the same step to the value of the seed before it; the
+same happens at every draw. As batches 0 to 63 of one layout of seed 0, with a
+million units of a million draws each, the values scatter (blue). Computations
+which are to be compared or combined therefore share one seed and use the
+batches of one layout.
 
 ## Migrating from the shared generator {#gislib_random_streams_migrating}
 

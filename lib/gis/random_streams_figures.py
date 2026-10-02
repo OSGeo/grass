@@ -498,9 +498,12 @@ COMPUTATIONS = 64
 BATCH_DRAWS = 1000000 * 1000000
 BATCH_DISTANCE = BATCH_DRAWS | 1
 
+# The colors of the dot figures, each from the first to the last computation:
+# red for related values, blue for what the library makes, grey for a distance
+# which the library does not make.
 REDS = ((240, 170, 170), (112, 8, 8))
-GREYS = ((200, 200, 200), (17, 17, 17))
-PALE_GREYS = ((225, 225, 225), (120, 120, 120))
+BLUES = ((170, 198, 240), (10, 40, 110))
+GREYS = ((225, 225, 225), (120, 120, 120))
 
 
 def shade(light, dark, fraction):
@@ -538,59 +541,63 @@ def dot_panel(svg, x0, y0, size, heights, titles, x_title, colors):
 
 
 def strides_figure():
-    """What an odd stride fixes, and where the relation it moves away remains"""
-    bound = 1 << 24
-    stride = bound | 1
+    """What odd distances fix, and where the relation they move away remains"""
     start = seed_state(0)
     last = COMPUTATIONS - 1
-    even = [values(jump(start, u * bound), 1)[0] for u in range(COMPUTATIONS)]
-    odd = [values(jump(start, u * stride), 1)[0] for u in range(COMPUTATIONS)]
-    # Draw 64 of unit 0, 63 of unit 1 and so on, down to draw 1 of unit 63.
-    shifted = [
-        values(jump(start, u * stride + last - u), 1)[0] for u in range(COMPUTATIONS)
-    ]
     svg = Svg(
-        "The first values of 64 units an even and an odd number of draws apart, "
-        "and the draws between which the relation remains",
+        "The first values of 64 units, and of 64 batches, an even and an odd "
+        "number of draws apart, and the draws between which the relation remains",
         640,
-        250,
+        492,
     )
-    panels = (
-        (
-            36,
-            ["an even stride, 2^24:", "the first value of every unit"],
-            even,
-            PALE_GREYS,
+    # A unit of 2^24 draws, and a batch of 8192 units of 4096 draws each.
+    rows = ((46, "unit", "stride", 1 << 24), (268, "batch", "distance", 1 << 25))
+    for y0, name, distance_name, even in rows:
+        odd = even | 1
+        power = even.bit_length() - 1
+        panels = (
             (
-                "An even stride, which the library does not make: the first values "
-                "of the units lie on lines."
+                30,
+                f"an even {distance_name}, 2^{power}:",
+                f"the first value of every {name}",
+                [values(jump(start, k * even), 1)[0] for k in range(COMPUTATIONS)],
+                GREYS,
             ),
-        ),
-        (
-            244,
-            ["an odd stride, 2^24 + 1:", "the first value of every unit"],
-            odd,
-            GREYS,
-            "The odd stride of the library: the first values of the units scatter.",
-        ),
-        (
-            452,
-            ["the odd stride: draw 64 of unit 0,", "63 of unit 1, 62 of unit 2, ..."],
-            shifted,
-            REDS,
             (
-                "Where the relation remains with the odd stride: between draws "
-                "whose numbers fall by one from unit to unit."
+                232,
+                f"an odd {distance_name}, 2^{power} + 1:",
+                f"the first value of every {name}",
+                [values(jump(start, k * odd), 1)[0] for k in range(COMPUTATIONS)],
+                BLUES,
             ),
-        ),
-    )
-    for x0, titles, heights, colors, note in panels:
-        svg.comment(note)
-        dot_panel(svg, x0, 46, (176, 150), heights, titles, "unit", colors)
+            (
+                434,
+                f"odd: draw 64 of {name} 0,",
+                f"63 of {name} 1, 62 of {name} 2, ...",
+                [
+                    values(jump(start, k * odd + last - k), 1)[0]
+                    for k in range(COMPUTATIONS)
+                ],
+                REDS,
+            ),
+        )
+        svg.comment(
+            f"Each {name} an even {distance_name} after the one before, which the",
+            f"library does not make; an odd {distance_name}, which it makes; and the",
+            "draws between which the relation remains with the odd one.",
+        )
+        for x0, title, subtitle, heights, colors in panels:
+            dot_panel(svg, x0, y0, (176, 150), heights, [title, subtitle], name, colors)
     svg.text(
         320,
-        242,
-        "grey: a stride the library does not make; red: where the relation remains",
+        466,
+        "grey: a distance the library does not make; blue: what the library makes;",
+        anchor="middle",
+    )
+    svg.text(
+        320,
+        484,
+        "red: where the relation remains; each dot is darker with its number",
         anchor="middle",
     )
     return svg
@@ -635,10 +642,14 @@ def seeds_figure():
         by_batch,
         ["64 batches of one layout of seed 0:", "the first value of each"],
         "batch",
-        GREYS,
+        BLUES,
     )
     svg.text(
-        320, 254, "each dot is one computation, darker with its number", anchor="middle"
+        320,
+        254,
+        "red: related values; blue: what the library makes; "
+        "each dot is darker with its number",
+        anchor="middle",
     )
     return svg
 
