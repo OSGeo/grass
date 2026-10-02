@@ -7,58 +7,58 @@
        six units, and a stride of a part rounded down to odd; the six units
        take six parts, the last part stays unused, and there is one batch
        only. -->
-  <text x="80" y="22">whole-span layout: G_random_init_layout()</text>
-  <text x="80" y="38">seven parts for six units: half the span lies in the middle of the stride of unit 3</text>
+  <text x="80.0" y="22.0">whole-span layout: G_random_init_layout()</text>
+  <text x="80.0" y="38.0">seven parts for six units: half the span lies in the middle of the stride of unit 3</text>
   <rect x="80" y="48" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
-  <rect x="80" y="48" width="14" height="24" fill="#222"/>
-  <text x="132" y="64.5" text-anchor="middle">0</text>
-  <line x1="154.286" y1="48" x2="154.286" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="154.286" y="48" width="22" height="24" fill="#222"/>
-  <text x="206.286" y="64.5" text-anchor="middle">1</text>
-  <line x1="228.571" y1="48" x2="228.571" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="228.571" y="48" width="9" height="24" fill="#222"/>
-  <text x="280.571" y="64.5" text-anchor="middle">2</text>
-  <line x1="302.857" y1="48" x2="302.857" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="302.857" y="48" width="27" height="24" fill="#222"/>
-  <text x="354.857" y="64.5" text-anchor="middle">3</text>
-  <line x1="377.143" y1="48" x2="377.143" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="377.143" y="48" width="19" height="24" fill="#222"/>
-  <text x="429.143" y="64.5" text-anchor="middle">4</text>
-  <line x1="451.429" y1="48" x2="451.429" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="451.429" y="48" width="12" height="24" fill="#222"/>
-  <text x="503.429" y="64.5" text-anchor="middle">5</text>
-  <line x1="525.714" y1="48" x2="525.714" y2="72" stroke="#222" stroke-width="1.5"/>
-  <text x="562.857" y="64.5" text-anchor="middle" fill="#888">unused</text>
+  <rect x="80.0" y="48" width="14" height="24" fill="#222"/>
+  <text x="132.0" y="64.5" text-anchor="middle">0</text>
+  <line x1="154.3" y1="48" x2="154.3" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="154.3" y="48" width="22" height="24" fill="#222"/>
+  <text x="206.3" y="64.5" text-anchor="middle">1</text>
+  <line x1="228.6" y1="48" x2="228.6" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="228.6" y="48" width="9" height="24" fill="#222"/>
+  <text x="280.6" y="64.5" text-anchor="middle">2</text>
+  <line x1="302.9" y1="48" x2="302.9" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="302.9" y="48" width="27" height="24" fill="#222"/>
+  <text x="354.9" y="64.5" text-anchor="middle">3</text>
+  <line x1="377.1" y1="48" x2="377.1" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="377.1" y="48" width="19" height="24" fill="#222"/>
+  <text x="429.1" y="64.5" text-anchor="middle">4</text>
+  <line x1="451.4" y1="48" x2="451.4" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="451.4" y="48" width="12" height="24" fill="#222"/>
+  <text x="503.4" y="64.5" text-anchor="middle">5</text>
+  <line x1="525.7" y1="48" x2="525.7" y2="72" stroke="#222" stroke-width="1.5"/>
+  <text x="562.9" y="64.5" text-anchor="middle" fill="#888">unused</text>
   <circle cx="80" cy="60" r="5" fill="#c33"/>
-  <text x="70" y="64.5" text-anchor="end">seed</text>
-  <line x1="340" y1="45" x2="340" y2="75" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="70.0" y="64.5" text-anchor="end">seed</text>
+  <line x1="340.0" y1="45" x2="340.0" y2="75" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
   <!-- Without the odd number of parts: the span divided into as many parts as
        there are units; unit 3 starts half the span after unit 0. In grey, since
        the library does not make this layout. -->
-  <text x="80" y="98" fill="#999">with six parts, unit 3 would start at half the span</text>
+  <text x="80.0" y="98.0" fill="#999">with six parts, unit 3 would start at half the span</text>
   <rect x="80" y="108" width="520" height="24" fill="none" stroke="#999" stroke-width="1.5"/>
-  <rect x="80" y="108" width="14" height="24" fill="#999"/>
-  <text x="140.667" y="124.5" text-anchor="middle" fill="#999">0</text>
-  <line x1="166.667" y1="108" x2="166.667" y2="132" stroke="#999" stroke-width="1.5"/>
-  <rect x="166.667" y="108" width="22" height="24" fill="#999"/>
-  <text x="227.333" y="124.5" text-anchor="middle" fill="#999">1</text>
-  <line x1="253.333" y1="108" x2="253.333" y2="132" stroke="#999" stroke-width="1.5"/>
-  <rect x="253.333" y="108" width="9" height="24" fill="#999"/>
-  <text x="314" y="124.5" text-anchor="middle" fill="#999">2</text>
-  <line x1="340" y1="108" x2="340" y2="132" stroke="#999" stroke-width="1.5"/>
-  <rect x="340" y="108" width="27" height="24" fill="#999"/>
-  <text x="400.667" y="124.5" text-anchor="middle" fill="#999">3</text>
-  <line x1="426.667" y1="108" x2="426.667" y2="132" stroke="#999" stroke-width="1.5"/>
-  <rect x="426.667" y="108" width="19" height="24" fill="#999"/>
-  <text x="487.333" y="124.5" text-anchor="middle" fill="#999">4</text>
-  <line x1="513.333" y1="108" x2="513.333" y2="132" stroke="#999" stroke-width="1.5"/>
-  <rect x="513.333" y="108" width="12" height="24" fill="#999"/>
-  <text x="574" y="124.5" text-anchor="middle" fill="#999">5</text>
-  <line x1="600" y1="108" x2="600" y2="132" stroke="#999" stroke-width="1.5"/>
+  <rect x="80.0" y="108" width="14" height="24" fill="#999"/>
+  <text x="140.7" y="124.5" text-anchor="middle" fill="#999">0</text>
+  <line x1="166.7" y1="108" x2="166.7" y2="132" stroke="#999" stroke-width="1.5"/>
+  <rect x="166.7" y="108" width="22" height="24" fill="#999"/>
+  <text x="227.3" y="124.5" text-anchor="middle" fill="#999">1</text>
+  <line x1="253.3" y1="108" x2="253.3" y2="132" stroke="#999" stroke-width="1.5"/>
+  <rect x="253.3" y="108" width="9" height="24" fill="#999"/>
+  <text x="314.0" y="124.5" text-anchor="middle" fill="#999">2</text>
+  <line x1="340.0" y1="108" x2="340.0" y2="132" stroke="#999" stroke-width="1.5"/>
+  <rect x="340.0" y="108" width="27" height="24" fill="#999"/>
+  <text x="400.7" y="124.5" text-anchor="middle" fill="#999">3</text>
+  <line x1="426.7" y1="108" x2="426.7" y2="132" stroke="#999" stroke-width="1.5"/>
+  <rect x="426.7" y="108" width="19" height="24" fill="#999"/>
+  <text x="487.3" y="124.5" text-anchor="middle" fill="#999">4</text>
+  <line x1="513.3" y1="108" x2="513.3" y2="132" stroke="#999" stroke-width="1.5"/>
+  <rect x="513.3" y="108" width="12" height="24" fill="#999"/>
+  <text x="574.0" y="124.5" text-anchor="middle" fill="#999">5</text>
+  <line x1="600.0" y1="108" x2="600.0" y2="132" stroke="#999" stroke-width="1.5"/>
   <circle cx="80" cy="120" r="5" fill="#dba5a5"/>
-  <text x="70" y="124.5" text-anchor="end" fill="#999">seed</text>
-  <line x1="340" y1="105" x2="340" y2="135" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="70.0" y="124.5" text-anchor="end" fill="#999">seed</text>
+  <line x1="340.0" y1="105" x2="340.0" y2="135" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
   <!-- Half the span, 2^45 draws after the seed. -->
-  <text x="340" y="154" text-anchor="middle" fill="#c33">half the span: the values of a unit starting here would be related to those of unit 0</text>
-  <text x="600" y="180" text-anchor="end">red dot: the seed; dashed line: the end of the span; grey: not a layout the library makes</text>
+  <text x="340.0" y="154.0" text-anchor="middle" fill="#c33">half the span: the values of a unit starting here would be related to those of unit 0</text>
+  <text x="600.0" y="180.0" text-anchor="end">red dot: the seed; dashed line: the end of the span; grey: not a layout the library makes</text>
 </svg>

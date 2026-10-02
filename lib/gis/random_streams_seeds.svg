@@ -76,8 +76,8 @@
   <circle cx="297.1" cy="69.9" r="2.3" fill="#c33"/>
   <circle cx="300.5" cy="83.1" r="2.3" fill="#c33"/>
   <circle cx="304.0" cy="96.3" r="2.3" fill="#c33"/>
-  <text x="74.0" y="161.0" text-anchor="end" font-size="11" fill="#888">0</text>
-  <text x="74.0" y="61.0" text-anchor="end" font-size="11" fill="#888">1</text>
+  <text x="74.0" y="161.0" text-anchor="end" fill="#888" font-size="11">0</text>
+  <text x="74.0" y="61.0" text-anchor="end" fill="#888" font-size="11">1</text>
   <rect x="370" y="52" width="230" height="110" fill="none" stroke="#bbb" stroke-width="1.5"/>
   <circle cx="376.0" cy="82.1" r="2.3" fill="#222"/>
   <circle cx="379.5" cy="108.7" r="2.3" fill="#222"/>
@@ -143,8 +143,8 @@
   <circle cx="587.1" cy="96.2" r="2.3" fill="#222"/>
   <circle cx="590.5" cy="80.6" r="2.3" fill="#222"/>
   <circle cx="594.0" cy="144.5" r="2.3" fill="#222"/>
-  <text x="364.0" y="161.0" text-anchor="end" font-size="11" fill="#888">0</text>
-  <text x="364.0" y="61.0" text-anchor="end" font-size="11" fill="#888">1</text>
+  <text x="364.0" y="161.0" text-anchor="end" fill="#888" font-size="11">0</text>
+  <text x="364.0" y="61.0" text-anchor="end" fill="#888" font-size="11">1</text>
   <text x="54.0" y="247.0" text-anchor="end">draw</text>
   <text x="54.0" y="263.0" text-anchor="end">2</text>
   <rect x="80" y="196" width="230" height="110" fill="none" stroke="#bbb" stroke-width="1.5"/>
@@ -212,8 +212,8 @@
   <circle cx="297.1" cy="269.1" r="2.3" fill="#c33"/>
   <circle cx="300.5" cy="299.2" r="2.3" fill="#c33"/>
   <circle cx="304.0" cy="227.3" r="2.3" fill="#c33"/>
-  <text x="74.0" y="305.0" text-anchor="end" font-size="11" fill="#888">0</text>
-  <text x="74.0" y="205.0" text-anchor="end" font-size="11" fill="#888">1</text>
+  <text x="74.0" y="305.0" text-anchor="end" fill="#888" font-size="11">0</text>
+  <text x="74.0" y="205.0" text-anchor="end" fill="#888" font-size="11">1</text>
   <rect x="370" y="196" width="230" height="110" fill="none" stroke="#bbb" stroke-width="1.5"/>
   <circle cx="376.0" cy="267.0" r="2.3" fill="#222"/>
   <circle cx="379.5" cy="229.0" r="2.3" fill="#222"/>
@@ -279,8 +279,8 @@
   <circle cx="587.1" cy="204.0" r="2.3" fill="#222"/>
   <circle cx="590.5" cy="204.9" r="2.3" fill="#222"/>
   <circle cx="594.0" cy="261.4" r="2.3" fill="#222"/>
-  <text x="364.0" y="305.0" text-anchor="end" font-size="11" fill="#888">0</text>
-  <text x="364.0" y="205.0" text-anchor="end" font-size="11" fill="#888">1</text>
+  <text x="364.0" y="305.0" text-anchor="end" fill="#888" font-size="11">0</text>
+  <text x="364.0" y="205.0" text-anchor="end" fill="#888" font-size="11">1</text>
   <text x="195.0" y="324.0" text-anchor="middle">seed, from 42 to 105</text>
   <text x="485.0" y="324.0" text-anchor="middle">batch, from 0 to 63</text>
 </svg>

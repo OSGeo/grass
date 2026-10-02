@@ -10,21 +10,21 @@
   <path d="M 228.1 113.1 A 130 130 0 1 1 228.1 296.9" fill="none" stroke="#bbb" stroke-width="3" stroke-dasharray="6 5"/>
   <!-- The span: the quarter of the ring after the seed, clockwise. -->
   <path d="M 228.1 296.9 A 130 130 0 0 1 228.1 113.1" fill="none" stroke="#ddd" stroke-width="14"/>
-  <path d="M 241.5 273.2 A 104 104 0 0 1 241.5 136.8" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="232" y="209">span</text>
+  <path d="M 239.2 270.4 A 104 104 0 0 1 239.2 139.6" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="232.0" y="209.0">span</text>
   <!-- The seed and the positions a quarter, a half and three quarters of
        the ring after it, where the generator draws the seed's values plus
        1/4, 1/2 and 3/4, wrapping past 1. -->
   <circle cx="228.1" cy="296.9" r="5" fill="#c33"/>
+  <text x="212.1" y="311.9" text-anchor="end">seed 42:</text>
+  <text x="212.1" y="327.9" text-anchor="end">0.7445, 0.3427, 0.1111</text>
   <circle cx="228.1" cy="113.1" r="5" fill="#fff" stroke="#c33" stroke-width="2"/>
+  <text x="212.1" y="92.1" text-anchor="end">+ 1/4:</text>
+  <text x="212.1" y="108.1" text-anchor="end">0.9945, 0.5927, 0.3611</text>
   <circle cx="411.9" cy="113.1" r="5" fill="#fff" stroke="#c33" stroke-width="2"/>
+  <text x="427.9" y="92.1">+ 1/2:</text>
+  <text x="427.9" y="108.1">0.2445, 0.8427, 0.6111</text>
   <circle cx="411.9" cy="296.9" r="5" fill="#fff" stroke="#c33" stroke-width="2"/>
-  <text x="212" y="312" text-anchor="end">seed 42:</text>
-  <text x="212" y="328" text-anchor="end">0.7445, 0.3427, 0.1111</text>
-  <text x="212" y="92" text-anchor="end">+ 1/4:</text>
-  <text x="212" y="108" text-anchor="end">0.9945, 0.5927, 0.3611</text>
-  <text x="428" y="92">+ 1/2:</text>
-  <text x="428" y="108">0.2445, 0.8427, 0.6111</text>
-  <text x="428" y="312">+ 3/4:</text>
-  <text x="428" y="328">0.4945, 0.0927, 0.8611</text>
+  <text x="427.9" y="311.9">+ 3/4:</text>
+  <text x="427.9" y="327.9">0.4945, 0.0927, 0.8611</text>
 </svg>

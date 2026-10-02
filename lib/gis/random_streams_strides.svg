@@ -5,97 +5,97 @@
   <line x1="600" y1="42" x2="600" y2="164" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6 5"/>
   <!-- Bounded: a stride of the bound rounded up to odd, with the added draw
        in light grey, much wider than one draw is. -->
-  <text x="80" y="22">bounded layout: G_random_init_layout_bounded()</text>
-  <text x="80" y="38">stride: the bound rounded up to odd; light grey: the draw added to an even bound</text>
+  <text x="80.0" y="22.0">bounded layout: G_random_init_layout_bounded()</text>
+  <text x="80.0" y="38.0">stride: the bound rounded up to odd; light grey: the draw added to an even bound</text>
   <rect x="80" y="48" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
-  <rect x="80" y="48" width="8" height="24" fill="#222"/>
-  <rect x="116" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="106" y="64.5" text-anchor="middle">0</text>
-  <line x1="120" y1="48" x2="120" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="120" y="48" width="13" height="24" fill="#222"/>
-  <rect x="156" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="146" y="64.5" text-anchor="middle">1</text>
-  <line x1="160" y1="48" x2="160" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="160" y="48" width="5" height="24" fill="#222"/>
-  <rect x="196" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="186" y="64.5" text-anchor="middle">2</text>
-  <line x1="200" y1="48" x2="200" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="200" y="48" width="16" height="24" fill="#222"/>
-  <rect x="236" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="226" y="64.5" text-anchor="middle">3</text>
-  <line x1="240" y1="48" x2="240" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="240" y="48" width="11" height="24" fill="#222"/>
-  <rect x="276" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="266" y="64.5" text-anchor="middle">4</text>
-  <line x1="280" y1="48" x2="280" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="280" y="48" width="7" height="24" fill="#222"/>
-  <rect x="316" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="306" y="64.5" text-anchor="middle">5</text>
-  <line x1="320" y1="48" x2="320" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="356" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="346" y="64.5" text-anchor="middle">0</text>
-  <line x1="360" y1="48" x2="360" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="396" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="386" y="64.5" text-anchor="middle">1</text>
-  <line x1="400" y1="48" x2="400" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="436" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="426" y="64.5" text-anchor="middle">2</text>
-  <line x1="440" y1="48" x2="440" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="476" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="466" y="64.5" text-anchor="middle">3</text>
-  <line x1="480" y1="48" x2="480" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="516" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="506" y="64.5" text-anchor="middle">4</text>
-  <line x1="520" y1="48" x2="520" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="556" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="546" y="64.5" text-anchor="middle">5</text>
-  <line x1="560" y1="48" x2="560" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="80.0" y="48" width="8" height="24" fill="#222"/>
+  <rect x="116.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="106.0" y="64.5" text-anchor="middle">0</text>
+  <line x1="120.0" y1="48" x2="120.0" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="120.0" y="48" width="13" height="24" fill="#222"/>
+  <rect x="156.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="146.0" y="64.5" text-anchor="middle">1</text>
+  <line x1="160.0" y1="48" x2="160.0" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="160.0" y="48" width="5" height="24" fill="#222"/>
+  <rect x="196.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="186.0" y="64.5" text-anchor="middle">2</text>
+  <line x1="200.0" y1="48" x2="200.0" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="200.0" y="48" width="16" height="24" fill="#222"/>
+  <rect x="236.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="226.0" y="64.5" text-anchor="middle">3</text>
+  <line x1="240.0" y1="48" x2="240.0" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="240.0" y="48" width="11" height="24" fill="#222"/>
+  <rect x="276.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="266.0" y="64.5" text-anchor="middle">4</text>
+  <line x1="280.0" y1="48" x2="280.0" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="280.0" y="48" width="7" height="24" fill="#222"/>
+  <rect x="316.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="306.0" y="64.5" text-anchor="middle">5</text>
+  <line x1="320.0" y1="48" x2="320.0" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="356.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="346.0" y="64.5" text-anchor="middle">0</text>
+  <line x1="360.0" y1="48" x2="360.0" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="396.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="386.0" y="64.5" text-anchor="middle">1</text>
+  <line x1="400.0" y1="48" x2="400.0" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="436.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="426.0" y="64.5" text-anchor="middle">2</text>
+  <line x1="440.0" y1="48" x2="440.0" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="476.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="466.0" y="64.5" text-anchor="middle">3</text>
+  <line x1="480.0" y1="48" x2="480.0" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="516.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="506.0" y="64.5" text-anchor="middle">4</text>
+  <line x1="520.0" y1="48" x2="520.0" y2="72" stroke="#222" stroke-width="1.5"/>
+  <rect x="556.0" y="49" width="4" height="22" fill="#ccc"/>
+  <text x="546.0" y="64.5" text-anchor="middle">5</text>
+  <line x1="560.0" y1="48" x2="560.0" y2="72" stroke="#222" stroke-width="1.5"/>
   <circle cx="80" cy="60" r="5" fill="#c33"/>
-  <text x="70" y="64.5" text-anchor="end">seed</text>
-  <path d="M 80 76 L 80 80 L 320 80 L 320 76" fill="none" stroke="#222" stroke-width="1.5"/>
-  <text x="200" y="96" text-anchor="middle">batch 0</text>
-  <path d="M 320 76 L 320 80 L 560 80 L 560 76" fill="none" stroke="#222" stroke-width="1.5"/>
-  <text x="440" y="96" text-anchor="middle">batch 1</text>
+  <text x="70.0" y="64.5" text-anchor="end">seed</text>
+  <path d="M 80.0 76 L 80.0 80 L 320.0 80 L 320.0 76" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="200.0" y="96.0" text-anchor="middle">batch 0</text>
+  <path d="M 320.0 76 L 320.0 80 L 560.0 80 L 560.0 76" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="440.0" y="96.0" text-anchor="middle">batch 1</text>
   <!-- Without the rounding: an even bound as the stride; the units 1, 2 and 4
        strides after unit 0 start at distances which carry the stride's power
        of two as well. In grey, since the library does not make this layout. -->
-  <text x="80" y="124" fill="#999">with an even bound taken as the stride</text>
+  <text x="80.0" y="124.0" fill="#999">with an even bound taken as the stride</text>
   <rect x="80" y="134" width="520" height="24" fill="none" stroke="#999" stroke-width="1.5"/>
-  <rect x="80" y="134" width="8" height="24" fill="#999"/>
-  <text x="105.92" y="150.5" text-anchor="middle" fill="#999">0</text>
-  <line x1="116" y1="134" x2="116" y2="158" stroke="#999" stroke-width="1.5"/>
-  <rect x="116" y="134" width="13" height="24" fill="#999"/>
-  <text x="141.92" y="150.5" text-anchor="middle" fill="#999">1</text>
-  <line x1="152" y1="134" x2="152" y2="158" stroke="#999" stroke-width="1.5"/>
-  <rect x="152" y="134" width="5" height="24" fill="#999"/>
-  <text x="177.92" y="150.5" text-anchor="middle" fill="#999">2</text>
-  <line x1="188" y1="134" x2="188" y2="158" stroke="#999" stroke-width="1.5"/>
-  <rect x="188" y="134" width="16" height="24" fill="#999"/>
-  <text x="213.92" y="150.5" text-anchor="middle" fill="#999">3</text>
-  <line x1="224" y1="134" x2="224" y2="158" stroke="#999" stroke-width="1.5"/>
-  <rect x="224" y="134" width="11" height="24" fill="#999"/>
-  <text x="249.92" y="150.5" text-anchor="middle" fill="#999">4</text>
-  <line x1="260" y1="134" x2="260" y2="158" stroke="#999" stroke-width="1.5"/>
-  <rect x="260" y="134" width="7" height="24" fill="#999"/>
-  <text x="285.92" y="150.5" text-anchor="middle" fill="#999">5</text>
-  <line x1="296" y1="134" x2="296" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="321.92" y="150.5" text-anchor="middle" fill="#999">0</text>
-  <line x1="332" y1="134" x2="332" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="357.92" y="150.5" text-anchor="middle" fill="#999">1</text>
-  <line x1="368" y1="134" x2="368" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="393.92" y="150.5" text-anchor="middle" fill="#999">2</text>
-  <line x1="404" y1="134" x2="404" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="429.92" y="150.5" text-anchor="middle" fill="#999">3</text>
-  <line x1="440" y1="134" x2="440" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="465.92" y="150.5" text-anchor="middle" fill="#999">4</text>
-  <line x1="476" y1="134" x2="476" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="501.92" y="150.5" text-anchor="middle" fill="#999">5</text>
-  <line x1="512" y1="134" x2="512" y2="158" stroke="#999" stroke-width="1.5"/>
+  <rect x="80.0" y="134" width="8" height="24" fill="#999"/>
+  <text x="105.9" y="150.5" text-anchor="middle" fill="#999">0</text>
+  <line x1="116.0" y1="134" x2="116.0" y2="158" stroke="#999" stroke-width="1.5"/>
+  <rect x="116.0" y="134" width="13" height="24" fill="#999"/>
+  <text x="141.9" y="150.5" text-anchor="middle" fill="#999">1</text>
+  <line x1="152.0" y1="134" x2="152.0" y2="158" stroke="#999" stroke-width="1.5"/>
+  <rect x="152.0" y="134" width="5" height="24" fill="#999"/>
+  <text x="177.9" y="150.5" text-anchor="middle" fill="#999">2</text>
+  <line x1="188.0" y1="134" x2="188.0" y2="158" stroke="#999" stroke-width="1.5"/>
+  <rect x="188.0" y="134" width="16" height="24" fill="#999"/>
+  <text x="213.9" y="150.5" text-anchor="middle" fill="#999">3</text>
+  <line x1="224.0" y1="134" x2="224.0" y2="158" stroke="#999" stroke-width="1.5"/>
+  <rect x="224.0" y="134" width="11" height="24" fill="#999"/>
+  <text x="249.9" y="150.5" text-anchor="middle" fill="#999">4</text>
+  <line x1="260.0" y1="134" x2="260.0" y2="158" stroke="#999" stroke-width="1.5"/>
+  <rect x="260.0" y="134" width="7" height="24" fill="#999"/>
+  <text x="285.9" y="150.5" text-anchor="middle" fill="#999">5</text>
+  <line x1="296.0" y1="134" x2="296.0" y2="158" stroke="#999" stroke-width="1.5"/>
+  <text x="321.9" y="150.5" text-anchor="middle" fill="#999">0</text>
+  <line x1="332.0" y1="134" x2="332.0" y2="158" stroke="#999" stroke-width="1.5"/>
+  <text x="357.9" y="150.5" text-anchor="middle" fill="#999">1</text>
+  <line x1="368.0" y1="134" x2="368.0" y2="158" stroke="#999" stroke-width="1.5"/>
+  <text x="393.9" y="150.5" text-anchor="middle" fill="#999">2</text>
+  <line x1="404.0" y1="134" x2="404.0" y2="158" stroke="#999" stroke-width="1.5"/>
+  <text x="429.9" y="150.5" text-anchor="middle" fill="#999">3</text>
+  <line x1="440.0" y1="134" x2="440.0" y2="158" stroke="#999" stroke-width="1.5"/>
+  <text x="465.9" y="150.5" text-anchor="middle" fill="#999">4</text>
+  <line x1="476.0" y1="134" x2="476.0" y2="158" stroke="#999" stroke-width="1.5"/>
+  <text x="501.9" y="150.5" text-anchor="middle" fill="#999">5</text>
+  <line x1="512.0" y1="134" x2="512.0" y2="158" stroke="#999" stroke-width="1.5"/>
   <circle cx="80" cy="146" r="5" fill="#dba5a5"/>
-  <text x="70" y="150.5" text-anchor="end" fill="#999">seed</text>
-  <line x1="116" y1="131" x2="116" y2="161" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <line x1="152" y1="131" x2="152" y2="161" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <line x1="224" y1="131" x2="224" y2="161" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <text x="340" y="180" text-anchor="middle" fill="#c33">an even bound would tie more low bits of the values of units 1, 2, and 4 to those of unit 0</text>
-  <text x="600" y="206" text-anchor="end">red dot: the seed; dashed line: the end of the span; grey: not a layout the library makes</text>
+  <text x="70.0" y="150.5" text-anchor="end" fill="#999">seed</text>
+  <line x1="116.0" y1="131" x2="116.0" y2="161" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="152.0" y1="131" x2="152.0" y2="161" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <line x1="224.0" y1="131" x2="224.0" y2="161" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="340.0" y="180.0" text-anchor="middle" fill="#c33">an even bound would tie more low bits of the values of units 1, 2, and 4 to those of unit 0</text>
+  <text x="600.0" y="206.0" text-anchor="end">red dot: the seed; dashed line: the end of the span; grey: not a layout the library makes</text>
 </svg>
