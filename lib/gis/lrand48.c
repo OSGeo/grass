@@ -453,7 +453,7 @@ static void fill_layout(struct G_random_layout *layout, long long seed,
     if (draws <= LCG_SPAN)
         layout->batches =
             (int64_t)((LCG_SPAN - draws) / batch_distance(layout) + 1);
-    layout->whole_span = 0;
+    layout->whole_span = false;
 }
 
 /*!
@@ -624,7 +624,7 @@ void G_random_init_layout(struct G_random_layout *layout, long long seed,
     layout->units = units;
     layout->stride = (int64_t)stride;
     layout->batches = 1;
-    layout->whole_span = 1;
+    layout->whole_span = true;
 }
 
 /*!
