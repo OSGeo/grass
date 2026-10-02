@@ -314,7 +314,7 @@ longer period behind the same calls.
 The generator is the 48-bit linear congruential generator of `drand48()`, and
 its values are multiples of 2^-48, uniform in [0, 1). A unit's stream is taken
 from the one sequence the generator has, so its values are as good as that
-sequence: fine for simulations, sampling and Monte Carlo estimates, and not
+sequence: fine for simulations, sampling, and Monte Carlo estimates, but not
 for cryptography.
 
 The multiplier a is 5 modulo 8, so a^(2^46) = 1 modulo 2^48 while a^(2^45) is
