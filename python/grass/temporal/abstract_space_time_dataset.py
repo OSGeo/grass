@@ -1765,14 +1765,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if not spatial_relation:
             spatial_relation = "overlaps"
         elif spatial_relation not in {"overlaps", "is_contained", "contains"}:
-            self.msgr.error(
-                _(
-                    "Invalid spatial relation <{}> requested."
-                    "Only values 'overlaps', 'is_contained', and 'contains' are \
-                        allowed."
-                ).format(spatial_relation)
-            )
-            raise
+            msg = _(
+                "Invalid spatial relation <{}> requested. "
+                "Only values 'overlaps', 'is_contained', and 'contains' are allowed."
+            ).format(spatial_relation)
+            self.msgr.error(msg)
+            raise ValueError(msg)
         # SQL implementation of overlap, is_contained, and contains
         where += ""
 
