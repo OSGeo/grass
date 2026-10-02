@@ -427,18 +427,36 @@ static void check_units(long long units)
                       units);
 }
 
+/* The draws from the start of one batch to the start of the next: those of
+ * one batch, units * stride, or one more when that number is even. With an
+ * odd distance, as with an odd stride between units, the same draw of
+ * different batches is as unrelated as the generator allows; an even
+ * distance would relate those draws, the more simply the more often 2
+ * divides it. */
+static unsigned long long batch_distance(const struct G_random_layout *layout)
+{
+    return ((unsigned long long)layout->units *
+            (unsigned long long)layout->stride) |
+           1;
+}
+
 /* Fill in a layout of units of the given stride, all of one batch first,
- * then those of the next batch. The number of batches that fit is how many
- * times units * stride draws fit into the span. Callers must check
- * beforehand that units * stride does not overflow. */
+ * then those of the next batch. The batches that fit are those whose last
+ * stream ends within the span. Callers must check beforehand that
+ * units * stride does not overflow. */
 static void fill_layout(struct G_random_layout *layout, long long seed,
                         long long units, long long stride)
 {
+    unsigned long long draws =
+        (unsigned long long)units * (unsigned long long)stride;
+
     layout->start = lcg_seed(seed);
     layout->units = units;
     layout->stride = stride;
-    layout->batches = (long long)(LCG_SPAN / ((unsigned long long)units *
-                                              (unsigned long long)stride));
+    layout->batches = 0;
+    if (draws <= LCG_SPAN)
+        layout->batches =
+            (long long)((LCG_SPAN - draws) / batch_distance(layout) + 1);
     layout->whole_span = 0;
 }
 
@@ -470,19 +488,19 @@ void G_random_state_from_seed(struct G_random_state *state, long long seed)
  * \brief Initialize a layout whose units draw an exact number of values
  *
  * The span is cut into streams of exactly \p draws_per_unit draws, one per
- * unit, placed one after another from the seed, and then one after
- * another for the following batches. Unit u of batch 0 therefore draws
- * what a single sequence from G_random_state_from_seed() draws at positions
- * u * \p draws_per_unit to (u + 1) * \p draws_per_unit - 1, so the units
- * together reproduce a serial run whatever order they are processed in.
+ * unit, placed one after another from the seed. Unit u of batch 0 therefore
+ * draws what a single sequence from G_random_state_from_seed() draws at
+ * positions u * \p draws_per_unit to (u + 1) * \p draws_per_unit - 1, so
+ * the units together reproduce a serial run whatever order they are
+ * processed in. Further batches follow, see G_random_state_for_batch().
  * A unit which draws more than \p draws_per_unit values runs into the
  * next unit's stream; when the number of draws is only bounded, use
  * G_random_init_layout_bounded().
  *
  * The stride is \p draws_per_unit. G_random_layout_length() returns it,
- * and G_random_layout_batches() returns the batches that fit, 2^46 divided
- * by \p units * \p draws_per_unit, which is 0 when one batch does not fit
- * into the span. See \ref gislib_random_streams.
+ * and G_random_layout_batches() returns the batches that fit, which is 0
+ * when \p units * \p draws_per_unit draws do not fit into the span. See \ref
+ * gislib_random_streams.
  *
  * A seed outside -2^31 to 2^32 - 1, a number of units or of draws which
  * is not positive, or a product of the two beyond the range of long long
@@ -522,8 +540,8 @@ void G_random_init_layout_exact(struct G_random_layout *layout, long long seed,
  *
  * The stride is \p max_draws rounded up to odd. G_random_layout_length()
  * returns it, and G_random_layout_batches() returns the batches that fit,
- * 2^46 divided by \p units times the stride, which is 0 when one batch does
- * not fit into the span. See \ref gislib_random_streams.
+ * which is 0 when \p units times the stride draws do not fit into the span. See
+ * \ref gislib_random_streams.
  *
  * A seed outside -2^31 to 2^32 - 1, a number of units or a bound which is
  * not positive, or a product of the units and the stride beyond the range
@@ -643,10 +661,14 @@ long long G_random_layout_length(const struct G_random_layout *layout)
  * \brief Put a generator state at the start of a unit's stream in a batch
  *
  * A batch is one stream for every unit of the layout, and the batches
- * follow one another along the span: the stream of \p unit in \p batch
- * starts (\p batch * units + \p unit) * stride draws after the seed. The
- * state is set whatever it held before, so the same call always restarts
- * the same sequence. See \ref gislib_random_streams.
+ * follow one another along the span. They start units * stride draws
+ * apart, or one more when that number is even, and the stream of \p unit
+ * in \p batch starts \p unit * stride draws after the start of the batch.
+ * With the odd distance, as with an odd stride, the same draw of different
+ * batches is as unrelated as the generator allows; what an even distance
+ * would relate there is related between draws whose numbers differ
+ * instead. The state is set whatever it held before, so the same call
+ * always restarts the same sequence. See \ref gislib_random_streams.
  *
  * A \p unit outside 0 to units - 1, a negative \p batch, a \p batch other
  * than 0 of a layout of the whole span, or a \p batch beyond the batches
@@ -696,9 +718,8 @@ void G_random_state_for_batch(struct G_random_state *state,
     /* With batch below the batches that fit, the offset is below 2^46; with
      * batch 0 of a layout which does not fit, it may reach past the span.
      * It is below 2^63 either way, since units times stride is. */
-    offset = ((unsigned long long)batch * (unsigned long long)layout->units +
-              (unsigned long long)unit) *
-             (unsigned long long)layout->stride;
+    offset = (unsigned long long)batch * batch_distance(layout) +
+             (unsigned long long)unit * (unsigned long long)layout->stride;
     state->state = lcg_jump(layout->start, offset);
 }
 
