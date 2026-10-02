@@ -84,9 +84,9 @@ wdepth.05, wdepth.10) and are timestamped with that time. The
 simulation advances in time steps which usually do not fall exactly on
 the output times. A map holds the state at the time step closest to the
 time in its name, so at most half a time step earlier or later. When the
-time step is longer than **output_step**, one time step can be the
-closest one to several output times and only the map for the latest of
-them is written. The series always ends with maps named by the
+time step is longer than **output_step**, there are fewer time steps
+than output times, and a time step writes only the maps for the output
+time closest to it. The series always ends with maps named by the
 **duration** which hold the state at the end of the run, also when the
 duration is not a multiple of **output_step** or when the simulation
 stopped early.

@@ -312,20 +312,22 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             sim->nwalka = nwalka;
 
             // Output step j is written at the iteration closest to
-            // j * output_step and named by that time. When one iteration is
-            // the closest one to several steps, only the latest one is
-            // written.
+            // j * output_step and named by that time. With a time step
+            // longer than output_step, an iteration is the closest one to
+            // several steps and writes the step closest to it.
             bool write_series = false;
             if (settings->ts && settings->iterout > 0) {
-                // An iteration is the closest one to the steps up to half a
-                // time step ahead of it. No step is past the duration.
-                double ahead = fmin(simulated_seconds(setup, i) +
-                                        0.5 * time_step_seconds(setup),
-                                    settings->timesec);
-                double reached =
-                    settings->iterout * floor(ahead / settings->iterout);
-                if (reached > series_time) {
-                    series_time = reached;
+                double iteration_time = simulated_seconds(setup, i);
+                double step_time =
+                    settings->iterout *
+                    floor(iteration_time / settings->iterout + 0.5);
+                // A step more than half a time step ahead is closer to the
+                // next iteration. No step is past the duration.
+                if (step_time > series_time &&
+                    step_time <=
+                        iteration_time + 0.5 * time_step_seconds(setup) &&
+                    step_time <= settings->timesec) {
+                    series_time = step_time;
                     write_series = true;
                 }
             }

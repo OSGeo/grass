@@ -97,26 +97,37 @@ def test_final_step_named_by_duration(slope_tools):
     check_series(slope_tools, summary, [3, 6, 9, 10])
 
 
-def test_time_step_longer_than_output_step(slope_tools):
-    """An iteration closest to several output steps writes the latest one
+@pytest.mark.parametrize(
+    ("mintimestep", "time_step", "minutes"),
+    [
+        (17.5, 70, [1, 2, 4, 5, 6, 7, 8, 9, 10]),
+        (30, 120, [2, 4, 6, 8, 10]),
+        (45, 180, [3, 6, 9, 10]),
+    ],
+)
+def test_time_step_longer_than_output_step(
+    slope_tools, mintimestep, time_step, minutes
+):
+    """An iteration writes only the output step closest to it
 
-    A minimum time step of 17.5 s makes the simulated time per iteration
-    70 s (the time step times the time coefficient 4), so the iteration
-    ending at 210 s is the closest one to both 3 and 4 minutes. The old
-    schedule wrote every (int)(60 / 70) = 0 iterations, that is, no maps
-    at all.
+    The simulated time per iteration is the minimum time step times the
+    time coefficient 4. With 70 s, the iteration ending at 210 s is equally
+    close to 3 and 4 minutes and writes the later one. With 120 s and 180 s,
+    the iterations fall exactly on every second and third output step. The
+    old schedule wrote every (int)(60 / time step) = 0 iterations, that is,
+    no maps at all.
     """
     result = slope_tools.r_sim_water(
         **SLOPE,
         depth="dep",
         output_step=1,
-        mintimestep=17.5,
+        mintimestep=mintimestep,
         flags="tp",
         format="json",
     )
     summary = result.json
-    assert summary["time_step"] == 70
-    check_series(slope_tools, summary, [1, 2, 4, 5, 6, 7, 8, 9, 10])
+    assert summary["time_step"] == time_step
+    check_series(slope_tools, summary, minutes)
     assert "longer than output_step" in result.stderr
 
 
@@ -140,18 +151,19 @@ def test_final_step_after_early_stop(slope_tools):
 
 
 def test_no_output_step_past_duration(slope_tools):
-    """The series ends with the duration also with a very long time step
+    """An output step past the duration is not written
 
-    With a time step of 290 s, the last iteration ends at 580 s and is the
-    closest one also to 11 and 12 minutes, which are past the duration.
+    With a time step of 160 s and a duration of 11 minutes, the last
+    iteration ends at 640 s. The output step closest to it is 12 minutes,
+    which is past the duration.
     """
     summary = slope_tools.r_sim_water(
-        **SLOPE,
+        **(SLOPE | {"duration": 11}),
         depth="dep",
-        output_step=1,
-        mintimestep=72.5,
+        output_step=3,
+        mintimestep=40,
         flags="tp",
         format="json",
     ).json
-    assert summary["time_step"] == 290
-    check_series(slope_tools, summary, [7, 10])
+    assert summary["time_step"] == 160
+    check_series(slope_tools, summary, [3, 6, 9, 11])

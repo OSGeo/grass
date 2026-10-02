@@ -94,8 +94,8 @@ Files are saved with a suffix representing time since the start of simulation in
 The simulation advances in time steps which usually do not fall exactly on the output times.
 A map holds the state at the time step closest to the time in its name,
 so at most half a time step earlier or later.
-When the time step is longer than <b>output_step</b>, one time step can be the closest one
-to several output times and only the map for the latest of them is written.
+When the time step is longer than <b>output_step</b>, there are fewer time steps than
+output times, and a time step writes only the maps for the output time closest to it.
 The series always ends with maps named by the <b>duration</b> which hold the state
 at the end of the run, also when the duration is not a multiple of <b>output_step</b>
 or when the simulation stopped early.
