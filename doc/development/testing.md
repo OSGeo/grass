@@ -158,6 +158,45 @@ When the test needs specific data which cannot be generated, the data has to
 be supplied as files, which is currently possible only with _grass.gunittest_
 in a `testsuite` directory.
 
+### Tests which use a database
+
+Vector geometry and attribute tables are separate. If a test needs attributes, create the map and its table (for example with _v.db.addtable_), then read the values back with _v.db.select_. Nothing else is needed once the table is linked.
+
+The temporal database is different. It has to exist before _grass.temporal_
+or any `t.*` tool will work, and by default it lives in the current mapset,
+at `$GISDBASE/$LOCATION_NAME/$MAPSET/tgis/sqlite.db`. A fixture which creates
+a new mapset therefore starts without one. Creating a space time dataset with
+_t.create_ sets it up, and `temporal/t.connect/tests/conftest.py` shows
+fixtures for the states worth testing against: a mapset with a connection,
+one without, and two mapsets which each have their own.
+
+Because the database belongs to a mapset, a module-scoped session shares one
+across its tests, and a dataset registered by one test is visible to the
+next. Give the session function scope when that matters, or use
+`TemporaryMapsetSession` as described above so each test gets a fresh mapset
+and a fresh database.
+
+_grass.temporal_ still reads the session from `os.environ` rather than taking
+an `env`, so a test which uses it has to make the session visible there.
+Mirror it with `monkeypatch` instead of letting `gs.setup.init()` modify the
+global environment, so the environment is restored for the tests which follow:
+
+```python
+with (
+    pytest.MonkeyPatch.context() as monkeypatch,
+    gs.setup.init(project, env=os.environ.copy()) as session,
+):
+    for key, value in session.env.items():
+        if os.environ.get(key) != value:
+            monkeypatch.setenv(key, value)
+```
+
+`pytest.MonkeyPatch.context()` is used here because the `monkeypatch` fixture
+is function-scoped and this fixture is not. In a function-scoped fixture, ask
+for `monkeypatch` directly. See
+`python/grass/temporal/tests/grass_temporal_gui_support_test.py` for the whole
+fixture, and mark such tests with `needs_solo_run` as described below.
+
 ### Tests which run in parallel
 
 Tests run in parallel, several per process, so a test which changes
