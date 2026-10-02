@@ -15,51 +15,43 @@ work, such as a row of a raster or a particle. The values of a unit are then
 fixed by the seed, the layout and the unit's number, which allows parallel
 code to give the same result with any number of threads.
 
-The generator is the one of the C function `drand48()` and of `G_drand48()` in
-GRASS, a 48-bit linear congruential generator.
+The generator is a 48-bit linear congruential generator, the one behind the C
+function `drand48()` and behind `G_drand48()` in GRASS.
 
 ## Terms {#gislib_random_streams_terms}
 
-- **Generator**: drand48. A draw replaces the 48-bit state x by x' = (a × x +
-  c) mod 2^48, with the multiplier a = 0x5DEECE66D and the increment c = 0xB,
-  and returns x' / 2^48. It passes through all 2^48 states before repeating,
-  so the states form one ring and every draw moves one step along it.
-- **Seed**: the integer which picks where drawing starts, from -2^31 to 2^32 -
-  1. Seed s starts at the state whose bits 16 to 47 are the low 32 bits of s
-  and whose low 16 bits are 0x330E, as `srand48()` sets it, so -1 and
-  4294967295 are the same seed. The values drawn one after another from there
-  are the seed's sequence.
+- **Generator**: the rule which gives the next state from the current one, and
+  with it the next value, a number in [0, 1). Its states form one ring, and
+  every draw moves one step along it.
+- **Seed**: the integer which picks where on the ring drawing starts. The
+  values drawn one after another from there are the seed's sequence.
 - **State**: a `struct G_random_state`, a position on the ring and nothing
   else, used by one thread at a time; copying it copies the position.
-  `G_random_double()` moves it one step and returns the value there, and
-  `G_random_advance()` moves it any number of draws in one jump.
-- **Span**: the first 2^46 draws after the seed, a quarter of the ring. The
-  library places everything within it (see \ref gislib_random_streams_span
-  for why).
+  `G_random_double()` moves it one step and returns the value there.
+- **Span**: the quarter of the ring after the seed. The library places
+  everything within it (see \ref gislib_random_streams_span for why).
 - **Layout**: a `struct G_random_layout`, holding where the seed's sequence
-  starts, the number of units and the stride. A tool builds it once,
-  outside any parallel region, and only reads it afterwards.
+  starts, the number of units and the stride. A tool builds it once, outside
+  any parallel region, and only reads it afterwards.
 - **Unit**: a piece of work with values of its own, such as a row of a raster,
   a particle, a point or an object, numbered from 0. Its **stream** is the
-  values of the seed's sequence it draws: at most stride values from where the
-  layout places it, one stream per unit and batch.
+  values of the seed's sequence it draws, one stream per unit and batch.
 - **Stride**: the number of draws from the start of one unit to the start of
-  the next, and so the number of values a unit may draw.
-  `G_random_layout_length()` returns it.
-- **Batch**: one stream for every unit of a layout. Unit u of batch b starts
-  (b × units + u) × stride draws after the seed, so the batches follow one
-  another along the span. A computation which needs one stream per unit uses
-  batch 0 only.
+  the next, and so the most values a unit may draw. `G_random_layout_length()`
+  returns it.
+- **Batch**: one stream for every unit of a layout. The batches follow one
+  another along the span, and a computation which needs one stream per unit
+  uses batch 0 only.
 
 \image html random_streams.svg
 
-The figure shows the ring of 2^48 states, the seed (the red dot) and the span,
-the shaded quarter after the seed, with the arrow in the direction of drawing.
-The ticks are one stride apart from the seed, and the last one marks the end
-of the span. Units 0, 1 and 2 each start at a tick, the dark arcs are their
-draws so far, and the black dot is the state of unit 1, the position at which
-it draws next. Every seed starts at a different place on the ring, and the
-span is always the quarter after it.
+The figure shows the ring of states, the seed (the red dot) and the span, the
+shaded quarter after the seed, with the arrow in the direction of drawing. The
+ticks are one stride apart from the seed, and the last one marks the end of
+the span. Units 0, 1 and 2 each start at a tick, the dark arcs are their draws
+so far, and the black dot is the state of unit 1, the position at which it
+draws next. Every seed starts at a different place on the ring, and the span
+is always the quarter after it.
 
 ## Layouts {#gislib_random_streams_layouts}
 
@@ -105,7 +97,8 @@ and the strides are odd is explained in \ref gislib_random_streams_distance
 and \ref gislib_random_streams_odd.
 
 The units of a layout can be placed more than once: a batch is one stream for
-every unit, and the batches follow one another along the span.
+every unit, and the batches follow one another along the span, unit u of batch
+b starting (b × units + u) × stride draws after the seed.
 `G_random_state_for_unit(&rng, &layout, unit)` places a state at the start of
 the unit's stream in batch 0,
 `G_random_state_for_batch(&rng, &layout, batch, unit)` does so in any batch,
@@ -124,8 +117,8 @@ cost nothing but their share of the span. Which pattern applies depends on
 whether a unit draws its values in one go or over many steps.
 
 The seed comes from the user or is generated. A tool parses its seed option
-into a `long long` with `strtoll()` and refuses what is not an integer in the
-range, naming the option. When the user gives no seed,
+into a `long long` with `strtoll()` and refuses what is not an integer from
+-2^31 to 2^32 - 1, naming the option. When the user gives no seed,
 `G_random_generate_seed()` gives one, from `GRASS_RANDOM_SEED`, or else from
 `SOURCE_DATE_EPOCH`, or else from the time and the process ID. The tool
 records the seed it used, for example in the history of the output map, so
@@ -296,11 +289,16 @@ what the library does about it.
 
 ### The generator and the span {#gislib_random_streams_span}
 
+A draw replaces the 48-bit state x by (a × x + c) mod 2^48, with the
+multiplier a = 0x5DEECE66D and the increment c = 0xB, and returns the new
+state divided by 2^48. The generator passes through all 2^48 states before
+repeating; they are the ring.
+
 The four quarters of the ring hold the same values shifted by 0, 0.25, 0.5 and
-0.75: two positions a quarter of the ring apart give values which differ by
-exactly 0.25 at every draw. Three of the quarters therefore add no values of
-their own, and the library places everything within the span, where no two
-positions are that far apart.
+0.75: two positions a quarter of the ring, 2^46 draws, apart give values which
+differ by exactly 0.25 at every draw. Three of the quarters therefore add no
+values of their own, and the library places everything within the span, the
+first 2^46 draws after the seed, where no two positions are that far apart.
 
 \image html random_streams_twins.svg
 
@@ -387,11 +385,13 @@ its values.
 ### Relations between seeds {#gislib_random_streams_between_seeds}
 
 On its own, any seed is as good as any other. Seeds are places on the same
-ring, however, so two seeds are related by their distance. Seeds 2^30 apart
-start a quarter of the ring apart, so seed 42 + 2^30 draws the values of seed
-42 plus one quarter. Consecutive seeds start close together, and because the
-generator is linear, the value of seed s + k is that of seed s plus k times
-one amount at every draw, modulo 1.
+ring, however, so two seeds are related by their distance. Seed s starts at
+the state whose bits 16 to 47 are the low 32 bits of s and whose low 16 bits
+are 0x330E, as `srand48()` sets it. So -1 and 4294967295 are the same seed,
+and seeds 2^30 apart start a quarter of the ring apart: seed 42 + 2^30 draws
+the values of seed 42 plus one quarter. Consecutive seeds start close
+together, and because the generator is linear, the value of seed s + k is that
+of seed s plus k times one amount at every draw, modulo 1.
 
 \image html random_streams_seeds.svg
 
