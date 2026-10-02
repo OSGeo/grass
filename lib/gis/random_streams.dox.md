@@ -53,7 +53,7 @@ so far, and the black dot is the state of unit 1, the position at which it
 draws next. Every seed starts at a different place on the ring, and the span
 is always the quarter after it.
 
-## Layouts {#gislib_random_streams_layouts}
+## Layouts and capacity {#gislib_random_streams_layouts}
 
 A layout gives every unit a stream of its own. A single sequence is the
 simplest case, and the three ways to initialize a layout for more units differ
@@ -108,6 +108,16 @@ ensemble (see \ref gislib_random_streams_ensembles), another pass over the
 same units, or one of the processes of a model. Computations which must be
 independent of one another share one seed and use different batches, not
 different seeds (see \ref gislib_random_streams_between_seeds).
+
+The number of batches that fit is the span, 2^46 draws, divided by the draws
+of one batch, units × stride, rounded down; a whole-span layout holds one
+batch. A million units drawing a million values each in an exact layout draw
+10^12 values per batch, so 70 batches fit on one seed, and a single batch
+could hold about 70 million such units. The library does not check how many
+values a unit draws: a unit which draws past its stride draws the next unit's
+values. No layout and no way of seeding makes the span larger (see
+\ref gislib_random_streams_span); more than it holds needs a generator with a
+longer period behind the same calls.
 
 ## Usage {#gislib_random_streams_usage}
 
@@ -258,25 +268,7 @@ whole-span layout holds a single batch and so cannot serve one.
 The members must share the seed and whatever else decides the layout, the
 number of units and the stride, so they should differ only in the run number
 and the output names. The number of members is limited by the batches that fit
-(see \ref gislib_random_streams_capacity).
-
-## Capacity {#gislib_random_streams_capacity}
-
-The number of batches that fit is the span, 2^46 draws, divided by the draws
-of one batch, units × stride, rounded down; a whole-span layout holds one
-batch. A million units drawing a million values each in an exact layout draw
-10^12 values per batch, so 70 batches fit on one seed, and a single batch
-could hold 70,368,744 such units, about 70 million.
-
-The library does not check how many values a unit draws. A unit which draws
-past its stride continues into the next unit's stream and draws the next
-unit's values. Where the units stay within their strides, only batch 0 of a
-layout into which no batch fits reaches past the span;
-\ref gislib_random_streams_span explains what it draws there.
-
-No layout and no way of seeding makes the span larger (see
-\ref gislib_random_streams_span); more than it holds needs a generator with a
-longer period behind the same calls.
+(see \ref gislib_random_streams_layouts).
 
 ## Quality of the values {#gislib_random_streams_quality}
 
