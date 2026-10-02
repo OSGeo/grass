@@ -17,6 +17,7 @@
 /*============================= Include Files ==============================*/
 
 /* System include files */
+#include <stdint.h>
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -634,14 +635,14 @@ struct Popen {
  * read and advance the state only through the G_random_*() functions. It
  * is a plain value: copying it copies the generator's position. */
 struct G_random_state {
-    unsigned long long state;
+    uint_least64_t state;
 };
 
 /* A layout: a seed and the way the generator's span is cut into streams
  * of stride draws, one per unit of work and batch; see
  * G_random_init_layout(). Private to the library. */
 struct G_random_layout {
-    unsigned long long start; /* generator state at the seed */
+    uint_least64_t start; /* generator state at the seed */
     long long units;
     long long stride;
     long long batches; /* batches that fit into the span, 0 when none */
