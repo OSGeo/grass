@@ -16,14 +16,13 @@ The plots and the results as JSON are written to the current directory.
 To redo the plots from saved results without running the benchmark, pass
 the JSON file as an argument.
 
-The plots show the mean of the repeated runs with a shaded 95 % confidence
-interval of the mean (Student's t). The interval of the speedup and of the
-efficiency combines the relative intervals of the two times divided.
+The plots show the mean of the repeated runs, shaded between the fastest
+and the slowest run. For speedup and efficiency, the shading spans the
+ratios of every serial run to every parallel run.
 
 @author Vaclav Petras
 """
 
-import math
 import statistics
 import sys
 from subprocess import DEVNULL
@@ -40,10 +39,6 @@ RESOLUTIONS = [4, 2, 1]
 MAX_NPROCS = 16
 REPEAT = 3
 
-# Two-sided 95 % quantiles of Student's t by the number of runs (degrees of
-# freedom plus one), to avoid depending on SciPy.
-T_QUANTILES = {2: 12.706, 3: 4.303, 4: 3.182, 5: 2.776, 6: 2.571, 7: 2.447}
-
 
 def main():
     if len(sys.argv) > 1:
@@ -56,17 +51,8 @@ def main():
     plot(results)
 
 
-def mean_and_half_width(times):
-    """Return the mean and the half width of its 95 % confidence interval"""
-    mean = statistics.mean(times)
-    if len(times) < 2:
-        return mean, 0
-    t = T_QUANTILES.get(len(times), 1.96)
-    return mean, t * statistics.stdev(times) / math.sqrt(len(times))
-
-
 def plot(results):
-    """Plot time, speedup and efficiency with confidence bands"""
+    """Plot time, speedup and efficiency with the range of the runs"""
     import matplotlib as mpl  # pylint: disable=import-outside-toplevel
 
     mpl.use("Agg")
@@ -80,27 +66,22 @@ def plot(results):
         # Twice the 600 pixels of the documentation, shown at half the size.
         fig, ax = plt.subplots(figsize=(6, 4.5), dpi=200)
         for result in results:
-            means, halves = zip(
-                *(mean_and_half_width(t) for t in result.all_times), strict=True
-            )
-            serial, serial_half = means[0], halves[0]
+            serial = result.all_times[0]
             values, lows, highs = [], [], []
-            for nprocs, mean, half in zip(result.nprocs, means, halves, strict=True):
+            for nprocs, times in zip(result.nprocs, result.all_times, strict=True):
                 if metric == "time":
-                    value, relative = mean, half / mean
-                else:
-                    value = serial / mean
+                    value, low, high = statistics.mean(times), min(times), max(times)
+                elif nprocs == 1:
                     # The speedup at one thread is 1 by definition.
-                    relative = (
-                        math.hypot(serial_half / serial, half / mean)
-                        if nprocs > 1
-                        else 0
-                    )
-                    if metric == "efficiency":
-                        value /= nprocs
+                    value = low = high = 1
+                else:
+                    value = statistics.mean(serial) / statistics.mean(times)
+                    low, high = min(serial) / max(times), max(serial) / min(times)
+                if metric == "efficiency":
+                    value, low, high = value / nprocs, low / nprocs, high / nprocs
                 values.append(value)
-                lows.append(value * (1 - relative))
-                highs.append(value * (1 + relative))
+                lows.append(low)
+                highs.append(high)
             (line,) = ax.plot(result.nprocs, values, label=result.label)
             ax.fill_between(
                 result.nprocs,

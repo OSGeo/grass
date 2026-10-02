@@ -168,8 +168,8 @@ there, and walkers that reach them leave the area. Null cells in the
 <b>infil</b> raster map mean no infiltration.
 
 <p>
-The number of threads is set by <b>nprocs</b>. The figures below show the
-execution time, parallel speedup and efficiency for the <code>elevation</code>
+The figures below show how the execution time, parallel speedup and
+efficiency change with the number of threads (<b>nprocs</b>) for the <code>elevation</code>
 raster map of the SECREF North Carolina dataset at 4 m, 2 m and 1 m
 resolution with the default number of walkers, as the mean of 3 runs on
 an Intel Xeon W-2295 CPU (18 cores). See the benchmark script in the
@@ -188,7 +188,7 @@ source code for details.
   <br>
   <i>Figure: Benchmark shows execution time, parallel speedup and
     efficiency for different numbers of cells (33k, 131k and 525k);
-    shading shows the 95 % confidence interval of the mean.</i>
+    shading shows the range of the 3 runs.</i>
 </div>
 
 <h3>Manning's n for surface roughness</h3>

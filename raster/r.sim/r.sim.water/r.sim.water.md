@@ -156,8 +156,8 @@ raster maps are excluded from the simulation, the outputs are null
 there, and walkers that reach them leave the area. Null cells in the
 **infil** raster map mean no infiltration.
 
-The number of threads is set by **nprocs**. The figures below show the
-execution time, parallel speedup and efficiency for the `elevation`
+The figures below show how the execution time, parallel speedup and
+efficiency change with the number of threads (**nprocs**) for the `elevation`
 raster map of the SECREF North Carolina dataset at 4 m, 2 m and 1 m
 resolution with the default number of walkers, as the mean of 3 runs on
 an Intel Xeon W-2295 CPU (18 cores). See the benchmark script in the
@@ -168,7 +168,7 @@ source code for details.
 ![efficiency for r.sim.water with different numbers of cells](r_sim_water_benchmark_efficiency.png)  
 *Figure: Benchmark shows execution time, parallel speedup and efficiency
 for different numbers of cells (33k, 131k and 525k); shading shows the
-95 % confidence interval of the mean.*
+range of the 3 runs.*
 
 ### Manning's n for surface roughness
 
