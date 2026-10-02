@@ -65,7 +65,7 @@ repos:
     hooks:
       - id: markdownlint-fix
   - repo: https://github.com/BlankSpruce/gersemi-pre-commit
-    rev: 0.27.7
+    rev: 0.29.2
     hooks:
       - id: gersemi
         args:
