@@ -159,7 +159,7 @@ there, and walkers that reach them leave the area. Null cells in the
 The number of threads is set by **nprocs**. The figures below show the
 execution time, parallel speedup and efficiency for the `elevation`
 raster map of the SECREF North Carolina dataset at 4 m, 2 m and 1 m
-resolution with the default number of walkers, averaged over 3 runs on
+resolution with the default number of walkers, as the mean of 3 runs on
 an Intel Xeon W-2295 CPU (18 cores). See the benchmark script in the
 source code for details.
 
@@ -167,7 +167,8 @@ source code for details.
 ![speedup for r.sim.water with different numbers of cells](r_sim_water_benchmark_speedup.png)
 ![efficiency for r.sim.water with different numbers of cells](r_sim_water_benchmark_efficiency.png)  
 *Figure: Benchmark shows execution time, parallel speedup and efficiency
-for different numbers of cells (33k, 131k and 525k).*
+for different numbers of cells (33k, 131k and 525k); shading shows the
+95 % confidence interval of the mean.*
 
 ### Manning's n for surface roughness
 

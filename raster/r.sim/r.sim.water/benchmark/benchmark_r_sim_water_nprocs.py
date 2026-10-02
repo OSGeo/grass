@@ -13,10 +13,19 @@ Run in a temporary mapset of the dataset, for example:
         --exec python benchmark_r_sim_water_nprocs.py
 
 The plots and the results as JSON are written to the current directory.
+To redo the plots from saved results without running the benchmark, pass
+the JSON file as an argument.
+
+The plots show the mean of the repeated runs with a shaded 95 % confidence
+interval of the mean (Student's t). The interval of the speedup and of the
+efficiency combines the relative intervals of the two times divided.
 
 @author Vaclav Petras
 """
 
+import math
+import statistics
+import sys
 from subprocess import DEVNULL
 
 from grass.pygrass.modules import Module
@@ -31,19 +40,84 @@ RESOLUTIONS = [4, 2, 1]
 MAX_NPROCS = 16
 REPEAT = 3
 
+# Two-sided 95 % quantiles of Student's t by the number of runs (degrees of
+# freedom plus one), to avoid depending on SciPy.
+T_QUANTILES = {2: 12.706, 3: 4.303, 4: 3.182, 5: 2.776, 6: 2.571, 7: 2.447}
+
 
 def main():
-    results = []
-    for resolution in RESOLUTIONS:
-        benchmark(resolution, results)
-    bm.save_results_to_file(results, "r_sim_water_benchmark.json")
-    for metric in ["time", "speedup", "efficiency"]:
-        bm.nprocs_plot(
-            results,
-            filename=f"r_sim_water_benchmark_{metric}.png",
-            title=f"r.sim.water {metric}",
-            metric=metric,
-        )
+    if len(sys.argv) > 1:
+        results = bm.load_results_from_file(sys.argv[1]).results
+    else:
+        results = []
+        for resolution in RESOLUTIONS:
+            benchmark(resolution, results)
+        bm.save_results_to_file(results, "r_sim_water_benchmark.json")
+    plot(results)
+
+
+def mean_and_half_width(times):
+    """Return the mean and the half width of its 95 % confidence interval"""
+    mean = statistics.mean(times)
+    if len(times) < 2:
+        return mean, 0
+    t = T_QUANTILES.get(len(times), 1.96)
+    return mean, t * statistics.stdev(times) / math.sqrt(len(times))
+
+
+def plot(results):
+    """Plot time, speedup and efficiency with confidence bands"""
+    import matplotlib as mpl  # pylint: disable=import-outside-toplevel
+
+    mpl.use("Agg")
+    import matplotlib.pyplot as plt  # pylint: disable=import-outside-toplevel
+
+    for metric, ylabel in [
+        ("time", "Time [s]"),
+        ("speedup", "Speedup"),
+        ("efficiency", "Efficiency"),
+    ]:
+        # Twice the 600 pixels of the documentation, shown at half the size.
+        fig, ax = plt.subplots(figsize=(6, 4.5), dpi=200)
+        for result in results:
+            means, halves = zip(
+                *(mean_and_half_width(t) for t in result.all_times), strict=True
+            )
+            serial, serial_half = means[0], halves[0]
+            values, lows, highs = [], [], []
+            for nprocs, mean, half in zip(result.nprocs, means, halves, strict=True):
+                if metric == "time":
+                    value, relative = mean, half / mean
+                else:
+                    value = serial / mean
+                    # The speedup at one thread is 1 by definition.
+                    relative = (
+                        math.hypot(serial_half / serial, half / mean)
+                        if nprocs > 1
+                        else 0
+                    )
+                    if metric == "efficiency":
+                        value /= nprocs
+                values.append(value)
+                lows.append(value * (1 - relative))
+                highs.append(value * (1 + relative))
+            (line,) = ax.plot(result.nprocs, values, label=result.label)
+            ax.fill_between(
+                result.nprocs,
+                lows,
+                highs,
+                color=line.get_color(),
+                alpha=0.25,
+                linewidth=0,
+            )
+        ax.set_xticks(results[0].nprocs)
+        ax.set_xlabel("Number of threads (nprocs)")
+        ax.set_ylabel(ylabel)
+        ax.set_title(f"r.sim.water {metric}")
+        ax.legend()
+        fig.tight_layout()
+        fig.savefig(f"r_sim_water_benchmark_{metric}.png")
+        plt.close(fig)
 
 
 def benchmark(resolution, results):
