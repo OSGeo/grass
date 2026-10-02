@@ -10,10 +10,10 @@ import grass.script as gs
 from grass.experimental.mapset import TemporaryMapsetSession
 from grass.tools import Tools
 
-# On this slope, the time step is about 10.2 s, so a 1-minute output step
+# On this slope, the time step is about 10.7 s, so a 1-minute output step
 # does not fall on an iteration and the old schedule, which wrote every
-# (int)(60 / 10.2) = 5 iterations and named maps by the rounded simulated
-# time, wrote dep.03 and dep.08 twice and no dep.10.
+# (int)(60 / 10.7) = 5 iterations and named maps by the rounded simulated
+# time, wrote dep.04 twice.
 SLOPE = {
     "elevation": "elevation",
     "man_value": 0.1,
@@ -25,12 +25,12 @@ SLOPE = {
 
 @pytest.fixture(scope="module")
 def slope_project(tmp_path_factory):
-    """Project with a 500 m by 500 m plane at 10 m rising 0.1 m per row"""
+    """Project with a 50 m by 500 m plane at 10 m rising 0.1 m per row"""
     project = tmp_path_factory.mktemp("simwe_time_series") / "simwe"
-    gs.create_project(project, epsg=3358)
+    gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
         tools = Tools(session=session)
-        tools.g_region(s=0, n=500, w=0, e=500, res=10, flags="s")
+        tools.g_region(s=0, n=500, w=0, e=50, res=10, flags="s")
         tools.r_mapcalc(expression="elevation = row() * 0.1")
         yield session
 
@@ -120,24 +120,22 @@ def test_time_step_longer_than_output_step(slope_tools):
     assert "longer than output_step" in result.stderr
 
 
-def test_final_step_after_early_stop(session_tools):
+def test_final_step_after_early_stop(slope_tools):
     """The series ends with the duration also when all walkers left early
 
-    With the default Manning's n, all walkers leave the small domain from
-    the shared fixture before the first output step.
+    With a very low Manning's n, all walkers leave the slope before the
+    first output step.
     """
-    summary = session_tools.r_sim_water(
-        elevation="rows_raster",
-        depth="depth",
-        duration=2,
+    summary = slope_tools.r_sim_water(
+        **(SLOPE | {"man_value": 0.002, "duration": 2}),
+        depth="dep",
         output_step=1,
-        random_seed=1,
         flags="tp",
         format="json",
     ).json
     assert summary["stopped_early"] is True
     assert summary["simulated_time"] < 60
-    assert [output["depth"] for output in summary["outputs"]] == ["depth.02"]
+    assert [output["depth"] for output in summary["outputs"]] == ["dep.02"]
     assert summary["outputs"][0]["timestamp"] == "2 minutes"
 
 
