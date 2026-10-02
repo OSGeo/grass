@@ -287,11 +287,14 @@ longer period behind the same calls.
 
 ## Quality of the values {#gislib_random_streams_quality}
 
-### The generator and the span {#gislib_random_streams_span}
+The values are those of the 48-bit linear congruential generator of
+`drand48()`: multiples of 2^-48, uniform in [0, 1), fine for simulations,
+sampling, and Monte Carlo estimates, but not for cryptography. What needs care
+is not the values of one unit but how the positions in use on the ring relate
+to one another. The sections below say what a tool should know about that and
+what the library does about it.
 
-The generator is the 48-bit linear congruential generator of `drand48()`. Its
-values are multiples of 2^-48, uniform in [0, 1): fine for simulations,
-sampling, and Monte Carlo estimates, but not for cryptography.
+### The generator and the span {#gislib_random_streams_span}
 
 The four quarters of the ring hold the same values shifted by 0, 0.25, 0.5 and
 0.75: two positions a quarter of the ring apart give values which differ by
