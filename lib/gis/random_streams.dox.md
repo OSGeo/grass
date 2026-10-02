@@ -33,15 +33,14 @@ function `drand48()` and behind `G_drand48()` in GRASS.
 - **Layout**: a `struct G_random_layout`, holding where the seed's sequence
   starts, the number of units and the stride. A tool builds it once, outside
   any parallel region, and only reads it afterwards.
-- **Unit**: a piece of work with values of its own, such as a row of a raster,
-  a particle, a point or an object, numbered from 0. Its **stream** is the
-  values of the seed's sequence it draws, one stream per unit and batch.
+- **Unit**: a piece of work with its own stream of numbers, such as a row of a
+  raster, a particle, a point or an object, numbered from 0.
 - **Stride**: the number of draws from the start of one unit to the start of
   the next, and so the most values a unit may draw. `G_random_layout_length()`
   returns it.
-- **Batch**: one stream for every unit of a layout. The batches follow one
-  another along the span, and a computation which needs one stream per unit
-  uses batch 0 only.
+- **Batch**: one use of all the units of a layout. A further batch gives every
+  unit another stream of numbers, further along the span; a computation which
+  needs each unit once uses batch 0 only.
 
 \image html random_streams.svg
 
@@ -53,35 +52,45 @@ so far, and the black dot is the state of unit 1, the position at which it
 draws next. Every seed starts at a different place on the ring, and the span
 is always the quarter after it.
 
-## Layouts and capacity {#gislib_random_streams_layouts}
+## Capacity and layouts {#gislib_random_streams_layouts}
 
-A layout gives every unit a stream of its own. A single sequence is the
+The span holds 2^46 draws, about 70 trillion. A layout gives units × stride of
+them to one batch, so the number of batches that fit is the span divided by
+units × stride, rounded down. A million units drawing a million values each
+draw 10^12 values per batch, so 70 batches fit on one seed. The library does
+not check how many values a unit draws: a unit which draws past its stride
+draws the next unit's values. No layout and no way of seeding makes the span
+larger (see \ref gislib_random_streams_span).
+
+A layout gives every unit its own stream of numbers. A single sequence is the
 simplest case, and the three ways to initialize a layout for more units differ
 in where the stride comes from:
 
-- A single sequence, `G_random_state_from_seed(&rng, seed)`, is one unit which
-  owns the whole span and draws the seed's sequence. It needs no
-  `struct G_random_layout`: the function places the state at the seed.
-- A whole-span layout, `G_random_init_layout(&layout, seed, units)`, divides
-  the span into an odd number of equal parts, as many as there are units or
-  one more when that number is even, and gives every unit the longest stride
-  the span allows, in a single batch. The stride is the length of a part
-  rounded down to odd (see \ref gislib_random_streams_distance and
-  \ref gislib_random_streams_odd). A single unit keeps the whole span. A
-  whole-span layout holds at most 2^20 units; a bounded layout serves more.
+- A single sequence, `G_random_state_from_seed(&rng, seed)`, is for values
+  drawn one after another in one place. Its one unit owns the whole span and
+  draws the seed's sequence. It needs no `struct G_random_layout`: the
+  function places the state at the seed.
+- A whole-span layout, `G_random_init_layout(&layout, seed, units)`, is for
+  units whose number of draws is not known in advance. It divides the span
+  into an odd number of equal parts, as many as there are units or one more
+  when that number is even, and gives every unit the longest stride the span
+  allows, in a single batch. The stride is the length of a part rounded down
+  to odd (see \ref gislib_random_streams_distance and
+  \ref gislib_random_streams_odd). A whole-span layout holds at most 2^20
+  units; a bounded layout serves more.
 - An exact layout,
-  `G_random_init_layout_exact(&layout, seed, units, draws_per_unit)`, takes
-  the stride as given, the number of values every unit draws, and leaves the
-  rest of the span to further batches. Unit u of batch 0 then draws values u ×
-  stride to (u + 1) × stride - 1 of the seed's sequence, counted from 0, so
-  the units together reproduce that sequence, whichever order they are
-  computed in.
+  `G_random_init_layout_exact(&layout, seed, units, draws_per_unit)`, is for
+  units which all draw the same, known number of values. That number is the
+  stride, and the rest of the span is left to further batches. Unit u of batch
+  0 draws values u × stride to (u + 1) × stride - 1 of the seed's sequence,
+  counted from 0, so the units together reproduce that sequence, whichever
+  order they are computed in.
 - A bounded layout,
-  `G_random_init_layout_bounded(&layout, seed, units, max_draws)`, takes a
-  bound on what a unit draws and rounds it up to odd (see
-  \ref gislib_random_streams_odd), for units whose draws vary. But for that
-  rounding, it places the units as an exact layout with the bound as its
-  stride does.
+  `G_random_init_layout_bounded(&layout, seed, units, max_draws)`, is for
+  units whose number of draws varies below a known bound. Its stride is that
+  bound rounded up to odd (see \ref gislib_random_streams_odd); apart from the
+  rounding, the units are placed as in an exact layout whose stride is the
+  bound.
 
 \image html random_streams_layouts.svg
 
@@ -89,18 +98,19 @@ The figure shows the single sequence, whose one unit owns the whole span, and
 below it the layouts of six units, with what each unit of batch 0 draws in
 dark. The whole-span layout divides the span into seven parts; the six units
 take six of them, one batch covers the span, and the last part stays unused.
-In the exact layout, batch 0 is the seed's sequence and batch 1 follows. The
-bounded layout has the strides of an exact layout whose stride is the bound,
-made odd, and each unit draws less than its stride; the draw which rounding
-adds to a stride is drawn much wider than one draw is. Why the number of parts
-and the strides are odd is explained in \ref gislib_random_streams_distance
-and \ref gislib_random_streams_odd.
+In the exact layout, the units of batch 0 draw the start of the seed's
+sequence, the same values as the single sequence above them, and batch 1 draws
+the values which follow. The bounded layout has the strides of an exact layout
+whose stride is the bound, made odd, and each unit is expected to draw less
+than its stride; the draw which rounding adds to a stride is shown much wider
+than one draw is. Why the number of parts and the strides are odd is explained
+in \ref gislib_random_streams_distance and \ref gislib_random_streams_odd.
 
-The units of a layout can be placed more than once: a batch is one stream for
-every unit, and the batches follow one another along the span, unit u of batch
-b starting (b × units + u) × stride draws after the seed.
-`G_random_state_for_unit(&rng, &layout, unit)` places a state at the start of
-the unit's stream in batch 0,
+The units of a layout can be placed more than once: a further batch gives
+every unit another stream of numbers, and the batches follow one another along
+the span, unit u of batch b starting (b × units + u) × stride draws after the
+seed. `G_random_state_for_unit(&rng, &layout, unit)` places a state at the
+start of the unit in batch 0,
 `G_random_state_for_batch(&rng, &layout, batch, unit)` does so in any batch,
 and `G_random_layout_batches(&layout)` returns the number of batches that fit
 into the span. What a batch stands for is up to the tool: a member of an
@@ -108,16 +118,6 @@ ensemble (see \ref gislib_random_streams_ensembles), another pass over the
 same units, or one of the processes of a model. Computations which must be
 independent of one another share one seed and use different batches, not
 different seeds (see \ref gislib_random_streams_between_seeds).
-
-The number of batches that fit is the span, 2^46 draws, divided by the draws
-of one batch, units × stride, rounded down; a whole-span layout holds one
-batch. A million units drawing a million values each in an exact layout draw
-10^12 values per batch, so 70 batches fit on one seed, and a single batch
-could hold about 70 million such units. The library does not check how many
-values a unit draws: a unit which draws past its stride draws the next unit's
-values. No layout and no way of seeding makes the span larger (see
-\ref gislib_random_streams_span); more than it holds needs a generator with a
-longer period behind the same calls.
 
 ## Usage {#gislib_random_streams_usage}
 
@@ -138,7 +138,7 @@ Whatever the pattern, the tool checks that no unit can draw more than the
 stride, which `G_random_layout_length(&layout)` returns, and that the batches
 it uses fit. Batch 0 can be placed even when no batch fits, so that a tool may
 warn and continue, as the fragments below do. Placing a state costs about as
-much as a few dozen draws, wherever its stream starts.
+much as a few dozen draws, wherever on the span it is placed.
 
 The values a unit draws do not depend on the thread which draws them. The
 result of the whole computation is then the same for any number of threads
@@ -163,13 +163,13 @@ for (int i = 0; i < n; i++)
 
 ### Rows of a raster {#gislib_random_streams_rows}
 
-When a computation goes by rows of a raster and every row draws a known
-number of values, for example a fixed number for each cell, a row is a unit
-of an exact layout, and each thread owns one state. The thread places its
-state at the stream of every row it takes, whatever the state held before,
-and draws the row's values. Since the layout is exact, the rows together draw
-the seed's sequence, so a computation which drew from one sequence row after
-row keeps its values:
+When a computation goes by rows of a raster and every row draws a known number
+of values, for example a fixed number for each cell, a row is a unit of an
+exact layout, and each thread owns one state. The thread places its state at
+the start of every row it takes, whatever the state held before, and draws the
+row's values. Since the layout is exact, the rows together draw the seed's
+sequence, so a computation which drew from one sequence row after row keeps
+its values:
 
 ```c
 #include <grass/gis.h>
@@ -208,20 +208,20 @@ took it and on the rows that thread computed before, so the result would
 change with the number of threads and with the schedule.
 
 The same pattern serves other items which draw all their values in one go,
-such as points or objects: each item is a unit, the thread places its state
-at the item's stream when it takes the item, and a bounded layout replaces
-the exact one when the number of values varies under a known bound.
+such as points or objects: each item is a unit, the thread places its state at
+the start of the item when it takes it, and a bounded layout replaces the
+exact one when the number of values varies under a known bound.
 
 ### Items drawn over time {#gislib_random_streams_items}
 
-When a computation goes over items, such as particles, which draw a few
-values at every one of many steps, each item is a unit which owns one state
-for the whole computation. The state is placed once and drawn from at every
-step by whichever thread handles the item in that step. It is never placed
-again, since that would return it to the start of its stream and draw the
-same values in every step. The states therefore live in an array for the
-whole computation, not in the thread's loop. When the values an item draws in
-a step vary under a known bound, the item is a unit of a bounded layout:
+When a computation goes over items, such as particles, which draw a few values
+at every one of many steps, each item is a unit which owns one state for the
+whole computation. The state is placed once and drawn from at every step by
+whichever thread handles the item in that step. It is never placed again,
+since that would return it to the start of the item and draw the same values
+in every step. The states therefore live in an array for the whole
+computation, not in the thread's loop. When the values an item draws in a step
+vary under a known bound, the item is a unit of a bounded layout:
 
 ```c
 #include <grass/gis.h>
