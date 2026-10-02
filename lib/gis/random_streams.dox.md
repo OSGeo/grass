@@ -102,7 +102,10 @@ unit 0 (see \ref gislib_random_streams_distance). In the exact layout, batch 0
 is the seed's sequence and batch 1 follows. The bounded layout has the strides
 of an exact layout whose stride is the bound, the grey bar below it, made odd,
 and each unit draws less than its stride; the draw which rounding adds to a
-stride is drawn much wider than one draw is.
+stride is drawn much wider than one draw is. With an even stride, units 1, 2
+and 4 apart, which start at the red marks, could have more of the low bits of
+their values related than an odd stride leaves (see
+\ref gislib_random_streams_odd).
 
 ### Batches {#gislib_random_streams_batches}
 
