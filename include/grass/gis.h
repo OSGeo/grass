@@ -17,6 +17,7 @@
 /*============================= Include Files ==============================*/
 
 /* System include files */
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -646,7 +647,7 @@ struct G_random_layout {
     int64_t units;
     int64_t stride;
     int64_t batches; /* batches that fit into the span, 0 when none */
-    int whole_span;  /* a layout of the whole span holds a single batch */
+    bool whole_span; /* a layout of the whole span holds a single batch */
 };
 
 typedef int CELL;
