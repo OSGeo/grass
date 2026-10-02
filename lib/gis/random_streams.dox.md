@@ -375,24 +375,19 @@ its values.
 
 ### Relations between seeds {#gislib_random_streams_between_seeds}
 
-The seed occupies bits 16 to 47 of the state, so two seeds 2^30 apart start
-2^46 apart in state, and 2^46 draws add 2^46 to a state: seed 42 + 2^30
-starts a quarter of the ring after seed 42 and draws 0.9945, 0.5927, 0.3611,
-0.6723, seed 42's values plus one quarter, and seed 42 + 2^31 draws 0.2445,
-0.8427, 0.6111, 0.9223, plus one half.
+Seeds are places on the same ring, so they are related by their distance too.
+Seeds 2^30 apart start a quarter of the ring apart, so seed 42 + 2^30 draws
+the values of seed 42 plus one quarter. Consecutive seeds start close
+together, and because the generator is linear, the value of seed s + k is that
+of seed s plus k times one amount at every draw, modulo 1.
 
-Consecutive seeds start 2^16 apart in state. Since the step is linear, states
-x and x + d become a × x + c and a × x + a × d + c after one draw, so states d
-apart are a^t × d apart after t draws, whatever x was. Computations seeded
-seed, seed + 1, seed + 2 and so on are therefore not independent: at every
-draw, the one seeded seed + k has the value of the one seeded seed plus k
-times the same amount, modulo 1, so their values step by the same amount at
-each draw instead of scattering. Seed 43 draws 0.6153, 0.0473, 0.8495, 0.8879
-and seed 44 draws 0.4861, 0.7519, 0.5880, 0.3534, nothing in common with seed
-42 at first sight, yet 43 minus 42 and 44 minus 43, modulo 1, are the same at
-every draw: 0.8708, 0.7046, 0.7384, 0.4655 for the first four. Computations
-meant to be independent use the batches of one layout, whose streams do not
-overlap.
+\image html random_streams_seeds.svg
+
+The figure shows the first four values of eight computations. Seeded 42 to 49,
+their values are one step apart at every draw. As batches 0 to 7 of one layout
+of seed 42, with a million units of a million draws each, they show no such
+pattern. Computations meant to be independent therefore share one seed and use
+the batches of one layout, whose strides do not overlap.
 
 ### Checking two sequences {#gislib_random_streams_checking}
 
