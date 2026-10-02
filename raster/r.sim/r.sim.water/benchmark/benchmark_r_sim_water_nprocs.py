@@ -36,11 +36,11 @@ def main():
     results = []
     for resolution in RESOLUTIONS:
         benchmark(resolution, results)
-    bm.save_results_to_file(results, "r_sim_water_benchmark_nprocs.json")
+    bm.save_results_to_file(results, "r_sim_water_benchmark.json")
     for metric in ["time", "speedup", "efficiency"]:
         bm.nprocs_plot(
             results,
-            filename=f"r_sim_water_benchmark_nprocs_{metric}.png",
+            filename=f"r_sim_water_benchmark_{metric}.png",
             title=f"r.sim.water {metric}",
             metric=metric,
         )
