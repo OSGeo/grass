@@ -203,7 +203,7 @@
   <line x1="116" y1="485" x2="116" y2="515" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
   <line x1="152" y1="485" x2="152" y2="515" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
   <line x1="224" y1="485" x2="224" y2="515" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <text x="340" y="534" text-anchor="middle" fill="#c33">an even stride: units 1, 2, 4, ... apart can relate in more of the low bits of their values</text>
+  <text x="340" y="534" text-anchor="middle" fill="#c33">an even bound would tie more low bits of the values of units 1, 2, and 4 to those of unit 0</text>
   <text x="600" y="562" text-anchor="end">red dot: the seed; dashed line: the end of the span, 2^46 draws after the seed</text>
   <text x="600" y="580" text-anchor="end">dark: what the units of batch 0 draw; grey bars: not layouts, shown for comparison</text>
 </svg>
