@@ -157,7 +157,7 @@ static int seed_from_environment(const char *name, long long *seed)
         G_fatal_error(_("Random number seed %s from %s is not an integer"),
                       text, name);
     if (!seed_in_range(value)) {
-        long long reduced = (long long)((uint_least64_t)value & 0xFFFFFFFF);
+        long long reduced = (long long)((uint64_t)value & 0xFFFFFFFF);
 
         G_warning(_("Random number seed %s from %s is used as %lld, "
                     "its low 32 bits"),
@@ -196,13 +196,13 @@ static int seed_from_environment(const char *name, long long *seed)
 long long G_random_generate_seed(void)
 {
     long long given;
-    uint_least64_t seed;
+    uint64_t seed;
 
     if (seed_from_environment("GRASS_RANDOM_SEED", &given) ||
         seed_from_environment("SOURCE_DATE_EPOCH", &given))
         return given;
 
-    seed = (uint_least64_t)getpid();
+    seed = (uint64_t)getpid();
 
 #ifdef HAVE_GETTIMEOFDAY
     {
@@ -210,14 +210,14 @@ long long G_random_generate_seed(void)
 
         if (gettimeofday(&tv, NULL) < 0)
             G_fatal_error(_("gettimeofday failed: %s"), strerror(errno));
-        seed += (uint_least64_t)tv.tv_sec;
-        seed += (uint_least64_t)tv.tv_usec;
+        seed += (uint64_t)tv.tv_sec;
+        seed += (uint64_t)tv.tv_usec;
     }
 #else
     {
         time_t t = time(NULL);
 
-        seed += (uint_least64_t)t;
+        seed += (uint64_t)t;
     }
 #endif
 
@@ -370,7 +370,7 @@ double G_drand48(void)
 /* Advance a generator of the program's own by one step. The
  * multiplication may wrap around at 2^64; that does not change the result
  * modulo 2^48. */
-static uint_least64_t lcg_step(uint_least64_t x)
+static uint64_t lcg_step(uint64_t x)
 {
     return (LCG_A * x + LCG_B) & MASK48;
 }
@@ -378,19 +378,19 @@ static uint_least64_t lcg_step(uint_least64_t x)
 /* Turn a seed into a generator state the way G_srand48() does: only the
  * low 32 bits are used, so a negative seed gives the state of its two's
  * complement 32-bit value. */
-static uint_least64_t lcg_seed(long long seed)
+static uint64_t lcg_seed(long long seed)
 {
-    return (((uint_least64_t)seed & 0xFFFFFFFF) << 16) | 0x330E;
+    return (((uint64_t)seed & 0xFFFFFFFF) << 16) | 0x330E;
 }
 
 /* Advance the generator by an arbitrary number of steps without taking
  * them one at a time. One step is the affine map x -> a * x + c, and
  * composing two such maps gives another, so the map for `steps` steps is
  * built by repeated squaring, as an integer power would be. */
-static uint_least64_t lcg_jump(uint_least64_t x, uint_least64_t steps)
+static uint64_t lcg_jump(uint64_t x, uint64_t steps)
 {
-    uint_least64_t a_total = 1, c_total = 0; /* the identity map */
-    uint_least64_t a = LCG_A, c = LCG_B;     /* one step */
+    uint64_t a_total = 1, c_total = 0; /* the identity map */
+    uint64_t a = LCG_A, c = LCG_B;     /* one step */
 
     while (steps) {
         if (steps & 1) {
@@ -432,9 +432,9 @@ static void check_units(long long units)
  * different batches is as unrelated as the generator allows; an even
  * distance would relate those draws, the more simply the more often 2
  * divides it. */
-static uint_least64_t batch_distance(const struct G_random_layout *layout)
+static uint64_t batch_distance(const struct G_random_layout *layout)
 {
-    return ((uint_least64_t)layout->units * (uint_least64_t)layout->stride) | 1;
+    return ((uint64_t)layout->units * (uint64_t)layout->stride) | 1;
 }
 
 /* Fill in a layout of units of the given stride, all of one batch first,
@@ -444,7 +444,7 @@ static uint_least64_t batch_distance(const struct G_random_layout *layout)
 static void fill_layout(struct G_random_layout *layout, long long seed,
                         long long units, long long stride)
 {
-    uint_least64_t draws = (uint_least64_t)units * (uint_least64_t)stride;
+    uint64_t draws = (uint64_t)units * (uint64_t)stride;
 
     layout->start = lcg_seed(seed);
     layout->units = units;
@@ -452,7 +452,7 @@ static void fill_layout(struct G_random_layout *layout, long long seed,
     layout->batches = 0;
     if (draws <= LCG_SPAN)
         layout->batches =
-            (long long)((LCG_SPAN - draws) / batch_distance(layout) + 1);
+            (int64_t)((LCG_SPAN - draws) / batch_distance(layout) + 1);
     layout->whole_span = 0;
 }
 
@@ -607,7 +607,7 @@ void G_random_init_layout_bounded(struct G_random_layout *layout,
 void G_random_init_layout(struct G_random_layout *layout, long long seed,
                           long long units)
 {
-    uint_least64_t parts, stride;
+    uint64_t parts, stride;
 
     check_seed(seed);
     check_units(units);
@@ -616,13 +616,13 @@ void G_random_init_layout(struct G_random_layout *layout, long long seed,
                         "most %lld units, not %lld; a bounded layout serves "
                         "any number of units"),
                       WHOLE_SPAN_MAX_UNITS, units);
-    parts = (uint_least64_t)units | 1;
+    parts = (uint64_t)units | 1;
     stride = LCG_SPAN / parts;
     if (parts > 1 && stride % 2 == 0)
         stride--;
     layout->start = lcg_seed(seed);
     layout->units = units;
-    layout->stride = (long long)stride;
+    layout->stride = (int64_t)stride;
     layout->batches = 1;
     layout->whole_span = 1;
 }
@@ -684,12 +684,12 @@ void G_random_state_for_batch(struct G_random_state *state,
                               const struct G_random_layout *layout,
                               long long batch, long long unit)
 {
-    uint_least64_t offset;
+    uint64_t offset;
 
     if (unit < 0 || unit >= layout->units)
         G_fatal_error(_("Random number unit %lld is out of range "
                         "(must be between 0 and %lld)"),
-                      unit, layout->units - 1);
+                      unit, (long long)(layout->units - 1));
     if (batch < 0)
         G_fatal_error(_("Random number batch %lld is out of range "
                         "(must not be negative)"),
@@ -704,7 +704,7 @@ void G_random_state_for_batch(struct G_random_state *state,
                          "Random number batch %lld is out of range "
                          "(%lld batches fit into the generator's span)",
                          (unsigned long)layout->batches),
-                      batch, layout->batches);
+                      batch, (long long)layout->batches);
     if (layout->batches == 0 && batch > 0)
         G_fatal_error(_("Random number batch %lld is out of range "
                         "(no batch fits into the generator's span, only batch "
@@ -714,8 +714,8 @@ void G_random_state_for_batch(struct G_random_state *state,
     /* With batch below the batches that fit, the offset is below 2^46; with
      * batch 0 of a layout which does not fit, it may reach past the span.
      * It is below 2^63 either way, since units times stride is. */
-    offset = (uint_least64_t)batch * batch_distance(layout) +
-             (uint_least64_t)unit * (uint_least64_t)layout->stride;
+    offset = (uint64_t)batch * batch_distance(layout) +
+             (uint64_t)unit * (uint64_t)layout->stride;
     state->state = lcg_jump(layout->start, offset);
 }
 
@@ -753,7 +753,7 @@ void G_random_advance(struct G_random_state *state, long long draws)
         G_fatal_error(_("Cannot advance a random number generator by %lld "
                         "draws (the number must not be negative)"),
                       draws);
-    state->state = lcg_jump(state->state, (uint_least64_t)draws);
+    state->state = lcg_jump(state->state, (uint64_t)draws);
 }
 
 /*!
