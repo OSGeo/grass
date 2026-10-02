@@ -258,36 +258,17 @@ bound, and checks that the batch fits as in the fragment above.
 
 An ensemble is many runs of the same model under one seed, meant to be
 independent replicates. Each member draws from a batch of its own of the
-layout the tool uses for a single run. Whether the members are computed in one
-process or one per invocation, on one machine or many, does not change where a
-batch lies.
+layout the tool uses for a single run. A tool which supports ensembles takes
+the number of the member, for example as an option `run` numbered from 1,
+places unit u with `G_random_state_for_batch(&rng, &layout, run - 1, u)`, and
+refuses a run beyond `G_random_layout_batches(&layout)`. With an exact or
+bounded layout, a member does not need to know the size of the ensemble; a
+whole-span layout holds a single batch and so cannot serve one.
 
-A tool which supports ensembles needs one option, `run`, the member this
-invocation computes, numbered from 1 and 1 by default, so that nothing changes
-for a user who runs the tool once. No option for the number of runs is needed:
-with an exact or bounded layout the stride is set by what a unit draws, so a
-member does not need to know the size of the ensemble. A whole-span layout
-holds a single batch and so cannot serve an ensemble. The tool places unit u
-with `G_random_state_for_batch(&rng, &layout, run - 1, u)`, and before any
-work it refuses a run beyond `G_random_layout_batches(&layout)`, with that
-number in the message; run 1 of a layout into which no batch fits is placed
-with the warning of the fragments above, as earlier versions ran. It writes
-the seed and the run into the history of its output, for example
-`random seed = 42, run 3`, so that a member can be found and repeated.
-
-The members must share one seed, so each member must be given it explicitly.
-When `run` is given, the tool takes the seed from the seed option or, when
-that is not set, from `GRASS_RANDOM_SEED`, which it reads itself with
-`getenv()`, and refuses to run with neither. It does not call
-`G_random_generate_seed()` in that case, since that function falls back to
-sources the members do not share.
-
-What must agree between the members is everything which decides the layout:
-the seed and whatever sets the number of units and the stride, such as the
-region and the tool's options. A member with a different layout can have
-streams which share values with another member's, so the members should differ
-only in the run number and the output names. The number of members is limited
-by the batches that fit (see \ref gislib_random_streams_capacity).
+The members must share the seed and whatever else decides the layout, the
+number of units and the stride, so they should differ only in the run number
+and the output names. The number of members is limited by the batches that fit
+(see \ref gislib_random_streams_capacity).
 
 ## Capacity {#gislib_random_streams_capacity}
 
