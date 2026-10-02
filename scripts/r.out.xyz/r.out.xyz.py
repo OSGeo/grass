@@ -77,8 +77,7 @@ def main():
                 output_text = "\n".join(lines)
 
             if output:
-                with open(output, "w", encoding="utf-8") as f:
-                    f.write(output_text)
+                pathlib.Path(output).write_text(output_text, encoding="utf-8")
             else:
                 print(output_text, end="")
         else:
