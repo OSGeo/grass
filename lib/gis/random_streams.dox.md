@@ -281,42 +281,27 @@ longer period behind the same calls.
 
 ### The generator and the span {#gislib_random_streams_span}
 
-The generator is the 48-bit linear congruential generator of `drand48()`, and
-its values are multiples of 2^-48, uniform in [0, 1). A unit's stream is taken
-from the one sequence the generator has, so its values are as good as that
-sequence: fine for simulations, sampling, and Monte Carlo estimates, but not
-for cryptography.
+The generator is the 48-bit linear congruential generator of `drand48()`. Its
+values are multiples of 2^-48, uniform in [0, 1): fine for simulations,
+sampling, and Monte Carlo estimates, but not for cryptography.
 
-The multiplier a is 5 modulo 8, so a^(2^46) = 1 modulo 2^48 while a^(2^45) is
-not, and, with this increment, 2^46 draws take every state x to x + 2^46
-modulo 2^48. Positions 2^46, 2^47 or 3 × 2^46 draws apart therefore give
-values which differ by exactly 0.25, 0.5 or 0.75 at every draw: the four
-quarters of the ring hold the same values shifted by 0, 0.25, 0.5 and 0.75.
-With seed 42 the generator draws 0.7445, 0.3427, 0.1111 at the seed and
-0.9945, 0.5927, 0.3611 a quarter of the ring later, each value the seed's
-plus 0.25, wrapping past 1. The other three quarters add no values of their
-own, so the library places everything within the span, where no two
-positions are 2^46 draws apart.
-
-Batch 0 of a layout into which no batch fits reaches past the span, where the
-generator gives the values of the positions 2^46 draws earlier shifted by a
-constant. A tool which warns and continues in that case should say that values
-beyond 2^46 draws repeat earlier values shifted by a constant, not only that a
-limit was exceeded, as the fragments in \ref gislib_random_streams_usage do.
-
-Seeding computations separately does not give more room: more than 2^46
-values drawn in total, however they are seeded, include two positions a
-multiple of 2^46 draws apart, which give the same values or the same values
-shifted by a constant, and computations seeded at random can overlap before
-that.
+The four quarters of the ring hold the same values shifted by 0, 0.25, 0.5 and
+0.75: two positions a quarter of the ring apart give values which differ by
+exactly 0.25 at every draw. Three of the quarters therefore add no values of
+their own, and the library places everything within the span, where no two
+positions are that far apart.
 
 \image html random_streams_twins.svg
 
 The figure shows the seed and the positions a quarter, a half and three
-quarters of the ring after it, with the first three values of seed 42 at
-each: the seed's values plus 1/4, 1/2 and 3/4, wrapping past 1. The streams
-of a layout lie within the span, the shaded quarter, and do not reach the
-position a quarter of the ring after the seed.
+quarters of the ring after it, with the first three values of seed 42 at each.
+
+Only batch 0 of a layout into which no batch fits reaches past the span, where
+it draws earlier values shifted by a constant; the warning of such a tool
+should say so, as the fragments in \ref gislib_random_streams_usage do.
+Seeding computations separately does not give more room, since more than 2^46
+values drawn in total always include two positions a quarter of the ring
+apart.
 
 ### Relations by distance {#gislib_random_streams_distance}
 
