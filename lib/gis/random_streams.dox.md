@@ -381,11 +381,13 @@ of seed s plus k times one amount at every draw, modulo 1.
 
 \image html random_streams_seeds.svg
 
-The figure shows the first four values of eight computations. Seeded 42 to 49,
-their values are one step apart at every draw. As batches 0 to 7 of one layout
-of seed 42, with a million units of a million draws each, they show no such
-pattern. Computations meant to be independent therefore share one seed and use
-the batches of one layout, whose strides do not overlap.
+The figure shows the first two values of 64 computations, each as a dot.
+Seeded with the consecutive seeds 42 to 105, their values lie on straight
+lines, since every seed adds the same step to the value of the seed before it.
+As batches 0 to 63 of one layout of seed 42, with a million units of a million
+draws each, their values scatter. Computations meant to be independent
+therefore share one seed and use the batches of one layout, whose strides do
+not overlap.
 
 ## Seeds {#gislib_random_streams_seeds}
 
