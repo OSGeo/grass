@@ -103,22 +103,15 @@ adds to a stride is drawn much wider than one draw is. Why the number of parts
 and the strides are odd is explained in \ref gislib_random_streams_distance
 and \ref gislib_random_streams_odd.
 
-### Batches {#gislib_random_streams_batches}
-
-A batch is one stream for every unit. What it stands for is up to the tool: a
-member of an ensemble, another pass over the same units, or one of the
-processes of a model. `G_random_state_for_batch(&rng, &layout, batch, unit)`
-places a state at the start of the unit's stream in that batch, and
-`G_random_state_for_unit(&rng, &layout, unit)` does so in batch 0. A batch
-needs no reservation, since where it lies depends only on the layout and its
-number, and placing a state costs about as much as a few dozen draws wherever
-the stream starts.
-
-`G_random_layout_batches(&layout)` returns the number of batches that fit into
-the span and `G_random_layout_length(&layout)` the stride. A tool checks that
-no unit can draw more than the stride and that the batches it uses fit. Batch
-0 can be placed even when no batch fits, so that a tool may warn and continue,
-as the fragments below do.
+The units of a layout can be placed more than once: a batch is one stream for
+every unit, and the batches follow one another along the span.
+`G_random_state_for_unit(&rng, &layout, unit)` places a state at the start of
+the unit's stream in batch 0,
+`G_random_state_for_batch(&rng, &layout, batch, unit)` does so in any batch,
+and `G_random_layout_batches(&layout)` returns the number of batches that fit
+into the span. What a batch stands for is up to the tool: a member of an
+ensemble (see \ref gislib_random_streams_ensembles), another pass over the
+same units, or one of the processes of a model.
 
 ## Usage {#gislib_random_streams_usage}
 
@@ -127,11 +120,16 @@ the number of units is their count or an upper bound on it, and unused units
 cost nothing but their share of the span. Which pattern applies depends on
 whether a unit draws its values in one go or over many steps.
 
-In every pattern, the values a unit draws do not depend on the thread which
-draws them. The result of the whole computation is then the same for any
-number of threads when nothing else in it depends on the schedule, which
-holds when every unit writes only its own output and not when threads add
-into shared sums.
+Whatever the pattern, the tool checks that no unit can draw more than the
+stride, which `G_random_layout_length(&layout)` returns, and that the batches
+it uses fit. Batch 0 can be placed even when no batch fits, so that a tool may
+warn and continue, as the fragments below do. Placing a state costs about as
+much as a few dozen draws, wherever its stream starts.
+
+The values a unit draws do not depend on the thread which draws them. The
+result of the whole computation is then the same for any number of threads
+when nothing else in it depends on the schedule, which holds when every unit
+writes only its own output and not when threads add into shared sums.
 
 ### A single sequence {#gislib_random_streams_single}
 
