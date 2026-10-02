@@ -407,50 +407,19 @@ that the computation can be repeated.
 ## Migrating from the shared generator {#gislib_random_streams_migrating}
 
 The shared generator, `G_srand48()` and `G_drand48()`, is unchanged. Code
-which seeds it and draws from it gets exactly the same values, the seed's
-sequence, from a state placed with `G_random_state_from_seed()` and drawn from
-with `G_random_double()`, without moving the shared generator or being moved
-by it:
+which moves from it to a generator of its own changes as follows:
 
-```c
-// seed: the seed, a long long; value: a double;
-// rng: a struct G_random_state.
-// Before: the shared generator.
-G_srand48(seed);
-value = G_drand48();
+| before | after | values |
+| --- | --- | --- |
+| `G_srand48(seed)`, then `G_drand48()` | `G_random_state_from_seed(&rng, seed)`, then `G_random_double(&rng)` | the same |
+| `G_srand48_auto()` | `G_random_generate_seed()`, then as above | the same seed |
+| `G_drand48()` in a parallel loop, with a known number of draws per unit | an exact layout and `G_random_state_for_unit()` for every unit | those of one thread, for any number of threads |
+| `G_drand48()` in a parallel loop, with a varying number of draws per unit | a bounded or whole-span layout | change once |
+| `G_lrand48()` | `(long)(G_random_double(&rng) * 2147483648.0)` | the same |
+| `G_mrand48()` | `(unsigned int)(G_random_double(&rng) * 4294967296.0)` | the same bits; for the signed value, subtract 2^32 from 2^31 and above |
 
-// After: a state of the tool's own, giving the same values.
-G_random_state_from_seed(&rng, seed);
-value = G_random_double(&rng);
-```
-
-Parallel code which drew from the shared generator inside the parallel loop
-depended on the schedule for which unit got which values. With an exact
-layout, as in \ref gislib_random_streams_rows, each unit draws the values of
-the seed's sequence it drew in a single-threaded run, so those results are
-kept and no longer depend on the number of threads. Where the draws of a unit
-vary, a bounded or whole-span layout replaces the exact one, and the values of
-a seed change once.
-
-`G_srand48_auto()` seeds the shared generator with the seed
-`G_random_generate_seed()` returns, so code which generated a seed with it
-calls `G_random_generate_seed()` instead and gets the same seed without
-seeding the shared generator, though not necessarily the same value where
-`long` has 32 bits, since `G_srand48_auto()` then returns a seed of 2^31 or
-more as a negative number. `G_srand48()` silently reduced any seed to its low
-32 bits, while the `G_random_*()` functions refuse a seed outside their range,
-so a tool which passes a user's seed through now refuses seeds it once
-accepted, such as 5000000000. Validate the seed right after parsing, before
-any work is done, by initializing the layout there, or, when the layout's
-counts are known only later, with `G_random_state_from_seed()` on a local
-state.
-
-The `G_random_*()` functions include no integer-returning one. To get an
-integer in [0, n), use `(long)(G_random_double(&rng) * n)`. With n = 2^31
-this is exactly what `G_lrand48()` gives at the same draw, since the state
-has 48 bits and a double holds the product without rounding. The value of
-`G_mrand48()` is `(long long)(G_random_double(&rng) * 4294967296.0)` read
-as a two's complement 32-bit integer, that is, with 4294967296 subtracted when
-it is 2147483648 or more; code which cast `G_mrand48()` to `unsigned int`
-gets the same value from
-`(unsigned int)(G_random_double(&rng) * 4294967296.0)`.
+The functions refuse a seed outside their range, which `G_srand48()` reduced
+to its low 32 bits without a word, so a tool which passes a user's seed
+through now refuses seeds it once accepted, such as 5000000000. Validate the
+seed right after parsing, before any work is done, by initializing the layout
+or a state there.
