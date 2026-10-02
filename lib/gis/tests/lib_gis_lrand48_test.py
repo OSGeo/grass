@@ -369,6 +369,19 @@ def whole_span_layout(seed, units):
     return layout
 
 
+def batch_distance(units, stride):
+    """Draws from the start of one batch to the next: units * stride, made odd"""
+    return (units * stride) | 1
+
+
+def batches_that_fit(units, stride):
+    """Batches whose last stream ends within the span"""
+    draws = units * stride
+    if draws > SPAN:
+        return 0
+    return (SPAN - draws) // batch_distance(units, stride) + 1
+
+
 def unit_states(layout, unit, n, batch=0):
     """States of the first n draws of a unit in a batch of a layout"""
     state = struct_G_random_state()
@@ -541,22 +554,30 @@ def test_exact_layout_units_follow_the_single_sequence(seed):
     [(5, 7), (1, 1), (1000, 100), (4096, 2**34), (2**23, 2**23), (2**23, 2**23 + 1)],
 )
 def test_exact_layout_batches_and_length(units, draws):
-    """The batches that fit are the span divided by units times draws.
+    """The batches that fit are those whose last stream ends within the span.
 
-    The last pair's product exceeds 2^46, so no batch fits and batches() is 0.
-    The length is the number of draws exactly.
+    A batch of exactly 2^46 draws fits once. The last pair's product exceeds
+    2^46, so no batch fits and batches() is 0. The length is the number of
+    draws exactly.
     """
     layout = exact_layout(1337, units, draws)
-    assert G_random_layout_batches(byref(layout)) == SPAN // (units * draws)
+    assert G_random_layout_batches(byref(layout)) == batches_that_fit(units, draws)
     assert G_random_layout_length(byref(layout)) == draws
 
 
-def test_exact_layout_batches_follow_each_other():
-    """Unit u of batch b starts (b * units + u) * draws into the single sequence."""
-    layout = exact_layout(1337, 5, 7)
-    assert unit_states(layout, 2, 3, batch=4) == reference_states(
-        1337, (4 * 5 + 2) * 7, 3
-    )
+@pytest.mark.parametrize(("units", "draws", "distance"), [(5, 7, 35), (4, 6, 25)])
+def test_exact_layout_batches_start_an_odd_distance_apart(units, draws, distance):
+    """Batches start units * draws apart, or one more when that is even.
+
+    Unit u of batch b starts b * distance + u * draws into the single
+    sequence.
+    """
+    assert batch_distance(units, draws) == distance
+    layout = exact_layout(1337, units, draws)
+    for batch, unit in [(0, 2), (1, 0), (4, 2)]:
+        assert unit_states(layout, unit, 3, batch=batch) == reference_states(
+            1337, batch * distance + unit * draws, 3
+        ), (batch, unit)
 
 
 def test_exact_layout_which_does_not_fit_allows_batch_zero(
@@ -586,7 +607,7 @@ def test_exact_layout_batch_past_the_batches_that_fit_is_fatal(
 ):
     """A batch beyond those that fit is a fatal error naming both numbers."""
     units, draws = 4096, 2**34
-    batches = SPAN // (units * draws)
+    batches = batches_that_fit(units, draws)
     assert batches == 1
     ok = run_calls(
         xy_session_for_module,
@@ -630,12 +651,12 @@ def test_bounded_layout_rounds_an_even_bound_up_to_odd(bound, stride):
     """An even bound becomes the next odd number, an odd bound stays."""
     layout = bounded_layout(1337, 1000, bound)
     assert G_random_layout_length(byref(layout)) == stride
-    assert G_random_layout_batches(byref(layout)) == SPAN // (1000 * stride)
+    assert G_random_layout_batches(byref(layout)) == batches_that_fit(1000, stride)
 
 
 @pytest.mark.parametrize("seed", [0, 1337, -1])
 def test_bounded_layout_unit_starts(seed):
-    """Unit u starts u * stride draws after the seed, batch 1's (units + u) * stride."""
+    """Unit u starts u * stride draws after the seed or after the start of batch 1."""
     units, stride = 1000, 101
     layout = bounded_layout(seed, units, 100)
     for unit in (0, 1, 2, 999):
@@ -643,7 +664,7 @@ def test_bounded_layout_unit_starts(seed):
             seed, unit * stride, 3
         ), unit
         assert unit_states(layout, unit, 3, batch=1) == reference_states(
-            seed, (units + unit) * stride, 3
+            seed, batch_distance(units, stride) + unit * stride, 3
         ), unit
 
 
@@ -795,7 +816,7 @@ def test_layout_lies_within_the_span(layout, units, stride):
     length = G_random_layout_length(byref(layout))
     assert length == stride
     assert batches >= 1
-    last_start = (batches * units - 1) * stride
+    last_start = (batches - 1) * batch_distance(units, stride) + (units - 1) * stride
     assert last_start + length <= SPAN
 
 
