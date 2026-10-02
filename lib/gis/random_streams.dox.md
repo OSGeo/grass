@@ -24,10 +24,11 @@ GRASS, a 48-bit linear congruential generator.
   c) mod 2^48, with the multiplier a = 0x5DEECE66D and the increment c = 0xB,
   and returns x' / 2^48. It passes through all 2^48 states before repeating,
   so the states form one ring and every draw moves one step along it.
-- **Seed**: the integer which picks where drawing starts. Seed s starts at the
-  state whose bits 16 to 47 are the low 32 bits of s and whose low 16 bits
-  are 0x330E, as `srand48()` sets it. The values drawn one after another
-  from there are the seed's sequence.
+- **Seed**: the integer which picks where drawing starts, from -2^31 to 2^32 -
+  1. Seed s starts at the state whose bits 16 to 47 are the low 32 bits of s
+  and whose low 16 bits are 0x330E, as `srand48()` sets it, so -1 and
+  4294967295 are the same seed. The values drawn one after another from there
+  are the seed's sequence.
 - **State**: a `struct G_random_state`, a position on the ring and nothing
   else, used by one thread at a time; copying it copies the position.
   `G_random_double()` moves it one step and returns the value there, and
@@ -111,7 +112,9 @@ the unit's stream in batch 0,
 and `G_random_layout_batches(&layout)` returns the number of batches that fit
 into the span. What a batch stands for is up to the tool: a member of an
 ensemble (see \ref gislib_random_streams_ensembles), another pass over the
-same units, or one of the processes of a model.
+same units, or one of the processes of a model. Computations which must be
+independent of one another share one seed and use different batches, not
+different seeds (see \ref gislib_random_streams_between_seeds).
 
 ## Usage {#gislib_random_streams_usage}
 
@@ -119,6 +122,14 @@ A unit is what the computation is naturally divided into and numbered by;
 the number of units is their count or an upper bound on it, and unused units
 cost nothing but their share of the span. Which pattern applies depends on
 whether a unit draws its values in one go or over many steps.
+
+The seed comes from the user or is generated. A tool parses its seed option
+into a `long long` with `strtoll()` and refuses what is not an integer in the
+range, naming the option. When the user gives no seed,
+`G_random_generate_seed()` gives one, from `GRASS_RANDOM_SEED`, or else from
+`SOURCE_DATE_EPOCH`, or else from the time and the process ID. The tool
+records the seed it used, for example in the history of the output map, so
+that the computation can be repeated.
 
 Whatever the pattern, the tool checks that no unit can draw more than the
 stride, which `G_random_layout_length(&layout)` returns, and that the batches
@@ -373,11 +384,12 @@ its values.
 
 ### Relations between seeds {#gislib_random_streams_between_seeds}
 
-Seeds are places on the same ring, so they are related by their distance too.
-Seeds 2^30 apart start a quarter of the ring apart, so seed 42 + 2^30 draws
-the values of seed 42 plus one quarter. Consecutive seeds start close
-together, and because the generator is linear, the value of seed s + k is that
-of seed s plus k times one amount at every draw, modulo 1.
+On its own, any seed is as good as any other. Seeds are places on the same
+ring, however, so two seeds are related by their distance. Seeds 2^30 apart
+start a quarter of the ring apart, so seed 42 + 2^30 draws the values of seed
+42 plus one quarter. Consecutive seeds start close together, and because the
+generator is linear, the value of seed s + k is that of seed s plus k times
+one amount at every draw, modulo 1.
 
 \image html random_streams_seeds.svg
 
@@ -388,21 +400,6 @@ As batches 0 to 63 of one layout of seed 42, with a million units of a million
 draws each, their values scatter. Computations meant to be independent
 therefore share one seed and use the batches of one layout, whose strides do
 not overlap.
-
-## Seeds {#gislib_random_streams_seeds}
-
-Any seed from -2^31 to 2^32 - 1 can be used, and any is as good as any other.
-The generator uses the low 32 bits of the seed, so -1 and 4294967295 are the
-same seed. Computations which must be independent share one seed and use the
-batches of one layout, since seeds are related to one another (see
-\ref gislib_random_streams_between_seeds).
-
-A tool parses its seed option into a `long long` with `strtoll()` and refuses
-what is not an integer in the range, naming the option. When the user gives no
-seed, `G_random_generate_seed()` gives one, from `GRASS_RANDOM_SEED`, or else
-from `SOURCE_DATE_EPOCH`, or else from the time and the process ID. The tool
-records the seed it used, for example in the history of the output map, so
-that the computation can be repeated.
 
 ## Migrating from the shared generator {#gislib_random_streams_migrating}
 
