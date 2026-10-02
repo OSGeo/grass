@@ -55,12 +55,12 @@ is always the quarter after it.
 ## Capacity and layouts {#gislib_random_streams_layouts}
 
 The span holds 2^46 draws, about 70 trillion. A layout gives units × stride of
-them to one batch, so the number of batches that fit is the span divided by
-units × stride, rounded down. A million units drawing a million values each
-draw 10^12 values per batch, so 70 batches fit on one seed. The library does
-not check how many values a unit draws: a unit which draws past its stride
-draws the next unit's values. No layout and no way of seeding makes the span
-larger (see \ref gislib_random_streams_span).
+them to one batch, so the number of batches that fit is about the span divided
+by units × stride. A million units drawing a million values each draw 10^12
+values per batch, so 70 batches fit on one seed. The library does not check
+how many values a unit draws: a unit which draws past its stride draws the
+next unit's values. No layout and no way of seeding makes the span larger (see
+\ref gislib_random_streams_span).
 
 A layout gives every unit its own stream of numbers. A single sequence is the
 simplest case, and the three ways to initialize a layout for more units differ
@@ -108,16 +108,18 @@ in \ref gislib_random_streams_distance and \ref gislib_random_streams_odd.
 
 The units of a layout can be placed more than once: a further batch gives
 every unit another stream of numbers, and the batches follow one another along
-the span, unit u of batch b starting (b × units + u) × stride draws after the
-seed. `G_random_state_for_unit(&rng, &layout, unit)` places a state at the
-start of the unit in batch 0,
-`G_random_state_for_batch(&rng, &layout, batch, unit)` does so in any batch,
-and `G_random_layout_batches(&layout)` returns the number of batches that fit
-into the span. What a batch stands for is up to the tool: a member of an
-ensemble (see \ref gislib_random_streams_ensembles), another pass over the
-same units, or one of the processes of a model. Computations which must be
-independent of one another share one seed and use different batches, not
-different seeds (see \ref gislib_random_streams_between_seeds).
+the span. Batches start units × stride draws apart, or one more when that
+number is even (see \ref gislib_random_streams_odd), and unit u starts u ×
+stride draws after the start of its batch.
+`G_random_state_for_unit(&rng, &layout, unit)` places a state at the start of
+the unit in batch 0, `G_random_state_for_batch(&rng, &layout, batch, unit)`
+does so in any batch, and `G_random_layout_batches(&layout)` returns the
+number of batches that fit into the span. What a batch stands for is up to the
+tool: a member of an ensemble (see \ref gislib_random_streams_ensembles),
+another pass over the same units, or one of the processes of a model.
+Computations which are to be compared or combined, such as the members of an
+ensemble, share one seed and use different batches, not different seeds (see
+\ref gislib_random_streams_between_seeds).
 
 ## Usage {#gislib_random_streams_usage}
 
@@ -256,14 +258,14 @@ bound, and checks that the batch fits as in the fragment above.
 
 ### Ensembles {#gislib_random_streams_ensembles}
 
-An ensemble is many runs of the same model under one seed, meant to be
-independent replicates. Each member draws from a batch of its own of the
-layout the tool uses for a single run. A tool which supports ensembles takes
-the number of the member, for example as an option `run` numbered from 1,
-places unit u with `G_random_state_for_batch(&rng, &layout, run - 1, u)`, and
-refuses a run beyond `G_random_layout_batches(&layout)`. With an exact or
-bounded layout, a member does not need to know the size of the ensemble; a
-whole-span layout holds a single batch and so cannot serve one.
+An ensemble is many runs of the same model under one seed. Each member draws
+from a batch of its own of the layout the tool uses for a single run. A tool
+which supports ensembles takes the number of the member, for example as an
+option `run` numbered from 1, places unit u with
+`G_random_state_for_batch(&rng, &layout, run - 1, u)`, and refuses a run
+beyond `G_random_layout_batches(&layout)`. With an exact or bounded layout, a
+member does not need to know the size of the ensemble; a whole-span layout
+holds a single batch and so cannot serve one.
 
 The members must share the seed and whatever else decides the layout, the
 number of units and the stride, so they should differ only in the run number
@@ -274,10 +276,11 @@ and the output names. The number of members is limited by the batches that fit
 
 The values are those of the 48-bit linear congruential generator of
 `drand48()`: multiples of 2^-48, uniform in [0, 1), fine for simulations,
-sampling, and Monte Carlo estimates, but not for cryptography. What needs care
-is not the values of one unit but how the positions in use on the ring relate
-to one another. The sections below say what a tool should know about that and
-what the library does about it.
+sampling, and Monte Carlo estimates, but not for cryptography. A layout keeps
+the streams of numbers of its units from overlapping. It does not make them
+independent, since positions on the ring are related by their distance. The
+sections below say what a tool should know about that and what the library
+does about it.
 
 ### The generator and the span {#gislib_random_streams_span}
 
@@ -334,14 +337,18 @@ What a tool should be aware of:
   the values at the precision computations use.
 - Batch 0 of an exact layout is the seed's sequence and has its structure, no
   better and no worse.
+- The library moves the relations between units and between batches; it does
+  not remove them. With its odd distances they are weakest between draws which
+  carry the same number, and they remain between draws whose numbers differ
+  (see \ref gislib_random_streams_odd).
 
 What the library does about it:
 
 - Every layout lies within the span, so constant-shift twins do not occur.
 - A whole-span layout divides the span into an odd number of parts, so that no
   unit starts at half or at a quarter of the span.
-- Bounded and whole-span layouts have odd strides (see
-  \ref gislib_random_streams_odd).
+- Bounded and whole-span layouts have odd strides, and batches start an odd
+  number of draws apart (see \ref gislib_random_streams_odd).
 
 \image html random_streams_parts.svg
 
@@ -352,27 +359,28 @@ parts, unit 3 reaches that position only after drawing half of its stride.
 
 ### Odd strides {#gislib_random_streams_odd}
 
-A distance divisible by 2^j and by no higher power of two
-fixes the low j + 2 bits of the difference of two states. Units 2^i apart in
-number start 2^i × stride apart; with an odd stride that distance is divisible
-by 2^i and by no higher power of two, so units 1, 2 and 4 apart have the low
-2, 3 and 4 bits of their difference fixed. With an even stride, say a bound of
-1,024 taken as it is, every such distance carries the stride's power of two on
-top, and the same units have the low 12, 13 and 14 bits fixed. That is why the
-library keeps the stride odd: the whole-span layout rounds down to odd and the
-bounded layout rounds the bound up to odd, so no tool has to know the rule. An
-exact layout cannot round, since its units must draw what the seed's sequence
-draws; it keeps that sequence's structure and is never worse than the seed's
-sequence it reproduces, in which the same values were the stride apart
-already.
+When units start an even number of draws apart, the values which they draw at
+the same draw are related across the units: the more often 2 divides the
+distance, the simpler the pattern, and with a stride divisible by 2^23 the
+values of the units lie on straight lines, as those of consecutive seeds do.
+The library therefore keeps the distances odd: a bounded layout rounds its
+bound up to odd, a whole-span layout rounds its stride down to odd, and
+batches start an odd number of draws apart. The same draw of different units,
+or of different batches, is then as unrelated as the generator allows.
 
 \image html random_streams_strides.svg
 
-The figure shows a bounded layout, whose stride is the bound rounded up to
-odd, and in grey an even bound taken as the stride: units 1, 2 and 4, which
-start at the red marks, would have more of the low bits of their values tied
-to those of unit 0, a risk for a computation which depends on the low bits of
-its values.
+The figure shows the first value of each of 64 units against the number of the
+unit. With an even stride of 2^24, which the library does not make, the values
+lie on lines. With the odd stride which the library makes of a bound of 2^24,
+they scatter. The relation is not gone, however: it holds between draws whose
+numbers fall by one from unit to unit, here draw 64 of unit 0, draw 63 of unit
+1 and so on, which the last panel shows. A tool meets it only where it
+compares or combines such draws.
+
+An exact layout cannot round its stride, since its units must draw what the
+seed's sequence draws. It keeps that sequence's structure, no better and no
+worse.
 
 ### Relations between seeds {#gislib_random_streams_between_seeds}
 
@@ -387,13 +395,13 @@ of seed s plus k times one amount at every draw, modulo 1.
 
 \image html random_streams_seeds.svg
 
-The figure shows the first two values of 64 computations, each as a dot.
-Seeded with the consecutive seeds 42 to 105, their values lie on straight
-lines, since every seed adds the same step to the value of the seed before it.
-As batches 0 to 63 of one layout of seed 42, with a million units of a million
-draws each, their values scatter. Computations meant to be independent
-therefore share one seed and use the batches of one layout, whose strides do
-not overlap.
+The figure shows the first value of each of 64 computations against the number
+of the computation. Seeded 0 to 63, the values lie on straight lines, since
+every seed adds the same step to the value of the seed before it; the same
+happens at every draw. As batches 0 to 63 of one layout of seed 0, with a
+million units of a million draws each, the values scatter. Computations which
+are to be compared or combined therefore share one seed and use the batches of
+one layout.
 
 ## Migrating from the shared generator {#gislib_random_streams_migrating}
 

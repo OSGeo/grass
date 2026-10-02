@@ -1,101 +1,227 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="222" viewBox="0 0 640 222" font-family="sans-serif" font-size="13" fill="#222">
-  <title>The bounded layout with an odd stride and what an even bound taken as the stride would give</title>
-  <!-- The end of the span, 2^46 draws after the seed, for all the bars. -->
-  <line x1="600" y1="42" x2="600" y2="164" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6 5"/>
-  <!-- Bounded: a stride of the bound rounded up to odd, with the added draw
-       in light grey, much wider than one draw is. -->
-  <text x="80.0" y="22.0">bounded layout: G_random_init_layout_bounded()</text>
-  <text x="80.0" y="38.0">stride: the bound rounded up to odd; light grey: the draw added to an even bound</text>
-  <rect x="80" y="48" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
-  <rect x="80.0" y="48" width="8" height="24" fill="#222"/>
-  <rect x="116.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="106.0" y="64.5" text-anchor="middle">0</text>
-  <line x1="120.0" y1="48" x2="120.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="120.0" y="48" width="13" height="24" fill="#222"/>
-  <rect x="156.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="146.0" y="64.5" text-anchor="middle">1</text>
-  <line x1="160.0" y1="48" x2="160.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="160.0" y="48" width="5" height="24" fill="#222"/>
-  <rect x="196.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="186.0" y="64.5" text-anchor="middle">2</text>
-  <line x1="200.0" y1="48" x2="200.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="200.0" y="48" width="16" height="24" fill="#222"/>
-  <rect x="236.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="226.0" y="64.5" text-anchor="middle">3</text>
-  <line x1="240.0" y1="48" x2="240.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="240.0" y="48" width="11" height="24" fill="#222"/>
-  <rect x="276.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="266.0" y="64.5" text-anchor="middle">4</text>
-  <line x1="280.0" y1="48" x2="280.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="280.0" y="48" width="7" height="24" fill="#222"/>
-  <rect x="316.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="306.0" y="64.5" text-anchor="middle">5</text>
-  <line x1="320.0" y1="48" x2="320.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="356.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="346.0" y="64.5" text-anchor="middle">0</text>
-  <line x1="360.0" y1="48" x2="360.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="396.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="386.0" y="64.5" text-anchor="middle">1</text>
-  <line x1="400.0" y1="48" x2="400.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="436.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="426.0" y="64.5" text-anchor="middle">2</text>
-  <line x1="440.0" y1="48" x2="440.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="476.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="466.0" y="64.5" text-anchor="middle">3</text>
-  <line x1="480.0" y1="48" x2="480.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="516.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="506.0" y="64.5" text-anchor="middle">4</text>
-  <line x1="520.0" y1="48" x2="520.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <rect x="556.0" y="49" width="4" height="22" fill="#ccc"/>
-  <text x="546.0" y="64.5" text-anchor="middle">5</text>
-  <line x1="560.0" y1="48" x2="560.0" y2="72" stroke="#222" stroke-width="1.5"/>
-  <circle cx="80" cy="60" r="5" fill="#c33"/>
-  <text x="70.0" y="64.5" text-anchor="end">seed</text>
-  <path d="M 80.0 76 L 80.0 80 L 320.0 80 L 320.0 76" fill="none" stroke="#222" stroke-width="1.5"/>
-  <text x="200.0" y="96.0" text-anchor="middle">batch 0</text>
-  <path d="M 320.0 76 L 320.0 80 L 560.0 80 L 560.0 76" fill="none" stroke="#222" stroke-width="1.5"/>
-  <text x="440.0" y="96.0" text-anchor="middle">batch 1</text>
-  <!-- Without the rounding: an even bound as the stride; the units 1, 2 and 4
-       strides after unit 0 start at distances which carry the stride's power
-       of two as well. In grey, since the library does not make this layout. -->
-  <text x="80.0" y="124.0" fill="#999">with an even bound taken as the stride</text>
-  <rect x="80" y="134" width="520" height="24" fill="none" stroke="#999" stroke-width="1.5"/>
-  <rect x="80.0" y="134" width="8" height="24" fill="#999"/>
-  <text x="105.9" y="150.5" text-anchor="middle" fill="#999">0</text>
-  <line x1="116.0" y1="134" x2="116.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <rect x="116.0" y="134" width="13" height="24" fill="#999"/>
-  <text x="141.9" y="150.5" text-anchor="middle" fill="#999">1</text>
-  <line x1="152.0" y1="134" x2="152.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <rect x="152.0" y="134" width="5" height="24" fill="#999"/>
-  <text x="177.9" y="150.5" text-anchor="middle" fill="#999">2</text>
-  <line x1="188.0" y1="134" x2="188.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <rect x="188.0" y="134" width="16" height="24" fill="#999"/>
-  <text x="213.9" y="150.5" text-anchor="middle" fill="#999">3</text>
-  <line x1="224.0" y1="134" x2="224.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <rect x="224.0" y="134" width="11" height="24" fill="#999"/>
-  <text x="249.9" y="150.5" text-anchor="middle" fill="#999">4</text>
-  <line x1="260.0" y1="134" x2="260.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <rect x="260.0" y="134" width="7" height="24" fill="#999"/>
-  <text x="285.9" y="150.5" text-anchor="middle" fill="#999">5</text>
-  <line x1="296.0" y1="134" x2="296.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="321.9" y="150.5" text-anchor="middle" fill="#999">0</text>
-  <line x1="332.0" y1="134" x2="332.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="357.9" y="150.5" text-anchor="middle" fill="#999">1</text>
-  <line x1="368.0" y1="134" x2="368.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="393.9" y="150.5" text-anchor="middle" fill="#999">2</text>
-  <line x1="404.0" y1="134" x2="404.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="429.9" y="150.5" text-anchor="middle" fill="#999">3</text>
-  <line x1="440.0" y1="134" x2="440.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="465.9" y="150.5" text-anchor="middle" fill="#999">4</text>
-  <line x1="476.0" y1="134" x2="476.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <text x="501.9" y="150.5" text-anchor="middle" fill="#999">5</text>
-  <line x1="512.0" y1="134" x2="512.0" y2="158" stroke="#999" stroke-width="1.5"/>
-  <circle cx="80" cy="146" r="5" fill="#dba5a5"/>
-  <text x="70.0" y="150.5" text-anchor="end" fill="#999">seed</text>
-  <line x1="116.0" y1="131" x2="116.0" y2="161" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <line x1="152.0" y1="131" x2="152.0" y2="161" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <line x1="224.0" y1="131" x2="224.0" y2="161" stroke="#c33" stroke-width="1.5" stroke-dasharray="4 3"/>
-  <text x="340.0" y="180.0" text-anchor="middle" fill="#c33">an even bound would tie more low bits of the values of units 1, 2, and 4 to those of unit 0</text>
-  <text x="600.0" y="206.0" text-anchor="end">red dot: the seed; dashed line: the end of the span; grey: not a layout the library makes</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="250" viewBox="0 0 640 250" font-family="sans-serif" font-size="13" fill="#222">
+  <title>The first values of 64 units an even and an odd number of draws apart, and the draws between which the relation remains</title>
+  <!-- An even stride, which the library does not make: the first values of the units lie on lines. -->
+  <text x="36.0" y="20.0">an even stride, 2^24:</text>
+  <text x="36.0" y="36.0">the first value of every unit</text>
+  <rect x="36" y="46" width="176" height="150" fill="none" stroke="#bbb" stroke-width="1.5"/>
+  <circle cx="44.0" cy="166.4" r="3" fill="#e1e1e1"/>
+  <circle cx="46.5" cy="68.0" r="3" fill="#dfdfdf"/>
+  <circle cx="49.1" cy="107.6" r="3" fill="#dedede"/>
+  <circle cx="51.6" cy="147.2" r="3" fill="#dcdcdc"/>
+  <circle cx="54.2" cy="186.8" r="3" fill="#dadada"/>
+  <circle cx="56.7" cy="88.4" r="3" fill="#d9d9d9"/>
+  <circle cx="59.2" cy="128.0" r="3" fill="#d7d7d7"/>
+  <circle cx="61.8" cy="167.6" r="3" fill="#d5d5d5"/>
+  <circle cx="64.3" cy="69.2" r="3" fill="#d4d4d4"/>
+  <circle cx="66.9" cy="108.8" r="3" fill="#d2d2d2"/>
+  <circle cx="69.4" cy="148.4" r="3" fill="#d0d0d0"/>
+  <circle cx="71.9" cy="188.0" r="3" fill="#cfcfcf"/>
+  <circle cx="74.5" cy="89.6" r="3" fill="#cdcdcd"/>
+  <circle cx="77.0" cy="129.2" r="3" fill="#cbcbcb"/>
+  <circle cx="79.6" cy="168.8" r="3" fill="#cacaca"/>
+  <circle cx="82.1" cy="70.4" r="3" fill="#c8c8c8"/>
+  <circle cx="84.6" cy="109.9" r="3" fill="#c6c6c6"/>
+  <circle cx="87.2" cy="149.5" r="3" fill="#c5c5c5"/>
+  <circle cx="89.7" cy="189.1" r="3" fill="#c3c3c3"/>
+  <circle cx="92.3" cy="90.7" r="3" fill="#c1c1c1"/>
+  <circle cx="94.8" cy="130.3" r="3" fill="#c0c0c0"/>
+  <circle cx="97.3" cy="169.9" r="3" fill="#bebebe"/>
+  <circle cx="99.9" cy="71.5" r="3" fill="#bcbcbc"/>
+  <circle cx="102.4" cy="111.1" r="3" fill="#bbbbbb"/>
+  <circle cx="105.0" cy="150.7" r="3" fill="#b9b9b9"/>
+  <circle cx="107.5" cy="52.3" r="3" fill="#b7b7b7"/>
+  <circle cx="110.0" cy="91.9" r="3" fill="#b6b6b6"/>
+  <circle cx="112.6" cy="131.5" r="3" fill="#b4b4b4"/>
+  <circle cx="115.1" cy="171.1" r="3" fill="#b2b2b2"/>
+  <circle cx="117.7" cy="72.7" r="3" fill="#b1b1b1"/>
+  <circle cx="120.2" cy="112.3" r="3" fill="#afafaf"/>
+  <circle cx="122.7" cy="151.9" r="3" fill="#adadad"/>
+  <circle cx="125.3" cy="53.5" r="3" fill="#acacac"/>
+  <circle cx="127.8" cy="93.1" r="3" fill="#aaaaaa"/>
+  <circle cx="130.3" cy="132.7" r="3" fill="#a8a8a8"/>
+  <circle cx="132.9" cy="172.3" r="3" fill="#a7a7a7"/>
+  <circle cx="135.4" cy="73.8" r="3" fill="#a5a5a5"/>
+  <circle cx="138.0" cy="113.4" r="3" fill="#a3a3a3"/>
+  <circle cx="140.5" cy="153.0" r="3" fill="#a2a2a2"/>
+  <circle cx="143.0" cy="54.6" r="3" fill="#a0a0a0"/>
+  <circle cx="145.6" cy="94.2" r="3" fill="#9e9e9e"/>
+  <circle cx="148.1" cy="133.8" r="3" fill="#9d9d9d"/>
+  <circle cx="150.7" cy="173.4" r="3" fill="#9b9b9b"/>
+  <circle cx="153.2" cy="75.0" r="3" fill="#999999"/>
+  <circle cx="155.7" cy="114.6" r="3" fill="#989898"/>
+  <circle cx="158.3" cy="154.2" r="3" fill="#969696"/>
+  <circle cx="160.8" cy="55.8" r="3" fill="#949494"/>
+  <circle cx="163.4" cy="95.4" r="3" fill="#939393"/>
+  <circle cx="165.9" cy="135.0" r="3" fill="#919191"/>
+  <circle cx="168.4" cy="174.6" r="3" fill="#8f8f8f"/>
+  <circle cx="171.0" cy="76.2" r="3" fill="#8e8e8e"/>
+  <circle cx="173.5" cy="115.8" r="3" fill="#8c8c8c"/>
+  <circle cx="176.1" cy="155.4" r="3" fill="#8a8a8a"/>
+  <circle cx="178.6" cy="57.0" r="3" fill="#898989"/>
+  <circle cx="181.1" cy="96.6" r="3" fill="#878787"/>
+  <circle cx="183.7" cy="136.2" r="3" fill="#858585"/>
+  <circle cx="186.2" cy="175.7" r="3" fill="#848484"/>
+  <circle cx="188.8" cy="77.3" r="3" fill="#828282"/>
+  <circle cx="191.3" cy="116.9" r="3" fill="#808080"/>
+  <circle cx="193.8" cy="156.5" r="3" fill="#7f7f7f"/>
+  <circle cx="196.4" cy="58.1" r="3" fill="#7d7d7d"/>
+  <circle cx="198.9" cy="97.7" r="3" fill="#7b7b7b"/>
+  <circle cx="201.5" cy="137.3" r="3" fill="#7a7a7a"/>
+  <circle cx="204.0" cy="176.9" r="3" fill="#787878"/>
+  <text x="44.0" y="211.0" text-anchor="middle" fill="#666" font-size="11">0</text>
+  <text x="204.0" y="211.0" text-anchor="middle" fill="#666" font-size="11">63</text>
+  <text x="124.0" y="212.0" text-anchor="middle">unit</text>
+  <text x="30.0" y="194.0" text-anchor="end" fill="#666" font-size="11">0</text>
+  <text x="30.0" y="56.0" text-anchor="end" fill="#666" font-size="11">1</text>
+  <text x="24.0" y="121.0" text-anchor="middle" transform="rotate(-90 24.0 121.0)">value</text>
+  <!-- The odd stride of the library: the first values of the units scatter. -->
+  <text x="244.0" y="20.0">an odd stride, 2^24 + 1:</text>
+  <text x="244.0" y="36.0">the first value of every unit</text>
+  <rect x="244" y="46" width="176" height="150" fill="none" stroke="#bbb" stroke-width="1.5"/>
+  <circle cx="252.0" cy="166.4" r="3" fill="#c8c8c8"/>
+  <circle cx="254.5" cy="146.2" r="3" fill="#c5c5c5"/>
+  <circle cx="257.1" cy="112.9" r="3" fill="#c2c2c2"/>
+  <circle cx="259.6" cy="139.2" r="3" fill="#bfbfbf"/>
+  <circle cx="262.2" cy="140.9" r="3" fill="#bcbcbc"/>
+  <circle cx="264.7" cy="62.7" r="3" fill="#b9b9b9"/>
+  <circle cx="267.2" cy="115.4" r="3" fill="#b7b7b7"/>
+  <circle cx="269.8" cy="80.2" r="3" fill="#b4b4b4"/>
+  <circle cx="272.3" cy="177.8" r="3" fill="#b1b1b1"/>
+  <circle cx="274.9" cy="124.4" r="3" fill="#aeaeae"/>
+  <circle cx="277.4" cy="175.3" r="3" fill="#ababab"/>
+  <circle cx="279.9" cy="114.3" r="3" fill="#a8a8a8"/>
+  <circle cx="282.5" cy="94.8" r="3" fill="#a5a5a5"/>
+  <circle cx="285.0" cy="76.4" r="3" fill="#a2a2a2"/>
+  <circle cx="287.6" cy="121.2" r="3" fill="#9f9f9f"/>
+  <circle cx="290.1" cy="149.2" r="3" fill="#9c9c9c"/>
+  <circle cx="292.6" cy="156.5" r="3" fill="#9a9a9a"/>
+  <circle cx="295.2" cy="156.1" r="3" fill="#979797"/>
+  <circle cx="297.7" cy="133.6" r="3" fill="#949494"/>
+  <circle cx="300.3" cy="143.3" r="3" fill="#919191"/>
+  <circle cx="302.8" cy="102.5" r="3" fill="#8e8e8e"/>
+  <circle cx="305.3" cy="82.0" r="3" fill="#8b8b8b"/>
+  <circle cx="307.9" cy="112.4" r="3" fill="#888888"/>
+  <circle cx="310.4" cy="147.3" r="3" fill="#858585"/>
+  <circle cx="313.0" cy="82.5" r="3" fill="#828282"/>
+  <circle cx="315.5" cy="189.7" r="3" fill="#7f7f7f"/>
+  <circle cx="318.0" cy="69.8" r="3" fill="#7c7c7c"/>
+  <circle cx="320.6" cy="71.6" r="3" fill="#7a7a7a"/>
+  <circle cx="323.1" cy="125.3" r="3" fill="#777777"/>
+  <circle cx="325.7" cy="171.8" r="3" fill="#747474"/>
+  <circle cx="328.2" cy="106.0" r="3" fill="#717171"/>
+  <circle cx="330.7" cy="136.0" r="3" fill="#6e6e6e"/>
+  <circle cx="333.3" cy="132.9" r="3" fill="#6b6b6b"/>
+  <circle cx="335.8" cy="154.4" r="3" fill="#686868"/>
+  <circle cx="338.3" cy="114.1" r="3" fill="#656565"/>
+  <circle cx="340.9" cy="159.9" r="3" fill="#626262"/>
+  <circle cx="343.4" cy="142.4" r="3" fill="#5f5f5f"/>
+  <circle cx="346.0" cy="108.0" r="3" fill="#5d5d5d"/>
+  <circle cx="348.5" cy="152.2" r="3" fill="#5a5a5a"/>
+  <circle cx="351.0" cy="174.8" r="3" fill="#575757"/>
+  <circle cx="353.6" cy="58.4" r="3" fill="#545454"/>
+  <circle cx="356.1" cy="160.5" r="3" fill="#515151"/>
+  <circle cx="358.7" cy="144.0" r="3" fill="#4e4e4e"/>
+  <circle cx="361.2" cy="151.0" r="3" fill="#4b4b4b"/>
+  <circle cx="363.7" cy="155.8" r="3" fill="#484848"/>
+  <circle cx="366.3" cy="78.9" r="3" fill="#454545"/>
+  <circle cx="368.8" cy="90.9" r="3" fill="#424242"/>
+  <circle cx="371.4" cy="118.6" r="3" fill="#3f3f3f"/>
+  <circle cx="373.9" cy="133.1" r="3" fill="#3d3d3d"/>
+  <circle cx="376.4" cy="64.0" r="3" fill="#3a3a3a"/>
+  <circle cx="379.0" cy="145.3" r="3" fill="#373737"/>
+  <circle cx="381.5" cy="176.8" r="3" fill="#343434"/>
+  <circle cx="384.1" cy="103.3" r="3" fill="#313131"/>
+  <circle cx="386.6" cy="174.0" r="3" fill="#2e2e2e"/>
+  <circle cx="389.1" cy="189.6" r="3" fill="#2b2b2b"/>
+  <circle cx="391.7" cy="73.6" r="3" fill="#282828"/>
+  <circle cx="394.2" cy="77.0" r="3" fill="#252525"/>
+  <circle cx="396.8" cy="56.7" r="3" fill="#222222"/>
+  <circle cx="399.3" cy="160.6" r="3" fill="#202020"/>
+  <circle cx="401.8" cy="63.0" r="3" fill="#1d1d1d"/>
+  <circle cx="404.4" cy="62.8" r="3" fill="#1a1a1a"/>
+  <circle cx="406.9" cy="130.4" r="3" fill="#171717"/>
+  <circle cx="409.5" cy="114.5" r="3" fill="#141414"/>
+  <circle cx="412.0" cy="124.6" r="3" fill="#111111"/>
+  <text x="252.0" y="211.0" text-anchor="middle" fill="#666" font-size="11">0</text>
+  <text x="412.0" y="211.0" text-anchor="middle" fill="#666" font-size="11">63</text>
+  <text x="332.0" y="212.0" text-anchor="middle">unit</text>
+  <text x="238.0" y="194.0" text-anchor="end" fill="#666" font-size="11">0</text>
+  <text x="238.0" y="56.0" text-anchor="end" fill="#666" font-size="11">1</text>
+  <text x="232.0" y="121.0" text-anchor="middle" transform="rotate(-90 232.0 121.0)">value</text>
+  <!-- Where the relation remains with the odd stride: between draws whose numbers fall by one from unit to unit. -->
+  <text x="452.0" y="20.0">the odd stride: draw 64 of unit 0,</text>
+  <text x="452.0" y="36.0">63 of unit 1, 62 of unit 2, ...</text>
+  <rect x="452" y="46" width="176" height="150" fill="none" stroke="#bbb" stroke-width="1.5"/>
+  <circle cx="460.0" cy="57.4" r="3" fill="#f0aaaa"/>
+  <circle cx="462.5" cy="97.9" r="3" fill="#eea7a7"/>
+  <circle cx="465.1" cy="138.4" r="3" fill="#eca5a5"/>
+  <circle cx="467.6" cy="178.9" r="3" fill="#eaa2a2"/>
+  <circle cx="470.2" cy="81.4" r="3" fill="#e8a0a0"/>
+  <circle cx="472.7" cy="121.9" r="3" fill="#e69d9d"/>
+  <circle cx="475.2" cy="162.4" r="3" fill="#e49b9b"/>
+  <circle cx="477.8" cy="64.9" r="3" fill="#e29898"/>
+  <circle cx="480.3" cy="105.4" r="3" fill="#e09595"/>
+  <circle cx="482.9" cy="145.9" r="3" fill="#de9393"/>
+  <circle cx="485.4" cy="186.4" r="3" fill="#dc9090"/>
+  <circle cx="487.9" cy="88.9" r="3" fill="#da8e8e"/>
+  <circle cx="490.5" cy="129.4" r="3" fill="#d88b8b"/>
+  <circle cx="493.0" cy="169.9" r="3" fill="#d68989"/>
+  <circle cx="495.6" cy="72.4" r="3" fill="#d48686"/>
+  <circle cx="498.1" cy="112.8" r="3" fill="#d28383"/>
+  <circle cx="500.6" cy="153.3" r="3" fill="#cf8181"/>
+  <circle cx="503.2" cy="55.8" r="3" fill="#cd7e7e"/>
+  <circle cx="505.7" cy="96.3" r="3" fill="#cb7c7c"/>
+  <circle cx="508.3" cy="136.8" r="3" fill="#c97979"/>
+  <circle cx="510.8" cy="177.3" r="3" fill="#c77777"/>
+  <circle cx="513.3" cy="79.8" r="3" fill="#c57474"/>
+  <circle cx="515.9" cy="120.3" r="3" fill="#c37171"/>
+  <circle cx="518.4" cy="160.8" r="3" fill="#c16f6f"/>
+  <circle cx="521.0" cy="63.3" r="3" fill="#bf6c6c"/>
+  <circle cx="523.5" cy="103.8" r="3" fill="#bd6a6a"/>
+  <circle cx="526.0" cy="144.3" r="3" fill="#bb6767"/>
+  <circle cx="528.6" cy="184.8" r="3" fill="#b96565"/>
+  <circle cx="531.1" cy="87.3" r="3" fill="#b76262"/>
+  <circle cx="533.7" cy="127.8" r="3" fill="#b55f5f"/>
+  <circle cx="536.2" cy="168.3" r="3" fill="#b35d5d"/>
+  <circle cx="538.7" cy="70.8" r="3" fill="#b15a5a"/>
+  <circle cx="541.3" cy="111.3" r="3" fill="#af5858"/>
+  <circle cx="543.8" cy="151.8" r="3" fill="#ad5555"/>
+  <circle cx="546.3" cy="54.3" r="3" fill="#ab5353"/>
+  <circle cx="548.9" cy="94.8" r="3" fill="#a95050"/>
+  <circle cx="551.4" cy="135.3" r="3" fill="#a74d4d"/>
+  <circle cx="554.0" cy="175.8" r="3" fill="#a54b4b"/>
+  <circle cx="556.5" cy="78.2" r="3" fill="#a34848"/>
+  <circle cx="559.0" cy="118.7" r="3" fill="#a14646"/>
+  <circle cx="561.6" cy="159.2" r="3" fill="#9f4343"/>
+  <circle cx="564.1" cy="61.7" r="3" fill="#9d4141"/>
+  <circle cx="566.7" cy="102.2" r="3" fill="#9b3e3e"/>
+  <circle cx="569.2" cy="142.7" r="3" fill="#993b3b"/>
+  <circle cx="571.7" cy="183.2" r="3" fill="#973939"/>
+  <circle cx="574.3" cy="85.7" r="3" fill="#953636"/>
+  <circle cx="576.8" cy="126.2" r="3" fill="#933434"/>
+  <circle cx="579.4" cy="166.7" r="3" fill="#913131"/>
+  <circle cx="581.9" cy="69.2" r="3" fill="#8e2f2f"/>
+  <circle cx="584.4" cy="109.7" r="3" fill="#8c2c2c"/>
+  <circle cx="587.0" cy="150.2" r="3" fill="#8a2929"/>
+  <circle cx="589.5" cy="52.7" r="3" fill="#882727"/>
+  <circle cx="592.1" cy="93.2" r="3" fill="#862424"/>
+  <circle cx="594.6" cy="133.7" r="3" fill="#842222"/>
+  <circle cx="597.1" cy="174.2" r="3" fill="#821f1f"/>
+  <circle cx="599.7" cy="76.7" r="3" fill="#801d1d"/>
+  <circle cx="602.2" cy="117.2" r="3" fill="#7e1a1a"/>
+  <circle cx="604.8" cy="157.7" r="3" fill="#7c1717"/>
+  <circle cx="607.3" cy="60.2" r="3" fill="#7a1515"/>
+  <circle cx="609.8" cy="100.7" r="3" fill="#781212"/>
+  <circle cx="612.4" cy="141.2" r="3" fill="#761010"/>
+  <circle cx="614.9" cy="181.6" r="3" fill="#740d0d"/>
+  <circle cx="617.5" cy="84.1" r="3" fill="#720b0b"/>
+  <circle cx="620.0" cy="124.6" r="3" fill="#700808"/>
+  <text x="460.0" y="211.0" text-anchor="middle" fill="#666" font-size="11">0</text>
+  <text x="620.0" y="211.0" text-anchor="middle" fill="#666" font-size="11">63</text>
+  <text x="540.0" y="212.0" text-anchor="middle">unit</text>
+  <text x="446.0" y="194.0" text-anchor="end" fill="#666" font-size="11">0</text>
+  <text x="446.0" y="56.0" text-anchor="end" fill="#666" font-size="11">1</text>
+  <text x="440.0" y="121.0" text-anchor="middle" transform="rotate(-90 440.0 121.0)">value</text>
+  <text x="320.0" y="242.0" text-anchor="middle">grey: a stride the library does not make; red: where the relation remains</text>
 </svg>

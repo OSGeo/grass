@@ -491,99 +491,155 @@ def parts_figure():
     return svg
 
 
+# The dot figures show one value for each of this many units, batches or seeds.
+COMPUTATIONS = 64
+# The batch of the example in the section on capacity, a million units of a
+# million draws each, and the distance between its batches, which is odd.
+BATCH_DRAWS = 1000000 * 1000000
+BATCH_DISTANCE = BATCH_DRAWS | 1
+
+REDS = ((240, 170, 170), (112, 8, 8))
+GREYS = ((200, 200, 200), (17, 17, 17))
+PALE_GREYS = ((225, 225, 225), (120, 120, 120))
+
+
+def shade(light, dark, fraction):
+    """Color between two colors, as #rrggbb"""
+    return "#" + "".join(
+        f"{round(a + (b - a) * fraction):02x}" for a, b in zip(light, dark, strict=True)
+    )
+
+
+def dot_panel(svg, x0, y0, size, heights, titles, x_title, colors):
+    """Plot one value for each computation against the number of the computation
+
+    The dots darken with the number. The axes carry their minimum and maximum.
+    """
+    width, height = size
+    for row, title in enumerate(titles):
+        svg.text(x0, y0 - 10 - 16 * (len(titles) - 1 - row), title)
+    svg.add(
+        f'<rect x="{x0}" y="{y0}" width="{width}" height="{height}" fill="none" '
+        'stroke="#bbb" stroke-width="1.5"/>'
+    )
+    last = len(heights) - 1
+    for k, value in enumerate(heights):
+        x = x0 + 8 + k * (width - 16) / last
+        y = y0 + height - 6 - value * (height - 12)
+        color = shade(*colors, k / last)
+        svg.add(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="3" fill="{color}"/>')
+    grey = {"size": 11, "fill": "#666"}
+    svg.text(x0 + 8, y0 + height + 15, "0", anchor="middle", **grey)
+    svg.text(x0 + width - 8, y0 + height + 15, last, anchor="middle", **grey)
+    svg.text(x0 + width / 2, y0 + height + 16, x_title, anchor="middle")
+    svg.text(x0 - 6, y0 + height - 2, "0", anchor="end", **grey)
+    svg.text(x0 - 6, y0 + 10, "1", anchor="end", **grey)
+    svg.text(x0 - 12, y0 + height / 2, "value", anchor="middle", rotate=True)
+
+
 def strides_figure():
-    """The bounded layout and what an even bound as the stride would give"""
-    svg = Bars(
-        "The bounded layout with an odd stride and what an even bound taken as "
-        "the stride would give",
-        222,
-        164,
+    """What an odd stride fixes, and where the relation it moves away remains"""
+    bound = 1 << 24
+    stride = bound | 1
+    start = seed_state(0)
+    last = COMPUTATIONS - 1
+    even = [values(jump(start, u * bound), 1)[0] for u in range(COMPUTATIONS)]
+    odd = [values(jump(start, u * stride), 1)[0] for u in range(COMPUTATIONS)]
+    # Draw 64 of unit 0, 63 of unit 1 and so on, down to draw 1 of unit 63.
+    shifted = [
+        values(jump(start, u * stride + last - u), 1)[0] for u in range(COMPUTATIONS)
+    ]
+    svg = Svg(
+        "The first values of 64 units an even and an odd number of draws apart, "
+        "and the draws between which the relation remains",
+        640,
+        250,
     )
-    svg.bounded(48)
-    y = 134
-    svg.comment(
-        "Without the rounding: an even bound as the stride; the units 1, 2 and 4",
-        "strides after unit 0 start at distances which carry the stride's power",
-        "of two as well. In grey, since the library does not make this layout.",
+    panels = (
+        (
+            36,
+            ["an even stride, 2^24:", "the first value of every unit"],
+            even,
+            PALE_GREYS,
+            (
+                "An even stride, which the library does not make: the first values "
+                "of the units lie on lines."
+            ),
+        ),
+        (
+            244,
+            ["an odd stride, 2^24 + 1:", "the first value of every unit"],
+            odd,
+            GREYS,
+            "The odd stride of the library: the first values of the units scatter.",
+        ),
+        (
+            452,
+            ["the odd stride: draw 64 of unit 0,", "63 of unit 1, 62 of unit 2, ..."],
+            shifted,
+            REDS,
+            (
+                "Where the relation remains with the odd stride: between draws "
+                "whose numbers fall by one from unit to unit."
+            ),
+        ),
     )
-    svg.text(svg.left, y - 10, "with an even bound taken as the stride", fill=GREY)
-    svg.bar(y, GREY)
-    svg.strides(y, 36, 12, GREY, svg.drawn_short, 0.72)
-    svg.seed(y, grey=True)
-    for unit in (1, 2, 4):
-        svg.red_mark(svg.left + unit * 36, y)
+    for x0, titles, heights, colors, note in panels:
+        svg.comment(note)
+        dot_panel(svg, x0, 46, (176, 150), heights, titles, "unit", colors)
     svg.text(
-        svg.left + svg.span / 2,
-        y + 46,
-        "an even bound would tie more low bits of the values of units 1, 2, and "
-        "4 to those of unit 0",
+        320,
+        242,
+        "grey: a stride the library does not make; red: where the relation remains",
         anchor="middle",
-        fill=RED,
-    )
-    svg.text(
-        svg.right,
-        y + 72,
-        "red dot: the seed; dashed line: the end of the span; grey: not a layout "
-        "the library makes",
-        anchor="end",
     )
     return svg
 
 
-# The seeds figure: 64 computations, either seeded 42 to 105 or drawing from
-# batches 0 to 63 of an exact layout of seed 42 with a million units of a
-# million draws each.
-COMPUTATIONS = 64
-BATCH_DRAWS = 1000000 * 1000000
-
-
 def seeds_figure():
     """The first values of consecutive seeds and of batches of one layout"""
-    by_seed = [values(seed_state(42 + k), 2) for k in range(COMPUTATIONS)]
+    by_seed = [values(seed_state(k), 1)[0] for k in range(COMPUTATIONS)]
     by_batch = [
-        values(jump(seed_state(42), b * BATCH_DRAWS), 2) for b in range(COMPUTATIONS)
+        values(jump(seed_state(0), b * BATCH_DISTANCE), 1)[0]
+        for b in range(COMPUTATIONS)
     ]
-    width, height = 230, 110
-    columns, rows = (80, 370), (52, 196)
     svg = Svg(
-        "The first two values of 64 consecutive seeds, which lie on lines, and of "
-        "64 batches of one layout, which scatter",
+        "The first value of 64 consecutive seeds, which lie on lines, and of 64 "
+        "batches of one layout, which scatter",
         640,
-        340,
+        262,
     )
-
-    def plot(x0, y0, series, draw, color):
-        svg.add(
-            f'<rect x="{x0}" y="{y0}" width="{width}" height="{height}" fill="none" '
-            'stroke="#bbb" stroke-width="1.5"/>'
-        )
-        for k in range(COMPUTATIONS):
-            x = x0 + 6 + k * (width - 12) / (COMPUTATIONS - 1)
-            y = y0 + height - 4 - series[k][draw] * (height - 8)
-            svg.add(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.3" fill="{color}"/>')
-        svg.text(x0 - 6, y0 + height - 1, "0", anchor="end", size=11, fill="#888")
-        svg.text(x0 - 6, y0 + 9, "1", anchor="end", size=11, fill="#888")
-
     svg.comment(
-        "Consecutive seeds: the value of seed 42 + k is that of seed 42 plus k",
-        "times one amount, modulo 1, so the values lie on straight lines.",
+        "Consecutive seeds: the value of seed k is that of seed 0 plus k times",
+        "one amount, modulo 1, so the values lie on straight lines.",
     )
-    svg.text(columns[0], 22, "seeds 42, 43, ... 105:")
-    svg.text(columns[0], 38, "the values lie on lines")
+    dot_panel(
+        svg,
+        60,
+        46,
+        (250, 170),
+        by_seed,
+        ["64 computations seeded 0, 1, 2, ... 63:", "the first value of each"],
+        "seed",
+        REDS,
+    )
     svg.comment(
         "Batches of one layout: unit 0 of batches 0 to 63 of an exact layout of",
-        "seed 42 with a million units of a million draws each.",
+        "seed 0 with a million units of a million draws each.",
     )
-    svg.text(columns[1], 22, "batches 0, 1, ... 63 of one layout:")
-    svg.text(columns[1], 38, "the values scatter")
-    for draw, y0 in enumerate(rows):
-        svg.text(columns[0] - 26, y0 + height / 2 - 4, "draw", anchor="end")
-        svg.text(columns[0] - 26, y0 + height / 2 + 12, f"{draw + 1}", anchor="end")
-        plot(columns[0], y0, by_seed, draw, RED)
-        plot(columns[1], y0, by_batch, draw, INK)
-    y = rows[1] + height + 18
-    svg.text(columns[0] + width / 2, y, "seed, from 42 to 105", anchor="middle")
-    svg.text(columns[1] + width / 2, y, "batch, from 0 to 63", anchor="middle")
+    dot_panel(
+        svg,
+        360,
+        46,
+        (250, 170),
+        by_batch,
+        ["64 batches of one layout of seed 0:", "the first value of each"],
+        "batch",
+        GREYS,
+    )
+    svg.text(
+        320, 254, "each dot is one computation, darker with its number", anchor="middle"
+    )
     return svg
 
 
@@ -626,9 +682,8 @@ def print_numbers():
     step = [(b - a) % 1 for a, b in zip(first, values(seed_state(43), 8), strict=True)]
     print("\nStep from one seed to the next, at draws 1 to 4:")
     print("  " + ", ".join(f"{s:.4f}" for s in step[:4]))
-    print(
-        f"\nBatches of {BATCH_DRAWS:g} draws which fit into the span: {SPAN // BATCH_DRAWS}"
-    )
+    fit = (SPAN - BATCH_DRAWS) // BATCH_DISTANCE + 1
+    print(f"\nBatches of {BATCH_DRAWS:g} draws which fit into the span: {fit}")
     print(f"Units of a million draws which fit into one batch: {SPAN // 1000000}")
 
 
