@@ -305,14 +305,14 @@ apart.
 
 ### Relations by distance {#gislib_random_streams_distance}
 
-A layout does not change the generator; it places the units' streams along its
-one sequence. Quality can therefore be lost not within a stream but between
-two positions in use, and what relates two positions is their distance in
-draws. A distance divisible by 2^(46 - k) leaves only the top k bits of the
-difference of the two states free, so the values drawn at the two positions
-differ by one of 2^k constants in turn. With one constant the two positions
-are a constant-shift twin, and with two an alternating-shift twin. The table
-lists the relations from the largest distance down.
+What relates two positions on the ring is their distance in draws: the more
+often 2 divides it, the fewer constants the differences of their values cycle
+through. Positions whose values differ by one constant are a constant-shift
+twin, and by two constants in turn an alternating-shift twin. The table lists
+the relations from the largest distance down, with the differences for seed 42
+as an example. The expected occurrence is the number of distances with the
+relation which a computation drawing T = 10^11 values in total is expected to
+have between the positions it uses; below 1, it reads as a chance.
 
 | distance in draws | part of the ring | relation | differences for seed 42 | expected occurrence |
 | --- | --- | --- | --- | --- |
@@ -325,52 +325,33 @@ lists the relations from the largest distance down.
 | 2^(46 - k), for k from 1 to 46 | 1/2^(k + 2) | one of 2^k constants, cycling | 2^k values, then the same again | 2^k × T / 2^46 |
 | any odd distance | an odd multiple of 1/2^48 | the low two bits fixed, 2^46 constants which do not repeat within the span | no pattern | about T, that is half of the distances which occur |
 
-The differences are those between the values drawn that distance apart from
-seed 42, modulo 1. The expected occurrence is the number of distances with the
-row's relation expected between the positions a computation uses when it draws
-T = 10^11 values in total, for example a million units drawing 100,000 values
-each; below 1, it reads as a chance. Such a computation has at most about 2T
-of the 2^46 distances within the span between its positions, and 2^(k - 1) of
-all the distances have the relation of the row with k. That row is the general
-rule, of which the rows from 2^45 down are cases and an odd distance the last
-one.
-
 What a tool should be aware of:
 
-- A relation at a large distance is exact and easy to see in the values, but a
-  layout rarely has two positions that far apart.
-- A relation at a small distance occurs in most layouts and cannot be seen in
-  the values at the precision computations use; only a comparison of the low
-  bits of the differences finds it.
-- The expected occurrence grows in proportion to the number of values drawn in
-  total, so the largest computations are the ones to look at.
-- The estimate holds for bounded and whole-span layouts. Batch 0 of an exact
-  layout draws the seed's sequence without gaps, so it has every distance up
-  to its total number of draws, exactly as the single sequence it reproduces
-  has.
+- A relation at a large distance is easy to see in the values, but rarely
+  occurs.
+- A relation at a small distance occurs in most layouts, but cannot be seen in
+  the values at the precision computations use.
+- Batch 0 of an exact layout is the seed's sequence and has its structure, no
+  better and no worse.
 
 What the library does about it:
 
-- Every layout lies within the span, where no two positions are a quarter of
-  the ring or more apart, so constant-shift twins do not occur.
+- Every layout lies within the span, so constant-shift twins do not occur.
 - A whole-span layout divides the span into an odd number of parts, so that no
-  unit starts at half or at a quarter of the span. The units nearest to those
-  positions start well inside a stride away from them, and the limit on the
-  number of units keeps the rounding of the stride from moving a unit there.
-- Bounded and whole-span layouts have odd strides, which leave the units
-  related in the fewest low bits (see \ref gislib_random_streams_odd).
+  unit starts at half or at a quarter of the span.
+- Bounded and whole-span layouts have odd strides (see
+  \ref gislib_random_streams_odd).
 
 \image html random_streams_parts.svg
 
 The figure shows a whole-span layout of six units, with seven parts, and in
 grey what six parts would give: unit 3 would start at half the span, and its
 values would be related to those of unit 0 from its first draw. With seven
-parts, half the span lies in the middle of the stride of unit 3, which reaches
-that position only after drawing half of its stride.
+parts, unit 3 reaches that position only after drawing half of its stride.
 
 ### Odd strides {#gislib_random_streams_odd}
 
-By the rule above, a distance divisible by 2^j and by no higher power of two
+A distance divisible by 2^j and by no higher power of two
 fixes the low j + 2 bits of the difference of two states. Units 2^i apart in
 number start 2^i × stride apart; with an odd stride that distance is divisible
 by 2^i and by no higher power of two, so units 1, 2 and 4 apart have the low
