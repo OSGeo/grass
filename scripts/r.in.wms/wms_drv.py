@@ -348,11 +348,13 @@ class BaseRequestMgr:
         for col in ["min_col", "max_col"]:
             for row in ["min_row", "max_row"]:
                 if (
-                    self.t_num_bbox["min_row"] <= self.t_num_bbox[row]
-                    and self.t_num_bbox[row] <= mat_num_bbox["max_row"]
+                    self.t_num_bbox["min_row"]
+                    <= self.t_num_bbox[row]
+                    <= mat_num_bbox["max_row"]
                 ) and (
-                    self.t_num_bbox["min_col"] <= self.t_num_bbox[col]
-                    and self.t_num_bbox[col] <= mat_num_bbox["max_col"]
+                    self.t_num_bbox["min_col"]
+                    <= self.t_num_bbox[col]
+                    <= mat_num_bbox["max_col"]
                 ):
                     self.intersects = True
 
