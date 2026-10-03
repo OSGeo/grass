@@ -311,6 +311,35 @@ The printed summary:
 }
 ```
 
+### Random numbers and parallel processing
+
+The walkers are placed and moved using pseudo-random numbers. The seed
+is given by **random_seed**, generated when the **-s** flag is used, and
+12345 when neither is given. The generated seed is reported with
+**--verbose**, and the environment variable `GRASS_RANDOM_SEED` sets it
+for scripts. The seed is an integer from -2147483648 to 4294967295;
+other values are an error. Each walker draws from a sequence of random
+numbers of its own, determined by the seed and the walker's number, so
+every walker receives the same random numbers whatever the number of
+threads given by **nprocs**. Results for a given seed differ from those
+of GRASS versions in which all walkers drew from one shared sequence.
+
+With **nprocs=1**, runs with the same seed and inputs give identical
+results. With more threads, every walker's weight is added to the water
+depth, but walkers in the same cell add their weights in an order which
+depends on the threads, and the floating point sums differ slightly with
+the order. Walkers in the same cell also use up the infiltration
+capacity at the same time without synchronization. The walkers
+themselves move the same way for any **nprocs** as long as the water
+depth stays below **hmax**, above which the diffusion depends on the
+depth, and there is no infiltration. Results with **nprocs** greater
+than 1 are close to, but not identical with, those with **nprocs=1**,
+and repeated runs with the same **nprocs** may differ slightly. Use
+**nprocs=1** when results must be reproducible.
+
+When runs with several seeds are compared, use seeds below 1073741824
+(2^30): seeds which differ by 2^30 or 2^31 give related random numbers.
+
 ## EXAMPLE
 
 This example uses the

@@ -907,8 +907,10 @@ def test_walkers_output(long_slope_session):
 def test_nprocs_gives_result_within_noise(east_slope_session):
     """Multiple threads produce a result close to a single thread.
 
-    Threads share the random number generator state, so multi-threaded
-    results vary between runs even with a fixed seed. Total depth should
+    Each walker draws the same random numbers with any number of threads,
+    but threads add to the water depth without synchronization, so
+    multi-threaded results vary between runs even with a fixed seed. Total
+    depth should
     still agree with the single-threaded result within Monte Carlo noise,
     using the same tolerance as test_results_consistent_across_seeds.
     """
