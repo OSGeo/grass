@@ -17,6 +17,8 @@
 /*============================= Include Files ==============================*/
 
 /* System include files */
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -626,6 +628,26 @@ struct Counter {
 struct Popen {
     FILE *fp;
     int pid;
+};
+
+/* A position of a pseudo-random number generator owned by the program;
+ * see G_random_state_from_seed() and G_random_state_for_unit(). The
+ * contents are private to the library and may change with the generator;
+ * read and advance the state only through the G_random_*() functions. It
+ * is a plain value: copying it copies the generator's position. */
+struct G_random_state {
+    uint64_t state;
+};
+
+/* A layout: a seed and the way the generator's span is cut into streams
+ * of stride draws, one per unit of work and batch; see
+ * G_random_init_layout(). Private to the library. */
+struct G_random_layout {
+    uint64_t start; /* generator state at the seed */
+    int64_t units;
+    int64_t stride;
+    int64_t batches; /* batches that fit into the span, 0 when none */
+    bool whole_span; /* a layout of the whole span holds a single batch */
 };
 
 typedef int CELL;
