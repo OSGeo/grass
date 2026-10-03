@@ -484,7 +484,7 @@ int main(int argc, char *argv[])
             if (ncats < 1) {
                 Vect_close(&In);
                 Vect_close(&Pro);
-                G_fatal_error(_("No features match Your query"));
+                G_fatal_error(_("No features match your query"));
             }
             if (ncats > 1) {
                 Vect_close(&In);
@@ -649,7 +649,7 @@ int main(int argc, char *argv[])
             ncats = db_select_int(driver, Fi->table, Fi->key, where_opt->answer,
                                   &cats);
             if (ncats < 1)
-                G_fatal_error(_("No features match Your query"));
+                G_fatal_error(_("No features match your query"));
             for (i = 0; i < ncats; i++) {
                 c = Vect_cidx_find_next(&In, field_index, cats[i], otype, 0,
                                         &type, &id);
