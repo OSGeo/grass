@@ -3,10 +3,8 @@
 
    \brief Vedit library - select primitives by query
 
-   (C) 2007-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2007-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -41,7 +39,7 @@ static int merge_lists(struct ilist *alist, struct ilist *blist);
 
    \return number of selected primitives
  */
-int Vedit_select_by_query(struct Map_info *Map, int type, int layer UNUSED,
+int Vedit_select_by_query(struct Map_info *Map, int type, int layer G_UNUSED,
                           double thresh, int query, struct ilist *List)
 {
     int num, line, i;

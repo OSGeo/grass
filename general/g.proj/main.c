@@ -6,11 +6,8 @@
  * PURPOSE:      Provides a means of reporting the contents of GRASS
  *               projection information files and creating
  *               new projection information files.
- * COPYRIGHT:    (C) 2003-2015 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2003-2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -68,7 +65,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("projection"));
     G_add_keyword(_("create project"));
     module->label = _("Prints or modifies GRASS projection information files "
-                      "(in various co-ordinate system descriptions).");
+                      "(in various coordinate system descriptions).");
     module->description = _("Can also be used to create new GRASS projects.");
 
     printinfo = G_define_flag();
@@ -183,7 +180,7 @@ int main(int argc, char *argv[])
     datum->required = NO;
     datum->guisection = _("Datum");
     datum->label =
-        _("Datum (overrides any datum specified in input co-ordinate system)");
+        _("Datum (overrides any datum specified in input coordinate system)");
     datum->description =
         _("Accepts standard GRASS datum codes, or \"list\" to list and exit");
 
@@ -203,7 +200,7 @@ int main(int argc, char *argv[])
     forcedatumtrans->guisection = _("Datum");
     forcedatumtrans->description =
         _("Force override of datum transformation information in input "
-          "co-ordinate system");
+          "coordinate system");
 
     create = G_define_flag();
     create->key = 'c';

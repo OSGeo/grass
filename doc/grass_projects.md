@@ -97,7 +97,7 @@ data file are often the most practical and convenient options.
 Projects can be created in various ways depending on the environment:
 
 - GRASS Python API: Allows creating a project programmatically with the function
-  [`create_project`](https://grass.osgeo.org/grass-stable/manuals/libpython/script.html#script.core.create_project).
+  [`create_project`](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html#grass.script.core.create_project).
     This example creates a project named *my_project* with a specific EPSG code:
 
     ```python

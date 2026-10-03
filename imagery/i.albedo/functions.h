@@ -8,6 +8,8 @@ double bb_alb_aster(double greenchan, double redchan, double nirchan,
                     double swirchan4, double swirchan5, double swirchan6);
 double bb_alb_landsat(double bluechan, double greenchan, double redchan,
                       double nirchan, double chan5, double chan7);
+double bb_alb_sentinel2(double b2chan, double b3chan, double b4chan,
+                        double b8chan, double b11chan, double b12chan);
 double bb_alb_noaa(double redchan, double nirchan);
 
 double bb_alb_modis(double redchan, double nirchan, double chan3, double chan4,

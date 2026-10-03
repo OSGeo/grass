@@ -226,33 +226,29 @@ Hofierka J., Parajka J., Mitasova H., Mitas L., 2002, Multivariate
 Interpolation of Precipitation Using Regularized Spline with Tension.
 Transactions in GIS  6, pp. 135-150.
 
-[Mitas, L., Mitasova, H.](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/),
-1999, Spatial Interpolation. In: P.Longley, M.F. Goodchild, D.J.
-Maguire, D.W.Rhind (Eds.), Geographical Information Systems: Principles,
-Techniques, Management and Applications, Wiley, pp.481-492
+Mitas, L., Mitasova, H., 1999, [Spatial
+Interpolation](https://www.wiley.com/en-us/shop/general-introductory-geography/geographical-information-systems-principles-techniques-management-and-applications-2nd-edition-abridged-p-9780471735458).
+In: P.Longley, M.F. Goodchild, D.J. Maguire, D.W.Rhind (Eds.),
+Geographical Information Systems: Principles, Techniques, Management and
+Applications, Wiley, pp.481-492
 
 Mitas L., Brown W. M., Mitasova H., 1997, [Role of dynamic cartography
 in simulations of landscape processes based on multi-variate
-fields.](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/lcgfin/cg-mitas.html)
-Computers and Geosciences, Vol. 23, No. 4, pp. 437-446 (includes CDROM
-and WWW: <www.elsevier.nl/locate/cgvis>)
+fields.](https://doi.org/10.1016/S0098-3004(97)00007-1)
+Computers and Geosciences, Vol. 23, No. 4, pp. 437-446 (includes CDROM)
 
 Mitasova H., Mitas L.,  Brown W.M.,  D.P. Gerdes, I. Kosinovsky, Baker,
 T.1995, Modeling spatially and temporally distributed phenomena: New
 methods and tools for GRASS GIS. International Journal of GIS, 9 (4),
 special issue on Integrating GIS and Environmental modeling, 433-446.
 
-Mitasova, H., Mitas, L., Brown, B., Kosinovsky, I., Baker, T., Gerdes,
-D. (1994): [Multidimensional interpolation and visualization in GRASS
-GIS](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/viz/ches.html)
-
 [Mitasova H. and Mitas L.
-1993](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/lmg.rev1.ps):
+1993](https://doi.org/10.1007/BF00893171):
 Interpolation by Regularized Spline with Tension: I. Theory and
 Implementation, *Mathematical Geology* 25, 641-655.
 
 [Mitasova H. and Hofierka J.
-1993](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps):
+1993](https://doi.org/10.1007/BF00893172):
 Interpolation by Regularized Spline with Tension: II. Application to
 Terrain Modeling and Surface Geometry Analysis, *Mathematical Geology*
 25, 657-667.

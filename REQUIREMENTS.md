@@ -34,7 +34,7 @@ for other platforms you may have to install some of them.
 - **GDAL/OGR >= 3.7** for import and export of most external raster and
   vector map formats
   GDAL: [https://gdal.org](https://gdal.org)
-- **Python >= 3.10** (for temporal framework, scripts, wxGUI, and ctypes interface)
+- **Python >= 3.11** (for temporal framework, scripts, wxGUI, and ctypes interface)
   [https://www.python.org](https://www.python.org)
 - **MkDocs** with "Material" theme Python packages for the manual pages:
   See `man/mkdocs/requirements.txt`.
@@ -136,7 +136,7 @@ MacOSX users may go here to download precompiled libraries etc.:
 
 ---
 
-© _GRASS Development Team 1997-2025_
+© _GRASS Development Team 1997-2026_
 
 Please report bugs here:
 [https://grass.osgeo.org/contribute/](https://grass.osgeo.org/contribute/)

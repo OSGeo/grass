@@ -7,11 +7,11 @@
 
 -- SPACETIME_REGISTER_TABLE is a placeholder for specific stds map register table name (SQL compliant)
 -- SPACETIME_ID is a placeholder for specific stds id: name@mapset
--- for TGIS < 3 the lines for semantic lables get replaced / commented out
+-- for TGIS < 3 the lines for semantic labels get replaced / commented out
 
 UPDATE strds_metadata
    SET
-       -- Update the min and max values
+       -- Update the number of registered semantic labels
        number_of_semantic_labels = number_of_semantic_labels_new,
        -- Update the min and max values
        min_min = new_stats.min_min_new,

@@ -17,7 +17,7 @@ int getg(double w, double *g[2], int size)
     long i, j, totsize, n, g_row;
     float rsq, sigma, two_ssq, val, sum = 0.0;
 
-    totsize = size * size;
+    totsize = (long)size * size;
     n = size / 2;
     for (i = 0; i < totsize; i++) {
         *(g[0] + i) = 0.0;

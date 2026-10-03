@@ -21,9 +21,6 @@ void close_down(void)
     struct History history;
     char map_title[80], map_type[32];
 
-    /* Close connection with existing input raster. */
-    Rast_unopen(fd_in);
-
     /* Write output raster map and close connection. */
     Rast_close(fd_out);
 
@@ -79,7 +76,7 @@ void close_down(void)
         strcpy(map_type, "Longitudinal curvature");
         Rast_append_history(&history, "Longitudinal curvature is the profile "
                                       "curvature intersecting with the");
-        Rast_append_history(&history, "plane defined by the surfacenormal and "
+        Rast_append_history(&history, "plane defined by the surface normal and "
                                       "maximum gradient direction.");
         break;
 

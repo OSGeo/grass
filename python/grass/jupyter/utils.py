@@ -4,41 +4,33 @@
 #
 # PURPOSE:   This module contains utility functions for InteractiveMap.
 #
-# COPYRIGHT: (C) 2021-2024 Caitlin Haedrich, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2021-2024 Caitlin Haedrich
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Utility functions warpping existing processes in a suitable way"""
+"""Utility functions wrapping existing processes in a suitable way"""
 
 from collections.abc import Mapping
+from io import StringIO
 import tempfile
 import json
 import os
-import multiprocessing
 
 from pathlib import Path
 import grass.script as gs
+from grass.tools import Tools
 
 
 def get_region(env=None):
-    """Returns current computational region as dictionary.
-
-    Additionally, it adds long key names.
-    """
-    region = gs.region(env=env)
-    region["east"] = region["e"]
-    region["west"] = region["w"]
-    region["north"] = region["n"]
-    region["south"] = region["s"]
-    return region
+    """Returns current computational region as dictionary."""
+    tools = Tools(env=env)
+    return tools.g_region(flags="p", format="json").json
 
 
 def get_location_proj_string(env=None):
     """Returns projection of environment in PROJ.4 format"""
-    out = gs.read_command("g.proj", flags="fp", format="proj4", env=env)
-    return out.strip()
+    tools = Tools(env=env)
+    return tools.g_proj(flags="fp", format="proj4").text
 
 
 def reproject_region(region, from_proj, to_proj):
@@ -98,28 +90,9 @@ def reproject_latlon(coord):
     :param coord: coordinates given as tuple (latitude, longitude)
     :return: reprojected coordinates (returned as tuple)
     """
-    # Prepare the input coordinate string
     coord_str = f"{coord[1]} {coord[0]}\n"
-
-    # Start the m.proj command
-    proc = gs.start_command(
-        "m.proj",
-        input="-",
-        flags="i",
-        separator=",",
-        stdin=gs.PIPE,
-        stdout=gs.PIPE,
-        stderr=gs.PIPE,
-    )
-
-    proc.stdin.write(gs.encode(coord_str))
-    proc.stdin.close()
-    proc.stdin = None
-    proj_output, _ = proc.communicate()
-
-    output = gs.decode(proj_output).splitlines()
-    east, north, elev = map(float, output[0].split(","))
-
+    output = Tools().m_proj(input=StringIO(coord_str), flags="i", separator=",").text
+    east, north, elev = map(float, output.splitlines()[0].split(","))
     return east, north, elev
 
 
@@ -447,11 +420,7 @@ def get_number_of_cores(requested, env=None):
     if nprocs is not None:
         return int(nprocs)
 
-    try:
-        num_cores = len(os.sched_getaffinity(0))
-    except AttributeError:
-        num_cores = multiprocessing.cpu_count()
-    return min(requested, max(1, num_cores - 1))
+    return min(requested, max(1, gs.available_cpus() - 1))
 
 
 def get_region_bounds_latlon():

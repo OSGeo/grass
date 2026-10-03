@@ -6,10 +6,8 @@
  * PURPOSE:   Rapidly fill "no data" cells in a raster map by simple
  *            interpolation.
  *
- * COPYRIGHT: (C) 2011-2018 by the GRASS Development Team
- *
- *            This program is free software under the GPL (>=v2)
- *            Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2011-2018 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************************
  */
@@ -233,8 +231,8 @@ void *get_input_row(unsigned long row_idx)
  * types of information to be collected.
  */
 
-void collect_values_unfiltered(double val1, double val2, double min UNUSED,
-                               double max UNUSED, stats_struct *stats)
+void collect_values_unfiltered(double val1, double val2, double min G_UNUSED,
+                               double max G_UNUSED, stats_struct *stats)
 {
     stats->values[stats->num_values] = val1;
     stats->certainty += val2;
@@ -250,7 +248,8 @@ void collect_values_filtered(double val1, double val2, double min, double max,
 }
 
 void collect_values_and_weights_unfiltered(double val1, double val2,
-                                           double min UNUSED, double max UNUSED,
+                                           double min G_UNUSED,
+                                           double max G_UNUSED,
                                            stats_struct *stats)
 {
     stats->values[stats->num_values] = val1;
@@ -268,8 +267,8 @@ void collect_values_and_weights_filtered(double val1, double val2, double min,
 }
 
 void collect_values_and_frequencies_unfiltered(double val1, double val2,
-                                               double min UNUSED,
-                                               double max UNUSED,
+                                               double min G_UNUSED,
+                                               double max G_UNUSED,
                                                stats_struct *stats)
 {
     unsigned long i;
