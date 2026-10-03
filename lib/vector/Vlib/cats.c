@@ -477,12 +477,17 @@ int Vect_array_to_cat_list(const int *vals, int nvals, struct cat_list *list)
 
    Allocated array should be freed by G_free().
 
+   An empty list is an error rather than an empty selection: the array and
+   count are the only outputs, and a caller that filters on them cannot
+   express "select nothing" through a null array, which downstream code
+   reads as "no filter" instead.
+
    \param list pointer to cat_list struct
    \param[out] vals array of integers
    \param[out] nvals number of values
 
    \return 0 on success
-   \return -1 on failure
+   \return -1 on failure, including a list with no ranges
  */
 int Vect_cat_list_to_array(const struct cat_list *list, int **vals, int *nvals)
 {
@@ -507,6 +512,14 @@ int Vect_cat_list_to_array(const struct cat_list *list, int **vals, int *nvals)
             cats[j] = list->min[i] + k;
         }
         n_cats += n;
+    }
+
+    /* Without this, cats is still NULL here and cats[0] below is a null
+       pointer dereference. Reporting failure rather than an empty array
+       keeps the caller from reading it as "no filter": see the note above. */
+    if (n_cats == 0) {
+        G_free(cats);
+        return -1;
     }
 
     /* sort array */
