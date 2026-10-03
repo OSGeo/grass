@@ -311,6 +311,28 @@ The printed summary:
 }
 ```
 
+### Performance
+
+To enable parallel processing, the user can specify the number of
+threads to be used with the **nprocs** parameter (default 1). Figures
+below show benchmark results for the `elevation` raster map of the
+SECREF North Carolina dataset at 4 m, 2 m and 1 m resolution with the
+default number of walkers, as the mean of 3 runs on Intel® Xeon® W-2295
+CPU @ 3.00GHz × 18. See the benchmark script in the source code for
+more details.
+
+The time step is derived from the cell size and the mean flow velocity,
+so the number of iterations, and with it the run time, depends on the
+terrain as well as on the number of cells. As a result, the benchmark
+results may vary depending on the study area.
+
+![time for r.sim.water with different numbers of cells](r_sim_water_benchmark_time.png)
+![speedup for r.sim.water with different numbers of cells](r_sim_water_benchmark_speedup.png)
+![efficiency for r.sim.water with different numbers of cells](r_sim_water_benchmark_efficiency.png)  
+*Figure: Benchmark shows execution time, parallel speedup and efficiency
+for different numbers of cells (33k, 131k and 525k); shading shows the
+range of the 3 runs.*
+
 ## EXAMPLE
 
 This example uses the
