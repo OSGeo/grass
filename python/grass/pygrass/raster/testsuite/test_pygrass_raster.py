@@ -2,7 +2,7 @@ from grass.exceptions import OpenError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
-from grass.pygrass.raster import RasterRow
+from grass.pygrass.raster import RasterRow, RasterSegment
 
 
 class RasterRowTestCase(TestCase):
@@ -86,6 +86,54 @@ class RasterRowTestCase(TestCase):
             # Index is out of range
             r.open()
             r[9999]
+        r.close()
+
+
+class RasterSegmentTestCase(TestCase):
+    name = "RasterSegmentTestCase_map"
+
+    @classmethod
+    def setUpClass(cls):
+        """Create test raster map and region"""
+        cls.use_temp_region()
+        cls.runModule("g.region", n=40, s=0, e=40, w=0, res=10)
+        cls.runModule(
+            "r.mapcalc",
+            expression="%s = row() + (10.0 * col())" % (cls.name),
+            overwrite=True,
+        )
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove the generated raster map, if exists"""
+        cls.runModule("g.remove", flags="f", type="raster", name=cls.name)
+        cls.del_temp_region()
+
+    def test_open_r_not_exist(self):
+        notexist = RasterSegment(self.name + "notexist")
+        with self.assertRaises(OpenError):
+            notexist.open(mode="r")
+
+    def test_open_w_already_exists(self):
+        r = RasterSegment(self.name)
+        with self.assertRaises(OpenError):
+            r.open(mode="w", mtype="DCELL", overwrite=False)
+
+    def test_open_rw_already_exists(self):
+        r = RasterSegment(self.name)
+        with self.assertRaises(OpenError):
+            r.open(mode="rw", overwrite=False)
+
+    def test_open_w_overwrite(self):
+        r = RasterSegment(self.name)
+        r.open(mode="w", mtype="DCELL", overwrite=True)
+        self.assertTrue(r.is_open())
+        r.close()
+
+    def test_open_rw_overwrite(self):
+        r = RasterSegment(self.name)
+        r.open(mode="rw", overwrite=True)
+        self.assertTrue(r.is_open())
         r.close()
 
 
