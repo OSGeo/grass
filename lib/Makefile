@@ -19,6 +19,7 @@ SUBDIRS = \
 	bitmap \
 	btree \
 	btree2 \
+	octree \
 	display \
 	db \
 	fonts \
