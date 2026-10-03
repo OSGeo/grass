@@ -33,7 +33,7 @@ name: Verify Success reusable workflow
 #       - a-job-id
 #       - another-job-id
 #     if: ${{ always() }}
-#     uses: ./.github/workflows/verify-success.yml
+#     uses: $/.github/workflows/verify-success.yml
 #     with:
 #       needs_context: ${{ toJson(needs) }}
 # ```
