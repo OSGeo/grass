@@ -42,8 +42,8 @@ int specsyn(double *data[2], /* Array holding complex data to transform. */
     double phase, rad, /* polar coordinates of Fourier coeff.  */
         *temp[2];
 
-    temp[0] = (double *)G_malloc(nn * nn * sizeof(double));
-    temp[1] = (double *)G_malloc(nn * nn * sizeof(double));
+    temp[0] = (double *)G_malloc((size_t)nn * nn * sizeof(double));
+    temp[1] = (double *)G_malloc((size_t)nn * nn * sizeof(double));
 
     /* ---------------------------------------------------------------- */
     /* ---                   Create fractal surface                 --- */
