@@ -1184,9 +1184,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         self.layerPage[layer] = {"browsePage": panel.GetId()}
 
-        label = _("Table")
-        if not self.dbMgrData["editable"]:
-            label += _(" (read-only)")
+        label = _("Table") if self.dbMgrData["editable"] else _("Table (read-only)")
 
         if pos == -1:
             pos = self.GetPageCount()
@@ -2329,9 +2327,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         self.layerPage[layer] = {}
         panel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.layerPage[layer]["tablePage"] = panel.GetId()
-        label = _("Table")
-        if not self.dbMgrData["editable"]:
-            label += _(" (read-only)")
+        label = _("Table") if self.dbMgrData["editable"] else _("Table (read-only)")
 
         if pos == -1:
             pos = self.GetPageCount()
