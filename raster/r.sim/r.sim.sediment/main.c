@@ -321,7 +321,7 @@ int main(int argc, char *argv[])
                              ? SUMMARY_JSON
                              : SUMMARY_PLAIN;
 
-    long long seed = simwe_seed(parm.seed, flag.generateSeed);
+    int64_t seed = simwe_seed(parm.seed, flag.generateSeed);
 
     G_get_set_window(&cellhd);
 

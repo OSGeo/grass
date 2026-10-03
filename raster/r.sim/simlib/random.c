@@ -1,6 +1,7 @@
 /* random.c (simlib), 20.nov.2002, JH */
 
 #include <errno.h>
+#include <inttypes.h>
 #include <math.h>
 #include <stdlib.h>
 
@@ -21,14 +22,14 @@
  *
  * \return the seed
  */
-long long simwe_seed(const struct Option *seed, const struct Flag *generate)
+int64_t simwe_seed(const struct Option *seed, const struct Flag *generate)
 {
-    long long value;
+    int64_t value;
     struct G_random_state check;
 
     if (generate->answer) {
         value = G_random_generate_seed();
-        G_verbose_message(_("Generated random seed (-s): %lld"), value);
+        G_verbose_message(_("Generated random seed (-s): %" PRId64), value);
     }
     else if (seed->answer) {
         char *end;
@@ -37,8 +38,8 @@ long long simwe_seed(const struct Option *seed, const struct Flag *generate)
         value = strtoll(seed->answer, &end, 10);
         if (end == seed->answer || *end != '\0' || errno == ERANGE)
             G_fatal_error(_("Invalid random seed <%s>"), seed->answer);
-        G_verbose_message(_("Read random seed from %s option: %lld"), seed->key,
-                          value);
+        G_verbose_message(_("Read random seed from %s option: %" PRId64),
+                          seed->key, value);
     }
     else {
         /* default as it used to be */

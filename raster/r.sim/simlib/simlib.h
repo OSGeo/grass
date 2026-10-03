@@ -5,6 +5,7 @@
  * \brief This is the interface for the simlib (SIMWE) library.
  */
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 
 #include <grass/gis.h>
@@ -39,7 +40,7 @@ typedef struct {
     int timesec;        // Time how long the simulation runs [minutes]
     bool ts;            // Time series output
     double mintimestep; // Minimum time step for the simulation [seconds]
-    long long seed;     // Seed of the walkers' random numbers
+    int64_t seed;       // Seed of the walkers' random numbers
 } Settings;
 
 typedef struct {
@@ -209,7 +210,7 @@ void create_observation_points(ObservationPoints *points);
 void derivatives(const Geometry *geometry, float **elevation, double **dx,
                  double **dy);
 
-long long simwe_seed(const struct Option *seed, const struct Flag *generate);
+int64_t simwe_seed(const struct Option *seed, const struct Flag *generate);
 void gasdev(struct G_random_state *state, double *x, double *y);
 double amax1(double, double);
 double amin1(double, double);
