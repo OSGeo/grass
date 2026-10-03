@@ -62,8 +62,8 @@ int execute(char *sql, cursor *c)
 
     if (yyparse() != 0) {
         G_free(tmpsql);
-        db_d_append_error("%s (%s) %s\n%s\n", _("SQL parser error"), st->errmsg,
-                          _("in statement:"), sql);
+        db_d_append_error(_("SQL parser error: %s\n"), st->errmsg);
+        db_d_append_error(_("Statement: %s\n"), sql);
         sqpFreeStmt(st);
         return DB_FAILED;
     }
