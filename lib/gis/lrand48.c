@@ -36,7 +36,7 @@
  */
 
 #include <errno.h>
-#include <limits.h>
+#include <inttypes.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -78,7 +78,7 @@ typedef signed int int32;
 
 /* The most units a layout of the whole span takes; see
  * G_random_init_layout() for why. */
-#define WHOLE_SPAN_MAX_UNITS (1LL << 20)
+#define WHOLE_SPAN_MAX_UNITS (INT64_C(1) << 20)
 
 #if LRAND48_ATOMIC
 
@@ -131,18 +131,18 @@ void G_srand48(long seedval)
 /* The seeds the generator tells apart: G_srand48() uses the low 32 bits of
  * the seed, and this range names every such seed once, as a signed or an
  * unsigned 32-bit value. */
-static int seed_in_range(long long seed)
+static int seed_in_range(int64_t seed)
 {
-    return seed >= -(1LL << 31) && seed <= (1LL << 32) - 1;
+    return seed >= -(INT64_C(1) << 31) && seed <= (INT64_C(1) << 32) - 1;
 }
 
 /* Read a seed from an environment variable. An unset or empty variable
  * gives no seed, so that the caller can try the next source. */
-static int seed_from_environment(const char *name, long long *seed)
+static int seed_from_environment(const char *name, int64_t *seed)
 {
     const char *text = getenv(name);
     char *end;
-    long long value;
+    int64_t value;
 
     if (!text || !*text)
         return 0;
@@ -157,9 +157,9 @@ static int seed_from_environment(const char *name, long long *seed)
         G_fatal_error(_("Random number seed %s from %s is not an integer"),
                       text, name);
     if (!seed_in_range(value)) {
-        long long reduced = (long long)((uint64_t)value & 0xFFFFFFFF);
+        int64_t reduced = (int64_t)((uint64_t)value & 0xFFFFFFFF);
 
-        G_warning(_("Random number seed %s from %s is used as %lld, "
+        G_warning(_("Random number seed %s from %s is used as %" PRId64 ", "
                     "its low 32 bits"),
                   text, name, reduced);
         value = reduced;
@@ -174,7 +174,7 @@ static int seed_from_environment(const char *name, long long *seed)
  * The seed is the value of the environment variable GRASS_RANDOM_SEED, or
  * of SOURCE_DATE_EPOCH when GRASS_RANDOM_SEED is not set or empty, and
  * otherwise a weak hash of the current time and process ID. A value from
- * the environment must be a decimal integer within the range of long long,
+ * the environment must be a decimal integer within the range of int64_t,
  * with nothing after it (leading white space and a sign are allowed);
  * anything else is a fatal error naming the variable. A value from -2^31
  * to 2^32 - 1 is returned as it is, and a value outside that range is
@@ -193,9 +193,9 @@ static int seed_from_environment(const char *name, long long *seed)
  *
  * \return the seed
  */
-long long G_random_generate_seed(void)
+int64_t G_random_generate_seed(void)
 {
-    long long given;
+    int64_t given;
     uint64_t seed;
 
     if (seed_from_environment("GRASS_RANDOM_SEED", &given) ||
@@ -221,7 +221,7 @@ long long G_random_generate_seed(void)
     }
 #endif
 
-    return (long long)(seed & 0xFFFFFFFF);
+    return (int64_t)(seed & 0xFFFFFFFF);
 }
 
 /*!
@@ -242,7 +242,7 @@ long long G_random_generate_seed(void)
  */
 long G_srand48_auto(void)
 {
-    long long seed = G_random_generate_seed();
+    int64_t seed = G_random_generate_seed();
 
     G_srand48((long)seed);
     return (long)seed;
@@ -378,7 +378,7 @@ static uint64_t lcg_step(uint64_t x)
 /* Turn a seed into a generator state the way G_srand48() does: only the
  * low 32 bits are used, so a negative seed gives the state of its two's
  * complement 32-bit value. */
-static uint64_t lcg_seed(long long seed)
+static uint64_t lcg_seed(int64_t seed)
 {
     return (((uint64_t)seed & 0xFFFFFFFF) << 16) | 0x330E;
 }
@@ -410,19 +410,19 @@ static uint64_t lcg_jump(uint64_t x, uint64_t steps)
  * as signed or as unsigned 32-bit values are accepted, so -1 and
  * 4294967295 are both accepted and are the same seed; anything else is
  * rejected rather than silently losing its high bits. */
-static void check_seed(long long seed)
+static void check_seed(int64_t seed)
 {
     if (!seed_in_range(seed))
-        G_fatal_error(_("Random number seed %lld is outside the range from "
-                        "-2147483648 to 4294967295 the generator can use"),
+        G_fatal_error(_("Random number seed %" PRId64 " is outside the range "
+                        "from -2147483648 to 4294967295 the generator can use"),
                       seed);
 }
 
-static void check_units(long long units)
+static void check_units(int64_t units)
 {
     if (units <= 0)
         G_fatal_error(_("The number of units of a random number layout must "
-                        "be positive, not %lld"),
+                        "be positive, not %" PRId64),
                       units);
 }
 
@@ -441,8 +441,8 @@ static uint64_t batch_distance(const struct G_random_layout *layout)
  * then those of the next batch. The batches that fit are those whose last
  * stream ends within the span. Callers must check beforehand that
  * units * stride does not overflow. */
-static void fill_layout(struct G_random_layout *layout, long long seed,
-                        long long units, long long stride)
+static void fill_layout(struct G_random_layout *layout, int64_t seed,
+                        int64_t units, int64_t stride)
 {
     uint64_t draws = (uint64_t)units * (uint64_t)stride;
 
@@ -474,7 +474,7 @@ static void fill_layout(struct G_random_layout *layout, long long seed,
  * \param[out] state generator state to seed
  * \param[in] seed seed, from -2^31 to 2^32 - 1
  */
-void G_random_state_from_seed(struct G_random_state *state, long long seed)
+void G_random_state_from_seed(struct G_random_state *state, int64_t seed)
 {
     check_seed(seed);
     state->state = lcg_seed(seed);
@@ -499,7 +499,7 @@ void G_random_state_from_seed(struct G_random_state *state, long long seed)
  * gislib_random_streams.
  *
  * A seed outside -2^31 to 2^32 - 1, a number of units or of draws which
- * is not positive, or a product of the two beyond the range of long long
+ * is not positive, or a product of the two beyond the range of int64_t
  * is a fatal error.
  *
  * \param[out] layout layout to initialize
@@ -507,20 +507,20 @@ void G_random_state_from_seed(struct G_random_state *state, long long seed)
  * \param[in] units number of units of work, positive
  * \param[in] draws_per_unit number of values each unit draws, positive
  */
-void G_random_init_layout_exact(struct G_random_layout *layout, long long seed,
-                                long long units, long long draws_per_unit)
+void G_random_init_layout_exact(struct G_random_layout *layout, int64_t seed,
+                                int64_t units, int64_t draws_per_unit)
 {
     check_seed(seed);
     check_units(units);
     if (draws_per_unit <= 0)
         G_fatal_error(_("The number of random numbers a unit draws must be "
-                        "positive, not %lld"),
+                        "positive, not %" PRId64),
                       draws_per_unit);
-    if (units > LLONG_MAX / draws_per_unit)
-        G_fatal_error(_("A random number layout of %lld units of %lld draws "
-                        "each is too large (the number of draws must not "
-                        "exceed %lld)"),
-                      units, draws_per_unit, LLONG_MAX);
+    if (units > INT64_MAX / draws_per_unit)
+        G_fatal_error(_("A random number layout of %" PRId64 " units of "
+                        "%" PRId64 " draws each is too large (the number of "
+                        "draws must not exceed %" PRId64 ")"),
+                      units, draws_per_unit, INT64_MAX);
     fill_layout(layout, seed, units, draws_per_unit);
 }
 
@@ -541,33 +541,32 @@ void G_random_init_layout_exact(struct G_random_layout *layout, long long seed,
  *
  * A seed outside -2^31 to 2^32 - 1, a number of units or a bound which is
  * not positive, or a product of the units and the stride beyond the range
- * of long long is a fatal error.
+ * of int64_t is a fatal error.
  *
  * \param[out] layout layout to initialize
  * \param[in] seed seed, see G_random_state_from_seed()
  * \param[in] units number of units of work, positive
  * \param[in] max_draws most values any unit draws, positive
  */
-void G_random_init_layout_bounded(struct G_random_layout *layout,
-                                  long long seed, long long units,
-                                  long long max_draws)
+void G_random_init_layout_bounded(struct G_random_layout *layout, int64_t seed,
+                                  int64_t units, int64_t max_draws)
 {
-    long long stride;
+    int64_t stride;
 
     check_seed(seed);
     check_units(units);
     if (max_draws <= 0)
         G_fatal_error(_("The most random numbers a unit draws must be "
-                        "positive, not %lld"),
+                        "positive, not %" PRId64),
                       max_draws);
-    /* LLONG_MAX is odd, so an even bound can be rounded up. */
+    /* INT64_MAX is odd, so an even bound can be rounded up. */
     stride = max_draws % 2 == 0 ? max_draws + 1 : max_draws;
-    if (units > LLONG_MAX / stride)
-        G_fatal_error(_("A random number layout of %lld units of at most "
-                        "%lld draws each is too large (the number of units "
-                        "times the bound rounded up to odd must not exceed "
-                        "%lld)"),
-                      units, max_draws, LLONG_MAX);
+    if (units > INT64_MAX / stride)
+        G_fatal_error(_("A random number layout of %" PRId64 " units of at "
+                        "most %" PRId64 " draws each is too large (the number "
+                        "of units times the bound rounded up to odd must not "
+                        "exceed %" PRId64 ")"),
+                      units, max_draws, INT64_MAX);
     fill_layout(layout, seed, units, stride);
 }
 
@@ -604,8 +603,8 @@ void G_random_init_layout_bounded(struct G_random_layout *layout,
  * \param[in] seed seed, see G_random_state_from_seed()
  * \param[in] units number of units of work, from 1 to 2^20
  */
-void G_random_init_layout(struct G_random_layout *layout, long long seed,
-                          long long units)
+void G_random_init_layout(struct G_random_layout *layout, int64_t seed,
+                          int64_t units)
 {
     uint64_t parts, stride;
 
@@ -613,8 +612,8 @@ void G_random_init_layout(struct G_random_layout *layout, long long seed,
     check_units(units);
     if (units > WHOLE_SPAN_MAX_UNITS)
         G_fatal_error(_("A random number layout of the whole span takes at "
-                        "most %lld units, not %lld; a bounded layout serves "
-                        "any number of units"),
+                        "most %" PRId64 " units, not %" PRId64 "; a bounded "
+                        "layout serves any number of units"),
                       WHOLE_SPAN_MAX_UNITS, units);
     parts = (uint64_t)units | 1;
     stride = LCG_SPAN / parts;
@@ -635,7 +634,7 @@ void G_random_init_layout(struct G_random_layout *layout, long long seed,
  * \return the batches that fit, 1 for a layout of the whole span, 0 when
  *         one batch of the layout does not fit into the span
  */
-long long G_random_layout_batches(const struct G_random_layout *layout)
+int64_t G_random_layout_batches(const struct G_random_layout *layout)
 {
     return layout->batches;
 }
@@ -648,7 +647,7 @@ long long G_random_layout_batches(const struct G_random_layout *layout)
  * \return the stride of the layout, the number of values every unit may
  *         draw without running into the next unit's stream
  */
-long long G_random_layout_length(const struct G_random_layout *layout)
+int64_t G_random_layout_length(const struct G_random_layout *layout)
 {
     return layout->stride;
 }
@@ -682,31 +681,31 @@ long long G_random_layout_length(const struct G_random_layout *layout)
  */
 void G_random_state_for_batch(struct G_random_state *state,
                               const struct G_random_layout *layout,
-                              long long batch, long long unit)
+                              int64_t batch, int64_t unit)
 {
     uint64_t offset;
 
     if (unit < 0 || unit >= layout->units)
-        G_fatal_error(_("Random number unit %lld is out of range "
-                        "(must be between 0 and %lld)"),
-                      unit, (long long)(layout->units - 1));
+        G_fatal_error(_("Random number unit %" PRId64 " is out of range "
+                        "(must be between 0 and %" PRId64 ")"),
+                      unit, layout->units - 1);
     if (batch < 0)
-        G_fatal_error(_("Random number batch %lld is out of range "
+        G_fatal_error(_("Random number batch %" PRId64 " is out of range "
                         "(must not be negative)"),
                       batch);
     if (batch > 0 && layout->whole_span)
-        G_fatal_error(_("Random number batch %lld is out of range "
+        G_fatal_error(_("Random number batch %" PRId64 " is out of range "
                         "(a layout of the whole span holds a single batch)"),
                       batch);
     if (layout->batches >= 1 && batch >= layout->batches)
-        G_fatal_error(n_("Random number batch %lld is out of range "
-                         "(%lld batch fits into the generator's span)",
-                         "Random number batch %lld is out of range "
-                         "(%lld batches fit into the generator's span)",
+        G_fatal_error(n_("Random number batch %" PRId64 " is out of range "
+                         "(%" PRId64 " batch fits into the generator's span)",
+                         "Random number batch %" PRId64 " is out of range "
+                         "(%" PRId64 " batches fit into the generator's span)",
                          (unsigned long)layout->batches),
-                      batch, (long long)layout->batches);
+                      batch, layout->batches);
     if (layout->batches == 0 && batch > 0)
-        G_fatal_error(_("Random number batch %lld is out of range "
+        G_fatal_error(_("Random number batch %" PRId64 " is out of range "
                         "(no batch fits into the generator's span, only batch "
                         "0 can be used)"),
                       batch);
@@ -729,8 +728,7 @@ void G_random_state_for_batch(struct G_random_state *state,
  * \param[in] unit number of the unit, from 0 to units - 1
  */
 void G_random_state_for_unit(struct G_random_state *state,
-                             const struct G_random_layout *layout,
-                             long long unit)
+                             const struct G_random_layout *layout, int64_t unit)
 {
     G_random_state_for_batch(state, layout, 0, unit);
 }
@@ -747,11 +745,11 @@ void G_random_state_for_unit(struct G_random_state *state,
  * \param[in,out] state a seeded generator state
  * \param[in] draws number of values to skip, not negative
  */
-void G_random_advance(struct G_random_state *state, long long draws)
+void G_random_advance(struct G_random_state *state, int64_t draws)
 {
     if (draws < 0)
-        G_fatal_error(_("Cannot advance a random number generator by %lld "
-                        "draws (the number must not be negative)"),
+        G_fatal_error(_("Cannot advance a random number generator by "
+                        "%" PRId64 " draws (the number must not be negative)"),
                       draws);
     state->state = lcg_jump(state->state, (uint64_t)draws);
 }

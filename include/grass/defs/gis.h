@@ -518,22 +518,21 @@ long G_srand48_auto(void);
 long G_lrand48(void);
 long G_mrand48(void);
 double G_drand48(void);
-void G_random_state_from_seed(struct G_random_state *, long long);
-void G_random_init_layout_exact(struct G_random_layout *, long long, long long,
-                                long long);
-void G_random_init_layout_bounded(struct G_random_layout *, long long,
-                                  long long, long long);
-void G_random_init_layout(struct G_random_layout *, long long, long long);
-long long G_random_layout_batches(const struct G_random_layout *);
-long long G_random_layout_length(const struct G_random_layout *);
+void G_random_state_from_seed(struct G_random_state *, int64_t);
+void G_random_init_layout_exact(struct G_random_layout *, int64_t, int64_t,
+                                int64_t);
+void G_random_init_layout_bounded(struct G_random_layout *, int64_t, int64_t,
+                                  int64_t);
+void G_random_init_layout(struct G_random_layout *, int64_t, int64_t);
+int64_t G_random_layout_batches(const struct G_random_layout *);
+int64_t G_random_layout_length(const struct G_random_layout *);
 void G_random_state_for_unit(struct G_random_state *,
-                             const struct G_random_layout *, long long);
+                             const struct G_random_layout *, int64_t);
 void G_random_state_for_batch(struct G_random_state *,
-                              const struct G_random_layout *, long long,
-                              long long);
-void G_random_advance(struct G_random_state *, long long);
+                              const struct G_random_layout *, int64_t, int64_t);
+void G_random_advance(struct G_random_state *, int64_t);
 double G_random_double(struct G_random_state *);
-long long G_random_generate_seed(void);
+int64_t G_random_generate_seed(void);
 
 /* ls.c */
 void G_set_ls_filter(int (*)(const char *, void *), void *);
