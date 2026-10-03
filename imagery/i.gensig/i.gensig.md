@@ -35,8 +35,8 @@ Input **group** is the name of the group that contains the band files which
 comprise the image to be analyzed. The *[i.group](i.group.md)* command
 is used to construct groups of raster layers which comprise an image.
 
-Input **subgroup** names the subgroup within the group that selects a subset of the
-bands to be analyzed. The *[i.group](i.group.md)* command is also used
+Input **subgroup** names the subgroup within the group that selects a subset of
+the bands to be analyzed. The *[i.group](i.group.md)* command is also used
 to prepare this subgroup. The subgroup mechanism allows the user to
 select a subset of all the band files that form an image.
 

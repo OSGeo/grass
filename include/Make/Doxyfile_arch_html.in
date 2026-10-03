@@ -2254,11 +2254,10 @@ INCLUDE_FILE_PATTERNS  =
 PREDEFINED             = HAVE_GEOS \
                          HAVE_LIBBLAS \
                          HAVE_LIBLAPACK \
-                         HAVE_OGR \
                          HAVE_TIFFIO_H \
                          NOPG_UNUSED= \
                          NO_NLS_UNUSED= \
-                         UNUSED=
+                         G_UNUSED=
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The

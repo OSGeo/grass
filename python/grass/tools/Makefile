@@ -6,6 +6,7 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 DSTDIR = $(ETC)/python/grass/tools
 
 MODULES = \
+	importexport \
 	session_tools \
 	support
 

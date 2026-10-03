@@ -4,11 +4,10 @@ Created on Sun Jun 08 10:11:18 2018
 @author: Sanjeet Bhatti
 """
 
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-
-import os
 
 
 class TestROutXyz(TestCase):
@@ -27,9 +26,7 @@ class TestROutXyz(TestCase):
     def tearDownClass(cls):
         """Remove temporary region"""
         cls.del_temp_region()
-
-        if os.path.isfile(cls.csvFile):
-            os.remove(cls.csvFile)
+        Path(cls.csvFile).unlink(missing_ok=True)
 
     def test_r_out_xyz(self):
         """ASCII text file test"""

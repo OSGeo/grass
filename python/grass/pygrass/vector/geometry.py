@@ -220,7 +220,7 @@ class Attrs:
 
     def __dict__(self):
         """Return a dict of the attribute table row."""
-        return dict(zip(self.keys(), self.values()))
+        return dict(zip(self.keys(), self.values(), strict=True))
 
     def values(self):
         """Return the values of the attribute table row.
@@ -1269,11 +1269,11 @@ class Node:
     """
 
     def __init__(self, v_id, c_mapinfo, **kwords):
-        """Construct a Node object
+        r"""Construct a Node object
 
-        param v_id: The unique node id
-        param c_mapinfo: A valid pointer to the mapinfo object
-        param **kwords: Ignored
+        :param v_id: The unique node id
+        :param c_mapinfo: A valid pointer to the mapinfo object
+        :param \*\*kwords: Ignored
         """
         self.id = v_id  # vector id
         self.c_mapinfo = c_mapinfo

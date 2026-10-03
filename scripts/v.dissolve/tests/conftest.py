@@ -14,7 +14,7 @@ def updates_as_transaction(table, cat_column, column, column_quote, cats, values
     """Create SQL statement for categories and values for a given column"""
     sql = ["BEGIN TRANSACTION"]
     quote = "'" if column_quote else ""
-    for cat, value in zip(cats, values):
+    for cat, value in zip(cats, values, strict=True):
         sql.append(
             f"UPDATE {table} SET {column} = {quote}{value}{quote} "
             f"WHERE {cat_column} = {cat};"

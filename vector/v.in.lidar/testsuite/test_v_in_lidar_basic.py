@@ -3,13 +3,12 @@ Name:      decimation_test
 Purpose:   v.in.lidar decimation test
 
 Author:    Vaclav Petras
-Copyright: (C) 2015 by Vaclav Petras and the GRASS Development Team
-Licence:   This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2015 Vaclav Petras
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
-import os
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -46,8 +45,7 @@ class BasicTest(TestCase):
     def tearDownClass(cls):
         """Remove the temporary region and generated data"""
         cls.runModule("g.remove", flags="f", type="vector", name=cls.vector_points)
-        if os.path.isfile(cls.las_file):
-            os.remove(cls.las_file)
+        Path(cls.las_file).unlink(missing_ok=True)
         cls.del_temp_region()
 
     def tearDown(self):

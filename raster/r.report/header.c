@@ -21,12 +21,11 @@ int header(int unit1, int unit2)
     int i, k;
     char buf[BUFSZ];
     char tbuf1[256], tbuf2[256];
-    char north[50], south[50];
-    char east[50], west[50];
-    char ns_res[50], ew_res[50];
+    char north[320], south[320];
+    char east[320], west[320];
+    char ns_res[320], ew_res[320];
     int len1, len2;
     char *label;
-    char *mask;
 
     nlines = page_length;
     if (date == NULL)
@@ -73,7 +72,8 @@ int header(int unit1, int unit2)
 
         divider("|");
 
-        mask = maskinfo();
+        char *mask_info = maskinfo();
+        char *mask = mask_info;
         label = "MASK:";
         len1 = strlen(label) + 1;
         while (mask) {
@@ -83,6 +83,7 @@ int header(int unit1, int unit2)
             fprintf(stdout, "|");
             newline();
         }
+        G_free(mask_info);
         divider("|");
 
         /*if title is available, print it, otherwise, print (untitled). in

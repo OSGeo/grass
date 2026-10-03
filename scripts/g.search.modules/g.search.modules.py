@@ -4,11 +4,8 @@
 # MODULE:	g.search.modules
 # AUTHOR(S):	Jachym Cepicky <jachym.cepicky gmail.com>
 # PURPOSE:	g.search.modules in grass modules using keywords
-# COPYRIGHT:	(C) 2015-2019 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General
-# 		Public License (>=v2). Read the file COPYING that
-# 		comes with GRASS for details.
+# SPDX-FileCopyrightText: 2015-2019 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -67,6 +64,7 @@ import os
 import sys
 import xml.etree.ElementTree as ET
 from operator import itemgetter
+from pathlib import Path
 
 from grass.exceptions import CalledModuleError
 from grass.script import core as grass
@@ -206,7 +204,7 @@ def _search_module(
     # add installed addons to modules list
     if os.getenv("GRASS_ADDON_BASE"):
         filename_addons = os.path.join(os.getenv("GRASS_ADDON_BASE"), "modules.xml")
-        if os.path.isfile(filename_addons):
+        if Path(filename_addons).is_file():
             with open(filename_addons) as addon_menudata_file:
                 addon_menudata = ET.parse(addon_menudata_file)
             addon_items = addon_menudata.findall("task")
@@ -214,7 +212,7 @@ def _search_module(
 
     # add system-wide installed addons to modules list
     filename_addons_s = os.path.join(os.getenv("GISBASE"), "modules.xml")
-    if os.path.isfile(filename_addons_s):
+    if Path(filename_addons_s).is_file():
         with open(filename_addons_s) as addon_menudata_file_s:
             addon_menudata_s = ET.parse(addon_menudata_file_s)
         addon_items_s = addon_menudata_s.findall("task")

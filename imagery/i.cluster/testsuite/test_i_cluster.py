@@ -63,7 +63,7 @@ class TestIClusterWithSyntheticData(TestCase):
             "sig",
             "sig",
         )
-        return os.path.isfile(sig_file_path)
+        return Path(sig_file_path).is_file()
 
     def test_cluster_creation(self):
         """Test the creation of a signature file and validate the number of classes."""
@@ -97,7 +97,7 @@ class TestIClusterWithSyntheticData(TestCase):
         """Test that sample interval affects the number of cells sampled"""
         sample_interval = (2, 2)
         report_file = "sample_report.txt"
-        self.addCleanup(os.remove, report_file) if os.path.exists(report_file) else None
+        self.addCleanup(os.remove, report_file) if Path(report_file).exists() else None
 
         self.assertModule(
             "i.cluster",
@@ -109,7 +109,7 @@ class TestIClusterWithSyntheticData(TestCase):
             sample=sample_interval,
             overwrite=True,
         )
-        self.assertTrue(os.path.isfile(report_file))
+        self.assertTrue(Path(report_file).is_file())
         content = Path(report_file).read_text()
         expected_cells = (100 // sample_interval[0]) * (100 // sample_interval[1])
         match = re.search(r"Sample size:\s+(\d+)", content)
@@ -123,8 +123,8 @@ class TestIClusterWithSyntheticData(TestCase):
         high_percent = 99.5
         low_report = "low_percent_report.txt"
         high_report = "high_percent_report.txt"
-        self.addCleanup(os.remove, low_report) if os.path.exists(low_report) else None
-        self.addCleanup(os.remove, high_report) if os.path.exists(high_report) else None
+        self.addCleanup(os.remove, low_report) if Path(low_report).exists() else None
+        self.addCleanup(os.remove, high_report) if Path(high_report).exists() else None
         self.assertModule(
             "i.cluster",
             group=self.group_name,
@@ -198,14 +198,14 @@ class TestIClusterWithSyntheticData(TestCase):
         """Calculate the minimum pairwise Euclidean distance between cluster means."""
         min_dist = float("inf")
         for a, b in combinations(means, 2):
-            dist = math.sqrt(sum((x - y) ** 2 for x, y in zip(a, b)))
+            dist = math.sqrt(sum((x - y) ** 2 for x, y in zip(a, b, strict=False)))
             min_dist = min(min_dist, dist)
         return min_dist
 
     def test_separation_parameter1(self):
         """Test the effect of the separation parameter on cluster separation quality."""
         report_file = "separation_report.txt"
-        self.addCleanup(os.remove, report_file) if os.path.exists(report_file) else None
+        self.addCleanup(os.remove, report_file) if Path(report_file).exists() else None
         sig_file_default = self.signature_file + "_sep0"
         self.assertModule(
             "i.cluster",

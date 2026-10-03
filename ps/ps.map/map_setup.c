@@ -86,7 +86,7 @@ int map_setup(void)
     PS.map_right = PS.map_left + PS.map_pix_wide;
     PS.min_y = PS.map_bot;
 
-    /* we want the size to be 10 times biger, because G_plot_where_xy()
+    /* we want the size to be 10 times bigger, because G_plot_where_xy()
        returns integer values (pixels) for x and y, and we want doubles
        until the first decimal point. Then in move() and cont() we will
        divide x and y by 10. to get double coordinates */

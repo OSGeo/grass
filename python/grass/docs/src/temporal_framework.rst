@@ -36,94 +36,94 @@ for example the database interface, the temporal database creation and initializ
 the SQL object serialization, all classes that represent table entries, datetime mathematics and many more.
 
 
-:mod:`~temporal.core`
-"""""""""""""""""""""
+:mod:`~grass.temporal.core`
+"""""""""""""""""""""""""""
 
     The core functionality of the temporal framework:
 
-    - Initialization function :func:`~temporal.core.init()`
+    - Initialization function :func:`~grass.temporal.core.init()`
     - Definition of global variables
     - Several global functions to access TGIS specific variables
     - Interfaces to the TGIS C-library and PyGRASS messenger objects
-    - Database interface connection class :class:`~temporal.core.SQLDatabaseInterfaceConnection`
+    - Database interface connection class :class:`~grass.temporal.core.SQLDatabaseInterfaceConnection`
       to sqlite3 and postgresql database backends
     - Functions to create the temporal database
 
-:mod:`~temporal.base`
-"""""""""""""""""""""
+:mod:`~grass.temporal.base`
+"""""""""""""""""""""""""""
 
     Implements of basic dataset information and SQL conversion of such information:
 
-    - Definition of the SQL serialize class :class:`~temporal.base.DictSQLSerializer`
+    - Definition of the SQL serialize class :class:`~grass.temporal.base.DictSQLSerializer`
       that converts the content of temporal
       classes into SQL SELECT, INSERT or UPDATE statements
-    - Definition of :class:`~temporal.base.SQLDatabaseInterface`
+    - Definition of :class:`~grass.temporal.base.SQLDatabaseInterface`
       that is the base class for all temporal datatype subclasses
     - Contains classes for all datasets [#allds]_ that contain
       basic information (id, name, mapset, creator, ...)
 
-:mod:`~temporal.spatial_extent`
-"""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.spatial_extent`
+"""""""""""""""""""""""""""""""""""""
 
     Implements of 2d and 3d spatial extents of all datasets:
 
-    - Implements class :class:`~temporal.spatial_extent.SpatialExtent`
+    - Implements class :class:`~grass.temporal.spatial_extent.SpatialExtent`
       that is the base class for all dataset specific spatial extent classes
       It provides spatial topological logic and operations for 2D and 3D extents
     - Implements spatial extent classes for all datasets [#allds]_
 
-:mod:`~temporal.temporal_extent`
-""""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.temporal_extent`
+""""""""""""""""""""""""""""""""""""""
 
     Implements of the temporal extent of all datasets for relative and absolute time:
 
-    - Implements class :class:`~temporal.temporal_extent.TemporalExtent`
+    - Implements class :class:`~grass.temporal.temporal_extent.TemporalExtent`
       that is the base class for all dataset specific temporal extent classes
       It provides temporal topological logic and operations
     - Implements temporal extent classes for relative time and absolute time for
       all datasets [#allds]_
 
-:mod:`~temporal.metadata`
-"""""""""""""""""""""""""
+:mod:`~grass.temporal.metadata`
+"""""""""""""""""""""""""""""""
 
     Implements the metadata base classes and datatype specific derivatives for all datasets [#allds]_.
 
-:mod:`~temporal.spatial_topology_dataset_connector`
-"""""""""""""""""""""""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.spatial_topology_dataset_connector`
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     Implements the interface to link datasets by spatial topological relations
 
-:mod:`~temporal.temporal_topology_dataset_connector`
-""""""""""""""""""""""""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.temporal_topology_dataset_connector`
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     Implements the interface to link datasets by temporal topological relations
 
-:mod:`~temporal.c_libraries_interface`
-""""""""""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.c_libraries_interface`
+""""""""""""""""""""""""""""""""""""""""""""
 
     The RPC C-library interface for exit safe and fast access to raster, vector and 3D raster information.
 
-:mod:`~temporal.temporal_granularity`
-"""""""""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.temporal_granularity`
+"""""""""""""""""""""""""""""""""""""""""""
 
     The computation of the temporal granularity for a list
-    of :class:`~temporal.abstract_dataset.AbstractDataset`
+    of :class:`~grass.temporal.abstract_dataset.AbstractDataset`
     objects for absolute and relative is implemented here.
 
-:mod:`~temporal.datetime_math`
-""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.datetime_math`
+""""""""""""""""""""""""""""""""""""
 
     This module contains function to parse, convert and process datetime objects
     in the temporal framework.
 
 Spatio-temporal algebra classes for space time raster and vector datasets are defined in:
 
-- :mod:`~temporal.temporal_algebra`
-- :mod:`~temporal.temporal_operator`
-- :mod:`~temporal.temporal_raster_base_algebra`
-- :mod:`~temporal.temporal_raster_algebra`
-- :mod:`~temporal.temporal_raster3d_algebra`
-- :mod:`~temporal.temporal_vector_algebra`
+- :mod:`~grass.temporal.temporal_algebra`
+- :mod:`~grass.temporal.temporal_operator`
+- :mod:`~grass.temporal.temporal_raster_base_algebra`
+- :mod:`~grass.temporal.temporal_raster_algebra`
+- :mod:`~grass.temporal.temporal_raster3d_algebra`
+- :mod:`~grass.temporal.temporal_vector_algebra`
 
 High level API
 ^^^^^^^^^^^^^^
@@ -131,46 +131,46 @@ High level API
 The high level API utilizes the low level API. Its classes and functions are usually used to implement
 temporal processing algorithms and temporal GRASS modules.
 
-:mod:`~temporal.abstract_dataset`
-"""""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.abstract_dataset`
+"""""""""""""""""""""""""""""""""""""""
 
-    - Implements the base class for all datasets [#allds]_ :class:`~temporal.abstract_dataset.AbstractDataset`.
+    - Implements the base class for all datasets [#allds]_ :class:`~grass.temporal.abstract_dataset.AbstractDataset`.
     - Implements the select, insert and update functionality as well as
       convenient functions to access the base, extent and metadata information
 
-:mod:`~temporal.abstract_map_dataset`
-"""""""""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.abstract_map_dataset`
+"""""""""""""""""""""""""""""""""""""""""""
 
-    - Implements the base class :class:`~temporal.abstract_map_dataset.AbstractMapDataset`
+    - Implements the base class :class:`~grass.temporal.abstract_map_dataset.AbstractMapDataset`
       for all map layer specific classes
     - Provides the interface to all map layer specific information in the temporal database
 
-:mod:`~temporal.abstract_space_time_dataset`
-""""""""""""""""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.abstract_space_time_dataset`
+""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    - Implements the base class :class:`~temporal.abstract_space_time_dataset.AbstractSpaceTimeDataset`
+    - Implements the base class :class:`~grass.temporal.abstract_space_time_dataset.AbstractSpaceTimeDataset`
       for all Space Time Datasets classes
     - Contains the creation and deletion functionality, the map registration and un-registration,
       access methods to map layer objects and so on
     - Provides the interface to all Space Time Dataset specific information in the temporal database
 
-:mod:`~temporal.space_time_datasets`
-""""""""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.space_time_datasets`
+""""""""""""""""""""""""""""""""""""""""""
 
     This module contains all classes that represent specific datasets [#allds]_.
     A module developer uses these map layer and Space Time Dataset object
     representations to perform spatio-temporal tasks.
 
-:mod:`~temporal.spatio_temporal_relationships`
-""""""""""""""""""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.spatio_temporal_relationships`
+""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-    The logic to compute spatio-temporal topology for a single list or two lists of :class:`~temporal.abstract_dataset.AbstractDataset` objects
+    The logic to compute spatio-temporal topology for a single list or two lists of :class:`~grass.temporal.abstract_dataset.AbstractDataset` objects
     is implemented in this module.
-    The class :class:`~temporal.spatio_temporal_relationships.SpatioTemporalTopologyBuilder`
+    The class :class:`~grass.temporal.spatio_temporal_relationships.SpatioTemporalTopologyBuilder`
     provides a convenient interface for topology computation.
 
-:mod:`~temporal.gui_support`
-""""""""""""""""""""""""""""
+:mod:`~grass.temporal.gui_support`
+""""""""""""""""""""""""""""""""""
 
     Helper functions to support the listing of space time datasets in the automatically generated GUI.
 
@@ -183,65 +183,65 @@ map listing, space time dataset creation, map registration and un-registration,
 aggregation, extraction, map calculation, statistics as well as import and export of
 space time datasets.
 
-:mod:`~temporal.aggregation`
-""""""""""""""""""""""""""""
+:mod:`~grass.temporal.aggregation`
+""""""""""""""""""""""""""""""""""
 
     Aggregation of Space Time Raster Datasets based on topological relations.
     Used in *t.rast.aggregate* and *t.rast.aggregate.ds*
 
-:mod:`~temporal.extract`
-""""""""""""""""""""""""
+:mod:`~grass.temporal.extract`
+""""""""""""""""""""""""""""""
 
     Extraction of subsets from Space Time Datasets including
     map algebra and vector selection statements.
     Used in *t.rast.extract*, *t.rast3d.extract* and *t.vect.extract*.
 
-:mod:`~temporal.factory`
-""""""""""""""""""""""""
+:mod:`~grass.temporal.factory`
+""""""""""""""""""""""""""""""
 
     Factory functions to create datasets of all types [#allds]_.
 
-:mod:`~temporal.open_stds`
-""""""""""""""""""""""""""
+:mod:`~grass.temporal.open_stds`
+""""""""""""""""""""""""""""""""
 
     Convenient functions to open existing Space Time Datasets or
     to create new ones. Used in almost all temporal modules.
 
-:mod:`~temporal.list_stds`
-""""""""""""""""""""""""""
+:mod:`~grass.temporal.list_stds`
+""""""""""""""""""""""""""""""""
 
     Convenient functions to list datasets of all types [#allds]_
     registered in the temporal database.
 
-:mod:`~temporal.mapcalc`
-""""""""""""""""""""""""
+:mod:`~grass.temporal.mapcalc`
+""""""""""""""""""""""""""""""
 
     Simple temporal algebra for Space Time Raster and 3d Raster
     datasets. Used in *t.rast.mapcalc* and *t.rast3d.mapcalc*
 
-:mod:`~temporal.register`
-"""""""""""""""""""""""""
+:mod:`~grass.temporal.register`
+"""""""""""""""""""""""""""""""
 
     Convenient functions to register a single or multiple map layer in the temporal database and
     SpaceTime Datasets. Used in several modules, most important *t.register*.
 
-:mod:`~temporal.sampling`
-"""""""""""""""""""""""""
+:mod:`~grass.temporal.sampling`
+"""""""""""""""""""""""""""""""
 
     Sampling functions used in several modules.
 
-:mod:`~temporal.stds_export`
-""""""""""""""""""""""""""""
+:mod:`~grass.temporal.stds_export`
+""""""""""""""""""""""""""""""""""
 
     Functions to export of Space Time Datasets, used in *t.rast.export*, *t.rast3d.export* and *t.vect.export*.
 
-:mod:`~temporal.stds_import`
-""""""""""""""""""""""""""""
+:mod:`~grass.temporal.stds_import`
+""""""""""""""""""""""""""""""""""
 
     Functions to import Space Time Datasets, used in *t.rast.import*, *t.rast3d.import* and *t.vect.import*.
 
-:mod:`~temporal.univar_statistics`
-""""""""""""""""""""""""""""""""""
+:mod:`~grass.temporal.univar_statistics`
+""""""""""""""""""""""""""""""""""""""""
 
     Simple statistical analysis functions for Space Time Datasets, used in *t.rast.univar*, *t.rast3d.univar*
     and *t.vect.univar*.
@@ -256,7 +256,7 @@ Here the full list of all temporal modules:
 .. toctree::
    :maxdepth: 2
 
-   temporal
+   grass.temporal
 
 
 Examples

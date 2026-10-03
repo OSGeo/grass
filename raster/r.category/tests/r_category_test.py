@@ -1,11 +1,13 @@
 """Tests of r.category"""
 
+import io
 import json
 
 import pytest
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from grass.tools import Tools
 
 
 def test_r_category_plain_output(simple_dataset):
@@ -118,7 +120,7 @@ def test_r_category_separator_variants(simple_dataset):
         "1\n&\ntrees\n2\n&\nwater\n",
     ]
 
-    for sep, expected in zip(separators, expected_outputs):
+    for sep, expected in zip(separators, expected_outputs, strict=True):
         result = gs.read_command(
             "r.category", map="test", separator=sep, env=session.env
         ).replace(
@@ -147,7 +149,7 @@ def test_r_category_input_separators(simple_dataset):
     ]
 
     for data, inp_sep, out_sep, expected in zip(
-        input_data, input_separators, output_separators, expected_outputs
+        input_data, input_separators, output_separators, expected_outputs, strict=True
     ):
         gs.write_command(
             "r.category",
@@ -183,7 +185,7 @@ def test_r_category_multiword_input(simple_dataset):
     ]
 
     for data, inp_sep, out_sep, expected in zip(
-        input_data, input_separators, output_separators, expected_outputs
+        input_data, input_separators, output_separators, expected_outputs, strict=True
     ):
         gs.write_command(
             "r.category",
@@ -214,7 +216,9 @@ def test_r_category_extreme_incorrect_values(simple_dataset):
     ]
     input_separators = ["comma", "tab", " "]
 
-    for idx, (data, inp_sep) in enumerate(zip(input_data, input_separators), start=1):
+    for idx, (data, inp_sep) in enumerate(
+        zip(input_data, input_separators, strict=True), start=1
+    ):
         try:
             gs.write_command(
                 "r.category",
@@ -322,7 +326,7 @@ def test_r_category_with_json_output_color(simple_dataset):
         ],
     ]
 
-    for color, expected in zip(colors, expected_outputs):
+    for color, expected in zip(colors, expected_outputs, strict=True):
         result = json.loads(
             gs.read_command(
                 "r.category",
@@ -335,6 +339,26 @@ def test_r_category_with_json_output_color(simple_dataset):
         assert result == expected, (
             f"test failed: expected {expected} but got {result} for color option {color}"
         )
+
+
+def test_r_category_rules_preserves_title(simple_dataset):
+    """Test that rules= does not erase a title previously set with r.support."""
+
+    session = simple_dataset
+    tools = Tools(session=session)
+    title = "USGS National Land Cover"
+
+    tools.r_support(map="test", title=title)
+    tools.r_category(
+        map="test",
+        rules=io.StringIO("1:trees\n2:water\n"),
+        separator=":",
+    )
+
+    info = tools.r_info(map="test", format="json")
+    assert info["title"] == title, (
+        f"Expected title '{title}', but r.category rules= overwrote it with '{info['title']}'"
+    )
 
 
 def test_r_category_with_plain_output_color(simple_dataset):
@@ -360,7 +384,7 @@ def test_r_category_with_plain_output_color(simple_dataset):
         "1 trees\n2 buildings\n",
     ]
 
-    for color, expected in zip(colors, expected_outputs):
+    for color, expected in zip(colors, expected_outputs, strict=True):
         result = gs.read_command(
             "r.category",
             map="test",

@@ -10,10 +10,8 @@ Classes:
  - frame::ScatterPlotsPanel
  - frame::CategoryListCtrl
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
@@ -379,9 +377,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         y_b = bands[b2_id].split("@")[0]
 
         if transpose:
-            tmp = x_b
-            x_b = y_b
-            y_b = tmp
+            x_b, y_b = y_b, x_b
 
         return "%s x: %s y: %s" % (_("scatter plot"), x_b, y_b)
 

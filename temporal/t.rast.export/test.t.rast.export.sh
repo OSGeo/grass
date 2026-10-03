@@ -7,12 +7,12 @@
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 # Generate data
-r.mapcalc --o expr="prec_1 = rand(0, 550.0)" -s
-r.mapcalc --o expr="prec_2 = rand(0, 80000)" -s
-r.mapcalc --o expr="prec_3 = rand(-120, 120)" -s
-r.mapcalc --o expr="prec_4 = rand(0, 255)" -s
-r.mapcalc --o expr="prec_5 = rand(-1, 60000)" -s
-r.mapcalc --o expr="prec_6 = rand(0, 256)" -s
+r.mapcalc --o expr="prec_1 = rand(0, 550.0)"
+r.mapcalc --o expr="prec_2 = rand(0, 80000)"
+r.mapcalc --o expr="prec_3 = rand(-120, 120)"
+r.mapcalc --o expr="prec_4 = rand(0, 255)"
+r.mapcalc --o expr="prec_5 = rand(-1, 60000)"
+r.mapcalc --o expr="prec_6 = rand(0, 256)"
 
 n1=`g.tempfile pid=1 -d`
 

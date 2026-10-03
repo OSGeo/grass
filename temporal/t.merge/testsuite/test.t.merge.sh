@@ -7,12 +7,12 @@
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 # Generate data
-r.mapcalc --o expr="prec_1 = rand(10, 150)" -s
-r.mapcalc --o expr="prec_2 = rand(20, 250)" -s
-r.mapcalc --o expr="prec_3 = rand(30, 350)" -s
-r.mapcalc --o expr="prec_4 = rand(40, 450)" -s
-r.mapcalc --o expr="prec_5 = rand(50, 550)" -s
-r.mapcalc --o expr="prec_6 = rand(60, 650)" -s
+r.mapcalc --o expr="prec_1 = rand(10, 150)"
+r.mapcalc --o expr="prec_2 = rand(20, 250)"
+r.mapcalc --o expr="prec_3 = rand(30, 350)"
+r.mapcalc --o expr="prec_4 = rand(40, 450)"
+r.mapcalc --o expr="prec_5 = rand(50, 550)"
+r.mapcalc --o expr="prec_6 = rand(60, 650)"
 
 # Register maps in temporal database
 t.register -i --o maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \

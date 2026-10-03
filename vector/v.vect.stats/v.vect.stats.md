@@ -129,6 +129,59 @@ v.vect.stats points=rand5000 area=myzipcodes_wake \
   method=average points_column=value separator=comma -p
 ```
 
+Calculation of average point elevation per ZIP code polygon, printed to
+terminal using Pandas:
+
+```python
+import grass.script as gs
+import pandas as pd
+
+data = gs.parse_command(
+    "v.vect.stats",
+    points="rand5000",
+    area="myzipcodes_wake",
+    method="average",
+    points_column="value",
+    flags="p",
+    format="json",
+)
+
+df = pd.DataFrame(data)
+print(df)
+```
+
+Possible output
+
+```text
+    category  count     average
+0          1     27   88.048804
+1          2      3  123.612151
+2          3     58  117.817925
+3          4      8   98.016271
+4          5      1  118.571144
+5          6     60   80.062659
+6          7     47  103.492038
+7          8    139   91.205997
+8          9     40   96.236051
+9         10     70   78.189556
+10        11     83   83.004861
+11        12      3  102.464809
+12        13    146   75.453039
+13        14      5  105.863010
+14        15      8   92.556496
+15        16     74  107.865658
+16        17    116   91.719968
+17        18     88   80.068764
+18        19      7   89.533522
+19        20      3  102.381422
+20        21      0         NaN
+...
+40        41     75  103.888415
+41        42     91  112.695404
+42        43    127  112.014728
+43        44      0         NaN
+```
+
 ### Average values of points in polygon with column update
 
 *See above for the creation of the input maps.*

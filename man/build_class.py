@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 # generates HTML man pages docs/html/<category>.html
-# (C) 2003-2019 Markus Neteler and the GRASS Development Team
+# SPDX-FileCopyrightText: 2003-2019 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Authors:
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
 no_intro_page_classes = ["display", "general", "miscellaneous", "postscript"]
 
@@ -15,19 +17,19 @@ no_intro_page_classes = ["display", "general", "miscellaneous", "postscript"]
 def build_class(ext):
     if ext == "html":
         from build_html import (
-            modclass_tmpl,
-            get_desc,
             desc2_tmpl,
-            modclass_intro_tmpl,
+            get_desc,
             man_dir,
+            modclass_intro_tmpl,
+            modclass_tmpl,
         )
     else:
         from build_md import (
-            modclass_tmpl,
-            get_desc,
             desc2_tmpl,
-            modclass_intro_tmpl,
+            get_desc,
             man_dir,
+            modclass_intro_tmpl,
+            modclass_tmpl,
         )
 
     os.chdir(man_dir)
@@ -74,12 +76,12 @@ if __name__ == "__main__":
         year = sys.argv[3]
 
     from build import (
-        to_title,
         check_for_desc_override,
-        replace_file,
         get_files,
-        write_header,
+        replace_file,
+        to_title,
         write_footer,
+        write_header,
     )
 
     build_class("html")

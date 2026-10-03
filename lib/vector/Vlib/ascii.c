@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2015 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2015 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
    \author Updated for GRASS 7 (SF support) by Martin Landa <landa.martin
@@ -215,6 +213,17 @@ int Vect_read_ascii(FILE *ascii, struct Map_info *Map)
 
             if (sscanf(buff, "%d%d", &catn, &cat) != 2) {
                 G_warning(_("Error reading categories: [%s]"), buff);
+                n_lines = -1;
+                goto cleanup_exit;
+            }
+
+            /* Vect_cat_set() has its range check commented out, so an
+               out-of-range value read here would be stored and only cause
+               trouble later, for example on export. */
+            if (catn < 1 || cat < 0) {
+                G_warning(_("Layer number or category number out of range: "
+                            "[%s]"),
+                          buff);
                 n_lines = -1;
                 goto cleanup_exit;
             }
@@ -829,11 +838,11 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
                     if (Map->head.with_z) {
                         G_rasprintf(&zstring, &zsize, "%.*f", dp, *zptr++);
                         G_trim_decimal(zstring);
-                        fprintf(ascii, " %-12s %-12s %-12s%s", xstring, ystring,
+                        fprintf(ascii, " %-12s %-12s %s%s", xstring, ystring,
                                 zstring, HOST_NEWLINE);
                     }
                     else {
-                        fprintf(ascii, " %-12s %-12s%s", xstring, ystring,
+                        fprintf(ascii, " %-12s %s%s", xstring, ystring,
                                 HOST_NEWLINE);
                     }
                 } /*Version 4 */
@@ -845,8 +854,8 @@ int Vect_write_ascii(FILE *ascii, FILE *att, struct Map_info *Map, int ver,
 
             if (ver == 5) {
                 for (i = 0; i < Cats->n_cats; i++) {
-                    fprintf(ascii, " %-5d %-10d%s", Cats->field[i],
-                            Cats->cat[i], HOST_NEWLINE);
+                    fprintf(ascii, " %-5d %d%s", Cats->field[i], Cats->cat[i],
+                            HOST_NEWLINE);
                 }
             }
             else {

@@ -3,11 +3,8 @@
  *
  * \brief DBMI Library (driver) - creare directories
  *
- * (C) 1999-2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Joel Jones (CERL/UIUC), Radim Blazek
  */
@@ -48,7 +45,7 @@ int db_driver_mkdir(const char *path, int mode, int parentdirs)
 
 /* make a directory if it doesn't exist */
 /* this routine could be made more intelligent as to why it failed */
-static int make_dir(const char *path, int mode UNUSED)
+static int make_dir(const char *path, int mode G_UNUSED)
 {
     if (db_isdir(path) == DB_OK)
         return DB_OK;

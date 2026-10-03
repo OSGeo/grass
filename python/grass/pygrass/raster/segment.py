@@ -33,7 +33,7 @@ class Segment:
         )
 
     def segments_in_mem(self):
-        if self.maxmem > 0 and self.maxmem < 100:
+        if 0 < self.maxmem < 100:
             seg_in_mem = (self.maxmem * self.nseg()) / 100
         else:
             seg_in_mem = 4 * (self.rows() / self.srows + self.cols() / self.scols + 2)

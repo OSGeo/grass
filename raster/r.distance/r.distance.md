@@ -10,23 +10,23 @@ The output is an ascii list, one line per pair of objects, in the
 following form:
 
 ```sh
-cat1:cat2:distance:east1:north1:east2:north2
+from_category:to_category:distance:from_easting:from_northing:to_easting:to_northing
 ```
 
-**cat1**  
+**from_category**  
 Category number from map1
 
-**cat2**  
+**to_category**  
 Category number from map2
 
 **distance**  
-The distance in meters between "cat1" and "cat2"
+The distance in meters between "from_category" and "to_category"
 
-**east1,north1**  
-The coordinates of the grid cell "cat1" which is closest to "cat2"
+**from_easting,from_northing**  
+The coordinates of the grid cell "from_category" which is closest to "to_category"
 
-**east2,north2**  
-The coordinates of the grid cell "cat2" which is closest to "cat1"
+**to_easting,to_northing**  
+The coordinates of the grid cell "to_category" which is closest to "from_category"
 
 ### Flags
 
@@ -53,6 +53,34 @@ into awk and then into *v.in.ascii*:
 ```sh
 r.distance map=map1,map2 | \
   awk -F: '{print $4,$5}' | v.in.ascii format=point output=name separator=space
+```
+
+## EXAMPLES
+
+### Using JSON output with Pandas to locate closest points
+
+```python
+import pandas as pd
+import grass.script as gs
+
+result = gs.parse_command(
+    "r.distance", map=["zipcodes", "lakes"], flags="l", format="json"
+)
+df = pd.json_normalize(result)
+print(df)
+```
+
+Possible output:
+
+```text
+        distance  from_cell.category  from_cell.easting  from_cell.northing from_cell.label  to_cell.category  to_cell.easting  to_cell.northing to_cell.label
+0   11158.870911               27511             632605              223295            CARY             34300           640585            215495      Dam/Weir
+1    1037.304198               27511             631735              222695            CARY             39000           632315            221835     Lake/Pond
+2    2277.059507               27511             630015              221605            CARY             43600           630765            219455     Reservoir
+..           ...                 ...                ...                 ...             ...               ...              ...               ...           ...
+36   4922.600939               27610             642975              219815         RALEIGH             34300           640615            215495      Dam/Weir
+37     50.000000               27610             642655              222765         RALEIGH             39000           642705            222765     Lake/Pond
+38  11368.069317               27610             642305              220945         RALEIGH             43600           631035            219455     Reservoir
 ```
 
 ## SEE ALSO

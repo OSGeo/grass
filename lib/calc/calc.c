@@ -12,7 +12,7 @@ int columns;
 
 /****************************************************************************/
 
-static void handle_fpe(int n UNUSED)
+static void handle_fpe(int n G_UNUSED)
 {
     floating_point_exception = 1;
     floating_point_exception_occurred = 1;

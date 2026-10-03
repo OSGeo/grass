@@ -7,16 +7,11 @@
 # 		a 3D raster. Unlike r.in.xyz, reading from stdin and z-scaling
 # 		won't work.
 #
-# COPYRIGHT:    (c) 2011-2012 Hamish Bowman, and the GRASS Development Team
-# 		Port of r3.in.xyz(.sh) for GRASS 6.4.
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2011-2012 Hamish Bowman
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
-# 		This program is distributed in the hope that it will be useful,
-# 		but WITHOUT ANY WARRANTY; without even the implied warranty of
-# 		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# 		GNU General Public License for more details.
+# 		Port of r3.in.xyz(.sh) for GRASS 6.4.
 #
 #############################################################################
 
@@ -171,6 +166,7 @@
 import sys
 import os
 import atexit
+from pathlib import Path
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
@@ -208,7 +204,7 @@ def main():
     if workers == 1 and "WORKERS" in os.environ:
         workers = int(os.environ["WORKERS"])
 
-    if not os.path.exists(infile):
+    if not Path(infile).exists():
         grass.fatal(_("Unable to read input file <%s>") % infile)
 
     addl_opts = {}

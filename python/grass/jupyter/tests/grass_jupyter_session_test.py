@@ -3,6 +3,7 @@
 import subprocess
 import os
 import sys
+from pathlib import Path
 
 
 # All init tests change the global environment, but we use a separate process
@@ -39,7 +40,7 @@ session.finish()
     assert session_file, "Expected something from the subprocess"
     session_file = session_file.strip()
     assert "\n" not in session_file, "Expected a file name from the subprocess"
-    assert not os.path.exists(session_file), f"Session file {session_file} not deleted"
+    assert not Path(session_file).exists(), f"Session file {session_file} not deleted"
 
 
 def test_init_with_auto_finish(tmp_path):
@@ -60,4 +61,4 @@ print(os.environ["GISRC"])
     assert session_file, "Expected something from the subprocess"
     session_file = session_file.strip()
     assert "\n" not in session_file, "Expected a file name from the subprocess"
-    assert not os.path.exists(session_file), f"Session file {session_file} not deleted"
+    assert not Path(session_file).exists(), f"Session file {session_file} not deleted"

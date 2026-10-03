@@ -8,11 +8,8 @@
  *
  * PURPOSE:      Print vector map info
  *
- * COPYRIGHT:    (C) 2002-2009, 2011 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2002-2009, 2011 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************/
 #include <stdlib.h>
@@ -31,8 +28,8 @@ int main(int argc, char *argv[])
 
     enum OutputFormat format;
 
-    JSON_Value *root_value;
-    JSON_Object *root_object;
+    G_JSON_Value *root_value;
+    G_JSON_Object *root_object;
 
     struct Map_info Map;
 
@@ -83,8 +80,8 @@ int main(int argc, char *argv[])
     }
 
     if (format == JSON) {
-        root_value = json_value_init_object();
-        root_object = json_value_get_object(root_value);
+        root_value = G_json_value_init_object();
+        root_object = G_json_value_get_object(root_value);
     }
 
     if ((print_content & PRINT_CONTENT_TEXT)) {
@@ -101,13 +98,13 @@ int main(int argc, char *argv[])
     }
 
     if (format == JSON) {
-        char *serialized_string = json_serialize_to_string_pretty(root_value);
+        char *serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     Vect_close(&Map);

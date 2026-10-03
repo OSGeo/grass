@@ -5,11 +5,9 @@
 # MODULE:        test_small_data
 # AUTHOR:        Vaclav Petras
 # PURPOSE:       Fast test using a small example
-# COPYRIGHT:     (C) 2016 by Vaclav Petras and the GRASS Development Team
-#
-#                This program is free software under the GNU General Public
-#                License (>=v2). Read the file COPYING that comes with GRASS
-#                for details.
+# SPDX-FileCopyrightText: 2016 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -160,7 +158,7 @@ class TestR3ToRast(TestCase):
             self.assertRasterFitsUnivar(raster=rast, reference=ref_univar, precision=0)
 
         # check the actual values
-        for rast_ref, rast in zip(self.rast2d_refs, rasts):
+        for rast_ref, rast in zip(self.rast2d_refs, rasts, strict=True):
             self.assertRastersNoDifference(
                 actual=rast, reference=rast_ref, precision=0.1
             )

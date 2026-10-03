@@ -2,19 +2,11 @@
  *
  * MODULE:       gis library
  * AUTHOR(S):    Glynn Clements <glynn@gclements.plus.com>
- * COPYRIGHT:    (C) 2007 Glynn Clements and the GRASS Development Team
+ * SPDX-FileCopyrightText: 2007 Glynn Clements
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * NOTE:         Based upon open.c
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
  *
  *****************************************************************************/
 
@@ -155,7 +147,12 @@ int G_open_update_misc(const char *dir, const char *element, const char *name)
 
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd >= 0)
-        lseek(fd, 0L, SEEK_END);
+        if (lseek(fd, 0L, SEEK_END) == -1) {
+            int err = errno;
+            G_warning(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+            return -1;
+        }
 
     return fd;
 }
@@ -222,7 +219,12 @@ FILE *G_fopen_append_misc(const char *dir, const char *element,
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return (FILE *)-1;
+    }
 
     return fdopen(fd, "a");
 }
@@ -235,7 +237,12 @@ FILE *G_fopen_modify_misc(const char *dir, const char *element,
     fd = G__open_misc(dir, element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return (FILE *)-1;
+    }
 
     return fdopen(fd, "r+");
 }

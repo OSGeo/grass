@@ -3,10 +3,8 @@
 
    \brief Raster library - Get raster row
 
-   (C) 2003-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2003-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -90,10 +88,10 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
     off_t t1 = fcb->row_ptr[row];
     off_t t2 = fcb->row_ptr[row + 1];
     size_t readamount = t2 - t1;
-    size_t bufsize = fcb->cellhd.cols * fcb->nbytes;
+    size_t bufsize = (size_t)fcb->cellhd.cols * fcb->nbytes;
     int ret;
 
-    if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
+    if (lseek(fcb->data_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking fp raster data file for row %d of <%s>: %s"), row,
             fcb->name, strerror(errno));
@@ -138,7 +136,7 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     unsigned char *cmp, *cmp2;
     int n;
 
-    if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
+    if (lseek(fcb->data_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking raster data file for row %d of <%s>: %s"), row,
             fcb->name, strerror(errno));
@@ -188,7 +186,7 @@ static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
                                    int *nbytes)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    ssize_t bufsize = fcb->cellhd.cols * fcb->nbytes;
+    ssize_t bufsize = (ssize_t)fcb->cellhd.cols * fcb->nbytes;
 
     *nbytes = fcb->nbytes;
 
@@ -201,33 +199,39 @@ static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
                       fcb->name);
 }
 
-#ifdef HAVE_GDAL
 static void read_data_gdal(int fd, int row, unsigned char *data_buf,
                            int *nbytes)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     unsigned char *buf;
     CPLErr err;
+    /* Logical (pre-flip) column range actually needed by the region;
+     * unrestricted (full row) if the window mapping left it unset. */
+    int min_col = fcb->gdal_min_col >= 0 ? fcb->gdal_min_col : 0;
+    int max_col =
+        fcb->gdal_min_col >= 0 ? fcb->gdal_max_col : fcb->cellhd.cols - 1;
+    int ncols = max_col - min_col + 1;
+    /* hflip'ed maps store columns mirrored, so the logical range read
+     * from disk is the physical range at the opposite end of the row. */
+    int col_off = fcb->gdal->hflip ? fcb->cellhd.cols - 1 - max_col : min_col;
 
     *nbytes = fcb->nbytes;
 
     if (fcb->gdal->vflip)
         row = fcb->cellhd.rows - 1 - row;
 
-    buf = fcb->gdal->hflip ? G_malloc(fcb->cellhd.cols * fcb->cur_nbytes)
-                           : data_buf;
+    buf = fcb->gdal->hflip ? G_malloc((size_t)ncols * fcb->cur_nbytes)
+                           : data_buf + (size_t)col_off * fcb->cur_nbytes;
 
-    err =
-        Rast_gdal_raster_IO(fcb->gdal->band, GF_Read, 0, row, fcb->cellhd.cols,
-                            1, buf, fcb->cellhd.cols, 1, fcb->gdal->type, 0, 0);
+    err = Rast_gdal_raster_IO(fcb->gdal->band, GF_Read, col_off, row, ncols, 1,
+                              buf, ncols, 1, fcb->gdal->type, 0, 0);
 
     if (fcb->gdal->hflip) {
         int i;
 
-        for (i = 0; i < fcb->cellhd.cols; i++)
-            memcpy(data_buf + i * fcb->cur_nbytes,
-                   buf + (fcb->cellhd.cols - 1 - i) * fcb->cur_nbytes,
-                   fcb->cur_nbytes);
+        for (i = 0; i < ncols; i++)
+            memcpy(data_buf + (min_col + i) * fcb->cur_nbytes,
+                   buf + (ncols - 1 - i) * fcb->cur_nbytes, fcb->cur_nbytes);
         G_free(buf);
     }
 
@@ -236,18 +240,15 @@ static void read_data_gdal(int fd, int row, unsigned char *data_buf,
             _("Error reading raster data via GDAL for row %d of <%s>"), row,
             fcb->name);
 }
-#endif
 
 static void read_data(int fd, int row, unsigned char *data_buf, int *nbytes)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
-#ifdef HAVE_GDAL
     if (fcb->gdal) {
         read_data_gdal(fd, row, data_buf, nbytes);
         return;
     }
-#endif
 
     if (!fcb->cellhd.compressed)
         read_data_uncompressed(fd, row, data_buf, nbytes);
@@ -258,8 +259,8 @@ static void read_data(int fd, int row, unsigned char *data_buf, int *nbytes)
 }
 
 /* copy cell file data to user buffer translated by window column mapping */
-static void cell_values_int(int fd UNUSED, const unsigned char *data UNUSED,
-                            const COLUMN_MAPPING *cmap, int nbytes UNUSED,
+static void cell_values_int(int fd G_UNUSED, const unsigned char *data G_UNUSED,
+                            const COLUMN_MAPPING *cmap, int nbytes G_UNUSED,
                             void *cell, int n)
 {
     CELL *c = cell;
@@ -303,8 +304,8 @@ static void cell_values_int(int fd UNUSED, const unsigned char *data UNUSED,
     }
 }
 
-static void cell_values_float(int fd, const unsigned char *data UNUSED,
-                              const COLUMN_MAPPING *cmap, int nbytes UNUSED,
+static void cell_values_float(int fd, const unsigned char *data G_UNUSED,
+                              const COLUMN_MAPPING *cmap, int nbytes G_UNUSED,
                               void *cell, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -322,8 +323,8 @@ static void cell_values_float(int fd, const unsigned char *data UNUSED,
     }
 }
 
-static void cell_values_double(int fd, const unsigned char *data UNUSED,
-                               const COLUMN_MAPPING *cmap, int nbytes UNUSED,
+static void cell_values_double(int fd, const unsigned char *data G_UNUSED,
+                               const COLUMN_MAPPING *cmap, int nbytes G_UNUSED,
                                void *cell, int n)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -341,7 +342,6 @@ static void cell_values_double(int fd, const unsigned char *data UNUSED,
     }
 }
 
-#ifdef HAVE_GDAL
 static void gdal_values_int(int fd, const unsigned char *data,
                             const COLUMN_MAPPING *cmap, int nbytes, void *cell,
                             int n)
@@ -369,12 +369,9 @@ static void gdal_values_int(int fd, const unsigned char *data,
         case GDT_Byte:
             c[i] = *(GByte *)d;
             break;
-/* GDT_Int8 was introduced in GDAL 3.7 */
-#if GDAL_VERSION_NUM >= GDAL_COMPUTE_VERSION(3, 7, 0)
         case GDT_Int8:
             c[i] = *(int8_t *)d;
             break;
-#endif
         case GDT_Int16:
             c[i] = *(GInt16 *)d;
             break;
@@ -397,8 +394,8 @@ static void gdal_values_int(int fd, const unsigned char *data,
     }
 }
 
-static void gdal_values_float(int fd UNUSED, const unsigned char *data,
-                              const COLUMN_MAPPING *cmap, int nbytes UNUSED,
+static void gdal_values_float(int fd G_UNUSED, const unsigned char *data,
+                              const COLUMN_MAPPING *cmap, int nbytes G_UNUSED,
                               void *cell, int n)
 {
     COLUMN_MAPPING cmapold = 0;
@@ -423,8 +420,8 @@ static void gdal_values_float(int fd UNUSED, const unsigned char *data,
     }
 }
 
-static void gdal_values_double(int fd UNUSED, const unsigned char *data,
-                               const COLUMN_MAPPING *cmap, int nbytes UNUSED,
+static void gdal_values_double(int fd G_UNUSED, const unsigned char *data,
+                               const COLUMN_MAPPING *cmap, int nbytes G_UNUSED,
                                void *cell, int n)
 {
     COLUMN_MAPPING cmapold = 0;
@@ -448,7 +445,6 @@ static void gdal_values_double(int fd UNUSED, const unsigned char *data,
         cmapold = cmap[i];
     }
 }
-#endif
 
 /* transfer_to_cell_XY takes bytes from fcb->data, converts these bytes with
    the appropriate procedure (e.g. XDR or byte reordering) into type X
@@ -464,20 +460,16 @@ static void transfer_to_cell_XX(int fd, void *cell)
     static void (*cell_values_type[3])(
         int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
         int) = {cell_values_int, cell_values_float, cell_values_double};
-#ifdef HAVE_GDAL
     static void (*gdal_values_type[3])(
         int, const unsigned char *, const COLUMN_MAPPING *, int, void *,
         int) = {gdal_values_int, gdal_values_float, gdal_values_double};
-#endif
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
-#ifdef HAVE_GDAL
     if (fcb->gdal)
         (gdal_values_type[fcb->map_type])(fd, fcb->data, fcb->col_map,
                                           fcb->cur_nbytes, cell,
                                           R__.rd_window.cols);
     else
-#endif
         (cell_values_type[fcb->map_type])(fd, fcb->data, fcb->col_map,
                                           fcb->cur_nbytes, cell,
                                           R__.rd_window.cols);
@@ -854,7 +846,7 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
     unsigned char *compressed_buf;
     int res;
 
-    if (lseek(null_fd, t1, SEEK_SET) < 0)
+    if (lseek(null_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
             _("Error seeking compressed null data for row %d of <%s>"), row,
             fcb->name);
@@ -914,7 +906,7 @@ int Rast__read_null_bits(int fd, int row, unsigned char *flags)
 
     offset = (off_t)size * R;
 
-    if (lseek(null_fd, offset, SEEK_SET) < 0)
+    if (lseek(null_fd, offset, SEEK_SET) == -1)
         G_fatal_error(_("Error seeking null row %d for <%s>"), R, fcb->name);
 
     if (read(null_fd, flags, size) != size)
@@ -982,8 +974,6 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 
 /*--------------------------------------------------------------------------*/
 
-#ifdef HAVE_GDAL
-
 static void get_null_value_row_gdal(int fd, char *flags, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -1003,8 +993,6 @@ static void get_null_value_row_gdal(int fd, char *flags, int row)
 
     G_free(tmp_buf);
 }
-
-#endif
 
 /*--------------------------------------------------------------------------*/
 
@@ -1039,13 +1027,11 @@ static void embed_mask(char *flags, int row)
 
 static void get_null_value_row(int fd, char *flags, int row, int with_mask)
 {
-#ifdef HAVE_GDAL
     struct fileinfo *fcb = &R__.fileinfo[fd];
 
     if (fcb->gdal)
         get_null_value_row_gdal(fd, flags, row);
     else
-#endif
         get_null_value_row_nomask(fd, flags, row);
 
     if (with_mask)

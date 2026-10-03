@@ -1,58 +1,57 @@
 build_library_in_subdir(
-  lib
-  NAME
-  grass_lrs
-  DEPENDS
-  grass_gis
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  HEADERS
-  "lrs.h")
+    lib
+    NAME grass_lrs
+    DEPENDS grass_dbmibase grass_dbmiclient grass_dbmidriver grass_gis
+    HEADERS "lrs.h"
+)
 add_dependencies(grass_lrs db.drivers)
 build_program_in_subdir(
-  v.lrs.create
-  DEPENDS
-  grass_lrs
-  grass_vector
-  grass_gis
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  GDAL::GDAL
-  ${LIBM})
+    v.lrs.create
+    DEPENDS
+        ${LIBM}
+        GDAL::GDAL
+        grass_dbmibase
+        grass_dbmiclient
+        grass_dbmidriver
+        grass_gis
+        grass_lrs
+        grass_vector
+)
 
 build_program_in_subdir(
-  v.lrs.segment
-  DEPENDS
-  grass_lrs
-  grass_vector
-  grass_gis
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  GDAL::GDAL
-  ${LIBM})
+    v.lrs.segment
+    DEPENDS
+        ${LIBM}
+        GDAL::GDAL
+        grass_dbmibase
+        grass_dbmiclient
+        grass_dbmidriver
+        grass_gis
+        grass_lrs
+        grass_vector
+)
 
 build_program_in_subdir(
-  v.lrs.label
-  DEPENDS
-  grass_lrs
-  grass_vector
-  grass_gis
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  GDAL::GDAL
-  ${LIBM})
+    v.lrs.label
+    DEPENDS
+        ${LIBM}
+        GDAL::GDAL
+        grass_dbmibase
+        grass_dbmiclient
+        grass_dbmidriver
+        grass_gis
+        grass_lrs
+        grass_vector
+)
 
 build_program_in_subdir(
-  v.lrs.where
-  DEPENDS
-  grass_lrs
-  grass_vector
-  grass_gis
-  grass_dbmibase
-  grass_dbmiclient
-  grass_dbmidriver
-  GDAL::GDAL)
+    v.lrs.where
+    DEPENDS
+        GDAL::GDAL
+        grass_dbmibase
+        grass_dbmiclient
+        grass_dbmidriver
+        grass_gis
+        grass_lrs
+        grass_vector
+)

@@ -7,11 +7,8 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      interface to db.execute to add a column to the attribute table
 #               connected to a given vector map
-# COPYRIGHT:    (C) 2005 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2005 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -41,7 +38,6 @@
 # %end
 
 import atexit
-import os
 from pathlib import Path
 import re
 
@@ -53,9 +49,10 @@ rm_files = []
 
 def cleanup():
     for file in rm_files:
-        if os.path.isfile(file):
+        file = Path(file)
+        if file.is_file():
             try:
-                os.remove(file)
+                file.unlink()
             except Exception as e:
                 gs.warning(
                     _("Unable to remove file {file}: {message}").format(

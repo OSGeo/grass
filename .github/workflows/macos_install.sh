@@ -44,6 +44,7 @@ CONFIGURE_FLAGS="\
   --with-proj-includes=${CONDA_PREFIX}/include \
   --with-proj-libs=${CONDA_PREFIX}/lib \
   --with-proj-share=${CONDA_PREFIX}/share/proj \
+  --with-pthread \
   --with-readline \
   --with-readline-includes=${CONDA_PREFIX}/include/readline \
   --with-readline-libs=${CONDA_PREFIX}/lib

@@ -2,8 +2,8 @@
 # Author: Owen Smith - Rewritten from test.pl by Huidae Cho
 # Run: d.mon start=wx0 && ./test.py | d.text at=0,100
 import math
-from pathlib import Path
 import re
+from pathlib import Path
 
 # Quiet black syntax checking for fonts and colors to keep the code printed to
 # the display vertically short.

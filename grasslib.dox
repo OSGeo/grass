@@ -1,7 +1,7 @@
 /*! \mainpage GRASS 8 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
-     * updated 8/2005, 2006-2025
+     * updated 8/2005, 2006-2026
   -->
 
 <a href="https://grass.osgeo.org">GRASS</a> (<b>Geographic
@@ -23,7 +23,7 @@ Team</a>, an international team of programmers, GRASS module authors
 are cited within their module's source code and the contributed manual
 pages.
 
-&copy; 2000-2025 by the GRASS Development Team
+&copy; 2000-2026 by the GRASS Development Team
 
 This manual is published under <a
 href="http://www.fsf.org/copyleft/fdl.html">GNU Free Documentation
@@ -331,10 +331,10 @@ subdirectories are created in the $SRC directory as OBJ.<tt>arch</tt>
 and LIB.<tt>arch</tt>, where <tt>arch</tt> represents the architecture
 of the compiling machine. Thus, for example, $SRC/OBJ.sun4 would
 contain the object files for Sun/4 and SPARC architectures, and
-<tt>$SRC/LIB.686-pc-linux-gnu</tt> would contain library archives for
-Linux architectures. Likewise, <tt>$SRC/OBJ.686-pc-linux-gnu</tt>
+<tt>$SRC/LIB.x86_64-pc-linux-gnu</tt> would contain library archives for
+Linux architectures. Likewise, <tt>$SRC/OBJ.x86_64-pc-linux-gnu</tt>
 would contain the object files for Linux architectures, and
-<tt>$SRC/LIB.686-pc-linux-gnu</tt> would contain library archives for
+<tt>$SRC/LIB.x86_64-pc-linux-gnu</tt> would contain library archives for
 Linux architectures.
 
 Note that 'arch' is defined for a specific architecture during setup

@@ -4,11 +4,8 @@
 # MODULE:    g.download.project
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:   Download and extract project (location) from web
-# COPYRIGHT: (C) 2017-2024 by the GRASS Development Team
-#
-#    This program is free software under the GNU General
-#    Public License (>=v2). Read the file COPYING that
-#    comes with GRASS for details.
+# SPDX-FileCopyrightText: 2017-2024 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -70,7 +67,7 @@ def find_location_in_directory(path, recurse=0):
     """
     assert recurse >= 0
     full_paths = [os.path.join(path, i) for i in os.listdir(path)]
-    candidates = sorted([i for i in full_paths if os.path.isdir(i)])
+    candidates = sorted([i for i in full_paths if Path(i).is_dir()])
     for candidate in candidates:
         if is_location_valid(candidate):
             return candidate

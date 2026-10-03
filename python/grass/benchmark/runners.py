@@ -5,11 +5,9 @@
 #
 # PURPOSE:   Benchmarking for GRASS modules
 #
-# COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2021 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 
 """Basic functions for benchmarking modules"""
@@ -173,7 +171,7 @@ def benchmark_resolutions(module, resolutions, label, repeat=5, nprocs=None):
         region = gs.region()
         n_cells.append(region["cells"])
         print("\u2500" * term_size.columns)
-        print(f"Benchmark with {resolution} resolution...\n")
+        print(f"Benchmark with resolution {resolution}...\n")
         time_sum = 0
         measured_times = []
         for _ in range(repeat):

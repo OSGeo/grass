@@ -2,7 +2,18 @@ MODULE_TOPDIR = ..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
-MANPAGES := $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTMLDIR)/*.html))
+# Some source/*.md files exist only for the MkDocs website and have no man
+# page equivalent. index.md is the site landing page, keywords.md is a stub
+# for the tags plugin (the keyword index is rendered by MkDocs), and the
+# *_intro.md pages are navigation-only introductions. The remaining ones are
+# the developer and user guides installed from doc/ and doc/development/;
+# they are derived from those directories so a newly added guide is excluded
+# automatically. grass_database and projectionintro are the exception: they
+# are reference pages that also ship as man pages.
+DOC_MD := $(wildcard $(MODULE_TOPDIR)/doc/*.md) \
+	$(wildcard $(MODULE_TOPDIR)/doc/development/*.md)
+WEB_ONLY_MD := index keywords development_intro command_line_intro \
+	$(filter-out grass_database projectionintro,$(basename $(notdir $(DOC_MD))))
 
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
@@ -20,6 +31,7 @@ DSTFILES := \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
 	$(MDDIR)/source/index.md \
+	$(MDDIR)/overrides/main.html \
 	$(MDDIR)/overrides/partials/copyright.html \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
@@ -66,16 +78,16 @@ default: $(DSTFILES)
 	@echo "Generating manual pages index (help system)..."
 	$(MAKE) $(INDICES)
 	$(call build,check)
-	$(MAKE) manpages
 	$(MAKE) $(INDICES_MD)
+	$(MAKE) manpages
 # $(MAKE) build-mkdocs
 
-# This must be a separate target so that evaluation of $(MANPAGES)
-# is delayed until the indices have been generated
-left := (
-right := )
+# The sweep script is shared with the CMake build, so both builds convert
+# the same set of pages. It skips pages whose man page is up to date, so
+# after the tool builds this effectively converts the index pages.
 manpages:
-	$(MAKE) $(subst $(left),\$(left),$(subst $(right),\$(right),$(MANPAGES)))
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(PYTHON) ./build_manpages.py \
+		$(MDDIR)/source $(MANDIR) $(GISBASE)/utils/g.md2man.py --exclude $(WEB_ONLY_MD)
 
 .PHONY: manpages
 
@@ -273,6 +285,12 @@ $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(M
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/scripts:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/main.html: mkdocs/overrides/main.html | $(MDDIR)/overrides
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides:
 	$(MKDIR) $@
 
 $(MDDIR)/overrides/partials/copyright.html: mkdocs/overrides/partials/copyright.html | $(MDDIR)/overrides/partials

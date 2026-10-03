@@ -6,11 +6,8 @@
  *
  * PURPOSE:      Export a 3D raster map as netCDF file
  *
- * COPYRIGHT:    (C) 2012 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2012 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * TODO: Add time zone support to time variable
  * TODO: Implement better support for CF coordinate reference system defined
@@ -163,12 +160,8 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
 
         pj_get_kv(&pjinfo, pkv, ukv);
         proj4 = pjinfo.def;
-#ifdef HAVE_PROJ_H
         proj_destroy(pjinfo.pj);
-#else
-        pj_free(pjinfo.pj);
-#endif
-#ifdef HAVE_OGR
+
         /* We support the CF suggestion crs_wkt and the gdal spatil_ref
          * attribute */
         if ((retval = nc_put_att_text(ncid, crs_varid, "crs_wkt",
@@ -179,7 +172,6 @@ static void write_netcdf_header(int ncid, RASTER3D_Region *region, int *varid,
                                       strlen(GPJ_grass_to_wkt(pkv, ukv, 0, 0)),
                                       GPJ_grass_to_wkt(pkv, ukv, 0, 0))))
             ERR(retval);
-#endif
         /* Code from g.proj:
          * GRASS-style PROJ.4 strings don't include a unit factor as this is
          * handled separately in GRASS - must include it here though */

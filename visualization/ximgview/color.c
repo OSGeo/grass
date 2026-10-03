@@ -142,8 +142,8 @@ static int try_get_colors(Colormap cmap, int nr, int ng, int nb)
     int n_pixels;
     int r, g, b;
 
-    xpixels = (unsigned long *)G_realloc(xpixels,
-                                         nr * ng * nb * sizeof(unsigned long));
+    xpixels = (unsigned long *)G_realloc(xpixels, (size_t)nr * ng * nb *
+                                                      sizeof(unsigned long));
     n_pixels = 0;
 
     xcolor.flags = DoRed | DoGreen | DoBlue;

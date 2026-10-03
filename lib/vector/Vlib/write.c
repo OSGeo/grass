@@ -11,10 +11,8 @@
    - Delete existing feature
    - Restore deleted feature
 
-   (C) 2001-2010, 2012-2013 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2010, 2012-2013 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Radim Blazek
    \author Updated by Martin Landa <landa.martin gmail.com> (restore lines, OGR
@@ -26,64 +24,65 @@
 #include <grass/glocale.h>
 #include <grass/vector.h>
 
-static off_t write_dummy(struct Map_info *Map UNUSED, int type UNUSED,
-                         const struct line_pnts *points UNUSED,
-                         const struct line_cats *cats UNUSED)
+static off_t write_dummy(struct Map_info *Map G_UNUSED, int type G_UNUSED,
+                         const struct line_pnts *points G_UNUSED,
+                         const struct line_cats *cats G_UNUSED)
 {
     G_warning("Vect_write_line() %s", _("for this format/level not supported"));
     return -1;
 }
 
-static off_t rewrite_dummy(struct Map_info *Map UNUSED, off_t line UNUSED,
-                           int type UNUSED,
-                           const struct line_pnts *points UNUSED,
-                           const struct line_cats *cats UNUSED)
+static off_t rewrite_dummy(struct Map_info *Map G_UNUSED, off_t line G_UNUSED,
+                           int type G_UNUSED,
+                           const struct line_pnts *points G_UNUSED,
+                           const struct line_cats *cats G_UNUSED)
 {
     G_warning("Vect_rewrite_line() %s",
               _("for this format/level not supported"));
     return -1;
 }
 
-static int delete_dummy(struct Map_info *Map UNUSED, off_t line UNUSED)
+static int delete_dummy(struct Map_info *Map G_UNUSED, off_t line G_UNUSED)
 {
     G_warning("Vect_delete_line() %s",
               _("for this format/level not supported"));
     return -1;
 }
 
-static int restore_dummy(struct Map_info *Map UNUSED, off_t offset UNUSED,
-                         off_t line UNUSED)
+static int restore_dummy(struct Map_info *Map G_UNUSED, off_t offset G_UNUSED,
+                         off_t line G_UNUSED)
 {
     G_warning("Vect_restore_line() %s",
               _("for this format/level not supported"));
     return -1;
 }
 
-#if !defined HAVE_OGR || !defined HAVE_POSTGRES
-static int format(struct Map_info *Map UNUSED, off_t line UNUSED)
+#if !defined HAVE_POSTGRES
+static int format(struct Map_info *Map G_UNUSED, off_t line G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
-static int format2(struct Map_info *Map UNUSED, off_t offset UNUSED,
-                   off_t line UNUSED)
+static int format2(struct Map_info *Map G_UNUSED, off_t offset G_UNUSED,
+                   off_t line G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
-static off_t format_l(struct Map_info *Map UNUSED, int type UNUSED,
-                      const struct line_pnts *points UNUSED,
-                      const struct line_cats *cats UNUSED)
+static off_t format_l(struct Map_info *Map G_UNUSED, int type G_UNUSED,
+                      const struct line_pnts *points G_UNUSED,
+                      const struct line_cats *cats G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
 }
 
-static off_t format_l2(struct Map_info *Map UNUSED, off_t line UNUSED,
-                       int type UNUSED, const struct line_pnts *points UNUSED,
-                       const struct line_cats *cats UNUSED)
+static off_t format_l2(struct Map_info *Map G_UNUSED, off_t line G_UNUSED,
+                       int type G_UNUSED,
+                       const struct line_pnts *points G_UNUSED,
+                       const struct line_cats *cats G_UNUSED)
 {
     G_fatal_error(_("Requested format is not compiled in this version"));
     return 0;
@@ -93,16 +92,9 @@ static off_t format_l2(struct Map_info *Map UNUSED, off_t line UNUSED,
 static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
                                            const struct line_pnts *,
                                            const struct line_cats *) = {
-    {write_dummy, V1_write_line_nat, V2_write_line_nat}
-#ifdef HAVE_OGR
-    ,
+    {write_dummy, V1_write_line_nat, V2_write_line_nat},
     {write_dummy, V1_write_line_ogr, V2_write_line_sfa},
     {write_dummy, V1_write_line_ogr, V2_write_line_sfa}
-#else
-    ,
-    {write_dummy, format_l, format_l},
-    {write_dummy, format_l, format_l}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {write_dummy, V1_write_line_pg, V2_write_line_pg}
@@ -115,16 +107,9 @@ static off_t (*Vect_write_line_array[][3])(struct Map_info *, int,
 static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
                                              const struct line_pnts *,
                                              const struct line_cats *) = {
-    {rewrite_dummy, V1_rewrite_line_nat, V2_rewrite_line_nat}
-#ifdef HAVE_OGR
-    ,
+    {rewrite_dummy, V1_rewrite_line_nat, V2_rewrite_line_nat},
     {rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_sfa},
     {rewrite_dummy, V1_rewrite_line_ogr, V2_rewrite_line_sfa}
-#else
-    ,
-    {rewrite_dummy, format_l2, format_l2},
-    {rewrite_dummy, format_l2, format_l2}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {rewrite_dummy, V1_rewrite_line_pg, V2_rewrite_line_pg}
@@ -135,16 +120,9 @@ static off_t (*Vect_rewrite_line_array[][3])(struct Map_info *, off_t, int,
 };
 
 static int (*Vect_delete_line_array[][3])(struct Map_info *, off_t) = {
-    {delete_dummy, V1_delete_line_nat, V2_delete_line_nat}
-#ifdef HAVE_OGR
-    ,
+    {delete_dummy, V1_delete_line_nat, V2_delete_line_nat},
     {delete_dummy, V1_delete_line_ogr, V2_delete_line_sfa},
     {delete_dummy, V1_delete_line_ogr, V2_delete_line_sfa}
-#else
-    ,
-    {delete_dummy, format, format},
-    {delete_dummy, format, format}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {delete_dummy, V1_delete_line_pg, V2_delete_line_pg}
@@ -155,16 +133,9 @@ static int (*Vect_delete_line_array[][3])(struct Map_info *, off_t) = {
 };
 
 static int (*Vect_restore_line_array[][3])(struct Map_info *, off_t, off_t) = {
-    {restore_dummy, V1_restore_line_nat, V2_restore_line_nat}
-#ifdef HAVE_OGR
-    ,
+    {restore_dummy, V1_restore_line_nat, V2_restore_line_nat},
     {restore_dummy, restore_dummy, restore_dummy},
     {restore_dummy, restore_dummy, restore_dummy}
-#else
-    ,
-    {restore_dummy, format2, format2},
-    {restore_dummy, format2, format2}
-#endif
 #ifdef HAVE_POSTGRES
     ,
     {restore_dummy, restore_dummy, restore_dummy}

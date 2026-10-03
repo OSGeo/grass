@@ -6,10 +6,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2013 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2013 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -37,9 +35,6 @@
 const char *Vect_get_finfo_dsn_name(struct Map_info *Map)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with OGR support"));
-#endif
         return Map->fInfo.ogr.dsn;
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
@@ -77,9 +72,6 @@ char *Vect_get_finfo_layer_name(struct Map_info *Map)
 
     name = NULL;
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with OGR support"));
-#endif
         name = G_store(Map->fInfo.ogr.layer_name);
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
@@ -110,21 +102,13 @@ char *Vect_get_finfo_layer_name(struct Map_info *Map)
 const char *Vect_get_finfo_format_info(struct Map_info *Map)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with OGR support"));
-#else
         if (!Map->fInfo.ogr.ds)
             return NULL;
 
         return OGR_Dr_GetName(OGR_DS_GetDriver(Map->fInfo.ogr.ds));
-#endif
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with PostgreSQL support"));
-#else
         return "PostgreSQL";
-#endif
     }
 
     return NULL;
@@ -149,9 +133,6 @@ const char *Vect_get_finfo_geometry_type(struct Map_info *Map)
 
     ftype_tmp = ftype = NULL;
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with OGR support"));
-#else
         OGRwkbGeometryType Ogr_geom_type;
         OGRFeatureDefnH Ogr_feature_defn;
 
@@ -164,7 +145,6 @@ const char *Vect_get_finfo_geometry_type(struct Map_info *Map)
         Ogr_geom_type = wkbFlatten(OGR_FD_GetGeomType(Ogr_feature_defn));
 
         ftype_tmp = G_store(OGRGeometryTypeToName(Ogr_geom_type));
-#endif
     }
     else if (Map->format == GV_FORMAT_POSTGIS) {
 #ifndef HAVE_POSTGRES
@@ -251,11 +231,7 @@ int Vect_get_finfo_topology_info(struct Map_info *Map, char **toposchema,
                                  char **topogeom, int *topo_geo_only)
 {
     if (Map->format == GV_FORMAT_OGR || Map->format == GV_FORMAT_OGR_DIRECT) {
-#ifndef HAVE_OGR
-        G_warning(_("GRASS is not compiled with OGR support"));
-#else
         return GV_TOPO_PSEUDO;
-#endif
     }
 
     if (Map->format == GV_FORMAT_POSTGIS) {

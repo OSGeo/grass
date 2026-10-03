@@ -10,10 +10,8 @@ Usage:
     tgis.register_maps_in_space_time_dataset(type, name, maps)
 
 
-(C) 2012-2022 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2022 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 :authors: Vaclav Petras
@@ -25,16 +23,20 @@ from contextlib import contextmanager
 
 import grass.script as gs
 
-from .core import get_available_temporal_mapsets, get_tgis_message_interface, init_dbif
+from .core import get_tgis_message_interface, init_dbif
 from .datetime_math import time_delta_to_relative_time
-from .factory import dataset_factory
 from .open_stds import open_old_stds
 
 ###############################################################################
 
 
 def get_dataset_list(
-    type, temporal_type, columns=None, where=None, order=None, dbif=None
+    type,
+    temporal_type,
+    columns=None,
+    where=None,
+    order=None,
+    dbif=None,
 ):
     """Return a list of time stamped maps or space time datasets of a specific
     temporal type that are registered in the temporal database
@@ -42,18 +44,23 @@ def get_dataset_list(
     This method returns a dictionary, the keys are the available mapsets,
     the values are the rows from the SQL database query.
 
-    :param type: The type of the datasets (strds, str3ds, stvds, raster,
-                 raster_3d, vector)
+    :param type: The dataset type(s) (strds, str3ds, stvds, raster,
+                 raster_3d, vector) as a string with a single dataset type
+                 (e.g. "strds") or a list of strings with dataset types (e.g.
+                 ["strds", "stvds"])
     :param temporal_type: The temporal type of the datasets (absolute,
-                          relative)
+                          relative) as a string or a list of strings
     :param columns: A comma separated list of columns that will be selected
     :param where: A where statement for selected listing without "WHERE"
     :param order: A comma separated list of columns to order the
                   datasets by category
     :param dbif: The database interface to be used
 
-    :return: A dictionary with the rows of the SQL query for each
-             available mapset
+    :return: A dictionary with mapsets as keys. When *type* is a string,
+             values are raw database row objects (preserving backward
+             compatibility). When *type* is a list, values are plain
+             dicts with an additional ``"type"`` key identifying the
+             dataset type of each record.
 
     .. code-block:: pycon
 
@@ -93,40 +100,105 @@ def get_dataset_list(
         >>> check = sp.delete()
 
     """
-    id = None
-    sp = dataset_factory(type, id)
+    msgr = get_tgis_message_interface()
 
     dbif, connection_state_changed = init_dbif(dbif)
 
-    mapsets = get_available_temporal_mapsets()
+    is_list_input = isinstance(type, list)
+    stds_type = [type] if isinstance(type, str) else type
+    if isinstance(temporal_type, str):
+        temporal_type = [temporal_type]
 
     result = {}
 
-    for mapset in mapsets.keys():
-        if temporal_type == "absolute":
-            table = sp.get_type() + "_view_abs_time"
-        else:
-            table = sp.get_type() + "_view_rel_time"
+    for ttype in temporal_type:
+        mapset_for_schema = (
+            list(dbif.tgis_mapsets.keys())[0] if dbif.tgis_mapsets else None
+        )
+        if not mapset_for_schema:
+            continue
+
+        type_schemas = []
+        for dtype in stds_type:
+            table = (
+                dtype + "_view_abs_time"
+                if ttype == "absolute"
+                else dtype + "_view_rel_time"
+            )
+            dbif.execute(f"SELECT * FROM {table} WHERE 0=1", mapset=mapset_for_schema)
+            type_schemas.append(
+                [d[0] for d in dbif.connections[mapset_for_schema].cursor.description]
+            )
+
+        common_columns = [
+            col
+            for col in type_schemas[0]
+            if all(col in schema for schema in type_schemas[1:])
+        ]
+        valid_columns_set = set(common_columns)
 
         if columns and columns.find("all") == -1:
-            sql = "SELECT " + str(columns) + " FROM " + table
+            requested_columns = [
+                col.strip() for col in columns.split(",") if col != "type"
+            ]
+            for col in requested_columns:
+                if col not in valid_columns_set:
+                    if connection_state_changed:
+                        dbif.close()
+                    if len(stds_type) == 1:
+                        msgr.fatal(
+                            _(
+                                "Column '%s' is not available for the requested dataset type"
+                            )
+                            % col
+                        )
+                    else:
+                        msgr.fatal(
+                            _(
+                                "Column '%s' is not available for the requested combination of dataset types"
+                            )
+                            % col
+                        )
+            final_columns = requested_columns
         else:
-            sql = "SELECT * FROM " + table
+            final_columns = common_columns
 
-        if where:
-            sql += " WHERE " + where
-            sql += " AND mapset = '%s'" % (mapset)
-        else:
-            sql += " WHERE mapset = '%s'" % (mapset)
+        if not final_columns:
+            if connection_state_changed:
+                dbif.close()
+            msgr.fatal(_("No valid database columns were requested"))
 
-        if order:
-            sql += " ORDER BY " + order
+        columns_to_query = ",".join(final_columns)
 
-        dbif.execute(sql, mapset=mapset)
-        rows = dbif.fetchall(mapset=mapset)
+        for dtype in stds_type:
+            for mapset in dbif.tgis_mapsets:
+                if ttype == "absolute":
+                    table = dtype + "_view_abs_time"
+                else:
+                    table = dtype + "_view_rel_time"
 
-        if rows:
-            result[mapset] = rows
+                sql = f"SELECT {columns_to_query} FROM {table}"
+
+                if where:
+                    sql += " WHERE " + where
+                    sql += " AND mapset = '%s'" % (mapset)
+                else:
+                    sql += " WHERE mapset = '%s'" % (mapset)
+
+                if order:
+                    sql += " ORDER BY " + order
+
+                dbif.execute(sql, mapset=mapset)
+                rows = dbif.fetchall(mapset=mapset)
+
+                if rows:
+                    if mapset not in result:
+                        result[mapset] = []
+                    if is_list_input:
+                        for row in rows:
+                            result[mapset].append({**dict(row), "type": dtype})
+                    else:
+                        result[mapset].extend(rows)
 
     if connection_state_changed:
         dbif.close()
@@ -186,7 +258,7 @@ def _write_json(rows, column_names, file) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = dict(zip(column_names, row))
+        new_row = dict(zip(column_names, row, strict=True))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:
@@ -217,7 +289,7 @@ def _write_yaml(rows, column_names, file=sys.stdout) -> None:
 
     dict_rows = []
     for row in rows:
-        new_row = dict(zip(column_names, row))
+        new_row = dict(zip(column_names, row, strict=True))
         dict_rows.append(new_row)
     meta = {"column_names": column_names}
     with _open_output_file(file) as stream:
@@ -280,17 +352,12 @@ def _get_get_registered_maps_as_objects_with_method(dataset, where, method, gran
         return dataset.get_registered_maps_as_objects(
             where=where, order="start_time", dbif=dbif
         )
-    if method != "gran":
-        msg = f"Invalid method '{method}'"
-        raise ValueError(msg)
-    if where:
-        msg = f"The where parameter is not supported with method={method}"
-        raise ValueError(msg)
-    if gran is not None and gran != "":
+    if method == "gran":
         return dataset.get_registered_maps_as_objects_by_granularity(
-            gran=gran, dbif=dbif
+            gran=gran, where=where, dbif=dbif
         )
-    return dataset.get_registered_maps_as_objects_by_granularity(dbif=dbif)
+    msg = f"Invalid method '{method}'"
+    raise ValueError(msg)
 
 
 def _get_get_registered_maps_as_objects_delta_gran(
@@ -512,10 +579,15 @@ def list_maps_of_stds(
                  dataset is used
     :param outpath: The path to file where to save output
     """
+    if gran == "":
+        gran = None
     if not output_format:
         if method == "comma":
             output_format = "line"
-        output_format = "plain"
+            if not separator:
+                separator = ","
+        else:
+            output_format = "plain"
 
     if columns:
         if isinstance(columns, str):

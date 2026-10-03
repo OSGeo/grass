@@ -13,6 +13,4 @@ EXTRA_CFLAGS = $(VECT_CFLAGS)
 
 include $(MODULE_TOPDIR)/include/Make/Module.make
 
-ifneq ($(USE_OGR),)
 default: cmd
-endif

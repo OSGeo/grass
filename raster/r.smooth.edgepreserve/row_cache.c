@@ -1,11 +1,10 @@
 /*
  * r.smooth.edgepreserve row cache
  *
- *   Copyright 2025 by Maris Nartiss, and The GRASS Development Team
+ *   SPDX-FileCopyrightText: 2025 Maris Nartiss
+ *   SPDX-FileCopyrightText: GRASS Development Team
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author: Maris Nartiss
- *
- *   This program is free software licensed under the GPL (>=v2).
- *   Read the COPYING file that comes with GRASS for details.
  *
  */
 #include <stdio.h>
@@ -24,13 +23,19 @@
 /* For rowio */
 int rowio_get_row(int fd, void *buf, int row, int buf_len)
 {
-    lseek(fd, ((off_t)row) * buf_len, SEEK_SET);
-    errno = 0;
+    if (lseek(fd, ((off_t)row) * buf_len, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("Seek error on temp file. %d: %s"), err, strerror(err));
+    }
+
     ssize_t reads = read(fd, buf, (size_t)buf_len);
-    if (reads == -1)
+    if (reads == -1) {
+        int err = errno;
         G_fatal_error(
             _("There was an error reading data from a temporary file. %d: %s"),
-            errno, strerror(errno));
+            err, strerror(err));
+    }
+
     return (reads == buf_len);
 }
 
@@ -38,13 +43,19 @@ int rowio_get_row(int fd, void *buf, int row, int buf_len)
 int rowio_put_row(int fd, const void *buf, int row, int buf_len)
 {
     // can't use G_fseek, as rowio operates on file descriptors
-    lseek(fd, ((off_t)row) * buf_len, SEEK_SET);
-    errno = 0;
+    if (lseek(fd, ((off_t)row) * buf_len, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("Seek error on temp file. %d: %s"), err, strerror(err));
+    }
+
     ssize_t writes = write(fd, buf, (size_t)buf_len);
-    if (writes == -1)
+    if (writes == -1) {
+        int err = errno;
         G_fatal_error(
             _("There was an error writing data from a temporary file. %d: %s"),
-            errno, strerror(errno));
+            err, strerror(err));
+    }
+
     return (writes == buf_len);
 }
 

@@ -6,11 +6,8 @@
 # AUTHOR(S):	CERL?; updated to GRASS 5.7 by Michael Barton
 #               Converted to Python by Glynn Clements
 # PURPOSE:	To redraw current displayed maps to 24 bit PNG output
-# COPYRIGHT:	(C) 2004-2012 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2004-2012 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -42,6 +39,8 @@
 # % key: c
 # % description: Combine resulting R,G,B layers into single output map
 # %end
+# %option G_OPT_M_NPROCS
+# %end
 
 import os
 import string
@@ -53,6 +52,7 @@ def main():
     second = options["second"]
     output = options["output"]
     percent = options["percent"]
+    nprocs = options["nprocs"]
 
     mapset = gs.gisenv()["MAPSET"]
 
@@ -80,7 +80,15 @@ def main():
     cmd = [template.substitute(ch=ch) for ch in ["r", "g", "b"]]
     cmd = ";".join(cmd)
 
-    gs.mapcalc(cmd, output=output, first=first, second=second, frac1=frac1, frac2=frac2)
+    gs.mapcalc(
+        cmd,
+        output=output,
+        first=first,
+        second=second,
+        frac1=frac1,
+        frac2=frac2,
+        nprocs=nprocs,
+    )
 
     for ch in ["r", "g", "b"]:
         map = "%s.%s" % (output, ch)

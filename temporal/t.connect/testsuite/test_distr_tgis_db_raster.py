@@ -1,9 +1,7 @@
 """test distributed temporal databases with strds
 
-(C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -95,7 +93,7 @@ class TestRasterExtraction(TestCase):
 
         out = t_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         t_list = SimpleModule(
@@ -108,12 +106,12 @@ class TestRasterExtraction(TestCase):
         )
         self.assertModule(t_list)
         self.assertFileExists(self.outfile)
-        read_data = Path(self.outfile).read_text()
-        for a, b in zip(list_string.split("\n"), read_data.split("\n")):
+        outfile_path = Path(self.outfile)
+        read_data = outfile_path.read_text()
+        for a, b in zip(list_string.split("\n"), read_data.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
         # self.assertLooksLike(reference=read_data, actual=list_string)
-        if os.path.isfile(self.outfile):
-            os.remove(self.outfile)
+        outfile_path.unlink(missing_ok=True)
 
     def test_trast_list(self):
         self.runModule("g.mapset", mapset="test1")
@@ -127,7 +125,7 @@ class TestRasterExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         list_string = """a1|test2|2001-01-01 00:00:00|2001-03-01 00:00:00
@@ -139,7 +137,7 @@ class TestRasterExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         list_string = """a1|test3|2001-01-01 00:00:00|2001-04-01 00:00:00
@@ -151,7 +149,7 @@ class TestRasterExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         list_string = """a1|test4|2001-01-01 00:00:00|2001-05-01 00:00:00
@@ -163,7 +161,7 @@ class TestRasterExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         list_string = """a1|test5|2001-01-01 00:00:00|2001-06-01 00:00:00
@@ -175,7 +173,7 @@ class TestRasterExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         trast_list = SimpleModule(
@@ -183,11 +181,11 @@ class TestRasterExtraction(TestCase):
         )
         self.assertModule(trast_list)
         self.assertFileExists(self.outfile)
-        read_data = Path(self.outfile).read_text()
-        for a, b in zip(list_string.split("\n"), read_data.split("\n")):
+        outfile_path = Path(self.outfile)
+        read_data = outfile_path.read_text()
+        for a, b in zip(list_string.split("\n"), read_data.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
-        if os.path.isfile(self.outfile):
-            os.remove(self.outfile)
+        outfile_path.unlink(missing_ok=True)
 
     def test_strds_info(self):
         self.runModule("g.mapset", mapset="test4")

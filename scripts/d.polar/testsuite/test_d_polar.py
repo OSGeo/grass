@@ -4,11 +4,10 @@ Created on Fri 20 Nov 2020
 @author: Markus Neteler
 """
 
+from pathlib import Path
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
-
-import os
 
 
 class TestDPolar(TestCase):
@@ -28,8 +27,8 @@ class TestDPolar(TestCase):
         """Remove temporary region"""
         cls.del_temp_region()
 
-        if os.path.isfile(cls.epsFile):
-            os.remove(cls.epsFile)
+        if (p := Path(cls.epsFile)).is_file():
+            p.unlink()
 
     def test_d_polar(self):
         """EPS file test"""

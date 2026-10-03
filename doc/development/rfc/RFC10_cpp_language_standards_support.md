@@ -1,3 +1,4 @@
+<!-- markdownlint-disable-file line-length -->
 # RFC 10: C++17 Standard Support for GRASS GIS 8.5
 
 Author of the first draft: Nicklas Larsson

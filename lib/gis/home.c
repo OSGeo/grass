@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Get user's home or config directory.
  *
- * (C) 2001-2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -107,14 +105,19 @@ const char *G_config_path(void)
         return config_path;
 
     config_dir = getenv("GRASS_CONFIG_DIR");
-    if (!config_dir)
+    if (!config_dir) {
 #ifdef __MINGW32__
         config_dir = getenv("APPDATA");
 #else
         config_dir = G_home();
 #endif
-
+    }
+#if defined(__APPLE__)
+    snprintf(buf, GPATH_MAX, "%s%c%s%c%s", config_dir, HOST_DIRSEP, "Library",
+             HOST_DIRSEP, CONFIG_DIR);
+#else
     snprintf(buf, GPATH_MAX, "%s%c%s", config_dir, HOST_DIRSEP, CONFIG_DIR);
+#endif
     config_path = G_store(buf);
 
 #if 0

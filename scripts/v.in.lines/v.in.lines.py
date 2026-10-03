@@ -8,11 +8,8 @@
 #
 # PURPOSE:      Import point data as lines ('v.in.mapgen -f' wrapper script)
 #
-# COPYRIGHT:    (c) 2009-2010 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2009-2010 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 # %module
@@ -35,8 +32,8 @@
 # %end
 
 import sys
-import os
 import atexit
+from pathlib import Path
 from grass.script.utils import separator, try_remove
 from grass.script import core as grass
 
@@ -59,7 +56,7 @@ def main():
         inf = sys.stdin
     else:
         infile = options["input"]
-        if not os.path.exists(infile):
+        if not Path(infile).exists():
             grass.fatal(_("Unable to read input file <%s>") % infile)
         grass.debug("input file=[%s]" % infile)
 

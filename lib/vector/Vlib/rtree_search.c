@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2012 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2012 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Soeren Gebbert
  */
@@ -19,7 +17,7 @@
 /* Function to add the ids of overlapping rectangles to an ilist
  * This function is a callback function used in RTreeSearch2()
  * */
-static int add_id_to_list(int id, const struct RTree_Rect *rect UNUSED,
+static int add_id_to_list(int id, const struct RTree_Rect *rect G_UNUSED,
                           void *list)
 {
     struct ilist *l = (struct ilist *)list;

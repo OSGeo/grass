@@ -6,11 +6,8 @@
 #               Converted to Python by Glynn Clements
 #               Update for GRASS 7 by Markus Metz
 # PURPOSE:      Reconnect all vector maps from the current mapset
-# COPYRIGHT:    (C) 2004, 2012 by the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2004, 2012 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -54,6 +51,7 @@
 import sys
 import os
 import string
+from pathlib import Path
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
@@ -61,7 +59,7 @@ from grass.exceptions import CalledModuleError
 # substitute variables (gisdbase, location_name, mapset)
 
 
-def substitute_db(database):
+def substitute_db(database) -> str:
     gisenv = gs.gisenv()
     tmpl = string.Template(database)
 
@@ -75,22 +73,22 @@ def substitute_db(database):
 # create database if doesn't exist
 
 
-def create_db(driver, database):
-    subst_database = substitute_db(database)
+def create_db(driver, database) -> bool:
+    subst_database: str = substitute_db(database)
     if driver == "dbf":
-        path = subst_database
+        path = Path(subst_database)
         # check if destination directory exists
-        if not os.path.isdir(path):
+        if not path.is_dir():
             # create dbf database
-            os.makedirs(path)
+            path.mkdir(parents=True)
             return True
         return False
 
     if driver == "sqlite":
-        path = os.path.dirname(subst_database)
+        path = Path(subst_database).parent
         # check if destination directory exists
-        if not os.path.isdir(path):
-            os.makedirs(path)
+        if not path.is_dir():
+            path.mkdir(parents=True)
 
     if (
         subst_database

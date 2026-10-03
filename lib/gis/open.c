@@ -3,11 +3,8 @@
  *
  * \brief GIS Library - Open file functions
  *
- * (C) 1999-2015 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1999-2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author USACERL and many others
  */
@@ -192,7 +189,12 @@ int G_open_update(const char *element, const char *name)
 
     fd = G__open(element, name, G_mapset(), 2);
     if (fd >= 0)
-        lseek(fd, 0L, SEEK_END);
+        if (lseek(fd, 0L, SEEK_END) == -1) {
+            int err = errno;
+            G_warning(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+            return -1;
+        }
 
     return fd;
 }
@@ -279,7 +281,12 @@ FILE *G_fopen_append(const char *element, const char *name)
     fd = G__open(element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return NULL;
+    }
 
     G_debug(2, "\tfile open: append (mode = a)");
     return fdopen(fd, "a");
@@ -307,7 +314,12 @@ FILE *G_fopen_modify(const char *element, const char *name)
     fd = G__open(element, name, G_mapset(), 2);
     if (fd < 0)
         return (FILE *)0;
-    lseek(fd, 0L, SEEK_END);
+    if (lseek(fd, 0L, SEEK_END) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return NULL;
+    }
 
     G_debug(2, "\tfile open: modify (mode = r+)");
     return fdopen(fd, "r+");

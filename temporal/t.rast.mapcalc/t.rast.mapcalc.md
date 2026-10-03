@@ -60,26 +60,26 @@ will be represented by null() in case of a time instance.
 The supported internal variables for the **current sample interval** or
 **instance for absolute time** are:
 
-| **Variable**   | **Description**   |
-|:-------------- |:----------------- |
-| *start_doy()*| Day of year (doy) from the start time \[1 - 366\] |
-| *start_dow()*| Day of week (dow) from the start time \[1 - 7\], the start of the week is Monday == 1 |
-| *start_year()* | The year of the start time \[0 - 9999\] |
-| *start_month()* |The month of the start time \[1 - 12\] |
-| *start_week()* |Week of year of the start time \[1 - 54\] |
-| *start_day()* |Day of month from the start time \[1 - 31\] |
-| *start_hour()* |The hour of the start time \[0 - 23\] |
-| *start_minute()* |The minute of the start time \[0 - 59\] |
-|*start_second()* |The second of the start time \[0 - 59\] |
-|*end_doy()* |Day of year (doy) from the end time \[1 - 366\] |
-|*end_dow()* |Day of week (dow) from the end time \[1 - 7\], the start of the week is Monday == 1 |
-|*end_year()* |The year of the end time \[0 - 9999\] |
-|*end_month()* |The month of the end time \[1 - 12\] |
-|*end_woy()* |Week of year (woy) of the end time \[1 - 54\] |
-|*end_day()* |Day of month from the start time \[1 - 31\] |
-|*end_hour()* |The hour of the end time \[0 - 23\] |
-|*end_minute()* |The minute of the end time \[0 - 59\] |
-|*end_second()* |The second of the end time \[0 - 59\] |
+| **Variable**     | **Description**                                                                       |
+|:---------------- |:------------------------------------------------------------------------------------- |
+| *start_doy()*    | Day of year (doy) from the start time \[1 - 366\]                                     |
+| *start_dow()*    | Day of week (dow) from the start time \[1 - 7\], the start of the week is Monday == 1 |
+| *start_year()*   | The year of the start time \[0 - 9999\]                                               |
+| *start_month()*  | The month of the start time \[1 - 12\]                                                |
+| *start_week()*   | Week of year of the start time \[1 - 54\]                                             |
+| *start_day()*    | Day of month from the start time \[1 - 31\]                                           |
+| *start_hour()*   | The hour of the start time \[0 - 23\]                                                 |
+| *start_minute()* | The minute of the start time \[0 - 59\]                                               |
+| *start_second()* | The second of the start time \[0 - 59\]                                               |
+| *end_doy()*      | Day of year (doy) from the end time \[1 - 366\]                                       |
+| *end_dow()*      | Day of week (dow) from the end time \[1 - 7\], the start of the week is Monday == 1   |
+| *end_year()*     | The year of the end time \[0 - 9999\]                                                 |
+| *end_month()*    | The month of the end time \[1 - 12\]                                                  |
+| *end_woy()*      | Week of year (woy) of the end time \[1 - 54\]                                         |
+| *end_day()*      | Day of month from the start time \[1 - 31\]                                           |
+| *end_hour()*     | The hour of the end time \[0 - 23\]                                                   |
+| *end_minute()*   | The minute of the end time \[0 - 59\]                                                 |
+| *end_second()*   | The second of the end time \[0 - 59\]                                                 |
 
 The *end\_\** functions are represented by the null() internal variable
 in case of time instances.

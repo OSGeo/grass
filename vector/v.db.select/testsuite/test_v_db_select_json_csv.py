@@ -3,11 +3,9 @@
 # MODULE:       Test of v.db.select
 # AUTHOR(S):    Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:      Test parsing and structure of CSV and JSON outputs
-# COPYRIGHT:    (C) 2021-2023 by Vaclav Petras the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2021-2023 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -193,6 +191,24 @@ class DifficultValueTest(TestCase):
         self.assertEqual(data[3]["place_name"], 'The "Great" Place')
         self.assertEqual(data[7]["place_name"], "Building: GeoLab[5]")
         self.assertEqual(data[8]["place_name"], "892 Long Street\nRaleigh NC 29401")
+
+    def test_json_extent_loads(self):
+        """Test that -r flag with JSON format returns valid extent structure and values"""
+        text = gs.read_command(
+            "v.db.select",
+            map=self.vector_points,
+            flags="r",
+            format="json",
+        )
+        data = json.loads(text)
+        self.assertIn("extent", data)
+        extent = data["extent"]
+        self.assertAlmostEqual(extent["n"], 18.67346939, places=4)
+        self.assertAlmostEqual(extent["s"], 10.67346939, places=4)
+        self.assertAlmostEqual(extent["w"], 15.91836735, places=4)
+        self.assertAlmostEqual(extent["e"], 20.93877551, places=4)
+        self.assertEqual(extent["t"], 143)
+        self.assertEqual(extent["b"], 125)
 
 
 if __name__ == "__main__":

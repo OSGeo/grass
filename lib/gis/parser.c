@@ -67,10 +67,8 @@
  * Overview table: <a href="parser_standard_options.html">Parser standard
  options</a>
  *
- * (C) 2001-2015 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  * \author Soeren Gebbert added Dec. 2009 WPS process_description document
@@ -357,7 +355,7 @@ int G_parser(int argc, char **argv)
 
         if (!opt->key)
             G_warning(_("Bug in UI description. Missing option key"));
-        if (!valid_option_name(opt->key))
+        if (opt->key && !valid_option_name(opt->key))
             G_warning(_("Bug in UI description. Option key <%s> is not valid"),
                       opt->key);
         if (!opt->label && !opt->description)

@@ -58,13 +58,14 @@ void read_sites(const char *name, const char *field_name, const char *col,
             G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                           Fi->database, Fi->driver);
 
+        G_verbose_message("Using column <%s> for interpolation...", col);
         nrec = db_select_CatValArray(Driver, Fi->table, Fi->key, col, NULL,
                                      &cvarr);
         G_debug(3, "nrec = %d", nrec);
 
         ctype = cvarr.ctype;
         if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-            G_fatal_error(_("Column type not supported"));
+            G_fatal_error(_("Column type of column <%s> is not numeric"), col);
 
         if (nrec < 0)
             G_fatal_error(_("Unable to select data from table"));

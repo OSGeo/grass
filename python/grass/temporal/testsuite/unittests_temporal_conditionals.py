@@ -1,8 +1,6 @@
 """
-(C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Thomas leppelt and Soeren Gebbert
 """
@@ -389,7 +387,7 @@ class TestTemporalConditionals(TestCase):
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
-        maplist = D.get_registered_maps_as_objects()
+        D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 4)
         self.assertEqual(D.metadata.get_min_min(), 1)
         self.assertEqual(D.metadata.get_max_max(), 4)

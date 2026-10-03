@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Radim Blazek
  */
@@ -29,7 +27,7 @@
    \return -1 area has not 4 points or has island
  */
 int Vect_tin_get_z(struct Map_info *Map, double tx, double ty, double *tz,
-                   double *angle UNUSED, double *slope UNUSED)
+                   double *angle G_UNUSED, double *slope G_UNUSED)
 {
     int i, area, n_points;
     struct Plus_head *Plus;

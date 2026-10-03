@@ -14,18 +14,16 @@ import string
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
-from grass.script.core import tempname
-from grass.pygrass.gis import Mapset
-from grass.pygrass import utils
-
 from grass.lib.gis import G_remove_misc
 from grass.lib.raster import (
+    Rast_get_semantic_label_or_name,
     Rast_legal_semantic_label,
     Rast_read_semantic_label,
-    Rast_get_semantic_label_or_name,
     Rast_write_semantic_label,
 )
+from grass.pygrass import utils
+from grass.pygrass.gis import Mapset
+from grass.script.core import tempname
 
 
 class RastLegalBandIdTestCase(TestCase):

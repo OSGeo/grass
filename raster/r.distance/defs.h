@@ -8,11 +8,8 @@
  * PURPOSE:      Locates the closest points between objects in two
  *               raster maps.
  *
- * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2003-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -20,7 +17,10 @@
 #define __R_DIST_DEFS_H__
 
 #include <grass/gis.h>
+#include <grass/gjson.h>
 #include <grass/raster.h>
+
+enum OutputFormat { PLAIN, CSV, JSON };
 
 struct EdgeList /* keep track of edge cells */
 {
@@ -52,6 +52,8 @@ struct Parms {
     int sort;              /* 0: sort by cat1,cat2 (default)
                               1: sort by distance in ascending order
                               2: sort by distance in descending order */
+    enum OutputFormat
+        format; /* output format for results: PLAIN, CSV, or JSON */
 };
 
 /* distance.c */

@@ -5,8 +5,8 @@
 # TOOL:         configure-grass.sh
 # AUTHOR(s):    Nicklas Larsson
 # PURPOSE:      Sets up configure and compiler flags and configures GRASS
-# COPYRIGHT:    (c) 2020-2025 Nicklas Larsson and the GRASS Development Team
-#
+# SPDX-FileCopyrightText: 2020-2025 Nicklas Larsson
+# SPDX-FileCopyrightText: GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
@@ -68,6 +68,7 @@ CONFIGURE_FLAGS="\
   --with-libs=${PREFIX}/lib \
   --with-includes=${PREFIX}/include \
   --with-pdal=${PREFIX}/bin/pdal-config \
+  --with-pthread \
   --with-readline \
   --with-readline-includes=${PREFIX}/include/readline \
   --with-readline-libs=${PREFIX}/lib

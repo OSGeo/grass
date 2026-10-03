@@ -190,7 +190,11 @@ static int write_row_ptrs(int nrows, off_t *row_ptr, int fd)
     unsigned char *buf, *b;
     int len, row, result;
 
-    lseek(fd, 0L, SEEK_SET);
+    if (lseek(fd, 0L, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
     len = (nrows + 1) * nbytes + 1;
     b = buf = G_malloc(len);

@@ -47,7 +47,11 @@ extern void describe_maps(FILE *, expr_list *);
 extern void setup_region(void);
 
 extern int map_type(const char *name, int mod);
-extern int open_map(const char *name, int mod, int row, int col);
+
+// Declarations shared between 2d and 3d, but definitions are different.
+// Caller code links to 2d and 3d versions, assumes same signature.
+extern int open_map(const char *name, int mod, int row, int col,
+                    int thread_num);
 extern void setup_maps(void);
 extern void get_map_row(int idx, int mod, int depth, int row, int col,
                         void *buf, int res_type);

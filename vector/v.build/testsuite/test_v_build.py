@@ -6,6 +6,8 @@ from grass.gunittest.main import test
 class TestVBuild(TestCase):
     """Test v.build output against expected output stored in vbuild_output"""
 
+    tiny_polygons = "test_tiny_polygons"
+
     @classmethod
     def setUpClass(cls):
         """Set up a temporary region and create vector map with test features."""
@@ -64,10 +66,25 @@ Layer      0  number of unique cats:       1  number of cats:       2  number of
         0 |    2 |         2
 ------------------------------------------------------------------------------------------"""
 
+        cls.runModule(
+            "v.unpack",
+            input="data/tiny_polygons.pack",
+            output=cls.tiny_polygons,
+        )
+        # This test vector contains a few small areas. One of the areas
+        # is so tiny that the sign of the signed area size might be wrong
+        # due to fp precision limits. In this case, the area is
+        # erroneously identified as an island and not as an area
+        cls.runModule(
+            "v.build",
+            map=cls.tiny_polygons,
+        )
+
     @classmethod
     def tearDownClass(cls):
         """Remove created vector map and temporary files, then delete the temp region."""
         gs.run_command("g.remove", type="vector", flags="f", name="test_3x3_map")
+        gs.run_command("g.remove", type="vector", flags="f", name=cls.tiny_polygons)
         cls.del_temp_region()
 
     def test_vbuild_output(self):
@@ -86,6 +103,26 @@ Layer      0  number of unique cats:       1  number of cats:       2  number of
             [line for line in output_lines if not line.startswith("Map:")]
         )
         self.assertMultiLineEqual(filtered_output, self.vbuild_output)
+
+    def test_areas_islands(self):
+        """Compare the v.info output to the expected output."""
+        self.assertModuleKeyValue(
+            "v.info",
+            map=self.tiny_polygons,
+            flags="tg",
+            sep="=",
+            precision=0.1,
+            reference={
+                "nodes": 159,
+                "points": 0,
+                "lines": 0,
+                "boundaries": 168,
+                "centroids": 5,
+                "areas": 10,
+                "islands": 1,
+                "primitives": 173,
+            },
+        )
 
 
 if __name__ == "__main__":

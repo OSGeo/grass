@@ -15,7 +15,10 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
+
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "local_proto.h"
 
 /**
@@ -33,7 +36,12 @@
  */
 int seg_pageout(SEGMENT *SEG, int i)
 {
-    SEG->seek(SEG, SEG->scb[i].n, 0);
+    if (SEG->seek(SEG, SEG->scb[i].n, 0) == -1) {
+        int err = errno;
+        G_warning(_("File read/write operation failed: %s (%d)"), strerror(err),
+                  err);
+        return -1;
+    }
     errno = 0;
     if (write(SEG->fd, SEG->scb[i].buf, SEG->size) != SEG->size) {
         int err = errno;

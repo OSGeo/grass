@@ -349,65 +349,65 @@ function gives an integer result, and *\** indicates that the result is
 float if any of the arguments to the function are floating point values
 and integer if all arguments are integer.
 
-| Function / Variable        | Description                                                     | Type |
-|----------------------------|------------------------------------------------------------------|------|
-| abs(x)                     | Return absolute value of x                                       | *    |
-| acos(x)                    | Inverse cosine of x (result is in degrees)                       | F    |
-| asin(x)                    | Inverse sine of x (result is in degrees)                         | F    |
-| atan(x)                    | Inverse tangent of x (result is in degrees)                      | F    |
-| atan(x, y)                 | Inverse tangent of y/x (result is in degrees)                    | F    |
-| ceil(x)                    | Smallest integral value not less than x                          | *    |
-| cos(x)                     | Cosine of x (x is in degrees)                                    | F    |
-| double(x)                  | Convert x to double-precision floating point                     | F    |
-| eval([x, y, ...,] z)       | Evaluate values of listed expr, pass results to z                |      |
-| exp(x)                     | Exponential function of x                                        | F    |
-| exp(x, y)                  | x to the power y                                                 | F    |
-| float(x)                   | Convert x to single-precision floating point                     | F    |
-| floor(x)                   | Largest integral value not greater than x                        | *    |
-| graph(x, x1, y1[, x2, y2...]) | Convert x to y based on points in a graph                     | F    |
-| graph2(x, x1[, x2...], y1[, y2...]) | Alternative form of graph()                             | F    |
-| if(x)                      | 1 if x not zero, 0 otherwise                                     | *    |
-| if(x, a)                   | a if x not zero, 0 otherwise                                     | *    |
-| if(x, a, b)                | a if x not zero, b otherwise                                     | *    |
-| if(x, a, b, c)             | a if x > 0, b if x is zero, c if x < 0                           | *    |
-| int(x)                     | Convert x to integer (truncates)                                 | I    |
-| isnull(x)                  | Check if x = NULL                                                |      |
-| log(x)                     | Natural log of x                                                 | F    |
-| log(x, b)                  | Log of x base b                                                  | F    |
-| max(x, y[, z...])          | Largest value of those listed                                    | *    |
-| median(x, y[, z...])       | Median value of those listed                                     | *    |
-| min(x, y[, z...])          | Smallest value of those listed                                   | *    |
-| mod(x, y)                  | Modulus (remainder) of x/y                                       | *    |
-| mode(x, y[, z...])         | Mode value of those listed                                       | *    |
-| nmax(x, y[, z...])         | Largest value, excluding NULLs                                   | *    |
-| nmedian(x, y[, z...])      | Median value, excluding NULLs                                    | *    |
-| nmin(x, y[, z...])         | Smallest value, excluding NULLs                                  | *    |
-| nmode(x, y[, z...])        | Mode value, excluding NULLs                                      | *    |
-| not(x)                     | 1 if x is zero, 0 otherwise                                      |      |
-| pow(x, y)                  | x to the power y                                                 | *    |
-| rand(a, b)                 | Random value x: a <= x < b                                       | *    |
-| round(x)                   | Round x to nearest integer                                       | I    |
-| round(x, y)                | Round x to nearest multiple of y                                 |      |
-| round(x, y, z)             | Round x to nearest y*i+z for some integer i                      |      |
-| sin(x)                     | Sine of x (x is in degrees)                                      | F    |
-| sqrt(x)                    | Square root of x                                                 | F    |
-| tan(x)                     | Tangent of x (x is in degrees)                                   | F    |
-| xor(x, y)                  | Exclusive-or (XOR) of x and y                                    | I    |
+| Function / Variable                 | Description                                       | Type |
+|-------------------------------------|---------------------------------------------------|------|
+| abs(x)                              | Return absolute value of x                        | *    |
+| acos(x)                             | Inverse cosine of x (result is in degrees)        | F    |
+| asin(x)                             | Inverse sine of x (result is in degrees)          | F    |
+| atan(x)                             | Inverse tangent of x (result is in degrees)       | F    |
+| atan(x, y)                          | Inverse tangent of y/x (result is in degrees)     | F    |
+| ceil(x)                             | Smallest integral value not less than x           | *    |
+| cos(x)                              | Cosine of x (x is in degrees)                     | F    |
+| double(x)                           | Convert x to double-precision floating point      | F    |
+| eval([x, y, ...,] z)                | Evaluate values of listed expr, pass results to z |      |
+| exp(x)                              | Exponential function of x                         | F    |
+| exp(x, y)                           | x to the power y                                  | F    |
+| float(x)                            | Convert x to single-precision floating point      | F    |
+| floor(x)                            | Largest integral value not greater than x         | *    |
+| graph(x, x1, y1[, x2, y2...])       | Convert x to y based on points in a graph         | F    |
+| graph2(x, x1[, x2...], y1[, y2...]) | Alternative form of graph()                       | F    |
+| if(x)                               | 1 if x not zero, 0 otherwise                      | *    |
+| if(x, a)                            | a if x not zero, 0 otherwise                      | *    |
+| if(x, a, b)                         | a if x not zero, b otherwise                      | *    |
+| if(x, a, b, c)                      | a if x > 0, b if x is zero, c if x < 0            | *    |
+| int(x)                              | Convert x to integer (truncates)                  | I    |
+| isnull(x)                           | Check if x = NULL                                 |      |
+| log(x)                              | Natural log of x                                  | F    |
+| log(x, b)                           | Log of x base b                                   | F    |
+| max(x, y[, z...])                   | Largest value of those listed                     | *    |
+| median(x, y[, z...])                | Median value of those listed                      | *    |
+| min(x, y[, z...])                   | Smallest value of those listed                    | *    |
+| mod(x, y)                           | Modulus (remainder) of x/y                        | *    |
+| mode(x, y[, z...])                  | Mode value of those listed                        | *    |
+| nmax(x, y[, z...])                  | Largest value, excluding NULLs                    | *    |
+| nmedian(x, y[, z...])               | Median value, excluding NULLs                     | *    |
+| nmin(x, y[, z...])                  | Smallest value, excluding NULLs                   | *    |
+| nmode(x, y[, z...])                 | Mode value, excluding NULLs                       | *    |
+| not(x)                              | 1 if x is zero, 0 otherwise                       |      |
+| pow(x, y)                           | x to the power y                                  | *    |
+| rand(a, b)                          | Random value x: a <= x < b                        | *    |
+| round(x)                            | Round x to nearest integer                        | I    |
+| round(x, y)                         | Round x to nearest multiple of y                  |      |
+| round(x, y, z)                      | Round x to nearest y*i+z for some integer i       |      |
+| sin(x)                              | Sine of x (x is in degrees)                       | F    |
+| sqrt(x)                             | Square root of x                                  | F    |
+| tan(x)                              | Tangent of x (x is in degrees)                    | F    |
+| xor(x, y)                           | Exclusive-or (XOR) of x and y                     | I    |
 
 ### Internal variables
 
-| Variable      | Description                                         | Type |
-|---------------|-----------------------------------------------------|------|
-| row()         | Current row of moving window                        | I    |
-| col()         | Current column of moving window                     | I    |
-| nrows()       | Number of rows in computation region                | I    |
-| ncols()       | Number of columns in computation region             | I    |
-| x()           | Current x-coordinate of moving window               | F    |
-| y()           | Current y-coordinate of moving window               | F    |
-| ewres()       | Current east-west resolution                        | F    |
-| nsres()       | Current north-south resolution                      | F    |
-| area()        | Area of current cell in square meters               | F    |
-| null()        | NULL value                                          |      |
+| Variable  | Description                                  | Type |
+| --------- | -------------------------------------------- | ---- |
+| row()     | Current row of moving window                 | I    |
+| col()     | Current column of moving window              | I    |
+| nrows()   | Number of rows in computation region         | I    |
+| ncols()   | Number of columns in computation region      | I    |
+| x()       | Current x-coordinate of moving window        | F    |
+| y()       | Current y-coordinate of moving window        | F    |
+| ewres()   | Current east-west resolution                 | F    |
+| nsres()   | Current north-south resolution               | F    |
+| area()    | Area of current cell in square meters        | F    |
+| null()    | NULL value                                   |      |
 
 Type legend:  
 *F*: always floating point result  
@@ -426,11 +426,11 @@ although this setting is the most frequent one, the ranges could differ
 for different architectures.
 
 | Data Type | Precision and Value Range Info |
-|-----------|-------------------------------|
-| **int**   | 32-bit integer with a range from -2,147,483,647 to +2,147,483,647. The value -2,147,483,648 is reserved for NODATA. |
+| --------- | ------------------------------ |
+| **int** | 32-bit integer with a range from -2,147,483,647 to +2,147,483,647. The value -2,147,483,648 is reserved for NODATA. |
 | **float** | 32-bit float (Float32) with a range from -3.4E38 to 3.4E38. Integer precision is only ensured between -16,777,216 and 16,777,216. If your raster exceeds this range, it is strongly suggested to use the type double instead. |
-| **double**| 64-bit float (Float64) with a range from -1.79E308 to 1.79E308. It is 8 bytes, with 15-17 digits precision. |
-| **null**  | NULL value. Refer to section "NULL support" below. |
+| **double** | 64-bit float (Float64) with a range from -1.79E308 to 1.79E308. It is 8 bytes, with 15-17 digits precision. |
+| **null** | NULL value. Refer to section "NULL support" below. |
 
 Note that the value counter wraps around when the value overflows its
 range. E.g., if your expression is `a = int(2147483648)`, you will get
@@ -762,23 +762,18 @@ g.rename raster=newmap,oldmap
 ### Random number generator initialization
 
 The pseudo-random number generator used by the rand() function can be
-initialised to a specific value using the **seed** option. This can be
+initialised to a specific value using the **seed** parameter. This can be
 used to replicate a previous calculation.
 
-Alternatively, it can be initialised from the system time and the PID
-using the **-s** flag. This should result in a different seed being used
-each time.
+If rand() function is used and no seed is given,
+*r.mapcalc* will generate a seed, resulting in a different result for
+each run.
 
 In either case, the seed will be written to the map's history, and can
 be seen using *r.info*.
 
 If you want other people to be able to verify your results, it's
-preferable to use the **seed** option to supply a seed which is either
-specified in the script or generated from a deterministic process such
-as a pseudo-random number generator given an explicit seed.
-
-Note that the rand() function will generate a fatal error if neither the
-**seed** option nor the **-s** flag are given.
+preferable to use the **seed** parameter.
 
 ## EXAMPLES
 
@@ -819,8 +814,7 @@ To change all values below 5 to NULL, keep 5 otherwise:
 newmap = if(map<5, null(), 5)
 ```
 
-To create a map with random values in a defined range (needs either the
-usage of **-s** flag or the *seed* parameter). The precision of the
+To create a map with random values in a defined range. The precision of the
 input values determines the output precision (the resulting [raster map
 type](rasterintro.md#raster-format)):
 

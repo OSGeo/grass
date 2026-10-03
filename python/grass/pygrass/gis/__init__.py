@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 from os import listdir
-from os.path import join, isdir
+from os.path import join
 import shutil
 import ctypes as ct
 import fnmatch
+from pathlib import Path
 
 
 import grass.lib.gis as libgis
@@ -243,7 +244,7 @@ class Location:
         return (
             m
             for m in listdir(lpath)
-            if (isdir(join(lpath, m)) and is_valid(m, lpath, "MAPSET"))
+            if (Path(lpath, m).is_dir() and is_valid(m, lpath, "MAPSET"))
         )
 
     def __len__(self):

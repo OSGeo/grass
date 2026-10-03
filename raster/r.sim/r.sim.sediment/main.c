@@ -6,11 +6,8 @@
  * AUTHOR(S):    L. Mitas,  H. Mitasova, J. Hofierka
  * PURPOSE:      Sediment transport simulation (SIMWE)
  *
- * COPYRIGHT:    (C) 2002, 2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2002, 2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -62,6 +59,7 @@
 /********************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 
 #include <grass/config.h>
@@ -129,11 +127,17 @@ int main(int argc, char *argv[])
 
     parm.dxin = G_define_standard_option(G_OPT_R_INPUT);
     parm.dxin->key = "dx";
-    parm.dxin->description = _("Name of x-derivatives raster map [m/m]");
+    parm.dxin->required = NO;
+    parm.dxin->label = _("Name of x-derivatives raster map [m/m]");
+    parm.dxin->description = _("Computed from elevation map if not given");
+    parm.dxin->guisection = _("Input");
 
     parm.dyin = G_define_standard_option(G_OPT_R_INPUT);
     parm.dyin->key = "dy";
-    parm.dyin->description = _("Name of y-derivatives raster map [m/m]");
+    parm.dyin->required = NO;
+    parm.dyin->label = _("Name of y-derivatives raster map [m/m]");
+    parm.dyin->description = _("Computed from elevation map if not given");
+    parm.dyin->guisection = _("Input");
 
     parm.detin = G_define_standard_option(G_OPT_R_INPUT);
     parm.detin->key = "detachment_coeff";
@@ -228,11 +232,12 @@ int main(int argc, char *argv[])
     parm.nwalk->guisection = _("Parameters");
 
     parm.niter = G_define_option();
-    parm.niter->key = "niterations";
+    parm.niter->key = "duration";
     parm.niter->type = TYPE_INTEGER;
     parm.niter->answer = NITER;
     parm.niter->required = NO;
-    parm.niter->description = _("Time used for iterations [minutes]");
+    parm.niter->description =
+        _("Duration of the simulated water flow [minutes]");
     parm.niter->guisection = _("Parameters");
 
     parm.mintimestep = G_define_option();
@@ -299,8 +304,30 @@ int main(int argc, char *argv[])
         _("Number of threads which will be used for parallel computation.");
     parm.threads->guisection = _("Parameters");
 
+    flag.print = G_define_flag();
+    flag.print->key = 'p';
+    flag.print->description = _("Print run summary to standard output");
+    flag.print->guisection = _("Print");
+
+    parm.format = G_define_standard_option(G_OPT_F_FORMAT);
+    parm.format->guisection = _("Print");
+
+    G_option_collective(parm.dxin, parm.dyin, NULL);
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    /* The simulation needs planar coordinates in length units. */
+    if (G_projection() == PROJECTION_LL)
+        G_fatal_error(_("Lat/Long project is not supported by %s. Please "
+                        "reproject the data to a projected coordinate "
+                        "system."),
+                      G_program_name());
+
+    SummaryFormat summary_format = SUMMARY_NONE;
+    if (flag.print->answer)
+        summary_format = strcmp(parm.format->answer, "json") == 0
+                             ? SUMMARY_JSON
+                             : SUMMARY_PLAIN;
 
     if (flag.generateSeed->answer) {
         seed_value = G_srand48_auto();
@@ -329,6 +356,7 @@ int main(int argc, char *argv[])
     Inputs inputs = {0};
     Outputs outputs = {0};
     Grids grids = {0};
+    Summary summary = {0};
 
     geometry.conv = G_database_units_to_meters_factor();
 
@@ -380,6 +408,7 @@ int main(int argc, char *argv[])
     threads = 1;
 #endif
     G_message(_("Number of threads: %d"), threads);
+    summary.threads = threads;
 
     /*      sscanf(parm.nwalk->answer, "%d", &wp.maxwa); */
     sscanf(parm.niter->answer, "%d", &settings.timesec);
@@ -420,8 +449,7 @@ int main(int argc, char *argv[])
         (outputs.conc == NULL) && (outputs.flux == NULL) &&
         (outputs.erdep == NULL))
         G_warning(_("You are not outputting any raster or site files"));
-    ret_val =
-        input_data(geometry.my, geometry.mx, &sim, &inputs, &outputs, &grids);
+    ret_val = input_data(&geometry, &sim, &inputs, &outputs, &grids);
     if (ret_val != 1)
         G_fatal_error(_("Input failed"));
 
@@ -431,7 +459,10 @@ int main(int argc, char *argv[])
     init_grids_sediment(&setup, &geometry, &outputs, &grids);
     /* treba dat output pre topoerdep */
     main_loop(&setup, &geometry, &settings, &sim, &points, &inputs, &outputs,
-              &grids);
+              &grids, &summary);
+    print_summary(summary_format, &setup, &settings, &sim, &inputs, &outputs,
+                  &summary);
+    free_summary(&summary);
     free_walkers(&sim, outputs.outwalk);
 
     /* Exit with Success */

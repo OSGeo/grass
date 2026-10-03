@@ -175,13 +175,13 @@ static void set_cats(struct Categories *cats, /* const */ int *is_default,
 static int _reclass(/* const */ RULE *rules, struct Categories *cats,
                     struct Reclass *new)
 {
-    int *is_default;
-
     init_reclass(new, rules);
-    is_default = G_calloc(new->num, sizeof(int));
+    int *is_default = G_calloc(new->num, sizeof(int));
     init_table(new, is_default);
     fill_table(new, is_default, rules);
     set_cats(cats, is_default, new);
+
+    G_free(is_default);
 
     return 0;
 }
@@ -190,7 +190,7 @@ static int re_reclass(/* const */ RULE *rules, struct Categories *cats,
                       /* const */ struct Reclass *old, struct Reclass *new,
                       const char *input_name, const char *input_mapset)
 {
-    struct Reclass mid;
+    struct Reclass mid = {0};
 
     mid.name = G_store(input_name);
     mid.mapset = G_store(input_mapset);
@@ -199,13 +199,15 @@ static int re_reclass(/* const */ RULE *rules, struct Categories *cats,
 
     compose(new, &mid, old);
 
+    Rast_free_reclass(&mid);
+
     return 0;
 }
 
 int reclass(const char *old_name, const char *old_mapset, const char *new_name,
             RULE *rules, struct Categories *cats, const char *title)
 {
-    struct Reclass old, new;
+    struct Reclass old = {0}, new = {0};
     struct History hist;
     int is_reclass;
     FILE *fd;
@@ -263,6 +265,9 @@ int reclass(const char *old_name, const char *old_mapset, const char *new_name,
     Rast_write_history(new_name, &hist);
 
     new_range(new_name, &new);
+
+    Rast_free_reclass(&old);
+    Rast_free_reclass(&new);
 
     return 0;
 }

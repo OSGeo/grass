@@ -97,9 +97,11 @@ int PS_raster_plot(void)
         fprintf(PS.fp, "image\n");
 
     /* let user know what's happening */
-    if (PS.do_raster)
-        G_message(_("Reading raster map <%s>..."),
-                  G_fully_qualified_name(PS.cell_name, PS.cell_mapset));
+    if (PS.do_raster) {
+        char *f_cname = G_fully_qualified_name(PS.cell_name, PS.cell_mapset);
+        G_message(_("Reading raster map <%s>..."), f_cname);
+        G_free(f_cname);
+    }
     else
         G_message(_("Reading raster maps in group <%s>..."), grp.group_name);
 

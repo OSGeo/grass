@@ -1,9 +1,7 @@
 """Test t.register
 
-(C) 2014-2023 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014-2023 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Soeren Gebbert
         Ported to Python by Stefan Blumentrath
@@ -72,7 +70,6 @@ class TestRegisterDifferentLocal(TestCase):
             # Generate data
             cls.runModule(
                 "r.mapcalc",
-                flags="s",
                 expression=f"prec_{raster_map_id + 1} = rand(0, {parameters[0]})",
                 overwrite=True,
             )

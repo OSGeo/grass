@@ -82,7 +82,7 @@ private:
     T *data;
 
     bool sorted; // true if it is sorted; set when the buffer is sorted
-    // to prevent sorting it twice
+                 // to prevent sorting it twice
 
 public:
     // create a buffer of maxsize n

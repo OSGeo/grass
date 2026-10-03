@@ -60,8 +60,9 @@ int I_read_cam_info(FILE *fd, struct Ortho_Camera_File_Ref *cam_info)
     return 1;
 }
 
-int I_new_fid_point(struct Ortho_Camera_File_Ref *cam_info UNUSED,
-                    char fid_id[30] UNUSED, double Xf UNUSED, double Yf UNUSED)
+int I_new_fid_point(struct Ortho_Camera_File_Ref *cam_info G_UNUSED,
+                    char fid_id[30] G_UNUSED, double Xf G_UNUSED,
+                    double Yf G_UNUSED)
 {
     return 0;
 }

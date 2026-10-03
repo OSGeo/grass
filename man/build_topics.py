@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 
 # generates topics.html and topic_*.html
-# (c) 2012-2025 by the GRASS Development Team
+# SPDX-FileCopyrightText: 2012-2026 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
+import glob
 import os
 import re
 import sys
-import glob
 from pathlib import Path
 
 year = os.getenv("VERSION_DATE")
@@ -17,26 +18,27 @@ min_num_modules_for_topic = 3
 def build_topics(ext):
     if ext == "html":
         from build_html import (
-            header1_tmpl,
-            headertopics_tmpl,
-            headerkey_tmpl,
             desc1_tmpl,
-            moduletopics_tmpl,
+            header1_tmpl,
+            headerkey_tmpl,
+            headertopics_tmpl,
             man_dir,
+            moduletopics_tmpl,
         )
     else:
         from build_md import (
-            header1_tmpl,
-            headertopics_tmpl,
-            headerkey_tmpl,
             desc1_tmpl,
-            moduletopics_tmpl,
+            header1_tmpl,
+            headerkey_tmpl,
+            headertopics_tmpl,
             man_dir,
+            moduletopics_tmpl,
+            unquote_yaml,
         )
 
     keywords = {}
 
-    files = glob.glob1(man_dir, f"*.{ext}")
+    files = glob.glob(f"*.{ext}", root_dir=man_dir)
     for fname in files:
         with Path(man_dir, fname).open() as fil:
             # TODO maybe move to Python re (regex)
@@ -86,7 +88,7 @@ def build_topics(ext):
                     key = keys[1]  # Second keyword is topic.
                 match = re.match(r"description:\s*(.*)\s*", line)
                 if match:
-                    text = match.group(1)
+                    text = unquote_yaml(match.group(1))
                     if not text:
                         print(f"Warning: Empty tile in {fname}", file=sys.stderr)
                         break
@@ -115,7 +117,7 @@ def build_topics(ext):
         topicsfile.write(headertopics_tmpl)
 
         for key, values in sorted(keywords.items(), key=lambda s: s[0].lower()):
-            with Path(man_dir, f"topic_%s.{ext}" % key.replace(" ", "_")).open(
+            with Path(man_dir, f"topic_{key.replace(' ', '_')}.{ext}").open(
                 "w"
             ) as keyfile:
                 if ext == "html":

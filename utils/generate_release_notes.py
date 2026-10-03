@@ -154,7 +154,7 @@ def adjust_after(lines):
             username = username.replace("@", "")
             if username in known_bot_names:
                 continue
-            output = subprocess.run(
+            output = subprocess.run(  # nosec B607: fixed external tool "gh" with no portable absolute path
                 ["gh", "api", f"users/{username}"],
                 capture_output=True,
                 text=True,
@@ -203,7 +203,7 @@ def print_notes(
 
 def notes_from_gh_api(start_tag, end_tag, branch, categories, exclude):
     """Generate notes from GitHub API"""
-    text = subprocess.run(
+    text = subprocess.run(  # nosec B607: fixed external tool "gh" with no portable absolute path
         [
             "gh",
             "api",
@@ -255,7 +255,7 @@ def csv_to_dict(filename, key, value):
 
 def notes_from_git_log(start_tag, end_tag, categories, exclude):
     """Generate notes from git log"""
-    text = subprocess.run(
+    text = subprocess.run(  # nosec B607: fixed external tool "git" with no portable absolute path
         ["git", "log", f"{start_tag}..{end_tag}", f"--pretty=format:{PRETTY_TEMPLATE}"],
         capture_output=True,
         text=True,
@@ -286,14 +286,16 @@ def notes_from_git_log(start_tag, end_tag, categories, exclude):
     lines = []
     unknow_authors = []
     for commit in commits:
-        if commit["author_email"].endswith("users.noreply.github.com"):
-            github_name = commit["author_email"].split("@")[0]
+        author_email = commit["author_email"]
+        local_part, sep, domain = author_email.rpartition("@")
+        if sep and domain == "users.noreply.github.com" and local_part:
+            github_name = local_part
             if "+" in github_name:
-                github_name = github_name.split("+")[1]
+                github_name = github_name.split("+", 1)[1]
             github_name = f"@{github_name}"
         else:
             # Emails are stored with @ replaced by a space.
-            email = commit["author_email"].replace("@", " ")
+            email = author_email.replace("@", " ")
             git_author = f"{commit['author_name']} <{email}>"
             if git_author in github_name_by_git_author:
                 github_name = github_name_by_git_author[git_author]
@@ -335,7 +337,7 @@ def create_release_notes(args):
     end_tag = args.end_tag
     if not end_tag:
         # git log has default, but the others do not.
-        end_tag = subprocess.run(
+        end_tag = subprocess.run(  # nosec B607: fixed external tool "git" with no portable absolute path
             ["git", "rev-parse", "--verify", "HEAD"],
             capture_output=True,
             text=True,

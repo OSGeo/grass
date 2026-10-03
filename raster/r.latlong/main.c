@@ -4,11 +4,8 @@
  * AUTHOR(S):    Yann Chemin - yann.chemin@gmail.com
  * PURPOSE:      Calculates the longitude of the pixels in the map.
  *
- * COPYRIGHT: (C) 2002-2008, 2012 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2002-2008, 2012 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -125,8 +122,8 @@ int main(int argc, char *argv[])
         Rast_get_d_row(infd, inrast, row);
 
         for (col = 0; col < ncols; col++) {
-            latitude = ymax - ((double)row * stepy);
-            longitude = xmin + ((double)col * stepx);
+            latitude = ymax - ((double)row * stepy) - (stepy / 2.0);
+            longitude = xmin + ((double)col * stepx) + (stepx / 2.0);
             if (not_ll) {
                 if (GPJ_transform(&iproj, &oproj, &tproj, PJ_FWD, &longitude,
                                   &latitude, NULL) < 0)

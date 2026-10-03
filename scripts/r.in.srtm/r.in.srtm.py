@@ -9,11 +9,8 @@
 #            Luca Delucchi
 # PURPOSE:   import of SRTM hgt files into GRASS
 #
-# COPYRIGHT:	(C) 2004, 2006 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2004, 2006 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # Dec 2004: merged with srtm_generate_hdr.sh (M. Neteler)
 #           corrections and refinement (W. Kyngesburye)
@@ -178,13 +175,13 @@ def main():
     zipfile = f"{infile}{suff}.zip"
     hgtfile = f"{infile}{suff}"
 
-    if os.path.isfile(zipfile):
+    if Path(zipfile).is_file():
         # really a ZIP file?
         if not zfile.is_zipfile(zipfile):
             gs.fatal(_("'%s' does not appear to be a valid zip file.") % zipfile)
 
         is_zip = True
-    elif os.path.isfile(hgtfile):
+    elif Path(hgtfile).is_file():
         # try and see if it's already unzipped
         is_zip = False
     else:
@@ -193,7 +190,7 @@ def main():
     # make a temporary directory
     tmpdir = gs.tempfile()
     gs.try_remove(tmpdir)
-    os.mkdir(tmpdir)
+    Path(tmpdir).mkdir()
     if is_zip:
         shutil.copyfile(zipfile, os.path.join(tmpdir, f"{tile}{suff}.zip"))
     else:
@@ -217,7 +214,7 @@ def main():
             gs.fatal(_("Unable to unzip file."))
 
     gs.message(_("Converting input file to BIL..."))
-    os.rename(hgtfile, bilfile)
+    Path(hgtfile).rename(bilfile)
 
     north = tile[0]
     ll_latitude = int(tile[1:3])

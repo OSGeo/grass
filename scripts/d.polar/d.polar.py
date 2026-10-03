@@ -11,11 +11,8 @@
 #               all cells in the map. If one or many of them are NULL (no data),
 #               the figure will not reach the outer circle. The vector inside
 #               indicates the prevalent direction.
-# COPYRIGHT:    (C) 2006,2008 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2006,2008 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -48,6 +45,7 @@ import math
 import atexit
 import glob
 import shutil
+from pathlib import Path
 from grass.script.utils import try_remove, basename
 from grass.script import core as gcore
 
@@ -421,7 +419,7 @@ def main():
         gcore.fatal(_("Please select only one output method"))
 
     if eps:
-        if os.sep in eps and not os.path.exists(os.path.dirname(eps)):
+        if os.sep in eps and not Path(eps).parent.exists():
             gcore.fatal(
                 _(
                     "EPS output file path <{}>, doesn't exists. "
@@ -432,7 +430,7 @@ def main():
             eps = basename(eps, "eps") + ".eps"
         if not eps.endswith(".eps"):
             eps += ".eps"
-        if os.path.exists(eps) and not os.getenv("GRASS_OVERWRITE"):
+        if Path(eps).exists() and not os.getenv("GRASS_OVERWRITE"):
             gcore.fatal(
                 _(
                     "option <output>: <{}> exists. To overwrite, "

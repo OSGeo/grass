@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import grass.script as gs
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
@@ -45,11 +46,11 @@ class TestITarget(TestCase):
         group = self.groups[0]
         target_file = self._target_path(group)
 
-        if os.path.exists(target_file):
+        if Path(target_file).exists():
             os.remove(target_file)
 
         self.assertModule("i.target", flags="c", group=group)
-        self.assertTrue(os.path.exists(target_file))
+        self.assertTrue(Path(target_file).exists())
 
         current_env = gs.gisenv()
         loc, mset = self._get_target_values(group)

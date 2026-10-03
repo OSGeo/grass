@@ -13,7 +13,7 @@
 #define PRINT_GMT    0x200
 #define PRINT_WMS    0x400
 
-#include <grass/parson.h>
+#include <grass/gjson.h>
 
 enum OutputFormat { PLAIN, SHELL, JSON };
 
@@ -22,6 +22,6 @@ int zoom(struct Cell_head *, const char *, const char *);
 
 /* printwindow.c */
 void print_window(struct Cell_head *, int, int, enum OutputFormat,
-                  JSON_Object *);
+                  G_JSON_Object *);
 
 #endif

@@ -5,11 +5,9 @@
 # MODULE:        test_nmedian_bug.py
 # AUTHOR:        Maris Nartiss, based on Vaclav Petras test_row_above_below_bug.py
 # PURPOSE:       Show bug reported in #3296
-# COPYRIGHT:     (C) 2017 by Maris Nartiss and the GRASS Development Team
-#
-#                This program is free software under the GNU General Public
-#                License (>=v2). Read the file COPYING that comes with GRASS
-#                for details.
+# SPDX-FileCopyrightText: 2017 Maris Nartiss
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -81,7 +79,7 @@ class TestNmedianBug(TestCase):
 
     def tearDown(self):
         self.del_temp_region()
-        if 0 and self.to_remove:
+        if 0 and self.to_remove:  # noqa: SIM223
             self.runModule(
                 "g.remove",
                 flags="f",

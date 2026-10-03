@@ -62,6 +62,13 @@
     <handler>OnRunScript</handler>
     <description>Launches script file.</description>
   </wxgui-item>
+  <wxgui-item name="JupyterNotebook">
+    <label>Jupyter Notebook</label>
+    <handler>OnJupyterNotebook</handler>
+    <description>Launch Jupyter Notebook interface.</description>
+    <keywords>general,gui,notebook,python,jupyter</keywords>
+    <icon>jupyter</icon>
+  </wxgui-item>
   <wxgui-item name="PyEdit">
     <label>Simple Python Editor</label>
     <handler>OnSimpleEditor</handler>
@@ -309,7 +316,7 @@
   <wxgui-item name="DisplayMapProjection">
     <label>Display map projection</label>
     <command>g.proj -p</command>
-    <description>Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</description>
+    <description>Converts coordinate system descriptions (i.e. projection information) between various formats (including GRASS format).</description>
     <keywords>general,projection,create project,create project</keywords>
   </wxgui-item>
   <wxgui-item name="InstallExtensionFromAddons">

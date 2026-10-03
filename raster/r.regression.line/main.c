@@ -8,11 +8,8 @@
  * PURPOSE:      Calculates linear regression from two raster maps:
  *               y = a + b*x
  *
- * COPYRIGHT:    (C) 2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -42,8 +39,8 @@ int main(int argc, char *argv[])
     struct Cell_head region;
     struct GModule *module;
     enum OutputFormat format;
-    JSON_Value *root_value = NULL;
-    JSON_Object *root_object = NULL;
+    G_JSON_Value *root_value = NULL;
+    G_JSON_Object *root_object = NULL;
 
     G_gisinit(argv[0]);
 

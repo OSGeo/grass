@@ -1,10 +1,8 @@
 """
 Testing framework module for running tests in Python unittest fashion
 
-Copyright (C) 2014-2021 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014-2021 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Vaclav Petras
 """
@@ -17,11 +15,7 @@ import locale
 
 
 def _get_encoding():
-    try:
-        # Python >= 3.11
-        encoding = locale.getencoding()
-    except AttributeError:
-        encoding = locale.getdefaultlocale()[1]
+    encoding = locale.getencoding()
     if not encoding:
         encoding = "UTF-8"
     return encoding
@@ -144,7 +138,7 @@ def main():
     gs.setup.init(gisbase, gisdb, location, mapset)
 
     reports = []
-    for location, location_type in zip(locations, locations_types):
+    for location, location_type in zip(locations, locations_types, strict=True):
         # here it is quite a good place to parallelize
         # including also type to make it unique and preserve it for sure
         report = "report_for_" + location + "_" + location_type
@@ -152,7 +146,6 @@ def main():
         with subprocess.Popen(
             [
                 sys.executable,
-                "-tt",
                 "-m",
                 "grass.gunittest.main",
                 "--grassdata",

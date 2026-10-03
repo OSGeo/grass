@@ -8,10 +8,8 @@ Classes:
  - mapwindow::GraphicsSet
  - mapwindow::GraphicsSetItem
 
-(C) 2006-2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Michael Barton
@@ -25,6 +23,7 @@ import os
 import time
 import math
 import sys
+from pathlib import Path
 
 import wx
 
@@ -798,8 +797,8 @@ class BufferedMapWindow(MapWindowBase, Window):
         for overlay in self.Map.GetListOfLayers(ltype="overlay", active=True):
             if (
                 overlay.mapfile is None
-                or not os.path.isfile(overlay.mapfile)
-                or (not os.path.getsize(overlay.mapfile))
+                or not Path(overlay.mapfile).is_file()
+                or (not Path(overlay.mapfile).stat().st_size)
             ):
                 continue
             img = utils.autoCropImageFromFile(overlay.mapfile)
@@ -823,8 +822,8 @@ class BufferedMapWindow(MapWindowBase, Window):
         imgId = 99
         if (
             self.Map.mapfile
-            and os.path.isfile(self.Map.mapfile)
-            and os.path.getsize(self.Map.mapfile)
+            and Path(self.Map.mapfile).is_file()
+            and Path(self.Map.mapfile).stat().st_size
         ):
             img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
         else:
@@ -1117,7 +1116,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
     def DragItem(self, id, coords):
         """Drag an overlay decoration item"""
-        if id in (99, "") or id is None:
+        if id in {99, ""} or id is None:
             return
         Debug.msg(5, "BufferedWindow.DragItem(): id=%d" % id)
         x, y = self.lastpos

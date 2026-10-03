@@ -9,12 +9,8 @@
  *
  * PURPOSE:      Network maintenance
  *
- * COPYRIGHT:    (C) 2001-2009,2014,2016 by the GRASS Development Team
- *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2001-2009,2014,2016 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************/
 #include <stdlib.h>
@@ -108,6 +104,8 @@ int main(int argc, char **argv)
 
         /* create output map */
         Out = (struct Map_info *)G_malloc(sizeof(struct Map_info));
+        if (!Out)
+            G_fatal_error(_("Out of memory"));
         is3d = WITHOUT_Z;
         if (In)
             is3d = Vect_is_3d(In);

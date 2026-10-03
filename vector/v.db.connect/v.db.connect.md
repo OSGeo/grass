@@ -25,6 +25,9 @@ to your map, it is advisable to make a copy from those tables first and
 connect the copied tables to the vector map (see also
 [v.overlay](v.overlay.md)).
 
+The **-g** flag is deprecated and will be removed in a future release. Please
+use **format=csv** option with the **-p** flag instead.
+
 ## EXAMPLE
 
 Note: The default database backend setting is SQLite.
@@ -41,6 +44,38 @@ Print column types and names of table linked to vector map.
 
 ```sh
 v.db.connect -c map=roads
+```
+
+### Print database connection using Python
+
+Print all database connection parameters for vector map.
+
+```python
+import grass.script as gs
+
+data = gs.parse_command("v.db.connect", map="roadsmajor", flags="p", format="json")
+print(data)
+```
+
+Possible output:
+
+```text
+[{'layer': 1, 'layer_name': 'roadsmajor', 'table': 'roadsmajor', 'key': 'cat', 'database': '/grassdata/nc_spm_08_grass7/PERMANENT/sqlite/sqlite.db', 'driver': 'sqlite'}]
+```
+
+Print column types and names of table linked to vector map.
+
+```python
+import grass.script as gs
+
+data = gs.parse_command("v.db.connect", map="roadsmajor", flags="c", format="json")
+print(data)
+```
+
+Possible output:
+
+```text
+[{'name': 'cat', 'sql_type': 'INTEGER', 'is_number': True}, {'name': 'MAJORRDS_', 'sql_type': 'DOUBLE PRECISION', 'is_number': True}, {'name': 'ROAD_NAME', 'sql_type': 'CHARACTER', 'is_number': False}, {'name': 'MULTILANE', 'sql_type': 'CHARACTER', 'is_number': False}, {'name': 'PROPYEAR', 'sql_type': 'INTEGER', 'is_number': True}, {'name': 'OBJECTID', 'sql_type': 'INTEGER', 'is_number': True}, {'name': 'SHAPE_LEN', 'sql_type': 'DOUBLE PRECISION', 'is_number': True}]
 ```
 
 ### Connect vector map to database (DBF driver)

@@ -9,17 +9,14 @@ Classes:
  - tools::ViewPositionWindow
  - tools::LightPositionWindow
 
-(C) 2008-2011 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2008-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Enhancements by Michael Barton <michael.barton asu.edu>
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
 """
 
-import os
 import sys
 import copy
 
@@ -331,7 +328,7 @@ class NvizToolWindow(GNotebook):
         # perspective
         # set initial defaults here (or perhaps in a default values file), not in user
         # settings
-        # todo: consider setting an absolute max at 360 instead of undefined.
+        # TODO: consider setting an absolute max at 360 instead of undefined.
         # (leave the default max value at pi)
         tooltip = _(
             "Adjusts the distance and angular perspective of the image viewpoint"
@@ -2783,7 +2780,7 @@ class NvizToolWindow(GNotebook):
         if not prefix:
             GMessage(parent=self, message=_("No file prefix given."))
             return
-        if not os.path.exists(dir):
+        if not Path(dir).exists():
             GMessage(parent=self, message=_("Directory %s does not exist.") % dir)
             return
 
@@ -3222,7 +3219,9 @@ class NvizToolWindow(GNotebook):
             padding = 20
         minWidth = sw.GetTextExtent(sw.GetLabel())[0] + padding
         for win, name in zip(
-            (w, n, s, e, nw, ne, se, sw), ("w", "n", "s", "e", "nw", "ne", "se", "sw")
+            (w, n, s, e, nw, ne, se, sw),
+            ("w", "n", "s", "e", "nw", "ne", "se", "sw"),
+            strict=True,
         ):
             win.SetMinSize((minWidth, -1))
             win.Bind(wx.EVT_BUTTON, self.OnLookFrom)
@@ -4849,7 +4848,7 @@ class NvizToolWindow(GNotebook):
             return
 
         for coord, val in zip(
-            ("x1", "x2", "y1", "y2", "z1", "z2"), (0, 1, 0, 1, 0, 1, 0)
+            ("x1", "x2", "y1", "y2", "z1", "z2"), (0, 1, 0, 1, 0, 1, 0), strict=True
         ):
             data["volume"]["slice"][sel]["position"][coord] = val
         data["volume"]["slice"][sel]["position"]["update"] = None

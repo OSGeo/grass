@@ -53,7 +53,8 @@ Vector features can be selected in several ways:
 Additional parameters for vector feature specification are:
 
 - **layer** - layer number (currently used only with **cats** or
-  **where** option)
+  **where** option and only the first layer is considered if more than
+  one is provided)
 - **threshold** - threshold distance used for selecting vector features
   by coordinates
 
@@ -82,7 +83,11 @@ Additional parameters for vector feature specification are:
   boundaries).
 - **catadd** - Add new layer category(ies) to selected vector
   feature(s). Category can be later used for new database entry.
+  If **catadd** is used, the **cats** parameter specifies new categories
+  to assign (and is not used for selection). The **layer** specifies the
+  layer to operate on (both of selection and writing new categories).
 - **catdel** - Delete layer category(ies) of selected vector feature(s).
+  The **layer** and **cats** parameters work the same way as for **addcat**.
 - **merge** - Merge (at least two) selected vector lines or boundaries.
   The geometry of the merged vector lines can be changed. If the second
   line from two selected lines is in opposite direction to the first, it

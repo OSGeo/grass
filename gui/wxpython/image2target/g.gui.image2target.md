@@ -1,9 +1,8 @@
 ---
+title: g.gui.image2target
 description: wxGUI GCP Manager
 index: topic_GUI|GUI
 ---
-
-# wxGUI GCP Manager
 
 ## DESCRIPTION
 

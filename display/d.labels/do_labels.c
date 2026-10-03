@@ -223,6 +223,7 @@ int show_it(void)
     /* get the box size for each line of text and expand the bounding box as
      * needed */
     n_lines = 0;
+    Y = north - (line_size * 1.2);
     for (;;) {
         n_chars = 0;
 
@@ -333,7 +334,7 @@ int show_it(void)
     fprintf(stdout, "L 5\n");
     for (i = 0; i < 5; i++)
         fprintf(stdout, " %f %f\n", xarr[i], yarr[i]);
-        /* d.labels labfile | v.in.ascii -n out=labbox format=standard */
+    /* d.labels labfile | v.in.ascii -n out=labbox format=standard */
 #endif
 
     /* draw boxes */
@@ -469,11 +470,11 @@ int scan_ref(char *buf)
     case 2:
         if (!(xmatch(word2) || ymatch(word2)))
             return 0;
-        FALLTHROUGH;
+        G_FALLTHROUGH;
     case 1:
         if (xmatch(word1) || ymatch(word1))
             return 1;
-        FALLTHROUGH;
+        G_FALLTHROUGH;
     case EOF:
     default:
         return 0;

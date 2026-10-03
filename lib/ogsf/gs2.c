@@ -17,12 +17,8 @@
    otherwise, load directly as packed color, set lookup = NULL
    MESSY! - need to fix up!
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL (1993)
    \author Pierre de Mouveaux <p_de_mouveaux hotmail.com> (updated October 1999)
@@ -1641,10 +1637,11 @@ int GS_load_att_map(int id, const char *filename, int att)
     Rast_get_cellhd(filename, mapset, &rast_head);
     if (rast_head.north <= wind.south || rast_head.south >= wind.north ||
         rast_head.east <= wind.west || rast_head.west >= wind.east) {
-
+        char *mname = G_fully_qualified_name(filename, mapset);
         G_warning(
             _("Raster map <%s> is outside of current region. Load failed."),
-            G_fully_qualified_name(filename, mapset));
+            mname);
+        G_free(mname);
     }
 
     while (!reuse && (0 < hdata)) {

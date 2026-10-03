@@ -3,10 +3,8 @@
 
 @brief Functions for modifying menu from default/user toolboxes specified in XML files
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Petrasova <kratochanna gmail.com>
@@ -57,14 +55,14 @@ def GetSettingsPath():
 
 def _getUserToolboxesFile():
     userToolboxesFile = os.path.join(GetSettingsPath(), "toolboxes", "toolboxes.xml")
-    if not os.path.exists(userToolboxesFile):
+    if not Path(userToolboxesFile).exists():
         userToolboxesFile = None
     return userToolboxesFile
 
 
 def _getUserMainMenuFile():
     userMainMenuFile = os.path.join(GetSettingsPath(), "toolboxes", "main_menu.xml")
-    if not os.path.exists(userMainMenuFile):
+    if not Path(userMainMenuFile).exists():
         userMainMenuFile = None
     return userMainMenuFile
 
@@ -96,7 +94,7 @@ def toolboxesOutdated():
     """Removes auto-generated menudata.xml
     to let gui regenerate it next time it starts."""
     path = os.path.join(GetSettingsPath(), "toolboxes", "menudata.xml")
-    if os.path.exists(path):
+    if Path(path).exists():
         try_remove(path)
 
 
@@ -118,7 +116,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
 
     distributionRootFile = os.path.join(WXGUIDIR, "xml", userRootFile)
     userRootFile = os.path.join(GetSettingsPath(), "toolboxes", userRootFile)
-    if not os.path.exists(userRootFile):
+    if not Path(userRootFile).exists():
         userRootFile = None
 
     # always create toolboxes directory if does not exist yet
@@ -133,7 +131,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
     # when any of main_menu.xml or toolboxes.xml are changed,
     # generate new menudata.xml
 
-    if os.path.exists(menudataFile):
+    if Path(menudataFile).exists():
         # remove menu file when there is no main_menu and toolboxes
         if not _getUserToolboxesFile() and (not userRootFile):
             os.remove(menudataFile)
@@ -153,9 +151,9 @@ def getMenudataFile(userRootFile, newFile, fallback):
             )
         else:
             # if newer files -> generate new
-            menudataTime = os.path.getmtime(menudataFile)
+            menudataTime = Path(menudataFile).stat().st_mtime
             if _getUserToolboxesFile():
-                if os.path.getmtime(_getUserToolboxesFile()) > menudataTime:
+                if Path(_getUserToolboxesFile()).stat().st_mtime > menudataTime:
                     _debug(
                         2,
                         (
@@ -165,7 +163,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
                     )
                     generateNew = True
             if userRootFile:
-                if os.path.getmtime(userRootFile) > menudataTime:
+                if Path(userRootFile).stat().st_mtime > menudataTime:
                     _debug(
                         2,
                         (
@@ -217,7 +215,7 @@ def _setupToolboxes():
     """Create 'toolboxes' directory if doesn't exist."""
     basePath = GetSettingsPath()
     path = os.path.join(basePath, "toolboxes")
-    if not os.path.exists(basePath):
+    if not Path(basePath).exists():
         return None
 
     if _createPath(path):
@@ -227,9 +225,9 @@ def _setupToolboxes():
 
 def _createPath(path):
     """Creates path (for toolboxes) if it doesn't exist'"""
-    if not os.path.exists(path):
+    if not Path(path).exists():
         try:
-            os.mkdir(path)
+            Path(path).mkdir()
         except OSError as e:
             # we cannot use GError or similar because the gui doesn't start at
             # all
@@ -331,8 +329,8 @@ def _indent(elem, level=0):
             elem.text = i + "  "
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
-        for _elem in elem:
-            _indent(_elem, level + 1)
+        for elem_ in elem:
+            _indent(elem_, level + 1)
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
     elif level and (not elem.tail or not elem.tail.strip()):

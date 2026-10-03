@@ -24,11 +24,8 @@
  *               program can be run repeatedly, using the output elevations
  *               from one run as input to the next run until all problems are
  *               resolved.
- * COPYRIGHT:    (C) 2001, 2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2001, 2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************************/
 
@@ -253,14 +250,21 @@ int main(int argc, char **argv)
     out_buf = Rast_allocate_c_buf();
     bufsz = ncols * sizeof(CELL);
 
-    lseek(fe, 0, SEEK_SET);
-    new_id = Rast_open_new(new_map_name, in_type);
+    if (lseek(fe, 0, SEEK_SET) == -1 || lseek(fd, 0, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
-    lseek(fd, 0, SEEK_SET);
+    new_id = Rast_open_new(new_map_name, in_type);
     dir_id = Rast_open_new(dir_name, CELL_TYPE);
 
     if (opt5->answer != NULL) {
-        lseek(fm, 0, SEEK_SET);
+        if (lseek(fm, 0, SEEK_SET) == -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
         bas_id = Rast_open_new(bas_name, CELL_TYPE);
 
         for (i = 0; i < nrows; i++) {

@@ -3,10 +3,8 @@
 
    \brief GIS Library - Argument parsing functions (standard options)
 
-   (C) 2001-2019 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2019 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
    \author Soeren Gebbert added Dec. 2009 WPS process_description document
@@ -93,6 +91,7 @@
    - G_OPT_F_BIN_INPUT
    - G_OPT_F_OUTPUT
    - G_OPT_F_SEP
+   - G_OPT_F_FORMAT
 
    - colors
    - G_OPT_C
@@ -131,6 +130,7 @@
    - G_OPT_MAP_INPUTS
    - G_OPT_STDS_TYPE
    - G_OPT_MAP_TYPE
+   - G_OPT_T_SUFFIX
    - G_OPT_T_TYPE
    - G_OPT_T_WHERE
 
@@ -631,6 +631,17 @@ struct Option *G_define_standard_option(int opt)
         Opt->description =
             _("Special characters: pipe, comma, space, tab, newline");
         break;
+    case G_OPT_F_FORMAT:
+        Opt->key = "format";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = YES;
+        Opt->label = _("Output format");
+        Opt->answer = "plain";
+        Opt->options = "plain,json";
+        Opt->descriptions = _("plain;Plain text output;"
+                              "json;JSON (JavaScript Object Notation);");
+        break;
 
         /* colors */
     case G_OPT_C:
@@ -945,6 +956,18 @@ struct Option *G_define_standard_option(int opt)
         Opt->options = "raster,vector,raster_3d";
         Opt->description = _("Type of the input map");
         break;
+    case G_OPT_T_SUFFIX:
+        Opt->key = "suffix";
+        Opt->type = TYPE_STRING;
+        Opt->key_desc = "name";
+        Opt->required = NO;
+        Opt->answer = "gran";
+        Opt->description = _("Suffix to add at basename: set "
+                             "'gran' for granularity, "
+                             "'time' for the full time format, "
+                             "'num' for numerical suffix with "
+                             "a specific number of digits (default %%05)");
+        break;
     case G_OPT_T_TYPE:
         Opt->key = "temporaltype";
         Opt->type = TYPE_STRING;
@@ -973,17 +996,6 @@ struct Option *G_define_standard_option(int opt)
         Opt->options = "start,during,overlap,contain,equal,follows,precedes";
         Opt->description =
             _("The method to be used for sampling the input dataset");
-        break;
-    case G_OPT_F_FORMAT:
-        Opt->key = "format";
-        Opt->type = TYPE_STRING;
-        Opt->key_desc = "name";
-        Opt->required = YES;
-        Opt->label = _("Output format");
-        Opt->answer = "plain";
-        Opt->options = "plain,json";
-        Opt->descriptions = _("plain;Plain text output;"
-                              "json;JSON (JavaScript Object Notation);");
         break;
     }
 

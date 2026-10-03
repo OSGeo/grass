@@ -6,10 +6,8 @@
 Classes:
  - toolbars::DataCatalogToolbar(BaseToolbar)
 
-(C) 2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 """
@@ -22,25 +20,20 @@ from icons.icon import MetaIcon
 icons = {
     "reloadTree": MetaIcon(img="redraw", label=_("Reload GRASS projects")),
     "reloadMapset": MetaIcon(img="reload", label=_("Reload current GRASS mapset only")),
-    "unlocked": MetaIcon(
-        img="edit", label=_("Restrict edits to the current mapset only")
-    ),
-    "locked": MetaIcon(
-        img="edit", label=_("Allow edits outside of the current mapset")
-    ),
-    "addGrassDB": MetaIcon(
-        img="grassdb-add", label=_("Add existing or create new database")
-    ),
     "addMapset": MetaIcon(
         img="mapset-add", label=_("Create new mapset in current project")
     ),
-    "addLocation": MetaIcon(
+    "addProject": MetaIcon(
         img="location-add",
-        label=_("Create new project (location) in current GRASS database"),
+        label=_("Add an existing project"),
+    ),
+    "createProject": MetaIcon(
+        img="location-create",
+        label=_("Create new project"),
     ),
     "downloadLocation": MetaIcon(
         img="location-download",
-        label=_("Download sample project (location) to current GRASS database"),
+        label=_("Download sample project"),
     ),
     "importRaster": MetaIcon(
         img="raster-import", label=_("Import raster data  [r.import]")
@@ -75,6 +68,12 @@ class DataCatalogSearch(SearchCtrl):
         self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
         item = filterMenu.AppendRadioItem(-1, "3D raster maps")
         self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+        item = filterMenu.AppendRadioItem(-1, "STRDS (space time raster datasets)")
+        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+        item = filterMenu.AppendRadioItem(-1, "STVDS (space time vector datasets)")
+        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
+        item = filterMenu.AppendRadioItem(-1, "STR3DS (space time 3D raster datasets)")
+        self.Bind(wx.EVT_MENU, self.OnFilterMenu, item)
         self.SetMenu(filterMenu)
         helpTip = _(
             "Type to search database by map type or name. "
@@ -92,6 +91,12 @@ class DataCatalogSearch(SearchCtrl):
             self.filter_element = "vector"
         elif filterMenu[3].IsChecked():
             self.filter_element = "raster_3d"
+        elif filterMenu[4].IsChecked():
+            self.filter_element = "strds"
+        elif filterMenu[5].IsChecked():
+            self.filter_element = "stvds"
+        elif filterMenu[6].IsChecked():
+            self.filter_element = "str3ds"
         # trigger filter on change
         if self.GetValue():
             self.filter_function(self.GetValue(), self.filter_element)
@@ -126,20 +131,14 @@ class DataCatalogToolbar(BaseToolbar):
                     self.parent.OnReloadCurrentMapset,
                 ),
                 (
-                    ("lock", icons["locked"].label),
-                    icons["locked"],
-                    self.OnSetRestriction,
-                    wx.ITEM_CHECK,
-                ),
-                (
-                    ("addGrassDB", icons["addGrassDB"].label),
-                    icons["addGrassDB"],
-                    self.parent.OnAddGrassDB,
-                ),
-                (
-                    ("addLocation", icons["addLocation"].label),
-                    icons["addLocation"],
+                    ("createProject", icons["createProject"].label),
+                    icons["createProject"],
                     self.parent.OnCreateLocation,
+                ),
+                (
+                    ("addProject", icons["addProject"].label),
+                    icons["addProject"],
+                    self.parent.OnAddProject,
                 ),
                 (
                     ("downloadLocation", icons["downloadLocation"].label),
@@ -168,13 +167,3 @@ class DataCatalogToolbar(BaseToolbar):
                 ),
             )
         )
-
-    def OnSetRestriction(self, event):
-        if self.GetToolState(self.lock):
-            self.SetToolNormalBitmap(self.lock, icons["unlocked"].GetBitmap())
-            self.SetToolShortHelp(self.lock, icons["unlocked"].GetLabel())
-            self.parent.SetRestriction(restrict=False)
-        else:
-            self.SetToolNormalBitmap(self.lock, icons["locked"].GetBitmap())
-            self.SetToolShortHelp(self.lock, icons["locked"].GetLabel())
-            self.parent.SetRestriction(restrict=True)

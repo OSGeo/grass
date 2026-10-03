@@ -119,8 +119,8 @@ detectEdgeNodata::~detectEdgeNodata()
    structs. */
 nodataType *detectEdgeNodata::getNodataForward(dimension_type i,
                                                dimension_type j,
-                                               dimension_type nr UNUSED,
-                                               dimension_type nc UNUSED)
+                                               dimension_type nr G_UNUSED,
+                                               dimension_type nc G_UNUSED)
 {
     bool ok;
     static nodataType ptarr[3]; /* return value */
@@ -163,7 +163,7 @@ nodataType *detectEdgeNodata::getNodataForward(dimension_type i,
 /* ********************************************************************** */
 
 void detectEdgeNodata::processWindow(dimension_type row, dimension_type col,
-                                     elevation_type &point UNUSED,
+                                     elevation_type &point G_UNUSED,
                                      elevation_type *a, elevation_type *b,
                                      elevation_type *c)
 {

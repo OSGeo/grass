@@ -7,10 +7,8 @@ Classes:
  - simplelmgr::SimpleLayerManager
  - simplelmgr::SimpleLmgrToolbar
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Petrasova (kratochanna gmail.com)
 """
@@ -157,7 +155,7 @@ class SimpleLayerManager(wx.Panel):
             _("Copy map names to clipboard (top to bottom)"),
             _("Copy map names to clipboard (bottom to top)"),
         ]
-        for label, text in zip(labels, texts):
+        for label, text in zip(labels, texts, strict=True):
             id = NewId()
             self.Bind(
                 wx.EVT_MENU,

@@ -8,11 +8,8 @@
  *
  * PURPOSE:      Multidimensional index
  *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2001 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <stdlib.h>
@@ -22,7 +19,10 @@
 #include <unistd.h>
 #include <assert.h>
 #include <errno.h>
+
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "index.h"
 
 /* #define USAGE_SWAP */
@@ -96,7 +96,11 @@ size_t RTreeReadNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
     int i;
     size_t size = 0;
 
-    lseek(t->fd, nodepos, SEEK_SET);
+    if (lseek(t->fd, nodepos, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
     size += read(t->fd, &(n->count), sizeof(int));
     size += read(t->fd, &(n->level), sizeof(int));
 
@@ -192,7 +196,11 @@ size_t RTreeWriteNode(struct RTree_Node *n, struct RTree *t)
 /* rewrite updated node to file */
 size_t RTreeRewriteNode(struct RTree_Node *n, off_t nodepos, struct RTree *t)
 {
-    lseek(t->fd, nodepos, SEEK_SET);
+    if (lseek(t->fd, nodepos, SEEK_SET) == -1) {
+        int err = errno;
+        G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                      strerror(err), err);
+    }
 
     return RTreeWriteNode(n, t);
 }

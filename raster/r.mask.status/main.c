@@ -3,11 +3,9 @@
  * MODULE:       r.mask.status
  * AUTHORS:      Vaclav Petras
  * PURPOSE:      Report status of raster mask
- * COPYRIGHT:    (C) 2024 by Vaclav Petras and the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2024 Vaclav Petras
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -18,7 +16,7 @@
 #include <unistd.h>
 
 #include <grass/gis.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
@@ -97,21 +95,21 @@ int report_status(struct Parameters *params)
         full_underlying = G_fully_qualified_name(reclass_name, reclass_mapset);
 
     if (strcmp(params->format->answer, "json") == 0) {
-        JSON_Value *root_value = json_value_init_object();
-        JSON_Object *root_object = json_object(root_value);
-        json_object_set_boolean(root_object, "present", present);
-        json_object_set_string(root_object, "name", full_mask);
+        G_JSON_Value *root_value = G_json_value_init_object();
+        G_JSON_Object *root_object = G_json_object(root_value);
+        G_json_object_set_boolean(root_object, "present", present);
+        G_json_object_set_string(root_object, "name", full_mask);
         if (is_mask_reclass)
-            json_object_set_string(root_object, "is_reclass_of",
-                                   full_underlying);
+            G_json_object_set_string(root_object, "is_reclass_of",
+                                     full_underlying);
         else
-            json_object_set_null(root_object, "is_reclass_of");
-        char *serialized_string = json_serialize_to_string_pretty(root_value);
+            G_json_object_set_null(root_object, "is_reclass_of");
+        char *serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (!serialized_string)
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
     else if (strcmp(params->format->answer, "shell") == 0) {
         printf("present=");

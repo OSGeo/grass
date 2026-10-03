@@ -188,8 +188,8 @@ int checkHull(int cR, int cC, double **oldHull, int lungOld)
 
 /*---------------------------------------------------------------------------*/
 double pianOriz(double **punti, int obsNum, double *minNS, double *minEW,
-                double *maxNS, double *maxEW, struct element_grow **mat UNUSED,
-                int CBordo UNUSED)
+                double *maxNS, double *maxEW,
+                struct element_grow **mat G_UNUSED, int CBordo G_UNUSED)
 {
     int c1;
     double minBordo, medioBordo; /*, minBordo1; */
@@ -301,14 +301,14 @@ struct element_grow **structMatrix(long nrl, long nrh, long ncl, long nch)
     return m;
 }
 
-void free_Pvector(double **v, long nl, long nh UNUSED)
+void free_Pvector(double **v, long nl, long nh G_UNUSED)
 {
 
     free((FREE_ARG)(v + nl - NR_END));
 }
 
-void free_structmatrix(struct element_grow **m, long nrl, long nrh UNUSED,
-                       long ncl, long nch UNUSED)
+void free_structmatrix(struct element_grow **m, long nrl, long nrh G_UNUSED,
+                       long ncl, long nch G_UNUSED)
 {
     free((FREE_ARG)(m[nrl] + ncl - NR_END));
     free((FREE_ARG)(m + nrl - NR_END));

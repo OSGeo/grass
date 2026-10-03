@@ -20,6 +20,8 @@ Partial derivatives can be computed by <a href="v.surf.rst.html">v.surf.rst</a>
 or <a href="r.slope.aspect.html">r.slope.aspect</a>
 module. The data are automatically converted from feet to metric
 system using database/projection information, so the elevation always should be in meters.
+The module requires a projected coordinate system and does not run in a
+latitude-longitude project.
 The water depth file can be computed using <a href="r.sim.water.html">r.sim.water</a>
 module. Other parameters must be determined using field measurements or
 reference literature (see suggested values in Notes and References). <br>
@@ -31,7 +33,7 @@ transport capacity limited erosion/deposition raster map
 can be viewed while the simulation continues. Sediment flow rate raster map
 <i>sediment_flux</i> [kg/ms], and net erosion/deposition raster map [kg/m<sup>2</sup>s]
 can take longer time depending on time step and simulation time.
-Simulation time is controlled by <i>niterations</i> [minutes] parameter.
+Simulation time is controlled by <i>duration</i> [minutes] parameter.
 <!-- Output files can be saved during simulation using <i>outiter</i> parameter
 defining simulation time step for writing output files. This option requires
 time series flag <i>-t</i>. Files are saved with suffix   containing
@@ -45,6 +47,81 @@ given by <i>nwalkers</i> should be used.
 Increasing the number of threads with <b>nprocs</b> does not really
 speed up the simulation.
 
+<h2>NOTES</h2>
+
+Null cells in the <b>elevation</b>, <b>dx</b>, <b>dy</b>, <b>water_depth</b>,
+<b>detachment_coeff</b>, <b>transport_coeff</b>, <b>shear_stress</b> and <b>man</b>
+raster maps are excluded from the simulation, the outputs are null
+there, and walkers that reach them leave the area.
+
+<h3>Run summary</h3>
+
+With the <b>-p</b> flag, a summary of the run is printed to standard output
+after the maps are written. The <b>format</b> option selects plain text
+(one <code>key: value</code> pair per line) or JSON. Without <b>-p</b>, nothing is
+printed to standard output regardless of <b>format</b>. The values are also
+stored in the history of the <em>sediment_flux</em> raster map under the same
+keys (see <a href="r.info.html">r.info</a>).
+
+<p>
+The keys are the same as for <a href="r.sim.water.html">r.sim.water</a> with these
+differences:
+
+<table border="1">
+ <tr><th>Key</th><th>Meaning</th><th>Unit</th></tr>
+ <tr><td><code>time_step_sediment</code></td><td>Time step limit derived from the sediment transport parameters, <code>null</code> when no cell exceeds the critical shear stress</td><td>s</td></tr>
+ <tr><td><code>velocity_max</code></td><td>Maximum flow velocity over the defined cells</td><td>m/s</td></tr>
+ <tr><td><code>sigma_max</code></td><td>Maximum first order reaction coefficient (detachment to transport capacity ratio) over the defined cells</td><td>1/m</td></tr>
+ <tr><td><code>mean_source_rate</code></td><td>Mean sediment source (detachment) rate</td><td>kg/m^2s</td></tr>
+ <tr><td><code>mean_infiltration</code></td><td>Not reported</td><td></td></tr>
+ <tr><td><code>transport_capacity</code>, <code>tlimit_erosion_deposition</code></td><td>Names of these maps, which are written once before the simulation starts, or <code>null</code> when not requested</td><td></td></tr>
+ <tr><td><code>outputs</code></td><td>A single entry with the <code>simulated_time</code> (s), <code>timestamp</code> and <code>walkers_remaining</code> at the time of writing, and the names of the <code>sediment_concentration</code>, <code>sediment_flux</code>, <code>erosion_deposition</code> and <code>walkers</code> maps, or <code>null</code> for maps which were not requested</td><td></td></tr>
+</table>
+
+<p>
+Summary of a run in JSON:
+
+<div class="code"><pre>
+r.sim.sediment elevation=elevation water_depth=water_depth detachment_coeff=detachment \
+    transport_coeff=transport shear_stress=shear_stress man_value=1 \
+    sediment_flux=flux erosion_deposition=erdep transport_capacity=tc \
+    duration=1 random_seed=1 -p format=json
+</pre></div>
+
+<div class="code"><pre>
+{
+    "walkers_requested": 60,
+    "walkers_generated": 78,
+    "walkers_remaining": 43,
+    "duration": 60,
+    "simulated_time": 54.891343113611583,
+    "time_step": 5.4891343113611581,
+    "time_step_sediment": 70.517234241515013,
+    "iterations_planned": 10,
+    "iterations_completed": 10,
+    "stopped_early": false,
+    "mean_velocity": 0.1821780891624834,
+    "velocity_max": 0.21544346900318839,
+    "sigma_max": 0.052657639041437901,
+    "mean_mannings_n": 1,
+    "mean_source_rate": 0.56025284041612944,
+    "threads": 1,
+    "transport_capacity": "tc",
+    "tlimit_erosion_deposition": null,
+    "outputs": [
+        {
+            "simulated_time": 54.891343113611583,
+            "timestamp": "1 minutes",
+            "walkers_remaining": 43,
+            "sediment_concentration": null,
+            "sediment_flux": "flux",
+            "erosion_deposition": "erdep",
+            "walkers": null
+        }
+    ]
+}
+</pre></div>
+
 <!--
 <h2>NOTES</h2>
 
@@ -54,7 +131,7 @@ wetland or pond, provide links to movies that explain the impact of the  paramet
 
 <h2>REFERENCES</h2>
 
-<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/II.6.8_Mitasova_044.pdf">
+<a href="https://doi.org/10.1016/S0167-5648(04)80159-X">
 Mitasova, H., Thaxton, C., Hofierka, J., McLaughlin, R., Moore, A., Mitas L., 2004,</a>
 Path sampling method for modeling overland water flow, sediment transport
 and short term terrain evolution in Open Source GIS.
@@ -62,15 +139,14 @@ In: C.T. Miller, M.W. Farthing, V.G. Gray, G.F. Pinder eds.,
 Proceedings of the XVth International Conference on Computational Methods in Water
 Resources (CMWR XV), June 13-17 2004, Chapel Hill, NC, USA, Elsevier, pp. 1479-1490.
 <p>
-<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/gisc00/duality.html">
 Mitasova H, Mitas, L., 2000, Modeling spatial processes in multiscale framework:
-exploring duality between particles and fields, </a>
+exploring duality between particles and fields,
 plenary talk at GIScience2000 conference, Savannah, GA.
 <p>
 Mitas, L., and Mitasova, H., 1998, Distributed soil erosion simulation
 for effective erosion prevention. Water Resources Research, 34(3), 505-516.
 <p>
-<a href="http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/LLEmiterev1.pdf">
+<a href="https://doi.org/10.1007/978-1-4615-0575-4_11">
 Mitasova, H., Mitas, L., 2001, Multiscale soil erosion simulations for land use management, </a>
 In: Landscape erosion and landscape evolution modeling, Harmon R. and Doe W. eds.,
 Kluwer Academic/Plenum Publishers, pp. 321-347.

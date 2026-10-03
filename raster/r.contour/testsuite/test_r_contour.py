@@ -3,14 +3,13 @@ Name:       r.contour test
 Purpose:    Tests r.contour module and its options.
 
 Author:     Shubham Sharma, Google Code-in 2018
-Copyright:  (C) 2018 by Shubham Sharma and the GRASS Development Team
-Licence:    This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
+SPDX-FileCopyrightText: 2018 Shubham Sharma
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
+from pathlib import Path
 from grass.gunittest.case import TestCase
-import os
 
 
 class TestRasterWhat(TestCase):
@@ -39,12 +38,12 @@ class TestRasterWhat(TestCase):
             name=(cls.output, cls.output + "_cut", cls.output + "_cut_flag_t"),
         )
 
-        if os.path.isfile("testReport"):
-            os.remove("testReport")
-        if os.path.isfile("testReportCut"):
-            os.remove("testReportCut")
-        if os.path.isfile("testReportCutFlagT"):
-            os.remove("testReportCutFlagT")
+        if (p := Path("testReport")).is_file():
+            p.unlink()
+        if (p := Path("testReportCut")).is_file():
+            p.unlink()
+        if (p := Path("testReportCutFlagT")).is_file():
+            p.unlink()
 
     def test_raster_contour(self):
         """Testing r.contour runs successfully with input steps,levels, minlevel, maxlevel"""
@@ -62,11 +61,9 @@ class TestRasterWhat(TestCase):
         # Check the attribute values of contours with v.db.select
         self.assertModule("v.db.select", map=self.output, file="testReport")
         self.assertFileExists("testReport", msg="testReport file was not created")
-        if os.path.isfile("testReport"):
-            file = open("testReport")
-            fileData = file.read()
+        if (p := Path("testReport")).is_file():
+            fileData = p.read_text()
             self.assertMultiLineEqual(fileData, self.test_ref_str)
-            file.close()
 
     def test_raster_contour_cut(self):
         """Testing r.contour runs successfully with input steps,levels, minlevel, maxlevel and cut=100"""
@@ -87,11 +84,9 @@ class TestRasterWhat(TestCase):
         # Check the attribute values of contours with v.db.select
         self.assertModule("v.db.select", map=self.output + "_cut", file="testReportCut")
         self.assertFileExists("testReportCut", msg="testReportCut file was not created")
-        if os.path.isfile("testReportCut"):
-            file = open("testReportCut")
-            fileData = file.read()
+        if (p := Path("testReportCut")).is_file():
+            fileData = p.read_text()
             self.assertMultiLineEqual(fileData, self.test_ref_str)
-            file.close()
 
     def test_raster_contour_flag_t(self):
         """Testing r.contour runs successfully with input steps,levels, minlevel, maxlevel ,cut=100 and flag t"""

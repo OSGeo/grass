@@ -6,11 +6,8 @@
  * PURPOSE:      Program to manage and print the boundary definitions for the
  *               geographic region.
  *
- * COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
- *
- *               This program is free software under the GPL (>=v2)
- *               Read the file COPYING that comes with GRASS for
- *               details.
+ * SPDX-FileCopyrightText: 2000-2021 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ****************************************************************************/
 
 #include <string.h>
@@ -21,7 +18,7 @@
 #include <grass/raster.h>
 #include <grass/raster3d.h>
 #include <grass/vector.h>
-#include <grass/parson.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
 #include "local_proto.h"
 
@@ -44,8 +41,8 @@ int main(int argc, char *argv[])
     int pix;
     bool update_file = false;
     enum OutputFormat format;
-    JSON_Value *root_value;
-    JSON_Object *root_object;
+    G_JSON_Value *root_value;
+    G_JSON_Object *root_object;
 
     struct GModule *module;
     struct {
@@ -465,12 +462,12 @@ int main(int argc, char *argv[])
 
     if (strcmp(parm.format->answer, "json") == 0) {
         format = JSON;
-        root_value = json_value_init_object();
+        root_value = G_json_value_init_object();
         if (root_value == NULL) {
             G_fatal_error(
                 _("Failed to initialize JSON object. Out of memory?"));
         }
-        root_object = json_object(root_value);
+        root_object = G_json_object(root_value);
     }
     else if (strcmp(parm.format->answer, "shell") == 0 ||
              (print_flag & PRINT_SH)) {
@@ -504,7 +501,9 @@ int main(int argc, char *argv[])
         for (; *rast_ptr != NULL; rast_ptr++) {
             char rast_name[GNAME_MAX];
 
-            strcpy(rast_name, *rast_ptr);
+            if (G_strlcpy(rast_name, *rast_ptr, sizeof(rast_name)) >=
+                sizeof(rast_name))
+                G_fatal_error(_("Raster map name too long: <%s>"), *rast_ptr);
             mapset = G_find_raster2(rast_name, "");
             if (!mapset)
                 G_fatal_error(_("Raster map <%s> not found"), rast_name);
@@ -559,7 +558,9 @@ int main(int argc, char *argv[])
             char vect_name[GNAME_MAX];
             struct Cell_head map_window;
 
-            strcpy(vect_name, *vect_ptr);
+            if (G_strlcpy(vect_name, *vect_ptr, sizeof(vect_name)) >=
+                sizeof(vect_name))
+                G_fatal_error(_("Vector map name too long: <%s>"), *vect_ptr);
             mapset = G_find_vector2(vect_name, "");
             if (!mapset)
                 G_fatal_error(_("Vector map <%s> not found"), vect_name);
@@ -910,7 +911,7 @@ int main(int argc, char *argv[])
     /* grow by number of cells */
     if ((value = parm.grow->answer)) {
         update_file = true;
-        if (sscanf(value, "%i", &pix)) {
+        if (sscanf(value, "%i", &pix) == 1) {
             xs = window.ns_res * pix;
             if (window.north + xs > window.south - xs) {
                 if (G_projection() == PROJECTION_LL &&
@@ -981,13 +982,13 @@ int main(int argc, char *argv[])
 
     if (format == JSON) {
         char *serialized_string = NULL;
-        serialized_string = json_serialize_to_string_pretty(root_value);
+        serialized_string = G_json_serialize_to_string_pretty(root_value);
         if (serialized_string == NULL) {
             G_fatal_error(_("Failed to initialize pretty JSON string."));
         }
         puts(serialized_string);
-        json_free_serialized_string(serialized_string);
-        json_value_free(root_value);
+        G_json_free_serialized_string(serialized_string);
+        G_json_value_free(root_value);
     }
 
     exit(EXIT_SUCCESS);

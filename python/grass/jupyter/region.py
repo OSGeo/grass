@@ -4,11 +4,9 @@
 # PURPOSE:   This module contains functionality for managing region
 #            during rendering.
 #
-# COPYRIGHT: (C) 2021 Anna Petrasova, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2021 Anna Petrasova
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 """Manage computational or display region settings for display (render) classes."""
 
@@ -334,7 +332,7 @@ class RegionManagerForTimeSeries:
         self._use_region = use_region
         self._saved_region = saved_region
 
-    def set_region_from_timeseries(self, timeseries):
+    def set_region_from_timeseries(self, timeseries, element_type="strds"):
         """Sets computational region for rendering.
 
         This function sets the computation region from the extent of
@@ -353,13 +351,17 @@ class RegionManagerForTimeSeries:
             # use current
             return
         # Get extent, resolution from space time dataset
-        info = gs.parse_command("t.info", input=timeseries, flags="g", env=self._env)
-        # Set grass region from extent
-        self._env["GRASS_REGION"] = gs.region_env(
-            n=info["north"],
-            s=info["south"],
-            e=info["east"],
-            w=info["west"],
-            nsres=info["nsres_min"],
-            ewres=info["ewres_min"],
+        info = gs.parse_command(
+            "t.info", input=timeseries, type=element_type, flags="g", env=self._env
         )
+        # Set grass region from extent
+        params = {
+            "n": info["north"],
+            "s": info["south"],
+            "e": info["east"],
+            "w": info["west"],
+        }
+        if "nsres_min" in info:
+            params["nsres"] = info["nsres_min"]
+            params["ewres"] = info["ewres_min"]
+        self._env["GRASS_REGION"] = gs.region_env(**params, env=self._env)

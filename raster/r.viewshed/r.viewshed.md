@@ -138,8 +138,8 @@ in terms of CPU operations and can be also made efficient in terms of
 I/O-operations. For all details see the REFERENCES below.
 
 | ![[SDF]](sweep1.png) | ![[SDF]](sweep2.png) |
-|------------------------------------------------------------------|------------------------------------------------------------------|
-| The sweep-line.  | The active cells.|
+|----------------------|----------------------|
+| The sweep-line.      | The active cells.    |
 
 ## EXAMPLES
 

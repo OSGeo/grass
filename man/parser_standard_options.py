@@ -1,5 +1,7 @@
 """
-Copyright 2015-2025 by Pietro Zambelli and the GRASS Development Team
+SPDX-FileCopyrightText: 2015-2025 Pietro Zambelli
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author: Pietro Zambelli
 @author: Vaclav Petras (Markdown output)
@@ -12,9 +14,8 @@ import contextlib
 import os
 import re
 import sys
-
-from typing import IO, TYPE_CHECKING
 from collections import defaultdict
+from typing import IO, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Generator
@@ -127,7 +128,7 @@ def write_markdown_option(md: list, name: str, option: dict, keys: list) -> None
         value = option.get(item, "")
         if re.match(r"G_[a-zA-Z0-9_]+\(.*\)", value):
             value = f"Computed dynamically by *{value}*"
-        if value in ["YES", "NO"]:
+        if value in {"YES", "NO"}:
             value = f"{value} (`{item}: {value.lower()}`)"
         result = re.match(r"TYPE_([A-Z0-9_]+)", value)
         if result:
@@ -152,7 +153,7 @@ def write_markdown_option(md: list, name: str, option: dict, keys: list) -> None
                 "\nTo use the value in Python:\n",
                 "```python",
                 f'{key_aka_name} = options["{key_aka_name}"]',
-                "```"
+                "```",
                 # Example from user perspective.
                 "\nWhat a tool user (caller) may write:\n",
                 "```python",
@@ -362,7 +363,7 @@ if __name__ == "__main__":
     ):
         options = OptTable(parse_options(cfile.readlines(), startswith=args.startswith))
         outform = args.format
-        if outform in ("csv", "html", "markdown"):
+        if outform in {"csv", "html", "markdown"}:
             print(getattr(options, outform)(), file=outfile)
         else:
             year = os.getenv("VERSION_DATE")

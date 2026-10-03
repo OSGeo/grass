@@ -8,23 +8,17 @@ enum OutputFormat { PLAIN, SHELL, JSON, WKT, PROJ4 };
 
 /* input.c */
 void input_currloc(void);
-
-#ifdef HAVE_OGR
 int input_wkt(char *);
 int input_srid(char *);
 int input_proj4(char *);
 int input_epsg(int);
 int input_georef(char *);
-#endif
 
 /* output.c */
 void print_projinfo(enum OutputFormat);
 void print_datuminfo(void);
 void print_proj4(int);
-
-#ifdef HAVE_OGR
 void print_wkt(int, int);
-#endif
 
 /* datumtrans.c */
 int set_datum(char *);

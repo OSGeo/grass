@@ -20,10 +20,8 @@ per-file-ignores =
     # E722 do not use bare 'except'
     # W605 invalid escape sequence
     # F821 undefined name 'unicode'
-    # F841 local variable assigned to but never used
     # E741 ambiguous variable name 'l'
     man/build_html.py: E501
-    man/build_md.py: E501
     doc/examples/python/m.distance.py: E501
     gui/scripts/d.wms.py: E501
     gui/wxpython/image2target/g.gui.image2target.py: E501

@@ -3,11 +3,8 @@
  *
  * \brief DBMI Library (client) - table management
  *
- * (C) 1999-2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Joel Jones (CERL/UIUC), Radim Blazek
  */
@@ -58,7 +55,10 @@ int db_table_exists(const char *drvname, const char *dbname,
         return (-1);
 
     for (i = 0; i < count; i++) {
-        strcpy(buf, db_get_string(&names[i]));
+        const char *source = db_get_string(&names[i]);
+        if (G_strlcpy(buf, source, sizeof(buf)) >= sizeof(buf)) {
+            G_fatal_error(_("Table name too long: <%s>"), source);
+        }
         bufp = buf;
         if (!full && (c = strchr(buf, '.'))) {
             bufp = c + 1;
@@ -76,7 +76,10 @@ int db_table_exists(const char *drvname, const char *dbname,
             return (-1);
 
         for (i = 0; i < count; i++) {
-            strcpy(buf, db_get_string(&names[i]));
+            const char *src = db_get_string(&names[i]);
+            if (G_strlcpy(buf, src, sizeof(buf)) >= sizeof(buf)) {
+                G_fatal_error(_("Table name too long: <%s>"), src);
+            }
             bufp = buf;
             if (!full && (c = strchr(buf, '.'))) {
                 bufp = c + 1;

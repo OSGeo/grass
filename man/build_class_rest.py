@@ -1,26 +1,28 @@
 #!/usr/bin/env python3
 
 # generates REST man pages docs/rest/<category>.txt
-# (C) 2003-2009 Markus Neteler and the GRASS Development Team
+# SPDX-FileCopyrightText: 2003-2009 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Authors:
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
 from build_rest import (
-    rest_dir,
+    check_for_desc_override,
+    desc2_tmpl,
+    get_desc,
     grass_version,
     modclass_intro_tmpl,
     modclass_tmpl,
-    desc2_tmpl,
-    write_rest_header,
-    write_rest_footer,
-    rest_files,
-    check_for_desc_override,
-    get_desc,
     replace_file,
+    rest_dir,
+    rest_files,
+    write_rest_footer,
+    write_rest_header,
 )
 
 os.chdir(rest_dir)
