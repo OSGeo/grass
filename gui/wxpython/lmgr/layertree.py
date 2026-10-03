@@ -1556,7 +1556,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         elif ltype == "group":
             # group item
             ctrl = None
-            grouptext = _("Layer group:") + str(self.groupnode)
+            grouptext = _("Layer group: {number}").format(number=self.groupnode)
             self.groupnode += 1
         else:
             btnbmp = LMIcons["layerOptions"].GetBitmap((16, 16))

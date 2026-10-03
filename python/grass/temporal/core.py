@@ -1242,7 +1242,9 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
-                _("Unable to check table. " + self._create_mapset_error_message(mapset))
+                _("Unable to check table. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
+                )
             )
 
         return self.connections[mapset].check_table(table_name)
@@ -1260,9 +1262,8 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
-                _(
-                    "Unable to execute sql statement. "
-                    + self._create_mapset_error_message(mapset)
+                _("Unable to execute sql statement. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
                 )
             )
 
@@ -1275,7 +1276,9 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
-                _("Unable to fetch one. " + self._create_mapset_error_message(mapset))
+                _("Unable to fetch one. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
+                )
             )
 
         return self.connections[mapset].fetchone()
@@ -1287,7 +1290,9 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
-                _("Unable to fetch all. " + self._create_mapset_error_message(mapset))
+                _("Unable to fetch all. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
+                )
             )
 
         return self.connections[mapset].fetchall()

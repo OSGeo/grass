@@ -554,7 +554,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         first_mapset = None
         for mapset in mapsets:
             mapset_node = self.AddItem(
-                _("Mapset") + ": " + mapset, node=True, mapset=mapset
+                _("Mapset: {name}").format(name=mapset), node=True, mapset=mapset
             )
             node = mapset_node
             if not first_mapset:
@@ -567,7 +567,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 if isinstance(filesdict[mapset], dict):
                     for elementType in filesdict[mapset].keys():
                         node = self.AddItem(
-                            _("Type: ") + elementType,
+                            _("Type: {name}").format(name=elementType),
                             mapset=mapset,
                             node=True,
                             parent=mapset_node,

@@ -64,11 +64,8 @@ class IClassMapToolbar(BaseToolbar):
 
         self.SetToolShortHelp(
             self.togglemap.GetId(),
-            "%s %s %s"
-            % (
-                _("Set map canvas for "),
-                BaseIcons["zoomBack"].GetLabel(),
-                _("/ Zoom to map"),
+            _("Set map canvas for {zoom_back} / Zoom to map").format(
+                zoom_back=BaseIcons["zoomBack"].GetLabel()
             ),
         )
 
