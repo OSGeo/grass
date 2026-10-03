@@ -4,7 +4,6 @@ import numpy as np
 #
 # import GRASS modules
 #
-from grass.script import fatal
 from grass.exceptions import OpenError
 
 import grass.lib.gis as libgis
@@ -518,9 +517,9 @@ class RasterSegment(RasterAbstractBase):
             self.cats.mtype = self.mtype
             self.cats.read()
             self.hist.read()
-            if (self.mode in {"w", "rw"}) and self.overwrite is False:
+            if (self.mode in {"w", "rw"}) and not self.overwrite:
                 str_err = _("Raster map <{0}> already exists. Use overwrite.")
-                fatal(str_err.format(self))
+                raise OpenError(str_err.format(self.name))
 
             # We copy the raster map content into the segments
             if self.mode in {"rw", "r"}:
