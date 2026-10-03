@@ -299,6 +299,7 @@ class GStderr:
         self.type = ""
         self.message = ""
         self.printMessage = False
+        self._incomplete_line = ""
 
     def flush(self):
         pass
@@ -306,6 +307,9 @@ class GStderr:
     def write(self, s):
         if "GtkPizza" in s:
             return
+
+        # Python may write one line in several parts (e.g., in a traceback)
+        s, _, self._incomplete_line = (self._incomplete_line + s).rpartition("\n")
 
         # remove/replace escape sequences '\b' or '\r' from stream
         progressValue = -1
