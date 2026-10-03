@@ -1,8 +1,10 @@
 #ifndef __GLOBALS_H_
 #define __GLOBALS_H_
 
+#include <stdint.h>
+
 extern int overwrite_flag;
-extern long long seed_value;
+extern int64_t seed_value;
 extern long seeded;
 extern int rand_calls;
 extern int region_approach;

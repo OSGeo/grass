@@ -383,9 +383,8 @@ static struct G_random_state *thread_rand_state(void)
 
 static void setup_rand(void)
 {
-    G_random_init_layout_exact(&rand_layout, seed_value,
-                               (long long)depths * rows,
-                               (long long)columns * rand_calls);
+    G_random_init_layout_exact(&rand_layout, seed_value, (int64_t)depths * rows,
+                               (int64_t)columns * rand_calls);
     /* Earlier versions drew these values without complaint, so this is
      * only a warning. */
     if (G_random_layout_batches(&rand_layout) < 1)
@@ -397,7 +396,7 @@ static void setup_rand(void)
 static void place_rand_row(int tid, int row)
 {
     G_random_state_for_unit(&rand_state[tid], &rand_layout,
-                            (long long)current_depth * rows + row);
+                            (int64_t)current_depth * rows + row);
 }
 
 /****************************************************************************/

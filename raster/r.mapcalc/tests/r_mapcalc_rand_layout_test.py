@@ -287,7 +287,7 @@ def test_seed_out_of_range(session_in_mapset):
 
 @pytest.mark.parametrize("seed", ["12abc", "1.5", str(2**64)])
 def test_invalid_seed(session_in_mapset, seed):
-    """A seed with trailing characters or beyond long long is an error
+    """A seed with trailing characters or beyond a 64-bit integer is an error
 
     The parser accepts these for an integer option, since it reads only
     the leading digits, so r.mapcalc checks them itself.

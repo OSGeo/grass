@@ -13,6 +13,7 @@
 #endif
 
 #include <errno.h>
+#include <inttypes.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,7 +27,7 @@
 
 int overwrite_flag;
 
-long long seed_value;
+int64_t seed_value;
 long seeded;
 int rand_calls;
 int region_approach;
@@ -201,13 +202,14 @@ int main(int argc, char **argv)
          * created. */
         G_random_state_from_seed(&check, seed_value);
         seeded = 1;
-        G_debug(3, "Read random seed from seed=: %lld", seed_value);
+        G_debug(3, "Read random seed from seed=: %" PRId64, seed_value);
     }
     else {
         if (rand_calls > 0) {
             seed_value = G_random_generate_seed();
             seeded = 1;
-            G_debug(3, "Automatically generated random seed: %lld", seed_value);
+            G_debug(3, "Automatically generated random seed: %" PRId64,
+                    seed_value);
         }
         if (random->answer) {
             G_verbose_message(_("Flag 's' is deprecated and will be removed in "
