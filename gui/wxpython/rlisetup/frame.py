@@ -57,11 +57,7 @@ class ViewFrame(wx.Frame):
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btn_ok.Bind(wx.EVT_BUTTON, self.OnOk)
         self._layout()
-        try:
-            # Python >= 3.11
-            self.enc = locale.getencoding()
-        except AttributeError:
-            self.enc = locale.getdefaultlocale()[1]
+        self.enc = locale.getencoding()
 
     def _layout(self):
         """Set the layout"""
@@ -280,7 +276,7 @@ class RLiSetupFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             res = dlg.GetValue()
             newname = "%s%s%s" % (self.rlipath, os.sep, res)
-            os.rename(os.path.join(self.rlipath, confile), newname)
+            Path(self.rlipath, confile).rename(newname)
             self.listfiles = self.ListFiles()
             self.listfileBox.Clear()
             self.listfileBox.Set(self.listfiles)

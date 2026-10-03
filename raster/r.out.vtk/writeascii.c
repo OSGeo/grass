@@ -7,11 +7,8 @@
  *                 08 23 2005 Berlin
  * PURPOSE:      Converts raster maps into the VTK-Ascii format
  *
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -165,7 +162,7 @@ void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname G_UNUSED,
     G_debug(3, _("write_vtk_structured_coordinates: Writing Coordinates"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -220,7 +217,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname G_UNUSED,
             _("write_vtk_polygonal_coordinates: Writing VTK Polygonal data"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -330,7 +327,7 @@ void write_vtk_data(int fd, FILE *fp, char *varname, struct Cell_head region,
     G_debug(3, _("write_vtk_data: Writing VTK-Data"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }

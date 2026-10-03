@@ -6,11 +6,8 @@
  *              Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
  * PURPOSE:     This file contains the prototypes for all the functions in the
  *              gis library (src/libes/gis).
- * COPYRIGHT:   (C) 2000 by the GRASS Development Team
- *
- *              This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ * SPDX-FileCopyrightText: 2000 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -673,7 +670,7 @@ void G_unset_percent_routine(void);
 void G_popen_clear(struct Popen *);
 FILE *G_popen_write(struct Popen *, const char *, const char **);
 FILE *G_popen_read(struct Popen *, const char *, const char **);
-void G_popen_close(struct Popen *);
+int G_popen_close(struct Popen *);
 
 /* plot.c */
 void G_setup_plot(double, double, double, double, int (*)(int, int),

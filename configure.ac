@@ -9,11 +9,8 @@
 # PURPOSE:	This configure runs all the tests to determine what components
 #		are installed on the current system. It also defines certain
 #		configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2026 by the GRASS Development Team
-#
-#		This program is free software under the GNU General
-#		Public License (>=v2). Read the file COPYING that
-#		comes with GRASS for details.
+# SPDX-FileCopyrightText: 2000-2026 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # MANUAL:       https://www.gnu.org/software/autoconf/manual/autoconf.html
 #               http://savannah.gnu.org/projects/autoconf/
@@ -48,6 +45,8 @@ LOC_CHECK_USE(cxx,C++,USE_CXX)
 
 if test -n "$USE_CXX"; then
 	AC_PROG_CXX
+	m4_include([m4/ax_cxx_compile_stdcxx.m4])
+	AX_CXX_COMPILE_STDCXX([17], [ext], [mandatory])
 else
 	CXX=
 	CXXFLAGS=
@@ -765,7 +764,7 @@ proj_version="$proj_ver_major.$proj_ver_minor.$proj_ver_patch"
 
 if test "$(expr "$proj_ver_major" \>= 9)" = 1; then
   AC_MSG_RESULT([using PROJ version "${proj_version}"])
-else
+elif test "$cross_compiling" != "yes" ; then
   AC_MSG_ERROR([*** PROJ version 9.0.0 or newer is required (found version "${proj_version}")])
 fi
 
@@ -963,7 +962,7 @@ else
   if test "$(expr "$gdal_version_major" \>= 3)" = 1 && \
       test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
       AC_MSG_RESULT([using GDAL version "${gdal_version}"])
-  else
+  elif test "$cross_compiling" != "yes" ; then
       AC_MSG_ERROR([*** GDAL version 3.7 or newer is required (found version "${gdal_version}")])
   fi
 

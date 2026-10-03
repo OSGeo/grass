@@ -8,11 +8,9 @@
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
 #
-# COPYRIGHT:    (C) 2009-2025 by Markus Neteler, and the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2009-2025 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # TODO:         - update temporary workaround of using grass7 subdir of addon-repo, see
 #                 https://github.com/OSGeo/grass-addons/issues/528
@@ -291,13 +289,13 @@ class GitAdapter:
         try:
             gs.call([self._git], stdout=PIPE)
         except OSError:
-            gs.fatal(_("Could not found Git. Please install it."))
+            gs.fatal(_("Could not find Git. Please install it."))
 
     def __check_permissions(self):
         """"""
         # Create working directory if it does not exist
         self.working_directory.mkdir(parents=True, exist_ok=True)
-        # Check pemissions in case he workdir existed
+        # Check permissions in case the workdir exists
         if not os.access(self.working_directory, os.W_OK):
             gs.fatal(
                 _("Cannot write to working directory {}.").format(
@@ -477,7 +475,7 @@ def replace_shebang_win(python_file):
             out_file.write(new_line)
 
     os.remove(python_file)  # remove original
-    os.rename(tmp_name, python_file)  # rename temp to original name
+    Path(tmp_name).rename(python_file)  # rename temp to original name
 
 
 def urlretrieve(url, filename, *args, **kwargs):
@@ -1218,10 +1216,10 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
 
         # update modules metadata file
         gs.message(_("Updating extension modules metadata file..."))
-        install_module_xml(new_modules)
+        install_module_xml(new_modules, source=source)
 
         for module in new_modules:
-            update_manual_page(module)
+            update_manual_page(module, source=source)
 
         gs.message(
             _("Installation of <%s> successfully finished") % options["extension"]
@@ -1495,7 +1493,7 @@ def filter_multi_addon_addons(mlist):
     return mlist
 
 
-def install_module_xml(mlist):
+def install_module_xml(mlist, source=None):
     """Update XML files with metadata about installed modules and toolbox
     of an private addon
 
@@ -1509,7 +1507,9 @@ def install_module_xml(mlist):
     # read XML file
     tree = etree_fromfile(xml_file)
 
-    if sys.platform != "win32":
+    # Identifying multi-addon addons queries the official repository over
+    # the network, so skip it for other sources (e.g. a local directory).
+    if sys.platform != "win32" and source in {"official", "official_fork"}:
         # Filter multi-addon addons
         if len(mlist) > 1:
             mlist = filter_multi_addon_addons(
@@ -1835,19 +1835,12 @@ def extract_tar(name, directory, tmpdir):
         extract_dir = os.path.join(tmpdir, "extract_dir")
         Path(extract_dir).mkdir()
 
-        # Extraction filters were added in Python 3.12,
-        # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
-        # See
-        # https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
-        # and https://peps.python.org/pep-0706/
-        # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
-        # and in Python 3.14, `filter='data'` will be the default
-        if hasattr(tarfile, "data_filter"):
-            tar.extractall(path=extract_dir, filter="data")
-        else:
-            # Remove this when no longer needed
-            gs.warning(_("Extracting may be unsafe; consider updating Python"))
-            tar.extractall(path=extract_dir)
+        # The 'data' extraction filter was added in Python 3.12 and backported
+        # to 3.11.4 (PEP 706). Refuse to extract without it rather
+        # than extracting unsafely.
+        if not hasattr(tarfile, "data_filter"):
+            gs.fatal(_("Extracting may be unsafe; upgrade Python to 3.11.4 or newer"))
+        tar.extractall(path=extract_dir, filter="data")
 
         files = os.listdir(extract_dir)
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
@@ -2360,6 +2353,7 @@ def remove_extension_std(name, force=False):
         os.path.join(options["prefix"], "bin", name),
         os.path.join(options["prefix"], "scripts", name),
         os.path.join(options["prefix"], "docs", "html", name + ".html"),
+        os.path.join(options["prefix"], "docs", "mkdocs", "source", name + ".md"),
         os.path.join(options["prefix"], "docs", "rest", name + ".txt"),
         os.path.join(options["prefix"], "docs", "man", "man1", name + ".1"),
     ]:
@@ -2471,6 +2465,7 @@ def check_dirs():
     """Ensure that the necessary directories in prefix path exist"""
     create_dir(os.path.join(options["prefix"], "bin"))
     create_dir(os.path.join(options["prefix"], "docs", "html"))
+    create_dir(os.path.join(options["prefix"], "docs", "mkdocs", "source"))
     create_dir(os.path.join(options["prefix"], "docs", "rest"))
     check_style_file("grass_logo.png")
     check_style_file("hamburger_menu.svg")
@@ -2484,7 +2479,7 @@ def check_dirs():
 # fix file URI in manual page
 
 
-def update_manual_page(module):
+def update_manual_page(module, source=None):
     """Fix manual page for addons which are at different directory
     than core modules"""
     if module.split(".", 1)[0] == "wx":
@@ -2513,7 +2508,9 @@ def update_manual_page(module):
     # find URIs
     pattern = r"""<a href="([^"]+)">([^>]+)</a>"""
     addons = get_installed_extensions(force=True)
-    if sys.platform != "win32":
+    # Identifying multi-addon addons queries the official repository over
+    # the network, so skip it for other sources (e.g. a local directory).
+    if sys.platform != "win32" and source in {"official", "official_fork"}:
         # Multi-addon
         if len(addons) > 1:
             for a in get_multi_addon_addons_which_install_only_html_man_page():

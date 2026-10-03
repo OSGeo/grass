@@ -11,10 +11,8 @@ Usage:
 
     gtask.command_info("r.info")
 
-(C) 2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
@@ -23,6 +21,7 @@ import os
 import re
 import sys
 import keyword
+import json
 import xml.etree.ElementTree as ET
 from xml.parsers import expat
 
@@ -488,7 +487,7 @@ def get_interface_description(cmd):
                 "Unable to fetch interface description for command '<{cmd}>'."
                 "\n\nDetails: <{det}>"
             ).format(cmd=cmd, det=e)
-        )
+        ) from e
 
     desc = convert_xml_to_utf8(cmdout)
     return desc.replace(
@@ -519,7 +518,7 @@ def parse_interface(name, parser=processTask, blackList=None):
             _("Cannot parse interface description of <{name}> module: {error}").format(
                 name=name, error=error
             )
-        )
+        ) from error
     task = parser(tree, blackList=blackList).get_task()
     # if name from interface is different than the originally
     # provided name, then the provided name is likely a full path needed
@@ -679,8 +678,8 @@ def cmdstring_to_tuple(cmd):
 def cmd_to_python_args(cmd):
     """Format parameters for Python calls, handling illegal keywords.
 
-    :param cmd: list of command arguments (e.g. ['v.distance', 'from=map1', 'to=map2'])
-    :return: string of formatted Python arguments ending with a closing parenthesis ')'
+    :param cmd: list of command arguments (e.g. ["v.distance", "from=map1", "to=map2"])
+    :return: string of formatted Python arguments
     """
     flags = ""
     python_params = []
@@ -707,21 +706,23 @@ def cmd_to_python_args(cmd):
             if keyword.iskeyword(k) or not k.isidentifier():
                 illegal_keys[k] = v
             else:
-                python_params.append(f"{k}={v!r}")
+                # json.dumps() automatically handles quotes, backslashes, and newlines using double quotes.
+                # ensure_ascii=False keeps international characters human-readable
+                python_params.append(f"{k}={json.dumps(v, ensure_ascii=False)}")
 
     # Build the command string
     args = []
 
     if flags:
-        args.append(f"flags='{flags}'")
+        args.append(f'flags="{flags}"')
 
     args.extend(python_params)
 
     if illegal_keys:
-        # Safe unpacking: **{'from': 'val', 'to': 'val'}
-        args.append(f"**{illegal_keys!r}")
+        # Safe unpacking: **{"from": "val", "to": "val"}
+        args.append(f"**{json.dumps(illegal_keys, ensure_ascii=False)}")
 
-    return ", ".join(args) + ")"
+    return ", ".join(args)
 
 
 def cmd_to_dict(cmd):

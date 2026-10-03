@@ -11,10 +11,8 @@ Usage:
         dataset, mapset, inputs, base, start, end, count, method, register_null, dbif
     )
 
-(C) 2012-2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :author: Soeren Gebbert
 """
@@ -115,7 +113,17 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
 
 def aggregate_raster_maps(
-    inputs, base, start, end, count: int, method, register_null, dbif, offset: int = 0
+    inputs,
+    base,
+    start,
+    end,
+    count: int,
+    method,
+    register_null,
+    dbif,
+    offset: int = 0,
+    *,
+    nprocs: int = 0,
 ):
     """Aggregate a list of raster input maps with r.series
 
@@ -132,6 +140,7 @@ def aggregate_raster_maps(
                          time raster dataset, if false not
     :param dbif: The temporal database interface to use
     :param offset: Offset to be added to the map counter to create the map ids
+    :param nprocs: Number of cores to use for processing (0 means use all available cores)
     """
 
     msgr = get_tgis_message_interface()
@@ -176,6 +185,7 @@ def aggregate_raster_maps(
         if len(inputs) > 1000:
             gs.run_command(
                 "r.series",
+                nprocs=nprocs,
                 flags="z",
                 file=filename,
                 output=output,
@@ -185,6 +195,7 @@ def aggregate_raster_maps(
         else:
             gs.run_command(
                 "r.series",
+                nprocs=nprocs,
                 file=filename,
                 output=output,
                 overwrite=gs.overwrite(),
@@ -273,6 +284,7 @@ def aggregate_by_topology(
     r_series = pymod.Module(
         "r.series",
         output="spam",
+        nprocs=1,
         method=[method],
         overwrite=overwrite,
         quiet=True,

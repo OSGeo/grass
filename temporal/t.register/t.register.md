@@ -139,7 +139,10 @@ For more information about semantic labels and image collections see
 *[i.band.library](i.band.library.md)* module.
 
 Specification of map names and absolute start time (datetime) of the
-time instances. The last column indicates related semantic label.
+time instances. The last column indicates related semantic label. The
+last column is interpreted as a semantic label only when it cannot be
+read as an end time, i.e., when it is not a datetime for absolute time
+or an integer for relative time.
 
 ```sh
 T33UYP_20190331T094039_B01|2019-03-31 09:40:39|S2_1

@@ -1,8 +1,8 @@
 Interface to GRASS modules
 ==============================
 
-In :mod:`~pygrass.modules` module, GRASS modules are represented
-by :class:`~pygrass.modules.interface.module.Module` class
+In :mod:`~grass.pygrass.modules` module, GRASS modules are represented
+by :class:`~grass.pygrass.modules.interface.module.Module` class
 objects. These objects are generated based on the XML module
 description that is used also for the generation of the graphical user
 interface (GUI). ::
@@ -193,11 +193,11 @@ Launching GRASS modules in parallel
 
 PyGRASS implements simple mechanism for launching GRASS modules in
 parallel. See
-:class:`~pygrass.modules.interface.module.ParallelModuleQueue` class
+:class:`~grass.pygrass.modules.interface.module.ParallelModuleQueue` class
 for details.
 
 Multiple GRASS modules can be joined into one object by
-:class:`~pygrass.modules.interface.module.MultiModule`.
+:class:`~grass.pygrass.modules.interface.module.MultiModule`.
 
 
 .. _Popen: https://docs.python.org/library/subprocess.html#Popen

@@ -93,19 +93,21 @@ r.out.vtk input=elevation.10m,slope,aspect elevation=elevation.10m output=/tmp/o
 paraview --data=/tmp/out.vtk
 ```
 
-### Spearfish example with RGB data
+### North Carolina sample dataset example with RGB data
 
 ```sh
-#set the region
-g.region n=4926990 s=4914840 w=591570 e=607800 res=30 -p
+# set the region to the statewide North Carolina elevation map
+g.region raster=elev_state_500m -p
 
-# using r.in.wms to create RGB data to get a satellite coverage
-r.in.wms layers=global_mosaic mapserver=http://wms.jpl.nasa.gov/wms.cgi \
-         output=wms_global_mosaic
+# use r.in.wms with the -b flag to fetch RGB satellite imagery from
+# NASA GIBS as separate .red, .green and .blue rasters
+r.in.wms -b layers=BlueMarble_ShadedRelief_Bathymetry \
+            url=https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi \
+            output=wms_blue_marble
 
 # export the data to VTK
-r.out.vtk rgbmaps=wms_global_mosaic.red,wms_global_mosaic.green,wms_global_mosaic.blue \
-          elevation=elevation.10m output=/tmp/out.vtk
+r.out.vtk rgbmaps=wms_blue_marble.red,wms_blue_marble.green,wms_blue_marble.blue \
+          elevation=elev_state_500m output=/tmp/out.vtk
 
 # visualize in Paraview or other VTK viewer:
 paraview --data=/tmp/out.vtk

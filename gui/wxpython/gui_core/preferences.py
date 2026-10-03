@@ -14,10 +14,8 @@ Classes:
  - preferences::MapsetAccess
  - preferences::CheckListMapset
 
-(C) 2007-2017 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2017 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Martin Landa <landa.martin gmail.com>
@@ -1285,6 +1283,34 @@ class PreferencesDialog(PreferencesBaseDialog):
         self.winId["cmd:verbosity:selection"] = verbosity.GetId()
 
         gridSizer.Add(verbosity, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+
+        row += 1
+        gridSizer.Add(
+            StaticText(
+                parent=panel,
+                id=wx.ID_ANY,
+                label=_("Default Python API for copied commands:"),
+            ),
+            flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
+            pos=(row, 0),
+        )
+        pythonAPI = wx.Choice(
+            parent=panel,
+            id=wx.ID_ANY,
+            size=(200, -1),
+            choices=self.settings.Get(
+                group="cmd",
+                key="pythonAPI",
+                subkey="choices",
+                settings_type="internal",
+            ),
+            name="GetSelection",
+        )
+        pythonAPI.SetSelection(
+            self.settings.Get(group="cmd", key="pythonAPI", subkey="selection")
+        )
+        self.winId["cmd:pythonAPI:selection"] = pythonAPI.GetId()
+        gridSizer.Add(pythonAPI, pos=(row, 1), flag=wx.ALIGN_RIGHT)
 
         row += 1
         # nprocs

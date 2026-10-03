@@ -3,10 +3,9 @@ Name:      i.svm.train input & output tests
 Purpose:   Validates user input validation code and output generation
 
 Author:    Maris Nartiss
-Copyright: (C) 2023 by Maris Nartiss and the GRASS Development Team
-Licence:   This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2023 Maris Nartiss
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import unittest
@@ -296,10 +295,10 @@ class IOValidationTest(TestCase):
             lines = rf.readlines()
             M, R = lines[0].strip().split(" ")
             self.assertTrue(float(M) > -1 and float(M) < 1)
-            self.assertTrue(float(R) <= 2)
+            self.assertLessEqual(float(R), 2)
             M, R = lines[1].strip().split(" ")
             self.assertTrue(float(M) > -1 and float(M) < 1)
-            self.assertTrue(float(R) <= 20)
+            self.assertLessEqual(float(R), 20)
 
     @unittest.skipIf(shutil.which("i.svm.train") is None, "i.svm.train not found.")
     def test_fail_on_empty_raster(self):
