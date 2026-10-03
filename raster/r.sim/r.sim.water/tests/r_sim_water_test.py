@@ -529,12 +529,12 @@ def test_duration_affects_time_series_progression(long_slope_session):
     """A longer duration must create more time-series output maps.
 
     With output_step=5, duration=10 produces maps at t=5,10 while
-    duration=20 produces maps at t=5,10,15 and, if walkers survive to the
-    end, also t=20. The exact count of the longer run is not pinned: whether
-    the final t=20 map appears depends on whether the last walkers leave the
-    domain before the final step, which varies with seed and platform. We
-    assert the robust lower bound (at least three maps) and that the longer
-    simulation yields strictly more maps than the shorter one.
+    duration=20 produces maps at t=5,10,15,20. The exact count of the longer
+    run is not pinned: when the last walkers leave the domain early, which
+    varies with seed and platform, the steps after that are not written,
+    only the final t=20 map. We assert the robust lower bound (at least
+    three maps) and that the longer simulation yields strictly more maps
+    than the shorter one.
     """
     tools = Tools(session=long_slope_session)
 
@@ -573,8 +573,8 @@ def test_duration_affects_time_series_progression(long_slope_session):
         f"10-min simulation with output_step=5 should produce 2 maps, got {len(maps_10)}"
     )
 
-    # 20-min run should produce at least 3 time-series maps (t=5, t=10, t=15;
-    # t=20 as well when the last walkers survive to the final step).
+    # 20-min run should produce at least 3 time-series maps (t=5, t=10 and
+    # t=20, and t=15 as well when the last walkers stay past it).
     maps_20 = list(tools.g_list(type="raster", pattern="depth_20min*", format="json"))
     assert len(maps_20) >= 3, (
         f"20-min simulation with output_step=5 should produce at least 3 maps, "

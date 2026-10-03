@@ -339,10 +339,11 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
         (int)(settings->timesec /
               (setup->deltap * setup->timec)); /* number of iterations = number
                                                   of cells to pass */
-    setup->iterout =
-        (int)(settings->iterout /
-              (setup->deltap * setup->timec)); /* number of cells to pass for
-                                                  time series output */
+    if (settings->ts && settings->iterout > 0 &&
+        time_step_seconds(setup) > settings->iterout)
+        G_warning(_("Time step of %.2f s is longer than output_step of %d s, "
+                    "some output steps may be skipped"),
+                  time_step_seconds(setup), settings->iterout);
 
     fprintf(stderr, "\n");
     G_message(_("Min elevation \t= %.2f m\nMax elevation \t= %.2f m\n"), zmin,
