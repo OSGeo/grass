@@ -130,12 +130,12 @@ cost nothing but their share of the span. Which pattern applies depends on
 whether a unit draws its values in one go or over many steps.
 
 The seed comes from the user or is generated. A tool parses its seed option
-into a `long long` with `strtoll()` and refuses what is not an integer from
--2^31 to 2^32 - 1, naming the option. When the user gives no seed,
-`G_random_generate_seed()` gives one, from `GRASS_RANDOM_SEED`, or else from
-`SOURCE_DATE_EPOCH`, or else from the time and the process ID. The tool
-records the seed it used, for example in the history of the output map, so
-that the computation can be repeated.
+with `strtoll()` and refuses what is not an integer from -2^31 to 2^32 - 1,
+naming the option. When the user gives no seed, `G_random_generate_seed()`
+gives one, from `GRASS_RANDOM_SEED`, or else from `SOURCE_DATE_EPOCH`, or
+else from the time and the process ID. The tool records the seed it used, for
+example in the history of the output map, so that the computation can be
+repeated.
 
 Whatever the pattern, the tool checks that no unit can draw more than the
 stride, which `G_random_layout_length(&layout)` returns, and that the batches
@@ -155,7 +155,7 @@ and drawn from in a loop. Its one unit owns the whole span, so there is no
 `struct G_random_layout` to initialize and there are no batches to check:
 
 ```c
-// seed: the seed, a long long; n: how many values to draw; values: where
+// seed: the seed, an int64_t; n: how many values to draw; values: where
 // they go.
 struct G_random_state rng;
 
@@ -178,13 +178,13 @@ its values:
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-// seed: the seed, a long long; rows, cols: the region; draws_per_value: the
+// seed: the seed, an int64_t; rows, cols: the region; draws_per_value: the
 // number of random values drawn for one cell. The product is formed in
-// long long, since it may not fit an int.
+// int64_t, since it may not fit an int.
 struct G_random_layout layout;
 
 G_random_init_layout_exact(&layout, seed, rows,
-                           (long long)cols * draws_per_value);
+                           (int64_t)cols * draws_per_value);
 if (G_random_layout_batches(&layout) < 1)
     G_warning(_("The computation draws more than 2^46 random values; "
                 "values beyond that repeat earlier values shifted by a "
@@ -227,11 +227,13 @@ computation, not in the thread's loop. When the values an item draws in a step
 vary under a known bound, the item is a unit of a bounded layout:
 
 ```c
+#include <inttypes.h>
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-// seed: the seed, a long long; items, steps: the number of items and of time
-// steps, as long long; max_draws_per_step: the most values an item draws in
+// seed: the seed, an int64_t; items, steps: the number of items and of time
+// steps, as int64_t; max_draws_per_step: the most values an item draws in
 // one step.
 struct G_random_layout layout;
 struct G_random_state *states = G_malloc(items * sizeof(*states));
@@ -239,11 +241,11 @@ struct G_random_state *states = G_malloc(items * sizeof(*states));
 G_random_init_layout_bounded(&layout, seed, items,
                              steps * max_draws_per_step);
 if (G_random_layout_batches(&layout) < 1)
-    G_warning(_("%lld items over %lld steps may draw more than 2^46 random "
-                "values; values beyond that repeat earlier values shifted "
-                "by a constant"),
+    G_warning(_("%" PRId64 " items over %" PRId64 " steps may draw more than "
+                "2^46 random values; values beyond that repeat earlier values "
+                "shifted by a constant"),
               items, steps);
-for (long long i = 0; i < items; i++)
+for (int64_t i = 0; i < items; i++)
     G_random_state_for_unit(&states[i], &layout, i);
 // At every step, whichever thread moves item i draws from states[i].
 G_free(states);
