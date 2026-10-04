@@ -178,8 +178,9 @@ def main():
                 except CalledModuleError:
                     dbif.close()
                     gs.fatal(
-                        _("Unable to add column %s to vector map <%s>")
-                        % (col_name, vectmap)
+                        _(
+                            "Unable to add column {column} to vector map <{vector}>"
+                        ).format(column=col_name, vector=vectmap)
                     )
 
                 # Call v.what.rast

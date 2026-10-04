@@ -263,7 +263,7 @@ def main():
     # write cmd history:
     gs.raster_history(tileout)
 
-    gs.message(_("Done: generated map {name}").format(name=tileout))
+    gs.message(_("Done: generated map {map_name}").format(map_name=tileout))
     gs.message(
         _("(Note: Holes in the data can be closed with 'r.fillnulls' using splines)")
     )
