@@ -58,7 +58,7 @@ The following examples will use the [North Carolina dataset](https://grass.osgeo
 ## Map
 
 The `gj.Map` class in `grass.jupyter` provides a way to create static maps in Jupyter.
-Here we create a map of elevation overlayed with streets:
+Here we create a map of elevation overlaid with streets:
 
 ```python
 # Create a new map
@@ -74,7 +74,7 @@ m.d_vect(map="streets", color="black")
 m.show()
 ```
 
-![Elevation map overlayed with streets with gj.Map](jupyter_map.png)
+![Elevation map overlaid with streets with gj.Map](jupyter_map.png)
 
 !!! grass-tip "Order Matters"
     <!-- markdownlint-disable-next-line MD046 -->

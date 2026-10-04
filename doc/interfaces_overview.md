@@ -114,7 +114,7 @@ m.d_vect(map="streets", color="black")
 m.show()
 ```
 
-![Elevation map overlayed with streets with gj.Map](jupyter_map.png)
+![Elevation map overlaid with streets with gj.Map](jupyter_map.png)
 
 [Learn more :material-arrow-right-bold:](jupyter_intro.md){ .md-button }
 

@@ -172,7 +172,7 @@ In this example no datum transformation will take place as a datum was
 not specified for the input projection. The datum specified for the
 output projection will thus be silently ignored and may be left out; all
 that is achieved a simple conversion from projected to geodetic
-co-ordinates, keeping the same datum (and thus also the same ellipsoid).
+coordinates, keeping the same datum (and thus also the same ellipsoid).
 
 For more usage examples, see the documentation for the
 [PROJ](https://proj.org) *cs2cs* program.

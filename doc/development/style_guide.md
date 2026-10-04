@@ -414,7 +414,7 @@ See [Changing computational region](#changing-computational-region) for more det
 #### Mapsets
 
 **Output data should be always written to the current mapset**. This is ensured
-by build-in GRASS mechanisms, so there is nothing which needs to be done in the
+by built-in GRASS mechanisms, so there is nothing which needs to be done in the
 tool. If a tool modifies inputs, the input must be in the current mapset.
 
 The tool should accept inputs from any mapset in the current project. The
