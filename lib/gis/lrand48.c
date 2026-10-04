@@ -371,8 +371,11 @@ double G_drand48(void)
 static uint64_t lcg_mul48(uint64_t x, uint64_t y)
 {
 #if defined(__SIZEOF_INT128__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
     return (uint64_t)(((unsigned __int128)(x & MASK48) * (y & MASK48)) &
                       MASK48);
+#pragma GCC diagnostic pop
 #else
     const uint64_t mask24 = UINT64_C(0xFFFFFF);
     uint64_t x0 = x & mask24;
