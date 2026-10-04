@@ -218,7 +218,7 @@ char *file_name(char *path, const char *dir, const char *element,
 
 void append_char(char *s, char c)
 {
-    int len = strlen(s);
+    size_t len = strlen(s);
 
     s[len] = c;
     s[len + 1] = '\0';

@@ -315,6 +315,13 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
+    /* The simulation needs planar coordinates in length units. */
+    if (G_projection() == PROJECTION_LL)
+        G_fatal_error(_("Lat/Long project is not supported by %s. Please "
+                        "reproject the data to a projected coordinate "
+                        "system."),
+                      G_program_name());
+
     SummaryFormat summary_format = SUMMARY_NONE;
     if (flag.print->answer)
         summary_format = strcmp(parm.format->answer, "json") == 0

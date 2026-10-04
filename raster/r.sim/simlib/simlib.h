@@ -36,15 +36,14 @@ typedef struct {
     double hbeta;       // Weighting factor for water flow velocity vector
     double hhmax;       // Threshold water depth [m]
     double frac;        // Water diffusion constant
-    int iterout;        // Time interval for creating output maps [minutes]
-    int timesec;        // Time how long the simulation runs [minutes]
+    int iterout;        // Time interval for creating output maps [seconds]
+    int timesec;        // Time how long the simulation runs [seconds]
     bool ts;            // Time series output
     double mintimestep; // Minimum time step for the simulation [seconds]
     int64_t seed;       // Seed of the walkers' random numbers
 } Settings;
 
 typedef struct {
-    int iterout;    // Number of iterations for creating output maps
     int miter;      // Total number of iterations
     double chmean;  // Mean Manning's n
     double si0;     // Mean rainfall excess (or sediment concentration?)
@@ -189,7 +188,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                const Settings *settings, Simulation *sim,
                ObservationPoints *points, const Inputs *inputs,
                const Outputs *outputs, Grids *grids, Summary *summary);
-int output_data(double tt, double conn, const Setup *setup,
+int output_data(double tt, double name_time, double conn, const Setup *setup,
                 const Geometry *geometry, const Settings *settings,
                 const Simulation *sim, const Inputs *inputs,
                 const Outputs *outputs, const Grids *grids, Summary *summary);

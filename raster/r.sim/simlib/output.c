@@ -143,12 +143,14 @@ static void write_history(const char *name, double tt, const Setup *setup,
     G_write_raster_timestamp(name, timestamp);
 }
 
-/* conn is the sequential-block extrapolation factor nblock/iblock: scales
+/* tt is the simulated time reached [s] and name_time the time [s] the maps
+ * are named and timestamped by, rounded to minutes.
+ * conn is the sequential-block extrapolation factor nblock/iblock: scales
  * the cumulative partial sum in gama into an estimator of the eventual total
  * for snapshots taken before all blocks have run. With nblock = 1 (or after
  * the final block) conn = 1.0 and the output formulas are unchanged. err is
  * written from gammas, which already has conn baked into its accumulator. */
-int output_data(double tt, double conn, const Setup *setup,
+int output_data(double tt, double name_time, double conn, const Setup *setup,
                 const Geometry *geometry, const Settings *settings,
                 const Simulation *sim, const Inputs *inputs,
                 const Outputs *outputs, const Grids *grids, Summary *summary)
@@ -187,7 +189,7 @@ int output_data(double tt, double conn, const Setup *setup,
         ndigit = 5;
 
     /* Convert to minutes */
-    tt_minutes = (int)(tt / 60. + 0.5);
+    tt_minutes = (int)(name_time / 60. + 0.5);
 
     /* Create timestamp */
     snprintf(timestamp_buf, sizeof(timestamp_buf), "%d minutes", tt_minutes);

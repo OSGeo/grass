@@ -42,8 +42,10 @@ highest water depth highlighting streams, pooling, and wet areas during
 a rainfall event.*
 
 The module automatically converts horizontal distances from feet to
-metric system using database/projection information. Rainfall excess is
-defined as rainfall intensity - infiltration rate and should be provided
+metric system using database/projection information. The module
+requires a projected coordinate system and does not run in a
+latitude-longitude project. Rainfall excess is defined as rainfall
+intensity - infiltration rate and should be provided
 in \[mm/hr\]. Rainfall intensities are usually available from
 meteorological stations. Infiltration rate depends on soil properties
 and land cover. It varies in space and time. For saturated soil and
@@ -78,7 +80,17 @@ water depth and discharge maps can be saved during simulation using the
 time series flag **-t** and **output_step** parameter defining the time
 step in minutes for writing output files. Files are saved with a suffix
 representing time since the start of simulation in minutes (e.g.
-wdepth.05, wdepth.10). Monitoring of water depth at specific points is
+wdepth.05, wdepth.10) and are timestamped with that time. The
+simulation advances in time steps which usually do not fall exactly on
+the output times. A map holds the state at the time step closest to the
+time in its name, so at most half a time step earlier or later. When the
+time step is longer than **output_step**, there are fewer time steps
+than output times, and a time step writes only the maps for the output
+time closest to it. The series always ends with maps named by the
+**duration** which hold the state at the end of the run, also when the
+duration is not a multiple of **output_step** or when the simulation
+stopped early.
+Monitoring of water depth at specific points is
 supported. A vector map with observation points and a path to a logfile
 must be provided. For each point in the vector map which is located in
 the computational region the water depth is logged each time step in the
@@ -149,6 +161,11 @@ independence of sampling points. Therefore, the methods are useful both
 for everyday exploratory work using a desktop computer and for large,
 cutting-edge applications using high performance computing.
 
+Null cells in the **elevation**, **dx**, **dy**, **rain** and **man**
+raster maps are excluded from the simulation, the outputs are null
+there, and walkers that reach them leave the area. Null cells in the
+**infil** raster map mean no infiltration.
+
 ### Manning's n for surface roughness
 
 The **man** raster map can be derived from a land cover raster with the
@@ -190,12 +207,12 @@ stored in the history of the output raster maps under the same keys (see
 | `mean_source_rate` | Mean rainfall excess | m/s |
 | `mean_infiltration` | Mean infiltration rate, 0 without infiltration input | m/s |
 | `threads` | Threads used for the computation | count |
-| `outputs` | One entry per set of written maps: one per **output_step** with **-t**, otherwise a single entry | |
+| `outputs` | One entry per set of written maps: with **-t**, one per written output step, the last one named by **duration**, otherwise a single entry | |
 
-Each entry of `outputs` contains the `simulated_time` (s) and `timestamp`
-of the written maps, the number of `walkers_remaining` at that time, and
-the names of the `depth`, `discharge`, `error` and `walkers` maps, or
-`null` for maps which were not requested.
+Each entry of `outputs` contains the `simulated_time` (s) when the maps
+were written, their `timestamp`, the number of `walkers_remaining` at
+that time, and the names of the `depth`, `discharge`, `error` and
+`walkers` maps, or `null` for maps which were not requested.
 
 Summary of a time series run with two output steps in JSON:
 

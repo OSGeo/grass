@@ -44,6 +44,8 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     int iblock;
     double conn = 1.0;
     double addac;
+    // Time of the last time series output step written [s]
+    double series_time = 0.;
 
     // nblock is reserved for Monte Carlo replicas. A future
     // change will allow nblock > 1, give each replica an
@@ -146,12 +148,6 @@ void main_loop(const Setup *setup, const Geometry *geometry,
         for (i = 1; i <= setup->miter;
              i++) { /* iteration loop depending on simulation time and deltap */
             G_percent(i, setup->miter, 1);
-            if (setup->iterout > 0 && i % setup->iterout == 0) {
-                /* nfiterw = i / iterout + 10;
-                   nfiterh = i / iterout + 40; */
-                G_debug(2, "iblock=%d i=%d miter=%d nwalk=%d nwalka=%d", iblock,
-                        i, setup->miter, sim->nwalk, sim->nwalka);
-            }
 
             if (sim->nwalka == 0 && i > 1) {
                 summary->stopped_early = true;
@@ -172,21 +168,10 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             nwalka = 0;
             sim->nstack = 0;
 
-#pragma omp parallel firstprivate(l, lw, k) reduction(+ : nwalka)
+#pragma omp parallel firstprivate(l, k) reduction(+ : nwalka)
             {
-#if defined(_OPENMP)
-                int steps = (sim->nwalk + omp_get_num_threads() - 1) /
-                            omp_get_num_threads();
-                int tid = omp_get_thread_num();
-                int min_loop = tid * steps;
-                int max_loop = ((tid + 1) * steps) > sim->nwalk
-                                   ? sim->nwalk
-                                   : (tid + 1) * steps;
-
-                for (lw = min_loop; lw < max_loop; lw++) {
-#else
+#pragma omp for schedule(static)
                 for (lw = 0; lw < sim->nwalk; lw++) {
-#endif
                     if (sim->w[lw].m > EPS) { /* check the walker weight */
                         ++(nwalka);
                         l = (int)((sim->w[lw].x + stxm) / geometry->stepx) -
@@ -211,39 +196,54 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                         }
 
                         if (grids->zz[k][l] != UNDEF) {
-                            if (grids->inf[k][l] != UNDEF &&
-                                grids->inf[k][l] > 0) {
-                                // Walker's contribution to water depth in this
-                                // cell for this timestep [m]
-                                double decr = factor * sim->w[lw].m;
-                                // Compare with the depth the cell can absorb
-                                // this timestep [m]
-                                if (grids->inf[k][l] * setup->deltap > decr) {
-                                    // The cell can absorb the full walker.
-                                    // Reduce infiltration rate [m/s].
-                                    grids->inf[k][l] -= decr / setup->deltap;
-                                    // Eliminate the walker
-                                    sim->w[lw].m = 0.;
-                                    continue;
-                                }
-                                else {
-                                    // The cell can't absorb the full walker.
-                                    // Reduce the walker mass by the equivalent
-                                    // of what an infiltration-rate source would
-                                    // generate as walker weight.
-                                    sim->w[lw].m -= sim->rwalk *
-                                                    grids->inf[k][l] /
-                                                    setup->sisum;
-                                    // Cell's infiltration capacity is fully
-                                    // exhausted
-                                    grids->inf[k][l] = 0.;
-                                    // Eliminate walker if needed
-                                    if (sim->w[lw].m < 0.) {
+                            /* Lock only cells which may have capacity left. */
+                            double inf;
+#pragma omp atomic read
+                            inf = grids->inf[k][l];
+                            bool eliminated = false;
+                            if (inf > 0) {
+#pragma omp critical(infiltration)
+                                if (grids->inf[k][l] != UNDEF &&
+                                    grids->inf[k][l] > 0) {
+                                    // Walker's contribution to water depth in
+                                    // this cell for this timestep [m]
+                                    double decr = factor * sim->w[lw].m;
+                                    // Compare with the depth the cell can
+                                    // absorb this timestep [m]
+                                    if (grids->inf[k][l] * setup->deltap >
+                                        decr) {
+                                        // The cell can absorb the full walker.
+                                        // Reduce infiltration rate [m/s].
+#pragma omp atomic
+                                        grids->inf[k][l] -=
+                                            decr / setup->deltap;
+                                        // Eliminate the walker
                                         sim->w[lw].m = 0.;
-                                        continue;
+                                        eliminated = true;
+                                    }
+                                    else {
+                                        // The cell can't absorb the full
+                                        // walker. Reduce the walker mass by the
+                                        // equivalent of what an
+                                        // infiltration-rate source would
+                                        // generate as walker weight.
+                                        sim->w[lw].m -= sim->rwalk *
+                                                        grids->inf[k][l] /
+                                                        setup->sisum;
+                                        // Cell's infiltration capacity is fully
+                                        // exhausted
+#pragma omp atomic write
+                                        grids->inf[k][l] = 0.;
+                                        // Eliminate walker if needed
+                                        if (sim->w[lw].m < 0.) {
+                                            sim->w[lw].m = 0.;
+                                            eliminated = true;
+                                        }
                                     }
                                 }
                             }
+                            if (eliminated)
+                                continue;
 
                             /* Add walker weight to water depth or
                              * concentration. The captured sum includes the
@@ -333,13 +333,33 @@ void main_loop(const Setup *setup, const Geometry *geometry,
             /* Total remaining walkers for this iteration */
             sim->nwalka = nwalka;
 
+            // Output step j is written at the iteration closest to
+            // j * output_step and named by that time. With a time step
+            // longer than output_step, an iteration is the closest one to
+            // several steps and writes the step closest to it.
+            bool write_series = false;
+            if (settings->ts && settings->iterout > 0) {
+                double iteration_time = simulated_seconds(setup, i);
+                double step_time =
+                    settings->iterout *
+                    floor(iteration_time / settings->iterout + 0.5);
+                // A step more than half a time step ahead is closer to the
+                // next iteration. No step is past the duration.
+                if (step_time > series_time &&
+                    step_time <=
+                        iteration_time + 0.5 * time_step_seconds(setup) &&
+                    step_time <= settings->timesec) {
+                    series_time = step_time;
+                    write_series = true;
+                }
+            }
+
             /* Changes made by Soeren 8. Mar 2011 to replace the site walker
              * output implementation */
             /* Save all walkers located within the computational region and with
                valid z coordinates */
             if (outputs->outwalk != NULL &&
-                (i == setup->miter ||
-                 (setup->iterout > 0 && i % setup->iterout == 0))) {
+                (i == setup->miter || write_series)) {
                 sim->nstack = 0;
 
                 for (lw = 0; lw < sim->nwalk; lw++) {
@@ -370,15 +390,18 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                 } /* lw loop */
             }
 
-            if (settings->ts && setup->iterout > 0 && i % setup->iterout == 0) {
+            if (write_series) {
+                G_debug(2, "iblock=%d i=%d miter=%d nwalk=%d nwalka=%d", iblock,
+                        i, setup->miter, sim->nwalk, sim->nwalka);
                 /* call output for iteration output */
                 if (outputs->erdep != NULL)
                     erod(grids->gama, setup, geometry,
                          grids); /* divergence of gama field */
 
                 double itime = simulated_seconds(setup, i);
-                int ii = output_data(itime, conn, setup, geometry, settings,
-                                     sim, inputs, outputs, grids, summary);
+                int ii =
+                    output_data(itime, series_time, conn, setup, geometry,
+                                settings, sim, inputs, outputs, grids, summary);
                 if (ii != 1)
                     G_fatal_error(_("Unable to write raster maps"));
             }
@@ -471,13 +494,16 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     }
 
     /* Write final maps here because we know the last time stamp here */
-    if (!settings->ts) {
+    // A time series always ends with a step named by the duration, also when
+    // the duration is not a multiple of output_step or the run stopped early.
+    if (!settings->ts || series_time < settings->timesec) {
         // All blocks have completed; gama is the eventual cumulative total,
         // so no extrapolation is needed.
         conn = 1.0;
         double itime = simulated_seconds(setup, summary->iterations_completed);
-        int ii = output_data(itime, conn, setup, geometry, settings, sim,
-                             inputs, outputs, grids, summary);
+        double name_time = settings->ts ? settings->timesec : itime;
+        int ii = output_data(itime, name_time, conn, setup, geometry, settings,
+                             sim, inputs, outputs, grids, summary);
         if (ii != 1)
             G_fatal_error(_("Cannot write raster maps"));
     }

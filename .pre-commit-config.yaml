@@ -65,7 +65,7 @@ repos:
     hooks:
       - id: markdownlint-fix
   - repo: https://github.com/BlankSpruce/gersemi-pre-commit
-    rev: 0.27.7
+    rev: 0.29.2
     hooks:
       - id: gersemi
         args:
@@ -115,7 +115,7 @@ repos:
           # https://github.com/zizmorcore/zizmor-pre-commit/blob/120fe9ac3c965ab7decf67e8b9ca24b274230eed/.pre-commit-hooks.yaml#L10
           - "--no-progress"
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
-    rev: v3.11.3
+    rev: v4.0.2
     hooks:
       - id: editorconfig-checker
   - repo: https://github.com/codespell-project/codespell
