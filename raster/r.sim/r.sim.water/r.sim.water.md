@@ -328,11 +328,11 @@ With **nprocs=1**, runs with the same seed and inputs give identical
 results. With more threads, every walker's weight is added to the water
 depth, but walkers in the same cell add their weights in an order which
 depends on the threads, and the floating point sums differ slightly with
-the order. Walkers in the same cell also use up the infiltration
-capacity at the same time without synchronization. The walkers
-themselves move the same way for any **nprocs** as long as the water
-depth stays below **hmax**, above which the diffusion depends on the
-depth, and there is no infiltration. Results with **nprocs** greater
+the order. Which walkers the infiltration capacity of a cell absorbs
+also depends on the order in which the threads bring them to the cell.
+The walkers themselves move the same way for any **nprocs** as long as
+the water depth stays below **hmax**, above which the diffusion depends
+on the depth, and there is no infiltration. Results with **nprocs** greater
 than 1 are close to, but not identical with, those with **nprocs=1**,
 and repeated runs with the same **nprocs** may differ slightly. Use
 **nprocs=1** when results must be reproducible.
