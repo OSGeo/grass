@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 18:13+0000\n"
+"POT-Creation-Date: 2026-10-03 18:51+0000\n"
 "PO-Revision-Date: 2025-08-23 20:17+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ar/>\n"
@@ -4957,6 +4957,10 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Error reading categories: [%s]"
 msgstr "لم يمكن قراءة ملف النطاف [%s فى %s]"
+
+#, fuzzy, c-format
+msgid "Layer number or category number out of range: [%s]"
+msgstr "دليل الخواص المضاعفة القيمة خارج النطاق"
 
 #, fuzzy
 msgid "Unable to copy points"

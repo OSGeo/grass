@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 18:13+0000\n"
+"POT-Creation-Date: 2026-10-03 18:51+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
@@ -4627,6 +4627,9 @@ msgstr "उपग्रह"
 msgid "Landsat"
 msgstr "लैंडसैट"
 
+msgid "Sentinel"
+msgstr "पहरेदार"
+
 msgid "ASTER"
 msgstr "एस्टर"
 
@@ -4650,6 +4653,9 @@ msgstr "लैंडसैट 5+7 (6 इनपुट बैंड:1,2,3,4,5,7)"
 
 msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
 msgstr "लैंडसैट 8 (7 इनपुट बैंड:1,2,3,4,5,6,7)"
+
+msgid "Sentinel-2 (6 input bands: B2,B3,B4,B8,B11,B12 surface reflectance in [0,1]; Bonafoni & Sekertekin 2020 coefficients)"
+msgstr ""
 
 msgid "ASTER (6 input bands:1,3,5,6,8,9)"
 msgstr "ASTER (6 इनपुट बैंड:1,3,5,6,8,9)"
@@ -7679,8 +7685,8 @@ msgstr "एक एसवीएम के साथ भविष्यवाण�
 msgid "Predict with a Support Vector Machine"
 msgstr "एक सपोर्ट वेक्टर मशीन से भविष्यवाणी करें"
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 msgid "Maps with feature values (attributes)"
 msgstr "फ़ीचर मान (विशेषताएँ) वाले मानचित्र"
 
@@ -8772,9 +8778,6 @@ msgstr "टैसल्ड कैप (कौथ थॉमस) परिवर्
 
 msgid "Worldview"
 msgstr "वैश्विक नजरिया"
-
-msgid "Sentinel"
-msgstr "पहरेदार"
 
 msgid "Tasseled Cap transformation"
 msgstr "लटकन टोपी परिवर्तन"
@@ -12034,6 +12037,10 @@ msgid "Pass 1 of 2..."
 msgstr "2 में से 1 पास करें..।"
 
 #, c-format
+msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
+msgstr ""
+
+#, c-format
 msgid "%d-band clumping with threshold %g"
 msgstr "%d-बैंड क्लम्पिंग थ्रेशोल्ड के साथ %g"
 
@@ -13042,6 +13049,15 @@ msgstr "चयनित बैंड (%d) मौजूद नहीं है"
 #, c-format
 msgid "Imagery group <%s> created"
 msgstr "इमेजरी समूह <%s> बनाया गया"
+
+#, c-format
+msgid "Vertical CRS <%s> of the dataset is ignored"
+msgstr ""
+
+#, fuzzy
+#| msgid "The vertical unit of the map"
+msgid "The vertical component of the dataset CRS is ignored"
+msgstr "मानचित्र की ऊर्ध्वाधर इकाई"
 
 msgid "Can't get WKT parameter string"
 msgstr "WKT पैरामीटर स्ट्रिंग नहीं मिल सका"
@@ -18428,6 +18444,16 @@ msgstr "यादृच्छिक संख्या जनरेटर के
 msgid "Number of threads which will be used for parallel computation."
 msgstr "थ्रेड्स की संख्या जिनका उपयोग समानांतर गणना के लिए किया जाएगा।"
 
+#, fuzzy
+#| msgid "If not given write to standard output"
+msgid "Print run summary to standard output"
+msgstr "यदि नहीं दिया गया है तो मानक आउटपुट पर लिखें"
+
+#, fuzzy, c-format
+#| msgid "Lat/Long project is not supported by %s. Please reproject map first."
+msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
+msgstr "अक्षांश/लंबा प्रोजेक्ट %s द्वारा समर्थित नहीं है। कृपया पहले मानचित्र दोबारा प्रोजेक्ट करें।"
+
 #, c-format
 msgid "Generated random seed (-s): %ld"
 msgstr "उत्पन्न यादृच्छिक बीज (-s): %ld"
@@ -18485,7 +18511,9 @@ msgstr "अपवाह अंतःस्यंदन दर रेखापु
 msgid "Runoff infiltration rate unique value [mm/hr]"
 msgstr "अपवाह घुसपैठ दर अद्वितीय मूल्य [मिमी/घंटा]"
 
-msgid "Name of flow controls raster map (permeability ratio 0-1)"
+#, fuzzy
+#| msgid "Name of flow controls raster map (permeability ratio 0-1)"
+msgid "Name of flow controls raster map (trapping probability 0-1)"
 msgstr "प्रवाह नियंत्रण का नाम रेखापुंज मानचित्र (पारगम्यता अनुपात 0-1)"
 
 msgid "Name for output water depth raster map [m]"
@@ -18539,6 +18567,10 @@ msgstr "मैनिंग्स एन में शून्य मान"
 
 msgid "No values in the elevation raster."
 msgstr "उन्नयन रेखापुंज में कोई मान नहीं।"
+
+#, c-format
+msgid "Time step of %.2f s is longer than output_step of %d s, some output steps may be skipped"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -22800,8 +22832,9 @@ msgstr "रेखापुंज मानचित्र %d फ़ाइल न
 msgid "At least 2 maps are required"
 msgstr "कम से कम 2 मानचित्र आवश्यक हैं"
 
-#, python-format
-msgid "Unable to get monitor info. %s"
+#, fuzzy
+#| msgid "Unable to get monitor info. %s"
+msgid "Unable to get monitor info. {}"
 msgstr "मॉनिटर की जानकारी प्राप्त करने में असमर्थ. %s"
 
 msgid "Unable to get monitor info"
@@ -28345,11 +28378,13 @@ msgstr "परत <%s> का प्रक्षेपण परत <%s> के 
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
 msgstr "पीडीएएल के साथ LAS LiDAR बिंदु बादलों को GRASS वेक्टर मानचित्र में परिवर्तित करता है।"
 
-msgid "Reproject to projects's coordinate system if needed"
-msgstr "यदि आवश्यक हो तो परियोजनाओं की समन्वय प्रणाली को पुनः प्रोजेक्ट करें"
+#, fuzzy, c-format
+#| msgid "Invalid input file %s"
+msgid "Invalid input_srs: %s"
+msgstr "अमान्य इनपुट फ़ाइल %s"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
-msgstr "इनपुट डेटासेट को GRASS प्रोजेक्ट की समन्वय प्रणाली में पुन: प्रोजेक्ट करता है (डिफ़ॉल्ट रूप से केवल मिलान समन्वय प्रणाली वाले डेटासेट आयात किए जा सकते हैं)"
+msgid "Unable to reproject the input because the current project has no CRS defined. Use the -o flag to import the data without reprojection."
+msgstr ""
 
 msgid "Cannot store return information because the input does not have a return dimensions"
 msgstr "रिटर्न जानकारी संग्रहीत नहीं की जा सकती क्योंकि इनपुट में रिटर्न आयाम नहीं है"
@@ -34042,6 +34077,12 @@ msgstr "पीएनजी ड्राइवर से बीएमपी छ�
 
 msgid "Image file"
 msgstr "छवि फ़ाइल"
+
+#~ msgid "Reproject to projects's coordinate system if needed"
+#~ msgstr "यदि आवश्यक हो तो परियोजनाओं की समन्वय प्रणाली को पुनः प्रोजेक्ट करें"
+
+#~ msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
+#~ msgstr "इनपुट डेटासेट को GRASS प्रोजेक्ट की समन्वय प्रणाली में पुन: प्रोजेक्ट करता है (डिफ़ॉल्ट रूप से केवल मिलान समन्वय प्रणाली वाले डेटासेट आयात किए जा सकते हैं)"
 
 #~ msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
 #~ msgstr "इनपुट डेटासेट को GRASS प्रोजेक्ट की समन्वय प्रणाली में पुन: प्रोजेक्ट करता है (डिफ़ॉल्ट रूप से केवल मिलान समन्वय प्रणाली वाले डेटासेट आयात किए जा सकते हैं)"
