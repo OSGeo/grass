@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Daniel Nylander <daniel@danielnylander.se>, 2025.
+# Daniel Nylander <daniel@danielnylander.se>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 15:44+0000\n"
-"PO-Revision-Date: 2025-12-22 12:47+0000\n"
+"POT-Creation-Date: 2026-10-04 17:59+0000\n"
+"PO-Revision-Date: 2026-10-04 18:03+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
-"Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
+"Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy-8-5/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, python-format
 msgid "Maximum number of animations is %d."
@@ -1282,7 +1282,7 @@ msgid "Copy &name"
 msgstr "Kopiera &namn"
 
 msgid "&Paste"
-msgstr "Klistra"
+msgstr "Kl&istra"
 
 #. GTC Delete mapset
 msgid "&Delete"
@@ -1290,7 +1290,7 @@ msgstr "&Radera"
 
 #. GTC Rename mapset
 msgid "&Rename"
-msgstr "&Rename"
+msgstr "Byt &namn"
 
 msgid "&Display layers"
 msgstr "&Visa lager"
@@ -1302,13 +1302,13 @@ msgid "Show &metadata"
 msgstr "Visa &metadata"
 
 msgid "&Switch mapset"
-msgstr "&Switch mapset"
+msgstr "Byt &kartuppsättning"
 
 msgid "&Delete mapset"
 msgstr "&Radera mapset"
 
 msgid "&Rename mapset"
-msgstr "&Rename mapset"
+msgstr "Byt &namn på kartuppsättning"
 
 msgid "Re&load maps"
 msgstr "U&ppdatera kartor"
@@ -1317,13 +1317,13 @@ msgid "&Copy path to mapset"
 msgstr "&Kopiera sökväg till mapset"
 
 msgid "&Create mapset"
-msgstr "& Skapa kartset"
+msgstr "Skapa &kartuppsättning"
 
 msgid "&Delete project"
-msgstr "&Avsluta projekt"
+msgstr "Ta &bort projekt"
 
 msgid "&Rename project"
-msgstr "&Rename-projekt"
+msgstr "Byt &namn på projekt"
 
 msgid "&Create new project (location)"
 msgstr "&Skapa nytt projekt (plats)"
@@ -1332,13 +1332,13 @@ msgid "&Download sample project (location)"
 msgstr "&Hämta ner exempelprojekt (plats)"
 
 msgid "&Remove GRASS database from data catalog"
-msgstr "&Remove GRASS-databasen från datakatalogen"
+msgstr "Ta &bort GRASS-databasen från datakatalogen"
 
 msgid "&Delete GRASS database from disk"
-msgstr "&Radera GRASS-databasen från hårddisken"
+msgstr "Ta &bort GRASS-databasen från disken"
 
 msgid "&Delete projects (locations)"
-msgstr "&Avveckla projekt (platser)"
+msgstr "Ta &bort projekt (platser)"
 
 msgid "&Delete mapsets"
 msgstr "&Radera kartor"
@@ -1781,7 +1781,7 @@ msgid "Display attributes"
 msgstr "Visa attribut"
 
 msgid "&Reload"
-msgstr "&Reload"
+msgstr "&Läs in igen"
 
 msgid "&Submit"
 msgstr "&Sänd in"
@@ -2070,7 +2070,7 @@ msgid ""
 msgstr ""
 "Otillräckliga punkter definierade och aktiva (markerade) för vald korrigeringsmetod (ordning: %d).\n"
 "3+ punkter behövs för 1:a ordningen,\n"
-"6+ punkter för 2:a ordningen, och\n"
+"6+ punkter för 2:a ordningen och\n"
 "10+ punkter för 3:e ordningen."
 
 #, python-brace-format
@@ -2524,7 +2524,7 @@ msgid "Delete intermediate data when finish"
 msgstr "Ta bort mellanliggande data när du är klar"
 
 msgid "&Run"
-msgstr "&Run"
+msgstr "&Kör"
 
 msgid "Variables"
 msgstr "Variabler"
@@ -2761,7 +2761,7 @@ msgid "region"
 msgstr "region"
 
 msgid "mapset"
-msgstr "kartset"
+msgstr "kartuppsättning"
 
 msgid "file"
 msgstr "fil"
@@ -3257,7 +3257,7 @@ msgid "Map Display"
 msgstr "Kartdesign"
 
 msgid "Show graphical representation of temporal extent of dataset(s)."
-msgstr "Visa en grafisk representation av datasetens/datasetens tidsmässiga omfattning."
+msgstr "Visa en grafisk representation av datasetens tidsmässiga omfattning."
 
 msgid "Transparent"
 msgstr "Genomskinlig"
@@ -3638,7 +3638,7 @@ msgid "GRASS module '%s' not found. Unable to start map display window."
 msgstr "GRASS-modulen '%s' hittades inte. Det går inte att starta kartvisningsfönstret."
 
 msgid "Adva&nced search..."
-msgstr "Adva&nced search..."
+msgstr "Avan&cerad sökning…"
 
 #, python-format
 msgid "Do advanced search using %s tool"
@@ -3648,13 +3648,13 @@ msgid "Double-click to run selected tool"
 msgstr "Dubbelklicka för att köra valt verktyg"
 
 msgid "&Run..."
-msgstr "&Run..."
+msgstr "&Kör…"
 
 msgid "Run selected tool from the tree"
 msgstr "Kör valt verktyg från trädet"
 
 msgid "H&elp"
-msgstr "H&elp"
+msgstr "H&jälp"
 
 msgid "Show manual for selected tool from the tree"
 msgstr "Visa manualen för valt verktyg från trädet"
@@ -3915,7 +3915,7 @@ msgid ""
 msgstr ""
 "\n"
 "Obs: Detta styr endast de koordinater som visas längst ned till vänster i Map Display-fönstrets\n"
-"fönstrets statusfält. Det är rent kosmetiskt och påverkar inte arbetsprojektets\n"
+"statusfält. Det är rent kosmetiskt och påverkar inte arbetsprojektets\n"
 "koordinatreferenssystem på något sätt. Du måste aktivera kryssrutan Projection i rullgardinsmenyn längst ner i\n"
 "menyn längst ned i fönstret Map Display.\n"
 
@@ -4051,7 +4051,7 @@ msgid "Right click to copy selected values to clipboard."
 msgstr "Högerklicka för att kopiera valda värden till urklipp."
 
 msgid "Feature"
-msgstr "Funktion"
+msgstr "Objekt"
 
 msgid "Value"
 msgstr "Värde"
@@ -4808,7 +4808,7 @@ msgid "Start &GRASS session"
 msgstr "Starta &GRASS-sessionen"
 
 msgid "&Browse"
-msgstr "&Browse"
+msgstr "&Bläddra"
 
 #. GTC New mapset
 msgid "&New"
@@ -4819,21 +4819,21 @@ msgstr "Skapa en ny Mapset på vald plats"
 
 #. GTC New location
 msgid "N&ew"
-msgstr "N&ew"
+msgstr "&Ny"
 
 msgid "Create a new location using location wizard. After location is created successfully, GRASS session is started."
 msgstr "Skapa en ny plats med hjälp av platsguiden. När platsen har skapats framgångsrikt startas GRASS-sessionen."
 
 #. GTC Rename location
 msgid "Ren&ame"
-msgstr "Nytt namn"
+msgstr "N&ytt namn"
 
 msgid "Rename selected location"
 msgstr "Byt namn på vald plats"
 
 #. GTC Delete location
 msgid "De&lete"
-msgstr "De&lete"
+msgstr "&Ta bort"
 
 msgid "Delete selected location"
 msgstr "Ta bort vald plats"
@@ -5559,7 +5559,7 @@ msgid "Unsupported map layer type <%s>."
 msgstr "Kartlagertypen <%s> stöds inte."
 
 msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
-msgstr "Observera att cellvärden endast kan visas för regioner med färre än 10.000 celler."
+msgstr "Observera att cellvärden endast kan visas för regioner med färre än 10 000 celler."
 
 msgid "opacity:"
 msgstr "opacitet:"
@@ -6806,7 +6806,7 @@ msgid "Save"
 msgstr "Spara"
 
 msgid "&Set"
-msgstr "&Set"
+msgstr "&Ange"
 
 msgid "Load color table:"
 msgstr "Läs in färgtabell:"
@@ -7046,7 +7046,7 @@ msgid "Override projection check (use current location's projection)"
 msgstr "Åsidosätt projektionskontroll (använd den aktuella platsens projektion)"
 
 msgid "&Import"
-msgstr "&Import"
+msgstr "&Importera"
 
 msgid "Import selected layers"
 msgstr "Importera valda lager"
@@ -9545,12 +9545,12 @@ msgid ""
 "\n"
 "Do you want to stay in the current mapset or remove .gislock and switch to selected mapset?"
 msgstr ""
-"Användare {user} kör redan GRASS i vald kartuppsättning <{mapset}> (fil {lockpath} skapad {timestamp} hittad)\n"
-" (fil {lockpath} skapad {timestamp} hittad).\n"
+"Användaren {user} kör redan GRASS i den valda kartuppsättningen <{mapset}>\n"
+" (filen {lockpath} skapades {timestamp} hittades).\n"
 "\n"
 "Samtidig användning är inte tillåten.\n"
 "\n"
-"Vill du stanna kvar i den aktuella kartuppsättningen eller ta bort .gislock och byta till vald kartuppsättning?"
+"Vill du stanna i den aktuella kartuppsättningen eller ta bort .gislock och byta till den valda kartuppsättningen?"
 
 msgid "Mapset is in use"
 msgstr "Mapset är i bruk"
@@ -9595,7 +9595,7 @@ msgid "Current mapset is <%s>."
 msgstr "Aktuell kartuppsättning är <%s>."
 
 msgid "Download in progress, wait until it is finished 0%"
-msgstr "Hämtning pågår, vänta tills den är klar 0%"
+msgstr "Hämtning pågår, vänta tills den är klar 0 %"
 
 #, python-brace-format
 msgid "Download in progress, wait until it is finished {0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed"
@@ -9614,7 +9614,7 @@ msgid "Select sample project to download:"
 msgstr "Välj ett exempelprojekt att hämta ner:"
 
 msgid "Do&wnload"
-msgstr "Do&wnload"
+msgstr "&Hämta"
 
 msgid "Download selected project"
 msgstr "Hämta ner valt projekt"
@@ -10088,7 +10088,7 @@ msgid "Geometry attributes"
 msgstr "Geometriattribut"
 
 msgid "area"
-msgstr "område"
+msgstr "area"
 
 msgid "perimeter"
 msgstr "perimeter"
@@ -10972,7 +10972,7 @@ msgid "Number of bins (for FP maps)"
 msgstr "Antal fack (för FP-kartor)"
 
 msgid "C&opy"
-msgstr "C&opy"
+msgstr "&Kopiera"
 
 msgid "Copy regression statistics the clipboard (Ctrl+C)"
 msgstr "Kopiera regressionsstatistik till urklipp (Ctrl+C)"

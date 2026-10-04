@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 15:44+0000\n"
+"POT-Creation-Date: 2026-10-04 17:59+0000\n"
 "PO-Revision-Date: 2025-08-26 13:42+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/pt_BR/>\n"
@@ -4879,6 +4879,11 @@ msgstr "Fim do arquivo ASCII alcançado antes do fim das categorias"
 msgid "Error reading categories: [%s]"
 msgstr "Erro ao ler categorias: [%s]"
 
+#, fuzzy, c-format
+#| msgid "Cell category value out of range"
+msgid "Layer number or category number out of range: [%s]"
+msgstr "Valor da categoria de célula fora do intervalo"
+
 msgid "Unable to copy points"
 msgstr "Não foi possível copiar pontos"
 
@@ -5201,7 +5206,7 @@ msgstr[1] "%d primitivas registradas"
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 msgstr[1] ""
 
