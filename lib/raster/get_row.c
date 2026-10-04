@@ -180,6 +180,13 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
         /* one byte is nbyte count */
         n = *nbytes = *cmp++;
         readamount -= 1;
+
+        if (n > fcb->nbytes) {
+            G_free(cmp2);
+            G_fatal_error(
+                _("Invalid byte count in raster data for row %d of <%s>"), row,
+                fcb->name);
+        }
     }
     else
         /* pre 3.0 compression */
