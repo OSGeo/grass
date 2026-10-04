@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-26 18:44+0000\n"
+"POT-Creation-Date: 2026-10-03 18:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1300,34 +1300,34 @@ msgstr ""
 msgid "Syntax error: %s"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:343
+#: ../gui/wxpython/core/utils.py:339
 #, python-format
 msgid "Vector map <%(map)s>: %(msg)s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:837
+#: ../gui/wxpython/core/utils.py:833
 #, python-format
 msgid ""
 "%s: line skipped - unable to parse '%s'\n"
 "Reason: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:843
+#: ../gui/wxpython/core/utils.py:839
 #, python-format
 msgid "Duplicated key: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:847
+#: ../gui/wxpython/core/utils.py:843
 #, python-brace-format
 msgid "Unable to open file '{name}': {error}\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:872
+#: ../gui/wxpython/core/utils.py:868
 #, python-brace-format
 msgid "Unable to create file '{name}': {error}\n"
 msgstr ""
 
-#: ../gui/wxpython/core/utils.py:946 ../gui/wxpython/gui_core/forms.py:2306
+#: ../gui/wxpython/core/utils.py:942 ../gui/wxpython/gui_core/forms.py:2306
 msgid "Select Color"
 msgstr ""
 
@@ -1563,7 +1563,7 @@ msgid "Select another import option"
 msgstr ""
 
 #: ../gui/wxpython/datacatalog/toolbars.py:55
-#: ../gui/wxpython/gui_core/menu.py:185 ../gui/wxpython/history/browser.py:385
+#: ../gui/wxpython/gui_core/menu.py:185 ../gui/wxpython/history/browser.py:405
 #: ../gui/wxpython/modules/extensions.py:74
 msgid "Search"
 msgstr ""
@@ -5274,7 +5274,7 @@ msgid "Abort running command"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:341
-#: ../gui/wxpython/history/browser.py:471
+#: ../gui/wxpython/history/browser.py:491
 msgid "Save file as..."
 msgstr ""
 
@@ -5284,13 +5284,13 @@ msgid "%(txt)s (*.txt)|*.txt|%(files)s (*)|*"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:344
-#: ../gui/wxpython/history/browser.py:462
-#: ../gui/wxpython/history/browser.py:467
+#: ../gui/wxpython/history/browser.py:482
+#: ../gui/wxpython/history/browser.py:487
 msgid "Files"
 msgstr ""
 
 #: ../gui/wxpython/gui_core/goutput.py:344
-#: ../gui/wxpython/history/browser.py:467
+#: ../gui/wxpython/history/browser.py:487
 msgid "Text files"
 msgstr ""
 
@@ -5537,7 +5537,7 @@ msgstr ""
 msgid "Do advanced search using %s tool"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/menu.py:195 ../gui/wxpython/history/browser.py:379
+#: ../gui/wxpython/gui_core/menu.py:195 ../gui/wxpython/history/browser.py:399
 msgid "Double-click to run selected tool"
 msgstr ""
 
@@ -6474,114 +6474,114 @@ msgstr ""
 msgid "&Apply"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:38
+#: ../gui/wxpython/history/browser.py:39
 msgid "Timestamp:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:39
+#: ../gui/wxpython/history/browser.py:40
 msgid "Runtime duration:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:40
+#: ../gui/wxpython/history/browser.py:41
 msgid "Status:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:41
+#: ../gui/wxpython/history/browser.py:42
 msgid "Mask 2D:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:42
+#: ../gui/wxpython/history/browser.py:43
 msgid "Mask 3D:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:43
+#: ../gui/wxpython/history/browser.py:44
 msgid "North:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:44
+#: ../gui/wxpython/history/browser.py:45
 msgid "South:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:45
+#: ../gui/wxpython/history/browser.py:46
 msgid "West:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:46
+#: ../gui/wxpython/history/browser.py:47
 msgid "East:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:47
+#: ../gui/wxpython/history/browser.py:48
 msgid "North-south resolution:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:48
+#: ../gui/wxpython/history/browser.py:49
 msgid "East-west resolution:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:49
+#: ../gui/wxpython/history/browser.py:50
 msgid "Number of rows:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:50
+#: ../gui/wxpython/history/browser.py:51
 msgid "Number of columns:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:51
+#: ../gui/wxpython/history/browser.py:52
 msgid "Number of cells:"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:61
+#: ../gui/wxpython/history/browser.py:62
 msgid "{} sec"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:115
+#: ../gui/wxpython/history/browser.py:129
 msgid "General info"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:136
+#: ../gui/wxpython/history/browser.py:150
 msgid "Computational region during command execution"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:261
-#: ../gui/wxpython/history/browser.py:288
+#: ../gui/wxpython/history/browser.py:278
+#: ../gui/wxpython/history/browser.py:305
 msgid "Update current region"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:267
+#: ../gui/wxpython/history/browser.py:284
 msgid "Region match"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:290
+#: ../gui/wxpython/history/browser.py:307
 msgid "Set current computational region to the region of executed command"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:355
+#: ../gui/wxpython/history/browser.py:375
 msgid "History browser"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:392
+#: ../gui/wxpython/history/browser.py:412
 msgid "&Export history"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:394
+#: ../gui/wxpython/history/browser.py:414
 msgid "Export history of executed commands to a file"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:461
+#: ../gui/wxpython/history/browser.py:481
 #, python-brace-format
 msgid "{json} (*.json)|*.txt|{files} (*)|*"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:462
+#: ../gui/wxpython/history/browser.py:482
 msgid "JSON files"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:466
+#: ../gui/wxpython/history/browser.py:486
 #, python-brace-format
 msgid "{txt} (*.txt)|*.txt|{files} (*)|*"
 msgstr ""
 
-#: ../gui/wxpython/history/browser.py:481
+#: ../gui/wxpython/history/browser.py:501
 msgid "Command history saved to '{}'"
 msgstr ""
 
@@ -8511,7 +8511,7 @@ msgid "Unable to create profile of raster map."
 msgstr ""
 
 #: ../gui/wxpython/lmgr/layertree.py:1117
-#: ../gui/wxpython/nviz/mapwindow.py:1780 ../gui/wxpython/nviz/tools.py:892
+#: ../gui/wxpython/nviz/mapwindow.py:1783 ../gui/wxpython/nviz/tools.py:892
 #: ../gui/wxpython/psmap/dialogs.py:1634
 msgid "Raster map"
 msgstr ""
@@ -10589,114 +10589,114 @@ msgstr ""
 msgid "Opening 3D view was not successful. Please try to change the value of depth buffer in GUI Settings dialog > tab Map Display > Advanced and restart GUI."
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:537
+#: ../gui/wxpython/nviz/mapwindow.py:540
 #, python-format
 msgid "Image is too large, your OpenGL implementation supports maximum texture size %d px."
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1094
+#: ../gui/wxpython/nviz/mapwindow.py:1097
 msgid "Easting"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1095
+#: ../gui/wxpython/nviz/mapwindow.py:1098
 msgid "Northing"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1096
+#: ../gui/wxpython/nviz/mapwindow.py:1099
 msgid "Elevation"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1107
+#: ../gui/wxpython/nviz/mapwindow.py:1110
 msgid "Surface map name"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1109
+#: ../gui/wxpython/nviz/mapwindow.py:1112
 msgid "Surface map elevation"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1111
+#: ../gui/wxpython/nviz/mapwindow.py:1114
 msgid "Surface map color"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1121
+#: ../gui/wxpython/nviz/mapwindow.py:1124
 msgid "XY distance from previous"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1123
+#: ../gui/wxpython/nviz/mapwindow.py:1126
 msgid "XYZ distance from previous"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1128
+#: ../gui/wxpython/nviz/mapwindow.py:1131
 msgid "Distance along surface"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1140
+#: ../gui/wxpython/nviz/mapwindow.py:1143
 msgid "Distance along exag. surface"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1151
+#: ../gui/wxpython/nviz/mapwindow.py:1154
 msgid "No point on surface"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1648
+#: ../gui/wxpython/nviz/mapwindow.py:1651
 msgid "Loading raster map"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1652
+#: ../gui/wxpython/nviz/mapwindow.py:1655
 msgid "Loading 3d raster map"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1658
+#: ../gui/wxpython/nviz/mapwindow.py:1661
 msgid "failed"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1660
+#: ../gui/wxpython/nviz/mapwindow.py:1663
 #, python-format
 msgid "Unsupported layer type '%s'"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1779
+#: ../gui/wxpython/nviz/mapwindow.py:1782
 msgid "Unable to unload raster map"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1784
+#: ../gui/wxpython/nviz/mapwindow.py:1787
 msgid "Unable to unload 3d raster map"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1785
+#: ../gui/wxpython/nviz/mapwindow.py:1788
 msgid "3d raster map"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1796
+#: ../gui/wxpython/nviz/mapwindow.py:1799
 msgid "unloaded successfully"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1849
+#: ../gui/wxpython/nviz/mapwindow.py:1852
 #, python-format
 msgid "Loading vector map <%(name)s> (%(type)s) failed"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1913
+#: ../gui/wxpython/nviz/mapwindow.py:1916
 #, python-format
 msgid "Unable to unload vector map <%(name)s> (%(type)s)"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:1918
+#: ../gui/wxpython/nviz/mapwindow.py:1921
 #, python-format
 msgid "Vector map <%(name)s> (%(type)s) unloaded successfully"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:2324
+#: ../gui/wxpython/nviz/mapwindow.py:2327
 #, python-format
 msgid "Vector point layer not found (id = %d)"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:2326
+#: ../gui/wxpython/nviz/mapwindow.py:2329
 #, python-format
 msgid "Unable to set data layer properties (id = %d)"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:2330
+#: ../gui/wxpython/nviz/mapwindow.py:2333
 #, python-format
 msgid ""
 "Setting data layer properties failed.\n"
@@ -10704,8 +10704,8 @@ msgid ""
 "%s"
 msgstr ""
 
-#: ../gui/wxpython/nviz/mapwindow.py:2390
-#: ../gui/wxpython/nviz/mapwindow.py:2409 ../gui/wxpython/nviz/tools.py:2803
+#: ../gui/wxpython/nviz/mapwindow.py:2393
+#: ../gui/wxpython/nviz/mapwindow.py:2412 ../gui/wxpython/nviz/tools.py:2803
 #: ../gui/wxpython/nviz/tools.py:5176
 msgid "constant#"
 msgstr ""

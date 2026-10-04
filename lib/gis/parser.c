@@ -333,10 +333,11 @@ int G_parser(int argc, char **argv)
     st->n_errors = 0;
     st->error = NULL;
     st->module_info.verbose = G_verbose_std();
-    i = strlen(tmp_name);
-    while (--i >= 0) {
-        if (G_is_dirsep(tmp_name[i])) {
-            tmp_name += i + 1;
+    size_t name_index = strlen(tmp_name);
+    while (name_index > 0) {
+        name_index--;
+        if (G_is_dirsep(tmp_name[name_index])) {
+            tmp_name += name_index + 1;
             break;
         }
     }
@@ -683,8 +684,9 @@ char *recreate_command(int original_path)
     const char *tmp;
     struct Flag *flag;
     struct Option *opt;
-    int n, len, slen;
-    int nalloced = 0;
+    int n;
+    size_t len, slen;
+    size_t nalloced = 0;
 
     G_debug(3, "G_recreate_command()");
 
@@ -1107,8 +1109,8 @@ int contains(const char *s, int c)
 
 int valid_option_name(const char *string)
 {
-    int m = strlen(string);
-    int n = strspn(string, "abcdefghijklmnopqrstuvwxyz0123456789_");
+    size_t m = strlen(string);
+    size_t n = strspn(string, "abcdefghijklmnopqrstuvwxyz0123456789_");
 
     if (!m)
         return 0;
@@ -1124,7 +1126,7 @@ int valid_option_name(const char *string)
 
 int is_option(const char *string)
 {
-    int n = strspn(string, "abcdefghijklmnopqrstuvwxyz0123456789_");
+    size_t n = strspn(string, "abcdefghijklmnopqrstuvwxyz0123456789_");
 
     return n > 0 && string[n] == '=' && string[0] != '_' &&
            string[n - 1] != '_';
@@ -1204,12 +1206,12 @@ void set_option(const char *string)
 
     if (found > 1) {
         int shortest = 0;
-        int length = strlen(matches[0]->key);
+        size_t length = strlen(matches[0]->key);
         int prefix = 1;
         int i;
 
         for (i = 1; i < found; i++) {
-            int len = strlen(matches[i]->key);
+            size_t len = strlen(matches[i]->key);
 
             if (len < length) {
                 length = len;
@@ -1500,7 +1502,7 @@ int check_double(const char *ans, const char **opts)
 
 int check_string(const char *ans, const char **opts, int *result)
 {
-    int len = strlen(ans);
+    size_t len = strlen(ans);
     int found = 0;
     int matches[MAX_MATCHES];
     int i;
@@ -1520,11 +1522,11 @@ int check_string(const char *ans, const char **opts, int *result)
 
     if (found > 1) {
         int shortest = 0;
-        int length = strlen(opts[matches[0]]);
+        size_t length = strlen(opts[matches[0]]);
         int prefix = 1;
 
         for (i = 1; i < found; i++) {
-            int lengthi = strlen(opts[matches[i]]);
+            size_t lengthi = strlen(opts[matches[i]]);
 
             if (lengthi < length) {
                 length = lengthi;

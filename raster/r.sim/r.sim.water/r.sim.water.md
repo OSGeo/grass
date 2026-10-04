@@ -42,8 +42,10 @@ highest water depth highlighting streams, pooling, and wet areas during
 a rainfall event.*
 
 The module automatically converts horizontal distances from feet to
-metric system using database/projection information. Rainfall excess is
-defined as rainfall intensity - infiltration rate and should be provided
+metric system using database/projection information. The module
+requires a projected coordinate system and does not run in a
+latitude-longitude project. Rainfall excess is defined as rainfall
+intensity - infiltration rate and should be provided
 in \[mm/hr\]. Rainfall intensities are usually available from
 meteorological stations. Infiltration rate depends on soil properties
 and land cover. It varies in space and time. For saturated soil and
@@ -78,7 +80,17 @@ water depth and discharge maps can be saved during simulation using the
 time series flag **-t** and **output_step** parameter defining the time
 step in minutes for writing output files. Files are saved with a suffix
 representing time since the start of simulation in minutes (e.g.
-wdepth.05, wdepth.10). Monitoring of water depth at specific points is
+wdepth.05, wdepth.10) and are timestamped with that time. The
+simulation advances in time steps which usually do not fall exactly on
+the output times. A map holds the state at the time step closest to the
+time in its name, so at most half a time step earlier or later. When the
+time step is longer than **output_step**, there are fewer time steps
+than output times, and a time step writes only the maps for the output
+time closest to it. The series always ends with maps named by the
+**duration** which hold the state at the end of the run, also when the
+duration is not a multiple of **output_step** or when the simulation
+stopped early.
+Monitoring of water depth at specific points is
 supported. A vector map with observation points and a path to a logfile
 must be provided. For each point in the vector map which is located in
 the computational region the water depth is logged each time step in the
@@ -149,6 +161,11 @@ independence of sampling points. Therefore, the methods are useful both
 for everyday exploratory work using a desktop computer and for large,
 cutting-edge applications using high performance computing.
 
+Null cells in the **elevation**, **dx**, **dy**, **rain** and **man**
+raster maps are excluded from the simulation, the outputs are null
+there, and walkers that reach them leave the area. Null cells in the
+**infil** raster map mean no infiltration.
+
 ### Manning's n for surface roughness
 
 The **man** raster map can be derived from a land cover raster with the
@@ -190,20 +207,70 @@ stored in the history of the output raster maps under the same keys (see
 | `mean_source_rate` | Mean rainfall excess | m/s |
 | `mean_infiltration` | Mean infiltration rate, 0 without infiltration input | m/s |
 | `threads` | Threads used for the computation | count |
-| `outputs` | One entry per set of written maps: one per **output_step** with **-t**, otherwise a single entry | |
+| `outputs` | One entry per set of written maps: with **-t**, one per written output step, the last one named by **duration**, otherwise a single entry | |
 
-Each entry of `outputs` contains the `simulated_time` (s) and `timestamp`
-of the written maps, the number of `walkers_remaining` at that time, and
-the names of the `depth`, `discharge`, `error` and `walkers` maps, or
-`null` for maps which were not requested.
+Each entry of `outputs` contains the `simulated_time` (s) when the maps
+were written, their `timestamp`, the number of `walkers_remaining` at
+that time, and the names of the `depth`, `discharge`, `error` and
+`walkers` maps, or `null` for maps which were not requested.
 
 Summary of a time series run with two output steps in JSON:
 
-```sh
-r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
-    man_value=0.05 nwalkers=100000 duration=20 output_step=10 random_seed=3 \
-    -t -p format=json
-```
+<!-- markdownlint-disable MD046 -->
+=== "Command line"
+
+    ```sh
+    r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
+        man_value=0.05 nwalkers=100000 duration=20 output_step=10 random_seed=3 \
+        -t -p format=json
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    summary = gs.parse_command(
+        "r.sim.water",
+        elevation="elevation",
+        depth="depth",
+        discharge="discharge",
+        rain_value=50,
+        man_value=0.05,
+        nwalkers=100000,
+        duration=20,
+        output_step=10,
+        random_seed=3,
+        flags="tp",
+        format="json",
+    )
+    print(summary["walkers_remaining"], summary["outputs"][-1]["depth"])
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    from grass.tools import Tools
+
+    tools = Tools()
+    summary = tools.r_sim_water(
+        elevation="elevation",
+        depth="depth",
+        discharge="discharge",
+        rain_value=50,
+        man_value=0.05,
+        nwalkers=100000,
+        duration=20,
+        output_step=10,
+        random_seed=3,
+        flags="tp",
+        format="json",
+    )
+    print(summary["walkers_remaining"], summary["outputs"][-1]["depth"])
+    ```
+<!-- markdownlint-enable MD046 -->
+
+The printed summary:
 
 ```json
 {
@@ -244,58 +311,133 @@ r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
 }
 ```
 
-Reading the summary in Python:
-
-```python
-import grass.script as gs
-
-summary = gs.parse_command(
-    "r.sim.water",
-    elevation="elevation",
-    depth="depth",
-    discharge="discharge",
-    flags="p",
-    format="json",
-)
-print(summary["walkers_remaining"], summary["outputs"][-1]["depth"])
-```
-
 ## EXAMPLE
 
-Using the North Carolina full sample dataset:
+This example uses the
+[SIMWE sample dataset](https://doi.org/10.5281/zenodo.23017720) of the
+NC State University Sediment and Erosion Control Research and Education
+Facility, a 52 ha area in Raleigh, North Carolina, USA, at 1 m
+resolution. It contains a lidar-based elevation map, a land cover map
+and orthophoto bands.
 
-```sh
-# set computational region
-g.region raster=elev_lid792_1m -p
+Set the computational region to the elevation map and derive the
+Manning's n raster map from the land cover classes with
+*[r.recode](r.recode.md)*. Buildings (class 1), paved roads (2) and
+compacted roads and parking lots (3) get low roughness values, while
+herbaceous cover such as fields and lawns (4) and forest (5) get high
+values suitable for shallow overland flow. Water (6) gets a low value.
+See the
+[r.manning](https://grass.osgeo.org/grass-stable/manuals/addons/r.manning.html)
+addon for an explanation of Manning's n and reference values for
+common land cover classifications.
 
-# compute dx, dy
-r.slope.aspect elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy
+<!-- markdownlint-disable MD046 -->
+=== "Command line"
 
-# simulate (this may take a minute or two)
-r.sim.water elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy depth=water_depth disch=water_discharge nwalk=10000 rain_value=100 niter=5
-```
+    ```sh
+    g.region raster=elevation
+    r.recode input=landcover output=mannings rules=- <<EOF
+    1:1:0.012
+    2:2:0.014
+    3:3:0.025
+    4:4:0.24
+    5:5:0.35
+    6:6:0.04
+    EOF
+    ```
 
-Now, let's visualize the result using rendering to a file (note the
-further management of computational region and usage of
-[d.mon](d.mon.md) module which are not needed when working in GUI):
+=== "Python (grass.script)"
 
-```sh
-# increase the computational region by 350 meters
-g.region e=e+350
-# initiate the rendering
-d.mon start=cairo output=r_sim_water_water_depth.png
-# render raster, legend, etc.
-d.rast map=water_depth_1m
-d.legend raster=water_depth_1m title="Water depth [m]" label_step=0.10 font=sans at=20,80,70,75
-d.barscale at=67,10 length=250 segment=5 font=sans
-d.northarrow at=90,25
-# finish the rendering
-d.mon stop=cairo
-```
+    ```python
+    import grass.script as gs
 
-![r.sim.water generated depth map](r_sim_water_water_depth.png)  
-*Figure: Simulated water depth map in the rural area of the North
-Carolina sample dataset.*
+    gs.run_command("g.region", raster="elevation")
+    manning = {
+        1: 0.012,  # buildings
+        2: 0.014,  # paved roads
+        3: 0.025,  # compacted roads and parking lots
+        4: 0.24,  # herbaceous cover
+        5: 0.35,  # forest
+        6: 0.04,  # water
+    }
+    rules = "\n".join(f"{k}:{k}:{v}" for k, v in manning.items())
+    gs.write_command(
+        "r.recode", input="landcover", output="mannings", rules="-", stdin=rules
+    )
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    from io import StringIO
+
+    from grass.tools import Tools
+
+    tools = Tools()
+    tools.g_region(raster="elevation")
+    manning = {
+        1: 0.012,  # buildings
+        2: 0.014,  # paved roads
+        3: 0.025,  # compacted roads and parking lots
+        4: 0.24,  # herbaceous cover
+        5: 0.35,  # forest
+        6: 0.04,  # water
+    }
+    rules = "\n".join(f"{k}:{k}:{v}" for k, v in manning.items())
+    tools.r_recode(input="landcover", output="mannings", rules=StringIO(rules))
+    ```
+<!-- markdownlint-enable MD046 -->
+
+![Manning's n derived from land cover](r_sim_water_mannings.png)  
+*Figure: Manning's n derived from land cover with low values for
+buildings and roads and high values for fields and forest.*
+
+Simulate 30 minutes of overland flow with a uniform rainfall excess of
+20 mm/hr. The random seed makes the run reproducible.
+
+<!-- markdownlint-disable MD046 -->
+=== "Command line"
+
+    ```sh
+    r.sim.water elevation=elevation man=mannings rain_value=20 depth=depth \
+        duration=30 random_seed=1
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    gs.run_command(
+        "r.sim.water",
+        elevation="elevation",
+        man="mannings",
+        rain_value=20,
+        depth="depth",
+        duration=30,
+        random_seed=1,
+    )
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    tools.r_sim_water(
+        elevation="elevation",
+        man="mannings",
+        rain_value=20,
+        depth="depth",
+        duration=30,
+        random_seed=1,
+    )
+    ```
+<!-- markdownlint-enable MD046 -->
+
+![Water depth over shaded relief](r_sim_water_depth.png)  
+*Figure: Simulated water depth in meters after 30 minutes of rainfall
+shown over shaded relief.*
+
+![Water depth over orthophoto](r_sim_water_depth_orthophoto.png)  
+*Figure: Water depth of at least 0.1 m shown over the orthophoto, with
+flow concentrated in ditches and channels and ponding in depressions.*
 
 ## REFERENCES
 

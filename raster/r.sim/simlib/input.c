@@ -112,6 +112,7 @@ int input_data(const Geometry *geometry, Simulation *sim, const Inputs *inputs,
     /* Manning surface roughnes: read map or use a single value */
     if (inputs->manin != NULL) {
         grids->cchez = read_float_raster_map(rows, cols, inputs->manin, 1.0);
+        copy_matrix_undef_float_values(rows, cols, grids->cchez, grids->zz);
     }
     else if (inputs->manin_val >=
              0.0) { /* If no value set its set to -999.99 */
@@ -141,6 +142,11 @@ int input_data(const Geometry *geometry, Simulation *sim, const Inputs *inputs,
     if (inputs->infil != NULL) {
         grids->inf =
             read_double_raster_map(rows, cols, inputs->infil, unitconv);
+        /* Null infiltration means no infiltration. */
+        for (int row = 0; row < rows; row++)
+            for (int col = 0; col < cols; col++)
+                if (grids->inf[row][col] == UNDEF)
+                    grids->inf[row][col] = 0.;
     }
     else if (inputs->infil_val >=
              0.0) { /* If no value set its set to -999.99 */
@@ -333,10 +339,11 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
         (int)(settings->timesec /
               (setup->deltap * setup->timec)); /* number of iterations = number
                                                   of cells to pass */
-    setup->iterout =
-        (int)(settings->iterout /
-              (setup->deltap * setup->timec)); /* number of cells to pass for
-                                                  time series output */
+    if (settings->ts && settings->iterout > 0 &&
+        time_step_seconds(setup) > settings->iterout)
+        G_warning(_("Time step of %.2f s is longer than output_step of %d s, "
+                    "some output steps may be skipped"),
+                  time_step_seconds(setup), settings->iterout);
 
     fprintf(stderr, "\n");
     G_message(_("Min elevation \t= %.2f m\nMax elevation \t= %.2f m\n"), zmin,

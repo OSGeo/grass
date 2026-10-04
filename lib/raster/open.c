@@ -537,7 +537,7 @@ static int open_raster_new_gdal(char *map, char *mapset,
 
     fcb->cellhd = R__.wr_window;
     fcb->cellhd.compressed = 0;
-    fcb->nbytes = Rast_cell_size(fcb->map_type);
+    fcb->nbytes = (int)Rast_cell_size(fcb->map_type);
     /* for writing fcb->data is allocated to be R__.wr_window.cols *
        sizeof(CELL or DCELL or FCELL)  */
     fcb->data = G_calloc(R__.wr_window.cols, fcb->nbytes);
