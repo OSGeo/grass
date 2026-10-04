@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_zh\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 15:44+0000\n"
+"POT-Creation-Date: 2026-10-04 17:59+0000\n"
 "PO-Revision-Date: 2026-06-25 11:56+0000\n"
 "Last-Translator: Jietao Wang <quaternary@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/zh_Hans/>\n"
@@ -4757,6 +4757,10 @@ msgstr ""
 msgid "Error reading categories: [%s]"
 msgstr ""
 
+#, c-format
+msgid "Layer number or category number out of range: [%s]"
+msgstr ""
+
 msgid "Unable to copy points"
 msgstr ""
 
@@ -5075,7 +5079,7 @@ msgstr[0] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 
 msgid "Building areas..."

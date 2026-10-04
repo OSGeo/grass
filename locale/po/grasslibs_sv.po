@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 15:44+0000\n"
-"PO-Revision-Date: 2026-01-08 02:38+0000\n"
+"POT-Creation-Date: 2026-10-04 17:59+0000\n"
+"PO-Revision-Date: 2026-10-04 18:03+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
-"Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
+"Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Unknown algorithm '%s'"
@@ -1010,11 +1010,11 @@ msgstr "G__open(read): Det gick inte att öppna '%s': %s"
 
 #, c-format
 msgid "G__open(write): xmapset <%s> != G_mapset() <%s>"
-msgstr "G__öppna(skriv): xmapset <%s> != G_mapset() <%s>"
+msgstr "G__open(write): xmapset <%s> != G_mapset() <%s>"
 
 #, c-format
 msgid "G__open(write): Unable to open '%s': %s"
-msgstr "G__open(write): Det gick inte att öppna '%s': %s"
+msgstr "G__open(write): Det går inte att öppna '%s': %s"
 
 #, c-format
 msgid "File read/write operation failed: %s (%d)"
@@ -1026,7 +1026,7 @@ msgstr "G__open_misc(read): mapset <%s> stämmer inte överens med xmapset <%s>"
 
 #, c-format
 msgid "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
-msgstr "G__öppna_misc(skriv): xmapset <%s> != G_mapset() <%s>"
+msgstr "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
 
 msgid "Bug in UI description. Missing module description"
 msgstr "Bugg i UI-beskrivning. Saknar beskrivning av modul"
@@ -1445,7 +1445,7 @@ msgid "Data type used in the output raster3d map"
 msgstr "Datatyp som används i den utgående raster3d-kartan"
 
 msgid "Number of digits used as mantissa in the internal map storage, 0 -23 for float, 0 - 52 for double, max or default"
-msgstr "Antal siffror som används som mantissa i det interna kartlagret, 0 -23 för float, 0 - 52 för double, max eller default"
+msgstr "Antal siffror som används som mantissa i det interna kartlagret, 0–23 för float, 0–52 för double, max eller default"
 
 msgid "The compression method used in the output raster3d map"
 msgstr "Den komprimeringsmetod som används i den utgående raster3d-kartan"
@@ -1653,7 +1653,7 @@ msgstr "Typ av inmatningskarta"
 
 #, c-format
 msgid "Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %%05)"
-msgstr ""
+msgstr "Suffix att lägga till i basnamnet: ange 'gran' för granularitet, 'time' för det fullständiga tidsformatet, 'num' för numeriskt suffix med ett angivet antal siffror (standard %%05)"
 
 msgid "The temporal type of the space time dataset"
 msgstr "Den temporala typen av rumtidsdataset"
@@ -2669,7 +2669,7 @@ msgstr "Det går inte att hitta patchraster <%s>."
 
 #, c-format
 msgid "Resolutions of patch <%s> and patched file <%s> are not same."
-msgstr "Lösningarna för patch <%s> och patchad fil <%s> är inte desamma."
+msgstr "Upplösningarna för sammansättningsrastret <%s> och den sammansatta filen <%s> är inte desamma."
 
 #, c-format
 msgid "Corrupted  category raster conditions file <%s> (fseek failed)"
@@ -4812,6 +4812,11 @@ msgstr "Slutet på ASCII-filen nås före slutet av kategorierna"
 msgid "Error reading categories: [%s]"
 msgstr "Fel vid läsning av kategorier: [%s]"
 
+#, fuzzy, c-format
+#| msgid "Cell category value out of range"
+msgid "Layer number or category number out of range: [%s]"
+msgstr "Cellkategorivärde utanför intervallet"
+
 msgid "Unable to copy points"
 msgstr "Det går inte att kopiera punkter"
 
@@ -5135,7 +5140,7 @@ msgstr[1] "%d primitiver registrerade"
 #| msgid "One vertex registered"
 #| msgid_plural "%d vertices registered"
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] "Ett hörn registrerat"
 msgstr[1] "%d hörn registrerade"
 
