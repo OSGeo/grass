@@ -153,8 +153,8 @@ int read_cube(Cube_data *Cube, file_info *headfax)
 
     while (first) { /* use while instead of if to utilize 'break' !! */
         /* try reading the entire file into memory */
-        long start, stop, i;
-        int ret;
+        off_t start, stop;
+        size_t i, ret;
 
         first = 0;
 
@@ -256,13 +256,13 @@ static int cptr = 0;
 int my_fread(char *buf, int size, int cnt, FILE *fp)
 {
     if (!fsize)
-        return fread(buf, size, cnt, fp);
+        return (int)fread(buf, size, cnt, fp);
     else {
         int amt;
 
         amt = size * cnt;
         if (cptr + amt >= fsize)
-            amt = fsize - cptr - 1;
+            amt = (int)fsize - cptr - 1;
         struct_copy(buf, fptr + cptr, amt);
         cptr += amt;
         return (amt);
