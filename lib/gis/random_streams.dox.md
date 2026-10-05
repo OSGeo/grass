@@ -135,7 +135,9 @@ naming the option. When the user gives no seed, `G_random_generate_seed()`
 gives one, from `GRASS_RANDOM_SEED`, or else from `SOURCE_DATE_EPOCH`, or
 else from the time and the process ID. The tool records the seed it used, for
 example in the history of the output map, so that the computation can be
-repeated.
+repeated. Seeds and counts are `int64_t`, which `<grass/gis.h>` provides by
+including `<stdint.h>`; printing one in a message takes `PRId64` from
+`<inttypes.h>`.
 
 Whatever the pattern, the tool checks that no unit can draw more than the
 stride, which `G_random_layout_length(&layout)` returns, and that the batches
