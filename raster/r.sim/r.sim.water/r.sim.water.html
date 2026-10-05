@@ -206,6 +206,7 @@ stored in the history of the output raster maps under the same keys (see
  <tr><td><code>walkers_requested</code></td><td>Number of walkers from <b>nwalkers</b>, by default twice the number of cells</td><td>count</td></tr>
  <tr><td><code>walkers_generated</code></td><td>Walkers created, at least one per cell and more where the source rate is higher</td><td>count</td></tr>
  <tr><td><code>walkers_remaining</code></td><td>Walkers still in the domain at the end of the run</td><td>count</td></tr>
+ <tr><td><code>random_seed</code></td><td>Seed of the random numbers, given or generated</td><td></td></tr>
  <tr><td><code>duration</code></td><td>Requested simulation length (<b>duration</b>)</td><td>s</td></tr>
  <tr><td><code>simulated_time</code></td><td>Simulated time reached at the end of the run</td><td>s</td></tr>
  <tr><td><code>time_step</code></td><td>Simulated time per iteration</td><td>s</td></tr>
@@ -286,6 +287,7 @@ The printed summary:
     "walkers_requested": 100000,
     "walkers_generated": 120000,
     "walkers_remaining": 112724,
+    "random_seed": 3,
     "duration": 1200,
     "simulated_time": 1199.2085202681737,
     "time_step": 1.0631281208051186,
@@ -323,11 +325,16 @@ The printed summary:
 <h3>Random numbers and parallel processing</h3>
 
 The walkers are placed and moved using pseudo-random numbers. The seed
-is given by <b>random_seed</b>, generated when the <b>-s</b> flag is used, and
-12345 when neither is given. The generated seed is reported with
-<b>--verbose</b>, and the environment variable <code>GRASS_RANDOM_SEED</code> sets it
-for scripts. The seed is an integer from -2147483648 to 4294967295;
-other values are an error. Each walker draws from a sequence of random
+is given by <b>random_seed</b>; without it, a seed is generated, so runs
+without a seed differ from each other, as in <em>r.mapcalc</em>. The seed used
+is recorded in the history of the output maps and in the run summary of
+<b>-p</b> as <code>random_seed</code>, and reported with <b>--verbose</b>, so that a run
+can be repeated by giving it. The environment variable
+<code>GRASS_RANDOM_SEED</code> sets the generated seed for scripts. The <b>-s</b>
+flag, which generated a seed, is deprecated, since generating is now the
+default; earlier versions used 12345 when neither was given. The seed is
+an integer from -2147483648 to 4294967295; other values are an error.
+Each walker draws from a sequence of random
 numbers of its own, determined by the seed and the walker's number, so
 every walker receives the same random numbers whatever the number of
 threads given by <b>nprocs</b>. Results for a given seed differ from those

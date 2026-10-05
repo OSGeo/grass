@@ -196,6 +196,7 @@ stored in the history of the output raster maps under the same keys (see
 | `walkers_requested` | Number of walkers from **nwalkers**, by default twice the number of cells | count |
 | `walkers_generated` | Walkers created, at least one per cell and more where the source rate is higher | count |
 | `walkers_remaining` | Walkers still in the domain at the end of the run | count |
+| `random_seed` | Seed of the random numbers, given or generated | |
 | `duration` | Requested simulation length (**duration**) | s |
 | `simulated_time` | Simulated time reached at the end of the run | s |
 | `time_step` | Simulated time per iteration | s |
@@ -277,6 +278,7 @@ The printed summary:
     "walkers_requested": 100000,
     "walkers_generated": 120000,
     "walkers_remaining": 112724,
+    "random_seed": 3,
     "duration": 1200,
     "simulated_time": 1199.2085202681737,
     "time_step": 1.0631281208051186,
@@ -314,11 +316,16 @@ The printed summary:
 ### Random numbers and parallel processing
 
 The walkers are placed and moved using pseudo-random numbers. The seed
-is given by **random_seed**, generated when the **-s** flag is used, and
-12345 when neither is given. The generated seed is reported with
-**--verbose**, and the environment variable `GRASS_RANDOM_SEED` sets it
-for scripts. The seed is an integer from -2147483648 to 4294967295;
-other values are an error. Each walker draws from a sequence of random
+is given by **random_seed**; without it, a seed is generated, so runs
+without a seed differ from each other, as in *r.mapcalc*. The seed used
+is recorded in the history of the output maps and in the run summary of
+**-p** as `random_seed`, and reported with **--verbose**, so that a run
+can be repeated by giving it. The environment variable
+`GRASS_RANDOM_SEED` sets the generated seed for scripts. The **-s**
+flag, which generated a seed, is deprecated, since generating is now the
+default; earlier versions used 12345 when neither was given. The seed is
+an integer from -2147483648 to 4294967295; other values are an error.
+Each walker draws from a sequence of random
 numbers of its own, determined by the seed and the walker's number, so
 every walker receives the same random numbers whatever the number of
 threads given by **nprocs**. Results for a given seed differ from those

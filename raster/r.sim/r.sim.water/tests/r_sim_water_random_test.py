@@ -14,12 +14,14 @@ in the region until the end of the simulation.
 """
 
 import os
+import re
 from io import StringIO
 
 import numpy as np
 import pytest
 
 import grass.script as gs
+import grass.script.array as garray
 from grass.exceptions import CalledModuleError
 from grass.tools import Tools
 
@@ -75,7 +77,29 @@ def test_different_seeds_give_different_depth(session):
 
 
 def test_generated_seed_is_the_seed_option(session):
-    """The -s flag with GRASS_RANDOM_SEED gives what the seed option gives."""
+    """Without a seed, GRASS_RANDOM_SEED gives what the seed option gives."""
+    env = session.env.copy()
+    env["GRASS_RANDOM_SEED"] = "3"
+    generated = Tools(env=env).r_sim_water(
+        elevation="elevation", depth=np.array, duration=5
+    )
+    given = simulate_depth(session, random_seed=3)
+    assert np.array_equal(generated, given)
+
+
+def test_generated_seed_is_recorded(session):
+    """A run without a seed records the seed it used, and the seed repeats it."""
+    tools = Tools(session=session)
+    tools.r_sim_water(elevation="elevation", depth="generated", duration=5)
+    history = tools.r_info(map="generated", flags="h").text
+    seed = int(re.search(r"random_seed=(-?\d+)", history).group(1))
+    repeated = simulate_depth(session, random_seed=seed)
+    generated = garray.array("generated", env=session.env)
+    assert np.array_equal(repeated, generated)
+
+
+def test_deprecated_flag_generates_a_seed(session):
+    """The deprecated -s flag still gives what GRASS_RANDOM_SEED says."""
     env = session.env.copy()
     env["GRASS_RANDOM_SEED"] = "3"
     generated = Tools(env=env).r_sim_water(
@@ -83,6 +107,12 @@ def test_generated_seed_is_the_seed_option(session):
     )
     given = simulate_depth(session, random_seed=3)
     assert np.array_equal(generated, given)
+
+
+def test_seed_and_flag_are_exclusive(session):
+    """The seed option and the flag to generate a seed cannot be combined."""
+    with pytest.raises(CalledModuleError, match="mutually exclusive"):
+        simulate_depth(session, random_seed=1, flags="s")
 
 
 @pytest.mark.parametrize("nprocs", [2, 4])

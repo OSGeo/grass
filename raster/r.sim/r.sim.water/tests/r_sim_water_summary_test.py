@@ -24,6 +24,7 @@ COMMON_KEYS = {
     "walkers_requested",
     "walkers_generated",
     "walkers_remaining",
+    "random_seed",
     "duration",
     "simulated_time",
     "time_step",
@@ -91,6 +92,7 @@ def test_json_summary(session_tools):
     assert summary["mean_source_rate"] > 0
     assert summary["mean_infiltration"] == 0
     assert summary["threads"] == 1
+    assert summary["random_seed"] == 1
 
     assert len(summary["outputs"]) == 1
     output = summary["outputs"][0]
@@ -195,6 +197,7 @@ def test_history(session_tools):
             "walkers_requested",
             "walkers_generated",
             "walkers_remaining",
+            "random_seed",
             "duration",
         ):
             assert history_value(history, key) == summary[key]

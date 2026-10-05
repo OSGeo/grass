@@ -15,6 +15,7 @@ SEDIMENT_KEYS = {
     "walkers_requested",
     "walkers_generated",
     "walkers_remaining",
+    "random_seed",
     "duration",
     "simulated_time",
     "time_step",

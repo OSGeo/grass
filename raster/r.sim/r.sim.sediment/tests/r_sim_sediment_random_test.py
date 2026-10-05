@@ -79,10 +79,10 @@ def test_different_seeds_give_different_results(session):
 
 
 def test_generated_seed_is_the_seed_option(session):
-    """The -s flag with GRASS_RANDOM_SEED gives what the seed option gives."""
+    """Without a seed, GRASS_RANDOM_SEED gives what the seed option gives."""
     env = session.env.copy()
     env["GRASS_RANDOM_SEED"] = "3"
-    generated, _ = simulate(session, env=env, flags="s")
+    generated, _ = simulate(session, env=env)
     given, _ = simulate(session, random_seed=3)
     assert np.array_equal(generated, given)
 
