@@ -108,7 +108,7 @@ static void write_history(const char *name, double tt, const Setup *setup,
         &hist,
         "walkers_generated=%d, walkers_requested=%d, walkers_remaining=%d",
         sim->nwalk, sim->maxwa, sim->nwalka);
-    Rast_append_format_history(&hist, "random_seed=%" PRId64, settings->seed);
+    Rast_append_format_history(&hist, "seed=%" PRId64, settings->seed);
     Rast_append_format_history(&hist, "duration=%d, simulated_time=%f",
                                settings->timesec, tt);
     Rast_append_format_history(&hist, "time_step=%f, mean_velocity=%f",

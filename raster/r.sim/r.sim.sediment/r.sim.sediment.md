@@ -94,7 +94,7 @@ r.sim.sediment elevation=elevation water_depth=water_depth detachment_coeff=deta
     "walkers_requested": 60,
     "walkers_generated": 78,
     "walkers_remaining": 43,
-    "random_seed": 1,
+    "seed": 1,
     "duration": 60,
     "simulated_time": 54.891343113611583,
     "time_step": 5.4891343113611581,

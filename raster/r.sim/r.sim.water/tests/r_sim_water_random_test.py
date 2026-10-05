@@ -92,7 +92,7 @@ def test_generated_seed_is_recorded(session):
     tools = Tools(session=session)
     tools.r_sim_water(elevation="elevation", depth="generated", duration=5)
     history = tools.r_info(map="generated", flags="h").text
-    seed = int(re.search(r"random_seed=(-?\d+)", history).group(1))
+    seed = int(re.search(r"\bseed=(-?\d+)", history).group(1))
     repeated = simulate_depth(session, random_seed=seed)
     generated = garray.array("generated", env=session.env)
     assert np.array_equal(repeated, generated)

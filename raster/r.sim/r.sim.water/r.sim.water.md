@@ -196,7 +196,7 @@ stored in the history of the output raster maps under the same keys (see
 | `walkers_requested` | Number of walkers from **nwalkers**, by default twice the number of cells | count |
 | `walkers_generated` | Walkers created, at least one per cell and more where the source rate is higher | count |
 | `walkers_remaining` | Walkers still in the domain at the end of the run | count |
-| `random_seed` | Seed of the random numbers, given or generated | |
+| `seed` | Seed of the random numbers, given or generated | |
 | `duration` | Requested simulation length (**duration**) | s |
 | `simulated_time` | Simulated time reached at the end of the run | s |
 | `time_step` | Simulated time per iteration | s |
@@ -278,7 +278,7 @@ The printed summary:
     "walkers_requested": 100000,
     "walkers_generated": 120000,
     "walkers_remaining": 112724,
-    "random_seed": 3,
+    "seed": 3,
     "duration": 1200,
     "simulated_time": 1199.2085202681737,
     "time_step": 1.0631281208051186,
@@ -319,7 +319,7 @@ The walkers are placed and moved using pseudo-random numbers. The seed
 is given by **random_seed**; without it, a seed is generated, so runs
 without a seed differ from each other, as in *r.mapcalc*. The seed used
 is recorded in the history of the output maps and in the run summary of
-**-p** as `random_seed`, and reported with **--verbose**, so that a run
+**-p** as `seed`, and reported with **--verbose**, so that a run
 can be repeated by giving it. The environment variable
 `GRASS_RANDOM_SEED` sets the generated seed for scripts. The **-s**
 flag, which generated a seed, is deprecated, since generating is now the
