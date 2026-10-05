@@ -750,8 +750,9 @@ def test_flow_control_increases_depth(east_slope_session):
     Higher trapping probability means more accumulation.
     """
     tools = Tools(session=east_slope_session)
-    # The ten default walkers leave the 0.3 case within noise of no trapping
-    # for about a quarter of the seeds; a thousand separate the three cases.
+    # The ten default walkers leave the total with trapping at 0.3 within
+    # noise of the total without trapping for about a quarter of the seeds;
+    # a thousand separate no trapping, 0.3 and 0.8 for every seed tried.
     walkers = {"nwalkers": 1000}
     sum_no_control = float(np.sum(run_sim(east_slope_session, **walkers)))
     tools.r_mapcalc(expression="flow_ctrl_low = 0.3")
