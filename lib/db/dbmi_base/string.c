@@ -90,7 +90,7 @@ static int set_string(dbString *x, char *s, int copy)
         copy = 1;
     }
 
-    len = strlen(s) + 1;
+    len = (int)strlen(s) + 1;
 
     if (copy) {
         stat = db_enlarge_string(x, len);
@@ -202,14 +202,14 @@ dbString *db_alloc_string_array(int count)
  */
 int db_append_string(dbString *x, const char *s)
 {
-    int len;
+    size_t len;
     int stat;
 
     if (!db_get_string(x))
         return db_set_string(x, s);
 
     len = strlen(db_get_string(x)) + strlen(s) + 1;
-    stat = db_enlarge_string(x, len);
+    stat = db_enlarge_string(x, (int)len);
     if (stat != DB_OK)
         return stat;
     strcat(db_get_string(x), s);
