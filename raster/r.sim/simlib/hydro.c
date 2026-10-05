@@ -75,12 +75,17 @@ void main_loop(const Setup *setup, const Geometry *geometry,
     // values depend on the seed and the walker's number, not on the
     // thread which moves it. The bound is what a walker draws: two values
     // when placed and, in each time step, a normal pair by the polar
-    // method (8 / pi values on average) and one more in a trap, with
-    // eight per step leaving room for the steps which draw more.
+    // method (8 / pi values on average, two per attempt at a pair) and one
+    // more in a trap. Eight per step allow three attempts at the pair,
+    // which the sum over many steps rarely exceeds, and the 48 more allow
+    // a run of 24 rejected attempts within one step: the probability per
+    // walker is below 1e-16, so a run of 2^31 walkers (the most a 32-bit
+    // int count holds) exceeds the bound with a probability below 1e-6,
+    // one in a million.
     struct G_random_layout layout;
 
     G_random_init_layout_bounded(&layout, settings->seed, sim->max_walkers,
-                                 2 + 8LL * setup->miter);
+                                 2 + 8LL * setup->miter + 48);
     if (G_random_layout_batches(&layout) < 1)
         G_warning(_("%d walkers over %d time steps may draw more random "
                     "numbers than one seed provides; the random numbers "
