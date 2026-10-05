@@ -278,8 +278,7 @@ void main_loop(const Setup *setup, const Geometry *geometry,
                             if (inputs->traps != NULL &&
                                 grids->trap[k][l] != 0.) { /* traps */
 
-                                float eff = G_random_double(
-                                    &sim->w[lw].state); /* random generator */
+                                float eff = G_random_double(&sim->w[lw].state);
 
                                 if (eff <= grids->trap[k][l]) {
                                     velx = -0.1 *

@@ -63,8 +63,8 @@ typedef struct {
     int nstack;            // Number of output walkers
     struct point3D *stack; // Output 3D walkers
     int maxwa;             // Number of total walkers
-    double rwalk;     // Number of input walkers per block as double precision
-    struct walker *w; // Walkers
+    double rwalk; // Number of input walkers per block as double precision
+    struct walker *w;
     struct point2D *vavg; // Average velocity of walkers
     int max_walkers; // Number of allocated walkers, maxwa plus one per cell
 } Simulation;
@@ -165,7 +165,7 @@ struct point3D {
     double m;
 };
 
-// A walker: position x and y, weight m, and its random number state
+// A walker with its weight m and its own random number state
 struct walker {
     double x;
     double y;
