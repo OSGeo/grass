@@ -1829,10 +1829,9 @@ class Area(Geo):
         :type bbox: a Bbox object
         """
         bbox = bbox or self.bbox()
+        x, y, _ = get_xyz(point)
         return bool(
-            libvect.Vect_point_in_area(
-                point.x, point.y, self.c_mapinfo, self.id, bbox.c_bbox
-            )
+            libvect.Vect_point_in_area(x, y, self.c_mapinfo, self.id, bbox.c_bbox)
         )
 
     @mapinfo_must_be_set

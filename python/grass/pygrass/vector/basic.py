@@ -130,11 +130,29 @@ class Bbox:
         >>> bbox = Bbox(north=10, south=0, west=0, east=10)
         >>> bbox.contains(poi)
         True
+        >>> bbox.contains((5, 5))
+        True
+        >>> bbox.contains((5, 5, 0))
+        True
 
         """
-        return bool(
-            libvect.Vect_point_in_box(point.x, point.y, point.z or 0, self.c_bbox)
-        )
+        if hasattr(point, "x") and hasattr(point, "y"):
+            x = point.x
+            y = point.y
+            z = getattr(point, "z", 0.0) or 0.0
+        elif isinstance(point, (tuple, list)):
+            if len(point) == 2:
+                x, y = point
+                z = 0.0
+            elif len(point) == 3:
+                x, y, z = point
+            else:
+                str_error = "The format of the point is not supported: {0!r}"
+                raise ValueError(str_error.format(point))
+        else:
+            str_error = "The format of the point is not supported: {0!r}"
+            raise ValueError(str_error.format(point))
+        return bool(libvect.Vect_point_in_box(x, y, z, self.c_bbox))
 
     def items(self):
         return [(k, getattr(self, k)) for k in self.keys()]
