@@ -376,8 +376,8 @@ void build_pg(struct Map_info *Map, int build)
                  Map->plus.n_lines),
               Map->plus.n_lines);
     G_message(n_("One vertex registered", "%" PRId64 " vertices registered",
-                 (grass_int64)npoints),
-              (grass_int64)npoints);
+                 (int64_t)npoints),
+              (int64_t)npoints);
 
     Map->plus.built = GV_BUILD_BASE;
 
@@ -663,8 +663,8 @@ void build_ogr(struct Map_info *Map, int build)
                  Map->plus.n_lines),
               Map->plus.n_lines);
     G_message(n_("One vertex registered", "%" PRId64 " vertices registered",
-                 (grass_int64)npoints),
-              (grass_int64)npoints);
+                 (int64_t)npoints),
+              (int64_t)npoints);
 
     if (nskipped > 0)
         G_warning(n_("One feature without geometry skipped",
