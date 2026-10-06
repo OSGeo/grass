@@ -367,12 +367,21 @@ double G_drand48(void)
 #endif
 }
 
-/* Advance a generator of the program's own by one step. The
- * multiplication may wrap around at 2^64; that does not change the result
- * modulo 2^48. */
+/* Multiply two values modulo 2^48. The unsigned multiplication may wrap
+ * around modulo 2^64. This is intentional and does not change the result:
+ * since 2^48 divides 2^64, masking the wrapped product to 48 bits gives
+ * the same result as computing the full product modulo 2^48. */
+static uint64_t mul48(uint64_t a, uint64_t b)
+{
+    return (a * b) & MASK48;
+}
+
+/* Advance a generator of the program's own by one step. All generator
+ * arithmetic is modulo 2^48; mul48() performs multiplication with
+ * intentional unsigned wraparound as described above. */
 static uint64_t lcg_step(uint64_t x)
 {
-    return (LCG_A * x + LCG_B) & MASK48;
+    return (mul48(LCG_A, x) + LCG_B) & MASK48;
 }
 
 /* Turn a seed into a generator state the way G_srand48() does: only the
@@ -386,7 +395,8 @@ static uint64_t lcg_seed(int64_t seed)
 /* Advance the generator by an arbitrary number of steps without taking
  * them one at a time. One step is the affine map x -> a * x + c, and
  * composing two such maps gives another, so the map for `steps` steps is
- * built by repeated squaring, as an integer power would be. */
+ * built by repeated squaring, as an integer power would be. All
+ * multiplication is modulo 2^48; see mul48(). */
 static uint64_t lcg_jump(uint64_t x, uint64_t steps)
 {
     uint64_t a_total = 1, c_total = 0; /* the identity map */
@@ -394,16 +404,16 @@ static uint64_t lcg_jump(uint64_t x, uint64_t steps)
 
     while (steps) {
         if (steps & 1) {
-            c_total = (a * c_total + c) & MASK48;
-            a_total = (a * a_total) & MASK48;
+            c_total = (mul48(a, c_total) + c) & MASK48;
+            a_total = mul48(a, a_total);
         }
         /* Square the map, so a and c then describe twice as many steps. */
-        c = (a * c + c) & MASK48;
-        a = (a * a) & MASK48;
+        c = (mul48(a, c) + c) & MASK48;
+        a = mul48(a, a);
         steps >>= 1;
     }
 
-    return (a_total * x + c_total) & MASK48;
+    return (mul48(a_total, x) + c_total) & MASK48;
 }
 
 /* The generator tells seeds apart by their low 32 bits only. Seeds read
