@@ -118,6 +118,7 @@ repos:
     rev: v4.0.2
     hooks:
       - id: editorconfig-checker
+        args: [--fix]
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.2
     hooks:
