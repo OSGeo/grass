@@ -88,14 +88,19 @@ def test_generated_seed_is_the_seed_option(session):
 
 
 @pytest.mark.parametrize("nprocs", [2, 4])
-def test_walkers_do_not_depend_on_nprocs(session, nprocs):
-    """Walkers end at the same positions with any number of threads."""
-    _, serial = simulate(session, f"walkers_{nprocs}_serial", random_seed=5)
-    _, parallel = simulate(
+def test_results_do_not_depend_on_nprocs(session, nprocs):
+    """The flux and the walkers are identical with any number of threads.
+
+    The water depth is an input here, so nothing a walker reacts to is
+    changed by the other walkers of the same step.
+    """
+    serial_flux, serial = simulate(session, f"walkers_{nprocs}_serial", random_seed=5)
+    parallel_flux, parallel = simulate(
         session, f"walkers_{nprocs}_parallel", random_seed=5, nprocs=nprocs
     )
     assert serial.size
     assert np.array_equal(parallel, serial)
+    assert np.array_equal(parallel_flux, serial_flux)
 
 
 @pytest.mark.parametrize("seed", [-(2**31) - 1, 2**32])

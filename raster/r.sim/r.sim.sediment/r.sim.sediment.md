@@ -38,18 +38,9 @@ erosion/deposition map is noisy, higher number of walkers, given by
 *nwalkers* should be used.  
 
 Increasing the number of threads with **nprocs** speeds up the
-simulation. The walkers draw their random numbers as in *r.sim.water*:
-each walker from a sequence of its own determined by **random_seed**
-(or the generated seed, recorded in the history and the run summary,
-when it is not given) and the walker's number, so the walkers move the
-same way whatever the value of **nprocs**. With **nprocs=1**, runs with
-the same seed and inputs give identical results. With more threads,
-walkers in the same cell add to the sediment concentration in an order
-which depends on the threads, and the floating point sums differ
-slightly with the order, so the outputs are close to, but not identical
-with, the single-threaded result, and repeated runs with the same
-**nprocs** may differ slightly. See
-[r.sim.water](r.sim.water.md) for the range of seeds.
+simulation. The random numbers and the seed work as in *r.sim.water*.
+The results do not depend on **nprocs**, since the water depth is an
+input here and there is no infiltration.
 
 ## NOTES
 

@@ -316,36 +316,17 @@ The printed summary:
 ### Random numbers and parallel processing
 
 The walkers are placed and moved using pseudo-random numbers. The seed
-is given by **random_seed**; without it, a seed is generated, so runs
-without a seed differ from each other, as in *r.mapcalc*. The seed used
-is recorded in the history of the output maps and in the run summary of
-**-p** as `seed`, and reported with **--verbose**, so that a run
-can be repeated by giving it. The environment variable
-`GRASS_RANDOM_SEED` sets the generated seed for scripts. The **-s**
-flag, which generated a seed, is deprecated, since generating is now the
-default; earlier versions used 12345 when neither was given. The seed is
-an integer from -2147483648 to 4294967295; other values are an error.
-Each walker draws from a sequence of random
-numbers of its own, determined by the seed and the walker's number, so
-every walker receives the same random numbers whatever the number of
-threads given by **nprocs**. Results for a given seed differ from those
-of GRASS versions in which all walkers drew from one shared sequence.
-
-With **nprocs=1**, runs with the same seed and inputs give identical
-results. With more threads, every walker's weight is added to the water
-depth, but walkers in the same cell add their weights in an order which
-depends on the threads, and the floating point sums differ slightly with
-the order. Which walkers the infiltration capacity of a cell absorbs
-also depends on the order in which the threads bring them to the cell.
-The walkers themselves move the same way for any **nprocs** as long as
-the water depth stays below **hmax**, above which the diffusion depends
-on the depth, and there is no infiltration. Results with **nprocs** greater
-than 1 are close to, but not identical with, those with **nprocs=1**,
-and repeated runs with the same **nprocs** may differ slightly. Use
-**nprocs=1** when results must be reproducible.
-
-When runs with several seeds are compared, use seeds below 1073741824
-(2^30): seeds which differ by 2^30 or 2^31 give related random numbers.
+is given by **random_seed**; without it, a seed is generated and
+recorded in the history of the output maps and in the run summary as
+`seed`, so that the run can be repeated. Each walker receives the same
+random numbers whatever the number of threads given by **nprocs**, so
+the results do not depend on **nprocs**, except where the water depth
+exceeds **hmax** or infiltration is used: there a walker reacts to the
+water or the infiltration capacity left by the walkers which reached
+the cell before it in the same time step, and that order depends on the
+threads. Such cells can differ slightly between thread counts and
+between repeated runs with more than one thread. Use **nprocs=1** when
+results must be reproducible to the last digit.
 
 ## EXAMPLE
 

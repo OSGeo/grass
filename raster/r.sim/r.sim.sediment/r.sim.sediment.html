@@ -45,18 +45,9 @@ given by <i>nwalkers</i> should be used.
 
 <p>
 Increasing the number of threads with <b>nprocs</b> speeds up the
-simulation. The walkers draw their random numbers as in <em>r.sim.water</em>:
-each walker from a sequence of its own determined by <b>random_seed</b>
-(or the generated seed, recorded in the history and the run summary,
-when it is not given) and the walker's number, so the walkers move the
-same way whatever the value of <b>nprocs</b>. With <b>nprocs=1</b>, runs with
-the same seed and inputs give identical results. With more threads,
-walkers in the same cell add to the sediment concentration in an order
-which depends on the threads, and the floating point sums differ
-slightly with the order, so the outputs are close to, but not identical
-with, the single-threaded result, and repeated runs with the same
-<b>nprocs</b> may differ slightly. See
-<a href="r.sim.water.html">r.sim.water</a> for the range of seeds.
+simulation. The random numbers and the seed work as in <em>r.sim.water</em>.
+The results do not depend on <b>nprocs</b>, since the water depth is an
+input here and there is no infiltration.
 
 <h2>NOTES</h2>
 

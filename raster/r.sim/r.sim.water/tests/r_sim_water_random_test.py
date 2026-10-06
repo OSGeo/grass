@@ -116,6 +116,20 @@ def test_seed_and_flag_are_exclusive(session):
 
 
 @pytest.mark.parametrize("nprocs", [2, 4])
+def test_depth_does_not_depend_on_nprocs_below_hmax(session, nprocs):
+    """The depth is identical with any number of threads while it stays below hmax.
+
+    Above hmax a walker reacts to the depth the walkers before it in the
+    same step left, and that order depends on the threads.
+    """
+    serial = simulate_depth(session, random_seed=5, **NO_DEPTH_FEEDBACK)
+    parallel = simulate_depth(
+        session, random_seed=5, nprocs=nprocs, **NO_DEPTH_FEEDBACK
+    )
+    assert np.array_equal(parallel, serial)
+
+
+@pytest.mark.parametrize("nprocs", [2, 4])
 def test_walkers_do_not_depend_on_nprocs(session, nprocs):
     """Walkers end at the same positions with any number of threads."""
     serial = simulate_walkers(
