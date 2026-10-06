@@ -367,27 +367,12 @@ double G_drand48(void)
 #endif
 }
 
-/* Multiply two 48-bit values modulo 2^48 without overflowing uint64_t. */
-static uint64_t lcg_mul48(uint64_t x, uint64_t y)
-{
-#if defined(__SIZEOF_INT128__)
-    return (uint64_t)(((unsigned __int128)(x & MASK48) * (y & MASK48)) &
-                      MASK48);
-#else
-    const uint64_t mask24 = UINT64_C(0xFFFFFF);
-    uint64_t x0 = x & mask24;
-    uint64_t x1 = (x >> 24) & mask24;
-    uint64_t y0 = y & mask24;
-    uint64_t y1 = (y >> 24) & mask24;
-
-    return (x0 * y0 + (((x0 * y1 + x1 * y0) & mask24) << 24)) & MASK48;
-#endif
-}
-
-/* Advance a generator of the program's own by one step. */
+/* Advance a generator of the program's own by one step. The
+ * multiplication may wrap around at 2^64; that does not change the result
+ * modulo 2^48. */
 static uint64_t lcg_step(uint64_t x)
 {
-    return (lcg_mul48(LCG_A, x) + LCG_B) & MASK48;
+    return (LCG_A * x + LCG_B) & MASK48;
 }
 
 /* Turn a seed into a generator state the way G_srand48() does: only the
@@ -409,16 +394,16 @@ static uint64_t lcg_jump(uint64_t x, uint64_t steps)
 
     while (steps) {
         if (steps & 1) {
-            c_total = (lcg_mul48(a, c_total) + c) & MASK48;
-            a_total = lcg_mul48(a, a_total);
+            c_total = (a * c_total + c) & MASK48;
+            a_total = (a * a_total) & MASK48;
         }
         /* Square the map, so a and c then describe twice as many steps. */
-        c = (lcg_mul48(a, c) + c) & MASK48;
-        a = lcg_mul48(a, a);
+        c = (a * c + c) & MASK48;
+        a = (a * a) & MASK48;
         steps >>= 1;
     }
 
-    return (lcg_mul48(a_total, x) + c_total) & MASK48;
+    return (a_total * x + c_total) & MASK48;
 }
 
 /* The generator tells seeds apart by their low 32 bits only. Seeds read
