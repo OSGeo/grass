@@ -318,15 +318,10 @@ The printed summary:
 The walkers are placed and moved using pseudo-random numbers. The seed
 is given by **random_seed**; without it, a seed is generated and
 recorded in the history of the output maps and in the run summary as
-`seed`, so that the run can be repeated. Each walker receives the same
-random numbers whatever the number of threads given by **nprocs**, so
-the results do not depend on **nprocs**, except where the water depth
-exceeds **hmax** or infiltration is used: there a walker reacts to the
-water or the infiltration capacity left by the walkers which reached
-the cell before it in the same time step, and that order depends on the
-threads. Such cells can differ slightly between thread counts and
-between repeated runs with more than one thread. Use **nprocs=1** when
-results must be reproducible to the last digit.
+`seed`, so that the run can be repeated. With more than one thread, the
+results differ slightly between thread counts and between repeated runs,
+since the order in which the walkers reach a cell depends on the
+threads. Use **nprocs=1** when results must be reproducible.
 
 ## EXAMPLE
 
