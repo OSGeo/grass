@@ -39,7 +39,7 @@ def depth(session, nprocs, rain=RAIN, **kwargs):
         man_value=0.05,
         nwalkers=400,
         duration=2,
-        random_seed=1,
+        seed=1,
         nprocs=nprocs,
         **kwargs,
     )

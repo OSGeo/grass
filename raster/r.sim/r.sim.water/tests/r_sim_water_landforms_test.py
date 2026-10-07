@@ -96,7 +96,7 @@ HOLLOW = surface(DOWNSLOPE, [1.8, 0.8, 0.2, 0.0, 0.2, 0.8, 1.8])
 SPUR = surface(DOWNSLOPE, [-1.8, -0.8, -0.2, 0.0, -0.2, -0.8, -1.8])
 
 
-def landform_depth(project, elevation, *, random_seed=SEED, **kwargs):
+def landform_depth(project, elevation, *, seed=SEED, **kwargs):
     """Simulate r.sim.water on an elevation array in a new project; return depth.
 
     The region is one cell per array element at unit resolution. Only the
@@ -110,7 +110,7 @@ def landform_depth(project, elevation, *, random_seed=SEED, **kwargs):
         return tools.r_sim_water(
             elevation=elevation,
             depth=np.array,
-            random_seed=random_seed,
+            seed=seed,
             rain_value=RAIN,
             infil_value=0,
             man_value=0.1,

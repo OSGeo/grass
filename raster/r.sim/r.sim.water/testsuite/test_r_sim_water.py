@@ -110,7 +110,7 @@ class TestRSimWater(TestCase):
             dy=self.dy,
             depth=self.depth,
             discharge=self.discharge,
-            random_seed=1,
+            seed=1,
         )
         self.assertRasterExists(self.depth)
         self.assertRasterExists(self.discharge)
@@ -133,7 +133,7 @@ class TestRSimWater(TestCase):
             elevation=self.elevation,
             depth=self.depth,
             discharge=self.discharge,
-            random_seed=1,
+            seed=1,
             nprocs=1,
         )
 
@@ -178,7 +178,7 @@ class TestRSimWater(TestCase):
             hmax=0.25,
             halpha=3.9,
             hbeta=0.6,
-            random_seed=1,
+            seed=1,
         )
         self.assertRasterExists(f"{self.depth}.05")
         self.assertRasterExists(f"{self.depth}.10")
@@ -206,7 +206,7 @@ class TestRSimWater(TestCase):
             infil=self.infil,
             depth=self.depth,
             duration=30,
-            random_seed=1,
+            seed=1,
         )
         self.assertRasterExists(self.depth)
         self.assertRastersEqual(
@@ -249,7 +249,7 @@ class TestRSimWaterLarge(TestCase):
             dx=self.dx,
             dy=self.dy,
             depth=self.depth,
-            random_seed=1,
+            seed=1,
         )
         self.assertRasterFitsUnivar(
             self.depth, reference="sum=30424.022289", precision=1e-6
