@@ -373,6 +373,7 @@ double G_drand48(void)
  * the same result as computing the full product modulo 2^48. */
 static uint64_t mul48(uint64_t a, uint64_t b)
 {
+    /* coverity[integer_overflow] */
     return (a * b) & MASK48;
 }
 
