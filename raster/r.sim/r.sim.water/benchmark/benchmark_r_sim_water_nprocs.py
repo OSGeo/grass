@@ -16,14 +16,12 @@ The plots and the results as JSON are written to the current directory.
 To redo the plots from saved results without running the benchmark, pass
 the JSON file as an argument.
 
-The plots show the mean of the repeated runs, shaded between the fastest
-and the slowest run. For speedup and efficiency, the shading spans the
-ratios of every serial run to every parallel run.
+The plots show the mean of the repeated runs with the range of the runs
+shaded (see grass.benchmark.nprocs_plot).
 
 @author Vaclav Petras
 """
 
-import statistics
 import sys
 from subprocess import DEVNULL
 
@@ -53,52 +51,16 @@ def main():
 
 def plot(results):
     """Plot time, speedup and efficiency with the range of the runs"""
-    import matplotlib as mpl  # pylint: disable=import-outside-toplevel
-
-    mpl.use("Agg")
-    import matplotlib.pyplot as plt  # pylint: disable=import-outside-toplevel
-
-    for metric, ylabel in [
-        ("time", "Time [s]"),
-        ("speedup", "Speedup"),
-        ("efficiency", "Efficiency"),
-    ]:
+    for metric in ["time", "speedup", "efficiency"]:
         # Twice the 600 pixels of the documentation, shown at half the size.
-        fig, ax = plt.subplots(figsize=(6, 4.5), dpi=200)
-        for result in results:
-            serial = result.all_times[0]
-            values, lows, highs = [], [], []
-            for nprocs, times in zip(result.nprocs, result.all_times, strict=True):
-                if metric == "time":
-                    value, low, high = statistics.mean(times), min(times), max(times)
-                elif nprocs == 1:
-                    # The speedup at one thread is 1 by definition.
-                    value = low = high = 1
-                else:
-                    value = statistics.mean(serial) / statistics.mean(times)
-                    low, high = min(serial) / max(times), max(serial) / min(times)
-                if metric == "efficiency":
-                    value, low, high = value / nprocs, low / nprocs, high / nprocs
-                values.append(value)
-                lows.append(low)
-                highs.append(high)
-            (line,) = ax.plot(result.nprocs, values, label=result.label)
-            ax.fill_between(
-                result.nprocs,
-                lows,
-                highs,
-                color=line.get_color(),
-                alpha=0.25,
-                linewidth=0,
-            )
-        ax.set_xticks(results[0].nprocs)
-        ax.set_xlabel("Number of threads (nprocs)")
-        ax.set_ylabel(ylabel)
-        ax.set_title(f"r.sim.water {metric}")
-        ax.legend()
-        fig.tight_layout()
-        fig.savefig(f"r_sim_water_benchmark_{metric}.png")
-        plt.close(fig)
+        bm.nprocs_plot(
+            results,
+            filename=f"r_sim_water_benchmark_{metric}.png",
+            title=f"r.sim.water {metric}",
+            metric=metric,
+            figsize=(6, 4.5),
+            dpi=200,
+        )
 
 
 def benchmark(resolution, results):
