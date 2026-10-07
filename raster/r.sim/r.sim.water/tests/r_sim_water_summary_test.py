@@ -17,7 +17,7 @@ SLOW_FLOW = {
     "elevation": ELEVATION,
     "man_value": 8,
     "diffusion_coeff": 0.05,
-    "random_seed": 1,
+    "seed": 1,
 }
 
 COMMON_KEYS = {
@@ -134,7 +134,7 @@ def test_json_summary_stopped_early(session_tools):
         elevation=ELEVATION,
         depth="depth",
         duration=1,
-        random_seed=1,
+        seed=1,
         flags="p",
         format="json",
     ).json

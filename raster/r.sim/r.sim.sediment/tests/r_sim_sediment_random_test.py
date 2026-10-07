@@ -65,15 +65,15 @@ def simulate(session, walkers=None, env=None, **kwargs):
 
 def test_same_seed_gives_same_flux(session):
     """Two runs with the same seed give the same sediment flux."""
-    first, _ = simulate(session, random_seed=1)
-    second, _ = simulate(session, random_seed=1)
+    first, _ = simulate(session, seed=1)
+    second, _ = simulate(session, seed=1)
     assert np.array_equal(first, second)
 
 
 def test_different_seeds_give_different_results(session):
     """Runs with different seeds give different fluxes and walker positions."""
-    first_flux, first_walkers = simulate(session, "walkers_seed_1", random_seed=1)
-    second_flux, second_walkers = simulate(session, "walkers_seed_2", random_seed=2)
+    first_flux, first_walkers = simulate(session, "walkers_seed_1", seed=1)
+    second_flux, second_walkers = simulate(session, "walkers_seed_2", seed=2)
     assert not np.array_equal(first_flux, second_flux)
     assert not np.array_equal(first_walkers, second_walkers)
 
@@ -83,7 +83,7 @@ def test_generated_seed_is_the_seed_option(session):
     env = session.env.copy()
     env["GRASS_RANDOM_SEED"] = "3"
     generated, _ = simulate(session, env=env)
-    given, _ = simulate(session, random_seed=3)
+    given, _ = simulate(session, seed=3)
     assert np.array_equal(generated, given)
 
 
@@ -94,9 +94,9 @@ def test_results_do_not_depend_on_nprocs(session, nprocs):
     The water depth is an input here, so nothing a walker reacts to is
     changed by the other walkers of the same step.
     """
-    serial_flux, serial = simulate(session, f"walkers_{nprocs}_serial", random_seed=5)
+    serial_flux, serial = simulate(session, f"walkers_{nprocs}_serial", seed=5)
     parallel_flux, parallel = simulate(
-        session, f"walkers_{nprocs}_parallel", random_seed=5, nprocs=nprocs
+        session, f"walkers_{nprocs}_parallel", seed=5, nprocs=nprocs
     )
     assert serial.size
     assert np.array_equal(parallel, serial)
@@ -107,11 +107,11 @@ def test_results_do_not_depend_on_nprocs(session, nprocs):
 def test_seed_outside_range_is_an_error(session, seed):
     """A seed the generator cannot use is refused, not silently wrapped."""
     with pytest.raises(CalledModuleError, match="outside the range"):
-        simulate(session, random_seed=seed)
+        simulate(session, seed=seed)
 
 
 @pytest.mark.parametrize("seed", ["12abc", "1.5", "-", "99999999999999999999"])
 def test_seed_which_is_not_an_integer_is_an_error(session, seed):
     """A seed which the parser lets through but which is not an integer is refused."""
     with pytest.raises(CalledModuleError, match="Invalid random seed"):
-        simulate(session, random_seed=seed)
+        simulate(session, seed=seed)

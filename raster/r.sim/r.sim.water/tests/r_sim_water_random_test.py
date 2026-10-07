@@ -64,15 +64,15 @@ def simulate_walkers(session, name, **kwargs):
 
 def test_same_seed_gives_same_depth(session):
     """Two runs with the same seed give the same water depth."""
-    first = simulate_depth(session, random_seed=1)
-    second = simulate_depth(session, random_seed=1)
+    first = simulate_depth(session, seed=1)
+    second = simulate_depth(session, seed=1)
     assert np.array_equal(first, second)
 
 
 def test_different_seeds_give_different_depth(session):
     """Runs with different seeds give different water depths."""
-    first = simulate_depth(session, random_seed=1)
-    second = simulate_depth(session, random_seed=2)
+    first = simulate_depth(session, seed=1)
+    second = simulate_depth(session, seed=2)
     assert not np.array_equal(first, second)
 
 
@@ -83,8 +83,21 @@ def test_generated_seed_is_the_seed_option(session):
     generated = Tools(env=env).r_sim_water(
         elevation="elevation", depth=np.array, duration=5
     )
-    given = simulate_depth(session, random_seed=3)
+    given = simulate_depth(session, seed=3)
     assert np.array_equal(generated, given)
+
+
+def test_old_option_name_is_renamed(session):
+    """The old name random_seed is accepted with a warning and means seed."""
+    tools = Tools(session=session, consistent_return_value=True)
+    result = tools.r_sim_water(
+        elevation="elevation", depth=np.array, duration=5, random_seed=3
+    )
+    # The message is wrapped, so the words may be on separate lines.
+    assert re.search(
+        r"<random_seed>\s+has\s+been\s+renamed\s+to\s+<seed>", result.stderr
+    )
+    assert np.array_equal(result.arrays.depth, simulate_depth(session, seed=3))
 
 
 def test_generated_seed_is_recorded(session):
@@ -93,7 +106,7 @@ def test_generated_seed_is_recorded(session):
     tools.r_sim_water(elevation="elevation", depth="generated", duration=5)
     history = tools.r_info(map="generated", flags="h").text
     seed = int(re.search(r"\bseed=(-?\d+)", history).group(1))
-    repeated = simulate_depth(session, random_seed=seed)
+    repeated = simulate_depth(session, seed=seed)
     generated = garray.array("generated", env=session.env)
     assert np.array_equal(repeated, generated)
 
@@ -105,14 +118,14 @@ def test_deprecated_flag_generates_a_seed(session):
     generated = Tools(env=env).r_sim_water(
         elevation="elevation", depth=np.array, duration=5, flags="s"
     )
-    given = simulate_depth(session, random_seed=3)
+    given = simulate_depth(session, seed=3)
     assert np.array_equal(generated, given)
 
 
 def test_seed_and_flag_are_exclusive(session):
     """The seed option and the flag to generate a seed cannot be combined."""
     with pytest.raises(CalledModuleError, match="mutually exclusive"):
-        simulate_depth(session, random_seed=1, flags="s")
+        simulate_depth(session, seed=1, flags="s")
 
 
 @pytest.mark.parametrize("nprocs", [2, 4])
@@ -122,10 +135,8 @@ def test_depth_does_not_depend_on_nprocs_below_hmax(session, nprocs):
     Above hmax a walker reacts to the depth the walkers before it in the
     same step left, and that order depends on the threads.
     """
-    serial = simulate_depth(session, random_seed=5, **NO_DEPTH_FEEDBACK)
-    parallel = simulate_depth(
-        session, random_seed=5, nprocs=nprocs, **NO_DEPTH_FEEDBACK
-    )
+    serial = simulate_depth(session, seed=5, **NO_DEPTH_FEEDBACK)
+    parallel = simulate_depth(session, seed=5, nprocs=nprocs, **NO_DEPTH_FEEDBACK)
     assert np.array_equal(parallel, serial)
 
 
@@ -133,12 +144,12 @@ def test_depth_does_not_depend_on_nprocs_below_hmax(session, nprocs):
 def test_walkers_do_not_depend_on_nprocs(session, nprocs):
     """Walkers end at the same positions with any number of threads."""
     serial = simulate_walkers(
-        session, f"walkers_{nprocs}_serial", random_seed=5, **NO_DEPTH_FEEDBACK
+        session, f"walkers_{nprocs}_serial", seed=5, **NO_DEPTH_FEEDBACK
     )
     parallel = simulate_walkers(
         session,
         f"walkers_{nprocs}_parallel",
-        random_seed=5,
+        seed=5,
         nprocs=nprocs,
         **NO_DEPTH_FEEDBACK,
     )
@@ -148,12 +159,8 @@ def test_walkers_do_not_depend_on_nprocs(session, nprocs):
 
 def test_walkers_depend_on_seed(session):
     """The walker comparison above can detect a difference."""
-    first = simulate_walkers(
-        session, "walkers_seed_5", random_seed=5, **NO_DEPTH_FEEDBACK
-    )
-    second = simulate_walkers(
-        session, "walkers_seed_6", random_seed=6, **NO_DEPTH_FEEDBACK
-    )
+    first = simulate_walkers(session, "walkers_seed_5", seed=5, **NO_DEPTH_FEEDBACK)
+    second = simulate_walkers(session, "walkers_seed_6", seed=6, **NO_DEPTH_FEEDBACK)
     assert not np.array_equal(first, second)
 
 
@@ -161,11 +168,11 @@ def test_walkers_depend_on_seed(session):
 def test_seed_outside_range_is_an_error(session, seed):
     """A seed the generator cannot use is refused, not silently wrapped."""
     with pytest.raises(CalledModuleError, match="outside the range"):
-        simulate_depth(session, random_seed=seed)
+        simulate_depth(session, seed=seed)
 
 
 @pytest.mark.parametrize("seed", ["12abc", "1.5", "-", "99999999999999999999"])
 def test_seed_which_is_not_an_integer_is_an_error(session, seed):
     """A seed which the parser lets through but which is not an integer is refused."""
     with pytest.raises(CalledModuleError, match="Invalid random seed"):
-        simulate_depth(session, random_seed=seed)
+        simulate_depth(session, seed=seed)

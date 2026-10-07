@@ -315,7 +315,6 @@ int main(int argc, char *argv[])
     flag.tserie->guisection = _("Output");
 
     parm.seed = G_define_standard_option(G_OPT_M_SEED);
-    parm.seed->key = "random_seed";
 
     flag.generateSeed = G_define_flag();
     flag.generateSeed->key = 's';
@@ -323,7 +322,7 @@ int main(int argc, char *argv[])
         _("Generate random seed (result is non-deterministic) [deprecated]");
     flag.generateSeed->description =
         _("This flag is deprecated and will be removed in a future release. "
-          "Seeding is automatic or use parameter random_seed.");
+          "Seeding is automatic or use parameter seed.");
 
     parm.threads = G_define_option();
     parm.threads->key = "nprocs";
