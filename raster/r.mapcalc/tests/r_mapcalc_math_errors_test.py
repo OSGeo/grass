@@ -30,6 +30,10 @@ def cell_values(tools, name):
         "exp(-8, 0.5)",
         "pow(-8.0, 0.5)",
         "pow(float(-8), float(0.5))",
+        # The exp() overflow gives infinite input.
+        "sin(exp(1000))",
+        "cos(-exp(1000))",
+        "tan(exp(1000))",
     ],
 )
 def test_null_result(session_in_mapset, expression, nprocs):
