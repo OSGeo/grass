@@ -13,6 +13,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
+#include <limits.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -100,7 +101,10 @@ static void make_rule(int type, void *first, va_list ap)
         vector_append(&opts, &opt);
     }
 
-    G_option_rule(type, opts.count, (void **)opts.data);
+    if (opts.count > INT_MAX)
+        G_fatal_error(_("Too many options in rule"));
+
+    G_option_rule(type, (int)opts.count, (void **)opts.data);
 }
 
 static int is_flag(const void *p)

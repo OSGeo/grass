@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="262" viewBox="0 0 640 262" font-family="sans-serif" font-size="13" fill="#222">
+  <title>The first value of 64 consecutive seeds, which lie on lines, and of 64 batches of one layout, which scatter</title>
+  <!-- Consecutive seeds: the value of seed k is that of seed 0 plus k times
+       one amount, modulo 1, so the values lie on straight lines. -->
+  <text x="60.0" y="20.0">64 computations seeded 0, 1, 2, ... 63:</text>
+  <text x="60.0" y="36.0">the first value of each</text>
+  <rect x="60" y="46" width="250" height="170" fill="none" stroke="#bbb" stroke-width="1.5"/>
+  <circle cx="68.0" cy="183.0" r="3" fill="#f0aaaa"/>
+  <circle cx="71.7" cy="203.4" r="3" fill="#eea7a7"/>
+  <circle cx="75.4" cy="65.8" r="3" fill="#eca5a5"/>
+  <circle cx="79.1" cy="86.2" r="3" fill="#eaa2a2"/>
+  <circle cx="82.9" cy="106.7" r="3" fill="#e8a0a0"/>
+  <circle cx="86.6" cy="127.1" r="3" fill="#e69d9d"/>
+  <circle cx="90.3" cy="147.5" r="3" fill="#e49b9b"/>
+  <circle cx="94.0" cy="167.9" r="3" fill="#e29898"/>
+  <circle cx="97.7" cy="188.3" r="3" fill="#e09595"/>
+  <circle cx="101.4" cy="208.7" r="3" fill="#de9393"/>
+  <circle cx="105.1" cy="71.1" r="3" fill="#dc9090"/>
+  <circle cx="108.9" cy="91.6" r="3" fill="#da8e8e"/>
+  <circle cx="112.6" cy="112.0" r="3" fill="#d88b8b"/>
+  <circle cx="116.3" cy="132.4" r="3" fill="#d68989"/>
+  <circle cx="120.0" cy="152.8" r="3" fill="#d48686"/>
+  <circle cx="123.7" cy="173.2" r="3" fill="#d28383"/>
+  <circle cx="127.4" cy="193.6" r="3" fill="#cf8181"/>
+  <circle cx="131.1" cy="56.0" r="3" fill="#cd7e7e"/>
+  <circle cx="134.9" cy="76.4" r="3" fill="#cb7c7c"/>
+  <circle cx="138.6" cy="96.9" r="3" fill="#c97979"/>
+  <circle cx="142.3" cy="117.3" r="3" fill="#c77777"/>
+  <circle cx="146.0" cy="137.7" r="3" fill="#c57474"/>
+  <circle cx="149.7" cy="158.1" r="3" fill="#c37171"/>
+  <circle cx="153.4" cy="178.5" r="3" fill="#c16f6f"/>
+  <circle cx="157.1" cy="198.9" r="3" fill="#bf6c6c"/>
+  <circle cx="160.9" cy="61.3" r="3" fill="#bd6a6a"/>
+  <circle cx="164.6" cy="81.8" r="3" fill="#bb6767"/>
+  <circle cx="168.3" cy="102.2" r="3" fill="#b96565"/>
+  <circle cx="172.0" cy="122.6" r="3" fill="#b76262"/>
+  <circle cx="175.7" cy="143.0" r="3" fill="#b55f5f"/>
+  <circle cx="179.4" cy="163.4" r="3" fill="#b35d5d"/>
+  <circle cx="183.1" cy="183.8" r="3" fill="#b15a5a"/>
+  <circle cx="186.9" cy="204.2" r="3" fill="#af5858"/>
+  <circle cx="190.6" cy="66.6" r="3" fill="#ad5555"/>
+  <circle cx="194.3" cy="87.1" r="3" fill="#ab5353"/>
+  <circle cx="198.0" cy="107.5" r="3" fill="#a95050"/>
+  <circle cx="201.7" cy="127.9" r="3" fill="#a74d4d"/>
+  <circle cx="205.4" cy="148.3" r="3" fill="#a54b4b"/>
+  <circle cx="209.1" cy="168.7" r="3" fill="#a34848"/>
+  <circle cx="212.9" cy="189.1" r="3" fill="#a14646"/>
+  <circle cx="216.6" cy="209.5" r="3" fill="#9f4343"/>
+  <circle cx="220.3" cy="72.0" r="3" fill="#9d4141"/>
+  <circle cx="224.0" cy="92.4" r="3" fill="#9b3e3e"/>
+  <circle cx="227.7" cy="112.8" r="3" fill="#993b3b"/>
+  <circle cx="231.4" cy="133.2" r="3" fill="#973939"/>
+  <circle cx="235.1" cy="153.6" r="3" fill="#953636"/>
+  <circle cx="238.9" cy="174.0" r="3" fill="#933434"/>
+  <circle cx="242.6" cy="194.4" r="3" fill="#913131"/>
+  <circle cx="246.3" cy="56.8" r="3" fill="#8e2f2f"/>
+  <circle cx="250.0" cy="77.3" r="3" fill="#8c2c2c"/>
+  <circle cx="253.7" cy="97.7" r="3" fill="#8a2929"/>
+  <circle cx="257.4" cy="118.1" r="3" fill="#882727"/>
+  <circle cx="261.1" cy="138.5" r="3" fill="#862424"/>
+  <circle cx="264.9" cy="158.9" r="3" fill="#842222"/>
+  <circle cx="268.6" cy="179.3" r="3" fill="#821f1f"/>
+  <circle cx="272.3" cy="199.7" r="3" fill="#801d1d"/>
+  <circle cx="276.0" cy="62.2" r="3" fill="#7e1a1a"/>
+  <circle cx="279.7" cy="82.6" r="3" fill="#7c1717"/>
+  <circle cx="283.4" cy="103.0" r="3" fill="#7a1515"/>
+  <circle cx="287.1" cy="123.4" r="3" fill="#781212"/>
+  <circle cx="290.9" cy="143.8" r="3" fill="#761010"/>
+  <circle cx="294.6" cy="164.2" r="3" fill="#740d0d"/>
+  <circle cx="298.3" cy="184.6" r="3" fill="#720b0b"/>
+  <circle cx="302.0" cy="205.0" r="3" fill="#700808"/>
+  <text x="68.0" y="231.0" text-anchor="middle" fill="#666" font-size="11">0</text>
+  <text x="302.0" y="231.0" text-anchor="middle" fill="#666" font-size="11">63</text>
+  <text x="185.0" y="232.0" text-anchor="middle">seed</text>
+  <text x="54.0" y="214.0" text-anchor="end" fill="#666" font-size="11">0</text>
+  <text x="54.0" y="56.0" text-anchor="end" fill="#666" font-size="11">1</text>
+  <text x="48.0" y="131.0" text-anchor="middle" transform="rotate(-90 48.0 131.0)">value</text>
+  <!-- Batches of one layout: unit 0 of batches 0 to 63 of an exact layout of
+       seed 0 with a million units of a million draws each. -->
+  <text x="360.0" y="20.0">64 batches of one layout of seed 0:</text>
+  <text x="360.0" y="36.0">the first value of each</text>
+  <rect x="360" y="46" width="250" height="170" fill="none" stroke="#bbb" stroke-width="1.5"/>
+  <circle cx="368.0" cy="183.0" r="3" fill="#aac6f0"/>
+  <circle cx="371.7" cy="122.5" r="3" fill="#a7c3ee"/>
+  <circle cx="375.4" cy="126.2" r="3" fill="#a5c1ec"/>
+  <circle cx="379.1" cy="191.8" r="3" fill="#a2beea"/>
+  <circle cx="382.9" cy="202.8" r="3" fill="#a0bce8"/>
+  <circle cx="386.6" cy="68.6" r="3" fill="#9db9e6"/>
+  <circle cx="390.3" cy="173.9" r="3" fill="#9bb7e4"/>
+  <circle cx="394.0" cy="153.4" r="3" fill="#98b4e2"/>
+  <circle cx="397.7" cy="86.6" r="3" fill="#96b2df"/>
+  <circle cx="401.4" cy="197.3" r="3" fill="#93afdd"/>
+  <circle cx="405.1" cy="153.2" r="3" fill="#91addb"/>
+  <circle cx="408.9" cy="192.2" r="3" fill="#8eaad9"/>
+  <circle cx="412.6" cy="105.8" r="3" fill="#8ca8d7"/>
+  <circle cx="416.3" cy="94.3" r="3" fill="#89a5d5"/>
+  <circle cx="420.0" cy="59.1" r="3" fill="#86a3d3"/>
+  <circle cx="423.7" cy="204.4" r="3" fill="#84a0d1"/>
+  <circle cx="427.4" cy="117.1" r="3" fill="#819ecf"/>
+  <circle cx="431.1" cy="180.6" r="3" fill="#7f9bcd"/>
+  <circle cx="434.9" cy="89.2" r="3" fill="#7c99cb"/>
+  <circle cx="438.6" cy="87.4" r="3" fill="#7a96c9"/>
+  <circle cx="442.3" cy="175.9" r="3" fill="#7794c7"/>
+  <circle cx="446.0" cy="65.4" r="3" fill="#7591c5"/>
+  <circle cx="449.7" cy="113.1" r="3" fill="#728fc3"/>
+  <circle cx="453.4" cy="96.1" r="3" fill="#708cc1"/>
+  <circle cx="457.1" cy="61.6" r="3" fill="#6d8abe"/>
+  <circle cx="460.9" cy="148.1" r="3" fill="#6b87bc"/>
+  <circle cx="464.6" cy="203.6" r="3" fill="#6885ba"/>
+  <circle cx="468.3" cy="65.7" r="3" fill="#6582b8"/>
+  <circle cx="472.0" cy="113.4" r="3" fill="#6380b6"/>
+  <circle cx="475.7" cy="162.7" r="3" fill="#607db4"/>
+  <circle cx="479.4" cy="97.5" r="3" fill="#5e7bb2"/>
+  <circle cx="483.1" cy="67.5" r="3" fill="#5b78b0"/>
+  <circle cx="486.9" cy="121.6" r="3" fill="#5976ae"/>
+  <circle cx="490.6" cy="124.8" r="3" fill="#5673ac"/>
+  <circle cx="494.3" cy="78.9" r="3" fill="#5471aa"/>
+  <circle cx="498.0" cy="69.4" r="3" fill="#516ea8"/>
+  <circle cx="501.7" cy="109.5" r="3" fill="#4f6ca6"/>
+  <circle cx="505.4" cy="106.9" r="3" fill="#4c69a4"/>
+  <circle cx="509.1" cy="121.4" r="3" fill="#4967a2"/>
+  <circle cx="512.9" cy="85.0" r="3" fill="#4764a0"/>
+  <circle cx="516.6" cy="191.8" r="3" fill="#44629d"/>
+  <circle cx="520.3" cy="69.6" r="3" fill="#425f9b"/>
+  <circle cx="524.0" cy="101.8" r="3" fill="#3f5d99"/>
+  <circle cx="527.7" cy="120.3" r="3" fill="#3d5a97"/>
+  <circle cx="531.4" cy="150.3" r="3" fill="#3a5895"/>
+  <circle cx="535.1" cy="90.0" r="3" fill="#385593"/>
+  <circle cx="538.9" cy="134.2" r="3" fill="#355391"/>
+  <circle cx="542.6" cy="201.6" r="3" fill="#33508f"/>
+  <circle cx="546.3" cy="130.5" r="3" fill="#304e8d"/>
+  <circle cx="550.0" cy="133.9" r="3" fill="#2e4b8b"/>
+  <circle cx="553.7" cy="162.0" r="3" fill="#2b4989"/>
+  <circle cx="557.4" cy="103.9" r="3" fill="#284687"/>
+  <circle cx="561.1" cy="195.2" r="3" fill="#264485"/>
+  <circle cx="564.9" cy="105.4" r="3" fill="#234183"/>
+  <circle cx="568.6" cy="87.4" r="3" fill="#213f81"/>
+  <circle cx="572.3" cy="97.8" r="3" fill="#1e3c7f"/>
+  <circle cx="576.0" cy="159.8" r="3" fill="#1c3a7c"/>
+  <circle cx="579.7" cy="190.1" r="3" fill="#19377a"/>
+  <circle cx="583.4" cy="116.4" r="3" fill="#173578"/>
+  <circle cx="587.1" cy="68.0" r="3" fill="#143276"/>
+  <circle cx="590.9" cy="185.8" r="3" fill="#123074"/>
+  <circle cx="594.6" cy="185.2" r="3" fill="#0f2d72"/>
+  <circle cx="598.3" cy="160.2" r="3" fill="#0d2b70"/>
+  <circle cx="602.0" cy="108.4" r="3" fill="#0a286e"/>
+  <text x="368.0" y="231.0" text-anchor="middle" fill="#666" font-size="11">0</text>
+  <text x="602.0" y="231.0" text-anchor="middle" fill="#666" font-size="11">63</text>
+  <text x="485.0" y="232.0" text-anchor="middle">batch</text>
+  <text x="354.0" y="214.0" text-anchor="end" fill="#666" font-size="11">0</text>
+  <text x="354.0" y="56.0" text-anchor="end" fill="#666" font-size="11">1</text>
+  <text x="348.0" y="131.0" text-anchor="middle" transform="rotate(-90 348.0 131.0)">value</text>
+  <text x="320.0" y="254.0" text-anchor="middle">red: related values; blue: what the library makes; each dot is darker with its number</text>
+</svg>

@@ -41,7 +41,7 @@ jobs:
         with:
           python-version: "3.14"
       - name: Install uv and restore its cache
-        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
           # To not have the last commit JSON and release notes files affected on
           # releases, if copying the contents displayed in the CI logs.
@@ -98,7 +98,6 @@ jobs:
           prek run --all-files --show-diff-on-failure --color=always --hook-stage=manual \
             --skip ruff-check --skip ruff-format \
             --skip actionlint \
-            --skip editorconfig-checker \
             --skip flake8 \
             --skip yamllint | \
             tee >(sed -E 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})*)?[mGK]//g' >> "$GITHUB_STEP_SUMMARY") >&1

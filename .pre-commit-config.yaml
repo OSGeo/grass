@@ -65,7 +65,7 @@ repos:
     hooks:
       - id: markdownlint-fix
   - repo: https://github.com/BlankSpruce/gersemi-pre-commit
-    rev: 0.27.7
+    rev: 0.29.2
     hooks:
       - id: gersemi
         args:
@@ -115,9 +115,24 @@ repos:
           # https://github.com/zizmorcore/zizmor-pre-commit/blob/120fe9ac3c965ab7decf67e8b9ca24b274230eed/.pre-commit-hooks.yaml#L10
           - "--no-progress"
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
-    rev: v3.11.3
+    rev: v4.0.2
     hooks:
       - id: editorconfig-checker
+        args: [--fix]
+  - repo: local
+    hooks:
+      - id: forbid-hidden-unicode
+        name: forbid hidden Unicode characters
+        description: >-
+          Reject invisible characters (soft hyphen, zero-width characters,
+          bidirectional controls, byte order mark), which editorconfig-checker
+          does not detect and which Renovate warns about. Translation files
+          are excluded because they legitimately contain some of them.
+        language: pygrep
+        entry: >-
+          \xc2\xad|\xe2\x80[\x8b-\x8f\xaa-\xae]|\xe2\x81[\xa0-\xa4\xa6-\xa9]|\xef\xbb\xbf
+        types: [text]
+        exclude: ^locale/po/
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.2
     hooks:

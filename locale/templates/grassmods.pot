@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-26 18:44+0000\n"
+"POT-Creation-Date: 2026-10-03 18:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,7 +90,7 @@ msgstr ""
 #: ../general/g.mapset/main.c:34 ../general/g.mapsets/list.c:34
 #: ../misc/m.measure/main.c:179 ../raster/r.distance/report.c:135
 #: ../raster/r.regression.line/main.c:266
-#: ../raster/r.regression.multi/main.c:693
+#: ../raster/r.regression.multi/main.c:693 ../raster/r.sim/simlib/summary.c:135
 #: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:445
 #: ../raster3d/r3.info/main.c:990 ../temporal/t.connect/main.c:214
 #: ../vector/v.class/main.c:386 ../vector/v.db.connect/main.c:427
@@ -152,8 +152,12 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:139 ../raster/r.profile/main.c:116
 #: ../raster/r.proj/main.c:203 ../raster/r.proj/main.c:214
 #: ../raster/r.proj/main.c:226 ../raster/r.proj/main.c:235
-#: ../raster/r.stats/main.c:157 ../raster/r.sunmask/main.c:230
-#: ../raster/r.sunmask/main.c:236 ../raster/r.univar/r.univar_main.c:124
+#: ../raster/r.sim/r.sim.sediment/main.c:310
+#: ../raster/r.sim/r.sim.sediment/main.c:313
+#: ../raster/r.sim/r.sim.water/main.c:345
+#: ../raster/r.sim/r.sim.water/main.c:348 ../raster/r.stats/main.c:157
+#: ../raster/r.sunmask/main.c:230 ../raster/r.sunmask/main.c:236
+#: ../raster/r.univar/r.univar_main.c:124
 #: ../raster/r.univar/r3.univar_main.c:86 ../raster/r.what/main.c:131
 #: ../raster/r.what/main.c:139 ../raster/r.what/main.c:142
 #: ../raster/r.what/main.c:156 ../raster/r.what/main.c:161
@@ -342,7 +346,7 @@ msgstr ""
 #: ../raster/r.info/main.c:144 ../raster/r.kappa/print_json.c:25
 #: ../raster/r.proj/main.c:478 ../raster/r.regression.line/main.c:98
 #: ../raster/r.regression.multi/main.c:194
-#: ../raster/r.regression.multi/main.c:563
+#: ../raster/r.regression.multi/main.c:563 ../raster/r.sim/simlib/summary.c:73
 #: ../raster/r.stats.quantile/main.c:430 ../raster/r.stats.quantile/main.c:447
 #: ../raster/r.univar/stats.c:101 ../raster/r.univar/stats.c:145
 #: ../raster/r.univar/stats.c:436 ../raster/r.volume/main.c:406
@@ -1934,8 +1938,8 @@ msgstr ""
 #: ../raster/r.resample/main.c:50 ../raster/r.rescale.eq/main.c:50
 #: ../raster/r.rescale/main.c:45 ../raster/r.ros/main.c:204
 #: ../raster/r.series.accumulate/main.c:73 ../raster/r.series.interp/main.c:69
-#: ../raster/r.series/main.c:150 ../raster/r.sim/r.sim.sediment/main.c:109
-#: ../raster/r.sim/r.sim.water/main.c:109 ../raster/r.slope.aspect/main.c:163
+#: ../raster/r.series/main.c:150 ../raster/r.sim/r.sim.sediment/main.c:110
+#: ../raster/r.sim/r.sim.water/main.c:110 ../raster/r.slope.aspect/main.c:163
 #: ../raster/r.smooth.edgepreserve/main.c:44
 #: ../raster/r.solute.transport/main.c:226 ../raster/r.spread/main.c:99
 #: ../raster/r.spreadpath/main.c:74 ../raster/r.statistics/main.c:50
@@ -2305,24 +2309,23 @@ msgstr ""
 #: ../raster/r.carve/vect.c:27 ../raster/r.contour/main.c:152
 #: ../raster/r.drain/main.c:201 ../raster/r.flow/flow_io.c:181
 #: ../raster/r.path/main.c:258 ../raster/r.random/random.c:58
-#: ../raster/r.resamp.bspline/main.c:481 ../raster/r.sim/simlib/output.c:54
-#: ../raster/r.sim/simlib/output.c:61 ../raster/r.stream.extract/close.c:38
-#: ../raster/r.to.vect/main.c:167 ../raster/r.volume/main.c:229
-#: ../raster3d/r3.flow/main.c:380 ../scripts/v.what.strds/v.what.strds.py:226
-#: ../vector/v.buffer/main.c:398 ../vector/v.build.polylines/main.c:154
-#: ../vector/v.build/main.c:153 ../vector/v.clean/main.c:292
-#: ../vector/v.clean/main.c:299 ../vector/v.cluster/main.c:196
-#: ../vector/v.decimate/main.c:385 ../vector/v.delaunay/main.c:123
-#: ../vector/v.distance/main.c:442 ../vector/v.drape/main.c:153
-#: ../vector/v.edit/main.c:104 ../vector/v.edit/main.c:121
-#: ../vector/v.external/main.c:164 ../vector/v.extract/main.c:406
-#: ../vector/v.extrude/main.c:191 ../vector/v.fill.holes/main.c:86
-#: ../vector/v.generalize/main.c:332 ../vector/v.hull/main.c:119
-#: ../vector/v.in.ascii/main.c:249 ../vector/v.in.db/main.c:154
-#: ../vector/v.in.dxf/main.c:140 ../vector/v.in.lidar/main.c:562
-#: ../vector/v.in.ogr/main.c:867 ../vector/v.in.pdal/main.cpp:438
-#: ../vector/v.in.region/main.c:71 ../vector/v.kernel/main.c:342
-#: ../vector/v.lidar.correction/main.c:214
+#: ../raster/r.resamp.bspline/main.c:481 ../raster/r.sim/simlib/output.c:51
+#: ../raster/r.stream.extract/close.c:38 ../raster/r.to.vect/main.c:167
+#: ../raster/r.volume/main.c:229 ../raster3d/r3.flow/main.c:380
+#: ../scripts/v.what.strds/v.what.strds.py:226 ../vector/v.buffer/main.c:398
+#: ../vector/v.build.polylines/main.c:154 ../vector/v.build/main.c:153
+#: ../vector/v.clean/main.c:292 ../vector/v.clean/main.c:299
+#: ../vector/v.cluster/main.c:196 ../vector/v.decimate/main.c:385
+#: ../vector/v.delaunay/main.c:123 ../vector/v.distance/main.c:442
+#: ../vector/v.drape/main.c:153 ../vector/v.edit/main.c:104
+#: ../vector/v.edit/main.c:121 ../vector/v.external/main.c:164
+#: ../vector/v.extract/main.c:406 ../vector/v.extrude/main.c:191
+#: ../vector/v.fill.holes/main.c:86 ../vector/v.generalize/main.c:332
+#: ../vector/v.hull/main.c:119 ../vector/v.in.ascii/main.c:249
+#: ../vector/v.in.db/main.c:154 ../vector/v.in.dxf/main.c:140
+#: ../vector/v.in.lidar/main.c:562 ../vector/v.in.ogr/main.c:867
+#: ../vector/v.in.pdal/main.cpp:471 ../vector/v.in.region/main.c:71
+#: ../vector/v.kernel/main.c:342 ../vector/v.lidar.correction/main.c:214
 #: ../vector/v.lidar.correction/main.c:220
 #: ../vector/v.lidar.edgedetection/main.c:253
 #: ../vector/v.lrs/v.lrs.create/main.c:268
@@ -3160,21 +3163,21 @@ msgstr ""
 #: ../raster/r.in.xyz/main.c:224 ../raster/r.in.xyz/main.c:235
 #: ../raster/r.in.xyz/main.c:245 ../raster/r.random/main.c:62
 #: ../raster/r.random/main.c:68 ../raster/r.random/main.c:92
-#: ../raster/r.random/main.c:98 ../raster/r.sim/r.sim.sediment/main.c:132
-#: ../raster/r.sim/r.sim.sediment/main.c:139
-#: ../raster/r.sim/r.sim.sediment/main.c:160
-#: ../raster/r.sim/r.sim.sediment/main.c:168
-#: ../raster/r.sim/r.sim.sediment/main.c:174
-#: ../raster/r.sim/r.sim.water/main.c:126
-#: ../raster/r.sim/r.sim.water/main.c:133
-#: ../raster/r.sim/r.sim.water/main.c:140
-#: ../raster/r.sim/r.sim.water/main.c:148
-#: ../raster/r.sim/r.sim.water/main.c:155
-#: ../raster/r.sim/r.sim.water/main.c:164
-#: ../raster/r.sim/r.sim.water/main.c:170
-#: ../raster/r.sim/r.sim.water/main.c:178
-#: ../raster/r.sim/r.sim.water/main.c:185
-#: ../raster/r.sim/r.sim.water/main.c:191 ../raster/r.spread/main.c:118
+#: ../raster/r.random/main.c:98 ../raster/r.sim/r.sim.sediment/main.c:133
+#: ../raster/r.sim/r.sim.sediment/main.c:140
+#: ../raster/r.sim/r.sim.sediment/main.c:161
+#: ../raster/r.sim/r.sim.sediment/main.c:169
+#: ../raster/r.sim/r.sim.sediment/main.c:175
+#: ../raster/r.sim/r.sim.water/main.c:127
+#: ../raster/r.sim/r.sim.water/main.c:134
+#: ../raster/r.sim/r.sim.water/main.c:141
+#: ../raster/r.sim/r.sim.water/main.c:149
+#: ../raster/r.sim/r.sim.water/main.c:156
+#: ../raster/r.sim/r.sim.water/main.c:165
+#: ../raster/r.sim/r.sim.water/main.c:171
+#: ../raster/r.sim/r.sim.water/main.c:179
+#: ../raster/r.sim/r.sim.water/main.c:186
+#: ../raster/r.sim/r.sim.water/main.c:192 ../raster/r.spread/main.c:118
 #: ../raster/r.spread/main.c:133 ../raster/r.spread/main.c:144
 #: ../raster/r.spread/main.c:159 ../raster/r.spread/main.c:172
 #: ../raster/r.spread/main.c:184 ../raster/r.spread/main.c:197
@@ -4211,7 +4214,7 @@ msgstr ""
 #: ../vector/v.in.ogr/main.c:343 ../vector/v.in.ogr/main.c:390
 #: ../vector/v.in.pdal/main.cpp:181 ../vector/v.in.pdal/main.cpp:189
 #: ../vector/v.in.pdal/main.cpp:198 ../vector/v.in.pdal/main.cpp:208
-#: ../vector/v.in.pdal/main.cpp:252 ../vector/v.net.allpairs/main.c:71
+#: ../vector/v.in.pdal/main.cpp:251 ../vector/v.net.allpairs/main.c:71
 #: ../vector/v.net.allpairs/main.c:77 ../vector/v.net.allpairs/main.c:80
 #: ../vector/v.net.allpairs/main.c:83 ../vector/v.net.centrality/main.c:117
 #: ../vector/v.net.centrality/main.c:119 ../vector/v.out.ascii/args.c:24
@@ -5343,12 +5346,9 @@ msgstr ""
 #: ../raster/r.ros/main.c:379 ../raster/r.ros/main.c:384
 #: ../raster/r.ros/main.c:398 ../raster/r.ros/main.c:402
 #: ../raster/r.ros/main.c:417 ../raster/r.ros/main.c:421
-#: ../raster/r.ros/main.c:431 ../raster/r.sim/simlib/output.c:391
-#: ../raster/r.sim/simlib/output.c:400 ../raster/r.sim/simlib/output.c:428
-#: ../raster/r.sim/simlib/output.c:437 ../raster/r.sim/simlib/output.c:479
-#: ../raster/r.sim/simlib/output.c:495 ../raster/r.sim/simlib/output.c:516
-#: ../raster/r.sim/simlib/output.c:570 ../raster/r.sim/simlib/output.c:630
-#: ../raster/r.sim/simlib/output.c:808
+#: ../raster/r.ros/main.c:431 ../raster/r.sim/simlib/output.c:396
+#: ../raster/r.sim/simlib/output.c:422 ../raster/r.sim/simlib/output.c:462
+#: ../raster/r.sim/simlib/output.c:628
 #: ../raster/r.smooth.edgepreserve/main.c:142 ../raster/r.spread/main.c:442
 #: ../raster/r.spread/main.c:445 ../raster/r.spread/main.c:448
 #: ../raster/r.spread/main.c:452 ../raster/r.spread/main.c:455
@@ -7955,19 +7955,19 @@ msgstr ""
 #: ../raster/r.resamp.rst/main.c:166 ../raster/r.resamp.rst/main.c:172
 #: ../raster/r.resamp.rst/main.c:179 ../raster/r.resamp.rst/main.c:186
 #: ../raster/r.resamp.rst/main.c:192 ../raster/r.resamp.rst/main.c:255
-#: ../raster/r.sim/r.sim.sediment/main.c:181
-#: ../raster/r.sim/r.sim.sediment/main.c:188
-#: ../raster/r.sim/r.sim.sediment/main.c:195
-#: ../raster/r.sim/r.sim.sediment/main.c:202
-#: ../raster/r.sim/r.sim.sediment/main.c:209
-#: ../raster/r.sim/r.sim.sediment/main.c:217
-#: ../raster/r.sim/r.sim.sediment/main.c:224
-#: ../raster/r.sim/r.sim.water/main.c:197
-#: ../raster/r.sim/r.sim.water/main.c:204
-#: ../raster/r.sim/r.sim.water/main.c:211
-#: ../raster/r.sim/r.sim.water/main.c:218
-#: ../raster/r.sim/r.sim.water/main.c:226
-#: ../raster/r.sim/r.sim.water/main.c:314 ../raster/r.spread/main.c:284
+#: ../raster/r.sim/r.sim.sediment/main.c:182
+#: ../raster/r.sim/r.sim.sediment/main.c:189
+#: ../raster/r.sim/r.sim.sediment/main.c:196
+#: ../raster/r.sim/r.sim.sediment/main.c:203
+#: ../raster/r.sim/r.sim.sediment/main.c:210
+#: ../raster/r.sim/r.sim.sediment/main.c:218
+#: ../raster/r.sim/r.sim.sediment/main.c:225
+#: ../raster/r.sim/r.sim.water/main.c:198
+#: ../raster/r.sim/r.sim.water/main.c:205
+#: ../raster/r.sim/r.sim.water/main.c:212
+#: ../raster/r.sim/r.sim.water/main.c:219
+#: ../raster/r.sim/r.sim.water/main.c:227
+#: ../raster/r.sim/r.sim.water/main.c:315 ../raster/r.spread/main.c:284
 #: ../raster/r.spread/main.c:295 ../raster/r.spread/main.c:306
 #: ../raster/r.sun/main.c:380 ../raster/r.sun/main.c:390
 #: ../raster/r.sun/main.c:400 ../raster/r.sun/main.c:410
@@ -8647,21 +8647,21 @@ msgstr ""
 #: ../imagery/i.eb.hsebal01/main.c:141 ../imagery/i.eb.hsebal01/main.c:148
 #: ../imagery/i.eb.hsebal01/main.c:155 ../imagery/i.eb.hsebal01/main.c:162
 #: ../imagery/i.eb.hsebal01/main.c:169
-#: ../raster/r.sim/r.sim.sediment/main.c:231
-#: ../raster/r.sim/r.sim.sediment/main.c:240
-#: ../raster/r.sim/r.sim.sediment/main.c:252
-#: ../raster/r.sim/r.sim.sediment/main.c:261
-#: ../raster/r.sim/r.sim.sediment/main.c:279
-#: ../raster/r.sim/r.sim.sediment/main.c:304
-#: ../raster/r.sim/r.sim.water/main.c:234
-#: ../raster/r.sim/r.sim.water/main.c:243
-#: ../raster/r.sim/r.sim.water/main.c:255
-#: ../raster/r.sim/r.sim.water/main.c:264
-#: ../raster/r.sim/r.sim.water/main.c:282
-#: ../raster/r.sim/r.sim.water/main.c:292
-#: ../raster/r.sim/r.sim.water/main.c:300
-#: ../raster/r.sim/r.sim.water/main.c:309
-#: ../raster/r.sim/r.sim.water/main.c:339 ../vector/v.surf.rst/main.c:162
+#: ../raster/r.sim/r.sim.sediment/main.c:232
+#: ../raster/r.sim/r.sim.sediment/main.c:241
+#: ../raster/r.sim/r.sim.sediment/main.c:253
+#: ../raster/r.sim/r.sim.sediment/main.c:262
+#: ../raster/r.sim/r.sim.sediment/main.c:280
+#: ../raster/r.sim/r.sim.sediment/main.c:305
+#: ../raster/r.sim/r.sim.water/main.c:235
+#: ../raster/r.sim/r.sim.water/main.c:244
+#: ../raster/r.sim/r.sim.water/main.c:256
+#: ../raster/r.sim/r.sim.water/main.c:265
+#: ../raster/r.sim/r.sim.water/main.c:283
+#: ../raster/r.sim/r.sim.water/main.c:293
+#: ../raster/r.sim/r.sim.water/main.c:301
+#: ../raster/r.sim/r.sim.water/main.c:310
+#: ../raster/r.sim/r.sim.water/main.c:340 ../vector/v.surf.rst/main.c:162
 #: ../vector/v.surf.rst/main.c:167 ../vector/v.surf.rst/main.c:190
 #: ../vector/v.surf.rst/main.c:265 ../vector/v.surf.rst/main.c:271
 #: ../vector/v.surf.rst/main.c:279 ../vector/v.surf.rst/main.c:288
@@ -13818,8 +13818,8 @@ msgstr ""
 #: ../raster/r.drain/main.c:108 ../raster/r.fill.dir/main.c:85
 #: ../raster/r.flow/main.c:415 ../raster/r.gwflow/main.c:220
 #: ../raster/r.lake/main.c:151 ../raster/r.path/main.c:148
-#: ../raster/r.sim/r.sim.sediment/main.c:110
-#: ../raster/r.sim/r.sim.water/main.c:110
+#: ../raster/r.sim/r.sim.sediment/main.c:111
+#: ../raster/r.sim/r.sim.water/main.c:111
 #: ../raster/r.solute.transport/main.c:227 ../raster/r.stream.extract/main.c:74
 #: ../raster/r.terraflow/main.cpp:458 ../raster/r.topidx/main.c:35
 #: ../raster/r.topmodel/main.c:46 ../raster/r.uslek/main.c:50
@@ -14100,7 +14100,7 @@ msgstr ""
 #: ../raster/r.external/main.c:100 ../raster/r.in.gdal/main.c:213
 #: ../raster/r.in.lidar/main.c:301 ../raster/r.in.pdal/main.cpp:411
 #: ../vector/v.external/args.c:48 ../vector/v.in.lidar/main.c:318
-#: ../vector/v.in.ogr/main.c:377 ../vector/v.in.pdal/main.cpp:223
+#: ../vector/v.in.ogr/main.c:377 ../vector/v.in.pdal/main.cpp:222
 msgid "Override projection check (use current project's CRS)"
 msgstr ""
 
@@ -15909,8 +15909,8 @@ msgstr ""
 #: ../raster/r.neighbors/main.c:185 ../raster/r.param.scale/interface.c:59
 #: ../raster/r.patch/main.c:72 ../raster/r.resamp.filter/main.c:435
 #: ../raster/r.resamp.interp/main.c:89 ../raster/r.resamp.stats/main.c:397
-#: ../raster/r.series/main.c:153 ../raster/r.sim/r.sim.sediment/main.c:116
-#: ../raster/r.sim/r.sim.water/main.c:115 ../raster/r.slope.aspect/main.c:168
+#: ../raster/r.series/main.c:153 ../raster/r.sim/r.sim.sediment/main.c:117
+#: ../raster/r.sim/r.sim.water/main.c:116 ../raster/r.slope.aspect/main.c:168
 #: ../raster/r.smooth.edgepreserve/main.c:47 ../raster/r.sun/main.c:226
 #: ../raster/r.texture/main.c:99 ../raster/r.univar/r.univar_main.c:166
 #: ../vector/v.ppa/main.c:68 ../vector/v.surf.rst/main.c:150
@@ -19998,7 +19998,7 @@ msgstr ""
 #: ../raster/r.external/main.c:101 ../raster/r.in.gdal/main.c:214
 #: ../raster/r.in.lidar/main.c:303 ../raster/r.in.pdal/main.cpp:413
 #: ../raster3d/r3.in.lidar/main.c:290 ../vector/v.external/args.c:50
-#: ../vector/v.in.lidar/main.c:320 ../vector/v.in.pdal/main.cpp:225
+#: ../vector/v.in.lidar/main.c:320 ../vector/v.in.pdal/main.cpp:224
 msgid "Assume that the dataset has the same coordinate reference system as the current project"
 msgstr ""
 
@@ -21606,8 +21606,8 @@ msgstr ""
 #: ../raster/r.in.gdal/main.c:143 ../raster/r.in.gdal/main.c:216
 #: ../raster/r.in.gdal/main.c:222 ../raster/r.in.pdal/main.cpp:257
 #: ../raster/r.in.pdal/main.cpp:271 ../raster/r.in.pdal/main.cpp:415
-#: ../vector/v.in.pdal/main.cpp:218 ../vector/v.in.pdal/main.cpp:227
-#: ../vector/v.in.pdal/main.cpp:240 ../vector/v.info/print.c:779
+#: ../vector/v.in.pdal/main.cpp:217 ../vector/v.in.pdal/main.cpp:226
+#: ../vector/v.in.pdal/main.cpp:239 ../vector/v.info/print.c:779
 #: ../vector/v.info/print.c:783
 msgid "Projection"
 msgstr ""
@@ -21654,7 +21654,7 @@ msgid "Create the project specified by the \"project\" parameter and exit. Do no
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:263 ../vector/v.in.lidar/main.c:283
-#: ../vector/v.in.ogr/main.c:391 ../vector/v.in.pdal/main.cpp:253
+#: ../vector/v.in.ogr/main.c:391 ../vector/v.in.pdal/main.cpp:252
 msgid "Limit import to the current region"
 msgstr ""
 
@@ -22087,7 +22087,7 @@ msgstr ""
 
 #: ../raster/r.in.lidar/main.c:410 ../raster/r.in.pdal/main.cpp:516
 #: ../raster3d/r3.in.lidar/main.c:376 ../vector/v.in.lidar/main.c:347
-#: ../vector/v.in.pdal/main.cpp:266
+#: ../vector/v.in.pdal/main.cpp:271
 #, c-format
 msgid "Input file <%s> does not exist"
 msgstr ""
@@ -22391,7 +22391,7 @@ msgid "Cannot determine input file type of <%s>"
 msgstr ""
 
 #: ../raster/r.in.pdal/info.cpp:61 ../raster/r.in.pdal/info.cpp:273
-#: ../raster/r.in.pdal/main.cpp:871
+#: ../raster/r.in.pdal/main.cpp:871 ../vector/v.in.pdal/main.cpp:416
 #, c-format
 msgid "PDAL error: %s"
 msgstr ""
@@ -22442,19 +22442,19 @@ msgstr ""
 msgid "Use if output dimension is not Z or intensity"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:253
+#: ../raster/r.in.pdal/main.cpp:253 ../vector/v.in.pdal/main.cpp:213
 msgid "Reproject to project's coordinate system if needed [deprecated]"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:255
+#: ../raster/r.in.pdal/main.cpp:255 ../vector/v.in.pdal/main.cpp:215
 msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:267 ../vector/v.in.pdal/main.cpp:236
+#: ../raster/r.in.pdal/main.cpp:267 ../vector/v.in.pdal/main.cpp:235
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:269 ../vector/v.in.pdal/main.cpp:238
+#: ../raster/r.in.pdal/main.cpp:269 ../vector/v.in.pdal/main.cpp:237
 msgid "Override input dataset coordinate system using EPSG code or WKT definition"
 msgstr ""
 
@@ -22525,7 +22525,7 @@ msgstr ""
 msgid "Print data file extent in shell script style and then exit"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:481
+#: ../raster/r.in.pdal/main.cpp:481 ../vector/v.in.pdal/main.cpp:266
 msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
 msgstr ""
 
@@ -22547,7 +22547,7 @@ msgstr ""
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:777
+#: ../raster/r.in.pdal/main.cpp:777 ../vector/v.in.pdal/main.cpp:362
 #, c-format
 msgid "PDAL error while reading <%s>: %s"
 msgstr ""
@@ -22556,19 +22556,19 @@ msgstr ""
 msgid "The input dataset has undefined projection"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:809 ../vector/v.in.pdal/main.cpp:371
+#: ../raster/r.in.pdal/main.cpp:809 ../vector/v.in.pdal/main.cpp:351
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:821 ../vector/v.in.pdal/main.cpp:349
+#: ../raster/r.in.pdal/main.cpp:821 ../vector/v.in.pdal/main.cpp:393
 msgid "Reprojecting the input to the project's CRS"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:874 ../vector/v.in.pdal/main.cpp:386
+#: ../raster/r.in.pdal/main.cpp:874 ../vector/v.in.pdal/main.cpp:419
 msgid "Running PDAL algorithms..."
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:898 ../vector/v.in.pdal/main.cpp:432
+#: ../raster/r.in.pdal/main.cpp:898 ../vector/v.in.pdal/main.cpp:465
 msgid "Scanning points..."
 msgstr ""
 
@@ -26960,8 +26960,8 @@ msgstr ""
 msgid "rate of spread"
 msgstr ""
 
-#: ../raster/r.ros/main.c:209 ../raster/r.sim/r.sim.sediment/main.c:115
-#: ../raster/r.sim/r.sim.water/main.c:114 ../raster/r.spread/main.c:103
+#: ../raster/r.ros/main.c:209 ../raster/r.sim/r.sim.sediment/main.c:116
+#: ../raster/r.sim/r.sim.water/main.c:115 ../raster/r.spread/main.c:103
 #: ../raster/r.topmodel/main.c:47
 msgid "model"
 msgstr ""
@@ -27300,372 +27300,388 @@ msgstr ""
 msgid "Method %s not compatible with weights, using unweighed version instead"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:111
-#: ../raster/r.sim/r.sim.water/main.c:111 ../raster/r.uslek/main.c:51
+#: ../raster/r.sim/r.sim.sediment/main.c:112
+#: ../raster/r.sim/r.sim.water/main.c:112 ../raster/r.uslek/main.c:51
 #: ../raster/r.usler/main.c:52
 msgid "soil"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:112
+#: ../raster/r.sim/r.sim.sediment/main.c:113
 msgid "sediment flow"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:113 ../raster/r.uslek/main.c:52
+#: ../raster/r.sim/r.sim.sediment/main.c:114 ../raster/r.uslek/main.c:52
 #: ../raster/r.usler/main.c:53
 msgid "erosion"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:114
+#: ../raster/r.sim/r.sim.sediment/main.c:115
 msgid "deposition"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:118
+#: ../raster/r.sim/r.sim.sediment/main.c:119
 msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:125
+#: ../raster/r.sim/r.sim.sediment/main.c:126
 msgid "Name of water depth raster map [m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:130
-#: ../raster/r.sim/r.sim.water/main.c:124
+#: ../raster/r.sim/r.sim.sediment/main.c:131
+#: ../raster/r.sim/r.sim.water/main.c:125
 msgid "Name of x-derivatives raster map [m/m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:131
-#: ../raster/r.sim/r.sim.sediment/main.c:138
-#: ../raster/r.sim/r.sim.water/main.c:125
-#: ../raster/r.sim/r.sim.water/main.c:132
+#: ../raster/r.sim/r.sim.sediment/main.c:132
+#: ../raster/r.sim/r.sim.sediment/main.c:139
+#: ../raster/r.sim/r.sim.water/main.c:126
+#: ../raster/r.sim/r.sim.water/main.c:133
 msgid "Computed from elevation map if not given"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:137
-#: ../raster/r.sim/r.sim.water/main.c:131
+#: ../raster/r.sim/r.sim.sediment/main.c:138
+#: ../raster/r.sim/r.sim.water/main.c:132
 msgid "Name of y-derivatives raster map [m/m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:144
+#: ../raster/r.sim/r.sim.sediment/main.c:145
 msgid "Name of detachment capacity coefficient raster map [s/m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:149
+#: ../raster/r.sim/r.sim.sediment/main.c:150
 msgid "Name of transport capacity coefficient raster map [s]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:154
+#: ../raster/r.sim/r.sim.sediment/main.c:155
 msgid "Name of critical shear stress raster map [Pa]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:159
-#: ../raster/r.sim/r.sim.water/main.c:169
+#: ../raster/r.sim/r.sim.sediment/main.c:160
+#: ../raster/r.sim/r.sim.water/main.c:170
 msgid "Name of Manning's n raster map"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:167
-#: ../raster/r.sim/r.sim.water/main.c:177
+#: ../raster/r.sim/r.sim.sediment/main.c:168
+#: ../raster/r.sim/r.sim.water/main.c:178
 msgid "Manning's n unique value"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:173
-#: ../raster/r.sim/r.sim.water/main.c:190
+#: ../raster/r.sim/r.sim.sediment/main.c:174
+#: ../raster/r.sim/r.sim.water/main.c:191
 msgid "Name of sampling locations vector points map"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:180
+#: ../raster/r.sim/r.sim.sediment/main.c:181
 msgid "Name for output transport capacity raster map [kg/ms]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:186
+#: ../raster/r.sim/r.sim.sediment/main.c:187
 msgid "Name for output transport limited erosion-deposition raster map [kg/m2s]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:194
+#: ../raster/r.sim/r.sim.sediment/main.c:195
 msgid "Name for output sediment concentration raster map [particle/m3]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:201
+#: ../raster/r.sim/r.sim.sediment/main.c:202
 msgid "Name for output sediment flux raster map [kg/ms]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:208
+#: ../raster/r.sim/r.sim.sediment/main.c:209
 msgid "Name for output erosion-deposition raster map [kg/m2s]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:215
+#: ../raster/r.sim/r.sim.sediment/main.c:216
 msgid "Name for sampling points output text file. For each observation vector point the time series of sediment transport is stored."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:223
-#: ../raster/r.sim/r.sim.water/main.c:217
+#: ../raster/r.sim/r.sim.sediment/main.c:224
+#: ../raster/r.sim/r.sim.water/main.c:218
 msgid "Base name of the output walkers vector points map"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:230
+#: ../raster/r.sim/r.sim.sediment/main.c:231
 msgid "Number of walkers"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:239
-#: ../raster/r.sim/r.sim.water/main.c:242
+#: ../raster/r.sim/r.sim.sediment/main.c:240
+#: ../raster/r.sim/r.sim.water/main.c:243
 msgid "Duration of the simulated water flow [minutes]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:248
-#: ../raster/r.sim/r.sim.water/main.c:251
+#: ../raster/r.sim/r.sim.sediment/main.c:249
+#: ../raster/r.sim/r.sim.water/main.c:252
 msgid "Minimum time step for the simulation [seconds]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:250
-#: ../raster/r.sim/r.sim.water/main.c:253
+#: ../raster/r.sim/r.sim.sediment/main.c:251
+#: ../raster/r.sim/r.sim.water/main.c:254
 msgid "A larger minimum time step substantially reduces processing time, but at the cost of accuracy"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:260
-#: ../raster/r.sim/r.sim.water/main.c:263
+#: ../raster/r.sim/r.sim.sediment/main.c:261
+#: ../raster/r.sim/r.sim.water/main.c:264
 msgid "Time interval for creating output maps [minutes]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:278
-#: ../raster/r.sim/r.sim.water/main.c:281
+#: ../raster/r.sim/r.sim.sediment/main.c:279
+#: ../raster/r.sim/r.sim.water/main.c:282
 msgid "Water diffusion constant"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:285
-#: ../raster/r.sim/r.sim.water/main.c:320
+#: ../raster/r.sim/r.sim.sediment/main.c:286
+#: ../raster/r.sim/r.sim.water/main.c:321
 msgid "Seed for random number generator"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:287
-#: ../raster/r.sim/r.sim.water/main.c:322
+#: ../raster/r.sim/r.sim.sediment/main.c:288
+#: ../raster/r.sim/r.sim.water/main.c:323
 msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:292
-#: ../raster/r.sim/r.sim.water/main.c:327
+#: ../raster/r.sim/r.sim.sediment/main.c:293
+#: ../raster/r.sim/r.sim.water/main.c:328
 msgid "Generate random seed"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:294
-#: ../raster/r.sim/r.sim.water/main.c:329
+#: ../raster/r.sim/r.sim.sediment/main.c:295
+#: ../raster/r.sim/r.sim.water/main.c:330
 msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:303
-#: ../raster/r.sim/r.sim.water/main.c:338
+#: ../raster/r.sim/r.sim.sediment/main.c:304
+#: ../raster/r.sim/r.sim.water/main.c:339
 msgid "Number of threads which will be used for parallel computation."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:312
-#: ../raster/r.sim/r.sim.water/main.c:348
+#: ../raster/r.sim/r.sim.sediment/main.c:309
+#: ../raster/r.sim/r.sim.water/main.c:344
+msgid "Print run summary to standard output"
+msgstr ""
+
+#: ../raster/r.sim/r.sim.sediment/main.c:321
+#: ../raster/r.sim/r.sim.water/main.c:357
+#, c-format
+msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
+msgstr ""
+
+#: ../raster/r.sim/r.sim.sediment/main.c:334
+#: ../raster/r.sim/r.sim.water/main.c:370
 #, c-format
 msgid "Generated random seed (-s): %ld"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:317
-#: ../raster/r.sim/r.sim.water/main.c:353 ../raster/r.surf.fractal/main.c:65
+#: ../raster/r.sim/r.sim.sediment/main.c:339
+#: ../raster/r.sim/r.sim.water/main.c:375 ../raster/r.surf.fractal/main.c:65
 #: ../raster/r.surf.gauss/main.c:66 ../raster/r.surf.random/main.c:115
 #: ../vector/v.ppa/main.c:175
 #, c-format
 msgid "Read random seed from %s option: %ld"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:373
-#: ../raster/r.sim/r.sim.water/main.c:424 ../vector/v.surf.rst/main.c:410
+#: ../raster/r.sim/r.sim.sediment/main.c:396
+#: ../raster/r.sim/r.sim.water/main.c:447 ../vector/v.surf.rst/main.c:410
 #, c-format
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:379
-#: ../raster/r.sim/r.sim.water/main.c:430 ../raster/r.sun/main.c:575
+#: ../raster/r.sim/r.sim.sediment/main.c:402
+#: ../raster/r.sim/r.sim.water/main.c:453 ../raster/r.sun/main.c:575
 #: ../vector/v.surf.rst/main.c:424
 msgid "Parallel processing disabled due to active mask."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:387
-#: ../raster/r.sim/r.sim.water/main.c:438
+#: ../raster/r.sim/r.sim.sediment/main.c:410
+#: ../raster/r.sim/r.sim.water/main.c:461
 #, c-format
 msgid "Number of threads: %d"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:402
-#: ../raster/r.sim/r.sim.water/main.c:532
+#: ../raster/r.sim/r.sim.sediment/main.c:426
+#: ../raster/r.sim/r.sim.water/main.c:556
 msgid "More than 100 files are going to be created !!!!!"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:408
-#: ../raster/r.sim/r.sim.water/main.c:538
+#: ../raster/r.sim/r.sim.sediment/main.c:432
+#: ../raster/r.sim/r.sim.water/main.c:562
 #, c-format
 msgid "default nwalk=%d, rwalk=%f"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:417
-#: ../raster/r.sim/r.sim.water/main.c:548
+#: ../raster/r.sim/r.sim.sediment/main.c:441
+#: ../raster/r.sim/r.sim.water/main.c:572
 #, c-format
 msgid "Using metric conversion factor %f, step=%f"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:427
+#: ../raster/r.sim/r.sim.sediment/main.c:451
 msgid "You are not outputting any raster or site files"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:430
-#: ../raster/r.sim/r.sim.water/main.c:561 ../vector/v.surf.rst/main.c:685
+#: ../raster/r.sim/r.sim.sediment/main.c:454
+#: ../raster/r.sim/r.sim.water/main.c:585 ../vector/v.surf.rst/main.c:685
 #: ../vector/v.surf.rst/main.c:757 ../vector/v.vol.rst/main.c:912
 msgid "Input failed"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:112 ../raster/r.terraflow/main.cpp:459
+#: ../raster/r.sim/r.sim.water/main.c:113 ../raster/r.terraflow/main.cpp:459
 #: ../vector/v.net.flow/main.c:55
 msgid "flow"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:113
+#: ../raster/r.sim/r.sim.water/main.c:114
 msgid "overland flow"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:116
+#: ../raster/r.sim/r.sim.water/main.c:117
 msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:139
+#: ../raster/r.sim/r.sim.water/main.c:140
 msgid "Name of rainfall excess rate (rain-infilt) raster map [mm/hr]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:147
+#: ../raster/r.sim/r.sim.water/main.c:148
 msgid "Rainfall excess rate unique value [mm/hr]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:154
+#: ../raster/r.sim/r.sim.water/main.c:155
 msgid "Name of runoff infiltration rate raster map [mm/hr]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:163
+#: ../raster/r.sim/r.sim.water/main.c:164
 msgid "Runoff infiltration rate unique value [mm/hr]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:184
-msgid "Name of flow controls raster map (permeability ratio 0-1)"
+#: ../raster/r.sim/r.sim.water/main.c:185
+msgid "Name of flow controls raster map (trapping probability 0-1)"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:196
+#: ../raster/r.sim/r.sim.water/main.c:197
 msgid "Name for output water depth raster map [m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:203
+#: ../raster/r.sim/r.sim.water/main.c:204
 msgid "Name for output water discharge raster map [m3/s]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:210
+#: ../raster/r.sim/r.sim.water/main.c:211
 msgid "Name for output simulation error raster map [m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:224
+#: ../raster/r.sim/r.sim.water/main.c:225
 msgid "Name for sampling points output text file. For each observation vector point the time series of water discharge is stored."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:233
+#: ../raster/r.sim/r.sim.water/main.c:234
 msgid "Number of walkers, default is twice the number of cells"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:289
+#: ../raster/r.sim/r.sim.water/main.c:290
 msgid "Threshold water depth [m]"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:291
+#: ../raster/r.sim/r.sim.water/main.c:292
 msgid "Diffusion increases after this water depth is reached"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:299
+#: ../raster/r.sim/r.sim.water/main.c:300
 msgid "Diffusion increase constant"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:308
+#: ../raster/r.sim/r.sim.water/main.c:309
 msgid "Weighting factor for water flow velocity vector"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:313
+#: ../raster/r.sim/r.sim.water/main.c:314
 msgid "Time-series output"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:558
+#: ../raster/r.sim/r.sim.water/main.c:582
 msgid "You are not outputting any raster maps"
 msgstr ""
 
-#: ../raster/r.sim/simlib/hydro.c:76
+#: ../raster/r.sim/simlib/hydro.c:78
 #, c-format
 msgid "Processing block %d of %d"
 msgstr ""
 
-#: ../raster/r.sim/simlib/hydro.c:358
+#: ../raster/r.sim/simlib/hydro.c:388
 msgid "Unable to write raster maps"
 msgstr ""
 
-#: ../raster/r.sim/simlib/hydro.c:453
+#: ../raster/r.sim/simlib/hydro.c:490
 msgid "Cannot write raster maps"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:123
+#: ../raster/r.sim/simlib/input.c:122
 msgid "Manning's n raster map not found and manin_val undefined, choose one to be allowed to process"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:242
+#: ../raster/r.sim/simlib/input.c:246
 msgid "Zero value in Mannings n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:305
+#: ../raster/r.sim/simlib/input.c:309
 msgid "No values in the elevation raster."
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:340
+#: ../raster/r.sim/simlib/input.c:344
+#, c-format
+msgid "Time step of %.2f s is longer than output_step of %d s, some output steps may be skipped"
+msgstr ""
+
+#: ../raster/r.sim/simlib/input.c:349
 #, c-format
 msgid ""
 "Min elevation \t= %.2f m\n"
 "Max elevation \t= %.2f m\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:342
+#: ../raster/r.sim/simlib/input.c:351
 #, c-format
 msgid "Mean Source Rate (rainf. excess or sediment) \t= %f m/s or kg/m2s \n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:345
+#: ../raster/r.sim/simlib/input.c:354
 #, c-format
 msgid "Mean flow velocity \t= %f m/s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:349
+#: ../raster/r.sim/simlib/input.c:358
 #, c-format
 msgid "Mean Mannings \t= %f\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:351
+#: ../raster/r.sim/simlib/input.c:360
 msgid "Mean Mannings \t= undefined (chmean is zero)\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:355
+#: ../raster/r.sim/simlib/input.c:364
 #, c-format
 msgid "Number of iterations \t= %d cell\n"
 msgid_plural "Number of iterations \t= %d cells\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../raster/r.sim/simlib/input.c:358
+#: ../raster/r.sim/simlib/input.c:367
 #, c-format
 msgid "Time step \t= %.2f s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:360
+#: ../raster/r.sim/simlib/input.c:369
 #, c-format
 msgid ""
 "Sigmax \t= %f\n"
 "Max velocity \t= %f m/s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:361
+#: ../raster/r.sim/simlib/input.c:370
 #, c-format
 msgid "Time step used \t= %.2f s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:412
+#: ../raster/r.sim/simlib/input.c:421
 msgid "Unable to write et file"
 msgstr ""
 
@@ -27679,7 +27695,7 @@ msgstr ""
 msgid "Unable to open observation logfile %s for writing"
 msgstr ""
 
-#: ../raster/r.sim/simlib/output.c:351 ../raster/r.sim/simlib/output.c:359
+#: ../raster/r.sim/simlib/output.c:367
 #, c-format
 msgid "FP raster map <%s> not found"
 msgstr ""
@@ -34444,40 +34460,40 @@ msgstr ""
 msgid "Unable to get reprojected map extent"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:388
+#: ../scripts/r.import/r.import.py:380
 msgid "Please check the 'extent' parameter"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:390 ../scripts/v.import/v.import.py:335
+#: ../scripts/r.import/r.import.py:382 ../scripts/v.import/v.import.py:335
 msgid "Unable to reproject to source project"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:410
+#: ../scripts/r.import/r.import.py:402
 #, python-brace-format
 msgid "Estimated target resolution for input band <{out}>: {res}"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:428
+#: ../scripts/r.import/r.import.py:420
 #, python-brace-format
 msgid "Using given resolution for input band <{out}>: {res}"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:438
+#: ../scripts/r.import/r.import.py:430
 #, python-brace-format
 msgid "Using current region resolution for input band <{out}>: nsres={ns}, ewres={ew}"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:444 ../scripts/v.import/v.import.py:384
+#: ../scripts/r.import/r.import.py:436 ../scripts/v.import/v.import.py:384
 #, python-format
 msgid "Reprojecting <%s>..."
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:459
+#: ../scripts/r.import/r.import.py:451
 #, python-format
 msgid "Unable to to reproject raster <%s>"
 msgstr ""
 
-#: ../scripts/r.import/r.import.py:462
+#: ../scripts/r.import/r.import.py:454
 #, python-format
 msgid "The reprojected raster <%s> is empty"
 msgstr ""
@@ -34804,57 +34820,57 @@ msgstr ""
 msgid "Unable to open %s "
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:360
+#: ../scripts/r.in.wms/wms_drv.py:362
 msgid "Region is out of server data extend."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:392
+#: ../scripts/r.in.wms/wms_drv.py:394
 #, python-format
 msgid "Fetching %d tiles with %d x %d pixel size per tile..."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:625 ../scripts/r.in.wms/wms_drv.py:904
+#: ../scripts/r.in.wms/wms_drv.py:627 ../scripts/r.in.wms/wms_drv.py:906
 #, python-format
 msgid ""
 "Unable to parse tile service file.\n"
 "%s\n"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:673
+#: ../scripts/r.in.wms/wms_drv.py:675
 #, python-format
 msgid "Layer '%s' was not found in capabilities file"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:692
+#: ../scripts/r.in.wms/wms_drv.py:694
 #, python-format
 msgid "Layer '%s' is not available with %s code."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:928
+#: ../scripts/r.in.wms/wms_drv.py:930
 #, python-format
 msgid ""
 "Unable to parse tile service file. \n"
 " No tag '%s' was found."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:941
+#: ../scripts/r.in.wms/wms_drv.py:943
 #, python-format
 msgid "Tiled group '%s' was not found in tile service file"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:1033
+#: ../scripts/r.in.wms/wms_drv.py:1035
 #, python-format
 msgid ""
 "Wrong form of parameter '%s' in '%s'. \n"
 "                                  The parameter was ignored."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:1058
+#: ../scripts/r.in.wms/wms_drv.py:1060
 #, python-format
 msgid "Parameter '%s' in '%s' is not variable in tile pattern url."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_drv.py:1065
+#: ../scripts/r.in.wms/wms_drv.py:1067
 #, python-format
 msgid "%s driver supports only '%s' parameter in '%s'. Other parameters are ignored."
 msgstr ""
@@ -39709,7 +39725,7 @@ msgstr ""
 #: ../vector/v.in.lidar/main.c:167 ../vector/v.in.lidar/main.c:175
 #: ../vector/v.in.pdal/main.cpp:145 ../vector/v.in.pdal/main.cpp:153
 #: ../vector/v.in.pdal/main.cpp:161 ../vector/v.in.pdal/main.cpp:169
-#: ../vector/v.in.pdal/main.cpp:248 ../vector/v.out.lidar/main.c:490
+#: ../vector/v.in.pdal/main.cpp:247 ../vector/v.out.lidar/main.c:490
 #: ../vector/v.out.lidar/main.c:497 ../vector/v.out.lidar/main.c:504
 #: ../vector/v.out.lidar/main.c:511
 msgid "Categories"
@@ -39789,11 +39805,11 @@ msgstr ""
 msgid "Invert mask when selecting points"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:308 ../vector/v.in.pdal/main.cpp:245
+#: ../vector/v.in.lidar/main.c:308 ../vector/v.in.pdal/main.cpp:244
 msgid "Do not automatically add unique ID as category to each point"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:309 ../vector/v.in.pdal/main.cpp:246
+#: ../vector/v.in.lidar/main.c:309 ../vector/v.in.pdal/main.cpp:245
 msgid "Create only requested layers and categories"
 msgstr ""
 
@@ -39815,7 +39831,7 @@ msgstr ""
 msgid "ID layer is required to store attribute table"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:428 ../vector/v.in.pdal/main.cpp:296
+#: ../vector/v.in.lidar/main.c:428 ../vector/v.in.pdal/main.cpp:301
 #, c-format
 msgid "Storing generated point IDs as categories in the layer <%d>, consequently no more than %d points can be imported"
 msgstr ""
@@ -40445,27 +40461,28 @@ msgstr ""
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
 msgstr ""
 
-#: ../vector/v.in.pdal/main.cpp:213
-msgid "Reproject to projects's coordinate system if needed"
+#: ../vector/v.in.pdal/main.cpp:375
+#, c-format
+msgid "Invalid input_srs: %s"
 msgstr ""
 
-#: ../vector/v.in.pdal/main.cpp:215
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
+#: ../vector/v.in.pdal/main.cpp:390
+msgid "Unable to reproject the input because the current project has no CRS defined. Use the -o flag to import the data without reprojection."
 msgstr ""
 
-#: ../vector/v.in.pdal/main.cpp:404
+#: ../vector/v.in.pdal/main.cpp:437
 msgid "Cannot store return information because the input does not have a return dimensions"
 msgstr ""
 
-#: ../vector/v.in.pdal/main.cpp:416
+#: ../vector/v.in.pdal/main.cpp:449
 msgid "Cannot store class because the input does not have a classification dimension"
 msgstr ""
 
-#: ../vector/v.in.pdal/main.cpp:427
+#: ../vector/v.in.pdal/main.cpp:460
 msgid "Cannot store RGB colors because the input does not have a RGB dimensions"
 msgstr ""
 
-#: ../vector/v.in.pdal/main.cpp:444
+#: ../vector/v.in.pdal/main.cpp:477
 #, c-format
 msgid "Dataset doesn't have requested dimension '%s' with ID %d (possibly a programming error)"
 msgstr ""

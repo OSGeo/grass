@@ -3115,7 +3115,7 @@ class CmdPanel(wx.Panel):
     def OnPageChange(self, event):
         sel = self.notebook.GetSelection() if not event else event.GetSelection()
         idx = self.notebook.GetPageIndexByName("manual")
-        if idx > -1 and sel == idx:
+        if -1 < idx == sel:
             # calling LoadPage() is strangely time-consuming (only first call)
             # FIXME: move to helpPage.__init__()
             if not self.manualTab.IsLoaded():

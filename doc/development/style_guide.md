@@ -194,6 +194,8 @@ We
 [use doxygen and document the functions](https://grass.osgeo.org/programming8/)
 directly in the source code. See `lib/gis/open.c` and `lib/gis/gislib.dox` for
 examples.
+Library pages may also be written in Markdown as `*.dox.md` files, which
+Doxygen renders, such as `lib/gis/random_streams.dox.md`.
 
 #### Python API documentation
 
