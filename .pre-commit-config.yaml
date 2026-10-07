@@ -118,6 +118,7 @@ repos:
     rev: v4.0.2
     hooks:
       - id: editorconfig-checker
+        args: [--fix]
   - repo: local
     hooks:
       - id: forbid-hidden-unicode

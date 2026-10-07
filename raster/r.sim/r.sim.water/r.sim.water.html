@@ -90,7 +90,15 @@ Output walker, water depth and discharge maps can be saved during simulation usi
 the time series flag <b>-t</b> and <b>output_step</b> parameter
 defining the time step in minutes for writing output files.
 Files are saved with a suffix representing time since the start of simulation in minutes
-(e.g. wdepth.05, wdepth.10).
+(e.g. wdepth.05, wdepth.10) and are timestamped with that time.
+The simulation advances in time steps which usually do not fall exactly on the output times.
+A map holds the state at the time step closest to the time in its name,
+so at most half a time step earlier or later.
+When the time step is longer than <b>output_step</b>, there are fewer time steps than
+output times, and a time step writes only the maps for the output time closest to it.
+The series always ends with maps named by the <b>duration</b> which hold the state
+at the end of the run, also when the duration is not a multiple of <b>output_step</b>
+or when the simulation stopped early.
 <!-- TODO add example of registering outputs into temporal framework when  #2146 is fixed -->
 Monitoring of water depth at specific points is supported. A vector map with observation points and
 a path to a logfile must be provided. For each point in the vector map which is located in
@@ -209,12 +217,12 @@ stored in the history of the output raster maps under the same keys (see
  <tr><td><code>mean_source_rate</code></td><td>Mean rainfall excess</td><td>m/s</td></tr>
  <tr><td><code>mean_infiltration</code></td><td>Mean infiltration rate, 0 without infiltration input</td><td>m/s</td></tr>
  <tr><td><code>threads</code></td><td>Threads used for the computation</td><td>count</td></tr>
- <tr><td><code>outputs</code></td><td>One entry per set of written maps: one per <b>output_step</b> with <b>-t</b>, otherwise a single entry</td><td></td></tr>
+ <tr><td><code>outputs</code></td><td>One entry per set of written maps: with <b>-t</b>, one per written output step, the last one named by <b>duration</b>, otherwise a single entry</td><td></td></tr>
 </table>
 
 <p>
-Each entry of <code>outputs</code> contains the <code>simulated_time</code> (s) and <code>timestamp</code>
-of the written maps, the number of <code>walkers_remaining</code> at that time, and
+Each entry of <code>outputs</code> contains the <code>simulated_time</code> (s) when the maps
+were written, their <code>timestamp</code>, the number of <code>walkers_remaining</code> at that time, and
 the names of the <code>depth</code>, <code>discharge</code>, <code>error</code> and <code>walkers</code> maps, or
 <code>null</code> for maps which were not requested.
 

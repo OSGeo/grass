@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 18:13+0000\n"
+"POT-Creation-Date: 2026-10-03 18:51+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -4726,6 +4726,9 @@ msgstr "satélite"
 msgid "Landsat"
 msgstr "Landsat"
 
+msgid "Sentinel"
+msgstr ""
+
 msgid "ASTER"
 msgstr "ASTER"
 
@@ -4749,6 +4752,9 @@ msgstr "Landsat 5+7 (6 bandas de entrada:1,2,3,4,5,7)"
 
 msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
 msgstr "Landsat 8 (7 bandas de entrada: 1,2,3,4,5,6,7)"
+
+msgid "Sentinel-2 (6 input bands: B2,B3,B4,B8,B11,B12 surface reflectance in [0,1]; Bonafoni & Sekertekin 2020 coefficients)"
+msgstr ""
 
 msgid "ASTER (6 input bands:1,3,5,6,8,9)"
 msgstr "ASTER (6 bandas de entrada:1,3,5,6,8,9)"
@@ -7818,8 +7824,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 #, fuzzy
 msgid "Maps with feature values (attributes)"
 msgstr "Número de quantiles"
@@ -8952,9 +8958,6 @@ msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
 msgstr "Realiza transformación Tasseled Cap (Kauth Thomas)"
 
 msgid "Worldview"
-msgstr ""
-
-msgid "Sentinel"
 msgstr ""
 
 msgid "Tasseled Cap transformation"
@@ -12258,6 +12261,10 @@ msgid "Pass 1 of 2..."
 msgstr "Paso 1 de 2..."
 
 #, c-format
+msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
+msgstr ""
+
+#, c-format
 msgid "%d-band clumping with threshold %g"
 msgstr ""
 
@@ -13267,6 +13274,15 @@ msgstr "La banda seleccionada (%d) no existe"
 #, c-format
 msgid "Imagery group <%s> created"
 msgstr "Grupo de imaginería <%s> creado"
+
+#, c-format
+msgid "Vertical CRS <%s> of the dataset is ignored"
+msgstr ""
+
+#, fuzzy
+#| msgid "The vertical unit of the map"
+msgid "The vertical component of the dataset CRS is ignored"
+msgstr "La unidad vertical del mapa"
 
 msgid "Can't get WKT parameter string"
 msgstr ""
@@ -18767,6 +18783,15 @@ msgstr "Genera una semila aleatoria automaticamente para el generador de número
 msgid "Number of threads which will be used for parallel computation."
 msgstr "Número de niveles a usar para cada componente"
 
+#, fuzzy
+#| msgid "If not given write to standard output"
+msgid "Print run summary to standard output"
+msgstr "Si no se da escribir en la salida estándar"
+
+#, fuzzy, c-format
+msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
+msgstr "Las localizaciones Latitud/Longitud no están soportadas por %s. Por favor reproyecte el mapa primero."
+
 #, c-format
 msgid "Generated random seed (-s): %ld"
 msgstr ""
@@ -18824,8 +18849,10 @@ msgstr ""
 msgid "Runoff infiltration rate unique value [mm/hr]"
 msgstr "Valor único de la tasa de escorrentía infiltración [mm/hr]"
 
-msgid "Name of flow controls raster map (permeability ratio 0-1)"
-msgstr ""
+#, fuzzy
+#| msgid "Name of input raster map (intensity)"
+msgid "Name of flow controls raster map (trapping probability 0-1)"
+msgstr "Nombre del mapa raster de entrada (intensidad)"
 
 msgid "Name for output water depth raster map [m]"
 msgstr "Nombre del mapa ráster de salida de altura del agua [m]"
@@ -18884,6 +18911,10 @@ msgstr "Cero valores en n de Manning"
 #| msgid "Could not open elevation raster"
 msgid "No values in the elevation raster."
 msgstr "No se pudo abrir raster de elevaciones"
+
+#, c-format
+msgid "Time step of %.2f s is longer than output_step of %d s, some output steps may be skipped"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -23219,9 +23250,10 @@ msgstr "Nombre de archivo de mapa ráster %d: %s ya existe. Usar la bandear --o 
 msgid "At least 2 maps are required"
 msgstr ""
 
-#, python-format
-msgid "Unable to get monitor info. %s"
-msgstr ""
+#, fuzzy
+#| msgid "Unable to get projection info"
+msgid "Unable to get monitor info. {}"
+msgstr "No ha sido posible obtener información de la proyección"
 
 msgid "Unable to get monitor info"
 msgstr ""
@@ -28808,10 +28840,12 @@ msgstr ""
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
 msgstr "Convierte nubes de puntos LAS LiDAR a un mapa vectorial GRASS con libLAS."
 
-msgid "Reproject to projects's coordinate system if needed"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Invalid input file %s"
+msgid "Invalid input_srs: %s"
+msgstr "Archivo de entrada no válido %s"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
+msgid "Unable to reproject the input because the current project has no CRS defined. Use the -o flag to import the data without reprojection."
 msgstr ""
 
 msgid "Cannot store return information because the input does not have a return dimensions"
