@@ -13,7 +13,17 @@ on:
 permissions: {}
 
 jobs:
+  changes:
+    name: Detect changed files
+    permissions:
+      contents: read
+    uses: ./.github/workflows/detect-relevant-changes.yml
+    with:
+      own-workflow-path: .github/workflows/ubuntu.yml
+
   ubuntu:
+    needs: changes
+    if: ${{ needs.changes.outputs.run == 'true' }}
     permissions:
       contents: read
       actions: read
@@ -199,6 +209,7 @@ jobs:
   build-and-test-success:
     name: Build & Test Result
     needs:
+      - changes
       - ubuntu
     if: ${{ always() }}
     uses: ./.github/workflows/verify-success.yml
