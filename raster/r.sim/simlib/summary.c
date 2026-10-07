@@ -8,6 +8,7 @@
  *
  *****************************************************************************/
 
+#include <inttypes.h>
 #include <math.h>
 #include <stdio.h>
 
@@ -75,6 +76,7 @@ static void print_json(const Setup *setup, const Settings *settings,
     G_json_object_set_number(root, "walkers_requested", sim->maxwa);
     G_json_object_set_number(root, "walkers_generated", sim->nwalk);
     G_json_object_set_number(root, "walkers_remaining", sim->nwalka);
+    G_json_object_set_number(root, "seed", (double)settings->seed);
     G_json_object_set_number(root, "duration", settings->timesec);
     G_json_object_set_number(
         root, "simulated_time",
@@ -164,6 +166,7 @@ static void print_plain(const Setup *setup, const Settings *settings,
     printf("walkers_requested: %d\n", sim->maxwa);
     printf("walkers_generated: %d\n", sim->nwalk);
     printf("walkers_remaining: %d\n", sim->nwalka);
+    printf("seed: %" PRId64 "\n", settings->seed);
     printf("duration: %d\n", settings->timesec);
     print_number("simulated_time",
                  simulated_seconds(setup, summary->iterations_completed));

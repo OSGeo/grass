@@ -750,14 +750,18 @@ def test_flow_control_increases_depth(east_slope_session):
     Higher trapping probability means more accumulation.
     """
     tools = Tools(session=east_slope_session)
-    sum_no_control = float(np.sum(run_sim(east_slope_session)))
+    # The ten default walkers leave the total with trapping at 0.3 within
+    # noise of the total without trapping for about a quarter of the seeds;
+    # a thousand separate no trapping, 0.3 and 0.8 for every seed tried.
+    walkers = {"nwalkers": 1000}
+    sum_no_control = float(np.sum(run_sim(east_slope_session, **walkers)))
     tools.r_mapcalc(expression="flow_ctrl_low = 0.3")
     tools.r_mapcalc(expression="flow_ctrl_high = 0.8")
     sum_low_trap = float(
-        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_low"))
+        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_low", **walkers))
     )
     sum_high_trap = float(
-        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_high"))
+        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_high", **walkers))
     )
     assert sum_low_trap > sum_no_control, (
         f"Trapping should increase depth: "
@@ -907,8 +911,10 @@ def test_walkers_output(long_slope_session):
 def test_nprocs_gives_result_within_noise(east_slope_session):
     """Multiple threads produce a result close to a single thread.
 
-    Threads share the random number generator state, so multi-threaded
-    results vary between runs even with a fixed seed. Total depth should
+    Each walker draws the same random numbers with any number of threads,
+    but threads add to the water depth without synchronization, so
+    multi-threaded results vary between runs even with a fixed seed. Total
+    depth should
     still agree with the single-threaded result within Monte Carlo noise,
     using the same tolerance as test_results_consistent_across_seeds.
     """

@@ -196,6 +196,7 @@ stored in the history of the output raster maps under the same keys (see
 | `walkers_requested` | Number of walkers from **nwalkers**, by default twice the number of cells | count |
 | `walkers_generated` | Walkers created, at least one per cell and more where the source rate is higher | count |
 | `walkers_remaining` | Walkers still in the domain at the end of the run | count |
+| `seed` | Seed of the random numbers, given or generated | |
 | `duration` | Requested simulation length (**duration**) | s |
 | `simulated_time` | Simulated time reached at the end of the run | s |
 | `time_step` | Simulated time per iteration | s |
@@ -277,6 +278,7 @@ The printed summary:
     "walkers_requested": 100000,
     "walkers_generated": 120000,
     "walkers_remaining": 112724,
+    "seed": 3,
     "duration": 1200,
     "simulated_time": 1199.2085202681737,
     "time_step": 1.0631281208051186,
@@ -310,6 +312,16 @@ The printed summary:
     ]
 }
 ```
+
+### Random numbers and parallel processing
+
+The walkers are placed and moved using pseudo-random numbers. The seed
+is given by **random_seed**; without it, a seed is generated and
+recorded in the history of the output maps and in the run summary as
+`seed`, so that the run can be repeated. With more than one thread, the
+results differ slightly between thread counts and between repeated runs,
+since the order in which the walkers reach a cell depends on the
+threads. Use **nprocs=1** when results must be reproducible.
 
 ## EXAMPLE
 
