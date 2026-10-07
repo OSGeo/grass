@@ -529,12 +529,12 @@ def test_duration_affects_time_series_progression(long_slope_session):
     """A longer duration must create more time-series output maps.
 
     With output_step=5, duration=10 produces maps at t=5,10 while
-    duration=20 produces maps at t=5,10,15 and, if walkers survive to the
-    end, also t=20. The exact count of the longer run is not pinned: whether
-    the final t=20 map appears depends on whether the last walkers leave the
-    domain before the final step, which varies with seed and platform. We
-    assert the robust lower bound (at least three maps) and that the longer
-    simulation yields strictly more maps than the shorter one.
+    duration=20 produces maps at t=5,10,15,20. The exact count of the longer
+    run is not pinned: when the last walkers leave the domain early, which
+    varies with seed and platform, the steps after that are not written,
+    only the final t=20 map. We assert the robust lower bound (at least
+    three maps) and that the longer simulation yields strictly more maps
+    than the shorter one.
     """
     tools = Tools(session=long_slope_session)
 
@@ -573,8 +573,8 @@ def test_duration_affects_time_series_progression(long_slope_session):
         f"10-min simulation with output_step=5 should produce 2 maps, got {len(maps_10)}"
     )
 
-    # 20-min run should produce at least 3 time-series maps (t=5, t=10, t=15;
-    # t=20 as well when the last walkers survive to the final step).
+    # 20-min run should produce at least 3 time-series maps (t=5, t=10 and
+    # t=20, and t=15 as well when the last walkers stay past it).
     maps_20 = list(tools.g_list(type="raster", pattern="depth_20min*", format="json"))
     assert len(maps_20) >= 3, (
         f"20-min simulation with output_step=5 should produce at least 3 maps, "
@@ -750,14 +750,18 @@ def test_flow_control_increases_depth(east_slope_session):
     Higher trapping probability means more accumulation.
     """
     tools = Tools(session=east_slope_session)
-    sum_no_control = float(np.sum(run_sim(east_slope_session)))
+    # The ten default walkers leave the total with trapping at 0.3 within
+    # noise of the total without trapping for about a quarter of the seeds;
+    # a thousand separate no trapping, 0.3 and 0.8 for every seed tried.
+    walkers = {"nwalkers": 1000}
+    sum_no_control = float(np.sum(run_sim(east_slope_session, **walkers)))
     tools.r_mapcalc(expression="flow_ctrl_low = 0.3")
     tools.r_mapcalc(expression="flow_ctrl_high = 0.8")
     sum_low_trap = float(
-        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_low"))
+        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_low", **walkers))
     )
     sum_high_trap = float(
-        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_high"))
+        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_high", **walkers))
     )
     assert sum_low_trap > sum_no_control, (
         f"Trapping should increase depth: "
@@ -907,8 +911,10 @@ def test_walkers_output(long_slope_session):
 def test_nprocs_gives_result_within_noise(east_slope_session):
     """Multiple threads produce a result close to a single thread.
 
-    Threads share the random number generator state, so multi-threaded
-    results vary between runs even with a fixed seed. Total depth should
+    Each walker draws the same random numbers with any number of threads,
+    but threads add to the water depth without synchronization, so
+    multi-threaded results vary between runs even with a fixed seed. Total
+    depth should
     still agree with the single-threaded result within Monte Carlo noise,
     using the same tolerance as test_results_consistent_across_seeds.
     """

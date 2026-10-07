@@ -24,6 +24,7 @@ COMMON_KEYS = {
     "walkers_requested",
     "walkers_generated",
     "walkers_remaining",
+    "seed",
     "duration",
     "simulated_time",
     "time_step",
@@ -91,6 +92,7 @@ def test_json_summary(session_tools):
     assert summary["mean_source_rate"] > 0
     assert summary["mean_infiltration"] == 0
     assert summary["threads"] == 1
+    assert summary["seed"] == 1
 
     assert len(summary["outputs"]) == 1
     output = summary["outputs"][0]
@@ -120,8 +122,8 @@ def test_json_summary_time_series(session_tools):
     assert [output["depth"] for output in outputs] == ["depth.01", "depth.02"]
     assert outputs[0]["simulated_time"] < outputs[1]["simulated_time"]
     assert summary["simulated_time"] >= outputs[1]["simulated_time"]
-    for output in outputs:
-        assert output["timestamp"] == timestamp_for(output["simulated_time"])
+    for minute, output in enumerate(outputs, start=1):
+        assert output["timestamp"] == f"{minute} minutes"
         assert output["discharge"] is None
         assert session_tools.r_info(map=output["depth"], format="json")["rows"] == 5
 
@@ -195,6 +197,7 @@ def test_history(session_tools):
             "walkers_requested",
             "walkers_generated",
             "walkers_remaining",
+            "seed",
             "duration",
         ):
             assert history_value(history, key) == summary[key]

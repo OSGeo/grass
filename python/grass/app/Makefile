@@ -18,7 +18,7 @@ PYFILES := $(filter-out resource_paths.py,$(PYFILES))
 
 default: $(PYFILES) $(PYCFILES) $(DSTDIR)/resource_paths.py $(ARCH_DISTDIR)/resource_paths.py
 
-$(DSTDIR)/resource_paths.py: resource_paths.py
+$(DSTDIR)/resource_paths.py: resource_paths.py | $(DSTDIR)
 	rm -f $@
 	sed \
 	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \

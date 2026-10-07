@@ -80,7 +80,17 @@ water depth and discharge maps can be saved during simulation using the
 time series flag **-t** and **output_step** parameter defining the time
 step in minutes for writing output files. Files are saved with a suffix
 representing time since the start of simulation in minutes (e.g.
-wdepth.05, wdepth.10). Monitoring of water depth at specific points is
+wdepth.05, wdepth.10) and are timestamped with that time. The
+simulation advances in time steps which usually do not fall exactly on
+the output times. A map holds the state at the time step closest to the
+time in its name, so at most half a time step earlier or later. When the
+time step is longer than **output_step**, there are fewer time steps
+than output times, and a time step writes only the maps for the output
+time closest to it. The series always ends with maps named by the
+**duration** which hold the state at the end of the run, also when the
+duration is not a multiple of **output_step** or when the simulation
+stopped early.
+Monitoring of water depth at specific points is
 supported. A vector map with observation points and a path to a logfile
 must be provided. For each point in the vector map which is located in
 the computational region the water depth is logged each time step in the
@@ -186,6 +196,7 @@ stored in the history of the output raster maps under the same keys (see
 | `walkers_requested` | Number of walkers from **nwalkers**, by default twice the number of cells | count |
 | `walkers_generated` | Walkers created, at least one per cell and more where the source rate is higher | count |
 | `walkers_remaining` | Walkers still in the domain at the end of the run | count |
+| `seed` | Seed of the random numbers, given or generated | |
 | `duration` | Requested simulation length (**duration**) | s |
 | `simulated_time` | Simulated time reached at the end of the run | s |
 | `time_step` | Simulated time per iteration | s |
@@ -197,12 +208,12 @@ stored in the history of the output raster maps under the same keys (see
 | `mean_source_rate` | Mean rainfall excess | m/s |
 | `mean_infiltration` | Mean infiltration rate, 0 without infiltration input | m/s |
 | `threads` | Threads used for the computation | count |
-| `outputs` | One entry per set of written maps: one per **output_step** with **-t**, otherwise a single entry | |
+| `outputs` | One entry per set of written maps: with **-t**, one per written output step, the last one named by **duration**, otherwise a single entry | |
 
-Each entry of `outputs` contains the `simulated_time` (s) and `timestamp`
-of the written maps, the number of `walkers_remaining` at that time, and
-the names of the `depth`, `discharge`, `error` and `walkers` maps, or
-`null` for maps which were not requested.
+Each entry of `outputs` contains the `simulated_time` (s) when the maps
+were written, their `timestamp`, the number of `walkers_remaining` at
+that time, and the names of the `depth`, `discharge`, `error` and
+`walkers` maps, or `null` for maps which were not requested.
 
 Summary of a time series run with two output steps in JSON:
 
@@ -267,6 +278,7 @@ The printed summary:
     "walkers_requested": 100000,
     "walkers_generated": 120000,
     "walkers_remaining": 112724,
+    "seed": 3,
     "duration": 1200,
     "simulated_time": 1199.2085202681737,
     "time_step": 1.0631281208051186,
@@ -300,6 +312,16 @@ The printed summary:
     ]
 }
 ```
+
+### Random numbers and parallel processing
+
+The walkers are placed and moved using pseudo-random numbers. The seed
+is given by **random_seed**; without it, a seed is generated and
+recorded in the history of the output maps and in the run summary as
+`seed`, so that the run can be repeated. With more than one thread, the
+results differ slightly between thread counts and between repeated runs,
+since the order in which the walkers reach a cell depends on the
+threads. Use **nprocs=1** when results must be reproducible.
 
 ### Performance
 

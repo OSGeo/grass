@@ -11,6 +11,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 from __future__ import annotations
 
 import logging
+import math
 import sys
 from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
 from datetime import datetime
@@ -825,11 +826,11 @@ def _read_raster3d_info(name, mapset):
         return None
     libraster3d.Rast3d_range_min_max(g3map, byref(min), byref(max))
 
-    if min.value != min.value:
+    if math.isnan(min.value):
         kvp["min"] = None
     else:
         kvp["min"] = float(min.value)
-    if max.value != max.value:
+    if math.isnan(max.value):
         kvp["max"] = None
     else:
         kvp["max"] = float(max.value)

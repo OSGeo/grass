@@ -79,7 +79,8 @@ int Rast_is_reclassed_to(const char *name, const char *mapset, int *nrmaps,
                          char ***rmaps)
 {
     FILE *fd;
-    int i, j, k, l;
+    int i;
+    size_t j, k, l;
     char buf2[256], buf3[256];
 
     fd = G_fopen_old_misc("cell_misc", "reclassed_to", name, mapset);
