@@ -167,12 +167,18 @@ def test_walkers_depend_on_seed(session):
 @pytest.mark.parametrize("seed", [-(2**31) - 1, 2**32])
 def test_seed_outside_range_is_an_error(session, seed):
     """A seed the generator cannot use is refused, not silently wrapped."""
-    with pytest.raises(CalledModuleError, match="outside the range"):
+    with pytest.raises(CalledModuleError, match=r"outside\s+the\s+range"):
         simulate_depth(session, seed=seed)
 
 
-@pytest.mark.parametrize("seed", ["12abc", "1.5", "-", "99999999999999999999"])
+@pytest.mark.parametrize("seed", ["12abc", "1.5", "1e9", "-", "99999999999999999999"])
 def test_seed_which_is_not_an_integer_is_an_error(session, seed):
     """A seed which the parser lets through but which is not an integer is refused."""
     with pytest.raises(CalledModuleError, match="Invalid random seed"):
         simulate_depth(session, seed=seed)
+
+
+@pytest.mark.parametrize("seed", [-(2**31), 2**32 - 1])
+def test_seed_at_range_limit_is_accepted(session, seed):
+    """The lowest and the highest seed the generator can use are accepted."""
+    simulate_depth(session, seed=seed)
