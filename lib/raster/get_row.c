@@ -171,7 +171,7 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 
     /* Now decompress the row */
     if (fcb->cellhd.compressed > 0) {
-        if (readamount == 0) {
+        if (readamount < 1) {
             G_free(cmp2);
             G_fatal_error(_("Error reading raster data for row %d of <%s>"),
                           row, fcb->name);
@@ -179,14 +179,21 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 
         /* one byte is nbyte count */
         n = *nbytes = *cmp++;
-        readamount--;
+        readamount -= 1;
+
+        if (n > fcb->nbytes) {
+            G_free(cmp2);
+            G_fatal_error(
+                _("Invalid byte count in raster data for row %d of <%s>"), row,
+                fcb->name);
+        }
     }
     else
         /* pre 3.0 compression */
         n = *nbytes = fcb->nbytes;
 
     bufsize = (size_t)n * fcb->cellhd.cols;
-    if (fcb->cellhd.compressed < 0 || (size_t)readamount < bufsize) {
+    if (fcb->cellhd.compressed < 0 || readamount < bufsize) {
         if (fcb->cellhd.compressed == 1)
             rle_decompress(data_buf, cmp, n, readamount);
         else {
@@ -203,8 +210,13 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
             }
         }
     }
-    else
-        memcpy(data_buf, cmp, readamount);
+    else {
+        if (readamount > bufsize)
+            G_fatal_error(_("Raster row for <%s> is larger than expected"),
+                          fcb->name);
+
+        memcpy(data_buf, cmp, bufsize);
+    }
 
     G_free(cmp2);
 }
