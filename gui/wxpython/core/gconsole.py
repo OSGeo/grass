@@ -302,14 +302,17 @@ class GStderr:
         self._incomplete_line = ""
 
     def flush(self):
-        pass
+        if self._incomplete_line:
+            self.write("\n")
 
     def write(self, s):
         if "GtkPizza" in s:
             return
 
-        # Python may write one line in several parts (e.g., in a traceback)
-        s, _, self._incomplete_line = (self._incomplete_line + s).rpartition("\n")
+        # Python may write a line in parts (e.g., a traceback), so wait for \n or \r.
+        s = self._incomplete_line + s
+        end = max(s.rfind("\n"), s.rfind("\r")) + 1
+        s, self._incomplete_line = s[:end], s[end:]
 
         # remove/replace escape sequences '\b' or '\r' from stream
         progressValue = -1
