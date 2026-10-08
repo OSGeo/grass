@@ -692,24 +692,18 @@ g.rename raster=newmap,oldmap
 <h3>Random number generator initialization</h3>
 <p>The pseudo-random number generator used by the rand() function can be
 initialised to a specific value using the <b>seed</b> parameter. This can be
-used to replicate a previous calculation. The seed must be an integer
-between -2147483648 and 4294967295. Seeds from 0 to 1073741823 are
-recommended, since two seeds 1073741824 or 2147483648 apart give related
-values.
-<p>If rand() function is used and no seed is given, <em>r.mapcalc</em> generates a
-seed: the value of the environment variable <code>GRASS_RANDOM_SEED</code>, or of
-<code>SOURCE_DATE_EPOCH</code> if that one is not set, and otherwise a value
-computed from the current time and the process ID, which differs from
-run to run.
+used to replicate a previous calculation.
+<p>If rand() function is used and no seed is given,
+<em>r.mapcalc</em> will generate a seed, resulting in a different result for
+each run.
 <p>In either case, the seed will be written to the map's history, and can
 be seen using <em>r.info</em>.
 <p>If you want other people to be able to verify your results, it's
 preferable to use the <b>seed</b> parameter.
-<p>The result for a given seed is the same as in earlier versions and the
-same for any number of threads (<b>nprocs</b>). The values for a given seed
-depend on the computational region and on all rand() calls in the
-expressions: adding or removing a rand() call can change the values of
-the others.
+<p>The result for a given seed does not depend on the number of threads
+(<b>nprocs</b>). The values for a given seed depend on the computational
+region and on all rand() calls in the expressions: adding or removing a
+rand() call can change the values of the others.
 
 <h2>EXAMPLES</h2>
 
