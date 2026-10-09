@@ -441,6 +441,7 @@ class DisplayDriver:
                         "WARNING: Zero-length line or boundary drawing skipped. "
                         "Use v.clean to remove it."
                     )
+                    + "\n"
                 )
                 return None
             if robj.type == TYPE_AREA:

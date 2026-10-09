@@ -821,7 +821,7 @@ class Map:
 
         # setting some initial env. variables
         if not self.GetWindow():
-            sys.stderr.write(_("Trying to recover from default region..."))
+            sys.stderr.write(_("Trying to recover from default region...") + "\n")
             RunCommand("g.region", flags="d")
 
         # projection info
