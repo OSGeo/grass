@@ -7,7 +7,7 @@ Parts of the grass.script API
 .. toctree::
    :maxdepth: 2
 
-   script
+   grass.script
 
 
 Syntax

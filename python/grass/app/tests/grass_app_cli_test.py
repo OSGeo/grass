@@ -240,13 +240,13 @@ def test_create_mapset(tmp_path):
 
 
 def test_mapset_create_exists(tmp_path):
-    """Check that creating mapset fails when mapset already exists"""
+    """Check that creating mapset fails unless --overwrite is used"""
     project = tmp_path / "test_1"
     mapset = project / "data_1"
     assert main(["project", "create", str(project)]) == 0
     assert main(["mapset", "create", str(mapset)]) == 0
     assert main(["mapset", "create", str(mapset)]) == 1
-    # There is no overwrite option for mapset yet, so we don't test that.
+    assert main(["mapset", "create", "--overwrite", str(mapset)]) == 0
 
 
 def test_create_overwrite(tmp_path):

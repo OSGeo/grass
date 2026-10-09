@@ -1,10 +1,8 @@
 """
 Map layer and space time dataset classes
 
-(C) 2012-2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -122,8 +120,8 @@ class RasterDataset(AbstractMapDataset):
         >>> rmap.metadata.print_info()
          +-------------------- Metadata information ----------------------------------+
          | Datatype:................... CELL
-         | Number of columns:.......... 8
-         | Number of rows:............. 12
+         | Number of columns:.......... 12
+         | Number of rows:............. 8
          | Number of cells:............ 96
          | North-South resolution:..... 10.0
          | East-west resolution:....... 10.0
@@ -544,8 +542,8 @@ class Raster3DDataset(AbstractMapDataset):
         >>> r3map.metadata.print_info()
          +-------------------- Metadata information ----------------------------------+
          | Datatype:................... DCELL
-         | Number of columns:.......... 8
-         | Number of rows:............. 12
+         | Number of columns:.......... 12
+         | Number of rows:............. 8
          | Number of cells:............ 960
          | North-South resolution:..... 10.0
          | East-west resolution:....... 10.0
@@ -782,7 +780,8 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _("Unable to remove timestamp for raster map <%s>") % (self.get_name())
+                _("Unable to remove timestamp for 3D raster map <%s>")
+                % (self.get_name())
             )
             return False
 
@@ -1118,9 +1117,7 @@ class VectorDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(
-                _("Unable to remove timestamp for vector map <%s>").format(
-                    self.get_name()
-                )
+                _("Unable to remove timestamp for vector map <%s>") % self.get_name()
             )
             return False
 

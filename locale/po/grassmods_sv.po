@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
-"PO-Revision-Date: 2026-01-08 02:38+0000\n"
+"POT-Creation-Date: 2026-10-03 18:51+0000\n"
+"PO-Revision-Date: 2026-10-04 18:34+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
 "Language: sv\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
@@ -40,15 +40,11 @@ msgstr "Misslyckades med att initiera JSON-array. Har du slut på minne?"
 msgid "Failed to serialize JSON to pretty format."
 msgstr "Misslyckades med att serialisera JSON till pretty-format."
 
-#, fuzzy
-#| msgid "Print raster3d information in shell style"
 msgid "Print type information about the columns"
-msgstr "Skriv ut raster3d-information i skal-stil"
+msgstr "Skriv ut typinformation om kolumnerna"
 
-#, fuzzy
-#| msgid "List all columns for a given table."
 msgid "Print the name and the type of all the columns for a given table."
-msgstr "Lista alla kolumner för en given tabell."
+msgstr "Skriv ut namnet och typen för alla kolumner i en given tabell."
 
 msgid "Print"
 msgstr "Skriv ut"
@@ -325,10 +321,8 @@ msgstr "Namn på fil som innehåller SQL select-sats(er)"
 msgid "Name of table to query"
 msgstr "Namn på tabellen som ska efterfrågas"
 
-#, fuzzy
-#| msgid "Vertical record separator (requires -v flag)"
 msgid "Vertical record separator (requires -v flag [deprecated] or format=vertical)"
-msgstr "Vertikal skivavskiljare (kräver flaggan -v)"
+msgstr "Vertikal postavgränsare (kräver flaggan -v [föråldrad] eller format=vertical)"
 
 msgid "Name for output file (if omitted or \"-\" output to stdout)"
 msgstr "Namn på utdatafil (om utelämnad eller \"-\" utdata till stdout)"
@@ -339,10 +333,8 @@ msgstr "Inkludera inte kolumnnamn i utdata"
 msgid "Describe query only (don't run it)"
 msgstr "Beskriv endast frågan (kör den inte)"
 
-#, fuzzy
-#| msgid "Vertical output (instead of horizontal)"
 msgid "Vertical output instead of horizontal [deprecated]"
-msgstr "Vertikal utmatning (istället för horisontell)"
+msgstr "Vertikal utmatning i stället för horisontell [föråldrad]"
 
 msgid "Use format=vertical instead."
 msgstr "Använd format=vertical istället."
@@ -363,10 +355,8 @@ msgstr "Du måste ange ett av dessa alternativ: <%s>, <%s> eller <%s>"
 msgid "Separator is part of the format"
 msgstr "Separatorn är en del av formatet"
 
-#, fuzzy
-#| msgid "Separator is part of the format"
 msgid "Vertical separator is part of the format"
-msgstr "Separatorn är en del av formatet"
+msgstr "Den vertikala avgränsaren är en del av formatet"
 
 msgid "Null value is part of the format"
 msgstr "Nullvärdet är en del av formatet"
@@ -374,13 +364,11 @@ msgstr "Nullvärdet är en del av formatet"
 msgid "Column names are always included"
 msgstr "Kolumnnamn inkluderas alltid"
 
-#, fuzzy
-#| msgid "Flag 'g' is deprecated and will be removed in a future release. Please use format=shell instead."
 msgid "Flag 'v' is deprecated and will be removed in a future release. Please use format=vertical instead."
-msgstr "Flaggan \"g\" är föråldrad och kommer att tas bort i en framtida version. Använd format=shell istället."
+msgstr "Flaggan 'v' är föråldrad och kommer att tas bort i en framtida version. Använd format=vertical i stället."
 
 msgid "Flag 'v' is only allowed with format=vertical."
-msgstr ""
+msgstr "Flaggan 'v' får endast användas med format=vertical."
 
 #, c-format
 msgid "Unable to list tables from database <%s>"
@@ -1489,7 +1477,7 @@ msgid "Invalid value for color type in legend file. Use one of 'lf' or 'ps'."
 msgstr "Ogiltigt värde för färgtyp i legendfilen. Använd en av 'lf' eller 'ps'."
 
 msgid "legend"
-msgstr "datasettlista"
+msgstr "teckenförklaring"
 
 msgid "Displays a vector legend in the active graphics frame."
 msgstr "Visar en vektorlegende i den aktiva grafikramen."
@@ -1772,8 +1760,8 @@ msgid "Cannot find/open symbol: '%s'"
 msgstr "Kan inte hitta/öppna symbolen: '%s'"
 
 #, c-format
-msgid "Color <%s> cannot for option %s be parsed"
-msgstr "Färg <%s> kan inte analyseras för alternativ %s"
+msgid "Color <%s> for option <%s> cannot be parsed"
+msgstr "Färgen <%s> för alternativet <%s> kan inte tolkas"
 
 #, c-format
 msgid "Only <%d> colors given for <%d> lines"
@@ -1784,7 +1772,7 @@ msgid "Number of widths (%d) is higher then the number of files (%d)"
 msgstr "Antalet bredder (%d) är högre än antalet filer (%d)"
 
 #, c-format
-msgid "Number of widths (%d) is lower then the number of files (%d)"
+msgid "Number of widths (%d) is lower than the number of files (%d)"
 msgstr "Antalet bredder (%d) är lägre än antalet filer (%d)"
 
 #, c-format
@@ -2460,10 +2448,8 @@ msgstr "Skapa legendinformation och skicka till stdout"
 msgid "Legend"
 msgstr "Historia"
 
-#, fuzzy
-#| msgid "Legend symbol for lines"
 msgid "Legend symbol size"
-msgstr "Legendsymbol för linjer"
+msgstr "Storlek på teckenförklaringssymbol"
 
 msgid "Do not draw map, only output the legend information"
 msgstr "Rita inte kartan, mata bara ut information om teckenförklaringen"
@@ -2474,10 +2460,9 @@ msgstr "Visa inte detta lager i vektorlegenden"
 msgid "Create 3D charts"
 msgstr "Skapa 3D-diagram"
 
-#, fuzzy, c-format
-#| msgid "Unable to open file <%s> for writing"
+#, c-format
 msgid "Unable to open GRASS_LEGEND_FILE <%s> for writing"
-msgstr "Det går inte att öppna filen <%s> för skrivning"
+msgstr "Det går inte att öppna GRASS_LEGEND_FILE <%s> för skrivning"
 
 #, c-format
 msgid "Database connection not defined for layer %d"
@@ -2673,7 +2658,7 @@ msgstr "Använda algoritm: *** %s ***\n"
 
 #, c-format
 msgid "Mean: %f\tStandard deviation = %f\n"
-msgstr "Medelvärde: %f Standardavvikelse = %f\n"
+msgstr "Medelvärde: %f\tStandardavvikelse = %f\n"
 
 #, c-format
 msgid "Last chi2 = %f\n"
@@ -3942,8 +3927,6 @@ msgstr "projektion"
 msgid "create project"
 msgstr "skapa projekt"
 
-#, fuzzy
-#| msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions)."
 msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions)."
 msgstr "Skriver ut eller ändrar GRASS-projektionsinformationsfiler (i olika beskrivningar av koordinatsystem)."
 
@@ -3999,13 +3982,11 @@ msgid "EPSG projection code"
 msgstr "EPSG-projektionskod"
 
 msgid "List codes for given authority, e.g. EPSG, and exit"
-msgstr "Lista koder för given myndighet, t.ex. EPSG, och avsluta"
+msgstr "Lista koder för given myndighet, t.ex. EPSG och avsluta"
 
 msgid "Datum"
 msgstr "Datum"
 
-#, fuzzy
-#| msgid "Datum (overrides any datum specified in input co-ordinate system)"
 msgid "Datum (overrides any datum specified in input coordinate system)"
 msgstr "Datum (åsidosätter eventuellt datum som anges i inmatat koordinatsystem)"
 
@@ -4018,10 +3999,8 @@ msgstr "Indexnummer för parametrar för datumtransformation"
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr "\"0\" för ospecificerat eller \"-1\" för att lista och avsluta"
 
-#, fuzzy
-#| msgid "Force override of datum transformation information in input co-ordinate system"
 msgid "Force override of datum transformation information in input coordinate system"
-msgstr "Force override av information om datumtransformation i inmatat koordinatsystem"
+msgstr "Tvinga fram åsidosättning av information om datumtransformation i inmatat koordinatsystem"
 
 msgid "Modify"
 msgstr "Ändra"
@@ -4073,7 +4052,7 @@ msgid "computational region"
 msgstr "beräkningsregion"
 
 msgid "extent"
-msgstr "omfattning"
+msgstr "utbredning"
 
 msgid "resolution"
 msgstr "upplösning"
@@ -4606,7 +4585,7 @@ msgid "Shell"
 msgstr "Skal"
 
 msgid "Cannot use the -g flag with format=json; please select only one option."
-msgstr "Flaggan -g kan inte användas med format=json. Välj endast ett alternativ."
+msgstr "Flaggan -g kan inte användas med format=json; välj endast ett alternativ."
 
 #, c-format
 msgid "Cannot determine GRASS libgis version and date number. The GRASS build might be broken. Report this to developers or packagers.\n"
@@ -4644,6 +4623,9 @@ msgstr "satellit"
 msgid "Landsat"
 msgstr "Landsat"
 
+msgid "Sentinel"
+msgstr "Sentinel"
+
 msgid "ASTER"
 msgstr "ASTER"
 
@@ -4667,6 +4649,9 @@ msgstr "Landsat 5+7 (6 inmatningsband: 1,2,3,4,5,7)"
 
 msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
 msgstr "Landsat 8 (7 inmatningsband: 1,2,3,4,5,6,7)"
+
+msgid "Sentinel-2 (6 input bands: B2,B3,B4,B8,B11,B12 surface reflectance in [0,1]; Bonafoni & Sekertekin 2020 coefficients)"
+msgstr "Sentinel-2 (6 inmatningsband: B2,B3,B4,B8,B11,B12, ytreflektans i [0,1]; koefficienter av Bonafoni och Sekertekin från 2020)"
 
 msgid "ASTER (6 input bands:1,3,5,6,8,9)"
 msgstr "ASTER (6 ingångsband: 1,3,5,6,8,9)"
@@ -7441,7 +7426,7 @@ msgid "Name for input raster map with starting seeds"
 msgstr "Namn för inmatad rasterkarta med startfrön"
 
 msgid "Name of input bounding/constraining raster map"
-msgstr "Namn på rasterkarta för begränsande/begränsande indata"
+msgstr "Namn på inmatad rasterkarta för avgränsning"
 
 msgid "Must be integer values, each area will be segmented independent of the others"
 msgstr "Måste vara heltalsvärden, varje område kommer att segmenteras oberoende av de andra"
@@ -7696,8 +7681,8 @@ msgstr "Förutsägelser med SVM"
 msgid "Predict with a Support Vector Machine"
 msgstr "Förutsägelser med en stödvektormaskin"
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 msgid "Maps with feature values (attributes)"
 msgstr "Kartor med funktionsvärden (attribut)"
 
@@ -8020,7 +8005,7 @@ msgid "Calculates different types of vegetation indices."
 msgstr "Beräknar olika typer av vegetationsindex."
 
 msgid "Uses red and nir bands mostly, and some indices require additional bands."
-msgstr "Använder mestadels röd- och nir-band, och vissa index kräver ytterligare band."
+msgstr "Använder främst röd- och NIR-band och vissa index kräver ytterligare band."
 
 msgid "Type of vegetation index"
 msgstr "Typ av vegetationsindex"
@@ -8793,9 +8778,6 @@ msgstr "Utför Tasseled Cap (Kauth Thomas) transformation."
 msgid "Worldview"
 msgstr "Världsbild"
 
-msgid "Sentinel"
-msgstr "Sentinel"
-
 msgid "Tasseled Cap transformation"
 msgstr "Tasseled Cap-transformation"
 
@@ -9339,23 +9321,38 @@ msgstr "Omklassificerar en rasterkarta som är större eller mindre än använda
 msgid "aggregation"
 msgstr "sammanställning"
 
-msgid "Value option that sets the area size limit (in hectares)"
-msgstr "Värdealternativ som anger gränsen för områdets storlek (i hektar)"
+msgid "Value option that sets the area size limit (in hectares) (deprecated)"
+msgstr "Värdealternativ som anger gränsen för områdets storlek (i hektar) (föråldrat)"
 
 msgid "Area"
 msgstr "Område"
 
-msgid "Lesser or greater than specified value"
-msgstr "Lägre eller högre än angivet värde"
+msgid "Keep only areas lesser or greater than specified value (deprecated)"
+msgstr "Behåll endast områden som är mindre eller större än angivet värde (föråldrat)"
 
-msgid "Method used for reclassification"
-msgstr "Metod som använts för omklassificering"
+msgid "Value for the lower area size limit (in hectares). Pixel clumps with areas below this value are removed."
+msgstr "Värde för den nedre gränsen för områdets storlek (i hektar). Pixelklumpar med områden under detta värde tas bort."
+
+msgid "Value for the upper area size limit (in hectares). Pixel clumps with areas above this value are removed."
+msgstr "Värde för den övre gränsen för områdets storlek (i hektar). Pixelklumpar med områden över detta värde tas bort."
+
+msgid "Method used for area size filtering"
+msgstr "Metod som används för filtrering efter områdesstorlek"
 
 msgid "Input map is clumped"
 msgstr "Inmatningskartan är klumpad"
 
-msgid "Clumps including diagonal neighbors"
-msgstr "Klumpar inklusive diagonala grannar"
+msgid "Generate clumps including diagonal neighbors"
+msgstr "Generera klumpar som omfattar diagonala grannar"
+
+msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgstr "Invertera filter (ta bort klumpar som är större än den nedre och mindre än den övre gränsen)"
+
+msgid "Apply lower area threshold as \"minsize\" during clumping"
+msgstr "Tillämpa den nedre områdesgränsen som ”minsize” vid klumpning"
+
+msgid "Output vector map, do not convert back to raster (only for method 'rmarea')"
+msgstr "Skriv ut vektorkarta, konvertera inte tillbaka till raster (endast för metoden 'rmarea')"
 
 msgid "Splits a raster map into red, green and blue maps."
 msgstr "Delar upp en rasterkarta i röda, gröna och blå kartor."
@@ -9590,6 +9587,12 @@ msgstr "Formaterar"
 
 msgid "Columns to be printed to stdout"
 msgstr "Kolumner som ska skrivas ut till stdout"
+
+msgid "plain;Plain text output;line;Comma separated list of dataset names;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr "plain;Vanlig textutdata;line;Kommaseparerad lista med datauppsättningsnamn;json;JSON (JavaScript Object Notation);csv;CSV (kommaseparerade värden)"
+
+msgid "Name of mapsets to list ('.' for current, '*' for all mapsets)"
+msgstr "Namn på kartuppsättningar som ska listas ('.' för aktuell, '*' för alla kartuppsättningar)"
 
 msgid "Field separator character between the output columns"
 msgstr "Fältavgränsningstecken mellan utdatakolumnerna"
@@ -9867,11 +9870,11 @@ msgstr "Tilldela start- och sluttid för rasterdatasetet för rymdtid till utdat
 msgid "Imports space time raster dataset."
 msgstr "Importerar rasterdataset för rymdtid."
 
-msgid "Path to the extraction directory"
-msgstr "Sökväg till extraktionskatalogen"
+msgid "Path to the extraction directory (default is .tmp in the current mapset)"
+msgstr "Sökväg till extraheringskatalogen (standard är .tmp i den aktuella kartuppsättningen)"
 
-msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
-msgstr "Skapa ett nytt projekt och importera data till det. Kör inte denna modul parallellt eller avbryt den när ett nytt projekt ska skapas"
+msgid "Create a new project and import the data into it."
+msgstr "Skapa ett nytt projekt och importera data till det."
 
 msgid "Set the current region from the last map that was imported"
 msgstr "Ställ in den aktuella regionen från den senaste kartan som importerades"
@@ -9897,10 +9900,8 @@ msgstr "Metod som används för datalistning"
 msgid "The granule to be used for listing. The granule must be specified as string eg.: absolute time \"1 months\" or relative time \"1\""
 msgstr "Det granulat som ska användas för listning. Granulatet måste anges som en sträng, t.ex.: absolut tid \"1 månader\" eller relativ tid \"1\""
 
-#, fuzzy
-#| msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
 msgid "plain;Plain text output;line;Comma separated list of map names;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (Comma Separated Values);"
-msgstr "vanlig;mänsklig läsbar textutmatning;skal;textutmatning i skalskriptstil;json;JSON (JavaScript Object Notation);"
+msgstr "plain;Vanlig textutdata;line;Kommaseparerad lista med kartnamn;json;JSON (JavaScript Object Notation);yaml;YAML (YAML Ain't Markup Language);csv;CSV (kommaseparerade värden);"
 
 msgid "Suppress printing of column names"
 msgstr "Undertrycka utskrift av kolumnnamn"
@@ -10040,6 +10041,9 @@ msgstr "parallell"
 msgid "Raster map used for zoning, must be of type CELL"
 msgstr "Rasterkarta som används för zonindelning, måste vara av typen CELL"
 
+msgid "plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)"
+msgstr "plain;Vanlig textutdata;json;JSON (JavaScript Object Notation);csv;CSV (kommaseparerade värden)"
+
 msgid "Calculate extended statistics"
 msgstr "Beräkna utökad statistik"
 
@@ -10106,8 +10110,8 @@ msgstr "Beräknar univariat statistik från de icke-nullceller som finns för va
 msgid "Raster map with zones to compute statistics for"
 msgstr "Rasterkarta med zoner för att beräkna statistik för"
 
-msgid "Raster map with zones to compute statistics for (needs to be CELL)"
-msgstr "Rasterkarta med zoner att beräkna statistik för (måste vara CELL)"
+msgid "3D raster map with zones"
+msgstr "3D-rasterkarta med zoner"
 
 msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
 msgstr "Tilldelar tidsstämplar och registrerar raster-, vektor- och raster3d-kartor i en rymdtidsdataset."
@@ -10274,6 +10278,9 @@ msgstr "Skriver ut attribut för vektorkartor som registrerats i ett vektordatas
 msgid "select"
 msgstr "välj"
 
+msgid "plain;Plain text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr "plain;Vanlig textutdata;csv;CSV (kommaseparerade värden);json;JSON (JavaScript Object Notation)"
+
 msgid "Exports a space time vector dataset as GRASS specific archive file."
 msgstr "Exporterar en vektoruppsättning för rymdtid som GRASS-specifik arkivfil."
 
@@ -10300,6 +10307,9 @@ msgstr "Registrera tomma kartor"
 
 msgid "Imports a space time vector dataset from a GRASS specific archive file."
 msgstr "Importerar en vektordatauppsättning för rymdtid från en GRASS-specifik arkivfil."
+
+msgid "Path to the extraction directory"
+msgstr "Sökväg till extraktionskatalogen"
 
 msgid "Create a new project (location) and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
 msgstr "Skapa ett nytt projekt (plats) och importera data till det. Kör inte denna modul parallellt eller avbryt den när ett nytt projekt ska skapas"
@@ -10341,7 +10351,7 @@ msgid "centroid"
 msgstr "centroid"
 
 msgid "area"
-msgstr "område"
+msgstr "area"
 
 msgid "Action to be taken"
 msgstr "Åtgärder som skall vidtas"
@@ -10512,7 +10522,7 @@ msgid "Dissolves adjacent or overlapping features sharing a common category numb
 msgstr "Löser upp angränsande eller överlappande funktioner som delar ett gemensamt kategorinummer eller attribut."
 
 msgid "dissolve"
-msgstr "lösas upp"
+msgstr "lösa upp"
 
 msgid "line"
 msgstr "linje"
@@ -10555,6 +10565,24 @@ msgstr "Standard är sql om inte de angivna aggregeringsmetoderna är för univa
 
 msgid "sql;Uses SQL attribute database;univar;Uses v.db.univar"
 msgstr "sql;Använder SQL-attributdatabas;univar;Använder v.db.univar"
+
+msgid "Prints geometry metrics of vector features."
+msgstr "Skriver ut geometriska mått för vektorobjekt."
+
+msgid "metric"
+msgstr "mått"
+
+msgid "Geometry metric(s) to compute"
+msgstr "Geometriska mått att beräkna"
+
+msgid "area;area size;perimeter;perimeter length of an area;length;line length;count;number of features for each category;compactness;compactness of an area, calculated as perimeter / (2 * sqrt(PI * area));fractal_dimension;fractal dimension of boundary defining a polygon, calculated as 2 * (log(perimeter) / log(area));slope;slope steepness of vector line or boundary;sinuosity;line sinuosity, calculated as line length / distance between end points;azimuth;line azimuth, calculated as angle between North direction and endnode direction at startnode;coordinates;point coordinates, X,Y or X,Y,Z;start;line/boundary starting point coordinates, X,Y or X,Y,Z;end;line/boundary end point coordinates, X,Y or X,Y,Z;bbox;bounding box of area, N,S,E,W"
+msgstr "area;områdesstorlek;perimeter;ett områdes omkrets;length;linjelängd;count;antal objekt för varje kategori;compactness;ett områdes kompakthet, beräknad som omkrets / (2 * sqrt(PI * area));fractal_dimension;gränsen för en polygons fraktaldimension, beräknad som 2 * (log(perimeter) / log(area));slope;lutningsbranthet för vektorlinje eller gräns;sinuosity;linjes slingrighet, beräknad som linjelängd / avstånd mellan ändpunkter;azimuth;linjes azimut, beräknad som vinkeln mellan nordriktningen och ändnodsriktningen vid startnoden;coordinates;punktkoordinater, X,Y eller X,Y,Z;start;startpunktskoordinater för linje/gräns, X,Y eller X,Y,Z;end;slutpunktskoordinater för linje/gräns, X,Y eller X,Y,Z;bbox;områdets begränsningsruta, N,S,E,W"
+
+msgid "Units (one per metric, positional; unspecified metrics use defaults)"
+msgstr "Enheter (en per mått, positionsberoende; ospecificerade mått använder standardvärden)"
+
+msgid "plain;Plain text with pipe separator by default;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
+msgstr "plain;Vanlig text med lodrät streckavgränsare som standard;csv;CSV (kommaseparerade värden);json;JSON (JavaScript Object Notation)"
 
 msgid "Imports vector data into a GRASS vector map using OGR library and reprojects on the fly."
 msgstr "Importerar vektordata till en GRASS-vektorkarta med hjälp av OGR-biblioteket och reprojicerar i farten."
@@ -11118,7 +11146,7 @@ msgid "Fringe elevation"
 msgstr "Förhöjning av Fringe"
 
 msgid "Place north arrow at given position\t(in screen coordinates from bottom left corner)"
-msgstr "Placera norrpilen på given position (i skärmkoordinater från nedre vänstra hörnet)"
+msgstr "Placera norrpilen på angiven position\t(i skärmkoordinater från nedre vänstra hörnet)"
 
 msgid "Decoration"
 msgstr "Dekoration"
@@ -11980,6 +12008,10 @@ msgid "Pass 1 of 2..."
 msgstr "Passera 1 av 2..."
 
 #, c-format
+msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
+msgstr "För många klumpar: det högsta antalet klumpar som stöds är %d. Minska utbredningen eller upplösningen för beräkningsregionen, eller använd ett tröskelvärde för att slå samman liknande celler."
+
+#, c-format
 msgid "%d-band clumping with threshold %g"
 msgstr "%d-bandklumpning med tröskelvärde %g"
 
@@ -12078,6 +12110,9 @@ msgstr "Det går inte att köra r.stats"
 
 msgid "Unexpected output from r.stats"
 msgstr "Oväntad utdata från r.stats"
+
+msgid "No data returned from r.stats"
+msgstr "Inga data returnerades från r.stats"
 
 msgid "Unable to open tempfile"
 msgstr "Det går inte att öppna tempfilen"
@@ -12984,6 +13019,13 @@ msgstr "Valt band (%d) finns inte"
 msgid "Imagery group <%s> created"
 msgstr "Bildgrupp <%s> skapad"
 
+#, c-format
+msgid "Vertical CRS <%s> of the dataset is ignored"
+msgstr "Datauppsättningens vertikala CRS <%s> ignoreras"
+
+msgid "The vertical component of the dataset CRS is ignored"
+msgstr "Den vertikala komponenten i datauppsättningens CRS ignoreras"
+
 msgid "Can't get WKT parameter string"
 msgstr "Kan inte få WKT-parametersträng"
 
@@ -13455,6 +13497,14 @@ msgstr "Misslyckades med att öppna utdatafilen <%s>: %d (%s)"
 msgid "Search radius size must cover at least 1 cell"
 msgstr "Storleken på sökradien måste täcka minst 1 cell"
 
+#, c-format
+msgid "The outer search radius (search=%s) exceeds the north-south extent of the current region (%d rows). At least %d rows are needed. Set larger computational region with g.region or use a smaller search value."
+msgstr "Den yttre sökradien (search=%s) överskrider nord-sydutbredningen för den aktuella regionen (%d rader). Minst %d rader krävs. Ange en större beräkningsregion med g.region eller använd ett mindre sökvärde."
+
+#, c-format
+msgid "memory=%d MB is below the %ld MB minimum for search=%s. This run will finish with the minimum MB needed instead."
+msgstr "memory=%d MB är mindre än minsta värdet %ld MB för search=%s. Körningen avslutas i stället med det minsta MB-värde som behövs."
+
 msgid "Skip radius size must be at least 1 cell lower than radius"
 msgstr "Skip radius size måste vara minst 1 cell lägre än radius"
 
@@ -13464,18 +13514,14 @@ msgstr "Tröskelvärdet för planhet måste vara större än 0"
 msgid "Flatness distance should be between skip and search radius. Otherwise ignored"
 msgstr "Platthetsavståndet ska vara mellan skip och sökradie. Annars ignoreras"
 
-#, c-format
-msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
-msgstr "Det kan uppstå en betydande fördröjning i bearbetningen eftersom beräkningsområdet är %lu gånger större än nödvändigt"
-
-msgid "Unknown output data type"
-msgstr "Okänd typ av utdata"
-
 msgid "Profile data has been written"
 msgstr "Profildata har skrivits"
 
 msgid "Failed writing profile data"
 msgstr "Misslyckades med att skriva profildata"
+
+msgid "Unknown output data type"
+msgstr "Okänd typ av utdata"
 
 msgid "Failed to profile the computation, please check the parameters"
 msgstr "Misslyckades med att profilera beräkningen, kontrollera parametrarna"
@@ -13487,6 +13533,9 @@ msgstr "Regionens upplösning bör inte vara mindre än kartans %s upplösning. 
 #, c-format
 msgid "Internal error in %s()"
 msgstr "Internt fel i %s()"
+
+msgid "JSON nesting exceeds maximum depth"
+msgstr "JSON-nästningen överskrider största djup"
 
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
 msgstr "Genererar en rasterkarta som innehåller avstånd till närmaste rasterobjekt och/eller värdet för närmaste icke-nullcell."
@@ -14632,6 +14681,14 @@ msgstr "Det går inte att fastställa typen av inmatningsfil för <%s>"
 msgid "PDAL error: %s"
 msgstr "PDAL-fel: %s"
 
+#, c-format
+msgid "The input dataset <%s> has undefined CRS, its extent is reported as stored in the file"
+msgstr "Indatauppsättningen <%s> har odefinierat CRS; dess utbredning rapporteras som den är lagrad i filen"
+
+#, c-format
+msgid "Reprojection of the data extent failed: %s"
+msgstr "Omprojicering av datautbredningen misslyckades: %s"
+
 msgid "Mode value of point values in cell"
 msgstr "Lägesvärde för punktvärden i cell"
 
@@ -14659,11 +14716,11 @@ msgstr "Skala som ska tillämpas på utgående dimensionsvärden"
 msgid "Use if output dimension is not Z or intensity"
 msgstr "Används om utdatadimensionen inte är Z eller intensitet"
 
-msgid "Reproject to project's coordinate system if needed"
-msgstr "Omprojicera till projektets koordinatsystem om det behövs"
+msgid "Reproject to project's coordinate system if needed [deprecated]"
+msgstr "Omprojicera till projektets koordinatsystem vid behov [föråldrat]"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
-msgstr "Reprojicerar inmatad dataset till GRASS-projektets koordinatsystem (som standard kan endast dataset med matchande koordinatsystem importeras)"
+msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr "Denna flagga är föråldrad och kommer att tas bort i en framtida version. Indatauppsättningen omprojiceras alltid vid behov."
 
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
 msgstr "Projektion av indataset (WKT eller EPSG, t.ex. EPSG:4326)"
@@ -14711,8 +14768,20 @@ msgstr "Egen dimension (variabel) att använda för rastervärden"
 msgid "PDAL dimension name"
 msgstr "PDAL-dimensionens namn"
 
+msgid "Number of points buffered at once during processing"
+msgstr "Antal punkter som buffras samtidigt under bearbetningen"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr "Större värden kan förbättra prestandan för stora datauppsättningar på bekostnad av minne"
+
+msgid "Performance"
+msgstr "Prestanda"
+
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Skriv ut datafilens omfattning i skalskriptstil och avsluta sedan"
+
+msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
+msgstr "Flaggan 'w' är föråldrad och kommer att tas bort i en framtida version. Indatauppsättningen omprojiceras alltid vid behov."
 
 #, c-format
 msgid "Flag %c makes sense only with %s option or -%c flag or -%c flag"
@@ -14728,14 +14797,18 @@ msgstr "Typ av utmatningskarta inställd på CELL"
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr "Skapandet av PDAL-läsare misslyckades, fel format för <%s>"
 
-msgid "Reprojecting the input to the project's CRS"
-msgstr "Återprojicering av inmatningen till projektets CRS"
+#, c-format
+msgid "PDAL error while reading <%s>: %s"
+msgstr "PDAL-fel vid läsning av <%s>: %s"
+
+msgid "The input dataset has undefined projection"
+msgstr "Inmatningsdatasetet har odefinierad projektion"
 
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr "Åsidosätta projektionskontroll och anta att CRS för indata matchar projektets CRS"
 
-msgid "The input dataset has undefined projection"
-msgstr "Inmatningsdatasetet har odefinierad projektion"
+msgid "Reprojecting the input to the project's CRS"
+msgstr "Återprojicering av inmatningen till projektets CRS"
 
 msgid "Running PDAL algorithms..."
 msgstr "Kör PDAL-algoritmer..."
@@ -14784,13 +14857,13 @@ msgid "Title for created raster map"
 msgstr "Titel för skapad rasterkarta"
 
 msgid "Display gamma"
-msgstr "Display gamma"
+msgstr "Visa gamma"
 
 msgid "Alpha threshold"
 msgstr "Alfa tröskelvärde"
 
 msgid "Create floating-point map (0.0 - 1.0)"
-msgstr "Skapa flyttalskarta (0,0 - 1,0)"
+msgstr "Skapa flyttalskarta (0,0–1,0)"
 
 msgid "Output image file header only and exit"
 msgstr "Skriv bara ut bildfilens huvud och avsluta"
@@ -15000,10 +15073,8 @@ msgstr "Det går inte att öppna filen <%s> för att skriva header"
 msgid "Cannot open file <%s> to write JSON output"
 msgstr "Det går inte att öppna filen <%s> för att skriva JSON-utdata"
 
-#, fuzzy
-#| msgid "Failed to serialize JSON to pretty format."
 msgid "Failed to serialize JSON"
-msgstr "Misslyckades med att serialisera JSON till pretty-format."
+msgstr "Misslyckades med att serialisera JSON"
 
 #, c-format
 msgid "Cannot open file <%s> to write kappa and relevant parameters"
@@ -16068,8 +16139,8 @@ msgstr "Exporterar rasterkarta <%s> (band %d)..."
 msgid "Unable to export raster map <%s>"
 msgstr "Det går inte att exportera en rasterkarta <%s>"
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr "Antal översikter måste vara mellan 0 och 5"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "Antalet översikter måste vara mellan 0 och 30"
 
 msgid "Building overviews ..."
 msgstr "Översikt över byggnader ..."
@@ -16237,7 +16308,7 @@ msgid "Name of output povray file (TGA height field file)"
 msgstr "Namn på utmatad povray-fil (TGA-höjdfältfil)"
 
 msgid "Height-field type (0=actual heights 1=normalized)"
-msgstr "Typ av höjdfält (0=aktuella höjder 1=normerade)"
+msgstr "Typ av höjdfält (0=faktiska höjder 1=normerade)"
 
 msgid "Elevation bias"
 msgstr "Förskjutning i höjdled"
@@ -16464,6 +16535,10 @@ msgstr "Exponent för avståndsvägning (0,0-4,0)"
 
 msgid "Constrain model through central window cell"
 msgstr "Begränsa modellen genom central fönstercell"
+
+#, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%d> är inte ett giltigt antal nprocs."
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr "Morfometrisk parameter inte känd. Förutsatt att 'Elevation'"
@@ -17898,6 +17973,10 @@ msgstr "Det går inte att skriva rasterkartor - försök öka cellstorleken"
 msgid "Error writing temporary file <%s>"
 msgstr "Fel vid skrivning av temporär fil <%s>"
 
+#, c-format
+msgid "Using %d thread(s), %d buffered output rows"
+msgstr "Använder %d tråd(ar), %d buffrade utdatarader"
+
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr "Samplar om rasterkartlager till ett grövre rutnät med hjälp av aggregering."
 
@@ -18244,7 +18323,7 @@ msgid "Name of x-derivatives raster map [m/m]"
 msgstr "Namn på rasterkarta över x-derivat [m/m]"
 
 msgid "Computed from elevation map if not given"
-msgstr ""
+msgstr "Beräknas från höjdkartan om det inte anges"
 
 msgid "Name of y-derivatives raster map [m/m]"
 msgstr "Namn på rasterkarta för y-derivat [m/m]"
@@ -18292,7 +18371,7 @@ msgid "Number of walkers"
 msgstr "Antal vandrare"
 
 msgid "Duration of the simulated water flow [minutes]"
-msgstr ""
+msgstr "Varaktighet för det simulerade vattenflödet [minuter]"
 
 msgid "Minimum time step for the simulation [seconds]"
 msgstr "Minsta tidssteg för simuleringen [sekunder]"
@@ -18320,6 +18399,13 @@ msgstr "Genererar automatiskt slumpmässigt frö för slumptalsgenerator (använ
 
 msgid "Number of threads which will be used for parallel computation."
 msgstr "Antal trådar som ska användas för parallellberäkning."
+
+msgid "Print run summary to standard output"
+msgstr "Skriv ut körningssammanfattning till standardutdata"
+
+#, c-format
+msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
+msgstr "Projekt med lat/long stöds inte av %s. Omprojicera data till ett projicerat koordinatsystem."
 
 #, c-format
 msgid "Generated random seed (-s): %ld"
@@ -18378,8 +18464,8 @@ msgstr "Namn på rasterkarta över avrinningens infiltrationshastighet [mm/hr]"
 msgid "Runoff infiltration rate unique value [mm/hr]"
 msgstr "Avrinningens infiltrationshastighet unikt värde [mm/tim]"
 
-msgid "Name of flow controls raster map (permeability ratio 0-1)"
-msgstr "Namn på flödeskontroller rasterkarta (permeabilitetskvot 0-1)"
+msgid "Name of flow controls raster map (trapping probability 0-1)"
+msgstr "Namn på rasterkarta för flödeskontroll (fångstsannolikhet 0–1)"
 
 msgid "Name for output water depth raster map [m]"
 msgstr "Namn för rasterkarta över utgående vattendjup [m]"
@@ -18430,31 +18516,32 @@ msgstr "Manning's n rasterkarta hittades inte och manin_val odefinierad, välj e
 msgid "Zero value in Mannings n"
 msgstr "Nollvärde i Mannings n"
 
-msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
-msgstr "Infiltrationen överstiger regnmängden överallt! Inget flöde över land."
-
 msgid "No values in the elevation raster."
 msgstr "Inga värden i höjdrastret."
+
+#, c-format
+msgid "Time step of %.2f s is longer than output_step of %d s, some output steps may be skipped"
+msgstr "Tidssteget %.2f s är längre än output_step på %d s; vissa utmatningssteg kan hoppas över"
 
 #, c-format
 msgid ""
 "Min elevation \t= %.2f m\n"
 "Max elevation \t= %.2f m\n"
 msgstr ""
-"Min höjd = %.2f m\n"
-"Max höjd = %.2f m\n"
+"Min. höjd \t= %.2f m\n"
+"Max. höjd \t= %.2f m\n"
 
 #, c-format
 msgid "Mean Source Rate (rainf. excess or sediment) \t= %f m/s or kg/m2s \n"
-msgstr "Genomsnittlig källhastighet (regn, överskott eller sediment) = %f m/s eller kg/m2s \n"
+msgstr "Genomsnittlig källhastighet (regnöverskott eller sediment) \t= %f m/s eller kg/m2s \n"
 
 #, c-format
 msgid "Mean flow velocity \t= %f m/s\n"
-msgstr "Medelflödeshastighet = %f m/s\n"
+msgstr "Medelflödeshastighet \t= %f m/s\n"
 
 #, c-format
 msgid "Mean Mannings \t= %f\n"
-msgstr "Medelvärden för manning = %f\n"
+msgstr "Medelvärde för Manning \t= %f\n"
 
 msgid "Mean Mannings \t= undefined (chmean is zero)\n"
 msgstr "Medelvärde för Mannings \t= odefinierat (chmean är noll)\n"
@@ -18462,24 +18549,24 @@ msgstr "Medelvärde för Mannings \t= odefinierat (chmean är noll)\n"
 #, c-format
 msgid "Number of iterations \t= %d cell\n"
 msgid_plural "Number of iterations \t= %d cells\n"
-msgstr[0] "Antal iterationer = %d cell\n"
-msgstr[1] "Antal iterationer = %d celler\n"
+msgstr[0] "Antal iterationer \t= %d cell\n"
+msgstr[1] "Antal iterationer \t= %d celler\n"
 
 #, c-format
 msgid "Time step \t= %.2f s\n"
-msgstr "Tidssteg = %.2f s\n"
+msgstr "Tidssteg \t= %.2f s\n"
 
 #, c-format
 msgid ""
 "Sigmax \t= %f\n"
 "Max velocity \t= %f m/s\n"
 msgstr ""
-"Sigmax = %f\n"
-"Max hastighet = %f m/s\n"
+"Sigmax \t= %f\n"
+"Max. hastighet \t= %f m/s\n"
 
 #, c-format
 msgid "Time step used \t= %.2f s\n"
-msgstr "Tidssteg som används = %.2f s\n"
+msgstr "Använt tidssteg \t= %.2f s\n"
 
 msgid "Unable to write et file"
 msgstr "Kan inte skriva et-fil"
@@ -18857,7 +18944,7 @@ msgid "An odd integer ranging 3 - 15 indicating the basic sampling window size w
 msgstr "Ett udda heltal mellan 3 och 15 som anger storleken på det grundläggande provtagningsfönstret inom vilket alla celler kommer att beaktas för att se om de kommer att nås av den aktuella spridda cellen. Standardvärdet är 3, vilket innebär ett 3x3-fönster."
 
 msgid "Sampling density for additional computing (range: 0.0 - 1.0 (0.5))"
-msgstr "Provtagningstäthet för ytterligare databehandling (intervall: 0.0 - 1.0 (0.5))"
+msgstr "Provtagningstäthet för ytterligare databehandling (intervall: 0,0–1,0 (0,5))"
 
 msgid "A decimal number ranging 0.0 - 1.0 indicating additional sampling cells will be considered to see whether they will be reached by the current spread cell. The closer to 1.0 the decimal number is, the longer the program will run and the higher the simulation accuracy will be. The default number is 0.5."
 msgstr "Ett decimaltal mellan 0,0 och 1,0 som anger att ytterligare provtagningsceller kommer att övervägas för att se om de nås av den aktuella spridningscellen. Ju närmare 1,0 decimaltalet är, desto längre kommer programmet att köras och desto högre blir simuleringsnoggrannheten. Standardvärdet är 0,5."
@@ -19268,7 +19355,7 @@ msgstr "Montgomery-exponenten måste vara positiv eller noll men är %f"
 
 #, c-format
 msgid "Montgomery exponent is %f, recommended range is 0.0 - 3.0"
-msgstr "Montgomery-exponenten är %f, rekommenderat intervall är 0,0 - 3,0"
+msgstr "Montgomery-exponenten är %f, rekommenderat intervall är 0,0–3,0"
 
 #, c-format
 msgid "Minimum stream length must be positive or zero but is %d"
@@ -22590,8 +22677,8 @@ msgstr "write_vtk_unstructured_grid_cells: Skriva cellerna"
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr "skriva_vtk_data: Skriver Celldata %s med rader %i kol %i djup %i till vtk-ascii-fil"
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
-msgstr "Fel värden för 3D-rasterkarta! Värdena ska ligga mellan 0 och 255!"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
+msgstr "Felaktiga värden för 3D-rasterkarta! Värdena ska vara mellan 0 och 255!"
 
 msgid "Unable to close the 3D raster map"
 msgstr "Det går inte att stänga 3D-rasterkartan"
@@ -22704,9 +22791,8 @@ msgstr "Rasterkarta %d Filnamn: %s finns redan. Använd flaggan --o för att skr
 msgid "At least 2 maps are required"
 msgstr "Minst 2 kartor krävs"
 
-#, python-format
-msgid "Unable to get monitor info. %s"
-msgstr "Det går inte att få monitorinformation. %s"
+msgid "Unable to get monitor info. {}"
+msgstr "Det går inte att hämta bildskärmsinformation. {}"
 
 msgid "Unable to get monitor info"
 msgstr "Det går inte att få monitorinformation"
@@ -22976,7 +23062,7 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr "Misslyckades med att hämta Git-versionen."
 
-msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr "Kunde inte hitta Git. Installera det."
 
 msgid "Cannot write to working directory {}."
@@ -23124,8 +23210,8 @@ msgstr "GRASS Addons <%s> hittades inte"
 msgid "ZIP file is unreadable: {0}"
 msgstr "ZIP-filen är oläslig: {0}"
 
-msgid "Extracting may be unsafe; consider updating Python"
-msgstr "Extrahering kan vara osäkert; överväg att uppdatera Python"
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
+msgstr "Extrahering kan vara osäker; uppgradera Python till 3.11.4 eller senare"
 
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
@@ -23589,14 +23675,14 @@ msgid "Failure during bspline interpolation. Error message: %s"
 msgstr "Fel under bspline-interpolation. Felmeddelande: %s"
 
 msgid "Patching fill data into NULL areas..."
-msgstr "Patcha fyllnadsdata i NULL-områden..."
+msgstr "Sammanfogar fyllnadsdata i NULL-områden…"
 
 #, python-format
 msgid "Filled raster map is: %s"
 msgstr "Fylld rasterkarta är: %s"
 
-msgid "Following holes where not filled. Temporary maps with are left in place to allow examination of unfilled holes"
-msgstr "Följande hål fylldes inte igen. Tillfälliga kartor med lämnas på plats för att möjliggöra undersökning av ofyllda hål"
+msgid "The following holes were not filled. Temporary maps are left in place to allow examination of unfilled holes:"
+msgstr "Följande hål fylldes inte. Tillfälliga kartor lämnas kvar så att ofyllda hål kan undersökas:"
 
 msgid "Output can be written only to the current mapset"
 msgstr "Utdata kan endast skrivas till aktuell mapset"
@@ -24125,50 +24211,49 @@ msgstr "dip måste ligga mellan -90 och 90."
 msgid "azimuth must be between 0 and 360"
 msgstr "azimut måste vara mellan 0 och 360"
 
-msgid "xy-locations are not supported"
-msgstr "xy-lokaliseringar stöds inte"
-
-msgid "Need projected data with grids in meters"
-msgstr "Behöver projicerade data med rutnät i meter"
-
-msgid "flags c and d are mutually exclusive"
-msgstr "flaggorna c och d utesluter varandra"
-
-#, python-format
-msgid "Temporary raster map <%s> exists"
-msgstr "Temporär rasterkarta <%s> finns"
-
-msgid "Generating a clumped raster file including diagonal neighbors..."
-msgstr "Generering av en klumpad rasterfil med diagonala grannar..."
-
-msgid "Generating a clumped raster file ..."
-msgstr "Generering av en klumpad rasterfil ..."
-
-#, python-format
-msgid "Generating a reclass map with area size less than or equal to %f hectares..."
-msgstr "Generera en reclass-karta med en områdesstorlek som är mindre än eller lika med %f hektar..."
-
-#, python-format
-msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
-msgstr "Generera en reclass-karta med en områdesstorlek som är större än eller lika med %f hektar..."
-
-#, python-format
-msgid "No areas of size less than or equal to %f hectares found."
-msgstr "Inga områden med en storlek mindre än eller lika med %f hektar hittades."
-
-#, python-format
-msgid "No areas of size greater than or equal to %f hectares found."
-msgstr "Inga områden med en storlek större än eller lika med %f hektar hittades."
+msgid ""
+"xy-locations are not supported\n"
+"Need projected data with grids in meters"
+msgstr ""
+"xy-platser stöds inte\n"
+"Projicerade data med rutnät i meter krävs"
 
 msgid "Latitude-longitude locations are not supported"
 msgstr "Latitud-longitud-placeringar stöds inte"
 
-msgid "You have to specify mode='lesser' with method='rmarea'"
-msgstr "Du måste ange mode='lesser' med method='rmarea'"
+msgid "xy-locations are not supported"
+msgstr "xy-lokaliseringar stöds inte"
+
+msgid "Generating a clumped raster file"
+msgstr "Genererar en klumpad rasterfil"
+
+msgid " including diagonal neighbors"
+msgstr " inklusive diagonala grannar"
 
 #, python-format
-msgid "Generating output raster map <%s>..."
-msgstr "Genererar rasterkarta för utdata <%s>..."
+msgid " with minimum %s pixels"
+msgstr " med minst %s bildpunkter"
+
+msgid "Generating a reclass map with area size"
+msgstr "Genererar en omklassificeringskarta efter områdesstorlek"
+
+#, python-format
+msgid " larger than or equal to %f hectares..."
+msgstr " större än eller lika med %f hektar…"
+
+#, python-format
+msgid " smaller than or equal to %f hectares..."
+msgstr " mindre än eller lika med %f hektar…"
+
+msgid "No areas of size "
+msgstr "Inga områden med storleken "
+
+#, python-format
+msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
+msgstr "Rasterkartan <%s> är inte av typen 'CELL'. Resultaten kanske inte blir som förväntat."
+
+msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
+msgstr "Alternativen <mode> och <value> är föråldrade. Använd 'lower' och/eller 'upper'."
 
 msgid "No semantic label assigned to <{}>"
 msgstr "Ingen semantisk etikett har tilldelats <{}>"
@@ -24334,7 +24419,7 @@ msgid "There is an empty column. Did you leave a trailing comma?"
 msgstr "Det finns en tom kolumn. Lämnade du ett efterföljande kommatecken?"
 
 msgid "Incorrect new column(s) format, use <'name type [,name type, ...]'> format, please."
-msgstr "Felaktigt format för ny(a) kolumn(er), använd <'namntyp [,namntyp, ...]'>-format, tack."
+msgstr "Felaktigt format för ny(a) kolumn(er), använd <'namn typ [,namn typ, ...]'>-format, tack."
 
 msgid "Column <{}> is already in the table. Skipping."
 msgstr "Kolumn <{}> finns redan i tabellen. Hoppa över."
@@ -24603,6 +24688,15 @@ msgstr ""
 "Ett bearbetningssteg misslyckades. Kontrollera ovanstående felmeddelanden och se följande detaljer:\n"
 "{error}"
 
+msgid "Cannot mix metrics from different feature types: {}. Results are merged by category, so combining e.g. line and area metrics would produce misleading records. Run v.geometry separately for each feature type."
+msgstr "Det går inte att blanda mått från olika objekttyper: {}. Resultaten sammanfogas efter kategori, så en kombination av exempelvis linje- och områdesmått skulle ge missvisande poster. Kör v.geometry separat för varje objekttyp."
+
+msgid "More units ({}) than metrics ({}) specified"
+msgstr "Fler enheter ({}) än mått ({}) angavs"
+
+msgid "A standard CSV separator (delimiter) is only one character long, got: {}"
+msgstr "En vanlig CSV-avgränsare är endast ett tecken lång, fick: {}"
+
 #, python-format
 msgid "Missing value for parameter <%s>"
 msgstr "Saknat värde för parameter <%s>"
@@ -24836,10 +24930,8 @@ msgstr "Fel vid konvertering av polygon till linje"
 msgid "Error removing centroids"
 msgstr "Fel vid borttagning av centroider"
 
-#, fuzzy
-#| msgid "Error removing table from layer 1"
 msgid "Error removing table from layer 2"
-msgstr "Fel vid borttagning av tabell från lager 1"
+msgstr "Fel vid borttagning av tabell från lager 2"
 
 msgid "Error adding categories"
 msgstr "Fel vid tillägg av kategorier"
@@ -24919,11 +25011,20 @@ msgstr "Det går inte att köra v.what.rast för vektorkarta <%s> och rasterkart
 msgid "Prints/sets general temporal GIS database connection for current mapset."
 msgstr "Skriver ut/ställer in allmän temporal GIS-databasanslutning för aktuell kartuppsättning."
 
+msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
+msgstr "plain;Vanlig textutdata;shell;Utdata i skalskriptstil;json;JSON (JavaScript Object Notation)"
+
 msgid "Overwrite current settings if initialized"
 msgstr "Skriva över aktuella inställningar om de initialiserats"
 
-msgid "Print current connection parameter in shell style and exit"
-msgstr "Skriv ut aktuell anslutningsparameter i skal-stil och avsluta"
+msgid "Name of the mapset(s) to print the connection info for"
+msgstr "Namn på de kartuppsättningar vars anslutningsinformation ska skrivas ut"
+
+msgid "'.' for current mapset; '*' for all mapsets in the project. Requires format=json."
+msgstr "'.' för aktuell kartuppsättning; '*' för alla kartuppsättningar i projektet. Kräver format=json."
+
+msgid "The mapset option requires format=json."
+msgstr "Alternativet mapset kräver format=json."
 
 msgid "Temporal GIS database connection not defined. Run t.connect."
 msgstr "Temporal GIS-databasanslutning inte definierad. Kör t.connect."
@@ -25133,7 +25234,7 @@ msgid "node"
 msgstr "nod"
 
 msgid "vertex"
-msgstr "toppunkt"
+msgstr "hörnpunkt"
 
 msgid "Builds polylines from lines or boundaries."
 msgstr "Skapar polylinjer från linjer eller gränser."
@@ -25315,7 +25416,7 @@ msgid "type       count        min        max\n"
 msgstr "typ antal min max\n"
 
 msgid "boundary"
-msgstr "avgränsning"
+msgstr "gräns"
 
 msgid "face"
 msgstr "yta"
@@ -25356,6 +25457,10 @@ msgstr "CSV-format kan inte användas med flaggan -b. Använd istället flaggan 
 
 msgid "The 'list' format can only be used with the -b flag. Please use -b to enable list output."
 msgstr "Formatet 'list' kan endast användas med flaggan -b. Använd -b för att aktivera listutmatning."
+
+#, c-format
+msgid "No records selected from table <%s>"
+msgstr "Inga poster valda från tabell <%s>"
 
 msgid "Unable to sort array of values"
 msgstr "Det går inte att sortera en matris med värden"
@@ -26241,7 +26346,7 @@ msgid "Print output as square matrix (only possible for one single upload variab
 msgstr "Utskrift som kvadratisk matris (endast möjligt för en enda uppladdningsvariabel)"
 
 msgid "The format option requires the -p flag; please re-run with -p to enable output."
-msgstr "Formatalternativet kräver flaggan -p. Kör igen med -p för att aktivera utmatning."
+msgstr "Formatalternativet kräver flaggan -p; kör igen med -p för att aktivera utmatning."
 
 msgid "Updating the from= table is not supported with -a"
 msgstr "Uppdatering av from=-tabellen stöds inte med -a"
@@ -28266,11 +28371,12 @@ msgstr "Projektionen av lager <%s> skiljer sig från projektionen av lager <%s>"
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
 msgstr "Konverterar LAS LiDAR-punktmoln till en GRASS-vektorkarta med PDAL."
 
-msgid "Reproject to projects's coordinate system if needed"
-msgstr "Omprojicera till projektets koordinatsystem om det behövs"
+#, c-format
+msgid "Invalid input_srs: %s"
+msgstr "Ogiltigt input_srs-värde: %s"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
-msgstr "Reprojicerar inmatad dataset till GRASS-projektets koordinatsystem (som standard kan endast dataset med matchande koordinatsystem importeras)"
+msgid "Unable to reproject the input because the current project has no CRS defined. Use the -o flag to import the data without reprojection."
+msgstr "Det går inte att omprojicera indata eftersom det aktuella projektet saknar ett definierat CRS. Använd flaggan -o för att importera data utan omprojicering."
 
 msgid "Cannot store return information because the input does not have a return dimensions"
 msgstr "Kan inte lagra returinformation eftersom inmatningen inte har några returmått"
@@ -28318,7 +28424,7 @@ msgid "Print attribute table columns instead of info"
 msgstr "Skriv ut kolumner i attributtabellen istället för information"
 
 msgid "Column names and types are printed for the specified layer if it has an attribute table database connection"
-msgstr "Kolumnnamn och typer skrivs ut för det angivna lagret om det har en databasanslutning till en attributtabell."
+msgstr "Kolumnnamn och typer skrivs ut för det angivna lagret om det har en databasanslutning till en attributtabell"
 
 msgid "Print data history instead of info"
 msgstr "Skriv ut datahistorik istället för information"
@@ -28332,15 +28438,11 @@ msgstr "Skriv endast ut regionsinformation"
 msgid "Print only topology info"
 msgstr "Skriv endast ut topologiinformation"
 
-#, fuzzy
-#| msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);"
 msgid "plain;Human readable text output;shell;shell script style text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values);"
-msgstr "vanlig;mänsklig läsbar textutmatning;skal;textutmatning i skalskriptstil;json;JSON (JavaScript Object Notation);"
+msgstr "plain;Mänskligt läsbar textutdata;shell;Textutdata i skalskriptstil;json;JSON (JavaScript Object Notation);csv;CSV (kommaseparerade värden);"
 
-#, fuzzy
-#| msgid "The format option can only be used with -%c flag"
 msgid "format=csv is only valid with -c flag."
-msgstr "Formatalternativet kan endast användas med flaggan -%c"
+msgstr "format=csv är endast giltigt med flaggan -c."
 
 #, c-format
 msgid "%s"
@@ -28363,7 +28465,7 @@ msgid "Unable to open driver <%s>"
 msgstr "Det går inte att öppna drivrutinen <%s>"
 
 msgid "format=shell is not valid with -c flag."
-msgstr ""
+msgstr "format=shell är inte giltigt med flaggan -c."
 
 msgid "Name:"
 msgstr "Namn:"
@@ -28536,7 +28638,7 @@ msgstr "internt fel"
 
 #, c-format
 msgid "\tScore Value=%f\tsmoothing parameter (standard deviation)=%f"
-msgstr "\tPoängvärde=%f utjämningsparameter (standardavvikelse)=%f"
+msgstr "\tPoängvärde=%f\tutjämningsparameter (standardavvikelse)=%f"
 
 msgid "kernel density"
 msgstr "kärndensitet"
@@ -28631,7 +28733,7 @@ msgstr "Standardavvikelse: %f"
 
 #, c-format
 msgid "Output raster map: resolution: %f\t%s\t%s"
-msgstr "Utmatning av rasterkarta: upplösning: %f %s %s"
+msgstr "Utdata-rasterkarta: upplösning: %f\t%s\t%s"
 
 #, c-format
 msgid "Output raster map resolution: %f"
@@ -29302,8 +29404,8 @@ msgstr "Felaktig segmenttyp: %s"
 #, c-format
 msgid "[%d] point read from input"
 msgid_plural "[%d] points read from input"
-msgstr[0] "[%d] punkt läst från inmatning[%d] punkter läses från inmatningen"
-msgstr[1] ""
+msgstr[0] "[%d] punkt läst från inmatningen"
+msgstr[1] "[%d] punkter lästa från inmatningen"
 
 #. GTC Number of lost points
 #. GTC Number of lost lines
@@ -29613,10 +29715,8 @@ msgstr "Typ av funktion"
 msgid "centrality measures"
 msgstr "mått på centralitet"
 
-#, fuzzy
-#| msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
 msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
-msgstr "Beräknar mått på grad, centralitet, mellanhet, närhet och egenvektorcentralitet i nätverket."
+msgstr "Beräknar mått för grad, centralitet, mellanliggande centralitet, närhetscentralitet och egenvektorcentralitet i nätverket."
 
 msgid "Name of degree centrality column"
 msgstr "Namn på kolumn för gradcentralitet"
@@ -31199,6 +31299,10 @@ msgstr[0] "%d gräns snäppt"
 msgstr[1] "%d gränser knäppta"
 
 #, c-format
+msgid "Removing areas smaller than %g sqm..."
+msgstr "Tar bort områden som är mindre än %g m²…"
+
+#, c-format
 msgid "Querying vector map <%s>..."
 msgstr "Förfrågan på vektorkarta <%s>..."
 
@@ -31277,6 +31381,12 @@ msgstr "Tröskelvärde för snäppning av gränser"
 
 msgid "Disable snapping with snap <= 0"
 msgstr "Avaktivera snapping med snap <= 0"
+
+msgid "Minimum size of areas to keep in square meters"
+msgstr "Minsta storlek på områden som ska behållas i kvadratmeter"
+
+msgid "Enable with minsize > 0"
+msgstr "Aktivera med minsize > 0"
 
 #, c-format
 msgid "Unknown operator '%s'"
@@ -31378,10 +31488,8 @@ msgstr "Lägga till filer i befintliga filer (överskrivning av befintliga filer
 msgid "Missing attribute table for vector map <%s>"
 msgstr "Attributtabell saknas för vektorkarta <%s>"
 
-#, fuzzy
-#| msgid "Too many units to place"
 msgid "Too many columns to copy the table"
-msgstr "För många enheter att placera"
+msgstr "För många kolumner för att kopiera tabellen"
 
 #, c-format
 msgid "Missing table for <%s>"
@@ -31435,12 +31543,10 @@ msgstr "Huvudinformationen kan också behöva redigeras"
 
 #, c-format
 msgid "%d vector maps patched"
-msgstr "%d Vektorkartor patchade"
+msgstr "%d vektorkartor sammanfogade"
 
-#, fuzzy
-#| msgid "Too many column names"
 msgid "Too many columns to copy records"
-msgstr "För många kolumnnamn"
+msgstr "För många kolumner för att kopiera poster"
 
 #, c-format
 msgid "Cannot open select cursor: '%s'"
@@ -31489,6 +31595,88 @@ msgstr "normalsv: återställning av oinitialiserat block"
 msgid "normalsv: save of uninitialized block"
 msgstr "normalsv: spara oinitialiserat block"
 
+msgid "Computing F function..."
+msgstr "Beräknar F-funktionen…"
+
+msgid "Computing G function..."
+msgstr "Beräknar G-funktionen…"
+
+msgid "Computing K function..."
+msgstr "Beräknar K-funktionen…"
+
+msgid "point pattern analysis"
+msgstr "punktmönsteranalys"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr "Punktmönsteranalys med sammanfattningsfunktionerna G, F, K och L."
+
+msgid "Summary function to compute"
+msgstr "Sammanfattningsfunktion att beräkna"
+
+msgid "g;Nearest neighbor distance distribution function;f;Empty space function;k;Ripley's K function;l;L function (variance stabilized K function)"
+msgstr "g;Fördelningsfunktion för avstånd till närmaste granne;f;Tomrumsfunktion;k;Ripleys K-funktion;l;L-funktion (variansstabiliserad K-funktion)"
+
+msgid "If omitted or '-', the results are printed to standard output"
+msgstr "Om det utelämnas eller är '-' skrivs resultaten ut till standardutdata"
+
+msgid "Number of distances"
+msgstr "Antal avstånd"
+
+msgid "Number of equally spaced distances at which the function is estimated"
+msgstr "Antal jämnt fördelade avstånd där funktionen beräknas"
+
+msgid "Number of random points for the F function"
+msgstr "Antal slumpmässiga punkter för F-funktionen"
+
+msgid "Empty space distances are sampled at this many uniformly random locations"
+msgstr "Tomrumsavstånd samplas vid detta antal likformigt slumpmässiga platser"
+
+msgid "Maximum distance for the K and L functions"
+msgstr "Maximalt avstånd för K- och L-funktionerna"
+
+msgid "Default is one quarter of the shorter side of the computational region"
+msgstr "Standardvärdet är en fjärdedel av den kortare sidan av beräkningsregionen"
+
+msgid "Edge correction for the K and L functions"
+msgstr "Kantkorrigering för K- och L-funktionerna"
+
+msgid "isotropic;Ripley's isotropic edge correction;none;No edge correction"
+msgstr "isotropic;Ripleys isotropa kantkorrigering;none;Ingen kantkorrigering"
+
+msgid "Used for the random locations of the F function"
+msgstr "Används för de slumpmässiga platserna för F-funktionen"
+
+#, c-format
+msgid "Option <%s> must be positive"
+msgstr "Alternativet <%s> måste vara positivt"
+
+#, c-format
+msgid "Option <%s> is larger than half of the shorter side of the computational region; the estimate becomes unreliable at large distances"
+msgstr "Alternativet <%s> är större än hälften av den kortare sidan av beräkningsregionen; uppskattningen blir otillförlitlig vid stora avstånd"
+
+#, c-format
+msgid "One point outside of the computational region was ignored"
+msgid_plural "%d points outside of the computational region were ignored"
+msgstr[0] "En punkt utanför beräkningsregionen ignorerades"
+msgstr[1] "%d punkter utanför beräkningsregionen ignorerades"
+
+msgid "No points found in the computational region"
+msgstr "Inga punkter hittades i beräkningsregionen"
+
+#, c-format
+msgid "At least 2 points are required, %d found"
+msgstr "Minst 2 punkter krävs, %d hittades"
+
+#, c-format
+msgid "Estimated intensity: %g"
+msgstr "Beräknad intensitet: %g"
+
+msgid "Unable to initialize JSON output"
+msgstr "Det går inte att initiera JSON-utdata"
+
+msgid "Unable to serialize JSON output"
+msgstr "Det går inte att serialisera JSON-utdata"
+
 msgid "Vector map profiling tool"
 msgstr "Verktyg för profilering med vektorkarta"
 
@@ -31498,10 +31686,8 @@ msgstr "Använd endast funktioner från angivet lager"
 msgid "Path to output text file or - for stdout"
 msgstr "Sökväg till textfil för utdata eller - för stdout"
 
-#, fuzzy
-#| msgid "plain;Human readable text output;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation);"
 msgid "plain;Plain text with pipe separator;csv;CSV (Comma Separated Values);json;JSON (JavaScript Object Notation)"
-msgstr "vanlig;Mänskligt läsbar textutmatning;csv;CSV (kommaseparerade värden);json;JSON (JavaScript Object Notation);"
+msgstr "plain;Vanlig text med lodrät streckavgränsare;csv;CSV (kommaseparerade värden);json;JSON (JavaScript Object Notation)"
 
 msgid "Buffer (tolerance) for points in map units"
 msgstr "Buffert (tolerans) för punkter i kartenheter"
@@ -31786,10 +31972,6 @@ msgstr "Antingen '%s' eller '%s' måste anges"
 msgid "Database connection not defined for layer %s"
 msgstr "Databasanslutning inte definierad för lagret %s"
 
-#, c-format
-msgid "No records selected from table <%s>"
-msgstr "Inga poster valda från tabell <%s>"
-
 msgid "Key column type is not integer"
 msgstr "Nyckelkolumnens typ är inte heltal"
 
@@ -31976,8 +32158,8 @@ msgstr ""
 #, c-format
 msgid "%d point read from input"
 msgid_plural "%d points read from input"
-msgstr[0] "%d punkt läst från inmatning%d punkter läses från inmatningen"
-msgstr[1] ""
+msgstr[0] "%d punkt läst från inmatningen"
+msgstr[1] "%d punkter lästa från inmatningen"
 
 #. GTC %s is replaced with message indicating number of lost points.
 #, c-format
@@ -33509,9 +33691,6 @@ msgstr "Det går inte att kopiera tabellen"
 msgid "Pass %d"
 msgstr "Passera %d"
 
-msgid "Node is outside any input area"
-msgstr "Noden ligger utanför något inmatningsområde"
-
 #, c-format
 msgid "Found %d point/centroid in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
 msgid_plural "Found %d points/centroids in <%s>, but at least 2 are needed. Are the current region extents covering at least parts of the input map?"
@@ -33692,7 +33871,7 @@ msgid "Print multiple features for each map if they meet the criteria"
 msgstr "Skriv ut flera funktioner för varje karta om de möter kriteriet"
 
 msgid "For JSON, this places features under a \"features\" key"
-msgstr "För JSON placeras funktionerna under en ”features”-nyckel."
+msgstr "För JSON placeras funktionerna under en ”features”-nyckel"
 
 msgid "No input vector maps!"
 msgstr "Ingen inmatning av vektorkartor!"
@@ -33845,12 +34024,12 @@ msgid ""
 "Type: Area\n"
 "Area height: %f\n"
 msgstr ""
-"Typ av område Område\n"
+"Typ: område\n"
 "Områdets höjd: %f\n"
 
 #, c-format
 msgid "Type: Area\n"
-msgstr "Typ av område Område\n"
+msgstr "Typ: område\n"
 
 #, c-format
 msgid ""
@@ -33920,6 +34099,59 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 
 msgid "Image file"
 msgstr "Bildfil"
+
+#~ msgid "Reproject to projects's coordinate system if needed"
+#~ msgstr "Omprojicera till projektets koordinatsystem om det behövs"
+
+#~ msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
+#~ msgstr "Reprojicerar inmatad dataset till GRASS-projektets koordinatsystem (som standard kan endast dataset med matchande koordinatsystem importeras)"
+
+#~ msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
+#~ msgstr "Reprojicerar inmatad dataset till GRASS-projektets koordinatsystem (som standard kan endast dataset med matchande koordinatsystem importeras)"
+
+#~ msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
+#~ msgstr "Infiltrationen överstiger regnmängden överallt! Inget flöde över land."
+
+#, c-format
+#~ msgid "There may be a notable processing delay because the computational region is %lu times larger than necessary"
+#~ msgstr "Det kan uppstå en betydande fördröjning i bearbetningen eftersom beräkningsområdet är %lu gånger större än nödvändigt"
+
+#~ msgid "flags c and d are mutually exclusive"
+#~ msgstr "flaggorna c och d utesluter varandra"
+
+#, python-format
+#~ msgid "Temporary raster map <%s> exists"
+#~ msgstr "Temporär rasterkarta <%s> finns"
+
+#~ msgid "Generating a clumped raster file including diagonal neighbors..."
+#~ msgstr "Generering av en klumpad rasterfil med diagonala grannar..."
+
+#, python-format
+#~ msgid "Generating a reclass map with area size less than or equal to %f hectares..."
+#~ msgstr "Generera en reclass-karta med en områdesstorlek som är mindre än eller lika med %f hektar..."
+
+#, python-format
+#~ msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
+#~ msgstr "Generera en reclass-karta med en områdesstorlek som är större än eller lika med %f hektar..."
+
+#~ msgid "You have to specify mode='lesser' with method='rmarea'"
+#~ msgstr "Du måste ange mode='lesser' med method='rmarea'"
+
+#, python-format
+#~ msgid "Generating output raster map <%s>..."
+#~ msgstr "Genererar rasterkarta för utdata <%s>..."
+
+#~ msgid "Raster map with zones to compute statistics for (needs to be CELL)"
+#~ msgstr "Rasterkarta med zoner att beräkna statistik för (måste vara CELL)"
+
+#~ msgid "Print current connection parameter in shell style and exit"
+#~ msgstr "Skriv ut aktuell anslutningsparameter i skal-stil och avsluta"
+
+#~ msgid "Create a new project and import the data into it. Do not run this module in parallel or interrupt it when a new project should be created"
+#~ msgstr "Skapa ett nytt projekt och importera data till det. Kör inte denna modul parallellt eller avbryt den när ett nytt projekt ska skapas"
+
+#~ msgid "Node is outside any input area"
+#~ msgstr "Noden ligger utanför något inmatningsområde"
 
 #~ msgid "Time used for iterations [minutes]"
 #~ msgstr "Tidsåtgång för iterationer [minuter]"

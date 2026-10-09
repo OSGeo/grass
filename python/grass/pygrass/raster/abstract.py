@@ -45,7 +45,7 @@ proj: {proj}
 
 class Info:
     def __init__(self, name, mapset=""):
-        """Read the information for a raster map. ::
+        """Read the information for a raster map.
 
         >>> info = Info(test_raster_name)
         >>> info.read()

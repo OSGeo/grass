@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Daniel Nylander <daniel@danielnylander.se>, 2025.
+# Daniel Nylander <daniel@danielnylander.se>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-09 16:40+0000\n"
-"PO-Revision-Date: 2025-12-22 12:47+0000\n"
+"POT-Creation-Date: 2026-10-03 18:51+0000\n"
+"PO-Revision-Date: 2026-10-04 16:57+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
 "Language: sv\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, python-format
 msgid "Maximum number of animations is %d."
@@ -448,26 +448,6 @@ msgstr "Ogiltig"
 msgid "Animation Tool"
 msgstr "Animeringsverktyg"
 
-msgid "Main Toolbar"
-msgstr "Huvudverktygsfält"
-
-msgid "Animation Toolbar"
-msgstr "Verktygsfält för animering"
-
-msgid "Misc Toolbar"
-msgstr "Övrigt verktygsfält"
-
-msgid "Loading data"
-msgstr "Läsar in data"
-
-#, python-brace-format
-msgid " ({c} out of {p})"
-msgstr " ({c} av {p})"
-
-#, python-format
-msgid "to %(to)s"
-msgstr "till %(to)s"
-
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr "%s=, %s=, %s= och %s= är ömsesidigt uteslutande."
@@ -492,6 +472,30 @@ msgstr "Lägg bara till ett lager i listan."
 
 msgid "No map series nor space-time dataset is added."
 msgstr "Inga kartserier eller dataset för tid och rum läggs till."
+
+msgid "Main Toolbar"
+msgstr "Huvudverktygsfält"
+
+msgid "Animation Toolbar"
+msgstr "Verktygsfält för animering"
+
+msgid "Misc Toolbar"
+msgstr "Övrigt verktygsfält"
+
+msgid "Loading data"
+msgstr "Läsar in data"
+
+#, python-brace-format
+msgid " ({c} out of {p})"
+msgstr " ({c} av {p})"
+
+#, python-format
+msgid "to %(to)s"
+msgstr "till %(to)s"
+
+#, python-brace-format
+msgid "Rendering process failed with exit code {code}."
+msgstr "Renderingsprocessen misslyckades med slutkoden {code}."
 
 msgid "Rendering map layers"
 msgstr "Rendering av kartlager"
@@ -750,6 +754,15 @@ msgstr "Redigera vald post"
 msgid "Display selected"
 msgstr "Display vald"
 
+msgid "Tools API"
+msgstr "Verktygs-API"
+
+msgid "Script API"
+msgstr "Skript-API"
+
+msgid "PyGRASS API"
+msgstr "PyGRASS API"
+
 msgid "Classic (labels only)"
 msgstr "Classic (endast etiketter)"
 
@@ -815,6 +828,9 @@ msgstr "Skriptpaket"
 
 msgid "PyGRASS"
 msgstr "PyGRASS"
+
+msgid "GRASS Tools"
+msgstr "GRASS-verktyg"
 
 #, python-brace-format
 msgid ""
@@ -988,6 +1004,12 @@ msgstr "Skapa rasterkarta från x,y,z-data [r.in.xyz]"
 msgid "Create vector map from x,y,z data  [v.in.ascii]"
 msgstr "Skapa vektorkarta från x,y,z-data [v.in.ascii]"
 
+msgid "Import space time raster dataset  [t.rast.import]"
+msgstr "Importera rumtidsrasterdata [t.rast.import]"
+
+msgid "Import space time vector dataset  [t.vect.import]"
+msgstr "Importera rumtidsvektordata [t.vect.import]"
+
 msgid "Link external data"
 msgstr "Länka externa data"
 
@@ -1135,6 +1157,22 @@ msgid "Failed to read maps from project <{l}>."
 msgstr "Misslyckades med att läsa kartor från projekt <{l}>."
 
 #, python-brace-format
+msgid ""
+"Unable to import the temporal framework: {e}\n"
+"Space time datasets will not be listed"
+msgstr ""
+"Det gick inte att importera tidsramverket: {e}\n"
+"Rumtidsdatauppsättningar kommer inte att listas"
+
+#, python-brace-format
+msgid "Failed to read temporal datasets from project <{l}>: {e}"
+msgstr "Det gick inte att läsa tidsdatauppsättningar från projektet <{l}>: {e}"
+
+#, python-brace-format
+msgid "Space time dataset of type {elem} <{name}> already exists in mapset <{mapset}>."
+msgstr "Rumtidsdatauppsättning av typen {elem} <{name}> finns redan i kartuppsättningen <{mapset}>."
+
+#, python-brace-format
 msgid "Map of type {elem} <{name}> already exists in mapset <{mapset}>. Do you want to overwrite it?"
 msgstr "Karta av typ {elem} <{name}> finns redan i mapset <{mapset}>. Vill du skriva över den?"
 
@@ -1196,6 +1234,17 @@ msgstr "Nytt Namn"
 msgid "Rename map"
 msgstr "Byt namn på kartan"
 
+msgid "Rename dataset"
+msgstr "&Byt namn på datauppsättning"
+
+#, python-brace-format
+msgid "Renaming dataset <{old}> to <{new}>..."
+msgstr "Byter namn på datauppsättningen <{old}> till <{new}>…"
+
+#, python-brace-format
+msgid "{cmd} -- completed"
+msgstr "{cmd} -- slutförd"
+
 msgid "Cannot rename mapset"
 msgstr "Kan inte byta namn på mapset"
 
@@ -1213,10 +1262,6 @@ msgstr "Byte av namn på projekt <{oldlocation}> till <{newlocation}> slutfört"
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr "Byter namn på karta <{name}>..."
-
-#, python-brace-format
-msgid "{cmd} -- completed"
-msgstr "{cmd} -- slutförd"
 
 msgid "No map selected for copying."
 msgstr "Ingen karta vald för kopiering."
@@ -1252,8 +1297,12 @@ msgid "g.remove completed"
 msgstr "g.ta bort färdigställd"
 
 #, python-brace-format
-msgid "Do you really want to delete map(s) <{m}>?"
-msgstr "Vill du verkligen ta bort kartan/kartorna <{m}>?"
+msgid "Do you really want to delete map <{m}>?"
+msgstr "Vill du verkligen ta bort kartan <{m}>?"
+
+#, python-brace-format
+msgid "Do you really want to delete maps <{m}>?"
+msgstr "Vill du verkligen ta bort kartorna <{m}>?"
 
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
@@ -1266,14 +1315,113 @@ msgstr "Radera karta"
 msgid "Deleting {name}..."
 msgstr "Radera {name}..."
 
+#, python-brace-format
+msgid "Deleting {n} maps..."
+msgstr "Tar bort {n} kartor…"
+
+#, python-brace-format
+msgid "Do you really want to delete dataset <{m}>?"
+msgstr "Vill du verkligen ta bort datauppsättningen <{m}>?"
+
+#, python-brace-format
+msgid "Do you really want to delete datasets <{m}>?"
+msgstr "Vill du verkligen ta bort datauppsättningarna <{m}>?"
+
+#, python-brace-format
+msgid "Do you really want to delete {n} datasets?"
+msgstr "Vill du verkligen ta bort {n} datauppsättningar?"
+
+msgid "Delete dataset and maps"
+msgstr "Ta bort datauppsättningen och kartorna"
+
+msgid "All maps registered in the dataset will be deleted as well."
+msgstr "Alla kartor som är registrerade i datauppsättningen tas också bort."
+
+msgid "All maps registered in the datasets will be deleted as well."
+msgstr "Alla kartor som är registrerade i datauppsättningarna tas också bort."
+
+msgid "Delete dataset"
+msgstr "&Ta bort datauppsättning"
+
+msgid "Deleting datasets..."
+msgstr "Tar bort datauppsättningar…"
+
+msgid "t.remove completed"
+msgstr "t.remove slutförd"
+
 msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr "För att flytta eller kopiera kartor till andra kartuppsättningar, låsa upp redigering av andra kartuppsättningar"
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr "Om du vill flytta eller kopiera kartor till ett annat projekt drar du dem till ett mapset i destinationsprojektet"
 
-msgid "&Cut"
-msgstr "&Klipp"
+#, python-brace-format
+msgid "Do you really want to unregister map <{m}>?"
+msgstr "Vill du verkligen avregistrera kartan <{m}>?"
+
+#, python-brace-format
+msgid "Do you really want to unregister {n} maps?"
+msgstr "Vill du verkligen avregistrera {n} kartor?"
+
+msgid "Unregister map"
+msgstr "Avregistrera karta"
+
+msgid "Unregistering map..."
+msgstr "Avregistrerar karta…"
+
+#, python-brace-format
+msgid "Unregistering {c} maps..."
+msgstr "Avregistrerar {c} kartor…"
+
+msgid "Successfully unregistered map"
+msgstr "Kartan har avregistrerats"
+
+#, python-brace-format
+msgid "Successfully unregistered {c} maps"
+msgstr "{c} kartor har avregistrerats"
+
+#, python-brace-format
+msgid ""
+"Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
+"\n"
+"Do you really want to animate it?"
+msgstr ""
+"Datauppsättningen <{n}> innehåller {c} kartor. Alla renderas innan animeringen startar, vilket kan ta lång tid och använda mycket minne.\n"
+"\n"
+"Vill du verkligen animera den?"
+
+msgid "Display animation"
+msgstr "Visa animering"
+
+msgid "Cannot merge temporal datasets of different types."
+msgstr "Det går inte att slå samman rumtidsdatauppsättningar av olika typer."
+
+msgid "&Register maps"
+msgstr "&Registrera kartor"
+
+msgid "&Unregister maps"
+msgstr "&Avregistrera kartor"
+
+msgid "Update metadata"
+msgstr "&Uppdatera metadata"
+
+msgid "Display &temporal extent"
+msgstr "Visa tids&utbredning"
+
+msgid "Display &animation"
+msgstr "Visa &animering"
+
+msgid "&Rename dataset"
+msgstr "&Byt namn på datauppsättning"
+
+msgid "&Delete dataset only"
+msgstr "&Ta bort endast datauppsättning"
+
+msgid "&Export dataset"
+msgstr "&Exportera datauppsättning"
+
+msgid "Show &metadata"
+msgstr "Visa &metadata"
 
 msgid "&Copy"
 msgstr "&Kopiera"
@@ -1281,8 +1429,20 @@ msgstr "&Kopiera"
 msgid "Copy &name"
 msgstr "Kopiera &namn"
 
+msgid "&Display layers"
+msgstr "&Visa lager"
+
+msgid "&Display layer"
+msgstr "&Display lager"
+
+msgid "&Unregister map"
+msgstr "&Avregistrera karta"
+
+msgid "&Cut"
+msgstr "&Klipp"
+
 msgid "&Paste"
-msgstr "Klistra"
+msgstr "Kl&istra"
 
 #. GTC Delete mapset
 msgid "&Delete"
@@ -1290,72 +1450,55 @@ msgstr "&Radera"
 
 #. GTC Rename mapset
 msgid "&Rename"
-msgstr "&Rename"
+msgstr "Byt &namn"
 
-msgid "&Display layers"
-msgstr "&Visa lager"
-
-msgid "&Display layer"
-msgstr "&Display lager"
-
-msgid "Show &metadata"
-msgstr "Visa &metadata"
+msgid "Create &temporal dataset"
+msgstr "Skapa &rumtidsdatauppsättning"
 
 msgid "&Switch mapset"
-msgstr "&Switch mapset"
+msgstr "Byt &kartuppsättning"
 
 msgid "&Delete mapset"
 msgstr "&Radera mapset"
 
 msgid "&Rename mapset"
-msgstr "&Rename mapset"
+msgstr "Byt &namn på kartuppsättning"
 
-msgid "Re&load maps"
-msgstr "U&ppdatera kartor"
+msgid "Re&load mapset"
+msgstr "&Läs in kartuppsättning igen"
 
-#, fuzzy
-#| msgid "Show computational region extent"
 msgid "Show computational region"
-msgstr "Visa beräkningsregionens omfattning"
+msgstr "Visa beräkningsregion"
 
-#, fuzzy
-#| msgid "&Copy path to mapset"
 msgid "&Copy path"
-msgstr "&Kopiera sökväg till mapset"
+msgstr "&Kopiera sökväg"
 
 msgid "&Create mapset"
-msgstr "& Skapa kartset"
+msgstr "Skapa &kartuppsättning"
 
 msgid "&Delete project"
-msgstr "&Avsluta projekt"
+msgstr "Ta &bort projekt"
 
 msgid "&Rename project"
-msgstr "&Rename-projekt"
+msgstr "Byt &namn på projekt"
 
-#, fuzzy
-#| msgid "Source projection:"
+msgid "Re&load project"
+msgstr "&Läs in projekt igen"
+
 msgid "Show projection info"
-msgstr "Källa projektion:"
+msgstr "Visa projektionsinformation"
 
-#, fuzzy
-#| msgid "CVS path"
 msgid "Copy path"
-msgstr "CVS sökväg"
+msgstr "Kopiera sökväg"
 
-#, fuzzy
-#| msgid "Change"
 msgid "Change Label"
-msgstr "Ändra"
+msgstr "Ändra etikett"
 
-#, fuzzy
-#| msgid "Set label"
 msgid "Set Label"
-msgstr "Ställ in etikett"
+msgstr "Ange etikett"
 
-#, fuzzy
-#| msgid "Remove layer"
 msgid "Remove Label"
-msgstr "Ta bort lagret"
+msgstr "Ta bort etikett"
 
 msgid "&Create new project (location)"
 msgstr "&Skapa nytt projekt (plats)"
@@ -1364,30 +1507,38 @@ msgid "&Download sample project (location)"
 msgstr "&Hämta ner exempelprojekt (plats)"
 
 msgid "&Remove GRASS database from data catalog"
-msgstr "&Remove GRASS-databasen från datakatalogen"
+msgstr "Ta &bort GRASS-databasen från datakatalogen"
 
 msgid "&Delete GRASS database from disk"
-msgstr "&Radera GRASS-databasen från hårddisken"
+msgstr "Ta &bort GRASS-databasen från disken"
+
+msgid "Re&load database"
+msgstr "&Läs in databas igen"
 
 msgid "&Delete projects (locations)"
-msgstr "&Avveckla projekt (platser)"
+msgstr "Ta &bort projekt (platser)"
 
-#, fuzzy
-#| msgid "&Copy path to mapset"
 msgid "Copy paths"
-msgstr "&Kopiera sökväg till mapset"
+msgstr "Kopiera sökvägar"
 
 msgid "&Delete mapsets"
 msgstr "&Radera kartor"
 
-#, fuzzy
-#| msgid "&Copy path to mapset"
 msgid "&Copy paths"
-msgstr "&Kopiera sökväg till mapset"
+msgstr "&Kopiera sökvägar"
+
+msgid "&Merge datasets"
+msgstr "&Slå samman datauppsättningar"
+
+msgid "&Delete datasets only"
+msgstr "&Ta bort endast datauppsättningar"
+
+msgid "Delete datasets and maps"
+msgstr "Ta bort datauppsättningar och kartor"
 
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
-msgstr ""
+msgstr "Ta bort etiketten '{label}' för den här databasen?"
 
 msgid "No available options"
 msgstr "Inga tillgängliga alternativ"
@@ -1824,7 +1975,7 @@ msgid "Display attributes"
 msgstr "Visa attribut"
 
 msgid "&Reload"
-msgstr "&Reload"
+msgstr "&Läs in igen"
 
 msgid "&Submit"
 msgstr "&Sänd in"
@@ -2113,7 +2264,7 @@ msgid ""
 msgstr ""
 "Otillräckliga punkter definierade och aktiva (markerade) för vald korrigeringsmetod (ordning: %d).\n"
 "3+ punkter behövs för 1:a ordningen,\n"
-"6+ punkter för 2:a ordningen, och\n"
+"6+ punkter för 2:a ordningen och\n"
 "10+ punkter för 3:e ordningen."
 
 #, python-brace-format
@@ -2567,7 +2718,7 @@ msgid "Delete intermediate data when finish"
 msgstr "Ta bort mellanliggande data när du är klar"
 
 msgid "&Run"
-msgstr "&Run"
+msgstr "&Kör"
 
 msgid "Variables"
 msgstr "Variabler"
@@ -2804,7 +2955,7 @@ msgid "region"
 msgstr "region"
 
 msgid "mapset"
-msgstr "kartset"
+msgstr "kartuppsättning"
 
 msgid "file"
 msgstr "fil"
@@ -3253,44 +3404,26 @@ msgstr "Stäng detta fönster utan att utföra kommandot (Ctrl+Q)"
 msgid "Run the command (Ctrl+R)"
 msgstr "Kör kommandot (Ctrl+R)"
 
-#, fuzzy
-#| msgid "Copy all to clipboard"
 msgid "Copy as Shell command"
-msgstr "Kopiera allt till urklipp"
+msgstr "Kopiera som skalkommando"
 
-#, fuzzy
-#| msgid "Python script"
-msgid "Copy as Python (Script API)"
-msgstr "Python-skript"
+msgid "Copy as Python"
+msgstr "Kopiera som Python"
 
-msgid "Copy as Python (Tools API)"
-msgstr ""
-
-msgid "Copy as Python (PyGRASS)"
-msgstr ""
-
-#, fuzzy
-#| msgid "Vector maps settings"
 msgid "Copy as JSON settings"
-msgstr "Inställningar för vektorkartor"
+msgstr "Kopiera som JSON-inställningar"
 
 msgid "Copy"
 msgstr "Kopiera"
 
-#, fuzzy
-#| msgid "Export common formats"
 msgid "More copy formats"
-msgstr "Exportera vanliga format"
+msgstr "Fler kopieringsformat"
 
-#, fuzzy
-#| msgid "Raster map settings"
 msgid "Paste JSON settings"
-msgstr "Inställningar för Raster-karta"
+msgstr "Klistra in JSON-inställningar"
 
-#, fuzzy
-#| msgid "Copy the current command string to the clipboard"
 msgid "Paste parameters from JSON string in the clipboard"
-msgstr "Kopiera den aktuella kommandosträngen till urklipp"
+msgstr "Klistra in parametrar från JSON-sträng i urklipp"
 
 msgid "Show manual page of the command (Ctrl+H)"
 msgstr "Visa manuell sida för kommandot (Ctrl+H)"
@@ -3304,51 +3437,56 @@ msgstr "Stäng dialogrutan när du är klar"
 msgid "Close dialog when command is successfully finished. Change this settings in Preferences dialog ('Command' tab)."
 msgstr "Stäng dialogrutan när kommandot är slutfört. Ändra dessa inställningar i dialogrutan Inställningar (fliken \"Kommando\")."
 
+msgid "Copy as Python (Tools API)"
+msgstr "Kopiera som Python (verktygs-API)"
+
+msgid "Copy as Python (Script API)"
+msgstr "Kopiera som Python (skript-API)"
+
+msgid "Copy as Python (PyGRASS API)"
+msgstr "Kopiera som Python (PyGRASS-API)"
+
 #, python-format
 msgid "'%s' copied to clipboard"
 msgstr "'%s' kopierat till urklipp"
 
-#, fuzzy
-#| msgid "'%s' copied to clipboard"
+msgid "Python code copied to clipboard"
+msgstr "Python-kod kopierad till urklipp"
+
 msgid "JSON copied to clipboard"
-msgstr "'%s' kopierat till urklipp"
+msgstr "JSON kopierad till urklipp"
 
 msgid "Pasted data is not a valid JSON object."
-msgstr ""
+msgstr "Inklistrade data är inte ett giltigt JSON-objekt."
 
 #, python-format
 msgid "You are pasting settings from module '%(pasted)s' into module '%(current)s'. Only matching parameters will be updated. Continue?"
-msgstr ""
+msgstr "Du klistrar in inställningar från modulen '%(pasted)s' i modulen '%(current)s'. Endast matchande parametrar uppdateras. Fortsätta?"
 
 msgid "Module Mismatch"
-msgstr ""
+msgstr "Moduler stämmer inte överens"
 
 msgid "Pasted parameters are not a valid JSON object."
-msgstr ""
+msgstr "Inklistrade parametrar är inte ett giltigt JSON-objekt."
 
 msgid "Parameters pasted from clipboard."
-msgstr ""
+msgstr "Parametrar inklistrade från urklipp."
 
 msgid "No matching parameters found in clipboard."
-msgstr ""
+msgstr "Inga matchande parametrar hittades i urklipp."
 
 msgid "The clipboard does not contain valid JSON data. Please ensure you have copied the settings correctly."
-msgstr ""
+msgstr "Urklipp innehåller inte giltiga JSON-data. Kontrollera att du har kopierat inställningarna korrekt."
 
-#, fuzzy
-#| msgid "Invalid name"
 msgid "Invalid Data"
-msgstr "Ogiltigt namn"
+msgstr "Ogiltiga data"
 
-#, fuzzy
-#| msgid "Error"
 msgid "Paste Error"
-msgstr "Fel"
+msgstr "Inklistringsfel"
 
-#, fuzzy, python-format
-#| msgid "'%s' copied to clipboard"
+#, python-format
 msgid "%s copied to clipboard"
-msgstr "'%s' kopierat till urklipp"
+msgstr "%s kopierades till urklipp"
 
 msgid "Required"
 msgstr "Obligatorisk"
@@ -3375,7 +3513,7 @@ msgid "Map Display"
 msgstr "Kartdesign"
 
 msgid "Show graphical representation of temporal extent of dataset(s)."
-msgstr "Visa en grafisk representation av datasetens/datasetens tidsmässiga omfattning."
+msgstr "Visa en grafisk representation av datasetens tidsmässiga omfattning."
 
 msgid "Transparent"
 msgstr "Genomskinlig"
@@ -3756,7 +3894,7 @@ msgid "GRASS module '%s' not found. Unable to start map display window."
 msgstr "GRASS-modulen '%s' hittades inte. Det går inte att starta kartvisningsfönstret."
 
 msgid "Adva&nced search..."
-msgstr "Adva&nced search..."
+msgstr "Avan&cerad sökning…"
 
 #, python-format
 msgid "Do advanced search using %s tool"
@@ -3766,13 +3904,13 @@ msgid "Double-click to run selected tool"
 msgstr "Dubbelklicka för att köra valt verktyg"
 
 msgid "&Run..."
-msgstr "&Run..."
+msgstr "&Kör…"
 
 msgid "Run selected tool from the tree"
 msgstr "Kör valt verktyg från trädet"
 
 msgid "H&elp"
-msgstr "H&elp"
+msgstr "H&jälp"
 
 msgid "Show manual for selected tool from the tree"
 msgstr "Visa manualen för valt verktyg från trädet"
@@ -3958,6 +4096,9 @@ msgstr "Tillåt interaktiv input"
 msgid "Verbosity level:"
 msgstr "Ordstyrka nivå:"
 
+msgid "Default Python API for copied commands:"
+msgstr "Standard-API för Python för kopierade kommandon:"
+
 msgid "Number of threads for parallel computing (supported tools only):"
 msgstr "Antal trådar för parallell databehandling (endast verktyg som stöds):"
 
@@ -4033,7 +4174,7 @@ msgid ""
 msgstr ""
 "\n"
 "Obs: Detta styr endast de koordinater som visas längst ned till vänster i Map Display-fönstrets\n"
-"fönstrets statusfält. Det är rent kosmetiskt och påverkar inte arbetsprojektets\n"
+"statusfält. Det är rent kosmetiskt och påverkar inte arbetsprojektets\n"
 "koordinatreferenssystem på något sätt. Du måste aktivera kryssrutan Projection i rullgardinsmenyn längst ner i\n"
 "menyn längst ned i fönstret Map Display.\n"
 
@@ -4169,7 +4310,7 @@ msgid "Right click to copy selected values to clipboard."
 msgstr "Högerklicka för att kopiera valda värden till urklipp."
 
 msgid "Feature"
-msgstr "Funktion"
+msgstr "Objekt"
 
 msgid "Value"
 msgstr "Värde"
@@ -4926,7 +5067,7 @@ msgid "Start &GRASS session"
 msgstr "Starta &GRASS-sessionen"
 
 msgid "&Browse"
-msgstr "&Browse"
+msgstr "&Bläddra"
 
 #. GTC New mapset
 msgid "&New"
@@ -4937,21 +5078,21 @@ msgstr "Skapa en ny Mapset på vald plats"
 
 #. GTC New location
 msgid "N&ew"
-msgstr "N&ew"
+msgstr "&Ny"
 
 msgid "Create a new location using location wizard. After location is created successfully, GRASS session is started."
 msgstr "Skapa en ny plats med hjälp av platsguiden. När platsen har skapats framgångsrikt startas GRASS-sessionen."
 
 #. GTC Rename location
 msgid "Ren&ame"
-msgstr "Nytt namn"
+msgstr "N&ytt namn"
 
 msgid "Rename selected location"
 msgstr "Byt namn på vald plats"
 
 #. GTC Delete location
 msgid "De&lete"
-msgstr "De&lete"
+msgstr "&Ta bort"
 
 msgid "Delete selected location"
 msgstr "Ta bort vald plats"
@@ -5455,9 +5596,8 @@ msgstr ""
 "v.to.rast misslyckades:\n"
 "{messages}"
 
-#, python-brace-format
-msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "Scatterplot Tool kräver att paketet \"matplotlib\" (python-matplotlib) är installerat. {0}"
+msgid "The Scatterplot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
+msgstr "Punktdiagramverktyget kräver att paketet ”matplotlib” (python-matplotlib) är installerat."
 
 msgid "Zoom to scatter plot extend"
 msgstr "Zooma till spridningsdiagram förläng"
@@ -5519,6 +5659,267 @@ msgstr "Lägg till klass"
 msgid "Remove selected class"
 msgstr "Ta bort vald klass"
 
+msgid "Start Jupyter Notebook"
+msgstr "Starta Jupyter Notebook"
+
+msgid "Where to Save Notebooks"
+msgstr "Var anteckningsböcker ska sparas"
+
+msgid "Choose custom directory (leave empty for current directory):"
+msgstr "Välj anpassad katalog (lämna tomt för aktuell katalog):"
+
+msgid "Select notebook directory"
+msgstr "Välj katalog för anteckningsböcker"
+
+msgid "Save in project: {}"
+msgstr "Spara i projekt: {}"
+
+msgid "Options"
+msgstr "Alternativ"
+
+msgid "Create welcome notebook"
+msgstr "Skapa välkomstanteckningsbok"
+
+msgid ""
+"If selected, a welcome notebook ({}) will be created,\n"
+"but only if the selected directory contains no .ipynb files."
+msgstr ""
+"Om alternativet väljs skapas en välkomstanteckningsbok ({}),\n"
+"men endast om den valda katalogen inte innehåller några .ipynb-filer."
+
+msgid "Note: The welcome notebook will be created only if the directory contains no .ipynb files."
+msgstr "Obs: Välkomstanteckningsboken skapas endast om katalogen inte innehåller några .ipynb-filer."
+
+msgid "Open Notebook in Browser"
+msgstr "Öppna anteckningsbok i bläddraren"
+
+msgid "Open Integrated Notebook"
+msgstr "Öppna integrerad anteckningsbok"
+
+msgid "Cannot create or write to the selected directory."
+msgstr "Det går inte att skapa eller skriva till den valda katalogen."
+
+msgid ""
+"Integrated mode failed: wx.html2.WebView is not functional on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+"Integrerat läge misslyckades: wx.html2.WebView fungerar inte på detta system.\n"
+"\n"
+"Vill du öppna Jupyter Notebook i din externa bläddrare i stället?"
+
+msgid "WebView Not Supported"
+msgstr "WebView stöds inte"
+
+msgid "Browser"
+msgstr "Bläddrare"
+
+msgid "Integrated"
+msgstr "Integrerad"
+
+msgid "Jupyter Notebook ({}) - {}"
+msgstr "Jupyter Notebook ({}) – {}"
+
+msgid "Jupyter Notebook"
+msgstr "Jupyter Notebook"
+
+msgid "Really close page '{}'?"
+msgstr "Vill du verkligen stänga sidan '{}'?"
+
+msgid "Close page"
+msgstr "Stäng sida"
+
+msgid ""
+"Failed to start Jupyter environment:\n"
+"{}"
+msgstr ""
+"Det gick inte att starta Jupyter-miljön:\n"
+"{}"
+
+msgid "Startup Error"
+msgstr "Startfel"
+
+msgid ""
+"Failed to get Jupyter server URL:\n"
+"{}"
+msgstr ""
+"Det gick inte att hämta Jupyter-serverns URL:\n"
+"{}"
+
+#, python-brace-format
+msgid "Jupyter server running at {url} (PID: {pid}) | Storage: {storage}"
+msgstr "Jupyter-server körs på {url} (PID: {pid}) | Lagring: {storage}"
+
+msgid "URL Error"
+msgstr "URL-fel"
+
+msgid "File '{}' is already opened."
+msgstr "Filen '{}' är redan öppen."
+
+msgid "File '{}' opened."
+msgstr "Filen '{}' öppnades."
+
+msgid "File '{}' imported and opened."
+msgstr "Filen '{}' importerades och öppnades."
+
+msgid ""
+"Failed to import file:\n"
+"{}"
+msgstr ""
+"Det gick inte att importera filen:\n"
+"{}"
+
+msgid "Notebook Import Error"
+msgstr "Fel vid import av anteckningsbok"
+
+msgid "Import file"
+msgstr "Importera fil"
+
+msgid ""
+"File '{}' already exists in notebook storage.\n"
+"Please enter a new name:"
+msgstr ""
+"Filen '{}' finns redan i anteckningsboklagringen.\n"
+"Ange ett nytt namn:"
+
+msgid "Rename File"
+msgstr "Byt namn på fil"
+
+msgid "No page for export is currently selected."
+msgstr "Ingen sida för export är vald."
+
+msgid "Notebook Export Error"
+msgstr "Fel vid export av anteckningsbok"
+
+msgid "Export file as..."
+msgstr "Exportera fil som…"
+
+msgid "File {} exported to {}."
+msgstr "Filen {} exporterades till {}."
+
+msgid ""
+"Failed to export file:\n"
+"{}"
+msgstr ""
+"Det gick inte att exportera filen:\n"
+"{}"
+
+msgid "Enter a name for the new notebook:"
+msgstr "Ange ett namn för den nya anteckningsboken:"
+
+msgid "New Notebook"
+msgstr "Ny anteckningsbok"
+
+msgid ""
+"Failed to create notebook:\n"
+"{}"
+msgstr ""
+"Det gick inte att skapa anteckningsboken:\n"
+"{}"
+
+msgid "Notebook Creation Error"
+msgstr "Fel vid skapande av anteckningsbok"
+
+msgid "New file '{}' created."
+msgstr "Ny fil '{}' skapades."
+
+msgid "Do you really want to close this tab and stop the Jupyter server?"
+msgstr "Vill du verkligen stänga den här fliken och stoppa Jupyter-servern?"
+
+msgid "Confirm Close"
+msgstr "Bekräfta stängning"
+
+#, python-brace-format
+msgid "Jupyter server at {url} (PID: {pid}) has been stopped"
+msgstr "Jupyter-servern på {url} (PID: {pid}) har stoppats"
+
+msgid ""
+"Failed to stop Jupyter server:\n"
+"{}"
+msgstr ""
+"Det gick inte att stoppa Jupyter-servern:\n"
+"{}"
+
+msgid "Jupyter Notebook has been opened in your default browser."
+msgstr "Jupyter Notebook har öppnats i din standardbläddrare."
+
+msgid "Open in Browser Again"
+msgstr "Öppna i bläddraren igen"
+
+msgid "Stop Jupyter Server"
+msgstr "Stoppa Jupyter-server"
+
+msgid "Server URL: {}"
+msgstr "Server-URL: {}"
+
+msgid "Process ID: {}"
+msgstr "Process-ID: {}"
+
+msgid "Notebook Storage: {}"
+msgstr "Anteckningsboklagring: {}"
+
+msgid ""
+"Failed to stop server:\n"
+"{}"
+msgstr ""
+"Det gick inte att stoppa servern:\n"
+"{}"
+
+msgid "Notebook storage does not exist: {}"
+msgstr "Anteckningsboklagringen finns inte: {}"
+
+msgid "Notebook storage is not writable: {}"
+msgstr "Anteckningsboklagringen är inte skrivbar: {}"
+
+msgid "Server is already running on port {}"
+msgstr "Servern körs redan på port {}"
+
+msgid "Failed to start Jupyter server. Ensure all dependencies are installed and accessible: {}"
+msgstr "Det gick inte att starta Jupyter-servern. Kontrollera att alla beroenden är installerade och tillgängliga: {}"
+
+msgid "Failed to start Jupyter server. Check for port conflicts, missing dependencies, or insufficient permissions."
+msgstr "Det gick inte att starta Jupyter-servern. Kontrollera portkonflikter, saknade beroenden eller otillräckliga behörigheter."
+
+msgid "Error stopping Jupyter server (PID {}): {}"
+msgstr "Fel vid stopp av Jupyter-servern (PID {}): {}"
+
+msgid "Server URL is not set. Start the server first."
+msgstr "Server-URL är inte angiven. Starta först servern."
+
+msgid "Jupyter server has stopped unexpectedly."
+msgstr "Jupyter-servern har stoppats oväntat."
+
+msgid ""
+"Some Jupyter servers failed to stop:\n"
+"{}"
+msgstr ""
+"Vissa Jupyter-servrar kunde inte stoppas:\n"
+"{}"
+
+msgid "File not found: {}"
+msgstr "Filen hittades inte: {}"
+
+msgid "Source file must have .ipynb extension: {}"
+msgstr "Källfilen måste ha filändelsen .ipynb: {}"
+
+msgid "Target file already exists: {}"
+msgstr "Målfilen finns redan: {}"
+
+msgid "File '{}' already exists"
+msgstr "Filen '{}' finns redan"
+
+msgid "Stop server"
+msgstr "Stoppa server"
+
+msgid "Create new notebook"
+msgstr "Skapa ny anteckningsbok"
+
+msgid "Import notebook"
+msgstr "Importera anteckningsbok"
+
+msgid "Export notebook"
+msgstr "Exportera anteckningsbok"
+
 msgid "GRASS"
 msgstr "GRASS"
 
@@ -5546,6 +5947,37 @@ msgstr "Stäng kartvisning {}"
 
 msgid "Console"
 msgstr "Konsol"
+
+msgid ""
+"Integrated mode requires wx.html2.WebView, which is not available on this system.\n"
+"\n"
+"This can happen if wxPython or wxWidgets were built without HTML2/WebView support."
+msgstr ""
+"Integrerat läge kräver wx.html2.WebView, som inte är tillgängligt på detta system.\n"
+"\n"
+"Detta kan inträffa om wxPython eller wxWidgets byggdes utan stöd för HTML2/WebView."
+
+msgid ""
+"Integrated mode requires Microsoft Edge WebView2 runtime on Windows.\n"
+"\n"
+"It is missing or not properly configured on this system."
+msgstr ""
+"Integrerat läge kräver Microsoft Edge WebView2-runtime på Windows.\n"
+"\n"
+"Den saknas eller är inte korrekt konfigurerad på detta system."
+
+#, python-brace-format
+msgid ""
+"{message}\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+"{message}\n"
+"\n"
+"Vill du öppna Jupyter Notebook i din externa bläddrare i stället?"
+
+msgid "Integrated Mode Not Available"
+msgstr "Integrerat läge är inte tillgängligt"
 
 msgid "Map Swipe Tool"
 msgstr "Verktyg för svepande kartor"
@@ -5677,7 +6109,7 @@ msgid "Unsupported map layer type <%s>."
 msgstr "Kartlagertypen <%s> stöds inte."
 
 msgid "Note that cell values can only be displayed for regions of less than 10,000 cells."
-msgstr "Observera att cellvärden endast kan visas för regioner med färre än 10.000 celler."
+msgstr "Observera att cellvärden endast kan visas för regioner med färre än 10 000 celler."
 
 msgid "opacity:"
 msgstr "opacitet:"
@@ -5700,6 +6132,13 @@ msgstr "Ta bort kartlager"
 
 msgid "Quit GRASS GUI"
 msgstr "Avsluta GRASS GUI"
+
+msgid ""
+"Failed to stop Jupyter servers:\n"
+"{}"
+msgstr ""
+"Det gick inte att stoppa Jupyter-servrar:\n"
+"{}"
 
 msgid "Display resolution is currently not constrained to computational settings. It's suggested to constrain map to region geometry. Do you want to constrain the resolution?"
 msgstr "Skärmupplösningen är för närvarande inte begränsad till beräkningsinställningarna. Det föreslås att kartan begränsas till regiongeometri. Vill du begränsa upplösningen?"
@@ -5934,15 +6373,11 @@ msgstr "Är du säker på att du vill ta bort den aktuella rastermasken?"
 msgid "Remove raster mask"
 msgstr "Ta bort rastermask"
 
-#, fuzzy
-#| msgid "Custom min"
 msgid "Custom CRS"
-msgstr "Anpassad min"
+msgstr "Anpassat CRS"
 
-#, fuzzy
-#| msgid "Left mouse click to remove the raster mask"
 msgid "Left mouse click to print detailed projection info"
-msgstr "Vänster musklick för att ta bort rastermasken"
+msgstr "Vänsterklicka för att skriva ut detaljerad projektionsinformation"
 
 msgid "Create new workspace (Ctrl+N)"
 msgstr "Skapa en ny arbetsyta (Ctrl+N)"
@@ -6025,11 +6460,11 @@ msgstr "Georektifierare"
 msgid "Cartographic Composer"
 msgstr "Kartografisk kompositör"
 
+msgid "Open Graphical Modeler"
+msgstr "Öppna grafisk modellerare"
+
 msgid "Launch user-defined script"
 msgstr "Starta användardefinierat skript"
-
-msgid "New display"
-msgstr "Ny display"
 
 msgid "Python code editor"
 msgstr "Python kodredigerare"
@@ -6421,6 +6856,15 @@ msgstr "WKT-sträng saknas."
 
 msgid "There were some issues when loading menu or Tools:"
 msgstr "Det uppstod vissa problem vid inläsning av meny eller verktyg:"
+
+msgid ""
+"Integrated mode is not supported on this system.\n"
+"\n"
+"Would you like to open Jupyter Notebook in your external browser instead?"
+msgstr ""
+"Integrerat läge stöds inte på detta system.\n"
+"\n"
+"Vill du öppna Jupyter Notebook i din externa bläddrare i stället?"
 
 msgid "No project provided. Operation canceled."
 msgstr "Inget projekt tillhandahållet. Operation avbruten."
@@ -6934,7 +7378,7 @@ msgid "Save"
 msgstr "Spara"
 
 msgid "&Set"
-msgstr "&Set"
+msgstr "&Ange"
 
 msgid "Load color table:"
 msgstr "Läs in färgtabell:"
@@ -7074,9 +7518,6 @@ msgstr "Hämta och installera tillägg från GRASS Addons"
 msgid "List of extensions - double-click to install"
 msgstr "Lista över tillägg - dubbelklicka för att installera"
 
-msgid "Options"
-msgstr "Alternativ"
-
 msgid "&Install"
 msgstr "&Installera"
 
@@ -7174,7 +7615,7 @@ msgid "Override projection check (use current location's projection)"
 msgstr "Åsidosätt projektionskontroll (använd den aktuella platsens projektion)"
 
 msgid "&Import"
-msgstr "&Import"
+msgstr "&Importera"
 
 msgid "Import selected layers"
 msgstr "Importera valda lager"
@@ -9676,12 +10117,12 @@ msgid ""
 "\n"
 "Do you want to stay in the current mapset or remove .gislock and switch to selected mapset?"
 msgstr ""
-"Användare {user} kör redan GRASS i vald kartuppsättning <{mapset}> (fil {lockpath} skapad {timestamp} hittad)\n"
-" (fil {lockpath} skapad {timestamp} hittad).\n"
+"Användaren {user} kör redan GRASS i den valda kartuppsättningen <{mapset}>\n"
+" (filen {lockpath} skapades {timestamp} hittades).\n"
 "\n"
 "Samtidig användning är inte tillåten.\n"
 "\n"
-"Vill du stanna kvar i den aktuella kartuppsättningen eller ta bort .gislock och byta till vald kartuppsättning?"
+"Vill du stanna i den aktuella kartuppsättningen eller ta bort .gislock och byta till den valda kartuppsättningen?"
 
 msgid "Mapset is in use"
 msgstr "Mapset är i bruk"
@@ -9726,7 +10167,7 @@ msgid "Current mapset is <%s>."
 msgstr "Aktuell kartuppsättning är <%s>."
 
 msgid "Download in progress, wait until it is finished 0%"
-msgstr "Hämtning pågår, vänta tills den är klar 0%"
+msgstr "Hämtning pågår, vänta tills den är klar 0 %"
 
 #, python-brace-format
 msgid "Download in progress, wait until it is finished {0}%, {1} MB, {2} KB/s, {3:.0f} seconds passed"
@@ -9745,7 +10186,7 @@ msgid "Select sample project to download:"
 msgstr "Välj ett exempelprojekt att hämta ner:"
 
 msgid "Do&wnload"
-msgstr "Do&wnload"
+msgstr "&Hämta"
 
 msgid "Download selected project"
 msgstr "Hämta ner valt projekt"
@@ -9780,8 +10221,8 @@ msgstr "Hämta ner utvalt dataset"
 msgid "Do you want to cancel dataset download?"
 msgstr "Vill du avbryta hämtningen av dataset?"
 
-msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed. {}"
-msgstr "Timeline Tool kräver att paketet \"matplotlib\" (python-matplotlib och på vissa system även python-matplotlib-wx) installeras. {}"
+msgid "The Timeline Tool needs the \"matplotlib\" (python-matplotlib and on some systems also python-matplotlib-wx) package(s) to be installed."
+msgstr "Tidslinjeverktyget kräver att paketet eller paketen ”matplotlib” (python-matplotlib och på vissa system även python-matplotlib-wx) är installerade."
 
 msgid "Timeline Tool"
 msgstr "Verktyg för tidslinje"
@@ -9878,19 +10319,20 @@ msgstr ""
 msgid "Timeline Tool - GRASS"
 msgstr "Verktyg för tidslinje - GRASS"
 
-#, python-brace-format
-msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed. {0}"
-msgstr "Temporal Plot Tool kräver att paketet \"matplotlib\" (python-matplotlib) är installerat. {0}"
+msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) package to be installed."
+msgstr "Verktyget för temporala diagram kräver att paketet ”matplotlib” (python-matplotlib) är installerat."
 
 msgid "Temporal Plot Tool"
 msgstr "Verktyg för temporär plottning"
 
 msgid ""
 "Raster temporal dataset (strds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
-"Raster temporalt dataset (strds)\n"
-"Tryck ENTER efter att ha skrivit in namnet eller välj med kombinationsrutan"
+"Temporalt rasterdataset (strds)\n"
+"\n"
+"Tryck på RETUR när du har skrivit namnet eller välj med kombinationsrutan"
 
 msgid "X and Y coordinates separated by comma:"
 msgstr "X- och Y-koordinater åtskilda med kommatecken:"
@@ -9906,10 +10348,12 @@ msgstr "STRDS"
 
 msgid ""
 "Vector temporal dataset (stvds)\n"
+"\n"
 "Press ENTER after typing the name or select with the combobox"
 msgstr ""
-"Vektor temporal dataset (stvds)\n"
-"Tryck ENTER efter att ha skrivit in namnet eller välj med kombinationsrutan"
+"Temporalt vektordataset (stvds)\n"
+"\n"
+"Tryck på RETUR när du har skrivit namnet eller välj med kombinationsrutan"
 
 msgid "Select attribute column"
 msgstr "Välj attributkolumn"
@@ -10219,7 +10663,7 @@ msgid "Geometry attributes"
 msgstr "Geometriattribut"
 
 msgid "area"
-msgstr "område"
+msgstr "area"
 
 msgid "perimeter"
 msgstr "perimeter"
@@ -11103,7 +11547,7 @@ msgid "Number of bins (for FP maps)"
 msgstr "Antal fack (för FP-kartor)"
 
 msgid "C&opy"
-msgstr "C&opy"
+msgstr "&Kopiera"
 
 msgid "Copy regression statistics the clipboard (Ctrl+C)"
 msgstr "Kopiera regressionsstatistik till urklipp (Ctrl+C)"
@@ -11353,6 +11797,9 @@ msgid ""
 msgstr ""
 "Regressionsekvation för rasterkartan <%(rast1)s> vs. <%(rast2)s>:\n"
 "\n"
+
+#~ msgid "New display"
+#~ msgstr "Ny display"
 
 #~ msgid "&Copy paths to mapsets"
 #~ msgstr "&Kopiera sökvägar till kartor"

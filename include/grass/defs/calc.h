@@ -2,8 +2,6 @@
 #define GRASS_CALCDEFS_H
 
 extern void calc_init(int);
-extern void pre_exec(void);
-extern void post_exec(void);
 
 extern func_t f_add;
 extern func_t f_sub;

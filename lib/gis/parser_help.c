@@ -3,10 +3,8 @@
 
    \brief GIS Library - Argument parsing functions (help)
 
-   (C) 2001-2009, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
    \author Soeren Gebbert added Dec. 2009 WPS process_description document
@@ -141,7 +139,7 @@ static void usage(FILE *fp, int markers)
                 fprintf(stderr, "\n%s\n", _("ERROR: Option key not defined"));
                 exit(EXIT_FAILURE);
             }
-            n = strlen(opt->key);
+            n = (int)strlen(opt->key);
             if (n > maxlen)
                 maxlen = n;
 
@@ -279,7 +277,8 @@ static void show_options(FILE *fp, int maxlen, const char *str)
 {
     char *buff = G_store(str);
     char *p1, *p2;
-    int totlen, len;
+    int totlen;
+    size_t len;
 
     fprintf(fp, _("  %*s   options: "), maxlen, " ");
     totlen = maxlen + 13;
@@ -307,7 +306,7 @@ static int show(FILE *fp, const char *item, int len)
 {
     int n;
 
-    n = strlen(item) + (len > 0);
+    n = (int)strlen(item) + (len > 0);
     if (n + len > 76) {
         if (len)
             fprintf(fp, "\n  ");

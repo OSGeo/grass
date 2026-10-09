@@ -7,10 +7,8 @@ Classes:
  - canvas::ModelCanvas
  - canvas::ModelEvtHandler
 
-(C) 2010-2023 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2010-2023 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Python exports Ondrej Pesek <pesej.ondrek gmail.com>
@@ -23,6 +21,7 @@ from gui_core.dialogs import TextEntryDialog as CustomTextEntryDialog
 from gui_core.wrap import TextEntryDialog as wxTextEntryDialog, NewId, Menu
 from gui_core.forms import GUI
 from core.gcmd import GException, GError
+from core.giface import StandaloneGrassInterface
 
 from gmodeler.model_items import (
     ModelRelation,
@@ -482,22 +481,34 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
         shape.SetHasDisplay(event.IsChecked())
         self.frame.canvas.Refresh()
 
+        if isinstance(self.frame._giface, StandaloneGrassInterface):
+            return
+
+        model = self.frame.GetModel()
+        run_params = model.GetRunParams()
+        resolved = {}
+        if run_params and "variables" in run_params:
+            for p in run_params["variables"]["params"]:
+                name = p.get("name", "")
+                value = p.get("value", "")
+                if name and value:
+                    resolved[name] = value
+
+        layer_list = self.frame._giface.GetLayerList()
         try:
             if event.IsChecked():
                 # add map layer to display
-                self.frame._giface.GetLayerList().AddLayer(
+                layer_list.AddLayer(
                     ltype=shape.GetPrompt(),
-                    name=shape.GetValue(),
+                    name=shape.GetResolvedValue(resolved),
                     checked=True,
-                    cmd=shape.GetDisplayCmd(),
+                    cmd=shape.GetDisplayCmd(resolved),
                 )
             else:
                 # remove map layer(s) from display
-                layers = self.frame._giface.GetLayerList().GetLayersByName(
-                    shape.GetValue()
-                )
+                layers = layer_list.GetLayersByName(shape.GetResolvedValue(resolved))
                 for layer in layers:
-                    self.frame._giface.GetLayerList().DeleteLayer(layer)
+                    layer_list.DeleteLayer(layer)
 
         except GException as e:
             GError(parent=self, message="{}".format(e))

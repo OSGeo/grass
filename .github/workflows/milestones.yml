@@ -47,12 +47,13 @@ jobs:
             gh api \
               -H "Accept: application/vnd.github.raw" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
-              "/repos/{owner}/{repo}/contents/include/VERSION?ref=${{ github.sha }}"
+              "/repos/{owner}/{repo}/contents/include/VERSION?ref=${MERGE_SHA}"
             echo "EOF"
           } >> "${GITHUB_OUTPUT}"
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
       - name: Show version file
         if: ${{ !steps.current-milestone.outputs.milestone }}
         run: echo "${VERSIONFILE}"

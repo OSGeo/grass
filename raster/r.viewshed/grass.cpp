@@ -27,10 +27,8 @@
  * paper: "Computing Visibility on * Terrains in External Memory" by
  * Herman Haverkort, Laura Toma and Yi Zhuang.
  *
- * COPYRIGHT: (C) 2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -94,7 +92,7 @@ GridHeader *read_header(char *rastName, Cell_head *region)
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    /*check for loss of prescion */
+    /*check for loss of precision */
     if (nrows <= maxDimension && ncols <= maxDimension) {
         hd->nrows = (dimensionType)nrows;
         hd->ncols = (dimensionType)ncols;
@@ -868,7 +866,7 @@ void save_io_visibilitygrid_to_GRASS(IOVisibilityGrid *visgrid, char *fname,
         for (j = 0; j < (dimensionType)ncols; j++) {
 
             if (curResult->row == i && curResult->col == j) {
-                /*cell is recodred in the visibility stream: it must be
+                /*cell is recorded in the visibility stream: it must be
                    either visible, or NODATA  */
                 if (is_visible(curResult->angle))
                     writeValue(visrast, j, fun(curResult->angle), type);
@@ -972,7 +970,7 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
 
         Rast_get_row(elevfd, elevrast, i, elev_data_type);
 
-        for (j = 0; j < Rast_window_cols(); j++) {
+        for (j = 0; j < (dimensionType)ncols; j++) {
 
             /* read the current elevation value */
             // int isNull = 0;
@@ -993,7 +991,7 @@ void save_io_vis_and_elev_to_GRASS(IOVisibilityGrid *visgrid, char *elevfname,
             }
 
             if (curResult->row == i && curResult->col == j) {
-                /*cell is recodred in the visibility stream: it must be
+                /*cell is recorded in the visibility stream: it must be
                    either visible, or NODATA  */
                 if (is_visible(curResult->angle))
                     writeValue(visrast, j, elev - vp_elev, elev_data_type);

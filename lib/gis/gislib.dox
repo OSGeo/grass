@@ -10,6 +10,7 @@ by GRASS Development Team (https://grass.osgeo.org)
 \par Subpages
 
 - \subpage gislib_cmdline_parsing
+- \subpage gislib_random_streams
 
 This chapter is divided as follows:
 

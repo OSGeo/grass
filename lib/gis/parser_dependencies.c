@@ -4,10 +4,8 @@
    \brief GIS Library - Argument parsing functions (dependencies between
    options)
 
-   (C) 2014-2015 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2014-2015 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Glynn Clements Jun. 2014
  */
@@ -15,6 +13,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
+#include <limits.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -102,7 +101,10 @@ static void make_rule(int type, void *first, va_list ap)
         vector_append(&opts, &opt);
     }
 
-    G_option_rule(type, opts.count, (void **)opts.data);
+    if (opts.count > INT_MAX)
+        G_fatal_error(_("Too many options in rule"));
+
+    G_option_rule(type, (int)opts.count, (void **)opts.data);
 }
 
 static int is_flag(const void *p)

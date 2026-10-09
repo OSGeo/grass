@@ -3,14 +3,13 @@
 
    \brief Raster library - Get raster row
 
-   (C) 2003-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2003-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
 
+#include <limits.h>
 #include <stdint.h>
 #include <string.h>
 #include <unistd.h>
@@ -90,7 +89,7 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
     off_t t1 = fcb->row_ptr[row];
     off_t t2 = fcb->row_ptr[row + 1];
     size_t readamount = t2 - t1;
-    size_t bufsize = fcb->cellhd.cols * fcb->nbytes;
+    size_t bufsize = (size_t)fcb->cellhd.cols * fcb->nbytes;
     int ret;
 
     if (lseek(fcb->data_fd, t1, SEEK_SET) == -1)
@@ -100,8 +99,12 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
 
     *nbytes = fcb->nbytes;
 
-    ret = G_read_compressed(fcb->data_fd, readamount, data_buf, bufsize,
-                            fcb->cellhd.compressed);
+    if (readamount > INT_MAX || bufsize > INT_MAX)
+        G_fatal_error(_("Compressed fp raster row for <%s> is too large"),
+                      fcb->name);
+
+    ret = G_read_compressed(fcb->data_fd, (int)readamount, data_buf,
+                            (int)bufsize, fcb->cellhd.compressed);
     if (ret <= 0)
         G_fatal_error(_("Error uncompressing fp raster data for row %d of "
                         "<%s>: error code %d"),
@@ -109,12 +112,11 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
 }
 
 static void rle_decompress(unsigned char *dst, const unsigned char *src,
-                           int nbytes, int size)
+                           int nbytes, size_t size)
 {
-    int pairs = size / (nbytes + 1);
-    int i;
+    size_t pairs = size / ((size_t)nbytes + 1);
 
-    for (i = 0; i < pairs; i++) {
+    for (size_t i = 0; i < pairs; i++) {
         int repeat = *src++;
         int j;
 
@@ -133,10 +135,22 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     struct fileinfo *fcb = &R__.fileinfo[fd];
     off_t t1 = fcb->row_ptr[row];
     off_t t2 = fcb->row_ptr[row + 1];
-    ssize_t readamount = t2 - t1;
+    off_t row_size;
+    size_t readamount;
     size_t bufsize;
     unsigned char *cmp, *cmp2;
     int n;
+
+    if (t2 < t1)
+        G_fatal_error(_("Invalid raster row offset for row %d of <%s>"), row,
+                      fcb->name);
+
+    row_size = t2 - t1;
+    if (row_size > INT_MAX)
+        G_fatal_error(_("Compressed raster row for <%s> is too large"),
+                      fcb->name);
+
+    readamount = (size_t)row_size;
 
     if (lseek(fcb->data_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
@@ -145,7 +159,8 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 
     cmp = G_malloc(readamount);
 
-    if (read(fcb->data_fd, cmp, readamount) != readamount) {
+    ssize_t nread = read(fcb->data_fd, cmp, readamount);
+    if (nread < 0 || (size_t)nread != readamount) {
         G_free(cmp);
         G_fatal_error(_("Error reading raster data for row %d of <%s>: %s"),
                       row, fcb->name, strerror(errno));
@@ -156,6 +171,12 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 
     /* Now decompress the row */
     if (fcb->cellhd.compressed > 0) {
+        if (readamount == 0) {
+            G_free(cmp2);
+            G_fatal_error(_("Error reading raster data for row %d of <%s>"),
+                          row, fcb->name);
+        }
+
         /* one byte is nbyte count */
         n = *nbytes = *cmp++;
         readamount--;
@@ -169,9 +190,13 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
         if (fcb->cellhd.compressed == 1)
             rle_decompress(data_buf, cmp, n, readamount);
         else {
-            if ((n = G_expand(cmp, readamount, data_buf, bufsize,
+            if (readamount > INT_MAX || bufsize > INT_MAX)
+                G_fatal_error(_("Compressed raster row for <%s> is too large"),
+                              fcb->name);
+
+            if ((n = G_expand(cmp, (int)readamount, data_buf, (int)bufsize,
                               fcb->cellhd.compressed)) < 0 ||
-                (unsigned int)n != bufsize) {
+                (size_t)n != bufsize) {
                 G_fatal_error(
                     _("Error uncompressing raster data for row %d of <%s>"),
                     row, fcb->name);
@@ -188,7 +213,7 @@ static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
                                    int *nbytes)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    ssize_t bufsize = fcb->cellhd.cols * fcb->nbytes;
+    ssize_t bufsize = (ssize_t)fcb->cellhd.cols * fcb->nbytes;
 
     *nbytes = fcb->nbytes;
 
@@ -207,26 +232,33 @@ static void read_data_gdal(int fd, int row, unsigned char *data_buf,
     struct fileinfo *fcb = &R__.fileinfo[fd];
     unsigned char *buf;
     CPLErr err;
+    /* Logical (pre-flip) column range actually needed by the region;
+     * unrestricted (full row) if the window mapping left it unset. */
+    int min_col = fcb->gdal_min_col >= 0 ? fcb->gdal_min_col : 0;
+    int max_col =
+        fcb->gdal_min_col >= 0 ? fcb->gdal_max_col : fcb->cellhd.cols - 1;
+    int ncols = max_col - min_col + 1;
+    /* hflip'ed maps store columns mirrored, so the logical range read
+     * from disk is the physical range at the opposite end of the row. */
+    int col_off = fcb->gdal->hflip ? fcb->cellhd.cols - 1 - max_col : min_col;
 
     *nbytes = fcb->nbytes;
 
     if (fcb->gdal->vflip)
         row = fcb->cellhd.rows - 1 - row;
 
-    buf = fcb->gdal->hflip ? G_malloc(fcb->cellhd.cols * fcb->cur_nbytes)
-                           : data_buf;
+    buf = fcb->gdal->hflip ? G_malloc((size_t)ncols * fcb->cur_nbytes)
+                           : data_buf + (size_t)col_off * fcb->cur_nbytes;
 
-    err =
-        Rast_gdal_raster_IO(fcb->gdal->band, GF_Read, 0, row, fcb->cellhd.cols,
-                            1, buf, fcb->cellhd.cols, 1, fcb->gdal->type, 0, 0);
+    err = Rast_gdal_raster_IO(fcb->gdal->band, GF_Read, col_off, row, ncols, 1,
+                              buf, ncols, 1, fcb->gdal->type, 0, 0);
 
     if (fcb->gdal->hflip) {
         int i;
 
-        for (i = 0; i < fcb->cellhd.cols; i++)
-            memcpy(data_buf + i * fcb->cur_nbytes,
-                   buf + (fcb->cellhd.cols - 1 - i) * fcb->cur_nbytes,
-                   fcb->cur_nbytes);
+        for (i = 0; i < ncols; i++)
+            memcpy(data_buf + (min_col + i) * fcb->cur_nbytes,
+                   buf + (ncols - 1 - i) * fcb->cur_nbytes, fcb->cur_nbytes);
         G_free(buf);
     }
 
@@ -607,7 +639,7 @@ static void get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
                         int null_is_zero, int with_mask)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    int size = Rast_cell_size(data_type);
+    size_t size = Rast_cell_size(data_type);
     CELL *temp_buf = NULL;
     void *buf;
     int type;
@@ -839,7 +871,7 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
     off_t t2 = fcb->null_row_ptr[row + 1];
     size_t readamount = t2 - t1;
     unsigned char *compressed_buf;
-    int res;
+    ssize_t res;
 
     if (lseek(null_fd, t1, SEEK_SET) == -1)
         G_fatal_error(
@@ -847,8 +879,7 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
             fcb->name);
 
     if (readamount == size) {
-        if ((res = read(null_fd, flags, size)) < 0 ||
-            (unsigned int)res != size) {
+        if ((res = read(null_fd, flags, size)) < 0 || (size_t)res != size) {
             G_fatal_error(
                 _("Error reading compressed null data for row %d of <%s>"), row,
                 fcb->name);
@@ -859,7 +890,7 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
     compressed_buf = G_malloc(readamount);
 
     if ((res = read(null_fd, compressed_buf, readamount)) < 0 ||
-        (unsigned int)res != readamount) {
+        (size_t)res != readamount) {
         G_free(compressed_buf);
         G_fatal_error(
             _("Error reading compressed null data for row %d of <%s>"), row,
@@ -867,7 +898,11 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags, int row,
     }
 
     /* null bits file compressed with LZ4, see lib/gis/compress.h */
-    if (G_lz4_expand(compressed_buf, readamount, flags, size) < 1) {
+    if (readamount > INT_MAX || size > INT_MAX)
+        G_fatal_error(_("Compressed null data for row %d of <%s> is too large"),
+                      row, fcb->name);
+
+    if (G_lz4_expand(compressed_buf, (int)readamount, flags, (int)size) < 1) {
         G_fatal_error(_("Error uncompressing null data for row %d of <%s>"),
                       row, fcb->name);
     }
