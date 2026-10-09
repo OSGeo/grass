@@ -14,7 +14,7 @@ can be run.
 The user will be prompted for the projection name. Most projections are
 supported. The [PROJ](https://proj.org/) abbreviations for the names are
 used with two exceptions, viz. 'll', for latitude / longitude geographic
-co-ordinates, and 'stp', for the State Plane Co-ordinate system (used in
+coordinates, and 'stp', for the State Plane Coordinate system (used in
 the USA).
 
 After the projection name, the user will be asked for a geodetic datum.

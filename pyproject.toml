@@ -42,6 +42,18 @@ ignore-words-list = [
     "parms",
     "siz",
     "vizual",
+    "ETo",    # Evapotranspiration technical term
+    "Eto",    # Evapotranspiration technical term
+    "eto",    # Evapotranspiration technical term
+    "ist",    # Part of acronyms (IST-SUPSI, etc.)
+    "IHS",    # Color model: Intensity-Hue-Saturation
+    "ihs",    # Color model: Intensity-Hue-Saturation
+    "ALOG",   # Function name
+    "Redner", # Person's name in citation
+    "NED",    # Acronym/proper name
+    "linke",  # Linke turbidity factor parameter
+    "infex",  # Infiltration excess parameter
+    "alle",   # Italian word in references
 ]
 quiet-level = 3
 skip = [

@@ -863,7 +863,7 @@ r.mapcalc is parallelized using OpenMP. The number of threads can be controlled
 with the **nprocs** parameter. Note that more complex expressions can benefit
 from more threads. By default (**nprocs=0**), r.mapcalc uses all available threads.
 Use the **--verbose** flag to display the number of threads in use.
-If you observe reduced performance when using many threads, try lowering ther number.
+If you observe reduced performance when using many threads, try lowering the number.
 
 Note: r.mapcalc may disable parallelization in certain cases, even when requested:
 
