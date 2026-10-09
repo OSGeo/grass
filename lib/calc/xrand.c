@@ -21,12 +21,10 @@ void calc_set_random_state(struct G_random_state *(*get_state)(void))
     random_state = get_state;
 }
 
-/* With a state, this is the value G_mrand48() gives at the same draw, as
- * unsigned. */
 static unsigned int draw_uint(struct G_random_state *state)
 {
     if (state)
-        return (unsigned int)(G_random_double(state) * 4294967296.0);
+        return G_random_uint32(state);
     return (unsigned int)G_mrand48();
 }
 
