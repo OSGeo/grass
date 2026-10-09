@@ -106,7 +106,7 @@ def test_results_do_not_depend_on_nprocs(session, nprocs):
 @pytest.mark.parametrize("seed", [-(2**31) - 1, 2**32])
 def test_seed_outside_range_is_an_error(session, seed):
     """A seed the generator cannot use is refused, not silently wrapped."""
-    with pytest.raises(CalledModuleError, match=r"outside\s+the\s+range"):
+    with pytest.raises(CalledModuleError, match=r"must\s+be\s+between"):
         simulate(session, seed=seed)
 
 

@@ -278,9 +278,8 @@ GRASS_RANDOM_SEED
 seed for the random number generator of tools which let the user omit
 the seed, such as *[r.mapcalc](r.mapcalc.md)* and
 *[r.sim.water](r.sim.water.md)*; the same value gives the same result
-in every run. The value must be an integer; anything else is an error.
-A value from -2147483648 to 4294967295 is used as it is, and a value
-outside that range is reduced to its low 32 bits with a warning. When
+in every run. The value must be an integer from -2147483648 to
+4294967295; anything else is an error. When
 the variable is not set or empty, SOURCE_DATE_EPOCH is read the same
 way if set, and otherwise the seed comes from the time and the process
 ID.
