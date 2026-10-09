@@ -304,6 +304,9 @@ class AreaTestCase(TestCase):
         bbox = Bbox(4.0, 0.0, 4.0, 0.0)
         self.assertTrue(area.contains_point(p, bbox))
         self.assertTrue(area.contains_point(p))
+        self.assertTrue(area.contains_point((0.5, 0.5), bbox))
+        self.assertTrue(area.contains_point((0.5, 0.5)))
+        self.assertFalse(area.contains_point((10.0, 10.0)))
 
     def test_bbox(self):
         """Test contain_point method"""
@@ -388,6 +391,21 @@ class AreaTestCase(TestCase):
         self.assertTrue(isle.alive())
 
         self.assertEqual(str(isle.bbox()), "Bbox(3.0, 1.0, 3.0, 1.0)")
+
+
+class BboxTestCase(TestCase):
+    def test_contains(self):
+        bbox = Bbox(north=10, south=0, east=10, west=0)
+        p = Point(5, 5)
+        self.assertTrue(bbox.contains(p))
+        self.assertTrue(bbox.contains((5, 5)))
+        self.assertTrue(bbox.contains((5, 5, 0)))
+        self.assertFalse(bbox.contains((15, 15)))
+        self.assertFalse(bbox.contains(Point(15, 15)))
+        with self.assertRaises(ValueError):
+            bbox.contains((1, 2, 3, 4))
+        with self.assertRaises(ValueError):
+            bbox.contains("invalid")
 
 
 if __name__ == "__main__":
