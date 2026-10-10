@@ -152,6 +152,11 @@ class Bbox:
             return (self.north, self.south, self.east, self.west, self.top, self.bottom)
         return (self.north, self.south, self.east, self.west)
 
+    def __eq__(self, other):
+        if not isinstance(other, Bbox):
+            return False
+        return self.nsewtb() == other.nsewtb()
+
 
 class BoxList:
     """Instantiate a BoxList class to create a list of Bounding Box"""
@@ -182,12 +187,33 @@ class BoxList:
         return "Boxlist([%s])" % ", ".join([repr(box) for box in self.__iter__()])
 
     def __getitem__(self, indx):
-        bbox = Bbox()
-        bbox.c_bbox = ctypes.pointer(self.c_boxlist.contents.box[indx])
-        return bbox
+        if isinstance(indx, slice):
+            return [self[i] for i in range(*indx.indices(len(self)))]
+        if isinstance(indx, int):
+            if indx < 0:
+                indx += len(self)
+            if indx >= len(self) or indx < 0:
+                msg = "Index out of range"
+                raise IndexError(msg)
+            bbox = Bbox()
+            bbox.c_bbox = ctypes.pointer(self.c_boxlist.contents.box[indx])
+            return bbox
+        msg = f"Index must be an integer or slice, got {type(indx).__name__}"
+        raise TypeError(msg)
 
     def __setitem__(self, indx, bbox):
-        self.c_boxlist.contents.box[indx] = bbox
+        if not isinstance(indx, int):
+            msg = f"Index must be an integer, got {type(indx).__name__}"
+            raise TypeError(msg)
+        if indx < 0:
+            indx += len(self)
+        if indx >= len(self) or indx < 0:
+            msg = "Index out of range"
+            raise IndexError(msg)
+        if not isinstance(bbox, Bbox):
+            msg = f"Expected Bbox instance, got {type(bbox).__name__}"
+            raise TypeError(msg)
+        self.c_boxlist.contents.box[indx] = bbox.c_bbox.contents
 
     def __iter__(self):
         return (self.__getitem__(box_id) for box_id in range(self.__len__()))
@@ -215,40 +241,37 @@ class BoxList:
         3
 
         """
+        if not isinstance(box, Bbox):
+            msg = f"Expected Bbox instance, got {type(box).__name__}"
+            raise TypeError(msg)
         indx = len(self)
-        libvect.Vect_boxlist_append(self.c_boxlist, indx, box.c_bbox)
+        if libvect.Vect_boxlist_append(self.c_boxlist, indx, box.c_bbox):
+            msg = "Cannot append box to list"
+            raise GrassError(msg)
 
-    #    def extend(self, boxlist):
-    #        """Extend a boxlist with another boxlist or using a list of Bbox, using
-    #        ``Vect_boxlist_append_boxlist`` c function. ::
-    #
-    #            >>> box0 = Bbox()
-    #            >>> box1 = Bbox(1,2,3,4)
-    #            >>> box2 = Bbox(5,6,7,8)
-    #            >>> box3 = Bbox(9,8,7,6)
-    #            >>> boxlist0 = BoxList([box0, box1])
-    #            >>> boxlist0
-    #            Boxlist([Bbox(0.0, 0.0, 0.0, 0.0), Bbox(1.0, 2.0, 3.0, 4.0)])
-    #            >>> boxlist1 = BoxList([box2, box3])
-    #            >>> len(boxlist0)
-    #            2
-    #            >>> boxlist0.extend(boxlist1)
-    #            >>> len(boxlist0)
-    #            4
-    #            >>> boxlist1.extend([box0, box1])
-    #            >>> len(boxlist1)
-    #            4
-    #
-    #        ..
-    #        """
-    #        if hasattr(boxlist, 'c_boxlist'):
-    #            #import pdb; pdb.set_trace()
-    #            # FIXME: doesn't work
-    #            libvect.Vect_boxlist_append_boxlist(self.c_boxlist,
-    #                                                boxlist.c_boxlist)
-    #        else:
-    #            for box in boxlist:
-    #                self.append(box)
+    def extend(self, boxlist):
+        """Extend a boxlist with another BoxList or iterable of Bbox objects.
+
+        >>> box0 = Bbox()
+        >>> box1 = Bbox(1, 2, 3, 4)
+        >>> box2 = Bbox(5, 6, 7, 8)
+        >>> box3 = Bbox(9, 8, 7, 6)
+        >>> boxlist0 = BoxList([box0, box1])
+        >>> boxlist0
+        Boxlist([Bbox(0.0, 0.0, 0.0, 0.0), Bbox(1.0, 2.0, 3.0, 4.0)])
+        >>> boxlist1 = BoxList([box2, box3])
+        >>> len(boxlist0)
+        2
+        >>> boxlist0.extend(boxlist1)
+        >>> len(boxlist0)
+        4
+        >>> boxlist1.extend([box0, box1])
+        >>> len(boxlist1)
+        4
+
+        """
+        for box in boxlist:
+            self.append(box)
 
     def remove(self, indx):
         """Remove Bbox from the boxlist, given an integer or a list of integer
@@ -268,9 +291,15 @@ class BoxList:
             libvect.Vect_boxlist_delete_boxlist(self.c_boxlist, indx.c_boxlist)
         elif isinstance(indx, int):
             libvect.Vect_boxlist_delete(self.c_boxlist, indx)
-        else:
+        elif isinstance(indx, Iterable):
             for ind in indx:
+                if not isinstance(ind, int):
+                    msg = f"Index must be an integer, got {type(ind).__name__}"
+                    raise TypeError(msg)
                 libvect.Vect_boxlist_delete(self.c_boxlist, ind)
+        else:
+            msg = f"Value {indx!r} of type {type(indx).__name__} is not supported"
+            raise TypeError(msg)
 
     def reset(self):
         """Reset the c_boxlist C struct, using the ``Vect_reset_boxlist`` C

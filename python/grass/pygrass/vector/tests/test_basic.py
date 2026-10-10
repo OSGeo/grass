@@ -2,7 +2,7 @@
 SPDX-FileCopyrightText: 2026 GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 
-Unit tests for grass.pygrass.vector.basic.Ilist
+Unit tests for grass.pygrass.vector.basic (Ilist, BoxList, Bbox)
 """
 
 from unittest.mock import patch
@@ -10,7 +10,7 @@ from unittest.mock import patch
 import pytest
 
 from grass.pygrass.errors import GrassError
-from grass.pygrass.vector.basic import Ilist
+from grass.pygrass.vector.basic import Bbox, BoxList, Ilist
 
 
 def test_init_empty():
@@ -153,3 +153,166 @@ def test_repr():
     """Test __repr__."""
     ilist = Ilist([1, 2, 3])
     assert repr(ilist) == "Ilist([1, 2, 3])"
+
+
+def test_bbox_equality():
+    """Test Bbox equality comparisons."""
+    b1 = Bbox(1, 2, 3, 4, 5, 6)
+    b2 = Bbox(1, 2, 3, 4, 5, 6)
+    b3 = Bbox(1, 2, 3, 4, 5, 7)
+    assert b1 == b2
+    assert b1 != b3
+    assert b1 != (1, 2, 3, 4, 5, 6)
+    assert b1 != "not_a_bbox"
+
+
+def test_boxlist_init_empty():
+    """Test empty BoxList initialization."""
+    bl = BoxList()
+    assert len(bl) == 0
+    assert list(bl) == []
+    assert bl.have_boxes()
+
+
+def test_boxlist_init_with_list():
+    """Test BoxList initialization with list of Bbox."""
+    b0 = Bbox(1, 2, 3, 4)
+    b1 = Bbox(5, 6, 7, 8)
+    bl = BoxList([b0, b1])
+    assert len(bl) == 2
+    assert bl[0] == b0
+    assert bl[1] == b1
+
+
+def test_boxlist_getitem():
+    """Test BoxList.__getitem__ with indexing and slicing."""
+    b0 = Bbox(1, 2, 3, 4)
+    b1 = Bbox(5, 6, 7, 8)
+    b2 = Bbox(9, 10, 11, 12)
+    bl = BoxList([b0, b1, b2])
+    assert bl[0] == b0
+    assert bl[1] == b1
+    assert bl[-1] == b2
+    assert bl[-2] == b1
+    assert bl[0:2] == [b0, b1]
+
+    with pytest.raises(IndexError, match="Index out of range"):
+        _ = bl[10]
+    with pytest.raises(IndexError, match="Index out of range"):
+        _ = bl[-10]
+    with pytest.raises(TypeError, match="Index must be an integer or slice"):
+        _ = bl["invalid"]
+
+    empty = BoxList()
+    with pytest.raises(IndexError, match="Index out of range"):
+        _ = empty[0]
+
+
+def test_boxlist_setitem():
+    """Test BoxList.__setitem__."""
+    b0 = Bbox(1, 2, 3, 4)
+    b1 = Bbox(5, 6, 7, 8)
+    bl = BoxList([b0, b1])
+
+    new_box = Bbox(10, 20, 30, 40)
+    bl[0] = new_box
+    assert bl[0] == new_box
+
+    neg_box = Bbox(50, 60, 70, 80)
+    bl[-1] = neg_box
+    assert bl[1] == neg_box
+
+    with pytest.raises(IndexError, match="Index out of range"):
+        bl[10] = new_box
+    with pytest.raises(IndexError, match="Index out of range"):
+        bl[-10] = new_box
+    with pytest.raises(TypeError, match="Expected Bbox instance"):
+        bl[0] = "not_a_bbox"
+    with pytest.raises(TypeError, match="Index must be an integer"):
+        bl["invalid"] = new_box
+
+
+def test_boxlist_contains():
+    """Test BoxList contains / in operator."""
+    b0 = Bbox(1, 2, 3, 4)
+    b1 = Bbox(5, 6, 7, 8)
+    bl = BoxList([b0, b1])
+    assert b0 in bl
+    assert b1 in bl
+    assert Bbox(9, 9, 9, 9) not in bl
+
+
+def test_boxlist_append():
+    """Test appending Bbox to BoxList."""
+    bl = BoxList()
+    b0 = Bbox(1, 2, 3, 4)
+    bl.append(b0)
+    assert len(bl) == 1
+    assert bl[0] == b0
+
+    with pytest.raises(TypeError, match="Expected Bbox instance"):
+        bl.append("not_a_bbox")
+
+
+def test_boxlist_append_error():
+    """Test BoxList.append raises GrassError on failure."""
+    bl = BoxList()
+    b0 = Bbox(1, 2, 3, 4)
+    with (
+        patch(
+            "grass.pygrass.vector.basic.libvect.Vect_boxlist_append",
+            return_value=1,
+        ),
+        pytest.raises(GrassError, match="Cannot append box to list"),
+    ):
+        bl.append(b0)
+
+
+def test_boxlist_extend():
+    """Test extending BoxList."""
+    b0 = Bbox(1, 2, 3, 4)
+    b1 = Bbox(5, 6, 7, 8)
+    bl = BoxList([b0])
+    bl.extend([b1])
+    assert len(bl) == 2
+    assert bl[1] == b1
+
+    b2 = Bbox(9, 10, 11, 12)
+    bl2 = BoxList([b2])
+    bl.extend(bl2)
+    assert len(bl) == 3
+    assert bl[2] == b2
+
+
+def test_boxlist_remove():
+    """Test removing Bbox from BoxList."""
+    b0 = Bbox()
+    b1 = Bbox(1, 0, 0, 1)
+    b2 = Bbox(1, -1, -1, 1)
+    bl = BoxList([b0, b1, b2])
+
+    bl.remove(0)
+    assert len(bl) == 2
+
+    bl.remove([1])
+    assert len(bl) == 1
+
+    bl_other = BoxList([Bbox(1, -1, -1, 1)])
+    bl.remove(bl_other)
+
+    with pytest.raises(TypeError, match="is not supported"):
+        bl.remove(1.5)
+
+
+def test_boxlist_reset():
+    """Test resetting BoxList."""
+    bl = BoxList([Bbox(), Bbox(1, 2, 3, 4)])
+    bl.reset()
+    assert len(bl) == 0
+    assert list(bl) == []
+
+
+def test_boxlist_repr():
+    """Test BoxList __repr__."""
+    bl = BoxList([Bbox(1, 2, 3, 4)])
+    assert repr(bl) == "Boxlist([Bbox(1.0, 2.0, 3.0, 4.0)])"
