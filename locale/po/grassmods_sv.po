@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2026-10-04 18:03+0000\n"
+"PO-Revision-Date: 2026-10-05 10:32+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/sv/>\n"
 "Language: sv\n"
@@ -11958,7 +11958,7 @@ msgstr "Passera 1 av 2..."
 
 #, c-format
 msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
-msgstr ""
+msgstr "För många klumpar: högsta antalet klumpar som stöds är %d. Minska utbredningen eller upplösningen för beräkningsregionen eller använd ett tröskelvärde för att slå samman liknande celler."
 
 #, c-format
 msgid "%d-band clumping with threshold %g"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2026-10-04 18:03+0000\n"
+"PO-Revision-Date: 2026-10-05 10:32+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/sv/>\n"
 "Language: sv\n"
@@ -4812,10 +4812,9 @@ msgstr "Slutet på ASCII-filen nås före slutet av kategorierna"
 msgid "Error reading categories: [%s]"
 msgstr "Fel vid läsning av kategorier: [%s]"
 
-#, fuzzy, c-format
-#| msgid "Cell category value out of range"
+#, c-format
 msgid "Layer number or category number out of range: [%s]"
-msgstr "Cellkategorivärde utanför intervallet"
+msgstr "Lagernummer eller kategorinummer utanför intervallet: [%s]"
 
 msgid "Unable to copy points"
 msgstr "Det går inte att kopiera punkter"
@@ -5136,13 +5135,11 @@ msgid_plural "%d primitives registered"
 msgstr[0] "En primitiv registrerad"
 msgstr[1] "%d primitiver registrerade"
 
-#, fuzzy, c-format
-#| msgid "One vertex registered"
-#| msgid_plural "%d vertices registered"
+#, c-format
 msgid "One vertex registered"
 msgid_plural "%<PRId64> vertices registered"
-msgstr[0] "Ett hörn registrerat"
-msgstr[1] "%d hörn registrerade"
+msgstr[0] "En hörnpunkt registrerad"
+msgstr[1] "%<PRId64> hörnpunkter registrerade"
 
 msgid "Building areas..."
 msgstr "Byggnadsområden..."
