@@ -591,7 +591,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                         node=node,
                     )
             except Exception as e:
-                sys.stderr.write(_("GSelect: invalid item: %s") % e)
+                sys.stderr.write(_("GSelect: invalid item: %s") % e + "\n")
                 continue
 
             if not self.seltree.ItemHasChildren(mapset_node):
@@ -786,7 +786,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                     try:
                         tgis.init(True)
                     except messages.FatalError as e:
-                        sys.stderr.write(_("Temporal GIS error:\n%s") % e)
+                        sys.stderr.write(_("Temporal GIS error:\n%s") % e + "\n")
                         self.tgis_error = True
                 except ImportError as e:
                     # PyGRASS (ctypes) is the likely cause
@@ -796,6 +796,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                             "Some functionality will be not accessible"
                         )
                         % e
+                        + "\n"
                     )
                     self.tgis_error = True
         if "mapsets" in kargs:
