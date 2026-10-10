@@ -673,8 +673,8 @@ class HistoryBrowserTree(CTreeView):
         if control_down and keycode == ord("C"):
             self.OnCopyCmd(None)
 
-        # Ctrl+D or Delete key -> Remove command from history
-        elif (control_down and keycode == ord("D")) or keycode == wx.WXK_DELETE:
+        # Delete key -> Remove command from history
+        elif keycode == wx.WXK_DELETE:
             self.OnRemoveCmd(None)
 
         else:
