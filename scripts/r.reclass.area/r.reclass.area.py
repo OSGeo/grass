@@ -174,14 +174,14 @@ def get_clumpfile(
     if clump_flags and minsize:
         msg = _(
             "Generating a clumped raster file including diagonal neighbors"
-            " with minimum {} pixels"
-        ).format(minsize)
+            " with minimum {pixel_count} pixels"
+        ).format(pixel_count=minsize)
     elif clump_flags:
         msg = _("Generating a clumped raster file including diagonal neighbors")
     elif minsize:
-        msg = _("Generating a clumped raster file with minimum {} pixels").format(
-            minsize
-        )
+        msg = _(
+            "Generating a clumped raster file with minimum {pixel_count} pixels"
+        ).format(pixel_count=minsize)
     else:
         msg = _("Generating a clumped raster file")
     gs.verbose(msg)
