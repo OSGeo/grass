@@ -168,7 +168,7 @@ def test_unordered_list_nested(tmp_path):
     assert rs_index != -1
     assert re_index != -1
     assert rs_index < re_index
-    assert ".IP \\(bu 4n" in result[rs_index:re_index]
+    assert ".IP \\(bu 4n" in result[rs_index:re_index]  # codespell:ignore bu
 
 
 def test_wrapped_number_line_is_not_a_list(tmp_path):
@@ -196,7 +196,7 @@ def test_ordered_list(tmp_path):
 
 def test_list_lazy_continuation_keeps_first_char(tmp_path):
     # A continuation line indented less than the marker width must not lose
-    # its leading characters ("Integers" -> "ntegers").
+    # its leading characters ("Integers" -> "ntegers").  # codespell:ignore ntegers
     md = '1. J. Rissanen, "A Universal Prior for\n  Integers and Estimation."\n'
     result = convert(md, tmp_path)
     assert "Integers and Estimation." in result
@@ -206,7 +206,7 @@ def test_table(tmp_path):
     md = "| Tool | Description |\n|------|-------------|\n| r.info | Info tool |\n"
     result = convert(md, tmp_path)
     assert ".TS" in result
-    assert ".TE" in result  # codespell:ignore TE
+    assert ".TE" in result  # codespell:ignore: TE
     assert "r.info" in result
 
 

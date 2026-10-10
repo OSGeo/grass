@@ -965,16 +965,16 @@ def create_suffix_from_datetime(start_time: datetime, granularity: str) -> str:
     return start_time.strftime(suffix_units[granularity.split(" ", 2)[1]])
 
 
-def create_time_suffix(mapp, end: bool = False) -> str:
+def create_time_suffix(map_name, end: bool = False) -> str:
     """Create a datetime string based on a map datetime object
 
-    :param mapp: a temporal map dataset
+    :param map_name: a temporal map dataset
     :param end: True if you want add also end time to the suffix
     """
-    start = mapp.temporal_extent.get_start_time()
+    start = map_name.temporal_extent.get_start_time()
     sstring = start.isoformat().replace(":", "_").replace("-", "_")
     if end:
-        end = mapp.temporal_extent.get_end_time()
+        end = map_name.temporal_extent.get_end_time()
         estring = end.isoformat().replace(":", "_").replace("-", "_")
         return "{st}_{en}".format(st=sstring, en=estring)
     return sstring

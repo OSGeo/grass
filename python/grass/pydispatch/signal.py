@@ -206,7 +206,7 @@ class Signal:
 
         Calling a signal from outside the class is usually not good
         practice. The only case when it is permitted is when signal is the part
-        of some globaly shared object and permission to emit is stayed in the
+        of some globally shared object and permission to emit is stayed in the
         documentation.
 
         The parameters of the emit function must be the same as the parameters

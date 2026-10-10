@@ -59,10 +59,10 @@ class TestRGrow(TestCase):
         """Shrinking of map without NULL values
         Based on https://github.com/OSGeo/grass/pull/343"""
         shrinked_string = "56-156"
-        shrinked = SimpleModule(
+        shrunk = SimpleModule(
             "r.grow", input=self.mapNoNULL, output=self.mapShrunkNoNULL, radius=-10
         )
-        self.assertModule(shrinked)
+        self.assertModule(shrunk)
 
         shrined_range = SimpleModule("r.describe", flags="i", _map=self.mapShrunkNoNULL)
         self.runModule(shrined_range)

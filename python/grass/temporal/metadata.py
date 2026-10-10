@@ -1161,7 +1161,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     class for strds and str3ds datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new maps are added. Therefor only some set- an many
+    new maps are added. Therefore only some set- an many
     get-functions are available.
 
     Usage:
@@ -1388,7 +1388,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
     space time raster datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new raster maps are added. Therefor only some set- an many
+    new raster maps are added. Therefore only some set- an many
     get-functions are available.
 
     Usage:
@@ -1583,7 +1583,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
     space time 3D raster datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new 3D raster maps are added. Therefor only some set- an many
+    new 3D raster maps are added. Therefore only some set- an many
     get-functions are available.
 
     Usage:
@@ -1739,7 +1739,7 @@ class STVDSMetadata(STDSMetadataBase):
     space time vector datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new vector maps are added. Therefor only some set- an many get-functions
+    new vector maps are added. Therefore only some set- an many get-functions
     are available.
 
     Usage:

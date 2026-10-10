@@ -84,9 +84,9 @@ def main():
 
     if int(layer) in gs.vector_db(mapname):
         colnames = gs.vector_columns(mapname, layer, getDict=False, stderr=nuldev)
-        isConnection = True
+        is_connected = True
     else:
-        isConnection = False
+        is_connected = False
         colnames = ["cat"]
 
     extracolnames = ["x", "y", "z"] if option == "coor" else [option]
@@ -99,7 +99,7 @@ def main():
         unitsp = None
 
     # NOTE: we suppress -1 cat and 0 cat
-    if isConnection:
+    if is_connected:
         f = gs.vector_db(map=mapname)[int(layer)]
         p = gs.pipe_command(
             "v.db.select", flags="e", quiet=True, map=mapname, layer=layer

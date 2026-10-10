@@ -47,7 +47,7 @@ def oifcalc(sdev, corr, k1, k2, k3):
     grass.debug(_("Calculating OIF for combination: %s, %s, %s") % (k1, k2, k3), 1)
     # calculate SUM of Stddeviations:
     ssdev = [sdev[k1], sdev[k2], sdev[k3]]
-    numer = sum(ssdev)
+    numerator = sum(ssdev)
 
     # calculate SUM of absolute(Correlation values):
     scorr = [corr[k1, k2], corr[k1, k3], corr[k2, k3]]
@@ -55,7 +55,7 @@ def oifcalc(sdev, corr, k1, k2, k3):
 
     # Calculate OIF index:
     #     Divide (SUM of Stddeviations) and (SUM of Correlation)
-    return numer / denom
+    return numerator / denom
 
 
 def perms(bands):

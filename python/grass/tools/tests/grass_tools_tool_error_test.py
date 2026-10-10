@@ -32,7 +32,7 @@ def test_tool_name_in_message(plain_tools):
 
 
 def test_parameter_in_message(plain_tools):
-    """Check parameters apprear in the message"""
+    """Check parameters appear in the message"""
     with pytest.raises(ToolError, match=r"raster.*does_not_exist"):
         plain_tools.g_region(raster="does_not_exist")
 
