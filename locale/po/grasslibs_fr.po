@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 18:13+0000\n"
-"PO-Revision-Date: 2026-08-29 15:38+0000\n"
+"POT-Creation-Date: 2026-10-03 18:51+0000\n"
+"PO-Revision-Date: 2026-10-05 10:33+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -3191,7 +3191,7 @@ msgstr "Le démarrage de GRASS a échoué, il n'y a pas de projet par défaut à
 
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
-msgstr "Lancement de l'interface graphique <%s> en tâche de fond, merci de patienter ..."
+msgstr "Lancement de l'interface graphique <%s> en arrière-plan, veuillez patienter..."
 
 #, python-format
 msgid "Failed to start shell '%s'"
@@ -4820,6 +4820,10 @@ msgstr "Fin du fichier ASCII atteinte avant la fin des catégories"
 msgid "Error reading categories: [%s]"
 msgstr "Erreur de lecture des catégories : [%s]"
 
+#, c-format
+msgid "Layer number or category number out of range: [%s]"
+msgstr "Numéro de couche ou de catégorie hors plage : [%s]"
+
 msgid "Unable to copy points"
 msgstr "Impossible de copier les points"
 
@@ -5139,13 +5143,11 @@ msgid_plural "%d primitives registered"
 msgstr[0] "Une primitive référencée"
 msgstr[1] "%d primitives référencées"
 
-#, fuzzy, c-format
-#| msgid "One vertex registered"
-#| msgid_plural "%d vertices registered"
+#, c-format
 msgid "One vertex registered"
 msgid_plural "%<PRId64> vertices registered"
 msgstr[0] "Un sommet référencé"
-msgstr[1] "%d sommets référencés"
+msgstr[1] "%<PRId64> sommets référencés"
 
 msgid "Building areas..."
 msgstr "Construction des surfaces ..."

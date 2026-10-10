@@ -37,8 +37,9 @@ controlled by *duration* \[minutes\] parameter. If the resulting
 erosion/deposition map is noisy, higher number of walkers, given by
 *nwalkers* should be used.  
 
-Increasing the number of threads with **nprocs** does not really speed
-up the simulation.
+Increasing the number of threads with **nprocs** speeds up the
+simulation. The random numbers, the seed and the reproducibility of the
+results with more than one thread are as in *r.sim.water*.
 
 ## NOTES
 
@@ -75,7 +76,7 @@ Summary of a run in JSON:
 r.sim.sediment elevation=elevation water_depth=water_depth detachment_coeff=detachment \
     transport_coeff=transport shear_stress=shear_stress man_value=1 \
     sediment_flux=flux erosion_deposition=erdep transport_capacity=tc \
-    duration=1 random_seed=1 -p format=json
+    duration=1 seed=1 -p format=json
 ```
 
 ```json
@@ -83,6 +84,7 @@ r.sim.sediment elevation=elevation water_depth=water_depth detachment_coeff=deta
     "walkers_requested": 60,
     "walkers_generated": 78,
     "walkers_remaining": 43,
+    "seed": 1,
     "duration": 60,
     "simulated_time": 54.891343113611583,
     "time_step": 5.4891343113611581,

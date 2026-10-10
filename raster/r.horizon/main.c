@@ -493,26 +493,22 @@ int main(int argc, char *argv[])
 
     if (parm.e_buff->answer != NULL) {
         if (sscanf(parm.e_buff->answer, "%lf", &ebufferZone) != 1)
-            G_fatal_error(_("Could not read %s bufferzone size. Aborting."),
-                          _("east"));
+            G_fatal_error(_("Could not read east bufferzone size. Aborting."));
     }
 
     if (parm.w_buff->answer != NULL) {
         if (sscanf(parm.w_buff->answer, "%lf", &wbufferZone) != 1)
-            G_fatal_error(_("Could not read %s bufferzone size. Aborting."),
-                          _("west"));
+            G_fatal_error(_("Could not read west bufferzone size. Aborting."));
     }
 
     if (parm.s_buff->answer != NULL) {
         if (sscanf(parm.s_buff->answer, "%lf", &sbufferZone) != 1)
-            G_fatal_error(_("Could not read %s bufferzone size. Aborting."),
-                          _("south"));
+            G_fatal_error(_("Could not read south bufferzone size. Aborting."));
     }
 
     if (parm.n_buff->answer != NULL) {
         if (sscanf(parm.n_buff->answer, "%lf", &nbufferZone) != 1)
-            G_fatal_error(_("Could not read %s bufferzone size. Aborting."),
-                          _("north"));
+            G_fatal_error(_("Could not read north bufferzone size. Aborting."));
     }
 
     settings.fixedMaxLength = BIG;

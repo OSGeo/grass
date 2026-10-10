@@ -10,7 +10,7 @@
  *               Hamish Bowman <hamish_b yahoo.com>
  * PURPOSE:      collect raster map layers into an imagery group by assigning
  *               them to user-named subgroups or other groups
- * SPDX-FileCopyrightText: 2001-2007, 2011, 2013 GRASS Development Team
+ * SPDX-FileCopyrightText: 2001-2007, 2011, 2013, 2026 GRASS Development Team
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     char xgroup[GNAME_MAX];
     char **rasters = NULL;
     int m, k = 0;
-    int can_edit;
+    int can_edit, qualified;
 
     struct Option *grp, *rast, *rastf, *sgrp, *frmt;
     struct Flag *r, *l, *s, *simple_flag;
@@ -194,7 +194,8 @@ int main(int argc, char *argv[])
     /* Get groups mapset. Remove @mapset if group contains
      */
     strcpy(xgroup, grp->answer);
-    can_edit = G_unqualified_name(xgroup, G_mapset(), group, mapset) != -1;
+    qualified = G_unqualified_name(xgroup, G_mapset(), group, mapset);
+    can_edit = qualified != -1;
 
     if (r->answer && can_edit) {
         /* Remove files from Group */
@@ -218,6 +219,13 @@ int main(int argc, char *argv[])
     else {
         if (l->answer || s->answer) {
             /* List raster maps in group */
+            if (!qualified) {
+                /* Get group from search path. */
+                const char *found_mapset = G_find_file2("group", group, "");
+
+                if (found_mapset)
+                    strcpy(mapset, found_mapset);
+            }
             if (!I_find_group2(group, mapset))
                 G_fatal_error(_("Group <%s> not found"), group);
 
@@ -395,8 +403,6 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
     int m, n, skip;
     struct Ref ref;
     struct Ref ref_tmp;
-    const char *mapset;
-    char tmp_name[INAME_LEN];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     I_get_group_ref(group, &ref_tmp);
@@ -408,21 +414,17 @@ static int remove_group_files(char group[INAME_LEN], char **rasters, int k)
         skip = 0;
         /* Parse through supplied rasters */
         for (n = 0; n < k; n++) {
-            strcpy(tmp_name, rasters[n]);
-            mapset = G_mapset();
+            /* Match qualified and unqualified names against group entries. */
+            int is_qualified =
+                G_name_is_fully_qualified(rasters[n], xname, xmapset);
 
-            /* Parse out mapset */
-            if (G_name_is_fully_qualified(rasters[n], xname, xmapset)) {
-                strcpy(tmp_name, xname);
-                mapset = xmapset;
-            }
-
-            G_debug(3, "tmp_name %s, ref_tmp.file[%d].name: %s", tmp_name, m,
-                    ref_tmp.file[m].name);
-            if ((strcmp(tmp_name, ref_tmp.file[m].name) == 0) &&
-                (strcmp(mapset, ref_tmp.file[m].mapset) == 0)) {
+            if (strcmp(is_qualified ? xname : rasters[n],
+                       ref_tmp.file[m].name) == 0 &&
+                (!is_qualified ||
+                 strcmp(xmapset, ref_tmp.file[m].mapset) == 0)) {
                 G_message(_("Removing raster map <%s> from group"),
-                          G_fully_qualified_name(tmp_name, mapset));
+                          G_fully_qualified_name(ref_tmp.file[m].name,
+                                                 ref_tmp.file[m].mapset));
                 skip = 1;
                 break;
             }
@@ -451,8 +453,6 @@ static int remove_subgroup_files(char group[INAME_LEN],
     int m, n, skip;
     struct Ref ref;
     struct Ref ref_tmp;
-    const char *mapset;
-    char tmp_name[INAME_LEN];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
     I_get_subgroup_ref(group, subgroup, &ref_tmp);
@@ -464,23 +464,18 @@ static int remove_subgroup_files(char group[INAME_LEN],
         skip = 0;
         /* Parse through supplied rasters */
         for (n = 0; n < k; n++) {
-            strcpy(tmp_name, rasters[n]);
-            mapset = G_mapset();
+            /* Match qualified and unqualified names against subgroup entries.
+             */
+            int is_qualified =
+                G_name_is_fully_qualified(rasters[n], xname, xmapset);
 
-            /* Parse out mapset */
-            if (G_name_is_fully_qualified(rasters[n], xname, xmapset)) {
-                strcpy(tmp_name, xname);
-                mapset = xmapset;
-            }
-
-            G_debug(3, "tmp_name %s, ref_tmp.file[%d].name: %s", tmp_name, m,
-                    ref_tmp.file[m].name);
-            G_debug(3, "mapset %s, ref_tmp.file[%d].mapset: %s", mapset, m,
-                    ref_tmp.file[m].mapset);
-            if ((strcmp(tmp_name, ref_tmp.file[m].name) == 0) &&
-                (strcmp(mapset, ref_tmp.file[m].mapset) == 0)) {
+            if (strcmp(is_qualified ? xname : rasters[n],
+                       ref_tmp.file[m].name) == 0 &&
+                (!is_qualified ||
+                 strcmp(xmapset, ref_tmp.file[m].mapset) == 0)) {
                 G_message(_("Removing raster map <%s> from subgroup"),
-                          G_fully_qualified_name(tmp_name, mapset));
+                          G_fully_qualified_name(ref_tmp.file[m].name,
+                                                 ref_tmp.file[m].mapset));
                 skip = 1;
                 break;
             }

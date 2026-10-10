@@ -622,6 +622,8 @@ class CommandThread(Thread):
 
         # redirect standard outputs...
         self._redirect_stream()
+        if self.stderr:
+            self.stderr.flush()
 
     def _redirect_stream(self):
         """Redirect stream"""

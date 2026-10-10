@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 18:13+0000\n"
-"PO-Revision-Date: 2026-09-26 12:52+0000\n"
+"POT-Creation-Date: 2026-10-03 18:51+0000\n"
+"PO-Revision-Date: 2026-10-05 10:33+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -3379,7 +3379,7 @@ msgstr ""
 
 #, c-format
 msgid "Launching <%s> GUI in the background, please wait..."
-msgstr "Lancement de l'interface graphique <%s> en tâche de fond, merci de patienter ..."
+msgstr "Lancement de l'interface graphique <%s> en arrière-plan, veuillez patienter..."
 
 #, c-format
 msgid "Unable to read header of 3D raster map <%s@%s>"
@@ -4629,6 +4629,9 @@ msgstr "satellite"
 msgid "Landsat"
 msgstr "Landsat"
 
+msgid "Sentinel"
+msgstr ""
+
 msgid "ASTER"
 msgstr "ASTER"
 
@@ -4651,6 +4654,9 @@ msgid "Landsat 5+7 (6 input bands:1,2,3,4,5,7)"
 msgstr ""
 
 msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
+msgstr ""
+
+msgid "Sentinel-2 (6 input bands: B2,B3,B4,B8,B11,B12 surface reflectance in [0,1]; Bonafoni & Sekertekin 2020 coefficients)"
 msgstr ""
 
 msgid "ASTER (6 input bands:1,3,5,6,8,9)"
@@ -7694,8 +7700,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM prediction input
 #. GTC: SVM training input
+#. GTC: SVM prediction input
 msgid "Maps with feature values (attributes)"
 msgstr "Cartes avec valeurs d'entités (attributs)"
 
@@ -8238,7 +8244,7 @@ msgid "background"
 msgstr "Couleur de fond"
 
 msgid "fill"
-msgstr ""
+msgstr "remplissage"
 
 msgid "erase"
 msgstr ""
@@ -8787,9 +8793,6 @@ msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
 msgstr "Transformation de Tasseled cap (Kauth Thomas)."
 
 msgid "Worldview"
-msgstr ""
-
-msgid "Sentinel"
 msgstr ""
 
 msgid "Tasseled Cap transformation"
@@ -12033,6 +12036,10 @@ msgid "Pass 1 of 2..."
 msgstr ""
 
 #, c-format
+msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
+msgstr ""
+
+#, c-format
 msgid "%d-band clumping with threshold %g"
 msgstr ""
 
@@ -13037,6 +13044,13 @@ msgstr ""
 #, c-format
 msgid "Imagery group <%s> created"
 msgstr ""
+
+#, c-format
+msgid "Vertical CRS <%s> of the dataset is ignored"
+msgstr "Le SCR vertical <%s> du jeu de données est ignoré"
+
+msgid "The vertical component of the dataset CRS is ignored"
+msgstr "La composante verticale du SCR du jeu de données est ignorée"
 
 msgid "Can't get WKT parameter string"
 msgstr ""
@@ -18445,6 +18459,13 @@ msgstr ""
 msgid "Number of threads which will be used for parallel computation."
 msgstr "Nombre de threads qui seront utilisés pour le calcul en parallèle."
 
+msgid "Print run summary to standard output"
+msgstr "Afficher le résumé de l'exécution sur la sortie standard"
+
+#, c-format
+msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
+msgstr "Le projet Lat/Long n'est pas pris en charge par %s. Veuillez reprojeter les données dans un système de coordonnées projetées."
+
 #, c-format
 msgid "Generated random seed (-s): %ld"
 msgstr ""
@@ -18502,8 +18523,9 @@ msgstr ""
 msgid "Runoff infiltration rate unique value [mm/hr]"
 msgstr ""
 
-msgid "Name of flow controls raster map (permeability ratio 0-1)"
-msgstr ""
+#, fuzzy
+msgid "Name of flow controls raster map (trapping probability 0-1)"
+msgstr "Nom de la carte raster de contrôle des flux (probabilité de piégeage comprise entre 0 et 1)"
 
 msgid "Name for output water depth raster map [m]"
 msgstr ""
@@ -18556,6 +18578,10 @@ msgstr ""
 
 msgid "No values in the elevation raster."
 msgstr "Aucune valeur dans le raster d'élévation."
+
+#, c-format
+msgid "Time step of %.2f s is longer than output_step of %d s, some output steps may be skipped"
+msgstr "Le pas de temps de %.2f s est plus long que le pas de sortie (output_step) de %d s, certains pas de sortie pourraient être sautés"
 
 #, c-format
 msgid ""
@@ -18741,9 +18767,8 @@ msgstr "Carte raster dxy <%s> terminée"
 msgid "smoothing"
 msgstr ""
 
-#, fuzzy
 msgid "edge detection"
-msgstr "détection des nuages"
+msgstr "détection des contours"
 
 msgid "denoise"
 msgstr "Débruitage"
@@ -22827,9 +22852,8 @@ msgstr "Carte raster %d Nom de fichier : %s existe déjà. Utilisez l'option -o 
 msgid "At least 2 maps are required"
 msgstr ""
 
-#, python-format
-msgid "Unable to get monitor info. %s"
-msgstr ""
+msgid "Unable to get monitor info. {}"
+msgstr "Impossible d'obtenir les informations sur le moniteur. {}"
 
 msgid "Unable to get monitor info"
 msgstr ""
@@ -23001,7 +23025,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Project named <{name}> already exists in <{directory}>, download canceled"
-msgstr "Le projet nommé <{name}> existe déjà dans <{directory}>, téléchargement annulé"
+msgstr "Le projet nommé <{name}> existe déjà dans le dossier <{directory}>, téléchargement annulé"
 
 msgid "Downloading and extracting..."
 msgstr ""
@@ -25417,7 +25441,7 @@ msgid "face"
 msgstr "face"
 
 msgid "kernel"
-msgstr ""
+msgstr "noyau"
 
 msgid "all"
 msgstr ""
@@ -28355,11 +28379,12 @@ msgstr ""
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
 msgstr "Convertir des nuages de points LIDAR LAS vers une carte vecteur GRASS avec PDAL."
 
-msgid "Reproject to projects's coordinate system if needed"
-msgstr ""
+#, c-format
+msgid "Invalid input_srs: %s"
+msgstr "SRS d'entrée (input_srs) invalide : %s"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
-msgstr ""
+msgid "Unable to reproject the input because the current project has no CRS defined. Use the -o flag to import the data without reprojection."
+msgstr "Impossible de reprojeter les données d'entrée car aucun SCR n'est défini pour le projet actuel. Utilisez l'option -o pour importer les données sans reprojection."
 
 msgid "Cannot store return information because the input does not have a return dimensions"
 msgstr ""
@@ -28405,7 +28430,7 @@ msgid "Print attribute table columns instead of info"
 msgstr "Afficher les colonnes de la table attributaire à la place des informations générales"
 
 msgid "Column names and types are printed for the specified layer if it has an attribute table database connection"
-msgstr "Les noms et types de colonnes sont affichés pour la couche spécifié s'il a une connexion de base de données de table attributaire"
+msgstr "Les noms et types des colonnes sont affichés pour la couche spécifiée si elle est reliée à une table attributaire par une connexion à une base de données"
 
 msgid "Print data history instead of info"
 msgstr "Afficher l'historique des données à la place des informations générales"
@@ -31279,7 +31304,7 @@ msgid "spatial query"
 msgstr "requête spatiale"
 
 msgid "difference"
-msgstr ""
+msgstr "différence"
 
 #, fuzzy
 msgid "intersection"
@@ -31478,7 +31503,7 @@ msgid "Key column not found"
 msgstr "Clef primaire non trouvée"
 
 msgid "The output map is not 3D"
-msgstr ""
+msgstr "La carte de sortie n'est pas en 3D"
 
 #, c-format
 msgid "Patching vector map <%s>..."

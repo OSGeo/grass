@@ -15,6 +15,7 @@ SEDIMENT_KEYS = {
     "walkers_requested",
     "walkers_generated",
     "walkers_remaining",
+    "seed",
     "duration",
     "simulated_time",
     "time_step",
@@ -69,7 +70,7 @@ def sediment_inputs(session_tools):
         "shear_stress": "shear_stress",
         "man_value": 1,
         "diffusion_coeff": 0.05,
-        "random_seed": 1,
+        "seed": 1,
     }
 
 

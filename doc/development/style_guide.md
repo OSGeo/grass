@@ -194,6 +194,8 @@ We
 [use doxygen and document the functions](https://grass.osgeo.org/programming8/)
 directly in the source code. See `lib/gis/open.c` and `lib/gis/gislib.dox` for
 examples.
+Library pages may also be written in Markdown as `*.dox.md` files, which
+Doxygen renders, such as `lib/gis/random_streams.dox.md`.
 
 #### Python API documentation
 
@@ -414,7 +416,7 @@ See [Changing computational region](#changing-computational-region) for more det
 #### Mapsets
 
 **Output data should be always written to the current mapset**. This is ensured
-by build-in GRASS mechanisms, so there is nothing which needs to be done in the
+by built-in GRASS mechanisms, so there is nothing which needs to be done in the
 tool. If a tool modifies inputs, the input must be in the current mapset.
 
 The tool should accept inputs from any mapset in the current project. The
