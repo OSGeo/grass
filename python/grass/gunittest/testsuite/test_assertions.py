@@ -18,7 +18,7 @@ class TestTextAssertions(TestCase):
     # pylint: disable=R0904
 
     std_newline = "aaa\nbbb\n"
-    platfrom_newline = "aaa{nl}bbb{nl}".format(nl=os.linesep)
+    platform_newline = "aaa{nl}bbb{nl}".format(nl=os.linesep)
 
     def test_assertLooksLike(self):
         self.assertLooksLike("Generated map is <elevation>", "Generated map is <...>")
@@ -63,7 +63,7 @@ class TestTextAssertions(TestCase):
     def test_assertMultiLineEqual(self):
         r"""Test different combinations of ``\n`` and os.linesep"""
         self.do_all_combidnations(
-            self.std_newline, self.platfrom_newline, function=self.assertMultiLineEqual
+            self.std_newline, self.platform_newline, function=self.assertMultiLineEqual
         )
 
     def test_assertMultiLineEqual_raises(self):
@@ -78,7 +78,7 @@ class TestTextAssertions(TestCase):
     def test_assertEqual(self):
         """Test for of newlines for strings (uses overwritten assertMultiLineEqual())"""
         self.do_all_combidnations(
-            self.std_newline, self.platfrom_newline, function=self.assertEqual
+            self.std_newline, self.platform_newline, function=self.assertEqual
         )
 
     def test_assertEqual_raises(self):
@@ -351,18 +351,24 @@ class TestFileAssertions(TestCase):
         open(cls.emtpy_file, "w").close()
         cls.file_with_md5 = cls.__name__ + "_this_is_a_file_with_known_md5"
         file_content = "Content of the file with known MD5.\n"
-        Path(cls.file_with_md5).write_text(file_content)
+
+        def write_exact(filename, content):
+            # newline="" keeps \n as-is instead of translating it to \r\n on
+            # Windows, so the binary MD5 matches the value below.
+            Path(filename).write_text(content, newline="")
+
+        write_exact(cls.file_with_md5, file_content)
         # MD5 sum created using:
         # echo 'Content of the file with known MD5.' > some_file.txt
         # md5sum some_file.txt
         cls.file_md5 = "807bba4ffac4bb351bc3f27853009949"
 
         cls.file_with_same_content = cls.__name__ + "_file_with_same_content"
-        Path(cls.file_with_same_content).write_text(file_content)
+        write_exact(cls.file_with_same_content, file_content)
 
         cls.file_with_different_content = cls.__name__ + "_file_with_different_content"
-        Path(cls.file_with_different_content).write_text(
-            file_content + " Something else here."
+        write_exact(
+            cls.file_with_different_content, file_content + " Something else here."
         )
 
     @classmethod
@@ -386,7 +392,6 @@ class TestFileAssertions(TestCase):
             self.failureException, self.assertFileExists, filename=self.emtpy_file
         )
 
-    @xfail_windows
     def test_assertFileMd5(self):
         self.assertFileMd5(filename=self.file_with_md5, md5=self.file_md5)
         self.assertRaises(

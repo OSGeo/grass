@@ -22,7 +22,6 @@ from grass.gunittest.checkers import (
     file_md5,
     text_file_md5,
 )
-from grass.gunittest.utils import xfail_windows
 
 
 class TestValuesEqual(TestCase):
@@ -369,8 +368,8 @@ class TestMd5Sums(TestCase):
         with open(cls.correct_file_name_platform_nl, "w") as f:
             # \n should be converted to platform newline
             f.writelines(line + "\n" for line in CORRECT_LINES)
-        with open(cls.correct_file_name_unix_nl, "w") as f:
-            # binary mode will write pure \n
+        with open(cls.correct_file_name_unix_nl, "w", newline="") as f:
+            # newline="" writes pure \n on every platform
             f.writelines(line + "\n" for line in CORRECT_LINES)
         with open(cls.wrong_file_name, "w") as f:
             # \n should be converted to platform newline
@@ -382,7 +381,6 @@ class TestMd5Sums(TestCase):
         try_remove(cls.correct_file_name_unix_nl)
         try_remove(cls.wrong_file_name)
 
-    @xfail_windows
     def test_text_file_binary(self):
         r"""File with ``\n`` (LF) newlines as binary (MD5 has ``\n``)."""
         self.assertEqual(
@@ -391,7 +389,7 @@ class TestMd5Sums(TestCase):
             msg="MD5 sums different",
         )
 
-    def test_text_file_platfrom(self):
+    def test_text_file_platform(self):
         r"""Text file with platform dependent newlines"""
         self.assertEqual(
             text_file_md5(self.correct_file_name_platform_nl),
