@@ -1219,6 +1219,10 @@ class SQLDatabaseInterfaceConnection:
                     "Unable to mogrify sql statement. "
                     + self._create_mapset_error_message(mapset)
                 )
+            self.msgr.fatal(
+                _("Unable to mogrify sql statement. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
+                )
             )
 
         return self.connections[mapset].mogrify_sql_statement(content)
@@ -1314,6 +1318,10 @@ class SQLDatabaseInterfaceConnection:
                 _(
                     "Unable to execute transaction. "
                     + self._create_mapset_error_message(mapset)
+                )
+            self.msgr.fatal(
+                _("Unable to execute transaction. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
                 )
             )
 
