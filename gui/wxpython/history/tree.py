@@ -184,6 +184,7 @@ class HistoryBrowserTree(CTreeView):
         self.contextMenu.connect(self.OnRightClick)
 
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
 
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
@@ -647,7 +648,7 @@ class HistoryBrowserTree(CTreeView):
             self._popupMenuEmpty()
 
     def OnKeyDown(self, event):
-        """Handle keyboard shortcuts for copying and deleting history entries."""
+        """Handle keyboard shortcuts for opening and copying history entries."""
         keycode = event.GetKeyCode()
         control_down = event.ControlDown()
 
@@ -672,13 +673,27 @@ class HistoryBrowserTree(CTreeView):
         # Ctrl+C -> Copy command to clipboard
         if control_down and keycode == ord("C"):
             self.OnCopyCmd(None)
-
-        # Delete key -> Remove command from history
-        elif keycode == wx.WXK_DELETE:
-            self.OnRemoveCmd(None)
-
         else:
             event.Skip()
+
+    def OnKeyUp(self, event):
+        """Handle the Delete key for removing history entries.
+
+        Removal is handled on key up rather than key down, so that holding
+        the key does not remove several commands in a row. This matches the
+        layer tree and the graphical modeler.
+        """
+        if event.GetKeyCode() != wx.WXK_DELETE:
+            event.Skip()
+            return
+
+        # Day nodes cannot be removed
+        selected = self.GetSelected()
+        if not selected or selected[0].data.get("type") != COMMAND:
+            event.Skip()
+            return
+
+        self.OnRemoveCmd(None)
 
     def OnDoubleClick(self, node):
         """Double click on item/node.
