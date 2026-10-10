@@ -64,6 +64,15 @@ for example we can display a map with a selected raster and vector::
 >>> streams_map.d_vect(map="streams")
 >>> streams_map.show()
 
+Values of rasters along a line can be sampled and plotted with the line
+vertices marked on a map and on the chart::
+
+>>> profile = gj.Profile("elevation", [(638000, 220000), (640000, 222000)])
+>>> profile.save("profile.png")
+
+The interactive map has a tool for drawing the line; the profile of the selected
+rasters is then shown below the map and available as the *profile* attribute.
+
 Other classes and functions are described below and in the example notebooks.
 Static HTML versions of the example notebooks are available on GitHub_
 and interactive ones with live code are available on Binder:
@@ -107,6 +116,7 @@ mentored by Vaclav Petras, Stephan Blumentrath, and Helena Mitasova.
 from .interactivemap import InteractiveMap, Raster, Vector
 from .map import Map
 from .map3d import Map3D
+from .profile import Profile
 from .seriesmap import SeriesMap
 from .setup import init
 from .timeseriesmap import TimeSeriesMap
@@ -115,6 +125,7 @@ __all__ = [
     "InteractiveMap",
     "Map",
     "Map3D",
+    "Profile",
     "Raster",
     "SeriesMap",
     "TimeSeriesMap",

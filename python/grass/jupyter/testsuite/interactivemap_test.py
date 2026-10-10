@@ -106,6 +106,27 @@ class TestDisplay(TestCase):
         self.assertIsNotNone(interactive_map._controllers[button].save_button_control)
 
     @unittest.skipIf(not can_import_ipyleaflet(), "Cannot import ipyleaflet")
+    def test_profile(self):
+        """Test the profile tool with a drawn line."""
+        interactive_map = gj.InteractiveMap(map_backend="ipyleaflet")
+        interactive_map.add_raster("elevation")
+        button = interactive_map.setup_profile_interface()
+        controller = interactive_map._controllers[button]
+        controller.activate()
+        self.assertEqual(controller.raster_select.value, ("elevation",))
+        geo_json = {
+            "type": "Feature",
+            "geometry": {
+                "type": "LineString",
+                "coordinates": [[-78.68, 35.78], [-78.66, 35.79]],
+            },
+        }
+        controller._handle_draw(None, "created", geo_json)
+        self.assertIsNotNone(interactive_map.profile)
+        self.assertEqual(len(interactive_map.profile.vertices), 2)
+        self.assertIn("elevation", interactive_map.profile.data)
+
+    @unittest.skipIf(not can_import_ipyleaflet(), "Cannot import ipyleaflet")
     def test_draw_computational_region(self):
         """Test the draw_computational_region method."""
         # Create InteractiveMap

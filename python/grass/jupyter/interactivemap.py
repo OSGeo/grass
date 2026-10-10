@@ -16,6 +16,7 @@ import os
 import base64
 import json
 from pathlib import Path
+from .profile import Profile
 from .reprojection_renderer import ReprojectionRenderer
 
 from .utils import (
@@ -28,6 +29,7 @@ from .utils import (
     query_raster,
     query_vector,
     reproject_latlon,
+    reproject_latlon_coords,
 )
 
 
@@ -302,6 +304,8 @@ class InteractiveMap:
         self.width = int(width)
         self.height = int(height)
         self._controllers = {}
+        self._profile_controller = None
+        self._bottom_output = None
 
         # Store vector and raster name
         self.raster_name = []
@@ -318,6 +322,8 @@ class InteractiveMap:
             self.map = self._ipyleaflet.Map(
                 basemap=basemap, layout=layout, scroll_wheel_zoom=True
             )
+            # Output shown below the map, used by the profile tool for its figure.
+            self._bottom_output = self._ipywidgets.Output()
 
         else:
             self.map = self._folium.Map(
@@ -419,6 +425,28 @@ class InteractiveMap:
             controller_class=InteractiveQueryController,
         )
 
+    def setup_profile_interface(self):
+        """Sets up the raster profile interface.
+
+        This includes creating a toggle button to activate the profile mode,
+        and instantiating an InteractiveProfileController which lets the user
+        draw a line and plots the values of the selected rasters along it.
+        """
+        button = self._create_toggle_button(
+            icon="line-chart",
+            tooltip=_("Click to draw a line and plot raster values along it"),
+            controller_class=InteractiveProfileController,
+        )
+        self._profile_controller = self._controllers[button]
+        return button
+
+    @property
+    def profile(self):
+        """Profile of the last line drawn with the profile tool, None if no line"""
+        if self._profile_controller is None:
+            return None
+        return self._profile_controller.profile
+
     def _create_toggle_button(self, icon, tooltip, controller_class):
         button = self._ipywidgets.ToggleButton(
             icon=icon,
@@ -437,6 +465,7 @@ class InteractiveMap:
             rasters=self.raster_name,
             vectors=self.vector_name,
             width=self.width,
+            output_widget=self._bottom_output,
         )
         self._controllers[button] = controller
         button.observe(self._toggle_mode, names="value")
@@ -453,8 +482,9 @@ class InteractiveMap:
             self._controllers[change["owner"]].deactivate()
 
     def show(self):
-        """This function returns a folium figure or ipyleaflet map object
-        with a GRASS raster and/or vector overlaid on a basemap.
+        """This function returns a folium figure or an ipywidgets box
+        with the ipyleaflet map and an output area below it, with a GRASS
+        raster and/or vector overlaid on a basemap.
 
         If map has layer control enabled, additional layers cannot be
         added after calling show()."""
@@ -463,9 +493,10 @@ class InteractiveMap:
                 self.setup_query_interface(),
                 self.setup_computational_region_interface(),
                 self.setup_drawing_interface(),
+                self.setup_profile_interface(),
             ]
             button_box = self._ipywidgets.HBox(
-                toggle_buttons, layout=self._ipywidgets.Layout(width="150px")
+                toggle_buttons, layout=self._ipywidgets.Layout(width="200px")
             )
             self.map.add(
                 self._ipyleaflet.WidgetControl(widget=button_box, position="topright")
@@ -486,7 +517,7 @@ class InteractiveMap:
 
         # ipyleaflet
         self.map.add(self.layer_control_object)
-        return self.map
+        return self._ipywidgets.VBox([self.map, self._bottom_output])
 
     def save(self, filename):
         """Save map as an html map.
@@ -846,3 +877,104 @@ class InteractiveQueryController:
         for item in reversed(list(self.map.layers)):
             if isinstance(item, self._ipyleaflet.Popup):
                 self.map.remove(item)
+
+
+class InteractiveProfileController:
+    """A controller for drawing a line and plotting raster values along it.
+
+    Attributes:
+        map: The ipyleaflet.Map object.
+        _ipyleaflet: The ipyleaflet module.
+        _ipywidgets: The ipywidgets module.
+        raster_name: List of raster layers on the map.
+        output_widget: The ipywidgets.Output where the profile figure is shown.
+        draw_control: The draw control restricted to lines.
+        raster_select: The widget for selecting the rasters to profile.
+        select_control: The widget control holding raster_select.
+        profile: The Profile of the last drawn line, None if no line.
+    """
+
+    def __init__(
+        self, map_object, ipyleaflet, ipywidgets, rasters, output_widget, **kwargs
+    ):  # pylint: disable=unused-argument
+        """Initializes the InteractiveProfileController.
+
+        :param map_object: The map object.
+        :param ipyleaflet: The ipyleaflet module.
+        :param ipywidgets: The ipywidgets module.
+        :param rasters: List of raster layers.
+        :param output_widget: The ipywidgets.Output where the profile is shown.
+        """
+        self.map = map_object
+        self._ipyleaflet = ipyleaflet
+        self._ipywidgets = ipywidgets
+        self.raster_name = rasters
+        self.output_widget = output_widget
+        self.profile = None
+        # An empty dict disables a shape; only a line makes sense for a profile.
+        self.draw_control = self._ipyleaflet.DrawControl(
+            polygon={},
+            circlemarker={},
+            polyline={"shapeOptions": {"color": "#d62728", "weight": 3}},
+            edit=False,
+            remove=False,
+        )
+        # Registered once, so toggling the tool does not stack callbacks.
+        self.draw_control.on_draw(self._handle_draw)
+        self.raster_select = self._ipywidgets.SelectMultiple(
+            description=_("Rasters:"),
+            rows=4,
+            style={"description_width": "initial"},
+        )
+        self.select_control = None
+
+    def activate(self):
+        """Activates line drawing and shows the raster selection."""
+        self.raster_select.options = list(self.raster_name)
+        self.raster_select.value = tuple(self.raster_name)
+        self.map.add(self.draw_control)
+        self.select_control = self._ipyleaflet.WidgetControl(
+            widget=self.raster_select, position="topright"
+        )
+        self.map.add(self.select_control)
+
+    def deactivate(self):
+        """Removes the drawn lines, the draw control, and the raster selection."""
+        self.draw_control.clear()
+        if self.draw_control in self.map.controls:
+            self.map.remove(self.draw_control)
+        if self.select_control in self.map.controls:
+            self.map.remove(self.select_control)
+        self.select_control = None
+
+    def _handle_draw(self, _control, action, geo_json):
+        """Computes and shows the profile of a newly drawn line.
+
+        :param str action: The action type.
+        :param dict geo_json: The GeoJSON data.
+        """
+        if action != "created" or geo_json["geometry"]["type"] != "LineString":
+            return
+        # Inside the output context, so errors show up in the notebook.
+        with self.output_widget:
+            self.output_widget.clear_output(wait=True)
+            rasters = list(self.raster_select.value)
+            if not rasters:
+                print(_("Select at least one raster to profile."))
+                return
+            self.profile = self.create_profile(
+                geo_json["geometry"]["coordinates"], rasters
+            )
+            self.profile.show()
+
+    def create_profile(self, lonlat_coordinates, rasters):
+        """Creates the profile of rasters along a line.
+
+        :param lonlat_coordinates: GeoJSON vertices as [longitude, latitude] pairs
+        :param rasters: List of raster names.
+        :return: Profile object
+        """
+        points = reproject_latlon_coords(
+            [(lat, lon) for lon, lat in lonlat_coordinates]
+        )
+        return Profile(rasters, [(east, north) for east, north, _elevation in points])
