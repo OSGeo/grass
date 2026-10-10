@@ -226,7 +226,7 @@ def reclass(
         fatal_message = _(
             "No areas of size larger than or equal to {lower} hectares"
         ).format(lower=lower)
-    else:
+    elif upper:
         verbose_message = _(
             "Generating a reclass map with area size"
             " smaller than or equal to {upper} hectares..."
@@ -234,6 +234,10 @@ def reclass(
         fatal_message = _(
             "No areas of size smaller than or equal to {upper} hectares"
         ).format(upper=upper)
+    else:
+        # A zero lower limit and no upper limit filter nothing.
+        verbose_message = _("Generating a reclass map without area size limits...")
+        fatal_message = _("No areas found")
     gs.verbose(verbose_message)
 
     if not lower:
