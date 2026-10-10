@@ -142,5 +142,3 @@ repos:
           - c
           - c++
           - csv
-          - python
-          - tex
