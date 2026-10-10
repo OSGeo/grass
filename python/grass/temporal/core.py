@@ -1215,11 +1215,6 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
-                _(
-                    "Unable to mogrify sql statement. "
-                    + self._create_mapset_error_message(mapset)
-                )
-            self.msgr.fatal(
                 _("Unable to mogrify sql statement. {reason}").format(
                     reason=self._create_mapset_error_message(mapset)
                 )
@@ -1314,11 +1309,6 @@ class SQLDatabaseInterfaceConnection:
 
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
-            self.msgr.fatal(
-                _(
-                    "Unable to execute transaction. "
-                    + self._create_mapset_error_message(mapset)
-                )
             self.msgr.fatal(
                 _("Unable to execute transaction. {reason}").format(
                     reason=self._create_mapset_error_message(mapset)
