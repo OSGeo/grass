@@ -160,15 +160,20 @@ in a `testsuite` directory.
 
 ### Tests which use a database
 
-Vector geometry and attribute tables are separate. If a test needs attributes, create the map and its table (for example with _v.db.addtable_), then read the values back with _v.db.select_. Nothing else is needed once the table is linked.
+Vector geometry and attribute tables are separate. If a test needs
+attributes, create the map and its table (for example with _v.db.addtable_),
+then read the values back with _v.db.select_. Nothing else is needed once the
+table is linked.
 
-The temporal database is different. It has to exist before _grass.temporal_
-or any `t.*` tool will work, and by default it lives in the current mapset,
-at `$GISDBASE/$LOCATION_NAME/$MAPSET/tgis/sqlite.db`. A fixture which creates
-a new mapset therefore starts without one. Creating a space time dataset with
-_t.create_ sets it up, and `temporal/t.connect/tests/conftest.py` shows
-fixtures for the states worth testing against: a mapset with a connection,
-one without, and two mapsets which each have their own.
+The temporal database does not need creating by hand: `tgis.init()` creates
+one for the current mapset if there is none, and the `t.*` tools call it
+before they do anything, so a fixture which creates a new mapset gets a
+database on first use. By default it lives in that mapset, at
+`$GISDBASE/$LOCATION_NAME/$MAPSET/tgis/sqlite.db`, which is worth knowing
+because it means a module-scoped session shares one between its tests. For
+tests about the connection itself, `temporal/t.connect/tests/conftest.py`
+shows fixtures for the states worth covering: a mapset with a connection, one
+without, and two mapsets which each have their own.
 
 Because the database belongs to a mapset, a module-scoped session shares one
 across its tests, and a dataset registered by one test is visible to the
