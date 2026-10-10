@@ -15,7 +15,7 @@ build_program_in_subdir(
 )
 add_dependencies(g.mkfontcap fonts)
 
-# TODO(FHS): revert GRASS_INSTALL_ETCBINDIR to GRASS_INSTALL_ETCDIR
+# TODO(FHS): rewire ${OUTDIR} path to ${PREFIX} in installed version of fontcap
 set(fontcap_file ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR}/fontcap)
 
 add_custom_command(
