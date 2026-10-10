@@ -114,12 +114,10 @@ int main(int argc, char *argv[])
         switch (parse(buf, &rules, &tail, &cats)) {
         case -1:
             if (tty) {
-                fprintf(stderr, _("Illegal reclass rule -"));
-                fprintf(stderr, _(" ignored\n"));
+                fprintf(stderr, _("Illegal reclass rule - ignored\n"));
             }
             else {
-                strcat(buf, _(" - invalid reclass rule"));
-                G_fatal_error("%s", buf);
+                G_fatal_error(_("%s - invalid reclass rule"), buf);
             }
             break;
 
