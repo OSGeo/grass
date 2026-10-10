@@ -16,6 +16,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
 .. sectionauthor:: Stefan Blumentrath
 """
 
+import json
+
 from .core import read_command, warning, fatal
 from .raster import raster_info
 
@@ -78,17 +80,15 @@ def group_to_dict(
     :rtype: dict
     """
     group_dict = {}
-    maps_in_group = (
+    maps_in_group = json.loads(
         read_command(
             "i.group",
             group=imagery_group_name,
             subgroup=subgroup,
-            flags="g",
+            format="json",
             quiet=True,
             env=env,
         )
-        .strip()
-        .split()
     )
 
     if dict_keys not in {"indices", "map_names", "semantic_labels"}:
