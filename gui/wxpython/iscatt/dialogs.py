@@ -423,7 +423,7 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = {**self.colorsSetts, **self.sizeSetts}
+        current_settings = {**self.colorsSetts, **self.sizeSetts}
 
         settsOrder = [
             "sel_pol",
@@ -433,7 +433,7 @@ class SettingsDialog(wx.Dialog):
             "snap_tresh",
         ]
         for settKey in settsOrder:
-            sett = setts[settKey]
+            sett = current_settings[settKey]
             gridSizer.Add(
                 settsLabels[settKey], flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0)
             )
@@ -454,7 +454,7 @@ class SettingsDialog(wx.Dialog):
         ellPolBoxSizer = wx.StaticBoxSizer(ell_box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
-        sett = setts[settKey]
+        sett = current_settings[settKey]
 
         row = 0
         gridSizer.Add(
