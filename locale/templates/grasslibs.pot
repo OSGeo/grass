@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-03 18:51+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -835,17 +835,21 @@ msgstr ""
 msgid "G_realloc: unable to allocate %lu bytes of memory at %s:%d"
 msgstr ""
 
-#: ../lib/gis/aprintf.c:139
+#: ../lib/gis/aprintf.c:142
 #, c-format
 msgid "Failed to print %s"
 msgstr ""
 
-#: ../lib/gis/aprintf.c:258
+#: ../lib/gis/aprintf.c:261
 #, c-format
 msgid "Failed to parse string specifier: %s"
 msgstr ""
 
-#: ../lib/gis/aprintf.c:354
+#: ../lib/gis/aprintf.c:279
+msgid "String precision is too large"
+msgstr ""
+
+#: ../lib/gis/aprintf.c:364
 #, c-format
 msgid "Format specifier exceeds the buffer size (%d)"
 msgstr ""
@@ -855,29 +859,30 @@ msgid "GRASS needs to be compiled with BZIP2 for BZIP2 compression"
 msgstr ""
 
 #: ../lib/gis/cmprbzip.c:99 ../lib/gis/cmprbzip.c:179 ../lib/gis/cmprlz4.c:84
-#: ../lib/gis/cmprlz4.c:150 ../lib/gis/cmprzlib.c:93 ../lib/gis/cmprzlib.c:171
-#: ../lib/gis/cmprzstd.c:98 ../lib/gis/cmprzstd.c:173 ../lib/gis/compress.c:327
+#: ../lib/gis/cmprlz4.c:150 ../lib/gis/cmprzlib.c:103 ../lib/gis/cmprzlib.c:181
+#: ../lib/gis/cmprzstd.c:113 ../lib/gis/cmprzstd.c:198
+#: ../lib/gis/compress.c:328
 msgid "No source buffer"
 msgstr ""
 
 #: ../lib/gis/cmprbzip.c:102 ../lib/gis/cmprbzip.c:182 ../lib/gis/cmprlz4.c:87
-#: ../lib/gis/cmprlz4.c:153 ../lib/gis/cmprzlib.c:96 ../lib/gis/cmprzlib.c:174
-#: ../lib/gis/cmprzstd.c:101 ../lib/gis/cmprzstd.c:176
+#: ../lib/gis/cmprlz4.c:153 ../lib/gis/cmprzlib.c:106 ../lib/gis/cmprzlib.c:184
+#: ../lib/gis/cmprzstd.c:116 ../lib/gis/cmprzstd.c:201
 msgid "No destination buffer"
 msgstr ""
 
 #: ../lib/gis/cmprbzip.c:109 ../lib/gis/cmprbzip.c:189 ../lib/gis/cmprlz4.c:94
-#: ../lib/gis/cmprlz4.c:160 ../lib/gis/cmprzlib.c:103 ../lib/gis/cmprzlib.c:181
-#: ../lib/gis/cmprzstd.c:108 ../lib/gis/cmprzstd.c:183
-#: ../lib/gis/compress.c:329
+#: ../lib/gis/cmprlz4.c:160 ../lib/gis/cmprzlib.c:113 ../lib/gis/cmprzlib.c:191
+#: ../lib/gis/cmprzstd.c:123 ../lib/gis/cmprzstd.c:208
+#: ../lib/gis/compress.c:330
 #, c-format
 msgid "Invalid source buffer size %d"
 msgstr ""
 
 #: ../lib/gis/cmprbzip.c:111 ../lib/gis/cmprbzip.c:191 ../lib/gis/cmprlz4.c:96
-#: ../lib/gis/cmprlz4.c:162 ../lib/gis/cmprzlib.c:105 ../lib/gis/cmprzlib.c:183
-#: ../lib/gis/cmprzstd.c:110 ../lib/gis/cmprzstd.c:185
-#: ../lib/gis/compress.c:251
+#: ../lib/gis/cmprlz4.c:162 ../lib/gis/cmprzlib.c:115 ../lib/gis/cmprzlib.c:193
+#: ../lib/gis/cmprzstd.c:125 ../lib/gis/cmprzstd.c:210
+#: ../lib/gis/compress.c:252
 #, c-format
 msgid "Invalid destination buffer size %d"
 msgstr ""
@@ -892,8 +897,8 @@ msgstr ""
 msgid "BZIP2 version %s decompression error %d"
 msgstr ""
 
-#: ../lib/gis/cmprbzip.c:214 ../lib/gis/cmprlz4.c:180 ../lib/gis/cmprzlib.c:206
-#: ../lib/gis/cmprzstd.c:203
+#: ../lib/gis/cmprbzip.c:214 ../lib/gis/cmprlz4.c:180 ../lib/gis/cmprzlib.c:216
+#: ../lib/gis/cmprzstd.c:232
 #, c-format
 msgid "Got uncompressed size %d, expected %d"
 msgstr ""
@@ -906,23 +911,40 @@ msgstr ""
 msgid "LZ4 decompression error"
 msgstr ""
 
-#: ../lib/gis/cmprzlib.c:137
+#: ../lib/gis/cmprzlib.c:147
 #, c-format
 msgid "ZLIB compression error %d: %s"
 msgstr ""
 
-#: ../lib/gis/cmprzlib.c:196
+#: ../lib/gis/cmprzlib.c:206
 #, c-format
 msgid "ZLIB decompression error %d: %s"
 msgstr ""
 
-#: ../lib/gis/cmprzstd.c:76 ../lib/gis/cmprzstd.c:91 ../lib/gis/cmprzstd.c:166
+#: ../lib/gis/cmprzstd.c:78 ../lib/gis/cmprzstd.c:106 ../lib/gis/cmprzstd.c:191
 msgid "GRASS needs to be compiled with ZSTD for ZSTD compression"
 msgstr ""
 
-#: ../lib/gis/cmprzstd.c:131 ../lib/gis/cmprzstd.c:193
+#: ../lib/gis/cmprzstd.c:84
+#, c-format
+msgid "ZSTD compression bound error %d: %s"
+msgstr ""
+
+#: ../lib/gis/cmprzstd.c:89
+msgid "ZSTD compression bound exceeds supported size"
+msgstr ""
+
+#: ../lib/gis/cmprzstd.c:148 ../lib/gis/cmprzstd.c:218
 #, c-format
 msgid "ZSTD compression error %d: %s"
+msgstr ""
+
+#: ../lib/gis/cmprzstd.c:155
+msgid "ZSTD compressed size exceeds supported size"
+msgstr ""
+
+#: ../lib/gis/cmprzstd.c:223
+msgid "ZSTD uncompressed size exceeds supported size"
 msgstr ""
 
 #: ../lib/gis/color_rules.c:99
@@ -957,38 +979,38 @@ msgstr ""
 msgid "Request for unsupported compressor"
 msgstr ""
 
-#: ../lib/gis/compress.c:249
+#: ../lib/gis/compress.c:250
 msgid "No destination buffer allocated"
 msgstr ""
 
-#: ../lib/gis/compress.c:256
+#: ../lib/gis/compress.c:257
 #, c-format
 msgid "Invalid read size %d"
 msgstr ""
 
-#: ../lib/gis/compress.c:276
+#: ../lib/gis/compress.c:277
 #, c-format
 msgid "Unable to read %d bytes: end of file"
 msgstr ""
 
-#: ../lib/gis/compress.c:278
+#: ../lib/gis/compress.c:279
 #, c-format
 msgid "Unable to read %d bytes: %s"
 msgstr ""
 
-#: ../lib/gis/compress.c:353 ../lib/gis/compress.c:377
-#: ../lib/gis/compress.c:416
+#: ../lib/gis/compress.c:354 ../lib/gis/compress.c:378
+#: ../lib/gis/compress.c:417
 msgid "Unable to write compression flag"
 msgstr ""
 
-#: ../lib/gis/compress.c:363 ../lib/gis/compress.c:387
-#: ../lib/gis/compress.c:431
+#: ../lib/gis/compress.c:364 ../lib/gis/compress.c:388
+#: ../lib/gis/compress.c:432
 #, c-format
 msgid "Unable to write %d bytes: nothing written"
 msgstr ""
 
-#: ../lib/gis/compress.c:366 ../lib/gis/compress.c:390
-#: ../lib/gis/compress.c:433
+#: ../lib/gis/compress.c:367 ../lib/gis/compress.c:391
+#: ../lib/gis/compress.c:434
 #, c-format
 msgid "Unable to write %d bytes: %s"
 msgstr ""
@@ -1035,7 +1057,7 @@ msgstr ""
 msgid "WARNING: "
 msgstr ""
 
-#: ../lib/gis/error.c:364 ../lib/gis/parser.c:1740
+#: ../lib/gis/error.c:364 ../lib/gis/parser.c:1742
 #, c-format
 msgid "ERROR: "
 msgstr ""
@@ -1227,13 +1249,95 @@ msgstr ""
 msgid "LOCATION <%s> not available"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:139
+#: ../lib/gis/lrand48.c:153
+#, c-format
+msgid "Random number seed %s from %s is too large in magnitude to be read"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:157
+#, c-format
+msgid "Random number seed %s from %s is not an integer"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:162
+#, c-format
+msgid "Random number seed %s from %s is used as %<PRId64>, its low 32 bits"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:212
 #, c-format
 msgid "gettimeofday failed: %s"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:167 ../lib/gis/lrand48.c:193
+#: ../lib/gis/lrand48.c:262 ../lib/gis/lrand48.c:288
 msgid "Pseudo-random number generator not seeded"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:427
+#, c-format
+msgid "Random number seed %<PRId64> is outside the range from -2147483648 to 4294967295 the generator can use"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:435
+#, c-format
+msgid "The number of units of a random number layout must be positive, not %<PRId64>"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:527
+#, c-format
+msgid "The number of random numbers a unit draws must be positive, not %<PRId64>"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:531
+#, c-format
+msgid "A random number layout of %<PRId64> units of %<PRId64> draws each is too large (the number of draws must not exceed %<PRId64>)"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:570
+#, c-format
+msgid "The most random numbers a unit draws must be positive, not %<PRId64>"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:576
+#, c-format
+msgid "A random number layout of %<PRId64> units of at most %<PRId64> draws each is too large (the number of units times the bound rounded up to odd must not exceed %<PRId64>)"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:625
+#, c-format
+msgid "A random number layout of the whole span takes at most %<PRId64> units, not %<PRId64>; a bounded layout serves any number of units"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:700
+#, c-format
+msgid "Random number unit %<PRId64> is out of range (must be between 0 and %<PRId64>)"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:704
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (must not be negative)"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:708
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (a layout of the whole span holds a single batch)"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:712
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (%<PRId64> batch fits into the generator's span)"
+msgid_plural "Random number batch %<PRId64> is out of range (%<PRId64> batches fit into the generator's span)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../lib/gis/lrand48.c:719
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (no batch fits into the generator's span, only batch 0 can be used)"
+msgstr ""
+
+#: ../lib/gis/lrand48.c:762
+#, c-format
+msgid "Cannot advance a random number generator by %<PRId64> draws (the number must not be negative)"
 msgstr ""
 
 #: ../lib/gis/ls.c:99
@@ -1322,7 +1426,7 @@ msgstr ""
 #: ../lib/gis/open_misc.c:242 ../lib/gis/seek.c:53 ../lib/gis/seek.c:63
 #: ../lib/raster/close.c:398 ../lib/raster/close.c:444
 #: ../lib/raster/close.c:543 ../lib/raster/format.c:195
-#: ../lib/raster/put_row.c:143 ../lib/raster/put_row.c:520
+#: ../lib/raster/put_row.c:144 ../lib/raster/put_row.c:527
 #: ../lib/raster3d/open.c:303 ../lib/raster3d/tilewrite.c:182
 #: ../lib/segment/get_row.c:65 ../lib/segment/get_row.c:86
 #: ../lib/segment/pagein.c:95 ../lib/segment/pageout.c:41
@@ -1348,248 +1452,252 @@ msgstr ""
 msgid "G__open_misc(write): xmapset <%s> != G_mapset() <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:347
+#: ../lib/gis/parser.c:348
 msgid "Bug in UI description. Missing module description"
 msgstr ""
 
-#: ../lib/gis/parser.c:357
+#: ../lib/gis/parser.c:358
 msgid "Bug in UI description. Missing option key"
 msgstr ""
 
-#: ../lib/gis/parser.c:359
+#: ../lib/gis/parser.c:360
 #, c-format
 msgid "Bug in UI description. Option key <%s> is not valid"
 msgstr ""
 
-#: ../lib/gis/parser.c:363
+#: ../lib/gis/parser.c:364
 #, c-format
 msgid "Bug in UI description. Description for option <%s> missing"
 msgstr ""
 
-#: ../lib/gis/parser.c:416
+#: ../lib/gis/parser.c:417
 #, c-format
 msgid "Bug in UI description. Option '%s' in <%s> does not exist"
 msgstr ""
 
-#: ../lib/gis/parser.c:549
+#: ../lib/gis/parser.c:550
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr ""
 
-#: ../lib/gis/parser.c:565
+#: ../lib/gis/parser.c:566
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr ""
 
-#: ../lib/gis/parser.c:582
+#: ../lib/gis/parser.c:583
 msgid "Use either --qq or --verbose flag, not both. Assuming --qq."
 msgstr ""
 
-#: ../lib/gis/parser.c:613
+#: ../lib/gis/parser.c:614
 #, c-format
 msgid "Sorry <%s> is not a valid option"
 msgstr ""
 
-#: ../lib/gis/parser.c:625
+#: ../lib/gis/parser.c:626
 msgid "Your installation doesn't include GUI, exiting."
 msgstr ""
 
-#: ../lib/gis/parser.c:648 ../lib/init/grass.py:139
+#: ../lib/gis/parser.c:649 ../lib/init/grass.py:139
 msgid "ERROR"
 msgstr ""
 
-#: ../lib/gis/parser.c:986
+#: ../lib/gis/parser.c:988
 msgid "Unable to determine program name"
 msgstr ""
 
-#: ../lib/gis/parser.c:1009 ../lib/gis/parser.c:1090
+#: ../lib/gis/parser.c:1011 ../lib/gis/parser.c:1092
 #, c-format
 msgid "%s: Sorry, <%c> is not a valid flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:1041 ../lib/gis/parser.c:1051 ../lib/gis/parser.c:1061
+#: ../lib/gis/parser.c:1043 ../lib/gis/parser.c:1053 ../lib/gis/parser.c:1063
 #, c-format
 msgid "Please update the usage of <%s>: flag <%c> has been renamed to <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1080
+#: ../lib/gis/parser.c:1082
 #, c-format
 msgid "Please update the usage of <%s>: flag <%c> has been renamed to option <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1227
+#: ../lib/gis/parser.c:1229
 #, c-format
 msgid "%s: Sorry, <%s=> is ambiguous"
 msgstr ""
 
-#: ../lib/gis/parser.c:1231
+#: ../lib/gis/parser.c:1233
 #, c-format
 msgid "Option <%s=> matches"
 msgstr ""
 
-#: ../lib/gis/parser.c:1251
+#: ../lib/gis/parser.c:1253
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to flag <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1256
+#: ../lib/gis/parser.c:1258
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to flag <%c>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1267
+#: ../lib/gis/parser.c:1269
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1280
+#: ../lib/gis/parser.c:1282
 #, c-format
 msgid "%s: Sorry, <%s> is not a valid parameter"
 msgstr ""
 
-#: ../lib/gis/parser.c:1287 ../lib/gis/parser.c:1548
+#: ../lib/gis/parser.c:1289 ../lib/gis/parser.c:1550
 #, c-format
 msgid "<%s> is an abbreviation for <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1292
+#: ../lib/gis/parser.c:1294
 #, c-format
 msgid "Option <%s> does not accept multiple answers"
 msgstr ""
 
-#: ../lib/gis/parser.c:1365
+#: ../lib/gis/parser.c:1367
 #, c-format
 msgid ""
 "Illegal range syntax for parameter <%s>\n"
 "\tPresented as: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1372
+#: ../lib/gis/parser.c:1374
 #, c-format
 msgid ""
 "Value <%s> out of range for parameter <%s>\n"
 "\tLegal range: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1378
+#: ../lib/gis/parser.c:1380
 #, c-format
 msgid "Missing value for parameter <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1382
+#: ../lib/gis/parser.c:1384
 #, c-format
 msgid "Invalid value <%s> for parameter <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1388
+#: ../lib/gis/parser.c:1390
 #, c-format
 msgid ""
 "Value <%s> ambiguous for parameter <%s>\n"
 "\tValid options: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1574
+#: ../lib/gis/parser.c:1576
 #, c-format
 msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
 
-#: ../lib/gis/parser.c:1667
+#: ../lib/gis/parser.c:1669
 #, c-format
 msgid ""
 "Option <%s> must be provided in multiples of %d\n"
 "\tYou provided %d item(s): %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1742 ../lib/gis/parser.c:1752
+#: ../lib/gis/parser.c:1744 ../lib/gis/parser.c:1754
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:1864
+#: ../lib/gis/parser.c:1866
 #, c-format
 msgid "%s= is not a separator option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1867
+#: ../lib/gis/parser.c:1869
 #, c-format
 msgid "No separator given for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1929 ../lib/gis/parser.c:1948
+#: ../lib/gis/parser.c:1931 ../lib/gis/parser.c:1950
 #, c-format
 msgid "%s= is not a file option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1931
+#: ../lib/gis/parser.c:1933
 #, c-format
 msgid "Opening multiple files not supported for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1937
+#: ../lib/gis/parser.c:1939
 #, c-format
 msgid "Unable to open %s file <%s>: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1944
+#: ../lib/gis/parser.c:1946
 #, c-format
 msgid "Unable to create %s file <%s>: %s"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:124
+#: ../lib/gis/parser_dependencies.c:105
+msgid "Too many options in rule"
+msgstr ""
+
+#: ../lib/gis/parser_dependencies.c:128
 msgid "Internal error: option or flag not found"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:188
+#: ../lib/gis/parser_dependencies.c:192
 #, c-format
 msgid "%s and <%s>"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:188
+#: ../lib/gis/parser_dependencies.c:192
 #, c-format
 msgid "%s or <%s>"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:226
+#: ../lib/gis/parser_dependencies.c:230
 #, c-format
 msgid "Options %s are mutually exclusive"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:255
+#: ../lib/gis/parser_dependencies.c:259
 #, c-format
 msgid "At least one of the following options is required: %s"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:293
+#: ../lib/gis/parser_dependencies.c:297
 #, c-format
 msgid "Option <%s> requires at least one of %s"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:296
+#: ../lib/gis/parser_dependencies.c:300
 #, c-format
 msgid "Option <%s> requires %s"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:332
+#: ../lib/gis/parser_dependencies.c:336
 #, c-format
 msgid "Option <%s> requires all of %s"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:363
+#: ../lib/gis/parser_dependencies.c:367
 #, c-format
 msgid "Option <%s> is mutually exclusive with all of %s"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:394
+#: ../lib/gis/parser_dependencies.c:398
 #, c-format
 msgid "Either all or none of %s must be given"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:428 ../lib/gis/parser_dependencies.c:466
+#: ../lib/gis/parser_dependencies.c:432 ../lib/gis/parser_dependencies.c:470
 #, c-format
 msgid "Internal error: invalid rule type: %d"
 msgstr ""
 
-#: ../lib/gis/parser_dependencies.c:502 ../lib/gis/parser_dependencies.c:536
+#: ../lib/gis/parser_dependencies.c:506 ../lib/gis/parser_dependencies.c:540
 msgid "Internal error: the number of options is < 0"
 msgstr ""
 
@@ -1654,7 +1762,7 @@ msgstr ""
 msgid "  %*s   default: %s\n"
 msgstr ""
 
-#: ../lib/gis/parser_help.c:282
+#: ../lib/gis/parser_help.c:283
 #, c-format
 msgid "  %*s   options: "
 msgstr ""
@@ -2768,12 +2876,12 @@ msgstr ""
 
 #: ../lib/gis/view.c:529
 #, c-format
-msgid " Window saved in \"%s\" is completely outside of current GRASS window."
+msgid "Window saved in \"%s\" is completely outside of current GRASS window."
 msgstr ""
 
 #: ../lib/gis/view.c:534
 #, c-format
-msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgid "Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
 msgstr ""
 
 #: ../lib/gis/worker.c:83
@@ -5108,67 +5216,88 @@ msgstr ""
 msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
 msgstr ""
 
-#: ../lib/raster/get_row.c:34 ../lib/raster/get_row.c:927
+#: ../lib/raster/get_row.c:35 ../lib/raster/get_row.c:957
 #, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
 msgstr ""
 
-#: ../lib/raster/get_row.c:96
+#: ../lib/raster/get_row.c:97
 #, c-format
 msgid "Error seeking fp raster data file for row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/get_row.c:104
+#: ../lib/raster/get_row.c:103
+#, c-format
+msgid "Compressed fp raster row for <%s> is too large"
+msgstr ""
+
+#: ../lib/raster/get_row.c:109
 #, c-format
 msgid "Error uncompressing fp raster data for row %d of <%s>: error code %d"
 msgstr ""
 
-#: ../lib/raster/get_row.c:141
+#: ../lib/raster/get_row.c:145
+#, c-format
+msgid "Invalid raster row offset for row %d of <%s>"
+msgstr ""
+
+#: ../lib/raster/get_row.c:150 ../lib/raster/get_row.c:194
+#, c-format
+msgid "Compressed raster row for <%s> is too large"
+msgstr ""
+
+#: ../lib/raster/get_row.c:157
 #, c-format
 msgid "Error seeking raster data file for row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/get_row.c:148
+#: ../lib/raster/get_row.c:165
 #, c-format
 msgid "Error reading raster data for row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/get_row.c:174
-#, c-format
-msgid "Error uncompressing raster data for row %d of <%s>"
-msgstr ""
-
-#: ../lib/raster/get_row.c:194 ../lib/raster/get_row.c:198
+#: ../lib/raster/get_row.c:176 ../lib/raster/get_row.c:221
+#: ../lib/raster/get_row.c:225
 #, c-format
 msgid "Error reading raster data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:240
+#: ../lib/raster/get_row.c:201
+#, c-format
+msgid "Error uncompressing raster data for row %d of <%s>"
+msgstr ""
+
+#: ../lib/raster/get_row.c:267
 #, c-format
 msgid "Error reading raster data via GDAL for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:851
+#: ../lib/raster/get_row.c:878
 #, c-format
 msgid "Error seeking compressed null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:858 ../lib/raster/get_row.c:870
+#: ../lib/raster/get_row.c:884 ../lib/raster/get_row.c:896
 #, c-format
 msgid "Error reading compressed null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:876
+#: ../lib/raster/get_row.c:902
+#, c-format
+msgid "Compressed null data for row %d of <%s> is too large"
+msgstr ""
+
+#: ../lib/raster/get_row.c:906
 #, c-format
 msgid "Error uncompressing null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:910
+#: ../lib/raster/get_row.c:940
 #, c-format
 msgid "Error seeking null row %d for <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:913
+#: ../lib/raster/get_row.c:943
 #, c-format
 msgid "Error reading null row %d for <%s>"
 msgstr ""
@@ -5381,61 +5510,65 @@ msgstr ""
 msgid "Unable to create header file for <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:120
+#: ../lib/raster/put_row.c:121
 #, c-format
 msgid "Error writing uncompressed FP data for row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/put_row.c:132
+#: ../lib/raster/put_row.c:133
 #, c-format
 msgid "Error writing compressed FP data for row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/put_row.c:398 ../lib/raster/put_row.c:405
+#: ../lib/raster/put_row.c:399 ../lib/raster/put_row.c:406
 #, c-format
 msgid "Error writing compressed data for row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/put_row.c:416
+#: ../lib/raster/put_row.c:417
 #, c-format
 msgid "Error writing uncompressed data for row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/put_row.c:475
+#: ../lib/raster/put_row.c:476
 #, c-format
 msgid "Error writing data via GDAL for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:498
+#: ../lib/raster/put_row.c:499
 msgid "GDAL output doesn't support writing null rows separately"
 msgstr ""
 
-#: ../lib/raster/put_row.c:501
+#: ../lib/raster/put_row.c:502
 #, c-format
 msgid "No null file for <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:535 ../lib/raster/put_row.c:542
+#: ../lib/raster/put_row.c:520
+msgid "Null row is too large to compress"
+msgstr ""
+
+#: ../lib/raster/put_row.c:543 ../lib/raster/put_row.c:549
 #, c-format
 msgid "Error writing compressed null data for row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/put_row.c:577
+#: ../lib/raster/put_row.c:584
 #, c-format
 msgid "Error writing null row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/put_row.c:581
+#: ../lib/raster/put_row.c:587
 #, c-format
 msgid "Error writing null row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/put_row.c:706
+#: ../lib/raster/put_row.c:712
 #, c-format
 msgid "put_raster_row: raster map <%s> not open for write - request ignored"
 msgstr ""
 
-#: ../lib/raster/put_row.c:715
+#: ../lib/raster/put_row.c:721
 msgid "put_raster_row: unopened file descriptor - request ignored"
 msgstr ""
 
@@ -5573,79 +5706,79 @@ msgstr ""
 msgid "Unable to create <%s> metadata file for raster map <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:161
+#: ../lib/raster/reclass.c:162
 #, c-format
 msgid "Error reading beginning of header file for <%s@%s>: %s"
 msgstr ""
 
-#: ../lib/raster/reclass.c:179
+#: ../lib/raster/reclass.c:180
 #, c-format
 msgid "Too many reclass categories for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:183
+#: ../lib/raster/reclass.c:184
 #, c-format
 msgid "Illegal reclass format in header file for <%s@%s>: %s"
 msgstr ""
 
-#: ../lib/raster/reclass.c:251
+#: ../lib/raster/reclass.c:252
 #, c-format
 msgid "File too short, reading line %d"
 msgstr ""
 
-#: ../lib/raster/reclass.c:258
+#: ../lib/raster/reclass.c:259
 #, c-format
 msgid "Line too long: %s..."
 msgstr ""
 
-#: ../lib/raster/reclass.c:264
+#: ../lib/raster/reclass.c:265
 #, c-format
 msgid "Format is not key:value: %s"
 msgstr ""
 
-#: ../lib/raster/reclass.c:277
+#: ../lib/raster/reclass.c:278
 #, c-format
 msgid "Unknown key at line: %s"
 msgstr ""
 
-#: ../lib/raster/reclass.c:288
+#: ../lib/raster/reclass.c:289
 #, c-format
 msgid "Mapset not read, only raster name: %s"
 msgstr ""
 
-#: ../lib/raster/reclass.c:292
+#: ../lib/raster/reclass.c:293
 #, c-format
 msgid "Raster name not read, only mapset: %s"
 msgstr ""
 
-#: ../lib/raster/reclass.c:295
+#: ../lib/raster/reclass.c:296
 msgid "Raster name and mapset not read"
 msgstr ""
 
-#: ../lib/raster/reclass.c:326
+#: ../lib/raster/reclass.c:327
 msgid "Illegal reclass request"
 msgstr ""
 
-#: ../lib/raster/reclass.c:331
+#: ../lib/raster/reclass.c:332
 msgid "Illegal reclass type"
 msgstr ""
 
-#: ../lib/raster/reclass.c:337
+#: ../lib/raster/reclass.c:338
 #, c-format
 msgid "Unable to create header file for <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:385
+#: ../lib/raster/reclass.c:386
 #, c-format
 msgid "Unable to create dependency file in <%s@%s>"
 msgstr ""
 
-#: ../lib/raster/reclass.c:472
+#: ../lib/raster/reclass.c:473
 #, c-format
 msgid "Reading integer failed on line: %s (after reading min: %d)"
 msgstr ""
 
-#: ../lib/raster/reclass.c:477
+#: ../lib/raster/reclass.c:478
 #, c-format
 msgid "First entry (min) not read yet and reading integer failed on line: %s"
 msgstr ""
@@ -6133,7 +6266,7 @@ msgid "Attempt to read points of nonexistent isle"
 msgstr ""
 
 #: ../lib/vector/Vlib/area.c:92 ../lib/vector/Vlib/area.c:493
-#: ../lib/vector/Vlib/build_pg.c:124 ../lib/vector/Vlib/build_sfa.c:717
+#: ../lib/vector/Vlib/build_pg.c:124 ../lib/vector/Vlib/build_sfa.c:720
 #: ../lib/vector/Vlib/close.c:260 ../lib/vector/Vlib/close_pg.c:100
 #: ../lib/vector/Vlib/close_pg.c:148 ../lib/vector/Vlib/copy.c:449
 #: ../lib/vector/Vlib/header_finfo.c:42 ../lib/vector/Vlib/header_finfo.c:79
@@ -6635,21 +6768,21 @@ msgstr ""
 msgid "Error writing out spatial index file"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:74 ../lib/vector/Vlib/build_sfa.c:329
-#: ../lib/vector/Vlib/build_sfa.c:628
+#: ../lib/vector/Vlib/build_nat.c:74 ../lib/vector/Vlib/build_sfa.c:330
+#: ../lib/vector/Vlib/build_sfa.c:630
 msgid "Registering primitives..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:117 ../lib/vector/Vlib/build_sfa.c:374
-#: ../lib/vector/Vlib/build_sfa.c:660
+#: ../lib/vector/Vlib/build_nat.c:117 ../lib/vector/Vlib/build_sfa.c:375
+#: ../lib/vector/Vlib/build_sfa.c:662
 #, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../lib/vector/Vlib/build_nat.c:120 ../lib/vector/Vlib/build_sfa.c:377
-#: ../lib/vector/Vlib/build_sfa.c:663
+#: ../lib/vector/Vlib/build_nat.c:120 ../lib/vector/Vlib/build_sfa.c:378
+#: ../lib/vector/Vlib/build_sfa.c:665
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%<PRId64> vertices registered"
@@ -6793,41 +6926,41 @@ msgstr ""
 msgid "Unable to build simple features from topogeometry data. Unsupported type %d."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:269 ../lib/vector/Vlib/build_sfa.c:540
+#: ../lib/vector/Vlib/build_sfa.c:270 ../lib/vector/Vlib/build_sfa.c:542
 #, c-format
 msgid "Unable to calculate centroid for area %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:295
+#: ../lib/vector/Vlib/build_sfa.c:296
 #, c-format
 msgid "Feature type %d not supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:344 ../lib/vector/Vlib/build_sfa.c:353
+#: ../lib/vector/Vlib/build_sfa.c:345 ../lib/vector/Vlib/build_sfa.c:354
 #: ../lib/vector/Vlib/read_pg.c:387
 #, c-format
 msgid "Feature %d without geometry skipped"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:599 ../lib/vector/Vlib/read_ogr.c:321
+#: ../lib/vector/Vlib/build_sfa.c:601 ../lib/vector/Vlib/read_ogr.c:321
 #: ../lib/vector/Vlib/read_ogr.c:556
 #, c-format
 msgid "OGR feature type %d not supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:667
+#: ../lib/vector/Vlib/build_sfa.c:670
 #, c-format
 msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../lib/vector/Vlib/build_sfa.c:721
+#: ../lib/vector/Vlib/build_sfa.c:724
 #, c-format
 msgid "%s: Native format unsupported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:746
+#: ../lib/vector/Vlib/build_sfa.c:749
 msgid "Feature index is built only for non-native formats. Nothing to dump."
 msgstr ""
 
