@@ -475,7 +475,8 @@ int I_WriteSigSet(FILE *fd, const struct SigSet *S)
  */
 char **I_SortSigSetBySemanticLabel(struct SigSet *S, const struct Ref *R)
 {
-    unsigned int total, complete;
+    unsigned int complete;
+    size_t total;
     unsigned int *match1, *match2, mc1, mc2, *new_order;
     double ***new_means, ****new_vars;
     char **group_semantic_labels, **mismatches, **new_semantic_labels;

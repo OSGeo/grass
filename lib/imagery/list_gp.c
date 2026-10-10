@@ -35,7 +35,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE *fd)
     max = 0;
     for (i = 0; i < ref->nfiles; i++) {
         I__list_group_name_fit(buf, ref->file[i].name, ref->file[i].mapset);
-        len = strlen(buf) + 4;
+        len = (int)strlen(buf) + 4;
         if (len > max)
             max = len;
     }
