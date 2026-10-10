@@ -1318,13 +1318,11 @@ class SQLDatabaseInterfaceConnection:
         return self.connections[mapset].execute_transaction(statement)
 
     def _create_mapset_error_message(self, mapset) -> str:
-        return (
-            "You have no permission to "
-            "access mapset <%(mapset)s>, or "
-            "mapset <%(mapset)s> has no temporal database. "
-            "Accessible mapsets are: <%(mapsets)s>"
-            % {"mapset": decode(mapset), "mapsets": ",".join(self.tgis_mapsets.keys())}
-        )
+        return _(
+            "You have no permission to access mapset <{mapset}>, or mapset"
+            " <{mapset}> has no temporal database."
+            " Accessible mapsets are: <{mapsets}>"
+        ).format(mapset=decode(mapset), mapsets=",".join(self.tgis_mapsets.keys()))
 
 
 ###############################################################################
