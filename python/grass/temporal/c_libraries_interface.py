@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import logging
 import math
+import os
 import sys
 from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
 from datetime import datetime
@@ -1183,14 +1184,27 @@ def _stop(lock: _LockLike, conn: Connection, data) -> None:
 ###############################################################################
 
 
-def c_library_server(lock: _LockLike, conn: Connection) -> None:
+def c_library_server(lock: _LockLike, conn: Connection, env=None) -> None:
     """The GRASS C-libraries server function designed to be a target for
     multiprocessing.Process
 
     :param lock: A multiprocessing.Lock
     :param conn: A multiprocessing.connection.Connection object obtained from
                  multiprocessing.Pipe
+    :param env: The environment of the server process, if None, the process
+                keeps the environment it inherited
     """
+    # The C libraries read the session from the environment on first use,
+    # so the environment has to be replaced before any library call.
+    if env is not None:
+        os.environ.clear()
+        os.environ.update(env)
+        if "GISRC" in env:
+            # On Windows, the C library has its own copy of the environment,
+            # and with fork, it may have read another session already.
+            libgis.G_putenv("GISRC", env["GISRC"])
+            libgis.G__read_gisrc_path()
+            libgis.G__read_gisrc_env()
 
     def error_handler(data) -> None:
         """This function will be called in case of a fatal error in libgis"""
@@ -1462,7 +1476,12 @@ class CLibrariesInterface(RPCServerBase):
 
     """  # noqa: E501
 
-    def __init__(self) -> None:
+    def __init__(self, env=None) -> None:
+        """
+        :param env: The environment of the server process, if None, the process
+                    inherits os.environ
+        """
+        self.env = None if env is None else dict(env)
         RPCServerBase.__init__(self)
 
     def start_server(self) -> None:
@@ -1470,7 +1489,7 @@ class CLibrariesInterface(RPCServerBase):
         self.client_conn, self.server_conn = ctx.Pipe(True)
         self.lock = ctx.Lock()
         self.server = ctx.Process(
-            target=c_library_server, args=(self.lock, self.server_conn)
+            target=c_library_server, args=(self.lock, self.server_conn, self.env)
         )
         self.server.daemon = True
         self.server.start()

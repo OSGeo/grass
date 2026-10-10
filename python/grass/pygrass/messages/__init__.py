@@ -14,6 +14,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
 from __future__ import annotations
 
+import os
 import sys
 from typing import TYPE_CHECKING, Literal, NoReturn
 
@@ -31,7 +32,7 @@ if TYPE_CHECKING:
     ]
 
 
-def message_server(lock: _LockLike, conn: Connection) -> NoReturn:
+def message_server(lock: _LockLike, conn: Connection, env=None) -> NoReturn:
     """The GRASS message server function designed to be a target for
     multiprocessing.Process
 
@@ -39,6 +40,8 @@ def message_server(lock: _LockLike, conn: Connection) -> NoReturn:
     :param lock: A multiprocessing.Lock
     :param conn: A multiprocessing.connection.Connection object obtained from
                  multiprocessing.Pipe
+    :param env: The environment of the server process, if None, the process
+                keeps the environment it inherited
 
     This function will use the G_* message C-functions from grass.lib.gis
     to provide an interface to the GRASS C-library messaging system.
@@ -69,6 +72,17 @@ def message_server(lock: _LockLike, conn: Connection) -> NoReturn:
     - Percent:  ["PERCENT", n, d, s]
 
     """
+    # The C library reads the session from the environment on first use,
+    # so the environment has to be replaced before any library call.
+    if env is not None:
+        os.environ.clear()
+        os.environ.update(env)
+        if "GISRC" in env:
+            # On Windows, the C library has its own copy of the environment,
+            # and with fork, it may have read another session already.
+            libgis.G_putenv("GISRC", env["GISRC"])
+            libgis.G__read_gisrc_path()
+            libgis.G__read_gisrc_env()
     libgis.G_debug(1, "Start messenger server")
 
     while True:
@@ -178,13 +192,20 @@ class Messenger:
     server_conn: Connection
     server: BaseProcess
 
-    def __init__(self, raise_on_error: bool = False) -> None:
+    def __init__(self, raise_on_error: bool = False, env=None) -> None:
+        """
+        :param raise_on_error: If True, fatal() raises a FatalError exception
+                               instead of calling sys.exit(1)
+        :param env: The environment of the server process, if None, the process
+                    inherits os.environ
+        """
         self.raise_on_error = raise_on_error
+        self.env = None if env is None else dict(env)
         ctx = _get_multiprocessing_context()
         self.client_conn, self.server_conn = ctx.Pipe()
         self.lock = ctx.Lock()
         self.server = ctx.Process(
-            target=message_server, args=(self.lock, self.server_conn)
+            target=message_server, args=(self.lock, self.server_conn, self.env)
         )
         self.server.daemon = True
         self.server.start()
@@ -195,7 +216,7 @@ class Messenger:
         self.client_conn, self.server_conn = ctx.Pipe()
         self.lock = ctx.Lock()
         self.server = ctx.Process(
-            target=message_server, args=(self.lock, self.server_conn)
+            target=message_server, args=(self.lock, self.server_conn, self.env)
         )
         self.server.daemon = True
         self.server.start()
