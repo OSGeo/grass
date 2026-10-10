@@ -880,7 +880,7 @@ class ModelItem(ModelObject):
     def GetLog(self):
         """Get log info"""
         if self.label:
-            return _("Condition: ") + self.label
+            return _("Condition: {label}").format(label=self.label)
         return _("Condition: not defined")
 
     def AddRelation(self, rel):

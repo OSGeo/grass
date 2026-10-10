@@ -1110,7 +1110,9 @@ class Settings:
 
         except KeyError as e:
             raise GException(
-                "%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey)
+                _("Unable to set '{group}:{key}:{subkey}'").format(
+                    group=group, key=key, subkey=subkey
+                )
             ) from e
 
     def Append(self, dict, group, key, subkey, value, overwrite=True):
