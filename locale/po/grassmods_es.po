@@ -9,21 +9,21 @@
 # Carlos Dávila <carluti@users.sourceforge.net>, 2007, 2008.
 # Joana Palahí/SIGTE-UdG <joana sigte.udg.edu>, 2011, 2014.
 # Daniel Torres <nobeeakon@gmail.com>, 2014, 2015, 2016.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2025-08-26 13:29+0000\n"
+"PO-Revision-Date: 2026-10-11 11:28+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
+"Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: SPAIN\n"
 
@@ -598,7 +598,7 @@ msgid "column '%s' : type BIGINT is stored as integer (4 bytes) some data may be
 msgstr "columna '%s' : el tipo BIGINT se guarda como entero (4 bytes) algunos datos pueden deteriorarse"
 
 msgid "Unable to execute:"
-msgstr "No se ha podido ejecutar: "
+msgstr "No se ha podido ejecutar:"
 
 msgid "Unable to start transaction:"
 msgstr "No se ha podido iniciar transacción:"
@@ -613,7 +613,7 @@ msgid "Cursor position is not supported by MySQL driver"
 msgstr "La posición del cursor no está soportada por el controlador MySQL"
 
 msgid "Unable to scan timestamp: "
-msgstr "No se puede explorar la marca de tiempo:"
+msgstr "No se puede explorar la marca de tiempo: "
 
 msgid "Unknown timestamp format: "
 msgstr "Formato de marca de tiempo desconocido: "
@@ -625,7 +625,7 @@ msgid "Unable to scan time: "
 msgstr "No ha sido posible explorar tiempo: "
 
 msgid "Unable to scan datetime:"
-msgstr "No ha sido posible explorar fecha y hora: "
+msgstr "No ha sido posible explorar fecha y hora:"
 
 msgid "Unable to create index:"
 msgstr "No ha sido posible crear el índice:"
@@ -727,7 +727,7 @@ msgid "Unknown column type (%s)"
 msgstr "Tipo de columna desconocido (%s)"
 
 msgid "Unable to create table:"
-msgstr "No se ha podido crear tabla: "
+msgstr "No se ha podido crear tabla:"
 
 msgid "Unable to grant select on table:"
 msgstr ""
@@ -812,7 +812,7 @@ msgid "Unable to select:"
 msgstr "No se ha podido seleccionar:"
 
 msgid "Unable to execute():"
-msgstr "No se ha podido ejecutar(): "
+msgstr "No se ha podido ejecutar():"
 
 msgid "Error in sqlite3_step():"
 msgstr "Error en sqlite3_step():"
@@ -879,7 +879,7 @@ msgid "DB_LAST is not supported"
 msgstr "DB_LAST no está soportado"
 
 msgid "Unable to scan timestamp:"
-msgstr "No se puede explorar marca temporal: "
+msgstr "No se puede explorar marca temporal:"
 
 msgid "SQLite driver: parsing of interval values not implemented; assuming seconds"
 msgstr "Controlador SQLite: análisis de valores de intervalo no está implementado; asumiendo segundos"
@@ -2639,7 +2639,7 @@ msgstr "Conexión a la base de datos no definida"
 
 #, c-format
 msgid "Data (%s) not numeric. Column must be numeric."
-msgstr "Dato (%s) no numérico. La columna tiene que ser numérica "
+msgstr "Dato (%s) no numérico. La columna tiene que ser numérica."
 
 #, c-format
 msgid "Cannot select data (%s) from table"
@@ -3024,7 +3024,7 @@ msgid "Invalid coordinates <%s,%s>"
 msgstr "Coordenadas no válidas <%s,%s>"
 
 msgid "keyword2"
-msgstr "palabra clave 2 "
+msgstr "palabra clave 2"
 
 msgid "keyword3"
 msgstr "palabra clave 3"
@@ -3684,10 +3684,10 @@ msgid "Print message as warning"
 msgstr "Imprimir mensaje como advertencia"
 
 msgid "Print message as fatal error"
-msgstr "Imprimir mensaje como error fatal "
+msgstr "Imprimir mensaje como error fatal"
 
 msgid "Print message as debug message"
-msgstr "Imprimir mensaje como mensaje de depuración "
+msgstr "Imprimir mensaje como mensaje de depuración"
 
 msgid "Print message as progress info"
 msgstr "Imprimir mensaje como información de progreso"
@@ -4649,8 +4649,9 @@ msgstr "licencia"
 msgid "Displays GRASS version info."
 msgstr "Muestra información de versión de GRASS."
 
+#, fuzzy
 msgid "Optionally also prints build or copyright information."
-msgstr "Opcionalmente "
+msgstr "Opcionalmente"
 
 msgid "Print also the copyright message"
 msgstr "Imprimir también el mensaje de copyright"
@@ -5967,7 +5968,7 @@ msgstr "** Máximo: %.2lf K"
 
 #, c-format
 msgid "** Mean (%s cloud): %.2lf K"
-msgstr "** Media (nube %s): %.2lf K "
+msgstr "** Media (nube %s): %.2lf K"
 
 #, c-format
 msgid "** Minimum: %.2lf K"
@@ -6677,8 +6678,9 @@ msgstr ""
 msgid "Group [%s] in project (location) [%s] mapset [%s] now uses camera file [%s]"
 msgstr "El group [%s] de la localización [%s] del directorio de mapas [%s] ahora usa el archivo de cámara [%s]"
 
+#, fuzzy
 msgid "Select or modify the target elevation model."
-msgstr "Seleccionar o modificar "
+msgstr "Seleccionar o modificar"
 
 #, fuzzy
 msgid "Name of the target project (location)"
@@ -6724,7 +6726,7 @@ msgstr "El group [%s] de la localización [%s] del directorio de mapas [%s] ahor
 
 #, fuzzy, c-format
 msgid "Mapset [%s] in target project (location) [%s] - %s "
-msgstr "Directorio de mapas [%s] en la Localización objetivo [%s] -  %s"
+msgstr "Directorio de mapas [%s] en la Localización objetivo [%s] - %s "
 
 msgid "not found\n"
 msgstr "no encontrado\n"
@@ -6977,8 +6979,9 @@ msgstr "Asignando memoria y leyendo el mapa de entrada..."
 msgid "Error writing segment file"
 msgstr "Error al escribir el archivo de segmentos"
 
+#, fuzzy
 msgid "Internal error: cache miss on fully-cached map"
-msgstr "Error interno: "
+msgstr "Error interno:"
 
 msgid "Error seeking on segment file"
 msgstr "Error al buscar en el archivo de segmentos"
@@ -7030,7 +7033,7 @@ msgstr "%.1f celdas por minuto"
 
 #, c-format
 msgid "Target information for group <%s> missing"
-msgstr "Falta Información de destino para el grupo <%s> "
+msgstr "Falta Información de destino para el grupo <%s>"
 
 #, fuzzy, c-format
 msgid "Target project (location) <%s> not found"
@@ -7793,7 +7796,7 @@ msgid "Processing rows %d-%d (of %d)..."
 msgstr "Procesando filas %d-%d (of %d)..."
 
 msgid "Writing output raster map(s)..."
-msgstr "Escribiendo mapa(s) ráster de salida... "
+msgstr "Escribiendo mapa(s) ráster de salida..."
 
 msgid "svm"
 msgstr ""
@@ -8136,7 +8139,7 @@ msgstr "Modelo de iluminación es de tipo CELL"
 
 #, c-format
 msgid "Band %s: "
-msgstr "Banda %s:"
+msgstr "Banda %s: "
 
 #, c-format
 msgid "Band name <%s> is too long"
@@ -8193,7 +8196,7 @@ msgid "Infrared Percentage Vegetation Index"
 msgstr ""
 
 msgid "Modified Soil Adjusted Vegetation Index"
-msgstr "Índice modificado de vegetación ajustado por suelo "
+msgstr "Índice modificado de vegetación ajustado por suelo"
 
 msgid "second Modified Soil Adjusted Vegetation Index"
 msgstr "segundo índice de vegetación ajustado por suelo"

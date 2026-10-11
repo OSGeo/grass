@@ -3,21 +3,21 @@
 # Copyright (C) 2014-2015 GRASS Development Team
 #
 # Kari Salovaara <kari.salovaara@pp1.inet.fi>, 2015.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2025-07-26 01:36+0000\n"
+"PO-Revision-Date: 2026-10-11 11:28+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Finnish <https://weblate.osgeo.org/projects/grass-gis/grassmods/fi/>\n"
+"Language-Team: Finnish <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
@@ -554,8 +554,9 @@ msgstr "Ei voitu jäsentää MySQL sisäistä tietokannan nimeä"
 msgid "Cannot initialize MySQL embedded server"
 msgstr "Ei voitu alustaa MySQL sisäistä palvelinta"
 
+#, fuzzy
 msgid "Unable to connect to MySQL embedded server: "
-msgstr "Ei voitu yhdistää MySQL sisäiseen palvelimeen"
+msgstr "Ei voitu yhdistää MySQL sisäiseen palvelimeen "
 
 msgid "Unable to describe table:"
 msgstr ""
