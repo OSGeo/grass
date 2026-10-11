@@ -332,10 +332,16 @@ def update_toc(data):
 
 # process header
 src_data = read_file(src_file)
+# The meta page comments override the page title used in the generated
+# header and source code section. The title must stay separate from pgm,
+# which is the page name used to look up the last commit and the addon
+# path, where the overridden title (e.g. "LRS" for the lrs page) would
+# not match.
+pgm_title = pgm
 name = re.search(r"(<!-- meta page name:)(.*)(-->)", src_data, re.IGNORECASE)
 pgm_desc = "GRASS Reference Manual"
 if name:
-    pgm = name.group(2).strip().split("-", 1)[0].strip()
+    pgm_title = name.group(2).strip().split("-", 1)[0].strip()
     name_desc = re.search(
         r"(<!-- meta page name description:)(.*)(-->)", src_data, re.IGNORECASE
     )
@@ -343,7 +349,7 @@ if name:
         pgm_desc = name_desc.group(2).strip()
 desc = re.search(r"(<!-- meta page description:)(.*)(-->)", src_data, re.IGNORECASE)
 if desc:
-    pgm = desc.group(2).strip()
+    pgm_title = desc.group(2).strip()
     header_tmpl = string.Template(header_base + header_nopgm)
 elif not pgm_desc:
     header_tmpl = string.Template(header_base + header_pgm)
@@ -377,7 +383,7 @@ if not re.search(r"<html>", src_data, re.IGNORECASE):
                 ",".join(new_keywords_paths),
             )
     if not re.search(r"<html>", tmp_data, re.IGNORECASE):
-        sys.stdout.write(header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc))
+        sys.stdout.write(header_tmpl.substitute(PGM=pgm_title, PGM_DESC=pgm_desc))
 
     if tmp_data:
         header_logo_img_el = '<img src="grass_logo.png" alt="GRASS logo">'
@@ -507,7 +513,7 @@ else:
 sys.stdout.write(
     sourcecode.substitute(
         URL_SOURCE=url_source,
-        PGM=pgm,
+        PGM=pgm_title,
         URL_LOG=url_log,
         DATE_TAG=date_tag,
     )
