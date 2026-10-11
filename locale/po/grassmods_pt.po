@@ -6,21 +6,21 @@
 # Daniel de Castro Victoria <daniel.victoria gmail com>, 2006, 2007.
 # Ricardo Oliveira <ricardoabeloliveira gmail com>, 2007.
 #
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2025-07-26 01:36+0000\n"
+"PO-Revision-Date: 2026-10-11 11:28+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grassmods/pt/>\n"
+"Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
@@ -2303,11 +2303,11 @@ msgstr ""
 
 #, fuzzy, c-format
 msgid "Unable to open file '%s' for reading."
-msgstr " [do arquivo de assinatura %s]"
+msgstr "[do arquivo de assinatura %s]"
 
 #, fuzzy, c-format
 msgid "Unable to open file '%s' for writing."
-msgstr " [do arquivo de assinatura %s]"
+msgstr "[do arquivo de assinatura %s]"
 
 msgid "Displays three user-specified raster maps as red, green, and blue overlays in the active graphics frame."
 msgstr ""
@@ -2466,7 +2466,7 @@ msgstr ""
 
 #, fuzzy, c-format
 msgid "Unable to open GRASS_LEGEND_FILE <%s> for writing"
-msgstr " [do arquivo de assinatura %s]"
+msgstr "[do arquivo de assinatura %s]"
 
 #, c-format
 msgid "Database connection not defined for layer %d"
@@ -7609,9 +7609,9 @@ msgstr ""
 msgid "Writing out shifted band values..."
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "No signature files of type \"%s\" found"
-msgstr " [do arquivo de assinatura %s]"
+msgstr ""
 
 #, fuzzy
 msgid "Manage imagery classification signature files"
@@ -15004,9 +15004,8 @@ msgstr "imprimir informação do atributo"
 msgid "Print range"
 msgstr "Entrada falhou"
 
-#, fuzzy
 msgid "Print stats"
-msgstr " [do arquivo de assinatura %s]"
+msgstr ""
 
 msgid "Print raster history instead of info"
 msgstr ""

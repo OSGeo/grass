@@ -10,21 +10,21 @@
 # Luca Delucchi <lucadeluge@gmail.com>, 2008.
 # Marco Curreli <marcocurreli at tiscali it>, 2011, 2012.
 # Anna Zanchetta <ciupava at gmail.com>, 2013.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2025-07-26 01:36+0000\n"
+"PO-Revision-Date: 2026-10-11 11:28+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grassmods/it/>\n"
+"Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 "X-Poedit-Bookmarks: 2364,2381,2449,2554,2623,3551,3587,-1,-1,6460\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -187,7 +187,7 @@ msgid "Cannot combine 'from_table' and 'select' options"
 msgstr "Non riesco ad unire le opzioni 'from_table' e 'select'"
 
 msgid "Either 'from_table' or 'select' option must be given."
-msgstr "Devono essere fornite sia l'opzione 'from_table' che 'select' "
+msgstr "Devono essere fornite sia l'opzione 'from_table' che 'select'."
 
 msgid "Cannot combine 'select' and 'where' options"
 msgstr "Non riesco ad unire le opzioni 'select' e 'where'"
@@ -612,7 +612,7 @@ msgid "Unable to scan timestamp: "
 msgstr ""
 
 msgid "Unknown timestamp format: "
-msgstr "Formato della data sbagliato"
+msgstr "Formato della data sbagliato "
 
 msgid "Unable to scan date: "
 msgstr ""
@@ -630,7 +630,7 @@ msgid "Unable get list of tables:"
 msgstr ""
 
 msgid "Wrong port number in MySQL database definition: "
-msgstr "Errato numero di porta nella definizione del database MySQL"
+msgstr "Errato numero di porta nella definizione del database MySQL: "
 
 msgid "'user' in database definition is not supported, use db.login"
 msgstr "'user' nella definizione del database non è supportata, usa db.login"
@@ -2287,7 +2287,7 @@ msgid "List of categories or values to be displayed"
 msgstr ""
 
 msgid "Selection"
-msgstr "Selezione "
+msgstr "Selezione"
 
 msgid "Background color (for null)"
 msgstr ""
@@ -4006,7 +4006,7 @@ msgid "Use ESRI-style format (applies to WKT output only)"
 msgstr "Usa formato in stile ESRI (solo per il formato WKT)"
 
 msgid "Specification"
-msgstr "Specifica "
+msgstr "Specifica"
 
 msgid "Name of georeferenced data file to read projection information from"
 msgstr "Nome del file di dati georeferenziati dal quale leggere le informazioni sulla proiezione"
@@ -4551,15 +4551,15 @@ msgstr "Errore durante la scrittura del file PROJ_INFO <%s>"
 
 #, c-format
 msgid "Enter plural form of units [meters]: "
-msgstr "Inserisci un forma plurare di unita [metri]:"
+msgstr "Inserisci un forma plurare di unita [metri]: "
 
 #, c-format
 msgid "Enter singular for unit: "
 msgstr ""
 
-#, c-format
+#, c-format, fuzzy
 msgid "Enter conversion factor from %s to meters: "
-msgstr "Inserire il fattore di conversione da %s a metri"
+msgstr "Inserire il fattore di conversione da %s a metri "
 
 #, c-format
 msgid "Error writing into UNITS output file <%s>"

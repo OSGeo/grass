@@ -11,21 +11,21 @@
 # Joana Palahí/SIGTE-UdG <joana@sigte.udg.edu>, 2011.
 # Javier García Prieto <fjgarciaprieto@hotmail.com>, 2009, 2010, 2013, 2014, 2016.
 # Daniel Torres <nobeeakon@gmail.com>, 2014, 2016.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2025-08-26 13:29+0000\n"
+"PO-Revision-Date: 2026-10-11 11:28+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/es/>\n"
+"Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: SPAIN\n"
 
@@ -589,7 +589,7 @@ msgstr "La extensión N-S no coincide con la resolución N-S: Existe una diferen
 
 #, c-format
 msgid "%g cells missing to reach 90 degree north"
-msgstr " Faltan %g celdas para alcanzar los 90 grados Norte."
+msgstr "Faltan %g celdas para alcanzar los 90 grados Norte"
 
 #, c-format
 msgid "Subtle input data rounding error of north boundary (%g)"
@@ -597,11 +597,11 @@ msgstr "Existe un error sutil de redondeo en los datos de entrada de la frontera
 
 #, c-format
 msgid "90 degree north is exceeded by %g cells"
-msgstr " Los 90 grados Norte, han sido excedidos por %g céldas."
+msgstr "Los 90 grados Norte, han sido excedidos por %g céldas"
 
 #, c-format
 msgid "%g cells missing to reach 90 degree south"
-msgstr " Faltan %g celdas para alcanzar los 90 grados Sur."
+msgstr "Faltan %g celdas para alcanzar los 90 grados Sur"
 
 #, c-format
 msgid "Subtle input data rounding error of south boundary (%g)"
@@ -617,7 +617,7 @@ msgstr ""
 
 #, fuzzy, c-format
 msgid "360 degree EW extent is exceeded by %g cells (East: %g, West: %g)"
-msgstr " Los 90 grados Norte, han sido excedidos por %g céldas."
+msgstr "Los 90 grados Norte, han sido excedidos por %g céldas."
 
 #, c-format
 msgid "%g cells missing to cover 360 degree EW extent"

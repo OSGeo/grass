@@ -6,21 +6,21 @@
 # Paulo Eduardo Pasquini Marcondes <paulomarcondes gmail.com>, 2005, 2006, 2007
 # Paulo E. P. Marcondes <paulomarcondes at gmail dot com>, 2007.
 # luisa <gem12lte@student.lu.se>, 2013.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2025-08-23 20:18+0000\n"
+"PO-Revision-Date: 2026-10-11 11:28+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grasslibs/pt/>\n"
+"Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Unknown algorithm '%s'"
@@ -818,7 +818,7 @@ msgstr "ATENÇÃO: "
 
 #, c-format
 msgid "ERROR: "
-msgstr "ERRO:"
+msgstr "ERRO: "
 
 #, c-format
 msgid "Data element '%s/%s' was found in more mapsets (also found in <%s>)"
@@ -4587,7 +4587,7 @@ msgid "Data type of column <%s> must be numeric"
 msgstr "O tipo de dados da coluna <%s> deve ser numérico"
 
 msgid "Reading features from vector map ..."
-msgstr "A ler elementos do mapa vectorial ... "
+msgstr "A ler elementos do mapa vectorial ..."
 
 #, c-format
 msgid "Database record for cat %d not found"
