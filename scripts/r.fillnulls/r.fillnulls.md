@@ -105,11 +105,11 @@ d.legend diff_rst_bilin
   of GIS*, 9 (4), special issue on Integrating GIS and Environmental
   modeling, 433-446.
 - [Mitasova H. and Mitas L.
-  1993](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/lmg.rev1.ps):
+  1993](https://doi.org/10.1007/BF00893171):
   Interpolation by Regularized Spline with Tension: I. Theory and
   Implementation, *Mathematical Geology* 25, 641-655.
 - [Mitasova H. and Hofierka L.
-  1993](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps):
+  1993](https://doi.org/10.1007/BF00893172):
   Interpolation by Regularized Spline with Tension: II. Application to
   Terrain Modeling and Surface Geometry Analysis, *Mathematical Geology*
   25, 657-667.

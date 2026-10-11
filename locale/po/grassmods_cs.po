@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grassmods/cs/>\n"
@@ -438,10 +438,14 @@ msgstr ""
 msgid "Unable to open DBF database: %s"
 msgstr ""
 
-msgid "SQL parser error"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "PNG error"
+msgid "SQL parser error: %s\n"
+msgstr "PNG chyba"
 
-msgid "in statement:"
+#, fuzzy, c-format
+#| msgid "in statement:"
+msgid "Statement: %s\n"
 msgstr "v prohlášení:"
 
 #, c-format
@@ -819,16 +823,18 @@ msgstr ""
 msgid "Database name <%s> is too long"
 msgstr ""
 
-#, c-format
-msgid "Unable to create directory '%s' for sqlite database"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Unable to create database:"
+msgid "Unable to create directory '%s' for SQLite database"
+msgstr "Nelze vytvořit databázi:"
 
 msgid "Disabling SQLite locking"
 msgstr ""
 
-#, c-format
-msgid "The sqlite config option '%s' is not supported"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "MySQL driver: column '%s', type %d is not supported"
+msgid "The SQLite config option '%s' is not supported"
+msgstr "ovladač MySQL: sloupec '%s', typu %d není podporován"
 
 msgid "Unable to open database:"
 msgstr ""
@@ -2252,7 +2258,6 @@ msgstr "Počet míst za desetinnou čárkou (pouze pro mapy s plovoucí desetinn
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -4685,6 +4690,9 @@ msgstr ""
 msgid "Landsat"
 msgstr ""
 
+msgid "Sentinel"
+msgstr ""
+
 msgid "ASTER"
 msgstr "ASTER"
 
@@ -4707,6 +4715,9 @@ msgid "Landsat 5+7 (6 input bands:1,2,3,4,5,7)"
 msgstr ""
 
 msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
+msgstr ""
+
+msgid "Sentinel-2 (6 input bands: B2,B3,B4,B8,B11,B12 surface reflectance in [0,1]; Bonafoni & Sekertekin 2020 coefficients)"
 msgstr ""
 
 msgid "ASTER (6 input bands:1,3,5,6,8,9)"
@@ -8895,9 +8906,6 @@ msgstr ""
 msgid "Worldview"
 msgstr ""
 
-msgid "Sentinel"
-msgstr ""
-
 msgid "Tasseled Cap transformation"
 msgstr ""
 
@@ -12155,6 +12163,10 @@ msgid "Pass 1 of 2..."
 msgstr ""
 
 #, c-format
+msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
+msgstr ""
+
+#, c-format
 msgid "%d-band clumping with threshold %g"
 msgstr ""
 
@@ -13171,6 +13183,13 @@ msgstr "Vybraný kanál (%d) neexistuje"
 msgid "Imagery group <%s> created"
 msgstr ""
 
+#, c-format
+msgid "Vertical CRS <%s> of the dataset is ignored"
+msgstr ""
+
+msgid "The vertical component of the dataset CRS is ignored"
+msgstr ""
+
 msgid "Can't get WKT parameter string"
 msgstr ""
 
@@ -13980,21 +13999,25 @@ msgstr "Není specifikována velikost kroku úhlu. Přerušuji."
 msgid "Could not read bufferzone size. Aborting."
 msgstr "Nelze načíst velikost okolní zóny. Přerušuji."
 
-#, c-format
-msgid "Could not read %s bufferzone size. Aborting."
-msgstr ""
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read east bufferzone size. Aborting."
+msgstr "Nelze načíst velikost okolní zóny. Přerušuji."
 
-msgid "east"
-msgstr ""
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read west bufferzone size. Aborting."
+msgstr "Nelze načíst velikost okolní zóny. Přerušuji."
 
-msgid "west"
-msgstr ""
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read south bufferzone size. Aborting."
+msgstr "Nelze načíst velikost okolní zóny. Přerušuji."
 
-msgid "south"
-msgstr ""
-
-msgid "north"
-msgstr ""
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read north bufferzone size. Aborting."
+msgstr "Nelze načíst velikost okolní zóny. Přerušuji."
 
 msgid "Could not read maximum distance. Aborting."
 msgstr "Nelze načíst maximální vzdálenost. Přerušuji"
@@ -14964,6 +14987,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Počet argumentů pro funkci '%s'"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Vypiš statistiku ve stylu pro shell skript"
 
@@ -15018,13 +15051,19 @@ msgstr ""
 msgid "Dataset doesn't have requested dimension '%s' (possibly a programming error)"
 msgstr ""
 
-#, fuzzy
-msgid " points found in input file(s)"
+#, fuzzy, c-format
+msgid "%<PRIu64> points found in input file(s)"
 msgstr "%lu bodů nalezeno v regionu."
 
 #, fuzzy, c-format
-msgid "Raster map <%s> created. "
-msgstr "Rastrová mapa <%s> byla vytvořena."
+#| msgid "%lu points found in region."
+msgid "%<PRIu64> points found in region."
+msgstr "%lu bodů nalezeno v regionu."
+
+#, fuzzy, c-format
+#| msgid "Number of input points: %d."
+msgid "Number of input files: %d"
+msgstr "Počet vstupních bodů: %d."
 
 msgid "Overriding projection check"
 msgstr ""
@@ -15664,9 +15703,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "<%d> is not valid number of nprocs."
 msgstr "<%s=%s>  neplatný počet bodů "
-
-msgid "Floating point error(s) occurred in the calculation"
-msgstr "Chyba ve výpočtu čísel s plovoucí desetinnou čárkou"
 
 #, c-format
 msgid "Unable to read color file for raster map <%s@%s>"
@@ -16352,8 +16388,10 @@ msgstr "Exportuji rastrovou mapu <%s> (část %d)... "
 msgid "Unable to export raster map <%s>"
 msgstr "Nelze exportovat rastrovou mapu <%s>"
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Number of points must be > 0 (%d given)"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "počet bodů,musí být > 0 (zadáno %d)"
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16756,6 +16794,10 @@ msgstr "Exponent pro vyvážení vzdálenosti (0.0-4.0)"
 
 msgid "Constrain model through central window cell"
 msgstr " Model omezen na centrální buňku okna"
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%s=%s>  neplatný počet bodů "
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr "Morfometrické parametry nebyly rozpoznané. Předpokládá se 'Elevation'"
@@ -17488,15 +17530,14 @@ msgstr ""
 msgid "CELL: Data range is %ld to %ld\n"
 msgstr ""
 
-#, c-format
-msgid "Illegal reclass rule -"
+#, fuzzy, c-format
+#| msgid "Illegal reclass rule -"
+msgid "Illegal reclass rule - ignored\n"
 msgstr "Neplatné pravidlo reklasifikace -"
 
-#, c-format
-msgid " ignored\n"
-msgstr "ignorováno\n"
-
-msgid " - invalid reclass rule"
+#, fuzzy, c-format
+#| msgid " - invalid reclass rule"
+msgid "%s - invalid reclass rule"
 msgstr " - neplatné pravidlo reklasifikace"
 
 #, c-format
@@ -18614,29 +18655,16 @@ msgstr "Časový krok pro uložení výstupních map [minuty]"
 msgid "Water diffusion constant"
 msgstr "Konstanta prostupnosti vody"
 
-msgid "Seed for random number generator"
-msgstr ""
-
-msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
-msgstr ""
-
-msgid "Generate random seed"
-msgstr ""
-
-msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
-msgstr ""
-
 #, fuzzy
 msgid "Number of threads which will be used for parallel computation."
 msgstr "Počet úrovní, které budou použity pro každou součást"
 
-#, c-format
-msgid "Generated random seed (-s): %ld"
+msgid "Print run summary to standard output"
 msgstr ""
 
-#, c-format
-msgid "Read random seed from %s option: %ld"
-msgstr ""
+#, fuzzy, c-format
+msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
+msgstr "Lokace Lat/Long není podporována %s. Prosím změňte projekci."
 
 #, c-format
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
@@ -18687,8 +18715,10 @@ msgstr ""
 msgid "Runoff infiltration rate unique value [mm/hr]"
 msgstr "Jméno rastrové mapy poměru odtoku a infiltrace [mm/hod]"
 
-msgid "Name of flow controls raster map (permeability ratio 0-1)"
-msgstr ""
+#, fuzzy
+#| msgid "Name of input raster map (intensity)"
+msgid "Name of flow controls raster map (trapping probability 0-1)"
+msgstr "Název vstupní rastrové mapy(intensity -intenzita)"
 
 msgid "Name for output water depth raster map [m]"
 msgstr ""
@@ -18723,6 +18753,10 @@ msgstr "Výstup časové řady"
 msgid "You are not outputting any raster maps"
 msgstr "Není vyplněna žádná výstupní rastrová mapa"
 
+#, c-format
+msgid "%d walkers over %d time steps may draw more random numbers than one seed provides; the random numbers of some walkers then repeat those of others shifted by a constant"
+msgstr ""
+
 #, fuzzy, c-format
 #| msgid "Processing rows %d-%d (of %d)..."
 msgid "Processing block %d of %d"
@@ -18744,6 +18778,10 @@ msgstr "Nulová hodnota v Manningově součiniteli n (drsnost koryta)"
 #, fuzzy
 msgid "No values in the elevation raster."
 msgstr "Název rastrového souboru s digitálním modelem terénu"
+
+#, c-format
+msgid "Time step of %.2f s is longer than output_step of %d s, some output steps may be skipped"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -18805,6 +18843,23 @@ msgstr ""
 
 #, c-format
 msgid "FP raster map <%s> not found"
+msgstr ""
+
+#, c-format
+msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Invalid map <%s>"
+msgid "Invalid random seed <%s>"
+msgstr "Neplatná mapa <%s>"
+
+#, c-format
+msgid "Read random seed from %s option: %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "Generated random seed: %<PRId64>"
 msgstr ""
 
 msgid "aspect"
@@ -20338,6 +20393,10 @@ msgid "Number of intermediate images to produce"
 msgstr "Počet snímků k vytvoření spektrálních koeficientů"
 
 #, c-format
+msgid "Read random seed from %s option: %ld"
+msgstr ""
+
+#, c-format
 msgid "Autogenerated random seed set to: %ld"
 msgstr ""
 
@@ -20594,7 +20653,6 @@ msgstr "Příliš mnoho kategorií (nalezeno: %i, max: %i). Zkuste změnit měř
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -23070,9 +23128,10 @@ msgstr ""
 msgid "At least 2 maps are required"
 msgstr ""
 
-#, python-format
-msgid "Unable to get monitor info. %s"
-msgstr ""
+#, fuzzy
+#| msgid "Unable to set geo transform"
+msgid "Unable to get monitor info. {}"
+msgstr "Nelze nastavit geo transform"
 
 msgid "Unable to get monitor info"
 msgstr ""
@@ -23343,7 +23402,7 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr ""
 
 msgid "Cannot write to working directory {}."
@@ -25742,13 +25801,17 @@ msgstr ""
 msgid "Lowest chi2 = %f\n"
 msgstr "Nejmenší chi2 = %f\n"
 
-#, c-format
-msgid ""
-"%15s%15s%15s\n"
-"\n"
+#. GTC Column header, lower class limit (exclusive)
+msgid "From (excl.)"
 msgstr ""
-"%15s%15s%15s\n"
-"\n"
+
+#. GTC Column header, upper class limit (inclusive)
+msgid "To (incl.)"
+msgstr ""
+
+#. GTC Column header, number of values in the class
+msgid "Frequency"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -28636,7 +28699,7 @@ msgid "%d input polygons got lost during import."
 msgstr ""
 
 #, c-format
-msgid "%d additional areas where created during import."
+msgid "%d additional areas were created during import."
 msgstr ""
 
 #, c-format
@@ -28678,10 +28741,12 @@ msgstr ""
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
 msgstr "Konvertuje DWG/DXF na GRASS vektorovu mapu"
 
-msgid "Reproject to projects's coordinate system if needed"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Invalid coordinates %s %s"
+msgid "Invalid input_srs: %s"
+msgstr "Neplatné souřadnice %s %s"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
+msgid "Unable to reproject the input because the current project has no CRS defined. Use the -o flag to import the data without reprojection."
 msgstr ""
 
 msgid "Cannot store return information because the input does not have a return dimensions"
@@ -32163,7 +32228,7 @@ msgstr ""
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
 msgstr ""
 
-msgid "No features match Your query"
+msgid "No features match your query"
 msgstr ""
 
 msgid "Your query matches more than one record in input profiling map. Currently it's not supported. Enhance WHERE conditions to get only one line."
@@ -32470,12 +32535,17 @@ msgstr ""
 msgid "A file with 3D control points is needed for 3D transformation"
 msgstr ""
 
-#, c-format
-msgid "The vector map <%s> already exists in"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Vector map <%s> already exists"
+msgid "The vector map <%s> already exists."
+msgstr "Vektorová mapa <%s> již existuje"
 
 #, fuzzy, c-format
-msgid "target project %s, mapset %s:"
+msgid "Target project: <%s>"
+msgstr "Cílová lokace <%s> nebyla nalezena"
+
+#, fuzzy, c-format
+msgid "Target mapset: <%s>"
 msgstr "Skupina <%s> jako cíl pro lokaci [%s], mapset [%s]"
 
 msgid "Rectification cancelled."
@@ -34546,6 +34616,25 @@ msgstr "Náhled BMP obrázku pomocí ovladače PNG."
 
 msgid "Image file"
 msgstr "Soubory obrazové skupiny"
+
+#, fuzzy, c-format
+#~ msgid "Raster map <%s> created. "
+#~ msgstr "Rastrová mapa <%s> byla vytvořena."
+
+#~ msgid "Floating point error(s) occurred in the calculation"
+#~ msgstr "Chyba ve výpočtu čísel s plovoucí desetinnou čárkou"
+
+#, c-format
+#~ msgid " ignored\n"
+#~ msgstr "ignorováno\n"
+
+#, c-format
+#~ msgid ""
+#~ "%15s%15s%15s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "%15s%15s%15s\n"
+#~ "\n"
 
 #~ msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 #~ msgstr "Vsak je větší než množství srážek na celém území! nevznikne žádný povrchový odtok."
@@ -38330,9 +38419,6 @@ msgstr "Soubory obrazové skupiny"
 #~ msgid "Number of points for the visibility"
 #~ msgstr "počet bodů, které mají být vytvořeny"
 
-#~ msgid "Number of points must be > 0 (%d given)"
-#~ msgstr "počet bodů,musí být > 0 (zadáno %d)"
-
 #, fuzzy
 #~ msgid "Number of points to use in interpolation."
 #~ msgstr "počet bodů, které mají být vytvořeny"
@@ -38428,10 +38514,6 @@ msgstr "Soubory obrazové skupiny"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Název vstupního souboru s digitálním modelem terénu"
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "Počet argumentů pro funkci '%s'"
 
 #, fuzzy
 #~ msgid "Number of tile border lines in each direction"

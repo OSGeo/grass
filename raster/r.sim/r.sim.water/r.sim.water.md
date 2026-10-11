@@ -23,12 +23,8 @@ used to determine the direction and magnitude of water flow velocity. To
 include a predefined direction of flow, map algebra can be used to
 replace terrain-derived partial derivatives with pre-defined partial
 derivatives in selected grid cells such as man-made channels, ditches or
-culverts. Equations (2) and (3) from [this
-report](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/reports/cerl99/rep99.html)
-can be used to compute partial derivates of the predefined flow using
-its direction given by aspect and slope.
-
-The equations are
+culverts. The partial derivatives of the predefined flow are computed
+from its direction, given by aspect and slope:
 
 ```sh
 dx = tan(slope) * cos(aspect)
@@ -46,8 +42,10 @@ highest water depth highlighting streams, pooling, and wet areas during
 a rainfall event.*
 
 The module automatically converts horizontal distances from feet to
-metric system using database/projection information. Rainfall excess is
-defined as rainfall intensity - infiltration rate and should be provided
+metric system using database/projection information. The module
+requires a projected coordinate system and does not run in a
+latitude-longitude project. Rainfall excess is defined as rainfall
+intensity - infiltration rate and should be provided
 in \[mm/hr\]. Rainfall intensities are usually available from
 meteorological stations. Infiltration rate depends on soil properties
 and land cover. It varies in space and time. For saturated soil and
@@ -58,10 +56,12 @@ overland flow infiltration rate map **infil** or a single value
 **infil_value** in \[mm/hr\] that control the rate of infiltration for
 the already flowing water, effectively reducing the flow depth and
 discharge. Overland flow can be further controlled by permeable check
-dams or similar type of structures, the user can provide a map of these
-structures and their permeability ratio in the map **flow_control** that
-defines the probability of particles to pass through the structure (the
-values will be 0-1).
+dams or similar types of structures. The user can provide a map of
+these structures as **flow_control** with values 0-1 that give the
+probability of a particle being trapped by the structure at each time
+step. A trapped particle is moved slightly back instead of forward, so
+a higher value means lower permeability, holding back more water and
+increasing the flow depth at the structure.
 
 Output includes a water depth raster map **depth** in \[m\], and a water
 discharge raster map **discharge** in \[m3/s\]. The **error** raster map
@@ -80,7 +80,17 @@ water depth and discharge maps can be saved during simulation using the
 time series flag **-t** and **output_step** parameter defining the time
 step in minutes for writing output files. Files are saved with a suffix
 representing time since the start of simulation in minutes (e.g.
-wdepth.05, wdepth.10). Monitoring of water depth at specific points is
+wdepth.05, wdepth.10) and are timestamped with that time. The
+simulation advances in time steps which usually do not fall exactly on
+the output times. A map holds the state at the time step closest to the
+time in its name, so at most half a time step earlier or later. When the
+time step is longer than **output_step**, there are fewer time steps
+than output times, and a time step writes only the maps for the output
+time closest to it. The series always ends with maps named by the
+**duration** which hold the state at the end of the run, also when the
+duration is not a multiple of **output_step** or when the simulation
+stopped early.
+Monitoring of water depth at specific points is
 supported. A vector map with observation points and a path to a logfile
 must be provided. For each point in the vector map which is located in
 the computational region the water depth is logged each time step in the
@@ -151,6 +161,11 @@ independence of sampling points. Therefore, the methods are useful both
 for everyday exploratory work using a desktop computer and for large,
 cutting-edge applications using high performance computing.
 
+Null cells in the **elevation**, **dx**, **dy**, **rain** and **man**
+raster maps are excluded from the simulation, the outputs are null
+there, and walkers that reach them leave the area. Null cells in the
+**infil** raster map mean no infiltration.
+
 ### Manning's n for surface roughness
 
 The **man** raster map can be derived from a land cover raster with the
@@ -167,42 +182,296 @@ For the shallow overland flow simulated here, Manning's n is generally
 higher than for deeper channel or floodplain flow, especially over
 vegetated surfaces, see the *r.manning* documentation.
 
+### Run summary
+
+With the **-p** flag, a summary of the run is printed to standard output
+after the last map is written. The **format** option selects plain text
+(one `key: value` pair per line) or JSON. Without **-p**, nothing is
+printed to standard output regardless of **format**. The values are also
+stored in the history of the output raster maps under the same keys (see
+[r.info](r.info.md)).
+
+| Key | Meaning | Unit |
+| --- | --- | --- |
+| `walkers_requested` | Number of walkers from **nwalkers**, by default twice the number of cells | count |
+| `walkers_generated` | Walkers created, at least one per cell and more where the source rate is higher | count |
+| `walkers_remaining` | Walkers still in the domain at the end of the run | count |
+| `seed` | Seed of the random numbers, given or generated | |
+| `duration` | Requested simulation length (**duration**) | s |
+| `simulated_time` | Simulated time reached at the end of the run | s |
+| `time_step` | Simulated time per iteration | s |
+| `iterations_planned` | Iterations needed to cover **duration** | count |
+| `iterations_completed` | Iterations run, fewer than planned when the run stopped early | count |
+| `stopped_early` | `true` when all walkers left the domain before **duration** was reached | |
+| `mean_velocity` | Mean flow velocity over the defined cells | m/s |
+| `mean_mannings_n` | Harmonic mean of Manning's n over the defined cells (the inverse of the mean of 1/n), `null` when undefined | |
+| `mean_source_rate` | Mean rainfall excess | m/s |
+| `mean_infiltration` | Mean infiltration rate, 0 without infiltration input | m/s |
+| `threads` | Threads used for the computation | count |
+| `outputs` | One entry per set of written maps: with **-t**, one per written output step, the last one named by **duration**, otherwise a single entry | |
+
+Each entry of `outputs` contains the `simulated_time` (s) when the maps
+were written, their `timestamp`, the number of `walkers_remaining` at
+that time, and the names of the `depth`, `discharge`, `error` and
+`walkers` maps, or `null` for maps which were not requested.
+
+Summary of a time series run with two output steps in JSON:
+
+<!-- markdownlint-disable MD046 -->
+=== "Command line"
+
+    ```sh
+    r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
+        man_value=0.05 nwalkers=100000 duration=20 output_step=10 seed=3 \
+        -t -p format=json
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    summary = gs.parse_command(
+        "r.sim.water",
+        elevation="elevation",
+        depth="depth",
+        discharge="discharge",
+        rain_value=50,
+        man_value=0.05,
+        nwalkers=100000,
+        duration=20,
+        output_step=10,
+        seed=3,
+        flags="tp",
+        format="json",
+    )
+    print(summary["walkers_remaining"], summary["outputs"][-1]["depth"])
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    from grass.tools import Tools
+
+    tools = Tools()
+    summary = tools.r_sim_water(
+        elevation="elevation",
+        depth="depth",
+        discharge="discharge",
+        rain_value=50,
+        man_value=0.05,
+        nwalkers=100000,
+        duration=20,
+        output_step=10,
+        seed=3,
+        flags="tp",
+        format="json",
+    )
+    print(summary["walkers_remaining"], summary["outputs"][-1]["depth"])
+    ```
+<!-- markdownlint-enable MD046 -->
+
+The printed summary:
+
+```json
+{
+    "walkers_requested": 100000,
+    "walkers_generated": 120000,
+    "walkers_remaining": 112724,
+    "seed": 3,
+    "duration": 1200,
+    "simulated_time": 1199.2085202681737,
+    "time_step": 1.0631281208051186,
+    "iterations_planned": 1128,
+    "iterations_completed": 1128,
+    "stopped_early": false,
+    "mean_velocity": 9.4062040165270862,
+    "mean_mannings_n": 0.050000000000000003,
+    "mean_source_rate": 1.390000000000819e-05,
+    "mean_infiltration": 0,
+    "threads": 1,
+    "outputs": [
+        {
+            "simulated_time": 599.60426013408687,
+            "timestamp": "10 minutes",
+            "walkers_remaining": 113464,
+            "depth": "depth.10",
+            "discharge": "discharge.10",
+            "error": null,
+            "walkers": null
+        },
+        {
+            "simulated_time": 1199.2085202681737,
+            "timestamp": "20 minutes",
+            "walkers_remaining": 112724,
+            "depth": "depth.20",
+            "discharge": "discharge.20",
+            "error": null,
+            "walkers": null
+        }
+    ]
+}
+```
+
+### Random numbers and parallel processing
+
+The walkers are placed and moved using pseudo-random numbers. The seed
+is given by **seed**; without it, a seed is generated and
+recorded in the history of the output maps and in the run summary as
+`seed`, so that the run can be repeated. With more than one thread, the
+results differ slightly between thread counts and between repeated runs,
+since the order in which the walkers reach a cell depends on the
+threads. Use **nprocs=1** when results must be reproducible.
+
+### Performance
+
+To enable parallel processing, the user can specify the number of
+threads to be used with the **nprocs** parameter (default 1). Figures
+below show benchmark results for the `elevation` raster map of the
+SECREF North Carolina dataset at 4 m, 2 m and 1 m resolution with the
+default number of walkers, as the mean of 3 runs on Intel® Xeon® W-2295
+CPU @ 3.00GHz × 18. See the benchmark script in the source code for
+more details.
+
+The time step is derived from the cell size and the mean flow velocity,
+so the number of iterations, and with it the run time, depends on the
+terrain as well as on the number of cells. As a result, the benchmark
+results may vary depending on the study area.
+
+![time for r.sim.water with different numbers of cells](r_sim_water_benchmark_time.png)
+![speedup for r.sim.water with different numbers of cells](r_sim_water_benchmark_speedup.png)
+![efficiency for r.sim.water with different numbers of cells](r_sim_water_benchmark_efficiency.png)  
+*Figure: Benchmark shows execution time, parallel speedup and efficiency
+for different numbers of cells (33k, 131k and 525k); shading shows the
+range of the 3 runs.*
+
 ## EXAMPLE
 
-Using the North Carolina full sample dataset:
+This example uses the
+[SIMWE sample dataset](https://doi.org/10.5281/zenodo.23017720) of the
+NC State University Sediment and Erosion Control Research and Education
+Facility, a 52 ha area in Raleigh, North Carolina, USA, at 1 m
+resolution. It contains a lidar-based elevation map, a land cover map
+and orthophoto bands.
 
-```sh
-# set computational region
-g.region raster=elev_lid792_1m -p
+Set the computational region to the elevation map and derive the
+Manning's n raster map from the land cover classes with
+*[r.recode](r.recode.md)*. Buildings (class 1), paved roads (2) and
+compacted roads and parking lots (3) get low roughness values, while
+herbaceous cover such as fields and lawns (4) and forest (5) get high
+values suitable for shallow overland flow. Water (6) gets a low value.
+See the
+[r.manning](https://grass.osgeo.org/grass-stable/manuals/addons/r.manning.html)
+addon for an explanation of Manning's n and reference values for
+common land cover classifications.
 
-# compute dx, dy
-r.slope.aspect elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy
+<!-- markdownlint-disable MD046 -->
+=== "Command line"
 
-# simulate (this may take a minute or two)
-r.sim.water elevation=elev_lid792_1m dx=elev_lid792_dx dy=elev_lid792_dy depth=water_depth disch=water_discharge nwalk=10000 rain_value=100 niter=5
-```
+    ```sh
+    g.region raster=elevation
+    r.recode input=landcover output=mannings rules=- <<EOF
+    1:1:0.012
+    2:2:0.014
+    3:3:0.025
+    4:4:0.24
+    5:5:0.35
+    6:6:0.04
+    EOF
+    ```
 
-Now, let's visualize the result using rendering to a file (note the
-further management of computational region and usage of
-[d.mon](d.mon.md) module which are not needed when working in GUI):
+=== "Python (grass.script)"
 
-```sh
-# increase the computational region by 350 meters
-g.region e=e+350
-# initiate the rendering
-d.mon start=cairo output=r_sim_water_water_depth.png
-# render raster, legend, etc.
-d.rast map=water_depth_1m
-d.legend raster=water_depth_1m title="Water depth [m]" label_step=0.10 font=sans at=20,80,70,75
-d.barscale at=67,10 length=250 segment=5 font=sans
-d.northarrow at=90,25
-# finish the rendering
-d.mon stop=cairo
-```
+    ```python
+    import grass.script as gs
 
-![r.sim.water generated depth map](r_sim_water_water_depth.png)  
-*Figure: Simulated water depth map in the rural area of the North
-Carolina sample dataset.*
+    gs.run_command("g.region", raster="elevation")
+    manning = {
+        1: 0.012,  # buildings
+        2: 0.014,  # paved roads
+        3: 0.025,  # compacted roads and parking lots
+        4: 0.24,  # herbaceous cover
+        5: 0.35,  # forest
+        6: 0.04,  # water
+    }
+    rules = "\n".join(f"{k}:{k}:{v}" for k, v in manning.items())
+    gs.write_command(
+        "r.recode", input="landcover", output="mannings", rules="-", stdin=rules
+    )
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    from io import StringIO
+
+    from grass.tools import Tools
+
+    tools = Tools()
+    tools.g_region(raster="elevation")
+    manning = {
+        1: 0.012,  # buildings
+        2: 0.014,  # paved roads
+        3: 0.025,  # compacted roads and parking lots
+        4: 0.24,  # herbaceous cover
+        5: 0.35,  # forest
+        6: 0.04,  # water
+    }
+    rules = "\n".join(f"{k}:{k}:{v}" for k, v in manning.items())
+    tools.r_recode(input="landcover", output="mannings", rules=StringIO(rules))
+    ```
+<!-- markdownlint-enable MD046 -->
+
+![Manning's n derived from land cover](r_sim_water_mannings.png)  
+*Figure: Manning's n derived from land cover with low values for
+buildings and roads and high values for fields and forest.*
+
+Simulate 30 minutes of overland flow with a uniform rainfall excess of
+20 mm/hr. The random seed makes the run reproducible.
+
+<!-- markdownlint-disable MD046 -->
+=== "Command line"
+
+    ```sh
+    r.sim.water elevation=elevation man=mannings rain_value=20 depth=depth \
+        duration=30 seed=1
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    gs.run_command(
+        "r.sim.water",
+        elevation="elevation",
+        man="mannings",
+        rain_value=20,
+        depth="depth",
+        duration=30,
+        seed=1,
+    )
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    tools.r_sim_water(
+        elevation="elevation",
+        man="mannings",
+        rain_value=20,
+        depth="depth",
+        duration=30,
+        seed=1,
+    )
+    ```
+<!-- markdownlint-enable MD046 -->
+
+![Water depth over shaded relief](r_sim_water_depth.png)  
+*Figure: Simulated water depth in meters after 30 minutes of rainfall
+shown over shaded relief.*
+
+![Water depth over orthophoto](r_sim_water_depth_orthophoto.png)  
+*Figure: Water depth of at least 0.1 m shown over the orthophoto, with
+flow concentrated in ditches and channels and ponding in depressions.*
 
 ## REFERENCES
 
@@ -210,21 +479,20 @@ Carolina sample dataset.*
   Mitas L., 2004, [Path sampling method for modeling overland water
   flow, sediment transport and short term terrain evolution in Open
   Source
-  GIS.](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/II.6.8_Mitasova_044.pdf)
+  GIS.](https://doi.org/10.1016/S0167-5648(04)80159-X)
   In: C.T. Miller, M.W. Farthing, V.G. Gray, G.F. Pinder eds.,
   Proceedings of the XVth International Conference on Computational
   Methods in Water Resources (CMWR XV), June 13-17 2004, Chapel Hill,
   NC, USA, Elsevier, pp. 1479-1490.
-- Mitasova H, Mitas, L., 2000, [Modeling spatial processes in multiscale
-  framework: exploring duality between particles and
-  fields,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/gisc00/duality.html)
-  plenary talk at GIScience2000 conference, Savannah, GA.
+- Mitasova H, Mitas, L., 2000, Modeling spatial processes in multiscale
+  framework: exploring duality between particles and fields, plenary
+  talk at GIScience2000 conference, Savannah, GA.
 - Mitas, L., and Mitasova, H., 1998, Distributed soil erosion simulation
   for effective erosion prevention. Water Resources Research, 34(3),
   505-516.
 - Mitasova, H., Mitas, L., 2001, [Multiscale soil erosion simulations
   for land use
-  management,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/LLEmiterev1.pdf)
+  management,](https://doi.org/10.1007/978-1-4615-0575-4_11)
   In: Landscape erosion and landscape evolution modeling, Harmon R. and
   Doe W. eds., Kluwer Academic/Plenum Publishers, pp. 321-347.
 - Hofierka, J, Mitasova, H., Mitas, L., 2002. GRASS and modeling

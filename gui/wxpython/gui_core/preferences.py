@@ -1559,7 +1559,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         randomColors = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Random colors according to category number "),
+            label=_("Random colors according to category number"),
         )
         randomColors.SetValue(
             self.settings.Get(group="vectorLayer", key="randomColors", subkey="enabled")

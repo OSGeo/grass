@@ -37,6 +37,8 @@ static int new_fileinfo(void)
         if (R__.fileinfo[i].open_mode <= 0) {
             memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
             R__.fileinfo[i].open_mode = -1;
+            R__.fileinfo[i].gdal_min_col = -1;
+            R__.fileinfo[i].gdal_max_col = -1;
             return i;
         }
 
@@ -51,6 +53,8 @@ static int new_fileinfo(void)
     for (i = oldsize; i < newsize; i++) {
         memset(&R__.fileinfo[i], 0, sizeof(struct fileinfo));
         R__.fileinfo[i].open_mode = -1;
+        R__.fileinfo[i].gdal_min_col = -1;
+        R__.fileinfo[i].gdal_max_col = -1;
     }
 
     R__.fileinfo_count = newsize;
@@ -533,7 +537,7 @@ static int open_raster_new_gdal(char *map, char *mapset,
 
     fcb->cellhd = R__.wr_window;
     fcb->cellhd.compressed = 0;
-    fcb->nbytes = Rast_cell_size(fcb->map_type);
+    fcb->nbytes = (int)Rast_cell_size(fcb->map_type);
     /* for writing fcb->data is allocated to be R__.wr_window.cols *
        sizeof(CELL or DCELL or FCELL)  */
     fcb->data = G_calloc(R__.wr_window.cols, fcb->nbytes);

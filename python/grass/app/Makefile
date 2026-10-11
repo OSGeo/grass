@@ -18,7 +18,7 @@ PYFILES := $(filter-out resource_paths.py,$(PYFILES))
 
 default: $(PYFILES) $(PYCFILES) $(DSTDIR)/resource_paths.py $(ARCH_DISTDIR)/resource_paths.py
 
-$(DSTDIR)/resource_paths.py: resource_paths.py
+$(DSTDIR)/resource_paths.py: resource_paths.py | $(DSTDIR)
 	rm -f $@
 	sed \
 	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \
@@ -33,6 +33,9 @@ $(DSTDIR)/resource_paths.py: resource_paths.py
 	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
 	-e 's#@GRASS_VERSION_MINOR@#$(GRASS_VERSION_MINOR)#' \
 	-e 's#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#' \
+	-e 's#@GRASS_HEADERS_GIT_HASH@#$(GRASS_HEADERS_GIT_HASH)#' \
+	-e 's#@GRASS_HEADERS_GIT_DATE@#$(GRASS_HEADERS_GIT_DATE)#' \
+	-e 's#@BUILD_ARCH@#$(ARCH)#' \
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	-e 's#@START_UP@#$(GRASS_NAME)#' \
 	$< > $@

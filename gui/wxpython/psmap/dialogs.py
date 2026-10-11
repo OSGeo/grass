@@ -4987,7 +4987,7 @@ class ScalebarDialog(PsmapDialog):
         self.sbSegmentsCtrl = SpinCtrl(panel, id=wx.ID_ANY, min=1, max=30, initial=4)
         self.sbSegmentsCtrl.SetValue(self.scalebarDict["segment"])
 
-        sbLabelsText1 = StaticText(panel, id=wx.ID_ANY, label=_("Label every "))
+        sbLabelsText1 = StaticText(panel, id=wx.ID_ANY, label=_("Label every"))
         sbLabelsText2 = StaticText(panel, id=wx.ID_ANY, label=_("segments"))
         self.sbLabelsCtrl = SpinCtrl(panel, id=wx.ID_ANY, min=1, max=30, initial=1)
         self.sbLabelsCtrl.SetValue(self.scalebarDict["numbers"])

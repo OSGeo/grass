@@ -431,7 +431,7 @@ Display output in a nice way
   *GIS-based Stream Network Analysis for The Chagres River Basin,
   Republic of Panama*. **The Rio Chagres: A Multidisciplinary Profile of
   a Tropical Watershed**, R. Harmon (Ed.), Springer/Kluwer, p.83-95.  
-  URL: <http://fatra.cnr.ncsu.edu/~hmitaso/measwork/panama/panama.html>
+  URL: <https://doi.org/10.1007/1-4020-3297-8_6>
 - McCool et al. (1987). *Revised Slope Steepness Factor for the
   Universal Soil Loss Equation*, **Transactions of the ASAE** Vol 30(5).
 - Metz M., Mitasova H., Harmon R. (2011). *Efficient extraction of

@@ -15,7 +15,11 @@
  *
  *****************************************************************************/
 
+#include <cinttypes>
+#include <cstdint>
 #include <cstdio>
+#include <iomanip>
+#include <sstream>
 
 #if defined(__clang__)
 #pragma clang diagnostic push
@@ -54,8 +58,6 @@ extern "C" {
 #include "string_list.h"
 }
 
-#define BUFFSIZE GPATH_MAX
-
 int main(int argc, char *argv[])
 {
     int out_fd;
@@ -70,8 +72,6 @@ int main(int argc, char *argv[])
     struct Cell_head region = {};
     struct Cell_head input_region = {};
     int rows, cols; /* scan box size */
-
-    char buff[BUFFSIZE];
 
     struct BinIndex bin_index_nodes;
 
@@ -367,6 +367,20 @@ int main(int argc, char *argv[])
         _("Custom dimension (variable) to use for raster values");
     user_dimension_opt->description = _("PDAL dimension name");
     user_dimension_opt->guisection = _("Selection");
+
+    Option *point_table_capacity_opt = G_define_option();
+
+    point_table_capacity_opt->key = "point_table_capacity";
+    point_table_capacity_opt->type = TYPE_INTEGER;
+    point_table_capacity_opt->required = NO;
+    point_table_capacity_opt->answer = const_cast<char *>("10000");
+    point_table_capacity_opt->options = "1-";
+    point_table_capacity_opt->label =
+        _("Number of points buffered at once during processing");
+    point_table_capacity_opt->description =
+        _("Larger values may improve performance for large datasets at the "
+          "cost of memory");
+    point_table_capacity_opt->guisection = _("Performance");
 
     Flag *extents_flag = G_define_flag();
 
@@ -721,6 +735,7 @@ int main(int argc, char *argv[])
     pdal::StageFactory factory;
     pdal::MergeFilter merge_filter;
     bool need_to_reproject = false;
+    bool bounds_pushed_to_reader = false;
     /* loop of input files */
     for (int i = 0; i < infiles.num_items; i++) {
         const char *infile = infiles.items[i];
@@ -748,6 +763,8 @@ int main(int argc, char *argv[])
         reader->setOptions(las_opts);
         readers.push_back(reader);
 
+        // With the -o flag the CRS is assumed to match the project's CRS.
+        bool proj_match = true;
         // getting projection is possible only after prepare
         if (!over_flag->answer) {
             pdal::PointTable table;
@@ -763,11 +780,26 @@ int main(int argc, char *argv[])
             if (spatial_reference.empty())
                 G_fatal_error(_("The input dataset has undefined projection"));
             std::string dataset_wkt = spatial_reference.getWKT();
-            bool proj_match =
-                is_wkt_projection_same_as_loc(dataset_wkt.c_str());
+            proj_match = is_wkt_projection_same_as_loc(dataset_wkt.c_str());
 
             if (!proj_match)
                 need_to_reproject = true;
+        }
+        // Let the COPC octree skip nodes outside the region; the region
+        // bounds are in the project's CRS, so this applies only when the
+        // file's CRS matches. The GRASS filter still does the exact clip.
+        // The option takes effect when the whole pipeline is prepared later.
+        // With -e the region is the extent of the data, so there is nothing
+        // outside it to skip.
+        if (use_spatial_filter && !extents_flag->answer && proj_match &&
+            pdal_read_driver == "readers.copc") {
+            std::ostringstream bounds_str;
+            bounds_str << std::setprecision(17) << "([" << xmin << ", " << xmax
+                       << "], [" << ymin << ", " << ymax << "])";
+            pdal::Options bounds_opts;
+            bounds_opts.add("bounds", bounds_str.str());
+            reader->addOptions(bounds_opts);
+            bounds_pushed_to_reader = true;
         }
         merge_filter.setInput(*reader);
     }
@@ -825,9 +857,10 @@ int main(int argc, char *argv[])
     binning_writer.set_output_scale(output_scale);
     binning_writer.setInput(grass_filter);
     // stream_filter.setInput(*last_stage);
-    //  there is no difference between 1 and 10k points in memory
-    //  consumption, so using 10k in case it is faster for some cases
-    pdal::point_count_t point_table_capacity = 10000;
+    // The default capacity of 10k points takes no more memory than 1, but
+    // can be faster; larger values trade memory for speed.
+    pdal::point_count_t point_table_capacity =
+        atoi(point_table_capacity_opt->answer);
     pdal::FixedPointTable point_table(point_table_capacity);
     try {
         binning_writer.prepare(point_table);
@@ -912,8 +945,8 @@ int main(int argc, char *argv[])
     G_percent(1, 1, 1); /* flush */
     G_free(raster_row);
 
-    G_message(_(GPOINT_COUNT_FORMAT " points found in input file(s)"),
-              grass_filter.num_processed());
+    G_message(_("%" PRIu64 " points found in input file(s)"),
+              (uint64_t)grass_filter.num_processed());
 
     /* close raster file & write history */
     Rast_close(out_fd);
@@ -944,23 +977,21 @@ int main(int argc, char *argv[])
     if (set_region_flag->answer)
         G_put_window(&region);
 
-    if (infiles.num_items > 1) {
-        snprintf(buff, BUFFSIZE,
-                 _("Raster map <%s> created."
-                   " " GPOINT_COUNT_FORMAT
-                   " points from %d files found in region."),
-                 outmap, grass_filter.num_passed(), infiles.num_items);
-    }
-    else {
-        snprintf(buff, BUFFSIZE,
-                 _("Raster map <%s> created."
-                   " " GPOINT_COUNT_FORMAT " points found in region."),
-                 outmap, grass_filter.num_passed());
-    }
-
-    G_done_msg("%s", buff);
-    G_message("Filtered spatially " GPOINT_COUNT_FORMAT " points.",
-              grass_filter.num_spatially_filtered());
+    G_message(_("%" PRIu64 " points found in region."),
+              (uint64_t)grass_filter.num_passed());
+    if (infiles.num_items > 1)
+        G_message(_("Number of input files: %d"), infiles.num_items);
+    G_done_msg(_("Raster map <%s> created."), outmap);
+    // Points pruned by the reader's spatial index never reach the filter, so
+    // the count below is not comparable to a run without the index.
+    if (bounds_pushed_to_reader)
+        G_message("Filtered spatially " GPOINT_COUNT_FORMAT
+                  " points (excluding those skipped by the spatial index of "
+                  "the input).",
+                  grass_filter.num_spatially_filtered());
+    else
+        G_message("Filtered spatially " GPOINT_COUNT_FORMAT " points.",
+                  grass_filter.num_spatially_filtered());
     G_message("Filtered z range " GPOINT_COUNT_FORMAT " points.",
               grass_filter.num_zrange_filtered());
     G_message("Filtered i range " GPOINT_COUNT_FORMAT " points.",
@@ -972,6 +1003,10 @@ int main(int argc, char *argv[])
     G_message("Filtered return " GPOINT_COUNT_FORMAT " points.",
               grass_filter.num_return_filtered());
 
+    if (binning_writer.n_on_edge)
+        G_message("Skipped " GPOINT_COUNT_FORMAT
+                  " points on the edge of the computational region.",
+                  binning_writer.n_on_edge);
     G_message("Processed into raster " GPOINT_COUNT_FORMAT " points.",
               binning_writer.n_processed);
 

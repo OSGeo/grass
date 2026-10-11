@@ -77,9 +77,7 @@ def sortfile(infile, outfile):
         else:
             # FIXME: we need a large-file sorting function
             gs.warning(_("'sort' not found: sorting in memory"))
-            lines = inf.readlines()
-            for i in range(len(lines)):
-                lines[i] = float(lines[i].rstrip("\r\n"))
+            lines = [float(line) for line in (line.strip() for line in inf) if line]
             lines.sort()
             outf.writelines(str(line) + "\n" for line in lines)
 

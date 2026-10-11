@@ -58,7 +58,7 @@ if(MSVC)
 endif()
 
 if(NOT CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 11)
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
 endif()
 
@@ -168,8 +168,13 @@ option(WITH_FHS "Install with FHS" OFF)
 include(check_target)
 include(CheckDependentLibraries)
 
-include(get_host_arch)
-get_host_arch(BUILD_ARCH)
+# Set target architecture, as displayed by e.g. `g.version -g` or `grass --config arch`
+string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" BUILD_CPU)
+string(TOLOWER "${CMAKE_SYSTEM_NAME}" BUILD_OS)
+set(BUILD_ARCH "${BUILD_CPU}-${BUILD_OS}")
+if(CMAKE_SYSTEM_VERSION)
+    set(BUILD_ARCH "${BUILD_ARCH}${CMAKE_SYSTEM_VERSION}")
+endif()
 
 # Setup GRASS install directories
 include(GRASSInstallDirs)
@@ -278,7 +283,7 @@ if(WIN32)
         ${CMAKE_COMMAND}
         -E
         env
-        "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}${sep}${LIB_DIR}"
+        "PATH=${BIN_DIR}/$<CONFIG>${sep}${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}${sep}${LIB_DIR}"
         "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}${env_pythonpath}"
         "GRASS_PYTHON=${PYTHON_EXECUTABLE}"
         "GISBASE=${RUN_GISBASE_NATIVE}"
@@ -302,9 +307,9 @@ else()
         ${CMAKE_COMMAND}
         -E
         env
-        "PATH=${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}"
+        "PATH=${BIN_DIR}/$<CONFIG>${sep}${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}"
         "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
-        "LD_LIBRARY_PATH=${LIB_DIR}${sep}$ENV{LD_LIBRARY_PATH}"
+        "LD_LIBRARY_PATH=${LIB_DIR}/$<CONFIG>${sep}${LIB_DIR}${sep}$ENV{LD_LIBRARY_PATH}"
         "GISBASE=${RUN_GISBASE_NATIVE}"
         "GISRC=${GISRC}"
         "LC_ALL=C"

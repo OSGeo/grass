@@ -765,20 +765,21 @@ class RenderMapMgr(wx.EvtHandler):
                     self.progressInfo["downloading"].remove(layer)
 
         # for updating statusbar text
-        stText = ""
-        first = True
-        for layer in self.progressInfo["downloading"]:
-            if first:
-                stText += _("Downloading data ")
-                first = False
-            else:
-                stText += ", "
-            stText += "<%s>" % layer.GetName()
-        if stText:
-            stText += "..."
-
-        if self.progressInfo["range"] != len(self.progressInfo["rendered"]):
-            stText = _("Rendering & ") + stText if stText else _("Rendering...")
+        downloading = ", ".join(
+            "<%s>" % downloading_layer.GetName()
+            for downloading_layer in self.progressInfo["downloading"]
+        )
+        is_rendering = self.progressInfo["range"] != len(self.progressInfo["rendered"])
+        if is_rendering and downloading:
+            stText = _("Rendering & downloading data {layers}...").format(
+                layers=downloading
+            )
+        elif is_rendering:
+            stText = _("Rendering...")
+        elif downloading:
+            stText = _("Downloading data {layers}...").format(layers=downloading)
+        else:
+            stText = ""
 
         self.updateProgress.emit(
             range=self.progressInfo["range"],

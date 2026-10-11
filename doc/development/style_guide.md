@@ -194,6 +194,8 @@ We
 [use doxygen and document the functions](https://grass.osgeo.org/programming8/)
 directly in the source code. See `lib/gis/open.c` and `lib/gis/gislib.dox` for
 examples.
+Library pages may also be written in Markdown as `*.dox.md` files, which
+Doxygen renders, such as `lib/gis/random_streams.dox.md`.
 
 #### Python API documentation
 
@@ -414,7 +416,7 @@ See [Changing computational region](#changing-computational-region) for more det
 #### Mapsets
 
 **Output data should be always written to the current mapset**. This is ensured
-by build-in GRASS mechanisms, so there is nothing which needs to be done in the
+by built-in GRASS mechanisms, so there is nothing which needs to be done in the
 tool. If a tool modifies inputs, the input must be in the current mapset.
 
 The tool should accept inputs from any mapset in the current project. The
@@ -783,11 +785,19 @@ Use the following header in your source code.
 #
 # PURPOSE:   Provide short description of module here...
 #
-# COPYRIGHT: (C) 2024 by John Doe and the GRASS Development Team
-#
+# SPDX-FileCopyrightText: 2024 John Doe
+# SPDX-FileCopyrightText: GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 ##############################################################################
 ```
+
+Each `SPDX-FileCopyrightText` line names one copyright holder with the years
+of their contributions. The line with `GRASS Development Team` is present
+in every file and stands for the project, as `COPYING` states.
+It carries years only when it is the sole copyright line. Add a line
+for yourself when you make a substantial contribution (the same threshold as
+an `AUTHOR(S)` entry), and leave other people's lines alone.
+The `SPDX-License-Identifier` line follows all copyright lines.
 
 #### Use Standard Options in Interface
 
@@ -975,8 +985,7 @@ Please use the following docstring template:
 Classes:
  - example::ExampleClass
 
-(C) 2024 by the GRASS Development Team
-
+SPDX-FileCopyrightText: 2024 GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 
 @author First Author <first somewhere.com>
@@ -1093,8 +1102,8 @@ original work remains, it must be properly cited.
  * MODULE:       g.foo
  * AUTHOR(S):    John Doe <jdoe at somewhere org>
  * PURPOSE:      Provide short description of module here...
- * COPYRIGHT:    (C) 2010 by John Doe, and the GRASS Development Team
- *
+ * SPDX-FileCopyrightText: 2010 John Doe
+ * SPDX-FileCopyrightText: GRASS Development Team
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/

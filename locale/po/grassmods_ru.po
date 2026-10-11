@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grassmods/ru/>\n"
@@ -420,11 +420,14 @@ msgstr ""
 msgid "Unable to open DBF database: %s"
 msgstr ""
 
-msgid "SQL parser error"
+#, c-format
+msgid "SQL parser error: %s\n"
 msgstr ""
 
-msgid "in statement:"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "SQL statement"
+msgid "Statement: %s\n"
+msgstr "Инструкция SQL"
 
 #, c-format
 msgid "Table '%s' doesn't exist."
@@ -801,15 +804,16 @@ msgstr ""
 msgid "Database name <%s> is too long"
 msgstr ""
 
-#, c-format
-msgid "Unable to create directory '%s' for sqlite database"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Unable to open directory '%s'"
+msgid "Unable to create directory '%s' for SQLite database"
+msgstr "Не удалось открыть каталог «%s»"
 
 msgid "Disabling SQLite locking"
 msgstr ""
 
 #, c-format
-msgid "The sqlite config option '%s' is not supported"
+msgid "The SQLite config option '%s' is not supported"
 msgstr ""
 
 msgid "Unable to open database:"
@@ -2233,7 +2237,6 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -4637,6 +4640,9 @@ msgstr ""
 msgid "Landsat"
 msgstr ""
 
+msgid "Sentinel"
+msgstr ""
+
 msgid "ASTER"
 msgstr ""
 
@@ -4659,6 +4665,9 @@ msgid "Landsat 5+7 (6 input bands:1,2,3,4,5,7)"
 msgstr ""
 
 msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
+msgstr ""
+
+msgid "Sentinel-2 (6 input bands: B2,B3,B4,B8,B11,B12 surface reflectance in [0,1]; Bonafoni & Sekertekin 2020 coefficients)"
 msgstr ""
 
 msgid "ASTER (6 input bands:1,3,5,6,8,9)"
@@ -8804,9 +8813,6 @@ msgstr ""
 msgid "Worldview"
 msgstr ""
 
-msgid "Sentinel"
-msgstr ""
-
 msgid "Tasseled Cap transformation"
 msgstr ""
 
@@ -12048,6 +12054,10 @@ msgid "Pass 1 of 2..."
 msgstr ""
 
 #, c-format
+msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
+msgstr ""
+
+#, c-format
 msgid "%d-band clumping with threshold %g"
 msgstr ""
 
@@ -13062,6 +13072,13 @@ msgstr ""
 msgid "Imagery group <%s> created"
 msgstr ""
 
+#, c-format
+msgid "Vertical CRS <%s> of the dataset is ignored"
+msgstr ""
+
+msgid "The vertical component of the dataset CRS is ignored"
+msgstr ""
+
 msgid "Can't get WKT parameter string"
 msgstr ""
 
@@ -13854,20 +13871,16 @@ msgstr ""
 msgid "Could not read bufferzone size. Aborting."
 msgstr ""
 
-#, c-format
-msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read east bufferzone size. Aborting."
 msgstr ""
 
-msgid "east"
+msgid "Could not read west bufferzone size. Aborting."
 msgstr ""
 
-msgid "west"
+msgid "Could not read south bufferzone size. Aborting."
 msgstr ""
 
-msgid "south"
-msgstr ""
-
-msgid "north"
+msgid "Could not read north bufferzone size. Aborting."
 msgstr ""
 
 msgid "Could not read maximum distance. Aborting."
@@ -14813,6 +14826,16 @@ msgstr ""
 msgid "PDAL dimension name"
 msgstr ""
 
+#, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Количество квадратов"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
 msgid "Print data file extent in shell script style and then exit"
 msgstr ""
 
@@ -14863,12 +14886,17 @@ msgstr ""
 msgid "Dataset doesn't have requested dimension '%s' (possibly a programming error)"
 msgstr ""
 
-msgid " points found in input file(s)"
+#, c-format
+msgid "%<PRIu64> points found in input file(s)"
+msgstr ""
+
+#, c-format
+msgid "%<PRIu64> points found in region."
 msgstr ""
 
 #, fuzzy, c-format
-msgid "Raster map <%s> created. "
-msgstr "Растровая карта <%s> не найдена"
+msgid "Number of input files: %d"
+msgstr "Ошибка открытия исходного файла dig."
 
 msgid "Overriding projection check"
 msgstr ""
@@ -15501,9 +15529,6 @@ msgstr ""
 
 #, c-format
 msgid "<%d> is not valid number of nprocs."
-msgstr ""
-
-msgid "Floating point error(s) occurred in the calculation"
 msgstr ""
 
 #, c-format
@@ -16181,7 +16206,7 @@ msgstr ""
 msgid "Unable to export raster map <%s>"
 msgstr "Не удалось выполнить экспорт растровой карты <%s>"
 
-msgid "Number of overviews must be between 0 and 5"
+msgid "Number of overviews must be between 0 and 30"
 msgstr ""
 
 msgid "Building overviews ..."
@@ -16582,6 +16607,10 @@ msgid "Exponent for distance weighting (0.0-4.0)"
 msgstr ""
 
 msgid "Constrain model through central window cell"
+msgstr ""
+
+#, c-format
+msgid "<%d> is not a valid number of nprocs."
 msgstr ""
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
@@ -17310,14 +17339,11 @@ msgid "CELL: Data range is %ld to %ld\n"
 msgstr ""
 
 #, c-format
-msgid "Illegal reclass rule -"
+msgid "Illegal reclass rule - ignored\n"
 msgstr ""
 
 #, c-format
-msgid " ignored\n"
-msgstr ""
-
-msgid " - invalid reclass rule"
+msgid "%s - invalid reclass rule"
 msgstr ""
 
 #, c-format
@@ -18435,29 +18461,16 @@ msgstr ""
 msgid "Water diffusion constant"
 msgstr ""
 
-msgid "Seed for random number generator"
-msgstr ""
-
-msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
-msgstr ""
-
-msgid "Generate random seed"
-msgstr ""
-
-msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
-msgstr ""
-
 #, fuzzy
 msgid "Number of threads which will be used for parallel computation."
 msgstr "Количество квадратов"
 
-#, c-format
-msgid "Generated random seed (-s): %ld"
+msgid "Print run summary to standard output"
 msgstr ""
 
-#, c-format
-msgid "Read random seed from %s option: %ld"
-msgstr ""
+#, fuzzy, c-format
+msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
+msgstr "Проекция lat/lon пока не поддерживается"
 
 #, c-format
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
@@ -18508,7 +18521,7 @@ msgstr ""
 msgid "Runoff infiltration rate unique value [mm/hr]"
 msgstr ""
 
-msgid "Name of flow controls raster map (permeability ratio 0-1)"
+msgid "Name of flow controls raster map (trapping probability 0-1)"
 msgstr ""
 
 msgid "Name for output water depth raster map [m]"
@@ -18545,6 +18558,10 @@ msgid "You are not outputting any raster maps"
 msgstr ""
 
 #, c-format
+msgid "%d walkers over %d time steps may draw more random numbers than one seed provides; the random numbers of some walkers then repeat those of others shifted by a constant"
+msgstr ""
+
+#, c-format
 msgid "Processing block %d of %d"
 msgstr ""
 
@@ -18563,6 +18580,10 @@ msgstr ""
 #, fuzzy
 msgid "No values in the elevation raster."
 msgstr "Имя выходного растрового слоя экспозиции склонов"
+
+#, c-format
+msgid "Time step of %.2f s is longer than output_step of %d s, some output steps may be skipped"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -18620,6 +18641,22 @@ msgstr ""
 
 #, c-format
 msgid "FP raster map <%s> not found"
+msgstr ""
+
+#, c-format
+msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Invalid random seed <%s>"
+msgstr "Название растрового слоя, содержащего путь распространения"
+
+#, c-format
+msgid "Read random seed from %s option: %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "Generated random seed: %<PRId64>"
 msgstr ""
 
 msgid "aspect"
@@ -20131,6 +20168,10 @@ msgid "Number of intermediate images to produce"
 msgstr ""
 
 #, c-format
+msgid "Read random seed from %s option: %ld"
+msgstr ""
+
+#, c-format
 msgid "Autogenerated random seed set to: %ld"
 msgstr ""
 
@@ -20387,7 +20428,6 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -22791,9 +22831,9 @@ msgstr ""
 msgid "At least 2 maps are required"
 msgstr ""
 
-#, python-format
-msgid "Unable to get monitor info. %s"
-msgstr ""
+#, fuzzy
+msgid "Unable to get monitor info. {}"
+msgstr "Не удалось создать векторную карту <%s>."
 
 msgid "Unable to get monitor info"
 msgstr ""
@@ -23059,7 +23099,7 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
+msgid "Could not find Git. Please install it."
 msgstr ""
 
 msgid "Cannot write to working directory {}."
@@ -25436,10 +25476,16 @@ msgstr ""
 msgid "Lowest chi2 = %f\n"
 msgstr ""
 
-#, c-format
-msgid ""
-"%15s%15s%15s\n"
-"\n"
+#. GTC Column header, lower class limit (exclusive)
+msgid "From (excl.)"
+msgstr ""
+
+#. GTC Column header, upper class limit (inclusive)
+msgid "To (incl.)"
+msgstr ""
+
+#. GTC Column header, number of values in the class
+msgid "Frequency"
 msgstr ""
 
 #, c-format
@@ -28311,7 +28357,7 @@ msgid "%d input polygons got lost during import."
 msgstr ""
 
 #, c-format
-msgid "%d additional areas where created during import."
+msgid "%d additional areas were created during import."
 msgstr ""
 
 #, c-format
@@ -28352,10 +28398,11 @@ msgstr ""
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
 msgstr ""
 
-msgid "Reproject to projects's coordinate system if needed"
-msgstr ""
+#, fuzzy, c-format
+msgid "Invalid input_srs: %s"
+msgstr "Ввод прерван"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
+msgid "Unable to reproject the input because the current project has no CRS defined. Use the -o flag to import the data without reprojection."
 msgstr ""
 
 msgid "Cannot store return information because the input does not have a return dimensions"
@@ -31796,7 +31843,7 @@ msgstr ""
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
 msgstr ""
 
-msgid "No features match Your query"
+msgid "No features match your query"
 msgstr ""
 
 msgid "Your query matches more than one record in input profiling map. Currently it's not supported. Enhance WHERE conditions to get only one line."
@@ -32101,13 +32148,18 @@ msgstr ""
 msgid "A file with 3D control points is needed for 3D transformation"
 msgstr ""
 
-#, c-format
-msgid "The vector map <%s> already exists in"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Vector map <%s> already exists and will be overwritten"
+msgid "The vector map <%s> already exists."
+msgstr "Векторная карта <%s> уже существует и будет перезаписана"
 
-#, c-format
-msgid "target project %s, mapset %s:"
-msgstr ""
+#, fuzzy, c-format
+msgid "Target project: <%s>"
+msgstr "Растровая карта <%s> не найдена"
+
+#, fuzzy, c-format
+msgid "Target mapset: <%s>"
+msgstr "Растровая карта <%s> не найдена"
 
 msgid "Rectification cancelled."
 msgstr ""
@@ -34140,6 +34192,10 @@ msgid "Image file"
 msgstr ""
 
 #, fuzzy, c-format
+#~ msgid "Raster map <%s> created. "
+#~ msgstr "Растровая карта <%s> не найдена"
+
+#, fuzzy, c-format
 #~| msgid "Unable to open file '%s'"
 #~ msgid "Unable to seek: %s"
 #~ msgstr "Не удалось открыть файл «%s»"
@@ -35201,10 +35257,6 @@ msgstr ""
 #~ msgstr "Название растрового слоя, содержащего путь распространения"
 
 #, fuzzy
-#~ msgid "Name of input PLY file"
-#~ msgstr "Ошибка открытия исходного файла dig."
-
-#, fuzzy
 #~ msgid "Name of input boundaries vector boolean map"
 #~ msgstr "Имя выходного растрового слоя экспозиции склонов"
 
@@ -35815,10 +35867,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Number of concurrent processes"
-#~ msgstr "Количество квадратов"
-
-#, fuzzy
-#~ msgid "Number of cores for multiprocessing"
 #~ msgstr "Количество квадратов"
 
 #, fuzzy
@@ -36475,10 +36523,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Uploads raster values and labels to vector point layer"
 #~ msgstr "Загружает значения растра на позициях векторных точек в таблицу."
-
-#, fuzzy
-#~ msgid "Use a random seed"
-#~ msgstr "Название растрового слоя, содержащего путь распространения"
 
 #, fuzzy
 #~ msgid "Use a raster map"

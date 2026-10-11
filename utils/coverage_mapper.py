@@ -6,7 +6,7 @@ from pathlib import Path
 def get_grass_config_path():
     grass_config_path = None
     try:
-        grass_config_path = subprocess.run(
+        grass_config_path = subprocess.run(  # nosec B607: fixed external tool "grass" with no portable absolute path
             ["grass", "--config", "path"], capture_output=True, text=True, check=True
         ).stdout.rstrip()
     except OSError:

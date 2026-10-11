@@ -307,7 +307,7 @@ We can compute the day of year from a specific date in Python:
 - Hofierka, J., Suri, M. (2002): The solar radiation model for Open
   source GIS: implementation and applications. International GRASS users
   conference in Trento, Italy, September 2002.
-  ([PDF](http://skagit.meas.ncsu.edu/~jaroslav/trento/Hofierka_Jaroslav.pdf))
+  ([PDF](https://web.archive.org/web/20030805000947/http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Hofierka_Jaroslav.pdf))
 - Hofierka, J. (1997). Direct solar radiation modelling within an open
   GIS environment. Proceedings of JEC-GI'97 conference in Vienna,
   Austria, IOS Press Amsterdam, 575-584.
