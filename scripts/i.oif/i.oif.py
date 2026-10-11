@@ -51,11 +51,11 @@ def oifcalc(sdev, corr, k1, k2, k3):
 
     # calculate SUM of absolute(Correlation values):
     scorr = [corr[k1, k2], corr[k1, k3], corr[k2, k3]]
-    denom = sum(map(abs, scorr))
+    denominator = sum(map(abs, scorr))
 
     # Calculate OIF index:
     #     Divide (SUM of Stddeviations) and (SUM of Correlation)
-    return numerator / denom
+    return numerator / denominator
 
 
 def perms(bands):

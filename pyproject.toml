@@ -54,6 +54,7 @@ ignore-words-list = [
     "linke",  # Linke turbidity factor parameter
     "infex",  # Infiltration excess parameter
     "alle",   # Italian word in references
+    "mapp",   # Keyword argument name in the public create_time_suffix() API
     "asnd",        # Email address username in lib/cdhc/doc/index.sty
     "APoints",     # Variable name, pairs with BPoints
     "cnA",         # r.stats flag

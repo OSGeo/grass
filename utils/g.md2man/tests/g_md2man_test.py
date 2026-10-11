@@ -206,7 +206,7 @@ def test_table(tmp_path):
     md = "| Tool | Description |\n|------|-------------|\n| r.info | Info tool |\n"
     result = convert(md, tmp_path)
     assert ".TS" in result
-    assert ".TE" in result  # codespell:ignore: TE
+    assert ".TE" in result  # codespell:ignore te
     assert "r.info" in result
 
 
