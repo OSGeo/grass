@@ -9,13 +9,13 @@
 # Carlos Dávila <carluti@users.sourceforge.net>, 2007, 2008.
 # Joana Palahí/SIGTE-UdG <joana sigte.udg.edu>, 2011, 2014.
 # Daniel Torres <nobeeakon@gmail.com>, 2014, 2015, 2016.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-03 18:51+0000\n"
-"PO-Revision-Date: 2025-08-26 13:29+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
 "Language: es\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: SPAIN\n"
 
@@ -443,10 +443,14 @@ msgstr "No se ha podido abrir directorio de base de datos DBF: %s"
 msgid "Unable to open DBF database: %s"
 msgstr "No se ha podido abrir base de datos DBF: %s"
 
-msgid "SQL parser error"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "parse error"
+msgid "SQL parser error: %s\n"
+msgstr "error al parsear"
 
-msgid "in statement:"
+#, fuzzy, c-format
+#| msgid "in statement:"
+msgid "Statement: %s\n"
 msgstr "en sentencia:"
 
 #, c-format
@@ -598,7 +602,7 @@ msgid "column '%s' : type BIGINT is stored as integer (4 bytes) some data may be
 msgstr "columna '%s' : el tipo BIGINT se guarda como entero (4 bytes) algunos datos pueden deteriorarse"
 
 msgid "Unable to execute:"
-msgstr "No se ha podido ejecutar: "
+msgstr "No se ha podido ejecutar:"
 
 msgid "Unable to start transaction:"
 msgstr "No se ha podido iniciar transacción:"
@@ -613,7 +617,7 @@ msgid "Cursor position is not supported by MySQL driver"
 msgstr "La posición del cursor no está soportada por el controlador MySQL"
 
 msgid "Unable to scan timestamp: "
-msgstr "No se puede explorar la marca de tiempo:"
+msgstr "No se puede explorar la marca de tiempo: "
 
 msgid "Unknown timestamp format: "
 msgstr "Formato de marca de tiempo desconocido: "
@@ -625,7 +629,7 @@ msgid "Unable to scan time: "
 msgstr "No ha sido posible explorar tiempo: "
 
 msgid "Unable to scan datetime:"
-msgstr "No ha sido posible explorar fecha y hora: "
+msgstr "No ha sido posible explorar fecha y hora:"
 
 msgid "Unable to create index:"
 msgstr "No ha sido posible crear el índice:"
@@ -727,7 +731,7 @@ msgid "Unknown column type (%s)"
 msgstr "Tipo de columna desconocido (%s)"
 
 msgid "Unable to create table:"
-msgstr "No se ha podido crear tabla: "
+msgstr "No se ha podido crear tabla:"
 
 msgid "Unable to grant select on table:"
 msgstr ""
@@ -812,7 +816,7 @@ msgid "Unable to select:"
 msgstr "No se ha podido seleccionar:"
 
 msgid "Unable to execute():"
-msgstr "No se ha podido ejecutar(): "
+msgstr "No se ha podido ejecutar():"
 
 msgid "Error in sqlite3_step():"
 msgstr "Error en sqlite3_step():"
@@ -825,15 +829,16 @@ msgstr "No se ha podido asignar cursor."
 msgid "Database name <%s> is too long"
 msgstr "Base de datos <%s> no encontrada"
 
-#, c-format
-msgid "Unable to create directory '%s' for sqlite database"
+#, fuzzy, c-format
+#| msgid "Unable to create directory '%s' for sqlite database"
+msgid "Unable to create directory '%s' for SQLite database"
 msgstr "No se ha podido crear directorio '%s' para base de datos sqlite"
 
 msgid "Disabling SQLite locking"
 msgstr ""
 
 #, fuzzy, c-format
-msgid "The sqlite config option '%s' is not supported"
+msgid "The SQLite config option '%s' is not supported"
 msgstr "Tipo de elemento %d no soportado"
 
 msgid "Unable to open database:"
@@ -879,7 +884,7 @@ msgid "DB_LAST is not supported"
 msgstr "DB_LAST no está soportado"
 
 msgid "Unable to scan timestamp:"
-msgstr "No se puede explorar marca temporal: "
+msgstr "No se puede explorar marca temporal:"
 
 msgid "SQLite driver: parsing of interval values not implemented; assuming seconds"
 msgstr "Controlador SQLite: análisis de valores de intervalo no está implementado; asumiendo segundos"
@@ -2259,7 +2264,6 @@ msgstr "Número de dígitos significativos (coma flotante solamente)"
 msgid "Get text color from cell color value"
 msgstr "Obtener color de texto del valor de color de la celda"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -2640,7 +2644,7 @@ msgstr "Conexión a la base de datos no definida"
 
 #, c-format
 msgid "Data (%s) not numeric. Column must be numeric."
-msgstr "Dato (%s) no numérico. La columna tiene que ser numérica "
+msgstr "Dato (%s) no numérico. La columna tiene que ser numérica."
 
 #, c-format
 msgid "Cannot select data (%s) from table"
@@ -3025,7 +3029,7 @@ msgid "Invalid coordinates <%s,%s>"
 msgstr "Coordenadas no válidas <%s,%s>"
 
 msgid "keyword2"
-msgstr "palabra clave 2 "
+msgstr "palabra clave 2"
 
 msgid "keyword3"
 msgstr "palabra clave 3"
@@ -3685,10 +3689,10 @@ msgid "Print message as warning"
 msgstr "Imprimir mensaje como advertencia"
 
 msgid "Print message as fatal error"
-msgstr "Imprimir mensaje como error fatal "
+msgstr "Imprimir mensaje como error fatal"
 
 msgid "Print message as debug message"
-msgstr "Imprimir mensaje como mensaje de depuración "
+msgstr "Imprimir mensaje como mensaje de depuración"
 
 msgid "Print message as progress info"
 msgstr "Imprimir mensaje como información de progreso"
@@ -4656,8 +4660,9 @@ msgstr "licencia"
 msgid "Displays GRASS version info."
 msgstr "Muestra información de versión de GRASS."
 
+#, fuzzy
 msgid "Optionally also prints build or copyright information."
-msgstr "Opcionalmente "
+msgstr "Opcionalmente"
 
 msgid "Print also the copyright message"
 msgstr "Imprimir también el mensaje de copyright"
@@ -5980,7 +5985,7 @@ msgstr "** Máximo: %.2lf K"
 
 #, c-format
 msgid "** Mean (%s cloud): %.2lf K"
-msgstr "** Media (nube %s): %.2lf K "
+msgstr "** Media (nube %s): %.2lf K"
 
 #, c-format
 msgid "** Minimum: %.2lf K"
@@ -6690,8 +6695,9 @@ msgstr ""
 msgid "Group [%s] in project (location) [%s] mapset [%s] now uses camera file [%s]"
 msgstr "El group [%s] de la localización [%s] del directorio de mapas [%s] ahora usa el archivo de cámara [%s]"
 
+#, fuzzy
 msgid "Select or modify the target elevation model."
-msgstr "Seleccionar o modificar "
+msgstr "Seleccionar o modificar"
 
 #, fuzzy
 msgid "Name of the target project (location)"
@@ -6737,7 +6743,7 @@ msgstr "El group [%s] de la localización [%s] del directorio de mapas [%s] ahor
 
 #, fuzzy, c-format
 msgid "Mapset [%s] in target project (location) [%s] - %s "
-msgstr "Directorio de mapas [%s] en la Localización objetivo [%s] -  %s"
+msgstr "Directorio de mapas [%s] en la Localización objetivo [%s] - %s "
 
 msgid "not found\n"
 msgstr "no encontrado\n"
@@ -6990,8 +6996,9 @@ msgstr "Asignando memoria y leyendo el mapa de entrada..."
 msgid "Error writing segment file"
 msgstr "Error al escribir el archivo de segmentos"
 
+#, fuzzy
 msgid "Internal error: cache miss on fully-cached map"
-msgstr "Error interno: "
+msgstr "Error interno:"
 
 msgid "Error seeking on segment file"
 msgstr "Error al buscar en el archivo de segmentos"
@@ -7043,7 +7050,7 @@ msgstr "%.1f celdas por minuto"
 
 #, c-format
 msgid "Target information for group <%s> missing"
-msgstr "Falta Información de destino para el grupo <%s> "
+msgstr "Falta Información de destino para el grupo <%s>"
 
 #, fuzzy, c-format
 msgid "Target project (location) <%s> not found"
@@ -7806,7 +7813,7 @@ msgid "Processing rows %d-%d (of %d)..."
 msgstr "Procesando filas %d-%d (of %d)..."
 
 msgid "Writing output raster map(s)..."
-msgstr "Escribiendo mapa(s) ráster de salida... "
+msgstr "Escribiendo mapa(s) ráster de salida..."
 
 msgid "svm"
 msgstr ""
@@ -7824,8 +7831,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 #, fuzzy
 msgid "Maps with feature values (attributes)"
 msgstr "Número de quantiles"
@@ -8149,7 +8156,7 @@ msgstr "Modelo de iluminación es de tipo CELL"
 
 #, c-format
 msgid "Band %s: "
-msgstr "Banda %s:"
+msgstr "Banda %s: "
 
 #, c-format
 msgid "Band name <%s> is too long"
@@ -8206,7 +8213,7 @@ msgid "Infrared Percentage Vegetation Index"
 msgstr ""
 
 msgid "Modified Soil Adjusted Vegetation Index"
-msgstr "Índice modificado de vegetación ajustado por suelo "
+msgstr "Índice modificado de vegetación ajustado por suelo"
 
 msgid "second Modified Soil Adjusted Vegetation Index"
 msgstr "segundo índice de vegetación ajustado por suelo"
@@ -14100,21 +14107,25 @@ msgstr "No se especificó un ángulo de tamaño de paso. Abortando."
 msgid "Could not read bufferzone size. Aborting."
 msgstr "No se pudo leer el tamaño de la zona buffer. Abortando."
 
-#, c-format
-msgid "Could not read %s bufferzone size. Aborting."
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read east bufferzone size. Aborting."
 msgstr "No se podía leer tamaño de bufferzone %s. Abortando."
 
-msgid "east"
-msgstr "este"
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read west bufferzone size. Aborting."
+msgstr "No se podía leer tamaño de bufferzone %s. Abortando."
 
-msgid "west"
-msgstr "oeste"
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read south bufferzone size. Aborting."
+msgstr "No se podía leer tamaño de bufferzone %s. Abortando."
 
-msgid "south"
-msgstr "sur"
-
-msgid "north"
-msgstr "norte"
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read north bufferzone size. Aborting."
+msgstr "No se pudo leer el tamaño de la zona buffer. Abortando."
 
 msgid "Could not read maximum distance. Aborting."
 msgstr "No se pudo leer una distancia máxima. Cancelando."
@@ -15159,13 +15170,19 @@ msgstr ""
 msgid "Dataset doesn't have requested dimension '%s' (possibly a programming error)"
 msgstr ""
 
-#, fuzzy
-msgid " points found in input file(s)"
+#, fuzzy, c-format
+msgid "%<PRIu64> points found in input file(s)"
 msgstr "%lu puntos encontrados en el archivo de entrada"
 
 #, fuzzy, c-format
-msgid "Raster map <%s> created. "
-msgstr "Mapa raster <%s> creado."
+#| msgid "%lu points found in region."
+msgid "%<PRIu64> points found in region."
+msgstr "%lu puntos encontrados en la región."
+
+#, fuzzy, c-format
+#| msgid "Number of input points: %d."
+msgid "Number of input files: %d"
+msgstr "Número de puntos de entrada: %d."
 
 msgid "Overriding projection check"
 msgstr ""
@@ -15811,9 +15828,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "<%d> is not valid number of nprocs."
 msgstr "<%s=%s> número de puntos no válido"
-
-msgid "Floating point error(s) occurred in the calculation"
-msgstr "Hubo error(es) de coma flotante en el cálculo"
 
 #, c-format
 msgid "Unable to read color file for raster map <%s@%s>"
@@ -17643,15 +17657,14 @@ msgstr "DCELL: Rango de datos es %.15g a %.15g\n"
 msgid "CELL: Data range is %ld to %ld\n"
 msgstr "CELL: Rango de datos es %ld a %ld\n"
 
-#, c-format
-msgid "Illegal reclass rule -"
+#, fuzzy, c-format
+#| msgid "Illegal reclass rule -"
+msgid "Illegal reclass rule - ignored\n"
 msgstr "regla de reclasificación no admitida -"
 
-#, c-format
-msgid " ignored\n"
-msgstr " ignorado\n"
-
-msgid " - invalid reclass rule"
+#, fuzzy, c-format
+#| msgid " - invalid reclass rule"
+msgid "%s - invalid reclass rule"
 msgstr " - regla de reclasificación no válida"
 
 #, c-format
@@ -18767,18 +18780,6 @@ msgstr "Intervalo de tiempo para crear mapas de salida  [minutos]"
 msgid "Water diffusion constant"
 msgstr "Constante de difusión del agua"
 
-msgid "Seed for random number generator"
-msgstr ""
-
-msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
-msgstr ""
-
-msgid "Generate random seed"
-msgstr "Generar semillas aleatoriass"
-
-msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
-msgstr "Genera una semila aleatoria automaticamente para el generador de números aleatorios (usar cuando no quiera proveer la opción semilla)"
-
 #, fuzzy
 msgid "Number of threads which will be used for parallel computation."
 msgstr "Número de niveles a usar para cada componente"
@@ -18791,14 +18792,6 @@ msgstr "Si no se da escribir en la salida estándar"
 #, fuzzy, c-format
 msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
 msgstr "Las localizaciones Latitud/Longitud no están soportadas por %s. Por favor reproyecte el mapa primero."
-
-#, c-format
-msgid "Generated random seed (-s): %ld"
-msgstr ""
-
-#, c-format
-msgid "Read random seed from %s option: %ld"
-msgstr ""
 
 #, c-format
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
@@ -18889,6 +18882,10 @@ msgstr "Salida de series de tiempo"
 msgid "You are not outputting any raster maps"
 msgstr "No se está produciendo ningún mapa raster"
 
+#, c-format
+msgid "%d walkers over %d time steps may draw more random numbers than one seed provides; the random numbers of some walkers then repeat those of others shifted by a constant"
+msgstr ""
+
 #, fuzzy, c-format
 #| msgid "Processing subregion %d of %d..."
 msgid "Processing block %d of %d"
@@ -18975,6 +18972,24 @@ msgstr "No ha sido posible abrir archivo de registro %s para escritura"
 #, c-format
 msgid "FP raster map <%s> not found"
 msgstr "Mapa ráster FP <%s> no encontrado"
+
+#, c-format
+msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Invalid zrange <%s>"
+msgid "Invalid random seed <%s>"
+msgstr "rangoz no válido <%s>"
+
+#, fuzzy, c-format
+msgid "Read random seed from %s option: %<PRId64>"
+msgstr "Generar semillas aleatoriass"
+
+#, fuzzy, c-format
+#| msgid "Generate random seed"
+msgid "Generated random seed: %<PRId64>"
+msgstr "Generar semillas aleatoriass"
 
 msgid "aspect"
 msgstr "aspecto"
@@ -20515,6 +20530,10 @@ msgstr "Dimensión fractal de la superficie (2 < D < 3)"
 msgid "Number of intermediate images to produce"
 msgstr "Número de imágenes intermedias a producir"
 
+#, c-format
+msgid "Read random seed from %s option: %ld"
+msgstr ""
+
 #, fuzzy, c-format
 msgid "Autogenerated random seed set to: %ld"
 msgstr "Generar semillas aleatoriass"
@@ -20768,7 +20787,6 @@ msgstr "Demasiadas categorías (encontradas: %i, máximo: %i). Intente rescalar 
 msgid "Input raster must be of type CELL."
 msgstr "Mapa ráster de entrada debe ser de tipo CELL."
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -25933,13 +25951,17 @@ msgstr ""
 msgid "Lowest chi2 = %f\n"
 msgstr "chi2 más baja= %f\n"
 
-#, c-format
-msgid ""
-"%15s%15s%15s\n"
-"\n"
+#. GTC Column header, lower class limit (exclusive)
+msgid "From (excl.)"
 msgstr ""
-"%15s%15s%15s\n"
-"\n"
+
+#. GTC Column header, upper class limit (inclusive)
+msgid "To (incl.)"
+msgstr ""
+
+#. GTC Column header, number of values in the class
+msgid "Frequency"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -28797,8 +28819,9 @@ msgstr ""
 msgid "%d input polygons got lost during import."
 msgstr "%d polígonos de entrada fueron perdidos durante la importación."
 
-#, c-format
-msgid "%d additional areas where created during import."
+#, fuzzy, c-format
+#| msgid "%d additional areas where created during import."
+msgid "%d additional areas were created during import."
 msgstr "%d áreas adicionales fueron creadas durante la importación."
 
 #, c-format
@@ -32281,8 +32304,10 @@ msgstr ""
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
 msgstr ""
 
-msgid "No features match Your query"
-msgstr ""
+#, fuzzy
+#| msgid "To feature type"
+msgid "No features match your query"
+msgstr "Hata tipo de elemento"
 
 msgid "Your query matches more than one record in input profiling map. Currently it's not supported. Enhance WHERE conditions to get only one line."
 msgstr ""
@@ -32588,13 +32613,19 @@ msgstr "La transformación 3D requiere un vector 3D"
 msgid "A file with 3D control points is needed for 3D transformation"
 msgstr "Se necesita un archivo de puntos de control 3D para transformación 3D"
 
-#, c-format
-msgid "The vector map <%s> already exists in"
+#, fuzzy, c-format
+#| msgid "The vector map <%s> already exists in"
+msgid "The vector map <%s> already exists."
 msgstr "El mapa vectorial <%s> ya existe en"
 
 #, fuzzy, c-format
-msgid "target project %s, mapset %s:"
-msgstr "El grupo <%s> se destinó a la localización [%s], conjunto de mapas [%s]"
+msgid "Target project: <%s>"
+msgstr "Localización de destino <%s> no encontrada"
+
+#, fuzzy, c-format
+#| msgid "Your current mapset is <%s>"
+msgid "Target mapset: <%s>"
+msgstr "El actual directorio de mapas es <%s>"
 
 msgid "Rectification cancelled."
 msgstr "Rectificación cancelada."
@@ -34642,6 +34673,44 @@ msgstr "Ver imágenes BMP desde el controlador PNG."
 
 msgid "Image file"
 msgstr "Archivo de imagen"
+
+#~ msgid "east"
+#~ msgstr "este"
+
+#~ msgid "west"
+#~ msgstr "oeste"
+
+#~ msgid "south"
+#~ msgstr "sur"
+
+#~ msgid "north"
+#~ msgstr "norte"
+
+#, fuzzy, c-format
+#~ msgid "Raster map <%s> created. "
+#~ msgstr "Mapa raster <%s> creado."
+
+#~ msgid "Floating point error(s) occurred in the calculation"
+#~ msgstr "Hubo error(es) de coma flotante en el cálculo"
+
+#, c-format
+#~ msgid " ignored\n"
+#~ msgstr " ignorado\n"
+
+#~ msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
+#~ msgstr "Genera una semila aleatoria automaticamente para el generador de números aleatorios (usar cuando no quiera proveer la opción semilla)"
+
+#, c-format
+#~ msgid ""
+#~ "%15s%15s%15s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "%15s%15s%15s\n"
+#~ "\n"
+
+#, fuzzy, c-format
+#~ msgid "target project %s, mapset %s:"
+#~ msgstr "El grupo <%s> se destinó a la localización [%s], conjunto de mapas [%s]"
 
 #~ msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 #~ msgstr "La infiltración supera la tasa de precipitación en todas partes. No hay flujo superficial."
