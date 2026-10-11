@@ -493,7 +493,7 @@ class TplotFrame(wx.Frame):
                 r.open()
                 val = r.get_value(self.poi)
                 r.close()
-                if val == -2147483648 and val < minmin:
+                if -2147483648 == val < minmin:
                     self.timeDataR[name][row[0]]["value"] = None
                 else:
                     self.timeDataR[name][row[0]]["value"] = val
@@ -1017,7 +1017,9 @@ class TplotFrame(wx.Frame):
                 GError(
                     parent=self,
                     showTraceback=False,
-                    message=_("Please change name of output CSV file or "),
+                    message=_(
+                        "Please change name of output CSV file or enable overwriting."
+                    ),
                 )
                 return
             dlg.Destroy()

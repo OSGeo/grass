@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 18:13+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
@@ -415,10 +415,14 @@ msgstr "DBF डेटाबेस निर्देशिका नहीं �
 msgid "Unable to open DBF database: %s"
 msgstr "DBF डेटाबेस खोलने में असमर्थ: %s"
 
-msgid "SQL parser error"
+#, fuzzy, c-format
+#| msgid "SQL parser error"
+msgid "SQL parser error: %s\n"
 msgstr "एसक्यूएल पार्सर त्रुटि"
 
-msgid "in statement:"
+#, fuzzy, c-format
+#| msgid "in statement:"
+msgid "Statement: %s\n"
 msgstr "कथन में:"
 
 #, c-format
@@ -799,15 +803,17 @@ msgstr "कर्सर आवंटित करने में असमर�
 msgid "Database name <%s> is too long"
 msgstr "डेटाबेस नाम <%s> बहुत लंबा है"
 
-#, c-format
-msgid "Unable to create directory '%s' for sqlite database"
+#, fuzzy, c-format
+#| msgid "Unable to create directory '%s' for sqlite database"
+msgid "Unable to create directory '%s' for SQLite database"
 msgstr "SQLite डेटाबेस के लिए निर्देशिका '%s' बनाने में असमर्थ"
 
 msgid "Disabling SQLite locking"
 msgstr "SQLite लॉकिंग अक्षम करना"
 
-#, c-format
-msgid "The sqlite config option '%s' is not supported"
+#, fuzzy, c-format
+#| msgid "The sqlite config option '%s' is not supported"
+msgid "The SQLite config option '%s' is not supported"
 msgstr "एसक्लाइट कॉन्फ़िगरेशन विकल्प '%s' समर्थित नहीं है"
 
 msgid "Unable to open database:"
@@ -2233,7 +2239,6 @@ msgstr "महत्वपूर्ण अंकों की संख्या
 msgid "Get text color from cell color value"
 msgstr "सेल रंग मान से टेक्स्ट का रंग प्राप्त करें"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -4627,6 +4632,9 @@ msgstr "उपग्रह"
 msgid "Landsat"
 msgstr "लैंडसैट"
 
+msgid "Sentinel"
+msgstr "पहरेदार"
+
 msgid "ASTER"
 msgstr "एस्टर"
 
@@ -4650,6 +4658,9 @@ msgstr "लैंडसैट 5+7 (6 इनपुट बैंड:1,2,3,4,5,7)"
 
 msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
 msgstr "लैंडसैट 8 (7 इनपुट बैंड:1,2,3,4,5,6,7)"
+
+msgid "Sentinel-2 (6 input bands: B2,B3,B4,B8,B11,B12 surface reflectance in [0,1]; Bonafoni & Sekertekin 2020 coefficients)"
+msgstr ""
 
 msgid "ASTER (6 input bands:1,3,5,6,8,9)"
 msgstr "ASTER (6 इनपुट बैंड:1,3,5,6,8,9)"
@@ -8773,9 +8784,6 @@ msgstr "टैसल्ड कैप (कौथ थॉमस) परिवर्
 msgid "Worldview"
 msgstr "वैश्विक नजरिया"
 
-msgid "Sentinel"
-msgstr "पहरेदार"
-
 msgid "Tasseled Cap transformation"
 msgstr "लटकन टोपी परिवर्तन"
 
@@ -12034,6 +12042,10 @@ msgid "Pass 1 of 2..."
 msgstr "2 में से 1 पास करें..।"
 
 #, c-format
+msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
+msgstr ""
+
+#, c-format
 msgid "%d-band clumping with threshold %g"
 msgstr "%d-बैंड क्लम्पिंग थ्रेशोल्ड के साथ %g"
 
@@ -13043,6 +13055,15 @@ msgstr "चयनित बैंड (%d) मौजूद नहीं है"
 msgid "Imagery group <%s> created"
 msgstr "इमेजरी समूह <%s> बनाया गया"
 
+#, c-format
+msgid "Vertical CRS <%s> of the dataset is ignored"
+msgstr ""
+
+#, fuzzy
+#| msgid "The vertical unit of the map"
+msgid "The vertical component of the dataset CRS is ignored"
+msgstr "मानचित्र की ऊर्ध्वाधर इकाई"
+
 msgid "Can't get WKT parameter string"
 msgstr "WKT पैरामीटर स्ट्रिंग नहीं मिल सका"
 
@@ -13830,21 +13851,25 @@ msgstr "आपने कोण चरण का आकार निर्दि�
 msgid "Could not read bufferzone size. Aborting."
 msgstr "बफ़रज़ोन आकार नहीं पढ़ सका. गर्भपात।"
 
-#, c-format
-msgid "Could not read %s bufferzone size. Aborting."
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read east bufferzone size. Aborting."
 msgstr "%s बफ़रज़ोन आकार नहीं पढ़ सका। गर्भपात।"
 
-msgid "east"
-msgstr "पूर्व"
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read west bufferzone size. Aborting."
+msgstr "%s बफ़रज़ोन आकार नहीं पढ़ सका। गर्भपात।"
 
-msgid "west"
-msgstr "पश्चिम"
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read south bufferzone size. Aborting."
+msgstr "%s बफ़रज़ोन आकार नहीं पढ़ सका। गर्भपात।"
 
-msgid "south"
-msgstr "दक्षिण"
-
-msgid "north"
-msgstr "उत्तर"
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read north bufferzone size. Aborting."
+msgstr "बफ़रज़ोन आकार नहीं पढ़ सका. गर्भपात।"
 
 msgid "Could not read maximum distance. Aborting."
 msgstr "अधिकतम दूरी नहीं पढ़ सका. गर्भपात।"
@@ -14852,12 +14877,20 @@ msgstr "आयाम और उपयोगकर्ता आयाम पै�
 msgid "Dataset doesn't have requested dimension '%s' (possibly a programming error)"
 msgstr "डेटासेट में अनुरोधित आयाम '%s' नहीं है (संभवतः एक प्रोग्रामिंग त्रुटि)"
 
-msgid " points found in input file(s)"
-msgstr " इनपुट फ़ाइल में पाए गए बिंदु"
+#, fuzzy, c-format
+#| msgid "%lu points found in input file(s)"
+msgid "%<PRIu64> points found in input file(s)"
+msgstr "इनपुट फ़ाइल(फ़ाइलों) में %lu अंक मिले"
 
-#, c-format
-msgid "Raster map <%s> created. "
-msgstr "रेखापुंज मानचित्र <%s> बनाया गया। "
+#, fuzzy, c-format
+#| msgid "%lu points found in region."
+msgid "%<PRIu64> points found in region."
+msgstr "क्षेत्र में %lu अंक मिले।"
+
+#, fuzzy, c-format
+#| msgid "Number of input points: %d."
+msgid "Number of input files: %d"
+msgstr "इनपुट बिंदुओं की संख्या: %d।"
 
 msgid "Overriding projection check"
 msgstr "ओवरराइडिंग प्रक्षेपण जांच"
@@ -15487,9 +15520,6 @@ msgstr "रैंड() फ़ंक्शन के साथ समानां
 #, c-format
 msgid "<%d> is not valid number of nprocs."
 msgstr "<%d> nprocs की वैध संख्या नहीं है।"
-
-msgid "Floating point error(s) occurred in the calculation"
-msgstr "गणना में फ़्लोटिंग पॉइंट त्रुटियाँ हुईं"
 
 #, c-format
 msgid "Unable to read color file for raster map <%s@%s>"
@@ -17291,15 +17321,14 @@ msgstr "DCELL: डेटा रेंज % .15g से .15g\\n है\n"
 msgid "CELL: Data range is %ld to %ld\n"
 msgstr "सेल: डेटा रेंज %ld से %ld है\n"
 
-#, c-format
-msgid "Illegal reclass rule -"
+#, fuzzy, c-format
+#| msgid "Illegal reclass rule -"
+msgid "Illegal reclass rule - ignored\n"
 msgstr "अवैध पुनर्वर्गीकरण नियम -"
 
-#, c-format
-msgid " ignored\n"
-msgstr " नजरअंदाज\n"
-
-msgid " - invalid reclass rule"
+#, fuzzy, c-format
+#| msgid " - invalid reclass rule"
+msgid "%s - invalid reclass rule"
 msgstr " -अमान्य पुनर्वर्गीकरण नियम"
 
 #, c-format
@@ -18413,28 +18442,18 @@ msgstr "आउटपुट मानचित्र बनाने के ल�
 msgid "Water diffusion constant"
 msgstr "जल प्रसार स्थिरांक"
 
-msgid "Seed for random number generator"
-msgstr "यादृच्छिक संख्या जनरेटर के लिए बीज"
-
-msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
-msgstr "समान परिणाम प्राप्त करने के लिए एक ही बीज का उपयोग किया जा सकता है या अन्य तरीकों से यादृच्छिक बीज उत्पन्न किया जा सकता है।"
-
-msgid "Generate random seed"
-msgstr "यादृच्छिक बीज उत्पन्न करें"
-
-msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
-msgstr "यादृच्छिक संख्या जनरेटर के लिए स्वचालित रूप से यादृच्छिक बीज उत्पन्न करता है (जब आप बीज विकल्प प्रदान नहीं करना चाहते हैं तो इसका उपयोग करें)"
-
 msgid "Number of threads which will be used for parallel computation."
 msgstr "थ्रेड्स की संख्या जिनका उपयोग समानांतर गणना के लिए किया जाएगा।"
 
-#, c-format
-msgid "Generated random seed (-s): %ld"
-msgstr "उत्पन्न यादृच्छिक बीज (-s): %ld"
+#, fuzzy
+#| msgid "If not given write to standard output"
+msgid "Print run summary to standard output"
+msgstr "यदि नहीं दिया गया है तो मानक आउटपुट पर लिखें"
 
-#, c-format
-msgid "Read random seed from %s option: %ld"
-msgstr "%s विकल्प से यादृच्छिक बीज पढ़ें: %ld"
+#, fuzzy, c-format
+#| msgid "Lat/Long project is not supported by %s. Please reproject map first."
+msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
+msgstr "अक्षांश/लंबा प्रोजेक्ट %s द्वारा समर्थित नहीं है। कृपया पहले मानचित्र दोबारा प्रोजेक्ट करें।"
 
 #, c-format
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
@@ -18485,7 +18504,9 @@ msgstr "अपवाह अंतःस्यंदन दर रेखापु
 msgid "Runoff infiltration rate unique value [mm/hr]"
 msgstr "अपवाह घुसपैठ दर अद्वितीय मूल्य [मिमी/घंटा]"
 
-msgid "Name of flow controls raster map (permeability ratio 0-1)"
+#, fuzzy
+#| msgid "Name of flow controls raster map (permeability ratio 0-1)"
+msgid "Name of flow controls raster map (trapping probability 0-1)"
 msgstr "प्रवाह नियंत्रण का नाम रेखापुंज मानचित्र (पारगम्यता अनुपात 0-1)"
 
 msgid "Name for output water depth raster map [m]"
@@ -18522,6 +18543,10 @@ msgid "You are not outputting any raster maps"
 msgstr "आप कोई रैस्टर मानचित्र आउटपुट नहीं कर रहे हैं"
 
 #, c-format
+msgid "%d walkers over %d time steps may draw more random numbers than one seed provides; the random numbers of some walkers then repeat those of others shifted by a constant"
+msgstr ""
+
+#, c-format
 msgid "Processing block %d of %d"
 msgstr "%d का प्रसंस्करण ब्लॉक %d"
 
@@ -18539,6 +18564,10 @@ msgstr "मैनिंग्स एन में शून्य मान"
 
 msgid "No values in the elevation raster."
 msgstr "उन्नयन रेखापुंज में कोई मान नहीं।"
+
+#, c-format
+msgid "Time step of %.2f s is longer than output_step of %d s, some output steps may be skipped"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -18599,6 +18628,26 @@ msgstr "लिखने के लिए अवलोकन लॉगफ़ा�
 #, c-format
 msgid "FP raster map <%s> not found"
 msgstr "एफपी रेखापुंज मानचित्र <%s> नहीं मिला"
+
+#, fuzzy, c-format
+#| msgid "Flag 's' is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
+msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
+msgstr "ध्वज 's' को हटा दिया गया है और भविष्य में रिलीज़ में हटा दिया जाएगा। सीडिंग स्वचालित है या पैरामीटर बीज का उपयोग करें।"
+
+#, fuzzy, c-format
+#| msgid "Invalid zrange <%s>"
+msgid "Invalid random seed <%s>"
+msgstr "अमान्य ज़रेंज <%s>"
+
+#, fuzzy, c-format
+#| msgid "Read random seed from %s option: %ld"
+msgid "Read random seed from %s option: %<PRId64>"
+msgstr "%s विकल्प से यादृच्छिक बीज पढ़ें: %ld"
+
+#, fuzzy, c-format
+#| msgid "Generated random seed (-s): %ld"
+msgid "Generated random seed: %<PRId64>"
+msgstr "उत्पन्न यादृच्छिक बीज (-s): %ld"
 
 msgid "aspect"
 msgstr "पहलू"
@@ -20108,6 +20157,10 @@ msgid "Number of intermediate images to produce"
 msgstr "उत्पादित की जाने वाली मध्यवर्ती छवियों की संख्या"
 
 #, c-format
+msgid "Read random seed from %s option: %ld"
+msgstr "%s विकल्प से यादृच्छिक बीज पढ़ें: %ld"
+
+#, c-format
 msgid "Autogenerated random seed set to: %ld"
 msgstr "स्वतः उत्पन्न यादृच्छिक बीज इस पर सेट: %ld"
 
@@ -20352,7 +20405,6 @@ msgstr "बहुत सारी श्रेणियाँ (मिलीं: 
 msgid "Input raster must be of type CELL."
 msgstr "इनपुट रैस्टर सेल प्रकार का होना चाहिए।"
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -22800,8 +22852,9 @@ msgstr "रेखापुंज मानचित्र %d फ़ाइल न
 msgid "At least 2 maps are required"
 msgstr "कम से कम 2 मानचित्र आवश्यक हैं"
 
-#, python-format
-msgid "Unable to get monitor info. %s"
+#, fuzzy
+#| msgid "Unable to get monitor info. %s"
+msgid "Unable to get monitor info. {}"
 msgstr "मॉनिटर की जानकारी प्राप्त करने में असमर्थ. %s"
 
 msgid "Unable to get monitor info"
@@ -25474,13 +25527,17 @@ msgstr ""
 msgid "Lowest chi2 = %f\n"
 msgstr "न्यूनतम chi2 = %f\\n\n"
 
-#, c-format
-msgid ""
-"%15s%15s%15s\n"
-"\n"
+#. GTC Column header, lower class limit (exclusive)
+msgid "From (excl.)"
 msgstr ""
-"%15s%15s%15s\\n\\n\n"
-"\n"
+
+#. GTC Column header, upper class limit (inclusive)
+msgid "To (incl.)"
+msgstr ""
+
+#. GTC Column header, number of values in the class
+msgid "Frequency"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -28303,8 +28360,9 @@ msgstr "यदि ओवरलैपिंग वांछित नहीं �
 msgid "%d input polygons got lost during import."
 msgstr "आयात के दौरान %d इनपुट बहुभुज खो गए।"
 
-#, c-format
-msgid "%d additional areas where created during import."
+#, fuzzy, c-format
+#| msgid "%d additional areas where created during import."
+msgid "%d additional areas were created during import."
 msgstr "%dअतिरिक्त क्षेत्र जहां आयात के दौरान बनाए गए।"
 
 #, c-format
@@ -28345,11 +28403,13 @@ msgstr "परत <%s> का प्रक्षेपण परत <%s> के 
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
 msgstr "पीडीएएल के साथ LAS LiDAR बिंदु बादलों को GRASS वेक्टर मानचित्र में परिवर्तित करता है।"
 
-msgid "Reproject to projects's coordinate system if needed"
-msgstr "यदि आवश्यक हो तो परियोजनाओं की समन्वय प्रणाली को पुनः प्रोजेक्ट करें"
+#, fuzzy, c-format
+#| msgid "Invalid input file %s"
+msgid "Invalid input_srs: %s"
+msgstr "अमान्य इनपुट फ़ाइल %s"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
-msgstr "इनपुट डेटासेट को GRASS प्रोजेक्ट की समन्वय प्रणाली में पुन: प्रोजेक्ट करता है (डिफ़ॉल्ट रूप से केवल मिलान समन्वय प्रणाली वाले डेटासेट आयात किए जा सकते हैं)"
+msgid "Unable to reproject the input because the current project has no CRS defined. Use the -o flag to import the data without reprojection."
+msgstr ""
 
 msgid "Cannot store return information because the input does not have a return dimensions"
 msgstr "रिटर्न जानकारी संग्रहीत नहीं की जा सकती क्योंकि इनपुट में रिटर्न आयाम नहीं है"
@@ -31741,7 +31801,9 @@ msgstr "कम से कम प्रोफ़ाइल प्रारंभ �
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
 msgstr "मानचित्र <%s> परत %d के लिए कोई डेटाबेस कनेक्शन परिभाषित नहीं है, लेकिन WHERE शर्त प्रदान की गई है"
 
-msgid "No features match Your query"
+#, fuzzy
+#| msgid "No features match Your query"
+msgid "No features match your query"
 msgstr "कोई भी विशेषता आपकी क्वेरी से मेल नहीं खाती"
 
 msgid "Your query matches more than one record in input profiling map. Currently it's not supported. Enhance WHERE conditions to get only one line."
@@ -32045,13 +32107,20 @@ msgstr "3डी परिवर्तन के लिए 3डी वेक्�
 msgid "A file with 3D control points is needed for 3D transformation"
 msgstr "3डी परिवर्तन के लिए 3डी नियंत्रण बिंदुओं वाली एक फ़ाइल की आवश्यकता होती है"
 
-#, c-format
-msgid "The vector map <%s> already exists in"
+#, fuzzy, c-format
+#| msgid "The vector map <%s> already exists in"
+msgid "The vector map <%s> already exists."
 msgstr "वेक्टर मानचित्र <%s> पहले से मौजूद है"
 
-#, c-format
-msgid "target project %s, mapset %s:"
-msgstr "लक्ष्य परियोजना %s, मैपसेट %s:"
+#, fuzzy, c-format
+#| msgid "Target project <%s> not found"
+msgid "Target project: <%s>"
+msgstr "लक्ष्य प्रोजेक्ट <%s> नहीं मिला"
+
+#, fuzzy, c-format
+#| msgid "Your current mapset is <%s>"
+msgid "Target mapset: <%s>"
+msgstr "आपका वर्तमान मैपसेट <%s> है"
 
 msgid "Rectification cancelled."
 msgstr "सुधार रद्द कर दिया गया।"
@@ -34042,6 +34111,62 @@ msgstr "पीएनजी ड्राइवर से बीएमपी छ�
 
 msgid "Image file"
 msgstr "छवि फ़ाइल"
+
+#~ msgid "east"
+#~ msgstr "पूर्व"
+
+#~ msgid "west"
+#~ msgstr "पश्चिम"
+
+#~ msgid "south"
+#~ msgstr "दक्षिण"
+
+#~ msgid "north"
+#~ msgstr "उत्तर"
+
+#~ msgid " points found in input file(s)"
+#~ msgstr " इनपुट फ़ाइल में पाए गए बिंदु"
+
+#, c-format
+#~ msgid "Raster map <%s> created. "
+#~ msgstr "रेखापुंज मानचित्र <%s> बनाया गया। "
+
+#~ msgid "Floating point error(s) occurred in the calculation"
+#~ msgstr "गणना में फ़्लोटिंग पॉइंट त्रुटियाँ हुईं"
+
+#, c-format
+#~ msgid " ignored\n"
+#~ msgstr " नजरअंदाज\n"
+
+#~ msgid "Seed for random number generator"
+#~ msgstr "यादृच्छिक संख्या जनरेटर के लिए बीज"
+
+#~ msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
+#~ msgstr "समान परिणाम प्राप्त करने के लिए एक ही बीज का उपयोग किया जा सकता है या अन्य तरीकों से यादृच्छिक बीज उत्पन्न किया जा सकता है।"
+
+#~ msgid "Generate random seed"
+#~ msgstr "यादृच्छिक बीज उत्पन्न करें"
+
+#~ msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
+#~ msgstr "यादृच्छिक संख्या जनरेटर के लिए स्वचालित रूप से यादृच्छिक बीज उत्पन्न करता है (जब आप बीज विकल्प प्रदान नहीं करना चाहते हैं तो इसका उपयोग करें)"
+
+#, c-format
+#~ msgid ""
+#~ "%15s%15s%15s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "%15s%15s%15s\\n\\n\n"
+#~ "\n"
+
+#, c-format
+#~ msgid "target project %s, mapset %s:"
+#~ msgstr "लक्ष्य परियोजना %s, मैपसेट %s:"
+
+#~ msgid "Reproject to projects's coordinate system if needed"
+#~ msgstr "यदि आवश्यक हो तो परियोजनाओं की समन्वय प्रणाली को पुनः प्रोजेक्ट करें"
+
+#~ msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
+#~ msgstr "इनपुट डेटासेट को GRASS प्रोजेक्ट की समन्वय प्रणाली में पुन: प्रोजेक्ट करता है (डिफ़ॉल्ट रूप से केवल मिलान समन्वय प्रणाली वाले डेटासेट आयात किए जा सकते हैं)"
 
 #~ msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with matching coordinate system can be imported"
 #~ msgstr "इनपुट डेटासेट को GRASS प्रोजेक्ट की समन्वय प्रणाली में पुन: प्रोजेक्ट करता है (डिफ़ॉल्ट रूप से केवल मिलान समन्वय प्रणाली वाले डेटासेट आयात किए जा सकते हैं)"

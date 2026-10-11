@@ -98,7 +98,6 @@ jobs:
           prek run --all-files --show-diff-on-failure --color=always --hook-stage=manual \
             --skip ruff-check --skip ruff-format \
             --skip actionlint \
-            --skip editorconfig-checker \
             --skip flake8 \
             --skip yamllint | \
             tee >(sed -E 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})*)?[mGK]//g' >> "$GITHUB_STEP_SUMMARY") >&1
