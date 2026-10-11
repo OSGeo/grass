@@ -51,6 +51,9 @@ if(WITH_DOCS)
 endif()
 
 build_program_in_subdir(d.barscale DEPENDS grass_symb grass_display grass_gis)
+# The thumbnails in gui/images are used by the GUI at runtime (the barscale
+# selection widget), so they are copied regardless of WITH_DOCS; the
+# documentation trees get their own copies.
 file(
     GLOB d_barscale_png
     ${CMAKE_CURRENT_SOURCE_DIR}/d.barscale/thumbnails/*.png
@@ -60,22 +63,39 @@ add_custom_command(
     POST_BUILD
     COMMAND
         ${CMAKE_COMMAND} -E make_directory
-        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
+        ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/barscales
     COMMAND
         ${CMAKE_COMMAND} -E copy ${d_barscale_png}
-        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
-    COMMAND
-        ${CMAKE_COMMAND} -E make_directory
-        ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/barscales
-    COMMAND
-        ${CMAKE_COMMAND} -E copy ${d_barscale_png}
-        ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/barscales
-    BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
+        ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/barscales
+    BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/barscales
 )
 install(
-    DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
-    DESTINATION ${GRASS_INSTALL_DOCDIR}
+    DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/barscales
+    DESTINATION ${GRASS_INSTALL_GUIDIR}/images
 )
+if(WITH_DOCS)
+    add_custom_command(
+        TARGET d.barscale
+        POST_BUILD
+        COMMAND
+            ${CMAKE_COMMAND} -E make_directory
+            ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
+        COMMAND
+            ${CMAKE_COMMAND} -E copy ${d_barscale_png}
+            ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
+        COMMAND
+            ${CMAKE_COMMAND} -E make_directory
+            ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/barscales
+        COMMAND
+            ${CMAKE_COMMAND} -E copy ${d_barscale_png}
+            ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/barscales
+        BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
+    )
+    install(
+        DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
+        DESTINATION ${GRASS_INSTALL_DOCDIR}
+    )
+endif()
 
 build_program_in_subdir(
     d.colorlist
@@ -141,12 +161,22 @@ build_program_in_subdir(
     d.northarrow
     DEPENDS ${LIBM} grass_display grass_gis grass_symb
 )
+# The thumbnails in gui/images are used by the GUI at runtime (the north
+# arrow selection widget), so they are copied regardless of WITH_DOCS; the
+# documentation trees get their own copies.
+file(
+    GLOB d_northarrow_png
+    ${CMAKE_CURRENT_SOURCE_DIR}/d.northarrow/thumbnails/*.png
+)
+file(
+    COPY ${d_northarrow_png}
+    DESTINATION ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/northarrows
+)
+install(
+    DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/northarrows
+    DESTINATION ${GRASS_INSTALL_GUIDIR}/images
+)
 if(WITH_DOCS)
-    file(MAKE_DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/northarrows)
-    file(
-        GLOB d_northarrow_png
-        ${CMAKE_CURRENT_SOURCE_DIR}/d.northarrow/thumbnails/*.png
-    )
     file(
         COPY ${d_northarrow_png}
         DESTINATION ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/northarrows
