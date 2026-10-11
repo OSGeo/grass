@@ -32,7 +32,7 @@ This filter generates:
 
 - *structured points* with *celldata* or *pointdata* if no elevationfile
   is given
-- *structured grid* (not recommendet) with *pointdata* if an
+- *structured grid* (not recommended) with *pointdata* if an
   elevationfile is given
 - *polydataset* with *pointdata* if an elevationfile is given (default)
 

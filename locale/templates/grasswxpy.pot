@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-03 18:51+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -905,12 +905,12 @@ msgstr ""
 msgid "Unable to execute command: '%s'"
 msgstr ""
 
-#: ../gui/wxpython/core/gcmd.py:776 ../gui/wxpython/gui_core/forms.py:3368
+#: ../gui/wxpython/core/gcmd.py:778 ../gui/wxpython/gui_core/forms.py:3368
 #, python-format
 msgid "Error in %s"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:576
+#: ../gui/wxpython/core/gconsole.py:583
 #, python-format
 msgid ""
 "Unable to run command:\n"
@@ -919,22 +919,22 @@ msgid ""
 "Option <%(opt)s>: read from standard input is not supported by wxGUI"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:613
+#: ../gui/wxpython/core/gconsole.py:620
 #, python-format
 msgid "Module <%s> not found."
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:772 ../gui/wxpython/gmodeler/panels.py:314
+#: ../gui/wxpython/core/gconsole.py:779 ../gui/wxpython/gmodeler/panels.py:314
 #, python-format
 msgid "%d sec"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:775 ../gui/wxpython/gmodeler/panels.py:317
+#: ../gui/wxpython/core/gconsole.py:782 ../gui/wxpython/gmodeler/panels.py:317
 #, python-format
 msgid "%(min)d min %(sec)d sec"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:781
+#: ../gui/wxpython/core/gconsole.py:788
 #: ../gui/wxpython/gmodeler/model_items.py:280
 #: ../gui/wxpython/gmodeler/model_items.py:386
 #: ../gui/wxpython/gmodeler/panels.py:323 ../gui/wxpython/gui_core/ghelp.py:257
@@ -942,20 +942,20 @@ msgstr ""
 msgid "unknown"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:787
+#: ../gui/wxpython/core/gconsole.py:794
 msgid "Please note that the data are left in inconsistent state and may be corrupted"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:791
+#: ../gui/wxpython/core/gconsole.py:798
 msgid "Command aborted"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:794
+#: ../gui/wxpython/core/gconsole.py:801
 #, python-brace-format
 msgid "Command ended with non-zero return code {returncode}"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:799 ../gui/wxpython/gmodeler/panels.py:330
+#: ../gui/wxpython/core/gconsole.py:806 ../gui/wxpython/gmodeler/panels.py:330
 msgid "Command finished"
 msgstr ""
 

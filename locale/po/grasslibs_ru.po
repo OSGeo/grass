@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-19 18:13+0000\n"
+"POT-Creation-Date: 2026-10-03 18:51+0000\n"
 "PO-Revision-Date: 2025-08-26 13:42+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ru/>\n"
@@ -4924,6 +4924,11 @@ msgstr "Конец ASCII-файла достигнут прежде конца �
 #, c-format
 msgid "Error reading categories: [%s]"
 msgstr "Ошибка чтения категорий: [%s]"
+
+#, fuzzy, c-format
+#| msgid "Cell category value out of range"
+msgid "Layer number or category number out of range: [%s]"
+msgstr "Значение категории ячейки вне диапазона"
 
 msgid "Unable to copy points"
 msgstr "Не удалось скопировать точки"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-03 18:51+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -90,10 +90,10 @@ msgstr ""
 #: ../general/g.mapset/main.c:34 ../general/g.mapsets/list.c:34
 #: ../misc/m.measure/main.c:179 ../raster/r.distance/report.c:135
 #: ../raster/r.regression.line/main.c:266
-#: ../raster/r.regression.multi/main.c:693 ../raster/r.sim/simlib/summary.c:135
+#: ../raster/r.regression.multi/main.c:693 ../raster/r.sim/simlib/summary.c:137
 #: ../raster/r.stats.quantile/main.c:472 ../raster/r.volume/main.c:445
 #: ../raster3d/r3.info/main.c:990 ../temporal/t.connect/main.c:214
-#: ../vector/v.class/main.c:386 ../vector/v.db.connect/main.c:427
+#: ../vector/v.class/main.c:391 ../vector/v.db.connect/main.c:427
 #: ../vector/v.profile/main.c:881 ../vector/v.vect.stats/main.c:859
 #: ../vector/v.what.rast/main.c:691 ../vector/v.what/main.c:318
 msgid "Failed to serialize JSON to pretty format."
@@ -152,10 +152,10 @@ msgstr ""
 #: ../raster/r.out.gdal/main.c:139 ../raster/r.profile/main.c:116
 #: ../raster/r.proj/main.c:203 ../raster/r.proj/main.c:214
 #: ../raster/r.proj/main.c:226 ../raster/r.proj/main.c:235
-#: ../raster/r.sim/r.sim.sediment/main.c:310
-#: ../raster/r.sim/r.sim.sediment/main.c:313
-#: ../raster/r.sim/r.sim.water/main.c:345
-#: ../raster/r.sim/r.sim.water/main.c:348 ../raster/r.stats/main.c:157
+#: ../raster/r.sim/r.sim.sediment/main.c:304
+#: ../raster/r.sim/r.sim.sediment/main.c:307
+#: ../raster/r.sim/r.sim.water/main.c:339
+#: ../raster/r.sim/r.sim.water/main.c:342 ../raster/r.stats/main.c:157
 #: ../raster/r.sunmask/main.c:230 ../raster/r.sunmask/main.c:236
 #: ../raster/r.univar/r.univar_main.c:124
 #: ../raster/r.univar/r3.univar_main.c:86 ../raster/r.what/main.c:131
@@ -346,13 +346,13 @@ msgstr ""
 #: ../raster/r.info/main.c:144 ../raster/r.kappa/print_json.c:25
 #: ../raster/r.proj/main.c:478 ../raster/r.regression.line/main.c:98
 #: ../raster/r.regression.multi/main.c:194
-#: ../raster/r.regression.multi/main.c:563 ../raster/r.sim/simlib/summary.c:73
+#: ../raster/r.regression.multi/main.c:563 ../raster/r.sim/simlib/summary.c:74
 #: ../raster/r.stats.quantile/main.c:430 ../raster/r.stats.quantile/main.c:447
 #: ../raster/r.univar/stats.c:101 ../raster/r.univar/stats.c:145
 #: ../raster/r.univar/stats.c:436 ../raster/r.volume/main.c:406
 #: ../raster/r.what.color/main.c:49 ../raster3d/r3.info/main.c:150
 #: ../temporal/t.connect/main.c:29 ../vector/v.category/main.c:938
-#: ../vector/v.class/main.c:261 ../vector/v.class/main.c:355
+#: ../vector/v.class/main.c:261 ../vector/v.class/main.c:360
 #: ../vector/v.db.connect/main.c:299 ../vector/v.db.connect/main.c:392
 #: ../vector/v.db.select/main.c:335 ../vector/v.db.select/main.c:346
 #: ../vector/v.db.select/main.c:363 ../vector/v.distance/main.c:1574
@@ -522,7 +522,7 @@ msgstr ""
 
 #: ../db/db.describe/main.c:137 ../general/g.proj/output.c:340
 #: ../general/g.region/main.c:987 ../general/g.version/main.c:381
-#: ../imagery/i.group/main.c:298 ../raster/r.category/main.c:419
+#: ../imagery/i.group/main.c:306 ../raster/r.category/main.c:419
 #: ../raster/r.describe/dumplist.c:68 ../raster/r.info/main.c:997
 #: ../raster/r.mask.status/main.c:109 ../raster/r.object.geometry/main.c:399
 #: ../raster/r.profile/main.c:318 ../raster/r.proj/main.c:363
@@ -897,11 +897,13 @@ msgid "Unable to open DBF database: %s"
 msgstr ""
 
 #: ../db/drivers/dbf/dbfexe.c:65
-msgid "SQL parser error"
+#, c-format
+msgid "SQL parser error: %s\n"
 msgstr ""
 
 #: ../db/drivers/dbf/dbfexe.c:66
-msgid "in statement:"
+#, c-format
+msgid "Statement: %s\n"
 msgstr ""
 
 #: ../db/drivers/dbf/dbfexe.c:79
@@ -1462,7 +1464,7 @@ msgstr ""
 
 #: ../db/drivers/sqlite/db.c:104
 #, c-format
-msgid "Unable to create directory '%s' for sqlite database"
+msgid "Unable to create directory '%s' for SQLite database"
 msgstr ""
 
 #: ../db/drivers/sqlite/db.c:116 ../db/drivers/sqlite/db.c:195
@@ -1471,7 +1473,7 @@ msgstr ""
 
 #: ../db/drivers/sqlite/db.c:119 ../db/drivers/sqlite/db.c:198
 #, c-format
-msgid "The sqlite config option '%s' is not supported"
+msgid "The SQLite config option '%s' is not supported"
 msgstr ""
 
 #: ../db/drivers/sqlite/db.c:136
@@ -1898,7 +1900,7 @@ msgstr ""
 #: ../raster/r.horizon/main.c:179 ../raster/r.in.ascii/main.c:66
 #: ../raster/r.in.bin/main.c:281 ../raster/r.in.gdal/main.c:111
 #: ../raster/r.in.gridatb/main.c:41 ../raster/r.in.lidar/main.c:108
-#: ../raster/r.in.mat/main.c:93 ../raster/r.in.pdal/main.cpp:90
+#: ../raster/r.in.mat/main.c:93 ../raster/r.in.pdal/main.cpp:88
 #: ../raster/r.in.png/main.c:479 ../raster/r.in.poly/main.c:31
 #: ../raster/r.in.xyz/main.c:152 ../raster/r.info/main.c:77
 #: ../raster/r.kappa/main.c:65 ../raster/r.lake/main.c:150
@@ -1914,7 +1916,7 @@ msgstr ""
 #: ../raster/r.li/r.li.pielou/pielou.c:46 ../raster/r.li/r.li.renyi/renyi.c:47
 #: ../raster/r.li/r.li.richness/richness.c:42
 #: ../raster/r.li/r.li.shannon/shannon.c:43 ../raster/r.li/r.li.shape/main.c:45
-#: ../raster/r.li/r.li.simpson/simpson.c:43 ../raster/r.mapcalc/main.c:106
+#: ../raster/r.li/r.li.simpson/simpson.c:43 ../raster/r.mapcalc/main.c:105
 #: ../raster/r.mask.status/main.c:33 ../raster/r.mfilter/main.c:62
 #: ../raster/r.mode/main.c:50 ../raster/r.neighbors/main.c:178
 #: ../raster/r.null/main.c:55 ../raster/r.object.geometry/main.c:73
@@ -2309,7 +2311,7 @@ msgstr ""
 #: ../raster/r.carve/vect.c:27 ../raster/r.contour/main.c:152
 #: ../raster/r.drain/main.c:201 ../raster/r.flow/flow_io.c:181
 #: ../raster/r.path/main.c:258 ../raster/r.random/random.c:58
-#: ../raster/r.resamp.bspline/main.c:481 ../raster/r.sim/simlib/output.c:51
+#: ../raster/r.resamp.bspline/main.c:481 ../raster/r.sim/simlib/output.c:52
 #: ../raster/r.stream.extract/close.c:38 ../raster/r.to.vect/main.c:167
 #: ../raster/r.volume/main.c:229 ../raster3d/r3.flow/main.c:380
 #: ../scripts/v.what.strds/v.what.strds.py:226 ../vector/v.buffer/main.c:398
@@ -2686,7 +2688,7 @@ msgid "Geo-grid option only available for LL projection, use without -g/-w"
 msgstr ""
 
 #: ../display/d.grid/plot.c:578 ../display/d.where/main.c:108
-#: ../ps/ps.map/do_geogrid.c:279 ../raster/r.horizon/main.c:590
+#: ../ps/ps.map/do_geogrid.c:279 ../raster/r.horizon/main.c:586
 msgid "Can't get projection key values of current location"
 msgstr ""
 
@@ -2697,7 +2699,7 @@ msgstr ""
 #: ../display/d.grid/plot.c:614 ../display/d.where/main.c:145
 #: ../general/g.region/printwindow.c:362 ../general/g.region/printwindow.c:658
 #: ../general/g.region/printwindow.c:753 ../ps/ps.map/do_geogrid.c:288
-#: ../raster/r.horizon/main.c:599 ../raster/r.in.gdal/main.c:1132
+#: ../raster/r.horizon/main.c:595 ../raster/r.in.gdal/main.c:1132
 #: ../raster/r.latlong/main.c:112 ../raster/r.proj/main.c:457
 #: ../raster/r.proj/main.c:560 ../raster/r.proj/main.c:604
 #: ../raster/r.proj/main.c:685 ../raster/r.sun/main.c:800
@@ -2759,7 +2761,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.report_to_translate.c:4
 #: ../raster/r.clump/main.c:56 ../raster/r.coin/main.c:63
 #: ../raster/r.covar/main.c:46 ../raster/r.cross/main.c:62
-#: ../raster/r.in.lidar/main.c:111 ../raster/r.in.pdal/main.cpp:93
+#: ../raster/r.in.lidar/main.c:111 ../raster/r.in.pdal/main.cpp:91
 #: ../raster/r.in.xyz/main.c:154 ../raster/r.kappa/main.c:66
 #: ../raster/r.mfilter/main.c:64 ../raster/r.mode/main.c:51
 #: ../raster/r.neighbors/main.c:180 ../raster/r.object.geometry/main.c:74
@@ -3158,7 +3160,7 @@ msgstr ""
 #: ../raster/r.external/main.c:82 ../raster/r.horizon/main.c:198
 #: ../raster/r.horizon/main.c:206 ../raster/r.horizon/main.c:214
 #: ../raster/r.in.lidar/main.c:123 ../raster/r.in.lidar/main.c:135
-#: ../raster/r.in.pdal/main.cpp:106 ../raster/r.in.pdal/main.cpp:120
+#: ../raster/r.in.pdal/main.cpp:104 ../raster/r.in.pdal/main.cpp:118
 #: ../raster/r.in.xyz/main.c:207 ../raster/r.in.xyz/main.c:216
 #: ../raster/r.in.xyz/main.c:224 ../raster/r.in.xyz/main.c:235
 #: ../raster/r.in.xyz/main.c:245 ../raster/r.random/main.c:62
@@ -4106,7 +4108,6 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #: ../display/d.rast.num/main.c:208 ../raster/r.thin/io.c:110
@@ -4176,10 +4177,10 @@ msgstr ""
 #: ../raster/r.category/main.c:65 ../raster/r.category/main.c:74
 #: ../raster/r.in.lidar/main.c:195 ../raster/r.in.lidar/main.c:211
 #: ../raster/r.in.lidar/main.c:264 ../raster/r.in.lidar/main.c:274
-#: ../raster/r.in.lidar/main.c:342 ../raster/r.in.pdal/main.cpp:198
-#: ../raster/r.in.pdal/main.cpp:217 ../raster/r.in.pdal/main.cpp:237
-#: ../raster/r.in.pdal/main.cpp:313 ../raster/r.in.pdal/main.cpp:325
-#: ../raster/r.in.pdal/main.cpp:337 ../raster/r.in.pdal/main.cpp:371
+#: ../raster/r.in.lidar/main.c:342 ../raster/r.in.pdal/main.cpp:196
+#: ../raster/r.in.pdal/main.cpp:215 ../raster/r.in.pdal/main.cpp:235
+#: ../raster/r.in.pdal/main.cpp:311 ../raster/r.in.pdal/main.cpp:323
+#: ../raster/r.in.pdal/main.cpp:335 ../raster/r.in.pdal/main.cpp:369
 #: ../raster3d/r3.in.lidar/main.c:228 ../raster3d/r3.in.lidar/main.c:238
 #: ../raster3d/r3.in.lidar/main.c:267 ../raster3d/r3.in.lidar/main.c:283
 #: ../vector/v.buffer/main.c:228 ../vector/v.buffer/main.c:231
@@ -5294,11 +5295,11 @@ msgstr ""
 msgid "Please specify a lat/long ellipsoid with -l or -w"
 msgstr ""
 
-#: ../display/d.where/main.c:101 ../raster/r.horizon/main.c:584
+#: ../display/d.where/main.c:101 ../raster/r.horizon/main.c:580
 msgid "Can't get projection info of current location"
 msgstr ""
 
-#: ../display/d.where/main.c:104 ../raster/r.horizon/main.c:587
+#: ../display/d.where/main.c:104 ../raster/r.horizon/main.c:583
 msgid "Can't get projection units of current location"
 msgstr ""
 
@@ -5346,9 +5347,9 @@ msgstr ""
 #: ../raster/r.ros/main.c:379 ../raster/r.ros/main.c:384
 #: ../raster/r.ros/main.c:398 ../raster/r.ros/main.c:402
 #: ../raster/r.ros/main.c:417 ../raster/r.ros/main.c:421
-#: ../raster/r.ros/main.c:431 ../raster/r.sim/simlib/output.c:396
-#: ../raster/r.sim/simlib/output.c:422 ../raster/r.sim/simlib/output.c:462
-#: ../raster/r.sim/simlib/output.c:628
+#: ../raster/r.ros/main.c:431 ../raster/r.sim/simlib/output.c:398
+#: ../raster/r.sim/simlib/output.c:424 ../raster/r.sim/simlib/output.c:464
+#: ../raster/r.sim/simlib/output.c:630
 #: ../raster/r.smooth.edgepreserve/main.c:142 ../raster/r.spread/main.c:442
 #: ../raster/r.spread/main.c:445 ../raster/r.spread/main.c:448
 #: ../raster/r.spread/main.c:452 ../raster/r.spread/main.c:455
@@ -7120,7 +7121,7 @@ msgid "Unable to change default region. The current mapset is not <PERMANENT>."
 msgstr ""
 
 #: ../general/g.region/main.c:1002 ../raster/r.in.lidar/main.c:538
-#: ../raster/r.in.pdal/main.cpp:664
+#: ../raster/r.in.pdal/main.cpp:662
 #, c-format
 msgid "Invalid input <%s=%s>"
 msgstr ""
@@ -7945,8 +7946,8 @@ msgstr ""
 #: ../raster/r.grow.distance/main.c:155 ../raster/r.grow.distance/main.c:161
 #: ../raster/r.in.lidar/main.c:127 ../raster/r.in.lidar/main.c:255
 #: ../raster/r.in.lidar/main.c:287 ../raster/r.in.lidar/main.c:296
-#: ../raster/r.in.pdal/main.cpp:111 ../raster/r.in.pdal/main.cpp:302
-#: ../raster/r.in.pdal/main.cpp:395 ../raster/r.in.pdal/main.cpp:405
+#: ../raster/r.in.pdal/main.cpp:109 ../raster/r.in.pdal/main.cpp:300
+#: ../raster/r.in.pdal/main.cpp:393 ../raster/r.in.pdal/main.cpp:403
 #: ../raster/r.in.xyz/main.c:294 ../raster/r.lake/main.c:167
 #: ../raster/r.lake/main.c:195 ../raster/r.random/main.c:79
 #: ../raster/r.random/main.c:84 ../raster/r.random/main.c:89
@@ -8652,7 +8653,7 @@ msgstr ""
 #: ../raster/r.sim/r.sim.sediment/main.c:253
 #: ../raster/r.sim/r.sim.sediment/main.c:262
 #: ../raster/r.sim/r.sim.sediment/main.c:280
-#: ../raster/r.sim/r.sim.sediment/main.c:305
+#: ../raster/r.sim/r.sim.sediment/main.c:299
 #: ../raster/r.sim/r.sim.water/main.c:235
 #: ../raster/r.sim/r.sim.water/main.c:244
 #: ../raster/r.sim/r.sim.water/main.c:256
@@ -8661,7 +8662,7 @@ msgstr ""
 #: ../raster/r.sim/r.sim.water/main.c:293
 #: ../raster/r.sim/r.sim.water/main.c:301
 #: ../raster/r.sim/r.sim.water/main.c:310
-#: ../raster/r.sim/r.sim.water/main.c:340 ../vector/v.surf.rst/main.c:162
+#: ../raster/r.sim/r.sim.water/main.c:334 ../vector/v.surf.rst/main.c:162
 #: ../vector/v.surf.rst/main.c:167 ../vector/v.surf.rst/main.c:190
 #: ../vector/v.surf.rst/main.c:265 ../vector/v.surf.rst/main.c:271
 #: ../vector/v.surf.rst/main.c:279 ../vector/v.surf.rst/main.c:288
@@ -9238,105 +9239,105 @@ msgstr ""
 msgid "No input raster map(s) specified"
 msgstr ""
 
-#: ../imagery/i.group/main.c:204
+#: ../imagery/i.group/main.c:205
 msgid "Specified group does not exist in current mapset"
 msgstr ""
 
-#: ../imagery/i.group/main.c:208
+#: ../imagery/i.group/main.c:209
 #, c-format
 msgid "Removing raster maps from subgroup <%s>..."
 msgstr ""
 
-#: ../imagery/i.group/main.c:213
+#: ../imagery/i.group/main.c:214
 #, c-format
 msgid "Removing raster maps from group <%s>..."
 msgstr ""
 
-#: ../imagery/i.group/main.c:222
+#: ../imagery/i.group/main.c:230
 #: ../imagery/i.ortho.photo/i.ortho.rectify/main.c:179
 #: ../imagery/i.pca/main.c:138 ../imagery/i.rectify/main.c:186
 #, c-format
 msgid "Group <%s> not found"
 msgstr ""
 
-#: ../imagery/i.group/main.c:231
+#: ../imagery/i.group/main.c:239
 #, c-format
 msgid "Subgroup <%s> of group <%s> references the following raster maps:"
 msgstr ""
 
-#: ../imagery/i.group/main.c:253
+#: ../imagery/i.group/main.c:261
 #, c-format
 msgid "Group <%s> references the following raster maps:"
 msgstr ""
 
-#: ../imagery/i.group/main.c:270
+#: ../imagery/i.group/main.c:278
 msgid "Only groups from the current mapset can be edited"
 msgstr ""
 
-#: ../imagery/i.group/main.c:275
+#: ../imagery/i.group/main.c:283
 #, c-format
 msgid "Group <%s> does not yet exist. Creating..."
 msgstr ""
 
-#: ../imagery/i.group/main.c:278 ../imagery/i.group/main.c:287
+#: ../imagery/i.group/main.c:286 ../imagery/i.group/main.c:295
 #, c-format
 msgid "Adding raster maps to group <%s>..."
 msgstr ""
 
-#: ../imagery/i.group/main.c:282
+#: ../imagery/i.group/main.c:290
 #, c-format
 msgid "Adding raster maps to subgroup <%s>..."
 msgstr ""
 
-#: ../imagery/i.group/main.c:319
+#: ../imagery/i.group/main.c:327
 msgid "No input raster maps defined"
 msgstr ""
 
-#: ../imagery/i.group/main.c:323 ../imagery/i.group/main.c:365
+#: ../imagery/i.group/main.c:331 ../imagery/i.group/main.c:373
 #, c-format
 msgid "Raster map <%s> not found. Skipped."
 msgstr ""
 
-#: ../imagery/i.group/main.c:329
+#: ../imagery/i.group/main.c:337
 #, c-format
 msgid "Adding raster map <%s> to group"
 msgstr ""
 
-#: ../imagery/i.group/main.c:334
+#: ../imagery/i.group/main.c:342
 #, c-format
 msgid "Raster map <%s> exists in group. Skipped."
 msgstr ""
 
-#: ../imagery/i.group/main.c:371
+#: ../imagery/i.group/main.c:379
 #, c-format
 msgid "Adding raster map <%s> to subgroup"
 msgstr ""
 
-#: ../imagery/i.group/main.c:376
+#: ../imagery/i.group/main.c:384
 #, c-format
 msgid "Raster map <%s> exists in subgroup. Skipping..."
 msgstr ""
 
-#: ../imagery/i.group/main.c:424
+#: ../imagery/i.group/main.c:425
 #, c-format
 msgid "Removing raster map <%s> from group"
 msgstr ""
 
-#: ../imagery/i.group/main.c:441 ../imagery/i.group/main.c:499
+#: ../imagery/i.group/main.c:443 ../imagery/i.group/main.c:494
 msgid "No raster map removed"
 msgstr ""
 
-#: ../imagery/i.group/main.c:482
+#: ../imagery/i.group/main.c:476
 #, c-format
 msgid "Removing raster map <%s> from subgroup"
 msgstr ""
 
-#: ../imagery/i.group/main.c:521
+#: ../imagery/i.group/main.c:516
 #, c-format
 msgid "Group <%s> does not contain any subgroup.\n"
 msgstr ""
 
-#: ../imagery/i.group/main.c:532
+#: ../imagery/i.group/main.c:527
 #, c-format
 msgid "group <%s> references the following subgroups\n"
 msgstr ""
@@ -12056,8 +12057,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 #: ../imagery/i.svm.predict/main.c:58 ../imagery/i.svm.train/main.c:60
 msgid "Maps with feature values (attributes)"
 msgstr ""
@@ -13108,7 +13109,7 @@ msgstr ""
 #: ../raster/r.external/main.c:57 ../raster/r.in.ascii/main.c:67
 #: ../raster/r.in.bin/main.c:282 ../raster/r.in.gdal/main.c:112
 #: ../raster/r.in.gridatb/main.c:42 ../raster/r.in.lidar/main.c:109
-#: ../raster/r.in.mat/main.c:94 ../raster/r.in.pdal/main.cpp:91
+#: ../raster/r.in.mat/main.c:94 ../raster/r.in.pdal/main.cpp:89
 #: ../raster/r.in.png/main.c:480 ../raster/r.in.poly/main.c:32
 #: ../raster/r.in.xyz/main.c:153 ../raster/r.proj/main.c:149
 #: ../raster3d/r3.in.ascii/main.c:357 ../raster3d/r3.in.bin/main.c:263
@@ -14098,7 +14099,7 @@ msgstr ""
 #: ../locale/scriptstrings/r.import_to_translate.c:29
 #: ../locale/scriptstrings/v.import_to_translate.c:27
 #: ../raster/r.external/main.c:100 ../raster/r.in.gdal/main.c:213
-#: ../raster/r.in.lidar/main.c:301 ../raster/r.in.pdal/main.cpp:411
+#: ../raster/r.in.lidar/main.c:301 ../raster/r.in.pdal/main.cpp:409
 #: ../vector/v.external/args.c:48 ../vector/v.in.lidar/main.c:318
 #: ../vector/v.in.ogr/main.c:377 ../vector/v.in.pdal/main.cpp:222
 msgid "Override projection check (use current project's CRS)"
@@ -14306,7 +14307,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:3
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:3
 #: ../locale/scriptstrings/t.vect.algebra_to_translate.c:3
-#: ../raster/r.mapcalc/main.c:107 ../raster/r.mfilter/main.c:63
+#: ../raster/r.mapcalc/main.c:106 ../raster/r.mfilter/main.c:63
 #: ../raster/r.mode/main.c:52 ../raster/r.neighbors/main.c:179
 #: ../raster/r.quantile/main.c:298 ../raster/r.texture/main.c:96
 #: ../raster3d/r3.neighbors/main.c:202 ../vector/v.neighbors/main.c:116
@@ -14459,7 +14460,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.to.rast3_to_translate.c:3
 #: ../locale/scriptstrings/t.rast.to.vect_to_translate.c:3
 #: ../raster/r.in.ascii/main.c:68 ../raster/r.in.lidar/main.c:112
-#: ../raster/r.in.pdal/main.cpp:94 ../raster/r.in.xyz/main.c:155
+#: ../raster/r.in.pdal/main.cpp:92 ../raster/r.in.xyz/main.c:155
 #: ../raster/r.to.rast3/main.c:195 ../raster/r.to.rast3elev/main.c:373
 #: ../raster/r.to.vect/main.c:75 ../raster3d/r3.in.ascii/main.c:359
 #: ../raster3d/r3.in.lidar/main.c:161 ../raster3d/r3.out.ascii/main.c:304
@@ -14531,7 +14532,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:3
 #: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:3
 #: ../locale/scriptstrings/t.rast.series_to_translate.c:3
-#: ../raster/r.in.lidar/main.c:113 ../raster/r.in.pdal/main.cpp:95
+#: ../raster/r.in.lidar/main.c:113 ../raster/r.in.pdal/main.cpp:93
 #: ../raster/r.in.xyz/main.c:156 ../raster/r.neighbors/main.c:181
 #: ../raster/r.patch/main.c:70 ../raster/r.resamp.stats/main.c:396
 #: ../raster/r.series/main.c:151 ../raster3d/r3.in.lidar/main.c:162
@@ -14783,7 +14784,7 @@ msgid "voxel"
 msgstr ""
 
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:5
-#: ../raster/r.in.lidar/main.c:110 ../raster/r.in.pdal/main.cpp:92
+#: ../raster/r.in.lidar/main.c:110 ../raster/r.in.pdal/main.cpp:90
 #: ../raster/r.in.xyz/main.c:159 ../raster3d/r3.in.lidar/main.c:159
 #: ../vector/v.decimate/main.c:115 ../vector/v.in.lidar/main.c:132
 #: ../vector/v.in.pdal/main.cpp:128 ../vector/v.lidar.correction/main.c:67
@@ -14794,7 +14795,7 @@ msgid "LIDAR"
 msgstr ""
 
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:9
-#: ../raster/r.in.lidar/main.c:114 ../raster/r.in.pdal/main.cpp:96
+#: ../raster/r.in.lidar/main.c:114 ../raster/r.in.pdal/main.cpp:94
 #: ../raster/r.in.xyz/main.c:157 ../raster3d/r3.in.lidar/main.c:163
 msgid "binning"
 msgstr ""
@@ -14821,7 +14822,7 @@ msgid "ASCII file containing input data"
 msgstr ""
 
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:15
-#: ../raster/r.in.lidar/main.c:141 ../raster/r.in.pdal/main.cpp:127
+#: ../raster/r.in.lidar/main.c:141 ../raster/r.in.pdal/main.cpp:125
 #: ../raster/r.in.xyz/main.c:173
 msgid "Statistic to use for raster values"
 msgstr ""
@@ -14830,8 +14831,8 @@ msgstr ""
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:32
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:34
 #: ../raster/r.in.lidar/main.c:145 ../raster/r.in.lidar/main.c:237
-#: ../raster/r.in.lidar/main.c:248 ../raster/r.in.pdal/main.cpp:133
-#: ../raster/r.in.pdal/main.cpp:282 ../raster/r.in.pdal/main.cpp:294
+#: ../raster/r.in.lidar/main.c:248 ../raster/r.in.pdal/main.cpp:131
+#: ../raster/r.in.pdal/main.cpp:280 ../raster/r.in.pdal/main.cpp:292
 #: ../raster/r.in.xyz/main.c:177 ../raster/r.in.xyz/main.c:312
 #: ../raster/r.in.xyz/main.c:321
 msgid "Statistic"
@@ -14878,12 +14879,12 @@ msgid "Percent of map to keep in memory"
 msgstr ""
 
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:31
-#: ../raster/r.in.lidar/main.c:236 ../raster/r.in.pdal/main.cpp:281
+#: ../raster/r.in.lidar/main.c:236 ../raster/r.in.pdal/main.cpp:279
 msgid "pth percentile of the values"
 msgstr ""
 
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:33
-#: ../raster/r.in.lidar/main.c:246 ../raster/r.in.pdal/main.cpp:292
+#: ../raster/r.in.lidar/main.c:246 ../raster/r.in.pdal/main.cpp:290
 #: ../raster/r.in.xyz/main.c:319
 msgid "Discard <trim> percent of the smallest and <trim> percent of the largest observations"
 msgstr ""
@@ -18389,7 +18390,7 @@ msgid "Name of input raster files"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:105 ../raster/r.external/main.c:181
-#: ../raster/r.mapcalc/main.c:174 ../raster/r.series.accumulate/main.c:204
+#: ../raster/r.mapcalc/main.c:173 ../raster/r.series.accumulate/main.c:204
 #: ../raster/r.series.interp/main.c:129 ../raster/r.series.interp/main.c:133
 #: ../raster/r.series.interp/main.c:145 ../raster/r.series.interp/main.c:149
 #: ../vector/v.colors/main.c:219
@@ -18666,8 +18667,8 @@ msgid "Please specify min and/or max radius when using the binary flag"
 msgstr ""
 
 #: ../raster/r.circle/main.c:148 ../raster/r.composite/main.c:253
-#: ../raster/r.li/r.li.daemon/daemon.c:179 ../raster/r.surf.fractal/main.c:96
-#: ../raster/r.surf.random/main.c:161
+#: ../raster/r.in.pdal/main.cpp:984 ../raster/r.li/r.li.daemon/daemon.c:179
+#: ../raster/r.surf.fractal/main.c:96 ../raster/r.surf.random/main.c:161
 #, c-format
 msgid "Raster map <%s> created."
 msgstr ""
@@ -19336,7 +19337,7 @@ msgid "Merge lines"
 msgstr ""
 
 #: ../raster/r.contour/main.c:251 ../raster/r.in.lidar/main.c:626
-#: ../raster/r.in.pdal/main.cpp:734 ../vector/v.generalize/displacement.c:74
+#: ../raster/r.in.pdal/main.cpp:732 ../vector/v.generalize/displacement.c:74
 msgid "Reading data..."
 msgstr ""
 
@@ -19839,7 +19840,7 @@ msgid "Calculating flow directions..."
 msgstr ""
 
 #: ../raster/r.drain/main.c:482 ../raster/r.in.lidar/main.c:781
-#: ../raster/r.in.pdal/main.cpp:932 ../raster/r.path/main.c:598
+#: ../raster/r.in.pdal/main.cpp:930 ../raster/r.path/main.c:598
 #: ../raster/r.path/main.c:628 ../raster/r.viewshed/grass.cpp:619
 msgid "Writing output raster map..."
 msgstr ""
@@ -19996,7 +19997,7 @@ msgid "Band to select (default is all bands)"
 msgstr ""
 
 #: ../raster/r.external/main.c:101 ../raster/r.in.gdal/main.c:214
-#: ../raster/r.in.lidar/main.c:303 ../raster/r.in.pdal/main.cpp:413
+#: ../raster/r.in.lidar/main.c:303 ../raster/r.in.pdal/main.cpp:411
 #: ../raster3d/r3.in.lidar/main.c:290 ../vector/v.external/args.c:50
 #: ../vector/v.in.lidar/main.c:320 ../vector/v.in.pdal/main.cpp:224
 msgid "Assume that the dataset has the same coordinate reference system as the current project"
@@ -21176,53 +21177,47 @@ msgstr ""
 msgid "Could not read bufferzone size. Aborting."
 msgstr ""
 
-#: ../raster/r.horizon/main.c:496 ../raster/r.horizon/main.c:502
-#: ../raster/r.horizon/main.c:508 ../raster/r.horizon/main.c:514
-#, c-format
-msgid "Could not read %s bufferzone size. Aborting."
+#: ../raster/r.horizon/main.c:496
+msgid "Could not read east bufferzone size. Aborting."
 msgstr ""
 
-#: ../raster/r.horizon/main.c:497
-msgid "east"
+#: ../raster/r.horizon/main.c:501
+msgid "Could not read west bufferzone size. Aborting."
 msgstr ""
 
-#: ../raster/r.horizon/main.c:503
-msgid "west"
+#: ../raster/r.horizon/main.c:506
+msgid "Could not read south bufferzone size. Aborting."
 msgstr ""
 
-#: ../raster/r.horizon/main.c:509
-msgid "south"
+#: ../raster/r.horizon/main.c:511
+msgid "Could not read north bufferzone size. Aborting."
 msgstr ""
 
-#: ../raster/r.horizon/main.c:515
-msgid "north"
-msgstr ""
-
-#: ../raster/r.horizon/main.c:522
+#: ../raster/r.horizon/main.c:518
 msgid "Could not read maximum distance. Aborting."
 msgstr ""
 
-#: ../raster/r.horizon/main.c:535
+#: ../raster/r.horizon/main.c:531
 msgid "The distance value must be 0.5-1.5. Aborting."
 msgstr ""
 
-#: ../raster/r.horizon/main.c:725 ../raster/r.in.ascii/main.c:184
+#: ../raster/r.horizon/main.c:721 ../raster/r.in.ascii/main.c:184
 #, c-format
 msgid "OOPS: rows changed from %d to %d"
 msgstr ""
 
-#: ../raster/r.horizon/main.c:729 ../raster/r.in.ascii/main.c:187
+#: ../raster/r.horizon/main.c:725 ../raster/r.in.ascii/main.c:187
 #, c-format
 msgid "OOPS: cols changed from %d to %d"
 msgstr ""
 
-#: ../raster/r.horizon/main.c:761 ../raster/r.horizon/main.c:776
+#: ../raster/r.horizon/main.c:757 ../raster/r.horizon/main.c:772
 #: ../raster/r.proj/main.c:622 ../raster/r.proj/main.c:726
 #, c-format
 msgid "Error in %s"
 msgstr ""
 
-#: ../raster/r.horizon/main.c:1190
+#: ../raster/r.horizon/main.c:1186
 #, c-format
 msgid "Calculating map %01d of %01d (angle %.2f, raster map <%s>)"
 msgstr ""
@@ -21604,8 +21599,8 @@ msgid "Name of project to create or to read CRS from for GCPs transformation"
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:143 ../raster/r.in.gdal/main.c:216
-#: ../raster/r.in.gdal/main.c:222 ../raster/r.in.pdal/main.cpp:257
-#: ../raster/r.in.pdal/main.cpp:271 ../raster/r.in.pdal/main.cpp:415
+#: ../raster/r.in.gdal/main.c:222 ../raster/r.in.pdal/main.cpp:255
+#: ../raster/r.in.pdal/main.cpp:269 ../raster/r.in.pdal/main.cpp:413
 #: ../vector/v.in.pdal/main.cpp:217 ../vector/v.in.pdal/main.cpp:226
 #: ../vector/v.in.pdal/main.cpp:239 ../vector/v.info/print.c:779
 #: ../vector/v.info/print.c:783
@@ -21857,182 +21852,182 @@ msgstr ""
 msgid "Range:     min         max\n"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:115 ../raster/r.in.pdal/main.cpp:97
+#: ../raster/r.in.lidar/main.c:115 ../raster/r.in.pdal/main.cpp:95
 msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:120 ../raster/r.in.pdal/main.cpp:103
+#: ../raster/r.in.lidar/main.c:120 ../raster/r.in.pdal/main.cpp:101
 #: ../raster3d/r3.in.lidar/main.c:169 ../vector/v.in.lidar/main.c:139
 #: ../vector/v.in.pdal/main.cpp:133
 msgid "LAS input file"
 msgstr ""
 
 #: ../raster/r.in.lidar/main.c:122 ../raster/r.in.lidar/main.c:133
-#: ../raster/r.in.pdal/main.cpp:105 ../raster/r.in.pdal/main.cpp:118
+#: ../raster/r.in.pdal/main.cpp:103 ../raster/r.in.pdal/main.cpp:116
 #: ../raster3d/r3.in.lidar/main.c:178 ../vector/v.in.lidar/main.c:140
 #: ../vector/v.in.pdal/main.cpp:134
 msgid "LiDAR input files in LAS format (*.las or *.laz)"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:131 ../raster/r.in.pdal/main.cpp:116
+#: ../raster/r.in.lidar/main.c:131 ../raster/r.in.pdal/main.cpp:114
 #: ../raster3d/r3.in.lidar/main.c:176
 msgid "File containing names of LAS input files"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:160 ../raster/r.in.pdal/main.cpp:154
+#: ../raster/r.in.lidar/main.c:160 ../raster/r.in.pdal/main.cpp:152
 #: ../raster/r.in.xyz/main.c:192
 msgid "Number of points in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:161 ../raster/r.in.pdal/main.cpp:155
+#: ../raster/r.in.lidar/main.c:161 ../raster/r.in.pdal/main.cpp:153
 #: ../raster/r.in.xyz/main.c:193
 msgid "Minimum value of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:162 ../raster/r.in.pdal/main.cpp:156
+#: ../raster/r.in.lidar/main.c:162 ../raster/r.in.pdal/main.cpp:154
 #: ../raster/r.in.xyz/main.c:194
 msgid "Maximum value of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:163 ../raster/r.in.pdal/main.cpp:157
+#: ../raster/r.in.lidar/main.c:163 ../raster/r.in.pdal/main.cpp:155
 #: ../raster/r.in.xyz/main.c:195
 msgid "Range of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:164 ../raster/r.in.pdal/main.cpp:158
+#: ../raster/r.in.lidar/main.c:164 ../raster/r.in.pdal/main.cpp:156
 #: ../raster/r.in.xyz/main.c:196
 msgid "Sum of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:165 ../raster/r.in.pdal/main.cpp:159
+#: ../raster/r.in.lidar/main.c:165 ../raster/r.in.pdal/main.cpp:157
 #: ../raster/r.in.xyz/main.c:197
 msgid "Mean (average) value of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:166 ../raster/r.in.pdal/main.cpp:160
+#: ../raster/r.in.lidar/main.c:166 ../raster/r.in.pdal/main.cpp:158
 #: ../raster/r.in.xyz/main.c:198
 msgid "Standard deviation of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:167 ../raster/r.in.pdal/main.cpp:161
+#: ../raster/r.in.lidar/main.c:167 ../raster/r.in.pdal/main.cpp:159
 #: ../raster/r.in.xyz/main.c:199
 msgid "Variance of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:168 ../raster/r.in.pdal/main.cpp:162
+#: ../raster/r.in.lidar/main.c:168 ../raster/r.in.pdal/main.cpp:160
 #: ../raster/r.in.xyz/main.c:200
 msgid "Coefficient of variance of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:169 ../raster/r.in.pdal/main.cpp:163
+#: ../raster/r.in.lidar/main.c:169 ../raster/r.in.pdal/main.cpp:161
 #: ../raster/r.in.xyz/main.c:201
 msgid "Median value of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:170 ../raster/r.in.pdal/main.cpp:165
+#: ../raster/r.in.lidar/main.c:170 ../raster/r.in.pdal/main.cpp:163
 msgid "pth (nth) percentile of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:171 ../raster/r.in.pdal/main.cpp:166
+#: ../raster/r.in.lidar/main.c:171 ../raster/r.in.pdal/main.cpp:164
 #: ../raster/r.in.xyz/main.c:203
 msgid "Skewness of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:172 ../raster/r.in.pdal/main.cpp:167
+#: ../raster/r.in.lidar/main.c:172 ../raster/r.in.pdal/main.cpp:165
 #: ../raster/r.in.xyz/main.c:204
 msgid "Trimmed mean of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:181 ../raster/r.in.pdal/main.cpp:183
+#: ../raster/r.in.lidar/main.c:181 ../raster/r.in.pdal/main.cpp:181
 msgid "Subtract raster values from the Z coordinates"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:183 ../raster/r.in.pdal/main.cpp:185
+#: ../raster/r.in.lidar/main.c:183 ../raster/r.in.pdal/main.cpp:183
 msgid "The scale for Z is applied beforehand, the range filter for Z afterwards"
 msgstr ""
 
 #: ../raster/r.in.lidar/main.c:185 ../raster/r.in.lidar/main.c:203
 #: ../raster/r.in.lidar/main.c:219 ../raster/r.in.lidar/main.c:334
-#: ../raster/r.in.pdal/main.cpp:187 ../raster/r.in.pdal/main.cpp:208
-#: ../raster/r.in.pdal/main.cpp:227 ../raster/r.in.pdal/main.cpp:247
-#: ../raster/r.in.pdal/main.cpp:425 ../raster3d/r3.in.lidar/main.c:246
+#: ../raster/r.in.pdal/main.cpp:185 ../raster/r.in.pdal/main.cpp:206
+#: ../raster/r.in.pdal/main.cpp:225 ../raster/r.in.pdal/main.cpp:245
+#: ../raster/r.in.pdal/main.cpp:423 ../raster3d/r3.in.lidar/main.c:246
 #: ../raster3d/r3.in.lidar/main.c:259 ../raster3d/r3.in.lidar/main.c:275
 msgid "Transform"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:192 ../raster/r.in.pdal/main.cpp:195
+#: ../raster/r.in.lidar/main.c:192 ../raster/r.in.pdal/main.cpp:193
 msgid "Filter range for Z data (min,max)"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:194 ../raster/r.in.pdal/main.cpp:197
+#: ../raster/r.in.lidar/main.c:194 ../raster/r.in.pdal/main.cpp:195
 msgid "Applied after base_raster transformation step"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:202 ../raster/r.in.pdal/main.cpp:207
+#: ../raster/r.in.lidar/main.c:202 ../raster/r.in.pdal/main.cpp:205
 #: ../raster3d/r3.in.lidar/main.c:258
 msgid "Scale to apply to Z data"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:210 ../raster/r.in.pdal/main.cpp:216
+#: ../raster/r.in.lidar/main.c:210 ../raster/r.in.pdal/main.cpp:214
 #: ../raster3d/r3.in.lidar/main.c:266
 msgid "Filter range for intensity values (min,max)"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:218 ../raster/r.in.pdal/main.cpp:226
+#: ../raster/r.in.lidar/main.c:218 ../raster/r.in.pdal/main.cpp:224
 #: ../raster3d/r3.in.lidar/main.c:274
 msgid "Scale to apply to intensity values"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:245 ../raster/r.in.pdal/main.cpp:291
+#: ../raster/r.in.lidar/main.c:245 ../raster/r.in.pdal/main.cpp:289
 msgid "Discard given percentage of the smallest and largest values"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:254 ../raster/r.in.pdal/main.cpp:301
+#: ../raster/r.in.lidar/main.c:254 ../raster/r.in.pdal/main.cpp:299
 msgid "Output raster resolution"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:261 ../raster/r.in.pdal/main.cpp:309
+#: ../raster/r.in.lidar/main.c:261 ../raster/r.in.pdal/main.cpp:307
 #: ../raster3d/r3.in.lidar/main.c:225 ../vector/v.in.lidar/main.c:199
 #: ../vector/v.in.pdal/main.cpp:195
 msgid "Only import points of selected return type"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:262 ../raster/r.in.pdal/main.cpp:311
+#: ../raster/r.in.lidar/main.c:262 ../raster/r.in.pdal/main.cpp:309
 #: ../raster3d/r3.in.lidar/main.c:226 ../vector/v.in.lidar/main.c:200
 #: ../vector/v.in.pdal/main.cpp:196
 msgid "If not specified, all points are imported"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:271 ../raster/r.in.pdal/main.cpp:321
+#: ../raster/r.in.lidar/main.c:271 ../raster/r.in.pdal/main.cpp:319
 #: ../raster3d/r3.in.lidar/main.c:235 ../vector/v.in.lidar/main.c:209
 #: ../vector/v.in.pdal/main.cpp:205
 msgid "Only import points of selected class(es)"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:272 ../raster/r.in.pdal/main.cpp:323
+#: ../raster/r.in.lidar/main.c:272 ../raster/r.in.pdal/main.cpp:321
 #: ../raster3d/r3.in.lidar/main.c:236 ../vector/v.in.lidar/main.c:210
 #: ../vector/v.in.pdal/main.cpp:206
 msgid "Input is comma separated integers. If not specified, all points are imported."
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:278 ../raster/r.in.pdal/main.cpp:430
+#: ../raster/r.in.lidar/main.c:278 ../raster/r.in.pdal/main.cpp:428
 #: ../raster3d/r3.in.lidar/main.c:295 ../vector/v.in.lidar/main.c:277
 msgid "Print LAS file info and exit"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:283 ../raster/r.in.pdal/main.cpp:391
+#: ../raster/r.in.lidar/main.c:283 ../raster/r.in.pdal/main.cpp:389
 msgid "Use the extent of the input for the raster extent"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:285 ../raster/r.in.pdal/main.cpp:393
+#: ../raster/r.in.lidar/main.c:285 ../raster/r.in.pdal/main.cpp:391
 msgid "Set internally computational region extents based on the point cloud"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:292 ../raster/r.in.pdal/main.cpp:401
+#: ../raster/r.in.lidar/main.c:292 ../raster/r.in.pdal/main.cpp:399
 msgid "Set computation region to match the new raster map"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:294 ../raster/r.in.pdal/main.cpp:403
+#: ../raster/r.in.lidar/main.c:294 ../raster/r.in.pdal/main.cpp:401
 msgid "Set computation region to match the 2D extent and resolution of the newly created new raster map"
 msgstr ""
 
@@ -22048,11 +22043,11 @@ msgstr ""
 msgid "Use Z values for filtering, but intensity values for statistics"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:330 ../raster/r.in.pdal/main.cpp:421
+#: ../raster/r.in.lidar/main.c:330 ../raster/r.in.pdal/main.cpp:419
 msgid "Use base raster resolution instead of computational region"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:332 ../raster/r.in.pdal/main.cpp:423
+#: ../raster/r.in.lidar/main.c:332 ../raster/r.in.pdal/main.cpp:421
 msgid "For getting values from base raster, use its actual resolution instead of computational region resolution"
 msgstr ""
 
@@ -22071,11 +22066,11 @@ msgstr ""
 msgid "Flag %c makes sense only with %s option or -%c flag"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:370 ../raster/r.in.pdal/main.cpp:498
+#: ../raster/r.in.lidar/main.c:370 ../raster/r.in.pdal/main.cpp:496
 msgid "Trim option can be used only with trimmean method"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:377 ../raster/r.in.pdal/main.cpp:453
+#: ../raster/r.in.lidar/main.c:377 ../raster/r.in.pdal/main.cpp:451
 #: ../raster3d/r3.in.lidar/main.c:340
 #, c-format
 msgid "File <%s> does not exist"
@@ -22085,7 +22080,7 @@ msgstr ""
 msgid "zrange will not be taken into account during scan"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:410 ../raster/r.in.pdal/main.cpp:516
+#: ../raster/r.in.lidar/main.c:410 ../raster/r.in.pdal/main.cpp:514
 #: ../raster3d/r3.in.lidar/main.c:376 ../vector/v.in.lidar/main.c:347
 #: ../vector/v.in.pdal/main.cpp:271
 #, c-format
@@ -22121,7 +22116,7 @@ msgstr ""
 msgid "Invalid %s"
 msgstr ""
 
-#: ../raster/r.in.lidar/main.c:542 ../raster/r.in.pdal/main.cpp:668
+#: ../raster/r.in.lidar/main.c:542 ../raster/r.in.pdal/main.cpp:666
 #, c-format
 msgid "Option '%s' must be > 0.0"
 msgstr ""
@@ -22385,13 +22380,13 @@ msgid "Unknown return filter value <%s>"
 msgstr ""
 
 #: ../raster/r.in.pdal/info.cpp:42 ../raster/r.in.pdal/info.cpp:254
-#: ../raster/r.in.pdal/main.cpp:747
+#: ../raster/r.in.pdal/main.cpp:745
 #, c-format
 msgid "Cannot determine input file type of <%s>"
 msgstr ""
 
 #: ../raster/r.in.pdal/info.cpp:61 ../raster/r.in.pdal/info.cpp:273
-#: ../raster/r.in.pdal/main.cpp:871 ../vector/v.in.pdal/main.cpp:416
+#: ../raster/r.in.pdal/main.cpp:869 ../vector/v.in.pdal/main.cpp:416
 #, c-format
 msgid "PDAL error: %s"
 msgstr ""
@@ -22406,193 +22401,199 @@ msgstr ""
 msgid "Reprojection of the data extent failed: %s"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:164
+#: ../raster/r.in.pdal/main.cpp:162
 msgid "Mode value of point values in cell"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:168
+#: ../raster/r.in.pdal/main.cpp:166
 msgid "Maximum number of points in cell per source ID"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:169
+#: ../raster/r.in.pdal/main.cpp:167
 msgid "Minimum number of points in cell per source ID"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:170
+#: ../raster/r.in.pdal/main.cpp:168
 msgid "First eigenvalue of point x, y, z coordinates"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:171
+#: ../raster/r.in.pdal/main.cpp:169
 msgid "Second eigenvalue of point x, y, z coordinates"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:172
+#: ../raster/r.in.pdal/main.cpp:170
 msgid "Third eigenvalue of point x, y, z coordinates"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:236
+#: ../raster/r.in.pdal/main.cpp:234
 msgid "Filter range for output dimension values (min,max)"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:244
+#: ../raster/r.in.pdal/main.cpp:242
 msgid "Scale to apply to output dimension values"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:246
+#: ../raster/r.in.pdal/main.cpp:244
 msgid "Use if output dimension is not Z or intensity"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:253 ../vector/v.in.pdal/main.cpp:213
+#: ../raster/r.in.pdal/main.cpp:251 ../vector/v.in.pdal/main.cpp:213
 msgid "Reproject to project's coordinate system if needed [deprecated]"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:255 ../vector/v.in.pdal/main.cpp:215
+#: ../raster/r.in.pdal/main.cpp:253 ../vector/v.in.pdal/main.cpp:215
 msgid "This flag is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:267 ../vector/v.in.pdal/main.cpp:235
+#: ../raster/r.in.pdal/main.cpp:265 ../vector/v.in.pdal/main.cpp:235
 msgid "Input dataset projection (WKT or EPSG, e.g. EPSG:4326)"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:269 ../vector/v.in.pdal/main.cpp:237
+#: ../raster/r.in.pdal/main.cpp:267 ../vector/v.in.pdal/main.cpp:237
 msgid "Override input dataset coordinate system using EPSG code or WKT definition"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:332
+#: ../raster/r.in.pdal/main.cpp:330
 msgid "Dimension (variable) to use for raster values"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:347
+#: ../raster/r.in.pdal/main.cpp:345
 msgid "Z coordinate"
 msgstr ""
 
 #. GTC: LAS LiDAR point property
-#: ../raster/r.in.pdal/main.cpp:349
+#: ../raster/r.in.pdal/main.cpp:347
 msgid "Intensity"
 msgstr ""
 
 #. GTC: LAS LiDAR point property
-#: ../raster/r.in.pdal/main.cpp:351
+#: ../raster/r.in.pdal/main.cpp:349
 msgid "Return number"
 msgstr ""
 
 #. GTC: LAS LiDAR point property
-#: ../raster/r.in.pdal/main.cpp:353
+#: ../raster/r.in.pdal/main.cpp:351
 msgid "Number of returns"
 msgstr ""
 
 #. GTC: LAS LiDAR point property
-#: ../raster/r.in.pdal/main.cpp:355
+#: ../raster/r.in.pdal/main.cpp:353
 msgid "Scan direction"
 msgstr ""
 
 #. GTC: LAS LiDAR point property
-#: ../raster/r.in.pdal/main.cpp:357
+#: ../raster/r.in.pdal/main.cpp:355
 msgid "Scan angle"
 msgstr ""
 
 #. GTC: LAS LiDAR point property
-#: ../raster/r.in.pdal/main.cpp:359
+#: ../raster/r.in.pdal/main.cpp:357
 msgid "Point class value"
 msgstr ""
 
 #. GTC: LAS LiDAR point property
-#: ../raster/r.in.pdal/main.cpp:361
+#: ../raster/r.in.pdal/main.cpp:359
 msgid "Source ID"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:369
+#: ../raster/r.in.pdal/main.cpp:367
 msgid "Custom dimension (variable) to use for raster values"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:370
+#: ../raster/r.in.pdal/main.cpp:368
 msgid "PDAL dimension name"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:381
+#: ../raster/r.in.pdal/main.cpp:379
 msgid "Number of points buffered at once during processing"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:383
+#: ../raster/r.in.pdal/main.cpp:381
 msgid "Larger values may improve performance for large datasets at the cost of memory"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:385
+#: ../raster/r.in.pdal/main.cpp:383
 msgid "Performance"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:436
+#: ../raster/r.in.pdal/main.cpp:434
 msgid "Print data file extent in shell script style and then exit"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:481 ../vector/v.in.pdal/main.cpp:266
+#: ../raster/r.in.pdal/main.cpp:479 ../vector/v.in.pdal/main.cpp:266
 msgid "Flag 'w' is deprecated and will be removed in a future release. Input dataset will always be reprojected if needed."
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:487
+#: ../raster/r.in.pdal/main.cpp:485
 #, c-format
 msgid "Flag %c makes sense only with %s option or -%c flag or -%c flag"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:510
+#: ../raster/r.in.pdal/main.cpp:508
 msgid "Binning methods 'n', 'sidnmax', 'sidnmin' and eigenvalues are ignoring specified dimension"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:589 ../raster/r.in.pdal/main.cpp:601
+#: ../raster/r.in.pdal/main.cpp:587 ../raster/r.in.pdal/main.cpp:599
 msgid "Output map type set to CELL"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:763
+#: ../raster/r.in.pdal/main.cpp:761
 #, c-format
 msgid "PDAL reader creation failed, a wrong format of <%s>"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:777 ../vector/v.in.pdal/main.cpp:362
+#: ../raster/r.in.pdal/main.cpp:775 ../vector/v.in.pdal/main.cpp:362
 #, c-format
 msgid "PDAL error while reading <%s>: %s"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:783 ../vector/v.in.pdal/main.cpp:379
+#: ../raster/r.in.pdal/main.cpp:781 ../vector/v.in.pdal/main.cpp:379
 msgid "The input dataset has undefined projection"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:809 ../vector/v.in.pdal/main.cpp:351
+#: ../raster/r.in.pdal/main.cpp:807 ../vector/v.in.pdal/main.cpp:351
 msgid "Overriding projection check and assuming that the CRS of input matches the project's CRS"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:821 ../vector/v.in.pdal/main.cpp:393
+#: ../raster/r.in.pdal/main.cpp:819 ../vector/v.in.pdal/main.cpp:393
 msgid "Reprojecting the input to the project's CRS"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:874 ../vector/v.in.pdal/main.cpp:419
+#: ../raster/r.in.pdal/main.cpp:872 ../vector/v.in.pdal/main.cpp:419
 msgid "Running PDAL algorithms..."
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:898 ../vector/v.in.pdal/main.cpp:465
+#: ../raster/r.in.pdal/main.cpp:896 ../vector/v.in.pdal/main.cpp:465
 msgid "Scanning points..."
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:903
+#: ../raster/r.in.pdal/main.cpp:901
 msgid "Cannot identify the requested dimension. Check dimension name spelling."
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:907
+#: ../raster/r.in.pdal/main.cpp:905
 #, c-format
 msgid "Both dimension and user dimension parameters are specified. Using '%s' as the dimension to import."
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:915
+#: ../raster/r.in.pdal/main.cpp:913
 #, c-format
 msgid "Dataset doesn't have requested dimension '%s' (possibly a programming error)"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:950
-msgid " points found in input file(s)"
+#: ../raster/r.in.pdal/main.cpp:948
+#, c-format
+msgid "%<PRIu64> points found in input file(s)"
 msgstr ""
 
-#: ../raster/r.in.pdal/main.cpp:984 ../raster/r.in.pdal/main.cpp:991
+#: ../raster/r.in.pdal/main.cpp:980
 #, c-format
-msgid "Raster map <%s> created. "
+msgid "%<PRIu64> points found in region."
+msgstr ""
+
+#: ../raster/r.in.pdal/main.cpp:983
+#, c-format
+msgid "Number of input files: %d"
 msgstr ""
 
 #: ../raster/r.in.pdal/projection.c:120 ../vector/v.in.pdal/projection.c:123
@@ -23407,72 +23408,74 @@ msgstr ""
 msgid "Known functions:"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:108
+#: ../raster/r.mapcalc/main.c:107
 msgid "Raster map calculator."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:115
+#: ../raster/r.mapcalc/main.c:114
 msgid "Expression to evaluate"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:116 ../raster/r.mapcalc/main.c:141
+#: ../raster/r.mapcalc/main.c:115 ../raster/r.mapcalc/main.c:140
 msgid "Expression"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:124
+#: ../raster/r.mapcalc/main.c:123
 msgid "The computational region that should be used."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:130
+#: ../raster/r.mapcalc/main.c:129
 msgid "current uses the current region of the mapset"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:131
+#: ../raster/r.mapcalc/main.c:130
 msgid "intersect computes the intersection region between all input maps and uses the smallest resolution"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:133
+#: ../raster/r.mapcalc/main.c:132
 msgid "union computes the union extent of all map regions and uses the smallest resolution"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:140
+#: ../raster/r.mapcalc/main.c:139
 msgid "File containing expression(s) to evaluate"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:148
+#: ../raster/r.mapcalc/main.c:147 ../raster/r.sim/r.sim.sediment/main.c:287
+#: ../raster/r.sim/r.sim.water/main.c:322
 msgid "Generate random seed (result is non-deterministic) [deprecated]"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:150
+#: ../raster/r.mapcalc/main.c:149 ../raster/r.sim/r.sim.sediment/main.c:289
+#: ../raster/r.sim/r.sim.water/main.c:324
 msgid "This flag is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:155
+#: ../raster/r.mapcalc/main.c:154
 msgid "List input and output maps"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:178
+#: ../raster/r.mapcalc/main.c:177 ../raster/r.sim/simlib/random.c:33
 #, c-format
 msgid "%s= and -%c are mutually exclusive"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:189
+#: ../raster/r.mapcalc/main.c:188
 msgid "parse error"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:205
+#: ../raster/r.mapcalc/main.c:204
 msgid "Flag 's' is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:243
+#: ../raster/r.mapcalc/main.c:240
 msgid "r3.mapcalc does not support parallel execution."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:249
+#: ../raster/r.mapcalc/main.c:246
 msgid "Parallel execution is not supported with rand() function"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:257 ../raster/r.mfilter/main.c:124
+#: ../raster/r.mapcalc/main.c:254 ../raster/r.mfilter/main.c:124
 #: ../raster/r.neighbors/main.c:301 ../raster/r.patch/main.c:105
 #: ../raster/r.resamp.filter/main.c:486 ../raster/r.resamp.interp/main.c:123
 #: ../raster/r.resamp.stats/main.c:438 ../raster/r.series/main.c:222
@@ -23480,10 +23483,6 @@ msgstr ""
 #: ../raster/r.univar/r.univar_main.c:244
 #, c-format
 msgid "<%d> is not valid number of nprocs."
-msgstr ""
-
-#: ../raster/r.mapcalc/main.c:269
-msgid "Floating point error(s) occurred in the calculation"
 msgstr ""
 
 #: ../raster/r.mapcalc/map.c:223 ../raster/r.mapcalc/map3.c:184
@@ -25540,7 +25539,7 @@ msgstr ""
 msgid "No rules specified. Quant table(s) not changed."
 msgstr ""
 
-#: ../raster/r.quant/main.c:183 ../raster/r.reclass/main.c:140
+#: ../raster/r.quant/main.c:183 ../raster/r.reclass/main.c:138
 #: ../raster/r.recode/main.c:94
 msgid "No rules specified"
 msgstr ""
@@ -25911,19 +25910,15 @@ msgstr ""
 
 #: ../raster/r.reclass/main.c:117
 #, c-format
-msgid "Illegal reclass rule -"
+msgid "Illegal reclass rule - ignored\n"
 msgstr ""
 
-#: ../raster/r.reclass/main.c:118
+#: ../raster/r.reclass/main.c:120
 #, c-format
-msgid " ignored\n"
+msgid "%s - invalid reclass rule"
 msgstr ""
 
-#: ../raster/r.reclass/main.c:121
-msgid " - invalid reclass rule"
-msgstr ""
-
-#: ../raster/r.reclass/main.c:137
+#: ../raster/r.reclass/main.c:135
 #, c-format
 msgid "No rules specified. Raster map <%s> not created"
 msgstr ""
@@ -27429,97 +27424,63 @@ msgstr ""
 msgid "Water diffusion constant"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:286
-#: ../raster/r.sim/r.sim.water/main.c:321
-msgid "Seed for random number generator"
-msgstr ""
-
-#: ../raster/r.sim/r.sim.sediment/main.c:288
-#: ../raster/r.sim/r.sim.water/main.c:323
-msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
-msgstr ""
-
-#: ../raster/r.sim/r.sim.sediment/main.c:293
-#: ../raster/r.sim/r.sim.water/main.c:328
-msgid "Generate random seed"
-msgstr ""
-
-#: ../raster/r.sim/r.sim.sediment/main.c:295
-#: ../raster/r.sim/r.sim.water/main.c:330
-msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
-msgstr ""
-
-#: ../raster/r.sim/r.sim.sediment/main.c:304
-#: ../raster/r.sim/r.sim.water/main.c:339
+#: ../raster/r.sim/r.sim.sediment/main.c:298
+#: ../raster/r.sim/r.sim.water/main.c:333
 msgid "Number of threads which will be used for parallel computation."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:309
-#: ../raster/r.sim/r.sim.water/main.c:344
+#: ../raster/r.sim/r.sim.sediment/main.c:303
+#: ../raster/r.sim/r.sim.water/main.c:338
 msgid "Print run summary to standard output"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:321
-#: ../raster/r.sim/r.sim.water/main.c:357
+#: ../raster/r.sim/r.sim.sediment/main.c:315
+#: ../raster/r.sim/r.sim.water/main.c:351
 #, c-format
 msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:334
-#: ../raster/r.sim/r.sim.water/main.c:370
-#, c-format
-msgid "Generated random seed (-s): %ld"
-msgstr ""
-
-#: ../raster/r.sim/r.sim.sediment/main.c:339
-#: ../raster/r.sim/r.sim.water/main.c:375 ../raster/r.surf.fractal/main.c:65
-#: ../raster/r.surf.gauss/main.c:66 ../raster/r.surf.random/main.c:115
-#: ../vector/v.ppa/main.c:175
-#, c-format
-msgid "Read random seed from %s option: %ld"
-msgstr ""
-
-#: ../raster/r.sim/r.sim.sediment/main.c:396
-#: ../raster/r.sim/r.sim.water/main.c:447 ../vector/v.surf.rst/main.c:410
+#: ../raster/r.sim/r.sim.sediment/main.c:378
+#: ../raster/r.sim/r.sim.water/main.c:429 ../vector/v.surf.rst/main.c:410
 #, c-format
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:402
-#: ../raster/r.sim/r.sim.water/main.c:453 ../raster/r.sun/main.c:575
+#: ../raster/r.sim/r.sim.sediment/main.c:384
+#: ../raster/r.sim/r.sim.water/main.c:435 ../raster/r.sun/main.c:575
 #: ../vector/v.surf.rst/main.c:424
 msgid "Parallel processing disabled due to active mask."
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:410
-#: ../raster/r.sim/r.sim.water/main.c:461
+#: ../raster/r.sim/r.sim.sediment/main.c:392
+#: ../raster/r.sim/r.sim.water/main.c:443
 #, c-format
 msgid "Number of threads: %d"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:426
-#: ../raster/r.sim/r.sim.water/main.c:556
+#: ../raster/r.sim/r.sim.sediment/main.c:408
+#: ../raster/r.sim/r.sim.water/main.c:538
 msgid "More than 100 files are going to be created !!!!!"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:432
-#: ../raster/r.sim/r.sim.water/main.c:562
+#: ../raster/r.sim/r.sim.sediment/main.c:414
+#: ../raster/r.sim/r.sim.water/main.c:544
 #, c-format
 msgid "default nwalk=%d, rwalk=%f"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:441
-#: ../raster/r.sim/r.sim.water/main.c:572
+#: ../raster/r.sim/r.sim.sediment/main.c:423
+#: ../raster/r.sim/r.sim.water/main.c:554
 #, c-format
 msgid "Using metric conversion factor %f, step=%f"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:451
+#: ../raster/r.sim/r.sim.sediment/main.c:433
 msgid "You are not outputting any raster or site files"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.sediment/main.c:454
-#: ../raster/r.sim/r.sim.water/main.c:585 ../vector/v.surf.rst/main.c:685
+#: ../raster/r.sim/r.sim.sediment/main.c:436
+#: ../raster/r.sim/r.sim.water/main.c:567 ../vector/v.surf.rst/main.c:685
 #: ../vector/v.surf.rst/main.c:757 ../vector/v.vol.rst/main.c:912
 msgid "Input failed"
 msgstr ""
@@ -27597,91 +27558,96 @@ msgstr ""
 msgid "Time-series output"
 msgstr ""
 
-#: ../raster/r.sim/r.sim.water/main.c:582
+#: ../raster/r.sim/r.sim.water/main.c:564
 msgid "You are not outputting any raster maps"
 msgstr ""
 
-#: ../raster/r.sim/simlib/hydro.c:78
+#: ../raster/r.sim/simlib/hydro.c:87
+#, c-format
+msgid "%d walkers over %d time steps may draw more random numbers than one seed provides; the random numbers of some walkers then repeat those of others shifted by a constant"
+msgstr ""
+
+#: ../raster/r.sim/simlib/hydro.c:100
 #, c-format
 msgid "Processing block %d of %d"
 msgstr ""
 
-#: ../raster/r.sim/simlib/hydro.c:388
+#: ../raster/r.sim/simlib/hydro.c:407
 msgid "Unable to write raster maps"
 msgstr ""
 
-#: ../raster/r.sim/simlib/hydro.c:490
+#: ../raster/r.sim/simlib/hydro.c:509
 msgid "Cannot write raster maps"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:122
+#: ../raster/r.sim/simlib/input.c:123
 msgid "Manning's n raster map not found and manin_val undefined, choose one to be allowed to process"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:246
+#: ../raster/r.sim/simlib/input.c:247
 msgid "Zero value in Mannings n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:309
+#: ../raster/r.sim/simlib/input.c:310
 msgid "No values in the elevation raster."
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:344
+#: ../raster/r.sim/simlib/input.c:345
 #, c-format
 msgid "Time step of %.2f s is longer than output_step of %d s, some output steps may be skipped"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:349
+#: ../raster/r.sim/simlib/input.c:350
 #, c-format
 msgid ""
 "Min elevation \t= %.2f m\n"
 "Max elevation \t= %.2f m\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:351
+#: ../raster/r.sim/simlib/input.c:352
 #, c-format
 msgid "Mean Source Rate (rainf. excess or sediment) \t= %f m/s or kg/m2s \n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:354
+#: ../raster/r.sim/simlib/input.c:355
 #, c-format
 msgid "Mean flow velocity \t= %f m/s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:358
+#: ../raster/r.sim/simlib/input.c:359
 #, c-format
 msgid "Mean Mannings \t= %f\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:360
+#: ../raster/r.sim/simlib/input.c:361
 msgid "Mean Mannings \t= undefined (chmean is zero)\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:364
+#: ../raster/r.sim/simlib/input.c:365
 #, c-format
 msgid "Number of iterations \t= %d cell\n"
 msgid_plural "Number of iterations \t= %d cells\n"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../raster/r.sim/simlib/input.c:367
+#: ../raster/r.sim/simlib/input.c:368
 #, c-format
 msgid "Time step \t= %.2f s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:369
+#: ../raster/r.sim/simlib/input.c:370
 #, c-format
 msgid ""
 "Sigmax \t= %f\n"
 "Max velocity \t= %f m/s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:370
+#: ../raster/r.sim/simlib/input.c:371
 #, c-format
 msgid "Time step used \t= %.2f s\n"
 msgstr ""
 
-#: ../raster/r.sim/simlib/input.c:421
+#: ../raster/r.sim/simlib/input.c:422
 msgid "Unable to write et file"
 msgstr ""
 
@@ -27695,9 +27661,29 @@ msgstr ""
 msgid "Unable to open observation logfile %s for writing"
 msgstr ""
 
-#: ../raster/r.sim/simlib/output.c:367
+#: ../raster/r.sim/simlib/output.c:369
 #, c-format
 msgid "FP raster map <%s> not found"
+msgstr ""
+
+#: ../raster/r.sim/simlib/random.c:36
+#, c-format
+msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
+msgstr ""
+
+#: ../raster/r.sim/simlib/random.c:47
+#, c-format
+msgid "Invalid random seed <%s>"
+msgstr ""
+
+#: ../raster/r.sim/simlib/random.c:49
+#, c-format
+msgid "Read random seed from %s option: %<PRId64>"
+msgstr ""
+
+#: ../raster/r.sim/simlib/random.c:54
+#, c-format
+msgid "Generated random seed: %<PRId64>"
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:165
@@ -29740,6 +29726,12 @@ msgstr ""
 msgid "Number of intermediate images to produce"
 msgstr ""
 
+#: ../raster/r.surf.fractal/main.c:65 ../raster/r.surf.gauss/main.c:66
+#: ../raster/r.surf.random/main.c:115 ../vector/v.ppa/main.c:175
+#, c-format
+msgid "Read random seed from %s option: %ld"
+msgstr ""
+
 #: ../raster/r.surf.fractal/main.c:71 ../raster/r.surf.gauss/main.c:72
 #: ../raster/r.surf.random/main.c:121 ../vector/v.ppa/main.c:180
 #, c-format
@@ -30058,7 +30050,6 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #: ../raster/r.thin/io.c:112 ../raster/r.thin/io.c:188
@@ -36662,14 +36653,22 @@ msgstr ""
 msgid "Lowest chi2 = %f\n"
 msgstr ""
 
-#: ../vector/v.class/main.c:316
-#, c-format
-msgid ""
-"%15s%15s%15s\n"
-"\n"
+#. GTC Column header, lower class limit (exclusive)
+#: ../vector/v.class/main.c:318
+msgid "From (excl.)"
 msgstr ""
 
-#: ../vector/v.class/main.c:329
+#. GTC Column header, upper class limit (inclusive)
+#: ../vector/v.class/main.c:320
+msgid "To (incl.)"
+msgstr ""
+
+#. GTC Column header, number of values in the class
+#: ../vector/v.class/main.c:322
+msgid "Frequency"
+msgstr ""
+
+#: ../vector/v.class/main.c:334
 #, c-format
 msgid ""
 "\n"
@@ -40409,7 +40408,7 @@ msgstr ""
 
 #: ../vector/v.in.ogr/main.c:1927
 #, c-format
-msgid "%d additional areas where created during import."
+msgid "%d additional areas were created during import."
 msgstr ""
 
 #: ../vector/v.in.ogr/main.c:1932
@@ -45031,7 +45030,7 @@ msgid "No database connection defined for map <%s> layer %d, but WHERE condition
 msgstr ""
 
 #: ../vector/v.profile/main.c:487 ../vector/v.profile/main.c:652
-msgid "No features match Your query"
+msgid "No features match your query"
 msgstr ""
 
 #: ../vector/v.profile/main.c:492 ../vector/v.profile/main.c:507
@@ -45431,12 +45430,17 @@ msgstr ""
 
 #: ../vector/v.rectify/main.c:202
 #, c-format
-msgid "The vector map <%s> already exists in"
+msgid "The vector map <%s> already exists."
 msgstr ""
 
 #: ../vector/v.rectify/main.c:204
 #, c-format
-msgid "target project %s, mapset %s:"
+msgid "Target project: <%s>"
+msgstr ""
+
+#: ../vector/v.rectify/main.c:205
+#, c-format
+msgid "Target mapset: <%s>"
 msgstr ""
 
 #: ../vector/v.rectify/main.c:206

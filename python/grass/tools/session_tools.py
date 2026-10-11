@@ -604,7 +604,7 @@ class Tools:
         """Get a function representing a GRASS tool.
 
         Attribute should be in the form 'r_example_name'. For example, 'r.slope.aspect'
-        is used trough attribute 'r_slope_aspect'.
+        is used through attribute 'r_slope_aspect'.
         """
         if not self._name_resolver:
             self._name_resolver = ToolFunctionResolver(

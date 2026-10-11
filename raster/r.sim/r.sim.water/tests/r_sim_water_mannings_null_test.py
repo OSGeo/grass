@@ -57,7 +57,7 @@ def simulate(session, elevation, man, **kwargs):
         rain_value=50,
         nwalkers=2000,
         duration=2,
-        random_seed=1,
+        seed=1,
         nprocs=1,
         flags="p",
         format="json",
