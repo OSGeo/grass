@@ -35,7 +35,7 @@ LIB_POTFILES = find ../lib ../python/grass \( -name "*.c" -o -name "*.py" \) | L
 MOD_POTFILES = find ../ \( -name "*.c" -o -name "*.cpp" \) | grep -v '../lib' | LC_ALL=C sort | xargs grep -l "_(\"\|n_(\""
 WXPY_POTFILES = find ../gui/wxpython -name '*.py' | LC_ALL=C sort | xargs grep -l "_(\"\|n_(\""
 #For Python script module messages
-MOD_PYFILES = find ../scripts ../temporal ../gui/scripts -name '*.py' | LC_ALL=C sort | xargs grep -l "_(\"\|n_(\""
+MOD_PYFILES = find ../scripts ../temporal -name '*.py' | LC_ALL=C sort | xargs grep -l "_(\"\|n_(\""
 
 XGETTEXT_ARGS = --no-wrap --sort-by-file
 MSGMERGE_ARGS = --no-wrap --sort-by-file --previous
