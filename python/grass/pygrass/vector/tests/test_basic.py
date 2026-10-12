@@ -165,7 +165,14 @@ def test_bbox_equality():
     assert box1 != box3
     assert box1 != (1, 2, 3, 4, 5, 6)
     assert box1 != "not_a_bbox"
-    assert box1.__eq__("not_a_bbox") is NotImplemented
+
+    class EqualToAll:
+        def __eq__(self, other):
+            return True
+
+    # Bbox returns NotImplemented for other types, so Python tries the
+    # other operand.
+    assert box1 == EqualToAll()
 
 
 def test_bbox_subclass_equality():
