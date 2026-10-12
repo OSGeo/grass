@@ -354,6 +354,18 @@ def test_boxlist_append_after_remove():
     assert boxlist[2] == box3
 
 
+def test_boxlist_append_to_query_ids():
+    """Test appending to a list with ids which are not 0..n-1."""
+    boxlist = BoxList()
+    for box_id in (5, 6, 8, 9):
+        libvect.Vect_boxlist_append(boxlist.c_boxlist, box_id, Bbox().c_bbox)
+    boxlist.append(Bbox(1, 1, 1, 1))
+    # The length, now 5, is taken by a query id, so the largest id + 1 is used.
+    boxlist.append(Bbox(2, 2, 2, 2))
+    assert boxlist.ids == [5, 6, 8, 9, 4, 10]
+    assert boxlist[-2:] == [Bbox(1, 1, 1, 1), Bbox(2, 2, 2, 2)]
+
+
 def test_boxlist_append_view_of_same_list():
     """Test appending a box from the list itself while the list grows."""
     # 1000 is the allocation step of Vect_boxlist_append, so the next append

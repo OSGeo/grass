@@ -181,8 +181,7 @@ class BoxList:
         # if set to 0, the list will hold only ids and no boxes
         self.c_boxlist.contents.have_boxes = 1
         if boxlist is not None:
-            for box in boxlist:
-                self.append(box)
+            self._extend_with_new_ids(boxlist)
 
     @property
     def ids(self):
@@ -253,9 +252,9 @@ class BoxList:
         """Append a Bbox object to a Boxlist object, using the
         ``Vect_boxlist_append`` C function.
 
-        The box gets an id one larger than the largest id in the list,
-        so that it does not collide with ids already in the list, such as
-        feature ids from a spatial query.
+        The box gets the length of the list as its id. If that id is
+        already in the list, e.g., after remove() or with feature ids from
+        a spatial query, it gets an id one larger than the largest id.
 
         :param box: the bounding box to add to the list
         :type box: a Bbox object
@@ -273,7 +272,14 @@ class BoxList:
         3
 
         """
-        self._append_c_box(self._next_id(), self._copy_c_box(box))
+        c_box = self._copy_c_box(box)
+        # Try the length first because finding the largest id is a slow
+        # pass over all ids in Python.
+        if self._append_c_box(len(self), c_box):
+            return
+        if not self._append_c_box(self._next_id(), c_box):
+            msg = "Cannot append box to list"
+            raise GrassError(msg)
 
     def _next_id(self):
         """Return an id which is not yet in the list."""
@@ -293,13 +299,12 @@ class BoxList:
         return libvect.bound_box.from_buffer_copy(box.c_bbox.contents)
 
     def _append_c_box(self, box_id, c_box):
+        """Append a C box, return False if the id is already in the list"""
         n_before = len(self)
-        if (
-            libvect.Vect_boxlist_append(self.c_boxlist, box_id, ctypes.pointer(c_box))
-            or len(self) != n_before + 1
-        ):
+        if libvect.Vect_boxlist_append(self.c_boxlist, box_id, ctypes.pointer(c_box)):
             msg = "Cannot append box to list"
             raise GrassError(msg)
+        return len(self) == n_before + 1
 
     def extend(self, boxlist):
         """Extend a boxlist with another BoxList or iterable of Bbox objects.
@@ -343,12 +348,17 @@ class BoxList:
                 msg = "Cannot extend list"
                 raise GrassError(msg)
         else:
-            # Copy all boxes before appending any, because they may be views
-            # into this list which the first append can invalidate.
-            c_boxes = [self._copy_c_box(box) for box in boxlist]
-            first_id = self._next_id()
-            for offset, c_box in enumerate(c_boxes):
-                self._append_c_box(first_id + offset, c_box)
+            self._extend_with_new_ids(boxlist)
+
+    def _extend_with_new_ids(self, boxes):
+        # Copy all boxes before appending any, because they may be views
+        # into this list which the first append can invalidate.
+        c_boxes = [self._copy_c_box(box) for box in boxes]
+        first_id = self._next_id()
+        for offset, c_box in enumerate(c_boxes):
+            if not self._append_c_box(first_id + offset, c_box):
+                msg = "Cannot append box to list"
+                raise GrassError(msg)
 
     def remove(self, indx):
         """Remove Bbox from the boxlist, given an id or a list of ids
