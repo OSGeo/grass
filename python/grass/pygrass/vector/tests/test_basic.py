@@ -189,6 +189,27 @@ def test_bbox_unhashable():
     """Test that Bbox is unhashable because it is mutable and has __eq__."""
     with pytest.raises(TypeError, match="unhashable"):
         hash(Bbox())
+    with pytest.raises(TypeError, match="unhashable"):
+        _ = {Bbox()}
+
+
+def test_bbox_changes_through_its_list():
+    """Test that a Bbox from a BoxList changes when the list changes.
+
+    This is why Bbox cannot have a hash based on its coordinates.
+    """
+    boxlist = BoxList([Bbox(1, 2, 3, 4)])
+    box = boxlist[0]
+    boxlist[0] = Bbox(5, 6, 7, 8)
+    assert box == Bbox(5, 6, 7, 8)
+
+
+def test_bbox_nsewtb_is_hashable():
+    """Test that nsewtb() can be used where a hashable value is needed."""
+    box1 = Bbox(1, 2, 3, 4)
+    box2 = Bbox(1, 2, 3, 4)
+    assert {box1.nsewtb(), box2.nsewtb()} == {(1, 2, 3, 4, 0, 0)}
+    assert {box1.nsewtb(): "a"}[box2.nsewtb()] == "a"
 
 
 def test_boxlist_init_empty():

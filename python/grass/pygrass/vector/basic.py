@@ -38,6 +38,16 @@ class Bbox:
     >>> bbox
     Bbox(100.0, 0.0, 0.0, 100.0)
 
+    Two Bbox objects are equal when their coordinates are equal. Because the
+    coordinates can be changed, Bbox objects are not hashable, so they cannot
+    be put in a set or used as dictionary keys. Use the tuple returned by
+    nsewtb() instead:
+
+    >>> Bbox(1, 2, 3, 4) == Bbox(1, 2, 3, 4)
+    True
+    >>> {Bbox(1, 2, 3, 4).nsewtb(), Bbox(1, 2, 3, 4).nsewtb()}
+    {(1.0, 2.0, 3.0, 4.0, 0.0, 0.0)}
+
     ..
     """
 
