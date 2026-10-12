@@ -5,6 +5,7 @@ Created on Tue Jul 31 13:06:20 2012
 """
 
 import ctypes
+import operator
 from collections.abc import Iterable
 
 import grass.lib.vector as libvect
@@ -154,8 +155,12 @@ class Bbox:
 
     def __eq__(self, other):
         if not isinstance(other, Bbox):
-            return False
+            return NotImplemented
         return self.nsewtb() == other.nsewtb()
+
+    # Equality is based on the coordinates, which are mutable, so a hash
+    # based on them would change while the object is in a set or a dict.
+    __hash__ = None
 
 
 class BoxList:
@@ -186,33 +191,46 @@ class BoxList:
     def __repr__(self):
         return "Boxlist([%s])" % ", ".join([repr(box) for box in self.__iter__()])
 
-    def __getitem__(self, indx):
-        if isinstance(indx, slice):
-            return [self[i] for i in range(*indx.indices(len(self)))]
-        if isinstance(indx, int):
-            if indx < 0:
-                indx += len(self)
-            if indx >= len(self) or indx < 0:
-                msg = "Index out of range"
-                raise IndexError(msg)
-            bbox = Bbox()
-            bbox.c_bbox = ctypes.pointer(self.c_boxlist.contents.box[indx])
-            return bbox
-        msg = f"Index must be an integer or slice, got {type(indx).__name__}"
-        raise TypeError(msg)
+    def _box_index(self, indx):
+        """Return a valid non-negative position in the C box array.
 
-    def __setitem__(self, indx, bbox):
-        if not isinstance(indx, int):
+        The box array is a raw C pointer, so indexing it is not checked by
+        ctypes and must not go out of bounds.
+        """
+        try:
+            indx = operator.index(indx)
+        except TypeError:
             msg = f"Index must be an integer, got {type(indx).__name__}"
-            raise TypeError(msg)
+            raise TypeError(msg) from None
+        if not self.have_boxes():
+            msg = "BoxList holds only ids and no boxes"
+            raise GrassError(msg)
         if indx < 0:
             indx += len(self)
         if indx >= len(self) or indx < 0:
             msg = "Index out of range"
             raise IndexError(msg)
+        return indx
+
+    def __getitem__(self, indx):
+        """Return a Bbox which is a view into the list, not a copy.
+
+        The view is valid only until the list grows, because growing the
+        list may move the boxes to a new memory location.
+        """
+        if isinstance(indx, slice):
+            return [self[i] for i in range(*indx.indices(len(self)))]
+        indx = self._box_index(indx)
+        bbox = Bbox()
+        bbox.c_bbox = ctypes.pointer(self.c_boxlist.contents.box[indx])
+        return bbox
+
+    def __setitem__(self, indx, bbox):
+        indx = self._box_index(indx)
         if not isinstance(bbox, Bbox):
             msg = f"Expected Bbox instance, got {type(bbox).__name__}"
             raise TypeError(msg)
+        # Assigning the struct copies its values into the C array.
         self.c_boxlist.contents.box[indx] = bbox.c_bbox.contents
 
     def __iter__(self):
@@ -224,6 +242,10 @@ class BoxList:
     def append(self, box):
         """Append a Bbox object to a Boxlist object, using the
         ``Vect_boxlist_append`` C function.
+
+        The box gets an id one larger than the largest id in the list,
+        so that it does not collide with ids already in the list, such as
+        feature ids from a spatial query.
 
         :param box: the bounding box to add to the list
         :type box: a Bbox object
@@ -241,16 +263,42 @@ class BoxList:
         3
 
         """
+        self._append_c_box(self._next_id(), self._copy_c_box(box))
+
+    def _next_id(self):
+        """Return an id which is not yet in the list."""
+        return max(self.ids, default=-1) + 1
+
+    @staticmethod
+    def _copy_c_box(box):
+        """Return a copy of the C struct of a Bbox.
+
+        The box may be a view into a BoxList (from boxlist[i]), which
+        becomes invalid when that list grows, so it is copied before
+        appending to any list.
+        """
         if not isinstance(box, Bbox):
             msg = f"Expected Bbox instance, got {type(box).__name__}"
             raise TypeError(msg)
-        indx = len(self)
-        if libvect.Vect_boxlist_append(self.c_boxlist, indx, box.c_bbox):
+        return libvect.bound_box.from_buffer_copy(box.c_bbox.contents)
+
+    def _append_c_box(self, box_id, c_box):
+        n_before = len(self)
+        if (
+            libvect.Vect_boxlist_append(self.c_boxlist, box_id, ctypes.pointer(c_box))
+            or len(self) != n_before + 1
+        ):
             msg = "Cannot append box to list"
             raise GrassError(msg)
 
     def extend(self, boxlist):
         """Extend a boxlist with another BoxList or iterable of Bbox objects.
+
+        Boxes from another BoxList keep their ids, so ids of features from
+        a spatial query still point to the right features. If any of these
+        ids is already in this list, ValueError is raised and nothing is
+        added. Boxes from any other iterable get new ids as in append().
+        Use, e.g., ``list(other)`` to add boxes from a BoxList with new ids.
 
         >>> box0 = Bbox()
         >>> box1 = Bbox(1, 2, 3, 4)
@@ -262,44 +310,74 @@ class BoxList:
         >>> boxlist1 = BoxList([box2, box3])
         >>> len(boxlist0)
         2
-        >>> boxlist0.extend(boxlist1)
+        >>> boxlist0.extend(list(boxlist1))
         >>> len(boxlist0)
         4
-        >>> boxlist1.extend([box0, box1])
-        >>> len(boxlist1)
-        4
+        >>> boxlist0.ids
+        [0, 1, 2, 3]
 
         """
-        for box in boxlist:
-            self.append(box)
+        if isinstance(boxlist, BoxList):
+            duplicates = sorted(set(self.ids) & set(boxlist.ids))
+            if duplicates:
+                shown = ", ".join(str(i) for i in duplicates[:5])
+                if len(duplicates) > 5:
+                    shown += ", ..."
+                msg = f"Ids already in the list: {shown}"
+                raise ValueError(msg)
+            n_expected = len(self) + len(boxlist)
+            if (
+                libvect.Vect_boxlist_append_boxlist(self.c_boxlist, boxlist.c_boxlist)
+                or len(self) != n_expected
+            ):
+                msg = "Cannot extend list"
+                raise GrassError(msg)
+        else:
+            # Copy all boxes before appending any, because they may be views
+            # into this list which the first append can invalidate.
+            c_boxes = [self._copy_c_box(box) for box in boxlist]
+            first_id = self._next_id()
+            for offset, c_box in enumerate(c_boxes):
+                self._append_c_box(first_id + offset, c_box)
 
     def remove(self, indx):
-        """Remove Bbox from the boxlist, given an integer or a list of integer
+        """Remove Bbox from the boxlist, given an id or a list of ids
         or a boxlist, using ``Vect_boxlist_delete`` C function or the
         ``Vect_boxlist_delete_boxlist``.
 
-        :param indx: the index value of the Bbox to remove
-        :param indx: int
+        The boxes are removed by their id, not by their position in the
+        list. Ids which are not in the list are ignored.
+
+        :param indx: the id of the Bbox to remove, an iterable of ids, or
+                     a BoxList with the ids to remove
+        :type indx: int, an iterable of int, or a BoxList
 
         >>> boxlist = BoxList([Bbox(), Bbox(1, 0, 0, 1), Bbox(1, -1, -1, 1)])
         >>> boxlist.remove(0)
         >>> boxlist
         Boxlist([Bbox(1.0, 0.0, 0.0, 1.0), Bbox(1.0, -1.0, -1.0, 1.0)])
+        >>> boxlist.ids
+        [1, 2]
 
         """
-        if hasattr(indx, "c_boxlist"):
+        if isinstance(indx, BoxList):
             libvect.Vect_boxlist_delete_boxlist(self.c_boxlist, indx.c_boxlist)
-        elif isinstance(indx, int):
-            libvect.Vect_boxlist_delete(self.c_boxlist, indx)
-        elif isinstance(indx, Iterable):
+            return
+        try:
+            ids = [operator.index(indx)]
+        except TypeError:
+            if not isinstance(indx, Iterable):
+                msg = f"Value {indx!r} of type {type(indx).__name__} is not supported"
+                raise TypeError(msg) from None
+            ids = []
             for ind in indx:
-                if not isinstance(ind, int):
-                    msg = f"Index must be an integer, got {type(ind).__name__}"
-                    raise TypeError(msg)
-                libvect.Vect_boxlist_delete(self.c_boxlist, ind)
-        else:
-            msg = f"Value {indx!r} of type {type(indx).__name__} is not supported"
-            raise TypeError(msg)
+                try:
+                    ids.append(operator.index(ind))
+                except TypeError:
+                    msg = f"Id must be an integer, got {type(ind).__name__}"
+                    raise TypeError(msg) from None
+        for box_id in ids:
+            libvect.Vect_boxlist_delete(self.c_boxlist, box_id)
 
     def reset(self):
         """Reset the c_boxlist C struct, using the ``Vect_reset_boxlist`` C
@@ -327,7 +405,6 @@ class Ilist:
 
     def __getitem__(self, key):
         if isinstance(key, slice):
-            # import pdb; pdb.set_trace()
             # Get the start, stop, and step from the slice
             return [
                 self.c_ilist.contents.value[indx]
