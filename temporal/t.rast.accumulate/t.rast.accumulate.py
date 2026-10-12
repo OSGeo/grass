@@ -278,6 +278,20 @@ def main():
     count = 1
     output_maps = []
 
+    def next_cycle(end):
+        start = end
+        if input_strds.is_time_absolute():
+            start = end
+            if offset:
+                start = tgis.increment_datetime_by_string(end, offset)
+
+            end = tgis.increment_datetime_by_string(start, cycle)
+        else:
+            if offset:
+                start = end + offset
+            end = start + cycle
+        return start, end
+
     while input_strds_end > start and stop > start:
         # Make sure that the cyclic computation will stop at the correct time
         if stop and end > stop:
@@ -289,6 +303,7 @@ def main():
         gs.message(_("Processing cycle %s - %s") % (str(start), str(end)))
 
         if len(input_maps) == 0:
+            start, end = next_cycle(end)
             continue
 
         # Lets create a dummy list of maps with granularity conform intervals
@@ -453,18 +468,7 @@ def main():
             old_map_name = output_map_name
             count += 1
 
-        # Increment the cycle
-        start = end
-        if input_strds.is_time_absolute():
-            start = end
-            if offset:
-                start = tgis.increment_datetime_by_string(end, offset)
-
-            end = tgis.increment_datetime_by_string(start, cycle)
-        else:
-            if offset:
-                start = end + offset
-            end = start + cycle
+        start, end = next_cycle(end)
 
     # Insert the maps into the output space time dataset
     if output_strds.is_in_db(dbif):
