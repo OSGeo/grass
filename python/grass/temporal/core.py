@@ -647,7 +647,7 @@ def init(
     new_gisrc = environ.get("GISRC")
 
     # The message and C-library subprocesses take GISRC from their environment
-    # at spawn time, so a session change, including a new session file for
+    # when they start, so a session change, including a new session file for
     # the same mapset, leaves them bound to the old (possibly deleted) session.
     # Stop them, and those started with another env, so the _init_* helpers
     # below respawn them in the current environment.

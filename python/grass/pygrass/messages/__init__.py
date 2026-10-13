@@ -73,14 +73,14 @@ def message_server(lock: _LockLike, conn: Connection, env=None) -> NoReturn:
 
     """
     # The C library reads the session from the environment on first use,
-    # so the environment has to be replaced before any library call.
+    # so the environment has to be replaced before that.
     if env is not None:
         os.environ.clear()
         os.environ.update(env)
         if "GISRC" in env:
-            # On Windows, the C library has its own copy of the environment,
-            # and with fork, it may have read another session already.
+            # On Windows, the C library can have its own copy of the environment.
             libgis.G_putenv("GISRC", env["GISRC"])
+            # With fork (e.g. Linux), the C library may hold the parent's session.
             libgis.G__read_gisrc_path()
             libgis.G__read_gisrc_env()
     libgis.G_debug(1, "Start messenger server")
