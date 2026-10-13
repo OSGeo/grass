@@ -76,6 +76,11 @@ class RuntimePaths:
         for env_var in self._env_vars.values():
             self.env[env_var] = self.__get_dir(env_var, use_env_values=False)
 
+    @classmethod
+    def env_variable_names(cls):
+        """Return names of the environment variables holding the resource paths."""
+        return list(cls._env_vars.values())
+
     @property
     def version(self):
         return resource_paths.GRASS_VERSION
