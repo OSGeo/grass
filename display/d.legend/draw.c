@@ -45,6 +45,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     struct FPRange fprange, render_range;
     CELL min_ind, max_ind;
     DCELL dmin, dmax, val;
+    double log_shift, lmin, lmax;
+    int label_min;
     CELL min_colr, max_colr;
     DCELL min_dcolr, max_dcolr;
     int x0, x1, y0, y1, xyTemp;
@@ -156,6 +158,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         "Requested range exceeds upper limit of actual data"));
             }
         }
+        /* The smooth bar and the value labels work with the continuous range
+         * for integer maps too. */
+        dmin = min_ind;
+        dmax = max_ind;
 
         /*  cats_num is total number of categories in raster                  */
         /*  do_cats is  total number of categories to be displayed            */
@@ -323,14 +329,6 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             }
         }
 
-        /* In case of log. scale raster doesn't contain negative or zero values
-         */
-        if (log_sc)
-            if ((dmin <= 0) || (dmax <= 0))
-                G_fatal_error(
-                    _("Range [%.3f, %.3f] out of the logarithm domain."), dmin,
-                    dmax);
-
         if (use_catlist) {
             for (i = 0; i < catlistCount; i++) {
                 if ((catlist[i] < dmin) || (catlist[i] > dmax)) {
@@ -365,6 +363,15 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         }
     } /* end of is fp */
 
+    if (log_sc) {
+        /* A range with non-positive values is shifted so that its minimum
+         * maps to 1, as Rast_log_colors() does for r.colors -g, so that the
+         * legend matches a color table created that way. */
+        log_shift = dmin <= 0 ? 1 - dmin : 0;
+        lmin = log10(dmin + log_shift);
+        lmax = log10(dmax + log_shift);
+    }
+
     if (use_catlist) {
         cats_num = catlistCount;
         do_cats = catlistCount;
@@ -397,7 +404,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             for (k = 0; k < lleg; k++) {
                 if (log_sc) { /* logarithmic scale */
                     num = k / lleg;
-                    val = dmin * pow(dmax / dmin, num);
+                    val =
+                        (dmin + log_shift) *
+                            pow((dmax + log_shift) / (dmin + log_shift), num) -
+                        log_shift;
                     D_d_color(val, &colors);
                     if (!flip) {
                         if (horiz)
@@ -532,10 +542,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         buff[0] = 0; /* no text */
                     else {
                         if (log_sc) {
-                            num =
-                                log10(dmax) -
-                                k * ((log10(dmax) - log10(dmin)) / (steps - 1));
-                            val = pow(10, num);
+                            num = lmax - k * ((lmax - lmin) / (steps - 1));
+                            val = pow(10, num) - log_shift;
                         }
                         else {
                             if (!flip)
@@ -562,8 +570,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         D_get_text_box(buff, &bb, &bt, &bl, &br);
                         if (!horiz) {
                             if (log_sc) {
-                                coef = (log10(val) - log10(dmin)) /
-                                       (log10(dmax) - log10(dmin));
+                                coef = (log10(val + log_shift) - lmin) /
+                                       (lmax - lmin);
                                 if (flip)
                                     D_pos_abs(x1 + label_indent,
                                               y1 - coef * lleg + (bb - bt) / 2);
@@ -592,8 +600,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         }
                         else {
                             if (log_sc) {
-                                coef = (log10(val) - log10(dmin)) /
-                                       (log10(dmax) - log10(dmin));
+                                coef = (log10(val + log_shift) - lmin) /
+                                       (lmax - lmin);
                                 if (flip)
                                     D_pos_abs(x1 - coef * wleg -
                                                   ((br - bl) / 2),
@@ -630,11 +638,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
             } /* for */
         }
 
-        if (!fp) {
-            dmin = min_ind;
-            dmax = max_ind;
+        if (!fp)
             snprintf(DispFormat, sizeof(DispFormat), "%s", "%.0f");
-        }
 
         /* LABEL_VALUE OPTION */
         if (ticksCount > 0) {
@@ -656,8 +661,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                 }
 
                 if (log_sc) {
-                    coef = (log10(tick_values[i]) - log10(dmin)) /
-                           (log10(dmax) - log10(dmin));
+                    coef = (log10(tick_values[i] + log_shift) - lmin) /
+                           (lmax - lmin);
                 }
                 else
                     coef = (tick_values[i] - dmin) / ((dmax - dmin) * 1.0);
@@ -714,10 +719,21 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         /* LABEL_STEP OPTION */
         if (opt_tstep->answer) {
             if (log_sc) { /* logarithmic */
+                /* Labels are placed at powers of ten, label_step orders of
+                 * magnitude apart. Non-positive values have no such labels, so
+                 * a range starting there is labeled at its minimum and then
+                 * from 1 or, when the maximum is below 1, from the first power
+                 * of ten below the maximum. A range ending at or below zero is
+                 * labeled at its minimum and maximum only. */
+                label_min = dmin <= 0;
+                num = 0;
+                if (dmin > 0)
+                    num = ceil(log10(dmin));
+                else if (dmax > 0 && dmax < 1)
+                    num = floor(log10(dmax));
                 t_start = 0;
-                while (log10(dmin) + t_start < log10(dmax)) {
-                    num = ceil(log10(dmin)) + t_start;
-                    val = pow(10, num);
+                val = label_min ? dmin : pow(10, num);
+                while (val <= dmax) {
                     snprintf(buff, sizeof(buff), DispFormat, val);
                     if (strlen(units) > 0)
                         strcat(buff, units);
@@ -728,8 +744,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         MaxLabelW = LabelW;
                         snprintf(MaxLabel, sizeof(MaxLabel), "%s", buff);
                     }
-                    coef = (log10(val) - log10(dmin)) /
-                           (log10(dmax) - log10(dmin));
+                    coef = (log10(val + log_shift) - lmin) / (lmax - lmin);
                     if (draw) {
                         if (!flip) {
                             if (!horiz) {
@@ -776,7 +791,16 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                         D_use_color(color);
                         D_text(buff);
                     }
-                    t_start += t_step;
+                    if (label_min) {
+                        label_min = 0;
+                        val = dmax > 0 ? pow(10, num) : dmax;
+                    }
+                    else if (dmax <= 0)
+                        break;
+                    else {
+                        t_start += t_step;
+                        val = pow(10, num + t_start);
+                    }
                 }
             }
             else { /* linear */

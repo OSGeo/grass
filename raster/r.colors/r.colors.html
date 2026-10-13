@@ -32,9 +32,9 @@ color table identical to <em>color=grey.log</em>. Different algorithms
 are used. Unlike <b>color=</b><em>grey.log</em>, <b>-g</b> is designed
 to work with both floating point and integer rasters, without
 performance issues with large datasets, of any original color
-table. Logarithmic scaling doesn't work on negative values. In the
-case when the value range includes zero, there's no realistic
-solution.
+table. When the value range includes zero or negative values, the
+values are shifted so that the minimum becomes 1 and the logarithmic
+scaling is applied to the shifted values.
 
 <p>The <b>-e</b> and <b>-g</b> flags are not mutually exclusive.
 

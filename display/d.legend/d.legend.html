@@ -92,7 +92,12 @@ The flag <b>-b</b> will show the background. Options <b>bgcolor</b> and <b>borde
 used to choose the color of border and background fill.
 <p>
 The flag <b>-l</b> will switch to logarithmic scale. In case this flag is used,
-the provided step in <b>label_step</b> is interpreted in the logarithmic space.
+the provided step in <b>label_step</b> is interpreted in the logarithmic space:
+labels are placed at powers of ten, <b>label_step</b> orders of magnitude
+apart. When the range includes zero or negative values, the values are shifted
+so that the minimum becomes 1 and the logarithmic scale is applied to the
+shifted values. This is the same transformation <em>r.colors</em> applies with
+its <b>-g</b> flag, so the legend matches a color table created that way.
 <h2>EXAMPLE</h2>
 
 Displaying the legend along with a histogram (North Carolina Sample dataset):
