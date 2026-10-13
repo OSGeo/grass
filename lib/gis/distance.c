@@ -7,10 +7,8 @@
    including calling sequences to any of the functions
    defined here.
 
-   (C) 2001-2009, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -44,19 +42,21 @@ int G_begin_distance_calculations(void)
     double a, e2;
 
     st->factor = 1.0;
-    switch (st->projection = G_projection()) {
-    case PROJECTION_LL:
+
+    if ((st->projection = G_projection()) == PROJECTION_LL) {
         G_get_ellipsoid_parameters(&a, &e2);
         G_begin_geodesic_distance(a, e2);
+
         return 2;
-    default:
-        st->factor = G_database_units_to_meters_factor();
-        if (st->factor <= 0.0) {
-            st->factor = 1.0; /* assume meter grid */
-            return 0;
-        }
-        return 1;
     }
+
+    st->factor = G_database_units_to_meters_factor();
+    if (st->factor > 0.0)
+        return 1;
+
+    st->factor = 1.0; /* assume meter grid */
+
+    return 0;
 }
 
 /*!
@@ -97,8 +97,10 @@ double G_distance_between_line_segments(double ax1, double ay1, double ax2,
 
     /* if the segments intersect, then the distance is zero */
     if (G_intersect_line_segments(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2, &ra,
-                                  &rb, &x, &y) > 0)
+                                  &rb, &x, &y) > 0) {
         return 0.0;
+    }
+
     return min4(G_distance_point_to_line_segment(ax1, ay1, bx1, by1, bx2, by2),
                 G_distance_point_to_line_segment(ax2, ay2, bx1, by1, bx2, by2),
                 G_distance_point_to_line_segment(bx1, by1, ax1, ay1, ax2, ay2),

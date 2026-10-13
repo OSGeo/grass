@@ -75,7 +75,7 @@ static int cacheWrite_readFun(int tileIndex, void *tileBuf, void *closure)
 
     pos = -pos - 2; /* pos is shifted by 2 to avoid 0 and -1 */
 
-    nBytes = map->tileSize * map->numLengthIntern;
+    nBytes = (size_t)map->tileSize * map->numLengthIntern;
     offs = pos * (nBytes + sizeof(int));
 
     /* seek tile and read it into buffer */
@@ -149,7 +149,7 @@ static int cacheWrite_writeFun(int tileIndex, const void *tileBuf,
         return 1;
 
     map->cachePosLast++;
-    nBytes = map->tileSize * map->numLengthIntern;
+    nBytes = (size_t)map->tileSize * map->numLengthIntern;
     offs = map->cachePosLast * (nBytes + sizeof(int));
 
     if (lseek(map->cacheFD, offs, SEEK_SET) == -1) {
@@ -299,7 +299,7 @@ int Rast3d_flush_all_tiles(RASTER3D_Map *map)
 
     /* first flush all the tiles which are in the file cache */
 
-    nBytes = map->tileSize * map->numLengthIntern;
+    nBytes = (size_t)map->tileSize * map->numLengthIntern;
 
     while (map->cachePosLast >= 0) {
         offs = map->cachePosLast * (nBytes + sizeof(int)) + nBytes;

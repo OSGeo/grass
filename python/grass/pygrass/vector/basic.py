@@ -5,9 +5,10 @@ Created on Tue Jul 31 13:06:20 2012
 """
 
 import ctypes
-import grass.lib.vector as libvect
 from collections.abc import Iterable
 
+import grass.lib.vector as libvect
+from grass.pygrass.errors import GrassError
 from grass.pygrass.shell.conversion import dict2html
 
 
@@ -306,7 +307,7 @@ class Ilist:
         if isinstance(key, int):
             if key < 0:  # Handle negative indices
                 key += self.c_ilist.contents.n_values
-            if key >= self.c_ilist.contents.n_values:
+            if key >= self.c_ilist.contents.n_values or key < 0:
                 msg = "Index out of range"
                 raise IndexError(msg)
             return self.c_ilist.contents.value[key]
@@ -328,12 +329,13 @@ class Ilist:
         return "Ilist(%r)" % list(self.__iter__())
 
     def __contains__(self, item):
-        return item in self.__iter__()
+        return self.contains(item)
 
     def append(self, value):
         """Append an integer to the list"""
-        if libvect.Vect_list_append(self.c_ilist, value):
-            raise  # TODO
+        if libvect.Vect_list_append(self.c_ilist, int(value)):
+            msg = "Cannot append value to list"
+            raise GrassError(msg)
 
     def reset(self):
         """Reset the list"""
@@ -347,7 +349,7 @@ class Ilist:
         :type ilist: a Ilist object
         """
         if isinstance(ilist, Ilist):
-            libvect.Vect_list_append_list(self.c_ilist, ilist.ilist)
+            libvect.Vect_list_append_list(self.c_ilist, ilist.c_ilist)
         else:
             for i in ilist:
                 self.append(i)
@@ -357,7 +359,7 @@ class Ilist:
         if isinstance(value, int):
             libvect.Vect_list_delete(self.c_ilist, value)
         elif isinstance(value, Ilist):
-            libvect.Vect_list_delete_list(self.c_ilist, value.ilist)
+            libvect.Vect_list_delete_list(self.c_ilist, value.c_ilist)
         elif isinstance(value, Iterable):
             for i in value:
                 libvect.Vect_list_delete(self.c_ilist, int(i))
@@ -546,8 +548,6 @@ class CatsList:
         """
         num_errors = libvect.Vect_str_to_cat_list(string, self.c_cat_list)
         if num_errors:
-            from grass.pygrass.errors import GrassError
-
             raise GrassError("%d number of errors in ranges" % num_errors)
 
     def from_array(self, array):

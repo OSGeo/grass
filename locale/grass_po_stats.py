@@ -6,11 +6,8 @@
 #               Pietro Zambelli <peter.zamb@gmail.com>
 # PURPOSE:      Create a json file containing languages translations
 #               information and statistics.
-# COPYRIGHT:    (C) 2012 by the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2012 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -112,7 +109,7 @@ def get_stats(languages, directory):
             fpref = flang.split("_")[0]
             # run msgfmt for statistics
             # TODO check if it's working on windows
-            process = subprocess.Popen(
+            process = subprocess.Popen(  # nosec B607: fixed external tool "msgfmt" with no portable absolute path
                 ["msgfmt", "--statistics", os.path.join(directory, flang)],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,

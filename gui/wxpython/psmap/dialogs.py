@@ -25,10 +25,9 @@ Classes:
  - dialogs::PointDialog
  - dialogs::RectangleDialog
 
-(C) 2011-2012 by Anna Kratochvilova, and the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2011-2012 Anna Kratochvilova
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Kratochvilova <kratochanna gmail.com> (bachelor's project)
 @author Martin Landa <landa.martin gmail.com> (mentor)
@@ -4988,7 +4987,7 @@ class ScalebarDialog(PsmapDialog):
         self.sbSegmentsCtrl = SpinCtrl(panel, id=wx.ID_ANY, min=1, max=30, initial=4)
         self.sbSegmentsCtrl.SetValue(self.scalebarDict["segment"])
 
-        sbLabelsText1 = StaticText(panel, id=wx.ID_ANY, label=_("Label every "))
+        sbLabelsText1 = StaticText(panel, id=wx.ID_ANY, label=_("Label every"))
         sbLabelsText2 = StaticText(panel, id=wx.ID_ANY, label=_("segments"))
         self.sbLabelsCtrl = SpinCtrl(panel, id=wx.ID_ANY, min=1, max=30, initial=1)
         self.sbLabelsCtrl.SetValue(self.scalebarDict["numbers"])

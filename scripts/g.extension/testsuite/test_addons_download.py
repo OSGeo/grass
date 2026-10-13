@@ -5,11 +5,9 @@ AUTHOR(S): Stefan Blumentrath <stefan dot blumentrath at nina dot no)
 
 PURPOSE:   Test for g.extension individual modules/extensions download
 
-COPYRIGHT: (C) 2022 Stefan Blumentrath and by the GRASS Development Team
-
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2022 Stefan Blumentrath
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import re
@@ -43,6 +41,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
     files = [
         install_prefix / "scripts" / "r.example.plus",
         install_prefix / "docs" / "html" / "r.example.plus.html",
+        install_prefix / "docs" / "mkdocs" / "source" / "r.example.plus.md",
     ]
 
     request_headers = {
@@ -77,7 +76,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in self.files:
             self.assertFileExists(file)
-            if file.suffix != ".html":
+            if file.suffix not in {".html", ".md"}:
                 self.assertModule(str(file), help=True)
 
     @unittest.skipIf(is_cmake, "currently not supported by CMake build")
@@ -93,7 +92,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in self.files:
             self.assertFileExists(file)
-            if file.suffix != ".html":
+            if file.suffix not in {".html", ".md"}:
                 self.assertModule(str(file), help=True)
 
     @unittest.skipIf(ms_windows, "currently not supported on MS Windows")
@@ -102,6 +101,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         files = [
             self.install_prefix / "scripts" / "r.sim.stats",
             self.install_prefix / "docs" / "html" / "r.sim.stats.html",
+            self.install_prefix / "docs" / "mkdocs" / "source" / "r.sim.stats.md",
         ]
         self.assertModule(
             "g.extension",
@@ -112,13 +112,14 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if file.suffix != ".html":
+            if file.suffix not in {".html", ".md"}:
                 self.assertModule(str(file), help=True)
 
     def test_github_install_official(self):
         """Test installing C-extension from official addons repository"""
         files = [
             self.install_prefix / "docs" / "html" / "r.gdd.html",
+            self.install_prefix / "docs" / "mkdocs" / "source" / "r.gdd.md",
         ]
         if ms_windows:
             files.append(self.install_prefix / "bin" / "r.gdd.exe")
@@ -131,7 +132,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if file.suffix != ".html":
+            if file.suffix not in {".html", ".md"}:
                 self.assertModule(str(file), help=True)
 
     def test_github_install_official_multimodule(self):
@@ -139,6 +140,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
         files = [
             self.install_prefix / "docs" / "html" / "i.sentinel.parallel.download.html",
             self.install_prefix / "docs" / "html" / "i.sentinel.import.html",
+            self.install_prefix / "docs" / "mkdocs" / "source" / "i.sentinel.import.md",
         ]
         if ms_windows:
             files.extend(
@@ -163,7 +165,7 @@ class TestModuleDownloadFromDifferentSources(TestCase):
 
         for file in files:
             self.assertFileExists(file)
-            if file.suffix not in {".html", ".py"}:
+            if file.suffix not in {".html", ".md", ".py"}:
                 self.assertModule(str(file), help=True)
 
     def test_github_install_official_non_exists_module(self):

@@ -101,7 +101,7 @@ the number of columns.
 The **-p** (or **-g**) option is recognized last. This means that all
 changes are applied to the region settings before printing occurs.
 
-The ****format=shell** parameter prints the current region settings in shell
+The **format=shell** parameter prints the current region settings in shell
 script style. This format can be given back to *g.region* on its command line.
 This may also be used to save region settings as shell environment
 variables with the UNIX eval command, "`` eval `g.region -p format=shell` ``".

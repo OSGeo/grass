@@ -146,7 +146,7 @@ g.gisenv unset=ADDONS_BASE_URL
 
 Alternative servers are:
 
-- <https://ecodiv.earth/share> (Python extensions only)
+- <https://ecodiv.earth/share/AddonServer> (Python extensions only)
 
 Note, settings explained in this section are is honoured on MS-Windows only; on
 Linux/macOS it has no effect.
@@ -176,7 +176,7 @@ both go through the configured server.
 
 ```sh
 # Point at the alternative server (persists across GRASS sessions)
-g.gisenv set="ADDONS_BASE_URL=https://ecodiv.earth/share"
+g.gisenv set="ADDONS_BASE_URL=https://ecodiv.earth/share/AddonServer"
 
 # List what the alternative server provides
 g.extension -l

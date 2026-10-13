@@ -4,11 +4,8 @@
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
  *               rewritten 2002: Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:
- * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2007 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 #if defined(_OPENMP)
@@ -99,7 +96,6 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *expr, *file, *seed, *region, *nprocs;
     struct Flag *random, *describe;
-    int all_ok;
     char *desc;
     int threads = 1;
 
@@ -228,8 +224,6 @@ int main(int argc, char **argv)
         return EXIT_SUCCESS;
     }
 
-    pre_exec();
-
     /* Determine the number of threads */
     threads = atoi(nprocs->answer);
 
@@ -261,19 +255,11 @@ int main(int argc, char **argv)
 
     /* Execute calculations */
     execute(result);
-    post_exec();
-
-    all_ok = 1;
 
     G_free(p);
     p = NULL;
 
-    if (floating_point_exception_occurred) {
-        G_warning(_("Floating point error(s) occurred in the calculation"));
-        all_ok = 0;
-    }
-
-    return all_ok ? EXIT_SUCCESS : EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }
 
 /****************************************************************************/

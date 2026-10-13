@@ -195,7 +195,7 @@ void convert(char *fileout, int rows, int cols, int depths, int trueCoords)
 
     /****************/
 
-    g = (float *)G_malloc(rows * cols * Nl[0] * sizeof(float));
+    g = (float *)G_malloc((size_t)rows * cols * Nl[0] * sizeof(float));
     d1p = &d1;
     f1p = (float *)&d1;
     cnt = 0;

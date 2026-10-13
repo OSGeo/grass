@@ -1,10 +1,7 @@
 """GRASS Simple Python Editor
 
-Copyright (C) 2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Vaclav Petras
 :authors: Martin Landa
@@ -453,10 +450,8 @@ class PyEditController:
         else:
             self.SaveAs()
 
-        if self.filename:
-            self.recent_files.AddFileToHistory(
-                filename=self.filename,
-            )
+        if self.filename and self.recent_files:
+            self.recent_files.AddFileToHistory(filename=self.filename)
 
     def IsModified(self):
         """Check if python script has been modified"""
@@ -492,10 +487,8 @@ class PyEditController:
         """Handle open event but ask about replacing content first"""
         if self.CanReplaceContent("file"):
             self.Open()
-            if self.filename:
-                self.recent_files.AddFileToHistory(
-                    filename=self.filename,
-                )
+            if self.filename and self.recent_files:
+                self.recent_files.AddFileToHistory(filename=self.filename)
 
     def OpenRecentFile(self, path, file_exists, file_history):
         """Try open recent file and read content

@@ -5,9 +5,8 @@
 
    Based on visualization/nviz/src/lights.c
 
-   (C) 2008, 2010 by the GRASS Development Team
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2008, 2010 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
            2008/2010)
@@ -68,9 +67,9 @@ int Nviz_set_light_bright(nv_data *data, int num, double value)
 
     data->light[num].brt = value;
 
-    r = data->light[num].r * data->light[num].brt;
-    g = data->light[num].g * data->light[num].brt;
-    b = data->light[num].b * data->light[num].brt;
+    r = (double)data->light[num].r * data->light[num].brt;
+    g = (double)data->light[num].g * data->light[num].brt;
+    b = (double)data->light[num].b * data->light[num].brt;
 
     G_debug(1,
             "Nviz_set_light_bright(): num = %d value = %f r = %f g = %f b = %f",
@@ -95,9 +94,9 @@ int Nviz_set_light_color(nv_data *data, int num, int red, int green, int blue)
     data->light[num].g = green / 255.;
     data->light[num].b = blue / 255.;
 
-    r = data->light[num].r * data->light[num].brt;
-    g = data->light[num].g * data->light[num].brt;
-    b = data->light[num].b * data->light[num].brt;
+    r = (double)data->light[num].r * data->light[num].brt;
+    g = (double)data->light[num].g * data->light[num].brt;
+    b = (double)data->light[num].b * data->light[num].brt;
 
     G_debug(1, "Nviz_set_light_color(): num = %d r = %d/%f g = %d/%f b = %d/%f",
             num, red, r, green, g, blue, b);

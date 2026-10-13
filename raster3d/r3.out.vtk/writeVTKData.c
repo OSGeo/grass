@@ -7,11 +7,8 @@
  *                 27 Feb 2006 Berlin
  * PURPOSE:      Converts 3D raster maps (RASTER3D) into the VTK-Ascii format
  *
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -340,7 +337,7 @@ void write_vtk_data(FILE *fp, RASTER3D_Map *map, RASTER3D_Region region,
     depths = region.depths;
 
     /*the nullvalue */
-    if (!sscanf(param.null_val->answer, "%lf", &nullvalue)) {
+    if (sscanf(param.null_val->answer, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -451,7 +448,7 @@ void write_vtk_rgb_data(RASTER3D_Map *map_r, RASTER3D_Map *map_g,
                      */
                     if (value > 255 || value < 0) {
                         G_warning(_("Wrong 3D raster map values! Values should "
-                                    "in between 0 and 255!"));
+                                    "be in between 0 and 255!"));
                         fprintf(fp, "0 ");
                     }
                     else {

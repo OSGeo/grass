@@ -31,11 +31,11 @@ MODDOMAIN = grassmods
 WXPYDOMAIN = grasswxpy
 DOMAINS = $(LIBDOMAIN) $(MODDOMAIN) $(WXPYDOMAIN)
 
-LIB_POTFILES = find ../lib \( -name "*.c" -o -name "*.py" \) | xargs grep -l "_(\"\|n_(\""
-MOD_POTFILES = find ../ \( -name "*.c" -o -name "*.cpp" \) | grep -v '../lib' | xargs grep -l "_(\"\|n_(\""
-WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\"\|n_(\""
+LIB_POTFILES = find ../lib \( -name "*.c" -o -name "*.py" \) | LC_ALL=C sort | xargs grep -l "_(\"\|n_(\""
+MOD_POTFILES = find ../ \( -name "*.c" -o -name "*.cpp" \) | grep -v '../lib' | LC_ALL=C sort | xargs grep -l "_(\"\|n_(\""
+WXPY_POTFILES = find ../gui/wxpython -name '*.py' | LC_ALL=C sort | xargs grep -l "_(\"\|n_(\""
 #For Python script module messages
-MOD_PYFILES = find ../scripts -name '*.py' | xargs grep -l "_(\"\|n_(\""
+MOD_PYFILES = find ../scripts -name '*.py' | LC_ALL=C sort | xargs grep -l "_(\"\|n_(\""
 
 XGETTEXT_ARGS = --no-wrap --sort-by-file
 MSGMERGE_ARGS = --no-wrap --sort-by-file --previous

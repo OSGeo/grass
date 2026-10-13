@@ -8,7 +8,7 @@
 
 void HTML_Text(const char *text)
 {
-    int len = strlen(text);
+    int len = (int)strlen(text);
     const char *s;
     char *d;
 

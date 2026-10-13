@@ -8,8 +8,7 @@
 /**********************************************************************
 acos(x)  [0 and PI]
 
-  if floating point exception occurs during the evaluation of acos(x)
-  the result is NULL
+  if x is outside [-1,1], the result is NULL
 
   note: result is in degrees
 **********************************************************************/
@@ -36,12 +35,8 @@ int f_acos(int argc, const int *argt, void **args)
     for (i = 0; i < columns; i++)
         if (IS_NULL_D(&arg1[i]))
             SET_NULL_D(&res[i]);
-        else {
-            floating_point_exception = 0;
+        else
             res[i] = RADIANS_TO_DEGREES * acos(arg1[i]);
-            if (floating_point_exception)
-                SET_NULL_D(&res[i]);
-        }
 
     return 0;
 }

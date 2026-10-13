@@ -38,6 +38,12 @@ install:
 	if [ -n "$(IMG)" ] ; then \
 		$(INSTALL_DATA) $(IMG)  $(INST_DIR)/docs/html/ ; \
 	fi
+	$(MKDIR) $(INST_DIR)/docs/mkdocs/source
+	$(INSTALL_DATA) $(MDDIR)/source/$(PGM).md $(INST_DIR)/docs/mkdocs/source/
+	$(eval IMG_MD := $(wildcard $(MDDIR)/source/*.png) $(wildcard $(MDDIR)/source/*.jpg) $(wildcard $(MDDIR)/source/*.gif))
+	if [ -n "$(IMG_MD)" ] ; then \
+		$(INSTALL_DATA) $(IMG_MD)  $(INST_DIR)/docs/mkdocs/source/ ; \
+	fi
 	$(INSTALL_DATA) $(ARCH_DISTDIR)/docs/man/man1/$(PGM).1 $(INST_DIR)/docs/man/man1/
 	if [ -d "$(ETC)/$(PGM)" ] ; then \
 		cp -RL $(ETC)/$(PGM) $(INST_DIR)/etc/ ; \

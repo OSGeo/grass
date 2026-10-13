@@ -39,7 +39,7 @@ class SemanticLabelReader:
                     config = json.load(fd, object_pairs_hook=OrderedDict)
             except json.decoder.JSONDecodeError as e:
                 msg = "Unable to parse '{}': {}".format(json_file, e)
-                raise SemanticLabelReaderError(msg)
+                raise SemanticLabelReaderError(msg) from e
 
             # check if configuration is valid
             self._check_config(config)
@@ -112,7 +112,7 @@ class SemanticLabelReader:
                         continue
                 except re.error as e:
                     msg = "Invalid pattern: {}".format(e)
-                    raise SemanticLabelReaderError(msg)
+                    raise SemanticLabelReaderError(msg) from e
 
                 found = True
                 if band and band not in item["bands"]:

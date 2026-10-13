@@ -1,10 +1,8 @@
 """
 GRASS Python testing framework test loading functionality
 
-Copyright (C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Vaclav Petras, Edouard Choinière
 """
@@ -168,16 +166,16 @@ def discover_modules(
                             add = True  # standard case with given location
                         if not locations:
                             add = True  # count not specified as universal
-            except ImportError as e:
+            except ImportError as error:
                 if add_failed_imports:
                     add = True
                 else:
-                    raise ImportError(
-                        "Cannot import module named %s in %s (%s)"
-                        % (name, full, e.message)
+                    error.add_note(
+                        "Cannot import module named {} in {}".format(name, full)
                     )
                     # alternative is to create TestClass which will raise
                     # see unittest.loader
+                    raise
             if add:
                 modules.append(
                     GrassTestPythonModule(

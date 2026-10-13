@@ -2,8 +2,9 @@
 
 *t.list* lists any dataset that is registered in the temporal database.
 Datasets are raster, 3D raster and vector maps as well as their
-corresponding space time datasets (STRDS, STR3DS and STVDS). The type of
-the dataset can be specified using the *type* option, default is STRDS.
+corresponding space time datasets (STRDS, STR3DS and STVDS). The type of the
+dataset can be specified using the *type* option (default is STRDS).
+Multiple comma-separated types can be provided, such as *type=strds,stvds*.
 By default all datasets with relative and absolute time are listed.
 However, the user has the ability to specify a single temporal type with
 the *temporaltype* option. The user can define the columns that should
@@ -17,19 +18,52 @@ The SQL *where* and *sort* expression will be applied for each temporal
 database that was found in accessible mapsets. Hence sorting works only
 on mapset basis.
 
-Temporal databases stored in other mapsets can be used as long as they
-are in the user's current mapset search path (managed with
-[g.mapsets](g.mapsets.md)).
+The **mapset** option allows the user to filter the output to one
+or multiple specific mapsets, or to query all mapsets in the project regardless
+of the current search path. By default (if the **mapset** option is not provided),
+Temporal datasets are listed from all mapsets in the user's current search path
+(managed with [g.mapsets](g.mapsets.md)).
+
+The **mapset** parameter accepts the following inputs:
+`mapset='.'` lists datasets only in the current mapset.
+`mapset='*'` lists datasets in all mapsets in the project (location), bypassing
+the search path.
+`mapset=name1,name2` lists datasets strictly from the explicitly named mapsets,
+even if they are outside the current search path.
 
 ## EXAMPLES
 
-Obtain the list of space time raster dataset(s):
+Obtain the list of space time raster dataset(s) in the current search path:
 
 ```sh
 t.list strds
 ----------------------------------------------
 Space time raster datasets with absolute time available in mapset <climate_2000_2012>:
 tempmean_monthly@climate_2000_2012
+```
+
+Obtain the list of space time raster datasets in a specific mapset, even if it is
+not in the search path:
+
+```sh
+t.list strds mapset=modis2002lst
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <modis2002lst>:
+mini_set@modis2002lst
+```
+
+Obtain the list of space time raster datasets across all mapsets in the project
+(location) using '*':
+
+```sh
+t.list type=strds mapset='*'
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset <climate_2000_2012>:
+precip_abs@climate_2000_2012
+precipitation@climate_2000_2012
+tempmean@climate_2000_2012
+Space time raster datasets with absolute time available in mapset <modis2002lst>:
+mini_set@modis2002lst
 ```
 
 Obtain the list of space time raster datasets in a specific mapset (Note
@@ -77,6 +111,86 @@ Time stamped raster maps with absolute time available in mapset <climate_2000_20
 2012_10_tempmean@climate_2000_2012
 2012_11_tempmean@climate_2000_2012
 2012_12_tempmean@climate_2000_2012
+```
+
+You can also use the *format=* option with `plain` (default), `csv`, `line`, and
+`json`.
+For `plain`, `csv`, and `line`, you can also use the *separator=* option to change
+ the output delimiter.
+
+To output the list in JSON format, use `format=json`. By default, if no
+columns are specified in json format, it will output all available metadata. You
+can restrict the output using the `columns` parameter.
+
+```sh
+t.list type=raster format=json columns=id,start_time
+```
+
+```json
+[
+    {
+        "id": "2009_01_tempmean@climate_2000_2012",
+        "start_time": "2009-01-01 00:00:00"
+    },
+    {
+        "id": "2009_02_tempmean@climate_2000_2012",
+        "start_time": "2009-02-01 00:00:00"
+    },
+    {
+        "id": "2009_03_tempmean@climate_2000_2012",
+        "start_time": "2009-03-01 00:00:00"
+    },
+    ...
+    {
+        "id": "2012_11_tempmean@climate_2000_2012",
+        "start_time": "2012-11-01 00:00:00"
+    },
+    {
+        "id": "2012_12_tempmean@climate_2000_2012",
+        "start_time": "2012-12-01 00:00:00"
+    }
+]
+```
+
+To list multiple dataset types at once, specify a comma-separated list of
+types (e.g., `type=strds,stvds`).
+
+**Note:** The `type` column is automatically included in the **csv** and
+**json** output formats when multiple types are requested to clearly identify
+the dataset type of each record. It can also be explicitly requested for
+single types using `columns=id,type`.
+
+```sh
+t.list type=strds,stvds columns=id format=json
+```
+
+```json
+[
+    {
+        "id": "lst_daily@PERMANENT",
+        "type": "strds"
+    },
+    {
+        "id": "mini_set@PERMANENT",
+        "type": "strds"
+    },
+    {
+        "id": "nc_lst_daily@PERMANENT",
+        "type": "strds"
+    },
+    {
+        "id": "precip_abs1@PERMANENT",
+        "type": "strds"
+    },
+    {
+        "id": "prec_observer@PERMANENT",
+        "type": "stvds"
+    },
+    {
+        "id": "schools_stds@PERMANENT",
+        "type": "stvds"
+    }
+]
 ```
 
 ## SEE ALSO

@@ -11,10 +11,8 @@ Classes:
  - gis_set::GListBox
  - gis_set::StartUp
 
-(C) 2006-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton and Jachym Cepicky (original author)
 @author Martin Landa <landa.martin gmail.com> (various updates)
@@ -721,9 +719,8 @@ class GRASSStartup(wx.Frame):
                 )
             else:
                 try:
-                    os.rename(
-                        os.path.join(self.gisdbase, location, mapset),
-                        os.path.join(self.gisdbase, location, newmapset),
+                    Path(self.gisdbase, location, mapset).rename(
+                        Path(self.gisdbase, location, newmapset)
                     )
                     self.OnSelectLocation(None)
                     self.lbmapsets.SetSelection(self.listOfMapsets.index(newmapset))
@@ -767,9 +764,8 @@ class GRASSStartup(wx.Frame):
                 )
             else:
                 try:
-                    os.rename(
-                        os.path.join(self.gisdbase, location),
-                        os.path.join(self.gisdbase, newlocation),
+                    Path(self.gisdbase, location).rename(
+                        Path(self.gisdbase, newlocation)
                     )
                     self.UpdateLocations(self.gisdbase)
                     self.lblocations.SetSelection(

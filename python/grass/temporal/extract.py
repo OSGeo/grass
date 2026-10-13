@@ -1,9 +1,7 @@
 """Extract functions for space time raster, 3d raster and vector datasets.
 
-(C) 2012-2026 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2026 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -12,10 +10,10 @@ from __future__ import annotations
 
 import re
 import sys
-from multiprocessing import Process
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from grass.script.utils import _get_multiprocessing_context
 
 from .abstract_map_dataset import AbstractMapDataset
 
@@ -209,6 +207,7 @@ def extract_dataset(
 
     # Run the mapcalc expression
     if expression:
+        ctx = _get_multiprocessing_context()
         proc_count = 0
         proc_list = []
 
@@ -264,15 +263,15 @@ def extract_dataset(
             # Add process to the process list
             if type == "raster":
                 msgr.verbose(_('Applying r.mapcalc expression: "%s"') % expr)
-                proc_list.append(Process(target=run_mapcalc2d, args=(expr,)))
+                proc_list.append(ctx.Process(target=run_mapcalc2d, args=(expr,)))
             elif type == "raster3d":
                 msgr.verbose(_('Applying r3.mapcalc expression: "%s"') % expr)
-                proc_list.append(Process(target=run_mapcalc3d, args=(expr,)))
+                proc_list.append(ctx.Process(target=run_mapcalc3d, args=(expr,)))
             elif type == "vector":
                 msgr.verbose(_('Applying v.extract where statement: "%s"') % expression)
                 if row["layer"]:
                     proc_list.append(
-                        Process(
+                        ctx.Process(
                             target=run_vector_extraction,
                             args=(
                                 row["name"] + "@" + row["mapset"],
@@ -285,7 +284,7 @@ def extract_dataset(
                     )
                 else:
                     proc_list.append(
-                        Process(
+                        ctx.Process(
                             target=run_vector_extraction,
                             args=(
                                 row["name"] + "@" + row["mapset"],

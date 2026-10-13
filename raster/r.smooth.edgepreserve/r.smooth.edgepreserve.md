@@ -9,7 +9,7 @@ and works to preserve sharp transitions between different regions.
 
 ![An example of smoothed image](r_smooth_edgepreserve.jpg)  
 *Figure: "A" is the original (unsmoothed) raster and
-"B" is the smoothed version (with quite agressive settings to emphasize
+"B" is the smoothed version (with quite aggressive settings to emphasize
 smoothing effects).*
 
 The module supports three types of diffusivity (conductance) functions:

@@ -286,11 +286,11 @@ def test_v_class_where_no_matches(setup_vector_with_values):
         where="value > 100",  # No points satisfy this
         algorithm="int",
         nbclasses=5,
-        flags="g",
+        flags="b",
         env=session.env,
     )
-    breaks = [float(b) for b in output.strip().split(",")] if output.strip() else []
-    assert len(breaks) == 4  # For 5 classes → 4 breaks
+    breaks = [float(b) for b in output.strip().split(",")]
+    assert len(breaks) == 4  # For 5 classes, there are 4 breaks
     assert all(b == 0.0 for b in breaks)
 
 

@@ -513,8 +513,12 @@ int tie_up(void)
         /* find area for this node */
         area = Vect_find_area(&In, x, y);
 
-        if (area == 0)
-            G_fatal_error(_("Node is outside any input area"));
+        if (area == 0) {
+            /* the node can be exactly on a boundary which is fine,
+             * no tie-up needed */
+            G_debug(3, "Node is not completely inside any input area");
+            continue;
+        }
 
         /* get area outer ring */
         Vect_get_area_points(&In, area, Points);

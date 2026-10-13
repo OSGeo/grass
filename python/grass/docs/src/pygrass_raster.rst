@@ -16,7 +16,7 @@ RowIO is row cached, :ref:`RasterSegment-label` is tile cached for reading and
 writing; therefore, random access is possible.  Hence RasterRow and
 RasterRowIO should be used for fast (cached) row read access and
 RasterRow for fast sequential writing.  RasterSegment should be used
-for random access. The classes are part of the :mod:`~pygrass.raster`
+for random access. The classes are part of the :mod:`~grass.pygrass.raster`
 module.
 
 
@@ -66,7 +66,7 @@ We can rename the map: ::
 RasterRow
 ---------
 
-The PyGRASS :class:`~pygrass.raster.RasterRow` class allow user to open maps row
+The PyGRASS :class:`~grass.pygrass.raster.RasterRow` class allow user to open maps row
 by row in either read or write mode using the `Raster library`_. Reading and writing
 to the same map at the same time is not supported. For this functionality,
 please see the :ref:`RasterSegment-label` class.
@@ -136,7 +136,7 @@ added to the file as the last row. ::
 RasterRowIO
 -----------
 
-The :class:`~pygrass.raster.RasterRowIO` class uses the GRASS `RowIO library`_, and implements a row
+The :class:`~grass.pygrass.raster.RasterRowIO` class uses the GRASS `RowIO library`_, and implements a row
 cache. The RasterRowIO class only supports reading rasters; because raster rows
 can only be written in sequential order, writing by row id is not
 supported by design. Hence, the RowIO lib can only be used to cache rows
@@ -159,7 +159,7 @@ for reading, and any write access should use the :ref:`RasterRow-label` class. :
 RasterSegment
 -------------
 
-The :class:`~pygrass.raster.RasterSegment` class uses the GRASS `Segmentation library`_. The class divides
+The :class:`~grass.pygrass.raster.RasterSegment` class uses the GRASS `Segmentation library`_. The class divides
 a raster map into small tiles stored on disk. Initialization of this class is
 therefore intensive. However, this class has lower memory requirements, as GRASS
 loads only currently-accessed tiles into memory. The segment library allow
