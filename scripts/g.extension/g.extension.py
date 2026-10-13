@@ -1592,28 +1592,45 @@ def install_module_xml(mlist, source=None):
     return mlist
 
 
-def get_addons_base_url():
-    """Resolve the base URL of the addon server (Windows binary repository).
+def get_addons_base_url_override():
+    """Return the user-configured addon server base URL, or None.
 
     Precedence (highest first):
       1. ``ADDONS_BASE_URL`` set via ``g.gisenv set="ADDONS_BASE_URL=..."``.
          Persists across GRASS sessions and is settable from inside GRASS.
       2. ``GRASS_ADDONS_BASE_URL`` shell environment variable. Useful for
          CI / system administrators / one-off shell sessions.
-      3. The built-in default ``http://wingrass.fsv.cvut.cz`` (the official
-         WinGRASS server).
+
+    Any trailing slash is removed. Returns None when neither is set.
     """
     try:
-        gisenv_value = gs.gisenv().get("ADDONS_BASE_URL")
+        value = gs.gisenv().get("ADDONS_BASE_URL")
     except Exception:  # noqa: BLE001
-        # gisenv() can fail outside a GRASS session; fall through.
-        gisenv_value = None
-    if gisenv_value:
-        return gisenv_value.rstrip("/")
-    env_value = os.environ.get("GRASS_ADDONS_BASE_URL")
-    if env_value:
-        return env_value.rstrip("/")
-    return "http://wingrass.fsv.cvut.cz"
+        # gisenv() can fail outside a GRASS session; fall through to the env var.
+        value = None
+    value = value or os.environ.get("GRASS_ADDONS_BASE_URL")
+    return value.rstrip("/") if value else None
+
+
+def addons_server_url(base):
+    """Build the versioned addon directory URL under server root *base*.
+
+    *base* must have no trailing slash; the result has none either, so a file
+    name is appended with a single separator (e.g. ``f"{url}/{name}.zip"``).
+    """
+    return (
+        f"{base}/grass{VERSION[0]}{VERSION[1]}/addons/"
+        f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
+    )
+
+
+def get_addons_base_url():
+    """Resolve the addon server root for Windows binary downloads.
+
+    Returns the user override (see get_addons_base_url_override) when set,
+    otherwise the official WinGRASS server.
+    """
+    return get_addons_base_url_override() or "http://wingrass.fsv.cvut.cz"
 
 
 def install_extension_win(name, url=None):
@@ -1635,13 +1652,7 @@ def install_extension_win(name, url=None):
             )
         zip_url = url
     else:
-        base = get_addons_base_url()
-        base_url = (
-            f"{base}/"
-            f"grass{VERSION[0]}{VERSION[1]}/addons/"
-            f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
-        )
-        zip_url = f"{base_url}/{name}.zip"
+        zip_url = f"{addons_server_url(get_addons_base_url())}/{name}.zip"
 
     # resolve ZIP URL
     source, url = resolve_source_code(url=zip_url)
@@ -2637,21 +2648,10 @@ def resolve_xmlurl_prefix(url, source=None):
         # On MS-Windows only, the user can redirect both listing and install
         # to a custom addon server via the ADDONS_BASE_URL gisenv setting or
         # the GRASS_ADDONS_BASE_URL env var.
-        # On non-Windows, this override is intentionally not honoured
-        override = None
-        if sys.platform == "win32":
-            try:
-                override = gs.gisenv().get("ADDONS_BASE_URL") or os.environ.get(
-                    "GRASS_ADDONS_BASE_URL"
-                )
-            except Exception:  # noqa: BLE001
-                override = os.environ.get("GRASS_ADDONS_BASE_URL")
+        # On non-Windows, this override is intentionally not honoured.
+        override = get_addons_base_url_override() if sys.platform == "win32" else None
         if override:
-            override = override.rstrip("/")
-            url = (
-                f"{override}/grass{VERSION[0]}{VERSION[1]}/addons/"
-                f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}/"
-            )
+            url = addons_server_url(override) + "/"
         else:
             # use pregenerated modules XML file
             # Define branch to fetch from (latest or current version)
