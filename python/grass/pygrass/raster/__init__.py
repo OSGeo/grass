@@ -202,12 +202,7 @@ class RasterRow(RasterAbstractBase):
             self._gtype = libraster.Rast_get_map_type(self._fd)
             self.mtype = RTYPE_STR[self._gtype]
         elif self.mode == "w":
-            if self.exist():
-                if not self.overwrite:
-                    str_err = _(
-                        "Raster map <{0}> already exists and will be not overwritten"
-                    )
-                    raise OpenError(str_err.format(self))
+            self._check_overwrite()
             if self._gtype is None:
                 raise OpenError(_("Raster type not defined"))
             self._fd = libraster.Rast_open_new(self.name, self._gtype)
@@ -512,14 +507,15 @@ class RasterSegment(RasterAbstractBase):
         self.mtype = mtype or self.mtype
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
+        # Check before reading the metadata, which is not needed on failure.
+        if self.mode in {"w", "rw"}:
+            self._check_overwrite()
+
         if self.exist():
             self.info.read()
             self.cats.mtype = self.mtype
             self.cats.read()
             self.hist.read()
-            if (self.mode in {"w", "rw"}) and not self.overwrite:
-                str_err = _("Raster map <{0}> already exists. Use overwrite.")
-                raise OpenError(str_err.format(self.name))
 
             # We copy the raster map content into the segments
             if self.mode in {"rw", "r"}:
