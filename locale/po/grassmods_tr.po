@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Turkish <https://weblate.osgeo.org/projects/grass-gis/grassmods/tr/>\n"
@@ -23749,8 +23749,10 @@ msgstr ""
 msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
-msgid "Missing output projection parameters "
-msgstr ""
+#, fuzzy
+#| msgid "Unable to set up lat/long projection parameters"
+msgid "Missing output projection parameters"
+msgstr "Enlem/Boylam parametreleri ayarlanamadı"
 
 msgid "Unable to read input data"
 msgstr ""
@@ -23980,8 +23982,9 @@ msgstr ""
 msgid "Unable to import data"
 msgstr ""
 
-msgid "Done: generated map "
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Done: generated map {map_name}"
+msgstr "Doğu kenar için değer"
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
 msgstr ""
@@ -24042,7 +24045,7 @@ msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
 #, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr ""
 
 #, python-format
@@ -24179,9 +24182,10 @@ msgstr ""
 msgid "Driver %s does not supports Create() method"
 msgstr ""
 
-#, python-format
-msgid "Unable to open %s "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to open tempfile"
+msgid "Unable to open {filename}"
+msgstr "geçici dosya dosya açılamıyor"
 
 msgid "Region is out of server data extend."
 msgstr ""
@@ -24360,35 +24364,59 @@ msgstr ""
 msgid "xy-locations are not supported"
 msgstr ""
 
+#, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr ""
+
+#, fuzzy
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr "Yeni kategori dosyası oluşturuluyor..."
+
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr "Yeni kategori dosyası oluşturuluyor..."
+
 #, fuzzy
 msgid "Generating a clumped raster file"
 msgstr "Yeni kategori dosyası oluşturuluyor..."
 
-msgid " including diagonal neighbors"
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, python-format
-msgid " with minimum %s pixels"
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
 msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Generating reclass map"
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
+msgstr "Yeniden sınıflandırma haritaları oluşturuluyor"
+
+#, fuzzy, python-brace-format
+#| msgid "Width less than or equal to zero not allowed"
+msgid "No areas of size larger than or equal to {lower} hectares"
+msgstr "Sıfırdan küçük yada eşit genişlik olanaksız"
+
+#, fuzzy, python-brace-format
+#| msgid "Generating reclass map"
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "Yeniden sınıflandırma haritaları oluşturuluyor"
+
+#, fuzzy, python-brace-format
+#| msgid "Width less than or equal to zero not allowed"
+msgid "No areas of size smaller than or equal to {upper} hectares"
+msgstr "Sıfırdan küçük yada eşit genişlik olanaksız"
 
 #, fuzzy
 #| msgid "Generating reclass map"
-msgid "Generating a reclass map with area size"
+msgid "Generating a reclass map without area size limits..."
 msgstr "Yeniden sınıflandırma haritaları oluşturuluyor"
 
-#, fuzzy, python-format
-#| msgid "Width less than or equal to zero not allowed"
-msgid " larger than or equal to %f hectares..."
-msgstr "Sıfırdan küçük yada eşit genişlik olanaksız"
-
-#, python-format
-msgid " smaller than or equal to %f hectares..."
-msgstr ""
-
 #, fuzzy
-#| msgid "No record for category [%d]"
-msgid "No areas of size "
-msgstr "[%d] kategorisi için kayıt yok"
+#| msgid "No DXF layers found!"
+msgid "No areas found"
+msgstr "Hiç DXF katmanı yok!"
 
 #, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
@@ -25007,11 +25035,8 @@ msgstr ""
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr ""
-
-msgid "Use -c flag to update values in this column."
+#, python-brace-format
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr ""
 
 #, python-format
@@ -25126,9 +25151,10 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr ""
 
-#, python-format
-msgid "Unable to add column %s to vector map <%s> "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to add column {column} to vector map <{vector}>"
+msgstr "<%s> vektör haritasının veritabanı bağı eklenemiyor"
 
 #, python-format
 msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
@@ -34209,6 +34235,11 @@ msgstr ""
 msgid "Image file"
 msgstr "Görüntü dosyası"
 
+#, fuzzy
+#~| msgid "No record for category [%d]"
+#~ msgid "No areas of size "
+#~ msgstr "[%d] kategorisi için kayıt yok"
+
 #, fuzzy, c-format
 #~ msgid "Raster map <%s> created. "
 #~ msgstr "<%s> raster haritası zaten mevcut"
@@ -34813,10 +34844,6 @@ msgstr "Görüntü dosyası"
 #, fuzzy
 #~ msgid "Custom ratio"
 #~ msgstr "Özel"
-
-#, fuzzy
-#~ msgid "DPI for the generated page"
-#~ msgstr "Doğu kenar için değer"
 
 #, fuzzy
 #~ msgid "Data type ID"

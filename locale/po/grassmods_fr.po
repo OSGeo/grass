@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
-"PO-Revision-Date: 2026-10-11 11:28+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
+"PO-Revision-Date: 2026-10-13 01:30+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -232,7 +232,7 @@ msgid "Lists all database drivers."
 msgstr "Lister tous les pilotes de bases de données."
 
 msgid "Removes an existing database."
-msgstr "Supprimer une base de données existante."
+msgstr "Supprime une base de données existante."
 
 #, c-format
 msgid "Unable to open file <%s>: %s"
@@ -562,19 +562,19 @@ msgid "Unable to set SQL ANSI_QUOTES mode:"
 msgstr ""
 
 msgid "Unable parse MySQL embedded database name"
-msgstr ""
+msgstr "Impossible d'analyser le nom de la base de données MySQL embarquée"
 
 msgid "Cannot initialize MySQL embedded server"
-msgstr ""
+msgstr "Impossible d'initialiser le serveur MySQL embarqué"
 
 msgid "Unable to connect to MySQL embedded server: "
-msgstr ""
+msgstr "Impossible de se connecter au serveur MySQL embarqué : "
 
 msgid "Unable to describe table:"
-msgstr ""
+msgstr "Impossible de décrire la table :"
 
 msgid "Unable to describe table"
-msgstr ""
+msgstr "Impossible de décrire la table"
 
 #, c-format
 msgid "MySQL driver: column '%s', type %d is not supported"
@@ -585,7 +585,7 @@ msgid "column '%s' : type BIGINT is stored as integer (4 bytes) some data may be
 msgstr "colonne '%s' : type BIGINT (entier large) enregistré comme entier (4 octets) des données peuvent avoir été endommagées"
 
 msgid "Unable to execute:"
-msgstr ""
+msgstr "Impossible d'exécuter :"
 
 msgid "Unable to start transaction:"
 msgstr ""
@@ -6577,7 +6577,7 @@ msgid "Group [%s] in project (location) [%s] mapset [%s] now uses camera file [%
 msgstr ""
 
 msgid "Select or modify the target elevation model."
-msgstr ""
+msgstr "Sélectionnez ou modifiez le modèle d'élévation cible."
 
 #, fuzzy
 msgid "Name of the target project (location)"
@@ -6767,7 +6767,7 @@ msgid " Run OPTION 5 of i.ortho.photo!"
 msgstr ""
 
 msgid "Orthorectifies an image by using the image to photo coordinate transformation matrix."
-msgstr ""
+msgstr "Orthorectifie une image en utilisant la matrice de transformation des coordonnées image-vers-photo."
 
 msgid "Output raster map(s) suffix"
 msgstr ""
@@ -6951,7 +6951,7 @@ msgid "Internal error: error message too long"
 msgstr "Erreur interne : message d'erreur trop long"
 
 msgid "Select or modify the imagery group target."
-msgstr ""
+msgstr "Sélectionnez ou modifiez la cible du groupe d'imagerie."
 
 msgid "Name of target project (location) for ortho-rectification"
 msgstr "Nom du projet (Secteur) cible pour l'ortho-rectification"
@@ -7000,7 +7000,7 @@ msgid "GCP"
 msgstr ""
 
 msgid "Computes a coordinate transformation based on the control points."
-msgstr ""
+msgstr "Calcule une transformation de coordonnées à partir des points de contrôle."
 
 msgid "destination coordinates"
 msgstr ""
@@ -8472,7 +8472,7 @@ msgid "Test name"
 msgstr "Nom de test"
 
 msgid "Calculates univariate statistics on selected table column."
-msgstr "Calculer des statistiques univariées sur la colonne sélectionnée"
+msgstr "Calcule des statistiques univariées sur la colonne sélectionnée de la table."
 
 msgid "Name of attribute column on which to calculate statistics (must be numeric)"
 msgstr "Nom de la colonne d'attributs sur laquelle calculer les statistiques (doit contenir des valeurs numériques)"
@@ -10295,7 +10295,7 @@ msgid "Name(s) of existing raster, vector or raster3d map(s) to unregister"
 msgstr ""
 
 msgid "Upgrades the version of the temporal database."
-msgstr ""
+msgstr "Met à jour la version de la base de données temporelle."
 
 msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
 msgstr "Applique des opérations spatiales et temporelles sur des jeux de données vecteur temporel à l'aide de l'algèbre temporelle vecteur."
@@ -22476,7 +22476,7 @@ msgid "Cannot create mask file: RASTER3D_MASK already exists"
 msgstr "Ne peut pas créer le fichier de masque : RAQTER3D_MASK existe déjà"
 
 msgid "Creates a display file from an existing 3D raster map according to specified threshold levels."
-msgstr "Créer un fichier d'affichage à partir d'une carte raster 3D existante selon les valeurs seuils spécifiées."
+msgstr "Crée un fichier d'affichage à partir d'une carte raster 3D existante, selon les niveaux de seuil spécifiés."
 
 msgid "Name of an existing 3D raster map"
 msgstr "Nom d'une carte raster 3D existante"
@@ -22783,7 +22783,7 @@ msgid "Updating the number of categories for <%s>"
 msgstr "Mise à jour du nombre de catégories pour <%s>"
 
 msgid "Allows creation and/or modification of 3D raster map layer support files."
-msgstr "Permet la création et/ou modification des fichiers supports de la carte raster 3D."
+msgstr "Permet la création et/ou la modification de fichiers de support de cartes raster 3D."
 
 msgid "Text to use for map title"
 msgstr "Texte à utiliser comme titre de carte"
@@ -23643,8 +23643,10 @@ msgstr ""
 msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
-msgid "Missing output projection parameters "
-msgstr ""
+#, fuzzy
+#| msgid "Output projection parameters (PROJ.4 style)"
+msgid "Missing output projection parameters"
+msgstr "Paramètres de projection en sortie (style PROJ.4)"
 
 msgid "Unable to read input data"
 msgstr ""
@@ -23874,8 +23876,9 @@ msgstr ""
 msgid "Unable to import data"
 msgstr ""
 
-msgid "Done: generated map "
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Done: generated map {map_name}"
+msgstr "Valeur de la limite est"
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
 msgstr ""
@@ -23935,8 +23938,9 @@ msgstr ""
 msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
-#, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+#, fuzzy, python-brace-format
+#| msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr "Impossible de récupérer les capacités de <{0}>. Raison : "
 
 #, python-format
@@ -24075,9 +24079,10 @@ msgstr ""
 msgid "Driver %s does not supports Create() method"
 msgstr ""
 
-#, python-format
-msgid "Unable to open %s "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to open tempfile"
+msgid "Unable to open {filename}"
+msgstr "Impossible d'ouvrir le fichier temporaire"
 
 msgid "Region is out of server data extend."
 msgstr ""
@@ -24248,31 +24253,56 @@ msgstr ""
 msgid "xy-locations are not supported"
 msgstr ""
 
+#, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr ""
+
+#, fuzzy
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr "Génération d'un fichier raster groupé"
+
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr "Génération d'un fichier raster groupé"
+
 #, fuzzy
 msgid "Generating a clumped raster file"
 msgstr "Génération d'un fichier raster groupé"
 
-msgid " including diagonal neighbors"
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, python-format
-msgid " with minimum %s pixels"
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
 msgstr ""
 
 # c-format
-msgid "Generating a reclass map with area size"
+#, fuzzy, python-brace-format
+#| msgid "Generating a reclass map with area size"
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
 msgstr "Génération d'une carte de reclassification en fonction de la superficie"
 
-#, python-format
-msgid " larger than or equal to %f hectares..."
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
 msgstr ""
 
-#, python-format
-msgid " smaller than or equal to %f hectares..."
+# c-format
+#, fuzzy, python-brace-format
+#| msgid "Generating a reclass map with area size"
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "Génération d'une carte de reclassification en fonction de la superficie"
+
+#, python-brace-format
+msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr ""
 
-msgid "No areas of size "
-msgstr ""
+# c-format
+msgid "Generating a reclass map without area size limits..."
+msgstr "Génération d'une carte de reclassement sans limites de taille d'aire..."
+
+msgid "No areas found"
+msgstr "Aucune surface trouvée"
 
 #, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
@@ -24892,12 +24922,9 @@ msgstr ""
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr ""
-
-msgid "Use -c flag to update values in this column."
-msgstr ""
+#, python-brace-format
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
+msgstr "Impossible de créer la colonne <{column}> (déjà présente). Utilisez l'option -c pour mettre à jour les valeurs de cette colonne."
 
 #, python-format
 msgid "Adding columns '%s'"
@@ -25013,9 +25040,10 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr ""
 
-#, python-format
-msgid "Unable to add column %s to vector map <%s> "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to add column {column} to vector map <{vector}>"
+msgstr "Impossible d'ajouter un lien vers la base de données pour la carte vectorielle <%s>"
 
 #, python-format
 msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
@@ -32074,10 +32102,9 @@ msgstr "Le fichier '%s' existe déjà."
 msgid "Target project: <%s>"
 msgstr "Projet cible <%s> non trouvé"
 
-#, fuzzy, c-format
-#| msgid "target project %s, mapset %s:"
+#, c-format
 msgid "Target mapset: <%s>"
-msgstr "projet cible %s, jeu de cartes %s:"
+msgstr "Jeu de cartes cible : <%s>"
 
 msgid "Rectification cancelled."
 msgstr "Rectification annulée."
@@ -35021,10 +35048,6 @@ msgstr ""
 
 #~ msgid "DONE: uncompressed file is %lu %s (%.2f%) smaller"
 #~ msgstr "FAIT : le fichier décompressé est %lu %s (%.2f%) plus petit"
-
-#, fuzzy
-#~ msgid "DPI for the generated page"
-#~ msgstr "Valeur de la limite est"
 
 #, fuzzy
 #~ msgid "DXF conversion"

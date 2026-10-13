@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grassmods/pt_BR/>\n"
@@ -23846,8 +23846,10 @@ msgstr ""
 msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
-msgid "Missing output projection parameters "
-msgstr ""
+#, fuzzy
+#| msgid "Unable to set up lat/long projection parameters"
+msgid "Missing output projection parameters"
+msgstr "Não consegui ajustar parâmetros de projeção lat/long"
 
 msgid "Unable to read input data"
 msgstr ""
@@ -24077,8 +24079,9 @@ msgstr ""
 msgid "Unable to import data"
 msgstr ""
 
-msgid "Done: generated map "
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Done: generated map {map_name}"
+msgstr "Valor para a borda leste"
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
 msgstr ""
@@ -24138,8 +24141,9 @@ msgstr ""
 msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr "A autorização falhou em <%s> ao buscar recursos"
 
-#, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+#, fuzzy, python-brace-format
+#| msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr "Não foi possível obter recursos de <{0}>. Razão:"
 
 #, python-format
@@ -24284,9 +24288,10 @@ msgstr "Erro do servidor WMS: nenhuma banda(s) recebida(s). O URL do servidor es
 msgid "Driver %s does not supports Create() method"
 msgstr "O driver %s não suporta o método Create()"
 
-#, python-format
-msgid "Unable to open %s "
-msgstr "Não foi possível abrir %s"
+#, fuzzy, python-brace-format
+#| msgid "Unable to open file <%s>"
+msgid "Unable to open {filename}"
+msgstr "Não consegui abrir o arquivo <%s>"
 
 msgid "Region is out of server data extend."
 msgstr "A região está fora da extensão de dados do servidor."
@@ -24471,32 +24476,52 @@ msgstr ""
 msgid "xy-locations are not supported"
 msgstr ""
 
+#, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr ""
+
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr ""
+
+#, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr ""
+
 msgid "Generating a clumped raster file"
 msgstr ""
 
-msgid " including diagonal neighbors"
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, fuzzy, python-format
-msgid " with minimum %s pixels"
-msgstr "Tamanho da fonte é altura em pixels"
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
+msgstr ""
 
-#, fuzzy
-msgid "Generating a reclass map with area size"
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
 msgstr "Criando %i mapas raster\n"
 
-#, python-format
-msgid " larger than or equal to %f hectares..."
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
 msgstr ""
 
-#, python-format
-msgid " smaller than or equal to %f hectares..."
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "Criando %i mapas raster\n"
+
+#, python-brace-format
+msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr ""
 
 #, fuzzy
-#| msgid "area size"
-msgid "No areas of size "
-msgstr "tamanho da área"
+msgid "Generating a reclass map without area size limits..."
+msgstr "Criando %i mapas raster\n"
+
+#, fuzzy
+#| msgid "No categories found"
+msgid "No areas found"
+msgstr "Nenhuma categoria encontrada"
 
 #, fuzzy, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
@@ -25123,11 +25148,8 @@ msgstr ""
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr ""
-
-msgid "Use -c flag to update values in this column."
+#, python-brace-format
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr ""
 
 #, python-format
@@ -25244,9 +25266,10 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr ""
 
-#, python-format
-msgid "Unable to add column %s to vector map <%s> "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to read color table for vector map <%s>"
+msgid "Unable to add column {column} to vector map <{vector}>"
+msgstr "Não é possível ler a tabela de cores para o mapa vetorial <%s>"
 
 #, python-format
 msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
@@ -34459,6 +34482,19 @@ msgstr ""
 msgid "Image file"
 msgstr "Arquivo de imagem"
 
+#, python-format
+#~ msgid "Unable to open %s "
+#~ msgstr "Não foi possível abrir %s"
+
+#, fuzzy, python-format
+#~ msgid " with minimum %s pixels"
+#~ msgstr "Tamanho da fonte é altura em pixels"
+
+#, fuzzy
+#~| msgid "area size"
+#~ msgid "No areas of size "
+#~ msgstr "tamanho da área"
+
 #, fuzzy, c-format
 #~ msgid "Raster map <%s> created. "
 #~ msgstr "Mapa raster <%s> criado."
@@ -35207,10 +35243,6 @@ msgstr "Arquivo de imagem"
 
 #~ msgid "DONE: uncompressed file is %lu %s (%.2f%) smaller"
 #~ msgstr "CONCLUÍDO: o arquivo descompactado é%lu  %s (%.2f%) menor"
-
-#, fuzzy
-#~ msgid "DPI for the generated page"
-#~ msgstr "Valor para a borda leste"
 
 #, fuzzy
 #~ msgid "Data category ID"
