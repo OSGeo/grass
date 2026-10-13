@@ -31,6 +31,7 @@ def load_tests(loader, tests, ignore):
     # Unexpected error here
     # tests.addTests(doctest.DocTestSuite(tgis.list_stds))
     tests.addTests(doctest.DocTestSuite(tgis.metadata))
+    tests.addTests(doctest.DocTestSuite(tgis.open_stds))
     tests.addTests(doctest.DocTestSuite(tgis.register))
     tests.addTests(doctest.DocTestSuite(tgis.space_time_datasets))
     tests.addTests(doctest.DocTestSuite(tgis.spatial_extent))

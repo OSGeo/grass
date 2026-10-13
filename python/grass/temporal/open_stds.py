@@ -40,6 +40,17 @@ def _parse_id(
     :param ident: The id of a space time dataset
 
     :return: Tuple with ID components: name, mapset, semantic_label
+
+    >>> _parse_id("elevation")
+    ('elevation', None, None)
+    >>> _parse_id("test@PERMANENT")
+    ('test', 'PERMANENT', None)
+    >>> _parse_id("test.S2_8", stds_type="raster")
+    ('test', None, 'S2_8')
+    >>> _parse_id("test.S2_8@PERMANENT", stds_type="raster")
+    ('test', 'PERMANENT', 'S2_8')
+    >>> _parse_id("test.S2_8", stds_type="str3ds")
+    ('test.S2_8', None, None)
     """
     msgr = get_tgis_message_interface()
     name = ident
@@ -49,7 +60,12 @@ def _parse_id(
         name, mapset = ident.split("@", 1)
 
     semantic_label = None
-    if "." in name and stds_type == "strds":
+    # Semantic labels apply to raster STRDS. Accept the raster map element types
+    # ("raster"/"rast") as well as "strds": callers such as t.rast.mapcalc reach
+    # open_old_stds() with the map element type rather than "strds", and without
+    # this the ".label" band reference stays attached to the name and the dataset
+    # lookup fails. 3D-raster and vector STDS have no semantic labels.
+    if "." in name and stds_type in {"strds", "raster", "rast"}:
         name, semantic_label = name.split(".", 1)
         if "." in semantic_label:
             msgr.fatal(_("Invalid semantic_label <%s>") % semantic_label)
