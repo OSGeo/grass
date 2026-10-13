@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5365,7 +5365,7 @@ msgstr ""
 #: ../scripts/r.buffer.lowmem/r.buffer.lowmem.py:83
 #: ../scripts/r.fillnulls/r.fillnulls.py:149 ../scripts/r.grow/r.grow.py:122
 #: ../scripts/r.mask/r.mask.py:148 ../scripts/r.pack/r.pack.py:71
-#: ../scripts/r.reclass.area/r.reclass.area.py:344 ../scripts/r.rgb/r.rgb.py:53
+#: ../scripts/r.reclass.area/r.reclass.area.py:372 ../scripts/r.rgb/r.rgb.py:53
 #: ../scripts/v.rast.stats/v.rast.stats.py:151 ../vector/v.colors/main.c:314
 #: ../vector/v.vol.rst/main.c:605
 #, c-format, python-format
@@ -34247,7 +34247,7 @@ msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
 #: ../scripts/m.proj/m.proj.py:206
-msgid "Missing output projection parameters "
+msgid "Missing output projection parameters"
 msgstr ""
 
 #: ../scripts/m.proj/m.proj.py:224
@@ -34555,7 +34555,8 @@ msgid "Unable to import data"
 msgstr ""
 
 #: ../scripts/r.in.srtm/r.in.srtm.py:266
-msgid "Done: generated map "
+#, python-brace-format
+msgid "Done: generated map {map_name}"
 msgstr ""
 
 #: ../scripts/r.in.srtm/r.in.srtm.py:268
@@ -34631,59 +34632,59 @@ msgstr ""
 msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:273
+#: ../scripts/r.in.wms/wms_base.py:275
 #, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:312
+#: ../scripts/r.in.wms/wms_base.py:310
 #, python-format
 msgid ""
 "Unable to open file '%s'.\n"
 "%s\n"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:354
+#: ../scripts/r.in.wms/wms_base.py:352
 msgid "Unable to write data into tempfile"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:372
+#: ../scripts/r.in.wms/wms_base.py:370
 #, python-format
 msgid "Unable to determine region, %s failed"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:376
+#: ../scripts/r.in.wms/wms_base.py:374
 msgid "Region definition: 4 points required"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:382
+#: ../scripts/r.in.wms/wms_base.py:380
 msgid "Reprojection of region using m.proj failed."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:422
+#: ../scripts/r.in.wms/wms_base.py:420
 msgid "Reprojecting raster..."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:481 ../scripts/r.in.wms/wms_base.py:583
-#: ../scripts/r.in.wms/wms_base.py:614 ../scripts/r.in.wms/wms_base.py:655
+#: ../scripts/r.in.wms/wms_base.py:479 ../scripts/r.in.wms/wms_base.py:581
+#: ../scripts/r.in.wms/wms_base.py:612 ../scripts/r.in.wms/wms_base.py:653
 #, python-format
 msgid "%s failed"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:498
+#: ../scripts/r.in.wms/wms_base.py:496
 msgid "Unable to create temporary files"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:523
+#: ../scripts/r.in.wms/wms_base.py:521
 #, python-format
 msgid "Please change output name, or change names of these rasters: %s, module needs to create this temporary maps during execution."
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:560
+#: ../scripts/r.in.wms/wms_base.py:558
 msgid "WMS import failed, nothing imported"
 msgstr ""
 
-#: ../scripts/r.in.wms/wms_base.py:567
+#: ../scripts/r.in.wms/wms_base.py:565
 #, python-format
 msgid "<%s> created."
 msgstr ""
@@ -34807,8 +34808,8 @@ msgid "Driver %s does not supports Create() method"
 msgstr ""
 
 #: ../scripts/r.in.wms/wms_drv.py:283
-#, python-format
-msgid "Unable to open %s "
+#, python-brace-format
+msgid "Unable to open {filename}"
 msgstr ""
 
 #: ../scripts/r.in.wms/wms_drv.py:362
@@ -35022,43 +35023,68 @@ msgstr ""
 msgid "xy-locations are not supported"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:174
+#: ../scripts/r.reclass.area/r.reclass.area.py:176
+#, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:180
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:183
+#, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:186
 msgid "Generating a clumped raster file"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:176
-msgid " including diagonal neighbors"
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:178
-#, python-format
-msgid " with minimum %s pixels"
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:201
-msgid "Generating a reclass map with area size"
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:206
-#, python-format
-msgid " larger than or equal to %f hectares..."
-msgstr ""
-
 #: ../scripts/r.reclass.area/r.reclass.area.py:214
-#, python-format
-msgid " smaller than or equal to %f hectares..."
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:254
-msgid "No areas of size "
+#: ../scripts/r.reclass.area/r.reclass.area.py:218
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:272
+#: ../scripts/r.reclass.area/r.reclass.area.py:223
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:227
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:231
+#, python-brace-format
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:235
+#, python-brace-format
+msgid "No areas of size smaller than or equal to {upper} hectares"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:239
+msgid "Generating a reclass map without area size limits..."
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:240
+msgid "No areas found"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:300
 #, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:353
+#: ../scripts/r.reclass.area/r.reclass.area.py:381
 msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
 msgstr ""
 
@@ -35851,21 +35877,17 @@ msgstr ""
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:414
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr ""
-
 #: ../scripts/v.rast.stats/v.rast.stats.py:415
-msgid "Use -c flag to update values in this column."
+#, python-brace-format
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:422
+#: ../scripts/v.rast.stats/v.rast.stats.py:424
 #, python-format
 msgid "Adding columns '%s'"
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:426
+#: ../scripts/v.rast.stats/v.rast.stats.py:428
 msgid "Adding columns failed. Exiting."
 msgstr ""
 
@@ -36005,11 +36027,11 @@ msgid "Unable to add table <%s> to vector map <%s>"
 msgstr ""
 
 #: ../scripts/v.what.strds/v.what.strds.py:263
-#, python-format
-msgid "Unable to add column %s to vector map <%s> "
+#, python-brace-format
+msgid "Unable to add column {column} to vector map <{vector}>"
 msgstr ""
 
-#: ../scripts/v.what.strds/v.what.strds.py:279
+#: ../scripts/v.what.strds/v.what.strds.py:280
 #, python-format
 msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
 msgstr ""

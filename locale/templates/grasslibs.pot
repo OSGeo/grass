@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5216,7 +5216,7 @@ msgstr ""
 msgid "Unable to open header file for raster map <%s@%s>. It seems that some previous step failed and created an incomplete raster map."
 msgstr ""
 
-#: ../lib/raster/get_row.c:35 ../lib/raster/get_row.c:957
+#: ../lib/raster/get_row.c:35 ../lib/raster/get_row.c:969
 #, c-format
 msgid "Reading raster map <%s@%s> request for row %d is outside region"
 msgstr ""
@@ -5241,7 +5241,7 @@ msgstr ""
 msgid "Invalid raster row offset for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:150 ../lib/raster/get_row.c:194
+#: ../lib/raster/get_row.c:150 ../lib/raster/get_row.c:201
 #, c-format
 msgid "Compressed raster row for <%s> is too large"
 msgstr ""
@@ -5256,48 +5256,58 @@ msgstr ""
 msgid "Error reading raster data for row %d of <%s>: %s"
 msgstr ""
 
-#: ../lib/raster/get_row.c:176 ../lib/raster/get_row.c:221
-#: ../lib/raster/get_row.c:225
+#: ../lib/raster/get_row.c:176 ../lib/raster/get_row.c:233
+#: ../lib/raster/get_row.c:237
 #, c-format
 msgid "Error reading raster data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:201
+#: ../lib/raster/get_row.c:187
+#, c-format
+msgid "Invalid byte count in raster data for row %d of <%s>"
+msgstr ""
+
+#: ../lib/raster/get_row.c:208
 #, c-format
 msgid "Error uncompressing raster data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:267
+#: ../lib/raster/get_row.c:215
+#, c-format
+msgid "Raster row for <%s> is larger than expected"
+msgstr ""
+
+#: ../lib/raster/get_row.c:279
 #, c-format
 msgid "Error reading raster data via GDAL for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:878
+#: ../lib/raster/get_row.c:890
 #, c-format
 msgid "Error seeking compressed null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:884 ../lib/raster/get_row.c:896
+#: ../lib/raster/get_row.c:896 ../lib/raster/get_row.c:908
 #, c-format
 msgid "Error reading compressed null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:902
+#: ../lib/raster/get_row.c:914
 #, c-format
 msgid "Compressed null data for row %d of <%s> is too large"
 msgstr ""
 
-#: ../lib/raster/get_row.c:906
+#: ../lib/raster/get_row.c:918
 #, c-format
 msgid "Error uncompressing null data for row %d of <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:940
+#: ../lib/raster/get_row.c:952
 #, c-format
 msgid "Error seeking null row %d for <%s>"
 msgstr ""
 
-#: ../lib/raster/get_row.c:943
+#: ../lib/raster/get_row.c:955
 #, c-format
 msgid "Error reading null row %d for <%s>"
 msgstr ""
