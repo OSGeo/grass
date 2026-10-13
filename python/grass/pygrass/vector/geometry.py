@@ -1829,7 +1829,11 @@ class Area(Geo):
         :type bbox: a Bbox object
         """
         bbox = bbox or self.bbox()
-        x, y, _ = get_xyz(point)
+        try:
+            x, y = (float(coord) for coord in get_xyz(point)[:2])
+        except (TypeError, ValueError) as error:
+            str_error = "The coordinates of the point must be numbers: {0!r}"
+            raise ValueError(str_error.format(point)) from error
         return bool(
             libvect.Vect_point_in_area(x, y, self.c_mapinfo, self.id, bbox.c_bbox)
         )

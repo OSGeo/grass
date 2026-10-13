@@ -137,21 +137,19 @@ class Bbox:
 
         """
         if hasattr(point, "x") and hasattr(point, "y"):
-            x = point.x
-            y = point.y
-            z = getattr(point, "z", 0.0) or 0.0
-        elif isinstance(point, (tuple, list)):
-            if len(point) == 2:
-                x, y = point
-                z = 0.0
-            elif len(point) == 3:
-                x, y, z = point
-            else:
-                str_error = "The format of the point is not supported: {0!r}"
-                raise ValueError(str_error.format(point))
+            coords = (point.x, point.y, getattr(point, "z", None) or 0.0)
+        elif isinstance(point, (tuple, list)) and len(point) in {2, 3}:
+            coords = (*point, 0.0) if len(point) == 2 else tuple(point)
         else:
             str_error = "The format of the point is not supported: {0!r}"
             raise ValueError(str_error.format(point))
+        # Convert here so that non-numeric input fails with a clear error
+        # instead of a ctypes error or garbage reaching the C function.
+        try:
+            x, y, z = (float(coord) for coord in coords)
+        except (TypeError, ValueError) as error:
+            str_error = "The coordinates of the point must be numbers: {0!r}"
+            raise ValueError(str_error.format(point)) from error
         return bool(libvect.Vect_point_in_box(x, y, z, self.c_bbox))
 
     def items(self):
