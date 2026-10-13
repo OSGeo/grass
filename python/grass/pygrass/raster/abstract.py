@@ -9,6 +9,7 @@ import ctypes
 #
 # import GRASS modules
 #
+from grass.exceptions import OpenError
 from grass.script import fatal, gisenv
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
@@ -434,6 +435,12 @@ class RasterAbstractBase:
             self.mapset = mapset or ""
             return bool(mapset)
         return bool(utils.get_mapset_raster(self.name, self.mapset))
+
+    def _check_overwrite(self):
+        """Raise OpenError if the map exists and overwrite is not set."""
+        if self.exist() and not self.overwrite:
+            str_err = _("Raster map <{0}> already exists and will be not overwritten")
+            raise OpenError(str_err.format(self))
 
     def is_open(self):
         """Return True if the map is open False otherwise.
