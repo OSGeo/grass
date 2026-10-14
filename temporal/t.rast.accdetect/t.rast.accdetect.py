@@ -296,7 +296,6 @@ def main():
     def next_cycle(end):
         start = end
         if input_strds.is_time_absolute():
-            start = end
             if offset:
                 start = tgis.increment_datetime_by_string(end, offset)
             end = tgis.increment_datetime_by_string(start, cycle)
