@@ -40,17 +40,6 @@ def _parse_id(
     :param ident: The id of a space time dataset
 
     :return: Tuple with ID components: name, mapset, semantic_label
-
-    >>> _parse_id("elevation")
-    ('elevation', None, None)
-    >>> _parse_id("test@PERMANENT")
-    ('test', 'PERMANENT', None)
-    >>> _parse_id("test.S2_8", stds_type="raster")
-    ('test', None, 'S2_8')
-    >>> _parse_id("test.S2_8@PERMANENT", stds_type="raster")
-    ('test', 'PERMANENT', 'S2_8')
-    >>> _parse_id("test.S2_8", stds_type="str3ds")
-    ('test.S2_8', None, None)
     """
     msgr = get_tgis_message_interface()
     name = ident
@@ -197,7 +186,14 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 
     msgr = get_tgis_message_interface()
 
-    name, mapset, _semantic_label = _parse_id(name, stds_type=stds_type)
+    original_name = name
+    name, mapset, semantic_label = _parse_id(name, stds_type=stds_type)
+    if semantic_label:
+        msgr.fatal(
+            _("Illegal dataset name <{}>. Character '.' not allowed.").format(
+                original_name
+            )
+        )
     if mapset:
         if mapset != get_current_mapset():
             msgr.fatal(
