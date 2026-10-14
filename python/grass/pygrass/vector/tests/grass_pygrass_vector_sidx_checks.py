@@ -9,6 +9,7 @@ subprocess, because the vector library state is per process.
 
 import os
 import sys
+from pathlib import Path
 
 from grass.pygrass.vector import VectorTopo
 
@@ -18,8 +19,8 @@ def sidx_is_open(path):
     if sys.platform.startswith("linux"):
         # A handle to a replaced file is reported with a " (deleted)" suffix.
         return any(
-            os.path.realpath(f"/proc/self/fd/{fd}").startswith(path)
-            for fd in os.listdir("/proc/self/fd")
+            os.path.realpath(fd).startswith(path)
+            for fd in Path("/proc/self/fd").iterdir()
         )
     # Windows refuses to delete an open file.
     try:
