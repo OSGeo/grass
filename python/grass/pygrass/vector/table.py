@@ -48,7 +48,7 @@ def get_path(path, vect_name=None):
     ...     "sqlite",
     ...     "sqlite.db",
     ... )
-    >>> new_path.replace("//", "/") == new_path2.replace("//", "/")
+    >>> os.path.normpath(new_path) == os.path.normpath(new_path2)
     True
     >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/vector/$MAP/sqlite.db"
     >>> new_path = get_path(path, "test")
@@ -60,7 +60,7 @@ def get_path(path, vect_name=None):
     ...     "test",
     ...     "sqlite.db",
     ... )
-    >>> new_path.replace("//", "/") == new_path2.replace("//", "/")
+    >>> os.path.normpath(new_path) == os.path.normpath(new_path2)
     True
 
     """
