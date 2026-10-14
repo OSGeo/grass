@@ -1291,6 +1291,12 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
                 fclose(Plus->spidx_fp.file);
                 return -1;
             }
+            if (!Plus->Spidx_file) {
+                /* the index is fully loaded in memory and the file is
+                 * rewritten by Vect_save_sidx() */
+                fclose(Plus->spidx_fp.file);
+                Plus->spidx_fp.file = NULL;
+            }
         }
     }
 
