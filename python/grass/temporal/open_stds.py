@@ -205,7 +205,7 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 
     if stds_type in {"strds", "rast", "raster"}:
         sp = dataset_factory("strds", id)
-    elif stds_type in {"str3ds", "raster3d", "rast3d ", "raster_3d"}:
+    elif stds_type in {"str3ds", "raster3d", "rast3d", "raster_3d"}:
         sp = dataset_factory("str3ds", id)
     elif stds_type in {"stvds", "vect", "vector"}:
         sp = dataset_factory("stvds", id)
