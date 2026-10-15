@@ -299,7 +299,8 @@ int G_get_datum_by_name(const char *);
 const char *G_datum_name(int);
 const char *G_datum_description(int);
 const char *G_datum_ellipsoid(int);
-int G_get_datumparams_from_projinfo(const struct Key_Value *, char *, char *);
+int G_get_datumparams_from_projinfo(const struct Key_Value *, char *, size_t,
+                                    char *, size_t);
 void G_read_datum_table(void);
 
 /* debug.c */
