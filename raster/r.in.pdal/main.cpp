@@ -15,6 +15,8 @@
  *
  *****************************************************************************/
 
+#include <cinttypes>
+#include <cstdint>
 #include <cstdio>
 #include <iomanip>
 #include <sstream>
@@ -56,8 +58,6 @@ extern "C" {
 #include "string_list.h"
 }
 
-#define BUFFSIZE GPATH_MAX
-
 int main(int argc, char *argv[])
 {
     int out_fd;
@@ -72,8 +72,6 @@ int main(int argc, char *argv[])
     struct Cell_head region = {};
     struct Cell_head input_region = {};
     int rows, cols; /* scan box size */
-
-    char buff[BUFFSIZE];
 
     struct BinIndex bin_index_nodes;
 
@@ -947,8 +945,8 @@ int main(int argc, char *argv[])
     G_percent(1, 1, 1); /* flush */
     G_free(raster_row);
 
-    G_message(_(GPOINT_COUNT_FORMAT " points found in input file(s)"),
-              grass_filter.num_processed());
+    G_message(_("%" PRIu64 " points found in input file(s)"),
+              (uint64_t)grass_filter.num_processed());
 
     /* close raster file & write history */
     Rast_close(out_fd);
@@ -979,21 +977,11 @@ int main(int argc, char *argv[])
     if (set_region_flag->answer)
         G_put_window(&region);
 
-    if (infiles.num_items > 1) {
-        snprintf(buff, BUFFSIZE,
-                 _("Raster map <%s> created."
-                   " " GPOINT_COUNT_FORMAT
-                   " points from %d files found in region."),
-                 outmap, grass_filter.num_passed(), infiles.num_items);
-    }
-    else {
-        snprintf(buff, BUFFSIZE,
-                 _("Raster map <%s> created."
-                   " " GPOINT_COUNT_FORMAT " points found in region."),
-                 outmap, grass_filter.num_passed());
-    }
-
-    G_done_msg("%s", buff);
+    G_message(_("%" PRIu64 " points found in region."),
+              (uint64_t)grass_filter.num_passed());
+    if (infiles.num_items > 1)
+        G_message(_("Number of input files: %d"), infiles.num_items);
+    G_done_msg(_("Raster map <%s> created."), outmap);
     // Points pruned by the reader's spatial index never reach the filter, so
     // the count below is not comparable to a run without the index.
     if (bounds_pushed_to_reader)

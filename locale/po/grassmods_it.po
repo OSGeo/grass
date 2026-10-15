@@ -10,13 +10,13 @@
 # Luca Delucchi <lucadeluge@gmail.com>, 2008.
 # Marco Curreli <marcocurreli at tiscali it>, 2011, 2012.
 # Anna Zanchetta <ciupava at gmail.com>, 2013.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-03 18:51+0000\n"
-"PO-Revision-Date: 2025-07-26 01:36+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grassmods/it/>\n"
 "Language: it\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 "X-Poedit-Bookmarks: 2364,2381,2449,2554,2623,3551,3587,-1,-1,6460\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
@@ -187,7 +187,7 @@ msgid "Cannot combine 'from_table' and 'select' options"
 msgstr "Non riesco ad unire le opzioni 'from_table' e 'select'"
 
 msgid "Either 'from_table' or 'select' option must be given."
-msgstr "Devono essere fornite sia l'opzione 'from_table' che 'select' "
+msgstr "Devono essere fornite sia l'opzione 'from_table' che 'select'."
 
 msgid "Cannot combine 'select' and 'where' options"
 msgstr "Non riesco ad unire le opzioni 'select' e 'where'"
@@ -439,10 +439,13 @@ msgstr ""
 msgid "Unable to open DBF database: %s"
 msgstr ""
 
-msgid "SQL parser error"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Error: %s\n"
+msgid "SQL parser error: %s\n"
+msgstr "Errore: %s\n"
 
-msgid "in statement:"
+#, c-format
+msgid "Statement: %s\n"
 msgstr ""
 
 #, c-format
@@ -612,7 +615,7 @@ msgid "Unable to scan timestamp: "
 msgstr ""
 
 msgid "Unknown timestamp format: "
-msgstr "Formato della data sbagliato"
+msgstr "Formato della data sbagliato "
 
 msgid "Unable to scan date: "
 msgstr ""
@@ -630,7 +633,7 @@ msgid "Unable get list of tables:"
 msgstr ""
 
 msgid "Wrong port number in MySQL database definition: "
-msgstr "Errato numero di porta nella definizione del database MySQL"
+msgstr "Errato numero di porta nella definizione del database MySQL: "
 
 msgid "'user' in database definition is not supported, use db.login"
 msgstr "'user' nella definizione del database non è supportata, usa db.login"
@@ -820,16 +823,17 @@ msgstr ""
 msgid "Database name <%s> is too long"
 msgstr ""
 
-#, c-format
-msgid "Unable to create directory '%s' for sqlite database"
-msgstr ""
+#, fuzzy, c-format
+msgid "Unable to create directory '%s' for SQLite database"
+msgstr "Non è possibile aprire l'origine dati OGR '%s'"
 
 msgid "Disabling SQLite locking"
 msgstr ""
 
-#, c-format
-msgid "The sqlite config option '%s' is not supported"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "MySQL driver: column '%s', type %d is not supported"
+msgid "The SQLite config option '%s' is not supported"
+msgstr "Driver MySQL: colonna '%s', di tipo %d non supportata"
 
 msgid "Unable to open database:"
 msgstr ""
@@ -2253,7 +2257,6 @@ msgstr "Numero di cifre significative (solo valori a virgola mobile)"
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -2288,7 +2291,7 @@ msgid "List of categories or values to be displayed"
 msgstr ""
 
 msgid "Selection"
-msgstr "Selezione "
+msgstr "Selezione"
 
 msgid "Background color (for null)"
 msgstr ""
@@ -4007,7 +4010,7 @@ msgid "Use ESRI-style format (applies to WKT output only)"
 msgstr "Usa formato in stile ESRI (solo per il formato WKT)"
 
 msgid "Specification"
-msgstr "Specifica "
+msgstr "Specifica"
 
 msgid "Name of georeferenced data file to read projection information from"
 msgstr "Nome del file di dati georeferenziati dal quale leggere le informazioni sulla proiezione"
@@ -4553,15 +4556,15 @@ msgstr "Errore durante la scrittura del file PROJ_INFO <%s>"
 
 #, c-format
 msgid "Enter plural form of units [meters]: "
-msgstr "Inserisci un forma plurare di unita [metri]:"
+msgstr "Inserisci un forma plurare di unita [metri]: "
 
 #, c-format
 msgid "Enter singular for unit: "
 msgstr ""
 
-#, c-format
+#, c-format, fuzzy
 msgid "Enter conversion factor from %s to meters: "
-msgstr "Inserire il fattore di conversione da %s a metri"
+msgstr "Inserire il fattore di conversione da %s a metri "
 
 #, c-format
 msgid "Error writing into UNITS output file <%s>"
@@ -7781,8 +7784,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 #, fuzzy
 msgid "Maps with feature values (attributes)"
 msgstr "Numero di quantili"
@@ -13989,21 +13992,25 @@ msgstr "Non hai specificato la misura del passo dell'angolo. L'operazione verrà
 msgid "Could not read bufferzone size. Aborting."
 msgstr "Impossibile leggere la dimensione della zona di buffer. L'operazione verrà interrotta."
 
-#, c-format
-msgid "Could not read %s bufferzone size. Aborting."
-msgstr ""
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read east bufferzone size. Aborting."
+msgstr "Impossibile leggere la dimensione della zona di buffer. L'operazione verrà interrotta."
 
-msgid "east"
-msgstr "est"
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read west bufferzone size. Aborting."
+msgstr "Impossibile leggere la dimensione della zona di buffer. L'operazione verrà interrotta."
 
-msgid "west"
-msgstr "ovest"
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read south bufferzone size. Aborting."
+msgstr "Impossibile leggere la dimensione della zona di buffer. L'operazione verrà interrotta."
 
-msgid "south"
-msgstr "sud"
-
-msgid "north"
-msgstr "nord"
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read north bufferzone size. Aborting."
+msgstr "Impossibile leggere la dimensione della zona di buffer. L'operazione verrà interrotta."
 
 msgid "Could not read maximum distance. Aborting."
 msgstr "Impossibile leggere la distanza massima. L'operazione verrà interrotta."
@@ -15039,13 +15046,19 @@ msgstr ""
 msgid "Dataset doesn't have requested dimension '%s' (possibly a programming error)"
 msgstr ""
 
-#, fuzzy
-msgid " points found in input file(s)"
+#, fuzzy, c-format
+msgid "%<PRIu64> points found in input file(s)"
 msgstr "Tovati %lu punti nella regione."
 
 #, fuzzy, c-format
-msgid "Raster map <%s> created. "
-msgstr "Mappa raster <%s> creata."
+#| msgid "%lu points found in region."
+msgid "%<PRIu64> points found in region."
+msgstr "Tovati %lu punti nella regione."
+
+#, fuzzy, c-format
+#| msgid "Number of input points: %d."
+msgid "Number of input files: %d"
+msgstr "Numero di punti in input:%d"
 
 msgid "Overriding projection check"
 msgstr ""
@@ -15688,9 +15701,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "<%d> is not valid number of nprocs."
 msgstr "<%s=%s> numero di punti non valido"
-
-msgid "Floating point error(s) occurred in the calculation"
-msgstr ""
 
 #, c-format
 msgid "Unable to read color file for raster map <%s@%s>"
@@ -17514,15 +17524,14 @@ msgstr ""
 msgid "CELL: Data range is %ld to %ld\n"
 msgstr ""
 
-#, c-format
-msgid "Illegal reclass rule -"
+#, fuzzy, c-format
+#| msgid "Illegal reclass rule -"
+msgid "Illegal reclass rule - ignored\n"
 msgstr "Regola di riclassificazione non valida -"
 
-#, c-format
-msgid " ignored\n"
-msgstr "ignorato\n"
-
-msgid " - invalid reclass rule"
+#, fuzzy, c-format
+#| msgid " - invalid reclass rule"
+msgid "%s - invalid reclass rule"
 msgstr " - regola di riclassificazione non valida"
 
 #, c-format
@@ -18636,18 +18645,6 @@ msgstr "Intervallo di tempo per la creazione delle mappe di output [minuti]"
 msgid "Water diffusion constant"
 msgstr "Costante di diffusione dell'acqua"
 
-msgid "Seed for random number generator"
-msgstr ""
-
-msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
-msgstr ""
-
-msgid "Generate random seed"
-msgstr ""
-
-msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
-msgstr ""
-
 #, fuzzy
 msgid "Number of threads which will be used for parallel computation."
 msgstr "Numero di livelli da utilizzare per ogni componente"
@@ -18658,14 +18655,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
 msgstr "La location Lat/Long non è supportata da %s. Prima riproiettare la mappa."
-
-#, c-format
-msgid "Generated random seed (-s): %ld"
-msgstr ""
-
-#, c-format
-msgid "Read random seed from %s option: %ld"
-msgstr ""
 
 #, c-format
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
@@ -18754,6 +18743,10 @@ msgstr "Output delle serie temporali"
 msgid "You are not outputting any raster maps"
 msgstr "Non si sta producendo nessuna mappa raster"
 
+#, c-format
+msgid "%d walkers over %d time steps may draw more random numbers than one seed provides; the random numbers of some walkers then repeat those of others shifted by a constant"
+msgstr ""
+
 #, fuzzy, c-format
 #| msgid "Processing rows %d-%d (of %d)..."
 msgid "Processing block %d of %d"
@@ -18839,6 +18832,23 @@ msgstr ""
 
 #, c-format
 msgid "FP raster map <%s> not found"
+msgstr ""
+
+#, c-format
+msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Invalid datum code <%s>"
+msgid "Invalid random seed <%s>"
+msgstr "Codice del datum <%s> non valido"
+
+#, c-format
+msgid "Read random seed from %s option: %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "Generated random seed: %<PRId64>"
 msgstr ""
 
 msgid "aspect"
@@ -20373,6 +20383,10 @@ msgid "Number of intermediate images to produce"
 msgstr "Numero di immagine intermediarie da produrre"
 
 #, c-format
+msgid "Read random seed from %s option: %ld"
+msgstr ""
+
+#, c-format
 msgid "Autogenerated random seed set to: %ld"
 msgstr ""
 
@@ -20625,7 +20639,6 @@ msgstr "Troppe categorie (trovate: %i, max: %i). Prova a riscalare o riclassific
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -25739,13 +25752,17 @@ msgstr ""
 msgid "Lowest chi2 = %f\n"
 msgstr ""
 
-#, c-format
-msgid ""
-"%15s%15s%15s\n"
-"\n"
+#. GTC Column header, lower class limit (exclusive)
+msgid "From (excl.)"
 msgstr ""
-"%15s%15s%15s\n"
-"\n"
+
+#. GTC Column header, upper class limit (inclusive)
+msgid "To (incl.)"
+msgstr ""
+
+#. GTC Column header, number of values in the class
+msgid "Frequency"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -28580,7 +28597,7 @@ msgid "%d input polygons got lost during import."
 msgstr ""
 
 #, c-format
-msgid "%d additional areas where created during import."
+msgid "%d additional areas were created during import."
 msgstr ""
 
 #, c-format
@@ -32027,8 +32044,10 @@ msgstr ""
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
 msgstr ""
 
-msgid "No features match Your query"
-msgstr ""
+#, fuzzy
+#| msgid "To feature type"
+msgid "No features match your query"
+msgstr "Tipo di elemento 'to'"
 
 msgid "Your query matches more than one record in input profiling map. Currently it's not supported. Enhance WHERE conditions to get only one line."
 msgstr ""
@@ -32334,13 +32353,19 @@ msgstr ""
 msgid "A file with 3D control points is needed for 3D transformation"
 msgstr ""
 
-#, c-format
-msgid "The vector map <%s> already exists in"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Vector map <%s> already exists"
+msgid "The vector map <%s> already exists."
+msgstr "La mappa vettoriale <%s> esiste già"
 
 #, fuzzy, c-format
-msgid "target project %s, mapset %s:"
-msgstr "Il gruppo <%s> è stato assegnato alla location [%s], mapset [%s]"
+msgid "Target project: <%s>"
+msgstr "Location di destinazione <%s> non trovata"
+
+#, fuzzy, c-format
+#| msgid "Your current mapset is <%s>"
+msgid "Target mapset: <%s>"
+msgstr "Il mapset corrente è <%s>"
 
 msgid "Rectification cancelled."
 msgstr ""
@@ -34370,6 +34395,38 @@ msgstr "Visualizza immagini BMP dal driver PNG."
 
 msgid "Image file"
 msgstr "File immagine"
+
+#~ msgid "east"
+#~ msgstr "est"
+
+#~ msgid "west"
+#~ msgstr "ovest"
+
+#~ msgid "south"
+#~ msgstr "sud"
+
+#~ msgid "north"
+#~ msgstr "nord"
+
+#, fuzzy, c-format
+#~ msgid "Raster map <%s> created. "
+#~ msgstr "Mappa raster <%s> creata."
+
+#, c-format
+#~ msgid " ignored\n"
+#~ msgstr "ignorato\n"
+
+#, c-format
+#~ msgid ""
+#~ "%15s%15s%15s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "%15s%15s%15s\n"
+#~ "\n"
+
+#, fuzzy, c-format
+#~ msgid "target project %s, mapset %s:"
+#~ msgstr "Il gruppo <%s> è stato assegnato alla location [%s], mapset [%s]"
 
 #~ msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 #~ msgstr "L'infiltrazione eccede l'intensità di precipitazione ovunque! Nessun flusso superficiale."

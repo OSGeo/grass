@@ -1017,7 +1017,9 @@ class TplotFrame(wx.Frame):
                 GError(
                     parent=self,
                     showTraceback=False,
-                    message=_("Please change name of output CSV file or "),
+                    message=_(
+                        "Please change name of output CSV file or enable overwriting."
+                    ),
                 )
                 return
             dlg.Destroy()

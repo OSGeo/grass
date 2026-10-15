@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-03 18:51+0000\n"
-"PO-Revision-Date: 2026-10-04 16:56+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"PO-Revision-Date: 2026-10-05 10:33+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
 "Language: sv\n"
@@ -679,6 +679,11 @@ msgstr "Misslyckades med att skriva ut %s"
 msgid "Failed to parse string specifier: %s"
 msgstr "Misslyckades med att analysera strängspecificerare: %s"
 
+#, fuzzy
+#| msgid "String <%s> is too long"
+msgid "String precision is too large"
+msgstr "Strängen <%s> är för lång"
+
 #, c-format
 msgid "Format specifier exceeds the buffer size (%d)"
 msgstr "Formatangivelsen överskrider buffertstorleken (%d)"
@@ -729,9 +734,29 @@ msgstr "ZLIB-dekomprimeringsfel %d: %s"
 msgid "GRASS needs to be compiled with ZSTD for ZSTD compression"
 msgstr "GRASS måste kompileras med ZSTD för ZSTD-komprimering"
 
+#, fuzzy, c-format
+#| msgid "ZSTD compression error %d: %s"
+msgid "ZSTD compression bound error %d: %s"
+msgstr "Fel vid komprimering av ZSTD %d: %s"
+
+#, fuzzy
+#| msgid "ZSTD compression error %d: %s"
+msgid "ZSTD compression bound exceeds supported size"
+msgstr "Fel vid komprimering av ZSTD %d: %s"
+
 #, c-format
 msgid "ZSTD compression error %d: %s"
 msgstr "Fel vid komprimering av ZSTD %d: %s"
+
+#, fuzzy
+#| msgid "Vector exceeds supported file size limit"
+msgid "ZSTD compressed size exceeds supported size"
+msgstr "Vektorn överskrider den tillåtna filstorleksgränsen"
+
+#, fuzzy
+#| msgid "Got uncompressed size %d, expected %d"
+msgid "ZSTD uncompressed size exceeds supported size"
+msgstr "Fick okomprimerad storlek %d, förväntad %d"
 
 msgid "no description"
 msgstr "ingen beskrivning"
@@ -949,11 +974,77 @@ msgid "LOCATION <%s> not available"
 msgstr "LOCATION <%s> inte tillgänglig"
 
 #, c-format
+msgid "Random number seed %s from %s is too large in magnitude to be read"
+msgstr ""
+
+#, c-format
+msgid "Random number seed %s from %s is not an integer"
+msgstr ""
+
+#, c-format
+msgid "Random number seed %s from %s is used as %<PRId64>, its low 32 bits"
+msgstr ""
+
+#, c-format
 msgid "gettimeofday failed: %s"
 msgstr "gettimeofday misslyckades: %s"
 
 msgid "Pseudo-random number generator not seeded"
 msgstr "Generatorn för pseudoslumpmässiga tal inte seedad"
+
+#, c-format
+msgid "Random number seed %<PRId64> is outside the range from -2147483648 to 4294967295 the generator can use"
+msgstr ""
+
+#, c-format
+msgid "The number of units of a random number layout must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "The number of random numbers a unit draws must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of %<PRId64> units of %<PRId64> draws each is too large (the number of draws must not exceed %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "The most random numbers a unit draws must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of %<PRId64> units of at most %<PRId64> draws each is too large (the number of units times the bound rounded up to odd must not exceed %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of the whole span takes at most %<PRId64> units, not %<PRId64>; a bounded layout serves any number of units"
+msgstr ""
+
+#, c-format
+msgid "Random number unit %<PRId64> is out of range (must be between 0 and %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (must not be negative)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (a layout of the whole span holds a single batch)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (%<PRId64> batch fits into the generator's span)"
+msgid_plural "Random number batch %<PRId64> is out of range (%<PRId64> batches fit into the generator's span)"
+msgstr[0] ""
+msgstr[1] ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (no batch fits into the generator's span, only batch 0 can be used)"
+msgstr ""
+
+#, c-format
+msgid "Cannot advance a random number generator by %<PRId64> draws (the number must not be negative)"
+msgstr ""
 
 #, c-format
 msgid "Unable to open directory %s"
@@ -1190,6 +1281,9 @@ msgstr "Det går inte att öppna filen %s <%s>: %s"
 #, c-format
 msgid "Unable to create %s file <%s>: %s"
 msgstr "Det gick inte att skapa %s-filen <%s>: %s"
+
+msgid "Too many options in rule"
+msgstr ""
 
 msgid "Internal error: option or flag not found"
 msgstr "Internt fel: alternativ eller flagga hittades inte"
@@ -2124,12 +2218,14 @@ msgstr "Det går inte att öppna %s för läsning"
 msgid "GRASS window when view was saved:\n"
 msgstr "GRASS-fönstret när vyn sparades:\n"
 
-#, c-format
-msgid " Window saved in \"%s\" is completely outside of current GRASS window."
+#, fuzzy, c-format
+#| msgid " Window saved in \"%s\" is completely outside of current GRASS window."
+msgid "Window saved in \"%s\" is completely outside of current GRASS window."
 msgstr " Fönstret som sparas i \"%s\" ligger helt utanför det aktuella GRASS-fönstret."
 
-#, c-format
-msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+#, fuzzy, c-format
+#| msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgid "Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
 msgstr " Endast %d%% ofönstret som sparats i \"%s\" överlappar det aktuella GRASS-fönstret."
 
 msgid "Task already has a worker"
@@ -3996,8 +4092,21 @@ msgid "Error seeking fp raster data file for row %d of <%s>: %s"
 msgstr "Fel vid sökning av fp-rasterdatafil för rad %d i <%s>: %s"
 
 #, c-format
+msgid "Compressed fp raster row for <%s> is too large"
+msgstr ""
+
+#, c-format
 msgid "Error uncompressing fp raster data for row %d of <%s>: error code %d"
 msgstr "Fel vid avkomprimering av fp-rasterdata för rad %d i <%s>: felkod %d"
+
+#, fuzzy, c-format
+#| msgid "Error reading raster data for row %d of <%s>"
+msgid "Invalid raster row offset for row %d of <%s>"
+msgstr "Fel vid läsning av rasterdata för rad %d av <%s>"
+
+#, c-format
+msgid "Compressed raster row for <%s> is too large"
+msgstr ""
 
 #, c-format
 msgid "Error seeking raster data file for row %d of <%s>: %s"
@@ -4008,12 +4117,12 @@ msgid "Error reading raster data for row %d of <%s>: %s"
 msgstr "Fel vid läsning av rasterdata för rad %d i <%s>: %s"
 
 #, c-format
-msgid "Error uncompressing raster data for row %d of <%s>"
-msgstr "Fel vid avkomprimering av rasterdata för rad %d i <%s>"
-
-#, c-format
 msgid "Error reading raster data for row %d of <%s>"
 msgstr "Fel vid läsning av rasterdata för rad %d av <%s>"
+
+#, c-format
+msgid "Error uncompressing raster data for row %d of <%s>"
+msgstr "Fel vid avkomprimering av rasterdata för rad %d i <%s>"
 
 #, c-format
 msgid "Error reading raster data via GDAL for row %d of <%s>"
@@ -4026,6 +4135,11 @@ msgstr "Fel vid sökning efter komprimerad null-data för rad %d i <%s>"
 #, c-format
 msgid "Error reading compressed null data for row %d of <%s>"
 msgstr "Fel vid läsning av komprimerad nolldata för rad %d i <%s>"
+
+#, fuzzy, c-format
+#| msgid "Error writing compressed null data for row %d of <%s>: %s"
+msgid "Compressed null data for row %d of <%s> is too large"
+msgstr "Fel vid skrivning av komprimerad null-data för rad %d i <%s>: %s"
 
 #, c-format
 msgid "Error uncompressing null data for row %d of <%s>"
@@ -4229,6 +4343,9 @@ msgstr "GDAL-utdata stöder inte att skriva nollrader separat"
 #, c-format
 msgid "No null file for <%s>"
 msgstr "Ingen null-fil för <%s>"
+
+msgid "Null row is too large to compress"
+msgstr ""
 
 #, c-format
 msgid "Error writing compressed null data for row %d of <%s>: %s"
