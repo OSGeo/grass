@@ -78,7 +78,7 @@ extra:
 # Hooks
 hooks:
   - scripts/hook_list_scripts.py
-  - scripts/hook_escape_lt.py
+  - scripts/hook_escape.py
 
 # Custom CSS
 extra_css:

@@ -30,7 +30,7 @@ DSTFILES := \
 	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
-	$(MDDIR)/scripts/hook_escape_lt.py \
+	$(MDDIR)/scripts/hook_escape.py \
 	$(MDDIR)/source/index.md \
 	$(MDDIR)/overrides/main.html \
 	$(MDDIR)/overrides/partials/copyright.html \
@@ -285,7 +285,7 @@ $(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
 $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/scripts/hook_escape_lt.py: mkdocs/scripts/hook_escape_lt.py | $(MDDIR)/scripts
+$(MDDIR)/scripts/hook_escape.py: mkdocs/scripts/hook_escape.py | $(MDDIR)/scripts
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/scripts:
