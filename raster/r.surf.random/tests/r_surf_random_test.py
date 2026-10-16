@@ -23,7 +23,7 @@ def session(tmp_path):
 
 
 def test_float_values_for_seed(session):
-    """Seed 42 gives the pinned values"""
+    """The float map of a seed is the pinned one"""
     tools = Tools(session=session)
     result = tools.r_surf_random(output=np.array, seed=42)
     expected = np.array(
@@ -36,7 +36,7 @@ def test_float_values_for_seed(session):
 
 
 def test_integer_values_for_seed(session):
-    """Seed 42 gives the pinned integers"""
+    """The integer map of a seed is the pinned one"""
     tools = Tools(session=session)
     result = tools.r_surf_random(output=np.array, seed=42, min=-20, max=7, flags="i")
     np.testing.assert_array_equal(result, [[-10, -1, -17], [-16, -5, 3]])
