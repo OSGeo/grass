@@ -55,3 +55,45 @@ def test_restrict_to_area(session):
     points = tools.v_info(map="points", flags="t", format="json")
     clipped = tools.v_info(map="clipped", flags="t", format="json")
     assert points["points"] == clipped["points"] == NPOINTS
+
+
+def test_2d_points_for_seed(session):
+    """The 2D points of a seed are the pinned ones"""
+    tools = Tools(session=session)
+    tools.v_random(output="points", npoints=3, seed=42)
+
+    text = tools.v_out_ascii(
+        input="points", format="point", precision=17, separator="comma"
+    ).text
+    values = [float(value) for line in text.split() for value in line.split(",")]
+    assert values == pytest.approx(
+        [
+            *(25.547499993899336, 34.2701478718908, 1),
+            *(57.7661042011691, 8.111117117831057, 2),
+            *(50.12005778059212, 47.88142906446282, 3),
+        ],
+        rel=1e-15,
+    )
+
+
+def test_points_for_seed(session):
+    """The 3D points of a seed are the pinned ones
+
+    Pinned separately from the 2D points, since how the draws are ordered
+    between the coordinates could change.
+    """
+    tools = Tools(session=session)
+    tools.v_random(output="points", npoints=3, seed=42, zmin=10, zmax=120, flags="z")
+
+    text = tools.v_out_ascii(
+        input="points", format="point", precision=17, separator="comma"
+    ).text
+    values = [float(value) for line in text.split() for value in line.split(",")]
+    assert values == pytest.approx(
+        [
+            *(25.547499993899336, 34.2701478718908, 22.219381068857764, 1),
+            *(57.7661042011691, 8.111117117831057, 104.20847788292875, 2),
+            *(50.12005778059212, 47.88142906446282, 85.98936887362026, 3),
+        ],
+        rel=1e-15,
+    )
