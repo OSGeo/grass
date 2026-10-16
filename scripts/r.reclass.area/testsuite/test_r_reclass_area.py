@@ -198,7 +198,7 @@ class TestReclassArea(TestCase):
         self.assertVectorFitsTopoInfo(
             vector=output_map,
             reference={"areas": 11, "primitives": 43},
-            msg=f"Toplogy of output map {output_map} does not match reference.",
+            msg=f"Topology of output map {output_map} does not match reference.",
         )
 
     def test_rmarea_lower_upper_vector_basins(self) -> None:

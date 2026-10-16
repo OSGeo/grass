@@ -502,9 +502,9 @@ class TplotFrame(wx.Frame):
         self.temporalType = mode
         return
 
-    def _parseVDbConn(self, mapp, layerInp):
+    def _parseVDbConn(self, map_name, layerInp):
         """find attribute key according to layer of input map"""
-        vdb = Module("v.db.connect", map=mapp, flags="g", stdout_=PIPE)
+        vdb = Module("v.db.connect", map=map_name, flags="g", stdout_=PIPE)
 
         vdb = vdb.outputs.stdout
         for line in vdb.splitlines():
@@ -514,9 +514,9 @@ class TplotFrame(wx.Frame):
                 return lsplit[2]
         return None
 
-    def _getExistingCategories(self, mapp, cats):
+    def _getExistingCategories(self, map_name, cats):
         """Get a list of categories for a vector map"""
-        vdb = gs.read_command("v.category", input=mapp, option="print")
+        vdb = gs.read_command("v.category", input=map_name, option="print")
         categories = vdb.splitlines()
         if not cats:
             return categories
@@ -526,7 +526,7 @@ class TplotFrame(wx.Frame):
                     message=_(
                         "Category {ca} is not on vector map"
                         " {ma} and it will be not used"
-                    ).format(ma=mapp, ca=cat),
+                    ).format(ma=map_name, ca=cat),
                     parent=self,
                 )
                 cats.remove(cat)
