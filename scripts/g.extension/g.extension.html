@@ -136,6 +136,16 @@ addon listing (<code>g.extension -l</code>, <code>-c</code>, <code>-g</code>)
 and the install download URL, so listing and install always come from the same
 place.
 
+<p> The alternative server must host the precompiled addon ZIPs in the directory
+layout <code>{base}/grass{MM}/addons/grass-{M.M.P}/</code> (for example
+<code>.../grass85/addons/grass-8.5.0/</code>), one ZIP per extension, together
+with a <code>modules.xml</code> file listing them in that same directory (and a
+<code>toolboxes.xml</code> file ifs toolbox operations with <code>-t</code> are
+to be used). Note that this setup differs from the official WinGRASS server,
+where the addon listing is served separately from <code>grass.osgeo.org</code>,
+so an exact mirror of the official server would install addons but fail on
+<code>g.extension -l</code>.
+
 <p>
 The setting can be applied in two ways:
 
@@ -147,9 +157,9 @@ g.gisenv set="ADDONS_BASE_URL=https://your.server.example"
 </pre></div>
 </li>
 <li>As a shell environment variable named <code>GRASS_ADDONS_BASE_URL</code> (useful
-    for one-off shell sessions or CI jobs). The gisenv setting takes
-    precedence over the environment variable; if neither is set, the
-    default WinGRASS server is used.</li>
+    for one-off shell sessions or CI jobs). The environment variable takes
+    precedence over the gisenv setting; if neither is set, the default
+    WinGRASS server is used.</li>
 </ul>
 
 <p>
@@ -162,12 +172,12 @@ g.gisenv unset=ADDONS_BASE_URL
 <p>
 Alternative servers are:
 <ul>
-<li><a href="https://ecodiv.earth/share">https://ecodiv.earth/share</a> (Python extensions only)</li>
+<li><a href="https://ecodiv.earth/share/AddonServer">https://ecodiv.earth/share/AddonServer</a> (Python extensions only)</li>
 </ul>
 
 <p>
-Note, settings explained in this section are is honoured on MS-Windows only; on
-Linux/macOS it has no effect.
+Note that the settings explained in this section are honoured on MS-Windows
+only; on Linux/macOS they have no effect.
 
 <h2>EXAMPLES</h2>
 
@@ -188,13 +198,13 @@ g.extension r.stream.distance
 
 <h3>Installing from an alternative addon server (MS-Windows)</h3>
 
-On MS-Windows, redirect the addon server to a mirror or private host
-once per session, then use <em>g.extension</em> normally — listing and install
-both go through the configured server.
+On MS-Windows, redirect the addon server to a mirror or private host,
+then use <em>g.extension</em> the usual way. Listing and install both go through the
+configured server.
 
 <div class="code"><pre>
 # Point at the alternative server (persists across GRASS sessions)
-g.gisenv set="ADDONS_BASE_URL=https://ecodiv.earth/share"
+g.gisenv set="ADDONS_BASE_URL=https://ecodiv.earth/share/AddonServer"
 
 # List what the alternative server provides
 g.extension -l
@@ -211,7 +221,7 @@ For a one-off shell session, set the environment variable instead:
 
 <div class="code"><pre>
 # cmd.exe
-set GRASS_ADDONS_BASE_URL=https://ecodiv.earth/share
+set GRASS_ADDONS_BASE_URL=https://ecodiv.earth/share/AddonServer
 g.extension extension=r.tpi
 </pre></div>
 
@@ -276,10 +286,12 @@ In general, when a ZIP file or other archive is provided, the full URL can be us
 g.extension r.example url=http://example.com/.../r.example?format=zip
 </pre></div>
 
-On Windows, this will work also, but only when pointing at a server with
-pre-compiled addons and set up using the same directory layout as the
-official WinGRASS server, namely <code>{base}/grass{MM}/addons/grass-{M.M.P}/</code>
-containing one ZIP per extension and a <code>modules.xml</code> listing.
+On MS-Windows, addons are not compiled locally, so <code>url</code> must point
+directly at a ZIP file of a single precompiled addon (the URL has to end in
+<code>.zip</code>). A source archive such as the one in the example above will
+not work. To install from a different addon server instead, redirect the server
+with <code>ADDONS_BASE_URL</code> (see <em>Using an alternative addon
+server</em> above).
 
 <h3>Install a specific version from Addons</h3>
 
@@ -317,16 +329,16 @@ build environment is needed.
 
 Toolboxes in the official repository cannot be downloaded.
 <p>
-On MS-Windows, only the official repository is working
-because there is no way of compiling the modules
+On MS-Windows, modules cannot be compiled locally
 <!-- what does it mean?? -->
-(a Python replacement for Python scripts should be implemented).
-
-<p>
-On Windows, it is now possible to point at an alternative server. However, note
-that this server should be set up using the same directory layout as the
-official WinGRASS server, namely <code>{base}/grass{MM}/addons/grass-{M.M.P}/</code>
-containing pre-compiled extensions as ZIP file, and a <code>modules.xml</code> listing.
+(a Python replacement for Python scripts should be implemented), so
+<em>g.extension</em> installs precompiled binaries. These come from the
+official WinGRASS server by default, but the server can be redirected to an
+alternative host that provides precompiled addon ZIPs together with a
+<code>modules.xml</code> listing (and a <code>toolboxes.xml</code> for
+<code>-t</code>) in the layout
+<code>{base}/grass{MM}/addons/grass-{M.M.P}/</code>. See <em>Using an
+alternative addon server</em> for details.
 
 <h2>TROUBLESHOOTING</h2>
 

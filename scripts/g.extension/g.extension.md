@@ -1,50 +1,46 @@
 ## DESCRIPTION
 
-*g.extension* downloads and installs, removes or updates extensions
-(addons) from the official [GRASS Addons
+*g.extension* downloads and installs, removes or updates extensions (addons)
+from the official [GRASS Addons
 repository](https://grass.osgeo.org/grass8/manuals/addons/) or from
-user-specified source code repositories into the local GRASS
-installation.
+user-specified source code repositories into the local GRASS installation.
 
 Two types of extensions are supported:
 
 - Python scripts: they are installed without the need of compilation or
   (usually) the need of special dependencies.
-- Source code (mostly written in C programming language; may also be
-  written in C++, Fortran or other languages): while on MS-Windows
-  systems the requested GRASS extension is downloaded pre-compiled
-  from the GRASS site, on Unix based systems the installation is
-  preceded by the automated download of the extension's source code
-  along with subsequent compilation and installation. This requires a
-  compiler environment to be present on the user's computer.
+- Source code (mostly written in C programming language; may also be written in
+  C++, Fortran or other languages): while on MS-Windows systems the requested
+  GRASS extension is downloaded pre-compiled from the GRASS site, on Unix based
+  systems the installation is preceded by the automated download of the
+  extension's source code along with subsequent compilation and installation.
+  This requires a compiler environment to be present on the user's computer.
 
 ### Managing installed extensions
 
-Re-running *g.extension* on an installed GRASS Addon extension
-re-installs the requested extension which may include updates.
+Re-running *g.extension* on an installed GRASS Addon extension re-installs the
+requested extension which may include updates.
 
 To bulk-update all locally installed GRASS extensions,
 *[g.extension.all](g.extension.all.md)* module is available.
 
 ### Where the extensions are installed
 
-GRASS extensions are installed by *g.extension* into a dedicated
-directory. The default is a directory for application data and settings
-inside the user's home directory. On GNU/Linux it is
-`$HOME/.grass8/addons`, on MS-Windows it is
-`%APPDATA%\Roaming\GRASS8\addons`. The name of the directory is stored
-in the `GRASS_ADDON_BASE` environmental variable.
+GRASS extensions are installed by *g.extension* into a dedicated directory. The
+default is a directory for application data and settings inside the user's home
+directory. On GNU/Linux it is `$HOME/.grass8/addons`, on MS-Windows it is
+`%APPDATA%\Roaming\GRASS8\addons`. The name of the directory is stored in the
+`GRASS_ADDON_BASE` environmental variable.
 
-The flag **-s** changes this install target directory to the GRASS
-installation directory (determined by `GISBASE` environmental variable,
-e.g. `/usr/`) rather than the default directory defined as per
-`GRASS_ADDON_BASE` (see also documentation for
-[variables](variables.md)). *g.extension* checks if the user has
-permission to write to `GISBASE` or `GRASS_ADDON_BASE`.
+The flag **-s** changes this install target directory to the GRASS installation
+directory (determined by `GISBASE` environmental variable, e.g. `/usr/`) rather
+than the default directory defined as per `GRASS_ADDON_BASE` (see also
+documentation for [variables](variables.md)). *g.extension* checks if the user
+has permission to write to `GISBASE` or `GRASS_ADDON_BASE`.
 
-The place where the extensions are installed can be customized by the
-option **prefix**. Ensuring that these extensions will be accessible in
-GRASS is in this case in the responsibility of the user.
+The place where the extensions are installed can be customized by the option
+**prefix**. Ensuring that these extensions will be accessible in GRASS is in
+this case in the responsibility of the user.
 
 ### Source code sources and repositories
 
@@ -61,11 +57,10 @@ project administrators of the trac server.
 
 #### Local source code directory
 
-Optionally, new extension can be also installed from a source code
-placed in a local directory on disk. This is advantageous when
-developing a new module. To keep the directory clean, the directory
-content is copied to a temporary directory and the compilation happens
-there.
+Optionally, new extension can be also installed from a source code placed in a
+local directory on disk. This is advantageous when developing a new module. To
+keep the directory clean, the directory content is copied to a temporary
+directory and the compilation happens there.
 
 #### Source code in a ZIP or TAR archive
 
@@ -76,15 +71,14 @@ URL).
 
 #### Online repositories: GitHub, GitLab and Bitbucket
 
-For well known general hosting services, namely GitHub, GitLab and
-Bitbucket, *g.extension* supports the download of a repository. Here the
-user only needs to provide a base URL to the repository web page (with
-or without the `https://` part). For GitHub, GitLab and Bitbucket, the
-latest source code in the default branch is downloaded, unless a
-specific branch is requested in the *branch* option. Of course, a user
-can still specify the full URL of a ZIP file e.g. for a specific release
-and install the archived code in this way (ZIP file mechanism will be
-applied).
+For well known general hosting services, namely GitHub, GitLab and Bitbucket,
+*g.extension* supports the download of a repository. Here the user only needs to
+provide a base URL to the repository web page (with or without the `https://`
+part). For GitHub, GitLab and Bitbucket, the latest source code in the default
+branch is downloaded, unless a specific branch is requested in the *branch*
+option. Of course, a user can still specify the full URL of a ZIP file e.g. for
+a specific release and install the archived code in this way (ZIP file mechanism
+will be applied).
 
 For the official repository, *g.extension* supports listing available
 extensions (addons) and few other metadata-related operations which
@@ -95,34 +89,42 @@ Makefile at the root of the repository.
 
 #### Needed directory layout
 
-When none of the above sources is identified, *g.extension* assumes that
-the source is in a GitHub repository and uses the *git* command line
-tool to obtain the source code. The expected structure of the repository
-should be the same as the one of the official repository.
+When none of the above sources is identified, *g.extension* assumes that the
+source is in a GitHub repository and uses the *git* command line tool to obtain
+the source code. The expected structure of the repository should be the same as
+the one of the official repository.
 
 Non-official sources are supported on all operating systems except for
 MS-Windows.
 
 ### Compilation and installation
 
-On MS-Windows systems, where compilation tools are typically not readily
-locally installed, *g.extension* downloads a precompiled executable from
-the GRASS project server. On all other operating systems where it is
-not difficult to install compilation tools, *g.extension* downloads the
-source code of the requested extension (addon) and compiles it locally.
-This applies for both C and Python modules as well as any other
-extensions. The reason is that more things such as manual page are
-compiled, not only the source code (which is really necessary to compile
-just in case of C).
+On MS-Windows systems, where compilation tools are typically not readily locally
+installed, *g.extension* downloads a precompiled executable from the GRASS
+project server. On all other operating systems where it is not difficult to
+install compilation tools, *g.extension* downloads the source code of the
+requested extension (addon) and compiles it locally. This applies for both C and
+Python modules as well as any other extensions. The reason is that more things
+such as manual page are compiled, not only the source code (which is really
+necessary to compile just in case of C).
 
 ### Using an alternative addon server (MS-Windows)
 
-On MS-Windows, *g.extension* downloads precompiled addon ZIPs from the
-official WinGRASS server (`http://wingrass.fsv.cvut.cz`) by default.
-The base URL of the server can be redirected to a mirror or a private
-addon server by setting `ADDONS_BASE_URL`. The setting affects both the
-addon listing (`g.extension -l`, `-c`, `-g`) and the install download
-URL, so listing and install always come from the same place.
+On MS-Windows, *g.extension* downloads precompiled addon ZIPs from the official
+WinGRASS server (`http://wingrass.fsv.cvut.cz`) by default. The base URL of the
+server can be redirected to a mirror or a private addon server by setting
+`ADDONS_BASE_URL`. The setting affects both the addon listing (`g.extension -l`,
+`-c`, `-g`) and the install download URL, so listing and install always come
+from the same place.
+
+The alternative server must host the precompiled addon ZIPs in the directory
+layout `{base}/grass{MM}/addons/grass-{M.M.P}/` (for example
+`.../grass85/addons/grass-8.5.0/`), one ZIP per extension, together with a
+`modules.xml` file listing them in that same directory (and a `toolboxes.xml`
+file if toolbox operations with `-t` are to be used). Note that this setup
+differs from the official WinGRASS server, where the addon listing is served
+separately from `grass.osgeo.org`, so an exact mirror of the official server
+would install addons but fail on `g.extension -l`.
 
 The setting can be applied in two ways:
 
@@ -133,10 +135,10 @@ The setting can be applied in two ways:
   g.gisenv set="ADDONS_BASE_URL=https://your.server.example"
   ```
 
-- As a shell environment variable named `GRASS_ADDONS_BASE_URL` (useful
-  for one-off shell sessions or CI jobs). The gisenv setting takes
-  precedence over the environment variable; if neither is set, the
-  default WinGRASS server is used.
+- As a shell environment variable named `GRASS_ADDONS_BASE_URL` (useful for
+  one-off shell sessions or CI jobs). The environment variable takes precedence
+  over the gisenv setting; if neither is set, the default WinGRASS server is
+  used.
 
 To revert to the default server, unset the value:
 
@@ -148,8 +150,8 @@ Alternative servers are:
 
 - <https://ecodiv.earth/share/AddonServer> (Python extensions only)
 
-Note, settings explained in this section are is honoured on MS-Windows only; on
-Linux/macOS it has no effect.
+Note that the settings explained in this section are honoured on
+MS-Windows only; on Linux/macOS they have no effect.
 
 ## EXAMPLES
 
@@ -161,8 +163,8 @@ Download and install *r.stream.distance* into current GRASS installation
 g.extension extension=r.stream.distance
 ```
 
-This installs the extension from the official repository. For
-convenience, a shorter syntax can be used:
+This installs the extension from the official repository. For convenience, a
+shorter syntax can be used:
 
 ```sh
 g.extension r.stream.distance
@@ -170,9 +172,9 @@ g.extension r.stream.distance
 
 ### Installing from an alternative addon server (MS-Windows)
 
-On MS-Windows, redirect the addon server to a mirror or private host
-once per session, then use *g.extension* normally — listing and install
-both go through the configured server.
+On MS-Windows, redirect the addon server to a mirror or private host,
+then use *g.extension* normally; listing and install both go through the
+configured server.
 
 ```sh
 # Point at the alternative server (persists across GRASS sessions)
@@ -262,10 +264,12 @@ can be used:
 g.extension r.example url=http://example.com/.../r.example?format=zip
 ```
 
-On Windows, this will work also, but only when pointing at a server with
-pre-compiled addons and set up using the same directory layout as the
-official WinGRASS server, namely `{base}/grass{MM}/addons/grass-{M.M.P}/`
-containing one ZIP per extension and a `modules.xml` listing.
+On MS-Windows, addons are not compiled locally, so `url` must point
+directly at a ZIP file of a single precompiled addon (the URL has to end
+in `.zip`); a source archive such as the one in the example above will
+not work. To install from a different addon server instead, redirect the
+server with `ADDONS_BASE_URL` (see *Using an alternative addon server*
+above).
 
 ### Install a specific version from Addons
 
@@ -301,14 +305,14 @@ C++, a respective build environment is needed.
 
 Toolboxes in the official repository cannot be downloaded.
 
-On MS-Windows, only the official repository is working because there is
-no way of compiling the modules (a Python replacement for Python scripts
-should be implemented).
-
-On Windows, it is now possible to point at an alternative server. However, note
-that this server should be set up using the same directory layout as the
-official WinGRASS server, namely `{base}/grass{MM}/addons/grass-{M.M.P}/`
-containing pre-compiled extensions as ZIP file, and a `modules.xml` listing.
+On MS-Windows, modules cannot be compiled locally (a Python replacement
+for Python scripts should be implemented), so *g.extension* installs
+precompiled binaries. These come from the official WinGRASS server by
+default, but the server can be redirected to an alternative host that
+provides precompiled addon ZIPs together with a `modules.xml` listing
+(and a `toolboxes.xml` for `-t`) in the layout
+`{base}/grass{MM}/addons/grass-{M.M.P}/`. See *Using an alternative
+addon server* for details.
 
 ## TROUBLESHOOTING
 
@@ -329,14 +333,14 @@ installed.
 *[g.extension.all](g.extension.all.md)*
 
 [GRASS 8 Addons Manual
-pages](https://grass.osgeo.org/grass8/manuals/addons/)  
+pages](https://grass.osgeo.org/grass8/manuals/addons/)
 [GRASS Addons](https://grasswiki.osgeo.org/wiki/GRASS_AddOns) wiki page.
 
 ## AUTHORS
 
-Markus Neteler (original shell script)  
+Markus Neteler (original shell script)
 Martin Landa, Czech Technical University in Prague, Czech Republic
-(Python rewrite)  
+(Python rewrite)
 Vaclav Petras, [NCSU GeoForAll
 Lab](https://geospatial.ncsu.edu/geoforall/) (support for general
 sources, partial refactoring)

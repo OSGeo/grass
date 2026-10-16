@@ -1596,19 +1596,19 @@ def get_addons_base_url_override():
     """Return the user-configured addon server base URL, or None.
 
     Precedence (highest first):
-      1. ``ADDONS_BASE_URL`` set via ``g.gisenv set="ADDONS_BASE_URL=..."``.
-         Persists across GRASS sessions and is settable from inside GRASS.
-      2. ``GRASS_ADDONS_BASE_URL`` shell environment variable. Useful for
-         CI / system administrators / one-off shell sessions.
+      1. ``GRASS_ADDONS_BASE_URL`` shell environment variable. The more
+         specific, transient setting; wins so that CI jobs, system
+         administrators and one-off shell sessions can override a persistent
+         configuration without having to unset it first.
+      2. ``ADDONS_BASE_URL`` set via ``g.gisenv set="ADDONS_BASE_URL=..."``.
+         Persists across GRASS sessions and is settable from inside GRASS
+         (including the GUI variables panel).
 
     Any trailing slash is removed. Returns None when neither is set.
     """
-    try:
-        value = gs.gisenv().get("ADDONS_BASE_URL")
-    except Exception:  # noqa: BLE001
-        # gisenv() can fail outside a GRASS session; fall through to the env var.
-        value = None
-    value = value or os.environ.get("GRASS_ADDONS_BASE_URL")
+    value = os.environ.get("GRASS_ADDONS_BASE_URL") or gs.gisenv().get(
+        "ADDONS_BASE_URL"
+    )
     return value.rstrip("/") if value else None
 
 
@@ -1622,15 +1622,6 @@ def addons_server_url(base):
         f"{base}/grass{VERSION[0]}{VERSION[1]}/addons/"
         f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
     )
-
-
-def get_addons_base_url():
-    """Resolve the addon server root for Windows binary downloads.
-
-    Returns the user override (see get_addons_base_url_override) when set,
-    otherwise the official WinGRASS server.
-    """
-    return get_addons_base_url_override() or "http://wingrass.fsv.cvut.cz"
 
 
 def install_extension_win(name, url=None):
@@ -1652,7 +1643,8 @@ def install_extension_win(name, url=None):
             )
         zip_url = url
     else:
-        zip_url = f"{addons_server_url(get_addons_base_url())}/{name}.zip"
+        base = get_addons_base_url_override() or "http://wingrass.fsv.cvut.cz"
+        zip_url = f"{addons_server_url(base)}/{name}.zip"
 
     # resolve ZIP URL
     source, url = resolve_source_code(url=zip_url)
