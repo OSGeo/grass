@@ -135,7 +135,7 @@ categorical versus numerical data. Note that three methods for the local
 interpolation step are provided.
 
 *r.proj* supports general datum transformations, making use of the
-*PROJ* co-ordinate system translation library.
+*PROJ* coordinate system translation library.
 
 ## NOTES
 

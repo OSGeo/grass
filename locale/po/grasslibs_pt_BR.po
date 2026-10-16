@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the GRASS GIS package.
 # transifex generated, 2017
 #
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-03 18:51+0000\n"
-"PO-Revision-Date: 2025-08-26 13:42+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Unknown algorithm '%s'"
@@ -694,6 +694,11 @@ msgstr ""
 msgid "Failed to parse string specifier: %s"
 msgstr ""
 
+#, fuzzy
+#| msgid "Outlined area is too large."
+msgid "String precision is too large"
+msgstr "A área contornada é muito grande."
+
 #, c-format
 msgid "Format specifier exceeds the buffer size (%d)"
 msgstr ""
@@ -744,9 +749,29 @@ msgstr "Erro de descompactação ZLIB %d:%s"
 msgid "GRASS needs to be compiled with ZSTD for ZSTD compression"
 msgstr "GRASS necessita ser compilado com ZSTD para usar a compressão ZSTD."
 
+#, fuzzy, c-format
+#| msgid "ZSTD compression error %d: %s"
+msgid "ZSTD compression bound error %d: %s"
+msgstr "Erro na compressão ZSTD %d: %s"
+
+#, fuzzy
+#| msgid "ZSTD compression error %d: %s"
+msgid "ZSTD compression bound exceeds supported size"
+msgstr "Erro na compressão ZSTD %d: %s"
+
 #, c-format
 msgid "ZSTD compression error %d: %s"
 msgstr "Erro na compressão ZSTD %d: %s"
+
+#, fuzzy
+#| msgid "Vector exceeds supported file size limit"
+msgid "ZSTD compressed size exceeds supported size"
+msgstr "O vetor excede o limite de tamanho de arquivo suportado"
+
+#, fuzzy
+#| msgid "Got uncompressed size %d, expected %d"
+msgid "ZSTD uncompressed size exceeds supported size"
+msgstr "Conseguiu tamanho não comprimido de %d, esperado era %d"
 
 msgid "no description"
 msgstr "sem descrição"
@@ -966,11 +991,77 @@ msgid "LOCATION <%s> not available"
 msgstr "LOCATION <%s> não disponível"
 
 #, c-format
+msgid "Random number seed %s from %s is too large in magnitude to be read"
+msgstr ""
+
+#, c-format
+msgid "Random number seed %s from %s is not an integer"
+msgstr ""
+
+#, c-format
+msgid "Random number seed %s from %s is used as %<PRId64>, its low 32 bits"
+msgstr ""
+
+#, c-format
 msgid "gettimeofday failed: %s"
 msgstr "gettimeofday falhou: %s"
 
 msgid "Pseudo-random number generator not seeded"
 msgstr "Gerador de números pseudo-aleatórios não foi semeado"
+
+#, c-format
+msgid "Random number seed %<PRId64> is outside the range from -2147483648 to 4294967295 the generator can use"
+msgstr ""
+
+#, c-format
+msgid "The number of units of a random number layout must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "The number of random numbers a unit draws must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of %<PRId64> units of %<PRId64> draws each is too large (the number of draws must not exceed %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "The most random numbers a unit draws must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of %<PRId64> units of at most %<PRId64> draws each is too large (the number of units times the bound rounded up to odd must not exceed %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of the whole span takes at most %<PRId64> units, not %<PRId64>; a bounded layout serves any number of units"
+msgstr ""
+
+#, c-format
+msgid "Random number unit %<PRId64> is out of range (must be between 0 and %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (must not be negative)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (a layout of the whole span holds a single batch)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (%<PRId64> batch fits into the generator's span)"
+msgid_plural "Random number batch %<PRId64> is out of range (%<PRId64> batches fit into the generator's span)"
+msgstr[0] ""
+msgstr[1] ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (no batch fits into the generator's span, only batch 0 can be used)"
+msgstr ""
+
+#, c-format
+msgid "Cannot advance a random number generator by %<PRId64> draws (the number must not be negative)"
+msgstr ""
 
 #, c-format
 msgid "Unable to open directory %s"
@@ -1209,6 +1300,9 @@ msgstr ""
 
 #, c-format
 msgid "Unable to create %s file <%s>: %s"
+msgstr ""
+
+msgid "Too many options in rule"
 msgstr ""
 
 msgid "Internal error: option or flag not found"
@@ -2162,12 +2256,12 @@ msgid "GRASS window when view was saved:\n"
 msgstr "Janela do GRASS quando a visão foi salva:\n"
 
 #, c-format
-msgid " Window saved in \"%s\" is completely outside of current GRASS window."
-msgstr " Janela gravada em \"%s\" está completamente fora da janela atual do GRASS."
+msgid "Window saved in \"%s\" is completely outside of current GRASS window."
+msgstr "Janela gravada em \"%s\" está completamente fora da janela atual do GRASS."
 
 #, c-format
-msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
-msgstr "Apenas %d%% da janela salva em \"%s\" sobrepõe a janela atual do GRASS"
+msgid "Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgstr "Apenas %d%% da janela salva em \"%s\" sobrepõe a janela atual do GRASS."
 
 msgid "Task already has a worker"
 msgstr "Tarefa em execuçao"
@@ -4049,8 +4143,21 @@ msgid "Error seeking fp raster data file for row %d of <%s>: %s"
 msgstr "Erro ao buscar arquivo de dados raster fp para linha %d de <%s>: %s"
 
 #, c-format
+msgid "Compressed fp raster row for <%s> is too large"
+msgstr ""
+
+#, c-format
 msgid "Error uncompressing fp raster data for row %d of <%s>: error code %d"
 msgstr "Erro ao descompactar dados raster fp para linha %d de <%s>: código de erro %d"
+
+#, fuzzy, c-format
+#| msgid "Error reading raster data for row %d of <%s>"
+msgid "Invalid raster row offset for row %d of <%s>"
+msgstr "Erro ao ler dados raster para linha %d de <%s>"
+
+#, c-format
+msgid "Compressed raster row for <%s> is too large"
+msgstr ""
 
 #, c-format
 msgid "Error seeking raster data file for row %d of <%s>: %s"
@@ -4061,12 +4168,12 @@ msgid "Error reading raster data for row %d of <%s>: %s"
 msgstr "Erro ao ler dados raster para linha %d de <%s>: %s"
 
 #, c-format
-msgid "Error uncompressing raster data for row %d of <%s>"
-msgstr "Erro ao descompactar dados raster para linha %d de <%s>"
-
-#, c-format
 msgid "Error reading raster data for row %d of <%s>"
 msgstr "Erro ao ler dados raster para linha %d de <%s>"
+
+#, c-format
+msgid "Error uncompressing raster data for row %d of <%s>"
+msgstr "Erro ao descompactar dados raster para linha %d de <%s>"
 
 #, c-format
 msgid "Error reading raster data via GDAL for row %d of <%s>"
@@ -4079,6 +4186,11 @@ msgstr "Erro ao buscar dados nulos compactados para a linha %d de <%s>"
 #, c-format
 msgid "Error reading compressed null data for row %d of <%s>"
 msgstr "Erro ao ler dados nulos compactados para a linha %d de <%s>"
+
+#, fuzzy, c-format
+#| msgid "Error seeking compressed null data for row %d of <%s>"
+msgid "Compressed null data for row %d of <%s> is too large"
+msgstr "Erro ao buscar dados nulos compactados para a linha %d de <%s>"
 
 #, c-format
 msgid "Error uncompressing null data for row %d of <%s>"
@@ -4284,6 +4396,9 @@ msgstr "A saída GDAL não suporta a escrita de linhas nulas separadamente"
 #, c-format
 msgid "No null file for <%s>"
 msgstr "Nenhum arquivo nulo para <%s>"
+
+msgid "Null row is too large to compress"
+msgstr ""
 
 #, c-format
 msgid "Error writing compressed null data for row %d of <%s>: %s"

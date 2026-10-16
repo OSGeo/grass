@@ -293,6 +293,18 @@ def main():
     occurrence_maps = {}
     indicator_maps = {}
 
+    def next_cycle(end):
+        start = end
+        if input_strds.is_time_absolute():
+            if offset:
+                start = tgis.increment_datetime_by_string(end, offset)
+            end = tgis.increment_datetime_by_string(start, cycle)
+        else:
+            if offset:
+                start = end + offset
+            end = start + cycle
+        return start, end
+
     while input_strds_end > start and stop > start:
         # Make sure that the cyclic computation will stop at the correct time
         if stop and end > stop:
@@ -307,6 +319,7 @@ def main():
         input_topo.build(input_maps, input_maps)
 
         if len(input_maps) == 0:
+            start, end = next_cycle(end)
             continue
 
         gs.message(_("Processing cycle %s - %s") % (str(start), str(end)))
@@ -487,17 +500,7 @@ def main():
                 indicator_maps[map.get_id()] = indicator_map
                 indi_count += 1
 
-        # Increment the cycle
-        start = end
-        if input_strds.is_time_absolute():
-            start = end
-            if offset:
-                start = tgis.increment_datetime_by_string(end, offset)
-            end = tgis.increment_datetime_by_string(start, cycle)
-        else:
-            if offset:
-                start = end + offset
-            end = start + cycle
+        start, end = next_cycle(end)
 
     empty_maps = []
 

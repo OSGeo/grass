@@ -87,7 +87,7 @@ jobs:
         id: diff-ruff
         # To run after ruff step exits with failure when rules don't have fixes available
         if: ${{ !cancelled() }}
-        uses: ./.github/actions/create-upload-suggestions
+        uses: $/.github/actions/create-upload-suggestions
         with:
           tool-name: ruff
           # To keep repo's file structure in formatted changes artifact
@@ -208,6 +208,6 @@ jobs:
     needs:
       - python-checks
     if: ${{ always() }}
-    uses: ./.github/workflows/verify-success.yml
+    uses: $/.github/workflows/verify-success.yml
     with:
       needs_context: ${{ toJson(needs) }}

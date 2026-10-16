@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-03 18:51+0000\n"
-"PO-Revision-Date: 2026-10-04 18:34+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"PO-Revision-Date: 2026-10-05 10:33+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
 "Language: sv\n"
@@ -415,10 +415,14 @@ msgstr "Det går inte att öppna DBF-databasens katalog: %s"
 msgid "Unable to open DBF database: %s"
 msgstr "Det går inte att öppna DBF-databasen: %s"
 
-msgid "SQL parser error"
+#, fuzzy, c-format
+#| msgid "SQL parser error"
+msgid "SQL parser error: %s\n"
 msgstr "Fel i SQL-parsern"
 
-msgid "in statement:"
+#, fuzzy, c-format
+#| msgid "in statement:"
+msgid "Statement: %s\n"
 msgstr "i uttalande:"
 
 #, c-format
@@ -799,15 +803,17 @@ msgstr "Det går inte att tilldela markören."
 msgid "Database name <%s> is too long"
 msgstr "Databasnamnet <%s> är för långt"
 
-#, c-format
-msgid "Unable to create directory '%s' for sqlite database"
+#, fuzzy, c-format
+#| msgid "Unable to create directory '%s' for sqlite database"
+msgid "Unable to create directory '%s' for SQLite database"
 msgstr "Det går inte att skapa katalogen '%s' för sqlite-databasen"
 
 msgid "Disabling SQLite locking"
 msgstr "Inaktivera SQLite-låsning"
 
-#, c-format
-msgid "The sqlite config option '%s' is not supported"
+#, fuzzy, c-format
+#| msgid "The sqlite config option '%s' is not supported"
+msgid "The SQLite config option '%s' is not supported"
 msgstr "Konfigurationsalternativet '%s' för sqlite stöds inte"
 
 msgid "Unable to open database:"
@@ -2231,7 +2237,6 @@ msgstr "Antal signifikanta siffror (endast flyttal)"
 msgid "Get text color from cell color value"
 msgstr "Hämta textfärg från cellens färgvärde"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -7681,8 +7686,8 @@ msgstr "Förutsägelser med SVM"
 msgid "Predict with a Support Vector Machine"
 msgstr "Förutsägelser med en stödvektormaskin"
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 msgid "Maps with feature values (attributes)"
 msgstr "Kartor med funktionsvärden (attribut)"
 
@@ -12009,7 +12014,7 @@ msgstr "Passera 1 av 2..."
 
 #, c-format
 msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
-msgstr "För många klumpar: det högsta antalet klumpar som stöds är %d. Minska utbredningen eller upplösningen för beräkningsregionen, eller använd ett tröskelvärde för att slå samman liknande celler."
+msgstr "För många klumpar: högsta antalet klumpar som stöds är %d. Minska utbredningen eller upplösningen för beräkningsregionen eller använd ett tröskelvärde för att slå samman liknande celler."
 
 #, c-format
 msgid "%d-band clumping with threshold %g"
@@ -13815,21 +13820,25 @@ msgstr "Du har inte angett någon storlek på vinkelsteget. Avbryter."
 msgid "Could not read bufferzone size. Aborting."
 msgstr "Kunde inte läsa buffertzonens storlek. Avbryter."
 
-#, c-format
-msgid "Could not read %s bufferzone size. Aborting."
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read east bufferzone size. Aborting."
 msgstr "Kunde inte läsa %s buffertzonens storlek. Avbryter."
 
-msgid "east"
-msgstr "österut"
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read west bufferzone size. Aborting."
+msgstr "Kunde inte läsa %s buffertzonens storlek. Avbryter."
 
-msgid "west"
-msgstr "väst"
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read south bufferzone size. Aborting."
+msgstr "Kunde inte läsa %s buffertzonens storlek. Avbryter."
 
-msgid "south"
-msgstr "söderut"
-
-msgid "north"
-msgstr "norr"
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read north bufferzone size. Aborting."
+msgstr "Kunde inte läsa buffertzonens storlek. Avbryter."
 
 msgid "Could not read maximum distance. Aborting."
 msgstr "Kunde inte läsa maximalt avstånd. Avbryter."
@@ -14827,12 +14836,20 @@ msgstr "Både dimensions- och användardimensionsparametrar anges. Använder '%s
 msgid "Dataset doesn't have requested dimension '%s' (possibly a programming error)"
 msgstr "Datasetet har inte den begärda dimensionen '%s' (eventuellt ett programmeringsfel)"
 
-msgid " points found in input file(s)"
-msgstr " punkter hittades i inmatningsfil(er)"
+#, fuzzy, c-format
+#| msgid "%lu points found in input file(s)"
+msgid "%<PRIu64> points found in input file(s)"
+msgstr "%lu punkter hittades i inmatningsfil (er)"
 
-#, c-format
-msgid "Raster map <%s> created. "
-msgstr "Rasterkarta <%s> skapad. "
+#, fuzzy, c-format
+#| msgid "%lu points found in region."
+msgid "%<PRIu64> points found in region."
+msgstr "%lu punkter hittades i regionen."
+
+#, fuzzy, c-format
+#| msgid "Number of input points: %d."
+msgid "Number of input files: %d"
+msgstr "Antal inmatningspunkter: %d."
 
 msgid "Overriding projection check"
 msgstr "Åsidosättande av projektionskontroll"
@@ -15462,9 +15479,6 @@ msgstr "Parallell körning stöds inte med funktionen rand()"
 #, c-format
 msgid "<%d> is not valid number of nprocs."
 msgstr "<%d> är inte ett giltigt antal nprocs."
-
-msgid "Floating point error(s) occurred in the calculation"
-msgstr "Fel i flyttal inträffade i beräkningen"
 
 #, c-format
 msgid "Unable to read color file for raster map <%s@%s>"
@@ -17263,15 +17277,14 @@ msgstr "DCELL: Dataområdet är %.15g till %.15g\n"
 msgid "CELL: Data range is %ld to %ld\n"
 msgstr "CELL: Dataområdet är %ld till %ld\n"
 
-#, c-format
-msgid "Illegal reclass rule -"
+#, fuzzy, c-format
+#| msgid "Illegal reclass rule -"
+msgid "Illegal reclass rule - ignored\n"
 msgstr "Olaglig regel för omklassificering -"
 
-#, c-format
-msgid " ignored\n"
-msgstr " ignorerad\n"
-
-msgid " - invalid reclass rule"
+#, fuzzy, c-format
+#| msgid " - invalid reclass rule"
+msgid "%s - invalid reclass rule"
 msgstr " - ogiltig regel för omklassificering"
 
 #, c-format
@@ -18385,18 +18398,6 @@ msgstr "Tidsintervall för att skapa output maps [minuter]"
 msgid "Water diffusion constant"
 msgstr "Vattendiffusionskonstant"
 
-msgid "Seed for random number generator"
-msgstr "Seed för slumptalsgenerator"
-
-msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
-msgstr "Samma frö kan användas för att få samma resultat eller så kan ett slumpmässigt frö genereras på annat sätt."
-
-msgid "Generate random seed"
-msgstr "Generera slumpmässigt frö"
-
-msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
-msgstr "Genererar automatiskt slumpmässigt frö för slumptalsgenerator (använd när du inte vill tillhandahålla fröalternativet)"
-
 msgid "Number of threads which will be used for parallel computation."
 msgstr "Antal trådar som ska användas för parallellberäkning."
 
@@ -18406,14 +18407,6 @@ msgstr "Skriv ut körningssammanfattning till standardutdata"
 #, c-format
 msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
 msgstr "Projekt med lat/long stöds inte av %s. Omprojicera data till ett projicerat koordinatsystem."
-
-#, c-format
-msgid "Generated random seed (-s): %ld"
-msgstr "Genererat slumpmässigt frö (-s): %ld"
-
-#, c-format
-msgid "Read random seed from %s option: %ld"
-msgstr "Läs slumpmässigt frö från %s alternativ: %ld"
 
 #, c-format
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
@@ -18501,6 +18494,10 @@ msgid "You are not outputting any raster maps"
 msgstr "Du matar inte ut några rasterkartor"
 
 #, c-format
+msgid "%d walkers over %d time steps may draw more random numbers than one seed provides; the random numbers of some walkers then repeat those of others shifted by a constant"
+msgstr ""
+
+#, c-format
 msgid "Processing block %d of %d"
 msgstr "Bearbetning av block %d av %d"
 
@@ -18582,6 +18579,26 @@ msgstr "Det går inte att öppna observationsloggfilen %s för skrivning"
 #, c-format
 msgid "FP raster map <%s> not found"
 msgstr "FP rasterkarta <%s> hittades inte"
+
+#, fuzzy, c-format
+#| msgid "Flag 's' is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
+msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
+msgstr "Flaggan ”t” är föråldrad och kommer att tas bort i en framtida version. Använda frö är automatiskt eller använd parametern seed."
+
+#, fuzzy, c-format
+#| msgid "Invalid zrange <%s>"
+msgid "Invalid random seed <%s>"
+msgstr "Ogiltigt zrange <%s>"
+
+#, fuzzy, c-format
+#| msgid "Read random seed from %s option: %ld"
+msgid "Read random seed from %s option: %<PRId64>"
+msgstr "Läs slumpmässigt frö från %s alternativ: %ld"
+
+#, fuzzy, c-format
+#| msgid "Generated random seed (-s): %ld"
+msgid "Generated random seed: %<PRId64>"
+msgstr "Genererat slumpmässigt frö (-s): %ld"
 
 msgid "aspect"
 msgstr "aspekt"
@@ -20089,6 +20106,10 @@ msgid "Number of intermediate images to produce"
 msgstr "Antal mellanliggande bilder som ska produceras"
 
 #, c-format
+msgid "Read random seed from %s option: %ld"
+msgstr "Läs slumpmässigt frö från %s alternativ: %ld"
+
+#, c-format
 msgid "Autogenerated random seed set to: %ld"
 msgstr "Autogenererat slumpmässigt frö satt till: %ld"
 
@@ -20333,7 +20354,6 @@ msgstr "För många kategorier (hittades: %i, max: %i). Försök att skala om el
 msgid "Input raster must be of type CELL."
 msgstr "Inmatningsrastret måste vara av typen CELL."
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -25480,13 +25500,17 @@ msgstr ""
 msgid "Lowest chi2 = %f\n"
 msgstr "Lägsta chi2 = %f\n"
 
-#, c-format
-msgid ""
-"%15s%15s%15s\n"
-"\n"
+#. GTC Column header, lower class limit (exclusive)
+msgid "From (excl.)"
 msgstr ""
-"%15s%15s%15s\n"
-"\n"
+
+#. GTC Column header, upper class limit (inclusive)
+msgid "To (incl.)"
+msgstr ""
+
+#. GTC Column header, number of values in the class
+msgid "Frequency"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -28329,8 +28353,9 @@ msgstr "Om överlappning inte är önskvärd kan indata rensas genom att snäppa
 msgid "%d input polygons got lost during import."
 msgstr "%d inmatade polygoner försvann under importen."
 
-#, c-format
-msgid "%d additional areas where created during import."
+#, fuzzy, c-format
+#| msgid "%d additional areas where created during import."
+msgid "%d additional areas were created during import."
 msgstr "%d ytterligare områden skapades under importen."
 
 #, c-format
@@ -31763,7 +31788,9 @@ msgstr "Åtminstone profilens start- och slutkoordinater krävs!"
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
 msgstr "Ingen databasanslutning definierad för karta <%s> lager %d, men WHERE-betingelse anges"
 
-msgid "No features match Your query"
+#, fuzzy
+#| msgid "No features match Your query"
+msgid "No features match your query"
 msgstr "Inga funktioner matchar din fråga"
 
 msgid "Your query matches more than one record in input profiling map. Currently it's not supported. Enhance WHERE conditions to get only one line."
@@ -32067,13 +32094,20 @@ msgstr "3D-transformation kräver en 3D-vektor"
 msgid "A file with 3D control points is needed for 3D transformation"
 msgstr "En fil med 3D-kontrollpunkter behövs för 3D-omvandling"
 
-#, c-format
-msgid "The vector map <%s> already exists in"
+#, fuzzy, c-format
+#| msgid "The vector map <%s> already exists in"
+msgid "The vector map <%s> already exists."
 msgstr "Vektorkartan <%s> finns redan i"
 
-#, c-format
-msgid "target project %s, mapset %s:"
-msgstr "målprojekt %s, kartset %s:"
+#, fuzzy, c-format
+#| msgid "Target project <%s> not found"
+msgid "Target project: <%s>"
+msgstr "Målprojekt <%s> hittades inte"
+
+#, fuzzy, c-format
+#| msgid "Your current mapset is <%s>"
+msgid "Target mapset: <%s>"
+msgstr "Ditt nuvarande mapset är <%s>"
 
 msgid "Rectification cancelled."
 msgstr "Korrigering avbruten."
@@ -34099,6 +34133,56 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 
 msgid "Image file"
 msgstr "Bildfil"
+
+#~ msgid "east"
+#~ msgstr "österut"
+
+#~ msgid "west"
+#~ msgstr "väst"
+
+#~ msgid "south"
+#~ msgstr "söderut"
+
+#~ msgid "north"
+#~ msgstr "norr"
+
+#~ msgid " points found in input file(s)"
+#~ msgstr " punkter hittades i inmatningsfil(er)"
+
+#, c-format
+#~ msgid "Raster map <%s> created. "
+#~ msgstr "Rasterkarta <%s> skapad. "
+
+#~ msgid "Floating point error(s) occurred in the calculation"
+#~ msgstr "Fel i flyttal inträffade i beräkningen"
+
+#, c-format
+#~ msgid " ignored\n"
+#~ msgstr " ignorerad\n"
+
+#~ msgid "Seed for random number generator"
+#~ msgstr "Seed för slumptalsgenerator"
+
+#~ msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
+#~ msgstr "Samma frö kan användas för att få samma resultat eller så kan ett slumpmässigt frö genereras på annat sätt."
+
+#~ msgid "Generate random seed"
+#~ msgstr "Generera slumpmässigt frö"
+
+#~ msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
+#~ msgstr "Genererar automatiskt slumpmässigt frö för slumptalsgenerator (använd när du inte vill tillhandahålla fröalternativet)"
+
+#, c-format
+#~ msgid ""
+#~ "%15s%15s%15s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "%15s%15s%15s\n"
+#~ "\n"
+
+#, c-format
+#~ msgid "target project %s, mapset %s:"
+#~ msgstr "målprojekt %s, kartset %s:"
 
 #~ msgid "Reproject to projects's coordinate system if needed"
 #~ msgstr "Omprojicera till projektets koordinatsystem om det behövs"

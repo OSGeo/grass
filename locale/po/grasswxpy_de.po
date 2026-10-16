@@ -7,13 +7,13 @@
 # Markus Neteler <neteler osgeo.org>, 2008, 2009, 2010.
 # Robert Nuske <rnuske gwdg.de>, 2009, 2010.
 # Robert Nuske <robert.nuske nw-fva.de>, 2011, 2012, 2013, 2014.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-03 18:51+0000\n"
-"PO-Revision-Date: 2025-08-26 13:29+0000\n"
+"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/de/>\n"
 "Language: de\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, python-format
 msgid "Maximum number of animations is %d."
@@ -7810,7 +7810,7 @@ msgstr "Liste der Vektorlayer"
 
 #, python-format
 msgid "List of %s layers"
-msgstr " Liste von %s Ebenen"
+msgstr "Liste von %s Ebenen"
 
 msgid "right click to (un)select all"
 msgstr ""
