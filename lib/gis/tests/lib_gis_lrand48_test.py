@@ -509,7 +509,8 @@ def test_random_integers_match_shared_generator(seed):
 
     G_random_int32() is G_mrand48(), G_random_uint32() its bits unsigned,
     G_random_int() is G_lrand48(), and the unsigned value is the floor of
-    2^32 times G_random_double().
+    2^32 times G_random_double(). These are properties of the current
+    engine, so the test checks for them.
     """
     state = struct_G_random_state()
 
