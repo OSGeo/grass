@@ -511,23 +511,22 @@ def test_random_integers_match_shared_generator(seed):
     G_random_int() is G_lrand48(), and the unsigned value is the floor of
     2^32 times G_random_double().
     """
+    state = struct_G_random_state()
+
+    def draws(function):
+        G_random_state_from_seed(byref(state), seed)
+        return [function(byref(state)) for _ in range(100)]
+
     G_srand48(seed)
     mrand = [G_mrand48() for _ in range(100)]
-    G_srand48(seed)
-    lrand = [G_lrand48() for _ in range(100)]
-    state = struct_G_random_state()
-    G_random_state_from_seed(byref(state), seed)
-    signed = [G_random_int32(byref(state)) for _ in range(100)]
-    G_random_state_from_seed(byref(state), seed)
-    unsigned = [G_random_uint32(byref(state)) for _ in range(100)]
-    G_random_state_from_seed(byref(state), seed)
-    ints = [G_random_int(byref(state)) for _ in range(100)]
-    G_random_state_from_seed(byref(state), seed)
-    doubles = [G_random_double(byref(state)) for _ in range(100)]
-    assert signed == mrand
+    assert draws(G_random_int32) == mrand
+    unsigned = draws(G_random_uint32)
     assert unsigned == [value % 2**32 for value in mrand]
-    assert ints == lrand
-    assert unsigned == [int(value * 2**32) for value in doubles]
+
+    G_srand48(seed)
+    assert draws(G_random_int) == [G_lrand48() for _ in range(100)]
+
+    assert unsigned == [int(value * 2**32) for value in draws(G_random_double)]
 
 
 @pytest.mark.parametrize(
