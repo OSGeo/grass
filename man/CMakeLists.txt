@@ -150,6 +150,7 @@ if(NOT WITH_FHS)
         COMMAND
             ${CMAKE_COMMAND} -E copy_if_different
             ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/hook_list_scripts.py
+            ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/hook_escape.py
             ${mkdocs_dir}/scripts
         COMMAND
             ${CMAKE_COMMAND} -E copy_if_different
