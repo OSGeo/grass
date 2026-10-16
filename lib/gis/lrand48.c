@@ -823,7 +823,7 @@ int32_t G_random_int32(struct G_random_state *state)
  * \brief Generate a non-negative integer in the range [0, 2^31)
  *
  * The top 31 bits of G_random_uint32(), for uses such as an index or a
- * value modulo n.
+ * modulo operation.
  *
  * Thread-safe as long as no two threads share a state.
  *
