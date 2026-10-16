@@ -31,7 +31,7 @@ class Bbox:
     >>> bbox
     Bbox(10.0, -10.0, -20.0, 20.0)
 
-    Or directly istantiate the class with the values, with:
+    Or directly instantiate the class with the values, with:
 
     >>> bbox = Bbox(north=100, south=0, east=0, west=100)
     >>> bbox

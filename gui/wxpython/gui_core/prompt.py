@@ -366,10 +366,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             return toComplete
 
         try:
-            splitted = utils.split(str(entry))
+            split_items = utils.split(str(entry))
         except ValueError:  # No closing quotation error
             return toComplete
-        if len(splitted) > 0 and cmd in globalvar.grassCmd:
+        if len(split_items) > 0 and cmd in globalvar.grassCmd:
             toComplete["cmd"] = cmd
             if entry[-1] == " ":
                 words = entry.split(" ")

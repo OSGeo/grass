@@ -62,15 +62,15 @@ def get_extensions():
         return []
 
     # read XML file
-    fo = open(fXML)
+    fobj = open(fXML)
     try:
-        tree = ET.fromstring(fo.read())
+        tree = ET.fromstring(fobj.read())
     except Exception as e:
         gs.error(_("Unable to parse metadata file: %s") % e)
-        fo.close()
+        fobj.close()
         return []
 
-    fo.close()
+    fobj.close()
 
     libgis_rev = gs.version()["libgis_revision"]
     ret = []
