@@ -192,7 +192,7 @@ For a one-off shell session, set the environment variable instead:
 
 ```sh
 # cmd.exe
-set GRASS_ADDONS_BASE_URL=https://ecodiv.earth/share
+set GRASS_ADDONS_BASE_URL=https://ecodiv.earth/share/AddonServer
 g.extension extension=r.tpi
 ```
 
