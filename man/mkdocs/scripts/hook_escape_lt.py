@@ -1,7 +1,7 @@
-"""Make Python-Markdown accept the backslash escape of the less-than sign.
+r"""Make Python-Markdown accept the backslash escape of the less-than sign.
 
 CommonMark (GitHub, pandoc) allows escaping any ASCII punctuation, so the
-documentation uses, e.g., \\<name\\> or x \\< 0. Python-Markdown follows the
+documentation uses, e.g., \<name\> or x \< 0. Python-Markdown follows the
 original Markdown rules where < is not escapable, so the backslash would be
 rendered. Python-Markdown lets extensions add escapable characters
 (the tables extension adds | the same way).
