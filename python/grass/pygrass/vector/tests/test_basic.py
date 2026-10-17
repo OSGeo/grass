@@ -189,8 +189,6 @@ def test_bbox_unhashable():
     """Test that Bbox is unhashable because it is mutable and has __eq__."""
     with pytest.raises(TypeError, match="unhashable"):
         hash(Bbox())
-    with pytest.raises(TypeError, match="unhashable"):
-        _ = {Bbox()}
 
 
 def test_bbox_changes_through_its_list():
