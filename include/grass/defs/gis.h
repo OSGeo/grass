@@ -532,6 +532,9 @@ void G_random_state_for_batch(struct G_random_state *,
                               const struct G_random_layout *, int64_t, int64_t);
 void G_random_advance(struct G_random_state *, int64_t);
 double G_random_double(struct G_random_state *);
+int G_random_int(struct G_random_state *);
+int32_t G_random_int32(struct G_random_state *);
+uint32_t G_random_uint32(struct G_random_state *);
 int64_t G_random_generate_seed(void);
 const char *G_random_parse_seed(const char *, int64_t *);
 

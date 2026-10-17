@@ -418,8 +418,8 @@ which moves from it to a generator of its own changes as follows:
 | `G_srand48_auto()` | `G_random_generate_seed()`, then as above | the same seed |
 | `G_drand48()` in a parallel loop, with a known number of draws per unit | an exact layout and `G_random_state_for_unit()` for every unit | those of one thread, for any number of threads |
 | `G_drand48()` in a parallel loop, with a varying number of draws per unit | a bounded or whole-span layout | change once |
-| `G_lrand48()` | `(long)(G_random_double(&rng) * 2147483648.0)` | the same |
-| `G_mrand48()` | `(unsigned int)(G_random_double(&rng) * 4294967296.0)` | the same bits; for the signed value, subtract 2^32 from 2^31 and above |
+| `G_lrand48()` | `G_random_int(&rng)` | the same |
+| `G_mrand48()` | `G_random_int32(&rng)`, or `G_random_uint32(&rng)` for the bits unsigned | the same |
 
 The functions refuse a seed outside their range, which `G_srand48()` reduced
 to its low 32 bits without a word, so a tool which passes a user's seed
