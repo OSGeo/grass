@@ -26,25 +26,32 @@ from grass.grassdb.checks import is_location_valid
 
 
 def get_possible_database_path():
-    """Looks for directory 'grassdata' (case-insensitive) in standard
-    locations to detect existing GRASS Database.
+    """Find a grassdata directory in home or Documents.
 
-    Returns the path as a string or None if nothing was found.
+    Names are matched case-insensitively and may contain other text.
+    Return the path as a string, or None if no directory is found.
     """
     home = os.path.expanduser("~")
 
-    # try some common directories for grassdata
     candidates = [
         home,
         os.path.join(home, "Documents"),
     ]
 
-    # find possible database path
     for candidate in candidates:
-        if Path(candidate).exists():
-            for subdir in next(os.walk(candidate))[1]:
-                if "grassdata" in subdir.lower():
-                    return os.path.join(candidate, subdir)
+        try:
+            for entry in Path(candidate).iterdir():
+                if "grassdata" not in entry.name.lower():
+                    continue
+                try:
+                    if entry.is_dir():
+                        return str(entry)
+                except OSError:
+                    # One inaccessible entry should not hide the others.
+                    continue
+        except OSError:
+            # Documents may be blocked by macOS privacy settings.
+            continue
     return None
 
 
