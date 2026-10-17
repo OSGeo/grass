@@ -536,6 +536,10 @@ int G_random_int(struct G_random_state *);
 int32_t G_random_int32(struct G_random_state *);
 uint32_t G_random_uint32(struct G_random_state *);
 int64_t G_random_generate_seed(void);
+const char *G_random_parse_seed(const char *, int64_t *);
+
+/* random_options.c */
+int64_t G_random_seed_from_option(const struct Option *);
 
 /* ls.c */
 void G_set_ls_filter(int (*)(const char *, void *), void *);
