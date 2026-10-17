@@ -85,7 +85,7 @@ int db__send_string(dbString *x)
 {
     int stat = DB_OK;
     const char *s = db_get_string(x);
-    int len = s ? strlen(s) + 1 : 1;
+    int len = s ? (int)strlen(s) + 1 : 1;
 
     if (!s)
         s = ""; /* don't send a NULL string */

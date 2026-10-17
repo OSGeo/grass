@@ -69,14 +69,14 @@ dbDirent *db_dirent(const char *dirname, int *n)
     max = 0;
     while ((entry = readdir(dp))) {
         count++;
-        len = strlen(entry->d_name);
+        len = (int)strlen(entry->d_name);
         if (len > max)
             max = len;
     }
     rewinddir(dp);
 
     size_t path_len = strlen(dirname) + max + 2; // extra 2 for / and NULL
-    path = db_malloc(path_len);
+    path = db_malloc((int)path_len);
     if (path == NULL) {
         closedir(dp);
         return (dbDirent *)NULL;
