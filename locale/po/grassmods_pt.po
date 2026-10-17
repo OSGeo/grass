@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grassmods/pt/>\n"
@@ -23660,8 +23660,10 @@ msgstr ""
 msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
-msgid "Missing output projection parameters "
-msgstr ""
+#, fuzzy
+#| msgid "Unable to set up lat/long projection parameters"
+msgid "Missing output projection parameters"
+msgstr "Não consegui ajustar parâmetros de projeção lat/long"
 
 msgid "Unable to read input data"
 msgstr ""
@@ -23890,8 +23892,9 @@ msgstr ""
 msgid "Unable to import data"
 msgstr ""
 
-msgid "Done: generated map "
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Done: generated map {map_name}"
+msgstr "Valor para a borda leste"
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
 msgstr ""
@@ -23952,7 +23955,7 @@ msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
 #, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr ""
 
 #, python-format
@@ -24089,9 +24092,9 @@ msgstr ""
 msgid "Driver %s does not supports Create() method"
 msgstr ""
 
-#, python-format
-msgid "Unable to open %s "
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Unable to open {filename}"
+msgstr " [do arquivo de assinatura %s]"
 
 msgid "Region is out of server data extend."
 msgstr ""
@@ -24263,29 +24266,49 @@ msgstr ""
 msgid "xy-locations are not supported"
 msgstr ""
 
+#, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr ""
+
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr ""
+
+#, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr ""
+
 msgid "Generating a clumped raster file"
 msgstr ""
 
-msgid " including diagonal neighbors"
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, fuzzy, python-format
-msgid " with minimum %s pixels"
-msgstr "Tamanho da fonte é altura em pixels"
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
+msgstr ""
 
-#, fuzzy
-msgid "Generating a reclass map with area size"
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
 msgstr "Criando %i mapas raster\n"
 
-#, python-format
-msgid " larger than or equal to %f hectares..."
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
 msgstr ""
 
-#, python-format
-msgid " smaller than or equal to %f hectares..."
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "Criando %i mapas raster\n"
+
+#, python-brace-format
+msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr ""
 
-msgid "No areas of size "
+#, fuzzy
+msgid "Generating a reclass map without area size limits..."
+msgstr "Criando %i mapas raster\n"
+
+msgid "No areas found"
 msgstr ""
 
 #, python-format
@@ -24906,11 +24929,8 @@ msgstr ""
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr ""
-
-msgid "Use -c flag to update values in this column."
+#, python-brace-format
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr ""
 
 #, python-format
@@ -25025,8 +25045,8 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr ""
 
-#, python-format
-msgid "Unable to add column %s to vector map <%s> "
+#, python-brace-format
+msgid "Unable to add column {column} to vector map <{vector}>"
 msgstr ""
 
 #, python-format
@@ -34082,6 +34102,10 @@ msgstr ""
 msgid "Image file"
 msgstr "Arquivo de imagem"
 
+#, fuzzy, python-format
+#~ msgid " with minimum %s pixels"
+#~ msgstr "Tamanho da fonte é altura em pixels"
+
 #, fuzzy, c-format
 #~ msgid "Raster map <%s> created. "
 #~ msgstr "Mapa raster 3D <%s> não encontrado"
@@ -34578,10 +34602,6 @@ msgstr "Arquivo de imagem"
 #, fuzzy
 #~ msgid "Custom ratio"
 #~ msgstr "Separação dos agrupamentos (clusters)"
-
-#, fuzzy
-#~ msgid "DPI for the generated page"
-#~ msgstr "Valor para a borda leste"
 
 #, fuzzy
 #~ msgid "Data type in column; user may treat int as float"

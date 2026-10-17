@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2025-08-23 20:18+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Tamil <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ta/>\n"
@@ -4012,7 +4012,15 @@ msgid "Error reading raster data for row %d of <%s>"
 msgstr ""
 
 #, c-format
+msgid "Invalid byte count in raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
 msgid "Error uncompressing raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Raster row for <%s> is larger than expected"
 msgstr ""
 
 #, c-format

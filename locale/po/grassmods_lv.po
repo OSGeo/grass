@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grassmods/lv/>\n"
@@ -23847,7 +23847,7 @@ msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
 #, fuzzy
-msgid "Missing output projection parameters "
+msgid "Missing output projection parameters"
 msgstr "Drukāt tekošo reģionu pēc platuma/garuma"
 
 #, fuzzy
@@ -24092,8 +24092,9 @@ msgstr ""
 msgid "Unable to import data"
 msgstr "neiespējami atvērt <%s>"
 
-msgid "Done: generated map "
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Done: generated map {map_name}"
+msgstr "Austrumu šķautnes vērtība"
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
 msgstr ""
@@ -24159,7 +24160,7 @@ msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
 #, fuzzy, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr "Nevar atlasīt datus no tabulas"
 
 #, fuzzy, python-format
@@ -24303,9 +24304,10 @@ msgstr ""
 msgid "Driver %s does not supports Create() method"
 msgstr "rastra karte [%s] nav atrasta"
 
-#, fuzzy, python-format
-msgid "Unable to open %s "
-msgstr "Neiespējami atvērt šūnu failu[%s]"
+#, fuzzy, python-brace-format
+#| msgid "Unable to open file <%s>"
+msgid "Unable to open {filename}"
+msgstr "Nebija iespējams atvērt failu <%s>"
 
 msgid "Region is out of server data extend."
 msgstr ""
@@ -24486,32 +24488,53 @@ msgstr "Kolonas tips nav atbalstīts"
 msgid "xy-locations are not supported"
 msgstr "Kolonas tips nav atbalstīts"
 
+#, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr ""
+
+#, fuzzy
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr "Eksistējošas rastra kartes nosaukums"
+
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr "Eksistējošas rastra kartes nosaukums"
+
 #, fuzzy
 msgid "Generating a clumped raster file"
 msgstr "Eksistējošas rastra kartes nosaukums"
 
-msgid " including diagonal neighbors"
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, python-format
-msgid " with minimum %s pixels"
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
 msgstr ""
 
-#, fuzzy
-msgid "Generating a reclass map with area size"
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
 msgstr "Izejas rastra kartes nosaukums"
 
-#, python-format
-msgid " larger than or equal to %f hectares..."
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
 msgstr ""
 
-#, python-format
-msgid " smaller than or equal to %f hectares..."
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "Izejas rastra kartes nosaukums"
+
+#, python-brace-format
+msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr ""
 
 #, fuzzy
-msgid "No areas of size "
-msgstr "Punktu skaits: %d"
+msgid "Generating a reclass map without area size limits..."
+msgstr "Izejas rastra kartes nosaukums"
+
+#, fuzzy
+msgid "No areas found"
+msgstr "Rastra karte kura tiks pārkodēta"
 
 #, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
@@ -25165,12 +25188,8 @@ msgstr "Rastra karte kura tiks pārkodēta"
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr ""
-
-#, fuzzy
-msgid "Use -c flag to update values in this column."
+#, fuzzy, python-brace-format
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
 
 #, python-format
@@ -25295,8 +25314,8 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr "neiespējami atvērt <%s>"
 
-#, fuzzy, python-format
-msgid "Unable to add column %s to vector map <%s> "
+#, fuzzy, python-brace-format
+msgid "Unable to add column {column} to vector map <{vector}>"
 msgstr "Neiespējami atvērt šūnu failu[%s]"
 
 #, fuzzy, python-format
@@ -34479,6 +34498,14 @@ msgstr ""
 msgid "Image file"
 msgstr ""
 
+#, fuzzy, python-format
+#~ msgid "Unable to open %s "
+#~ msgstr "Neiespējami atvērt šūnu failu[%s]"
+
+#, fuzzy
+#~ msgid "No areas of size "
+#~ msgstr "Punktu skaits: %d"
+
 #~ msgid "north"
 #~ msgstr "ziemeļi"
 
@@ -34839,10 +34866,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Custom raster map to be used for colorization"
 #~ msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
-
-#, fuzzy
-#~ msgid "DPI for the generated page"
-#~ msgstr "Austrumu šķautnes vērtība"
 
 #, fuzzy
 #~ msgid "Data type ID"
@@ -36684,10 +36707,6 @@ msgstr ""
 
 #~ msgid "No existing MASK to remove"
 #~ msgstr "MASK nevar noņemt, jo neeksistē"
-
-#, fuzzy
-#~ msgid "No features found !"
-#~ msgstr "Rastra karte kura tiks pārkodēta"
 
 #, fuzzy
 #~ msgid "No maps output"
