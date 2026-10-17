@@ -16,6 +16,7 @@ SUBDIRS = \
 	jupyter \
 	pydispatch \
 	pygrass \
+	pytest \
 	script \
 	semantic_label \
 	temporal \
