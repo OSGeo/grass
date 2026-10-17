@@ -1888,7 +1888,8 @@ def c_read_next_line(c_mapinfo, c_points, c_cats):
     if ftype == -2:
         raise StopIteration
     if ftype == -1:
-        raise
+        msg = "Cannot read the next line"
+        raise GrassError(msg)
     return ftype, v_id, c_points, c_cats
 
 

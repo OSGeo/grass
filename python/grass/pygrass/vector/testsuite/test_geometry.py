@@ -5,15 +5,17 @@ Created on Thu Jun 19 14:13:53 2014
 """
 
 import unittest
+from unittest.mock import MagicMock, patch
 
 import numpy as np
 
 import grass.lib.vector as libvect
+from grass.exceptions import GrassError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.basic import Bbox
-from grass.pygrass.vector.geometry import Area, Line, Node, Point
+from grass.pygrass.vector.geometry import Area, Line, Node, Point, c_read_next_line
 
 
 class PointTestCase(TestCase):
@@ -388,6 +390,34 @@ class AreaTestCase(TestCase):
         self.assertTrue(isle.alive())
 
         self.assertEqual(str(isle.bbox()), "Bbox(3.0, 1.0, 3.0, 1.0)")
+
+
+class ReadNextLineTestCase(TestCase):
+    def test_c_read_next_line_error(self):
+        """Test c_read_next_line raises GrassError when Vect_read_next_line returns -1"""
+        mock_mapinfo = MagicMock()
+        mock_mapinfo.contents.next_line = 1
+        with (
+            patch(
+                "grass.pygrass.vector.geometry.libvect.Vect_read_next_line",
+                return_value=-1,
+            ),
+            self.assertRaises(GrassError),
+        ):
+            c_read_next_line(mock_mapinfo, None, None)
+
+    def test_c_read_next_line_stop_iteration(self):
+        """Test c_read_next_line raises StopIteration when Vect_read_next_line returns -2"""
+        mock_mapinfo = MagicMock()
+        mock_mapinfo.contents.next_line = 1
+        with (
+            patch(
+                "grass.pygrass.vector.geometry.libvect.Vect_read_next_line",
+                return_value=-2,
+            ),
+            self.assertRaises(StopIteration),
+        ):
+            c_read_next_line(mock_mapinfo, None, None)
 
 
 if __name__ == "__main__":
