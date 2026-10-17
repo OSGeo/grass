@@ -1,9 +1,7 @@
 /* random.c (simlib), 20.nov.2002, JH */
 
-#include <errno.h>
 #include <inttypes.h>
 #include <math.h>
-#include <stdlib.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -27,7 +25,6 @@
 int64_t simwe_seed(const struct Option *seed, const struct Flag *generate)
 {
     int64_t value;
-    struct G_random_state check;
 
     if (seed->answer && generate->answer)
         G_fatal_error(_("%s= and -%c are mutually exclusive"), seed->key,
@@ -38,14 +35,7 @@ int64_t simwe_seed(const struct Option *seed, const struct Flag *generate)
                             "parameter %s."),
                           generate->key, seed->key);
     if (seed->answer) {
-        long long parsed;
-        char *end;
-
-        errno = 0;
-        parsed = strtoll(seed->answer, &end, 10);
-        if (end == seed->answer || *end != '\0' || errno == ERANGE)
-            G_fatal_error(_("Invalid random seed <%s>"), seed->answer);
-        value = parsed;
+        value = G_random_seed_from_option(seed);
         G_verbose_message(_("Read random seed from %s option: %" PRId64),
                           seed->key, value);
     }
@@ -53,9 +43,6 @@ int64_t simwe_seed(const struct Option *seed, const struct Flag *generate)
         value = G_random_generate_seed();
         G_verbose_message(_("Generated random seed: %" PRId64), value);
     }
-    /* The layout, which refuses a seed out of range, is built only when the
-     * number of time steps is known. */
-    G_random_state_from_seed(&check, value);
     return value;
 }
 
