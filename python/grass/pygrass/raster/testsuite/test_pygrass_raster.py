@@ -114,7 +114,7 @@ class RasterSegmentTestCase(RasterTestCase):
 
     def copy_test_map(self, name):
         """Copy the test map so that a test can overwrite it"""
-        self.runModule("g.copy", raster=f"{self.name},{name}")
+        self.runModule("g.copy", raster=[self.name, name])
         self.addCleanup(self.runModule, "g.remove", flags="f", type="raster", name=name)
         return name
 
