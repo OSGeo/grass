@@ -12,7 +12,6 @@
 #include <omp.h>
 #endif
 
-#include <errno.h>
 #include <inttypes.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -191,16 +190,7 @@ int main(int argc, char **argv)
 
     rand_calls = expr_list_count_rand_calls(result);
     if (seed->answer) {
-        struct G_random_state check;
-        char *end;
-
-        errno = 0;
-        seed_value = strtoll(seed->answer, &end, 10);
-        if (errno || end == seed->answer || *end)
-            G_fatal_error(_("Invalid random seed <%s>"), seed->answer);
-        /* Refuse a seed out of range now, before the output maps are
-         * created. */
-        G_random_state_from_seed(&check, seed_value);
+        seed_value = G_random_seed_from_option(seed);
         seeded = 1;
         G_debug(3, "Read random seed from seed=: %" PRId64, seed_value);
     }
