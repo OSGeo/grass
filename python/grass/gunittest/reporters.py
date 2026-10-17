@@ -23,6 +23,7 @@ from typing import TYPE_CHECKING
 
 from .utils import add_gitignore_to_dir, ensure_dir
 from .checkers import text_to_keyvalue
+from .loader import discovery_sort_key
 
 
 from io import StringIO
@@ -560,13 +561,17 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         self.main_index = None
         self._file_anonymizer = file_anonymizer
         self._main_page_name = main_page_name
+        self._main_page_path = None
+        self._main_page_header = None
+        self._main_page_rows = []
 
     def start(self, results_dir):
         super().start(results_dir)
         # having all variables public although not really part of API
-        main_page_name = os.path.join(results_dir, self._main_page_name)
+        self._main_page_path = os.path.join(results_dir, self._main_page_name)
+        self._main_page_rows = []
         # TODO: Ensure file is closed in all situations
-        self.main_index = open(main_page_name, "w", encoding="utf-8")  # noqa: SIM115
+        self.main_index = open(self._main_page_path, "w", encoding="utf-8")  # noqa: SIM115
 
         # TODO: this can be moved to the counter class
         self.failures = 0
@@ -589,7 +594,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             svn_text = ('SVN revision <a href="{url}">{rev}</a>').format(
                 url=url, rev=svn_info["revision"]
             )
-        self.main_index.write(
+        self._main_page_header = (
             "<html><body>"
             "<h1>Test results</h1>"
             "{time:%Y-%m-%d %H:%M:%S}"
@@ -603,6 +608,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             "<th>Failed</th><th>Percent successful</th>"
             "</tr></thead><tbody>".format(time=self.main_start_time, svn=svn_text)
         )
+        self.main_index.write(self._main_page_header)
 
     def finish(self):
         super().finish()
@@ -639,12 +645,20 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             )
         )
 
-        self.main_index.write(
-            "<tbody>{tfoot}</table><p>{summary}</p></body></html>".format(
-                tfoot=tfoot, summary=summary_sentence
-            )
-        )
+        # Rows were written in the order the test files ran, so that a partial
+        # report is available while the tests are running. Rewrite the page
+        # with rows in discovery order, so that reports from runs in different
+        # orders can be compared.
         self.main_index.close()
+        self._main_page_rows.sort()
+        with open(self._main_page_path, "w", encoding="utf-8") as main_page:
+            main_page.write(self._main_page_header)
+            main_page.writelines(row for unused_key, row in self._main_page_rows)
+            main_page.write(
+                "<tbody>{tfoot}</table><p>{summary}</p></body></html>".format(
+                    tfoot=tfoot, summary=summary_sentence
+                )
+            )
 
     def start_file_test(self, module):
         super().start_file_test(module)
@@ -694,7 +708,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
         else:
             total = successes = pass_per = self.unknown_number
         bad_ones = failures + errors
-        self.main_index.write(
+        row = (
             "<tr><td>{d}</td>"
             '<td><a href="{d}/{m}/index.html">{m}</a></td>'
             "<td>{status}</td>"
@@ -710,6 +724,8 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
                 ptests=pass_per,
             )
         )
+        self.main_index.write(row)
+        self._main_page_rows.append((discovery_sort_key(module), row))
         wrap_stdstream_to_html(
             infile=stdout,
             outfile=os.path.join(cwd, "stdout.html"),
@@ -852,6 +868,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
         self.names = []
         self.tested_dirs = []
         self.files_returncodes = []
+        self._sort_keys = []
 
         # sets (no size specified)
         self.modules = set()
@@ -859,6 +876,14 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
 
     def finish(self):
         super().finish()
+
+        # Store the per-file lists in discovery order regardless of the order
+        # the test files ran in, so that results of different runs can be
+        # compared.
+        order = sorted(range(len(self.names)), key=self._sort_keys.__getitem__)
+        self.names = [self.names[i] for i in order]
+        self.tested_dirs = [self.tested_dirs[i] for i in order]
+        self.files_returncodes = [self.files_returncodes[i] for i in order]
 
         # this should be moved to some additional meta passed in constructor
         svn_info = get_svn_info()
@@ -942,6 +967,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
 
         self.tested_dirs.append(module.tested_dir)
         self.names.append(module.name)
+        self._sort_keys.append(discovery_sort_key(module))
 
         modules = test_summary.get("tested_modules", None)
         if modules:

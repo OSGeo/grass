@@ -8,6 +8,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import os
+import random
 import sys
 import argparse
 import configparser
@@ -17,6 +18,7 @@ from unittest.main import TestProgram
 
 import grass.script.core as gs
 
+from .checkers import text_to_keyvalue
 from .loader import GrassTestLoader
 from .runner import (
     GrassTestRunner,
@@ -168,6 +170,28 @@ def get_config(start_directory, config_file):
     return config_parser["gunittest"]
 
 
+def seed_type(value: str) -> int | str:
+    """Convert a seed option value to int unless it is the special value last"""
+    if value == "last":
+        return value
+    try:
+        return int(value)
+    except ValueError:
+        msg = f"invalid seed value: {value!r} (use an integer or 'last')"
+        raise argparse.ArgumentTypeError(msg) from None
+
+
+def get_last_seed(results_dir) -> int | None:
+    """Return the seed of the previous run stored in its report, if any"""
+    summary_file = Path(results_dir) / "test_keyvalue_result.txt"
+    try:
+        text = summary_file.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    seed = text_to_keyvalue(text, sep="=").get("random_seed")
+    return seed if isinstance(seed, int) else None
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Run test files in all testsuite directories starting"
@@ -220,6 +244,28 @@ def main():
         type=str,
         help=f"Path to a configuration file (default: {CONFIG_FILENAME})",
     )
+    parser.add_argument(
+        "--random-order",
+        dest="random_order",
+        action="store_true",
+        help=(
+            "Run test files in random order using a newly generated seed"
+            " (reports still list test files in the usual order)"
+        ),
+    )
+    parser.add_argument(
+        "--randomly-seed",
+        dest="randomly_seed",
+        action="store",
+        type=seed_type,
+        default=None,
+        help=(
+            "Run test files in random order generated from this seed,"
+            " or pass the special value 'last' to reuse the seed from the"
+            " previous run with the same output directory"
+            " (implies --random-order)"
+        ),
+    )
     args = parser.parse_args()
     gisdbase = args.gisdbase
     if gisdbase is None:
@@ -238,6 +284,16 @@ def main():
             f" does not exist in GRASS Database <{gisdbase}>\n"
         )
     results_dir = args.output
+    random_seed = args.randomly_seed
+    if random_seed == "last":
+        # The previous report is removed below, so get the seed first.
+        random_seed = get_last_seed(results_dir)
+        if random_seed is None:
+            return (
+                f"No seed of a previous run in random order found in <{results_dir}>\n"
+            )
+    elif args.random_order and random_seed is None:
+        random_seed = random.randrange(2**32)
     silent_rmtree(results_dir)  # TODO: too brute force?
 
     start_dir = "."
@@ -247,6 +303,9 @@ def main():
         config = get_config(start_directory=start_dir, config_file=args.config)
     except OSError as error:
         return f"Error reading configuration: {error}"
+
+    if random_seed is not None:
+        print(f"Using --randomly-seed={random_seed}", file=sys.stderr)
 
     invoker = GrassTestFilesInvoker(
         start_dir=start_dir,
@@ -263,6 +322,7 @@ def main():
         location_type=location_type,
         results_dir=results_dir,
         exclude=config.get("exclude", "").split(),
+        random_seed=random_seed,
     )
     if not reporter.test_files:
         return "No tests found or executed"
