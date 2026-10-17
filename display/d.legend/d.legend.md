@@ -98,7 +98,12 @@ background fill.
 
 The flag **-l** will switch to logarithmic scale. In case this flag is
 used, the provided step in **label_step** is interpreted in the
-logarithmic space.
+logarithmic space: labels are placed at powers of ten, **label_step**
+orders of magnitude apart. When the range includes zero or negative
+values, the values are shifted so that the minimum becomes 1 and the
+logarithmic scale is applied to the shifted values. This is the same
+transformation *r.colors* applies with its **-g** flag, so the legend
+matches a color table created that way.
 
 ## EXAMPLE
 
