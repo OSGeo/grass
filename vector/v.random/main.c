@@ -26,6 +26,7 @@
  *
  **************************************************************/
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
@@ -57,9 +58,9 @@ static int sort_by_size(const void *a, const void *b)
 int main(int argc, char *argv[])
 {
     char *output, buf[DB_SQL_MAX];
-    double (*rng)(void) = G_drand48;
     double zmin, zmax;
-    int seed;
+    int64_t seed;
+    struct G_random_state rng;
     unsigned long i, n, total_n;
     int j, k, type, usefloat;
     int area, nareas, field, cat_area;
@@ -182,9 +183,12 @@ int main(int argc, char *argv[])
     output = parm.output->answer;
     n = strtoul(parm.nsites->answer, NULL, 10);
 
-    seed = 0;
+    /* The seed is checked here, before any output exists. */
     if (parm.seed->answer)
-        seed = atoi(parm.seed->answer);
+        seed = G_random_seed_from_option(parm.seed);
+    else
+        seed = G_random_generate_seed();
+    G_random_state_from_seed(&rng, seed);
 
     if (n <= 0) {
         G_fatal_error(_("Number of points must be > 0 (%ld given)"), n);
@@ -330,12 +334,6 @@ int main(int argc, char *argv[])
     }
 
     Vect_hist_command(&Out);
-
-    /* Init the random seed */
-    if (parm.seed->answer)
-        G_srand48(seed);
-    else
-        G_srand48_auto();
 
     G_get_window(&window);
 
@@ -506,9 +504,9 @@ int main(int argc, char *argv[])
                 Vect_reset_cats(Cats);
 
                 while (outside) {
-                    x = rng() * (bbox.W - bbox.E) + bbox.E;
-                    y = rng() * (bbox.N - bbox.S) + bbox.S;
-                    z = rng() * (zmax - zmin) + zmin;
+                    x = G_random_double(&rng) * (bbox.W - bbox.E) + bbox.E;
+                    y = G_random_double(&rng) * (bbox.N - bbox.S) + bbox.S;
+                    z = G_random_double(&rng) * (zmax - zmin) + zmin;
 
                     ret = Vect_point_in_area(x, y, &In, area, &abox);
 
@@ -571,9 +569,11 @@ int main(int argc, char *argv[])
             Vect_reset_line(Points);
             Vect_reset_cats(Cats);
 
-            x = rng() * (window.west - window.east) + window.east;
-            y = rng() * (window.north - window.south) + window.south;
-            z = rng() * (zmax - zmin) + zmin;
+            x = G_random_double(&rng) * (window.west - window.east) +
+                window.east;
+            y = G_random_double(&rng) * (window.north - window.south) +
+                window.south;
+            z = G_random_double(&rng) * (zmax - zmin) + zmin;
 
             if (nareas) {
                 int outside = 1;
@@ -657,10 +657,13 @@ int main(int argc, char *argv[])
                         }
                     }
                     if (outside) {
-                        x = rng() * (window.west - window.east) + window.east;
-                        y = rng() * (window.north - window.south) +
+                        x = G_random_double(&rng) *
+                                (window.west - window.east) +
+                            window.east;
+                        y = G_random_double(&rng) *
+                                (window.north - window.south) +
                             window.south;
-                        z = rng() * (zmax - zmin) + zmin;
+                        z = G_random_double(&rng) * (zmax - zmin) + zmin;
                     }
                 } while (outside);
             }
