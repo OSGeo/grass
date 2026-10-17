@@ -2,28 +2,34 @@ from grass.exceptions import OpenError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
-from grass.pygrass.raster import RasterRow
+from grass.pygrass.raster import RasterRow, RasterSegment
 
 
-class RasterRowTestCase(TestCase):
-    name = "RasterRowTestCase_map"
+class RasterTestCase(TestCase):
+    """Base class creating the test raster map and region"""
+
+    name = None
+    # Univariate statistics of the map created in setUpClass.
+    univar = {"n": 16, "null_cells": 0, "min": 11, "max": 44, "sum": 440}
 
     @classmethod
     def setUpClass(cls):
         """Create test raster map and region"""
         cls.use_temp_region()
+        cls.addClassCleanup(cls.del_temp_region)
         cls.runModule("g.region", n=40, s=0, e=40, w=0, res=10)
         cls.runModule(
             "r.mapcalc",
-            expression="%s = row() + (10.0 * col())" % (cls.name),
+            expression=f"{cls.name} = row() + (10.0 * col())",
             overwrite=True,
         )
+        cls.addClassCleanup(
+            cls.runModule, "g.remove", flags="f", type="raster", name=cls.name
+        )
 
-    @classmethod
-    def tearDownClass(cls):
-        """Remove the generated vector map, if exists"""
-        cls.runModule("g.remove", flags="f", type="raster", name=cls.name)
-        cls.del_temp_region()
+
+class RasterRowTestCase(RasterTestCase):
+    name = "RasterRowTestCase_map"
 
     def test_type(self):
         r = RasterRow(self.name)
@@ -86,6 +92,47 @@ class RasterRowTestCase(TestCase):
             # Index is out of range
             r.open()
             r[9999]
+        r.close()
+
+
+class RasterSegmentTestCase(RasterTestCase):
+    name = "RasterSegmentTestCase_map"
+
+    def copy_test_map(self, name):
+        """Copy the test map so that a test can overwrite it"""
+        self.runModule("g.copy", raster=[self.name, name])
+        self.addCleanup(self.runModule, "g.remove", flags="f", type="raster", name=name)
+        return name
+
+    def test_open_r_not_exist(self):
+        notexist = RasterSegment(self.name + "notexist")
+        with self.assertRaises(OpenError):
+            notexist.open(mode="r")
+
+    def test_open_w_already_exists(self):
+        r = RasterSegment(self.name)
+        with self.assertRaises(OpenError):
+            r.open(mode="w", mtype="DCELL", overwrite=False)
+        self.assertFalse(r.is_open())
+        self.assertRasterFitsUnivar(self.name, reference=self.univar)
+
+    def test_open_rw_already_exists(self):
+        r = RasterSegment(self.name)
+        with self.assertRaises(OpenError):
+            r.open(mode="rw", overwrite=False)
+        self.assertFalse(r.is_open())
+        self.assertRasterFitsUnivar(self.name, reference=self.univar)
+
+    def test_open_w_overwrite(self):
+        r = RasterSegment(self.copy_test_map("test_open_w_overwrite_map"))
+        r.open(mode="w", mtype="DCELL", overwrite=True)
+        self.assertTrue(r.is_open())
+        r.close()
+
+    def test_open_rw_overwrite(self):
+        r = RasterSegment(self.copy_test_map("test_open_rw_overwrite_map"))
+        r.open(mode="rw", overwrite=True)
+        self.assertTrue(r.is_open())
         r.close()
 
 
