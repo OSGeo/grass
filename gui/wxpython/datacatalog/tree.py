@@ -2860,7 +2860,7 @@ class DataCatalogTree(TreeView):
 
     def _confirmDialog(self, question, title):
         """Confirm dialog"""
-        dlg = wx.MessageDialog(self, question, title, wx.YES_NO)
+        dlg = wx.MessageDialog(self, question, title, wx.YES_NO | wx.NO_DEFAULT)
         res = dlg.ShowModal()
         dlg.Destroy()
         return res
