@@ -129,6 +129,23 @@ jobs:
           pytest \
             @.github/workflows/pytest_args_gunittest.txt \
             --junitxml=pytest.gunittest.junit.xml
+      - name: Run pytest for loading C libraries into the process
+        shell: micromamba-shell {0}
+        run: |
+          # The installation is moved away from the prefix it was configured
+          # with, so that the libraries cannot find each other through the
+          # install names recorded at configure time and the loading done by
+          # init is the only mechanism left. The Python package moves with
+          # it, so its path is taken beforehand.
+          python_path="$(grass --config python_path)"
+          mv "${HOME}/install" "${HOME}/install-relocated"
+          trap 'mv "${HOME}/install-relocated" "${HOME}/install"' EXIT
+          # Prefix removal instead of pattern substitution because quoted
+          # patterns in substitutions behave differently in Bash 3.2 (macOS).
+          PYTHONPATH="${HOME}/install-relocated${python_path#"${HOME}/install"}"
+          export PYTHONPATH
+          pytest python/grass/script/tests/grass_script_setup_load_libs_test.py \
+            --junitxml=pytest.load_libs.junit.xml
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
