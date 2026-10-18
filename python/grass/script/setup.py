@@ -215,6 +215,9 @@ def setup_runtime_env(gisbase=None, *, env=None, load_libs=False):
     With _load_libs_ set to True, the GRASS C libraries are loaded into the
     current process, which is needed to use :mod:`grass.lib`
     (see :func:`grass.app.runtime.preload_dynamic_libraries`).
+    RuntimeError is raised when the core library (libgrass_gis) cannot be
+    loaded. A failing optional library only makes importing the
+    corresponding :mod:`grass.lib` module fail.
     """
     from grass.app.runtime import (
         get_grass_config_dir,
@@ -260,7 +263,14 @@ def setup_runtime_env(gisbase=None, *, env=None, load_libs=False):
     if load_libs:
         # The variable set above applies only to newly started processes, so load
         # the libraries into the current process for ctypes-based interfaces.
-        preload_dynamic_libraries(install_path=gisbase)
+        failures = preload_dynamic_libraries(install_path=gisbase)
+        for library, error in failures:
+            if library.name.startswith("libgrass_gis."):
+                msg = (
+                    f"The GRASS core library failed to load ({library}:"
+                    f" {error}), so grass.lib cannot work"
+                )
+                raise RuntimeError(msg)
     set_python_path_variable(install_path=gisbase, env=env)
     set_path_to_python_executable(env=env)
 

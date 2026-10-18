@@ -11,6 +11,7 @@ import json
 import os
 import subprocess
 import sys
+from pathlib import Path
 from textwrap import dedent
 
 import pytest
@@ -47,6 +48,15 @@ def run_in_clean_environment(code, tmp_path):
         " GISBASE)"
     )
     return json.loads(result.stdout)
+
+
+@pytest.fixture
+def global_environment():
+    """Restore the global environment after a test which modifies it"""
+    saved = dict(os.environ)
+    yield
+    os.environ.clear()
+    os.environ.update(saved)
 
 
 @pytest.mark.usefixtures("mock_no_session")
@@ -110,6 +120,8 @@ def test_libraries_not_loaded_by_default(tmp_path, monkeypatch):
 
     def record_call(install_path):
         calls.append(install_path)
+        # The replaced function returns the list of load failures.
+        return []
 
     monkeypatch.setattr(grass.app.runtime, "preload_dynamic_libraries", record_call)
     project = tmp_path / "test"
@@ -120,6 +132,39 @@ def test_libraries_not_loaded_by_default(tmp_path, monkeypatch):
     with gs.setup.init(project, env=os.environ.copy(), load_libs=True):
         pass
     assert calls
+
+
+@pytest.mark.usefixtures("mock_no_session", "global_environment")
+def test_init_load_libs_raises_for_failing_core_library(tmp_path, monkeypatch):
+    """Check that a failure to load the core library is an error"""
+
+    def fail_gis(install_path):
+        library = Path(install_path) / "lib" / "libgrass_gis.so"
+        return [(library, OSError("mock failure"))]
+
+    monkeypatch.setattr(grass.app.runtime, "preload_dynamic_libraries", fail_gis)
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with (
+        pytest.raises(RuntimeError, match="libgrass_gis"),
+        gs.setup.init(project, load_libs=True),
+    ):
+        pass
+
+
+@pytest.mark.usefixtures("mock_no_session", "global_environment")
+def test_init_load_libs_tolerates_failing_optional_library(tmp_path, monkeypatch):
+    """Check that a failure to load an optional library is not an error"""
+
+    def fail_ogsf(install_path):
+        library = Path(install_path) / "lib" / "libgrass_ogsf.so"
+        return [(library, OSError("mock failure"))]
+
+    monkeypatch.setattr(grass.app.runtime, "preload_dynamic_libraries", fail_ogsf)
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, load_libs=True):
+        pass
 
 
 def test_preload_reports_libraries_which_cannot_be_loaded(tmp_path):
