@@ -217,8 +217,17 @@ def setup_runtime_env(gisbase=None, *, env=None, load_libs=False):
     (see :func:`grass.app.runtime.preload_dynamic_libraries`).
     RuntimeError is raised when the core library (libgrass_gis) cannot be
     loaded. A failing optional library only makes importing the
-    corresponding :mod:`grass.lib` module fail.
+    corresponding :mod:`grass.lib` module fail. ValueError is raised when
+    _env_ is provided together with _load_libs_, because the libraries
+    read the session from the process environment.
     """
+    if load_libs and env is not None and env is not os.environ:
+        msg = (
+            "load_libs is only allowed for the global environment:"
+            " the C libraries read the session from the process environment,"
+            " so they cannot see a session set up in a custom env"
+        )
+        raise ValueError(msg)
     from grass.app.runtime import (
         get_grass_config_dir,
         preload_dynamic_libraries,
@@ -334,6 +343,7 @@ def init(
     which sessions using only tools don't need. The C libraries read the
     session from the environment of the process, so :mod:`grass.lib` works
     only in a session set up in the global environment, i.e., without *env*.
+    The combination of *load_libs* and *env* raises ValueError.
 
     When the path or specified mapset does not exist, ValueError is raised.
 

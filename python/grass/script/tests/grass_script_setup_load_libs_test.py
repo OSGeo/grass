@@ -113,7 +113,7 @@ def test_grass_lib_usable_with_load_libs(tmp_path):
     assert run_in_clean_environment(code, tmp_path=tmp_path)["raster_opened"]
 
 
-@pytest.mark.usefixtures("mock_no_session")
+@pytest.mark.usefixtures("mock_no_session", "global_environment")
 def test_libraries_not_loaded_by_default(tmp_path, monkeypatch):
     """Check that a session does not load the C libraries unless asked to"""
     calls = []
@@ -129,9 +129,21 @@ def test_libraries_not_loaded_by_default(tmp_path, monkeypatch):
     with gs.setup.init(project, env=os.environ.copy()):
         pass
     assert not calls
-    with gs.setup.init(project, env=os.environ.copy(), load_libs=True):
+    with gs.setup.init(project, load_libs=True):
         pass
     assert calls
+
+
+@pytest.mark.usefixtures("mock_no_session")
+def test_init_load_libs_with_custom_env_raises(tmp_path):
+    """Check that load_libs combined with a custom environment is refused"""
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with (
+        pytest.raises(ValueError, match="global environment"),
+        gs.setup.init(project, env=os.environ.copy(), load_libs=True),
+    ):
+        pass
 
 
 @pytest.mark.usefixtures("mock_no_session", "global_environment")
