@@ -1804,6 +1804,7 @@ class DataCatalogTree(TreeView):
                         continue
 
                 def callback(
+                    env2=env2,
                     gisrc2=gisrc2,
                     gisrc=gisrc,
                     cLayer=self.copy_layer[i],
