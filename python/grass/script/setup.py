@@ -313,10 +313,15 @@ def init(
     standard main executable grass. No GRASS modules shall be called before
     call of this function but any module or user script can be called
     afterwards because a GRASS session has been set up. GRASS Python
-    libraries are usable as well in general but the ones using C
-    libraries through ``ctypes`` are not (which is caused by library
-    path not being updated for the current process which is a common
-    operating system limitation).
+    libraries are usable as well, including the ones using C libraries
+    through ``ctypes`` (:mod:`grass.lib`): the library a :mod:`grass.lib`
+    module wraps is found through the variables set by this function, and
+    the GRASS libraries it depends on through the search path recorded in
+    the libraries at build time, which works for an installation at the
+    prefix it was configured for. For an installation moved elsewhere, the
+    dynamic library search path variable must be set before the process
+    starts, because the operating system does not apply a modified
+    variable to an already running process.
 
     When the path or specified mapset does not exist, ValueError is raised.
 
