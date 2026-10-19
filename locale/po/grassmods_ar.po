@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/grassmods/ar/>\n"
@@ -26357,7 +26357,7 @@ msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
 #, fuzzy
-msgid "Missing output projection parameters "
+msgid "Missing output projection parameters"
 msgstr "خريطة الإتجاه المخرجة"
 
 #, fuzzy
@@ -26603,8 +26603,9 @@ msgstr ""
 msgid "Unable to import data"
 msgstr "<%s> لم يمكن فتح"
 
-msgid "Done: generated map "
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Done: generated map {map_name}"
+msgstr "قيمة الحافة الغربية"
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
 msgstr ""
@@ -26670,7 +26671,7 @@ msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
 #, fuzzy, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr "لم يمكن اختيار البيانات من الجدول"
 
 #, fuzzy, python-format
@@ -26814,9 +26815,9 @@ msgstr ""
 msgid "Driver %s does not supports Create() method"
 msgstr "غير موجودة <%s> الخريطة الراسترية "
 
-#, fuzzy, python-format
-msgid "Unable to open %s "
-msgstr "[%s]لم يتم فتح ملف الخلية ل "
+#, fuzzy, python-brace-format
+msgid "Unable to open {filename}"
+msgstr "<%s> لم يمكن فتح"
 
 msgid "Region is out of server data extend."
 msgstr ""
@@ -26999,33 +27000,53 @@ msgstr "نوع العمود غير مدعم"
 msgid "xy-locations are not supported"
 msgstr "نوع العمود غير مدعم"
 
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr "ترشيح كل الخلايا بدون قيمة"
+
+#, fuzzy
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr "ترشيح كل الخلايا بدون قيمة"
+
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr "ترشيح كل الخلايا بدون قيمة"
+
 #, fuzzy
 msgid "Generating a clumped raster file"
 msgstr "%-5d dig_att قراءة ملف...\n"
 
-#, fuzzy
-msgid " including diagonal neighbors"
-msgstr "ترشيح كل الخلايا بدون قيمة"
-
-#, python-format
-msgid " with minimum %s pixels"
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, fuzzy
-msgid "Generating a reclass map with area size"
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
 msgstr "خريطة الراستر االناتجة"
 
-#, python-format
-msgid " larger than or equal to %f hectares..."
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
 msgstr ""
 
-#, python-format
-msgid " smaller than or equal to %f hectares..."
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "خريطة الراستر االناتجة"
+
+#, python-brace-format
+msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr ""
 
 #, fuzzy
-msgid "No areas of size "
-msgstr "المساحة\n"
+msgid "Generating a reclass map without area size limits..."
+msgstr "خريطة الراستر االناتجة"
+
+#, fuzzy
+msgid "No areas found"
+msgstr "إدخال خريطة راسترية بينرية "
 
 #, fuzzy, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
@@ -27675,12 +27696,8 @@ msgstr "إدخال خريطة راسترية بينرية "
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr ""
-
-#, fuzzy
-msgid "Use -c flag to update values in this column."
+#, fuzzy, python-brace-format
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr "[%s]لم يتم فتح ملف الخلية ل "
 
 #, python-format
@@ -27806,8 +27823,8 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr "[%s]لم يتم فتح ملف الخلية ل "
 
-#, fuzzy, python-format
-msgid "Unable to add column %s to vector map <%s> "
+#, fuzzy, python-brace-format
+msgid "Unable to add column {column} to vector map <{vector}>"
 msgstr "[%s]لم يتم فتح ملف الخلية ل "
 
 #, fuzzy, python-format
@@ -37848,6 +37865,18 @@ msgstr ""
 msgid "Image file"
 msgstr "ملف المدخل"
 
+#, fuzzy, python-format
+#~ msgid "Unable to open %s "
+#~ msgstr "[%s]لم يتم فتح ملف الخلية ل "
+
+#, fuzzy
+#~ msgid " including diagonal neighbors"
+#~ msgstr "ترشيح كل الخلايا بدون قيمة"
+
+#, fuzzy
+#~ msgid "No areas of size "
+#~ msgstr "المساحة\n"
+
 #, fuzzy
 #~ msgid "east"
 #~ msgstr "اسم الخريطة الراسترية"
@@ -37875,10 +37904,6 @@ msgstr "ملف المدخل"
 #, fuzzy, python-format
 #~ msgid "Temporary raster map <%s> exists"
 #~ msgstr "dig_att لم يمكن العثور على ملف"
-
-#, fuzzy
-#~ msgid "Generating a clumped raster file including diagonal neighbors..."
-#~ msgstr "ترشيح كل الخلايا بدون قيمة"
 
 #, fuzzy, python-format
 #~ msgid "Generating output raster map <%s>..."
@@ -38718,10 +38743,6 @@ msgstr "ملف المدخل"
 #, fuzzy
 #~ msgid "D niche similarity"
 #~ msgstr "%s:منطقة غير صالحة"
-
-#, fuzzy
-#~ msgid "DPI for the generated page"
-#~ msgstr "قيمة الحافة الغربية"
 
 #, fuzzy
 #~ msgid "DXF conversion"

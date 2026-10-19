@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/pt_BR/>\n"
@@ -4171,9 +4171,18 @@ msgstr "Erro ao ler dados raster para linha %d de <%s>: %s"
 msgid "Error reading raster data for row %d of <%s>"
 msgstr "Erro ao ler dados raster para linha %d de <%s>"
 
+#, fuzzy, c-format
+#| msgid "Error reading raster data for row %d of <%s>"
+msgid "Invalid byte count in raster data for row %d of <%s>"
+msgstr "Erro ao ler dados raster para linha %d de <%s>"
+
 #, c-format
 msgid "Error uncompressing raster data for row %d of <%s>"
 msgstr "Erro ao descompactar dados raster para linha %d de <%s>"
+
+#, c-format
+msgid "Raster row for <%s> is larger than expected"
+msgstr ""
 
 #, c-format
 msgid "Error reading raster data via GDAL for row %d of <%s>"

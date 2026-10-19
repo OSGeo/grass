@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -202,7 +202,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/gselect.py:1648
 #: ../gui/wxpython/gui_core/gselect.py:1649
 #: ../gui/wxpython/gui_core/widgets.py:1460
-#: ../gui/wxpython/vnet/dialogs.py:1677
+#: ../gui/wxpython/vnet/dialogs.py:1675
 msgid "Name:"
 msgstr ""
 
@@ -7594,7 +7594,7 @@ msgstr ""
 msgid "Selection style:"
 msgstr ""
 
-#: ../gui/wxpython/iscatt/dialogs.py:452
+#: ../gui/wxpython/iscatt/dialogs.py:450
 msgid "Ellipses settings:"
 msgstr ""
 
@@ -19302,19 +19302,19 @@ msgstr ""
 msgid "Maximum number of results in history:"
 msgstr ""
 
-#: ../gui/wxpython/vnet/dialogs.py:1505
+#: ../gui/wxpython/vnet/dialogs.py:1503
 msgid "New vector map with turntable"
 msgstr ""
 
-#: ../gui/wxpython/vnet/dialogs.py:1658
+#: ../gui/wxpython/vnet/dialogs.py:1656
 msgid "Save analysis result"
 msgstr ""
 
-#: ../gui/wxpython/vnet/dialogs.py:1771
+#: ../gui/wxpython/vnet/dialogs.py:1769
 msgid "Edit intersection turns costs"
 msgstr ""
 
-#: ../gui/wxpython/vnet/dialogs.py:1811
+#: ../gui/wxpython/vnet/dialogs.py:1809
 msgid "Define Global Turn Costs"
 msgstr ""
 

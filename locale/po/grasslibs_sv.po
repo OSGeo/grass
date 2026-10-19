@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2026-10-05 10:33+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/sv/>\n"
@@ -4120,9 +4120,18 @@ msgstr "Fel vid läsning av rasterdata för rad %d i <%s>: %s"
 msgid "Error reading raster data for row %d of <%s>"
 msgstr "Fel vid läsning av rasterdata för rad %d av <%s>"
 
+#, fuzzy, c-format
+#| msgid "Error reading raster data for row %d of <%s>"
+msgid "Invalid byte count in raster data for row %d of <%s>"
+msgstr "Fel vid läsning av rasterdata för rad %d av <%s>"
+
 #, c-format
 msgid "Error uncompressing raster data for row %d of <%s>"
 msgstr "Fel vid avkomprimering av rasterdata för rad %d i <%s>"
+
+#, c-format
+msgid "Raster row for <%s> is larger than expected"
+msgstr ""
 
 #, c-format
 msgid "Error reading raster data via GDAL for row %d of <%s>"

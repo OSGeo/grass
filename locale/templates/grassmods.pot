@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +50,7 @@ msgstr ""
 #: ../doc/examples/vector/v.example/main.c:139
 #: ../scripts/db.univar/db.univar.py:120 ../vector/v.db.connect/main.c:347
 #: ../vector/v.extract/main.c:230 ../vector/v.in.ascii/main.c:444
-#: ../vector/v.info/print.c:236 ../vector/v.out.ogr/main.c:715
+#: ../vector/v.info/print.c:236 ../vector/v.out.ogr/main.c:716
 #: ../vector/v.out.postgis/table.c:41 ../vector/v.out.svg/main.c:162
 #: ../vector/v.out.vtk/writeVTK.c:648 ../vector/v.patch/main.c:166
 #: ../vector/v.patch/main.c:212 ../vector/v.profile/main.c:478
@@ -1238,7 +1238,7 @@ msgstr ""
 msgid "Unknown type"
 msgstr ""
 
-#: ../db/drivers/ogr/execute.c:62 ../vector/v.out.ogr/main.c:663
+#: ../db/drivers/ogr/execute.c:62 ../vector/v.out.ogr/main.c:664
 #, c-format
 msgid "OGR layer <%s> not found"
 msgstr ""
@@ -1571,8 +1571,8 @@ msgstr ""
 msgid "Error in sqlite3_exec():"
 msgstr ""
 
-#: ../display/d.barscale/draw_scale.c:216 ../display/d.barscale/main.c:247
-#: ../display/d.barscale/main.c:264
+#: ../display/d.barscale/draw_scale.c:216 ../display/d.barscale/main.c:250
+#: ../display/d.barscale/main.c:267
 msgid "Programmer error"
 msgstr ""
 
@@ -1639,9 +1639,9 @@ msgstr ""
 msgid "Draw the scale bar without text"
 msgstr ""
 
-#: ../display/d.barscale/main.c:70 ../display/d.barscale/main.c:131
-#: ../display/d.barscale/main.c:156 ../display/d.barscale/main.c:171
-#: ../display/d.barscale/main.c:180 ../display/d.barscale/main.c:195
+#: ../display/d.barscale/main.c:70 ../display/d.barscale/main.c:134
+#: ../display/d.barscale/main.c:159 ../display/d.barscale/main.c:174
+#: ../display/d.barscale/main.c:183 ../display/d.barscale/main.c:198
 #: ../display/d.northarrow/main.c:110 ../display/d.northarrow/main.c:138
 #: ../display/d.northarrow/main.c:147 ../display/d.northarrow/main.c:159
 #: ../display/d.northarrow/main.c:167 ../display/d.northarrow/main.c:172
@@ -1656,7 +1656,7 @@ msgid "Display north-arrow symbol."
 msgstr ""
 
 #: ../display/d.barscale/main.c:75 ../display/d.barscale/main.c:85
-#: ../display/d.barscale/main.c:139 ../display/d.northarrow/main.c:85
+#: ../display/d.barscale/main.c:142 ../display/d.northarrow/main.c:85
 msgid "Style"
 msgstr ""
 
@@ -1720,27 +1720,31 @@ msgstr ""
 msgid "(0,0) is lower-left of the display frame"
 msgstr ""
 
-#: ../display/d.barscale/main.c:120
-msgid "Length of barscale in map units"
+#: ../display/d.barscale/main.c:121
+msgid "Length of barscale in units set by the units option"
 msgstr ""
 
-#: ../display/d.barscale/main.c:124
+#: ../display/d.barscale/main.c:123
+msgid "Map units if units is not given; 0 picks a length automatically"
+msgstr ""
+
+#: ../display/d.barscale/main.c:127
 msgid "Barscale units to display"
 msgstr ""
 
-#: ../display/d.barscale/main.c:129
+#: ../display/d.barscale/main.c:132
 msgid "Custom label of unit"
 msgstr ""
 
-#: ../display/d.barscale/main.c:138
+#: ../display/d.barscale/main.c:141
 msgid "Number of segments"
 msgstr ""
 
-#: ../display/d.barscale/main.c:142
+#: ../display/d.barscale/main.c:145
 msgid "Bar scale and text color"
 msgstr ""
 
-#: ../display/d.barscale/main.c:143 ../display/d.barscale/main.c:149
+#: ../display/d.barscale/main.c:146 ../display/d.barscale/main.c:152
 #: ../display/d.northarrow/main.c:114 ../display/d.northarrow/main.c:119
 #: ../display/d.northarrow/main.c:125 ../display/d.rast.arrow/main.c:114
 #: ../display/d.rast.arrow/main.c:120 ../display/d.rast.arrow/main.c:126
@@ -1761,37 +1765,37 @@ msgstr ""
 msgid "Colors"
 msgstr ""
 
-#: ../display/d.barscale/main.c:148
+#: ../display/d.barscale/main.c:151
 msgid "Background color (drawn behind the bar)"
 msgstr ""
 
-#: ../display/d.barscale/main.c:153
+#: ../display/d.barscale/main.c:156
 msgid "Text position"
 msgstr ""
 
-#: ../display/d.barscale/main.c:164
+#: ../display/d.barscale/main.c:167
 msgid "Scale factor to change bar width"
 msgstr ""
 
-#: ../display/d.barscale/main.c:170 ../display/d.legend.vect/main.c:108
+#: ../display/d.barscale/main.c:173 ../display/d.legend.vect/main.c:108
 #: ../display/d.legend/main.c:204 ../display/d.northarrow/main.c:137
 #: ../display/d.rast.num/main.c:115 ../display/d.text/main.c:212
 #: ../display/d.vect/main.c:264 ../vector/v.label/main.c:118
 msgid "Font name"
 msgstr ""
 
-#: ../display/d.barscale/main.c:179 ../display/d.legend.vect/main.c:116
+#: ../display/d.barscale/main.c:182 ../display/d.legend.vect/main.c:116
 #: ../display/d.legend/main.c:212 ../display/d.northarrow/main.c:146
 msgid "Font size"
 msgstr ""
 
-#: ../display/d.barscale/main.c:185 ../display/d.legend/main.c:219
+#: ../display/d.barscale/main.c:188 ../display/d.legend/main.c:219
 #: ../display/d.northarrow/main.c:152 ../display/d.rast.num/main.c:121
 #: ../display/d.text/main.c:228
 msgid "Path to font file"
 msgstr ""
 
-#: ../display/d.barscale/main.c:187 ../display/d.legend.vect/main.c:109
+#: ../display/d.barscale/main.c:190 ../display/d.legend.vect/main.c:109
 #: ../display/d.legend.vect/main.c:118 ../display/d.legend.vect/main.c:125
 #: ../display/d.legend.vect/main.c:141 ../display/d.legend.vect/main.c:150
 #: ../display/d.legend.vect/main.c:156 ../display/d.legend/main.c:198
@@ -1805,13 +1809,13 @@ msgstr ""
 msgid "Font settings"
 msgstr ""
 
-#: ../display/d.barscale/main.c:194 ../display/d.legend/main.c:228
+#: ../display/d.barscale/main.c:197 ../display/d.legend/main.c:228
 #: ../display/d.northarrow/main.c:166 ../display/d.rast.num/main.c:130
 #: ../display/d.text/main.c:237
 msgid "Text encoding (only applicable to TrueType fonts)"
 msgstr ""
 
-#: ../display/d.barscale/main.c:204
+#: ../display/d.barscale/main.c:207
 #, c-format
 msgid "%s does not work with a latitude-longitude location"
 msgstr ""
@@ -4567,7 +4571,7 @@ msgstr ""
 #: ../vector/v.net.components/main.c:174 ../vector/v.net.distance/main.c:276
 #: ../vector/v.net.flow/main.c:163 ../vector/v.net.iso/main.c:368
 #: ../vector/v.net.path/path.c:95 ../vector/v.net.timetable/main.c:85
-#: ../vector/v.normal/main.c:117 ../vector/v.out.ogr/main.c:710
+#: ../vector/v.normal/main.c:117 ../vector/v.out.ogr/main.c:711
 #: ../vector/v.out.postgis/table.c:34 ../vector/v.out.svg/main.c:156
 #: ../vector/v.out.vtk/writeVTK.c:642 ../vector/v.overlay/main.c:260
 #: ../vector/v.overlay/main.c:444 ../vector/v.patch/main.c:158
@@ -23454,7 +23458,7 @@ msgstr ""
 msgid "List input and output maps"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:177 ../raster/r.sim/simlib/random.c:33
+#: ../raster/r.mapcalc/main.c:177 ../raster/r.sim/simlib/random.c:30
 #, c-format
 msgid "%s= and -%c are mutually exclusive"
 msgstr ""
@@ -27666,22 +27670,17 @@ msgstr ""
 msgid "FP raster map <%s> not found"
 msgstr ""
 
-#: ../raster/r.sim/simlib/random.c:36
+#: ../raster/r.sim/simlib/random.c:33
 #, c-format
 msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
 msgstr ""
 
-#: ../raster/r.sim/simlib/random.c:47
-#, c-format
-msgid "Invalid random seed <%s>"
-msgstr ""
-
-#: ../raster/r.sim/simlib/random.c:49
+#: ../raster/r.sim/simlib/random.c:39
 #, c-format
 msgid "Read random seed from %s option: %<PRId64>"
 msgstr ""
 
-#: ../raster/r.sim/simlib/random.c:54
+#: ../raster/r.sim/simlib/random.c:44
 #, c-format
 msgid "Generated random seed: %<PRId64>"
 msgstr ""
@@ -43906,127 +43905,127 @@ msgstr ""
 msgid "Unable to open OGR data source '%s'"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:566
+#: ../vector/v.out.ogr/main.c:567
 #, c-format
 msgid "Layer <%s> already exists in OGR data source '%s'"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:571
+#: ../vector/v.out.ogr/main.c:572
 #, c-format
 msgid "OGR layer <%s> already exists and will be overwritten"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:579
+#: ../vector/v.out.ogr/main.c:580
 #, c-format
 msgid "OGR layer <%s> doesn't exists, creating new OGR layer instead"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:609
+#: ../vector/v.out.ogr/main.c:610
 msgid "Overriding existing user-defined 'SHPT=' LCO."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:624
+#: ../vector/v.out.ogr/main.c:625
 #, c-format
 msgid "Vector map <%s> is 3D. Use format specific layer creation options SHPT (parameter 'lco') to export in 3D rather than 2D (default)"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:637
+#: ../vector/v.out.ogr/main.c:638
 #, c-format
 msgid "Vector map <%s> is 3D. Use format specific layer creation options DIM (parameter 'lco') to export in 3D rather than 2D (default)."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:645
+#: ../vector/v.out.ogr/main.c:646
 #, c-format
 msgid "Vector map <%s> is 3D. Use format specific layer creation options (parameter 'lco') to export in 3D rather than 2D (default)."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:665
+#: ../vector/v.out.ogr/main.c:666
 msgid "Unable to create OGR layer"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:678
+#: ../vector/v.out.ogr/main.c:679
 msgid "No attribute table found -> using only category numbers as attributes"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:683
+#: ../vector/v.out.ogr/main.c:684
 msgid "Exporting 'cat' anyway, as it is the only attribute table field"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:693 ../vector/v.out.ogr/main.c:767
+#: ../vector/v.out.ogr/main.c:694 ../vector/v.out.ogr/main.c:768
 #, c-format
 msgid "New attribute column <%s> added to the table"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:700 ../vector/v.out.ogr/main.c:775
+#: ../vector/v.out.ogr/main.c:701 ../vector/v.out.ogr/main.c:776
 #: ../vector/v.to.db/main.c:299
 #, c-format
 msgid "Unable to create column <%s>"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:781
+#: ../vector/v.out.ogr/main.c:782
 #, c-format
 msgid "Key column <%s> not found"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:791
+#: ../vector/v.out.ogr/main.c:792
 msgid "Unable to start OGR transaction"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:812
+#: ../vector/v.out.ogr/main.c:813
 #, c-format
 msgid "Exporting %d feature..."
 msgid_plural "Exporting %d features..."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.out.ogr/main.c:834
+#: ../vector/v.out.ogr/main.c:835
 #, c-format
 msgid "Exporting %d area (may take some time)..."
 msgid_plural "Exporting %d areas (may take some time)..."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.out.ogr/main.c:862
+#: ../vector/v.out.ogr/main.c:863
 #, c-format
 msgid "Exporting %d volume..."
 msgid_plural "Exporting %d volumes..."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.out.ogr/main.c:865
+#: ../vector/v.out.ogr/main.c:866
 msgid "Export of volumes not implemented yet. Skipping."
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:870
+#: ../vector/v.out.ogr/main.c:871
 msgid "Unable to commit OGR transaction"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:885
+#: ../vector/v.out.ogr/main.c:886
 #, c-format
 msgid "%d feature without attributes was written"
 msgid_plural "%d features without attributes were written"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.out.ogr/main.c:892
+#: ../vector/v.out.ogr/main.c:893
 #, c-format
 msgid "%d feature without category was written"
 msgid_plural "%d features without category were written"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.out.ogr/main.c:897
+#: ../vector/v.out.ogr/main.c:898
 #, c-format
 msgid "%d feature without category was skipped. Features without category are written only when -%c flag is given."
 msgid_plural "%d features without category were skipped. Features without category are written only when -%c flag is given."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../vector/v.out.ogr/main.c:916
+#: ../vector/v.out.ogr/main.c:917
 msgid "Output layer is empty, no features written"
 msgstr ""
 
-#: ../vector/v.out.ogr/main.c:917
+#: ../vector/v.out.ogr/main.c:918
 #, c-format
 msgid "%d feature (%s type) written to <%s> (%s format)."
 msgid_plural "%d features (%s type) written to <%s> (%s format)."
