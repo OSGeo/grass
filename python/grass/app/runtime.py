@@ -269,27 +269,28 @@ def append_left_addon_paths(paths, config_dir, env):
             paths.appendleft(path)
 
 
-def set_executable_paths(install_path, grass_config_dir, env):
-    """Add paths with executables to PATH in _env_
+def prepend_paths(variable_name, paths, env):
+    """Put paths in front of a path list variable in _env_
 
-    Paths already present are not added again, so calling this repeatedly on
-    the same environment does not grow the variable. Paths from another
-    installation are still added in front of the existing ones.
+    Other occurrences of the paths are removed, so the paths take precedence
+    and repeated calls on the same environment do not grow the variable.
     """
+    existing = env.get(variable_name)
+    rest = existing.split(os.pathsep) if existing else []
+    env[variable_name] = os.pathsep.join(
+        paths + [path for path in rest if path not in paths]
+    )
+
+
+def set_executable_paths(install_path, grass_config_dir, env):
+    """Add paths with executables to PATH in _env_"""
     paths = collections.deque()
     # Addons
     append_left_addon_paths(paths, grass_config_dir, env=env)
     # Standard installation
     append_left_main_executable_paths(paths, install_path=install_path)
 
-    existing = env.get("PATH") or ""
-    present = existing.split(os.pathsep) if existing else []
-    paths = [path for path in paths if path not in present]
-    if not paths:
-        return
-    if existing:
-        paths.append(existing)
-    env["PATH"] = os.pathsep.join(paths)
+    prepend_paths("PATH", list(paths), env=env)
 
 
 def set_paths(install_path, grass_config_dir):
@@ -360,12 +361,7 @@ def set_dynamic_library_path(variable_name, install_path, env):
 
 def set_python_path_variable(install_path, env):
     """Set PYTHONPATH to find GRASS Python package in subprocesses"""
-    path = env.get("PYTHONPATH")
-    etcpy = os.path.join(install_path, "etc", "python")
-    if path and etcpy in path.split(os.pathsep):
-        return
-    path = etcpy + os.pathsep + path if path else etcpy
-    env["PYTHONPATH"] = path
+    prepend_paths("PYTHONPATH", [os.path.join(install_path, "etc", "python")], env=env)
 
 
 def set_path_to_python_executable(env):

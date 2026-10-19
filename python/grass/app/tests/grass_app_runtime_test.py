@@ -225,17 +225,31 @@ def test_executable_paths_added_once(tmp_path):
     assert env["PATH"] == after_first
 
 
-def test_executable_paths_of_another_installation_are_added_in_front(tmp_path):
-    """Switching to another installation still puts its paths first"""
+def test_executable_paths_of_previous_installation_are_moved_to_front(tmp_path):
+    """Switching back to an installation puts its paths first again"""
     env = {"PATH": "/usr/bin"}
     first = tmp_path / "first"
     second = tmp_path / "second"
-    set_executable_paths(str(first), str(tmp_path / "config"), env=env)
-    set_executable_paths(str(second), str(tmp_path / "config"), env=env)
+    for install_path in (first, second, first):
+        set_executable_paths(str(install_path), str(tmp_path / "config"), env=env)
+        set_python_path_variable(str(install_path), env=env)
+
+    assert env["PATH"].split(os.pathsep)[0] == str(first / "bin")
+    assert env["PYTHONPATH"].split(os.pathsep) == [
+        str(first / "etc" / "python"),
+        str(second / "etc" / "python"),
+    ]
+
+
+def test_executable_paths_already_present_are_moved_to_front(tmp_path):
+    """A path already in PATH behind other paths is put first"""
+    bin_path = str(tmp_path / "bin")
+    env = {"PATH": os.pathsep.join(["/other/bin", bin_path, "/usr/bin"])}
+    set_executable_paths(str(tmp_path), str(tmp_path / "config"), env=env)
 
     entries = env["PATH"].split(os.pathsep)
-    assert str(second / "bin") in entries
-    assert entries.index(str(second / "bin")) < entries.index(str(first / "bin"))
+    assert entries[0] == bin_path
+    assert entries.count(bin_path) == 1
 
 
 def test_dynamic_library_path_added_once(tmp_path):
