@@ -142,7 +142,5 @@ repos:
           - c
           - c++
           - csv
-          - html
-          - markdown
           - python
           - tex

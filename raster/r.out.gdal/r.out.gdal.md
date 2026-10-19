@@ -108,7 +108,7 @@ to issue an error message describing the problem and exit without
 exporting. However, depending on the data size, data loss tests may take
 some time. For performance reasons, those tests can therefore be skipped
 if both the **-f** flag, the **nodata** option and the **type**
-option are given. Here the assumtion is that the user has made a
+option are given. Here the assumption is that the user has made a
 deliberate choice about those settings and considered the potential risk
 for data loss when forcing the export with the **-f** flag.
 
