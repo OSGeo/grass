@@ -150,7 +150,7 @@ if(NOT WITH_FHS)
         COMMAND
             ${CMAKE_COMMAND} -E copy_if_different
             ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/hook_list_scripts.py
-            ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/hook_escape.py
+            ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/grass_markdown.py
             ${mkdocs_dir}/scripts
         COMMAND
             ${CMAKE_COMMAND} -E copy_if_different
@@ -229,6 +229,7 @@ if(NOT WITH_FHS)
         env
         "SITE_NAME=GRASS ${GRASS_VERSION_NUMBER} Documentation"
         "COPYRIGHT=&copy$<SEMICOLON> 2003-${GRASS_VERSION_DATE} GRASS Development Team, GRASS ${GRASS_VERSION_NUMBER} Documentation"
+        "PYTHONPATH=${mkdocs_dir}/scripts"
     )
     add_custom_target(
         build-mkdocs
