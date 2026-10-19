@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2026-03-05 11:44+0000\n"
 "Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hi/>\n"
@@ -671,14 +671,18 @@ msgstr "रेंडरिंग विफल रही:"
 msgid "Rendering aborted"
 msgstr "रेंडरिंग रद्द कर दी गई"
 
-msgid "Downloading data "
-msgstr "डेटा डाउनलोड हो रहा है "
-
-msgid "Rendering & "
-msgstr "रेंडरिंग "
+#, fuzzy, python-brace-format
+#| msgid "Downloading data..."
+msgid "Rendering & downloading data {layers}..."
+msgstr "डेटा डाउनलोड हो रहा है..।"
 
 msgid "Rendering..."
 msgstr "रेंडरिंग..।"
+
+#, fuzzy, python-brace-format
+#| msgid "Downloading data..."
+msgid "Downloading data {layers}..."
+msgstr "डेटा डाउनलोड हो रहा है..।"
 
 msgid "Trying to recover from default region..."
 msgstr "डिफ़ॉल्ट रीजन से रिकवर करने की कोशिश कर रहा हूँ..।"
@@ -865,8 +869,9 @@ msgstr ""
 "\n"
 "विवरण: %(detail)s"
 
-msgid "Unable to set "
-msgstr "सेट करने में असमर्थ "
+#, python-brace-format
+msgid "Unable to set '{group}:{key}:{subkey}'"
+msgstr ""
 
 #, python-format
 msgid "Unable to parse settings '%s'"
@@ -1715,7 +1720,9 @@ msgstr "विशेषता डेटा - रिकॉर्ड्स को 
 msgid "Table"
 msgstr "मेज़"
 
-msgid " (read-only)"
+#, fuzzy
+#| msgid " (read-only)"
+msgid "Table (read-only)"
 msgstr " (केवल पढ़ने के लिए)"
 
 msgid "SQL Query"
@@ -2300,8 +2307,14 @@ msgid ""
 "10+ points for 3rd order."
 msgstr "चयनित सुधार विधि के लिए अपर्याप्त अंक परिभाषित और सक्रिय (जांचे गए) (क्रम: %d)।\\nपहले क्रम के लिए 3+ अंक,\\nदूसरे क्रम के लिए 6+ अंक, और\\nतीसरे क्रम के लिए 10+ अंक।"
 
-#, python-brace-format
-msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
+#, fuzzy, python-brace-format
+#| msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
+msgid "The raster map {map_name} exists. Do you want to overwrite?"
+msgstr "{map_type} मानचित्र {map_name} मौजूद है। क्या आप अधिलेखित करना चाहते हैं?"
+
+#, fuzzy, python-brace-format
+#| msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
+msgid "The vector map {map_name} exists. Do you want to overwrite?"
 msgstr "{map_type} मानचित्र {map_name} मौजूद है। क्या आप अधिलेखित करना चाहते हैं?"
 
 msgid "Rectifying images, please wait..."
@@ -2562,11 +2575,10 @@ msgstr "GCPs को POINTS फ़ाइल में सहेजें"
 msgid "Reload GCPs from POINTS file"
 msgstr "POINTS फ़ाइल से GCPs पुनः लोड करें"
 
-msgid "Set map canvas for "
+#, fuzzy, python-brace-format
+#| msgid "Set map canvas for "
+msgid "Set map canvas for {zoom_back} / Zoom to map"
 msgstr "के लिए मानचित्र कैनवास सेट करें "
-
-msgid " / Zoom to map"
-msgstr " मानचित्र पर ज़ूम करें"
 
 msgid "Update GCP coordinates"
 msgstr "GCP निर्देशांक अद्यतन करें"
@@ -2806,7 +2818,9 @@ msgstr "आपके मॉडल में मॉड्यूल {task_name} �
 msgid "<not defined>"
 msgstr "<परिभाषित नहीं है>"
 
-msgid "Condition: "
+#, fuzzy, python-brace-format
+#| msgid "Condition: "
+msgid "Condition: {label}"
 msgstr "शर्त: "
 
 msgid "Condition: not defined"
@@ -3403,7 +3417,9 @@ msgstr "फ़ॉन्ट आकार:"
 msgid "Example"
 msgstr "उदाहरण"
 
-msgid "Enter parameters for '"
+#, fuzzy, python-brace-format
+#| msgid "Enter parameters for '"
+msgid "Enter parameters for '{tool}'"
 msgstr "'के लिए पैरामीटर दर्ज करें"
 
 msgid "Close this window without executing the command (Ctrl+Q)"
@@ -3761,11 +3777,15 @@ msgstr "कमांड आउटपुट '%s' में सहेजा गय
 msgid "Not selectable element"
 msgstr "चयन योग्य तत्व नहीं"
 
-msgid "Mapset"
-msgstr "मैपसेट"
+#, fuzzy, python-brace-format
+#| msgid "Mapset: %s"
+msgid "Mapset: {mapset}"
+msgstr "मैपसेट: %s"
 
-msgid "Type: "
-msgstr "प्रकार: "
+#, fuzzy, python-brace-format
+#| msgid "Type of element:"
+msgid "Type: {element_type}"
+msgstr "तत्व का प्रकार:"
 
 #, python-format
 msgid "GSelect: invalid item: %s"
@@ -4152,7 +4172,9 @@ msgstr "फ़ीचर रंग:"
 msgid "Area fill color:"
 msgstr "क्षेत्र भरण रंग (Area fill color):"
 
-msgid "Random colors according to category number "
+#, fuzzy
+#| msgid "Random colors according to category number "
+msgid "Random colors according to category number"
 msgstr "श्रेणी संख्या के अनुसार यादृच्छिक रंग "
 
 msgid "Symbol:"
@@ -4253,6 +4275,9 @@ msgid ""
 "    - You may only write to the current mapset.\n"
 "    - You may only write to mapsets which you own."
 msgstr "↵"
+
+msgid "Mapset"
+msgstr "मैपसेट"
 
 msgid "Owner"
 msgstr "मालिक"
@@ -5026,9 +5051,6 @@ msgstr "पूर्व दर्शन"
 
 msgid "Training"
 msgstr "प्रशिक्षण"
-
-msgid "/ Zoom to map"
-msgstr "/ मानचित्र पर ज़ूम करें"
 
 msgid "std dev"
 msgstr "मानक विचलन"
@@ -6262,7 +6284,9 @@ msgstr "wxGUI वेक्टर डिजिटाइज़र प्रार�
 msgid "Set opacity of <{}>"
 msgstr "<{}> की अपारदर्शिता सेट करें"
 
-msgid "Layer group:"
+#, fuzzy, python-brace-format
+#| msgid "Layer group:"
+msgid "Layer group: {number}"
 msgstr "परत समूह:"
 
 msgid "Click to edit layer settings"
@@ -7133,8 +7157,10 @@ msgstr "माप समाप्त हो गया"
 msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
 msgstr "मापने के लिए माउस के बाएँ बटन से क्लिक करें और खींचें।%sसाफ़ करने के लिए बाएँ बटन से डबल क्लिक करें।"
 
-msgid "Measuring distance"
-msgstr "दूरी नापना"
+#, fuzzy, python-brace-format
+#| msgid "Measuring distance:"
+msgid "Measuring distance ({units}):"
+msgstr "दूरी मापना:"
 
 msgid "Measuring distance:"
 msgstr "दूरी मापना:"
@@ -7254,6 +7280,4389 @@ msgstr "रेखापुंज किंवदंती गुण"
 msgid "Property does not exist: %s"
 msgstr "संपत्ति मौजूद नहीं है: %s"
 
+#, fuzzy
+#| msgid "File"
+msgid "&File"
+msgstr "फ़ाइल"
+
+msgid "New"
+msgstr "नया"
+
+#, fuzzy
+#| msgid "Create new workspace?"
+msgid "Create new workspace"
+msgstr "नया वर्कस्पेस बनाएं?"
+
+#, fuzzy
+#| msgid "Open file"
+msgid "Open"
+msgstr "खुली फाइल"
+
+#, fuzzy
+#| msgid "Load model from file"
+msgid "Load workspace from file"
+msgstr "फ़ाइल से मॉडल लोड करें"
+
+msgid "Save"
+msgstr "बचाना"
+
+#, fuzzy
+#| msgid "&Save as"
+msgid "Save as"
+msgstr "&इस रूप में सहेजें"
+
+#, fuzzy
+#| msgid "Save workspace"
+msgid "Save workspace to file"
+msgstr "कार्यक्षेत्र सहेजें"
+
+#, fuzzy
+#| msgid "Choose workspace file"
+msgid "Close workspace file"
+msgstr "वर्कस्पेस फ़ाइल चुनें"
+
+msgid "Map display"
+msgstr "मानचित्र प्रदर्शन"
+
+#, fuzzy
+#| msgid "Add raster map"
+msgid "Add raster"
+msgstr "रास्टर मानचित्र जोड़ें"
+
+#, fuzzy
+#| msgid "Add raster map layer"
+msgid "Add raster map layer to current display"
+msgstr "रास्टर मानचित्र परत जोड़ें"
+
+#, fuzzy
+#| msgid "Add vector map"
+msgid "Add vector"
+msgstr "वेक्टर मानचित्र जोड़ें"
+
+#, fuzzy
+#| msgid "Add vector map into layer tree"
+msgid "Add vector map layer to current display"
+msgstr "वेक्टर मानचित्र को परत ट्री (layer tree) में जोड़ें"
+
+#, fuzzy
+#| msgid "Add multiple raster or vector map layers (Ctrl+Shift+L)"
+msgid "Add multiple rasters or vectors"
+msgstr "एकाधिक रास्टर या वेक्टर मानचित्र परतें जोड़ें (Ctrl+Shift+L)"
+
+#, fuzzy
+#| msgid "Add multiple raster or vector map layers (Ctrl+Shift+L)"
+msgid "Add multiple raster or vector map layers to current display"
+msgstr "एकाधिक रास्टर या वेक्टर मानचित्र परतें जोड़ें (Ctrl+Shift+L)"
+
+#, fuzzy
+#| msgid "Add RGB map layer"
+msgid "Add RGB raster layer"
+msgstr "RGB मैप परत जोड़ें"
+
+#, fuzzy
+#| msgid "Add 3D raster map layer"
+msgid "Add RGB raster map layer to current display"
+msgstr "3D रास्टर मैप परत जोड़ें"
+
+msgid "Add web service layer"
+msgstr "वेब सेवा परत जोड़ें"
+
+#, fuzzy
+#| msgid "New display"
+msgid "New map display window"
+msgstr "नया प्रदर्शन"
+
+#, fuzzy
+#| msgid "Start new map display"
+msgid "Open new map display window"
+msgstr "नया मानचित्र प्रदर्शन प्रारंभ करें"
+
+#, fuzzy
+#| msgid "Close all Map Displays"
+msgid "Render all map displays"
+msgstr "सभी मैप डिस्प्ले बंद करें"
+
+msgid "Re-render maps in all open map display windows"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename current Map Display"
+msgid "Close current map display window"
+msgstr "वर्तमान मानचित्र प्रदर्शन का नाम बदलें"
+
+#, fuzzy
+#| msgid "Close all Map Displays"
+msgid "Close all open map display windows"
+msgstr "सभी मैप डिस्प्ले बंद करें"
+
+#, fuzzy
+#| msgid "Select another import option"
+msgid "Simplified raster import with reprojection"
+msgstr "अन्य इम्पोर्ट विकल्प चुनें"
+
+msgid "Imports raster data into a GRASS raster map using GDAL library."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export common formats"
+msgid "Import of common raster formats"
+msgstr "सामान्य प्रारूप निर्यात करें"
+
+msgid "ASCII x,y,z point import and gridding"
+msgstr ""
+
+msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
+msgstr ""
+
+msgid "ASCII grid import"
+msgstr ""
+
+msgid "Converts a GRASS ASCII raster file to binary raster map."
+msgstr ""
+
+msgid "ASCII polygons, lines, and point import"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create raster map from x,y,z data  [r.in.xyz]"
+msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgstr "x,y,z डेटा से रास्टर मैप बनाएं [r.in.xyz]"
+
+msgid "Raw binary array import"
+msgstr ""
+
+msgid "Import a binary raster file into a GRASS raster map layer."
+msgstr ""
+
+msgid "GRIDATB.FOR import"
+msgstr ""
+
+msgid "Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map."
+msgstr ""
+
+msgid "Matlab 2D array import"
+msgstr ""
+
+msgid "Imports a binary MAT-File(v4) to a GRASS raster."
+msgstr ""
+
+msgid "PNG import"
+msgstr ""
+
+msgid "Imports non-georeferenced PNG format image."
+msgstr ""
+
+msgid "SPOT NDVI import"
+msgstr ""
+
+msgid "Imports SPOT VGT NDVI data into a raster map."
+msgstr ""
+
+msgid "SRTM HGT import"
+msgstr ""
+
+msgid "Imports SRTM HGT files into raster map."
+msgstr ""
+
+msgid "Terra ASTER HDF import"
+msgstr ""
+
+msgid "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp."
+msgstr ""
+
+msgid "LAS LiDAR points import"
+msgstr ""
+
+msgid "Point cloud (LAS LiDAR) import"
+msgstr ""
+
+msgid "WMS/WMTS import"
+msgstr ""
+
+msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
+msgstr ""
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unpack raster map"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Select mapset in GRASS project"
+msgid "Reproject raster map from different GRASS project"
+msgstr "GRASS प्रोजेक्ट में मैपसेट का चयन करें"
+
+msgid "Re-projects a raster map from given project to the current project."
+msgstr ""
+
+msgid "Simplified vector import with reprojection"
+msgstr ""
+
+msgid "Imports vector data into a GRASS vector map using OGR library."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export common formats"
+msgid "Import of common vector formats"
+msgstr "सामान्य प्रारूप निर्यात करें"
+
+msgid "ASCII points or GRASS ASCII format"
+msgstr ""
+
+msgid "Creates a vector map from an ASCII points file or ASCII vector file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Show vector lines"
+msgid "ASCII points as a vector lines"
+msgstr "सदिश रेखाएँ दिखाएँ"
+
+msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
+msgstr ""
+
+msgid "DXF import"
+msgstr ""
+
+msgid "Converts files in DXF format to GRASS vector map format."
+msgstr ""
+
+#, fuzzy
+#| msgid "SWF"
+msgid "WFS"
+msgstr "SWF"
+
+#, fuzzy
+#| msgid "Import data from WMS server"
+msgid "Imports GetFeature from a WFS server."
+msgstr "WMS सर्वर से डेटा आयात करें"
+
+msgid "ESRI e00 import"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector map"
+msgid "Imports E00 file into a vector map."
+msgstr "वेक्टर मानचित्र आयात करें"
+
+#, fuzzy
+#| msgid "Rename map"
+msgid "Geonames import"
+msgstr "मानचित्र का नाम बदलें"
+
+msgid "Imports geonames.org country files into a vector points map."
+msgstr ""
+
+msgid "Matlab array or Mapgen format import"
+msgstr ""
+
+msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage vector maps"
+msgid "Unpack vector map"
+msgstr "वेक्टर मानचित्र प्रबंधित करें"
+
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Select mapset in GRASS project"
+msgid "Reproject vector map from different GRASS project"
+msgstr "GRASS प्रोजेक्ट में मैपसेट का चयन करें"
+
+msgid "Re-projects a vector map from one project to the current project."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Import 3D raster data"
+msgstr "रास्टर डेटा इम्पोर्ट करें"
+
+msgid "ASCII 3D import"
+msgstr ""
+
+msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
+msgstr ""
+
+msgid "Raw binary array 3D import"
+msgstr ""
+
+msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgstr ""
+
+msgid "Vis5D import"
+msgstr ""
+
+msgid "Import 3-dimensional Vis5D files."
+msgstr ""
+
+msgid "LiDAR 3D import"
+msgstr ""
+
+msgid "XYZ to 3D raster series"
+msgstr ""
+
+msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export attribute table"
+msgid "Import database table"
+msgstr "निर्यात विशेषता तालिका"
+
+#, fuzzy
+#| msgid "Export common formats"
+msgid "Common import formats"
+msgstr "सामान्य प्रारूप निर्यात करें"
+
+#, fuzzy
+#| msgid "Export attribute table"
+msgid "Imports attribute tables in various formats."
+msgstr "निर्यात विशेषता तालिका"
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Export raster map"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+#, fuzzy
+#| msgid "Export common formats"
+msgid "Common export formats"
+msgstr "सामान्य प्रारूप निर्यात करें"
+
+msgid "Exports GRASS raster maps into GDAL supported formats."
+msgstr ""
+
+msgid "ASCII grid export"
+msgstr ""
+
+msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgstr ""
+
+msgid "ASCII x,y,z points export"
+msgstr ""
+
+msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
+msgstr ""
+
+msgid "GRIDATB.FOR export"
+msgstr ""
+
+msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
+msgstr ""
+
+msgid "Matlab 2D array export"
+msgstr ""
+
+msgid "Exports a GRASS raster to a binary MAT-File."
+msgstr ""
+
+msgid "Raw binary array export"
+msgstr ""
+
+msgid "Exports a GRASS raster to a binary array."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export"
+msgid "MPEG-1 export"
+msgstr "निर्यात"
+
+#, fuzzy
+#| msgid "Select raster maps to profile"
+msgid "Converts raster map series to MPEG movie."
+msgstr "प्रोफ़ाइल के लिए रेखापुंज मानचित्र चुनें"
+
+#, fuzzy
+#| msgid "Export"
+msgid "PNG export"
+msgstr "निर्यात"
+
+msgid "Export a GRASS raster map as a non-georeferenced PNG image."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export"
+msgid "PPM export"
+msgstr "निर्यात"
+
+msgid "Converts a GRASS raster map to a PPM image file."
+msgstr ""
+
+msgid "PPM from RGB export"
+msgstr ""
+
+msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
+msgstr ""
+
+msgid "POV-Ray export"
+msgstr ""
+
+msgid "Converts a raster map layer into a height-field file for POV-Ray."
+msgstr ""
+
+msgid "VRML export"
+msgstr ""
+
+msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export"
+msgid "VTK export"
+msgstr "निर्यात"
+
+msgid "Converts raster maps into the VTK-ASCII format."
+msgstr ""
+
+#, fuzzy
+#| msgid "Save raster map"
+msgid "Pack raster map"
+msgstr "रेखापुंज मानचित्र सहेजें"
+
+msgid "Exports a raster map as GRASS specific archive file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector map"
+msgid "Export vector map"
+msgstr "वेक्टर मानचित्र आयात करें"
+
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
+msgstr ""
+
+msgid "ASCII points or GRASS ASCII vector export"
+msgstr ""
+
+msgid "Exports a vector map to a GRASS ASCII vector representation. By default only features with category are exported. To export all features use 'layer=-1'."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export"
+msgid "DXF export"
+msgstr "निर्यात"
+
+#, fuzzy
+#| msgid "Export common formats"
+msgid "Exports vector map to DXF file format."
+msgstr "सामान्य प्रारूप निर्यात करें"
+
+msgid "PostGIS export"
+msgstr ""
+
+msgid "Exports a vector map layer to PostGIS feature table."
+msgstr ""
+
+msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export"
+msgid "SVG export"
+msgstr "निर्यात"
+
+#, fuzzy
+#| msgid "Export history of executed commands to a file"
+msgid "Exports a vector map to SVG file."
+msgstr "निष्पादित आदेशों का इतिहास किसी फ़ाइल में निर्यात करें"
+
+msgid "Converts a vector map to VTK ASCII output."
+msgstr ""
+
+#, fuzzy
+#| msgid "Background vector map"
+msgid "Pack vector map"
+msgstr "पृष्ठभूमि वेक्टर मानचित्र"
+
+msgid "Exports a vector map as GRASS specific archive file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export common formats"
+msgid "Export to LiDAR format"
+msgstr "सामान्य प्रारूप निर्यात करें"
+
+#, fuzzy
+#| msgid "3D raster maps"
+msgid "Export 3D raster maps"
+msgstr "3D रास्टर मैप्स"
+
+msgid "ASCII 3D export"
+msgstr ""
+
+msgid "Converts a 3D raster map layer into a ASCII text file."
+msgstr ""
+
+msgid "Raw binary array 3D export"
+msgstr ""
+
+msgid "Exports a GRASS 3D raster map to a binary array."
+msgstr ""
+
+msgid "Vis5D export"
+msgstr ""
+
+msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr ""
+
+msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgstr ""
+
+msgid "NetCDF export"
+msgstr ""
+
+msgid "Export a 3D raster map as netCDF file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export attribute table"
+msgid "Export database table"
+msgstr "निर्यात विशेषता तालिका"
+
+#, fuzzy
+#| msgid "Export attribute table"
+msgid "Exports attribute tables into various formats."
+msgstr "निर्यात विशेषता तालिका"
+
+msgid "Link external raster data"
+msgstr "बाह्य रेखापुंज डेटा लिंक करें"
+
+msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
+msgstr ""
+
+msgid "Link external vector data"
+msgstr "बाहरी वेक्टर डेटा लिंक करें"
+
+msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Define output format for raster data"
+msgid "Output format for raster data"
+msgstr "रास्टर डेटा के लिए आउटपुट फ़ॉर्मेट परिभाषित करें"
+
+msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
+msgstr ""
+
+#, fuzzy
+#| msgid "Define output format for vector data"
+msgid "Output format for vector data"
+msgstr "वेक्टर डेटा के लिए आउटपुट फ़ॉर्मेट परिभाषित करें"
+
+msgid "Defines vector output format utilizing OGR library."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage vector maps"
+msgid "Manage maps"
+msgstr "वेक्टर मानचित्र प्रबंधित करें"
+
+msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
+msgstr ""
+
+#, fuzzy
+#| msgid "GCP List"
+msgid "List"
+msgstr "जीसीपी सूची"
+
+msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
+msgstr ""
+
+#, fuzzy
+#| msgid "Enter name for the new %s in the current mapset:"
+msgid "Renames data base element files in the user's current mapset."
+msgstr "वर्तमान मैपसेट में नए %s के लिए नाम दर्ज करें:"
+
+msgid "Delete"
+msgstr "हटाएं"
+
+msgid "Removes data base element files from the user's current mapset using the search pattern."
+msgstr ""
+
+#, fuzzy
+#| msgid "Downloaded project is not valid"
+msgid "Download project from web"
+msgstr "डाउनलोड किया गया प्रोजेक्ट मान्य नहीं है"
+
+msgid "Download GRASS project from the web Get GRASS project from an URL or file path"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add, edit or remove animations"
+msgid "Rebuild or remove all addons"
+msgstr "एनिमेशन जोड़ें, संपादित करें या हटाएं"
+
+msgid "Rebuilds or removes all locally installed GRASS Addons extensions. By default only extensions built against different GIS Library are rebuilt."
+msgstr ""
+
+#, fuzzy
+#| msgid "Feature type conversion"
+msgid "Map type conversions"
+msgstr "फ़ीचर प्रकार रूपांतरण"
+
+#, fuzzy
+#| msgid "Reproject vector"
+msgid "Raster to vector"
+msgstr "वेक्टर पुनः प्रोजेक्ट करें"
+
+#, fuzzy
+#| msgid "Failed to create temporary vector map."
+msgid "Converts a raster map into a vector map."
+msgstr "अस्थायी वेक्टर मानचित्र बनाने में विफल।"
+
+#, fuzzy
+#| msgid "Insert existing 3D raster map"
+msgid "Raster series to 3D raster"
+msgstr "मौजूदा 3D रेखापुंज मानचित्र सम्मिलित करें"
+
+msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgstr ""
+
+msgid "Raster 2.5D to 3D raster"
+msgstr ""
+
+msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "select raster"
+msgid "Vector to raster"
+msgstr "रेखापुंज का चयन करें"
+
+msgid "Converts (rasterize) a vector map into a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster"
+msgid "Vector to 3D raster"
+msgstr "3D रास्टर"
+
+msgid "Converts a vector map (only points) into a 3D raster map."
+msgstr ""
+
+msgid "2D vector to 3D vector"
+msgstr ""
+
+msgid "Performs transformation of 2D vector features to 3D."
+msgstr ""
+
+#, fuzzy
+#| msgid "List of raster layers"
+msgid "3D raster to raster series"
+msgstr "रेखापुंज परतों की सूची"
+
+#, fuzzy
+#| msgid "Name for new 3D raster map to create"
+msgid "Converts 3D raster maps to 2D raster maps"
+msgstr "बनाए जाने वाले नए 3डी रेखापुंज मानचित्र का नाम"
+
+#, fuzzy
+#| msgid "Simple Python Editor"
+msgid "Launches Simple Python Editor."
+msgstr "सरल पायथन संपादक"
+
+#, fuzzy
+#| msgid "Run script"
+msgid "Launch script"
+msgstr "स्क्रिप्ट चलाएँ"
+
+#, fuzzy
+#| msgid "Launching script '%s'..."
+msgid "Launches script file."
+msgstr "स्क्रिप्ट '%s' लॉन्च हो रही है..।"
+
+msgid "Launch Jupyter Notebook interface."
+msgstr ""
+
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Graphical modeler"
+msgstr "ग्राफ़िकल मॉडलर"
+
+#, fuzzy
+#| msgid "Quit Graphical Modeler"
+msgid "Launch Graphical modeler"
+msgstr "ग्राफ़िकल मॉडलर छोड़ें"
+
+#, fuzzy
+#| msgid "Script generated by wxGUI Graphical Modeler."
+msgid "Run model prepared by Graphical modeler"
+msgstr "wxGUI ग्राफिकल मॉडलर द्वारा उत्पन्न स्क्रिप्ट।"
+
+#, fuzzy
+#| msgid "Manage Ground Control Points"
+msgid "Manage Ground Control Points for Georectification"
+msgstr "ग्राउंड कंट्रोल पॉइंट प्रबंधित करें"
+
+#, fuzzy
+#| msgid "Animation Tool"
+msgid "Animation tool"
+msgstr "एनिमेशन टूल (Animation Tool)"
+
+#, fuzzy
+#| msgid "No animation to export."
+msgid "Launch animation tool."
+msgstr "एक्सपोर्ट करने के लिए कोई एनिमेशन नहीं है।"
+
+#, fuzzy
+#| msgid "Cartographic Composer"
+msgid "Launch Cartographic Composer"
+msgstr "कार्टोग्राफिक कंपोजर"
+
+#, fuzzy
+#| msgid "Map Swipe"
+msgid "Launch Map Swipe"
+msgstr "मानचित्र स्वाइप करें"
+
+msgid "Close graphical user interface."
+msgstr ""
+
+msgid "Close GUI and exit GRASS shell."
+msgstr ""
+
+#, fuzzy
+#| msgid "Settings"
+msgid "&Settings"
+msgstr "सेटिंग्स"
+
+#, fuzzy
+#| msgid "Update current region"
+msgid "Show current region"
+msgstr "वर्तमान क्षेत्र अद्यतन करें"
+
+#, fuzzy
+#| msgid "Extent and resolution are based on computational region."
+msgid "Shows the extent and resolution of the computational region."
+msgstr "विस्तार और संकल्प कम्प्यूटेशनल क्षेत्र पर आधारित हैं।"
+
+msgid "Show region using latitude and longitude"
+msgstr ""
+
+#, fuzzy
+#| msgid "Set computational region extent from display"
+msgid "Show current region extent in Map Display"
+msgstr "प्रदर्शन से कम्प्यूटेशनल क्षेत्र की सीमा निर्धारित करें"
+
+#, fuzzy
+#| msgid "Set computational region from display"
+msgid "Shows the extent of the computational region in Map Display."
+msgstr "प्रदर्शन से कम्प्यूटेशनल क्षेत्र सेट करें"
+
+#, fuzzy
+#| msgid "&Set region"
+msgid "Set region"
+msgstr "&क्षेत्र सेट करें"
+
+msgid "Manages the boundary definitions for the geographic region."
+msgstr ""
+
+msgid "GRASS working environment"
+msgstr ""
+
+#, fuzzy
+#| msgid "Mapset: %s"
+msgid "Mapset access"
+msgstr "मैपसेट: %s"
+
+#, fuzzy
+#| msgid "Create new mapset in current project"
+msgid "Set/unset access to other mapsets in current project"
+msgstr "वर्तमान प्रोजेक्ट में नया मैपसेट बनाएं"
+
+#, fuzzy
+#| msgid "Username:"
+msgid "User access"
+msgstr "उपयोगकर्ता नाम:"
+
+msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
+msgstr ""
+
+#, fuzzy
+#| msgid "Choose a working directory"
+msgid "Change working environment"
+msgstr "कार्यशील निर्देशिका चुनें"
+
+msgid "Changes or reports current mapset. Optionally, creates new mapset or lists available mapsets in given project (location)."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Create new project (location)"
+msgid "Change project (location) and mapset"
+msgstr "&नया प्रोजेक्ट (लोकेशन) बनाएं"
+
+#, fuzzy
+#| msgid "Select GRASS project and mapset"
+msgid "Change current project and mapset."
+msgstr "GRASS प्रोजेक्ट और मैपसेट का चयन करें"
+
+#, fuzzy
+#| msgid "&Create mapset"
+msgid "Change mapset"
+msgstr "&मैपसेट बनाएं"
+
+#, fuzzy
+#| msgid "Use current mask"
+msgid "Change current mapset."
+msgstr "वर्तमान मास्क का प्रयोग करें"
+
+#, fuzzy
+#| msgid "Choose a working directory"
+msgid "Change working directory"
+msgstr "कार्यशील निर्देशिका चुनें"
+
+#, fuzzy
+#| msgid "Symbol settings"
+msgid "Show settings"
+msgstr "प्रतीक सेटिंग्स"
+
+msgid "Outputs and modifies the user's current GRASS variable settings."
+msgstr ""
+
+#, fuzzy
+#| msgid "Language settings"
+msgid "Change settings"
+msgstr "भाषा सेटिंग्स"
+
+msgid "Outputs and modifies the user's current GRASS variable settings. Prints all defined GRASS variables if no option is given."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Create new project (location)"
+msgid "Create new project (location)"
+msgstr "&नया प्रोजेक्ट (लोकेशन) बनाएं"
+
+msgid "Launches project wizard to create a new GRASS project (also known as location)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new mapset in current project"
+msgid "Creates new mapset in the current project, changes current mapset."
+msgstr "वर्तमान प्रोजेक्ट में नया मैपसेट बनाएं"
+
+#, fuzzy
+#| msgid "Lat/long projections"
+msgid "Map projections"
+msgstr "अक्षांश/दीर्घ प्रक्षेपण"
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display map projection"
+msgstr "मानचित्र प्रदर्शित करें"
+
+msgid "Converts coordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Lat/long projections"
+msgid "Manage projections"
+msgstr "अक्षांश/दीर्घ प्रक्षेपण"
+
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions). Can also be used to create new GRASS projects."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set GCP coordinates"
+msgid "Convert coordinates"
+msgstr "GCP निर्देशांक सेट करें"
+
+msgid "Converts coordinates from one projection to another (cs2cs frontend)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove extension"
+msgid "Addons extensions"
+msgstr "एक्सटेंशन हटाएँ"
+
+#, fuzzy
+#| msgid "Fetch & install extension from GRASS Addons"
+msgid "Install extension from addons"
+msgstr "GRASS Addons से एक्सटेंशन प्राप्त करें और इंस्टॉल करें"
+
+#, fuzzy
+#| msgid "Fetch & install extension from GRASS Addons"
+msgid "Installs new extension from GRASS AddOns repository."
+msgstr "GRASS Addons से एक्सटेंशन प्राप्त करें और इंस्टॉल करें"
+
+#, fuzzy
+#| msgid "Manage installed GRASS Addons extensions"
+msgid "Manage installed extension"
+msgstr "स्थापित GRASS Addons एक्सटेंशन प्रबंधित करें"
+
+#, fuzzy
+#| msgid "Manage installed GRASS Addons extensions"
+msgid "Updates or removes installed GRASS AddOns extension(s)."
+msgstr "स्थापित GRASS Addons एक्सटेंशन प्रबंधित करें"
+
+#, fuzzy
+#| msgid "Georeferenced file:"
+msgid "Preferences"
+msgstr "भू-संदर्भित फ़ाइल:"
+
+msgid "User GUI preferences (display font, commands, digitizer, etc.)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster:"
+msgid "&Raster"
+msgstr "रेखापुंज:"
+
+#, fuzzy
+#| msgid "Save raster map"
+msgid "Develop raster map"
+msgstr "रेखापुंज मानचित्र सहेजें"
+
+msgid "Compress/decompress"
+msgstr ""
+
+msgid "Compresses and decompresses raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "boundaries"
+msgid "Region boundaries"
+msgstr "सीमाएँ"
+
+msgid "Sets the boundary definitions for a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage NULL values"
+msgstr "तालिकाएँ प्रबंधित करें"
+
+msgid "Manages NULL-values of given raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "animation"
+msgid "Quantization"
+msgstr "एनीमेशन"
+
+msgid "Produces the quantization file for a floating-point map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Timestamp:"
+msgid "Timestamp"
+msgstr "टाइमस्टैम्प:"
+
+msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Resample using aggregate statistics"
+msgstr "रेखापुंज आँकड़े रिपोर्ट करें"
+
+msgid "Resamples raster map layers to a coarser grid using aggregation."
+msgstr ""
+
+#, fuzzy
+#| msgid "Resampling method:"
+msgid "Resample using multiple methods"
+msgstr "रीसैंपलिंग विधि:"
+
+msgid "Resamples raster map to a finer grid using interpolation."
+msgstr ""
+
+#, fuzzy
+#| msgid "Nearest neighbor"
+msgid "Resample using nearest neighbor"
+msgstr "निकटतम पड़ोसी"
+
+msgid "GRASS raster map layer data resampling capability."
+msgstr ""
+
+msgid "Resample using spline tension"
+msgstr ""
+
+msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
+msgstr ""
+
+#, fuzzy
+#| msgid "Resampling method:"
+msgid "Resample using bspline"
+msgstr "रीसैंपलिंग विधि:"
+
+msgid "Performs bilinear or bicubic spline interpolation with Tykhonov regularization."
+msgstr ""
+
+msgid "Resample using analytic kernel"
+msgstr ""
+
+msgid "Resamples raster map layers using an analytic kernel."
+msgstr ""
+
+msgid "Support file maintenance"
+msgstr ""
+
+msgid "Allows creation and/or modification of raster map layer support files."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Update map statistics"
+msgstr "यूनीवेरिएट रेखापुंज आँकड़े"
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Update raster map statistics"
+msgstr "यूनीवेरिएट रेखापुंज आँकड़े"
+
+msgid "Tiling"
+msgstr ""
+
+msgid "Produces tilings of the source projection for use in the destination region and projection."
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster)"
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "New raster map"
+msgid "Tile raster map"
+msgstr "नया रेखापुंज मानचित्र"
+
+#, fuzzy
+#| msgid "Select raster maps to profile"
+msgid "Splits a raster map into tiles."
+msgstr "प्रोफ़ाइल के लिए रेखापुंज मानचित्र चुनें"
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage semantic labels"
+msgstr "तालिकाएँ प्रबंधित करें"
+
+msgid "Manages semantic label information assigned to a single raster map or to a list of raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage layers"
+msgid "Manage colors"
+msgstr "परतें प्रबंधित करें"
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "Color tables"
+msgstr "रंग तालिका सेट करें"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a raster map."
+msgstr "रास्टर मैप के लिए नई रंग टेबल बनाएं"
+
+#, fuzzy
+#| msgid "Color table style %s:"
+msgid "Color tables (stddev)"
+msgstr "रंग टेबल स्टाइल %s:"
+
+msgid "Sets color rules based on stddev from a raster map's mean value."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set color table interactively"
+msgid "Manage color rules interactively"
+msgstr "रंग तालिका को अंतःक्रियात्मक रूप से सेट करें"
+
+msgid "Interactive management of raster color tables."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "Export color table"
+msgstr "रंग तालिका सेट करें"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Exports the color table associated with a raster map."
+msgstr "रास्टर मैप के लिए नई रंग टेबल बनाएं"
+
+msgid "Blend 2 color rasters"
+msgstr ""
+
+msgid "Blends color components of two raster maps by a given ratio."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create"
+msgid "Create RGB"
+msgstr "बनाएं"
+
+msgid "Combines red, green and blue raster maps into a single composite raster map."
+msgstr ""
+
+msgid "RGB to HIS"
+msgstr ""
+
+msgid "Generates red, green and blue (RGB) raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
+msgstr ""
+
+msgid "Split raster into RGB"
+msgstr ""
+
+msgid "Splits a raster map into red, green and blue maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query raster/vector map(s)"
+msgid "Query raster maps"
+msgstr "क्वेरी रेखापुंज/वेक्टर मानचित्र"
+
+#, fuzzy
+#| msgid "by map coordinates"
+msgid "Query values by coordinates"
+msgstr "मानचित्र निर्देशांक द्वारा"
+
+msgid "Queries raster maps on their category values and category labels."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "Query colors by value"
+msgstr "रंग तालिका सेट करें"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Queries colors for a raster map layer."
+msgstr "रास्टर मैप के लिए नई रंग टेबल बनाएं"
+
+#, fuzzy
+#| msgid "Measuring distance"
+msgid "Raster buffers and distance"
+msgstr "दूरी नापना"
+
+#, fuzzy
+#| msgid "Source raster"
+msgid "Buffer rasters"
+msgstr "स्रोत रेखापुंज"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
+msgstr ""
+
+msgid "Buffer rasters (low memory)"
+msgstr ""
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values. This is the low-memory alternative to the classic r.buffer module."
+msgstr ""
+
+msgid "Concentric circles"
+msgstr ""
+
+msgid "Creates a raster map containing concentric rings around a given point."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector points"
+msgid "Closest points"
+msgstr "सदिश बिंदु"
+
+msgid "Locates the closest points between objects in two raster maps."
+msgstr ""
+
+msgid "Grow by one cell"
+msgstr ""
+
+msgid "Generates a raster map layer with contiguous areas grown by one cell."
+msgstr ""
+
+#, fuzzy
+#| msgid "Distance along surface"
+msgid "Distance to features"
+msgstr "सतह के अनुदिश दूरी"
+
+msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
+msgstr ""
+
+msgid "Creates a raster mask for limiting raster operation."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query features"
+msgid "Query mask status"
+msgstr "क्वेरी सुविधाएँ"
+
+msgid "Reports presence or absence of a raster mask Provides information about the presence of a 2D raster mask as text output or return code"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster Map Calculator"
+msgid "Raster map calculator"
+msgstr "रेखापुंज मानचित्र कैलकुलेटर"
+
+#, fuzzy
+#| msgid "Raster Map Calculator"
+msgid "Simplified raster map calculator"
+msgstr "रेखापुंज मानचित्र कैलकुलेटर"
+
+msgid "Calculates a new raster map from a simple r.mapcalc expression."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster Map Calculator"
+msgid "Raster map calculator."
+msgstr "रेखापुंज मानचित्र कैलकुलेटर"
+
+msgid "Neighborhood analysis"
+msgstr ""
+
+msgid "Moving window"
+msgstr "चलती खिड़की"
+
+msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector points"
+msgid "Neighborhood points"
+msgstr "सदिश बिंदु"
+
+msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Overlaying map layers"
+msgid "Overlay rasters"
+msgstr "मानचित्र परतों को ओवरले किया जा रहा है"
+
+msgid "Cross product"
+msgstr ""
+
+msgid "Creates a cross product of the category values from multiple raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster maps"
+msgid "Patch raster maps"
+msgstr "3D रास्टर मैप्स"
+
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgstr ""
+
+msgid "Raster series aggregation"
+msgstr ""
+
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster Map Calculator"
+msgid "Raster series accumulation"
+msgstr "रेखापुंज मानचित्र कैलकुलेटर"
+
+msgid "Makes each output cell value a accumulationfunction of the values assigned to the corresponding cells in the input raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Statistics"
+msgid "Statistical overlay"
+msgstr "आंकड़े"
+
+msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
+msgstr ""
+
+msgid "Quantiles overlay"
+msgstr ""
+
+msgid "Compute category quantiles using two passes."
+msgstr ""
+
+msgid "Solar radiance and shadows"
+msgstr ""
+
+msgid "LatLong map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new raster map"
+msgid "Creates a latitude/longitude raster map."
+msgstr "नया रास्टर मैप बनाएं"
+
+msgid "Solar irradiance and irradiation"
+msgstr ""
+
+msgid "Solar irradiance and irradiation model. Computes direct (beam), diffuse and reflected solar irradiation raster maps for given day, latitude, surface and atmospheric conditions. Solar parameters (e.g. sunrise, sunset times, declination, extraterrestrial irradiance, daylight length) are saved in the map history file. Alternatively, a local time can be specified to compute solar incidence angle and/or irradiance raster maps. The shadowing effect of the topography is optionally incorporated."
+msgstr ""
+
+msgid "Shadows map"
+msgstr ""
+
+msgid "Calculates cast shadow areas from sun position and elevation raster map. Either exact sun position (A) is specified, or date/time to calculate the sun position (B) by r.sunmask itself."
+msgstr ""
+
+msgid "Sunshine hours and solar angles"
+msgstr ""
+
+msgid "Calculates solar elevation, solar azimuth, and sun hours. Solar elevation: the angle between the direction of the geometric center of the sun's apparent disk and the (idealized) horizon. Solar azimuth: the angle from due north in clockwise direction."
+msgstr ""
+
+#, fuzzy
+#| msgid "Execute analysis"
+msgid "Terrain analysis"
+msgstr "विश्लेषण निष्पादित करें"
+
+#, fuzzy
+#| msgid "Vector lines"
+msgid "Generate contour lines"
+msgstr "सदिश रेखाएँ"
+
+msgid "Produces a vector map of specified contours from a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Constant surface"
+msgid "Cost surface"
+msgstr "स्थिर सतह (Constant surface)"
+
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Trace a path"
+msgstr ""
+
+msgid "Traces paths from starting points following input directions."
+msgstr ""
+
+msgid "Cumulative movement costs"
+msgstr ""
+
+msgid "Creates a raster map showing the anisotropic cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Least cost route or flow"
+msgstr ""
+
+msgid "Traces a flow through an elevation model or cost surface on a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Compute convergence"
+msgid "Compute shaded relief"
+msgstr "अभिसरण की गणना करें"
+
+msgid "Creates shaded relief map from an elevation map (DEM)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Apply changes to selected group"
+msgid "Apply shade to raster"
+msgstr "चयनित समूह (selected group) में परिवर्तन लागू करें"
+
+msgid "Drapes a color raster over an shaded relief or aspect map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Size and style"
+msgid "Slope and aspect"
+msgstr "आकार और शैली"
+
+msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map. Aspect is calculated counterclockwise from east."
+msgstr ""
+
+msgid "Landforms"
+msgstr ""
+
+msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
+msgstr ""
+
+#, fuzzy
+#| msgid "Model parameters"
+msgid "Terrain parameters"
+msgstr "मॉडल पैरामीटर"
+
+msgid "Extracts terrain parameters from a DEM. Uses a multi-scale approach by taking fitting quadratic parameters to any size window (via least squares)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query features"
+msgid "Textural features"
+msgstr "क्वेरी सुविधाएँ"
+
+msgid "Generate images with textural features from a raster map."
+msgstr ""
+
+msgid "Visibility"
+msgstr ""
+
+msgid "Computes the viewshed of a point on an elevation raster map. Default format: NULL (invisible), vertical angle wrt viewpoint (visible)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Horizontal X:"
+msgid "Horizon angle"
+msgstr "क्षैतिज एक्स:"
+
+msgid "Computes horizon angle height from a digital elevation model. The module has two different modes of operation: 1. Computes the entire horizon around a single point whose coordinates are given with the 'coord' option. The horizon height (in radians). 2. Computes one or more raster maps of the horizon height in a single direction. The input for this is the angle (in degrees), which is measured counterclockwise with east=0, north=90 etc. The output is the horizon height in radians."
+msgstr ""
+
+#, fuzzy
+#| msgid "simple features"
+msgid "Transform features"
+msgstr "सरल विशेषताएं"
+
+msgid "Clump"
+msgstr ""
+
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
+msgstr ""
+
+msgid "Grow"
+msgstr ""
+
+msgid "Thin"
+msgstr ""
+
+msgid "Thins non-null cells that denote linear features in a raster map layer."
+msgstr ""
+
+msgid "Hydrologic modeling"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save raster map changes"
+msgid "Carve stream channels"
+msgstr "रेखापुंज मानचित्र परिवर्तन सहेजें"
+
+msgid "Generates stream channels. Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
+msgstr ""
+
+#, fuzzy
+#| msgid "Fill"
+msgid "Fill lake"
+msgstr "भरना"
+
+msgid "Fills lake at given point to given level."
+msgstr ""
+
+msgid "Depressionless map and flowlines"
+msgstr ""
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Field calculator"
+msgid "Flow accumulation"
+msgstr "फ़ील्ड कैलकुलेटर"
+
+msgid "Performs flow computation for massive grids."
+msgstr ""
+
+#, fuzzy
+#| msgid "Iso lines:"
+msgid "Flow lines"
+msgstr "आईएसओ लाइनें:"
+
+msgid "Constructs flowlines. Computes flowlines, flowpath lengths, and flowaccumulation (contributing areas) from a elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Execute analysis"
+msgid "Watershed analysis"
+msgstr "विश्लेषण निष्पादित करें"
+
+msgid "Calculates hydrological parameters and RUSLE factors."
+msgstr ""
+
+msgid "Watershed subbasins"
+msgstr ""
+
+msgid "Generates watershed subbasins raster map."
+msgstr ""
+
+msgid "Watershed basin creation"
+msgstr ""
+
+msgid "Creates watershed basins from a drainage direction map."
+msgstr ""
+
+msgid "Extraction of stream networks"
+msgstr ""
+
+msgid "Performs stream network extraction."
+msgstr ""
+
+msgid "SIMWE Overland flow modeling"
+msgstr ""
+
+msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "SIMWE Sediment flux modeling"
+msgstr ""
+
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "Topographic index map"
+msgstr ""
+
+msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
+msgstr ""
+
+msgid "TOPMODEL simulation"
+msgstr ""
+
+msgid "Simulates TOPMODEL which is a physically based hydrologic model."
+msgstr ""
+
+msgid "USLE K-factor"
+msgstr ""
+
+msgid "Computes USLE Soil Erodibility Factor (K)."
+msgstr ""
+
+msgid "USLE R-factor"
+msgstr ""
+
+msgid "Computes USLE R factor, Rainfall erosivity index."
+msgstr ""
+
+msgid "Groundwater modeling"
+msgstr ""
+
+msgid "Groundwater flow"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgstr ""
+
+msgid "Groundwater solute transport"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined and unconfined solute transport in two dimensions"
+msgstr ""
+
+msgid "Landscape patch analysis"
+msgstr ""
+
+msgid "Set up sampling and analysis framework"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new configuration file for r.li modules"
+msgid "Configuration editor for r.li.'index'"
+msgstr "r.li मॉड्यूल के लिए नई कॉन्फ़िगरेशन फ़ाइल बनाएं"
+
+msgid "Edge density"
+msgstr ""
+
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Contrast weighted edge density"
+msgstr ""
+
+msgid "Calculates contrast weighted edge density index on a raster map"
+msgstr ""
+
+msgid "Patch area mean"
+msgstr ""
+
+msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Patch area range"
+msgstr ""
+
+msgid "Calculates range of patch area size on a raster map"
+msgstr ""
+
+msgid "Patch area Std Dev"
+msgstr ""
+
+msgid "Calculates standard deviation of patch area a raster map"
+msgstr ""
+
+msgid "Patch area Coeff Var"
+msgstr ""
+
+msgid "Calculates coefficient of variation of patch area on a raster map"
+msgstr ""
+
+msgid "Patch density"
+msgstr ""
+
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+#, fuzzy
+#| msgid "Category number"
+msgid "Patch number"
+msgstr "श्रेणी संख्या"
+
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
+msgstr ""
+
+msgid "Dominance's diversity"
+msgstr ""
+
+msgid "Calculates dominance's diversity index on a raster map"
+msgstr ""
+
+msgid "Shannon's diversity"
+msgstr ""
+
+msgid "Calculates Shannon's diversity index on a raster map"
+msgstr ""
+
+msgid "Simpson's diversity"
+msgstr ""
+
+msgid "Calculates Simpson's diversity index on a raster map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Brightness:"
+msgid "Richness"
+msgstr "चमक:"
+
+msgid "Calculates richness index on a raster map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Shape size"
+msgid "Shape index"
+msgstr "आकृति का आकार"
+
+#, fuzzy
+#| msgid "Please specify name for a new raster map"
+msgid "Calculates shape index on a raster map"
+msgstr "कृपया नए रेखापुंज मानचित्र के लिए नाम निर्दिष्ट करें"
+
+msgid "Wildfire modeling"
+msgstr ""
+
+msgid "Rate of spread"
+msgstr ""
+
+msgid "Generates rate of spread raster maps. Generates three, or four raster map layers showing the base (perpendicular) rate of spread (ROS), the maximum (forward) ROS, the direction of the maximum ROS, and optionally the maximum potential spotting distance for fire spread simulation."
+msgstr ""
+
+msgid "Least-cost spread paths"
+msgstr ""
+
+msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
+msgstr ""
+
+msgid "Anisotropic spread simulation"
+msgstr ""
+
+msgid "Simulates elliptically anisotropic spread. Generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins. It optionally produces raster maps to contain backlink UTM coordinates for tracing spread paths. Usable for fire spread simulations."
+msgstr ""
+
+#, fuzzy
+#| msgid "Enter raster category values or percents"
+msgid "Change category values and labels"
+msgstr "रेखापुंज श्रेणी मान या प्रतिशत दर्ज करें"
+
+#, fuzzy
+#| msgid "Parameter for animation:"
+msgid "Manage category information"
+msgstr "एनिमेशन के लिए पैरामीटर:"
+
+msgid "Manages category values and labels associated with user-specified raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "multiply width by category value"
+msgid "Interactively edit category values"
+msgstr "चौड़ाई को श्रेणी मान से गुणा करें"
+
+#, fuzzy
+#| msgid "Failed to create new raster map."
+msgid "Edits cell values in a raster map."
+msgstr "नया रैस्टर मानचित्र बनाने में विफल।"
+
+msgid "Reclassify by size"
+msgstr ""
+
+msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename class"
+msgid "Reclassify"
+msgstr "कक्षा का नाम बदलें"
+
+msgid "Reclassify raster map based on category values. Creates a new raster map whose category values are based upon a reclassification of the categories in an existing raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Record"
+msgid "Recode"
+msgstr "अभिलेख"
+
+#, fuzzy
+#| msgid "Select raster maps"
+msgid "Recodes categorical raster maps."
+msgstr "रेखापुंज मानचित्र चुनें"
+
+#, fuzzy
+#| msgid "scale:"
+msgid "Rescale"
+msgstr "पैमाना:"
+
+msgid "Rescales the range of category values in a raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create histogram with d.histogram"
+msgid "Rescale with histogram"
+msgstr "d.histogram के साथ हिस्टोग्राम बनाएं"
+
+msgid "Rescales histogram equalized the range of category values in a raster map layer."
+msgstr ""
+
+msgid "Generate random cells"
+msgstr ""
+
+#, fuzzy
+#| msgid "Random seed:"
+msgid "Random cells"
+msgstr "यादृच्छिक बीज:"
+
+msgid "Generates random cell values with spatial dependence."
+msgstr ""
+
+#, fuzzy
+#| msgid "Show vector points"
+msgid "Random cells and vector points"
+msgstr "सदिश बिंदु दिखाएँ"
+
+msgid "Creates randomly placed raster cells or vector points Creates a raster map and vector point map containing randomly located cells and points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Constant surface"
+msgid "Generate surfaces"
+msgstr "स्थिर सतह (Constant surface)"
+
+#, fuzzy
+#| msgid "Distance along surface"
+msgid "Fractal surface"
+msgstr "सतह के अनुदिश दूरी"
+
+msgid "Creates a fractal surface of a given fractal dimension."
+msgstr ""
+
+msgid "Gaussian kernel density surface"
+msgstr ""
+
+msgid "Generates a raster density map from vector points map. Density is computed using a moving kernel. Optionally generates a vector density map on a vector network."
+msgstr ""
+
+msgid "Gaussian deviates surface"
+msgstr ""
+
+msgid "Generates a raster map using gaussian random number generator. Mean and standard deviation of gaussian deviates can be expressed by the user."
+msgstr ""
+
+msgid "Plane"
+msgstr "विमान"
+
+msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
+msgstr ""
+
+msgid "Random deviates surface"
+msgstr ""
+
+msgid "Produces a raster surface map of uniform random deviates with defined range."
+msgstr ""
+
+msgid "Random surface with spatial dependence"
+msgstr ""
+
+msgid "Generates random surface(s) with spatial dependence."
+msgstr ""
+
+#, fuzzy
+#| msgid "Constant surface"
+msgid "Interpolate surfaces"
+msgstr "स्थिर सतह (Constant surface)"
+
+msgid "Bilinear and bicubic from vector points"
+msgstr ""
+
+msgid "Performs bicubic or bilinear spline interpolation with Tykhonov regularization."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster maps"
+msgid "IDW from raster points"
+msgstr "3D रास्टर मैप्स"
+
+msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+#, fuzzy
+#| msgid "Show vector points"
+msgid "IDW from vector points"
+msgstr "सदिश बिंदु दिखाएँ"
+
+msgid "Provides surface interpolation from vector point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster values"
+msgid "Raster contours"
+msgstr "रेखापुंज मान"
+
+msgid "Generates surface raster map from rasterized contours."
+msgstr ""
+
+msgid "Regularized spline tension"
+msgstr ""
+
+msgid "Performs surface interpolation from vector points map by splines. Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension."
+msgstr ""
+
+#, fuzzy
+#| msgid "Linear interpolation"
+msgid "Raster series interpolation"
+msgstr "रेखिक आंतरिक"
+
+msgid "Interpolates raster maps located (temporal or spatial) in between input raster maps at specific sampling positions."
+msgstr ""
+
+msgid "Fill NULL cells"
+msgstr ""
+
+msgid "Fills no-data areas in raster maps using spline interpolation."
+msgstr ""
+
+msgid "Fill NULL cells using IDW"
+msgstr ""
+
+msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Reports and statistics"
+msgstr "रेखापुंज आँकड़े रिपोर्ट करें"
+
+#, fuzzy
+#| msgid "Show &metadata"
+msgid "Basic raster metadata"
+msgstr "SShhooww  &&mmeettaaddaattaa"
+
+msgid "Outputs basic information about a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Field statistics"
+msgid "General statistics"
+msgstr "फ़ील्ड आँकड़े"
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Generates area statistics for raster map."
+msgstr "रेखापुंज मानचित्र के लिए आँकड़े <%s>"
+
+msgid "Quantiles for large data sets"
+msgstr ""
+
+msgid "Compute quantiles using two passes."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster values"
+msgid "Range of category values"
+msgstr "रेखापुंज मान"
+
+msgid "Prints terse list of category values found in a raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Save raster map changes"
+msgid "Sum area by raster map and category"
+msgstr "रेखापुंज मानचित्र परिवर्तन सहेजें"
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Reports statistics for raster maps."
+msgstr "रेखापुंज मानचित्र के लिए आँकड़े <%s>"
+
+#, fuzzy
+#| msgid "Statistics for Profile(s)"
+msgid "Statistics for clumped cells"
+msgstr "प्रोफ़ाइल के लिए आँकड़े"
+
+msgid "Calculates the volume of data \"clumps\". Optionally produces a GRASS vector points map containing the calculated centroids of these clumps."
+msgstr ""
+
+msgid "Total corrected area"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Prints estimation of surface area for raster map."
+msgstr "रास्टर मैप के लिए नई रंग टेबल बनाएं"
+
+msgid "Calculates univariate statistics from the non-null cells of a raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+#, fuzzy
+#| msgid "Sample text"
+msgid "Sample transects"
+msgstr "नमूना पाठ"
+
+msgid "Outputs the raster map layer values lying on user-defined line(s)."
+msgstr ""
+
+msgid "Sample transects (bearing/distance)"
+msgstr ""
+
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
+msgstr ""
+
+msgid "Covariance/correlation"
+msgstr ""
+
+msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Linear interpolation"
+msgid "Linear regression"
+msgstr "रेखिक आंतरिक"
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x."
+msgstr ""
+
+#, fuzzy
+#| msgid "Multiple raster maps"
+msgid "Multiple regression"
+msgstr "एकाधिक रास्टर मानचित्र"
+
+msgid "Calculates multiple linear regression from raster maps."
+msgstr ""
+
+msgid "Mutual category occurrences"
+msgstr ""
+
+msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Move category up"
+msgid "Modal category value"
+msgstr "श्रेणी ऊपर ले जाएँ"
+
+msgid "Finds the mode of values in a cover map within areas assigned the same category value in a user-specified base map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Plot statistics"
+msgid "Zonal statistics"
+msgstr "कथानक आँकड़े"
+
+msgid "Calculates category or object oriented statistics."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Object geometry statistics"
+msgstr "रेखापुंज आँकड़े रिपोर्ट करें"
+
+#, fuzzy
+#| msgid " Enter parameters for %s projection "
+msgid "Calculates geometry parameters for raster objects."
+msgstr " %s प्रोजेक्शन के लिए पैरामीटर दर्ज करें "
+
+#, fuzzy
+#| msgid "Vector"
+msgid "&Vector"
+msgstr "वेक्टर"
+
+#, fuzzy
+#| msgid "New vector map"
+msgid "Develop vector map"
+msgstr "नया वेक्टर मानचित्र"
+
+#, fuzzy
+#| msgid "Create new vector map"
+msgid "Create new empty vector map"
+msgstr "नया वेक्टर मैप बनाएं"
+
+#, fuzzy
+#| msgid "Set color table interactively"
+msgid "Edit vector map (non-interactively)"
+msgstr "रंग तालिका को अंतःक्रियात्मक रूप से सेट करें"
+
+msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
+msgstr ""
+
+msgid "Convert object types"
+msgstr ""
+
+#, fuzzy
+#| msgid "Select vector features"
+msgid "Changes type of vector features."
+msgstr "वेक्टर विशेषताएँ चुनें"
+
+#, fuzzy
+#| msgid "Select lines"
+msgid "Parallel lines"
+msgstr "पंक्तियाँ चुनें"
+
+msgid "Creates parallel line to input vector lines."
+msgstr ""
+
+#, fuzzy
+#| msgid "boundaries"
+msgid "Dissolve boundaries"
+msgstr "सीमाएँ"
+
+msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create histogram of raster map"
+msgid "Create 3D vector over raster"
+msgstr "रास्टर मैप का हिस्टोग्राम बनाएं"
+
+msgid "Converts 2D vector features to 3D by sampling of elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Add vector map"
+msgid "Extrude 3D vector map"
+msgstr "वेक्टर मानचित्र जोड़ें"
+
+msgid "Extrudes flat vector features to 3D vector features with defined height. Optionally the height can be derived from sampling of elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create table"
+msgid "Create labels"
+msgstr "टेबल बनाएं"
+
+msgid "Creates paint labels for a vector map from attached attributes."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector map"
+msgid "Reposition vector map"
+msgstr "वेक्टर मानचित्र आयात करें"
+
+msgid "Performs an affine transformation (shift, scale and rotate) on vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select vector map"
+msgid "Rectify vector map"
+msgstr "वेक्टर मानचित्र चुनें"
+
+msgid "Rectifies a vector by computing a coordinate transformation for each object in the vector based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Show &metadata"
+msgid "Updates vector map metadata."
+msgstr "SShhooww  &&mmeettaaddaattaa"
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage timestamp"
+msgstr "तालिकाएँ प्रबंधित करें"
+
+msgid "Modifies a timestamp for a vector map. Print/add/remove a timestamp for a vector map."
+msgstr ""
+
+msgid "Create labels with simulated annealing"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new color rules for vector map"
+msgid "Create optimally placed labels for vector map(s)"
+msgstr "वेक्टर मैप के लिए नए रंग नियम बनाएं"
+
+#, fuzzy
+#| msgid "Data point"
+msgid "Decimate points"
+msgstr "डेटा पॉइंट"
+
+msgid "Decimates a point cloud Copies points from one vector to another while applying different decimations"
+msgstr ""
+
+#, fuzzy
+#| msgid "Topology missing"
+msgid "Topology maintenance"
+msgstr "टोपोलॉजी गायब"
+
+#, fuzzy
+#| msgid "Rebuild topology"
+msgid "Create or rebuild topology"
+msgstr "टोपोलॉजी का पुनर्निर्माण करें"
+
+msgid "Creates topology for vector map. Optionally also checks for topological errors."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rebuild topology"
+msgid "Rebuild topology on all vector maps"
+msgstr "टोपोलॉजी का पुनर्निर्माण करें"
+
+#, fuzzy
+#| msgid "Editing is allowed only for vector maps from the current mapset."
+msgid "Rebuilds topology on all vector maps in the current mapset."
+msgstr "संपादन की अनुमति केवल वर्तमान मैपसेट से वेक्टर मानचित्रों के लिए है।"
+
+msgid "Build polylines"
+msgstr ""
+
+msgid "Builds polylines from lines or boundaries."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select lines"
+msgid "Split lines"
+msgstr "पंक्तियाँ चुनें"
+
+msgid "Splits vector lines to shorter segments."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select lines"
+msgid "Split polylines"
+msgstr "पंक्तियाँ चुनें"
+
+msgid "Creates points/segments from input vector lines and positions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new vector map"
+msgid "Clean vector map"
+msgstr "नया वेक्टर मैप बनाएं"
+
+#, fuzzy
+#| msgid "Please wait, closing and rebuilding topology of vector map <%s>..."
+msgid "Toolset for cleaning topology of vector map."
+msgstr "कृपया प्रतीक्षा करें, वेक्टर मानचित्र की टोपोलॉजी को बंद करना और पुनर्निर्माण करना <%s>..।"
+
+msgid "Fill holes in areas"
+msgstr ""
+
+msgid "Fill holes in areas by keeping only outer boundaries"
+msgstr ""
+
+msgid "Smooth or simplify"
+msgstr ""
+
+msgid "Performs vector based generalization."
+msgstr ""
+
+#, fuzzy
+#| msgid "centroids"
+msgid "Add centroids"
+msgstr "सेंट्रोइड्स"
+
+msgid "Adds missing centroids to closed boundaries."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a vector map."
+msgstr "रास्टर मैप के लिए नई रंग टेबल बनाएं"
+
+msgid "Interactive management of vector color tables."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export training areas to vector map"
+msgid "Exports the color table associated with a vector map."
+msgstr "प्रशिक्षण क्षेत्रों को वेक्टर मानचित्र पर निर्यात करें"
+
+#, fuzzy
+#| msgid "New vector map"
+msgid "Query vector map"
+msgstr "नया वेक्टर मानचित्र"
+
+#, fuzzy
+#| msgid "by map coordinates"
+msgid "Query with coordinate(s)"
+msgstr "मानचित्र निर्देशांक द्वारा"
+
+msgid "Queries a vector map at given locations."
+msgstr ""
+
+#, fuzzy
+#| msgid "Enter vector attribute values"
+msgid "Query vector attribute data"
+msgstr "वेक्टर विशेषता मान दर्ज करें"
+
+#, fuzzy
+#| msgid "Enter vector attribute values"
+msgid "Prints vector map attributes."
+msgstr "वेक्टर विशेषता मान दर्ज करें"
+
+#, fuzzy
+#| msgid "Data selection"
+msgid "Feature selection"
+msgstr "डेटा चयन"
+
+#, fuzzy
+#| msgid "Slice attributes"
+msgid "Select by attributes"
+msgstr "स्लाइस विशेषताएँ"
+
+msgid "Selects vector features from an existing vector map and creates a new vector map containing only the selected features."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select raster map"
+msgid "Select by another map"
+msgstr "रेखापुंज मानचित्र का चयन करें"
+
+#, fuzzy
+#| msgid "Select features interactively from vector map"
+msgid "Selects features from vector map (A) by features from other vector map (B)."
+msgstr "वेक्टर मानचित्र से अंतःक्रियात्मक रूप से सुविधाओं का चयन करें"
+
+#, fuzzy
+#| msgid "Not enough points for line"
+msgid "Convert areas or points to lines"
+msgstr "लाइन के लिए पर्याप्त अंक नहीं"
+
+msgid "Converts vector polygons or points to lines."
+msgstr ""
+
+#, fuzzy
+#| msgid "Source vector maps"
+msgid "Buffer vectors"
+msgstr "स्रोत वेक्टर मानचित्र"
+
+msgid "Creates a buffer around vector features of given type."
+msgstr ""
+
+#, fuzzy
+#| msgid "Points for analysis:"
+msgid "Point analysis"
+msgstr "विश्लेषण के लिए बिंदु:"
+
+msgid "Identify and remove outliers"
+msgstr ""
+
+msgid "Removes outliers from vector point data."
+msgstr ""
+
+msgid "Identify point clusters"
+msgstr ""
+
+#, fuzzy
+#| msgid "Setup for georectification"
+msgid "Performs cluster identification."
+msgstr "भू-संशोधन के लिए सेटअप"
+
+msgid "Indices for quadrat counts of vector point lists"
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector points"
+msgid "Perturb points"
+msgstr "सदिश बिंदु"
+
+msgid "Random location perturbations of vector points."
+msgstr ""
+
+msgid "Test/training point sets"
+msgstr ""
+
+msgid "Randomly partition points into test/train sets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Define output format for vector data"
+msgid "Tests for normality for vector points"
+msgstr "वेक्टर डेटा के लिए आउटपुट फ़ॉर्मेट परिभाषित करें"
+
+msgid "Tests for normality for vector points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Points for analysis:"
+msgid "Point pattern analysis"
+msgstr "विश्लेषण के लिए बिंदु:"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Points for analysis:"
+msgid "Lidar analysis"
+msgstr "विश्लेषण के लिए बिंदु:"
+
+#, fuzzy
+#| msgid "Select dangles"
+msgid "Detect edges"
+msgstr "डेंगल्स का चयन करें"
+
+msgid "Detects the object's edges from a LIDAR data set."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select lines"
+msgid "Detect interiors"
+msgstr "पंक्तियाँ चुनें"
+
+msgid "Building contour determination and Region Growing algorithm for determining the building inside"
+msgstr ""
+
+msgid "Correct and reclassify objects"
+msgstr ""
+
+msgid "Corrects the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
+msgstr ""
+
+msgid "Linear referencing"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create"
+msgid "Create LRS"
+msgstr "बनाएं"
+
+#, fuzzy
+#| msgid "Create a generic cartesian coordinate system (XY)"
+msgid "Creates a linear reference system."
+msgstr "एक सामान्य कार्टेशियन निर्देशांक प्रणाली (XY) बनाएं"
+
+#, fuzzy
+#| msgid "Create selection polygon"
+msgid "Create stationing"
+msgstr "चयन पॉलीगॉन (selection polygon) बनाएं"
+
+msgid "Creates stationing from input lines, and linear reference system."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Create points/segments"
+msgstr "नया मैपसेट बनाएं"
+
+msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgstr ""
+
+msgid "Find line id and offset"
+msgstr ""
+
+msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select features"
+msgid "Nearest features"
+msgstr "सुविधाएँ चुनें"
+
+msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
+msgstr ""
+
+#, fuzzy
+#| msgid "Execute analysis"
+msgid "Network analysis"
+msgstr "विश्लेषण निष्पादित करें"
+
+#, fuzzy
+#| msgid "Vector network analysis tool"
+msgid "Tool for interactive vector network analysis."
+msgstr "वेक्टर नेटवर्क विश्लेषण उपकरण"
+
+msgid "Network preparation"
+msgstr ""
+
+msgid "Performs network maintenance."
+msgstr ""
+
+msgid "Allocate subnets"
+msgstr ""
+
+msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Split net"
+msgstr ""
+
+msgid "Splits subnets for nearest centers by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+#, fuzzy
+#| msgid "Shortest path %s"
+msgid "Shortest path"
+msgstr "सबसे छोटा रास्ता %s"
+
+msgid "Finds shortest path on vector network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Shortest path %s"
+msgid "Shortest path for sets of features"
+msgstr "सबसे छोटा रास्ता %s"
+
+msgid "Computes shortest distance via the network between the given sets of features. Finds the shortest paths from each 'from' point to the nearest 'to' feature and various information about this relation are uploaded to the attribute table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Shortest path %s"
+msgid "Shortest path using timetables"
+msgstr "सबसे छोटा रास्ता %s"
+
+msgid "Finds shortest path using timetables."
+msgstr ""
+
+#, fuzzy
+#| msgid "Shortest path %s"
+msgid "Shortest path for all pairs"
+msgstr "सबसे छोटा रास्ता %s"
+
+msgid "Computes the shortest path between all pairs of nodes in the network."
+msgstr ""
+
+msgid "Visibility network"
+msgstr ""
+
+msgid "Performs visibility graph construction."
+msgstr ""
+
+msgid "Bridges and articulation points"
+msgstr ""
+
+msgid "Computes bridges and articulation points in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Maximum flow %s"
+msgid "Maximum flow"
+msgstr "अधिकतम प्रवाह %s"
+
+msgid "Computes the maximum flow between two sets of nodes in the network."
+msgstr ""
+
+msgid "Vertex connectivity"
+msgstr ""
+
+msgid "Computes vertex connectivity between two sets of nodes in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "exponent"
+msgid "Components"
+msgstr "प्रतिपादक"
+
+msgid "Computes strongly and weakly connected components in the network."
+msgstr ""
+
+msgid "Centrality"
+msgstr ""
+
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
+msgstr ""
+
+msgid "Steiner tree"
+msgstr ""
+
+msgid "Creates Steiner tree for the network and given terminals. Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm is used in this module so the result may be sub optimal."
+msgstr ""
+
+msgid "Minimum spanning tree"
+msgstr ""
+
+msgid "Computes minimum spanning tree for the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Traveling salesman %s"
+msgid "Traveling salesman analysis"
+msgstr "ट्रैवलिंग सेल्समैन %s"
+
+msgid "Creates a cycle connecting given nodes (Traveling salesman problem). Note that TSP is NP-hard, heuristic algorithm is used by this module and created cycle may be sub optimal"
+msgstr ""
+
+#, fuzzy
+#| msgid "Overwrite vector map"
+msgid "Overlay vector maps"
+msgstr "वेक्टर मानचित्र को अधिलेखित करें"
+
+#, fuzzy
+#| msgid "Multiple vector maps"
+msgid "Clip vector maps"
+msgstr "एकाधिक वेक्टर मानचित्र"
+
+msgid "Extracts features of input map which overlay features of clip map."
+msgstr ""
+
+msgid "Overlays two vector maps offering clip, intersection, difference, symmetrical difference, union operators."
+msgstr ""
+
+#, fuzzy
+#| msgid "No vector maps."
+msgid "Patch vector maps"
+msgstr "कोई वेक्टर मानचित्र नहीं।"
+
+#, fuzzy
+#| msgid "Create new color rules for vector map"
+msgid "Creates a new vector map by combining other vector maps."
+msgstr "वेक्टर मैप के लिए नए रंग नियम बनाएं"
+
+#, fuzzy
+#| msgid "Update categories"
+msgid "Manage categories"
+msgstr "श्रेणियाँ अद्यतन करें"
+
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Change or report categories"
+msgstr "श्रेणियां (categories) कॉपी करें"
+
+msgid "Attaches, deletes or reports vector categories to/from/of map geometry."
+msgstr ""
+
+msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update attributes"
+msgid "Update area attributes from raster"
+msgstr "विशेषताएँ अद्यतन करें"
+
+msgid "Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update attributes"
+msgid "Update area attributes from vector"
+msgstr "विशेषताएँ अद्यतन करें"
+
+msgid "Count points in areas, calculate statistics from point attributes."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update attributes"
+msgid "Update point attributes from areas"
+msgstr "विशेषताएँ अद्यतन करें"
+
+msgid "Uploads vector values at positions of vector points to the table."
+msgstr ""
+
+msgid "Update database values from vector"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading attribute data for vector map <%s>..."
+msgid "Populates attribute values from vector features."
+msgstr "वेक्टर मानचित्र <%s>... के लिए विशेषता डेटा लोड हो रहा है"
+
+#, fuzzy
+#| msgid "Select raster maps to profile"
+msgid "Sample raster maps at point locations"
+msgstr "प्रोफ़ाइल के लिए रेखापुंज मानचित्र चुनें"
+
+msgid "Uploads raster values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Save raster map changes"
+msgid "Sample 3D raster at point locations"
+msgstr "रेखापुंज मानचित्र परिवर्तन सहेजें"
+
+msgid "Uploads 3D raster values at positions of vector points to the table."
+msgstr ""
+
+msgid "Sample temporal raster dataset at point locations"
+msgstr ""
+
+msgid "Uploads space time raster dataset values at positions of vector points to the table."
+msgstr ""
+
+msgid "Sample raster neighborhood around points"
+msgstr ""
+
+msgid "Samples a raster map at vector point locations."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update current region"
+msgid "Generate area for current region"
+msgstr "वर्तमान क्षेत्र अद्यतन करें"
+
+msgid "Creates a vector polygon from the current region extent."
+msgstr ""
+
+msgid "Generate areas from points"
+msgstr ""
+
+msgid "Convex hull"
+msgstr ""
+
+msgid "Produces a 2D/3D convex hull for a given vector map."
+msgstr ""
+
+msgid "Delaunay triangles"
+msgstr ""
+
+msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgstr ""
+
+msgid "Voronoi diagram/Thiessen polygons"
+msgstr ""
+
+msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
+msgstr ""
+
+#, fuzzy
+#| msgid "General info"
+msgid "Generate grid"
+msgstr "सामान्य जानकारी"
+
+msgid "Creates a vector map of a user-defined grid."
+msgstr ""
+
+#, fuzzy
+#| msgid "General info"
+msgid "Generate points"
+msgstr "सामान्य जानकारी"
+
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "Generate from database"
+msgstr "&मैपसेट का नाम बदलें"
+
+msgid "Creates new vector (points) map from database table containing coordinates."
+msgstr ""
+
+#, fuzzy
+#| msgid "Not enough points for line"
+msgid "Generate points along lines"
+msgstr "लाइन के लिए पर्याप्त अंक नहीं"
+
+msgid "Creates points along input lines in new vector map with 2 layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Scatterplot points"
+msgid "Generate random points"
+msgstr "स्कैटरप्लॉट बिंदु"
+
+msgid "Generates random 2D/3D vector points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove control point"
+msgid "Remove outliers in point sets"
+msgstr "नियंत्रण बिंदु हटाएँ"
+
+#, fuzzy
+#| msgid "Background vector map"
+msgid "Basic vector metadata"
+msgstr "पृष्ठभूमि वेक्टर मानचित्र"
+
+msgid "Outputs basic information about a vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Show attribute data"
+msgid "Classify attribute data"
+msgstr "विशेषता डेटा दिखाएँ"
+
+#, fuzzy
+#| msgid "use width for thematic mapping"
+msgid "Classifies attribute data, e.g. for thematic mapping"
+msgstr "विषयगत मानचित्रण के लिए चौड़ाई का उपयोग करें"
+
+msgid "Report topology by category"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import training areas from vector map"
+msgid "Reports geometry statistics for vector maps."
+msgstr "वेक्टर मानचित्र से प्रशिक्षण क्षेत्र आयात करें"
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate attribute statistics for points"
+msgstr "यूनीवेरिएट रेखापुंज आँकड़े"
+
+msgid "Calculates univariate statistics of vector map features. Variance and standard deviation is calculated only for points if specified."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate statistics for attribute columns"
+msgstr "यूनीवेरिएट रेखापुंज आँकड़े"
+
+msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector map is 3D"
+msgid "Vector map profiling tool"
+msgstr "वेक्टर मानचित्र 3D है"
+
+msgid "Quadrat indices"
+msgstr ""
+
+#, fuzzy
+#| msgid "east, north"
+msgid "Test normality"
+msgstr "पूर्व, उत्तर"
+
+#, fuzzy
+#| msgid "Image"
+msgid "&Imagery"
+msgstr "छवि"
+
+#, fuzzy
+#| msgid "Select image group:"
+msgid "Develop images and groups"
+msgstr "छवि समूह चुनें:"
+
+#, fuzzy
+#| msgid "Create/edit group..."
+msgid "Create/edit group"
+msgstr "ग्रुप बनाएं/संपादित करें..।"
+
+msgid "Creates, edits, and lists groups of imagery files."
+msgstr ""
+
+#, fuzzy
+#| msgid "Layer group:"
+msgid "Target group"
+msgstr "परत समूह:"
+
+msgid "Targets an imagery group to a GRASS location and mapset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading imagery lib failed"
+msgid "Find imagery files"
+msgstr "इमेजरी lib लोड करना विफल रहा"
+
+msgid "Semantic label library"
+msgstr ""
+
+msgid "Prints available semantic label information used for multispectral data."
+msgstr ""
+
+msgid "Mosaic images"
+msgstr ""
+
+msgid "Mosaics several images and extends colormap."
+msgstr ""
+
+#, fuzzy
+#| msgid "Change wire color"
+msgid "Manage image colors"
+msgstr "तार का रंग बदलें"
+
+msgid "Color balance for RGB"
+msgstr ""
+
+msgid "Performs auto-balancing of colors for RGB images."
+msgstr ""
+
+msgid "HIS to RGB"
+msgstr ""
+
+msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
+msgstr ""
+
+msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rectifying images, please wait..."
+msgid "Rectify image or raster"
+msgstr "छवियों को सुधारा जा रहा है, कृपया प्रतीक्षा करें..।"
+
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create histogram of raster map"
+msgid "Generate histogram of image"
+msgstr "रास्टर मैप का हिस्टोग्राम बनाएं"
+
+msgid "Spectral response"
+msgstr ""
+
+msgid "Displays spectral response at user specified locations in group or images."
+msgstr ""
+
+msgid "Pan sharpening"
+msgstr ""
+
+msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
+msgstr ""
+
+#, fuzzy
+#| msgid "Class manager"
+msgid "Classify image"
+msgstr "क्लास मैनेजर"
+
+msgid "Clustering input for unsupervised classification"
+msgstr ""
+
+msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
+msgstr ""
+
+msgid "Input for supervised MLC"
+msgstr ""
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Generates statistics for i.maxlik from raster map."
+msgstr "रेखापुंज मानचित्र के लिए आँकड़े <%s>"
+
+msgid "Maximum likelihood classification (MLC)"
+msgstr ""
+
+msgid "Classifies the cell spectral reflectances in imagery data. Classification is based on the spectral signature information generated by either i.cluster, g.gui.iclass, or i.gensig."
+msgstr ""
+
+#, fuzzy
+#| msgid "Interactive insertion"
+msgid "Interactive input for supervised classification"
+msgstr "इंटरैक्टिव प्रविष्टि"
+
+msgid "Generates spectral signatures by allowing the user to outline training areas."
+msgstr ""
+
+msgid "Input for supervised SMAP"
+msgstr ""
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Generates statistics for i.smap from raster map."
+msgstr "रेखापुंज मानचित्र के लिए आँकड़े <%s>"
+
+msgid "Sequential maximum a posteriori classification (SMAP)"
+msgstr ""
+
+msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
+msgstr ""
+
+msgid "Input for supervised SVM"
+msgstr ""
+
+msgid "Train a SVM Train a Support Vector Machine"
+msgstr ""
+
+msgid "Support Vector Machines classification (SVM)"
+msgstr ""
+
+msgid "Predict with a SVM Predict with a Support Vector Machine"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save signature file"
+msgid "Manage signature files"
+msgstr "हस्ताक्षर फ़ाइल सहेजें"
+
+msgid "Manage imagery classification signature files"
+msgstr ""
+
+#, fuzzy
+#| msgid "Orientation"
+msgid "Object segmentation"
+msgstr "अभिविन्यास"
+
+msgid "Identifies segments (objects) from imagery data."
+msgstr ""
+
+msgid "Filter image"
+msgstr ""
+
+#, fuzzy
+#| msgid "Layer selection"
+msgid "Edge detection"
+msgstr "परत चयन"
+
+msgid "Zero-crossing \"edge detection\" raster function for image processing."
+msgstr ""
+
+msgid "Matrix/convolving filter"
+msgstr ""
+
+#, fuzzy
+#| msgid "Select raster maps to profile"
+msgid "Performs raster map matrix filter."
+msgstr "प्रोफ़ाइल के लिए रेखापुंज मानचित्र चुनें"
+
+msgid "Edge preserving smoothing"
+msgstr ""
+
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+#, fuzzy
+#| msgid "Transforming <%s>..."
+msgid "Transform image"
+msgstr "परिवर्तन <%s>..।"
+
+#, fuzzy
+#| msgid "Cannot rename location"
+msgid "Canonical correlation"
+msgstr "स्थान का नाम नहीं बदला जा सकता"
+
+msgid "Canonical components analysis (CCA) program for image processing."
+msgstr ""
+
+msgid "Principal components"
+msgstr ""
+
+msgid "Principal components analysis (PCA) for image processing."
+msgstr ""
+
+msgid "Fast Fourier"
+msgstr ""
+
+msgid "Fast Fourier Transform (FFT) for image processing."
+msgstr ""
+
+msgid "Inverse Fast Fourier"
+msgstr ""
+
+msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set image size"
+msgid "Satellite images tools"
+msgstr "छवि का आकार सेट करें"
+
+msgid "Aster DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN."
+msgstr ""
+
+msgid "Landsat DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+/OLI"
+msgstr ""
+
+msgid "Landsat cloud cover assessment"
+msgstr ""
+
+msgid "Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA)."
+msgstr ""
+
+msgid "Modis quality control"
+msgstr ""
+
+msgid "Extracts quality control parameters from MODIS QC layers."
+msgstr ""
+
+msgid "Atmospheric correction"
+msgstr ""
+
+msgid "Performs atmospheric correction using the 6S algorithm. 6S - Second Simulation of Satellite Signal in the Solar Spectrum."
+msgstr ""
+
+msgid "Topographic correction"
+msgstr ""
+
+msgid "Computes topographic correction of reflectance."
+msgstr ""
+
+msgid "Orthophoto tools"
+msgstr ""
+
+msgid "Manage GCPs for 3D correction"
+msgstr ""
+
+msgid "Georectifies a map and allows managing GCP for 3D correction."
+msgstr ""
+
+msgid "Corrects scanning distortions"
+msgstr ""
+
+msgid "Corrects scanning distortions of a scanned aerial photo."
+msgstr ""
+
+#, fuzzy
+#| msgid "Insert sampling frame parameter"
+msgid "Initialize ortho parameters"
+msgstr "सैंपलिंग फ़्रेम पैरामीटर डालें"
+
+msgid "Interactively creates or modifies entries in a camera initial exposure station file for imagery group referenced by a sub-block."
+msgstr ""
+
+#, fuzzy
+#| msgid "Model parameters"
+msgid "Camera parameters"
+msgstr "मॉडल पैरामीटर"
+
+msgid "Select and modify the imagery group camera reference file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Setup for georectification"
+msgid "Elevation model for orthorectification"
+msgstr "भू-संशोधन के लिए सेटअप"
+
+msgid "Select or modify the target elevation model."
+msgstr ""
+
+#, fuzzy
+#| msgid "Setup for georectification"
+msgid "Target group for orthorectification"
+msgstr "भू-संशोधन के लिए सेटअप"
+
+#, fuzzy
+#| msgid "Create or edit imagery groups"
+msgid "Select or modify the imagery group target."
+msgstr "इमेजरी ग्रुप्स (imagery groups) बनाएं या संपादित करें"
+
+#, fuzzy
+#| msgid "Select datum transformation"
+msgid "Compute ortho transformation"
+msgstr "डेटाम परिवर्तन का चयन करें"
+
+msgid "Computes a coordinate transformation based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Georectifier"
+msgid "Orthorectify imagery"
+msgstr "जियोरेक्टिफायर"
+
+msgid "Orthorectifies an image by using the image to photo coordinate transformation matrix."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select image group:"
+msgid "Satellite images products"
+msgstr "छवि समूह चुनें:"
+
+msgid "Vegetation indices"
+msgstr ""
+
+msgid "Calculates different types of vegetation indices. Uses red and nir bands mostly, and some indices require additional bands."
+msgstr ""
+
+msgid "Tasseled cap vegetation index"
+msgstr ""
+
+msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
+msgstr ""
+
+msgid "Albedo"
+msgstr ""
+
+msgid "Computes broad band albedo from surface reflectance."
+msgstr ""
+
+msgid "Emissivity"
+msgstr ""
+
+msgid "Computes emissivity from NDVI, generic method for sparse land."
+msgstr ""
+
+msgid "Biomass growth"
+msgstr ""
+
+msgid "Computes biomass growth, precursor of crop yield calculation."
+msgstr ""
+
+msgid "Evapotranspiration calculation"
+msgstr ""
+
+msgid "Instantaneaous Net Radiation"
+msgstr ""
+
+msgid "Net radiation approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Soil heat flux"
+msgstr ""
+
+msgid "Soil heat flux approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Sensible heat flux"
+msgstr ""
+
+msgid "Computes sensible heat flux iteration SEBAL 01."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export animation"
+msgid "Evaporative fraction"
+msgstr "एनिमेशन निर्यात करें"
+
+msgid "Computes evaporative fraction and root zone soil moisture."
+msgstr ""
+
+msgid "Actual Evapotranspiration"
+msgstr ""
+
+msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal resolution: %s"
+msgid "Temporal integration of ETa"
+msgstr "अस्थायी रिज़ॉल्यूशन: %s"
+
+msgid "Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)."
+msgstr ""
+
+msgid "Hargreaves methods Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation modified or original Hargreaves formulation, 2001."
+msgstr ""
+
+msgid "Penman-Monteith Evapotranspiration"
+msgstr ""
+
+msgid "Computes potential evapotranspiration calculation with hourly Penman-Monteith."
+msgstr ""
+
+msgid "Priestley-Taylor Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation Priestley and Taylor formulation, 1972."
+msgstr ""
+
+#, fuzzy
+#| msgid "Analysis"
+msgid "Kappa analysis"
+msgstr "विश्लेषण"
+
+msgid "Calculates error matrix and kappa parameter for accuracy assessment of classification result."
+msgstr ""
+
+msgid "OIF for LandSat TM"
+msgstr ""
+
+msgid "Calculates Optimum-Index-Factor table for spectral bands"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster"
+msgid "3D r&aster"
+msgstr "3D रास्टर"
+
+#, fuzzy
+#| msgid "3D raster map"
+msgid "Develop 3D raster map"
+msgstr "3D रास्टर मैप"
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage 3D NULL values"
+msgstr "तालिकाएँ प्रबंधित करें"
+
+msgid "Explicitly create the 3D NULL-value bitmap file."
+msgstr ""
+
+msgid "Modifies a timestamp for a 3D raster map. Print/add/remove a timestamp for a 3D raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster"
+msgid "Retile 3D raster"
+msgstr "3D रास्टर"
+
+msgid "Retiles an existing 3D raster map with user defined x, y and z tile size."
+msgstr ""
+
+msgid "Allows creation and/or modification of 3D raster map layer support files."
+msgstr ""
+
+#, fuzzy
+#| msgid "List of raster layers"
+msgid "3D rasters to raster series"
+msgstr "रेखापुंज परतों की सूची"
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "3D color tables"
+msgstr "रंग तालिका सेट करें"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a 3D raster map."
+msgstr "रास्टर मैप के लिए नई रंग टेबल बनाएं"
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "Export 3D color table"
+msgstr "रंग तालिका सेट करें"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Exports the color table associated with a 3D raster map."
+msgstr "रास्टर मैप के लिए नई रंग टेबल बनाएं"
+
+msgid "3D mask"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create profile of raster map."
+msgid "Establishes the current working 3D raster mask."
+msgstr "रेखापुंज मानचित्र का प्रोफ़ाइल बनाने में असमर्थ।"
+
+#, fuzzy
+#| msgid "3D Raster Map Calculator"
+msgid "3D raster map calculator"
+msgstr "3D रास्टर मैप कैलकुलेटर"
+
+#, fuzzy
+#| msgid "Projection"
+msgid "Cross section"
+msgstr "प्रक्षेपण"
+
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Iso lines:"
+msgid "3D flow lines"
+msgstr "आईएसओ लाइनें:"
+
+msgid "Computes 3D flow lines and 3D flow accumulation."
+msgstr ""
+
+msgid "3D gradient"
+msgstr ""
+
+msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
+msgstr ""
+
+msgid "3D neighborhood analysis"
+msgstr ""
+
+msgid "Makes each voxel value a function of the values assigned to the voxels around it, and stores new voxel values in an output 3D raster map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save display to file"
+msgid "Create 3D display file"
+msgstr "प्रदर्शन को फ़ाइल में सहेजें"
+
+msgid "Creates a display file from an existing 3D raster map according to specified threshold levels."
+msgstr ""
+
+#, fuzzy
+#| msgid "Multiple 3D raster maps"
+msgid "Interpolate 3D raster from points"
+msgstr "एकाधिक 3D रास्टर मानचित्र"
+
+msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
+msgstr ""
+
+#, fuzzy
+#| msgid "Space time 3D raster dataset"
+msgid "Basic 3D raster metadata"
+msgstr "स्पेस टाइम 3D रास्टर डेटासेट"
+
+msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "3D raster statistics"
+msgstr "रेखापुंज आँकड़े रिपोर्ट करें"
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Generates volume statistics for 3D raster maps."
+msgstr "रेखापुंज मानचित्र के लिए आँकड़े <%s>"
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate statistics for 3D rasters"
+msgstr "यूनीवेरिएट रेखापुंज आँकड़े"
+
+msgid "Calculates univariate statistics from the non-null cells of a 3D raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+#, fuzzy
+#| msgid "Database"
+msgid "&Database"
+msgstr "डेटाबेस"
+
+#, fuzzy
+#| msgid "Database connection"
+msgid "Database information"
+msgstr "डेटाबेस कनेक्शन"
+
+#, fuzzy
+#| msgid "Database"
+msgid "List databases"
+msgstr "डेटाबेस"
+
+msgid "Lists all databases for a given driver and location."
+msgstr ""
+
+#, fuzzy
+#| msgid "Display driver:"
+msgid "List drivers"
+msgstr "डिस्प्ले ड्राइवर:"
+
+msgid "Lists all database drivers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Result tables"
+msgid "List tables"
+msgstr "परिणाम तालिकाएँ"
+
+msgid "Lists all tables for a given database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "Describe table"
+msgstr "रंग तालिका सेट करें"
+
+msgid "Describes a table in detail."
+msgstr ""
+
+#, fuzzy
+#| msgid "List of maps:"
+msgid "List columns"
+msgstr "मानचित्रों की सूची:"
+
+msgid "List all columns for a given table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage databases"
+msgstr "तालिकाएँ प्रबंधित करें"
+
+#, fuzzy
+#| msgid "&Connect"
+msgid "Connect"
+msgstr "&जुड़ें"
+
+msgid "Prints/sets general DB connection for current mapset."
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Sets user/password for DB driver/database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create table"
+msgid "Create database"
+msgstr "टेबल बनाएं"
+
+#, fuzzy
+#| msgid "Invalid input temporal dataset"
+msgid "Creates an empty database."
+msgstr "अमान्य इनपुट अस्थायी डेटासेट"
+
+#, fuzzy
+#| msgid "Database"
+msgid "Drop database"
+msgstr "डेटाबेस"
+
+#, fuzzy
+#| msgid "Remove label '{label}' for this database?"
+msgid "Removes an existing database."
+msgstr "इस डेटाबेस के लिए लेबल '{label}' हटाएँ?"
+
+#, fuzzy
+#| msgid "Create table"
+msgid "Drop table"
+msgstr "टेबल बनाएं"
+
+#, fuzzy
+#| msgid "Create attribute table"
+msgid "Drops an attribute table."
+msgstr "एट्रिब्यूट टेबल बनाएं"
+
+#, fuzzy
+#| msgid "Copy line"
+msgid "Copy table"
+msgstr "लाइन कॉपी करें"
+
+msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
+msgstr ""
+
+#, fuzzy
+#| msgid "Drop column(s)"
+msgid "Drop column"
+msgstr "कॉलम ड्रॉप करें"
+
+#, fuzzy
+#| msgid "Drop also linked attribute table (%s)"
+msgid "Drops a column from selected attribute table."
+msgstr "लिंक की गई विशेषता तालिका भी छोड़ें (%s)"
+
+msgid "Test"
+msgstr ""
+
+msgid "Test database driver, database must exist and set by db.connect."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query tool"
+msgid "Query any table"
+msgstr "क्वेरी उपकरण"
+
+msgid "Selects data from attribute table. Performs SQL query statement(s)."
+msgstr ""
+
+#, fuzzy
+#| msgid " SQL statement "
+msgid "SQL statement"
+msgstr " एसक्यूएल कथन "
+
+msgid "Executes any SQL statement. For SELECT statements use 'db.select'."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate statistics for table column"
+msgstr "यूनीवेरिएट रेखापुंज आँकड़े"
+
+msgid "Calculates univariate statistics on selected table column."
+msgstr ""
+
+#, fuzzy
+#| msgid "Database connection"
+msgid "Vector database connections"
+msgstr "डेटाबेस कनेक्शन"
+
+#, fuzzy
+#| msgid "New name"
+msgid "New table"
+msgstr "नया नाम"
+
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove Label"
+msgid "Remove table"
+msgstr "लेबल हटाएँ"
+
+#, fuzzy
+#| msgid "Chosen column '%s' does not exist in attribute table of layer '%s' of vector map '%s'.\n"
+msgid "Removes existing attribute table of a vector map."
+msgstr "चुना गया कॉलम '%s' वेक्टर मैप '%s' की लेयर '%s' की एट्रिब्यूट टेबल में मौजूद नहीं है।\n"
+
+#, fuzzy
+#| msgid "Loading tables..."
+msgid "Join table"
+msgstr "तालिकाएँ लोड हो रही हैं..।"
+
+#, fuzzy
+#| msgid "Unable to update vector map."
+msgid "Joins a database table to a vector map table."
+msgstr "वेक्टर मानचित्र अद्यतन करने में असमर्थ।"
+
+#, fuzzy
+#| msgid "Add column"
+msgid "Add columns"
+msgstr "कॉलम जोड़ें"
+
+msgid "Adds one or more columns to the attribute table connected to a given vector map."
+msgstr ""
+
+msgid "Drops a column from the attribute table connected to a given vector map."
+msgstr ""
+
+msgid "Renames a column in the attribute table connected to a given vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Cell values"
+msgid "Change values"
+msgstr "सेल मान"
+
+msgid "Updates a column in the attribute table connected to a vector map."
+msgstr ""
+
+msgid "Drop row"
+msgstr ""
+
+msgid "Removes a vector feature from a vector map through attribute selection."
+msgstr ""
+
+#, fuzzy
+#| msgid "Space time vector dataset"
+msgid "Reconnect vectors to database"
+msgstr "स्पेस टाइम वेक्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Editing is allowed only for vector maps from the current mapset."
+msgid "Reconnects attribute tables for all vector maps from the current mapset to a new database."
+msgstr "संपादन की अनुमति केवल वर्तमान मैपसेट से वेक्टर मानचित्रों के लिए है।"
+
+#, fuzzy
+#| msgid "Database connection"
+msgid "Set vector map - database connection"
+msgstr "डेटाबेस कनेक्शन"
+
+msgid "Prints/sets DB connection for a vector map to attribute table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal mode"
+msgid "&Temporal"
+msgstr "अस्थायी मोड"
+
+#, fuzzy
+#| msgid "&Delete mapsets"
+msgid "Manage datasets"
+msgstr "&Delete mapsets"
+
+#, fuzzy
+#| msgid "Invalid input temporal dataset"
+msgid "Connect temporal database"
+msgstr "अमान्य इनपुट अस्थायी डेटासेट"
+
+msgid "Prints/sets general temporal GIS database connection for current mapset."
+msgstr ""
+
+msgid "Create"
+msgstr "बनाएं"
+
+#, fuzzy
+#| msgid "Select space time dataset(s):"
+msgid "Creates a space time dataset."
+msgstr "स्पेस टाइम डेटासेट चुनें:"
+
+#, fuzzy
+#| msgid "Select space time dataset(s):"
+msgid "Renames a space time dataset"
+msgstr "स्पेस टाइम डेटासेट चुनें:"
+
+#, fuzzy
+#| msgid "Import vector data  [v.import]"
+msgid "Removes space time datasets from temporal database."
+msgstr "वेक्टर डेटा इम्पोर्ट करें [v.import]"
+
+#, fuzzy
+#| msgid "Please specify the space time dataset <%s>."
+msgid "Modifies the metadata of a space time dataset."
+msgstr "कृपया स्पेस टाइम डेटासेट <%s> निर्दिष्ट करें।"
+
+msgid "Merge"
+msgstr ""
+
+msgid "Merges several space time datasets into a single space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal mode"
+msgid "Temporally shift"
+msgstr "अस्थायी मोड"
+
+#, fuzzy
+#| msgid "The temporal extents of maps in space-time datasets have to be the same."
+msgid "Shifts temporally the maps of a space time dataset."
+msgstr "स्पेस-टाइम डेटासेट्स में मानचित्रों के लौकिक विस्तार समान होने चाहिए।"
+
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "Snap maps of dataset"
+msgstr "&मैपसेट का नाम बदलें"
+
+#, fuzzy
+#| msgid "Please specify the space time dataset <%s>."
+msgid "Snaps temporally the maps of a space time dataset."
+msgstr "कृपया स्पेस टाइम डेटासेट <%s> निर्दिष्ट करें।"
+
+msgid "Lists space time datasets and maps registered in the temporal database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select space time dataset(s):"
+msgid "Copy space time dataset"
+msgstr "स्पेस टाइम डेटासेट चुनें:"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Creates a copy of a space time raster dataset."
+msgstr "स्पेस टाइम रास्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Invalid input temporal dataset"
+msgid "Upgrade temporal database"
+msgstr "अमान्य इनपुट अस्थायी डेटासेट"
+
+#, fuzzy
+#| msgid "Dataset <%s> not found in temporal database"
+msgid "Upgrades the version of the temporal database."
+msgstr "टेम्पोरल डेटाबेस में डेटासेट <%s> नहीं मिला"
+
+#, fuzzy
+#| msgid "Manage access to mapsets"
+msgid "Manage maps in datasets"
+msgstr "मैपसेट तक पहुंच प्रबंधित करें"
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "Register maps in datasets"
+msgstr "रेखापुंज मानचित्र"
+
+msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister maps from datasets"
+msgstr "कोई रेखापुंज मानचित्र नहीं"
+
+msgid "Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Space time raster dataset: %s"
+msgid "List raster dataset maps"
+msgstr "अंतरिक्ष समय रेखापुंज डेटासेट: %s"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Lists registered maps of a space time raster dataset."
+msgstr "स्पेस टाइम रास्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Space time vector dataset: %s"
+msgid "List vector dataset maps"
+msgstr "अंतरिक्ष समय वेक्टर डेटासेट: %s"
+
+#, fuzzy
+#| msgid "Space time vector dataset"
+msgid "Lists registered maps of a space time vector dataset."
+msgstr "स्पेस टाइम वेक्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Space time 3D raster dataset: %s"
+msgid "List 3D raster dataset maps"
+msgstr "अंतरिक्ष समय 3D रेखापुंज डेटासेट: %s"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Lists registered maps of a space time raster3d dataset."
+msgstr "स्पेस टाइम रास्टर डेटासेट"
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import"
+msgstr "&इंपोर्ट करें"
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Import raster dataset"
+msgstr "रास्टर डेटा इम्पोर्ट करें"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Imports space time raster dataset."
+msgstr "स्पेस टाइम रास्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Import vector dataset"
+msgstr "वेक्टर डेटा इम्पोर्ट करें"
+
+#, fuzzy
+#| msgid "Import vector data  [v.import]"
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr "वेक्टर डेटा इम्पोर्ट करें [v.import]"
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Export raster dataset"
+msgstr "रास्टर डेटा इम्पोर्ट करें"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Exports space time raster dataset."
+msgstr "स्पेस टाइम रास्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Export raster dataset as VTK time series"
+msgstr "रेखापुंज आँकड़े रिपोर्ट करें"
+
+#, fuzzy
+#| msgid "Import raster data  [r.import]"
+msgid "Exports space time raster dataset as VTK time series."
+msgstr "रास्टर डेटा इम्पोर्ट करें [r.import]"
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Export vector dataset"
+msgstr "वेक्टर डेटा इम्पोर्ट करें"
+
+#, fuzzy
+#| msgid "Import vector data  [v.import]"
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr "वेक्टर डेटा इम्पोर्ट करें [v.import]"
+
+msgid "Convert raster dataset to 3D raster"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster data  [r.import]"
+msgid "Converts a space time raster dataset into a 3D raster map."
+msgstr "रास्टर डेटा इम्पोर्ट करें [r.import]"
+
+#, fuzzy
+#| msgid "Invalid input vector dataset"
+msgid "Convert raster dataset to vector dataset"
+msgstr "अमान्य इनपुट वेक्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Import raster data  [r.import]"
+msgid "Converts a space time raster dataset into a space time vector dataset"
+msgstr "रास्टर डेटा इम्पोर्ट करें [r.import]"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Create contour lines from raster dataset"
+msgstr "रास्टर मैप के लिए नई रंग टेबल बनाएं"
+
+msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Text rotation"
+msgid "Extraction"
+msgstr "पाठ का घूमना"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Extract subset of raster dataset"
+msgstr "स्पेस टाइम रास्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Extracts a subset of a space time raster datasets."
+msgstr "स्पेस टाइम रास्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Space time vector dataset"
+msgid "Extract subset of vector dataset"
+msgstr "स्पेस टाइम वेक्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Space time vector dataset"
+msgid "Extracts a subset of a space time vector dataset."
+msgstr "स्पेस टाइम वेक्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Space time 3D raster dataset"
+msgid "Extract subset of 3D raster dataset"
+msgstr "स्पेस टाइम 3D रास्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Space time 3D raster dataset"
+msgid "Extracts a subset of a space time 3D raster dataset."
+msgstr "स्पेस टाइम 3D रास्टर डेटासेट"
+
+#, fuzzy
+#| msgid "Select raster maps to profile"
+msgid "Select maps by temporal topology"
+msgstr "प्रोफ़ाइल के लिए रेखापुंज मानचित्र चुनें"
+
+msgid "Select maps from space time datasets by topological relationships to other space time datasets using temporal algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Enter vector attribute values"
+msgid "Query vector dataset attribute data"
+msgstr "वेक्टर विशेषता मान दर्ज करें"
+
+msgid "Prints attributes of vector maps registered in a space time vector dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "Raster dataset color table"
+msgstr "रंग तालिका सेट करें"
+
+msgid "Creates/modifies the color table associated with each raster map of the space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster Map Calculator"
+msgid "Raster calculations"
+msgstr "रेखापुंज मानचित्र कैलकुलेटर"
+
+msgid "Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Temporal raster algebra"
+msgstr "रास्टर डेटा इम्पोर्ट करें"
+
+msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D Raster Map Calculator"
+msgid "3D raster calculations"
+msgstr "3D रास्टर मैप कैलकुलेटर"
+
+msgid "Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Temporal 3D raster algebra"
+msgstr "रास्टर डेटा इम्पोर्ट करें"
+
+msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Temporal vector algebra"
+msgstr "वेक्टर डेटा इम्पोर्ट करें"
+
+msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Interpolate gaps in raster datasets"
+msgstr "स्पेस टाइम रास्टर डेटासेट"
+
+msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Orientation"
+msgid "Aggregation"
+msgstr "अभिविन्यास"
+
+#, fuzzy
+#| msgid "Invalid input raster dataset"
+msgid "Neighborhood analysis in raster dataset"
+msgstr "अमान्य इनपुट रैस्टर डेटासेट"
+
+msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input raster dataset"
+msgid "Aggregation in raster datasets"
+msgstr "अमान्य इनपुट रैस्टर डेटासेट"
+
+msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal resolution: %s"
+msgid "Temporal aggregation"
+msgstr "अस्थायी रिज़ॉल्यूशन: %s"
+
+msgid "Aggregates temporally the maps of a space time raster dataset by a user defined granularity."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal resolution: %s"
+msgid "Temporal aggregation by dataset"
+msgstr "अस्थायी रिज़ॉल्यूशन: %s"
+
+msgid "Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset."
+msgstr ""
+
+msgid "Compute cyclic accumulations"
+msgstr ""
+
+msgid "Computes cyclic accumulations of a space time raster dataset."
+msgstr ""
+
+msgid "Detect accumulation patterns"
+msgstr ""
+
+msgid "Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate."
+msgstr ""
+
+#, fuzzy
+#| msgid "Sample units"
+msgid "Sampling"
+msgstr "नमूना इकाइयाँ"
+
+#, fuzzy
+#| msgid "Import raster data  [r.import]"
+msgid "Sample a space time raster dataset at point coordinates"
+msgstr "रास्टर डेटा इम्पोर्ट करें [r.import]"
+
+msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
+msgstr ""
+
+msgid "Query raster dataset by vector points dataset"
+msgstr ""
+
+msgid "Stores raster map values at spatial and temporal positions of vector points as vector attributes."
+msgstr ""
+
+msgid "Observe specific locations in raster dataset"
+msgstr ""
+
+msgid "Observes specific locations in a space time raster dataset over a period of time using vector points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal mode"
+msgid "Temporal sampling"
+msgstr "अस्थायी मोड"
+
+msgid "Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout."
+msgstr ""
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Space time datasets metadata"
+msgstr "स्पेस टाइम रास्टर डेटासेट"
+
+msgid "Lists information about space time datasets and maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate raster dataset statistics"
+msgstr "यूनीवेरिएट रेखापुंज आँकड़े"
+
+msgid "Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate vector dataset statistics"
+msgstr "यूनीवेरिएट रेखापुंज आँकड़े"
+
+msgid "Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset"
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate 3D raster dataset statistics"
+msgstr "यूनीवेरिएट रेखापुंज आँकड़े"
+
+msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rebuild topology"
+msgid "Report temporal topology"
+msgstr "टोपोलॉजी का पुनर्निर्माण करें"
+
+#, fuzzy
+#| msgid "Topology of Space time dataset %s is invalid."
+msgid "Lists temporal topology of a space time dataset."
+msgstr "स्पेस टाइम डेटासेट की टोपोलॉजी"
+
+#, fuzzy
+#| msgid "Tools"
+msgid "GUI tools"
+msgstr "औजार"
+
+#, fuzzy
+#| msgid "Timeline Tool"
+msgid "Timeline tool"
+msgstr "टाइमलाइन टूल"
+
+#, fuzzy
+#| msgid "Display extent"
+msgid "Plot temporal extents."
+msgstr "प्रदर्शन सीमा"
+
+#, fuzzy
+#| msgid "Temporal Plot Tool"
+msgid "Temporal plot tool"
+msgstr "टेम्पोरल प्लॉट टूल"
+
+#, fuzzy
+#| msgid "Get all values"
+msgid "Plot temporal values."
+msgstr "सभी मान प्राप्त करें"
+
+#, fuzzy
+#| msgid "Help"
+msgid "&Help"
+msgstr "मदद"
+
+#, fuzzy
+#| msgid "Tools"
+msgid "GRASS help"
+msgstr "औजार"
+
+msgid "Display the HTML man pages of GRASS"
+msgstr ""
+
+msgid "GUI help"
+msgstr ""
+
+msgid "About system"
+msgstr ""
+
+#, fuzzy
+#| msgid "Find more information at:"
+msgid "Prints system information"
+msgstr "अधिक जानकारी यहां पाएं:"
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Import, export and link data"
+msgstr "वेक्टर डेटा इम्पोर्ट करें"
+
+#, fuzzy
+#| msgid "Attribute Table Manager"
+msgid "Attribute table manager"
+msgstr "एट्रिब्यूट टेबल मैनेजर (Attribute Table Manager)"
+
+#, fuzzy
+#| msgid "Data Catalog"
+msgid "Launch Data Catalog."
+msgstr "डेटा कैटलॉग"
+
+msgid "Managing GCPs for 3D correction"
+msgstr ""
+
+msgid "Interactive editing and digitization of vector maps."
+msgstr ""
+
+msgid "Interactive editing and digitization of raster maps."
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input coordinates"
+msgid "Bearing/distance to coordinates"
+msgstr "अमान्य इनपुट निर्देशांक"
+
+msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa. It assumes a cartesian coordinate system"
+msgstr ""
+
+#, fuzzy
+#| msgid "Measure distance"
+msgid "Measure map distances"
+msgstr "दूरी नापें"
+
+msgid "Measures the lengths and areas of features."
+msgstr ""
+
+#, fuzzy
+#| msgid "Enable auto-rendering"
+msgid "3D image rendering"
+msgstr "ऑटो-रेंडरिंग सक्षम करें"
+
+msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
+msgstr ""
+
+msgid "3D visualization script"
+msgstr ""
+
+msgid "Creates fly-through script to run in NVIZ."
+msgstr ""
+
+msgid "Convert coordinates between projections"
+msgstr ""
+
+msgid "Transform coordinates (affine)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate PostScript output"
+msgid "PostScript map output"
+msgstr "पोस्टस्क्रिप्ट आउटपुट जेनरेट करें"
+
+#, fuzzy
+#| msgid "Generate PostScript output"
+msgid "Produces hardcopy PostScript map output."
+msgstr "पोस्टस्क्रिप्ट आउटपुट जेनरेट करें"
+
+#, fuzzy
+#| msgid "Save current model to file"
+msgid "Save model to file"
+msgstr "वर्तमान मॉडल को फ़ाइल में सहेजें"
+
+#, fuzzy
+#| msgid "Choose model file"
+msgid "Close model file"
+msgstr "मॉडल फ़ाइल चुनें"
+
+#, fuzzy
+#| msgid "Export model to image"
+msgid "Export to image"
+msgstr "मॉडल को छवि में निर्यात करें"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export to Python"
+msgstr "मॉडल को पायथन लिपि में निर्यात करें"
+
+#, fuzzy
+#| msgid "Export to:"
+msgid "Export to PyWPS"
+msgstr "इसमें निर्यात करें:"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to PyWPS script"
+msgstr "मॉडल को पायथन लिपि में निर्यात करें"
+
+#, fuzzy
+#| msgid "Export training areas"
+msgid "Export to actinia"
+msgstr "निर्यात प्रशिक्षण क्षेत्र"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to actinia script"
+msgstr "मॉडल को पायथन लिपि में निर्यात करें"
+
+#, fuzzy
+#| msgid "Run model"
+msgid "Quit modeler"
+msgstr "मॉडल चलाएँ"
+
+#, fuzzy
+#| msgid "Choose model file"
+msgid "Close modeler window"
+msgstr "मॉडल फ़ाइल चुनें"
+
+#, fuzzy
+#| msgid "Model"
+msgid "&Model"
+msgstr "नमूना"
+
+#, fuzzy
+#| msgid "Add comment"
+msgid "Add command"
+msgstr "टिप्पणी जोड़ें"
+
+#, fuzzy
+#| msgid "Add GRASS command to the model"
+msgid "Add action (GRASS command) to model"
+msgstr "मॉडल में GRASS कमांड जोड़ें"
+
+#, fuzzy
+#| msgid "Add default"
+msgid "Add data"
+msgstr "डिफ़ॉल्ट जोड़ें"
+
+#, fuzzy
+#| msgid "Add data to model"
+msgid "Add data item to model"
+msgstr "मॉडल में डेटा जोड़ें"
+
+#, fuzzy
+#| msgid "Fine resolution:"
+msgid "Define relation"
+msgstr "उत्तम संकल्प:"
+
+#, fuzzy
+#| msgid "Manually define relation between data and commands"
+msgid "Define relation between data and action items"
+msgstr "डेटा और कमांड के बीच संबंध को मैन्युअल रूप से परिभाषित करें"
+
+#, fuzzy
+#| msgid "Add loop/series to model"
+msgid "Add loop / series"
+msgstr "मॉडल में लूप/सीरीज जोड़ें"
+
+#, fuzzy
+#| msgid "Add loop/series to model"
+msgid "Adds loop (series) to model"
+msgstr "मॉडल में लूप/सीरीज जोड़ें"
+
+#, fuzzy
+#| msgid "conditional"
+msgid "Add condition"
+msgstr "सशर्त"
+
+#, fuzzy
+#| msgid "Add comment to model"
+msgid "Adds condition (if/else) to model"
+msgstr "मॉडल में टिप्पणी जोड़ें"
+
+#, fuzzy
+#| msgid "Add comment to model"
+msgid "Adds comment to model"
+msgstr "मॉडल में टिप्पणी जोड़ें"
+
+#, fuzzy
+#| msgid "Remove text"
+msgid "Remove item"
+msgstr "पाठ हटाएँ"
+
+#, fuzzy
+#| msgid "Remove control point"
+msgid "Remove action/data from model"
+msgstr "नियंत्रण बिंदु हटाएँ"
+
+msgid "Model properties (name, purpose, etc.)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Delete intermediate data?"
+msgid "Delete intermediate data"
+msgstr "इंटरमीडिएट डेटा हटाएं?"
+
+#, fuzzy
+#| msgid "Delete intermediate data when finish"
+msgid "Delete intermediate data defined in the model"
+msgstr "समाप्त होने पर इंटरमीडिएट डेटा हटाएं"
+
+#, fuzzy
+#| msgid "Run model"
+msgid "Run entire model"
+msgstr "मॉडल चलाएँ"
+
+#, fuzzy
+#| msgid "Validate model"
+msgid "Validate entire model"
+msgstr "मॉडल मान्य करें"
+
+msgid "Help"
+msgstr "मदद"
+
+msgid "Display the HTML man pages of Graphical modeler"
+msgstr ""
+
+#, fuzzy
+#| msgid "Quit Graphical Modeler"
+msgid "About Graphical Modeler"
+msgstr "ग्राफ़िकल मॉडलर छोड़ें"
+
+#, fuzzy
+#| msgid "Script generated by wxGUI Graphical Modeler."
+msgid "Display information about Graphical Modeler"
+msgstr "wxGUI ग्राफिकल मॉडलर द्वारा उत्पन्न स्क्रिप्ट।"
+
+msgid "Specify paper size, margins and orientation"
+msgstr "कागज का आकार, मार्जिन और ओरिएंटेशन निर्दिष्ट करें"
+
+#, fuzzy
+#| msgid "Failed to read instruction %s"
+msgid "Load instruction file"
+msgstr "निर्देश पढ़ने में विफल %s"
+
+msgid "Load text file with mapping instructions"
+msgstr "मैपिंग निर्देशों के साथ टेक्स्ट फ़ाइल लोड करें"
+
+#, fuzzy
+#| msgid "Export attribute table"
+msgid "Export instruction file"
+msgstr "निर्यात विशेषता तालिका"
+
+msgid "Generate text file with mapping instructions"
+msgstr "मैपिंग निर्देशों के साथ टेक्स्ट फ़ाइल जेनरेट करें"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export to PostScript"
+msgstr "मॉडल को पायथन लिपि में निर्यात करें"
+
+msgid "Generate PostScript output"
+msgstr "पोस्टस्क्रिप्ट आउटपुट जेनरेट करें"
+
+#, fuzzy
+#| msgid "Export to:"
+msgid "Export to PDF"
+msgstr "इसमें निर्यात करें:"
+
+msgid "Generate PDF output"
+msgstr "पीडीएफ आउटपुट जेनरेट करें"
+
+msgid "Launch ps.map dialog"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cartographic Composer"
+msgid "Close Cartographic Composer"
+msgstr "कार्टोग्राफिक कंपोजर"
+
+#, fuzzy
+#| msgid "&Install"
+msgid "&Insert"
+msgstr "&इंस्टॉल करें"
+
+msgid "Map frame"
+msgstr "मानचित्र फ़्रेम"
+
+#, fuzzy
+#| msgid "draw border around map frame"
+msgid "Add or edit map frame"
+msgstr "मानचित्र फ़्रेम के चारों ओर बॉर्डर बनाएं"
+
+#, fuzzy
+#| msgid "Add raster map"
+msgid "Add or edit raster map"
+msgstr "रास्टर मानचित्र जोड़ें"
+
+#, fuzzy
+#| msgid "Add vector map"
+msgid "Add or edit vector map"
+msgstr "वेक्टर मानचित्र जोड़ें"
+
+#, fuzzy
+#| msgid "Raster legend"
+msgid "Map legend"
+msgstr "रेखापुंज कथा"
+
+#, fuzzy
+#| msgid "Add vector legend"
+msgid "Add or edit raster and vector legend"
+msgstr "वेक्टर लीजेंड जोड़ें"
+
+msgid "Map info"
+msgstr "मानचित्र की जानकारी"
+
+msgid "Add or edit map info"
+msgstr ""
+
+msgid "Scale bar"
+msgstr "स्केल बार"
+
+#, fuzzy
+#| msgid "Add scale bar"
+msgid "Add or edit scale bar"
+msgstr "स्केल बार जोड़ें"
+
+msgid "North Arrow"
+msgstr "उत्तर तीर"
+
+msgid "Delete selected object"
+msgstr "चयनित ऑब्जेक्ट हटाएं"
+
+msgid "Display the HTML man pages of Cartographic Composer"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cartographic Composer"
+msgid "About Cartographic Composer"
+msgstr "कार्टोग्राफिक कंपोजर"
+
+#, fuzzy
+#| msgid "Cartographic Composer"
+msgid "Display information about Cartographic Composer"
+msgstr "कार्टोग्राफिक कंपोजर"
+
 msgid "Check all"
 msgstr "सभी चुनें"
 
@@ -7290,9 +11699,6 @@ msgstr "रंग तालिका सहेजने के लिए फ़�
 
 msgid "Type filename or click to choose file and save color table"
 msgstr "फ़ाइल नाम टाइप करें या फ़ाइल चुनने और रंग तालिका सहेजने के लिए क्लिक करें"
-
-msgid "Save"
-msgstr "बचाना"
 
 msgid "&Set"
 msgstr "&सेट करें"
@@ -7550,9 +11956,6 @@ msgstr "आउटपुट मानचित्र नाम <%(name)s> मौ�
 msgid "Dialog cannot be closed while command is running."
 msgstr "कमांड चलने के दौरान डायलॉग बंद नहीं किया जा सकता।"
 
-msgid "Link external raster data"
-msgstr "बाह्य रेखापुंज डेटा लिंक करें"
-
 msgid "Add linked layers into layer tree"
 msgstr "लिंक की गई परतों को परत ट्री में जोड़ें"
 
@@ -7570,9 +11973,6 @@ msgstr "कोई परत चयनित नहीं. ऑपरेशन र
 
 msgid "Unable to determine number of raster bands"
 msgstr "रैस्टर बैंड की संख्या निर्धारित करने में असमर्थ"
-
-msgid "Link external vector data"
-msgstr "बाहरी वेक्टर डेटा लिंक करें"
 
 msgid "Define output format for vector data"
 msgstr "वेक्टर डेटा के लिए आउटपुट फ़ॉर्मेट परिभाषित करें"
@@ -8145,12 +12545,6 @@ msgstr "धारा काटने वाले तल को क्षैत�
 msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
 msgstr "वर्तमान काटने वाले तल का Z निर्देशांक सेट करता है (केवल तभी सार्थक जब झुकाव 0 नहीं है)"
 
-msgid "New"
-msgstr "नया"
-
-msgid "Delete"
-msgstr "हटाएं"
-
 msgid "Fine resolution:"
 msgstr "उत्तम संकल्प:"
 
@@ -8256,9 +12650,6 @@ msgstr "एस एंड& ई"
 msgid "Elevation of fringe from bottom:"
 msgstr "नीचे से फ्रिंज की ऊंचाई:"
 
-msgid "North Arrow"
-msgstr "उत्तर तीर"
-
 msgid "Arrow length (in map units):"
 msgstr "तीर की लंबाई (मानचित्र इकाइयों में):"
 
@@ -8267,9 +12658,6 @@ msgstr "तीर का रंग (Arrow color):"
 
 msgid "Place arrow"
 msgstr "तीर लगाएं"
-
-msgid "Scale bar"
-msgstr "स्केल बार"
 
 msgid "Scale bar length (in map units):"
 msgstr "स्केल बार की लंबाई (मानचित्र इकाइयों में):"
@@ -8355,9 +12743,6 @@ msgstr "स्केलबार %d"
 
 msgid "None"
 msgstr "कोई नहीं"
-
-msgid "Plane"
-msgstr "विमान"
 
 msgid "Vector map is 3D"
 msgstr "वेक्टर मानचित्र 3D है"
@@ -8541,9 +12926,6 @@ msgstr "मानचित्र सेटिंग"
 
 msgid "Map frame settings"
 msgstr "मानचित्र फ़्रेम सेटिंग"
-
-msgid "Map frame"
-msgstr "मानचित्र फ़्रेम"
 
 msgid "Map frame options:"
 msgstr "मानचित्र फ़्रेम विकल्प:"
@@ -8908,7 +13290,9 @@ msgstr "प्रकार:"
 msgid "Number of segments:"
 msgstr "खंडों की संख्या:"
 
-msgid "Label every "
+#, fuzzy
+#| msgid "Label every "
+msgid "Label every"
 msgstr "प्रत्येक को लेबल करें "
 
 msgid "segments"
@@ -9154,7 +13538,9 @@ msgstr "उत्तर तीर"
 msgid "Click and drag to resize object"
 msgstr "ऑब्जेक्ट का आकार बदलने के लिए क्लिक करें और खींचें"
 
-msgid "labels: "
+#, fuzzy, python-brace-format
+#| msgid "labels: "
+msgid "labels: {files}"
 msgstr "लेबल: "
 
 msgid "Cartographic Composer - GRASS"
@@ -9221,21 +13607,6 @@ msgstr "निर्देश %(inst)s पढ़ने में विफल: �
 msgid "Select graphics tool"
 msgstr "ग्राफ़िक्स टूल चुनें"
 
-msgid "Generate text file with mapping instructions"
-msgstr "मैपिंग निर्देशों के साथ टेक्स्ट फ़ाइल जेनरेट करें"
-
-msgid "Load text file with mapping instructions"
-msgstr "मैपिंग निर्देशों के साथ टेक्स्ट फ़ाइल लोड करें"
-
-msgid "Generate PostScript output"
-msgstr "पोस्टस्क्रिप्ट आउटपुट जेनरेट करें"
-
-msgid "Generate PDF output"
-msgstr "पीडीएफ आउटपुट जेनरेट करें"
-
-msgid "Specify paper size, margins and orientation"
-msgstr "कागज का आकार, मार्जिन और ओरिएंटेशन निर्दिष्ट करें"
-
 msgid "Full extent"
 msgstr "पूर्ण विस्तार"
 
@@ -9245,14 +13616,8 @@ msgstr "पूर्ण सीमा तक ज़ूम करें"
 msgid "Click and drag to place map frame"
 msgstr "मैप फ्रेम लगाने के लिए क्लिक करें और खींचें"
 
-msgid "Delete selected object"
-msgstr "चयनित ऑब्जेक्ट हटाएं"
-
 msgid "Show preview"
 msgstr "पूर्वावलोकन दिखाएं"
-
-msgid "Map info"
-msgstr "मानचित्र की जानकारी"
 
 msgid "Legend"
 msgstr "दंतकथा"
@@ -9412,9 +13777,6 @@ msgstr "उपलब्ध सैंपलिंग क्षेत्र (sampl
 msgid "Remove a configuration file"
 msgstr "एक कॉन्फ़िगरेशन फ़ाइल निकालें"
 
-msgid "Create"
-msgstr "बनाएं"
-
 msgid "Create a new configuration file"
 msgstr "एक नई कॉन्फ़िगरेशन फ़ाइल बनाएं"
 
@@ -9565,9 +13927,6 @@ msgstr "क्षेत्रों"
 msgid "Sample units"
 msgstr "नमूना इकाइयाँ"
 
-msgid "Moving window"
-msgstr "चलती खिड़की"
-
 msgid ""
 "Select areas from the\n"
 "overlaid vector map"
@@ -9702,9 +14061,6 @@ msgstr "{area_num} का नमूना क्षेत्र {areas_count} �
 #, python-brace-format
 msgid "The raster map <{map_name}> already exists. Please remove or rename the maps with the prefix '{prefix}' or select the option to overwrite existing maps"
 msgstr "रेखापुंज मानचित्र <{map_name}> पहले से मौजूद है। कृपया उपसर्ग '{prefix}' वाले मानचित्रों को हटा दें या उनका नाम बदल दें या मौजूदा मानचित्रों को अधिलेखित करने का विकल्प चुनें"
-
-msgid "Select sample area 1 of "
-msgstr "का नमूना क्षेत्र 1 चुनें "
 
 msgid "Configuration file name:"
 msgstr "कॉन्फ़िगरेशन फ़ाइल का नाम:"
@@ -10052,9 +14408,6 @@ msgstr "टाइमलाइन टूल को स्थापित कर�
 msgid "Timeline Tool"
 msgstr "टाइमलाइन टूल"
 
-msgid "Help"
-msgstr "मदद"
-
 msgid "3D plot of spatio-temporal extents"
 msgstr "स्पैटियो-टेम्पोरल एक्सटेंट्स का 3D प्लॉट"
 
@@ -10255,7 +14608,9 @@ msgstr "{pa} पहले से मौजूद है, क्या आप ओ
 msgid "File exists"
 msgstr "फ़ाइल मौजूद"
 
-msgid "Please change name of output CSV file or "
+#, fuzzy
+#| msgid "Please change name of output CSV file or "
+msgid "Please change name of output CSV file or enable overwriting."
 msgstr "कृपया आउटपुट सीएसवी फ़ाइल का नाम बदलें या "
 
 msgid "Incorrect coordinates format, should be: x,y"
@@ -11165,9 +15520,6 @@ msgstr "<%s> से कनेक्ट किया गया"
 msgid "Unable to connect to <%s>"
 msgstr "<%s> से कनेक्ट करने में असमर्थ"
 
-msgid "Add web service layer"
-msgstr "वेब सेवा परत जोड़ें"
-
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr "चयनित वेब सेवा परतों को मानचित्र परत के रूप में परत ट्री (layer tree) में जोड़ें"
 
@@ -11182,9 +15534,6 @@ msgstr "आउटपुट रैस्टर मानचित्र का �
 
 msgid "Export region"
 msgstr "निर्यात क्षेत्र"
-
-msgid "Map display"
-msgstr "मानचित्र प्रदर्शन"
 
 msgid "Named region"
 msgstr "नामित क्षेत्र"
@@ -11583,16 +15932,24 @@ msgstr "साजिश करने के लिए कुछ भी नही
 msgid "At least 2 raster maps must be specified"
 msgstr "कम से कम 2 रास्टर मैप्स (raster maps) निर्दिष्ट किए जाने चाहिए"
 
-msgid "Bivariate Scatterplot of "
+#, python-brace-format
+msgid "{first} vs {second}"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Bivariate Scatterplot of "
+msgid "Bivariate Scatterplot of {pairs}"
 msgstr "· "
 
-#, python-format
-msgid "Raster <%s> cell values"
+#, fuzzy, python-brace-format
+#| msgid "Raster <%s> cell values"
+msgid "Raster <{raster}> cell values: {units}"
 msgstr "रेखापुंज <%s> सेल मान"
 
-#, python-format
-msgid ": %s"
-msgstr ": %s"
+#, fuzzy, python-brace-format
+#| msgid "Raster <%s> cell values"
+msgid "Raster <{raster}> cell values"
+msgstr "रेखापुंज <%s> सेल मान"
 
 msgid "Regression Statistics for Scatterplot(s)"
 msgstr "स्कैटरप्लॉट के लिए प्रतिगमन सांख्यिकी"
@@ -11605,8 +15962,30 @@ msgstr ""
 "रेखापुंज मानचित्र <%(rast1)s> बनाम <%(rast2)s> के लिए प्रतिगमन समीकरण:\\n\\n\n"
 "\n"
 
-#~ msgid "New display"
-#~ msgstr "नया प्रदर्शन"
+#~ msgid "Downloading data "
+#~ msgstr "डेटा डाउनलोड हो रहा है "
+
+#~ msgid "Rendering & "
+#~ msgstr "रेंडरिंग "
+
+#~ msgid "Unable to set "
+#~ msgstr "सेट करने में असमर्थ "
+
+#~ msgid " / Zoom to map"
+#~ msgstr " मानचित्र पर ज़ूम करें"
+
+#~ msgid "Type: "
+#~ msgstr "प्रकार: "
+
+#~ msgid "/ Zoom to map"
+#~ msgstr "/ मानचित्र पर ज़ूम करें"
+
+#~ msgid "Select sample area 1 of "
+#~ msgstr "का नमूना क्षेत्र 1 चुनें "
+
+#, python-format
+#~ msgid ": %s"
+#~ msgstr ": %s"
 
 #~ msgid "&Copy paths to mapsets"
 #~ msgstr "&म्यापसेट्स के कांपी पॄंथ करें"

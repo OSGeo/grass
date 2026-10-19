@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hungarian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/hu/>\n"
@@ -679,14 +679,18 @@ msgstr ""
 msgid "Rendering aborted"
 msgstr ""
 
-msgid "Downloading data "
-msgstr ""
-
-msgid "Rendering & "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Rendering map layers"
+msgid "Rendering & downloading data {layers}..."
+msgstr "Térkép rétegek rajzolása"
 
 msgid "Rendering..."
 msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Loading tables..."
+msgid "Downloading data {layers}..."
+msgstr "Táblák betöltése..."
 
 msgid "Trying to recover from default region..."
 msgstr ""
@@ -861,7 +865,8 @@ msgid ""
 "Details: %(detail)s"
 msgstr ""
 
-msgid "Unable to set "
+#, python-brace-format
+msgid "Unable to set '{group}:{key}:{subkey}'"
 msgstr ""
 
 #, python-format
@@ -1723,8 +1728,10 @@ msgstr ""
 msgid "Table"
 msgstr "Tábla"
 
-msgid " (read-only)"
-msgstr ""
+#, fuzzy
+#| msgid " (readonly)"
+msgid "Table (read-only)"
+msgstr "(csak olvasható)"
 
 msgid "SQL Query"
 msgstr "SQL lekérdezés"
@@ -2314,9 +2321,15 @@ msgid ""
 "10+ points for 3rd order."
 msgstr ""
 
-#, python-brace-format
-msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Raster map <%s> already exists. Do you want to overwrite it?"
+msgid "The raster map {map_name} exists. Do you want to overwrite?"
+msgstr "<%s> raszter térkép már létezik. Felül akarja írni?"
+
+#, fuzzy, python-brace-format
+#| msgid "Vector map %s already exists. Do you want to overwrite it?"
+msgid "The vector map {map_name} exists. Do you want to overwrite?"
+msgstr "<%s> vektortérkép már létezik. Felül akarja írni?"
 
 msgid "Rectifying images, please wait..."
 msgstr ""
@@ -2580,10 +2593,8 @@ msgstr ""
 msgid "Reload GCPs from POINTS file"
 msgstr ""
 
-msgid "Set map canvas for "
-msgstr ""
-
-msgid " / Zoom to map"
+#, python-brace-format
+msgid "Set map canvas for {zoom_back} / Zoom to map"
 msgstr ""
 
 msgid "Update GCP coordinates"
@@ -2823,7 +2834,9 @@ msgstr ""
 msgid "<not defined>"
 msgstr "<not defined>"
 
-msgid "Condition: "
+#, fuzzy, python-brace-format
+#| msgid "Condition: "
+msgid "Condition: {label}"
 msgstr "Feltétel:"
 
 msgid "Condition: not defined"
@@ -3441,8 +3454,10 @@ msgstr "Betűméret:"
 msgid "Example"
 msgstr "Példa"
 
-msgid "Enter parameters for '"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid " Enter parameters for %s projection "
+msgid "Enter parameters for '{tool}'"
+msgstr "Adja meg a paramétereket a %s vetülethez"
 
 msgid "Close this window without executing the command (Ctrl+Q)"
 msgstr ""
@@ -3807,11 +3822,15 @@ msgstr "Parancs outputot mentettem ide: '%s'"
 msgid "Not selectable element"
 msgstr "Nem szelektálható elem"
 
-msgid "Mapset"
-msgstr "Térképcsoport"
+#, fuzzy, python-brace-format
+#| msgid "Mapset: %s"
+msgid "Mapset: {mapset}"
+msgstr "Térképcsoport: %s"
 
-msgid "Type: "
-msgstr "Típus:"
+#, fuzzy, python-brace-format
+#| msgid "Type of element:"
+msgid "Type: {element_type}"
+msgstr "Elem típus:"
 
 #, python-format
 msgid "GSelect: invalid item: %s"
@@ -4202,7 +4221,9 @@ msgstr "Elem szín:"
 msgid "Area fill color:"
 msgstr "Terület kitöltő szín:"
 
-msgid "Random colors according to category number "
+#, fuzzy
+#| msgid "Random colors according to category number "
+msgid "Random colors according to category number"
 msgstr "Véletlen színek a kategória számnak megfelelően"
 
 msgid "Symbol:"
@@ -4301,6 +4322,9 @@ msgid ""
 "    - You may only write to the current mapset.\n"
 "    - You may only write to mapsets which you own."
 msgstr ""
+
+msgid "Mapset"
+msgstr "Térképcsoport"
 
 msgid "Owner"
 msgstr "Tulajdonos"
@@ -5108,9 +5132,6 @@ msgid "Preview"
 msgstr "Előnézet"
 
 msgid "Training"
-msgstr ""
-
-msgid "/ Zoom to map"
 msgstr ""
 
 msgid "std dev"
@@ -6384,7 +6405,9 @@ msgstr ""
 msgid "Set opacity of <{}>"
 msgstr "Átlátszóság színt beállítás"
 
-msgid "Layer group:"
+#, fuzzy, python-brace-format
+#| msgid "Layer group:"
+msgid "Layer group: {number}"
 msgstr "Réteg csoport:"
 
 msgid "Click to edit layer settings"
@@ -7297,8 +7320,10 @@ msgstr "Mérés vége"
 msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
 msgstr ""
 
-msgid "Measuring distance"
-msgstr "Távolságmérés"
+#, fuzzy, python-brace-format
+#| msgid "Measuring distance:"
+msgid "Measuring distance ({units}):"
+msgstr "Távolságmérés:"
 
 msgid "Measuring distance:"
 msgstr "Távolságmérés:"
@@ -7422,6 +7447,4193 @@ msgstr ""
 msgid "Property does not exist: %s"
 msgstr "A tulajdonság nem létezik: %s"
 
+msgid "&File"
+msgstr "&Fájl"
+
+msgid "New"
+msgstr "Új"
+
+msgid "Create new workspace"
+msgstr "Új munkaterület létrehozás"
+
+msgid "Open"
+msgstr "Megnyitás"
+
+msgid "Load workspace from file"
+msgstr "Munkaterület betöltése fájlból"
+
+msgid "Save"
+msgstr "Mentés"
+
+msgid "Save as"
+msgstr "Mentés másként"
+
+msgid "Save workspace to file"
+msgstr "Munkaterület mentés fájlba"
+
+#, fuzzy
+#| msgid "Choose workspace file"
+msgid "Close workspace file"
+msgstr "Válasszon munkaterület fájlt"
+
+msgid "Map display"
+msgstr ""
+
+msgid "Add raster"
+msgstr "Raszter hozzáadás"
+
+msgid "Add raster map layer to current display"
+msgstr "Raszter térkép réteg hozzáadása az aktuális megjelenítőhöz"
+
+msgid "Add vector"
+msgstr "Vektor hozzáadás"
+
+msgid "Add vector map layer to current display"
+msgstr "Vektor térkép réteg hozzáadása az aktuális megjelenítőhöz"
+
+msgid "Add multiple rasters or vectors"
+msgstr "Több raszter vagy vektor hozzáadás"
+
+msgid "Add multiple raster or vector map layers to current display"
+msgstr "Több raszter vagy vektor réteg hozzáadása az aktuális ablakhoz"
+
+msgid "Add RGB raster layer"
+msgstr "RGB raszter réteg hozzáadás"
+
+#, fuzzy
+#| msgid "Add raster map layer to current display"
+msgid "Add RGB raster map layer to current display"
+msgstr "Raszter térkép réteg hozzáadása az aktuális megjelenítőhöz"
+
+msgid "Add web service layer"
+msgstr ""
+
+msgid "New map display window"
+msgstr "Új térkép megjelenítő ablak"
+
+msgid "Open new map display window"
+msgstr "Új térkép megjelenítő ablak megnyitása"
+
+#, fuzzy
+#| msgid "Rendering map layers"
+msgid "Render all map displays"
+msgstr "Térkép rétegek rajzolása"
+
+#, fuzzy
+#| msgid "Open new map display window"
+msgid "Re-render maps in all open map display windows"
+msgstr "Új térkép megjelenítő ablak megnyitása"
+
+#, fuzzy
+#| msgid "Open new map display window"
+msgid "Close current map display window"
+msgstr "Új térkép megjelenítő ablak megnyitása"
+
+#, fuzzy
+#| msgid "Open new map display window"
+msgid "Close all open map display windows"
+msgstr "Új térkép megjelenítő ablak megnyitása"
+
+#, fuzzy
+#| msgid "Sample raster maps at point locations"
+msgid "Simplified raster import with reprojection"
+msgstr "Rasztertérkép mintavételezése adott pont helyeken"
+
+#, fuzzy
+#| msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgid "Imports raster data into a GRASS raster map using GDAL library."
+msgstr "Bináris raszter fájl import GRASS 3D raszter térképbe."
+
+#, fuzzy
+#| msgid "Import 3D raster data"
+msgid "Import of common raster formats"
+msgstr "3D raszter adat import"
+
+#, fuzzy
+#| msgid "ASCII x,y,z points export"
+msgid "ASCII x,y,z point import and gridding"
+msgstr "ASCII x,y,z pont export"
+
+msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
+msgstr ""
+
+msgid "ASCII grid import"
+msgstr "ASCII rács import"
+
+msgid "Converts a GRASS ASCII raster file to binary raster map."
+msgstr "GRASS ASCII raszter fájl konvertálás bináris raszter térképbe."
+
+msgid "ASCII polygons, lines, and point import"
+msgstr ""
+
+msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raw binary array export"
+msgid "Raw binary array import"
+msgstr "Nyers bináris tömb export"
+
+#, fuzzy
+#| msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgid "Import a binary raster file into a GRASS raster map layer."
+msgstr "Bináris raszter fájl import GRASS 3D raszter térképbe."
+
+msgid "GRIDATB.FOR import"
+msgstr "GRIDATB.FOR import"
+
+#, fuzzy
+#| msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgid "Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map."
+msgstr "Bináris raszter fájl import GRASS 3D raszter térképbe."
+
+msgid "Matlab 2D array import"
+msgstr "Matlab 2D tömb import"
+
+#, fuzzy
+#| msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgid "Imports a binary MAT-File(v4) to a GRASS raster."
+msgstr "Bináris raszter fájl import GRASS 3D raszter térképbe."
+
+msgid "PNG import"
+msgstr "PNG import"
+
+#, fuzzy
+#| msgid "Export a GRASS raster map as a non-georeferenced PNG image."
+msgid "Imports non-georeferenced PNG format image."
+msgstr "GRASS raszter térkép export nem georeferált PNG képbe."
+
+msgid "SPOT NDVI import"
+msgstr "SPOT NDVI import"
+
+#, fuzzy
+#| msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgid "Imports SPOT VGT NDVI data into a raster map."
+msgstr "Bináris raszter fájl import GRASS 3D raszter térképbe."
+
+msgid "SRTM HGT import"
+msgstr "SRTM HGT import"
+
+#, fuzzy
+#| msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgid "Imports SRTM HGT files into raster map."
+msgstr "Bináris raszter fájl import GRASS 3D raszter térképbe."
+
+msgid "Terra ASTER HDF import"
+msgstr "Terra ASTER HDF import"
+
+msgid "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp."
+msgstr ""
+
+msgid "LAS LiDAR points import"
+msgstr "LAS LiDAR pont import"
+
+#, fuzzy
+#| msgid "LAS LiDAR points import"
+msgid "Point cloud (LAS LiDAR) import"
+msgstr "LAS LiDAR pont import"
+
+#, fuzzy
+#| msgid "SRTM HGT import"
+msgid "WMS/WMTS import"
+msgstr "SRTM HGT import"
+
+msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Pack raster map"
+msgid "Unpack raster map"
+msgstr "Raszter térkép becsomagolás"
+
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
+msgstr ""
+
+#, fuzzy
+msgid "Reproject raster map from different GRASS project"
+msgstr "Egy rasztertérkép vetületi transzformációja egy másik helyről"
+
+#, fuzzy
+msgid "Re-projects a raster map from given project to the current project."
+msgstr "Egy rasztertérkép vetületi transzformációja egy adott helyről az aktuális helyre."
+
+msgid "Simplified vector import with reprojection"
+msgstr ""
+
+msgid "Imports vector data into a GRASS vector map using OGR library."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector dataset"
+msgid "Import of common vector formats"
+msgstr "Vektor adathalmaz import"
+
+#, fuzzy
+#| msgid "ASCII points or GRASS ASCII vector export"
+msgid "ASCII points or GRASS ASCII format"
+msgstr "ASCII pontok vagy GRASS ASCII vektor export"
+
+msgid "Creates a vector map from an ASCII points file or ASCII vector file."
+msgstr ""
+
+msgid "ASCII points as a vector lines"
+msgstr "ASCII pontok mint vektor vonalak"
+
+msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
+msgstr ""
+
+msgid "DXF import"
+msgstr "DXF import"
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Converts files in DXF format to GRASS vector map format."
+msgstr "Raszter térkép konvertálása vektor térképpé."
+
+msgid "WFS"
+msgstr "WFS"
+
+#, fuzzy
+#| msgid "Import data from WMS server"
+msgid "Imports GetFeature from a WFS server."
+msgstr "Adat import WMS szerverről"
+
+msgid "ESRI e00 import"
+msgstr "ESRI e00 import"
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Imports E00 file into a vector map."
+msgstr "Raszter térkép konvertálása vektor térképpé."
+
+#, fuzzy
+#| msgid "PNG import"
+msgid "Geonames import"
+msgstr "PNG import"
+
+msgid "Imports geonames.org country files into a vector points map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Matlab 2D array import"
+msgid "Matlab array or Mapgen format import"
+msgstr "Matlab 2D tömb import"
+
+msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr ""
+
+msgid "Unpack vector map"
+msgstr "Vektor térkép kicsomagolás"
+
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
+msgstr ""
+
+#, fuzzy
+msgid "Reproject vector map from different GRASS project"
+msgstr "Egy vektortérkép vetületi transzformációja egy másik helyről"
+
+#, fuzzy
+msgid "Re-projects a vector map from one project to the current project."
+msgstr "Egy rasztertérkép vetületi transzformációja egy helyről az aktuális helyre."
+
+msgid "Import 3D raster data"
+msgstr "3D raszter adat import"
+
+msgid "ASCII 3D import"
+msgstr "ASCII 3D import"
+
+#, fuzzy
+#| msgid "Converts a GRASS ASCII raster file to binary raster map."
+msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
+msgstr "GRASS ASCII raszter fájl konvertálás bináris raszter térképbe."
+
+#, fuzzy
+#| msgid "Raw binary array export"
+msgid "Raw binary array 3D import"
+msgstr "Nyers bináris tömb export"
+
+msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgstr "Bináris raszter fájl import GRASS 3D raszter térképbe."
+
+msgid "Vis5D import"
+msgstr "Vis5D import"
+
+msgid "Import 3-dimensional Vis5D files."
+msgstr "3-dimenziós Vis5D fájlok importálása."
+
+#, fuzzy
+#| msgid "ASCII 3D import"
+msgid "LiDAR 3D import"
+msgstr "ASCII 3D import"
+
+#, fuzzy
+#| msgid "Vector to 3D raster"
+msgid "XYZ to 3D raster series"
+msgstr "Vektor 3D raszterbe"
+
+msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
+msgstr ""
+
+msgid "Import database table"
+msgstr "Adatbázistábla import"
+
+#, fuzzy
+#| msgid "Command prompt"
+msgid "Common import formats"
+msgstr "Parancs prompt"
+
+msgid "Imports attribute tables in various formats."
+msgstr "Attribútumtábla import változatos formátumokból."
+
+msgid "Export raster map"
+msgstr "Raszter térkép export"
+
+#, fuzzy
+#| msgid "Command prompt"
+msgid "Common export formats"
+msgstr "Parancs prompt"
+
+msgid "Exports GRASS raster maps into GDAL supported formats."
+msgstr "GRASS raszter térképek exportálása GDAL támogatott formátumokba."
+
+msgid "ASCII grid export"
+msgstr "ASCII rács export"
+
+msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgstr "Raszter térkép réteg konvertálása GRASS ASCII szövegfájlba."
+
+msgid "ASCII x,y,z points export"
+msgstr "ASCII x,y,z pont export"
+
+msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
+msgstr ""
+
+msgid "GRIDATB.FOR export"
+msgstr "GRIDATB.FOR export"
+
+msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
+msgstr "GRASS raszter export GRIDATB.FOR térkép fájlba (TOPMODEL)."
+
+msgid "Matlab 2D array export"
+msgstr "Matlab 2D tömb export"
+
+msgid "Exports a GRASS raster to a binary MAT-File."
+msgstr "GRASS raszter export bináris MAT-fájlba"
+
+msgid "Raw binary array export"
+msgstr "Nyers bináris tömb export"
+
+msgid "Exports a GRASS raster to a binary array."
+msgstr "GRASS raszter exportálás bináris tömbbe."
+
+msgid "MPEG-1 export"
+msgstr "MPEG-1 export"
+
+msgid "Converts raster map series to MPEG movie."
+msgstr "Raszter térkép sorozat konvertálása MPEG filmbe."
+
+msgid "PNG export"
+msgstr "PNG export"
+
+msgid "Export a GRASS raster map as a non-georeferenced PNG image."
+msgstr "GRASS raszter térkép export nem georeferált PNG képbe."
+
+msgid "PPM export"
+msgstr "PPM export"
+
+msgid "Converts a GRASS raster map to a PPM image file."
+msgstr "GRASS raszter térkép konvertálás PPM kép fájlba."
+
+#, fuzzy
+#| msgid "PPM export"
+msgid "PPM from RGB export"
+msgstr "PPM export"
+
+#, fuzzy
+#| msgid "Converts a GRASS raster map to a PPM image file."
+msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
+msgstr "GRASS raszter térkép konvertálás PPM kép fájlba."
+
+msgid "POV-Ray export"
+msgstr "POV-Ray export"
+
+#, fuzzy
+#| msgid "Converts a 3D raster map layer into a ASCII text file."
+msgid "Converts a raster map layer into a height-field file for POV-Ray."
+msgstr "3D raszter térkép konvertálása ASCII szövegfájlba."
+
+msgid "VRML export"
+msgstr "VRML export"
+
+msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
+msgstr "Raszter térkép export virtuális valóság modellező nyelvbe (VRML)."
+
+msgid "VTK export"
+msgstr "VTK export"
+
+msgid "Converts raster maps into the VTK-ASCII format."
+msgstr "Raszter térkép konvertálás VTK-ASCII formátumba."
+
+msgid "Pack raster map"
+msgstr "Raszter térkép becsomagolás"
+
+#, fuzzy
+#| msgid "Exports a raster map as GRASS GIS specific archive file"
+msgid "Exports a raster map as GRASS specific archive file"
+msgstr "Raszter térkép export GRASS GIS specifikus archive fájlba"
+
+msgid "Export vector map"
+msgstr "Vektor térkép export"
+
+#, fuzzy
+#| msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
+msgstr "Vektor térkép réteg export bármelyik támogatott OGR vektor formátumba. Alapértelmezés szerint a vektor térkép réteget ESRI shape fájl formátumba exportáljuk."
+
+msgid "ASCII points or GRASS ASCII vector export"
+msgstr "ASCII pontok vagy GRASS ASCII vektor export"
+
+msgid "Exports a vector map to a GRASS ASCII vector representation. By default only features with category are exported. To export all features use 'layer=-1'."
+msgstr ""
+
+msgid "DXF export"
+msgstr "DXF export"
+
+msgid "Exports vector map to DXF file format."
+msgstr "Vektor térkép exportálása DXF fájl formátumba."
+
+msgid "PostGIS export"
+msgstr "PostGIS export"
+
+#, fuzzy
+#| msgid "Exports a vector map to SVG file."
+msgid "Exports a vector map layer to PostGIS feature table."
+msgstr "Vektor térkép konvertálása SVG fájlba."
+
+msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
+msgstr "GRASS x,y,z pontok konvertálása POV-Ray x,y,z formátumba."
+
+msgid "SVG export"
+msgstr "SVG export"
+
+msgid "Exports a vector map to SVG file."
+msgstr "Vektor térkép konvertálása SVG fájlba."
+
+msgid "Converts a vector map to VTK ASCII output."
+msgstr "Vektor térkép konvertálása VTK ASCII outputba."
+
+#, fuzzy
+#| msgid "Unpack vector map"
+msgid "Pack vector map"
+msgstr "Vektor térkép kicsomagolás"
+
+#, fuzzy
+#| msgid "Exports a raster map as GRASS GIS specific archive file"
+msgid "Exports a vector map as GRASS specific archive file"
+msgstr "Raszter térkép export GRASS GIS specifikus archive fájlba"
+
+#, fuzzy
+#| msgid "Export to image"
+msgid "Export to LiDAR format"
+msgstr "Exportálás képbe"
+
+msgid "Export 3D raster maps"
+msgstr "3D raszter térkép  export"
+
+msgid "ASCII 3D export"
+msgstr "ASCII 3D export"
+
+msgid "Converts a 3D raster map layer into a ASCII text file."
+msgstr "3D raszter térkép konvertálása ASCII szövegfájlba."
+
+#, fuzzy
+#| msgid "Raw binary array export"
+msgid "Raw binary array 3D export"
+msgstr "Nyers bináris tömb export"
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Exports a GRASS 3D raster map to a binary array."
+msgstr "GRASS raszter exportálás bináris tömbbe."
+
+msgid "Vis5D export"
+msgstr "Vis5D export"
+
+#, fuzzy
+#| msgid "Import 3-dimensional Vis5D files."
+msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr "3-dimenziós Vis5D fájlok importálása."
+
+#, fuzzy
+#| msgid "Converts raster maps into the VTK-ASCII format."
+msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgstr "Raszter térkép konvertálás VTK-ASCII formátumba."
+
+#, fuzzy
+#| msgid "DXF export"
+msgid "NetCDF export"
+msgstr "DXF export"
+
+#, fuzzy
+#| msgid "Export 3D raster maps"
+msgid "Export a 3D raster map as netCDF file."
+msgstr "3D raszter térkép  export"
+
+msgid "Export database table"
+msgstr "Adatbázistábla export"
+
+msgid "Exports attribute tables into various formats."
+msgstr "Attribútum táblák exportálása különböző formátumokba."
+
+msgid "Link external raster data"
+msgstr "Külső raszter adat kapcsolás"
+
+msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
+msgstr ""
+
+msgid "Link external vector data"
+msgstr "Külső vektor adtok kapcsolása"
+
+msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
+msgstr ""
+
+msgid "Output format for raster data"
+msgstr "Output formátum a raszter adatokhoz"
+
+msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
+msgstr ""
+
+msgid "Output format for vector data"
+msgstr "Output formátum vektor adatokhoz"
+
+msgid "Defines vector output format utilizing OGR library."
+msgstr ""
+
+msgid "Manage maps"
+msgstr "Térképek kezelése"
+
+msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
+msgstr ""
+
+msgid "List"
+msgstr "Lista"
+
+msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
+msgstr ""
+
+msgid "Renames data base element files in the user's current mapset."
+msgstr ""
+
+msgid "Delete"
+msgstr "Törlés"
+
+msgid "Removes data base element files from the user's current mapset using the search pattern."
+msgstr ""
+
+#, fuzzy
+msgid "Download project from web"
+msgstr "Letöltött hely hibás"
+
+msgid "Download GRASS project from the web Get GRASS project from an URL or file path"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add, edit or remove animations"
+msgid "Rebuild or remove all addons"
+msgstr "Animációk hozzáadása, szerkesztése vagy eltávolítása"
+
+msgid "Rebuilds or removes all locally installed GRASS Addons extensions. By default only extensions built against different GIS Library are rebuilt."
+msgstr ""
+
+msgid "Map type conversions"
+msgstr "Térkép típus konverziók"
+
+msgid "Raster to vector"
+msgstr "Raszter vektorrá"
+
+msgid "Converts a raster map into a vector map."
+msgstr "Raszter térkép konvertálása vektor térképpé."
+
+msgid "Raster series to 3D raster"
+msgstr "Raszter sorozatok 3D raszterbe"
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgstr "Raszter térkép konvertálása vektor térképpé."
+
+msgid "Raster 2.5D to 3D raster"
+msgstr "2.5D raszter 3D raszterbe"
+
+msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector to 3D raster"
+msgid "Vector to raster"
+msgstr "Vektor 3D raszterbe"
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Converts (rasterize) a vector map into a raster map."
+msgstr "Raszter térkép konvertálása vektor térképpé."
+
+msgid "Vector to 3D raster"
+msgstr "Vektor 3D raszterbe"
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Converts a vector map (only points) into a 3D raster map."
+msgstr "Raszter térkép konvertálása vektor térképpé."
+
+msgid "2D vector to 3D vector"
+msgstr "2D vektor 3D vektorba"
+
+msgid "Performs transformation of 2D vector features to 3D."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster statistics"
+msgid "3D raster to raster series"
+msgstr "3D raszter statisztika"
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Converts 3D raster maps to 2D raster maps"
+msgstr "Raszter térkép konvertálása vektor térképpé."
+
+msgid "Launches Simple Python Editor."
+msgstr "Egyszerű Python szerkesztő indítása."
+
+#, fuzzy
+msgid "Launch script"
+msgstr "Python szkript futtatása"
+
+#, fuzzy
+msgid "Launches script file."
+msgstr "Python szkript mentése fájlba"
+
+msgid "Launch Jupyter Notebook interface."
+msgstr ""
+
+msgid "Graphical modeler"
+msgstr "Grafikus modellező"
+
+msgid "Launch Graphical modeler"
+msgstr "Grafikus modellező indítása"
+
+msgid "Run model prepared by Graphical modeler"
+msgstr "A grafikus modellezővel készített modell futtatása"
+
+#, fuzzy
+#| msgid "Manage Ground Control Points"
+msgid "Manage Ground Control Points for Georectification"
+msgstr "Illesztőpontok (GCP) kezelése"
+
+#, fuzzy
+#| msgid "Animation Toolbar"
+msgid "Animation tool"
+msgstr "Animáció eszközssor"
+
+#, fuzzy
+#| msgid "No animation to export."
+msgid "Launch animation tool."
+msgstr "Nincs exportálható animáció."
+
+#, fuzzy
+#| msgid "wxGUI Cartographic Composer"
+msgid "Launch Cartographic Composer"
+msgstr "wxGUI kartográfiai szerkesztő"
+
+#, fuzzy
+msgid "Launch Map Swipe"
+msgstr "Térkép eszközsor"
+
+msgid "Close graphical user interface."
+msgstr ""
+
+msgid "Close GUI and exit GRASS shell."
+msgstr ""
+
+msgid "&Settings"
+msgstr "Beállítások"
+
+msgid "Show current region"
+msgstr "Aktuális régió megjelenítése"
+
+msgid "Shows the extent and resolution of the computational region."
+msgstr ""
+
+msgid "Show region using latitude and longitude"
+msgstr ""
+
+#, fuzzy
+#| msgid "Show current region"
+msgid "Show current region extent in Map Display"
+msgstr "Aktuális régió megjelenítése"
+
+msgid "Shows the extent of the computational region in Map Display."
+msgstr ""
+
+msgid "Set region"
+msgstr "Régió beállítás"
+
+msgid "Manages the boundary definitions for the geographic region."
+msgstr ""
+
+msgid "GRASS working environment"
+msgstr "GRASS munka környezet"
+
+msgid "Mapset access"
+msgstr "Térképcsoport hozzáférés"
+
+#, fuzzy
+msgid "Set/unset access to other mapsets in current project"
+msgstr "Hozzáférés beállítása/törlése egy másik térképcsoporthoz az aktuális helyen"
+
+#, fuzzy
+#| msgid "Mapset access"
+msgid "User access"
+msgstr "Térképcsoport hozzáférés"
+
+msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
+msgstr ""
+
+msgid "Change working environment"
+msgstr "Munkakörnyezet módosítás"
+
+msgid "Changes or reports current mapset. Optionally, creates new mapset or lists available mapsets in given project (location)."
+msgstr ""
+
+#, fuzzy
+msgid "Change project (location) and mapset"
+msgstr "Aktuális hely és térképcsoport módosítása"
+
+#, fuzzy
+msgid "Change current project and mapset."
+msgstr "Aktuális hely és térképcsoport módosítása"
+
+#, fuzzy
+#| msgid "Manage maps"
+msgid "Change mapset"
+msgstr "Térképek kezelése"
+
+msgid "Change current mapset."
+msgstr "Aktuális térképcsoport módosítása"
+
+msgid "Change working directory"
+msgstr "Munkakönyvtár váltás"
+
+msgid "Show settings"
+msgstr "Beállítások megjelenítése"
+
+msgid "Outputs and modifies the user's current GRASS variable settings."
+msgstr ""
+
+msgid "Change settings"
+msgstr "Beállítások módosítása"
+
+msgid "Outputs and modifies the user's current GRASS variable settings. Prints all defined GRASS variables if no option is given."
+msgstr ""
+
+#, fuzzy
+msgid "Create new project (location)"
+msgstr "Új hely létrehozása"
+
+#, fuzzy
+msgid "Launches project wizard to create a new GRASS project (also known as location)."
+msgstr "Elindítja a hely varázslót egy új GRASS hely létrehozásához."
+
+#, fuzzy
+msgid "Creates new mapset in the current project, changes current mapset."
+msgstr "Az aktuális helyen létrehoz egy új térképcsoportot, módosítja az aktuális térképcsoportot."
+
+msgid "Map projections"
+msgstr "Térkép vetületek"
+
+#, fuzzy
+#| msgid "Edit animation"
+msgid "Display map projection"
+msgstr "Animáció szerkesztés"
+
+msgid "Converts coordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgstr ""
+
+msgid "Manage projections"
+msgstr "Vetületek kezelése"
+
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions). Can also be used to create new GRASS projects."
+msgstr ""
+
+msgid "Convert coordinates"
+msgstr "Koordináta konvertálás"
+
+msgid "Converts coordinates from one projection to another (cs2cs frontend)."
+msgstr "Koordináták konvertálása egyik vetületből egy másikba (cs2cs frontend)"
+
+#, fuzzy
+#| msgid "Remove extension"
+msgid "Addons extensions"
+msgstr "Bővítmény eltávolítás"
+
+#, fuzzy
+#| msgid "%d extensions loaded"
+msgid "Install extension from addons"
+msgstr "%d bővítményt betöltöttem"
+
+msgid "Installs new extension from GRASS AddOns repository."
+msgstr ""
+
+msgid "Manage installed extension"
+msgstr "Telepített bővítmények kezelése"
+
+#, fuzzy
+#| msgid "Manage installed GRASS Addons extensions"
+msgid "Updates or removes installed GRASS AddOns extension(s)."
+msgstr "Telepített GRASS Addons bővítmények kezelése"
+
+#, fuzzy
+#| msgid "Georeferenced file:"
+msgid "Preferences"
+msgstr "Georeferált fájl:"
+
+msgid "User GUI preferences (display font, commands, digitizer, etc.)"
+msgstr ""
+
+msgid "&Raster"
+msgstr "&Raszter"
+
+#, fuzzy
+#| msgid "Save raster map"
+msgid "Develop raster map"
+msgstr "Raszter térkép mentés"
+
+msgid "Compress/decompress"
+msgstr ""
+
+msgid "Compresses and decompresses raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "boundaries"
+msgid "Region boundaries"
+msgstr "határok"
+
+msgid "Sets the boundary definitions for a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage NULL values"
+msgstr "Táblák kezelése"
+
+msgid "Manages NULL-values of given raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Animation"
+msgid "Quantization"
+msgstr "Animáció"
+
+msgid "Produces the quantization file for a floating-point map."
+msgstr ""
+
+msgid "Timestamp"
+msgstr "Időbélyeg"
+
+msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Resample using aggregate statistics"
+msgstr "Raszter statisztika jelentés"
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Resamples raster map layers to a coarser grid using aggregation."
+msgstr "Rasztertérkép mintavételezése adott vektor pont helyeken."
+
+#, fuzzy
+#| msgid "Resampling method:"
+msgid "Resample using multiple methods"
+msgstr "Újramintavételezési módszer:"
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Resamples raster map to a finer grid using interpolation."
+msgstr "Rasztertérkép mintavételezése adott vektor pont helyeken."
+
+#, fuzzy
+#| msgid "Resampling method:"
+msgid "Resample using nearest neighbor"
+msgstr "Újramintavételezési módszer:"
+
+#, fuzzy
+#| msgid "Add raster map layer to current display"
+msgid "GRASS raster map layer data resampling capability."
+msgstr "Raszter térkép réteg hozzáadása az aktuális megjelenítőhöz"
+
+msgid "Resample using spline tension"
+msgstr ""
+
+msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
+msgstr ""
+
+#, fuzzy
+#| msgid "Resampling method:"
+msgid "Resample using bspline"
+msgstr "Újramintavételezési módszer:"
+
+msgid "Performs bilinear or bicubic spline interpolation with Tykhonov regularization."
+msgstr ""
+
+msgid "Resample using analytic kernel"
+msgstr ""
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Resamples raster map layers using an analytic kernel."
+msgstr "Rasztertérkép mintavételezése adott vektor pont helyeken."
+
+msgid "Support file maintenance"
+msgstr ""
+
+msgid "Allows creation and/or modification of raster map layer support files."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Update map statistics"
+msgstr "Egyváltozós raszter statisztika"
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Update raster map statistics"
+msgstr "Egyváltozós raszter statisztika"
+
+msgid "Tiling"
+msgstr ""
+
+msgid "Produces tilings of the source projection for use in the destination region and projection."
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster)"
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "New raster map"
+msgid "Tile raster map"
+msgstr "Új raszter térkép"
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Splits a raster map into tiles."
+msgstr "Rasztertérkép mintavételezése adott vektor pont helyeken."
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage semantic labels"
+msgstr "Táblák kezelése"
+
+msgid "Manages semantic label information assigned to a single raster map or to a list of raster maps."
+msgstr ""
+
+msgid "Manage colors"
+msgstr "Színek kezelése"
+
+#, fuzzy
+#| msgid "3D color tables"
+msgid "Color tables"
+msgstr "3D színtáblák"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a raster map."
+msgstr "Új szín tábla létrehozása a raszter térképhez"
+
+#, fuzzy
+#| msgid "Color table style %s:"
+msgid "Color tables (stddev)"
+msgstr "Szín tábla stílus %s:"
+
+msgid "Sets color rules based on stddev from a raster map's mean value."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set color table interactively"
+msgid "Manage color rules interactively"
+msgstr "Színtábla interaktív beállítása"
+
+msgid "Interactive management of raster color tables."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "Export color table"
+msgstr "Szín tábla beállítás"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Exports the color table associated with a raster map."
+msgstr "Új szín tábla létrehozása a raszter térképhez"
+
+msgid "Blend 2 color rasters"
+msgstr ""
+
+msgid "Blends color components of two raster maps by a given ratio."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create"
+msgid "Create RGB"
+msgstr "Létrehozás"
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Combines red, green and blue raster maps into a single composite raster map."
+msgstr "Raszter térkép konvertálása vektor térképpé."
+
+msgid "RGB to HIS"
+msgstr ""
+
+msgid "Generates red, green and blue (RGB) raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
+msgstr ""
+
+msgid "Split raster into RGB"
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Splits a raster map into red, green and blue maps."
+msgstr "Raszter térkép konvertálása vektor térképpé."
+
+#, fuzzy
+#| msgid "Query raster/vector map(s)"
+msgid "Query raster maps"
+msgstr "Raszter/vektor térkép(ek) lekérdezés"
+
+#, fuzzy
+#| msgid "by map coordinates"
+msgid "Query values by coordinates"
+msgstr "térkép koordinátákkal"
+
+msgid "Queries raster maps on their category values and category labels."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "Query colors by value"
+msgstr "Szín tábla beállítás"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Queries colors for a raster map layer."
+msgstr "Új szín tábla létrehozása a raszter térképhez"
+
+#, fuzzy
+#| msgid "Measuring distance"
+msgid "Raster buffers and distance"
+msgstr "Távolságmérés"
+
+#, fuzzy
+#| msgid "Source raster"
+msgid "Buffer rasters"
+msgstr "Forrás raszter"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
+msgstr ""
+
+msgid "Buffer rasters (low memory)"
+msgstr ""
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values. This is the low-memory alternative to the classic r.buffer module."
+msgstr ""
+
+msgid "Concentric circles"
+msgstr "Koncentrikus körök"
+
+msgid "Creates a raster map containing concentric rings around a given point."
+msgstr ""
+
+msgid "Closest points"
+msgstr "Legközelebbi pontok"
+
+msgid "Locates the closest points between objects in two raster maps."
+msgstr ""
+
+msgid "Grow by one cell"
+msgstr "Növelés egy cellával"
+
+#, fuzzy
+#| msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgid "Generates a raster map layer with contiguous areas grown by one cell."
+msgstr "Raszter térkép réteg konvertálása GRASS ASCII szövegfájlba."
+
+msgid "Distance to features"
+msgstr "Távolság az elemekhez"
+
+msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
+msgstr ""
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Creates a raster mask for limiting raster operation."
+msgstr "Rasztertérkép mintavételezése adott vektor pont helyeken."
+
+#, fuzzy
+#| msgid "Query features"
+msgid "Query mask status"
+msgstr "Elemek lekérdezése"
+
+msgid "Reports presence or absence of a raster mask Provides information about the presence of a 2D raster mask as text output or return code"
+msgstr ""
+
+msgid "Raster map calculator"
+msgstr "Raszter térkép kalkulátor"
+
+#, fuzzy
+#| msgid "3D raster map calculator"
+msgid "Simplified raster map calculator"
+msgstr "3D raszter térkép kalkulátor"
+
+msgid "Calculates a new raster map from a simple r.mapcalc expression."
+msgstr ""
+
+msgid "Raster map calculator."
+msgstr "Rasztertérkép kalkulátor"
+
+msgid "Neighborhood analysis"
+msgstr "Szomszédsági elemzés"
+
+msgid "Moving window"
+msgstr "Mozgó ablak"
+
+msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "Neighborhood points"
+msgstr "Szomszédsági elemzés"
+
+msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Overlaying map layers"
+msgid "Overlay rasters"
+msgstr "Térkép rétegek átfedés vizsgálata"
+
+#, fuzzy
+#| msgid "Cross section"
+msgid "Cross product"
+msgstr "Metszet"
+
+msgid "Creates a cross product of the category values from multiple raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Pack raster map"
+msgid "Patch raster maps"
+msgstr "Raszter térkép becsomagolás"
+
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster series to 3D raster"
+msgid "Raster series aggregation"
+msgstr "Raszter sorozatok 3D raszterbe"
+
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster Map Calculator"
+msgid "Raster series accumulation"
+msgstr "Raszter térkép kalkulátor"
+
+msgid "Makes each output cell value a accumulationfunction of the values assigned to the corresponding cells in the input raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Statistics"
+msgid "Statistical overlay"
+msgstr "Statisztika"
+
+msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
+msgstr ""
+
+msgid "Quantiles overlay"
+msgstr ""
+
+msgid "Compute category quantiles using two passes."
+msgstr ""
+
+msgid "Solar radiance and shadows"
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage maps"
+msgid "LatLong map"
+msgstr "Térképek kezelése"
+
+#, fuzzy
+#| msgid "Create new raster map"
+msgid "Creates a latitude/longitude raster map."
+msgstr "Új raszter térkép létrehozás"
+
+msgid "Solar irradiance and irradiation"
+msgstr ""
+
+msgid "Solar irradiance and irradiation model. Computes direct (beam), diffuse and reflected solar irradiation raster maps for given day, latitude, surface and atmospheric conditions. Solar parameters (e.g. sunrise, sunset times, declination, extraterrestrial irradiance, daylight length) are saved in the map history file. Alternatively, a local time can be specified to compute solar incidence angle and/or irradiance raster maps. The shadowing effect of the topography is optionally incorporated."
+msgstr ""
+
+msgid "Shadows map"
+msgstr ""
+
+msgid "Calculates cast shadow areas from sun position and elevation raster map. Either exact sun position (A) is specified, or date/time to calculate the sun position (B) by r.sunmask itself."
+msgstr ""
+
+msgid "Sunshine hours and solar angles"
+msgstr ""
+
+msgid "Calculates solar elevation, solar azimuth, and sun hours. Solar elevation: the angle between the direction of the geometric center of the sun's apparent disk and the (idealized) horizon. Solar azimuth: the angle from due north in clockwise direction."
+msgstr ""
+
+#, fuzzy
+#| msgid "Point analysis"
+msgid "Terrain analysis"
+msgstr "Pont elemzés"
+
+msgid "Generate contour lines"
+msgstr "Szintvonalak generálása"
+
+msgid "Produces a vector map of specified contours from a raster map."
+msgstr ""
+
+msgid "Cost surface"
+msgstr ""
+
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Trace a path"
+msgstr ""
+
+msgid "Traces paths from starting points following input directions."
+msgstr ""
+
+msgid "Cumulative movement costs"
+msgstr ""
+
+msgid "Creates a raster map showing the anisotropic cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Least cost route or flow"
+msgstr ""
+
+msgid "Traces a flow through an elevation model or cost surface on a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Compute convergence"
+msgid "Compute shaded relief"
+msgstr "Konvergencia számítás"
+
+msgid "Creates shaded relief map from an elevation map (DEM)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Apply changes to selected group"
+msgid "Apply shade to raster"
+msgstr "Módosítások alkalmazása a szelektált csoportra"
+
+msgid "Drapes a color raster over an shaded relief or aspect map."
+msgstr ""
+
+msgid "Slope and aspect"
+msgstr "Lejtő és kitettség"
+
+msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map. Aspect is calculated counterclockwise from east."
+msgstr ""
+
+msgid "Landforms"
+msgstr ""
+
+msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
+msgstr ""
+
+#, fuzzy
+#| msgid "Model parameters"
+msgid "Terrain parameters"
+msgstr "Modell paraméterek"
+
+msgid "Extracts terrain parameters from a DEM. Uses a multi-scale approach by taking fitting quadratic parameters to any size window (via least squares)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query features"
+msgid "Textural features"
+msgstr "Elemek lekérdezése"
+
+#, fuzzy
+#| msgid "Generates volume statistics for 3D raster maps."
+msgid "Generate images with textural features from a raster map."
+msgstr "Térfogat statisztika generálás 3Draszter térképekhez."
+
+msgid "Visibility"
+msgstr "Láthatóság"
+
+msgid "Computes the viewshed of a point on an elevation raster map. Default format: NULL (invisible), vertical angle wrt viewpoint (visible)."
+msgstr ""
+
+msgid "Horizon angle"
+msgstr "Vízszintes szög"
+
+msgid "Computes horizon angle height from a digital elevation model. The module has two different modes of operation: 1. Computes the entire horizon around a single point whose coordinates are given with the 'coord' option. The horizon height (in radians). 2. Computes one or more raster maps of the horizon height in a single direction. The input for this is the angle (in degrees), which is measured counterclockwise with east=0, north=90 etc. The output is the horizon height in radians."
+msgstr ""
+
+#, fuzzy
+#| msgid "simple features"
+msgid "Transform features"
+msgstr "egyszerű elemek"
+
+msgid "Clump"
+msgstr ""
+
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
+msgstr ""
+
+msgid "Grow"
+msgstr "Növel"
+
+msgid "Thin"
+msgstr "Vékonyít"
+
+msgid "Thins non-null cells that denote linear features in a raster map layer."
+msgstr ""
+
+msgid "Hydrologic modeling"
+msgstr "Hidrológiai modellezés"
+
+#, fuzzy
+#| msgid "Save changes"
+msgid "Carve stream channels"
+msgstr "Változások mentése"
+
+msgid "Generates stream channels. Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
+msgstr ""
+
+#, fuzzy
+#| msgid "Fill"
+msgid "Fill lake"
+msgstr "Kitöltés"
+
+msgid "Fills lake at given point to given level."
+msgstr ""
+
+msgid "Depressionless map and flowlines"
+msgstr ""
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Field calculator"
+msgid "Flow accumulation"
+msgstr "Mezőkalkulátor"
+
+msgid "Performs flow computation for massive grids."
+msgstr ""
+
+#, fuzzy
+#| msgid "Iso lines:"
+msgid "Flow lines"
+msgstr "Izovonalak:"
+
+msgid "Constructs flowlines. Computes flowlines, flowpath lengths, and flowaccumulation (contributing areas) from a elevation raster map."
+msgstr ""
+
+msgid "Watershed analysis"
+msgstr "Vízgyűjtő elemzés"
+
+msgid "Calculates hydrological parameters and RUSLE factors."
+msgstr ""
+
+#, fuzzy
+#| msgid "Watershed analysis"
+msgid "Watershed subbasins"
+msgstr "Vízgyűjtő elemzés"
+
+#, fuzzy
+#| msgid "Generates volume statistics for 3D raster maps."
+msgid "Generates watershed subbasins raster map."
+msgstr "Térfogat statisztika generálás 3Draszter térképekhez."
+
+#, fuzzy
+#| msgid "Watershed analysis"
+msgid "Watershed basin creation"
+msgstr "Vízgyűjtő elemzés"
+
+msgid "Creates watershed basins from a drainage direction map."
+msgstr ""
+
+msgid "Extraction of stream networks"
+msgstr ""
+
+msgid "Performs stream network extraction."
+msgstr ""
+
+msgid "SIMWE Overland flow modeling"
+msgstr ""
+
+msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "SIMWE Sediment flux modeling"
+msgstr ""
+
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "Topographic index map"
+msgstr ""
+
+msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
+msgstr ""
+
+msgid "TOPMODEL simulation"
+msgstr ""
+
+msgid "Simulates TOPMODEL which is a physically based hydrologic model."
+msgstr ""
+
+msgid "USLE K-factor"
+msgstr "USLE K-faktor"
+
+msgid "Computes USLE Soil Erodibility Factor (K)."
+msgstr "USLE talajerózió faktor (K) számítás."
+
+msgid "USLE R-factor"
+msgstr "USLE R-faktor"
+
+msgid "Computes USLE R factor, Rainfall erosivity index."
+msgstr ""
+
+msgid "Groundwater modeling"
+msgstr "Talajvíz modellezés"
+
+msgid "Groundwater flow"
+msgstr "Talajvíz áramlás"
+
+msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Groundwater flow"
+msgid "Groundwater solute transport"
+msgstr "Talajvíz áramlás"
+
+msgid "Numerical calculation program for transient, confined and unconfined solute transport in two dimensions"
+msgstr ""
+
+#, fuzzy
+#| msgid "Lidar analysis"
+msgid "Landscape patch analysis"
+msgstr "Lidar elemzés"
+
+msgid "Set up sampling and analysis framework"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new configuration file for r.li modules"
+msgid "Configuration editor for r.li.'index'"
+msgstr "Új konfigurációs fájl létrehozása az r.li modulokhoz"
+
+msgid "Edge density"
+msgstr ""
+
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Contrast weighted edge density"
+msgstr ""
+
+msgid "Calculates contrast weighted edge density index on a raster map"
+msgstr ""
+
+msgid "Patch area mean"
+msgstr ""
+
+msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Patch area range"
+msgstr ""
+
+msgid "Calculates range of patch area size on a raster map"
+msgstr ""
+
+msgid "Patch area Std Dev"
+msgstr ""
+
+msgid "Calculates standard deviation of patch area a raster map"
+msgstr ""
+
+msgid "Patch area Coeff Var"
+msgstr ""
+
+msgid "Calculates coefficient of variation of patch area on a raster map"
+msgstr ""
+
+msgid "Patch density"
+msgstr ""
+
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+#, fuzzy
+#| msgid "Category number"
+msgid "Patch number"
+msgstr "Kategória szám"
+
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
+msgstr ""
+
+msgid "Dominance's diversity"
+msgstr ""
+
+msgid "Calculates dominance's diversity index on a raster map"
+msgstr ""
+
+msgid "Shannon's diversity"
+msgstr ""
+
+msgid "Calculates Shannon's diversity index on a raster map"
+msgstr ""
+
+msgid "Simpson's diversity"
+msgstr ""
+
+msgid "Calculates Simpson's diversity index on a raster map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Brightness:"
+msgid "Richness"
+msgstr "Fényesség:"
+
+msgid "Calculates richness index on a raster map"
+msgstr ""
+
+msgid "Shape index"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new raster map"
+msgid "Calculates shape index on a raster map"
+msgstr "Új raszter térkép létrehozás"
+
+#, fuzzy
+#| msgid "Hydrologic modeling"
+msgid "Wildfire modeling"
+msgstr "Hidrológiai modellezés"
+
+msgid "Rate of spread"
+msgstr ""
+
+msgid "Generates rate of spread raster maps. Generates three, or four raster map layers showing the base (perpendicular) rate of spread (ROS), the maximum (forward) ROS, the direction of the maximum ROS, and optionally the maximum potential spotting distance for fire spread simulation."
+msgstr ""
+
+msgid "Least-cost spread paths"
+msgstr ""
+
+msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
+msgstr ""
+
+msgid "Anisotropic spread simulation"
+msgstr ""
+
+msgid "Simulates elliptically anisotropic spread. Generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins. It optionally produces raster maps to contain backlink UTM coordinates for tracing spread paths. Usable for fire spread simulations."
+msgstr ""
+
+#, fuzzy
+#| msgid "Change location and mapset"
+msgid "Change category values and labels"
+msgstr "Hely és térképcsoport váltás"
+
+#, fuzzy
+#| msgid "Manage categories"
+msgid "Manage category information"
+msgstr "Kategória kezelés"
+
+msgid "Manages category values and labels associated with user-specified raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "multiply width by category value"
+msgid "Interactively edit category values"
+msgstr "változó szélesség a kategória értékkel"
+
+#, fuzzy
+#| msgid "Insert existing 3D raster map"
+msgid "Edits cell values in a raster map."
+msgstr "Létező 3D raszter térkép beillesztés"
+
+msgid "Reclassify by size"
+msgstr ""
+
+msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename class"
+msgid "Reclassify"
+msgstr "Osztály átnevezés"
+
+msgid "Reclassify raster map based on category values. Creates a new raster map whose category values are based upon a reclassification of the categories in an existing raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Record"
+msgid "Recode"
+msgstr "Felvétel"
+
+#, fuzzy
+#| msgid "Select raster maps"
+msgid "Recodes categorical raster maps."
+msgstr "Válasszon rasztertérképeket"
+
+#, fuzzy
+#| msgid "scale:"
+msgid "Rescale"
+msgstr "méretarány:"
+
+msgid "Rescales the range of category values in a raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create histogram with d.histogram"
+msgid "Rescale with histogram"
+msgstr "Hisztogram létrehozása d.histogram paranccsal"
+
+msgid "Rescales histogram equalized the range of category values in a raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate random seed for rand()"
+msgid "Generate random cells"
+msgstr "Véletlen mag generálás rand()-hoz"
+
+#, fuzzy
+#| msgid "Random cells"
+msgid "Random cells"
+msgstr "Véletlen cellák"
+
+msgid "Generates random cell values with spatial dependence."
+msgstr ""
+
+msgid "Random cells and vector points"
+msgstr "Véletlen cellák és raszter pontok"
+
+msgid "Creates randomly placed raster cells or vector points Creates a raster map and vector point map containing randomly located cells and points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate contour lines"
+msgid "Generate surfaces"
+msgstr "Szintvonalak generálása"
+
+#, fuzzy
+#| msgid "Distance along surface"
+msgid "Fractal surface"
+msgstr "Távolság a felszín mentén"
+
+msgid "Creates a fractal surface of a given fractal dimension."
+msgstr ""
+
+msgid "Gaussian kernel density surface"
+msgstr ""
+
+msgid "Generates a raster density map from vector points map. Density is computed using a moving kernel. Optionally generates a vector density map on a vector network."
+msgstr ""
+
+msgid "Gaussian deviates surface"
+msgstr ""
+
+msgid "Generates a raster map using gaussian random number generator. Mean and standard deviation of gaussian deviates can be expressed by the user."
+msgstr ""
+
+msgid "Plane"
+msgstr "Sík"
+
+msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
+msgstr ""
+
+msgid "Random deviates surface"
+msgstr ""
+
+msgid "Produces a raster surface map of uniform random deviates with defined range."
+msgstr ""
+
+msgid "Random surface with spatial dependence"
+msgstr ""
+
+msgid "Generates random surface(s) with spatial dependence."
+msgstr ""
+
+msgid "Interpolate surfaces"
+msgstr ""
+
+msgid "Bilinear and bicubic from vector points"
+msgstr ""
+
+msgid "Performs bicubic or bilinear spline interpolation with Tykhonov regularization."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster maps"
+msgid "IDW from raster points"
+msgstr "3D raszter térképek"
+
+msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector points"
+msgid "IDW from vector points"
+msgstr "Vektor pontok"
+
+msgid "Provides surface interpolation from vector point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "Raster contours"
+msgstr "Raszter vektorrá"
+
+msgid "Generates surface raster map from rasterized contours."
+msgstr ""
+
+msgid "Regularized spline tension"
+msgstr ""
+
+msgid "Performs surface interpolation from vector points map by splines. Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster series to 3D raster"
+msgid "Raster series interpolation"
+msgstr "Raszter sorozatok 3D raszterbe"
+
+msgid "Interpolates raster maps located (temporal or spatial) in between input raster maps at specific sampling positions."
+msgstr ""
+
+msgid "Fill NULL cells"
+msgstr ""
+
+msgid "Fills no-data areas in raster maps using spline interpolation."
+msgstr ""
+
+msgid "Fill NULL cells using IDW"
+msgstr ""
+
+msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Reports and Statistics"
+msgid "Reports and statistics"
+msgstr "Jelentések és statisztikák"
+
+#, fuzzy
+#| msgid "Basic 3D raster metadata"
+msgid "Basic raster metadata"
+msgstr "Alap 3D raszter meta adat"
+
+#, fuzzy
+#| msgid "Output format for raster data"
+msgid "Outputs basic information about a raster map."
+msgstr "Output formátum a raszter adatokhoz"
+
+msgid "General statistics"
+msgstr "Általános statisztika"
+
+#, fuzzy
+#| msgid "Generates volume statistics for 3D raster maps."
+msgid "Generates area statistics for raster map."
+msgstr "Térfogat statisztika generálás 3Draszter térképekhez."
+
+msgid "Quantiles for large data sets"
+msgstr ""
+
+msgid "Compute quantiles using two passes."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage categories"
+msgid "Range of category values"
+msgstr "Kategória kezelés"
+
+msgid "Prints terse list of category values found in a raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Name for new 3D raster map to create"
+msgid "Sum area by raster map and category"
+msgstr "Létrehozandó új 3D raszter térkép neve"
+
+#, fuzzy
+#| msgid "Generates volume statistics for 3D raster maps."
+msgid "Reports statistics for raster maps."
+msgstr "Térfogat statisztika generálás 3Draszter térképekhez."
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Statistics for clumped cells"
+msgstr "Raszter térkép statisztika <%s>"
+
+msgid "Calculates the volume of data \"clumps\". Optionally produces a GRASS vector points map containing the calculated centroids of these clumps."
+msgstr ""
+
+msgid "Total corrected area"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Prints estimation of surface area for raster map."
+msgstr "Új szín tábla létrehozása a raszter térképhez"
+
+msgid "Calculates univariate statistics from the non-null cells of a raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+#, fuzzy
+#| msgid "Sample text"
+msgid "Sample transects"
+msgstr "Minta szöveg"
+
+msgid "Outputs the raster map layer values lying on user-defined line(s)."
+msgstr ""
+
+msgid "Sample transects (bearing/distance)"
+msgstr ""
+
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
+msgstr ""
+
+msgid "Covariance/correlation"
+msgstr ""
+
+msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Load region:"
+msgid "Linear regression"
+msgstr "Régió betöltés:"
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x."
+msgstr ""
+
+#, fuzzy
+#| msgid "Multiple raster maps"
+msgid "Multiple regression"
+msgstr "Több rasztertérkép"
+
+msgid "Calculates multiple linear regression from raster maps."
+msgstr ""
+
+msgid "Mutual category occurrences"
+msgstr ""
+
+msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Move category up"
+msgid "Modal category value"
+msgstr "Kategória mozgatás fel"
+
+msgid "Finds the mode of values in a cover map within areas assigned the same category value in a user-specified base map."
+msgstr ""
+
+#, fuzzy
+#| msgid "General statistics"
+msgid "Zonal statistics"
+msgstr "Általános statisztika"
+
+msgid "Calculates category or object oriented statistics."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Object geometry statistics"
+msgstr "Raszter statisztika jelentés"
+
+#, fuzzy
+#| msgid " Enter parameters for %s projection "
+msgid "Calculates geometry parameters for raster objects."
+msgstr "Adja meg a paramétereket a %s vetülethez"
+
+msgid "&Vector"
+msgstr "&Vektor"
+
+#, fuzzy
+#| msgid "Clip vector maps"
+msgid "Develop vector map"
+msgstr "Vektor térkép vágás"
+
+msgid "Create new empty vector map"
+msgstr "Új üres vektor térkép létrehozás"
+
+#, fuzzy
+#| msgid "Set color table interactively"
+msgid "Edit vector map (non-interactively)"
+msgstr "Színtábla interaktív beállítása"
+
+msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
+msgstr ""
+
+#, fuzzy
+#| msgid "Convert coordinates"
+msgid "Convert object types"
+msgstr "Koordináta konvertálás"
+
+#, fuzzy
+#| msgid "Select vector features"
+msgid "Changes type of vector features."
+msgstr "Vektor elemek szelektálása"
+
+msgid "Parallel lines"
+msgstr "Párhuzamos vonalak"
+
+msgid "Creates parallel line to input vector lines."
+msgstr ""
+
+#, fuzzy
+#| msgid "boundaries"
+msgid "Dissolve boundaries"
+msgstr "határok"
+
+msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create histogram of raster map"
+msgid "Create 3D vector over raster"
+msgstr "Raszter térkép hisztogram létrehozás"
+
+msgid "Converts 2D vector features to 3D by sampling of elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Extrude 3D vector map"
+msgstr "Vektor térkép export"
+
+msgid "Extrudes flat vector features to 3D vector features with defined height. Optionally the height can be derived from sampling of elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create table"
+msgid "Create labels"
+msgstr "Tábla létrehozás"
+
+msgid "Creates paint labels for a vector map from attached attributes."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Reposition vector map"
+msgstr "Vektor térkép export"
+
+msgid "Performs an affine transformation (shift, scale and rotate) on vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select vector map"
+msgid "Rectify vector map"
+msgstr "Válasszon vektor térképet"
+
+msgid "Rectifies a vector by computing a coordinate transformation for each object in the vector based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Show &metadata"
+msgid "Updates vector map metadata."
+msgstr "&Metaadat megjelenítés"
+
+#, fuzzy
+#| msgid "Manage maps"
+msgid "Manage timestamp"
+msgstr "Térképek kezelése"
+
+msgid "Modifies a timestamp for a vector map. Print/add/remove a timestamp for a vector map."
+msgstr ""
+
+msgid "Create labels with simulated annealing"
+msgstr ""
+
+msgid "Create optimally placed labels for vector map(s)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate points"
+msgid "Decimate points"
+msgstr "Pont generálás"
+
+msgid "Decimates a point cloud Copies points from one vector to another while applying different decimations"
+msgstr ""
+
+#, fuzzy
+#| msgid "Topology missing"
+msgid "Topology maintenance"
+msgstr "Topológia hiányzik"
+
+#, fuzzy
+#| msgid "Rebuild topology"
+msgid "Create or rebuild topology"
+msgstr "Topológia újraépítés"
+
+msgid "Creates topology for vector map. Optionally also checks for topological errors."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rebuilds topology on all vector maps in the current mapset."
+msgid "Rebuild topology on all vector maps"
+msgstr "Topológia újraépítése az összes vektortérképhez az aktuális térképcsoportban."
+
+msgid "Rebuilds topology on all vector maps in the current mapset."
+msgstr "Topológia újraépítése az összes vektortérképhez az aktuális térképcsoportban."
+
+msgid "Build polylines"
+msgstr ""
+
+msgid "Builds polylines from lines or boundaries."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select lines"
+msgid "Split lines"
+msgstr "Vonalak szelektálása"
+
+msgid "Splits vector lines to shorter segments."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select lines"
+msgid "Split polylines"
+msgstr "Vonalak szelektálása"
+
+msgid "Creates points/segments from input vector lines and positions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Clip vector maps"
+msgid "Clean vector map"
+msgstr "Vektor térkép vágás"
+
+#, fuzzy
+#| msgid "Please wait, closing and rebuilding topology of vector map <%s>..."
+msgid "Toolset for cleaning topology of vector map."
+msgstr "Kérem várjon a <%s> vektortérkép lezárására és a topológia újraépítésére..."
+
+msgid "Fill holes in areas"
+msgstr ""
+
+msgid "Fill holes in areas by keeping only outer boundaries"
+msgstr ""
+
+msgid "Smooth or simplify"
+msgstr ""
+
+msgid "Performs vector based generalization."
+msgstr ""
+
+#, fuzzy
+#| msgid "centroids"
+msgid "Add centroids"
+msgstr "centrálisok"
+
+msgid "Adds missing centroids to closed boundaries."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a vector map."
+msgstr "Új szín tábla létrehozása a raszter térképhez"
+
+msgid "Interactive management of vector color tables."
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Exports the color table associated with a vector map."
+msgstr "Raszter térkép konvertálása vektor térképpé."
+
+#, fuzzy
+#| msgid "New vector map"
+msgid "Query vector map"
+msgstr "Új vektor térkép"
+
+#, fuzzy
+#| msgid "Convert coordinates"
+msgid "Query with coordinate(s)"
+msgstr "Koordináta konvertálás"
+
+msgid "Queries a vector map at given locations."
+msgstr "Egy vektortérkép lekérdezése adott helyeken."
+
+#, fuzzy
+#| msgid "Enter vector attribute values"
+msgid "Query vector attribute data"
+msgstr "Vektor attribútum értékek bevitele"
+
+#, fuzzy
+#| msgid "Enter vector attribute values"
+msgid "Prints vector map attributes."
+msgstr "Vektor attribútum értékek bevitele"
+
+#, fuzzy
+#| msgid "Data selection"
+msgid "Feature selection"
+msgstr "Adat szelekció"
+
+#, fuzzy
+#| msgid "Select attribute column"
+msgid "Select by attributes"
+msgstr "Válasszon attribútum oszlopot"
+
+msgid "Selects vector features from an existing vector map and creates a new vector map containing only the selected features."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select raster map"
+msgid "Select by another map"
+msgstr "Raszter térkép választás"
+
+#, fuzzy
+#| msgid "Select features interactively from vector map"
+msgid "Selects features from vector map (A) by features from other vector map (B)."
+msgstr "Válasszon interaktívan elemeket a vektor térképről"
+
+#, fuzzy
+#| msgid "Generate points along lines"
+msgid "Convert areas or points to lines"
+msgstr "Pontok generálása vonalak mentén"
+
+msgid "Converts vector polygons or points to lines."
+msgstr ""
+
+#, fuzzy
+#| msgid "Source vector maps"
+msgid "Buffer vectors"
+msgstr "Forrás vektor térképek"
+
+msgid "Creates a buffer around vector features of given type."
+msgstr ""
+
+msgid "Point analysis"
+msgstr "Pont elemzés"
+
+msgid "Identify and remove outliers"
+msgstr ""
+
+msgid "Removes outliers from vector point data."
+msgstr ""
+
+msgid "Identify point clusters"
+msgstr ""
+
+msgid "Performs cluster identification."
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists"
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector points"
+msgid "Perturb points"
+msgstr "Vektor pontok"
+
+#, fuzzy
+#| msgid "Random cells and vector points"
+msgid "Random location perturbations of vector points."
+msgstr "Véletlen cellák és raszter pontok"
+
+msgid "Test/training point sets"
+msgstr ""
+
+msgid "Randomly partition points into test/train sets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Output format for vector data"
+msgid "Tests for normality for vector points"
+msgstr "Output formátum vektor adatokhoz"
+
+#, fuzzy
+#| msgid "Output format for vector data"
+msgid "Tests for normality for vector points."
+msgstr "Output formátum vektor adatokhoz"
+
+#, fuzzy
+#| msgid "Point analysis"
+msgid "Point pattern analysis"
+msgstr "Pont elemzés"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Lidar analysis"
+msgstr "Lidar elemzés"
+
+#, fuzzy
+#| msgid "Select dangles"
+msgid "Detect edges"
+msgstr "Lógó vonalak szlektálása"
+
+msgid "Detects the object's edges from a LIDAR data set."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select lines"
+msgid "Detect interiors"
+msgstr "Vonalak szelektálása"
+
+msgid "Building contour determination and Region Growing algorithm for determining the building inside"
+msgstr ""
+
+msgid "Correct and reclassify objects"
+msgstr ""
+
+msgid "Corrects the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
+msgstr ""
+
+msgid "Linear referencing"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create"
+msgid "Create LRS"
+msgstr "Létrehozás"
+
+#, fuzzy
+#| msgid "Select EPSG code of spatial reference system"
+msgid "Creates a linear reference system."
+msgstr "Válasszon EPSG kódot a vetülethez"
+
+#, fuzzy
+#| msgid "Create new location?"
+msgid "Create stationing"
+msgstr "Új hely létrehozása?"
+
+msgid "Creates stationing from input lines, and linear reference system."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Create points/segments"
+msgstr "Új térképcsoport létrehozás"
+
+msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgstr ""
+
+msgid "Find line id and offset"
+msgstr ""
+
+msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
+msgstr ""
+
+msgid "Nearest features"
+msgstr "Legközelebbi elemek"
+
+msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
+msgstr ""
+
+msgid "Network analysis"
+msgstr "Hálózat elemzés"
+
+#, fuzzy
+#| msgid "Vector network analysis tool"
+msgid "Tool for interactive vector network analysis."
+msgstr "Vektor hálózat elemző eszköz"
+
+msgid "Network preparation"
+msgstr "Hálózat előkészítés"
+
+msgid "Performs network maintenance."
+msgstr ""
+
+msgid "Allocate subnets"
+msgstr ""
+
+msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Split net"
+msgstr ""
+
+msgid "Splits subnets for nearest centers by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Shortest path"
+msgstr "Legrövidebb útvonal"
+
+msgid "Finds shortest path on vector network."
+msgstr "Legrövidebb útvonal megtalálása a vektor hálózaton."
+
+#, fuzzy
+#| msgid "Shortest path for all pairs"
+msgid "Shortest path for sets of features"
+msgstr "Legrövidebb útvonal minden párra"
+
+msgid "Computes shortest distance via the network between the given sets of features. Finds the shortest paths from each 'from' point to the nearest 'to' feature and various information about this relation are uploaded to the attribute table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Shortest path %s"
+msgid "Shortest path using timetables"
+msgstr "Legrövidebb útvonal %s"
+
+#, fuzzy
+#| msgid "Finds shortest path on vector network."
+msgid "Finds shortest path using timetables."
+msgstr "Legrövidebb útvonal megtalálása a vektor hálózaton."
+
+msgid "Shortest path for all pairs"
+msgstr "Legrövidebb útvonal minden párra"
+
+msgid "Computes the shortest path between all pairs of nodes in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Visibility"
+msgid "Visibility network"
+msgstr "Láthatóság"
+
+msgid "Performs visibility graph construction."
+msgstr ""
+
+msgid "Bridges and articulation points"
+msgstr ""
+
+#, fuzzy
+#| msgid "Computes minimum spanning tree for the network."
+msgid "Computes bridges and articulation points in the network."
+msgstr "Minimális feszítő fa számítás a hálózatra."
+
+msgid "Maximum flow"
+msgstr ""
+
+#, fuzzy
+#| msgid "Computes minimum spanning tree for the network."
+msgid "Computes the maximum flow between two sets of nodes in the network."
+msgstr "Minimális feszítő fa számítás a hálózatra."
+
+#, fuzzy
+#| msgid "Vector database connections"
+msgid "Vertex connectivity"
+msgstr "Vektor adatbázis kapcsolatok"
+
+msgid "Computes vertex connectivity between two sets of nodes in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "exponent"
+msgid "Components"
+msgstr "exponens"
+
+msgid "Computes strongly and weakly connected components in the network."
+msgstr ""
+
+msgid "Centrality"
+msgstr ""
+
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
+msgstr ""
+
+msgid "Steiner tree"
+msgstr "Steiner fa"
+
+msgid "Creates Steiner tree for the network and given terminals. Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm is used in this module so the result may be sub optimal."
+msgstr ""
+
+msgid "Minimum spanning tree"
+msgstr "Minimális feszítő fa"
+
+msgid "Computes minimum spanning tree for the network."
+msgstr "Minimális feszítő fa számítás a hálózatra."
+
+msgid "Traveling salesman analysis"
+msgstr "Utazó ügynök elemzés"
+
+msgid "Creates a cycle connecting given nodes (Traveling salesman problem). Note that TSP is NP-hard, heuristic algorithm is used by this module and created cycle may be sub optimal"
+msgstr ""
+
+#, fuzzy
+#| msgid "Overwrite vector map"
+msgid "Overlay vector maps"
+msgstr "Vektor térkép felülírása"
+
+msgid "Clip vector maps"
+msgstr "Vektor térkép vágás"
+
+msgid "Extracts features of input map which overlay features of clip map."
+msgstr ""
+
+msgid "Overlays two vector maps offering clip, intersection, difference, symmetrical difference, union operators."
+msgstr ""
+
+#, fuzzy
+#| msgid "Unpack vector map"
+msgid "Patch vector maps"
+msgstr "Vektor térkép kicsomagolás"
+
+#, fuzzy
+#| msgid "Create new empty vector map"
+msgid "Creates a new vector map by combining other vector maps."
+msgstr "Új üres vektor térkép létrehozás"
+
+msgid "Manage categories"
+msgstr "Kategória kezelés"
+
+#, fuzzy
+#| msgid "Manage categories"
+msgid "Change or report categories"
+msgstr "Kategória kezelés"
+
+msgid "Attaches, deletes or reports vector categories to/from/of map geometry."
+msgstr ""
+
+msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster series to 3D raster"
+msgid "Update area attributes from raster"
+msgstr "Raszter sorozatok 3D raszterbe"
+
+msgid "Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns."
+msgstr ""
+
+msgid "Update area attributes from vector"
+msgstr ""
+
+msgid "Count points in areas, calculate statistics from point attributes."
+msgstr ""
+
+msgid "Update point attributes from areas"
+msgstr ""
+
+msgid "Uploads vector values at positions of vector points to the table."
+msgstr ""
+
+msgid "Update database values from vector"
+msgstr ""
+
+#, fuzzy
+#| msgid "Exports attribute tables into various formats."
+msgid "Populates attribute values from vector features."
+msgstr "Attribútum táblák exportálása különböző formátumokba."
+
+msgid "Sample raster maps at point locations"
+msgstr "Rasztertérkép mintavételezése adott pont helyeken"
+
+msgid "Uploads raster values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Sample raster maps at point locations"
+msgid "Sample 3D raster at point locations"
+msgstr "Rasztertérkép mintavételezése adott pont helyeken"
+
+msgid "Uploads 3D raster values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Sample raster maps at point locations"
+msgid "Sample temporal raster dataset at point locations"
+msgstr "Rasztertérkép mintavételezése adott pont helyeken"
+
+msgid "Uploads space time raster dataset values at positions of vector points to the table."
+msgstr ""
+
+msgid "Sample raster neighborhood around points"
+msgstr ""
+
+msgid "Samples a raster map at vector point locations."
+msgstr "Rasztertérkép mintavételezése adott vektor pont helyeken."
+
+#, fuzzy
+msgid "Generate area for current region"
+msgstr "Aktuális régió megjelenítése"
+
+#, fuzzy
+msgid "Creates a vector polygon from the current region extent."
+msgstr "Egy rasztertérkép vetületi transzformációja egy helyről az aktuális helyre."
+
+#, fuzzy
+#| msgid "Generate points"
+msgid "Generate areas from points"
+msgstr "Pont generálás"
+
+msgid "Convex hull"
+msgstr ""
+
+msgid "Produces a 2D/3D convex hull for a given vector map."
+msgstr ""
+
+msgid "Delaunay triangles"
+msgstr "Delaunay háromszögek"
+
+msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgstr ""
+
+msgid "Voronoi diagram/Thiessen polygons"
+msgstr ""
+
+msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
+msgstr ""
+
+msgid "Generate grid"
+msgstr "Rács generálás"
+
+#, fuzzy
+#| msgid "Exports a vector map to SVG file."
+msgid "Creates a vector map of a user-defined grid."
+msgstr "Vektor térkép konvertálása SVG fájlba."
+
+msgid "Generate points"
+msgstr "Pont generálás"
+
+msgid "Generate from database"
+msgstr "Generálás adatbázisból"
+
+msgid "Creates new vector (points) map from database table containing coordinates."
+msgstr ""
+
+msgid "Generate points along lines"
+msgstr "Pontok generálása vonalak mentén"
+
+msgid "Creates points along input lines in new vector map with 2 layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate points"
+msgid "Generate random points"
+msgstr "Pont generálás"
+
+#, fuzzy
+#| msgid "Random cells and vector points"
+msgid "Generates random 2D/3D vector points."
+msgstr "Véletlen cellák és raszter pontok"
+
+#, fuzzy
+#| msgid "Symbol size in points"
+msgid "Remove outliers in point sets"
+msgstr "Szimbólum méret pontokban"
+
+#, fuzzy
+#| msgid "Basic 3D raster metadata"
+msgid "Basic vector metadata"
+msgstr "Alap 3D raszter meta adat"
+
+#, fuzzy
+#| msgid "Output format for vector data"
+msgid "Outputs basic information about a vector map."
+msgstr "Output formátum vektor adatokhoz"
+
+#, fuzzy
+#| msgid "Show attribute data"
+msgid "Classify attribute data"
+msgstr "Attribútumadat megjelenítés"
+
+#, fuzzy
+#| msgid "use width for thematic mapping"
+msgid "Classifies attribute data, e.g. for thematic mapping"
+msgstr "használd a vastagságot a tematikus térképezéshez"
+
+msgid "Report topology by category"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generates volume statistics for 3D raster maps."
+msgid "Reports geometry statistics for vector maps."
+msgstr "Térfogat statisztika generálás 3Draszter térképekhez."
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate attribute statistics for points"
+msgstr "Egyváltozós raszter statisztika"
+
+msgid "Calculates univariate statistics of vector map features. Variance and standard deviation is calculated only for points if specified."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate statistics for attribute columns"
+msgstr "Egyváltozós raszter statisztika"
+
+msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector map is 3D"
+msgid "Vector map profiling tool"
+msgstr "A vektor térkép 3D-s"
+
+msgid "Quadrat indices"
+msgstr ""
+
+#, fuzzy
+#| msgid "east, north"
+msgid "Test normality"
+msgstr "kelet, észak"
+
+#, fuzzy
+#| msgid "Image"
+msgid "&Imagery"
+msgstr "Kép"
+
+msgid "Develop images and groups"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create/edit group..."
+msgid "Create/edit group"
+msgstr "Csoport létrehozás/szerkesztés..."
+
+msgid "Creates, edits, and lists groups of imagery files."
+msgstr ""
+
+#, fuzzy
+#| msgid "Layer group:"
+msgid "Target group"
+msgstr "Réteg csoport:"
+
+#, fuzzy
+msgid "Targets an imagery group to a GRASS location and mapset."
+msgstr "Aktuális hely és térképcsoport módosítása"
+
+#, fuzzy
+#| msgid "Choose image file"
+msgid "Find imagery files"
+msgstr "Válasszon képfájlt"
+
+msgid "Semantic label library"
+msgstr ""
+
+msgid "Prints available semantic label information used for multispectral data."
+msgstr ""
+
+msgid "Mosaic images"
+msgstr ""
+
+msgid "Mosaics several images and extends colormap."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage colors"
+msgid "Manage image colors"
+msgstr "Színek kezelése"
+
+msgid "Color balance for RGB"
+msgstr ""
+
+msgid "Performs auto-balancing of colors for RGB images."
+msgstr ""
+
+msgid "HIS to RGB"
+msgstr ""
+
+msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
+msgstr ""
+
+msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
+msgstr ""
+
+msgid "Rectify image or raster"
+msgstr ""
+
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create histogram of raster map"
+msgid "Generate histogram of image"
+msgstr "Raszter térkép hisztogram létrehozás"
+
+msgid "Spectral response"
+msgstr ""
+
+msgid "Displays spectral response at user specified locations in group or images."
+msgstr ""
+
+msgid "Pan sharpening"
+msgstr ""
+
+msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
+msgstr ""
+
+#, fuzzy
+#| msgid "Class manager"
+msgid "Classify image"
+msgstr "Osztály kezelő"
+
+msgid "Clustering input for unsupervised classification"
+msgstr ""
+
+msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
+msgstr ""
+
+msgid "Input for supervised MLC"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generates volume statistics for 3D raster maps."
+msgid "Generates statistics for i.maxlik from raster map."
+msgstr "Térfogat statisztika generálás 3Draszter térképekhez."
+
+msgid "Maximum likelihood classification (MLC)"
+msgstr ""
+
+msgid "Classifies the cell spectral reflectances in imagery data. Classification is based on the spectral signature information generated by either i.cluster, g.gui.iclass, or i.gensig."
+msgstr ""
+
+#, fuzzy
+#| msgid "Interactive insertion"
+msgid "Interactive input for supervised classification"
+msgstr "Interaktív beszúrás"
+
+msgid "Generates spectral signatures by allowing the user to outline training areas."
+msgstr ""
+
+msgid "Input for supervised SMAP"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generates volume statistics for 3D raster maps."
+msgid "Generates statistics for i.smap from raster map."
+msgstr "Térfogat statisztika generálás 3Draszter térképekhez."
+
+msgid "Sequential maximum a posteriori classification (SMAP)"
+msgstr ""
+
+msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
+msgstr ""
+
+msgid "Input for supervised SVM"
+msgstr ""
+
+msgid "Train a SVM Train a Support Vector Machine"
+msgstr ""
+
+msgid "Support Vector Machines classification (SVM)"
+msgstr ""
+
+msgid "Predict with a SVM Predict with a Support Vector Machine"
+msgstr ""
+
+#, fuzzy
+msgid "Manage signature files"
+msgstr "Kategória kezelés"
+
+#, fuzzy
+msgid "Manage imagery classification signature files"
+msgstr "Kategória kezelés"
+
+#, fuzzy
+#| msgid "Orientation"
+msgid "Object segmentation"
+msgstr "Tájékozás"
+
+msgid "Identifies segments (objects) from imagery data."
+msgstr ""
+
+msgid "Filter image"
+msgstr ""
+
+#, fuzzy
+#| msgid "Layer selection"
+msgid "Edge detection"
+msgstr "Réteg szelektálás"
+
+msgid "Zero-crossing \"edge detection\" raster function for image processing."
+msgstr ""
+
+msgid "Matrix/convolving filter"
+msgstr ""
+
+msgid "Performs raster map matrix filter."
+msgstr ""
+
+msgid "Edge preserving smoothing"
+msgstr ""
+
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+#, fuzzy
+#| msgid "Transforming <%s>..."
+msgid "Transform image"
+msgstr "Transzformálás <%s>..."
+
+msgid "Canonical correlation"
+msgstr ""
+
+msgid "Canonical components analysis (CCA) program for image processing."
+msgstr ""
+
+msgid "Principal components"
+msgstr ""
+
+msgid "Principal components analysis (PCA) for image processing."
+msgstr ""
+
+msgid "Fast Fourier"
+msgstr ""
+
+msgid "Fast Fourier Transform (FFT) for image processing."
+msgstr ""
+
+msgid "Inverse Fast Fourier"
+msgstr ""
+
+msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set image size"
+msgid "Satellite images tools"
+msgstr "Képméret beállítás"
+
+msgid "Aster DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN."
+msgstr ""
+
+msgid "Landsat DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+/OLI"
+msgstr ""
+
+msgid "Landsat cloud cover assessment"
+msgstr ""
+
+msgid "Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA)."
+msgstr ""
+
+msgid "Modis quality control"
+msgstr ""
+
+msgid "Extracts quality control parameters from MODIS QC layers."
+msgstr ""
+
+msgid "Atmospheric correction"
+msgstr ""
+
+msgid "Performs atmospheric correction using the 6S algorithm. 6S - Second Simulation of Satellite Signal in the Solar Spectrum."
+msgstr ""
+
+msgid "Topographic correction"
+msgstr ""
+
+msgid "Computes topographic correction of reflectance."
+msgstr ""
+
+msgid "Orthophoto tools"
+msgstr "Ortofotó eszközök"
+
+#, fuzzy
+#| msgid "Manage projections"
+msgid "Manage GCPs for 3D correction"
+msgstr "Vetületek kezelése"
+
+msgid "Georectifies a map and allows managing GCP for 3D correction."
+msgstr ""
+
+msgid "Corrects scanning distortions"
+msgstr "Szkennelési torzítás korrekciója"
+
+#, fuzzy
+#| msgid "Corrects scanning distortions"
+msgid "Corrects scanning distortions of a scanned aerial photo."
+msgstr "Szkennelési torzítás korrekciója"
+
+msgid "Initialize ortho parameters"
+msgstr ""
+
+msgid "Interactively creates or modifies entries in a camera initial exposure station file for imagery group referenced by a sub-block."
+msgstr ""
+
+#, fuzzy
+#| msgid "Model parameters"
+msgid "Camera parameters"
+msgstr "Modell paraméterek"
+
+msgid "Select and modify the imagery group camera reference file."
+msgstr ""
+
+msgid "Elevation model for orthorectification"
+msgstr ""
+
+msgid "Select or modify the target elevation model."
+msgstr ""
+
+msgid "Target group for orthorectification"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create or edit imagery groups"
+msgid "Select or modify the imagery group target."
+msgstr "Képcsoport létrehozás vagy szerkesztés"
+
+#, fuzzy
+#| msgid "Select datum transformation"
+msgid "Compute ortho transformation"
+msgstr "Válasszon dátum transzformációt"
+
+msgid "Computes a coordinate transformation based on the control points."
+msgstr ""
+
+msgid "Orthorectify imagery"
+msgstr ""
+
+msgid "Orthorectifies an image by using the image to photo coordinate transformation matrix."
+msgstr ""
+
+msgid "Satellite images products"
+msgstr ""
+
+msgid "Vegetation indices"
+msgstr ""
+
+msgid "Calculates different types of vegetation indices. Uses red and nir bands mostly, and some indices require additional bands."
+msgstr ""
+
+msgid "Tasseled cap vegetation index"
+msgstr ""
+
+msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
+msgstr ""
+
+msgid "Albedo"
+msgstr ""
+
+msgid "Computes broad band albedo from surface reflectance."
+msgstr ""
+
+msgid "Emissivity"
+msgstr ""
+
+msgid "Computes emissivity from NDVI, generic method for sparse land."
+msgstr ""
+
+msgid "Biomass growth"
+msgstr ""
+
+msgid "Computes biomass growth, precursor of crop yield calculation."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster calculations"
+msgid "Evapotranspiration calculation"
+msgstr "3D raszter számítások"
+
+msgid "Instantaneaous Net Radiation"
+msgstr ""
+
+msgid "Net radiation approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Soil heat flux"
+msgstr ""
+
+msgid "Soil heat flux approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Sensible heat flux"
+msgstr ""
+
+msgid "Computes sensible heat flux iteration SEBAL 01."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export animation"
+msgid "Evaporative fraction"
+msgstr "Animáció export"
+
+msgid "Computes evaporative fraction and root zone soil moisture."
+msgstr ""
+
+msgid "Actual Evapotranspiration"
+msgstr ""
+
+msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal resolution: %s"
+msgid "Temporal integration of ETa"
+msgstr "Időbeli felbontás: %s"
+
+msgid "Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)."
+msgstr ""
+
+msgid "Hargreaves methods Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation modified or original Hargreaves formulation, 2001."
+msgstr ""
+
+msgid "Penman-Monteith Evapotranspiration"
+msgstr ""
+
+msgid "Computes potential evapotranspiration calculation with hourly Penman-Monteith."
+msgstr ""
+
+msgid "Priestley-Taylor Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation Priestley and Taylor formulation, 1972."
+msgstr ""
+
+#, fuzzy
+#| msgid "Lidar analysis"
+msgid "Kappa analysis"
+msgstr "Lidar elemzés"
+
+msgid "Calculates error matrix and kappa parameter for accuracy assessment of classification result."
+msgstr ""
+
+msgid "OIF for LandSat TM"
+msgstr ""
+
+msgid "Calculates Optimum-Index-Factor table for spectral bands"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster"
+msgid "3D r&aster"
+msgstr "3D raszter"
+
+#, fuzzy
+#| msgid "3D raster map"
+msgid "Develop 3D raster map"
+msgstr "3D raszter térkép"
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage 3D NULL values"
+msgstr "Táblák kezelése"
+
+msgid "Explicitly create the 3D NULL-value bitmap file."
+msgstr ""
+
+msgid "Modifies a timestamp for a 3D raster map. Print/add/remove a timestamp for a 3D raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster"
+msgid "Retile 3D raster"
+msgstr "3D raszter"
+
+msgid "Retiles an existing 3D raster map with user defined x, y and z tile size."
+msgstr ""
+
+msgid "Allows creation and/or modification of 3D raster map layer support files."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster statistics"
+msgid "3D rasters to raster series"
+msgstr "3D raszter statisztika"
+
+msgid "3D color tables"
+msgstr "3D színtáblák"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a 3D raster map."
+msgstr "Új szín tábla létrehozása a raszter térképhez"
+
+#, fuzzy
+#| msgid "3D color tables"
+msgid "Export 3D color table"
+msgstr "3D színtáblák"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Exports the color table associated with a 3D raster map."
+msgstr "Új szín tábla létrehozása a raszter térképhez"
+
+msgid "3D mask"
+msgstr "3D maszk"
+
+msgid "Establishes the current working 3D raster mask."
+msgstr ""
+
+msgid "3D raster map calculator"
+msgstr "3D raszter térkép kalkulátor"
+
+msgid "Cross section"
+msgstr "Metszet"
+
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Iso lines:"
+msgid "3D flow lines"
+msgstr "Izovonalak:"
+
+msgid "Computes 3D flow lines and 3D flow accumulation."
+msgstr ""
+
+msgid "3D gradient"
+msgstr ""
+
+msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "3D neighborhood analysis"
+msgstr "Szomszédsági elemzés"
+
+msgid "Makes each voxel value a function of the values assigned to the voxels around it, and stores new voxel values in an output 3D raster map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save display to file"
+msgid "Create 3D display file"
+msgstr "Képernyő mentése fájlba"
+
+msgid "Creates a display file from an existing 3D raster map according to specified threshold levels."
+msgstr ""
+
+#, fuzzy
+#| msgid "Multiple 3D raster maps"
+msgid "Interpolate 3D raster from points"
+msgstr "Több 3D rasztertérkép"
+
+msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
+msgstr ""
+
+msgid "Basic 3D raster metadata"
+msgstr "Alap 3D raszter meta adat"
+
+msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgstr ""
+
+msgid "3D raster statistics"
+msgstr "3D raszter statisztika"
+
+msgid "Generates volume statistics for 3D raster maps."
+msgstr "Térfogat statisztika generálás 3Draszter térképekhez."
+
+#, fuzzy
+#| msgid "Generates volume statistics for 3D raster maps."
+msgid "Univariate statistics for 3D rasters"
+msgstr "Térfogat statisztika generálás 3Draszter térképekhez."
+
+msgid "Calculates univariate statistics from the non-null cells of a 3D raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "&Database"
+msgstr "A&datbázis"
+
+msgid "Database information"
+msgstr "Adatbázis információ"
+
+msgid "List databases"
+msgstr "Adatbázisok lista"
+
+msgid "Lists all databases for a given driver and location."
+msgstr ""
+
+#, fuzzy
+#| msgid "List databases"
+msgid "List drivers"
+msgstr "Adatbázisok lista"
+
+#, fuzzy
+#| msgid "List databases"
+msgid "Lists all database drivers."
+msgstr "Adatbázisok lista"
+
+msgid "List tables"
+msgstr "Táblák listája"
+
+#, fuzzy
+#| msgid "List all columns for a given table."
+msgid "Lists all tables for a given database."
+msgstr "Egy adott tábla összes oszlopának listája"
+
+msgid "Describe table"
+msgstr "Tábla leírás"
+
+#, fuzzy
+#| msgid "Describe table"
+msgid "Describes a table in detail."
+msgstr "Tábla leírás"
+
+#, fuzzy
+#| msgid "Add columns"
+msgid "List columns"
+msgstr "Oszlopok hozzáadása"
+
+msgid "List all columns for a given table."
+msgstr "Egy adott tábla összes oszlopának listája"
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage databases"
+msgstr "Táblák kezelése"
+
+msgid "Connect"
+msgstr "Csatlakozás"
+
+msgid "Prints/sets general DB connection for current mapset."
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Sets user/password for DB driver/database."
+msgstr ""
+
+msgid "Create database"
+msgstr "Adatbázis létrehozás"
+
+#, fuzzy
+#| msgid "Create database"
+msgid "Creates an empty database."
+msgstr "Adatbázis létrehozás"
+
+#, fuzzy
+#| msgid "Drop table"
+msgid "Drop database"
+msgstr "Tábla törlés"
+
+#, fuzzy
+#| msgid "Removes existing attribute table of a vector map."
+msgid "Removes an existing database."
+msgstr "Egy vektor térkép attribútum táblájának eltávolítása."
+
+msgid "Drop table"
+msgstr "Tábla törlés"
+
+msgid "Drops an attribute table."
+msgstr "Egy attribútum tábla törlése."
+
+msgid "Copy table"
+msgstr "Tábla másolás"
+
+msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
+msgstr ""
+
+msgid "Drop column"
+msgstr "Oszlop törlés"
+
+msgid "Drops a column from selected attribute table."
+msgstr "Oszlop törlés a kiválasztott attribútum táblából."
+
+msgid "Test"
+msgstr "Teszt"
+
+msgid "Test database driver, database must exist and set by db.connect."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query tool"
+msgid "Query any table"
+msgstr "Lekérdezés eszköz"
+
+msgid "Selects data from attribute table. Performs SQL query statement(s)."
+msgstr ""
+
+msgid "SQL statement"
+msgstr "SQL mondat"
+
+msgid "Executes any SQL statement. For SELECT statements use 'db.select'."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate statistics for table column"
+msgstr "Egyváltozós raszter statisztika"
+
+msgid "Calculates univariate statistics on selected table column."
+msgstr ""
+
+msgid "Vector database connections"
+msgstr "Vektor adatbázis kapcsolatok"
+
+msgid "New table"
+msgstr "Új tábla"
+
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove table"
+msgid "Remove table"
+msgstr "Tábla eltávolítás"
+
+msgid "Removes existing attribute table of a vector map."
+msgstr "Egy vektor térkép attribútum táblájának eltávolítása."
+
+msgid "Join table"
+msgstr "Tábla kapcsolás"
+
+msgid "Joins a database table to a vector map table."
+msgstr "Adatbázis tábla kapcsolása egy vektor térkép táblához."
+
+msgid "Add columns"
+msgstr "Oszlopok hozzáadása"
+
+#, fuzzy
+#| msgid "Removes existing attribute table of a vector map."
+msgid "Adds one or more columns to the attribute table connected to a given vector map."
+msgstr "Egy vektor térkép attribútum táblájának eltávolítása."
+
+#, fuzzy
+#| msgid "Drops a column from selected attribute table."
+msgid "Drops a column from the attribute table connected to a given vector map."
+msgstr "Oszlop törlés a kiválasztott attribútum táblából."
+
+#, fuzzy
+#| msgid "Removes existing attribute table of a vector map."
+msgid "Renames a column in the attribute table connected to a given vector map."
+msgstr "Egy vektor térkép attribútum táblájának eltávolítása."
+
+msgid "Change values"
+msgstr "Értékek módosítása"
+
+#, fuzzy
+#| msgid "Removes existing attribute table of a vector map."
+msgid "Updates a column in the attribute table connected to a vector map."
+msgstr "Egy vektor térkép attribútum táblájának eltávolítása."
+
+msgid "Drop row"
+msgstr "Sor eldobása"
+
+msgid "Removes a vector feature from a vector map through attribute selection."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector dataset"
+msgid "Reconnect vectors to database"
+msgstr "Vektor adathalmaz export"
+
+#, fuzzy
+#| msgid "Editing is allowed only for vector maps from the current mapset."
+msgid "Reconnects attribute tables for all vector maps from the current mapset to a new database."
+msgstr "A szerkesztés csak az aktuális térképcsoport vektor térképeire engedélyezett."
+
+#, fuzzy
+#| msgid "Vector database connections"
+msgid "Set vector map - database connection"
+msgstr "Vektor adatbázis kapcsolatok"
+
+msgid "Prints/sets DB connection for a vector map to attribute table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal mode"
+msgid "&Temporal"
+msgstr "Idő mód"
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "Manage datasets"
+msgstr "Adatbázisok kezelése"
+
+#, fuzzy
+#| msgid "Invalid input temporal dataset"
+msgid "Connect temporal database"
+msgstr "Hibás input idősor adatok"
+
+msgid "Prints/sets general temporal GIS database connection for current mapset."
+msgstr ""
+
+msgid "Create"
+msgstr "Létrehozás"
+
+#, fuzzy
+#| msgid "No map series or space-time dataset added."
+msgid "Creates a space time dataset."
+msgstr "Nincs térkép sorozat vagy tér-idő adatállomány."
+
+#, fuzzy
+#| msgid "Rename class"
+msgid "Renames a space time dataset"
+msgstr "Osztály átnevezés"
+
+#, fuzzy
+#| msgid "Remove action/data from model"
+msgid "Removes space time datasets from temporal database."
+msgstr "Művelet/adat eltávolítása a modellből"
+
+msgid "Modifies the metadata of a space time dataset."
+msgstr ""
+
+msgid "Merge"
+msgstr ""
+
+msgid "Merges several space time datasets into a single space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal mode"
+msgid "Temporally shift"
+msgstr "Idő mód"
+
+#, fuzzy
+#| msgid "The temporal extents of maps in space-time datasets have to be the same."
+msgid "Shifts temporally the maps of a space time dataset."
+msgstr "A tér-idő adathalmazok időbeli terjedelmének azonosnak kell lennie."
+
+#, fuzzy
+#| msgid "Rename class"
+msgid "Snap maps of dataset"
+msgstr "Osztály átnevezés"
+
+#, fuzzy
+#| msgid "No map series or space-time dataset added."
+msgid "Snaps temporally the maps of a space time dataset."
+msgstr "Nincs térkép sorozat vagy tér-idő adatállomány."
+
+msgid "Lists space time datasets and maps registered in the temporal database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Copy space time dataset"
+msgstr "Tér-idő raszter adatállomány"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Creates a copy of a space time raster dataset."
+msgstr "Tér-idő raszter adatállomány"
+
+#, fuzzy
+#| msgid "Invalid input temporal dataset"
+msgid "Upgrade temporal database"
+msgstr "Hibás input idősor adatok"
+
+#, fuzzy
+#| msgid "Dataset <%s> not found in temporal database"
+msgid "Upgrades the version of the temporal database."
+msgstr "<%s> adathalmaz nem található az időbeli adatbázisban"
+
+#, fuzzy
+#| msgid "Manage access to mapsets"
+msgid "Manage maps in datasets"
+msgstr "Hozzáférés kezelése a térképcsoportokhoz"
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "Register maps in datasets"
+msgstr "Raszter térképek"
+
+msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister maps from datasets"
+msgstr "nincs raszter térkép"
+
+msgid "Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset."
+msgstr ""
+
+msgid "List raster dataset maps"
+msgstr "Raszter térkép lista"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Lists registered maps of a space time raster dataset."
+msgstr "Tér-idő raszter adatállomány"
+
+msgid "List vector dataset maps"
+msgstr "Vektor térkép lista"
+
+#, fuzzy
+#| msgid "Space time vector dataset"
+msgid "Lists registered maps of a space time vector dataset."
+msgstr "Tér-idő vektor adatállomány"
+
+msgid "List 3D raster dataset maps"
+msgstr "3D raszter térkép lista"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Lists registered maps of a space time raster3d dataset."
+msgstr "Tér-idő raszter adatállomány"
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import"
+msgstr "&Import"
+
+msgid "Import raster dataset"
+msgstr "Raszter adathalmaz import"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Imports space time raster dataset."
+msgstr "Tér-idő raszter adatállomány"
+
+msgid "Import vector dataset"
+msgstr "Vektor adathalmaz import"
+
+#, fuzzy
+#| msgid "Exports a raster map as GRASS GIS specific archive file"
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr "Raszter térkép export GRASS GIS specifikus archive fájlba"
+
+#, fuzzy
+#| msgid "Import raster dataset"
+msgid "Export raster dataset"
+msgstr "Raszter adathalmaz import"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Exports space time raster dataset."
+msgstr "Tér-idő raszter adatállomány"
+
+#, fuzzy
+#| msgid "Convert raster dataset to 3D raster"
+msgid "Export raster dataset as VTK time series"
+msgstr "Raszter adathalmaz konvertálás 3D rétegbe"
+
+#, fuzzy
+#| msgid "Space time raster dataset: %s"
+msgid "Exports space time raster dataset as VTK time series."
+msgstr "Tér-idő raszter adatok: %s"
+
+msgid "Export vector dataset"
+msgstr "Vektor adathalmaz export"
+
+#, fuzzy
+#| msgid "Exports a raster map as GRASS GIS specific archive file"
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr "Raszter térkép export GRASS GIS specifikus archive fájlba"
+
+msgid "Convert raster dataset to 3D raster"
+msgstr "Raszter adathalmaz konvertálás 3D rétegbe"
+
+#, fuzzy
+#| msgid "Convert raster dataset to 3D raster"
+msgid "Converts a space time raster dataset into a 3D raster map."
+msgstr "Raszter adathalmaz konvertálás 3D rétegbe"
+
+#, fuzzy
+#| msgid "Convert raster dataset to 3D raster"
+msgid "Convert raster dataset to vector dataset"
+msgstr "Raszter adathalmaz konvertálás 3D rétegbe"
+
+#, fuzzy
+#| msgid "Space time raster dataset: %s"
+msgid "Converts a space time raster dataset into a space time vector dataset"
+msgstr "Tér-idő raszter adatok: %s"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Create contour lines from raster dataset"
+msgstr "Új szín tábla létrehozása a raszter térképhez"
+
+msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Text rotation"
+msgid "Extraction"
+msgstr "Szöveg fogatás"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Extract subset of raster dataset"
+msgstr "Tér-idő raszter adatállomány"
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Extracts a subset of a space time raster datasets."
+msgstr "Tér-idő raszter adatállomány"
+
+#, fuzzy
+#| msgid "Export vector dataset"
+msgid "Extract subset of vector dataset"
+msgstr "Vektor adathalmaz export"
+
+#, fuzzy
+#| msgid "Space time vector dataset"
+msgid "Extracts a subset of a space time vector dataset."
+msgstr "Tér-idő vektor adatállomány"
+
+#, fuzzy
+#| msgid "Space time 3D raster dataset"
+msgid "Extract subset of 3D raster dataset"
+msgstr "Tér-idő 3D raszter adatállomány"
+
+#, fuzzy
+#| msgid "Space time 3D raster dataset"
+msgid "Extracts a subset of a space time 3D raster dataset."
+msgstr "Tér-idő 3D raszter adatállomány"
+
+msgid "Select maps by temporal topology"
+msgstr ""
+
+msgid "Select maps from space time datasets by topological relationships to other space time datasets using temporal algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Enter vector attribute values"
+msgid "Query vector dataset attribute data"
+msgstr "Vektor attribútum értékek bevitele"
+
+msgid "Prints attributes of vector maps registered in a space time vector dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "Raster dataset color table"
+msgstr "Szín tábla beállítás"
+
+msgid "Creates/modifies the color table associated with each raster map of the space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster calculations"
+msgid "Raster calculations"
+msgstr "3D raszter számítások"
+
+msgid "Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Temporal raster algebra"
+msgstr "Raszter adat import"
+
+msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+msgstr ""
+
+msgid "3D raster calculations"
+msgstr "3D raszter számítások"
+
+msgid "Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import 3D raster data"
+msgid "Temporal 3D raster algebra"
+msgstr "3D raszter adat import"
+
+msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Temporal vector algebra"
+msgstr "Vektor adat import"
+
+msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster dataset"
+msgid "Interpolate gaps in raster datasets"
+msgstr "Raszter adathalmaz import"
+
+msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Orientation"
+msgid "Aggregation"
+msgstr "Tájékozás"
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "Neighborhood analysis in raster dataset"
+msgstr "Szomszédsági elemzés"
+
+msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input raster dataset"
+msgid "Aggregation in raster datasets"
+msgstr "Hibás input raszter adathalmaz"
+
+msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal resolution: %s"
+msgid "Temporal aggregation"
+msgstr "Időbeli felbontás: %s"
+
+msgid "Aggregates temporally the maps of a space time raster dataset by a user defined granularity."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal resolution: %s"
+msgid "Temporal aggregation by dataset"
+msgstr "Időbeli felbontás: %s"
+
+msgid "Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset."
+msgstr ""
+
+msgid "Compute cyclic accumulations"
+msgstr ""
+
+msgid "Computes cyclic accumulations of a space time raster dataset."
+msgstr ""
+
+msgid "Detect accumulation patterns"
+msgstr ""
+
+msgid "Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate."
+msgstr ""
+
+msgid "Sampling"
+msgstr ""
+
+#, fuzzy
+#| msgid "Space time raster dataset: %s"
+msgid "Sample a space time raster dataset at point coordinates"
+msgstr "Tér-idő raszter adatok: %s"
+
+msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
+msgstr ""
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Query raster dataset by vector points dataset"
+msgstr "Rasztertérkép mintavételezése adott vektor pont helyeken."
+
+msgid "Stores raster map values at spatial and temporal positions of vector points as vector attributes."
+msgstr ""
+
+msgid "Observe specific locations in raster dataset"
+msgstr ""
+
+msgid "Observes specific locations in a space time raster dataset over a period of time using vector points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Temporal mode"
+msgid "Temporal sampling"
+msgstr "Idő mód"
+
+msgid "Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout."
+msgstr ""
+
+#, fuzzy
+#| msgid "Space time raster dataset"
+msgid "Space time datasets metadata"
+msgstr "Tér-idő raszter adatállomány"
+
+msgid "Lists information about space time datasets and maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate raster dataset statistics"
+msgstr "Egyváltozós raszter statisztika"
+
+msgid "Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate vector dataset statistics"
+msgstr "Egyváltozós raszter statisztika"
+
+msgid "Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset"
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate 3D raster dataset statistics"
+msgstr "Egyváltozós raszter statisztika"
+
+msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rebuild topology"
+msgid "Report temporal topology"
+msgstr "Topológia újraépítés"
+
+#, fuzzy
+#| msgid "Topology of Space time dataset %s is invalid."
+msgid "Lists temporal topology of a space time dataset."
+msgstr "A %s tér-idő adatok topológiája hibás."
+
+msgid "GUI tools"
+msgstr "GUI eszközök"
+
+#, fuzzy
+#| msgid "Timeline tool"
+msgid "Timeline tool"
+msgstr "Idővonal eszközök"
+
+#, fuzzy
+msgid "Plot temporal extents."
+msgstr "Képernyő felbontás"
+
+#, fuzzy
+#| msgid "GRASS GIS Temporal Plot Tool"
+msgid "Temporal plot tool"
+msgstr "GRASS időbeli rajz eszköz"
+
+msgid "Plot temporal values."
+msgstr ""
+
+msgid "&Help"
+msgstr "Súgó"
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS help"
+msgstr "GRASS súgó"
+
+#, fuzzy
+#| msgid "Display the HTML man pages of GRASS GIS"
+msgid "Display the HTML man pages of GRASS"
+msgstr "GRASS GIS HTML kézikönyv oldalainak megjelenítése"
+
+msgid "GUI help"
+msgstr "GUI súgó"
+
+msgid "About system"
+msgstr "Rendszer névjegy"
+
+#, fuzzy
+#| msgid "Database information"
+msgid "Prints system information"
+msgstr "Adatbázis információ"
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Import, export and link data"
+msgstr "Vektor adat import"
+
+#, fuzzy
+#| msgid "Close Attribute Table Manager"
+msgid "Attribute table manager"
+msgstr "Attribútum tábla kezelő bezárása"
+
+#, fuzzy
+#| msgid "Data catalog"
+msgid "Launch Data Catalog."
+msgstr "Adat katalógus"
+
+msgid "Managing GCPs for 3D correction"
+msgstr ""
+
+msgid "Interactive editing and digitization of vector maps."
+msgstr ""
+
+msgid "Interactive editing and digitization of raster maps."
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input coordinates"
+msgid "Bearing/distance to coordinates"
+msgstr "Hibás input koordináták"
+
+msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa. It assumes a cartesian coordinate system"
+msgstr ""
+
+#, fuzzy
+#| msgid "Measure distance"
+msgid "Measure map distances"
+msgstr "Távolságmérés"
+
+msgid "Measures the lengths and areas of features."
+msgstr ""
+
+msgid "3D image rendering"
+msgstr ""
+
+msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
+msgstr ""
+
+msgid "3D visualization script"
+msgstr ""
+
+msgid "Creates fly-through script to run in NVIZ."
+msgstr ""
+
+#, fuzzy
+#| msgid "Convert coordinates"
+msgid "Convert coordinates between projections"
+msgstr "Koordináta konvertálás"
+
+msgid "Transform coordinates (affine)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate PostScript output"
+msgid "PostScript map output"
+msgstr "PostScript output generálás"
+
+#, fuzzy
+#| msgid "Generate PostScript output"
+msgid "Produces hardcopy PostScript map output."
+msgstr "PostScript output generálás"
+
+msgid "Save model to file"
+msgstr "Modell mentés fájlba"
+
+msgid "Close model file"
+msgstr "Modell fájl lezárás"
+
+msgid "Export to image"
+msgstr "Exportálás képbe"
+
+msgid "Export to Python"
+msgstr "Export Pythonba"
+
+#, fuzzy
+#| msgid "Export to PDF"
+msgid "Export to PyWPS"
+msgstr "Export PDF-be"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to PyWPS script"
+msgstr "Modell export Python szkriptbe"
+
+#, fuzzy
+#| msgid "Export to image"
+msgid "Export to actinia"
+msgstr "Exportálás képbe"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to actinia script"
+msgstr "Modell export Python szkriptbe"
+
+msgid "Quit modeler"
+msgstr "Kilépés a modellezőből"
+
+msgid "Close modeler window"
+msgstr "Modellező ablak lezárás"
+
+msgid "&Model"
+msgstr "&Modell"
+
+msgid "Add command"
+msgstr "Parancs hozzáadás"
+
+#, fuzzy
+#| msgid "Add GRASS command to the model"
+msgid "Add action (GRASS command) to model"
+msgstr "GRASS megjegyzés hozzáadása a modellhez"
+
+#, fuzzy
+#| msgid "Add map"
+msgid "Add data"
+msgstr "Térkép hozáadás"
+
+msgid "Add data item to model"
+msgstr ""
+
+#, fuzzy
+#| msgid "Direction"
+msgid "Define relation"
+msgstr "Irány"
+
+msgid "Define relation between data and action items"
+msgstr ""
+
+msgid "Add loop / series"
+msgstr ""
+
+msgid "Adds loop (series) to model"
+msgstr ""
+
+msgid "Add condition"
+msgstr "Feltétel hozzáadás"
+
+msgid "Adds condition (if/else) to model"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add GRASS command to the model"
+msgid "Adds comment to model"
+msgstr "GRASS megjegyzés hozzáadása a modellhez"
+
+msgid "Remove item"
+msgstr "Elem eltávoilítás"
+
+msgid "Remove action/data from model"
+msgstr "Művelet/adat eltávolítása a modellből"
+
+msgid "Model properties (name, purpose, etc.)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Delete intermediate data?"
+msgid "Delete intermediate data"
+msgstr "Közbenső adatok törlése?"
+
+#, fuzzy
+#| msgid "Delete intermediate data?"
+msgid "Delete intermediate data defined in the model"
+msgstr "Közbenső adatok törlése?"
+
+#, fuzzy
+#| msgid "Run model"
+msgid "Run entire model"
+msgstr "Modell futtatás"
+
+msgid "Validate entire model"
+msgstr "A teljes modell ellenőrzése"
+
+msgid "Help"
+msgstr "Súgó"
+
+#, fuzzy
+#| msgid "Display the HTML man pages of GRASS GIS"
+msgid "Display the HTML man pages of Graphical modeler"
+msgstr "GRASS GIS HTML kézikönyv oldalainak megjelenítése"
+
+msgid "About Graphical Modeler"
+msgstr "Grafikus modellező névjegy"
+
+#, fuzzy
+#| msgid "About Graphical Modeler"
+msgid "Display information about Graphical Modeler"
+msgstr "Grafikus modellező névjegy"
+
+msgid "Specify paper size, margins and orientation"
+msgstr "Papír méret, margók és tájolás megadása"
+
+#, fuzzy
+#| msgid "Failed to read instruction %s"
+msgid "Load instruction file"
+msgstr "Utasítások beolvasása sikertelen %s"
+
+msgid "Load text file with mapping instructions"
+msgstr "Térképi utasításokat tartalmazó szövegfájl betöltése "
+
+#, fuzzy
+#| msgid "Export to image"
+msgid "Export instruction file"
+msgstr "Exportálás képbe"
+
+msgid "Generate text file with mapping instructions"
+msgstr "Térképi utasításokat tartalmazó szövegfájl generálása"
+
+msgid "Export to PostScript"
+msgstr "Export PostScriptbe"
+
+msgid "Generate PostScript output"
+msgstr "PostScript output generálás"
+
+msgid "Export to PDF"
+msgstr "Export PDF-be"
+
+msgid "Generate PDF output"
+msgstr "PDF output generálás"
+
+msgid "Launch ps.map dialog"
+msgstr ""
+
+#, fuzzy
+#| msgid "wxGUI Cartographic Composer"
+msgid "Close Cartographic Composer"
+msgstr "wxGUI kartográfiai szerkesztő"
+
+#, fuzzy
+#| msgid "&Install"
+msgid "&Insert"
+msgstr "Telepít"
+
+msgid "Map frame"
+msgstr "Térképkeret"
+
+#, fuzzy
+#| msgid "draw border around map frame"
+msgid "Add or edit map frame"
+msgstr "keretvonal rajzolás a térkép körül"
+
+#, fuzzy
+msgid "Add or edit raster map"
+msgstr "3D raszter térkép"
+
+#, fuzzy
+msgid "Add or edit vector map"
+msgstr "Vektor hozzáadás"
+
+msgid "Map legend"
+msgstr "Térkép jelmagarázat"
+
+#, fuzzy
+#| msgid "Add vector legend"
+msgid "Add or edit raster and vector legend"
+msgstr "Vektor jelmagyarázat hozzáadás"
+
+msgid "Map info"
+msgstr "Térkép info"
+
+#, fuzzy
+#| msgid "Add condition"
+msgid "Add or edit map info"
+msgstr "Feltétel hozzáadás"
+
+msgid "Scale bar"
+msgstr "Léptékvonalzó"
+
+#, fuzzy
+#| msgid "Add scale bar"
+msgid "Add or edit scale bar"
+msgstr "Léptékvonalzó hozzáadás"
+
+msgid "North Arrow"
+msgstr "Észak nyíl"
+
+msgid "Delete selected object"
+msgstr "Szelektált objektum törlése"
+
+#, fuzzy
+#| msgid "Display the HTML man pages of GRASS GIS"
+msgid "Display the HTML man pages of Cartographic Composer"
+msgstr "GRASS GIS HTML kézikönyv oldalainak megjelenítése"
+
+#, fuzzy
+#| msgid "wxGUI Cartographic Composer"
+msgid "About Cartographic Composer"
+msgstr "wxGUI kartográfiai szerkesztő"
+
+msgid "Display information about Cartographic Composer"
+msgstr ""
+
 msgid "Check all"
 msgstr "Mindent ellenőriz"
 
@@ -7459,9 +11671,6 @@ msgstr "Válasszon fájl a szín tábla mentéséhez"
 
 msgid "Type filename or click to choose file and save color table"
 msgstr ""
-
-msgid "Save"
-msgstr "Mentés"
 
 msgid "&Set"
 msgstr "Beállítá&s"
@@ -7719,9 +11928,6 @@ msgstr ""
 msgid "Dialog cannot be closed while command is running."
 msgstr ""
 
-msgid "Link external raster data"
-msgstr "Külső raszter adat kapcsolás"
-
 msgid "Add linked layers into layer tree"
 msgstr "Kapcsolt réteg hozzáadása rétegfához"
 
@@ -7739,9 +11945,6 @@ msgstr "Nem szelektált réteget. A művelet megszakadt."
 
 msgid "Unable to determine number of raster bands"
 msgstr "Nem tudom meghatározni a raszter sávok  számát"
-
-msgid "Link external vector data"
-msgstr "Külső vektor adtok kapcsolása"
 
 msgid "Define output format for vector data"
 msgstr "Adja meg a vektor adatokhoz az output formátumot"
@@ -8316,12 +12519,6 @@ msgstr ""
 msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
 msgstr ""
 
-msgid "New"
-msgstr "Új"
-
-msgid "Delete"
-msgstr "Törlés"
-
 msgid "Fine resolution:"
 msgstr ""
 
@@ -8427,9 +12624,6 @@ msgstr "D && K"
 msgid "Elevation of fringe from bottom:"
 msgstr ""
 
-msgid "North Arrow"
-msgstr "Észak nyíl"
-
 msgid "Arrow length (in map units):"
 msgstr "Nyíl hossz (térképi egységekben):"
 
@@ -8438,9 +12632,6 @@ msgstr "Nyíl szín:"
 
 msgid "Place arrow"
 msgstr ""
-
-msgid "Scale bar"
-msgstr "Léptékvonalzó"
 
 msgid "Scale bar length (in map units):"
 msgstr ""
@@ -8526,9 +12717,6 @@ msgstr "Lépték vonalzó %d"
 
 msgid "None"
 msgstr ""
-
-msgid "Plane"
-msgstr "Sík"
 
 msgid "Vector map is 3D"
 msgstr "A vektor térkép 3D-s"
@@ -8716,9 +12904,6 @@ msgstr "Térkép beálítások"
 
 msgid "Map frame settings"
 msgstr "Térkép keret beállítások"
-
-msgid "Map frame"
-msgstr "Térképkeret"
 
 msgid "Map frame options:"
 msgstr "Térkép keret opciók:"
@@ -9081,7 +13266,9 @@ msgstr "Típus:"
 msgid "Number of segments:"
 msgstr "Szegmensek száma:"
 
-msgid "Label every "
+#, fuzzy
+#| msgid "Label every "
+msgid "Label every"
 msgstr "Mindet címkézi"
 
 msgid "segments"
@@ -9333,7 +13520,9 @@ msgstr "ÉSZAK NYÍL"
 msgid "Click and drag to resize object"
 msgstr "Kattintson és húzza az objektumot az átméretezéshez"
 
-msgid "labels: "
+#, fuzzy, python-brace-format
+#| msgid "labels: "
+msgid "labels: {files}"
 msgstr "címkék:"
 
 #, fuzzy
@@ -9414,21 +13603,6 @@ msgstr "Az utasítások beolvasása sikertelen %(inst)s: %(file)sfájlt nem tal�
 msgid "Select graphics tool"
 msgstr "Válasszon grafikus eszközt"
 
-msgid "Generate text file with mapping instructions"
-msgstr "Térképi utasításokat tartalmazó szövegfájl generálása"
-
-msgid "Load text file with mapping instructions"
-msgstr "Térképi utasításokat tartalmazó szövegfájl betöltése "
-
-msgid "Generate PostScript output"
-msgstr "PostScript output generálás"
-
-msgid "Generate PDF output"
-msgstr "PDF output generálás"
-
-msgid "Specify paper size, margins and orientation"
-msgstr "Papír méret, margók és tájolás megadása"
-
 msgid "Full extent"
 msgstr "Teljes terjedelem"
 
@@ -9438,14 +13612,8 @@ msgstr "Nagyítás a teljes terjedelemre"
 msgid "Click and drag to place map frame"
 msgstr "Kattintás és húzás a térképkeret elhelyezéséhez"
 
-msgid "Delete selected object"
-msgstr "Szelektált objektum törlése"
-
 msgid "Show preview"
 msgstr "Előnézet megjelenítés"
-
-msgid "Map info"
-msgstr "Térkép info"
 
 msgid "Legend"
 msgstr "Jelmagyarázat"
@@ -9607,9 +13775,6 @@ msgstr ""
 msgid "Remove a configuration file"
 msgstr "Konfigurációs fájl eltávolítás"
 
-msgid "Create"
-msgstr "Létrehozás"
-
 msgid "Create a new configuration file"
 msgstr "Új konfigurációs fájl létrehozása"
 
@@ -9762,9 +13927,6 @@ msgstr "Régiók"
 msgid "Sample units"
 msgstr ""
 
-msgid "Moving window"
-msgstr "Mozgó ablak"
-
 msgid ""
 "Select areas from the\n"
 "overlaid vector map"
@@ -9898,9 +14060,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "The raster map <{map_name}> already exists. Please remove or rename the maps with the prefix '{prefix}' or select the option to overwrite existing maps"
-msgstr ""
-
-msgid "Select sample area 1 of "
 msgstr ""
 
 msgid "Configuration file name:"
@@ -10249,9 +14408,6 @@ msgstr ""
 msgid "Timeline Tool"
 msgstr ""
 
-msgid "Help"
-msgstr "Súgó"
-
 msgid "3D plot of spatio-temporal extents"
 msgstr ""
 
@@ -10442,7 +14598,9 @@ msgstr ""
 msgid "File exists"
 msgstr "A fájl létezik"
 
-msgid "Please change name of output CSV file or "
+#, fuzzy
+#| msgid "Please change name of output CSV file or "
+msgid "Please change name of output CSV file or enable overwriting."
 msgstr "Kérem módosítsa az output CSV fájl nevét vagy"
 
 msgid "Incorrect coordinates format, should be: x,y"
@@ -11383,9 +15541,6 @@ msgstr ""
 msgid "Unable to connect to <%s>"
 msgstr ""
 
-msgid "Add web service layer"
-msgstr ""
-
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr ""
 
@@ -11399,9 +15554,6 @@ msgid "Name for output raster map:"
 msgstr ""
 
 msgid "Export region"
-msgstr ""
-
-msgid "Map display"
 msgstr ""
 
 msgid "Named region"
@@ -11801,16 +15953,23 @@ msgstr ""
 msgid "At least 2 raster maps must be specified"
 msgstr ""
 
-msgid "Bivariate Scatterplot of "
+#, python-brace-format
+msgid "{first} vs {second}"
 msgstr ""
 
-#, python-format
-msgid "Raster <%s> cell values"
+#, python-brace-format
+msgid "Bivariate Scatterplot of {pairs}"
 msgstr ""
 
-#, python-format
-msgid ": %s"
-msgstr ": %s"
+#, fuzzy, python-brace-format
+#| msgid "Raster cell values %s"
+msgid "Raster <{raster}> cell values: {units}"
+msgstr "Raszter cella értékek %s"
+
+#, fuzzy, python-brace-format
+#| msgid "Raster cell values"
+msgid "Raster <{raster}> cell values"
+msgstr "Raszter cella értékek"
 
 msgid "Regression Statistics for Scatterplot(s)"
 msgstr ""
@@ -11821,12 +15980,16 @@ msgid ""
 "\n"
 msgstr ""
 
+#~ msgid "Type: "
+#~ msgstr "Típus:"
+
+#, python-format
+#~ msgid ": %s"
+#~ msgstr ": %s"
+
 #, fuzzy
 #~ msgid "New display"
 #~ msgstr "Képernyő törlés"
-
-#~ msgid "Generate random seed for rand()"
-#~ msgstr "Véletlen mag generálás rand()-hoz"
 
 #~ msgid "Seed:"
 #~ msgstr "Mag:"
@@ -11843,9 +16006,6 @@ msgstr ""
 #~ msgid "Create new project (location) in current GRASS database"
 #~ msgstr "Az aktuális helyen létrehoz egy új térképcsoportot, módosítja az aktuális térképcsoportot."
 
-#~ msgid " (readonly)"
-#~ msgstr "(csak olvasható)"
-
 #~ msgid " Feature type: "
 #~ msgstr "Elemtípus:"
 
@@ -11861,110 +16021,14 @@ msgstr ""
 #~ msgid "%s. cleaning tool removed, will be ignored"
 #~ msgstr "%s. tisztítási eszközt eltávolították, nem veszem figyelembe"
 
-#~ msgid "&Database"
-#~ msgstr "A&datbázis"
-
-#~ msgid "&File"
-#~ msgstr "&Fájl"
-
-#~ msgid "&Help"
-#~ msgstr "Súgó"
-
 #~ msgid "&Log file"
 #~ msgstr "Napló fájl"
-
-#~ msgid "&Model"
-#~ msgstr "&Modell"
-
-#~ msgid "&Raster"
-#~ msgstr "&Raszter"
-
-#~ msgid "&Settings"
-#~ msgstr "Beállítások"
-
-#~ msgid "&Vector"
-#~ msgstr "&Vektor"
 
 #~ msgid "1. cleaning tool can not be moved up "
 #~ msgstr "1. tisztítási eszközt nem tudom felfelé mozgatni"
 
-#~ msgid "2D vector to 3D vector"
-#~ msgstr "2D vektor 3D vektorba"
-
-#~ msgid "3D color tables"
-#~ msgstr "3D színtáblák"
-
-#~ msgid "3D mask"
-#~ msgstr "3D maszk"
-
-#~ msgid "3D raster calculations"
-#~ msgstr "3D raszter számítások"
-
-#~ msgid "3D raster map calculator"
-#~ msgstr "3D raszter térkép kalkulátor"
-
-#~ msgid "3D raster statistics"
-#~ msgstr "3D raszter statisztika"
-
-#~ msgid "ASCII 3D export"
-#~ msgstr "ASCII 3D export"
-
-#~ msgid "ASCII 3D import"
-#~ msgstr "ASCII 3D import"
-
-#~ msgid "ASCII grid export"
-#~ msgstr "ASCII rács export"
-
-#~ msgid "ASCII grid import"
-#~ msgstr "ASCII rács import"
-
-#~ msgid "ASCII points as a vector lines"
-#~ msgstr "ASCII pontok mint vektor vonalak"
-
-#~ msgid "ASCII points or GRASS ASCII vector export"
-#~ msgstr "ASCII pontok vagy GRASS ASCII vektor export"
-
-#~ msgid "ASCII x,y,z points export"
-#~ msgstr "ASCII x,y,z pont export"
-
 #~ msgid "Abort download location"
 #~ msgstr "Hely letöltés megszakítása"
-
-#~ msgid "About Graphical Modeler"
-#~ msgstr "Grafikus modellező névjegy"
-
-#~ msgid "About system"
-#~ msgstr "Rendszer névjegy"
-
-#~ msgid "Add RGB raster layer"
-#~ msgstr "RGB raszter réteg hozzáadás"
-
-#~ msgid "Add columns"
-#~ msgstr "Oszlopok hozzáadása"
-
-#~ msgid "Add command"
-#~ msgstr "Parancs hozzáadás"
-
-#~ msgid "Add condition"
-#~ msgstr "Feltétel hozzáadás"
-
-#~ msgid "Add multiple raster or vector map layers to current display"
-#~ msgstr "Több raszter vagy vektor réteg hozzáadása az aktuális ablakhoz"
-
-#~ msgid "Add multiple rasters or vectors"
-#~ msgstr "Több raszter vagy vektor hozzáadás"
-
-#~ msgid "Add raster"
-#~ msgstr "Raszter hozzáadás"
-
-#~ msgid "Add raster map layer to current display"
-#~ msgstr "Raszter térkép réteg hozzáadása az aktuális megjelenítőhöz"
-
-#~ msgid "Add vector"
-#~ msgstr "Vektor hozzáadás"
-
-#~ msgid "Add vector map layer to current display"
-#~ msgstr "Vektor térkép réteg hozzáadása az aktuális megjelenítőhöz"
 
 #~ msgid "Advanced methods:"
 #~ msgstr "Haladó módszerek:"
@@ -11981,35 +16045,6 @@ msgstr ""
 
 #~ msgid "Availiable analyses"
 #~ msgstr "Elérhető elemzések"
-
-#~ msgid "Basic 3D raster metadata"
-#~ msgstr "Alap 3D raszter meta adat"
-
-#~ msgid "Change current mapset."
-#~ msgstr "Aktuális térképcsoport módosítása"
-
-#, fuzzy
-#~ msgid "Change current project and mapset."
-#~ msgstr "Aktuális hely és térképcsoport módosítása"
-
-#~ msgid "Change location and mapset"
-#~ msgstr "Hely és térképcsoport váltás"
-
-#, fuzzy
-#~ msgid "Change project (location) and mapset"
-#~ msgstr "Aktuális hely és térképcsoport módosítása"
-
-#~ msgid "Change settings"
-#~ msgstr "Beállítások módosítása"
-
-#~ msgid "Change values"
-#~ msgstr "Értékek módosítása"
-
-#~ msgid "Change working directory"
-#~ msgstr "Munkakönyvtár váltás"
-
-#~ msgid "Change working environment"
-#~ msgstr "Munkakörnyezet módosítás"
 
 #~ msgid "Choose EPSG Code"
 #~ msgstr "Válasszon EPSG kódot"
@@ -12029,133 +16064,20 @@ msgstr ""
 #~ msgid "Click to allow editing other mapsets"
 #~ msgstr "Kattintson más térképcsoportok szerkesztésének az engedélyezéséhez"
 
-#~ msgid "Clip vector maps"
-#~ msgstr "Vektor térkép vágás"
-
-#~ msgid "Close model file"
-#~ msgstr "Modell fájl lezárás"
-
-#~ msgid "Close modeler window"
-#~ msgstr "Modellező ablak lezárás"
-
-#~ msgid "Closest points"
-#~ msgstr "Legközelebbi pontok"
-
-#~ msgid "Command prompt"
-#~ msgstr "Parancs prompt"
-
-#~ msgid "Computes USLE Soil Erodibility Factor (K)."
-#~ msgstr "USLE talajerózió faktor (K) számítás."
-
-#~ msgid "Computes minimum spanning tree for the network."
-#~ msgstr "Minimális feszítő fa számítás a hálózatra."
-
-#~ msgid "Concentric circles"
-#~ msgstr "Koncentrikus körök"
-
-#~ msgid "Connect"
-#~ msgstr "Csatlakozás"
-
-#~ msgid "Convert coordinates"
-#~ msgstr "Koordináta konvertálás"
-
-#~ msgid "Convert raster dataset to 3D raster"
-#~ msgstr "Raszter adathalmaz konvertálás 3D rétegbe"
-
-#~ msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
-#~ msgstr "GRASS x,y,z pontok konvertálása POV-Ray x,y,z formátumba."
-
-#~ msgid "Converts a 3D raster map layer into a ASCII text file."
-#~ msgstr "3D raszter térkép konvertálása ASCII szövegfájlba."
-
-#~ msgid "Converts a GRASS ASCII raster file to binary raster map."
-#~ msgstr "GRASS ASCII raszter fájl konvertálás bináris raszter térképbe."
-
-#~ msgid "Converts a GRASS raster map to a PPM image file."
-#~ msgstr "GRASS raszter térkép konvertálás PPM kép fájlba."
-
-#~ msgid "Converts a raster map into a vector map."
-#~ msgstr "Raszter térkép konvertálása vektor térképpé."
-
-#~ msgid "Converts a raster map layer into a GRASS ASCII text file."
-#~ msgstr "Raszter térkép réteg konvertálása GRASS ASCII szövegfájlba."
-
-#~ msgid "Converts a vector map to VTK ASCII output."
-#~ msgstr "Vektor térkép konvertálása VTK ASCII outputba."
-
-#~ msgid "Converts coordinates from one projection to another (cs2cs frontend)."
-#~ msgstr "Koordináták konvertálása egyik vetületből egy másikba (cs2cs frontend)"
-
-#~ msgid "Converts raster map series to MPEG movie."
-#~ msgstr "Raszter térkép sorozat konvertálása MPEG filmbe."
-
-#~ msgid "Converts raster maps into the VTK-ASCII format."
-#~ msgstr "Raszter térkép konvertálás VTK-ASCII formátumba."
-
-#~ msgid "Copy table"
-#~ msgstr "Tábla másolás"
-
 #~ msgid "Copy the current command string to the clipboard (Ctrl+C)"
 #~ msgstr "Aktuális parancs szöveg vágólapra másolása (Ctrl+C)"
-
-#~ msgid "Corrects scanning distortions"
-#~ msgstr "Szkennelési torzítás korrekciója"
 
 #~ msgid "Create a generic Cartesian coordinate system (XY)"
 #~ msgstr "Hozzon létre egy általános derékszögű koordináta-rendszert (XY)"
 
-#~ msgid "Create database"
-#~ msgstr "Adatbázis létrehozás"
-
-#~ msgid "Create new empty vector map"
-#~ msgstr "Új üres vektor térkép létrehozás"
-
-#~ msgid "Create new location?"
-#~ msgstr "Új hely létrehozása?"
-
-#, fuzzy
-#~ msgid "Create new project (location)"
-#~ msgstr "Új hely létrehozása"
-
-#~ msgid "Create new workspace"
-#~ msgstr "Új munkaterület létrehozás"
-
 #~ msgid "Create user mapset"
 #~ msgstr "Felhasználói térképcsoport létrehozás"
-
-#, fuzzy
-#~ msgid "Creates new mapset in the current project, changes current mapset."
-#~ msgstr "Az aktuális helyen létrehoz egy új térképcsoportot, módosítja az aktuális térképcsoportot."
-
-#~ msgid "Cross section"
-#~ msgstr "Metszet"
-
-#~ msgid "DXF export"
-#~ msgstr "DXF export"
-
-#~ msgid "DXF import"
-#~ msgstr "DXF import"
 
 #~ msgid "Data Toolbar"
 #~ msgstr "Adatok eszközsor"
 
-#~ msgid "Database information"
-#~ msgstr "Adatbázis információ"
-
 #~ msgid "Define GRASS Database and Location Name"
 #~ msgstr "GRASS adatbázis és hely név megadása"
-
-#~ msgid "Delaunay triangles"
-#~ msgstr "Delaunay háromszögek"
-
-#~ msgid "Describe table"
-#~ msgstr "Tábla leírás"
-
-#~ msgid "Display the HTML man pages of GRASS GIS"
-#~ msgstr "GRASS GIS HTML kézikönyv oldalainak megjelenítése"
-
-#~ msgid "Distance to features"
-#~ msgstr "Távolság az elemekhez"
 
 #~ msgid "Do you want to set the default region extents and resolution now?"
 #~ msgstr "Be akarja állítani az alapértelmezett régió terjedelmét és a felbontást most?"
@@ -12175,86 +16097,8 @@ msgstr ""
 #~ msgid "Download of <{url}> failed or file <{name}> is not a ZIP file"
 #~ msgstr "A <{url}> letöltése sikertelen vagy a <{name}> fájl nem ZIP fájl"
 
-#~ msgid "Drop column"
-#~ msgstr "Oszlop törlés"
-
-#~ msgid "Drop row"
-#~ msgstr "Sor eldobása"
-
-#~ msgid "Drop table"
-#~ msgstr "Tábla törlés"
-
-#~ msgid "Drops a column from selected attribute table."
-#~ msgstr "Oszlop törlés a kiválasztott attribútum táblából."
-
-#~ msgid "Drops an attribute table."
-#~ msgstr "Egy attribútum tábla törlése."
-
-#~ msgid "ESRI e00 import"
-#~ msgstr "ESRI e00 import"
-
 #~ msgid "Executing selected cleaning operations..."
 #~ msgstr "A kiválasztott tisztítási műveletek végrehajtása..."
-
-#~ msgid "Export 3D raster maps"
-#~ msgstr "3D raszter térkép  export"
-
-#~ msgid "Export a GRASS raster map as a non-georeferenced PNG image."
-#~ msgstr "GRASS raszter térkép export nem georeferált PNG képbe."
-
-#~ msgid "Export database table"
-#~ msgstr "Adatbázistábla export"
-
-#~ msgid "Export raster map"
-#~ msgstr "Raszter térkép export"
-
-#~ msgid "Export to PDF"
-#~ msgstr "Export PDF-be"
-
-#~ msgid "Export to PostScript"
-#~ msgstr "Export PostScriptbe"
-
-#~ msgid "Export to Python"
-#~ msgstr "Export Pythonba"
-
-#~ msgid "Export to image"
-#~ msgstr "Exportálás képbe"
-
-#~ msgid "Export vector dataset"
-#~ msgstr "Vektor adathalmaz export"
-
-#~ msgid "Export vector map"
-#~ msgstr "Vektor térkép export"
-
-#~ msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
-#~ msgstr "GRASS raszter export GRIDATB.FOR térkép fájlba (TOPMODEL)."
-
-#~ msgid "Exports GRASS raster maps into GDAL supported formats."
-#~ msgstr "GRASS raszter térképek exportálása GDAL támogatott formátumokba."
-
-#~ msgid "Exports a GRASS raster to a binary MAT-File."
-#~ msgstr "GRASS raszter export bináris MAT-fájlba"
-
-#~ msgid "Exports a GRASS raster to a binary array."
-#~ msgstr "GRASS raszter exportálás bináris tömbbe."
-
-#~ msgid "Exports a raster map as GRASS GIS specific archive file"
-#~ msgstr "Raszter térkép export GRASS GIS specifikus archive fájlba"
-
-#~ msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
-#~ msgstr "Raszter térkép export virtuális valóság modellező nyelvbe (VRML)."
-
-#~ msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
-#~ msgstr "Vektor térkép réteg export bármelyik támogatott OGR vektor formátumba. Alapértelmezés szerint a vektor térkép réteget ESRI shape fájl formátumba exportáljuk."
-
-#~ msgid "Exports a vector map to SVG file."
-#~ msgstr "Vektor térkép konvertálása SVG fájlba."
-
-#~ msgid "Exports attribute tables into various formats."
-#~ msgstr "Attribútum táblák exportálása különböző formátumokba."
-
-#~ msgid "Exports vector map to DXF file format."
-#~ msgstr "Vektor térkép exportálása DXF fájl formátumba."
 
 #~ msgid "Extent"
 #~ msgstr "Terjedelem"
@@ -12264,9 +16108,6 @@ msgstr ""
 
 #~ msgid "Fetching list of modules from GRASS-Addons (be patient)..."
 #~ msgstr "Modulok lekérdezése a GRASS bővítményekből (legyen türelmes)..."
-
-#~ msgid "Finds shortest path on vector network."
-#~ msgstr "Legrövidebb útvonal megtalálása a vektor hálózaton."
 
 #~ msgid "GIS Data Directory:"
 #~ msgstr "GISadat könyvtár:"
@@ -12313,135 +16154,11 @@ msgstr ""
 #~ msgid "GRASS locations in {0}"
 #~ msgstr "GRASS hely ebben {0}"
 
-#~ msgid "GRASS working environment"
-#~ msgstr "GRASS munka környezet"
-
-#~ msgid "GRIDATB.FOR export"
-#~ msgstr "GRIDATB.FOR export"
-
-#~ msgid "GRIDATB.FOR import"
-#~ msgstr "GRIDATB.FOR import"
-
-#~ msgid "GUI help"
-#~ msgstr "GUI súgó"
-
-#~ msgid "GUI tools"
-#~ msgstr "GUI eszközök"
-
-#~ msgid "General statistics"
-#~ msgstr "Általános statisztika"
-
-#~ msgid "Generate contour lines"
-#~ msgstr "Szintvonalak generálása"
-
-#~ msgid "Generate from database"
-#~ msgstr "Generálás adatbázisból"
-
-#~ msgid "Generate grid"
-#~ msgstr "Rács generálás"
-
-#~ msgid "Generate points"
-#~ msgstr "Pont generálás"
-
-#~ msgid "Generate points along lines"
-#~ msgstr "Pontok generálása vonalak mentén"
-
-#~ msgid "Generates volume statistics for 3D raster maps."
-#~ msgstr "Térfogat statisztika generálás 3Draszter térképekhez."
-
-#~ msgid "Graphical modeler"
-#~ msgstr "Grafikus modellező"
-
-#~ msgid "Groundwater flow"
-#~ msgstr "Talajvíz áramlás"
-
-#~ msgid "Groundwater modeling"
-#~ msgstr "Talajvíz modellezés"
-
-#~ msgid "Grow"
-#~ msgstr "Növel"
-
-#~ msgid "Grow by one cell"
-#~ msgstr "Növelés egy cellával"
-
-#~ msgid "Horizon angle"
-#~ msgstr "Vízszintes szög"
-
-#~ msgid "Hydrologic modeling"
-#~ msgstr "Hidrológiai modellezés"
-
-#~ msgid "Import 3-dimensional Vis5D files."
-#~ msgstr "3-dimenziós Vis5D fájlok importálása."
-
-#~ msgid "Import 3D raster data"
-#~ msgstr "3D raszter adat import"
-
-#~ msgid "Import database table"
-#~ msgstr "Adatbázistábla import"
-
-#~ msgid "Import raster dataset"
-#~ msgstr "Raszter adathalmaz import"
-
-#~ msgid "Import vector dataset"
-#~ msgstr "Vektor adathalmaz import"
-
-#~ msgid "Imports a binary raster file into a GRASS 3D raster map."
-#~ msgstr "Bináris raszter fájl import GRASS 3D raszter térképbe."
-
-#~ msgid "Imports attribute tables in various formats."
-#~ msgstr "Attribútumtábla import változatos formátumokból."
-
 #~ msgid "Install selected add-ons GRASS module"
 #~ msgstr "Kiválasztott GRASS bővítmények telepítése"
 
-#~ msgid "Join table"
-#~ msgstr "Tábla kapcsolás"
-
-#~ msgid "Joins a database table to a vector map table."
-#~ msgstr "Adatbázis tábla kapcsolása egy vektor térkép táblához."
-
-#~ msgid "LAS LiDAR points import"
-#~ msgstr "LAS LiDAR pont import"
-
 #~ msgid "Last cleaning tool can not be moved down "
 #~ msgstr "Az utolsó tisztítási eszköz nem mozgatható lefelé"
-
-#~ msgid "Launch Graphical modeler"
-#~ msgstr "Grafikus modellező indítása"
-
-#~ msgid "Launches Simple Python Editor."
-#~ msgstr "Egyszerű Python szerkesztő indítása."
-
-#, fuzzy
-#~ msgid "Launches project wizard to create a new GRASS project (also known as location)."
-#~ msgstr "Elindítja a hely varázslót egy új GRASS hely létrehozásához."
-
-#~ msgid "Lidar analysis"
-#~ msgstr "Lidar elemzés"
-
-#~ msgid "List"
-#~ msgstr "Lista"
-
-#~ msgid "List 3D raster dataset maps"
-#~ msgstr "3D raszter térkép lista"
-
-#~ msgid "List all columns for a given table."
-#~ msgstr "Egy adott tábla összes oszlopának listája"
-
-#~ msgid "List databases"
-#~ msgstr "Adatbázisok lista"
-
-#~ msgid "List raster dataset maps"
-#~ msgstr "Raszter térkép lista"
-
-#~ msgid "List tables"
-#~ msgstr "Táblák listája"
-
-#~ msgid "List vector dataset maps"
-#~ msgstr "Vektor térkép lista"
-
-#~ msgid "Load workspace from file"
-#~ msgstr "Munkaterület betöltése fájlból"
 
 #~ msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
 #~ msgstr "<%(loc)s> helyet a <%(dir)s> GIS adat könyvtárban hoztam létre. Meg kell változtatnia az alapértelmezett GIS adat könyvtárat a GRASS induló képernyőjén."
@@ -12473,51 +16190,8 @@ msgstr ""
 #~ msgid "MASK"
 #~ msgstr "MASZK"
 
-#~ msgid "MPEG-1 export"
-#~ msgstr "MPEG-1 export"
-
-#~ msgid "Manage categories"
-#~ msgstr "Kategória kezelés"
-
-#~ msgid "Manage colors"
-#~ msgstr "Színek kezelése"
-
-#~ msgid "Manage installed extension"
-#~ msgstr "Telepített bővítmények kezelése"
-
-#~ msgid "Manage maps"
-#~ msgstr "Térképek kezelése"
-
-#~ msgid "Manage projections"
-#~ msgstr "Vetületek kezelése"
-
-#, fuzzy
-#~ msgid "Manage signature files"
-#~ msgstr "Kategória kezelés"
-
-#~ msgid "Map legend"
-#~ msgstr "Térkép jelmagarázat"
-
-#~ msgid "Map projections"
-#~ msgstr "Térkép vetületek"
-
-#~ msgid "Map type conversions"
-#~ msgstr "Térkép típus konverziók"
-
-#~ msgid "Mapset access"
-#~ msgstr "Térképcsoport hozzáférés"
-
-#~ msgid "Matlab 2D array export"
-#~ msgstr "Matlab 2D tömb export"
-
-#~ msgid "Matlab 2D array import"
-#~ msgstr "Matlab 2D tömb import"
-
 #~ msgid "Maximum number of animations is %s."
 #~ msgstr "Az animációk maximális száma %s."
-
-#~ msgid "Minimum spanning tree"
-#~ msgstr "Minimális feszítő fa"
 
 #~ msgid "Mode"
 #~ msgstr "Mód"
@@ -12531,68 +16205,17 @@ msgstr ""
 #~ msgid "Name of input vector map"
 #~ msgstr "Input vektor térkép neve"
 
-#~ msgid "Nearest features"
-#~ msgstr "Legközelebbi elemek"
-
-#~ msgid "Neighborhood analysis"
-#~ msgstr "Szomszédsági elemzés"
-
-#~ msgid "Network analysis"
-#~ msgstr "Hálózat elemzés"
-
-#~ msgid "Network preparation"
-#~ msgstr "Hálózat előkészítés"
-
 #~ msgid "New GIS data directory"
 #~ msgstr "Új GIS adatkönyvtár"
-
-#~ msgid "New map display window"
-#~ msgstr "Új térkép megjelenítő ablak"
-
-#~ msgid "New table"
-#~ msgstr "Új tábla"
 
 #~ msgid "Old GRASS Workspace File (*.grc)|*.grc"
 #~ msgstr "Régi GRASS munkaterület fájl (*.grc)|*.grc"
 
-#~ msgid "Open"
-#~ msgstr "Megnyitás"
-
-#~ msgid "Open new map display window"
-#~ msgstr "Új térkép megjelenítő ablak megnyitása"
-
 #~ msgid "Optional location title, you can leave this field blank."
 #~ msgstr "Opcionális hely cím, ezt a mezőt üresen hagyhatja."
 
-#~ msgid "Orthophoto tools"
-#~ msgstr "Ortofotó eszközök"
-
-#~ msgid "Output format for raster data"
-#~ msgstr "Output formátum a raszter adatokhoz"
-
-#~ msgid "Output format for vector data"
-#~ msgstr "Output formátum vektor adatokhoz"
-
 #~ msgid "Output window"
 #~ msgstr "Output ablak"
-
-#~ msgid "PNG export"
-#~ msgstr "PNG export"
-
-#~ msgid "PNG import"
-#~ msgstr "PNG import"
-
-#~ msgid "POV-Ray export"
-#~ msgstr "POV-Ray export"
-
-#~ msgid "PPM export"
-#~ msgstr "PPM export"
-
-#~ msgid "Pack raster map"
-#~ msgstr "Raszter térkép becsomagolás"
-
-#~ msgid "Parallel lines"
-#~ msgstr "Párhuzamos vonalak"
 
 #~ msgid "Path to the EPSG-codes file:"
 #~ msgstr "Elérési út az EPSG kódok fájlhoz:"
@@ -12612,61 +16235,17 @@ msgstr ""
 #~ msgid "Plot options"
 #~ msgstr "Rajzolási beállítások"
 
-#~ msgid "Point analysis"
-#~ msgstr "Pont elemzés"
-
-#~ msgid "PostGIS export"
-#~ msgstr "PostGIS export"
-
 #~ msgid "Project Location"
 #~ msgstr "Projekt hely"
 
-#~ msgid "Queries a vector map at given locations."
-#~ msgstr "Egy vektortérkép lekérdezése adott helyeken."
-
 #~ msgid "Quit digitizer"
 #~ msgstr "Kilépés a digitalizálóból"
-
-#~ msgid "Quit modeler"
-#~ msgstr "Kilépés a modellezőből"
-
-#~ msgid "Random cells and vector points"
-#~ msgstr "Véletlen cellák és raszter pontok"
-
-#~ msgid "Raster 2.5D to 3D raster"
-#~ msgstr "2.5D raszter 3D raszterbe"
-
-#~ msgid "Raster map calculator"
-#~ msgstr "Raszter térkép kalkulátor"
-
-#~ msgid "Raster map calculator."
-#~ msgstr "Rasztertérkép kalkulátor"
-
-#~ msgid "Raster series to 3D raster"
-#~ msgstr "Raszter sorozatok 3D raszterbe"
-
-#~ msgid "Raster to vector"
-#~ msgstr "Raszter vektorrá"
-
-#~ msgid "Raw binary array export"
-#~ msgstr "Nyers bináris tömb export"
-
-#, fuzzy
-#~ msgid "Re-projects a raster map from given project to the current project."
-#~ msgstr "Egy rasztertérkép vetületi transzformációja egy adott helyről az aktuális helyre."
-
-#, fuzzy
-#~ msgid "Re-projects a vector map from one project to the current project."
-#~ msgstr "Egy rasztertérkép vetületi transzformációja egy helyről az aktuális helyre."
 
 #~ msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
 #~ msgstr "Olvass be a vetületet és a dátumot egy Well Known Text (WKT) .prj fájlból"
 
 #~ msgid "Read projection and datum terms from a georeferenced data file"
 #~ msgstr "Olvass be a vetületet és a dátumot egy georeferált adatfájlból"
-
-#~ msgid "Rebuilds topology on all vector maps in the current mapset."
-#~ msgstr "Topológia újraépítése az összes vektortérképhez az aktuális térképcsoportban."
 
 #~ msgid "Redo"
 #~ msgstr "Újra"
@@ -12675,70 +16254,17 @@ msgstr ""
 #~ msgid "Remove MASK"
 #~ msgstr "Eltávolítás"
 
-#~ msgid "Remove action/data from model"
-#~ msgstr "Művelet/adat eltávolítása a modellből"
-
-#~ msgid "Remove item"
-#~ msgstr "Elem eltávoilítás"
-
 #~ msgid "Remove vector legend"
 #~ msgstr "Vektor jelmagyarázat eltávolítás"
-
-#~ msgid "Removes existing attribute table of a vector map."
-#~ msgstr "Egy vektor térkép attribútum táblájának eltávolítása."
-
-#~ msgid "Reports and Statistics"
-#~ msgstr "Jelentések és statisztikák"
-
-#, fuzzy
-#~ msgid "Reproject raster map from different GRASS project"
-#~ msgstr "Egy rasztertérkép vetületi transzformációja egy másik helyről"
-
-#, fuzzy
-#~ msgid "Reproject vector map from different GRASS project"
-#~ msgstr "Egy vektortérkép vetületi transzformációja egy másik helyről"
 
 #~ msgid "Resize legend"
 #~ msgstr "Jelmagyarázat átméretezés"
 
-#~ msgid "Run model prepared by Graphical modeler"
-#~ msgstr "A grafikus modellezővel készített modell futtatása"
-
-#~ msgid "SPOT NDVI import"
-#~ msgstr "SPOT NDVI import"
-
-#~ msgid "SQL statement"
-#~ msgstr "SQL mondat"
-
-#~ msgid "SRTM HGT import"
-#~ msgstr "SRTM HGT import"
-
-#~ msgid "SVG export"
-#~ msgstr "SVG export"
-
-#~ msgid "Sample raster maps at point locations"
-#~ msgstr "Rasztertérkép mintavételezése adott pont helyeken"
-
-#~ msgid "Samples a raster map at vector point locations."
-#~ msgstr "Rasztertérkép mintavételezése adott vektor pont helyeken."
-
-#~ msgid "Save as"
-#~ msgstr "Mentés másként"
-
-#~ msgid "Save model to file"
-#~ msgstr "Modell mentés fájlba"
-
 #~ msgid "Save output window content to the file"
 #~ msgstr "Output ablak tartalmának mentése fájlba"
 
-#~ msgid "Save workspace to file"
-#~ msgstr "Munkaterület mentés fájlba"
-
 #~ msgid "Search:"
 #~ msgstr "Keresés:"
-
-#~ msgid "Select EPSG code of spatial reference system"
-#~ msgstr "Válasszon EPSG kódot a vetülethez"
 
 #~ msgid "Select Well Known Text (WKT) .prj file"
 #~ msgstr "Válasszon Well Known Text (WKT) .prj fájlt"
@@ -12755,36 +16281,14 @@ msgstr ""
 #~ msgid "Set raster output format"
 #~ msgstr "Raszter output formátum beállítás"
 
-#~ msgid "Set region"
-#~ msgstr "Régió beállítás"
-
 #~ msgid "Set up vector cleaning tools"
 #~ msgstr "Vektor tisztító eszközök beállítása"
 
 #~ msgid "Set vector output format"
 #~ msgstr "Vektor output formátum beállítás"
 
-#, fuzzy
-#~ msgid "Set/unset access to other mapsets in current project"
-#~ msgstr "Hozzáférés beállítása/törlése egy másik térképcsoporthoz az aktuális helyen"
-
-#~ msgid "Shortest path"
-#~ msgstr "Legrövidebb útvonal"
-
-#~ msgid "Shortest path for all pairs"
-#~ msgstr "Legrövidebb útvonal minden párra"
-
-#~ msgid "Show current region"
-#~ msgstr "Aktuális régió megjelenítése"
-
-#~ msgid "Show settings"
-#~ msgstr "Beállítások megjelenítése"
-
 #~ msgid "Simple methods:"
 #~ msgstr "Egyszerű módszerek:"
-
-#~ msgid "Slope and aspect"
-#~ msgstr "Lejtő és kitettség"
 
 #, python-format
 #~ msgid ""
@@ -12799,20 +16303,8 @@ msgstr ""
 #~ msgid "Start region:"
 #~ msgstr "Kezdő régió:"
 
-#~ msgid "Steiner tree"
-#~ msgstr "Steiner fa"
-
 #~ msgid "Switch to new location?"
 #~ msgstr "Váltás az új helyre?"
-
-#~ msgid "Terra ASTER HDF import"
-#~ msgstr "Terra ASTER HDF import"
-
-#~ msgid "Test"
-#~ msgstr "Teszt"
-
-#~ msgid "Thin"
-#~ msgstr "Vékonyít"
 
 #~ msgid "This option allows creating user mapset immediately after new location is created. Note that GRASS always creates PERMANENT mapset."
 #~ msgstr "Ez  a beállítás lehetővé teszi felhasználói térképcsoportok azonnali létrehozását a hely létrehozása után. Vegye észre, hogy a GRASS mindig létrehozza a PERMANENT térképcsoportot."
@@ -12827,20 +16319,8 @@ msgstr ""
 #~ msgid "Threshold for %(num)s. tool '%(tool)s': %(thresh)s"
 #~ msgstr "Küszöbérték a 1%(num)s. eszközhöz '%(tool)s': %(thresh)s"
 
-#~ msgid "Timestamp"
-#~ msgstr "Időbélyeg"
-
 #~ msgid "Toggle to save list of executed commands into a file; content saved when switching off."
 #~ msgstr "Átkapcsolás a végrehajtott parancsok fájlba mentésére; a tartalmat a kikapcsolásnál mentjük."
-
-#~ msgid "Traveling salesman analysis"
-#~ msgstr "Utazó ügynök elemzés"
-
-#~ msgid "USLE K-factor"
-#~ msgstr "USLE K-faktor"
-
-#~ msgid "USLE R-factor"
-#~ msgstr "USLE R-faktor"
 
 #~ msgid "Unable to delete location"
 #~ msgstr "Nem tudom törölni a helyet"
@@ -12873,20 +16353,8 @@ msgstr ""
 #~ msgid "Unpack GRASS vector map"
 #~ msgstr "GRASS vektor térkép kicsomagolás"
 
-#~ msgid "Unpack vector map"
-#~ msgstr "Vektor térkép kicsomagolás"
-
 #~ msgid "Use defined projection"
 #~ msgstr "Felhasználó definiált vetület"
-
-#~ msgid "VRML export"
-#~ msgstr "VRML export"
-
-#~ msgid "VTK export"
-#~ msgstr "VTK export"
-
-#~ msgid "Validate entire model"
-#~ msgstr "A teljes modell ellenőrzése"
 
 #~ msgid "Vector Digitizer manual"
 #~ msgstr "Vektor digitalizálás kézikönyv"
@@ -12894,32 +16362,11 @@ msgstr ""
 #~ msgid "Vector Toolbar"
 #~ msgstr "Vektor eszközsor"
 
-#~ msgid "Vector database connections"
-#~ msgstr "Vektor adatbázis kapcsolatok"
-
 #~ msgid "Vector network analysis settings"
 #~ msgstr "Vektor hálózat elemzés beállítások"
 
-#~ msgid "Vector to 3D raster"
-#~ msgstr "Vektor 3D raszterbe"
-
-#~ msgid "Vis5D export"
-#~ msgstr "Vis5D export"
-
-#~ msgid "Vis5D import"
-#~ msgstr "Vis5D import"
-
-#~ msgid "Visibility"
-#~ msgstr "Láthatóság"
-
-#~ msgid "WFS"
-#~ msgstr "WFS"
-
 #~ msgid "WKT .prj file:"
 #~ msgstr "WKT .prj fáll:"
-
-#~ msgid "Watershed analysis"
-#~ msgstr "Vízgyűjtő elemzés"
 
 #, python-brace-format
 #~ msgid "ZIP file is unreadable: {0}"

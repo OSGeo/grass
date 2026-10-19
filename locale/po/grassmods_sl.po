@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
@@ -26531,7 +26531,7 @@ msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
 #, fuzzy
-msgid "Missing output projection parameters "
+msgid "Missing output projection parameters"
 msgstr "Ime izhodnega rastrskega sloja smeri toka"
 
 #, fuzzy
@@ -26777,8 +26777,9 @@ msgstr ""
 msgid "Unable to import data"
 msgstr "ne morem odpreti <%s>"
 
-msgid "Done: generated map "
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Done: generated map {map_name}"
+msgstr "Vrednost za zahodni rob"
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
 msgstr ""
@@ -26844,7 +26845,7 @@ msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
 #, fuzzy, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr "Ne morem izbrati (select) podatkov iz tabele"
 
 #, fuzzy, python-format
@@ -26988,9 +26989,9 @@ msgstr ""
 msgid "Driver %s does not supports Create() method"
 msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
 
-#, fuzzy, python-format
-msgid "Unable to open %s "
-msgstr "Ne morem odpreti cellfile za [%s]"
+#, fuzzy, python-brace-format
+msgid "Unable to open {filename}"
+msgstr "Ime izhodne datoteke"
 
 msgid "Region is out of server data extend."
 msgstr ""
@@ -27173,33 +27174,53 @@ msgstr "Tip zapisa kolone ni podprt"
 msgid "xy-locations are not supported"
 msgstr "Tip zapisa kolone ni podprt"
 
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr "Pri štetju izvzemi celice z NULL vrednostjo"
+
+#, fuzzy
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr "Pri štetju izvzemi celice z NULL vrednostjo"
+
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr "Pri štetju izvzemi celice z NULL vrednostjo"
+
 #, fuzzy
 msgid "Generating a clumped raster file"
 msgstr "Berem dig_att datoteko...\n"
 
-#, fuzzy
-msgid " including diagonal neighbors"
-msgstr "Pri štetju izvzemi celice z NULL vrednostjo"
-
-#, python-format
-msgid " with minimum %s pixels"
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, fuzzy
-msgid "Generating a reclass map with area size"
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
 msgstr "izhodni rastrski sloj"
 
-#, python-format
-msgid " larger than or equal to %f hectares..."
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
 msgstr ""
 
-#, python-format
-msgid " smaller than or equal to %f hectares..."
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "izhodni rastrski sloj"
+
+#, python-brace-format
+msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr ""
 
 #, fuzzy
-msgid "No areas of size "
-msgstr "Območje\n"
+msgid "Generating a reclass map without area size limits..."
+msgstr "izhodni rastrski sloj"
+
+#, fuzzy
+msgid "No areas found"
+msgstr "Ničesar nisem našel.\n"
 
 #, fuzzy, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
@@ -27849,12 +27870,8 @@ msgstr "Binarna rastrska datoteka, ki jo nameravate uvoziti"
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr ""
-
-#, fuzzy
-msgid "Use -c flag to update values in this column."
+#, fuzzy, python-brace-format
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, python-format
@@ -27980,8 +27997,8 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
-#, fuzzy, python-format
-msgid "Unable to add column %s to vector map <%s> "
+#, fuzzy, python-brace-format
+msgid "Unable to add column {column} to vector map <{vector}>"
 msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy, python-format
@@ -38064,6 +38081,18 @@ msgstr ""
 msgid "Image file"
 msgstr "Vhodni sloj"
 
+#, fuzzy, python-format
+#~ msgid "Unable to open %s "
+#~ msgstr "Ne morem odpreti cellfile za [%s]"
+
+#, fuzzy
+#~ msgid " including diagonal neighbors"
+#~ msgstr "Pri štetju izvzemi celice z NULL vrednostjo"
+
+#, fuzzy
+#~ msgid "No areas of size "
+#~ msgstr "Območje\n"
+
 #, fuzzy
 #~ msgid "east"
 #~ msgstr "Ime rastrskega sloja"
@@ -38091,10 +38120,6 @@ msgstr "Vhodni sloj"
 #, fuzzy, python-format
 #~ msgid "Temporary raster map <%s> exists"
 #~ msgstr "dig_att datoteka ne obstaja."
-
-#, fuzzy
-#~ msgid "Generating a clumped raster file including diagonal neighbors..."
-#~ msgstr "Pri štetju izvzemi celice z NULL vrednostjo"
 
 #, fuzzy, python-format
 #~ msgid "Generating output raster map <%s>..."
@@ -38944,10 +38969,6 @@ msgstr "Vhodni sloj"
 #, fuzzy
 #~ msgid "D niche similarity"
 #~ msgstr "neveljavna regija: %s"
-
-#, fuzzy
-#~ msgid "DPI for the generated page"
-#~ msgstr "Vrednost za zahodni rob"
 
 #, fuzzy
 #~ msgid "DXF conversion"

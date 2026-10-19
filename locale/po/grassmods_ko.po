@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grassmods/ko/>\n"
@@ -23719,8 +23719,10 @@ msgstr ""
 msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
-msgid "Missing output projection parameters "
-msgstr ""
+#, fuzzy
+#| msgid "Output projection parameters (PROJ.4 style)"
+msgid "Missing output projection parameters"
+msgstr "출력 재투영 매개변수(PROJ.4 스타일)"
 
 msgid "Unable to read input data"
 msgstr ""
@@ -23950,7 +23952,8 @@ msgstr ""
 msgid "Unable to import data"
 msgstr ""
 
-msgid "Done: generated map "
+#, python-brace-format
+msgid "Done: generated map {map_name}"
 msgstr ""
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
@@ -24012,7 +24015,7 @@ msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
 #, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr ""
 
 #, python-format
@@ -24153,9 +24156,10 @@ msgstr ""
 msgid "Driver %s does not supports Create() method"
 msgstr ""
 
-#, python-format
-msgid "Unable to open %s "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to open tempfile"
+msgid "Unable to open {filename}"
+msgstr "임시 파일을 열 수 없습니다"
 
 msgid "Region is out of server data extend."
 msgstr ""
@@ -24334,33 +24338,54 @@ msgstr ""
 msgid "xy-locations are not supported"
 msgstr ""
 
+#, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr ""
+
+#, fuzzy
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr "설정 파일을 읽을 수 없습니다"
+
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr "설정 파일을 읽을 수 없습니다"
+
 #, fuzzy
 msgid "Generating a clumped raster file"
 msgstr "설정 파일을 읽을 수 없습니다"
 
-msgid " including diagonal neighbors"
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, python-format
-msgid " with minimum %s pixels"
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
 msgstr ""
 
-#, fuzzy
-msgid "Generating a reclass map with area size"
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
 msgstr "출력할 격자지도"
 
-#, python-format
-msgid " larger than or equal to %f hectares..."
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
 msgstr ""
 
-#, python-format
-msgid " smaller than or equal to %f hectares..."
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "출력할 격자지도"
+
+#, python-brace-format
+msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr ""
 
 #, fuzzy
-#| msgid "No table for layer %d"
-msgid "No areas of size "
-msgstr "레이어 %d를 위한 테이블이 존재하지 않습니다"
+msgid "Generating a reclass map without area size limits..."
+msgstr "출력할 격자지도"
+
+#, fuzzy
+#| msgid "No RGB values found"
+msgid "No areas found"
+msgstr "RGB 값을 찾을 수 없습니다"
 
 #, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
@@ -24981,12 +25006,10 @@ msgstr ""
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
+#, fuzzy, python-brace-format
+#| msgid "Cannot create column <%s> (already present). "
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr "열 <%s>를 생성할 수 없습니다 (이미 존재)."
-
-msgid "Use -c flag to update values in this column."
-msgstr ""
 
 #, python-format
 msgid "Adding columns '%s'"
@@ -25102,9 +25125,10 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr ""
 
-#, python-format
-msgid "Unable to add column %s to vector map <%s> "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to add column {column} to vector map <{vector}>"
+msgstr "벡터 지도 <%s>를 위한 데이터베이스 연결을 추가할 수 없습니다"
 
 #, python-format
 msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
@@ -34104,6 +34128,11 @@ msgstr ""
 
 msgid "Image file"
 msgstr ""
+
+#, fuzzy
+#~| msgid "No table for layer %d"
+#~ msgid "No areas of size "
+#~ msgstr "레이어 %d를 위한 테이블이 존재하지 않습니다"
 
 #, fuzzy, c-format
 #~ msgid "Raster map <%s> created. "

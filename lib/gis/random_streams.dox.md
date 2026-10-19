@@ -129,9 +129,9 @@ the number of units is their count or an upper bound on it, and unused units
 cost nothing but their share of the span. Which pattern applies depends on
 whether a unit draws its values in one go or over many steps.
 
-The seed comes from the user or is generated. A tool parses its seed option
-with `strtoll()` and refuses what is not an integer from -2^31 to 2^32 - 1,
-naming the option. When the user gives no seed, `G_random_generate_seed()`
+The seed comes from the user or is generated. A tool reads its seed option
+with `G_random_seed_from_option()`, which refuses what is not an integer
+from -2^31 to 2^32 - 1, naming the option. When the user gives no seed, `G_random_generate_seed()`
 gives one, from `GRASS_RANDOM_SEED`, or else from `SOURCE_DATE_EPOCH`, or
 else from the time and the process ID. The tool records the seed it used, for
 example in the history of the output map, so that the computation can be

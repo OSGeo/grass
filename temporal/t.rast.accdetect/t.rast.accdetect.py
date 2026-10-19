@@ -250,11 +250,11 @@ def main():
                 _("Space time raster dataset <%s> not found") % (minimum_strds.get_id())
             )
 
+        minimum_strds.select(dbif)
+
         if minimum_strds.get_temporal_type() != input_strds.get_temporal_type():
             dbif.close()
             gs.fatal(_("Temporal type of input strds and minimum strds must be equal"))
-
-        minimum_strds.select(dbif)
 
     # The maximum threshold space time raster dataset
     maximum_strds = None
@@ -268,11 +268,28 @@ def main():
                 _("Space time raster dataset <%s> not found") % (maximum_strds.get_id())
             )
 
+        maximum_strds.select(dbif)
+
         if maximum_strds.get_temporal_type() != input_strds.get_temporal_type():
             dbif.close()
             gs.fatal(_("Temporal type of input strds and maximum strds must be equal"))
 
-        maximum_strds.select(dbif)
+    # Compound increments such as "1 days, 2 days" are not valid
+    # granularity strings but work here, so only the sign is checked.
+    if (
+        tgis.check_granularity_string(cycle, input_strds.get_temporal_type())
+        and int(cycle.split()[0]) <= 0
+    ):
+        dbif.close()
+        gs.fatal(_("Invalid cycle"))
+
+    if (
+        offset
+        and tgis.check_granularity_string(offset, input_strds.get_temporal_type())
+        and int(offset.split()[0]) < 0
+    ):
+        dbif.close()
+        gs.fatal(_("Invalid offset"))
 
     input_strds_start, input_strds_end = input_strds.get_temporal_extent_as_tuple()
 
@@ -282,6 +299,8 @@ def main():
     else:
         start = int(start)
         stop = int(stop) if stop else input_strds_end
+        cycle = int(cycle)
+        offset = int(offset) if offset else 0
 
     if input_strds.is_time_absolute():
         end = tgis.increment_datetime_by_string(start, cycle)

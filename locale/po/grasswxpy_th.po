@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2008-01-05 15:19+0700\n"
 "Last-Translator: \n"
 "Language-Team: Thai <grass-translations@lists.osgeo.org>\n"
@@ -671,13 +671,15 @@ msgstr ""
 msgid "Rendering aborted"
 msgstr ""
 
-msgid "Downloading data "
-msgstr ""
-
-msgid "Rendering & "
+#, python-brace-format
+msgid "Rendering & downloading data {layers}..."
 msgstr ""
 
 msgid "Rendering..."
+msgstr ""
+
+#, python-brace-format
+msgid "Downloading data {layers}..."
 msgstr ""
 
 msgid "Trying to recover from default region..."
@@ -847,7 +849,8 @@ msgid ""
 "Details: %(detail)s"
 msgstr ""
 
-msgid "Unable to set "
+#, python-brace-format
+msgid "Unable to set '{group}:{key}:{subkey}'"
 msgstr ""
 
 #, python-format
@@ -1650,7 +1653,7 @@ msgstr ""
 msgid "Table"
 msgstr "ตาราง"
 
-msgid " (read-only)"
+msgid "Table (read-only)"
 msgstr ""
 
 msgid "SQL Query"
@@ -2236,7 +2239,11 @@ msgid ""
 msgstr ""
 
 #, python-brace-format
-msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
+msgid "The raster map {map_name} exists. Do you want to overwrite?"
+msgstr ""
+
+#, python-brace-format
+msgid "The vector map {map_name} exists. Do you want to overwrite?"
 msgstr ""
 
 msgid "Rectifying images, please wait..."
@@ -2494,10 +2501,8 @@ msgstr ""
 msgid "Reload GCPs from POINTS file"
 msgstr ""
 
-msgid "Set map canvas for "
-msgstr ""
-
-msgid " / Zoom to map"
+#, python-brace-format
+msgid "Set map canvas for {zoom_back} / Zoom to map"
 msgstr ""
 
 msgid "Update GCP coordinates"
@@ -2732,7 +2737,8 @@ msgstr ""
 msgid "<not defined>"
 msgstr ""
 
-msgid "Condition: "
+#, python-brace-format
+msgid "Condition: {label}"
 msgstr ""
 
 msgid "Condition: not defined"
@@ -3329,7 +3335,8 @@ msgstr ""
 msgid "Example"
 msgstr ""
 
-msgid "Enter parameters for '"
+#, python-brace-format
+msgid "Enter parameters for '{tool}'"
 msgstr ""
 
 msgid "Close this window without executing the command (Ctrl+Q)"
@@ -3669,10 +3676,13 @@ msgstr ""
 msgid "Not selectable element"
 msgstr ""
 
-msgid "Mapset"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Mapset access"
+msgid "Mapset: {mapset}"
+msgstr "เข้าถึง Mapset"
 
-msgid "Type: "
+#, python-brace-format
+msgid "Type: {element_type}"
 msgstr ""
 
 #, python-format
@@ -4063,7 +4073,7 @@ msgstr ""
 msgid "Area fill color:"
 msgstr ""
 
-msgid "Random colors according to category number "
+msgid "Random colors according to category number"
 msgstr ""
 
 msgid "Symbol:"
@@ -4161,6 +4171,9 @@ msgid ""
 "    - The current mapset is always accessible.\n"
 "    - You may only write to the current mapset.\n"
 "    - You may only write to mapsets which you own."
+msgstr ""
+
+msgid "Mapset"
 msgstr ""
 
 msgid "Owner"
@@ -4944,9 +4957,6 @@ msgid "Preview"
 msgstr "แสดงตัวอย่าง"
 
 msgid "Training"
-msgstr ""
-
-msgid "/ Zoom to map"
 msgstr ""
 
 msgid "std dev"
@@ -6136,7 +6146,8 @@ msgstr ""
 msgid "Set opacity of <{}>"
 msgstr ""
 
-msgid "Layer group:"
+#, python-brace-format
+msgid "Layer group: {number}"
 msgstr ""
 
 msgid "Click to edit layer settings"
@@ -7011,8 +7022,10 @@ msgstr ""
 msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
 msgstr ""
 
-msgid "Measuring distance"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Bearing/distance to coordinates"
+msgid "Measuring distance ({units}):"
+msgstr "มุม/ระยะทาง ไปเป็น ค่าพิกัด"
 
 msgid "Measuring distance:"
 msgstr ""
@@ -7132,6 +7145,3958 @@ msgstr ""
 msgid "Property does not exist: %s"
 msgstr ""
 
+msgid "&File"
+msgstr ""
+
+msgid "New"
+msgstr "ใหม่"
+
+#, fuzzy
+msgid "Create new workspace"
+msgstr "พื้นที่ทำงาน"
+
+msgid "Open"
+msgstr "เปิด"
+
+msgid "Load workspace from file"
+msgstr ""
+
+msgid "Save"
+msgstr "บันทึก"
+
+#, fuzzy
+#| msgid "Save"
+msgid "Save as"
+msgstr "บันทึก"
+
+#, fuzzy
+msgid "Save workspace to file"
+msgstr "พื้นที่ทำงาน"
+
+#, fuzzy
+msgid "Close workspace file"
+msgstr "พื้นที่ทำงาน"
+
+msgid "Map display"
+msgstr ""
+
+#, fuzzy
+#| msgid "raster"
+msgid "Add raster"
+msgstr "แผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "GRASS raster map layer data resampling capability."
+msgid "Add raster map layer to current display"
+msgstr "ความสามารถในการ  resampling ชั้นข้อมูลแผนที่เชิงภาพ GRASS"
+
+#, fuzzy
+msgid "Add vector"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Add vector map layer to current display"
+msgstr ""
+
+#, fuzzy
+msgid "Add multiple rasters or vectors"
+msgstr "เพิ่มชั้นข้อมูลคำสั่ง"
+
+msgid "Add multiple raster or vector map layers to current display"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add text layer"
+msgid "Add RGB raster layer"
+msgstr "เพิ่มชั้นข้อมูลข้อความ"
+
+#, fuzzy
+#| msgid "GRASS raster map layer data resampling capability."
+msgid "Add RGB raster map layer to current display"
+msgstr "ความสามารถในการ  resampling ชั้นข้อมูลแผนที่เชิงภาพ GRASS"
+
+msgid "Add web service layer"
+msgstr ""
+
+#, fuzzy
+msgid "New map display window"
+msgstr "แสดง"
+
+msgid "Open new map display window"
+msgstr ""
+
+msgid "Render all map displays"
+msgstr ""
+
+msgid "Re-render maps in all open map display windows"
+msgstr ""
+
+msgid "Close current map display window"
+msgstr ""
+
+msgid "Close all open map display windows"
+msgstr ""
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Simplified raster import with reprojection"
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Imports raster data into a GRASS raster map using GDAL library."
+msgstr "นำเข้า ไฟล์แผนที่เชิงภาพ binary ไปที่ ชั้นข้อมูลเชิงภาพ GRASS"
+
+#, fuzzy
+#| msgid "IDW from raster points"
+msgid "Import of common raster formats"
+msgstr "IDW จากจุดแรสเตอร์"
+
+msgid "ASCII x,y,z point import and gridding"
+msgstr ""
+
+msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
+msgstr ""
+
+msgid "ASCII grid import"
+msgstr ""
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Converts a GRASS ASCII raster file to binary raster map."
+msgstr "ส่งออก แผนที่ภาพ GRASS แบบ binary"
+
+msgid "ASCII polygons, lines, and point import"
+msgstr ""
+
+msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgstr "สร้าง แผนที่เชิงภาพ จากไฟล์ข้อมูล ASCII รูปปิด/เส้น/จุด"
+
+msgid "Raw binary array import"
+msgstr ""
+
+msgid "Import a binary raster file into a GRASS raster map layer."
+msgstr "นำเข้า ไฟล์แผนที่เชิงภาพ binary ไปที่ ชั้นข้อมูลเชิงภาพ GRASS"
+
+msgid "GRIDATB.FOR import"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map."
+msgstr "นำเข้า ไฟล์แผนที่เชิงภาพ binary ไปที่ ชั้นข้อมูลเชิงภาพ GRASS"
+
+msgid "Matlab 2D array import"
+msgstr ""
+
+msgid "Imports a binary MAT-File(v4) to a GRASS raster."
+msgstr "นำเข้า  binary MAT-File(v4) ไปเป็น แผนที่เชิงภาพ GRASS"
+
+msgid "PNG import"
+msgstr ""
+
+msgid "Imports non-georeferenced PNG format image."
+msgstr ""
+
+msgid "SPOT NDVI import"
+msgstr ""
+
+msgid "Imports SPOT VGT NDVI data into a raster map."
+msgstr ""
+
+msgid "SRTM HGT import"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Imports SRTM HGT files into raster map."
+msgstr "นำเข้า ไฟล์แผนที่เชิงภาพ binary ไปที่ ชั้นข้อมูลเชิงภาพ GRASS"
+
+msgid "Terra ASTER HDF import"
+msgstr ""
+
+msgid "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp."
+msgstr ""
+
+msgid "LAS LiDAR points import"
+msgstr ""
+
+msgid "Point cloud (LAS LiDAR) import"
+msgstr ""
+
+msgid "WMS/WMTS import"
+msgstr ""
+
+msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map"
+msgid "Unpack raster map"
+msgstr "แผนที่แรสเตอร์"
+
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
+msgstr ""
+
+msgid "Reproject raster map from different GRASS project"
+msgstr ""
+
+msgid "Re-projects a raster map from given project to the current project."
+msgstr ""
+
+msgid "Simplified vector import with reprojection"
+msgstr ""
+
+#, fuzzy
+#| msgid "Imports older versions of GRASS vector maps."
+msgid "Imports vector data into a GRASS vector map using OGR library."
+msgstr "นำเข้า แผนที่เชิงเส้น รุ่นเก่า ของ GRASS"
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Import of common vector formats"
+msgstr "IDW จากจุดเวคเตอร์"
+
+msgid "ASCII points or GRASS ASCII format"
+msgstr ""
+
+#, fuzzy
+#| msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgid "Creates a vector map from an ASCII points file or ASCII vector file."
+msgstr "สร้าง แผนที่เชิงภาพ จากไฟล์ข้อมูล ASCII รูปปิด/เส้น/จุด"
+
+msgid "ASCII points as a vector lines"
+msgstr ""
+
+msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
+msgstr ""
+
+msgid "DXF import"
+msgstr ""
+
+msgid "Converts files in DXF format to GRASS vector map format."
+msgstr "แปลงไฟล์ในรูปแบบ DXF ไปเป็น แผนที่เชิงเส้น GRASS."
+
+msgid "WFS"
+msgstr ""
+
+msgid "Imports GetFeature from a WFS server."
+msgstr ""
+
+msgid "ESRI e00 import"
+msgstr ""
+
+#, fuzzy
+#| msgid "Imports older versions of GRASS vector maps."
+msgid "Imports E00 file into a vector map."
+msgstr "นำเข้า แผนที่เชิงเส้น รุ่นเก่า ของ GRASS"
+
+#, fuzzy
+msgid "Geonames import"
+msgstr "จัดการ projections"
+
+#, fuzzy
+#| msgid "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map."
+msgid "Imports geonames.org country files into a vector points map."
+msgstr "นำเข้า US-NGA GEOnet Names Server (GNS)  country files ไปที่ แผนที่เชิงเส้นแบบจุดของ GRASS"
+
+msgid "Matlab array or Mapgen format import"
+msgstr ""
+
+msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr ""
+
+#, fuzzy
+msgid "Unpack vector map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
+msgstr ""
+
+msgid "Reproject vector map from different GRASS project"
+msgstr ""
+
+msgid "Re-projects a vector map from one project to the current project."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Import 3D raster data"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+msgid "ASCII 3D import"
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
+msgstr "แปลงแผนที่เชิงภาพ slices 2 มิติ ไปเป็นแผนที่เชิงภาพ แบบ ปริมาตร 3 มิติ"
+
+msgid "Raw binary array 3D import"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgstr "นำเข้า ไฟล์แผนที่เชิงภาพ binary ไปที่ ชั้นข้อมูลเชิงภาพ GRASS"
+
+msgid "Vis5D import"
+msgstr ""
+
+msgid "Import 3-dimensional Vis5D files."
+msgstr ""
+
+msgid "LiDAR 3D import"
+msgstr ""
+
+msgid "XYZ to 3D raster series"
+msgstr ""
+
+msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
+msgstr ""
+
+#, fuzzy
+msgid "Import database table"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+#, fuzzy
+msgid "Common import formats"
+msgstr "ค่าพิกัด"
+
+msgid "Imports attribute tables in various formats."
+msgstr "นำเข้าตารางรายละเอียดแบบหลายรูปแบบ"
+
+msgid "Export raster map"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+#, fuzzy
+msgid "Common export formats"
+msgstr "ค่าพิกัด"
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Exports GRASS raster maps into GDAL supported formats."
+msgstr "ส่งออก แผนที่ภาพ GRASS แบบ binary"
+
+msgid "ASCII grid export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgstr "นำเข้า ไฟล์แผนที่เชิงภาพ binary ไปที่ ชั้นข้อมูลเชิงภาพ GRASS"
+
+msgid "ASCII x,y,z points export"
+msgstr ""
+
+msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
+msgstr ""
+
+msgid "GRIDATB.FOR export"
+msgstr ""
+
+msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
+msgstr ""
+
+msgid "Matlab 2D array export"
+msgstr ""
+
+msgid "Exports a GRASS raster to a binary MAT-File."
+msgstr "ส่งออกแผนที่เชิงภาพ GRASSไปเป็น  binary MAT-File"
+
+msgid "Raw binary array export"
+msgstr ""
+
+msgid "Exports a GRASS raster to a binary array."
+msgstr "ส่งออก แผนที่ภาพ GRASS แบบ binary"
+
+msgid "MPEG-1 export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgid "Converts raster map series to MPEG movie."
+msgstr "แปลงแผนที่เชิงภาพ slices 2 มิติ ไปเป็นแผนที่เชิงภาพ แบบ ปริมาตร 3 มิติ"
+
+msgid "PNG export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Export a GRASS raster map as a non-georeferenced PNG image."
+msgstr "ส่งออก แผนที่ภาพ GRASS แบบ binary"
+
+msgid "PPM export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary MAT-File."
+msgid "Converts a GRASS raster map to a PPM image file."
+msgstr "ส่งออกแผนที่เชิงภาพ GRASSไปเป็น  binary MAT-File"
+
+msgid "PPM from RGB export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary MAT-File."
+msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
+msgstr "ส่งออกแผนที่เชิงภาพ GRASSไปเป็น  binary MAT-File"
+
+msgid "POV-Ray export"
+msgstr ""
+
+msgid "Converts a raster map layer into a height-field file for POV-Ray."
+msgstr ""
+
+msgid "VRML export"
+msgstr ""
+
+msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
+msgstr ""
+
+msgid "VTK export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Converts raster maps into the VTK-ASCII format."
+msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
+
+#, fuzzy
+#| msgid "Raster map"
+msgid "Pack raster map"
+msgstr "แผนที่แรสเตอร์"
+
+msgid "Exports a raster map as GRASS specific archive file"
+msgstr ""
+
+msgid "Export vector map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
+msgstr ""
+
+#, fuzzy
+msgid "ASCII points or GRASS ASCII vector export"
+msgstr "ส่งออก แผนที่เชิงเส้น GRASS เป็น SVG."
+
+msgid "Exports a vector map to a GRASS ASCII vector representation. By default only features with category are exported. To export all features use 'layer=-1'."
+msgstr ""
+
+msgid "DXF export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Exports vector map to DXF file format."
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "PostGIS export"
+msgstr ""
+
+msgid "Exports a vector map layer to PostGIS feature table."
+msgstr ""
+
+msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
+msgstr ""
+
+msgid "SVG export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Exports a vector map to SVG file."
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Converts a vector map to VTK ASCII output."
+msgstr ""
+
+#, fuzzy
+msgid "Pack vector map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Exports a vector map as GRASS specific archive file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export to LiDAR format"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Export 3D raster maps"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+msgid "ASCII 3D export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgid "Converts a 3D raster map layer into a ASCII text file."
+msgstr "แปลงแผนที่เชิงภาพ slices 2 มิติ ไปเป็นแผนที่เชิงภาพ แบบ ปริมาตร 3 มิติ"
+
+msgid "Raw binary array 3D export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Exports a GRASS 3D raster map to a binary array."
+msgstr "ส่งออก แผนที่ภาพ GRASS แบบ binary"
+
+msgid "Vis5D export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary MAT-File."
+msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr "ส่งออกแผนที่เชิงภาพ GRASSไปเป็น  binary MAT-File"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
+
+msgid "NetCDF export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary MAT-File."
+msgid "Export a 3D raster map as netCDF file."
+msgstr "ส่งออกแผนที่เชิงภาพ GRASSไปเป็น  binary MAT-File"
+
+#, fuzzy
+msgid "Export database table"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+#, fuzzy
+#| msgid "Imports attribute tables in various formats."
+msgid "Exports attribute tables into various formats."
+msgstr "นำเข้าตารางรายละเอียดแบบหลายรูปแบบ"
+
+msgid "Link external raster data"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
+msgstr "นำเข้า ไฟล์แผนที่เชิงภาพ binary ไปที่ ชั้นข้อมูลเชิงภาพ GRASS"
+
+msgid "Link external vector data"
+msgstr ""
+
+msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
+msgstr ""
+
+msgid "Output format for raster data"
+msgstr ""
+
+msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
+msgstr ""
+
+msgid "Output format for vector data"
+msgstr ""
+
+msgid "Defines vector output format utilizing OGR library."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage projections"
+msgid "Manage maps"
+msgstr "จัดการ projections"
+
+msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
+msgstr ""
+
+msgid "List"
+msgstr "รายการ"
+
+msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
+msgstr ""
+
+msgid "Renames data base element files in the user's current mapset."
+msgstr "เปลี่ยนชื่อไฟล์ชิ้นส่วนของข้อมูลฐาน ในชุดแผนที่"
+
+msgid "Delete"
+msgstr "ลบ"
+
+#, fuzzy
+#| msgid "Renames data base element files in the user's current mapset."
+msgid "Removes data base element files from the user's current mapset using the search pattern."
+msgstr "เปลี่ยนชื่อไฟล์ชิ้นส่วนของข้อมูลฐาน ในชุดแผนที่"
+
+#, fuzzy
+msgid "Download project from web"
+msgstr "จัดการ projections"
+
+msgid "Download GRASS project from the web Get GRASS project from an URL or file path"
+msgstr ""
+
+msgid "Rebuild or remove all addons"
+msgstr ""
+
+msgid "Rebuilds or removes all locally installed GRASS Addons extensions. By default only extensions built against different GIS Library are rebuilt."
+msgstr ""
+
+msgid "Map type conversions"
+msgstr "แปลงชนิดแผนที่"
+
+msgid "Raster to vector"
+msgstr "แรสเตอร์ เป็น เวคเตอร์"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Converts a raster map into a vector map."
+msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
+
+#, fuzzy
+#| msgid "Update area attributes from raster"
+msgid "Raster series to 3D raster"
+msgstr "ปรับปรุง รายละเอียด Area จากแผนที่เชิงภาพ"
+
+msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgstr "แปลงแผนที่เชิงภาพ slices 2 มิติ ไปเป็นแผนที่เชิงภาพ แบบ ปริมาตร 3 มิติ"
+
+#, fuzzy
+#| msgid "Create 3D vector over raster"
+msgid "Raster 2.5D to 3D raster"
+msgstr "สร้าง 3D เวคเตอร์บนแรสเตอร์"
+
+msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
+msgstr "สร้าง แผนที่ปริมาตร  3 มิติ จาก แผนที่ความสูง เชิงภาพ 2 มิติ และ แผนที่ปริมาตรเชิงภาพ"
+
+msgid "Vector to raster"
+msgstr "จากเวคเตอร์เป็นแรสเตอร์"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Converts (rasterize) a vector map into a raster map."
+msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
+
+#, fuzzy
+#| msgid "Vector to raster"
+msgid "Vector to 3D raster"
+msgstr "จากเวคเตอร์เป็นแรสเตอร์"
+
+#, fuzzy
+#| msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgid "Converts a vector map (only points) into a 3D raster map."
+msgstr "แปลงแผนที่เชิงภาพ slices 2 มิติ ไปเป็นแผนที่เชิงภาพ แบบ ปริมาตร 3 มิติ"
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "2D vector to 3D vector"
+msgstr "แรสเตอร์ เป็น เวคเตอร์"
+
+msgid "Performs transformation of 2D vector features to 3D."
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "3D raster to raster series"
+msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
+
+msgid "Converts 3D raster maps to 2D raster maps"
+msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
+
+msgid "Launches Simple Python Editor."
+msgstr ""
+
+msgid "Launch script"
+msgstr ""
+
+msgid "Launches script file."
+msgstr ""
+
+msgid "Launch Jupyter Notebook interface."
+msgstr ""
+
+msgid "Graphical modeler"
+msgstr ""
+
+msgid "Launch Graphical modeler"
+msgstr ""
+
+msgid "Run model prepared by Graphical modeler"
+msgstr ""
+
+msgid "Manage Ground Control Points for Georectification"
+msgstr ""
+
+msgid "Animation tool"
+msgstr ""
+
+msgid "Launch animation tool."
+msgstr ""
+
+msgid "Launch Cartographic Composer"
+msgstr ""
+
+msgid "Launch Map Swipe"
+msgstr ""
+
+msgid "Close graphical user interface."
+msgstr ""
+
+msgid "Close GUI and exit GRASS shell."
+msgstr ""
+
+#, fuzzy
+#| msgid "Settings"
+msgid "&Settings"
+msgstr "ตั้งค่า"
+
+#, fuzzy
+msgid "Show current region"
+msgstr "สร้าง Area สำหรับ ขอบเขต ปัจจุบัน"
+
+msgid "Shows the extent and resolution of the computational region."
+msgstr ""
+
+msgid "Show region using latitude and longitude"
+msgstr ""
+
+msgid "Show current region extent in Map Display"
+msgstr ""
+
+msgid "Shows the extent of the computational region in Map Display."
+msgstr ""
+
+msgid "Set region"
+msgstr ""
+
+msgid "Manages the boundary definitions for the geographic region."
+msgstr "จัดการนิยามขอบเขต สำหรับขอบเขต geographic"
+
+msgid "GRASS working environment"
+msgstr "GRASS working environment"
+
+msgid "Mapset access"
+msgstr "เข้าถึง Mapset"
+
+#, fuzzy
+msgid "Set/unset access to other mapsets in current project"
+msgstr "สร้าง mapset ใหม่"
+
+msgid "User access"
+msgstr "การเข้าถ฿ง ของผู้ใช้"
+
+msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
+msgstr ""
+
+msgid "Change working environment"
+msgstr "เปลี่ยน สภาวะแวดล้อม การทำงาน"
+
+msgid "Changes or reports current mapset. Optionally, creates new mapset or lists available mapsets in given project (location)."
+msgstr ""
+
+#, fuzzy
+msgid "Change project (location) and mapset"
+msgstr "กลุ่มภาพเป้าหมาย ตำแหน่ง และ ชุดแผนที่  ของ GRASS"
+
+#, fuzzy
+msgid "Change current project and mapset."
+msgstr "กลุ่มภาพเป้าหมาย ตำแหน่ง และ ชุดแผนที่  ของ GRASS"
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Change mapset"
+msgstr "สร้าง mapset ใหม่"
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Change current mapset."
+msgstr "สร้าง mapset ใหม่"
+
+#, fuzzy
+#| msgid "Change working environment"
+msgid "Change working directory"
+msgstr "เปลี่ยน สภาวะแวดล้อม การทำงาน"
+
+msgid "Show settings"
+msgstr "แสดงค่าติดตั้ง"
+
+msgid "Outputs and modifies the user's current GRASS variable settings."
+msgstr "ผลลัพธ์และการเปลี่ยนแปลง ผู้ใช้ ในการกำหนดตัวแปรของ  GRASS"
+
+#, fuzzy
+#| msgid "Show settings"
+msgid "Change settings"
+msgstr "แสดงค่าติดตั้ง"
+
+#, fuzzy
+#| msgid "Outputs and modifies the user's current GRASS variable settings."
+msgid "Outputs and modifies the user's current GRASS variable settings. Prints all defined GRASS variables if no option is given."
+msgstr "ผลลัพธ์และการเปลี่ยนแปลง ผู้ใช้ ในการกำหนดตัวแปรของ  GRASS"
+
+#, fuzzy
+msgid "Create new project (location)"
+msgstr "สร้าง mapset ใหม่"
+
+msgid "Launches project wizard to create a new GRASS project (also known as location)."
+msgstr ""
+
+#, fuzzy
+msgid "Creates new mapset in the current project, changes current mapset."
+msgstr "สร้าง mapset ใหม่"
+
+#, fuzzy
+#| msgid "Manage projections"
+msgid "Map projections"
+msgstr "จัดการ projections"
+
+#, fuzzy
+msgid "Display map projection"
+msgstr "แสดง"
+
+msgid "Converts coordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgstr ""
+
+msgid "Manage projections"
+msgstr "จัดการ projections"
+
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions). Can also be used to create new GRASS projects."
+msgstr ""
+
+#, fuzzy
+#| msgid "Coordinates"
+msgid "Convert coordinates"
+msgstr "ค่าพิกัด"
+
+msgid "Converts coordinates from one projection to another (cs2cs frontend)."
+msgstr ""
+
+msgid "Addons extensions"
+msgstr ""
+
+msgid "Install extension from addons"
+msgstr ""
+
+msgid "Installs new extension from GRASS AddOns repository."
+msgstr ""
+
+msgid "Manage installed extension"
+msgstr ""
+
+msgid "Updates or removes installed GRASS AddOns extension(s)."
+msgstr ""
+
+msgid "Preferences"
+msgstr ""
+
+msgid "User GUI preferences (display font, commands, digitizer, etc.)"
+msgstr ""
+
+#, fuzzy
+#| msgid "raster"
+msgid "&Raster"
+msgstr "แผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Remove vertex"
+msgid "Develop raster map"
+msgstr "ลบ vertex"
+
+msgid "Compress/decompress"
+msgstr "บีบอัด/ขยาย"
+
+msgid "Compresses and decompresses raster maps."
+msgstr "บีบอัด และ ลด ขนาด แผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Dissolve boundaries"
+msgid "Region boundaries"
+msgstr "ละลาย ขอบเขต"
+
+msgid "Sets the boundary definitions for a raster map."
+msgstr "กำหนด ข้อกำหนดขอบเขต สำหรับ แผนที่เชิงภาพ"
+
+msgid "Manage NULL values"
+msgstr ""
+
+msgid "Manages NULL-values of given raster map."
+msgstr ""
+
+msgid "Quantization"
+msgstr "Quantization"
+
+msgid "Produces the quantization file for a floating-point map."
+msgstr "สร้าง ไฟล์quantization สำหรับ  floating-point map."
+
+msgid "Timestamp"
+msgstr ""
+
+#, fuzzy
+#| msgid "Print/add/remove a timestamp for a 3D raster map"
+msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgstr "พิมพ์/เพิ่ม/เอาออก  timestamp สำหรับ แผนที่เชิงภาพ 3 มิติ"
+
+msgid "Resample using aggregate statistics"
+msgstr "Resample ใช้วิธ๊ Aggregate statistics"
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Resamples raster map layers to a coarser grid using aggregation."
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+msgid "Resample using multiple methods"
+msgstr "การใช้หลายๆวิธีในการ Resample"
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Resamples raster map to a finer grid using interpolation."
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+msgid "Resample using nearest neighbor"
+msgstr "Resample ใช้ วิธ๊ Nearest Neighbor"
+
+msgid "GRASS raster map layer data resampling capability."
+msgstr "ความสามารถในการ  resampling ชั้นข้อมูลแผนที่เชิงภาพ GRASS"
+
+msgid "Resample using spline tension"
+msgstr "Resample ใช้ วิธ๊ Spline Tension"
+
+msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
+msgstr ""
+
+#, fuzzy
+#| msgid "Resample using spline tension"
+msgid "Resample using bspline"
+msgstr "Resample ใช้ วิธ๊ Spline Tension"
+
+msgid "Performs bilinear or bicubic spline interpolation with Tykhonov regularization."
+msgstr ""
+
+#, fuzzy
+#| msgid "Resample using nearest neighbor"
+msgid "Resample using analytic kernel"
+msgstr "Resample ใช้ วิธ๊ Nearest Neighbor"
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Resamples raster map layers using an analytic kernel."
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+msgid "Support file maintenance"
+msgstr "การบำรุงรักษา Support ไฟล์"
+
+msgid "Allows creation and/or modification of raster map layer support files."
+msgstr "ยอมให้สร้าง และ/หรือ เปลี่ยนแปลง ไฟล์ support ของชั้นข้อมูลเชิงภาพ."
+
+msgid "Update map statistics"
+msgstr "ปรับปรุง Map Statistics"
+
+msgid "Update raster map statistics"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+msgid "Tiling"
+msgstr "Tiling"
+
+msgid "Produces tilings of the source projection for use in the destination region and projection."
+msgstr "สร้าง tiling ของ  projection เดิม เพื่อใช้กับขอบเขตและ projection ปลายทาง"
+
+msgid "Build a VRT (Virtual Raster)"
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map"
+msgid "Tile raster map"
+msgstr "แผนที่แรสเตอร์"
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Splits a raster map into tiles."
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+msgid "Manage semantic labels"
+msgstr ""
+
+msgid "Manages semantic label information assigned to a single raster map or to a list of raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Line color"
+msgid "Manage colors"
+msgstr "สีเส้น"
+
+msgid "Color tables"
+msgstr "ตารางสี"
+
+msgid "Creates/modifies the color table associated with a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Color tables"
+msgid "Color tables (stddev)"
+msgstr "ตารางสี"
+
+msgid "Sets color rules based on stddev from a raster map's mean value."
+msgstr ""
+
+msgid "Manage color rules interactively"
+msgstr ""
+
+#, fuzzy
+#| msgid "Interactively edit category values"
+msgid "Interactive management of raster color tables."
+msgstr "แก้ไขค่าหมวดหมู่ แบบโต้ตอบ"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export color table"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+#, fuzzy
+#| msgid "Compares bit patterns with a raster map."
+msgid "Exports the color table associated with a raster map."
+msgstr "เปรียบเทียบ bit patterns ด้วย แผนที่เชิงภาพ"
+
+msgid "Blend 2 color rasters"
+msgstr ""
+
+msgid "Blends color components of two raster maps by a given ratio."
+msgstr ""
+
+msgid "Create RGB"
+msgstr "สร้าง RGB"
+
+msgid "Combines red, green and blue raster maps into a single composite raster map."
+msgstr ""
+
+msgid "RGB to HIS"
+msgstr "RGB ถึง HIS"
+
+msgid "Generates red, green and blue (RGB) raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
+msgstr ""
+
+msgid "Split raster into RGB"
+msgstr ""
+
+msgid "Splits a raster map into red, green and blue maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Query raster maps"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+#, fuzzy
+#| msgid "Query with coordinate(s)"
+msgid "Query values by coordinates"
+msgstr "ค้นหาด้วยค่าพิกัด"
+
+#, fuzzy
+#| msgid "Prints terse list of category values found in a raster map layer."
+msgid "Queries raster maps on their category values and category labels."
+msgstr "แสดงรายการค่าหมวดหมู่ แบบ กะทัดรัด ที่พบในชั้นแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Query any table"
+msgid "Query colors by value"
+msgstr "ร้องขอข้อมูลจากตารางใดๆ"
+
+msgid "Queries colors for a raster map layer."
+msgstr "ค้นหา สี สำหรับ ชั้นข้อมูลแผนที่เชิงภาพ"
+
+msgid "Raster buffers and distance"
+msgstr ""
+
+#, fuzzy
+#| msgid "Buffer vectors"
+msgid "Buffer rasters"
+msgstr "แผนที่ Buffer"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
+msgstr ""
+
+msgid "Buffer rasters (low memory)"
+msgstr ""
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values. This is the low-memory alternative to the classic r.buffer module."
+msgstr ""
+
+msgid "Concentric circles"
+msgstr ""
+
+msgid "Creates a raster map containing concentric rings around a given point."
+msgstr "สร้างแผนที่เชิงภาพที่มี  rings รอบๆจุด"
+
+msgid "Closest points"
+msgstr "จุดใกล้สุด"
+
+msgid "Locates the closest points between objects in two raster maps."
+msgstr "ระบุตำแหน่ง จุดที่ใกล้ที่สุดระหว่างวัตถุ ในแผนที่เชิงภาพ 2 แผนที่"
+
+msgid "Grow by one cell"
+msgstr ""
+
+msgid "Generates a raster map layer with contiguous areas grown by one cell."
+msgstr "สร้าง ชั้นแผนที่เชิงภาพ ด้วย  contiguous areas grown ด้วย 1 cell"
+
+#, fuzzy
+#| msgid "Nearest features"
+msgid "Distance to features"
+msgstr "ข้อมูลที่ใกล้ที่สุด"
+
+msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
+msgstr ""
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Creates a raster mask for limiting raster operation."
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+#, fuzzy
+#| msgid "Query any table"
+msgid "Query mask status"
+msgstr "ร้องขอข้อมูลจากตารางใดๆ"
+
+msgid "Reports presence or absence of a raster mask Provides information about the presence of a 2D raster mask as text output or return code"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "Raster map calculator"
+msgstr "แรสเตอร์ เป็น เวคเตอร์"
+
+msgid "Simplified raster map calculator"
+msgstr ""
+
+msgid "Calculates a new raster map from a simple r.mapcalc expression."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "Raster map calculator."
+msgstr "แรสเตอร์ เป็น เวคเตอร์"
+
+msgid "Neighborhood analysis"
+msgstr "การวเคราะหพนทขางเคยง"
+
+msgid "Moving window"
+msgstr "ย้ายหน้าต่าง"
+
+msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgstr "สร้างแต่ละค่าของหมวดหมู่ คำสั่งของหมวดหมู่ที่ระบุของ cell รอบๆและ ค่าใหม่ใน ชั้นแผนที่เชิงภาพ"
+
+msgid "Neighborhood points"
+msgstr "จุดรอบข้าง"
+
+#, fuzzy
+#| msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
+msgstr "สร้างแต่ละค่าของหมวดหมู่ คำสั่งของหมวดหมู่ที่ระบุของ cell รอบๆและ ค่าใหม่ใน ชั้นแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Remove vertex"
+msgid "Overlay rasters"
+msgstr "ลบ vertex"
+
+msgid "Cross product"
+msgstr "Cross product"
+
+msgid "Creates a cross product of the category values from multiple raster map layers."
+msgstr "สร้าง cross product ของหมวดหมู่ จากหลายชั้นข้อมูลแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Patch raster maps"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgstr "สร้าง ชั้นข้อมูลแผนที่เชิงภาพ composite โดยใช้ ค่าหมวดหมู่ที่รู้จัก จาก หนึ่ง(หรือ มากกว่า) ชั้นแผนที่ เพื่อที่จะเติมในพื้นที่ของ \"no data\" ในชั้นแผนที่อื่น"
+
+#, fuzzy
+#| msgid "Watershed basin creation"
+msgid "Raster series aggregation"
+msgstr "การสร้าง Watershed basin"
+
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgstr "ทำคำสั่ง ของแต่ละค่า cell ผลลัพธ์ จากค่าที่ให้  ในชั้นข้อมูลแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Flow accumulation"
+msgid "Raster series accumulation"
+msgstr "Flow accumulation"
+
+#, fuzzy
+#| msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgid "Makes each output cell value a accumulationfunction of the values assigned to the corresponding cells in the input raster map layers."
+msgstr "ทำคำสั่ง ของแต่ละค่า cell ผลลัพธ์ จากค่าที่ให้  ในชั้นข้อมูลแผนที่เชิงภาพ"
+
+msgid "Statistical overlay"
+msgstr "Statistical ของการซ้อนทับ"
+
+msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Statistical overlay"
+msgid "Quantiles overlay"
+msgstr "Statistical ของการซ้อนทับ"
+
+msgid "Compute category quantiles using two passes."
+msgstr ""
+
+msgid "Solar radiance and shadows"
+msgstr "Solar radiance และ shadows"
+
+msgid "LatLong map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Compares bit patterns with a raster map."
+msgid "Creates a latitude/longitude raster map."
+msgstr "เปรียบเทียบ bit patterns ด้วย แผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Solar radiance and shadows"
+msgid "Solar irradiance and irradiation"
+msgstr "Solar radiance และ shadows"
+
+msgid "Solar irradiance and irradiation model. Computes direct (beam), diffuse and reflected solar irradiation raster maps for given day, latitude, surface and atmospheric conditions. Solar parameters (e.g. sunrise, sunset times, declination, extraterrestrial irradiance, daylight length) are saved in the map history file. Alternatively, a local time can be specified to compute solar incidence angle and/or irradiance raster maps. The shadowing effect of the topography is optionally incorporated."
+msgstr ""
+
+msgid "Shadows map"
+msgstr "แผนที่ Shadow"
+
+msgid "Calculates cast shadow areas from sun position and elevation raster map. Either exact sun position (A) is specified, or date/time to calculate the sun position (B) by r.sunmask itself."
+msgstr ""
+
+msgid "Sunshine hours and solar angles"
+msgstr ""
+
+msgid "Calculates solar elevation, solar azimuth, and sun hours. Solar elevation: the angle between the direction of the geometric center of the sun's apparent disk and the (idealized) horizon. Solar azimuth: the angle from due north in clockwise direction."
+msgstr ""
+
+#, fuzzy
+#| msgid "Network analysis"
+msgid "Terrain analysis"
+msgstr "วเคราะหโครงขาย"
+
+#, fuzzy
+#| msgid "Generate points along lines"
+msgid "Generate contour lines"
+msgstr "สร้างจุดตามเส้น"
+
+msgid "Produces a vector map of specified contours from a raster map."
+msgstr ""
+
+msgid "Cost surface"
+msgstr "Cost surface"
+
+#, fuzzy
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr "ส่งออก ชั้นข้อมูลแผนที่เชิงภาพ ที่แสดง anisotropic cumulative cost ของ การเคลื่อนที่ ระหว่าง ตำแหน่งภูมิศาสตร์ที่ต่างกัน บนชั้นข้อมูลแผนที่ความสูง เชิงภาพ ที่ ค่า หมวดหมู่ cell แทน ความสูงที่รวมด้วย ชั้นข้อมูลแผนที่เชิงภาพ ที่ค่า cell แทน friction cost."
+
+msgid "Trace a path"
+msgstr ""
+
+msgid "Traces paths from starting points following input directions."
+msgstr ""
+
+msgid "Cumulative movement costs"
+msgstr "Cumulative movement costs"
+
+#, fuzzy
+msgid "Creates a raster map showing the anisotropic cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr "ส่งออก ชั้นข้อมูลแผนที่เชิงภาพ ที่แสดง anisotropic cumulative cost ของ การเคลื่อนที่ ระหว่าง ตำแหน่งภูมิศาสตร์ที่ต่างกัน บนชั้นข้อมูลแผนที่ความสูง เชิงภาพ ที่ ค่า หมวดหมู่ cell แทน ความสูงที่รวมด้วย ชั้นข้อมูลแผนที่เชิงภาพ ที่ค่า cell แทน friction cost."
+
+msgid "Least cost route or flow"
+msgstr "Least cost route หรือ flow"
+
+msgid "Traces a flow through an elevation model or cost surface on a raster map."
+msgstr ""
+
+msgid "Compute shaded relief"
+msgstr ""
+
+msgid "Creates shaded relief map from an elevation map (DEM)."
+msgstr ""
+
+msgid "Apply shade to raster"
+msgstr ""
+
+msgid "Drapes a color raster over an shaded relief or aspect map."
+msgstr ""
+
+msgid "Slope and aspect"
+msgstr "Slope และ aspect"
+
+msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map. Aspect is calculated counterclockwise from east."
+msgstr ""
+
+msgid "Landforms"
+msgstr ""
+
+msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
+msgstr ""
+
+msgid "Terrain parameters"
+msgstr "ตัวแปร Terrain"
+
+msgid "Extracts terrain parameters from a DEM. Uses a multi-scale approach by taking fitting quadratic parameters to any size window (via least squares)."
+msgstr ""
+
+msgid "Textural features"
+msgstr "ข้อมูล Textural"
+
+msgid "Generate images with textural features from a raster map."
+msgstr "สร้าง ภาพ ด้วยลวดลาย จากแผนที่เชิงภาพ"
+
+msgid "Visibility"
+msgstr "สามารถมองเห็น"
+
+msgid "Computes the viewshed of a point on an elevation raster map. Default format: NULL (invisible), vertical angle wrt viewpoint (visible)."
+msgstr ""
+
+msgid "Horizon angle"
+msgstr ""
+
+msgid "Computes horizon angle height from a digital elevation model. The module has two different modes of operation: 1. Computes the entire horizon around a single point whose coordinates are given with the 'coord' option. The horizon height (in radians). 2. Computes one or more raster maps of the horizon height in a single direction. The input for this is the angle (in degrees), which is measured counterclockwise with east=0, north=90 etc. The output is the horizon height in radians."
+msgstr ""
+
+msgid "Transform features"
+msgstr "ขอมล Transform"
+
+msgid "Clump"
+msgstr "Clump"
+
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
+msgstr ""
+
+msgid "Grow"
+msgstr "Grow"
+
+msgid "Thin"
+msgstr "บาง"
+
+#, fuzzy
+#| msgid "Rescales the range of category values in a raster map layer."
+msgid "Thins non-null cells that denote linear features in a raster map layer."
+msgstr "Rescales ช่วงของค่าหมวดหมู่ ในชั้นข้อมูลแผนที่เชิงภาพ"
+
+msgid "Hydrologic modeling"
+msgstr "แบบจำลอง Hydrologic"
+
+msgid "Carve stream channels"
+msgstr "Carve stream channels"
+
+msgid "Generates stream channels. Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
+msgstr ""
+
+msgid "Fill lake"
+msgstr "Fill lake"
+
+msgid "Fills lake at given point to given level."
+msgstr ""
+
+msgid "Depressionless map and flowlines"
+msgstr "แผนที่ Depressionless และ  flowlines"
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
+msgstr ""
+
+msgid "Flow accumulation"
+msgstr "Flow accumulation"
+
+msgid "Performs flow computation for massive grids."
+msgstr ""
+
+msgid "Flow lines"
+msgstr "Flow lines"
+
+msgid "Constructs flowlines. Computes flowlines, flowpath lengths, and flowaccumulation (contributing areas) from a elevation raster map."
+msgstr ""
+
+msgid "Watershed analysis"
+msgstr "Watershed analysis"
+
+msgid "Calculates hydrological parameters and RUSLE factors."
+msgstr ""
+
+msgid "Watershed subbasins"
+msgstr "Watershed subbasins"
+
+#, fuzzy
+#| msgid "Watershed subbasins"
+msgid "Generates watershed subbasins raster map."
+msgstr "Watershed subbasins"
+
+msgid "Watershed basin creation"
+msgstr "การสร้าง Watershed basin"
+
+msgid "Creates watershed basins from a drainage direction map."
+msgstr ""
+
+msgid "Extraction of stream networks"
+msgstr ""
+
+msgid "Performs stream network extraction."
+msgstr ""
+
+msgid "SIMWE Overland flow modeling"
+msgstr ""
+
+msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "SIMWE Sediment flux modeling"
+msgstr ""
+
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "Topographic index map"
+msgstr "แผนที่ดัชนี Topographic"
+
+msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
+msgstr ""
+
+msgid "TOPMODEL simulation"
+msgstr "การจำลอง TOPMODEL"
+
+msgid "Simulates TOPMODEL which is a physically based hydrologic model."
+msgstr "จำลอง TOPMODEL ที่มีโครงทางกายภาพแบบ hydrologic model."
+
+msgid "USLE K-factor"
+msgstr ""
+
+msgid "Computes USLE Soil Erodibility Factor (K)."
+msgstr ""
+
+msgid "USLE R-factor"
+msgstr ""
+
+msgid "Computes USLE R factor, Rainfall erosivity index."
+msgstr ""
+
+msgid "Groundwater modeling"
+msgstr ""
+
+msgid "Groundwater flow"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgstr "โปรแกรมตัวเลข สำหรับคำนวน Transient, Confined และ Unconfined groundwater flow แบบ 2 มิติ"
+
+msgid "Groundwater solute transport"
+msgstr ""
+
+#, fuzzy
+#| msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgid "Numerical calculation program for transient, confined and unconfined solute transport in two dimensions"
+msgstr "โปรแกรมตัวเลข สำหรับคำนวน Transient, Confined และ Unconfined groundwater flow แบบ 2 มิติ"
+
+msgid "Landscape patch analysis"
+msgstr "การวิเคราะห์ Landscape patch"
+
+msgid "Set up sampling and analysis framework"
+msgstr "กำหนด Sampling และ analysis framework"
+
+msgid "Configuration editor for r.li.'index'"
+msgstr "ตัวแก้การกำหนดค่า สำหรับ r.li.'index'"
+
+msgid "Edge density"
+msgstr "ความหนาแน่นของขอบ"
+
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
+msgstr "คำนวน ดัชนี edge density บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
+
+msgid "Contrast weighted edge density"
+msgstr "ผสมสีให้ตัดกัน"
+
+msgid "Calculates contrast weighted edge density index on a raster map"
+msgstr "คำนวน ดัชนี contrast weighted edge density บนแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Patch area range"
+msgid "Patch area mean"
+msgstr "ช่วง ของพื้นที่ Patch"
+
+msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
+msgstr "คำนวน ดัชนี mean patch size บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
+
+msgid "Patch area range"
+msgstr "ช่วง ของพื้นที่ Patch"
+
+msgid "Calculates range of patch area size on a raster map"
+msgstr "คำนวน  range ของ patch area size บนแผนที่เชิงภาพ"
+
+msgid "Patch area Std Dev"
+msgstr "Std Dev ของพื้นที่ Patch"
+
+msgid "Calculates standard deviation of patch area a raster map"
+msgstr "คำนวน  standard deviation ของ patch บนแผนที่เชิงภาพ"
+
+msgid "Patch area Coeff Var"
+msgstr "Coeff Var ของพื้นที่ Patch"
+
+msgid "Calculates coefficient of variation of patch area on a raster map"
+msgstr "คำนวน coefficient of variation ของ patch area บนแผนที่เชิงภาพ"
+
+msgid "Patch density"
+msgstr "ความหนาแน่นของ Patch"
+
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
+msgstr "คำนวน ดัชนี patch density บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
+
+msgid "Patch number"
+msgstr "จำนวนของ Patch"
+
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
+msgstr "คำนวน ดัชนี patch number บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
+
+msgid "Dominance's diversity"
+msgstr "ความหลากหลาย Dominance"
+
+msgid "Calculates dominance's diversity index on a raster map"
+msgstr "คำนวน ดัชนี  dominance's diversity บน แผนที่เชิงภาพ"
+
+msgid "Shannon's diversity"
+msgstr "ความหลากหลาย Shannon"
+
+msgid "Calculates Shannon's diversity index on a raster map"
+msgstr "คำนวน ดัชนี Shannon's diversity บนแผนที่เชิงภาพ"
+
+msgid "Simpson's diversity"
+msgstr "ความหลากหลาย Simpson"
+
+msgid "Calculates Simpson's diversity index on a raster map"
+msgstr "คำนวน ดัชนี  Simpson's diversity บนแผนที่เชิงภาพ"
+
+msgid "Richness"
+msgstr ""
+
+#, fuzzy
+#| msgid "Calculates shape index on a raster map"
+msgid "Calculates richness index on a raster map"
+msgstr "คำนวน ดัชนี shape บนแผนที่เชิงภาพ"
+
+msgid "Shape index"
+msgstr "ดัชนี Shape"
+
+msgid "Calculates shape index on a raster map"
+msgstr "คำนวน ดัชนี shape บนแผนที่เชิงภาพ"
+
+msgid "Wildfire modeling"
+msgstr "แบบจำลองไฟป่า"
+
+msgid "Rate of spread"
+msgstr "อัตราการขยาย"
+
+msgid "Generates rate of spread raster maps. Generates three, or four raster map layers showing the base (perpendicular) rate of spread (ROS), the maximum (forward) ROS, the direction of the maximum ROS, and optionally the maximum potential spotting distance for fire spread simulation."
+msgstr ""
+
+msgid "Least-cost spread paths"
+msgstr "Least-cost เส้นทางการกระจาย"
+
+msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
+msgstr "Recursively traces น้อยที่สุดของ cost path backwards ที่ cells จาก ที่กำหนด  cumulative cost"
+
+msgid "Anisotropic spread simulation"
+msgstr "แบบจำลองการกระจาย Anisotropic"
+
+msgid "Simulates elliptically anisotropic spread. Generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins. It optionally produces raster maps to contain backlink UTM coordinates for tracing spread paths. Usable for fire spread simulations."
+msgstr ""
+
+msgid "Change category values and labels"
+msgstr "เปลยน คา หมวดหม และ แถบขอความ"
+
+#, fuzzy
+#| msgid "Database information"
+msgid "Manage category information"
+msgstr "ข้อมูลฐานข้อมูล"
+
+msgid "Manages category values and labels associated with user-specified raster map layers."
+msgstr "จัดการ ค่าหมวดและแถบข้อความ ที่เกี่ยวข้องกับ ชั้นข้อมูลแผนที่ที่ผู้ใช้กำหนด"
+
+msgid "Interactively edit category values"
+msgstr "แก้ไขค่าหมวดหมู่ แบบโต้ตอบ"
+
+#, fuzzy
+#| msgid "Prints terse list of category values found in a raster map layer."
+msgid "Edits cell values in a raster map."
+msgstr "แสดงรายการค่าหมวดหมู่ แบบ กะทัดรัด ที่พบในชั้นแผนที่เชิงภาพ"
+
+msgid "Reclassify by size"
+msgstr "Reclassify โดย ขนาด"
+
+msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Reclassify by size"
+msgid "Reclassify"
+msgstr "Reclassify โดย ขนาด"
+
+msgid "Reclassify raster map based on category values. Creates a new raster map whose category values are based upon a reclassification of the categories in an existing raster map."
+msgstr ""
+
+msgid "Recode"
+msgstr ""
+
+msgid "Recodes categorical raster maps."
+msgstr "Recodes หมวดหมู่ ของ แผนที่เชิงภาพ"
+
+msgid "Rescale"
+msgstr "Rescale"
+
+msgid "Rescales the range of category values in a raster map layer."
+msgstr "Rescales ช่วงของค่าหมวดหมู่ ในชั้นข้อมูลแผนที่เชิงภาพ"
+
+msgid "Rescale with histogram"
+msgstr "Rescale โดย histogram"
+
+msgid "Rescales histogram equalized the range of category values in a raster map layer."
+msgstr "Rescales histogram equalized ค่าช่วงของหมวดหมู่  ในชั้นข้อมูลแผนที่เชิงภาพ"
+
+msgid "Generate random cells"
+msgstr "สร้างเซลล์สุ่ม"
+
+#, fuzzy
+#| msgid "Generate random cells"
+msgid "Random cells"
+msgstr "สร้างเซลล์สุ่ม"
+
+msgid "Generates random cell values with spatial dependence."
+msgstr "สร้าง random cell values ด้วย spatial dependence."
+
+msgid "Random cells and vector points"
+msgstr "เซลล์สุ่มและจุดเวคเตอร์"
+
+msgid "Creates randomly placed raster cells or vector points Creates a raster map and vector point map containing randomly located cells and points."
+msgstr ""
+
+msgid "Generate surfaces"
+msgstr "สร้างพื้นผิว"
+
+msgid "Fractal surface"
+msgstr "พื้นผิว Fractal"
+
+msgid "Creates a fractal surface of a given fractal dimension."
+msgstr "สร้าง fractal surface จาก มิติของ fractal"
+
+#, fuzzy
+#| msgid "Gaussian deviates surface"
+msgid "Gaussian kernel density surface"
+msgstr "พื้นผิว Gaussian deviates"
+
+msgid "Generates a raster density map from vector points map. Density is computed using a moving kernel. Optionally generates a vector density map on a vector network."
+msgstr ""
+
+msgid "Gaussian deviates surface"
+msgstr "พื้นผิว Gaussian deviates"
+
+msgid "Generates a raster map using gaussian random number generator. Mean and standard deviation of gaussian deviates can be expressed by the user."
+msgstr ""
+
+msgid "Plane"
+msgstr "ระนาบ"
+
+msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
+msgstr ""
+
+msgid "Random deviates surface"
+msgstr "Random deviates surface"
+
+msgid "Produces a raster surface map of uniform random deviates with defined range."
+msgstr ""
+
+msgid "Random surface with spatial dependence"
+msgstr "Random surface ด้วย spatial dependence"
+
+msgid "Generates random surface(s) with spatial dependence."
+msgstr "สร้าง random random surface(s) ด้วย spatial dependence."
+
+msgid "Interpolate surfaces"
+msgstr "Interpolate surfaces"
+
+msgid "Bilinear and bicubic from vector points"
+msgstr "Bilinear และ  bicubic จากจุดแผนที่เชิงเส้น"
+
+msgid "Performs bicubic or bilinear spline interpolation with Tykhonov regularization."
+msgstr ""
+
+msgid "IDW from raster points"
+msgstr "IDW จากจุดแรสเตอร์"
+
+msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+msgid "IDW from vector points"
+msgstr "IDW จากจุดเวคเตอร์"
+
+msgid "Provides surface interpolation from vector point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+msgid "Raster contours"
+msgstr "เส้นชั้นความสูงเชิงภาพ"
+
+#, fuzzy
+#| msgid "Generates a raster map layer with contiguous areas grown by one cell."
+msgid "Generates surface raster map from rasterized contours."
+msgstr "สร้าง ชั้นแผนที่เชิงภาพ ด้วย  contiguous areas grown ด้วย 1 cell"
+
+msgid "Regularized spline tension"
+msgstr "Regularized spline tension"
+
+msgid "Performs surface interpolation from vector points map by splines. Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension."
+msgstr ""
+
+msgid "Raster series interpolation"
+msgstr ""
+
+msgid "Interpolates raster maps located (temporal or spatial) in between input raster maps at specific sampling positions."
+msgstr ""
+
+msgid "Fill NULL cells"
+msgstr "เติม NULL cells"
+
+msgid "Fills no-data areas in raster maps using spline interpolation."
+msgstr ""
+
+#, fuzzy
+#| msgid "Fill NULL cells"
+msgid "Fill NULL cells using IDW"
+msgstr "เติม NULL cells"
+
+msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
+msgstr ""
+
+msgid "Reports and statistics"
+msgstr "รายงานและสถต"
+
+#, fuzzy
+#| msgid "Updates vector map metadata."
+msgid "Basic raster metadata"
+msgstr "ปรับปรุง metadata ของแผนที่เชิงเส้น."
+
+#, fuzzy
+#| msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgid "Outputs basic information about a raster map."
+msgstr "ออกผลลัพธ์พื้นฐาน เกี่ยวกับ ชั้นข้อมูล แผนที่เชิงภาพ 3 มิติ ที่ผู้ใช้ระบุ"
+
+msgid "General statistics"
+msgstr "สถิติทั่วไป"
+
+#, fuzzy
+#| msgid "Update area attributes from raster"
+msgid "Generates area statistics for raster map."
+msgstr "ปรับปรุง รายละเอียด Area จากแผนที่เชิงภาพ"
+
+msgid "Quantiles for large data sets"
+msgstr ""
+
+msgid "Compute quantiles using two passes."
+msgstr ""
+
+msgid "Range of category values"
+msgstr "ช่วงของ ค่าหมวดหมู่"
+
+msgid "Prints terse list of category values found in a raster map layer."
+msgstr "แสดงรายการค่าหมวดหมู่ แบบ กะทัดรัด ที่พบในชั้นแผนที่เชิงภาพ"
+
+msgid "Sum area by raster map and category"
+msgstr ""
+
+#, fuzzy
+#| msgid "Recodes categorical raster maps."
+msgid "Reports statistics for raster maps."
+msgstr "Recodes หมวดหมู่ ของ แผนที่เชิงภาพ"
+
+msgid "Statistics for clumped cells"
+msgstr ""
+
+msgid "Calculates the volume of data \"clumps\". Optionally produces a GRASS vector points map containing the calculated centroids of these clumps."
+msgstr ""
+
+msgid "Total corrected area"
+msgstr ""
+
+#, fuzzy
+#| msgid "Calculates standard deviation of patch area a raster map"
+msgid "Prints estimation of surface area for raster map."
+msgstr "คำนวน  standard deviation ของ patch บนแผนที่เชิงภาพ"
+
+msgid "Calculates univariate statistics from the non-null cells of a raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "Sample transects"
+msgstr "Sample transects"
+
+msgid "Outputs the raster map layer values lying on user-defined line(s)."
+msgstr "ส่งออก ค่าชั้นข้อมูลแผนที่เชิงภาพ บนบรรทัดที่ผู้ใช้ระบุ"
+
+msgid "Sample transects (bearing/distance)"
+msgstr "Sample transects (ทิศทาง/ระยะทาง)"
+
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
+msgstr "ค่าส่งออก ของชั้นข้อมูลแผนที่เชิงภาพ วางตัวตาม transect line(s) ที่ผู้ใช้กำหนด"
+
+msgid "Covariance/correlation"
+msgstr "Covariance/correlation"
+
+msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
+msgstr "ผลลัพธ์ของ covariance/correlation matrix สำหรับชั้นข้อมูลแผนที่เชิงภาพที่ผู้ใช้กำหนด"
+
+msgid "Linear regression"
+msgstr "การเสื่อมถอย เชิงเส้น"
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x."
+msgstr ""
+
+#, fuzzy
+#| msgid "Linear regression"
+msgid "Multiple regression"
+msgstr "การเสื่อมถอย เชิงเส้น"
+
+#, fuzzy
+#| msgid "Calculates shape index on a raster map"
+msgid "Calculates multiple linear regression from raster maps."
+msgstr "คำนวน ดัชนี shape บนแผนที่เชิงภาพ"
+
+msgid "Mutual category occurrences"
+msgstr ""
+
+msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
+msgstr "ตารางมีความสัมพันธ์กัน ของหมวดหมู่ สำหรับ 2 ชั้นข้อมูลแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Range of category values"
+msgid "Modal category value"
+msgstr "ช่วงของ ค่าหมวดหมู่"
+
+msgid "Finds the mode of values in a cover map within areas assigned the same category value in a user-specified base map."
+msgstr ""
+
+#, fuzzy
+#| msgid "General statistics"
+msgid "Zonal statistics"
+msgstr "สถิติทั่วไป"
+
+msgid "Calculates category or object oriented statistics."
+msgstr ""
+
+#, fuzzy
+#| msgid "General statistics"
+msgid "Object geometry statistics"
+msgstr "สถิติทั่วไป"
+
+msgid "Calculates geometry parameters for raster objects."
+msgstr ""
+
+#, fuzzy
+#| msgid "vector"
+msgid "&Vector"
+msgstr "เวคเตอร์"
+
+#, fuzzy
+msgid "Develop vector map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Create new empty vector map"
+msgstr "สร้าง mapset ใหม่"
+
+msgid "Edit vector map (non-interactively)"
+msgstr ""
+
+msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
+msgstr "แก้ไข แผนที่เชิงเส้น, ยอมให้เพิ่ม,ลบ และ แก้ไข ข้อมูลที่เลือก."
+
+msgid "Convert object types"
+msgstr "แปลง ชนิดวัตถุ"
+
+#, fuzzy
+#| msgid "Range of category values"
+msgid "Changes type of vector features."
+msgstr "ช่วงของ ค่าหมวดหมู่"
+
+msgid "Parallel lines"
+msgstr "เส้นขนาน"
+
+#, fuzzy
+#| msgid "Creates points/segments from input vector lines and positions."
+msgid "Creates parallel line to input vector lines."
+msgstr "สร้าง จุด/ชิ้นส่วน จากแผนที่เชิงเส้น และตำแหน่ง ที่จะนำเข้า."
+
+msgid "Dissolve boundaries"
+msgstr "ละลาย ขอบเขต"
+
+#, fuzzy
+msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
+msgstr "Dissolves เขต ระหว่าง พื้นที่ที่อยู่ติดกันและมี ข้อมูลเหมือนกัน"
+
+msgid "Create 3D vector over raster"
+msgstr "สร้าง 3D เวคเตอร์บนแรสเตอร์"
+
+msgid "Converts 2D vector features to 3D by sampling of elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Extrude 3D vector map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Extrudes flat vector features to 3D vector features with defined height. Optionally the height can be derived from sampling of elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create table"
+msgid "Create labels"
+msgstr "สร้างตาราง"
+
+msgid "Creates paint labels for a vector map from attached attributes."
+msgstr "สร้าง แถบข้อความ สำหรับ แผนที่เชิงเส้น จาก รายละเอียดที่แนบ."
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Reposition vector map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Performs an affine transformation (shift, scale and rotate) on vector map."
+msgstr ""
+
+#, fuzzy
+msgid "Rectify vector map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Rectifies a vector by computing a coordinate transformation for each object in the vector based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Updates vector map metadata."
+msgid "Updates vector map metadata."
+msgstr "ปรับปรุง metadata ของแผนที่เชิงเส้น."
+
+msgid "Manage timestamp"
+msgstr ""
+
+#, fuzzy
+#| msgid "Print/add/remove a timestamp for a 3D raster map"
+msgid "Modifies a timestamp for a vector map. Print/add/remove a timestamp for a vector map."
+msgstr "พิมพ์/เพิ่ม/เอาออก  timestamp สำหรับ แผนที่เชิงภาพ 3 มิติ"
+
+msgid "Create labels with simulated annealing"
+msgstr ""
+
+msgid "Create optimally placed labels for vector map(s)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate points"
+msgid "Decimate points"
+msgstr "สร้างจุด"
+
+msgid "Decimates a point cloud Copies points from one vector to another while applying different decimations"
+msgstr ""
+
+#, fuzzy
+#| msgid "Support file maintenance"
+msgid "Topology maintenance"
+msgstr "การบำรุงรักษา Support ไฟล์"
+
+msgid "Create or rebuild topology"
+msgstr ""
+
+msgid "Creates topology for vector map. Optionally also checks for topological errors."
+msgstr ""
+
+#, fuzzy
+#| msgid "Toolset for cleaning topology of vector map."
+msgid "Rebuild topology on all vector maps"
+msgstr "ชุดเครื่องมือ สำหรับ  cleaning topology ของแผนที่เชิงเส้น"
+
+msgid "Rebuilds topology on all vector maps in the current mapset."
+msgstr ""
+
+msgid "Build polylines"
+msgstr "สร้าง polyline"
+
+msgid "Builds polylines from lines or boundaries."
+msgstr "สร้าง  polylines จาก เส้น หรือ ขอบเขต"
+
+#, fuzzy
+#| msgid "Split polylines"
+msgid "Split lines"
+msgstr "ตัด polyline"
+
+msgid "Splits vector lines to shorter segments."
+msgstr ""
+
+msgid "Split polylines"
+msgstr "ตัด polyline"
+
+msgid "Creates points/segments from input vector lines and positions."
+msgstr "สร้าง จุด/ชิ้นส่วน จากแผนที่เชิงเส้น และตำแหน่ง ที่จะนำเข้า."
+
+#, fuzzy
+msgid "Clean vector map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Toolset for cleaning topology of vector map."
+msgstr "ชุดเครื่องมือ สำหรับ  cleaning topology ของแผนที่เชิงเส้น"
+
+msgid "Fill holes in areas"
+msgstr ""
+
+msgid "Fill holes in areas by keeping only outer boundaries"
+msgstr ""
+
+msgid "Smooth or simplify"
+msgstr ""
+
+msgid "Performs vector based generalization."
+msgstr ""
+
+msgid "Add centroids"
+msgstr "เพิ่มจุดศูนย์ถ่วง"
+
+msgid "Adds missing centroids to closed boundaries."
+msgstr "เพิ่ม จุดศูนย์ถ่วง ของรูปปิดที่ไม่มี จุดศูนย์ถ่วง"
+
+msgid "Creates/modifies the color table associated with a vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Interactively edit category values"
+msgid "Interactive management of vector color tables."
+msgstr "แก้ไขค่าหมวดหมู่ แบบโต้ตอบ"
+
+msgid "Exports the color table associated with a vector map."
+msgstr ""
+
+#, fuzzy
+msgid "Query vector map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Query with coordinate(s)"
+msgstr "ค้นหาด้วยค่าพิกัด"
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Queries a vector map at given locations."
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+#, fuzzy
+#| msgid "Prints vector map attributes."
+msgid "Query vector attribute data"
+msgstr "แสดง รายละเอียด ของแผนที่เชิงภาพ"
+
+msgid "Prints vector map attributes."
+msgstr "แสดง รายละเอียด ของแผนที่เชิงภาพ"
+
+msgid "Feature selection"
+msgstr ""
+
+#, fuzzy
+#| msgid "Display attributes"
+msgid "Select by attributes"
+msgstr "แสดงข้อมูลลักษณะ"
+
+msgid "Selects vector features from an existing vector map and creates a new vector map containing only the selected features."
+msgstr ""
+
+msgid "Select by another map"
+msgstr ""
+
+msgid "Selects features from vector map (A) by features from other vector map (B)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate points along lines"
+msgid "Convert areas or points to lines"
+msgstr "สร้างจุดตามเส้น"
+
+msgid "Converts vector polygons or points to lines."
+msgstr ""
+
+msgid "Buffer vectors"
+msgstr "แผนที่ Buffer"
+
+msgid "Creates a buffer around vector features of given type."
+msgstr ""
+
+#, fuzzy
+#| msgid "Lidar analysis"
+msgid "Point analysis"
+msgstr "การวิเคราะห์ Lidar"
+
+msgid "Identify and remove outliers"
+msgstr ""
+
+msgid "Removes outliers from vector point data."
+msgstr "เอา outliers ออกจาก แผนที่เชิงเส้นแบบจุด"
+
+msgid "Identify point clusters"
+msgstr ""
+
+msgid "Performs cluster identification."
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists"
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists."
+msgstr ""
+
+msgid "Perturb points"
+msgstr "จุด Perturb"
+
+#, fuzzy
+#| msgid "Random cells and vector points"
+msgid "Random location perturbations of vector points."
+msgstr "เซลล์สุ่มและจุดเวคเตอร์"
+
+#, fuzzy
+#| msgid "Remove outliers in point sets"
+msgid "Test/training point sets"
+msgstr "เอา  outliers ใน ชุดของจุด ออก"
+
+msgid "Randomly partition points into test/train sets."
+msgstr "สุ่ม จุด partitionไปเป็น ชุด test/train."
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Tests for normality for vector points"
+msgstr "IDW จากจุดเวคเตอร์"
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Tests for normality for vector points."
+msgstr "IDW จากจุดเวคเตอร์"
+
+#, fuzzy
+#| msgid "Lidar analysis"
+msgid "Point pattern analysis"
+msgstr "การวิเคราะห์ Lidar"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Lidar analysis"
+msgstr "การวิเคราะห์ Lidar"
+
+msgid "Detect edges"
+msgstr "ค้นหา ขอบ"
+
+msgid "Detects the object's edges from a LIDAR data set."
+msgstr "ตรวจจับ ขอบของวัตถุ จาก ชุดข้อมูล LIDAR"
+
+msgid "Detect interiors"
+msgstr "ตรวจจับ ภายใน"
+
+msgid "Building contour determination and Region Growing algorithm for determining the building inside"
+msgstr "กำลังสร้าง contour determination และ Region Growing algorithm สำหรับ determining the building inside"
+
+msgid "Correct and reclassify objects"
+msgstr "แก้ไข และ  reclassify วัตถุ"
+
+msgid "Corrects the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
+msgstr ""
+
+msgid "Linear referencing"
+msgstr "การอ้างอิงตำแหน่งเชิงเส้น"
+
+msgid "Create LRS"
+msgstr "สร้าง LRS"
+
+msgid "Creates a linear reference system."
+msgstr ""
+
+msgid "Create stationing"
+msgstr "สร้าง Stationing"
+
+#, fuzzy
+#| msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgid "Creates stationing from input lines, and linear reference system."
+msgstr "สร้าง  จุด/ชิ้นส่วน จากเส้นที่นำเข้า, ระบบอ้างอิงเชิงเส้น และ ตำแหน่ง อ่านจาก stdin หรือ ไฟล์."
+
+msgid "Create points/segments"
+msgstr "สร้าง จุด/ชิ้นส่วน"
+
+msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgstr "สร้าง  จุด/ชิ้นส่วน จากเส้นที่นำเข้า, ระบบอ้างอิงเชิงเส้น และ ตำแหน่ง อ่านจาก stdin หรือ ไฟล์."
+
+msgid "Find line id and offset"
+msgstr ""
+
+msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
+msgstr "ค้นหา เส้น  id และ real km+offset สำหรับ จุดที่ให้ ในแผนที่เชิงเส้น โดยใช้ ระบบอ้างอิงตำแหน่งเชิงเส้น."
+
+msgid "Nearest features"
+msgstr "ข้อมูลที่ใกล้ที่สุด"
+
+msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
+msgstr ""
+
+msgid "Network analysis"
+msgstr "วเคราะหโครงขาย"
+
+msgid "Tool for interactive vector network analysis."
+msgstr ""
+
+#, fuzzy
+#| msgid "Network analysis"
+msgid "Network preparation"
+msgstr "วเคราะหโครงขาย"
+
+#, fuzzy
+#| msgid "Support file maintenance"
+msgid "Performs network maintenance."
+msgstr "การบำรุงรักษา Support ไฟล์"
+
+msgid "Allocate subnets"
+msgstr "กำหนด subnets"
+
+msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Split net"
+msgstr "ตัด net"
+
+msgid "Splits subnets for nearest centers by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Shortest path"
+msgstr ""
+
+msgid "Finds shortest path on vector network."
+msgstr "หา shortest path บน vector network."
+
+#, fuzzy
+#| msgid "Finds shortest path on vector network."
+msgid "Shortest path for sets of features"
+msgstr "หา shortest path บน vector network."
+
+msgid "Computes shortest distance via the network between the given sets of features. Finds the shortest paths from each 'from' point to the nearest 'to' feature and various information about this relation are uploaded to the attribute table."
+msgstr ""
+
+msgid "Shortest path using timetables"
+msgstr ""
+
+#, fuzzy
+#| msgid "Finds shortest path on vector network."
+msgid "Finds shortest path using timetables."
+msgstr "หา shortest path บน vector network."
+
+msgid "Shortest path for all pairs"
+msgstr ""
+
+msgid "Computes the shortest path between all pairs of nodes in the network."
+msgstr ""
+
+msgid "Visibility network"
+msgstr "Network ที่มองเห็น"
+
+msgid "Performs visibility graph construction."
+msgstr ""
+
+msgid "Bridges and articulation points"
+msgstr ""
+
+msgid "Computes bridges and articulation points in the network."
+msgstr ""
+
+msgid "Maximum flow"
+msgstr ""
+
+msgid "Computes the maximum flow between two sets of nodes in the network."
+msgstr ""
+
+msgid "Vertex connectivity"
+msgstr ""
+
+msgid "Computes vertex connectivity between two sets of nodes in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Principal components"
+msgid "Components"
+msgstr "ส่วนประกอบหลัก"
+
+msgid "Computes strongly and weakly connected components in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Test normality"
+msgid "Centrality"
+msgstr "ทดสอบ"
+
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
+msgstr ""
+
+msgid "Steiner tree"
+msgstr "Steiner tree"
+
+msgid "Creates Steiner tree for the network and given terminals. Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm is used in this module so the result may be sub optimal."
+msgstr ""
+
+msgid "Minimum spanning tree"
+msgstr ""
+
+msgid "Computes minimum spanning tree for the network."
+msgstr ""
+
+msgid "Traveling salesman analysis"
+msgstr "การวิเคราะห์การเดินทางของ Salesman"
+
+msgid "Creates a cycle connecting given nodes (Traveling salesman problem). Note that TSP is NP-hard, heuristic algorithm is used by this module and created cycle may be sub optimal"
+msgstr ""
+
+#, fuzzy
+msgid "Overlay vector maps"
+msgstr "ซ้อนทับ แผนที่เชิงเส้น 2 แผนที่"
+
+#, fuzzy
+msgid "Clip vector maps"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Extracts features of input map which overlay features of clip map."
+msgstr ""
+
+msgid "Overlays two vector maps offering clip, intersection, difference, symmetrical difference, union operators."
+msgstr ""
+
+#, fuzzy
+msgid "Patch vector maps"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Creates a new vector map by combining other vector maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Manage categories"
+msgstr "คัดลอกหมวดหมู่"
+
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Change or report categories"
+msgstr "คัดลอกหมวดหมู่"
+
+msgid "Attaches, deletes or reports vector categories to/from/of map geometry."
+msgstr ""
+
+msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
+msgstr ""
+
+msgid "Update area attributes from raster"
+msgstr "ปรับปรุง รายละเอียด Area จากแผนที่เชิงภาพ"
+
+msgid "Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update area attributes from raster"
+msgid "Update area attributes from vector"
+msgstr "ปรับปรุง รายละเอียด Area จากแผนที่เชิงภาพ"
+
+msgid "Count points in areas, calculate statistics from point attributes."
+msgstr ""
+
+msgid "Update point attributes from areas"
+msgstr "ปรับปรุง รายละเอียด จุด จาก Areas"
+
+msgid "Uploads vector values at positions of vector points to the table."
+msgstr "Uploads ค่าแผนที่เชิงเส้น ที่ตำแหน่งของจุด ไปที่ตาราง"
+
+#, fuzzy
+#| msgid "Update area attributes from raster"
+msgid "Update database values from vector"
+msgstr "ปรับปรุง รายละเอียด Area จากแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Update area attributes from raster"
+msgid "Populates attribute values from vector features."
+msgstr "ปรับปรุง รายละเอียด Area จากแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Sample raster maps at point locations"
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+msgid "Uploads raster values at positions of vector points to the table."
+msgstr "ส่งค่าของแผนที่เชิงภาพ ที่ตำแหน่ง ของ จุดเชิงเส้น ไปที่ตาราง."
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Sample 3D raster at point locations"
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+#, fuzzy
+#| msgid "Uploads raster values at positions of vector points to the table."
+msgid "Uploads 3D raster values at positions of vector points to the table."
+msgstr "ส่งค่าของแผนที่เชิงภาพ ที่ตำแหน่ง ของ จุดเชิงเส้น ไปที่ตาราง."
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Sample temporal raster dataset at point locations"
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+#, fuzzy
+#| msgid "Uploads raster values at positions of vector points to the table."
+msgid "Uploads space time raster dataset values at positions of vector points to the table."
+msgstr "ส่งค่าของแผนที่เชิงภาพ ที่ตำแหน่ง ของ จุดเชิงเส้น ไปที่ตาราง."
+
+msgid "Sample raster neighborhood around points"
+msgstr "แผนที่เชิงภาพ Sample neighborhood ที่ตำแหน่งรอบๆจุด"
+
+msgid "Samples a raster map at vector point locations."
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+msgid "Generate area for current region"
+msgstr "สร้าง Area สำหรับ ขอบเขต ปัจจุบัน"
+
+msgid "Creates a vector polygon from the current region extent."
+msgstr ""
+
+msgid "Generate areas from points"
+msgstr "สร้างพื้นที่จากจุด"
+
+msgid "Convex hull"
+msgstr ""
+
+msgid "Produces a 2D/3D convex hull for a given vector map."
+msgstr ""
+
+msgid "Delaunay triangles"
+msgstr "Delaunay triangles"
+
+msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgstr "สร้าง Delaunay triangulation จาก แผนที่เชิงเส้นนำเข้า ที่มี จุด หรือ จุดศูนย์ถ่วง."
+
+msgid "Voronoi diagram/Thiessen polygons"
+msgstr "Voronoi diagram/Thiessen polygons"
+
+#, fuzzy
+#| msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
+msgstr "สร้าง Delaunay triangulation จาก แผนที่เชิงเส้นนำเข้า ที่มี จุด หรือ จุดศูนย์ถ่วง."
+
+#, fuzzy
+#| msgid "Generate points"
+msgid "Generate grid"
+msgstr "สร้างจุด"
+
+msgid "Creates a vector map of a user-defined grid."
+msgstr ""
+
+msgid "Generate points"
+msgstr "สร้างจุด"
+
+#, fuzzy
+#| msgid "Generate random points"
+msgid "Generate from database"
+msgstr "สร้างจุดสุ่ม"
+
+msgid "Creates new vector (points) map from database table containing coordinates."
+msgstr "สร้าง แผนที่เชิงเส้นจุดใหม่ จาก ตาราง ฐานข้อมูล ที่มี ค่าพิกัด"
+
+msgid "Generate points along lines"
+msgstr "สร้างจุดตามเส้น"
+
+msgid "Creates points along input lines in new vector map with 2 layers."
+msgstr ""
+
+msgid "Generate random points"
+msgstr "สร้างจุดสุ่ม"
+
+#, fuzzy
+#| msgid "Generate random points"
+msgid "Generates random 2D/3D vector points."
+msgstr "สร้างจุดสุ่ม"
+
+msgid "Remove outliers in point sets"
+msgstr "เอา  outliers ใน ชุดของจุด ออก"
+
+#, fuzzy
+#| msgid "Updates vector map metadata."
+msgid "Basic vector metadata"
+msgstr "ปรับปรุง metadata ของแผนที่เชิงเส้น."
+
+#, fuzzy
+#| msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgid "Outputs basic information about a vector map."
+msgstr "ออกผลลัพธ์พื้นฐาน เกี่ยวกับ ชั้นข้อมูล แผนที่เชิงภาพ 3 มิติ ที่ผู้ใช้ระบุ"
+
+#, fuzzy
+#| msgid "Display attributes"
+msgid "Classify attribute data"
+msgstr "แสดงข้อมูลลักษณะ"
+
+msgid "Classifies attribute data, e.g. for thematic mapping"
+msgstr ""
+
+msgid "Report topology by category"
+msgstr "รายงาน topology โดยหมวดหมู่"
+
+#, fuzzy
+#| msgid "Imports older versions of GRASS vector maps."
+msgid "Reports geometry statistics for vector maps."
+msgstr "นำเข้า แผนที่เชิงเส้น รุ่นเก่า ของ GRASS"
+
+#, fuzzy
+msgid "Univariate attribute statistics for points"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+msgid "Calculates univariate statistics of vector map features. Variance and standard deviation is calculated only for points if specified."
+msgstr ""
+
+msgid "Univariate statistics for attribute columns"
+msgstr ""
+
+msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgstr "คำนวน univariate statistics บน column ของตารางที่เลือก สำหรับแผนที่เชิงเส้นของ GRASS"
+
+msgid "Vector map profiling tool"
+msgstr ""
+
+msgid "Quadrat indices"
+msgstr "ดัชนี Quadrat"
+
+msgid "Test normality"
+msgstr "ทดสอบ"
+
+msgid "&Imagery"
+msgstr ""
+
+msgid "Develop images and groups"
+msgstr "ปรับปรุง ภาพและกลุ่ม"
+
+msgid "Create/edit group"
+msgstr "สร้าง/แก้ไข กลุ่ม"
+
+msgid "Creates, edits, and lists groups of imagery files."
+msgstr ""
+
+msgid "Target group"
+msgstr "กลุ่ม เป้าหมาย"
+
+msgid "Targets an imagery group to a GRASS location and mapset."
+msgstr "กลุ่มภาพเป้าหมาย ตำแหน่ง และ ชุดแผนที่  ของ GRASS"
+
+msgid "Find imagery files"
+msgstr ""
+
+msgid "Semantic label library"
+msgstr ""
+
+msgid "Prints available semantic label information used for multispectral data."
+msgstr ""
+
+msgid "Mosaic images"
+msgstr "ต่อภาพ"
+
+msgid "Mosaics several images and extends colormap."
+msgstr ""
+
+msgid "Manage image colors"
+msgstr ""
+
+msgid "Color balance for RGB"
+msgstr "สี RGB"
+
+msgid "Performs auto-balancing of colors for RGB images."
+msgstr ""
+
+msgid "HIS to RGB"
+msgstr "HIS ไปเป็น RGB"
+
+msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
+msgstr ""
+
+msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector to raster"
+msgid "Rectify image or raster"
+msgstr "จากเวคเตอร์เป็นแรสเตอร์"
+
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate surfaces"
+msgid "Generate histogram of image"
+msgstr "สร้างพื้นผิว"
+
+msgid "Spectral response"
+msgstr "Spectral ที่ตอบสนอง"
+
+msgid "Displays spectral response at user specified locations in group or images."
+msgstr ""
+
+msgid "Pan sharpening"
+msgstr ""
+
+msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
+msgstr ""
+
+msgid "Classify image"
+msgstr "การจำแนก ภาพ"
+
+msgid "Clustering input for unsupervised classification"
+msgstr "Clustering input สำหรับ unsupervised classification"
+
+msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
+msgstr ""
+
+msgid "Input for supervised MLC"
+msgstr "นำเข้า supervised MLC"
+
+#, fuzzy
+#| msgid "Generate images with textural features from a raster map."
+msgid "Generates statistics for i.maxlik from raster map."
+msgstr "สร้าง ภาพ ด้วยลวดลาย จากแผนที่เชิงภาพ"
+
+msgid "Maximum likelihood classification (MLC)"
+msgstr ""
+
+msgid "Classifies the cell spectral reflectances in imagery data. Classification is based on the spectral signature information generated by either i.cluster, g.gui.iclass, or i.gensig."
+msgstr ""
+
+#, fuzzy
+#| msgid "Clustering input for unsupervised classification"
+msgid "Interactive input for supervised classification"
+msgstr "Clustering input สำหรับ unsupervised classification"
+
+msgid "Generates spectral signatures by allowing the user to outline training areas."
+msgstr ""
+
+msgid "Input for supervised SMAP"
+msgstr "นำเข้า supervised SMAP"
+
+#, fuzzy
+#| msgid "Generate images with textural features from a raster map."
+msgid "Generates statistics for i.smap from raster map."
+msgstr "สร้าง ภาพ ด้วยลวดลาย จากแผนที่เชิงภาพ"
+
+msgid "Sequential maximum a posteriori classification (SMAP)"
+msgstr ""
+
+msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
+msgstr "สร้าง contextual image classification ใช้การประมาณ sequential maximum a posteriori (SMAP)"
+
+#, fuzzy
+msgid "Input for supervised SVM"
+msgstr "นำเข้า supervised SMAP"
+
+msgid "Train a SVM Train a Support Vector Machine"
+msgstr ""
+
+msgid "Support Vector Machines classification (SVM)"
+msgstr ""
+
+msgid "Predict with a SVM Predict with a Support Vector Machine"
+msgstr ""
+
+msgid "Manage signature files"
+msgstr ""
+
+msgid "Manage imagery classification signature files"
+msgstr ""
+
+msgid "Object segmentation"
+msgstr ""
+
+msgid "Identifies segments (objects) from imagery data."
+msgstr ""
+
+msgid "Filter image"
+msgstr "การกรอง ภาพ"
+
+msgid "Edge detection"
+msgstr "ค้นหาขอบมุม"
+
+msgid "Zero-crossing \"edge detection\" raster function for image processing."
+msgstr "Zero-crossing \"edge detection\" คำสั่งของภาพ สำหรับ image processing."
+
+msgid "Matrix/convolving filter"
+msgstr "ตัวกรอง Matrix/convolving"
+
+msgid "Performs raster map matrix filter."
+msgstr ""
+
+msgid "Edge preserving smoothing"
+msgstr ""
+
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+#, fuzzy
+#| msgid "Transform features"
+msgid "Transform image"
+msgstr "ขอมล Transform"
+
+msgid "Canonical correlation"
+msgstr "Canonical correlation"
+
+msgid "Canonical components analysis (CCA) program for image processing."
+msgstr ""
+
+msgid "Principal components"
+msgstr "ส่วนประกอบหลัก"
+
+#, fuzzy
+#| msgid "Fast Fourier Transform (FFT) for image processing."
+msgid "Principal components analysis (PCA) for image processing."
+msgstr "Fast Fourier Transform (FFT) for image processing."
+
+msgid "Fast Fourier"
+msgstr "Fast Fourier"
+
+msgid "Fast Fourier Transform (FFT) for image processing."
+msgstr "Fast Fourier Transform (FFT) for image processing."
+
+msgid "Inverse Fast Fourier"
+msgstr "ส่วนกลับของ  Fast Fourier"
+
+msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
+msgstr "หาส่วนกลับ Fast Fourier Transform (IFFT) สำหรับ image processing"
+
+msgid "Satellite images tools"
+msgstr ""
+
+msgid "Aster DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN."
+msgstr ""
+
+msgid "Landsat DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+/OLI"
+msgstr ""
+
+msgid "Landsat cloud cover assessment"
+msgstr ""
+
+msgid "Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA)."
+msgstr ""
+
+msgid "Modis quality control"
+msgstr ""
+
+msgid "Extracts quality control parameters from MODIS QC layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Canonical correlation"
+msgid "Atmospheric correction"
+msgstr "Canonical correlation"
+
+msgid "Performs atmospheric correction using the 6S algorithm. 6S - Second Simulation of Satellite Signal in the Solar Spectrum."
+msgstr ""
+
+#, fuzzy
+#| msgid "Topographic index map"
+msgid "Topographic correction"
+msgstr "แผนที่ดัชนี Topographic"
+
+msgid "Computes topographic correction of reflectance."
+msgstr ""
+
+msgid "Orthophoto tools"
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage projections"
+msgid "Manage GCPs for 3D correction"
+msgstr "จัดการ projections"
+
+msgid "Georectifies a map and allows managing GCP for 3D correction."
+msgstr ""
+
+msgid "Corrects scanning distortions"
+msgstr ""
+
+msgid "Corrects scanning distortions of a scanned aerial photo."
+msgstr ""
+
+msgid "Initialize ortho parameters"
+msgstr ""
+
+msgid "Interactively creates or modifies entries in a camera initial exposure station file for imagery group referenced by a sub-block."
+msgstr ""
+
+#, fuzzy
+#| msgid "Terrain parameters"
+msgid "Camera parameters"
+msgstr "ตัวแปร Terrain"
+
+msgid "Select and modify the imagery group camera reference file."
+msgstr ""
+
+msgid "Elevation model for orthorectification"
+msgstr ""
+
+msgid "Select or modify the target elevation model."
+msgstr ""
+
+msgid "Target group for orthorectification"
+msgstr ""
+
+msgid "Select or modify the imagery group target."
+msgstr ""
+
+msgid "Compute ortho transformation"
+msgstr ""
+
+msgid "Computes a coordinate transformation based on the control points."
+msgstr ""
+
+msgid "Orthorectify imagery"
+msgstr ""
+
+msgid "Orthorectifies an image by using the image to photo coordinate transformation matrix."
+msgstr ""
+
+msgid "Satellite images products"
+msgstr ""
+
+#, fuzzy
+#| msgid "Quadrat indices"
+msgid "Vegetation indices"
+msgstr "ดัชนี Quadrat"
+
+msgid "Calculates different types of vegetation indices. Uses red and nir bands mostly, and some indices require additional bands."
+msgstr ""
+
+msgid "Tasseled cap vegetation index"
+msgstr ""
+
+msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
+msgstr ""
+
+msgid "Albedo"
+msgstr ""
+
+msgid "Computes broad band albedo from surface reflectance."
+msgstr ""
+
+msgid "Emissivity"
+msgstr ""
+
+msgid "Computes emissivity from NDVI, generic method for sparse land."
+msgstr ""
+
+msgid "Biomass growth"
+msgstr ""
+
+msgid "Computes biomass growth, precursor of crop yield calculation."
+msgstr ""
+
+msgid "Evapotranspiration calculation"
+msgstr ""
+
+msgid "Instantaneaous Net Radiation"
+msgstr ""
+
+msgid "Net radiation approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Soil heat flux"
+msgstr ""
+
+msgid "Soil heat flux approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Sensible heat flux"
+msgstr ""
+
+msgid "Computes sensible heat flux iteration SEBAL 01."
+msgstr ""
+
+msgid "Evaporative fraction"
+msgstr ""
+
+msgid "Computes evaporative fraction and root zone soil moisture."
+msgstr ""
+
+msgid "Actual Evapotranspiration"
+msgstr ""
+
+msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Temporal integration of ETa"
+msgstr ""
+
+msgid "Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)."
+msgstr ""
+
+msgid "Hargreaves methods Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation modified or original Hargreaves formulation, 2001."
+msgstr ""
+
+msgid "Penman-Monteith Evapotranspiration"
+msgstr ""
+
+msgid "Computes potential evapotranspiration calculation with hourly Penman-Monteith."
+msgstr ""
+
+msgid "Priestley-Taylor Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation Priestley and Taylor formulation, 1972."
+msgstr ""
+
+msgid "Kappa analysis"
+msgstr "การวิเคราะห์ Kappa"
+
+msgid "Calculates error matrix and kappa parameter for accuracy assessment of classification result."
+msgstr ""
+
+msgid "OIF for LandSat TM"
+msgstr "OIF สำหรับ LandSat TM"
+
+msgid "Calculates Optimum-Index-Factor table for spectral bands"
+msgstr ""
+
+#, fuzzy
+#| msgid "raster"
+msgid "3D r&aster"
+msgstr "แผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Remove vertex"
+msgid "Develop 3D raster map"
+msgstr "ลบ vertex"
+
+msgid "Manage 3D NULL values"
+msgstr ""
+
+msgid "Explicitly create the 3D NULL-value bitmap file."
+msgstr "สร้าง 3D NULL-value bitmap ไฟล์."
+
+#, fuzzy
+#| msgid "Print/add/remove a timestamp for a 3D raster map"
+msgid "Modifies a timestamp for a 3D raster map. Print/add/remove a timestamp for a 3D raster map."
+msgstr "พิมพ์/เพิ่ม/เอาออก  timestamp สำหรับ แผนที่เชิงภาพ 3 มิติ"
+
+#, fuzzy
+#| msgid "Vector to raster"
+msgid "Retile 3D raster"
+msgstr "จากเวคเตอร์เป็นแรสเตอร์"
+
+msgid "Retiles an existing 3D raster map with user defined x, y and z tile size."
+msgstr ""
+
+#, fuzzy
+#| msgid "Allows creation and/or modification of raster map layer support files."
+msgid "Allows creation and/or modification of 3D raster map layer support files."
+msgstr "ยอมให้สร้าง และ/หรือ เปลี่ยนแปลง ไฟล์ support ของชั้นข้อมูลเชิงภาพ."
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "3D rasters to raster series"
+msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
+
+#, fuzzy
+#| msgid "Color tables"
+msgid "3D color tables"
+msgstr "ตารางสี"
+
+msgid "Creates/modifies the color table associated with a 3D raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export 3D color table"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Exports the color table associated with a 3D raster map."
+msgstr ""
+
+msgid "3D mask"
+msgstr ""
+
+msgid "Establishes the current working 3D raster mask."
+msgstr "สร้าง แผนที่ mask 3 มิติเชิงภาพ ที่กำลังทำงาน"
+
+msgid "3D raster map calculator"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cross product"
+msgid "Cross section"
+msgstr "Cross product"
+
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions."
+msgstr "โปรแกรมตัวเลข สำหรับคำนวน Transient, Confined และ Unconfined groundwater flow แบบ 2 มิติ"
+
+#, fuzzy
+#| msgid "Flow lines"
+msgid "3D flow lines"
+msgstr "Flow lines"
+
+msgid "Computes 3D flow lines and 3D flow accumulation."
+msgstr ""
+
+msgid "3D gradient"
+msgstr ""
+
+msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "3D neighborhood analysis"
+msgstr "การวเคราะหพนทขางเคยง"
+
+#, fuzzy
+#| msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgid "Makes each voxel value a function of the values assigned to the voxels around it, and stores new voxel values in an output 3D raster map"
+msgstr "สร้างแต่ละค่าของหมวดหมู่ คำสั่งของหมวดหมู่ที่ระบุของ cell รอบๆและ ค่าใหม่ใน ชั้นแผนที่เชิงภาพ"
+
+msgid "Create 3D display file"
+msgstr ""
+
+msgid "Creates a display file from an existing 3D raster map according to specified threshold levels."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate areas from points"
+msgid "Interpolate 3D raster from points"
+msgstr "สร้างพื้นที่จากจุด"
+
+msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
+msgstr "ข้อมูลจุดไม่เหมาะสม กับค่า G3D กริด ใช้ regularized spline กับ tension (RST) algorithm."
+
+#, fuzzy
+#| msgid "Updates vector map metadata."
+msgid "Basic 3D raster metadata"
+msgstr "ปรับปรุง metadata ของแผนที่เชิงเส้น."
+
+msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgstr "ออกผลลัพธ์พื้นฐาน เกี่ยวกับ ชั้นข้อมูล แผนที่เชิงภาพ 3 มิติ ที่ผู้ใช้ระบุ"
+
+#, fuzzy
+#| msgid "Update raster map statistics"
+msgid "3D raster statistics"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Generate images with textural features from a raster map."
+msgid "Generates volume statistics for 3D raster maps."
+msgstr "สร้าง ภาพ ด้วยลวดลาย จากแผนที่เชิงภาพ"
+
+msgid "Univariate statistics for 3D rasters"
+msgstr ""
+
+msgid "Calculates univariate statistics from the non-null cells of a 3D raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "&Database"
+msgstr ""
+
+msgid "Database information"
+msgstr "ข้อมูลฐานข้อมูล"
+
+#, fuzzy
+#| msgid "List tables"
+msgid "List databases"
+msgstr "ลิสต์ตาราง"
+
+#, fuzzy
+#| msgid "Lists all tables for a given database."
+msgid "Lists all databases for a given driver and location."
+msgstr "แสดงตารางทั้งหมดในฐานข้อมูล"
+
+msgid "List drivers"
+msgstr "ลิสต์ไดร์เวอร์"
+
+#, fuzzy
+#| msgid "Lists all tables for a given database."
+msgid "Lists all database drivers."
+msgstr "แสดงตารางทั้งหมดในฐานข้อมูล"
+
+msgid "List tables"
+msgstr "ลิสต์ตาราง"
+
+msgid "Lists all tables for a given database."
+msgstr "แสดงตารางทั้งหมดในฐานข้อมูล"
+
+msgid "Describe table"
+msgstr "อธิบาย ตาราง"
+
+msgid "Describes a table in detail."
+msgstr "อธิบาย รายละเอียดของตาราง"
+
+msgid "List columns"
+msgstr "ลิสต์คอลัมน์"
+
+msgid "List all columns for a given table."
+msgstr "รายการ columns ทั้งหมด สำหรับตาราง table."
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Manage databases"
+msgstr "เปลี่ยนชื่อ"
+
+msgid "Connect"
+msgstr ""
+
+#, fuzzy
+#| msgid "Prints/sets DB connection for a vector map to attribute table."
+msgid "Prints/sets general DB connection for current mapset."
+msgstr "แสดง/กำหนด การติดต่อฐานข้อมูล สำหรับตารางรายละเอียดแผนที่เชิงเส้น"
+
+msgid "Login"
+msgstr ""
+
+msgid "Sets user/password for DB driver/database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create table"
+msgid "Create database"
+msgstr "สร้างตาราง"
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Creates an empty database."
+msgstr "สร้าง mapset ใหม่"
+
+msgid "Drop database"
+msgstr ""
+
+#, fuzzy
+#| msgid "Removes existing attribute table of a vector map."
+msgid "Removes an existing database."
+msgstr "เอาตารางรายละเอียดของแผนที่เชิงเส้นออก"
+
+#, fuzzy
+#| msgid "Describe table"
+msgid "Drop table"
+msgstr "อธิบาย ตาราง"
+
+#, fuzzy
+#| msgid "Describe table"
+msgid "Drops an attribute table."
+msgstr "อธิบาย ตาราง"
+
+#, fuzzy
+#| msgid "Color tables"
+msgid "Copy table"
+msgstr "ตารางสี"
+
+msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
+msgstr ""
+
+msgid "Drop column"
+msgstr "ลบคอลัมน์"
+
+#, fuzzy
+#| msgid "Drops a column from the attribute table connected to a given vector map."
+msgid "Drops a column from selected attribute table."
+msgstr "ลบ  column จาก ตารางรายละเอียด ที่เชื่อมกับ แผนที่เชิงเส้น"
+
+msgid "Test"
+msgstr "ทดสอบ"
+
+msgid "Test database driver, database must exist and set by db.connect."
+msgstr "ทดสอบ ตัวขับฐานข้อมูล, ฐานข้อมูลจะต้องมีอยู่และกำหนดโดย db.connect"
+
+msgid "Query any table"
+msgstr "ร้องขอข้อมูลจากตารางใดๆ"
+
+msgid "Selects data from attribute table. Performs SQL query statement(s)."
+msgstr ""
+
+msgid "SQL statement"
+msgstr "ข้อความ SQL"
+
+msgid "Executes any SQL statement. For SELECT statements use 'db.select'."
+msgstr ""
+
+msgid "Univariate statistics for table column"
+msgstr ""
+
+#, fuzzy
+#| msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgid "Calculates univariate statistics on selected table column."
+msgstr "คำนวน univariate statistics บน column ของตารางที่เลือก สำหรับแผนที่เชิงเส้นของ GRASS"
+
+msgid "Vector database connections"
+msgstr ""
+
+msgid "New table"
+msgstr "ตารางใหม่"
+
+#, fuzzy
+#| msgid "Drops a column from the attribute table connected to a given vector map."
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
+msgstr "ลบ  column จาก ตารางรายละเอียด ที่เชื่อมกับ แผนที่เชิงเส้น"
+
+#, fuzzy
+#| msgid "Remove table"
+msgid "Remove table"
+msgstr "เอาตารางออก"
+
+msgid "Removes existing attribute table of a vector map."
+msgstr "เอาตารางรายละเอียดของแผนที่เชิงเส้นออก"
+
+#, fuzzy
+#| msgid "List tables"
+msgid "Join table"
+msgstr "ลิสต์ตาราง"
+
+#, fuzzy
+#| msgid "Removes existing attribute table of a vector map."
+msgid "Joins a database table to a vector map table."
+msgstr "เอาตารางรายละเอียดของแผนที่เชิงเส้นออก"
+
+msgid "Add columns"
+msgstr "เพิ่มตาราง"
+
+msgid "Adds one or more columns to the attribute table connected to a given vector map."
+msgstr "เพิ่ม 1 column หรือมากกว่า ไปที่ตารางที่เชื่อมกับ แผนที่เชิงเส้นที่ระบุ"
+
+msgid "Drops a column from the attribute table connected to a given vector map."
+msgstr "ลบ  column จาก ตารางรายละเอียด ที่เชื่อมกับ แผนที่เชิงเส้น"
+
+#, fuzzy
+#| msgid "Drops a column from the attribute table connected to a given vector map."
+msgid "Renames a column in the attribute table connected to a given vector map."
+msgstr "ลบ  column จาก ตารางรายละเอียด ที่เชื่อมกับ แผนที่เชิงเส้น"
+
+#, fuzzy
+#| msgid "Change values"
+msgid "Change values"
+msgstr "เปลี่ยนค่า"
+
+#, fuzzy
+#| msgid "Drops a column from the attribute table connected to a given vector map."
+msgid "Updates a column in the attribute table connected to a vector map."
+msgstr "ลบ  column จาก ตารางรายละเอียด ที่เชื่อมกับ แผนที่เชิงเส้น"
+
+#, fuzzy
+#| msgid "Drop column"
+msgid "Drop row"
+msgstr "ลบคอลัมน์"
+
+#, fuzzy
+#| msgid "Prints/sets DB connection for a vector map to attribute table."
+msgid "Removes a vector feature from a vector map through attribute selection."
+msgstr "แสดง/กำหนด การติดต่อฐานข้อมูล สำหรับตารางรายละเอียดแผนที่เชิงเส้น"
+
+msgid "Reconnect vectors to database"
+msgstr ""
+
+#, fuzzy
+#| msgid "Creates paint labels for a vector map from attached attributes."
+msgid "Reconnects attribute tables for all vector maps from the current mapset to a new database."
+msgstr "สร้าง แถบข้อความ สำหรับ แผนที่เชิงเส้น จาก รายละเอียดที่แนบ."
+
+msgid "Set vector map - database connection"
+msgstr ""
+
+msgid "Prints/sets DB connection for a vector map to attribute table."
+msgstr "แสดง/กำหนด การติดต่อฐานข้อมูล สำหรับตารางรายละเอียดแผนที่เชิงเส้น"
+
+msgid "&Temporal"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Manage datasets"
+msgstr "เปลี่ยนชื่อ"
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Connect temporal database"
+msgstr "สร้าง mapset ใหม่"
+
+msgid "Prints/sets general temporal GIS database connection for current mapset."
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Creates a space time dataset."
+msgstr "สร้าง mapset ใหม่"
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Renames a space time dataset"
+msgstr "เปลี่ยนชื่อ"
+
+msgid "Removes space time datasets from temporal database."
+msgstr ""
+
+msgid "Modifies the metadata of a space time dataset."
+msgstr ""
+
+msgid "Merge"
+msgstr ""
+
+msgid "Merges several space time datasets into a single space time dataset."
+msgstr ""
+
+msgid "Temporally shift"
+msgstr ""
+
+msgid "Shifts temporally the maps of a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename"
+msgid "Snap maps of dataset"
+msgstr "เปลี่ยนชื่อ"
+
+msgid "Snaps temporally the maps of a space time dataset."
+msgstr ""
+
+msgid "Lists space time datasets and maps registered in the temporal database."
+msgstr ""
+
+msgid "Copy space time dataset"
+msgstr ""
+
+#, fuzzy
+msgid "Creates a copy of a space time raster dataset."
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Upgrade temporal database"
+msgstr "สร้าง mapset ใหม่"
+
+msgid "Upgrades the version of the temporal database."
+msgstr ""
+
+msgid "Manage maps in datasets"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map"
+msgid "Register maps in datasets"
+msgstr "แผนที่แรสเตอร์"
+
+msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map"
+msgid "Unregister maps from datasets"
+msgstr "แผนที่แรสเตอร์"
+
+msgid "Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset."
+msgstr ""
+
+#, fuzzy
+msgid "List raster dataset maps"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+msgid "Lists registered maps of a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+msgid "List vector dataset maps"
+msgstr "ลิสต์ filtered"
+
+msgid "Lists registered maps of a space time vector dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "List 3D raster dataset maps"
+msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
+
+msgid "Lists registered maps of a space time raster3d dataset."
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Import raster dataset"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+#, fuzzy
+msgid "Imports space time raster dataset."
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Import vector dataset"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Export raster dataset"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+#, fuzzy
+msgid "Exports space time raster dataset."
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "Export raster dataset as VTK time series"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "Exports space time raster dataset as VTK time series."
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export vector dataset"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Convert raster dataset to 3D raster"
+msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Converts a space time raster dataset into a 3D raster map."
+msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Convert raster dataset to vector dataset"
+msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
+
+#, fuzzy
+msgid "Converts a space time raster dataset into a space time vector dataset"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Create contour lines from raster dataset"
+msgstr "สร้าง mapset ใหม่"
+
+msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgstr ""
+
+msgid "Extraction"
+msgstr ""
+
+#, fuzzy
+msgid "Extract subset of raster dataset"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "Extracts a subset of a space time raster datasets."
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "Extract subset of vector dataset"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "Extracts a subset of a space time vector dataset."
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "Extract subset of 3D raster dataset"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "Extracts a subset of a space time 3D raster dataset."
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+msgid "Select maps by temporal topology"
+msgstr ""
+
+msgid "Select maps from space time datasets by topological relationships to other space time datasets using temporal algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Prints vector map attributes."
+msgid "Query vector dataset attribute data"
+msgstr "แสดง รายละเอียด ของแผนที่เชิงภาพ"
+
+msgid "Prints attributes of vector maps registered in a space time vector dataset."
+msgstr ""
+
+msgid "Raster dataset color table"
+msgstr ""
+
+#, fuzzy
+msgid "Creates/modifies the color table associated with each raster map of the space time raster dataset."
+msgstr "คำนวน univariate statistics จาก non-null 3d cells ของแผนที่เชิงภาพ3d"
+
+#, fuzzy
+#| msgid "Raster contours"
+msgid "Raster calculations"
+msgstr "เส้นชั้นความสูงเชิงภาพ"
+
+msgid "Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Temporal raster algebra"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+msgstr ""
+
+msgid "3D raster calculations"
+msgstr ""
+
+msgid "Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets."
+msgstr ""
+
+msgid "Temporal 3D raster algebra"
+msgstr ""
+
+msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Temporal vector algebra"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+msgstr ""
+
+#, fuzzy
+msgid "Interpolate gaps in raster datasets"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
+msgstr ""
+
+msgid "Aggregation"
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "Neighborhood analysis in raster dataset"
+msgstr "การวเคราะหพนทขางเคยง"
+
+msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
+msgstr ""
+
+msgid "Aggregation in raster datasets"
+msgstr ""
+
+#, fuzzy
+msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
+msgstr "คำนวน univariate statistics จาก non-null 3d cells ของแผนที่เชิงภาพ3d"
+
+msgid "Temporal aggregation"
+msgstr ""
+
+msgid "Aggregates temporally the maps of a space time raster dataset by a user defined granularity."
+msgstr ""
+
+msgid "Temporal aggregation by dataset"
+msgstr ""
+
+msgid "Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Flow accumulation"
+msgid "Compute cyclic accumulations"
+msgstr "Flow accumulation"
+
+msgid "Computes cyclic accumulations of a space time raster dataset."
+msgstr ""
+
+msgid "Detect accumulation patterns"
+msgstr ""
+
+msgid "Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate."
+msgstr ""
+
+msgid "Sampling"
+msgstr ""
+
+#, fuzzy
+msgid "Sample a space time raster dataset at point coordinates"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
+msgstr ""
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Query raster dataset by vector points dataset"
+msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
+
+#, fuzzy
+#| msgid "Uploads raster values at positions of vector points to the table."
+msgid "Stores raster map values at spatial and temporal positions of vector points as vector attributes."
+msgstr "ส่งค่าของแผนที่เชิงภาพ ที่ตำแหน่ง ของ จุดเชิงเส้น ไปที่ตาราง."
+
+msgid "Observe specific locations in raster dataset"
+msgstr ""
+
+msgid "Observes specific locations in a space time raster dataset over a period of time using vector points."
+msgstr ""
+
+msgid "Temporal sampling"
+msgstr ""
+
+msgid "Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout."
+msgstr ""
+
+#, fuzzy
+#| msgid "Updates vector map metadata."
+msgid "Space time datasets metadata"
+msgstr "ปรับปรุง metadata ของแผนที่เชิงเส้น."
+
+msgid "Lists information about space time datasets and maps."
+msgstr ""
+
+#, fuzzy
+msgid "Univariate raster dataset statistics"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset."
+msgstr "คำนวน univariate statistics จาก non-null 3d cells ของแผนที่เชิงภาพ3d"
+
+#, fuzzy
+msgid "Univariate vector dataset statistics"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset"
+msgstr "คำนวน univariate statistics จาก non-null 3d cells ของแผนที่เชิงภาพ3d"
+
+#, fuzzy
+msgid "Univariate 3D raster dataset statistics"
+msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
+msgstr "คำนวน univariate statistics จาก non-null 3d cells ของแผนที่เชิงภาพ3d"
+
+msgid "Report temporal topology"
+msgstr ""
+
+#, fuzzy
+#| msgid "Lists all tables for a given database."
+msgid "Lists temporal topology of a space time dataset."
+msgstr "แสดงตารางทั้งหมดในฐานข้อมูล"
+
+msgid "GUI tools"
+msgstr ""
+
+msgid "Timeline tool"
+msgstr ""
+
+#, fuzzy
+msgid "Plot temporal extents."
+msgstr "แสดง"
+
+msgid "Temporal plot tool"
+msgstr ""
+
+msgid "Plot temporal values."
+msgstr ""
+
+#, fuzzy
+#| msgid "Help"
+msgid "&Help"
+msgstr "ช่วยเหลือ"
+
+msgid "GRASS help"
+msgstr ""
+
+msgid "Display the HTML man pages of GRASS"
+msgstr ""
+
+msgid "GUI help"
+msgstr ""
+
+msgid "About system"
+msgstr ""
+
+#, fuzzy
+#| msgid "Database information"
+msgid "Prints system information"
+msgstr "ข้อมูลฐานข้อมูล"
+
+msgid "Import, export and link data"
+msgstr ""
+
+msgid "Attribute table manager"
+msgstr ""
+
+msgid "Launch Data Catalog."
+msgstr ""
+
+msgid "Managing GCPs for 3D correction"
+msgstr ""
+
+msgid "Interactive editing and digitization of vector maps."
+msgstr ""
+
+msgid "Interactive editing and digitization of raster maps."
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+msgid "Bearing/distance to coordinates"
+msgstr "มุม/ระยะทาง ไปเป็น ค่าพิกัด"
+
+msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa. It assumes a cartesian coordinate system"
+msgstr ""
+
+msgid "Measure map distances"
+msgstr ""
+
+msgid "Measures the lengths and areas of features."
+msgstr ""
+
+msgid "3D image rendering"
+msgstr ""
+
+msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
+msgstr ""
+
+msgid "3D visualization script"
+msgstr ""
+
+msgid "Creates fly-through script to run in NVIZ."
+msgstr ""
+
+msgid "Convert coordinates between projections"
+msgstr ""
+
+msgid "Transform coordinates (affine)"
+msgstr ""
+
+msgid "PostScript map output"
+msgstr ""
+
+msgid "Produces hardcopy PostScript map output."
+msgstr ""
+
+msgid "Save model to file"
+msgstr ""
+
+msgid "Close model file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export to image"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+#, fuzzy
+msgid "Export to Python"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+#, fuzzy
+msgid "Export to PyWPS"
+msgstr "ส่งออกแผนที่แรสเตอร์"
+
+msgid "Export model to PyWPS script"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export to actinia"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Export model to actinia script"
+msgstr ""
+
+msgid "Quit modeler"
+msgstr ""
+
+msgid "Close modeler window"
+msgstr ""
+
+#, fuzzy
+msgid "&Model"
+msgstr "วิธี:"
+
+#, fuzzy
+#| msgid "Add command layer"
+msgid "Add command"
+msgstr "เพิ่มชั้นข้อมูลคำสั่ง"
+
+msgid "Add action (GRASS command) to model"
+msgstr ""
+
+msgid "Add data"
+msgstr ""
+
+msgid "Add data item to model"
+msgstr ""
+
+msgid "Define relation"
+msgstr ""
+
+msgid "Define relation between data and action items"
+msgstr ""
+
+msgid "Add loop / series"
+msgstr ""
+
+msgid "Adds loop (series) to model"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add centroids"
+msgid "Add condition"
+msgstr "เพิ่มจุดศูนย์ถ่วง"
+
+msgid "Adds condition (if/else) to model"
+msgstr ""
+
+msgid "Adds comment to model"
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove vertex"
+msgid "Remove item"
+msgstr "ลบ vertex"
+
+msgid "Remove action/data from model"
+msgstr ""
+
+msgid "Model properties (name, purpose, etc.)"
+msgstr ""
+
+#, fuzzy
+msgid "Delete intermediate data"
+msgstr "ลบข้อมูลที่เลือก"
+
+msgid "Delete intermediate data defined in the model"
+msgstr ""
+
+msgid "Run entire model"
+msgstr ""
+
+msgid "Validate entire model"
+msgstr ""
+
+msgid "Help"
+msgstr "ช่วยเหลือ"
+
+msgid "Display the HTML man pages of Graphical modeler"
+msgstr ""
+
+msgid "About Graphical Modeler"
+msgstr ""
+
+msgid "Display information about Graphical Modeler"
+msgstr ""
+
+msgid "Specify paper size, margins and orientation"
+msgstr ""
+
+msgid "Load instruction file"
+msgstr ""
+
+msgid "Load text file with mapping instructions"
+msgstr ""
+
+msgid "Export instruction file"
+msgstr ""
+
+msgid "Generate text file with mapping instructions"
+msgstr ""
+
+msgid "Export to PostScript"
+msgstr ""
+
+msgid "Generate PostScript output"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export to PDF"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+msgid "Generate PDF output"
+msgstr ""
+
+msgid "Launch ps.map dialog"
+msgstr ""
+
+msgid "Close Cartographic Composer"
+msgstr ""
+
+msgid "&Insert"
+msgstr ""
+
+msgid "Map frame"
+msgstr ""
+
+msgid "Add or edit map frame"
+msgstr ""
+
+#, fuzzy
+msgid "Add or edit raster map"
+msgstr "Recodes หมวดหมู่ ของ แผนที่เชิงภาพ"
+
+#, fuzzy
+msgid "Add or edit vector map"
+msgstr "ส่งออกแผนที่เวคเตอร์"
+
+#, fuzzy
+msgid "Map legend"
+msgstr "เพิ่ม legend"
+
+msgid "Add or edit raster and vector legend"
+msgstr ""
+
+msgid "Map info"
+msgstr ""
+
+msgid "Add or edit map info"
+msgstr ""
+
+msgid "Scale bar"
+msgstr ""
+
+#, fuzzy
+msgid "Add or edit scale bar"
+msgstr "แผนที่เชิงภาพ"
+
+msgid "North Arrow"
+msgstr ""
+
+msgid "Delete selected object"
+msgstr ""
+
+msgid "Display the HTML man pages of Cartographic Composer"
+msgstr ""
+
+msgid "About Cartographic Composer"
+msgstr ""
+
+msgid "Display information about Cartographic Composer"
+msgstr ""
+
 msgid "Check all"
 msgstr ""
 
@@ -7168,9 +11133,6 @@ msgstr ""
 
 msgid "Type filename or click to choose file and save color table"
 msgstr ""
-
-msgid "Save"
-msgstr "บันทึก"
 
 msgid "&Set"
 msgstr ""
@@ -7428,9 +11390,6 @@ msgstr ""
 msgid "Dialog cannot be closed while command is running."
 msgstr ""
 
-msgid "Link external raster data"
-msgstr ""
-
 msgid "Add linked layers into layer tree"
 msgstr ""
 
@@ -7447,9 +11406,6 @@ msgid "No layers selected. Operation canceled."
 msgstr ""
 
 msgid "Unable to determine number of raster bands"
-msgstr ""
-
-msgid "Link external vector data"
 msgstr ""
 
 msgid "Define output format for vector data"
@@ -8025,12 +11981,6 @@ msgstr ""
 msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
 msgstr ""
 
-msgid "New"
-msgstr "ใหม่"
-
-msgid "Delete"
-msgstr "ลบ"
-
 msgid "Fine resolution:"
 msgstr ""
 
@@ -8136,9 +12086,6 @@ msgstr ""
 msgid "Elevation of fringe from bottom:"
 msgstr ""
 
-msgid "North Arrow"
-msgstr ""
-
 msgid "Arrow length (in map units):"
 msgstr ""
 
@@ -8146,9 +12093,6 @@ msgid "Arrow color:"
 msgstr ""
 
 msgid "Place arrow"
-msgstr ""
-
-msgid "Scale bar"
 msgstr ""
 
 msgid "Scale bar length (in map units):"
@@ -8235,9 +12179,6 @@ msgstr ""
 
 msgid "None"
 msgstr ""
-
-msgid "Plane"
-msgstr "ระนาบ"
 
 msgid "Vector map is 3D"
 msgstr ""
@@ -8420,9 +12361,6 @@ msgid "Map settings"
 msgstr ""
 
 msgid "Map frame settings"
-msgstr ""
-
-msgid "Map frame"
 msgstr ""
 
 msgid "Map frame options:"
@@ -8786,7 +12724,7 @@ msgstr ""
 msgid "Number of segments:"
 msgstr ""
 
-msgid "Label every "
+msgid "Label every"
 msgstr ""
 
 msgid "segments"
@@ -9027,7 +12965,8 @@ msgstr ""
 msgid "Click and drag to resize object"
 msgstr ""
 
-msgid "labels: "
+#, python-brace-format
+msgid "labels: {files}"
 msgstr ""
 
 msgid "Cartographic Composer - GRASS"
@@ -9094,21 +13033,6 @@ msgstr ""
 msgid "Select graphics tool"
 msgstr ""
 
-msgid "Generate text file with mapping instructions"
-msgstr ""
-
-msgid "Load text file with mapping instructions"
-msgstr ""
-
-msgid "Generate PostScript output"
-msgstr ""
-
-msgid "Generate PDF output"
-msgstr ""
-
-msgid "Specify paper size, margins and orientation"
-msgstr ""
-
 msgid "Full extent"
 msgstr ""
 
@@ -9118,13 +13042,7 @@ msgstr ""
 msgid "Click and drag to place map frame"
 msgstr ""
 
-msgid "Delete selected object"
-msgstr ""
-
 msgid "Show preview"
-msgstr ""
-
-msgid "Map info"
 msgstr ""
 
 msgid "Legend"
@@ -9285,9 +13203,6 @@ msgstr ""
 msgid "Remove a configuration file"
 msgstr ""
 
-msgid "Create"
-msgstr ""
-
 msgid "Create a new configuration file"
 msgstr ""
 
@@ -9438,9 +13353,6 @@ msgstr ""
 msgid "Sample units"
 msgstr ""
 
-msgid "Moving window"
-msgstr "ย้ายหน้าต่าง"
-
 msgid ""
 "Select areas from the\n"
 "overlaid vector map"
@@ -9574,9 +13486,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "The raster map <{map_name}> already exists. Please remove or rename the maps with the prefix '{prefix}' or select the option to overwrite existing maps"
-msgstr ""
-
-msgid "Select sample area 1 of "
 msgstr ""
 
 msgid "Configuration file name:"
@@ -9903,9 +13812,6 @@ msgstr ""
 msgid "Timeline Tool"
 msgstr ""
 
-msgid "Help"
-msgstr "ช่วยเหลือ"
-
 msgid "3D plot of spatio-temporal extents"
 msgstr ""
 
@@ -10094,7 +14000,7 @@ msgstr ""
 msgid "File exists"
 msgstr ""
 
-msgid "Please change name of output CSV file or "
+msgid "Please change name of output CSV file or enable overwriting."
 msgstr ""
 
 msgid "Incorrect coordinates format, should be: x,y"
@@ -11013,9 +14919,6 @@ msgstr ""
 msgid "Unable to connect to <%s>"
 msgstr ""
 
-msgid "Add web service layer"
-msgstr ""
-
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr ""
 
@@ -11029,9 +14932,6 @@ msgid "Name for output raster map:"
 msgstr ""
 
 msgid "Export region"
-msgstr ""
-
-msgid "Map display"
 msgstr ""
 
 msgid "Named region"
@@ -11427,15 +15327,20 @@ msgstr ""
 msgid "At least 2 raster maps must be specified"
 msgstr ""
 
-msgid "Bivariate Scatterplot of "
+#, python-brace-format
+msgid "{first} vs {second}"
 msgstr ""
 
-#, python-format
-msgid "Raster <%s> cell values"
+#, python-brace-format
+msgid "Bivariate Scatterplot of {pairs}"
 msgstr ""
 
-#, python-format
-msgid ": %s"
+#, python-brace-format
+msgid "Raster <{raster}> cell values: {units}"
+msgstr ""
+
+#, python-brace-format
+msgid "Raster <{raster}> cell values"
 msgstr ""
 
 msgid "Regression Statistics for Scatterplot(s)"
@@ -11448,22 +15353,12 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-#~ msgid "New display"
-#~ msgstr "แสดง"
-
-#, fuzzy
 #~ msgid "Create project?"
 #~ msgstr "สร้าง mapset ใหม่"
 
 #, fuzzy
 #~ msgid ":"
 #~ msgstr "X:"
-
-#~ msgid "Add centroids"
-#~ msgstr "เพิ่มจุดศูนย์ถ่วง"
-
-#~ msgid "Add columns"
-#~ msgstr "เพิ่มตาราง"
 
 #, fuzzy
 #~ msgid "Add imported layers into layer tree ({mightNotWork})"
@@ -11473,254 +15368,13 @@ msgstr ""
 #~ msgid "Add linked layers into layer tree ({mightNotWork})"
 #~ msgstr "เพิ่มชั้นข้อมูลข้อความ"
 
-#~ msgid "Add text layer"
-#~ msgstr "เพิ่มชั้นข้อมูลข้อความ"
-
-#~ msgid "Adds missing centroids to closed boundaries."
-#~ msgstr "เพิ่ม จุดศูนย์ถ่วง ของรูปปิดที่ไม่มี จุดศูนย์ถ่วง"
-
-#~ msgid "Adds one or more columns to the attribute table connected to a given vector map."
-#~ msgstr "เพิ่ม 1 column หรือมากกว่า ไปที่ตารางที่เชื่อมกับ แผนที่เชิงเส้นที่ระบุ"
-
-#~ msgid "Allocate subnets"
-#~ msgstr "กำหนด subnets"
-
-#~ msgid "Allows creation and/or modification of raster map layer support files."
-#~ msgstr "ยอมให้สร้าง และ/หรือ เปลี่ยนแปลง ไฟล์ support ของชั้นข้อมูลเชิงภาพ."
-
-#~ msgid "Anisotropic spread simulation"
-#~ msgstr "แบบจำลองการกระจาย Anisotropic"
-
-#~ msgid "Bearing/distance to coordinates"
-#~ msgstr "มุม/ระยะทาง ไปเป็น ค่าพิกัด"
-
-#~ msgid "Bilinear and bicubic from vector points"
-#~ msgstr "Bilinear และ  bicubic จากจุดแผนที่เชิงเส้น"
-
-#~ msgid "Buffer vectors"
-#~ msgstr "แผนที่ Buffer"
-
-#~ msgid "Build polylines"
-#~ msgstr "สร้าง polyline"
-
-#~ msgid "Building contour determination and Region Growing algorithm for determining the building inside"
-#~ msgstr "กำลังสร้าง contour determination และ Region Growing algorithm สำหรับ determining the building inside"
-
-#~ msgid "Builds polylines from lines or boundaries."
-#~ msgstr "สร้าง  polylines จาก เส้น หรือ ขอบเขต"
-
-#~ msgid "Calculates Shannon's diversity index on a raster map"
-#~ msgstr "คำนวน ดัชนี Shannon's diversity บนแผนที่เชิงภาพ"
-
-#~ msgid "Calculates Simpson's diversity index on a raster map"
-#~ msgstr "คำนวน ดัชนี  Simpson's diversity บนแผนที่เชิงภาพ"
-
-#~ msgid "Calculates coefficient of variation of patch area on a raster map"
-#~ msgstr "คำนวน coefficient of variation ของ patch area บนแผนที่เชิงภาพ"
-
-#~ msgid "Calculates contrast weighted edge density index on a raster map"
-#~ msgstr "คำนวน ดัชนี contrast weighted edge density บนแผนที่เชิงภาพ"
-
-#~ msgid "Calculates dominance's diversity index on a raster map"
-#~ msgstr "คำนวน ดัชนี  dominance's diversity บน แผนที่เชิงภาพ"
-
-#~ msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
-#~ msgstr "คำนวน ดัชนี edge density บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
-
-#~ msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
-#~ msgstr "คำนวน ดัชนี mean patch size บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
-
-#~ msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
-#~ msgstr "คำนวน ดัชนี patch density บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
-
-#~ msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
-#~ msgstr "คำนวน ดัชนี patch number บนแผนที่เชิงภาพ, ใช้  4 neighbour algorithm"
-
-#~ msgid "Calculates range of patch area size on a raster map"
-#~ msgstr "คำนวน  range ของ patch area size บนแผนที่เชิงภาพ"
-
-#~ msgid "Calculates shape index on a raster map"
-#~ msgstr "คำนวน ดัชนี shape บนแผนที่เชิงภาพ"
-
-#~ msgid "Calculates standard deviation of patch area a raster map"
-#~ msgstr "คำนวน  standard deviation ของ patch บนแผนที่เชิงภาพ"
-
-#, fuzzy
-#~ msgid "Calculates univariate statistics from the non-null cells for each registered raster3d map of a space time raster3d dataset."
-#~ msgstr "คำนวน univariate statistics จาก non-null 3d cells ของแผนที่เชิงภาพ3d"
-
-#~ msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
-#~ msgstr "คำนวน univariate statistics บน column ของตารางที่เลือก สำหรับแผนที่เชิงเส้นของ GRASS"
-
-#~ msgid "Canonical correlation"
-#~ msgstr "Canonical correlation"
-
-#~ msgid "Carve stream channels"
-#~ msgstr "Carve stream channels"
-
-#~ msgid "Change category values and labels"
-#~ msgstr "เปลยน คา หมวดหม และ แถบขอความ"
-
-#, fuzzy
-#~ msgid "Change project (location) and mapset"
-#~ msgstr "กลุ่มภาพเป้าหมาย ตำแหน่ง และ ชุดแผนที่  ของ GRASS"
-
-#~ msgid "Change working environment"
-#~ msgstr "เปลี่ยน สภาวะแวดล้อม การทำงาน"
-
-#~ msgid "Classify image"
-#~ msgstr "การจำแนก ภาพ"
-
-#~ msgid "Closest points"
-#~ msgstr "จุดใกล้สุด"
-
-#~ msgid "Clump"
-#~ msgstr "Clump"
-
-#~ msgid "Clustering input for unsupervised classification"
-#~ msgstr "Clustering input สำหรับ unsupervised classification"
-
-#~ msgid "Color balance for RGB"
-#~ msgstr "สี RGB"
-
-#~ msgid "Color tables"
-#~ msgstr "ตารางสี"
-
-#, fuzzy
-#~ msgid "Common export formats using OGR"
-#~ msgstr "ค่าพิกัด"
-
-#~ msgid "Compares bit patterns with a raster map."
-#~ msgstr "เปรียบเทียบ bit patterns ด้วย แผนที่เชิงภาพ"
-
-#~ msgid "Compress/decompress"
-#~ msgstr "บีบอัด/ขยาย"
-
-#~ msgid "Compresses and decompresses raster maps."
-#~ msgstr "บีบอัด และ ลด ขนาด แผนที่เชิงภาพ"
-
-#~ msgid "Configuration editor for r.li.'index'"
-#~ msgstr "ตัวแก้การกำหนดค่า สำหรับ r.li.'index'"
-
-#~ msgid "Contrast weighted edge density"
-#~ msgstr "ผสมสีให้ตัดกัน"
-
-#~ msgid "Convert object types"
-#~ msgstr "แปลง ชนิดวัตถุ"
-
-#~ msgid "Converts 2D raster map slices to one 3D raster volume map."
-#~ msgstr "แปลงแผนที่เชิงภาพ slices 2 มิติ ไปเป็นแผนที่เชิงภาพ แบบ ปริมาตร 3 มิติ"
-
-#~ msgid "Converts 3D raster maps to 2D raster maps"
-#~ msgstr "แปลง แผนที่เชิงภาพ 3 มิติ ไปเป็น แผนที่เชิงภาพ 2 มิติ"
-
 #, fuzzy
 #~ msgid "Converts all older versions of GRASS vector maps in current mapset to current format."
 #~ msgstr "นำเข้า แผนที่เชิงเส้น รุ่นเก่า ของ GRASS"
 
-#~ msgid "Converts files in DXF format to GRASS vector map format."
-#~ msgstr "แปลงไฟล์ในรูปแบบ DXF ไปเป็น แผนที่เชิงเส้น GRASS."
-
 #, fuzzy
 #~ msgid "Copying"
 #~ msgstr "คัดลอกตาราง"
-
-#~ msgid "Correct and reclassify objects"
-#~ msgstr "แก้ไข และ  reclassify วัตถุ"
-
-#~ msgid "Cost surface"
-#~ msgstr "Cost surface"
-
-#~ msgid "Covariance/correlation"
-#~ msgstr "Covariance/correlation"
-
-#~ msgid "Create 3D vector over raster"
-#~ msgstr "สร้าง 3D เวคเตอร์บนแรสเตอร์"
-
-#~ msgid "Create LRS"
-#~ msgstr "สร้าง LRS"
-
-#~ msgid "Create RGB"
-#~ msgstr "สร้าง RGB"
-
-#, fuzzy
-#~ msgid "Create new project (location)"
-#~ msgstr "สร้าง mapset ใหม่"
-
-#~ msgid "Create points/segments"
-#~ msgstr "สร้าง จุด/ชิ้นส่วน"
-
-#~ msgid "Create stationing"
-#~ msgstr "สร้าง Stationing"
-
-#~ msgid "Create/edit group"
-#~ msgstr "สร้าง/แก้ไข กลุ่ม"
-
-#~ msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
-#~ msgstr "สร้าง แผนที่ปริมาตร  3 มิติ จาก แผนที่ความสูง เชิงภาพ 2 มิติ และ แผนที่ปริมาตรเชิงภาพ"
-
-#~ msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
-#~ msgstr "สร้าง Delaunay triangulation จาก แผนที่เชิงเส้นนำเข้า ที่มี จุด หรือ จุดศูนย์ถ่วง."
-
-#~ msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
-#~ msgstr "สร้าง ชั้นข้อมูลแผนที่เชิงภาพ composite โดยใช้ ค่าหมวดหมู่ที่รู้จัก จาก หนึ่ง(หรือ มากกว่า) ชั้นแผนที่ เพื่อที่จะเติมในพื้นที่ของ \"no data\" ในชั้นแผนที่อื่น"
-
-#~ msgid "Creates a cross product of the category values from multiple raster map layers."
-#~ msgstr "สร้าง cross product ของหมวดหมู่ จากหลายชั้นข้อมูลแผนที่เชิงภาพ"
-
-#~ msgid "Creates a fractal surface of a given fractal dimension."
-#~ msgstr "สร้าง fractal surface จาก มิติของ fractal"
-
-#~ msgid "Creates a raster map containing concentric rings around a given point."
-#~ msgstr "สร้างแผนที่เชิงภาพที่มี  rings รอบๆจุด"
-
-#~ msgid "Creates new vector (points) map from database table containing coordinates."
-#~ msgstr "สร้าง แผนที่เชิงเส้นจุดใหม่ จาก ตาราง ฐานข้อมูล ที่มี ค่าพิกัด"
-
-#~ msgid "Creates paint labels for a vector map from attached attributes."
-#~ msgstr "สร้าง แถบข้อความ สำหรับ แผนที่เชิงเส้น จาก รายละเอียดที่แนบ."
-
-#~ msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
-#~ msgstr "สร้าง  จุด/ชิ้นส่วน จากเส้นที่นำเข้า, ระบบอ้างอิงเชิงเส้น และ ตำแหน่ง อ่านจาก stdin หรือ ไฟล์."
-
-#~ msgid "Creates points/segments from input vector lines and positions."
-#~ msgstr "สร้าง จุด/ชิ้นส่วน จากแผนที่เชิงเส้น และตำแหน่ง ที่จะนำเข้า."
-
-#~ msgid "Creates raster maps from ASCII polygon/line/point data files."
-#~ msgstr "สร้าง แผนที่เชิงภาพ จากไฟล์ข้อมูล ASCII รูปปิด/เส้น/จุด"
-
-#~ msgid "Cross product"
-#~ msgstr "Cross product"
-
-#~ msgid "Cumulative movement costs"
-#~ msgstr "Cumulative movement costs"
-
-#~ msgid "Database information"
-#~ msgstr "ข้อมูลฐานข้อมูล"
-
-#~ msgid "Delaunay triangles"
-#~ msgstr "Delaunay triangles"
-
-#~ msgid "Depressionless map and flowlines"
-#~ msgstr "แผนที่ Depressionless และ  flowlines"
-
-#~ msgid "Describe table"
-#~ msgstr "อธิบาย ตาราง"
-
-#~ msgid "Describes a table in detail."
-#~ msgstr "อธิบาย รายละเอียดของตาราง"
-
-#~ msgid "Detect edges"
-#~ msgstr "ค้นหา ขอบ"
-
-#~ msgid "Detect interiors"
-#~ msgstr "ตรวจจับ ภายใน"
-
-#~ msgid "Detects the object's edges from a LIDAR data set."
-#~ msgstr "ตรวจจับ ขอบของวัตถุ จาก ชุดข้อมูล LIDAR"
-
-#~ msgid "Develop images and groups"
-#~ msgstr "ปรับปรุง ภาพและกลุ่ม"
 
 #~ msgid "Digitize"
 #~ msgstr "ดิจิไทซ์"
@@ -11728,536 +15382,31 @@ msgstr ""
 #~ msgid "Displays version and copyright information."
 #~ msgstr "แสดงข้อมูล รุ่น และ ลิขสิทธิ์"
 
-#~ msgid "Dissolve boundaries"
-#~ msgstr "ละลาย ขอบเขต"
-
-#, fuzzy
-#~ msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
-#~ msgstr "Dissolves เขต ระหว่าง พื้นที่ที่อยู่ติดกันและมี ข้อมูลเหมือนกัน"
-
-#~ msgid "Dominance's diversity"
-#~ msgstr "ความหลากหลาย Dominance"
-
-#~ msgid "Drop column"
-#~ msgstr "ลบคอลัมน์"
-
-#~ msgid "Drops a column from the attribute table connected to a given vector map."
-#~ msgstr "ลบ  column จาก ตารางรายละเอียด ที่เชื่อมกับ แผนที่เชิงเส้น"
-
-#~ msgid "Edge density"
-#~ msgstr "ความหนาแน่นของขอบ"
-
-#~ msgid "Edge detection"
-#~ msgstr "ค้นหาขอบมุม"
-
-#~ msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
-#~ msgstr "แก้ไข แผนที่เชิงเส้น, ยอมให้เพิ่ม,ลบ และ แก้ไข ข้อมูลที่เลือก."
-
-#~ msgid "Establishes the current working 3D raster mask."
-#~ msgstr "สร้าง แผนที่ mask 3 มิติเชิงภาพ ที่กำลังทำงาน"
-
-#~ msgid "Explicitly create the 3D NULL-value bitmap file."
-#~ msgstr "สร้าง 3D NULL-value bitmap ไฟล์."
-
-#~ msgid "Export raster map"
-#~ msgstr "ส่งออกแผนที่แรสเตอร์"
-
 #, fuzzy
 #~ msgid "Export variance map as well: "
 #~ msgstr "ส่งออกแผนที่แรสเตอร์"
-
-#~ msgid "Export vector map"
-#~ msgstr "ส่งออกแผนที่เวคเตอร์"
-
-#~ msgid "Exports a GRASS raster to a binary MAT-File."
-#~ msgstr "ส่งออกแผนที่เชิงภาพ GRASSไปเป็น  binary MAT-File"
-
-#~ msgid "Exports a GRASS raster to a binary array."
-#~ msgstr "ส่งออก แผนที่ภาพ GRASS แบบ binary"
-
-#, fuzzy
-#~ msgid "Extract subset of raster3D dataset"
-#~ msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
-
-#~ msgid "Fast Fourier"
-#~ msgstr "Fast Fourier"
-
-#~ msgid "Fast Fourier Transform (FFT) for image processing."
-#~ msgstr "Fast Fourier Transform (FFT) for image processing."
-
-#~ msgid "Fill NULL cells"
-#~ msgstr "เติม NULL cells"
-
-#~ msgid "Fill lake"
-#~ msgstr "Fill lake"
-
-#~ msgid "Filter image"
-#~ msgstr "การกรอง ภาพ"
-
-#~ msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
-#~ msgstr "ค้นหา เส้น  id และ real km+offset สำหรับ จุดที่ให้ ในแผนที่เชิงเส้น โดยใช้ ระบบอ้างอิงตำแหน่งเชิงเส้น."
-
-#~ msgid "Finds shortest path on vector network."
-#~ msgstr "หา shortest path บน vector network."
-
-#~ msgid "Flow accumulation"
-#~ msgstr "Flow accumulation"
-
-#~ msgid "Flow lines"
-#~ msgstr "Flow lines"
-
-#~ msgid "Fractal surface"
-#~ msgstr "พื้นผิว Fractal"
-
-#~ msgid "GRASS raster map layer data resampling capability."
-#~ msgstr "ความสามารถในการ  resampling ชั้นข้อมูลแผนที่เชิงภาพ GRASS"
-
-#~ msgid "GRASS working environment"
-#~ msgstr "GRASS working environment"
-
-#~ msgid "Gaussian deviates surface"
-#~ msgstr "พื้นผิว Gaussian deviates"
-
-#~ msgid "General statistics"
-#~ msgstr "สถิติทั่วไป"
-
-#~ msgid "Generate area for current region"
-#~ msgstr "สร้าง Area สำหรับ ขอบเขต ปัจจุบัน"
-
-#~ msgid "Generate areas from points"
-#~ msgstr "สร้างพื้นที่จากจุด"
-
-#~ msgid "Generate images with textural features from a raster map."
-#~ msgstr "สร้าง ภาพ ด้วยลวดลาย จากแผนที่เชิงภาพ"
-
-#~ msgid "Generate points"
-#~ msgstr "สร้างจุด"
-
-#~ msgid "Generate points along lines"
-#~ msgstr "สร้างจุดตามเส้น"
-
-#~ msgid "Generate random cells"
-#~ msgstr "สร้างเซลล์สุ่ม"
-
-#~ msgid "Generate random points"
-#~ msgstr "สร้างจุดสุ่ม"
-
-#~ msgid "Generate surfaces"
-#~ msgstr "สร้างพื้นผิว"
-
-#~ msgid "Generates a raster map layer with contiguous areas grown by one cell."
-#~ msgstr "สร้าง ชั้นแผนที่เชิงภาพ ด้วย  contiguous areas grown ด้วย 1 cell"
-
-#~ msgid "Generates random cell values with spatial dependence."
-#~ msgstr "สร้าง random cell values ด้วย spatial dependence."
-
-#~ msgid "Generates random surface(s) with spatial dependence."
-#~ msgstr "สร้าง random random surface(s) ด้วย spatial dependence."
-
-#~ msgid "Grow"
-#~ msgstr "Grow"
-
-#~ msgid "HIS to RGB"
-#~ msgstr "HIS ไปเป็น RGB"
 
 #, fuzzy
 #~ msgid "Hide {overlay}"
 #~ msgstr "แผนที่เชิงภาพ"
 
-#, fuzzy
-#~ msgid "Historical GRASS vector import"
-#~ msgstr "ส่งออก แผนที่เชิงเส้น GRASS เป็น SVG."
-
-#~ msgid "Hydrologic modeling"
-#~ msgstr "แบบจำลอง Hydrologic"
-
-#~ msgid "IDW from raster points"
-#~ msgstr "IDW จากจุดแรสเตอร์"
-
-#~ msgid "IDW from vector points"
-#~ msgstr "IDW จากจุดเวคเตอร์"
-
-#~ msgid "Import a binary raster file into a GRASS raster map layer."
-#~ msgstr "นำเข้า ไฟล์แผนที่เชิงภาพ binary ไปที่ ชั้นข้อมูลเชิงภาพ GRASS"
-
-#~ msgid "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map."
-#~ msgstr "นำเข้า US-NGA GEOnet Names Server (GNS)  country files ไปที่ แผนที่เชิงเส้นแบบจุดของ GRASS"
-
-#~ msgid "Imports a binary MAT-File(v4) to a GRASS raster."
-#~ msgstr "นำเข้า  binary MAT-File(v4) ไปเป็น แผนที่เชิงภาพ GRASS"
-
-#~ msgid "Imports attribute tables in various formats."
-#~ msgstr "นำเข้าตารางรายละเอียดแบบหลายรูปแบบ"
-
-#~ msgid "Imports older versions of GRASS vector maps."
-#~ msgstr "นำเข้า แผนที่เชิงเส้น รุ่นเก่า ของ GRASS"
-
-#~ msgid "Input for supervised MLC"
-#~ msgstr "นำเข้า supervised MLC"
-
-#~ msgid "Input for supervised SMAP"
-#~ msgstr "นำเข้า supervised SMAP"
-
-#, fuzzy
-#~ msgid "Input for supervised SVM"
-#~ msgstr "นำเข้า supervised SMAP"
-
-#~ msgid "Interactively edit category values"
-#~ msgstr "แก้ไขค่าหมวดหมู่ แบบโต้ตอบ"
-
-#~ msgid "Interpolate surfaces"
-#~ msgstr "Interpolate surfaces"
-
-#~ msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
-#~ msgstr "ข้อมูลจุดไม่เหมาะสม กับค่า G3D กริด ใช้ regularized spline กับ tension (RST) algorithm."
-
-#~ msgid "Inverse Fast Fourier"
-#~ msgstr "ส่วนกลับของ  Fast Fourier"
-
-#~ msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
-#~ msgstr "หาส่วนกลับ Fast Fourier Transform (IFFT) สำหรับ image processing"
-
-#~ msgid "Kappa analysis"
-#~ msgstr "การวิเคราะห์ Kappa"
-
-#~ msgid "Landscape patch analysis"
-#~ msgstr "การวิเคราะห์ Landscape patch"
-
-#~ msgid "Least cost route or flow"
-#~ msgstr "Least cost route หรือ flow"
-
-#~ msgid "Least-cost spread paths"
-#~ msgstr "Least-cost เส้นทางการกระจาย"
-
-#~ msgid "Lidar analysis"
-#~ msgstr "การวิเคราะห์ Lidar"
-
-#~ msgid "Linear referencing"
-#~ msgstr "การอ้างอิงตำแหน่งเชิงเส้น"
-
-#~ msgid "Linear regression"
-#~ msgstr "การเสื่อมถอย เชิงเส้น"
-
-#~ msgid "List"
-#~ msgstr "รายการ"
-
-#~ msgid "List all columns for a given table."
-#~ msgstr "รายการ columns ทั้งหมด สำหรับตาราง table."
-
-#~ msgid "List columns"
-#~ msgstr "ลิสต์คอลัมน์"
-
-#~ msgid "List drivers"
-#~ msgstr "ลิสต์ไดร์เวอร์"
-
-#~ msgid "List tables"
-#~ msgstr "ลิสต์ตาราง"
-
-#~ msgid "Lists all tables for a given database."
-#~ msgstr "แสดงตารางทั้งหมดในฐานข้อมูล"
-
-#~ msgid "Locates the closest points between objects in two raster maps."
-#~ msgstr "ระบุตำแหน่ง จุดที่ใกล้ที่สุดระหว่างวัตถุ ในแผนที่เชิงภาพ 2 แผนที่"
-
 #~ msgid "MASK"
 #~ msgstr "MASK"
-
-#~ msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
-#~ msgstr "สร้างแต่ละค่าของหมวดหมู่ คำสั่งของหมวดหมู่ที่ระบุของ cell รอบๆและ ค่าใหม่ใน ชั้นแผนที่เชิงภาพ"
-
-#~ msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
-#~ msgstr "ทำคำสั่ง ของแต่ละค่า cell ผลลัพธ์ จากค่าที่ให้  ในชั้นข้อมูลแผนที่เชิงภาพ"
-
-#~ msgid "Manage projections"
-#~ msgstr "จัดการ projections"
-
-#~ msgid "Manages category values and labels associated with user-specified raster map layers."
-#~ msgstr "จัดการ ค่าหมวดและแถบข้อความ ที่เกี่ยวข้องกับ ชั้นข้อมูลแผนที่ที่ผู้ใช้กำหนด"
-
-#~ msgid "Manages the boundary definitions for the geographic region."
-#~ msgstr "จัดการนิยามขอบเขต สำหรับขอบเขต geographic"
-
-#~ msgid "Map type conversions"
-#~ msgstr "แปลงชนิดแผนที่"
-
-#~ msgid "Mapset access"
-#~ msgstr "เข้าถึง Mapset"
-
-#~ msgid "Matrix/convolving filter"
-#~ msgstr "ตัวกรอง Matrix/convolving"
-
-#, fuzzy
-#~ msgid "Model: "
-#~ msgstr "วิธี:"
-
-#~ msgid "Mosaic images"
-#~ msgstr "ต่อภาพ"
-
-#~ msgid "Nearest features"
-#~ msgstr "ข้อมูลที่ใกล้ที่สุด"
-
-#~ msgid "Neighborhood analysis"
-#~ msgstr "การวเคราะหพนทขางเคยง"
-
-#~ msgid "Neighborhood points"
-#~ msgstr "จุดรอบข้าง"
-
-#~ msgid "Network analysis"
-#~ msgstr "วเคราะหโครงขาย"
-
-#~ msgid "New table"
-#~ msgstr "ตารางใหม่"
 
 #, fuzzy
 #~ msgid "No mapsets readable"
 #~ msgstr "แผนที่เชืงเส้น 3มิติ"
 
-#~ msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
-#~ msgstr "โปรแกรมตัวเลข สำหรับคำนวน Transient, Confined และ Unconfined groundwater flow แบบ 2 มิติ"
-
-#~ msgid "OIF for LandSat TM"
-#~ msgstr "OIF สำหรับ LandSat TM"
-
-#~ msgid "Open"
-#~ msgstr "เปิด"
-
-#~ msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
-#~ msgstr "ผลลัพธ์ของ covariance/correlation matrix สำหรับชั้นข้อมูลแผนที่เชิงภาพที่ผู้ใช้กำหนด"
-
-#, fuzzy
-#~ msgid "Outputs a raster map showing the anisotropic cumulative cost. Computes anisotropic cumulative cost of moving between different geographic locations on an input elevation raster map whose cell category values represent elevation combined with an input raster map layer whose cell values represent friction cost."
-#~ msgstr "ส่งออก ชั้นข้อมูลแผนที่เชิงภาพ ที่แสดง anisotropic cumulative cost ของ การเคลื่อนที่ ระหว่าง ตำแหน่งภูมิศาสตร์ที่ต่างกัน บนชั้นข้อมูลแผนที่ความสูง เชิงภาพ ที่ ค่า หมวดหมู่ cell แทน ความสูงที่รวมด้วย ชั้นข้อมูลแผนที่เชิงภาพ ที่ค่า cell แทน friction cost."
-
-#~ msgid "Outputs and modifies the user's current GRASS variable settings."
-#~ msgstr "ผลลัพธ์และการเปลี่ยนแปลง ผู้ใช้ ในการกำหนดตัวแปรของ  GRASS"
-
-#~ msgid "Outputs basic information about a user-specified 3D raster map layer."
-#~ msgstr "ออกผลลัพธ์พื้นฐาน เกี่ยวกับ ชั้นข้อมูล แผนที่เชิงภาพ 3 มิติ ที่ผู้ใช้ระบุ"
-
-#~ msgid "Outputs raster map layer values lying along user defined transect line(s)."
-#~ msgstr "ค่าส่งออก ของชั้นข้อมูลแผนที่เชิงภาพ วางตัวตาม transect line(s) ที่ผู้ใช้กำหนด"
-
-#~ msgid "Outputs the raster map layer values lying on user-defined line(s)."
-#~ msgstr "ส่งออก ค่าชั้นข้อมูลแผนที่เชิงภาพ บนบรรทัดที่ผู้ใช้ระบุ"
-
-#~ msgid "Parallel lines"
-#~ msgstr "เส้นขนาน"
-
-#~ msgid "Patch area Coeff Var"
-#~ msgstr "Coeff Var ของพื้นที่ Patch"
-
-#~ msgid "Patch area Std Dev"
-#~ msgstr "Std Dev ของพื้นที่ Patch"
-
-#~ msgid "Patch area range"
-#~ msgstr "ช่วง ของพื้นที่ Patch"
-
-#~ msgid "Patch density"
-#~ msgstr "ความหนาแน่นของ Patch"
-
-#~ msgid "Patch number"
-#~ msgstr "จำนวนของ Patch"
-
-#~ msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
-#~ msgstr "สร้าง contextual image classification ใช้การประมาณ sequential maximum a posteriori (SMAP)"
-
-#~ msgid "Perturb points"
-#~ msgstr "จุด Perturb"
-
-#~ msgid "Principal components"
-#~ msgstr "ส่วนประกอบหลัก"
-
-#~ msgid "Print/add/remove a timestamp for a 3D raster map"
-#~ msgstr "พิมพ์/เพิ่ม/เอาออก  timestamp สำหรับ แผนที่เชิงภาพ 3 มิติ"
-
-#~ msgid "Prints terse list of category values found in a raster map layer."
-#~ msgstr "แสดงรายการค่าหมวดหมู่ แบบ กะทัดรัด ที่พบในชั้นแผนที่เชิงภาพ"
-
-#~ msgid "Prints vector map attributes."
-#~ msgstr "แสดง รายละเอียด ของแผนที่เชิงภาพ"
-
-#~ msgid "Prints/sets DB connection for a vector map to attribute table."
-#~ msgstr "แสดง/กำหนด การติดต่อฐานข้อมูล สำหรับตารางรายละเอียดแผนที่เชิงเส้น"
-
-#~ msgid "Produces the quantization file for a floating-point map."
-#~ msgstr "สร้าง ไฟล์quantization สำหรับ  floating-point map."
-
-#~ msgid "Produces tilings of the source projection for use in the destination region and projection."
-#~ msgstr "สร้าง tiling ของ  projection เดิม เพื่อใช้กับขอบเขตและ projection ปลายทาง"
-
-#~ msgid "Quadrat indices"
-#~ msgstr "ดัชนี Quadrat"
-
-#~ msgid "Quantization"
-#~ msgstr "Quantization"
-
-#~ msgid "Queries colors for a raster map layer."
-#~ msgstr "ค้นหา สี สำหรับ ชั้นข้อมูลแผนที่เชิงภาพ"
-
-#~ msgid "Query any table"
-#~ msgstr "ร้องขอข้อมูลจากตารางใดๆ"
-
-#~ msgid "Query with coordinate(s)"
-#~ msgstr "ค้นหาด้วยค่าพิกัด"
-
-#~ msgid "RGB to HIS"
-#~ msgstr "RGB ถึง HIS"
-
-#~ msgid "Random cells and vector points"
-#~ msgstr "เซลล์สุ่มและจุดเวคเตอร์"
-
-#~ msgid "Random deviates surface"
-#~ msgstr "Random deviates surface"
-
-#~ msgid "Random surface with spatial dependence"
-#~ msgstr "Random surface ด้วย spatial dependence"
-
-#~ msgid "Randomly partition points into test/train sets."
-#~ msgstr "สุ่ม จุด partitionไปเป็น ชุด test/train."
-
-#~ msgid "Range of category values"
-#~ msgstr "ช่วงของ ค่าหมวดหมู่"
-
-#~ msgid "Raster contours"
-#~ msgstr "เส้นชั้นความสูงเชิงภาพ"
-
-#~ msgid "Raster to vector"
-#~ msgstr "แรสเตอร์ เป็น เวคเตอร์"
-
-#~ msgid "Rate of spread"
-#~ msgstr "อัตราการขยาย"
-
-#~ msgid "Reclassify by size"
-#~ msgstr "Reclassify โดย ขนาด"
-
-#~ msgid "Recodes categorical raster maps."
-#~ msgstr "Recodes หมวดหมู่ ของ แผนที่เชิงภาพ"
-
-#~ msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
-#~ msgstr "Recursively traces น้อยที่สุดของ cost path backwards ที่ cells จาก ที่กำหนด  cumulative cost"
-
-#~ msgid "Regularized spline tension"
-#~ msgstr "Regularized spline tension"
-
 #, fuzzy
 #~ msgid "Remove MASK"
 #~ msgstr "เอาตารางออก"
-
-#~ msgid "Remove outliers in point sets"
-#~ msgstr "เอา  outliers ใน ชุดของจุด ออก"
-
-#~ msgid "Removes existing attribute table of a vector map."
-#~ msgstr "เอาตารางรายละเอียดของแผนที่เชิงเส้นออก"
-
-#~ msgid "Removes outliers from vector point data."
-#~ msgstr "เอา outliers ออกจาก แผนที่เชิงเส้นแบบจุด"
-
-#~ msgid "Renames data base element files in the user's current mapset."
-#~ msgstr "เปลี่ยนชื่อไฟล์ชิ้นส่วนของข้อมูลฐาน ในชุดแผนที่"
-
-#~ msgid "Report topology by category"
-#~ msgstr "รายงาน topology โดยหมวดหมู่"
-
-#~ msgid "Reports and statistics"
-#~ msgstr "รายงานและสถต"
-
-#~ msgid "Resample using aggregate statistics"
-#~ msgstr "Resample ใช้วิธ๊ Aggregate statistics"
-
-#~ msgid "Resample using multiple methods"
-#~ msgstr "การใช้หลายๆวิธีในการ Resample"
-
-#~ msgid "Resample using nearest neighbor"
-#~ msgstr "Resample ใช้ วิธ๊ Nearest Neighbor"
-
-#~ msgid "Resample using spline tension"
-#~ msgstr "Resample ใช้ วิธ๊ Spline Tension"
-
-#~ msgid "Rescale"
-#~ msgstr "Rescale"
-
-#~ msgid "Rescale with histogram"
-#~ msgstr "Rescale โดย histogram"
-
-#~ msgid "Rescales histogram equalized the range of category values in a raster map layer."
-#~ msgstr "Rescales histogram equalized ค่าช่วงของหมวดหมู่  ในชั้นข้อมูลแผนที่เชิงภาพ"
-
-#~ msgid "Rescales the range of category values in a raster map layer."
-#~ msgstr "Rescales ช่วงของค่าหมวดหมู่ ในชั้นข้อมูลแผนที่เชิงภาพ"
-
-#~ msgid "SQL statement"
-#~ msgstr "ข้อความ SQL"
-
-#~ msgid "Sample raster neighborhood around points"
-#~ msgstr "แผนที่เชิงภาพ Sample neighborhood ที่ตำแหน่งรอบๆจุด"
-
-#~ msgid "Sample transects"
-#~ msgstr "Sample transects"
-
-#~ msgid "Sample transects (bearing/distance)"
-#~ msgstr "Sample transects (ทิศทาง/ระยะทาง)"
-
-#~ msgid "Samples a raster map at vector point locations."
-#~ msgstr "ตัวอย่าง แผนที่เชิงภาพ ที่ตำแหน่งของจุด"
-
-#~ msgid "Set up sampling and analysis framework"
-#~ msgstr "กำหนด Sampling และ analysis framework"
-
-#~ msgid "Sets the boundary definitions for a raster map."
-#~ msgstr "กำหนด ข้อกำหนดขอบเขต สำหรับ แผนที่เชิงภาพ"
-
-#~ msgid "Shadows map"
-#~ msgstr "แผนที่ Shadow"
-
-#~ msgid "Shannon's diversity"
-#~ msgstr "ความหลากหลาย Shannon"
-
-#~ msgid "Shape index"
-#~ msgstr "ดัชนี Shape"
-
-#~ msgid "Show settings"
-#~ msgstr "แสดงค่าติดตั้ง"
 
 #, fuzzy
 #~ msgid "Show/hide legend"
 #~ msgstr "เพิ่ม legend"
 
-#, fuzzy
-#~ msgid "Show/hide scale bar"
-#~ msgstr "แผนที่เชิงภาพ"
-
-#~ msgid "Simpson's diversity"
-#~ msgstr "ความหลากหลาย Simpson"
-
-#~ msgid "Simulates TOPMODEL which is a physically based hydrologic model."
-#~ msgstr "จำลอง TOPMODEL ที่มีโครงทางกายภาพแบบ hydrologic model."
-
 #~ msgid "Sites to vector"
 #~ msgstr "Sites ไปเป็น แผนที่เชิงเส้น"
-
-#~ msgid "Slope and aspect"
-#~ msgstr "Slope และ aspect"
-
-#~ msgid "Solar radiance and shadows"
-#~ msgstr "Solar radiance และ shadows"
-
-#~ msgid "Spectral response"
-#~ msgstr "Spectral ที่ตอบสนอง"
-
-#~ msgid "Split net"
-#~ msgstr "ตัด net"
-
-#~ msgid "Split polylines"
-#~ msgstr "ตัด polyline"
-
-#~ msgid "Statistical overlay"
-#~ msgstr "Statistical ของการซ้อนทับ"
-
-#~ msgid "Steiner tree"
-#~ msgstr "Steiner tree"
-
-#~ msgid "Support file maintenance"
-#~ msgstr "การบำรุงรักษา Support ไฟล์"
 
 #~ msgid "Surface generation program."
 #~ msgstr "โปรแกรมสร้าง Surface"
@@ -12266,118 +15415,17 @@ msgstr ""
 #~ msgid "Surface interpolation utility for raster map."
 #~ msgstr "เครื่องมือ Surface interpolation สำหรับ ชั้นข้อมูลแผนที่เชิงภาพ"
 
-#~ msgid "TOPMODEL simulation"
-#~ msgstr "การจำลอง TOPMODEL"
-
-#~ msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
-#~ msgstr "ตารางมีความสัมพันธ์กัน ของหมวดหมู่ สำหรับ 2 ชั้นข้อมูลแผนที่เชิงภาพ"
-
-#~ msgid "Target group"
-#~ msgstr "กลุ่ม เป้าหมาย"
-
-#~ msgid "Targets an imagery group to a GRASS location and mapset."
-#~ msgstr "กลุ่มภาพเป้าหมาย ตำแหน่ง และ ชุดแผนที่  ของ GRASS"
-
 #, fuzzy
 #~ msgid "Temporary map %s  already exists.\n"
 #~ msgstr "แผนที่เชิงภาพไม่ใช่ 3มิติ"
-
-#~ msgid "Terrain parameters"
-#~ msgstr "ตัวแปร Terrain"
-
-#~ msgid "Test"
-#~ msgstr "ทดสอบ"
-
-#~ msgid "Test database driver, database must exist and set by db.connect."
-#~ msgstr "ทดสอบ ตัวขับฐานข้อมูล, ฐานข้อมูลจะต้องมีอยู่และกำหนดโดย db.connect"
-
-#~ msgid "Test normality"
-#~ msgstr "ทดสอบ"
-
-#~ msgid "Textural features"
-#~ msgstr "ข้อมูล Textural"
-
-#~ msgid "Thin"
-#~ msgstr "บาง"
-
-#~ msgid "Tiling"
-#~ msgstr "Tiling"
-
-#~ msgid "Toolset for cleaning topology of vector map."
-#~ msgstr "ชุดเครื่องมือ สำหรับ  cleaning topology ของแผนที่เชิงเส้น"
-
-#~ msgid "Topographic index map"
-#~ msgstr "แผนที่ดัชนี Topographic"
-
-#~ msgid "Transform features"
-#~ msgstr "ขอมล Transform"
-
-#~ msgid "Traveling salesman analysis"
-#~ msgstr "การวิเคราะห์การเดินทางของ Salesman"
-
-#, fuzzy
-#~ msgid "Univariate raster3D dataset statistics"
-#~ msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
-
-#~ msgid "Update area attributes from raster"
-#~ msgstr "ปรับปรุง รายละเอียด Area จากแผนที่เชิงภาพ"
-
-#~ msgid "Update map statistics"
-#~ msgstr "ปรับปรุง Map Statistics"
-
-#~ msgid "Update point attributes from areas"
-#~ msgstr "ปรับปรุง รายละเอียด จุด จาก Areas"
-
-#~ msgid "Update raster map statistics"
-#~ msgstr "ปรับปรุง statistic ของแผนที่เชิงภาพ"
-
-#~ msgid "Uploads raster values at positions of vector points to the table."
-#~ msgstr "ส่งค่าของแผนที่เชิงภาพ ที่ตำแหน่ง ของ จุดเชิงเส้น ไปที่ตาราง."
-
-#~ msgid "Uploads vector values at positions of vector points to the table."
-#~ msgstr "Uploads ค่าแผนที่เชิงเส้น ที่ตำแหน่งของจุด ไปที่ตาราง"
-
-#~ msgid "User access"
-#~ msgstr "การเข้าถ฿ง ของผู้ใช้"
 
 #, fuzzy
 #~ msgid "V&olumes"
 #~ msgstr "columns"
 
-#~ msgid "Vector to raster"
-#~ msgstr "จากเวคเตอร์เป็นแรสเตอร์"
-
 #~ msgid "Vector to volume"
 #~ msgstr "แผนที่เชิงเส้น ไปเป็น ปริมาตร"
-
-#~ msgid "Visibility"
-#~ msgstr "สามารถมองเห็น"
-
-#~ msgid "Visibility network"
-#~ msgstr "Network ที่มองเห็น"
 
 #, fuzzy
 #~ msgid "Volume"
 #~ msgstr "columns"
-
-#~ msgid "Voronoi diagram/Thiessen polygons"
-#~ msgstr "Voronoi diagram/Thiessen polygons"
-
-#~ msgid "Watershed analysis"
-#~ msgstr "Watershed analysis"
-
-#~ msgid "Watershed basin creation"
-#~ msgstr "การสร้าง Watershed basin"
-
-#~ msgid "Watershed subbasins"
-#~ msgstr "Watershed subbasins"
-
-#~ msgid "Wildfire modeling"
-#~ msgstr "แบบจำลองไฟป่า"
-
-#~ msgid "Zero-crossing \"edge detection\" raster function for image processing."
-#~ msgstr "Zero-crossing \"edge detection\" คำสั่งของภาพ สำหรับ image processing."
-
-#, fuzzy
-#~ msgid "legend"
-#~ msgstr "เพิ่ม legend"

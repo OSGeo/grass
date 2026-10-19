@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2010-12-01 03:06+0200\n"
 "Last-Translator: Fatih <bounfat@gmail.com>\n"
 "Language-Team: Türkçe <grass-translations@lists.osgeo.org>\n"
@@ -675,14 +675,17 @@ msgstr ""
 msgid "Rendering aborted"
 msgstr ""
 
-msgid "Downloading data "
-msgstr ""
-
-msgid "Rendering & "
+#, python-brace-format
+msgid "Rendering & downloading data {layers}..."
 msgstr ""
 
 msgid "Rendering..."
 msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Loading data..."
+msgid "Downloading data {layers}..."
+msgstr "Veri yükleniyor..."
 
 msgid "Trying to recover from default region..."
 msgstr ""
@@ -852,8 +855,9 @@ msgid ""
 "Details: %(detail)s"
 msgstr ""
 
-msgid "Unable to set "
-msgstr "Ayarlanamıyor"
+#, python-brace-format
+msgid "Unable to set '{group}:{key}:{subkey}'"
+msgstr ""
 
 #, python-format
 msgid "Unable to parse settings '%s'"
@@ -1686,7 +1690,7 @@ msgstr "Öznitelik verisi - kayıtları düzenleme/yönetme için sağ tıklayı
 msgid "Table"
 msgstr "Tablo"
 
-msgid " (read-only)"
+msgid "Table (read-only)"
 msgstr ""
 
 msgid "SQL Query"
@@ -2277,9 +2281,15 @@ msgid ""
 "10+ points for 3rd order."
 msgstr ""
 
-#, python-brace-format
-msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Region file <%s> already exists. Do you want to overwrite it?"
+msgid "The raster map {map_name} exists. Do you want to overwrite?"
+msgstr "<%s> bölge dosyası zaten var. Üzerine yazılmasını istermisin?"
+
+#, fuzzy, python-brace-format
+#| msgid "Region file <%s> already exists. Do you want to overwrite it?"
+msgid "The vector map {map_name} exists. Do you want to overwrite?"
+msgstr "<%s> bölge dosyası zaten var. Üzerine yazılmasını istermisin?"
 
 msgid "Rectifying images, please wait..."
 msgstr ""
@@ -2536,10 +2546,8 @@ msgstr ""
 msgid "Reload GCPs from POINTS file"
 msgstr ""
 
-msgid "Set map canvas for "
-msgstr ""
-
-msgid " / Zoom to map"
+#, python-brace-format
+msgid "Set map canvas for {zoom_back} / Zoom to map"
 msgstr ""
 
 msgid "Update GCP coordinates"
@@ -2782,8 +2790,10 @@ msgstr ""
 msgid "<not defined>"
 msgstr ""
 
-msgid "Condition: "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Condition: not defined"
+msgid "Condition: {label}"
+msgstr "Durum: tanımlanmadı"
 
 msgid "Condition: not defined"
 msgstr "Durum: tanımlanmadı"
@@ -3389,8 +3399,10 @@ msgstr ""
 msgid "Example"
 msgstr ""
 
-msgid "Enter parameters for '"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Enter PROJ.4 parameters string:"
+msgid "Enter parameters for '{tool}'"
+msgstr "PROJ.4 parametreleri girin:"
 
 msgid "Close this window without executing the command (Ctrl+Q)"
 msgstr ""
@@ -3739,10 +3751,13 @@ msgstr ""
 msgid "Not selectable element"
 msgstr ""
 
-msgid "Mapset"
-msgstr "Harita takımı"
+#, fuzzy, python-brace-format
+#| msgid "Mapset access"
+msgid "Mapset: {mapset}"
+msgstr "Harita takımı erişimi"
 
-msgid "Type: "
+#, python-brace-format
+msgid "Type: {element_type}"
 msgstr ""
 
 #, python-format
@@ -4134,7 +4149,7 @@ msgstr ""
 msgid "Area fill color:"
 msgstr ""
 
-msgid "Random colors according to category number "
+msgid "Random colors according to category number"
 msgstr ""
 
 msgid "Symbol:"
@@ -4233,6 +4248,9 @@ msgid ""
 "    - You may only write to the current mapset.\n"
 "    - You may only write to mapsets which you own."
 msgstr ""
+
+msgid "Mapset"
+msgstr "Harita takımı"
 
 msgid "Owner"
 msgstr "Sahip"
@@ -5033,9 +5051,6 @@ msgid "Preview"
 msgstr "Önizleme"
 
 msgid "Training"
-msgstr ""
-
-msgid "/ Zoom to map"
 msgstr ""
 
 msgid "std dev"
@@ -6263,7 +6278,9 @@ msgstr ""
 msgid "Set opacity of <{}>"
 msgstr ""
 
-msgid "Layer group:"
+#, fuzzy, python-brace-format
+#| msgid "Layer group:"
+msgid "Layer group: {number}"
 msgstr "Katman grubu:"
 
 msgid "Click to edit layer settings"
@@ -7154,8 +7171,10 @@ msgstr ""
 msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
 msgstr "Ölçmek için farenin sol tuşuna basın ve sürükleyin.%sTemizlemek için sol tuşa çift tıklayın."
 
-msgid "Measuring distance"
-msgstr "Mesafe Ölçümü"
+#, fuzzy, python-brace-format
+#| msgid "Measuring distance:"
+msgid "Measuring distance ({units}):"
+msgstr "Mesafe Ölçüm:"
 
 msgid "Measuring distance:"
 msgstr "Mesafe Ölçüm:"
@@ -7275,6 +7294,4077 @@ msgstr ""
 msgid "Property does not exist: %s"
 msgstr ""
 
+#, fuzzy
+#| msgid "File"
+msgid "&File"
+msgstr "Dosya"
+
+msgid "New"
+msgstr "Yeni"
+
+#, fuzzy
+msgid "Create new workspace"
+msgstr "Çalışma alanını kaydet"
+
+msgid "Open"
+msgstr "Aç"
+
+#, fuzzy
+#| msgid "Choose workspace file"
+msgid "Load workspace from file"
+msgstr "Çalışma alanı dosyasını seç"
+
+msgid "Save"
+msgstr ""
+
+msgid "Save as"
+msgstr "Değişiklikleri farklı kaydet"
+
+#, fuzzy
+#| msgid "Save workspace"
+msgid "Save workspace to file"
+msgstr "Çalışma alanını kaydet"
+
+#, fuzzy
+#| msgid "Choose workspace file"
+msgid "Close workspace file"
+msgstr "Çalışma alanı dosyasını seç"
+
+msgid "Map display"
+msgstr ""
+
+#, fuzzy
+#| msgid "raster"
+msgid "Add raster"
+msgstr "raster"
+
+#, fuzzy
+#| msgid "Add raster map layer"
+msgid "Add raster map layer to current display"
+msgstr "Raster harita katmanı ekle"
+
+#, fuzzy
+msgid "Add vector"
+msgstr "Vektör harita katmanı ekle"
+
+#, fuzzy
+#| msgid "Add vector map layer"
+msgid "Add vector map layer to current display"
+msgstr "Vektör harita katmanı ekle"
+
+#, fuzzy
+msgid "Add multiple rasters or vectors"
+msgstr "Raster harita katmanı ekle"
+
+msgid "Add multiple raster or vector map layers to current display"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add raster map layer"
+msgid "Add RGB raster layer"
+msgstr "Raster harita katmanı ekle"
+
+#, fuzzy
+#| msgid "Add raster map layer"
+msgid "Add RGB raster map layer to current display"
+msgstr "Raster harita katmanı ekle"
+
+msgid "Add web service layer"
+msgstr ""
+
+#, fuzzy
+msgid "New map display window"
+msgstr "Görüntüyü sil"
+
+#, fuzzy
+#| msgid "Draw transect in map display window to profile"
+msgid "Open new map display window"
+msgstr "?????????????????????????????????????"
+
+#, fuzzy
+#| msgid "Force re-rendering all map layers"
+msgid "Render all map displays"
+msgstr "Tüm harita katmanlarını tekrar oluşturma da zorlanıyor."
+
+msgid "Re-render maps in all open map display windows"
+msgstr ""
+
+msgid "Close current map display window"
+msgstr ""
+
+msgid "Close all open map display windows"
+msgstr ""
+
+msgid "Simplified raster import with reprojection"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Imports raster data into a GRASS raster map using GDAL library."
+msgstr "İkili raster dosyayı GRASS raster harita katmanı olarak içe aktar."
+
+#, fuzzy
+#| msgid "IDW from raster points"
+msgid "Import of common raster formats"
+msgstr "Raster noktalardan IDW "
+
+msgid "ASCII x,y,z point import and gridding"
+msgstr "ASCII x,y,z noktalarını içe aktar ve ızgarala"
+
+msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
+msgstr ""
+
+msgid "ASCII grid import"
+msgstr "ASCII Gridi içe aktar"
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Converts a GRASS ASCII raster file to binary raster map."
+msgstr "GRASS raster dosyasını ikili diziye aktar."
+
+msgid "ASCII polygons, lines, and point import"
+msgstr ""
+
+msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgstr "ASCII poligon/çizgi/nokta veri dosyalarından raster haritalar oluşturur."
+
+msgid "Raw binary array import"
+msgstr ""
+
+msgid "Import a binary raster file into a GRASS raster map layer."
+msgstr "İkili raster dosyayı GRASS raster harita katmanı olarak içe aktar."
+
+msgid "GRIDATB.FOR import"
+msgstr "GRIDATB.FOR içe aktar"
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map."
+msgstr "İkili raster dosyayı GRASS raster harita katmanı olarak içe aktar."
+
+msgid "Matlab 2D array import"
+msgstr ""
+
+msgid "Imports a binary MAT-File(v4) to a GRASS raster."
+msgstr "İkili MAT-File(v4) GRASS raster harita katmanına dönüştür."
+
+#, fuzzy
+#| msgid "PNG export"
+msgid "PNG import"
+msgstr "PNG olarak dışa aktar"
+
+msgid "Imports non-georeferenced PNG format image."
+msgstr ""
+
+msgid "SPOT NDVI import"
+msgstr "SPOT NDVI içe aktar"
+
+msgid "Imports SPOT VGT NDVI data into a raster map."
+msgstr "Raster haritaya SPOT VGT NDVI verisini aktar."
+
+msgid "SRTM HGT import"
+msgstr "SRTM (.hgt) içe aktar"
+
+#, fuzzy
+#| msgid "Imports SPOT VGT NDVI data into a raster map."
+msgid "Imports SRTM HGT files into raster map."
+msgstr "Raster haritaya SPOT VGT NDVI verisini aktar."
+
+msgid "Terra ASTER HDF import"
+msgstr "Terra ASTER HDF içe aktar"
+
+msgid "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp."
+msgstr ""
+
+msgid "LAS LiDAR points import"
+msgstr ""
+
+msgid "Point cloud (LAS LiDAR) import"
+msgstr ""
+
+#, fuzzy
+#| msgid "SRTM HGT import"
+msgid "WMS/WMTS import"
+msgstr "SRTM (.hgt) içe aktar"
+
+msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Patch raster maps"
+msgid "Unpack raster map"
+msgstr "Raster haritaları kümele"
+
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
+msgstr ""
+
+msgid "Reproject raster map from different GRASS project"
+msgstr ""
+
+msgid "Re-projects a raster map from given project to the current project."
+msgstr ""
+
+msgid "Simplified vector import with reprojection"
+msgstr ""
+
+#, fuzzy
+#| msgid "Imports older versions of GRASS vector maps."
+msgid "Imports vector data into a GRASS vector map using OGR library."
+msgstr "Eski GRASS vektör haritasını içe aktarır."
+
+#, fuzzy
+#| msgid "Import vector map"
+msgid "Import of common vector formats"
+msgstr "Vektör haritayı içe aktar"
+
+msgid "ASCII points or GRASS ASCII format"
+msgstr ""
+
+#, fuzzy
+#| msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgid "Creates a vector map from an ASCII points file or ASCII vector file."
+msgstr "ASCII poligon/çizgi/nokta veri dosyalarından raster haritalar oluşturur."
+
+#, fuzzy
+#| msgid "Show vector lines"
+msgid "ASCII points as a vector lines"
+msgstr "Vektör çizgileri göster"
+
+msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
+msgstr ""
+
+msgid "DXF import"
+msgstr "DXF dosyasını içe aktar"
+
+msgid "Converts files in DXF format to GRASS vector map format."
+msgstr "DXF biçimindeki dosyaları GRASS vektör haritasına dönüştürür."
+
+msgid "WFS"
+msgstr ""
+
+msgid "Imports GetFeature from a WFS server."
+msgstr ""
+
+msgid "ESRI e00 import"
+msgstr "ESRI e00 dosyasını içe aktar"
+
+#, fuzzy
+#| msgid "Imports older versions of GRASS vector maps."
+msgid "Imports E00 file into a vector map."
+msgstr "Eski GRASS vektör haritasını içe aktarır."
+
+#, fuzzy
+#| msgid "GEOnet import"
+msgid "Geonames import"
+msgstr "GEOnet içe aktar"
+
+#, fuzzy
+#| msgid "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map."
+msgid "Imports geonames.org country files into a vector points map."
+msgstr "GRASS vektör noktalar haritasına US-NGA GEOnet Names Server (GNS) ülke dosyalarını aktar."
+
+msgid "Matlab array or Mapgen format import"
+msgstr ""
+
+msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr ""
+
+#, fuzzy
+#| msgid "Patch vector maps"
+msgid "Unpack vector map"
+msgstr "Vektör haritaları yamala"
+
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
+msgstr ""
+
+msgid "Reproject vector map from different GRASS project"
+msgstr ""
+
+msgid "Re-projects a vector map from one project to the current project."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Import 3D raster data"
+msgstr "Raster haritayı dışa aktar"
+
+msgid "ASCII 3D import"
+msgstr "ASCII 3B dosyayı içe aktar"
+
+#, fuzzy
+#| msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
+msgstr "2B raster harita dilimlerini 3B raster hacim haritasına dönüştürür."
+
+msgid "Raw binary array 3D import"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgstr "İkili raster dosyayı GRASS raster harita katmanı olarak içe aktar."
+
+msgid "Vis5D import"
+msgstr "Vis5D içe aktar"
+
+msgid "Import 3-dimensional Vis5D files."
+msgstr "3 boyutlu Vis5D dosyalarını içe aktar."
+
+#, fuzzy
+#| msgid "ASCII 3D import"
+msgid "LiDAR 3D import"
+msgstr "ASCII 3B dosyayı içe aktar"
+
+msgid "XYZ to 3D raster series"
+msgstr ""
+
+msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
+msgstr ""
+
+msgid "Import database table"
+msgstr "Veritabanı tablosunu içe aktar"
+
+#, fuzzy
+msgid "Common import formats"
+msgstr "OGR kullanan çeşitli dışa aktarma biçimleri"
+
+msgid "Imports attribute tables in various formats."
+msgstr "Değişik biçimlerdeki öznitelik tablolarını içe aktar."
+
+msgid "Export raster map"
+msgstr "Raster haritayı dışa aktar"
+
+#, fuzzy
+msgid "Common export formats"
+msgstr "OGR kullanan çeşitli dışa aktarma biçimleri"
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Exports GRASS raster maps into GDAL supported formats."
+msgstr "GRASS raster dosyasını ikili diziye aktar."
+
+msgid "ASCII grid export"
+msgstr "ASCII Gridi dışa aktar"
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgstr "İkili raster dosyayı GRASS raster harita katmanı olarak içe aktar."
+
+#, fuzzy
+#| msgid "ASCII x,y,z point import and gridding"
+msgid "ASCII x,y,z points export"
+msgstr "ASCII x,y,z noktalarını içe aktar ve ızgarala"
+
+msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
+msgstr ""
+
+msgid "GRIDATB.FOR export"
+msgstr "GRIDATB.FOR dışa aktar"
+
+msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
+msgstr ""
+
+msgid "Matlab 2D array export"
+msgstr ""
+
+msgid "Exports a GRASS raster to a binary MAT-File."
+msgstr "GRASS raster dosyasını ikili MAT-dosyasına aktar."
+
+msgid "Raw binary array export"
+msgstr ""
+
+msgid "Exports a GRASS raster to a binary array."
+msgstr "GRASS raster dosyasını ikili diziye aktar."
+
+msgid "MPEG-1 export"
+msgstr "MPEG-1 dışa aktar"
+
+#, fuzzy
+#| msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgid "Converts raster map series to MPEG movie."
+msgstr "2B raster harita dilimlerini 3B raster hacim haritasına dönüştürür."
+
+msgid "PNG export"
+msgstr "PNG olarak dışa aktar"
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Export a GRASS raster map as a non-georeferenced PNG image."
+msgstr "GRASS raster dosyasını ikili diziye aktar."
+
+msgid "PPM export"
+msgstr "PPM olarak dışa aktar"
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary MAT-File."
+msgid "Converts a GRASS raster map to a PPM image file."
+msgstr "GRASS raster dosyasını ikili MAT-dosyasına aktar."
+
+msgid "PPM from RGB export"
+msgstr "RGB den PPM'e ver   **************"
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary MAT-File."
+msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
+msgstr "GRASS raster dosyasını ikili MAT-dosyasına aktar."
+
+msgid "POV-Ray export"
+msgstr "POV-Ray dışa aktar"
+
+msgid "Converts a raster map layer into a height-field file for POV-Ray."
+msgstr ""
+
+msgid "VRML export"
+msgstr "VRML olarak dışa aktar"
+
+msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
+msgstr "Raster haritayı Virtual Reality Modeling Language (VRML) e ver.  ???????????????????????"
+
+msgid "VTK export"
+msgstr "VTK olarak dışa aktar"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Converts raster maps into the VTK-ASCII format."
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+#, fuzzy
+#| msgid "Patch raster maps"
+msgid "Pack raster map"
+msgstr "Raster haritaları kümele"
+
+msgid "Exports a raster map as GRASS specific archive file"
+msgstr ""
+
+msgid "Export vector map"
+msgstr "Vektör haritayı dışa aktar"
+
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
+msgstr ""
+
+#, fuzzy
+msgid "ASCII points or GRASS ASCII vector export"
+msgstr "Eski GRASS vektör haritasını içe aktar"
+
+msgid "Exports a vector map to a GRASS ASCII vector representation. By default only features with category are exported. To export all features use 'layer=-1'."
+msgstr ""
+
+msgid "DXF export"
+msgstr "DXF olarak dışa aktar"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Exports vector map to DXF file format."
+msgstr "Vektör haritayı dışa aktar"
+
+#, fuzzy
+#| msgid "PNG export"
+msgid "PostGIS export"
+msgstr "PNG olarak dışa aktar"
+
+msgid "Exports a vector map layer to PostGIS feature table."
+msgstr ""
+
+msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
+msgstr "GRASS x,y,z noktalarını POV-Ray x,z,y formatına dönüştür."
+
+msgid "SVG export"
+msgstr "SVG olarak dışa aktar"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Exports a vector map to SVG file."
+msgstr "Vektör haritayı dışa aktar"
+
+msgid "Converts a vector map to VTK ASCII output."
+msgstr ""
+
+#, fuzzy
+#| msgid "Patch vector maps"
+msgid "Pack vector map"
+msgstr "Vektör haritaları yamala"
+
+msgid "Exports a vector map as GRASS specific archive file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export to LiDAR format"
+msgstr "Vektör haritayı dışa aktar"
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Export 3D raster maps"
+msgstr "Raster haritayı dışa aktar"
+
+msgid "ASCII 3D export"
+msgstr "ASCII 3B olarak dışa aktar"
+
+#, fuzzy
+#| msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgid "Converts a 3D raster map layer into a ASCII text file."
+msgstr "2B raster harita dilimlerini 3B raster hacim haritasına dönüştürür."
+
+msgid "Raw binary array 3D export"
+msgstr ""
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Exports a GRASS 3D raster map to a binary array."
+msgstr "GRASS raster dosyasını ikili diziye aktar."
+
+msgid "Vis5D export"
+msgstr "Vis5D olarak dışa aktar"
+
+#, fuzzy
+#| msgid "Import 3-dimensional Vis5D files."
+msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr "3 boyutlu Vis5D dosyalarını içe aktar."
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+#, fuzzy
+#| msgid "DXF export"
+msgid "NetCDF export"
+msgstr "DXF olarak dışa aktar"
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary MAT-File."
+msgid "Export a 3D raster map as netCDF file."
+msgstr "GRASS raster dosyasını ikili MAT-dosyasına aktar."
+
+#, fuzzy
+#| msgid "Import database table"
+msgid "Export database table"
+msgstr "Veritabanı tablosunu içe aktar"
+
+#, fuzzy
+#| msgid "Imports attribute tables in various formats."
+msgid "Exports attribute tables into various formats."
+msgstr "Değişik biçimlerdeki öznitelik tablolarını içe aktar."
+
+msgid "Link external raster data"
+msgstr ""
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
+msgstr "İkili raster dosyayı GRASS raster harita katmanı olarak içe aktar."
+
+msgid "Link external vector data"
+msgstr ""
+
+msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
+msgstr ""
+
+msgid "Output format for raster data"
+msgstr ""
+
+msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
+msgstr ""
+
+msgid "Output format for vector data"
+msgstr ""
+
+msgid "Defines vector output format utilizing OGR library."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage maps"
+msgstr "Tabloları yönet"
+
+msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
+msgstr ""
+
+msgid "List"
+msgstr "Listele"
+
+msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
+msgstr ""
+
+msgid "Renames data base element files in the user's current mapset."
+msgstr "Kullanıcının geçerli harita takımındaki veritabanı elemanı dosyalarını yeniden adlandırır."
+
+msgid "Delete"
+msgstr "Sil"
+
+#, fuzzy
+#| msgid "Renames data base element files in the user's current mapset."
+msgid "Removes data base element files from the user's current mapset using the search pattern."
+msgstr "Kullanıcının geçerli harita takımındaki veritabanı elemanı dosyalarını yeniden adlandırır."
+
+#, fuzzy
+msgid "Download project from web"
+msgstr "Seçilmiş harita takımını yeniden adlandır"
+
+msgid "Download GRASS project from the web Get GRASS project from an URL or file path"
+msgstr ""
+
+msgid "Rebuild or remove all addons"
+msgstr ""
+
+msgid "Rebuilds or removes all locally installed GRASS Addons extensions. By default only extensions built against different GIS Library are rebuilt."
+msgstr ""
+
+msgid "Map type conversions"
+msgstr "Harita tipi dönüşümleri"
+
+msgid "Raster to vector"
+msgstr "Rasterdan vektöre"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Converts a raster map into a vector map."
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+#, fuzzy
+#| msgid "Update area attributes from raster"
+msgid "Raster series to 3D raster"
+msgstr "Alan özniteliklerini rasterdan güncelle"
+
+msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgstr "2B raster harita dilimlerini 3B raster hacim haritasına dönüştürür."
+
+#, fuzzy
+#| msgid "Create 3D vector over raster"
+msgid "Raster 2.5D to 3D raster"
+msgstr "Raster üzerinde 3B vektör oluştur"
+
+msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
+msgstr "2B yükselti ve raster haritalardan 3B hacim haritası oluşturur."
+
+msgid "Vector to raster"
+msgstr "Vektörden raster'e"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Converts (rasterize) a vector map into a raster map."
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+#, fuzzy
+#| msgid "Vector to raster"
+msgid "Vector to 3D raster"
+msgstr "Vektörden raster'e"
+
+#, fuzzy
+#| msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgid "Converts a vector map (only points) into a 3D raster map."
+msgstr "2B raster harita dilimlerini 3B raster hacim haritasına dönüştürür."
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "2D vector to 3D vector"
+msgstr "Rasterdan vektöre"
+
+msgid "Performs transformation of 2D vector features to 3D."
+msgstr "2B vektör elemanları 3B ye dönüştürür."
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "3D raster to raster series"
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+msgid "Converts 3D raster maps to 2D raster maps"
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+msgid "Launches Simple Python Editor."
+msgstr ""
+
+#, fuzzy
+#| msgid "Launching script '%s'..."
+msgid "Launch script"
+msgstr "Kod başlatılıyor '%s'..."
+
+#, fuzzy
+#| msgid "Launching script '%s'..."
+msgid "Launches script file."
+msgstr "Kod başlatılıyor '%s'..."
+
+msgid "Launch Jupyter Notebook interface."
+msgstr ""
+
+#, fuzzy
+#| msgid "Launch Graphical modeler"
+msgid "Graphical modeler"
+msgstr "Grafik modelci'yi başlat"
+
+msgid "Launch Graphical modeler"
+msgstr "Grafik modelci'yi başlat"
+
+msgid "Run model prepared by Graphical modeler"
+msgstr "Grafik modelci tarafından hazırlanmış modeli çalıştır"
+
+#, fuzzy
+#| msgid "Manage Ground Control Points"
+msgid "Manage Ground Control Points for Georectification"
+msgstr "Yer Kontrol Noktalarını Yönet"
+
+#, fuzzy
+#| msgid "Animation %d"
+msgid "Animation tool"
+msgstr "Animasyon %d"
+
+msgid "Launch animation tool."
+msgstr ""
+
+#, fuzzy
+#| msgid "Launch Graphical modeler"
+msgid "Launch Cartographic Composer"
+msgstr "Grafik modelci'yi başlat"
+
+#, fuzzy
+msgid "Launch Map Swipe"
+msgstr "Harita Araçları"
+
+msgid "Close graphical user interface."
+msgstr ""
+
+msgid "Close GUI and exit GRASS shell."
+msgstr ""
+
+#, fuzzy
+#| msgid "Settings"
+msgid "&Settings"
+msgstr "Ayarlar"
+
+#, fuzzy
+msgid "Show current region"
+msgstr "Geçerli bölgeden alan üret"
+
+#, fuzzy
+#| msgid "Constrain display resolution to computational settings"
+msgid "Shows the extent and resolution of the computational region."
+msgstr "Görüntü çözünürlüğünü hesaplama ayarlarına göre sınırlandır"
+
+msgid "Show region using latitude and longitude"
+msgstr ""
+
+msgid "Show current region extent in Map Display"
+msgstr ""
+
+msgid "Shows the extent of the computational region in Map Display."
+msgstr ""
+
+msgid "Set region"
+msgstr "Bölge Ayarla"
+
+msgid "Manages the boundary definitions for the geographic region."
+msgstr "Coğrafi bölgenin sınır tanımlarını yönetir"
+
+msgid "GRASS working environment"
+msgstr "GRASS çalışma ortamı"
+
+msgid "Mapset access"
+msgstr "Harita takımı erişimi"
+
+#, fuzzy
+msgid "Set/unset access to other mapsets in current project"
+msgstr "Diğer mevkideki harita takımlarına erişimi ayarla/kaldır"
+
+msgid "User access"
+msgstr "Kullanıcı erişimi"
+
+msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
+msgstr ""
+
+msgid "Change working environment"
+msgstr "Çalışma ortamı ayarlarını değiştir"
+
+msgid "Changes or reports current mapset. Optionally, creates new mapset or lists available mapsets in given project (location)."
+msgstr ""
+
+#, fuzzy
+msgid "Change project (location) and mapset"
+msgstr "Proje mevkisi ve harita takımını seç"
+
+#, fuzzy
+msgid "Change current project and mapset."
+msgstr "Geçerli harita takımını değiştir"
+
+#, fuzzy
+#| msgid "Change current mapset."
+msgid "Change mapset"
+msgstr "Geçerli harita takımını değiştir"
+
+msgid "Change current mapset."
+msgstr "Geçerli harita takımını değiştir"
+
+#, fuzzy
+#| msgid "Change working environment"
+msgid "Change working directory"
+msgstr "Çalışma ortamı ayarlarını değiştir"
+
+msgid "Show settings"
+msgstr "Ayarları göster"
+
+msgid "Outputs and modifies the user's current GRASS variable settings."
+msgstr "Kullanıcının geçerli GRASS değişken ayarlarını değiştirir ve çıktılar."
+
+msgid "Change settings"
+msgstr "Ayarları değiştir"
+
+#, fuzzy
+#| msgid "Outputs and modifies the user's current GRASS variable settings."
+msgid "Outputs and modifies the user's current GRASS variable settings. Prints all defined GRASS variables if no option is given."
+msgstr "Kullanıcının geçerli GRASS değişken ayarlarını değiştirir ve çıktılar."
+
+#, fuzzy
+msgid "Create new project (location)"
+msgstr "Yeni Mevki oluşturayım mı?"
+
+#, fuzzy
+msgid "Launches project wizard to create a new GRASS project (also known as location)."
+msgstr "<%s> GRASS mevkisini oluşturmak istiyormusun?"
+
+#, fuzzy
+msgid "Creates new mapset in the current project, changes current mapset."
+msgstr "Yeni harita takımı oluştur"
+
+#, fuzzy
+#| msgid "Manage projections"
+msgid "Map projections"
+msgstr "Projeksiyonları yönet"
+
+#, fuzzy
+#| msgid "Display region"
+msgid "Display map projection"
+msgstr "Bölgeyi göster"
+
+#, fuzzy
+#| msgid "Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgid "Converts coordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgstr "Çeşitli formatlar arasında (GRASS formatı dahil) koordinat sistemi tanımlarını (projeksiyon bilgisi) dönüştür."
+
+msgid "Manage projections"
+msgstr "Projeksiyonları yönet"
+
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions). Can also be used to create new GRASS projects."
+msgstr ""
+
+msgid "Convert coordinates"
+msgstr "Koordinatları dönüştür"
+
+msgid "Converts coordinates from one projection to another (cs2cs frontend)."
+msgstr ""
+
+msgid "Addons extensions"
+msgstr ""
+
+msgid "Install extension from addons"
+msgstr ""
+
+msgid "Installs new extension from GRASS AddOns repository."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage installed extension"
+msgstr "Tabloları yönet"
+
+msgid "Updates or removes installed GRASS AddOns extension(s)."
+msgstr ""
+
+msgid "Preferences"
+msgstr "Tercihler"
+
+msgid "User GUI preferences (display font, commands, digitizer, etc.)"
+msgstr "Kullanıcı GUI tercihleri (yazı tipi, komutlar, sayısallaştırıcı vs.)"
+
+#, fuzzy
+#| msgid "aster"
+msgid "&Raster"
+msgstr "aster"
+
+#, fuzzy
+msgid "Develop raster map"
+msgstr "Raster harita geliştir"
+
+msgid "Compress/decompress"
+msgstr "Sıkıştır/aç "
+
+msgid "Compresses and decompresses raster maps."
+msgstr "Raster haritaları sıkıştırır ve açar."
+
+msgid "Region boundaries"
+msgstr "Bölge sınırları"
+
+msgid "Sets the boundary definitions for a raster map."
+msgstr "Raster harita için sınır tanımları ayarlanamıyor."
+
+msgid "Manage NULL values"
+msgstr "BOŞ değerlei yönet"
+
+msgid "Manages NULL-values of given raster map."
+msgstr "Raster haritanın BOŞ değerlerini yönetir."
+
+msgid "Quantization"
+msgstr "***********           Kuantumlama"
+
+msgid "Produces the quantization file for a floating-point map."
+msgstr "Kayan noktalı harita için kuantumlama dosyası üretir."
+
+msgid "Timestamp"
+msgstr "tarih damgası"
+
+#, fuzzy
+#| msgid "Print/add/remove a timestamp for a 3D raster map"
+msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgstr "3B raster haritanın tarih damgasını yazdır/ekle/kaldır"
+
+msgid "Resample using aggregate statistics"
+msgstr "Ayrıştırma istatistiklerini kullanarak yeniden örnekle"
+
+msgid "Resamples raster map layers to a coarser grid using aggregation."
+msgstr ""
+
+msgid "Resample using multiple methods"
+msgstr "Çeşitli yöntemler kullanarak yeniden örnekle"
+
+msgid "Resamples raster map to a finer grid using interpolation."
+msgstr ""
+
+msgid "Resample using nearest neighbor"
+msgstr "En yakın komşuyu kullanarak yeniden örnekle"
+
+msgid "GRASS raster map layer data resampling capability."
+msgstr "GRASS raster harita katmanı yeniden örnekleme yeteneği"
+
+msgid "Resample using spline tension"
+msgstr "Resampeln mit der Spline-Tension-Methode (RST)"
+
+msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
+msgstr ""
+
+#, fuzzy
+#| msgid "Resample using spline tension"
+msgid "Resample using bspline"
+msgstr "Resampeln mit der Spline-Tension-Methode (RST)"
+
+msgid "Performs bilinear or bicubic spline interpolation with Tykhonov regularization."
+msgstr ""
+
+#, fuzzy
+#| msgid "Resample using nearest neighbor"
+msgid "Resample using analytic kernel"
+msgstr "En yakın komşuyu kullanarak yeniden örnekle"
+
+msgid "Resamples raster map layers using an analytic kernel."
+msgstr ""
+
+msgid "Support file maintenance"
+msgstr "Destek dosyası bakımı"
+
+msgid "Allows creation and/or modification of raster map layer support files."
+msgstr "Raster harita katmanı destek dosyalarının oluşturulması ve/veya değiştirilmesine olanak tanır"
+
+msgid "Update map statistics"
+msgstr "Harita tistatistiklerini güncelle"
+
+msgid "Update raster map statistics"
+msgstr "Raster harita istatistiklerini güncelle"
+
+msgid "Tiling"
+msgstr "***********           Döşeme"
+
+msgid "Produces tilings of the source projection for use in the destination region and projection."
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster)"
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select raster map:"
+msgid "Tile raster map"
+msgstr "Raster haritayı seç:"
+
+#, fuzzy
+#| msgid "Update raster map statistics"
+msgid "Splits a raster map into tiles."
+msgstr "Raster harita istatistiklerini güncelle"
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage semantic labels"
+msgstr "Tabloları yönet"
+
+msgid "Manages semantic label information assigned to a single raster map or to a list of raster maps."
+msgstr ""
+
+msgid "Manage colors"
+msgstr "Renkleri yönet"
+
+msgid "Color tables"
+msgstr "Renk tabloları"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a raster map."
+msgstr "Raster harita için yeni renk tablosu oluştur"
+
+#, fuzzy
+#| msgid "Color tables"
+msgid "Color tables (stddev)"
+msgstr "Renk tabloları"
+
+msgid "Sets color rules based on stddev from a raster map's mean value."
+msgstr ""
+
+msgid "Manage color rules interactively"
+msgstr ""
+
+#, fuzzy
+#| msgid "Interactively edit category values"
+msgid "Interactive management of raster color tables."
+msgstr "Kategori değerlerini etkileşimli olarak düzenle"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export color table"
+msgstr "Vektör haritayı dışa aktar"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Exports the color table associated with a raster map."
+msgstr "Raster harita için yeni renk tablosu oluştur"
+
+#, fuzzy
+#| msgid "Buffer rasters"
+msgid "Blend 2 color rasters"
+msgstr "Raster tampon"
+
+msgid "Blends color components of two raster maps by a given ratio."
+msgstr "İki raster haritaya ait renk bileşenlerini verilen oranlarda karıştırır."
+
+msgid "Create RGB"
+msgstr "KYM oluştur"
+
+msgid "Combines red, green and blue raster maps into a single composite raster map."
+msgstr ""
+
+msgid "RGB to HIS"
+msgstr ""
+
+msgid "Generates red, green and blue (RGB) raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
+msgstr ""
+
+msgid "Split raster into RGB"
+msgstr ""
+
+msgid "Splits a raster map into red, green and blue maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query raster/vector map(s)"
+msgid "Query raster maps"
+msgstr "Raster/vektör harita(lar) sorgula"
+
+#, fuzzy
+#| msgid "Query with coordinate(s)"
+msgid "Query values by coordinates"
+msgstr "Koordinat(lar)a göre sorgula"
+
+#, fuzzy
+#| msgid "Change category values and labels"
+msgid "Queries raster maps on their category values and category labels."
+msgstr "Categori değerleri ve etiketleri değiştir"
+
+#, fuzzy
+#| msgid "Query any table"
+msgid "Query colors by value"
+msgstr "Herhangi bir tabloyu sorgula"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Queries colors for a raster map layer."
+msgstr "Raster harita için yeni renk tablosu oluştur"
+
+#, fuzzy
+#| msgid "Measuring distance"
+msgid "Raster buffers and distance"
+msgstr "Mesafe Ölçümü"
+
+msgid "Buffer rasters"
+msgstr "Raster tampon"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
+msgstr ""
+
+#, fuzzy
+#| msgid "Buffer rasters"
+msgid "Buffer rasters (low memory)"
+msgstr "Raster tampon"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values. This is the low-memory alternative to the classic r.buffer module."
+msgstr ""
+
+msgid "Concentric circles"
+msgstr "Eş merkezli çemberler"
+
+msgid "Creates a raster map containing concentric rings around a given point."
+msgstr "Verilen bir nokta etrafında eş merkezli halkalar içeren raster harita oluşturur."
+
+msgid "Closest points"
+msgstr "En yakın noktalar"
+
+msgid "Locates the closest points between objects in two raster maps."
+msgstr "İki raster haritaki objelere en yakın noktaları yerleştirir."
+
+msgid "Grow by one cell"
+msgstr ""
+
+msgid "Generates a raster map layer with contiguous areas grown by one cell."
+msgstr ""
+
+#, fuzzy
+#| msgid "Nearest features"
+msgid "Distance to features"
+msgstr "En yakın elemanlar"
+
+msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Creates a raster mask for limiting raster operation."
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+#, fuzzy
+#| msgid "Query features"
+msgid "Query mask status"
+msgstr "Elemanları sorgula"
+
+msgid "Reports presence or absence of a raster mask Provides information about the presence of a 2D raster mask as text output or return code"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "Raster map calculator"
+msgstr "Rasterdan vektöre"
+
+#, fuzzy
+#| msgid "Sum area by raster map and category"
+msgid "Simplified raster map calculator"
+msgstr "Alanları raster harita ve kategoriye göre özetle"
+
+msgid "Calculates a new raster map from a simple r.mapcalc expression."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "Raster map calculator."
+msgstr "Rasterdan vektöre"
+
+msgid "Neighborhood analysis"
+msgstr "Komşuluk analizi"
+
+msgid "Moving window"
+msgstr "Kayar pencere"
+
+msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgstr ""
+
+msgid "Neighborhood points"
+msgstr "Komşu noktalar"
+
+msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
+msgstr ""
+
+msgid "Overlay rasters"
+msgstr "rasterları çakıştır"
+
+msgid "Cross product"
+msgstr "***********           Çapraz çarpım                                 Vektörel çarpım"
+
+#, fuzzy
+#| msgid "Rescales the range of category values in a raster map layer."
+msgid "Creates a cross product of the category values from multiple raster map layers."
+msgstr "Raster harita katmanındaki kategori değerlerini yeniden ölçekler."
+
+msgid "Patch raster maps"
+msgstr "Raster haritaları kümele"
+
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgstr ""
+
+msgid "Raster series aggregation"
+msgstr ""
+
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Flow accumulation"
+msgid "Raster series accumulation"
+msgstr "Akış birikimi"
+
+msgid "Makes each output cell value a accumulationfunction of the values assigned to the corresponding cells in the input raster map layers."
+msgstr ""
+
+msgid "Statistical overlay"
+msgstr "İstatistiksel çakıştırma"
+
+msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Statistical overlay"
+msgid "Quantiles overlay"
+msgstr "İstatistiksel çakıştırma"
+
+msgid "Compute category quantiles using two passes."
+msgstr ""
+
+msgid "Solar radiance and shadows"
+msgstr "Güneş ışınımı ve gölgeleme"
+
+msgid "LatLong map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Calculates shape index on a raster map"
+msgid "Creates a latitude/longitude raster map."
+msgstr "Raster haritada şekil indeksini hesaplar"
+
+#, fuzzy
+#| msgid "Solar radiance and shadows"
+msgid "Solar irradiance and irradiation"
+msgstr "Güneş ışınımı ve gölgeleme"
+
+msgid "Solar irradiance and irradiation model. Computes direct (beam), diffuse and reflected solar irradiation raster maps for given day, latitude, surface and atmospheric conditions. Solar parameters (e.g. sunrise, sunset times, declination, extraterrestrial irradiance, daylight length) are saved in the map history file. Alternatively, a local time can be specified to compute solar incidence angle and/or irradiance raster maps. The shadowing effect of the topography is optionally incorporated."
+msgstr ""
+
+msgid "Shadows map"
+msgstr "Gölgelenme haritası"
+
+msgid "Calculates cast shadow areas from sun position and elevation raster map. Either exact sun position (A) is specified, or date/time to calculate the sun position (B) by r.sunmask itself."
+msgstr ""
+
+msgid "Sunshine hours and solar angles"
+msgstr ""
+
+msgid "Calculates solar elevation, solar azimuth, and sun hours. Solar elevation: the angle between the direction of the geometric center of the sun's apparent disk and the (idealized) horizon. Solar azimuth: the angle from due north in clockwise direction."
+msgstr ""
+
+msgid "Terrain analysis"
+msgstr "Arazi analizi"
+
+msgid "Generate contour lines"
+msgstr "Eşyükselti eğrileri üret"
+
+msgid "Produces a vector map of specified contours from a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "on surface"
+msgid "Cost surface"
+msgstr "yüzeyde"
+
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Trace a path"
+msgstr ""
+
+msgid "Traces paths from starting points following input directions."
+msgstr ""
+
+msgid "Cumulative movement costs"
+msgstr ""
+
+msgid "Creates a raster map showing the anisotropic cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Least cost route or flow"
+msgstr ""
+
+msgid "Traces a flow through an elevation model or cost surface on a raster map."
+msgstr ""
+
+msgid "Compute shaded relief"
+msgstr ""
+
+msgid "Creates shaded relief map from an elevation map (DEM)."
+msgstr ""
+
+msgid "Apply shade to raster"
+msgstr ""
+
+msgid "Drapes a color raster over an shaded relief or aspect map."
+msgstr ""
+
+msgid "Slope and aspect"
+msgstr "Eğim ve bakı"
+
+msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map. Aspect is calculated counterclockwise from east."
+msgstr ""
+
+msgid "Landforms"
+msgstr ""
+
+msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
+msgstr ""
+
+msgid "Terrain parameters"
+msgstr "Arazi parametreleri"
+
+msgid "Extracts terrain parameters from a DEM. Uses a multi-scale approach by taking fitting quadratic parameters to any size window (via least squares)."
+msgstr ""
+
+msgid "Textural features"
+msgstr "Tekstür objeleri"
+
+msgid "Generate images with textural features from a raster map."
+msgstr ""
+
+msgid "Visibility"
+msgstr "Görünürlük"
+
+msgid "Computes the viewshed of a point on an elevation raster map. Default format: NULL (invisible), vertical angle wrt viewpoint (visible)."
+msgstr ""
+
+msgid "Horizon angle"
+msgstr "Yatay açı"
+
+msgid "Computes horizon angle height from a digital elevation model. The module has two different modes of operation: 1. Computes the entire horizon around a single point whose coordinates are given with the 'coord' option. The horizon height (in radians). 2. Computes one or more raster maps of the horizon height in a single direction. The input for this is the angle (in degrees), which is measured counterclockwise with east=0, north=90 etc. The output is the horizon height in radians."
+msgstr ""
+
+msgid "Transform features"
+msgstr "Objeleri dönüştür"
+
+msgid "Clump"
+msgstr "************             Küme                      Çalılık"
+
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
+msgstr ""
+
+msgid "Grow"
+msgstr "Büyüme"
+
+msgid "Thin"
+msgstr "İnce"
+
+#, fuzzy
+#| msgid "Rescales the range of category values in a raster map layer."
+msgid "Thins non-null cells that denote linear features in a raster map layer."
+msgstr "Raster harita katmanındaki kategori değerlerini yeniden ölçekler."
+
+msgid "Hydrologic modeling"
+msgstr "Hidrolojik modelleme"
+
+#, fuzzy
+#| msgid "Save changes"
+msgid "Carve stream channels"
+msgstr "Değişiklikleri kaydet"
+
+msgid "Generates stream channels. Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
+msgstr ""
+
+msgid "Fill lake"
+msgstr "Gölleri doldur"
+
+msgid "Fills lake at given point to given level."
+msgstr ""
+
+msgid "Depressionless map and flowlines"
+msgstr "Çukurlukları giderilmiş harita ve akış hatları"
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
+msgstr ""
+
+msgid "Flow accumulation"
+msgstr "Akış birikimi"
+
+msgid "Performs flow computation for massive grids."
+msgstr ""
+
+msgid "Flow lines"
+msgstr "Akış hatları"
+
+msgid "Constructs flowlines. Computes flowlines, flowpath lengths, and flowaccumulation (contributing areas) from a elevation raster map."
+msgstr ""
+
+msgid "Watershed analysis"
+msgstr "Havza analizi"
+
+msgid "Calculates hydrological parameters and RUSLE factors."
+msgstr "Hidrolojik parametreleri ve RUSLE etmenlerini hesaplar."
+
+#, fuzzy
+#| msgid "Watershed analysis"
+msgid "Watershed subbasins"
+msgstr "Havza analizi"
+
+msgid "Generates watershed subbasins raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Watershed analysis"
+msgid "Watershed basin creation"
+msgstr "Havza analizi"
+
+msgid "Creates watershed basins from a drainage direction map."
+msgstr ""
+
+msgid "Extraction of stream networks"
+msgstr ""
+
+msgid "Performs stream network extraction."
+msgstr ""
+
+msgid "SIMWE Overland flow modeling"
+msgstr "SIMWE su erozyon modelleme"
+
+msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "SIMWE Sediment flux modeling"
+msgstr "SIMWE sediment erozyon modelleme"
+
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "Topographic index map"
+msgstr "Topoğrafik indeks haritası"
+
+msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
+msgstr ""
+
+msgid "TOPMODEL simulation"
+msgstr "TOPMODEL canlandırması"
+
+msgid "Simulates TOPMODEL which is a physically based hydrologic model."
+msgstr ""
+
+msgid "USLE K-factor"
+msgstr "USLE K-etmeni"
+
+msgid "Computes USLE Soil Erodibility Factor (K)."
+msgstr ""
+
+#, fuzzy
+#| msgid "USLE K-factor"
+msgid "USLE R-factor"
+msgstr "USLE K-etmeni"
+
+msgid "Computes USLE R factor, Rainfall erosivity index."
+msgstr ""
+
+#, fuzzy
+#| msgid "Groundwater flow"
+msgid "Groundwater modeling"
+msgstr "Yeraltısuyu Akışı"
+
+msgid "Groundwater flow"
+msgstr "Yeraltısuyu Akışı"
+
+msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Groundwater flow"
+msgid "Groundwater solute transport"
+msgstr "Yeraltısuyu Akışı"
+
+msgid "Numerical calculation program for transient, confined and unconfined solute transport in two dimensions"
+msgstr ""
+
+msgid "Landscape patch analysis"
+msgstr "Peyzaj leke analizi"
+
+msgid "Set up sampling and analysis framework"
+msgstr "Örnekleme ve analiz sistemini kur"
+
+msgid "Configuration editor for r.li.'index'"
+msgstr "r.li.'index' için yapılandırma düzenleyici"
+
+msgid "Edge density"
+msgstr "Kenar yoğunluğu"
+
+#, fuzzy
+#| msgid "Calculates Shannon's diversity index on a raster map"
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
+msgstr "Raster haritada Shannon'un çeşitlilik indeksini hesaplar."
+
+msgid "Contrast weighted edge density"
+msgstr ""
+
+#, fuzzy
+#| msgid "Calculates Shannon's diversity index on a raster map"
+msgid "Calculates contrast weighted edge density index on a raster map"
+msgstr "Raster haritada Shannon'un çeşitlilik indeksini hesaplar."
+
+msgid "Patch area mean"
+msgstr "Leke alanı ortalaması"
+
+#, fuzzy
+#| msgid "Calculates range of patch area size on a raster map"
+msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
+msgstr "Raster haritadaki parça alan boyutunun aralığını hesaplar"
+
+msgid "Patch area range"
+msgstr "Leke alan aralığı -"
+
+msgid "Calculates range of patch area size on a raster map"
+msgstr "Raster haritadaki parça alan boyutunun aralığını hesaplar"
+
+msgid "Patch area Std Dev"
+msgstr "Leke alanı standart sapması"
+
+msgid "Calculates standard deviation of patch area a raster map"
+msgstr "Raster harita için leke alanı standart sapmayı hesaplar."
+
+#, fuzzy
+#| msgid "Patch area mean"
+msgid "Patch area Coeff Var"
+msgstr "Leke alanı ortalaması"
+
+#, fuzzy
+#| msgid "Calculates standard deviation of patch area a raster map"
+msgid "Calculates coefficient of variation of patch area on a raster map"
+msgstr "Raster harita için leke alanı standart sapmayı hesaplar."
+
+msgid "Patch density"
+msgstr "Leke yoğunluğu"
+
+#, fuzzy
+#| msgid "Calculates Shannon's diversity index on a raster map"
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
+msgstr "Raster haritada Shannon'un çeşitlilik indeksini hesaplar."
+
+msgid "Patch number"
+msgstr "Leke sayısı"
+
+#, fuzzy
+#| msgid "Calculates shape index on a raster map"
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
+msgstr "Raster haritada şekil indeksini hesaplar"
+
+msgid "Dominance's diversity"
+msgstr "Dominance'ın farkı"
+
+#, fuzzy
+#| msgid "Calculates Shannon's diversity index on a raster map"
+msgid "Calculates dominance's diversity index on a raster map"
+msgstr "Raster haritada Shannon'un çeşitlilik indeksini hesaplar."
+
+msgid "Shannon's diversity"
+msgstr "Shannon'ın farkı"
+
+msgid "Calculates Shannon's diversity index on a raster map"
+msgstr "Raster haritada Shannon'un çeşitlilik indeksini hesaplar."
+
+msgid "Simpson's diversity"
+msgstr "Simpson'ın farkı        "
+
+msgid "Calculates Simpson's diversity index on a raster map"
+msgstr "Raster haritada Simpson'un çeşitlilik indeksini hesaplar."
+
+msgid "Richness"
+msgstr "Verim                                                                  ************************** zenginlik / canlılık"
+
+#, fuzzy
+#| msgid "Calculates shape index on a raster map"
+msgid "Calculates richness index on a raster map"
+msgstr "Raster haritada şekil indeksini hesaplar"
+
+msgid "Shape index"
+msgstr "Şekil indeksi"
+
+msgid "Calculates shape index on a raster map"
+msgstr "Raster haritada şekil indeksini hesaplar"
+
+msgid "Wildfire modeling"
+msgstr "Doğa Yangını modelleme"
+
+msgid "Rate of spread"
+msgstr "Yayılma oranı"
+
+msgid "Generates rate of spread raster maps. Generates three, or four raster map layers showing the base (perpendicular) rate of spread (ROS), the maximum (forward) ROS, the direction of the maximum ROS, and optionally the maximum potential spotting distance for fire spread simulation."
+msgstr ""
+
+msgid "Least-cost spread paths"
+msgstr ""
+
+msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
+msgstr ""
+
+msgid "Anisotropic spread simulation"
+msgstr ""
+
+msgid "Simulates elliptically anisotropic spread. Generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins. It optionally produces raster maps to contain backlink UTM coordinates for tracing spread paths. Usable for fire spread simulations."
+msgstr ""
+
+msgid "Change category values and labels"
+msgstr "Categori değerleri ve etiketleri değiştir"
+
+msgid "Manage category information"
+msgstr "Kategori bilgisini yönet"
+
+msgid "Manages category values and labels associated with user-specified raster map layers."
+msgstr "Kullanıcı tanımlı raster harita katmanlarının kategori değerleri ve etiketleri yönetir."
+
+msgid "Interactively edit category values"
+msgstr "Kategori değerlerini etkileşimli olarak düzenle"
+
+#, fuzzy
+#| msgid "Manages NULL-values of given raster map."
+msgid "Edits cell values in a raster map."
+msgstr "Raster haritanın BOŞ değerlerini yönetir."
+
+msgid "Reclassify by size"
+msgstr "Boyutuna göre yeniden sınıflandır"
+
+msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Reclassify by size"
+msgid "Reclassify"
+msgstr "Boyutuna göre yeniden sınıflandır"
+
+msgid "Reclassify raster map based on category values. Creates a new raster map whose category values are based upon a reclassification of the categories in an existing raster map."
+msgstr ""
+
+msgid "Recode"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create profile of raster map."
+msgid "Recodes categorical raster maps."
+msgstr "Raster haritanın kesiti oluşturulamıyor."
+
+msgid "Rescale"
+msgstr "Yeniden ölçekle"
+
+msgid "Rescales the range of category values in a raster map layer."
+msgstr "Raster harita katmanındaki kategori değerlerini yeniden ölçekler."
+
+msgid "Rescale with histogram"
+msgstr "Histogram ile yeniden ölçekle"
+
+#, fuzzy
+#| msgid "Rescales the range of category values in a raster map layer."
+msgid "Rescales histogram equalized the range of category values in a raster map layer."
+msgstr "Raster harita katmanındaki kategori değerlerini yeniden ölçekler."
+
+msgid "Generate random cells"
+msgstr "Rasgele hücreler üret"
+
+#, fuzzy
+#| msgid "Generate random cells"
+msgid "Random cells"
+msgstr "Rasgele hücreler üret"
+
+msgid "Generates random cell values with spatial dependence."
+msgstr ""
+
+msgid "Random cells and vector points"
+msgstr "Rasgele hücreler ve vektör noktalar"
+
+msgid "Creates randomly placed raster cells or vector points Creates a raster map and vector point map containing randomly located cells and points."
+msgstr ""
+
+msgid "Generate surfaces"
+msgstr "Yüzey üret"
+
+msgid "Fractal surface"
+msgstr "Fractal yüzey"
+
+msgid "Creates a fractal surface of a given fractal dimension."
+msgstr ""
+
+msgid "Gaussian kernel density surface"
+msgstr ""
+
+msgid "Generates a raster density map from vector points map. Density is computed using a moving kernel. Optionally generates a vector density map on a vector network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate surfaces"
+msgid "Gaussian deviates surface"
+msgstr "Yüzey üret"
+
+msgid "Generates a raster map using gaussian random number generator. Mean and standard deviation of gaussian deviates can be expressed by the user."
+msgstr ""
+
+msgid "Plane"
+msgstr "Düzlem"
+
+msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate surfaces"
+msgid "Random deviates surface"
+msgstr "Yüzey üret"
+
+msgid "Produces a raster surface map of uniform random deviates with defined range."
+msgstr ""
+
+msgid "Random surface with spatial dependence"
+msgstr ""
+
+msgid "Generates random surface(s) with spatial dependence."
+msgstr ""
+
+msgid "Interpolate surfaces"
+msgstr "Yüzey enterpolasyonu"
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Bilinear and bicubic from vector points"
+msgstr "Vektör noktalardan IDW "
+
+msgid "Performs bicubic or bilinear spline interpolation with Tykhonov regularization."
+msgstr ""
+
+msgid "IDW from raster points"
+msgstr "Raster noktalardan IDW "
+
+msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+msgid "IDW from vector points"
+msgstr "Vektör noktalardan IDW "
+
+msgid "Provides surface interpolation from vector point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+msgid "Raster contours"
+msgstr "Raster eşyükselti eğrileri"
+
+msgid "Generates surface raster map from rasterized contours."
+msgstr ""
+
+#, fuzzy
+#| msgid "Resample using spline tension"
+msgid "Regularized spline tension"
+msgstr "Resampeln mit der Spline-Tension-Methode (RST)"
+
+msgid "Performs surface interpolation from vector points map by splines. Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension."
+msgstr ""
+
+msgid "Raster series interpolation"
+msgstr ""
+
+msgid "Interpolates raster maps located (temporal or spatial) in between input raster maps at specific sampling positions."
+msgstr ""
+
+msgid "Fill NULL cells"
+msgstr "BOŞ hücreleri doldur"
+
+msgid "Fills no-data areas in raster maps using spline interpolation."
+msgstr ""
+
+#, fuzzy
+#| msgid "Fill NULL cells"
+msgid "Fill NULL cells using IDW"
+msgstr "BOŞ hücreleri doldur"
+
+msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
+msgstr ""
+
+msgid "Reports and statistics"
+msgstr "Raporlar ve istatistikler"
+
+#, fuzzy
+#| msgid "Basic vector metadata"
+msgid "Basic raster metadata"
+msgstr "Temel vektör metadatası"
+
+#, fuzzy
+msgid "Outputs basic information about a raster map."
+msgstr "Raster harita için yeni renk tablosu oluştur"
+
+msgid "General statistics"
+msgstr "Genel istatistikler"
+
+#, fuzzy
+#| msgid "Update area attributes from raster"
+msgid "Generates area statistics for raster map."
+msgstr "Alan özniteliklerini rasterdan güncelle"
+
+msgid "Quantiles for large data sets"
+msgstr ""
+
+msgid "Compute quantiles using two passes."
+msgstr ""
+
+msgid "Range of category values"
+msgstr "Kategori değerleri aralığı"
+
+#, fuzzy
+#| msgid "Rescales the range of category values in a raster map layer."
+msgid "Prints terse list of category values found in a raster map layer."
+msgstr "Raster harita katmanındaki kategori değerlerini yeniden ölçekler."
+
+msgid "Sum area by raster map and category"
+msgstr "Alanları raster harita ve kategoriye göre özetle"
+
+#, fuzzy
+#| msgid "Sets the boundary definitions for a raster map."
+msgid "Reports statistics for raster maps."
+msgstr "Raster harita için sınır tanımları ayarlanamıyor."
+
+msgid "Statistics for clumped cells"
+msgstr ""
+
+msgid "Calculates the volume of data \"clumps\". Optionally produces a GRASS vector points map containing the calculated centroids of these clumps."
+msgstr ""
+
+msgid "Total corrected area"
+msgstr "Toplam düzeltilen alan"
+
+#, fuzzy
+#| msgid "Calculates standard deviation of patch area a raster map"
+msgid "Prints estimation of surface area for raster map."
+msgstr "Raster harita için leke alanı standart sapmayı hesaplar."
+
+msgid "Calculates univariate statistics from the non-null cells of a raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "Sample transects"
+msgstr ""
+
+msgid "Outputs the raster map layer values lying on user-defined line(s)."
+msgstr ""
+
+msgid "Sample transects (bearing/distance)"
+msgstr ""
+
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
+msgstr ""
+
+msgid "Covariance/correlation"
+msgstr "Kovariyans/Korelasyon  "
+
+#, fuzzy
+#| msgid "Manages category values and labels associated with user-specified raster map layers."
+msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
+msgstr "Kullanıcı tanımlı raster harita katmanlarının kategori değerleri ve etiketleri yönetir."
+
+msgid "Linear regression"
+msgstr "Doğrusal ilişki    "
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x."
+msgstr ""
+
+#, fuzzy
+#| msgid "Linear regression"
+msgid "Multiple regression"
+msgstr "Doğrusal ilişki    "
+
+#, fuzzy
+#| msgid "Calculates shape index on a raster map"
+msgid "Calculates multiple linear regression from raster maps."
+msgstr "Raster haritada şekil indeksini hesaplar"
+
+msgid "Mutual category occurrences"
+msgstr ""
+
+#, fuzzy
+#| msgid "Rescales the range of category values in a raster map layer."
+msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
+msgstr "Raster harita katmanındaki kategori değerlerini yeniden ölçekler."
+
+#, fuzzy
+#| msgid "Range of category values"
+msgid "Modal category value"
+msgstr "Kategori değerleri aralığı"
+
+msgid "Finds the mode of values in a cover map within areas assigned the same category value in a user-specified base map."
+msgstr ""
+
+#, fuzzy
+#| msgid "General statistics"
+msgid "Zonal statistics"
+msgstr "Genel istatistikler"
+
+msgid "Calculates category or object oriented statistics."
+msgstr ""
+
+#, fuzzy
+#| msgid "General statistics"
+msgid "Object geometry statistics"
+msgstr "Genel istatistikler"
+
+msgid "Calculates geometry parameters for raster objects."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector"
+msgid "&Vector"
+msgstr "Vektör"
+
+msgid "Develop vector map"
+msgstr "Vektör harita geliştir"
+
+msgid "Create new empty vector map"
+msgstr "Yeni boş vektör harita oluştur"
+
+msgid "Edit vector map (non-interactively)"
+msgstr ""
+
+msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
+msgstr ""
+
+msgid "Convert object types"
+msgstr "Obje tiplerini dönüştür"
+
+#, fuzzy
+#| msgid "Select vector features"
+msgid "Changes type of vector features."
+msgstr "Vektör elemanları seç"
+
+msgid "Parallel lines"
+msgstr "Paralel çizgiler"
+
+msgid "Creates parallel line to input vector lines."
+msgstr ""
+
+msgid "Dissolve boundaries"
+msgstr "Sınırları çöz"
+
+#, fuzzy
+msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
+msgstr "Ortak kategori numarası veya özniteliği paylaşan komşu alanlar arasındaki sınırları çözer. "
+
+msgid "Create 3D vector over raster"
+msgstr "Raster üzerinde 3B vektör oluştur"
+
+msgid "Converts 2D vector features to 3D by sampling of elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Extrude 3D vector map"
+msgstr "Vektör haritayı dışa aktar"
+
+msgid "Extrudes flat vector features to 3D vector features with defined height. Optionally the height can be derived from sampling of elevation raster map."
+msgstr ""
+
+msgid "Create labels"
+msgstr "Etiketleri oluştur"
+
+msgid "Creates paint labels for a vector map from attached attributes."
+msgstr "Bağlı özniteliklerden vektör harita için etiketler oluşturur.                      "
+
+msgid "Reposition vector map"
+msgstr "Vektör haritayı yeniden konumlandır"
+
+msgid "Performs an affine transformation (shift, scale and rotate) on vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select vector map"
+msgid "Rectify vector map"
+msgstr "Vektör haritayı seç"
+
+msgid "Rectifies a vector by computing a coordinate transformation for each object in the vector based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Basic vector metadata"
+msgid "Updates vector map metadata."
+msgstr "Temel vektör metadatası"
+
+msgid "Manage timestamp"
+msgstr "Tarih damgasını yönet"
+
+#, fuzzy
+#| msgid "Print/add/remove a timestamp for a 3D raster map"
+msgid "Modifies a timestamp for a vector map. Print/add/remove a timestamp for a vector map."
+msgstr "3B raster haritanın tarih damgasını yazdır/ekle/kaldır"
+
+msgid "Create labels with simulated annealing"
+msgstr ""
+
+#, fuzzy
+msgid "Create optimally placed labels for vector map(s)"
+msgstr "Etiketleri oluştur"
+
+#, fuzzy
+#| msgid "Generate points"
+msgid "Decimate points"
+msgstr "Nokta üret"
+
+msgid "Decimates a point cloud Copies points from one vector to another while applying different decimations"
+msgstr ""
+
+#, fuzzy
+#| msgid "Support file maintenance"
+msgid "Topology maintenance"
+msgstr "Destek dosyası bakımı"
+
+msgid "Create or rebuild topology"
+msgstr ""
+
+msgid "Creates topology for vector map. Optionally also checks for topological errors."
+msgstr ""
+
+#, fuzzy
+#| msgid "Toolset for cleaning topology of vector map."
+msgid "Rebuild topology on all vector maps"
+msgstr "Vektör haritanın topolojisini temizleme araçları"
+
+msgid "Rebuilds topology on all vector maps in the current mapset."
+msgstr ""
+
+msgid "Build polylines"
+msgstr "Çoklu çizgileri oluştur"
+
+msgid "Builds polylines from lines or boundaries."
+msgstr "Çizgiler veya sınırlardan çoklu çizgiler oluşturur."
+
+#, fuzzy
+#| msgid "Split polylines"
+msgid "Split lines"
+msgstr "Çoklu çizgileri böl"
+
+msgid "Splits vector lines to shorter segments."
+msgstr ""
+
+msgid "Split polylines"
+msgstr "Çoklu çizgileri böl"
+
+msgid "Creates points/segments from input vector lines and positions."
+msgstr ""
+
+msgid "Clean vector map"
+msgstr "Vektör haritayı temizle"
+
+msgid "Toolset for cleaning topology of vector map."
+msgstr "Vektör haritanın topolojisini temizleme araçları"
+
+msgid "Fill holes in areas"
+msgstr ""
+
+msgid "Fill holes in areas by keeping only outer boundaries"
+msgstr ""
+
+msgid "Smooth or simplify"
+msgstr "Yumuşatmak veya Basitleştirmek       *********************************"
+
+msgid "Performs vector based generalization."
+msgstr ""
+
+msgid "Add centroids"
+msgstr "Ağırlık merkezi ekle   "
+
+msgid "Adds missing centroids to closed boundaries."
+msgstr "Kapalı sınırlara eksik ağırlık merkezleri ekler.   "
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a vector map."
+msgstr "Raster harita için yeni renk tablosu oluştur"
+
+#, fuzzy
+#| msgid "Interactively edit category values"
+msgid "Interactive management of vector color tables."
+msgstr "Kategori değerlerini etkileşimli olarak düzenle"
+
+msgid "Exports the color table associated with a vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Overlay vector maps"
+msgid "Query vector map"
+msgstr "Vektör haritaları çakıştır."
+
+msgid "Query with coordinate(s)"
+msgstr "Koordinat(lar)a göre sorgula"
+
+#, fuzzy
+#| msgid "Prints vector map attributes."
+msgid "Queries a vector map at given locations."
+msgstr "Vektör harita özniteliklerini yazdır."
+
+msgid "Query vector attribute data"
+msgstr "Vektör öznitelik verisini sorgula"
+
+msgid "Prints vector map attributes."
+msgstr "Vektör harita özniteliklerini yazdır."
+
+#, fuzzy
+#| msgid "Feature id"
+msgid "Feature selection"
+msgstr "Eleman numarası    "
+
+#, fuzzy
+#| msgid "Display attributes"
+msgid "Select by attributes"
+msgstr "Öznitelikleri göster"
+
+msgid "Selects vector features from an existing vector map and creates a new vector map containing only the selected features."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select raster map:"
+msgid "Select by another map"
+msgstr "Raster haritayı seç:"
+
+msgid "Selects features from vector map (A) by features from other vector map (B)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate points along lines"
+msgid "Convert areas or points to lines"
+msgstr "Çizgiler boyunca noktalar üret"
+
+msgid "Converts vector polygons or points to lines."
+msgstr ""
+
+msgid "Buffer vectors"
+msgstr "Vektör tampon"
+
+msgid "Creates a buffer around vector features of given type."
+msgstr ""
+
+#, fuzzy
+#| msgid "Terrain analysis"
+msgid "Point analysis"
+msgstr "Arazi analizi"
+
+msgid "Identify and remove outliers"
+msgstr ""
+
+msgid "Removes outliers from vector point data."
+msgstr ""
+
+msgid "Identify point clusters"
+msgstr ""
+
+msgid "Performs cluster identification."
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists"
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector points"
+msgid "Perturb points"
+msgstr "Vektör noktalar"
+
+#, fuzzy
+#| msgid "Random cells and vector points"
+msgid "Random location perturbations of vector points."
+msgstr "Rasgele hücreler ve vektör noktalar"
+
+msgid "Test/training point sets"
+msgstr ""
+
+msgid "Randomly partition points into test/train sets."
+msgstr ""
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Tests for normality for vector points"
+msgstr "Vektör noktalardan IDW "
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Tests for normality for vector points."
+msgstr "Vektör noktalardan IDW "
+
+#, fuzzy
+#| msgid "Lidar analysis"
+msgid "Point pattern analysis"
+msgstr "Lidar analizi"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Lidar analysis"
+msgstr "Lidar analizi"
+
+msgid "Detect edges"
+msgstr "Kenarları bul"
+
+msgid "Detects the object's edges from a LIDAR data set."
+msgstr "LIDAR veri takımından obje kenarlarını belirler."
+
+#, fuzzy
+#| msgid "Detect edges"
+msgid "Detect interiors"
+msgstr "Kenarları bul"
+
+msgid "Building contour determination and Region Growing algorithm for determining the building inside"
+msgstr ""
+
+msgid "Correct and reclassify objects"
+msgstr "Objeleri düzelt ve tekrar sınıflandır"
+
+msgid "Corrects the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
+msgstr ""
+
+#, fuzzy
+#| msgid "Linear regression"
+msgid "Linear referencing"
+msgstr "Doğrusal ilişki    "
+
+msgid "Create LRS"
+msgstr "LRS Oluştur"
+
+msgid "Creates a linear reference system."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create table"
+msgid "Create stationing"
+msgstr "Tablo oluştur"
+
+msgid "Creates stationing from input lines, and linear reference system."
+msgstr ""
+
+msgid "Create points/segments"
+msgstr "Nokta/parça oluştur"
+
+msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgstr ""
+
+msgid "Find line id and offset"
+msgstr ""
+
+msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
+msgstr ""
+
+msgid "Nearest features"
+msgstr "En yakın elemanlar"
+
+msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
+msgstr ""
+
+msgid "Network analysis"
+msgstr "Ağ(şebeke) analizi"
+
+msgid "Tool for interactive vector network analysis."
+msgstr ""
+
+#, fuzzy
+#| msgid "Network analysis"
+msgid "Network preparation"
+msgstr "Ağ(şebeke) analizi"
+
+#, fuzzy
+#| msgid "Support file maintenance"
+msgid "Performs network maintenance."
+msgstr "Destek dosyası bakımı"
+
+msgid "Allocate subnets"
+msgstr ""
+
+msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Split net"
+msgstr "Şebekeyi böl"
+
+msgid "Splits subnets for nearest centers by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Shortest path"
+msgstr "En kısa yol"
+
+msgid "Finds shortest path on vector network."
+msgstr "Vektör ağ üzerinde en kısa yolu bulur."
+
+#, fuzzy
+#| msgid "Finds shortest path on vector network."
+msgid "Shortest path for sets of features"
+msgstr "Vektör ağ üzerinde en kısa yolu bulur."
+
+msgid "Computes shortest distance via the network between the given sets of features. Finds the shortest paths from each 'from' point to the nearest 'to' feature and various information about this relation are uploaded to the attribute table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Shortest path"
+msgid "Shortest path using timetables"
+msgstr "En kısa yol"
+
+#, fuzzy
+#| msgid "Finds shortest path on vector network."
+msgid "Finds shortest path using timetables."
+msgstr "Vektör ağ üzerinde en kısa yolu bulur."
+
+#, fuzzy
+#| msgid "Shortest path"
+msgid "Shortest path for all pairs"
+msgstr "En kısa yol"
+
+msgid "Computes the shortest path between all pairs of nodes in the network."
+msgstr ""
+
+msgid "Visibility network"
+msgstr "Görünürlük ağı"
+
+msgid "Performs visibility graph construction."
+msgstr ""
+
+msgid "Bridges and articulation points"
+msgstr ""
+
+msgid "Computes bridges and articulation points in the network."
+msgstr ""
+
+msgid "Maximum flow"
+msgstr ""
+
+msgid "Computes the maximum flow between two sets of nodes in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector database connections"
+msgid "Vertex connectivity"
+msgstr "Vektör veritabanı bağlantıları"
+
+msgid "Computes vertex connectivity between two sets of nodes in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Principal components"
+msgid "Components"
+msgstr "Temel bileşenler"
+
+msgid "Computes strongly and weakly connected components in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Test normality"
+msgid "Centrality"
+msgstr "Normalliği sına"
+
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
+msgstr ""
+
+msgid "Steiner tree"
+msgstr ""
+
+msgid "Creates Steiner tree for the network and given terminals. Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm is used in this module so the result may be sub optimal."
+msgstr ""
+
+msgid "Minimum spanning tree"
+msgstr ""
+
+msgid "Computes minimum spanning tree for the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Terrain analysis"
+msgid "Traveling salesman analysis"
+msgstr "Arazi analizi"
+
+msgid "Creates a cycle connecting given nodes (Traveling salesman problem). Note that TSP is NP-hard, heuristic algorithm is used by this module and created cycle may be sub optimal"
+msgstr ""
+
+msgid "Overlay vector maps"
+msgstr "Vektör haritaları çakıştır."
+
+#, fuzzy
+#| msgid "Clean vector map"
+msgid "Clip vector maps"
+msgstr "Vektör haritayı temizle"
+
+msgid "Extracts features of input map which overlay features of clip map."
+msgstr ""
+
+msgid "Overlays two vector maps offering clip, intersection, difference, symmetrical difference, union operators."
+msgstr ""
+
+msgid "Patch vector maps"
+msgstr "Vektör haritaları yamala"
+
+#, fuzzy
+#| msgid "Create new empty vector map"
+msgid "Creates a new vector map by combining other vector maps."
+msgstr "Yeni boş vektör harita oluştur"
+
+#, fuzzy
+#| msgid "Update categories"
+msgid "Manage categories"
+msgstr "Kategorileri güncelle"
+
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Change or report categories"
+msgstr "Kategorileri kopyala"
+
+msgid "Attaches, deletes or reports vector categories to/from/of map geometry."
+msgstr ""
+
+msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
+msgstr "Varolan vektör haritanın vektör kategori değerlerini SQL sorgularına veya öznitelik tablosundaki bir değere göre değiştirir."
+
+msgid "Update area attributes from raster"
+msgstr "Alan özniteliklerini rasterdan güncelle"
+
+msgid "Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update area attributes from raster"
+msgid "Update area attributes from vector"
+msgstr "Alan özniteliklerini rasterdan güncelle"
+
+msgid "Count points in areas, calculate statistics from point attributes."
+msgstr ""
+
+msgid "Update point attributes from areas"
+msgstr "Nokta özniteliklerini alanlardan güncelle"
+
+msgid "Uploads vector values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update area attributes from raster"
+msgid "Update database values from vector"
+msgstr "Alan özniteliklerini rasterdan güncelle"
+
+#, fuzzy
+#| msgid "Update area attributes from raster"
+msgid "Populates attribute values from vector features."
+msgstr "Alan özniteliklerini rasterdan güncelle"
+
+#, fuzzy
+#| msgid "Update raster map statistics"
+msgid "Sample raster maps at point locations"
+msgstr "Raster harita istatistiklerini güncelle"
+
+msgid "Uploads raster values at positions of vector points to the table."
+msgstr ""
+
+msgid "Sample 3D raster at point locations"
+msgstr ""
+
+msgid "Uploads 3D raster values at positions of vector points to the table."
+msgstr ""
+
+msgid "Sample temporal raster dataset at point locations"
+msgstr ""
+
+msgid "Uploads space time raster dataset values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood points"
+msgid "Sample raster neighborhood around points"
+msgstr "Komşu noktalar"
+
+msgid "Samples a raster map at vector point locations."
+msgstr ""
+
+msgid "Generate area for current region"
+msgstr "Geçerli bölgeden alan üret"
+
+msgid "Creates a vector polygon from the current region extent."
+msgstr ""
+
+msgid "Generate areas from points"
+msgstr "Noktalardan alan üret"
+
+msgid "Convex hull"
+msgstr "Dışbükey kabuk"
+
+msgid "Produces a 2D/3D convex hull for a given vector map."
+msgstr ""
+
+msgid "Delaunay triangles"
+msgstr "Delaunay üçgenleri"
+
+msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgstr "Nokta veya ağırlık merkezlerini içeren girdi vektör haritadan Delaunay üçgenlemesi oluşturur.           "
+
+msgid "Voronoi diagram/Thiessen polygons"
+msgstr "Voronoi diyagramı/Thiessen poligonları"
+
+#, fuzzy
+#| msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
+msgstr "Nokta veya ağırlık merkezlerini içeren girdi vektör haritadan Delaunay üçgenlemesi oluşturur.           "
+
+#, fuzzy
+#| msgid "Generate points"
+msgid "Generate grid"
+msgstr "Nokta üret"
+
+msgid "Creates a vector map of a user-defined grid."
+msgstr ""
+
+msgid "Generate points"
+msgstr "Nokta üret"
+
+msgid "Generate from database"
+msgstr "Veritabanından üret"
+
+msgid "Creates new vector (points) map from database table containing coordinates."
+msgstr "Koordinatlar içeren veritabanı tablosundan yeni vektör (nokta) harita oluşturur."
+
+msgid "Generate points along lines"
+msgstr "Çizgiler boyunca noktalar üret"
+
+msgid "Creates points along input lines in new vector map with 2 layers."
+msgstr ""
+
+msgid "Generate random points"
+msgstr "Rasgele noktalar üret"
+
+#, fuzzy
+#| msgid "Generate random points"
+msgid "Generates random 2D/3D vector points."
+msgstr "Rasgele noktalar üret"
+
+msgid "Remove outliers in point sets"
+msgstr ""
+
+msgid "Basic vector metadata"
+msgstr "Temel vektör metadatası"
+
+msgid "Outputs basic information about a vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Show attribute data"
+msgid "Classify attribute data"
+msgstr "Öznitelik verisini göster"
+
+msgid "Classifies attribute data, e.g. for thematic mapping"
+msgstr ""
+
+msgid "Report topology by category"
+msgstr "Topolojiyi kategoriye göre raporla"
+
+#, fuzzy
+#| msgid "Imports older versions of GRASS vector maps."
+msgid "Reports geometry statistics for vector maps."
+msgstr "Eski GRASS vektör haritasını içe aktarır."
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate attribute statistics for points"
+msgstr "Tek değişkenli raster istatistikleri "
+
+msgid "Calculates univariate statistics of vector map features. Variance and standard deviation is calculated only for points if specified."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate statistics for attribute columns"
+msgstr "Tek değişkenli raster istatistikleri "
+
+msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector points"
+msgid "Vector map profiling tool"
+msgstr "Vektör noktalar"
+
+msgid "Quadrat indices"
+msgstr ""
+
+msgid "Test normality"
+msgstr "Normalliği sına"
+
+msgid "&Imagery"
+msgstr ""
+
+msgid "Develop images and groups"
+msgstr "Görüntü ve grup geliştir"
+
+msgid "Create/edit group"
+msgstr "Grup oluştur/düzenle"
+
+msgid "Creates, edits, and lists groups of imagery files."
+msgstr ""
+
+msgid "Target group"
+msgstr "Hedef grup"
+
+#, fuzzy
+msgid "Targets an imagery group to a GRASS location and mapset."
+msgstr "Proje mevkisi ve harita takımını seç"
+
+msgid "Find imagery files"
+msgstr ""
+
+msgid "Semantic label library"
+msgstr ""
+
+msgid "Prints available semantic label information used for multispectral data."
+msgstr ""
+
+msgid "Mosaic images"
+msgstr "Görüntüleri birleştir  "
+
+msgid "Mosaics several images and extends colormap."
+msgstr ""
+
+msgid "Manage image colors"
+msgstr "Görüntü renklerini yönet"
+
+msgid "Color balance for RGB"
+msgstr "KYM için renk dengesi"
+
+msgid "Performs auto-balancing of colors for RGB images."
+msgstr ""
+
+msgid "HIS to RGB"
+msgstr ""
+
+msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
+msgstr ""
+
+msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
+msgstr ""
+
+msgid "Rectify image or raster"
+msgstr "Görüntü veya raster konumlandırma"
+
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgstr ""
+
+msgid "Generate histogram of image"
+msgstr "Görüntünün histogramını üret"
+
+msgid "Spectral response"
+msgstr "Spektral yanıt"
+
+msgid "Displays spectral response at user specified locations in group or images."
+msgstr ""
+
+msgid "Pan sharpening"
+msgstr ""
+
+msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
+msgstr ""
+
+msgid "Classify image"
+msgstr "Görüntüyü sınıflandır"
+
+msgid "Clustering input for unsupervised classification"
+msgstr "Girdileri eğitimsiz sınıflandırma için kümeleme         "
+
+msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
+msgstr ""
+
+msgid "Input for supervised MLC"
+msgstr "*************                  Denetlenen MLC için girdi"
+
+msgid "Generates statistics for i.maxlik from raster map."
+msgstr ""
+
+msgid "Maximum likelihood classification (MLC)"
+msgstr ""
+
+msgid "Classifies the cell spectral reflectances in imagery data. Classification is based on the spectral signature information generated by either i.cluster, g.gui.iclass, or i.gensig."
+msgstr ""
+
+msgid "Interactive input for supervised classification"
+msgstr "Kontrollü sınıflandırma için etkileşimli girdi"
+
+msgid "Generates spectral signatures by allowing the user to outline training areas."
+msgstr ""
+
+msgid "Input for supervised SMAP"
+msgstr "*************                  Denetlenen SMAP için girdi"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Generates statistics for i.smap from raster map."
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+msgid "Sequential maximum a posteriori classification (SMAP)"
+msgstr ""
+
+msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
+msgstr ""
+
+#, fuzzy
+msgid "Input for supervised SVM"
+msgstr "*************                  Denetlenen SMAP için girdi"
+
+msgid "Train a SVM Train a Support Vector Machine"
+msgstr ""
+
+msgid "Support Vector Machines classification (SVM)"
+msgstr ""
+
+msgid "Predict with a SVM Predict with a Support Vector Machine"
+msgstr ""
+
+#, fuzzy
+msgid "Manage signature files"
+msgstr "Görüntü renklerini yönet"
+
+#, fuzzy
+msgid "Manage imagery classification signature files"
+msgstr "Görüntü renklerini yönet"
+
+msgid "Object segmentation"
+msgstr ""
+
+msgid "Identifies segments (objects) from imagery data."
+msgstr ""
+
+msgid "Filter image"
+msgstr "Görüntüyü filtrele"
+
+msgid "Edge detection"
+msgstr "Kenar bulma"
+
+msgid "Zero-crossing \"edge detection\" raster function for image processing."
+msgstr ""
+
+msgid "Matrix/convolving filter"
+msgstr ""
+
+msgid "Performs raster map matrix filter."
+msgstr ""
+
+msgid "Edge preserving smoothing"
+msgstr ""
+
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+msgid "Transform image"
+msgstr "Görüntüyü dönüştür"
+
+msgid "Canonical correlation"
+msgstr "Canonical korelasyon                             "
+
+msgid "Canonical components analysis (CCA) program for image processing."
+msgstr ""
+
+msgid "Principal components"
+msgstr "Temel bileşenler"
+
+msgid "Principal components analysis (PCA) for image processing."
+msgstr ""
+
+msgid "Fast Fourier"
+msgstr ""
+
+msgid "Fast Fourier Transform (FFT) for image processing."
+msgstr ""
+
+msgid "Inverse Fast Fourier"
+msgstr ""
+
+msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set image size"
+msgid "Satellite images tools"
+msgstr "Görüntü büyüklüğünü ayarla"
+
+msgid "Aster DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN."
+msgstr ""
+
+msgid "Landsat DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+/OLI"
+msgstr ""
+
+msgid "Landsat cloud cover assessment"
+msgstr ""
+
+msgid "Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA)."
+msgstr ""
+
+msgid "Modis quality control"
+msgstr ""
+
+msgid "Extracts quality control parameters from MODIS QC layers."
+msgstr ""
+
+msgid "Atmospheric correction"
+msgstr "Atmosferik düzeltme"
+
+msgid "Performs atmospheric correction using the 6S algorithm. 6S - Second Simulation of Satellite Signal in the Solar Spectrum."
+msgstr ""
+
+#, fuzzy
+#| msgid "Atmospheric correction"
+msgid "Topographic correction"
+msgstr "Atmosferik düzeltme"
+
+msgid "Computes topographic correction of reflectance."
+msgstr ""
+
+msgid "Orthophoto tools"
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage projections"
+msgid "Manage GCPs for 3D correction"
+msgstr "Projeksiyonları yönet"
+
+msgid "Georectifies a map and allows managing GCP for 3D correction."
+msgstr ""
+
+msgid "Corrects scanning distortions"
+msgstr ""
+
+msgid "Corrects scanning distortions of a scanned aerial photo."
+msgstr ""
+
+msgid "Initialize ortho parameters"
+msgstr ""
+
+msgid "Interactively creates or modifies entries in a camera initial exposure station file for imagery group referenced by a sub-block."
+msgstr ""
+
+#, fuzzy
+#| msgid "Terrain parameters"
+msgid "Camera parameters"
+msgstr "Arazi parametreleri"
+
+msgid "Select and modify the imagery group camera reference file."
+msgstr ""
+
+msgid "Elevation model for orthorectification"
+msgstr ""
+
+msgid "Select or modify the target elevation model."
+msgstr ""
+
+msgid "Target group for orthorectification"
+msgstr ""
+
+msgid "Select or modify the imagery group target."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select datum transformation"
+msgid "Compute ortho transformation"
+msgstr "Datum dönüşümünü seçin"
+
+msgid "Computes a coordinate transformation based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rectify image or raster"
+msgid "Orthorectify imagery"
+msgstr "Görüntü veya raster konumlandırma"
+
+msgid "Orthorectifies an image by using the image to photo coordinate transformation matrix."
+msgstr ""
+
+msgid "Satellite images products"
+msgstr ""
+
+#, fuzzy
+#| msgid "Region boundaries"
+msgid "Vegetation indices"
+msgstr "Bölge sınırları"
+
+msgid "Calculates different types of vegetation indices. Uses red and nir bands mostly, and some indices require additional bands."
+msgstr ""
+
+msgid "Tasseled cap vegetation index"
+msgstr ""
+
+msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
+msgstr ""
+
+msgid "Albedo"
+msgstr "Yansıma Değeri      "
+
+msgid "Computes broad band albedo from surface reflectance."
+msgstr ""
+
+msgid "Emissivity"
+msgstr ""
+
+msgid "Computes emissivity from NDVI, generic method for sparse land."
+msgstr ""
+
+msgid "Biomass growth"
+msgstr ""
+
+msgid "Computes biomass growth, precursor of crop yield calculation."
+msgstr ""
+
+msgid "Evapotranspiration calculation"
+msgstr ""
+
+msgid "Instantaneaous Net Radiation"
+msgstr ""
+
+msgid "Net radiation approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Soil heat flux"
+msgstr ""
+
+msgid "Soil heat flux approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Sensible heat flux"
+msgstr ""
+
+msgid "Computes sensible heat flux iteration SEBAL 01."
+msgstr ""
+
+msgid "Evaporative fraction"
+msgstr ""
+
+msgid "Computes evaporative fraction and root zone soil moisture."
+msgstr ""
+
+msgid "Actual Evapotranspiration"
+msgstr ""
+
+msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Temporal integration of ETa"
+msgstr ""
+
+msgid "Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)."
+msgstr ""
+
+msgid "Hargreaves methods Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation modified or original Hargreaves formulation, 2001."
+msgstr ""
+
+msgid "Penman-Monteith Evapotranspiration"
+msgstr ""
+
+msgid "Computes potential evapotranspiration calculation with hourly Penman-Monteith."
+msgstr ""
+
+msgid "Priestley-Taylor Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation Priestley and Taylor formulation, 1972."
+msgstr ""
+
+msgid "Kappa analysis"
+msgstr "Kappa analizi"
+
+msgid "Calculates error matrix and kappa parameter for accuracy assessment of classification result."
+msgstr ""
+
+msgid "OIF for LandSat TM"
+msgstr ""
+
+msgid "Calculates Optimum-Index-Factor table for spectral bands"
+msgstr ""
+
+#, fuzzy
+#| msgid "raster"
+msgid "3D r&aster"
+msgstr "raster"
+
+#, fuzzy
+msgid "Develop 3D raster map"
+msgstr "Raster harita geliştir"
+
+msgid "Manage 3D NULL values"
+msgstr "3B BOŞ değerleri yönet"
+
+msgid "Explicitly create the 3D NULL-value bitmap file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Print/add/remove a timestamp for a 3D raster map"
+msgid "Modifies a timestamp for a 3D raster map. Print/add/remove a timestamp for a 3D raster map."
+msgstr "3B raster haritanın tarih damgasını yazdır/ekle/kaldır"
+
+#, fuzzy
+msgid "Retile 3D raster"
+msgstr "Raster harita geliştir"
+
+msgid "Retiles an existing 3D raster map with user defined x, y and z tile size."
+msgstr ""
+
+#, fuzzy
+#| msgid "Allows creation and/or modification of raster map layer support files."
+msgid "Allows creation and/or modification of 3D raster map layer support files."
+msgstr "Raster harita katmanı destek dosyalarının oluşturulması ve/veya değiştirilmesine olanak tanır"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "3D rasters to raster series"
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+#, fuzzy
+#| msgid "Color tables"
+msgid "3D color tables"
+msgstr "Renk tabloları"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a 3D raster map."
+msgstr "Raster harita için yeni renk tablosu oluştur"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export 3D color table"
+msgstr "Vektör haritayı dışa aktar"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Exports the color table associated with a 3D raster map."
+msgstr "Raster harita için yeni renk tablosu oluştur"
+
+msgid "3D mask"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create profile of raster map."
+msgid "Establishes the current working 3D raster mask."
+msgstr "Raster haritanın kesiti oluşturulamıyor."
+
+#, fuzzy
+#| msgid "Add raster map layer"
+msgid "3D raster map calculator"
+msgstr "Raster harita katmanı ekle"
+
+#, fuzzy
+#| msgid "Projection:"
+msgid "Cross section"
+msgstr "Projeksiyon:"
+
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Flow lines"
+msgid "3D flow lines"
+msgstr "Akış hatları"
+
+msgid "Computes 3D flow lines and 3D flow accumulation."
+msgstr ""
+
+msgid "3D gradient"
+msgstr ""
+
+msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "3D neighborhood analysis"
+msgstr "Komşuluk analizi"
+
+msgid "Makes each voxel value a function of the values assigned to the voxels around it, and stores new voxel values in an output 3D raster map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Erase display"
+msgid "Create 3D display file"
+msgstr "Görüntüyü sil"
+
+msgid "Creates a display file from an existing 3D raster map according to specified threshold levels."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate areas from points"
+msgid "Interpolate 3D raster from points"
+msgstr "Noktalardan alan üret"
+
+msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
+msgstr ""
+
+#, fuzzy
+#| msgid "Basic vector metadata"
+msgid "Basic 3D raster metadata"
+msgstr "Temel vektör metadatası"
+
+#, fuzzy
+#| msgid "Manages category values and labels associated with user-specified raster map layers."
+msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgstr "Kullanıcı tanımlı raster harita katmanlarının kategori değerleri ve etiketleri yönetir."
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "3D raster statistics"
+msgstr "Tek değişkenli raster istatistikleri "
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Generates volume statistics for 3D raster maps."
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate statistics for 3D rasters"
+msgstr "Tek değişkenli raster istatistikleri "
+
+msgid "Calculates univariate statistics from the non-null cells of a 3D raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+#, fuzzy
+#| msgid "Database"
+msgid "&Database"
+msgstr "Veritabanı"
+
+msgid "Database information"
+msgstr "Veritabanı bilgisi"
+
+#, fuzzy
+#| msgid "List tables"
+msgid "List databases"
+msgstr "Tabloları listele"
+
+#, fuzzy
+#| msgid "Lists all tables for a given database."
+msgid "Lists all databases for a given driver and location."
+msgstr "İlgili veritabanı için tüm tabloları listele"
+
+msgid "List drivers"
+msgstr "Sürücüleri listele"
+
+#, fuzzy
+#| msgid "Lists all tables for a given database."
+msgid "Lists all database drivers."
+msgstr "İlgili veritabanı için tüm tabloları listele"
+
+msgid "List tables"
+msgstr "Tabloları listele"
+
+msgid "Lists all tables for a given database."
+msgstr "İlgili veritabanı için tüm tabloları listele"
+
+msgid "Describe table"
+msgstr "Tabloyu tanımla"
+
+msgid "Describes a table in detail."
+msgstr "Tabloyu detaylı olarak tanımlar."
+
+msgid "List columns"
+msgstr "Sütunları listele"
+
+msgid "List all columns for a given table."
+msgstr "Verilen tablodaki tüm sütunları listele."
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage databases"
+msgstr "Tabloları yönet"
+
+msgid "Connect"
+msgstr "Bağlan"
+
+#, fuzzy
+#| msgid "Prints/sets DB connection for a vector map to attribute table."
+msgid "Prints/sets general DB connection for current mapset."
+msgstr "Vektör haritanın veritabanı bağlantısını öznitelik tablosuna yazdırır/ayarlar."
+
+msgid "Login"
+msgstr "Giriş"
+
+msgid "Sets user/password for DB driver/database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create table"
+msgid "Create database"
+msgstr "Tablo oluştur"
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Creates an empty database."
+msgstr "Yeni harita takımı oluştur"
+
+#, fuzzy
+#| msgid "Database"
+msgid "Drop database"
+msgstr "Veritabanı"
+
+#, fuzzy
+msgid "Removes an existing database."
+msgstr "Mevki Grass Veritabanında zaten mevcut."
+
+#, fuzzy
+#| msgid "Describe table"
+msgid "Drop table"
+msgstr "Tabloyu tanımla"
+
+msgid "Drops an attribute table."
+msgstr "Öznitelik tablosunu kaldırır."
+
+#, fuzzy
+#| msgid "Color tables"
+msgid "Copy table"
+msgstr "Renk tabloları"
+
+msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
+msgstr ""
+
+#, fuzzy
+#| msgid "Drop all columns"
+msgid "Drop column"
+msgstr "Tüm sütunları kaldır"
+
+#, fuzzy
+#| msgid "Drops an attribute table."
+msgid "Drops a column from selected attribute table."
+msgstr "Öznitelik tablosunu kaldırır."
+
+msgid "Test"
+msgstr "Sınama"
+
+msgid "Test database driver, database must exist and set by db.connect."
+msgstr ""
+
+msgid "Query any table"
+msgstr "Herhangi bir tabloyu sorgula"
+
+msgid "Selects data from attribute table. Performs SQL query statement(s)."
+msgstr ""
+
+msgid "SQL statement"
+msgstr "SQL ifadesi"
+
+msgid "Executes any SQL statement. For SELECT statements use 'db.select'."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate statistics for table column"
+msgstr "Tek değişkenli raster istatistikleri "
+
+msgid "Calculates univariate statistics on selected table column."
+msgstr ""
+
+msgid "Vector database connections"
+msgstr "Vektör veritabanı bağlantıları"
+
+msgid "New table"
+msgstr "Yeni tablo"
+
+#, fuzzy
+#| msgid "Renames a column in the attribute table connected to a given vector map."
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
+msgstr "Verilen vektör haritaya bağlı öznitelik tablosundaki sütunu yeniden adlandırır."
+
+#, fuzzy
+#| msgid "Remove table"
+msgid "Remove table"
+msgstr "Tabloyu kaldır"
+
+#, fuzzy
+#| msgid "Renames a column in the attribute table connected to a given vector map."
+msgid "Removes existing attribute table of a vector map."
+msgstr "Verilen vektör haritaya bağlı öznitelik tablosundaki sütunu yeniden adlandırır."
+
+#, fuzzy
+#| msgid "List tables"
+msgid "Join table"
+msgstr "Tabloları listele"
+
+#, fuzzy
+#| msgid "Unable to update vector map."
+msgid "Joins a database table to a vector map table."
+msgstr "Vektör harita güncellenemiyor."
+
+msgid "Add columns"
+msgstr "Sütun ekle"
+
+msgid "Adds one or more columns to the attribute table connected to a given vector map."
+msgstr "Verilen vektör haritaya bağlı öznitelik tablosuna bir veya daha fazla sütun ekler."
+
+#, fuzzy
+#| msgid "Renames a column in the attribute table connected to a given vector map."
+msgid "Drops a column from the attribute table connected to a given vector map."
+msgstr "Verilen vektör haritaya bağlı öznitelik tablosundaki sütunu yeniden adlandırır."
+
+msgid "Renames a column in the attribute table connected to a given vector map."
+msgstr "Verilen vektör haritaya bağlı öznitelik tablosundaki sütunu yeniden adlandırır."
+
+#, fuzzy
+#| msgid "Cell values"
+msgid "Change values"
+msgstr "Hücre değerleri"
+
+#, fuzzy
+#| msgid "Renames a column in the attribute table connected to a given vector map."
+msgid "Updates a column in the attribute table connected to a vector map."
+msgstr "Verilen vektör haritaya bağlı öznitelik tablosundaki sütunu yeniden adlandırır."
+
+msgid "Drop row"
+msgstr ""
+
+#, fuzzy
+#| msgid "Prints/sets DB connection for a vector map to attribute table."
+msgid "Removes a vector feature from a vector map through attribute selection."
+msgstr "Vektör haritanın veritabanı bağlantısını öznitelik tablosuna yazdırır/ayarlar."
+
+#, fuzzy
+#| msgid "Generate from database"
+msgid "Reconnect vectors to database"
+msgstr "Veritabanından üret"
+
+#, fuzzy
+#| msgid "Creates paint labels for a vector map from attached attributes."
+msgid "Reconnects attribute tables for all vector maps from the current mapset to a new database."
+msgstr "Bağlı özniteliklerden vektör harita için etiketler oluşturur.                      "
+
+msgid "Set vector map - database connection"
+msgstr "Vektör harita - veritabanı bağlantısı ayarla"
+
+msgid "Prints/sets DB connection for a vector map to attribute table."
+msgstr "Vektör haritanın veritabanı bağlantısını öznitelik tablosuna yazdırır/ayarlar."
+
+#, fuzzy
+#| msgid "&Import"
+msgid "&Temporal"
+msgstr "&İçe Aktar"
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "Manage datasets"
+msgstr "Veritabanlarını yönet"
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Connect temporal database"
+msgstr "Yeni harita takımı oluştur"
+
+msgid "Prints/sets general temporal GIS database connection for current mapset."
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Creates a space time dataset."
+msgstr "Yeni harita takımı oluştur"
+
+#, fuzzy
+#| msgid "Rename selected mapset"
+msgid "Renames a space time dataset"
+msgstr "Seçilmiş harita takımını yeniden adlandır"
+
+msgid "Removes space time datasets from temporal database."
+msgstr ""
+
+msgid "Modifies the metadata of a space time dataset."
+msgstr ""
+
+msgid "Merge"
+msgstr ""
+
+msgid "Merges several space time datasets into a single space time dataset."
+msgstr ""
+
+msgid "Temporally shift"
+msgstr ""
+
+msgid "Shifts temporally the maps of a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename selected mapset"
+msgid "Snap maps of dataset"
+msgstr "Seçilmiş harita takımını yeniden adlandır"
+
+msgid "Snaps temporally the maps of a space time dataset."
+msgstr ""
+
+msgid "Lists space time datasets and maps registered in the temporal database."
+msgstr ""
+
+msgid "Copy space time dataset"
+msgstr ""
+
+#, fuzzy
+msgid "Creates a copy of a space time raster dataset."
+msgstr "Kaynak harita takımını seç:"
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Upgrade temporal database"
+msgstr "Yeni harita takımı oluştur"
+
+msgid "Upgrades the version of the temporal database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "Manage maps in datasets"
+msgstr "Veritabanlarını yönet"
+
+#, fuzzy
+#| msgid "Raster map"
+msgid "Register maps in datasets"
+msgstr "Raster harita"
+
+msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "3d raster map"
+msgid "Unregister maps from datasets"
+msgstr "3b raster harita"
+
+msgid "Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset."
+msgstr ""
+
+#, fuzzy
+msgid "List raster dataset maps"
+msgstr "Katman listesi"
+
+msgid "Lists registered maps of a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+msgid "List vector dataset maps"
+msgstr "Katman listesi"
+
+msgid "Lists registered maps of a space time vector dataset."
+msgstr ""
+
+#, fuzzy
+msgid "List 3D raster dataset maps"
+msgstr "Katman listesi"
+
+msgid "Lists registered maps of a space time raster3d dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import"
+msgstr "&İçe Aktar"
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Import raster dataset"
+msgstr "Raster haritayı dışa aktar"
+
+#, fuzzy
+msgid "Imports space time raster dataset."
+msgstr "Kaynak harita takımını seç:"
+
+#, fuzzy
+#| msgid "Import vector map"
+msgid "Import vector dataset"
+msgstr "Vektör haritayı içe aktar"
+
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Export raster dataset"
+msgstr "Raster haritayı dışa aktar"
+
+#, fuzzy
+msgid "Exports space time raster dataset."
+msgstr "Kaynak harita takımını seç:"
+
+#, fuzzy
+msgid "Export raster dataset as VTK time series"
+msgstr "Tek değişkenli raster istatistikleri "
+
+#, fuzzy
+msgid "Exports space time raster dataset as VTK time series."
+msgstr "Kaynak harita takımını seç:"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export vector dataset"
+msgstr "Vektör haritayı dışa aktar"
+
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Convert raster dataset to 3D raster"
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Converts a space time raster dataset into a 3D raster map."
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Convert raster dataset to vector dataset"
+msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
+
+#, fuzzy
+msgid "Converts a space time raster dataset into a space time vector dataset"
+msgstr "Kaynak harita takımını seç:"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Create contour lines from raster dataset"
+msgstr "Raster harita için yeni renk tablosu oluştur"
+
+msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Direction"
+msgid "Extraction"
+msgstr "Yön"
+
+#, fuzzy
+msgid "Extract subset of raster dataset"
+msgstr "Raster haritayı içe aktar"
+
+#, fuzzy
+msgid "Extracts a subset of a space time raster datasets."
+msgstr "Raster haritayı içe aktar"
+
+#, fuzzy
+msgid "Extract subset of vector dataset"
+msgstr "Raster haritayı içe aktar"
+
+#, fuzzy
+msgid "Extracts a subset of a space time vector dataset."
+msgstr "Raster haritayı içe aktar"
+
+#, fuzzy
+msgid "Extract subset of 3D raster dataset"
+msgstr "Raster haritayı içe aktar"
+
+#, fuzzy
+msgid "Extracts a subset of a space time 3D raster dataset."
+msgstr "Raster haritayı içe aktar"
+
+msgid "Select maps by temporal topology"
+msgstr ""
+
+msgid "Select maps from space time datasets by topological relationships to other space time datasets using temporal algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query vector attribute data"
+msgid "Query vector dataset attribute data"
+msgstr "Vektör öznitelik verisini sorgula"
+
+msgid "Prints attributes of vector maps registered in a space time vector dataset."
+msgstr ""
+
+msgid "Raster dataset color table"
+msgstr ""
+
+#, fuzzy
+msgid "Creates/modifies the color table associated with each raster map of the space time raster dataset."
+msgstr "Raster haritanın boş değer içermeyen hücrelerinden tek değişkenli istatistikler hesaplar."
+
+#, fuzzy
+#| msgid "Raster values"
+msgid "Raster calculations"
+msgstr "Raster değerler"
+
+msgid "Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Temporal raster algebra"
+msgstr "Raster haritayı dışa aktar"
+
+msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+msgstr ""
+
+msgid "3D raster calculations"
+msgstr ""
+
+msgid "Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets."
+msgstr ""
+
+msgid "Temporal 3D raster algebra"
+msgstr ""
+
+msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector map"
+msgid "Temporal vector algebra"
+msgstr "Vektör haritayı içe aktar"
+
+msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+msgstr ""
+
+#, fuzzy
+msgid "Interpolate gaps in raster datasets"
+msgstr "Raster haritayı içe aktar"
+
+msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Direction"
+msgid "Aggregation"
+msgstr "Yön"
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "Neighborhood analysis in raster dataset"
+msgstr "Komşuluk analizi"
+
+msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+msgid "Aggregation in raster datasets"
+msgstr "Katman listesi"
+
+#, fuzzy
+msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
+msgstr "Raster haritanın boş değer içermeyen hücrelerinden tek değişkenli istatistikler hesaplar."
+
+msgid "Temporal aggregation"
+msgstr ""
+
+msgid "Aggregates temporally the maps of a space time raster dataset by a user defined granularity."
+msgstr ""
+
+msgid "Temporal aggregation by dataset"
+msgstr ""
+
+msgid "Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Flow accumulation"
+msgid "Compute cyclic accumulations"
+msgstr "Akış birikimi"
+
+msgid "Computes cyclic accumulations of a space time raster dataset."
+msgstr ""
+
+msgid "Detect accumulation patterns"
+msgstr ""
+
+msgid "Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate."
+msgstr ""
+
+msgid "Sampling"
+msgstr ""
+
+#, fuzzy
+msgid "Sample a space time raster dataset at point coordinates"
+msgstr "Kaynak harita takımını seç:"
+
+msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
+msgstr ""
+
+msgid "Query raster dataset by vector points dataset"
+msgstr ""
+
+msgid "Stores raster map values at spatial and temporal positions of vector points as vector attributes."
+msgstr ""
+
+msgid "Observe specific locations in raster dataset"
+msgstr ""
+
+msgid "Observes specific locations in a space time raster dataset over a period of time using vector points."
+msgstr ""
+
+msgid "Temporal sampling"
+msgstr ""
+
+msgid "Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout."
+msgstr ""
+
+#, fuzzy
+#| msgid "Basic raster metadata"
+msgid "Space time datasets metadata"
+msgstr "Temel raster değişim verisi"
+
+msgid "Lists information about space time datasets and maps."
+msgstr ""
+
+#, fuzzy
+msgid "Univariate raster dataset statistics"
+msgstr "Tek değişkenli raster istatistikleri "
+
+#, fuzzy
+msgid "Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset."
+msgstr "Raster haritanın boş değer içermeyen hücrelerinden tek değişkenli istatistikler hesaplar."
+
+#, fuzzy
+msgid "Univariate vector dataset statistics"
+msgstr "Tek değişkenli raster istatistikleri "
+
+#, fuzzy
+msgid "Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset"
+msgstr "Raster haritanın boş değer içermeyen hücrelerinden tek değişkenli istatistikler hesaplar."
+
+#, fuzzy
+msgid "Univariate 3D raster dataset statistics"
+msgstr "Tek değişkenli raster istatistikleri "
+
+#, fuzzy
+msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
+msgstr "Raster haritanın boş değer içermeyen hücrelerinden tek değişkenli istatistikler hesaplar."
+
+msgid "Report temporal topology"
+msgstr ""
+
+#, fuzzy
+#| msgid "Lists all tables for a given database."
+msgid "Lists temporal topology of a space time dataset."
+msgstr "İlgili veritabanı için tüm tabloları listele"
+
+msgid "GUI tools"
+msgstr ""
+
+msgid "Timeline tool"
+msgstr ""
+
+#, fuzzy
+msgid "Plot temporal extents."
+msgstr "Geometriyi göster"
+
+msgid "Temporal plot tool"
+msgstr ""
+
+msgid "Plot temporal values."
+msgstr ""
+
+#, fuzzy
+#| msgid "Help"
+msgid "&Help"
+msgstr "Yardım"
+
+msgid "GRASS help"
+msgstr ""
+
+msgid "Display the HTML man pages of GRASS"
+msgstr ""
+
+msgid "GUI help"
+msgstr ""
+
+msgid "About system"
+msgstr ""
+
+#, fuzzy
+#| msgid "Database information"
+msgid "Prints system information"
+msgstr "Veritabanı bilgisi"
+
+msgid "Import, export and link data"
+msgstr ""
+
+#, fuzzy
+#| msgid "GRASS GIS Attribute Table Manager"
+msgid "Attribute table manager"
+msgstr "GRASS CBS Öznitelik Tablo Yöneticisi"
+
+msgid "Launch Data Catalog."
+msgstr ""
+
+msgid "Managing GCPs for 3D correction"
+msgstr ""
+
+msgid "Interactive editing and digitization of vector maps."
+msgstr ""
+
+msgid "Interactive editing and digitization of raster maps."
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+msgid "Bearing/distance to coordinates"
+msgstr "Açı/mesafeden koordinatlara"
+
+msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa. It assumes a cartesian coordinate system"
+msgstr ""
+
+#, fuzzy
+#| msgid "Measure distance"
+msgid "Measure map distances"
+msgstr "Mesafe Ölçümü"
+
+msgid "Measures the lengths and areas of features."
+msgstr ""
+
+#, fuzzy
+#| msgid "Enable auto-rendering"
+msgid "3D image rendering"
+msgstr "Otomatik render etkinleştirme"
+
+msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
+msgstr ""
+
+msgid "3D visualization script"
+msgstr ""
+
+msgid "Creates fly-through script to run in NVIZ."
+msgstr ""
+
+#, fuzzy
+#| msgid "Convert coordinates"
+msgid "Convert coordinates between projections"
+msgstr "Koordinatları dönüştür"
+
+msgid "Transform coordinates (affine)"
+msgstr ""
+
+msgid "PostScript map output"
+msgstr ""
+
+msgid "Produces hardcopy PostScript map output."
+msgstr ""
+
+#, fuzzy
+msgid "Save model to file"
+msgstr "Geçerli pencere düzenini varsayılan olarak kaydet"
+
+#, fuzzy
+#| msgid "Choose EPSG codes file"
+msgid "Close model file"
+msgstr "EPSG-Kodları dosyasını Seç"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export to image"
+msgstr "Vektör haritayı dışa aktar"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export to Python"
+msgstr "Modeli Python kodu olarak dışa aktar"
+
+#, fuzzy
+msgid "Export to PyWPS"
+msgstr "Raster haritayı dışa aktar"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to PyWPS script"
+msgstr "Modeli Python kodu olarak dışa aktar"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export to actinia"
+msgstr "Vektör haritayı dışa aktar"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to actinia script"
+msgstr "Modeli Python kodu olarak dışa aktar"
+
+#, fuzzy
+#| msgid "Run model"
+msgid "Quit modeler"
+msgstr "Modeli çalıştır"
+
+msgid "Close modeler window"
+msgstr ""
+
+#, fuzzy
+#| msgid "Mode"
+msgid "&Model"
+msgstr "Mod"
+
+#, fuzzy
+#| msgid "Add command layer"
+msgid "Add command"
+msgstr "Komut katmanı ekle"
+
+#, fuzzy
+#| msgid "Adds condition (if/else) to model"
+msgid "Add action (GRASS command) to model"
+msgstr "Modele koşul ekle (if/else) "
+
+msgid "Add data"
+msgstr "Veri ekle"
+
+msgid "Add data item to model"
+msgstr "Modele veri maddesi ekle"
+
+#, fuzzy
+#| msgid "Define new location"
+msgid "Define relation"
+msgstr "Yeni mevki belirle"
+
+msgid "Define relation between data and action items"
+msgstr "Veri ve işlem ilişkisini tanımla   "
+
+#, fuzzy
+msgid "Add loop / series"
+msgstr "Katman grubu ekle"
+
+#, fuzzy
+#| msgid "Adds condition (if/else) to model"
+msgid "Adds loop (series) to model"
+msgstr "Modele koşul ekle (if/else) "
+
+#, fuzzy
+#| msgid "Add centroids"
+msgid "Add condition"
+msgstr "Ağırlık merkezi ekle   "
+
+msgid "Adds condition (if/else) to model"
+msgstr "Modele koşul ekle (if/else) "
+
+#, fuzzy
+#| msgid "Adds condition (if/else) to model"
+msgid "Adds comment to model"
+msgstr "Modele koşul ekle (if/else) "
+
+#, fuzzy
+#| msgid "Remove vertex"
+msgid "Remove item"
+msgstr "Kırıklık noktası kaldır"
+
+msgid "Remove action/data from model"
+msgstr ""
+
+msgid "Model properties (name, purpose, etc.)"
+msgstr "Model özellikleri (isim, amaç vs.) "
+
+#, fuzzy
+msgid "Delete intermediate data"
+msgstr "Seçilmiş harita takımını yeniden adlandır"
+
+msgid "Delete intermediate data defined in the model"
+msgstr ""
+
+msgid "Run entire model"
+msgstr "Tüm modeli çalıştır"
+
+msgid "Validate entire model"
+msgstr "Tüm modeli doğrula"
+
+msgid "Help"
+msgstr "Yardım"
+
+msgid "Display the HTML man pages of Graphical modeler"
+msgstr ""
+
+msgid "About Graphical Modeler"
+msgstr "Grafik Modelci Hakkında"
+
+#, fuzzy
+#| msgid "About Graphical Modeler"
+msgid "Display information about Graphical Modeler"
+msgstr "Grafik Modelci Hakkında"
+
+msgid "Specify paper size, margins and orientation"
+msgstr ""
+
+msgid "Load instruction file"
+msgstr ""
+
+msgid "Load text file with mapping instructions"
+msgstr ""
+
+#, fuzzy
+#| msgid "Execution failed:"
+msgid "Export instruction file"
+msgstr "Çalıştırmada hata:"
+
+msgid "Generate text file with mapping instructions"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export to PostScript"
+msgstr "Modeli Python kodu olarak dışa aktar"
+
+msgid "Generate PostScript output"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export to PDF"
+msgstr "Vektör haritayı dışa aktar"
+
+msgid "Generate PDF output"
+msgstr ""
+
+msgid "Launch ps.map dialog"
+msgstr ""
+
+msgid "Close Cartographic Composer"
+msgstr ""
+
+#, fuzzy
+#| msgid "&Install"
+msgid "&Insert"
+msgstr "&Kur"
+
+msgid "Map frame"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add raster map layer"
+msgid "Add or edit map frame"
+msgstr "Raster harita katmanı ekle"
+
+#, fuzzy
+msgid "Add or edit raster map"
+msgstr "3b raster harita"
+
+#, fuzzy
+msgid "Add or edit vector map"
+msgstr "Vektör harita katmanı ekle"
+
+#, fuzzy
+msgid "Map legend"
+msgstr "Açıklama"
+
+msgid "Add or edit raster and vector legend"
+msgstr ""
+
+msgid "Map info"
+msgstr ""
+
+msgid "Add or edit map info"
+msgstr ""
+
+msgid "Scale bar"
+msgstr ""
+
+#, fuzzy
+msgid "Add or edit scale bar"
+msgstr "Ölçek ve Kuzey okunu göster/gizle"
+
+msgid "North Arrow"
+msgstr "Kuzey Oku"
+
+msgid "Delete selected object"
+msgstr ""
+
+msgid "Display the HTML man pages of Cartographic Composer"
+msgstr ""
+
+#, fuzzy
+#| msgid "About Graphical Modeler"
+msgid "About Cartographic Composer"
+msgstr "Grafik Modelci Hakkında"
+
+msgid "Display information about Cartographic Composer"
+msgstr ""
+
 msgid "Check all"
 msgstr ""
 
@@ -7310,9 +11400,6 @@ msgid "Choose file to save color table"
 msgstr ""
 
 msgid "Type filename or click to choose file and save color table"
-msgstr ""
-
-msgid "Save"
 msgstr ""
 
 msgid "&Set"
@@ -7571,9 +11658,6 @@ msgstr ""
 msgid "Dialog cannot be closed while command is running."
 msgstr ""
 
-msgid "Link external raster data"
-msgstr ""
-
 msgid "Add linked layers into layer tree"
 msgstr ""
 
@@ -7590,9 +11674,6 @@ msgid "No layers selected. Operation canceled."
 msgstr ""
 
 msgid "Unable to determine number of raster bands"
-msgstr ""
-
-msgid "Link external vector data"
 msgstr ""
 
 msgid "Define output format for vector data"
@@ -8168,12 +12249,6 @@ msgstr ""
 msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
 msgstr ""
 
-msgid "New"
-msgstr "Yeni"
-
-msgid "Delete"
-msgstr "Sil"
-
 msgid "Fine resolution:"
 msgstr ""
 
@@ -8279,9 +12354,6 @@ msgstr "G && D"
 msgid "Elevation of fringe from bottom:"
 msgstr ""
 
-msgid "North Arrow"
-msgstr "Kuzey Oku"
-
 msgid "Arrow length (in map units):"
 msgstr ""
 
@@ -8289,9 +12361,6 @@ msgid "Arrow color:"
 msgstr ""
 
 msgid "Place arrow"
-msgstr ""
-
-msgid "Scale bar"
 msgstr ""
 
 msgid "Scale bar length (in map units):"
@@ -8378,9 +12447,6 @@ msgstr ""
 
 msgid "None"
 msgstr ""
-
-msgid "Plane"
-msgstr "Düzlem"
 
 msgid "Vector map is 3D"
 msgstr ""
@@ -8563,9 +12629,6 @@ msgid "Map settings"
 msgstr ""
 
 msgid "Map frame settings"
-msgstr ""
-
-msgid "Map frame"
 msgstr ""
 
 msgid "Map frame options:"
@@ -8929,7 +12992,7 @@ msgstr ""
 msgid "Number of segments:"
 msgstr ""
 
-msgid "Label every "
+msgid "Label every"
 msgstr ""
 
 msgid "segments"
@@ -9171,7 +13234,8 @@ msgstr ""
 msgid "Click and drag to resize object"
 msgstr ""
 
-msgid "labels: "
+#, python-brace-format
+msgid "labels: {files}"
 msgstr ""
 
 msgid "Cartographic Composer - GRASS"
@@ -9238,21 +13302,6 @@ msgstr ""
 msgid "Select graphics tool"
 msgstr ""
 
-msgid "Generate text file with mapping instructions"
-msgstr ""
-
-msgid "Load text file with mapping instructions"
-msgstr ""
-
-msgid "Generate PostScript output"
-msgstr ""
-
-msgid "Generate PDF output"
-msgstr ""
-
-msgid "Specify paper size, margins and orientation"
-msgstr ""
-
 msgid "Full extent"
 msgstr ""
 
@@ -9262,13 +13311,7 @@ msgstr ""
 msgid "Click and drag to place map frame"
 msgstr ""
 
-msgid "Delete selected object"
-msgstr ""
-
 msgid "Show preview"
-msgstr ""
-
-msgid "Map info"
 msgstr ""
 
 msgid "Legend"
@@ -9429,9 +13472,6 @@ msgstr ""
 msgid "Remove a configuration file"
 msgstr ""
 
-msgid "Create"
-msgstr ""
-
 msgid "Create a new configuration file"
 msgstr ""
 
@@ -9582,9 +13622,6 @@ msgstr ""
 msgid "Sample units"
 msgstr ""
 
-msgid "Moving window"
-msgstr "Kayar pencere"
-
 msgid ""
 "Select areas from the\n"
 "overlaid vector map"
@@ -9718,9 +13755,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "The raster map <{map_name}> already exists. Please remove or rename the maps with the prefix '{prefix}' or select the option to overwrite existing maps"
-msgstr ""
-
-msgid "Select sample area 1 of "
 msgstr ""
 
 msgid "Configuration file name:"
@@ -10058,9 +14092,6 @@ msgstr ""
 msgid "Timeline Tool"
 msgstr ""
 
-msgid "Help"
-msgstr "Yardım"
-
 msgid "3D plot of spatio-temporal extents"
 msgstr ""
 
@@ -10249,7 +14280,7 @@ msgstr ""
 msgid "File exists"
 msgstr ""
 
-msgid "Please change name of output CSV file or "
+msgid "Please change name of output CSV file or enable overwriting."
 msgstr ""
 
 msgid "Incorrect coordinates format, should be: x,y"
@@ -11173,9 +15204,6 @@ msgstr ""
 msgid "Unable to connect to <%s>"
 msgstr ""
 
-msgid "Add web service layer"
-msgstr ""
-
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr ""
 
@@ -11189,9 +15217,6 @@ msgid "Name for output raster map:"
 msgstr ""
 
 msgid "Export region"
-msgstr ""
-
-msgid "Map display"
 msgstr ""
 
 msgid "Named region"
@@ -11587,16 +15612,22 @@ msgstr ""
 msgid "At least 2 raster maps must be specified"
 msgstr ""
 
-msgid "Bivariate Scatterplot of "
+#, python-brace-format
+msgid "{first} vs {second}"
 msgstr ""
 
-#, python-format
-msgid "Raster <%s> cell values"
+#, python-brace-format
+msgid "Bivariate Scatterplot of {pairs}"
 msgstr ""
 
-#, python-format
-msgid ": %s"
+#, python-brace-format
+msgid "Raster <{raster}> cell values: {units}"
 msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Raster values"
+msgid "Raster <{raster}> cell values"
+msgstr "Raster değerler"
 
 msgid "Regression Statistics for Scatterplot(s)"
 msgstr ""
@@ -11607,13 +15638,8 @@ msgid ""
 "\n"
 msgstr ""
 
-#, fuzzy
-#~ msgid "New display"
-#~ msgstr "Görüntüyü sil"
-
-#, fuzzy
-#~ msgid "Do you want to create a new project (also known as location)?"
-#~ msgstr "<%s> GRASS mevkisini oluşturmak istiyormusun?"
+#~ msgid "Unable to set "
+#~ msgstr "Ayarlanamıyor"
 
 #, fuzzy
 #~ msgid "Create project?"
@@ -11646,46 +15672,12 @@ msgstr ""
 #~ msgid ":"
 #~ msgstr "X:"
 
-#~ msgid "ASCII 3D export"
-#~ msgstr "ASCII 3B olarak dışa aktar"
-
-#~ msgid "ASCII 3D import"
-#~ msgstr "ASCII 3B dosyayı içe aktar"
-
-#~ msgid "ASCII grid export"
-#~ msgstr "ASCII Gridi dışa aktar"
-
-#~ msgid "ASCII grid import"
-#~ msgstr "ASCII Gridi içe aktar"
-
-#~ msgid "ASCII x,y,z point import and gridding"
-#~ msgstr "ASCII x,y,z noktalarını içe aktar ve ızgarala"
-
-#~ msgid "About Graphical Modeler"
-#~ msgstr "Grafik Modelci Hakkında"
-
 #~ msgid ""
 #~ "Accessible mapsets\n"
 #~ "(directories of GIS files)"
 #~ msgstr ""
 #~ "Erişilebilir Harita takımları\n"
 #~ "(CBS dosyaları dizinleri)"
-
-#~ msgid "Add centroids"
-#~ msgstr "Ağırlık merkezi ekle   "
-
-#~ msgid "Add columns"
-#~ msgstr "Sütun ekle"
-
-#~ msgid "Add data"
-#~ msgstr "Veri ekle"
-
-#~ msgid "Add data item to model"
-#~ msgstr "Modele veri maddesi ekle"
-
-#, fuzzy
-#~ msgid "Add default servers"
-#~ msgstr "Katman grubu ekle"
 
 #, fuzzy
 #~ msgid "Add imported layers into layer tree ({mightNotWork})"
@@ -11698,111 +15690,21 @@ msgstr ""
 #~ msgid "Add text layer"
 #~ msgstr "Metin katmanı ekle"
 
-#~ msgid "Adds condition (if/else) to model"
-#~ msgstr "Modele koşul ekle (if/else) "
-
-#~ msgid "Adds missing centroids to closed boundaries."
-#~ msgstr "Kapalı sınırlara eksik ağırlık merkezleri ekler.   "
-
-#~ msgid "Adds one or more columns to the attribute table connected to a given vector map."
-#~ msgstr "Verilen vektör haritaya bağlı öznitelik tablosuna bir veya daha fazla sütun ekler."
-
-#~ msgid "Albedo"
-#~ msgstr "Yansıma Değeri      "
-
-#~ msgid "Allows creation and/or modification of raster map layer support files."
-#~ msgstr "Raster harita katmanı destek dosyalarının oluşturulması ve/veya değiştirilmesine olanak tanır"
-
 #~ msgid "Ask when quiting wxGUI or closing display"
 #~ msgstr "wxGUI yi sona erdirirken veya pencereyi kapatırken sor"
-
-#~ msgid "Atmospheric correction"
-#~ msgstr "Atmosferik düzeltme"
 
 #~ msgid "Auto-fit variogram"
 #~ msgstr "Otomatik sığdırma variogramı"
 
-#~ msgid "Basic vector metadata"
-#~ msgstr "Temel vektör metadatası"
-
 #~ msgid "Basic volume metadata"
 #~ msgstr "Temel hacim metadatası       ******************** metadata = her yerde değiştir"
-
-#~ msgid "Bearing/distance to coordinates"
-#~ msgstr "Açı/mesafeden koordinatlara"
-
-#~ msgid "Blends color components of two raster maps by a given ratio."
-#~ msgstr "İki raster haritaya ait renk bileşenlerini verilen oranlarda karıştırır."
 
 #, fuzzy
 #~ msgid "Block size:"
 #~ msgstr "Simge boyutu:"
 
-#~ msgid "Buffer rasters"
-#~ msgstr "Raster tampon"
-
-#~ msgid "Buffer vectors"
-#~ msgstr "Vektör tampon"
-
-#~ msgid "Build polylines"
-#~ msgstr "Çoklu çizgileri oluştur"
-
-#~ msgid "Builds polylines from lines or boundaries."
-#~ msgstr "Çizgiler veya sınırlardan çoklu çizgiler oluşturur."
-
-#~ msgid "Calculates Shannon's diversity index on a raster map"
-#~ msgstr "Raster haritada Shannon'un çeşitlilik indeksini hesaplar."
-
-#~ msgid "Calculates Simpson's diversity index on a raster map"
-#~ msgstr "Raster haritada Simpson'un çeşitlilik indeksini hesaplar."
-
-#~ msgid "Calculates hydrological parameters and RUSLE factors."
-#~ msgstr "Hidrolojik parametreleri ve RUSLE etmenlerini hesaplar."
-
-#~ msgid "Calculates range of patch area size on a raster map"
-#~ msgstr "Raster haritadaki parça alan boyutunun aralığını hesaplar"
-
-#~ msgid "Calculates shape index on a raster map"
-#~ msgstr "Raster haritada şekil indeksini hesaplar"
-
-#~ msgid "Calculates standard deviation of patch area a raster map"
-#~ msgstr "Raster harita için leke alanı standart sapmayı hesaplar."
-
-#, fuzzy
-#~ msgid "Calculates univariate statistics from the non-null cells for each registered raster3d map of a space time raster3d dataset."
-#~ msgstr "Raster haritanın boş değer içermeyen hücrelerinden tek değişkenli istatistikler hesaplar."
-
-#~ msgid "Canonical correlation"
-#~ msgstr "Canonical korelasyon                             "
-
-#~ msgid "Change category values and labels"
-#~ msgstr "Categori değerleri ve etiketleri değiştir"
-
-#~ msgid "Change current mapset."
-#~ msgstr "Geçerli harita takımını değiştir"
-
-#, fuzzy
-#~ msgid "Change current project and mapset."
-#~ msgstr "Geçerli harita takımını değiştir"
-
-#, fuzzy
-#~ msgid "Change project (location) and mapset"
-#~ msgstr "Proje mevkisi ve harita takımını seç"
-
-#~ msgid "Change settings"
-#~ msgstr "Ayarları değiştir"
-
-#~ msgid "Change working environment"
-#~ msgstr "Çalışma ortamı ayarlarını değiştir"
-
-#~ msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
-#~ msgstr "Varolan vektör haritanın vektör kategori değerlerini SQL sorgularına veya öznitelik tablosundaki bir değere göre değiştirir."
-
 #~ msgid "Choose EPSG Code"
 #~ msgstr "EPSG Kodunu Seç:"
-
-#~ msgid "Choose EPSG codes file"
-#~ msgstr "EPSG-Kodları dosyasını Seç"
 
 #~ msgid "Choose GRC file to load"
 #~ msgstr "Yüklenecek GRC dosyasını seçin"
@@ -11813,176 +15715,13 @@ msgstr ""
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "Coğrafi referans parametrelerini belirleme yöntemini seç"
 
-#~ msgid "Classify image"
-#~ msgstr "Görüntüyü sınıflandır"
-
-#~ msgid "Clean vector map"
-#~ msgstr "Vektör haritayı temizle"
-
-#~ msgid "Closest points"
-#~ msgstr "En yakın noktalar"
-
-#~ msgid "Clump"
-#~ msgstr "************             Küme                      Çalılık"
-
-#~ msgid "Clustering input for unsupervised classification"
-#~ msgstr "Girdileri eğitimsiz sınıflandırma için kümeleme         "
-
-#~ msgid "Color balance for RGB"
-#~ msgstr "KYM için renk dengesi"
-
-#~ msgid "Color tables"
-#~ msgstr "Renk tabloları"
-
-#, fuzzy
-#~ msgid "Common export formats using OGR"
-#~ msgstr "OGR kullanan çeşitli dışa aktarma biçimleri"
-
-#~ msgid "Compress/decompress"
-#~ msgstr "Sıkıştır/aç "
-
-#~ msgid "Compresses and decompresses raster maps."
-#~ msgstr "Raster haritaları sıkıştırır ve açar."
-
-#~ msgid "Concentric circles"
-#~ msgstr "Eş merkezli çemberler"
-
-#~ msgid "Configuration editor for r.li.'index'"
-#~ msgstr "r.li.'index' için yapılandırma düzenleyici"
-
-#~ msgid "Connect"
-#~ msgstr "Bağlan"
-
-#~ msgid "Convert coordinates"
-#~ msgstr "Koordinatları dönüştür"
-
-#~ msgid "Convert object types"
-#~ msgstr "Obje tiplerini dönüştür"
-
-#~ msgid "Converts 2D raster map slices to one 3D raster volume map."
-#~ msgstr "2B raster harita dilimlerini 3B raster hacim haritasına dönüştürür."
-
-#~ msgid "Converts 3D raster maps to 2D raster maps"
-#~ msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
-
-#~ msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
-#~ msgstr "GRASS x,y,z noktalarını POV-Ray x,z,y formatına dönüştür."
-
 #, fuzzy
 #~ msgid "Converts all older versions of GRASS vector maps in current mapset to current format."
 #~ msgstr "Eski GRASS vektör haritasını içe aktarır."
 
-#~ msgid "Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
-#~ msgstr "Çeşitli formatlar arasında (GRASS formatı dahil) koordinat sistemi tanımlarını (projeksiyon bilgisi) dönüştür."
-
-#~ msgid "Converts files in DXF format to GRASS vector map format."
-#~ msgstr "DXF biçimindeki dosyaları GRASS vektör haritasına dönüştürür."
-
-#~ msgid "Convex hull"
-#~ msgstr "Dışbükey kabuk"
-
 #, fuzzy
 #~ msgid "Copying"
 #~ msgstr "Tabloyu kopyala"
-
-#~ msgid "Correct and reclassify objects"
-#~ msgstr "Objeleri düzelt ve tekrar sınıflandır"
-
-#~ msgid "Covariance/correlation"
-#~ msgstr "Kovariyans/Korelasyon  "
-
-#~ msgid "Create 3D vector over raster"
-#~ msgstr "Raster üzerinde 3B vektör oluştur"
-
-#~ msgid "Create LRS"
-#~ msgstr "LRS Oluştur"
-
-#~ msgid "Create RGB"
-#~ msgstr "KYM oluştur"
-
-#~ msgid "Create labels"
-#~ msgstr "Etiketleri oluştur"
-
-#~ msgid "Create new empty vector map"
-#~ msgstr "Yeni boş vektör harita oluştur"
-
-#, fuzzy
-#~ msgid "Create new project (location)"
-#~ msgstr "Yeni Mevki oluşturayım mı?"
-
-#, fuzzy
-#~ msgid "Create optimally placed labels"
-#~ msgstr "Etiketleri oluştur"
-
-#~ msgid "Create points/segments"
-#~ msgstr "Nokta/parça oluştur"
-
-#~ msgid "Create/edit group"
-#~ msgstr "Grup oluştur/düzenle"
-
-#~ msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
-#~ msgstr "2B yükselti ve raster haritalardan 3B hacim haritası oluşturur."
-
-#~ msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
-#~ msgstr "Nokta veya ağırlık merkezlerini içeren girdi vektör haritadan Delaunay üçgenlemesi oluşturur.           "
-
-#~ msgid "Creates a raster map containing concentric rings around a given point."
-#~ msgstr "Verilen bir nokta etrafında eş merkezli halkalar içeren raster harita oluşturur."
-
-#~ msgid "Creates new vector (points) map from database table containing coordinates."
-#~ msgstr "Koordinatlar içeren veritabanı tablosundan yeni vektör (nokta) harita oluşturur."
-
-#~ msgid "Creates paint labels for a vector map from attached attributes."
-#~ msgstr "Bağlı özniteliklerden vektör harita için etiketler oluşturur.                      "
-
-#~ msgid "Creates raster maps from ASCII polygon/line/point data files."
-#~ msgstr "ASCII poligon/çizgi/nokta veri dosyalarından raster haritalar oluşturur."
-
-#~ msgid "Cross product"
-#~ msgstr "***********           Çapraz çarpım                                 Vektörel çarpım"
-
-#~ msgid "DXF export"
-#~ msgstr "DXF olarak dışa aktar"
-
-#~ msgid "DXF import"
-#~ msgstr "DXF dosyasını içe aktar"
-
-#~ msgid "Database information"
-#~ msgstr "Veritabanı bilgisi"
-
-#~ msgid "Define new location"
-#~ msgstr "Yeni mevki belirle"
-
-#~ msgid "Define relation between data and action items"
-#~ msgstr "Veri ve işlem ilişkisini tanımla   "
-
-#~ msgid "Delaunay triangles"
-#~ msgstr "Delaunay üçgenleri"
-
-#~ msgid "Depressionless map and flowlines"
-#~ msgstr "Çukurlukları giderilmiş harita ve akış hatları"
-
-#~ msgid "Describe table"
-#~ msgstr "Tabloyu tanımla"
-
-#~ msgid "Describes a table in detail."
-#~ msgstr "Tabloyu detaylı olarak tanımlar."
-
-#~ msgid "Detect edges"
-#~ msgstr "Kenarları bul"
-
-#~ msgid "Detects the object's edges from a LIDAR data set."
-#~ msgstr "LIDAR veri takımından obje kenarlarını belirler."
-
-#, fuzzy
-#~ msgid "Develop 3D rasters"
-#~ msgstr "Raster harita geliştir"
-
-#~ msgid "Develop images and groups"
-#~ msgstr "Görüntü ve grup geliştir"
-
-#~ msgid "Develop vector map"
-#~ msgstr "Vektör harita geliştir"
 
 #~ msgid "Develop volumes"
 #~ msgstr "Hacim oluştur"
@@ -11993,36 +15732,11 @@ msgstr ""
 #~ msgid "Display mode"
 #~ msgstr "Görüntü modu"
 
-#~ msgid "Display region"
-#~ msgstr "Bölgeyi göster"
-
 #~ msgid "Displays version and copyright information."
 #~ msgstr "Sürüm ve telif hakkı bilgisini göster."
 
-#~ msgid "Dissolve boundaries"
-#~ msgstr "Sınırları çöz"
-
-#, fuzzy
-#~ msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
-#~ msgstr "Ortak kategori numarası veya özniteliği paylaşan komşu alanlar arasındaki sınırları çözer. "
-
 #~ msgid "Do you want to set the default region extents and resolution now?"
 #~ msgstr "Varsayılan bölge sınırları ve çözünürlüğünü şimdi ayarlamak istermisin?"
-
-#~ msgid "Dominance's diversity"
-#~ msgstr "Dominance'ın farkı"
-
-#~ msgid "Drops an attribute table."
-#~ msgstr "Öznitelik tablosunu kaldırır."
-
-#~ msgid "ESRI e00 import"
-#~ msgstr "ESRI e00 dosyasını içe aktar"
-
-#~ msgid "Edge density"
-#~ msgstr "Kenar yoğunluğu"
-
-#~ msgid "Edge detection"
-#~ msgstr "Kenar bulma"
 
 #, fuzzy
 #~ msgid "Editing"
@@ -12034,55 +15748,12 @@ msgstr ""
 #~ msgid "Exit GUI"
 #~ msgstr "Arayüzden Çık"
 
-#~ msgid "Export raster map"
-#~ msgstr "Raster haritayı dışa aktar"
-
 #, fuzzy
 #~ msgid "Export variance map as well: "
 #~ msgstr "Raster haritayı dışa aktar"
 
-#~ msgid "Export vector map"
-#~ msgstr "Vektör haritayı dışa aktar"
-
-#~ msgid "Exports a GRASS raster to a binary MAT-File."
-#~ msgstr "GRASS raster dosyasını ikili MAT-dosyasına aktar."
-
-#~ msgid "Exports a GRASS raster to a binary array."
-#~ msgstr "GRASS raster dosyasını ikili diziye aktar."
-
-#~ msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
-#~ msgstr "Raster haritayı Virtual Reality Modeling Language (VRML) e ver.  ???????????????????????"
-
 #~ msgid "Extent"
 #~ msgstr "Boyut"
-
-#, fuzzy
-#~ msgid "Extract subset of raster3D dataset"
-#~ msgstr "Raster haritayı içe aktar"
-
-#~ msgid "Fill NULL cells"
-#~ msgstr "BOŞ hücreleri doldur"
-
-#~ msgid "Fill lake"
-#~ msgstr "Gölleri doldur"
-
-#~ msgid "Filter image"
-#~ msgstr "Görüntüyü filtrele"
-
-#~ msgid "Finds shortest path on vector network."
-#~ msgstr "Vektör ağ üzerinde en kısa yolu bulur."
-
-#~ msgid "Flow accumulation"
-#~ msgstr "Akış birikimi"
-
-#~ msgid "Flow lines"
-#~ msgstr "Akış hatları"
-
-#~ msgid "Fractal surface"
-#~ msgstr "Fractal yüzey"
-
-#~ msgid "GEOnet import"
-#~ msgstr "GEOnet içe aktar"
 
 #~ msgid "GIS Data Directory:"
 #~ msgstr "CBS Veri Dizini:"
@@ -12094,129 +15765,16 @@ msgstr ""
 #~ msgid "GRASS GIS - Map display"
 #~ msgstr "GRASS CBS - Harita Görüntüsü"
 
-#~ msgid "GRASS raster map layer data resampling capability."
-#~ msgstr "GRASS raster harita katmanı yeniden örnekleme yeteneği"
-
-#~ msgid "GRASS working environment"
-#~ msgstr "GRASS çalışma ortamı"
-
-#~ msgid "GRIDATB.FOR export"
-#~ msgstr "GRIDATB.FOR dışa aktar"
-
-#~ msgid "GRIDATB.FOR import"
-#~ msgstr "GRIDATB.FOR içe aktar"
-
-#~ msgid "General statistics"
-#~ msgstr "Genel istatistikler"
-
-#~ msgid "Generate area for current region"
-#~ msgstr "Geçerli bölgeden alan üret"
-
-#~ msgid "Generate areas from points"
-#~ msgstr "Noktalardan alan üret"
-
-#~ msgid "Generate contour lines"
-#~ msgstr "Eşyükselti eğrileri üret"
-
-#~ msgid "Generate from database"
-#~ msgstr "Veritabanından üret"
-
-#~ msgid "Generate histogram of image"
-#~ msgstr "Görüntünün histogramını üret"
-
-#~ msgid "Generate points"
-#~ msgstr "Nokta üret"
-
-#~ msgid "Generate points along lines"
-#~ msgstr "Çizgiler boyunca noktalar üret"
-
-#~ msgid "Generate random cells"
-#~ msgstr "Rasgele hücreler üret"
-
-#~ msgid "Generate random points"
-#~ msgstr "Rasgele noktalar üret"
-
-#~ msgid "Generate surfaces"
-#~ msgstr "Yüzey üret"
-
-#~ msgid "Groundwater flow"
-#~ msgstr "Yeraltısuyu Akışı"
-
-#~ msgid "Grow"
-#~ msgstr "Büyüme"
-
 #, fuzzy
 #~ msgid "Hide {overlay}"
 #~ msgstr "Vektör harita katmanı ekle"
 
 #, fuzzy
-#~ msgid "Historical GRASS vector import"
-#~ msgstr "Eski GRASS vektör haritasını içe aktar"
-
-#, fuzzy
 #~ msgid "Historical GRASS vector import (all maps)"
 #~ msgstr "Eski GRASS vektör haritasını içe aktar"
 
-#~ msgid "Horizon angle"
-#~ msgstr "Yatay açı"
-
-#~ msgid "Hydrologic modeling"
-#~ msgstr "Hidrolojik modelleme"
-
-#~ msgid "IDW from raster points"
-#~ msgstr "Raster noktalardan IDW "
-
-#~ msgid "IDW from vector points"
-#~ msgstr "Vektör noktalardan IDW "
-
-#~ msgid "Import 3-dimensional Vis5D files."
-#~ msgstr "3 boyutlu Vis5D dosyalarını içe aktar."
-
-#~ msgid "Import a binary raster file into a GRASS raster map layer."
-#~ msgstr "İkili raster dosyayı GRASS raster harita katmanı olarak içe aktar."
-
-#~ msgid "Import database table"
-#~ msgstr "Veritabanı tablosunu içe aktar"
-
-#~ msgid "Imports SPOT VGT NDVI data into a raster map."
-#~ msgstr "Raster haritaya SPOT VGT NDVI verisini aktar."
-
-#~ msgid "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map."
-#~ msgstr "GRASS vektör noktalar haritasına US-NGA GEOnet Names Server (GNS) ülke dosyalarını aktar."
-
-#~ msgid "Imports a binary MAT-File(v4) to a GRASS raster."
-#~ msgstr "İkili MAT-File(v4) GRASS raster harita katmanına dönüştür."
-
-#~ msgid "Imports attribute tables in various formats."
-#~ msgstr "Değişik biçimlerdeki öznitelik tablolarını içe aktar."
-
-#~ msgid "Imports older versions of GRASS vector maps."
-#~ msgstr "Eski GRASS vektör haritasını içe aktarır."
-
 #~ msgid "Input Data"
 #~ msgstr "Veri Girişi"
-
-#~ msgid "Input for supervised MLC"
-#~ msgstr "*************                  Denetlenen MLC için girdi"
-
-#~ msgid "Input for supervised SMAP"
-#~ msgstr "*************                  Denetlenen SMAP için girdi"
-
-#, fuzzy
-#~ msgid "Input for supervised SVM"
-#~ msgstr "*************                  Denetlenen SMAP için girdi"
-
-#~ msgid "Interactive input for supervised classification"
-#~ msgstr "Kontrollü sınıflandırma için etkileşimli girdi"
-
-#~ msgid "Interactively edit category values"
-#~ msgstr "Kategori değerlerini etkileşimli olarak düzenle"
-
-#~ msgid "Interpolate surfaces"
-#~ msgstr "Yüzey enterpolasyonu"
-
-#~ msgid "Kappa analysis"
-#~ msgstr "Kappa analizi"
 
 #~ msgid "Kriging"
 #~ msgstr "Kriging"
@@ -12227,52 +15785,15 @@ msgstr ""
 #~ msgid "Kriging techniques"
 #~ msgstr "Kriging teknikleri"
 
-#~ msgid "Landscape patch analysis"
-#~ msgstr "Peyzaj leke analizi"
-
 #~ msgid "Last cleaning tool can not be moved down "
 #~ msgstr "***********       Son temizleme aracı aşağı taşınmış olamaz"
-
-#~ msgid "Launch Graphical modeler"
-#~ msgstr "Grafik modelci'yi başlat"
 
 #, fuzzy
 #~ msgid "Launches graphical attribute table manager."
 #~ msgstr "Öznitelik Tablo Yöneticisi"
 
-#~ msgid "Lidar analysis"
-#~ msgstr "Lidar analizi"
-
-#~ msgid "Linear regression"
-#~ msgstr "Doğrusal ilişki    "
-
-#~ msgid "List"
-#~ msgstr "Listele"
-
-#~ msgid "List all columns for a given table."
-#~ msgstr "Verilen tablodaki tüm sütunları listele."
-
-#~ msgid "List columns"
-#~ msgstr "Sütunları listele"
-
-#~ msgid "List drivers"
-#~ msgstr "Sürücüleri listele"
-
-#, fuzzy
-#~ msgid "List raster3D dataset maps"
-#~ msgstr "Katman listesi"
-
-#~ msgid "List tables"
-#~ msgstr "Tabloları listele"
-
-#~ msgid "Lists all tables for a given database."
-#~ msgstr "İlgili veritabanı için tüm tabloları listele"
-
 #~ msgid "Load GRC file (Tcl/Tk GUI)"
 #~ msgstr "GRC dosyasını yükle (Tcl/Tk GUI)"
-
-#~ msgid "Locates the closest points between objects in two raster maps."
-#~ msgstr "İki raster haritaki objelere en yakın noktaları yerleştirir."
 
 #~ msgid "Location <%s> created"
 #~ msgstr "<%s> Konumu oluşturuldu"
@@ -12283,74 +15804,19 @@ msgstr ""
 #~ msgid "Location wizard canceled. Location not created."
 #~ msgstr "Konum sihirbazı iptal edildi. Konum oluşturulamadı."
 
-#~ msgid "Login"
-#~ msgstr "Giriş"
-
-#~ msgid "MPEG-1 export"
-#~ msgstr "MPEG-1 dışa aktar"
-
 #~ msgid "Manage"
 #~ msgstr "Yönet"
-
-#~ msgid "Manage 3D NULL values"
-#~ msgstr "3B BOŞ değerleri yönet"
-
-#~ msgid "Manage NULL values"
-#~ msgstr "BOŞ değerlei yönet"
-
-#~ msgid "Manage category information"
-#~ msgstr "Kategori bilgisini yönet"
-
-#~ msgid "Manage colors"
-#~ msgstr "Renkleri yönet"
-
-#~ msgid "Manage image colors"
-#~ msgstr "Görüntü renklerini yönet"
-
-#~ msgid "Manage projections"
-#~ msgstr "Projeksiyonları yönet"
-
-#, fuzzy
-#~ msgid "Manage signature files"
-#~ msgstr "Görüntü renklerini yönet"
-
-#~ msgid "Manage timestamp"
-#~ msgstr "Tarih damgasını yönet"
-
-#~ msgid "Manages NULL-values of given raster map."
-#~ msgstr "Raster haritanın BOŞ değerlerini yönetir."
-
-#~ msgid "Manages category values and labels associated with user-specified raster map layers."
-#~ msgstr "Kullanıcı tanımlı raster harita katmanlarının kategori değerleri ve etiketleri yönetir."
-
-#~ msgid "Manages the boundary definitions for the geographic region."
-#~ msgstr "Coğrafi bölgenin sınır tanımlarını yönetir"
 
 #, fuzzy
 #~ msgid "Map layers"
 #~ msgstr "Harita katmanları"
 
-#~ msgid "Map type conversions"
-#~ msgstr "Harita tipi dönüşümleri"
-
-#~ msgid "Mapset access"
-#~ msgstr "Harita takımı erişimi"
-
 #~ msgid "Maximum number of animations is %s."
 #~ msgstr "En büyük animasyon sayısı: %s."
-
-#~ msgid "Mode"
-#~ msgstr "Mod"
-
-#~ msgid "Model properties (name, purpose, etc.)"
-#~ msgstr "Model özellikleri (isim, amaç vs.) "
 
 #, fuzzy
 #~ msgid "Model: "
 #~ msgstr "Mod:"
-
-#~ msgid "Mosaic images"
-#~ msgstr "Görüntüleri birleştir  "
 
 #, fuzzy
 #~ msgid "Multiple GPS export formats using GPSBabel"
@@ -12363,21 +15829,6 @@ msgstr ""
 #~ msgid "Name for the output raster map:"
 #~ msgstr "Yeni vektör harita için ad:"
 
-#~ msgid "Nearest features"
-#~ msgstr "En yakın elemanlar"
-
-#~ msgid "Neighborhood analysis"
-#~ msgstr "Komşuluk analizi"
-
-#~ msgid "Neighborhood points"
-#~ msgstr "Komşu noktalar"
-
-#~ msgid "Network analysis"
-#~ msgstr "Ağ(şebeke) analizi"
-
-#~ msgid "New table"
-#~ msgstr "Yeni tablo"
-
 #~ msgid "No GRASS-python library found."
 #~ msgstr "GRASS-python kütüphanesini bulamadı."
 
@@ -12388,62 +15839,11 @@ msgstr ""
 #~ msgid "Old GRASS Workspace File (*.grc)|*.grc"
 #~ msgstr "Eski GRASS Çalışma Alanı Dosyası (*.grc)|*.grc"
 
-#~ msgid "Open"
-#~ msgstr "Aç"
-
-#~ msgid "Outputs and modifies the user's current GRASS variable settings."
-#~ msgstr "Kullanıcının geçerli GRASS değişken ayarlarını değiştirir ve çıktılar."
-
-#~ msgid "Overlay rasters"
-#~ msgstr "rasterları çakıştır"
-
-#~ msgid "Overlay vector maps"
-#~ msgstr "Vektör haritaları çakıştır."
-
 #~ msgid "Overlays two vector maps."
 #~ msgstr "İki vektör haritayı çakıştırır."
 
-#~ msgid "PNG export"
-#~ msgstr "PNG olarak dışa aktar"
-
-#~ msgid "POV-Ray export"
-#~ msgstr "POV-Ray dışa aktar"
-
-#~ msgid "PPM export"
-#~ msgstr "PPM olarak dışa aktar"
-
-#~ msgid "PPM from RGB export"
-#~ msgstr "RGB den PPM'e ver   **************"
-
-#~ msgid "Parallel lines"
-#~ msgstr "Paralel çizgiler"
-
-#~ msgid "Patch area Std Dev"
-#~ msgstr "Leke alanı standart sapması"
-
-#~ msgid "Patch area mean"
-#~ msgstr "Leke alanı ortalaması"
-
-#~ msgid "Patch area range"
-#~ msgstr "Leke alan aralığı -"
-
-#~ msgid "Patch density"
-#~ msgstr "Leke yoğunluğu"
-
-#~ msgid "Patch number"
-#~ msgstr "Leke sayısı"
-
-#~ msgid "Patch raster maps"
-#~ msgstr "Raster haritaları kümele"
-
-#~ msgid "Patch vector maps"
-#~ msgstr "Vektör haritaları yamala"
-
 #~ msgid "Path to the EPSG-codes file:"
 #~ msgstr "EPSG-kodları dosyası yolu:"
-
-#~ msgid "Performs transformation of 2D vector features to 3D."
-#~ msgstr "2B vektör elemanları 3B ye dönüştürür."
 
 #~ msgid "Please select a cleaning tool to move down"
 #~ msgstr "Lütfen aşağı taşımak için bir temizleme aracı seçiniz"
@@ -12454,66 +15854,12 @@ msgstr ""
 #~ msgid "Plot/refresh variogram"
 #~ msgstr "Arsa/yenileme variogram"
 
-#~ msgid "Preferences"
-#~ msgstr "Tercihler"
-
-#~ msgid "Principal components"
-#~ msgstr "Temel bileşenler"
-
-#~ msgid "Print/add/remove a timestamp for a 3D raster map"
-#~ msgstr "3B raster haritanın tarih damgasını yazdır/ekle/kaldır"
-
-#~ msgid "Prints vector map attributes."
-#~ msgstr "Vektör harita özniteliklerini yazdır."
-
-#~ msgid "Prints/sets DB connection for a vector map to attribute table."
-#~ msgstr "Vektör haritanın veritabanı bağlantısını öznitelik tablosuna yazdırır/ayarlar."
-
-#~ msgid "Produces the quantization file for a floating-point map."
-#~ msgstr "Kayan noktalı harita için kuantumlama dosyası üretir."
-
 #~ msgid "Project Location"
 #~ msgstr "Proje Konumu"
-
-#~ msgid "Quantization"
-#~ msgstr "***********           Kuantumlama"
-
-#~ msgid "Query any table"
-#~ msgstr "Herhangi bir tabloyu sorgula"
-
-#~ msgid "Query vector attribute data"
-#~ msgstr "Vektör öznitelik verisini sorgula"
-
-#~ msgid "Query with coordinate(s)"
-#~ msgstr "Koordinat(lar)a göre sorgula"
-
-#~ msgid "Random cells and vector points"
-#~ msgstr "Rasgele hücreler ve vektör noktalar"
-
-#~ msgid "Range of category values"
-#~ msgstr "Kategori değerleri aralığı"
-
-#~ msgid "Raster contours"
-#~ msgstr "Raster eşyükselti eğrileri"
-
-#~ msgid "Raster to vector"
-#~ msgstr "Rasterdan vektöre"
-
-#~ msgid "Rate of spread"
-#~ msgstr "Yayılma oranı"
 
 #, fuzzy
 #~ msgid "Ready."
 #~ msgstr "Yeniden yükle"
-
-#~ msgid "Reclassify by size"
-#~ msgstr "Boyutuna göre yeniden sınıflandır"
-
-#~ msgid "Rectify image or raster"
-#~ msgstr "Görüntü veya raster konumlandırma"
-
-#~ msgid "Region boundaries"
-#~ msgstr "Bölge sınırları"
 
 #, fuzzy
 #~ msgid "Remove MASK"
@@ -12526,78 +15872,12 @@ msgstr ""
 #~ "Seçilen harita takımı veya mevkiyi \n"
 #~ "yeniden adlandır/sil"
 
-#~ msgid "Renames a column in the attribute table connected to a given vector map."
-#~ msgstr "Verilen vektör haritaya bağlı öznitelik tablosundaki sütunu yeniden adlandırır."
-
-#~ msgid "Renames data base element files in the user's current mapset."
-#~ msgstr "Kullanıcının geçerli harita takımındaki veritabanı elemanı dosyalarını yeniden adlandırır."
-
 #, fuzzy
 #~ msgid "Renaming"
 #~ msgstr "Yeniden adlandır"
 
-#~ msgid "Report topology by category"
-#~ msgstr "Topolojiyi kategoriye göre raporla"
-
-#~ msgid "Reports and statistics"
-#~ msgstr "Raporlar ve istatistikler"
-
-#~ msgid "Reposition vector map"
-#~ msgstr "Vektör haritayı yeniden konumlandır"
-
 #~ msgid "Repository"
 #~ msgstr "Depo               *************"
-
-#~ msgid "Resample using aggregate statistics"
-#~ msgstr "Ayrıştırma istatistiklerini kullanarak yeniden örnekle"
-
-#~ msgid "Resample using multiple methods"
-#~ msgstr "Çeşitli yöntemler kullanarak yeniden örnekle"
-
-#~ msgid "Resample using nearest neighbor"
-#~ msgstr "En yakın komşuyu kullanarak yeniden örnekle"
-
-#~ msgid "Resample using spline tension"
-#~ msgstr "Resampeln mit der Spline-Tension-Methode (RST)"
-
-#~ msgid "Rescale"
-#~ msgstr "Yeniden ölçekle"
-
-#~ msgid "Rescale with histogram"
-#~ msgstr "Histogram ile yeniden ölçekle"
-
-#~ msgid "Rescales the range of category values in a raster map layer."
-#~ msgstr "Raster harita katmanındaki kategori değerlerini yeniden ölçekler."
-
-#~ msgid "Richness"
-#~ msgstr "Verim                                                                  ************************** zenginlik / canlılık"
-
-#~ msgid "Run entire model"
-#~ msgstr "Tüm modeli çalıştır"
-
-#~ msgid "Run model prepared by Graphical modeler"
-#~ msgstr "Grafik modelci tarafından hazırlanmış modeli çalıştır"
-
-#~ msgid "SIMWE Overland flow modeling"
-#~ msgstr "SIMWE su erozyon modelleme"
-
-#~ msgid "SIMWE Sediment flux modeling"
-#~ msgstr "SIMWE sediment erozyon modelleme"
-
-#~ msgid "SPOT NDVI import"
-#~ msgstr "SPOT NDVI içe aktar"
-
-#~ msgid "SQL statement"
-#~ msgstr "SQL ifadesi"
-
-#~ msgid "SRTM HGT import"
-#~ msgstr "SRTM (.hgt) içe aktar"
-
-#~ msgid "SVG export"
-#~ msgstr "SVG olarak dışa aktar"
-
-#~ msgid "Save as"
-#~ msgstr "Değişiklikleri farklı kaydet"
 
 #~ msgid ""
 #~ "Select an existing project location and mapset\n"
@@ -12606,37 +15886,6 @@ msgstr ""
 #~ "Varolan mevki ve harita takımı seç\n"
 #~ "veya yeni bir mevki belirle"
 
-#~ msgid "Set region"
-#~ msgstr "Bölge Ayarla"
-
-#~ msgid "Set up sampling and analysis framework"
-#~ msgstr "Örnekleme ve analiz sistemini kur"
-
-#~ msgid "Set vector map - database connection"
-#~ msgstr "Vektör harita - veritabanı bağlantısı ayarla"
-
-#, fuzzy
-#~ msgid "Set/unset access to other mapsets in current project"
-#~ msgstr "Diğer mevkideki harita takımlarına erişimi ayarla/kaldır"
-
-#~ msgid "Sets the boundary definitions for a raster map."
-#~ msgstr "Raster harita için sınır tanımları ayarlanamıyor."
-
-#~ msgid "Shadows map"
-#~ msgstr "Gölgelenme haritası"
-
-#~ msgid "Shannon's diversity"
-#~ msgstr "Shannon'ın farkı"
-
-#~ msgid "Shape index"
-#~ msgstr "Şekil indeksi"
-
-#~ msgid "Shortest path"
-#~ msgstr "En kısa yol"
-
-#~ msgid "Show settings"
-#~ msgstr "Ayarları göster"
-
 #~ msgid "Show/hide legend"
 #~ msgstr "Açıklamayı göster/gizle"
 
@@ -12644,33 +15893,8 @@ msgstr ""
 #~ msgid "Show/hide north arrow"
 #~ msgstr "Ölçek ve Kuzey okunu göster/gizle"
 
-#, fuzzy
-#~ msgid "Show/hide scale bar"
-#~ msgstr "Ölçek ve Kuzey okunu göster/gizle"
-
-#~ msgid "Simpson's diversity"
-#~ msgstr "Simpson'ın farkı        "
-
 #~ msgid "Sites to vector"
 #~ msgstr "Noktadan vektöre"
-
-#~ msgid "Slope and aspect"
-#~ msgstr "Eğim ve bakı"
-
-#~ msgid "Smooth or simplify"
-#~ msgstr "Yumuşatmak veya Basitleştirmek       *********************************"
-
-#~ msgid "Solar radiance and shadows"
-#~ msgstr "Güneş ışınımı ve gölgeleme"
-
-#~ msgid "Spectral response"
-#~ msgstr "Spektral yanıt"
-
-#~ msgid "Split net"
-#~ msgstr "Şebekeyi böl"
-
-#~ msgid "Split polylines"
-#~ msgstr "Çoklu çizgileri böl"
 
 #, fuzzy
 #~ msgid "Start &GRASS"
@@ -12679,28 +15903,9 @@ msgstr ""
 #~ msgid "Starting GRASS for the first time"
 #~ msgstr "GRASS ilk kez başlatılıyor"
 
-#~ msgid "Statistical overlay"
-#~ msgstr "İstatistiksel çakıştırma"
-
-#~ msgid "Sum area by raster map and category"
-#~ msgstr "Alanları raster harita ve kategoriye göre özetle"
-
-#~ msgid "Support file maintenance"
-#~ msgstr "Destek dosyası bakımı"
-
 #, fuzzy
 #~ msgid "Surface generation program."
 #~ msgstr "Rasterlar için yüzey alan hesabı"
-
-#, fuzzy
-#~ msgid "Surface interpolation utility for raster map."
-#~ msgstr "Raster harita için yeni renk tablosu oluştur"
-
-#~ msgid "TOPMODEL simulation"
-#~ msgstr "TOPMODEL canlandırması"
-
-#~ msgid "Target group"
-#~ msgstr "Hedef grup"
 
 #, fuzzy
 #~ msgid "Temporary map %s  already exists.\n"
@@ -12714,54 +15919,9 @@ msgstr ""
 #~ msgid "Temporary map '%s' with result "
 #~ msgstr "Dosya zaten var"
 
-#~ msgid "Terra ASTER HDF import"
-#~ msgstr "Terra ASTER HDF içe aktar"
-
-#~ msgid "Terrain analysis"
-#~ msgstr "Arazi analizi"
-
-#~ msgid "Terrain parameters"
-#~ msgstr "Arazi parametreleri"
-
-#~ msgid "Test"
-#~ msgstr "Sınama"
-
-#~ msgid "Test normality"
-#~ msgstr "Normalliği sına"
-
-#~ msgid "Textural features"
-#~ msgstr "Tekstür objeleri"
-
 #, fuzzy
 #~ msgid "The copied layer needs to be reprojected:"
 #~ msgstr "Silinecek katman"
-
-#~ msgid "Thin"
-#~ msgstr "İnce"
-
-#~ msgid "Tiling"
-#~ msgstr "***********           Döşeme"
-
-#~ msgid "Timestamp"
-#~ msgstr "tarih damgası"
-
-#~ msgid "Toolset for cleaning topology of vector map."
-#~ msgstr "Vektör haritanın topolojisini temizleme araçları"
-
-#~ msgid "Topographic index map"
-#~ msgstr "Topoğrafik indeks haritası"
-
-#~ msgid "Total corrected area"
-#~ msgstr "Toplam düzeltilen alan"
-
-#~ msgid "Transform features"
-#~ msgstr "Objeleri dönüştür"
-
-#~ msgid "Transform image"
-#~ msgstr "Görüntüyü dönüştür"
-
-#~ msgid "USLE K-factor"
-#~ msgstr "USLE K-etmeni"
 
 #~ msgid "Unable to delete location"
 #~ msgstr "Mevki silinemiyor"
@@ -12775,71 +15935,22 @@ msgstr ""
 #~ msgstr "Mevki oluşturulamıyor"
 
 #, fuzzy
-#~ msgid "Univariate raster3D dataset statistics"
-#~ msgstr "Tek değişkenli raster istatistikleri "
-
-#, fuzzy
 #~ msgid "Unsupported units"
 #~ msgstr "Desteklenmeyen katman tipi '%s'"
-
-#~ msgid "Update area attributes from raster"
-#~ msgstr "Alan özniteliklerini rasterdan güncelle"
-
-#~ msgid "Update map statistics"
-#~ msgstr "Harita tistatistiklerini güncelle"
-
-#~ msgid "Update point attributes from areas"
-#~ msgstr "Nokta özniteliklerini alanlardan güncelle"
-
-#~ msgid "Update raster map statistics"
-#~ msgstr "Raster harita istatistiklerini güncelle"
-
-#~ msgid "User GUI preferences (display font, commands, digitizer, etc.)"
-#~ msgstr "Kullanıcı GUI tercihleri (yazı tipi, komutlar, sayısallaştırıcı vs.)"
-
-#~ msgid "User access"
-#~ msgstr "Kullanıcı erişimi"
 
 #, fuzzy
 #~ msgid "V&olumes"
 #~ msgstr "Hacimler"
 
-#~ msgid "VRML export"
-#~ msgstr "VRML olarak dışa aktar"
-
-#~ msgid "VTK export"
-#~ msgstr "VTK olarak dışa aktar"
-
-#~ msgid "Validate entire model"
-#~ msgstr "Tüm modeli doğrula"
-
 #~ msgid "Variogram fitting"
 #~ msgstr "Variograma uydur"
-
-#~ msgid "Vector database connections"
-#~ msgstr "Vektör veritabanı bağlantıları"
 
 #, fuzzy
 #~ msgid "Vector map %s already exists. "
 #~ msgstr "Dosya zaten var"
 
-#~ msgid "Vector to raster"
-#~ msgstr "Vektörden raster'e"
-
 #~ msgid "Vector to volume"
 #~ msgstr "Vektörden hacime"
-
-#~ msgid "Vis5D export"
-#~ msgstr "Vis5D olarak dışa aktar"
-
-#~ msgid "Vis5D import"
-#~ msgstr "Vis5D içe aktar"
-
-#~ msgid "Visibility"
-#~ msgstr "Görünürlük"
-
-#~ msgid "Visibility network"
-#~ msgstr "Görünürlük ağı"
 
 #, fuzzy
 #~ msgid "Volume"
@@ -12849,9 +15960,6 @@ msgstr ""
 #~ msgid "Volume calculator"
 #~ msgstr "Harita hesaplayıcı"
 
-#~ msgid "Voronoi diagram/Thiessen polygons"
-#~ msgstr "Voronoi diyagramı/Thiessen poligonları"
-
 #, fuzzy
 #~ msgid "Voxel statistics"
 #~ msgstr "Genel istatistikler"
@@ -12859,9 +15967,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Warning: "
 #~ msgstr "Uyarı"
-
-#~ msgid "Watershed analysis"
-#~ msgstr "Havza analizi"
 
 #, fuzzy
 #~ msgid ""
@@ -12871,16 +15976,9 @@ msgstr ""
 #~ "GRASS %s CBS'ne Hoşgeldiniz \n"
 #~ "Dünyanın lider açık kodlu CBS"
 
-#~ msgid "Wildfire modeling"
-#~ msgstr "Doğa Yangını modelleme"
-
 #~ msgid "Work in progress! No functionality provided."
 #~ msgstr "Devam eden iş! Hiçbir işlevselliği sağlanamadı."
 
 #, python-format
 #~ msgid "cleaning tool: '%s'"
 #~ msgstr "temizleme aracı: '%s'"
-
-#, fuzzy
-#~ msgid "legend"
-#~ msgstr "Açıklama"
