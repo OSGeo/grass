@@ -338,11 +338,11 @@ pages](https://grass.osgeo.org/grass8/manuals/addons/)
 
 ## AUTHORS
 
-Markus Neteler (original shell script)
+Markus Neteler (original shell script)  
 Martin Landa, Czech Technical University in Prague, Czech Republic
-(Python rewrite)
+(Python rewrite)  
 Vaclav Petras, [NCSU GeoForAll
 Lab](https://geospatial.ncsu.edu/geoforall/) (support for general
-sources, partial refactoring)
+sources, partial refactoring)  
 Paulo van Breugel, HAS green academy (add option for Windows users to
 point at alternative repositories)
