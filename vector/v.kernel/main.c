@@ -205,6 +205,7 @@ int main(int argc, char **argv)
     flag_q->key = 'q';
     flag_q->description =
         _("Only calculate optimal radius and exit (no map is written)");
+    flag_q->suppress_overwrite = YES;
 
     flag_normalize = G_define_flag();
     flag_normalize->key = 'n';
@@ -269,6 +270,10 @@ int main(int argc, char **argv)
     else
         G_fatal_error(_("Unknown kernel function"));
 
+    if (flag_q->answer) {
+        flag_o->answer = 1;
+    }
+
     if (flag_o->answer) {
         if (net_opt->answer) {
             if (node_method != NODE_NONE ||
@@ -282,10 +287,6 @@ int main(int argc, char **argv)
             G_fatal_error(_("Optimal standard deviation calculation is "
                             "supported only for kernel function 'gaussian'."));
         }
-    }
-
-    if (flag_q->answer) {
-        flag_o->answer = 1;
     }
 
     if (net_opt->answer && net_out_opt->answer) {

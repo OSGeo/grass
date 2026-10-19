@@ -43,6 +43,13 @@ def test_optimal_radius_without_output(tools):
     assert list_map_names(tools, "raster") == []
 
 
+def test_optimal_radius_ignores_existing_output(tools):
+    """The -q flag does not overwrite or reject an existing output map"""
+    tools.r_mapcalc(expression="dens = 1")
+    tools.v_kernel(input="points", output="dens", radius=100, flags="q")
+    assert list_map_names(tools, "raster") == ["dens"]
+
+
 def test_optimal_radius_on_network_without_output(tools):
     """The -q flag runs in network mode without a net_output name"""
     tools.v_kernel(input="points", net="network", radius=100, flags="q")
