@@ -18,6 +18,10 @@ config-variables: null
 paths:
   # .github/workflows/**/*.yml:
   #   ignore: []
+  .github/workflows/**/*.yml:
+    ignore:
+      - 'reusable workflow call "\$/.+" at "uses" is not following the format' # [workflow-call]
+      - 'specifying action "\$/.+" in invalid format because ref is missing' # [action]
   .github/workflows/python-code-quality.yml:
     ignore:
       - 'condition "false" is always evaluated to false. remove the if: section' # [if-cond]

@@ -123,7 +123,7 @@ class SemanticLabelReader:
                 if extended:
                     for subitem in item.keys():
                         if subitem == "bands":
-                            # bands item is processed bellow
+                            # bands item is processed below
                             continue
                         print("{}: {}".format(subitem, item[subitem]))
 

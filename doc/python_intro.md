@@ -839,7 +839,7 @@ slope_aspect_tool.inputs
 ```
 
 The [grass.pygrass.modules](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_modules.html)
-module provides an alterative approach to running GRASS tools.
+module provides an alternative approach to running GRASS tools.
 
 To learn more about the `Module` class, see the Full Documentation:
 

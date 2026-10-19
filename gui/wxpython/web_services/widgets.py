@@ -1145,12 +1145,12 @@ class WSManageSettingsWidget(ManageSettingsWidget):
         self.settingsSizer.Add(self.btnAddDefaultServers, flag=wx.RIGHT, border=5)
 
     def OnAddDefaultServers(self, event):
-        setts = self.GetSettings()
+        current_settings = self.GetSettings()
         self.servers_to_add = {}
         for k, v in self.default_servers.items():
-            if k not in setts.keys():
+            if k not in current_settings.keys():
                 self.servers_to_add[k] = v
-            elif v != setts[k]:
+            elif v != current_settings[k]:
                 GMessage(
                     parent=self,
                     message=_(

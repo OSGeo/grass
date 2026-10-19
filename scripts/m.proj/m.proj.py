@@ -203,7 +203,7 @@ def main():
             gcore.fatal(_("Invalid PROJ.4 output specification"))
 
     if not out_proj:
-        gcore.fatal(_("Missing output projection parameters "))
+        gcore.fatal(_("Missing output projection parameters"))
     out_proj = out_proj.strip()
     gcore.verbose("Output parameters: '%s'" % out_proj)
 

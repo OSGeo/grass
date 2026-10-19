@@ -35,7 +35,7 @@ supported_url_schemes = ("http", "https", "ftp", "file")
 def debug(*args, **kwargs):
     """Print a debug message (to be used in this module only)
 
-    Using the stanard grass.script debug function is nice, but it may create a circular
+    Using the standard grass.script debug function is nice, but it may create a circular
     dependency if this is used from grass.script, so this is a wrapper which lazy
     imports the standard function.
     """

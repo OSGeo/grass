@@ -171,11 +171,19 @@ def get_clumpfile(
     if minsize:
         minsize = ceil((minsize * 10000.0) / prod(resolution))
 
-    msg = _("Generating a clumped raster file")
-    if clump_flags:
-        msg += _(" including diagonal neighbors")
-    if minsize:
-        msg += _(" with minimum %s pixels") % minsize
+    if clump_flags and minsize:
+        msg = _(
+            "Generating a clumped raster file including diagonal neighbors"
+            " with minimum {pixel_count} pixels"
+        ).format(pixel_count=minsize)
+    elif clump_flags:
+        msg = _("Generating a clumped raster file including diagonal neighbors")
+    elif minsize:
+        msg = _(
+            "Generating a clumped raster file with minimum {pixel_count} pixels"
+        ).format(pixel_count=minsize)
+    else:
+        msg = _("Generating a clumped raster file")
     gs.verbose(msg)
     tools.r_clump(
         flags=clump_flags,
@@ -198,23 +206,44 @@ def reclass(
     tools = Tools(capture_output=True)
     stats_input = clump_map
     expected_fields_number = 4
-    verbose_message = _("Generating a reclass map with area size")
-    range_filter_message = ""
 
-    # Define lower threshold
-    if lower:
-        range_filter_message += _(" larger than or equal to %f hectares...") % lower
+    # Each combination of thresholds gets complete messages, so that
+    # translators can reorder the words and numbers freely.
+    if lower and upper:
+        verbose_message = _(
+            "Generating a reclass map with area size larger than or equal to"
+            " {lower} hectares and smaller than or equal to {upper} hectares..."
+        ).format(lower=lower, upper=upper)
+        fatal_message = _(
+            "No areas of size larger than or equal to {lower} hectares"
+            " and smaller than or equal to {upper} hectares"
+        ).format(lower=lower, upper=upper)
+    elif lower:
+        verbose_message = _(
+            "Generating a reclass map with area size"
+            " larger than or equal to {lower} hectares..."
+        ).format(lower=lower)
+        fatal_message = _(
+            "No areas of size larger than or equal to {lower} hectares"
+        ).format(lower=lower)
+    elif upper:
+        verbose_message = _(
+            "Generating a reclass map with area size"
+            " smaller than or equal to {upper} hectares..."
+        ).format(upper=upper)
+        fatal_message = _(
+            "No areas of size smaller than or equal to {upper} hectares"
+        ).format(upper=upper)
     else:
+        # A zero lower limit and no upper limit filter nothing.
+        verbose_message = _("Generating a reclass map without area size limits...")
+        fatal_message = _("No areas found")
+    gs.verbose(verbose_message)
+
+    if not lower:
         lower = -inf
-
-    # Define upper threshold
-    if upper:
-        if range_filter_message:
-            range_filter_message += " and"
-        range_filter_message += _(" smaller than or equal to %f hectares...") % upper
-    else:
+    if not upper:
         upper = inf
-    gs.verbose(verbose_message + range_filter_message)
 
     recfile = f"{TEMP_PREFIX}_recl"
     sflags = "aln"
@@ -251,8 +280,7 @@ def reclass(
             quiet=True,
         )
     else:
-        fatal_message = _("No areas of size ")
-        gs.fatal(fatal_message + range_filter_message)
+        gs.fatal(fatal_message)
     tools.r_mapcalc(expression=f"{output_map} = {recfile}")
 
 
