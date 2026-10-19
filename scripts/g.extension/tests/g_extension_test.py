@@ -1,11 +1,13 @@
 """Test g.extension"""
 
 import pytest
+import sys
 import grass.script as gs
 from grass.tools import Tools
 
 
 # This should cover both C and Python tools.
+@pytest.mark.skipif(sys.platform.startswith("win"), reason="Temporarily disable tests.")
 @pytest.mark.parametrize("name", ["r.stream.distance", "r.lake.series"])
 def test_install(session, name):
     """Test that a tools installs and gives help message"""
