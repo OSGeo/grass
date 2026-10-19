@@ -397,7 +397,7 @@ add_custom_target(
         ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/colortables
     BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/colortables
     COMMENT "Creating thumbnails"
-    DEPENDS ALL_MODULES
+    DEPENDS ALL_MODULES generate_fontcap
 )
 set_target_properties(r_colors_thumbnails PROPERTIES FOLDER Misc)
 install(
