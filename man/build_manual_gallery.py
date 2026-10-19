@@ -91,7 +91,7 @@ header_graphical_index_tmpl = """\
 <h2>GRASS manual gallery</h2>
 """
 
-# The recommeded width from style guide.
+# The recommended width from style guide.
 MIN_IMAGE_WIDTH = 600
 
 
