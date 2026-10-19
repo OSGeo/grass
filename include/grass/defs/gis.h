@@ -436,6 +436,13 @@ void G__gisinit(const char *, const char *);
 void G__no_gisinit(const char *);
 void G_init_all(void);
 
+/* resource_dirs.c */
+const char *G_colors_dir(void);
+const char *G_etcbin_dir(void);
+const char *G_etc_dir(void);
+const char *G_fonts_dir(void);
+const char *G_locale_dir(void);
+
 /* handler.c */
 void G_add_error_handler(void (*)(void *), void *);
 void G_remove_error_handler(void (*)(void *), void *);
@@ -533,6 +540,10 @@ void G_random_state_for_batch(struct G_random_state *,
 void G_random_advance(struct G_random_state *, int64_t);
 double G_random_double(struct G_random_state *);
 int64_t G_random_generate_seed(void);
+const char *G_random_parse_seed(const char *, int64_t *);
+
+/* random_options.c */
+int64_t G_random_seed_from_option(const struct Option *);
 
 /* ls.c */
 void G_set_ls_filter(int (*)(const char *, void *), void *);
