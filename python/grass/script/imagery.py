@@ -103,7 +103,8 @@ def group_to_dict(
         warning(
             _("Empty result returned for subgroup <{sg}> in group <{g}>").format(
                 sg=subgroup, g=imagery_group_name
-            )
+            ),
+            env=env,
         )
 
     for idx, raster_map in enumerate(maps_in_group):
@@ -129,7 +130,8 @@ def group_to_dict(
                     fatal(
                         _(
                             "Semantic label missing for raster map {m} in group <{g}>."
-                        ).format(m=raster_map, g=imagery_group_name)
+                        ).format(m=raster_map, g=imagery_group_name),
+                        env=env,
                     )
 
         if dict_values == "indices":
@@ -145,7 +147,8 @@ def group_to_dict(
                 _(
                     "Key {k} from raster map {m} already present in group dictionary."
                     "Overwriting existing entry..."
-                ).format(k=key, m=raster_map)
+                ).format(k=key, m=raster_map),
+                env=env,
             )
         group_dict[key] = val
     return group_dict
