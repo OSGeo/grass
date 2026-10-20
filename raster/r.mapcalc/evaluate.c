@@ -389,9 +389,9 @@ static void setup_rand(void)
     /* Earlier versions drew these values without complaint, so this is
      * only a warning. */
     if (G_random_layout_batches(&rand_layout) < 1)
-        G_warning(_("rand() draws more than 2^46 random values; later "
+        G_warning(_("rand() draws more than 2^46 random values. Later "
                     "rows repeat the values of earlier rows plus a "
-                    "constant"));
+                    "constant."));
 }
 
 static void place_rand_row(int tid, int row)
