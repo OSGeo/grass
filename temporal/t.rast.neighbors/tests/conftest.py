@@ -1,24 +1,25 @@
 # SPDX-FileCopyrightText: 2026 GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Fixture for t.rast.neighbors tests"""
+"""Fixtures for t.rast.neighbors tests"""
 
 import os
 
 import pytest
 
 import grass.script as gs
+from grass.experimental import TemporaryMapsetSession
 from grass.tools import Tools
 
 
-@pytest.fixture
-def session_with_strds(tmp_path):
+@pytest.fixture(scope="module")
+def session_with_strds(tmp_path_factory):
     """Start a session in a new project with a space time raster dataset."""
-    project = tmp_path / "test"
+    project = tmp_path_factory.mktemp("t_rast_neighbors") / "test"
     gs.create_project(project)
     with gs.setup.init(project, env=os.environ.copy()) as session:
         tools = Tools(session=session)
-        tools.g_region(s=0, n=3, w=0, e=3, res=1)
+        tools.g_region(s=0, n=3, w=0, e=3, res=1, flags="s")
         for name, expression in (
             ("jan", "row()"),
             ("feb", "row()"),
@@ -41,4 +42,11 @@ def session_with_strds(tmp_path):
             start="2001-01-01",
             increment="1 month",
         )
+        yield session
+
+
+@pytest.fixture
+def session_in_mapset(session_with_strds):
+    """Start a session in a temporary mapset with the dataset in PERMANENT."""
+    with TemporaryMapsetSession(env=session_with_strds.env) as session:
         yield session
