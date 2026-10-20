@@ -11,8 +11,10 @@ the current mapset, so without the read-only guard a registration would create
 ghost cell_misc entries in PERMANENT for a map that does not exist there.
 """
 
-import pytest
+from datetime import datetime
 from pathlib import Path
+
+import pytest
 
 from grass.grassdb.create import create_mapset
 import grass.script as gs
@@ -86,6 +88,55 @@ def test_foreign_map_no_file_semantic_label(cross_mapset_session):
         "foreign_map in source mapset must not have its semantic label "
         "written to the file system when registered from PERMANENT"
     )
+
+
+def test_foreign_map_direct_metadata_writes_are_skipped(
+    cross_mapset_session, monkeypatch
+):
+    """Direct file-metadata helpers must also respect a foreign mapset."""
+    tgis.init()
+    rmap = tgis.RasterDataset("foreign_map@source")
+    rmap.set_absolute_time(datetime(2010, 6, 1))
+    rmap.metadata.set_semantic_label("S2_1")
+
+    def unexpected_write(*args):
+        pytest.fail("GRASS metadata write was called for a foreign map")
+
+    monkeypatch.setattr(rmap.ciface, "write_raster_timestamp", unexpected_write)
+    monkeypatch.setattr(rmap.ciface, "write_raster_semantic_label", unexpected_write)
+
+    assert not rmap.write_timestamp_to_grass()
+    assert not rmap.write_semantic_label_to_grass()
+
+
+def test_foreign_map_direct_timestamp_removal_is_skipped(cross_mapset_session):
+    """Removing a foreign timestamp must not remove a current-mapset file."""
+    tgis.init()
+    rmap = tgis.RasterDataset("foreign_map@source")
+    env = gs.gisenv()
+    project = Path(env["GISDBASE"]) / env["LOCATION_NAME"]
+    timestamp = project / "PERMANENT" / "cell_misc" / "foreign_map" / "timestamp"
+    timestamp.parent.mkdir(parents=True, exist_ok=True)
+    timestamp.write_text("local timestamp")
+
+    try:
+        assert not rmap.remove_timestamp_from_grass()
+        assert timestamp.read_text() == "local timestamp"
+    finally:
+        timestamp.unlink(missing_ok=True)
+
+
+def test_mapset_change_updates_readonly_state(cross_mapset_session):
+    """Changing a dataset mapset must update its file-write protection."""
+    tgis.init()
+    rmap = tgis.RasterDataset("local_map@PERMANENT")
+    assert not rmap.get_readonly()
+
+    rmap.base.set_mapset("source")
+    assert rmap.get_readonly()
+
+    rmap.base.set_mapset("PERMANENT")
+    assert not rmap.get_readonly()
 
 
 def test_foreign_map_has_db_timestamp(cross_mapset_session):

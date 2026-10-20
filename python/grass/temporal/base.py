@@ -258,10 +258,11 @@ class SQLDatabaseInterface(DictSQLSerializer):
         self.ident = ident
         self.msgr = get_tgis_message_interface()
 
-        if self.ident and self.ident.find("@") >= 0:
+        if self.ident and "@" in self.ident:
             self.mapset = self.ident.split("@")[1]
         else:
             self.mapset = None
+        self._readonly = False
 
     def get_table_name(self):
         """Return the name of the table in which the internal
@@ -665,7 +666,7 @@ class DatasetBase(SQLDatabaseInterface):
             if "@" in ident:
                 name, mapset = ident.split("@", 1)
             if ":" in name:
-                name, layer = ident.split(":", 1)
+                name, layer = name.split(":", 1)
         self.set_name(name)
         self.set_mapset(mapset)
         self.set_creator(creator)
@@ -710,6 +711,7 @@ class DatasetBase(SQLDatabaseInterface):
         :param mapset: The name of the mapset in which this dataset is stored
         """
         self.D["mapset"] = mapset
+        self.set_readonly()
 
     def set_layer(self, layer) -> None:
         """Convenient method to set the layer of the map (part of primary key)

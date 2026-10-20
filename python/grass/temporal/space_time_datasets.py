@@ -311,6 +311,9 @@ class RasterDataset(AbstractMapDataset):
 
         :return: True if success, False on error
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.write_raster_timestamp(
             self.get_name(), self.get_mapset(), self._convert_timestamp()
         )
@@ -343,6 +346,9 @@ class RasterDataset(AbstractMapDataset):
 
         :return: True if success, False on error
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.remove_raster_timestamp(self.get_name(), self.get_mapset())
 
         if check == -1:
@@ -378,10 +384,14 @@ class RasterDataset(AbstractMapDataset):
         """Write the semantic label of this map into the map metadata in
         the GRASS file system based spatial database.
 
-        Internally the libgis API functions are used for writing
+        Internally the libgis API functions are used for writing. Writing is
+        only possible if the map is in the current mapset (not read-only).
 
         :return: True if success, False on error
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.write_raster_semantic_label(
             self.get_name(), self.get_mapset(), self.metadata.get_semantic_label()
         )
@@ -748,6 +758,9 @@ class Raster3DDataset(AbstractMapDataset):
 
            :return: True if success, False on error
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.write_raster3d_timestamp(
             self.get_name(), self.get_mapset(), self._convert_timestamp()
         )
@@ -777,6 +790,9 @@ class Raster3DDataset(AbstractMapDataset):
 
         :return: True if success, False on error
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.remove_raster3d_timestamp(
             self.get_name(), self.get_mapset()
         )
@@ -1086,6 +1102,9 @@ class VectorDataset(AbstractMapDataset):
 
         Internally the libgis API functions are used for writing
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.write_vector_timestamp(
             self.get_name(),
             self.get_mapset(),
@@ -1115,6 +1134,9 @@ class VectorDataset(AbstractMapDataset):
 
         Internally the libgis API functions are used for removal
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.remove_vector_timestamp(self.get_name(), self.get_mapset())
 
         if check == -1:
