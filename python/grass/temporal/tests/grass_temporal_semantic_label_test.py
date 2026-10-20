@@ -1,4 +1,4 @@
-"""Parsing of semantic-label band references in STDS names.
+"""Semantic-label band references in STDS names.
 
 Regression tests for https://github.com/OSGeo/grass/issues/7670: a dataset
 name of the form ``name.semantic_label`` (e.g. ``ndvi.S2_8``) must have the
@@ -12,6 +12,7 @@ import pytest
 
 import grass.script as gs
 from grass.exceptions import FatalError
+from grass.tools import Tools
 
 
 @pytest.fixture(scope="module")
@@ -84,3 +85,23 @@ def test_check_new_stds_accepts_plain_name(tgis_session):
 
     sp = check_new_stds("newdataset", "strds")
     assert sp is not None
+
+
+def test_numeric_band_reference_with_where(tgis_session, tmp_path):
+    """Both the numeric band reference and the where condition filter the maps."""
+    tools = Tools(session=tgis_session)
+    for name in ("jan_s2_1", "jun_s2_1", "jun_s2_2"):
+        tools.r_mapcalc(expression=f"{name} = 1")
+    maps_file = tmp_path / "maps.txt"
+    maps_file.write_text(
+        "jan_s2_1|2001-01-01|S2_1\njun_s2_1|2001-06-01|S2_1\njun_s2_2|2001-06-01|S2_2"
+    )
+    tools.t_create(output="sat", title="sat", description="sat")
+    tools.t_register(input="sat", file=maps_file)
+    result = tools.t_rast_list(
+        input="sat.1",
+        where="start_time >= '2001-06-01'",
+        columns="name",
+        format="line",
+    )
+    assert result.text == "jun_s2_1"
