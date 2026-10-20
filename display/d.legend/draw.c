@@ -46,7 +46,7 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     CELL min_ind, max_ind;
     DCELL dmin, dmax, val;
     double log_shift, lmin, lmax;
-    int label_min;
+    int label_min, ends_only;
     CELL min_colr, max_colr;
     DCELL min_dcolr, max_dcolr;
     int x0, x1, y0, y1, xyTemp;
@@ -364,6 +364,10 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     } /* end of is fp */
 
     if (log_sc) {
+        if (dmin == dmax)
+            G_fatal_error(
+                _("Range [%.3f, %.3f] has no extent for a logarithmic scale"),
+                dmin, dmax);
         /* A range with non-positive values is shifted so that its minimum
          * maps to 1, as Rast_log_colors() does for r.colors -g, so that the
          * legend matches a color table created that way. */
@@ -504,6 +508,8 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     else
                         tcell = max_ind -
                                 k * (double)(max_ind - min_ind) / (steps - 1);
+                    /* The logarithmic scale positions the label by val. */
+                    val = tcell;
 
                     if (!cstr[0]) /* no cats found, disable str output */
                         hide_catstr = 1;
@@ -723,14 +729,16 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                  * magnitude apart. Non-positive values have no such labels, so
                  * a range starting there is labeled at its minimum and then
                  * from 1 or, when the maximum is below 1, from the first power
-                 * of ten below the maximum. A range ending at or below zero is
-                 * labeled at its minimum and maximum only. */
-                label_min = dmin <= 0;
+                 * of ten below the maximum. A range without any power of ten,
+                 * because it ends at or below zero or lies between two powers
+                 * of ten, is labeled at its minimum and maximum only. */
                 num = 0;
                 if (dmin > 0)
                     num = ceil(log10(dmin));
                 else if (dmax > 0 && dmax < 1)
                     num = floor(log10(dmax));
+                ends_only = dmax <= 0 || pow(10, num) > dmax;
+                label_min = dmin <= 0 || ends_only;
                 t_start = 0;
                 val = label_min ? dmin : pow(10, num);
                 while (val <= dmax) {
@@ -793,9 +801,9 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
                     }
                     if (label_min) {
                         label_min = 0;
-                        val = dmax > 0 ? pow(10, num) : dmax;
+                        val = ends_only ? dmax : pow(10, num);
                     }
-                    else if (dmax <= 0)
+                    else if (ends_only)
                         break;
                     else {
                         t_start += t_step;

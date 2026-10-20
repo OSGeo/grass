@@ -29,9 +29,10 @@ this will not yield a color table identical to *color=grey.log*.
 Different algorithms are used. Unlike **color**=*grey.log*, **-g** is
 designed to work with both floating point and integer rasters, without
 performance issues with large datasets, of any original color table.
-When the value range includes zero or negative values, the values are
-shifted so that the minimum becomes 1 and the logarithmic scaling is
-applied to the shifted values.
+Since the logarithm is not defined for zero and negative values, a
+value range which includes them is scaled with its values shifted so
+that the minimum becomes 1. The color rules keep the original values of
+the raster; only the spacing of the steps is affected by the shift.
 
 The **-e** and **-g** flags are not mutually exclusive.
 

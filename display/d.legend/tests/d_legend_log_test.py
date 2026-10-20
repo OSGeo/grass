@@ -8,12 +8,13 @@ import os
 import pytest
 
 import grass.script as gs
-from grass.tools import Tools
+from grass.tools import ToolError, Tools
 
 # Rasters whose value ranges cover the cases a logarithmic legend has to
 # handle, with label values spanning each range including its minimum.
 RASTERS = {
     "positive": ("row() * col() * 10.0", "10,100,1000"),
+    "between_tens": ("2.0 + 7.0 * (row() - 1) * (col() - 1) / 81", "2,5,9"),
     "from_zero": ("1000.0 * (row() - 1) * col() / 90", "0,1,10,100,1000"),
     "zero_to_one": ("(row() - 1) * (col() - 1) / 81.0", "0,0.1,0.5,1"),
     "mixed": ("2.0 * row() * col() - 100", "-98,0,10,100"),
@@ -36,6 +37,7 @@ def session(tmp_path_factory):
         for name, (expression, _) in RASTERS.items():
             tools.r_mapcalc(expression=f"{name} = {expression}")
             tools.r_colors(map=name, color="viridis", flags="g")
+        tools.r_mapcalc(expression="constant = 5.0")
         yield session
 
 
@@ -79,3 +81,25 @@ def test_log_legend_differs_from_linear(session, tmp_path):
     render_tools(session, linear).d_legend(raster="from_zero", flags="s")
     render_tools(session, log).d_legend(raster="from_zero", flags="ls")
     assert linear.read_bytes() != log.read_bytes()
+
+
+def test_log_legend_labels_range_without_power_of_ten(session, tmp_path):
+    """A range between two powers of ten still gets labels with label_step.
+
+    Without a power of ten to place labels at, the minimum and maximum are
+    labeled, so the legend differs from the same legend without numbers.
+    """
+    bar_only = tmp_path / "bar_only.png"
+    labeled = tmp_path / "labeled.png"
+    render_tools(session, bar_only).d_legend(raster="between_tens", flags="lsc")
+    render_tools(session, labeled).d_legend(
+        raster="between_tens", flags="ls", label_step=1
+    )
+    assert bar_only.read_bytes() != labeled.read_bytes()
+
+
+def test_log_legend_constant_raster_fails(session, tmp_path):
+    """A single-value range has no logarithmic scale and is an error."""
+    tools = render_tools(session, tmp_path / "legend.png")
+    with pytest.raises(ToolError, match="logarithmic"):
+        tools.d_legend(raster="constant", flags="l")
