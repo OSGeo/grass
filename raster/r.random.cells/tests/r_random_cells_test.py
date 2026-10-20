@@ -26,7 +26,7 @@ def test_fill_all(session):
     tools = Tools(session=session)
     tools.r_random_cells(output="all", distance=0.01, seed=100)
 
-    univar = tools.r_univar(map="all", format="json").json
+    univar = tools.r_univar(map="all", format="json")
     assert univar["cells"] == N_CELLS
     assert univar["n"] == N_CELLS
     assert univar["null_cells"] == 0
