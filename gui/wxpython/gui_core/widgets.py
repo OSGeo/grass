@@ -779,7 +779,7 @@ class NTCValidator(Validator):
         if self.flag == "DIGIT_ONLY" and chr(key) in string.digits + ".-":
             event.Skip()
             return
-        if not wx.Validator_IsSilent():
+        if not wx.Validator.IsSilent():
             wx.Bell()
         # Returning without calling even.Skip eats the event before it
         # gets to the text control
