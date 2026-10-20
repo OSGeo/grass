@@ -20,8 +20,10 @@
 #define G_NDR 1
 #endif
 
+#include <stdint.h>
+
 typedef unsigned char dglByte_t;
-typedef long dglInt32_t;
-typedef long long dglInt64_t;
+typedef int32_t dglInt32_t;
+typedef int64_t dglInt64_t;
 
 #endif
