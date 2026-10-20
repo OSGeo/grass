@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2015 Vaclav Petras
+# SPDX-FileCopyrightText: 2026 Rajveer Bishnoi
 # SPDX-License-Identifier: GPL-2.0-or-later
 import os
 
@@ -11,7 +13,7 @@ N_CELLS = 50
 
 
 @pytest.fixture
-def session(tmp_path):
+def session_with_region(tmp_path):
     """An isolated GRASS session with the region r.random.cells fills."""
     project = tmp_path / "r_random_cells_project"
     gs.create_project(project)
@@ -21,9 +23,9 @@ def session(tmp_path):
         yield session
 
 
-def test_fill_all(session):
+def test_fill_all(session_with_region):
     """A near-zero distance leaves no cell without a unique category."""
-    tools = Tools(session=session)
+    tools = Tools(session=session_with_region)
     tools.r_random_cells(output="all", distance=0.01, seed=100)
 
     univar = tools.r_univar(map="all", format="json")
@@ -34,12 +36,12 @@ def test_fill_all(session):
     assert univar["max"] == N_CELLS
 
 
-def test_fill_some(session):
+def test_fill_some(session_with_region):
     """A distance just over one cell width leaves most cells unfilled."""
-    tools = Tools(session=session)
+    tools = Tools(session=session_with_region)
     tools.r_random_cells(output="some", distance=2.00001, seed=100)
 
-    univar = tools.r_univar(map="some", format="json").json
+    univar = tools.r_univar(map="some", format="json")
     assert univar["cells"] == N_CELLS
     assert univar["min"] == 1
     # The exact count depends on the random sequence, so this only pins an
@@ -48,13 +50,13 @@ def test_fill_some(session):
     assert univar["max"] <= N_CELLS // 2
 
 
-def test_fill_count(session):
+def test_fill_count(session_with_region):
     """ncells= limits the number of filled cells to an explicit count."""
-    tools = Tools(session=session)
+    tools = Tools(session=session_with_region)
     count = 12
     tools.r_random_cells(output="count", distance=2, seed=100, ncells=count)
 
-    univar = tools.r_univar(map="count", format="json").json
+    univar = tools.r_univar(map="count", format="json")
     assert univar["cells"] == N_CELLS
     assert univar["n"] == count
     assert univar["null_cells"] == N_CELLS - count
