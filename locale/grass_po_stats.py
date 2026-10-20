@@ -109,7 +109,7 @@ def get_stats(languages, directory):
             fpref = flang.split("_")[0]
             # run msgfmt for statistics
             # TODO check if it's working on windows
-            process = subprocess.Popen(
+            process = subprocess.Popen(  # nosec B607: fixed external tool "msgfmt" with no portable absolute path
                 ["msgfmt", "--statistics", os.path.join(directory, flang)],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -157,5 +157,5 @@ def main(in_dirpath, out_josonpath):
 
 if __name__ == "__main__":
     directory = "po/"
-    outfile = os.path.join(os.environ["GISBASE"], "translation_status.json")
+    outfile = os.path.join(os.environ["GRASS_MISCDIR"], "translation_status.json")
     sys.exit(main(directory, outfile))

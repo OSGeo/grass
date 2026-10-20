@@ -17,8 +17,12 @@ void Rast3d_get_block_nocache(RASTER3D_Map *map, int x0, int y0, int z0, int nx,
     int tx, ty, tz, dx, dy, dz, x, y, z, rows, cols, depths;
     int tileIndex;
 
+    /* The tile is read in the map's internal type and only converted to
+     * the requested type when copied into the block, so it must be
+     * allocated in the internal type: a DCELL map read as FCELL would
+     * otherwise overflow the buffer. */
     if (!map->useCache)
-        tile = Rast3d_alloc_tiles_type(map, 1, type);
+        tile = Rast3d_alloc_tiles_type(map, 1, map->typeIntern);
     if (tile == NULL)
         Rast3d_fatal_error(
             "Rast3d_get_block_nocache: error in Rast3d_alloc_tiles");

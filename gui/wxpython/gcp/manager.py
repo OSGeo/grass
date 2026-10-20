@@ -1724,14 +1724,17 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             map_name = "<{}>".format(found["name"])
 
         if found["name"] and not overwrite:
+            if maptype == "raster":
+                message = _(
+                    "The raster map {map_name} exists. Do you want to overwrite?"
+                ).format(map_name=map_name)
+            else:
+                message = _(
+                    "The vector map {map_name} exists. Do you want to overwrite?"
+                ).format(map_name=map_name)
             return wx.MessageDialog(
                 self.GetParent(),
-                message=_(
-                    "The {map_type} map {map_name} exists. Do you want to overwrite?"
-                ).format(
-                    map_type=maptype,
-                    map_name=map_name,
-                ),
+                message=message,
                 caption=_("Overwrite?"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )

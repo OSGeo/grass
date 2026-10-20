@@ -17,6 +17,7 @@
    \author Various updates for GRASS 7 by Martin Landa <landa.martin gmail.com>
  */
 
+#include <inttypes.h>
 #include <stdlib.h>
 
 #include <grass/gis.h>
@@ -374,8 +375,9 @@ void build_pg(struct Map_info *Map, int build)
     G_message(n_("One primitive registered", "%d primitives registered",
                  Map->plus.n_lines),
               Map->plus.n_lines);
-    G_message(n_("One vertex registered", "%d vertices registered", npoints),
-              npoints);
+    G_message(n_("One vertex registered", "%" PRId64 " vertices registered",
+                 (int64_t)npoints),
+              (int64_t)npoints);
 
     Map->plus.built = GV_BUILD_BASE;
 
@@ -660,8 +662,9 @@ void build_ogr(struct Map_info *Map, int build)
     G_message(n_("One primitive registered", "%d primitives registered",
                  Map->plus.n_lines),
               Map->plus.n_lines);
-    G_message(n_("One vertex registered", "%d vertices registered", npoints),
-              npoints);
+    G_message(n_("One vertex registered", "%" PRId64 " vertices registered",
+                 (int64_t)npoints),
+              (int64_t)npoints);
 
     if (nskipped > 0)
         G_warning(n_("One feature without geometry skipped",

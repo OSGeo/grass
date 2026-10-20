@@ -516,8 +516,8 @@ class ProcessWorkspaceFile:
             if node_res is not None:
                 nvizData["volume"]["draw"]["resolution"] = {}
                 for vol_type in ("isosurface", "slice"):
-                    nd = node_res.find(vol_type)
-                    value = int(self.__getNodeText(nd, "value"))
+                    node_el = node_res.find(vol_type)
+                    value = int(self.__getNodeText(node_el, "value"))
                     nvizData["volume"]["draw"]["resolution"][vol_type] = {
                         "value": value
                     }
@@ -525,9 +525,9 @@ class ProcessWorkspaceFile:
             if node_shading is not None:
                 nvizData["volume"]["draw"]["shading"] = {}
                 for vol_type in ("isosurface", "slice"):
-                    nd = node_shading.find(vol_type)
-                    value = int(self.__getNodeText(nd, "value"))
-                    desc = self.__getNodeText(nd, "desc")
+                    node_el = node_shading.find(vol_type)
+                    value = int(self.__getNodeText(node_el, "value"))
+                    desc = self.__getNodeText(node_el, "desc")
                     nvizData["volume"]["draw"]["shading"][vol_type] = {
                         "value": value,
                         "desc": desc,

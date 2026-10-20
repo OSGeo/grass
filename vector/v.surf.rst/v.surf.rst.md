@@ -87,7 +87,7 @@ Topographic parameters are computed directly from the approximation
 function so that the important relationships between these parameters
 are preserved. The equations for computation of these parameters and
 their interpretation is described in [Mitasova and Hofierka,
-1993](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps) or
+1993](https://doi.org/10.1007/BF00893172) or
 Neteler and Mitasova, 2004. Slopes and aspect are computed in degrees
 (0-90 and 1-360 respectively). The aspect raster map has value 0
 assigned to flat areas (with slope less than 0.1%) and to singular
@@ -302,14 +302,14 @@ d.vect elevrand where="value > 94.9"
 ## REFERENCES
 
 - [Mitasova, H., Mitas, L. and Harmon, R.S.,
-  2005,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/IEEEGRSL2005.pdf)
+  2005,](https://doi.org/10.1109/LGRS.2005.848533)
   Simultaneous spline approximation and topographic analysis for lidar
   elevation data in open source GIS, IEEE GRSL 2 (4), 375- 379.
 - Hofierka, J., 2005, Interpolation of Radioactivity Data Using
   Regularized Spline with Tension. Applied GIS, Vol. 1, No. 2, pp. 16-01
   to 16-13. DOI: 10.2104/ag050016
 - [Hofierka J., Parajka J., Mitasova H., Mitas L.,
-  2002,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/TGIS2002_Hofierka_et_al.pdf)
+  2002,](https://doi.org/10.1111/1467-9671.00101)
   Multivariate Interpolation of Precipitation Using Regularized Spline
   with Tension. Transactions in GIS 6(2), pp. 135-150.
 - H. Mitasova, L. Mitas, B.M. Brown, D.P. Gerdes, I. Kosinovsky, 1995,
@@ -317,16 +317,16 @@ d.vect elevrand where="value > 94.9"
   and tools for GRASS GIS. International Journal of GIS, 9 (4), special
   issue on Integrating GIS and Environmental modeling, 433-446.
 - [Mitasova, H. and Mitas, L.,
-  1993](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/MG-I-93.pdf):
+  1993](https://doi.org/10.1007/BF00893171):
   Interpolation by Regularized Spline with Tension: I. Theory and
   Implementation, Mathematical Geology ,25, 641-655.
 - [Mitasova, H. and Hofierka, J.,
-  1993](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/MG-II-93.pdf):
+  1993](https://doi.org/10.1007/BF00893172):
   Interpolation by Regularized Spline with Tension: II. Application to
   Terrain Modeling and Surface Geometry Analysis, Mathematical Geology
   25, 657-667.
 - [Mitas, L., and Mitasova H.,
-  1988,](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/papers/CMA1988.pdf)
+  1988,](https://doi.org/10.1016/0898-1221(88)90255-6)
   General variational approach to the approximation problem, Computers
   and Mathematics with Applications, v.16, p. 983-992.
 - [Neteler, M. and Mitasova, H., 2008, Open Source GIS: A GRASS GIS
@@ -346,10 +346,6 @@ d.vect elevrand where="value > 94.9"
 
 Overview: [Interpolation and
 Resampling](https://grasswiki.osgeo.org/wiki/Interpolation) in GRASS
-
-For examples of applications see [GRASS4
-implementation](http://fatra.cnr.ncsu.edu/~hmitaso/gmslab/) and [GRASS5
-and GRASS6 implementation](http://fatra.cnr.ncsu.edu/~hmitaso/).
 
 ## AUTHORS
 

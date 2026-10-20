@@ -368,12 +368,12 @@ class Columns:
         ['cat', 'name', 'value']
 
         """
-        nams = list(self.odict.keys())
+        names = list(self.odict.keys())
         if remove:
-            nams.remove(remove)
+            names.remove(remove)
         if unicod:
-            return nams
-        return [str(name) for name in nams]
+            return names
+        return [str(name) for name in names]
 
     def items(self):
         """Return a list of tuple with column name and column type.
@@ -862,7 +862,7 @@ class Link:
                 )
                 raise
 
-        str_err = "Driver is not supported yet, pleas use: sqlite or pg"
+        str_err = "Driver is not supported yet, please use: sqlite or pg"
         raise TypeError(str_err)
 
     def table(self):

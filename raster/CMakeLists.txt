@@ -259,6 +259,7 @@ build_program_in_subdir(r.his DEPENDS grass_gis grass_raster grass_gproj)
 build_program_in_subdir(
     r.horizon
     DEPENDS ${LIBM} grass_gis grass_gproj grass_parson grass_raster
+    OPTIONAL_DEPENDS OpenMP::OpenMP_C
 )
 
 build_program_in_subdir(r.in.ascii DEPENDS grass_gis grass_raster)
@@ -318,7 +319,7 @@ build_program_in_subdir(
 
 build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj)
 
-build_program_in_subdir(r.lake DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.lake DEPENDS grass_gis grass_raster ${LIBM})
 
 build_program_in_subdir(
     r.mask.status
@@ -633,7 +634,11 @@ else()
     set(USER_NAME $ENV{USER})
 endif()
 
-build_program_in_subdir(r.texture DEPENDS grass_gis grass_raster ${LIBM})
+build_program_in_subdir(
+    r.texture
+    DEPENDS ${LIBM} grass_gis grass_raster
+    OPTIONAL_DEPENDS OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(r.thin DEPENDS grass_gis grass_raster grass_rowio)
 

@@ -58,12 +58,8 @@ int f_pow(int argc, const int *argt, void **args)
                 SET_NULL_F(&res[i]);
             else if (arg1[i] < 0 && arg2[i] != ceil(arg2[i]))
                 SET_NULL_F(&res[i]);
-            else {
-                floating_point_exception = 0;
+            else
                 res[i] = pow(arg1[i], arg2[i]);
-                if (floating_point_exception)
-                    SET_NULL_F(&res[i]);
-            }
         }
         return 0;
     }
@@ -77,12 +73,8 @@ int f_pow(int argc, const int *argt, void **args)
                 SET_NULL_D(&res[i]);
             else if (arg1[i] < 0 && arg2[i] != ceil(arg2[i]))
                 SET_NULL_D(&res[i]);
-            else {
-                floating_point_exception = 0;
+            else
                 res[i] = pow(arg1[i], arg2[i]);
-                if (floating_point_exception)
-                    SET_NULL_D(&res[i]);
-            }
         }
         return 0;
     }

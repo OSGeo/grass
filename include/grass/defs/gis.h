@@ -436,6 +436,13 @@ void G__gisinit(const char *, const char *);
 void G__no_gisinit(const char *);
 void G_init_all(void);
 
+/* resource_dirs.c */
+const char *G_colors_dir(void);
+const char *G_etcbin_dir(void);
+const char *G_etc_dir(void);
+const char *G_fonts_dir(void);
+const char *G_locale_dir(void);
+
 /* handler.c */
 void G_add_error_handler(void (*)(void *), void *);
 void G_remove_error_handler(void (*)(void *), void *);
@@ -518,6 +525,28 @@ long G_srand48_auto(void);
 long G_lrand48(void);
 long G_mrand48(void);
 double G_drand48(void);
+void G_random_state_from_seed(struct G_random_state *, int64_t);
+void G_random_init_layout_exact(struct G_random_layout *, int64_t, int64_t,
+                                int64_t);
+void G_random_init_layout_bounded(struct G_random_layout *, int64_t, int64_t,
+                                  int64_t);
+void G_random_init_layout(struct G_random_layout *, int64_t, int64_t);
+int64_t G_random_layout_batches(const struct G_random_layout *);
+int64_t G_random_layout_length(const struct G_random_layout *);
+void G_random_state_for_unit(struct G_random_state *,
+                             const struct G_random_layout *, int64_t);
+void G_random_state_for_batch(struct G_random_state *,
+                              const struct G_random_layout *, int64_t, int64_t);
+void G_random_advance(struct G_random_state *, int64_t);
+double G_random_double(struct G_random_state *);
+int G_random_int(struct G_random_state *);
+int32_t G_random_int32(struct G_random_state *);
+uint32_t G_random_uint32(struct G_random_state *);
+int64_t G_random_generate_seed(void);
+const char *G_random_parse_seed(const char *, int64_t *);
+
+/* random_options.c */
+int64_t G_random_seed_from_option(const struct Option *);
 
 /* ls.c */
 void G_set_ls_filter(int (*)(const char *, void *), void *);
@@ -670,7 +699,7 @@ void G_unset_percent_routine(void);
 void G_popen_clear(struct Popen *);
 FILE *G_popen_write(struct Popen *, const char *, const char **);
 FILE *G_popen_read(struct Popen *, const char *, const char **);
-void G_popen_close(struct Popen *);
+int G_popen_close(struct Popen *);
 
 /* plot.c */
 void G_setup_plot(double, double, double, double, int (*)(int, int),

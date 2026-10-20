@@ -88,6 +88,12 @@ lib/*/latex/
 .coverage.*
 coverage.xml
 
+# Ignore project-local git worktree directories created by AI coding
+# agent workflows (e.g. Claude Code)
+.claude/worktrees/
+.worktrees/
+worktrees/
+
 # Created by https://www.toptal.com/developers/gitignore/api/windows,linux,macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,macos
 

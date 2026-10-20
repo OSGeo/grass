@@ -258,8 +258,8 @@ class ModelAction(ModelObject, ogl.DividedShape):
             self.FormatText(dc, text, rnum)
             rnum += 1
 
-    def OnSizingEndDragLeft(self, pt, x, y, keys, attch):
-        ogl.DividedShape.OnSizingEndDragLeft(self, pt, x, y, keys, attch)
+    def OnSizingEndDragLeft(self, pt, x, y, keys, attach):
+        ogl.DividedShape.OnSizingEndDragLeft(self, pt, x, y, keys, attach)
         self.SetRegionSizes()
         self.ReformatRegions()
         self.GetCanvas().Refresh()
@@ -880,7 +880,7 @@ class ModelItem(ModelObject):
     def GetLog(self):
         """Get log info"""
         if self.label:
-            return _("Condition: ") + self.label
+            return _("Condition: {label}").format(label=self.label)
         return _("Condition: not defined")
 
     def AddRelation(self, rel):

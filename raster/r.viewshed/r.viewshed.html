@@ -132,7 +132,7 @@ a (square) grid of <em>n</em> cells, there can be <em>O(n
 <sup>1/2</sup>)</em> cells that intersect the LOS. If we test every
 single such cell for every point in the grid, this adds up to
 <em>O(n<sup>3/2</sup>)</em> tests. We can do all these tests faster if
-we re-use information from one point to the next (two grid points that
+we reuse information from one point to the next (two grid points that
 are close to each other will be intersected by a lot of the same
 points) and organize the computation differently.
 

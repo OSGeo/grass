@@ -42,6 +42,18 @@ class RuntimePaths:
     # Mapping of attribute names to environment variable name except the prefix.
     _env_vars = {
         "gisbase": "GISBASE",
+        "colors_dir": "GRASS_COLORSDIR",
+        "doc_dir": "GRASS_DOCDIR",
+        "etc_dir": "GRASS_ETCDIR",
+        "etcbin_dir": "GRASS_ETCBINDIR",
+        "fonts_dir": "GRASS_FONTSDIR",
+        "graphics_dir": "GRASS_GRAPHICSDIR",
+        "guires_dir": "GRASS_GUIRESDIR",
+        "guiscript_dir": "GRASS_GUISCRIPTDIR",
+        "guiwx_dir": "GRASS_GUIWXDIR",
+        "locale_dir": "GRASS_LOCALEDIR",
+        "misc_dir": "GRASS_MISCDIR",
+        "mkdocs_dir": "GRASS_MKDOCSDIR",
     }
 
     def __init__(self, *, env=None, set_env_variables=False, prefix=None):
@@ -63,6 +75,11 @@ class RuntimePaths:
         self.env["GRASS_PREFIX"] = self.prefix
         for env_var in self._env_vars.values():
             self.env[env_var] = self.__get_dir(env_var, use_env_values=False)
+
+    @classmethod
+    def env_variable_names(cls):
+        """Return names of the environment variables holding the resource paths."""
+        return list(cls._env_vars.values())
 
     @property
     def version(self):
@@ -87,6 +104,18 @@ class RuntimePaths:
     @property
     def grass_version_git(self):
         return resource_paths.GRASS_VERSION_GIT
+
+    @property
+    def grass_headers_version(self):
+        return resource_paths.GRASS_HEADERS_VERSION
+
+    @property
+    def grass_headers_date(self):
+        return resource_paths.GRASS_HEADERS_DATE
+
+    @property
+    def grass_arch(self):
+        return resource_paths.GRASS_ARCH
 
     @property
     def config_projshare(self):

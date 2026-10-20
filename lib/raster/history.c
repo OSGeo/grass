@@ -272,7 +272,7 @@ void Rast_short_history(const char *name, const char *type,
 int Rast_command_history(struct History *hist)
 {
     char *cmdlin;
-    int cmdlen;
+    size_t cmdlen;
 
     cmdlin = G_recreate_command();
     cmdlen = strlen(cmdlin);

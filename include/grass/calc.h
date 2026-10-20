@@ -37,9 +37,6 @@ typedef struct func_desc {
 #define GRASS_CALC_EXPORT
 #endif
 
-extern GRASS_CALC_EXPORT volatile int floating_point_exception;
-extern GRASS_CALC_EXPORT volatile int floating_point_exception_occurred;
-
 extern GRASS_CALC_EXPORT int columns;
 
 extern GRASS_CALC_EXPORT func_desc calc_func_descs[];

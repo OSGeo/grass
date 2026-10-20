@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grassmods/de/>\n"
@@ -433,10 +433,13 @@ msgstr ""
 msgid "Unable to open DBF database: %s"
 msgstr ""
 
-msgid "SQL parser error"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Error: %s\n"
+msgid "SQL parser error: %s\n"
+msgstr "Fehler: %s\n"
 
-msgid "in statement:"
+#, c-format
+msgid "Statement: %s\n"
 msgstr ""
 
 #, c-format
@@ -814,16 +817,18 @@ msgstr ""
 msgid "Database name <%s> is too long"
 msgstr ""
 
-#, c-format
-msgid "Unable to create directory '%s' for sqlite database"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Unable to open directory '%s'"
+msgid "Unable to create directory '%s' for SQLite database"
+msgstr "Kann das Verzeichnis '%s' nicht öffnen."
 
 msgid "Disabling SQLite locking"
 msgstr ""
 
-#, c-format
-msgid "The sqlite config option '%s' is not supported"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "MySQL driver: column '%s', type %d is not supported"
+msgid "The SQLite config option '%s' is not supported"
+msgstr "MySQL-Treiber: Spalte '%s', Typ %d wird nicht unterstützt."
 
 msgid "Unable to open database:"
 msgstr ""
@@ -2247,7 +2252,6 @@ msgstr "Anzahl der signifikanten Stellen (nur Fließkommazahlen)"
 msgid "Get text color from cell color value"
 msgstr "Hole Textfarbe von der Farbtabelle der Zelle."
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -4700,6 +4704,9 @@ msgstr ""
 msgid "Landsat"
 msgstr "Landsat"
 
+msgid "Sentinel"
+msgstr ""
+
 msgid "ASTER"
 msgstr ""
 
@@ -4722,6 +4729,9 @@ msgid "Landsat 5+7 (6 input bands:1,2,3,4,5,7)"
 msgstr ""
 
 msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
+msgstr ""
+
+msgid "Sentinel-2 (6 input bands: B2,B3,B4,B8,B11,B12 surface reflectance in [0,1]; Bonafoni & Sekertekin 2020 coefficients)"
 msgstr ""
 
 msgid "ASTER (6 input bands:1,3,5,6,8,9)"
@@ -8915,9 +8925,6 @@ msgstr ""
 msgid "Worldview"
 msgstr ""
 
-msgid "Sentinel"
-msgstr ""
-
 msgid "Tasseled Cap transformation"
 msgstr ""
 
@@ -12180,6 +12187,10 @@ msgid "Pass 1 of 2..."
 msgstr ""
 
 #, c-format
+msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
+msgstr ""
+
+#, c-format
 msgid "%d-band clumping with threshold %g"
 msgstr ""
 
@@ -13189,6 +13200,13 @@ msgstr "Der ausgewählte Kanal (%d) existiert nicht."
 msgid "Imagery group <%s> created"
 msgstr "Bildgruppe <%s> erzeugt."
 
+#, c-format
+msgid "Vertical CRS <%s> of the dataset is ignored"
+msgstr ""
+
+msgid "The vertical component of the dataset CRS is ignored"
+msgstr ""
+
 msgid "Can't get WKT parameter string"
 msgstr ""
 
@@ -14002,21 +14020,25 @@ msgstr "Sie haben kein Schrittgröße für den Winkel angegeben. Breche ab."
 msgid "Could not read bufferzone size. Aborting."
 msgstr "Konnte die Pufferzonengröße nicht lesen. Breche ab."
 
-#, c-format
-msgid "Could not read %s bufferzone size. Aborting."
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read east bufferzone size. Aborting."
 msgstr "Konnte die %s Bufferzonengröße nicht lesen. Breche ab."
 
-msgid "east"
-msgstr "Osten"
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read west bufferzone size. Aborting."
+msgstr "Konnte die %s Bufferzonengröße nicht lesen. Breche ab."
 
-msgid "west"
-msgstr "Westen"
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read south bufferzone size. Aborting."
+msgstr "Konnte die %s Bufferzonengröße nicht lesen. Breche ab."
 
-msgid "south"
-msgstr "Süden"
-
-msgid "north"
-msgstr "Norden"
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read north bufferzone size. Aborting."
+msgstr "Konnte die Pufferzonengröße nicht lesen. Breche ab."
 
 msgid "Could not read maximum distance. Aborting."
 msgstr "Konnte die maximale Distanz nicht lesen. Breche ab."
@@ -14987,6 +15009,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "Anzahl der Argumente für die Funktion '%s'."
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "Gebe die Statistik im Shell-Skript-Stil aus."
 
@@ -15041,13 +15073,19 @@ msgstr ""
 msgid "Dataset doesn't have requested dimension '%s' (possibly a programming error)"
 msgstr ""
 
-#, fuzzy
-msgid " points found in input file(s)"
+#, fuzzy, c-format
+msgid "%<PRIu64> points found in input file(s)"
 msgstr "%lu Punkte in der Region gefunden."
 
 #, fuzzy, c-format
-msgid "Raster map <%s> created. "
-msgstr "Rasterkarte <%s> erzeugt."
+#| msgid "%lu points found in region."
+msgid "%<PRIu64> points found in region."
+msgstr "%lu Punkte in der Region gefunden."
+
+#, fuzzy, c-format
+#| msgid "Number of input points: %d."
+msgid "Number of input files: %d"
+msgstr "Anzahl der Eingabepunkte: %d."
 
 msgid "Overriding projection check"
 msgstr "Übersteuere Projektionsprüfung"
@@ -15688,9 +15726,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "<%d> is not valid number of nprocs."
 msgstr "<%s=%s> Ungültige Anzahl von Punkten."
-
-msgid "Floating point error(s) occurred in the calculation"
-msgstr "Während der Berechnung sind Fließkomma-Fehler aufgetreten."
 
 #, c-format
 msgid "Unable to read color file for raster map <%s@%s>"
@@ -16376,8 +16411,10 @@ msgstr "Exportiere Rasterkarte <%s> (Kanal %d)..."
 msgid "Unable to export raster map <%s>"
 msgstr "Kann die Rasterkarte <%s> nicht exportieren."
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Number of points must be > 0 (%d given)"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "Anzahl der Punkte muss größer >0 sein (%d gegeben)."
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16777,6 +16814,10 @@ msgstr "Exponent für die Distanzgewichtung (0.0-4.0)"
 
 msgid "Constrain model through central window cell"
 msgstr "Einschränkungsmodell durch die zentrale Fensterzelle."
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%s=%s> Ungültige Anzahl von Punkten."
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr "Morphometrische Parameter nicht erkannt. Vermute 'Elevation'."
@@ -17511,15 +17552,14 @@ msgstr "DCELL: Wertebereich ist %.15g bis %.15g\n"
 msgid "CELL: Data range is %ld to %ld\n"
 msgstr "CELL: Wertebereich ist %ld bis %ld\n"
 
-#, c-format
-msgid "Illegal reclass rule -"
+#, fuzzy, c-format
+#| msgid "Illegal reclass rule -"
+msgid "Illegal reclass rule - ignored\n"
 msgstr "Ungültige Reklassifizierungsregel -"
 
-#, c-format
-msgid " ignored\n"
-msgstr " ignoriert\n"
-
-msgid " - invalid reclass rule"
+#, fuzzy, c-format
+#| msgid " - invalid reclass rule"
+msgid "%s - invalid reclass rule"
 msgstr " - ungültige Reklassifizierungs-Regel"
 
 #, c-format
@@ -18633,29 +18673,16 @@ msgstr "Zeit-Intervall für die Erstellung von Ausgabekarten [Minuten]"
 msgid "Water diffusion constant"
 msgstr "Wasserdiffusionskoeffizienten"
 
-msgid "Seed for random number generator"
-msgstr ""
-
-msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
-msgstr ""
-
-msgid "Generate random seed"
-msgstr ""
-
-msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
-msgstr ""
-
 #, fuzzy
 msgid "Number of threads which will be used for parallel computation."
 msgstr "Anzahl der Level, welche für jeden Komponent benutzt werden sollen."
 
-#, c-format
-msgid "Generated random seed (-s): %ld"
+msgid "Print run summary to standard output"
 msgstr ""
 
-#, c-format
-msgid "Read random seed from %s option: %ld"
-msgstr ""
+#, fuzzy, c-format
+msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
+msgstr "Lat/Long Location wird nicht unterstützt von %s. Bitte, projezieren Sie die Karte zuerst."
 
 #, c-format
 msgid "<%d> is not valid number of threads. Number of threads will be set on <%d>"
@@ -18706,8 +18733,10 @@ msgstr ""
 msgid "Runoff infiltration rate unique value [mm/hr]"
 msgstr "Abflußinfiltrationsrate, einzelner Wert [mm/hr]."
 
-msgid "Name of flow controls raster map (permeability ratio 0-1)"
-msgstr ""
+#, fuzzy
+#| msgid "Name of input raster map (intensity)"
+msgid "Name of flow controls raster map (trapping probability 0-1)"
+msgstr "Name der Eingabe-Rasterkarte (Intensität; intensity)."
 
 msgid "Name for output water depth raster map [m]"
 msgstr ""
@@ -18742,6 +18771,10 @@ msgstr "Ausgabe der Zeitreihe"
 msgid "You are not outputting any raster maps"
 msgstr "Sie produzieren keine Rasterkarten."
 
+#, c-format
+msgid "%d walkers over %d time steps may draw more random numbers than one seed provides; the random numbers of some walkers then repeat those of others shifted by a constant"
+msgstr ""
+
 #, fuzzy, c-format
 #| msgid "Processing rows %d-%d (of %d)..."
 msgid "Processing block %d of %d"
@@ -18764,6 +18797,10 @@ msgstr "Nullwert in Mannings n"
 #| msgid "Could not open elevation raster"
 msgid "No values in the elevation raster."
 msgstr "Kann die Rasterkarte mit Höheninformationen nicht öffnen."
+
+#, c-format
+msgid "Time step of %.2f s is longer than output_step of %d s, some output steps may be skipped"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -18824,6 +18861,23 @@ msgstr ""
 #, c-format
 msgid "FP raster map <%s> not found"
 msgstr "FP-Rasterkarte <%s> nicht gefunden."
+
+#, c-format
+msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Invalid grid size <%s>"
+msgid "Invalid random seed <%s>"
+msgstr "Ungültige Gittergröße <%s>."
+
+#, c-format
+msgid "Read random seed from %s option: %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "Generated random seed: %<PRId64>"
+msgstr ""
 
 msgid "aspect"
 msgstr ""
@@ -20357,6 +20411,10 @@ msgid "Number of intermediate images to produce"
 msgstr "Anzahl der zu produzierenden Zwischenschritte."
 
 #, c-format
+msgid "Read random seed from %s option: %ld"
+msgstr ""
+
+#, c-format
 msgid "Autogenerated random seed set to: %ld"
 msgstr ""
 
@@ -20609,7 +20667,6 @@ msgstr "Zu viele Kategorien (gefunden %i, Max: %i). Versuchen Sie die Karte zu r
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -23085,9 +23142,10 @@ msgstr ""
 msgid "At least 2 maps are required"
 msgstr ""
 
-#, python-format
-msgid "Unable to get monitor info. %s"
-msgstr ""
+#, fuzzy
+#| msgid "Unable to set geo transform"
+msgid "Unable to get monitor info. {}"
+msgstr "Kann geo transform nicht setzen."
 
 msgid "Unable to get monitor info"
 msgstr ""
@@ -23356,8 +23414,10 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
-msgstr ""
+#, fuzzy
+#| msgid "Could not initialize the timetables"
+msgid "Could not find Git. Please install it."
+msgstr "Zeittabellen konnten nicht initialisiert werden."
 
 msgid "Cannot write to working directory {}."
 msgstr ""
@@ -23877,8 +23937,10 @@ msgstr ""
 msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
-msgid "Missing output projection parameters "
-msgstr ""
+#, fuzzy
+#| msgid "Output projection parameters (PROJ.4 style)"
+msgid "Missing output projection parameters"
+msgstr "Ausgabe-Projektionsparameter (PROJ.4 Stil)."
 
 msgid "Unable to read input data"
 msgstr ""
@@ -24108,8 +24170,9 @@ msgstr ""
 msgid "Unable to import data"
 msgstr ""
 
-msgid "Done: generated map "
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Done: generated map {map_name}"
+msgstr "Wert für die östliche Grenze."
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
 msgstr ""
@@ -24170,7 +24233,7 @@ msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
 #, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr ""
 
 #, python-format
@@ -24307,9 +24370,10 @@ msgstr ""
 msgid "Driver %s does not supports Create() method"
 msgstr ""
 
-#, python-format
-msgid "Unable to open %s "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to open tempfile"
+msgid "Unable to open {filename}"
+msgstr "Kann temporäre Datei nicht öffnen."
 
 msgid "Region is out of server data extend."
 msgstr ""
@@ -24491,35 +24555,59 @@ msgstr ""
 msgid "xy-locations are not supported"
 msgstr ""
 
+#, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr ""
+
+#, fuzzy
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr "Erstelle neue Cats-Datei..."
+
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr "Erstelle neue Cats-Datei..."
+
 #, fuzzy
 msgid "Generating a clumped raster file"
 msgstr "Erstelle neue Cats-Datei..."
 
-msgid " including diagonal neighbors"
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, fuzzy, python-format
-msgid " with minimum %s pixels"
-msgstr "Schrift-Größe ist Höhe in Pixel."
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Renaming reclass maps"
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
+msgstr "Benenne reclass-Karten um."
+
+#, fuzzy, python-brace-format
+#| msgid "Width less than or equal to zero not allowed"
+msgid "No areas of size larger than or equal to {lower} hectares"
+msgstr "Breite kleiner oder gleich Null ist nicht zulässig."
+
+#, fuzzy, python-brace-format
+#| msgid "Renaming reclass maps"
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "Benenne reclass-Karten um."
+
+#, fuzzy, python-brace-format
+#| msgid "Width less than or equal to zero not allowed"
+msgid "No areas of size smaller than or equal to {upper} hectares"
+msgstr "Breite kleiner oder gleich Null ist nicht zulässig."
 
 #, fuzzy
 #| msgid "Renaming reclass maps"
-msgid "Generating a reclass map with area size"
+msgid "Generating a reclass map without area size limits..."
 msgstr "Benenne reclass-Karten um."
 
-#, fuzzy, python-format
-#| msgid "Width less than or equal to zero not allowed"
-msgid " larger than or equal to %f hectares..."
-msgstr "Breite kleiner oder gleich Null ist nicht zulässig."
-
-#, python-format
-msgid " smaller than or equal to %f hectares..."
-msgstr ""
-
 #, fuzzy
-#| msgid "area size"
-msgid "No areas of size "
-msgstr "Flächengröße"
+#| msgid "No categories found"
+msgid "No areas found"
+msgstr "Keine Kategorien gefunden"
 
 #, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
@@ -25145,11 +25233,8 @@ msgstr ""
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr ""
-
-msgid "Use -c flag to update values in this column."
+#, python-brace-format
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr ""
 
 #, python-format
@@ -25266,9 +25351,10 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr ""
 
-#, python-format
-msgid "Unable to add column %s to vector map <%s> "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to add column {column} to vector map <{vector}>"
+msgstr "Kann den Link zur Datenbank der Vektorkarte <%s> nicht hinzufügen."
 
 #, python-format
 msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
@@ -25753,13 +25839,17 @@ msgstr ""
 msgid "Lowest chi2 = %f\n"
 msgstr "Kleinstes chi^2 = %f\n"
 
-#, c-format
-msgid ""
-"%15s%15s%15s\n"
-"\n"
+#. GTC Column header, lower class limit (exclusive)
+msgid "From (excl.)"
 msgstr ""
-"%15s%15s%15s\n"
-"\n"
+
+#. GTC Column header, upper class limit (inclusive)
+msgid "To (incl.)"
+msgstr ""
+
+#. GTC Column header, number of values in the class
+msgid "Frequency"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -28595,8 +28685,9 @@ msgstr ""
 msgid "%d input polygons got lost during import."
 msgstr ""
 
-#, c-format
-msgid "%d additional areas where created during import."
+#, fuzzy, c-format
+#| msgid "%d additional areas where created during import."
+msgid "%d additional areas were created during import."
 msgstr "%d zusätzliche Bereiche wurden beim Import angelegt."
 
 #, c-format
@@ -28638,10 +28729,12 @@ msgstr ""
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
 msgstr "Konvertiert DWG/DXF in GRASS Vektorkarten."
 
-msgid "Reproject to projects's coordinate system if needed"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Invalid input file %s"
+msgid "Invalid input_srs: %s"
+msgstr "Ungültige Eingabedatei %s"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
+msgid "Unable to reproject the input because the current project has no CRS defined. Use the -o flag to import the data without reprojection."
 msgstr ""
 
 msgid "Cannot store return information because the input does not have a return dimensions"
@@ -32061,8 +32154,10 @@ msgstr ""
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
 msgstr ""
 
-msgid "No features match Your query"
-msgstr ""
+#, fuzzy
+#| msgid "To feature type"
+msgid "No features match your query"
+msgstr "Ziel-Vektortyp"
 
 msgid "Your query matches more than one record in input profiling map. Currently it's not supported. Enhance WHERE conditions to get only one line."
 msgstr ""
@@ -32368,13 +32463,19 @@ msgstr ""
 msgid "A file with 3D control points is needed for 3D transformation"
 msgstr ""
 
-#, c-format
-msgid "The vector map <%s> already exists in"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Vector map <%s> already exists"
+msgid "The vector map <%s> already exists."
+msgstr "Vektorkarte <%s> existiert bereits."
 
 #, fuzzy, c-format
-msgid "target project %s, mapset %s:"
-msgstr "Gruppe <%s> zielt auf Location [%s], Mapset [%s]."
+msgid "Target project: <%s>"
+msgstr "Ziel-Location <%s> nicht gefunden."
+
+#, fuzzy, c-format
+#| msgid "Your current mapset is <%s>"
+msgid "Target mapset: <%s>"
+msgstr "Aktuelles Mapset ist <%s>"
 
 msgid "Rectification cancelled."
 msgstr ""
@@ -34413,6 +34514,50 @@ msgstr "Zeige BMP Bilder von dem PNG-Treiber."
 msgid "Image file"
 msgstr "Bild-Datei"
 
+#, fuzzy, python-format
+#~ msgid " with minimum %s pixels"
+#~ msgstr "Schrift-Größe ist Höhe in Pixel."
+
+#, fuzzy
+#~| msgid "area size"
+#~ msgid "No areas of size "
+#~ msgstr "Flächengröße"
+
+#~ msgid "east"
+#~ msgstr "Osten"
+
+#~ msgid "west"
+#~ msgstr "Westen"
+
+#~ msgid "south"
+#~ msgstr "Süden"
+
+#~ msgid "north"
+#~ msgstr "Norden"
+
+#, fuzzy, c-format
+#~ msgid "Raster map <%s> created. "
+#~ msgstr "Rasterkarte <%s> erzeugt."
+
+#~ msgid "Floating point error(s) occurred in the calculation"
+#~ msgstr "Während der Berechnung sind Fließkomma-Fehler aufgetreten."
+
+#, c-format
+#~ msgid " ignored\n"
+#~ msgstr " ignoriert\n"
+
+#, c-format
+#~ msgid ""
+#~ "%15s%15s%15s\n"
+#~ "\n"
+#~ msgstr ""
+#~ "%15s%15s%15s\n"
+#~ "\n"
+
+#, fuzzy, c-format
+#~ msgid "target project %s, mapset %s:"
+#~ msgstr "Gruppe <%s> zielt auf Location [%s], Mapset [%s]."
+
 #~ msgid "Infiltration exceeds the rainfall rate everywhere! No overland flow."
 #~ msgstr "Die Infiltration übersteigt den Niederschlag überall! Kein Oberflächenabfluß."
 
@@ -35494,10 +35639,6 @@ msgstr "Bild-Datei"
 #, fuzzy
 #~ msgid "Custom ratio"
 #~ msgstr "Spezifisch"
-
-#, fuzzy
-#~ msgid "DPI for the generated page"
-#~ msgstr "Wert für die östliche Grenze."
 
 #, fuzzy
 #~ msgid "DXF conversion"
@@ -38749,9 +38890,6 @@ msgstr "Bild-Datei"
 #~ msgid "Number of points for the visibility"
 #~ msgstr "Anzahl der zu erstellenden Punkte."
 
-#~ msgid "Number of points must be > 0 (%d given)"
-#~ msgstr "Anzahl der Punkte muss größer >0 sein (%d gegeben)."
-
 #, fuzzy
 #~ msgid "Number of points to use in interpolation."
 #~ msgstr "Anzahl der zu erstellenden Punkte."
@@ -38843,10 +38981,6 @@ msgstr "Bild-Datei"
 #, fuzzy
 #~ msgid "Number of the maximum value for raster maps"
 #~ msgstr "Name der Rasterkarte mit Höheninformationen [in Meter]."
-
-#, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "Anzahl der Argumente für die Funktion '%s'."
 
 #, fuzzy
 #~ msgid "Number of tile border lines in each direction"

@@ -435,7 +435,7 @@ def import_stds(
                 # that must be extended by the file suffix
                 filename = line_list[0].strip().split(":")[0]
                 if base:
-                    mapname = f"{base}_{gs.get_num_suffix(line_count + 1, max_count)}"
+                    mapname = f"{base}_{gs.get_num_suffix(line_count, max_count)}"
                     mapid = f"{mapname}@{mapset}"
                 else:
                     mapname = filename
@@ -613,7 +613,6 @@ def import_stds(
             start="file",
             end="file",
             unit=relative_time_unit,
-            dbif=None,
             fs=fs,
             update_cmd_list=False,
         )
