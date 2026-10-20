@@ -183,7 +183,6 @@ int main(int argc, char *argv[])
     output = parm.output->answer;
     n = strtoul(parm.nsites->answer, NULL, 10);
 
-    /* The seed is checked here, before any output exists. */
     if (parm.seed->answer)
         seed = G_random_seed_from_option(parm.seed);
     else
