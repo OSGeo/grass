@@ -10,6 +10,7 @@ import pytest
 
 from grass.temporal.datetime_math import (
     adjust_datetime_to_granularity,
+    decrement_datetime_by_string,
     increment_datetime_by_string,
 )
 
@@ -29,10 +30,27 @@ from grass.temporal.datetime_math import (
         # More than twelve months has to roll the year over.
         (datetime(2001, 11, 1), "13 months", datetime(2002, 12, 1)),
         (datetime(2001, 1, 1), "72 months", datetime(2007, 1, 1)),
+        # A day missing in the target month is clamped to the month's last day.
+        (datetime(2001, 1, 31), "1 months", datetime(2001, 2, 28)),
+        (datetime(2004, 1, 31), "1 months", datetime(2004, 2, 29)),
+        (datetime(2001, 8, 31), "1 months", datetime(2001, 9, 30)),
+        (datetime(2004, 2, 29), "1 years", datetime(2005, 2, 28)),
     ],
 )
 def test_increment_datetime_by_string(start, increment, expected) -> None:
     assert increment_datetime_by_string(start, increment) == expected
+
+
+@pytest.mark.parametrize(
+    ("start", "decrement", "expected"),
+    [
+        (datetime(2001, 3, 31), "1 months", datetime(2001, 2, 28)),
+        (datetime(2001, 1, 31), "2 months", datetime(2000, 11, 30)),
+        (datetime(2004, 2, 29), "1 years", datetime(2003, 2, 28)),
+    ],
+)
+def test_decrement_datetime_by_string_month_end(start, decrement, expected) -> None:
+    assert decrement_datetime_by_string(start, decrement) == expected
 
 
 @pytest.mark.parametrize(

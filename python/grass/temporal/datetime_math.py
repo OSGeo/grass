@@ -9,6 +9,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 
 from __future__ import annotations
 
+import calendar
 import copy
 from datetime import datetime, timedelta
 from typing import TypedDict
@@ -270,6 +271,16 @@ def modify_datetime_by_string(
 ###############################################################################
 
 
+def _replace_year_month(mydate: datetime, year: int, month: int) -> datetime:
+    """Return mydate moved to the given year and month
+
+    The day is clamped to the last day of the target month, so that, e.g.,
+    January 31 moved to February becomes February 28 (or 29).
+    """
+    day = min(mydate.day, calendar.monthrange(year, month)[1])
+    return mydate.replace(year=year, month=month, day=day)
+
+
 def modify_datetime(
     mydate: datetime, years=0, months=0, weeks=0, days=0, hours=0, minutes=0, seconds=0
 ) -> datetime:
@@ -293,14 +304,11 @@ def modify_datetime(
         years_to_add = int(all_months / 12.001)
         residual_months = all_months - (years_to_add * 12)
 
-        # Make a deep copy of the datetime object
-        dt1 = copy.copy(mydate)
-
         # Make sure the month starts with a 1
         if residual_months == 0:
             residual_months = 1
 
-        dt1 = dt1.replace(year=year + years_to_add, month=residual_months)
+        dt1 = _replace_year_month(mydate, year + years_to_add, residual_months)
 
         tdelta_months = dt1 - mydate
     elif months < 0:
@@ -317,22 +325,17 @@ def modify_datetime(
         else:
             residual_months = all_months
 
-        # Make a deep copy of the datetime object
-        dt1 = copy.copy(mydate)
-
         # Correct the months
         if residual_months <= 0:
             residual_months += 12
 
-        dt1 = dt1.replace(year=year - years_to_remove, month=residual_months)
+        dt1 = _replace_year_month(mydate, year - years_to_remove, residual_months)
 
         tdelta_months = dt1 - mydate
 
     if years != 0:
-        # Make a deep copy of the datetime object
-        dt1 = copy.copy(mydate)
         # Compute the number of days
-        dt1 = dt1.replace(year=mydate.year + int(years))
+        dt1 = _replace_year_month(mydate, mydate.year + int(years), mydate.month)
         tdelta_years = dt1 - mydate
 
     return (
