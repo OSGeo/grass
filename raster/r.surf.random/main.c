@@ -125,8 +125,8 @@ int main(int argc, char *argv[])
                                Rast_window_cols());
     if (G_random_layout_batches(&layout) < 1)
         G_warning(_("The region has more cells than random values one seed "
-                    "holds; later rows repeat the values of earlier rows "
-                    "plus a constant"));
+                    "holds. Later rows repeat the values of earlier rows "
+                    "plus a constant."));
 
     /* We disallow max=5.5 for integer output since there are unclear
      * expectations on what it should do. */
