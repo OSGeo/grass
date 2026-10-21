@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Python-Markdown extension for GRASS documentation.
 
 The documentation follows CommonMark (as GitHub and pandoc do), while
