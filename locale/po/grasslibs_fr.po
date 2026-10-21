@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2026-10-11 11:28+0000\n"
+"PO-Revision-Date: 2026-10-18 18:39+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/fr/>\n"
 "Language: fr\n"
@@ -87,7 +87,7 @@ msgstr "Cairo : en-tête BMP invalide pour <%s>"
 
 #, c-format
 msgid "Cairo: error reading BMP file <%s>: unexpected end of file"
-msgstr ""
+msgstr "Cairo : erreur de lecture du fichier BMP <%s> : fin de fichier inattendue"
 
 #, c-format
 msgid "Cairo: error reading BMP file <%s>: %s"
@@ -95,7 +95,7 @@ msgstr "Cairo : erreur de lecture du fichier BMP <%s> : %s"
 
 #, c-format
 msgid "Cairo: unexpected EOF reading <%s>"
-msgstr ""
+msgstr "Cairo : fin de fichier (EOF) inattendu lors de la lecture de <%s>"
 
 #, c-format
 msgid "Cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d"
@@ -515,23 +515,23 @@ msgstr "Valeur de résolution n-s illégale pour 3D : %g"
 
 #, c-format
 msgid "Illegal number of rows for 3D: %d (resolution is %g)"
-msgstr ""
+msgstr "Nombre de lignes non valide pour la 3D : %d (la résolution est %g)"
 
 #, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
 msgstr "Valeur de résolution e-o illégale pour 3D : %g"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal number of columns for 3D: %d (resolution is %g)"
-msgstr "Nombre de colonnes illégal pour 3D : %d (la résolution est %g)"
+msgstr "Nombre de colonnes non valide pour la 3D : %d (la résolution est %g)"
 
 #, c-format
 msgid "Illegal t-b resolution value: %g"
-msgstr ""
+msgstr "Valeur de résolution h-b non valide : %g"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal depths value: %d"
-msgstr "Valeur des profondeurs illégale : %d"
+msgstr "Nombre de profondeurs non valide : %d"
 
 #, c-format
 msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
@@ -4502,7 +4502,7 @@ msgstr "Ajout d'une règle : %lf - %lf"
 
 #, c-format
 msgid "%s: illegal value spec"
-msgstr "%s: spécification de valeur non valide"
+msgstr "%s : spécification de valeur non valide"
 
 msgid "Rast3d_open_cell_old_no_header: error in Rast3d_mask_open_old"
 msgstr "Rast3d_open_cell_old_no_header : erreur dans Rast3d_mask_open_old"
@@ -6415,7 +6415,7 @@ msgstr "Tentative d'accéder à l'entité en cours %d"
 
 #, c-format
 msgid "%s: Area %d does not exist"
-msgstr "%s: la surface %d n'existe pas"
+msgstr "%s : la surface %d n'existe pas"
 
 #, c-format
 msgid "Attempt to access dead area %d"
