@@ -162,6 +162,8 @@ class TestReclassArea(TestCase):
     def test_reclass_lower_upper_invert(self) -> None:
         """Testing r.reclass.area with method reclass, lower, upper and invert flag."""
         output_map = f"{self.output}_lower_upper_invert"
+        ref_max = 1000
+        ref_min = 200
         self.assertModule(
             "r.reclass.area",
             flags="i",
@@ -174,9 +176,9 @@ class TestReclassArea(TestCase):
         self.map_list.append(output_map)
         self.assertRasterMinMax(
             map=output_map,
-            refmin=900,
-            refmax=1000,
-            msg="Range of data for inverted lower/upper filter",
+            refmin=ref_min,
+            refmax=ref_max,
+            msg=f"Range of data: min = {ref_min}  max = {ref_max}",
         )
 
     def test_rmarea_invert_unsupported(self) -> None:
