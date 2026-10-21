@@ -637,7 +637,7 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             omp_set_lock(&minmax[z]);
 #endif
             if (stats[z].max < zd->max ||
-                (stats[z].max != stats[z].max && zd->max != DBL_MIN)) {
+                (stats[z].max != stats[z].max && zd->bucket.n != 0)) {
                 stats[z].max = zd->max;
             }
             if (stats[z].min > zd->min ||
