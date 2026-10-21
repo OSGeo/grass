@@ -374,16 +374,16 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         /* The logarithmic scale applies to the smooth legend only; a category
          * legend ignores the flag. */
         if (log_sc) {
-            if (dmin == dmax)
-                G_fatal_error(_("Range [%.3f, %.3f] has no extent for a "
-                                "logarithmic scale"),
-                              dmin, dmax);
             /* A range with non-positive values is shifted so that its
              * minimum maps to 1, as Rast_log_colors() does for r.colors -g,
              * so that the legend matches a color table created that way. */
             log_shift = dmin <= 0 ? 1 - dmin : 0;
             lmin = log10(dmin + log_shift);
             lmax = log10(dmax + log_shift);
+            if (lmax <= lmin)
+                G_fatal_error(_("Range [%.3f, %.3f] has no extent for a "
+                                "logarithmic scale"),
+                              dmin, dmax);
         }
         if (horiz) {
             if (draw) {
@@ -503,7 +503,15 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         if (steps >= 2) {
             for (k = 0; k < steps; k++) {
                 if (!fp) {
-                    if (!flip)
+                    if (log_sc) {
+                        /* Evenly spaced in the logarithmic space, as for
+                         * floating-point maps, rounded to a category. The
+                         * order does not depend on flip, as the position is
+                         * computed from the value. */
+                        num = lmin + k * ((lmax - lmin) / (steps - 1));
+                        tcell = (int)round(pow(10, num) - log_shift);
+                    }
+                    else if (!flip)
                         tcell = min_ind +
                                 k * (double)(max_ind - min_ind) / (steps - 1);
                     else

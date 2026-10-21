@@ -109,7 +109,15 @@ def test_log_legend_constant_raster_fails(session, tmp_path):
 
 
 def test_log_legend_constant_integer_raster(session, tmp_path):
-    """A single-value integer raster gets a category legend as without -l."""
+    """A single-value integer raster gets a category legend as without -l.
+
+    The logarithmic scale applies to the smooth legend only, so the flag is
+    ignored for a category legend, but a smooth legend, here forced by a wide
+    box, has no scale to draw.
+    """
     output = tmp_path / "legend.png"
-    render_tools(session, output).d_legend(raster="constant_integer", flags="l")
+    tools = render_tools(session, output)
+    tools.d_legend(raster="constant_integer", flags="l")
     assert output.exists()
+    with pytest.raises(ToolError, match="logarithmic"):
+        tools.d_legend(raster="constant_integer", flags="l", at=(5, 10, 5, 95))
