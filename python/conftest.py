@@ -10,23 +10,43 @@ import json
 import os
 import subprocess
 import sys
+from pathlib import Path
 from textwrap import dedent
 
 import pytest
 
 
+def _contains_grass_core_library(directory):
+    try:
+        return any(
+            path.name.startswith(("libgrass_gis.", "grass_gis."))
+            for path in Path(directory).iterdir()
+        )
+    except OSError:
+        return False
+
+
 @pytest.fixture
 def clean_subprocess_environment():
-    """Environment without a session and without the library search path variable"""
+    """Environment without a session and without the GRASS library search paths"""
     env = os.environ.copy()
     for variable in (
         "LD_LIBRARY_PATH",
         "DYLD_LIBRARY_PATH",
+        "LD_RUN_PATH",
         "GISRC",
         "GIS_LOCK",
         "GISBASE",
     ):
         env.pop(variable, None)
+    if sys.platform.startswith("win"):
+        # On Windows, the search path variable is PATH, so only the
+        # directories with the GRASS libraries are removed.
+        env["PATH"] = os.pathsep.join(
+            directory
+            for directory in env.get("PATH", "").split(os.pathsep)
+            if not _contains_grass_core_library(directory)
+        )
     return env
 
 

@@ -36,6 +36,7 @@ def test_grass_lib_importable_after_init(
 
 @pytest.mark.xfail(
     WINDOWS,
+    strict=True,
     reason="On Windows, the C libraries (built with a different C runtime than"
     " Python) do not see the environment variables set by init in the running"
     " process, so they do not see the session",
