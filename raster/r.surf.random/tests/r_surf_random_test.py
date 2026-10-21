@@ -9,8 +9,7 @@ import numpy as np
 import pytest
 
 import grass.script as gs
-from grass.exceptions import CalledModuleError
-from grass.tools import Tools
+from grass.tools import ToolError, Tools
 
 
 @pytest.fixture
@@ -47,6 +46,6 @@ def test_integer_values_for_seed(session):
 def test_invalid_seed_refused(session, seed):
     """A seed out of range or not wholly an integer is an error"""
     tools = Tools(session=session)
-    with pytest.raises(CalledModuleError):
+    with pytest.raises(ToolError):
         tools.r_surf_random(output="random", seed=seed)
     assert not tools.g_list(type="raster", pattern="random", format="json")
