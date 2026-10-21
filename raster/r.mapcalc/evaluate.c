@@ -370,7 +370,10 @@ static expr_list *exprs;
  * where it started in that serial run, whichever thread computes it. A
  * row of r3.mapcalc is numbered across the depths. */
 static struct G_random_layout rand_layout;
-static struct G_random_state *rand_state;
+/* The state of the row each thread evaluates. The states themselves are
+ * local to the row's evaluation, so the draws of different threads do not
+ * write to the same cache line. */
+static struct G_random_state **rand_state;
 
 /* Give rand() of the calc library the calling thread's state. */
 static struct G_random_state *thread_rand_state(void)
@@ -379,7 +382,7 @@ static struct G_random_state *thread_rand_state(void)
 #if defined(_OPENMP)
     tid = omp_get_thread_num();
 #endif
-    return &rand_state[tid];
+    return rand_state[tid];
 }
 
 static void setup_rand(void)
@@ -392,12 +395,6 @@ static void setup_rand(void)
         G_warning(_("rand() draws more than 2^46 random values. Later "
                     "rows repeat the values of earlier rows plus a "
                     "constant."));
-}
-
-static void place_rand_row(int tid, int row)
-{
-    G_random_state_for_unit(&rand_state[tid], &rand_layout,
-                            (int64_t)current_depth * rows + row);
 }
 
 /****************************************************************************/
@@ -518,13 +515,17 @@ void execute(expr_list *ee)
                 G_percent(n, count, 2);
 
             int tid = 0;
+            struct G_random_state row_rand_state;
 #if defined(_OPENMP)
             tid = omp_get_thread_num();
 #endif
             /* calculate through expressions row by row */
             current_row[tid] = row;
-            if (rand_calls > 0)
-                place_rand_row(tid, row);
+            if (rand_calls > 0) {
+                G_random_state_for_unit(&row_rand_state, &rand_layout,
+                                        (int64_t)current_depth * rows + row);
+                rand_state[tid] = &row_rand_state;
+            }
             /* The thread evaluates the expressions of the row in the order
              * of a serial run, so the rand() calls of the row draw in that
              * order too; see evaluate_function(). */
