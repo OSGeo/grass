@@ -28,7 +28,7 @@ def _contains_grass_core_library(directory):
 
 @pytest.fixture
 def clean_subprocess_environment():
-    """Environment without a session and without the GRASS library search paths"""
+    """Environment without a session and without the dynamic library search paths"""
     env = os.environ.copy()
     for variable in (
         "LD_LIBRARY_PATH",
