@@ -23,7 +23,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 import os
 import sys
 
-WMSLibPath = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
+WMSLibPath = os.path.join(os.getenv("GRASS_ETCBINDIR"), "r.in.wms")
 if WMSLibPath not in sys.path:
     sys.path.append(WMSLibPath)
 

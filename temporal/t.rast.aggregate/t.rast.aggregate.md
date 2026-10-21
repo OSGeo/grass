@@ -131,13 +131,13 @@ t.rast.aggregate input=daily_temp output=weekly_avg_temp \
 
 t.rast.list weekly_avg_temp
 name|mapset|start_time|end_time
-weekly_avg_temp_2003_01|climate|2003-01-03 00:00:00|2003-01-10 00:00:00
-weekly_avg_temp_2003_02|climate|2003-01-10 00:00:00|2003-01-17 00:00:00
-weekly_avg_temp_2003_03|climate|2003-01-17 00:00:00|2003-01-24 00:00:00
-weekly_avg_temp_2003_04|climate|2003-01-24 00:00:00|2003-01-31 00:00:00
-weekly_avg_temp_2003_05|climate|2003-01-31 00:00:00|2003-02-07 00:00:00
-weekly_avg_temp_2003_06|climate|2003-02-07 00:00:00|2003-02-14 00:00:00
-weekly_avg_temp_2003_07|climate|2003-02-14 00:00:00|2003-02-21 00:00:00
+weekly_avg_temp_2003_01|climate|2002-12-30 00:00:00|2003-01-06 00:00:00
+weekly_avg_temp_2003_02|climate|2003-01-06 00:00:00|2003-01-13 00:00:00
+weekly_avg_temp_2003_03|climate|2003-01-13 00:00:00|2003-01-20 00:00:00
+weekly_avg_temp_2003_04|climate|2003-01-20 00:00:00|2003-01-27 00:00:00
+weekly_avg_temp_2003_05|climate|2003-01-27 00:00:00|2003-02-03 00:00:00
+weekly_avg_temp_2003_06|climate|2003-02-03 00:00:00|2003-02-10 00:00:00
+weekly_avg_temp_2003_07|climate|2003-02-10 00:00:00|2003-02-17 00:00:00
 ```
 
 Variant with **suffix** set to granularity:
@@ -149,13 +149,13 @@ t.rast.aggregate input=daily_temp output=weekly_avg_temp \
 
 t.rast.list weekly_avg_temp
 name|mapset|start_time|end_time
-weekly_avg_temp_2003_01_03|climate|2003-01-03 00:00:00|2003-01-10 00:00:00
-weekly_avg_temp_2003_01_10|climate|2003-01-10 00:00:00|2003-01-17 00:00:00
-weekly_avg_temp_2003_01_17|climate|2003-01-17 00:00:00|2003-01-24 00:00:00
-weekly_avg_temp_2003_01_24|climate|2003-01-24 00:00:00|2003-01-31 00:00:00
-weekly_avg_temp_2003_01_31|climate|2003-01-31 00:00:00|2003-02-07 00:00:00
-weekly_avg_temp_2003_02_07|climate|2003-02-07 00:00:00|2003-02-14 00:00:00
-weekly_avg_temp_2003_02_14|climate|2003-02-14 00:00:00|2003-02-21 00:00:00
+weekly_avg_temp_2002_12_30|climate|2002-12-30 00:00:00|2003-01-06 00:00:00
+weekly_avg_temp_2003_01_06|climate|2003-01-06 00:00:00|2003-01-13 00:00:00
+weekly_avg_temp_2003_01_13|climate|2003-01-13 00:00:00|2003-01-20 00:00:00
+weekly_avg_temp_2003_01_20|climate|2003-01-20 00:00:00|2003-01-27 00:00:00
+weekly_avg_temp_2003_01_27|climate|2003-01-27 00:00:00|2003-02-03 00:00:00
+weekly_avg_temp_2003_02_03|climate|2003-02-03 00:00:00|2003-02-10 00:00:00
+weekly_avg_temp_2003_02_10|climate|2003-02-10 00:00:00|2003-02-17 00:00:00
 ```
 
 #### Monthly aggregation

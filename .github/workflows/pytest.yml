@@ -182,6 +182,6 @@ jobs:
     needs:
       - pytest
     if: ${{ always() }}
-    uses: ./.github/workflows/verify-success.yml
+    uses: $/.github/workflows/verify-success.yml
     with:
       needs_context: ${{ toJson(needs) }}

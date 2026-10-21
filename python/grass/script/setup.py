@@ -104,7 +104,7 @@ def write_gisrc(dbase, location, mapset):
 
 def set_gui_path():
     """Insert wxPython GRASS path to sys.path."""
-    gui_path = os.path.join(os.environ["GISBASE"], "gui", "wxpython")
+    gui_path = os.environ["GRASS_GUIWXDIR"]
     if gui_path and gui_path not in sys.path:
         sys.path.insert(0, gui_path)
 
@@ -227,7 +227,11 @@ def setup_runtime_env(gisbase=None, *, env=None):
     # Remove mapset-specific variables that should not leak into the
     # runtime environment being set up.
     sanitize_mapset_environment(env)
-    runtime_paths = RuntimePaths(env=env, prefix=gisbase)
+    # Derive the resource paths from an existing GISBASE rather than from
+    # the build-time prefix, which is wrong for a relocated installation
+    # (e.g., a copied distribution or a custom OSGeo4W root).
+    # TODO(FHS): remove need for gisbase, which is now decoupled from resource paths
+    runtime_paths = RuntimePaths(env=env, prefix=gisbase or env.get("GISBASE"))
     gisbase = runtime_paths.gisbase
     if not Path(gisbase).is_dir():
         gisbase = get_install_path(gisbase)
@@ -262,10 +266,16 @@ def runtime_env_is_active(env=None):
 
     If *env* is not provided, uses the global environment (os.environ).
     """
+    from grass.app.runtime import RuntimePaths
+
     if not env:
         env = os.environ
     gisbase = env.get("GISBASE")
     if not gisbase:
+        return False
+    # GISBASE alone (e.g., set by a wrapper script) is not enough because
+    # tools read the resource directories from their own variables.
+    if not all(env.get(name) for name in RuntimePaths.env_variable_names()):
         return False
     # Check also path to tools.
     return gisbase in env["PATH"]
@@ -590,9 +600,10 @@ def clean_temp(env=None):
         env = os.environ
 
     gs.verbose(_("Cleaning up temporary files..."), env=env)
-    gisbase = env["GISBASE"]
     call(
-        [os.path.join(gisbase, "etc", "clean_temp")], stdout=subprocess.DEVNULL, env=env
+        [os.path.join(env["GRASS_ETCBINDIR"], "clean_temp")],
+        stdout=subprocess.DEVNULL,
+        env=env,
     )
 
 
