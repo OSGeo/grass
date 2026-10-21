@@ -363,19 +363,6 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
         }
     } /* end of is fp */
 
-    if (log_sc) {
-        if (dmin == dmax)
-            G_fatal_error(
-                _("Range [%.3f, %.3f] has no extent for a logarithmic scale"),
-                dmin, dmax);
-        /* A range with non-positive values is shifted so that its minimum
-         * maps to 1, as Rast_log_colors() does for r.colors -g, so that the
-         * legend matches a color table created that way. */
-        log_shift = dmin <= 0 ? 1 - dmin : 0;
-        lmin = log10(dmin + log_shift);
-        lmax = log10(dmax + log_shift);
-    }
-
     if (use_catlist) {
         cats_num = catlistCount;
         do_cats = catlistCount;
@@ -384,6 +371,20 @@ void draw(const char *map_name, int maptype, int color, int thin, int lines,
     }
 
     if (do_smooth) {
+        /* The logarithmic scale applies to the smooth legend only; a category
+         * legend ignores the flag. */
+        if (log_sc) {
+            if (dmin == dmax)
+                G_fatal_error(_("Range [%.3f, %.3f] has no extent for a "
+                                "logarithmic scale"),
+                              dmin, dmax);
+            /* A range with non-positive values is shifted so that its
+             * minimum maps to 1, as Rast_log_colors() does for r.colors -g,
+             * so that the legend matches a color table created that way. */
+            log_shift = dmin <= 0 ? 1 - dmin : 0;
+            lmin = log10(dmin + log_shift);
+            lmax = log10(dmax + log_shift);
+        }
         if (horiz) {
             if (draw) {
                 lleg = x1 - x0;

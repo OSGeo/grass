@@ -38,6 +38,7 @@ def session(tmp_path_factory):
             tools.r_mapcalc(expression=f"{name} = {expression}")
             tools.r_colors(map=name, color="viridis", flags="g")
         tools.r_mapcalc(expression="constant = 5.0")
+        tools.r_mapcalc(expression="constant_integer = 5")
         yield session
 
 
@@ -87,13 +88,15 @@ def test_log_legend_labels_range_without_power_of_ten(session, tmp_path):
     """A range between two powers of ten still gets labels with label_step.
 
     Without a power of ten to place labels at, the minimum and maximum are
-    labeled, so the legend differs from the same legend without numbers.
+    labeled, so the legend differs from the same legend without numbers. The
+    labels are drawn with ticks, so the difference does not depend on text
+    rendering, which is not available on all platforms.
     """
     bar_only = tmp_path / "bar_only.png"
     labeled = tmp_path / "labeled.png"
     render_tools(session, bar_only).d_legend(raster="between_tens", flags="lsc")
     render_tools(session, labeled).d_legend(
-        raster="between_tens", flags="ls", label_step=1
+        raster="between_tens", flags="lst", label_step=1
     )
     assert bar_only.read_bytes() != labeled.read_bytes()
 
@@ -103,3 +106,10 @@ def test_log_legend_constant_raster_fails(session, tmp_path):
     tools = render_tools(session, tmp_path / "legend.png")
     with pytest.raises(ToolError, match="logarithmic"):
         tools.d_legend(raster="constant", flags="l")
+
+
+def test_log_legend_constant_integer_raster(session, tmp_path):
+    """A single-value integer raster gets a category legend as without -l."""
+    output = tmp_path / "legend.png"
+    render_tools(session, output).d_legend(raster="constant_integer", flags="l")
+    assert output.exists()
