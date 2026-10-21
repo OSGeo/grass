@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
 "PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grasslibs/el/>\n"
@@ -966,17 +966,16 @@ msgstr "G_list: Άγνωστος τύπος στοιχείου"
 msgid "LOCATION <%s> not available"
 msgstr ""
 
-#, c-format
-msgid "Random number seed %s from %s is too large in magnitude to be read"
+msgid "must be an integer with nothing after it"
 msgstr ""
 
-#, c-format
-msgid "Random number seed %s from %s is not an integer"
+msgid "must be between -2147483648 and 4294967295"
 msgstr ""
 
-#, c-format
-msgid "Random number seed %s from %s is used as %<PRId64>, its low 32 bits"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Invalid a: field '%s' in file %s in <%s>"
+msgid "Invalid random seed <%s> from %s: %s"
+msgstr "Λάθος a: πεδίο '%s' στο αρχείο %s στο <%s>"
 
 #, c-format
 msgid "gettimeofday failed: %s"
@@ -1783,6 +1782,15 @@ msgstr "Άλλη προβολή"
 
 msgid "Unknown projection"
 msgstr ""
+
+#, c-format
+msgid "%s= is required"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Invalid histogram file for [%s in %s]"
+msgid "Invalid random seed <%s> for %s=: %s"
+msgstr "Λάθος αρχείο ιστογράμματοςγια [%s in %s]"
 
 #, c-format
 msgid "Syntax error in cell header, line %d: %s"
@@ -3198,6 +3206,12 @@ msgid ""
 msgstr ""
 
 msgid "Starting GRASS..."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Neither an interactive terminal nor a graphical user interface is available.\n"
+"Run {cmd_name} from a terminal, use --exec to run a command, or use --text to read commands from standard input."
 msgstr ""
 
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."

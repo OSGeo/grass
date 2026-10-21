@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
 "PO-Revision-Date: 2026-10-05 10:33+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -964,8 +964,13 @@ msgstr "Skärmkoordinater för rektangelns övre vänstra hörn"
 msgid "(0,0) is lower-left of the display frame"
 msgstr "(0,0) är nedre vänstra delen av bildskärmsramen"
 
-msgid "Length of barscale in map units"
+#, fuzzy
+#| msgid "Length of barscale in map units"
+msgid "Length of barscale in units set by the units option"
 msgstr "Längd på stapelskalan i kartenheter"
+
+msgid "Map units if units is not given; 0 picks a length automatically"
+msgstr ""
 
 msgid "Barscale units to display"
 msgstr "Enheter för barskala att visa"
@@ -18586,11 +18591,6 @@ msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding 
 msgstr "Flaggan ”t” är föråldrad och kommer att tas bort i en framtida version. Använda frö är automatiskt eller använd parametern seed."
 
 #, fuzzy, c-format
-#| msgid "Invalid zrange <%s>"
-msgid "Invalid random seed <%s>"
-msgstr "Ogiltigt zrange <%s>"
-
-#, fuzzy, c-format
 #| msgid "Read random seed from %s option: %ld"
 msgid "Read random seed from %s option: %<PRId64>"
 msgstr "Läs slumpmässigt frö från %s alternativ: %ld"
@@ -34171,6 +34171,11 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 
 msgid "Image file"
 msgstr "Bildfil"
+
+#, fuzzy, c-format
+#~| msgid "Invalid zrange <%s>"
+#~ msgid "Invalid random seed <%s>"
+#~ msgstr "Ogiltigt zrange <%s>"
 
 #, python-format
 #~ msgid "Unable to open %s "
