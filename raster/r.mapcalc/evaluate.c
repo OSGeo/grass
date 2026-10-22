@@ -267,11 +267,6 @@ static void evaluate_function(expression *e)
     tid = omp_get_thread_num();
 #endif
 
-    /* G_begin_execute() evaluates the arguments right away, one after
-     * another, on the calling thread, because G_init_workers() is never
-     * called, so no workers exist and WORKERS has no effect. rand() relies
-     * on that order. A worker thread would also index the per-thread
-     * buffers and random states with its OpenMP thread number, 0. */
     if (e->data.func.argc > 1 && e->data.func.func != f_eval) {
         for (i = 1; i <= e->data.func.argc; i++)
             begin_evaluate(e->data.func.args[i]);
@@ -363,12 +358,9 @@ static expr_list *exprs;
 
 /****************************************************************************/
 
-/* rand() draws the values it drew when rows were evaluated one after
- * another from one generator: every rand() call draws one value per cell,
- * each row evaluates every call once, so every row draws the same number
- * of values, and an exact layout with a row as its unit places each row
- * where it started in that serial run, whichever thread computes it. A
- * row of r3.mapcalc is numbered across the depths. */
+/* The layout rand() draws from, with a row as its unit. Every rand() call
+ * draws one value per cell, so every row draws columns times calls values.
+ * A row of r3.mapcalc is numbered across the depths. */
 static struct G_random_layout rand_layout;
 /* The state of the row each thread evaluates. The states themselves are
  * local to the row's evaluation, so the draws of different threads do not
@@ -385,12 +377,11 @@ static struct G_random_state *thread_rand_state(void)
     return rand_state[tid];
 }
 
+/* Build the layout for the region and the number of rand() calls. */
 static void setup_rand(void)
 {
     G_random_init_layout_exact(&rand_layout, seed_value, (int64_t)depths * rows,
                                (int64_t)columns * rand_calls);
-    /* Earlier versions drew these values without complaint, so this is
-     * only a warning. */
     if (G_random_layout_batches(&rand_layout) < 1)
         G_warning(_("rand() draws more than 2^46 random values. Later "
                     "rows repeat the values of earlier rows plus a "
@@ -526,9 +517,6 @@ void execute(expr_list *ee)
                                         (int64_t)current_depth * rows + row);
                 rand_state[tid] = &row_rand_state;
             }
-            /* The thread evaluates the expressions of the row in the order
-             * of a serial run, so the rand() calls of the row draw in that
-             * order too; see evaluate_function(). */
             for (i = 0; i < num_exprs; i++) {
                 expression *e = exp_arr[i];
                 evaluate(e);
