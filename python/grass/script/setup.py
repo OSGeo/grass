@@ -327,9 +327,9 @@ def init(
     running process.
 
     On Windows, the C libraries do not see environment variables set in
-    the running process, so :mod:`grass.lib` functions do not see a
-    session set up by this function, only a session set up before the
-    process starts, e.g., by the grass executable.
+    the running process, so :mod:`grass.lib` functions see a session set
+    up by this function only in processes started afterwards, such as
+    subprocesses.
 
     When the path or specified mapset does not exist, ValueError is raised.
 
