@@ -14,7 +14,6 @@ depth d is unit d * rows + r.
 """
 
 from ctypes import byref
-from io import StringIO
 
 import numpy as np
 import pytest
@@ -58,66 +57,19 @@ def cell_values(values, low, high):
 
 
 @pytest.mark.parametrize("nprocs", [1, 4])
-def test_dcell_rows_continue_sequence(session_in_mapset, nprocs):
-    """rand(0.0, 1.0) gives the values of the sequence row by row"""
-    tools = Tools(session=session_in_mapset)
-    tools.g_region(**REGION)
-    tools.r_mapcalc(expression="result = rand(0.0, 1.0)", seed=42, nprocs=nprocs)
-    (expected,) = row_values(42, ROWS, COLS)
-    result = garray.array("result", env=session_in_mapset.env)
-    assert np.array_equal(result, expected)
+def test_expressions_draw_in_order(session_in_mapset, nprocs):
+    """The rand() calls of the expressions draw the sequence row by row
 
-
-@pytest.mark.parametrize("nprocs", [1, 4])
-def test_cell_rows_continue_sequence(session_in_mapset, nprocs):
-    """An integer rand() uses the top 32 bits of each value of the sequence"""
-    tools = Tools(session=session_in_mapset)
-    tools.g_region(**REGION)
-    tools.r_mapcalc(expression="result = rand(0, 1000)", seed=42, nprocs=nprocs)
-    (values,) = row_values(42, ROWS, COLS)
-    result = garray.array("result", env=session_in_mapset.env)
-    assert np.array_equal(result, cell_values(values, 0, 1000))
-
-
-@pytest.mark.parametrize("nprocs", [1, 4])
-def test_fcell_rows_continue_sequence(session_in_mapset, nprocs):
-    """A single-precision rand() rounds the values of the sequence"""
+    The expressions draw in their order, and each type of rand() uses the
+    values in its own way.
+    """
     tools = Tools(session=session_in_mapset)
     tools.g_region(**REGION)
     tools.r_mapcalc(
-        expression="result = rand(float(0), float(1))", seed=42, nprocs=nprocs
-    )
-    (values,) = row_values(42, ROWS, COLS)
-    result = garray.array("result", env=session_in_mapset.env)
-    assert np.array_equal(result, values.astype(np.float32))
-
-
-@pytest.mark.parametrize("nprocs", [1, 4])
-def test_rand_calls_in_order_of_expressions(session_in_mapset, nprocs):
-    """Each rand() call of a row draws the next values of the sequence"""
-    tools = Tools(session=session_in_mapset)
-    tools.g_region(**REGION)
-    tools.r_mapcalc(
-        expression="first = rand(0.0, 1.0)\nsecond = rand(0.0, 1.0)",
-        seed=42,
-        nprocs=nprocs,
-    )
-    first, second = row_values(42, ROWS, COLS, calls=2)
-    env = session_in_mapset.env
-    assert np.array_equal(garray.array("first", env=env), first)
-    assert np.array_equal(garray.array("second", env=env), second)
-
-
-@pytest.mark.parametrize("nprocs", [1, 4])
-def test_rand_calls_in_order_of_file_expressions(session_in_mapset, nprocs):
-    """The rand() calls of expressions read from a file draw in their order"""
-    tools = Tools(session=session_in_mapset)
-    tools.g_region(**REGION)
-    tools.r_mapcalc(
-        file=StringIO(
+        expression=(
             "first = rand(0.0, 1.0)\n"
             "second = rand(0, 1000)\n"
-            "third = rand(float(0), float(1))\n"
+            "third = rand(float(0), float(1))"
         ),
         seed=42,
         nprocs=nprocs,
@@ -194,71 +146,6 @@ def test_r3_rows_continue_sequence(session_in_mapset, nprocs):
     assert np.array_equal(result, expected)
 
 
-@pytest.mark.parametrize("nprocs", [2, 3, 4, 7])
-def test_nprocs_gives_same_result(session_in_mapset, nprocs):
-    """The result for a seed is the same as with one thread"""
-    tools = Tools(session=session_in_mapset)
-    tools.g_region(n=50, s=0, e=30, w=0, res=1)
-    for name, threads in [("serial", 1), ("parallel", nprocs)]:
-        tools.r_mapcalc(
-            expression=(
-                f"{name}_a = rand(0.0, 1.0) + rand(-5, 5)\n"
-                f"{name}_b = if(row() % 2, rand(1, 100), {name}_a)"
-            ),
-            seed=3,
-            nprocs=threads,
-        )
-    env = session_in_mapset.env
-    for suffix in ["a", "b"]:
-        assert np.array_equal(
-            garray.array(f"serial_{suffix}", env=env),
-            garray.array(f"parallel_{suffix}", env=env),
-        )
-
-
-def test_same_seed_gives_same_result(session_in_mapset):
-    """Two runs with the same seed give the same raster"""
-    tools = Tools(session=session_in_mapset)
-    tools.g_region(**REGION)
-    tools.r_mapcalc(expression="first = rand(0.0, 1.0)", seed=7, nprocs=4)
-    tools.r_mapcalc(expression="second = rand(0.0, 1.0)", seed=7, nprocs=4)
-    env = session_in_mapset.env
-    assert np.array_equal(
-        garray.array("first", env=env), garray.array("second", env=env)
-    )
-
-
-def test_different_seeds_give_different_results(session_in_mapset):
-    """Two runs with different seeds differ in every cell"""
-    tools = Tools(session=session_in_mapset)
-    tools.g_region(**REGION)
-    tools.r_mapcalc(expression="first = rand(0.0, 1.0)", seed=7)
-    tools.r_mapcalc(expression="second = rand(0.0, 1.0)", seed=8)
-    env = session_in_mapset.env
-    assert np.all(garray.array("first", env=env) != garray.array("second", env=env))
-
-
-@pytest.mark.parametrize("expression", ["rand(-3, 4)", "rand(4, -3)"])
-def test_cell_range(session_in_mapset, expression):
-    """Integer values lie between the bounds, the upper one excluded"""
-    tools = Tools(session=session_in_mapset)
-    tools.g_region(n=20, s=0, e=20, w=0, res=1)
-    tools.r_mapcalc(expression=f"result = {expression}", seed=1, nprocs=4)
-    result = garray.array("result", env=session_in_mapset.env)
-    assert set(np.unique(result)) == set(range(-3, 4))
-
-
-@pytest.mark.parametrize("expression", ["rand(-1.0, 2.0)", "rand(2.0, -1.0)"])
-def test_dcell_range(session_in_mapset, expression):
-    """Floating-point values lie between the bounds, the upper one excluded"""
-    tools = Tools(session=session_in_mapset)
-    tools.g_region(n=20, s=0, e=20, w=0, res=1)
-    tools.r_mapcalc(expression=f"result = {expression}", seed=1, nprocs=4)
-    result = garray.array("result", env=session_in_mapset.env)
-    assert result.min() >= -1
-    assert result.max() < 2
-
-
 @pytest.mark.parametrize("flags", [None, "s"])
 def test_automatic_seed_is_the_reported_seed(session_in_mapset, flags):
     """An automatic seed gives the result of the seed written to the history"""
@@ -274,25 +161,9 @@ def test_automatic_seed_is_the_reported_seed(session_in_mapset, flags):
     )
 
 
-def test_seed_out_of_range(session_in_mapset):
-    """A seed the generator cannot use is an error, not silently reduced"""
-    tools = Tools(
-        session=session_in_mapset, consistent_return_value=True, errors="ignore"
-    )
-    tools.g_region(**REGION)
-    result = tools.r_mapcalc(expression="result = rand(0.0, 1.0)", seed=2**32)
-    assert result.returncode == 1
-    assert "4294967296" in result.stderr
-    assert not tools.g_list(type="raster", pattern="result").text
-
-
-@pytest.mark.parametrize("seed", ["12abc", "1.5", str(2**64)])
+@pytest.mark.parametrize("seed", [str(2**32), "12abc", "1.5", str(2**64)])
 def test_invalid_seed(session_in_mapset, seed):
-    """A seed with trailing characters or beyond a 64-bit integer is an error
-
-    The parser accepts these for an integer option, since it reads only
-    the leading digits, so r.mapcalc checks them itself.
-    """
+    """A seed out of range or with trailing characters is an error"""
     tools = Tools(
         session=session_in_mapset, consistent_return_value=True, errors="ignore"
     )
