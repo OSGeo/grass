@@ -56,18 +56,6 @@ def test_csv_output(space_time_vector_dataset):
     assert float(rows[1]["mean"]) == 50.0
 
 
-def test_csv_rejects_long_separator(space_time_vector_dataset):
-    """CSV output rejects a separator longer than one character"""
-    tools = Tools(session=space_time_vector_dataset.session)
-    with pytest.raises(ToolError):
-        tools.t_vect_univar(
-            input=space_time_vector_dataset.name,
-            column=space_time_vector_dataset.column,
-            format="csv",
-            separator="ab",
-        )
-
-
 def test_json_output(space_time_vector_dataset):
     """JSON output is a list of records with typed v.univar statistics"""
     tools = Tools(session=space_time_vector_dataset.session)

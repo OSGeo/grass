@@ -435,22 +435,22 @@ def print_vector_dataset_univar_statistics(
         if not mylayer:
             mylayer = layer
 
+        stats = gs.parse_command(
+            "v.univar",
+            map=id,
+            where=where,
+            column=column,
+            layer=mylayer,
+            type=type,
+            flags="e" if extended else "",
+            format="json",
+        )
+
+        if not stats:
+            gs.warning(_("Unable to get statistics for vector map <%s>") % id)
+            continue
+
         if format == "json":
-            json_output = gs.read_command(
-                "v.univar",
-                map=id,
-                where=where,
-                column=column,
-                layer=mylayer,
-                type=type,
-                flags="e" if extended else "",
-                format="json",
-            )
-            try:
-                stats = json.loads(json_output)
-            except ValueError:
-                gs.warning(_("Unable to get statistics for vector map <%s>") % id)
-                continue
             record = {
                 "id": id,
                 "start": str(start) if start else None,
@@ -460,26 +460,20 @@ def print_vector_dataset_univar_statistics(
             json_records.append(record)
             continue
 
-        flags = "g"
-
-        if extended is True:
-            flags += "e"
-
-        stats = gs.parse_command(
-            "v.univar",
-            map=id,
-            where=where,
-            column=column,
-            layer=mylayer,
-            type=type,
-            flags=flags,
-        )
+        # The plain and CSV output used the shell format of v.univar, which
+        # names two of the keys differently and prints floats with %g.
+        stats = dict(stats)
+        stats["nmissing"] = stats.pop("missing", None)
+        percentiles = stats.pop("percentiles", None)
+        if percentiles:
+            stats["percentile_90"] = percentiles[0]["value"]
+        stats = {
+            key: f"{value:g}" if isinstance(value, float) else value
+            for key, value in stats.items()
+            if value is not None
+        }
 
         string = ""
-
-        if not stats:
-            gs.warning(_("Unable to get statistics for vector map <%s>") % id)
-            continue
 
         string += str(id) + fs + str(start) + fs + str(end)
         string += (

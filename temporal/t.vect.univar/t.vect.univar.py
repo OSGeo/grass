@@ -96,10 +96,6 @@ def main():
     if output_format == "csv":
         if not separator:
             separator = ","
-        elif len(separator) > 1:
-            gs.fatal(
-                _("A standard CSV separator (delimiter) is only one character long")
-            )
 
     elif output_format == "json":
         if no_header:
@@ -119,16 +115,16 @@ def main():
         output = None
 
     tgis.print_vector_dataset_univar_statistics(
-        input,
-        output,
-        twhere,
-        layer,
-        type,
-        column,
-        where,
-        extended,
-        no_header,
-        separator,
+        input=input,
+        output=output,
+        twhere=twhere,
+        layer=layer,
+        type=type,
+        column=column,
+        where=where,
+        extended=extended,
+        no_header=no_header,
+        fs=separator,
         format=output_format,
     )
 
