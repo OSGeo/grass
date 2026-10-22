@@ -326,6 +326,11 @@ def init(
     operating system does not apply a modified variable to an already
     running process.
 
+    On Windows, the C libraries do not see environment variables set in
+    the running process, so :mod:`grass.lib` functions do not see a
+    session set up by this function, only a session set up before the
+    process starts, e.g., by the grass executable.
+
     When the path or specified mapset does not exist, ValueError is raised.
 
     The :func:`get_install_path` function is used to determine where
