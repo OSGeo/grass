@@ -13,6 +13,7 @@
 
  **********************************************************************/
 
+#include <limits.h>
 #include <string.h>
 
 #include <sys/types.h>
@@ -424,7 +425,7 @@ static void put_data_gdal(int fd, const void *rast, int row, int n,
                           int zeros_r_nulls, RASTER_MAP_TYPE map_type)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    int size = Rast_cell_size(map_type);
+    size_t size = Rast_cell_size(map_type);
     DCELL null_val = fcb->gdal->null_val;
     const void *src;
     void *work_buf, *dst;
@@ -511,8 +512,14 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
     struct fileinfo *fcb = &R__.fileinfo[fd];
     unsigned char *compressed_buf;
     ssize_t nwrite;
-    size_t cmax;
-    int res;
+    int compressed_size;
+    int compressed_bound;
+    ssize_t res;
+
+    if (size > INT_MAX)
+        G_fatal_error(_("Null row is too large to compress"));
+
+    compressed_size = (int)size;
 
     fcb->null_row_ptr[row] = lseek(fcb->null_fd, 0L, SEEK_CUR);
     if (fcb->null_row_ptr[row] == -1) {
@@ -522,22 +529,22 @@ static void write_null_bits_compressed(const unsigned char *flags, int row,
     }
 
     /* get upper bound of compressed size */
-    cmax = G_compress_bound(size, 3);
-    compressed_buf = G_malloc(cmax);
+    compressed_bound = G_compress_bound(compressed_size, 3);
+    compressed_buf = G_malloc((size_t)compressed_bound);
 
     /* compress null bits file with LZ4, see lib/gis/compress.h */
-    nwrite = G_compress((unsigned char *)flags, size, compressed_buf, cmax, 3);
+    nwrite = G_compress((unsigned char *)flags, compressed_size, compressed_buf,
+                        compressed_bound, 3);
 
     if (nwrite > 0 && (size_t)nwrite < size) {
-        if ((res = write(fcb->null_fd, compressed_buf, nwrite)) < 0 ||
-            (unsigned int)res != nwrite)
+        if ((res = write(fcb->null_fd, compressed_buf, (size_t)nwrite)) < 0 ||
+            res != nwrite)
             G_fatal_error(
                 _("Error writing compressed null data for row %d of <%s>: %s"),
                 row, fcb->name, strerror(errno));
     }
     else {
-        if ((res = write(fcb->null_fd, flags, size)) < 0 ||
-            (unsigned int)res != size)
+        if ((res = write(fcb->null_fd, flags, size)) < 0 || (size_t)res != size)
             G_fatal_error(
                 _("Error writing compressed null data for row %d of <%s>: %s"),
                 row, fcb->name, strerror(errno));
@@ -562,7 +569,7 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
     int row = fcb->null_cur_row++;
     off_t offset;
     size_t size;
-    int res;
+    ssize_t res;
 
     size = Rast__null_bitstream_size(fcb->cellhd.cols);
 
@@ -576,8 +583,7 @@ void Rast__write_null_bits(int fd, const unsigned char *flags)
     if (lseek(fcb->null_fd, offset, SEEK_SET) == -1)
         G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
 
-    if ((res = write(fcb->null_fd, flags, size)) < 0 ||
-        (unsigned int)res != size)
+    if ((res = write(fcb->null_fd, flags, size)) < 0 || (size_t)res != size)
         G_fatal_error(_("Error writing null row %d of <%s>: %s"), row,
                       fcb->name, strerror(errno));
 }

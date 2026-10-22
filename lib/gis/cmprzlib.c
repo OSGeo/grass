@@ -64,6 +64,7 @@
 
 #else
 
+#include <limits.h>
 #include <zlib.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -72,19 +73,28 @@
 
 int G_zlib_compress_bound(int src_sz)
 {
+    uLong bound;
+
     /* from zlib.h:
      * "when using compress or compress2,
      * destLen must be at least the value returned by
      * compressBound(sourceLen)"
      * no explanation for the "must be"
      */
-    return compressBound(src_sz);
+    bound = compressBound(src_sz);
+
+    if (bound > (uLong)INT_MAX)
+        return INT_MAX;
+
+    return (int)bound;
 }
 
 int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
                     int dst_sz)
 {
-    uLong err, nbytes, buf_sz;
+    int err;
+    uLong nbytes, buf_sz;
+    uLong i;
     unsigned char *buf;
 
     /* Catch errors early */
@@ -150,13 +160,13 @@ int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
 
     if (buf != dst) {
         /* Copy the data from buf to dst */
-        for (err = 0; err < nbytes; err++)
-            dst[err] = buf[err];
+        for (i = 0; i < nbytes; i++)
+            dst[i] = buf[i];
 
         G_free(buf);
     }
 
-    return nbytes;
+    return (int)nbytes;
 } /* G_zlib_compress() */
 
 int G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
@@ -208,7 +218,7 @@ int G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
         return -1;
     }
 
-    return nbytes;
+    return (int)nbytes;
 } /* G_zlib_expand() */
 
 #endif /* HAVE_ZLIB_H */

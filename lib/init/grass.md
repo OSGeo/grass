@@ -116,7 +116,8 @@ interface and mapset selected.
 If you specify a graphical user interface (**--gui**) the *grass*
 program will try to verify that the system you specified exists and that
 you can access it successfully. If any of these checks fail then *grass*
-will automatically switch back to the text user interface mode.
+will automatically switch back to the text user interface mode. Note:
+text mode requires an interactive shell terminal e.g. xterm.
 
 ### Running non-interactive jobs
 

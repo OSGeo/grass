@@ -7,8 +7,7 @@
 /**********************************************************************
 sqrt(x)
 
-  if floating point exception occurs during the evaluation of sqrt(x)
-  the result is NULL
+  if x is negative, the result is NULL
 **********************************************************************/
 
 int f_sqrt(int argc, const int *argt, void **args)
@@ -31,12 +30,8 @@ int f_sqrt(int argc, const int *argt, void **args)
     for (i = 0; i < columns; i++)
         if (IS_NULL_D(&arg1[i]) || (arg1[i] < 0.0))
             SET_NULL_D(&res[i]);
-        else {
-            floating_point_exception = 0;
+        else
             res[i] = sqrt(arg1[i]);
-            if (floating_point_exception)
-                SET_NULL_D(&res[i]);
-        }
 
     return 0;
 }

@@ -42,10 +42,32 @@ ignore-words-list = [
     "parms",
     "siz",
     "vizual",
+    "ETo",    # Evapotranspiration technical term
+    "Eto",    # Evapotranspiration technical term
+    "eto",    # Evapotranspiration technical term
+    "ist",    # Part of acronyms (IST-SUPSI, etc.)
+    "IHS",    # Color model: Intensity-Hue-Saturation
+    "ihs",    # Color model: Intensity-Hue-Saturation
+    "ALOG",   # Function name
+    "Redner", # Person's name in citation
+    "NED",    # Acronym/proper name
+    "linke",  # Linke turbidity factor parameter
+    "infex",  # Infiltration excess parameter
+    "alle",   # Italian word in references
+    "mapp",   # Keyword argument name in the public create_time_suffix() API
+    "asnd",        # Email address username in lib/cdhc/doc/index.sty
+    "APoints",     # Variable name, pairs with BPoints
+    "cnA",         # r.stats flag
+    "doubleClick", # Event argument name in wxPython code
+    "expres",      # Abbreviated option names tested in parse_mapcalc_cmd doctests
+    "expressio",   # Abbreviated option names tested in parse_mapcalc_cmd doctests
+    "loner",       # Name of a raster map that is not in any dataset in a test
 ]
 quiet-level = 3
 skip = [
     "config.guess",
+    "python/grass/temporal/ply/*",              # Vendored PLY parser
+    "python/libgrass_interface_generator/*",    # Vendored ctypesgen
     "gui/icons/grass.desktop",
     "gui/wxpython/xml/grass-gxw.dtd",     # TODO
     "lib/cdhc/doc/goodness.ps",

@@ -11,6 +11,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 from __future__ import annotations
 
 import logging
+import multiprocessing.util
 import sys
 import threading
 import time
@@ -25,6 +26,10 @@ if TYPE_CHECKING:
 
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+# The function is not documented (although multiprocessing.queues uses it),
+# so do not fail if it is missing.
+_mp_is_exiting = getattr(multiprocessing.util, "is_exiting", lambda: False)
 
 
 ###############################################################################
@@ -131,10 +136,16 @@ class RPCServerBase:
         """Check every 200 micro seconds if the server process is alive"""
         while True:
             time.sleep(0.2)
-            self._check_restart_server(caller="Server check thread")
+            # Check before restarting so that a server is not restarted
+            # once stop was requested.
             with self.threadLock:
                 if self.stopThread is True:
                     return
+            try:
+                self._check_restart_server(caller="Server check thread")
+            except FatalError:
+                # Raised only when the server was terminated at exit.
+                return
 
     def start_server(self):
         """This function must be re-implemented in the subclasses"""
@@ -159,6 +170,10 @@ class RPCServerBase:
         with self.threadLock:
             if self.server is not None and self.server.is_alive() is True:
                 return
+            # Do not restart a server that multiprocessing terminated at exit.
+            if _mp_is_exiting():
+                msg = f"The libgis server was terminated at exit, caller: {caller}"
+                raise FatalError(msg)
             if self.client_conn is not None:
                 self.client_conn.close()
             if self.server_conn is not None:
@@ -206,6 +221,8 @@ class RPCServerBase:
                         0,
                     ]
                 )
+            # Let the server exit on its own before falling back to terminate.
+            self.server.join(timeout=5)
             self.server.terminate()
             # A process still starting up reopens the lock semaphore by name,
             # so it must be gone before the reference is dropped below.
