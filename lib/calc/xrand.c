@@ -9,18 +9,24 @@
 rand(lo,hi) random values between a and b
 ****************************************************************/
 
-/* A tool which evaluates rows on several threads sets this so that each
- * thread draws from a state of its own, placed for the row it evaluates.
- * Without it, rand() draws from the generator shared by the whole program
- * as it always did, which gives the same values as before to tools which
- * evaluate on one thread and do not set it. */
+/* The function set by calc_set_random_state(), or NULL. */
 static struct G_random_state *(*random_state)(void);
 
+/*!
+ * \brief Set the function which gives rand() the random number state
+ *
+ * The function must return the state of the calling thread, which the
+ * tool places for the row being evaluated. Without a function, that is,
+ * with NULL, rand() draws from the generator shared by the whole program.
+ *
+ * \param get_state function returning the calling thread's state, or NULL
+ */
 void calc_set_random_state(struct G_random_state *(*get_state)(void))
 {
     random_state = get_state;
 }
 
+/* Draw from the state, or from the shared generator without one. */
 static unsigned int draw_uint(struct G_random_state *state)
 {
     if (state)
@@ -28,6 +34,7 @@ static unsigned int draw_uint(struct G_random_state *state)
     return (unsigned int)G_mrand48();
 }
 
+/* Draw from the state, or from the shared generator without one. */
 static double draw_double(struct G_random_state *state)
 {
     if (state)
@@ -35,6 +42,12 @@ static double draw_double(struct G_random_state *state)
     return G_drand48();
 }
 
+/*!
+ * \brief Random value between two values, the upper one excluded
+ *
+ * Draws one value per column from the state given by the function set
+ * with calc_set_random_state(), or from the shared generator.
+ */
 int f_rand(int argc, const int *argt, void **args)
 {
     struct G_random_state *state = random_state ? random_state() : NULL;
