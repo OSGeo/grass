@@ -1210,6 +1210,19 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
     if ret != 0:
         gs.warning(_("Installation failed, sorry. Please check above error messages."))
     else:
+        # Extending PATH, PYTHONPATH ENVs by custom addons base dir path,
+        # required for correct wxGUI Tools tree Addons node addons registration
+        # modules.xml file
+        if options["prefix"] != os.environ["GRASS_ADDON_BASE"]:
+            os.environ["PATH"] += (
+                os.pathsep
+                + str(Path(options["prefix"]) / "scripts")
+                + os.pathsep
+                + str(Path(options["prefix"]) / "bin")
+            )
+            etc_dir = Path(options["prefix"]) / "etc"
+            for content in etc_dir.walk():
+                os.environ["PYTHONPATH"] += os.pathsep + str(content[0])
         # update extensions metadata file
         gs.message(_("Updating extensions metadata file..."))
         install_extension_xml(edict)
