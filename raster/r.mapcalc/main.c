@@ -56,9 +56,10 @@ static expr_list *parse_file(const char *filename)
     return res;
 }
 
-/* Count the rand() calls, each of which is evaluated once per row. A
- * variable is not followed, since its binding is evaluated where it
- * is defined, not where it is used. */
+/* Count the rand() calls of an expression. A variable is not followed,
+ * since the rand() calls of its value are counted where the variable is
+ * defined, and they draw once per cell however often the variable is
+ * used. */
 static int count_rand_calls(const expression *e)
 {
     int count = 0;
@@ -83,6 +84,7 @@ static int count_rand_calls(const expression *e)
     }
 }
 
+/* Count the rand() calls of all expressions, which every row evaluates. */
 static int expr_list_count_rand_calls(const expr_list *list)
 {
     int count = 0;
