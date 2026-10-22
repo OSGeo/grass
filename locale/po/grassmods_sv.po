@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2026-10-05 10:33+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -23606,7 +23606,9 @@ msgstr "Ogiltig PROJ.4 inmatningsspecifikation"
 msgid "Invalid PROJ.4 output specification"
 msgstr "Ogiltig PROJ.4 utdataspecifikation"
 
-msgid "Missing output projection parameters "
+#, fuzzy
+#| msgid "Missing output projection parameters "
+msgid "Missing output projection parameters"
 msgstr "Saknade parametrar för utmatningsprojektion "
 
 msgid "Unable to read input data"
@@ -23836,7 +23838,9 @@ msgstr "Försöker importera 1-arcsec-data"
 msgid "Unable to import data"
 msgstr "Det går inte att importera data"
 
-msgid "Done: generated map "
+#, fuzzy, python-brace-format
+#| msgid "Done: generated map "
+msgid "Done: generated map {map_name}"
 msgstr "Klar: genererad karta "
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
@@ -23903,8 +23907,9 @@ msgstr ""
 msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr "Auktorisering misslyckades för <%s> vid hämtning av kapacitet"
 
-#, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+#, fuzzy, python-brace-format
+#| msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr "Det gick inte att hämta funktioner från <{0}>. Orsak till detta: "
 
 #, python-format
@@ -24063,9 +24068,10 @@ msgstr "WMS-serverfel: inga band mottagna. Är serverns URL korrekt? <%s>"
 msgid "Driver %s does not supports Create() method"
 msgstr "Drivrutin %s stöder inte Create()-metoden"
 
-#, python-format
-msgid "Unable to open %s "
-msgstr "Går inte att öppna %s "
+#, fuzzy, python-brace-format
+#| msgid "Unable to open tempfile"
+msgid "Unable to open {filename}"
+msgstr "Det går inte att öppna tempfilen"
 
 msgid "Region is out of server data extend."
 msgstr "Regionen har inte längre tillgång till serverdata."
@@ -24244,29 +24250,62 @@ msgstr "Latitud-longitud-placeringar stöds inte"
 msgid "xy-locations are not supported"
 msgstr "xy-lokaliseringar stöds inte"
 
+#, fuzzy, python-brace-format
+#| msgid "Generating a clumped raster file including diagonal neighbors..."
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr "Generering av en klumpad rasterfil med diagonala grannar..."
+
+#, fuzzy
+#| msgid "Generating a clumped raster file including diagonal neighbors..."
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr "Generering av en klumpad rasterfil med diagonala grannar..."
+
+#, fuzzy, python-brace-format
+#| msgid "Generating a clumped raster file including diagonal neighbors..."
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr "Generering av en klumpad rasterfil med diagonala grannar..."
+
 msgid "Generating a clumped raster file"
 msgstr "Genererar en klumpad rasterfil"
 
-msgid " including diagonal neighbors"
-msgstr " inklusive diagonala grannar"
+#, fuzzy, python-brace-format
+#| msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
+msgstr "Generera en reclass-karta med en områdesstorlek som är större än eller lika med %f hektar..."
 
-#, python-format
-msgid " with minimum %s pixels"
-msgstr " med minst %s bildpunkter"
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
+msgstr ""
 
-msgid "Generating a reclass map with area size"
-msgstr "Genererar en omklassificeringskarta efter områdesstorlek"
+#, fuzzy, python-brace-format
+#| msgid "Generating a reclass map with area size less than or equal to %f hectares..."
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
+msgstr "Generera en reclass-karta med en områdesstorlek som är mindre än eller lika med %f hektar..."
 
-#, python-format
-msgid " larger than or equal to %f hectares..."
+#, fuzzy, python-brace-format
+#| msgid " larger than or equal to %f hectares..."
+msgid "No areas of size larger than or equal to {lower} hectares"
 msgstr " större än eller lika med %f hektar…"
 
-#, python-format
-msgid " smaller than or equal to %f hectares..."
+#, fuzzy, python-brace-format
+#| msgid "Generating a reclass map with area size less than or equal to %f hectares..."
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "Generera en reclass-karta med en områdesstorlek som är mindre än eller lika med %f hektar..."
+
+#, fuzzy, python-brace-format
+#| msgid " smaller than or equal to %f hectares..."
+msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr " mindre än eller lika med %f hektar…"
 
-msgid "No areas of size "
-msgstr "Inga områden med storleken "
+#, fuzzy
+#| msgid "Generating a reclass map with area size"
+msgid "Generating a reclass map without area size limits..."
+msgstr "Genererar en omklassificeringskarta efter områdesstorlek"
+
+#, fuzzy
+#| msgid "No tables found"
+msgid "No areas found"
+msgstr "Inga tabeller hittades"
 
 #, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
@@ -24899,11 +24938,9 @@ msgstr "Inga kategorier hittades i rasterkartan"
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr "Inte alla vektorkategorier konverterade till raster.                         Konverterade {0} av {1}."
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr "Det går inte att skapa kolumn <%s> (finns redan). "
-
-msgid "Use -c flag to update values in this column."
+#, fuzzy, python-brace-format
+#| msgid "Use -c flag to update values in this column."
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr "Använd flaggan -c för att uppdatera värden i den här kolumnen."
 
 #, python-format
@@ -25020,8 +25057,9 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr "Det går inte att lägga till tabell <%s> i vektorkarta <%s>"
 
-#, python-format
-msgid "Unable to add column %s to vector map <%s> "
+#, fuzzy, python-brace-format
+#| msgid "Unable to add column %s to vector map <%s> "
+msgid "Unable to add column {column} to vector map <{vector}>"
 msgstr "Det går inte att lägga till kolumn %s i vektorkartan <%s> "
 
 #, python-format
@@ -34134,6 +34172,24 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 msgid "Image file"
 msgstr "Bildfil"
 
+#, python-format
+#~ msgid "Unable to open %s "
+#~ msgstr "Går inte att öppna %s "
+
+#~ msgid " including diagonal neighbors"
+#~ msgstr " inklusive diagonala grannar"
+
+#, python-format
+#~ msgid " with minimum %s pixels"
+#~ msgstr " med minst %s bildpunkter"
+
+#~ msgid "No areas of size "
+#~ msgstr "Inga områden med storleken "
+
+#, python-format
+#~ msgid "Cannot create column <%s> (already present). "
+#~ msgstr "Det går inte att skapa kolumn <%s> (finns redan). "
+
 #~ msgid "east"
 #~ msgstr "österut"
 
@@ -34206,17 +34262,6 @@ msgstr "Bildfil"
 #, python-format
 #~ msgid "Temporary raster map <%s> exists"
 #~ msgstr "Temporär rasterkarta <%s> finns"
-
-#~ msgid "Generating a clumped raster file including diagonal neighbors..."
-#~ msgstr "Generering av en klumpad rasterfil med diagonala grannar..."
-
-#, python-format
-#~ msgid "Generating a reclass map with area size less than or equal to %f hectares..."
-#~ msgstr "Generera en reclass-karta med en områdesstorlek som är mindre än eller lika med %f hektar..."
-
-#, python-format
-#~ msgid "Generating a reclass map with area size greater than or equal to %f hectares..."
-#~ msgstr "Generera en reclass-karta med en områdesstorlek som är större än eller lika med %f hektar..."
 
 #~ msgid "You have to specify mode='lesser' with method='rmarea'"
 #~ msgstr "Du måste ange mode='lesser' med method='rmarea'"

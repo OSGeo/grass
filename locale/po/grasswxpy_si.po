@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_si\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2017-05-23 21:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: Sinhala (https://www.transifex.com/grass-gis/teams/45198/si/)\n"
@@ -670,13 +670,15 @@ msgstr ""
 msgid "Rendering aborted"
 msgstr ""
 
-msgid "Downloading data "
-msgstr ""
-
-msgid "Rendering & "
+#, python-brace-format
+msgid "Rendering & downloading data {layers}..."
 msgstr ""
 
 msgid "Rendering..."
+msgstr ""
+
+#, python-brace-format
+msgid "Downloading data {layers}..."
 msgstr ""
 
 msgid "Trying to recover from default region..."
@@ -846,7 +848,8 @@ msgid ""
 "Details: %(detail)s"
 msgstr ""
 
-msgid "Unable to set "
+#, python-brace-format
+msgid "Unable to set '{group}:{key}:{subkey}'"
 msgstr ""
 
 #, python-format
@@ -1604,7 +1607,7 @@ msgstr ""
 msgid "Table"
 msgstr ""
 
-msgid " (read-only)"
+msgid "Table (read-only)"
 msgstr ""
 
 msgid "SQL Query"
@@ -2190,7 +2193,11 @@ msgid ""
 msgstr ""
 
 #, python-brace-format
-msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
+msgid "The raster map {map_name} exists. Do you want to overwrite?"
+msgstr ""
+
+#, python-brace-format
+msgid "The vector map {map_name} exists. Do you want to overwrite?"
 msgstr ""
 
 msgid "Rectifying images, please wait..."
@@ -2447,10 +2454,8 @@ msgstr ""
 msgid "Reload GCPs from POINTS file"
 msgstr ""
 
-msgid "Set map canvas for "
-msgstr ""
-
-msgid " / Zoom to map"
+#, python-brace-format
+msgid "Set map canvas for {zoom_back} / Zoom to map"
 msgstr ""
 
 msgid "Update GCP coordinates"
@@ -2685,7 +2690,8 @@ msgstr ""
 msgid "<not defined>"
 msgstr ""
 
-msgid "Condition: "
+#, python-brace-format
+msgid "Condition: {label}"
 msgstr ""
 
 msgid "Condition: not defined"
@@ -3282,7 +3288,8 @@ msgstr ""
 msgid "Example"
 msgstr ""
 
-msgid "Enter parameters for '"
+#, python-brace-format
+msgid "Enter parameters for '{tool}'"
 msgstr ""
 
 msgid "Close this window without executing the command (Ctrl+Q)"
@@ -3615,10 +3622,12 @@ msgstr ""
 msgid "Not selectable element"
 msgstr ""
 
-msgid "Mapset"
+#, python-brace-format
+msgid "Mapset: {mapset}"
 msgstr ""
 
-msgid "Type: "
+#, python-brace-format
+msgid "Type: {element_type}"
 msgstr ""
 
 #, python-format
@@ -4006,7 +4015,7 @@ msgstr ""
 msgid "Area fill color:"
 msgstr ""
 
-msgid "Random colors according to category number "
+msgid "Random colors according to category number"
 msgstr ""
 
 msgid "Symbol:"
@@ -4104,6 +4113,9 @@ msgid ""
 "    - The current mapset is always accessible.\n"
 "    - You may only write to the current mapset.\n"
 "    - You may only write to mapsets which you own."
+msgstr ""
+
+msgid "Mapset"
 msgstr ""
 
 msgid "Owner"
@@ -4875,9 +4887,6 @@ msgid "Preview"
 msgstr ""
 
 msgid "Training"
-msgstr ""
-
-msgid "/ Zoom to map"
 msgstr ""
 
 msgid "std dev"
@@ -6047,7 +6056,8 @@ msgstr ""
 msgid "Set opacity of <{}>"
 msgstr ""
 
-msgid "Layer group:"
+#, python-brace-format
+msgid "Layer group: {number}"
 msgstr ""
 
 msgid "Click to edit layer settings"
@@ -6910,7 +6920,8 @@ msgstr ""
 msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
 msgstr ""
 
-msgid "Measuring distance"
+#, python-brace-format
+msgid "Measuring distance ({units}):"
 msgstr ""
 
 msgid "Measuring distance:"
@@ -7031,6 +7042,3387 @@ msgstr ""
 msgid "Property does not exist: %s"
 msgstr ""
 
+msgid "&File"
+msgstr ""
+
+msgid "New"
+msgstr ""
+
+msgid "Create new workspace"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Load workspace from file"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Save as"
+msgstr ""
+
+msgid "Save workspace to file"
+msgstr ""
+
+msgid "Close workspace file"
+msgstr ""
+
+msgid "Map display"
+msgstr ""
+
+msgid "Add raster"
+msgstr ""
+
+msgid "Add raster map layer to current display"
+msgstr ""
+
+msgid "Add vector"
+msgstr ""
+
+msgid "Add vector map layer to current display"
+msgstr ""
+
+msgid "Add multiple rasters or vectors"
+msgstr ""
+
+msgid "Add multiple raster or vector map layers to current display"
+msgstr ""
+
+msgid "Add RGB raster layer"
+msgstr ""
+
+msgid "Add RGB raster map layer to current display"
+msgstr ""
+
+msgid "Add web service layer"
+msgstr ""
+
+msgid "New map display window"
+msgstr ""
+
+msgid "Open new map display window"
+msgstr ""
+
+msgid "Render all map displays"
+msgstr ""
+
+msgid "Re-render maps in all open map display windows"
+msgstr ""
+
+msgid "Close current map display window"
+msgstr ""
+
+msgid "Close all open map display windows"
+msgstr ""
+
+msgid "Simplified raster import with reprojection"
+msgstr ""
+
+msgid "Imports raster data into a GRASS raster map using GDAL library."
+msgstr ""
+
+msgid "Import of common raster formats"
+msgstr ""
+
+msgid "ASCII x,y,z point import and gridding"
+msgstr ""
+
+msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
+msgstr ""
+
+msgid "ASCII grid import"
+msgstr ""
+
+msgid "Converts a GRASS ASCII raster file to binary raster map."
+msgstr ""
+
+msgid "ASCII polygons, lines, and point import"
+msgstr ""
+
+msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgstr ""
+
+msgid "Raw binary array import"
+msgstr ""
+
+msgid "Import a binary raster file into a GRASS raster map layer."
+msgstr ""
+
+msgid "GRIDATB.FOR import"
+msgstr ""
+
+msgid "Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map."
+msgstr ""
+
+msgid "Matlab 2D array import"
+msgstr ""
+
+msgid "Imports a binary MAT-File(v4) to a GRASS raster."
+msgstr ""
+
+msgid "PNG import"
+msgstr ""
+
+msgid "Imports non-georeferenced PNG format image."
+msgstr ""
+
+msgid "SPOT NDVI import"
+msgstr ""
+
+msgid "Imports SPOT VGT NDVI data into a raster map."
+msgstr ""
+
+msgid "SRTM HGT import"
+msgstr ""
+
+msgid "Imports SRTM HGT files into raster map."
+msgstr ""
+
+msgid "Terra ASTER HDF import"
+msgstr ""
+
+msgid "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp."
+msgstr ""
+
+msgid "LAS LiDAR points import"
+msgstr ""
+
+msgid "Point cloud (LAS LiDAR) import"
+msgstr ""
+
+msgid "WMS/WMTS import"
+msgstr ""
+
+msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
+msgstr ""
+
+msgid "Unpack raster map"
+msgstr ""
+
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
+msgstr ""
+
+msgid "Reproject raster map from different GRASS project"
+msgstr ""
+
+msgid "Re-projects a raster map from given project to the current project."
+msgstr ""
+
+msgid "Simplified vector import with reprojection"
+msgstr ""
+
+msgid "Imports vector data into a GRASS vector map using OGR library."
+msgstr ""
+
+msgid "Import of common vector formats"
+msgstr ""
+
+msgid "ASCII points or GRASS ASCII format"
+msgstr ""
+
+msgid "Creates a vector map from an ASCII points file or ASCII vector file."
+msgstr ""
+
+msgid "ASCII points as a vector lines"
+msgstr ""
+
+msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
+msgstr ""
+
+msgid "DXF import"
+msgstr ""
+
+msgid "Converts files in DXF format to GRASS vector map format."
+msgstr ""
+
+msgid "WFS"
+msgstr ""
+
+msgid "Imports GetFeature from a WFS server."
+msgstr ""
+
+msgid "ESRI e00 import"
+msgstr ""
+
+msgid "Imports E00 file into a vector map."
+msgstr ""
+
+msgid "Geonames import"
+msgstr ""
+
+msgid "Imports geonames.org country files into a vector points map."
+msgstr ""
+
+msgid "Matlab array or Mapgen format import"
+msgstr ""
+
+msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr ""
+
+msgid "Unpack vector map"
+msgstr ""
+
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
+msgstr ""
+
+msgid "Reproject vector map from different GRASS project"
+msgstr ""
+
+msgid "Re-projects a vector map from one project to the current project."
+msgstr ""
+
+msgid "Import 3D raster data"
+msgstr ""
+
+msgid "ASCII 3D import"
+msgstr ""
+
+msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
+msgstr ""
+
+msgid "Raw binary array 3D import"
+msgstr ""
+
+msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgstr ""
+
+msgid "Vis5D import"
+msgstr ""
+
+msgid "Import 3-dimensional Vis5D files."
+msgstr ""
+
+msgid "LiDAR 3D import"
+msgstr ""
+
+msgid "XYZ to 3D raster series"
+msgstr ""
+
+msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
+msgstr ""
+
+msgid "Import database table"
+msgstr ""
+
+msgid "Common import formats"
+msgstr ""
+
+msgid "Imports attribute tables in various formats."
+msgstr ""
+
+msgid "Export raster map"
+msgstr ""
+
+msgid "Common export formats"
+msgstr ""
+
+msgid "Exports GRASS raster maps into GDAL supported formats."
+msgstr ""
+
+msgid "ASCII grid export"
+msgstr ""
+
+msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgstr ""
+
+msgid "ASCII x,y,z points export"
+msgstr ""
+
+msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
+msgstr ""
+
+msgid "GRIDATB.FOR export"
+msgstr ""
+
+msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
+msgstr ""
+
+msgid "Matlab 2D array export"
+msgstr ""
+
+msgid "Exports a GRASS raster to a binary MAT-File."
+msgstr ""
+
+msgid "Raw binary array export"
+msgstr ""
+
+msgid "Exports a GRASS raster to a binary array."
+msgstr ""
+
+msgid "MPEG-1 export"
+msgstr ""
+
+msgid "Converts raster map series to MPEG movie."
+msgstr ""
+
+msgid "PNG export"
+msgstr ""
+
+msgid "Export a GRASS raster map as a non-georeferenced PNG image."
+msgstr ""
+
+msgid "PPM export"
+msgstr ""
+
+msgid "Converts a GRASS raster map to a PPM image file."
+msgstr ""
+
+msgid "PPM from RGB export"
+msgstr ""
+
+msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
+msgstr ""
+
+msgid "POV-Ray export"
+msgstr ""
+
+msgid "Converts a raster map layer into a height-field file for POV-Ray."
+msgstr ""
+
+msgid "VRML export"
+msgstr ""
+
+msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
+msgstr ""
+
+msgid "VTK export"
+msgstr ""
+
+msgid "Converts raster maps into the VTK-ASCII format."
+msgstr ""
+
+msgid "Pack raster map"
+msgstr ""
+
+msgid "Exports a raster map as GRASS specific archive file"
+msgstr ""
+
+msgid "Export vector map"
+msgstr ""
+
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
+msgstr ""
+
+msgid "ASCII points or GRASS ASCII vector export"
+msgstr ""
+
+msgid "Exports a vector map to a GRASS ASCII vector representation. By default only features with category are exported. To export all features use 'layer=-1'."
+msgstr ""
+
+msgid "DXF export"
+msgstr ""
+
+msgid "Exports vector map to DXF file format."
+msgstr ""
+
+msgid "PostGIS export"
+msgstr ""
+
+msgid "Exports a vector map layer to PostGIS feature table."
+msgstr ""
+
+msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
+msgstr ""
+
+msgid "SVG export"
+msgstr ""
+
+msgid "Exports a vector map to SVG file."
+msgstr ""
+
+msgid "Converts a vector map to VTK ASCII output."
+msgstr ""
+
+msgid "Pack vector map"
+msgstr ""
+
+msgid "Exports a vector map as GRASS specific archive file"
+msgstr ""
+
+msgid "Export to LiDAR format"
+msgstr ""
+
+msgid "Export 3D raster maps"
+msgstr ""
+
+msgid "ASCII 3D export"
+msgstr ""
+
+msgid "Converts a 3D raster map layer into a ASCII text file."
+msgstr ""
+
+msgid "Raw binary array 3D export"
+msgstr ""
+
+msgid "Exports a GRASS 3D raster map to a binary array."
+msgstr ""
+
+msgid "Vis5D export"
+msgstr ""
+
+msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr ""
+
+msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgstr ""
+
+msgid "NetCDF export"
+msgstr ""
+
+msgid "Export a 3D raster map as netCDF file."
+msgstr ""
+
+msgid "Export database table"
+msgstr ""
+
+msgid "Exports attribute tables into various formats."
+msgstr ""
+
+msgid "Link external raster data"
+msgstr ""
+
+msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
+msgstr ""
+
+msgid "Link external vector data"
+msgstr ""
+
+msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
+msgstr ""
+
+msgid "Output format for raster data"
+msgstr ""
+
+msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
+msgstr ""
+
+msgid "Output format for vector data"
+msgstr ""
+
+msgid "Defines vector output format utilizing OGR library."
+msgstr ""
+
+msgid "Manage maps"
+msgstr ""
+
+msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
+msgstr ""
+
+msgid "List"
+msgstr ""
+
+msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
+msgstr ""
+
+msgid "Renames data base element files in the user's current mapset."
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Removes data base element files from the user's current mapset using the search pattern."
+msgstr ""
+
+msgid "Download project from web"
+msgstr ""
+
+msgid "Download GRASS project from the web Get GRASS project from an URL or file path"
+msgstr ""
+
+msgid "Rebuild or remove all addons"
+msgstr ""
+
+msgid "Rebuilds or removes all locally installed GRASS Addons extensions. By default only extensions built against different GIS Library are rebuilt."
+msgstr ""
+
+msgid "Map type conversions"
+msgstr ""
+
+msgid "Raster to vector"
+msgstr ""
+
+msgid "Converts a raster map into a vector map."
+msgstr ""
+
+msgid "Raster series to 3D raster"
+msgstr ""
+
+msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgstr ""
+
+msgid "Raster 2.5D to 3D raster"
+msgstr ""
+
+msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
+msgstr ""
+
+msgid "Vector to raster"
+msgstr ""
+
+msgid "Converts (rasterize) a vector map into a raster map."
+msgstr ""
+
+msgid "Vector to 3D raster"
+msgstr ""
+
+msgid "Converts a vector map (only points) into a 3D raster map."
+msgstr ""
+
+msgid "2D vector to 3D vector"
+msgstr ""
+
+msgid "Performs transformation of 2D vector features to 3D."
+msgstr ""
+
+msgid "3D raster to raster series"
+msgstr ""
+
+msgid "Converts 3D raster maps to 2D raster maps"
+msgstr ""
+
+msgid "Launches Simple Python Editor."
+msgstr ""
+
+msgid "Launch script"
+msgstr ""
+
+msgid "Launches script file."
+msgstr ""
+
+msgid "Launch Jupyter Notebook interface."
+msgstr ""
+
+msgid "Graphical modeler"
+msgstr ""
+
+msgid "Launch Graphical modeler"
+msgstr ""
+
+msgid "Run model prepared by Graphical modeler"
+msgstr ""
+
+msgid "Manage Ground Control Points for Georectification"
+msgstr ""
+
+msgid "Animation tool"
+msgstr ""
+
+msgid "Launch animation tool."
+msgstr ""
+
+msgid "Launch Cartographic Composer"
+msgstr ""
+
+msgid "Launch Map Swipe"
+msgstr ""
+
+msgid "Close graphical user interface."
+msgstr ""
+
+msgid "Close GUI and exit GRASS shell."
+msgstr ""
+
+msgid "&Settings"
+msgstr ""
+
+msgid "Show current region"
+msgstr ""
+
+msgid "Shows the extent and resolution of the computational region."
+msgstr ""
+
+msgid "Show region using latitude and longitude"
+msgstr ""
+
+msgid "Show current region extent in Map Display"
+msgstr ""
+
+msgid "Shows the extent of the computational region in Map Display."
+msgstr ""
+
+msgid "Set region"
+msgstr ""
+
+msgid "Manages the boundary definitions for the geographic region."
+msgstr ""
+
+msgid "GRASS working environment"
+msgstr ""
+
+msgid "Mapset access"
+msgstr ""
+
+msgid "Set/unset access to other mapsets in current project"
+msgstr ""
+
+msgid "User access"
+msgstr ""
+
+msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
+msgstr ""
+
+msgid "Change working environment"
+msgstr ""
+
+msgid "Changes or reports current mapset. Optionally, creates new mapset or lists available mapsets in given project (location)."
+msgstr ""
+
+msgid "Change project (location) and mapset"
+msgstr ""
+
+msgid "Change current project and mapset."
+msgstr ""
+
+msgid "Change mapset"
+msgstr ""
+
+msgid "Change current mapset."
+msgstr ""
+
+msgid "Change working directory"
+msgstr ""
+
+msgid "Show settings"
+msgstr ""
+
+msgid "Outputs and modifies the user's current GRASS variable settings."
+msgstr ""
+
+msgid "Change settings"
+msgstr ""
+
+msgid "Outputs and modifies the user's current GRASS variable settings. Prints all defined GRASS variables if no option is given."
+msgstr ""
+
+msgid "Create new project (location)"
+msgstr ""
+
+msgid "Launches project wizard to create a new GRASS project (also known as location)."
+msgstr ""
+
+msgid "Creates new mapset in the current project, changes current mapset."
+msgstr ""
+
+msgid "Map projections"
+msgstr ""
+
+msgid "Display map projection"
+msgstr ""
+
+msgid "Converts coordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgstr ""
+
+msgid "Manage projections"
+msgstr ""
+
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions). Can also be used to create new GRASS projects."
+msgstr ""
+
+msgid "Convert coordinates"
+msgstr ""
+
+msgid "Converts coordinates from one projection to another (cs2cs frontend)."
+msgstr ""
+
+msgid "Addons extensions"
+msgstr ""
+
+msgid "Install extension from addons"
+msgstr ""
+
+msgid "Installs new extension from GRASS AddOns repository."
+msgstr ""
+
+msgid "Manage installed extension"
+msgstr ""
+
+msgid "Updates or removes installed GRASS AddOns extension(s)."
+msgstr ""
+
+msgid "Preferences"
+msgstr ""
+
+msgid "User GUI preferences (display font, commands, digitizer, etc.)"
+msgstr ""
+
+msgid "&Raster"
+msgstr ""
+
+msgid "Develop raster map"
+msgstr ""
+
+msgid "Compress/decompress"
+msgstr ""
+
+msgid "Compresses and decompresses raster maps."
+msgstr ""
+
+msgid "Region boundaries"
+msgstr ""
+
+msgid "Sets the boundary definitions for a raster map."
+msgstr ""
+
+msgid "Manage NULL values"
+msgstr ""
+
+msgid "Manages NULL-values of given raster map."
+msgstr ""
+
+msgid "Quantization"
+msgstr ""
+
+msgid "Produces the quantization file for a floating-point map."
+msgstr ""
+
+msgid "Timestamp"
+msgstr ""
+
+msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgstr ""
+
+msgid "Resample using aggregate statistics"
+msgstr ""
+
+msgid "Resamples raster map layers to a coarser grid using aggregation."
+msgstr ""
+
+msgid "Resample using multiple methods"
+msgstr ""
+
+msgid "Resamples raster map to a finer grid using interpolation."
+msgstr ""
+
+msgid "Resample using nearest neighbor"
+msgstr ""
+
+msgid "GRASS raster map layer data resampling capability."
+msgstr ""
+
+msgid "Resample using spline tension"
+msgstr ""
+
+msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
+msgstr ""
+
+msgid "Resample using bspline"
+msgstr ""
+
+msgid "Performs bilinear or bicubic spline interpolation with Tykhonov regularization."
+msgstr ""
+
+msgid "Resample using analytic kernel"
+msgstr ""
+
+msgid "Resamples raster map layers using an analytic kernel."
+msgstr ""
+
+msgid "Support file maintenance"
+msgstr ""
+
+msgid "Allows creation and/or modification of raster map layer support files."
+msgstr ""
+
+msgid "Update map statistics"
+msgstr ""
+
+msgid "Update raster map statistics"
+msgstr ""
+
+msgid "Tiling"
+msgstr ""
+
+msgid "Produces tilings of the source projection for use in the destination region and projection."
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster)"
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
+msgstr ""
+
+msgid "Tile raster map"
+msgstr ""
+
+msgid "Splits a raster map into tiles."
+msgstr ""
+
+msgid "Manage semantic labels"
+msgstr ""
+
+msgid "Manages semantic label information assigned to a single raster map or to a list of raster maps."
+msgstr ""
+
+msgid "Manage colors"
+msgstr ""
+
+msgid "Color tables"
+msgstr ""
+
+msgid "Creates/modifies the color table associated with a raster map."
+msgstr ""
+
+msgid "Color tables (stddev)"
+msgstr ""
+
+msgid "Sets color rules based on stddev from a raster map's mean value."
+msgstr ""
+
+msgid "Manage color rules interactively"
+msgstr ""
+
+msgid "Interactive management of raster color tables."
+msgstr ""
+
+msgid "Export color table"
+msgstr ""
+
+msgid "Exports the color table associated with a raster map."
+msgstr ""
+
+msgid "Blend 2 color rasters"
+msgstr ""
+
+msgid "Blends color components of two raster maps by a given ratio."
+msgstr ""
+
+msgid "Create RGB"
+msgstr ""
+
+msgid "Combines red, green and blue raster maps into a single composite raster map."
+msgstr ""
+
+msgid "RGB to HIS"
+msgstr ""
+
+msgid "Generates red, green and blue (RGB) raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
+msgstr ""
+
+msgid "Split raster into RGB"
+msgstr ""
+
+msgid "Splits a raster map into red, green and blue maps."
+msgstr ""
+
+msgid "Query raster maps"
+msgstr ""
+
+msgid "Query values by coordinates"
+msgstr ""
+
+msgid "Queries raster maps on their category values and category labels."
+msgstr ""
+
+msgid "Query colors by value"
+msgstr ""
+
+msgid "Queries colors for a raster map layer."
+msgstr ""
+
+msgid "Raster buffers and distance"
+msgstr ""
+
+msgid "Buffer rasters"
+msgstr ""
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
+msgstr ""
+
+msgid "Buffer rasters (low memory)"
+msgstr ""
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values. This is the low-memory alternative to the classic r.buffer module."
+msgstr ""
+
+msgid "Concentric circles"
+msgstr ""
+
+msgid "Creates a raster map containing concentric rings around a given point."
+msgstr ""
+
+msgid "Closest points"
+msgstr ""
+
+msgid "Locates the closest points between objects in two raster maps."
+msgstr ""
+
+msgid "Grow by one cell"
+msgstr ""
+
+msgid "Generates a raster map layer with contiguous areas grown by one cell."
+msgstr ""
+
+msgid "Distance to features"
+msgstr ""
+
+msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
+msgstr ""
+
+msgid "Creates a raster mask for limiting raster operation."
+msgstr ""
+
+msgid "Query mask status"
+msgstr ""
+
+msgid "Reports presence or absence of a raster mask Provides information about the presence of a 2D raster mask as text output or return code"
+msgstr ""
+
+msgid "Raster map calculator"
+msgstr ""
+
+msgid "Simplified raster map calculator"
+msgstr ""
+
+msgid "Calculates a new raster map from a simple r.mapcalc expression."
+msgstr ""
+
+msgid "Raster map calculator."
+msgstr ""
+
+msgid "Neighborhood analysis"
+msgstr ""
+
+msgid "Moving window"
+msgstr ""
+
+msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgstr ""
+
+msgid "Neighborhood points"
+msgstr ""
+
+msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
+msgstr ""
+
+msgid "Overlay rasters"
+msgstr ""
+
+msgid "Cross product"
+msgstr ""
+
+msgid "Creates a cross product of the category values from multiple raster map layers."
+msgstr ""
+
+msgid "Patch raster maps"
+msgstr ""
+
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgstr ""
+
+msgid "Raster series aggregation"
+msgstr ""
+
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgstr ""
+
+msgid "Raster series accumulation"
+msgstr ""
+
+msgid "Makes each output cell value a accumulationfunction of the values assigned to the corresponding cells in the input raster map layers."
+msgstr ""
+
+msgid "Statistical overlay"
+msgstr ""
+
+msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
+msgstr ""
+
+msgid "Quantiles overlay"
+msgstr ""
+
+msgid "Compute category quantiles using two passes."
+msgstr ""
+
+msgid "Solar radiance and shadows"
+msgstr ""
+
+msgid "LatLong map"
+msgstr ""
+
+msgid "Creates a latitude/longitude raster map."
+msgstr ""
+
+msgid "Solar irradiance and irradiation"
+msgstr ""
+
+msgid "Solar irradiance and irradiation model. Computes direct (beam), diffuse and reflected solar irradiation raster maps for given day, latitude, surface and atmospheric conditions. Solar parameters (e.g. sunrise, sunset times, declination, extraterrestrial irradiance, daylight length) are saved in the map history file. Alternatively, a local time can be specified to compute solar incidence angle and/or irradiance raster maps. The shadowing effect of the topography is optionally incorporated."
+msgstr ""
+
+msgid "Shadows map"
+msgstr ""
+
+msgid "Calculates cast shadow areas from sun position and elevation raster map. Either exact sun position (A) is specified, or date/time to calculate the sun position (B) by r.sunmask itself."
+msgstr ""
+
+msgid "Sunshine hours and solar angles"
+msgstr ""
+
+msgid "Calculates solar elevation, solar azimuth, and sun hours. Solar elevation: the angle between the direction of the geometric center of the sun's apparent disk and the (idealized) horizon. Solar azimuth: the angle from due north in clockwise direction."
+msgstr ""
+
+msgid "Terrain analysis"
+msgstr ""
+
+msgid "Generate contour lines"
+msgstr ""
+
+msgid "Produces a vector map of specified contours from a raster map."
+msgstr ""
+
+msgid "Cost surface"
+msgstr ""
+
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Trace a path"
+msgstr ""
+
+msgid "Traces paths from starting points following input directions."
+msgstr ""
+
+msgid "Cumulative movement costs"
+msgstr ""
+
+msgid "Creates a raster map showing the anisotropic cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Least cost route or flow"
+msgstr ""
+
+msgid "Traces a flow through an elevation model or cost surface on a raster map."
+msgstr ""
+
+msgid "Compute shaded relief"
+msgstr ""
+
+msgid "Creates shaded relief map from an elevation map (DEM)."
+msgstr ""
+
+msgid "Apply shade to raster"
+msgstr ""
+
+msgid "Drapes a color raster over an shaded relief or aspect map."
+msgstr ""
+
+msgid "Slope and aspect"
+msgstr ""
+
+msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map. Aspect is calculated counterclockwise from east."
+msgstr ""
+
+msgid "Landforms"
+msgstr ""
+
+msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
+msgstr ""
+
+msgid "Terrain parameters"
+msgstr ""
+
+msgid "Extracts terrain parameters from a DEM. Uses a multi-scale approach by taking fitting quadratic parameters to any size window (via least squares)."
+msgstr ""
+
+msgid "Textural features"
+msgstr ""
+
+msgid "Generate images with textural features from a raster map."
+msgstr ""
+
+msgid "Visibility"
+msgstr ""
+
+msgid "Computes the viewshed of a point on an elevation raster map. Default format: NULL (invisible), vertical angle wrt viewpoint (visible)."
+msgstr ""
+
+msgid "Horizon angle"
+msgstr ""
+
+msgid "Computes horizon angle height from a digital elevation model. The module has two different modes of operation: 1. Computes the entire horizon around a single point whose coordinates are given with the 'coord' option. The horizon height (in radians). 2. Computes one or more raster maps of the horizon height in a single direction. The input for this is the angle (in degrees), which is measured counterclockwise with east=0, north=90 etc. The output is the horizon height in radians."
+msgstr ""
+
+msgid "Transform features"
+msgstr ""
+
+msgid "Clump"
+msgstr ""
+
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
+msgstr ""
+
+msgid "Grow"
+msgstr ""
+
+msgid "Thin"
+msgstr ""
+
+msgid "Thins non-null cells that denote linear features in a raster map layer."
+msgstr ""
+
+msgid "Hydrologic modeling"
+msgstr ""
+
+msgid "Carve stream channels"
+msgstr ""
+
+msgid "Generates stream channels. Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
+msgstr ""
+
+msgid "Fill lake"
+msgstr ""
+
+msgid "Fills lake at given point to given level."
+msgstr ""
+
+msgid "Depressionless map and flowlines"
+msgstr ""
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
+msgstr ""
+
+msgid "Flow accumulation"
+msgstr ""
+
+msgid "Performs flow computation for massive grids."
+msgstr ""
+
+msgid "Flow lines"
+msgstr ""
+
+msgid "Constructs flowlines. Computes flowlines, flowpath lengths, and flowaccumulation (contributing areas) from a elevation raster map."
+msgstr ""
+
+msgid "Watershed analysis"
+msgstr ""
+
+msgid "Calculates hydrological parameters and RUSLE factors."
+msgstr ""
+
+msgid "Watershed subbasins"
+msgstr ""
+
+msgid "Generates watershed subbasins raster map."
+msgstr ""
+
+msgid "Watershed basin creation"
+msgstr ""
+
+msgid "Creates watershed basins from a drainage direction map."
+msgstr ""
+
+msgid "Extraction of stream networks"
+msgstr ""
+
+msgid "Performs stream network extraction."
+msgstr ""
+
+msgid "SIMWE Overland flow modeling"
+msgstr ""
+
+msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "SIMWE Sediment flux modeling"
+msgstr ""
+
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "Topographic index map"
+msgstr ""
+
+msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
+msgstr ""
+
+msgid "TOPMODEL simulation"
+msgstr ""
+
+msgid "Simulates TOPMODEL which is a physically based hydrologic model."
+msgstr ""
+
+msgid "USLE K-factor"
+msgstr ""
+
+msgid "Computes USLE Soil Erodibility Factor (K)."
+msgstr ""
+
+msgid "USLE R-factor"
+msgstr ""
+
+msgid "Computes USLE R factor, Rainfall erosivity index."
+msgstr ""
+
+msgid "Groundwater modeling"
+msgstr ""
+
+msgid "Groundwater flow"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgstr ""
+
+msgid "Groundwater solute transport"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined and unconfined solute transport in two dimensions"
+msgstr ""
+
+msgid "Landscape patch analysis"
+msgstr ""
+
+msgid "Set up sampling and analysis framework"
+msgstr ""
+
+msgid "Configuration editor for r.li.'index'"
+msgstr ""
+
+msgid "Edge density"
+msgstr ""
+
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Contrast weighted edge density"
+msgstr ""
+
+msgid "Calculates contrast weighted edge density index on a raster map"
+msgstr ""
+
+msgid "Patch area mean"
+msgstr ""
+
+msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Patch area range"
+msgstr ""
+
+msgid "Calculates range of patch area size on a raster map"
+msgstr ""
+
+msgid "Patch area Std Dev"
+msgstr ""
+
+msgid "Calculates standard deviation of patch area a raster map"
+msgstr ""
+
+msgid "Patch area Coeff Var"
+msgstr ""
+
+msgid "Calculates coefficient of variation of patch area on a raster map"
+msgstr ""
+
+msgid "Patch density"
+msgstr ""
+
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Patch number"
+msgstr ""
+
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
+msgstr ""
+
+msgid "Dominance's diversity"
+msgstr ""
+
+msgid "Calculates dominance's diversity index on a raster map"
+msgstr ""
+
+msgid "Shannon's diversity"
+msgstr ""
+
+msgid "Calculates Shannon's diversity index on a raster map"
+msgstr ""
+
+msgid "Simpson's diversity"
+msgstr ""
+
+msgid "Calculates Simpson's diversity index on a raster map"
+msgstr ""
+
+msgid "Richness"
+msgstr ""
+
+msgid "Calculates richness index on a raster map"
+msgstr ""
+
+msgid "Shape index"
+msgstr ""
+
+msgid "Calculates shape index on a raster map"
+msgstr ""
+
+msgid "Wildfire modeling"
+msgstr ""
+
+msgid "Rate of spread"
+msgstr ""
+
+msgid "Generates rate of spread raster maps. Generates three, or four raster map layers showing the base (perpendicular) rate of spread (ROS), the maximum (forward) ROS, the direction of the maximum ROS, and optionally the maximum potential spotting distance for fire spread simulation."
+msgstr ""
+
+msgid "Least-cost spread paths"
+msgstr ""
+
+msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
+msgstr ""
+
+msgid "Anisotropic spread simulation"
+msgstr ""
+
+msgid "Simulates elliptically anisotropic spread. Generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins. It optionally produces raster maps to contain backlink UTM coordinates for tracing spread paths. Usable for fire spread simulations."
+msgstr ""
+
+msgid "Change category values and labels"
+msgstr ""
+
+msgid "Manage category information"
+msgstr ""
+
+msgid "Manages category values and labels associated with user-specified raster map layers."
+msgstr ""
+
+msgid "Interactively edit category values"
+msgstr ""
+
+msgid "Edits cell values in a raster map."
+msgstr ""
+
+msgid "Reclassify by size"
+msgstr ""
+
+msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
+msgstr ""
+
+msgid "Reclassify"
+msgstr ""
+
+msgid "Reclassify raster map based on category values. Creates a new raster map whose category values are based upon a reclassification of the categories in an existing raster map."
+msgstr ""
+
+msgid "Recode"
+msgstr ""
+
+msgid "Recodes categorical raster maps."
+msgstr ""
+
+msgid "Rescale"
+msgstr ""
+
+msgid "Rescales the range of category values in a raster map layer."
+msgstr ""
+
+msgid "Rescale with histogram"
+msgstr ""
+
+msgid "Rescales histogram equalized the range of category values in a raster map layer."
+msgstr ""
+
+msgid "Generate random cells"
+msgstr ""
+
+msgid "Random cells"
+msgstr ""
+
+msgid "Generates random cell values with spatial dependence."
+msgstr ""
+
+msgid "Random cells and vector points"
+msgstr ""
+
+msgid "Creates randomly placed raster cells or vector points Creates a raster map and vector point map containing randomly located cells and points."
+msgstr ""
+
+msgid "Generate surfaces"
+msgstr ""
+
+msgid "Fractal surface"
+msgstr ""
+
+msgid "Creates a fractal surface of a given fractal dimension."
+msgstr ""
+
+msgid "Gaussian kernel density surface"
+msgstr ""
+
+msgid "Generates a raster density map from vector points map. Density is computed using a moving kernel. Optionally generates a vector density map on a vector network."
+msgstr ""
+
+msgid "Gaussian deviates surface"
+msgstr ""
+
+msgid "Generates a raster map using gaussian random number generator. Mean and standard deviation of gaussian deviates can be expressed by the user."
+msgstr ""
+
+msgid "Plane"
+msgstr ""
+
+msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
+msgstr ""
+
+msgid "Random deviates surface"
+msgstr ""
+
+msgid "Produces a raster surface map of uniform random deviates with defined range."
+msgstr ""
+
+msgid "Random surface with spatial dependence"
+msgstr ""
+
+msgid "Generates random surface(s) with spatial dependence."
+msgstr ""
+
+msgid "Interpolate surfaces"
+msgstr ""
+
+msgid "Bilinear and bicubic from vector points"
+msgstr ""
+
+msgid "Performs bicubic or bilinear spline interpolation with Tykhonov regularization."
+msgstr ""
+
+msgid "IDW from raster points"
+msgstr ""
+
+msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+msgid "IDW from vector points"
+msgstr ""
+
+msgid "Provides surface interpolation from vector point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+msgid "Raster contours"
+msgstr ""
+
+msgid "Generates surface raster map from rasterized contours."
+msgstr ""
+
+msgid "Regularized spline tension"
+msgstr ""
+
+msgid "Performs surface interpolation from vector points map by splines. Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension."
+msgstr ""
+
+msgid "Raster series interpolation"
+msgstr ""
+
+msgid "Interpolates raster maps located (temporal or spatial) in between input raster maps at specific sampling positions."
+msgstr ""
+
+msgid "Fill NULL cells"
+msgstr ""
+
+msgid "Fills no-data areas in raster maps using spline interpolation."
+msgstr ""
+
+msgid "Fill NULL cells using IDW"
+msgstr ""
+
+msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
+msgstr ""
+
+msgid "Reports and statistics"
+msgstr ""
+
+msgid "Basic raster metadata"
+msgstr ""
+
+msgid "Outputs basic information about a raster map."
+msgstr ""
+
+msgid "General statistics"
+msgstr ""
+
+msgid "Generates area statistics for raster map."
+msgstr ""
+
+msgid "Quantiles for large data sets"
+msgstr ""
+
+msgid "Compute quantiles using two passes."
+msgstr ""
+
+msgid "Range of category values"
+msgstr ""
+
+msgid "Prints terse list of category values found in a raster map layer."
+msgstr ""
+
+msgid "Sum area by raster map and category"
+msgstr ""
+
+msgid "Reports statistics for raster maps."
+msgstr ""
+
+msgid "Statistics for clumped cells"
+msgstr ""
+
+msgid "Calculates the volume of data \"clumps\". Optionally produces a GRASS vector points map containing the calculated centroids of these clumps."
+msgstr ""
+
+msgid "Total corrected area"
+msgstr ""
+
+msgid "Prints estimation of surface area for raster map."
+msgstr ""
+
+msgid "Calculates univariate statistics from the non-null cells of a raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "Sample transects"
+msgstr ""
+
+msgid "Outputs the raster map layer values lying on user-defined line(s)."
+msgstr ""
+
+msgid "Sample transects (bearing/distance)"
+msgstr ""
+
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
+msgstr ""
+
+msgid "Covariance/correlation"
+msgstr ""
+
+msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
+msgstr ""
+
+msgid "Linear regression"
+msgstr ""
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x."
+msgstr ""
+
+msgid "Multiple regression"
+msgstr ""
+
+msgid "Calculates multiple linear regression from raster maps."
+msgstr ""
+
+msgid "Mutual category occurrences"
+msgstr ""
+
+msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
+msgstr ""
+
+msgid "Modal category value"
+msgstr ""
+
+msgid "Finds the mode of values in a cover map within areas assigned the same category value in a user-specified base map."
+msgstr ""
+
+msgid "Zonal statistics"
+msgstr ""
+
+msgid "Calculates category or object oriented statistics."
+msgstr ""
+
+msgid "Object geometry statistics"
+msgstr ""
+
+msgid "Calculates geometry parameters for raster objects."
+msgstr ""
+
+msgid "&Vector"
+msgstr ""
+
+msgid "Develop vector map"
+msgstr ""
+
+msgid "Create new empty vector map"
+msgstr ""
+
+msgid "Edit vector map (non-interactively)"
+msgstr ""
+
+msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
+msgstr ""
+
+msgid "Convert object types"
+msgstr ""
+
+msgid "Changes type of vector features."
+msgstr ""
+
+msgid "Parallel lines"
+msgstr ""
+
+msgid "Creates parallel line to input vector lines."
+msgstr ""
+
+msgid "Dissolve boundaries"
+msgstr ""
+
+msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
+msgstr ""
+
+msgid "Create 3D vector over raster"
+msgstr ""
+
+msgid "Converts 2D vector features to 3D by sampling of elevation raster map."
+msgstr ""
+
+msgid "Extrude 3D vector map"
+msgstr ""
+
+msgid "Extrudes flat vector features to 3D vector features with defined height. Optionally the height can be derived from sampling of elevation raster map."
+msgstr ""
+
+msgid "Create labels"
+msgstr ""
+
+msgid "Creates paint labels for a vector map from attached attributes."
+msgstr ""
+
+msgid "Reposition vector map"
+msgstr ""
+
+msgid "Performs an affine transformation (shift, scale and rotate) on vector map."
+msgstr ""
+
+msgid "Rectify vector map"
+msgstr ""
+
+msgid "Rectifies a vector by computing a coordinate transformation for each object in the vector based on the control points."
+msgstr ""
+
+msgid "Updates vector map metadata."
+msgstr ""
+
+msgid "Manage timestamp"
+msgstr ""
+
+msgid "Modifies a timestamp for a vector map. Print/add/remove a timestamp for a vector map."
+msgstr ""
+
+msgid "Create labels with simulated annealing"
+msgstr ""
+
+msgid "Create optimally placed labels for vector map(s)"
+msgstr ""
+
+msgid "Decimate points"
+msgstr ""
+
+msgid "Decimates a point cloud Copies points from one vector to another while applying different decimations"
+msgstr ""
+
+msgid "Topology maintenance"
+msgstr ""
+
+msgid "Create or rebuild topology"
+msgstr ""
+
+msgid "Creates topology for vector map. Optionally also checks for topological errors."
+msgstr ""
+
+msgid "Rebuild topology on all vector maps"
+msgstr ""
+
+msgid "Rebuilds topology on all vector maps in the current mapset."
+msgstr ""
+
+msgid "Build polylines"
+msgstr ""
+
+msgid "Builds polylines from lines or boundaries."
+msgstr ""
+
+msgid "Split lines"
+msgstr ""
+
+msgid "Splits vector lines to shorter segments."
+msgstr ""
+
+msgid "Split polylines"
+msgstr ""
+
+msgid "Creates points/segments from input vector lines and positions."
+msgstr ""
+
+msgid "Clean vector map"
+msgstr ""
+
+msgid "Toolset for cleaning topology of vector map."
+msgstr ""
+
+msgid "Fill holes in areas"
+msgstr ""
+
+msgid "Fill holes in areas by keeping only outer boundaries"
+msgstr ""
+
+msgid "Smooth or simplify"
+msgstr ""
+
+msgid "Performs vector based generalization."
+msgstr ""
+
+msgid "Add centroids"
+msgstr ""
+
+msgid "Adds missing centroids to closed boundaries."
+msgstr ""
+
+msgid "Creates/modifies the color table associated with a vector map."
+msgstr ""
+
+msgid "Interactive management of vector color tables."
+msgstr ""
+
+msgid "Exports the color table associated with a vector map."
+msgstr ""
+
+msgid "Query vector map"
+msgstr ""
+
+msgid "Query with coordinate(s)"
+msgstr ""
+
+msgid "Queries a vector map at given locations."
+msgstr ""
+
+msgid "Query vector attribute data"
+msgstr ""
+
+msgid "Prints vector map attributes."
+msgstr ""
+
+msgid "Feature selection"
+msgstr ""
+
+msgid "Select by attributes"
+msgstr ""
+
+msgid "Selects vector features from an existing vector map and creates a new vector map containing only the selected features."
+msgstr ""
+
+msgid "Select by another map"
+msgstr ""
+
+msgid "Selects features from vector map (A) by features from other vector map (B)."
+msgstr ""
+
+msgid "Convert areas or points to lines"
+msgstr ""
+
+msgid "Converts vector polygons or points to lines."
+msgstr ""
+
+msgid "Buffer vectors"
+msgstr ""
+
+msgid "Creates a buffer around vector features of given type."
+msgstr ""
+
+msgid "Point analysis"
+msgstr ""
+
+msgid "Identify and remove outliers"
+msgstr ""
+
+msgid "Removes outliers from vector point data."
+msgstr ""
+
+msgid "Identify point clusters"
+msgstr ""
+
+msgid "Performs cluster identification."
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists"
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists."
+msgstr ""
+
+msgid "Perturb points"
+msgstr ""
+
+msgid "Random location perturbations of vector points."
+msgstr ""
+
+msgid "Test/training point sets"
+msgstr ""
+
+msgid "Randomly partition points into test/train sets."
+msgstr ""
+
+msgid "Tests for normality for vector points"
+msgstr ""
+
+msgid "Tests for normality for vector points."
+msgstr ""
+
+msgid "Point pattern analysis"
+msgstr ""
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Lidar analysis"
+msgstr ""
+
+msgid "Detect edges"
+msgstr ""
+
+msgid "Detects the object's edges from a LIDAR data set."
+msgstr ""
+
+msgid "Detect interiors"
+msgstr ""
+
+msgid "Building contour determination and Region Growing algorithm for determining the building inside"
+msgstr ""
+
+msgid "Correct and reclassify objects"
+msgstr ""
+
+msgid "Corrects the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
+msgstr ""
+
+msgid "Linear referencing"
+msgstr ""
+
+msgid "Create LRS"
+msgstr ""
+
+msgid "Creates a linear reference system."
+msgstr ""
+
+msgid "Create stationing"
+msgstr ""
+
+msgid "Creates stationing from input lines, and linear reference system."
+msgstr ""
+
+msgid "Create points/segments"
+msgstr ""
+
+msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgstr ""
+
+msgid "Find line id and offset"
+msgstr ""
+
+msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
+msgstr ""
+
+msgid "Nearest features"
+msgstr ""
+
+msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
+msgstr ""
+
+msgid "Network analysis"
+msgstr ""
+
+msgid "Tool for interactive vector network analysis."
+msgstr ""
+
+msgid "Network preparation"
+msgstr ""
+
+msgid "Performs network maintenance."
+msgstr ""
+
+msgid "Allocate subnets"
+msgstr ""
+
+msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Split net"
+msgstr ""
+
+msgid "Splits subnets for nearest centers by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Shortest path"
+msgstr ""
+
+msgid "Finds shortest path on vector network."
+msgstr ""
+
+msgid "Shortest path for sets of features"
+msgstr ""
+
+msgid "Computes shortest distance via the network between the given sets of features. Finds the shortest paths from each 'from' point to the nearest 'to' feature and various information about this relation are uploaded to the attribute table."
+msgstr ""
+
+msgid "Shortest path using timetables"
+msgstr ""
+
+msgid "Finds shortest path using timetables."
+msgstr ""
+
+msgid "Shortest path for all pairs"
+msgstr ""
+
+msgid "Computes the shortest path between all pairs of nodes in the network."
+msgstr ""
+
+msgid "Visibility network"
+msgstr ""
+
+msgid "Performs visibility graph construction."
+msgstr ""
+
+msgid "Bridges and articulation points"
+msgstr ""
+
+msgid "Computes bridges and articulation points in the network."
+msgstr ""
+
+msgid "Maximum flow"
+msgstr ""
+
+msgid "Computes the maximum flow between two sets of nodes in the network."
+msgstr ""
+
+msgid "Vertex connectivity"
+msgstr ""
+
+msgid "Computes vertex connectivity between two sets of nodes in the network."
+msgstr ""
+
+msgid "Components"
+msgstr ""
+
+msgid "Computes strongly and weakly connected components in the network."
+msgstr ""
+
+msgid "Centrality"
+msgstr ""
+
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
+msgstr ""
+
+msgid "Steiner tree"
+msgstr ""
+
+msgid "Creates Steiner tree for the network and given terminals. Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm is used in this module so the result may be sub optimal."
+msgstr ""
+
+msgid "Minimum spanning tree"
+msgstr ""
+
+msgid "Computes minimum spanning tree for the network."
+msgstr ""
+
+msgid "Traveling salesman analysis"
+msgstr ""
+
+msgid "Creates a cycle connecting given nodes (Traveling salesman problem). Note that TSP is NP-hard, heuristic algorithm is used by this module and created cycle may be sub optimal"
+msgstr ""
+
+msgid "Overlay vector maps"
+msgstr ""
+
+msgid "Clip vector maps"
+msgstr ""
+
+msgid "Extracts features of input map which overlay features of clip map."
+msgstr ""
+
+msgid "Overlays two vector maps offering clip, intersection, difference, symmetrical difference, union operators."
+msgstr ""
+
+msgid "Patch vector maps"
+msgstr ""
+
+msgid "Creates a new vector map by combining other vector maps."
+msgstr ""
+
+msgid "Manage categories"
+msgstr ""
+
+msgid "Change or report categories"
+msgstr ""
+
+msgid "Attaches, deletes or reports vector categories to/from/of map geometry."
+msgstr ""
+
+msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
+msgstr ""
+
+msgid "Update area attributes from raster"
+msgstr ""
+
+msgid "Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns."
+msgstr ""
+
+msgid "Update area attributes from vector"
+msgstr ""
+
+msgid "Count points in areas, calculate statistics from point attributes."
+msgstr ""
+
+msgid "Update point attributes from areas"
+msgstr ""
+
+msgid "Uploads vector values at positions of vector points to the table."
+msgstr ""
+
+msgid "Update database values from vector"
+msgstr ""
+
+msgid "Populates attribute values from vector features."
+msgstr ""
+
+msgid "Sample raster maps at point locations"
+msgstr ""
+
+msgid "Uploads raster values at positions of vector points to the table."
+msgstr ""
+
+msgid "Sample 3D raster at point locations"
+msgstr ""
+
+msgid "Uploads 3D raster values at positions of vector points to the table."
+msgstr ""
+
+msgid "Sample temporal raster dataset at point locations"
+msgstr ""
+
+msgid "Uploads space time raster dataset values at positions of vector points to the table."
+msgstr ""
+
+msgid "Sample raster neighborhood around points"
+msgstr ""
+
+msgid "Samples a raster map at vector point locations."
+msgstr ""
+
+msgid "Generate area for current region"
+msgstr ""
+
+msgid "Creates a vector polygon from the current region extent."
+msgstr ""
+
+msgid "Generate areas from points"
+msgstr ""
+
+msgid "Convex hull"
+msgstr ""
+
+msgid "Produces a 2D/3D convex hull for a given vector map."
+msgstr ""
+
+msgid "Delaunay triangles"
+msgstr ""
+
+msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgstr ""
+
+msgid "Voronoi diagram/Thiessen polygons"
+msgstr ""
+
+msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
+msgstr ""
+
+msgid "Generate grid"
+msgstr ""
+
+msgid "Creates a vector map of a user-defined grid."
+msgstr ""
+
+msgid "Generate points"
+msgstr ""
+
+msgid "Generate from database"
+msgstr ""
+
+msgid "Creates new vector (points) map from database table containing coordinates."
+msgstr ""
+
+msgid "Generate points along lines"
+msgstr ""
+
+msgid "Creates points along input lines in new vector map with 2 layers."
+msgstr ""
+
+msgid "Generate random points"
+msgstr ""
+
+msgid "Generates random 2D/3D vector points."
+msgstr ""
+
+msgid "Remove outliers in point sets"
+msgstr ""
+
+msgid "Basic vector metadata"
+msgstr ""
+
+msgid "Outputs basic information about a vector map."
+msgstr ""
+
+msgid "Classify attribute data"
+msgstr ""
+
+msgid "Classifies attribute data, e.g. for thematic mapping"
+msgstr ""
+
+msgid "Report topology by category"
+msgstr ""
+
+msgid "Reports geometry statistics for vector maps."
+msgstr ""
+
+msgid "Univariate attribute statistics for points"
+msgstr ""
+
+msgid "Calculates univariate statistics of vector map features. Variance and standard deviation is calculated only for points if specified."
+msgstr ""
+
+msgid "Univariate statistics for attribute columns"
+msgstr ""
+
+msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgstr ""
+
+msgid "Vector map profiling tool"
+msgstr ""
+
+msgid "Quadrat indices"
+msgstr ""
+
+msgid "Test normality"
+msgstr ""
+
+msgid "&Imagery"
+msgstr ""
+
+msgid "Develop images and groups"
+msgstr ""
+
+msgid "Create/edit group"
+msgstr ""
+
+msgid "Creates, edits, and lists groups of imagery files."
+msgstr ""
+
+msgid "Target group"
+msgstr ""
+
+msgid "Targets an imagery group to a GRASS location and mapset."
+msgstr ""
+
+msgid "Find imagery files"
+msgstr ""
+
+msgid "Semantic label library"
+msgstr ""
+
+msgid "Prints available semantic label information used for multispectral data."
+msgstr ""
+
+msgid "Mosaic images"
+msgstr ""
+
+msgid "Mosaics several images and extends colormap."
+msgstr ""
+
+msgid "Manage image colors"
+msgstr ""
+
+msgid "Color balance for RGB"
+msgstr ""
+
+msgid "Performs auto-balancing of colors for RGB images."
+msgstr ""
+
+msgid "HIS to RGB"
+msgstr ""
+
+msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
+msgstr ""
+
+msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
+msgstr ""
+
+msgid "Rectify image or raster"
+msgstr ""
+
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgstr ""
+
+msgid "Generate histogram of image"
+msgstr ""
+
+msgid "Spectral response"
+msgstr ""
+
+msgid "Displays spectral response at user specified locations in group or images."
+msgstr ""
+
+msgid "Pan sharpening"
+msgstr ""
+
+msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
+msgstr ""
+
+msgid "Classify image"
+msgstr ""
+
+msgid "Clustering input for unsupervised classification"
+msgstr ""
+
+msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
+msgstr ""
+
+msgid "Input for supervised MLC"
+msgstr ""
+
+msgid "Generates statistics for i.maxlik from raster map."
+msgstr ""
+
+msgid "Maximum likelihood classification (MLC)"
+msgstr ""
+
+msgid "Classifies the cell spectral reflectances in imagery data. Classification is based on the spectral signature information generated by either i.cluster, g.gui.iclass, or i.gensig."
+msgstr ""
+
+msgid "Interactive input for supervised classification"
+msgstr ""
+
+msgid "Generates spectral signatures by allowing the user to outline training areas."
+msgstr ""
+
+msgid "Input for supervised SMAP"
+msgstr ""
+
+msgid "Generates statistics for i.smap from raster map."
+msgstr ""
+
+msgid "Sequential maximum a posteriori classification (SMAP)"
+msgstr ""
+
+msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
+msgstr ""
+
+msgid "Input for supervised SVM"
+msgstr ""
+
+msgid "Train a SVM Train a Support Vector Machine"
+msgstr ""
+
+msgid "Support Vector Machines classification (SVM)"
+msgstr ""
+
+msgid "Predict with a SVM Predict with a Support Vector Machine"
+msgstr ""
+
+msgid "Manage signature files"
+msgstr ""
+
+msgid "Manage imagery classification signature files"
+msgstr ""
+
+msgid "Object segmentation"
+msgstr ""
+
+msgid "Identifies segments (objects) from imagery data."
+msgstr ""
+
+msgid "Filter image"
+msgstr ""
+
+msgid "Edge detection"
+msgstr ""
+
+msgid "Zero-crossing \"edge detection\" raster function for image processing."
+msgstr ""
+
+msgid "Matrix/convolving filter"
+msgstr ""
+
+msgid "Performs raster map matrix filter."
+msgstr ""
+
+msgid "Edge preserving smoothing"
+msgstr ""
+
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+msgid "Transform image"
+msgstr ""
+
+msgid "Canonical correlation"
+msgstr ""
+
+msgid "Canonical components analysis (CCA) program for image processing."
+msgstr ""
+
+msgid "Principal components"
+msgstr ""
+
+msgid "Principal components analysis (PCA) for image processing."
+msgstr ""
+
+msgid "Fast Fourier"
+msgstr ""
+
+msgid "Fast Fourier Transform (FFT) for image processing."
+msgstr ""
+
+msgid "Inverse Fast Fourier"
+msgstr ""
+
+msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
+msgstr ""
+
+msgid "Satellite images tools"
+msgstr ""
+
+msgid "Aster DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN."
+msgstr ""
+
+msgid "Landsat DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+/OLI"
+msgstr ""
+
+msgid "Landsat cloud cover assessment"
+msgstr ""
+
+msgid "Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA)."
+msgstr ""
+
+msgid "Modis quality control"
+msgstr ""
+
+msgid "Extracts quality control parameters from MODIS QC layers."
+msgstr ""
+
+msgid "Atmospheric correction"
+msgstr ""
+
+msgid "Performs atmospheric correction using the 6S algorithm. 6S - Second Simulation of Satellite Signal in the Solar Spectrum."
+msgstr ""
+
+msgid "Topographic correction"
+msgstr ""
+
+msgid "Computes topographic correction of reflectance."
+msgstr ""
+
+msgid "Orthophoto tools"
+msgstr ""
+
+msgid "Manage GCPs for 3D correction"
+msgstr ""
+
+msgid "Georectifies a map and allows managing GCP for 3D correction."
+msgstr ""
+
+msgid "Corrects scanning distortions"
+msgstr ""
+
+msgid "Corrects scanning distortions of a scanned aerial photo."
+msgstr ""
+
+msgid "Initialize ortho parameters"
+msgstr ""
+
+msgid "Interactively creates or modifies entries in a camera initial exposure station file for imagery group referenced by a sub-block."
+msgstr ""
+
+msgid "Camera parameters"
+msgstr ""
+
+msgid "Select and modify the imagery group camera reference file."
+msgstr ""
+
+msgid "Elevation model for orthorectification"
+msgstr ""
+
+msgid "Select or modify the target elevation model."
+msgstr ""
+
+msgid "Target group for orthorectification"
+msgstr ""
+
+msgid "Select or modify the imagery group target."
+msgstr ""
+
+msgid "Compute ortho transformation"
+msgstr ""
+
+msgid "Computes a coordinate transformation based on the control points."
+msgstr ""
+
+msgid "Orthorectify imagery"
+msgstr ""
+
+msgid "Orthorectifies an image by using the image to photo coordinate transformation matrix."
+msgstr ""
+
+msgid "Satellite images products"
+msgstr ""
+
+msgid "Vegetation indices"
+msgstr ""
+
+msgid "Calculates different types of vegetation indices. Uses red and nir bands mostly, and some indices require additional bands."
+msgstr ""
+
+msgid "Tasseled cap vegetation index"
+msgstr ""
+
+msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
+msgstr ""
+
+msgid "Albedo"
+msgstr ""
+
+msgid "Computes broad band albedo from surface reflectance."
+msgstr ""
+
+msgid "Emissivity"
+msgstr ""
+
+msgid "Computes emissivity from NDVI, generic method for sparse land."
+msgstr ""
+
+msgid "Biomass growth"
+msgstr ""
+
+msgid "Computes biomass growth, precursor of crop yield calculation."
+msgstr ""
+
+msgid "Evapotranspiration calculation"
+msgstr ""
+
+msgid "Instantaneaous Net Radiation"
+msgstr ""
+
+msgid "Net radiation approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Soil heat flux"
+msgstr ""
+
+msgid "Soil heat flux approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Sensible heat flux"
+msgstr ""
+
+msgid "Computes sensible heat flux iteration SEBAL 01."
+msgstr ""
+
+msgid "Evaporative fraction"
+msgstr ""
+
+msgid "Computes evaporative fraction and root zone soil moisture."
+msgstr ""
+
+msgid "Actual Evapotranspiration"
+msgstr ""
+
+msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Temporal integration of ETa"
+msgstr ""
+
+msgid "Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)."
+msgstr ""
+
+msgid "Hargreaves methods Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation modified or original Hargreaves formulation, 2001."
+msgstr ""
+
+msgid "Penman-Monteith Evapotranspiration"
+msgstr ""
+
+msgid "Computes potential evapotranspiration calculation with hourly Penman-Monteith."
+msgstr ""
+
+msgid "Priestley-Taylor Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation Priestley and Taylor formulation, 1972."
+msgstr ""
+
+msgid "Kappa analysis"
+msgstr ""
+
+msgid "Calculates error matrix and kappa parameter for accuracy assessment of classification result."
+msgstr ""
+
+msgid "OIF for LandSat TM"
+msgstr ""
+
+msgid "Calculates Optimum-Index-Factor table for spectral bands"
+msgstr ""
+
+msgid "3D r&aster"
+msgstr ""
+
+msgid "Develop 3D raster map"
+msgstr ""
+
+msgid "Manage 3D NULL values"
+msgstr ""
+
+msgid "Explicitly create the 3D NULL-value bitmap file."
+msgstr ""
+
+msgid "Modifies a timestamp for a 3D raster map. Print/add/remove a timestamp for a 3D raster map."
+msgstr ""
+
+msgid "Retile 3D raster"
+msgstr ""
+
+msgid "Retiles an existing 3D raster map with user defined x, y and z tile size."
+msgstr ""
+
+msgid "Allows creation and/or modification of 3D raster map layer support files."
+msgstr ""
+
+msgid "3D rasters to raster series"
+msgstr ""
+
+msgid "3D color tables"
+msgstr ""
+
+msgid "Creates/modifies the color table associated with a 3D raster map."
+msgstr ""
+
+msgid "Export 3D color table"
+msgstr ""
+
+msgid "Exports the color table associated with a 3D raster map."
+msgstr ""
+
+msgid "3D mask"
+msgstr ""
+
+msgid "Establishes the current working 3D raster mask."
+msgstr ""
+
+msgid "3D raster map calculator"
+msgstr ""
+
+msgid "Cross section"
+msgstr ""
+
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions."
+msgstr ""
+
+msgid "3D flow lines"
+msgstr ""
+
+msgid "Computes 3D flow lines and 3D flow accumulation."
+msgstr ""
+
+msgid "3D gradient"
+msgstr ""
+
+msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
+msgstr ""
+
+msgid "3D neighborhood analysis"
+msgstr ""
+
+msgid "Makes each voxel value a function of the values assigned to the voxels around it, and stores new voxel values in an output 3D raster map"
+msgstr ""
+
+msgid "Create 3D display file"
+msgstr ""
+
+msgid "Creates a display file from an existing 3D raster map according to specified threshold levels."
+msgstr ""
+
+msgid "Interpolate 3D raster from points"
+msgstr ""
+
+msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
+msgstr ""
+
+msgid "Basic 3D raster metadata"
+msgstr ""
+
+msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgstr ""
+
+msgid "3D raster statistics"
+msgstr ""
+
+msgid "Generates volume statistics for 3D raster maps."
+msgstr ""
+
+msgid "Univariate statistics for 3D rasters"
+msgstr ""
+
+msgid "Calculates univariate statistics from the non-null cells of a 3D raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "&Database"
+msgstr ""
+
+msgid "Database information"
+msgstr ""
+
+msgid "List databases"
+msgstr ""
+
+msgid "Lists all databases for a given driver and location."
+msgstr ""
+
+msgid "List drivers"
+msgstr ""
+
+msgid "Lists all database drivers."
+msgstr ""
+
+msgid "List tables"
+msgstr ""
+
+msgid "Lists all tables for a given database."
+msgstr ""
+
+msgid "Describe table"
+msgstr ""
+
+msgid "Describes a table in detail."
+msgstr ""
+
+msgid "List columns"
+msgstr ""
+
+msgid "List all columns for a given table."
+msgstr ""
+
+msgid "Manage databases"
+msgstr ""
+
+msgid "Connect"
+msgstr ""
+
+msgid "Prints/sets general DB connection for current mapset."
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Sets user/password for DB driver/database."
+msgstr ""
+
+msgid "Create database"
+msgstr ""
+
+msgid "Creates an empty database."
+msgstr ""
+
+msgid "Drop database"
+msgstr ""
+
+msgid "Removes an existing database."
+msgstr ""
+
+msgid "Drop table"
+msgstr ""
+
+msgid "Drops an attribute table."
+msgstr ""
+
+msgid "Copy table"
+msgstr ""
+
+msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
+msgstr ""
+
+msgid "Drop column"
+msgstr ""
+
+msgid "Drops a column from selected attribute table."
+msgstr ""
+
+msgid "Test"
+msgstr ""
+
+msgid "Test database driver, database must exist and set by db.connect."
+msgstr ""
+
+msgid "Query any table"
+msgstr ""
+
+msgid "Selects data from attribute table. Performs SQL query statement(s)."
+msgstr ""
+
+msgid "SQL statement"
+msgstr ""
+
+msgid "Executes any SQL statement. For SELECT statements use 'db.select'."
+msgstr ""
+
+msgid "Univariate statistics for table column"
+msgstr ""
+
+msgid "Calculates univariate statistics on selected table column."
+msgstr ""
+
+msgid "Vector database connections"
+msgstr ""
+
+msgid "New table"
+msgstr ""
+
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
+msgstr ""
+
+msgid "Remove table"
+msgstr ""
+
+msgid "Removes existing attribute table of a vector map."
+msgstr ""
+
+msgid "Join table"
+msgstr ""
+
+msgid "Joins a database table to a vector map table."
+msgstr ""
+
+msgid "Add columns"
+msgstr ""
+
+msgid "Adds one or more columns to the attribute table connected to a given vector map."
+msgstr ""
+
+msgid "Drops a column from the attribute table connected to a given vector map."
+msgstr ""
+
+msgid "Renames a column in the attribute table connected to a given vector map."
+msgstr ""
+
+msgid "Change values"
+msgstr ""
+
+msgid "Updates a column in the attribute table connected to a vector map."
+msgstr ""
+
+msgid "Drop row"
+msgstr ""
+
+msgid "Removes a vector feature from a vector map through attribute selection."
+msgstr ""
+
+msgid "Reconnect vectors to database"
+msgstr ""
+
+msgid "Reconnects attribute tables for all vector maps from the current mapset to a new database."
+msgstr ""
+
+msgid "Set vector map - database connection"
+msgstr ""
+
+msgid "Prints/sets DB connection for a vector map to attribute table."
+msgstr ""
+
+msgid "&Temporal"
+msgstr ""
+
+msgid "Manage datasets"
+msgstr ""
+
+msgid "Connect temporal database"
+msgstr ""
+
+msgid "Prints/sets general temporal GIS database connection for current mapset."
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Creates a space time dataset."
+msgstr ""
+
+msgid "Renames a space time dataset"
+msgstr ""
+
+msgid "Removes space time datasets from temporal database."
+msgstr ""
+
+msgid "Modifies the metadata of a space time dataset."
+msgstr ""
+
+msgid "Merge"
+msgstr ""
+
+msgid "Merges several space time datasets into a single space time dataset."
+msgstr ""
+
+msgid "Temporally shift"
+msgstr ""
+
+msgid "Shifts temporally the maps of a space time dataset."
+msgstr ""
+
+msgid "Snap maps of dataset"
+msgstr ""
+
+msgid "Snaps temporally the maps of a space time dataset."
+msgstr ""
+
+msgid "Lists space time datasets and maps registered in the temporal database."
+msgstr ""
+
+msgid "Copy space time dataset"
+msgstr ""
+
+msgid "Creates a copy of a space time raster dataset."
+msgstr ""
+
+msgid "Upgrade temporal database"
+msgstr ""
+
+msgid "Upgrades the version of the temporal database."
+msgstr ""
+
+msgid "Manage maps in datasets"
+msgstr ""
+
+msgid "Register maps in datasets"
+msgstr ""
+
+msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgstr ""
+
+msgid "Unregister maps from datasets"
+msgstr ""
+
+msgid "Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset."
+msgstr ""
+
+msgid "List raster dataset maps"
+msgstr ""
+
+msgid "Lists registered maps of a space time raster dataset."
+msgstr ""
+
+msgid "List vector dataset maps"
+msgstr ""
+
+msgid "Lists registered maps of a space time vector dataset."
+msgstr ""
+
+msgid "List 3D raster dataset maps"
+msgstr ""
+
+msgid "Lists registered maps of a space time raster3d dataset."
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Import raster dataset"
+msgstr ""
+
+msgid "Imports space time raster dataset."
+msgstr ""
+
+msgid "Import vector dataset"
+msgstr ""
+
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr ""
+
+msgid "Export raster dataset"
+msgstr ""
+
+msgid "Exports space time raster dataset."
+msgstr ""
+
+msgid "Export raster dataset as VTK time series"
+msgstr ""
+
+msgid "Exports space time raster dataset as VTK time series."
+msgstr ""
+
+msgid "Export vector dataset"
+msgstr ""
+
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr ""
+
+msgid "Convert raster dataset to 3D raster"
+msgstr ""
+
+msgid "Converts a space time raster dataset into a 3D raster map."
+msgstr ""
+
+msgid "Convert raster dataset to vector dataset"
+msgstr ""
+
+msgid "Converts a space time raster dataset into a space time vector dataset"
+msgstr ""
+
+msgid "Create contour lines from raster dataset"
+msgstr ""
+
+msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgstr ""
+
+msgid "Extraction"
+msgstr ""
+
+msgid "Extract subset of raster dataset"
+msgstr ""
+
+msgid "Extracts a subset of a space time raster datasets."
+msgstr ""
+
+msgid "Extract subset of vector dataset"
+msgstr ""
+
+msgid "Extracts a subset of a space time vector dataset."
+msgstr ""
+
+msgid "Extract subset of 3D raster dataset"
+msgstr ""
+
+msgid "Extracts a subset of a space time 3D raster dataset."
+msgstr ""
+
+msgid "Select maps by temporal topology"
+msgstr ""
+
+msgid "Select maps from space time datasets by topological relationships to other space time datasets using temporal algebra."
+msgstr ""
+
+msgid "Query vector dataset attribute data"
+msgstr ""
+
+msgid "Prints attributes of vector maps registered in a space time vector dataset."
+msgstr ""
+
+msgid "Raster dataset color table"
+msgstr ""
+
+msgid "Creates/modifies the color table associated with each raster map of the space time raster dataset."
+msgstr ""
+
+msgid "Raster calculations"
+msgstr ""
+
+msgid "Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets."
+msgstr ""
+
+msgid "Temporal raster algebra"
+msgstr ""
+
+msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+msgstr ""
+
+msgid "3D raster calculations"
+msgstr ""
+
+msgid "Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets."
+msgstr ""
+
+msgid "Temporal 3D raster algebra"
+msgstr ""
+
+msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+msgstr ""
+
+msgid "Temporal vector algebra"
+msgstr ""
+
+msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+msgstr ""
+
+msgid "Interpolate gaps in raster datasets"
+msgstr ""
+
+msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
+msgstr ""
+
+msgid "Aggregation"
+msgstr ""
+
+msgid "Neighborhood analysis in raster dataset"
+msgstr ""
+
+msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
+msgstr ""
+
+msgid "Aggregation in raster datasets"
+msgstr ""
+
+msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
+msgstr ""
+
+msgid "Temporal aggregation"
+msgstr ""
+
+msgid "Aggregates temporally the maps of a space time raster dataset by a user defined granularity."
+msgstr ""
+
+msgid "Temporal aggregation by dataset"
+msgstr ""
+
+msgid "Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset."
+msgstr ""
+
+msgid "Compute cyclic accumulations"
+msgstr ""
+
+msgid "Computes cyclic accumulations of a space time raster dataset."
+msgstr ""
+
+msgid "Detect accumulation patterns"
+msgstr ""
+
+msgid "Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate."
+msgstr ""
+
+msgid "Sampling"
+msgstr ""
+
+msgid "Sample a space time raster dataset at point coordinates"
+msgstr ""
+
+msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
+msgstr ""
+
+msgid "Query raster dataset by vector points dataset"
+msgstr ""
+
+msgid "Stores raster map values at spatial and temporal positions of vector points as vector attributes."
+msgstr ""
+
+msgid "Observe specific locations in raster dataset"
+msgstr ""
+
+msgid "Observes specific locations in a space time raster dataset over a period of time using vector points."
+msgstr ""
+
+msgid "Temporal sampling"
+msgstr ""
+
+msgid "Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout."
+msgstr ""
+
+msgid "Space time datasets metadata"
+msgstr ""
+
+msgid "Lists information about space time datasets and maps."
+msgstr ""
+
+msgid "Univariate raster dataset statistics"
+msgstr ""
+
+msgid "Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset."
+msgstr ""
+
+msgid "Univariate vector dataset statistics"
+msgstr ""
+
+msgid "Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset"
+msgstr ""
+
+msgid "Univariate 3D raster dataset statistics"
+msgstr ""
+
+msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
+msgstr ""
+
+msgid "Report temporal topology"
+msgstr ""
+
+msgid "Lists temporal topology of a space time dataset."
+msgstr ""
+
+msgid "GUI tools"
+msgstr ""
+
+msgid "Timeline tool"
+msgstr ""
+
+msgid "Plot temporal extents."
+msgstr ""
+
+msgid "Temporal plot tool"
+msgstr ""
+
+msgid "Plot temporal values."
+msgstr ""
+
+msgid "&Help"
+msgstr ""
+
+msgid "GRASS help"
+msgstr ""
+
+msgid "Display the HTML man pages of GRASS"
+msgstr ""
+
+msgid "GUI help"
+msgstr ""
+
+msgid "About system"
+msgstr ""
+
+msgid "Prints system information"
+msgstr ""
+
+msgid "Import, export and link data"
+msgstr ""
+
+msgid "Attribute table manager"
+msgstr ""
+
+msgid "Launch Data Catalog."
+msgstr ""
+
+msgid "Managing GCPs for 3D correction"
+msgstr ""
+
+msgid "Interactive editing and digitization of vector maps."
+msgstr ""
+
+msgid "Interactive editing and digitization of raster maps."
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+msgid "Bearing/distance to coordinates"
+msgstr ""
+
+msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa. It assumes a cartesian coordinate system"
+msgstr ""
+
+msgid "Measure map distances"
+msgstr ""
+
+msgid "Measures the lengths and areas of features."
+msgstr ""
+
+msgid "3D image rendering"
+msgstr ""
+
+msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
+msgstr ""
+
+msgid "3D visualization script"
+msgstr ""
+
+msgid "Creates fly-through script to run in NVIZ."
+msgstr ""
+
+msgid "Convert coordinates between projections"
+msgstr ""
+
+msgid "Transform coordinates (affine)"
+msgstr ""
+
+msgid "PostScript map output"
+msgstr ""
+
+msgid "Produces hardcopy PostScript map output."
+msgstr ""
+
+msgid "Save model to file"
+msgstr ""
+
+msgid "Close model file"
+msgstr ""
+
+msgid "Export to image"
+msgstr ""
+
+msgid "Export to Python"
+msgstr ""
+
+msgid "Export to PyWPS"
+msgstr ""
+
+msgid "Export model to PyWPS script"
+msgstr ""
+
+msgid "Export to actinia"
+msgstr ""
+
+msgid "Export model to actinia script"
+msgstr ""
+
+msgid "Quit modeler"
+msgstr ""
+
+msgid "Close modeler window"
+msgstr ""
+
+msgid "&Model"
+msgstr ""
+
+msgid "Add command"
+msgstr ""
+
+msgid "Add action (GRASS command) to model"
+msgstr ""
+
+msgid "Add data"
+msgstr ""
+
+msgid "Add data item to model"
+msgstr ""
+
+msgid "Define relation"
+msgstr ""
+
+msgid "Define relation between data and action items"
+msgstr ""
+
+msgid "Add loop / series"
+msgstr ""
+
+msgid "Adds loop (series) to model"
+msgstr ""
+
+msgid "Add condition"
+msgstr ""
+
+msgid "Adds condition (if/else) to model"
+msgstr ""
+
+msgid "Adds comment to model"
+msgstr ""
+
+msgid "Remove item"
+msgstr ""
+
+msgid "Remove action/data from model"
+msgstr ""
+
+msgid "Model properties (name, purpose, etc.)"
+msgstr ""
+
+msgid "Delete intermediate data"
+msgstr ""
+
+msgid "Delete intermediate data defined in the model"
+msgstr ""
+
+msgid "Run entire model"
+msgstr ""
+
+msgid "Validate entire model"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+msgid "Display the HTML man pages of Graphical modeler"
+msgstr ""
+
+msgid "About Graphical Modeler"
+msgstr ""
+
+msgid "Display information about Graphical Modeler"
+msgstr ""
+
+msgid "Specify paper size, margins and orientation"
+msgstr ""
+
+msgid "Load instruction file"
+msgstr ""
+
+msgid "Load text file with mapping instructions"
+msgstr ""
+
+msgid "Export instruction file"
+msgstr ""
+
+msgid "Generate text file with mapping instructions"
+msgstr ""
+
+msgid "Export to PostScript"
+msgstr ""
+
+msgid "Generate PostScript output"
+msgstr ""
+
+msgid "Export to PDF"
+msgstr ""
+
+msgid "Generate PDF output"
+msgstr ""
+
+msgid "Launch ps.map dialog"
+msgstr ""
+
+msgid "Close Cartographic Composer"
+msgstr ""
+
+msgid "&Insert"
+msgstr ""
+
+msgid "Map frame"
+msgstr ""
+
+msgid "Add or edit map frame"
+msgstr ""
+
+msgid "Add or edit raster map"
+msgstr ""
+
+msgid "Add or edit vector map"
+msgstr ""
+
+msgid "Map legend"
+msgstr ""
+
+msgid "Add or edit raster and vector legend"
+msgstr ""
+
+msgid "Map info"
+msgstr ""
+
+msgid "Add or edit map info"
+msgstr ""
+
+msgid "Scale bar"
+msgstr ""
+
+msgid "Add or edit scale bar"
+msgstr ""
+
+msgid "North Arrow"
+msgstr ""
+
+msgid "Delete selected object"
+msgstr ""
+
+msgid "Display the HTML man pages of Cartographic Composer"
+msgstr ""
+
+msgid "About Cartographic Composer"
+msgstr ""
+
+msgid "Display information about Cartographic Composer"
+msgstr ""
+
 msgid "Check all"
 msgstr ""
 
@@ -7066,9 +10458,6 @@ msgid "Choose file to save color table"
 msgstr ""
 
 msgid "Type filename or click to choose file and save color table"
-msgstr ""
-
-msgid "Save"
 msgstr ""
 
 msgid "&Set"
@@ -7327,9 +10716,6 @@ msgstr ""
 msgid "Dialog cannot be closed while command is running."
 msgstr ""
 
-msgid "Link external raster data"
-msgstr ""
-
 msgid "Add linked layers into layer tree"
 msgstr ""
 
@@ -7346,9 +10732,6 @@ msgid "No layers selected. Operation canceled."
 msgstr ""
 
 msgid "Unable to determine number of raster bands"
-msgstr ""
-
-msgid "Link external vector data"
 msgstr ""
 
 msgid "Define output format for vector data"
@@ -7922,12 +11305,6 @@ msgstr ""
 msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
 msgstr ""
 
-msgid "New"
-msgstr ""
-
-msgid "Delete"
-msgstr ""
-
 msgid "Fine resolution:"
 msgstr ""
 
@@ -8033,9 +11410,6 @@ msgstr ""
 msgid "Elevation of fringe from bottom:"
 msgstr ""
 
-msgid "North Arrow"
-msgstr ""
-
 msgid "Arrow length (in map units):"
 msgstr ""
 
@@ -8043,9 +11417,6 @@ msgid "Arrow color:"
 msgstr ""
 
 msgid "Place arrow"
-msgstr ""
-
-msgid "Scale bar"
 msgstr ""
 
 msgid "Scale bar length (in map units):"
@@ -8131,9 +11502,6 @@ msgid "Scalebar %d"
 msgstr ""
 
 msgid "None"
-msgstr ""
-
-msgid "Plane"
 msgstr ""
 
 msgid "Vector map is 3D"
@@ -8317,9 +11685,6 @@ msgid "Map settings"
 msgstr ""
 
 msgid "Map frame settings"
-msgstr ""
-
-msgid "Map frame"
 msgstr ""
 
 msgid "Map frame options:"
@@ -8683,7 +12048,7 @@ msgstr ""
 msgid "Number of segments:"
 msgstr ""
 
-msgid "Label every "
+msgid "Label every"
 msgstr ""
 
 msgid "segments"
@@ -8924,7 +12289,8 @@ msgstr ""
 msgid "Click and drag to resize object"
 msgstr ""
 
-msgid "labels: "
+#, python-brace-format
+msgid "labels: {files}"
 msgstr ""
 
 msgid "Cartographic Composer - GRASS"
@@ -8991,21 +12357,6 @@ msgstr ""
 msgid "Select graphics tool"
 msgstr ""
 
-msgid "Generate text file with mapping instructions"
-msgstr ""
-
-msgid "Load text file with mapping instructions"
-msgstr ""
-
-msgid "Generate PostScript output"
-msgstr ""
-
-msgid "Generate PDF output"
-msgstr ""
-
-msgid "Specify paper size, margins and orientation"
-msgstr ""
-
 msgid "Full extent"
 msgstr ""
 
@@ -9015,13 +12366,7 @@ msgstr ""
 msgid "Click and drag to place map frame"
 msgstr ""
 
-msgid "Delete selected object"
-msgstr ""
-
 msgid "Show preview"
-msgstr ""
-
-msgid "Map info"
 msgstr ""
 
 msgid "Legend"
@@ -9182,9 +12527,6 @@ msgstr ""
 msgid "Remove a configuration file"
 msgstr ""
 
-msgid "Create"
-msgstr ""
-
 msgid "Create a new configuration file"
 msgstr ""
 
@@ -9335,9 +12677,6 @@ msgstr ""
 msgid "Sample units"
 msgstr ""
 
-msgid "Moving window"
-msgstr ""
-
 msgid ""
 "Select areas from the\n"
 "overlaid vector map"
@@ -9471,9 +12810,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "The raster map <{map_name}> already exists. Please remove or rename the maps with the prefix '{prefix}' or select the option to overwrite existing maps"
-msgstr ""
-
-msgid "Select sample area 1 of "
 msgstr ""
 
 msgid "Configuration file name:"
@@ -9797,9 +13133,6 @@ msgstr ""
 msgid "Timeline Tool"
 msgstr ""
 
-msgid "Help"
-msgstr ""
-
 msgid "3D plot of spatio-temporal extents"
 msgstr ""
 
@@ -9988,7 +13321,7 @@ msgstr ""
 msgid "File exists"
 msgstr ""
 
-msgid "Please change name of output CSV file or "
+msgid "Please change name of output CSV file or enable overwriting."
 msgstr ""
 
 msgid "Incorrect coordinates format, should be: x,y"
@@ -10898,9 +14231,6 @@ msgstr ""
 msgid "Unable to connect to <%s>"
 msgstr ""
 
-msgid "Add web service layer"
-msgstr ""
-
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr ""
 
@@ -10914,9 +14244,6 @@ msgid "Name for output raster map:"
 msgstr ""
 
 msgid "Export region"
-msgstr ""
-
-msgid "Map display"
 msgstr ""
 
 msgid "Named region"
@@ -11312,15 +14639,20 @@ msgstr ""
 msgid "At least 2 raster maps must be specified"
 msgstr ""
 
-msgid "Bivariate Scatterplot of "
+#, python-brace-format
+msgid "{first} vs {second}"
 msgstr ""
 
-#, python-format
-msgid "Raster <%s> cell values"
+#, python-brace-format
+msgid "Bivariate Scatterplot of {pairs}"
 msgstr ""
 
-#, python-format
-msgid ": %s"
+#, python-brace-format
+msgid "Raster <{raster}> cell values: {units}"
+msgstr ""
+
+#, python-brace-format
+msgid "Raster <{raster}> cell values"
 msgstr ""
 
 msgid "Regression Statistics for Scatterplot(s)"

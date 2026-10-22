@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2014-05-03 16:44-0400\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -673,13 +673,15 @@ msgstr ""
 msgid "Rendering aborted"
 msgstr ""
 
-msgid "Downloading data "
-msgstr ""
-
-msgid "Rendering & "
+#, python-brace-format
+msgid "Rendering & downloading data {layers}..."
 msgstr ""
 
 msgid "Rendering..."
+msgstr ""
+
+#, python-brace-format
+msgid "Downloading data {layers}..."
 msgstr ""
 
 msgid "Trying to recover from default region..."
@@ -852,7 +854,8 @@ msgid ""
 "Details: %(detail)s"
 msgstr ""
 
-msgid "Unable to set "
+#, python-brace-format
+msgid "Unable to set '{group}:{key}:{subkey}'"
 msgstr ""
 
 #, python-format
@@ -1675,7 +1678,7 @@ msgstr ""
 msgid "Table"
 msgstr ""
 
-msgid " (read-only)"
+msgid "Table (read-only)"
 msgstr ""
 
 msgid "SQL Query"
@@ -2266,7 +2269,11 @@ msgid ""
 msgstr ""
 
 #, python-brace-format
-msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
+msgid "The raster map {map_name} exists. Do you want to overwrite?"
+msgstr ""
+
+#, python-brace-format
+msgid "The vector map {map_name} exists. Do you want to overwrite?"
 msgstr ""
 
 msgid "Rectifying images, please wait..."
@@ -2527,10 +2534,8 @@ msgstr ""
 msgid "Reload GCPs from POINTS file"
 msgstr ""
 
-msgid "Set map canvas for "
-msgstr ""
-
-msgid " / Zoom to map"
+#, python-brace-format
+msgid "Set map canvas for {zoom_back} / Zoom to map"
 msgstr ""
 
 msgid "Update GCP coordinates"
@@ -2767,7 +2772,8 @@ msgstr ""
 msgid "<not defined>"
 msgstr ""
 
-msgid "Condition: "
+#, python-brace-format
+msgid "Condition: {label}"
 msgstr ""
 
 msgid "Condition: not defined"
@@ -3373,7 +3379,8 @@ msgstr ""
 msgid "Example"
 msgstr ""
 
-msgid "Enter parameters for '"
+#, python-brace-format
+msgid "Enter parameters for '{tool}'"
 msgstr ""
 
 msgid "Close this window without executing the command (Ctrl+Q)"
@@ -3718,10 +3725,12 @@ msgstr ""
 msgid "Not selectable element"
 msgstr ""
 
-msgid "Mapset"
+#, python-brace-format
+msgid "Mapset: {mapset}"
 msgstr ""
 
-msgid "Type: "
+#, python-brace-format
+msgid "Type: {element_type}"
 msgstr ""
 
 #, python-format
@@ -4110,7 +4119,7 @@ msgstr ""
 msgid "Area fill color:"
 msgstr ""
 
-msgid "Random colors according to category number "
+msgid "Random colors according to category number"
 msgstr ""
 
 msgid "Symbol:"
@@ -4211,6 +4220,9 @@ msgid ""
 "    - The current mapset is always accessible.\n"
 "    - You may only write to the current mapset.\n"
 "    - You may only write to mapsets which you own."
+msgstr ""
+
+msgid "Mapset"
 msgstr ""
 
 msgid "Owner"
@@ -5001,9 +5013,6 @@ msgid "Preview"
 msgstr ""
 
 msgid "Training"
-msgstr ""
-
-msgid "/ Zoom to map"
 msgstr ""
 
 msgid "std dev"
@@ -6238,7 +6247,8 @@ msgstr ""
 msgid "Set opacity of <{}>"
 msgstr ""
 
-msgid "Layer group:"
+#, python-brace-format
+msgid "Layer group: {number}"
 msgstr ""
 
 msgid "Click to edit layer settings"
@@ -7119,7 +7129,8 @@ msgstr ""
 msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
 msgstr ""
 
-msgid "Measuring distance"
+#, python-brace-format
+msgid "Measuring distance ({units}):"
 msgstr ""
 
 msgid "Measuring distance:"
@@ -7240,6 +7251,3946 @@ msgstr ""
 msgid "Property does not exist: %s"
 msgstr ""
 
+msgid "&File"
+msgstr "파일(&F)"
+
+msgid "New"
+msgstr ""
+
+#, fuzzy
+msgid "Create new workspace"
+msgstr "원천 자료 투영:"
+
+msgid "Open"
+msgstr ""
+
+msgid "Load workspace from file"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Save as"
+msgstr ""
+
+msgid "Save workspace to file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Close GUI"
+msgid "Close workspace file"
+msgstr "GUI 닫기"
+
+msgid "Map display"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D r&aster"
+msgid "Add raster"
+msgstr "3차원 래스터(&a)"
+
+msgid "Add raster map layer to current display"
+msgstr ""
+
+#, fuzzy
+msgid "Add vector"
+msgstr "벡터 지도 꾸리기"
+
+msgid "Add vector map layer to current display"
+msgstr ""
+
+#, fuzzy
+msgid "Add multiple rasters or vectors"
+msgstr "지도 레이어를 제거합니다"
+
+msgid "Add multiple raster or vector map layers to current display"
+msgstr ""
+
+#, fuzzy
+msgid "Add RGB raster layer"
+msgstr "다양한 중첩 추가"
+
+msgid "Add RGB raster map layer to current display"
+msgstr ""
+
+msgid "Add web service layer"
+msgstr ""
+
+#, fuzzy
+msgid "New map display window"
+msgstr "디스플레이를 지웁니다"
+
+#, fuzzy
+#| msgid "Re-render maps in all open map display windows"
+msgid "Open new map display window"
+msgstr "모든 열려 있는 지도 디스플레이 창 안의 지도를 다시 표시합니다"
+
+msgid "Render all map displays"
+msgstr "모든 지도 디스플레이 표시"
+
+msgid "Re-render maps in all open map display windows"
+msgstr "모든 열려 있는 지도 디스플레이 창 안의 지도를 다시 표시합니다"
+
+#, fuzzy
+#| msgid "Re-render maps in all open map display windows"
+msgid "Close current map display window"
+msgstr "모든 열려 있는 지도 디스플레이 창 안의 지도를 다시 표시합니다"
+
+#, fuzzy
+#| msgid "Re-render maps in all open map display windows"
+msgid "Close all open map display windows"
+msgstr "모든 열려 있는 지도 디스플레이 창 안의 지도를 다시 표시합니다"
+
+msgid "Simplified raster import with reprojection"
+msgstr "재투영과 동시에 단순화된 래스터 가져오기"
+
+msgid "Imports raster data into a GRASS raster map using GDAL library."
+msgstr ""
+
+msgid "Import of common raster formats"
+msgstr "일반적인 래스터 서식 가져오기"
+
+msgid "ASCII x,y,z point import and gridding"
+msgstr "ASCII x,y,z 점 가져오기 및 격자화"
+
+msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
+msgstr ""
+
+msgid "ASCII grid import"
+msgstr "ASCII 격자 가져오기"
+
+msgid "Converts a GRASS ASCII raster file to binary raster map."
+msgstr ""
+
+msgid "ASCII polygons, lines, and point import"
+msgstr "ASCII 다각형, 선, 점 가져오기"
+
+msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgstr ""
+
+msgid "Raw binary array import"
+msgstr "순수 이진 배열 가져오기"
+
+msgid "Import a binary raster file into a GRASS raster map layer."
+msgstr ""
+
+msgid "GRIDATB.FOR import"
+msgstr "GRIDATB.FOR 가져오기"
+
+msgid "Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map."
+msgstr ""
+
+msgid "Matlab 2D array import"
+msgstr "매트랩 2차원 배열 가져오기"
+
+msgid "Imports a binary MAT-File(v4) to a GRASS raster."
+msgstr ""
+
+msgid "PNG import"
+msgstr "PNG 가져오기"
+
+msgid "Imports non-georeferenced PNG format image."
+msgstr ""
+
+msgid "SPOT NDVI import"
+msgstr "SPOT NDVI 가져오기"
+
+msgid "Imports SPOT VGT NDVI data into a raster map."
+msgstr ""
+
+msgid "SRTM HGT import"
+msgstr "SRTM HGT 가져오기"
+
+msgid "Imports SRTM HGT files into raster map."
+msgstr ""
+
+msgid "Terra ASTER HDF import"
+msgstr "Terra ASTER HDF 가져오기"
+
+msgid "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp."
+msgstr ""
+
+msgid "LAS LiDAR points import"
+msgstr "LAS LiDAR 점 가져오기"
+
+#, fuzzy
+#| msgid "LAS LiDAR points import"
+msgid "Point cloud (LAS LiDAR) import"
+msgstr "LAS LiDAR 점 가져오기"
+
+#, fuzzy
+#| msgid "SRTM HGT import"
+msgid "WMS/WMTS import"
+msgstr "SRTM HGT 가져오기"
+
+msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Pack raster map"
+msgid "Unpack raster map"
+msgstr "래스터 지도 꾸리기"
+
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
+msgstr ""
+
+#, fuzzy
+msgid "Reproject raster map from different GRASS project"
+msgstr "다른 GRASS 로케이션으로부터 래스터 지도 재투영"
+
+#, fuzzy
+msgid "Re-projects a raster map from given project to the current project."
+msgstr "다른 GRASS 로케이션으로부터 래스터 지도 재투영"
+
+msgid "Simplified vector import with reprojection"
+msgstr "재투영과 동시에 단순화된 벡터 가져오기"
+
+#, fuzzy
+#| msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
+msgid "Imports vector data into a GRASS vector map using OGR library."
+msgstr "맵젠 또는 매트랩-ASCII 벡터 지도를 GRASS로 가져옵니다."
+
+msgid "Import of common vector formats"
+msgstr "일반적인 벡터 서식 가져오기"
+
+msgid "ASCII points or GRASS ASCII format"
+msgstr "ASCII 점 또는 GRASS ASCII 포맷"
+
+msgid "Creates a vector map from an ASCII points file or ASCII vector file."
+msgstr ""
+
+msgid "ASCII points as a vector lines"
+msgstr "ASCII 점을 벡터 선으로 가져오기"
+
+msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
+msgstr ""
+
+msgid "DXF import"
+msgstr "DXF 가져오기"
+
+msgid "Converts files in DXF format to GRASS vector map format."
+msgstr ""
+
+msgid "WFS"
+msgstr ""
+
+msgid "Imports GetFeature from a WFS server."
+msgstr ""
+
+msgid "ESRI e00 import"
+msgstr "ESRI e00 가져오기"
+
+#, fuzzy
+#| msgid "Name of input vector map"
+msgid "Imports E00 file into a vector map."
+msgstr "입력 벡터 지도의 이름"
+
+msgid "Geonames import"
+msgstr "Geonames 가져오기"
+
+msgid "Imports geonames.org country files into a vector points map."
+msgstr ""
+
+msgid "Matlab array or Mapgen format import"
+msgstr "매트랩 배열 또는 맵젠 포맷 가져오기"
+
+msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr "맵젠 또는 매트랩-ASCII 벡터 지도를 GRASS로 가져옵니다."
+
+msgid "Unpack vector map"
+msgstr "벡터 지도 풀기"
+
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
+msgstr ""
+
+#, fuzzy
+msgid "Reproject vector map from different GRASS project"
+msgstr "다른 GRASS 로케이션으로부터 벡터 지도 재투영"
+
+#, fuzzy
+msgid "Re-projects a vector map from one project to the current project."
+msgstr "다른 GRASS 로케이션으로부터 벡터 지도 재투영"
+
+msgid "Import 3D raster data"
+msgstr "3차원 래스터 자료 가져오기"
+
+msgid "ASCII 3D import"
+msgstr "ASCII 3차원 가져오기"
+
+msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
+msgstr ""
+
+msgid "Raw binary array 3D import"
+msgstr "순수 이진 배열 3차원 가져오기"
+
+msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgstr ""
+
+msgid "Vis5D import"
+msgstr "Vis5D 가져오기"
+
+msgid "Import 3-dimensional Vis5D files."
+msgstr ""
+
+#, fuzzy
+#| msgid "ASCII 3D import"
+msgid "LiDAR 3D import"
+msgstr "ASCII 3차원 가져오기"
+
+msgid "XYZ to 3D raster series"
+msgstr ""
+
+msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
+msgstr ""
+
+msgid "Import database table"
+msgstr "데이터베이스 테이블 가져오기"
+
+msgid "Common import formats"
+msgstr "일반적인 가져오기 포맷"
+
+#, fuzzy
+#| msgid "Removes existing attribute table of a vector map."
+msgid "Imports attribute tables in various formats."
+msgstr "벡터 지도의 기존 속성 테이블을 제거합니다."
+
+msgid "Export raster map"
+msgstr "래스터 지도 내보내기"
+
+msgid "Common export formats"
+msgstr "일반적인 내보내기 포맷"
+
+msgid "Exports GRASS raster maps into GDAL supported formats."
+msgstr ""
+
+msgid "ASCII grid export"
+msgstr "ASCII 격자 내보내기"
+
+msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgstr ""
+
+msgid "ASCII x,y,z points export"
+msgstr "ASCII x,y,z 점 내보내기"
+
+msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
+msgstr ""
+
+msgid "GRIDATB.FOR export"
+msgstr "GRIDATB.FOR 내보내기"
+
+msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
+msgstr ""
+
+msgid "Matlab 2D array export"
+msgstr "매트랩 2차원 배열 내보내기"
+
+msgid "Exports a GRASS raster to a binary MAT-File."
+msgstr ""
+
+msgid "Raw binary array export"
+msgstr "순수 이진 배열 내보내기"
+
+msgid "Exports a GRASS raster to a binary array."
+msgstr ""
+
+msgid "MPEG-1 export"
+msgstr "MPEG-1 내보내기"
+
+msgid "Converts raster map series to MPEG movie."
+msgstr ""
+
+msgid "PNG export"
+msgstr "PNG 내보내기"
+
+msgid "Export a GRASS raster map as a non-georeferenced PNG image."
+msgstr ""
+
+msgid "PPM export"
+msgstr "PPM 내보내기"
+
+msgid "Converts a GRASS raster map to a PPM image file."
+msgstr ""
+
+msgid "PPM from RGB export"
+msgstr "RGB를 PPM으로 내보내기"
+
+msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
+msgstr ""
+
+msgid "POV-Ray export"
+msgstr "POV-Ray 내보내기"
+
+msgid "Converts a raster map layer into a height-field file for POV-Ray."
+msgstr ""
+
+msgid "VRML export"
+msgstr "VRML 내보내기"
+
+msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
+msgstr ""
+
+msgid "VTK export"
+msgstr "VTK 내보내기"
+
+msgid "Converts raster maps into the VTK-ASCII format."
+msgstr ""
+
+msgid "Pack raster map"
+msgstr "래스터 지도 꾸리기"
+
+msgid "Exports a raster map as GRASS specific archive file"
+msgstr ""
+
+msgid "Export vector map"
+msgstr "벡터 지도 내보내기"
+
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
+msgstr ""
+
+msgid "ASCII points or GRASS ASCII vector export"
+msgstr "ASCII 점 또는 GRASS ASCII 벡터 내보내기"
+
+msgid "Exports a vector map to a GRASS ASCII vector representation. By default only features with category are exported. To export all features use 'layer=-1'."
+msgstr ""
+
+msgid "DXF export"
+msgstr "DXF 내보내기"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Exports vector map to DXF file format."
+msgstr "벡터 지도 내보내기"
+
+msgid "PostGIS export"
+msgstr "PostGIS 내보내기"
+
+msgid "Exports a vector map layer to PostGIS feature table."
+msgstr ""
+
+msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
+msgstr ""
+
+msgid "SVG export"
+msgstr "SVG 내보내기"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Exports a vector map to SVG file."
+msgstr "벡터 지도 내보내기"
+
+msgid "Converts a vector map to VTK ASCII output."
+msgstr ""
+
+msgid "Pack vector map"
+msgstr "벡터 지도 꾸리기"
+
+msgid "Exports a vector map as GRASS specific archive file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export to LiDAR format"
+msgstr "벡터 지도 내보내기"
+
+msgid "Export 3D raster maps"
+msgstr "3차원 래스터 지도 내보내기"
+
+msgid "ASCII 3D export"
+msgstr "ASCII 3차원 내보내기"
+
+msgid "Converts a 3D raster map layer into a ASCII text file."
+msgstr ""
+
+msgid "Raw binary array 3D export"
+msgstr "순수 이진 배열 3차원 내보내기"
+
+msgid "Exports a GRASS 3D raster map to a binary array."
+msgstr ""
+
+msgid "Vis5D export"
+msgstr "Vis5D 내보내기"
+
+msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr ""
+
+msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgstr ""
+
+#, fuzzy
+#| msgid "DXF export"
+msgid "NetCDF export"
+msgstr "DXF 내보내기"
+
+#, fuzzy
+#| msgid "Export 3D raster maps"
+msgid "Export a 3D raster map as netCDF file."
+msgstr "3차원 래스터 지도 내보내기"
+
+#, fuzzy
+#| msgid "Import database table"
+msgid "Export database table"
+msgstr "데이터베이스 테이블 가져오기"
+
+msgid "Exports attribute tables into various formats."
+msgstr ""
+
+msgid "Link external raster data"
+msgstr "외부 래스터 자료 연결"
+
+msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
+msgstr ""
+
+msgid "Link external vector data"
+msgstr "외부 벡터 자료 연결"
+
+msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
+msgstr ""
+
+msgid "Output format for raster data"
+msgstr "래스터 자료를 위한 출력 포맷"
+
+msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
+msgstr ""
+
+msgid "Output format for vector data"
+msgstr "벡터 자료를 위한 출력 포맷"
+
+msgid "Defines vector output format utilizing OGR library."
+msgstr ""
+
+msgid "Manage maps"
+msgstr "지도 관리"
+
+msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
+msgstr ""
+
+msgid "List"
+msgstr "목록"
+
+msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
+msgstr "사용자가 지정한 자료형의 유효한 GRASS 데이터베이스 파일을 나열합니다. 필요한 경우 검색패턴을 사용할 수도 있습니다."
+
+#, fuzzy
+#| msgid "Removes data base element files from the user's current mapset using the search pattern."
+msgid "Renames data base element files in the user's current mapset."
+msgstr "검색패턴을 이용해서 사용자의 현재 지도 세트로부터 데이터베이스 요소파일을 제거합니다."
+
+msgid "Delete"
+msgstr "삭제"
+
+msgid "Removes data base element files from the user's current mapset using the search pattern."
+msgstr "검색패턴을 이용해서 사용자의 현재 지도 세트로부터 데이터베이스 요소파일을 제거합니다."
+
+#, fuzzy
+msgid "Download project from web"
+msgstr "선택된 객체를 삭제합니다"
+
+msgid "Download GRASS project from the web Get GRASS project from an URL or file path"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add, edit or remove animations"
+msgid "Rebuild or remove all addons"
+msgstr "애니메이션을 추가, 편집, 또는 제거합니다"
+
+msgid "Rebuilds or removes all locally installed GRASS Addons extensions. By default only extensions built against different GIS Library are rebuilt."
+msgstr ""
+
+msgid "Map type conversions"
+msgstr "지도 유형 변환"
+
+msgid "Raster to vector"
+msgstr "래스터를 벡터로 변환"
+
+#, fuzzy
+#| msgid "Removes existing attribute table of a vector map."
+msgid "Converts a raster map into a vector map."
+msgstr "벡터 지도의 기존 속성 테이블을 제거합니다."
+
+msgid "Raster series to 3D raster"
+msgstr "래스터 계열을 3차원 래스터로 변환"
+
+msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgstr ""
+
+msgid "Raster 2.5D to 3D raster"
+msgstr "2.5차원 래스터를 3차원 래스터로 변환"
+
+msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export raster map"
+msgid "Vector to raster"
+msgstr "래스터 지도 내보내기"
+
+msgid "Converts (rasterize) a vector map into a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster 2.5D to 3D raster"
+msgid "Vector to 3D raster"
+msgstr "2.5차원 래스터를 3차원 래스터로 변환"
+
+msgid "Converts a vector map (only points) into a 3D raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "2D vector to 3D vector"
+msgstr "래스터를 벡터로 변환"
+
+msgid "Performs transformation of 2D vector features to 3D."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster 2.5D to 3D raster"
+msgid "3D raster to raster series"
+msgstr "2.5차원 래스터를 3차원 래스터로 변환"
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Converts 3D raster maps to 2D raster maps"
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+#, fuzzy
+#| msgid "GRASS GIS Simple Python Editor"
+msgid "Launches Simple Python Editor."
+msgstr "GRASS GIS 단순한 파이썬 편집기"
+
+#, fuzzy
+#| msgid "Launching script '%s'..."
+msgid "Launch script"
+msgstr "'%s' 스크립트를 시작합니다..."
+
+#, fuzzy
+#| msgid "Launching script '%s'..."
+msgid "Launches script file."
+msgstr "'%s' 스크립트를 시작합니다..."
+
+msgid "Launch Jupyter Notebook interface."
+msgstr ""
+
+#, fuzzy
+#| msgid "GRASS GIS Graphical Modeler"
+msgid "Graphical modeler"
+msgstr "GRASS GIS 그래픽 모델러"
+
+#, fuzzy
+#| msgid "GRASS GIS Graphical Modeler"
+msgid "Launch Graphical modeler"
+msgstr "GRASS GIS 그래픽 모델러"
+
+#, fuzzy
+#| msgid "GRASS GIS Graphical Modeler"
+msgid "Run model prepared by Graphical modeler"
+msgstr "GRASS GIS 그래픽 모델러"
+
+#, fuzzy
+#| msgid "GRASS GIS Manage Ground Control Points"
+msgid "Manage Ground Control Points for Georectification"
+msgstr "GRASS GIS 지상 제어점 관리"
+
+#, fuzzy
+#| msgid "Animation Toolbar"
+msgid "Animation tool"
+msgstr "애니메이션 도구 모음"
+
+msgid "Launch animation tool."
+msgstr "애니메이션 도구를 시작합니다."
+
+msgid "Launch Cartographic Composer"
+msgstr "지도 작성자를 시작합니다"
+
+msgid "Launch Map Swipe"
+msgstr ""
+
+msgid "Close graphical user interface."
+msgstr ""
+
+#, fuzzy
+#| msgid "Close GUI and exit GRASS GIS shell."
+msgid "Close GUI and exit GRASS shell."
+msgstr "GUI를 닫고 GRASS GIS 셸을 종료합니다."
+
+msgid "&Settings"
+msgstr "설정(&S)"
+
+msgid "Show current region"
+msgstr "현재 영역 보기"
+
+#, fuzzy
+#| msgid "Shows the extent of the computational region in Map Display."
+msgid "Shows the extent and resolution of the computational region."
+msgstr "지도 디스플레이 내 계산 영역의 범위를 보여 줍니다."
+
+msgid "Show region using latitude and longitude"
+msgstr "위도 및 경도를 이용한 영역 보기"
+
+msgid "Show current region extent in Map Display"
+msgstr "지도 디스플레이 내 현재 영역의 범위 보기"
+
+msgid "Shows the extent of the computational region in Map Display."
+msgstr "지도 디스플레이 내 계산 영역의 범위를 보여 줍니다."
+
+msgid "Set region"
+msgstr "영역 설정"
+
+msgid "Manages the boundary definitions for the geographic region."
+msgstr ""
+
+msgid "GRASS working environment"
+msgstr ""
+
+msgid "Mapset access"
+msgstr ""
+
+msgid "Set/unset access to other mapsets in current project"
+msgstr ""
+
+msgid "User access"
+msgstr ""
+
+msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
+msgstr ""
+
+msgid "Change working environment"
+msgstr ""
+
+#, fuzzy
+#| msgid "Changes/reports current mapset. Optionally create new mapset or list available mapsets in given location."
+msgid "Changes or reports current mapset. Optionally, creates new mapset or lists available mapsets in given project (location)."
+msgstr "현재 지도 세트를 바꾸거나 보고합니다. 선택적으로 새 지도 세트를 생성하거나 주어진 로케이션 안에 유효한 지도 세트를 나열합니다."
+
+#, fuzzy
+msgid "Change project (location) and mapset"
+msgstr "GRASS 로케이션과 지도 세트를 선택하세요"
+
+#, fuzzy
+msgid "Change current project and mapset."
+msgstr "GRASS 로케이션과 지도 세트를 선택하세요"
+
+#, fuzzy
+#| msgid "Manage maps"
+msgid "Change mapset"
+msgstr "지도 관리"
+
+msgid "Change current mapset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Change or report categories"
+msgid "Change working directory"
+msgstr "범주 변경 또는 보고"
+
+#, fuzzy
+#| msgid "&Settings"
+msgid "Show settings"
+msgstr "설정(&S)"
+
+msgid "Outputs and modifies the user's current GRASS variable settings."
+msgstr ""
+
+#, fuzzy
+#| msgid "Layer Manager settings"
+msgid "Change settings"
+msgstr "레이어 관리자 설정"
+
+msgid "Outputs and modifies the user's current GRASS variable settings. Prints all defined GRASS variables if no option is given."
+msgstr ""
+
+#, fuzzy
+msgid "Create new project (location)"
+msgstr "선택된 로케이션을 삭제합니다"
+
+#, fuzzy
+msgid "Launches project wizard to create a new GRASS project (also known as location)."
+msgstr "자료를 영구히 삭제하길 원하십니까? %s"
+
+#, fuzzy
+msgid "Creates new mapset in the current project, changes current mapset."
+msgstr "지도 세트 검색 경로에서 가능한 파일을 현재 사용자 지도 세트로 복사합니다."
+
+#, fuzzy
+#| msgid "Projection"
+msgid "Map projections"
+msgstr "투영"
+
+#, fuzzy
+#| msgid "Edit animation"
+msgid "Display map projection"
+msgstr "애니메이션 편집"
+
+msgid "Converts coordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Source projection:"
+msgid "Manage projections"
+msgstr "원천 자료 투영:"
+
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions). Can also be used to create new GRASS projects."
+msgstr ""
+
+#, fuzzy
+msgid "Convert coordinates"
+msgstr "무효한 입력 좌표"
+
+msgid "Converts coordinates from one projection to another (cs2cs frontend)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove extension"
+msgid "Addons extensions"
+msgstr "확장을 제거합니다"
+
+msgid "Install extension from addons"
+msgstr ""
+
+msgid "Installs new extension from GRASS AddOns repository."
+msgstr ""
+
+msgid "Manage installed extension"
+msgstr ""
+
+msgid "Updates or removes installed GRASS AddOns extension(s)."
+msgstr "설치된 GRASS 애드온 확장을 갱신하거나 제거합니다"
+
+msgid "Preferences"
+msgstr ""
+
+msgid "User GUI preferences (display font, commands, digitizer, etc.)"
+msgstr ""
+
+msgid "&Raster"
+msgstr "래스터(&R)"
+
+#, fuzzy
+#| msgid "Develop 3D raster map"
+msgid "Develop raster map"
+msgstr "3차원 래스터 지도 개발"
+
+msgid "Compress/decompress"
+msgstr "압축/해제"
+
+#, fuzzy
+#| msgid "Compress/decompress"
+msgid "Compresses and decompresses raster maps."
+msgstr "압축/해제"
+
+msgid "Region boundaries"
+msgstr "영역 경계"
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Sets the boundary definitions for a raster map."
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+msgid "Manage NULL values"
+msgstr "널값 관리"
+
+msgid "Manages NULL-values of given raster map."
+msgstr ""
+
+msgid "Quantization"
+msgstr "양자화"
+
+msgid "Produces the quantization file for a floating-point map."
+msgstr ""
+
+msgid "Timestamp"
+msgstr "타임스탬프"
+
+msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgstr "래스터 지도를 위한 타임스탬프를 수정합니다. 래스터 지도를 위한 타임스탬프를 출력/추가/제거합니다."
+
+msgid "Resample using aggregate statistics"
+msgstr "집계 통계를 이용한 재추출"
+
+msgid "Resamples raster map layers to a coarser grid using aggregation."
+msgstr "집계를 이용해서 래스터 지도 레이어를 더 큰 격자로 재추출합니다."
+
+msgid "Resample using multiple methods"
+msgstr "복수의 방법을 이용한 재추출"
+
+msgid "Resamples raster map to a finer grid using interpolation."
+msgstr "보간을 이용해서 래스터 지도를 더 작은 격자로 재추출합니다."
+
+msgid "Resample using nearest neighbor"
+msgstr "최근접 이웃을 이용한 재추출"
+
+msgid "GRASS raster map layer data resampling capability."
+msgstr ""
+
+msgid "Resample using spline tension"
+msgstr "스플라인 장력을 이용한 재추출"
+
+msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
+msgstr ""
+
+msgid "Resample using bspline"
+msgstr "B-스플라인을 이용한 재추출"
+
+msgid "Performs bilinear or bicubic spline interpolation with Tykhonov regularization."
+msgstr ""
+
+msgid "Resample using analytic kernel"
+msgstr "분석적인 커널을 이용한 재추출"
+
+msgid "Resamples raster map layers using an analytic kernel."
+msgstr "분석적인 커널을 이용해서 래스터 지도 레이어를 재추출합니다."
+
+msgid "Support file maintenance"
+msgstr "지원 파일 유지 관리"
+
+msgid "Allows creation and/or modification of raster map layer support files."
+msgstr ""
+
+#, fuzzy
+#| msgid "Reports and statistics"
+msgid "Update map statistics"
+msgstr "보고 및 통계"
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Update raster map statistics"
+msgstr "래스터 통계를 보고합니다"
+
+msgid "Tiling"
+msgstr "타일 생성"
+
+msgid "Produces tilings of the source projection for use in the destination region and projection."
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster)"
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Pack raster map"
+msgid "Tile raster map"
+msgstr "래스터 지도 꾸리기"
+
+msgid "Splits a raster map into tiles."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage maps"
+msgid "Manage semantic labels"
+msgstr "지도 관리"
+
+msgid "Manages semantic label information assigned to a single raster map or to a list of raster maps."
+msgstr ""
+
+msgid "Manage colors"
+msgstr "색상 관리"
+
+msgid "Color tables"
+msgstr "색상 테이블"
+
+msgid "Creates/modifies the color table associated with a raster map."
+msgstr ""
+
+msgid "Color tables (stddev)"
+msgstr "색상 테이블 (표준 편차)"
+
+msgid "Sets color rules based on stddev from a raster map's mean value."
+msgstr ""
+
+msgid "Manage color rules interactively"
+msgstr "대화식 색상 규칙 관리"
+
+msgid "Interactive management of raster color tables."
+msgstr ""
+
+msgid "Export color table"
+msgstr "색상 테이블 내보내기"
+
+msgid "Exports the color table associated with a raster map."
+msgstr ""
+
+msgid "Blend 2 color rasters"
+msgstr "두 개의 색상 래스터 혼합"
+
+msgid "Blends color components of two raster maps by a given ratio."
+msgstr ""
+
+msgid "Create RGB"
+msgstr "RGB 생성"
+
+msgid "Combines red, green and blue raster maps into a single composite raster map."
+msgstr ""
+
+msgid "RGB to HIS"
+msgstr "RGB를 HIS로 변환"
+
+msgid "Generates red, green and blue (RGB) raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
+msgstr ""
+
+msgid "Split raster into RGB"
+msgstr ""
+
+msgid "Splits a raster map into red, green and blue maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Buffer rasters"
+msgid "Query raster maps"
+msgstr "래스터 버퍼"
+
+msgid "Query values by coordinates"
+msgstr "좌표로 값 질의"
+
+msgid "Queries raster maps on their category values and category labels."
+msgstr ""
+
+msgid "Query colors by value"
+msgstr "값으로 색상 질의"
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Queries colors for a raster map layer."
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+msgid "Raster buffers and distance"
+msgstr "래스터 버퍼 및 거리"
+
+msgid "Buffer rasters"
+msgstr "래스터 버퍼"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
+msgstr ""
+
+#, fuzzy
+#| msgid "Buffer rasters"
+msgid "Buffer rasters (low memory)"
+msgstr "래스터 버퍼"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values. This is the low-memory alternative to the classic r.buffer module."
+msgstr ""
+
+msgid "Concentric circles"
+msgstr "동심원"
+
+msgid "Creates a raster map containing concentric rings around a given point."
+msgstr ""
+
+msgid "Closest points"
+msgstr "최근접 점"
+
+msgid "Locates the closest points between objects in two raster maps."
+msgstr ""
+
+msgid "Grow by one cell"
+msgstr "한 셀 키우기"
+
+msgid "Generates a raster map layer with contiguous areas grown by one cell."
+msgstr ""
+
+msgid "Distance to features"
+msgstr "피처까지 거리"
+
+msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
+msgstr ""
+
+#, fuzzy
+#| msgid "Resamples raster map to a finer grid using interpolation."
+msgid "Creates a raster mask for limiting raster operation."
+msgstr "보간을 이용해서 래스터 지도를 더 작은 격자로 재추출합니다."
+
+msgid "Query mask status"
+msgstr ""
+
+msgid "Reports presence or absence of a raster mask Provides information about the presence of a 2D raster mask as text output or return code"
+msgstr ""
+
+msgid "Raster map calculator"
+msgstr "래스터 지도 계산기"
+
+#, fuzzy
+#| msgid "3D raster map calculator"
+msgid "Simplified raster map calculator"
+msgstr "3차원 래스터 지도 계산기"
+
+msgid "Calculates a new raster map from a simple r.mapcalc expression."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map calculator"
+msgid "Raster map calculator."
+msgstr "래스터 지도 계산기"
+
+msgid "Neighborhood analysis"
+msgstr "이웃 분석"
+
+msgid "Moving window"
+msgstr "이동 창"
+
+msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgstr "각 셀의 범주 값은 그 주변 셀에 할당된 범주값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도 레이어에 저장됩니다."
+
+msgid "Neighborhood points"
+msgstr "이웃 점"
+
+#, fuzzy
+#| msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
+msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
+msgstr "벡터 점 지도를 위한 이웃 분석 도구. 각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
+
+msgid "Overlay rasters"
+msgstr "래스터 중첩"
+
+msgid "Cross product"
+msgstr "벡터곱"
+
+msgid "Creates a cross product of the category values from multiple raster map layers."
+msgstr ""
+
+msgid "Patch raster maps"
+msgstr "래스터 지도 덧대기"
+
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgstr ""
+
+msgid "Raster series aggregation"
+msgstr "래스터 계열 집계"
+
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgstr "각 출력 셀의 값은 입력 래스터 지도 레이어 안의 해당하는 셀에 할당된 값들의 함수가 됩니다."
+
+msgid "Raster series accumulation"
+msgstr "래스터 계열 누적"
+
+msgid "Makes each output cell value a accumulationfunction of the values assigned to the corresponding cells in the input raster map layers."
+msgstr "각 출력 셀의 값은 입력 래스터 지도 레이어 안의 해당하는 셀에 할당된 값들의 누적값이 됩니다."
+
+msgid "Statistical overlay"
+msgstr "통계적 중첩"
+
+msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
+msgstr ""
+
+msgid "Quantiles overlay"
+msgstr "분위수 중첩"
+
+msgid "Compute category quantiles using two passes."
+msgstr ""
+
+msgid "Solar radiance and shadows"
+msgstr "태양 복사 및 그림자"
+
+msgid "LatLong map"
+msgstr "위경도 지도"
+
+msgid "Creates a latitude/longitude raster map."
+msgstr ""
+
+msgid "Solar irradiance and irradiation"
+msgstr "태양 복사 조도 및 조사"
+
+msgid "Solar irradiance and irradiation model. Computes direct (beam), diffuse and reflected solar irradiation raster maps for given day, latitude, surface and atmospheric conditions. Solar parameters (e.g. sunrise, sunset times, declination, extraterrestrial irradiance, daylight length) are saved in the map history file. Alternatively, a local time can be specified to compute solar incidence angle and/or irradiance raster maps. The shadowing effect of the topography is optionally incorporated."
+msgstr ""
+
+msgid "Shadows map"
+msgstr ""
+
+msgid "Calculates cast shadow areas from sun position and elevation raster map. Either exact sun position (A) is specified, or date/time to calculate the sun position (B) by r.sunmask itself."
+msgstr ""
+
+msgid "Sunshine hours and solar angles"
+msgstr ""
+
+msgid "Calculates solar elevation, solar azimuth, and sun hours. Solar elevation: the angle between the direction of the geometric center of the sun's apparent disk and the (idealized) horizon. Solar azimuth: the angle from due north in clockwise direction."
+msgstr ""
+
+msgid "Terrain analysis"
+msgstr ""
+
+msgid "Generate contour lines"
+msgstr ""
+
+msgid "Produces a vector map of specified contours from a raster map."
+msgstr ""
+
+msgid "Cost surface"
+msgstr ""
+
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Trace a path"
+msgstr ""
+
+msgid "Traces paths from starting points following input directions."
+msgstr ""
+
+msgid "Cumulative movement costs"
+msgstr ""
+
+msgid "Creates a raster map showing the anisotropic cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Least cost route or flow"
+msgstr ""
+
+msgid "Traces a flow through an elevation model or cost surface on a raster map."
+msgstr ""
+
+msgid "Compute shaded relief"
+msgstr ""
+
+#, fuzzy
+#| msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
+msgid "Creates shaded relief map from an elevation map (DEM)."
+msgstr "표고 래스터 지도로부터 지형지표(습윤지표) 래스터 지도를 생성합니다."
+
+msgid "Apply shade to raster"
+msgstr ""
+
+msgid "Drapes a color raster over an shaded relief or aspect map."
+msgstr ""
+
+msgid "Slope and aspect"
+msgstr ""
+
+msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map. Aspect is calculated counterclockwise from east."
+msgstr ""
+
+msgid "Landforms"
+msgstr ""
+
+msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
+msgstr ""
+
+#, fuzzy
+#| msgid "Parameters"
+msgid "Terrain parameters"
+msgstr "매개변수"
+
+msgid "Extracts terrain parameters from a DEM. Uses a multi-scale approach by taking fitting quadratic parameters to any size window (via least squares)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Nearest features"
+msgid "Textural features"
+msgstr "최근접 피처"
+
+msgid "Generate images with textural features from a raster map."
+msgstr ""
+
+msgid "Visibility"
+msgstr ""
+
+msgid "Computes the viewshed of a point on an elevation raster map. Default format: NULL (invisible), vertical angle wrt viewpoint (visible)."
+msgstr ""
+
+msgid "Horizon angle"
+msgstr ""
+
+msgid "Computes horizon angle height from a digital elevation model. The module has two different modes of operation: 1. Computes the entire horizon around a single point whose coordinates are given with the 'coord' option. The horizon height (in radians). 2. Computes one or more raster maps of the horizon height in a single direction. The input for this is the angle (in degrees), which is measured counterclockwise with east=0, north=90 etc. The output is the horizon height in radians."
+msgstr ""
+
+#, fuzzy
+#| msgid "Nearest features"
+msgid "Transform features"
+msgstr "최근접 피처"
+
+msgid "Clump"
+msgstr ""
+
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
+msgstr ""
+
+msgid "Grow"
+msgstr ""
+
+msgid "Thin"
+msgstr ""
+
+msgid "Thins non-null cells that denote linear features in a raster map layer."
+msgstr ""
+
+msgid "Hydrologic modeling"
+msgstr ""
+
+msgid "Carve stream channels"
+msgstr ""
+
+msgid "Generates stream channels. Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
+msgstr ""
+
+msgid "Fill lake"
+msgstr ""
+
+msgid "Fills lake at given point to given level."
+msgstr ""
+
+msgid "Depressionless map and flowlines"
+msgstr ""
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster series accumulation"
+msgid "Flow accumulation"
+msgstr "래스터 계열 누적"
+
+msgid "Performs flow computation for massive grids."
+msgstr ""
+
+msgid "Flow lines"
+msgstr ""
+
+msgid "Constructs flowlines. Computes flowlines, flowpath lengths, and flowaccumulation (contributing areas) from a elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "Watershed analysis"
+msgstr "이웃 분석"
+
+msgid "Calculates hydrological parameters and RUSLE factors."
+msgstr ""
+
+msgid "Watershed subbasins"
+msgstr ""
+
+msgid "Generates watershed subbasins raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster series aggregation"
+msgid "Watershed basin creation"
+msgstr "래스터 계열 집계"
+
+msgid "Creates watershed basins from a drainage direction map."
+msgstr ""
+
+msgid "Extraction of stream networks"
+msgstr ""
+
+msgid "Performs stream network extraction."
+msgstr ""
+
+msgid "SIMWE Overland flow modeling"
+msgstr ""
+
+msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "SIMWE Sediment flux modeling"
+msgstr ""
+
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "Topographic index map"
+msgstr "지형지표 지도"
+
+msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
+msgstr "표고 래스터 지도로부터 지형지표(습윤지표) 래스터 지도를 생성합니다."
+
+msgid "TOPMODEL simulation"
+msgstr ""
+
+msgid "Simulates TOPMODEL which is a physically based hydrologic model."
+msgstr ""
+
+msgid "USLE K-factor"
+msgstr ""
+
+msgid "Computes USLE Soil Erodibility Factor (K)."
+msgstr ""
+
+msgid "USLE R-factor"
+msgstr ""
+
+msgid "Computes USLE R factor, Rainfall erosivity index."
+msgstr ""
+
+msgid "Groundwater modeling"
+msgstr ""
+
+msgid "Groundwater flow"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgstr ""
+
+msgid "Groundwater solute transport"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined and unconfined solute transport in two dimensions"
+msgstr ""
+
+msgid "Landscape patch analysis"
+msgstr ""
+
+msgid "Set up sampling and analysis framework"
+msgstr ""
+
+msgid "Configuration editor for r.li.'index'"
+msgstr ""
+
+msgid "Edge density"
+msgstr ""
+
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Contrast weighted edge density"
+msgstr ""
+
+msgid "Calculates contrast weighted edge density index on a raster map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Patch raster maps"
+msgid "Patch area mean"
+msgstr "래스터 지도 덧대기"
+
+msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+#, fuzzy
+#| msgid "Patch raster maps"
+msgid "Patch area range"
+msgstr "래스터 지도 덧대기"
+
+msgid "Calculates range of patch area size on a raster map"
+msgstr ""
+
+msgid "Patch area Std Dev"
+msgstr ""
+
+msgid "Calculates standard deviation of patch area a raster map"
+msgstr ""
+
+msgid "Patch area Coeff Var"
+msgstr ""
+
+msgid "Calculates coefficient of variation of patch area on a raster map"
+msgstr ""
+
+msgid "Patch density"
+msgstr ""
+
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Patch number"
+msgstr ""
+
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
+msgstr ""
+
+msgid "Dominance's diversity"
+msgstr ""
+
+msgid "Calculates dominance's diversity index on a raster map"
+msgstr ""
+
+msgid "Shannon's diversity"
+msgstr ""
+
+msgid "Calculates Shannon's diversity index on a raster map"
+msgstr ""
+
+msgid "Simpson's diversity"
+msgstr ""
+
+msgid "Calculates Simpson's diversity index on a raster map"
+msgstr ""
+
+msgid "Richness"
+msgstr ""
+
+msgid "Calculates richness index on a raster map"
+msgstr ""
+
+msgid "Shape index"
+msgstr ""
+
+msgid "Calculates shape index on a raster map"
+msgstr ""
+
+msgid "Wildfire modeling"
+msgstr ""
+
+msgid "Rate of spread"
+msgstr ""
+
+msgid "Generates rate of spread raster maps. Generates three, or four raster map layers showing the base (perpendicular) rate of spread (ROS), the maximum (forward) ROS, the direction of the maximum ROS, and optionally the maximum potential spotting distance for fire spread simulation."
+msgstr ""
+
+msgid "Least-cost spread paths"
+msgstr ""
+
+msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
+msgstr ""
+
+msgid "Anisotropic spread simulation"
+msgstr ""
+
+msgid "Simulates elliptically anisotropic spread. Generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins. It optionally produces raster maps to contain backlink UTM coordinates for tracing spread paths. Usable for fire spread simulations."
+msgstr ""
+
+msgid "Change category values and labels"
+msgstr ""
+
+#, fuzzy
+#| msgid "Parameter for animation:"
+msgid "Manage category information"
+msgstr "애니메이션을 위한 매개변수"
+
+msgid "Manages category values and labels associated with user-specified raster map layers."
+msgstr ""
+
+msgid "Interactively edit category values"
+msgstr ""
+
+msgid "Edits cell values in a raster map."
+msgstr ""
+
+msgid "Reclassify by size"
+msgstr ""
+
+msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
+msgstr ""
+
+msgid "Reclassify"
+msgstr ""
+
+msgid "Reclassify raster map based on category values. Creates a new raster map whose category values are based upon a reclassification of the categories in an existing raster map."
+msgstr ""
+
+msgid "Recode"
+msgstr ""
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Recodes categorical raster maps."
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+#, fuzzy
+#| msgid "Remove scale bar"
+msgid "Rescale"
+msgstr "축척 표시줄을 제거합니다"
+
+msgid "Rescales the range of category values in a raster map layer."
+msgstr ""
+
+msgid "Rescale with histogram"
+msgstr ""
+
+msgid "Rescales histogram equalized the range of category values in a raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate from database"
+msgid "Generate random cells"
+msgstr "데이터베이스로부터 생성"
+
+msgid "Random cells"
+msgstr ""
+
+msgid "Generates random cell values with spatial dependence."
+msgstr ""
+
+msgid "Random cells and vector points"
+msgstr ""
+
+msgid "Creates randomly placed raster cells or vector points Creates a raster map and vector point map containing randomly located cells and points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate from database"
+msgid "Generate surfaces"
+msgstr "데이터베이스로부터 생성"
+
+msgid "Fractal surface"
+msgstr ""
+
+msgid "Creates a fractal surface of a given fractal dimension."
+msgstr ""
+
+msgid "Gaussian kernel density surface"
+msgstr ""
+
+msgid "Generates a raster density map from vector points map. Density is computed using a moving kernel. Optionally generates a vector density map on a vector network."
+msgstr ""
+
+msgid "Gaussian deviates surface"
+msgstr ""
+
+msgid "Generates a raster map using gaussian random number generator. Mean and standard deviation of gaussian deviates can be expressed by the user."
+msgstr ""
+
+msgid "Plane"
+msgstr ""
+
+msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
+msgstr ""
+
+msgid "Random deviates surface"
+msgstr ""
+
+msgid "Produces a raster surface map of uniform random deviates with defined range."
+msgstr ""
+
+msgid "Random surface with spatial dependence"
+msgstr ""
+
+msgid "Generates random surface(s) with spatial dependence."
+msgstr ""
+
+msgid "Interpolate surfaces"
+msgstr ""
+
+msgid "Bilinear and bicubic from vector points"
+msgstr ""
+
+msgid "Performs bicubic or bilinear spline interpolation with Tykhonov regularization."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import of common raster formats"
+msgid "IDW from raster points"
+msgstr "일반적인 래스터 서식 가져오기"
+
+msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import of common vector formats"
+msgid "IDW from vector points"
+msgstr "일반적인 벡터 서식 가져오기"
+
+msgid "Provides surface interpolation from vector point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "Raster contours"
+msgstr "래스터를 벡터로 변환"
+
+msgid "Generates surface raster map from rasterized contours."
+msgstr ""
+
+#, fuzzy
+#| msgid "Resample using spline tension"
+msgid "Regularized spline tension"
+msgstr "스플라인 장력을 이용한 재추출"
+
+msgid "Performs surface interpolation from vector points map by splines. Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster series aggregation"
+msgid "Raster series interpolation"
+msgstr "래스터 계열 집계"
+
+msgid "Interpolates raster maps located (temporal or spatial) in between input raster maps at specific sampling positions."
+msgstr ""
+
+msgid "Fill NULL cells"
+msgstr ""
+
+#, fuzzy
+#| msgid "Resamples raster map to a finer grid using interpolation."
+msgid "Fills no-data areas in raster maps using spline interpolation."
+msgstr "보간을 이용해서 래스터 지도를 더 작은 격자로 재추출합니다."
+
+msgid "Fill NULL cells using IDW"
+msgstr ""
+
+msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
+msgstr ""
+
+msgid "Reports and statistics"
+msgstr "보고 및 통계"
+
+#, fuzzy
+#| msgid "Update map statistics"
+msgid "Basic raster metadata"
+msgstr "지도 통계 갱신"
+
+#, fuzzy
+#| msgid "Output format for raster data"
+msgid "Outputs basic information about a raster map."
+msgstr "래스터 자료를 위한 출력 포맷"
+
+#, fuzzy
+#| msgid "Reports and statistics"
+msgid "General statistics"
+msgstr "보고 및 통계"
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Generates area statistics for raster map."
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+#, fuzzy
+#| msgid "Quantiles overlay"
+msgid "Quantiles for large data sets"
+msgstr "분위수 중첩"
+
+msgid "Compute quantiles using two passes."
+msgstr ""
+
+#, fuzzy
+#| msgid "Change or report categories"
+msgid "Range of category values"
+msgstr "범주 변경 또는 보고"
+
+msgid "Prints terse list of category values found in a raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster map calculator"
+msgid "Sum area by raster map and category"
+msgstr "3차원 래스터 지도 계산기"
+
+msgid "Reports statistics for raster maps."
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+msgid "Statistics for clumped cells"
+msgstr ""
+
+msgid "Calculates the volume of data \"clumps\". Optionally produces a GRASS vector points map containing the calculated centroids of these clumps."
+msgstr ""
+
+msgid "Total corrected area"
+msgstr ""
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Prints estimation of surface area for raster map."
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+msgid "Calculates univariate statistics from the non-null cells of a raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "Sample transects"
+msgstr ""
+
+msgid "Outputs the raster map layer values lying on user-defined line(s)."
+msgstr ""
+
+msgid "Sample transects (bearing/distance)"
+msgstr ""
+
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
+msgstr ""
+
+msgid "Covariance/correlation"
+msgstr ""
+
+msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
+msgstr ""
+
+msgid "Linear regression"
+msgstr ""
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x."
+msgstr ""
+
+msgid "Multiple regression"
+msgstr ""
+
+msgid "Calculates multiple linear regression from raster maps."
+msgstr ""
+
+msgid "Mutual category occurrences"
+msgstr ""
+
+msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
+msgstr ""
+
+msgid "Modal category value"
+msgstr ""
+
+msgid "Finds the mode of values in a cover map within areas assigned the same category value in a user-specified base map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Reports and statistics"
+msgid "Zonal statistics"
+msgstr "보고 및 통계"
+
+msgid "Calculates category or object oriented statistics."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Object geometry statistics"
+msgstr "래스터 통계를 보고합니다"
+
+msgid "Calculates geometry parameters for raster objects."
+msgstr ""
+
+msgid "&Vector"
+msgstr "벡터(&V)"
+
+#, fuzzy
+#| msgid "Overlay vector maps"
+msgid "Develop vector map"
+msgstr "벡터 지도 중첩"
+
+#, fuzzy
+#| msgid "Clean vector map"
+msgid "Create new empty vector map"
+msgstr "벡터 지도 정리"
+
+msgid "Edit vector map (non-interactively)"
+msgstr ""
+
+msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
+msgstr ""
+
+msgid "Convert object types"
+msgstr ""
+
+#, fuzzy
+#| msgid "Change or report categories"
+msgid "Changes type of vector features."
+msgstr "범주 변경 또는 보고"
+
+msgid "Parallel lines"
+msgstr ""
+
+msgid "Creates parallel line to input vector lines."
+msgstr ""
+
+#, fuzzy
+#| msgid "Region boundaries"
+msgid "Dissolve boundaries"
+msgstr "영역 경계"
+
+msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster 2.5D to 3D raster"
+msgid "Create 3D vector over raster"
+msgstr "2.5차원 래스터를 3차원 래스터로 변환"
+
+msgid "Converts 2D vector features to 3D by sampling of elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Extrude 3D vector map"
+msgstr "벡터 지도 내보내기"
+
+msgid "Extrudes flat vector features to 3D vector features with defined height. Optionally the height can be derived from sampling of elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create RGB"
+msgid "Create labels"
+msgstr "RGB 생성"
+
+#, fuzzy
+#| msgid "Removes a vector feature from a vector map through attribute selection."
+msgid "Creates paint labels for a vector map from attached attributes."
+msgstr "속성 선택을 이용해서 벡터 지도로부터 벡터 피처를 제거합니다"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Reposition vector map"
+msgstr "벡터 지도 내보내기"
+
+msgid "Performs an affine transformation (shift, scale and rotate) on vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Pack vector map"
+msgid "Rectify vector map"
+msgstr "벡터 지도 꾸리기"
+
+msgid "Rectifies a vector by computing a coordinate transformation for each object in the vector based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update map statistics"
+msgid "Updates vector map metadata."
+msgstr "지도 통계 갱신"
+
+#, fuzzy
+#| msgid "Manage maps"
+msgid "Manage timestamp"
+msgstr "지도 관리"
+
+#, fuzzy
+#| msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgid "Modifies a timestamp for a vector map. Print/add/remove a timestamp for a vector map."
+msgstr "래스터 지도를 위한 타임스탬프를 수정합니다. 래스터 지도를 위한 타임스탬프를 출력/추가/제거합니다."
+
+msgid "Create labels with simulated annealing"
+msgstr ""
+
+msgid "Create optimally placed labels for vector map(s)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Closest points"
+msgid "Decimate points"
+msgstr "최근접 점"
+
+msgid "Decimates a point cloud Copies points from one vector to another while applying different decimations"
+msgstr ""
+
+#, fuzzy
+#| msgid "Support file maintenance"
+msgid "Topology maintenance"
+msgstr "지원 파일 유지 관리"
+
+#, fuzzy
+#| msgid "Report temporal topology"
+msgid "Create or rebuild topology"
+msgstr "시간 위상 보고"
+
+msgid "Creates topology for vector map. Optionally also checks for topological errors."
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to open vector map <%s>"
+msgid "Rebuild topology on all vector maps"
+msgstr "벡터 지도 <%s>를 열 수 없습니다"
+
+msgid "Rebuilds topology on all vector maps in the current mapset."
+msgstr ""
+
+msgid "Build polylines"
+msgstr ""
+
+msgid "Builds polylines from lines or boundaries."
+msgstr ""
+
+msgid "Split lines"
+msgstr ""
+
+msgid "Splits vector lines to shorter segments."
+msgstr ""
+
+msgid "Split polylines"
+msgstr ""
+
+msgid "Creates points/segments from input vector lines and positions."
+msgstr ""
+
+msgid "Clean vector map"
+msgstr "벡터 지도 정리"
+
+msgid "Toolset for cleaning topology of vector map."
+msgstr "벡터 지도의 위상 정리를 위한 도구세트"
+
+msgid "Fill holes in areas"
+msgstr ""
+
+msgid "Fill holes in areas by keeping only outer boundaries"
+msgstr ""
+
+msgid "Smooth or simplify"
+msgstr ""
+
+msgid "Performs vector based generalization."
+msgstr ""
+
+msgid "Add centroids"
+msgstr ""
+
+msgid "Adds missing centroids to closed boundaries."
+msgstr ""
+
+msgid "Creates/modifies the color table associated with a vector map."
+msgstr ""
+
+msgid "Interactive management of vector color tables."
+msgstr ""
+
+msgid "Exports the color table associated with a vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Overlay vector maps"
+msgid "Query vector map"
+msgstr "벡터 지도 중첩"
+
+#, fuzzy
+#| msgid "Query values by coordinates"
+msgid "Query with coordinate(s)"
+msgstr "좌표로 값 질의"
+
+msgid "Queries a vector map at given locations."
+msgstr ""
+
+msgid "Query vector attribute data"
+msgstr ""
+
+msgid "Prints vector map attributes."
+msgstr ""
+
+#, fuzzy
+#| msgid "Delete selected location"
+msgid "Feature selection"
+msgstr "선택된 로케이션을 삭제합니다"
+
+msgid "Select by attributes"
+msgstr ""
+
+msgid "Selects vector features from an existing vector map and creates a new vector map containing only the selected features."
+msgstr ""
+
+msgid "Select by another map"
+msgstr ""
+
+msgid "Selects features from vector map (A) by features from other vector map (B)."
+msgstr ""
+
+msgid "Convert areas or points to lines"
+msgstr ""
+
+msgid "Converts vector polygons or points to lines."
+msgstr ""
+
+#, fuzzy
+#| msgid "Buffer rasters"
+msgid "Buffer vectors"
+msgstr "래스터 버퍼"
+
+msgid "Creates a buffer around vector features of given type."
+msgstr ""
+
+msgid "Point analysis"
+msgstr ""
+
+msgid "Identify and remove outliers"
+msgstr "이상치 식별 및 제거"
+
+msgid "Removes outliers from vector point data."
+msgstr "벡터 점 자료로부터 이상치를 제거합니다."
+
+#, fuzzy
+#| msgid "Identify and remove outliers"
+msgid "Identify point clusters"
+msgstr "이상치 식별 및 제거"
+
+msgid "Performs cluster identification."
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists"
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists."
+msgstr ""
+
+#, fuzzy
+#| msgid "Closest points"
+msgid "Perturb points"
+msgstr "최근접 점"
+
+msgid "Random location perturbations of vector points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove outliers in point sets"
+msgid "Test/training point sets"
+msgstr "점 세트 내 이상치 제거"
+
+msgid "Randomly partition points into test/train sets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Output format for vector data"
+msgid "Tests for normality for vector points"
+msgstr "벡터 자료를 위한 출력 포맷"
+
+#, fuzzy
+#| msgid "Output format for vector data"
+msgid "Tests for normality for vector points."
+msgstr "벡터 자료를 위한 출력 포맷"
+
+msgid "Point pattern analysis"
+msgstr ""
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "Lidar analysis"
+msgstr "이웃 분석"
+
+msgid "Detect edges"
+msgstr ""
+
+msgid "Detects the object's edges from a LIDAR data set."
+msgstr ""
+
+msgid "Detect interiors"
+msgstr ""
+
+msgid "Building contour determination and Region Growing algorithm for determining the building inside"
+msgstr ""
+
+msgid "Correct and reclassify objects"
+msgstr ""
+
+msgid "Corrects the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
+msgstr ""
+
+msgid "Linear referencing"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create RGB"
+msgid "Create LRS"
+msgstr "RGB 생성"
+
+#, fuzzy
+#| msgid "Select EPSG code of spatial reference system"
+msgid "Creates a linear reference system."
+msgstr "공간 참조 체계의 EPSG 코드를 선택하세요"
+
+msgid "Create stationing"
+msgstr ""
+
+msgid "Creates stationing from input lines, and linear reference system."
+msgstr ""
+
+msgid "Create points/segments"
+msgstr ""
+
+msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgstr ""
+
+msgid "Find line id and offset"
+msgstr ""
+
+msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
+msgstr ""
+
+msgid "Nearest features"
+msgstr "최근접 피처"
+
+msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "Network analysis"
+msgstr "이웃 분석"
+
+#, fuzzy
+#| msgid "Vector network analysis tool"
+msgid "Tool for interactive vector network analysis."
+msgstr "벡터 네트워크 분석 도구"
+
+msgid "Network preparation"
+msgstr ""
+
+#, fuzzy
+#| msgid "Support file maintenance"
+msgid "Performs network maintenance."
+msgstr "지원 파일 유지 관리"
+
+msgid "Allocate subnets"
+msgstr "서브넷 할당"
+
+msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr "최근접 중심을 위한 서브넷을 할당합니다. 중심 교점이 열려 있어야 합니다 (비용 >= 0). 중심 교점의 비용은 계산에 사용됩니다."
+
+msgid "Split net"
+msgstr ""
+
+#, fuzzy
+#| msgid "Allocates subnets for nearest centers (direction from center). center node must be opened (costs >= 0). Costs of center node are used in calculation"
+msgid "Splits subnets for nearest centers by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr "최근접 중심을 위한 서브넷을 할당합니다 (중심으로부터의 방향). 중심 교점이 열려 있어야 합니다 (비용 >= 0). 중심 교점의 비용은 계산에 사용됩니다."
+
+msgid "Shortest path"
+msgstr ""
+
+#, fuzzy
+#| msgid "Shortest path for sets of features"
+msgid "Finds shortest path on vector network."
+msgstr "피처 세트의 최단 경로"
+
+msgid "Shortest path for sets of features"
+msgstr "피처 세트의 최단 경로"
+
+msgid "Computes shortest distance via the network between the given sets of features. Finds the shortest paths from each 'from' point to the nearest 'to' feature and various information about this relation are uploaded to the attribute table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Shortest path for sets of features"
+msgid "Shortest path using timetables"
+msgstr "피처 세트의 최단 경로"
+
+msgid "Finds shortest path using timetables."
+msgstr ""
+
+#, fuzzy
+#| msgid "Shortest path for sets of features"
+msgid "Shortest path for all pairs"
+msgstr "피처 세트의 최단 경로"
+
+msgid "Computes the shortest path between all pairs of nodes in the network."
+msgstr ""
+
+msgid "Visibility network"
+msgstr ""
+
+msgid "Performs visibility graph construction."
+msgstr ""
+
+msgid "Bridges and articulation points"
+msgstr ""
+
+msgid "Computes bridges and articulation points in the network."
+msgstr ""
+
+msgid "Maximum flow"
+msgstr ""
+
+msgid "Computes the maximum flow between two sets of nodes in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector database connections"
+msgid "Vertex connectivity"
+msgstr "벡터 데이터베이스 연결"
+
+msgid "Computes vertex connectivity between two sets of nodes in the network."
+msgstr ""
+
+msgid "Components"
+msgstr ""
+
+msgid "Computes strongly and weakly connected components in the network."
+msgstr ""
+
+msgid "Centrality"
+msgstr ""
+
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
+msgstr ""
+
+msgid "Steiner tree"
+msgstr ""
+
+msgid "Creates Steiner tree for the network and given terminals. Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm is used in this module so the result may be sub optimal."
+msgstr ""
+
+msgid "Minimum spanning tree"
+msgstr ""
+
+msgid "Computes minimum spanning tree for the network."
+msgstr ""
+
+msgid "Traveling salesman analysis"
+msgstr ""
+
+msgid "Creates a cycle connecting given nodes (Traveling salesman problem). Note that TSP is NP-hard, heuristic algorithm is used by this module and created cycle may be sub optimal"
+msgstr ""
+
+msgid "Overlay vector maps"
+msgstr "벡터 지도 중첩"
+
+#, fuzzy
+#| msgid "Clean vector map"
+msgid "Clip vector maps"
+msgstr "벡터 지도 정리"
+
+msgid "Extracts features of input map which overlay features of clip map."
+msgstr ""
+
+msgid "Overlays two vector maps offering clip, intersection, difference, symmetrical difference, union operators."
+msgstr ""
+
+#, fuzzy
+#| msgid "Pack vector map"
+msgid "Patch vector maps"
+msgstr "벡터 지도 꾸리기"
+
+msgid "Creates a new vector map by combining other vector maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage colors"
+msgid "Manage categories"
+msgstr "색상 관리"
+
+msgid "Change or report categories"
+msgstr "범주 변경 또는 보고"
+
+#, fuzzy
+#| msgid "Attaches, deletes or reports vector categories to map geometry."
+msgid "Attaches, deletes or reports vector categories to/from/of map geometry."
+msgstr "지도 지형의 벡터 범주를 부착, 삭제, 또는 보고합니다."
+
+msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update database values from vector"
+msgid "Update area attributes from raster"
+msgstr "벡터로부터 데이터베이스값 갱신"
+
+msgid "Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update database values from vector"
+msgid "Update area attributes from vector"
+msgstr "벡터로부터 데이터베이스값 갱신"
+
+msgid "Count points in areas, calculate statistics from point attributes."
+msgstr ""
+
+msgid "Update point attributes from areas"
+msgstr ""
+
+msgid "Uploads vector values at positions of vector points to the table."
+msgstr ""
+
+msgid "Update database values from vector"
+msgstr "벡터로부터 데이터베이스값 갱신"
+
+#, fuzzy
+#| msgid "Update database values from vector"
+msgid "Populates attribute values from vector features."
+msgstr "벡터로부터 데이터베이스값 갱신"
+
+#, fuzzy
+#| msgid "Simplified raster import with reprojection"
+msgid "Sample raster maps at point locations"
+msgstr "재투영과 동시에 단순화된 래스터 가져오기"
+
+msgid "Uploads raster values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Simplified raster import with reprojection"
+msgid "Sample 3D raster at point locations"
+msgstr "재투영과 동시에 단순화된 래스터 가져오기"
+
+msgid "Uploads 3D raster values at positions of vector points to the table."
+msgstr ""
+
+msgid "Sample temporal raster dataset at point locations"
+msgstr ""
+
+msgid "Uploads space time raster dataset values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood points"
+msgid "Sample raster neighborhood around points"
+msgstr "이웃 점"
+
+#, fuzzy
+#| msgid "Resamples raster map to a finer grid using interpolation."
+msgid "Samples a raster map at vector point locations."
+msgstr "보간을 이용해서 래스터 지도를 더 작은 격자로 재추출합니다."
+
+#, fuzzy
+msgid "Generate area for current region"
+msgstr "현재 영역 보기"
+
+#, fuzzy
+msgid "Creates a vector polygon from the current region extent."
+msgstr "다른 GRASS 로케이션으로부터 벡터 지도 재투영"
+
+#, fuzzy
+#| msgid "Generate from database"
+msgid "Generate areas from points"
+msgstr "데이터베이스로부터 생성"
+
+msgid "Convex hull"
+msgstr ""
+
+msgid "Produces a 2D/3D convex hull for a given vector map."
+msgstr ""
+
+msgid "Delaunay triangles"
+msgstr ""
+
+msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgstr ""
+
+msgid "Voronoi diagram/Thiessen polygons"
+msgstr ""
+
+msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate from database"
+msgid "Generate grid"
+msgstr "데이터베이스로부터 생성"
+
+msgid "Creates a vector map of a user-defined grid."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate from database"
+msgid "Generate points"
+msgstr "데이터베이스로부터 생성"
+
+msgid "Generate from database"
+msgstr "데이터베이스로부터 생성"
+
+msgid "Creates new vector (points) map from database table containing coordinates."
+msgstr ""
+
+msgid "Generate points along lines"
+msgstr ""
+
+msgid "Creates points along input lines in new vector map with 2 layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate from database"
+msgid "Generate random points"
+msgstr "데이터베이스로부터 생성"
+
+msgid "Generates random 2D/3D vector points."
+msgstr ""
+
+msgid "Remove outliers in point sets"
+msgstr "점 세트 내 이상치 제거"
+
+#, fuzzy
+#| msgid "Pack vector map"
+msgid "Basic vector metadata"
+msgstr "벡터 지도 꾸리기"
+
+#, fuzzy
+#| msgid "Output format for vector data"
+msgid "Outputs basic information about a vector map."
+msgstr "벡터 자료를 위한 출력 포맷"
+
+msgid "Classify attribute data"
+msgstr ""
+
+msgid "Classifies attribute data, e.g. for thematic mapping"
+msgstr ""
+
+msgid "Report topology by category"
+msgstr "범주별 위상 보고"
+
+msgid "Reports geometry statistics for vector maps."
+msgstr "벡터 지도를 위한 지형 통계를 보고합니다."
+
+msgid "Univariate attribute statistics for points"
+msgstr ""
+
+msgid "Calculates univariate statistics of vector map features. Variance and standard deviation is calculated only for points if specified."
+msgstr ""
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Univariate statistics for attribute columns"
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgstr ""
+
+msgid "Vector map profiling tool"
+msgstr ""
+
+msgid "Quadrat indices"
+msgstr ""
+
+msgid "Test normality"
+msgstr ""
+
+msgid "&Imagery"
+msgstr "영상(&I)"
+
+msgid "Develop images and groups"
+msgstr ""
+
+msgid "Create/edit group"
+msgstr ""
+
+msgid "Creates, edits, and lists groups of imagery files."
+msgstr ""
+
+msgid "Target group"
+msgstr ""
+
+#, fuzzy
+msgid "Targets an imagery group to a GRASS location and mapset."
+msgstr "GRASS 로케이션과 지도 세트를 선택하세요"
+
+msgid "Find imagery files"
+msgstr ""
+
+msgid "Semantic label library"
+msgstr ""
+
+msgid "Prints available semantic label information used for multispectral data."
+msgstr ""
+
+msgid "Mosaic images"
+msgstr ""
+
+msgid "Mosaics several images and extends colormap."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage colors"
+msgid "Manage image colors"
+msgstr "색상 관리"
+
+msgid "Color balance for RGB"
+msgstr ""
+
+msgid "Performs auto-balancing of colors for RGB images."
+msgstr ""
+
+msgid "HIS to RGB"
+msgstr "HIS를 RGB로 변환"
+
+msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
+msgstr ""
+
+msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
+msgstr ""
+
+msgid "Rectify image or raster"
+msgstr ""
+
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgstr ""
+
+msgid "Generate histogram of image"
+msgstr ""
+
+msgid "Spectral response"
+msgstr ""
+
+msgid "Displays spectral response at user specified locations in group or images."
+msgstr ""
+
+msgid "Pan sharpening"
+msgstr ""
+
+msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
+msgstr ""
+
+msgid "Classify image"
+msgstr ""
+
+msgid "Clustering input for unsupervised classification"
+msgstr "무감독 분류를 위한 군집 입력"
+
+msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
+msgstr "군집 알고리듬을 이용해서 영상 안 토지 피복 유형을 위한 스펙트럼 서명을 생성합니다. 만들어질 서명 파일은 무감독 영상 분류를 생성하기 위해 i.maxlik를 위한 입력으로 쓰입니다."
+
+msgid "Input for supervised MLC"
+msgstr "감독 MLC를 위한 입력"
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Generates statistics for i.maxlik from raster map."
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+msgid "Maximum likelihood classification (MLC)"
+msgstr ""
+
+msgid "Classifies the cell spectral reflectances in imagery data. Classification is based on the spectral signature information generated by either i.cluster, g.gui.iclass, or i.gensig."
+msgstr ""
+
+msgid "Interactive input for supervised classification"
+msgstr "감독 분류를 위한 대화식 입력"
+
+msgid "Generates spectral signatures by allowing the user to outline training areas."
+msgstr ""
+
+msgid "Input for supervised SMAP"
+msgstr "감독 SMAP을 위한 입력"
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Generates statistics for i.smap from raster map."
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+msgid "Sequential maximum a posteriori classification (SMAP)"
+msgstr ""
+
+msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
+msgstr ""
+
+#, fuzzy
+msgid "Input for supervised SVM"
+msgstr "감독 SMAP을 위한 입력"
+
+msgid "Train a SVM Train a Support Vector Machine"
+msgstr ""
+
+msgid "Support Vector Machines classification (SVM)"
+msgstr ""
+
+msgid "Predict with a SVM Predict with a Support Vector Machine"
+msgstr ""
+
+msgid "Manage signature files"
+msgstr ""
+
+msgid "Manage imagery classification signature files"
+msgstr ""
+
+msgid "Object segmentation"
+msgstr ""
+
+msgid "Identifies segments (objects) from imagery data."
+msgstr ""
+
+msgid "Filter image"
+msgstr ""
+
+msgid "Edge detection"
+msgstr ""
+
+msgid "Zero-crossing \"edge detection\" raster function for image processing."
+msgstr ""
+
+msgid "Matrix/convolving filter"
+msgstr ""
+
+msgid "Performs raster map matrix filter."
+msgstr ""
+
+msgid "Edge preserving smoothing"
+msgstr ""
+
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+msgid "Transform image"
+msgstr ""
+
+#, fuzzy
+#| msgid "Topographic correction"
+msgid "Canonical correlation"
+msgstr "지형 보정"
+
+msgid "Canonical components analysis (CCA) program for image processing."
+msgstr ""
+
+msgid "Principal components"
+msgstr ""
+
+msgid "Principal components analysis (PCA) for image processing."
+msgstr ""
+
+msgid "Fast Fourier"
+msgstr ""
+
+msgid "Fast Fourier Transform (FFT) for image processing."
+msgstr ""
+
+msgid "Inverse Fast Fourier"
+msgstr ""
+
+msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
+msgstr ""
+
+msgid "Satellite images tools"
+msgstr ""
+
+msgid "Aster DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN."
+msgstr ""
+
+msgid "Landsat DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+/OLI"
+msgstr ""
+
+msgid "Landsat cloud cover assessment"
+msgstr ""
+
+msgid "Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA)."
+msgstr ""
+
+msgid "Modis quality control"
+msgstr ""
+
+msgid "Extracts quality control parameters from MODIS QC layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Topographic correction"
+msgid "Atmospheric correction"
+msgstr "지형 보정"
+
+msgid "Performs atmospheric correction using the 6S algorithm. 6S - Second Simulation of Satellite Signal in the Solar Spectrum."
+msgstr ""
+
+msgid "Topographic correction"
+msgstr "지형 보정"
+
+#, fuzzy
+#| msgid "Topographic correction"
+msgid "Computes topographic correction of reflectance."
+msgstr "지형 보정"
+
+msgid "Orthophoto tools"
+msgstr ""
+
+msgid "Manage GCPs for 3D correction"
+msgstr ""
+
+msgid "Georectifies a map and allows managing GCP for 3D correction."
+msgstr ""
+
+msgid "Corrects scanning distortions"
+msgstr ""
+
+msgid "Corrects scanning distortions of a scanned aerial photo."
+msgstr ""
+
+msgid "Initialize ortho parameters"
+msgstr ""
+
+msgid "Interactively creates or modifies entries in a camera initial exposure station file for imagery group referenced by a sub-block."
+msgstr ""
+
+#, fuzzy
+#| msgid "Parameters"
+msgid "Camera parameters"
+msgstr "매개변수"
+
+msgid "Select and modify the imagery group camera reference file."
+msgstr ""
+
+msgid "Elevation model for orthorectification"
+msgstr ""
+
+msgid "Select or modify the target elevation model."
+msgstr ""
+
+msgid "Target group for orthorectification"
+msgstr ""
+
+msgid "Select or modify the imagery group target."
+msgstr ""
+
+msgid "Compute ortho transformation"
+msgstr ""
+
+msgid "Computes a coordinate transformation based on the control points."
+msgstr ""
+
+msgid "Orthorectify imagery"
+msgstr ""
+
+msgid "Orthorectifies an image by using the image to photo coordinate transformation matrix."
+msgstr ""
+
+msgid "Satellite images products"
+msgstr ""
+
+#, fuzzy
+#| msgid "Region boundaries"
+msgid "Vegetation indices"
+msgstr "영역 경계"
+
+msgid "Calculates different types of vegetation indices. Uses red and nir bands mostly, and some indices require additional bands."
+msgstr ""
+
+msgid "Tasseled cap vegetation index"
+msgstr ""
+
+msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
+msgstr ""
+
+msgid "Albedo"
+msgstr ""
+
+msgid "Computes broad band albedo from surface reflectance."
+msgstr ""
+
+msgid "Emissivity"
+msgstr ""
+
+msgid "Computes emissivity from NDVI, generic method for sparse land."
+msgstr ""
+
+msgid "Biomass growth"
+msgstr ""
+
+msgid "Computes biomass growth, precursor of crop yield calculation."
+msgstr ""
+
+msgid "Evapotranspiration calculation"
+msgstr ""
+
+msgid "Instantaneaous Net Radiation"
+msgstr ""
+
+msgid "Net radiation approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Soil heat flux"
+msgstr ""
+
+msgid "Soil heat flux approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Sensible heat flux"
+msgstr ""
+
+msgid "Computes sensible heat flux iteration SEBAL 01."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export animation"
+msgid "Evaporative fraction"
+msgstr "애니메이션 내보내기"
+
+msgid "Computes evaporative fraction and root zone soil moisture."
+msgstr ""
+
+msgid "Actual Evapotranspiration"
+msgstr ""
+
+msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Temporal integration of ETa"
+msgstr ""
+
+msgid "Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)."
+msgstr ""
+
+msgid "Hargreaves methods Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation modified or original Hargreaves formulation, 2001."
+msgstr ""
+
+msgid "Penman-Monteith Evapotranspiration"
+msgstr ""
+
+msgid "Computes potential evapotranspiration calculation with hourly Penman-Monteith."
+msgstr ""
+
+msgid "Priestley-Taylor Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation Priestley and Taylor formulation, 1972."
+msgstr ""
+
+msgid "Kappa analysis"
+msgstr ""
+
+msgid "Calculates error matrix and kappa parameter for accuracy assessment of classification result."
+msgstr ""
+
+msgid "OIF for LandSat TM"
+msgstr ""
+
+msgid "Calculates Optimum-Index-Factor table for spectral bands"
+msgstr ""
+
+msgid "3D r&aster"
+msgstr "3차원 래스터(&a)"
+
+msgid "Develop 3D raster map"
+msgstr "3차원 래스터 지도 개발"
+
+msgid "Manage 3D NULL values"
+msgstr "3차원 널값 관리"
+
+msgid "Explicitly create the 3D NULL-value bitmap file."
+msgstr ""
+
+msgid "Modifies a timestamp for a 3D raster map. Print/add/remove a timestamp for a 3D raster map."
+msgstr "3차원 래스터 지도를 위한 타임스탬프를 수정합니다. 3차원 래스터 지도를 위한 타임스탬프를 출력/추가/제거합니다."
+
+#, fuzzy
+#| msgid "3D r&aster"
+msgid "Retile 3D raster"
+msgstr "3차원 래스터(&a)"
+
+msgid "Retiles an existing 3D raster map with user defined x, y and z tile size."
+msgstr ""
+
+msgid "Allows creation and/or modification of 3D raster map layer support files."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster series to 3D raster"
+msgid "3D rasters to raster series"
+msgstr "래스터 계열을 3차원 래스터로 변환"
+
+#, fuzzy
+#| msgid "Color tables"
+msgid "3D color tables"
+msgstr "색상 테이블"
+
+msgid "Creates/modifies the color table associated with a 3D raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export color table"
+msgid "Export 3D color table"
+msgstr "색상 테이블 내보내기"
+
+msgid "Exports the color table associated with a 3D raster map."
+msgstr ""
+
+msgid "3D mask"
+msgstr ""
+
+msgid "Establishes the current working 3D raster mask."
+msgstr ""
+
+msgid "3D raster map calculator"
+msgstr "3차원 래스터 지도 계산기"
+
+#, fuzzy
+#| msgid "Projection"
+msgid "Cross section"
+msgstr "투영"
+
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions."
+msgstr ""
+
+msgid "3D flow lines"
+msgstr ""
+
+msgid "Computes 3D flow lines and 3D flow accumulation."
+msgstr ""
+
+msgid "3D gradient"
+msgstr ""
+
+msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "3D neighborhood analysis"
+msgstr "이웃 분석"
+
+#, fuzzy
+#| msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgid "Makes each voxel value a function of the values assigned to the voxels around it, and stores new voxel values in an output 3D raster map"
+msgstr "각 셀의 범주 값은 그 주변 셀에 할당된 범주값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도 레이어에 저장됩니다."
+
+#, fuzzy
+#| msgid "Erase display"
+msgid "Create 3D display file"
+msgstr "디스플레이를 지웁니다"
+
+msgid "Creates a display file from an existing 3D raster map according to specified threshold levels."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export 3D raster maps"
+msgid "Interpolate 3D raster from points"
+msgstr "3차원 래스터 지도 내보내기"
+
+msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import 3D raster data"
+msgid "Basic 3D raster metadata"
+msgstr "3차원 래스터 자료 가져오기"
+
+msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "3D raster statistics"
+msgstr "래스터 통계를 보고합니다"
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Generates volume statistics for 3D raster maps."
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Univariate statistics for 3D rasters"
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+msgid "Calculates univariate statistics from the non-null cells of a 3D raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "&Database"
+msgstr "데이터베이스(&D)"
+
+#, fuzzy
+#| msgid "Database connection"
+msgid "Database information"
+msgstr "데이터베이스 연결"
+
+msgid "List databases"
+msgstr "데이터베이스 나열"
+
+msgid "Lists all databases for a given driver and location."
+msgstr ""
+
+#, fuzzy
+#| msgid "List databases"
+msgid "List drivers"
+msgstr "데이터베이스 나열"
+
+#, fuzzy
+#| msgid "List databases"
+msgid "Lists all database drivers."
+msgstr "데이터베이스 나열"
+
+#, fuzzy
+#| msgid "List databases"
+msgid "List tables"
+msgstr "데이터베이스 나열"
+
+msgid "Lists all tables for a given database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Drop table"
+msgid "Describe table"
+msgstr "테이블 삭제"
+
+msgid "Describes a table in detail."
+msgstr ""
+
+#, fuzzy
+#| msgid "Drop column(s)"
+msgid "List columns"
+msgstr "열을 삭제합니다"
+
+#, fuzzy
+#| msgid "Drops a column from selected attribute table."
+msgid "List all columns for a given table."
+msgstr "선택된 속성 테이블로부터 열을 삭제합니다."
+
+#, fuzzy
+#| msgid "Create database"
+msgid "Manage databases"
+msgstr "데이터베이스 생성"
+
+msgid "Connect"
+msgstr ""
+
+msgid "Prints/sets general DB connection for current mapset."
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Sets user/password for DB driver/database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Create database"
+msgstr "빈 데이터베이스를 생성합니다."
+
+msgid "Creates an empty database."
+msgstr "빈 데이터베이스를 생성합니다."
+
+msgid "Drop database"
+msgstr "데이터베이스 삭제"
+
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Removes an existing database."
+msgstr "빈 데이터베이스를 생성합니다."
+
+msgid "Drop table"
+msgstr "테이블 삭제"
+
+msgid "Drops an attribute table."
+msgstr "속성 테이블을 삭제합니다."
+
+#, fuzzy
+#| msgid "Drop table"
+msgid "Copy table"
+msgstr "테이블 삭제"
+
+msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
+msgstr ""
+
+msgid "Drop column"
+msgstr "열 삭제"
+
+msgid "Drops a column from selected attribute table."
+msgstr "선택된 속성 테이블로부터 열을 삭제합니다."
+
+msgid "Test"
+msgstr "검정"
+
+msgid "Test database driver, database must exist and set by db.connect."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query colors by value"
+msgid "Query any table"
+msgstr "값으로 색상 질의"
+
+msgid "Selects data from attribute table. Performs SQL query statement(s)."
+msgstr ""
+
+msgid "SQL statement"
+msgstr ""
+
+msgid "Executes any SQL statement. For SELECT statements use 'db.select'."
+msgstr ""
+
+#, fuzzy
+#| msgid "Reports statistics for raster maps."
+msgid "Univariate statistics for table column"
+msgstr "래스터 지도를 위한 통계를 보고합니다"
+
+msgid "Calculates univariate statistics on selected table column."
+msgstr ""
+
+msgid "Vector database connections"
+msgstr "벡터 데이터베이스 연결"
+
+#, fuzzy
+#| msgid "Drop table"
+msgid "New table"
+msgstr "테이블 삭제"
+
+#, fuzzy
+#| msgid "Drops a column from the attribute table connected to a given vector map."
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
+msgstr "주어진 벡터 지도에 연결된 속성 테이블로부터 열을 삭제합니다."
+
+#, fuzzy
+#| msgid "Remove table"
+msgid "Remove table"
+msgstr "테이블 제거"
+
+msgid "Removes existing attribute table of a vector map."
+msgstr "벡터 지도의 기존 속성 테이블을 제거합니다."
+
+#, fuzzy
+#| msgid "Drop table"
+msgid "Join table"
+msgstr "테이블 삭제"
+
+#, fuzzy
+#| msgid "Removes existing attribute table of a vector map."
+msgid "Joins a database table to a vector map table."
+msgstr "벡터 지도의 기존 속성 테이블을 제거합니다."
+
+#, fuzzy
+#| msgid "Drop column(s)"
+msgid "Add columns"
+msgstr "열을 삭제합니다"
+
+#, fuzzy
+#| msgid "Drops a column from the attribute table connected to a given vector map."
+msgid "Adds one or more columns to the attribute table connected to a given vector map."
+msgstr "주어진 벡터 지도에 연결된 속성 테이블로부터 열을 삭제합니다."
+
+msgid "Drops a column from the attribute table connected to a given vector map."
+msgstr "주어진 벡터 지도에 연결된 속성 테이블로부터 열을 삭제합니다."
+
+#, fuzzy
+#| msgid "Drops a column from the attribute table connected to a given vector map."
+msgid "Renames a column in the attribute table connected to a given vector map."
+msgstr "주어진 벡터 지도에 연결된 속성 테이블로부터 열을 삭제합니다."
+
+#, fuzzy
+#| msgid "Manage NULL values"
+msgid "Change values"
+msgstr "널값 관리"
+
+#, fuzzy
+#| msgid "Drops a column from the attribute table connected to a given vector map."
+msgid "Updates a column in the attribute table connected to a vector map."
+msgstr "주어진 벡터 지도에 연결된 속성 테이블로부터 열을 삭제합니다."
+
+msgid "Drop row"
+msgstr "행 삭제"
+
+msgid "Removes a vector feature from a vector map through attribute selection."
+msgstr "속성 선택을 이용해서 벡터 지도로부터 벡터 피처를 제거합니다"
+
+msgid "Reconnect vectors to database"
+msgstr "벡터를 데이터베이스로 재연결"
+
+msgid "Reconnects attribute tables for all vector maps from the current mapset to a new database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector database connections"
+msgid "Set vector map - database connection"
+msgstr "벡터 데이터베이스 연결"
+
+#, fuzzy
+#| msgid "Removes a vector feature from a vector map through attribute selection."
+msgid "Prints/sets DB connection for a vector map to attribute table."
+msgstr "속성 선택을 이용해서 벡터 지도로부터 벡터 피처를 제거합니다"
+
+msgid "&Temporal"
+msgstr "시간(&T)"
+
+#, fuzzy
+#| msgid "Create database"
+msgid "Manage datasets"
+msgstr "데이터베이스 생성"
+
+#, fuzzy
+#| msgid "Connect temporal database"
+msgid "Connect temporal database"
+msgstr "시간 데이터베이스 연결"
+
+msgid "Prints/sets general temporal GIS database connection for current mapset."
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Creates a space time dataset."
+msgstr "빈 데이터베이스를 생성합니다."
+
+#, fuzzy
+#| msgid "Create database"
+msgid "Renames a space time dataset"
+msgstr "데이터베이스 생성"
+
+#, fuzzy
+#| msgid "Remove action/data from model"
+msgid "Removes space time datasets from temporal database."
+msgstr "모델에서 작업/자료를 제거합니다"
+
+msgid "Modifies the metadata of a space time dataset."
+msgstr ""
+
+msgid "Merge"
+msgstr ""
+
+msgid "Merges several space time datasets into a single space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Temporal"
+msgid "Temporally shift"
+msgstr "시간(&T)"
+
+msgid "Shifts temporally the maps of a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create database"
+msgid "Snap maps of dataset"
+msgstr "데이터베이스 생성"
+
+msgid "Snaps temporally the maps of a space time dataset."
+msgstr ""
+
+msgid "Lists space time datasets and maps registered in the temporal database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Topology of Space time dataset %s is invalid."
+msgid "Copy space time dataset"
+msgstr "시공간 자료세트 %s의 위상이 무효합니다"
+
+msgid "Creates a copy of a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Connect temporal database"
+msgid "Upgrade temporal database"
+msgstr "시간 데이터베이스 연결"
+
+msgid "Upgrades the version of the temporal database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage maps"
+msgid "Manage maps in datasets"
+msgstr "지도 관리"
+
+#, fuzzy
+#| msgid "Query raster maps"
+msgid "Register maps in datasets"
+msgstr "래스터 지도 질의"
+
+msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgstr "타임스탬프를 할당하고 시공간 자료세트 안에 래스터, 벡터, 그리고 3차원 래스터 지도를 등록합니다."
+
+#, fuzzy
+#| msgid "Unpack raster map"
+msgid "Unregister maps from datasets"
+msgstr "래스터 지도 풀기"
+
+#, fuzzy
+#| msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgid "Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset."
+msgstr "타임스탬프를 할당하고 시공간 자료세트 안에 래스터, 벡터, 그리고 3차원 래스터 지도를 등록합니다."
+
+#, fuzzy
+#| msgid "Invalid input raster dataset"
+msgid "List raster dataset maps"
+msgstr "무효한 입력 래스터 자료세트"
+
+#, fuzzy
+#| msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgid "Lists registered maps of a space time raster dataset."
+msgstr "타임스탬프를 할당하고 시공간 자료세트 안에 래스터, 벡터, 그리고 3차원 래스터 지도를 등록합니다."
+
+#, fuzzy
+#| msgid "Invalid input vector dataset"
+msgid "List vector dataset maps"
+msgstr "무효한 입력 벡터 자료세트"
+
+#, fuzzy
+#| msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgid "Lists registered maps of a space time vector dataset."
+msgstr "타임스탬프를 할당하고 시공간 자료세트 안에 래스터, 벡터, 그리고 3차원 래스터 지도를 등록합니다."
+
+#, fuzzy
+#| msgid "Import 3D raster data"
+msgid "List 3D raster dataset maps"
+msgstr "3차원 래스터 자료 가져오기"
+
+msgid "Lists registered maps of a space time raster3d dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import"
+msgstr "가져오기(&I)"
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Import raster dataset"
+msgstr "래스터 자료 가져오기"
+
+#, fuzzy
+#| msgid "Removes space time datasets from temporal database."
+msgid "Imports space time raster dataset."
+msgstr "시간 데이터베이스로부터 시공간 자료세트를 제거합니다"
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Import vector dataset"
+msgstr "벡터 자료 가져오기"
+
+#, fuzzy
+#| msgid "Removes space time datasets from temporal database."
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr "시간 데이터베이스로부터 시공간 자료세트를 제거합니다"
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Export raster dataset"
+msgstr "래스터 자료 가져오기"
+
+#, fuzzy
+#| msgid "Removes space time datasets from temporal database."
+msgid "Exports space time raster dataset."
+msgstr "시간 데이터베이스로부터 시공간 자료세트를 제거합니다"
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Export raster dataset as VTK time series"
+msgstr "래스터 통계를 보고합니다"
+
+#, fuzzy
+#| msgid "Removes space time datasets from temporal database."
+msgid "Exports space time raster dataset as VTK time series."
+msgstr "시간 데이터베이스로부터 시공간 자료세트를 제거합니다"
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Export vector dataset"
+msgstr "벡터 자료 가져오기"
+
+#, fuzzy
+#| msgid "Removes space time datasets from temporal database."
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr "시간 데이터베이스로부터 시공간 자료세트를 제거합니다"
+
+#, fuzzy
+#| msgid "Raster series to 3D raster"
+msgid "Convert raster dataset to 3D raster"
+msgstr "래스터 계열을 3차원 래스터로 변환"
+
+msgid "Converts a space time raster dataset into a 3D raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input vector dataset"
+msgid "Convert raster dataset to vector dataset"
+msgstr "무효한 입력 벡터 자료세트"
+
+msgid "Converts a space time raster dataset into a space time vector dataset"
+msgstr ""
+
+#, fuzzy
+#| msgid "Connect temporal database"
+msgid "Create contour lines from raster dataset"
+msgstr "시간 데이터베이스 연결"
+
+msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export animation"
+msgid "Extraction"
+msgstr "애니메이션 내보내기"
+
+#, fuzzy
+#| msgid "Invalid input raster dataset"
+msgid "Extract subset of raster dataset"
+msgstr "무효한 입력 래스터 자료세트"
+
+msgid "Extracts a subset of a space time raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input vector dataset"
+msgid "Extract subset of vector dataset"
+msgstr "무효한 입력 벡터 자료세트"
+
+msgid "Extracts a subset of a space time vector dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import 3D raster data"
+msgid "Extract subset of 3D raster dataset"
+msgstr "3차원 래스터 자료 가져오기"
+
+msgid "Extracts a subset of a space time 3D raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report temporal topology"
+msgid "Select maps by temporal topology"
+msgstr "시간 위상 보고"
+
+msgid "Select maps from space time datasets by topological relationships to other space time datasets using temporal algebra."
+msgstr ""
+
+msgid "Query vector dataset attribute data"
+msgstr ""
+
+#, fuzzy
+#| msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgid "Prints attributes of vector maps registered in a space time vector dataset."
+msgstr "타임스탬프를 할당하고 시공간 자료세트 안에 래스터, 벡터, 그리고 3차원 래스터 지도를 등록합니다."
+
+#, fuzzy
+#| msgid "Export color table"
+msgid "Raster dataset color table"
+msgstr "색상 테이블 내보내기"
+
+msgid "Creates/modifies the color table associated with each raster map of the space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map calculator"
+msgid "Raster calculations"
+msgstr "래스터 지도 계산기"
+
+msgid "Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Temporal raster algebra"
+msgstr "래스터 자료 가져오기"
+
+msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster map calculator"
+msgid "3D raster calculations"
+msgstr "3차원 래스터 지도 계산기"
+
+msgid "Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import 3D raster data"
+msgid "Temporal 3D raster algebra"
+msgstr "3차원 래스터 자료 가져오기"
+
+msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Temporal vector algebra"
+msgstr "벡터 자료 가져오기"
+
+msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input raster dataset"
+msgid "Interpolate gaps in raster datasets"
+msgstr "무효한 입력 래스터 자료세트"
+
+msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Animation"
+msgid "Aggregation"
+msgstr "애니메이션"
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "Neighborhood analysis in raster dataset"
+msgstr "이웃 분석"
+
+msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input raster dataset"
+msgid "Aggregation in raster datasets"
+msgstr "무효한 입력 래스터 자료세트"
+
+msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster series aggregation"
+msgid "Temporal aggregation"
+msgstr "래스터 계열 집계"
+
+msgid "Aggregates temporally the maps of a space time raster dataset by a user defined granularity."
+msgstr ""
+
+msgid "Temporal aggregation by dataset"
+msgstr ""
+
+msgid "Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster series accumulation"
+msgid "Compute cyclic accumulations"
+msgstr "래스터 계열 누적"
+
+msgid "Computes cyclic accumulations of a space time raster dataset."
+msgstr ""
+
+msgid "Detect accumulation patterns"
+msgstr ""
+
+msgid "Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate."
+msgstr ""
+
+msgid "Sampling"
+msgstr ""
+
+msgid "Sample a space time raster dataset at point coordinates"
+msgstr ""
+
+msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
+msgstr ""
+
+msgid "Query raster dataset by vector points dataset"
+msgstr ""
+
+msgid "Stores raster map values at spatial and temporal positions of vector points as vector attributes."
+msgstr ""
+
+msgid "Observe specific locations in raster dataset"
+msgstr ""
+
+msgid "Observes specific locations in a space time raster dataset over a period of time using vector points."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Temporal"
+msgid "Temporal sampling"
+msgstr "시간(&T)"
+
+msgid "Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update map statistics"
+msgid "Space time datasets metadata"
+msgstr "지도 통계 갱신"
+
+msgid "Lists information about space time datasets and maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Univariate raster dataset statistics"
+msgstr "래스터 통계를 보고합니다"
+
+msgid "Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input vector dataset"
+msgid "Univariate vector dataset statistics"
+msgstr "무효한 입력 벡터 자료세트"
+
+msgid "Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset"
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Univariate 3D raster dataset statistics"
+msgstr "래스터 통계를 보고합니다"
+
+msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
+msgstr ""
+
+msgid "Report temporal topology"
+msgstr "시간 위상 보고"
+
+#, fuzzy
+#| msgid "Topology of Space time dataset %s is invalid."
+msgid "Lists temporal topology of a space time dataset."
+msgstr "시공간 자료세트 %s의 위상이 무효합니다"
+
+msgid "GUI tools"
+msgstr "GUI 도구"
+
+#, fuzzy
+#| msgid "GRASS GIS Timeline Tool"
+msgid "Timeline tool"
+msgstr "GRASS GIS 시간선 도구"
+
+#, fuzzy
+#| msgid "Connect temporal database"
+msgid "Plot temporal extents."
+msgstr "시간 데이터베이스 연결"
+
+#, fuzzy
+#| msgid "GRASS GIS Temporal Plot Tool"
+msgid "Temporal plot tool"
+msgstr "GRASS GIS 시간 도표 도구"
+
+msgid "Plot temporal values."
+msgstr ""
+
+msgid "&Help"
+msgstr "도움말(&H)"
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS help"
+msgstr "GRASS 도움말"
+
+#, fuzzy
+#| msgid "Display the HTML man pages of GRASS GIS"
+msgid "Display the HTML man pages of GRASS"
+msgstr "GRASS GIS의 HTML 설명서를 보여 줍니다"
+
+msgid "GUI help"
+msgstr ""
+
+msgid "About system"
+msgstr ""
+
+msgid "Prints system information"
+msgstr ""
+
+msgid "Import, export and link data"
+msgstr "가져오기, 내보내기, 자료 연결"
+
+#, fuzzy
+#| msgid "GRASS GIS Attribute Table Manager - "
+msgid "Attribute table manager"
+msgstr "GRASS GIS 속성 테이블 관리자"
+
+#, fuzzy
+#| msgid "GRASS GIS Data Catalog"
+msgid "Launch Data Catalog."
+msgstr "GRASS GIS 자료 목록"
+
+msgid "Managing GCPs for 3D correction"
+msgstr ""
+
+msgid "Interactive editing and digitization of vector maps."
+msgstr ""
+
+msgid "Interactive editing and digitization of raster maps."
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid input coordinates"
+msgid "Bearing/distance to coordinates"
+msgstr "무효한 입력 좌표"
+
+msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa. It assumes a cartesian coordinate system"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster buffers and distance"
+msgid "Measure map distances"
+msgstr "래스터 버퍼 및 거리"
+
+msgid "Measures the lengths and areas of features."
+msgstr ""
+
+msgid "3D image rendering"
+msgstr ""
+
+msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
+msgstr ""
+
+msgid "3D visualization script"
+msgstr ""
+
+msgid "Creates fly-through script to run in NVIZ."
+msgstr ""
+
+msgid "Convert coordinates between projections"
+msgstr ""
+
+msgid "Transform coordinates (affine)"
+msgstr ""
+
+msgid "PostScript map output"
+msgstr ""
+
+msgid "Produces hardcopy PostScript map output."
+msgstr ""
+
+msgid "Save model to file"
+msgstr ""
+
+msgid "Close model file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export to image"
+msgstr "벡터 지도 내보내기"
+
+#, fuzzy
+msgid "Export to Python"
+msgstr "애니메이션 내보내기"
+
+#, fuzzy
+msgid "Export to PyWPS"
+msgstr "애니메이션 내보내기"
+
+msgid "Export model to PyWPS script"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export animation"
+msgid "Export to actinia"
+msgstr "애니메이션 내보내기"
+
+msgid "Export model to actinia script"
+msgstr ""
+
+msgid "Quit modeler"
+msgstr ""
+
+msgid "Close modeler window"
+msgstr ""
+
+msgid "&Model"
+msgstr ""
+
+#, fuzzy
+msgid "Add command"
+msgstr "범례를 제거합니다"
+
+msgid "Add action (GRASS command) to model"
+msgstr ""
+
+msgid "Add data"
+msgstr ""
+
+msgid "Add data item to model"
+msgstr ""
+
+msgid "Define relation"
+msgstr ""
+
+msgid "Define relation between data and action items"
+msgstr ""
+
+msgid "Add loop / series"
+msgstr ""
+
+msgid "Adds loop (series) to model"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add new animation"
+msgid "Add condition"
+msgstr "새 애니메이션 추가"
+
+msgid "Adds condition (if/else) to model"
+msgstr ""
+
+msgid "Adds comment to model"
+msgstr ""
+
+msgid "Remove item"
+msgstr "항목을 제거합니다"
+
+msgid "Remove action/data from model"
+msgstr "모델에서 작업/자료를 제거합니다"
+
+msgid "Model properties (name, purpose, etc.)"
+msgstr ""
+
+msgid "Delete intermediate data"
+msgstr "중간 자료를 삭제합니다"
+
+msgid "Delete intermediate data defined in the model"
+msgstr "모델 안에 정의된 중간 자료를 삭제합니다"
+
+msgid "Run entire model"
+msgstr ""
+
+msgid "Validate entire model"
+msgstr ""
+
+msgid "Help"
+msgstr "도움말"
+
+#, fuzzy
+#| msgid "Display the HTML man pages of Cartographic Composer"
+msgid "Display the HTML man pages of Graphical modeler"
+msgstr "지도 작성자의 HTML 설명서를 보여 줍니다"
+
+#, fuzzy
+#| msgid "GRASS GIS Graphical Modeler"
+msgid "About Graphical Modeler"
+msgstr "GRASS GIS 그래픽 모델러"
+
+#, fuzzy
+#| msgid "Display information about Cartographic Composer"
+msgid "Display information about Graphical Modeler"
+msgstr "지도 작성자에 관한 정보를 보여 줍니다"
+
+msgid "Specify paper size, margins and orientation"
+msgstr ""
+
+msgid "Load instruction file"
+msgstr ""
+
+msgid "Load text file with mapping instructions"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export animation"
+msgid "Export instruction file"
+msgstr "애니메이션 내보내기"
+
+msgid "Generate text file with mapping instructions"
+msgstr ""
+
+msgid "Export to PostScript"
+msgstr ""
+
+msgid "Generate PostScript output"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Export to PDF"
+msgstr "벡터 지도 내보내기"
+
+msgid "Generate PDF output"
+msgstr ""
+
+msgid "Launch ps.map dialog"
+msgstr ""
+
+msgid "Close Cartographic Composer"
+msgstr "지도 작성자를 닫습니다"
+
+msgid "&Insert"
+msgstr ""
+
+msgid "Map frame"
+msgstr ""
+
+msgid "Add or edit map frame"
+msgstr ""
+
+#, fuzzy
+msgid "Add or edit raster map"
+msgstr "다양한 중첩 추가"
+
+#, fuzzy
+msgid "Add or edit vector map"
+msgstr "벡터 지도 꾸리기"
+
+#, fuzzy
+#| msgid "Remove legend"
+msgid "Map legend"
+msgstr "범례를 제거합니다"
+
+#, fuzzy
+#| msgid "ASCII points as a vector lines"
+msgid "Add or edit raster and vector legend"
+msgstr "ASCII 점을 벡터 선으로 가져오기"
+
+msgid "Map info"
+msgstr ""
+
+msgid "Add or edit map info"
+msgstr ""
+
+msgid "Scale bar"
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove scale bar"
+msgid "Add or edit scale bar"
+msgstr "축척 표시줄을 제거합니다"
+
+msgid "North Arrow"
+msgstr ""
+
+msgid "Delete selected object"
+msgstr "선택된 객체를 삭제합니다"
+
+msgid "Display the HTML man pages of Cartographic Composer"
+msgstr "지도 작성자의 HTML 설명서를 보여 줍니다"
+
+msgid "About Cartographic Composer"
+msgstr "지도 작성자에 대해"
+
+msgid "Display information about Cartographic Composer"
+msgstr "지도 작성자에 관한 정보를 보여 줍니다"
+
 msgid "Check all"
 msgstr ""
 
@@ -7275,9 +11226,6 @@ msgid "Choose file to save color table"
 msgstr ""
 
 msgid "Type filename or click to choose file and save color table"
-msgstr ""
-
-msgid "Save"
 msgstr ""
 
 msgid "&Set"
@@ -7540,9 +11488,6 @@ msgstr ""
 msgid "Dialog cannot be closed while command is running."
 msgstr ""
 
-msgid "Link external raster data"
-msgstr "외부 래스터 자료 연결"
-
 msgid "Add linked layers into layer tree"
 msgstr ""
 
@@ -7560,9 +11505,6 @@ msgstr ""
 
 msgid "Unable to determine number of raster bands"
 msgstr ""
-
-msgid "Link external vector data"
-msgstr "외부 벡터 자료 연결"
 
 msgid "Define output format for vector data"
 msgstr ""
@@ -8135,12 +12077,6 @@ msgstr ""
 msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
 msgstr ""
 
-msgid "New"
-msgstr ""
-
-msgid "Delete"
-msgstr "삭제"
-
 msgid "Fine resolution:"
 msgstr ""
 
@@ -8246,9 +12182,6 @@ msgstr ""
 msgid "Elevation of fringe from bottom:"
 msgstr ""
 
-msgid "North Arrow"
-msgstr ""
-
 msgid "Arrow length (in map units):"
 msgstr ""
 
@@ -8256,9 +12189,6 @@ msgid "Arrow color:"
 msgstr ""
 
 msgid "Place arrow"
-msgstr ""
-
-msgid "Scale bar"
 msgstr ""
 
 msgid "Scale bar length (in map units):"
@@ -8344,9 +12274,6 @@ msgid "Scalebar %d"
 msgstr ""
 
 msgid "None"
-msgstr ""
-
-msgid "Plane"
 msgstr ""
 
 msgid "Vector map is 3D"
@@ -8530,9 +12457,6 @@ msgid "Map settings"
 msgstr ""
 
 msgid "Map frame settings"
-msgstr ""
-
-msgid "Map frame"
 msgstr ""
 
 msgid "Map frame options:"
@@ -8896,7 +12820,7 @@ msgstr ""
 msgid "Number of segments:"
 msgstr ""
 
-msgid "Label every "
+msgid "Label every"
 msgstr ""
 
 msgid "segments"
@@ -9142,7 +13066,8 @@ msgstr ""
 msgid "Click and drag to resize object"
 msgstr ""
 
-msgid "labels: "
+#, python-brace-format
+msgid "labels: {files}"
 msgstr ""
 
 #, fuzzy
@@ -9217,21 +13142,6 @@ msgstr ""
 msgid "Select graphics tool"
 msgstr ""
 
-msgid "Generate text file with mapping instructions"
-msgstr ""
-
-msgid "Load text file with mapping instructions"
-msgstr ""
-
-msgid "Generate PostScript output"
-msgstr ""
-
-msgid "Generate PDF output"
-msgstr ""
-
-msgid "Specify paper size, margins and orientation"
-msgstr ""
-
 msgid "Full extent"
 msgstr ""
 
@@ -9241,13 +13151,7 @@ msgstr ""
 msgid "Click and drag to place map frame"
 msgstr ""
 
-msgid "Delete selected object"
-msgstr "선택된 객체를 삭제합니다"
-
 msgid "Show preview"
-msgstr ""
-
-msgid "Map info"
 msgstr ""
 
 msgid "Legend"
@@ -9408,9 +13312,6 @@ msgstr ""
 msgid "Remove a configuration file"
 msgstr "설정 파일을 제거합니다"
 
-msgid "Create"
-msgstr ""
-
 msgid "Create a new configuration file"
 msgstr ""
 
@@ -9563,9 +13464,6 @@ msgstr ""
 msgid "Sample units"
 msgstr ""
 
-msgid "Moving window"
-msgstr "이동 창"
-
 msgid ""
 "Select areas from the\n"
 "overlaid vector map"
@@ -9701,9 +13599,6 @@ msgstr ""
 #| msgid "The raster map <%s> already exists. Please remove or rename the maps with the prefix '%s' or select the option to overwrite existing maps"
 msgid "The raster map <{map_name}> already exists. Please remove or rename the maps with the prefix '{prefix}' or select the option to overwrite existing maps"
 msgstr "래스터 지도 <%s>가 이미 존재합니다. '%s'를 접두사로 가진 지도를 제거 또는 이름을 바꾸세요. 아니면 기존 지도를 덮어쓰는 옵션을 선택하세요"
-
-msgid "Select sample area 1 of "
-msgstr ""
 
 msgid "Configuration file name:"
 msgstr ""
@@ -10037,9 +13932,6 @@ msgstr ""
 msgid "Timeline Tool"
 msgstr ""
 
-msgid "Help"
-msgstr "도움말"
-
 msgid "3D plot of spatio-temporal extents"
 msgstr ""
 
@@ -10228,7 +14120,7 @@ msgstr ""
 msgid "File exists"
 msgstr ""
 
-msgid "Please change name of output CSV file or "
+msgid "Please change name of output CSV file or enable overwriting."
 msgstr ""
 
 msgid "Incorrect coordinates format, should be: x,y"
@@ -11148,9 +15040,6 @@ msgstr ""
 msgid "Unable to connect to <%s>"
 msgstr ""
 
-msgid "Add web service layer"
-msgstr ""
-
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr ""
 
@@ -11164,9 +15053,6 @@ msgid "Name for output raster map:"
 msgstr ""
 
 msgid "Export region"
-msgstr ""
-
-msgid "Map display"
 msgstr ""
 
 msgid "Named region"
@@ -11564,15 +15450,20 @@ msgstr ""
 msgid "At least 2 raster maps must be specified"
 msgstr ""
 
-msgid "Bivariate Scatterplot of "
+#, python-brace-format
+msgid "{first} vs {second}"
 msgstr ""
 
-#, python-format
-msgid "Raster <%s> cell values"
+#, python-brace-format
+msgid "Bivariate Scatterplot of {pairs}"
 msgstr ""
 
-#, python-format
-msgid ": %s"
+#, python-brace-format
+msgid "Raster <{raster}> cell values: {units}"
+msgstr ""
+
+#, python-brace-format
+msgid "Raster <{raster}> cell values"
 msgstr ""
 
 msgid "Regression Statistics for Scatterplot(s)"
@@ -11583,14 +15474,6 @@ msgid ""
 "Regression equation for raster map <%(rast1)s> vs. <%(rast2)s>:\n"
 "\n"
 msgstr ""
-
-#, fuzzy
-#~ msgid "New display"
-#~ msgstr "디스플레이를 지웁니다"
-
-#, fuzzy
-#~ msgid "Do you want to create a new project (also known as location)?"
-#~ msgstr "자료를 영구히 삭제하길 원하십니까? %s"
 
 #, fuzzy
 #~ msgid "Create project?"
@@ -11608,236 +15491,26 @@ msgstr ""
 #~ msgid "%s. cleaning tool removed, will be ignored"
 #~ msgstr "%s. 정리 도구가 제거됐습니다, 무시합니다"
 
-#~ msgid "&Database"
-#~ msgstr "데이터베이스(&D)"
-
-#~ msgid "&File"
-#~ msgstr "파일(&F)"
-
-#~ msgid "&Help"
-#~ msgstr "도움말(&H)"
-
-#~ msgid "&Imagery"
-#~ msgstr "영상(&I)"
-
-#~ msgid "&Raster"
-#~ msgstr "래스터(&R)"
-
-#~ msgid "&Settings"
-#~ msgstr "설정(&S)"
-
-#~ msgid "&Temporal"
-#~ msgstr "시간(&T)"
-
-#~ msgid "&Vector"
-#~ msgstr "벡터(&V)"
-
 #~ msgid "1. cleaning tool can not be moved up "
 #~ msgstr "1. 정리 도구를 위로 이동할 수 없습니다"
-
-#~ msgid "3D r&aster"
-#~ msgstr "3차원 래스터(&a)"
-
-#~ msgid "3D raster map calculator"
-#~ msgstr "3차원 래스터 지도 계산기"
-
-#~ msgid "ASCII 3D export"
-#~ msgstr "ASCII 3차원 내보내기"
-
-#~ msgid "ASCII 3D import"
-#~ msgstr "ASCII 3차원 가져오기"
-
-#~ msgid "ASCII grid export"
-#~ msgstr "ASCII 격자 내보내기"
-
-#~ msgid "ASCII grid import"
-#~ msgstr "ASCII 격자 가져오기"
-
-#~ msgid "ASCII points as a vector lines"
-#~ msgstr "ASCII 점을 벡터 선으로 가져오기"
-
-#~ msgid "ASCII points or GRASS ASCII format"
-#~ msgstr "ASCII 점 또는 GRASS ASCII 포맷"
-
-#~ msgid "ASCII points or GRASS ASCII vector export"
-#~ msgstr "ASCII 점 또는 GRASS ASCII 벡터 내보내기"
-
-#~ msgid "ASCII polygons, lines, and point import"
-#~ msgstr "ASCII 다각형, 선, 점 가져오기"
-
-#~ msgid "ASCII x,y,z point import and gridding"
-#~ msgstr "ASCII x,y,z 점 가져오기 및 격자화"
-
-#~ msgid "ASCII x,y,z points export"
-#~ msgstr "ASCII x,y,z 점 내보내기"
-
-#~ msgid "About Cartographic Composer"
-#~ msgstr "지도 작성자에 대해"
-
-#~ msgid "Allocate subnets"
-#~ msgstr "서브넷 할당"
-
-#~ msgid "Allocates subnets for nearest centers (direction from center). center node must be opened (costs >= 0). Costs of center node are used in calculation"
-#~ msgstr "최근접 중심을 위한 서브넷을 할당합니다 (중심으로부터의 방향). 중심 교점이 열려 있어야 합니다 (비용 >= 0). 중심 교점의 비용은 계산에 사용됩니다."
-
-#~ msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
-#~ msgstr "최근접 중심을 위한 서브넷을 할당합니다. 중심 교점이 열려 있어야 합니다 (비용 >= 0). 중심 교점의 비용은 계산에 사용됩니다."
 
 #~ msgid "Animation already axists"
 #~ msgstr "애니메이션이 이미 존재합니다"
 
-#~ msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
-#~ msgstr "타임스탬프를 할당하고 시공간 자료세트 안에 래스터, 벡터, 그리고 3차원 래스터 지도를 등록합니다."
-
-#~ msgid "Attaches, deletes or reports vector categories to map geometry."
-#~ msgstr "지도 지형의 벡터 범주를 부착, 삭제, 또는 보고합니다."
-
-#~ msgid "Blend 2 color rasters"
-#~ msgstr "두 개의 색상 래스터 혼합"
-
-#~ msgid "Buffer rasters"
-#~ msgstr "래스터 버퍼"
-
-#~ msgid "Change or report categories"
-#~ msgstr "범주 변경 또는 보고"
-
-#, fuzzy
-#~ msgid "Change project (location) and mapset"
-#~ msgstr "GRASS 로케이션과 지도 세트를 선택하세요"
-
-#~ msgid "Changes/reports current mapset. Optionally create new mapset or list available mapsets in given location."
-#~ msgstr "현재 지도 세트를 바꾸거나 보고합니다. 선택적으로 새 지도 세트를 생성하거나 주어진 로케이션 안에 유효한 지도 세트를 나열합니다."
-
 #~ msgid "Choose cleaning tools and set thresholds"
 #~ msgstr "정리 도구를 선택하고 임계값을 설정합니다"
-
-#~ msgid "Clean vector map"
-#~ msgstr "벡터 지도 정리"
-
-#~ msgid "Close Cartographic Composer"
-#~ msgstr "지도 작성자를 닫습니다"
-
-#~ msgid "Close GUI and exit GRASS GIS shell."
-#~ msgstr "GUI를 닫고 GRASS GIS 셸을 종료합니다."
-
-#~ msgid "Closest points"
-#~ msgstr "최근접 점"
-
-#~ msgid "Clustering input for unsupervised classification"
-#~ msgstr "무감독 분류를 위한 군집 입력"
-
-#~ msgid "Color tables"
-#~ msgstr "색상 테이블"
-
-#~ msgid "Color tables (stddev)"
-#~ msgstr "색상 테이블 (표준 편차)"
-
-#~ msgid "Common export formats"
-#~ msgstr "일반적인 내보내기 포맷"
 
 #~ msgid "Common formats import"
 #~ msgstr "일반적인 포맷 가져오기"
 
-#~ msgid "Common import formats"
-#~ msgstr "일반적인 가져오기 포맷"
-
-#~ msgid "Compress/decompress"
-#~ msgstr "압축/해제"
-
-#~ msgid "Concentric circles"
-#~ msgstr "동심원"
-
-#~ msgid "Create RGB"
-#~ msgstr "RGB 생성"
-
-#, fuzzy
-#~ msgid "Create new project (location)"
-#~ msgstr "선택된 로케이션을 삭제합니다"
-
-#~ msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
-#~ msgstr "표고 래스터 지도로부터 지형지표(습윤지표) 래스터 지도를 생성합니다."
-
-#~ msgid "Creates an empty database."
-#~ msgstr "빈 데이터베이스를 생성합니다."
-
-#, fuzzy
-#~ msgid "Creates new mapset in the current project, changes current mapset."
-#~ msgstr "지도 세트 검색 경로에서 가능한 파일을 현재 사용자 지도 세트로 복사합니다."
-
-#~ msgid "Cross product"
-#~ msgstr "벡터곱"
-
-#~ msgid "DXF export"
-#~ msgstr "DXF 내보내기"
-
-#~ msgid "DXF import"
-#~ msgstr "DXF 가져오기"
-
-#~ msgid "Delete intermediate data"
-#~ msgstr "중간 자료를 삭제합니다"
-
-#~ msgid "Delete intermediate data defined in the model"
-#~ msgstr "모델 안에 정의된 중간 자료를 삭제합니다"
-
-#~ msgid "Develop 3D raster map"
-#~ msgstr "3차원 래스터 지도 개발"
-
-#~ msgid "Display information about Cartographic Composer"
-#~ msgstr "지도 작성자에 관한 정보를 보여 줍니다"
-
-#~ msgid "Display the HTML man pages of Cartographic Composer"
-#~ msgstr "지도 작성자의 HTML 설명서를 보여 줍니다"
-
-#~ msgid "Display the HTML man pages of GRASS GIS"
-#~ msgstr "GRASS GIS의 HTML 설명서를 보여 줍니다"
-
-#~ msgid "Distance to features"
-#~ msgstr "피처까지 거리"
-
 #~ msgid "Do you really want to delete map <{m}> of type <{etype}> from mapset <{mapset}> in location <{loc}>?"
 #~ msgstr "로케이션 <{loc}> 내 지도세트 <{mapset}>으로부터 <{etype}> 타입의 지도 <{m}>를 정말로 삭제하길 원하십니까?"
-
-#~ msgid "Drop column"
-#~ msgstr "열 삭제"
-
-#~ msgid "Drop database"
-#~ msgstr "데이터베이스 삭제"
-
-#~ msgid "Drop row"
-#~ msgstr "행 삭제"
-
-#~ msgid "Drop table"
-#~ msgstr "테이블 삭제"
-
-#~ msgid "Drops a column from selected attribute table."
-#~ msgstr "선택된 속성 테이블로부터 열을 삭제합니다."
-
-#~ msgid "Drops a column from the attribute table connected to a given vector map."
-#~ msgstr "주어진 벡터 지도에 연결된 속성 테이블로부터 열을 삭제합니다."
-
-#~ msgid "Drops an attribute table."
-#~ msgstr "속성 테이블을 삭제합니다."
 
 #~ msgid "Due to the limitations of your operating system, the script path cannot contain certain non-ascii characters. Please rename the script or move it to a different location."
 #~ msgstr "운영 체계의 한계 때문에 스크립트의 경로는 특정 ASCII가 아닌 문자를 포함할 수 없습니다. 스크립트의 이름을 바꾸거나 다른 장소로 이동하세요."
 
-#~ msgid "ESRI e00 import"
-#~ msgstr "ESRI e00 가져오기"
-
 #~ msgid "Executing selected cleaning operations..."
 #~ msgstr "선택된 정리 조작을 실행하는 중입니다..."
-
-#~ msgid "Export 3D raster maps"
-#~ msgstr "3차원 래스터 지도 내보내기"
-
-#~ msgid "Export color table"
-#~ msgstr "색상 테이블 내보내기"
-
-#~ msgid "Export raster map"
-#~ msgstr "래스터 지도 내보내기"
-
-#~ msgid "Export vector map"
-#~ msgstr "벡터 지도 내보내기"
 
 #~ msgid "GRASS GIS %s Layer Manager"
 #~ msgstr "GRASS GIS %s 레이어 관리자"
@@ -11856,9 +15529,6 @@ msgstr ""
 
 #~ msgid "GRASS GIS Cartographic Composer"
 #~ msgstr "GRASS GIS 지도 작성자"
-
-#~ msgid "GRASS GIS Data Catalog"
-#~ msgstr "GRASS GIS 자료 목록"
 
 #~ msgid "GRASS GIS Histogramming Tool"
 #~ msgstr "GRASS GIS 주상도 도구"
@@ -11884,202 +15554,21 @@ msgstr ""
 #~ msgid "GRASS GIS SQL Query Utility"
 #~ msgstr "GRASS GIS SQL 질의 유틸리티"
 
-#~ msgid "GRASS GIS Simple Python Editor"
-#~ msgstr "GRASS GIS 단순한 파이썬 편집기"
-
-#~ msgid "GRASS GIS Timeline Tool"
-#~ msgstr "GRASS GIS 시간선 도구"
-
 #~ msgid "GRASS GIS Vector Network Analysis Tool"
 #~ msgstr "GRASS GIS 벡터 네트워크 분석 도구"
-
-#~ msgid "GRIDATB.FOR export"
-#~ msgstr "GRIDATB.FOR 내보내기"
-
-#~ msgid "GRIDATB.FOR import"
-#~ msgstr "GRIDATB.FOR 가져오기"
-
-#~ msgid "GUI tools"
-#~ msgstr "GUI 도구"
-
-#~ msgid "Generate from database"
-#~ msgstr "데이터베이스로부터 생성"
-
-#~ msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
-#~ msgstr "군집 알고리듬을 이용해서 영상 안 토지 피복 유형을 위한 스펙트럼 서명을 생성합니다. 만들어질 서명 파일은 무감독 영상 분류를 생성하기 위해 i.maxlik를 위한 입력으로 쓰입니다."
-
-#~ msgid "Geonames import"
-#~ msgstr "Geonames 가져오기"
-
-#~ msgid "Grow by one cell"
-#~ msgstr "한 셀 키우기"
-
-#~ msgid "HIS to RGB"
-#~ msgstr "HIS를 RGB로 변환"
-
-#~ msgid "Identify and remove outliers"
-#~ msgstr "이상치 식별 및 제거"
-
-#~ msgid "Import 3D raster data"
-#~ msgstr "3차원 래스터 자료 가져오기"
-
-#~ msgid "Import database table"
-#~ msgstr "데이터베이스 테이블 가져오기"
-
-#~ msgid "Import of common raster formats"
-#~ msgstr "일반적인 래스터 서식 가져오기"
-
-#~ msgid "Import of common vector formats"
-#~ msgstr "일반적인 벡터 서식 가져오기"
-
-#~ msgid "Import, export and link data"
-#~ msgstr "가져오기, 내보내기, 자료 연결"
-
-#~ msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
-#~ msgstr "맵젠 또는 매트랩-ASCII 벡터 지도를 GRASS로 가져옵니다."
-
-#~ msgid "Input for supervised MLC"
-#~ msgstr "감독 MLC를 위한 입력"
-
-#~ msgid "Input for supervised SMAP"
-#~ msgstr "감독 SMAP을 위한 입력"
-
-#, fuzzy
-#~ msgid "Input for supervised SVM"
-#~ msgstr "감독 SMAP을 위한 입력"
-
-#~ msgid "Interactive input for supervised classification"
-#~ msgstr "감독 분류를 위한 대화식 입력"
 
 #, python-format
 #~ msgid "Invalid map size %d,%d\n"
 #~ msgstr "무효한 지도 크기 %d,%d\n"
 
-#~ msgid "LAS LiDAR points import"
-#~ msgstr "LAS LiDAR 점 가져오기"
-
 #~ msgid "Last cleaning tool can not be moved down "
 #~ msgstr "마지막 정리 도구는 아래로 이동할 수 없습니다"
-
-#~ msgid "LatLong map"
-#~ msgstr "위경도 지도"
-
-#~ msgid "Launch Cartographic Composer"
-#~ msgstr "지도 작성자를 시작합니다"
-
-#~ msgid "Launch animation tool."
-#~ msgstr "애니메이션 도구를 시작합니다."
-
-#~ msgid "List"
-#~ msgstr "목록"
-
-#~ msgid "List databases"
-#~ msgstr "데이터베이스 나열"
-
-#~ msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
-#~ msgstr "사용자가 지정한 자료형의 유효한 GRASS 데이터베이스 파일을 나열합니다. 필요한 경우 검색패턴을 사용할 수도 있습니다."
 
 #~ msgid "MASK"
 #~ msgstr "마스크"
 
-#~ msgid "MPEG-1 export"
-#~ msgstr "MPEG-1 내보내기"
-
-#~ msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
-#~ msgstr "각 셀의 범주 값은 그 주변 셀에 할당된 범주값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도 레이어에 저장됩니다."
-
-#~ msgid "Makes each output cell value a accumulationfunction of the values assigned to the corresponding cells in the input raster map layers."
-#~ msgstr "각 출력 셀의 값은 입력 래스터 지도 레이어 안의 해당하는 셀에 할당된 값들의 누적값이 됩니다."
-
-#~ msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
-#~ msgstr "각 출력 셀의 값은 입력 래스터 지도 레이어 안의 해당하는 셀에 할당된 값들의 함수가 됩니다."
-
-#~ msgid "Manage 3D NULL values"
-#~ msgstr "3차원 널값 관리"
-
-#~ msgid "Manage NULL values"
-#~ msgstr "널값 관리"
-
-#~ msgid "Manage color rules interactively"
-#~ msgstr "대화식 색상 규칙 관리"
-
-#~ msgid "Manage colors"
-#~ msgstr "색상 관리"
-
-#~ msgid "Manage maps"
-#~ msgstr "지도 관리"
-
-#~ msgid "Map type conversions"
-#~ msgstr "지도 유형 변환"
-
-#~ msgid "Matlab 2D array export"
-#~ msgstr "매트랩 2차원 배열 내보내기"
-
-#~ msgid "Matlab 2D array import"
-#~ msgstr "매트랩 2차원 배열 가져오기"
-
-#~ msgid "Matlab array or Mapgen format import"
-#~ msgstr "매트랩 배열 또는 맵젠 포맷 가져오기"
-
 #~ msgid "Maximum number of animations is %s."
 #~ msgstr "애니메이션의 최대 개수는 %s입니다"
-
-#~ msgid "Modifies a timestamp for a 3D raster map. Print/add/remove a timestamp for a 3D raster map."
-#~ msgstr "3차원 래스터 지도를 위한 타임스탬프를 수정합니다. 3차원 래스터 지도를 위한 타임스탬프를 출력/추가/제거합니다."
-
-#~ msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
-#~ msgstr "래스터 지도를 위한 타임스탬프를 수정합니다. 래스터 지도를 위한 타임스탬프를 출력/추가/제거합니다."
-
-#~ msgid "Name of input vector map"
-#~ msgstr "입력 벡터 지도의 이름"
-
-#~ msgid "Nearest features"
-#~ msgstr "최근접 피처"
-
-#~ msgid "Neighborhood analysis"
-#~ msgstr "이웃 분석"
-
-#~ msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
-#~ msgstr "벡터 점 지도를 위한 이웃 분석 도구. 각 셀의 값은 그 주변 벡터 점 또는 도심에 할당된 속성값들의 함수가 되며, 새 셀의 값은 출력 래스터 지도에 저장됩니다."
-
-#~ msgid "Neighborhood points"
-#~ msgstr "이웃 점"
-
-#~ msgid "Output format for raster data"
-#~ msgstr "래스터 자료를 위한 출력 포맷"
-
-#~ msgid "Output format for vector data"
-#~ msgstr "벡터 자료를 위한 출력 포맷"
-
-#~ msgid "Overlay rasters"
-#~ msgstr "래스터 중첩"
-
-#~ msgid "Overlay vector maps"
-#~ msgstr "벡터 지도 중첩"
-
-#~ msgid "PNG export"
-#~ msgstr "PNG 내보내기"
-
-#~ msgid "PNG import"
-#~ msgstr "PNG 가져오기"
-
-#~ msgid "POV-Ray export"
-#~ msgstr "POV-Ray 내보내기"
-
-#~ msgid "PPM export"
-#~ msgstr "PPM 내보내기"
-
-#~ msgid "PPM from RGB export"
-#~ msgstr "RGB를 PPM으로 내보내기"
-
-#~ msgid "Pack raster map"
-#~ msgstr "래스터 지도 꾸리기"
-
-#~ msgid "Pack vector map"
-#~ msgstr "벡터 지도 꾸리기"
-
-#~ msgid "Patch raster maps"
-#~ msgstr "래스터 지도 덧대기"
 
 #~ msgid "Please select a cleaning tool to move down"
 #~ msgstr "아래로 이동할 정리 도구를 선택하세요"
@@ -12090,232 +15579,21 @@ msgstr ""
 #~ msgid "Please select a cleaning tool to remove"
 #~ msgstr "제거할 정리 도구를 선택하세요"
 
-#~ msgid "PostGIS export"
-#~ msgstr "PostGIS 내보내기"
-
-#~ msgid "Quantiles overlay"
-#~ msgstr "분위수 중첩"
-
-#~ msgid "Quantization"
-#~ msgstr "양자화"
-
-#~ msgid "Query colors by value"
-#~ msgstr "값으로 색상 질의"
-
-#~ msgid "Query values by coordinates"
-#~ msgstr "좌표로 값 질의"
-
 #~ msgid "Quit Cartographic Composer"
 #~ msgstr "지도 작성자를 종료합니다"
-
-#~ msgid "RGB to HIS"
-#~ msgstr "RGB를 HIS로 변환"
-
-#~ msgid "Raster 2.5D to 3D raster"
-#~ msgstr "2.5차원 래스터를 3차원 래스터로 변환"
-
-#~ msgid "Raster buffers and distance"
-#~ msgstr "래스터 버퍼 및 거리"
-
-#~ msgid "Raster map calculator"
-#~ msgstr "래스터 지도 계산기"
-
-#~ msgid "Raster series accumulation"
-#~ msgstr "래스터 계열 누적"
-
-#~ msgid "Raster series aggregation"
-#~ msgstr "래스터 계열 집계"
-
-#~ msgid "Raster series to 3D raster"
-#~ msgstr "래스터 계열을 3차원 래스터로 변환"
-
-#~ msgid "Raster to vector"
-#~ msgstr "래스터를 벡터로 변환"
-
-#~ msgid "Raw binary array 3D export"
-#~ msgstr "순수 이진 배열 3차원 내보내기"
-
-#~ msgid "Raw binary array 3D import"
-#~ msgstr "순수 이진 배열 3차원 가져오기"
-
-#~ msgid "Raw binary array export"
-#~ msgstr "순수 이진 배열 내보내기"
-
-#~ msgid "Raw binary array import"
-#~ msgstr "순수 이진 배열 가져오기"
-
-#, fuzzy
-#~ msgid "Re-projects a raster map from given project to the current project."
-#~ msgstr "다른 GRASS 로케이션으로부터 래스터 지도 재투영"
-
-#, fuzzy
-#~ msgid "Re-projects a vector map from one project to the current project."
-#~ msgstr "다른 GRASS 로케이션으로부터 벡터 지도 재투영"
-
-#~ msgid "Re-render maps in all open map display windows"
-#~ msgstr "모든 열려 있는 지도 디스플레이 창 안의 지도를 다시 표시합니다"
-
-#~ msgid "Reconnect vectors to database"
-#~ msgstr "벡터를 데이터베이스로 재연결"
-
-#~ msgid "Region boundaries"
-#~ msgstr "영역 경계"
 
 #, fuzzy
 #~ msgid "Remove MASK"
 #~ msgstr "제거"
 
-#~ msgid "Remove action/data from model"
-#~ msgstr "모델에서 작업/자료를 제거합니다"
-
-#~ msgid "Remove item"
-#~ msgstr "항목을 제거합니다"
-
-#~ msgid "Remove outliers in point sets"
-#~ msgstr "점 세트 내 이상치 제거"
-
 #~ msgid "Remove vector legend"
 #~ msgstr "벡터 범례를 제거합니다"
-
-#~ msgid "Removes a vector feature from a vector map through attribute selection."
-#~ msgstr "속성 선택을 이용해서 벡터 지도로부터 벡터 피처를 제거합니다"
-
-#~ msgid "Removes data base element files from the user's current mapset using the search pattern."
-#~ msgstr "검색패턴을 이용해서 사용자의 현재 지도 세트로부터 데이터베이스 요소파일을 제거합니다."
-
-#~ msgid "Removes existing attribute table of a vector map."
-#~ msgstr "벡터 지도의 기존 속성 테이블을 제거합니다."
-
-#~ msgid "Removes outliers from vector point data."
-#~ msgstr "벡터 점 자료로부터 이상치를 제거합니다."
-
-#~ msgid "Render all map displays"
-#~ msgstr "모든 지도 디스플레이 표시"
-
-#~ msgid "Report temporal topology"
-#~ msgstr "시간 위상 보고"
-
-#~ msgid "Report topology by category"
-#~ msgstr "범주별 위상 보고"
 
 #~ msgid "Reports and Statistics"
 #~ msgstr "보고 및 통계"
 
-#~ msgid "Reports and statistics"
-#~ msgstr "보고 및 통계"
-
-#~ msgid "Reports geometry statistics for vector maps."
-#~ msgstr "벡터 지도를 위한 지형 통계를 보고합니다."
-
-#~ msgid "Reports statistics for raster maps."
-#~ msgstr "래스터 지도를 위한 통계를 보고합니다"
-
-#, fuzzy
-#~ msgid "Reproject raster map from different GRASS project"
-#~ msgstr "다른 GRASS 로케이션으로부터 래스터 지도 재투영"
-
-#, fuzzy
-#~ msgid "Reproject vector map from different GRASS project"
-#~ msgstr "다른 GRASS 로케이션으로부터 벡터 지도 재투영"
-
-#~ msgid "Resample using aggregate statistics"
-#~ msgstr "집계 통계를 이용한 재추출"
-
-#~ msgid "Resample using analytic kernel"
-#~ msgstr "분석적인 커널을 이용한 재추출"
-
-#~ msgid "Resample using bspline"
-#~ msgstr "B-스플라인을 이용한 재추출"
-
-#~ msgid "Resample using multiple methods"
-#~ msgstr "복수의 방법을 이용한 재추출"
-
-#~ msgid "Resample using nearest neighbor"
-#~ msgstr "최근접 이웃을 이용한 재추출"
-
-#~ msgid "Resample using spline tension"
-#~ msgstr "스플라인 장력을 이용한 재추출"
-
-#~ msgid "Resamples raster map layers to a coarser grid using aggregation."
-#~ msgstr "집계를 이용해서 래스터 지도 레이어를 더 큰 격자로 재추출합니다."
-
-#~ msgid "Resamples raster map layers using an analytic kernel."
-#~ msgstr "분석적인 커널을 이용해서 래스터 지도 레이어를 재추출합니다."
-
-#~ msgid "Resamples raster map to a finer grid using interpolation."
-#~ msgstr "보간을 이용해서 래스터 지도를 더 작은 격자로 재추출합니다."
-
-#~ msgid "SPOT NDVI import"
-#~ msgstr "SPOT NDVI 가져오기"
-
-#~ msgid "SRTM HGT import"
-#~ msgstr "SRTM HGT 가져오기"
-
-#~ msgid "SVG export"
-#~ msgstr "SVG 내보내기"
-
-#~ msgid "Select EPSG code of spatial reference system"
-#~ msgstr "공간 참조 체계의 EPSG 코드를 선택하세요"
-
-#~ msgid "Set region"
-#~ msgstr "영역 설정"
-
 #~ msgid "Set up vector cleaning tools"
 #~ msgstr "벡터 정리 도구를 설정합니다"
-
-#~ msgid "Shortest path for sets of features"
-#~ msgstr "피처 세트의 최단 경로"
-
-#~ msgid "Show current region"
-#~ msgstr "현재 영역 보기"
-
-#~ msgid "Show current region extent in Map Display"
-#~ msgstr "지도 디스플레이 내 현재 영역의 범위 보기"
-
-#~ msgid "Show region using latitude and longitude"
-#~ msgstr "위도 및 경도를 이용한 영역 보기"
-
-#~ msgid "Shows the extent of the computational region in Map Display."
-#~ msgstr "지도 디스플레이 내 계산 영역의 범위를 보여 줍니다."
-
-#~ msgid "Simplified raster import with reprojection"
-#~ msgstr "재투영과 동시에 단순화된 래스터 가져오기"
-
-#~ msgid "Simplified vector import with reprojection"
-#~ msgstr "재투영과 동시에 단순화된 벡터 가져오기"
-
-#~ msgid "Solar irradiance and irradiation"
-#~ msgstr "태양 복사 조도 및 조사"
-
-#~ msgid "Solar radiance and shadows"
-#~ msgstr "태양 복사 및 그림자"
-
-#~ msgid "Statistical overlay"
-#~ msgstr "통계적 중첩"
-
-#~ msgid "Support file maintenance"
-#~ msgstr "지원 파일 유지 관리"
-
-#~ msgid "Terra ASTER HDF import"
-#~ msgstr "Terra ASTER HDF 가져오기"
-
-#~ msgid "Test"
-#~ msgstr "검정"
-
-#~ msgid "Tiling"
-#~ msgstr "타일 생성"
-
-#~ msgid "Timestamp"
-#~ msgstr "타임스탬프"
-
-#~ msgid "Toolset for cleaning topology of vector map."
-#~ msgstr "벡터 지도의 위상 정리를 위한 도구세트"
-
-#~ msgid "Topographic correction"
-#~ msgstr "지형 보정"
-
-#~ msgid "Topographic index map"
-#~ msgstr "지형지표 지도"
 
 #~ msgid "Unable to delete location"
 #~ msgstr "로케이션을 삭제할 수 없습니다"
@@ -12341,30 +15619,6 @@ msgstr ""
 #, python-brace-format
 #~ msgid "Unknown format '{0}'."
 #~ msgstr "알려지지 않은 포맷 '{0}'."
-
-#~ msgid "Unpack vector map"
-#~ msgstr "벡터 지도 풀기"
-
-#~ msgid "Update database values from vector"
-#~ msgstr "벡터로부터 데이터베이스값 갱신"
-
-#~ msgid "Updates or removes installed GRASS AddOns extension(s)."
-#~ msgstr "설치된 GRASS 애드온 확장을 갱신하거나 제거합니다"
-
-#~ msgid "VRML export"
-#~ msgstr "VRML 내보내기"
-
-#~ msgid "VTK export"
-#~ msgstr "VTK 내보내기"
-
-#~ msgid "Vector database connections"
-#~ msgstr "벡터 데이터베이스 연결"
-
-#~ msgid "Vis5D export"
-#~ msgstr "Vis5D 내보내기"
-
-#~ msgid "Vis5D import"
-#~ msgstr "Vis5D 가져오기"
 
 #, python-format
 #~ msgid "cleaning tool: '%s'"

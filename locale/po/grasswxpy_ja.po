@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Japanese <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ja/>\n"
@@ -682,14 +682,17 @@ msgstr "レンダリング失敗: %s"
 msgid "Rendering aborted"
 msgstr "レンダリング中止"
 
-msgid "Downloading data "
-msgstr "データのダウンロード"
-
-msgid "Rendering & "
-msgstr "レンダリング中 &"
+#, python-brace-format
+msgid "Rendering & downloading data {layers}..."
+msgstr ""
 
 msgid "Rendering..."
 msgstr "レンダリング中..."
+
+#, fuzzy, python-brace-format
+#| msgid "Downloading data "
+msgid "Downloading data {layers}..."
+msgstr "データのダウンロード"
 
 msgid "Trying to recover from default region..."
 msgstr "デフォルト領域から修復します..."
@@ -872,8 +875,9 @@ msgstr ""
 "\n"
 "詳細： %(detail)s "
 
-msgid "Unable to set "
-msgstr "設定できません"
+#, python-brace-format
+msgid "Unable to set '{group}:{key}:{subkey}'"
+msgstr ""
 
 #, python-format
 msgid "Unable to parse settings '%s'"
@@ -1727,7 +1731,7 @@ msgstr "属性デ-タ - 右クリックで レコードの編集/マージ"
 msgid "Table"
 msgstr "テーブル"
 
-msgid " (read-only)"
+msgid "Table (read-only)"
 msgstr ""
 
 msgid "SQL Query"
@@ -2336,9 +2340,15 @@ msgid ""
 "10+ points for 3rd order."
 msgstr ""
 
-#, python-brace-format
-msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Region file <%s> already exists. Do you want to overwrite it?"
+msgid "The raster map {map_name} exists. Do you want to overwrite?"
+msgstr "領域<%s>がすでに存在します。上書きしてよろしいですか? "
+
+#, fuzzy, python-brace-format
+#| msgid "Region file <%s> already exists. Do you want to overwrite it?"
+msgid "The vector map {map_name} exists. Do you want to overwrite?"
+msgstr "領域<%s>がすでに存在します。上書きしてよろしいですか? "
 
 msgid "Rectifying images, please wait..."
 msgstr "画像補正中, しばらくお待ちください..."
@@ -2602,11 +2612,10 @@ msgstr ""
 msgid "Reload GCPs from POINTS file"
 msgstr ""
 
-msgid "Set map canvas for "
+#, fuzzy, python-brace-format
+#| msgid "Set map canvas for "
+msgid "Set map canvas for {zoom_back} / Zoom to map"
 msgstr "マップキャンバスをセット"
-
-msgid " / Zoom to map"
-msgstr ""
 
 msgid "Update GCP coordinates"
 msgstr ""
@@ -2854,7 +2863,9 @@ msgstr ""
 msgid "<not defined>"
 msgstr "<定義されていません>"
 
-msgid "Condition: "
+#, fuzzy, python-brace-format
+#| msgid "Condition: "
+msgid "Condition: {label}"
 msgstr "条件: "
 
 msgid "Condition: not defined"
@@ -3471,7 +3482,9 @@ msgstr "フォントサイズ:"
 msgid "Example"
 msgstr ""
 
-msgid "Enter parameters for '"
+#, fuzzy, python-brace-format
+#| msgid "Enter parameters for '"
+msgid "Enter parameters for '{tool}'"
 msgstr "パラメータを入力してください '"
 
 msgid "Close this window without executing the command (Ctrl+Q)"
@@ -3827,11 +3840,15 @@ msgstr ""
 msgid "Not selectable element"
 msgstr "選択可能な要素ではない"
 
-msgid "Mapset"
-msgstr "マップセット"
+#, fuzzy, python-brace-format
+#| msgid "Mapset: %s"
+msgid "Mapset: {mapset}"
+msgstr "マップセット: %s"
 
-msgid "Type: "
-msgstr "タイプ"
+#, fuzzy, python-brace-format
+#| msgid "Type of element:"
+msgid "Type: {element_type}"
+msgstr "凡例表示"
 
 #, python-format
 msgid "GSelect: invalid item: %s"
@@ -4226,7 +4243,7 @@ msgstr ""
 msgid "Area fill color:"
 msgstr ""
 
-msgid "Random colors according to category number "
+msgid "Random colors according to category number"
 msgstr ""
 
 msgid "Symbol:"
@@ -4330,6 +4347,9 @@ msgstr ""
 "    - 現在のマップセットは常にアクセス可能.\n"
 "    - 現在のマップセットのみ書き込み可能.\n"
 "    - 自分が所有しているマップセットのみ書き込み可能."
+
+msgid "Mapset"
+msgstr "マップセット"
 
 msgid "Owner"
 msgstr "所有者"
@@ -5136,9 +5156,6 @@ msgstr "プレビュー "
 
 msgid "Training"
 msgstr ""
-
-msgid "/ Zoom to map"
-msgstr " / マップのズーム"
 
 msgid "std dev"
 msgstr ""
@@ -6411,7 +6428,9 @@ msgstr ""
 msgid "Set opacity of <{}>"
 msgstr "不透明度のセット <%s> "
 
-msgid "Layer group:"
+#, fuzzy, python-brace-format
+#| msgid "Layer group:"
+msgid "Layer group: {number}"
 msgstr "レイヤーグループ： "
 
 msgid "Click to edit layer settings"
@@ -7320,8 +7339,10 @@ msgstr ""
 msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
 msgstr "左ボタンでドラッグすると距離計測 %s左ボタンダブルクリックでクリア "
 
-msgid "Measuring distance"
-msgstr "計測距離 "
+#, fuzzy, python-brace-format
+#| msgid "Measuring distance:"
+msgid "Measuring distance ({units}):"
+msgstr "計測距離："
 
 msgid "Measuring distance:"
 msgstr "計測距離："
@@ -7441,6 +7462,3990 @@ msgstr ""
 msgid "Property does not exist: %s"
 msgstr ""
 
+msgid "&File"
+msgstr "ファイル(&F)"
+
+msgid "New"
+msgstr "新規 "
+
+msgid "Create new workspace"
+msgstr "ワークスペース新規作成 "
+
+msgid "Open"
+msgstr "開く"
+
+msgid "Load workspace from file"
+msgstr "ファイルからワークスペースをロード "
+
+msgid "Save"
+msgstr "保存 "
+
+msgid "Save as"
+msgstr "別名で保存 "
+
+msgid "Save workspace to file"
+msgstr "現在のワークスペースを保存 "
+
+#, fuzzy
+#| msgid "Choose workspace file"
+msgid "Close workspace file"
+msgstr "ワークスペースファイルの選択 "
+
+msgid "Map display"
+msgstr "マップディスプレイ"
+
+msgid "Add raster"
+msgstr "ラスター追加"
+
+msgid "Add raster map layer to current display"
+msgstr "現在の画面にラスターマップレイヤーを追加"
+
+msgid "Add vector"
+msgstr "ベクトル追加"
+
+msgid "Add vector map layer to current display"
+msgstr "現在の画面にベクトルマップレイヤーを追加"
+
+msgid "Add multiple rasters or vectors"
+msgstr "複数ラスターまたはベクトルを追加"
+
+msgid "Add multiple raster or vector map layers to current display"
+msgstr "ラスターマップの追加 "
+
+msgid "Add RGB raster layer"
+msgstr "RGBレイヤー追加 "
+
+#, fuzzy
+#| msgid "Add raster map layer to current display"
+msgid "Add RGB raster map layer to current display"
+msgstr "現在の画面にラスターマップレイヤーを追加"
+
+msgid "Add web service layer"
+msgstr ""
+
+msgid "New map display window"
+msgstr "マップの横断面を表示 "
+
+msgid "Open new map display window"
+msgstr "新しいマップ画面を開く"
+
+#, fuzzy
+#| msgid "Force re-rendering all map layers"
+msgid "Render all map displays"
+msgstr "全レイヤ－を強制的に再レンダリング "
+
+#, fuzzy
+#| msgid "Close all open map display windows"
+msgid "Re-render maps in all open map display windows"
+msgstr "全てのマップ画面を閉じる"
+
+msgid "Close current map display window"
+msgstr "現在のマップ表示画面を閉じる"
+
+msgid "Close all open map display windows"
+msgstr "全てのマップ画面を閉じる"
+
+#, fuzzy
+#| msgid "Sample raster maps at point locations"
+msgid "Simplified raster import with reprojection"
+msgstr "ポイントの場所にあるラスターマップのサンプリング"
+
+msgid "Imports raster data into a GRASS raster map using GDAL library."
+msgstr "GDALでGRASSマップレイヤーにラスターデータをインポート "
+
+#, fuzzy
+#| msgid "Import 3D raster data"
+msgid "Import of common raster formats"
+msgstr "3Dラスターデータのインポート "
+
+msgid "ASCII x,y,z point import and gridding"
+msgstr "ASCII x,y,zポイントインポート グリッド化"
+
+msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
+msgstr ""
+
+msgid "ASCII grid import"
+msgstr "ASCIIグリッドのインポート "
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Converts a GRASS ASCII raster file to binary raster map."
+msgstr "バイナリアレイとしてエクスポート "
+
+msgid "ASCII polygons, lines, and point import"
+msgstr ""
+
+msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgstr "ASCII ポリゴン/ライン/ポイントデータファイルからラスターマップを作成 "
+
+#, fuzzy
+#| msgid "Raw binary array export"
+msgid "Raw binary array import"
+msgstr "バイナリー配列へエクスポート "
+
+msgid "Import a binary raster file into a GRASS raster map layer."
+msgstr "バイナリーファイルをラスターマップとしてインポート "
+
+msgid "GRIDATB.FOR import"
+msgstr "GRIDATB.FOR インポート "
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map."
+msgstr "バイナリーファイルをラスターマップとしてインポート "
+
+msgid "Matlab 2D array import"
+msgstr "Matlab ２次元配列インポート"
+
+msgid "Imports a binary MAT-File(v4) to a GRASS raster."
+msgstr "MAT-File(v4) をラスターマップとしてインポート "
+
+#, fuzzy
+#| msgid "PNG export"
+msgid "PNG import"
+msgstr "PNGのエクスポート "
+
+msgid "Imports non-georeferenced PNG format image."
+msgstr ""
+
+msgid "SPOT NDVI import"
+msgstr "SPOT NDVI インポート "
+
+msgid "Imports SPOT VGT NDVI data into a raster map."
+msgstr ""
+
+msgid "SRTM HGT import"
+msgstr "SRTM HGT インポート "
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Imports SRTM HGT files into raster map."
+msgstr "バイナリーファイルをラスターマップとしてインポート "
+
+msgid "Terra ASTER HDF import"
+msgstr "Terra ASTER HDF インポート "
+
+msgid "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp."
+msgstr ""
+
+#, fuzzy
+#| msgid "ASCII x,y,z points export"
+msgid "LAS LiDAR points import"
+msgstr "ASCII XYZ形式のエクスポート "
+
+msgid "Point cloud (LAS LiDAR) import"
+msgstr ""
+
+#, fuzzy
+#| msgid "SRTM HGT import"
+msgid "WMS/WMTS import"
+msgstr "SRTM HGT インポート "
+
+msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
+msgstr ""
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unpack raster map"
+msgstr "ラスターマップ"
+
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
+msgstr ""
+
+#, fuzzy
+msgid "Reproject raster map from different GRASS project"
+msgstr "あるロケーションのベクトルマップを現在のロケーションに投影変換"
+
+#, fuzzy
+msgid "Re-projects a raster map from given project to the current project."
+msgstr "あるロケーションのベクトルマップを現在のロケーションに投影変換"
+
+msgid "Simplified vector import with reprojection"
+msgstr ""
+
+#, fuzzy
+#| msgid "Imports raster data into a GRASS raster map using GDAL library."
+msgid "Imports vector data into a GRASS vector map using OGR library."
+msgstr "GDALでGRASSマップレイヤーにラスターデータをインポート "
+
+#, fuzzy
+#| msgid "Import vector map"
+msgid "Import of common vector formats"
+msgstr "ベクトルマップのインポート "
+
+msgid "ASCII points or GRASS ASCII format"
+msgstr ""
+
+#, fuzzy
+#| msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgid "Creates a vector map from an ASCII points file or ASCII vector file."
+msgstr "ASCII ポリゴン/ライン/ポイントデータファイルからラスターマップを作成 "
+
+msgid "ASCII points as a vector lines"
+msgstr "ベクトルのラインとしてASCIIポイントを変換"
+
+msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
+msgstr ""
+
+msgid "DXF import"
+msgstr "DXFのインポート "
+
+msgid "Converts files in DXF format to GRASS vector map format."
+msgstr "DXFフォーマットからGRASSベクトルフォーマットへ変換"
+
+msgid "WFS"
+msgstr "WFS"
+
+#, fuzzy
+#| msgid "Import data from WMS server"
+msgid "Imports GetFeature from a WFS server."
+msgstr "WMSサーバーからデータをインポート "
+
+msgid "ESRI e00 import"
+msgstr "ESRI e00のインポート "
+
+#, fuzzy
+#| msgid "Imports older versions of GRASS vector maps."
+msgid "Imports E00 file into a vector map."
+msgstr "旧GRASSフォーマットベクトルマップインポート "
+
+msgid "Geonames import"
+msgstr "Geonamesのインポート "
+
+#, fuzzy
+#| msgid "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map."
+msgid "Imports geonames.org country files into a vector points map."
+msgstr "US-NGA GEOnet Names Server (GNS)  からGRASSベクトルマップへインポート "
+
+msgid "Matlab array or Mapgen format import"
+msgstr "Matlab配列またはMapGenフォーマットのインポート "
+
+msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr "Mapgen または Matlab-ASCII のベクトルマップをGRASSへインポート "
+
+#, fuzzy
+#| msgid "Patch vector maps"
+msgid "Unpack vector map"
+msgstr "ベクトルマップのパッチ"
+
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
+msgstr ""
+
+#, fuzzy
+msgid "Reproject vector map from different GRASS project"
+msgstr "あるロケーションのベクトルマップを現在のロケーションに投影変換"
+
+#, fuzzy
+msgid "Re-projects a vector map from one project to the current project."
+msgstr "あるロケーションのベクトルマップを現在のロケーションに投影変換"
+
+msgid "Import 3D raster data"
+msgstr "3Dラスターデータのインポート "
+
+msgid "ASCII 3D import"
+msgstr "ASCII 3Dのインポート "
+
+#, fuzzy
+#| msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
+msgstr "2Dラスターマップ断面を １つの 3Dラスターマップの値として変換"
+
+#, fuzzy
+#| msgid "Raw binary array export"
+msgid "Raw binary array 3D import"
+msgstr "バイナリー配列へエクスポート "
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgstr "バイナリーファイルをラスターマップとしてインポート "
+
+msgid "Vis5D import"
+msgstr "Vis5Dのインポート "
+
+#, fuzzy
+#| msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
+msgid "Import 3-dimensional Vis5D files."
+msgstr "GRASS 3D ラスターマップを3D Vis5D ファイルにエクスポート "
+
+#, fuzzy
+#| msgid "ASCII 3D import"
+msgid "LiDAR 3D import"
+msgstr "ASCII 3Dのインポート "
+
+msgid "XYZ to 3D raster series"
+msgstr ""
+
+msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
+msgstr ""
+
+msgid "Import database table"
+msgstr "データベーステーブルのインポート "
+
+msgid "Common import formats"
+msgstr "一般的なインポート形式"
+
+msgid "Imports attribute tables in various formats."
+msgstr "複数フォーマットからなる属性テーブルのインポート "
+
+msgid "Export raster map"
+msgstr "ラスターマップのエクスポート "
+
+msgid "Common export formats"
+msgstr "一般的なエキスポートフォーマット"
+
+msgid "Exports GRASS raster maps into GDAL supported formats."
+msgstr "GDAL用フォーマットへのラスターマップのエクスポート "
+
+msgid "ASCII grid export"
+msgstr "ASCIIグリッドのエクスポート "
+
+#, fuzzy
+#| msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgstr "3Dラスターマップを VTK-Ascii フォーマットへ変換"
+
+msgid "ASCII x,y,z points export"
+msgstr "ASCII XYZ形式のエクスポート "
+
+msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
+msgstr ""
+
+msgid "GRIDATB.FOR export"
+msgstr "GRIDATB.FORのエクスポート "
+
+#, fuzzy
+#| msgid "Exports GRASS raster maps into GDAL supported formats."
+msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
+msgstr "GDAL用フォーマットへのラスターマップのエクスポート "
+
+msgid "Matlab 2D array export"
+msgstr "Matlab 2D 座標値 エキスポート"
+
+msgid "Exports a GRASS raster to a binary MAT-File."
+msgstr "MAT-Fileへエクスポート "
+
+msgid "Raw binary array export"
+msgstr "バイナリー配列へエクスポート "
+
+msgid "Exports a GRASS raster to a binary array."
+msgstr "バイナリアレイとしてエクスポート "
+
+msgid "MPEG-1 export"
+msgstr "MPEG-1のエクスポート "
+
+#, fuzzy
+#| msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgid "Converts raster map series to MPEG movie."
+msgstr "2Dラスターマップ断面を １つの 3Dラスターマップの値として変換"
+
+msgid "PNG export"
+msgstr "PNGのエクスポート "
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Export a GRASS raster map as a non-georeferenced PNG image."
+msgstr "バイナリアレイとしてエクスポート "
+
+msgid "PPM export"
+msgstr "PPMのエクスポート "
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary MAT-File."
+msgid "Converts a GRASS raster map to a PPM image file."
+msgstr "MAT-Fileへエクスポート "
+
+msgid "PPM from RGB export"
+msgstr "RGBからPPMへのエクスポート "
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary MAT-File."
+msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
+msgstr "MAT-Fileへエクスポート "
+
+msgid "POV-Ray export"
+msgstr "POV-Rayのエクスポート "
+
+#, fuzzy
+#| msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgid "Converts a raster map layer into a height-field file for POV-Ray."
+msgstr "3Dラスターマップを VTK-Ascii フォーマットへ変換"
+
+msgid "VRML export"
+msgstr "VRMLのエクスポート "
+
+msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
+msgstr ""
+
+msgid "VTK export"
+msgstr "VTKのエクスポート "
+
+#, fuzzy
+#| msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgid "Converts raster maps into the VTK-ASCII format."
+msgstr "3Dラスターマップを VTK-Ascii フォーマットへ変換"
+
+#, fuzzy
+#| msgid "Patch raster maps"
+msgid "Pack raster map"
+msgstr "ラスターマップの重ね合せ "
+
+msgid "Exports a raster map as GRASS specific archive file"
+msgstr ""
+
+msgid "Export vector map"
+msgstr "ベクトルマップのエクスポート "
+
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
+msgstr ""
+
+#, fuzzy
+#| msgid "ASCII points as a vector lines"
+msgid "ASCII points or GRASS ASCII vector export"
+msgstr "ベクトルのラインとしてASCIIポイントを変換"
+
+msgid "Exports a vector map to a GRASS ASCII vector representation. By default only features with category are exported. To export all features use 'layer=-1'."
+msgstr ""
+
+msgid "DXF export"
+msgstr "DXFのエクスポート "
+
+#, fuzzy
+#| msgid "Exports GRASS raster maps into GDAL supported formats."
+msgid "Exports vector map to DXF file format."
+msgstr "GDAL用フォーマットへのラスターマップのエクスポート "
+
+#, fuzzy
+#| msgid "PNG export"
+msgid "PostGIS export"
+msgstr "PNGのエクスポート "
+
+msgid "Exports a vector map layer to PostGIS feature table."
+msgstr ""
+
+msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
+msgstr ""
+
+msgid "SVG export"
+msgstr "SVGフォーマットのエクスポート "
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Exports a vector map to SVG file."
+msgstr "ベクトルマップのエクスポート "
+
+#, fuzzy
+#| msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgid "Converts a vector map to VTK ASCII output."
+msgstr "3Dラスターマップを VTK-Ascii フォーマットへ変換"
+
+#, fuzzy
+#| msgid "Patch vector maps"
+msgid "Pack vector map"
+msgstr "ベクトルマップのパッチ"
+
+msgid "Exports a vector map as GRASS specific archive file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to image"
+msgid "Export to LiDAR format"
+msgstr "イメージにエキスポート"
+
+msgid "Export 3D raster maps"
+msgstr "3Dラスターマップのエクスポート "
+
+msgid "ASCII 3D export"
+msgstr "ASCII 3Dのエクスポート "
+
+#, fuzzy
+#| msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgid "Converts a 3D raster map layer into a ASCII text file."
+msgstr "3Dラスターマップを VTK-Ascii フォーマットへ変換"
+
+#, fuzzy
+#| msgid "Raw binary array export"
+msgid "Raw binary array 3D export"
+msgstr "バイナリー配列へエクスポート "
+
+#, fuzzy
+#| msgid "Exports a GRASS raster to a binary array."
+msgid "Exports a GRASS 3D raster map to a binary array."
+msgstr "バイナリアレイとしてエクスポート "
+
+msgid "Vis5D export"
+msgstr "Vis5Dのエクスポート "
+
+msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr "GRASS 3D ラスターマップを3D Vis5D ファイルにエクスポート "
+
+msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgstr "3Dラスターマップを VTK-Ascii フォーマットへ変換"
+
+#, fuzzy
+#| msgid "DXF export"
+msgid "NetCDF export"
+msgstr "DXFのエクスポート "
+
+#, fuzzy
+#| msgid "Export 3D raster maps"
+msgid "Export a 3D raster map as netCDF file."
+msgstr "3Dラスターマップのエクスポート "
+
+#, fuzzy
+#| msgid "Import database table"
+msgid "Export database table"
+msgstr "データベーステーブルのインポート "
+
+msgid "Exports attribute tables into various formats."
+msgstr "属性テーブルを別のフォーマットにエクスポート "
+
+msgid "Link external raster data"
+msgstr "外部ラスターデータへのリンク"
+
+msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
+msgstr "GRASSの擬似ラスターマップレイヤーとしてGDALがサポートするラスターデータをリンク"
+
+msgid "Link external vector data"
+msgstr "外部ベクトルデータへのリンク"
+
+msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
+msgstr "OGRがサポートするレイヤーにリンクする擬似ベクトルマップを新しく作成"
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Output format for raster data"
+msgstr "ラスターデータのインポート "
+
+msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Output format for vector data"
+msgstr "ベクトルデータのインポート "
+
+msgid "Defines vector output format utilizing OGR library."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage vector maps"
+msgid "Manage maps"
+msgstr "ベクトルマップの消去"
+
+msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
+msgstr ""
+
+msgid "List"
+msgstr "リスト "
+
+msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
+msgstr "ユーザーが検索オプションを使って指定したデータ型の、現在使用できるGRASSデータベースファイルの一覧を表示 "
+
+msgid "Renames data base element files in the user's current mapset."
+msgstr "現在使用できるマップセットのエレメントファイル名を変更 "
+
+msgid "Delete"
+msgstr "削除 "
+
+#, fuzzy
+#| msgid "Renames data base element files in the user's current mapset."
+msgid "Removes data base element files from the user's current mapset using the search pattern."
+msgstr "現在使用できるマップセットのエレメントファイル名を変更 "
+
+#, fuzzy
+msgid "Download project from web"
+msgstr "選択ロケーションを削除する"
+
+msgid "Download GRASS project from the web Get GRASS project from an URL or file path"
+msgstr ""
+
+msgid "Rebuild or remove all addons"
+msgstr ""
+
+msgid "Rebuilds or removes all locally installed GRASS Addons extensions. By default only extensions built against different GIS Library are rebuilt."
+msgstr ""
+
+msgid "Map type conversions"
+msgstr "マップタイプの変換 "
+
+msgid "Raster to vector"
+msgstr "ラスター → ベクトル "
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Converts a raster map into a vector map."
+msgstr "3Dラスターマップから2Dラスターマップへ変換"
+
+#, fuzzy
+#| msgid "Insert existing 3D raster map"
+msgid "Raster series to 3D raster"
+msgstr "挿入する既存３Dラスターマップ名"
+
+msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgstr "2Dラスターマップ断面を １つの 3Dラスターマップの値として変換"
+
+#, fuzzy
+#| msgid "Create 3D vector over raster"
+msgid "Raster 2.5D to 3D raster"
+msgstr "3Dベクトルまたはラスターの作成"
+
+msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
+msgstr "標高データとラスターマップから3Dマップを作成 "
+
+msgid "Vector to raster"
+msgstr "ベクトル → ラスター "
+
+msgid "Converts (rasterize) a vector map into a raster map."
+msgstr "ラスターマップ内にベクトルマップを変換"
+
+#, fuzzy
+#| msgid "Vector to raster"
+msgid "Vector to 3D raster"
+msgstr "ベクトル → ラスター "
+
+#, fuzzy
+#| msgid "Converts (rasterize) a vector map into a raster map."
+msgid "Converts a vector map (only points) into a 3D raster map."
+msgstr "ラスターマップ内にベクトルマップを変換"
+
+msgid "2D vector to 3D vector"
+msgstr "2Dベクトル → 3Dベクトル "
+
+msgid "Performs transformation of 2D vector features to 3D."
+msgstr "2Dベクトルデータを3Dに変換します "
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "3D raster to raster series"
+msgstr "3Dラスターマップから2Dラスターマップへ変換"
+
+msgid "Converts 3D raster maps to 2D raster maps"
+msgstr "3Dラスターマップから2Dラスターマップへ変換"
+
+msgid "Launches Simple Python Editor."
+msgstr ""
+
+msgid "Launch script"
+msgstr "スクリプト実行"
+
+msgid "Launches script file."
+msgstr "スクリプトファイル起動."
+
+msgid "Launch Jupyter Notebook interface."
+msgstr ""
+
+msgid "Graphical modeler"
+msgstr "描画モデラー"
+
+msgid "Launch Graphical modeler"
+msgstr "描画モデラー起動"
+
+msgid "Run model prepared by Graphical modeler"
+msgstr "描画モデラーで作成されたモデルの実行"
+
+msgid "Manage Ground Control Points for Georectification"
+msgstr "幾何補正の為のGCP（地上基準点）管理"
+
+#, fuzzy
+#| msgid "animation"
+msgid "Animation tool"
+msgstr "アニメージョン"
+
+msgid "Launch animation tool."
+msgstr ""
+
+msgid "Launch Cartographic Composer"
+msgstr "カートグラフィックコンポーザーを起動する"
+
+#, fuzzy
+#| msgid "Launch script"
+msgid "Launch Map Swipe"
+msgstr "スクリプト実行"
+
+msgid "Close graphical user interface."
+msgstr ""
+
+msgid "Close GUI and exit GRASS shell."
+msgstr ""
+
+msgid "&Settings"
+msgstr "設定(&S)"
+
+#, fuzzy
+msgid "Show current region"
+msgstr "現在の領域からエリアを作成"
+
+#, fuzzy
+#| msgid "Constrain display resolution to computational settings"
+msgid "Shows the extent and resolution of the computational region."
+msgstr "計算を行うための表示解像度を設定 "
+
+msgid "Show region using latitude and longitude"
+msgstr ""
+
+msgid "Show current region extent in Map Display"
+msgstr ""
+
+#, fuzzy
+#| msgid "Set computational region from display"
+msgid "Shows the extent of the computational region in Map Display."
+msgstr "表示域からの解析領域を設定"
+
+msgid "Set region"
+msgstr "領域設定"
+
+msgid "Manages the boundary definitions for the geographic region."
+msgstr "領域の境界定義を管理 "
+
+msgid "GRASS working environment"
+msgstr "GRASS作業環境 "
+
+msgid "Mapset access"
+msgstr "マップセット作成 "
+
+#, fuzzy
+msgid "Set/unset access to other mapsets in current project"
+msgstr "現在のロケーションに他のマップセットの追加をセットする/しない "
+
+msgid "User access"
+msgstr "ユーザーアクセス "
+
+msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
+msgstr ""
+
+msgid "Change working environment"
+msgstr "作業環境を変更する "
+
+msgid "Changes or reports current mapset. Optionally, creates new mapset or lists available mapsets in given project (location)."
+msgstr ""
+
+#, fuzzy
+msgid "Change project (location) and mapset"
+msgstr "プロジェクトのロケーションとマップセットを選択"
+
+#, fuzzy
+msgid "Change current project and mapset."
+msgstr "現在のロケーションとマップセットを変更"
+
+#, fuzzy
+#| msgid "Change current mapset."
+msgid "Change mapset"
+msgstr "マップセットを変更する "
+
+msgid "Change current mapset."
+msgstr "マップセットを変更する "
+
+#, fuzzy
+#| msgid "Change working environment"
+msgid "Change working directory"
+msgstr "作業環境を変更する "
+
+msgid "Show settings"
+msgstr "設定情報 "
+
+msgid "Outputs and modifies the user's current GRASS variable settings."
+msgstr "GRASSのユーザー設定係数の更新/出力 "
+
+msgid "Change settings"
+msgstr "設定変更 "
+
+#, fuzzy
+#| msgid "Outputs and modifies the user's current GRASS variable settings."
+msgid "Outputs and modifies the user's current GRASS variable settings. Prints all defined GRASS variables if no option is given."
+msgstr "GRASSのユーザー設定係数の更新/出力 "
+
+#, fuzzy
+msgid "Create new project (location)"
+msgstr "新しいロケーションを作成しますか？"
+
+#, fuzzy
+msgid "Launches project wizard to create a new GRASS project (also known as location)."
+msgstr "GRASS ロケーションを作成しますか <%s>?"
+
+#, fuzzy
+msgid "Creates new mapset in the current project, changes current mapset."
+msgstr "新しいマップセットの作成 "
+
+msgid "Map projections"
+msgstr "マップ投影法"
+
+#, fuzzy
+#| msgid "Display region"
+msgid "Display map projection"
+msgstr "領域表示"
+
+#, fuzzy
+#| msgid "Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgid "Converts coordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgstr "様々なフォーマット間での座標系（i.e. 投影情報）の変換"
+
+msgid "Manage projections"
+msgstr "投影法の管理 "
+
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions). Can also be used to create new GRASS projects."
+msgstr ""
+
+msgid "Convert coordinates"
+msgstr "座標変換 "
+
+msgid "Converts coordinates from one projection to another (cs2cs frontend)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove extension"
+msgid "Addons extensions"
+msgstr "拡張機能の削除 "
+
+#, fuzzy
+#| msgid "Fetch & install extension from GRASS Addons"
+msgid "Install extension from addons"
+msgstr "GRASSアドオンからエクステンションを取得＆インストール"
+
+#, fuzzy
+#| msgid "Fetch & install extension from GRASS Addons"
+msgid "Installs new extension from GRASS AddOns repository."
+msgstr "GRASSアドオンからエクステンションを取得＆インストール"
+
+#, fuzzy
+#| msgid "List of installed extensions"
+msgid "Manage installed extension"
+msgstr "インストールされたアドオンGRASSモジュールの一覧"
+
+msgid "Updates or removes installed GRASS AddOns extension(s)."
+msgstr ""
+
+msgid "Preferences"
+msgstr "GUI設定 "
+
+msgid "User GUI preferences (display font, commands, digitizer, etc.)"
+msgstr "ユーザーGUI設定 (フォント, コマンド,デジタイザー, etc.)  "
+
+msgid "&Raster"
+msgstr "ラスター(&R)"
+
+#, fuzzy
+msgid "Develop raster map"
+msgstr "ラスターマップの作成"
+
+msgid "Compress/decompress"
+msgstr "圧縮/解凍 "
+
+msgid "Compresses and decompresses raster maps."
+msgstr "ラスターマップの圧縮/解凍 "
+
+msgid "Region boundaries"
+msgstr "領域境界 "
+
+msgid "Sets the boundary definitions for a raster map."
+msgstr "ラスターマップの境界を定義 "
+
+msgid "Manage NULL values"
+msgstr "NULL値の管理 "
+
+msgid "Manages NULL-values of given raster map."
+msgstr "ラスターマップのNULL値の管理 "
+
+msgid "Quantization"
+msgstr "量子化 "
+
+msgid "Produces the quantization file for a floating-point map."
+msgstr "浮動小数点マップのための量子化ファイルを作成 "
+
+msgid "Timestamp"
+msgstr "タイムスタンプ "
+
+#, fuzzy
+#| msgid "Print/add/remove a timestamp for a 3D raster map"
+msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgstr "3Dラスターマップのタイムスタンプ出力/追加/削除 "
+
+msgid "Resample using aggregate statistics"
+msgstr "総量統計を使用した再サンプリング "
+
+msgid "Resamples raster map layers to a coarser grid using aggregation."
+msgstr "疎グリッドの集成使用したラスターレイヤーの再サンプリング "
+
+msgid "Resample using multiple methods"
+msgstr "複数手法による再サンプリング "
+
+#, fuzzy
+#| msgid "Resamples raster map layers to a coarser grid using aggregation."
+msgid "Resamples raster map to a finer grid using interpolation."
+msgstr "疎グリッドの集成使用したラスターレイヤーの再サンプリング "
+
+msgid "Resample using nearest neighbor"
+msgstr "近傍情報を利用した再サンプリング "
+
+msgid "GRASS raster map layer data resampling capability."
+msgstr "ラスターマップレイヤーの再サンプリング機能 "
+
+msgid "Resample using spline tension"
+msgstr " スプライン法による再サンプリング "
+
+msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
+msgstr "再補間およびオプションで入力ラスターマップから新しいラスターマップに異なる解像度の（おそらく）張力と平滑化でスプライン正則化を使って地形解析します "
+
+#, fuzzy
+#| msgid "Resample using spline tension"
+msgid "Resample using bspline"
+msgstr " スプライン法による再サンプリング "
+
+msgid "Performs bilinear or bicubic spline interpolation with Tykhonov regularization."
+msgstr ""
+
+#, fuzzy
+#| msgid "Resample using nearest neighbor"
+msgid "Resample using analytic kernel"
+msgstr "近傍情報を利用した再サンプリング "
+
+#, fuzzy
+#| msgid "Resamples raster map layers to a coarser grid using aggregation."
+msgid "Resamples raster map layers using an analytic kernel."
+msgstr "疎グリッドの集成使用したラスターレイヤーの再サンプリング "
+
+msgid "Support file maintenance"
+msgstr "サポートファイルの保守 "
+
+msgid "Allows creation and/or modification of raster map layer support files."
+msgstr "ラスターマップサポートファイルの作成・更新 "
+
+msgid "Update map statistics"
+msgstr "マップ統計の更新 "
+
+msgid "Update raster map statistics"
+msgstr "ラスターマップ統計の更新 "
+
+msgid "Tiling"
+msgstr "タイル "
+
+msgid "Produces tilings of the source projection for use in the destination region and projection."
+msgstr "使用中の領域と投影法でタイルを作成する "
+
+msgid "Build a VRT (Virtual Raster)"
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "New raster map"
+msgid "Tile raster map"
+msgstr "新ラスターマップ"
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Splits a raster map into tiles."
+msgstr "ポイントロケーションでのラスターマップのサンプリング"
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage semantic labels"
+msgstr "テーブル管理"
+
+msgid "Manages semantic label information assigned to a single raster map or to a list of raster maps."
+msgstr ""
+
+msgid "Manage colors"
+msgstr "カラー調整 "
+
+msgid "Color tables"
+msgstr "カラーテーブル "
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a raster map."
+msgstr "ラスターマップ用カラーテーブルを作成"
+
+msgid "Color tables (stddev)"
+msgstr "カラーテーブル (標準偏差) "
+
+msgid "Sets color rules based on stddev from a raster map's mean value."
+msgstr ""
+
+msgid "Manage color rules interactively"
+msgstr ""
+
+msgid "Interactive management of raster color tables."
+msgstr "ラスターカラーテーブルの対話型管理"
+
+msgid "Export color table"
+msgstr "カラーテーブルをエキスポート"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Exports the color table associated with a raster map."
+msgstr "ラスターマップ用カラーテーブルを作成"
+
+msgid "Blend 2 color rasters"
+msgstr "2色のラスターをブレンド "
+
+msgid "Blends color components of two raster maps by a given ratio."
+msgstr "指定された比率で 2 色のラスターをブレンド "
+
+msgid "Create RGB"
+msgstr "RGB 作成 "
+
+msgid "Combines red, green and blue raster maps into a single composite raster map."
+msgstr "コンポジットラスターマップに R,G,Bラスターマップを合成する "
+
+msgid "RGB to HIS"
+msgstr "RGB → HIS "
+
+msgid "Generates red, green and blue (RGB) raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
+msgstr ""
+
+msgid "Split raster into RGB"
+msgstr ""
+
+msgid "Splits a raster map into red, green and blue maps."
+msgstr ""
+
+msgid "Query raster maps"
+msgstr "ラスターマップの検索 "
+
+msgid "Query values by coordinates"
+msgstr "座標値からの検索 "
+
+#, fuzzy
+#| msgid "Prints terse list of category values found in a raster map layer."
+msgid "Queries raster maps on their category values and category labels."
+msgstr "ラスターマップのカテゴリー値一覧を表示"
+
+msgid "Query colors by value"
+msgstr "カラーの値から検索 "
+
+msgid "Queries colors for a raster map layer."
+msgstr "ラスターマップレイヤーのカラーから検索 "
+
+msgid "Raster buffers and distance"
+msgstr "ラスターバッファと距離"
+
+msgid "Buffer rasters"
+msgstr "バッファリング"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
+msgstr ""
+
+#, fuzzy
+#| msgid "Buffer rasters"
+msgid "Buffer rasters (low memory)"
+msgstr "バッファリング"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values. This is the low-memory alternative to the classic r.buffer module."
+msgstr ""
+
+msgid "Concentric circles"
+msgstr "同心円の作成"
+
+msgid "Creates a raster map containing concentric rings around a given point."
+msgstr "指定されたポイントを中心に同心円を含むマップをラスターを作成します"
+
+msgid "Closest points"
+msgstr "近傍のポイント "
+
+msgid "Locates the closest points between objects in two raster maps."
+msgstr "２つのラスターマップに最も近いポイントにオブジェクトを配置 "
+
+msgid "Grow by one cell"
+msgstr ""
+
+msgid "Generates a raster map layer with contiguous areas grown by one cell."
+msgstr "１つのセルを拡大させることによって新しいラスターマップを作成する "
+
+msgid "Distance to features"
+msgstr "フィーチャの距離 "
+
+msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
+msgstr ""
+
+#, fuzzy
+#| msgid "Creates a MASK for limiting raster operation."
+msgid "Creates a raster mask for limiting raster operation."
+msgstr "ラスター操作制限用マスク作成 "
+
+#, fuzzy
+#| msgid "Query raster maps"
+msgid "Query mask status"
+msgstr "ラスターマップの検索 "
+
+msgid "Reports presence or absence of a raster mask Provides information about the presence of a 2D raster mask as text output or return code"
+msgstr ""
+
+msgid "Raster map calculator"
+msgstr "ラスターマップカリキュレータ"
+
+#, fuzzy
+#| msgid "Raster map calculator"
+msgid "Simplified raster map calculator"
+msgstr "ラスターマップカリキュレータ"
+
+msgid "Calculates a new raster map from a simple r.mapcalc expression."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map calculator"
+msgid "Raster map calculator."
+msgstr "ラスターマップカリキュレータ"
+
+msgid "Neighborhood analysis"
+msgstr "近傍性分析 "
+
+msgid "Moving window"
+msgstr "ウィンドウを移動 "
+
+msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgstr "各セルのカテゴリーで近傍点解析を行い，ラスターマップに新しいセルを作成します "
+
+msgid "Neighborhood points"
+msgstr "近傍点 "
+
+#, fuzzy
+#| msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
+msgstr "各セルのカテゴリーで近傍点解析を行い，ラスターマップに新しいセルを作成します "
+
+msgid "Overlay rasters"
+msgstr "ラスターマップの重ね合せ "
+
+msgid "Cross product"
+msgstr "カテゴリー値の掛け合わせ "
+
+msgid "Creates a cross product of the category values from multiple raster map layers."
+msgstr "カテゴリー値を掛け合わせて新たなラスターマップを作成します "
+
+msgid "Patch raster maps"
+msgstr "ラスターマップの重ね合せ "
+
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgstr "別のレイヤーによってデータが存在しないエリアのカテゴリー情報を挿入し、合成ラスターマップレイヤーを作成する "
+
+#, fuzzy
+#| msgid "Watershed basin creation"
+msgid "Raster series aggregation"
+msgstr "分水界作成 "
+
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgstr "各出力のセルの値の値を入力ラスターマップレイヤーに対応するセルに割り当てられた関数を作成 "
+
+#, fuzzy
+msgid "Raster series accumulation"
+msgstr "ラスターマップカリキュレータ"
+
+#, fuzzy
+#| msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgid "Makes each output cell value a accumulationfunction of the values assigned to the corresponding cells in the input raster map layers."
+msgstr "各出力のセルの値の値を入力ラスターマップレイヤーに対応するセルに割り当てられた関数を作成 "
+
+msgid "Statistical overlay"
+msgstr "統計オーバーレイ "
+
+msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Statistical overlay"
+msgid "Quantiles overlay"
+msgstr "統計オーバーレイ "
+
+#, fuzzy
+#| msgid "Compute quantiles using two passes."
+msgid "Compute category quantiles using two passes."
+msgstr "２つのパスを使用した分位数の計算"
+
+msgid "Solar radiance and shadows"
+msgstr "太陽照度と影 "
+
+msgid "LatLong map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create histogram of raster map"
+msgid "Creates a latitude/longitude raster map."
+msgstr "画像/ラスタ－ファイルのヒストグラム作成 "
+
+msgid "Solar irradiance and irradiation"
+msgstr "太陽照度と照射 "
+
+msgid "Solar irradiance and irradiation model. Computes direct (beam), diffuse and reflected solar irradiation raster maps for given day, latitude, surface and atmospheric conditions. Solar parameters (e.g. sunrise, sunset times, declination, extraterrestrial irradiance, daylight length) are saved in the map history file. Alternatively, a local time can be specified to compute solar incidence angle and/or irradiance raster maps. The shadowing effect of the topography is optionally incorporated."
+msgstr ""
+
+msgid "Shadows map"
+msgstr "陰影図 "
+
+msgid "Calculates cast shadow areas from sun position and elevation raster map. Either exact sun position (A) is specified, or date/time to calculate the sun position (B) by r.sunmask itself."
+msgstr ""
+
+msgid "Sunshine hours and solar angles"
+msgstr ""
+
+msgid "Calculates solar elevation, solar azimuth, and sun hours. Solar elevation: the angle between the direction of the geometric center of the sun's apparent disk and the (idealized) horizon. Solar azimuth: the angle from due north in clockwise direction."
+msgstr ""
+
+msgid "Terrain analysis"
+msgstr "地形解析 "
+
+msgid "Generate contour lines"
+msgstr "コンターラインの作成"
+
+msgid "Produces a vector map of specified contours from a raster map."
+msgstr "ラスターマップからコンターを作成しベクトルマップを作成"
+
+msgid "Cost surface"
+msgstr "表層断面図 "
+
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr "異なるロケーションの移動コストを各セルの情報として表現したラスターマップを作成する "
+
+msgid "Trace a path"
+msgstr ""
+
+msgid "Traces paths from starting points following input directions."
+msgstr ""
+
+msgid "Cumulative movement costs"
+msgstr "移動コスト積算 "
+
+#, fuzzy
+#| msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgid "Creates a raster map showing the anisotropic cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr "異なるロケーションの移動コストを各セルの情報として表現したラスターマップを作成する "
+
+msgid "Least cost route or flow"
+msgstr "最小コストルートあるいはフロー "
+
+msgid "Traces a flow through an elevation model or cost surface on a raster map."
+msgstr ""
+
+msgid "Compute shaded relief"
+msgstr ""
+
+#, fuzzy
+#| msgid "Creates shaded relief map from an elevation map (DEM). "
+msgid "Creates shaded relief map from an elevation map (DEM)."
+msgstr "標高マップ（DEM）をより陰影マップを作成"
+
+msgid "Apply shade to raster"
+msgstr ""
+
+msgid "Drapes a color raster over an shaded relief or aspect map."
+msgstr ""
+
+msgid "Slope and aspect"
+msgstr "傾斜と方位"
+
+msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map. Aspect is calculated counterclockwise from east."
+msgstr ""
+
+msgid "Landforms"
+msgstr ""
+
+msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
+msgstr ""
+
+msgid "Terrain parameters"
+msgstr "地形パラメータ "
+
+msgid "Extracts terrain parameters from a DEM. Uses a multi-scale approach by taking fitting quadratic parameters to any size window (via least squares)."
+msgstr ""
+
+msgid "Textural features"
+msgstr "テキストフィーチャ"
+
+msgid "Generate images with textural features from a raster map."
+msgstr "ラスターマップからテキストフィーチャを作成"
+
+msgid "Visibility"
+msgstr "可視域"
+
+msgid "Computes the viewshed of a point on an elevation raster map. Default format: NULL (invisible), vertical angle wrt viewpoint (visible)."
+msgstr ""
+
+msgid "Horizon angle"
+msgstr "水平角度 "
+
+msgid "Computes horizon angle height from a digital elevation model. The module has two different modes of operation: 1. Computes the entire horizon around a single point whose coordinates are given with the 'coord' option. The horizon height (in radians). 2. Computes one or more raster maps of the horizon height in a single direction. The input for this is the angle (in degrees), which is measured counterclockwise with east=0, north=90 etc. The output is the horizon height in radians."
+msgstr ""
+
+msgid "Transform features"
+msgstr "フィーチャの変形"
+
+msgid "Clump"
+msgstr "クランプ "
+
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
+msgstr "物理的離散領域をグルーピングすることによってデータを再分類する "
+
+msgid "Grow"
+msgstr "拡大"
+
+msgid "Thin"
+msgstr "縮小"
+
+#, fuzzy
+#| msgid "Rescales the range of category values in a raster map layer."
+msgid "Thins non-null cells that denote linear features in a raster map layer."
+msgstr "ラスターマップのカテゴリー値の範囲を変更します "
+
+msgid "Hydrologic modeling"
+msgstr "水文モデリング "
+
+msgid "Carve stream channels"
+msgstr "河川水路網の作成 "
+
+msgid "Generates stream channels. Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
+msgstr ""
+
+msgid "Fill lake"
+msgstr "湖沼の塗潰し "
+
+msgid "Fills lake at given point to given level."
+msgstr ""
+
+msgid "Depressionless map and flowlines"
+msgstr "凹地の無いマップとフローライン "
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
+msgstr "標高レイヤーから 凹地のない標高マップと流方向マップを作成 "
+
+msgid "Flow accumulation"
+msgstr "フローアキュミュレーション "
+
+msgid "Performs flow computation for massive grids."
+msgstr ""
+
+msgid "Flow lines"
+msgstr "流線 "
+
+msgid "Constructs flowlines. Computes flowlines, flowpath lengths, and flowaccumulation (contributing areas) from a elevation raster map."
+msgstr ""
+
+msgid "Watershed analysis"
+msgstr "分水界解析 "
+
+msgid "Calculates hydrological parameters and RUSLE factors."
+msgstr ""
+
+msgid "Watershed subbasins"
+msgstr "分水界小盆地の作成"
+
+msgid "Generates watershed subbasins raster map."
+msgstr "分水界ラスターマップ生成"
+
+msgid "Watershed basin creation"
+msgstr "分水界作成 "
+
+#, fuzzy
+#| msgid "Generates watershed subbasins raster map."
+msgid "Creates watershed basins from a drainage direction map."
+msgstr "分水界ラスターマップ生成"
+
+msgid "Extraction of stream networks"
+msgstr ""
+
+#, fuzzy
+#| msgid "Performs network maintenance."
+msgid "Performs stream network extraction."
+msgstr "ネットワークメンテナンスを実行"
+
+msgid "SIMWE Overland flow modeling"
+msgstr "SIMWE 地表流モデル "
+
+msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
+msgstr "経路サンプリング法(SIMWE)を使用した流水門シミュレーション"
+
+msgid "SIMWE Sediment flux modeling"
+msgstr "SIMWE 透過流束モデリング"
+
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
+msgstr "経路サンプリング法(SIMWE)を使用した土砂流送 侵食/沈着 シミュレーション"
+
+msgid "Topographic index map"
+msgstr "地形図インデックスマップ "
+
+#, fuzzy
+#| msgid "Creates shaded relief map from an elevation map (DEM). "
+msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
+msgstr "標高マップ（DEM）をより陰影マップを作成"
+
+msgid "TOPMODEL simulation"
+msgstr "TOPMODELシミュレーション "
+
+msgid "Simulates TOPMODEL which is a physically based hydrologic model."
+msgstr "物理的流域水文モデルに基づくトポモデルをシュミレーション"
+
+msgid "USLE K-factor"
+msgstr ""
+
+msgid "Computes USLE Soil Erodibility Factor (K)."
+msgstr ""
+
+msgid "USLE R-factor"
+msgstr ""
+
+msgid "Computes USLE R factor, Rainfall erosivity index."
+msgstr ""
+
+msgid "Groundwater modeling"
+msgstr "地下水 モデリング  "
+
+#, fuzzy
+#| msgid "Groundwater modeling"
+msgid "Groundwater flow"
+msgstr "地下水 モデリング  "
+
+msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgstr "２層による非定常流 被圧/負圧地下水流の数値解析"
+
+#, fuzzy
+#| msgid "Groundwater modeling"
+msgid "Groundwater solute transport"
+msgstr "地下水 モデリング  "
+
+#, fuzzy
+#| msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgid "Numerical calculation program for transient, confined and unconfined solute transport in two dimensions"
+msgstr "２層による非定常流 被圧/負圧地下水流の数値解析"
+
+msgid "Landscape patch analysis"
+msgstr "景観パッチ分析"
+
+msgid "Set up sampling and analysis framework"
+msgstr "サンプリングと解析フレームワークのための設定 "
+
+msgid "Configuration editor for r.li.'index'"
+msgstr "r.li.'index'のための設定エディタ"
+
+msgid "Edge density"
+msgstr "周辺密度"
+
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
+msgstr "4近傍法を使用してラスターマップの周辺密度指標を解析"
+
+msgid "Contrast weighted edge density"
+msgstr "対照的加重周辺密度"
+
+msgid "Calculates contrast weighted edge density index on a raster map"
+msgstr "ラスターマップで対照的加重周辺密度指標を解析"
+
+msgid "Patch area mean"
+msgstr "平均パッチ領域"
+
+msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
+msgstr "4近傍法を使用して、ラスターマップ上で平均パッチサイズ指標を解析"
+
+msgid "Patch area range"
+msgstr "パッチ領域の範囲"
+
+msgid "Calculates range of patch area size on a raster map"
+msgstr "ラスターマップ上でパッチ領域サイズの範囲を解析"
+
+msgid "Patch area Std Dev"
+msgstr "パッチ領域標準偏差"
+
+msgid "Calculates standard deviation of patch area a raster map"
+msgstr "ラスターマップのパッチ領域の標準偏差を解析"
+
+msgid "Patch area Coeff Var"
+msgstr "パッチ領域COEFF演算子"
+
+msgid "Calculates coefficient of variation of patch area on a raster map"
+msgstr " ラスターマップ上でパッチ領域の変動係数を解析"
+
+msgid "Patch density"
+msgstr "パッチ密度"
+
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
+msgstr "4近傍法を使用して、ラスターマップ上でパッチ密度指標を解析"
+
+msgid "Patch number"
+msgstr "パッチ番号"
+
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
+msgstr "4近傍法を使用して、ラスターマップ上でパッチ数指標を解析"
+
+msgid "Dominance's diversity"
+msgstr "順位多様性"
+
+msgid "Calculates dominance's diversity index on a raster map"
+msgstr "ラスターマップで順位多様性指標を解析"
+
+msgid "Shannon's diversity"
+msgstr "シャノン 多様性  "
+
+msgid "Calculates Shannon's diversity index on a raster map"
+msgstr "ラスターマップでシャノン多様性指標を解析"
+
+msgid "Simpson's diversity"
+msgstr "シンプソン多様性"
+
+msgid "Calculates Simpson's diversity index on a raster map"
+msgstr "ラスターマップでシンプソン多様性指標を解析"
+
+msgid "Richness"
+msgstr "濃厚"
+
+#, fuzzy
+#| msgid "Calculates shape index on a raster map"
+msgid "Calculates richness index on a raster map"
+msgstr "ラスターマップで形状係数を解析"
+
+msgid "Shape index"
+msgstr "形状係数"
+
+msgid "Calculates shape index on a raster map"
+msgstr "ラスターマップで形状係数を解析"
+
+msgid "Wildfire modeling"
+msgstr "森林火災モデリング "
+
+msgid "Rate of spread"
+msgstr "拡散比率"
+
+msgid "Generates rate of spread raster maps. Generates three, or four raster map layers showing the base (perpendicular) rate of spread (ROS), the maximum (forward) ROS, the direction of the maximum ROS, and optionally the maximum potential spotting distance for fire spread simulation."
+msgstr ""
+
+msgid "Least-cost spread paths"
+msgstr "最小コストの拡散経路"
+
+msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
+msgstr "累積コストで計算されたセルから最小コストのパスで再帰的にトレース"
+
+msgid "Anisotropic spread simulation"
+msgstr "非等方性拡散シミュレーション  "
+
+msgid "Simulates elliptically anisotropic spread. Generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins. It optionally produces raster maps to contain backlink UTM coordinates for tracing spread paths. Usable for fire spread simulations."
+msgstr ""
+
+msgid "Change category values and labels"
+msgstr "カテゴリー値・ラベルの変更 "
+
+msgid "Manage category information"
+msgstr "カテゴリー情報の管理"
+
+msgid "Manages category values and labels associated with user-specified raster map layers."
+msgstr "ユーザー定義ラスターマップレイヤーに関連付けられたカテゴリー情報とラベルの管理"
+
+msgid "Interactively edit category values"
+msgstr "対話形式でカテゴリー値を編集"
+
+#, fuzzy
+#| msgid "Manages NULL-values of given raster map."
+msgid "Edits cell values in a raster map."
+msgstr "ラスターマップのNULL値の管理 "
+
+msgid "Reclassify by size"
+msgstr "サイズで再分類"
+
+msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
+msgstr "定義されたサイズ（ヘクタール）をしきい値としてラスターマップを再分類"
+
+msgid "Reclassify"
+msgstr "再分類"
+
+msgid "Reclassify raster map based on category values. Creates a new raster map whose category values are based upon a reclassification of the categories in an existing raster map."
+msgstr ""
+
+msgid "Recode"
+msgstr "再コード"
+
+msgid "Recodes categorical raster maps."
+msgstr "カテゴリー分けされたラスターマップの再コード化"
+
+msgid "Rescale"
+msgstr "再スケール"
+
+msgid "Rescales the range of category values in a raster map layer."
+msgstr "ラスターマップのカテゴリー値の範囲を変更します "
+
+msgid "Rescale with histogram"
+msgstr "ヒストグラムの再スケール"
+
+msgid "Rescales histogram equalized the range of category values in a raster map layer."
+msgstr "ラスターマップのカテゴリー値の範囲によりヒストグラムの再スケール"
+
+msgid "Generate random cells"
+msgstr "ランダムセルの作成"
+
+#, fuzzy
+#| msgid "Generate random cells"
+msgid "Random cells"
+msgstr "ランダムセルの作成"
+
+msgid "Generates random cell values with spatial dependence."
+msgstr "空間に依存したランダムセル値を作成"
+
+msgid "Random cells and vector points"
+msgstr "ランダムセルとベクトルポイント"
+
+#, fuzzy
+#| msgid "Creates a raster map layer and vector point map containing randomly located points."
+msgid "Creates randomly placed raster cells or vector points Creates a raster map and vector point map containing randomly located cells and points."
+msgstr "ランダムに定義された地点を含むラスターマップレイヤーとベクトルポイントを作成"
+
+msgid "Generate surfaces"
+msgstr "曲面の作成"
+
+msgid "Fractal surface"
+msgstr "フラクタル面"
+
+msgid "Creates a fractal surface of a given fractal dimension."
+msgstr "指定されたフラクタル次元のフラクタル曲面を作成"
+
+msgid "Gaussian kernel density surface"
+msgstr "ガウスカーネル密度面"
+
+msgid "Generates a raster density map from vector points map. Density is computed using a moving kernel. Optionally generates a vector density map on a vector network."
+msgstr ""
+
+msgid "Gaussian deviates surface"
+msgstr "ガウス偏差面"
+
+msgid "Generates a raster map using gaussian random number generator. Mean and standard deviation of gaussian deviates can be expressed by the user."
+msgstr ""
+
+msgid "Plane"
+msgstr "平面 "
+
+#, fuzzy
+#| msgid "Creates a raster map layer and vector point map containing randomly located points."
+msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
+msgstr "ランダムに定義された地点を含むラスターマップレイヤーとベクトルポイントを作成"
+
+msgid "Random deviates surface"
+msgstr "ランダム逸脱曲面"
+
+msgid "Produces a raster surface map of uniform random deviates with defined range."
+msgstr ""
+
+msgid "Random surface with spatial dependence"
+msgstr "空間依存性ランダム曲面"
+
+msgid "Generates random surface(s) with spatial dependence."
+msgstr "空間依存性ランダム曲面を作成"
+
+msgid "Interpolate surfaces"
+msgstr "曲面補間 "
+
+msgid "Bilinear and bicubic from vector points"
+msgstr "ベクトルポイントからの線形補間と三次補間"
+
+msgid "Performs bicubic or bilinear spline interpolation with Tykhonov regularization."
+msgstr ""
+
+msgid "IDW from raster points"
+msgstr "ラスターポイントから加重平均補間"
+
+msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+msgid "IDW from vector points"
+msgstr "ベクトルポイントでの加重平均補間"
+
+msgid "Provides surface interpolation from vector point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+msgid "Raster contours"
+msgstr "ラスターコンターから作成"
+
+#, fuzzy
+#| msgid "Generates statistics for i.smap from raster map."
+msgid "Generates surface raster map from rasterized contours."
+msgstr "ラスターマップから i.smapの統計情報を作成"
+
+msgid "Regularized spline tension"
+msgstr "正則化スプライン法"
+
+msgid "Performs surface interpolation from vector points map by splines. Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension."
+msgstr ""
+
+msgid "Raster series interpolation"
+msgstr ""
+
+msgid "Interpolates raster maps located (temporal or spatial) in between input raster maps at specific sampling positions."
+msgstr ""
+
+msgid "Fill NULL cells"
+msgstr "NULLセルの穴埋め "
+
+msgid "Fills no-data areas in raster maps using spline interpolation."
+msgstr ""
+
+#, fuzzy
+#| msgid "Fill NULL cells"
+msgid "Fill NULL cells using IDW"
+msgstr "NULLセルの穴埋め "
+
+msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
+msgstr ""
+
+msgid "Reports and statistics"
+msgstr "レポートと統計"
+
+msgid "Basic raster metadata"
+msgstr "基本的なラスターメタデータ"
+
+#, fuzzy
+#| msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgid "Outputs basic information about a raster map."
+msgstr "ユーザー定義3Dラスターマップの基礎情報を出力します "
+
+msgid "General statistics"
+msgstr "一般統計"
+
+#, fuzzy
+#| msgid "Generates volume statistics for 3D raster maps."
+msgid "Generates area statistics for raster map."
+msgstr "3Dラスターマップにおいてボリューム統計解析値を作成"
+
+msgid "Quantiles for large data sets"
+msgstr "大規模データセットの分位数 "
+
+msgid "Compute quantiles using two passes."
+msgstr "２つのパスを使用した分位数の計算"
+
+msgid "Range of category values"
+msgstr "カテゴリー値の範囲"
+
+msgid "Prints terse list of category values found in a raster map layer."
+msgstr "ラスターマップのカテゴリー値一覧を表示"
+
+msgid "Sum area by raster map and category"
+msgstr "ラスターマップをカテゴリー別に集計"
+
+#, fuzzy
+#| msgid "Generates volume statistics for 3D raster maps."
+msgid "Reports statistics for raster maps."
+msgstr "3Dラスターマップにおいてボリューム統計解析値を作成"
+
+msgid "Statistics for clumped cells"
+msgstr "クランプセルによる統計解析"
+
+msgid "Calculates the volume of data \"clumps\". Optionally produces a GRASS vector points map containing the calculated centroids of these clumps."
+msgstr ""
+
+msgid "Total corrected area"
+msgstr "修正エリア合計"
+
+#, fuzzy
+#| msgid "Calculates standard deviation of patch area a raster map"
+msgid "Prints estimation of surface area for raster map."
+msgstr "ラスターマップのパッチ領域の標準偏差を解析"
+
+msgid "Calculates univariate statistics from the non-null cells of a raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "Sample transects"
+msgstr "サンプル横断面"
+
+msgid "Outputs the raster map layer values lying on user-defined line(s)."
+msgstr "指定した直線上でのラスターマップの値を出力"
+
+msgid "Sample transects (bearing/distance)"
+msgstr "単位（角度/距離） "
+
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
+msgstr "指定した横断面でラスターマップの値を出力"
+
+msgid "Covariance/correlation"
+msgstr "共分散/相関 "
+
+msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
+msgstr "ラスターマップの共分散と相関を求めます "
+
+msgid "Linear regression"
+msgstr "線形回帰"
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x."
+msgstr "2つのラスターマップでの線形回帰計算: y = a + b*x"
+
+#, fuzzy
+#| msgid "Linear regression"
+msgid "Multiple regression"
+msgstr "線形回帰"
+
+#, fuzzy
+#| msgid "Calculates linear regression from two raster maps: y = a + b*x."
+msgid "Calculates multiple linear regression from raster maps."
+msgstr "2つのラスターマップでの線形回帰計算: y = a + b*x"
+
+msgid "Mutual category occurrences"
+msgstr "カテゴリー間の関係"
+
+msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
+msgstr "２つのラスターマップのカテゴリー関係（一致）表を作成します "
+
+#, fuzzy
+#| msgid "Range of category values"
+msgid "Modal category value"
+msgstr "カテゴリー値の範囲"
+
+msgid "Finds the mode of values in a cover map within areas assigned the same category value in a user-specified base map."
+msgstr ""
+
+#, fuzzy
+#| msgid "General statistics"
+msgid "Zonal statistics"
+msgstr "一般統計"
+
+msgid "Calculates category or object oriented statistics."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Object geometry statistics"
+msgstr "ラスター統計レポート"
+
+#, fuzzy
+#| msgid " Enter parameters for %s projection "
+msgid "Calculates geometry parameters for raster objects."
+msgstr "投影法 %s のパラメータを入力 "
+
+msgid "&Vector"
+msgstr "ベクトル(&V)"
+
+msgid "Develop vector map"
+msgstr "ベクトルマップの作成 "
+
+msgid "Create new empty vector map"
+msgstr "空のベクトルマップの作成 "
+
+msgid "Edit vector map (non-interactively)"
+msgstr "ベクトルマップ編集（非対話型）"
+
+msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
+msgstr "選択したベクトルフィーチャの修正、追加、削除"
+
+msgid "Convert object types"
+msgstr "オブジェクトタイプの変換"
+
+#, fuzzy
+#| msgid "Select vector features"
+msgid "Changes type of vector features."
+msgstr "ベクトルフィーチャ選択"
+
+msgid "Parallel lines"
+msgstr "平行線"
+
+msgid "Creates parallel line to input vector lines."
+msgstr "入力された線分から平行線を作成"
+
+msgid "Dissolve boundaries"
+msgstr "境界の融合"
+
+#, fuzzy
+msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
+msgstr "共通のカテゴリー番号や属性を共有するエリアを融合させる"
+
+msgid "Create 3D vector over raster"
+msgstr "3Dベクトルまたはラスターの作成"
+
+#, fuzzy
+#| msgid "Converts (rasterize) a vector map into a raster map."
+msgid "Converts 2D vector features to 3D by sampling of elevation raster map."
+msgstr "ラスターマップ内にベクトルマップを変換"
+
+msgid "Extrude 3D vector map"
+msgstr "3Dベクトルマップの立上げ"
+
+msgid "Extrudes flat vector features to 3D vector features with defined height. Optionally the height can be derived from sampling of elevation raster map."
+msgstr ""
+
+msgid "Create labels"
+msgstr "ラベル作成"
+
+msgid "Creates paint labels for a vector map from attached attributes."
+msgstr "属性からベクトルマップのラベルを作成"
+
+msgid "Reposition vector map"
+msgstr "ベクトルマップの再配置"
+
+msgid "Performs an affine transformation (shift, scale and rotate) on vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select vector map"
+msgid "Rectify vector map"
+msgstr "ベクトルマップの選択"
+
+#, fuzzy
+#| msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgid "Rectifies a vector by computing a coordinate transformation for each object in the vector based on the control points."
+msgstr "コントロールポイントに基づいて、各ピクセルの座標変換を計算することによって画像を補正する"
+
+#, fuzzy
+#| msgid "Basic vector metadata"
+msgid "Updates vector map metadata."
+msgstr "基本ベクトルメタデータ"
+
+msgid "Manage timestamp"
+msgstr "タイムスタンプ管理"
+
+#, fuzzy
+#| msgid "Print/add/remove a timestamp for a 3D raster map"
+msgid "Modifies a timestamp for a vector map. Print/add/remove a timestamp for a vector map."
+msgstr "3Dラスターマップのタイムスタンプ出力/追加/削除 "
+
+msgid "Create labels with simulated annealing"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create optimally placed labels"
+msgid "Create optimally placed labels for vector map(s)"
+msgstr "最適な位置にラベルを作成"
+
+#, fuzzy
+#| msgid "Generate points"
+msgid "Decimate points"
+msgstr "ポイントの作成"
+
+msgid "Decimates a point cloud Copies points from one vector to another while applying different decimations"
+msgstr ""
+
+msgid "Topology maintenance"
+msgstr "トポロジーの保守 "
+
+msgid "Create or rebuild topology"
+msgstr "トポロジーの作成/再ビルド"
+
+msgid "Creates topology for vector map. Optionally also checks for topological errors."
+msgstr ""
+
+msgid "Rebuild topology on all vector maps"
+msgstr "全ベクトルマップにトポロジを再構築"
+
+msgid "Rebuilds topology on all vector maps in the current mapset."
+msgstr "現在のマップセット内全ベクトルマップのトポロジを再構築"
+
+msgid "Build polylines"
+msgstr "ポリラインの作成"
+
+msgid "Builds polylines from lines or boundaries."
+msgstr "線分や境界線からポリラインを作成"
+
+msgid "Split lines"
+msgstr "線分の分割"
+
+msgid "Splits vector lines to shorter segments."
+msgstr ""
+
+msgid "Split polylines"
+msgstr "ポリラインの分割"
+
+msgid "Creates points/segments from input vector lines and positions."
+msgstr "入力された線分とポイントからセグメントを作成"
+
+msgid "Clean vector map"
+msgstr "ベクトルマップの消去"
+
+msgid "Toolset for cleaning topology of vector map."
+msgstr "ベクトルマップのトポロジーの編集ツールキット"
+
+msgid "Fill holes in areas"
+msgstr ""
+
+msgid "Fill holes in areas by keeping only outer boundaries"
+msgstr ""
+
+msgid "Smooth or simplify"
+msgstr "円滑化または単純化"
+
+#, fuzzy
+#| msgid "Performs network maintenance."
+msgid "Performs vector based generalization."
+msgstr "ネットワークメンテナンスを実行"
+
+msgid "Add centroids"
+msgstr "セントロイド追加"
+
+msgid "Adds missing centroids to closed boundaries."
+msgstr "閉領域の欠けているセントロイドを追加"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a vector map."
+msgstr "ラスターマップ用カラーテーブルを作成"
+
+msgid "Interactive management of vector color tables."
+msgstr "ベクトルカラーテーブルの対話式管理"
+
+msgid "Exports the color table associated with a vector map."
+msgstr ""
+
+msgid "Query vector map"
+msgstr "クエリベクトルマップ"
+
+msgid "Query with coordinate(s)"
+msgstr "座標で検索"
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Queries a vector map at given locations."
+msgstr "ポイントロケーションでのラスターマップのサンプリング"
+
+msgid "Query vector attribute data"
+msgstr "ベクトル属性データの検索"
+
+msgid "Prints vector map attributes."
+msgstr "ベクトルマップの属性を出力"
+
+msgid "Feature selection"
+msgstr "フィーチャーの選択"
+
+#, fuzzy
+#| msgid "Geometry attributes"
+msgid "Select by attributes"
+msgstr "ジオメトリ属性"
+
+msgid "Selects vector features from an existing vector map and creates a new vector map containing only the selected features."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select raster map"
+msgid "Select by another map"
+msgstr "ラスターマップの選択："
+
+msgid "Selects features from vector map (A) by features from other vector map (B)."
+msgstr "ベクトルマップ（B）からのフィーチャによって他のベクトルマップ（A）からフィーチャを選択"
+
+#, fuzzy
+#| msgid "Generate points along lines"
+msgid "Convert areas or points to lines"
+msgstr "ラインに沿ったを作成"
+
+msgid "Converts vector polygons or points to lines."
+msgstr ""
+
+msgid "Buffer vectors"
+msgstr "バッファリング"
+
+msgid "Creates a buffer around vector features of given type."
+msgstr ""
+
+#, fuzzy
+#| msgid "Terrain analysis"
+msgid "Point analysis"
+msgstr "地形解析 "
+
+msgid "Identify and remove outliers"
+msgstr ""
+
+msgid "Removes outliers from vector point data."
+msgstr "ベクトルポイントデータから異常値を削除"
+
+msgid "Identify point clusters"
+msgstr ""
+
+#, fuzzy
+#| msgid "Setup for georectification"
+msgid "Performs cluster identification."
+msgstr "幾何補正のセットアップ"
+
+msgid "Indices for quadrat counts of vector point lists"
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists."
+msgstr ""
+
+msgid "Perturb points"
+msgstr "摂動点を作成"
+
+#, fuzzy
+#| msgid "Random cells and vector points"
+msgid "Random location perturbations of vector points."
+msgstr "ランダムセルとベクトルポイント"
+
+msgid "Test/training point sets"
+msgstr "テスト/トレーニング ポイントセット"
+
+msgid "Randomly partition points into test/train sets."
+msgstr "テスト/トレーニングセットにランダムな分割点を作成"
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Tests for normality for vector points"
+msgstr "ベクトルポイントでの加重平均補間"
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Tests for normality for vector points."
+msgstr "ベクトルポイントでの加重平均補間"
+
+#, fuzzy
+#| msgid "Lidar analysis"
+msgid "Point pattern analysis"
+msgstr "ライダー分析"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Lidar analysis"
+msgstr "ライダー分析"
+
+msgid "Detect edges"
+msgstr "エッジ検出"
+
+msgid "Detects the object's edges from a LIDAR data set."
+msgstr "ライダー データセットからエッジを検出する"
+
+msgid "Detect interiors"
+msgstr "内面検出"
+
+msgid "Building contour determination and Region Growing algorithm for determining the building inside"
+msgstr "コンター線定義と内部コンター線定義のための領域成長アルゴリズム"
+
+msgid "Correct and reclassify objects"
+msgstr "オブジェクトの修正と再分類"
+
+msgid "Corrects the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
+msgstr ""
+
+msgid "Linear referencing"
+msgstr "線形参照"
+
+msgid "Create LRS"
+msgstr "線形参照システム作成"
+
+#, fuzzy
+#| msgid "Select EPSG code of spatial reference system"
+msgid "Creates a linear reference system."
+msgstr "EPSGコードを指定"
+
+msgid "Create stationing"
+msgstr "配置測点作成"
+
+#, fuzzy
+#| msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgid "Creates stationing from input lines, and linear reference system."
+msgstr "入力された線分や線形参照システム、ファイルや標準入力のポイントから新しいポイント/セグメントを作成 "
+
+msgid "Create points/segments"
+msgstr "ポイント/セグメントの作成 "
+
+msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgstr "入力された線分や線形参照システム、ファイルや標準入力のポイントから新しいポイント/セグメントを作成 "
+
+msgid "Find line id and offset"
+msgstr "ラインIDとオフセットを表示"
+
+msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
+msgstr "線形参照システムを利用し、ベクトルマップのポイントからラインIDと実距離（Km)オフセットを表示"
+
+msgid "Nearest features"
+msgstr "近傍のフィーチャ"
+
+msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
+msgstr "ベクトルマップの２点に一番近いエレメントを探す"
+
+msgid "Network analysis"
+msgstr "ネットワーク解析 "
+
+msgid "Tool for interactive vector network analysis."
+msgstr ""
+
+#, fuzzy
+#| msgid "Network analysis"
+msgid "Network preparation"
+msgstr "ネットワーク解析 "
+
+msgid "Performs network maintenance."
+msgstr "ネットワークメンテナンスを実行"
+
+msgid "Allocate subnets"
+msgstr "サブネットの設定 "
+
+msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Split net"
+msgstr "ネットの分割"
+
+msgid "Splits subnets for nearest centers by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Shortest path"
+msgstr "最短経路"
+
+msgid "Finds shortest path on vector network."
+msgstr "ベクトルネットワークの最短経路探査"
+
+msgid "Shortest path for sets of features"
+msgstr "フィーチャー間の最短経路"
+
+msgid "Computes shortest distance via the network between the given sets of features. Finds the shortest paths from each 'from' point to the nearest 'to' feature and various information about this relation are uploaded to the attribute table."
+msgstr ""
+
+msgid "Shortest path using timetables"
+msgstr "時刻表による最短経路"
+
+msgid "Finds shortest path using timetables."
+msgstr "時刻表による最短経路探査"
+
+msgid "Shortest path for all pairs"
+msgstr "すべてのペアの最短径路"
+
+msgid "Computes the shortest path between all pairs of nodes in the network."
+msgstr "ネットワークの全てのノード間を最短距離で計算."
+
+msgid "Visibility network"
+msgstr "ネットワーク可視化"
+
+msgid "Performs visibility graph construction."
+msgstr ""
+
+msgid "Bridges and articulation points"
+msgstr "接続点や節点"
+
+msgid "Computes bridges and articulation points in the network."
+msgstr "ネットワーク内の接続点や節点を計算する."
+
+msgid "Maximum flow"
+msgstr "最大流量"
+
+msgid "Computes the maximum flow between two sets of nodes in the network."
+msgstr "ネットワーク内の２つのノード間の最大流量を計算する."
+
+msgid "Vertex connectivity"
+msgstr "頂点接続"
+
+msgid "Computes vertex connectivity between two sets of nodes in the network."
+msgstr "ネットワーク内の２つのノード間の頂点接続関係を計算する."
+
+msgid "Components"
+msgstr "コンポーネント"
+
+msgid "Computes strongly and weakly connected components in the network."
+msgstr "ネットワークの強連結成分と弱連結成分を計算する"
+
+msgid "Centrality"
+msgstr "重要性"
+
+#, fuzzy
+#| msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
+msgstr "ネットワークの角度、中心性、中間性、近接性、固有ベクトル中心性を計算する"
+
+msgid "Steiner tree"
+msgstr "シュタイナーツリー"
+
+msgid "Creates Steiner tree for the network and given terminals. Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm is used in this module so the result may be sub optimal."
+msgstr ""
+
+msgid "Minimum spanning tree"
+msgstr "最小全域木"
+
+msgid "Computes minimum spanning tree for the network."
+msgstr "ネットワークの最小全域木を計算する"
+
+msgid "Traveling salesman analysis"
+msgstr "巡回セールスマン問題 "
+
+msgid "Creates a cycle connecting given nodes (Traveling salesman problem). Note that TSP is NP-hard, heuristic algorithm is used by this module and created cycle may be sub optimal"
+msgstr ""
+
+msgid "Overlay vector maps"
+msgstr "ベクトルマップの重ね合せ "
+
+#, fuzzy
+#| msgid "Clean vector map"
+msgid "Clip vector maps"
+msgstr "ベクトルマップの消去"
+
+msgid "Extracts features of input map which overlay features of clip map."
+msgstr ""
+
+msgid "Overlays two vector maps offering clip, intersection, difference, symmetrical difference, union operators."
+msgstr ""
+
+msgid "Patch vector maps"
+msgstr "ベクトルマップのパッチ"
+
+#, fuzzy
+#| msgid "Create new empty vector map"
+msgid "Creates a new vector map by combining other vector maps."
+msgstr "空のベクトルマップの作成 "
+
+#, fuzzy
+#| msgid "Update categories"
+msgid "Manage categories"
+msgstr "カテゴリーの更新 "
+
+#, fuzzy
+#| msgid "Copy categories"
+msgid "Change or report categories"
+msgstr "カテゴリーコピー "
+
+msgid "Attaches, deletes or reports vector categories to/from/of map geometry."
+msgstr ""
+
+msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
+msgstr "既存のベクトルマップのカテゴリー値は、SQLクエリまたは属性テーブルの列の値によって変更されます"
+
+msgid "Update area attributes from raster"
+msgstr "ラスターからエリア属性を更新"
+
+msgid "Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update area attributes from raster"
+msgid "Update area attributes from vector"
+msgstr "ラスターからエリア属性を更新"
+
+msgid "Count points in areas, calculate statistics from point attributes."
+msgstr ""
+
+msgid "Update point attributes from areas"
+msgstr "エリアからポイントの属性を更新"
+
+msgid "Uploads vector values at positions of vector points to the table."
+msgstr "ポイントの位置のベクトルの値をテーブルにアップロード"
+
+msgid "Update database values from vector"
+msgstr "ベクトルのフィーチャからデータベースの値を設定"
+
+#, fuzzy
+#| msgid "Update database values from vector"
+msgid "Populates attribute values from vector features."
+msgstr "ベクトルのフィーチャからデータベースの値を設定"
+
+msgid "Sample raster maps at point locations"
+msgstr "ポイントの場所にあるラスターマップのサンプリング"
+
+msgid "Uploads raster values at positions of vector points to the table."
+msgstr "ポイントの位置のラスターの値をテーブルにアップロード"
+
+#, fuzzy
+#| msgid "Sample raster maps at point locations"
+msgid "Sample 3D raster at point locations"
+msgstr "ポイントの場所にあるラスターマップのサンプリング"
+
+#, fuzzy
+#| msgid "Uploads raster values at positions of vector points to the table."
+msgid "Uploads 3D raster values at positions of vector points to the table."
+msgstr "ポイントの位置のラスターの値をテーブルにアップロード"
+
+#, fuzzy
+#| msgid "Sample raster maps at point locations"
+msgid "Sample temporal raster dataset at point locations"
+msgstr "ポイントの場所にあるラスターマップのサンプリング"
+
+#, fuzzy
+#| msgid "Uploads raster values at positions of vector points to the table."
+msgid "Uploads space time raster dataset values at positions of vector points to the table."
+msgstr "ポイントの位置のラスターの値をテーブルにアップロード"
+
+msgid "Sample raster neighborhood around points"
+msgstr "ポイント近傍でのラスターマップのサンプリング "
+
+msgid "Samples a raster map at vector point locations."
+msgstr "ポイントロケーションでのラスターマップのサンプリング"
+
+msgid "Generate area for current region"
+msgstr "現在の領域からエリアを作成"
+
+#, fuzzy
+msgid "Creates a vector polygon from the current region extent."
+msgstr "あるロケーションのベクトルマップを現在のロケーションに投影変換"
+
+msgid "Generate areas from points"
+msgstr "複数のポイントからエリアを作成"
+
+msgid "Convex hull"
+msgstr "凸包 "
+
+msgid "Produces a 2D/3D convex hull for a given vector map."
+msgstr ""
+
+msgid "Delaunay triangles"
+msgstr "ドローネ三角形"
+
+msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgstr "ポイントやセントロイドを含むベクトルマップからするドローネ三角形を作成"
+
+msgid "Voronoi diagram/Thiessen polygons"
+msgstr "ボロノイ図/ティーセンポリゴン"
+
+#, fuzzy
+#| msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
+msgstr "ポイントやセントロイドを含むベクトルマップからするドローネ三角形を作成"
+
+msgid "Generate grid"
+msgstr "グリッドの作成"
+
+msgid "Creates a vector map of a user-defined grid."
+msgstr ""
+
+msgid "Generate points"
+msgstr "ポイントの作成"
+
+msgid "Generate from database"
+msgstr "データベースから作成"
+
+msgid "Creates new vector (points) map from database table containing coordinates."
+msgstr "座標を含むデータベースから新しいベクトルマップを作成"
+
+msgid "Generate points along lines"
+msgstr "ラインに沿ったを作成"
+
+msgid "Creates points along input lines in new vector map with 2 layers."
+msgstr ""
+
+msgid "Generate random points"
+msgstr "ランダムなポイントを作成"
+
+#, fuzzy
+#| msgid "Generate random points"
+msgid "Generates random 2D/3D vector points."
+msgstr "ランダムなポイントを作成"
+
+msgid "Remove outliers in point sets"
+msgstr "ポイント群から異常値を削除"
+
+msgid "Basic vector metadata"
+msgstr "基本ベクトルメタデータ"
+
+#, fuzzy
+#| msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgid "Outputs basic information about a vector map."
+msgstr "ユーザー定義3Dラスターマップの基礎情報を出力します "
+
+msgid "Classify attribute data"
+msgstr "属性データの分類"
+
+msgid "Classifies attribute data, e.g. for thematic mapping"
+msgstr "主題図作成等の属性データの分類"
+
+msgid "Report topology by category"
+msgstr "カテゴリー別トポロジーのレポート作成"
+
+#, fuzzy
+#| msgid "Generates volume statistics for 3D raster maps."
+msgid "Reports geometry statistics for vector maps."
+msgstr "3Dラスターマップにおいてボリューム統計解析値を作成"
+
+msgid "Univariate attribute statistics for points"
+msgstr "ポイントの単変量属性統計"
+
+msgid "Calculates univariate statistics of vector map features. Variance and standard deviation is calculated only for points if specified."
+msgstr ""
+
+msgid "Univariate statistics for attribute columns"
+msgstr "属性列による単変量統計"
+
+msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgstr "ベクトルマップの選択されたテーブルの列で単変量統計解析を行う"
+
+#, fuzzy
+#| msgid "Vector map is 3D"
+msgid "Vector map profiling tool"
+msgstr "ベクトルマップは3Dです"
+
+msgid "Quadrat indices"
+msgstr "２次補間インデックス"
+
+msgid "Test normality"
+msgstr "正規性検定"
+
+msgid "&Imagery"
+msgstr "画像(&I)"
+
+msgid "Develop images and groups"
+msgstr "画像とグループの作成 "
+
+msgid "Create/edit group"
+msgstr "グループの作成/修正"
+
+msgid "Creates, edits, and lists groups of imagery files."
+msgstr ""
+
+msgid "Target group"
+msgstr "対象グループ"
+
+msgid "Targets an imagery group to a GRASS location and mapset."
+msgstr "画像グループをロケーションやマップセットの対象とする"
+
+msgid "Find imagery files"
+msgstr ""
+
+msgid "Semantic label library"
+msgstr ""
+
+msgid "Prints available semantic label information used for multispectral data."
+msgstr ""
+
+msgid "Mosaic images"
+msgstr "モザイク画像"
+
+msgid "Mosaics several images and extends colormap."
+msgstr ""
+
+msgid "Manage image colors"
+msgstr "画像カラーの管理 "
+
+msgid "Color balance for RGB"
+msgstr "RGBのカラーバランス"
+
+msgid "Performs auto-balancing of colors for RGB images."
+msgstr ""
+
+msgid "HIS to RGB"
+msgstr "HIS → RGB"
+
+msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
+msgstr "カラーの定義をHIS（色相/照度/彩度）をRGB(赤/緑/青）に変換する"
+
+msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
+msgstr "カラーの定義をRGB(赤/緑/青）をHIS（色相/照度/彩度）に変換する"
+
+msgid "Rectify image or raster"
+msgstr "画像またはラスターを補正する"
+
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgstr "コントロールポイントに基づいて、各ピクセルの座標変換を計算することによって画像を補正する"
+
+msgid "Generate histogram of image"
+msgstr "画像のヒストグラムを作成"
+
+msgid "Spectral response"
+msgstr "スペクトル応答 "
+
+msgid "Displays spectral response at user specified locations in group or images."
+msgstr "画像あるいはグループでユーザーが指定したロケーションのスペクトル応答を表示"
+
+msgid "Pan sharpening"
+msgstr ""
+
+msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
+msgstr ""
+
+msgid "Classify image"
+msgstr "画像分類 "
+
+msgid "Clustering input for unsupervised classification"
+msgstr "教師無し分類用クラスタリング入力"
+
+msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
+msgstr ""
+
+msgid "Input for supervised MLC"
+msgstr "最尤法のためのシグネチャの作成"
+
+msgid "Generates statistics for i.maxlik from raster map."
+msgstr "ラスターマップからi.maxlikの統計情報を作成"
+
+msgid "Maximum likelihood classification (MLC)"
+msgstr "最尤法による分類(MLC) "
+
+msgid "Classifies the cell spectral reflectances in imagery data. Classification is based on the spectral signature information generated by either i.cluster, g.gui.iclass, or i.gensig."
+msgstr ""
+
+msgid "Interactive input for supervised classification"
+msgstr "対話型入力による監視下分類"
+
+msgid "Generates spectral signatures by allowing the user to outline training areas."
+msgstr ""
+
+msgid "Input for supervised SMAP"
+msgstr "最大事後確率推定法のためのシグネチャの作成"
+
+msgid "Generates statistics for i.smap from raster map."
+msgstr "ラスターマップから i.smapの統計情報を作成"
+
+msgid "Sequential maximum a posteriori classification (SMAP)"
+msgstr "逐次最大事後確率推定法 (SMAP)  "
+
+msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
+msgstr "逐次最大事後確率推定法によりコンテキスト画像を分類します"
+
+#, fuzzy
+msgid "Input for supervised SVM"
+msgstr "最大事後確率推定法のためのシグネチャの作成"
+
+msgid "Train a SVM Train a Support Vector Machine"
+msgstr ""
+
+msgid "Support Vector Machines classification (SVM)"
+msgstr ""
+
+msgid "Predict with a SVM Predict with a Support Vector Machine"
+msgstr ""
+
+#, fuzzy
+msgid "Manage signature files"
+msgstr "画像カラーの管理 "
+
+#, fuzzy
+msgid "Manage imagery classification signature files"
+msgstr "画像カラーの管理 "
+
+#, fuzzy
+#| msgid "Orientation"
+msgid "Object segmentation"
+msgstr "回転："
+
+msgid "Identifies segments (objects) from imagery data."
+msgstr ""
+
+msgid "Filter image"
+msgstr "画像フィルター "
+
+msgid "Edge detection"
+msgstr "縁辺検出"
+
+msgid "Zero-crossing \"edge detection\" raster function for image processing."
+msgstr "ゼロ交差法を用いて画像のエッジを決定します "
+
+msgid "Matrix/convolving filter"
+msgstr "行列/畳み込みフィルタ"
+
+msgid "Performs raster map matrix filter."
+msgstr "ラスターマップ行列フィルター実行"
+
+msgid "Edge preserving smoothing"
+msgstr ""
+
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+msgid "Transform image"
+msgstr "画像変換 "
+
+msgid "Canonical correlation"
+msgstr "正準相関"
+
+msgid "Canonical components analysis (CCA) program for image processing."
+msgstr "画像処理の正準成分分析(cca)"
+
+msgid "Principal components"
+msgstr "主成分"
+
+msgid "Principal components analysis (PCA) for image processing."
+msgstr "画像処理のための主成分分析（PCA）"
+
+msgid "Fast Fourier"
+msgstr "高速フーリエ変換"
+
+msgid "Fast Fourier Transform (FFT) for image processing."
+msgstr "高速フーリエ変換を行います "
+
+msgid "Inverse Fast Fourier"
+msgstr "高速フーリエ逆変換 "
+
+msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
+msgstr "高速フーリエ逆変換を行います "
+
+msgid "Satellite images tools"
+msgstr "衛星画像ツール"
+
+msgid "Aster DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN."
+msgstr ""
+
+msgid "Landsat DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+/OLI"
+msgstr ""
+
+msgid "Landsat cloud cover assessment"
+msgstr ""
+
+msgid "Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA)."
+msgstr ""
+
+msgid "Modis quality control"
+msgstr ""
+
+msgid "Extracts quality control parameters from MODIS QC layers."
+msgstr ""
+
+msgid "Atmospheric correction"
+msgstr "大気補正 "
+
+msgid "Performs atmospheric correction using the 6S algorithm. 6S - Second Simulation of Satellite Signal in the Solar Spectrum."
+msgstr ""
+
+msgid "Topographic correction"
+msgstr "地形的補正 "
+
+msgid "Computes topographic correction of reflectance."
+msgstr "反射率の地形的補正を計算する"
+
+msgid "Orthophoto tools"
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage projections"
+msgid "Manage GCPs for 3D correction"
+msgstr "投影法の管理 "
+
+msgid "Georectifies a map and allows managing GCP for 3D correction."
+msgstr ""
+
+msgid "Corrects scanning distortions"
+msgstr ""
+
+msgid "Corrects scanning distortions of a scanned aerial photo."
+msgstr ""
+
+#, fuzzy
+#| msgid "Enter parameters for '"
+msgid "Initialize ortho parameters"
+msgstr "パラメータを入力してください '"
+
+msgid "Interactively creates or modifies entries in a camera initial exposure station file for imagery group referenced by a sub-block."
+msgstr ""
+
+#, fuzzy
+#| msgid "Terrain parameters"
+msgid "Camera parameters"
+msgstr "地形パラメータ "
+
+msgid "Select and modify the imagery group camera reference file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Setup for georectification"
+msgid "Elevation model for orthorectification"
+msgstr "幾何補正のセットアップ"
+
+msgid "Select or modify the target elevation model."
+msgstr ""
+
+#, fuzzy
+#| msgid "Setup for georectification"
+msgid "Target group for orthorectification"
+msgstr "幾何補正のセットアップ"
+
+msgid "Select or modify the imagery group target."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select datum transformation"
+msgid "Compute ortho transformation"
+msgstr "データム変換方法の選択"
+
+#, fuzzy
+#| msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgid "Computes a coordinate transformation based on the control points."
+msgstr "コントロールポイントに基づいて、各ピクセルの座標変換を計算することによって画像を補正する"
+
+#, fuzzy
+#| msgid "Rectify image or raster"
+msgid "Orthorectify imagery"
+msgstr "画像またはラスターを補正する"
+
+msgid "Orthorectifies an image by using the image to photo coordinate transformation matrix."
+msgstr ""
+
+msgid "Satellite images products"
+msgstr "衛星画像製品"
+
+#, fuzzy
+#| msgid "Region boundaries"
+msgid "Vegetation indices"
+msgstr "領域境界 "
+
+msgid "Calculates different types of vegetation indices. Uses red and nir bands mostly, and some indices require additional bands."
+msgstr ""
+
+msgid "Tasseled cap vegetation index"
+msgstr "タッセルドキャップ植生指数"
+
+msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
+msgstr ""
+
+msgid "Albedo"
+msgstr ""
+
+#, fuzzy
+#| msgid "Computes topographic correction of reflectance."
+msgid "Computes broad band albedo from surface reflectance."
+msgstr "反射率の地形的補正を計算する"
+
+msgid "Emissivity"
+msgstr ""
+
+msgid "Computes emissivity from NDVI, generic method for sparse land."
+msgstr ""
+
+msgid "Biomass growth"
+msgstr ""
+
+msgid "Computes biomass growth, precursor of crop yield calculation."
+msgstr ""
+
+msgid "Evapotranspiration calculation"
+msgstr ""
+
+msgid "Instantaneaous Net Radiation"
+msgstr ""
+
+msgid "Net radiation approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Soil heat flux"
+msgstr ""
+
+msgid "Soil heat flux approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Sensible heat flux"
+msgstr ""
+
+msgid "Computes sensible heat flux iteration SEBAL 01."
+msgstr ""
+
+msgid "Evaporative fraction"
+msgstr ""
+
+msgid "Computes evaporative fraction and root zone soil moisture."
+msgstr ""
+
+msgid "Actual Evapotranspiration"
+msgstr ""
+
+msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Temporal integration of ETa"
+msgstr ""
+
+msgid "Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)."
+msgstr ""
+
+msgid "Hargreaves methods Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation modified or original Hargreaves formulation, 2001."
+msgstr ""
+
+msgid "Penman-Monteith Evapotranspiration"
+msgstr ""
+
+msgid "Computes potential evapotranspiration calculation with hourly Penman-Monteith."
+msgstr ""
+
+msgid "Priestley-Taylor Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation Priestley and Taylor formulation, 1972."
+msgstr ""
+
+msgid "Kappa analysis"
+msgstr "カッパー分析"
+
+msgid "Calculates error matrix and kappa parameter for accuracy assessment of classification result."
+msgstr ""
+
+msgid "OIF for LandSat TM"
+msgstr "ランドサットのバンド選定指標"
+
+msgid "Calculates Optimum-Index-Factor table for spectral bands"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster"
+msgid "3D r&aster"
+msgstr "3Dラスター "
+
+#, fuzzy
+msgid "Develop 3D raster map"
+msgstr "ラスターマップの作成"
+
+msgid "Manage 3D NULL values"
+msgstr "3D NULL値の管理"
+
+msgid "Explicitly create the 3D NULL-value bitmap file."
+msgstr "3D NULL-値のビットマップファイルの作成 "
+
+#, fuzzy
+#| msgid "Print/add/remove a timestamp for a 3D raster map"
+msgid "Modifies a timestamp for a 3D raster map. Print/add/remove a timestamp for a 3D raster map."
+msgstr "3Dラスターマップのタイムスタンプ出力/追加/削除 "
+
+#, fuzzy
+#| msgid "3D raster"
+msgid "Retile 3D raster"
+msgstr "3Dラスター "
+
+msgid "Retiles an existing 3D raster map with user defined x, y and z tile size."
+msgstr ""
+
+#, fuzzy
+#| msgid "Allows creation and/or modification of raster map layer support files."
+msgid "Allows creation and/or modification of 3D raster map layer support files."
+msgstr "ラスターマップサポートファイルの作成・更新 "
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "3D rasters to raster series"
+msgstr "3Dラスターマップから2Dラスターマップへ変換"
+
+#, fuzzy
+#| msgid "Color tables"
+msgid "3D color tables"
+msgstr "カラーテーブル "
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a 3D raster map."
+msgstr "ラスターマップ用カラーテーブルを作成"
+
+#, fuzzy
+#| msgid "Export color table"
+msgid "Export 3D color table"
+msgstr "カラーテーブルをエキスポート"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Exports the color table associated with a 3D raster map."
+msgstr "ラスターマップ用カラーテーブルを作成"
+
+msgid "3D mask"
+msgstr "3D マスク"
+
+msgid "Establishes the current working 3D raster mask."
+msgstr "現在作業中の 3D ラスターマスクを確立します "
+
+#, fuzzy
+#| msgid "Raster map calculator"
+msgid "3D raster map calculator"
+msgstr "ラスターマップカリキュレータ"
+
+msgid "Cross section"
+msgstr "断面図"
+
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions."
+msgstr "２層による非定常流 被圧/負圧地下水流の数値解析"
+
+#, fuzzy
+#| msgid "Flow lines"
+msgid "3D flow lines"
+msgstr "流線 "
+
+msgid "Computes 3D flow lines and 3D flow accumulation."
+msgstr ""
+
+msgid "3D gradient"
+msgstr ""
+
+#, fuzzy
+#| msgid "Combines red, green and blue raster maps into a single composite raster map."
+msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
+msgstr "コンポジットラスターマップに R,G,Bラスターマップを合成する "
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "3D neighborhood analysis"
+msgstr "近傍性分析 "
+
+#, fuzzy
+#| msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgid "Makes each voxel value a function of the values assigned to the voxels around it, and stores new voxel values in an output 3D raster map"
+msgstr "各セルのカテゴリーで近傍点解析を行い，ラスターマップに新しいセルを作成します "
+
+#, fuzzy
+#| msgid "Erase display"
+msgid "Create 3D display file"
+msgstr "画面消去 "
+
+msgid "Creates a display file from an existing 3D raster map according to specified threshold levels."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate areas from points"
+msgid "Interpolate 3D raster from points"
+msgstr "複数のポイントからエリアを作成"
+
+msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
+msgstr "テンション（ＲＳＴ）アルゴリズムによる正規化スプライン曲線を使用して3Dグリッドのポイントを補間する"
+
+#, fuzzy
+#| msgid "Basic raster metadata"
+msgid "Basic 3D raster metadata"
+msgstr "基本的なラスターメタデータ"
+
+msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgstr "ユーザー定義3Dラスターマップの基礎情報を出力します "
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "3D raster statistics"
+msgstr "ラスター統計レポート"
+
+msgid "Generates volume statistics for 3D raster maps."
+msgstr "3Dラスターマップにおいてボリューム統計解析値を作成"
+
+#, fuzzy
+#| msgid "Univariate statistics for attribute columns"
+msgid "Univariate statistics for 3D rasters"
+msgstr "属性列による単変量統計"
+
+msgid "Calculates univariate statistics from the non-null cells of a 3D raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+#, fuzzy
+#| msgid "Database"
+msgid "&Database"
+msgstr "データベース "
+
+msgid "Database information"
+msgstr "データベース情報"
+
+#, fuzzy
+#| msgid "List tables"
+msgid "List databases"
+msgstr "テーブル一覧"
+
+#, fuzzy
+#| msgid "Lists all tables for a given database."
+msgid "Lists all databases for a given driver and location."
+msgstr "データベースの全てのテーブルを表示します"
+
+msgid "List drivers"
+msgstr "ドライバー一覧"
+
+#, fuzzy
+#| msgid "Lists all tables for a given database."
+msgid "Lists all database drivers."
+msgstr "データベースの全てのテーブルを表示します"
+
+msgid "List tables"
+msgstr "テーブル一覧"
+
+msgid "Lists all tables for a given database."
+msgstr "データベースの全てのテーブルを表示します"
+
+msgid "Describe table"
+msgstr "テーブル定義"
+
+msgid "Describes a table in detail."
+msgstr "詳細なテーブル定義"
+
+msgid "List columns"
+msgstr "列一覧"
+
+msgid "List all columns for a given table."
+msgstr "テーブルのすべての列を表示します "
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage databases"
+msgstr "テーブル管理"
+
+msgid "Connect"
+msgstr "接続 "
+
+#, fuzzy
+#| msgid "Prints/sets DB connection for a vector map to attribute table."
+msgid "Prints/sets general DB connection for current mapset."
+msgstr "ベクトルマップと属性テーブルのDB接続を出力/設定"
+
+msgid "Login"
+msgstr "ログイン "
+
+msgid "Sets user/password for DB driver/database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create table"
+msgid "Create database"
+msgstr "テーブル作成"
+
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Creates an empty database."
+msgstr "空のデータベースを作成する"
+
+#, fuzzy
+#| msgid "Drop table"
+msgid "Drop database"
+msgstr "テーブル削除"
+
+#, fuzzy
+#| msgid "Removes existing attribute table of a vector map."
+msgid "Removes an existing database."
+msgstr "ベクトルマップ属性テーブルを消去"
+
+msgid "Drop table"
+msgstr "テーブル削除"
+
+msgid "Drops an attribute table."
+msgstr "属性テーブルの削除"
+
+msgid "Copy table"
+msgstr "テーブルコピー"
+
+msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
+msgstr ""
+
+msgid "Drop column"
+msgstr "カラム削除"
+
+#, fuzzy
+#| msgid "Drops an attribute table."
+msgid "Drops a column from selected attribute table."
+msgstr "属性テーブルの削除"
+
+msgid "Test"
+msgstr "テストモード "
+
+msgid "Test database driver, database must exist and set by db.connect."
+msgstr "データベースドライバのテスト, データベースは実存しdb.connectで接続されている必要があります"
+
+msgid "Query any table"
+msgstr "テーブルの検索"
+
+msgid "Selects data from attribute table. Performs SQL query statement(s)."
+msgstr ""
+
+msgid "SQL statement"
+msgstr "SQL文"
+
+msgid "Executes any SQL statement. For SELECT statements use 'db.select'."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate statistics for attribute columns"
+msgid "Univariate statistics for table column"
+msgstr "属性列による単変量統計"
+
+#, fuzzy
+#| msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgid "Calculates univariate statistics on selected table column."
+msgstr "ベクトルマップの選択されたテーブルの列で単変量統計解析を行う"
+
+msgid "Vector database connections"
+msgstr "データベース接続"
+
+msgid "New table"
+msgstr "新規テーブル"
+
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
+msgstr "ベクトルマップの指定されたレイヤーに新しい属性テーブルを作成・追加"
+
+#, fuzzy
+#| msgid "Remove table"
+msgid "Remove table"
+msgstr "テーブル削除"
+
+msgid "Removes existing attribute table of a vector map."
+msgstr "ベクトルマップ属性テーブルを消去"
+
+msgid "Join table"
+msgstr "テーブル結合"
+
+#, fuzzy
+#| msgid "Removes existing attribute table of a vector map."
+msgid "Joins a database table to a vector map table."
+msgstr "ベクトルマップ属性テーブルを消去"
+
+msgid "Add columns"
+msgstr "列追加"
+
+msgid "Adds one or more columns to the attribute table connected to a given vector map."
+msgstr "ベクトルマップに関連付けられている属性テーブルに列を追加する"
+
+msgid "Drops a column from the attribute table connected to a given vector map."
+msgstr "ベクトルマップに接続された属性テーブルの列名を変更します"
+
+msgid "Renames a column in the attribute table connected to a given vector map."
+msgstr "ベクトルマップに接続された属性テーブルの列名を変更します"
+
+msgid "Change values"
+msgstr "値の変更"
+
+#, fuzzy
+#| msgid "Renames a column in the attribute table connected to a given vector map."
+msgid "Updates a column in the attribute table connected to a vector map."
+msgstr "ベクトルマップに接続された属性テーブルの列名を変更します"
+
+#, fuzzy
+#| msgid "Drop column"
+msgid "Drop row"
+msgstr "カラム削除"
+
+#, fuzzy
+#| msgid "Prints/sets DB connection for a vector map to attribute table."
+msgid "Removes a vector feature from a vector map through attribute selection."
+msgstr "ベクトルマップと属性テーブルのDB接続を出力/設定"
+
+msgid "Reconnect vectors to database"
+msgstr "ベクトルとデータベースの再接続"
+
+#, fuzzy
+#| msgid "Editing is allowed only for vector maps from the current mapset."
+msgid "Reconnects attribute tables for all vector maps from the current mapset to a new database."
+msgstr "編集は、現在のマップセットからベクトルマップにのみ許可されています"
+
+msgid "Set vector map - database connection"
+msgstr "ベクトルマップ - データベース 接続設定"
+
+msgid "Prints/sets DB connection for a vector map to attribute table."
+msgstr "ベクトルマップと属性テーブルのDB接続を出力/設定"
+
+#, fuzzy
+#| msgid "&Import"
+msgid "&Temporal"
+msgstr "インポート(&I)"
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "Manage datasets"
+msgstr "データベース管理"
+
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Connect temporal database"
+msgstr "空のデータベースを作成する"
+
+msgid "Prints/sets general temporal GIS database connection for current mapset."
+msgstr ""
+
+msgid "Create"
+msgstr "作成"
+
+#, fuzzy
+#| msgid "Select space time dataset(s):"
+msgid "Creates a space time dataset."
+msgstr "時空間データセットの選択:"
+
+#, fuzzy
+#| msgid "Select space time dataset(s):"
+msgid "Renames a space time dataset"
+msgstr "時空間データセットの選択:"
+
+#, fuzzy
+#| msgid "Remove action/data from model"
+msgid "Removes space time datasets from temporal database."
+msgstr "モデルからアクション/データ消去"
+
+msgid "Modifies the metadata of a space time dataset."
+msgstr ""
+
+msgid "Merge"
+msgstr ""
+
+msgid "Merges several space time datasets into a single space time dataset."
+msgstr ""
+
+msgid "Temporally shift"
+msgstr ""
+
+msgid "Shifts temporally the maps of a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rename map"
+msgid "Snap maps of dataset"
+msgstr "マップセット名変更"
+
+msgid "Snaps temporally the maps of a space time dataset."
+msgstr ""
+
+msgid "Lists space time datasets and maps registered in the temporal database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select space time dataset(s):"
+msgid "Copy space time dataset"
+msgstr "時空間データセットの選択:"
+
+#, fuzzy
+msgid "Creates a copy of a space time raster dataset."
+msgstr "元のマップセットの選択："
+
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Upgrade temporal database"
+msgstr "空のデータベースを作成する"
+
+#, fuzzy
+#| msgid "Dataset <%s> not found in temporal database"
+msgid "Upgrades the version of the temporal database."
+msgstr "時間データベースの中にデータセット <%s> が見つかりません"
+
+#, fuzzy
+#| msgid "Manage access to mapsets"
+msgid "Manage maps in datasets"
+msgstr "マップセットへのアクセスを管理"
+
+#, fuzzy
+#| msgid "Raster maps"
+msgid "Register maps in datasets"
+msgstr "ラスターマップ"
+
+msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "no raster map"
+msgid "Unregister maps from datasets"
+msgstr "ラスターマップ"
+
+msgid "Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset."
+msgstr ""
+
+#, fuzzy
+msgid "List raster dataset maps"
+msgstr "レイヤ一覧  "
+
+msgid "Lists registered maps of a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+msgid "List vector dataset maps"
+msgstr "レイヤ一覧  "
+
+msgid "Lists registered maps of a space time vector dataset."
+msgstr ""
+
+#, fuzzy
+msgid "List 3D raster dataset maps"
+msgstr "レイヤ一覧  "
+
+msgid "Lists registered maps of a space time raster3d dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import"
+msgstr "インポート(&I)"
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Import raster dataset"
+msgstr "ラスターデータのインポート "
+
+#, fuzzy
+msgid "Imports space time raster dataset."
+msgstr "元のマップセットの選択："
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Import vector dataset"
+msgstr "ベクトルデータのインポート "
+
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Export raster dataset"
+msgstr "ラスターデータのインポート "
+
+#, fuzzy
+msgid "Exports space time raster dataset."
+msgstr "元のマップセットの選択："
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Export raster dataset as VTK time series"
+msgstr "ラスター統計レポート"
+
+#, fuzzy
+msgid "Exports space time raster dataset as VTK time series."
+msgstr "元のマップセットの選択："
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Export vector dataset"
+msgstr "ベクトルデータのインポート "
+
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts 3D raster maps to 2D raster maps"
+msgid "Convert raster dataset to 3D raster"
+msgstr "3Dラスターマップから2Dラスターマップへ変換"
+
+#, fuzzy
+#| msgid "Converts (rasterize) a vector map into a raster map."
+msgid "Converts a space time raster dataset into a 3D raster map."
+msgstr "ラスターマップ内にベクトルマップを変換"
+
+#, fuzzy
+#| msgid "Import/link raster or vector data"
+msgid "Convert raster dataset to vector dataset"
+msgstr "ラスターマップのインポート "
+
+#, fuzzy
+msgid "Converts a space time raster dataset into a space time vector dataset"
+msgstr "元のマップセットの選択："
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Create contour lines from raster dataset"
+msgstr "ラスターマップ用カラーテーブルを作成"
+
+#, fuzzy
+#| msgid "Produces a vector map of specified contours from a raster map."
+msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgstr "ラスターマップからコンターを作成しベクトルマップを作成"
+
+#, fuzzy
+#| msgid "Text rotation"
+msgid "Extraction"
+msgstr "テキスト設定"
+
+#, fuzzy
+msgid "Extract subset of raster dataset"
+msgstr "ラスターデータのインポート "
+
+#, fuzzy
+msgid "Extracts a subset of a space time raster datasets."
+msgstr "ラスターデータのインポート "
+
+#, fuzzy
+msgid "Extract subset of vector dataset"
+msgstr "ラスターデータのインポート "
+
+#, fuzzy
+msgid "Extracts a subset of a space time vector dataset."
+msgstr "ラスターデータのインポート "
+
+#, fuzzy
+msgid "Extract subset of 3D raster dataset"
+msgstr "ラスターデータのインポート "
+
+#, fuzzy
+msgid "Extracts a subset of a space time 3D raster dataset."
+msgstr "ラスターデータのインポート "
+
+msgid "Select maps by temporal topology"
+msgstr ""
+
+msgid "Select maps from space time datasets by topological relationships to other space time datasets using temporal algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query vector attribute data"
+msgid "Query vector dataset attribute data"
+msgstr "ベクトル属性データの検索"
+
+msgid "Prints attributes of vector maps registered in a space time vector dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "Raster dataset color table"
+msgstr "カラーテーブルのセット"
+
+#, fuzzy
+msgid "Creates/modifies the color table associated with each raster map of the space time raster dataset."
+msgstr "3Dラスターマップの非-NULLセルから単変量統計解析を行う"
+
+#, fuzzy
+msgid "Raster calculations"
+msgstr "ラスターマップカリキュレータ"
+
+msgid "Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Temporal raster algebra"
+msgstr "ラスターデータのインポート "
+
+msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+msgstr ""
+
+#, fuzzy
+msgid "3D raster calculations"
+msgstr "ラスターマップカリキュレータ"
+
+msgid "Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import 3D raster data"
+msgid "Temporal 3D raster algebra"
+msgstr "3Dラスターデータのインポート "
+
+msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Temporal vector algebra"
+msgstr "ベクトルデータのインポート "
+
+msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+msgstr ""
+
+#, fuzzy
+msgid "Interpolate gaps in raster datasets"
+msgstr "ラスターデータのインポート "
+
+msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Orientation"
+msgid "Aggregation"
+msgstr "回転："
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "Neighborhood analysis in raster dataset"
+msgstr "近傍性分析 "
+
+msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+msgid "Aggregation in raster datasets"
+msgstr "レイヤ一覧  "
+
+#, fuzzy
+msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
+msgstr "3Dラスターマップの非-NULLセルから単変量統計解析を行う"
+
+msgid "Temporal aggregation"
+msgstr ""
+
+msgid "Aggregates temporally the maps of a space time raster dataset by a user defined granularity."
+msgstr ""
+
+msgid "Temporal aggregation by dataset"
+msgstr ""
+
+msgid "Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Flow accumulation"
+msgid "Compute cyclic accumulations"
+msgstr "フローアキュミュレーション "
+
+msgid "Computes cyclic accumulations of a space time raster dataset."
+msgstr ""
+
+msgid "Detect accumulation patterns"
+msgstr ""
+
+msgid "Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate."
+msgstr ""
+
+msgid "Sampling"
+msgstr ""
+
+#, fuzzy
+msgid "Sample a space time raster dataset at point coordinates"
+msgstr "元のマップセットの選択："
+
+msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
+msgstr ""
+
+#, fuzzy
+#| msgid "Samples a raster map at vector point locations."
+msgid "Query raster dataset by vector points dataset"
+msgstr "ポイントロケーションでのラスターマップのサンプリング"
+
+#, fuzzy
+#| msgid "Uploads raster values at positions of vector points to the table."
+msgid "Stores raster map values at spatial and temporal positions of vector points as vector attributes."
+msgstr "ポイントの位置のラスターの値をテーブルにアップロード"
+
+msgid "Observe specific locations in raster dataset"
+msgstr ""
+
+msgid "Observes specific locations in a space time raster dataset over a period of time using vector points."
+msgstr ""
+
+msgid "Temporal sampling"
+msgstr ""
+
+msgid "Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select space time dataset(s):"
+msgid "Space time datasets metadata"
+msgstr "時空間データセットの選択:"
+
+msgid "Lists information about space time datasets and maps."
+msgstr ""
+
+#, fuzzy
+msgid "Univariate raster dataset statistics"
+msgstr "単変量ラスター統計"
+
+#, fuzzy
+msgid "Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset."
+msgstr "3Dラスターマップの非-NULLセルから単変量統計解析を行う"
+
+#, fuzzy
+msgid "Univariate vector dataset statistics"
+msgstr "単変量ラスター統計"
+
+#, fuzzy
+msgid "Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset"
+msgstr "3Dラスターマップの非-NULLセルから単変量統計解析を行う"
+
+#, fuzzy
+msgid "Univariate 3D raster dataset statistics"
+msgstr "単変量ラスター統計"
+
+#, fuzzy
+msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
+msgstr "3Dラスターマップの非-NULLセルから単変量統計解析を行う"
+
+#, fuzzy
+#| msgid "Rebuild topology"
+msgid "Report temporal topology"
+msgstr "トポロジーの再ビルド"
+
+#, fuzzy
+#| msgid "Lists all tables for a given database."
+msgid "Lists temporal topology of a space time dataset."
+msgstr "データベースの全てのテーブルを表示します"
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GUI tools"
+msgstr "GRASSのヘルプ "
+
+#, fuzzy
+#| msgid "GRASS GIS Timeline Tool"
+msgid "Timeline tool"
+msgstr "GRASS GIS タイムラインツール"
+
+#, fuzzy
+msgid "Plot temporal extents."
+msgstr "ジオメトリ表示"
+
+msgid "Temporal plot tool"
+msgstr ""
+
+#, fuzzy
+#| msgid "Get all values"
+msgid "Plot temporal values."
+msgstr "すべての値を取得"
+
+msgid "&Help"
+msgstr "ヘルプ(&H)"
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS help"
+msgstr "GRASSのヘルプ "
+
+#, fuzzy
+#| msgid "Display the HTML man pages of Graphical modeler"
+msgid "Display the HTML man pages of GRASS"
+msgstr "画像モデラーのHTMLマニュアルを表示"
+
+msgid "GUI help"
+msgstr "GUIのヘルプ "
+
+msgid "About system"
+msgstr "システム情報 "
+
+#, fuzzy
+#| msgid "Database information"
+msgid "Prints system information"
+msgstr "データベース情報"
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Import, export and link data"
+msgstr "ベクトルデータのインポート "
+
+#, fuzzy
+#| msgid "Close Attribute Table Manager"
+msgid "Attribute table manager"
+msgstr "属性テーブルマネージャーを閉じる"
+
+#, fuzzy
+#| msgid "Data catalog"
+msgid "Launch Data Catalog."
+msgstr "データカタログ"
+
+msgid "Managing GCPs for 3D correction"
+msgstr ""
+
+#, fuzzy
+#| msgid "Interactive management of vector color tables."
+msgid "Interactive editing and digitization of vector maps."
+msgstr "ベクトルカラーテーブルの対話式管理"
+
+#, fuzzy
+#| msgid "Interactive management of raster color tables."
+msgid "Interactive editing and digitization of raster maps."
+msgstr "ラスターカラーテーブルの対話型管理"
+
+msgid "Miscellaneous"
+msgstr ""
+
+msgid "Bearing/distance to coordinates"
+msgstr "座標の角度/距離 "
+
+msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa. It assumes a cartesian coordinate system"
+msgstr ""
+
+#, fuzzy
+#| msgid "Measure distance"
+msgid "Measure map distances"
+msgstr "距離の測定 "
+
+msgid "Measures the lengths and areas of features."
+msgstr ""
+
+msgid "3D image rendering"
+msgstr "3Dイメージのレンダリング"
+
+msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
+msgstr ""
+
+msgid "3D visualization script"
+msgstr ""
+
+msgid "Creates fly-through script to run in NVIZ."
+msgstr ""
+
+#, fuzzy
+#| msgid "Convert coordinates"
+msgid "Convert coordinates between projections"
+msgstr "座標変換 "
+
+msgid "Transform coordinates (affine)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate PostScript output"
+msgid "PostScript map output"
+msgstr "ポストスクリプト出力ユーティリティ "
+
+#, fuzzy
+#| msgid "Generate PostScript output"
+msgid "Produces hardcopy PostScript map output."
+msgstr "ポストスクリプト出力ユーティリティ "
+
+msgid "Save model to file"
+msgstr "モデルをファイルに保存"
+
+msgid "Close model file"
+msgstr "モデルファイルを閉じる"
+
+msgid "Export to image"
+msgstr "イメージにエキスポート"
+
+#, fuzzy
+#| msgid "Export to PDF"
+msgid "Export to Python"
+msgstr "PDFへエクスポート"
+
+#, fuzzy
+#| msgid "Export to PDF"
+msgid "Export to PyWPS"
+msgstr "PDFへエクスポート"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to PyWPS script"
+msgstr "Pythonスクリプトでモデルを出力"
+
+#, fuzzy
+#| msgid "Export to image"
+msgid "Export to actinia"
+msgstr "イメージにエキスポート"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to actinia script"
+msgstr "Pythonスクリプトでモデルを出力"
+
+msgid "Quit modeler"
+msgstr "モデラー終了"
+
+msgid "Close modeler window"
+msgstr "モデラーウィンドウを閉じる"
+
+msgid "&Model"
+msgstr "モデル(&M)"
+
+msgid "Add command"
+msgstr "コマンド追加 "
+
+#, fuzzy
+#| msgid "Adds condition (if/else) to model"
+msgid "Add action (GRASS command) to model"
+msgstr "モデルに(if/else)条件追加"
+
+msgid "Add data"
+msgstr "データ追加"
+
+msgid "Add data item to model"
+msgstr "モデルにデータアイテムを追加"
+
+msgid "Define relation"
+msgstr "連携定義"
+
+msgid "Define relation between data and action items"
+msgstr "データとアクションアイテムの関連付けを定義"
+
+#, fuzzy
+msgid "Add loop / series"
+msgstr "ループ追加 "
+
+#, fuzzy
+#| msgid "Adds condition (if/else) to model"
+msgid "Adds loop (series) to model"
+msgstr "モデルに(if/else)条件追加"
+
+msgid "Add condition"
+msgstr "条件追加"
+
+msgid "Adds condition (if/else) to model"
+msgstr "モデルに(if/else)条件追加"
+
+#, fuzzy
+#| msgid "Add comment"
+msgid "Adds comment to model"
+msgstr "コメント追加"
+
+msgid "Remove item"
+msgstr "アイテム削除"
+
+msgid "Remove action/data from model"
+msgstr "モデルからアクション/データ消去"
+
+msgid "Model properties (name, purpose, etc.)"
+msgstr "モデルプロパティ(名前,目的,etc.)"
+
+msgid "Delete intermediate data"
+msgstr "中間データ削除"
+
+msgid "Delete intermediate data defined in the model"
+msgstr "モデル内に定義された中間データ削除"
+
+msgid "Run entire model"
+msgstr "全体モデル実行"
+
+msgid "Validate entire model"
+msgstr "全体モデル検証"
+
+msgid "Help"
+msgstr "ヘルプ "
+
+msgid "Display the HTML man pages of Graphical modeler"
+msgstr "画像モデラーのHTMLマニュアルを表示"
+
+msgid "About Graphical Modeler"
+msgstr "描画モデラーについて"
+
+msgid "Display information about Graphical Modeler"
+msgstr "画像モデラーに関する情報表示"
+
+msgid "Specify paper size, margins and orientation"
+msgstr "用紙のサイズ、余白、方向を指定"
+
+#, fuzzy
+#| msgid "Failed to read instruction %s"
+msgid "Load instruction file"
+msgstr "リストが読ません： %s "
+
+msgid "Load text file with mapping instructions"
+msgstr "マッピング命令を含むテキストファイルの読み込み"
+
+#, fuzzy
+#| msgid "Export to image"
+msgid "Export instruction file"
+msgstr "イメージにエキスポート"
+
+msgid "Generate text file with mapping instructions"
+msgstr "マッピング命令を含むテキストファイルを作成"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export to PostScript"
+msgstr "Pythonスクリプトでモデルを出力"
+
+msgid "Generate PostScript output"
+msgstr "ポストスクリプト出力ユーティリティ "
+
+msgid "Export to PDF"
+msgstr "PDFへエクスポート"
+
+msgid "Generate PDF output"
+msgstr "ポイントの作成"
+
+msgid "Launch ps.map dialog"
+msgstr "ps.map ダイアログ起動"
+
+msgid "Close Cartographic Composer"
+msgstr "作図コンポーザーを閉じる"
+
+msgid "&Insert"
+msgstr "&挿入"
+
+msgid "Map frame"
+msgstr "縮尺"
+
+msgid "Add or edit map frame"
+msgstr "マップフレームの追加又は修正"
+
+msgid "Add or edit raster map"
+msgstr "ラスタマップの追加又は修正"
+
+msgid "Add or edit vector map"
+msgstr "ベクトルマップの追加又は修正"
+
+msgid "Map legend"
+msgstr "マップの凡例"
+
+msgid "Add or edit raster and vector legend"
+msgstr "ラスタとベクトルの凡例を追加又は修正"
+
+msgid "Map info"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add or edit map frame"
+msgid "Add or edit map info"
+msgstr "マップフレームの追加又は修正"
+
+msgid "Scale bar"
+msgstr "縮尺"
+
+#, fuzzy
+#| msgid "Add scale bar"
+msgid "Add or edit scale bar"
+msgstr "レイヤー追加"
+
+msgid "North Arrow"
+msgstr "方位"
+
+msgid "Delete selected object"
+msgstr "選択ロケーションを削除する"
+
+#, fuzzy
+#| msgid "Display the HTML man pages of Graphical modeler"
+msgid "Display the HTML man pages of Cartographic Composer"
+msgstr "画像モデラーのHTMLマニュアルを表示"
+
+#, fuzzy
+#| msgid "Quit Cartographic Composer"
+msgid "About Cartographic Composer"
+msgstr "カートグラフィックコンポーザーを終了する"
+
+#, fuzzy
+#| msgid "Display information about Graphical Modeler"
+msgid "Display information about Cartographic Composer"
+msgstr "画像モデラーに関する情報表示"
+
 msgid "Check all"
 msgstr ""
 
@@ -7477,9 +11482,6 @@ msgstr ""
 
 msgid "Type filename or click to choose file and save color table"
 msgstr ""
-
-msgid "Save"
-msgstr "保存 "
 
 msgid "&Set"
 msgstr ""
@@ -7741,9 +11743,6 @@ msgstr ""
 msgid "Dialog cannot be closed while command is running."
 msgstr ""
 
-msgid "Link external raster data"
-msgstr "外部ラスターデータへのリンク"
-
 msgid "Add linked layers into layer tree"
 msgstr "レイヤーツリーにレイヤーを追加 "
 
@@ -7761,9 +11760,6 @@ msgstr ""
 
 msgid "Unable to determine number of raster bands"
 msgstr ""
-
-msgid "Link external vector data"
-msgstr "外部ベクトルデータへのリンク"
 
 msgid "Define output format for vector data"
 msgstr ""
@@ -8341,12 +12337,6 @@ msgstr ""
 msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
 msgstr ""
 
-msgid "New"
-msgstr "新規 "
-
-msgid "Delete"
-msgstr "削除 "
-
 msgid "Fine resolution:"
 msgstr ""
 
@@ -8452,9 +12442,6 @@ msgstr "南 && 東"
 msgid "Elevation of fringe from bottom:"
 msgstr "底部からフリンジの標高："
 
-msgid "North Arrow"
-msgstr "方位"
-
 msgid "Arrow length (in map units):"
 msgstr ""
 
@@ -8463,9 +12450,6 @@ msgstr ""
 
 msgid "Place arrow"
 msgstr "場所表示矢印"
-
-msgid "Scale bar"
-msgstr "縮尺"
 
 msgid "Scale bar length (in map units):"
 msgstr ""
@@ -8551,9 +12535,6 @@ msgstr ""
 
 msgid "None"
 msgstr "無し"
-
-msgid "Plane"
-msgstr "平面 "
 
 msgid "Vector map is 3D"
 msgstr "ベクトルマップは3Dです"
@@ -8741,9 +12722,6 @@ msgstr "一般設定"
 
 msgid "Map frame settings"
 msgstr "ラスター設定"
-
-msgid "Map frame"
-msgstr "縮尺"
 
 msgid "Map frame options:"
 msgstr "投影法の管理 "
@@ -9112,7 +13090,9 @@ msgstr "タイプ"
 msgid "Number of segments:"
 msgstr "マップセット名変更"
 
-msgid "Label every "
+#, fuzzy
+#| msgid "Label every "
+msgid "Label every"
 msgstr "すべてにラベルを付ける"
 
 msgid "segments"
@@ -9364,8 +13344,10 @@ msgstr "方位"
 msgid "Click and drag to resize object"
 msgstr "クリックそれからドラッグをしてオブジェクトのサイズを変更する"
 
-msgid "labels: "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "All files"
+msgid "labels: {files}"
+msgstr "全ファイル"
 
 #, fuzzy
 #| msgid "Cartographic Composer"
@@ -9443,21 +13425,6 @@ msgstr ""
 msgid "Select graphics tool"
 msgstr ""
 
-msgid "Generate text file with mapping instructions"
-msgstr "マッピング命令を含むテキストファイルを作成"
-
-msgid "Load text file with mapping instructions"
-msgstr "マッピング命令を含むテキストファイルの読み込み"
-
-msgid "Generate PostScript output"
-msgstr "ポストスクリプト出力ユーティリティ "
-
-msgid "Generate PDF output"
-msgstr "ポイントの作成"
-
-msgid "Specify paper size, margins and orientation"
-msgstr "用紙のサイズ、余白、方向を指定"
-
 msgid "Full extent"
 msgstr "全範囲"
 
@@ -9467,14 +13434,8 @@ msgstr "デフォルト領域でズーム"
 msgid "Click and drag to place map frame"
 msgstr "マップフレームを配置する場所へクリックしてドラッグする"
 
-msgid "Delete selected object"
-msgstr "選択ロケーションを削除する"
-
 msgid "Show preview"
 msgstr "グリッド表示"
-
-msgid "Map info"
-msgstr ""
 
 msgid "Legend"
 msgstr "凡例"
@@ -9634,9 +13595,6 @@ msgstr ""
 msgid "Remove a configuration file"
 msgstr ""
 
-msgid "Create"
-msgstr "作成"
-
 msgid "Create a new configuration file"
 msgstr ""
 
@@ -9787,9 +13745,6 @@ msgstr "境界"
 msgid "Sample units"
 msgstr ""
 
-msgid "Moving window"
-msgstr "ウィンドウを移動 "
-
 msgid ""
 "Select areas from the\n"
 "overlaid vector map"
@@ -9923,9 +13878,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "The raster map <{map_name}> already exists. Please remove or rename the maps with the prefix '{prefix}' or select the option to overwrite existing maps"
-msgstr ""
-
-msgid "Select sample area 1 of "
 msgstr ""
 
 msgid "Configuration file name:"
@@ -10272,9 +14224,6 @@ msgstr ""
 msgid "Timeline Tool"
 msgstr ""
 
-msgid "Help"
-msgstr "ヘルプ "
-
 msgid "3D plot of spatio-temporal extents"
 msgstr "時空間領域の3Dプロット"
 
@@ -10465,7 +14414,7 @@ msgstr ""
 msgid "File exists"
 msgstr ""
 
-msgid "Please change name of output CSV file or "
+msgid "Please change name of output CSV file or enable overwriting."
 msgstr ""
 
 msgid "Incorrect coordinates format, should be: x,y"
@@ -11395,9 +15344,6 @@ msgstr ""
 msgid "Unable to connect to <%s>"
 msgstr ""
 
-msgid "Add web service layer"
-msgstr ""
-
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr ""
 
@@ -11412,9 +15358,6 @@ msgstr ""
 
 msgid "Export region"
 msgstr ""
-
-msgid "Map display"
-msgstr "マップディスプレイ"
 
 msgid "Named region"
 msgstr ""
@@ -11809,16 +15752,23 @@ msgstr ""
 msgid "At least 2 raster maps must be specified"
 msgstr ""
 
-msgid "Bivariate Scatterplot of "
+#, python-brace-format
+msgid "{first} vs {second}"
 msgstr ""
 
-#, python-format
-msgid "Raster <%s> cell values"
+#, python-brace-format
+msgid "Bivariate Scatterplot of {pairs}"
 msgstr ""
 
-#, python-format
-msgid ": %s"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Enter raster category values or percents"
+msgid "Raster <{raster}> cell values: {units}"
+msgstr "ラスターカテゴリー値またはパーセントの入力 "
+
+#, fuzzy, python-brace-format
+#| msgid "Raster values"
+msgid "Raster <{raster}> cell values"
+msgstr "ラスター値"
 
 msgid "Regression Statistics for Scatterplot(s)"
 msgstr ""
@@ -11829,13 +15779,24 @@ msgid ""
 "\n"
 msgstr ""
 
+#~ msgid "Rendering & "
+#~ msgstr "レンダリング中 &"
+
+#~ msgid "Unable to set "
+#~ msgstr "設定できません"
+
+#~ msgid "Type: "
+#~ msgstr "タイプ"
+
+#~ msgid "/ Zoom to map"
+#~ msgstr " / マップのズーム"
+
+#~ msgid "Measuring distance"
+#~ msgstr "計測距離 "
+
 #, fuzzy
 #~ msgid "New display"
 #~ msgstr "画面消去 "
-
-#, fuzzy
-#~ msgid "Do you want to create a new project (also known as location)?"
-#~ msgstr "GRASS ロケーションを作成しますか <%s>?"
 
 #, fuzzy
 #~ msgid "Create project?"
@@ -11862,30 +15823,6 @@ msgstr ""
 #~ msgid "&Fetch"
 #~ msgstr "取得(&F)"
 
-#~ msgid "&File"
-#~ msgstr "ファイル(&F)"
-
-#~ msgid "&Help"
-#~ msgstr "ヘルプ(&H)"
-
-#~ msgid "&Imagery"
-#~ msgstr "画像(&I)"
-
-#~ msgid "&Insert"
-#~ msgstr "&挿入"
-
-#~ msgid "&Model"
-#~ msgstr "モデル(&M)"
-
-#~ msgid "&Raster"
-#~ msgstr "ラスター(&R)"
-
-#~ msgid "&Settings"
-#~ msgstr "設定(&S)"
-
-#~ msgid "&Vector"
-#~ msgstr "ベクトル(&V)"
-
 #, python-format
 #~ msgid ""
 #~ "'%s' is not a GRASS module.\n"
@@ -11903,47 +15840,11 @@ msgstr ""
 #~ msgid "1. cleaning tool can not be moved up "
 #~ msgstr "1. クリーニングツールは、上に移動することはできません"
 
-#~ msgid "2D vector to 3D vector"
-#~ msgstr "2Dベクトル → 3Dベクトル "
-
 #~ msgid "3D Mask"
-#~ msgstr "3D マスク"
-
-#~ msgid "3D image rendering"
-#~ msgstr "3Dイメージのレンダリング"
-
-#~ msgid "3D mask"
 #~ msgstr "3D マスク"
 
 #~ msgid ":"
 #~ msgstr ":  "
-
-#~ msgid "ASCII 3D export"
-#~ msgstr "ASCII 3Dのエクスポート "
-
-#~ msgid "ASCII 3D import"
-#~ msgstr "ASCII 3Dのインポート "
-
-#~ msgid "ASCII grid export"
-#~ msgstr "ASCIIグリッドのエクスポート "
-
-#~ msgid "ASCII grid import"
-#~ msgstr "ASCIIグリッドのインポート "
-
-#~ msgid "ASCII points as a vector lines"
-#~ msgstr "ベクトルのラインとしてASCIIポイントを変換"
-
-#~ msgid "ASCII x,y,z point import and gridding"
-#~ msgstr "ASCII x,y,zポイントインポート グリッド化"
-
-#~ msgid "ASCII x,y,z points export"
-#~ msgstr "ASCII XYZ形式のエクスポート "
-
-#~ msgid "About Graphical Modeler"
-#~ msgstr "描画モデラーについて"
-
-#~ msgid "About system"
-#~ msgstr "システム情報 "
 
 #~ msgid ""
 #~ "Accessible mapsets\n"
@@ -11951,31 +15852,6 @@ msgstr ""
 #~ msgstr ""
 #~ "利用可能なマップセット\n"
 #~ "(GISファイルのディレクトリ)"
-
-#~ msgid "Add RGB raster layer"
-#~ msgstr "RGBレイヤー追加 "
-
-#~ msgid "Add centroids"
-#~ msgstr "セントロイド追加"
-
-#~ msgid "Add columns"
-#~ msgstr "列追加"
-
-#~ msgid "Add command"
-#~ msgstr "コマンド追加 "
-
-#~ msgid "Add condition"
-#~ msgstr "条件追加"
-
-#~ msgid "Add data"
-#~ msgstr "データ追加"
-
-#~ msgid "Add data item to model"
-#~ msgstr "モデルにデータアイテムを追加"
-
-#, fuzzy
-#~ msgid "Add default servers"
-#~ msgstr "ループ追加 "
 
 #, fuzzy
 #~ msgid "Add imported layers into layer tree ({mightNotWork})"
@@ -11985,197 +15861,26 @@ msgstr ""
 #~ msgid "Add linked layers into layer tree ({mightNotWork})"
 #~ msgstr "レイヤーツリーにレイヤーを追加 "
 
-#~ msgid "Add multiple raster or vector map layers to current display"
-#~ msgstr "ラスターマップの追加 "
-
-#~ msgid "Add multiple rasters or vectors"
-#~ msgstr "複数ラスターまたはベクトルを追加"
-
-#~ msgid "Add or edit map frame"
-#~ msgstr "マップフレームの追加又は修正"
-
-#~ msgid "Add or edit raster and vector legend"
-#~ msgstr "ラスタとベクトルの凡例を追加又は修正"
-
-#~ msgid "Add or edit raster map"
-#~ msgstr "ラスタマップの追加又は修正"
-
-#~ msgid "Add or edit vector map"
-#~ msgstr "ベクトルマップの追加又は修正"
-
-#~ msgid "Add raster"
-#~ msgstr "ラスター追加"
-
-#~ msgid "Add raster map layer to current display"
-#~ msgstr "現在の画面にラスターマップレイヤーを追加"
-
 #~ msgid "Add text layer"
 #~ msgstr "テキストレイヤー追加 "
-
-#~ msgid "Add vector"
-#~ msgstr "ベクトル追加"
-
-#~ msgid "Add vector map layer to current display"
-#~ msgstr "現在の画面にベクトルマップレイヤーを追加"
-
-#~ msgid "Adds condition (if/else) to model"
-#~ msgstr "モデルに(if/else)条件追加"
-
-#~ msgid "Adds missing centroids to closed boundaries."
-#~ msgstr "閉領域の欠けているセントロイドを追加"
-
-#~ msgid "Adds one or more columns to the attribute table connected to a given vector map."
-#~ msgstr "ベクトルマップに関連付けられている属性テーブルに列を追加する"
-
-#~ msgid "Allocate subnets"
-#~ msgstr "サブネットの設定 "
-
-#~ msgid "Allows creation and/or modification of raster map layer support files."
-#~ msgstr "ラスターマップサポートファイルの作成・更新 "
-
-#~ msgid "Anisotropic spread simulation"
-#~ msgstr "非等方性拡散シミュレーション  "
 
 #~ msgid "Ask when quiting wxGUI or closing display"
 #~ msgstr "ｗｘGUIの終了または画面を閉じる時に問い合わせる"
 
-#~ msgid "Atmospheric correction"
-#~ msgstr "大気補正 "
-
 #~ msgid "Auto-fit variogram"
 #~ msgstr "バリオグラムによる自動配分"
-
-#~ msgid "Basic raster metadata"
-#~ msgstr "基本的なラスターメタデータ"
-
-#~ msgid "Basic vector metadata"
-#~ msgstr "基本ベクトルメタデータ"
 
 #~ msgid "Basic volume metadata"
 #~ msgstr "基本ボリュームメタデータ"
 
-#~ msgid "Bearing/distance to coordinates"
-#~ msgstr "座標の角度/距離 "
-
-#~ msgid "Bilinear and bicubic from vector points"
-#~ msgstr "ベクトルポイントからの線形補間と三次補間"
-
 #~ msgid "Bit pattern comparison "
 #~ msgstr "ビットパタ-ン比較"
-
-#~ msgid "Blend 2 color rasters"
-#~ msgstr "2色のラスターをブレンド "
-
-#~ msgid "Blends color components of two raster maps by a given ratio."
-#~ msgstr "指定された比率で 2 色のラスターをブレンド "
 
 #~ msgid "Block size:"
 #~ msgstr "ブロックサイズ："
 
-#~ msgid "Bridges and articulation points"
-#~ msgstr "接続点や節点"
-
-#~ msgid "Buffer rasters"
-#~ msgstr "バッファリング"
-
-#~ msgid "Buffer vectors"
-#~ msgstr "バッファリング"
-
-#~ msgid "Build polylines"
-#~ msgstr "ポリラインの作成"
-
-#~ msgid "Building contour determination and Region Growing algorithm for determining the building inside"
-#~ msgstr "コンター線定義と内部コンター線定義のための領域成長アルゴリズム"
-
-#~ msgid "Builds polylines from lines or boundaries."
-#~ msgstr "線分や境界線からポリラインを作成"
-
-#~ msgid "Calculates Shannon's diversity index on a raster map"
-#~ msgstr "ラスターマップでシャノン多様性指標を解析"
-
-#~ msgid "Calculates Simpson's diversity index on a raster map"
-#~ msgstr "ラスターマップでシンプソン多様性指標を解析"
-
-#~ msgid "Calculates coefficient of variation of patch area on a raster map"
-#~ msgstr " ラスターマップ上でパッチ領域の変動係数を解析"
-
-#~ msgid "Calculates contrast weighted edge density index on a raster map"
-#~ msgstr "ラスターマップで対照的加重周辺密度指標を解析"
-
-#~ msgid "Calculates dominance's diversity index on a raster map"
-#~ msgstr "ラスターマップで順位多様性指標を解析"
-
-#~ msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
-#~ msgstr "4近傍法を使用してラスターマップの周辺密度指標を解析"
-
-#~ msgid "Calculates linear regression from two raster maps: y = a + b*x."
-#~ msgstr "2つのラスターマップでの線形回帰計算: y = a + b*x"
-
-#~ msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
-#~ msgstr "4近傍法を使用して、ラスターマップ上で平均パッチサイズ指標を解析"
-
-#~ msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
-#~ msgstr "4近傍法を使用して、ラスターマップ上でパッチ密度指標を解析"
-
-#~ msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
-#~ msgstr "4近傍法を使用して、ラスターマップ上でパッチ数指標を解析"
-
-#~ msgid "Calculates range of patch area size on a raster map"
-#~ msgstr "ラスターマップ上でパッチ領域サイズの範囲を解析"
-
-#~ msgid "Calculates shape index on a raster map"
-#~ msgstr "ラスターマップで形状係数を解析"
-
-#~ msgid "Calculates standard deviation of patch area a raster map"
-#~ msgstr "ラスターマップのパッチ領域の標準偏差を解析"
-
-#, fuzzy
-#~ msgid "Calculates univariate statistics from the non-null cells for each registered raster3d map of a space time raster3d dataset."
-#~ msgstr "3Dラスターマップの非-NULLセルから単変量統計解析を行う"
-
-#~ msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
-#~ msgstr "ベクトルマップの選択されたテーブルの列で単変量統計解析を行う"
-
-#~ msgid "Canonical components analysis (CCA) program for image processing."
-#~ msgstr "画像処理の正準成分分析(cca)"
-
-#~ msgid "Canonical correlation"
-#~ msgstr "正準相関"
-
-#~ msgid "Carve stream channels"
-#~ msgstr "河川水路網の作成 "
-
-#~ msgid "Centrality"
-#~ msgstr "重要性"
-
-#~ msgid "Change category values and labels"
-#~ msgstr "カテゴリー値・ラベルの変更 "
-
-#~ msgid "Change current mapset."
-#~ msgstr "マップセットを変更する "
-
-#, fuzzy
-#~ msgid "Change current project and mapset."
-#~ msgstr "現在のロケーションとマップセットを変更"
-
 #~ msgid "Change location and mapset"
 #~ msgstr "ロケーションとマップセットを変更"
-
-#, fuzzy
-#~ msgid "Change project (location) and mapset"
-#~ msgstr "プロジェクトのロケーションとマップセットを選択"
-
-#~ msgid "Change settings"
-#~ msgstr "設定変更 "
-
-#~ msgid "Change values"
-#~ msgstr "値の変更"
-
-#~ msgid "Change working environment"
-#~ msgstr "作業環境を変更する "
-
-#~ msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
-#~ msgstr "既存のベクトルマップのカテゴリー値は、SQLクエリまたは属性テーブルの列の値によって変更されます"
 
 #~ msgid "Choose EPSG Code"
 #~ msgstr "EPSGコードの選択"
@@ -12195,18 +15900,6 @@ msgstr ""
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "地理参照パラメータの定義方法の選択"
 
-#~ msgid "Classifies attribute data, e.g. for thematic mapping"
-#~ msgstr "主題図作成等の属性データの分類"
-
-#~ msgid "Classify attribute data"
-#~ msgstr "属性データの分類"
-
-#~ msgid "Classify image"
-#~ msgstr "画像分類 "
-
-#~ msgid "Clean vector map"
-#~ msgstr "ベクトルマップの消去"
-
 #~ msgid "Click here to hide search module engine"
 #~ msgstr "クリックで検索モジュールエンジン非表示"
 
@@ -12219,137 +15912,17 @@ msgstr ""
 #~ msgid "Click to restrict editing to current mapset only"
 #~ msgstr "クリックし編集を現在のマップセットのみに限定します"
 
-#~ msgid "Close Cartographic Composer"
-#~ msgstr "作図コンポーザーを閉じる"
-
-#~ msgid "Close all open map display windows"
-#~ msgstr "全てのマップ画面を閉じる"
-
-#~ msgid "Close current map display window"
-#~ msgstr "現在のマップ表示画面を閉じる"
-
-#~ msgid "Close model file"
-#~ msgstr "モデルファイルを閉じる"
-
-#~ msgid "Close modeler window"
-#~ msgstr "モデラーウィンドウを閉じる"
-
-#~ msgid "Closest points"
-#~ msgstr "近傍のポイント "
-
-#~ msgid "Clump"
-#~ msgstr "クランプ "
-
-#~ msgid "Clustering input for unsupervised classification"
-#~ msgstr "教師無し分類用クラスタリング入力"
-
-#~ msgid "Color balance for RGB"
-#~ msgstr "RGBのカラーバランス"
-
-#~ msgid "Color tables"
-#~ msgstr "カラーテーブル "
-
-#~ msgid "Color tables (stddev)"
-#~ msgstr "カラーテーブル (標準偏差) "
-
 #~ msgid "Combined (labels and module names)"
 #~ msgstr "組み合わせ（ラベルとモジュール名）"
-
-#~ msgid "Combines red, green and blue raster maps into a single composite raster map."
-#~ msgstr "コンポジットラスターマップに R,G,Bラスターマップを合成する "
-
-#~ msgid "Common export formats"
-#~ msgstr "一般的なエキスポートフォーマット"
 
 #~ msgid "Common export formats using OGR"
 #~ msgstr "OGRを使用した一般的エクスポートフォーマット"
 
-#~ msgid "Common import formats"
-#~ msgstr "一般的なインポート形式"
-
 #~ msgid "Compares bit patterns with a raster map."
 #~ msgstr "ラスターマップのビットパターン比較"
 
-#~ msgid "Components"
-#~ msgstr "コンポーネント"
-
-#~ msgid "Compress/decompress"
-#~ msgstr "圧縮/解凍 "
-
-#~ msgid "Compresses and decompresses raster maps."
-#~ msgstr "ラスターマップの圧縮/解凍 "
-
-#~ msgid "Compute quantiles using two passes."
-#~ msgstr "２つのパスを使用した分位数の計算"
-
-#~ msgid "Computes bridges and articulation points in the network."
-#~ msgstr "ネットワーク内の接続点や節点を計算する."
-
-#~ msgid "Computes degree, centrality, betweeness, closeness and eigenvector centrality measures in the network."
-#~ msgstr "ネットワークの角度、中心性、中間性、近接性、固有ベクトル中心性を計算する"
-
-#~ msgid "Computes minimum spanning tree for the network."
-#~ msgstr "ネットワークの最小全域木を計算する"
-
-#~ msgid "Computes strongly and weakly connected components in the network."
-#~ msgstr "ネットワークの強連結成分と弱連結成分を計算する"
-
-#~ msgid "Computes the maximum flow between two sets of nodes in the network."
-#~ msgstr "ネットワーク内の２つのノード間の最大流量を計算する."
-
-#~ msgid "Computes the shortest path between all pairs of nodes in the network."
-#~ msgstr "ネットワークの全てのノード間を最短距離で計算."
-
-#~ msgid "Computes topographic correction of reflectance."
-#~ msgstr "反射率の地形的補正を計算する"
-
-#~ msgid "Computes vertex connectivity between two sets of nodes in the network."
-#~ msgstr "ネットワーク内の２つのノード間の頂点接続関係を計算する."
-
-#~ msgid "Concentric circles"
-#~ msgstr "同心円の作成"
-
-#~ msgid "Configuration editor for r.li.'index'"
-#~ msgstr "r.li.'index'のための設定エディタ"
-
-#~ msgid "Connect"
-#~ msgstr "接続 "
-
-#~ msgid "Contrast weighted edge density"
-#~ msgstr "対照的加重周辺密度"
-
-#~ msgid "Convert coordinates"
-#~ msgstr "座標変換 "
-
-#~ msgid "Convert object types"
-#~ msgstr "オブジェクトタイプの変換"
-
-#~ msgid "Converts (rasterize) a vector map into a raster map."
-#~ msgstr "ラスターマップ内にベクトルマップを変換"
-
-#~ msgid "Converts 2D raster map slices to one 3D raster volume map."
-#~ msgstr "2Dラスターマップ断面を １つの 3Dラスターマップの値として変換"
-
-#~ msgid "Converts 3D raster maps into the VTK-ASCII format."
-#~ msgstr "3Dラスターマップを VTK-Ascii フォーマットへ変換"
-
-#~ msgid "Converts 3D raster maps to 2D raster maps"
-#~ msgstr "3Dラスターマップから2Dラスターマップへ変換"
-
 #~ msgid "Converts all older versions of GRASS vector maps in current mapset to current format."
 #~ msgstr "旧GRASSフォーマットベクトルマップインポート "
-
-#~ msgid "Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
-#~ msgstr "様々なフォーマット間での座標系（i.e. 投影情報）の変換"
-
-#~ msgid "Converts files in DXF format to GRASS vector map format."
-#~ msgstr "DXFフォーマットからGRASSベクトルフォーマットへ変換"
-
-#~ msgid "Convex hull"
-#~ msgstr "凸包 "
-
-#~ msgid "Copy table"
-#~ msgstr "テーブルコピー"
 
 #~ msgid "Copy the current command string to the clipboard (Ctrl+C)"
 #~ msgstr "クリップボードに現在のコマンド設定をコピー (Ctrl+C)"
@@ -12358,121 +15931,6 @@ msgstr ""
 #~ msgid "Copying"
 #~ msgstr "テーブルコピー"
 
-#~ msgid "Correct and reclassify objects"
-#~ msgstr "オブジェクトの修正と再分類"
-
-#~ msgid "Cost surface"
-#~ msgstr "表層断面図 "
-
-#~ msgid "Covariance/correlation"
-#~ msgstr "共分散/相関 "
-
-#~ msgid "Create 3D vector over raster"
-#~ msgstr "3Dベクトルまたはラスターの作成"
-
-#~ msgid "Create LRS"
-#~ msgstr "線形参照システム作成"
-
-#~ msgid "Create RGB"
-#~ msgstr "RGB 作成 "
-
-#~ msgid "Create labels"
-#~ msgstr "ラベル作成"
-
-#~ msgid "Create new empty vector map"
-#~ msgstr "空のベクトルマップの作成 "
-
-#, fuzzy
-#~ msgid "Create new project (location)"
-#~ msgstr "新しいロケーションを作成しますか？"
-
-#~ msgid "Create new workspace"
-#~ msgstr "ワークスペース新規作成 "
-
-#~ msgid "Create optimally placed labels"
-#~ msgstr "最適な位置にラベルを作成"
-
-#~ msgid "Create or rebuild topology"
-#~ msgstr "トポロジーの作成/再ビルド"
-
-#~ msgid "Create points/segments"
-#~ msgstr "ポイント/セグメントの作成 "
-
-#~ msgid "Create stationing"
-#~ msgstr "配置測点作成"
-
-#~ msgid "Create/edit group"
-#~ msgstr "グループの作成/修正"
-
-#~ msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
-#~ msgstr "標高データとラスターマップから3Dマップを作成 "
-
-#~ msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
-#~ msgstr "ポイントやセントロイドを含むベクトルマップからするドローネ三角形を作成"
-
-#~ msgid "Creates a MASK for limiting raster operation."
-#~ msgstr "ラスター操作制限用マスク作成 "
-
-#~ msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
-#~ msgstr "別のレイヤーによってデータが存在しないエリアのカテゴリー情報を挿入し、合成ラスターマップレイヤーを作成する "
-
-#~ msgid "Creates a cross product of the category values from multiple raster map layers."
-#~ msgstr "カテゴリー値を掛け合わせて新たなラスターマップを作成します "
-
-#~ msgid "Creates a fractal surface of a given fractal dimension."
-#~ msgstr "指定されたフラクタル次元のフラクタル曲面を作成"
-
-#~ msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
-#~ msgstr "OGRがサポートするレイヤーにリンクする擬似ベクトルマップを新しく作成"
-
-#~ msgid "Creates a raster map containing concentric rings around a given point."
-#~ msgstr "指定されたポイントを中心に同心円を含むマップをラスターを作成します"
-
-#~ msgid "Creates a raster map layer and vector point map containing randomly located points."
-#~ msgstr "ランダムに定義された地点を含むラスターマップレイヤーとベクトルポイントを作成"
-
-#~ msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
-#~ msgstr "異なるロケーションの移動コストを各セルの情報として表現したラスターマップを作成する "
-
-#~ msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
-#~ msgstr "ベクトルマップの指定されたレイヤーに新しい属性テーブルを作成・追加"
-
-#~ msgid "Creates new vector (points) map from database table containing coordinates."
-#~ msgstr "座標を含むデータベースから新しいベクトルマップを作成"
-
-#~ msgid "Creates paint labels for a vector map from attached attributes."
-#~ msgstr "属性からベクトルマップのラベルを作成"
-
-#~ msgid "Creates parallel line to input vector lines."
-#~ msgstr "入力された線分から平行線を作成"
-
-#~ msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
-#~ msgstr "入力された線分や線形参照システム、ファイルや標準入力のポイントから新しいポイント/セグメントを作成 "
-
-#~ msgid "Creates points/segments from input vector lines and positions."
-#~ msgstr "入力された線分とポイントからセグメントを作成"
-
-#~ msgid "Creates raster maps from ASCII polygon/line/point data files."
-#~ msgstr "ASCII ポリゴン/ライン/ポイントデータファイルからラスターマップを作成 "
-
-#~ msgid "Creates shaded relief map from an elevation map (DEM). "
-#~ msgstr "標高マップ（DEM）をより陰影マップを作成"
-
-#~ msgid "Cross product"
-#~ msgstr "カテゴリー値の掛け合わせ "
-
-#~ msgid "Cross section"
-#~ msgstr "断面図"
-
-#~ msgid "Cumulative movement costs"
-#~ msgstr "移動コスト積算 "
-
-#~ msgid "DXF export"
-#~ msgstr "DXFのエクスポート "
-
-#~ msgid "DXF import"
-#~ msgstr "DXFのインポート "
-
 #~ msgid "Data Toolbar"
 #~ msgstr "データツールバー "
 
@@ -12480,54 +15938,8 @@ msgstr ""
 #~ msgid "Data file <%(name)s> imported successfully."
 #~ msgstr "ベクトルマップ <%(name)s> (%(type)s) がアンロードされました"
 
-#~ msgid "Database information"
-#~ msgstr "データベース情報"
-
 #~ msgid "Define new location"
 #~ msgstr "ロケーションの新規作成"
-
-#~ msgid "Define relation"
-#~ msgstr "連携定義"
-
-#~ msgid "Define relation between data and action items"
-#~ msgstr "データとアクションアイテムの関連付けを定義"
-
-#~ msgid "Delaunay triangles"
-#~ msgstr "ドローネ三角形"
-
-#~ msgid "Delete intermediate data"
-#~ msgstr "中間データ削除"
-
-#~ msgid "Delete intermediate data defined in the model"
-#~ msgstr "モデル内に定義された中間データ削除"
-
-#~ msgid "Depressionless map and flowlines"
-#~ msgstr "凹地の無いマップとフローライン "
-
-#~ msgid "Describe table"
-#~ msgstr "テーブル定義"
-
-#~ msgid "Describes a table in detail."
-#~ msgstr "詳細なテーブル定義"
-
-#~ msgid "Detect edges"
-#~ msgstr "エッジ検出"
-
-#~ msgid "Detect interiors"
-#~ msgstr "内面検出"
-
-#~ msgid "Detects the object's edges from a LIDAR data set."
-#~ msgstr "ライダー データセットからエッジを検出する"
-
-#, fuzzy
-#~ msgid "Develop 3D rasters"
-#~ msgstr "ラスターマップの作成"
-
-#~ msgid "Develop images and groups"
-#~ msgstr "画像とグループの作成 "
-
-#~ msgid "Develop vector map"
-#~ msgstr "ベクトルマップの作成 "
 
 #~ msgid "Develop volumes"
 #~ msgstr "ボリュームの作成"
@@ -12535,45 +15947,20 @@ msgstr ""
 #~ msgid "Digitize"
 #~ msgstr "デジタイズ"
 
-#~ msgid "Display information about Graphical Modeler"
-#~ msgstr "画像モデラーに関する情報表示"
-
 #~ msgid "Display mode"
 #~ msgstr "表示モード"
-
-#~ msgid "Display region"
-#~ msgstr "領域表示"
-
-#~ msgid "Display the HTML man pages of Graphical modeler"
-#~ msgstr "画像モデラーのHTMLマニュアルを表示"
 
 #~ msgid "Displaying {name}..."
 #~ msgstr "表示中 {name}..."
 
-#~ msgid "Displays spectral response at user specified locations in group or images."
-#~ msgstr "画像あるいはグループでユーザーが指定したロケーションのスペクトル応答を表示"
-
 #~ msgid "Displays version and copyright information."
 #~ msgstr "ディスプレイバージョン コピーライト情報 "
-
-#~ msgid "Dissolve boundaries"
-#~ msgstr "境界の融合"
-
-#, fuzzy
-#~ msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
-#~ msgstr "共通のカテゴリー番号や属性を共有するエリアを融合させる"
-
-#~ msgid "Distance to features"
-#~ msgstr "フィーチャの距離 "
 
 #~ msgid "Do you really want to delete map <{m}> of type <{etype}> from mapset <{mapset}> in location <{loc}>?"
 #~ msgstr "下記の情報を削除してよろしいですか マップ <{m}> タイプ <{etype}> マップセット <{mapset}> ロケーション<{loc}>?"
 
 #~ msgid "Do you want to set the default region extents and resolution now?"
 #~ msgstr "デフォルト領域と解像度をセットしますか？"
-
-#~ msgid "Dominance's diversity"
-#~ msgstr "順位多様性"
 
 #~ msgid ""
 #~ "Drag text with mouse in pointer mode to position.\n"
@@ -12582,33 +15969,9 @@ msgstr ""
 #~ "テキストの位置をマウスでドラッグ\n"
 #~ "ダブルクリックでオプション変更 "
 
-#~ msgid "Drop column"
-#~ msgstr "カラム削除"
-
-#~ msgid "Drop table"
-#~ msgstr "テーブル削除"
-
-#~ msgid "Drops a column from the attribute table connected to a given vector map."
-#~ msgstr "ベクトルマップに接続された属性テーブルの列名を変更します"
-
-#~ msgid "Drops an attribute table."
-#~ msgstr "属性テーブルの削除"
-
 #, python-format
 #~ msgid "ERROR: Unable to determine GRASS version. Details: %s"
 #~ msgstr "エラー: GRASSバージョンを決定できません. 詳細Details: %s"
-
-#~ msgid "ESRI e00 import"
-#~ msgstr "ESRI e00のインポート "
-
-#~ msgid "Edge density"
-#~ msgstr "周辺密度"
-
-#~ msgid "Edge detection"
-#~ msgstr "縁辺検出"
-
-#~ msgid "Edit vector map (non-interactively)"
-#~ msgstr "ベクトルマップ編集（非対話型）"
 
 #, fuzzy
 #~ msgid "Editing"
@@ -12616,12 +15979,6 @@ msgstr ""
 
 #~ msgid "Editing {name}"
 #~ msgstr "修正 {name}"
-
-#~ msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
-#~ msgstr "選択したベクトルフィーチャの修正、追加、削除"
-
-#~ msgid "Establishes the current working 3D raster mask."
-#~ msgstr "現在作業中の 3D ラスターマスクを確立します "
 
 #~ msgid "Executing selected cleaning operations..."
 #~ msgstr "選択したクリーニング処理を実行..."
@@ -12632,54 +15989,11 @@ msgstr ""
 #~ msgid "Expert (module names only)"
 #~ msgstr "エキスパート (モジュール名のみ)"
 
-#~ msgid "Explicitly create the 3D NULL-value bitmap file."
-#~ msgstr "3D NULL-値のビットマップファイルの作成 "
-
-#~ msgid "Export 3D raster maps"
-#~ msgstr "3Dラスターマップのエクスポート "
-
-#~ msgid "Export color table"
-#~ msgstr "カラーテーブルをエキスポート"
-
-#~ msgid "Export raster map"
-#~ msgstr "ラスターマップのエクスポート "
-
-#~ msgid "Export to PDF"
-#~ msgstr "PDFへエクスポート"
-
-#~ msgid "Export to image"
-#~ msgstr "イメージにエキスポート"
-
 #~ msgid "Export variance map as well: "
 #~ msgstr "分散マップと同様にエクスポート: "
 
-#~ msgid "Export vector map"
-#~ msgstr "ベクトルマップのエクスポート "
-
-#~ msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
-#~ msgstr "GRASS 3D ラスターマップを3D Vis5D ファイルにエクスポート "
-
-#~ msgid "Exports GRASS raster maps into GDAL supported formats."
-#~ msgstr "GDAL用フォーマットへのラスターマップのエクスポート "
-
-#~ msgid "Exports a GRASS raster to a binary MAT-File."
-#~ msgstr "MAT-Fileへエクスポート "
-
-#~ msgid "Exports a GRASS raster to a binary array."
-#~ msgstr "バイナリアレイとしてエクスポート "
-
-#~ msgid "Exports attribute tables into various formats."
-#~ msgstr "属性テーブルを別のフォーマットにエクスポート "
-
 #~ msgid "Extent"
 #~ msgstr "範囲"
-
-#, fuzzy
-#~ msgid "Extract subset of raster3D dataset"
-#~ msgstr "ラスターデータのインポート "
-
-#~ msgid "Extrude 3D vector map"
-#~ msgstr "3Dベクトルマップの立上げ"
 
 #~ msgid "Failed to copy map: action is allowed only within the same location."
 #~ msgstr "マップをコピー出来ません: 同じロケーション内にのみコピー出来ます."
@@ -12693,53 +16007,8 @@ msgstr ""
 #~ msgid "Fancy green"
 #~ msgstr "ファンシーグリーン"
 
-#~ msgid "Fast Fourier"
-#~ msgstr "高速フーリエ変換"
-
-#~ msgid "Fast Fourier Transform (FFT) for image processing."
-#~ msgstr "高速フーリエ変換を行います "
-
-#~ msgid "Feature selection"
-#~ msgstr "フィーチャーの選択"
-
 #~ msgid "Fetch list of available modules from GRASS Addons SVN repository"
 #~ msgstr "GRASSのアドオンSVNリポジトリから利用可能なモジュールの参照リスト"
-
-#~ msgid "Fill NULL cells"
-#~ msgstr "NULLセルの穴埋め "
-
-#~ msgid "Fill lake"
-#~ msgstr "湖沼の塗潰し "
-
-#~ msgid "Filter image"
-#~ msgstr "画像フィルター "
-
-#~ msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
-#~ msgstr "標高レイヤーから 凹地のない標高マップと流方向マップを作成 "
-
-#~ msgid "Find line id and offset"
-#~ msgstr "ラインIDとオフセットを表示"
-
-#~ msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
-#~ msgstr "線形参照システムを利用し、ベクトルマップのポイントからラインIDと実距離（Km)オフセットを表示"
-
-#~ msgid "Finds shortest path on vector network."
-#~ msgstr "ベクトルネットワークの最短経路探査"
-
-#~ msgid "Finds shortest path using timetables."
-#~ msgstr "時刻表による最短経路探査"
-
-#~ msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
-#~ msgstr "ベクトルマップの２点に一番近いエレメントを探す"
-
-#~ msgid "Flow accumulation"
-#~ msgstr "フローアキュミュレーション "
-
-#~ msgid "Flow lines"
-#~ msgstr "流線 "
-
-#~ msgid "Fractal surface"
-#~ msgstr "フラクタル面"
 
 #~ msgid "GEOnet import"
 #~ msgstr "GEOnetのインポート "
@@ -12766,113 +16035,14 @@ msgstr ""
 #~ msgid "GRASS GIS Raster Map Calculator"
 #~ msgstr "GRASS GISラスターマップカリキュレータ"
 
-#~ msgid "GRASS GIS Timeline Tool"
-#~ msgstr "GRASS GIS タイムラインツール"
-
 #~ msgid "GRASS GIS Vector Digitizer"
 #~ msgstr "GRASS GIS ベクトルデジタイザ"
-
-#~ msgid "GRASS raster map layer data resampling capability."
-#~ msgstr "ラスターマップレイヤーの再サンプリング機能 "
-
-#~ msgid "GRASS working environment"
-#~ msgstr "GRASS作業環境 "
-
-#~ msgid "GRIDATB.FOR export"
-#~ msgstr "GRIDATB.FORのエクスポート "
-
-#~ msgid "GRIDATB.FOR import"
-#~ msgstr "GRIDATB.FOR インポート "
-
-#~ msgid "GUI help"
-#~ msgstr "GUIのヘルプ "
-
-#~ msgid "Gaussian deviates surface"
-#~ msgstr "ガウス偏差面"
-
-#~ msgid "Gaussian kernel density surface"
-#~ msgstr "ガウスカーネル密度面"
-
-#~ msgid "General statistics"
-#~ msgstr "一般統計"
-
-#~ msgid "Generate area for current region"
-#~ msgstr "現在の領域からエリアを作成"
-
-#~ msgid "Generate areas from points"
-#~ msgstr "複数のポイントからエリアを作成"
-
-#~ msgid "Generate contour lines"
-#~ msgstr "コンターラインの作成"
-
-#~ msgid "Generate from database"
-#~ msgstr "データベースから作成"
-
-#~ msgid "Generate grid"
-#~ msgstr "グリッドの作成"
-
-#~ msgid "Generate histogram of image"
-#~ msgstr "画像のヒストグラムを作成"
-
-#~ msgid "Generate images with textural features from a raster map."
-#~ msgstr "ラスターマップからテキストフィーチャを作成"
-
-#~ msgid "Generate points"
-#~ msgstr "ポイントの作成"
-
-#~ msgid "Generate points along lines"
-#~ msgstr "ラインに沿ったを作成"
-
-#~ msgid "Generate random cells"
-#~ msgstr "ランダムセルの作成"
-
-#~ msgid "Generate random points"
-#~ msgstr "ランダムなポイントを作成"
-
-#~ msgid "Generate surfaces"
-#~ msgstr "曲面の作成"
-
-#~ msgid "Generates a raster map layer with contiguous areas grown by one cell."
-#~ msgstr "１つのセルを拡大させることによって新しいラスターマップを作成する "
-
-#~ msgid "Generates random cell values with spatial dependence."
-#~ msgstr "空間に依存したランダムセル値を作成"
-
-#~ msgid "Generates random surface(s) with spatial dependence."
-#~ msgstr "空間依存性ランダム曲面を作成"
-
-#~ msgid "Generates statistics for i.maxlik from raster map."
-#~ msgstr "ラスターマップからi.maxlikの統計情報を作成"
-
-#~ msgid "Generates statistics for i.smap from raster map."
-#~ msgstr "ラスターマップから i.smapの統計情報を作成"
-
-#~ msgid "Generates volume statistics for 3D raster maps."
-#~ msgstr "3Dラスターマップにおいてボリューム統計解析値を作成"
-
-#~ msgid "Generates watershed subbasins raster map."
-#~ msgstr "分水界ラスターマップ生成"
-
-#~ msgid "Geonames import"
-#~ msgstr "Geonamesのインポート "
 
 #~ msgid "Go to"
 #~ msgstr "進む"
 
 #~ msgid "Go to GCP No."
 #~ msgstr "GCP No. へ進む"
-
-#~ msgid "Graphical modeler"
-#~ msgstr "描画モデラー"
-
-#~ msgid "Groundwater modeling"
-#~ msgstr "地下水 モデリング  "
-
-#~ msgid "Grow"
-#~ msgstr "拡大"
-
-#~ msgid "HIS to RGB"
-#~ msgstr "HIS → RGB"
 
 #, fuzzy
 #~ msgid "Hide {overlay}"
@@ -12884,100 +16054,18 @@ msgstr ""
 #~ msgid "Historical GRASS vector import (all maps)"
 #~ msgstr "旧GRASSベクトルのインポート（全てのマップ）"
 
-#~ msgid "Horizon angle"
-#~ msgstr "水平角度 "
-
-#~ msgid "Hydrologic modeling"
-#~ msgstr "水文モデリング "
-
-#~ msgid "IDW from raster points"
-#~ msgstr "ラスターポイントから加重平均補間"
-
 #~ msgid "IDW from raster points (alternate method for sparse points)"
 #~ msgstr "ラスターポイントの加重平均補間 (まばらなポイントの代替方法)  "
-
-#~ msgid "IDW from vector points"
-#~ msgstr "ベクトルポイントでの加重平均補間"
-
-#~ msgid "Import 3D raster data"
-#~ msgstr "3Dラスターデータのインポート "
-
-#~ msgid "Import a binary raster file into a GRASS raster map layer."
-#~ msgstr "バイナリーファイルをラスターマップとしてインポート "
-
-#~ msgid "Import database table"
-#~ msgstr "データベーステーブルのインポート "
-
-#~ msgid "Import/link raster or vector data"
-#~ msgstr "ラスターマップのインポート "
-
-#~ msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
-#~ msgstr "Mapgen または Matlab-ASCII のベクトルマップをGRASSへインポート "
-
-#~ msgid "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector points map."
-#~ msgstr "US-NGA GEOnet Names Server (GNS)  からGRASSベクトルマップへインポート "
-
-#~ msgid "Imports a binary MAT-File(v4) to a GRASS raster."
-#~ msgstr "MAT-File(v4) をラスターマップとしてインポート "
-
-#~ msgid "Imports attribute tables in various formats."
-#~ msgstr "複数フォーマットからなる属性テーブルのインポート "
-
-#~ msgid "Imports older versions of GRASS vector maps."
-#~ msgstr "旧GRASSフォーマットベクトルマップインポート "
-
-#~ msgid "Imports raster data into a GRASS raster map using GDAL library."
-#~ msgstr "GDALでGRASSマップレイヤーにラスターデータをインポート "
 
 #~ msgid "Input Data"
 #~ msgstr "入力データ"
 
-#~ msgid "Input for supervised MLC"
-#~ msgstr "最尤法のためのシグネチャの作成"
-
-#~ msgid "Input for supervised SMAP"
-#~ msgstr "最大事後確率推定法のためのシグネチャの作成"
-
-#, fuzzy
-#~ msgid "Input for supervised SVM"
-#~ msgstr "最大事後確率推定法のためのシグネチャの作成"
-
 #~ msgid "Install selected add-ons GRASS module"
 #~ msgstr "選択されたアドオンGRASSモジュールのインストール"
-
-#~ msgid "Interactive input for supervised classification"
-#~ msgstr "対話型入力による監視下分類"
-
-#~ msgid "Interactive management of raster color tables."
-#~ msgstr "ラスターカラーテーブルの対話型管理"
-
-#~ msgid "Interactive management of vector color tables."
-#~ msgstr "ベクトルカラーテーブルの対話式管理"
-
-#~ msgid "Interactively edit category values"
-#~ msgstr "対話形式でカテゴリー値を編集"
-
-#~ msgid "Interpolate surfaces"
-#~ msgstr "曲面補間 "
-
-#~ msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
-#~ msgstr "テンション（ＲＳＴ）アルゴリズムによる正規化スプライン曲線を使用して3Dグリッドのポイントを補間する"
 
 #, python-format
 #~ msgid "Invalid map size %d,%d\n"
 #~ msgstr "マップのサイズが違います %d,%d\n"
-
-#~ msgid "Inverse Fast Fourier"
-#~ msgstr "高速フーリエ逆変換 "
-
-#~ msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
-#~ msgstr "高速フーリエ逆変換を行います "
-
-#~ msgid "Join table"
-#~ msgstr "テーブル結合"
-
-#~ msgid "Kappa analysis"
-#~ msgstr "カッパー分析"
 
 #~ msgid "Kriging"
 #~ msgstr "クリギング"
@@ -12988,73 +16076,12 @@ msgstr ""
 #~ msgid "Kriging techniques"
 #~ msgstr "クリギング技法"
 
-#~ msgid "Landscape patch analysis"
-#~ msgstr "景観パッチ分析"
-
 #~ msgid "Last cleaning tool can not be moved down "
 #~ msgstr "最後のクリーニングツールは、下に移動することはできません"
-
-#~ msgid "Launch Cartographic Composer"
-#~ msgstr "カートグラフィックコンポーザーを起動する"
-
-#~ msgid "Launch Graphical modeler"
-#~ msgstr "描画モデラー起動"
-
-#~ msgid "Launch ps.map dialog"
-#~ msgstr "ps.map ダイアログ起動"
-
-#~ msgid "Launch script"
-#~ msgstr "スクリプト実行"
 
 #, fuzzy
 #~ msgid "Launches graphical attribute table manager."
 #~ msgstr "属性テーブルマネージャー"
-
-#~ msgid "Launches script file."
-#~ msgstr "スクリプトファイル起動."
-
-#~ msgid "Least cost route or flow"
-#~ msgstr "最小コストルートあるいはフロー "
-
-#~ msgid "Least-cost spread paths"
-#~ msgstr "最小コストの拡散経路"
-
-#~ msgid "Lidar analysis"
-#~ msgstr "ライダー分析"
-
-#~ msgid "Linear referencing"
-#~ msgstr "線形参照"
-
-#~ msgid "Linear regression"
-#~ msgstr "線形回帰"
-
-#~ msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
-#~ msgstr "GRASSの擬似ラスターマップレイヤーとしてGDALがサポートするラスターデータをリンク"
-
-#~ msgid "List"
-#~ msgstr "リスト "
-
-#~ msgid "List all columns for a given table."
-#~ msgstr "テーブルのすべての列を表示します "
-
-#~ msgid "List columns"
-#~ msgstr "列一覧"
-
-#~ msgid "List drivers"
-#~ msgstr "ドライバー一覧"
-
-#, fuzzy
-#~ msgid "List raster3D dataset maps"
-#~ msgstr "レイヤ一覧  "
-
-#~ msgid "List tables"
-#~ msgstr "テーブル一覧"
-
-#~ msgid "Lists all tables for a given database."
-#~ msgstr "データベースの全てのテーブルを表示します"
-
-#~ msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
-#~ msgstr "ユーザーが検索オプションを使って指定したデータ型の、現在使用できるGRASSデータベースファイルの一覧を表示 "
 
 #~ msgid "Load GRC file (Tcl/Tk GUI)"
 #~ msgstr "GRCファイル のロード(Tcl/Tk GUI)  "
@@ -13064,12 +16091,6 @@ msgstr ""
 
 #~ msgid "Load settings:"
 #~ msgstr "ロードする設定:"
-
-#~ msgid "Load workspace from file"
-#~ msgstr "ファイルからワークスペースをロード "
-
-#~ msgid "Locates the closest points between objects in two raster maps."
-#~ msgstr "２つのラスターマップに最も近いポイントにオブジェクトを配置 "
 
 #~ msgid "Location <%(loc)s> will be created in GIS data directory <%(dir)s>. You will need to change the default GIS data directory in the GRASS startup screen."
 #~ msgstr "ロケーション <%(loc)s> がディレクトリ<%(dir)s>に作成されます 必要ならばGRASSのスタートアップ画面でデフォルトディレクトリを変更してください"
@@ -13089,60 +16110,11 @@ msgstr ""
 #~ msgid "Location wizard canceled. Location not created."
 #~ msgstr "ロケーションウイザードはキャンセルされました。ロケーションは作成されません"
 
-#~ msgid "Login"
-#~ msgstr "ログイン "
-
 #~ msgid "MASK"
 #~ msgstr "マスク "
 
-#~ msgid "MPEG-1 export"
-#~ msgstr "MPEG-1のエクスポート "
-
-#~ msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
-#~ msgstr "各セルのカテゴリーで近傍点解析を行い，ラスターマップに新しいセルを作成します "
-
-#~ msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
-#~ msgstr "各出力のセルの値の値を入力ラスターマップレイヤーに対応するセルに割り当てられた関数を作成 "
-
 #~ msgid "Manage"
 #~ msgstr "管理"
-
-#~ msgid "Manage 3D NULL values"
-#~ msgstr "3D NULL値の管理"
-
-#~ msgid "Manage Ground Control Points for Georectification"
-#~ msgstr "幾何補正の為のGCP（地上基準点）管理"
-
-#~ msgid "Manage NULL values"
-#~ msgstr "NULL値の管理 "
-
-#~ msgid "Manage category information"
-#~ msgstr "カテゴリー情報の管理"
-
-#~ msgid "Manage colors"
-#~ msgstr "カラー調整 "
-
-#~ msgid "Manage image colors"
-#~ msgstr "画像カラーの管理 "
-
-#~ msgid "Manage projections"
-#~ msgstr "投影法の管理 "
-
-#, fuzzy
-#~ msgid "Manage signature files"
-#~ msgstr "画像カラーの管理 "
-
-#~ msgid "Manage timestamp"
-#~ msgstr "タイムスタンプ管理"
-
-#~ msgid "Manages NULL-values of given raster map."
-#~ msgstr "ラスターマップのNULL値の管理 "
-
-#~ msgid "Manages category values and labels associated with user-specified raster map layers."
-#~ msgstr "ユーザー定義ラスターマップレイヤーに関連付けられたカテゴリー情報とラベルの管理"
-
-#~ msgid "Manages the boundary definitions for the geographic region."
-#~ msgstr "領域の境界定義を管理 "
 
 #~ msgid "Map <{layer}> marked for copying. You can paste it to the current mapset <{mapset}>."
 #~ msgstr "マップ <{layer}> がコピーのためにマークされました. 現在のマップセット <{mapset}> に貼り付け出来ます."
@@ -13153,53 +16125,14 @@ msgstr ""
 #~ msgid "Map layers"
 #~ msgstr "マップレイヤー"
 
-#~ msgid "Map legend"
-#~ msgstr "マップの凡例"
-
-#~ msgid "Map projections"
-#~ msgstr "マップ投影法"
-
-#~ msgid "Map type conversions"
-#~ msgstr "マップタイプの変換 "
-
 #~ msgid "Maps can be copied only to current mapset"
 #~ msgstr "マップは現在のマップセットにのみコピーすることが出来ます"
-
-#~ msgid "Mapset access"
-#~ msgstr "マップセット作成 "
-
-#~ msgid "Matlab 2D array export"
-#~ msgstr "Matlab 2D 座標値 エキスポート"
-
-#~ msgid "Matlab 2D array import"
-#~ msgstr "Matlab ２次元配列インポート"
-
-#~ msgid "Matlab array or Mapgen format import"
-#~ msgstr "Matlab配列またはMapGenフォーマットのインポート "
-
-#~ msgid "Matrix/convolving filter"
-#~ msgstr "行列/畳み込みフィルタ"
-
-#~ msgid "Maximum flow"
-#~ msgstr "最大流量"
-
-#~ msgid "Maximum likelihood classification (MLC)"
-#~ msgstr "最尤法による分類(MLC) "
-
-#~ msgid "Minimum spanning tree"
-#~ msgstr "最小全域木"
 
 #~ msgid "Mode"
 #~ msgstr "モード"
 
-#~ msgid "Model properties (name, purpose, etc.)"
-#~ msgstr "モデルプロパティ(名前,目的,etc.)"
-
 #~ msgid "Model: "
 #~ msgstr "モデル："
-
-#~ msgid "Mosaic images"
-#~ msgstr "モザイク画像"
 
 #~ msgid "Moving maps not implemented"
 #~ msgstr "移動出来るマップは有りません"
@@ -13210,9 +16143,6 @@ msgstr ""
 #~ msgid "Multiple import formats using OGR"
 #~ msgstr "OGRを使用した複数ファイルのインポート"
 
-#~ msgid "Mutual category occurrences"
-#~ msgstr "カテゴリー間の関係"
-
 #~ msgid "Name for output vector map"
 #~ msgstr "出力するベクトルマップ名"
 
@@ -13222,26 +16152,8 @@ msgstr ""
 #~ msgid "Name of input vector map"
 #~ msgstr "入力するベクトルマップ名"
 
-#~ msgid "Nearest features"
-#~ msgstr "近傍のフィーチャ"
-
-#~ msgid "Neighborhood analysis"
-#~ msgstr "近傍性分析 "
-
-#~ msgid "Neighborhood points"
-#~ msgstr "近傍点 "
-
-#~ msgid "Network analysis"
-#~ msgstr "ネットワーク解析 "
-
 #~ msgid "New GIS data directory"
 #~ msgstr "新しいGISデータディレクトリ"
-
-#~ msgid "New map display window"
-#~ msgstr "マップの横断面を表示 "
-
-#~ msgid "New table"
-#~ msgstr "新規テーブル"
 
 #~ msgid "No GRASS-python library found."
 #~ msgstr "GRASS-python ライブラリーが見つかりません."
@@ -13250,114 +16162,24 @@ msgstr ""
 #~ msgid "No mapsets readable"
 #~ msgstr "3Dビューモードは使用できません"
 
-#~ msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
-#~ msgstr "２層による非定常流 被圧/負圧地下水流の数値解析"
-
-#~ msgid "OIF for LandSat TM"
-#~ msgstr "ランドサットのバンド選定指標"
-
 #~ msgid "Old GRASS Workspace File (*.grc)|*.grc"
 #~ msgstr "旧 GRASS ワークスペースファイル (*.grc)|*.grc"
 
-#~ msgid "Open"
-#~ msgstr "開く"
-
-#~ msgid "Open new map display window"
-#~ msgstr "新しいマップ画面を開く"
-
 #~ msgid "Ordinary or block kriging"
 #~ msgstr "通常またはブロッククリギング"
-
-#~ msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
-#~ msgstr "ラスターマップの共分散と相関を求めます "
 
 #, fuzzy
 #~ msgid "Outputs a raster map showing the anisotropic cumulative cost. Computes anisotropic cumulative cost of moving between different geographic locations on an input elevation raster map whose cell category values represent elevation combined with an input raster map layer whose cell values represent friction cost."
 #~ msgstr "出力ラスターマップレイヤーの異なる地理的な場所の間に、そのセルのカテゴリー値の標高を持つセルの値を摩擦コストを表す入力ラスターマップレイヤーと結合を表す入力標高ラスターマップレイヤー上を移動する異方性の累積的なコストを示しています "
 
-#~ msgid "Outputs and modifies the user's current GRASS variable settings."
-#~ msgstr "GRASSのユーザー設定係数の更新/出力 "
-
-#~ msgid "Outputs basic information about a user-specified 3D raster map layer."
-#~ msgstr "ユーザー定義3Dラスターマップの基礎情報を出力します "
-
-#~ msgid "Outputs raster map layer values lying along user defined transect line(s)."
-#~ msgstr "指定した横断面でラスターマップの値を出力"
-
-#~ msgid "Outputs the raster map layer values lying on user-defined line(s)."
-#~ msgstr "指定した直線上でのラスターマップの値を出力"
-
-#~ msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
-#~ msgstr "経路サンプリング法(SIMWE)を使用した流水門シミュレーション"
-
-#~ msgid "Overlay rasters"
-#~ msgstr "ラスターマップの重ね合せ "
-
-#~ msgid "Overlay vector maps"
-#~ msgstr "ベクトルマップの重ね合せ "
-
 #~ msgid "Overlays two vector maps."
 #~ msgstr "２つのベクトルマップの重ね合せ"
-
-#~ msgid "PNG export"
-#~ msgstr "PNGのエクスポート "
-
-#~ msgid "POV-Ray export"
-#~ msgstr "POV-Rayのエクスポート "
-
-#~ msgid "PPM export"
-#~ msgstr "PPMのエクスポート "
-
-#~ msgid "PPM from RGB export"
-#~ msgstr "RGBからPPMへのエクスポート "
-
-#~ msgid "Parallel lines"
-#~ msgstr "平行線"
-
-#~ msgid "Patch area Coeff Var"
-#~ msgstr "パッチ領域COEFF演算子"
-
-#~ msgid "Patch area Std Dev"
-#~ msgstr "パッチ領域標準偏差"
-
-#~ msgid "Patch area mean"
-#~ msgstr "平均パッチ領域"
-
-#~ msgid "Patch area range"
-#~ msgstr "パッチ領域の範囲"
-
-#~ msgid "Patch density"
-#~ msgstr "パッチ密度"
-
-#~ msgid "Patch number"
-#~ msgstr "パッチ番号"
-
-#~ msgid "Patch raster maps"
-#~ msgstr "ラスターマップの重ね合せ "
-
-#~ msgid "Patch vector maps"
-#~ msgstr "ベクトルマップのパッチ"
 
 #~ msgid "Path to the EPSG-codes file:"
 #~ msgstr "EPSGコードファイルのパス："
 
-#~ msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
-#~ msgstr "逐次最大事後確率推定法によりコンテキスト画像を分類します"
-
-#~ msgid "Performs network maintenance."
-#~ msgstr "ネットワークメンテナンスを実行"
-
 #~ msgid "Performs ordinary or block kriging."
 #~ msgstr "通常またはブロッククリギングを実行."
-
-#~ msgid "Performs raster map matrix filter."
-#~ msgstr "ラスターマップ行列フィルター実行"
-
-#~ msgid "Performs transformation of 2D vector features to 3D."
-#~ msgstr "2Dベクトルデータを3Dに変換します "
-
-#~ msgid "Perturb points"
-#~ msgstr "摂動点を作成"
 
 #~ msgid "Please select a cleaning tool to move down"
 #~ msgstr "下に移動するクリーニングツールを選択してください"
@@ -13374,128 +16196,11 @@ msgstr ""
 #~ msgid "Point dataset:"
 #~ msgstr "点データセット:"
 
-#~ msgid "Preferences"
-#~ msgstr "GUI設定 "
-
-#~ msgid "Principal components"
-#~ msgstr "主成分"
-
-#~ msgid "Principal components analysis (PCA) for image processing."
-#~ msgstr "画像処理のための主成分分析（PCA）"
-
-#~ msgid "Print/add/remove a timestamp for a 3D raster map"
-#~ msgstr "3Dラスターマップのタイムスタンプ出力/追加/削除 "
-
-#~ msgid "Prints terse list of category values found in a raster map layer."
-#~ msgstr "ラスターマップのカテゴリー値一覧を表示"
-
-#~ msgid "Prints vector map attributes."
-#~ msgstr "ベクトルマップの属性を出力"
-
-#~ msgid "Prints/sets DB connection for a vector map to attribute table."
-#~ msgstr "ベクトルマップと属性テーブルのDB接続を出力/設定"
-
-#~ msgid "Produces a vector map of specified contours from a raster map."
-#~ msgstr "ラスターマップからコンターを作成しベクトルマップを作成"
-
-#~ msgid "Produces the quantization file for a floating-point map."
-#~ msgstr "浮動小数点マップのための量子化ファイルを作成 "
-
-#~ msgid "Produces tilings of the source projection for use in the destination region and projection."
-#~ msgstr "使用中の領域と投影法でタイルを作成する "
-
 #~ msgid "Project Location"
 #~ msgstr "プロジェクトロケーション "
 
-#~ msgid "Quadrat indices"
-#~ msgstr "２次補間インデックス"
-
-#~ msgid "Quantiles for large data sets"
-#~ msgstr "大規模データセットの分位数 "
-
-#~ msgid "Quantization"
-#~ msgstr "量子化 "
-
-#~ msgid "Queries colors for a raster map layer."
-#~ msgstr "ラスターマップレイヤーのカラーから検索 "
-
-#~ msgid "Query any table"
-#~ msgstr "テーブルの検索"
-
-#~ msgid "Query colors by value"
-#~ msgstr "カラーの値から検索 "
-
-#~ msgid "Query raster maps"
-#~ msgstr "ラスターマップの検索 "
-
-#~ msgid "Query values by coordinates"
-#~ msgstr "座標値からの検索 "
-
-#~ msgid "Query vector attribute data"
-#~ msgstr "ベクトル属性データの検索"
-
-#~ msgid "Query vector map"
-#~ msgstr "クエリベクトルマップ"
-
-#~ msgid "Query with coordinate(s)"
-#~ msgstr "座標で検索"
-
-#~ msgid "Quit Cartographic Composer"
-#~ msgstr "カートグラフィックコンポーザーを終了する"
-
 #~ msgid "Quit digitizer"
 #~ msgstr "デジタイザー終了"
-
-#~ msgid "Quit modeler"
-#~ msgstr "モデラー終了"
-
-#~ msgid "RGB to HIS"
-#~ msgstr "RGB → HIS "
-
-#~ msgid "Random cells and vector points"
-#~ msgstr "ランダムセルとベクトルポイント"
-
-#~ msgid "Random deviates surface"
-#~ msgstr "ランダム逸脱曲面"
-
-#~ msgid "Random surface with spatial dependence"
-#~ msgstr "空間依存性ランダム曲面"
-
-#~ msgid "Randomly partition points into test/train sets."
-#~ msgstr "テスト/トレーニングセットにランダムな分割点を作成"
-
-#~ msgid "Range of category values"
-#~ msgstr "カテゴリー値の範囲"
-
-#~ msgid "Raster buffers and distance"
-#~ msgstr "ラスターバッファと距離"
-
-#~ msgid "Raster contours"
-#~ msgstr "ラスターコンターから作成"
-
-#~ msgid "Raster map calculator"
-#~ msgstr "ラスターマップカリキュレータ"
-
-#~ msgid "Raster to vector"
-#~ msgstr "ラスター → ベクトル "
-
-#, fuzzy
-#~ msgid "Raster3D calculations"
-#~ msgstr "ラスターマップカリキュレータ"
-
-#~ msgid "Rate of spread"
-#~ msgstr "拡散比率"
-
-#~ msgid "Raw binary array export"
-#~ msgstr "バイナリー配列へエクスポート "
-
-#, fuzzy
-#~ msgid "Re-projects a raster map from given project to the current project."
-#~ msgstr "あるロケーションのベクトルマップを現在のロケーションに投影変換"
-
-#, fuzzy
-#~ msgid "Re-projects a vector map from one project to the current project."
-#~ msgstr "あるロケーションのベクトルマップを現在のロケーションに投影変換"
 
 #~ msgid "Read projection and datum terms from a georeferenced data file"
 #~ msgstr "地理参照ファイルを選択"
@@ -13503,72 +16208,12 @@ msgstr ""
 #~ msgid "Ready."
 #~ msgstr "用意."
 
-#~ msgid "Rebuild topology on all vector maps"
-#~ msgstr "全ベクトルマップにトポロジを再構築"
-
-#~ msgid "Rebuilds topology on all vector maps in the current mapset."
-#~ msgstr "現在のマップセット内全ベクトルマップのトポロジを再構築"
-
-#~ msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
-#~ msgstr "物理的離散領域をグルーピングすることによってデータを再分類する "
-
-#~ msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
-#~ msgstr "定義されたサイズ（ヘクタール）をしきい値としてラスターマップを再分類"
-
-#~ msgid "Reclassify"
-#~ msgstr "再分類"
-
-#~ msgid "Reclassify by size"
-#~ msgstr "サイズで再分類"
-
-#~ msgid "Recode"
-#~ msgstr "再コード"
-
-#~ msgid "Recodes categorical raster maps."
-#~ msgstr "カテゴリー分けされたラスターマップの再コード化"
-
-#~ msgid "Reconnect vectors to database"
-#~ msgstr "ベクトルとデータベースの再接続"
-
-#~ msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
-#~ msgstr "コントロールポイントに基づいて、各ピクセルの座標変換を計算することによって画像を補正する"
-
-#~ msgid "Rectify image or raster"
-#~ msgstr "画像またはラスターを補正する"
-
-#~ msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
-#~ msgstr "累積コストで計算されたセルから最小コストのパスで再帰的にトレース"
-
 #~ msgid "Redo"
 #~ msgstr "やり直し"
-
-#~ msgid "Region boundaries"
-#~ msgstr "領域境界 "
-
-#~ msgid "Regularized spline tension"
-#~ msgstr "正則化スプライン法"
-
-#~ msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
-#~ msgstr "再補間およびオプションで入力ラスターマップから新しいラスターマップに異なる解像度の（おそらく）張力と平滑化でスプライン正則化を使って地形解析します "
 
 #, fuzzy
 #~ msgid "Remove MASK"
 #~ msgstr "削除 "
-
-#~ msgid "Remove action/data from model"
-#~ msgstr "モデルからアクション/データ消去"
-
-#~ msgid "Remove item"
-#~ msgstr "アイテム削除"
-
-#~ msgid "Remove outliers in point sets"
-#~ msgstr "ポイント群から異常値を削除"
-
-#~ msgid "Removes existing attribute table of a vector map."
-#~ msgstr "ベクトルマップ属性テーブルを消去"
-
-#~ msgid "Removes outliers from vector point data."
-#~ msgstr "ベクトルポイントデータから異常値を削除"
 
 #~ msgid ""
 #~ "Rename/delete selected\n"
@@ -13577,130 +16222,21 @@ msgstr ""
 #~ "名前変更 または 削除\n"
 #~ "(選択したマップセット・ロケーション)"
 
-#~ msgid "Renames a column in the attribute table connected to a given vector map."
-#~ msgstr "ベクトルマップに接続された属性テーブルの列名を変更します"
-
-#~ msgid "Renames data base element files in the user's current mapset."
-#~ msgstr "現在使用できるマップセットのエレメントファイル名を変更 "
-
 #, fuzzy
 #~ msgid "Renaming"
 #~ msgstr "名前変更 "
 
-#~ msgid "Report topology by category"
-#~ msgstr "カテゴリー別トポロジーのレポート作成"
-
 #~ msgid "Reports and Statistics"
 #~ msgstr "レポートと統計"
-
-#~ msgid "Reports and statistics"
-#~ msgstr "レポートと統計"
-
-#~ msgid "Reposition vector map"
-#~ msgstr "ベクトルマップの再配置"
 
 #~ msgid "Repository"
 #~ msgstr "リポジトリ"
 
-#, fuzzy
-#~ msgid "Reproject vector map from different GRASS project"
-#~ msgstr "あるロケーションのベクトルマップを現在のロケーションに投影変換"
-
-#~ msgid "Resample using aggregate statistics"
-#~ msgstr "総量統計を使用した再サンプリング "
-
-#~ msgid "Resample using multiple methods"
-#~ msgstr "複数手法による再サンプリング "
-
-#~ msgid "Resample using nearest neighbor"
-#~ msgstr "近傍情報を利用した再サンプリング "
-
-#~ msgid "Resample using spline tension"
-#~ msgstr " スプライン法による再サンプリング "
-
-#~ msgid "Resamples raster map layers to a coarser grid using aggregation."
-#~ msgstr "疎グリッドの集成使用したラスターレイヤーの再サンプリング "
-
-#~ msgid "Rescale"
-#~ msgstr "再スケール"
-
-#~ msgid "Rescale with histogram"
-#~ msgstr "ヒストグラムの再スケール"
-
-#~ msgid "Rescales histogram equalized the range of category values in a raster map layer."
-#~ msgstr "ラスターマップのカテゴリー値の範囲によりヒストグラムの再スケール"
-
-#~ msgid "Rescales the range of category values in a raster map layer."
-#~ msgstr "ラスターマップのカテゴリー値の範囲を変更します "
-
-#~ msgid "Richness"
-#~ msgstr "濃厚"
-
-#~ msgid "Run entire model"
-#~ msgstr "全体モデル実行"
-
-#~ msgid "Run model prepared by Graphical modeler"
-#~ msgstr "描画モデラーで作成されたモデルの実行"
-
 #~ msgid "Run python script"
 #~ msgstr "Pythonスクリプト実行"
 
-#~ msgid "SIMWE Overland flow modeling"
-#~ msgstr "SIMWE 地表流モデル "
-
-#~ msgid "SIMWE Sediment flux modeling"
-#~ msgstr "SIMWE 透過流束モデリング"
-
-#~ msgid "SPOT NDVI import"
-#~ msgstr "SPOT NDVI インポート "
-
-#~ msgid "SQL statement"
-#~ msgstr "SQL文"
-
-#~ msgid "SRTM HGT import"
-#~ msgstr "SRTM HGT インポート "
-
-#~ msgid "SVG export"
-#~ msgstr "SVGフォーマットのエクスポート "
-
-#~ msgid "Sample raster maps at point locations"
-#~ msgstr "ポイントの場所にあるラスターマップのサンプリング"
-
-#~ msgid "Sample raster neighborhood around points"
-#~ msgstr "ポイント近傍でのラスターマップのサンプリング "
-
-#~ msgid "Sample transects"
-#~ msgstr "サンプル横断面"
-
-#~ msgid "Sample transects (bearing/distance)"
-#~ msgstr "単位（角度/距離） "
-
-#~ msgid "Samples a raster map at vector point locations."
-#~ msgstr "ポイントロケーションでのラスターマップのサンプリング"
-
-#~ msgid "Satellite images products"
-#~ msgstr "衛星画像製品"
-
-#~ msgid "Satellite images tools"
-#~ msgstr "衛星画像ツール"
-
-#~ msgid "Save as"
-#~ msgstr "別名で保存 "
-
-#~ msgid "Save model to file"
-#~ msgstr "モデルをファイルに保存"
-
-#~ msgid "Save workspace to file"
-#~ msgstr "現在のワークスペースを保存 "
-
 #~ msgid "Search:"
 #~ msgstr "検索:"
-
-#~ msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
-#~ msgstr "経路サンプリング法(SIMWE)を使用した土砂流送 侵食/沈着 シミュレーション"
-
-#~ msgid "Select EPSG code of spatial reference system"
-#~ msgstr "EPSGコードを指定"
 
 #~ msgid ""
 #~ "Select an existing project location and mapset\n"
@@ -13718,60 +16254,14 @@ msgstr ""
 #~ msgid "Select output vector map:"
 #~ msgstr "出力ベクトルマップ選択："
 
-#~ msgid "Selects features from vector map (A) by features from other vector map (B)."
-#~ msgstr "ベクトルマップ（B）からのフィーチャによって他のベクトルマップ（A）からフィーチャを選択"
-
-#~ msgid "Sequential maximum a posteriori classification (SMAP)"
-#~ msgstr "逐次最大事後確率推定法 (SMAP)  "
-
 #~ msgid "Set computational region from selected map(s) (ignore NULLs)"
 #~ msgstr "選択したマップから計算領域をセット (未選択は不可) "
-
-#~ msgid "Set region"
-#~ msgstr "領域設定"
-
-#~ msgid "Set up sampling and analysis framework"
-#~ msgstr "サンプリングと解析フレームワークのための設定 "
 
 #~ msgid "Set up vector cleaning tools"
 #~ msgstr "ベクトルクリーニングツール設定"
 
-#~ msgid "Set vector map - database connection"
-#~ msgstr "ベクトルマップ - データベース 接続設定"
-
-#, fuzzy
-#~ msgid "Set/unset access to other mapsets in current project"
-#~ msgstr "現在のロケーションに他のマップセットの追加をセットする/しない "
-
-#~ msgid "Sets the boundary definitions for a raster map."
-#~ msgstr "ラスターマップの境界を定義 "
-
-#~ msgid "Shadows map"
-#~ msgstr "陰影図 "
-
-#~ msgid "Shannon's diversity"
-#~ msgstr "シャノン 多様性  "
-
-#~ msgid "Shape index"
-#~ msgstr "形状係数"
-
-#~ msgid "Shortest path"
-#~ msgstr "最短経路"
-
-#~ msgid "Shortest path for all pairs"
-#~ msgstr "すべてのペアの最短径路"
-
-#~ msgid "Shortest path for sets of features"
-#~ msgstr "フィーチャー間の最短経路"
-
-#~ msgid "Shortest path using timetables"
-#~ msgstr "時刻表による最短経路"
-
 #~ msgid "Show comp. extent"
 #~ msgstr "編集範囲表示"
-
-#~ msgid "Show settings"
-#~ msgstr "設定情報 "
 
 #~ msgid "Show text object"
 #~ msgstr "編集範囲表示"
@@ -13787,41 +16277,11 @@ msgstr ""
 #~ msgid "Show/hide scale bar"
 #~ msgstr "スケールと方位 表示/非表示"
 
-#~ msgid "Simpson's diversity"
-#~ msgstr "シンプソン多様性"
-
-#~ msgid "Simulates TOPMODEL which is a physically based hydrologic model."
-#~ msgstr "物理的流域水文モデルに基づくトポモデルをシュミレーション"
-
 #~ msgid "Sites to vector"
 #~ msgstr "サイト → ベクトル "
 
-#~ msgid "Slope and aspect"
-#~ msgstr "傾斜と方位"
-
-#~ msgid "Smooth or simplify"
-#~ msgstr "円滑化または単純化"
-
-#~ msgid "Solar irradiance and irradiation"
-#~ msgstr "太陽照度と照射 "
-
-#~ msgid "Solar radiance and shadows"
-#~ msgstr "太陽照度と影 "
-
 #~ msgid "Specify projection and datum terms using custom PROJ.4 parameters"
 #~ msgstr "PRJ.4パラメータ入力"
-
-#~ msgid "Spectral response"
-#~ msgstr "スペクトル応答 "
-
-#~ msgid "Split lines"
-#~ msgstr "線分の分割"
-
-#~ msgid "Split net"
-#~ msgstr "ネットの分割"
-
-#~ msgid "Split polylines"
-#~ msgstr "ポリラインの分割"
 
 #~ msgid "Start &GRASS"
 #~ msgstr "GRASSの起動(&G)"
@@ -13829,41 +16289,11 @@ msgstr ""
 #~ msgid "Starting GRASS for the first time"
 #~ msgstr "GRASSの初回実行"
 
-#~ msgid "Statistical overlay"
-#~ msgstr "統計オーバーレイ "
-
-#~ msgid "Statistics for clumped cells"
-#~ msgstr "クランプセルによる統計解析"
-
-#~ msgid "Steiner tree"
-#~ msgstr "シュタイナーツリー"
-
-#~ msgid "Sum area by raster map and category"
-#~ msgstr "ラスターマップをカテゴリー別に集計"
-
-#~ msgid "Support file maintenance"
-#~ msgstr "サポートファイルの保守 "
-
 #~ msgid "Surface generation program."
 #~ msgstr "曲面作成プログラム"
 
 #~ msgid "Surface interpolation utility for raster map."
 #~ msgstr "ラスターマップの曲面補間ユーティリティ"
-
-#~ msgid "TOPMODEL simulation"
-#~ msgstr "TOPMODELシミュレーション "
-
-#~ msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
-#~ msgstr "２つのラスターマップのカテゴリー関係（一致）表を作成します "
-
-#~ msgid "Target group"
-#~ msgstr "対象グループ"
-
-#~ msgid "Targets an imagery group to a GRASS location and mapset."
-#~ msgstr "画像グループをロケーションやマップセットの対象とする"
-
-#~ msgid "Tasseled cap vegetation index"
-#~ msgstr "タッセルドキャップ植生指数"
 
 #, fuzzy
 #~ msgid "Temporary map %s  already exists.\n"
@@ -13877,76 +16307,13 @@ msgstr ""
 #~ msgid "Temporary map '%s' with result "
 #~ msgstr "ファイルはすでに存在します"
 
-#~ msgid "Terra ASTER HDF import"
-#~ msgstr "Terra ASTER HDF インポート "
-
-#~ msgid "Terrain analysis"
-#~ msgstr "地形解析 "
-
-#~ msgid "Terrain parameters"
-#~ msgstr "地形パラメータ "
-
-#~ msgid "Test"
-#~ msgstr "テストモード "
-
-#~ msgid "Test database driver, database must exist and set by db.connect."
-#~ msgstr "データベースドライバのテスト, データベースは実存しdb.connectで接続されている必要があります"
-
-#~ msgid "Test normality"
-#~ msgstr "正規性検定"
-
-#~ msgid "Test/training point sets"
-#~ msgstr "テスト/トレーニング ポイントセット"
-
-#~ msgid "Textural features"
-#~ msgstr "テキストフィーチャ"
-
 #, fuzzy
 #~ msgid "The copied layer needs to be reprojected:"
 #~ msgstr "消去するレイヤー"
 
-#~ msgid "Thin"
-#~ msgstr "縮小"
-
 #, python-format
 #~ msgid "Threshold for %(num)s. tool '%(tool)s': %(thresh)s"
 #~ msgstr "しきい値 %(num)s. ツール '%(tool)s': %(thresh)s"
-
-#~ msgid "Tiling"
-#~ msgstr "タイル "
-
-#~ msgid "Timestamp"
-#~ msgstr "タイムスタンプ "
-
-#~ msgid "Toolset for cleaning topology of vector map."
-#~ msgstr "ベクトルマップのトポロジーの編集ツールキット"
-
-#~ msgid "Topographic correction"
-#~ msgstr "地形的補正 "
-
-#~ msgid "Topographic index map"
-#~ msgstr "地形図インデックスマップ "
-
-#~ msgid "Topology maintenance"
-#~ msgstr "トポロジーの保守 "
-
-#~ msgid "Total corrected area"
-#~ msgstr "修正エリア合計"
-
-#~ msgid "Transform features"
-#~ msgstr "フィーチャの変形"
-
-#~ msgid "Transform image"
-#~ msgstr "画像変換 "
-
-#~ msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
-#~ msgstr "カラーの定義をHIS（色相/照度/彩度）をRGB(赤/緑/青）に変換する"
-
-#~ msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
-#~ msgstr "カラーの定義をRGB(赤/緑/青）をHIS（色相/照度/彩度）に変換する"
-
-#~ msgid "Traveling salesman analysis"
-#~ msgstr "巡回セールスマン問題 "
 
 #~ msgid "Type to search database by map type or name. Use prefix 'r:', 'v:' and 'r3:'to show only raster, vector or 3D raster data, respectively. Use Python regular expressions to refine your search."
 #~ msgstr "マップタイプや名前でデータベースを検索します プレフィックス 'r:', 'v:' 及び 'r3:'を使用するとラスタ,ベクトル3Dラスタのみを表示できます.Python正規表現を使用して検索を絞り込みます."
@@ -13998,60 +16365,14 @@ msgstr ""
 #~ "現在の投影の単位はサポートされていません,\n"
 #~ " メートルが使用されます!"
 
-#~ msgid "Univariate attribute statistics for points"
-#~ msgstr "ポイントの単変量属性統計"
-
-#, fuzzy
-#~ msgid "Univariate raster3D dataset statistics"
-#~ msgstr "単変量ラスター統計"
-
-#~ msgid "Univariate statistics for attribute columns"
-#~ msgstr "属性列による単変量統計"
-
 #~ msgid "Unsupported units"
 #~ msgstr "サポートしていないレイヤーのタイプ '%s'"
-
-#~ msgid "Update area attributes from raster"
-#~ msgstr "ラスターからエリア属性を更新"
-
-#~ msgid "Update database values from vector"
-#~ msgstr "ベクトルのフィーチャからデータベースの値を設定"
-
-#~ msgid "Update map statistics"
-#~ msgstr "マップ統計の更新 "
-
-#~ msgid "Update point attributes from areas"
-#~ msgstr "エリアからポイントの属性を更新"
-
-#~ msgid "Update raster map statistics"
-#~ msgstr "ラスターマップ統計の更新 "
-
-#~ msgid "Uploads raster values at positions of vector points to the table."
-#~ msgstr "ポイントの位置のラスターの値をテーブルにアップロード"
-
-#~ msgid "Uploads vector values at positions of vector points to the table."
-#~ msgstr "ポイントの位置のベクトルの値をテーブルにアップロード"
 
 #~ msgid "Use defined projection"
 #~ msgstr "定義された投影法を使用"
 
-#~ msgid "User GUI preferences (display font, commands, digitizer, etc.)"
-#~ msgstr "ユーザーGUI設定 (フォント, コマンド,デジタイザー, etc.)  "
-
-#~ msgid "User access"
-#~ msgstr "ユーザーアクセス "
-
 #~ msgid "V&olumes"
 #~ msgstr "ボリューム(&o)"
-
-#~ msgid "VRML export"
-#~ msgstr "VRMLのエクスポート "
-
-#~ msgid "VTK export"
-#~ msgstr "VTKのエクスポート "
-
-#~ msgid "Validate entire model"
-#~ msgstr "全体モデル検証"
 
 #~ msgid "Variogram fitting"
 #~ msgstr "バリオグラム推定"
@@ -14059,33 +16380,12 @@ msgstr ""
 #~ msgid "Vector Toolbar"
 #~ msgstr "ベクトルツールバー "
 
-#~ msgid "Vector database connections"
-#~ msgstr "データベース接続"
-
 #, fuzzy
 #~ msgid "Vector map %s already exists. "
 #~ msgstr "ファイルはすでに存在します"
 
-#~ msgid "Vector to raster"
-#~ msgstr "ベクトル → ラスター "
-
 #~ msgid "Vector to volume"
 #~ msgstr "ベクトル → ボリューム "
-
-#~ msgid "Vertex connectivity"
-#~ msgstr "頂点接続"
-
-#~ msgid "Vis5D export"
-#~ msgstr "Vis5Dのエクスポート "
-
-#~ msgid "Vis5D import"
-#~ msgstr "Vis5Dのインポート "
-
-#~ msgid "Visibility"
-#~ msgstr "可視域"
-
-#~ msgid "Visibility network"
-#~ msgstr "ネットワーク可視化"
 
 #~ msgid "Volume"
 #~ msgstr "ボリューム"
@@ -14093,27 +16393,12 @@ msgstr ""
 #~ msgid "Volume calculator"
 #~ msgstr "ボリュームカリキュレータ"
 
-#~ msgid "Voronoi diagram/Thiessen polygons"
-#~ msgstr "ボロノイ図/ティーセンポリゴン"
-
 #~ msgid "Voxel statistics"
 #~ msgstr "3Dグリッド統計"
-
-#~ msgid "WFS"
-#~ msgstr "WFS"
 
 #, fuzzy
 #~ msgid "Warning: "
 #~ msgstr "警告"
-
-#~ msgid "Watershed analysis"
-#~ msgstr "分水界解析 "
-
-#~ msgid "Watershed basin creation"
-#~ msgstr "分水界作成 "
-
-#~ msgid "Watershed subbasins"
-#~ msgstr "分水界小盆地の作成"
 
 #, fuzzy
 #~ msgid ""
@@ -14123,14 +16408,8 @@ msgstr ""
 #~ "世界をリードするオープンソースGIS \n"
 #~ "GRASS GIS %s へようこそ"
 
-#~ msgid "Wildfire modeling"
-#~ msgstr "森林火災モデリング "
-
 #~ msgid "Work in progress! No functionality provided."
 #~ msgstr "作業中です! 他の機能は動作しません."
-
-#~ msgid "Zero-crossing \"edge detection\" raster function for image processing."
-#~ msgstr "ゼロ交差法を用いて画像のエッジを決定します "
 
 #~ msgid "boundary"
 #~ msgstr "境界"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2025-08-26 13:29+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/lv/>\n"
@@ -676,14 +676,18 @@ msgstr "Renderēšana neizdevās: %s"
 msgid "Rendering aborted"
 msgstr "Renderēšana atcelta"
 
-msgid "Downloading data "
-msgstr "Lejupielādē datus"
-
-msgid "Rendering & "
-msgstr "Renderē &"
+#, fuzzy, python-brace-format
+#| msgid "Downloading data..."
+msgid "Rendering & downloading data {layers}..."
+msgstr "Lejupielādē datus..."
 
 msgid "Rendering..."
 msgstr "Renderē..."
+
+#, fuzzy, python-brace-format
+#| msgid "Downloading data..."
+msgid "Downloading data {layers}..."
+msgstr "Lejupielādē datus..."
 
 msgid "Trying to recover from default region..."
 msgstr ""
@@ -859,7 +863,8 @@ msgid ""
 "Details: %(detail)s"
 msgstr ""
 
-msgid "Unable to set "
+#, python-brace-format
+msgid "Unable to set '{group}:{key}:{subkey}'"
 msgstr ""
 
 #, python-format
@@ -1713,7 +1718,7 @@ msgid "Table"
 msgstr "Tabula"
 
 #, fuzzy
-msgid " (read-only)"
+msgid "Table (read-only)"
 msgstr " (tikai lasīšanai)"
 
 msgid "SQL Query"
@@ -2305,7 +2310,11 @@ msgid ""
 msgstr ""
 
 #, fuzzy, python-brace-format
-msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
+msgid "The raster map {map_name} exists. Do you want to overwrite?"
+msgstr "{pa} jau eksistē. Vai vēlies to pārrakstīt?"
+
+#, fuzzy, python-brace-format
+msgid "The vector map {map_name} exists. Do you want to overwrite?"
 msgstr "{pa} jau eksistē. Vai vēlies to pārrakstīt?"
 
 msgid "Rectifying images, please wait..."
@@ -2568,12 +2577,9 @@ msgstr "Saglabāt ekrāna saturu datnē"
 msgid "Reload GCPs from POINTS file"
 msgstr ""
 
-msgid "Set map canvas for "
+#, python-brace-format
+msgid "Set map canvas for {zoom_back} / Zoom to map"
 msgstr ""
-
-#, fuzzy
-msgid " / Zoom to map"
-msgstr "/ Tuvināt līdz kartei"
 
 #, fuzzy
 msgid "Update GCP coordinates"
@@ -2810,7 +2816,9 @@ msgstr ""
 msgid "<not defined>"
 msgstr "<nav definēts>"
 
-msgid "Condition: "
+#, fuzzy, python-brace-format
+#| msgid "Condition: "
+msgid "Condition: {label}"
 msgstr "Nosacījums: "
 
 msgid "Condition: not defined"
@@ -3429,7 +3437,8 @@ msgstr "Fonta izmērs:"
 msgid "Example"
 msgstr "Piemērs"
 
-msgid "Enter parameters for '"
+#, python-brace-format
+msgid "Enter parameters for '{tool}'"
 msgstr ""
 
 msgid "Close this window without executing the command (Ctrl+Q)"
@@ -3792,11 +3801,14 @@ msgstr ""
 msgid "Not selectable element"
 msgstr ""
 
-msgid "Mapset"
-msgstr "Karšu kopa"
+#, fuzzy, python-brace-format
+#| msgid "Mapset: %s"
+msgid "Mapset: {mapset}"
+msgstr "Karšu kopa: %s"
 
-msgid "Type: "
-msgstr "Tips: "
+#, python-brace-format
+msgid "Type: {element_type}"
+msgstr ""
 
 #, python-format
 msgid "GSelect: invalid item: %s"
@@ -4194,7 +4206,7 @@ msgstr "Objekta krāsa:"
 msgid "Area fill color:"
 msgstr "Poligona aizpildījuma krāsa:"
 
-msgid "Random colors according to category number "
+msgid "Random colors according to category number"
 msgstr ""
 
 msgid "Symbol:"
@@ -4293,6 +4305,9 @@ msgid ""
 "    - You may only write to the current mapset.\n"
 "    - You may only write to mapsets which you own."
 msgstr ""
+
+msgid "Mapset"
+msgstr "Karšu kopa"
 
 msgid "Owner"
 msgstr "Īpašnieks"
@@ -5105,9 +5120,6 @@ msgstr "Priekšskatījums"
 
 msgid "Training"
 msgstr "Apmācība"
-
-msgid "/ Zoom to map"
-msgstr "/ Tuvināt līdz kartei"
 
 msgid "std dev"
 msgstr ""
@@ -6334,7 +6346,9 @@ msgstr ""
 msgid "Set opacity of <{}>"
 msgstr "Iestatīt <%s> caurspīdīgumu"
 
-msgid "Layer group:"
+#, fuzzy, python-brace-format
+#| msgid "Layer group:"
+msgid "Layer group: {number}"
 msgstr "Slāņu grupa:"
 
 msgid "Click to edit layer settings"
@@ -7230,8 +7244,10 @@ msgstr "Mērīšana ir pabeigta"
 msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
 msgstr ""
 
-msgid "Measuring distance"
-msgstr "Attāluma mērīšana"
+#, fuzzy, python-brace-format
+#| msgid "Measuring distance:"
+msgid "Measuring distance ({units}):"
+msgstr "Mēra attālumu:"
 
 msgid "Measuring distance:"
 msgstr "Mēra attālumu:"
@@ -7357,6 +7373,3942 @@ msgstr "Rastra leģenda"
 msgid "Property does not exist: %s"
 msgstr "Īpašība %s neeksistē"
 
+msgid "&File"
+msgstr "&Datne"
+
+msgid "New"
+msgstr "Jauns"
+
+msgid "Create new workspace"
+msgstr "Izveidot jaunu darbtelpu"
+
+msgid "Open"
+msgstr "Atvērt"
+
+msgid "Load workspace from file"
+msgstr "Ielādēt darbtelpu no datnes"
+
+msgid "Save"
+msgstr "Saglabāt"
+
+msgid "Save as"
+msgstr "Saglabāt kā"
+
+msgid "Save workspace to file"
+msgstr "Saglabāt darbtelpu failā"
+
+#, fuzzy
+#| msgid "Close workspace file"
+msgid "Close workspace file"
+msgstr "Aizvērt darbtelpas failu"
+
+msgid "Map display"
+msgstr "Kartes skats"
+
+msgid "Add raster"
+msgstr "Pievienot rastru"
+
+#, fuzzy
+#| msgid "Add raster map layer"
+msgid "Add raster map layer to current display"
+msgstr "Pievienot rastra karti"
+
+msgid "Add vector"
+msgstr "Pievienot vektorus"
+
+#, fuzzy
+#| msgid "Add vector map layer"
+msgid "Add vector map layer to current display"
+msgstr "Pievienot vektoru karti"
+
+msgid "Add multiple rasters or vectors"
+msgstr "Pievienot vairākas rastra vai vektoru kartes"
+
+#, fuzzy
+#| msgid "Add multiple rasters or vectors"
+msgid "Add multiple raster or vector map layers to current display"
+msgstr "Pievienot vairākas rastra vai vektoru kartes"
+
+msgid "Add RGB raster layer"
+msgstr "Pievienot RGB rastra slāni"
+
+#, fuzzy
+#| msgid "Add 3D raster map layer"
+msgid "Add RGB raster map layer to current display"
+msgstr "Pievienot 3D rastra slāni"
+
+msgid "Add web service layer"
+msgstr "Pievienot tīmekļa servisa slāni"
+
+msgid "New map display window"
+msgstr "Jauns kartes skata logs"
+
+msgid "Open new map display window"
+msgstr "Atver jaunu kartes skata logu"
+
+msgid "Render all map displays"
+msgstr "Zīmēt visus kartes skatus"
+
+#, fuzzy
+#| msgid "Close all open map display windows"
+msgid "Re-render maps in all open map display windows"
+msgstr "Aizvērt visus šobrīd atvērtos kartes skata logus"
+
+msgid "Close current map display window"
+msgstr "Aizvērt pašreizējo kartes skata logu"
+
+msgid "Close all open map display windows"
+msgstr "Aizvērt visus šobrīd atvērtos kartes skata logus"
+
+msgid "Simplified raster import with reprojection"
+msgstr "Vienkāršota rastra importēšana ar pārprojecēšanu"
+
+msgid "Imports raster data into a GRASS raster map using GDAL library."
+msgstr ""
+
+msgid "Import of common raster formats"
+msgstr "Importēt biežāk sastopamos rastra datu formātus"
+
+#, fuzzy
+#| msgid "ASCII x,y,z points export"
+msgid "ASCII x,y,z point import and gridding"
+msgstr "ASCII x,y,z punktu eksports"
+
+msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
+msgstr ""
+
+msgid "ASCII grid import"
+msgstr "ASCII tīkla imports"
+
+msgid "Converts a GRASS ASCII raster file to binary raster map."
+msgstr ""
+
+msgid "ASCII polygons, lines, and point import"
+msgstr ""
+
+msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgstr ""
+
+msgid "Raw binary array import"
+msgstr ""
+
+msgid "Import a binary raster file into a GRASS raster map layer."
+msgstr ""
+
+msgid "GRIDATB.FOR import"
+msgstr "GRIDATB.FOR importēšana"
+
+msgid "Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Matlab 2D array export"
+msgid "Matlab 2D array import"
+msgstr "Matlab 2D masīva eksports"
+
+msgid "Imports a binary MAT-File(v4) to a GRASS raster."
+msgstr ""
+
+msgid "PNG import"
+msgstr "PNG importēšana"
+
+msgid "Imports non-georeferenced PNG format image."
+msgstr ""
+
+msgid "SPOT NDVI import"
+msgstr "SPOT NDVI importēšana"
+
+msgid "Imports SPOT VGT NDVI data into a raster map."
+msgstr ""
+
+msgid "SRTM HGT import"
+msgstr "SRTM HGT importēšana"
+
+msgid "Imports SRTM HGT files into raster map."
+msgstr ""
+
+msgid "Terra ASTER HDF import"
+msgstr "Terra ASTER HDF importēšana"
+
+msgid "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp."
+msgstr ""
+
+msgid "LAS LiDAR points import"
+msgstr "LAS LiDAR punktu importēšana"
+
+#, fuzzy
+msgid "Point cloud (LAS LiDAR) import"
+msgstr "LAS LiDAR punktu importēšana"
+
+#, fuzzy
+msgid "WMS/WMTS import"
+msgstr "SRTM HGT importēšana"
+
+msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Pack raster map"
+msgid "Unpack raster map"
+msgstr "Sapakot rastra karti"
+
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
+msgstr ""
+
+#, fuzzy
+msgid "Reproject raster map from different GRASS project"
+msgstr "3. Izvēlieties GRASS karšu kopu"
+
+msgid "Re-projects a raster map from given project to the current project."
+msgstr ""
+
+msgid "Simplified vector import with reprojection"
+msgstr "Vienkāršota vektordatu importēšana ar pārprojecēšanu"
+
+msgid "Imports vector data into a GRASS vector map using OGR library."
+msgstr ""
+
+msgid "Import of common vector formats"
+msgstr "Importēt biežāk sastopamos vektordatu formātus"
+
+msgid "ASCII points or GRASS ASCII format"
+msgstr "ASCII punkti vai GRASS ASCII formāts"
+
+msgid "Creates a vector map from an ASCII points file or ASCII vector file."
+msgstr ""
+
+msgid "ASCII points as a vector lines"
+msgstr "ASCII punkti kā vektoru līnijas"
+
+msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
+msgstr ""
+
+msgid "DXF import"
+msgstr "DXF imports"
+
+msgid "Converts files in DXF format to GRASS vector map format."
+msgstr ""
+
+msgid "WFS"
+msgstr "WFS"
+
+msgid "Imports GetFeature from a WFS server."
+msgstr ""
+
+msgid "ESRI e00 import"
+msgstr "ESRI e00 imports"
+
+#, fuzzy
+#| msgid "Import vector map"
+msgid "Imports E00 file into a vector map."
+msgstr "Importēt vektrdatu karti"
+
+msgid "Geonames import"
+msgstr "Geonames imports"
+
+msgid "Imports geonames.org country files into a vector points map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Matlab 2D array export"
+msgid "Matlab array or Mapgen format import"
+msgstr "Matlab 2D masīva eksports"
+
+msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr ""
+
+#, fuzzy
+#| msgid "Clean vector map"
+msgid "Unpack vector map"
+msgstr "Sakopt vektordatu karti"
+
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
+msgstr ""
+
+#, fuzzy
+msgid "Reproject vector map from different GRASS project"
+msgstr "3. Izvēlieties GRASS karšu kopu"
+
+msgid "Re-projects a vector map from one project to the current project."
+msgstr ""
+
+msgid "Import 3D raster data"
+msgstr "Importēt 3D rastra datus"
+
+#, fuzzy
+#| msgid "ASCII grid import"
+msgid "ASCII 3D import"
+msgstr "ASCII tīkla imports"
+
+msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
+msgstr ""
+
+msgid "Raw binary array 3D import"
+msgstr ""
+
+msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "DXF import"
+msgid "Vis5D import"
+msgstr "DXF imports"
+
+msgid "Import 3-dimensional Vis5D files."
+msgstr ""
+
+#, fuzzy
+#| msgid "LAS LiDAR points import"
+msgid "LiDAR 3D import"
+msgstr "LAS LiDAR punktu importēšana"
+
+#, fuzzy
+#| msgid "3D raster statistics"
+msgid "XYZ to 3D raster series"
+msgstr "3D rastra statistika"
+
+msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export database table"
+msgid "Import database table"
+msgstr "Eksportēt datubāzes tabulu"
+
+msgid "Common import formats"
+msgstr "Biežāk sastopamie formāti"
+
+#, fuzzy
+#| msgid "Export attribute table"
+msgid "Imports attribute tables in various formats."
+msgstr "Eksportēt atribūtu tabulu"
+
+msgid "Export raster map"
+msgstr "Eksportēt rastra karti"
+
+msgid "Common export formats"
+msgstr "Biežāk sastopamie formāti"
+
+msgid "Exports GRASS raster maps into GDAL supported formats."
+msgstr ""
+
+msgid "ASCII grid export"
+msgstr "ASCII tīkla eksports"
+
+msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgstr ""
+
+msgid "ASCII x,y,z points export"
+msgstr "ASCII x,y,z punktu eksports"
+
+msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
+msgstr ""
+
+msgid "GRIDATB.FOR export"
+msgstr "GRIDATB.FOR eksports"
+
+msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
+msgstr ""
+
+msgid "Matlab 2D array export"
+msgstr "Matlab 2D masīva eksports"
+
+msgid "Exports a GRASS raster to a binary MAT-File."
+msgstr ""
+
+#, fuzzy
+#| msgid "Matlab 2D array export"
+msgid "Raw binary array export"
+msgstr "Matlab 2D masīva eksports"
+
+msgid "Exports a GRASS raster to a binary array."
+msgstr ""
+
+#, fuzzy
+#| msgid "PNG export"
+msgid "MPEG-1 export"
+msgstr "PNG eksports"
+
+msgid "Converts raster map series to MPEG movie."
+msgstr ""
+
+msgid "PNG export"
+msgstr "PNG eksports"
+
+msgid "Export a GRASS raster map as a non-georeferenced PNG image."
+msgstr ""
+
+msgid "PPM export"
+msgstr "PPM eksports"
+
+msgid "Converts a GRASS raster map to a PPM image file."
+msgstr ""
+
+#, fuzzy
+#| msgid "PPM export"
+msgid "PPM from RGB export"
+msgstr "PPM eksports"
+
+msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
+msgstr ""
+
+#, fuzzy
+#| msgid "PNG export"
+msgid "POV-Ray export"
+msgstr "PNG eksports"
+
+msgid "Converts a raster map layer into a height-field file for POV-Ray."
+msgstr ""
+
+#, fuzzy
+#| msgid "PPM export"
+msgid "VRML export"
+msgstr "PPM eksports"
+
+msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
+msgstr ""
+
+msgid "VTK export"
+msgstr "VTK eksports"
+
+msgid "Converts raster maps into the VTK-ASCII format."
+msgstr ""
+
+msgid "Pack raster map"
+msgstr "Sapakot rastra karti"
+
+msgid "Exports a raster map as GRASS specific archive file"
+msgstr ""
+
+msgid "Export vector map"
+msgstr "Eksportēt vektrodatus"
+
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
+msgstr ""
+
+#, fuzzy
+#| msgid "ASCII points or GRASS ASCII format"
+msgid "ASCII points or GRASS ASCII vector export"
+msgstr "ASCII punkti vai GRASS ASCII formāts"
+
+msgid "Exports a vector map to a GRASS ASCII vector representation. By default only features with category are exported. To export all features use 'layer=-1'."
+msgstr ""
+
+msgid "DXF export"
+msgstr "DXF eksports"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Exports vector map to DXF file format."
+msgstr "Eksportēt vektrodatus"
+
+#, fuzzy
+#| msgid "PNG export"
+msgid "PostGIS export"
+msgstr "PNG eksports"
+
+msgid "Exports a vector map layer to PostGIS feature table."
+msgstr ""
+
+msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
+msgstr ""
+
+msgid "SVG export"
+msgstr "SVG eksports"
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Exports a vector map to SVG file."
+msgstr "Eksportēt vektrodatus"
+
+msgid "Converts a vector map to VTK ASCII output."
+msgstr ""
+
+#, fuzzy
+#| msgid "Clean vector map"
+msgid "Pack vector map"
+msgstr "Sakopt vektordatu karti"
+
+msgid "Exports a vector map as GRASS specific archive file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to image"
+msgid "Export to LiDAR format"
+msgstr "Eksportēt kā attēlu"
+
+msgid "Export 3D raster maps"
+msgstr "Eksportēt 3D rastra kartes"
+
+#, fuzzy
+#| msgid "ASCII grid export"
+msgid "ASCII 3D export"
+msgstr "ASCII tīkla eksports"
+
+msgid "Converts a 3D raster map layer into a ASCII text file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Matlab 2D array export"
+msgid "Raw binary array 3D export"
+msgstr "Matlab 2D masīva eksports"
+
+msgid "Exports a GRASS 3D raster map to a binary array."
+msgstr ""
+
+#, fuzzy
+#| msgid "DXF export"
+msgid "Vis5D export"
+msgstr "DXF eksports"
+
+msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr ""
+
+msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgstr ""
+
+#, fuzzy
+#| msgid "DXF export"
+msgid "NetCDF export"
+msgstr "DXF eksports"
+
+#, fuzzy
+#| msgid "Export 3D raster maps"
+msgid "Export a 3D raster map as netCDF file."
+msgstr "Eksportēt 3D rastra kartes"
+
+msgid "Export database table"
+msgstr "Eksportēt datubāzes tabulu"
+
+#, fuzzy
+#| msgid "Export attribute table"
+msgid "Exports attribute tables into various formats."
+msgstr "Eksportēt atribūtu tabulu"
+
+msgid "Link external raster data"
+msgstr "Saitēt ārējos rastra datus"
+
+msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
+msgstr ""
+
+msgid "Link external vector data"
+msgstr "Saitēt ārējos vektordatus"
+
+msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Output format for raster data"
+msgstr "Importēt rastra datus"
+
+msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Output format for vector data"
+msgstr "Importēt vektordatus"
+
+msgid "Defines vector output format utilizing OGR library."
+msgstr ""
+
+msgid "Manage maps"
+msgstr "Pārvaldīt kartes"
+
+msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
+msgstr ""
+
+msgid "List"
+msgstr "Parādīt"
+
+msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
+msgstr ""
+
+msgid "Renames data base element files in the user's current mapset."
+msgstr ""
+
+msgid "Delete"
+msgstr "Dzēst"
+
+msgid "Removes data base element files from the user's current mapset using the search pattern."
+msgstr ""
+
+#, fuzzy
+msgid "Download project from web"
+msgstr "Lejupielādētais novietojums nav derīgs"
+
+msgid "Download GRASS project from the web Get GRASS project from an URL or file path"
+msgstr ""
+
+msgid "Rebuild or remove all addons"
+msgstr ""
+
+msgid "Rebuilds or removes all locally installed GRASS Addons extensions. By default only extensions built against different GIS Library are rebuilt."
+msgstr ""
+
+msgid "Map type conversions"
+msgstr "Kartes tipa konvertēšana"
+
+msgid "Raster to vector"
+msgstr "Rastru par vektoriem"
+
+#, fuzzy
+#| msgid "Select raster/vector maps."
+msgid "Converts a raster map into a vector map."
+msgstr "Izvēlieties rastra/vektordatu kartes."
+
+#, fuzzy
+#| msgid "Insert existing 3D raster map"
+msgid "Raster series to 3D raster"
+msgstr "Ievietot eksistējošu 3D rastra karti"
+
+msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "Raster 2.5D to 3D raster"
+msgstr "Rastru par vektoriem"
+
+msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
+msgstr ""
+
+msgid "Vector to raster"
+msgstr "Vektorus par rastru"
+
+msgid "Converts (rasterize) a vector map into a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector to raster"
+msgid "Vector to 3D raster"
+msgstr "Vektorus par rastru"
+
+msgid "Converts a vector map (only points) into a 3D raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "2D vector to 3D vector"
+msgstr "Rastru par vektoriem"
+
+msgid "Performs transformation of 2D vector features to 3D."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster statistics"
+msgid "3D raster to raster series"
+msgstr "3D rastra statistika"
+
+#, fuzzy
+#| msgid "Name for new 3D raster map to create"
+msgid "Converts 3D raster maps to 2D raster maps"
+msgstr "Jaunveidojamās 3D rastra kartes nosaukums"
+
+msgid "Launches Simple Python Editor."
+msgstr "Startē vienkāršu Python redaktoru."
+
+msgid "Launch script"
+msgstr "Darbināt skriptu"
+
+#, fuzzy
+#| msgid "Launch script"
+msgid "Launches script file."
+msgstr "Darbināt skriptu"
+
+msgid "Launch Jupyter Notebook interface."
+msgstr ""
+
+msgid "Graphical modeler"
+msgstr "Grafiskais modelētājs"
+
+#, fuzzy
+#| msgid "Graphical modeler"
+msgid "Launch Graphical modeler"
+msgstr "Grafiskais modelētājs"
+
+#, fuzzy
+#| msgid "Graphical Modeler"
+msgid "Run model prepared by Graphical modeler"
+msgstr "Grafiskais modelētājs"
+
+msgid "Manage Ground Control Points for Georectification"
+msgstr ""
+
+msgid "Animation tool"
+msgstr "Animāciju rīks"
+
+#, fuzzy
+#| msgid "Animation tool"
+msgid "Launch animation tool."
+msgstr "Animāciju rīks"
+
+#, fuzzy
+#| msgid "Cartographic Composer"
+msgid "Launch Cartographic Composer"
+msgstr "Kartogrāfisko salikumu veidotājs"
+
+#, fuzzy
+#| msgid "Map Swipe"
+msgid "Launch Map Swipe"
+msgstr "Rādīt blakus"
+
+msgid "Close graphical user interface."
+msgstr ""
+
+#, fuzzy
+#| msgid "Close GUI and exit GRASS GIS shell."
+msgid "Close GUI and exit GRASS shell."
+msgstr "Aizvērt grafisko vidi un iziet no GRASS GIS čaulas."
+
+msgid "&Settings"
+msgstr "Ie&statījumi"
+
+msgid "Show current region"
+msgstr "Parādīt pašreizējo reģionu"
+
+msgid "Shows the extent and resolution of the computational region."
+msgstr "Parāda aprēķinu reģiona apjomu un izšķirtspēju."
+
+msgid "Show region using latitude and longitude"
+msgstr ""
+
+msgid "Show current region extent in Map Display"
+msgstr "Parādīt pašreizējo reģiona apjomu kartes skatā"
+
+msgid "Shows the extent of the computational region in Map Display."
+msgstr "Parāda aprēķinu reģiona apjomu kartes skatā."
+
+msgid "Set region"
+msgstr "Iestatīt reģionu"
+
+msgid "Manages the boundary definitions for the geographic region."
+msgstr ""
+
+msgid "GRASS working environment"
+msgstr "GRASS darba vide"
+
+msgid "Mapset access"
+msgstr "Karšu kopu piekļuve"
+
+#, fuzzy
+msgid "Set/unset access to other mapsets in current project"
+msgstr "Izveidot jaunu karšu kopu izvēlētajā novietojumā"
+
+msgid "User access"
+msgstr "Lietotāju piekļuve"
+
+msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
+msgstr ""
+
+msgid "Change working environment"
+msgstr "Mainīt darba vidi"
+
+msgid "Changes or reports current mapset. Optionally, creates new mapset or lists available mapsets in given project (location)."
+msgstr ""
+
+#, fuzzy
+msgid "Change project (location) and mapset"
+msgstr "Mainīt novietojumu un karšu kopu"
+
+#, fuzzy
+msgid "Change current project and mapset."
+msgstr "Mainīt novietojumu un karšu kopu"
+
+#, fuzzy
+#| msgid "Manage maps"
+msgid "Change mapset"
+msgstr "Pārvaldīt kartes"
+
+#, fuzzy
+msgid "Change current mapset."
+msgstr "Mainīt novietojumu un karšu kopu"
+
+msgid "Change working directory"
+msgstr "Mainīt darba mapi"
+
+msgid "Show settings"
+msgstr "Rādīt iestatījumus"
+
+msgid "Outputs and modifies the user's current GRASS variable settings."
+msgstr ""
+
+msgid "Change settings"
+msgstr "Mainīt iestatījumus"
+
+msgid "Outputs and modifies the user's current GRASS variable settings. Prints all defined GRASS variables if no option is given."
+msgstr ""
+
+#, fuzzy
+msgid "Create new project (location)"
+msgstr "Veidot jaunu novietojumu"
+
+#, fuzzy
+msgid "Launches project wizard to create a new GRASS project (also known as location)."
+msgstr "Vai vēlaties pārtraukt novietojuma lejupielādi?"
+
+#, fuzzy
+msgid "Creates new mapset in the current project, changes current mapset."
+msgstr "Izveidot jaunu karšu kopu izvēlētajā novietojumā"
+
+#, fuzzy
+#| msgid "Manage projections"
+msgid "Map projections"
+msgstr "Pārvaldīt projekcijas"
+
+#, fuzzy
+#| msgid "Display map"
+msgid "Display map projection"
+msgstr "Rādīt karti"
+
+msgid "Converts coordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgstr ""
+
+msgid "Manage projections"
+msgstr "Pārvaldīt projekcijas"
+
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions). Can also be used to create new GRASS projects."
+msgstr ""
+
+#, fuzzy
+#| msgid "Coordinates"
+msgid "Convert coordinates"
+msgstr "Koordinātes"
+
+msgid "Converts coordinates from one projection to another (cs2cs frontend)."
+msgstr ""
+
+msgid "Addons extensions"
+msgstr "Paplašinājumi"
+
+msgid "Install extension from addons"
+msgstr ""
+
+msgid "Installs new extension from GRASS AddOns repository."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage installed extension"
+msgstr "Pārvaldīt tabulas"
+
+msgid "Updates or removes installed GRASS AddOns extension(s)."
+msgstr ""
+
+msgid "Preferences"
+msgstr "Iestatījumi"
+
+msgid "User GUI preferences (display font, commands, digitizer, etc.)"
+msgstr ""
+
+msgid "&Raster"
+msgstr "&Rastrs"
+
+msgid "Develop raster map"
+msgstr "Veidot rastra karti"
+
+msgid "Compress/decompress"
+msgstr ""
+
+msgid "Compresses and decompresses raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "boundaries"
+msgid "Region boundaries"
+msgstr "robežas"
+
+msgid "Sets the boundary definitions for a raster map."
+msgstr ""
+
+msgid "Manage NULL values"
+msgstr "Pārvaldīt NULL vērtības"
+
+msgid "Manages NULL-values of given raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "animation"
+msgid "Quantization"
+msgstr "animācija"
+
+msgid "Produces the quantization file for a floating-point map."
+msgstr ""
+
+#, fuzzy
+msgid "Timestamp"
+msgstr "Laika zīmogs"
+
+msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Resample using aggregate statistics"
+msgstr "Rastra statistika"
+
+msgid "Resamples raster map layers to a coarser grid using aggregation."
+msgstr ""
+
+msgid "Resample using multiple methods"
+msgstr ""
+
+msgid "Resamples raster map to a finer grid using interpolation."
+msgstr ""
+
+msgid "Resample using nearest neighbor"
+msgstr ""
+
+msgid "GRASS raster map layer data resampling capability."
+msgstr ""
+
+msgid "Resample using spline tension"
+msgstr ""
+
+msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
+msgstr ""
+
+msgid "Resample using bspline"
+msgstr ""
+
+msgid "Performs bilinear or bicubic spline interpolation with Tykhonov regularization."
+msgstr ""
+
+msgid "Resample using analytic kernel"
+msgstr ""
+
+msgid "Resamples raster map layers using an analytic kernel."
+msgstr ""
+
+#, fuzzy
+#| msgid "Topology maintenance"
+msgid "Support file maintenance"
+msgstr "Topoloģijas uzturēšana"
+
+msgid "Allows creation and/or modification of raster map layer support files."
+msgstr ""
+
+#, fuzzy
+#| msgid "Reports and statistics"
+msgid "Update map statistics"
+msgstr "Atskaites un statistika"
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Update raster map statistics"
+msgstr "Aprakstošā statistika"
+
+msgid "Tiling"
+msgstr ""
+
+msgid "Produces tilings of the source projection for use in the destination region and projection."
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster)"
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "New raster map"
+msgid "Tile raster map"
+msgstr "Jauna rastra karte"
+
+#, fuzzy
+#| msgid "Add created raster map into layer tree"
+msgid "Splits a raster map into tiles."
+msgstr "Pievienot izveidoto rastra karti projekta slāņu sarakstam"
+
+#, fuzzy
+#| msgid "Manage tables"
+msgid "Manage semantic labels"
+msgstr "Pārvaldīt tabulas"
+
+msgid "Manages semantic label information assigned to a single raster map or to a list of raster maps."
+msgstr ""
+
+msgid "Manage colors"
+msgstr "Pārvaldīt krāsas"
+
+msgid "Color tables"
+msgstr "Krāsu tabulas"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a raster map."
+msgstr "Izveidot jaunu rastra kartes krāsu tabulu"
+
+#, fuzzy
+#| msgid "Color tables"
+msgid "Color tables (stddev)"
+msgstr "Krāsu tabulas"
+
+msgid "Sets color rules based on stddev from a raster map's mean value."
+msgstr ""
+
+#, fuzzy
+#| msgid "Set color table interactively"
+msgid "Manage color rules interactively"
+msgstr "Interaktīvi iestatīt krāsu tabulu"
+
+msgid "Interactive management of raster color tables."
+msgstr ""
+
+msgid "Export color table"
+msgstr "Eksportēt krāsu tabulu"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Exports the color table associated with a raster map."
+msgstr "Izveidot jaunu rastra kartes krāsu tabulu"
+
+#, fuzzy
+#| msgid "Buffer rasters"
+msgid "Blend 2 color rasters"
+msgstr "Rastra buferzonas"
+
+msgid "Blends color components of two raster maps by a given ratio."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create LRS"
+msgid "Create RGB"
+msgstr "Izveidot LRS"
+
+msgid "Combines red, green and blue raster maps into a single composite raster map."
+msgstr ""
+
+msgid "RGB to HIS"
+msgstr ""
+
+msgid "Generates red, green and blue (RGB) raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
+msgstr ""
+
+msgid "Split raster into RGB"
+msgstr ""
+
+msgid "Splits a raster map into red, green and blue maps."
+msgstr ""
+
+msgid "Query raster maps"
+msgstr "Vaicājumi rastra kartēm"
+
+#, fuzzy
+msgid "Query values by coordinates"
+msgstr "Koordinātes"
+
+#, fuzzy
+#| msgid "Change category values and labels"
+msgid "Queries raster maps on their category values and category labels."
+msgstr "Mainīt kategoriju vērtības un nosaukumus"
+
+#, fuzzy
+#| msgid "Set color table"
+msgid "Query colors by value"
+msgstr "Iestatīt krāsu tabulu"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Queries colors for a raster map layer."
+msgstr "Izveidot jaunu rastra kartes krāsu tabulu"
+
+msgid "Raster buffers and distance"
+msgstr "Rastra buferzonas un attālumi"
+
+msgid "Buffer rasters"
+msgstr "Rastra buferzonas"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
+msgstr ""
+
+#, fuzzy
+#| msgid "Buffer rasters"
+msgid "Buffer rasters (low memory)"
+msgstr "Rastra buferzonas"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values. This is the low-memory alternative to the classic r.buffer module."
+msgstr ""
+
+msgid "Concentric circles"
+msgstr ""
+
+msgid "Creates a raster map containing concentric rings around a given point."
+msgstr ""
+
+msgid "Closest points"
+msgstr "Tuvākie punkti"
+
+msgid "Locates the closest points between objects in two raster maps."
+msgstr ""
+
+msgid "Grow by one cell"
+msgstr "Pieaudzēt vienu šūnu"
+
+msgid "Generates a raster map layer with contiguous areas grown by one cell."
+msgstr ""
+
+msgid "Distance to features"
+msgstr "Attālums līdz objektiem"
+
+msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
+msgstr ""
+
+msgid "Creates a raster mask for limiting raster operation."
+msgstr ""
+
+#, fuzzy
+#| msgid "Query raster maps"
+msgid "Query mask status"
+msgstr "Vaicājumi rastra kartēm"
+
+msgid "Reports presence or absence of a raster mask Provides information about the presence of a 2D raster mask as text output or return code"
+msgstr ""
+
+msgid "Raster map calculator"
+msgstr "Rastra kalkulators"
+
+msgid "Simplified raster map calculator"
+msgstr "Vienkāršots rastra kalkulators"
+
+msgid "Calculates a new raster map from a simple r.mapcalc expression."
+msgstr ""
+
+msgid "Raster map calculator."
+msgstr "Rastra kalkulators."
+
+msgid "Neighborhood analysis"
+msgstr "Kaimiņu analīze"
+
+msgid "Moving window"
+msgstr "Slīdošais logs"
+
+msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgstr ""
+
+msgid "Neighborhood points"
+msgstr "Kaimiņu punkti"
+
+msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
+msgstr ""
+
+msgid "Overlay rasters"
+msgstr "Pārklāt rastrus"
+
+msgid "Cross product"
+msgstr ""
+
+msgid "Creates a cross product of the category values from multiple raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Pack raster map"
+msgid "Patch raster maps"
+msgstr "Sapakot rastra karti"
+
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Watershed basin creation"
+msgid "Raster series aggregation"
+msgstr "Sateces baseinu izveide"
+
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster calculations"
+msgid "Raster series accumulation"
+msgstr "Rastra aprēķini"
+
+msgid "Makes each output cell value a accumulationfunction of the values assigned to the corresponding cells in the input raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Statistics"
+msgid "Statistical overlay"
+msgstr "Statistika"
+
+msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
+msgstr ""
+
+msgid "Quantiles overlay"
+msgstr ""
+
+msgid "Compute category quantiles using two passes."
+msgstr ""
+
+msgid "Solar radiance and shadows"
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage maps"
+msgid "LatLong map"
+msgstr "Pārvaldīt kartes"
+
+#, fuzzy
+#| msgid "Create new raster map"
+msgid "Creates a latitude/longitude raster map."
+msgstr "Izveidot jaunu rastra karti"
+
+msgid "Solar irradiance and irradiation"
+msgstr ""
+
+msgid "Solar irradiance and irradiation model. Computes direct (beam), diffuse and reflected solar irradiation raster maps for given day, latitude, surface and atmospheric conditions. Solar parameters (e.g. sunrise, sunset times, declination, extraterrestrial irradiance, daylight length) are saved in the map history file. Alternatively, a local time can be specified to compute solar incidence angle and/or irradiance raster maps. The shadowing effect of the topography is optionally incorporated."
+msgstr ""
+
+msgid "Shadows map"
+msgstr ""
+
+msgid "Calculates cast shadow areas from sun position and elevation raster map. Either exact sun position (A) is specified, or date/time to calculate the sun position (B) by r.sunmask itself."
+msgstr ""
+
+msgid "Sunshine hours and solar angles"
+msgstr ""
+
+msgid "Calculates solar elevation, solar azimuth, and sun hours. Solar elevation: the angle between the direction of the geometric center of the sun's apparent disk and the (idealized) horizon. Solar azimuth: the angle from due north in clockwise direction."
+msgstr ""
+
+msgid "Terrain analysis"
+msgstr "Reljefa analīze"
+
+msgid "Generate contour lines"
+msgstr "Ģenerēt izolīnijas"
+
+msgid "Produces a vector map of specified contours from a raster map."
+msgstr ""
+
+msgid "Cost surface"
+msgstr "Izmaksu virsma"
+
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Trace a path"
+msgstr ""
+
+msgid "Traces paths from starting points following input directions."
+msgstr ""
+
+msgid "Cumulative movement costs"
+msgstr ""
+
+msgid "Creates a raster map showing the anisotropic cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr ""
+
+msgid "Least cost route or flow"
+msgstr ""
+
+msgid "Traces a flow through an elevation model or cost surface on a raster map."
+msgstr ""
+
+msgid "Compute shaded relief"
+msgstr ""
+
+msgid "Creates shaded relief map from an elevation map (DEM)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Apply changes to selected group"
+msgid "Apply shade to raster"
+msgstr "Pielietot izmaiņas izvēlētajai grupai"
+
+msgid "Drapes a color raster over an shaded relief or aspect map."
+msgstr ""
+
+msgid "Slope and aspect"
+msgstr "Nogāze un tās orientācija"
+
+msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map. Aspect is calculated counterclockwise from east."
+msgstr ""
+
+msgid "Landforms"
+msgstr "Reljefa formas"
+
+msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
+msgstr ""
+
+msgid "Terrain parameters"
+msgstr "Reljefa parametri"
+
+msgid "Extracts terrain parameters from a DEM. Uses a multi-scale approach by taking fitting quadratic parameters to any size window (via least squares)."
+msgstr ""
+
+msgid "Textural features"
+msgstr "Teksturālās īpašības"
+
+msgid "Generate images with textural features from a raster map."
+msgstr ""
+
+msgid "Visibility"
+msgstr "Redzamība"
+
+msgid "Computes the viewshed of a point on an elevation raster map. Default format: NULL (invisible), vertical angle wrt viewpoint (visible)."
+msgstr ""
+
+msgid "Horizon angle"
+msgstr ""
+
+msgid "Computes horizon angle height from a digital elevation model. The module has two different modes of operation: 1. Computes the entire horizon around a single point whose coordinates are given with the 'coord' option. The horizon height (in radians). 2. Computes one or more raster maps of the horizon height in a single direction. The input for this is the angle (in degrees), which is measured counterclockwise with east=0, north=90 etc. The output is the horizon height in radians."
+msgstr ""
+
+msgid "Transform features"
+msgstr "Pārveidot objektus"
+
+msgid "Clump"
+msgstr "Pudurot"
+
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
+msgstr ""
+
+msgid "Grow"
+msgstr "Audzēt"
+
+msgid "Thin"
+msgstr "Tievināt"
+
+msgid "Thins non-null cells that denote linear features in a raster map layer."
+msgstr ""
+
+msgid "Hydrologic modeling"
+msgstr "Hidroloģiskā modelēšana"
+
+#, fuzzy
+#| msgid "Save changes"
+msgid "Carve stream channels"
+msgstr "Saglabāt izmaiņas"
+
+msgid "Generates stream channels. Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
+msgstr ""
+
+msgid "Fill lake"
+msgstr "Ezera aizpildīšana"
+
+msgid "Fills lake at given point to given level."
+msgstr "Aizpilda ezeru no punkta ar norādīto līmeni."
+
+msgid "Depressionless map and flowlines"
+msgstr ""
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
+msgstr ""
+
+msgid "Flow accumulation"
+msgstr "Plūsmas akumulācija"
+
+msgid "Performs flow computation for massive grids."
+msgstr ""
+
+msgid "Flow lines"
+msgstr "Plūsmas līnijas"
+
+msgid "Constructs flowlines. Computes flowlines, flowpath lengths, and flowaccumulation (contributing areas) from a elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Watershed subbasins"
+msgid "Watershed analysis"
+msgstr "Sateces apakšbaseini"
+
+msgid "Calculates hydrological parameters and RUSLE factors."
+msgstr ""
+
+msgid "Watershed subbasins"
+msgstr "Sateces apakšbaseini"
+
+#, fuzzy
+#| msgid "Watershed subbasins"
+msgid "Generates watershed subbasins raster map."
+msgstr "Sateces apakšbaseini"
+
+msgid "Watershed basin creation"
+msgstr "Sateces baseinu izveide"
+
+msgid "Creates watershed basins from a drainage direction map."
+msgstr ""
+
+msgid "Extraction of stream networks"
+msgstr ""
+
+msgid "Performs stream network extraction."
+msgstr ""
+
+msgid "SIMWE Overland flow modeling"
+msgstr ""
+
+msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "SIMWE Sediment flux modeling"
+msgstr ""
+
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Topographic correction"
+msgid "Topographic index map"
+msgstr "Topogrāfiskā koriģēšana"
+
+msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
+msgstr ""
+
+msgid "TOPMODEL simulation"
+msgstr ""
+
+msgid "Simulates TOPMODEL which is a physically based hydrologic model."
+msgstr ""
+
+msgid "USLE K-factor"
+msgstr ""
+
+msgid "Computes USLE Soil Erodibility Factor (K)."
+msgstr ""
+
+msgid "USLE R-factor"
+msgstr ""
+
+msgid "Computes USLE R factor, Rainfall erosivity index."
+msgstr ""
+
+msgid "Groundwater modeling"
+msgstr "Gruntsūdens modelēšana"
+
+#, fuzzy
+#| msgid "Groundwater modeling"
+msgid "Groundwater flow"
+msgstr "Gruntsūdens modelēšana"
+
+msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Groundwater modeling"
+msgid "Groundwater solute transport"
+msgstr "Gruntsūdens modelēšana"
+
+msgid "Numerical calculation program for transient, confined and unconfined solute transport in two dimensions"
+msgstr ""
+
+msgid "Landscape patch analysis"
+msgstr "Ainavu analīze"
+
+msgid "Set up sampling and analysis framework"
+msgstr ""
+
+msgid "Configuration editor for r.li.'index'"
+msgstr ""
+
+#, fuzzy
+#| msgid "Edge detection"
+msgid "Edge density"
+msgstr "Robežu detektēšana"
+
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Contrast weighted edge density"
+msgstr ""
+
+msgid "Calculates contrast weighted edge density index on a raster map"
+msgstr ""
+
+msgid "Patch area mean"
+msgstr ""
+
+msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Patch area range"
+msgstr ""
+
+msgid "Calculates range of patch area size on a raster map"
+msgstr ""
+
+msgid "Patch area Std Dev"
+msgstr ""
+
+msgid "Calculates standard deviation of patch area a raster map"
+msgstr ""
+
+msgid "Patch area Coeff Var"
+msgstr ""
+
+msgid "Calculates coefficient of variation of patch area on a raster map"
+msgstr ""
+
+msgid "Patch density"
+msgstr ""
+
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+#, fuzzy
+#| msgid "Category number"
+msgid "Patch number"
+msgstr "Kategorijas numurs"
+
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
+msgstr ""
+
+msgid "Dominance's diversity"
+msgstr ""
+
+msgid "Calculates dominance's diversity index on a raster map"
+msgstr ""
+
+msgid "Shannon's diversity"
+msgstr ""
+
+msgid "Calculates Shannon's diversity index on a raster map"
+msgstr ""
+
+msgid "Simpson's diversity"
+msgstr ""
+
+msgid "Calculates Simpson's diversity index on a raster map"
+msgstr ""
+
+msgid "Richness"
+msgstr ""
+
+msgid "Calculates richness index on a raster map"
+msgstr ""
+
+msgid "Shape index"
+msgstr ""
+
+#, fuzzy
+#| msgid "Please specify name for a new raster map"
+msgid "Calculates shape index on a raster map"
+msgstr "Norādiet jaunās rastra kartes nosaukumu"
+
+msgid "Wildfire modeling"
+msgstr "Savvaļas ugunsgrēku modelēšana"
+
+msgid "Rate of spread"
+msgstr "Izplatīšanās ātrums"
+
+msgid "Generates rate of spread raster maps. Generates three, or four raster map layers showing the base (perpendicular) rate of spread (ROS), the maximum (forward) ROS, the direction of the maximum ROS, and optionally the maximum potential spotting distance for fire spread simulation."
+msgstr ""
+
+msgid "Least-cost spread paths"
+msgstr ""
+
+msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
+msgstr ""
+
+msgid "Anisotropic spread simulation"
+msgstr ""
+
+msgid "Simulates elliptically anisotropic spread. Generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins. It optionally produces raster maps to contain backlink UTM coordinates for tracing spread paths. Usable for fire spread simulations."
+msgstr ""
+
+msgid "Change category values and labels"
+msgstr "Mainīt kategoriju vērtības un nosaukumus"
+
+#, fuzzy
+#| msgid "Manage categories"
+msgid "Manage category information"
+msgstr "Pārvaldīt kategorijas"
+
+msgid "Manages category values and labels associated with user-specified raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Enter raster category values or percents"
+msgid "Interactively edit category values"
+msgstr "Ievadiet rastra kategoriju vērtības vai procentus"
+
+#, fuzzy
+#| msgid "Failed to create new raster map."
+msgid "Edits cell values in a raster map."
+msgstr "Nebija iespējams izveidot jaunu rastra karti."
+
+#, fuzzy
+#| msgid "Reclassify"
+msgid "Reclassify by size"
+msgstr "Pārklasificēt"
+
+msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
+msgstr ""
+
+msgid "Reclassify"
+msgstr "Pārklasificēt"
+
+msgid "Reclassify raster map based on category values. Creates a new raster map whose category values are based upon a reclassification of the categories in an existing raster map."
+msgstr ""
+
+msgid "Recode"
+msgstr ""
+
+#, fuzzy
+msgid "Recodes categorical raster maps."
+msgstr "Pievienot rastra karti"
+
+#, fuzzy
+#| msgid "scale:"
+msgid "Rescale"
+msgstr "mērogs:"
+
+msgid "Rescales the range of category values in a raster map layer."
+msgstr ""
+
+msgid "Rescale with histogram"
+msgstr ""
+
+msgid "Rescales histogram equalized the range of category values in a raster map layer."
+msgstr ""
+
+msgid "Generate random cells"
+msgstr "Ģenerēt gadījuma šūnas"
+
+#, fuzzy
+#| msgid "Generate random cells"
+msgid "Random cells"
+msgstr "Ģenerēt gadījuma šūnas"
+
+msgid "Generates random cell values with spatial dependence."
+msgstr ""
+
+msgid "Random cells and vector points"
+msgstr "Gadījuma šūnas un vektoru punkti"
+
+msgid "Creates randomly placed raster cells or vector points Creates a raster map and vector point map containing randomly located cells and points."
+msgstr ""
+
+msgid "Generate surfaces"
+msgstr "Ģenerēt virsmas"
+
+msgid "Fractal surface"
+msgstr "Fraktāļa virsma"
+
+msgid "Creates a fractal surface of a given fractal dimension."
+msgstr ""
+
+msgid "Gaussian kernel density surface"
+msgstr ""
+
+msgid "Generates a raster density map from vector points map. Density is computed using a moving kernel. Optionally generates a vector density map on a vector network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate surfaces"
+msgid "Gaussian deviates surface"
+msgstr "Ģenerēt virsmas"
+
+msgid "Generates a raster map using gaussian random number generator. Mean and standard deviation of gaussian deviates can be expressed by the user."
+msgstr ""
+
+msgid "Plane"
+msgstr "Plakne"
+
+msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate surfaces"
+msgid "Random deviates surface"
+msgstr "Ģenerēt virsmas"
+
+msgid "Produces a raster surface map of uniform random deviates with defined range."
+msgstr ""
+
+msgid "Random surface with spatial dependence"
+msgstr ""
+
+msgid "Generates random surface(s) with spatial dependence."
+msgstr ""
+
+msgid "Interpolate surfaces"
+msgstr "Interpolēt virsmas"
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Bilinear and bicubic from vector points"
+msgstr "IDW no vektoru punktiem"
+
+msgid "Performs bicubic or bilinear spline interpolation with Tykhonov regularization."
+msgstr ""
+
+msgid "IDW from raster points"
+msgstr "IDW no rastra punktiem"
+
+msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+msgid "IDW from vector points"
+msgstr "IDW no vektoru punktiem"
+
+msgid "Provides surface interpolation from vector point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster to vector"
+msgid "Raster contours"
+msgstr "Rastru par vektoriem"
+
+msgid "Generates surface raster map from rasterized contours."
+msgstr ""
+
+msgid "Regularized spline tension"
+msgstr ""
+
+msgid "Performs surface interpolation from vector points map by splines. Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension."
+msgstr ""
+
+msgid "Raster series interpolation"
+msgstr ""
+
+msgid "Interpolates raster maps located (temporal or spatial) in between input raster maps at specific sampling positions."
+msgstr ""
+
+msgid "Fill NULL cells"
+msgstr "Aizpildīt NULL šūnas"
+
+msgid "Fills no-data areas in raster maps using spline interpolation."
+msgstr ""
+
+#, fuzzy
+msgid "Fill NULL cells using IDW"
+msgstr "Aizpildīt NULL šūnas"
+
+msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
+msgstr ""
+
+msgid "Reports and statistics"
+msgstr "Atskaites un statistika"
+
+msgid "Basic raster metadata"
+msgstr "Rastra pamata metadati"
+
+msgid "Outputs basic information about a raster map."
+msgstr ""
+
+msgid "General statistics"
+msgstr "Vispārēja statistika"
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Generates area statistics for raster map."
+msgstr "Statistika rastra kartei <%s>"
+
+msgid "Quantiles for large data sets"
+msgstr ""
+
+msgid "Compute quantiles using two passes."
+msgstr ""
+
+#, fuzzy
+#| msgid "Change category values and labels"
+msgid "Range of category values"
+msgstr "Mainīt kategoriju vērtības un nosaukumus"
+
+msgid "Prints terse list of category values found in a raster map layer."
+msgstr ""
+
+#, fuzzy
+#| msgid "Simplified raster map calculator"
+msgid "Sum area by raster map and category"
+msgstr "Vienkāršots rastra kalkulators"
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Reports statistics for raster maps."
+msgstr "Statistika rastra kartei <%s>"
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Statistics for clumped cells"
+msgstr "Statistika rastra kartei <%s>"
+
+msgid "Calculates the volume of data \"clumps\". Optionally produces a GRASS vector points map containing the calculated centroids of these clumps."
+msgstr ""
+
+msgid "Total corrected area"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Prints estimation of surface area for raster map."
+msgstr "Izveidot jaunu rastra kartes krāsu tabulu"
+
+msgid "Calculates univariate statistics from the non-null cells of a raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+#, fuzzy
+#| msgid "Sample text"
+msgid "Sample transects"
+msgstr "Parauga teksts"
+
+msgid "Outputs the raster map layer values lying on user-defined line(s)."
+msgstr ""
+
+msgid "Sample transects (bearing/distance)"
+msgstr ""
+
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
+msgstr ""
+
+msgid "Covariance/correlation"
+msgstr ""
+
+msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
+msgstr ""
+
+msgid "Linear regression"
+msgstr "Lineārā regresija"
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x."
+msgstr ""
+
+#, fuzzy
+#| msgid "Linear regression"
+msgid "Multiple regression"
+msgstr "Lineārā regresija"
+
+msgid "Calculates multiple linear regression from raster maps."
+msgstr ""
+
+msgid "Mutual category occurrences"
+msgstr ""
+
+msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
+msgstr ""
+
+#, fuzzy
+#| msgid "No category"
+msgid "Modal category value"
+msgstr "Nav kategorijas"
+
+msgid "Finds the mode of values in a cover map within areas assigned the same category value in a user-specified base map."
+msgstr ""
+
+#, fuzzy
+#| msgid "General statistics"
+msgid "Zonal statistics"
+msgstr "Vispārēja statistika"
+
+msgid "Calculates category or object oriented statistics."
+msgstr ""
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Object geometry statistics"
+msgstr "Rastra statistika"
+
+msgid "Calculates geometry parameters for raster objects."
+msgstr ""
+
+msgid "&Vector"
+msgstr "&Vektori"
+
+msgid "Develop vector map"
+msgstr "Veidot vektordatu karti"
+
+#, fuzzy
+#| msgid "Create new vector map"
+msgid "Create new empty vector map"
+msgstr "Izveidot jaunu vektordatu karti"
+
+#, fuzzy
+#| msgid "Set color table interactively"
+msgid "Edit vector map (non-interactively)"
+msgstr "Interaktīvi iestatīt krāsu tabulu"
+
+msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
+msgstr ""
+
+msgid "Convert object types"
+msgstr ""
+
+#, fuzzy
+#| msgid "Select vector feature(s)"
+msgid "Changes type of vector features."
+msgstr "Izvēlēties vektoru objektus"
+
+msgid "Parallel lines"
+msgstr "Paralēlas līnijas"
+
+msgid "Creates parallel line to input vector lines."
+msgstr ""
+
+msgid "Dissolve boundaries"
+msgstr "Izšķīdināt robežas"
+
+msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create histogram of raster map"
+msgid "Create 3D vector over raster"
+msgstr "Izveidot rastra kartes histogrammu"
+
+msgid "Converts 2D vector features to 3D by sampling of elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector map"
+msgid "Extrude 3D vector map"
+msgstr "Eksportēt vektrodatus"
+
+msgid "Extrudes flat vector features to 3D vector features with defined height. Optionally the height can be derived from sampling of elevation raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create table"
+msgid "Create labels"
+msgstr "Izveidot tabulu"
+
+msgid "Creates paint labels for a vector map from attached attributes."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector map"
+msgid "Reposition vector map"
+msgstr "Importēt vektrdatu karti"
+
+msgid "Performs an affine transformation (shift, scale and rotate) on vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select vector map"
+msgid "Rectify vector map"
+msgstr "Izvēlieties vektordatu karti"
+
+msgid "Rectifies a vector by computing a coordinate transformation for each object in the vector based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Basic vector metadata"
+msgid "Updates vector map metadata."
+msgstr "Vektordatu pamata metadati"
+
+msgid "Manage timestamp"
+msgstr "Pārvaldīt laika zīmogu"
+
+msgid "Modifies a timestamp for a vector map. Print/add/remove a timestamp for a vector map."
+msgstr ""
+
+msgid "Create labels with simulated annealing"
+msgstr ""
+
+msgid "Create optimally placed labels for vector map(s)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate points"
+msgid "Decimate points"
+msgstr "Ģenerēt punktus"
+
+msgid "Decimates a point cloud Copies points from one vector to another while applying different decimations"
+msgstr ""
+
+msgid "Topology maintenance"
+msgstr "Topoloģijas uzturēšana"
+
+msgid "Create or rebuild topology"
+msgstr "Izveidot vai pārbūvēt topoloģiju"
+
+msgid "Creates topology for vector map. Optionally also checks for topological errors."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rebuild topology"
+msgid "Rebuild topology on all vector maps"
+msgstr "Pārbūvēt topoloģiju"
+
+msgid "Rebuilds topology on all vector maps in the current mapset."
+msgstr ""
+
+msgid "Build polylines"
+msgstr ""
+
+msgid "Builds polylines from lines or boundaries."
+msgstr ""
+
+msgid "Split lines"
+msgstr "Sadalīt līnijas"
+
+msgid "Splits vector lines to shorter segments."
+msgstr ""
+
+#, fuzzy
+#| msgid "Split lines"
+msgid "Split polylines"
+msgstr "Sadalīt līnijas"
+
+msgid "Creates points/segments from input vector lines and positions."
+msgstr ""
+
+msgid "Clean vector map"
+msgstr "Sakopt vektordatu karti"
+
+msgid "Toolset for cleaning topology of vector map."
+msgstr ""
+
+msgid "Fill holes in areas"
+msgstr ""
+
+msgid "Fill holes in areas by keeping only outer boundaries"
+msgstr ""
+
+msgid "Smooth or simplify"
+msgstr "Nogludināt vai vienkāršot"
+
+msgid "Performs vector based generalization."
+msgstr ""
+
+msgid "Add centroids"
+msgstr "Pievienot centroīdus"
+
+msgid "Adds missing centroids to closed boundaries."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a vector map."
+msgstr "Izveidot jaunu rastra kartes krāsu tabulu"
+
+msgid "Interactive management of vector color tables."
+msgstr ""
+
+msgid "Exports the color table associated with a vector map."
+msgstr ""
+
+msgid "Query vector map"
+msgstr "Vaicājumi vektoru kartēm"
+
+#, fuzzy
+msgid "Query with coordinate(s)"
+msgstr "Koordinātes"
+
+msgid "Queries a vector map at given locations."
+msgstr ""
+
+#, fuzzy
+#| msgid "Show attribute data"
+msgid "Query vector attribute data"
+msgstr "Rādīt atribūtu datus"
+
+#, fuzzy
+#| msgid "Select by attributes"
+msgid "Prints vector map attributes."
+msgstr "Izvēlēties pēc atribūtiem"
+
+msgid "Feature selection"
+msgstr "Objektu izvēlēšanās"
+
+msgid "Select by attributes"
+msgstr "Izvēlēties pēc atribūtiem"
+
+msgid "Selects vector features from an existing vector map and creates a new vector map containing only the selected features."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select raster map"
+msgid "Select by another map"
+msgstr "Izvēlieties rastra karti"
+
+msgid "Selects features from vector map (A) by features from other vector map (B)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate points along lines"
+msgid "Convert areas or points to lines"
+msgstr "Ģenerēt punktus uz līnijām"
+
+msgid "Converts vector polygons or points to lines."
+msgstr ""
+
+msgid "Buffer vectors"
+msgstr "Vektoru buferi"
+
+msgid "Creates a buffer around vector features of given type."
+msgstr ""
+
+msgid "Point analysis"
+msgstr "Punktu analīze"
+
+msgid "Identify and remove outliers"
+msgstr ""
+
+msgid "Removes outliers from vector point data."
+msgstr ""
+
+msgid "Identify point clusters"
+msgstr ""
+
+msgid "Performs cluster identification."
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists"
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector points"
+msgid "Perturb points"
+msgstr "Vektoru punktus"
+
+#, fuzzy
+#| msgid "Random cells and vector points"
+msgid "Random location perturbations of vector points."
+msgstr "Gadījuma šūnas un vektoru punkti"
+
+msgid "Test/training point sets"
+msgstr ""
+
+msgid "Randomly partition points into test/train sets."
+msgstr ""
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Tests for normality for vector points"
+msgstr "IDW no vektoru punktiem"
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Tests for normality for vector points."
+msgstr "IDW no vektoru punktiem"
+
+#, fuzzy
+#| msgid "Point analysis"
+msgid "Point pattern analysis"
+msgstr "Punktu analīze"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Lidar analysis"
+msgstr "LiDAR analīze"
+
+msgid "Detect edges"
+msgstr ""
+
+msgid "Detects the object's edges from a LIDAR data set."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select lines"
+msgid "Detect interiors"
+msgstr "Izvēlēties līnijas"
+
+msgid "Building contour determination and Region Growing algorithm for determining the building inside"
+msgstr ""
+
+msgid "Correct and reclassify objects"
+msgstr ""
+
+msgid "Corrects the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
+msgstr ""
+
+msgid "Linear referencing"
+msgstr "Lineārās atskaites sistēma"
+
+msgid "Create LRS"
+msgstr "Izveidot LRS"
+
+msgid "Creates a linear reference system."
+msgstr ""
+
+#, fuzzy
+msgid "Create stationing"
+msgstr "Veidot jaunu novietojumu"
+
+msgid "Creates stationing from input lines, and linear reference system."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create new mapset"
+msgid "Create points/segments"
+msgstr "Izveidot jaunu karšu kopu"
+
+msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgstr ""
+
+msgid "Find line id and offset"
+msgstr ""
+
+msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
+msgstr ""
+
+msgid "Nearest features"
+msgstr "Tuvākie objekti"
+
+msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
+msgstr ""
+
+msgid "Network analysis"
+msgstr "Tīkla analīze"
+
+#, fuzzy
+#| msgid "Vector network analysis tool"
+msgid "Tool for interactive vector network analysis."
+msgstr "Vektordatu tīkla analīzes rīks"
+
+msgid "Network preparation"
+msgstr "Tīkla sagatavošana"
+
+msgid "Performs network maintenance."
+msgstr ""
+
+msgid "Allocate subnets"
+msgstr "Izdalīt apakštīklus"
+
+msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+#, fuzzy
+#| msgid "Split lines"
+msgid "Split net"
+msgstr "Sadalīt līnijas"
+
+msgid "Splits subnets for nearest centers by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Shortest path"
+msgstr "Īsākais ceļš"
+
+msgid "Finds shortest path on vector network."
+msgstr ""
+
+msgid "Shortest path for sets of features"
+msgstr ""
+
+msgid "Computes shortest distance via the network between the given sets of features. Finds the shortest paths from each 'from' point to the nearest 'to' feature and various information about this relation are uploaded to the attribute table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Shortest path"
+msgid "Shortest path using timetables"
+msgstr "Īsākais ceļš"
+
+msgid "Finds shortest path using timetables."
+msgstr ""
+
+#, fuzzy
+#| msgid "Shortest path"
+msgid "Shortest path for all pairs"
+msgstr "Īsākais ceļš"
+
+msgid "Computes the shortest path between all pairs of nodes in the network."
+msgstr ""
+
+msgid "Visibility network"
+msgstr "Redzamības tīkls"
+
+msgid "Performs visibility graph construction."
+msgstr ""
+
+msgid "Bridges and articulation points"
+msgstr ""
+
+msgid "Computes bridges and articulation points in the network."
+msgstr ""
+
+msgid "Maximum flow"
+msgstr ""
+
+msgid "Computes the maximum flow between two sets of nodes in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector database connections"
+msgid "Vertex connectivity"
+msgstr "Vektoru datubāzes savienojumi"
+
+msgid "Computes vertex connectivity between two sets of nodes in the network."
+msgstr ""
+
+#, fuzzy
+#| msgid "exponent"
+msgid "Components"
+msgstr "eksponente"
+
+msgid "Computes strongly and weakly connected components in the network."
+msgstr ""
+
+msgid "Centrality"
+msgstr ""
+
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
+msgstr ""
+
+msgid "Steiner tree"
+msgstr "Šteinera koks"
+
+msgid "Creates Steiner tree for the network and given terminals. Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm is used in this module so the result may be sub optimal."
+msgstr ""
+
+msgid "Minimum spanning tree"
+msgstr ""
+
+msgid "Computes minimum spanning tree for the network."
+msgstr ""
+
+msgid "Traveling salesman analysis"
+msgstr "Ceļojošā pārdevēja analīze"
+
+msgid "Creates a cycle connecting given nodes (Traveling salesman problem). Note that TSP is NP-hard, heuristic algorithm is used by this module and created cycle may be sub optimal"
+msgstr ""
+
+msgid "Overlay vector maps"
+msgstr "Pārklāt vektoru kartes"
+
+#, fuzzy
+#| msgid "Multiple vector maps"
+msgid "Clip vector maps"
+msgstr "Vairākas vektordatu kartes"
+
+msgid "Extracts features of input map which overlay features of clip map."
+msgstr ""
+
+msgid "Overlays two vector maps offering clip, intersection, difference, symmetrical difference, union operators."
+msgstr ""
+
+#, fuzzy
+#| msgid "No vector maps."
+msgid "Patch vector maps"
+msgstr "Nav vektoru kartes."
+
+msgid "Creates a new vector map by combining other vector maps."
+msgstr ""
+
+msgid "Manage categories"
+msgstr "Pārvaldīt kategorijas"
+
+#, fuzzy
+#| msgid "Manage categories"
+msgid "Change or report categories"
+msgstr "Pārvaldīt kategorijas"
+
+msgid "Attaches, deletes or reports vector categories to/from/of map geometry."
+msgstr ""
+
+msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
+msgstr ""
+
+msgid "Update area attributes from raster"
+msgstr "Atjaunināt poligonu atribūtus no rastra datiem"
+
+msgid "Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns."
+msgstr ""
+
+msgid "Update area attributes from vector"
+msgstr "Atjaunināt poligonu atribūtus no vektordatiem"
+
+msgid "Count points in areas, calculate statistics from point attributes."
+msgstr ""
+
+msgid "Update point attributes from areas"
+msgstr "Atjaunināt punktu atribūtus no poligoniem"
+
+msgid "Uploads vector values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update area attributes from vector"
+msgid "Update database values from vector"
+msgstr "Atjaunināt poligonu atribūtus no vektordatiem"
+
+#, fuzzy
+#| msgid "Update area attributes from vector"
+msgid "Populates attribute values from vector features."
+msgstr "Atjaunināt poligonu atribūtus no vektordatiem"
+
+#, fuzzy
+#| msgid "Simplified raster map calculator"
+msgid "Sample raster maps at point locations"
+msgstr "Vienkāršots rastra kalkulators"
+
+msgid "Uploads raster values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Simplified raster map calculator"
+msgid "Sample 3D raster at point locations"
+msgstr "Vienkāršots rastra kalkulators"
+
+msgid "Uploads 3D raster values at positions of vector points to the table."
+msgstr ""
+
+msgid "Sample temporal raster dataset at point locations"
+msgstr ""
+
+msgid "Uploads space time raster dataset values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood points"
+msgid "Sample raster neighborhood around points"
+msgstr "Kaimiņu punkti"
+
+#, fuzzy
+#| msgid "Simplified raster import with reprojection"
+msgid "Samples a raster map at vector point locations."
+msgstr "Vienkāršota rastra importēšana ar pārprojecēšanu"
+
+#, fuzzy
+msgid "Generate area for current region"
+msgstr "Parādīt pašreizējo reģionu"
+
+msgid "Creates a vector polygon from the current region extent."
+msgstr ""
+
+msgid "Generate areas from points"
+msgstr "Ģenerēt poligonus no punktiem"
+
+msgid "Convex hull"
+msgstr ""
+
+msgid "Produces a 2D/3D convex hull for a given vector map."
+msgstr ""
+
+msgid "Delaunay triangles"
+msgstr "Delonē triangulācija"
+
+msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgstr ""
+
+msgid "Voronoi diagram/Thiessen polygons"
+msgstr "Voronoja diagramma / Tīzena poligoni"
+
+msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate points"
+msgid "Generate grid"
+msgstr "Ģenerēt punktus"
+
+msgid "Creates a vector map of a user-defined grid."
+msgstr ""
+
+msgid "Generate points"
+msgstr "Ģenerēt punktus"
+
+msgid "Generate from database"
+msgstr "Ģenerēt no datubāzes"
+
+msgid "Creates new vector (points) map from database table containing coordinates."
+msgstr ""
+
+msgid "Generate points along lines"
+msgstr "Ģenerēt punktus uz līnijām"
+
+msgid "Creates points along input lines in new vector map with 2 layers."
+msgstr ""
+
+msgid "Generate random points"
+msgstr "Ģenerēt gadījuma punktus"
+
+#, fuzzy
+#| msgid "Generate random points"
+msgid "Generates random 2D/3D vector points."
+msgstr "Ģenerēt gadījuma punktus"
+
+msgid "Remove outliers in point sets"
+msgstr ""
+
+msgid "Basic vector metadata"
+msgstr "Vektordatu pamata metadati"
+
+msgid "Outputs basic information about a vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Show attribute data"
+msgid "Classify attribute data"
+msgstr "Rādīt atribūtu datus"
+
+msgid "Classifies attribute data, e.g. for thematic mapping"
+msgstr ""
+
+msgid "Report topology by category"
+msgstr ""
+
+msgid "Reports geometry statistics for vector maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate attribute statistics for points"
+msgstr "Aprakstošā statistika"
+
+msgid "Calculates univariate statistics of vector map features. Variance and standard deviation is calculated only for points if specified."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate statistics for attribute columns"
+msgstr "Aprakstošā statistika"
+
+msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgstr ""
+
+msgid "Vector map profiling tool"
+msgstr "Vektorkaršu profilēšanas rīks"
+
+#, fuzzy
+#| msgid "Vegetation indices"
+msgid "Quadrat indices"
+msgstr "Veģetācijas indeksi"
+
+msgid "Test normality"
+msgstr ""
+
+msgid "&Imagery"
+msgstr "&Attēla"
+
+msgid "Develop images and groups"
+msgstr "Veidot attēla grupas"
+
+msgid "Create/edit group"
+msgstr "Veidot/rediģēt grupu"
+
+msgid "Creates, edits, and lists groups of imagery files."
+msgstr ""
+
+#, fuzzy
+#| msgid "Layer group:"
+msgid "Target group"
+msgstr "Slāņu grupa:"
+
+#, fuzzy
+msgid "Targets an imagery group to a GRASS location and mapset."
+msgstr "Mainīt novietojumu un karšu kopu"
+
+#, fuzzy
+#| msgid "Choose image file"
+msgid "Find imagery files"
+msgstr "Izvēlies attēla failu"
+
+msgid "Semantic label library"
+msgstr ""
+
+msgid "Prints available semantic label information used for multispectral data."
+msgstr ""
+
+msgid "Mosaic images"
+msgstr ""
+
+msgid "Mosaics several images and extends colormap."
+msgstr ""
+
+msgid "Manage image colors"
+msgstr "Pārvaldīt attēla krāsas"
+
+msgid "Color balance for RGB"
+msgstr ""
+
+msgid "Performs auto-balancing of colors for RGB images."
+msgstr ""
+
+msgid "HIS to RGB"
+msgstr "HIS uz RGB"
+
+msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
+msgstr ""
+
+msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector to raster"
+msgid "Rectify image or raster"
+msgstr "Vektorus par rastru"
+
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create histogram of raster map"
+msgid "Generate histogram of image"
+msgstr "Izveidot rastra kartes histogrammu"
+
+msgid "Spectral response"
+msgstr ""
+
+msgid "Displays spectral response at user specified locations in group or images."
+msgstr ""
+
+msgid "Pan sharpening"
+msgstr ""
+
+msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
+msgstr ""
+
+msgid "Classify image"
+msgstr "Klasificēt attēlu"
+
+msgid "Clustering input for unsupervised classification"
+msgstr ""
+
+msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
+msgstr ""
+
+msgid "Input for supervised MLC"
+msgstr ""
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Generates statistics for i.maxlik from raster map."
+msgstr "Statistika rastra kartei <%s>"
+
+msgid "Maximum likelihood classification (MLC)"
+msgstr ""
+
+msgid "Classifies the cell spectral reflectances in imagery data. Classification is based on the spectral signature information generated by either i.cluster, g.gui.iclass, or i.gensig."
+msgstr ""
+
+msgid "Interactive input for supervised classification"
+msgstr ""
+
+msgid "Generates spectral signatures by allowing the user to outline training areas."
+msgstr ""
+
+msgid "Input for supervised SMAP"
+msgstr ""
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Generates statistics for i.smap from raster map."
+msgstr "Statistika rastra kartei <%s>"
+
+msgid "Sequential maximum a posteriori classification (SMAP)"
+msgstr ""
+
+msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
+msgstr ""
+
+msgid "Input for supervised SVM"
+msgstr ""
+
+msgid "Train a SVM Train a Support Vector Machine"
+msgstr ""
+
+msgid "Support Vector Machines classification (SVM)"
+msgstr ""
+
+msgid "Predict with a SVM Predict with a Support Vector Machine"
+msgstr ""
+
+#, fuzzy
+msgid "Manage signature files"
+msgstr "Saglabāt parakstu datni"
+
+#, fuzzy
+msgid "Manage imagery classification signature files"
+msgstr "Saglabāt parakstu datni"
+
+msgid "Object segmentation"
+msgstr "Objektu segmentēšana"
+
+msgid "Identifies segments (objects) from imagery data."
+msgstr ""
+
+msgid "Filter image"
+msgstr "Filtrēt attēlu"
+
+msgid "Edge detection"
+msgstr "Robežu detektēšana"
+
+msgid "Zero-crossing \"edge detection\" raster function for image processing."
+msgstr ""
+
+msgid "Matrix/convolving filter"
+msgstr ""
+
+msgid "Performs raster map matrix filter."
+msgstr ""
+
+msgid "Edge preserving smoothing"
+msgstr ""
+
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+msgid "Transform image"
+msgstr "Pārveidot attēlu"
+
+#, fuzzy
+#| msgid "Atmospheric correction"
+msgid "Canonical correlation"
+msgstr "Atmosfēras koriģēšana"
+
+msgid "Canonical components analysis (CCA) program for image processing."
+msgstr ""
+
+msgid "Principal components"
+msgstr ""
+
+msgid "Principal components analysis (PCA) for image processing."
+msgstr ""
+
+msgid "Fast Fourier"
+msgstr ""
+
+msgid "Fast Fourier Transform (FFT) for image processing."
+msgstr ""
+
+msgid "Inverse Fast Fourier"
+msgstr ""
+
+msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
+msgstr ""
+
+msgid "Satellite images tools"
+msgstr "Satelītattēlu rīki"
+
+msgid "Aster DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN."
+msgstr ""
+
+msgid "Landsat DN to radiance/reflectance"
+msgstr ""
+
+msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+/OLI"
+msgstr ""
+
+msgid "Landsat cloud cover assessment"
+msgstr "Landsat mākoņu segas novērtējums"
+
+msgid "Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA)."
+msgstr ""
+
+msgid "Modis quality control"
+msgstr "Modis kvalitātes kontrole"
+
+msgid "Extracts quality control parameters from MODIS QC layers."
+msgstr ""
+
+msgid "Atmospheric correction"
+msgstr "Atmosfēras koriģēšana"
+
+msgid "Performs atmospheric correction using the 6S algorithm. 6S - Second Simulation of Satellite Signal in the Solar Spectrum."
+msgstr ""
+
+msgid "Topographic correction"
+msgstr "Topogrāfiskā koriģēšana"
+
+#, fuzzy
+#| msgid "Topographic correction"
+msgid "Computes topographic correction of reflectance."
+msgstr "Topogrāfiskā koriģēšana"
+
+msgid "Orthophoto tools"
+msgstr "Ortofoto rīki"
+
+#, fuzzy
+#| msgid "Manage projections"
+msgid "Manage GCPs for 3D correction"
+msgstr "Pārvaldīt projekcijas"
+
+msgid "Georectifies a map and allows managing GCP for 3D correction."
+msgstr ""
+
+msgid "Corrects scanning distortions"
+msgstr ""
+
+msgid "Corrects scanning distortions of a scanned aerial photo."
+msgstr ""
+
+msgid "Initialize ortho parameters"
+msgstr ""
+
+msgid "Interactively creates or modifies entries in a camera initial exposure station file for imagery group referenced by a sub-block."
+msgstr ""
+
+#, fuzzy
+#| msgid "Terrain parameters"
+msgid "Camera parameters"
+msgstr "Reljefa parametri"
+
+msgid "Select and modify the imagery group camera reference file."
+msgstr ""
+
+msgid "Elevation model for orthorectification"
+msgstr ""
+
+msgid "Select or modify the target elevation model."
+msgstr ""
+
+msgid "Target group for orthorectification"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create or edit imagery groups"
+msgid "Select or modify the imagery group target."
+msgstr "Veidot vai rediģēt attēlu grupas"
+
+msgid "Compute ortho transformation"
+msgstr ""
+
+msgid "Computes a coordinate transformation based on the control points."
+msgstr ""
+
+msgid "Orthorectify imagery"
+msgstr ""
+
+msgid "Orthorectifies an image by using the image to photo coordinate transformation matrix."
+msgstr ""
+
+#, fuzzy
+#| msgid "Satellite images tools"
+msgid "Satellite images products"
+msgstr "Satelītattēlu rīki"
+
+msgid "Vegetation indices"
+msgstr "Veģetācijas indeksi"
+
+msgid "Calculates different types of vegetation indices. Uses red and nir bands mostly, and some indices require additional bands."
+msgstr ""
+
+msgid "Tasseled cap vegetation index"
+msgstr ""
+
+msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
+msgstr ""
+
+msgid "Albedo"
+msgstr "Albedo"
+
+msgid "Computes broad band albedo from surface reflectance."
+msgstr ""
+
+msgid "Emissivity"
+msgstr ""
+
+msgid "Computes emissivity from NDVI, generic method for sparse land."
+msgstr ""
+
+msgid "Biomass growth"
+msgstr "Biomasas pieaugums"
+
+msgid "Computes biomass growth, precursor of crop yield calculation."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster calculations"
+msgid "Evapotranspiration calculation"
+msgstr "Rastra aprēķini"
+
+msgid "Instantaneaous Net Radiation"
+msgstr ""
+
+msgid "Net radiation approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Soil heat flux"
+msgstr ""
+
+msgid "Soil heat flux approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Sensible heat flux"
+msgstr ""
+
+msgid "Computes sensible heat flux iteration SEBAL 01."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export animation"
+msgid "Evaporative fraction"
+msgstr "Eksportēt animāciju"
+
+msgid "Computes evaporative fraction and root zone soil moisture."
+msgstr ""
+
+msgid "Actual Evapotranspiration"
+msgstr ""
+
+msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Temporal integration of ETa"
+msgstr ""
+
+msgid "Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)."
+msgstr ""
+
+msgid "Hargreaves methods Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation modified or original Hargreaves formulation, 2001."
+msgstr ""
+
+msgid "Penman-Monteith Evapotranspiration"
+msgstr ""
+
+msgid "Computes potential evapotranspiration calculation with hourly Penman-Monteith."
+msgstr ""
+
+msgid "Priestley-Taylor Evapotranspiration"
+msgstr ""
+
+msgid "Computes evapotranspiration calculation Priestley and Taylor formulation, 1972."
+msgstr ""
+
+msgid "Kappa analysis"
+msgstr "Kappa analīze"
+
+msgid "Calculates error matrix and kappa parameter for accuracy assessment of classification result."
+msgstr ""
+
+msgid "OIF for LandSat TM"
+msgstr ""
+
+msgid "Calculates Optimum-Index-Factor table for spectral bands"
+msgstr ""
+
+msgid "3D r&aster"
+msgstr "3D r&astrs"
+
+msgid "Develop 3D raster map"
+msgstr "Veidot 3D rastra karti"
+
+#, fuzzy
+#| msgid "Manage NULL values"
+msgid "Manage 3D NULL values"
+msgstr "Pārvaldīt NULL vērtības"
+
+msgid "Explicitly create the 3D NULL-value bitmap file."
+msgstr ""
+
+msgid "Modifies a timestamp for a 3D raster map. Print/add/remove a timestamp for a 3D raster map."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster"
+msgid "Retile 3D raster"
+msgstr "3D rastrs"
+
+msgid "Retiles an existing 3D raster map with user defined x, y and z tile size."
+msgstr ""
+
+msgid "Allows creation and/or modification of 3D raster map layer support files."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster statistics"
+msgid "3D rasters to raster series"
+msgstr "3D rastra statistika"
+
+msgid "3D color tables"
+msgstr "3D krāsu tabulas"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Creates/modifies the color table associated with a 3D raster map."
+msgstr "Izveidot jaunu rastra kartes krāsu tabulu"
+
+msgid "Export 3D color table"
+msgstr "Eksportēt 3D krāsu tabulu"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Exports the color table associated with a 3D raster map."
+msgstr "Izveidot jaunu rastra kartes krāsu tabulu"
+
+msgid "3D mask"
+msgstr "3D maska"
+
+msgid "Establishes the current working 3D raster mask."
+msgstr ""
+
+msgid "3D raster map calculator"
+msgstr "3D rastra kalkulators"
+
+#, fuzzy
+#| msgid "Projection"
+msgid "Cross section"
+msgstr "Projekcija"
+
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Flow lines"
+msgid "3D flow lines"
+msgstr "Plūsmas līnijas"
+
+msgid "Computes 3D flow lines and 3D flow accumulation."
+msgstr ""
+
+msgid "3D gradient"
+msgstr ""
+
+msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "3D neighborhood analysis"
+msgstr "Kaimiņu analīze"
+
+msgid "Makes each voxel value a function of the values assigned to the voxels around it, and stores new voxel values in an output 3D raster map"
+msgstr ""
+
+#, fuzzy
+#| msgid "Save display to file"
+msgid "Create 3D display file"
+msgstr "Saglabāt ekrāna saturu datnē"
+
+msgid "Creates a display file from an existing 3D raster map according to specified threshold levels."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate areas from points"
+msgid "Interpolate 3D raster from points"
+msgstr "Ģenerēt poligonus no punktiem"
+
+msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
+msgstr ""
+
+msgid "Basic 3D raster metadata"
+msgstr "3D rastra pamata metadati"
+
+msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgstr ""
+
+msgid "3D raster statistics"
+msgstr "3D rastra statistika"
+
+#, fuzzy
+#| msgid "Statistics for raster map <%s>"
+msgid "Generates volume statistics for 3D raster maps."
+msgstr "Statistika rastra kartei <%s>"
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate statistics for 3D rasters"
+msgstr "Aprakstošā statistika"
+
+msgid "Calculates univariate statistics from the non-null cells of a 3D raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "&Database"
+msgstr "&Datubāze"
+
+msgid "Database information"
+msgstr "Datubāzes informācija"
+
+msgid "List databases"
+msgstr "Parādīt datubāzes"
+
+msgid "Lists all databases for a given driver and location."
+msgstr ""
+
+msgid "List drivers"
+msgstr "Parādīt dzinējus"
+
+#, fuzzy
+#| msgid "List databases"
+msgid "Lists all database drivers."
+msgstr "Parādīt datubāzes"
+
+msgid "List tables"
+msgstr "Parādīt tabulas"
+
+msgid "Lists all tables for a given database."
+msgstr ""
+
+msgid "Describe table"
+msgstr "Aprakstīt tabulas"
+
+#, fuzzy
+#| msgid "Describe table"
+msgid "Describes a table in detail."
+msgstr "Aprakstīt tabulas"
+
+msgid "List columns"
+msgstr "Parādīt kolonas"
+
+msgid "List all columns for a given table."
+msgstr ""
+
+msgid "Manage databases"
+msgstr "Pārvaldīt datubāzes"
+
+msgid "Connect"
+msgstr "Pieslēgties"
+
+msgid "Prints/sets general DB connection for current mapset."
+msgstr ""
+
+msgid "Login"
+msgstr "Pieteikties"
+
+msgid "Sets user/password for DB driver/database."
+msgstr ""
+
+msgid "Create database"
+msgstr "Izveidot datubāzi"
+
+#, fuzzy
+#| msgid "Create database"
+msgid "Creates an empty database."
+msgstr "Izveidot datubāzi"
+
+msgid "Drop database"
+msgstr "Dzēst datubāzi"
+
+#, fuzzy
+msgid "Removes an existing database."
+msgstr "GRASS datubāzē šāds novietojums jau eksistē."
+
+msgid "Drop table"
+msgstr "Dzēst tabulu"
+
+#, fuzzy
+#| msgid "Create attribute table"
+msgid "Drops an attribute table."
+msgstr "Izveidot atribūtu tabulu"
+
+msgid "Copy table"
+msgstr "Kopēt tabulu"
+
+msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
+msgstr ""
+
+msgid "Drop column"
+msgstr "Dzēst kolonu"
+
+msgid "Drops a column from selected attribute table."
+msgstr ""
+
+msgid "Test"
+msgstr "Testēt"
+
+msgid "Test database driver, database must exist and set by db.connect."
+msgstr ""
+
+msgid "Query any table"
+msgstr "Vaicāt jebkurai tabulai"
+
+msgid "Selects data from attribute table. Performs SQL query statement(s)."
+msgstr ""
+
+msgid "SQL statement"
+msgstr "SQL izteikums"
+
+msgid "Executes any SQL statement. For SELECT statements use 'db.select'."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate statistics for table column"
+msgstr "Aprakstošā statistika"
+
+msgid "Calculates univariate statistics on selected table column."
+msgstr ""
+
+msgid "Vector database connections"
+msgstr "Vektoru datubāzes savienojumi"
+
+msgid "New table"
+msgstr "Jauna tabula"
+
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove table"
+msgid "Remove table"
+msgstr "Noņemt tabulu"
+
+msgid "Removes existing attribute table of a vector map."
+msgstr ""
+
+msgid "Join table"
+msgstr "Pievienot tabulu"
+
+msgid "Joins a database table to a vector map table."
+msgstr ""
+
+msgid "Add columns"
+msgstr "Pievienot kolonas"
+
+msgid "Adds one or more columns to the attribute table connected to a given vector map."
+msgstr ""
+
+msgid "Drops a column from the attribute table connected to a given vector map."
+msgstr ""
+
+msgid "Renames a column in the attribute table connected to a given vector map."
+msgstr ""
+
+msgid "Change values"
+msgstr "Mainīt vērtības"
+
+msgid "Updates a column in the attribute table connected to a vector map."
+msgstr ""
+
+msgid "Drop row"
+msgstr "Dzēst rindu"
+
+msgid "Removes a vector feature from a vector map through attribute selection."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector dataset"
+msgid "Reconnect vectors to database"
+msgstr "Eksportēt vektordatus"
+
+msgid "Reconnects attribute tables for all vector maps from the current mapset to a new database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector database connections"
+msgid "Set vector map - database connection"
+msgstr "Vektoru datubāzes savienojumi"
+
+msgid "Prints/sets DB connection for a vector map to attribute table."
+msgstr ""
+
+msgid "&Temporal"
+msgstr "&Laika"
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "Manage datasets"
+msgstr "Pārvaldīt datubāzes"
+
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Connect temporal database"
+msgstr "Izveido tukšu datubāzi."
+
+msgid "Prints/sets general temporal GIS database connection for current mapset."
+msgstr ""
+
+msgid "Create"
+msgstr "Izveidot"
+
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Creates a space time dataset."
+msgstr "Izveido tukšu datubāzi."
+
+#, fuzzy
+#| msgid "&Rename mapset"
+msgid "Renames a space time dataset"
+msgstr "Pā&rsaukt karšu kopu"
+
+#, fuzzy
+msgid "Removes space time datasets from temporal database."
+msgstr "Importēt vektordatus"
+
+msgid "Modifies the metadata of a space time dataset."
+msgstr ""
+
+msgid "Merge"
+msgstr "Apvienot"
+
+msgid "Merges several space time datasets into a single space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Temporal"
+msgid "Temporally shift"
+msgstr "&Laika"
+
+msgid "Shifts temporally the maps of a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage maps in datasets"
+msgid "Snap maps of dataset"
+msgstr "Pārvaldīt kartes datu kopās"
+
+msgid "Snaps temporally the maps of a space time dataset."
+msgstr ""
+
+msgid "Lists space time datasets and maps registered in the temporal database."
+msgstr ""
+
+#, fuzzy
+msgid "Copy space time dataset"
+msgstr "&Izveidot jaunu karšu kopu"
+
+#, fuzzy
+msgid "Creates a copy of a space time raster dataset."
+msgstr "Importēt rastra datus"
+
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Upgrade temporal database"
+msgstr "Izveido tukšu datubāzi."
+
+msgid "Upgrades the version of the temporal database."
+msgstr ""
+
+msgid "Manage maps in datasets"
+msgstr "Pārvaldīt kartes datu kopās"
+
+#, fuzzy
+#| msgid "Manage maps in datasets"
+msgid "Register maps in datasets"
+msgstr "Pārvaldīt kartes datu kopās"
+
+msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage maps in datasets"
+msgid "Unregister maps from datasets"
+msgstr "Pārvaldīt kartes datu kopās"
+
+msgid "Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster dataset"
+msgid "List raster dataset maps"
+msgstr "Importēt rastra datus"
+
+msgid "Lists registered maps of a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Export vector dataset"
+msgid "List vector dataset maps"
+msgstr "Eksportēt vektordatus"
+
+msgid "Lists registered maps of a space time vector dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "3D raster maps"
+msgid "List 3D raster dataset maps"
+msgstr "3D rastra kartes"
+
+msgid "Lists registered maps of a space time raster3d dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Import"
+msgid "Import"
+msgstr "&Importēt"
+
+msgid "Import raster dataset"
+msgstr "Importēt rastra datus"
+
+#, fuzzy
+msgid "Imports space time raster dataset."
+msgstr "Importēt rastra datus"
+
+msgid "Import vector dataset"
+msgstr "Importēt vektordatus"
+
+#, fuzzy
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr "Importēt vektordatus"
+
+#, fuzzy
+#| msgid "Import raster dataset"
+msgid "Export raster dataset"
+msgstr "Importēt rastra datus"
+
+#, fuzzy
+msgid "Exports space time raster dataset."
+msgstr "Importēt rastra datus"
+
+#, fuzzy
+#| msgid "Report raster statistics"
+msgid "Export raster dataset as VTK time series"
+msgstr "Rastra statistika"
+
+#, fuzzy
+msgid "Exports space time raster dataset as VTK time series."
+msgstr "Importēt rastra datus"
+
+msgid "Export vector dataset"
+msgstr "Eksportēt vektordatus"
+
+#, fuzzy
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr "Importēt vektordatus"
+
+#, fuzzy
+#| msgid "Import raster dataset"
+msgid "Convert raster dataset to 3D raster"
+msgstr "Importēt rastra datus"
+
+#, fuzzy
+msgid "Converts a space time raster dataset into a 3D raster map."
+msgstr "Importēt rastra datus"
+
+#, fuzzy
+#| msgid "Raster dataset color table"
+msgid "Convert raster dataset to vector dataset"
+msgstr "Rastra kartes krāsu tabula"
+
+#, fuzzy
+msgid "Converts a space time raster dataset into a space time vector dataset"
+msgstr "Importēt rastra datus"
+
+#, fuzzy
+#| msgid "Create new color table for raster map"
+msgid "Create contour lines from raster dataset"
+msgstr "Izveidot jaunu rastra kartes krāsu tabulu"
+
+msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Text rotation"
+msgid "Extraction"
+msgstr "Teksta rotēšana"
+
+#, fuzzy
+#| msgid "Import raster dataset"
+msgid "Extract subset of raster dataset"
+msgstr "Importēt rastra datus"
+
+#, fuzzy
+msgid "Extracts a subset of a space time raster datasets."
+msgstr "Importēt rastra datus"
+
+#, fuzzy
+#| msgid "Export vector dataset"
+msgid "Extract subset of vector dataset"
+msgstr "Eksportēt vektordatus"
+
+msgid "Extracts a subset of a space time vector dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import 3D raster data"
+msgid "Extract subset of 3D raster dataset"
+msgstr "Importēt 3D rastra datus"
+
+msgid "Extracts a subset of a space time 3D raster dataset."
+msgstr ""
+
+#, fuzzy
+msgid "Select maps by temporal topology"
+msgstr "Izvēlieties rastra karti"
+
+msgid "Select maps from space time datasets by topological relationships to other space time datasets using temporal algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create attribute table"
+msgid "Query vector dataset attribute data"
+msgstr "Izveidot atribūtu tabulu"
+
+msgid "Prints attributes of vector maps registered in a space time vector dataset."
+msgstr ""
+
+msgid "Raster dataset color table"
+msgstr "Rastra kartes krāsu tabula"
+
+msgid "Creates/modifies the color table associated with each raster map of the space time raster dataset."
+msgstr ""
+
+msgid "Raster calculations"
+msgstr "Rastra aprēķini"
+
+msgid "Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Temporal raster algebra"
+msgstr "Importēt rastra datus"
+
+msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster calculations"
+msgid "3D raster calculations"
+msgstr "Rastra aprēķini"
+
+msgid "Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import 3D raster data"
+msgid "Temporal 3D raster algebra"
+msgstr "Importēt 3D rastra datus"
+
+msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Temporal vector algebra"
+msgstr "Importēt vektordatus"
+
+msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster dataset"
+msgid "Interpolate gaps in raster datasets"
+msgstr "Importēt rastra datus"
+
+msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Orientation"
+msgid "Aggregation"
+msgstr "Orientācija"
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "Neighborhood analysis in raster dataset"
+msgstr "Kaimiņu analīze"
+
+msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster dataset"
+msgid "Aggregation in raster datasets"
+msgstr "Importēt rastra datus"
+
+msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Computational region"
+msgid "Temporal aggregation"
+msgstr "Aprēķinu reģions"
+
+msgid "Aggregates temporally the maps of a space time raster dataset by a user defined granularity."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster dataset"
+msgid "Temporal aggregation by dataset"
+msgstr "Importēt rastra datus"
+
+msgid "Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Flow accumulation"
+msgid "Compute cyclic accumulations"
+msgstr "Plūsmas akumulācija"
+
+msgid "Computes cyclic accumulations of a space time raster dataset."
+msgstr ""
+
+msgid "Detect accumulation patterns"
+msgstr ""
+
+msgid "Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate."
+msgstr ""
+
+msgid "Sampling"
+msgstr "Paraugošana"
+
+#, fuzzy
+msgid "Sample a space time raster dataset at point coordinates"
+msgstr "Importēt rastra datus"
+
+msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
+msgstr ""
+
+msgid "Query raster dataset by vector points dataset"
+msgstr ""
+
+msgid "Stores raster map values at spatial and temporal positions of vector points as vector attributes."
+msgstr ""
+
+msgid "Observe specific locations in raster dataset"
+msgstr ""
+
+msgid "Observes specific locations in a space time raster dataset over a period of time using vector points."
+msgstr ""
+
+#, fuzzy
+#| msgid "&Temporal"
+msgid "Temporal sampling"
+msgstr "&Laika"
+
+msgid "Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout."
+msgstr ""
+
+#, fuzzy
+#| msgid "Update metadata"
+msgid "Space time datasets metadata"
+msgstr "Atjaunināt metadatus"
+
+msgid "Lists information about space time datasets and maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate raster dataset statistics"
+msgstr "Aprakstošā statistika"
+
+msgid "Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate vector dataset statistics"
+msgstr "Aprakstošā statistika"
+
+msgid "Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset"
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate raster statistics"
+msgid "Univariate 3D raster dataset statistics"
+msgstr "Aprakstošā statistika"
+
+msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Rebuild topology"
+msgid "Report temporal topology"
+msgstr "Pārbūvēt topoloģiju"
+
+msgid "Lists temporal topology of a space time dataset."
+msgstr ""
+
+msgid "GUI tools"
+msgstr "Grafiskās vides rīki"
+
+#, fuzzy
+msgid "Timeline tool"
+msgstr "Animācijas rīkjosla"
+
+#, fuzzy
+msgid "Plot temporal extents."
+msgstr "Ekrāna režīms"
+
+#, fuzzy
+msgid "Temporal plot tool"
+msgstr "Animācijas rīkjosla"
+
+#, fuzzy
+#| msgid "Get all values"
+msgid "Plot temporal values."
+msgstr "Saņemt visas vērtības"
+
+msgid "&Help"
+msgstr "&Palīdzība"
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS help"
+msgstr "GRASS palīdzība"
+
+msgid "Display the HTML man pages of GRASS"
+msgstr ""
+
+msgid "GUI help"
+msgstr "Grafiskās vides palīdzība"
+
+msgid "About system"
+msgstr "Par sistēmu"
+
+#, fuzzy
+#| msgid "Database information"
+msgid "Prints system information"
+msgstr "Datubāzes informācija"
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Import, export and link data"
+msgstr "Importēt vektordatus"
+
+msgid "Attribute table manager"
+msgstr "Atribūtu tabulas pārvaldnieks"
+
+#, fuzzy
+msgid "Launch Data Catalog."
+msgstr "Datu katalogs"
+
+msgid "Managing GCPs for 3D correction"
+msgstr ""
+
+msgid "Interactive editing and digitization of vector maps."
+msgstr ""
+
+msgid "Interactive editing and digitization of raster maps."
+msgstr ""
+
+msgid "Miscellaneous"
+msgstr ""
+
+#, fuzzy
+msgid "Bearing/distance to coordinates"
+msgstr "Koordinātes"
+
+msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa. It assumes a cartesian coordinate system"
+msgstr ""
+
+#, fuzzy
+#| msgid "Measure distance"
+msgid "Measure map distances"
+msgstr "Mērīt attālumu"
+
+msgid "Measures the lengths and areas of features."
+msgstr ""
+
+msgid "3D image rendering"
+msgstr "3D attēlu renderēšana"
+
+msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
+msgstr ""
+
+msgid "3D visualization script"
+msgstr ""
+
+msgid "Creates fly-through script to run in NVIZ."
+msgstr ""
+
+msgid "Convert coordinates between projections"
+msgstr ""
+
+msgid "Transform coordinates (affine)"
+msgstr ""
+
+msgid "PostScript map output"
+msgstr ""
+
+msgid "Produces hardcopy PostScript map output."
+msgstr ""
+
+msgid "Save model to file"
+msgstr "Saglabāt modeli datnē"
+
+msgid "Close model file"
+msgstr "Aizvērt modeļa failu"
+
+msgid "Export to image"
+msgstr "Eksportēt kā attēlu"
+
+msgid "Export to Python"
+msgstr "Eksportēt kā Python"
+
+#, fuzzy
+#| msgid "Export to PDF"
+msgid "Export to PyWPS"
+msgstr "Eksportēt kā PDF"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to PyWPS script"
+msgstr "Eksportē modeli kā Python skriptu"
+
+#, fuzzy
+#| msgid "Export to image"
+msgid "Export to actinia"
+msgstr "Eksportēt kā attēlu"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to actinia script"
+msgstr "Eksportē modeli kā Python skriptu"
+
+msgid "Quit modeler"
+msgstr "Iziet no modelētāja"
+
+msgid "Close modeler window"
+msgstr "Aizver modelēšanas logu"
+
+msgid "&Model"
+msgstr "&Modelis"
+
+msgid "Add command"
+msgstr "Pievienot komandu"
+
+#, fuzzy
+msgid "Add action (GRASS command) to model"
+msgstr "Pievienot komentāru"
+
+msgid "Add data"
+msgstr "Pievienot datus"
+
+#, fuzzy
+msgid "Add data item to model"
+msgstr "Pievienot datus"
+
+#, fuzzy
+#| msgid "Direction"
+msgid "Define relation"
+msgstr "Virziens"
+
+msgid "Define relation between data and action items"
+msgstr ""
+
+msgid "Add loop / series"
+msgstr ""
+
+#, fuzzy
+msgid "Adds loop (series) to model"
+msgstr "Pievienot komentāru"
+
+#, fuzzy
+#| msgid "Condition: "
+msgid "Add condition"
+msgstr "Nosacījums: "
+
+#, fuzzy
+msgid "Adds condition (if/else) to model"
+msgstr "Pievienot komentāru"
+
+#, fuzzy
+msgid "Adds comment to model"
+msgstr "Pievienot komentāru"
+
+msgid "Remove item"
+msgstr "Noņemt vienumu"
+
+msgid "Remove action/data from model"
+msgstr ""
+
+msgid "Model properties (name, purpose, etc.)"
+msgstr ""
+
+#, fuzzy
+#| msgid "&Delete mapset"
+msgid "Delete intermediate data"
+msgstr "&Dzēst karšu kopu"
+
+msgid "Delete intermediate data defined in the model"
+msgstr ""
+
+#, fuzzy
+#| msgid "Run model"
+msgid "Run entire model"
+msgstr "Darbināt modeli"
+
+#, fuzzy
+#| msgid "Validate model"
+msgid "Validate entire model"
+msgstr "Validēt modeli"
+
+msgid "Help"
+msgstr "Palīdzība"
+
+msgid "Display the HTML man pages of Graphical modeler"
+msgstr ""
+
+#, fuzzy
+#| msgid "Quit Graphical Modeler"
+msgid "About Graphical Modeler"
+msgstr "Iziet no grafiskā modelētāja"
+
+#, fuzzy
+#| msgid "Quit Graphical Modeler"
+msgid "Display information about Graphical Modeler"
+msgstr "Iziet no grafiskā modelētāja"
+
+msgid "Specify paper size, margins and orientation"
+msgstr ""
+
+#, fuzzy
+#| msgid "Under Construction"
+msgid "Load instruction file"
+msgstr "Izstrādē"
+
+msgid "Load text file with mapping instructions"
+msgstr ""
+
+#, fuzzy
+#| msgid "Export to image"
+msgid "Export instruction file"
+msgstr "Eksportēt kā attēlu"
+
+msgid "Generate text file with mapping instructions"
+msgstr ""
+
+msgid "Export to PostScript"
+msgstr "Eksportēt kā PostScript"
+
+msgid "Generate PostScript output"
+msgstr ""
+
+msgid "Export to PDF"
+msgstr "Eksportēt kā PDF"
+
+msgid "Generate PDF output"
+msgstr ""
+
+#, fuzzy
+msgid "Launch ps.map dialog"
+msgstr "Datu katalogs"
+
+#, fuzzy
+#| msgid "Cartographic Composer"
+msgid "Close Cartographic Composer"
+msgstr "Kartogrāfisko salikumu veidotājs"
+
+msgid "&Insert"
+msgstr "&Ievietot"
+
+msgid "Map frame"
+msgstr "Kartes rāmis"
+
+#, fuzzy
+#| msgid "Add or edit map info"
+msgid "Add or edit map frame"
+msgstr "Pievienot vai rediģēt kartes informāciju"
+
+msgid "Add or edit raster map"
+msgstr "Pievienot vai rediģēt rastra karti"
+
+msgid "Add or edit vector map"
+msgstr "Pievienot vai rediģēt vektoru karti"
+
+msgid "Map legend"
+msgstr "Kartes leģenda"
+
+msgid "Add or edit raster and vector legend"
+msgstr "Pievienot vai rediģēt rastra un vektoru leģendu"
+
+msgid "Map info"
+msgstr "Kartes informācija"
+
+msgid "Add or edit map info"
+msgstr "Pievienot vai rediģēt kartes informāciju"
+
+msgid "Scale bar"
+msgstr "Mērogjosla"
+
+msgid "Add or edit scale bar"
+msgstr "Pievienot vai rediģēt mērogjoslu"
+
+msgid "North Arrow"
+msgstr "Ziemeļu bulta"
+
+msgid "Delete selected object"
+msgstr "Dzēst izvēlēto objektu"
+
+msgid "Display the HTML man pages of Cartographic Composer"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cartographic Composer"
+msgid "About Cartographic Composer"
+msgstr "Kartogrāfisko salikumu veidotājs"
+
+#, fuzzy
+#| msgid "Cartographic Composer"
+msgid "Display information about Cartographic Composer"
+msgstr "Kartogrāfisko salikumu veidotājs"
+
 msgid "Check all"
 msgstr ""
 
@@ -7393,9 +11345,6 @@ msgstr "Izvēlieties datni krāsu tabulas saglabāšanai"
 
 msgid "Type filename or click to choose file and save color table"
 msgstr ""
-
-msgid "Save"
-msgstr "Saglabāt"
 
 msgid "&Set"
 msgstr "Ie&stat"
@@ -7653,9 +11602,6 @@ msgstr ""
 msgid "Dialog cannot be closed while command is running."
 msgstr ""
 
-msgid "Link external raster data"
-msgstr "Saitēt ārējos rastra datus"
-
 msgid "Add linked layers into layer tree"
 msgstr "Pievienot piesaistītos slāņus slāņu sarakstam"
 
@@ -7673,9 +11619,6 @@ msgstr "Nav izvēlēti slāņi. Darbība ir atcelta."
 
 msgid "Unable to determine number of raster bands"
 msgstr "Nebija iespējams noteikt rastra kanālu skaitu"
-
-msgid "Link external vector data"
-msgstr "Saitēt ārējos vektordatus"
 
 msgid "Define output format for vector data"
 msgstr ""
@@ -8251,12 +12194,6 @@ msgstr ""
 msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
 msgstr ""
 
-msgid "New"
-msgstr "Jauns"
-
-msgid "Delete"
-msgstr "Dzēst"
-
 msgid "Fine resolution:"
 msgstr ""
 
@@ -8362,9 +12299,6 @@ msgstr ""
 msgid "Elevation of fringe from bottom:"
 msgstr ""
 
-msgid "North Arrow"
-msgstr "Ziemeļu bulta"
-
 msgid "Arrow length (in map units):"
 msgstr ""
 
@@ -8373,9 +12307,6 @@ msgstr ""
 
 msgid "Place arrow"
 msgstr ""
-
-msgid "Scale bar"
-msgstr "Mērogjosla"
 
 msgid "Scale bar length (in map units):"
 msgstr ""
@@ -8461,9 +12392,6 @@ msgstr ""
 
 msgid "None"
 msgstr "Nav"
-
-msgid "Plane"
-msgstr "Plakne"
 
 msgid "Vector map is 3D"
 msgstr ""
@@ -8647,9 +12575,6 @@ msgstr "Kartes iestatījumi"
 
 msgid "Map frame settings"
 msgstr "Kartes rāmja iestatījumi"
-
-msgid "Map frame"
-msgstr "Kartes rāmis"
 
 msgid "Map frame options:"
 msgstr ""
@@ -9012,8 +12937,10 @@ msgstr ""
 msgid "Number of segments:"
 msgstr ""
 
-msgid "Label every "
-msgstr ""
+#, fuzzy
+#| msgid "Label"
+msgid "Label every"
+msgstr "Birka"
 
 msgid "segments"
 msgstr ""
@@ -9254,8 +13181,10 @@ msgstr ""
 msgid "Click and drag to resize object"
 msgstr ""
 
-msgid "labels: "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "All files"
+msgid "labels: {files}"
+msgstr "Visi faili"
 
 #, fuzzy
 msgid "Cartographic Composer - GRASS"
@@ -9324,21 +13253,6 @@ msgstr ""
 msgid "Select graphics tool"
 msgstr ""
 
-msgid "Generate text file with mapping instructions"
-msgstr ""
-
-msgid "Load text file with mapping instructions"
-msgstr ""
-
-msgid "Generate PostScript output"
-msgstr ""
-
-msgid "Generate PDF output"
-msgstr ""
-
-msgid "Specify paper size, margins and orientation"
-msgstr ""
-
 msgid "Full extent"
 msgstr "Kopskats"
 
@@ -9348,14 +13262,8 @@ msgstr "Tālināt līdz kopsaktam"
 msgid "Click and drag to place map frame"
 msgstr ""
 
-msgid "Delete selected object"
-msgstr "Dzēst izvēlēto objektu"
-
 msgid "Show preview"
 msgstr "Rādīt priekšskatījumu"
-
-msgid "Map info"
-msgstr "Kartes informācija"
 
 msgid "Legend"
 msgstr "Leģenda"
@@ -9518,9 +13426,6 @@ msgstr ""
 msgid "Remove a configuration file"
 msgstr ""
 
-msgid "Create"
-msgstr "Izveidot"
-
 msgid "Create a new configuration file"
 msgstr ""
 
@@ -9672,9 +13577,6 @@ msgstr "Reģioni"
 msgid "Sample units"
 msgstr "Parauga vienības"
 
-msgid "Moving window"
-msgstr "Slīdošais logs"
-
 msgid ""
 "Select areas from the\n"
 "overlaid vector map"
@@ -9808,9 +13710,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "The raster map <{map_name}> already exists. Please remove or rename the maps with the prefix '{prefix}' or select the option to overwrite existing maps"
-msgstr ""
-
-msgid "Select sample area 1 of "
 msgstr ""
 
 msgid "Configuration file name:"
@@ -10166,9 +14065,6 @@ msgstr ""
 msgid "Timeline Tool"
 msgstr "Animācijas rīkjosla"
 
-msgid "Help"
-msgstr "Palīdzība"
-
 msgid "3D plot of spatio-temporal extents"
 msgstr ""
 
@@ -10359,7 +14255,7 @@ msgstr "{pa} jau eksistē. Vai vēlies to pārrakstīt?"
 msgid "File exists"
 msgstr "Datne jau eksistē"
 
-msgid "Please change name of output CSV file or "
+msgid "Please change name of output CSV file or enable overwriting."
 msgstr ""
 
 msgid "Incorrect coordinates format, should be: x,y"
@@ -11292,9 +15188,6 @@ msgstr ""
 msgid "Unable to connect to <%s>"
 msgstr ""
 
-msgid "Add web service layer"
-msgstr "Pievienot tīmekļa servisa slāni"
-
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr ""
 
@@ -11309,9 +15202,6 @@ msgstr ""
 
 msgid "Export region"
 msgstr "Eksportēt reģionu"
-
-msgid "Map display"
-msgstr "Kartes skats"
 
 msgid "Named region"
 msgstr ""
@@ -11707,16 +15597,23 @@ msgstr "Nav ko attēlot."
 msgid "At least 2 raster maps must be specified"
 msgstr ""
 
-msgid "Bivariate Scatterplot of "
+#, python-brace-format
+msgid "{first} vs {second}"
 msgstr ""
 
-#, python-format
-msgid "Raster <%s> cell values"
+#, python-brace-format
+msgid "Bivariate Scatterplot of {pairs}"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Raster <%s> cell values"
+msgid "Raster <{raster}> cell values: {units}"
 msgstr "<%s> rastra šūnu vērtības"
 
-#, python-format
-msgid ": %s"
-msgstr ": %s"
+#, fuzzy, python-brace-format
+#| msgid "Raster <%s> cell values"
+msgid "Raster <{raster}> cell values"
+msgstr "<%s> rastra šūnu vērtības"
 
 msgid "Regression Statistics for Scatterplot(s)"
 msgstr ""
@@ -11727,23 +15624,38 @@ msgid ""
 "\n"
 msgstr ""
 
+#~ msgid "Downloading data "
+#~ msgstr "Lejupielādē datus"
+
+#~ msgid "Rendering & "
+#~ msgstr "Renderē &"
+
+#, fuzzy
+#~ msgid " / Zoom to map"
+#~ msgstr "/ Tuvināt līdz kartei"
+
+#~ msgid "Type: "
+#~ msgstr "Tips: "
+
+#~ msgid "/ Zoom to map"
+#~ msgstr "/ Tuvināt līdz kartei"
+
+#~ msgid "Measuring distance"
+#~ msgstr "Attāluma mērīšana"
+
+#, python-format
+#~ msgid ": %s"
+#~ msgstr ": %s"
+
 #, fuzzy
 #~ msgid "New display"
 #~ msgstr "Dzēst ekrānu"
-
-#, fuzzy
-#~ msgid "&Copy paths to mapsets"
-#~ msgstr "&Izveidot jaunu karšu kopu"
 
 #~ msgid "Generate random seed for rand()"
 #~ msgstr "Ģenerēt rand() sēklu automātiski"
 
 #~ msgid "Seed:"
 #~ msgstr "Sēkla:"
-
-#, fuzzy
-#~ msgid "Do you want to create a new project (also known as location)?"
-#~ msgstr "Vai vēlaties pārtraukt novietojuma lejupielādi?"
 
 #, fuzzy
 #~ msgid "Create project?"
@@ -11776,494 +15688,59 @@ msgstr ""
 #~ msgid " Feature type: "
 #~ msgstr " Objekta tips: "
 
-#~ msgid "&Database"
-#~ msgstr "&Datubāze"
-
 #~ msgid "&Delete location"
 #~ msgstr "&Dzēst novietojumu"
-
-#~ msgid "&File"
-#~ msgstr "&Datne"
-
-#~ msgid "&Help"
-#~ msgstr "&Palīdzība"
-
-#~ msgid "&Imagery"
-#~ msgstr "&Attēla"
-
-#~ msgid "&Insert"
-#~ msgstr "&Ievietot"
 
 #~ msgid "&Log file"
 #~ msgstr "Žurnā&la datne"
 
-#~ msgid "&Model"
-#~ msgstr "&Modelis"
-
-#~ msgid "&Raster"
-#~ msgstr "&Rastrs"
-
 #~ msgid "&Rename location"
 #~ msgstr "Pā&rsaukt novietojumu"
-
-#~ msgid "&Settings"
-#~ msgstr "Ie&statījumi"
-
-#~ msgid "&Temporal"
-#~ msgstr "&Laika"
-
-#~ msgid "&Vector"
-#~ msgstr "&Vektori"
 
 #, fuzzy
 #~ msgid "(Un)dock Map Display"
 #~ msgstr "Kartes skats"
 
-#~ msgid "3D color tables"
-#~ msgstr "3D krāsu tabulas"
-
-#~ msgid "3D image rendering"
-#~ msgstr "3D attēlu renderēšana"
-
-#~ msgid "3D mask"
-#~ msgstr "3D maska"
-
-#~ msgid "3D r&aster"
-#~ msgstr "3D r&astrs"
-
-#~ msgid "3D raster map calculator"
-#~ msgstr "3D rastra kalkulators"
-
-#~ msgid "3D raster statistics"
-#~ msgstr "3D rastra statistika"
-
-#~ msgid "ASCII grid export"
-#~ msgstr "ASCII tīkla eksports"
-
-#~ msgid "ASCII grid import"
-#~ msgstr "ASCII tīkla imports"
-
-#~ msgid "ASCII points as a vector lines"
-#~ msgstr "ASCII punkti kā vektoru līnijas"
-
-#~ msgid "ASCII points or GRASS ASCII format"
-#~ msgstr "ASCII punkti vai GRASS ASCII formāts"
-
-#~ msgid "ASCII x,y,z points export"
-#~ msgstr "ASCII x,y,z punktu eksports"
-
 #, fuzzy
 #~ msgid "Abort download location"
 #~ msgstr "Pārtraukt lejupielādi"
 
-#~ msgid "About system"
-#~ msgstr "Par sistēmu"
-
-#~ msgid "Add RGB raster layer"
-#~ msgstr "Pievienot RGB rastra slāni"
-
-#~ msgid "Add centroids"
-#~ msgstr "Pievienot centroīdus"
-
-#~ msgid "Add columns"
-#~ msgstr "Pievienot kolonas"
-
-#~ msgid "Add command"
-#~ msgstr "Pievienot komandu"
-
-#~ msgid "Add data"
-#~ msgstr "Pievienot datus"
-
-#~ msgid "Add multiple rasters or vectors"
-#~ msgstr "Pievienot vairākas rastra vai vektoru kartes"
-
-#~ msgid "Add or edit map info"
-#~ msgstr "Pievienot vai rediģēt kartes informāciju"
-
-#~ msgid "Add or edit raster and vector legend"
-#~ msgstr "Pievienot vai rediģēt rastra un vektoru leģendu"
-
-#~ msgid "Add or edit raster map"
-#~ msgstr "Pievienot vai rediģēt rastra karti"
-
-#~ msgid "Add or edit scale bar"
-#~ msgstr "Pievienot vai rediģēt mērogjoslu"
-
-#~ msgid "Add or edit vector map"
-#~ msgstr "Pievienot vai rediģēt vektoru karti"
-
-#~ msgid "Add raster"
-#~ msgstr "Pievienot rastru"
-
-#~ msgid "Add vector"
-#~ msgstr "Pievienot vektorus"
-
-#~ msgid "Addons extensions"
-#~ msgstr "Paplašinājumi"
-
-#~ msgid "Albedo"
-#~ msgstr "Albedo"
-
-#~ msgid "Allocate subnets"
-#~ msgstr "Izdalīt apakštīklus"
-
-#~ msgid "Animation tool"
-#~ msgstr "Animāciju rīks"
-
-#~ msgid "Atmospheric correction"
-#~ msgstr "Atmosfēras koriģēšana"
-
-#~ msgid "Attribute table manager"
-#~ msgstr "Atribūtu tabulas pārvaldnieks"
-
-#~ msgid "Basic 3D raster metadata"
-#~ msgstr "3D rastra pamata metadati"
-
-#~ msgid "Basic raster metadata"
-#~ msgstr "Rastra pamata metadati"
-
-#~ msgid "Basic vector metadata"
-#~ msgstr "Vektordatu pamata metadati"
-
-#~ msgid "Biomass growth"
-#~ msgstr "Biomasas pieaugums"
-
-#~ msgid "Buffer rasters"
-#~ msgstr "Rastra buferzonas"
-
-#~ msgid "Buffer vectors"
-#~ msgstr "Vektoru buferi"
-
-#~ msgid "Change category values and labels"
-#~ msgstr "Mainīt kategoriju vērtības un nosaukumus"
-
-#, fuzzy
-#~ msgid "Change current project and mapset."
-#~ msgstr "Mainīt novietojumu un karšu kopu"
-
-#, fuzzy
-#~ msgid "Change project (location) and mapset"
-#~ msgstr "Mainīt novietojumu un karšu kopu"
-
-#~ msgid "Change settings"
-#~ msgstr "Mainīt iestatījumus"
-
-#~ msgid "Change values"
-#~ msgstr "Mainīt vērtības"
-
-#~ msgid "Change working directory"
-#~ msgstr "Mainīt darba mapi"
-
-#~ msgid "Change working environment"
-#~ msgstr "Mainīt darba vidi"
-
-#~ msgid "Classify image"
-#~ msgstr "Klasificēt attēlu"
-
-#~ msgid "Clean vector map"
-#~ msgstr "Sakopt vektordatu karti"
-
 #~ msgid "Clear command prompt content"
 #~ msgstr "Notīrīt komandrindas ievades saturu"
 
-#~ msgid "Close GUI and exit GRASS GIS shell."
-#~ msgstr "Aizvērt grafisko vidi un iziet no GRASS GIS čaulas."
-
-#~ msgid "Close all open map display windows"
-#~ msgstr "Aizvērt visus šobrīd atvērtos kartes skata logus"
-
-#~ msgid "Close current map display window"
-#~ msgstr "Aizvērt pašreizējo kartes skata logu"
-
-#~ msgid "Close model file"
-#~ msgstr "Aizvērt modeļa failu"
-
-#~ msgid "Close modeler window"
-#~ msgstr "Aizver modelēšanas logu"
-
-#~ msgid "Closest points"
-#~ msgstr "Tuvākie punkti"
-
-#~ msgid "Clump"
-#~ msgstr "Pudurot"
-
-#~ msgid "Color tables"
-#~ msgstr "Krāsu tabulas"
-
 #~ msgid "Command prompt"
 #~ msgstr "Komandrinda"
-
-#~ msgid "Common export formats"
-#~ msgstr "Biežāk sastopamie formāti"
-
-#~ msgid "Common import formats"
-#~ msgstr "Biežāk sastopamie formāti"
-
-#~ msgid "Connect"
-#~ msgstr "Pieslēgties"
-
-#~ msgid "Copy table"
-#~ msgstr "Kopēt tabulu"
-
-#~ msgid "Cost surface"
-#~ msgstr "Izmaksu virsma"
-
-#~ msgid "Create LRS"
-#~ msgstr "Izveidot LRS"
-
-#~ msgid "Create database"
-#~ msgstr "Izveidot datubāzi"
-
-#, fuzzy
-#~ msgid "Create new Location"
-#~ msgstr "Veidot jaunu novietojumu"
 
 #, fuzzy
 #~ msgid "Create new model (Ctrl+N)"
 #~ msgstr "Veidot jaunu modeli"
 
-#, fuzzy
-#~ msgid "Create new project (location)"
-#~ msgstr "Veidot jaunu novietojumu"
-
-#~ msgid "Create new workspace"
-#~ msgstr "Izveidot jaunu darbtelpu"
-
-#~ msgid "Create or rebuild topology"
-#~ msgstr "Izveidot vai pārbūvēt topoloģiju"
-
-#~ msgid "Create/edit group"
-#~ msgstr "Veidot/rediģēt grupu"
-
-#, fuzzy
-#~ msgid "Creates new mapset in the current project, changes current mapset."
-#~ msgstr "Izveidot jaunu karšu kopu izvēlētajā novietojumā"
-
-#~ msgid "DXF export"
-#~ msgstr "DXF eksports"
-
-#~ msgid "DXF import"
-#~ msgstr "DXF imports"
-
 #~ msgid "Data Toolbar"
 #~ msgstr "Datu rīkjosla"
-
-#~ msgid "Database information"
-#~ msgstr "Datubāzes informācija"
-
-#~ msgid "Delaunay triangles"
-#~ msgstr "Delonē triangulācija"
 
 #, fuzzy
 #~ msgid "Delete selected locations"
 #~ msgstr "Dzēst izvēlēto novietojumu"
 
-#~ msgid "Describe table"
-#~ msgstr "Aprakstīt tabulas"
-
-#~ msgid "Develop 3D raster map"
-#~ msgstr "Veidot 3D rastra karti"
-
-#~ msgid "Develop images and groups"
-#~ msgstr "Veidot attēla grupas"
-
-#~ msgid "Develop raster map"
-#~ msgstr "Veidot rastra karti"
-
-#~ msgid "Develop vector map"
-#~ msgstr "Veidot vektordatu karti"
-
 #~ msgid "Display resolution"
 #~ msgstr "Ekrāna izšķirtspēja"
 
-#~ msgid "Dissolve boundaries"
-#~ msgstr "Izšķīdināt robežas"
-
-#~ msgid "Distance to features"
-#~ msgstr "Attālums līdz objektiem"
-
 #~ msgid "Download sample location"
 #~ msgstr "Lejupielādēt parauga novietojumu"
-
-#~ msgid "Drop column"
-#~ msgstr "Dzēst kolonu"
-
-#~ msgid "Drop database"
-#~ msgstr "Dzēst datubāzi"
-
-#~ msgid "Drop row"
-#~ msgstr "Dzēst rindu"
-
-#~ msgid "Drop table"
-#~ msgstr "Dzēst tabulu"
-
-#~ msgid "ESRI e00 import"
-#~ msgstr "ESRI e00 imports"
-
-#~ msgid "Edge detection"
-#~ msgstr "Robežu detektēšana"
 
 #, fuzzy
 #~ msgid "Error when deleting locations"
 #~ msgstr "Kļūda nolasot failu '%s'."
 
-#~ msgid "Export 3D color table"
-#~ msgstr "Eksportēt 3D krāsu tabulu"
-
-#~ msgid "Export 3D raster maps"
-#~ msgstr "Eksportēt 3D rastra kartes"
-
-#~ msgid "Export color table"
-#~ msgstr "Eksportēt krāsu tabulu"
-
-#~ msgid "Export database table"
-#~ msgstr "Eksportēt datubāzes tabulu"
-
-#~ msgid "Export raster map"
-#~ msgstr "Eksportēt rastra karti"
-
-#~ msgid "Export to PDF"
-#~ msgstr "Eksportēt kā PDF"
-
-#~ msgid "Export to PostScript"
-#~ msgstr "Eksportēt kā PostScript"
-
-#~ msgid "Export to Python"
-#~ msgstr "Eksportēt kā Python"
-
-#~ msgid "Export to image"
-#~ msgstr "Eksportēt kā attēlu"
-
-#~ msgid "Export vector dataset"
-#~ msgstr "Eksportēt vektordatus"
-
-#~ msgid "Export vector map"
-#~ msgstr "Eksportēt vektrodatus"
-
 #~ msgid "Extent"
 #~ msgstr "Apjoms"
-
-#~ msgid "Feature selection"
-#~ msgstr "Objektu izvēlēšanās"
-
-#~ msgid "Fill NULL cells"
-#~ msgstr "Aizpildīt NULL šūnas"
-
-#, fuzzy
-#~ msgid "Fill NULL cells using IDW"
-#~ msgstr "Aizpildīt NULL šūnas"
-
-#~ msgid "Fill lake"
-#~ msgstr "Ezera aizpildīšana"
-
-#~ msgid "Fills lake at given point to given level."
-#~ msgstr "Aizpilda ezeru no punkta ar norādīto līmeni."
-
-#~ msgid "Filter image"
-#~ msgstr "Filtrēt attēlu"
-
-#~ msgid "Flow accumulation"
-#~ msgstr "Plūsmas akumulācija"
-
-#~ msgid "Flow lines"
-#~ msgstr "Plūsmas līnijas"
-
-#~ msgid "Fractal surface"
-#~ msgstr "Fraktāļa virsma"
 
 #, python-format
 #~ msgid "GRASS GIS %s Startup%s"
 #~ msgstr "GRASS GIS %s palaišana %s"
 
-#~ msgid "GRASS working environment"
-#~ msgstr "GRASS darba vide"
-
-#~ msgid "GRIDATB.FOR export"
-#~ msgstr "GRIDATB.FOR eksports"
-
-#~ msgid "GRIDATB.FOR import"
-#~ msgstr "GRIDATB.FOR importēšana"
-
-#~ msgid "GUI help"
-#~ msgstr "Grafiskās vides palīdzība"
-
-#~ msgid "GUI tools"
-#~ msgstr "Grafiskās vides rīki"
-
-#~ msgid "General statistics"
-#~ msgstr "Vispārēja statistika"
-
-#~ msgid "Generate areas from points"
-#~ msgstr "Ģenerēt poligonus no punktiem"
-
-#~ msgid "Generate contour lines"
-#~ msgstr "Ģenerēt izolīnijas"
-
-#~ msgid "Generate from database"
-#~ msgstr "Ģenerēt no datubāzes"
-
-#~ msgid "Generate points"
-#~ msgstr "Ģenerēt punktus"
-
-#~ msgid "Generate points along lines"
-#~ msgstr "Ģenerēt punktus uz līnijām"
-
-#~ msgid "Generate random cells"
-#~ msgstr "Ģenerēt gadījuma šūnas"
-
-#~ msgid "Generate random points"
-#~ msgstr "Ģenerēt gadījuma punktus"
-
-#~ msgid "Generate surfaces"
-#~ msgstr "Ģenerēt virsmas"
-
-#~ msgid "Geonames import"
-#~ msgstr "Geonames imports"
-
 #~ msgid "Go to"
 #~ msgstr "Iet uz"
-
-#~ msgid "Graphical modeler"
-#~ msgstr "Grafiskais modelētājs"
-
-#~ msgid "Groundwater modeling"
-#~ msgstr "Gruntsūdens modelēšana"
-
-#~ msgid "Grow"
-#~ msgstr "Audzēt"
-
-#~ msgid "Grow by one cell"
-#~ msgstr "Pieaudzēt vienu šūnu"
-
-#~ msgid "HIS to RGB"
-#~ msgstr "HIS uz RGB"
-
-#~ msgid "Hydrologic modeling"
-#~ msgstr "Hidroloģiskā modelēšana"
-
-#~ msgid "IDW from raster points"
-#~ msgstr "IDW no rastra punktiem"
-
-#~ msgid "IDW from vector points"
-#~ msgstr "IDW no vektoru punktiem"
-
-#~ msgid "Import 3D raster data"
-#~ msgstr "Importēt 3D rastra datus"
-
-#~ msgid "Import of common raster formats"
-#~ msgstr "Importēt biežāk sastopamos rastra datu formātus"
-
-#~ msgid "Import of common vector formats"
-#~ msgstr "Importēt biežāk sastopamos vektordatu formātus"
-
-#~ msgid "Import raster dataset"
-#~ msgstr "Importēt rastra datus"
-
-#~ msgid "Import vector dataset"
-#~ msgstr "Importēt vektordatus"
-
-#~ msgid "Interpolate surfaces"
-#~ msgstr "Interpolēt virsmas"
 
 #~ msgid "Invalid location name"
 #~ msgstr "Nederīgs novietojuma nosaukums"
@@ -12272,125 +15749,18 @@ msgstr ""
 #~ msgid "Invalid map size %d,%d\n"
 #~ msgstr "Nederīgs kartes izmērs %d,%d\n"
 
-#~ msgid "Join table"
-#~ msgstr "Pievienot tabulu"
-
-#~ msgid "Kappa analysis"
-#~ msgstr "Kappa analīze"
-
-#~ msgid "LAS LiDAR points import"
-#~ msgstr "LAS LiDAR punktu importēšana"
-
-#~ msgid "Landforms"
-#~ msgstr "Reljefa formas"
-
-#~ msgid "Landsat cloud cover assessment"
-#~ msgstr "Landsat mākoņu segas novērtējums"
-
-#~ msgid "Landscape patch analysis"
-#~ msgstr "Ainavu analīze"
-
-#, fuzzy
-#~ msgid "Launch Data Catalog."
-#~ msgstr "Datu katalogs"
-
-#~ msgid "Launch script"
-#~ msgstr "Darbināt skriptu"
-
-#~ msgid "Launches Simple Python Editor."
-#~ msgstr "Startē vienkāršu Python redaktoru."
-
-#~ msgid "Lidar analysis"
-#~ msgstr "LiDAR analīze"
-
-#~ msgid "Linear referencing"
-#~ msgstr "Lineārās atskaites sistēma"
-
-#~ msgid "Linear regression"
-#~ msgstr "Lineārā regresija"
-
-#~ msgid "List"
-#~ msgstr "Parādīt"
-
-#~ msgid "List columns"
-#~ msgstr "Parādīt kolonas"
-
-#~ msgid "List databases"
-#~ msgstr "Parādīt datubāzes"
-
-#~ msgid "List drivers"
-#~ msgstr "Parādīt dzinējus"
-
-#~ msgid "List tables"
-#~ msgstr "Parādīt tabulas"
-
 #, fuzzy
 #~ msgid "Load model from file (Ctrl+O)"
 #~ msgstr "Ielādēt modeli no datnes"
 
-#~ msgid "Load workspace from file"
-#~ msgstr "Ielādēt darbtelpu no datnes"
-
 #~ msgid "Location Name:"
 #~ msgstr "Novietojuma nosaukums:"
-
-#~ msgid "Login"
-#~ msgstr "Pieteikties"
 
 #~ msgid "MASK"
 #~ msgstr "MASKA"
 
-#~ msgid "Manage NULL values"
-#~ msgstr "Pārvaldīt NULL vērtības"
-
-#~ msgid "Manage categories"
-#~ msgstr "Pārvaldīt kategorijas"
-
-#~ msgid "Manage colors"
-#~ msgstr "Pārvaldīt krāsas"
-
-#~ msgid "Manage databases"
-#~ msgstr "Pārvaldīt datubāzes"
-
-#~ msgid "Manage image colors"
-#~ msgstr "Pārvaldīt attēla krāsas"
-
-#~ msgid "Manage maps"
-#~ msgstr "Pārvaldīt kartes"
-
-#~ msgid "Manage maps in datasets"
-#~ msgstr "Pārvaldīt kartes datu kopās"
-
-#~ msgid "Manage projections"
-#~ msgstr "Pārvaldīt projekcijas"
-
-#, fuzzy
-#~ msgid "Manage signature files"
-#~ msgstr "Saglabāt parakstu datni"
-
-#~ msgid "Manage timestamp"
-#~ msgstr "Pārvaldīt laika zīmogu"
-
-#~ msgid "Map legend"
-#~ msgstr "Kartes leģenda"
-
-#~ msgid "Map type conversions"
-#~ msgstr "Kartes tipa konvertēšana"
-
-#~ msgid "Mapset access"
-#~ msgstr "Karšu kopu piekļuve"
-
-#~ msgid "Matlab 2D array export"
-#~ msgstr "Matlab 2D masīva eksports"
-
-#~ msgid "Merge"
-#~ msgstr "Apvienot"
-
 #~ msgid "Mode"
 #~ msgstr "Režīms"
-
-#~ msgid "Modis quality control"
-#~ msgstr "Modis kvalitātes kontrole"
 
 #~ msgid "Name for output vector map"
 #~ msgstr "Izvades vektordatu kartes nosaukums"
@@ -12398,84 +15768,11 @@ msgstr ""
 #~ msgid "Name of input vector map"
 #~ msgstr "Ievades vektordatu kartes nosaukums"
 
-#~ msgid "Nearest features"
-#~ msgstr "Tuvākie objekti"
-
-#~ msgid "Neighborhood analysis"
-#~ msgstr "Kaimiņu analīze"
-
-#~ msgid "Neighborhood points"
-#~ msgstr "Kaimiņu punkti"
-
-#~ msgid "Network analysis"
-#~ msgstr "Tīkla analīze"
-
-#~ msgid "Network preparation"
-#~ msgstr "Tīkla sagatavošana"
-
-#~ msgid "New map display window"
-#~ msgstr "Jauns kartes skata logs"
-
-#~ msgid "New table"
-#~ msgstr "Jauna tabula"
-
-#~ msgid "Object segmentation"
-#~ msgstr "Objektu segmentēšana"
-
-#~ msgid "Open"
-#~ msgstr "Atvērt"
-
-#~ msgid "Open new map display window"
-#~ msgstr "Atver jaunu kartes skata logu"
-
-#~ msgid "Orthophoto tools"
-#~ msgstr "Ortofoto rīki"
-
 #~ msgid "Output window"
 #~ msgstr "Izvades logs"
 
-#~ msgid "Overlay rasters"
-#~ msgstr "Pārklāt rastrus"
-
-#~ msgid "Overlay vector maps"
-#~ msgstr "Pārklāt vektoru kartes"
-
-#~ msgid "PNG export"
-#~ msgstr "PNG eksports"
-
-#~ msgid "PNG import"
-#~ msgstr "PNG importēšana"
-
-#~ msgid "PPM export"
-#~ msgstr "PPM eksports"
-
-#~ msgid "Pack raster map"
-#~ msgstr "Sapakot rastra karti"
-
-#~ msgid "Parallel lines"
-#~ msgstr "Paralēlas līnijas"
-
 #~ msgid "Plot options"
 #~ msgstr "Grafika iestatījumi"
-
-#~ msgid "Point analysis"
-#~ msgstr "Punktu analīze"
-
-#, fuzzy
-#~ msgid "Point cloud (LAS LiDAR) import"
-#~ msgstr "LAS LiDAR punktu importēšana"
-
-#~ msgid "Preferences"
-#~ msgstr "Iestatījumi"
-
-#~ msgid "Query any table"
-#~ msgstr "Vaicāt jebkurai tabulai"
-
-#~ msgid "Query raster maps"
-#~ msgstr "Vaicājumi rastra kartēm"
-
-#~ msgid "Query vector map"
-#~ msgstr "Vaicājumi vektoru kartēm"
 
 #, fuzzy
 #~ msgid "Quit Simple Python Editor"
@@ -12484,44 +15781,14 @@ msgstr ""
 #~ msgid "Quit digitizer"
 #~ msgstr "Iziet no digitizētāja"
 
-#~ msgid "Quit modeler"
-#~ msgstr "Iziet no modelētāja"
-
 #~ msgid "Quit plot tool"
 #~ msgstr "Iziet no grafiku rīka"
 
 #~ msgid "Quit raster digitizer"
 #~ msgstr "Iziet no rastra digitizētāja"
 
-#~ msgid "Random cells and vector points"
-#~ msgstr "Gadījuma šūnas un vektoru punkti"
-
 #~ msgid "Raster Digitizer manual"
 #~ msgstr "Rastra digitizētāja rokasgrāmata"
-
-#~ msgid "Raster buffers and distance"
-#~ msgstr "Rastra buferzonas un attālumi"
-
-#~ msgid "Raster calculations"
-#~ msgstr "Rastra aprēķini"
-
-#~ msgid "Raster dataset color table"
-#~ msgstr "Rastra kartes krāsu tabula"
-
-#~ msgid "Raster map calculator"
-#~ msgstr "Rastra kalkulators"
-
-#~ msgid "Raster map calculator."
-#~ msgstr "Rastra kalkulators."
-
-#~ msgid "Raster to vector"
-#~ msgstr "Rastru par vektoriem"
-
-#~ msgid "Rate of spread"
-#~ msgstr "Izplatīšanās ātrums"
-
-#~ msgid "Reclassify"
-#~ msgstr "Pārklasificēt"
 
 #~ msgid "Redo"
 #~ msgstr "Pārdarīt"
@@ -12530,50 +15797,11 @@ msgstr ""
 #~ msgid "Remove MASK"
 #~ msgstr "Noņemt"
 
-#~ msgid "Remove item"
-#~ msgstr "Noņemt vienumu"
-
-#~ msgid "Render all map displays"
-#~ msgstr "Zīmēt visus kartes skatus"
-
-#~ msgid "Reports and statistics"
-#~ msgstr "Atskaites un statistika"
-
 #~ msgid "Run python script"
 #~ msgstr "Darbināt Python skriptu"
 
-#~ msgid "SPOT NDVI import"
-#~ msgstr "SPOT NDVI importēšana"
-
-#~ msgid "SQL statement"
-#~ msgstr "SQL izteikums"
-
-#~ msgid "SRTM HGT import"
-#~ msgstr "SRTM HGT importēšana"
-
-#~ msgid "SVG export"
-#~ msgstr "SVG eksports"
-
-#~ msgid "Sampling"
-#~ msgstr "Paraugošana"
-
-#~ msgid "Satellite images tools"
-#~ msgstr "Satelītattēlu rīki"
-
-#~ msgid "Save as"
-#~ msgstr "Saglabāt kā"
-
-#~ msgid "Save model to file"
-#~ msgstr "Saglabāt modeli datnē"
-
 #~ msgid "Save output window content to the file"
 #~ msgstr "Saglabāt loga izvadi failā"
-
-#~ msgid "Save workspace to file"
-#~ msgstr "Saglabāt darbtelpu failā"
-
-#~ msgid "Select by attributes"
-#~ msgstr "Izvēlēties pēc atribūtiem"
 
 #~ msgid "Select input vector map:"
 #~ msgstr "Izvēlieties ievades vektoru karti:"
@@ -12581,90 +15809,11 @@ msgstr ""
 #~ msgid "Select output vector map:"
 #~ msgstr "Izvēlieties izvades vektoru karti:"
 
-#~ msgid "Set region"
-#~ msgstr "Iestatīt reģionu"
-
-#, fuzzy
-#~ msgid "Set/unset access to other mapsets in current project"
-#~ msgstr "Izveidot jaunu karšu kopu izvēlētajā novietojumā"
-
-#~ msgid "Shortest path"
-#~ msgstr "Īsākais ceļš"
-
 #~ msgid "Show comp. extent"
 #~ msgstr "Rādīt aprēķinu reģionu"
 
-#~ msgid "Show current region"
-#~ msgstr "Parādīt pašreizējo reģionu"
-
-#~ msgid "Show current region extent in Map Display"
-#~ msgstr "Parādīt pašreizējo reģiona apjomu kartes skatā"
-
-#~ msgid "Show settings"
-#~ msgstr "Rādīt iestatījumus"
-
-#~ msgid "Shows the extent and resolution of the computational region."
-#~ msgstr "Parāda aprēķinu reģiona apjomu un izšķirtspēju."
-
-#~ msgid "Shows the extent of the computational region in Map Display."
-#~ msgstr "Parāda aprēķinu reģiona apjomu kartes skatā."
-
-#~ msgid "Simplified raster import with reprojection"
-#~ msgstr "Vienkāršota rastra importēšana ar pārprojecēšanu"
-
-#~ msgid "Simplified raster map calculator"
-#~ msgstr "Vienkāršots rastra kalkulators"
-
-#~ msgid "Simplified vector import with reprojection"
-#~ msgstr "Vienkāršota vektordatu importēšana ar pārprojecēšanu"
-
-#~ msgid "Slope and aspect"
-#~ msgstr "Nogāze un tās orientācija"
-
-#~ msgid "Smooth or simplify"
-#~ msgstr "Nogludināt vai vienkāršot"
-
-#~ msgid "Split lines"
-#~ msgstr "Sadalīt līnijas"
-
-#~ msgid "Steiner tree"
-#~ msgstr "Šteinera koks"
-
-#~ msgid "Terra ASTER HDF import"
-#~ msgstr "Terra ASTER HDF importēšana"
-
-#~ msgid "Terrain analysis"
-#~ msgstr "Reljefa analīze"
-
-#~ msgid "Terrain parameters"
-#~ msgstr "Reljefa parametri"
-
-#~ msgid "Test"
-#~ msgstr "Testēt"
-
-#~ msgid "Textural features"
-#~ msgstr "Teksturālās īpašības"
-
-#~ msgid "Thin"
-#~ msgstr "Tievināt"
-
 #~ msgid "Threshold"
 #~ msgstr "Robežvērtība"
-
-#~ msgid "Topographic correction"
-#~ msgstr "Topogrāfiskā koriģēšana"
-
-#~ msgid "Topology maintenance"
-#~ msgstr "Topoloģijas uzturēšana"
-
-#~ msgid "Transform features"
-#~ msgstr "Pārveidot objektus"
-
-#~ msgid "Transform image"
-#~ msgstr "Pārveidot attēlu"
-
-#~ msgid "Traveling salesman analysis"
-#~ msgstr "Ceļojošā pārdevēja analīze"
 
 #~ msgid "Unable to delete location"
 #~ msgstr "Nav iespējams dzēst novietojumu"
@@ -12692,66 +15841,14 @@ msgstr ""
 #~ msgid "Unable to rename selected location"
 #~ msgstr "Nav iespējams dzēst novietojumu"
 
-#~ msgid "Update area attributes from raster"
-#~ msgstr "Atjaunināt poligonu atribūtus no rastra datiem"
-
-#~ msgid "Update area attributes from vector"
-#~ msgstr "Atjaunināt poligonu atribūtus no vektordatiem"
-
-#~ msgid "Update point attributes from areas"
-#~ msgstr "Atjaunināt punktu atribūtus no poligoniem"
-
-#~ msgid "User access"
-#~ msgstr "Lietotāju piekļuve"
-
-#~ msgid "VTK export"
-#~ msgstr "VTK eksports"
-
 #~ msgid "Vector Toolbar"
 #~ msgstr "Vektoru rīkjosla"
-
-#~ msgid "Vector database connections"
-#~ msgstr "Vektoru datubāzes savienojumi"
-
-#~ msgid "Vector map profiling tool"
-#~ msgstr "Vektorkaršu profilēšanas rīks"
 
 #~ msgid "Vector network analysis settings"
 #~ msgstr "Vektordatu tīkla analīzes iestatījumi"
 
-#~ msgid "Vector to raster"
-#~ msgstr "Vektorus par rastru"
-
-#~ msgid "Vegetation indices"
-#~ msgstr "Veģetācijas indeksi"
-
 #~ msgid "Version and copyright"
 #~ msgstr "Versija un autortiesības"
-
-#~ msgid "Visibility"
-#~ msgstr "Redzamība"
-
-#~ msgid "Visibility network"
-#~ msgstr "Redzamības tīkls"
-
-#~ msgid "Voronoi diagram/Thiessen polygons"
-#~ msgstr "Voronoja diagramma / Tīzena poligoni"
-
-#~ msgid "WFS"
-#~ msgstr "WFS"
-
-#, fuzzy
-#~ msgid "WMS/WMTS import"
-#~ msgstr "SRTM HGT importēšana"
-
-#~ msgid "Watershed basin creation"
-#~ msgstr "Sateces baseinu izveide"
-
-#~ msgid "Watershed subbasins"
-#~ msgstr "Sateces apakšbaseini"
-
-#~ msgid "Wildfire modeling"
-#~ msgstr "Savvaļas ugunsgrēku modelēšana"
 
 #~ msgid "boundary"
 #~ msgstr "robeža"

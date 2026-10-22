@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -4002,7 +4002,15 @@ msgid "Error reading raster data for row %d of <%s>"
 msgstr ""
 
 #, c-format
+msgid "Invalid byte count in raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
 msgid "Error uncompressing raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Raster row for <%s> is larger than expected"
 msgstr ""
 
 #, c-format
