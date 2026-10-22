@@ -270,6 +270,9 @@ class GStdout:
             self.write("\n")
 
     def write(self, s):
+        if len(s) == 0:
+            return
+
         # Python and tools may write a line in parts, so wait for \n or \r.
         s = self._incomplete_line + s
         end = max(s.rfind("\n"), s.rfind("\r")) + 1
