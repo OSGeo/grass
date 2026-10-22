@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2026-07-27 14:40+0000\n"
 "Last-Translator: Liuxs <liuxspro@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
@@ -678,14 +678,17 @@ msgstr ""
 msgid "Rendering aborted"
 msgstr ""
 
-msgid "Downloading data "
-msgstr ""
-
-msgid "Rendering & "
+#, python-brace-format
+msgid "Rendering & downloading data {layers}..."
 msgstr ""
 
 msgid "Rendering..."
 msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Manage datasets"
+msgid "Downloading data {layers}..."
+msgstr "数据集管理"
 
 msgid "Trying to recover from default region..."
 msgstr "正在尝试恢复默认区域..."
@@ -858,8 +861,9 @@ msgid ""
 "Details: %(detail)s"
 msgstr ""
 
-msgid "Unable to set "
-msgstr "无法设置 "
+#, python-brace-format
+msgid "Unable to set '{group}:{key}:{subkey}'"
+msgstr ""
 
 #, python-format
 msgid "Unable to parse settings '%s'"
@@ -1688,7 +1692,7 @@ msgstr ""
 msgid "Table"
 msgstr "表"
 
-msgid " (read-only)"
+msgid "Table (read-only)"
 msgstr ""
 
 msgid "SQL Query"
@@ -2275,9 +2279,15 @@ msgid ""
 "10+ points for 3rd order."
 msgstr ""
 
-#, python-brace-format
-msgid "The {map_type} map {map_name} exists. Do you want to overwrite?"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Model file <%s> already exists. Do you want to overwrite this file?"
+msgid "The raster map {map_name} exists. Do you want to overwrite?"
+msgstr "模型文件 <%s> 已存在。是否要覆盖该文件？"
+
+#, fuzzy, python-brace-format
+#| msgid "Model file <%s> already exists. Do you want to overwrite this file?"
+msgid "The vector map {map_name} exists. Do you want to overwrite?"
+msgstr "模型文件 <%s> 已存在。是否要覆盖该文件？"
 
 msgid "Rectifying images, please wait..."
 msgstr ""
@@ -2534,10 +2544,8 @@ msgstr ""
 msgid "Reload GCPs from POINTS file"
 msgstr ""
 
-msgid "Set map canvas for "
-msgstr ""
-
-msgid " / Zoom to map"
+#, python-brace-format
+msgid "Set map canvas for {zoom_back} / Zoom to map"
 msgstr ""
 
 msgid "Update GCP coordinates"
@@ -2784,7 +2792,9 @@ msgstr "您的模型中的“{task_name}”模块包含参数化标志（paramet
 msgid "<not defined>"
 msgstr "<未定义>"
 
-msgid "Condition: "
+#, fuzzy, python-brace-format
+#| msgid "Condition: "
+msgid "Condition: {label}"
 msgstr "条件： "
 
 msgid "Condition: not defined"
@@ -3401,8 +3411,10 @@ msgstr "字号："
 msgid "Example"
 msgstr ""
 
-msgid "Enter parameters for '"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid " Enter parameters for %s projection "
+msgid "Enter parameters for '{tool}'"
+msgstr " 输入投影%s的参数 "
 
 msgid "Close this window without executing the command (Ctrl+Q)"
 msgstr "不执行命令而关闭窗口(Ctrl+Q)"
@@ -3751,11 +3763,15 @@ msgstr ""
 msgid "Not selectable element"
 msgstr ""
 
-msgid "Mapset"
-msgstr "地图集"
+#, fuzzy, python-brace-format
+#| msgid "Mapset: %s"
+msgid "Mapset: {mapset}"
+msgstr "地图集：%s"
 
-msgid "Type: "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Type of element:"
+msgid "Type: {element_type}"
+msgstr "要素类型："
 
 #, python-format
 msgid "GSelect: invalid item: %s"
@@ -4149,7 +4165,7 @@ msgstr "要素颜色："
 msgid "Area fill color:"
 msgstr "区域填充色："
 
-msgid "Random colors according to category number "
+msgid "Random colors according to category number"
 msgstr ""
 
 msgid "Symbol:"
@@ -4258,6 +4274,9 @@ msgstr ""
 "- 当前地图集总是可见。\n"
 "- 您可能只对当前地图集的拥有写入权限。\n"
 "- 您只对你名下的地图集拥有写入权限。"
+
+msgid "Mapset"
+msgstr "地图集"
 
 msgid "Owner"
 msgstr "所有者"
@@ -5048,9 +5067,6 @@ msgid "Preview"
 msgstr ""
 
 msgid "Training"
-msgstr ""
-
-msgid "/ Zoom to map"
 msgstr ""
 
 msgid "std dev"
@@ -6300,7 +6316,8 @@ msgstr ""
 msgid "Set opacity of <{}>"
 msgstr "设置<%s>的透明度"
 
-msgid "Layer group:"
+#, python-brace-format
+msgid "Layer group: {number}"
 msgstr ""
 
 msgid "Click to edit layer settings"
@@ -7202,8 +7219,10 @@ msgstr ""
 msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
 msgstr ""
 
-msgid "Measuring distance"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Measure distance"
+msgid "Measuring distance ({units}):"
+msgstr "测量距离"
 
 msgid "Measuring distance:"
 msgstr ""
@@ -7323,6 +7342,3845 @@ msgstr ""
 msgid "Property does not exist: %s"
 msgstr ""
 
+msgid "&File"
+msgstr "文件(&F)"
+
+msgid "New"
+msgstr "新建"
+
+msgid "Create new workspace"
+msgstr "创建新工作区"
+
+msgid "Open"
+msgstr "打开"
+
+msgid "Load workspace from file"
+msgstr "加载工作区文件"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Save as"
+msgstr "另存为"
+
+msgid "Save workspace to file"
+msgstr "保存工作区到文件"
+
+#, fuzzy
+#| msgid "Choose workspace file"
+msgid "Close workspace file"
+msgstr "选择工作区文件"
+
+msgid "Map display"
+msgstr "地图显示"
+
+msgid "Add raster"
+msgstr "添加栅格图层"
+
+msgid "Add raster map layer to current display"
+msgstr "添加栅格图层到当前显示区"
+
+msgid "Add vector"
+msgstr "添加矢量图层"
+
+msgid "Add vector map layer to current display"
+msgstr "添加矢量图层到当前显示窗口"
+
+msgid "Add multiple rasters or vectors"
+msgstr "批量添加栅格或矢量图层"
+
+msgid "Add multiple raster or vector map layers to current display"
+msgstr "批量添加栅格或矢量图层到当前显示窗口"
+
+#, fuzzy
+#| msgid "Add RGB map layer"
+msgid "Add RGB raster layer"
+msgstr "添加RGB图层"
+
+#, fuzzy
+#| msgid "Add raster map layer to current display"
+msgid "Add RGB raster map layer to current display"
+msgstr "添加栅格图层到当前显示区"
+
+msgid "Add web service layer"
+msgstr "添加网络图层"
+
+msgid "New map display window"
+msgstr "新建地图显示窗口"
+
+msgid "Open new map display window"
+msgstr "打开新地图显示窗口"
+
+#, fuzzy
+#| msgid "Force re-rendering all map layers"
+msgid "Render all map displays"
+msgstr "强制重新渲染所有图层"
+
+#, fuzzy
+#| msgid "Close all open map display windows"
+msgid "Re-render maps in all open map display windows"
+msgstr "关闭所有地图显示窗口"
+
+msgid "Close current map display window"
+msgstr "关闭地图显示窗口"
+
+msgid "Close all open map display windows"
+msgstr "关闭所有地图显示窗口"
+
+#, fuzzy
+#| msgid "Sample raster maps at point locations"
+msgid "Simplified raster import with reprojection"
+msgstr "提取数据点的栅格图层值"
+
+#, fuzzy
+#| msgid "Import a binary raster file into a GRASS raster map layer."
+msgid "Imports raster data into a GRASS raster map using GDAL library."
+msgstr "将二元栅格文件导入到GRASS栅格图层中。"
+
+#, fuzzy
+#| msgid "Export common formats"
+msgid "Import of common raster formats"
+msgstr "常见格式导出"
+
+msgid "ASCII x,y,z point import and gridding"
+msgstr "导入ASCII x,y,z点数据并栅格化"
+
+msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
+msgstr ""
+
+msgid "ASCII grid import"
+msgstr "导入ASCII网格"
+
+#, fuzzy
+#| msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
+msgid "Converts a GRASS ASCII raster file to binary raster map."
+msgstr "将三维ASCII栅格文本文件转换为二进制三维栅格地图。"
+
+msgid "ASCII polygons, lines, and point import"
+msgstr "导入ASCII格式多边形，线及点数据"
+
+msgid "Creates raster maps from ASCII polygon/line/point data files."
+msgstr "从ASCII格式的多边形/线形/点数据文件创建栅格地图。"
+
+msgid "Raw binary array import"
+msgstr "导入原始二进制数组"
+
+msgid "Import a binary raster file into a GRASS raster map layer."
+msgstr "将二元栅格文件导入到GRASS栅格图层中。"
+
+msgid "GRIDATB.FOR import"
+msgstr "导入GRIDATB.FOR数据"
+
+#, fuzzy
+#| msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgid "Imports GRIDATB.FOR map file (TOPMODEL) into a GRASS raster map."
+msgstr "将二进制栅格文件导入到GRASS三维栅格地图中。"
+
+msgid "Matlab 2D array import"
+msgstr "导入Matlab 2D数组"
+
+msgid "Imports a binary MAT-File(v4) to a GRASS raster."
+msgstr "将二元MAT-File(v4)导入为GRASS栅格。"
+
+msgid "PNG import"
+msgstr "导入PNG格式数据"
+
+#, fuzzy
+#| msgid "Export a GRASS raster map as a non-georeferenced PNG image."
+msgid "Imports non-georeferenced PNG format image."
+msgstr "将GRASS栅格地图导出为无地理参考数据的PNG图像。"
+
+msgid "SPOT NDVI import"
+msgstr "导入SPOT NDVI"
+
+#, fuzzy
+#| msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgid "Imports SPOT VGT NDVI data into a raster map."
+msgstr "将二进制栅格文件导入到GRASS三维栅格地图中。"
+
+msgid "SRTM HGT import"
+msgstr "导入SRTM HGT"
+
+#, fuzzy
+#| msgid "Imports E00 file into a vector map."
+msgid "Imports SRTM HGT files into raster map."
+msgstr "将E00文件导入到矢量地图。"
+
+msgid "Terra ASTER HDF import"
+msgstr "导入Terra ASTER HDF"
+
+msgid "Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp."
+msgstr ""
+
+msgid "LAS LiDAR points import"
+msgstr "导入LAS LiDAR点数据"
+
+#, fuzzy
+#| msgid "LAS LiDAR points import"
+msgid "Point cloud (LAS LiDAR) import"
+msgstr "导入LAS LiDAR点数据"
+
+#, fuzzy
+#| msgid "SRTM HGT import"
+msgid "WMS/WMTS import"
+msgstr "导入SRTM HGT"
+
+msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
+msgstr ""
+
+#, fuzzy
+#| msgid "Pack raster map"
+msgid "Unpack raster map"
+msgstr "打包栅格地图"
+
+msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
+msgstr ""
+
+#, fuzzy
+msgid "Reproject raster map from different GRASS project"
+msgstr "将栅格图从其他地点重新投影到当前地点"
+
+#, fuzzy
+msgid "Re-projects a raster map from given project to the current project."
+msgstr "将栅格图从另外地点重新投影到当前地点"
+
+msgid "Simplified vector import with reprojection"
+msgstr ""
+
+#, fuzzy
+#| msgid "Imports older versions of GRASS vector maps."
+msgid "Imports vector data into a GRASS vector map using OGR library."
+msgstr "导入旧版GRASS矢量地图。"
+
+#, fuzzy
+#| msgid "Export common formats"
+msgid "Import of common vector formats"
+msgstr "常见格式导出"
+
+msgid "ASCII points or GRASS ASCII format"
+msgstr "ASCII点数据或GRASS ASCII格式数据"
+
+msgid "Creates a vector map from an ASCII points file or ASCII vector file."
+msgstr "从ASCII点数据文件或矢量文件创建矢量地图。"
+
+msgid "ASCII points as a vector lines"
+msgstr "以ASCII点数据绘制矢量线段"
+
+msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
+msgstr "导入ASCII x,y[,z]坐标以绘制一系列线段。"
+
+msgid "DXF import"
+msgstr "导入DXF"
+
+msgid "Converts files in DXF format to GRASS vector map format."
+msgstr "转化DXF格式到GRASS矢量格式。"
+
+msgid "WFS"
+msgstr "WFS"
+
+msgid "Imports GetFeature from a WFS server."
+msgstr "从WFS器导入"
+
+msgid "ESRI e00 import"
+msgstr "导入ESRI e00格式数据"
+
+msgid "Imports E00 file into a vector map."
+msgstr "将E00文件导入到矢量地图。"
+
+msgid "Geonames import"
+msgstr "导入Geonames数据"
+
+msgid "Imports geonames.org country files into a vector points map."
+msgstr "将geonames.org文件导入为矢量点地图。"
+
+msgid "Matlab array or Mapgen format import"
+msgstr "从Matlab数组和MapGen文件导入"
+
+msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
+msgstr "将Mapgen或Matlab的ASCII矢量地图导入到GRASS。"
+
+msgid "Unpack vector map"
+msgstr "解开矢量图层"
+
+msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
+msgstr ""
+
+#, fuzzy
+msgid "Reproject vector map from different GRASS project"
+msgstr "将矢量地图从另外地点重新投影到当前地点"
+
+#, fuzzy
+msgid "Re-projects a vector map from one project to the current project."
+msgstr "将栅格图从另外地点重新投影到当前地点"
+
+msgid "Import 3D raster data"
+msgstr "导入三维栅格地图"
+
+msgid "ASCII 3D import"
+msgstr "导入三维ASCII数据"
+
+msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
+msgstr "将三维ASCII栅格文本文件转换为二进制三维栅格地图。"
+
+msgid "Raw binary array 3D import"
+msgstr "导入原始二进制三维数组"
+
+msgid "Imports a binary raster file into a GRASS 3D raster map."
+msgstr "将二进制栅格文件导入到GRASS三维栅格地图中。"
+
+msgid "Vis5D import"
+msgstr "导入Vis5D数据"
+
+msgid "Import 3-dimensional Vis5D files."
+msgstr "导入三维Vis5D文件。"
+
+#, fuzzy
+#| msgid "ASCII 3D import"
+msgid "LiDAR 3D import"
+msgstr "导入三维ASCII数据"
+
+#, fuzzy
+#| msgid "Volume to raster series"
+msgid "XYZ to 3D raster series"
+msgstr "体积转换为栅格系列"
+
+msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
+msgstr ""
+
+msgid "Import database table"
+msgstr "导入数据库表"
+
+msgid "Common import formats"
+msgstr "常用导入格式"
+
+msgid "Imports attribute tables in various formats."
+msgstr "从多种格式的特征表导入数据"
+
+msgid "Export raster map"
+msgstr "导出栅格地图"
+
+msgid "Common export formats"
+msgstr "常用导出格式"
+
+msgid "Exports GRASS raster maps into GDAL supported formats."
+msgstr "将GRASS栅格输出为GDAL支持的格式。"
+
+msgid "ASCII grid export"
+msgstr "导出ASCII栅格数据"
+
+msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgstr "将栅格地图层导出为GRASS ASCII文本格式。"
+
+msgid "ASCII x,y,z points export"
+msgstr "导出到ASCII x,y,z点数据"
+
+msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
+msgstr "将栅格地图导出为像素中心x,y,z值的文本文件。"
+
+msgid "GRIDATB.FOR export"
+msgstr "导出GRIDATB.FOR格式数据"
+
+#, fuzzy
+#| msgid "Exports GRASS raster maps into GDAL supported formats."
+msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
+msgstr "将GRASS栅格输出为GDAL支持的格式。"
+
+msgid "Matlab 2D array export"
+msgstr "导出Matlab 2D数组"
+
+msgid "Exports a GRASS raster to a binary MAT-File."
+msgstr "将GRASS栅格输出为二进制Matlab文件。"
+
+msgid "Raw binary array export"
+msgstr "导出原生二进制数组"
+
+msgid "Exports a GRASS raster to a binary array."
+msgstr "将GRASS栅格输出为二进制数组。"
+
+msgid "MPEG-1 export"
+msgstr "导出为MPEG-1格式数据"
+
+msgid "Converts raster map series to MPEG movie."
+msgstr "将栅格地图系列转换为MPEG电影。"
+
+msgid "PNG export"
+msgstr "导出PNG格式数据"
+
+msgid "Export a GRASS raster map as a non-georeferenced PNG image."
+msgstr "将GRASS栅格地图导出为无地理参考数据的PNG图像。"
+
+msgid "PPM export"
+msgstr "导出PPM格式数据"
+
+msgid "Converts a GRASS raster map to a PPM image file."
+msgstr "将GRASS栅格地图导出为PPM图像。"
+
+msgid "PPM from RGB export"
+msgstr "从RGB导出为PPM格式"
+
+msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
+msgstr "将三色GRASS栅格图层(R,G,B)导出为PPM图像文件。"
+
+msgid "POV-Ray export"
+msgstr "导出为POV-Ray文件"
+
+msgid "Converts a raster map layer into a height-field file for POV-Ray."
+msgstr "将GRASS栅格地图导出为含高度字段的POV-Ray文件。"
+
+msgid "VRML export"
+msgstr "导出为VRML格式"
+
+msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
+msgstr "将GRASS栅格地图导出为虚拟现实模型语言(VRML)格式。"
+
+msgid "VTK export"
+msgstr "导出为VTK格式"
+
+msgid "Converts raster maps into the VTK-ASCII format."
+msgstr "将GRASS栅格地图导出为VTK ASCII格式。"
+
+msgid "Pack raster map"
+msgstr "打包栅格地图"
+
+#, fuzzy
+#| msgid "Converts a raster map layer into a GRASS ASCII text file."
+msgid "Exports a raster map as GRASS specific archive file"
+msgstr "将栅格地图层导出为GRASS ASCII文本格式。"
+
+msgid "Export vector map"
+msgstr "导出矢量地图"
+
+#, fuzzy
+#| msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
+msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to OGC GeoPackage format."
+msgstr "将矢量图层导出为受支持的OGR矢量格式。默认输出为ESRI Shapefile格式。"
+
+msgid "ASCII points or GRASS ASCII vector export"
+msgstr "导出为ASCII点或GRASS ASCII矢量格式"
+
+msgid "Exports a vector map to a GRASS ASCII vector representation. By default only features with category are exported. To export all features use 'layer=-1'."
+msgstr "将矢量地图导出为GRASS ASCII矢量格式。默认只导出含有类别的数据。使用'layer=-1'以导出所有数据。"
+
+msgid "DXF export"
+msgstr "导出DXF格式"
+
+msgid "Exports vector map to DXF file format."
+msgstr "将矢量地图导出为DXF文件格式。"
+
+msgid "PostGIS export"
+msgstr "导出为PostGIS格式数据"
+
+msgid "Exports a vector map layer to PostGIS feature table."
+msgstr "将矢量地图导出为PostGIS格式数据。"
+
+msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
+msgstr "将GRASS x,y,z点数据导出为POV-Ray x,y,z格式数据。"
+
+msgid "SVG export"
+msgstr "导出为SVG格式"
+
+msgid "Exports a vector map to SVG file."
+msgstr "将矢量地图导出为SVG文件。"
+
+msgid "Converts a vector map to VTK ASCII output."
+msgstr "将矢量地图导出为VTK ASCII输出格式。"
+
+msgid "Pack vector map"
+msgstr "打包矢量地图"
+
+#, fuzzy
+#| msgid "Exports a vector map to SVG file."
+msgid "Exports a vector map as GRASS specific archive file"
+msgstr "将矢量地图导出为SVG文件。"
+
+#, fuzzy
+#| msgid "Export to image"
+msgid "Export to LiDAR format"
+msgstr "输出为图像"
+
+msgid "Export 3D raster maps"
+msgstr "导出三维栅格地图"
+
+msgid "ASCII 3D export"
+msgstr "导出为ASCII三维文本文件"
+
+msgid "Converts a 3D raster map layer into a ASCII text file."
+msgstr "将三维栅格图层转换为ASCII文本文件。"
+
+msgid "Raw binary array 3D export"
+msgstr "导出三维图层为原始二进制数组"
+
+msgid "Exports a GRASS 3D raster map to a binary array."
+msgstr "将GRASS三维栅格地图导出为二进制数组。"
+
+msgid "Vis5D export"
+msgstr "导出为Vis5D格式"
+
+msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
+msgstr "将 GRASS 3D 栅格文件输出为三维的 Vis5D 文件。"
+
+msgid "Converts 3D raster maps into the VTK-ASCII format."
+msgstr "将三维栅格地图转化为 VTK-Ascii 格式"
+
+#, fuzzy
+#| msgid "DXF export"
+msgid "NetCDF export"
+msgstr "导出DXF格式"
+
+#, fuzzy
+#| msgid "Export 3D raster maps"
+msgid "Export a 3D raster map as netCDF file."
+msgstr "导出三维栅格地图"
+
+msgid "Export database table"
+msgstr "导出数据库表"
+
+msgid "Exports attribute tables into various formats."
+msgstr "将属性表导出为多种格式。"
+
+msgid "Link external raster data"
+msgstr "链接到外部栅格数据"
+
+msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
+msgstr "将GDAL支持的栅格文件链接为准GRASS栅格图层。"
+
+msgid "Link external vector data"
+msgstr "链接到外部矢量数据"
+
+msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
+msgstr "将OGR支持的图层链接为准矢量地图。"
+
+msgid "Output format for raster data"
+msgstr "栅格数据输出格式"
+
+msgid "Redirects raster output to file utilizing GDAL library rather than storing in GRASS raster format."
+msgstr ""
+
+msgid "Output format for vector data"
+msgstr "矢量数据输出格式"
+
+msgid "Defines vector output format utilizing OGR library."
+msgstr "用OGR库定义矢量输出格式。"
+
+msgid "Manage maps"
+msgstr "地图管理"
+
+#, fuzzy
+#| msgid "Copies available data files in the current mapset search path to the user's current mapset."
+msgid "Creates copies of maps and other elements Copies available data files in the current mapset search path to the user's current mapset."
+msgstr "将用户当前地图集搜索路径下可用数据文件拷贝到用户当前的地图集。"
+
+msgid "List"
+msgstr "列举"
+
+msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
+msgstr "列举用户所选的数据类型下可用的GRASS基础数据文件（可指定查找规则）。"
+
+msgid "Renames data base element files in the user's current mapset."
+msgstr "重命名当前用户地图集下数据库组成文件"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Removes data base element files from the user's current mapset using the search pattern."
+msgstr "使用查找规则从用户当前地图集删除数据库组成文件。"
+
+#, fuzzy
+msgid "Download project from web"
+msgstr "重命名选中的地图集"
+
+msgid "Download GRASS project from the web Get GRASS project from an URL or file path"
+msgstr ""
+
+#, fuzzy
+#| msgid "Add, edit or remove animations"
+msgid "Rebuild or remove all addons"
+msgstr "添加，编辑或移除动画"
+
+msgid "Rebuilds or removes all locally installed GRASS Addons extensions. By default only extensions built against different GIS Library are rebuilt."
+msgstr ""
+
+msgid "Map type conversions"
+msgstr "转换地图类型"
+
+msgid "Raster to vector"
+msgstr "将栅格转换为矢量格式"
+
+msgid "Converts a raster map into a vector map."
+msgstr "将栅格图转化为矢量图层。"
+
+#, fuzzy
+#| msgid "Raster series to volume"
+msgid "Raster series to 3D raster"
+msgstr "栅格系列转换为体积"
+
+msgid "Converts 2D raster map slices to one 3D raster volume map."
+msgstr "将 2D 栅格分块地图转化为一个 3D 栅格地图"
+
+#, fuzzy
+#| msgid "Raster 2.5D to volume"
+msgid "Raster 2.5D to 3D raster"
+msgstr "2.5D栅格地图转换为体积"
+
+msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
+msgstr "基于2D高度及栅格地图值创建3D体积地图。"
+
+msgid "Vector to raster"
+msgstr "矢量图转换为栅格图"
+
+msgid "Converts (rasterize) a vector map into a raster map."
+msgstr "将GRASS二元矢量图层转化(栅格化)为GRASS栅格图层。"
+
+#, fuzzy
+#| msgid "Vector to raster"
+msgid "Vector to 3D raster"
+msgstr "矢量图转换为栅格图"
+
+msgid "Converts a vector map (only points) into a 3D raster map."
+msgstr "将矢量地图(仅含有数据点)转换为三维栅格地图。"
+
+msgid "2D vector to 3D vector"
+msgstr "二维向量转化到三维向量"
+
+msgid "Performs transformation of 2D vector features to 3D."
+msgstr "将二维向量要素转化为三维向量要素。"
+
+#, fuzzy
+#| msgid "3D rasters to raster series"
+msgid "3D raster to raster series"
+msgstr "三维栅格转换为栅格系列"
+
+msgid "Converts 3D raster maps to 2D raster maps"
+msgstr "将 3D 栅格图转化为 2D 栅格图"
+
+#, fuzzy
+#| msgid "Launch animation tool."
+msgid "Launches Simple Python Editor."
+msgstr "启动动画工具"
+
+msgid "Launch script"
+msgstr "运行脚本"
+
+msgid "Launches script file."
+msgstr "运行脚本文件"
+
+msgid "Launch Jupyter Notebook interface."
+msgstr ""
+
+msgid "Graphical modeler"
+msgstr "建模器界面"
+
+msgid "Launch Graphical modeler"
+msgstr "启动建模器界面"
+
+msgid "Run model prepared by Graphical modeler"
+msgstr "运行建模器界面中已建好的模型"
+
+#, fuzzy
+#| msgid "Manage Ground Control Points for Georectification"
+msgid "Manage Ground Control Points for Georectification"
+msgstr "地理校正地面控制点管理"
+
+#, fuzzy
+#| msgid "Animation %d"
+msgid "Animation tool"
+msgstr "动画 %d"
+
+msgid "Launch animation tool."
+msgstr "启动动画工具"
+
+msgid "Launch Cartographic Composer"
+msgstr "启动地图绘制界面"
+
+msgid "Launch Map Swipe"
+msgstr "启动地图比较(Map Swipe)"
+
+msgid "Close graphical user interface."
+msgstr ""
+
+msgid "Close GUI and exit GRASS shell."
+msgstr ""
+
+msgid "&Settings"
+msgstr "设置(&S)"
+
+#, fuzzy
+msgid "Show current region"
+msgstr "生成区域边界"
+
+#, fuzzy
+#| msgid "Constrain display resolution to computational settings"
+msgid "Shows the extent and resolution of the computational region."
+msgstr "根据计算性能设置显示分辨率"
+
+msgid "Show region using latitude and longitude"
+msgstr ""
+
+msgid "Show current region extent in Map Display"
+msgstr ""
+
+msgid "Shows the extent of the computational region in Map Display."
+msgstr ""
+
+msgid "Set region"
+msgstr "设置区域"
+
+msgid "Manages the boundary definitions for the geographic region."
+msgstr "管理地理区域边界。"
+
+msgid "GRASS working environment"
+msgstr "GRASS工作环境"
+
+msgid "Mapset access"
+msgstr "地图集读取控制"
+
+#, fuzzy
+msgid "Set/unset access to other mapsets in current project"
+msgstr "允许／取消其它地图集对当前地点的读取"
+
+msgid "User access"
+msgstr "用户权限"
+
+msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
+msgstr "设置其他用户对当前地图集的权限。若无设置改变刚显示当前状态。"
+
+msgid "Change working environment"
+msgstr "改变工作环境"
+
+#, fuzzy
+#| msgid "Changes/reports current mapset. Optionally create new mapset or list available mapsets in given location."
+msgid "Changes or reports current mapset. Optionally, creates new mapset or lists available mapsets in given project (location)."
+msgstr "改变/显示当前地图集。可创建新地图集或列出当前地点下的地图集。"
+
+#, fuzzy
+msgid "Change project (location) and mapset"
+msgstr "选择投影地点和数据集"
+
+#, fuzzy
+msgid "Change current project and mapset."
+msgstr "改变当前地点和地图集"
+
+#, fuzzy
+#| msgid "Manage maps"
+msgid "Change mapset"
+msgstr "地图管理"
+
+msgid "Change current mapset."
+msgstr "改变当前地图集"
+
+msgid "Change working directory"
+msgstr "改变工作目录"
+
+msgid "Show settings"
+msgstr "显示设置"
+
+msgid "Outputs and modifies the user's current GRASS variable settings."
+msgstr "输出或改变当前用户的GRASS环境变量设置。"
+
+msgid "Change settings"
+msgstr "改动设置"
+
+msgid "Outputs and modifies the user's current GRASS variable settings. Prints all defined GRASS variables if no option is given."
+msgstr "输出或改变当前用户的GRASS环境变量设置。若无变动则输出当前GRASS环境变量。"
+
+#, fuzzy
+msgid "Create new project (location)"
+msgstr "创建新地点"
+
+#, fuzzy
+msgid "Launches project wizard to create a new GRASS project (also known as location)."
+msgstr "启动地点向导以创建新GRASS地点。"
+
+#, fuzzy
+msgid "Creates new mapset in the current project, changes current mapset."
+msgstr "在当前地点下创建新地图集或切换当前地图集。"
+
+msgid "Map projections"
+msgstr "地图投影管理"
+
+#, fuzzy
+#| msgid "Display region"
+msgid "Display map projection"
+msgstr "显示地区"
+
+#, fuzzy
+#| msgid "Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgid "Converts coordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
+msgstr "不同坐标系统间转换(包括GRASS格式)。"
+
+msgid "Manage projections"
+msgstr "投影管理"
+
+#, fuzzy
+msgid "Prints or modifies GRASS projection information files (in various coordinate system descriptions). Can also be used to create new GRASS projects."
+msgstr "显示或调整GRASS投影信息文件(多种坐标格式)。可创建GRASS地点。"
+
+msgid "Convert coordinates"
+msgstr "坐标转换"
+
+msgid "Converts coordinates from one projection to another (cs2cs frontend)."
+msgstr "不同坐标投影间转换(使用cs2cs作为前台)。"
+
+msgid "Addons extensions"
+msgstr "组件扩展"
+
+msgid "Install extension from addons"
+msgstr "从GRASS插件安装扩展"
+
+#, fuzzy
+#| msgid "Fetch & install extension from GRASS Addons"
+msgid "Installs new extension from GRASS AddOns repository."
+msgstr "从GRASS插件获取并安装扩展"
+
+msgid "Manage installed extension"
+msgstr "扩展管理"
+
+msgid "Updates or removes installed GRASS AddOns extension(s)."
+msgstr "更新或移除GRASS组件扩展"
+
+msgid "Preferences"
+msgstr "设置"
+
+msgid "User GUI preferences (display font, commands, digitizer, etc.)"
+msgstr "图形界面设置(字体，指令，数字化工具等。)"
+
+msgid "&Raster"
+msgstr "栅格(&R)"
+
+#, fuzzy
+#| msgid "Develop 3D raster map"
+msgid "Develop raster map"
+msgstr "三维栅格地图开发"
+
+msgid "Compress/decompress"
+msgstr "压缩/解压"
+
+msgid "Compresses and decompresses raster maps."
+msgstr "压缩和解压缩栅格文件。"
+
+msgid "Region boundaries"
+msgstr "区域界限"
+
+msgid "Sets the boundary definitions for a raster map."
+msgstr "为栅格图设置边界范围。"
+
+msgid "Manage NULL values"
+msgstr "管理NULL值"
+
+msgid "Manages NULL-values of given raster map."
+msgstr "管理栅格地图的NULL值"
+
+msgid "Quantization"
+msgstr "量化"
+
+msgid "Produces the quantization file for a floating-point map."
+msgstr "为浮点地图生成量化文件。"
+
+msgid "Timestamp"
+msgstr "时间戳"
+
+msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgstr "调整栅格地图的时间戳。输出/添加/删除栅格地图的时间戳。"
+
+msgid "Resample using aggregate statistics"
+msgstr "合计统计量重取样"
+
+msgid "Resamples raster map layers to a coarser grid using aggregation."
+msgstr "通过合计将对栅格重取样得到更低分辨率的栅格图。"
+
+msgid "Resample using multiple methods"
+msgstr "多种方式进行重取样"
+
+msgid "Resamples raster map to a finer grid using interpolation."
+msgstr "通过插直重取样得到更高分辨率的栅格图。"
+
+msgid "Resample using nearest neighbor"
+msgstr "使用最近邻法重取样"
+
+msgid "GRASS raster map layer data resampling capability."
+msgstr "GRASS栅格图层数据的重取样能力。"
+
+msgid "Resample using spline tension"
+msgstr "张力样条重取样"
+
+msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
+msgstr "使用拉伸和平滑的规则样条，对输入的栅格文件进行重新插值(地形分析为可选项)，生成一个新的栅格文件(可能有不同的分辨率)。"
+
+msgid "Resample using bspline"
+msgstr "B样条重取样"
+
+msgid "Performs bilinear or bicubic spline interpolation with Tykhonov regularization."
+msgstr "使用Tikhonov正则化进行双线性或三次样条插值。"
+
+msgid "Resample using analytic kernel"
+msgstr "分析内核法重采样"
+
+msgid "Resamples raster map layers using an analytic kernel."
+msgstr "使用分析内核法对栅格地图重采样"
+
+msgid "Support file maintenance"
+msgstr "支持文件维护"
+
+msgid "Allows creation and/or modification of raster map layer support files."
+msgstr "创建/修改栅格图层的支持文件"
+
+msgid "Update map statistics"
+msgstr "刷新地图统计"
+
+msgid "Update raster map statistics"
+msgstr "刷新栅格地图统计量"
+
+msgid "Tiling"
+msgstr "分割平铺"
+
+msgid "Produces tilings of the source projection for use in the destination region and projection."
+msgstr "生成与源投影相同的平铺块在目标区域和投影上使用。"
+
+msgid "Build a VRT (Virtual Raster)"
+msgstr ""
+
+msgid "Build a VRT (Virtual Raster) from the list of input raster maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Select raster map:"
+msgid "Tile raster map"
+msgstr "选择栅格地图："
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Splits a raster map into tiles."
+msgstr "将栅格图转化为矢量图层。"
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "Manage semantic labels"
+msgstr "数据库管理"
+
+msgid "Manages semantic label information assigned to a single raster map or to a list of raster maps."
+msgstr ""
+
+msgid "Manage colors"
+msgstr "颜色管理"
+
+msgid "Color tables"
+msgstr "色彩表"
+
+msgid "Creates/modifies the color table associated with a raster map."
+msgstr "创建/修改栅格图层的色彩表。"
+
+msgid "Color tables (stddev)"
+msgstr "色彩表(标准差)"
+
+msgid "Sets color rules based on stddev from a raster map's mean value."
+msgstr "基于栅格图层均值的标准差设置色彩"
+
+msgid "Manage color rules interactively"
+msgstr "交互式设置色彩"
+
+msgid "Interactive management of raster color tables."
+msgstr "交互式管理栅格图层色彩。"
+
+msgid "Export color table"
+msgstr "导出色彩表"
+
+msgid "Exports the color table associated with a raster map."
+msgstr "导出栅格图层色彩表。"
+
+msgid "Blend 2 color rasters"
+msgstr "两个栅格混色"
+
+msgid "Blends color components of two raster maps by a given ratio."
+msgstr "在指定比例下对两个栅格图层色彩表混色"
+
+msgid "Create RGB"
+msgstr "合成RGB图层"
+
+msgid "Combines red, green and blue raster maps into a single composite raster map."
+msgstr "将红、绿、蓝图层合并为一个复合图层"
+
+msgid "RGB to HIS"
+msgstr "RBG转HIS"
+
+msgid "Generates red, green and blue (RGB) raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers."
+msgstr ""
+
+msgid "Split raster into RGB"
+msgstr ""
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Splits a raster map into red, green and blue maps."
+msgstr "将栅格图转化为矢量图层。"
+
+msgid "Query raster maps"
+msgstr "栅格图层查询"
+
+msgid "Query values by coordinates"
+msgstr "用坐标查询"
+
+msgid "Queries raster maps on their category values and category labels."
+msgstr "在栅格图层的类别值和类别标签中查询。"
+
+msgid "Query colors by value"
+msgstr "值到色彩查询"
+
+msgid "Queries colors for a raster map layer."
+msgstr "栅格图层色彩查询"
+
+msgid "Raster buffers and distance"
+msgstr "缓冲区及距离"
+
+msgid "Buffer rasters"
+msgstr "缓冲区"
+
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
+msgstr "创建以像元为中心的不包含无效值的缓冲区。"
+
+#, fuzzy
+#| msgid "Buffer rasters"
+msgid "Buffer rasters (low memory)"
+msgstr "缓冲区"
+
+#, fuzzy
+#| msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
+msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values. This is the low-memory alternative to the classic r.buffer module."
+msgstr "创建以像元为中心的不包含无效值的缓冲区。"
+
+msgid "Concentric circles"
+msgstr "同心圆"
+
+msgid "Creates a raster map containing concentric rings around a given point."
+msgstr "创建以指定点为中心的同心环图层。"
+
+msgid "Closest points"
+msgstr "距离最近点"
+
+msgid "Locates the closest points between objects in two raster maps."
+msgstr "确定两幅栅格图上目标间最近的点"
+
+msgid "Grow by one cell"
+msgstr "逐格增加"
+
+msgid "Generates a raster map layer with contiguous areas grown by one cell."
+msgstr "生成以一个像元为单位逐渐增长形成连续区域的栅格图层。"
+
+msgid "Distance to features"
+msgstr "要素距离"
+
+#, fuzzy
+#| msgid "Generates a raster map containing distances to nearest raster features."
+msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
+msgstr "生成含距最近要素距离的栅格图层。"
+
+#, fuzzy
+#| msgid "Creates a MASK for limiting raster operation."
+msgid "Creates a raster mask for limiting raster operation."
+msgstr "生成掩码以限制栅格操作"
+
+#, fuzzy
+#| msgid "Query raster maps"
+msgid "Query mask status"
+msgstr "栅格图层查询"
+
+msgid "Reports presence or absence of a raster mask Provides information about the presence of a 2D raster mask as text output or return code"
+msgstr ""
+
+msgid "Raster map calculator"
+msgstr "栅格掩码计算器"
+
+#, fuzzy
+#| msgid "3D raster map calculator"
+msgid "Simplified raster map calculator"
+msgstr "三维栅格地图计算器"
+
+msgid "Calculates a new raster map from a simple r.mapcalc expression."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map calculator"
+msgid "Raster map calculator."
+msgstr "栅格掩码计算器"
+
+msgid "Neighborhood analysis"
+msgstr "近邻分析"
+
+msgid "Moving window"
+msgstr "移动窗口"
+
+msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgstr "对一个像元周围的像元值进行函数计算，将得到的值赋予该像元，并将新的像元值存储在输出栅格图层中。"
+
+msgid "Neighborhood points"
+msgstr "近邻点"
+
+#, fuzzy
+#| msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
+msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids in a radius around it, and stores new cell values in an output raster map."
+msgstr "对一个像元周围的像元值进行函数计算，将得到的值赋予该像元或其中心点，并将新的像元值存储在输出栅格图层中。"
+
+msgid "Overlay rasters"
+msgstr "图层叠加"
+
+msgid "Cross product"
+msgstr "叉积"
+
+msgid "Creates a cross product of the category values from multiple raster map layers."
+msgstr "创建多个图层的叉积图层。"
+
+msgid "Patch raster maps"
+msgstr "图层修补"
+
+msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
+msgstr "使用一个（或多个）图层已知的类别值来填充另一个图层的无数据区域，生成一幅合成栅格图层。"
+
+msgid "Raster series aggregation"
+msgstr "图层系列合计"
+
+msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
+msgstr "对输入图层的像元进行函数计算，并将得到的结果赋予输出的像元。"
+
+msgid "Raster series accumulation"
+msgstr "地图系列累计"
+
+msgid "Makes each output cell value a accumulationfunction of the values assigned to the corresponding cells in the input raster map layers."
+msgstr "对输入图层的像元进行累计函数计算，并将得到的结果赋予输出的像元。"
+
+msgid "Statistical overlay"
+msgstr "统计叠加"
+
+msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
+msgstr "面向类别或对象统计(基于累计的统计量)。"
+
+msgid "Quantiles overlay"
+msgstr "分位数叠加"
+
+msgid "Compute category quantiles using two passes."
+msgstr "使用两步法计算分位数"
+
+msgid "Solar radiance and shadows"
+msgstr "太阳辐射及阴影"
+
+msgid "LatLong map"
+msgstr "经纬图"
+
+msgid "Creates a latitude/longitude raster map."
+msgstr "创建经纬度栅格地图"
+
+msgid "Solar irradiance and irradiation"
+msgstr "太阳辐照及放射"
+
+msgid "Solar irradiance and irradiation model. Computes direct (beam), diffuse and reflected solar irradiation raster maps for given day, latitude, surface and atmospheric conditions. Solar parameters (e.g. sunrise, sunset times, declination, extraterrestrial irradiance, daylight length) are saved in the map history file. Alternatively, a local time can be specified to compute solar incidence angle and/or irradiance raster maps. The shadowing effect of the topography is optionally incorporated."
+msgstr "阳光辐照度(irradiance)和日射积模型(irradiation)。计算指定日期、纬度、表面及大气质量下栅格图的直接照射、漫射及反射的阳光日射积。太阳参数(如日出、日落时间、偏角、地球外辐照度、白昼长度)将保存在地图记录文件。此外，可以计算指定本地时间的太阳入射角、辐照度地图。可选择是否计算地形阴影效果。"
+
+msgid "Shadows map"
+msgstr "阴影图"
+
+msgid "Calculates cast shadow areas from sun position and elevation raster map. Either exact sun position (A) is specified, or date/time to calculate the sun position (B) by r.sunmask itself."
+msgstr ""
+
+msgid "Sunshine hours and solar angles"
+msgstr "日照时长及相关角度"
+
+msgid "Calculates solar elevation, solar azimuth, and sun hours. Solar elevation: the angle between the direction of the geometric center of the sun's apparent disk and the (idealized) horizon. Solar azimuth: the angle from due north in clockwise direction."
+msgstr ""
+
+msgid "Terrain analysis"
+msgstr "地形分析"
+
+msgid "Generate contour lines"
+msgstr "等高线"
+
+msgid "Produces a vector map of specified contours from a raster map."
+msgstr "从栅格图层生成等高线矢量地图。"
+
+msgid "Cost surface"
+msgstr "表面成本"
+
+#, fuzzy
+msgid "Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr "输出一个栅格图层来显示在输入栅格图上不同位置间移动时的累计成本，输入栅格图的像元类别值表示成本。"
+
+msgid "Trace a path"
+msgstr ""
+
+msgid "Traces paths from starting points following input directions."
+msgstr ""
+
+msgid "Cumulative movement costs"
+msgstr "累积移动成本"
+
+#, fuzzy
+msgid "Creates a raster map showing the anisotropic cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost."
+msgstr "输出一个栅格图层来显示在输入栅格图上不同位置间移动时的累计成本，输入栅格图的像元类别值表示成本。"
+
+msgid "Least cost route or flow"
+msgstr "最低成本路径"
+
+msgid "Traces a flow through an elevation model or cost surface on a raster map."
+msgstr ""
+
+msgid "Compute shaded relief"
+msgstr "计算晕渲图"
+
+msgid "Creates shaded relief map from an elevation map (DEM)."
+msgstr ""
+
+msgid "Apply shade to raster"
+msgstr "栅格晕渲"
+
+msgid "Drapes a color raster over an shaded relief or aspect map."
+msgstr ""
+
+msgid "Slope and aspect"
+msgstr "坡度和方位"
+
+msgid "Generates raster maps of slope, aspect, curvatures and partial derivatives from an elevation raster map. Aspect is calculated counterclockwise from east."
+msgstr ""
+
+msgid "Landforms"
+msgstr ""
+
+msgid "Calculates geomorphons (terrain forms) and associated geometry using machine vision approach."
+msgstr ""
+
+msgid "Terrain parameters"
+msgstr "地形参数"
+
+msgid "Extracts terrain parameters from a DEM. Uses a multi-scale approach by taking fitting quadratic parameters to any size window (via least squares)."
+msgstr ""
+
+msgid "Textural features"
+msgstr "纹理特征"
+
+msgid "Generate images with textural features from a raster map."
+msgstr ""
+
+msgid "Visibility"
+msgstr "视线图"
+
+msgid "Computes the viewshed of a point on an elevation raster map. Default format: NULL (invisible), vertical angle wrt viewpoint (visible)."
+msgstr ""
+
+msgid "Horizon angle"
+msgstr "水平角"
+
+msgid "Computes horizon angle height from a digital elevation model. The module has two different modes of operation: 1. Computes the entire horizon around a single point whose coordinates are given with the 'coord' option. The horizon height (in radians). 2. Computes one or more raster maps of the horizon height in a single direction. The input for this is the angle (in degrees), which is measured counterclockwise with east=0, north=90 etc. The output is the horizon height in radians."
+msgstr ""
+
+msgid "Transform features"
+msgstr "要素变换"
+
+msgid "Clump"
+msgstr "簇块化"
+
+msgid "Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories."
+msgstr ""
+
+msgid "Grow"
+msgstr "扩展"
+
+msgid "Thin"
+msgstr "细化"
+
+#, fuzzy
+#| msgid "Rescales the range of category values in a raster map layer."
+msgid "Thins non-null cells that denote linear features in a raster map layer."
+msgstr "重新调整栅格图层的类别值范围。"
+
+msgid "Hydrologic modeling"
+msgstr "水文模型"
+
+msgid "Carve stream channels"
+msgstr "刻画河道"
+
+msgid "Generates stream channels. Takes vector stream data, transforms it to raster and subtracts depth from the output DEM."
+msgstr ""
+
+msgid "Fill lake"
+msgstr "湖泊填充"
+
+msgid "Fills lake at given point to given level."
+msgstr ""
+
+msgid "Depressionless map and flowlines"
+msgstr "低洼去除及生成流向图"
+
+msgid "Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map."
+msgstr ""
+
+msgid "Flow accumulation"
+msgstr "流量累积"
+
+msgid "Performs flow computation for massive grids."
+msgstr ""
+
+msgid "Flow lines"
+msgstr "流向"
+
+msgid "Constructs flowlines. Computes flowlines, flowpath lengths, and flowaccumulation (contributing areas) from a elevation raster map."
+msgstr ""
+
+msgid "Watershed analysis"
+msgstr "流域分析"
+
+msgid "Calculates hydrological parameters and RUSLE factors."
+msgstr ""
+
+msgid "Watershed subbasins"
+msgstr "流域子盆地划分"
+
+#, fuzzy
+msgid "Generates watershed subbasins raster map."
+msgstr "生成一个栅格图层，显示一个流域的子流域"
+
+msgid "Watershed basin creation"
+msgstr "流域盆地生成"
+
+#, fuzzy
+msgid "Creates watershed basins from a drainage direction map."
+msgstr "生成一个栅格图层，显示一个流域的子流域"
+
+msgid "Extraction of stream networks"
+msgstr "生成流域网络"
+
+msgid "Performs stream network extraction."
+msgstr ""
+
+msgid "SIMWE Overland flow modeling"
+msgstr "SIMWE陆地流量模型"
+
+msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "SIMWE Sediment flux modeling"
+msgstr "SIMWE沙通量模型"
+
+msgid "Sediment transport and erosion/deposition simulation using path sampling method (SIMWE)."
+msgstr ""
+
+msgid "Topographic index map"
+msgstr "地形指数"
+
+msgid "Creates a topographic index (wetness index) raster map from an elevation raster map."
+msgstr ""
+
+msgid "TOPMODEL simulation"
+msgstr "TOPMODEL模拟"
+
+msgid "Simulates TOPMODEL which is a physically based hydrologic model."
+msgstr ""
+
+msgid "USLE K-factor"
+msgstr "USLE土壤可蚀性因子K"
+
+msgid "Computes USLE Soil Erodibility Factor (K)."
+msgstr ""
+
+msgid "USLE R-factor"
+msgstr "USLE降雨侵蚀力指标R"
+
+msgid "Computes USLE R factor, Rainfall erosivity index."
+msgstr ""
+
+msgid "Groundwater modeling"
+msgstr "地下水模型"
+
+msgid "Groundwater flow"
+msgstr "地下水流模型"
+
+msgid "Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions."
+msgstr ""
+
+msgid "Groundwater solute transport"
+msgstr "地下水溶质运移"
+
+msgid "Numerical calculation program for transient, confined and unconfined solute transport in two dimensions"
+msgstr ""
+
+msgid "Landscape patch analysis"
+msgstr "景观斑块分析"
+
+msgid "Set up sampling and analysis framework"
+msgstr "设置取样及分析框架"
+
+msgid "Configuration editor for r.li.'index'"
+msgstr ""
+
+msgid "Edge density"
+msgstr "边缘密度"
+
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Contrast weighted edge density"
+msgstr "加权边缘密度对比度"
+
+#, fuzzy
+#| msgid "Calculates range of patch area size on a raster map"
+msgid "Calculates contrast weighted edge density index on a raster map"
+msgstr "。"
+
+msgid "Patch area mean"
+msgstr "斑块面积均值"
+
+#, fuzzy
+#| msgid "Calculates range of patch area size on a raster map"
+msgid "Calculates mean patch size index on a raster map, using a 4 neighbour algorithm"
+msgstr "。"
+
+msgid "Patch area range"
+msgstr "斑块面积区间"
+
+msgid "Calculates range of patch area size on a raster map"
+msgstr "。"
+
+msgid "Patch area Std Dev"
+msgstr "斑块面积标准差"
+
+#, fuzzy
+#| msgid "Calculates range of patch area size on a raster map"
+msgid "Calculates standard deviation of patch area a raster map"
+msgstr "。"
+
+msgid "Patch area Coeff Var"
+msgstr "斑块面积标变异系数"
+
+#, fuzzy
+#| msgid "Calculates range of patch area size on a raster map"
+msgid "Calculates coefficient of variation of patch area on a raster map"
+msgstr "。"
+
+msgid "Patch density"
+msgstr "斑块密度"
+
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
+msgstr ""
+
+msgid "Patch number"
+msgstr "斑块数量"
+
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
+msgstr ""
+
+msgid "Dominance's diversity"
+msgstr "Dominance多样性指数"
+
+#, fuzzy
+#| msgid "Calculates range of patch area size on a raster map"
+msgid "Calculates dominance's diversity index on a raster map"
+msgstr "。"
+
+msgid "Shannon's diversity"
+msgstr "Shannon多样性指数"
+
+#, fuzzy
+#| msgid "Calculates range of patch area size on a raster map"
+msgid "Calculates Shannon's diversity index on a raster map"
+msgstr "。"
+
+msgid "Simpson's diversity"
+msgstr "Simpson多样性指数"
+
+#, fuzzy
+#| msgid "Calculates range of patch area size on a raster map"
+msgid "Calculates Simpson's diversity index on a raster map"
+msgstr "。"
+
+msgid "Richness"
+msgstr "丰富度"
+
+#, fuzzy
+#| msgid "Calculates range of patch area size on a raster map"
+msgid "Calculates richness index on a raster map"
+msgstr "。"
+
+msgid "Shape index"
+msgstr "形状指数"
+
+#, fuzzy
+#| msgid "Calculates range of patch area size on a raster map"
+msgid "Calculates shape index on a raster map"
+msgstr "。"
+
+msgid "Wildfire modeling"
+msgstr "野火模型"
+
+msgid "Rate of spread"
+msgstr "蔓延速度"
+
+msgid "Generates rate of spread raster maps. Generates three, or four raster map layers showing the base (perpendicular) rate of spread (ROS), the maximum (forward) ROS, the direction of the maximum ROS, and optionally the maximum potential spotting distance for fire spread simulation."
+msgstr ""
+
+msgid "Least-cost spread paths"
+msgstr "最低蔓延成本路径"
+
+msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
+msgstr "反向追踪最低成本的路径，得到一组像元，这些像元确定了累计成本。"
+
+msgid "Anisotropic spread simulation"
+msgstr "各向异性蔓延模拟"
+
+msgid "Simulates elliptically anisotropic spread. Generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins. It optionally produces raster maps to contain backlink UTM coordinates for tracing spread paths. Usable for fire spread simulations."
+msgstr ""
+
+msgid "Change category values and labels"
+msgstr "调整类别值及标签"
+
+msgid "Manage category information"
+msgstr "类别信息管理"
+
+msgid "Manages category values and labels associated with user-specified raster map layers."
+msgstr "栅格图层的类别值和标签管理。"
+
+msgid "Interactively edit category values"
+msgstr "互动编辑"
+
+#, fuzzy
+#| msgid "Manages NULL-values of given raster map."
+msgid "Edits cell values in a raster map."
+msgstr "管理栅格地图的NULL值"
+
+msgid "Reclassify by size"
+msgstr "根据大小重新分类"
+
+msgid "Reclasses a raster map greater or less than user specified area size (in hectares)."
+msgstr ""
+
+msgid "Reclassify"
+msgstr "重新分类"
+
+msgid "Reclassify raster map based on category values. Creates a new raster map whose category values are based upon a reclassification of the categories in an existing raster map."
+msgstr ""
+
+msgid "Recode"
+msgstr "重新编码"
+
+msgid "Recodes categorical raster maps."
+msgstr "重新编码栅格图。"
+
+msgid "Rescale"
+msgstr "调整值的范围"
+
+msgid "Rescales the range of category values in a raster map layer."
+msgstr "重新调整栅格图层的类别值范围。"
+
+msgid "Rescale with histogram"
+msgstr "用直方图调整值的范围"
+
+#, fuzzy
+#| msgid "Rescales the range of category values in a raster map layer."
+msgid "Rescales histogram equalized the range of category values in a raster map layer."
+msgstr "重新调整栅格图层的类别值范围。"
+
+msgid "Generate random cells"
+msgstr "随机像元生成"
+
+#, fuzzy
+#| msgid "Generate random cells"
+msgid "Random cells"
+msgstr "随机像元生成"
+
+msgid "Generates random cell values with spatial dependence."
+msgstr "根据空间依赖性产生随机的像元值"
+
+msgid "Random cells and vector points"
+msgstr "随机像元及点矢量量"
+
+msgid "Creates randomly placed raster cells or vector points Creates a raster map and vector point map containing randomly located cells and points."
+msgstr ""
+
+msgid "Generate surfaces"
+msgstr "表面生成"
+
+msgid "Fractal surface"
+msgstr "分形表面"
+
+msgid "Creates a fractal surface of a given fractal dimension."
+msgstr ""
+
+msgid "Gaussian kernel density surface"
+msgstr "高斯核密度表面"
+
+msgid "Generates a raster density map from vector points map. Density is computed using a moving kernel. Optionally generates a vector density map on a vector network."
+msgstr ""
+
+msgid "Gaussian deviates surface"
+msgstr "高斯偏离表面"
+
+msgid "Generates a raster map using gaussian random number generator. Mean and standard deviation of gaussian deviates can be expressed by the user."
+msgstr ""
+
+msgid "Plane"
+msgstr "平面"
+
+msgid "Creates raster plane map given dip (inclination), aspect (azimuth) and one point."
+msgstr ""
+
+msgid "Random deviates surface"
+msgstr "随机偏离表面"
+
+msgid "Produces a raster surface map of uniform random deviates with defined range."
+msgstr ""
+
+msgid "Random surface with spatial dependence"
+msgstr "空间相关的随机表面"
+
+msgid "Generates random surface(s) with spatial dependence."
+msgstr "根据空间依赖性生成随机表面"
+
+msgid "Interpolate surfaces"
+msgstr "插值表面"
+
+msgid "Bilinear and bicubic from vector points"
+msgstr "二次线性或三次插值"
+
+#, fuzzy
+#| msgid "Performs bilinear or bicubic spline interpolation with Tykhonov regularization."
+msgid "Performs bicubic or bilinear spline interpolation with Tykhonov regularization."
+msgstr "使用Tikhonov正则化进行双线性或三次样条插值。"
+
+msgid "IDW from raster points"
+msgstr "栅格图层上点的反距离加权(IDW)"
+
+msgid "Provides surface interpolation from raster point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+msgid "IDW from vector points"
+msgstr "矢量图层上点的反距离加权(IDW)"
+
+msgid "Provides surface interpolation from vector point data by Inverse Distance Squared Weighting."
+msgstr ""
+
+msgid "Raster contours"
+msgstr "栅格图层等高线"
+
+#, fuzzy
+#| msgid "Generates a raster map layer with contiguous areas grown by one cell."
+msgid "Generates surface raster map from rasterized contours."
+msgstr "生成以一个像元为单位逐渐增长形成连续区域的栅格图层。"
+
+msgid "Regularized spline tension"
+msgstr "张力样条正则化"
+
+msgid "Performs surface interpolation from vector points map by splines. Spatial approximation and topographic analysis from given point or isoline data in vector format to floating point raster format using regularized spline with tension."
+msgstr ""
+
+msgid "Raster series interpolation"
+msgstr "栅格系列图层插值"
+
+msgid "Interpolates raster maps located (temporal or spatial) in between input raster maps at specific sampling positions."
+msgstr ""
+
+msgid "Fill NULL cells"
+msgstr "填充NULL像元"
+
+#, fuzzy
+#| msgid "Resamples raster map to a finer grid using interpolation."
+msgid "Fills no-data areas in raster maps using spline interpolation."
+msgstr "通过插直重取样得到更高分辨率的栅格图。"
+
+#, fuzzy
+#| msgid "Fill NULL cells"
+msgid "Fill NULL cells using IDW"
+msgstr "填充NULL像元"
+
+msgid "Rapidly fills 'no data' cells (NULLs) of a raster map with interpolated values (IDW)."
+msgstr ""
+
+msgid "Reports and statistics"
+msgstr "报告及统计"
+
+msgid "Basic raster metadata"
+msgstr "栅格基本元数据"
+
+#, fuzzy
+#| msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgid "Outputs basic information about a raster map."
+msgstr "输出用户指定的三维栅格图层的基本信息"
+
+msgid "General statistics"
+msgstr "常用统计量"
+
+#, fuzzy
+#| msgid "Univariate statistics for 3D rasters"
+msgid "Generates area statistics for raster map."
+msgstr "三维栅格一元统计量"
+
+msgid "Quantiles for large data sets"
+msgstr "大数据集分位数"
+
+#, fuzzy
+#| msgid "Compute category quantiles using two passes."
+msgid "Compute quantiles using two passes."
+msgstr "使用两步法计算分位数"
+
+msgid "Range of category values"
+msgstr "值域"
+
+msgid "Prints terse list of category values found in a raster map layer."
+msgstr "打印栅格图层分类值的简要列表"
+
+msgid "Sum area by raster map and category"
+msgstr "按栅格图及类别面积合计"
+
+#, fuzzy
+#| msgid "Univariate statistics for 3D rasters"
+msgid "Reports statistics for raster maps."
+msgstr "三维栅格一元统计量"
+
+msgid "Statistics for clumped cells"
+msgstr "簇块化像元统计"
+
+msgid "Calculates the volume of data \"clumps\". Optionally produces a GRASS vector points map containing the calculated centroids of these clumps."
+msgstr ""
+
+msgid "Total corrected area"
+msgstr "修正后的总面积"
+
+#, fuzzy
+#| msgid "Prints terse list of category values found in a raster map layer."
+msgid "Prints estimation of surface area for raster map."
+msgstr "打印栅格图层分类值的简要列表"
+
+msgid "Calculates univariate statistics from the non-null cells of a raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "Sample transects"
+msgstr "采样区"
+
+msgid "Outputs the raster map layer values lying on user-defined line(s)."
+msgstr "输出栅格图层的像元值，基于用户定义的线。"
+
+msgid "Sample transects (bearing/distance)"
+msgstr "采样区(方位/距离)"
+
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
+msgstr "依据用户定义的横断线，输出栅格图层上的值"
+
+msgid "Covariance/correlation"
+msgstr "协方差/相关性"
+
+msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
+msgstr "输出用户指定栅格图层的协方差/相关矩阵。"
+
+msgid "Linear regression"
+msgstr "线性回归"
+
+msgid "Calculates linear regression from two raster maps: y = a + b*x."
+msgstr ""
+
+msgid "Multiple regression"
+msgstr "多元回归"
+
+#, fuzzy
+#| msgid "Calculates range of patch area size on a raster map"
+msgid "Calculates multiple linear regression from raster maps."
+msgstr "。"
+
+msgid "Mutual category occurrences"
+msgstr "重合统计"
+
+#, fuzzy
+#| msgid "Rescales the range of category values in a raster map layer."
+msgid "Tabulates the mutual occurrence (coincidence) of categories for two raster map layers."
+msgstr "重新调整栅格图层的类别值范围。"
+
+#, fuzzy
+#| msgid "Range of category values"
+msgid "Modal category value"
+msgstr "值域"
+
+msgid "Finds the mode of values in a cover map within areas assigned the same category value in a user-specified base map."
+msgstr ""
+
+#, fuzzy
+#| msgid "General statistics"
+msgid "Zonal statistics"
+msgstr "常用统计量"
+
+#, fuzzy
+#| msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
+msgid "Calculates category or object oriented statistics."
+msgstr "面向类别或对象统计(基于累计的统计量)。"
+
+#, fuzzy
+#| msgid "General statistics"
+msgid "Object geometry statistics"
+msgstr "常用统计量"
+
+#, fuzzy
+#| msgid " Enter parameters for %s projection "
+msgid "Calculates geometry parameters for raster objects."
+msgstr " 输入投影%s的参数 "
+
+msgid "&Vector"
+msgstr "矢量(&V)"
+
+msgid "Develop vector map"
+msgstr "矢量地图开发"
+
+#, fuzzy
+#| msgid "Create new vector map"
+msgid "Create new empty vector map"
+msgstr "新建矢量地图"
+
+msgid "Edit vector map (non-interactively)"
+msgstr "编辑矢量地图(非互动)"
+
+msgid "Edits a vector map, allows adding, deleting and modifying selected vector features."
+msgstr ""
+
+msgid "Convert object types"
+msgstr "要素类型转换"
+
+#, fuzzy
+#| msgid "Analysing all vector features..."
+msgid "Changes type of vector features."
+msgstr "分析所有矢量特征..."
+
+msgid "Parallel lines"
+msgstr "平行线"
+
+msgid "Creates parallel line to input vector lines."
+msgstr ""
+
+msgid "Dissolve boundaries"
+msgstr "边界融合"
+
+msgid "Dissolves adjacent or overlapping features sharing a common category number or attribute."
+msgstr ""
+
+msgid "Create 3D vector over raster"
+msgstr "从栅格图层创建三维矢量"
+
+#, fuzzy
+#| msgid "Converts a vector map (only points) into a 3D raster map."
+msgid "Converts 2D vector features to 3D by sampling of elevation raster map."
+msgstr "将矢量地图(仅含有数据点)转换为三维栅格地图。"
+
+msgid "Extrude 3D vector map"
+msgstr "矢量三维拉伸"
+
+msgid "Extrudes flat vector features to 3D vector features with defined height. Optionally the height can be derived from sampling of elevation raster map."
+msgstr ""
+
+msgid "Create labels"
+msgstr "创建标签"
+
+#, fuzzy
+#| msgid "Prints vector map attributes."
+msgid "Creates paint labels for a vector map from attached attributes."
+msgstr "打印矢量的要素属性"
+
+msgid "Reposition vector map"
+msgstr "矢量位移"
+
+msgid "Performs an affine transformation (shift, scale and rotate) on vector map."
+msgstr ""
+
+msgid "Rectify vector map"
+msgstr "矢量校正"
+
+msgid "Rectifies a vector by computing a coordinate transformation for each object in the vector based on the control points."
+msgstr ""
+
+msgid "Updates vector map metadata."
+msgstr "更新矢量元数据"
+
+msgid "Manage timestamp"
+msgstr "管理时间戳"
+
+#, fuzzy
+#| msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgid "Modifies a timestamp for a vector map. Print/add/remove a timestamp for a vector map."
+msgstr "调整栅格地图的时间戳。输出/添加/删除栅格地图的时间戳。"
+
+msgid "Create labels with simulated annealing"
+msgstr ""
+
+#, fuzzy
+#| msgid "Create optimally placed labels"
+msgid "Create optimally placed labels for vector map(s)"
+msgstr "优化标签位置"
+
+#, fuzzy
+#| msgid "Generate points"
+msgid "Decimate points"
+msgstr "生成点数据"
+
+msgid "Decimates a point cloud Copies points from one vector to another while applying different decimations"
+msgstr ""
+
+msgid "Topology maintenance"
+msgstr "拓扑维护"
+
+msgid "Create or rebuild topology"
+msgstr "创建或重建拓扑"
+
+msgid "Creates topology for vector map. Optionally also checks for topological errors."
+msgstr ""
+
+msgid "Rebuild topology on all vector maps"
+msgstr "重建所有矢量图的拓扑"
+
+#, fuzzy
+#| msgid "Rebuild topology on all vector maps"
+msgid "Rebuilds topology on all vector maps in the current mapset."
+msgstr "重建所有矢量图的拓扑"
+
+msgid "Build polylines"
+msgstr "构建多线段"
+
+msgid "Builds polylines from lines or boundaries."
+msgstr ""
+
+msgid "Split lines"
+msgstr "线段拆分"
+
+msgid "Splits vector lines to shorter segments."
+msgstr ""
+
+msgid "Split polylines"
+msgstr "多线段拆分"
+
+msgid "Creates points/segments from input vector lines and positions."
+msgstr ""
+
+msgid "Clean vector map"
+msgstr "清空矢量图"
+
+#, fuzzy
+#| msgid "Please wait, closing and rebuilding topology of vector map <%s>..."
+msgid "Toolset for cleaning topology of vector map."
+msgstr "关闭和重建矢量地图拓扑中，请稍候 <%s>..."
+
+msgid "Fill holes in areas"
+msgstr ""
+
+msgid "Fill holes in areas by keeping only outer boundaries"
+msgstr ""
+
+msgid "Smooth or simplify"
+msgstr "平滑及简化"
+
+msgid "Performs vector based generalization."
+msgstr ""
+
+msgid "Add centroids"
+msgstr "添加中心点"
+
+msgid "Adds missing centroids to closed boundaries."
+msgstr ""
+
+#, fuzzy
+#| msgid "Creates/modifies the color table associated with a raster map."
+msgid "Creates/modifies the color table associated with a vector map."
+msgstr "创建/修改栅格图层的色彩表。"
+
+#, fuzzy
+#| msgid "Interactive management of raster color tables."
+msgid "Interactive management of vector color tables."
+msgstr "交互式管理栅格图层色彩。"
+
+#, fuzzy
+#| msgid "Exports the color table associated with a raster map."
+msgid "Exports the color table associated with a vector map."
+msgstr "导出栅格图层色彩表。"
+
+msgid "Query vector map"
+msgstr "矢量图查询"
+
+msgid "Query with coordinate(s)"
+msgstr "通过坐标查询"
+
+#, fuzzy
+#| msgid "Sample raster maps at point locations"
+msgid "Queries a vector map at given locations."
+msgstr "提取数据点的栅格图层值"
+
+msgid "Query vector attribute data"
+msgstr "矢量要素查询"
+
+msgid "Prints vector map attributes."
+msgstr "打印矢量的要素属性"
+
+msgid "Feature selection"
+msgstr "要素选择"
+
+msgid "Select by attributes"
+msgstr "根据要素属性选择"
+
+msgid "Selects vector features from an existing vector map and creates a new vector map containing only the selected features."
+msgstr ""
+
+msgid "Select by another map"
+msgstr "据其他地图要素属性选择"
+
+msgid "Selects features from vector map (A) by features from other vector map (B)."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate points along lines"
+msgid "Convert areas or points to lines"
+msgstr "沿线段生成"
+
+#, fuzzy
+#| msgid "Converts a vector map (only points) into a 3D raster map."
+msgid "Converts vector polygons or points to lines."
+msgstr "将矢量地图(仅含有数据点)转换为三维栅格地图。"
+
+msgid "Buffer vectors"
+msgstr "矢量缓冲区"
+
+msgid "Creates a buffer around vector features of given type."
+msgstr ""
+
+#, fuzzy
+#| msgid "Terrain analysis"
+msgid "Point analysis"
+msgstr "地形分析"
+
+msgid "Identify and remove outliers"
+msgstr "查找移除异常值"
+
+#, fuzzy
+#| msgid "Remove outliers in point sets"
+msgid "Removes outliers from vector point data."
+msgstr "移除异常点"
+
+#, fuzzy
+#| msgid "Identify and remove outliers"
+msgid "Identify point clusters"
+msgstr "查找移除异常值"
+
+msgid "Performs cluster identification."
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists"
+msgstr ""
+
+msgid "Indices for quadrat counts of vector point lists."
+msgstr ""
+
+msgid "Perturb points"
+msgstr "扰动点"
+
+#, fuzzy
+#| msgid "Random cells and vector points"
+msgid "Random location perturbations of vector points."
+msgstr "随机像元及点矢量量"
+
+msgid "Test/training point sets"
+msgstr "划分测试/训练点"
+
+msgid "Randomly partition points into test/train sets."
+msgstr ""
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Tests for normality for vector points"
+msgstr "矢量图层上点的反距离加权(IDW)"
+
+#, fuzzy
+#| msgid "IDW from vector points"
+msgid "Tests for normality for vector points."
+msgstr "矢量图层上点的反距离加权(IDW)"
+
+#, fuzzy
+#| msgid "Lidar analysis"
+msgid "Point pattern analysis"
+msgstr "Lidar分析"
+
+msgid "Point pattern analysis using the G, F, K, and L summary functions."
+msgstr ""
+
+msgid "Lidar analysis"
+msgstr "Lidar分析"
+
+msgid "Detect edges"
+msgstr "边界探测"
+
+msgid "Detects the object's edges from a LIDAR data set."
+msgstr ""
+
+msgid "Detect interiors"
+msgstr "内部探测"
+
+msgid "Building contour determination and Region Growing algorithm for determining the building inside"
+msgstr ""
+
+msgid "Correct and reclassify objects"
+msgstr "修正及重新分类"
+
+msgid "Corrects the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering."
+msgstr ""
+
+msgid "Linear referencing"
+msgstr "线性参考"
+
+msgid "Create LRS"
+msgstr "创建线性参考系统"
+
+msgid "Creates a linear reference system."
+msgstr "创建线性参考系统"
+
+msgid "Create stationing"
+msgstr "创建站点"
+
+#, fuzzy
+#| msgid "Creates a linear reference system."
+msgid "Creates stationing from input lines, and linear reference system."
+msgstr "创建线性参考系统"
+
+msgid "Create points/segments"
+msgstr "创建点/线段"
+
+msgid "Creates points/segments from input lines, linear reference system and positions read from stdin or a file."
+msgstr ""
+
+msgid "Find line id and offset"
+msgstr "查找线条标识及偏移量"
+
+msgid "Finds line id and real km+offset for given points in vector map using linear reference system."
+msgstr ""
+
+msgid "Nearest features"
+msgstr "最近邻要素"
+
+msgid "Finds the nearest element in vector map 'to' for elements in vector map 'from'."
+msgstr ""
+
+msgid "Network analysis"
+msgstr "网络分析"
+
+msgid "Tool for interactive vector network analysis."
+msgstr ""
+
+msgid "Network preparation"
+msgstr "网络分析准备"
+
+#, fuzzy
+#| msgid "Support file maintenance"
+msgid "Performs network maintenance."
+msgstr "支持文件维护"
+
+msgid "Allocate subnets"
+msgstr "分配子网"
+
+msgid "Allocates subnets for nearest centers. Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Split net"
+msgstr "网络切分"
+
+msgid "Splits subnets for nearest centers by cost isolines. Splits net to bands between cost isolines (direction from center). Center node must be opened (costs >= 0). Costs of center node are used in calculation."
+msgstr ""
+
+msgid "Shortest path"
+msgstr "最短路径"
+
+#, fuzzy
+#| msgid "Shortest path for sets of features"
+msgid "Finds shortest path on vector network."
+msgstr "指定要素的最短路径"
+
+msgid "Shortest path for sets of features"
+msgstr "指定要素的最短路径"
+
+msgid "Computes shortest distance via the network between the given sets of features. Finds the shortest paths from each 'from' point to the nearest 'to' feature and various information about this relation are uploaded to the attribute table."
+msgstr ""
+
+msgid "Shortest path using timetables"
+msgstr "用时间表计算最短路径"
+
+#, fuzzy
+#| msgid "Shortest path using timetables"
+msgid "Finds shortest path using timetables."
+msgstr "用时间表计算最短路径"
+
+msgid "Shortest path for all pairs"
+msgstr "所有节点对间的最短路径"
+
+msgid "Computes the shortest path between all pairs of nodes in the network."
+msgstr ""
+
+msgid "Visibility network"
+msgstr "视野网络"
+
+msgid "Performs visibility graph construction."
+msgstr ""
+
+msgid "Bridges and articulation points"
+msgstr "桥接及连接点"
+
+#, fuzzy
+#| msgid "Bridges and articulation points"
+msgid "Computes bridges and articulation points in the network."
+msgstr "桥接及连接点"
+
+msgid "Maximum flow"
+msgstr "最大流量"
+
+msgid "Computes the maximum flow between two sets of nodes in the network."
+msgstr ""
+
+msgid "Vertex connectivity"
+msgstr "顶点连接性"
+
+msgid "Computes vertex connectivity between two sets of nodes in the network."
+msgstr ""
+
+msgid "Components"
+msgstr "成份"
+
+msgid "Computes strongly and weakly connected components in the network."
+msgstr ""
+
+msgid "Centrality"
+msgstr "向心性"
+
+msgid "Computes degree, centrality, betweenness, closeness and eigenvector centrality measures in the network."
+msgstr ""
+
+msgid "Steiner tree"
+msgstr "Steiner树"
+
+msgid "Creates Steiner tree for the network and given terminals. Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm is used in this module so the result may be sub optimal."
+msgstr ""
+
+msgid "Minimum spanning tree"
+msgstr "最小生成树"
+
+msgid "Computes minimum spanning tree for the network."
+msgstr ""
+
+msgid "Traveling salesman analysis"
+msgstr "旅行商分析"
+
+msgid "Creates a cycle connecting given nodes (Traveling salesman problem). Note that TSP is NP-hard, heuristic algorithm is used by this module and created cycle may be sub optimal"
+msgstr ""
+
+msgid "Overlay vector maps"
+msgstr "矢量图叠加"
+
+#, fuzzy
+#| msgid "Clean vector map"
+msgid "Clip vector maps"
+msgstr "清空矢量图"
+
+msgid "Extracts features of input map which overlay features of clip map."
+msgstr ""
+
+msgid "Overlays two vector maps offering clip, intersection, difference, symmetrical difference, union operators."
+msgstr ""
+
+msgid "Patch vector maps"
+msgstr "矢量图拼接"
+
+#, fuzzy
+#| msgid "Creates a vector map from an ASCII points file or ASCII vector file."
+msgid "Creates a new vector map by combining other vector maps."
+msgstr "从ASCII点数据文件或矢量文件创建矢量地图。"
+
+msgid "Manage categories"
+msgstr "类别管理"
+
+msgid "Change or report categories"
+msgstr "类别调整/生成报告"
+
+msgid "Attaches, deletes or reports vector categories to/from/of map geometry."
+msgstr ""
+
+msgid "Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column."
+msgstr ""
+
+msgid "Update area attributes from raster"
+msgstr "从栅格图层更新属性"
+
+#, fuzzy
+#| msgid "Calculates univariate statistics from the non-null cells of a raster map."
+msgid "Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns."
+msgstr "计算栅格地图中非空像元的一元统计值"
+
+msgid "Update area attributes from vector"
+msgstr "从矢量图更新面积属性"
+
+msgid "Count points in areas, calculate statistics from point attributes."
+msgstr ""
+
+msgid "Update point attributes from areas"
+msgstr "从面积更新点的属性"
+
+msgid "Uploads vector values at positions of vector points to the table."
+msgstr ""
+
+msgid "Update database values from vector"
+msgstr "从矢量图更新数据库"
+
+#, fuzzy
+#| msgid "Update database values from vector"
+msgid "Populates attribute values from vector features."
+msgstr "从矢量图更新数据库"
+
+msgid "Sample raster maps at point locations"
+msgstr "提取数据点的栅格图层值"
+
+msgid "Uploads raster values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Sample raster maps at point locations"
+msgid "Sample 3D raster at point locations"
+msgstr "提取数据点的栅格图层值"
+
+msgid "Uploads 3D raster values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Sample raster maps at point locations"
+msgid "Sample temporal raster dataset at point locations"
+msgstr "提取数据点的栅格图层值"
+
+msgid "Uploads space time raster dataset values at positions of vector points to the table."
+msgstr ""
+
+#, fuzzy
+#| msgid "Neighborhood points"
+msgid "Sample raster neighborhood around points"
+msgstr "近邻点"
+
+#, fuzzy
+#| msgid "Sample raster maps at point locations"
+msgid "Samples a raster map at vector point locations."
+msgstr "提取数据点的栅格图层值"
+
+msgid "Generate area for current region"
+msgstr "生成区域边界"
+
+#, fuzzy
+msgid "Creates a vector polygon from the current region extent."
+msgstr "将栅格图从另外地点重新投影到当前地点"
+
+msgid "Generate areas from points"
+msgstr "从数据点绘制区域"
+
+msgid "Convex hull"
+msgstr "凸包"
+
+msgid "Produces a 2D/3D convex hull for a given vector map."
+msgstr ""
+
+msgid "Delaunay triangles"
+msgstr "Delaunay三角化"
+
+msgid "Creates a Delaunay triangulation from an input vector map containing points or centroids."
+msgstr ""
+
+msgid "Voronoi diagram/Thiessen polygons"
+msgstr "Voronoi图/Thiessen多边形"
+
+msgid "Creates a Voronoi diagram constrained to the extents of the current region from an input vector map containing points or centroids."
+msgstr ""
+
+msgid "Generate grid"
+msgstr "生成网格"
+
+#, fuzzy
+#| msgid "Exports a vector map to SVG file."
+msgid "Creates a vector map of a user-defined grid."
+msgstr "将矢量地图导出为SVG文件。"
+
+msgid "Generate points"
+msgstr "生成点数据"
+
+msgid "Generate from database"
+msgstr "从数据库生成"
+
+msgid "Creates new vector (points) map from database table containing coordinates."
+msgstr ""
+
+msgid "Generate points along lines"
+msgstr "沿线段生成"
+
+msgid "Creates points along input lines in new vector map with 2 layers."
+msgstr ""
+
+msgid "Generate random points"
+msgstr "生成随机点"
+
+#, fuzzy
+#| msgid "Generate random points"
+msgid "Generates random 2D/3D vector points."
+msgstr "生成随机点"
+
+msgid "Remove outliers in point sets"
+msgstr "移除异常点"
+
+msgid "Basic vector metadata"
+msgstr "基本矢量数据"
+
+#, fuzzy
+#| msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgid "Outputs basic information about a vector map."
+msgstr "输出用户指定的三维栅格图层的基本信息"
+
+msgid "Classify attribute data"
+msgstr "数据属性分类"
+
+msgid "Classifies attribute data, e.g. for thematic mapping"
+msgstr ""
+
+msgid "Report topology by category"
+msgstr "生成类别拓扑报告"
+
+#, fuzzy
+#| msgid "Imports older versions of GRASS vector maps."
+msgid "Reports geometry statistics for vector maps."
+msgstr "导入旧版GRASS矢量地图。"
+
+msgid "Univariate attribute statistics for points"
+msgstr "点的一元变量属性统计"
+
+msgid "Calculates univariate statistics of vector map features. Variance and standard deviation is calculated only for points if specified."
+msgstr ""
+
+msgid "Univariate statistics for attribute columns"
+msgstr "属性列的一元变量统计"
+
+#, fuzzy
+#| msgid "Calculates univariate statistics from the non-null cells of a raster map."
+msgid "Calculates univariate statistics on selected table column for a GRASS vector map."
+msgstr "计算栅格地图中非空像元的一元统计值"
+
+msgid "Vector map profiling tool"
+msgstr ""
+
+msgid "Quadrat indices"
+msgstr "分区计算指数"
+
+msgid "Test normality"
+msgstr "正态分布检验"
+
+msgid "&Imagery"
+msgstr "图像(&I)"
+
+msgid "Develop images and groups"
+msgstr "图像及其分组"
+
+msgid "Create/edit group"
+msgstr "创建/编辑组"
+
+msgid "Creates, edits, and lists groups of imagery files."
+msgstr ""
+
+msgid "Target group"
+msgstr "目标组"
+
+#, fuzzy
+msgid "Targets an imagery group to a GRASS location and mapset."
+msgstr "选择投影地点和数据集"
+
+#, fuzzy
+#| msgid "Choose image file"
+msgid "Find imagery files"
+msgstr "选择图像文件"
+
+msgid "Semantic label library"
+msgstr ""
+
+msgid "Prints available semantic label information used for multispectral data."
+msgstr ""
+
+msgid "Mosaic images"
+msgstr "图象镶嵌"
+
+msgid "Mosaics several images and extends colormap."
+msgstr ""
+
+msgid "Manage image colors"
+msgstr "图像色彩管理"
+
+msgid "Color balance for RGB"
+msgstr "RGB色彩平衡"
+
+msgid "Performs auto-balancing of colors for RGB images."
+msgstr ""
+
+msgid "HIS to RGB"
+msgstr "HIS转RGB"
+
+msgid "Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space."
+msgstr ""
+
+msgid "Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space."
+msgstr ""
+
+msgid "Rectify image or raster"
+msgstr "图像或栅格图校正"
+
+msgid "Rectifies an image by computing a coordinate transformation for each pixel in the image based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Generate surfaces"
+msgid "Generate histogram of image"
+msgstr "表面生成"
+
+msgid "Spectral response"
+msgstr "光谱响应"
+
+msgid "Displays spectral response at user specified locations in group or images."
+msgstr ""
+
+msgid "Pan sharpening"
+msgstr "全色增强"
+
+msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
+msgstr ""
+
+msgid "Classify image"
+msgstr "图像分类"
+
+msgid "Clustering input for unsupervised classification"
+msgstr "无干预聚类"
+
+msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
+msgstr ""
+
+msgid "Input for supervised MLC"
+msgstr "监督最大似然分类输入数据"
+
+#, fuzzy
+#| msgid "Univariate statistics for 3D rasters"
+msgid "Generates statistics for i.maxlik from raster map."
+msgstr "三维栅格一元统计量"
+
+msgid "Maximum likelihood classification (MLC)"
+msgstr "最大似然分类输(MLC)"
+
+msgid "Classifies the cell spectral reflectances in imagery data. Classification is based on the spectral signature information generated by either i.cluster, g.gui.iclass, or i.gensig."
+msgstr ""
+
+msgid "Interactive input for supervised classification"
+msgstr "监督分类交互的输入"
+
+msgid "Generates spectral signatures by allowing the user to outline training areas."
+msgstr ""
+
+msgid "Input for supervised SMAP"
+msgstr "监督式最大后验分类的输入"
+
+#, fuzzy
+#| msgid "Univariate statistics for 3D rasters"
+msgid "Generates statistics for i.smap from raster map."
+msgstr "三维栅格一元统计量"
+
+msgid "Sequential maximum a posteriori classification (SMAP)"
+msgstr "最大后验分类(SMAP)"
+
+msgid "Performs contextual image classification using sequential maximum a posteriori (SMAP) estimation."
+msgstr ""
+
+#, fuzzy
+msgid "Input for supervised SVM"
+msgstr "监督式最大后验分类的输入"
+
+msgid "Train a SVM Train a Support Vector Machine"
+msgstr ""
+
+msgid "Support Vector Machines classification (SVM)"
+msgstr ""
+
+msgid "Predict with a SVM Predict with a Support Vector Machine"
+msgstr ""
+
+#, fuzzy
+msgid "Manage signature files"
+msgstr "类别管理"
+
+#, fuzzy
+msgid "Manage imagery classification signature files"
+msgstr "类别管理"
+
+msgid "Object segmentation"
+msgstr "目标分割"
+
+msgid "Identifies segments (objects) from imagery data."
+msgstr ""
+
+msgid "Filter image"
+msgstr "图像过滤"
+
+msgid "Edge detection"
+msgstr "边界侦测"
+
+msgid "Zero-crossing \"edge detection\" raster function for image processing."
+msgstr ""
+
+msgid "Matrix/convolving filter"
+msgstr "矩阵/卷积过滤"
+
+msgid "Performs raster map matrix filter."
+msgstr ""
+
+msgid "Edge preserving smoothing"
+msgstr ""
+
+msgid "Smoothing with anisotropic diffusion"
+msgstr ""
+
+msgid "Transform image"
+msgstr "图像变换"
+
+msgid "Canonical correlation"
+msgstr "典型相关"
+
+msgid "Canonical components analysis (CCA) program for image processing."
+msgstr ""
+
+msgid "Principal components"
+msgstr "主成份分析"
+
+msgid "Principal components analysis (PCA) for image processing."
+msgstr ""
+
+msgid "Fast Fourier"
+msgstr "快速傅立叶"
+
+msgid "Fast Fourier Transform (FFT) for image processing."
+msgstr ""
+
+msgid "Inverse Fast Fourier"
+msgstr "逆快速傅立叶"
+
+msgid "Inverse Fast Fourier Transform (IFFT) for image processing."
+msgstr ""
+
+msgid "Satellite images tools"
+msgstr "卫星图像工具"
+
+msgid "Aster DN to radiance/reflectance"
+msgstr "Aster数字值(DN)转换为辐射/反射"
+
+msgid "Calculates Top of Atmosphere Radiance/Reflectance/Brightness Temperature from ASTER DN."
+msgstr ""
+
+msgid "Landsat DN to radiance/reflectance"
+msgstr "Landsat数字值(DN)转换为辐射/反射"
+
+msgid "Calculates top-of-atmosphere radiance or reflectance and temperature for Landsat MSS/TM/ETM+/OLI"
+msgstr ""
+
+msgid "Landsat cloud cover assessment"
+msgstr "Landsat云层覆盖评估"
+
+msgid "Performs Landsat TM/ETM+ Automatic Cloud Cover Assessment (ACCA)."
+msgstr ""
+
+msgid "Modis quality control"
+msgstr "Modis质量控制"
+
+msgid "Extracts quality control parameters from MODIS QC layers."
+msgstr ""
+
+msgid "Atmospheric correction"
+msgstr "大气校正"
+
+msgid "Performs atmospheric correction using the 6S algorithm. 6S - Second Simulation of Satellite Signal in the Solar Spectrum."
+msgstr ""
+
+msgid "Topographic correction"
+msgstr "拓扑校正"
+
+#, fuzzy
+#| msgid "Topographic correction"
+msgid "Computes topographic correction of reflectance."
+msgstr "拓扑校正"
+
+msgid "Orthophoto tools"
+msgstr ""
+
+#, fuzzy
+#| msgid "Manage projections"
+msgid "Manage GCPs for 3D correction"
+msgstr "投影管理"
+
+msgid "Georectifies a map and allows managing GCP for 3D correction."
+msgstr ""
+
+msgid "Corrects scanning distortions"
+msgstr ""
+
+msgid "Corrects scanning distortions of a scanned aerial photo."
+msgstr ""
+
+msgid "Initialize ortho parameters"
+msgstr ""
+
+msgid "Interactively creates or modifies entries in a camera initial exposure station file for imagery group referenced by a sub-block."
+msgstr ""
+
+#, fuzzy
+#| msgid "Terrain parameters"
+msgid "Camera parameters"
+msgstr "地形参数"
+
+msgid "Select and modify the imagery group camera reference file."
+msgstr ""
+
+msgid "Elevation model for orthorectification"
+msgstr ""
+
+msgid "Select or modify the target elevation model."
+msgstr ""
+
+msgid "Target group for orthorectification"
+msgstr ""
+
+#, fuzzy
+#| msgid "Select raster map or imagery group to histogram"
+msgid "Select or modify the imagery group target."
+msgstr "选择栅格地图或图像组以绘制柱形图"
+
+#, fuzzy
+#| msgid "Select datum transformation"
+msgid "Compute ortho transformation"
+msgstr "选择基准面转换"
+
+msgid "Computes a coordinate transformation based on the control points."
+msgstr ""
+
+#, fuzzy
+#| msgid "Georectifier"
+msgid "Orthorectify imagery"
+msgstr "地理校正"
+
+msgid "Orthorectifies an image by using the image to photo coordinate transformation matrix."
+msgstr ""
+
+msgid "Satellite images products"
+msgstr "卫星图像生成指数"
+
+msgid "Vegetation indices"
+msgstr "植被指数"
+
+msgid "Calculates different types of vegetation indices. Uses red and nir bands mostly, and some indices require additional bands."
+msgstr ""
+
+msgid "Tasseled cap vegetation index"
+msgstr "缨帽变换植被指数"
+
+msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
+msgstr ""
+
+msgid "Albedo"
+msgstr "反照率"
+
+msgid "Computes broad band albedo from surface reflectance."
+msgstr ""
+
+msgid "Emissivity"
+msgstr "发射率"
+
+msgid "Computes emissivity from NDVI, generic method for sparse land."
+msgstr ""
+
+msgid "Biomass growth"
+msgstr "生物量增长"
+
+msgid "Computes biomass growth, precursor of crop yield calculation."
+msgstr ""
+
+msgid "Evapotranspiration calculation"
+msgstr "蒸散计算"
+
+msgid "Instantaneaous Net Radiation"
+msgstr "瞬时净辐射"
+
+msgid "Net radiation approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Soil heat flux"
+msgstr "土壤热通量"
+
+msgid "Soil heat flux approximation (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Sensible heat flux"
+msgstr "感热通量"
+
+msgid "Computes sensible heat flux iteration SEBAL 01."
+msgstr ""
+
+msgid "Evaporative fraction"
+msgstr "蒸发率"
+
+msgid "Computes evaporative fraction and root zone soil moisture."
+msgstr ""
+
+msgid "Actual Evapotranspiration"
+msgstr "实际蒸散"
+
+msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
+msgstr ""
+
+msgid "Temporal integration of ETa"
+msgstr "实际蒸散时段整合"
+
+msgid "Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)."
+msgstr ""
+
+msgid "Hargreaves methods Evapotranspiration"
+msgstr "Hargreaves蒸散"
+
+msgid "Computes evapotranspiration calculation modified or original Hargreaves formulation, 2001."
+msgstr ""
+
+msgid "Penman-Monteith Evapotranspiration"
+msgstr "Penman-Monteith蒸散"
+
+msgid "Computes potential evapotranspiration calculation with hourly Penman-Monteith."
+msgstr ""
+
+msgid "Priestley-Taylor Evapotranspiration"
+msgstr "Priestley-Taylor蒸散"
+
+msgid "Computes evapotranspiration calculation Priestley and Taylor formulation, 1972."
+msgstr ""
+
+msgid "Kappa analysis"
+msgstr "Kappa分析"
+
+msgid "Calculates error matrix and kappa parameter for accuracy assessment of classification result."
+msgstr ""
+
+msgid "OIF for LandSat TM"
+msgstr "Landsat TM最佳指数因子"
+
+msgid "Calculates Optimum-Index-Factor table for spectral bands"
+msgstr ""
+
+msgid "3D r&aster"
+msgstr "三维栅格(&a)"
+
+msgid "Develop 3D raster map"
+msgstr "三维栅格地图开发"
+
+msgid "Manage 3D NULL values"
+msgstr "管理三维NULL值"
+
+msgid "Explicitly create the 3D NULL-value bitmap file."
+msgstr ""
+
+#, fuzzy
+#| msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
+msgid "Modifies a timestamp for a 3D raster map. Print/add/remove a timestamp for a 3D raster map."
+msgstr "调整栅格地图的时间戳。输出/添加/删除栅格地图的时间戳。"
+
+#, fuzzy
+#| msgid "3D raster"
+msgid "Retile 3D raster"
+msgstr "三维栅格"
+
+msgid "Retiles an existing 3D raster map with user defined x, y and z tile size."
+msgstr ""
+
+#, fuzzy
+#| msgid "Allows creation and/or modification of raster map layer support files."
+msgid "Allows creation and/or modification of 3D raster map layer support files."
+msgstr "创建/修改栅格图层的支持文件"
+
+msgid "3D rasters to raster series"
+msgstr "三维栅格转换为栅格系列"
+
+msgid "3D color tables"
+msgstr "三维色彩表"
+
+#, fuzzy
+#| msgid "Creates/modifies the color table associated with a raster map."
+msgid "Creates/modifies the color table associated with a 3D raster map."
+msgstr "创建/修改栅格图层的色彩表。"
+
+msgid "Export 3D color table"
+msgstr "导出三维色彩表"
+
+#, fuzzy
+#| msgid "Exports the color table associated with a raster map."
+msgid "Exports the color table associated with a 3D raster map."
+msgstr "导出栅格图层色彩表。"
+
+msgid "3D mask"
+msgstr "栅格掩码"
+
+msgid "Establishes the current working 3D raster mask."
+msgstr "为当前三维栅格创建掩码"
+
+msgid "3D raster map calculator"
+msgstr "三维栅格地图计算器"
+
+msgid "Cross section"
+msgstr "横截面"
+
+msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map"
+msgstr ""
+
+msgid "Numerical calculation program for transient, confined groundwater flow in three dimensions."
+msgstr ""
+
+#, fuzzy
+#| msgid "Flow lines"
+msgid "3D flow lines"
+msgstr "流向"
+
+msgid "Computes 3D flow lines and 3D flow accumulation."
+msgstr ""
+
+msgid "3D gradient"
+msgstr ""
+
+#, fuzzy
+#| msgid "Combines red, green and blue raster maps into a single composite raster map."
+msgid "Computes gradient of a 3D raster map and outputs gradient components as three 3D raster maps."
+msgstr "将红、绿、蓝图层合并为一个复合图层"
+
+#, fuzzy
+#| msgid "Neighborhood analysis"
+msgid "3D neighborhood analysis"
+msgstr "近邻分析"
+
+#, fuzzy
+#| msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
+msgid "Makes each voxel value a function of the values assigned to the voxels around it, and stores new voxel values in an output 3D raster map"
+msgstr "对一个像元周围的像元值进行函数计算，将得到的值赋予该像元，并将新的像元值存储在输出栅格图层中。"
+
+#, fuzzy
+#| msgid "Erase display"
+msgid "Create 3D display file"
+msgstr "清屏"
+
+msgid "Creates a display file from an existing 3D raster map according to specified threshold levels."
+msgstr ""
+
+msgid "Interpolate 3D raster from points"
+msgstr "数据点三维栅格插值"
+
+msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
+msgstr "使用规则张力样条(RST)算法将点数据插值为三维栅格。"
+
+msgid "Basic 3D raster metadata"
+msgstr "三维栅格基本元数据"
+
+msgid "Outputs basic information about a user-specified 3D raster map layer."
+msgstr "输出用户指定的三维栅格图层的基本信息"
+
+msgid "3D raster statistics"
+msgstr "三维的栅格统计"
+
+#, fuzzy
+#| msgid "Univariate statistics for 3D rasters"
+msgid "Generates volume statistics for 3D raster maps."
+msgstr "三维栅格一元统计量"
+
+msgid "Univariate statistics for 3D rasters"
+msgstr "三维栅格一元统计量"
+
+msgid "Calculates univariate statistics from the non-null cells of a 3D raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
+msgstr ""
+
+msgid "&Database"
+msgstr "数据库(&D)"
+
+msgid "Database information"
+msgstr "数据库信息"
+
+msgid "List databases"
+msgstr "数据库列表"
+
+#, fuzzy
+#| msgid "Lists all tables for a given database."
+msgid "Lists all databases for a given driver and location."
+msgstr "列出指定数据库的所有表。"
+
+msgid "List drivers"
+msgstr "驱动列表"
+
+#, fuzzy
+#| msgid "List databases"
+msgid "Lists all database drivers."
+msgstr "数据库列表"
+
+msgid "List tables"
+msgstr "数据库表列表"
+
+msgid "Lists all tables for a given database."
+msgstr "列出指定数据库的所有表。"
+
+msgid "Describe table"
+msgstr "数据表信息"
+
+msgid "Describes a table in detail."
+msgstr "描述表(详细地)。"
+
+msgid "List columns"
+msgstr "字段列表"
+
+msgid "List all columns for a given table."
+msgstr "列出给出表的所有字段。"
+
+msgid "Manage databases"
+msgstr "数据库管理"
+
+msgid "Connect"
+msgstr "连接"
+
+msgid "Prints/sets general DB connection for current mapset."
+msgstr ""
+
+msgid "Login"
+msgstr "登入"
+
+msgid "Sets user/password for DB driver/database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Create table"
+msgid "Create database"
+msgstr "创建表"
+
+#, fuzzy
+#| msgid "Creates a space time dataset."
+msgid "Creates an empty database."
+msgstr "创建一个时空数据集"
+
+msgid "Drop database"
+msgstr "删除数据库"
+
+#, fuzzy
+#| msgid "Renames a space time dataset"
+msgid "Removes an existing database."
+msgstr "重命名时空数据集"
+
+msgid "Drop table"
+msgstr "删除数据表"
+
+#, fuzzy
+msgid "Drops an attribute table."
+msgstr "未发现矢量地图<%s>"
+
+#, fuzzy
+#| msgid "Drop table"
+msgid "Copy table"
+msgstr "删除数据表"
+
+msgid "Copy a table. Either 'from_table' (optionally with 'where') can be used or 'select' option, but not 'from_table' and 'select' at the same time."
+msgstr ""
+
+msgid "Drop column"
+msgstr "删除字段"
+
+#, fuzzy
+#| msgid "List all columns for a given table."
+msgid "Drops a column from selected attribute table."
+msgstr "列出给出表的所有字段。"
+
+msgid "Test"
+msgstr "测试"
+
+msgid "Test database driver, database must exist and set by db.connect."
+msgstr ""
+
+msgid "Query any table"
+msgstr "查询所有任意表"
+
+msgid "Selects data from attribute table. Performs SQL query statement(s)."
+msgstr ""
+
+msgid "SQL statement"
+msgstr "SQL语句"
+
+msgid "Executes any SQL statement. For SELECT statements use 'db.select'."
+msgstr ""
+
+#, fuzzy
+#| msgid "Univariate statistics for attribute columns"
+msgid "Univariate statistics for table column"
+msgstr "属性列的一元变量统计"
+
+#, fuzzy
+#| msgid "Calculates univariate statistics from the non-null cells of a raster map."
+msgid "Calculates univariate statistics on selected table column."
+msgstr "计算栅格地图中非空像元的一元统计值"
+
+msgid "Vector database connections"
+msgstr "矢量数据库连接"
+
+msgid "New table"
+msgstr "创建新数据表"
+
+msgid "Creates and connects a new attribute table to a given layer of an existing vector map."
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove table"
+msgid "Remove table"
+msgstr "移除数据表"
+
+#, fuzzy
+#| msgid "Show attribute data for selected vector map"
+msgid "Removes existing attribute table of a vector map."
+msgstr "显示选中矢量地图的属性数据"
+
+msgid "Join table"
+msgstr "连接数据表"
+
+#, fuzzy
+#| msgid "Converts a raster map into a vector map."
+msgid "Joins a database table to a vector map table."
+msgstr "将栅格图转化为矢量图层。"
+
+msgid "Add columns"
+msgstr "添加字段"
+
+msgid "Adds one or more columns to the attribute table connected to a given vector map."
+msgstr ""
+
+msgid "Drops a column from the attribute table connected to a given vector map."
+msgstr ""
+
+msgid "Renames a column in the attribute table connected to a given vector map."
+msgstr ""
+
+msgid "Change values"
+msgstr "更改值"
+
+msgid "Updates a column in the attribute table connected to a vector map."
+msgstr ""
+
+msgid "Drop row"
+msgstr "删除行"
+
+msgid "Removes a vector feature from a vector map through attribute selection."
+msgstr ""
+
+msgid "Reconnect vectors to database"
+msgstr "重新连接数据库"
+
+msgid "Reconnects attribute tables for all vector maps from the current mapset to a new database."
+msgstr ""
+
+msgid "Set vector map - database connection"
+msgstr "设置矢量图--数据库连接"
+
+#, fuzzy
+#| msgid "Prints vector map attributes."
+msgid "Prints/sets DB connection for a vector map to attribute table."
+msgstr "打印矢量的要素属性"
+
+msgid "&Temporal"
+msgstr "时空数据(&T)"
+
+#, fuzzy
+#| msgid "Manage databases"
+msgid "Manage datasets"
+msgstr "数据库管理"
+
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Connect temporal database"
+msgstr "创建一个空数据库"
+
+msgid "Prints/sets general temporal GIS database connection for current mapset."
+msgstr ""
+
+msgid "Create"
+msgstr "新建"
+
+msgid "Creates a space time dataset."
+msgstr "创建一个时空数据集"
+
+msgid "Renames a space time dataset"
+msgstr "重命名时空数据集"
+
+msgid "Removes space time datasets from temporal database."
+msgstr "从时空数据库中删除时空数据集。"
+
+msgid "Modifies the metadata of a space time dataset."
+msgstr "更新时空数据集的元数据。"
+
+msgid "Merge"
+msgstr "合并"
+
+msgid "Merges several space time datasets into a single space time dataset."
+msgstr "时空数据集合并。"
+
+msgid "Temporally shift"
+msgstr "时间位移"
+
+msgid "Shifts temporally the maps of a space time dataset."
+msgstr "时空数据集地图时相位移。"
+
+msgid "Snap maps of dataset"
+msgstr "数据集地图对齐"
+
+msgid "Snaps temporally the maps of a space time dataset."
+msgstr "时空数据集地图时相对齐。"
+
+#, fuzzy
+#| msgid "Removes space time datasets from temporal database."
+msgid "Lists space time datasets and maps registered in the temporal database."
+msgstr "从时空数据库中删除时空数据集。"
+
+#, fuzzy
+#| msgid "Creates a space time dataset."
+msgid "Copy space time dataset"
+msgstr "创建一个时空数据集"
+
+#, fuzzy
+msgid "Creates a copy of a space time raster dataset."
+msgstr "导入栅格数据"
+
+#, fuzzy
+#| msgid "Creates an empty database."
+msgid "Upgrade temporal database"
+msgstr "创建一个空数据库"
+
+#, fuzzy
+#| msgid "Removes space time datasets from temporal database."
+msgid "Upgrades the version of the temporal database."
+msgstr "从时空数据库中删除时空数据集。"
+
+msgid "Manage maps in datasets"
+msgstr "管理数据集的地图"
+
+msgid "Register maps in datasets"
+msgstr "注册地图到数据集"
+
+msgid "Assigns timestamps and registers raster, vector and raster3d maps in a space time dataset."
+msgstr ""
+
+#, fuzzy
+#| msgid "Register maps in datasets"
+msgid "Unregister maps from datasets"
+msgstr "注册地图到数据集"
+
+#, fuzzy
+#| msgid "Merges several space time datasets into a single space time dataset."
+msgid "Unregisters raster, vector and raster3d maps from the temporal database or a specific space time dataset."
+msgstr "时空数据集合并。"
+
+msgid "List raster dataset maps"
+msgstr "列举栅格数据集地图"
+
+#, fuzzy
+msgid "Lists registered maps of a space time raster dataset."
+msgstr "导入栅格数据"
+
+msgid "List vector dataset maps"
+msgstr "列举矢量数据集地图"
+
+#, fuzzy
+#| msgid "Shifts temporally the maps of a space time dataset."
+msgid "Lists registered maps of a space time vector dataset."
+msgstr "时空数据集地图时相位移。"
+
+#, fuzzy
+#| msgid "List raster dataset maps"
+msgid "List 3D raster dataset maps"
+msgstr "列举栅格数据集地图"
+
+#, fuzzy
+msgid "Lists registered maps of a space time raster3d dataset."
+msgstr "导入栅格数据"
+
+#, fuzzy
+#| msgid "Import"
+msgid "Import"
+msgstr "导入"
+
+msgid "Import raster dataset"
+msgstr "导入栅格数据集"
+
+#, fuzzy
+#| msgid "Converts a space time raster dataset into a 3D raster map."
+msgid "Imports space time raster dataset."
+msgstr "将时空数据集转化为三维栅格图层。"
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Import vector dataset"
+msgstr "导入矢量数据"
+
+#, fuzzy
+#| msgid "Import vector dataset"
+msgid "Imports a space time vector dataset from a GRASS specific archive file."
+msgstr "导入矢量数据集"
+
+#, fuzzy
+#| msgid "Import raster dataset"
+msgid "Export raster dataset"
+msgstr "导入栅格数据集"
+
+#, fuzzy
+msgid "Exports space time raster dataset."
+msgstr "导入栅格数据"
+
+msgid "Export raster dataset as VTK time series"
+msgstr "栅格数据集导出为VTK时间序列"
+
+#, fuzzy
+#| msgid "Export raster dataset as VTK time series"
+msgid "Exports space time raster dataset as VTK time series."
+msgstr "栅格数据集导出为VTK时间序列"
+
+msgid "Export vector dataset"
+msgstr "导出矢量数据集"
+
+#, fuzzy
+#| msgid "Import vector dataset"
+msgid "Exports a space time vector dataset as GRASS specific archive file."
+msgstr "导入矢量数据集"
+
+msgid "Convert raster dataset to 3D raster"
+msgstr "将栅格数据集转换为三维栅格图层"
+
+#, fuzzy
+#| msgid "Convert raster dataset to 3D raster"
+msgid "Converts a space time raster dataset into a 3D raster map."
+msgstr "将栅格数据集转换为三维栅格图层"
+
+#, fuzzy
+#| msgid "Convert raster dataset to volume"
+msgid "Convert raster dataset to vector dataset"
+msgstr "将栅格数据集转换为三维栅格图层"
+
+#, fuzzy
+#| msgid "Merges several space time datasets into a single space time dataset."
+msgid "Converts a space time raster dataset into a space time vector dataset"
+msgstr "时空数据集合并。"
+
+#, fuzzy
+#| msgid "Aggregation in raster datasets"
+msgid "Create contour lines from raster dataset"
+msgstr "栅格数据集合计"
+
+#, fuzzy
+#| msgid "Produces a vector map of specified contours from a raster map."
+msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgstr "从栅格图层生成等高线矢量地图。"
+
+msgid "Extraction"
+msgstr "提取"
+
+msgid "Extract subset of raster dataset"
+msgstr "从栅格数据集提取子集"
+
+#, fuzzy
+msgid "Extracts a subset of a space time raster datasets."
+msgstr "导入栅格数据"
+
+msgid "Extract subset of vector dataset"
+msgstr "从矢量数据集提取子集"
+
+#, fuzzy
+msgid "Extracts a subset of a space time vector dataset."
+msgstr "导入栅格数据"
+
+#, fuzzy
+#| msgid "Extract subset of raster dataset"
+msgid "Extract subset of 3D raster dataset"
+msgstr "从栅格数据集提取子集"
+
+#, fuzzy
+msgid "Extracts a subset of a space time 3D raster dataset."
+msgstr "导入栅格数据"
+
+#, fuzzy
+#| msgid "Report temporal topology"
+msgid "Select maps by temporal topology"
+msgstr "时空数据拓扑报告"
+
+msgid "Select maps from space time datasets by topological relationships to other space time datasets using temporal algebra."
+msgstr ""
+
+msgid "Query vector dataset attribute data"
+msgstr "查询矢量数据集属性"
+
+msgid "Prints attributes of vector maps registered in a space time vector dataset."
+msgstr ""
+
+msgid "Raster dataset color table"
+msgstr "栅格数据集色彩表"
+
+#, fuzzy
+#| msgid "Creates/modifies the color table associated with a raster map."
+msgid "Creates/modifies the color table associated with each raster map of the space time raster dataset."
+msgstr "创建/修改栅格图层的色彩表。"
+
+msgid "Raster calculations"
+msgstr "栅格地图计算"
+
+msgid "Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import raster data"
+msgid "Temporal raster algebra"
+msgstr "导入栅格数据"
+
+msgid "Apply temporal and spatial operations on space time raster datasets using temporal raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster calculations"
+msgid "3D raster calculations"
+msgstr "栅格地图计算"
+
+msgid "Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import 3D raster data"
+msgid "Temporal 3D raster algebra"
+msgstr "导入三维栅格地图"
+
+msgid "Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra."
+msgstr ""
+
+#, fuzzy
+#| msgid "Import vector data"
+msgid "Temporal vector algebra"
+msgstr "导入矢量数据"
+
+msgid "Apply temporal and spatial operations on space time vector datasets using temporal vector algebra."
+msgstr ""
+
+msgid "Interpolate gaps in raster datasets"
+msgstr "栅格数据集插值"
+
+msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
+msgstr ""
+
+msgid "Aggregation"
+msgstr "合计"
+
+msgid "Neighborhood analysis in raster dataset"
+msgstr "栅格数据集最近邻分析"
+
+#, fuzzy
+#| msgid "Neighborhood analysis in raster dataset"
+msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
+msgstr "栅格数据集最近邻分析"
+
+msgid "Aggregation in raster datasets"
+msgstr "栅格数据集合计"
+
+#, fuzzy
+msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
+msgstr "计算栅格地图中非空像元的一元统计值"
+
+msgid "Temporal aggregation"
+msgstr "时间数据集合计"
+
+#, fuzzy
+#| msgid "Snaps temporally the maps of a space time dataset."
+msgid "Aggregates temporally the maps of a space time raster dataset by a user defined granularity."
+msgstr "时空数据集地图时相对齐。"
+
+msgid "Temporal aggregation by dataset"
+msgstr "时间数据集内合计"
+
+#, fuzzy
+#| msgid "Merges several space time datasets into a single space time dataset."
+msgid "Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset."
+msgstr "时空数据集合并。"
+
+#, fuzzy
+#| msgid "Raster series accumulation"
+msgid "Compute cyclic accumulations"
+msgstr "地图系列累计"
+
+#, fuzzy
+msgid "Computes cyclic accumulations of a space time raster dataset."
+msgstr "导入栅格数据"
+
+msgid "Detect accumulation patterns"
+msgstr ""
+
+msgid "Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate."
+msgstr ""
+
+msgid "Sampling"
+msgstr "抽样"
+
+#, fuzzy
+#| msgid "Converts a space time raster dataset into a 3D raster map."
+msgid "Sample a space time raster dataset at point coordinates"
+msgstr "将时空数据集转化为三维栅格图层。"
+
+msgid "Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts"
+msgstr ""
+
+msgid "Query raster dataset by vector points dataset"
+msgstr "通过矢量点数据查询栅格数据"
+
+msgid "Stores raster map values at spatial and temporal positions of vector points as vector attributes."
+msgstr ""
+
+msgid "Observe specific locations in raster dataset"
+msgstr "栅格数据定点观测"
+
+#, fuzzy
+#| msgid "Observe specific locations in raster dataset"
+msgid "Observes specific locations in a space time raster dataset over a period of time using vector points."
+msgstr "栅格数据定点观测"
+
+msgid "Temporal sampling"
+msgstr "时间数据集抽样"
+
+#, fuzzy
+#| msgid "Merges several space time datasets into a single space time dataset."
+msgid "Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout."
+msgstr "时空数据集合并。"
+
+msgid "Space time datasets metadata"
+msgstr "时空数据集元数据"
+
+#, fuzzy
+#| msgid "Creates a space time dataset."
+msgid "Lists information about space time datasets and maps."
+msgstr "创建一个时空数据集"
+
+msgid "Univariate raster dataset statistics"
+msgstr "栅格数据集一元统计量"
+
+#, fuzzy
+msgid "Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset."
+msgstr "计算栅格地图中非空像元的一元统计值"
+
+msgid "Univariate vector dataset statistics"
+msgstr "矢量数据集一元统计量"
+
+#, fuzzy
+msgid "Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset"
+msgstr "计算栅格地图中非空像元的一元统计值"
+
+#, fuzzy
+#| msgid "Univariate raster dataset statistics"
+msgid "Univariate 3D raster dataset statistics"
+msgstr "栅格数据集一元统计量"
+
+#, fuzzy
+msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
+msgstr "计算栅格地图中非空像元的一元统计值"
+
+msgid "Report temporal topology"
+msgstr "时空数据拓扑报告"
+
+#, fuzzy
+#| msgid "Shifts temporally the maps of a space time dataset."
+msgid "Lists temporal topology of a space time dataset."
+msgstr "时空数据集地图时相位移。"
+
+msgid "GUI tools"
+msgstr "GUI工具"
+
+#, fuzzy
+#| msgid "Timeline tool"
+msgid "Timeline tool"
+msgstr "时间表工具"
+
+#, fuzzy
+msgid "Plot temporal extents."
+msgstr "显示几何形状"
+
+#, fuzzy
+#| msgid "Temporally shift"
+msgid "Temporal plot tool"
+msgstr "时间位移"
+
+msgid "Plot temporal values."
+msgstr ""
+
+msgid "&Help"
+msgstr "帮助(&H)"
+
+#, fuzzy
+#| msgid "GRASS help"
+msgid "GRASS help"
+msgstr "GRASS帮助文件"
+
+#, fuzzy
+#| msgid "Display the HTML man pages of Graphical modeler"
+msgid "Display the HTML man pages of GRASS"
+msgstr "显示图形建模器的HTML帮助文件"
+
+msgid "GUI help"
+msgstr "图形界面帮助文件"
+
+msgid "About system"
+msgstr "关于系统"
+
+#, fuzzy
+#| msgid "Database information"
+msgid "Prints system information"
+msgstr "数据库信息"
+
+msgid "Import, export and link data"
+msgstr "导入、导出、链接数据"
+
+#, fuzzy
+#| msgid "Attribute table manager"
+msgid "Attribute table manager"
+msgstr "属性表管理器"
+
+#, fuzzy
+#| msgid "Data Catalog"
+msgid "Launch Data Catalog."
+msgstr "数据目录"
+
+msgid "Managing GCPs for 3D correction"
+msgstr ""
+
+msgid "Interactive editing and digitization of vector maps."
+msgstr ""
+
+#, fuzzy
+#| msgid "Interactive management of raster color tables."
+msgid "Interactive editing and digitization of raster maps."
+msgstr "交互式管理栅格图层色彩。"
+
+msgid "Miscellaneous"
+msgstr ""
+
+msgid "Bearing/distance to coordinates"
+msgstr "坐标的方位/距离"
+
+msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa. It assumes a cartesian coordinate system"
+msgstr "可将方位及距离度量与坐标进行双向转换的简单工具。转换于笛卡尔坐标系统上进行。"
+
+#, fuzzy
+#| msgid "Measure distance"
+msgid "Measure map distances"
+msgstr "测量距离"
+
+msgid "Measures the lengths and areas of features."
+msgstr ""
+
+msgid "3D image rendering"
+msgstr "三维图像渲染"
+
+msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
+msgstr "为GIS数据创建三维渲染。可对栅格面，二维/三维矢量数据以及体积(三维栅格数据)进行渲染。"
+
+msgid "3D visualization script"
+msgstr ""
+
+msgid "Creates fly-through script to run in NVIZ."
+msgstr ""
+
+#, fuzzy
+#| msgid "Convert coordinates"
+msgid "Convert coordinates between projections"
+msgstr "坐标转换"
+
+msgid "Transform coordinates (affine)"
+msgstr ""
+
+msgid "PostScript map output"
+msgstr ""
+
+msgid "Produces hardcopy PostScript map output."
+msgstr ""
+
+msgid "Save model to file"
+msgstr "将模型保存到文件"
+
+msgid "Close model file"
+msgstr "关闭模型文件"
+
+msgid "Export to image"
+msgstr "输出为图像"
+
+msgid "Export to Python"
+msgstr "导出到Python"
+
+#, fuzzy
+#| msgid "Export to PDF"
+msgid "Export to PyWPS"
+msgstr "导出到PDF"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to PyWPS script"
+msgstr "将模型导出到Python脚本"
+
+#, fuzzy
+#| msgid "Export to image"
+msgid "Export to actinia"
+msgstr "输出为图像"
+
+#, fuzzy
+#| msgid "Export model to Python script"
+msgid "Export model to actinia script"
+msgstr "将模型导出到Python脚本"
+
+msgid "Quit modeler"
+msgstr "安静模式"
+
+msgid "Close modeler window"
+msgstr "关闭模型窗口"
+
+msgid "&Model"
+msgstr "模型(&M)"
+
+msgid "Add command"
+msgstr "添加指令"
+
+msgid "Add action (GRASS command) to model"
+msgstr "添加动作(GRASS指令)到模型"
+
+msgid "Add data"
+msgstr "添加数据"
+
+msgid "Add data item to model"
+msgstr "添加数据项到模型"
+
+msgid "Define relation"
+msgstr "定义关系"
+
+msgid "Define relation between data and action items"
+msgstr "定义数据和动作关系"
+
+msgid "Add loop / series"
+msgstr "添加循环/系列"
+
+msgid "Adds loop (series) to model"
+msgstr "添加循环/系列到模型"
+
+msgid "Add condition"
+msgstr "添加条件"
+
+msgid "Adds condition (if/else) to model"
+msgstr "添加模型条件(if/else)"
+
+msgid "Adds comment to model"
+msgstr "添加模型注释"
+
+msgid "Remove item"
+msgstr "移除项目"
+
+msgid "Remove action/data from model"
+msgstr "从模型中删除动作/数据。"
+
+msgid "Model properties (name, purpose, etc.)"
+msgstr "模型属性(名称、目的等)"
+
+msgid "Delete intermediate data"
+msgstr "删除中间数据"
+
+msgid "Delete intermediate data defined in the model"
+msgstr "删除模型的中间数据"
+
+msgid "Run entire model"
+msgstr "运行整个模型"
+
+msgid "Validate entire model"
+msgstr "验证整个模型"
+
+msgid "Help"
+msgstr "帮助"
+
+msgid "Display the HTML man pages of Graphical modeler"
+msgstr "显示图形建模器的HTML帮助文件"
+
+msgid "About Graphical Modeler"
+msgstr "关于图形建模器"
+
+msgid "Display information about Graphical Modeler"
+msgstr "显示图形建模器信息"
+
+msgid "Specify paper size, margins and orientation"
+msgstr "设定纸张大小，边框和模式"
+
+msgid "Load instruction file"
+msgstr "载入示例文件"
+
+msgid "Load text file with mapping instructions"
+msgstr "使用地图绘制指令载入文本文件"
+
+msgid "Export instruction file"
+msgstr "导出示例文件"
+
+msgid "Generate text file with mapping instructions"
+msgstr "使用地图绘制指令生成文本文件"
+
+msgid "Export to PostScript"
+msgstr "导出到PostScript"
+
+msgid "Generate PostScript output"
+msgstr ""
+
+msgid "Export to PDF"
+msgstr "导出到PDF"
+
+msgid "Generate PDF output"
+msgstr "生成PDF输出"
+
+msgid "Launch ps.map dialog"
+msgstr "启动ps.map对话框"
+
+msgid "Close Cartographic Composer"
+msgstr "启动地图绘制器"
+
+msgid "&Insert"
+msgstr "插入(&I)"
+
+msgid "Map frame"
+msgstr ""
+
+msgid "Add or edit map frame"
+msgstr "添加或编辑地图框架"
+
+msgid "Add or edit raster map"
+msgstr "添加或编辑栅格图"
+
+msgid "Add or edit vector map"
+msgstr "添加或编辑矢量图"
+
+msgid "Map legend"
+msgstr "添加图例"
+
+msgid "Add or edit raster and vector legend"
+msgstr "添加或编辑图例"
+
+msgid "Map info"
+msgstr ""
+
+msgid "Add or edit map info"
+msgstr "添加或编辑地图信息"
+
+msgid "Scale bar"
+msgstr ""
+
+msgid "Add or edit scale bar"
+msgstr "添加或编辑比例尺"
+
+msgid "North Arrow"
+msgstr "指北针"
+
+msgid "Delete selected object"
+msgstr ""
+
+msgid "Display the HTML man pages of Cartographic Composer"
+msgstr "显示地图绘制器HTML帮助文件"
+
+msgid "About Cartographic Composer"
+msgstr "启动地图绘制"
+
+msgid "Display information about Cartographic Composer"
+msgstr "显示地图绘制窗口信息"
+
 msgid "Check all"
 msgstr ""
 
@@ -7359,9 +11217,6 @@ msgstr ""
 
 msgid "Type filename or click to choose file and save color table"
 msgstr ""
-
-msgid "Save"
-msgstr "保存"
 
 msgid "&Set"
 msgstr ""
@@ -7619,9 +11474,6 @@ msgstr ""
 msgid "Dialog cannot be closed while command is running."
 msgstr ""
 
-msgid "Link external raster data"
-msgstr "链接到外部栅格数据"
-
 msgid "Add linked layers into layer tree"
 msgstr ""
 
@@ -7639,9 +11491,6 @@ msgstr ""
 
 msgid "Unable to determine number of raster bands"
 msgstr ""
-
-msgid "Link external vector data"
-msgstr "链接到外部矢量数据"
 
 msgid "Define output format for vector data"
 msgstr ""
@@ -8214,12 +12063,6 @@ msgstr "围绕水平轴旋转当前切面"
 msgid "Sets the Z coordinate of the current cutting plane (only meaningful when tilt is not 0)"
 msgstr ""
 
-msgid "New"
-msgstr "新建"
-
-msgid "Delete"
-msgstr "删除"
-
 msgid "Fine resolution:"
 msgstr ""
 
@@ -8325,9 +12168,6 @@ msgstr ""
 msgid "Elevation of fringe from bottom:"
 msgstr ""
 
-msgid "North Arrow"
-msgstr "指北针"
-
 msgid "Arrow length (in map units):"
 msgstr ""
 
@@ -8335,9 +12175,6 @@ msgid "Arrow color:"
 msgstr ""
 
 msgid "Place arrow"
-msgstr ""
-
-msgid "Scale bar"
 msgstr ""
 
 msgid "Scale bar length (in map units):"
@@ -8424,9 +12261,6 @@ msgstr ""
 
 msgid "None"
 msgstr ""
-
-msgid "Plane"
-msgstr "平面"
 
 msgid "Vector map is 3D"
 msgstr ""
@@ -8613,9 +12447,6 @@ msgid "Map settings"
 msgstr ""
 
 msgid "Map frame settings"
-msgstr ""
-
-msgid "Map frame"
 msgstr ""
 
 msgid "Map frame options:"
@@ -8985,7 +12816,9 @@ msgstr ""
 msgid "Number of segments:"
 msgstr ""
 
-msgid "Label every "
+#, fuzzy
+#| msgid "Label every "
+msgid "Label every"
 msgstr "标签间隔 "
 
 msgid "segments"
@@ -9228,7 +13061,9 @@ msgstr "指北针"
 msgid "Click and drag to resize object"
 msgstr "点击并拖动以改变大小"
 
-msgid "labels: "
+#, fuzzy, python-brace-format
+#| msgid "labels: "
+msgid "labels: {files}"
 msgstr "标签： "
 
 #, fuzzy
@@ -9297,21 +13132,6 @@ msgstr ""
 msgid "Select graphics tool"
 msgstr ""
 
-msgid "Generate text file with mapping instructions"
-msgstr "使用地图绘制指令生成文本文件"
-
-msgid "Load text file with mapping instructions"
-msgstr "使用地图绘制指令载入文本文件"
-
-msgid "Generate PostScript output"
-msgstr ""
-
-msgid "Generate PDF output"
-msgstr "生成PDF输出"
-
-msgid "Specify paper size, margins and orientation"
-msgstr "设定纸张大小，边框和模式"
-
 msgid "Full extent"
 msgstr ""
 
@@ -9321,13 +13141,7 @@ msgstr "缩放到全图范围"
 msgid "Click and drag to place map frame"
 msgstr "点击并拖动到合适位置放置地图框架"
 
-msgid "Delete selected object"
-msgstr ""
-
 msgid "Show preview"
-msgstr ""
-
-msgid "Map info"
 msgstr ""
 
 msgid "Legend"
@@ -9488,9 +13302,6 @@ msgstr ""
 msgid "Remove a configuration file"
 msgstr "删除配置文件"
 
-msgid "Create"
-msgstr "新建"
-
 msgid "Create a new configuration file"
 msgstr "创建新配置文件"
 
@@ -9641,9 +13452,6 @@ msgstr ""
 msgid "Sample units"
 msgstr ""
 
-msgid "Moving window"
-msgstr "移动窗口"
-
 msgid ""
 "Select areas from the\n"
 "overlaid vector map"
@@ -9777,9 +13585,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "The raster map <{map_name}> already exists. Please remove or rename the maps with the prefix '{prefix}' or select the option to overwrite existing maps"
-msgstr ""
-
-msgid "Select sample area 1 of "
 msgstr ""
 
 msgid "Configuration file name:"
@@ -10119,9 +13924,6 @@ msgstr ""
 msgid "Timeline Tool"
 msgstr ""
 
-msgid "Help"
-msgstr "帮助"
-
 msgid "3D plot of spatio-temporal extents"
 msgstr "时空范围三维图形"
 
@@ -10314,7 +14116,7 @@ msgstr ""
 msgid "File exists"
 msgstr ""
 
-msgid "Please change name of output CSV file or "
+msgid "Please change name of output CSV file or enable overwriting."
 msgstr ""
 
 msgid "Incorrect coordinates format, should be: x,y"
@@ -11254,9 +15056,6 @@ msgstr ""
 msgid "Unable to connect to <%s>"
 msgstr ""
 
-msgid "Add web service layer"
-msgstr "添加网络图层"
-
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr ""
 
@@ -11271,9 +15070,6 @@ msgstr ""
 
 msgid "Export region"
 msgstr ""
-
-msgid "Map display"
-msgstr "地图显示"
 
 msgid "Named region"
 msgstr ""
@@ -11668,16 +15464,23 @@ msgstr ""
 msgid "At least 2 raster maps must be specified"
 msgstr ""
 
-msgid "Bivariate Scatterplot of "
+#, python-brace-format
+msgid "{first} vs {second}"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Bivariate Scatterplot of "
+msgid "Bivariate Scatterplot of {pairs}"
 msgstr "二元散点图 "
 
-#, python-format
-msgid "Raster <%s> cell values"
+#, python-brace-format
+msgid "Raster <{raster}> cell values: {units}"
 msgstr ""
 
-#, python-format
-msgid ": %s"
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Raster values"
+msgid "Raster <{raster}> cell values"
+msgstr "栅格值"
 
 msgid "Regression Statistics for Scatterplot(s)"
 msgstr ""
@@ -11689,6 +15492,9 @@ msgid ""
 msgstr ""
 "栅格地图<%(rast1)s>对<%(rast2)s>的回归方程：\n"
 "\n"
+
+#~ msgid "Unable to set "
+#~ msgstr "无法设置 "
 
 #, fuzzy
 #~ msgid "New display"
@@ -11706,41 +15512,11 @@ msgstr ""
 #~ msgid "Create new project (location) in current GRASS database"
 #~ msgstr "在当前地点下创建新地图集或切换当前地图集。"
 
-#~ msgid "&Database"
-#~ msgstr "数据库(&D)"
-
 #~ msgid "&Fetch"
 #~ msgstr "获取(&F)"
 
-#~ msgid "&File"
-#~ msgstr "文件(&F)"
-
-#~ msgid "&Help"
-#~ msgstr "帮助(&H)"
-
-#~ msgid "&Imagery"
-#~ msgstr "图像(&I)"
-
-#~ msgid "&Insert"
-#~ msgstr "插入(&I)"
-
 #~ msgid "&Log file"
 #~ msgstr "日志文件"
-
-#~ msgid "&Model"
-#~ msgstr "模型(&M)"
-
-#~ msgid "&Raster"
-#~ msgstr "栅格(&R)"
-
-#~ msgid "&Settings"
-#~ msgstr "设置(&S)"
-
-#~ msgid "&Temporal"
-#~ msgstr "时空数据(&T)"
-
-#~ msgid "&Vector"
-#~ msgstr "矢量(&V)"
 
 #, python-format
 #~ msgid ""
@@ -11756,80 +15532,14 @@ msgstr ""
 #~ msgid "(Un)dock Map Display"
 #~ msgstr "地图显示"
 
-#~ msgid "2D vector to 3D vector"
-#~ msgstr "二维向量转化到三维向量"
-
 #~ msgid "3D Mask"
 #~ msgstr "三维掩码"
-
-#~ msgid "3D color tables"
-#~ msgstr "三维色彩表"
-
-#~ msgid "3D image rendering"
-#~ msgstr "三维图像渲染"
-
-#~ msgid "3D mask"
-#~ msgstr "栅格掩码"
-
-#~ msgid "3D r&aster"
-#~ msgstr "三维栅格(&a)"
-
-#~ msgid "3D raster map calculator"
-#~ msgstr "三维栅格地图计算器"
 
 #~ msgid "3D raster map calculator."
 #~ msgstr "三维栅格地图计算器"
 
-#~ msgid "3D raster statistics"
-#~ msgstr "三维的栅格统计"
-
-#~ msgid "3D rasters to raster series"
-#~ msgstr "三维栅格转换为栅格系列"
-
 #~ msgid ":"
 #~ msgstr ":"
-
-#~ msgid "A simple utility for converting bearing and distance measurements to coordinates and vice versa. It assumes a cartesian coordinate system"
-#~ msgstr "可将方位及距离度量与坐标进行双向转换的简单工具。转换于笛卡尔坐标系统上进行。"
-
-#~ msgid "ASCII 3D export"
-#~ msgstr "导出为ASCII三维文本文件"
-
-#~ msgid "ASCII 3D import"
-#~ msgstr "导入三维ASCII数据"
-
-#~ msgid "ASCII grid export"
-#~ msgstr "导出ASCII栅格数据"
-
-#~ msgid "ASCII grid import"
-#~ msgstr "导入ASCII网格"
-
-#~ msgid "ASCII points as a vector lines"
-#~ msgstr "以ASCII点数据绘制矢量线段"
-
-#~ msgid "ASCII points or GRASS ASCII format"
-#~ msgstr "ASCII点数据或GRASS ASCII格式数据"
-
-#~ msgid "ASCII points or GRASS ASCII vector export"
-#~ msgstr "导出为ASCII点或GRASS ASCII矢量格式"
-
-#~ msgid "ASCII polygons, lines, and point import"
-#~ msgstr "导入ASCII格式多边形，线及点数据"
-
-#~ msgid "ASCII x,y,z point import and gridding"
-#~ msgstr "导入ASCII x,y,z点数据并栅格化"
-
-#~ msgid "ASCII x,y,z points export"
-#~ msgstr "导出到ASCII x,y,z点数据"
-
-#~ msgid "About Cartographic Composer"
-#~ msgstr "启动地图绘制"
-
-#~ msgid "About Graphical Modeler"
-#~ msgstr "关于图形建模器"
-
-#~ msgid "About system"
-#~ msgstr "关于系统"
 
 #~ msgid ""
 #~ "Accessible mapsets\n"
@@ -11841,30 +15551,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Action"
 #~ msgstr "无法获取栅格行\n"
-
-#~ msgid "Actual Evapotranspiration"
-#~ msgstr "实际蒸散"
-
-#~ msgid "Add action (GRASS command) to model"
-#~ msgstr "添加动作(GRASS指令)到模型"
-
-#~ msgid "Add centroids"
-#~ msgstr "添加中心点"
-
-#~ msgid "Add columns"
-#~ msgstr "添加字段"
-
-#~ msgid "Add command"
-#~ msgstr "添加指令"
-
-#~ msgid "Add condition"
-#~ msgstr "添加条件"
-
-#~ msgid "Add data"
-#~ msgstr "添加数据"
-
-#~ msgid "Add data item to model"
-#~ msgstr "添加数据项到模型"
 
 #, fuzzy
 #~ msgid "Add default servers"
@@ -11881,39 +15567,6 @@ msgstr ""
 #~ msgid "Add linked layers into layer tree ({mightNotWork})"
 #~ msgstr "加载地图层到层列表"
 
-#~ msgid "Add loop / series"
-#~ msgstr "添加循环/系列"
-
-#~ msgid "Add multiple raster or vector map layers to current display"
-#~ msgstr "批量添加栅格或矢量图层到当前显示窗口"
-
-#~ msgid "Add multiple rasters or vectors"
-#~ msgstr "批量添加栅格或矢量图层"
-
-#~ msgid "Add or edit map frame"
-#~ msgstr "添加或编辑地图框架"
-
-#~ msgid "Add or edit map info"
-#~ msgstr "添加或编辑地图信息"
-
-#~ msgid "Add or edit raster and vector legend"
-#~ msgstr "添加或编辑图例"
-
-#~ msgid "Add or edit raster map"
-#~ msgstr "添加或编辑栅格图"
-
-#~ msgid "Add or edit scale bar"
-#~ msgstr "添加或编辑比例尺"
-
-#~ msgid "Add or edit vector map"
-#~ msgstr "添加或编辑矢量图"
-
-#~ msgid "Add raster"
-#~ msgstr "添加栅格图层"
-
-#~ msgid "Add raster map layer to current display"
-#~ msgstr "添加栅格图层到当前显示区"
-
 #~ msgid "Add scalebar and north arrow"
 #~ msgstr "添加比例尺和指北针"
 
@@ -11923,53 +15576,8 @@ msgstr ""
 #~ msgid "Add various raster map layers (RGB, HIS, 晕渲...)"
 #~ msgstr "添加多种栅格地图层(RGB, HIS, shaded relief...)"
 
-#~ msgid "Add vector"
-#~ msgstr "添加矢量图层"
-
-#~ msgid "Add vector map layer to current display"
-#~ msgstr "添加矢量图层到当前显示窗口"
-
-#~ msgid "Addons extensions"
-#~ msgstr "组件扩展"
-
-#~ msgid "Adds comment to model"
-#~ msgstr "添加模型注释"
-
-#~ msgid "Adds condition (if/else) to model"
-#~ msgstr "添加模型条件(if/else)"
-
-#~ msgid "Adds loop (series) to model"
-#~ msgstr "添加循环/系列到模型"
-
-#~ msgid "Aggregation"
-#~ msgstr "合计"
-
-#~ msgid "Aggregation in raster datasets"
-#~ msgstr "栅格数据集合计"
-
-#~ msgid "Albedo"
-#~ msgstr "反照率"
-
-#~ msgid "Allocate subnets"
-#~ msgstr "分配子网"
-
-#~ msgid "Allows creation and/or modification of raster map layer support files."
-#~ msgstr "创建/修改栅格图层的支持文件"
-
-#~ msgid "Anisotropic spread simulation"
-#~ msgstr "各向异性蔓延模拟"
-
-#~ msgid "Apply shade to raster"
-#~ msgstr "栅格晕渲"
-
 #~ msgid "Ask when quiting wxGUI or closing display"
 #~ msgstr "退出wxGUI界面或关闭显示时提示"
-
-#~ msgid "Aster DN to radiance/reflectance"
-#~ msgstr "Aster数字值(DN)转换为辐射/反射"
-
-#~ msgid "Atmospheric correction"
-#~ msgstr "大气校正"
 
 #~ msgid "Auto-fit variogram"
 #~ msgstr "自动拟合变异函数"
@@ -11977,111 +15585,21 @@ msgstr ""
 #~ msgid "Automatically hightlight selected features in map display"
 #~ msgstr "地图显示窗口中自动高亮所选择要素"
 
-#~ msgid "Basic 3D raster metadata"
-#~ msgstr "三维栅格基本元数据"
-
-#~ msgid "Basic raster metadata"
-#~ msgstr "栅格基本元数据"
-
-#~ msgid "Basic vector metadata"
-#~ msgstr "基本矢量数据"
-
 #~ msgid "Basic volume metadata"
 #~ msgstr "三维图基本元数据"
-
-#~ msgid "Bearing/distance to coordinates"
-#~ msgstr "坐标的方位/距离"
-
-#~ msgid "Bilinear and bicubic from vector points"
-#~ msgstr "二次线性或三次插值"
-
-#~ msgid "Biomass growth"
-#~ msgstr "生物量增长"
 
 #~ msgid "Bit pattern comparison "
 #~ msgstr "位模式比较"
 
-#~ msgid "Blend 2 color rasters"
-#~ msgstr "两个栅格混色"
-
-#~ msgid "Blends color components of two raster maps by a given ratio."
-#~ msgstr "在指定比例下对两个栅格图层色彩表混色"
-
 #~ msgid "Block size:"
 #~ msgstr "块大小："
-
-#~ msgid "Bridges and articulation points"
-#~ msgstr "桥接及连接点"
-
-#~ msgid "Buffer rasters"
-#~ msgstr "缓冲区"
-
-#~ msgid "Buffer vectors"
-#~ msgstr "矢量缓冲区"
-
-#~ msgid "Build polylines"
-#~ msgstr "构建多线段"
-
-#~ msgid "Calculates category or object oriented statistics (accumulator-based statistics)."
-#~ msgstr "面向类别或对象统计(基于累计的统计量)。"
-
-#~ msgid "Calculates range of patch area size on a raster map"
-#~ msgstr "。"
 
 #, fuzzy
 #~ msgid "Calculates univariate statistics from the non-null 3d cells of a raster3d map."
 #~ msgstr "计算栅格地图中非空像元的一元统计值"
 
-#, fuzzy
-#~ msgid "Calculates univariate statistics from the non-null cells for each registered raster3d map of a space time raster3d dataset."
-#~ msgstr "计算栅格地图中非空像元的一元统计值"
-
-#~ msgid "Calculates univariate statistics from the non-null cells of a raster map."
-#~ msgstr "计算栅格地图中非空像元的一元统计值"
-
-#~ msgid "Canonical correlation"
-#~ msgstr "典型相关"
-
-#~ msgid "Carve stream channels"
-#~ msgstr "刻画河道"
-
-#~ msgid "Centrality"
-#~ msgstr "向心性"
-
-#~ msgid "Change category values and labels"
-#~ msgstr "调整类别值及标签"
-
-#~ msgid "Change current mapset."
-#~ msgstr "改变当前地图集"
-
-#, fuzzy
-#~ msgid "Change current project and mapset."
-#~ msgstr "改变当前地点和地图集"
-
 #~ msgid "Change location and mapset"
 #~ msgstr "改变地点和地图集"
-
-#~ msgid "Change or report categories"
-#~ msgstr "类别调整/生成报告"
-
-#, fuzzy
-#~ msgid "Change project (location) and mapset"
-#~ msgstr "选择投影地点和数据集"
-
-#~ msgid "Change settings"
-#~ msgstr "改动设置"
-
-#~ msgid "Change values"
-#~ msgstr "更改值"
-
-#~ msgid "Change working directory"
-#~ msgstr "改变工作目录"
-
-#~ msgid "Change working environment"
-#~ msgstr "改变工作环境"
-
-#~ msgid "Changes/reports current mapset. Optionally create new mapset or list available mapsets in given location."
-#~ msgstr "改变/显示当前地图集。可创建新地图集或列出当前地点下的地图集。"
 
 #~ msgid "Choose EPSG Code"
 #~ msgstr "选择EPSG代码"
@@ -12098,62 +15616,14 @@ msgstr ""
 #~ msgid "Choose method of specifying georeferencing parameters"
 #~ msgstr "选择定义地理配准参数的方式"
 
-#~ msgid "Classify attribute data"
-#~ msgstr "数据属性分类"
-
-#~ msgid "Classify image"
-#~ msgstr "图像分类"
-
-#~ msgid "Clean vector map"
-#~ msgstr "清空矢量图"
-
-#~ msgid "Close Cartographic Composer"
-#~ msgstr "启动地图绘制器"
-
-#~ msgid "Close all open map display windows"
-#~ msgstr "关闭所有地图显示窗口"
-
-#~ msgid "Close current map display window"
-#~ msgstr "关闭地图显示窗口"
-
 #~ msgid "Close dialog when module is successfully finished"
 #~ msgstr "模块结束时关闭对话框"
-
-#~ msgid "Close model file"
-#~ msgstr "关闭模型文件"
-
-#~ msgid "Close modeler window"
-#~ msgstr "关闭模型窗口"
-
-#~ msgid "Closest points"
-#~ msgstr "距离最近点"
-
-#~ msgid "Clump"
-#~ msgstr "簇块化"
-
-#~ msgid "Clustering input for unsupervised classification"
-#~ msgstr "无干预聚类"
-
-#~ msgid "Color balance for RGB"
-#~ msgstr "RGB色彩平衡"
-
-#~ msgid "Color tables"
-#~ msgstr "色彩表"
-
-#~ msgid "Color tables (stddev)"
-#~ msgstr "色彩表(标准差)"
 
 #~ msgid "Combined (labels and module names)"
 #~ msgstr "混合（标签和模块名称）"
 
-#~ msgid "Combines red, green and blue raster maps into a single composite raster map."
-#~ msgstr "将红、绿、蓝图层合并为一个复合图层"
-
 #~ msgid "Command prompt"
 #~ msgstr "命令运行结果输出"
-
-#~ msgid "Common export formats"
-#~ msgstr "常用导出格式"
 
 #~ msgid "Common export formats using OGR"
 #~ msgstr "导出为常用OGR格式"
@@ -12161,242 +15631,29 @@ msgstr ""
 #~ msgid "Common formats import"
 #~ msgstr "常用导入格式"
 
-#~ msgid "Common import formats"
-#~ msgstr "常用导入格式"
-
 #, fuzzy
 #~ msgid "Compares bit patterns with a raster map."
 #~ msgstr "以比特模式与栅格地图比较"
 
-#~ msgid "Components"
-#~ msgstr "成份"
-
-#~ msgid "Compress/decompress"
-#~ msgstr "压缩/解压"
-
-#~ msgid "Compresses and decompresses raster maps."
-#~ msgstr "压缩和解压缩栅格文件。"
-
-#~ msgid "Compute category quantiles using two passes."
-#~ msgstr "使用两步法计算分位数"
-
-#~ msgid "Compute shaded relief"
-#~ msgstr "计算晕渲图"
-
-#~ msgid "Concentric circles"
-#~ msgstr "同心圆"
-
-#~ msgid "Connect"
-#~ msgstr "连接"
-
-#~ msgid "Contrast weighted edge density"
-#~ msgstr "加权边缘密度对比度"
-
-#~ msgid "Controls access to the current mapset for other users on the system. If no option given, prints current status."
-#~ msgstr "设置其他用户对当前地图集的权限。若无设置改变刚显示当前状态。"
-
-#~ msgid "Convert coordinates"
-#~ msgstr "坐标转换"
-
-#~ msgid "Convert object types"
-#~ msgstr "要素类型转换"
-
-#~ msgid "Convert raster dataset to 3D raster"
-#~ msgstr "将栅格数据集转换为三维栅格图层"
-
-#~ msgid "Convert raster dataset to volume"
-#~ msgstr "将栅格数据集转换为三维栅格图层"
-
-#~ msgid "Converts (rasterize) a vector map into a raster map."
-#~ msgstr "将GRASS二元矢量图层转化(栅格化)为GRASS栅格图层。"
-
-#~ msgid "Converts 2D raster map slices to one 3D raster volume map."
-#~ msgstr "将 2D 栅格分块地图转化为一个 3D 栅格地图"
-
-#~ msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
-#~ msgstr "将三色GRASS栅格图层(R,G,B)导出为PPM图像文件。"
-
-#~ msgid "Converts 3D raster maps into the VTK-ASCII format."
-#~ msgstr "将三维栅格地图转化为 VTK-Ascii 格式"
-
-#~ msgid "Converts 3D raster maps to 2D raster maps"
-#~ msgstr "将 3D 栅格图转化为 2D 栅格图"
-
-#~ msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
-#~ msgstr "将GRASS x,y,z点数据导出为POV-Ray x,y,z格式数据。"
-
-#~ msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
-#~ msgstr "将三维ASCII栅格文本文件转换为二进制三维栅格地图。"
-
-#~ msgid "Converts a 3D raster map layer into a ASCII text file."
-#~ msgstr "将三维栅格图层转换为ASCII文本文件。"
-
-#~ msgid "Converts a GRASS raster map to a PPM image file."
-#~ msgstr "将GRASS栅格地图导出为PPM图像。"
-
 #~ msgid "Converts a GRASS site_lists file into a vector map."
 #~ msgstr "将GRASS site_lists文件转化为矢量图层。"
 
-#~ msgid "Converts a raster map into a vector map."
-#~ msgstr "将栅格图转化为矢量图层。"
-
-#~ msgid "Converts a raster map layer into a GRASS ASCII text file."
-#~ msgstr "将栅格地图层导出为GRASS ASCII文本格式。"
-
-#~ msgid "Converts a raster map layer into a height-field file for POV-Ray."
-#~ msgstr "将GRASS栅格地图导出为含高度字段的POV-Ray文件。"
-
 #~ msgid "Converts a raster map layer into an ESRI ARCGRID file."
 #~ msgstr "将栅格图层转换为ESRI GRID文件。"
-
-#~ msgid "Converts a vector map (only points) into a 3D raster map."
-#~ msgstr "将矢量地图(仅含有数据点)转换为三维栅格地图。"
-
-#~ msgid "Converts a vector map to VTK ASCII output."
-#~ msgstr "将矢量地图导出为VTK ASCII输出格式。"
 
 #, fuzzy
 #~ msgid "Converts all older versions of GRASS vector maps in current mapset to current format."
 #~ msgstr "导入旧版GRASS矢量地图。"
 
-#~ msgid "Converts co-ordinate system descriptions (i.e. projection information) between various formats (including GRASS format)."
-#~ msgstr "不同坐标系统间转换(包括GRASS格式)。"
-
-#~ msgid "Converts coordinates from one projection to another (cs2cs frontend)."
-#~ msgstr "不同坐标投影间转换(使用cs2cs作为前台)。"
-
-#~ msgid "Converts files in DXF format to GRASS vector map format."
-#~ msgstr "转化DXF格式到GRASS矢量格式。"
-
-#~ msgid "Converts raster map series to MPEG movie."
-#~ msgstr "将栅格地图系列转换为MPEG电影。"
-
-#~ msgid "Converts raster maps into the VTK-ASCII format."
-#~ msgstr "将GRASS栅格地图导出为VTK ASCII格式。"
-
-#~ msgid "Convex hull"
-#~ msgstr "凸包"
-
-#~ msgid "Copies available data files in the current mapset search path to the user's current mapset."
-#~ msgstr "将用户当前地图集搜索路径下可用数据文件拷贝到用户当前的地图集。"
-
 #, fuzzy
 #~ msgid "Copying"
 #~ msgstr "拷贝表失败"
 
-#~ msgid "Correct and reclassify objects"
-#~ msgstr "修正及重新分类"
-
-#~ msgid "Cost surface"
-#~ msgstr "表面成本"
-
-#~ msgid "Covariance/correlation"
-#~ msgstr "协方差/相关性"
-
-#~ msgid "Create 3D vector over raster"
-#~ msgstr "从栅格图层创建三维矢量"
-
-#~ msgid "Create LRS"
-#~ msgstr "创建线性参考系统"
-
-#~ msgid "Create RGB"
-#~ msgstr "合成RGB图层"
-
 #~ msgid "Create a generic Cartesian coordinate system (XY)"
 #~ msgstr "创建通用笛卡尔坐标系统(XY)"
 
-#~ msgid "Create labels"
-#~ msgstr "创建标签"
-
 #~ msgid "Create new location?"
 #~ msgstr "创建新地点？"
-
-#, fuzzy
-#~ msgid "Create new project (location)"
-#~ msgstr "创建新地点"
-
-#~ msgid "Create new workspace"
-#~ msgstr "创建新工作区"
-
-#~ msgid "Create optimally placed labels"
-#~ msgstr "优化标签位置"
-
-#~ msgid "Create or rebuild topology"
-#~ msgstr "创建或重建拓扑"
-
-#~ msgid "Create points/segments"
-#~ msgstr "创建点/线段"
-
-#~ msgid "Create stationing"
-#~ msgstr "创建站点"
-
-#~ msgid "Create/edit group"
-#~ msgstr "创建/编辑组"
-
-#~ msgid "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D vector data, and volumes (3D raster data) in 3D."
-#~ msgstr "为GIS数据创建三维渲染。可对栅格面，二维/三维矢量数据以及体积(三维栅格数据)进行渲染。"
-
-#~ msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
-#~ msgstr "基于2D高度及栅格地图值创建3D体积地图。"
-
-#~ msgid "Creates a MASK for limiting raster operation."
-#~ msgstr "生成掩码以限制栅格操作"
-
-#~ msgid "Creates a composite raster map layer by using known category values from one (or more) map layer(s) to fill in areas of \"no data\" in another map layer."
-#~ msgstr "使用一个（或多个）图层已知的类别值来填充另一个图层的无数据区域，生成一幅合成栅格图层。"
-
-#~ msgid "Creates a cross product of the category values from multiple raster map layers."
-#~ msgstr "创建多个图层的叉积图层。"
-
-#~ msgid "Creates a latitude/longitude raster map."
-#~ msgstr "创建经纬度栅格地图"
-
-#~ msgid "Creates a linear reference system."
-#~ msgstr "创建线性参考系统"
-
-#~ msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
-#~ msgstr "将OGR支持的图层链接为准矢量地图。"
-
-#~ msgid "Creates a raster map containing concentric rings around a given point."
-#~ msgstr "创建以指定点为中心的同心环图层。"
-
-#~ msgid "Creates a raster map showing buffer zones surrounding cells that contain non-NULL category values."
-#~ msgstr "创建以像元为中心的不包含无效值的缓冲区。"
-
-#~ msgid "Creates a space time dataset."
-#~ msgstr "创建一个时空数据集"
-
-#~ msgid "Creates a vector map from an ASCII points file or ASCII vector file."
-#~ msgstr "从ASCII点数据文件或矢量文件创建矢量地图。"
-
-#, fuzzy
-#~ msgid "Creates new mapset in the current project, changes current mapset."
-#~ msgstr "在当前地点下创建新地图集或切换当前地图集。"
-
-#~ msgid "Creates raster maps from ASCII polygon/line/point data files."
-#~ msgstr "从ASCII格式的多边形/线形/点数据文件创建栅格地图。"
-
-#, fuzzy
-#~ msgid "Creates watershed basins."
-#~ msgstr "生成一个栅格图层，显示一个流域的子流域"
-
-#~ msgid "Creates/modifies the color table associated with a raster map."
-#~ msgstr "创建/修改栅格图层的色彩表。"
-
-#~ msgid "Cross product"
-#~ msgstr "叉积"
-
-#~ msgid "Cross section"
-#~ msgstr "横截面"
-
-#~ msgid "Cumulative movement costs"
-#~ msgstr "累积移动成本"
-
-#~ msgid "DXF export"
-#~ msgstr "导出DXF格式"
-
-#~ msgid "DXF import"
-#~ msgstr "导入DXF"
 
 #~ msgid "Data Toolbar"
 #~ msgstr "数据工具栏"
@@ -12405,29 +15662,14 @@ msgstr ""
 #~ msgid "Database <%s> not accessible."
 #~ msgstr "图层 '%s' 不可用"
 
-#~ msgid "Database information"
-#~ msgstr "数据库信息"
-
 #~ msgid "Define GRASS Database and Location Name"
 #~ msgstr "定义GRASS数据库及地点名称"
 
 #~ msgid "Define new location"
 #~ msgstr "定义新地点"
 
-#~ msgid "Define relation"
-#~ msgstr "定义关系"
-
-#~ msgid "Define relation between data and action items"
-#~ msgstr "定义数据和动作关系"
-
 #~ msgid "Defines raster output format utilizing GDAL library."
 #~ msgstr "用GDAL库定义栅格输出格式。"
-
-#~ msgid "Defines vector output format utilizing OGR library."
-#~ msgstr "用OGR库定义矢量输出格式。"
-
-#~ msgid "Delaunay triangles"
-#~ msgstr "Delaunay三角化"
 
 #, fuzzy
 #~ msgid "Delete area(s)"
@@ -12436,39 +15678,9 @@ msgstr ""
 #~ msgid "Delete filtered"
 #~ msgstr "删除符合正则表达式的项"
 
-#~ msgid "Delete intermediate data"
-#~ msgstr "删除中间数据"
-
-#~ msgid "Delete intermediate data defined in the model"
-#~ msgstr "删除模型的中间数据"
-
-#~ msgid "Depressionless map and flowlines"
-#~ msgstr "低洼去除及生成流向图"
-
-#~ msgid "Describe table"
-#~ msgstr "数据表信息"
-
-#~ msgid "Describes a table in detail."
-#~ msgstr "描述表(详细地)。"
-
-#~ msgid "Detect edges"
-#~ msgstr "边界探测"
-
-#~ msgid "Detect interiors"
-#~ msgstr "内部探测"
-
-#~ msgid "Develop 3D raster map"
-#~ msgstr "三维栅格地图开发"
-
 #, fuzzy
 #~ msgid "Develop 3D rasters"
 #~ msgstr "基础栅格图"
-
-#~ msgid "Develop images and groups"
-#~ msgstr "图像及其分组"
-
-#~ msgid "Develop vector map"
-#~ msgstr "矢量地图开发"
 
 #~ msgid "Develop volumes"
 #~ msgstr "三维栅格开发"
@@ -12480,12 +15692,6 @@ msgstr ""
 #~ msgid "Digitize new area"
 #~ msgstr "矢量化新线"
 
-#~ msgid "Display information about Cartographic Composer"
-#~ msgstr "显示地图绘制窗口信息"
-
-#~ msgid "Display information about Graphical Modeler"
-#~ msgstr "显示图形建模器信息"
-
 #~ msgid "Display mode"
 #~ msgstr "显示模式"
 
@@ -12493,44 +15699,14 @@ msgstr ""
 #~ msgid "Display on surface(s):"
 #~ msgstr "纹理特征"
 
-#~ msgid "Display region"
-#~ msgstr "显示地区"
-
 #~ msgid "Display resolution"
 #~ msgstr "显示分辨率"
-
-#~ msgid "Display the HTML man pages of Cartographic Composer"
-#~ msgstr "显示地图绘制器HTML帮助文件"
-
-#~ msgid "Display the HTML man pages of Graphical modeler"
-#~ msgstr "显示图形建模器的HTML帮助文件"
 
 #~ msgid "Displays version and copyright information."
 #~ msgstr "显示版本及版权信息。"
 
-#~ msgid "Dissolve boundaries"
-#~ msgstr "边界融合"
-
-#~ msgid "Distance to features"
-#~ msgstr "要素距离"
-
 #~ msgid "Do you want to set the default region extents and resolution now?"
 #~ msgstr "现在设置地域范围和分辨率？"
-
-#~ msgid "Dominance's diversity"
-#~ msgstr "Dominance多样性指数"
-
-#~ msgid "Drop column"
-#~ msgstr "删除字段"
-
-#~ msgid "Drop database"
-#~ msgstr "删除数据库"
-
-#~ msgid "Drop row"
-#~ msgstr "删除行"
-
-#~ msgid "Drop table"
-#~ msgstr "删除数据表"
 
 #~ msgid "ESRI ASCII grid export"
 #~ msgstr "导出ESRI ASCIIs栅格"
@@ -12538,33 +15714,9 @@ msgstr ""
 #~ msgid "ESRI ASCII grid import"
 #~ msgstr "导入ESRI ASCII网格"
 
-#~ msgid "ESRI e00 import"
-#~ msgstr "导入ESRI e00格式数据"
-
-#~ msgid "Edge density"
-#~ msgstr "边缘密度"
-
-#~ msgid "Edge detection"
-#~ msgstr "边界侦测"
-
-#~ msgid "Edit vector map (non-interactively)"
-#~ msgstr "编辑矢量地图(非互动)"
-
 #, fuzzy
 #~ msgid "Editing"
 #~ msgstr "验证模型..."
-
-#~ msgid "Emissivity"
-#~ msgstr "发射率"
-
-#~ msgid "Establishes the current working 3D raster mask."
-#~ msgstr "为当前三维栅格创建掩码"
-
-#~ msgid "Evaporative fraction"
-#~ msgstr "蒸发率"
-
-#~ msgid "Evapotranspiration calculation"
-#~ msgstr "蒸散计算"
 
 #~ msgid "Exit GUI"
 #~ msgstr "退出图形界面"
@@ -12572,150 +15724,20 @@ msgstr ""
 #~ msgid "Expert (module names only)"
 #~ msgstr "高级（仅模块名称）"
 
-#~ msgid "Export 3D color table"
-#~ msgstr "导出三维色彩表"
-
-#~ msgid "Export 3D raster maps"
-#~ msgstr "导出三维栅格地图"
-
-#~ msgid "Export a GRASS raster map as a non-georeferenced PNG image."
-#~ msgstr "将GRASS栅格地图导出为无地理参考数据的PNG图像。"
-
-#~ msgid "Export color table"
-#~ msgstr "导出色彩表"
-
-#~ msgid "Export database table"
-#~ msgstr "导出数据库表"
-
-#~ msgid "Export instruction file"
-#~ msgstr "导出示例文件"
-
-#~ msgid "Export raster dataset as VTK time series"
-#~ msgstr "栅格数据集导出为VTK时间序列"
-
-#~ msgid "Export raster map"
-#~ msgstr "导出栅格地图"
-
-#~ msgid "Export to PDF"
-#~ msgstr "导出到PDF"
-
-#~ msgid "Export to PostScript"
-#~ msgstr "导出到PostScript"
-
-#~ msgid "Export to Python"
-#~ msgstr "导出到Python"
-
-#~ msgid "Export to image"
-#~ msgstr "输出为图像"
-
 #~ msgid "Export variance map as well: "
 #~ msgstr "并导出方差地图："
-
-#~ msgid "Export vector dataset"
-#~ msgstr "导出矢量数据集"
-
-#~ msgid "Export vector map"
-#~ msgstr "导出矢量地图"
-
-#~ msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
-#~ msgstr "将 GRASS 3D 栅格文件输出为三维的 Vis5D 文件。"
-
-#~ msgid "Exports GRASS raster maps into GDAL supported formats."
-#~ msgstr "将GRASS栅格输出为GDAL支持的格式。"
-
-#~ msgid "Exports a GRASS 3D raster map to a binary array."
-#~ msgstr "将GRASS三维栅格地图导出为二进制数组。"
-
-#~ msgid "Exports a GRASS raster to a binary MAT-File."
-#~ msgstr "将GRASS栅格输出为二进制Matlab文件。"
-
-#~ msgid "Exports a GRASS raster to a binary array."
-#~ msgstr "将GRASS栅格输出为二进制数组。"
-
-#~ msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
-#~ msgstr "将栅格地图导出为像素中心x,y,z值的文本文件。"
-
-#~ msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
-#~ msgstr "将GRASS栅格地图导出为虚拟现实模型语言(VRML)格式。"
-
-#~ msgid "Exports a vector map layer to PostGIS feature table."
-#~ msgstr "将矢量地图导出为PostGIS格式数据。"
-
-#~ msgid "Exports a vector map layer to any of the supported OGR vector formats. By default a vector map layer is exported to Esri Shapefile format."
-#~ msgstr "将矢量图层导出为受支持的OGR矢量格式。默认输出为ESRI Shapefile格式。"
-
-#~ msgid "Exports a vector map to SVG file."
-#~ msgstr "将矢量地图导出为SVG文件。"
 
 #~ msgid "Exports a vector map to a GPS receiver or file format supported by GPSBabel."
 #~ msgstr "将矢量地图导出到GPSBabel支持的GPS装置或文件格式。"
 
-#~ msgid "Exports a vector map to a GRASS ASCII vector representation. By default only features with category are exported. To export all features use 'layer=-1'."
-#~ msgstr "将矢量地图导出为GRASS ASCII矢量格式。默认只导出含有类别的数据。使用'layer=-1'以导出所有数据。"
-
-#~ msgid "Exports attribute tables into various formats."
-#~ msgstr "将属性表导出为多种格式。"
-
-#~ msgid "Exports the color table associated with a raster map."
-#~ msgstr "导出栅格图层色彩表。"
-
-#~ msgid "Exports vector map to DXF file format."
-#~ msgstr "将矢量地图导出为DXF文件格式。"
-
 #~ msgid "Extent"
 #~ msgstr "范围"
-
-#~ msgid "Extract subset of raster dataset"
-#~ msgstr "从栅格数据集提取子集"
 
 #~ msgid "Extract subset of raster3D dataset"
 #~ msgstr "从三维栅格数据集提取子集"
 
-#~ msgid "Extract subset of vector dataset"
-#~ msgstr "从矢量数据集提取子集"
-
-#~ msgid "Extraction"
-#~ msgstr "提取"
-
-#~ msgid "Extraction of stream networks"
-#~ msgstr "生成流域网络"
-
-#, fuzzy
-#~ msgid "Extracts a subset of a space time raster3d dataset."
-#~ msgstr "导入栅格数据"
-
-#~ msgid "Extrude 3D vector map"
-#~ msgstr "矢量三维拉伸"
-
 #~ msgid "Fancy green"
 #~ msgstr "花哨绿"
-
-#~ msgid "Fast Fourier"
-#~ msgstr "快速傅立叶"
-
-#~ msgid "Feature selection"
-#~ msgstr "要素选择"
-
-#~ msgid "Fill NULL cells"
-#~ msgstr "填充NULL像元"
-
-#~ msgid "Fill lake"
-#~ msgstr "湖泊填充"
-
-#~ msgid "Filter image"
-#~ msgstr "图像过滤"
-
-#~ msgid "Find line id and offset"
-#~ msgstr "查找线条标识及偏移量"
-
-#~ msgid "Flow accumulation"
-#~ msgstr "流量累积"
-
-#~ msgid "Flow lines"
-#~ msgstr "流向"
-
-#~ msgid "Fractal surface"
-#~ msgstr "分形表面"
 
 #, fuzzy
 #~ msgid "Function not supported yet"
@@ -12750,107 +15772,11 @@ msgstr ""
 #~ msgid "GRASS needs a directory in which to store its data. Create one now if you have not already done so. A popular choice is \"grassdata\", located in your home directory."
 #~ msgstr "需为GRASS设置数据存贮目录。若尚未设置，请新建一个目录。较常见的做法是在用户home目录新建目录\"grassdata\"。"
 
-#~ msgid "GRASS raster map layer data resampling capability."
-#~ msgstr "GRASS栅格图层数据的重取样能力。"
-
-#~ msgid "GRASS working environment"
-#~ msgstr "GRASS工作环境"
-
-#~ msgid "GRIDATB.FOR export"
-#~ msgstr "导出GRIDATB.FOR格式数据"
-
-#~ msgid "GRIDATB.FOR import"
-#~ msgstr "导入GRIDATB.FOR数据"
-
-#~ msgid "GUI help"
-#~ msgstr "图形界面帮助文件"
-
-#~ msgid "GUI tools"
-#~ msgstr "GUI工具"
-
-#~ msgid "Gaussian deviates surface"
-#~ msgstr "高斯偏离表面"
-
-#~ msgid "Gaussian kernel density surface"
-#~ msgstr "高斯核密度表面"
-
-#~ msgid "General statistics"
-#~ msgstr "常用统计量"
-
-#~ msgid "Generate area for current region"
-#~ msgstr "生成区域边界"
-
-#~ msgid "Generate areas from points"
-#~ msgstr "从数据点绘制区域"
-
-#~ msgid "Generate contour lines"
-#~ msgstr "等高线"
-
-#~ msgid "Generate from database"
-#~ msgstr "从数据库生成"
-
-#~ msgid "Generate grid"
-#~ msgstr "生成网格"
-
-#~ msgid "Generate points"
-#~ msgstr "生成点数据"
-
-#~ msgid "Generate points along lines"
-#~ msgstr "沿线段生成"
-
-#~ msgid "Generate random cells"
-#~ msgstr "随机像元生成"
-
-#~ msgid "Generate random points"
-#~ msgstr "生成随机点"
-
-#~ msgid "Generate surfaces"
-#~ msgstr "表面生成"
-
-#~ msgid "Generates a raster map containing distances to nearest raster features."
-#~ msgstr "生成含距最近要素距离的栅格图层。"
-
-#~ msgid "Generates a raster map layer with contiguous areas grown by one cell."
-#~ msgstr "生成以一个像元为单位逐渐增长形成连续区域的栅格图层。"
-
-#~ msgid "Generates random cell values with spatial dependence."
-#~ msgstr "根据空间依赖性产生随机的像元值"
-
-#~ msgid "Generates random surface(s) with spatial dependence."
-#~ msgstr "根据空间依赖性生成随机表面"
-
-#~ msgid "Geonames import"
-#~ msgstr "导入Geonames数据"
-
 #~ msgid "Go to"
 #~ msgstr "转到"
 
 #~ msgid "Go to GCP No."
 #~ msgstr "转到如下标号的地面控制点(GCP)。"
-
-#~ msgid "Graphical modeler"
-#~ msgstr "建模器界面"
-
-#~ msgid "Groundwater flow"
-#~ msgstr "地下水流模型"
-
-#~ msgid "Groundwater modeling"
-#~ msgstr "地下水模型"
-
-#~ msgid "Groundwater solute transport"
-#~ msgstr "地下水溶质运移"
-
-#~ msgid "Grow"
-#~ msgstr "扩展"
-
-#~ msgid "Grow by one cell"
-#~ msgstr "逐格增加"
-
-#~ msgid "HIS to RGB"
-#~ msgstr "HIS转RGB"
-
-#~ msgid "Hargreaves methods Evapotranspiration"
-#~ msgstr "Hargreaves蒸散"
 
 #~ msgid "Height size (in cells) ?"
 #~ msgstr "高度（像元数）"
@@ -12872,124 +15798,18 @@ msgstr ""
 #~ msgid "Historical GRASS vector import (all maps)"
 #~ msgstr "导入旧版GRASS矢量数据(所有地图)"
 
-#~ msgid "Horizon angle"
-#~ msgstr "水平角"
-
-#~ msgid "Hydrologic modeling"
-#~ msgstr "水文模型"
-
-#~ msgid "IDW from raster points"
-#~ msgstr "栅格图层上点的反距离加权(IDW)"
-
 #~ msgid "IDW from raster points (alternate method for sparse points)"
 #~ msgstr "反距离加权(适用于稀疏点的另一种方法)"
 
-#~ msgid "IDW from vector points"
-#~ msgstr "矢量图层上点的反距离加权(IDW)"
-
-#~ msgid "Identify and remove outliers"
-#~ msgstr "查找移除异常值"
-
-#~ msgid "Import 3-dimensional Vis5D files."
-#~ msgstr "导入三维Vis5D文件。"
-
-#~ msgid "Import 3D raster data"
-#~ msgstr "导入三维栅格地图"
-
-#~ msgid "Import a binary raster file into a GRASS raster map layer."
-#~ msgstr "将二元栅格文件导入到GRASS栅格图层中。"
-
-#~ msgid "Import database table"
-#~ msgstr "导入数据库表"
-
-#~ msgid "Import raster dataset"
-#~ msgstr "导入栅格数据集"
-
-#~ msgid "Import, export and link data"
-#~ msgstr "导入、导出、链接数据"
-
 #~ msgid "Import/link raster or vector data"
 #~ msgstr "导入/链接栅格或矢量数据"
-
-#~ msgid "Imports ASCII x,y[,z] coordinates as a series of lines."
-#~ msgstr "导入ASCII x,y[,z]坐标以绘制一系列线段。"
-
-#~ msgid "Imports E00 file into a vector map."
-#~ msgstr "将E00文件导入到矢量地图。"
-
-#~ msgid "Imports GetFeature from a WFS server."
-#~ msgstr "从WFS器导入"
-
-#~ msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
-#~ msgstr "将Mapgen或Matlab的ASCII矢量地图导入到GRASS。"
-
-#~ msgid "Imports a binary MAT-File(v4) to a GRASS raster."
-#~ msgstr "将二元MAT-File(v4)导入为GRASS栅格。"
-
-#~ msgid "Imports a binary raster file into a GRASS 3D raster map."
-#~ msgstr "将二进制栅格文件导入到GRASS三维栅格地图中。"
-
-#~ msgid "Imports attribute tables in various formats."
-#~ msgstr "从多种格式的特征表导入数据"
-
-#~ msgid "Imports geonames.org country files into a vector points map."
-#~ msgstr "将geonames.org文件导入为矢量点地图。"
-
-#~ msgid "Imports older versions of GRASS vector maps."
-#~ msgstr "导入旧版GRASS矢量地图。"
-
-#~ msgid "Input for supervised MLC"
-#~ msgstr "监督最大似然分类输入数据"
-
-#~ msgid "Input for supervised SMAP"
-#~ msgstr "监督式最大后验分类的输入"
-
-#, fuzzy
-#~ msgid "Input for supervised SVM"
-#~ msgstr "监督式最大后验分类的输入"
 
 #, fuzzy
 #~ msgid "Input map '%s' for analysis was changed outside "
 #~ msgstr "输入在外部有改动."
 
-#~ msgid "Install extension from addons"
-#~ msgstr "从GRASS插件安装扩展"
-
-#~ msgid "Instantaneaous Net Radiation"
-#~ msgstr "瞬时净辐射"
-
-#~ msgid "Interactive input for supervised classification"
-#~ msgstr "监督分类交互的输入"
-
-#~ msgid "Interactive management of raster color tables."
-#~ msgstr "交互式管理栅格图层色彩。"
-
-#~ msgid "Interactively edit category values"
-#~ msgstr "互动编辑"
-
-#~ msgid "Interpolate 3D raster from points"
-#~ msgstr "数据点三维栅格插值"
-
-#~ msgid "Interpolate gaps in raster datasets"
-#~ msgstr "栅格数据集插值"
-
-#~ msgid "Interpolate surfaces"
-#~ msgstr "插值表面"
-
 #~ msgid "Interpolate volume from points"
 #~ msgstr "三维插值"
-
-#~ msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
-#~ msgstr "使用规则张力样条(RST)算法将点数据插值为三维栅格。"
-
-#~ msgid "Inverse Fast Fourier"
-#~ msgstr "逆快速傅立叶"
-
-#~ msgid "Join table"
-#~ msgstr "连接数据表"
-
-#~ msgid "Kappa analysis"
-#~ msgstr "Kappa分析"
 
 #~ msgid "Kriging"
 #~ msgstr "克里金法"
@@ -13000,110 +15820,22 @@ msgstr ""
 #~ msgid "Kriging techniques"
 #~ msgstr "克里金技巧"
 
-#~ msgid "LAS LiDAR points import"
-#~ msgstr "导入LAS LiDAR点数据"
-
-#~ msgid "Landsat DN to radiance/reflectance"
-#~ msgstr "Landsat数字值(DN)转换为辐射/反射"
-
-#~ msgid "Landsat cloud cover assessment"
-#~ msgstr "Landsat云层覆盖评估"
-
-#~ msgid "Landscape patch analysis"
-#~ msgstr "景观斑块分析"
-
-#~ msgid "LatLong map"
-#~ msgstr "经纬图"
-
-#~ msgid "Launch Cartographic Composer"
-#~ msgstr "启动地图绘制界面"
-
-#~ msgid "Launch Graphical modeler"
-#~ msgstr "启动建模器界面"
-
-#~ msgid "Launch Map Swipe"
-#~ msgstr "启动地图比较(Map Swipe)"
-
-#~ msgid "Launch animation tool."
-#~ msgstr "启动动画工具"
-
-#~ msgid "Launch ps.map dialog"
-#~ msgstr "启动ps.map对话框"
-
-#~ msgid "Launch script"
-#~ msgstr "运行脚本"
-
 #, fuzzy
 #~ msgid "Launches graphical attribute table manager."
 #~ msgstr "GRASS GIS层管理器"
 
-#, fuzzy
-#~ msgid "Launches project wizard to create a new GRASS project (also known as location)."
-#~ msgstr "启动地点向导以创建新GRASS地点。"
-
-#~ msgid "Launches script file."
-#~ msgstr "运行脚本文件"
-
-#~ msgid "Least cost route or flow"
-#~ msgstr "最低成本路径"
-
-#~ msgid "Least-cost spread paths"
-#~ msgstr "最低蔓延成本路径"
-
-#~ msgid "Lidar analysis"
-#~ msgstr "Lidar分析"
-
 #~ msgid "Line-of-sight raster analysis program."
 #~ msgstr "栅格视线分析程序。"
-
-#~ msgid "Linear referencing"
-#~ msgstr "线性参考"
-
-#~ msgid "Linear regression"
-#~ msgstr "线性回归"
-
-#~ msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
-#~ msgstr "将GDAL支持的栅格文件链接为准GRASS栅格图层。"
 
 #, fuzzy
 #~ msgid "Link external formats"
 #~ msgstr "常用导出格式"
 
-#~ msgid "List"
-#~ msgstr "列举"
-
-#~ msgid "List all columns for a given table."
-#~ msgstr "列出给出表的所有字段。"
-
-#~ msgid "List columns"
-#~ msgstr "字段列表"
-
-#~ msgid "List databases"
-#~ msgstr "数据库列表"
-
-#~ msgid "List drivers"
-#~ msgstr "驱动列表"
-
 #~ msgid "List filtered"
 #~ msgstr "显示正则过滤结果"
 
-#~ msgid "List raster dataset maps"
-#~ msgstr "列举栅格数据集地图"
-
 #~ msgid "List raster3D dataset maps"
 #~ msgstr "列举三维栅格数据集地图"
-
-#~ msgid "List tables"
-#~ msgstr "数据库表列表"
-
-#~ msgid "List vector dataset maps"
-#~ msgstr "列举矢量数据集地图"
-
-#~ msgid "Lists all tables for a given database."
-#~ msgstr "列出指定数据库的所有表。"
-
-#~ msgid "Lists available GRASS data base files of the user-specified data type optionally using the search pattern."
-#~ msgstr "列举用户所选的数据类型下可用的GRASS基础数据文件（可指定查找规则）。"
 
 #, fuzzy
 #~ msgid "Lists available GRASS data base files of the user-specified data type."
@@ -13112,17 +15844,8 @@ msgstr ""
 #~ msgid "Load GRC file (Tcl/Tk GUI)"
 #~ msgstr "加载GRC文件(Tcl/Tk图形界面)"
 
-#~ msgid "Load instruction file"
-#~ msgstr "载入示例文件"
-
 #~ msgid "Load map layers from GRC file to layer tree"
 #~ msgstr "从GRC文件加载地图层到图层列表"
-
-#~ msgid "Load workspace from file"
-#~ msgstr "加载工作区文件"
-
-#~ msgid "Locates the closest points between objects in two raster maps."
-#~ msgstr "确定两幅栅格图上目标间最近的点"
 
 #~ msgid "Location Name:"
 #~ msgstr "地点名称："
@@ -13133,144 +15856,23 @@ msgstr ""
 #~ msgid "Location wizard canceled. Location not created."
 #~ msgstr "地点向导已取消，没有创建新地点。"
 
-#~ msgid "Login"
-#~ msgstr "登入"
-
 #~ msgid "MASK"
 #~ msgstr "掩码"
-
-#~ msgid "MPEG-1 export"
-#~ msgstr "导出为MPEG-1格式数据"
-
-#~ msgid "Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer."
-#~ msgstr "对一个像元周围的像元值进行函数计算，将得到的值赋予该像元，并将新的像元值存储在输出栅格图层中。"
-
-#~ msgid "Makes each output cell value a accumulationfunction of the values assigned to the corresponding cells in the input raster map layers."
-#~ msgstr "对输入图层的像元进行累计函数计算，并将得到的结果赋予输出的像元。"
-
-#~ msgid "Makes each output cell value a function of the values assigned to the corresponding cells in the input raster map layers."
-#~ msgstr "对输入图层的像元进行函数计算，并将得到的结果赋予输出的像元。"
 
 #~ msgid "Manage"
 #~ msgstr "管理"
 
-#~ msgid "Manage 3D NULL values"
-#~ msgstr "管理三维NULL值"
-
-#~ msgid "Manage NULL values"
-#~ msgstr "管理NULL值"
-
-#~ msgid "Manage categories"
-#~ msgstr "类别管理"
-
-#~ msgid "Manage category information"
-#~ msgstr "类别信息管理"
-
-#~ msgid "Manage color rules interactively"
-#~ msgstr "交互式设置色彩"
-
-#~ msgid "Manage colors"
-#~ msgstr "颜色管理"
-
-#~ msgid "Manage databases"
-#~ msgstr "数据库管理"
-
-#~ msgid "Manage image colors"
-#~ msgstr "图像色彩管理"
-
-#~ msgid "Manage installed extension"
-#~ msgstr "扩展管理"
-
-#~ msgid "Manage maps"
-#~ msgstr "地图管理"
-
 #~ msgid "Manage maps and volumes"
 #~ msgstr "管理地图于地图集"
-
-#~ msgid "Manage maps in datasets"
-#~ msgstr "管理数据集的地图"
-
-#~ msgid "Manage projections"
-#~ msgstr "投影管理"
-
-#, fuzzy
-#~ msgid "Manage signature files"
-#~ msgstr "类别管理"
-
-#~ msgid "Manage timestamp"
-#~ msgstr "管理时间戳"
-
-#~ msgid "Manages NULL-values of given raster map."
-#~ msgstr "管理栅格地图的NULL值"
-
-#~ msgid "Manages category values and labels associated with user-specified raster map layers."
-#~ msgstr "栅格图层的类别值和标签管理。"
-
-#~ msgid "Manages the boundary definitions for the geographic region."
-#~ msgstr "管理地理区域边界。"
 
 #~ msgid "Map layers"
 #~ msgstr "地图层"
 
-#~ msgid "Map legend"
-#~ msgstr "添加图例"
-
-#~ msgid "Map projections"
-#~ msgstr "地图投影管理"
-
-#~ msgid "Map type conversions"
-#~ msgstr "转换地图类型"
-
-#~ msgid "Mapset access"
-#~ msgstr "地图集读取控制"
-
-#~ msgid "Matlab 2D array export"
-#~ msgstr "导出Matlab 2D数组"
-
-#~ msgid "Matlab 2D array import"
-#~ msgstr "导入Matlab 2D数组"
-
-#~ msgid "Matlab array or Mapgen format import"
-#~ msgstr "从Matlab数组和MapGen文件导入"
-
-#~ msgid "Matrix/convolving filter"
-#~ msgstr "矩阵/卷积过滤"
-
-#~ msgid "Maximum flow"
-#~ msgstr "最大流量"
-
-#~ msgid "Maximum likelihood classification (MLC)"
-#~ msgstr "最大似然分类输(MLC)"
-
-#~ msgid "Merge"
-#~ msgstr "合并"
-
-#~ msgid "Merges several space time datasets into a single space time dataset."
-#~ msgstr "时空数据集合并。"
-
-#~ msgid "Minimum spanning tree"
-#~ msgstr "最小生成树"
-
-#~ msgid "Model properties (name, purpose, etc.)"
-#~ msgstr "模型属性(名称、目的等)"
-
 #~ msgid "Model: "
 #~ msgstr "  模型："
 
-#~ msgid "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a raster map."
-#~ msgstr "调整栅格地图的时间戳。输出/添加/删除栅格地图的时间戳。"
-
-#~ msgid "Modifies the metadata of a space time dataset."
-#~ msgstr "更新时空数据集的元数据。"
-
-#~ msgid "Modis quality control"
-#~ msgstr "Modis质量控制"
-
 #~ msgid "Module dialog settings"
 #~ msgstr "模块对话框设置"
-
-#~ msgid "Mosaic images"
-#~ msgstr "图象镶嵌"
 
 #~ msgid "Move feature(s)"
 #~ msgstr "移动要素"
@@ -13280,12 +15882,6 @@ msgstr ""
 
 #~ msgid "Multiple import formats using OGR"
 #~ msgstr "使用OGR导入多种格式数据"
-
-#~ msgid "Multiple regression"
-#~ msgstr "多元回归"
-
-#~ msgid "Mutual category occurrences"
-#~ msgstr "重合统计"
 
 #, fuzzy
 #~ msgid "Name for output raster layer:"
@@ -13298,35 +15894,8 @@ msgstr ""
 #~ msgid "Name for the output raster map:"
 #~ msgstr "输出的栅格地图名称："
 
-#~ msgid "Nearest features"
-#~ msgstr "最近邻要素"
-
-#~ msgid "Neighborhood analysis"
-#~ msgstr "近邻分析"
-
-#~ msgid "Neighborhood analysis in raster dataset"
-#~ msgstr "栅格数据集最近邻分析"
-
-#~ msgid "Neighborhood analysis tool for vector point maps. Makes each cell value a function of the attribute values assigned to the vector points or centroids around it, and stores new cell values in an output raster map."
-#~ msgstr "对一个像元周围的像元值进行函数计算，将得到的值赋予该像元或其中心点，并将新的像元值存储在输出栅格图层中。"
-
-#~ msgid "Neighborhood points"
-#~ msgstr "近邻点"
-
-#~ msgid "Network analysis"
-#~ msgstr "网络分析"
-
-#~ msgid "Network preparation"
-#~ msgstr "网络分析准备"
-
 #~ msgid "New GIS data directory"
 #~ msgstr "新GIS数据目录"
-
-#~ msgid "New map display window"
-#~ msgstr "新建地图显示窗口"
-
-#~ msgid "New table"
-#~ msgstr "创建新数据表"
 
 #~ msgid "No GRASS-python library found."
 #~ msgstr "找不到Grass-python库。"
@@ -13342,23 +15911,8 @@ msgstr ""
 #~ msgid "Normalize"
 #~ msgstr "归一化"
 
-#~ msgid "OIF for LandSat TM"
-#~ msgstr "Landsat TM最佳指数因子"
-
-#~ msgid "Object segmentation"
-#~ msgstr "目标分割"
-
-#~ msgid "Observe specific locations in raster dataset"
-#~ msgstr "栅格数据定点观测"
-
 #~ msgid "Old GRASS Workspace File (*.grc)|*.grc"
 #~ msgstr "旧版本工作区文件(*.grc)|*.grc"
-
-#~ msgid "Open"
-#~ msgstr "打开"
-
-#~ msgid "Open new map display window"
-#~ msgstr "打开新地图显示窗口"
 
 #~ msgid "Optional location title, you can leave this field blank."
 #~ msgstr "地点标签为选填项,可以为空."
@@ -13366,67 +15920,12 @@ msgstr ""
 #~ msgid "Ordinary or block kriging"
 #~ msgstr "普通或区块克里金插值"
 
-#~ msgid "Output format for raster data"
-#~ msgstr "栅格数据输出格式"
-
-#~ msgid "Output format for vector data"
-#~ msgstr "矢量数据输出格式"
-
 #~ msgid "Output window"
 #~ msgstr "输出窗口"
-
-#~ msgid "Outputs a covariance/correlation matrix for user-specified raster map layer(s)."
-#~ msgstr "输出用户指定栅格图层的协方差/相关矩阵。"
-
-#, fuzzy
-#~ msgid "Outputs a raster map showing the anisotropic cumulative cost. Computes anisotropic cumulative cost of moving between different geographic locations on an input elevation raster map whose cell category values represent elevation combined with an input raster map layer whose cell values represent friction cost."
-#~ msgstr "输出一个栅格图层来显示在输入栅格图上不同位置间移动时的累计成本，输入栅格图的像元类别值表示成本。"
-
-#~ msgid "Outputs and modifies the user's current GRASS variable settings."
-#~ msgstr "输出或改变当前用户的GRASS环境变量设置。"
-
-#~ msgid "Outputs and modifies the user's current GRASS variable settings. Prints all defined GRASS variables if no option is given."
-#~ msgstr "输出或改变当前用户的GRASS环境变量设置。若无变动则输出当前GRASS环境变量。"
-
-#~ msgid "Outputs basic information about a user-specified 3D raster map layer."
-#~ msgstr "输出用户指定的三维栅格图层的基本信息"
-
-#~ msgid "Outputs raster map layer values lying along user defined transect line(s)."
-#~ msgstr "依据用户定义的横断线，输出栅格图层上的值"
-
-#~ msgid "Outputs the raster map layer values lying on user-defined line(s)."
-#~ msgstr "输出栅格图层的像元值，基于用户定义的线。"
-
-#~ msgid "Overlay rasters"
-#~ msgstr "图层叠加"
-
-#~ msgid "Overlay vector maps"
-#~ msgstr "矢量图叠加"
 
 #, fuzzy
 #~ msgid "Overlays two vector maps."
 #~ msgstr "输入的 2D 矢量地图的名称"
-
-#~ msgid "PNG export"
-#~ msgstr "导出PNG格式数据"
-
-#~ msgid "PNG import"
-#~ msgstr "导入PNG格式数据"
-
-#~ msgid "POV-Ray export"
-#~ msgstr "导出为POV-Ray文件"
-
-#~ msgid "PPM export"
-#~ msgstr "导出PPM格式数据"
-
-#~ msgid "PPM from RGB export"
-#~ msgstr "从RGB导出为PPM格式"
-
-#~ msgid "Pack raster map"
-#~ msgstr "打包栅格地图"
-
-#~ msgid "Pack vector map"
-#~ msgstr "打包矢量地图"
 
 #~ msgid "Packs up a raster map and support files for copying."
 #~ msgstr "将栅格地图及其支持文件打包以拷贝。"
@@ -13434,50 +15933,8 @@ msgstr ""
 #~ msgid "Packs up a vector map and support files for copying."
 #~ msgstr "将矢量地图及其支持文件打包以拷贝。"
 
-#~ msgid "Pan sharpening"
-#~ msgstr "全色增强"
-
-#~ msgid "Parallel lines"
-#~ msgstr "平行线"
-
-#~ msgid "Patch area Coeff Var"
-#~ msgstr "斑块面积标变异系数"
-
-#~ msgid "Patch area Std Dev"
-#~ msgstr "斑块面积标准差"
-
-#~ msgid "Patch area mean"
-#~ msgstr "斑块面积均值"
-
-#~ msgid "Patch area range"
-#~ msgstr "斑块面积区间"
-
-#~ msgid "Patch density"
-#~ msgstr "斑块密度"
-
-#~ msgid "Patch number"
-#~ msgstr "斑块数量"
-
-#~ msgid "Patch raster maps"
-#~ msgstr "图层修补"
-
-#~ msgid "Patch vector maps"
-#~ msgstr "矢量图拼接"
-
 #~ msgid "Path to the EPSG-codes file:"
 #~ msgstr "EPSG代码文件路径："
-
-#~ msgid "Penman-Monteith Evapotranspiration"
-#~ msgstr "Penman-Monteith蒸散"
-
-#~ msgid "Performs bilinear or bicubic spline interpolation with Tykhonov regularization."
-#~ msgstr "使用Tikhonov正则化进行双线性或三次样条插值。"
-
-#~ msgid "Performs transformation of 2D vector features to 3D."
-#~ msgstr "将二维向量要素转化为三维向量要素。"
-
-#~ msgid "Perturb points"
-#~ msgstr "扰动点"
 
 #~ msgid "Plot/refresh variogram"
 #~ msgstr "绘制/刷新变异函数"
@@ -13485,39 +15942,8 @@ msgstr ""
 #~ msgid "Point dataset:"
 #~ msgstr "点数据集："
 
-#~ msgid "PostGIS export"
-#~ msgstr "导出为PostGIS格式数据"
-
-#~ msgid "Preferences"
-#~ msgstr "设置"
-
-#~ msgid "Priestley-Taylor Evapotranspiration"
-#~ msgstr "Priestley-Taylor蒸散"
-
-#~ msgid "Principal components"
-#~ msgstr "主成份分析"
-
 #~ msgid "Print/add/remove a timestamp for a 3D raster map"
 #~ msgstr "三维栅格地图 打印/添加/删除 时间戳"
-
-#, fuzzy
-#~ msgid "Prints or modifies GRASS projection information files (in various co-ordinate system descriptions). Can also be used to create new GRASS projects."
-#~ msgstr "显示或调整GRASS投影信息文件(多种坐标格式)。可创建GRASS地点。"
-
-#~ msgid "Prints terse list of category values found in a raster map layer."
-#~ msgstr "打印栅格图层分类值的简要列表"
-
-#~ msgid "Prints vector map attributes."
-#~ msgstr "打印矢量的要素属性"
-
-#~ msgid "Produces a vector map of specified contours from a raster map."
-#~ msgstr "从栅格图层生成等高线矢量地图。"
-
-#~ msgid "Produces the quantization file for a floating-point map."
-#~ msgstr "为浮点地图生成量化文件。"
-
-#~ msgid "Produces tilings of the source projection for use in the destination region and projection."
-#~ msgstr "生成与源投影相同的平铺块在目标区域和投影上使用。"
 
 #~ msgid "Project Location"
 #~ msgstr "投影地点"
@@ -13529,51 +15955,6 @@ msgstr ""
 #~ "投影地点\n"
 #~ "(投影/坐标系统)"
 
-#~ msgid "Quadrat indices"
-#~ msgstr "分区计算指数"
-
-#~ msgid "Quantiles for large data sets"
-#~ msgstr "大数据集分位数"
-
-#~ msgid "Quantiles overlay"
-#~ msgstr "分位数叠加"
-
-#~ msgid "Quantization"
-#~ msgstr "量化"
-
-#~ msgid "Queries colors for a raster map layer."
-#~ msgstr "栅格图层色彩查询"
-
-#~ msgid "Queries raster maps on their category values and category labels."
-#~ msgstr "在栅格图层的类别值和类别标签中查询。"
-
-#~ msgid "Query any table"
-#~ msgstr "查询所有任意表"
-
-#~ msgid "Query colors by value"
-#~ msgstr "值到色彩查询"
-
-#~ msgid "Query raster dataset by vector points dataset"
-#~ msgstr "通过矢量点数据查询栅格数据"
-
-#~ msgid "Query raster maps"
-#~ msgstr "栅格图层查询"
-
-#~ msgid "Query values by coordinates"
-#~ msgstr "用坐标查询"
-
-#~ msgid "Query vector attribute data"
-#~ msgstr "矢量要素查询"
-
-#~ msgid "Query vector dataset attribute data"
-#~ msgstr "查询矢量数据集属性"
-
-#~ msgid "Query vector map"
-#~ msgstr "矢量图查询"
-
-#~ msgid "Query with coordinate(s)"
-#~ msgstr "通过坐标查询"
-
 #~ msgid "Quit Cartographic Composer"
 #~ msgstr "退出地图绘制"
 
@@ -13583,86 +15964,12 @@ msgstr ""
 #~ msgid "Quit digitizer"
 #~ msgstr "退出地图数字化"
 
-#~ msgid "Quit modeler"
-#~ msgstr "安静模式"
-
-#~ msgid "RGB to HIS"
-#~ msgstr "RBG转HIS"
-
-#~ msgid "Random cells and vector points"
-#~ msgstr "随机像元及点矢量量"
-
-#~ msgid "Random deviates surface"
-#~ msgstr "随机偏离表面"
-
-#~ msgid "Random surface with spatial dependence"
-#~ msgstr "空间相关的随机表面"
-
-#~ msgid "Range of category values"
-#~ msgstr "值域"
-
-#~ msgid "Raster 2.5D to volume"
-#~ msgstr "2.5D栅格地图转换为体积"
-
-#~ msgid "Raster buffers and distance"
-#~ msgstr "缓冲区及距离"
-
-#~ msgid "Raster calculations"
-#~ msgstr "栅格地图计算"
-
-#~ msgid "Raster contours"
-#~ msgstr "栅格图层等高线"
-
-#~ msgid "Raster dataset color table"
-#~ msgstr "栅格数据集色彩表"
-
-#~ msgid "Raster map calculator"
-#~ msgstr "栅格掩码计算器"
-
 #, fuzzy
 #~ msgid "Raster maps in selected group:"
 #~ msgstr "反向清扫完成"
 
-#~ msgid "Raster series accumulation"
-#~ msgstr "地图系列累计"
-
-#~ msgid "Raster series aggregation"
-#~ msgstr "图层系列合计"
-
-#~ msgid "Raster series interpolation"
-#~ msgstr "栅格系列图层插值"
-
-#~ msgid "Raster series to volume"
-#~ msgstr "栅格系列转换为体积"
-
-#~ msgid "Raster to vector"
-#~ msgstr "将栅格转换为矢量格式"
-
 #~ msgid "Raster3D calculations"
 #~ msgstr "三维栅格地图计算"
-
-#~ msgid "Rate of spread"
-#~ msgstr "蔓延速度"
-
-#~ msgid "Raw binary array 3D export"
-#~ msgstr "导出三维图层为原始二进制数组"
-
-#~ msgid "Raw binary array 3D import"
-#~ msgstr "导入原始二进制三维数组"
-
-#~ msgid "Raw binary array export"
-#~ msgstr "导出原生二进制数组"
-
-#~ msgid "Raw binary array import"
-#~ msgstr "导入原始二进制数组"
-
-#, fuzzy
-#~ msgid "Re-projects a raster map from given project to the current project."
-#~ msgstr "将栅格图从另外地点重新投影到当前地点"
-
-#, fuzzy
-#~ msgid "Re-projects a vector map from one project to the current project."
-#~ msgstr "将栅格图从另外地点重新投影到当前地点"
 
 #~ msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
 #~ msgstr "从WKT .prj文件读取投影和基准面条件"
@@ -13673,63 +15980,9 @@ msgstr ""
 #~ msgid "Ready."
 #~ msgstr "准备完毕。"
 
-#~ msgid "Rebuild topology on all vector maps"
-#~ msgstr "重建所有矢量图的拓扑"
-
-#~ msgid "Reclassify"
-#~ msgstr "重新分类"
-
-#~ msgid "Reclassify by size"
-#~ msgstr "根据大小重新分类"
-
-#~ msgid "Recode"
-#~ msgstr "重新编码"
-
-#~ msgid "Recodes categorical raster maps."
-#~ msgstr "重新编码栅格图。"
-
-#~ msgid "Reconnect vectors to database"
-#~ msgstr "重新连接数据库"
-
-#~ msgid "Rectify image or raster"
-#~ msgstr "图像或栅格图校正"
-
-#~ msgid "Rectify vector map"
-#~ msgstr "矢量校正"
-
-#~ msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
-#~ msgstr "反向追踪最低成本的路径，得到一组像元，这些像元确定了累计成本。"
-
-#~ msgid "Region boundaries"
-#~ msgstr "区域界限"
-
-#~ msgid "Register maps in datasets"
-#~ msgstr "注册地图到数据集"
-
-#~ msgid "Regularized spline tension"
-#~ msgstr "张力样条正则化"
-
-#~ msgid "Reinterpolates and optionally computes topographic analysis from input raster map to a new raster map (possibly with different resolution) using regularized spline with tension and smoothing."
-#~ msgstr "使用拉伸和平滑的规则样条，对输入的栅格文件进行重新插值(地形分析为可选项)，生成一个新的栅格文件(可能有不同的分辨率)。"
-
 #, fuzzy
 #~ msgid "Remove MASK"
 #~ msgstr "移除"
-
-#~ msgid "Remove action/data from model"
-#~ msgstr "从模型中删除动作/数据。"
-
-#~ msgid "Remove item"
-#~ msgstr "移除项目"
-
-#~ msgid "Remove outliers in point sets"
-#~ msgstr "移除异常点"
-
-#~ msgid "Removes data base element files from the user's current mapset using the search pattern."
-#~ msgstr "使用查找规则从用户当前地图集删除数据库组成文件。"
-
-#~ msgid "Removes space time datasets from temporal database."
-#~ msgstr "从时空数据库中删除时空数据集。"
 
 #~ msgid ""
 #~ "Rename/delete selected\n"
@@ -13738,134 +15991,18 @@ msgstr ""
 #~ "重命名/删除选中的\n"
 #~ "地图集或地点"
 
-#~ msgid "Renames a space time dataset"
-#~ msgstr "重命名时空数据集"
-
-#~ msgid "Renames data base element files in the user's current mapset."
-#~ msgstr "重命名当前用户地图集下数据库组成文件"
-
 #, fuzzy
 #~ msgid "Renaming"
 #~ msgstr "重命名"
 
-#~ msgid "Report temporal topology"
-#~ msgstr "时空数据拓扑报告"
-
-#~ msgid "Report topology by category"
-#~ msgstr "生成类别拓扑报告"
-
 #~ msgid "Reports and Statistics"
 #~ msgstr "报告与统计"
-
-#~ msgid "Reports and statistics"
-#~ msgstr "报告及统计"
-
-#~ msgid "Reposition vector map"
-#~ msgstr "矢量位移"
 
 #~ msgid "Repository"
 #~ msgstr "组件库"
 
-#, fuzzy
-#~ msgid "Reproject raster map from different GRASS project"
-#~ msgstr "将栅格图从其他地点重新投影到当前地点"
-
-#, fuzzy
-#~ msgid "Reproject vector map from different GRASS project"
-#~ msgstr "将矢量地图从另外地点重新投影到当前地点"
-
-#~ msgid "Resample using aggregate statistics"
-#~ msgstr "合计统计量重取样"
-
-#~ msgid "Resample using analytic kernel"
-#~ msgstr "分析内核法重采样"
-
-#~ msgid "Resample using bspline"
-#~ msgstr "B样条重取样"
-
-#~ msgid "Resample using multiple methods"
-#~ msgstr "多种方式进行重取样"
-
-#~ msgid "Resample using nearest neighbor"
-#~ msgstr "使用最近邻法重取样"
-
-#~ msgid "Resample using spline tension"
-#~ msgstr "张力样条重取样"
-
-#~ msgid "Resamples raster map layers to a coarser grid using aggregation."
-#~ msgstr "通过合计将对栅格重取样得到更低分辨率的栅格图。"
-
-#~ msgid "Resamples raster map layers using an analytic kernel."
-#~ msgstr "使用分析内核法对栅格地图重采样"
-
-#~ msgid "Resamples raster map to a finer grid using interpolation."
-#~ msgstr "通过插直重取样得到更高分辨率的栅格图。"
-
-#~ msgid "Rescale"
-#~ msgstr "调整值的范围"
-
-#~ msgid "Rescale with histogram"
-#~ msgstr "用直方图调整值的范围"
-
-#~ msgid "Rescales the range of category values in a raster map layer."
-#~ msgstr "重新调整栅格图层的类别值范围。"
-
-#~ msgid "Richness"
-#~ msgstr "丰富度"
-
-#~ msgid "Run entire model"
-#~ msgstr "运行整个模型"
-
-#~ msgid "Run model prepared by Graphical modeler"
-#~ msgstr "运行建模器界面中已建好的模型"
-
 #~ msgid "Run python script"
 #~ msgstr "运行Python脚本"
-
-#~ msgid "SIMWE Overland flow modeling"
-#~ msgstr "SIMWE陆地流量模型"
-
-#~ msgid "SIMWE Sediment flux modeling"
-#~ msgstr "SIMWE沙通量模型"
-
-#~ msgid "SPOT NDVI import"
-#~ msgstr "导入SPOT NDVI"
-
-#~ msgid "SQL statement"
-#~ msgstr "SQL语句"
-
-#~ msgid "SRTM HGT import"
-#~ msgstr "导入SRTM HGT"
-
-#~ msgid "SVG export"
-#~ msgstr "导出为SVG格式"
-
-#~ msgid "Sample raster maps at point locations"
-#~ msgstr "提取数据点的栅格图层值"
-
-#~ msgid "Sample transects"
-#~ msgstr "采样区"
-
-#~ msgid "Sample transects (bearing/distance)"
-#~ msgstr "采样区(方位/距离)"
-
-#~ msgid "Sampling"
-#~ msgstr "抽样"
-
-#~ msgid "Satellite images products"
-#~ msgstr "卫星图像生成指数"
-
-#~ msgid "Satellite images tools"
-#~ msgstr "卫星图像工具"
-
-#~ msgid "Save as"
-#~ msgstr "另存为"
-
-#~ msgid "Save model to file"
-#~ msgstr "将模型保存到文件"
-
-#~ msgid "Save workspace to file"
-#~ msgstr "保存工作区到文件"
 
 #~ msgid "Select EPSG code of spatial reference system"
 #~ msgstr "选择空间参考系统EPSG代码"
@@ -13880,30 +16017,11 @@ msgstr ""
 #~ "选择投影地点和地图集\n"
 #~ "或创建新地点"
 
-#~ msgid "Select by another map"
-#~ msgstr "据其他地图要素属性选择"
-
-#~ msgid "Select by attributes"
-#~ msgstr "根据要素属性选择"
-
 #~ msgid "Select coordinate system parameters from a list"
 #~ msgstr "从列表中选择坐标系统参数"
 
-#, fuzzy
-#~ msgid "Select space time raster dataset(s):"
-#~ msgstr "导入栅格数据"
-
-#~ msgid "Sensible heat flux"
-#~ msgstr "感热通量"
-
-#~ msgid "Sequential maximum a posteriori classification (SMAP)"
-#~ msgstr "最大后验分类(SMAP)"
-
 #~ msgid "Set computational region from selected map(s) (ignore NULLs)"
 #~ msgstr "设置选中图层的计算区域(忽略NULL值)"
-
-#~ msgid "Set region"
-#~ msgstr "设置区域"
 
 #, fuzzy
 #~ msgid "Set size and position"
@@ -13912,51 +16030,8 @@ msgstr ""
 #~ msgid "Set te new name for %s \"                                            \"configuration file"
 #~ msgstr "为设置文件%s \"                                            \" 设定新名称"
 
-#~ msgid "Set up sampling and analysis framework"
-#~ msgstr "设置取样及分析框架"
-
-#~ msgid "Set vector map - database connection"
-#~ msgstr "设置矢量图--数据库连接"
-
-#, fuzzy
-#~ msgid "Set/unset access to other mapsets in current project"
-#~ msgstr "允许／取消其它地图集对当前地点的读取"
-
-#~ msgid "Sets color rules based on stddev from a raster map's mean value."
-#~ msgstr "基于栅格图层均值的标准差设置色彩"
-
-#~ msgid "Sets the boundary definitions for a raster map."
-#~ msgstr "为栅格图设置边界范围。"
-
-#~ msgid "Shadows map"
-#~ msgstr "阴影图"
-
-#~ msgid "Shannon's diversity"
-#~ msgstr "Shannon多样性指数"
-
-#~ msgid "Shape index"
-#~ msgstr "形状指数"
-
-#~ msgid "Shifts temporally the maps of a space time dataset."
-#~ msgstr "时空数据集地图时相位移。"
-
-#~ msgid "Shortest path"
-#~ msgstr "最短路径"
-
-#~ msgid "Shortest path for all pairs"
-#~ msgstr "所有节点对间的最短路径"
-
-#~ msgid "Shortest path for sets of features"
-#~ msgstr "指定要素的最短路径"
-
-#~ msgid "Shortest path using timetables"
-#~ msgstr "用时间表计算最短路径"
-
 #~ msgid "Show comp. extent"
 #~ msgstr "显示计算范围"
-
-#~ msgid "Show settings"
-#~ msgstr "显示设置"
 
 #, fuzzy
 #~ msgid "Show text object"
@@ -13974,53 +16049,11 @@ msgstr ""
 #~ msgid "Show/hide scale bar"
 #~ msgstr "添加格网值图层"
 
-#~ msgid "Simpson's diversity"
-#~ msgstr "Simpson多样性指数"
-
 #~ msgid "Sites to vector"
 #~ msgstr "样点转化为矢量"
 
-#~ msgid "Slope and aspect"
-#~ msgstr "坡度和方位"
-
-#~ msgid "Smooth or simplify"
-#~ msgstr "平滑及简化"
-
-#~ msgid "Snap maps of dataset"
-#~ msgstr "数据集地图对齐"
-
-#~ msgid "Snaps temporally the maps of a space time dataset."
-#~ msgstr "时空数据集地图时相对齐。"
-
-#~ msgid "Soil heat flux"
-#~ msgstr "土壤热通量"
-
-#~ msgid "Solar irradiance and irradiation"
-#~ msgstr "太阳辐照及放射"
-
-#~ msgid "Solar irradiance and irradiation model. Computes direct (beam), diffuse and reflected solar irradiation raster maps for given day, latitude, surface and atmospheric conditions. Solar parameters (e.g. sunrise, sunset times, declination, extraterrestrial irradiance, daylight length) are saved in the map history file. Alternatively, a local time can be specified to compute solar incidence angle and/or irradiance raster maps. The shadowing effect of the topography is optionally incorporated."
-#~ msgstr "阳光辐照度(irradiance)和日射积模型(irradiation)。计算指定日期、纬度、表面及大气质量下栅格图的直接照射、漫射及反射的阳光日射积。太阳参数(如日出、日落时间、偏角、地球外辐照度、白昼长度)将保存在地图记录文件。此外，可以计算指定本地时间的太阳入射角、辐照度地图。可选择是否计算地形阴影效果。"
-
-#~ msgid "Solar radiance and shadows"
-#~ msgstr "太阳辐射及阴影"
-
-#~ msgid "Space time datasets metadata"
-#~ msgstr "时空数据集元数据"
-
 #~ msgid "Specify projection and datum terms using custom PROJ.4 parameters"
 #~ msgstr "使用自定义PROJ. 4参数指定投影和基准面条件"
-
-#~ msgid "Spectral response"
-#~ msgstr "光谱响应"
-
-#~ msgid "Split lines"
-#~ msgstr "线段拆分"
-
-#~ msgid "Split net"
-#~ msgstr "网络切分"
-
-#~ msgid "Split polylines"
-#~ msgstr "多线段拆分"
 
 #~ msgid "Start &GRASS"
 #~ msgstr "启动 &GRASS"
@@ -14030,24 +16063,6 @@ msgstr ""
 
 #~ msgid "Starting GRASS for the first time"
 #~ msgstr "第一次运行GRASS"
-
-#~ msgid "Statistical overlay"
-#~ msgstr "统计叠加"
-
-#~ msgid "Statistics for clumped cells"
-#~ msgstr "簇块化像元统计"
-
-#~ msgid "Steiner tree"
-#~ msgstr "Steiner树"
-
-#~ msgid "Sum area by raster map and category"
-#~ msgstr "按栅格图及类别面积合计"
-
-#~ msgid "Sunshine hours and solar angles"
-#~ msgstr "日照时长及相关角度"
-
-#~ msgid "Support file maintenance"
-#~ msgstr "支持文件维护"
 
 #~ msgid "Surface generation program."
 #~ msgstr "表面生成程序。"
@@ -14059,32 +16074,8 @@ msgstr ""
 #~ msgid "TIFF export"
 #~ msgstr "导出为TIFF格式"
 
-#~ msgid "TOPMODEL simulation"
-#~ msgstr "TOPMODEL模拟"
-
-#~ msgid "Target group"
-#~ msgstr "目标组"
-
-#~ msgid "Tasseled cap vegetation index"
-#~ msgstr "缨帽变换植被指数"
-
 #~ msgid "Temporal"
 #~ msgstr "时间序列"
-
-#~ msgid "Temporal aggregation"
-#~ msgstr "时间数据集合计"
-
-#~ msgid "Temporal aggregation by dataset"
-#~ msgstr "时间数据集内合计"
-
-#~ msgid "Temporal integration of ETa"
-#~ msgstr "实际蒸散时段整合"
-
-#~ msgid "Temporal sampling"
-#~ msgstr "时间数据集抽样"
-
-#~ msgid "Temporally shift"
-#~ msgstr "时间位移"
 
 #, fuzzy
 #~ msgid "Temporary map %s  already exists.\n"
@@ -14098,27 +16089,6 @@ msgstr ""
 #~ msgid "Temporary map '%s' with result "
 #~ msgstr "dig_att文件不存在。"
 
-#~ msgid "Terra ASTER HDF import"
-#~ msgstr "导入Terra ASTER HDF"
-
-#~ msgid "Terrain analysis"
-#~ msgstr "地形分析"
-
-#~ msgid "Terrain parameters"
-#~ msgstr "地形参数"
-
-#~ msgid "Test"
-#~ msgstr "测试"
-
-#~ msgid "Test normality"
-#~ msgstr "正态分布检验"
-
-#~ msgid "Test/training point sets"
-#~ msgstr "划分测试/训练点"
-
-#~ msgid "Textural features"
-#~ msgstr "纹理特征"
-
 #, fuzzy
 #~ msgid "The copied layer needs to be reprojected:"
 #~ msgstr "将要导入的二进制栅格文件"
@@ -14129,42 +16099,6 @@ msgstr ""
 #~ msgstr ""
 #~ "打印时出现问题。\n"
 #~ "可能是您的打印机设置不正确？"
-
-#~ msgid "Thin"
-#~ msgstr "细化"
-
-#~ msgid "Tiling"
-#~ msgstr "分割平铺"
-
-#~ msgid "Timestamp"
-#~ msgstr "时间戳"
-
-#~ msgid "Topographic correction"
-#~ msgstr "拓扑校正"
-
-#~ msgid "Topographic index map"
-#~ msgstr "地形指数"
-
-#~ msgid "Topology maintenance"
-#~ msgstr "拓扑维护"
-
-#~ msgid "Total corrected area"
-#~ msgstr "修正后的总面积"
-
-#~ msgid "Transform features"
-#~ msgstr "要素变换"
-
-#~ msgid "Transform image"
-#~ msgstr "图像变换"
-
-#~ msgid "Traveling salesman analysis"
-#~ msgstr "旅行商分析"
-
-#~ msgid "USLE K-factor"
-#~ msgstr "USLE土壤可蚀性因子K"
-
-#~ msgid "USLE R-factor"
-#~ msgstr "USLE降雨侵蚀力指标R"
 
 #~ msgid "Unable to delete location"
 #~ msgstr "无法删除地点"
@@ -14207,121 +16141,36 @@ msgstr ""
 #~ "当前投影不支持该单位，\n"
 #~ "将使用米作为单位！"
 
-#~ msgid "Univariate attribute statistics for points"
-#~ msgstr "点的一元变量属性统计"
-
-#~ msgid "Univariate raster dataset statistics"
-#~ msgstr "栅格数据集一元统计量"
-
 #~ msgid "Univariate raster3D dataset statistics"
 #~ msgstr "三维栅格数据集一元统计量"
 
-#~ msgid "Univariate statistics for 3D rasters"
-#~ msgstr "三维栅格一元统计量"
-
-#~ msgid "Univariate statistics for attribute columns"
-#~ msgstr "属性列的一元变量统计"
-
 #~ msgid "Univariate statistics for volumes"
 #~ msgstr "三维栅格一元统计量"
-
-#~ msgid "Univariate vector dataset statistics"
-#~ msgstr "矢量数据集一元统计量"
-
-#~ msgid "Unpack vector map"
-#~ msgstr "解开矢量图层"
 
 #, fuzzy
 #~ msgid "Unsupported units"
 #~ msgstr "未知的类型"
 
-#~ msgid "Update area attributes from raster"
-#~ msgstr "从栅格图层更新属性"
-
-#~ msgid "Update area attributes from vector"
-#~ msgstr "从矢量图更新面积属性"
-
-#~ msgid "Update database values from vector"
-#~ msgstr "从矢量图更新数据库"
-
-#~ msgid "Update map statistics"
-#~ msgstr "刷新地图统计"
-
-#~ msgid "Update point attributes from areas"
-#~ msgstr "从面积更新点的属性"
-
-#~ msgid "Update raster map statistics"
-#~ msgstr "刷新栅格地图统计量"
-
-#~ msgid "Updates or removes installed GRASS AddOns extension(s)."
-#~ msgstr "更新或移除GRASS组件扩展"
-
-#~ msgid "Updates vector map metadata."
-#~ msgstr "更新矢量元数据"
-
 #, fuzzy
 #~ msgid "Use as background vector map for digitizer"
 #~ msgstr "输入的 2D 矢量地图的名称"
-
-#~ msgid "User GUI preferences (display font, commands, digitizer, etc.)"
-#~ msgstr "图形界面设置(字体，指令，数字化工具等。)"
-
-#~ msgid "User access"
-#~ msgstr "用户权限"
 
 #, fuzzy
 #~ msgid "V&olumes"
 #~ msgstr "三维栅格"
 
-#~ msgid "VRML export"
-#~ msgstr "导出为VRML格式"
-
-#~ msgid "VTK export"
-#~ msgstr "导出为VTK格式"
-
-#~ msgid "Validate entire model"
-#~ msgstr "验证整个模型"
-
 #~ msgid "Variogram fitting"
 #~ msgstr "变异函数拟合"
-
-#~ msgid "Vector database connections"
-#~ msgstr "矢量数据库连接"
 
 #, fuzzy
 #~ msgid "Vector map %s already exists. "
 #~ msgstr "dig_att文件不存在。"
 
-#, fuzzy
-#~ msgid "Vector map <%s>: no attribute table found"
-#~ msgstr "未发现矢量地图<%s>"
-
-#~ msgid "Vector to raster"
-#~ msgstr "矢量图转换为栅格图"
-
 #~ msgid "Vector to volume"
 #~ msgstr "矢量转换为三维"
 
-#~ msgid "Vegetation indices"
-#~ msgstr "植被指数"
-
 #~ msgid "Version and copyright"
 #~ msgstr "版本及版权"
-
-#~ msgid "Vertex connectivity"
-#~ msgstr "顶点连接性"
-
-#~ msgid "Vis5D export"
-#~ msgstr "导出为Vis5D格式"
-
-#~ msgid "Vis5D import"
-#~ msgstr "导入Vis5D数据"
-
-#~ msgid "Visibility"
-#~ msgstr "视线图"
-
-#~ msgid "Visibility network"
-#~ msgstr "视野网络"
 
 #, fuzzy
 #~ msgid "Volume"
@@ -14330,26 +16179,8 @@ msgstr ""
 #~ msgid "Volume calculator"
 #~ msgstr "三维计算器"
 
-#~ msgid "Volume to raster series"
-#~ msgstr "体积转换为栅格系列"
-
-#~ msgid "Voronoi diagram/Thiessen polygons"
-#~ msgstr "Voronoi图/Thiessen多边形"
-
 #~ msgid "Voxel statistics"
 #~ msgstr "三维栅格统计"
-
-#~ msgid "WFS"
-#~ msgstr "WFS"
-
-#~ msgid "Watershed analysis"
-#~ msgstr "流域分析"
-
-#~ msgid "Watershed basin creation"
-#~ msgstr "流域盆地生成"
-
-#~ msgid "Watershed subbasins"
-#~ msgstr "流域子盆地划分"
 
 #~ msgid ""
 #~ "Welcome to GRASS GIS %s%s\n"
@@ -14369,9 +16200,6 @@ msgstr ""
 
 #~ msgid "Width size (in cells)? "
 #~ msgstr "窗口大小（像元数）？"
-
-#~ msgid "Wildfire modeling"
-#~ msgstr "野火模型"
 
 #~ msgid "Work in progress! No functionality provided."
 #~ msgstr "开发中！暂不可用。"

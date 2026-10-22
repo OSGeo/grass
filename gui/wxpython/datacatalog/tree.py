@@ -1804,6 +1804,7 @@ class DataCatalogTree(TreeView):
                         continue
 
                 def callback(
+                    env2=env2,
                     gisrc2=gisrc2,
                     gisrc=gisrc,
                     cLayer=self.copy_layer[i],
@@ -2860,7 +2861,7 @@ class DataCatalogTree(TreeView):
 
     def _confirmDialog(self, question, title):
         """Confirm dialog"""
-        dlg = wx.MessageDialog(self, question, title, wx.YES_NO)
+        dlg = wx.MessageDialog(self, question, title, wx.YES_NO | wx.NO_DEFAULT)
         res = dlg.ShowModal()
         dlg.Destroy()
         return res

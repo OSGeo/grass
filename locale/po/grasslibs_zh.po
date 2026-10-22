@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_zh\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-10-13 00:09+0000\n"
 "PO-Revision-Date: 2026-06-25 11:49+0000\n"
 "Last-Translator: Jietao Wang <quaternary@163.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/zh_Hans/>\n"
@@ -4052,7 +4052,15 @@ msgid "Error reading raster data for row %d of <%s>"
 msgstr ""
 
 #, c-format
+msgid "Invalid byte count in raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
 msgid "Error uncompressing raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Raster row for <%s> is larger than expected"
 msgstr ""
 
 #, c-format
