@@ -197,7 +197,7 @@ def get_install_path(path: str | Path | None = None) -> str:
     return os.fspath(path) if path else path
 
 
-def setup_runtime_env(gisbase=None, *, env=None):
+def setup_runtime_env(gisbase=None, *, env=None, load_libs=False):
     """Setup the runtime environment.
 
     Modifies environment so that GRASS modules can run. It does not setup a session,
@@ -209,9 +209,26 @@ def setup_runtime_env(gisbase=None, *, env=None):
 
     If _gisbase_ is not provided, a heuristic is used to find the path to GRASS
     installation (see the :func:`get_install_path` function for details).
+
+    With _load_libs_ set to True, the GRASS C libraries are loaded into the
+    current process, which is needed to use :mod:`grass.lib`
+    (see :func:`grass.app.runtime.preload_dynamic_libraries`).
+    RuntimeError is raised when the core library (libgrass_gis) cannot be
+    loaded. A failing optional library only makes importing the
+    corresponding :mod:`grass.lib` module fail. ValueError is raised when
+    _env_ is provided together with _load_libs_, because the libraries
+    read the session from the process environment.
     """
+    if load_libs and env is not None and env is not os.environ:
+        msg = (
+            "load_libs is only allowed for the global environment:"
+            " the C libraries read the session from the process environment,"
+            " so they cannot see a session set up in a custom env"
+        )
+        raise ValueError(msg)
     from grass.app.runtime import (
         get_grass_config_dir,
+        preload_dynamic_libraries,
         set_dynamic_library_path,
         set_executable_paths,
         set_path_to_python_executable,
@@ -254,6 +271,17 @@ def setup_runtime_env(gisbase=None, *, env=None):
     set_dynamic_library_path(
         variable_name=runtime_paths.ld_library_path_var, install_path=gisbase, env=env
     )
+    if load_libs:
+        # The variable set above applies only to newly started processes, so load
+        # the libraries into the current process for ctypes-based interfaces.
+        failures = preload_dynamic_libraries(install_path=gisbase)
+        for library, error in failures:
+            if library.name.startswith("libgrass_gis."):
+                msg = (
+                    f"The GRASS core library failed to load ({library}:"
+                    f" {error}), so grass.lib cannot work"
+                )
+                raise RuntimeError(msg)
     set_python_path_variable(install_path=gisbase, env=env)
     set_path_to_python_executable(env=env)
 
@@ -306,6 +334,7 @@ def init(
     lock=False,
     timeout=0,
     force_unlock=False,
+    load_libs=False,
 ):
     """Initialize system variables to run GRASS modules
 
@@ -313,10 +342,16 @@ def init(
     standard main executable grass. No GRASS modules shall be called before
     call of this function but any module or user script can be called
     afterwards because a GRASS session has been set up. GRASS Python
-    libraries are usable as well in general but the ones using C
-    libraries through ``ctypes`` are not (which is caused by library
-    path not being updated for the current process which is a common
-    operating system limitation).
+    libraries are usable as well, but the ones using C libraries through
+    ``ctypes`` (:mod:`grass.lib`) need *load_libs* set to True: operating
+    systems don't apply a modified library search path to an already
+    running process, so the C libraries have to be loaded into the process
+    explicitly. This is not done by default because it loads the whole
+    GRASS C stack and its dependencies (GDAL, PROJ, ...) into the process,
+    which sessions using only tools don't need. The C libraries read the
+    session from the environment of the process, so :mod:`grass.lib` works
+    only in a session set up in the global environment, i.e., without *env*.
+    The combination of *load_libs* and *env* raises ValueError.
 
     When the path or specified mapset does not exist, ValueError is raised.
 
@@ -371,6 +406,7 @@ def init(
     :param location: location name
     :param mapset: mapset within given location (default: 'PERMANENT')
     :param grass_path: path to GRASS installation or executable
+    :param load_libs: load the C libraries into the process for :mod:`grass.lib`
 
     :returns: reference to a session handle object which is a context manager
     """
@@ -409,7 +445,7 @@ def init(
     # If environment is not provided, use the global one.
     if not env:
         env = os.environ
-    setup_runtime_env(grass_path, env=env)
+    setup_runtime_env(grass_path, env=env, load_libs=load_libs)
 
     process_id = os.getpid()
     env["GIS_LOCK"] = str(process_id)
