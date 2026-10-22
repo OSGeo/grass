@@ -39,6 +39,7 @@ http://linux.die.net/man/1/ffmpeg
 """
 
 import os
+import shlex
 import time
 import subprocess
 import shutil
@@ -89,7 +90,7 @@ def writeAvi(
     :param inputOptions:
     :param outputOptions:
     :param bool bg_task: if thread background task, not raise but
-    return error message
+        return error message
 
     :return str: error message
     """
@@ -97,8 +98,8 @@ def writeAvi(
     # Get fps
     try:
         fps = float(1.0 / duration)
-    except Exception:
-        raise ValueError(_("Invalid duration parameter for writeAvi."))
+    except Exception as e:
+        raise ValueError(_("Invalid duration parameter for writeAvi.")) from e
 
     # Determine temp dir and create images
     tempDir = os.path.join(os.path.expanduser("~"), ".tempIms")
@@ -115,14 +116,15 @@ def writeAvi(
         formatter = "%03d"
 
     # Compile command to create avi
-    command = "ffmpeg -r %i %s " % (int(fps), inputOptions)
-    command += "-i im%s.png " % (formatter,)
-    command += "-g 1 -vcodec %s %s " % (encoding, outputOptions)
-    command += "output.avi"
+    command = ["ffmpeg", "-r", "%i" % int(fps)]
+    command += shlex.split(inputOptions)
+    command += ["-i", "im%s.png" % formatter, "-g", "1", "-vcodec", encoding]
+    command += shlex.split(outputOptions)
+    command.append("output.avi")
 
     # Run ffmpeg
     S = subprocess.Popen(
-        command, shell=True, cwd=tempDir, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        command, cwd=tempDir, stdout=subprocess.PIPE, stderr=subprocess.PIPE
     )
 
     # Show what ffmpeg has to say
@@ -180,7 +182,7 @@ def readAvi(filename, asNumpy=True):
     shutil.copy(filename, os.path.join(tempDir, "input.avi"))
 
     # Run ffmpeg
-    command = "ffmpeg -i input.avi im%d.jpg"
+    command = ["ffmpeg", "-i", "input.avi", "im%d.jpg"]
     with subprocess.Popen(
         command,
         cwd=tempDir,

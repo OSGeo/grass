@@ -9,10 +9,8 @@ List of classes:
  - mapwindow::NvizThread
  - mapwindow::GLWindow
 
-(C) 2008-2011 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2008-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Anna Kratochvilova <kratochanna gmail.com> (Google SoC 2011)
@@ -418,27 +416,30 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         pass  # do nothing, to avoid flashing on MSW
 
     def OnSize(self, event):
-        size = self.GetClientSize()
-        context = self.context if CheckWxVersion(version=[2, 9]) else self.GetContext()
-        if self.size != size and context:
-            Debug.msg(
-                3, "GLCanvas.OnSize(): w = %d, h = %d" % (size.width, size.height)
+        if self.IsShownOnScreen():
+            size = self.GetClientSize()
+            context = (
+                self.context if CheckWxVersion(version=[2, 9]) else self.GetContext()
             )
-            if CheckWxVersion(version=[2, 9]):
-                self.SetCurrent(self.context)
-            else:
-                self.SetCurrent()
-            self._display.ResizeWindow(
-                size.width, size.height, self.GetContentScaleFactor()
-            )
+            if self.size != size and context:
+                Debug.msg(
+                    3, "GLCanvas.OnSize(): w = %d, h = %d" % (size.width, size.height)
+                )
+                if CheckWxVersion(version=[2, 9]):
+                    self.SetCurrent(self.context)
+                else:
+                    self.SetCurrent()
+                self._display.ResizeWindow(
+                    size.width, size.height, self.GetContentScaleFactor()
+                )
 
-            # reposition checkbox in statusbar
-            self.parent.StatusbarReposition()
+                # reposition checkbox in statusbar
+                self.parent.StatusbarReposition()
 
-            # update statusbar
-            self.parent.StatusbarUpdate()
+                # update statusbar
+                self.parent.StatusbarUpdate()
 
-        self.size = size
+            self.size = size
 
         event.Skip()
 

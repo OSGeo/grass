@@ -368,12 +368,12 @@ class Columns:
         ['cat', 'name', 'value']
 
         """
-        nams = list(self.odict.keys())
+        names = list(self.odict.keys())
         if remove:
-            nams.remove(remove)
+            names.remove(remove)
         if unicod:
-            return nams
-        return [str(name) for name in nams]
+            return names
+        return [str(name) for name in names]
 
     def items(self):
         """Return a list of tuple with column name and column type.
@@ -399,7 +399,7 @@ class Columns:
 
         :param col_name: the name of column to add
         :type col_name: str
-        :param col_type: the tipe of column to add
+        :param col_type: the type of column to add
         :type col_type: str
 
         >>> import sqlite3
@@ -856,11 +856,13 @@ class Link:
                 psycopg2.paramstyle = "qmark"
                 db = " ".join(self.database.split(","))
                 return psycopg2.connect(db)
-            except ImportError:
-                er = "You need to install psycopg2 to connect with this table."
-                raise ImportError(er)
+            except ImportError as error:
+                error.add_note(
+                    "You need to install psycopg2 to connect with this table."
+                )
+                raise
 
-        str_err = "Driver is not supported yet, pleas use: sqlite or pg"
+        str_err = "Driver is not supported yet, please use: sqlite or pg"
         raise TypeError(str_err)
 
     def table(self):
@@ -1209,7 +1211,7 @@ class Table:
                 "The SQL statement is not correct:\n%r,\n"
                 "values: %r,\n"
                 "SQL error: %s" % (sqlc, values, str(exc))
-            )
+            ) from exc
 
     def exist(self, cursor=None):
         """Return True if the table already exists in the DB, False otherwise

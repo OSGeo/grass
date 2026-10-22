@@ -573,7 +573,7 @@ class Region:
 
         This function writes this region to the Region file (WIND)
         in the users current mapset. This function should be
-        carefully used, since the user will ot notice if his region
+        carefully used, since the user will not notice if his region
         was changed and would expect that only g.region will do this.
 
         :Example:

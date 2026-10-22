@@ -8,14 +8,15 @@ Classes:
  - model::ProcessModelFile
  - model::WriteModelFile
 
-(C) 2010-2024 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2010-2024 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Ondrej Pesek <pesej.ondrek gmail.com>
 """
+
+from __future__ import annotations
+from typing import TYPE_CHECKING
 
 import os
 import getpass
@@ -53,6 +54,9 @@ from core.giface import StandaloneGrassInterface
 from gui_core.forms import GUI
 
 from grass.script import task as gtask
+
+if TYPE_CHECKING:
+    from typing_extensions import Writer
 
 
 class Model:
@@ -311,7 +315,7 @@ class Model:
             gxmXml = ProcessModelFile(ET.parse(filename))
         except Exception as e:
             msg = "{}".format(e)
-            raise GException(msg)
+            raise GException(msg) from e
 
         if self.canvas:
             win = self.canvas.parent
@@ -734,7 +738,10 @@ class Model:
                     if ret:
                         vlist = ret.splitlines()
                 else:
-                    vlist = eval(condText)
+                    # The loop condition is part of the model authored by the
+                    # user, so evaluating it is equivalent to running the
+                    # model itself.
+                    vlist = eval(condText)  # nosec B307
 
                 if "variables" not in params:
                     params["variables"] = {"params": []}
@@ -1192,8 +1199,8 @@ class ProcessModelFile:
 class WriteModelFile:
     """Generic class for writing model file"""
 
-    def __init__(self, fd, model):
-        self.fd = fd
+    def __init__(self, fd: Writer[str], model: Model):
+        self.fd = fd  # Should be io.Writer when Python 3.14 is possible to use
         self.model = model
         self.properties = model.GetProperties()
         self.variables = model.GetVariables()
@@ -1272,7 +1279,7 @@ class WriteModelFile:
                 % (" " * self.indent, self.properties["author"])
             )
 
-        if "overwrite" in self.properties and self.properties["overwrite"]:
+        if self.properties.get("overwrite"):
             self.fd.write('%s<flag name="overwrite" />\n' % (" " * self.indent))
         self.indent -= 4
         self.fd.write("%s</properties>\n" % (" " * self.indent))

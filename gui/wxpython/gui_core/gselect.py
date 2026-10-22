@@ -30,10 +30,8 @@ Classes:
  - :class:`SeparatorSelect`
  - :class:`SqlWhereSelect`
 
-(C) 2007-2023 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2023 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton
 @author Martin Landa <landa.martin gmail.com>
@@ -556,7 +554,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         first_mapset = None
         for mapset in mapsets:
             mapset_node = self.AddItem(
-                _("Mapset") + ": " + mapset, node=True, mapset=mapset
+                _("Mapset: {mapset}").format(mapset=mapset), node=True, mapset=mapset
             )
             node = mapset_node
             if not first_mapset:
@@ -569,7 +567,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 if isinstance(filesdict[mapset], dict):
                     for elementType in filesdict[mapset].keys():
                         node = self.AddItem(
-                            _("Type: ") + elementType,
+                            _("Type: {element_type}").format(element_type=elementType),
                             mapset=mapset,
                             node=True,
                             parent=mapset_node,

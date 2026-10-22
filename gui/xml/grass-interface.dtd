@@ -1,6 +1,7 @@
 <!--	grass-interface.dtd
 
-	Copyright (C) 2000-2007 by the GRASS Development Team
+	SPDX-FileCopyrightText: 2000-2007 GRASS Development Team
+	SPDX-License-Identifier: GPL-2.0-or-later
 	Author: Jan-Oliver Wagner <jan intevation.de>
 
 	Changes:
@@ -70,7 +71,7 @@
 	integer		: a numeric integer parameter.
 	float		: a numeric float parameter.
 	If multiple is "yes", then many values for the
-	parameter may be given in a comma-seperated list
+	parameter may be given in a comma-separated list
 -->
 <!ELEMENT parameter     (description?, keydesc?, gisprompt?, default?, values?, guisection?)>
 <!ATTLIST parameter	name		CDATA #REQUIRED

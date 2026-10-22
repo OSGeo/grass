@@ -47,18 +47,18 @@ than as a directly-supplied command-line parameter.</dd>
 
 <dt>epsg=<em>number</em></dt>
 <dd><em>number</em> should correspond to the index number of a valid
-co-ordinate system in the <a href="https://epsg.org/search/by-name">EPSG
+coordinate system in the <a href="https://epsg.org/search/by-name">EPSG
 database</a>. EPSG code support is based upon a local copy of the GDAL CSV
-co-ordinate system and datum information files, stored in the directory
+coordinate system and datum information files, stored in the directory
 <code>$GISBASE/etc/proj/ogr_csv</code>. These can be updated if necessary
 to support future revisions of the EPSG database.</dd>
 </dl>
 
 <p>If datum information is incorrect or missing in the input
-co-ordinate system definition (e.g. PROJ descriptions have very limited
+coordinate system definition (e.g. PROJ descriptions have very limited
 support for specifying datum names), a GRASS datum abbreviation can instead be
 supplied using the <em>datum</em> parameter. This will override any
-datum contained in the input co-ordinate system, and discard
+datum contained in the input coordinate system, and discard
 any datum transformation parameters. Enter datum=<em>list</em> to return a
 list of all the datums supported by GRASS. Since any
 existing datum transformation parameters will have been discarded, the
@@ -80,12 +80,12 @@ overwritten. The program will <strong>not</strong> warn before doing this.
 
 <p>The final mode of operation of <em>g.proj</em> is to report on the datum
 information and datum transformation parameters associated with the
-co-ordinate system. The <b>-d</b> flag will report a human-readable summary of
+coordinate system. The <b>-d</b> flag will report a human-readable summary of
 this.
 
 <h2>NOTES</h2>
 
-<p>If the input co-ordinate system contains a datum name but no
+<p>If the input coordinate system contains a datum name but no
 transformation parameters, and there is more than one suitable parameter set
 available (according to the files datum.table and datumtransform.table in
 <code>$GISBASE/etc/proj</code>), <em>g.proj</em> will check the value of
@@ -99,17 +99,17 @@ used when creating a project, other GRASS modules will use the "default"
 (likely non-optimum) parameters for this datum if necessary in the future.</li>
 <li> <strong>Any other number less than or equal to the number of parameter sets
 available for this datum:</strong> Choose this parameter set and add it to the
-co-ordinate system description.</li>
+coordinate system description.</li>
 </ul>
 
 If the <b>-t</b> flag is specified, the module will attempt to change the
 datum transformation parameters using one of the above two methods
 <strong>even if</strong> a valid parameter set is already specified in the
-input co-ordinate system. This can be useful to change the datum information
+input coordinate system. This can be useful to change the datum information
 for an existing project.
 
 <p>Output is simply based on the input CRS information. g.proj does
-<strong>not</strong> attempt to verify that the co-ordinate system thus
+<strong>not</strong> attempt to verify that the coordinate system thus
 described matches a pre-defined existing system in use in the world. In
 particular, this means there may be no authority names and codes in the
 WKT output.

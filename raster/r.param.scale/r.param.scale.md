@@ -42,6 +42,17 @@ downslope) is stored as (West is 0 degree, East is +/- 180 degree):
 Note that the aspect map is calculated differently from
 *[r.slope.aspect](r.slope.aspect.md)*.
 
+### Performance
+
+To enable parallel processing, the user can specify the number of
+threads to be used with the **nprocs** parameter (default 0, which uses
+all available cores). The **memory** parameter (default 300) can also
+be provided to determine the size of the buffer for computation.
+
+To reduce the memory requirements to minimum, set option **memory** to
+zero. To take advantage of the parallelization, GRASS needs to be
+compiled with OpenMP enabled.
+
 ## EXAMPLE
 
 The next commands will create a geomorphological map of the Spearfish

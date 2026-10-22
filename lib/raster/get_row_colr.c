@@ -3,11 +3,8 @@
  *
  * \brief Raster Library - Get raster row (colors)
  *
- * (C) 1999-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1999-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author USACERL and many others
  */
@@ -42,7 +39,7 @@ void Rast_get_row_colors(int fd, int row, struct Colors *colors,
 {
     int cols = Rast_window_cols();
     int type = Rast_get_map_type(fd);
-    int size = Rast_cell_size(type);
+    size_t size = Rast_cell_size(type);
     void *array;
     unsigned char *set;
     void *p;

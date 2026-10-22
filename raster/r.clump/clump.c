@@ -8,11 +8,8 @@
  * PURPOSE:      Recategorizes data in a raster map layer by grouping cells
  *               that form physically discrete areas into unique categories.
  *
- * COPYRIGHT:    (C) 2006-2016 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006-2016 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -26,9 +23,15 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 #include <errno.h>
+#include <limits.h>
 #include <string.h>
 
-#define INCR 1024
+#define INCR      1024
+
+/* Clump IDs are stored as CELL, a 32 bit signed integer, so the number of
+ * clumps cannot exceed the largest CELL value. Stopping INCR short of that
+ * also keeps nalloc, which grows in INCR steps, from overflowing. */
+#define MAX_LABEL (INT_MAX - INCR)
 
 int print_time(time_t *);
 
@@ -311,6 +314,13 @@ CELL clump(int *in_fd, int out_fd, int diag, int minsize)
             if (NEW == 0 || OLD == NEW) { /* ok */
                 if (OLD == 0) {
                     /* start a new clump */
+                    if (label >= MAX_LABEL)
+                        G_fatal_error(
+                            _("Too many clumps: the maximum supported number "
+                              "of clumps is %d. Reduce the extent or the "
+                              "resolution of the computational region, or use "
+                              "a threshold to merge similar cells."),
+                            MAX_LABEL);
                     label++;
                     cur_clump[col] = label;
                     if (label >= nalloc) {
@@ -641,6 +651,13 @@ CELL clump_n(int *in_fd, char **inname, int nin, double threshold, int out_fd,
             if (NEW == 0 || OLD == NEW) { /* ok */
                 if (OLD == 0) {
                     /* start a new clump */
+                    if (label >= MAX_LABEL)
+                        G_fatal_error(
+                            _("Too many clumps: the maximum supported number "
+                              "of clumps is %d. Reduce the extent or the "
+                              "resolution of the computational region, or use "
+                              "a threshold to merge similar cells."),
+                            MAX_LABEL);
                     label++;
                     cur_clump[col] = label;
                     if (label >= nalloc) {

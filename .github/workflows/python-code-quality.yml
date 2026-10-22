@@ -28,11 +28,11 @@ jobs:
     env:
       # renovate: datasource=python-version depName=python
       PYTHON_VERSION: "3.14"
-      MIN_PYTHON_VERSION: "3.10"
+      MIN_PYTHON_VERSION: "3.11"
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.3.0"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "4.0.6"
+      PYLINT_VERSION: "4.1.2"
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.9.4"
       # renovate: datasource=pypi depName=ruff
@@ -55,12 +55,12 @@ jobs:
         env:
           MATRIX_OS: ${{ matrix.os }}
 
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip # zizmor: ignore[cache-poisoning] Not creating release artifacts, less of a concern here
@@ -87,7 +87,7 @@ jobs:
         id: diff-ruff
         # To run after ruff step exits with failure when rules don't have fixes available
         if: ${{ !cancelled() }}
-        uses: ./.github/actions/create-upload-suggestions
+        uses: $/.github/actions/create-upload-suggestions
         with:
           tool-name: ruff
           # To keep repo's file structure in formatted changes artifact
@@ -111,8 +111,7 @@ jobs:
           pipx install "flake8==${FLAKE8_VERSION}"
           pipx install "pylint==${PYLINT_VERSION}"
           pipx inject pylint -r .github/workflows/python_requirements.txt -r .github/workflows/optional_requirements.txt
-          # The extra toml is only needed before Python 3.11
-          pipx install "bandit[sarif,toml]==${BANDIT_VERSION}"
+          pipx install "bandit[sarif]==${BANDIT_VERSION}"
 
       - name: Run Flake8
         run: |
@@ -133,7 +132,7 @@ jobs:
           path: bandit.sarif
 
       - name: Upload SARIF File into Security Tab
-        uses: github/codeql-action/upload-sarif@8aad20d150bbac5944a9f9d289da16a4b0d87c1e # v4.36.2
+        uses: github/codeql-action/upload-sarif@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4.37.0
         with:
           sarif_file: bandit.sarif
 
@@ -145,7 +144,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
 
-      - uses: rui314/setup-mold@9c9c13bf4c3f1adef0cc596abc155580bcb04444 # v1
+      - uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
       - name: Build
         run: |
           ".github/workflows/build_${MATRIX_OS}.sh" "${HOME}/install"
@@ -209,6 +208,6 @@ jobs:
     needs:
       - python-checks
     if: ${{ always() }}
-    uses: ./.github/workflows/verify-success.yml
+    uses: $/.github/workflows/verify-success.yml
     with:
       needs_context: ${{ toJson(needs) }}

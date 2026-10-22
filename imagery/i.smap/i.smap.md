@@ -149,7 +149,7 @@ r.kappa -w classification=lsat7_2002_smap_classes reference=training
 
 The signature file obtained in the example above will allow to classify
 the current imagery group only (lsat7_2002). If the user would like to
-re-use the signature file for the classification of different imagery
+reuse the signature file for the classification of different imagery
 group(s), they can set semantic labels for each group member beforehand,
 i.e., before generating the signature files. Semantic labels are set by
 means of *r.support* as shown below:

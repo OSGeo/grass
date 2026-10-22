@@ -8,12 +8,8 @@
  * PURPOSE:      Change current mapset, optionally adding it
  *               if the mapset does not exist.
  *
- * COPYRIGHT:    (C) 2004, 2010-2011 by the GRASS Development Team
- *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2004, 2010-2011 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************/
 
@@ -246,7 +242,7 @@ int main(int argc, char *argv[])
     if (!gis_lock)
         G_fatal_error(_("Unable to read GIS_LOCK environment variable"));
 
-    G_asprintf(&lock_prog, "%s/etc/lock", G_gisbase());
+    G_asprintf(&lock_prog, "%s/lock", G_etcbin_dir());
 
     snprintf(path, sizeof(path), "%s/.gislock", mapset_new_path);
     G_debug(2, "%s", path);
@@ -269,7 +265,7 @@ int main(int argc, char *argv[])
     }
 
     /* Clean temporary directory */
-    snprintf(path, sizeof(path), "%s/etc/clean_temp", G_gisbase());
+    snprintf(path, sizeof(path), "%s/clean_temp", G_etcbin_dir());
     G_verbose_message(_("Cleaning up temporary files..."));
     G_spawn(path, "clean_temp", NULL);
 

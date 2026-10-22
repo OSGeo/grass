@@ -48,25 +48,10 @@ libpythonhelp:
 libpythonclean:
 	-rm -rf $(BUILDDIR)/*
 	-rm -f _templates/layout.html
-	-rm -f src/ctypes*.rst
-	-rm -f src/exceptions.rst
-	-rm -f src/gunittest.*rst
-	-rm -f src/imaging.rst
-	-rm -f src/pydispatch.rst
-	-rm -f src/pygrass.*rst
-	-rm -f src/script.rst
-	-rm -f src/temporal.rst
 	-rm -f src/grass*.rst
 
 libpythonapidoc:
 	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
-	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../imaging/)
-	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../exceptions/)
-	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../gunittest/ ../gunittest/multireport.py ../gunittest/multirunner.py ../gunittest/main.py)
-	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../pydispatch/)
-	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../pygrass/)
-	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../script/)
-	$(call run_grass,$(SPHINXAPIDOC) -T -f -t _templates/sphinx/apidoc/ -o src/ ../temporal/)
 	$(call run_grass,$(SPHINXAPIDOC) --module-first -T -f -t _templates/sphinx/apidoc/ -o src/ ../../grass)
 
 libpythonhtml: checksphinx

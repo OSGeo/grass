@@ -46,8 +46,8 @@ int del2g(double *img[2], int size, double w)
     G_message(_("    taking FFT of image..."));
     fft(FORWARD, img, size * size, size, size);
 
-    g[0] = (double *)G_malloc(size * size * sizeof(double));
-    g[1] = (double *)G_malloc(size * size * sizeof(double));
+    g[0] = (double *)G_malloc((size_t)size * size * sizeof(double));
+    g[1] = (double *)G_malloc((size_t)size * size * sizeof(double));
 
     G_message(_("    computing del**2 g..."));
     getg(w, g, size);

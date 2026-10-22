@@ -8,11 +8,8 @@
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:
- * COPYRIGHT:    (C) 1999-2006, 2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2006, 2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -117,12 +114,10 @@ int main(int argc, char *argv[])
         switch (parse(buf, &rules, &tail, &cats)) {
         case -1:
             if (tty) {
-                fprintf(stderr, _("Illegal reclass rule -"));
-                fprintf(stderr, _(" ignored\n"));
+                fprintf(stderr, _("Illegal reclass rule - ignored\n"));
             }
             else {
-                strcat(buf, _(" - invalid reclass rule"));
-                G_fatal_error("%s", buf);
+                G_fatal_error(_("%s - invalid reclass rule"), buf);
             }
             break;
 

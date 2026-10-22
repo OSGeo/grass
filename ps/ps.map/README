@@ -23,7 +23,7 @@ The manual for ps.map says that fields width and hwidth
 specify the width of the line in pixels, which is not true:
 they were actually interpreted as width in user space PostScript
 coordinates: 1/72 of inch. I made the width double, added width options
-for outline and grid, and also now the width ni is isnterpreted as n inches.
+for outline and grid, and also now the width ni is interpreted as n inches.
 
 STATUS:
     FIXED and coming out with the next update

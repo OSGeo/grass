@@ -1,10 +1,8 @@
 """
 GRASS Python testing framework module for report generation
 
-Copyright (C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Vaclav Petras
 """
@@ -69,7 +67,7 @@ def replace_in_file(file_path, pattern, repl) -> None:
     os.remove(file_path)
     # replace old file by new file
     # TODO: this can fail in some (random) cases on MS Windows
-    os.rename(tmp_file_path, file_path)
+    Path(tmp_file_path).rename(file_path)
 
 
 class NoopFileAnonymizer:
@@ -176,7 +174,7 @@ def get_svn_revision():
     """
     # TODO: here should be starting directory
     # but now we are using current as starting
-    with subprocess.Popen(
+    with subprocess.Popen(  # nosec B607: fixed external tool "svnversion" with no portable absolute path
         ["svnversion", "."], stdout=subprocess.PIPE, stderr=subprocess.PIPE
     ) as p:
         stdout, stderr = p.communicate()
@@ -199,7 +197,7 @@ def get_svn_info():
     """
     try:
         # TODO: introduce directory, not only current
-        with subprocess.Popen(
+        with subprocess.Popen(  # nosec B607: fixed external tool "svn" with no portable absolute path
             ["svn", "info", ".", "--xml"],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -254,7 +252,7 @@ def get_svn_path_authors(path, from_date=None):
     revision_range = "BASE:1" if from_date is None else "BASE:{%s}" % from_date
     try:
         # TODO: allow also usage of --limit
-        with subprocess.Popen(
+        with subprocess.Popen(  # nosec B607: fixed external tool "svn" with no portable absolute path
             ["svn", "log", "--xml", "--revision", revision_range, path],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -475,10 +473,10 @@ def html_file_preview(filename):
     before = "<pre>"
     after = "</pre>"
     if not Path(filename).is_file():
-        return '<p style="color: red>File %s does not exist</p>' % filename
+        return '<p style="color: red">File %s does not exist</p>' % filename
     size = Path(filename).stat().st_size
     if not size:
-        return '<p style="color: red>File %s is empty</p>' % filename
+        return '<p style="color: red">File %s is empty</p>' % filename
     max_size = 10000
     html = StringIO()
     html.write(before)
@@ -495,7 +493,7 @@ def html_file_preview(filename):
         for line in tail(filename, 50):
             html.write(color_error_line(html_escape(line)))
     else:
-        return '<p style="color: red>File %s is too large to show</p>' % filename
+        return '<p style="color: red">File %s is too large to show</p>' % filename
     html.write(after)
     return html.getvalue()
 
@@ -1117,7 +1115,7 @@ class TestsuiteDirReporter:
                     self.total += summary["total"]
 
                     dir_failures += summary["failures"]
-                    dir_errors += summary["failures"]
+                    dir_errors += summary["errors"]
                     dir_skipped += summary["skipped"]
                     dir_successes += summary["successes"]
                     dir_expected_failures += summary["expected_failures"]

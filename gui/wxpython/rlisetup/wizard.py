@@ -12,9 +12,8 @@ Classes:
  - SamplingAreas (define sampling area)
  - SummaryPage (show chosen options)
 
-(C) 2011 by the GRASS Development Team
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Luca Delucchi <lucadeluge gmail com>
 """
@@ -1913,7 +1912,11 @@ class VectorAreasPage(TitledPage):
             GError(parent=self, message=_("The polygon seems to have 0 areas"))
             self.parent.wizard.ShowPage(self.parent.samplingareapage)
             return
-        self.title.SetLabel(_("Select sample area 1 of " + str(self.areanum)))
+        self.title.SetLabel(
+            _("Select sample area {areas_count} of {area_num}").format(
+                areas_count=1, area_num=self.areanum
+            )
+        )
         grass.use_temp_region()
         if self._raster != self.rast:
             self.map_ = self.mapPanel.GetMap()
