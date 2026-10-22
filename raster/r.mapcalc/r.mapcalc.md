@@ -777,8 +777,7 @@ preferable to use the **seed** parameter.
 
 The result for a given seed does not depend on the number of threads
 (**nprocs**). The values for a given seed depend on the computational
-region and on all rand() calls in the expressions: adding or removing a
-rand() call can change the values of the others.
+region and on the number of rand() calls.
 
 ## EXAMPLES
 
