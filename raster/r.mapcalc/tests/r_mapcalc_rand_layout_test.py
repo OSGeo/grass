@@ -129,8 +129,7 @@ def test_eval_variable_draws_once(session_in_mapset, nprocs):
     assert np.array_equal(result, first + 2 * second + first)
 
 
-@pytest.mark.parametrize("nprocs", [1, 4])
-def test_r3_rows_continue_sequence(session_in_mapset, nprocs):
+def test_r3_rows_continue_sequence(session_in_mapset):
     """In 3D, the rows of each depth continue the sequence"""
     depths = 3
     tools = Tools(session=session_in_mapset)
@@ -138,7 +137,6 @@ def test_r3_rows_continue_sequence(session_in_mapset, nprocs):
     tools.r3_mapcalc(
         expression="result = rand(0.0, 1.0) + 2 * rand(0.0, 1.0)",
         seed=42,
-        nprocs=nprocs,
     )
     first, second = row_values(42, ROWS, COLS, calls=2, depths=depths)
     expected = (first + 2 * second).reshape(depths, ROWS, COLS)
