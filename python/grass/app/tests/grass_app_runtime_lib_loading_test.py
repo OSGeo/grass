@@ -23,15 +23,16 @@ def test_grass_lib_importable_with_manual_search_path(
     """Check that the search path variable set at process start is enough"""
     lib_path = os.fspath(Path(get_install_path()) / "lib")
     env = clean_subprocess_environment
-    variable = RuntimePaths().ld_library_path_var
-    if variable in env:
-        env[variable] = lib_path + os.pathsep + env[variable]
-    else:
-        env[variable] = lib_path
+    variables = [RuntimePaths().ld_library_path_var]
     if sys.platform == "darwin":
         # The variable GRASS knows on macOS (LD_RUN_PATH) is read by the
         # ctypes loader but ignored by dyld, which reads DYLD_LIBRARY_PATH.
-        env["DYLD_LIBRARY_PATH"] = lib_path
+        variables.append("DYLD_LIBRARY_PATH")
+    for variable in variables:
+        if env.get(variable):
+            env[variable] = lib_path + os.pathsep + env[variable]
+        else:
+            env[variable] = lib_path
     code = """
         import json
 
