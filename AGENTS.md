@@ -126,7 +126,7 @@ code, not the verbose output):
 
 ```bash
 cd raster/r.slope.aspect/testsuite
-grass --tmp-mapset ~/grassdata/nc_spm_08_grass7/ \
+grass --tmp-mapset ~/grassdata/nc_spm_full_v2alpha2/ \
     --exec python test_r_slope_aspect.py
 ```
 
