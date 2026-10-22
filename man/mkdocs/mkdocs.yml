@@ -125,6 +125,8 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
+  # From scripts/grass_markdown.py, needs scripts on PYTHONPATH
+  - grass_markdown
 
 # Navigation
 nav:
