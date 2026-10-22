@@ -88,7 +88,7 @@
 
 # %flag
 # % key: i
-# % description: Invert filter (remove clumps larger than lower and smaller than upper)
+# % description: Invert filter (remove clumps larger than lower and smaller than upper, only for method 'reclass')
 # %end
 
 # %flag
@@ -302,7 +302,8 @@ def reclass(
             continue
         hectares = float(f[-1]) * 0.0001
         in_range = lower <= hectares <= upper
-        if not in_range if invert else in_range:
+        keep = not in_range if invert else in_range
+        if keep:
             rules += "{} = {} {}\n".format(*[f[i] for i in [0, 2, -2]])
     if rules:
         tools.r_reclass(
