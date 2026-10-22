@@ -158,28 +158,27 @@ When the test needs specific data which cannot be generated, the data has to
 be supplied as files, which is currently possible only with _grass.gunittest_
 in a `testsuite` directory.
 
-### Tests which use a database
+### Tests which use vector attributes
 
-Vector geometry and attribute tables are separate. If a test needs
-attributes, create the map and its table (for example with _v.db.addtable_),
-then read the values back with _v.db.select_. Nothing else is needed once the
-table is linked.
+Vector geometry and its attribute table are separate, and a map does not
+necessarily have one. _v.random_ and _v.edit_ give a map with no table, so
+create it with _v.db.addtable_ and read the values back with _v.db.select_.
 
-The temporal database does not need creating by hand: `tgis.init()` creates
-one for the current mapset if there is none, and the `t.*` tools call it
-before they do anything, so a fixture which creates a new mapset gets a
-database on first use. By default it lives in that mapset, at
-`$GISDBASE/$LOCATION_NAME/$MAPSET/tgis/sqlite.db`, which is worth knowing
-because it means a module-scoped session shares one between its tests. For
-tests about the connection itself, `temporal/t.connect/tests/conftest.py`
-shows fixtures for the states worth covering: a mapset with a connection, one
-without, and two mapsets which each have their own.
+Adding the first table also defines the connection for the mapset, which by
+default is one SQLite file shared by every map in it. A module-scoped session
+therefore shares it across its tests, and a table written by one test is
+visible to the next. Give the session function scope when that matters, or
+use `TemporaryMapsetSession` as described above.
 
-Because the database belongs to a mapset, a module-scoped session shares one
-across its tests, and a dataset registered by one test is visible to the
-next. Give the session function scope when that matters, or use
-`TemporaryMapsetSession` as described above so each test gets a fresh mapset
-and a fresh database.
+Test against the default backend unless the test is about a backend.
+
+### Tests which use temporal data
+
+The temporal database is created on demand, so a fixture which creates a
+mapset does not have to set one up. It belongs to the mapset in the same way
+attribute tables do, so a module-scoped session shares one across its tests
+and a dataset registered by one test is visible to the next, with the same
+two ways out.
 
 _grass.temporal_ still reads the session from `os.environ` rather than taking
 an `env`, so a test which uses it has to make the session visible there.
@@ -201,6 +200,10 @@ is function-scoped and this fixture is not. In a function-scoped fixture, ask
 for `monkeypatch` directly. See
 `python/grass/temporal/tests/grass_temporal_gui_support_test.py` for the whole
 fixture, and mark such tests with `needs_solo_run` as described below.
+
+For tests about the connection itself, `temporal/t.connect/tests/conftest.py`
+shows the states worth covering: a mapset with a connection, one without, and
+two mapsets which each have their own.
 
 ### Tests which run in parallel
 
