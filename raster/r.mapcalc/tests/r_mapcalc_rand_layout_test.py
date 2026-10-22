@@ -1,4 +1,5 @@
 # SPDX-FileCopyrightText: 2026 GRASS Development Team
+# SPDX-FileCopyrightText: 2026 Vaclav Petras
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """Tests of rand() in r.mapcalc and r3.mapcalc drawing from an exact layout
