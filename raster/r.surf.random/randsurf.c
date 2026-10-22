@@ -8,8 +8,11 @@
  * @param min Minimum cell value
  * @param min Maximum cell value
  * @param int_map TRUE for a CELL map, FALSE for DCELL
+ * @param layout Random number layout with one unit per row, each drawing
+ *               one value per cell
  */
-int randsurf(char *out, double min, double max, int int_map)
+int randsurf(char *out, double min, double max, int int_map,
+             const struct G_random_layout *layout)
 {
     int nrows, ncols; /* Number of cell rows and columns      */
 
@@ -20,6 +23,7 @@ int randsurf(char *out, double min, double max, int int_map)
 
     /* open raster maps.                    */
     int row_count, col_count;
+    struct G_random_state state;
 
     /****** OPEN CELL FILES AND GET CELL DETAILS ******/
     fd_out = Rast_open_new(out, int_map ? CELL_TYPE : DCELL_TYPE);
@@ -35,16 +39,17 @@ int randsurf(char *out, double min, double max, int int_map)
     /****** PASS THROUGH EACH CELL ASSIGNING RANDOM VALUE ******/
     for (row_count = 0; row_count < nrows; row_count++) {
         G_percent(row_count, nrows, 2);
+        G_random_state_for_unit(&state, layout, row_count);
         for (col_count = 0; col_count < ncols; col_count++) {
             if (int_map) {
-                unsigned int x = (unsigned int)G_mrand48();
+                unsigned int x = G_random_uint32(&state);
 
                 *(row_out_C + col_count) =
                     (CELL)(min + x % (unsigned int)(max + 1 - min));
             }
             else {
                 *(row_out_D + col_count) =
-                    (DCELL)(min + G_drand48() * (max - min));
+                    (DCELL)(min + G_random_double(&state) * (max - min));
             }
         }
 
