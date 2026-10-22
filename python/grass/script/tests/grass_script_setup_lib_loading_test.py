@@ -11,6 +11,7 @@ the search path recorded in the libraries at build time.
 """
 
 import sys
+from textwrap import dedent
 
 import pytest
 
@@ -64,6 +65,56 @@ def test_grass_lib_usable_after_init(
             fd = libraster.Rast_open_old(b"ones", b"")
             libraster.Rast_close(fd)
         print(json.dumps({{"raster_opened": True}}))
+    """
+    assert run_code_in_environment(code, env=clean_subprocess_environment)[
+        "raster_opened"
+    ]
+
+
+@pytest.mark.usefixtures("mock_no_session")
+def test_grass_lib_usable_in_subprocess_of_init(
+    tmp_path, run_code_in_environment, clean_subprocess_environment
+):
+    """Check that grass.lib works in a process started from a session of init
+
+    The session exists in the environment of the started process from its
+    start, so the C libraries see it on all platforms, including Windows,
+    where they do not see a session set up in their own process.
+    """
+    project = tmp_path / "test"
+    child_file = tmp_path / "child.py"
+    child_file.write_text(
+        dedent(
+            """
+            import json
+
+            import grass.lib.gis as libgis
+            import grass.lib.raster as libraster
+
+            libgis.G_gisinit(b"test")
+            fd = libraster.Rast_open_old(b"ones", b"")
+            libraster.Rast_close(fd)
+            print(json.dumps({"raster_opened": True}))
+            """
+        )
+    )
+    code = f"""
+        import subprocess
+        import sys
+
+        import grass.script as gs
+
+        gs.create_project(r"{project}")
+        with gs.setup.init(r"{project}"):
+            gs.run_command("g.region", rows=2, cols=2)
+            gs.mapcalc("ones = 1")
+            result = subprocess.run(
+                [sys.executable, r"{child_file}"],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+        print(result.stdout)
     """
     assert run_code_in_environment(code, env=clean_subprocess_environment)[
         "raster_opened"
