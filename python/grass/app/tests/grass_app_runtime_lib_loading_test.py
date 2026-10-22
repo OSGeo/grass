@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2026 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Tests of making the GRASS C libraries (grass.lib) work without a session
 
