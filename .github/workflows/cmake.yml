@@ -32,7 +32,17 @@ permissions:
   contents: read
 
 jobs:
+  changes:
+    name: Detect changed files
+    permissions:
+      contents: read
+    uses: ./.github/workflows/detect-relevant-changes.yml
+    with:
+      own-workflow-path: .github/workflows/cmake.yml
+
   build-cmake:
+    needs: changes
+    if: ${{ needs.changes.outputs.run == 'true' }}
     runs-on: ubuntu-24.04
     env:
       CMAKE_VERSION: "3.22.0"
