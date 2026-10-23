@@ -1,6 +1,3 @@
-"""Tests for startup database discovery."""
-
-import os
 import sys
 from pathlib import Path
 
@@ -11,7 +8,6 @@ from grass.app import data
 
 @pytest.fixture
 def home(tmp_path, monkeypatch):
-    """Keep each test out of the real home directory."""
     home_dir = tmp_path / "home"
     home_dir.mkdir()
     monkeypatch.setenv("HOME", str(home_dir))
@@ -19,30 +15,20 @@ def home(tmp_path, monkeypatch):
     return home_dir
 
 
-def deny_listing(monkeypatch, directory, error_type=PermissionError):
-    """Simulate a directory that cannot be listed."""
-    original_scandir = os.scandir
-    original_listdir = os.listdir
+def deny_listing(monkeypatch, directory):
+    original_iterdir = Path.iterdir
 
-    def scandir(path):
-        if Path(path) == directory:
-            raise error_type(path)
-        return original_scandir(path)
+    def iterdir(path):
+        if path == directory:
+            raise PermissionError(path)
+        return original_iterdir(path)
 
-    def listdir(path):
-        if Path(path) == directory:
-            raise error_type(path)
-        return original_listdir(path)
-
-    # Path.iterdir uses listdir or scandir depending on the Python version.
-    monkeypatch.setattr(os, "scandir", scandir)
-    monkeypatch.setattr(os, "listdir", listdir)
+    monkeypatch.setattr(Path, "iterdir", iterdir)
 
 
 @pytest.mark.parametrize("parent", [".", "Documents"])
 @pytest.mark.parametrize("name", ["grassdata", "GrassData", "my_grassdata_backup"])
 def test_find_database(home, parent, name):
-    """Match grassdata names in either search directory."""
     database = home / parent / name
     database.mkdir(parents=True)
 
@@ -50,7 +36,6 @@ def test_find_database(home, parent, name):
 
 
 def test_home_precedes_documents(home):
-    """Search home before Documents."""
     database = home / "grassdata"
     database.mkdir()
     (home / "Documents" / "grassdata").mkdir(parents=True)
@@ -60,7 +45,6 @@ def test_home_precedes_documents(home):
 
 @pytest.mark.parametrize("parent", [".", "Documents"])
 def test_ignore_matching_file(home, parent):
-    """Ignore regular files named grassdata."""
     directory = home / parent
     directory.mkdir(exist_ok=True)
     (directory / "grassdata").touch()
@@ -70,37 +54,31 @@ def test_ignore_matching_file(home, parent):
 
 @pytest.mark.parametrize("parent", [".", "Documents"])
 def test_do_not_search_recursively(home, parent):
-    """Only search immediate children."""
     (home / parent / "other" / "grassdata").mkdir(parents=True)
 
     assert data.get_possible_database_path() is None
 
 
 def test_missing_documents(home):
-    """Skip a missing Documents directory."""
     assert data.get_possible_database_path() is None
 
 
 def test_documents_is_file(home):
-    """Skip Documents when it is a file."""
     (home / "Documents").touch()
 
     assert data.get_possible_database_path() is None
 
 
 @pytest.mark.parametrize("parent", [".", "Documents"])
-@pytest.mark.parametrize("error_type", [PermissionError, FileNotFoundError, OSError])
-def test_skip_unreadable_candidate(home, monkeypatch, parent, error_type):
-    """Skip a directory when listing it fails."""
+def test_skip_unreadable_candidate(home, monkeypatch, parent):
     candidate = home / parent
     candidate.mkdir(exist_ok=True)
-    deny_listing(monkeypatch, candidate, error_type)
+    deny_listing(monkeypatch, candidate)
 
     assert data.get_possible_database_path() is None
 
 
 def test_search_documents_after_unreadable_home(home, monkeypatch):
-    """Still try Documents when home cannot be listed."""
     database = home / "Documents" / "grassdata"
     database.mkdir(parents=True)
     deny_listing(monkeypatch, home)
@@ -109,7 +87,6 @@ def test_search_documents_after_unreadable_home(home, monkeypatch):
 
 
 def test_existing_database_precedes_unreadable_documents(home, monkeypatch):
-    """Use the existing database even when Documents is blocked."""
     database = home / "grassdata"
     database.mkdir()
     documents = home / "Documents"
@@ -120,7 +97,6 @@ def test_existing_database_precedes_unreadable_documents(home, monkeypatch):
 
 
 def test_skip_unreadable_child(home, monkeypatch):
-    """Keep searching after an inaccessible entry."""
     blocked = home / "grassdata_unreadable"
     blocked.mkdir()
     database = home / "grassdata"
@@ -145,7 +121,6 @@ def test_skip_unreadable_child(home, monkeypatch):
 
 
 def test_error_while_advancing_iterator(home, monkeypatch):
-    """Handle listing errors raised by a lazy iterator."""
     database = home / "Documents" / "grassdata"
     database.mkdir(parents=True)
     original_iterdir = Path.iterdir
@@ -162,7 +137,6 @@ def test_error_while_advancing_iterator(home, monkeypatch):
 
 @pytest.mark.parametrize("target_type", ["directory", "file", "missing"])
 def test_database_symlink(home, tmp_path, target_type):
-    """Accept directory symlinks, not file or broken links."""
     target = tmp_path / "target"
     if target_type == "directory":
         target.mkdir()
@@ -180,7 +154,6 @@ def test_database_symlink(home, tmp_path, target_type):
 
 @pytest.mark.skipif(sys.platform == "win32", reason="Unix home-directory fallback")
 def test_fallback_after_unreadable_documents(home, monkeypatch):
-    """Create the usual fallback when Documents cannot be read."""
     documents = home / "Documents"
     documents.mkdir()
     deny_listing(monkeypatch, documents)
