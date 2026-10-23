@@ -286,6 +286,19 @@ def append_left_addon_paths(paths, config_dir, env):
             paths.appendleft(path)
 
 
+def prepend_paths(variable_name, paths, env):
+    """Put paths in front of a path list variable in _env_
+
+    Other occurrences of the paths are removed, so the paths take precedence
+    and repeated calls on the same environment do not grow the variable.
+    """
+    existing = env.get(variable_name)
+    rest = existing.split(os.pathsep) if existing else []
+    env[variable_name] = os.pathsep.join(
+        paths + [path for path in rest if path not in paths]
+    )
+
+
 def set_executable_paths(install_path, grass_config_dir, env):
     """Add paths with executables to PATH in _env_"""
     paths = collections.deque()
@@ -294,8 +307,7 @@ def set_executable_paths(install_path, grass_config_dir, env):
     # Standard installation
     append_left_main_executable_paths(paths, install_path=install_path)
 
-    paths.append(env.get("PATH"))
-    env["PATH"] = os.pathsep.join(paths)
+    prepend_paths("PATH", list(paths), env=env)
 
 
 def set_paths(install_path, grass_config_dir):
@@ -350,18 +362,23 @@ def set_man_path(install_path, addon_base, env):
 
 
 def set_dynamic_library_path(variable_name, install_path, env):
-    """Define path to dynamic libraries (LD_LIBRARY_PATH on Linux)"""
-    if variable_name not in env:
-        env[variable_name] = ""
-    env[variable_name] += os.pathsep + os.path.join(install_path, "lib")
+    """Define path to dynamic libraries (LD_LIBRARY_PATH on Linux)
+
+    The path is not added again if it is already there, so calling this
+    repeatedly on the same environment does not grow the variable.
+    """
+    library_path = os.path.join(install_path, "lib")
+    existing = env.get(variable_name) or ""
+    if library_path in existing.split(os.pathsep):
+        return
+    env[variable_name] = (
+        (existing + os.pathsep + library_path) if existing else library_path
+    )
 
 
 def set_python_path_variable(install_path, env):
     """Set PYTHONPATH to find GRASS Python package in subprocesses"""
-    path = env.get("PYTHONPATH")
-    etcpy = os.path.join(install_path, "etc", "python")
-    path = etcpy + os.pathsep + path if path else etcpy
-    env["PYTHONPATH"] = path
+    prepend_paths("PYTHONPATH", [os.path.join(install_path, "etc", "python")], env=env)
 
 
 def set_path_to_python_executable(env):
