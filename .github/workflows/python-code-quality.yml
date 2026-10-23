@@ -201,6 +201,8 @@ jobs:
       - name: Test compiling example modules
         run: |
           ( cd doc/examples/raster/r.example/ && make )
+          ( cd doc/examples/raster/r.example.segment/ && make )
+          ( cd doc/examples/raster/r.example.segmulti/ && make )
           ( cd doc/examples/vector/v.example/ && make )
 
   python-success:
