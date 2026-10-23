@@ -14,6 +14,14 @@ def group_session(tmp_path_factory):
     tmp_path = tmp_path_factory.mktemp("imagery_group_test")
     project = tmp_path / "test_project"
     gs.create_project(project)
+    gs.create_mapset(project, name="other_mapset")
+    with (
+        gs.setup.init(project / "other_mapset", env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        tools.g_region(rows=2, cols=2)
+        tools.r_mapcalc(expression="other_band = 1")
+        tools.i_group(group="other_group", input="other_band")
     with (
         gs.setup.init(project, env=os.environ.copy()) as session,
         Tools(session=session) as tools,
@@ -31,6 +39,7 @@ def group_session(tmp_path_factory):
         tools.i_group(
             group="test_group", subgroup="test_subgroup", input="band_1,band_2"
         )
+        tools.g_mapsets(mapset="other_mapset", operation="add")
         yield session
 
 
