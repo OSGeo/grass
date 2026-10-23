@@ -83,6 +83,32 @@ to run the test and ``grass.gunittest.main`` returning zero return code
 even if some tests fail, use ``--min-success 0``
 
 
+Running test files in random order
+----------------------------------
+
+By default, test files run in the same order every time. A fixed order can
+hide a test which passes only because of what an earlier test did,
+for example a file an earlier test left in a shared directory. To run the
+test files in a random order, use::
+
+    python -m grass.gunittest.main ... --random-order
+
+The seed of the random order is printed at the start and stored in the
+report. To run the test files again in the same order, pass this seed::
+
+    python -m grass.gunittest.main ... --randomly-seed 1234
+
+To reuse the seed of the previous run, which is read from the report in the
+output directory, use ``--randomly-seed last``.
+
+The same seed gives the same order only for the same set of test files.
+Regardless of the order the test files run in, the reports list them in the
+usual order, so that reports from different runs can be compared.
+Tests inside a test file still run in their usual order.
+The ``--randomly-seed`` option and the printed seed follow the
+*pytest-randomly* plugin, but the order is random only when requested.
+
+
 Excluding test files from testing
 ---------------------------------
 
