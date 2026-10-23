@@ -226,7 +226,7 @@ if(NOT WITH_FHS)
         ${CMAKE_COMMAND}
         -E
         env
-        "SITE_NAME=GRASS ${GRASS_VERSION_NUMBER} Documentation"
+        "SITE_NAME=GRASS ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR} Documentation"
         "COPYRIGHT=&copy$<SEMICOLON> 2003-${GRASS_VERSION_DATE} GRASS Development Team, GRASS ${GRASS_VERSION_NUMBER} Documentation"
     )
     add_custom_target(
