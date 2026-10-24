@@ -603,6 +603,8 @@ the computational region extents.
   <dd>Add vector map layer to current map display</dd>
   <dt>Ctrl+W</dt>
   <dd>Close current map display</dd>
+  <dt>Delete</dt>
+  <dd>Delete selected layer</dd>
 </dl>
 
 <b>Console</b>
@@ -638,6 +640,19 @@ the computational region extents.
   <dd>Render map (re-renders map)</dd>
   <dt>F6</dt>
   <dd>Enable/disable auto-rendering map (re-renders map)</dd>
+</dl>
+
+<h4>Data Catalog</h4>
+
+<dl>
+  <dt>Delete</dt>
+  <dd>Remove the selected item. Maps, mapsets and projects are deleted after
+  a confirmation. On a GRASS database node the database is only removed from
+  the catalog, so it can be added back later. Nothing is removed when
+  several databases are selected or when items of different types are
+  selected together.</dd>
+  <dt>Ctrl+Shift+Delete</dt>
+  <dd>Delete the selected GRASS database from disk</dd>
 </dl>
 
 <h3>Starting the GUI from command line</h3>
