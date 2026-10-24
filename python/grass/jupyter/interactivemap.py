@@ -142,6 +142,35 @@ class Raster(Layer):
             interactive_map.add(image)
 
 
+# Leaflet path options for the styling d.vect exposes. The names on the left
+# are the ones a GRASS user already knows from d.vect, the ones on the right
+# are what both backends pass to Leaflet.
+VECTOR_STYLE_OPTIONS = {
+    "color": "color",
+    "fill_color": "fillColor",
+    "width": "weight",
+    "opacity": "opacity",
+    "fill_opacity": "fillOpacity",
+}
+
+
+def vector_style(options):
+    """Translate GRASS vector style options to Leaflet path options
+
+    Takes the recognized options out of *options* and returns them as a
+    dictionary Leaflet understands. Options which are not about style are
+    left in place, so what remains can go to the backend unchanged.
+
+    :param dict options: keyword arguments given to a vector layer
+    :return dict: Leaflet path options, empty if none were given
+    """
+    return {
+        leaflet_name: options.pop(name)
+        for name, leaflet_name in VECTOR_STYLE_OPTIONS.items()
+        if name in options
+    }
+
+
 class Vector(Layer):
     """Adds vectors to a folium or ipyleaflet map.
 
@@ -172,9 +201,15 @@ class Vector(Layer):
 
     def add_to(self, interactive_map):
         """Add vector to map"""
+        # The two backends take styling differently, folium through a
+        # callable and ipyleaflet through a dictionary, so the same options
+        # are translated once here and handed to each in its own form.
+        style = vector_style(self._layer_kwargs)
         if get_backend(interactive_map) == "folium":
             import folium  # pylint: disable=import-outside-toplevel
 
+            if style and "style_function" not in self._layer_kwargs:
+                self._layer_kwargs["style_function"] = lambda _feature: style
             folium.GeoJson(
                 str(self._filename), name=self._title, **self._layer_kwargs
             ).add_to(interactive_map)
@@ -183,14 +218,13 @@ class Vector(Layer):
 
             with open(self._filename, encoding="utf-8") as file:
                 data = json.load(file)
-            # allow using opacity directly to keep interface
-            # consistent for both backends
-            if "opacity" in self._layer_kwargs:
-                opacity = self._layer_kwargs.pop("opacity")
-                if "style" in self._layer_kwargs:
-                    self._layer_kwargs["style"]["opacity"] = opacity
-                else:
-                    self._layer_kwargs["style"] = {"opacity": opacity}
+            if style:
+                # An explicitly given style wins, so a user who already
+                # passes one keeps the behavior they had.
+                self._layer_kwargs["style"] = {
+                    **style,
+                    **self._layer_kwargs.get("style", {}),
+                }
             geo_json = ipyleaflet.GeoJSON(
                 data=data, name=self._title, **self._layer_kwargs
             )
