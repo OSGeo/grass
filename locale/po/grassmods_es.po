@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
 "PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -989,7 +989,10 @@ msgstr "Coordenadas de pantalla para la esquina superior izquierda del rectángu
 msgid "(0,0) is lower-left of the display frame"
 msgstr "(0,0) es abajo y a la izquierda del marco de visualización"
 
-msgid "Length of barscale in map units"
+msgid "Length of barscale in units set by the units option"
+msgstr ""
+
+msgid "Map units if units is not given; 0 picks a length automatically"
 msgstr ""
 
 msgid "Barscale units to display"
@@ -18978,11 +18981,6 @@ msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding 
 msgstr ""
 
 #, fuzzy, c-format
-#| msgid "Invalid zrange <%s>"
-msgid "Invalid random seed <%s>"
-msgstr "rangoz no válido <%s>"
-
-#, fuzzy, c-format
 msgid "Read random seed from %s option: %<PRId64>"
 msgstr "Generar semillas aleatoriass"
 
@@ -34698,6 +34696,11 @@ msgstr "Ver imágenes BMP desde el controlador PNG."
 
 msgid "Image file"
 msgstr "Archivo de imagen"
+
+#, fuzzy, c-format
+#~| msgid "Invalid zrange <%s>"
+#~ msgid "Invalid random seed <%s>"
+#~ msgstr "rangoz no válido <%s>"
 
 #, python-format
 #~ msgid "Unable to open %s "

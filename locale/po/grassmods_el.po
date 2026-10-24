@@ -6,13 +6,13 @@
 # Carlos Davila <carluti@users.sourceforge.net>, 2007.
 # Vasilios Antoniou <antoniou_v@yahoo.gr>, 2008.
 # Vasilios Antoniou <vantoniou@gmail.com>, 2008.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
-"PO-Revision-Date: 2025-07-26 01:36+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
+"PO-Revision-Date: 2026-10-17 19:54+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grassmods/el/>\n"
 "Language: el\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
@@ -968,7 +968,10 @@ msgstr ""
 msgid "(0,0) is lower-left of the display frame"
 msgstr ""
 
-msgid "Length of barscale in map units"
+msgid "Length of barscale in units set by the units option"
+msgstr ""
+
+msgid "Map units if units is not given; 0 picks a length automatically"
 msgstr ""
 
 msgid "Barscale units to display"
@@ -1024,7 +1027,7 @@ msgid "Outputs a list of all available display colors."
 msgstr ""
 
 msgid "raster"
-msgstr ""
+msgstr "raster"
 
 msgid "color table"
 msgstr ""
@@ -18598,10 +18601,6 @@ msgstr ""
 msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
 msgstr ""
 
-#, fuzzy, c-format
-msgid "Invalid random seed <%s>"
-msgstr "Σφάλμα κατά το άνοιμα 3Δ ράστερ χάρτη"
-
 #, c-format
 msgid "Read random seed from %s option: %<PRId64>"
 msgstr ""
@@ -33972,6 +33971,10 @@ msgstr ""
 
 msgid "Image file"
 msgstr ""
+
+#, fuzzy, c-format
+#~ msgid "Invalid random seed <%s>"
+#~ msgstr "Σφάλμα κατά το άνοιμα 3Δ ράστερ χάρτη"
 
 #, fuzzy, c-format
 #~ msgid "Raster map <%s> created. "

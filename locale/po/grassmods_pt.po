@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_pt\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
 "PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese <https://weblate.osgeo.org/projects/grass-gis/grassmods/pt/>\n"
@@ -971,7 +971,10 @@ msgstr ""
 msgid "(0,0) is lower-left of the display frame"
 msgstr ""
 
-msgid "Length of barscale in map units"
+msgid "Length of barscale in units set by the units option"
+msgstr ""
+
+msgid "Map units if units is not given; 0 picks a length automatically"
 msgstr ""
 
 msgid "Barscale units to display"
@@ -18672,11 +18675,6 @@ msgstr ""
 msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
 msgstr ""
 
-#, fuzzy, c-format
-#| msgid "Invalid grid size <%s>"
-msgid "Invalid random seed <%s>"
-msgstr "Tamanho de malha inválido <%s>"
-
 #, c-format
 msgid "Read random seed from %s option: %<PRId64>"
 msgstr ""
@@ -34101,6 +34099,11 @@ msgstr ""
 
 msgid "Image file"
 msgstr "Arquivo de imagem"
+
+#, fuzzy, c-format
+#~| msgid "Invalid grid size <%s>"
+#~ msgid "Invalid random seed <%s>"
+#~ msgstr "Tamanho de malha inválido <%s>"
 
 #, fuzzy, python-format
 #~ msgid " with minimum %s pixels"

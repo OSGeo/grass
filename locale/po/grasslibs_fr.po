@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
-"PO-Revision-Date: 2026-10-10 21:19+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
+"PO-Revision-Date: 2026-10-17 18:52+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -89,7 +89,7 @@ msgstr "Cairo : en-tête BMP invalide pour <%s>"
 
 #, c-format
 msgid "Cairo: error reading BMP file <%s>: unexpected end of file"
-msgstr ""
+msgstr "Cairo : erreur de lecture du fichier BMP <%s> : fin de fichier inattendue"
 
 #, c-format
 msgid "Cairo: error reading BMP file <%s>: %s"
@@ -97,7 +97,7 @@ msgstr "Cairo : erreur de lecture du fichier BMP <%s> : %s"
 
 #, c-format
 msgid "Cairo: unexpected EOF reading <%s>"
-msgstr ""
+msgstr "Cairo : fin de fichier (EOF) inattendu lors de la lecture de <%s>"
 
 #, c-format
 msgid "Cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d"
@@ -517,23 +517,23 @@ msgstr "Valeur de résolution n-s illégale pour 3D : %g"
 
 #, c-format
 msgid "Illegal number of rows for 3D: %d (resolution is %g)"
-msgstr ""
+msgstr "Nombre de lignes non valide pour la 3D : %d (la résolution est %g)"
 
 #, c-format
 msgid "Illegal e-w resolution value for 3D: %g"
 msgstr "Valeur de résolution e-o illégale pour 3D : %g"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal number of columns for 3D: %d (resolution is %g)"
-msgstr "Nombre de colonnes illégal pour 3D : %d (la résolution est %g)"
+msgstr "Nombre de colonnes non valide pour la 3D : %d (la résolution est %g)"
 
 #, c-format
 msgid "Illegal t-b resolution value: %g"
-msgstr ""
+msgstr "Valeur de résolution h-b non valide : %g"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal depths value: %d"
-msgstr "Valeur des profondeurs illégale : %d"
+msgstr "Nombre de profondeurs non valide : %d"
 
 #, c-format
 msgid "Top must be larger than Bottom, but %g (top) <= %g (bottom)"
@@ -978,17 +978,16 @@ msgstr "G_list : Type d'élément inconnu"
 msgid "LOCATION <%s> not available"
 msgstr "SECTEUR <%s> non disponible"
 
-#, c-format
-msgid "Random number seed %s from %s is too large in magnitude to be read"
+msgid "must be an integer with nothing after it"
 msgstr ""
 
-#, c-format
-msgid "Random number seed %s from %s is not an integer"
+msgid "must be between -2147483648 and 4294967295"
 msgstr ""
 
-#, c-format
-msgid "Random number seed %s from %s is used as %<PRId64>, its low 32 bits"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Invalid timestamp specified for %s map <%s@%s>"
+msgid "Invalid random seed <%s> from %s: %s"
+msgstr "Horodatage invalide pour la carte %s <%s@%s>"
 
 #, c-format
 msgid "gettimeofday failed: %s"
@@ -1798,6 +1797,16 @@ msgstr "Autre projection"
 
 msgid "Unknown projection"
 msgstr "Projection inconnue"
+
+#, fuzzy, c-format
+#| msgid "<required>"
+msgid "%s= is required"
+msgstr "<obligatoire>"
+
+#, fuzzy, c-format
+#| msgid "Invalid value <%s> for parameter <%s>"
+msgid "Invalid random seed <%s> for %s=: %s"
+msgstr "Valeur <%s> manquante pour le paramètre <%s>"
 
 #, c-format
 msgid "Syntax error in cell header, line %d: %s"
@@ -3277,6 +3286,12 @@ msgstr ""
 msgid "Starting GRASS..."
 msgstr "Démarrage de GRASS..."
 
+#, python-brace-format
+msgid ""
+"Neither an interactive terminal nor a graphical user interface is available.\n"
+"Run {cmd_name} from a terminal, use --exec to run a command, or use --text to read commands from standard input."
+msgstr ""
+
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr "Le démarrage de GRASS a échoué, le dossier grassdata est introuvable ou ne peut pas être créé."
 
@@ -4625,7 +4640,7 @@ msgstr "Ajout d'une règle : %lf - %lf"
 
 #, c-format
 msgid "%s: illegal value spec"
-msgstr "%s: spécification de valeur non valide"
+msgstr "%s : spécification de valeur non valide"
 
 msgid "Rast3d_open_cell_old_no_header: error in Rast3d_mask_open_old"
 msgstr "Rast3d_open_cell_old_no_header : erreur dans Rast3d_mask_open_old"
@@ -6538,7 +6553,7 @@ msgstr "Tentative d'accéder à l'entité en cours %d"
 
 #, c-format
 msgid "%s: Area %d does not exist"
-msgstr "%s: la surface %d n'existe pas"
+msgstr "%s : la surface %d n'existe pas"
 
 #, c-format
 msgid "Attempt to access dead area %d"
@@ -7140,9 +7155,6 @@ msgstr "Outil de recherche inconnu"
 #, c-format
 #~ msgid "<%s> or <%s>"
 #~ msgstr "<%s> ou <%s>"
-
-#~ msgid "<required>"
-#~ msgstr "<obligatoire>"
 
 #, python-brace-format
 #~ msgid "<{0}> requested, but not available. Run GRASS in text mode (--text) or install missing package (usually 'grass-gui')."
