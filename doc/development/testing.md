@@ -7,8 +7,7 @@ it.
 
 GRASS has two testing frameworks. Use _pytest_ for everything new. Use the
 older _grass.gunittest_ framework when the test needs the North Carolina
-sample dataset, or when it needs data supplied as files. Neither is currently
-possible with _pytest_.
+sample dataset, which is not yet possible with _pytest_.
 
 The two live side by side in the source tree: _pytest_ tests go into a
 `tests` directory next to the code they test, _grass.gunittest_ tests into a
@@ -154,9 +153,17 @@ _r.in.ascii_, which accept an `io.StringIO` object as their input parameter.
 NumPy arrays can be passed to tools and requested back from them through
 _grass.tools_.
 
-When the test needs specific data which cannot be generated, the data has to
-be supplied as files, which is currently possible only with _grass.gunittest_
-in a `testsuite` directory.
+When the test needs specific data which cannot be generated, put the files in
+a `data` directory next to the test and read them relative to the test file,
+as `temporal/t.rast.import/tests` does:
+
+```python
+DATA = pathlib.Path(__file__).parent / "data"
+```
+
+Pass the path to the tool rather than the contents, so the bytes on disk are
+what it reads. `pyproject.toml` already keeps `*/tests/data/*` out of test
+collection.
 
 ### Tests which use vector attributes
 
