@@ -55,6 +55,7 @@ class RuntimePaths:
         "misc_dir": "GRASS_MISCDIR",
         "mkdocs_dir": "GRASS_MKDOCSDIR",
     }
+    _module_relative_paths = {"GRASS_GUIRESDIR", "GRASS_GUIWXDIR"}
 
     def __init__(self, *, env=None, set_env_variables=False, prefix=None):
         if env is None:
@@ -167,7 +168,8 @@ class RuntimePaths:
     def prefix(self):
         if self._custom_prefix:
             return self._custom_prefix
-        return os.path.normpath(resource_paths.GRASS_PREFIX)
+        script_dir = Path(__file__).resolve().parent
+        return str((script_dir / resource_paths.GRASS_PREFIX_RELATIVE).resolve())
 
     def __getattr__(self, name):
         """Access paths by attributes."""
@@ -188,11 +190,17 @@ class RuntimePaths:
 
         If the environmental variable not yet set, it is retrieved and
         set from resource_paths."""
-        if use_env_values and env_var in self.env and self.env[env_var]:
+        if use_env_values and self.env.get(env_var):
             return os.path.normpath(self.env[env_var])
-        # Default to path from the installation
+
         path = getattr(resource_paths, env_var)
-        return os.path.normpath(os.path.join(self.prefix, path))
+
+        if env_var in self._module_relative_paths:
+            base_dir = Path(__file__).resolve().parent
+        else:
+            base_dir = self.prefix
+
+        return os.path.normpath(os.path.join(base_dir, path))
 
 
 def get_grass_config_dir(*, env):
@@ -359,7 +367,7 @@ def set_dynamic_library_path(variable_name, install_path, env):
 def set_python_path_variable(install_path, env):
     """Set PYTHONPATH to find GRASS Python package in subprocesses"""
     path = env.get("PYTHONPATH")
-    etcpy = os.path.join(install_path, "etc", "python")
+    etcpy = str(Path(__file__).resolve().parent.parent.parent)
     path = etcpy + os.pathsep + path if path else etcpy
     env["PYTHONPATH"] = path
 

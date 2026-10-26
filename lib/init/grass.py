@@ -79,6 +79,7 @@ GRASS_VERSION = None
 GRASS_VERSION_MAJOR = None
 CONFIG_PROJSHARE = None
 GRASS_VERSION_GIT = None
+GRASS_PYDIR = None
 
 # Get the system name
 WINDOWS = sys.platform.startswith("win")
@@ -1777,6 +1778,8 @@ def print_params(params) -> None:
             "date",
         ]
 
+    global GRASS_PYDIR
+
     from grass.app.runtime import RuntimePaths
 
     runtime_paths = RuntimePaths()
@@ -1785,7 +1788,7 @@ def print_params(params) -> None:
         if arg == "path":
             sys.stdout.write(f"{GISBASE}\n")
         elif arg in {"python_path", "python-path"}:
-            sys.stdout.write("%s\n" % r"@GRASS_PYDIR@")
+            sys.stdout.write("%s\n" % GRASS_PYDIR)
         elif arg == "arch":
             sys.stdout.write("%s\n" % runtime_paths.grass_arch)
         elif arg == "build":
@@ -2067,6 +2070,7 @@ def find_grass_python_package() -> None:
         del sys.modules["grass"]
 
     # Try to find the package.
+    global GRASS_PYDIR
     path, exists = find_path_to_grass_python_package()
     if exists:
         sys.path.insert(0, path)
@@ -2076,6 +2080,7 @@ def find_grass_python_package() -> None:
             import grass.script as unused_gs_2nd_attempt  # noqa: F401, ICN001
 
             # If the import worked, we did our part.
+            GRASS_PYDIR = path
             return
         except ModuleNotFoundError as error:
             # Existing path provided, but there is some issue with the import.
@@ -2110,7 +2115,8 @@ def find_path_to_grass_python_package() -> tuple[str, bool]:
         path_from_variable = os.path.normpath(env_variable)
     else:
         # The "@...@" variables are being substituted during build process
-        path_from_variable = os.path.normpath(r"@GRASS_PYDIR@")
+        script_dir = Path(__file__).resolve().parent
+        path_from_variable = str((script_dir / r"@GRASS_PYDIR@").resolve())
     if Path(path_from_variable).exists():
         return path_from_variable, True
 

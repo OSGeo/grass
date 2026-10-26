@@ -203,6 +203,38 @@ AC_SUBST(GRASS_HEADERS_GIT_DATE)
 AC_SUBST(NAME_VER)
 AC_SUBST(LIB_VER)
 
+
+# Calculate relative paths to GISBASE from lib and location of resource_paths.py
+# and to GUI resource and wxpython dir from location of resource_paths.py.
+
+AC_PATH_PROG([PYTHON], [python3])
+
+AS_IF([test -z "$PYTHON"], [
+    AC_MSG_ERROR([Python 3 is required])
+])
+
+GRASS_PREFIX_RELATIVE=`"$PYTHON" -c \
+    'import os, sys; print(os.path.relpath(sys.argv[[1]], sys.argv[[2]]))' \
+    "$GISBASE" "$GISBASE/lib/grass"`
+
+GRASS_PY_PREFIX_RELATIVE=`"$PYTHON" -c \
+    'import os, sys; print(os.path.relpath(sys.argv[[1]], sys.argv[[2]]))' \
+    "$GISBASE" "$GISBASE/etc/python/grass/app"`
+
+GRASS_GUIRESDIR_RELATIVE=`"$PYTHON" -c \
+    'import os, sys; print(os.path.relpath(sys.argv[[1]], sys.argv[[2]]))' \
+    "$GISBASE/gui" "$GISBASE/etc/python/grass/app"`
+
+GRASS_GUIWXDIR_RELATIVE=`"$PYTHON" -c \
+    'import os, sys; print(os.path.relpath(sys.argv[[1]], sys.argv[[2]]))' \
+    "$GISBASE/gui/wxpython" "$GISBASE/etc/python/grass/app"`
+
+AC_SUBST([GRASS_PREFIX_RELATIVE])
+AC_SUBST([GRASS_PY_PREFIX_RELATIVE])
+AC_SUBST([GRASS_GUIRESDIR_RELATIVE])
+AC_SUBST([GRASS_GUIWXDIR_RELATIVE])
+
+
 # Check for MacOSX App
 
 AC_ARG_ENABLE(macosx-app,
@@ -620,9 +652,9 @@ AC_CHECK_LIB(m, atan, MATHLIB=-lm, [
 ])])
 AC_SUBST(MATHLIB)
 
-AC_CHECK_FUNC(dlsym, DLLIB=, [
-AC_CHECK_LIB(dl, dlsym, DLLIB=-ldl, [
-    DLLIB=
+AC_CHECK_FUNCS([dladdr dlsym], DLLIB=, [
+AC_CHECK_LIB(dl, dladdr, DLLIB=-ldl, [
+    AC_MSG_WARN([*** Unable to locate dl library.])
 ])])
 AC_SUBST(DLLIB)
 
