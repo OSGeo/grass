@@ -5,6 +5,7 @@
 
 import pytest
 
+from grass.jupyter import interactivemap
 from grass.jupyter.interactivemap import vector_style
 
 
@@ -53,3 +54,36 @@ def test_without_style_options():
 def test_one_option_at_a_time(option, leaflet_name):
     """One option on its own gives one Leaflet option"""
     assert vector_style({option: 1}) == {leaflet_name: 1}
+
+
+def test_named_option_wins_over_style(simple_dataset):
+    """A named option overrides the same key in a style given directly
+
+    This is what the opacity shim did before the named options existed.
+    """
+    ipyleaflet = pytest.importorskip("ipyleaflet")
+
+    m = interactivemap.InteractiveMap(use_region=True, map_backend="ipyleaflet")
+    m.add_vector(simple_dataset.vector_name, opacity=0.4, style={"opacity": 0.9})
+
+    layer = next(
+        layer
+        for layer in reversed(m.map.layers)
+        if isinstance(layer, ipyleaflet.GeoJSON)
+    )
+    assert layer.style["opacity"] == 0.4
+
+
+def test_style_keeps_keys_the_options_do_not_set(simple_dataset):
+    """Keys only present in a style given directly survive"""
+    ipyleaflet = pytest.importorskip("ipyleaflet")
+
+    m = interactivemap.InteractiveMap(use_region=True, map_backend="ipyleaflet")
+    m.add_vector(simple_dataset.vector_name, opacity=0.4, style={"dashArray": "5"})
+
+    layer = next(
+        layer
+        for layer in reversed(m.map.layers)
+        if isinstance(layer, ipyleaflet.GeoJSON)
+    )
+    assert layer.style == {"opacity": 0.4, "dashArray": "5"}

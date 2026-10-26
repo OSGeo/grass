@@ -219,11 +219,13 @@ class Vector(Layer):
             with open(self._filename, encoding="utf-8") as file:
                 data = json.load(file)
             if style:
-                # An explicitly given style wins, so a user who already
-                # passes one keeps the behavior they had.
+                # The named options win over the same key in a style given
+                # directly, which is what the opacity shim did before them.
+                # folium cannot do the same, since a style_function is a
+                # callable there is no sensible way to merge into.
                 self._layer_kwargs["style"] = {
-                    **style,
                     **self._layer_kwargs.get("style", {}),
+                    **style,
                 }
             geo_json = ipyleaflet.GeoJSON(
                 data=data, name=self._title, **self._layer_kwargs
