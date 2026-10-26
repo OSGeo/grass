@@ -19,10 +19,6 @@
                 <langSet xml:lang="es"><tig><term>GRASS</term></tig></langSet>
             </termEntry>
             <termEntry>
-                <langSet xml:lang="en"><tig><term>Raster</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term/></tig></langSet>
-            </termEntry>
-            <termEntry>
                 <langSet xml:lang="en"><tig><term>Feature</term></tig></langSet>
                 <langSet xml:lang="es"><tig><term>Elemento</term></tig></langSet>
             </termEntry>
@@ -151,7 +147,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>raster</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term/></tig></langSet>
+                <langSet xml:lang="es"><tig><term>ráster</term></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>JSON</term></tig></langSet>
@@ -263,7 +259,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>MySQL</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term/></tig></langSet>
+                <langSet xml:lang="es"><tig><term>MySQL</term></tig></langSet>
                 <note from="translator">Name of a relational database management system</note>
             </termEntry>
             <termEntry>
@@ -329,11 +325,38 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>datasets</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>space time</term></tig></langSet>
-                <langSet xml:lang="es"><tig><term></term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry id="hydrology">
+                <langSet xml:lang="en"><tig><term>flow direction</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry id="hydrology">
+                <langSet xml:lang="en"><tig><term>flow direction</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry id="hydrology">
+                <langSet xml:lang="en"><tig><term>watershed</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
+                <descrip>hydrology</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>monitor</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
+                <descrip>A graphics output target managed by d.mon, which can be started, selected, released, listed or stopped. A monitor is either an interactive display window (e.g., wx0 to wx7) or a file renderer (e.g., png, ps, html, cairo).</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>monitors</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term/></tig></langSet>
+                <descrip>A graphics output target managed by d.mon, which can be started, selected, released, listed or stopped. A monitor is either an interactive display window (e.g., wx0 to wx7) or a file renderer (e.g., png, ps, html, cairo).</descrip>
+            </termEntry>
+            <termEntry id="1">
+                <langSet xml:lang="en"><tig><term>Raster</term></tig></langSet>
+                <langSet xml:lang="es"><tig><term>Ráster</term></tig></langSet>
             </termEntry>
         </body>
     </text>

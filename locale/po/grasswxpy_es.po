@@ -6,13 +6,13 @@
 # Javier Garcia Prieto <fjgarciaprieto hotmail.com>, 2009.
 # Joana Palahí/SIGTE-UdG <joana@sigte.udg.edu>, 2011, 2014.
 # Daniel Torres <nobeeakon@gmail.com>, 2014, 2016.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
-"PO-Revision-Date: 2025-08-26 13:29+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
+"PO-Revision-Date: 2026-10-21 02:27+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/es/>\n"
 "Language: es\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 2026.10.1\n"
 "X-Poedit-Language: Spanish\n"
 "X-Poedit-Country: SPAIN\n"
 
@@ -4124,7 +4124,7 @@ msgid "Ask when removing map layer from layer tree"
 msgstr "Preguntar cuando se elimine una capa de mapa del árbol de capas"
 
 msgid "Ask when quitting wxGUI or closing display"
-msgstr "Preguntar cuando se abandone la interfaz gráfica de usuario wx o se cierre la ventana."
+msgstr "Preguntar cuando se abandone la interfaz gráfica de usuario wx o se cierre la ventana"
 
 msgid "Automatically copy selected text to clipboard (in the Console tab)"
 msgstr "Copiar automaticamente el texto seleccionado al portapapeles (en la pestaña de Consola)"
@@ -4147,9 +4147,8 @@ msgstr "Guardar parámetros de visualización de la ventana actual como predeter
 msgid "Save current position and size of single-window mode panes and use as default for next sessions."
 msgstr "Guardar la posición y tamaño actuales, tanto de la ventana del Administrador de capas, como de la(s) de visualización de mapas abiertas y utilizar como ajustes predeterminados para próximas sesiones."
 
-#, fuzzy
 msgid "Hide '{}' tab (requires GUI restart)"
-msgstr "Ocultar pestaña '%s'  (requiere reiniciar la GUI)"
+msgstr "Ocultar la pestaña '{}' (requiere reiniciar la GUI)"
 
 msgid "Tools"
 msgstr "Herramientas"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pt_BR\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
-"PO-Revision-Date: 2026-10-10 21:19+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
+"PO-Revision-Date: 2026-10-17 19:54+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.osgeo.org/projects/grass-gis/grasslibs/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -990,17 +990,16 @@ msgstr "G_list: Tipo de elemento desconhecido"
 msgid "LOCATION <%s> not available"
 msgstr "LOCATION <%s> não disponível"
 
-#, c-format
-msgid "Random number seed %s from %s is too large in magnitude to be read"
+msgid "must be an integer with nothing after it"
 msgstr ""
 
-#, c-format
-msgid "Random number seed %s from %s is not an integer"
+msgid "must be between -2147483648 and 4294967295"
 msgstr ""
 
-#, c-format
-msgid "Random number seed %s from %s is used as %<PRId64>, its low 32 bits"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Invalid timestamp specified for %s map <%s@%s>"
+msgid "Invalid random seed <%s> from %s: %s"
+msgstr "Timestamp inválido especificado para o mapa %s <%s@%s>"
 
 #, c-format
 msgid "gettimeofday failed: %s"
@@ -1829,6 +1828,16 @@ msgstr "Outra projeção"
 
 msgid "Unknown projection"
 msgstr "Projeção desconhecida"
+
+#, fuzzy, c-format
+#| msgid "<required>"
+msgid "%s= is required"
+msgstr "<required>"
+
+#, fuzzy, c-format
+#| msgid "Invalid value <%s> for parameter <%s>"
+msgid "Invalid random seed <%s> for %s=: %s"
+msgstr "Valor inválido <%s> para o parâmetro <%s>"
 
 #, c-format
 msgid "Syntax error in cell header, line %d: %s"
@@ -3307,6 +3316,12 @@ msgstr ""
 #| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
 msgstr "Iniciando GRASS..."
+
+#, python-brace-format
+msgid ""
+"Neither an interactive terminal nor a graphical user interface is available.\n"
+"Run {cmd_name} from a terminal, use --exec to run a command, or use --text to read commands from standard input."
+msgstr ""
 
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr ""
@@ -7204,9 +7219,6 @@ msgstr "Ferramenta de consulta desconhecida"
 #, c-format
 #~ msgid "<%s> or <%s>"
 #~ msgstr "<%s> ou <%s>"
-
-#~ msgid "<required>"
-#~ msgstr "<required>"
 
 #, python-brace-format
 #~ msgid "<{0}> requested, but not available. Run GRASS in text mode (--text) or install missing package (usually 'grass-gui')."
