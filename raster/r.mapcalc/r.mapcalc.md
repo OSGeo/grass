@@ -775,9 +775,8 @@ be seen using *r.info*.
 If you want other people to be able to verify your results, it's
 preferable to use the **seed** parameter.
 
-The result for a given seed does not depend on the number of threads
-(**nprocs**). The values for a given seed depend on the computational
-region and on the number of rand() calls.
+The values for a given seed depend on the computational region and on
+the number of rand() calls (not on the number of threads, **nprocs**).
 
 ## EXAMPLES
 
