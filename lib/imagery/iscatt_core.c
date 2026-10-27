@@ -456,8 +456,9 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
                                          int *fd_cats_rasts)
 {
 
-    int i_rows_pix, i_cat, i_scatt, n_pixs;
+    int i_rows_pix, i_cat, i_scatt;
     int cat_id, scatt_plts_cat_idx, array_idx, max_arr_idx;
+    size_t n_pixs;
     char *b_1_null_row, *b_2_null_row;
     struct rast_row b_1_rast_row, b_2_rast_row;
     CELL *cat_rast_row;
@@ -522,7 +523,7 @@ static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
                         "Unable to read from category raster condition file."));
                     return -1;
                 }
-                if (n_pixs != (row_size) / (int)sizeof(unsigned char)) {
+                if (n_pixs != ((unsigned)row_size / sizeof(unsigned char))) {
                     G_free(rast_pixs);
                     G_free(belongs_pix);
                     G_warning(
@@ -721,7 +722,7 @@ int I_compute_scatts(struct Cell_head *region, struct scCats *scatt_conds,
     for (i_cat = 0; i_cat < scatts->n_a_cats; i_cat++)
         fd_cats_rasts[i_cat] = -1;
 
-    G_zero(b_needed_bands, (size_t)n_bands * sizeof(int));
+    G_zero(b_needed_bands, n_bands * (unsigned)sizeof(int));
 
     get_needed_bands(scatt_conds, &b_needed_bands[0]);
     get_needed_bands(scatts, &b_needed_bands[0]);
