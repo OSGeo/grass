@@ -142,6 +142,35 @@ class Raster(Layer):
             interactive_map.add(image)
 
 
+# Leaflet path options for the styling d.vect exposes. The names on the left
+# are the ones a GRASS user already knows from d.vect, the ones on the right
+# are what both backends pass to Leaflet.
+VECTOR_STYLE_OPTIONS = {
+    "color": "color",
+    "fill_color": "fillColor",
+    "width": "weight",
+    "opacity": "opacity",
+    "fill_opacity": "fillOpacity",
+}
+
+
+def vector_style(options):
+    """Translate GRASS vector style options to Leaflet path options
+
+    Takes the recognized options out of *options* and returns them as a
+    dictionary Leaflet understands. Options which are not about style are
+    left in place, so what remains can go to the backend unchanged.
+
+    :param dict options: keyword arguments given to a vector layer
+    :return dict: Leaflet path options, empty if none were given
+    """
+    return {
+        leaflet_name: options.pop(name)
+        for name, leaflet_name in VECTOR_STYLE_OPTIONS.items()
+        if name in options
+    }
+
+
 class Vector(Layer):
     """Adds vectors to a folium or ipyleaflet map.
 
@@ -172,9 +201,26 @@ class Vector(Layer):
 
     def add_to(self, interactive_map):
         """Add vector to map"""
+        # The two backends take styling differently, folium through a
+        # callable and ipyleaflet through a dictionary, so the same options
+        # are translated once here and handed to each in its own form.
+        style = vector_style(self._layer_kwargs)
         if get_backend(interactive_map) == "folium":
             import folium  # pylint: disable=import-outside-toplevel
 
+            if style:
+                # Both backends apply the named options on top of whatever the
+                # backend's own form produces, so the same call means the same
+                # thing on either one. A style_function is a callable, so it is
+                # wrapped rather than merged.
+                given = self._layer_kwargs.get("style_function")
+                if given is None:
+                    self._layer_kwargs["style_function"] = lambda _feature: style
+                else:
+                    self._layer_kwargs["style_function"] = lambda feature: {
+                        **given(feature),
+                        **style,
+                    }
             folium.GeoJson(
                 str(self._filename), name=self._title, **self._layer_kwargs
             ).add_to(interactive_map)
@@ -183,14 +229,14 @@ class Vector(Layer):
 
             with open(self._filename, encoding="utf-8") as file:
                 data = json.load(file)
-            # allow using opacity directly to keep interface
-            # consistent for both backends
-            if "opacity" in self._layer_kwargs:
-                opacity = self._layer_kwargs.pop("opacity")
-                if "style" in self._layer_kwargs:
-                    self._layer_kwargs["style"]["opacity"] = opacity
-                else:
-                    self._layer_kwargs["style"] = {"opacity": opacity}
+            if style:
+                # `or {}` because passing style=None is how a caller asks for
+                # the backend default, and a missing key and an empty value
+                # have to mean the same thing here.
+                self._layer_kwargs["style"] = {
+                    **(self._layer_kwargs.get("style") or {}),
+                    **style,
+                }
             geo_json = ipyleaflet.GeoJSON(
                 data=data, name=self._title, **self._layer_kwargs
             )
