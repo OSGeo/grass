@@ -208,8 +208,19 @@ class Vector(Layer):
         if get_backend(interactive_map) == "folium":
             import folium  # pylint: disable=import-outside-toplevel
 
-            if style and "style_function" not in self._layer_kwargs:
-                self._layer_kwargs["style_function"] = lambda _feature: style
+            if style:
+                # Both backends apply the named options on top of whatever the
+                # backend's own form produces, so the same call means the same
+                # thing on either one. A style_function is a callable, so it is
+                # wrapped rather than merged.
+                given = self._layer_kwargs.get("style_function")
+                if given is None:
+                    self._layer_kwargs["style_function"] = lambda _feature: style
+                else:
+                    self._layer_kwargs["style_function"] = lambda feature: {
+                        **given(feature),
+                        **style,
+                    }
             folium.GeoJson(
                 str(self._filename), name=self._title, **self._layer_kwargs
             ).add_to(interactive_map)
@@ -219,12 +230,11 @@ class Vector(Layer):
             with open(self._filename, encoding="utf-8") as file:
                 data = json.load(file)
             if style:
-                # The named options win over the same key in a style given
-                # directly, which is what the opacity shim did before them.
-                # folium cannot do the same, since a style_function is a
-                # callable there is no sensible way to merge into.
+                # `or {}` because passing style=None is how a caller asks for
+                # the backend default, and a missing key and an empty value
+                # have to mean the same thing here.
                 self._layer_kwargs["style"] = {
-                    **self._layer_kwargs.get("style", {}),
+                    **(self._layer_kwargs.get("style") or {}),
                     **style,
                 }
             geo_json = ipyleaflet.GeoJSON(

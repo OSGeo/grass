@@ -87,3 +87,52 @@ def test_style_keeps_keys_the_options_do_not_set(simple_dataset):
         if isinstance(layer, ipyleaflet.GeoJSON)
     )
     assert layer.style == {"opacity": 0.4, "dashArray": "5"}
+
+
+def test_style_none_is_the_backend_default(simple_dataset):
+    """style=None means the default, not a style to merge into"""
+    ipyleaflet = pytest.importorskip("ipyleaflet")
+
+    m = interactivemap.InteractiveMap(use_region=True, map_backend="ipyleaflet")
+    m.add_vector(simple_dataset.vector_name, color="red", style=None)
+
+    layer = next(
+        layer
+        for layer in reversed(m.map.layers)
+        if isinstance(layer, ipyleaflet.GeoJSON)
+    )
+    assert layer.style == {"color": "red"}
+
+
+def test_named_option_applies_over_a_style_function(simple_dataset):
+    """On folium the named options are applied on top of a style_function"""
+    pytest.importorskip("folium")
+
+    m = interactivemap.InteractiveMap(use_region=True, map_backend="folium")
+    m.add_vector(
+        simple_dataset.vector_name,
+        color="red",
+        style_function=lambda _feature: {"dashArray": "6 4"},
+    )
+
+    layer = next(
+        child
+        for child in m.map._children.values()
+        if child.__class__.__name__ == "GeoJson"
+    )
+    assert layer.style_function(None) == {"dashArray": "6 4", "color": "red"}
+
+
+def test_style_function_none_is_the_backend_default(simple_dataset):
+    """style_function=None means the default, so the named options still apply"""
+    pytest.importorskip("folium")
+
+    m = interactivemap.InteractiveMap(use_region=True, map_backend="folium")
+    m.add_vector(simple_dataset.vector_name, color="red", style_function=None)
+
+    layer = next(
+        child
+        for child in m.map._children.values()
+        if child.__class__.__name__ == "GeoJson"
+    )
+    assert layer.style_function(None) == {"color": "red"}
