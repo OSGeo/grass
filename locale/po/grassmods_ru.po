@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
 "PO-Revision-Date: 2025-07-26 01:37+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grassmods/ru/>\n"
@@ -964,7 +964,10 @@ msgstr ""
 msgid "(0,0) is lower-left of the display frame"
 msgstr ""
 
-msgid "Length of barscale in map units"
+msgid "Length of barscale in units set by the units option"
+msgstr ""
+
+msgid "Map units if units is not given; 0 picks a length automatically"
 msgstr ""
 
 msgid "Barscale units to display"
@@ -18647,10 +18650,6 @@ msgstr ""
 msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
 msgstr ""
 
-#, fuzzy, c-format
-msgid "Invalid random seed <%s>"
-msgstr "Название растрового слоя, содержащего путь распространения"
-
 #, c-format
 msgid "Read random seed from %s option: %<PRId64>"
 msgstr ""
@@ -34212,6 +34211,10 @@ msgstr ""
 
 msgid "Image file"
 msgstr ""
+
+#, fuzzy, c-format
+#~ msgid "Invalid random seed <%s>"
+#~ msgstr "Название растрового слоя, содержащего путь распространения"
 
 #, fuzzy
 #~| msgid "Number of duplicate centroids: %d"

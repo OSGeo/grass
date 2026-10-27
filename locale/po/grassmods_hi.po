@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
 "PO-Revision-Date: 2026-03-22 08:14+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods/hi/>\n"
@@ -964,8 +964,13 @@ msgstr "आयत के ऊपरी-बाएँ कोने के स्क
 msgid "(0,0) is lower-left of the display frame"
 msgstr "(0,0) डिस्प्ले फ़्रेम के निचले-बाएँ है"
 
-msgid "Length of barscale in map units"
+#, fuzzy
+#| msgid "Length of barscale in map units"
+msgid "Length of barscale in units set by the units option"
 msgstr "मानचित्र इकाइयों में बारस्केल की लंबाई"
+
+msgid "Map units if units is not given; 0 picks a length automatically"
+msgstr ""
 
 msgid "Barscale units to display"
 msgstr "प्रदर्शित करने के लिए बारस्केल इकाइयाँ"
@@ -18635,11 +18640,6 @@ msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding 
 msgstr "ध्वज 's' को हटा दिया गया है और भविष्य में रिलीज़ में हटा दिया जाएगा। सीडिंग स्वचालित है या पैरामीटर बीज का उपयोग करें।"
 
 #, fuzzy, c-format
-#| msgid "Invalid zrange <%s>"
-msgid "Invalid random seed <%s>"
-msgstr "अमान्य ज़रेंज <%s>"
-
-#, fuzzy, c-format
 #| msgid "Read random seed from %s option: %ld"
 msgid "Read random seed from %s option: %<PRId64>"
 msgstr "%s विकल्प से यादृच्छिक बीज पढ़ें: %ld"
@@ -34141,6 +34141,11 @@ msgstr "पीएनजी ड्राइवर से बीएमपी छ�
 
 msgid "Image file"
 msgstr "छवि फ़ाइल"
+
+#, fuzzy, c-format
+#~| msgid "Invalid zrange <%s>"
+#~ msgid "Invalid random seed <%s>"
+#~ msgstr "अमान्य ज़रेंज <%s>"
 
 #, python-format
 #~ msgid "Unable to open %s "

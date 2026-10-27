@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
-"PO-Revision-Date: 2026-10-13 01:30+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
+"PO-Revision-Date: 2026-10-17 18:31+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -189,7 +189,7 @@ msgid "Use saved region:"
 msgstr "Utiliser la région enregistrée :"
 
 msgid "Animate region change"
-msgstr ""
+msgstr "Animer le changement de région"
 
 msgid "End region:"
 msgstr "Région d'arrivée :"
@@ -687,18 +687,16 @@ msgstr "Le rendu a échoué : %s"
 msgid "Rendering aborted"
 msgstr "Annulation du rendu"
 
-#, fuzzy, python-brace-format
-#| msgid "Downloading data..."
+#, python-brace-format
 msgid "Rendering & downloading data {layers}..."
-msgstr "Téléchargement des données ..."
+msgstr "Rendu et téléchargement des données {layers}..."
 
 msgid "Rendering..."
 msgstr "Rendu en cours ..."
 
-#, fuzzy, python-brace-format
-#| msgid "Downloading data..."
+#, python-brace-format
 msgid "Downloading data {layers}..."
-msgstr "Téléchargement des données ..."
+msgstr "Téléchargement des données {layers}..."
 
 msgid "Trying to recover from default region..."
 msgstr "Essai de récupération depuis la région par défaut ..."
@@ -847,6 +845,8 @@ msgid ""
 "Unable to read settings file <{path}>:\n"
 "{err}"
 msgstr ""
+"Impossible de lire le fichier de paramètres <{path}> :\n"
+"{err}"
 
 #, python-format
 msgid "Unable to read settings file <%s>\n"
@@ -877,7 +877,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Unable to set '{group}:{key}:{subkey}'"
-msgstr ""
+msgstr "Impossible de définir '{group}:{key}:{subkey}'"
 
 #, python-format
 msgid "Unable to parse settings '%s'"
@@ -918,13 +918,13 @@ msgid "feet"
 msgstr "pied"
 
 msgid "sq map units"
-msgstr ""
+msgstr "unités de la carte carrées"
 
 msgid "sq meters"
-msgstr ""
+msgstr "mètres carrés"
 
 msgid "sq kilometers"
-msgstr ""
+msgstr "kilomètres carrés"
 
 msgid "acres"
 msgstr "acres"
@@ -996,13 +996,13 @@ msgid "Link external vector data  [v.external]"
 msgstr "Lier des données vectorielles externes  [v.external]"
 
 msgid "Set raster output format  [r.external.out]"
-msgstr ""
+msgstr "Définir le format de sortie du raster  [r.external.out]"
 
 msgid "Set vector output format  [v.external.out]"
 msgstr ""
 
 msgid "Unpack GRASS raster map  [r.unpack]"
-msgstr ""
+msgstr "Désempaqueter la carte raster GRASS  [r.unpack]"
 
 msgid "Unpack GRASS vector map  [v.unpack]"
 msgstr ""
@@ -1075,6 +1075,9 @@ msgid ""
 "\n"
 "You are currently in mapset PERMANENT in default project {loc} which uses WGS 84 (EPSG:4326). Consider creating a new project with a CRS specific to your area. You can do it now or anytime later from the toolbar above."
 msgstr ""
+"GRASS vous aide à organiser vos données à l'aide de projets (secteur), qui contiennent des jeux de cartes (sous-projets). Toutes les données d'un projet utilisent le même système de coordonnées de référence (SCR).\n"
+"\n"
+"Vous êtes actuellement dans le jeu de cartes PERMANENT du projet par défaut {loc}, qui utilise WGS 84 (EPSG:4326). Nous vous conseillons de créer un nouveau projet avec un SCR adapté à votre région. Vous pouvez le faire dès maintenant ou plus tard, depuis la barre d'outils ci-dessus."
 
 msgid "Import vector data"
 msgstr "Importer des données vectorielles"
@@ -1152,7 +1155,7 @@ msgid "Search"
 msgstr "Rechercher"
 
 msgid "Type to search database by map type or name. Use Python regular expressions to refine your search."
-msgstr ""
+msgstr "Saisissez pour rechercher dans la base de données par type de carte ou par nom. Utilisez les expressions régulières Python pour affiner votre recherche."
 
 #, python-brace-format
 msgid "Failed to read mapsets from project <{l}>."
@@ -2269,15 +2272,13 @@ msgstr ""
 "6 points ou + nécessaires pour le 2ème ordre, et\n"
 "10 points ou + nécessaires pour le 3ème ordre."
 
-#, fuzzy, python-brace-format
-#| msgid "Raster map <%s> already exists. Do you want to overwrite it?"
+#, python-brace-format
 msgid "The raster map {map_name} exists. Do you want to overwrite?"
-msgstr "La carte raster <%s> existe déjà. Voulez-vous l'écraser ?"
+msgstr "La carte raster {map_name} existe déjà. Voulez-vous l'écraser ?"
 
-#, fuzzy, python-brace-format
-#| msgid "Vector map %s already exists. Do you want to overwrite it?"
+#, python-brace-format
 msgid "The vector map {map_name} exists. Do you want to overwrite?"
-msgstr "Le carte vectorielle <%s> existe déjà. Voulez-vous l'écraser ?"
+msgstr "La carte vecteur {map_name} existe. Voulez-vous l'écraser ?"
 
 msgid "Rectifying images, please wait..."
 msgstr "Rectification des images en cours, merci de patienter ..."
@@ -2509,7 +2510,7 @@ msgid "Save display geometry to named region"
 msgstr "Enregistrer la géométrie de l'écran dans un nom de région"
 
 msgid "Pan to GCP by number"
-msgstr ""
+msgstr "Déplacer la vue vers le point de contrôle au sol (GCP) par numéro"
 
 msgid "Valid Range:"
 msgstr "Plage de validité :"
@@ -2542,10 +2543,9 @@ msgstr ""
 msgid "Reload GCPs from POINTS file"
 msgstr ""
 
-#, fuzzy, python-brace-format
-#| msgid "Set map canvas for "
+#, python-brace-format
 msgid "Set map canvas for {zoom_back} / Zoom to map"
-msgstr "Définir la trame de carte pour "
+msgstr "Définir le canevas de carte pour {zoom_back} / Zoomer sur la carte"
 
 msgid "Update GCP coordinates"
 msgstr ""
@@ -2794,10 +2794,9 @@ msgstr "Le module {task_name} de votre modèle contient des drapeaux paramétré
 msgid "<not defined>"
 msgstr "<non défini>"
 
-#, fuzzy, python-brace-format
-#| msgid "Condition: "
+#, python-brace-format
 msgid "Condition: {label}"
-msgstr "Condition : "
+msgstr "Condition : {label}"
 
 msgid "Condition: not defined"
 msgstr "Condition : non définie"
@@ -3404,10 +3403,9 @@ msgstr "Taille du texte :"
 msgid "Example"
 msgstr "Exemple"
 
-#, fuzzy, python-brace-format
-#| msgid "Enter parameters for '"
+#, python-brace-format
 msgid "Enter parameters for '{tool}'"
-msgstr "Entrer les paramètres pour '"
+msgstr "Saisissez les paramètres pour '{tool}'"
 
 msgid "Close this window without executing the command (Ctrl+Q)"
 msgstr "Fermer la fenêtre sans exécuter la commande (Ctrl+Q)"
@@ -3772,15 +3770,13 @@ msgstr "Sortie de la commande enregistrée dans '%s'"
 msgid "Not selectable element"
 msgstr "Pas d'élément sélectionnable"
 
-#, fuzzy, python-brace-format
-#| msgid "Mapset: %s"
+#, python-brace-format
 msgid "Mapset: {mapset}"
-msgstr "Jeu de données : %s"
+msgstr "Jeu de cartes : {mapset}"
 
-#, fuzzy, python-brace-format
-#| msgid "Type of element:"
+#, python-brace-format
 msgid "Type: {element_type}"
-msgstr "Type d'élément :"
+msgstr "Type : {element_type}"
 
 #, python-format
 msgid "GSelect: invalid item: %s"
@@ -6147,9 +6143,8 @@ msgstr ""
 "\n"
 "Raison : %s"
 
-#, fuzzy
 msgid "Unable to start Timeline Tool."
-msgstr "Impossible de démarrer l'outil Temporel."
+msgstr "Impossible de lancer l'outil Chronologie."
 
 msgid "Unable to start Temporal Plot Tool."
 msgstr "Impossible de démarrer l'outil d'affichage temporel."
@@ -6369,10 +6364,9 @@ msgstr ""
 msgid "Set opacity of <{}>"
 msgstr "Régler l'opacité de <{}>"
 
-#, fuzzy, python-brace-format
-#| msgid "Layer group:"
+#, python-brace-format
 msgid "Layer group: {number}"
-msgstr "Groupe de couches :"
+msgstr "Groupe de couches : {number}"
 
 msgid "Click to edit layer settings"
 msgstr "Cliquer pour modifier les paramètres de couche"
@@ -7263,10 +7257,9 @@ msgstr "Mesure terminée"
 msgid "Click and drag with left mouse button to measure.%sDouble click with left button to clear."
 msgstr "Cliquer et glisser avec le bouton gauche de la souris pour mesurer. %s Double-cliquer avec le bouton gauche pour annuler."
 
-#, fuzzy, python-brace-format
-#| msgid "Measuring distance:"
+#, python-brace-format
 msgid "Measuring distance ({units}):"
-msgstr "Mesure de la distance :"
+msgstr "Mesure de la distance ({units}) :"
 
 msgid "Measuring distance:"
 msgstr "Mesure de la distance :"
