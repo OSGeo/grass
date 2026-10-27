@@ -7,8 +7,7 @@ it.
 
 GRASS has two testing frameworks. Use _pytest_ for everything new. Use the
 older _grass.gunittest_ framework when the test needs the North Carolina
-sample dataset, or when it needs data supplied as files. Neither is currently
-possible with _pytest_.
+sample dataset, which is not yet possible with _pytest_.
 
 The two live side by side in the source tree: _pytest_ tests go into a
 `tests` directory next to the code they test, _grass.gunittest_ tests into a
@@ -154,9 +153,64 @@ _r.in.ascii_, which accept an `io.StringIO` object as their input parameter.
 NumPy arrays can be passed to tools and requested back from them through
 _grass.tools_.
 
-When the test needs specific data which cannot be generated, the data has to
-be supplied as files, which is currently possible only with _grass.gunittest_
-in a `testsuite` directory.
+When the test needs specific data which cannot be generated, put the files in
+a `data` directory next to the test and read them relative to the test file,
+as `temporal/t.rast.import/tests` does:
+
+```python
+DATA = pathlib.Path(__file__).parent / "data"
+```
+
+Pass the path to the tool rather than the contents, so the bytes on disk are
+what it reads. `pyproject.toml` already keeps `*/tests/data/*` out of test
+collection.
+
+### Tests which use vector attributes
+
+Vector geometry and its attribute table are separate, and a map does not
+necessarily have one. _v.random_ and _v.edit_ give a map with no table, so
+create it with _v.db.addtable_ and read the values back with _v.db.select_.
+
+Adding the first table also defines the connection for the mapset, which by
+default is one SQLite file shared by every map in it. A module-scoped session
+therefore shares it across its tests, and a table written by one test is
+visible to the next. Give the session function scope when that matters, or
+use `TemporaryMapsetSession` as described above.
+
+Test against the default backend unless the test is about a backend.
+
+### Tests which use temporal data
+
+The temporal database is created on demand, so a fixture which creates a
+mapset does not have to set one up. It belongs to the mapset in the same way
+attribute tables do, so a module-scoped session shares one across its tests
+and a dataset registered by one test is visible to the next, with the same
+two ways out.
+
+_grass.temporal_ still reads the session from `os.environ` rather than taking
+an `env`, so a test which uses it has to make the session visible there.
+Mirror it with `monkeypatch` instead of letting `gs.setup.init()` modify the
+global environment, so the environment is restored for the tests which follow:
+
+```python
+with (
+    pytest.MonkeyPatch.context() as monkeypatch,
+    gs.setup.init(project, env=os.environ.copy()) as session,
+):
+    for key, value in session.env.items():
+        if os.environ.get(key) != value:
+            monkeypatch.setenv(key, value)
+```
+
+`pytest.MonkeyPatch.context()` is used here because the `monkeypatch` fixture
+is function-scoped and this fixture is not. In a function-scoped fixture, ask
+for `monkeypatch` directly. See
+`python/grass/temporal/tests/grass_temporal_gui_support_test.py` for the whole
+fixture, and mark such tests with `needs_solo_run` as described below.
+
+For tests about the connection itself, `temporal/t.connect/tests/conftest.py`
+shows the states worth covering: a mapset with a connection, one without, and
+two mapsets which each have their own.
 
 ### Tests which run in parallel
 
