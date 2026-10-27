@@ -5,6 +5,7 @@ import os
 import pytest
 
 import grass.script as gs
+from grass.exceptions import CalledModuleError
 from grass.tools import Tools
 
 
@@ -47,25 +48,6 @@ def group_session(tmp_path_factory):
 def mapset(group_session):
     """Mapset holding the test rasters, i.e. the suffix of their fully qualified names."""
     return gs.gisenv(env=group_session.env)["MAPSET"]
-
-
-@pytest.fixture(scope="module")
-def cross_mapset_group_session(tmp_path_factory):
-    """Session with a group in another mapset that is on the search path but not current."""
-    tmp_path = tmp_path_factory.mktemp("imagery_cross_mapset_test")
-    project = tmp_path / "test_project"
-    gs.create_project(project)
-    with (
-        gs.setup.init(project, env=os.environ.copy()) as session,
-        Tools(session=session) as tools,
-    ):
-        tools.g_mapset(flags="c", mapset="other_mapset")
-        tools.g_region(rows=2, cols=2)
-        tools.r_mapcalc(expression="other_band = 1")
-        tools.i_group(group="other_group", input="other_band")
-        tools.g_mapset(mapset="PERMANENT")
-        tools.g_mapsets(mapset="other_mapset", operation="add")
-        yield session
 
 
 def test_default_keys_and_values(group_session, mapset):
@@ -158,6 +140,12 @@ def test_unlabeled_map_is_fatal_without_fallback(group_session):
         gs.group_to_dict("test_group", fill_semantic_label=False, env=group_session.env)
 
 
+def test_missing_group_raises(group_session):
+    """A group that does not exist is an error from i.group."""
+    with pytest.raises(CalledModuleError):
+        gs.group_to_dict("no_such_group", env=group_session.env)
+
+
 @pytest.mark.parametrize("bad_option", ["dict_keys", "dict_values"])
 def test_invalid_option_raises_value_error(group_session, bad_option):
     """An unsupported dict_keys or dict_values value raises ValueError."""
@@ -167,14 +155,9 @@ def test_invalid_option_raises_value_error(group_session, bad_option):
         )
 
 
-def test_unqualified_group_in_other_mapset_is_resolved(cross_mapset_group_session):
-    """An unqualified group name is resolved via the mapset search path.
-
-    i.group itself only resolves an unqualified group name in the current
-    mapset, so group_to_dict() has to qualify it first to find a group that
-    lives in another, merely accessible, mapset.
-    """
+def test_unqualified_group_in_other_mapset_is_resolved(group_session):
+    """An unqualified group name is resolved via the mapset search path."""
     group_dict = gs.group_to_dict(
-        "other_group", dict_keys="indices", env=cross_mapset_group_session.env
+        "other_group", dict_keys="indices", env=group_session.env
     )
     assert group_dict == {"1": "other_band@other_mapset"}
