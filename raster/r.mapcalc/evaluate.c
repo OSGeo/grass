@@ -388,8 +388,6 @@ static void setup_rand(void)
                     "constant."));
 }
 
-/****************************************************************************/
-
 static void error_handler(void *p G_UNUSED)
 {
     expr_list *l;
