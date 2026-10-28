@@ -187,12 +187,10 @@ def test_exec_separates_two_well_separated_groups(libgis_without_session) -> Non
     signatures = sorted(
         (cluster.S.sig[c].mean[0], cluster.S.sig[c].mean[1]) for c in range(2)
     )
-    assert signatures == pytest.approx(
-        [
-            (band_mean(GROUP_A, 0), band_mean(GROUP_A, 1)),
-            (band_mean(GROUP_B, 0), band_mean(GROUP_B, 1)),
-        ]
-    )
+    assert signatures == [
+        pytest.approx((band_mean(GROUP_A, 0), band_mean(GROUP_A, 1))),
+        pytest.approx((band_mean(GROUP_B, 0), band_mean(GROUP_B, 1))),
+    ]
     for c in range(2):
         assert cluster.S.sig[c].npoints == len(GROUP_A)
         assert cluster.S.sig[c].status == 1
