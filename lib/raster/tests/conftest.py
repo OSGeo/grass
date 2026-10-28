@@ -14,7 +14,8 @@ def session_for_module(tmp_path_factory):
     gs.create_project(tmp_path)
     with gs.setup.init(tmp_path, env=os.environ.copy()) as session:
         tools = Tools(session=session)
-        tools.g_region(n=20, s=0, e=20, w=0, rows=20, cols=20)
+        # Save as default, so that the temporary mapsets get this region too.
+        tools.g_region(n=20, s=0, e=20, w=0, rows=20, cols=20, flags="s")
         tools.r_mapcalc(expression="data = row() + col()")
         tools.r_mapcalc(expression="raster_mask = if(row() < 10, 1, null())")
         yield session
