@@ -33,4 +33,8 @@ def G_debug(level, *msg):
     if debug_level >= level:
         dfile = os.environ.get("GRASS_DEBUG_FILE")
         fd = sys.stderr if dfile is None else open(dfile, mode="a")
-        print("D%d/%d: " % (level, debug_level), *msg, end="\n", file=fd)
+        try:
+            print("D%d/%d: " % (level, debug_level), *msg, end="\n", file=fd)
+        finally:
+            if dfile is not None:
+                fd.close()

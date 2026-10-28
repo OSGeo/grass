@@ -282,7 +282,13 @@ def main():
                 )
             )
 
+    p.stdout.close()
     p.wait()
+
+    if inf is not sys.stdin:
+        inf.close()
+    if outf is not sys.stdout:
+        outf.close()
 
     if p.returncode != 0:
         gcore.warning(_("Projection transform probably failed, please investigate"))

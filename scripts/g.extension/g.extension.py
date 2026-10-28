@@ -1665,6 +1665,8 @@ def install_extension_win(name):
             if fullname not in old_file_list:
                 file_list.append(fullname)
 
+    if outdev is not sys.stdout:
+        outdev.close()
     return 0, module_list, file_list
 
 
@@ -1780,8 +1782,9 @@ def fix_newlines(directory):
     for root, unused, files in os.walk(directory):
         for name in files:
             filename = os.path.join(root, name)
-            if is_binary_string(open(filename, "rb").read(1024)):
-                continue  # ignore binary files
+            with open(filename, "rb") as file:
+                if is_binary_string(file.read(1024)):
+                    continue  # ignore binary files
 
             # read content of text file
             data = Path(filename).read_bytes()
@@ -2183,6 +2186,8 @@ def install_extension_std_platforms(name, source, url, branch):
             if fullname not in old_file_list:
                 file_list.append(fullname)
 
+    if outdev is not sys.stdout:
+        outdev.close()
     return ret, module_list, file_list, os.path.join(srcdir)
 
 
