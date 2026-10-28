@@ -14,6 +14,7 @@
 
 import os
 import base64
+import functools
 import json
 from pathlib import Path
 from .reprojection_renderer import ReprojectionRenderer
@@ -29,6 +30,27 @@ from .utils import (
     query_vector,
     reproject_latlon,
 )
+
+# Without a referrer policy, the browser may omit the Referer header which
+# OpenStreetMap requires, e.g., in the output frame of Google Colab. This is
+# the default for tile layers in Leaflet 2.0 which neither backend bundles yet.
+BASEMAP_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+
+@functools.cache
+def _ipyleaflet_tile_layer():
+    """Return ipyleaflet TileLayer class with the Leaflet referrerPolicy option
+
+    ipyleaflet does not expose the option, but its JavaScript side passes
+    every trait tagged with o=True to Leaflet as an option.
+    """
+    import ipyleaflet  # pylint: disable=import-outside-toplevel
+    from traitlets import Unicode  # pylint: disable=import-outside-toplevel
+
+    class TileLayerWithReferrerPolicy(ipyleaflet.TileLayer):
+        referrer_policy = Unicode(BASEMAP_REFERRER_POLICY).tag(sync=True, o=True)
+
+    return TileLayerWithReferrerPolicy
 
 
 def get_backend(interactive_map):
@@ -341,16 +363,24 @@ class InteractiveMap:
         max_zoom = max(native_max_zoom, 20)
 
         if self._ipyleaflet:
-            basemap = self._ipyleaflet.basemap_to_tiles(tiles)
-            basemap.max_native_zoom = native_max_zoom
-            basemap.max_zoom = max_zoom
+            basemap = _ipyleaflet_tile_layer()(
+                url=tiles.build_url(scale_factor="{r}"),
+                attribution=tiles.get("html_attribution") or tiles.get("attribution"),
+                name=tiles.name,
+                min_zoom=tiles.get("min_zoom", 1),
+                max_native_zoom=native_max_zoom,
+                max_zoom=max_zoom,
+            )
             layout = self._ipywidgets.Layout(width=f"{width}px", height=f"{height}px")
             self.map = self._ipyleaflet.Map(
                 basemap=basemap, layout=layout, scroll_wheel_zoom=True
             )
         else:
             basemap = self._folium.TileLayer(
-                tiles=tiles, max_native_zoom=native_max_zoom, max_zoom=max_zoom
+                tiles=tiles,
+                max_native_zoom=native_max_zoom,
+                max_zoom=max_zoom,
+                referrer_policy=BASEMAP_REFERRER_POLICY,
             )
             self.map = self._folium.Map(
                 width=self.width, height=self.height, tiles=basemap
