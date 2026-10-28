@@ -149,6 +149,11 @@ int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
     }
 
     if (buf != dst) {
+        if (nbytes > (uLong)dst_sz) {
+            /* The compressed data does not fit into dst. */
+            G_free(buf);
+            return -2;
+        }
         /* Copy the data from buf to dst */
         for (err = 0; err < nbytes; err++)
             dst[err] = buf[err];
