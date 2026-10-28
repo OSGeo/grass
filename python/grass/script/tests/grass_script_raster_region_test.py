@@ -187,3 +187,30 @@ def test_region_manager_env_save(session_2x2):
         region = gs.region(env=session_2x2.env)
         assert region["rows"] == 6
         assert region["cols"] == 6
+
+
+def test_region_manager_removes_temporary_region(session_2x2):
+    """Test RegionManager does not leave the region it saved in the mapset."""
+    env = session_2x2.env
+    with gs.RegionManager(env=env) as manager:
+        assert any(
+            name.startswith(manager.region_name)
+            for name in gs.list_strings("region", env=env)
+        )
+    assert not any(
+        name.startswith(manager.region_name)
+        for name in gs.list_strings("region", env=env)
+    )
+
+
+def test_region_manager_nested_removes_temporary_regions(session_2x2):
+    """Test a nested RegionManager does not leave its saved region in the mapset."""
+    env = session_2x2.env
+    with (
+        gs.RegionManager(env=env) as outer,
+        gs.RegionManager(env=env) as inner,
+    ):
+        pass
+    saved = gs.list_strings("region", env=env)
+    assert not any(name.startswith(outer.region_name) for name in saved)
+    assert not any(name.startswith(inner.region_name) for name in saved)

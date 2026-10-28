@@ -583,14 +583,15 @@ class RegionManager:
             self.env["WIND_OVERRIDE"] = self._original_value
         else:
             self.env.pop("WIND_OVERRIDE", None)
-            run_command(
-                "g.remove",
-                flags="f",
-                quiet=True,
-                type="region",
-                name=self.region_name,
-                env=self.env,
-            )
+
+        run_command(
+            "g.remove",
+            flags="f",
+            quiet=True,
+            type="region",
+            name=self.region_name,
+            env=self.env,
+        )
         self._active = False
 
     def __enter__(self):
