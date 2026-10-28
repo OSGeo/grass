@@ -236,6 +236,7 @@ jobs:
           export SITE_NAME="GRASS ${MAJOR}.${MINOR} Documentation"
           export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS $VERSION Documentation"
           cd "${MKDOCS_DIR}" || exit
+          export PYTHONPATH="scripts${PYTHONPATH:+:$PYTHONPATH}"
           mkdocs build
 
       - name: Build Sphinx documentation
