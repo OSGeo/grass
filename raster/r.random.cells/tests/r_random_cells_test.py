@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 import os
 
+import numpy as np
 import pytest
 
 import grass.script as gs
@@ -62,3 +63,41 @@ def test_fill_count(session_with_region):
     assert univar["null_cells"] == N_CELLS - count
     assert univar["min"] == 1
     assert univar["max"] == count
+
+
+@pytest.fixture
+def session_small_region(tmp_path):
+    """A session with a region of 4 rows and 5 columns."""
+    project = tmp_path / "r_random_cells_small"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        Tools(session=session).g_region(n=4, s=0, e=5, w=0, res=1)
+        yield session
+
+
+# The maps are integer, so unfilled cells come back from the array conversion
+# as 0 rather than as a null. Categories start at 1, so the two do not overlap.
+def test_cells_of_a_seed(session_small_region):
+    """The cells a seed fills are the pinned ones."""
+    tools = Tools(session=session_small_region)
+    result = tools.r_random_cells(output=np.array, distance=2, seed=100)
+    expected = [
+        [4, 0, 2, 0, 0],
+        [0, 0, 0, 0, 5],
+        [0, 0, 0, 0, 0],
+        [3, 0, 0, 1, 0],
+    ]
+    np.testing.assert_array_equal(result, expected)
+
+
+def test_cells_of_a_seed_with_count(session_small_region):
+    """ncells= keeps the first cells of the same seed."""
+    tools = Tools(session=session_small_region)
+    result = tools.r_random_cells(output=np.array, distance=2, seed=100, ncells=3)
+    expected = [
+        [0, 0, 2, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [3, 0, 0, 1, 0],
+    ]
+    np.testing.assert_array_equal(result, expected)
