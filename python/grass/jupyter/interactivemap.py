@@ -207,6 +207,14 @@ class InteractiveMap:
         >>> m.add_vector("streams")
         >>> m.add_raster("elevation")
         >>> m.show()
+
+    :Different basemap:
+      .. code-block:: pycon
+
+        >>> m = InteractiveMap(tiles="Esri.WorldImagery")
+
+      The basemap is any tile provider from the xyzservices package, see
+      https://xyzservices.readthedocs.io/en/stable/gallery.html for the list.
     """
 
     def __init__(
