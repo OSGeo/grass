@@ -213,7 +213,7 @@ class InteractiveMap:
         self,
         width=400,
         height=400,
-        tiles="CartoDB positron",
+        tiles="Esri.WorldGrayCanvas",
         API_key=None,  # pylint: disable=invalid-name
         use_region=False,
         saved_region=None,
@@ -225,16 +225,13 @@ class InteractiveMap:
         ipyleaflet first, then folium if it fails. The backend can be
         specified explicitly with valid values "folium" and "ipyleaflet" .
 
-        In case of folium backend, tiles parameter is passed directly
-        to folium.Map() which supports several built-in tilesets
-        (including "OpenStreetMap", "Stamen Toner", "Stamen Terrain",
-        "Stamen Watercolor", "Mapbox Bright", "Mapbox Control Room", "CartoDB positron",
-        "CartoDB dark_matter") as well as custom tileset URL (i.e.
-        "http://{s}.yourtiles.com/{z}/{x}/{y}.png"). For more information, visit
-        folium documentation:
-        https://python-visualization.github.io/folium/modules.html
-        In case of ipyleaflet, only the tileset name and not the URL is
-        currently supported.
+        The basemap is given by the tiles parameter as a name of a tile
+        provider from the xyzservices package (e.g., "Esri.WorldGrayCanvas",
+        "Esri.WorldImagery", "OpenStreetMap.Mapnik") or as an
+        xyzservices.TileProvider object. The names work the same with both
+        backends. See https://xyzservices.readthedocs.io/en/stable/gallery.html
+        for the available providers. Providers which require an API key
+        (e.g., "CartoDB.Positron") get it from the API_key parameter.
 
         Raster and vector data are always reprojected to Pseudo-Mercator.
         With use_region=True or saved_region=myregion, the region extent
@@ -248,8 +245,8 @@ class InteractiveMap:
 
         :param int height: height in pixels of figure (default 400)
         :param int width: width in pixels of figure (default 400)
-        :param str tiles: map tileset to use
-        :param str API_key: API key for Mapbox or Cloudmade tiles
+        :param tiles: name of a tile provider or xyzservices.TileProvider object
+        :param str API_key: API key for tile providers which require one
         :param bool use_region: use computational region of current mapset
         :param str saved_region: name of saved computation region
         :param str map_backend: "ipyleaflet" or "folium" or None
@@ -296,7 +293,7 @@ class InteractiveMap:
             import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
 
             self._ipywidgets = widgets
-            import xyzservices  # pylint: disable=import-outside-toplevel
+        import xyzservices  # pylint: disable=import-outside-toplevel
 
         # Store height and width
         self.width = int(width)
@@ -310,21 +307,45 @@ class InteractiveMap:
         # Store Region
         self.region = None
 
+        if isinstance(tiles, str):
+            tiles = xyzservices.providers.query_name(tiles)
+        if API_key:
+            # The name of the key attribute differs between providers
+            # (apikey, accessToken, ...); xyzservices marks it with a placeholder.
+            key_attributes = [
+                attribute
+                for attribute, value in tiles.items()
+                if isinstance(value, str) and "<insert your" in value
+            ]
+            if not key_attributes:
+                raise ValueError(
+                    _(
+                        "Tile provider <{}> does not take an API key"
+                        " (if it should, update the xyzservices package)"
+                    ).format(tiles.name)
+                )
+            tiles = tiles(**dict.fromkeys(key_attributes, API_key))
+        # Providers stop at different zoom levels (Esri.WorldGrayCanvas at 16,
+        # Leaflet assumes 18 when not specified) while GRASS data often needs
+        # a closer look, so let the map zoom to level 20 and upscale the tiles
+        # beyond the provider's own maximum.
+        native_max_zoom = tiles.get("max_zoom", 18)
+        max_zoom = max(native_max_zoom, 20)
+
         if self._ipyleaflet:
-            basemap = xyzservices.providers.query_name(tiles)
-            if API_key and basemap.get("accessToken"):
-                basemap["accessToken"] = API_key
+            basemap = self._ipyleaflet.basemap_to_tiles(tiles)
+            basemap.max_native_zoom = native_max_zoom
+            basemap.max_zoom = max_zoom
             layout = self._ipywidgets.Layout(width=f"{width}px", height=f"{height}px")
             self.map = self._ipyleaflet.Map(
                 basemap=basemap, layout=layout, scroll_wheel_zoom=True
             )
-
         else:
+            basemap = self._folium.TileLayer(
+                tiles=tiles, max_native_zoom=native_max_zoom, max_zoom=max_zoom
+            )
             self.map = self._folium.Map(
-                width=self.width,
-                height=self.height,
-                tiles=tiles,
-                API_key=API_key,  # pylint: disable=invalid-name
+                width=self.width, height=self.height, tiles=basemap
             )
         # Set LayerControl default
         self.layer_control_object = None
