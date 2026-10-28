@@ -123,7 +123,6 @@ select = [
     "D209",   # pydocstyle (D) new-line-after-last-paragraph
     "D211",   # pydocstyle (D) blank-line-before-class
     "D212",   # pydocstyle (D) multi-line-summary-first-line
-    "DOC",    # pydoclint (DOC)
     "DTZ",    # flake8-datetimez (DTZ)
     "E",      # pycodestyle (E, W)
     "EM",     # flake8-errmsg (EM)
@@ -223,9 +222,6 @@ ignore = [
     "D415",    # missing-terminal-punctuation
     "D416",    # missing-section-name-colon
     "D419",    # empty-docstring
-    "DOC201",  # docstring-missing-returns
-    "DOC402",  # docstring-missing-yields
-    "DOC501",  # docstring-missing-exception
     "DTZ001",  # call-datetime-without-tzinfo
     "DTZ002",  # call-datetime-today
     "DTZ005",  # call-datetime-now-without-tzinfo
