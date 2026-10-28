@@ -166,6 +166,11 @@ class WrapperPrinter:
         pointer = """def POINTER(obj):
     p = ctypes.POINTER(obj)
 
+    # POINTER(None) is ctypes.c_void_p itself, which the whole process shares,
+    # and its own from_param already turns None into NULL
+    if p is ctypes.c_void_p:
+        return p
+
     # Convert None to a real NULL pointer to work around bugs
     # in how ctypes handles None on 64-bit platforms
     if not isinstance(p.from_param, classmethod):
