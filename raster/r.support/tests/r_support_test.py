@@ -55,3 +55,16 @@ def test_remove_semantic_label(session):
     tools.r_support(map="test", flags="b")
     info = tools.r_info(map="test", format="json").json
     assert not info.get("semantic_label")
+
+
+@pytest.mark.parametrize("function", ["float", "double", "int"])
+def test_stats_keep_range(session, function):
+    """Updating the statistics with -s stores the range of the values"""
+    tools = Tools(session=session)
+    tools.g_region(n=3, s=0, e=4, w=0, res=1)
+    tools.r_mapcalc(expression=f"values = {function}(row() * 10 + col() + 0.25)")
+    expected = tools.r_info(map="values", flags="r", format="json").json
+
+    tools.r_support(map="values", flags="s")
+    info = tools.r_info(map="values", flags="r", format="json").json
+    assert (info["min"], info["max"]) == (expected["min"], expected["max"])

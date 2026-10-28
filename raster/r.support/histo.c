@@ -60,7 +60,7 @@ int do_histogram(const char *name)
                     cell[col] = (CELL)dcell[col];
             }
             Rast_update_cell_stats(cell, ncols, &statf);
-            Rast_row_update_fp_range(dcell, ncols, &fprange, data_type);
+            Rast_row_update_fp_range(dcell, ncols, &fprange, DCELL_TYPE);
         }
         Rast_write_fp_range(name, &fprange);
         G_free(dcell);
