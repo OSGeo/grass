@@ -106,15 +106,20 @@ def main():
 
     gs.message(_("Current attribute table link(s):"))
     # silently test first to avoid confusing error messages
-    nuldev = open(os.devnull, "w")
-    try:
-        gs.run_command(
-            "v.db.connect", flags="p", map=map, quiet=True, stdout=nuldev, stderr=nuldev
-        )
-    except CalledModuleError:
-        gs.message(_("(No database links remaining)"))
-    else:
-        gs.run_command("v.db.connect", flags="p", map=map)
+    with open(os.devnull, "w") as nuldev:
+        try:
+            gs.run_command(
+                "v.db.connect",
+                flags="p",
+                map=map,
+                quiet=True,
+                stdout=nuldev,
+                stderr=nuldev,
+            )
+        except CalledModuleError:
+            gs.message(_("(No database links remaining)"))
+        else:
+            gs.run_command("v.db.connect", flags="p", map=map)
 
     # write cmd history:
     gs.vector_history(map)

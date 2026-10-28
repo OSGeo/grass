@@ -127,6 +127,7 @@ def main():
             if cols[catcol] == "-1" or cols[catcol] == "0":
                 continue
             records1.append(cols[:catcol] + [int(cols[catcol])] + cols[(catcol + 1) :])
+        p.stdout.close()
         p.wait()
         if p.returncode != 0:
             sys.exit(1)
@@ -162,6 +163,7 @@ def main():
             if fields[0] in {"cat", "-1", "0"}:
                 continue
             records2.append([int(fields[0])] + fields[1:])
+        p.stdout.close()
         p.wait()
         records2.sort()
 
@@ -186,6 +188,7 @@ def main():
             field = int(decode(line).rstrip())
             if field > 0:
                 records1.append(field)
+        p.stdout.close()
         p.wait()
         records1.sort()
         records1 = uniq(records1)
@@ -206,6 +209,7 @@ def main():
             if fields[0] in {"cat", "-1", "0"}:
                 continue
             records3.append([int(fields[0])] + fields[1:])
+        p.stdout.close()
         p.wait()
         records3.sort()
 
@@ -239,6 +243,8 @@ def main():
 
     for r in records3:
         sys.stdout.write(fs.join(map(str, r)) + "\n")
+
+    nuldev.close()
 
 
 if __name__ == "__main__":

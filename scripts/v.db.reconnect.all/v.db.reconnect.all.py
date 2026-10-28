@@ -322,4 +322,7 @@ def main():
 if __name__ == "__main__":
     options, flags = gs.parser()
     nuldev = open(os.devnull, "w")
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    finally:
+        nuldev.close()

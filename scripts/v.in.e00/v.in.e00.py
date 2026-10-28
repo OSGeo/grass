@@ -130,6 +130,7 @@ def main():
         gcore.call(["e00conv", filename, e00tmp + ".e00"])
         gcore.message(_("...converted to Arc Coverage in current directory"))
         gcore.call(["avcimport", e00tmp + ".e00", e00shortname], stderr=nuldev)
+    nuldev.close()
 
     # SQL name fix:
     name = name.replace("-", "_")

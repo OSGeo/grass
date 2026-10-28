@@ -71,7 +71,6 @@
 # %end
 
 import sys
-import os
 import atexit
 import grass.script as gs
 from grass.script.utils import decode
@@ -88,15 +87,13 @@ def cleanup():
 
 
 def main():
-    global tmp, sqltmp, tmpname, nuldev, vector, rastertmp
+    global tmp, sqltmp, tmpname, vector, rastertmp
     rastertmp = False
     # setup temporary files
     tmp = gs.tempfile()
     sqltmp = tmp + ".sql"
     # we need a random name
     tmpname = gs.basename(tmp)
-
-    nuldev = open(os.devnull, "w")
 
     rasters = options["raster"].split(",")
     colprefixes = options["column_prefix"].split(",")
@@ -296,6 +293,7 @@ def get_nr_of_categories(
     for line in p.stdout:
         line = decode(line)
         cats.append(line.rstrip("\r\n").split(";")[0])
+    p.stdout.close()
     p.wait()
 
     number = len(cats)
@@ -482,6 +480,7 @@ def perform_stats(
 
             f.write(" WHERE %s=%s;\n" % (fi["key"], vars[0]))
         f.write("{0}\n".format(gs.db_commit_transaction(fi["driver"])))
+        p.stdout.close()
         p.wait()
 
 
