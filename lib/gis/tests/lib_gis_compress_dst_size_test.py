@@ -24,9 +24,9 @@ def number(name):
     return name
 
 
-# These compress into a temporary buffer when dst is smaller than the bound.
-BUFFERED = [number(name) for name in ["ZLIB", "LZ4", "BZIP2", "ZSTD"]]
-ALL = [number(name) for name in ["NONE", "RLE"]] + BUFFERED
+# These compress DATA, so a dst of the compressed size is smaller than the bound.
+COMPRESSING = [number(name) for name in ["ZLIB", "LZ4", "BZIP2", "ZSTD"]]
+ALL = [number(name) for name in ["NONE", "RLE"]] + COMPRESSING
 
 # One row of 10000 FCELL values, compressible to more than SMALL bytes
 DATA = b"".join(
@@ -91,7 +91,7 @@ def test_dst_too_small(xy_session_for_module, name):
     assert result == -2
 
 
-@pytest.mark.parametrize("name", BUFFERED)
+@pytest.mark.parametrize("name", COMPRESSING)
 def test_dst_smaller_than_bound_fits(xy_session_for_module, name):
     """Data which fits into dst smaller than the bound is written there"""
     size, stream, unused = compress(xy_session_for_module, name, len(DATA))
