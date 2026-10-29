@@ -70,10 +70,10 @@ jobs:
       - name: Install Ruff
         run: pip install --break-system-packages "ruff==${RUFF_VERSION}"
       - name: Run Ruff (output annotations on fixable errors)
-        run: ruff check --output-format=github . --preview --unsafe-fixes
+        run: ruff check --output-format=github . --unsafe-fixes
         continue-on-error: true
       - name: Run Ruff (apply fixes for suggestions)
-        run: ruff check . --preview --fix --unsafe-fixes
+        run: ruff check . --fix --unsafe-fixes
       - name: Run `ruff format` showing diff without failing
         continue-on-error: true
         if: ${{ !cancelled() }}
