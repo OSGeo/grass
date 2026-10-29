@@ -109,7 +109,7 @@ m.d_legend(
     at=(1, 50, 1, 8),
     title="Elevation (m)",
     border_color="none",
-    flags="bt"
+    flags="bt",
 )
 
 # Add a scale bar to the map
@@ -161,12 +161,11 @@ elevation_3dmap.render(
     perspective=10,
     height=5000,
     resolution_fine=1,
-    zexag=5
+    zexag=5,
 )
-elevation_3dmap.overlay.d_legend(raster="landuse",
-                                 at=(0, 30, 87, 100),
-                                 flags="b",
-                                 border_color="none")
+elevation_3dmap.overlay.d_legend(
+    raster="landuse", at=(0, 30, 87, 100), flags="b", border_color="none"
+)
 elevation_3dmap.show()
 ```
 
@@ -184,10 +183,7 @@ maps and play a continuous loop.
 # Create a series of relief maps with different angles
 directions = [0, 90, 180, 270]
 for azimuth in directions:
-    tools.r_relief(
-        input="elevation",
-        output=f"relief_{azimuth}",
-        azimuth=azimuth)
+    tools.r_relief(input="elevation", output=f"relief_{azimuth}", azimuth=azimuth)
 m = gj.SeriesMap()
 m.add_rasters(f"relief_{azimuth}" for azimuth in directions)
 m.d_vect(map="roads")
@@ -212,19 +208,16 @@ tools.g_region(n=226040, s=223780, e=639170, w=636190)
 tools.r_slope_aspect(elevation="elevation", dx="dx", dy="dy")
 # Compute overland flow
 tools.r_sim_water(
-    flags="t",
-    elevation="elevation",
-    dx="dx",
-    dy="dy",
-    depth="depth",
-    duration=30)
+    flags="t", elevation="elevation", dx="dx", dy="dy", depth="depth", duration=30
+)
 
 # Create a time series
 tools.t_create(
     output="depth",
     temporaltype="relative",
     title="Overland flow depth",
-    description="Overland flow depth")
+    description="Overland flow depth",
+)
 # Register the time series
 maps = [
     item["fullname"]
@@ -243,11 +236,13 @@ flow_map.add_raster_series("depth", values="0.025-1.25")
 flow_map.d_vect(map="streets")
 
 # Add map features
-flow_map.d_legend(raster="depth.30",
-                  title="Depth [m]",
-                  flags="bt",
-                  border_color="none",
-                  at=(1, 50, 0, 5))
+flow_map.d_legend(
+    raster="depth.30",
+    title="Depth [m]",
+    flags="bt",
+    border_color="none",
+    at=(1, 50, 0, 5),
+)
 
 # Display the map
 flow_map.show()

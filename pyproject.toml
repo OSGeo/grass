@@ -534,6 +534,8 @@ known-first-party = ["grass"]
 # Declare a custom aliases, checked with rule ICN001
 "grass.script" = "gs"
 "grass.temporal" = "tgis"
+# Ruff 0.17 added a default alias of dt for datetime; keep the existing import style.
+datetime = "datetime"
 
 [tool.ruff.format]
 docstring-code-format = true

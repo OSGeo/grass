@@ -196,9 +196,7 @@ dataset [t.vect.list](t.vect.list.md#using-method-option)
 
 ```python
 result = json.loads(
-    gs.read_command(
-        "t.rast.list", input="tempmean_monthly", format="json"
-    )
+    gs.read_command("t.rast.list", input="tempmean_monthly", format="json")
 )
 for item in result["data"]:
     print(item["name"])
