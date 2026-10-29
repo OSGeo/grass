@@ -62,6 +62,9 @@ sys.stdout.buffer.write(b"%d\\n" % result + bytes(buffer))
 
 def compress(session, name, dst_sz):
     """Compress DATA into dst_sz bytes, return result, dst, and the tail"""
+    env = session.env.copy()
+    # Level 0 does not compress, so the data would never be copied to dst.
+    env["GRASS_ZLIB_LEVEL"] = "1"
     output = subprocess.run(
         [
             sys.executable,
@@ -73,7 +76,7 @@ def compress(session, name, dst_sz):
         ],
         input=DATA,
         capture_output=True,
-        env=session.env,
+        env=env,
         check=True,
     ).stdout
     result, buffer = output.split(b"\n", 1)
