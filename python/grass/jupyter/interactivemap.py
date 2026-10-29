@@ -17,6 +17,9 @@ import base64
 import functools
 import json
 from pathlib import Path
+
+import grass.script as gs
+
 from .reprojection_renderer import ReprojectionRenderer
 
 from .utils import (
@@ -262,6 +265,7 @@ class InteractiveMap:
         backends. See https://xyzservices.readthedocs.io/en/stable/gallery.html
         for the available providers. Providers which require an API key
         (e.g., "CartoDB.Positron") get it from the API_key parameter.
+        With tiles=None, the map has no basemap.
 
         Raster and vector data are always reprojected to Pseudo-Mercator.
         With use_region=True or saved_region=myregion, the region extent
@@ -275,7 +279,8 @@ class InteractiveMap:
 
         :param int height: height in pixels of figure (default 400)
         :param int width: width in pixels of figure (default 400)
-        :param tiles: name of a tile provider or xyzservices.TileProvider object
+        :param tiles: name of a tile provider, xyzservices.TileProvider object,
+                      or None for no basemap
         :param str API_key: API key for tile providers which require one
         :param bool use_region: use computational region of current mapset
         :param str saved_region: name of saved computation region
@@ -323,7 +328,6 @@ class InteractiveMap:
             import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
 
             self._ipywidgets = widgets
-        import xyzservices  # pylint: disable=import-outside-toplevel
 
         # Store height and width
         self.width = int(width)
@@ -337,51 +341,17 @@ class InteractiveMap:
         # Store Region
         self.region = None
 
-        if isinstance(tiles, str):
-            tiles = xyzservices.providers.query_name(tiles)
-        if API_key:
-            # The name of the key attribute differs between providers
-            # (apikey, accessToken, ...); xyzservices marks it with a placeholder.
-            key_attributes = [
-                attribute
-                for attribute, value in tiles.items()
-                if isinstance(value, str) and "<insert your" in value
-            ]
-            if not key_attributes:
-                raise ValueError(
-                    _(
-                        "Tile provider <{}> does not take an API key"
-                        " (if it should, update the xyzservices package)"
-                    ).format(tiles.name)
-                )
-            tiles = tiles(**dict.fromkeys(key_attributes, API_key))
-        # Providers stop at different zoom levels (Esri.WorldGrayCanvas at 16,
-        # Leaflet assumes 18 when not specified) while GRASS data often needs
-        # a closer look, so let the map zoom to level 20 and upscale the tiles
-        # beyond the provider's own maximum.
-        native_max_zoom = tiles.get("max_zoom", 18)
-        max_zoom = max(native_max_zoom, 20)
+        basemap = None if tiles is None else self._basemap_layer(tiles, API_key)
 
         if self._ipyleaflet:
-            basemap = _ipyleaflet_tile_layer()(
-                url=tiles.build_url(scale_factor="{r}"),
-                attribution=tiles.get("html_attribution") or tiles.get("attribution"),
-                name=tiles.name,
-                min_zoom=tiles.get("min_zoom", 1),
-                max_native_zoom=native_max_zoom,
-                max_zoom=max_zoom,
-            )
             layout = self._ipywidgets.Layout(width=f"{width}px", height=f"{height}px")
+            # Without a basemap, the layers are given explicitly, otherwise the
+            # map adds its default basemap.
+            map_layers = {"layers": ()} if basemap is None else {"basemap": basemap}
             self.map = self._ipyleaflet.Map(
-                basemap=basemap, layout=layout, scroll_wheel_zoom=True
+                layout=layout, scroll_wheel_zoom=True, **map_layers
             )
         else:
-            basemap = self._folium.TileLayer(
-                tiles=tiles,
-                max_native_zoom=native_max_zoom,
-                max_zoom=max_zoom,
-                referrer_policy=BASEMAP_REFERRER_POLICY,
-            )
             self.map = self._folium.Map(
                 width=self.width, height=self.height, tiles=basemap
             )
@@ -391,6 +361,66 @@ class InteractiveMap:
 
         self._renderer = ReprojectionRenderer(
             use_region=use_region, saved_region=saved_region
+        )
+
+    def _basemap_layer(self, tiles, api_key):
+        """Create the tile layer of the current backend from a tile provider
+
+        :param tiles: name of a tile provider or xyzservices.TileProvider object
+        :param api_key: API key for the provider or None
+        """
+        import xyzservices  # pylint: disable=import-outside-toplevel
+
+        if isinstance(tiles, str):
+            if tiles.lower() == "openstreetmap":
+                # Short name accepted by folium, so it may be in use.
+                tiles = "OpenStreetMap.Mapnik"
+            tiles = xyzservices.providers.query_name(tiles)
+        if tiles.requires_token():
+            if not api_key:
+                raise ValueError(
+                    _(
+                        "Tile provider <{}> requires an API key,"
+                        " provide it with the API_key parameter"
+                    ).format(tiles.name)
+                )
+            # The name of the key attribute differs between providers
+            # (apikey, accessToken, ...); xyzservices marks it with a placeholder.
+            key_attributes = [
+                attribute
+                for attribute, value in tiles.items()
+                if isinstance(value, str) and "<insert your" in value
+            ]
+            tiles = tiles(**dict.fromkeys(key_attributes, api_key))
+        elif api_key:
+            gs.warning(
+                _(
+                    "Tile provider <{}> does not take an API key, ignoring it"
+                    " (if it should take one, update the xyzservices package)"
+                ).format(tiles.name)
+            )
+        # Providers stop at different zoom levels (Esri.WorldGrayCanvas at 16,
+        # Leaflet assumes 18 when not specified) while GRASS data often needs
+        # a closer look, so let the map zoom to level 20 and upscale the tiles
+        # beyond the provider's own maximum.
+        native_max_zoom = tiles.get("max_zoom", 18)
+        max_zoom = max(native_max_zoom, 20)
+
+        if self._ipyleaflet:
+            return _ipyleaflet_tile_layer()(
+                url=tiles.build_url(scale_factor="{r}"),
+                attribution=tiles.get("html_attribution") or tiles.get("attribution"),
+                name=tiles.name,
+                min_zoom=tiles.get("min_zoom", 1),
+                max_native_zoom=native_max_zoom,
+                max_zoom=max_zoom,
+            )
+        return self._folium.TileLayer(
+            # folium 0.15 takes max_zoom from the provider, not the parameter.
+            tiles=tiles(max_zoom=max_zoom),
+            max_native_zoom=native_max_zoom,
+            max_zoom=max_zoom,
+            referrer_policy=BASEMAP_REFERRER_POLICY,
         )
 
     def add_vector(self, name, title=None, **kwargs):
