@@ -1,10 +1,14 @@
+# SPDX-FileCopyrightText: 2026 Anna Petrasova
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 """Tests of r.profile with profile lines from a vector map"""
 
 from io import StringIO
 
 import pytest
 
-from grass.exceptions import CalledModuleError
+from grass.tools import ToolError
 
 # Two lines in a region of 6 columns and 5 rows with resolution 1.
 # Line 1 runs north through cell centers of column 1, line 2 runs east
@@ -131,21 +135,21 @@ def test_line_without_category(session_tools):
 
 
 def test_lines_exclusive_with_coordinates(session_tools, lines):
-    with pytest.raises(CalledModuleError):
+    with pytest.raises(ToolError):
         session_tools.r_profile(
             input="rows_raster", lines=lines, coordinates=(0.5, 0.5, 0.5, 4.5)
         )
 
 
 def test_selection_requires_valid_layer(session_tools, lines):
-    with pytest.raises(CalledModuleError):
+    with pytest.raises(ToolError):
         session_tools.r_profile(
             input="rows_raster", lines=lines, layer=-1, cats=1, format="json"
         )
 
 
 def test_cats_requires_lines(session_tools):
-    with pytest.raises(CalledModuleError):
+    with pytest.raises(ToolError):
         session_tools.r_profile(
             input="rows_raster", coordinates=(0.5, 0.5, 0.5, 4.5), cats=1
         )
