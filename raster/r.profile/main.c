@@ -6,47 +6,48 @@
  */
 
 #include <stdlib.h>
-#include <grass/gjson.h>
 #include <grass/gis.h>
-#include <grass/raster.h>
+#include <grass/gjson.h>
 #include <grass/glocale.h>
+#include <grass/raster.h>
+#include <grass/vector.h>
 
 #include "local_proto.h"
 
 int clr;
 struct Colors colors;
 
+/* Running state of the profile being built: cumulative distance and the
+ * last sampled position, carried over from one segment to the next. */
 static double dist, e, n;
+static int have_last;
 char *fs;
+
+static void profile_segment(double e1, double e2, double n1, double n2,
+                            double res, const struct profile_output *out);
+static void profile_vector_lines(const char *name, const char *layer_name,
+                                 char *where, char *cats, double res,
+                                 const struct profile_output *out);
 
 int main(int argc, char *argv[])
 {
     char *name, *outfile;
-    const char *unit;
-    int unit_id;
-    double factor;
-    int fd, projection;
-    FILE *fp, *coor_fp;
     double res;
-    char *null_string;
-    char ebuf[256], nbuf[256], label[512], formatbuff[256];
+    char ebuf[256], nbuf[256], label[512];
     char b1[100], b2[100];
     int n;
     int havefirst = FALSE;
-    int coords = 0, i, k = -1;
+    int i, k = -1;
     double e1, e2, n1, n2;
-    RASTER_MAP_TYPE data_type;
-    struct Cell_head window;
+    FILE *coor_fp;
     struct {
         struct Option *opt1, *profile, *res, *output, *null_str, *coord_file,
-            *units, *format, *color_format, *fs;
+            *lines, *layer, *cats, *where, *units, *format, *color_format, *fs;
         struct Flag *g, *c;
     } parm;
     struct GModule *module;
-    enum OutputFormat format;
-    ColorFormat clr_frmt;
+    struct profile_output out = {0};
     G_JSON_Value *array_value;
-    G_JSON_Array *array;
 
     G_gisinit(argv[0]);
 
@@ -78,6 +79,23 @@ int main(int argc, char *argv[])
         _("Name of input file containing coordinate pairs");
     parm.coord_file->description = _("Use instead of the 'coordinates' option. "
                                      "\"-\" reads from stdin.");
+
+    parm.lines = G_define_standard_option(G_OPT_V_INPUT);
+    parm.lines->key = "lines";
+    parm.lines->required = NO;
+    parm.lines->label = _("Name of input vector map with profile lines");
+    parm.lines->description =
+        _("Each line is profiled separately. Use instead of the "
+          "'coordinates' option.");
+
+    parm.layer = G_define_standard_option(G_OPT_V_FIELD);
+    parm.layer->guisection = _("Selection");
+
+    parm.cats = G_define_standard_option(G_OPT_V_CATS);
+    parm.cats->guisection = _("Selection");
+
+    parm.where = G_define_standard_option(G_OPT_DB_WHERE);
+    parm.where->guisection = _("Selection");
 
     parm.res = G_define_option();
     parm.res->key = "resolution";
@@ -124,6 +142,11 @@ int main(int argc, char *argv[])
     parm.fs->answer = "comma";
     parm.fs->guisection = _("Formatting");
 
+    G_option_required(parm.profile, parm.coord_file, parm.lines, NULL);
+    G_option_exclusive(parm.profile, parm.coord_file, parm.lines, NULL);
+    G_option_requires(parm.cats, parm.lines, NULL);
+    G_option_requires(parm.where, parm.lines, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -131,56 +154,55 @@ int main(int argc, char *argv[])
     if (parm.c->answer)
         clr = 1; /* color output */
 
-    null_string = parm.null_str->answer;
-
-    if ((parm.profile->answer && parm.coord_file->answer) ||
-        (!parm.profile->answer && !parm.coord_file->answer))
-        G_fatal_error(_("Either use profile option or coordinate_file "
-                        " option, but not both"));
-
-    G_get_window(&window);
-    projection = G_projection();
+    out.null_string = parm.null_str->answer;
+    out.coords = parm.g->answer ? 1 : 0;
+    out.with_cat = parm.lines->answer ? 1 : 0;
 
     /* get conversion factor and units name */
     if (parm.units->answer) {
-        unit_id = G_units(parm.units->answer);
-        factor = 1. / G_meters_to_units_factor(unit_id);
-        unit = G_get_units_name(unit_id, 1, 0);
+        int unit_id = G_units(parm.units->answer);
+
+        out.factor = 1. / G_meters_to_units_factor(unit_id);
+        out.unit = G_get_units_name(unit_id, 1, 0);
     }
     /* keep meters in case of latlon */
-    else if (projection == PROJECTION_LL) {
-        factor = 1;
-        unit = "meters";
+    else if (G_projection() == PROJECTION_LL) {
+        out.factor = 1;
+        out.unit = "meters";
     }
     else {
         /* get conversion factor to current units */
-        unit = G_database_unit_name(1);
-        factor = G_database_units_to_meters_factor();
+        out.unit = G_database_unit_name(1);
+        out.factor = G_database_units_to_meters_factor();
     }
 
     if (parm.res->answer) {
         res = atof(parm.res->answer);
         /* Catch bad resolution ? */
         if (res <= 0)
-            G_fatal_error(_("Illegal resolution %g [%s]"), res / factor, unit);
+            G_fatal_error(_("Illegal resolution %g [%s]"), res / out.factor,
+                          out.unit);
     }
     else {
+        struct Cell_head window;
+
         /* Do average of EW and NS res */
+        G_get_window(&window);
         res = (window.ew_res + window.ns_res) / 2;
     }
 
     if (strcmp(parm.format->answer, "json") == 0) {
-        format = JSON;
+        out.format = JSON;
         array_value = G_json_value_init_array();
-        array = G_json_array(array_value);
+        out.array = G_json_array(array_value);
     }
     else if (strcmp(parm.format->answer, "csv") == 0) {
-        format = CSV;
+        out.format = CSV;
     }
     else {
-        format = PLAIN;
+        out.format = PLAIN;
 
-        G_message(_("Using resolution: %g [%s]"), res / factor, unit);
+        G_message(_("Using resolution: %g [%s]"), res / out.factor, out.unit);
     }
 
     fs = G_option_to_separator(parm.fs);
@@ -188,13 +210,13 @@ int main(int argc, char *argv[])
     if (clr) {
         if (parm.color_format->answer == NULL ||
             parm.color_format->answer[0] == '\0') {
-            if (format == PLAIN)
+            if (out.format == PLAIN)
                 parm.color_format->answer = "triplet";
             else
                 parm.color_format->answer = "hex";
         }
 
-        clr_frmt = G_option_to_color_format(parm.color_format);
+        out.clr_frmt = G_option_to_color_format(parm.color_format);
     }
 
     G_begin_distance_calculations();
@@ -202,11 +224,9 @@ int main(int argc, char *argv[])
     /* Open Input File for reading */
     /* Get Input Name */
     name = parm.opt1->answer;
-    if (parm.g->answer)
-        coords = 1;
 
     /* Open Raster File */
-    fd = Rast_open_old(name, "");
+    out.fd = Rast_open_old(name, "");
 
     /* initialize color structure */
     if (clr)
@@ -216,41 +236,47 @@ int main(int argc, char *argv[])
     outfile = parm.output->answer;
 
     if ((strcmp("-", outfile)) == 0) {
-        fp = stdout;
+        out.fp = stdout;
     }
-    else if (NULL == (fp = fopen(outfile, "w")))
+    else if (NULL == (out.fp = fopen(outfile, "w")))
         G_fatal_error(_("Unable to open file <%s>"), outfile);
 
     /* Get Raster Type */
-    data_type = Rast_get_map_type(fd);
+    out.data_type = Rast_get_map_type(out.fd);
     /* Done with file */
 
-    if (format == PLAIN) {
+    if (out.format == PLAIN) {
+        char *dist_column;
+
         /* Show message giving output format */
         G_message(_("Output columns:"));
-        if (coords == 1)
-            snprintf(formatbuff, sizeof(formatbuff),
-                     _("Easting, Northing, Along track dist. [%s], Elevation"),
-                     unit);
-        else
-            snprintf(formatbuff, sizeof(formatbuff),
-                     _("Along track dist. [%s], Elevation"), unit);
-        if (clr)
-            strcat(formatbuff, _(" RGB color"));
-        G_message("%s", formatbuff);
+        G_asprintf(&dist_column, _("Along track dist. [%s], Elevation"),
+                   out.unit);
+        G_message("%s%s%s%s", out.with_cat ? _("Category, ") : "",
+                  out.coords ? _("Easting, Northing, ") : "", dist_column,
+                  clr ? _(" RGB color") : "");
+        G_free(dist_column);
     }
-    else if (format == CSV) {
+    else if (out.format == CSV) {
         /* CSV Header */
-        if (coords)
-            fprintf(fp, "%s%s%s%s", "easting", fs, "northing", fs);
-        fprintf(fp, "%s%s%s", "distance", fs, "value");
+        if (out.with_cat)
+            fprintf(out.fp, "%s%s", "cat", fs);
+        if (out.coords)
+            fprintf(out.fp, "%s%s%s%s", "easting", fs, "northing", fs);
+        fprintf(out.fp, "%s%s%s", "distance", fs, "value");
         if (clr)
-            fprintf(fp, "%s%s", fs, "color");
-        fprintf(fp, "\n");
+            fprintf(out.fp, "%s%s", fs, "color");
+        fprintf(out.fp, "\n");
     }
 
+    start_profile();
+
     /* Get Profile Start Coords */
-    if (parm.coord_file->answer) {
+    if (parm.lines->answer) {
+        profile_vector_lines(parm.lines->answer, parm.layer->answer,
+                             parm.where->answer, parm.cats->answer, res, &out);
+    }
+    else if (parm.coord_file->answer) {
         if (strcmp("-", parm.coord_file->answer) == 0)
             coor_fp = stdin;
         else
@@ -266,8 +292,7 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Invalid coordinates %s %s"), ebuf, nbuf);
 
             if (havefirst)
-                do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
-                           null_string, unit, factor, format, array, clr_frmt);
+                profile_segment(e1, e2, n1, n2, res, &out);
             e1 = e2;
             n1 = n2;
             havefirst = TRUE;
@@ -291,8 +316,7 @@ int main(int argc, char *argv[])
             n2 = n1;
 
             /* Get profile info */
-            do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
-                       null_string, unit, factor, format, array, clr_frmt);
+            profile_segment(e1, e2, n1, n2, res, &out);
         }
         else {
             for (i = 0; i <= k - 2; i += 2) {
@@ -305,13 +329,12 @@ int main(int argc, char *argv[])
                                 G_projection());
 
                 /* Get profile info */
-                do_profile(e1, e2, n1, n2, coords, res, fd, data_type, fp,
-                           null_string, unit, factor, format, array, clr_frmt);
+                profile_segment(e1, e2, n1, n2, res, &out);
             }
         }
     }
 
-    if (format == JSON) {
+    if (out.format == JSON) {
         char *serialized_string =
             G_json_serialize_to_string_pretty(array_value);
         if (serialized_string == NULL) {
@@ -322,8 +345,8 @@ int main(int argc, char *argv[])
         G_json_value_free(array_value);
     }
 
-    Rast_close(fd);
-    fclose(fp);
+    Rast_close(out.fd);
+    fclose(out.fp);
 
     if (clr)
         Rast_free_colors(&colors);
@@ -331,34 +354,139 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 } /* Done with main */
 
-/* Calculate the Profile Now */
-/* Establish parameters */
-int do_profile(double e1, double e2, double n1, double n2, int coords,
-               double res, int fd, int data_type, FILE *fp, char *null_string,
-               const char *unit, double factor, enum OutputFormat format,
-               G_JSON_Array *array, ColorFormat clr_frmt)
+/* Profile one segment given by the user as a pair of coordinates. */
+static void profile_segment(double e1, double e2, double n1, double n2,
+                            double res, const struct profile_output *out)
 {
-    double rows, cols, LEN;
-    double Y, X, k;
-
-    cols = e1 - e2;
-    rows = n1 - n2;
-
-    LEN = G_distance(e1, n1, e2, n2);
-    if (format == PLAIN)
-        G_message(_("Approx. transect length: %f [%s]"), LEN / factor, unit);
+    if (out->format == PLAIN)
+        G_message(_("Approx. transect length: %f [%s]"),
+                  G_distance(e1, n1, e2, n2) / out->factor, out->unit);
 
     if (!G_point_in_region(e2, n2))
         G_warning(
             _("Endpoint coordinates are outside of current region settings"));
+
+    do_profile(e1, e2, n1, n2, res, out);
+}
+
+/* Profile every line of a vector map, each as a separate profile
+ * starting at distance zero. Only lines matching the category
+ * selection (if any) are used; points, centroids and boundaries are
+ * skipped. */
+static void profile_vector_lines(const char *name, const char *layer_name,
+                                 char *where, char *cats, double res,
+                                 const struct profile_output *out)
+{
+    struct Map_info Map;
+    struct line_pnts *Points = Vect_new_line_struct();
+    struct line_cats *Cats = Vect_new_cats_struct();
+    struct cat_list *cat_list = NULL;
+    struct profile_output line_out = *out;
+    struct Cell_head window;
+    struct bound_box region_box, line_box;
+    int select = where || cats;
+    int layer, type, nlines = 0, nselected = 0, ncategorized = 0;
+    char label[128];
+
+    Vect_set_open_level(1); /* topology not required */
+    if (Vect_open_old2(&Map, name, "", layer_name) < 0)
+        G_fatal_error(_("Unable to open vector map <%s>"), name);
+    Vect_set_constraint_type(&Map, GV_LINE);
+
+    layer = Vect_get_field_number(&Map, layer_name);
+    if (select) {
+        if (layer < 1)
+            G_fatal_error(_("Options <cats> and <where> require a valid "
+                            "layer, not <%s>"),
+                          layer_name);
+        /* NULL means nothing usable was selected, e.g. a malformed
+         * cats value, not the absence of a constraint. */
+        cat_list = Vect_cats_set_constraint(&Map, layer, where, cats);
+    }
+
+    G_get_window(&window);
+    Vect_region_box(&window, &region_box);
+
+    while ((type = Vect_read_next_line(&Map, Points, Cats)) > 0) {
+        nlines++;
+        if (select &&
+            (!cat_list || !Vect_cats_in_constraint(Cats, layer, cat_list)))
+            continue;
+
+        if (Vect_cat_get(Cats, layer, &line_out.cat))
+            ncategorized++;
+        /* Repeated vertices would be sampled twice */
+        Vect_line_prune(Points);
+
+        /* Categories need not be unique or present, so messages name
+         * the line by its position in the map as well. */
+        if (line_out.cat < 0)
+            snprintf(label, sizeof(label), _("Line %d (no category)"), nlines);
+        else
+            snprintf(label, sizeof(label), _("Line %d (category %d)"), nlines,
+                     line_out.cat);
+        if (out->format == PLAIN)
+            G_message(_("%s: approx. length %f [%s]"), label,
+                      Vect_line_geodesic_length(Points) / out->factor,
+                      out->unit);
+        Vect_line_box(Points, &line_box);
+        if (line_box.W < region_box.W || line_box.E > region_box.E ||
+            line_box.S < region_box.S || line_box.N > region_box.N)
+            G_warning(_("%s is not fully inside the current region"), label);
+
+        start_profile();
+        if (Points->n_points == 1)
+            do_profile(Points->x[0], Points->x[0], Points->y[0], Points->y[0],
+                       res, &line_out);
+        for (int i = 0; i < Points->n_points - 1; i++)
+            do_profile(Points->x[i], Points->x[i + 1], Points->y[i],
+                       Points->y[i + 1], res, &line_out);
+        nselected++;
+    }
+    if (type == -1)
+        G_fatal_error(_("Unable to read vector map <%s>"),
+                      Vect_get_full_name(&Map));
+    if (nlines == 0)
+        G_warning(_("No lines found in vector map <%s>"),
+                  Vect_get_full_name(&Map));
+    else if (nselected == 0)
+        G_warning(_("No lines selected from vector map <%s>"),
+                  Vect_get_full_name(&Map));
+    else if (ncategorized == 0)
+        G_warning(_("No selected line has a category in layer <%s>"),
+                  layer_name);
+
+    Vect_close(&Map);
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
+    if (cat_list)
+        Vect_destroy_cat_list(cat_list);
+}
+
+/* Start a new profile: the next segment begins at distance zero. */
+void start_profile(void)
+{
+    dist = 0;
+    have_last = FALSE;
+}
+
+/* Calculate the Profile Now */
+/* Establish parameters */
+int do_profile(double e1, double e2, double n1, double n2, double res,
+               const struct profile_output *out)
+{
+    double rows, cols;
+    double Y, X, k;
+
+    cols = e1 - e2;
+    rows = n1 - n2;
 
     /* Calculate Azimuth of Line */
     if (rows == 0 && cols == 0) {
         /* Special case for no movement */
         e = e1;
         n = n1;
-        read_rast(e, n, dist / factor, fd, coords, data_type, fp, null_string,
-                  format, array, clr_frmt);
+        read_rast(e, n, dist / out->factor, out);
     }
 
     k = res / hypot(rows, cols);
@@ -369,15 +497,16 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
     if (X < 0)
         X = X * -1.;
 
-    if (e != 0.0 && (e != e1 || n != n1)) {
+    /* The previous segment stepped past its end point; take back the
+     * distance between that last step and the start of this segment. */
+    if (have_last && (e != e1 || n != n1)) {
         dist -= G_distance(e, n, e1, n1);
     }
 
     if (rows >= 0 && cols < 0) {
         /* SE Quad or due east */
         for (e = e1, n = n1; e < e2 || n > n2; e += X, n -= Y) {
-            read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string, format, array, clr_frmt);
+            read_rast(e, n, dist / out->factor, out);
             /* d+=res; */
             dist += G_distance(e - X, n + Y, e, n);
         }
@@ -386,8 +515,7 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
     if (rows < 0 && cols <= 0) {
         /* NE Quad  or due north */
         for (e = e1, n = n1; e < e2 || n < n2; e += X, n += Y) {
-            read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string, format, array, clr_frmt);
+            read_rast(e, n, dist / out->factor, out);
             /* d+=res; */
             dist += G_distance(e - X, n - Y, e, n);
         }
@@ -396,8 +524,7 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
     if (rows > 0 && cols >= 0) {
         /* SW Quad or due south */
         for (e = e1, n = n1; e > e2 || n > n2; e -= X, n -= Y) {
-            read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string, format, array, clr_frmt);
+            read_rast(e, n, dist / out->factor, out);
             /* d+=res; */
             dist += G_distance(e + X, n + Y, e, n);
         }
@@ -406,12 +533,12 @@ int do_profile(double e1, double e2, double n1, double n2, int coords,
     if (rows <= 0 && cols > 0) {
         /* NW Quad  or due west */
         for (e = e1, n = n1; e > e2 || n < n2; e -= X, n += Y) {
-            read_rast(e, n, dist / factor, fd, coords, data_type, fp,
-                      null_string, format, array, clr_frmt);
+            read_rast(e, n, dist / out->factor, out);
             /* d+=res; */
             dist += G_distance(e + X, n - Y, e, n);
         }
     }
+    have_last = TRUE;
     /*
      * return dist;
      */
