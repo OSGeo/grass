@@ -483,3 +483,45 @@ def test_init_removes_mapset_variables(tmp_path, variable):
     env[variable] = "value"
     with gs.setup.init(project, env=env) as session:
         assert variable not in session.env
+
+
+@pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Uses a shebang to make a fake executable"
+)
+def test_get_install_path_executable_query_does_not_recurse(tmp_path, monkeypatch):
+    """Check that an executable which queries the path itself is asked only once
+
+    The grass command calls get_install_path() when its own path is wrong and
+    get_install_path() runs the grass command as a last resort, so the two
+    would start each other forever without a guard. The fake executable records
+    each call and refuses to go deeper than a few levels so that a broken guard
+    fails the test instead of flooding the system with processes.
+    """
+    monkeypatch.delenv("GRASSBIN", raising=False)
+    calls = tmp_path / "calls"
+    calls.mkdir()
+    executable = tmp_path / "fake_grass"
+    executable.write_text(
+        dedent(
+            f"""\
+            #!{sys.executable}
+            import os
+            import sys
+            import uuid
+            from pathlib import Path
+
+            depth = int(os.environ.get("FAKE_GRASS_DEPTH", "0"))
+            if depth > 2:
+                sys.exit("recursion not stopped")
+            os.environ["FAKE_GRASS_DEPTH"] = str(depth + 1)
+            Path({os.fspath(calls)!r}, str(uuid.uuid4())).touch()
+
+            import grass.script as gs
+
+            print(gs.setup.get_install_path(__file__))
+            """
+        )
+    )
+    executable.chmod(0o755)
+    assert gs.setup.get_install_path(executable) == gs.setup.get_install_path()
+    assert len(list(calls.iterdir())) == 1
