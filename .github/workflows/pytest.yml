@@ -34,12 +34,12 @@ jobs:
       PYTHONWARNINGS: always
 
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip # zizmor: ignore[cache-poisoning] This pytest workflow not used for release artifacts
@@ -54,13 +54,14 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - uses: rui314/setup-mold@9c9c13bf4c3f1adef0cc596abc155580bcb04444 # v1
+      - uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
 
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install --break-system-packages -r .github/workflows/python_requirements.txt
           pip install --break-system-packages -r .github/workflows/optional_requirements.txt
+          pip install --break-system-packages GDAL=="$(gdal-config --version)"
           pip install --break-system-packages pytest pytest-timeout \
               pytest-github-actions-annotate-failures pytest-xdist pytest-cov
 
@@ -138,6 +139,33 @@ jobs:
             @.github/workflows/pytest_args_cov.txt \
             @.github/workflows/pytest_args_gunittest.txt \
             --junitxml=pytest.gunittest.junit.xml
+      - name: Run pytest for the grass.lib loading tests standalone
+        run: |
+          # No library search path variable is exported here: the tests
+          # provide their own environment, so this pins what works without
+          # the setup done by the other steps.
+          PYTHONPATH="$(grass --config python_path)"
+          export PYTHONPATH
+          pytest \
+            python/grass/script/tests/grass_script_setup_lib_loading_test.py \
+            python/grass/app/tests/grass_app_runtime_lib_loading_test.py \
+            --junitxml=pytest.lib_loading.junit.xml
+      - name: Run pytest for the grass.lib loading tests with a relocated installation
+        run: |
+          # The installation is moved away from the prefix it was configured
+          # with, so that the libraries cannot find each other through their
+          # RUNPATH. Only the tests which provide the search path variable
+          # themselves can pass here. The Python package moves with the
+          # installation, so its path is taken beforehand.
+          python_path="$(grass --config python_path)"
+          mv "${HOME}/install" "${HOME}/install-relocated"
+          trap 'mv "${HOME}/install-relocated" "${HOME}/install"' EXIT
+          PYTHONPATH="${HOME}/install-relocated${python_path#"${HOME}/install"}"
+          export PYTHONPATH
+          pytest \
+            python/grass/app/tests/grass_app_runtime_lib_loading_test.py \
+            -k manual \
+            --junitxml=pytest.lib_loading_relocated.junit.xml
       - name: Fix non-standard installed script paths in coverage data
         run: |
           PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
@@ -154,7 +182,7 @@ jobs:
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           exclude: gui
           flags: pytest-python-${{ matrix.python-version }}
@@ -162,7 +190,7 @@ jobs:
           report_type: test_results
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           verbose: true
           flags: pytest-python-${{ matrix.python-version }}
@@ -181,6 +209,6 @@ jobs:
     needs:
       - pytest
     if: ${{ always() }}
-    uses: ./.github/workflows/verify-success.yml
+    uses: $/.github/workflows/verify-success.yml
     with:
       needs_context: ${{ toJson(needs) }}

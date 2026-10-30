@@ -6,17 +6,8 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Detect accumulation pattern in temporally accumulated space time raster datasets created by t.rast.accumulate.
-# COPYRIGHT:    (C) 2013-2017  by the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2013-2017 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -259,11 +250,11 @@ def main():
                 _("Space time raster dataset <%s> not found") % (minimum_strds.get_id())
             )
 
+        minimum_strds.select(dbif)
+
         if minimum_strds.get_temporal_type() != input_strds.get_temporal_type():
             dbif.close()
             gs.fatal(_("Temporal type of input strds and minimum strds must be equal"))
-
-        minimum_strds.select(dbif)
 
     # The maximum threshold space time raster dataset
     maximum_strds = None
@@ -277,11 +268,28 @@ def main():
                 _("Space time raster dataset <%s> not found") % (maximum_strds.get_id())
             )
 
+        maximum_strds.select(dbif)
+
         if maximum_strds.get_temporal_type() != input_strds.get_temporal_type():
             dbif.close()
             gs.fatal(_("Temporal type of input strds and maximum strds must be equal"))
 
-        maximum_strds.select(dbif)
+    # Compound increments such as "1 days, 2 days" are not valid
+    # granularity strings but work here, so only the sign is checked.
+    if (
+        tgis.check_granularity_string(cycle, input_strds.get_temporal_type())
+        and int(cycle.split()[0]) <= 0
+    ):
+        dbif.close()
+        gs.fatal(_("Invalid cycle"))
+
+    if (
+        offset
+        and tgis.check_granularity_string(offset, input_strds.get_temporal_type())
+        and int(offset.split()[0]) < 0
+    ):
+        dbif.close()
+        gs.fatal(_("Invalid offset"))
 
     input_strds_start, input_strds_end = input_strds.get_temporal_extent_as_tuple()
 
@@ -291,6 +299,8 @@ def main():
     else:
         start = int(start)
         stop = int(stop) if stop else input_strds_end
+        cycle = int(cycle)
+        offset = int(offset) if offset else 0
 
     if input_strds.is_time_absolute():
         end = tgis.increment_datetime_by_string(start, cycle)
@@ -301,6 +311,18 @@ def main():
     indi_count = 1
     occurrence_maps = {}
     indicator_maps = {}
+
+    def next_cycle(end):
+        start = end
+        if input_strds.is_time_absolute():
+            if offset:
+                start = tgis.increment_datetime_by_string(end, offset)
+            end = tgis.increment_datetime_by_string(start, cycle)
+        else:
+            if offset:
+                start = end + offset
+            end = start + cycle
+        return start, end
 
     while input_strds_end > start and stop > start:
         # Make sure that the cyclic computation will stop at the correct time
@@ -316,6 +338,7 @@ def main():
         input_topo.build(input_maps, input_maps)
 
         if len(input_maps) == 0:
+            start, end = next_cycle(end)
             continue
 
         gs.message(_("Processing cycle %s - %s") % (str(start), str(end)))
@@ -496,17 +519,7 @@ def main():
                 indicator_maps[map.get_id()] = indicator_map
                 indi_count += 1
 
-        # Increment the cycle
-        start = end
-        if input_strds.is_time_absolute():
-            start = end
-            if offset:
-                start = tgis.increment_datetime_by_string(end, offset)
-            end = tgis.increment_datetime_by_string(start, cycle)
-        else:
-            if offset:
-                start = end + offset
-            end = start + cycle
+        start, end = next_cycle(end)
 
     empty_maps = []
 

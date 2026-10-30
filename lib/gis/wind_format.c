@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Window formatting functions.
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -23,7 +21,7 @@ static void format_double(double, char *, int);
  * its ASCII representation (into <i>buf</i>).
  *
  * \param north northing
- * \param[out] buf buffer to hold formatted string
+ * \param[out] buf buffer (>=320 bytes) to hold formatted string
  * \param projection projection code, or -1 to force full precision FP
  */
 void G_format_northing(double north, char *buf, int projection)
@@ -43,7 +41,7 @@ void G_format_northing(double north, char *buf, int projection)
  * its ASCII representation (into <i>buf</i>).
  *
  * \param east easting
- * \param[out] buf buffer to hold formatted string
+ * \param[out] buf buffer (>=320 bytes) to hold formatted string
  * \param projection projection code, or -1 to force full precision FP
  */
 void G_format_easting(double east, char *buf, int projection)
@@ -63,7 +61,7 @@ void G_format_easting(double east, char *buf, int projection)
  * ASCII representation (into <i>buf</i>).
  *
  * \param res resolution value
- * \param[out] buf buffer to hold formatted string
+ * \param[out] buf buffer (>=320 bytes) to hold formatted string
  * \param projection projection code, or -1 to force full precision FP
  */
 void G_format_resolution(double res, char *buf, int projection)

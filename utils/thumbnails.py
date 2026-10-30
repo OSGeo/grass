@@ -7,10 +7,8 @@
 #      Earlier Bourne script version by Hamish Bowman,
 #      https://grasswiki.osgeo.org/wiki/Talk:Color_tables
 #
-#   (C) 2009-2017 by the GRASS Development Team
-#       This program is free software under the GNU General Public
-#       License (>=v2). Read the file COPYING that comes with GRASS
-#       for details.
+#   SPDX-FileCopyrightText: 2009-2017 GRASS Development Team
+#   SPDX-License-Identifier: GPL-2.0-or-later
 #
 
 import atexit
@@ -157,7 +155,7 @@ def main():
 
     os.environ["GRASS_OVERWRITE"] = "1"
 
-    color_dir = os.path.join(os.environ["GISBASE"], "etc", "colors")
+    color_dir = os.environ["GRASS_COLORSDIR"]
     output_dir = sys.argv[1]
 
     Path(output_dir).mkdir(parents=True, exist_ok=True)

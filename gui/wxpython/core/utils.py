@@ -3,10 +3,8 @@
 
 @brief Misc utilities for wxGUI
 
-(C) 2007-2024 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2024 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Jachym Cepicky
@@ -232,11 +230,7 @@ def GetValidLayerName(name):
         cIdx += 1
     retName = "".join(retNameList)
 
-    if (
-        retName
-        and not (retName[0] >= "A" and retName[0] <= "Z")
-        and not (retName[0] >= "a" and retName[0] <= "z")
-    ):
+    if retName and not ("A" <= retName[0] <= "Z") and not ("a" <= retName[0] <= "z"):
         retName = "x" + retName[1:]
 
     if mapset:
@@ -471,14 +465,13 @@ def __ll_parts(value, reverse=False, precision=3):
             m = m[:-1]
             s = "0.0"
         except ValueError:
-            try:
-                d = value
-                hs = d[-1]
-                d = d[:-1]
-                m = "0"
-                s = "0.0"
-            except ValueError:
-                raise ValueError
+            # Value without minutes and seconds. Errors are passed to the caller
+            # as they are.
+            d = value
+            hs = d[-1]
+            d = d[:-1]
+            m = "0"
+            s = "0.0"
 
     if hs not in {"N", "S", "E", "W"}:
         raise ValueError

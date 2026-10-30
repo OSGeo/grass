@@ -2,13 +2,13 @@
 GUI support functions
 
 
-(C) 2008-2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2008-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
+
+from datetime import datetime
 
 import grass.script as gs
 from grass.exceptions import ScriptError
@@ -34,7 +34,9 @@ def tlist_grouped(type, group_type: bool = False, dbif=None):
         ['precipitation', 'temperature']
 
     :param type: element type (strds, str3ds, stvds)
-    :param group_type: TBD
+    :param group_type: If True, group results by dataset type within each
+        mapset (dict of dicts); otherwise return a flat list of dataset names
+        per mapset (dict of lists).
 
     :return: directory of mapsets/elements
     """
@@ -188,9 +190,15 @@ def registered_maps_grouped(dbif=None):
 
         # A dataset is homogeneous in temporal type, so its start times are
         # mutually comparable; maps without a start time are listed last.
+        # A dataset holding both absolute and relative time maps is ordered by
+        # absolute time first, then relative time, then maps without a start time.
         def sort_key(map_info):
             start = map_info["start_time"]
-            return (start is None, 0 if start is None else start)
+            if start is None:
+                return (2, 0)
+            if isinstance(start, datetime):
+                return (0, start)
+            return (1, start)
 
         for datasets in result.values():
             for maps in datasets.values():

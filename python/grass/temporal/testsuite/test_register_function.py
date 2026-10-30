@@ -1,10 +1,8 @@
 """Unit test to register raster maps with absolute and relative
    time using tgis.register_maps_in_space_time_dataset()
 
-(C) 2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -318,7 +316,6 @@ class TestRasterRegisterFunctions(TestCase):
             start="2001-01-01 10:30:01",
             increment="1 year",
             interval=True,
-            dbif=self.dbif,
         )
 
         map_1 = tgis.RasterDataset("elevation@PERMANENT")
@@ -342,7 +339,6 @@ class TestRasterRegisterFunctions(TestCase):
             start="2001-01-01 10:30:01",
             increment="1 year",
             interval=True,
-            dbif=self.dbif,
         )
 
         map_1 = tgis.VectorDataset("lakes@PERMANENT")

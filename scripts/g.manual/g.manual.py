@@ -6,11 +6,8 @@
 # AUTHOR(S):    Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Display the HTML/MAN pages
-# COPYRIGHT:    (C) 2003-2015 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2003-2015 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -124,7 +121,7 @@ def start_man(entry):
 
     for ext in ["", ".gz", ".bz2"]:
         if Path(path + ext).exists():
-            os.execlp("man", "man", path + ext)
+            os.execlp("man", "man", path + ext)  # nosec B607: runs the user's system "man" (PATH lookup intended)
             grass.fatal(_("Error starting 'man' for '%s'") % path)
     grass.fatal(_("No manual page entry for '%s'") % entry)
 

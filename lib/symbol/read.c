@@ -6,11 +6,8 @@
  *
  * PURPOSE:      Read symbol from a file to internal structure
  *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with
- *               GRASS for details.
+ * SPDX-FileCopyrightText: 2001 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -273,7 +270,7 @@ SYMBOL *S_read(const char *sname)
         fp = G_fopen_old(buf, name, ms);
     }
     else { /* Search in GISBASE */
-        snprintf(buf, sizeof(buf), "%s/etc/symbol/%s", G_gisbase(), sname);
+        snprintf(buf, sizeof(buf), "%s/symbol/%s", G_etc_dir(), sname);
         fp = fopen(buf, "r");
     }
 

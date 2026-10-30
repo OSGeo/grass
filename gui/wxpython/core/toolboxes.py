@@ -3,10 +3,8 @@
 
 @brief Functions for modifying menu from default/user toolboxes specified in XML files
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Petrasova <kratochanna gmail.com>
@@ -31,7 +29,7 @@ ETREE_EXCEPTIONS = (ET.ParseError, expat.ExpatError)
 # if this will become part of grass Python library or module, this should be
 # parametrized, so we will get rid of the definition here
 # (GUI will use its definition and build also its own)
-WXGUIDIR = os.path.join(os.getenv("GISBASE"), "gui", "wxpython")
+WXGUIDIR = os.environ["GRASS_GUIWXDIR"]
 
 
 # this could be placed to functions

@@ -19,10 +19,8 @@ List of classes:
 .. todo::
     Implement giface class
 
-(C) 2007-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Jachym Cepicky <jachym.cepicky gmail.com>
 @author Martin Landa <landa.martin gmail.com>
@@ -179,7 +177,7 @@ class VirtualAttributeList(
         keyColumn = self.mapDBInfo.layers[layer]["key"]
         try:
             self.columns = self.mapDBInfo.tables[tableName]
-        except KeyError:
+        except KeyError as err:
             raise GException(
                 _(
                     "Attribute table <%s> not found. "
@@ -187,7 +185,7 @@ class VirtualAttributeList(
                     "'Manage layers' tab."
                 )
                 % tableName
-            )
+            ) from err
 
         if not columns:
             columns = self.mapDBInfo.GetColumns(tableName)
@@ -1186,9 +1184,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         self.layerPage[layer] = {"browsePage": panel.GetId()}
 
-        label = _("Table")
-        if not self.dbMgrData["editable"]:
-            label += _(" (read-only)")
+        label = _("Table") if self.dbMgrData["editable"] else _("Table (read-only)")
 
         if pos == -1:
             pos = self.GetPageCount()
@@ -1568,7 +1564,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                             raise ValueError(
                                 _("Value '%(value)s' needs to be entered as %(type)s.")
                                 % {"value": str(values[i]), "type": column["type"]}
-                            )
+                            ) from None
 
                         if column["ctype"] == str:
                             if "'" in values[i]:  # replace "'" -> "''"
@@ -1686,14 +1682,14 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                                 "value": values[i],
                                 "type": tlist.columns[columnName[i]]["type"],
                             }
-                        )
+                        ) from None
                     except KeyError:
                         raise KeyError(
                             _("Column '%(column)s' does not exist.")
                             % {
                                 "column": columnName[i],
                             }
-                        )
+                        ) from None
                     columnsString += "%s," % columnName[i]
 
                     if tlist.columns[columnName[i]]["ctype"] == str:
@@ -2331,9 +2327,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         self.layerPage[layer] = {}
         panel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.layerPage[layer]["tablePage"] = panel.GetId()
-        label = _("Table")
-        if not self.dbMgrData["editable"]:
-            label += _(" (read-only)")
+        label = _("Table") if self.dbMgrData["editable"] else _("Table (read-only)")
 
         if pos == -1:
             pos = self.GetPageCount()

@@ -22,7 +22,7 @@ class SemanticLabelReader:
 
     def __init__(self):
         self._json_files = glob.glob(
-            os.path.join(os.environ["GISBASE"], "etc", "i.band.library", "*.json")
+            os.path.join(os.environ["GRASS_ETCDIR"], "i.band.library", "*.json")
         )
         if not self._json_files:
             msg = "No semantic label definitions found"
@@ -39,7 +39,7 @@ class SemanticLabelReader:
                     config = json.load(fd, object_pairs_hook=OrderedDict)
             except json.decoder.JSONDecodeError as e:
                 msg = "Unable to parse '{}': {}".format(json_file, e)
-                raise SemanticLabelReaderError(msg)
+                raise SemanticLabelReaderError(msg) from e
 
             # check if configuration is valid
             self._check_config(config)
@@ -112,7 +112,7 @@ class SemanticLabelReader:
                         continue
                 except re.error as e:
                     msg = "Invalid pattern: {}".format(e)
-                    raise SemanticLabelReaderError(msg)
+                    raise SemanticLabelReaderError(msg) from e
 
                 found = True
                 if band and band not in item["bands"]:
@@ -123,7 +123,7 @@ class SemanticLabelReader:
                 if extended:
                     for subitem in item.keys():
                         if subitem == "bands":
-                            # bands item is processed bellow
+                            # bands item is processed below
                             continue
                         print("{}: {}".format(subitem, item[subitem]))
 

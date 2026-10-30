@@ -8,10 +8,8 @@ Classes:
  - frame::GMFrame
  - frame::SingleWindowAuiManager
 
-(C) 2006-2021 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2021 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Jachym Cepicky (Mendel University of Agriculture)
@@ -40,9 +38,6 @@ try:
     import wx.lib.agw.flatnotebook as FN
 except ImportError:
     import wx.lib.flatnotebook as FN
-
-if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
-    sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 
 from grass.script import core as grass
 from grass.script.utils import decode
@@ -1781,7 +1776,7 @@ class GMFrame(wx.Frame):
         # check also OSGeo4W on MS Windows
         if (
             sys.platform == "win32"
-            and not Path(os.getenv("GISBASE"), "WinGRASS-README.url").exists()
+            and not Path(os.getenv("GRASS_MISCDIR"), "WinGRASS-README.url").exists()
         ):
             osgeo4w = " (OSGeo4W)"
         else:
@@ -2009,13 +2004,26 @@ class GMFrame(wx.Frame):
 
         win.Show()
 
-    def OnAnimationTool(self, event=None, cmd=None):
-        """Launch Animation tool. See OnIClass documentation."""
-        from animation.frame import AnimationFrame
+    def OpenAnimationTool(self):
+        """Open the Animation Tool in a new page of the main notebook
 
-        frame = AnimationFrame(parent=self, giface=self._giface)
-        frame.CentreOnScreen()
-        frame.Show()
+        :return: the animation panel, so that a caller can load data into it
+        """
+        from animation.panels import AnimationToolPanel
+
+        animation_panel = AnimationToolPanel(
+            parent=self, giface=self._giface, statusbar=self.statusbar, dockable=True
+        )
+        animation_panel.SetUpPage(self, self.mainnotebook)
+
+        # add animation panel to notebook and make it current
+        self.mainnotebook.AddPage(animation_panel, _("Animation Tool"))
+
+        return animation_panel
+
+    def OnAnimationTool(self, event=None, cmd=None):
+        """Launch Animation tool"""
+        animation_panel = self.OpenAnimationTool()
 
         tree = self.GetLayerTree()
         if tree:
@@ -2034,7 +2042,7 @@ class GMFrame(wx.Frame):
                 layer.name = ",".join(rasters)
                 layer.cmd = ["d.rast", "map="]
                 layerList.AddLayer(layer)
-                frame.SetAnimations([layerList, None, None, None])
+                animation_panel.SetAnimations([layerList, None, None, None])
 
     def OnTimelineTool(self, event=None, cmd=None):
         """Launch Timeline Tool"""

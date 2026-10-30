@@ -9,7 +9,9 @@ Created on Thu Aug  9 14:04:12 2012
 """
 # utilities for generating REST indices
 # utilities for generating HTML indices
-# (C) 2003-2026 by Luca Delucchi and the GRASS Development Team
+# SPDX-FileCopyrightText: 2003-2026 Luca Delucchi
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 import os
 import string
@@ -360,8 +362,8 @@ def get_desc(cmd):
 
 arch_dist_dir = os.environ["ARCH_DISTDIR"]
 rest_dir = os.path.join(arch_dist_dir, "docs", "rest")
-gisbase = os.environ["GISBASE"]
-ver = read_file(os.path.join(gisbase, "etc", "VERSIONNUMBER"))
+grass_etc_dir = os.environ["GRASS_ETCDIR"]
+ver = read_file(os.path.join(grass_etc_dir, "VERSIONNUMBER"))
 try:
     grass_version = ver.split()[0].strip()
 except IndexError:

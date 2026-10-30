@@ -7,10 +7,8 @@ control for display management and access to command console.
 Classes:
  - frame::GMFrame
 
-(C) 2006-2015 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Jachym Cepicky (Mendel University of Agriculture)
@@ -34,9 +32,6 @@ try:
     import wx.lib.agw.flatnotebook as FN
 except ImportError:
     import wx.lib.flatnotebook as FN
-
-if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
-    sys.path.append(os.path.join(globalvar.ETCDIR, "python"))
 
 from grass.script import core as grass
 from grass.script.utils import decode
@@ -1549,7 +1544,7 @@ class GMFrame(wx.Frame):
         # check also OSGeo4W on MS Windows
         if (
             sys.platform == "win32"
-            and not Path(os.getenv("GISBASE"), "WinGRASS-README.url").exists()
+            and not Path(os.getenv("GRASS_MISCDIR"), "WinGRASS-README.url").exists()
         ):
             osgeo4w = " (OSGeo4W)"
         else:
@@ -1777,13 +1772,22 @@ class GMFrame(wx.Frame):
 
         win.Show()
 
-    def OnAnimationTool(self, event=None, cmd=None):
-        """Launch Animation tool. See OnIClass documentation."""
+    def OpenAnimationTool(self):
+        """Open the Animation Tool in a new window
+
+        :return: the animation window, so that a caller can load data into it
+        """
         from animation.frame import AnimationFrame
 
         frame = AnimationFrame(parent=self, giface=self._giface)
         frame.CentreOnScreen()
         frame.Show()
+
+        return frame
+
+    def OnAnimationTool(self, event=None, cmd=None):
+        """Launch Animation tool"""
+        frame = self.OpenAnimationTool()
 
         tree = self.GetLayerTree()
         if tree:

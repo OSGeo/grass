@@ -16,10 +16,8 @@ Classes:
  - manager::EditGCP
  - manager::GrSettingsDialog
 
-(C) 2006-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Original author Michael Barton
 @author Original version improved by Martin Landa <landa.martin gmail.com>
@@ -1726,14 +1724,17 @@ class GCPPanel(MapPanel, ColumnSorterMixin):
             map_name = "<{}>".format(found["name"])
 
         if found["name"] and not overwrite:
+            if maptype == "raster":
+                message = _(
+                    "The raster map {map_name} exists. Do you want to overwrite?"
+                ).format(map_name=map_name)
+            else:
+                message = _(
+                    "The vector map {map_name} exists. Do you want to overwrite?"
+                ).format(map_name=map_name)
             return wx.MessageDialog(
                 self.GetParent(),
-                message=_(
-                    "The {map_type} map {map_name} exists. Do you want to overwrite?"
-                ).format(
-                    map_type=maptype,
-                    map_name=map_name,
-                ),
+                message=message,
                 caption=_("Overwrite?"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION,
             )

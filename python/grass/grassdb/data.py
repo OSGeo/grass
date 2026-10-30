@@ -1,15 +1,14 @@
 """
 Manipulate data in mapsets in GRASS Spatial Database
 
-(C) 2020 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2020 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
 
 import grass.script as gs
+from grass.tools import Tools, ToolError
 
 
 def map_exists(name, element, mapset=None, env=None) -> bool:
@@ -43,3 +42,29 @@ def map_exists(name, element, mapset=None, env=None) -> bool:
     # file is the key questioned in grass.script.core find_file()
     # return code should be equivalent to checking the output
     return bool(info["file"])
+
+
+def stds_exists(name, element, mapset, env=None) -> bool:
+    """Check if a space time dataset (STDS) is present in the temporal database.
+
+    :param name: Name of the space time dataset
+    :param element: STDS type ('strds', 'stvds', 'str3ds')
+    :param mapset: Mapset name where the dataset is located
+    :param env: Environment created by function grass.script.create_environment
+    """
+    # The where clause goes to SQL as it is, and a quote inside a SQL string
+    # literal has to be written twice to not end the literal early.
+    escaped_name = name.replace("'", "''")
+    tools = Tools(env=env)
+    try:
+        output = tools.t_list(
+            type=element,
+            columns="name",
+            where=f"name='{escaped_name}'",
+            mapset=mapset,
+            format="json",
+            quiet=True,
+        )
+        return bool(output.json)
+    except ToolError:
+        return False

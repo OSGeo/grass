@@ -6,11 +6,8 @@
  *
  * PURPOSE:      Simple driver for reading and writing dbf files
  *
- * COPYRIGHT:    (C) 2000,2005 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2000,2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * DBF API:      http://shapelib.maptools.org/dbf_api.html
  *****************************************************************************/
@@ -65,8 +62,8 @@ int execute(char *sql, cursor *c)
 
     if (yyparse() != 0) {
         G_free(tmpsql);
-        db_d_append_error("%s (%s) %s\n%s\n", _("SQL parser error"), st->errmsg,
-                          _("in statement:"), sql);
+        db_d_append_error(_("SQL parser error: %s\n"), st->errmsg);
+        db_d_append_error(_("Statement: %s\n"), sql);
         sqpFreeStmt(st);
         return DB_FAILED;
     }

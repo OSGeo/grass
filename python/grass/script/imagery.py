@@ -9,13 +9,14 @@ Imagery related functions to be used in Python scripts.
     gs.imagery.group_to_dict(imagery_group)
     ...
 
-(C) 2024 by Stefan Blumentrath and the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2024 Stefan Blumentrath
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Stefan Blumentrath
 """
+
+import json
 
 from .core import read_command, warning, fatal
 from .raster import raster_info
@@ -79,17 +80,15 @@ def group_to_dict(
     :rtype: dict
     """
     group_dict = {}
-    maps_in_group = (
+    maps_in_group = json.loads(
         read_command(
             "i.group",
             group=imagery_group_name,
             subgroup=subgroup,
-            flags="g",
+            format="json",
             quiet=True,
             env=env,
         )
-        .strip()
-        .split()
     )
 
     if dict_keys not in {"indices", "map_names", "semantic_labels"}:
@@ -104,7 +103,8 @@ def group_to_dict(
         warning(
             _("Empty result returned for subgroup <{sg}> in group <{g}>").format(
                 sg=subgroup, g=imagery_group_name
-            )
+            ),
+            env=env,
         )
 
     for idx, raster_map in enumerate(maps_in_group):
@@ -130,7 +130,8 @@ def group_to_dict(
                     fatal(
                         _(
                             "Semantic label missing for raster map {m} in group <{g}>."
-                        ).format(m=raster_map, g=imagery_group_name)
+                        ).format(m=raster_map, g=imagery_group_name),
+                        env=env,
                     )
 
         if dict_values == "indices":
@@ -146,7 +147,8 @@ def group_to_dict(
                 _(
                     "Key {k} from raster map {m} already present in group dictionary."
                     "Overwriting existing entry..."
-                ).format(k=key, m=raster_map)
+                ).format(k=key, m=raster_map),
+                env=env,
             )
         group_dict[key] = val
     return group_dict

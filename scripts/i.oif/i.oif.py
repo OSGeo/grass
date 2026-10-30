@@ -10,11 +10,8 @@
 #               Customised by Luca Delucchi Vienna Code Sprint 2014
 # PURPOSE:      calculates the Optimum Index factor of all band combinations
 #               for LANDSAT TM 1,2,3,4,5,7
-# COPYRIGHT:    (C) 1999,2008 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 1999,2008 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # Ref.: Jensen: Introductory digital image processing 1996, p.98
 #############################################################################
@@ -50,15 +47,15 @@ def oifcalc(sdev, corr, k1, k2, k3):
     grass.debug(_("Calculating OIF for combination: %s, %s, %s") % (k1, k2, k3), 1)
     # calculate SUM of Stddeviations:
     ssdev = [sdev[k1], sdev[k2], sdev[k3]]
-    numer = sum(ssdev)
+    numerator = sum(ssdev)
 
     # calculate SUM of absolute(Correlation values):
     scorr = [corr[k1, k2], corr[k1, k3], corr[k2, k3]]
-    denom = sum(map(abs, scorr))
+    denominator = sum(map(abs, scorr))
 
     # Calculate OIF index:
     #     Divide (SUM of Stddeviations) and (SUM of Correlation)
-    return numer / denom
+    return numerator / denominator
 
 
 def perms(bands):

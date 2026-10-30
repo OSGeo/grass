@@ -32,11 +32,11 @@ jobs:
       # renovate: datasource=pypi depName=flake8
       FLAKE8_VERSION: "7.3.0"
       # renovate: datasource=pypi depName=pylint
-      PYLINT_VERSION: "4.0.6"
+      PYLINT_VERSION: "4.1.2"
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.9.4"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.15.17"
+      RUFF_VERSION: "0.17.3"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -55,12 +55,12 @@ jobs:
         env:
           MATRIX_OS: ${{ matrix.os }}
 
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip # zizmor: ignore[cache-poisoning] Not creating release artifacts, less of a concern here
@@ -70,10 +70,10 @@ jobs:
       - name: Install Ruff
         run: pip install --break-system-packages "ruff==${RUFF_VERSION}"
       - name: Run Ruff (output annotations on fixable errors)
-        run: ruff check --output-format=github . --preview --unsafe-fixes
+        run: ruff check --output-format=github . --unsafe-fixes
         continue-on-error: true
       - name: Run Ruff (apply fixes for suggestions)
-        run: ruff check . --preview --fix --unsafe-fixes
+        run: ruff check . --fix --unsafe-fixes
       - name: Run `ruff format` showing diff without failing
         continue-on-error: true
         if: ${{ !cancelled() }}
@@ -87,7 +87,7 @@ jobs:
         id: diff-ruff
         # To run after ruff step exits with failure when rules don't have fixes available
         if: ${{ !cancelled() }}
-        uses: ./.github/actions/create-upload-suggestions
+        uses: $/.github/actions/create-upload-suggestions
         with:
           tool-name: ruff
           # To keep repo's file structure in formatted changes artifact
@@ -144,7 +144,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
 
-      - uses: rui314/setup-mold@9c9c13bf4c3f1adef0cc596abc155580bcb04444 # v1
+      - uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
       - name: Build
         run: |
           ".github/workflows/build_${MATRIX_OS}.sh" "${HOME}/install"
@@ -208,6 +208,6 @@ jobs:
     needs:
       - python-checks
     if: ${{ always() }}
-    uses: ./.github/workflows/verify-success.yml
+    uses: $/.github/workflows/verify-success.yml
     with:
       needs_context: ${{ toJson(needs) }}
