@@ -291,7 +291,7 @@ using python:
 ```python
 import grass.script as gs
 
-# Run the r.proj command to print the input map's bounds in the current 
+# Run the r.proj command to print the input map's bounds in the current
 # projection using JSON output format
 bounds = gs.parse_command(
     "r.proj",
