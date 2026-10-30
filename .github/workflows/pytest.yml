@@ -39,7 +39,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip # zizmor: ignore[cache-poisoning] This pytest workflow not used for release artifacts
@@ -139,6 +139,33 @@ jobs:
             @.github/workflows/pytest_args_cov.txt \
             @.github/workflows/pytest_args_gunittest.txt \
             --junitxml=pytest.gunittest.junit.xml
+      - name: Run pytest for the grass.lib loading tests standalone
+        run: |
+          # No library search path variable is exported here: the tests
+          # provide their own environment, so this pins what works without
+          # the setup done by the other steps.
+          PYTHONPATH="$(grass --config python_path)"
+          export PYTHONPATH
+          pytest \
+            python/grass/script/tests/grass_script_setup_lib_loading_test.py \
+            python/grass/app/tests/grass_app_runtime_lib_loading_test.py \
+            --junitxml=pytest.lib_loading.junit.xml
+      - name: Run pytest for the grass.lib loading tests with a relocated installation
+        run: |
+          # The installation is moved away from the prefix it was configured
+          # with, so that the libraries cannot find each other through their
+          # RUNPATH. Only the tests which provide the search path variable
+          # themselves can pass here. The Python package moves with the
+          # installation, so its path is taken beforehand.
+          python_path="$(grass --config python_path)"
+          mv "${HOME}/install" "${HOME}/install-relocated"
+          trap 'mv "${HOME}/install-relocated" "${HOME}/install"' EXIT
+          PYTHONPATH="${HOME}/install-relocated${python_path#"${HOME}/install"}"
+          export PYTHONPATH
+          pytest \
+            python/grass/app/tests/grass_app_runtime_lib_loading_test.py \
+            -k manual \
+            --junitxml=pytest.lib_loading_relocated.junit.xml
       - name: Fix non-standard installed script paths in coverage data
         run: |
           PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
@@ -155,7 +182,7 @@ jobs:
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           exclude: gui
           flags: pytest-python-${{ matrix.python-version }}
@@ -163,7 +190,7 @@ jobs:
           report_type: test_results
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           verbose: true
           flags: pytest-python-${{ matrix.python-version }}

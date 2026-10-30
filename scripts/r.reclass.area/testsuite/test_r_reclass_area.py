@@ -138,6 +138,93 @@ class TestReclassArea(TestCase):
             msg=f"Range of data: min = {ref_min}  max = {ref_max}",
         )
 
+    def test_reclass_lower_invert(self) -> None:
+        """Testing r.reclass.area with method reclass, lower and invert flag."""
+        output_map = f"{self.output}_lower_invert"
+        ref_max = 1000
+        ref_min = 900
+        self.assertModule(
+            "r.reclass.area",
+            flags="i",
+            input=self.input,
+            output=output_map,
+            lower=self.lower,
+            method="reclass",
+        )
+        self.map_list.append(output_map)
+        self.assertRasterMinMax(
+            map=output_map,
+            refmin=ref_min,
+            refmax=ref_max,
+            msg=f"Range of data: min = {ref_min}  max = {ref_max}",
+        )
+
+    def test_reclass_upper_invert(self) -> None:
+        """Testing r.reclass.area with method reclass, upper and invert flag."""
+        output_map = f"{self.output}_upper_invert"
+        ref_max = 270
+        ref_min = 217
+        self.assertModule(
+            "r.reclass.area",
+            flags="i",
+            input=self.input,
+            output=output_map,
+            upper=self.upper,
+            method="reclass",
+        )
+        self.map_list.append(output_map)
+        self.assertRasterMinMax(
+            map=output_map,
+            refmin=ref_min,
+            refmax=ref_max,
+            msg=f"Range of data: min = {ref_min}  max = {ref_max}",
+        )
+
+    def test_reclass_lower_upper_invert(self) -> None:
+        """Testing r.reclass.area with method reclass, lower, upper and invert flag."""
+        output_norm = f"{self.output}_lower_upper_norm"
+        output_inv = f"{self.output}_lower_upper_inv"
+        overlap_map = f"{self.output}_lower_upper_overlap"
+        self.assertModule(
+            "r.reclass.area",
+            input=self.input,
+            output=output_norm,
+            lower=self.lower,
+            upper=self.upper,
+            method="reclass",
+        )
+        self.map_list.append(output_norm)
+        self.assertModule(
+            "r.reclass.area",
+            flags="i",
+            input=self.input,
+            output=output_inv,
+            lower=self.lower,
+            upper=self.upper,
+            method="reclass",
+        )
+        self.map_list.append(output_inv)
+        self.map_list.append(overlap_map)
+        self.runModule(
+            "r.mapcalc",
+            expression=(
+                f"{overlap_map} = if(!isnull({output_norm}) && !isnull({output_inv}), 1, null())"
+            ),
+        )
+        self.assertRasterFitsUnivar(raster=overlap_map, reference="n=0")
+
+    def test_rmarea_invert_unsupported(self) -> None:
+        """Testing that flag -i fails when method rmarea is used."""
+        output_map = f"{self.output}_rmarea_fail"
+        self.assertModuleFail(
+            "r.reclass.area",
+            flags="i",
+            input=self.input,
+            output=output_map,
+            lower=self.lower,
+            method="rmarea",
+        )
+
     def test_rmarea_lower(self) -> None:
         """Testing r.reclass.area with method rmarea and lower."""
         output_map = f"{self.output}_rmarea_lower"

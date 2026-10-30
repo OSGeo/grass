@@ -171,10 +171,23 @@ jobs:
             --junitxml=pytest.gunittest.junit.xml
         # Obfuscated usage of GitHub Actions features, Windows CMD shell limits analysis
         shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[misfeature]
+      - name: Run pytest for the grass.lib loading tests standalone
+        run: |
+          call %OSGEO4W_ROOT%\opt\grass\etc\env.bat
+          set PYTHONPATH=%GISBASE%\etc\python;%PYTHONPATH%
+          REM The library directory is deliberately not added to PATH here:
+          REM the tests provide their own environment, so this pins what
+          REM works without the setup done by the other steps.
+          pytest ^
+            python/grass/script/tests/grass_script_setup_lib_loading_test.py ^
+            python/grass/app/tests/grass_app_runtime_lib_loading_test.py ^
+            --junitxml=pytest.lib_loading.junit.xml
+        # Obfuscated usage of GitHub Actions features, Windows CMD shell limits analysis
+        shell: cmd /D /E:ON /V:OFF /S /C "CALL C:/OSGeo4W/OSGeo4W.bat "{0}"" # zizmor: ignore[misfeature]
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           exclude: gui
           flags: ${{ matrix.os }}-pytest-python

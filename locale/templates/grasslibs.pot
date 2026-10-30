@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 18:18+0000\n"
+"POT-Creation-Date: 2026-10-24 18:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -951,21 +951,21 @@ msgstr ""
 msgid "no description"
 msgstr ""
 
-#: ../lib/gis/color_rules.c:292
+#: ../lib/gis/color_rules.c:291
 msgid "Unable to open color rule"
 msgstr ""
 
-#: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
-#: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
+#: ../lib/gis/color_rules.c:340 ../lib/gis/color_rules.c:351
+#: ../lib/gis/color_rules.c:355 ../lib/gis/color_rules.c:359
 msgid "range: map values"
 msgstr ""
 
-#: ../lib/gis/color_rules.c:343
+#: ../lib/gis/color_rules.c:342
 #, c-format
 msgid "range: %g to %g"
 msgstr ""
 
-#: ../lib/gis/color_rules.c:368
+#: ../lib/gis/color_rules.c:367
 msgid "Unable to open color descriptions"
 msgstr ""
 
@@ -1044,7 +1044,8 @@ msgstr ""
 msgid "No active GRASS session: GISRC environment variable not set"
 msgstr ""
 
-#: ../lib/gis/env.c:365 ../lib/gis/env.c:391
+#: ../lib/gis/env.c:365 ../lib/gis/env.c:391 ../lib/gis/parser.c:992
+#: ../lib/gis/resource_dirs.c:51
 #, c-format
 msgid "Incomplete GRASS session: Variable '%s' not set"
 msgstr ""
@@ -1057,7 +1058,7 @@ msgstr ""
 msgid "WARNING: "
 msgstr ""
 
-#: ../lib/gis/error.c:364 ../lib/gis/parser.c:1742
+#: ../lib/gis/error.c:364 ../lib/gis/parser.c:1746
 #, c-format
 msgid "ERROR: "
 msgstr ""
@@ -1502,137 +1503,137 @@ msgstr ""
 msgid "Unable to determine program name"
 msgstr ""
 
-#: ../lib/gis/parser.c:1011 ../lib/gis/parser.c:1092
+#: ../lib/gis/parser.c:1015 ../lib/gis/parser.c:1096
 #, c-format
 msgid "%s: Sorry, <%c> is not a valid flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:1043 ../lib/gis/parser.c:1053 ../lib/gis/parser.c:1063
+#: ../lib/gis/parser.c:1047 ../lib/gis/parser.c:1057 ../lib/gis/parser.c:1067
 #, c-format
 msgid "Please update the usage of <%s>: flag <%c> has been renamed to <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1082
+#: ../lib/gis/parser.c:1086
 #, c-format
 msgid "Please update the usage of <%s>: flag <%c> has been renamed to option <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1229
+#: ../lib/gis/parser.c:1233
 #, c-format
 msgid "%s: Sorry, <%s=> is ambiguous"
 msgstr ""
 
-#: ../lib/gis/parser.c:1233
+#: ../lib/gis/parser.c:1237
 #, c-format
 msgid "Option <%s=> matches"
 msgstr ""
 
-#: ../lib/gis/parser.c:1253
+#: ../lib/gis/parser.c:1257
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to flag <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1258
+#: ../lib/gis/parser.c:1262
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to flag <%c>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1269
+#: ../lib/gis/parser.c:1273
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1282
+#: ../lib/gis/parser.c:1286
 #, c-format
 msgid "%s: Sorry, <%s> is not a valid parameter"
 msgstr ""
 
-#: ../lib/gis/parser.c:1289 ../lib/gis/parser.c:1550
+#: ../lib/gis/parser.c:1293 ../lib/gis/parser.c:1554
 #, c-format
 msgid "<%s> is an abbreviation for <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1294
+#: ../lib/gis/parser.c:1298
 #, c-format
 msgid "Option <%s> does not accept multiple answers"
 msgstr ""
 
-#: ../lib/gis/parser.c:1367
+#: ../lib/gis/parser.c:1371
 #, c-format
 msgid ""
 "Illegal range syntax for parameter <%s>\n"
 "\tPresented as: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1374
+#: ../lib/gis/parser.c:1378
 #, c-format
 msgid ""
 "Value <%s> out of range for parameter <%s>\n"
 "\tLegal range: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1380
+#: ../lib/gis/parser.c:1384
 #, c-format
 msgid "Missing value for parameter <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1384
+#: ../lib/gis/parser.c:1388
 #, c-format
 msgid "Invalid value <%s> for parameter <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1390
+#: ../lib/gis/parser.c:1394
 #, c-format
 msgid ""
 "Value <%s> ambiguous for parameter <%s>\n"
 "\tValid options: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1576
+#: ../lib/gis/parser.c:1580
 #, c-format
 msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
 
-#: ../lib/gis/parser.c:1669
+#: ../lib/gis/parser.c:1673
 #, c-format
 msgid ""
 "Option <%s> must be provided in multiples of %d\n"
 "\tYou provided %d item(s): %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1744 ../lib/gis/parser.c:1754
+#: ../lib/gis/parser.c:1748 ../lib/gis/parser.c:1758
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:1866
+#: ../lib/gis/parser.c:1870
 #, c-format
 msgid "%s= is not a separator option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1869
+#: ../lib/gis/parser.c:1873
 #, c-format
 msgid "No separator given for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1931 ../lib/gis/parser.c:1950
+#: ../lib/gis/parser.c:1935 ../lib/gis/parser.c:1954
 #, c-format
 msgid "%s= is not a file option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1933
+#: ../lib/gis/parser.c:1937
 #, c-format
 msgid "Opening multiple files not supported for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1939
+#: ../lib/gis/parser.c:1943
 #, c-format
 msgid "Unable to open %s file <%s>: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1946
+#: ../lib/gis/parser.c:1950
 #, c-format
 msgid "Unable to create %s file <%s>: %s"
 msgstr ""
@@ -4998,20 +4999,20 @@ msgstr ""
 msgid "Output Unit Factor"
 msgstr ""
 
-#: ../lib/psdriver/graph_set.c:196
+#: ../lib/psdriver/graph_set.c:195
 msgid "ps: truecolor status enabled"
 msgstr ""
 
-#: ../lib/psdriver/graph_set.c:197
+#: ../lib/psdriver/graph_set.c:196
 msgid "ps: truecolor status disabled"
 msgstr ""
 
-#: ../lib/psdriver/graph_set.c:215
+#: ../lib/psdriver/graph_set.c:214
 #, c-format
 msgid "ps: collecting to file '%s'"
 msgstr ""
 
-#: ../lib/psdriver/graph_set.c:216
+#: ../lib/psdriver/graph_set.c:215
 #, c-format
 msgid "ps: image size %dx%d"
 msgstr ""

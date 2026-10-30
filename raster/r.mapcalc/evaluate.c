@@ -2,6 +2,7 @@
 #include <omp.h>
 #endif
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -357,6 +358,36 @@ static expr_list *exprs;
 
 /****************************************************************************/
 
+/* The layout rand() draws from, with a row as its unit. Every rand() call
+ * draws one value per cell, so every row draws columns times calls values.
+ * A row of r3.mapcalc is numbered across the depths. */
+static struct G_random_layout rand_layout;
+/* The state of the row each thread evaluates. The states themselves are
+ * local to the row's evaluation, so the draws of different threads do not
+ * write to the same cache line. */
+static struct G_random_state **rand_state;
+
+/* Give rand() of the calc library the calling thread's state. */
+static struct G_random_state *thread_rand_state(void)
+{
+    int tid = 0;
+#if defined(_OPENMP)
+    tid = omp_get_thread_num();
+#endif
+    return rand_state[tid];
+}
+
+/* Build the layout for the region and the number of rand() calls. */
+static void setup_rand(void)
+{
+    G_random_init_layout_exact(&rand_layout, seed_value, (int64_t)depths * rows,
+                               (int64_t)columns * rand_calls);
+    if (G_random_layout_batches(&rand_layout) < 1)
+        G_warning(_("rand() draws more than 2^46 random values. Later "
+                    "rows repeat the values of earlier rows plus a "
+                    "constant."));
+}
+
 static void error_handler(void *p G_UNUSED)
 {
     expr_list *l;
@@ -421,6 +452,8 @@ void execute(expr_list *ee)
         prepare_region_from_maps_intersect(map_list, num_maps);
 
     setup_region();
+    if (rand_calls > 0)
+        setup_rand();
 
     /* Parse each expression and initialize the maps, buffers and variables */
 
@@ -455,6 +488,10 @@ void execute(expr_list *ee)
     }
 #endif
     current_row = (int *)G_malloc(sizeof(int) * threads);
+    if (rand_calls > 0) {
+        rand_state = G_malloc(sizeof(*rand_state) * threads);
+        calc_set_random_state(thread_rand_state);
+    }
     count = rows * depths;
     n = 0;
 
@@ -467,11 +504,17 @@ void execute(expr_list *ee)
                 G_percent(n, count, 2);
 
             int tid = 0;
+            struct G_random_state row_rand_state;
 #if defined(_OPENMP)
             tid = omp_get_thread_num();
 #endif
             /* calculate through expressions row by row */
             current_row[tid] = row;
+            if (rand_calls > 0) {
+                G_random_state_for_unit(&row_rand_state, &rand_layout,
+                                        (int64_t)current_depth * rows + row);
+                rand_state[tid] = &row_rand_state;
+            }
             for (i = 0; i < num_exprs; i++) {
                 expression *e = exp_arr[i];
                 evaluate(e);
@@ -530,6 +573,9 @@ void execute(expr_list *ee)
 
     /* Free the memory and make it unreachable */
     G_free(current_row);
+    calc_set_random_state(NULL);
+    G_free(rand_state);
+    rand_state = NULL;
     for (i = 0; i < num_exprs; i++) {
         expression *e = exp_arr[i];
         free_buf(e);
