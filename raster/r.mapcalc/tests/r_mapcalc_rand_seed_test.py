@@ -1,8 +1,6 @@
 """Tests of r.mapcalc rand() with a given or automatic seed
 
-A given seed must reproduce the reference rasters regardless of nprocs:
-r.mapcalc evaluates expressions with rand() single-threaded even
-when more processes are requested.
+A given seed must reproduce the reference rasters regardless of nprocs.
 """
 
 import io
@@ -119,21 +117,6 @@ def test_seed_fcell(session_in_mapset, nprocs):
         rtol=0,
         atol=1e-6,
     )
-
-
-def test_rand_nprocs_single_thread_message(session_in_mapset):
-    """r.mapcalc reports that rand() does not support parallel execution.
-
-    The seed tests rely on rand() forcing single-threaded evaluation for
-    any nprocs; this pins the message reporting it. The message is emitted
-    at verbose level only.
-    """
-    tools = Tools(session=session_in_mapset, consistent_return_value=True)
-    tools.g_region(**REGION)
-    result = tools.r_mapcalc(
-        expression="rand_nprocs = rand(1, 200)", seed=500, nprocs=4, verbose=True
-    )
-    assert "Parallel execution is not supported with rand()" in result.stderr
 
 
 def test_seed_not_required(session_in_mapset):

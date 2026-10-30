@@ -6,13 +6,13 @@
 # Carlos Davila <carluti@users.sourceforge.net>, 2007.
 # Vasilios Antoniou <antoniou_v@yahoo.gr>, 2008.
 # Vasilios Antoniou <vantoniou@gmail.com>, 2008.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
-"PO-Revision-Date: 2025-07-26 01:36+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
+"PO-Revision-Date: 2026-10-17 19:54+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grassmods/el/>\n"
 "Language: el\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.16.2\n"
 
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
@@ -968,7 +968,10 @@ msgstr ""
 msgid "(0,0) is lower-left of the display frame"
 msgstr ""
 
-msgid "Length of barscale in map units"
+msgid "Length of barscale in units set by the units option"
+msgstr ""
+
+msgid "Map units if units is not given; 0 picks a length automatically"
 msgstr ""
 
 msgid "Barscale units to display"
@@ -1024,7 +1027,7 @@ msgid "Outputs a list of all available display colors."
 msgstr ""
 
 msgid "raster"
-msgstr ""
+msgstr "raster"
 
 msgid "color table"
 msgstr ""
@@ -18598,10 +18601,6 @@ msgstr ""
 msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
 msgstr ""
 
-#, fuzzy, c-format
-msgid "Invalid random seed <%s>"
-msgstr "Σφάλμα κατά το άνοιμα 3Δ ράστερ χάρτη"
-
 #, c-format
 msgid "Read random seed from %s option: %<PRId64>"
 msgstr ""
@@ -23552,8 +23551,10 @@ msgstr ""
 msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
-msgid "Missing output projection parameters "
-msgstr ""
+#, fuzzy
+#| msgid "Print current connection parameters and exit"
+msgid "Missing output projection parameters"
+msgstr "Εκτυπώνει τις τρέχουσες παραμέτρους σύνδεσης και κλείνει"
 
 msgid "Unable to read input data"
 msgstr ""
@@ -23782,7 +23783,8 @@ msgstr ""
 msgid "Unable to import data"
 msgstr ""
 
-msgid "Done: generated map "
+#, python-brace-format
+msgid "Done: generated map {map_name}"
 msgstr ""
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
@@ -23844,7 +23846,7 @@ msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
 #, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr ""
 
 #, python-format
@@ -23981,9 +23983,10 @@ msgstr ""
 msgid "Driver %s does not supports Create() method"
 msgstr ""
 
-#, python-format
-msgid "Unable to open %s "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to open database <%s>"
+msgid "Unable to open {filename}"
+msgstr "Αδυναμία ανοίγματος βάσης δεδομενων <%s>"
 
 msgid "Region is out of server data extend."
 msgstr ""
@@ -24157,30 +24160,52 @@ msgstr ""
 msgid "xy-locations are not supported"
 msgstr ""
 
+#, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr ""
+
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr ""
+
+#, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr ""
+
 msgid "Generating a clumped raster file"
 msgstr ""
 
-msgid " including diagonal neighbors"
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, python-format
-msgid " with minimum %s pixels"
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
+msgstr "Όνομα εισαγώμενου ράστερ χάρτη  (red)"
+
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "Όνομα εισαγώμενου ράστερ χάρτη  (red)"
+
+#, python-brace-format
+msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr ""
 
 #, fuzzy
-msgid "Generating a reclass map with area size"
+msgid "Generating a reclass map without area size limits..."
 msgstr "Όνομα εισαγώμενου ράστερ χάρτη  (red)"
 
-#, python-format
-msgid " larger than or equal to %f hectares..."
-msgstr ""
-
-#, python-format
-msgid " smaller than or equal to %f hectares..."
-msgstr ""
-
-msgid "No areas of size "
-msgstr ""
+#, fuzzy
+#| msgid "not found"
+msgid "No areas found"
+msgstr "δεν βρέθηκε"
 
 #, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
@@ -24797,11 +24822,8 @@ msgstr ""
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr ""
-
-msgid "Use -c flag to update values in this column."
+#, python-brace-format
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr ""
 
 #, python-format
@@ -24916,8 +24938,8 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr ""
 
-#, python-format
-msgid "Unable to add column %s to vector map <%s> "
+#, python-brace-format
+msgid "Unable to add column {column} to vector map <{vector}>"
 msgstr ""
 
 #, python-format
@@ -33949,6 +33971,10 @@ msgstr ""
 
 msgid "Image file"
 msgstr ""
+
+#, fuzzy, c-format
+#~ msgid "Invalid random seed <%s>"
+#~ msgstr "Σφάλμα κατά το άνοιμα 3Δ ράστερ χάρτη"
 
 #, fuzzy, c-format
 #~ msgid "Raster map <%s> created. "

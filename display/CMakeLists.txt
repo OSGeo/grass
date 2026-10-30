@@ -60,22 +60,28 @@ add_custom_command(
     POST_BUILD
     COMMAND
         ${CMAKE_COMMAND} -E make_directory
-        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
+        ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/barscales
     COMMAND
         ${CMAKE_COMMAND} -E copy ${d_barscale_png}
-        ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
+        ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/barscales
     COMMAND
         ${CMAKE_COMMAND} -E make_directory
         ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/barscales
     COMMAND
         ${CMAKE_COMMAND} -E copy ${d_barscale_png}
         ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/barscales
-    BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
+    BYPRODUCTS ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/barscales
 )
 install(
-    DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/barscales
-    DESTINATION ${GRASS_INSTALL_DOCDIR}
+    DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/barscales
+    DESTINATION ${GRASS_INSTALL_GRAPHICSDIR}
 )
+if(WITH_FHS AND WITH_DOCS)
+    install(
+        DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/barscales
+        DESTINATION ${GRASS_INSTALL_DOCDIR}
+    )
+endif()
 
 build_program_in_subdir(
     d.colorlist
@@ -156,9 +162,15 @@ if(WITH_DOCS)
         DESTINATION ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/northarrows
     )
     install(
-        DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/northarrows
-        DESTINATION ${GRASS_INSTALL_DOCDIR}
+        DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/northarrows
+        DESTINATION ${GRASS_INSTALL_GRAPHICSDIR}
     )
+    if(WITH_FHS)
+        install(
+            DIRECTORY ${OUTDIR}/${GRASS_INSTALL_GRAPHICSDIR}/northarrows
+            DESTINATION ${GRASS_INSTALL_DOCDIR}
+        )
+    endif()
 endif()
 build_program_in_subdir(d.path DEPENDS grass_gis grass_display grass_vector)
 build_program_in_subdir(

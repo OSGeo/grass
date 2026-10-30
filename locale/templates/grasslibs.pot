@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 00:09+0000\n"
+"POT-Creation-Date: 2026-10-24 18:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -951,21 +951,21 @@ msgstr ""
 msgid "no description"
 msgstr ""
 
-#: ../lib/gis/color_rules.c:292
+#: ../lib/gis/color_rules.c:291
 msgid "Unable to open color rule"
 msgstr ""
 
-#: ../lib/gis/color_rules.c:341 ../lib/gis/color_rules.c:352
-#: ../lib/gis/color_rules.c:356 ../lib/gis/color_rules.c:360
+#: ../lib/gis/color_rules.c:340 ../lib/gis/color_rules.c:351
+#: ../lib/gis/color_rules.c:355 ../lib/gis/color_rules.c:359
 msgid "range: map values"
 msgstr ""
 
-#: ../lib/gis/color_rules.c:343
+#: ../lib/gis/color_rules.c:342
 #, c-format
 msgid "range: %g to %g"
 msgstr ""
 
-#: ../lib/gis/color_rules.c:368
+#: ../lib/gis/color_rules.c:367
 msgid "Unable to open color descriptions"
 msgstr ""
 
@@ -1044,7 +1044,8 @@ msgstr ""
 msgid "No active GRASS session: GISRC environment variable not set"
 msgstr ""
 
-#: ../lib/gis/env.c:365 ../lib/gis/env.c:391
+#: ../lib/gis/env.c:365 ../lib/gis/env.c:391 ../lib/gis/parser.c:992
+#: ../lib/gis/resource_dirs.c:51
 #, c-format
 msgid "Incomplete GRASS session: Variable '%s' not set"
 msgstr ""
@@ -1057,7 +1058,7 @@ msgstr ""
 msgid "WARNING: "
 msgstr ""
 
-#: ../lib/gis/error.c:364 ../lib/gis/parser.c:1742
+#: ../lib/gis/error.c:364 ../lib/gis/parser.c:1746
 #, c-format
 msgid "ERROR: "
 msgstr ""
@@ -1199,7 +1200,7 @@ msgstr ""
 #: ../lib/ogsf/gs3.c:116 ../lib/ogsf/gs3.c:181 ../lib/ogsf/gs3.c:257
 #: ../lib/ogsf/gs3.c:329 ../lib/ogsf/gs3.c:436 ../lib/ogsf/gs3.c:524
 #: ../lib/ogsf/gs3.c:584 ../lib/ogsf/gs3.c:642 ../lib/ogsf/gs3.c:712
-#: ../lib/ogsf/gs3.c:782 ../lib/ogsf/gsd_legend.c:234 ../lib/raster/open.c:176
+#: ../lib/ogsf/gs3.c:782 ../lib/ogsf/gsd_legend.c:239 ../lib/raster/open.c:176
 #: ../lib/raster/open.c:858 ../lib/raster/open.c:895 ../lib/raster/open.c:948
 #: ../lib/rst/interp_float/output2d.c:264
 #: ../lib/rst/interp_float/output2d.c:351
@@ -1249,93 +1250,91 @@ msgstr ""
 msgid "LOCATION <%s> not available"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:153
-#, c-format
-msgid "Random number seed %s from %s is too large in magnitude to be read"
+#: ../lib/gis/lrand48.c:164
+msgid "must be an integer with nothing after it"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:157
-#, c-format
-msgid "Random number seed %s from %s is not an integer"
+#: ../lib/gis/lrand48.c:168
+msgid "must be between -2147483648 and 4294967295"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:162
+#: ../lib/gis/lrand48.c:184
 #, c-format
-msgid "Random number seed %s from %s is used as %<PRId64>, its low 32 bits"
+msgid "Invalid random seed <%s> from %s: %s"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:212
+#: ../lib/gis/lrand48.c:227
 #, c-format
 msgid "gettimeofday failed: %s"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:262 ../lib/gis/lrand48.c:288
+#: ../lib/gis/lrand48.c:277 ../lib/gis/lrand48.c:303
 msgid "Pseudo-random number generator not seeded"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:427
+#: ../lib/gis/lrand48.c:442
 #, c-format
 msgid "Random number seed %<PRId64> is outside the range from -2147483648 to 4294967295 the generator can use"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:435
+#: ../lib/gis/lrand48.c:450
 #, c-format
 msgid "The number of units of a random number layout must be positive, not %<PRId64>"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:527
+#: ../lib/gis/lrand48.c:542
 #, c-format
 msgid "The number of random numbers a unit draws must be positive, not %<PRId64>"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:531
+#: ../lib/gis/lrand48.c:546
 #, c-format
 msgid "A random number layout of %<PRId64> units of %<PRId64> draws each is too large (the number of draws must not exceed %<PRId64>)"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:570
+#: ../lib/gis/lrand48.c:585
 #, c-format
 msgid "The most random numbers a unit draws must be positive, not %<PRId64>"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:576
+#: ../lib/gis/lrand48.c:591
 #, c-format
 msgid "A random number layout of %<PRId64> units of at most %<PRId64> draws each is too large (the number of units times the bound rounded up to odd must not exceed %<PRId64>)"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:625
+#: ../lib/gis/lrand48.c:640
 #, c-format
 msgid "A random number layout of the whole span takes at most %<PRId64> units, not %<PRId64>; a bounded layout serves any number of units"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:700
+#: ../lib/gis/lrand48.c:715
 #, c-format
 msgid "Random number unit %<PRId64> is out of range (must be between 0 and %<PRId64>)"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:704
+#: ../lib/gis/lrand48.c:719
 #, c-format
 msgid "Random number batch %<PRId64> is out of range (must not be negative)"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:708
+#: ../lib/gis/lrand48.c:723
 #, c-format
 msgid "Random number batch %<PRId64> is out of range (a layout of the whole span holds a single batch)"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:712
+#: ../lib/gis/lrand48.c:727
 #, c-format
 msgid "Random number batch %<PRId64> is out of range (%<PRId64> batch fits into the generator's span)"
 msgid_plural "Random number batch %<PRId64> is out of range (%<PRId64> batches fit into the generator's span)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../lib/gis/lrand48.c:719
+#: ../lib/gis/lrand48.c:734
 #, c-format
 msgid "Random number batch %<PRId64> is out of range (no batch fits into the generator's span, only batch 0 can be used)"
 msgstr ""
 
-#: ../lib/gis/lrand48.c:762
+#: ../lib/gis/lrand48.c:777
 #, c-format
 msgid "Cannot advance a random number generator by %<PRId64> draws (the number must not be negative)"
 msgstr ""
@@ -1504,137 +1503,137 @@ msgstr ""
 msgid "Unable to determine program name"
 msgstr ""
 
-#: ../lib/gis/parser.c:1011 ../lib/gis/parser.c:1092
+#: ../lib/gis/parser.c:1015 ../lib/gis/parser.c:1096
 #, c-format
 msgid "%s: Sorry, <%c> is not a valid flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:1043 ../lib/gis/parser.c:1053 ../lib/gis/parser.c:1063
+#: ../lib/gis/parser.c:1047 ../lib/gis/parser.c:1057 ../lib/gis/parser.c:1067
 #, c-format
 msgid "Please update the usage of <%s>: flag <%c> has been renamed to <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1082
+#: ../lib/gis/parser.c:1086
 #, c-format
 msgid "Please update the usage of <%s>: flag <%c> has been renamed to option <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1229
+#: ../lib/gis/parser.c:1233
 #, c-format
 msgid "%s: Sorry, <%s=> is ambiguous"
 msgstr ""
 
-#: ../lib/gis/parser.c:1233
+#: ../lib/gis/parser.c:1237
 #, c-format
 msgid "Option <%s=> matches"
 msgstr ""
 
-#: ../lib/gis/parser.c:1253
+#: ../lib/gis/parser.c:1257
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to flag <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1258
+#: ../lib/gis/parser.c:1262
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to flag <%c>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1269
+#: ../lib/gis/parser.c:1273
 #, c-format
 msgid "Please update the usage of <%s>: option <%s> has been renamed to <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1282
+#: ../lib/gis/parser.c:1286
 #, c-format
 msgid "%s: Sorry, <%s> is not a valid parameter"
 msgstr ""
 
-#: ../lib/gis/parser.c:1289 ../lib/gis/parser.c:1550
+#: ../lib/gis/parser.c:1293 ../lib/gis/parser.c:1554
 #, c-format
 msgid "<%s> is an abbreviation for <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1294
+#: ../lib/gis/parser.c:1298
 #, c-format
 msgid "Option <%s> does not accept multiple answers"
 msgstr ""
 
-#: ../lib/gis/parser.c:1367
+#: ../lib/gis/parser.c:1371
 #, c-format
 msgid ""
 "Illegal range syntax for parameter <%s>\n"
 "\tPresented as: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1374
+#: ../lib/gis/parser.c:1378
 #, c-format
 msgid ""
 "Value <%s> out of range for parameter <%s>\n"
 "\tLegal range: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1380
+#: ../lib/gis/parser.c:1384
 #, c-format
 msgid "Missing value for parameter <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1384
+#: ../lib/gis/parser.c:1388
 #, c-format
 msgid "Invalid value <%s> for parameter <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1390
+#: ../lib/gis/parser.c:1394
 #, c-format
 msgid ""
 "Value <%s> ambiguous for parameter <%s>\n"
 "\tValid options: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1576
+#: ../lib/gis/parser.c:1580
 #, c-format
 msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
 
-#: ../lib/gis/parser.c:1669
+#: ../lib/gis/parser.c:1673
 #, c-format
 msgid ""
 "Option <%s> must be provided in multiples of %d\n"
 "\tYou provided %d item(s): %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1744 ../lib/gis/parser.c:1754
+#: ../lib/gis/parser.c:1748 ../lib/gis/parser.c:1758
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:1866
+#: ../lib/gis/parser.c:1870
 #, c-format
 msgid "%s= is not a separator option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1869
+#: ../lib/gis/parser.c:1873
 #, c-format
 msgid "No separator given for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1931 ../lib/gis/parser.c:1950
+#: ../lib/gis/parser.c:1935 ../lib/gis/parser.c:1954
 #, c-format
 msgid "%s= is not a file option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1933
+#: ../lib/gis/parser.c:1937
 #, c-format
 msgid "Opening multiple files not supported for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1939
+#: ../lib/gis/parser.c:1943
 #, c-format
 msgid "Unable to open %s file <%s>: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1946
+#: ../lib/gis/parser.c:1950
 #, c-format
 msgid "Unable to create %s file <%s>: %s"
 msgstr ""
@@ -2329,6 +2328,16 @@ msgstr ""
 
 #: ../lib/gis/proj3.c:130 ../lib/vector/Vlib/header.c:563
 msgid "Unknown projection"
+msgstr ""
+
+#: ../lib/gis/random_options.c:38
+#, c-format
+msgid "%s= is required"
+msgstr ""
+
+#: ../lib/gis/random_options.c:41
+#, c-format
+msgid "Invalid random seed <%s> for %s=: %s"
 msgstr ""
 
 #: ../lib/gis/rd_cellhd.c:137 ../lib/gis/rd_cellhd.c:176
@@ -3688,7 +3697,7 @@ msgstr ""
 msgid "WARNING"
 msgstr ""
 
-#: ../lib/init/grass.py:140 ../lib/init/grass.py:2407
+#: ../lib/init/grass.py:140 ../lib/init/grass.py:2420
 msgid "Exiting..."
 msgstr ""
 
@@ -4151,20 +4160,27 @@ msgstr ""
 msgid "Starting GRASS..."
 msgstr ""
 
-#: ../lib/init/grass.py:2332
+#: ../lib/init/grass.py:2301
+#, python-brace-format
+msgid ""
+"Neither an interactive terminal nor a graphical user interface is available.\n"
+"Run {cmd_name} from a terminal, use --exec to run a command, or use --text to read commands from standard input."
+msgstr ""
+
+#: ../lib/init/grass.py:2345
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr ""
 
-#: ../lib/init/grass.py:2339
+#: ../lib/init/grass.py:2352
 msgid "Failed to start GRASS, no default project to copy in the installation or copying failed."
 msgstr ""
 
-#: ../lib/init/grass.py:2444
+#: ../lib/init/grass.py:2457
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
 
-#: ../lib/init/grass.py:2482
+#: ../lib/init/grass.py:2495
 #, python-format
 msgid "Failed to start shell '%s'"
 msgstr ""
@@ -4477,32 +4493,32 @@ msgstr ""
 msgid "%d points without category. Unable to determine color rules for features without category."
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1200
+#: ../lib/ogsf/gs2.c:1205
 #, c-format
 msgid "no category info"
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1218
+#: ../lib/ogsf/gs2.c:1223
 #, c-format
 msgid "no data"
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1642
+#: ../lib/ogsf/gs2.c:1647
 #, c-format
 msgid "Raster map <%s> is outside of current region. Load failed."
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1723 ../lib/ogsf/gs2.c:1730 ../lib/ogsf/gs2.c:1739
-#: ../lib/ogsf/gs2.c:1749 ../lib/ogsf/gs2.c:1758 ../lib/ogsf/gs2.c:1769
-#: ../lib/ogsf/gs2.c:1817
+#: ../lib/ogsf/gs2.c:1728 ../lib/ogsf/gs2.c:1735 ../lib/ogsf/gs2.c:1744
+#: ../lib/ogsf/gs2.c:1754 ../lib/ogsf/gs2.c:1763 ../lib/ogsf/gs2.c:1774
+#: ../lib/ogsf/gs2.c:1822
 msgid "GS_load_att_map(): Out of memory. Unable to load map"
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1846
+#: ../lib/ogsf/gs2.c:1851
 msgid "Loading failed"
 msgstr ""
 
-#: ../lib/ogsf/gs2.c:1850
+#: ../lib/ogsf/gs2.c:1855
 msgid "Error finding range"
 msgstr ""
 
@@ -4542,48 +4558,48 @@ msgstr ""
 msgid "Max. number of labels reached!"
 msgstr ""
 
-#: ../lib/ogsf/gsd_legend.c:241
+#: ../lib/ogsf/gsd_legend.c:246
 #, c-format
 msgid "Unable to read color file of raster map <%s>"
 msgstr ""
 
-#: ../lib/ogsf/gsd_legend.c:247
+#: ../lib/ogsf/gsd_legend.c:252
 #, c-format
 msgid "Unable to read category file of raster map <%s>"
 msgstr ""
 
-#: ../lib/ogsf/gsd_legend.c:263
+#: ../lib/ogsf/gsd_legend.c:268
 #, c-format
 msgid "Unable to read fp range of raster map <%s>"
 msgstr ""
 
-#: ../lib/ogsf/gsd_legend.c:275
+#: ../lib/ogsf/gsd_legend.c:280
 #, c-format
 msgid "Unable to read range of raster map <%s>"
 msgstr ""
 
-#: ../lib/ogsf/gsd_legend.c:289
+#: ../lib/ogsf/gsd_legend.c:294
 msgid "Range request error for legend"
 msgstr ""
 
-#: ../lib/ogsf/gsd_legend.c:379
+#: ../lib/ogsf/gsd_legend.c:384
 msgid "Unable to show discrete FP range (use list)"
 msgstr ""
 
-#: ../lib/ogsf/gsd_legend.c:498
+#: ../lib/ogsf/gsd_legend.c:503
 msgid "Too many categories to show as discrete!"
 msgstr ""
 
-#: ../lib/ogsf/gsd_legend.c:500
+#: ../lib/ogsf/gsd_legend.c:505
 msgid "Try using smaller font!"
 msgstr ""
 
-#: ../lib/ogsf/gsd_prim.c:152
+#: ../lib/ogsf/gsd_prim.c:155
 #, c-format
 msgid "Color Material: %d"
 msgstr ""
 
-#: ../lib/ogsf/gsd_prim.c:634
+#: ../lib/ogsf/gsd_prim.c:637
 #, c-format
 msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
 msgstr ""
@@ -4983,20 +4999,20 @@ msgstr ""
 msgid "Output Unit Factor"
 msgstr ""
 
-#: ../lib/psdriver/graph_set.c:196
+#: ../lib/psdriver/graph_set.c:195
 msgid "ps: truecolor status enabled"
 msgstr ""
 
-#: ../lib/psdriver/graph_set.c:197
+#: ../lib/psdriver/graph_set.c:196
 msgid "ps: truecolor status disabled"
 msgstr ""
 
-#: ../lib/psdriver/graph_set.c:215
+#: ../lib/psdriver/graph_set.c:214
 #, c-format
 msgid "ps: collecting to file '%s'"
 msgstr ""
 
-#: ../lib/psdriver/graph_set.c:216
+#: ../lib/psdriver/graph_set.c:215
 #, c-format
 msgid "ps: image size %dx%d"
 msgstr ""

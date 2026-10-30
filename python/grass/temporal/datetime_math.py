@@ -459,10 +459,11 @@ def adjust_datetime_to_granularity(mydate: datetime, granularity):
             seconds = 0
             minutes = 0
             hours = 0
-            if days > weekday:
-                days -= weekday  # this needs to be fixed
-            else:
-                days += weekday  # this needs to be fixed
+            # The Monday can be in the previous month or year.
+            monday = mydate - timedelta(days=weekday)
+            years = monday.year
+            months = monday.month
+            days = monday.day
         elif has_months:  # Start at the first day of the month at 00:00:00
             seconds = 0
             minutes = 0

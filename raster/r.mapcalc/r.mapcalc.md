@@ -775,6 +775,9 @@ be seen using *r.info*.
 If you want other people to be able to verify your results, it's
 preferable to use the **seed** parameter.
 
+The values for a given seed depend on the computational region and on
+the number of rand() calls (not on the number of threads, **nprocs**).
+
 ## EXAMPLES
 
 To compute the average of two raster map layers *a* and *b*:
@@ -869,7 +872,6 @@ Note: r.mapcalc may disable parallelization in certain cases, even when requeste
 
 - When a mask is active, because the current parallel implementation
  does not support it.
-- When the rand() function is used, to ensure reproducible results.
 
 ![Benchmark of r.mapcalc](r_mapcalc_benchmark_time.png)  
 *Figure: Benchmark shows execution time for different number of cells

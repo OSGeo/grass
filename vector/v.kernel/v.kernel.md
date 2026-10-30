@@ -29,6 +29,9 @@ optimal radius. The value of *radius* is taken as maximum value. The
 radius is calculated based on the gaussian function, using ALL points,
 not just those in the current region.
 
+The **-q** flag implies **-o**: it calculates the optimal radius in the same
+way and exits without writing any map. No output map name is needed.
+
 ## EXAMPLES
 
 Compute density of points (using vector map of schools from North
