@@ -293,6 +293,12 @@ The exact masks for the first few neighborhood sizes are as follows:
                                         . . . . . X . . . . .
 ```
 
+**-n**
+Preserve NULL cells from the input raster map. If the input center cell
+is NULL, the corresponding cell in every output map is NULL, regardless
+of the **method** or **selection** map. Non-NULL center cells are
+processed as usual.
+
 ## NOTES
 
 The ***r.neighbors*** program works in the current geographic region
@@ -303,8 +309,11 @@ geographic region settings. However, the user can select to keep
 original input and output resolutions which are not aligned by
 specifying this (e.g., using the **-a** option).
 
-***r.neighbors*** doesn't propagate NULLs, but computes the aggregate
-over the non-NULL cells in the neighborhood.
+By default, ***r.neighbors*** doesn't propagate NULLs, but computes
+the aggregate over the non-NULL cells in the neighborhood. Thus, a
+NULL input center cell can receive a non-NULL output value from the
+neighboring cells. With the **-n** flag, center cells that are NULL
+in the input map remain NULL in the output map.
 
 The **-c** flag and the **weights** parameter are mutually exclusive.
 Any use of the two together will produce an error. Differently-shaped
