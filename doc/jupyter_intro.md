@@ -58,7 +58,7 @@ The following examples will use the [North Carolina dataset](https://grass.osgeo
 ## Map
 
 The `gj.Map` class in `grass.jupyter` provides a way to create static maps in Jupyter.
-Here we create a map of elevation overlayed with streets:
+Here we create a map of elevation overlaid with streets:
 
 ```python
 # Create a new map
@@ -74,7 +74,7 @@ m.d_vect(map="streets", color="black")
 m.show()
 ```
 
-![Elevation map overlayed with streets with gj.Map](jupyter_map.png)
+![Elevation map overlaid with streets with gj.Map](jupyter_map.png)
 
 !!! grass-tip "Order Matters"
     <!-- markdownlint-disable-next-line MD046 -->
@@ -109,7 +109,7 @@ m.d_legend(
     at=(1, 50, 1, 8),
     title="Elevation (m)",
     border_color="none",
-    flags="bt"
+    flags="bt",
 )
 
 # Add a scale bar to the map
@@ -146,7 +146,19 @@ m.show()
 
 The map gives you the ability to query the map, zoom in and out, and pan around,
 set the computational region, and create simple vector data by digitizing.
-To change the default basemap, see [documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html#module-grass.jupyter.interactivemap).
+The basemap can be changed with the `tiles` parameter which takes a name of
+a tile provider from the [xyzservices](https://xyzservices.readthedocs.io/)
+package, see its [gallery](https://xyzservices.readthedocs.io/en/stable/gallery.html)
+for the available basemaps. Some providers require an API key which can be
+passed with the `API_key` parameter. For example, to use satellite imagery
+as the basemap:
+
+```python
+m = gj.InteractiveMap(tiles="Esri.WorldImagery")
+```
+
+For more details, see the
+[documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html#module-grass.jupyter.interactivemap).
 
 ## 3D map
 
@@ -161,12 +173,11 @@ elevation_3dmap.render(
     perspective=10,
     height=5000,
     resolution_fine=1,
-    zexag=5
+    zexag=5,
 )
-elevation_3dmap.overlay.d_legend(raster="landuse",
-                                 at=(0, 30, 87, 100),
-                                 flags="b",
-                                 border_color="none")
+elevation_3dmap.overlay.d_legend(
+    raster="landuse", at=(0, 30, 87, 100), flags="b", border_color="none"
+)
 elevation_3dmap.show()
 ```
 
@@ -184,10 +195,7 @@ maps and play a continuous loop.
 # Create a series of relief maps with different angles
 directions = [0, 90, 180, 270]
 for azimuth in directions:
-    tools.r_relief(
-        input="elevation",
-        output=f"relief_{azimuth}",
-        azimuth=azimuth)
+    tools.r_relief(input="elevation", output=f"relief_{azimuth}", azimuth=azimuth)
 m = gj.SeriesMap()
 m.add_rasters(f"relief_{azimuth}" for azimuth in directions)
 m.d_vect(map="roads")
@@ -212,19 +220,16 @@ tools.g_region(n=226040, s=223780, e=639170, w=636190)
 tools.r_slope_aspect(elevation="elevation", dx="dx", dy="dy")
 # Compute overland flow
 tools.r_sim_water(
-    flags="t",
-    elevation="elevation",
-    dx="dx",
-    dy="dy",
-    depth="depth",
-    duration=30)
+    flags="t", elevation="elevation", dx="dx", dy="dy", depth="depth", duration=30
+)
 
 # Create a time series
 tools.t_create(
     output="depth",
     temporaltype="relative",
     title="Overland flow depth",
-    description="Overland flow depth")
+    description="Overland flow depth",
+)
 # Register the time series
 maps = [
     item["fullname"]
@@ -243,11 +248,13 @@ flow_map.add_raster_series("depth", values="0.025-1.25")
 flow_map.d_vect(map="streets")
 
 # Add map features
-flow_map.d_legend(raster="depth.30",
-                  title="Depth [m]",
-                  flags="bt",
-                  border_color="none",
-                  at=(1, 50, 0, 5))
+flow_map.d_legend(
+    raster="depth.30",
+    title="Depth [m]",
+    flags="bt",
+    border_color="none",
+    at=(1, 50, 0, 5),
+)
 
 # Display the map
 flow_map.show()

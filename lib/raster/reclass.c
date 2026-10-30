@@ -3,10 +3,8 @@
  *
  * \brief Raster Library - Check if raster map is reclassified
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -81,7 +79,8 @@ int Rast_is_reclassed_to(const char *name, const char *mapset, int *nrmaps,
                          char ***rmaps)
 {
     FILE *fd;
-    int i, j, k, l;
+    int i;
+    size_t j, k, l;
     char buf2[256], buf3[256];
 
     fd = G_fopen_old_misc("cell_misc", "reclassed_to", name, mapset);

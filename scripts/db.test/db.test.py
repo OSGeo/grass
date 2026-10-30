@@ -5,11 +5,8 @@
 # AUTHOR(S):	Radim Blazek
 #               Converted to Python by Glynn Clements
 # PURPOSE:	Test database driver
-# COPYRIGHT:	(C) 2004-2014 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (version 2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2004-2014 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -45,7 +42,7 @@ def main():
         gcore.fatal(_("Database connection not defined. Run db.connect."))
     gcore.message(_("Using DB driver: %s") % dbconn["driver"])
 
-    infile = os.path.join(os.environ["GISBASE"], "etc", "db.test", test_file)
+    infile = os.path.join(os.environ["GRASS_ETCDIR"], "db.test", test_file)
     inf = open(infile)
 
     while True:

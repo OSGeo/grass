@@ -10,10 +10,8 @@ Classes:
  - dialogs::ManageBusyCursorMixin
  - dialogs::RenameClassDialog
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
@@ -425,7 +423,6 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = {**self.colorsSetts, **self.sizeSetts}
 
         settsOrder = [
             "sel_pol",
@@ -435,7 +432,6 @@ class SettingsDialog(wx.Dialog):
             "snap_tresh",
         ]
         for settKey in settsOrder:
-            sett = setts[settKey]
             gridSizer.Add(
                 settsLabels[settKey], flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0)
             )
@@ -455,8 +451,6 @@ class SettingsDialog(wx.Dialog):
         )
         ellPolBoxSizer = wx.StaticBoxSizer(ell_box, wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
-
-        sett = setts[settKey]
 
         row = 0
         gridSizer.Add(

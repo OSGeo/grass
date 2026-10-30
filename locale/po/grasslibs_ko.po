@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-27 15:58+0000\n"
+"POT-Creation-Date: 2026-10-17 18:18+0000\n"
 "PO-Revision-Date: 2025-08-23 20:18+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ko/>\n"
@@ -22,6 +22,9 @@ msgstr ""
 #, c-format
 msgid "Unknown algorithm '%s'"
 msgstr "알려지지 않은 알고리듬 '%s'"
+
+msgid "Cannot classify an empty set of values"
+msgstr ""
 
 msgid "Classification algorithm failed"
 msgstr ""
@@ -684,6 +687,9 @@ msgstr ""
 msgid "Failed to parse string specifier: %s"
 msgstr ""
 
+msgid "String precision is too large"
+msgstr ""
+
 #, c-format
 msgid "Format specifier exceeds the buffer size (%d)"
 msgstr ""
@@ -734,8 +740,22 @@ msgstr ""
 msgid "GRASS needs to be compiled with ZSTD for ZSTD compression"
 msgstr ""
 
+#, fuzzy, c-format
+#| msgid "LZ4 compression error"
+msgid "ZSTD compression bound error %d: %s"
+msgstr "LZ4 압축 오류"
+
+msgid "ZSTD compression bound exceeds supported size"
+msgstr ""
+
 #, c-format
 msgid "ZSTD compression error %d: %s"
+msgstr ""
+
+msgid "ZSTD compressed size exceeds supported size"
+msgstr ""
+
+msgid "ZSTD uncompressed size exceeds supported size"
 msgstr ""
 
 msgid "no description"
@@ -954,11 +974,74 @@ msgstr "G_list: 알려지지 않은 요소 유형"
 msgid "LOCATION <%s> not available"
 msgstr ""
 
+msgid "must be an integer with nothing after it"
+msgstr ""
+
+msgid "must be between -2147483648 and 4294967295"
+msgstr ""
+
+#, c-format
+msgid "Invalid random seed <%s> from %s: %s"
+msgstr ""
+
 #, c-format
 msgid "gettimeofday failed: %s"
 msgstr ""
 
 msgid "Pseudo-random number generator not seeded"
+msgstr ""
+
+#, c-format
+msgid "Random number seed %<PRId64> is outside the range from -2147483648 to 4294967295 the generator can use"
+msgstr ""
+
+#, c-format
+msgid "The number of units of a random number layout must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "The number of random numbers a unit draws must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of %<PRId64> units of %<PRId64> draws each is too large (the number of draws must not exceed %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "The most random numbers a unit draws must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of %<PRId64> units of at most %<PRId64> draws each is too large (the number of units times the bound rounded up to odd must not exceed %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of the whole span takes at most %<PRId64> units, not %<PRId64>; a bounded layout serves any number of units"
+msgstr ""
+
+#, c-format
+msgid "Random number unit %<PRId64> is out of range (must be between 0 and %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (must not be negative)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (a layout of the whole span holds a single batch)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (%<PRId64> batch fits into the generator's span)"
+msgid_plural "Random number batch %<PRId64> is out of range (%<PRId64> batches fit into the generator's span)"
+msgstr[0] ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (no batch fits into the generator's span, only batch 0 can be used)"
+msgstr ""
+
+#, c-format
+msgid "Cannot advance a random number generator by %<PRId64> draws (the number must not be negative)"
 msgstr ""
 
 #, c-format
@@ -1184,6 +1267,9 @@ msgstr ""
 
 #, c-format
 msgid "Unable to create %s file <%s>: %s"
+msgstr ""
+
+msgid "Too many options in rule"
 msgstr ""
 
 msgid "Internal error: option or flag not found"
@@ -1705,6 +1791,14 @@ msgid "Unknown projection"
 msgstr "알려지지 않은 투영"
 
 #, c-format
+msgid "%s= is required"
+msgstr ""
+
+#, c-format
+msgid "Invalid random seed <%s> for %s=: %s"
+msgstr ""
+
+#, c-format
 msgid "Syntax error in cell header, line %d: %s"
 msgstr "셀 헤더, 줄 %d 내에 구문 오류: %s"
 
@@ -2130,11 +2224,11 @@ msgid "GRASS window when view was saved:\n"
 msgstr ""
 
 #, c-format
-msgid " Window saved in \"%s\" is completely outside of current GRASS window."
+msgid "Window saved in \"%s\" is completely outside of current GRASS window."
 msgstr ""
 
 #, c-format
-msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgid "Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
 msgstr ""
 
 msgid "Task already has a worker"
@@ -3076,11 +3170,6 @@ msgstr "완료."
 msgid "Goodbye from GRASS"
 msgstr "GRASS를 종료합니다"
 
-#, fuzzy
-#| msgid "Please install the GRASS GIS development package"
-msgid "Please install the GRASS development package"
-msgstr "GRASS 개발 패키지를 설치하세요"
-
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "매개변수 <%s>를 지원하지 않습니다"
@@ -3150,6 +3239,12 @@ msgstr ""
 #| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
 msgstr "GRASS를 시작하는 중입니다..."
+
+#, python-brace-format
+msgid ""
+"Neither an interactive terminal nor a graphical user interface is available.\n"
+"Run {cmd_name} from a terminal, use --exec to run a command, or use --text to read commands from standard input."
+msgstr ""
 
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr ""
@@ -3974,7 +4069,19 @@ msgid "Error seeking fp raster data file for row %d of <%s>: %s"
 msgstr ""
 
 #, c-format
+msgid "Compressed fp raster row for <%s> is too large"
+msgstr ""
+
+#, c-format
 msgid "Error uncompressing fp raster data for row %d of <%s>: error code %d"
+msgstr ""
+
+#, c-format
+msgid "Invalid raster row offset for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Compressed raster row for <%s> is too large"
 msgstr ""
 
 #, c-format
@@ -3986,11 +4093,19 @@ msgid "Error reading raster data for row %d of <%s>: %s"
 msgstr ""
 
 #, c-format
+msgid "Error reading raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Invalid byte count in raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
 msgid "Error uncompressing raster data for row %d of <%s>"
 msgstr ""
 
 #, c-format
-msgid "Error reading raster data for row %d of <%s>"
+msgid "Raster row for <%s> is larger than expected"
 msgstr ""
 
 #, c-format
@@ -4003,6 +4118,10 @@ msgstr ""
 
 #, c-format
 msgid "Error reading compressed null data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Compressed null data for row %d of <%s> is too large"
 msgstr ""
 
 #, c-format
@@ -4208,6 +4327,9 @@ msgstr ""
 
 #, c-format
 msgid "No null file for <%s>"
+msgstr ""
+
+msgid "Null row is too large to compress"
 msgstr ""
 
 #, c-format
@@ -4797,6 +4919,10 @@ msgstr ""
 msgid "Error reading categories: [%s]"
 msgstr ""
 
+#, c-format
+msgid "Layer number or category number out of range: [%s]"
+msgstr ""
+
 msgid "Unable to copy points"
 msgstr ""
 
@@ -5116,7 +5242,7 @@ msgstr[0] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 
 msgid "Building areas..."
@@ -6838,6 +6964,11 @@ msgstr ""
 
 msgid "Unknown query tool"
 msgstr "알려지지 않은 질의 도구"
+
+#, fuzzy
+#~| msgid "Please install the GRASS GIS development package"
+#~ msgid "Please install the GRASS development package"
+#~ msgstr "GRASS 개발 패키지를 설치하세요"
 
 #, c-format
 #~ msgid "<%s> and <%s>"

@@ -4,11 +4,8 @@
 # MODULE:	g.search.modules
 # AUTHOR(S):	Jachym Cepicky <jachym.cepicky gmail.com>
 # PURPOSE:	g.search.modules in grass modules using keywords
-# COPYRIGHT:	(C) 2015-2019 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General
-# 		Public License (>=v2). Read the file COPYING that
-# 		comes with GRASS for details.
+# SPDX-FileCopyrightText: 2015-2019 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -197,8 +194,8 @@ def _search_module(
     :return dict: modules
     """
 
-    WXGUIDIR = os.path.join(os.getenv("GISBASE"), "gui", "wxpython")
-    filename = os.path.join(WXGUIDIR, "xml", "module_items.xml")
+    GUIRESDIR = os.getenv("GRASS_GUIRESDIR")
+    filename = os.path.join(GUIRESDIR, "wxpython", "xml", "module_items.xml")
     with open(filename) as menudata_file:
         menudata = ET.parse(menudata_file)
 
@@ -214,7 +211,7 @@ def _search_module(
             items.extend(addon_items)
 
     # add system-wide installed addons to modules list
-    filename_addons_s = os.path.join(os.getenv("GISBASE"), "modules.xml")
+    filename_addons_s = os.path.join(os.getenv("GRASS_MISCDIR"), "modules.xml")
     if Path(filename_addons_s).is_file():
         with open(filename_addons_s) as addon_menudata_file_s:
             addon_menudata_s = ET.parse(addon_menudata_file_s)

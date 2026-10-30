@@ -1384,6 +1384,9 @@
       <module-item name="v.normal">
         <label>Tests for normality for vector points</label>
       </module-item>
+      <module-item name="v.ppa">
+        <label>Point pattern analysis</label>
+      </module-item>
     </items>
   </toolbox>
   <toolbox name="LidarAnalysis">
@@ -1602,6 +1605,9 @@
       </module-item>
       <module-item name="v.normal">
         <label>Test normality</label>
+      </module-item>
+      <module-item name="v.ppa">
+        <label>Point pattern analysis</label>
       </module-item>
     </items>
   </toolbox>

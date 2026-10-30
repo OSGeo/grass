@@ -47,7 +47,7 @@ jobs:
             -mindepth 1 -maxdepth 1 -type f -print -delete
           # Rehash to forget about the deleted files
           hash -r
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
       - name: Get current date cache key segment
@@ -129,14 +129,46 @@ jobs:
           pytest \
             @.github/workflows/pytest_args_gunittest.txt \
             --junitxml=pytest.gunittest.junit.xml
+      - name: Run pytest for the grass.lib loading tests standalone
+        shell: micromamba-shell {0}
+        run: |
+          # No library search path variable is exported here: the tests
+          # provide their own environment, so this pins what works without
+          # the setup done by the other steps.
+          PYTHONPATH="$(grass --config python_path)"
+          export PYTHONPATH
+          pytest \
+            python/grass/script/tests/grass_script_setup_lib_loading_test.py \
+            python/grass/app/tests/grass_app_runtime_lib_loading_test.py \
+            --junitxml=pytest.lib_loading.junit.xml
+      - name: Run pytest for the grass.lib loading tests with a relocated installation
+        shell: micromamba-shell {0}
+        run: |
+          # The installation is moved away from the prefix it was configured
+          # with, so that the libraries cannot find each other through the
+          # install names recorded at configure time. Only the tests which
+          # provide the search path variables themselves can pass here. The
+          # Python package moves with the installation, so its path is taken
+          # beforehand.
+          python_path="$(grass --config python_path)"
+          mv "${HOME}/install" "${HOME}/install-relocated"
+          trap 'mv "${HOME}/install-relocated" "${HOME}/install"' EXIT
+          PYTHONPATH="${HOME}/install-relocated${python_path#"${HOME}/install"}"
+          export PYTHONPATH
+          pytest \
+            python/grass/app/tests/grass_app_runtime_lib_loading_test.py \
+            -k manual \
+            --junitxml=pytest.lib_loading_relocated.junit.xml
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           exclude: gui
           flags: macos-pytest-python
           token: ${{ secrets.CODECOV_TOKEN }}
+          report_type: test_results
+          skip_validation: true
 
       - name: Cache GRASS Sample Dataset
         id: cached-data

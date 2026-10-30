@@ -8,11 +8,8 @@
  *               the vector
  *               control points can come from g.gui.gcp or a user-given
  *               text file
- * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2002-2011 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -202,10 +199,10 @@ int main(int argc, char *argv[])
         select_target_env();
 
         if (G_find_vector2(out_opt->answer, G_mapset())) {
-            G_warning(_("The vector map <%s> already exists in"),
+            G_warning(_("The vector map <%s> already exists."),
                       out_opt->answer);
-            G_warning(_("target project %s, mapset %s:"), G_location(),
-                      G_mapset());
+            G_warning(_("Target project: <%s>"), G_location());
+            G_warning(_("Target mapset: <%s>"), G_mapset());
             G_fatal_error(_("Rectification cancelled."));
         }
         select_current_env();

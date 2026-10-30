@@ -9,10 +9,8 @@ Can be used either from Layer Manager or as d.mon backend.
 Classes:
  - mapdisp::MapPanel
 
-(C) 2006-2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton
 @author Jachym Cepicky
@@ -249,7 +247,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.printopt = PrintOptions(self, self.MapWindow)
 
         #
-        # Re-use dialogs
+        # Reuse dialogs
         #
         self.dialogs = {}
         self.dialogs["attributes"] = None
@@ -539,7 +537,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def Disable3dMode(self):
         """Disables 3D mode (NVIZ) in user interface."""
-        # TODO: this is broken since item is removed but switch is drived by
+        # TODO: this is broken since item is removed but switch is driven by
         # index
         if "3D" in self.toolbars["map"].combo.GetString(1):
             self.toolbars["map"].combo.Delete(1)

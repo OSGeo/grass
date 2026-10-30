@@ -66,7 +66,6 @@ gs.create_project(path="path/to/my_project", epsg="3358")
 
 # Initialize the GRASS session
 with gs.setup.init("path/to/my_project") as session:
-
     # Run GRASS tools
     tools = Tools(session=session)
     tools.r_import(input="/path/to/elevation.tif", output="elevation")
@@ -114,7 +113,7 @@ m.d_vect(map="streets", color="black")
 m.show()
 ```
 
-![Elevation map overlayed with streets with gj.Map](jupyter_map.png)
+![Elevation map overlaid with streets with gj.Map](jupyter_map.png)
 
 [Learn more :material-arrow-right-bold:](jupyter_intro.md){ .md-button }
 

@@ -12,10 +12,8 @@ Classes:
  - colorrules::ThematicVectorTable
  - colorrules::BufferedWindow
 
-(C) 2008-2015 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2008-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Martin Landa <landa.martin gmail.com> (various updates, pre-defined color table)
@@ -1393,9 +1391,9 @@ class VectorColorTable(ColorTable):
             idx += 1
             self.properties["tmpColumn"] = name + "_" + str(idx)
 
-        modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
+        module_name = "v.db.addcolumn" if self.version7 else "v.db.addcol"
         RunCommand(
-            modul,
+            module_name,
             parent=self,
             map=self.inmap,
             layer=self.properties["layer"],
@@ -1408,9 +1406,9 @@ class VectorColorTable(ColorTable):
             return
 
         if self.inmap:
-            modul = "v.db.dropcolumn" if self.version7 else "v.db.dropcol"
+            module_name = "v.db.dropcolumn" if self.version7 else "v.db.dropcol"
             RunCommand(
-                modul,
+                module_name,
                 map=self.inmap,
                 layer=self.properties["layer"],
                 column=self.properties["tmpColumn"],
@@ -1477,9 +1475,9 @@ class VectorColorTable(ColorTable):
             self.columnsProp[self.attributeType]["name"]
             not in self.fromColumn.GetColumns()
         ):
-            modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
+            module_name = "v.db.addcolumn" if self.version7 else "v.db.addcol"
             RunCommand(
-                modul,
+                module_name,
                 map=self.inmap,
                 layer=self.properties["layer"],
                 columns="%s %s"
