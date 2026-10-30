@@ -487,6 +487,9 @@ Add vector map layer to current map display
 Ctrl+W:
 Close current map display
 
+Delete:
+Delete selected layer
+
 ##### Console
 
 Tab:
@@ -529,6 +532,18 @@ Render map (re-renders map)
 
 F6:
 Enable/disable auto-rendering map (re-renders map)
+
+#### Data Catalog
+
+Delete:
+Remove the selected item. Maps, mapsets and projects are deleted after
+a confirmation. On a GRASS database node the database is only removed from
+the catalog, so it can be added back later. Nothing is removed when
+several databases are selected or when items of different types are
+selected together.
+
+Ctrl+Shift+Delete:
+Delete the selected GRASS database from disk
 
 ### Starting the GUI from command line
 

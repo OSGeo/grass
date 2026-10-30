@@ -467,6 +467,8 @@ class DataCatalogTree(TreeView):
         self._hoveredDb = False
         self.Bind(wx.EVT_MOTION, self.OnMotion)
 
+        self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+
         self.EnableWatchingMapset()
 
     def _resetSelectVariables(self):
@@ -2209,6 +2211,105 @@ class DataCatalogTree(TreeView):
 
         # Update user's settings
         self._saveGrassDBs()
+
+    def _selectedGrassDb(self):
+        """
+        Return the selected GRASS database node, None if there is not exactly one
+
+        Nodes below the database in the tree populate the selected database as
+        well, so the node type has to be checked explicitly. Only a database
+        node itself can be removed.
+        """
+        if (
+            self.mixed
+            or self.selected_layer[0]
+            or self.selected_stds[0]
+            or self.selected_mapset[0]
+            or self.selected_location[0]
+            or len(self.selected_grassdb) != 1
+        ):
+            return None
+
+        return self.selected_grassdb[0]
+
+    def _getRemoveHandler(self):
+        """
+        Return the handler removing the selected items from the tree
+
+        The returned handler is None if the selection cannot be removed. The
+        conditions mirror the context menu items, so that the keyboard
+        shortcuts never remove more than the menus offer.
+        """
+        if self.mixed:
+            return None
+
+        # Maps registered in a space-time dataset can only be unregistered
+        if self.selected_stds_map[0]:
+            return None
+
+        if self.selected_layer[0]:
+            _, _, currentMapset = self._isCurrent(gisenv())
+            return self.OnDeleteMap if currentMapset else None
+
+        if self.selected_stds[0]:
+            # Removing a dataset only or also its maps is left to the
+            # context menu, which offers both as separate items
+            return None
+
+        if self.selected_mapset[0]:
+            return None if self._restricted else self.OnDeleteMapset
+
+        if self.selected_location[0]:
+            return None if self._restricted else self.OnDeleteLocation
+
+        grassdb = self._selectedGrassDb()
+        if grassdb:
+            # The database in use cannot be removed from the catalog
+            if grassdb.data["name"] == gisenv()["GISDBASE"]:
+                return None
+            return self.OnRemoveGrassDb
+
+        return None
+
+    def OnKeyUp(self, event):
+        """
+        Handle keyboard shortcuts for removing items from the data catalog
+
+        Removal is handled on key up rather than key down, so that holding
+        the key does not remove several items in a row. This matches the
+        layer tree and the graphical modeler.
+        """
+        if event.GetKeyCode() != wx.WXK_DELETE:
+            event.Skip()
+            return
+
+        # Keys belong to the label editor while a node is being renamed
+        if self.GetEditControl():
+            event.Skip()
+            return
+
+        # DefineItems leaves the selected item lists empty, which the removal
+        # handlers index into
+        selected = self.GetSelected()
+        if not selected:
+            event.Skip()
+            return
+
+        self.DefineItems(selected)
+
+        if event.ControlDown() and event.ShiftDown():
+            # Deleting a database from disk cannot be undone by adding it
+            # back to the catalog, so it needs an extra modifier
+            if self._selectedGrassDb() and not self._restricted:
+                self.OnDeleteGrassDb(None)
+                return
+        else:
+            handler = self._getRemoveHandler()
+            if handler:
+                handler(None)
+                return
+
+        event.Skip()
 
     def OnDisplayLayer(self, event):
         """
