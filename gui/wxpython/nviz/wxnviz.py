@@ -294,7 +294,7 @@ def print_error(msg, type):
     global log
     if log:
         msg = DecodeString(msg.data)
-        log.write(msg)
+        log.write(msg + "\n")
     else:
         print(msg)
 
