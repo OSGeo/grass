@@ -1,4 +1,11 @@
 import grass.script as gs
+from grass.tools import Tools
+
+
+def region_exists(name, env):
+    """Return True if a saved region with the name is found"""
+    found = Tools(env=env).g_findfile(element="windows", file=name, format="json")
+    return found["name"] is not None
 
 
 def test_region_manager_with_g_region(session_2x2):
@@ -193,14 +200,8 @@ def test_region_manager_removes_temporary_region(session_2x2):
     """Test RegionManager does not leave the region it saved in the mapset."""
     env = session_2x2.env
     with gs.RegionManager(env=env) as manager:
-        assert any(
-            name.startswith(manager.region_name)
-            for name in gs.list_strings("region", env=env)
-        )
-    assert not any(
-        name.startswith(manager.region_name)
-        for name in gs.list_strings("region", env=env)
-    )
+        assert region_exists(manager.region_name, env=env)
+    assert not region_exists(manager.region_name, env=env)
 
 
 def test_region_manager_nested_removes_temporary_regions(session_2x2):
@@ -210,7 +211,7 @@ def test_region_manager_nested_removes_temporary_regions(session_2x2):
         gs.RegionManager(env=env) as outer,
         gs.RegionManager(env=env) as inner,
     ):
-        pass
-    saved = gs.list_strings("region", env=env)
-    assert not any(name.startswith(outer.region_name) for name in saved)
-    assert not any(name.startswith(inner.region_name) for name in saved)
+        assert region_exists(outer.region_name, env=env)
+        assert region_exists(inner.region_name, env=env)
+    assert not region_exists(outer.region_name, env=env)
+    assert not region_exists(inner.region_name, env=env)
