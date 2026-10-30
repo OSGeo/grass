@@ -28,13 +28,19 @@ def session(tmp_path_factory):
         yield session
 
 
-def test_update_mode_releases_sidx(session):
-    """The sidx file is closed after a map opened with "rw" is closed"""
+@pytest.mark.parametrize("lowmem", [False, True])
+def test_update_mode_releases_sidx(session, lowmem):
+    """The sidx file is closed after a map opened with "rw" is closed
+
+    With GRASS_VECTOR_LOWMEM, the index is kept in temporary files instead of
+    memory.
+    """
     env = session.env.copy()
+    if lowmem:
+        env["GRASS_VECTOR_LOWMEM"] = "1"
+    gisenv = gs.gisenv(env=session.env)
     env["MAPSET_PATH"] = str(
-        Path(gs.gisenv(env=session.env)["GISDBASE"])
-        / gs.gisenv(env=session.env)["LOCATION_NAME"]
-        / gs.gisenv(env=session.env)["MAPSET"]
+        Path(gisenv["GISDBASE"]) / gisenv["LOCATION_NAME"] / gisenv["MAPSET"]
     )
     result = subprocess.run(
         [sys.executable, str(CHECKS)],

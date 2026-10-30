@@ -1192,7 +1192,7 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
  */
 int Vect_open_sidx(struct Map_info *Map, int mode)
 {
-    int err;
+    int err, ret;
     struct Coor_info CInfo;
     struct Plus_head *Plus;
 
@@ -1287,16 +1287,13 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
 
         if (mode == 1) {
             /* load spatial index for update */
-            if (dig_Rd_spidx(&(Plus->spidx_fp), Plus) == -1) {
-                fclose(Plus->spidx_fp.file);
+            ret = dig_Rd_spidx(&(Plus->spidx_fp), Plus);
+            /* The index is now copied to memory or to temporary files and
+             * the sidx file is rewritten by Vect_save_sidx(). */
+            fclose(Plus->spidx_fp.file);
+            Plus->spidx_fp.file = NULL;
+            if (ret == -1)
                 return -1;
-            }
-            if (!Plus->Spidx_file) {
-                /* the index is fully loaded in memory and the file is
-                 * rewritten by Vect_save_sidx() */
-                fclose(Plus->spidx_fp.file);
-                Plus->spidx_fp.file = NULL;
-            }
         }
     }
 
