@@ -84,16 +84,25 @@ def reproject_region(region, from_proj, to_proj):
     return region
 
 
+def reproject_latlon_coords(coords, env=None):
+    """Reproject coordinates from WGS84 to the project CRS in one m.proj call
+
+    :param coords: list of (latitude, longitude) tuples
+    :param env: environment to use (defaults to global)
+    :return: list of (east, north, elevation) tuples in the input order
+    """
+    text = "".join(f"{lon} {lat}\n" for lat, lon in coords)
+    output = Tools(env=env).m_proj(input=StringIO(text), flags="i", separator=",").text
+    return [tuple(map(float, line.split(","))) for line in output.splitlines()]
+
+
 def reproject_latlon(coord):
     """Reproject coordinates
 
     :param coord: coordinates given as tuple (latitude, longitude)
     :return: reprojected coordinates (returned as tuple)
     """
-    coord_str = f"{coord[1]} {coord[0]}\n"
-    output = Tools().m_proj(input=StringIO(coord_str), flags="i", separator=",").text
-    east, north, elev = map(float, output.splitlines()[0].split(","))
-    return east, north, elev
+    return reproject_latlon_coords([coord])[0]
 
 
 def _style_table(html_content):
