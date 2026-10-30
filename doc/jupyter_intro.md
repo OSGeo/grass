@@ -146,7 +146,19 @@ m.show()
 
 The map gives you the ability to query the map, zoom in and out, and pan around,
 set the computational region, and create simple vector data by digitizing.
-To change the default basemap, see [documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html#module-grass.jupyter.interactivemap).
+The basemap can be changed with the `tiles` parameter which takes a name of
+a tile provider from the [xyzservices](https://xyzservices.readthedocs.io/)
+package, see its [gallery](https://xyzservices.readthedocs.io/en/stable/gallery.html)
+for the available basemaps. Some providers require an API key which can be
+passed with the `API_key` parameter. For example, to use satellite imagery
+as the basemap:
+
+```python
+m = gj.InteractiveMap(tiles="Esri.WorldImagery")
+```
+
+For more details, see the
+[documentation](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.jupyter.html#module-grass.jupyter.interactivemap).
 
 ## 3D map
 
