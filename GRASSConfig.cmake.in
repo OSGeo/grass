@@ -36,6 +36,7 @@ set(_GRASS_supported_components
     manage
     neta
     nviz
+    octree
     ogsf
     parson
     pngdriver
