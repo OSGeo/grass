@@ -2,20 +2,20 @@
 # French translation of grassmods.pot
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2005-2019 GRASS Development Team
-# Emmanuel Saracco <esaracco@users.labs.libre-entreprise.org>, 2004.
+# SPDX-FileCopyrightText: 2004 Emmanuel Saracco <esaracco@users.labs.libre-entreprise.org>
 # Laurent Courty, 2005.
-# Daniel Calvelo Aros <dca@users.sf.net>, 2005
-# Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>, 2005, 2006
+# SPDX-FileCopyrightText: 2005 Daniel Calvelo Aros <dca@users.sf.net>
+# SPDX-FileCopyrightText: 2005, 2006 Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>
 # Vincent Bain <bain toraval.fr>, 2012.
-# Sylvain Maillard <sylvain.maillard@gmail.com>, 2012, 2013.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
-# Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>, 2026.
+# SPDX-FileCopyrightText: 2012, 2013 Sylvain Maillard <sylvain.maillard@gmail.com>
+# SPDX-FileCopyrightText: 2025, 2026 Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>
+# SPDX-FileCopyrightText: 2026 Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 18:18+0000\n"
-"PO-Revision-Date: 2026-10-18 04:54+0000\n"
+"POT-Creation-Date: 2026-10-24 18:21+0000\n"
+"PO-Revision-Date: 2026-10-25 21:39+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
@@ -75,7 +75,7 @@ msgid "connection settings"
 msgstr "paramètres de connexion"
 
 msgid "Prints/sets general DB connection for current mapset."
-msgstr "Afficher/définir la connecion DB générale pour le jeu de cartes courant."
+msgstr "Afficher/définir la connexion DB générale pour le jeu de cartes courant."
 
 msgid "Print current connection parameters and exit"
 msgstr "Afficher les paramètres de connexion courants et quitter"
@@ -349,7 +349,7 @@ msgid "Use format=vertical instead."
 msgstr ""
 
 msgid "Only test query, do not execute"
-msgstr "Tester uniquement les requêtes, ne pas les éxécuter"
+msgstr "Tester uniquement la requête, ne pas l'exécuter"
 
 msgid "Selects data from attribute table."
 msgstr ""
@@ -1225,7 +1225,7 @@ msgid "Program for generating and displaying simple graphics on the display moni
 msgstr "Programme pour générer et afficher de simples graphiques dans le moniteur actif."
 
 msgid "Name of file containing graphics commands, if not given reads from standard input"
-msgstr "Nom du fichier contenant les commandes graphiques, s'il n'y en a pas, les prendre à partirde la ligne de commande"
+msgstr "Nom du fichier contenant les commandes graphiques ; s'il n'est pas spécifié, la lecture s'effectue à partir de l'entrée standard"
 
 msgid "Color to draw with, either a standard GRASS color or R:G:B triplet"
 msgstr "Couleur pour le traçage, soit une couleur GRASS standard, soit un triplet R:G:B"
@@ -1247,7 +1247,7 @@ msgid "grid"
 msgstr "grille"
 
 msgid "Overlays a user-specified grid in the active display frame on the graphics monitor."
-msgstr "Superpose une grille dont le pas est spécifié par l'utilisateur dans le moniteuractif."
+msgstr "Superpose une grille définie par l'utilisateur dans le cadre d'affichage actif sur le moniteur graphique."
 
 msgid "Size of grid to be drawn (in map units)"
 msgstr ""
@@ -1608,11 +1608,11 @@ msgid "Color range exceeds upper limit of actual data"
 msgstr "Les valeurs de couleurs dépassent la limite plafond des données actuelles"
 
 #, c-format
-msgid "Range [%.3f, %.3f] out of the logarithm domain."
+msgid "use=%s out of range [%.3f, %.3f] (extend with range= ?)"
 msgstr ""
 
 #, c-format
-msgid "use=%s out of range [%.3f, %.3f] (extend with range= ?)"
+msgid "Range [%.3f, %.3f] has no extent for a logarithmic scale"
 msgstr ""
 
 #, c-format
@@ -1975,6 +1975,10 @@ msgid "Output file: %s"
 msgstr ""
 
 #, c-format
+msgid "Incomplete GRASS session: Variable '%s' not set"
+msgstr ""
+
+#, c-format
 msgid "Monitor <%s> already running"
 msgstr ""
 
@@ -2193,7 +2197,7 @@ msgid "At least two points are required"
 msgstr ""
 
 msgid "Draws arrows representing cell aspect direction for a raster map containing aspect data."
-msgstr "Tracer des flèches représentant la direction d'aspect des cellules pour une couche rastercontenant des données d'aspect."
+msgstr "Trace des flèches représentant la direction d'aspect des cellules pour une carte raster contenant des données d’exposition."
 
 msgid "Name of raster aspect map to be displayed"
 msgstr "Nom de la couche raster d'aspect à afficher"
@@ -9098,7 +9102,7 @@ msgid "Input is a 1-arcsec tile (default: 3-arcsec)"
 msgstr "La tuile en entrée est une 1-arsec (par défaut : 3-arsec)"
 
 msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
-msgstr ""
+msgstr "Télécharge et importe des données depuis des serveurs de cartographie web OGC WMS et OGC WMTS."
 
 msgid "OGC web services"
 msgstr "services web OGC"
@@ -9469,7 +9473,7 @@ msgid "Print projection information of input pack file and exit"
 msgstr "Afficher les informations de projection du fichier empaqueté d'entrée et quitter"
 
 msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
-msgstr "Créer une carte raster 3D depuis un assemblage de plusieurs coordonnées à l'aide de statistiques univarées"
+msgstr "Créer une carte raster 3D à partir d'un ensemble de plusieurs coordonnées à l'aide de statistiques univariées"
 
 msgid "raster3d"
 msgstr "raster3d"
@@ -10745,7 +10749,7 @@ msgid "Restrict fetch to features which touch the current region"
 msgstr "Restreindre le téléchargement aux entités qui touchent la région courante"
 
 msgid "Exports a vector map as GRASS specific archive file"
-msgstr "Exporter une carte vecteur vers un fichier d'archive GRASS"
+msgstr "Exporter une carte vecteur vers un fichier d'archive spécifique à GRASS"
 
 msgid "Name of vector map to pack up"
 msgstr "Nom de la carte vecteur empaquetée"
@@ -14850,10 +14854,9 @@ msgstr ""
 msgid "%<PRIu64> points found in input file(s)"
 msgstr "%<PRIu64> points trouvés dans le(s) fichier(s) d'entrée"
 
-#, fuzzy, c-format
-#| msgid "%lu points found in region."
+#, c-format
 msgid "%<PRIu64> points found in region."
-msgstr "%lu points trouvés dans la région."
+msgstr "%<PRIu64> points trouvés dans la région."
 
 #, fuzzy, c-format
 #| msgid "Number of input points: %d."
@@ -14931,7 +14934,7 @@ msgid "Pass #%d (of %d) ..."
 msgstr "Passe #%d (sur %d) ..."
 
 msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
-msgstr "Créer une carte raster à partir de l'assemblage d'un lot de coordonnées en utilisant des statistiques univariées."
+msgstr "Créer une carte raster à partir d'un ensemble de plusieurs coordonnées à l'aide de statistiques univariées."
 
 msgid "ASCII file containing input data (or \"-\" to read from stdin)"
 msgstr "Fichier ASCII contenant les données d'entrée (ou \"-\" pour lire depuis stdin)"
@@ -16823,9 +16826,8 @@ msgstr "La carte raster d'entrée est en dehors de la région cuorante"
 msgid "Unable to reproject map center %g, %g"
 msgstr ""
 
-#, fuzzy
 msgid "Re-projects a raster map from given project to the current project."
-msgstr "Reprojeter une carte raster depuis un secteur donné vers le secteur courant."
+msgstr "Permet de reprojeter une carte raster d’un projet donné vers le projet actuel."
 
 #, fuzzy
 msgid "Project (location) containing input raster map"
@@ -18610,10 +18612,9 @@ msgstr ""
 msgid "FP raster map <%s> not found"
 msgstr ""
 
-#, fuzzy, c-format
-#| msgid "Flag 't' is deprecated and will be removed in a future release. Please use format=csv instead."
+#, c-format
 msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
-msgstr "L'option 't' est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=csv."
+msgstr "L'option '%c' est obsolète et sera retirée dans une prochaine version. L'initialisation est automatique ; vous pouvez également utiliser le paramètre %s."
 
 #, c-format
 msgid "Read random seed from %s option: %<PRId64>"
@@ -20205,6 +20206,13 @@ msgid "Create an integer raster map"
 msgstr ""
 
 #, c-format
+msgid "Autogenerated random seed set to: %<PRId64>"
+msgstr ""
+
+msgid "The region has more cells than random values one seed holds. Later rows repeat the values of earlier rows plus a constant."
+msgstr ""
+
+#, c-format
 msgid "Minimum %s should be higher than maximum %s, but %s > %s"
 msgstr ""
 
@@ -20500,7 +20508,7 @@ msgid "Use 3D raster mask (if exists) with output map"
 msgstr "Utiliser le masque raster 3D (s'il existe) pour la carte en sortie"
 
 msgid "Converts 2D raster map slices to one 3D raster volume map."
-msgstr "Convertir des tranches de cartes raster 2D en une carte volumique raster 3D."
+msgstr "Convertit des tranches de cartes raster 2D en une seule carte volumique raster 3D."
 
 msgid "No output map"
 msgstr "Aucune couche créée en sortie"
@@ -22424,7 +22432,7 @@ msgstr "Le format de sortie par défaut des options -g et -r est actuellement «
 
 #, c-format
 msgid "Unable to read range of 3D raster map <%s>"
-msgstr "Impossible de lire la plage de la carte raster 3D <%s>"
+msgstr "Impossible de lire la plage de valeurs de la carte raster 3D <%s>"
 
 msgid "Error while reading history file"
 msgstr "Erreur à la lecture du fichier d'historique"
@@ -25027,7 +25035,7 @@ msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
 msgstr ""
 
 msgid "Prints/sets general temporal GIS database connection for current mapset."
-msgstr "Afficher/définir la connecion DB générale pour le jeu de cartes courant."
+msgstr "Afficher/définir la connexion à la base de données SIG temporelle générale pour le jeu de cartes courant."
 
 msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
 msgstr ""
@@ -31792,7 +31800,7 @@ msgid "Can not write data portion to provided output"
 msgstr ""
 
 msgid "Re-projects a vector map from one project to the current project."
-msgstr "Re-projette une carte vecteur depuis un projet vers le projet courant."
+msgstr "Permet de reprojeter une carte vecteur d’un projet donné vers le projet actuel."
 
 msgid "Project (location) containing input vector map"
 msgstr "Projet (secteur) contenant la carte vectorielle d’entrée"

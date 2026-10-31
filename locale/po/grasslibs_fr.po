@@ -1,19 +1,19 @@
 # French translation of grasslibs_fr.po
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2005, 2012-2017 GRASS Development Team
-# Emmanuel Saracco <esaracco@users.labs.libre-entreprise.org>, 2004
-# Daniel Calvelo <dca@users.sf.net>, 2005
-# Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>, 2005
+# SPDX-FileCopyrightText: 2004 Emmanuel Saracco <esaracco@users.labs.libre-entreprise.org>
+# SPDX-FileCopyrightText: 2005 Daniel Calvelo <dca@users.sf.net>
+# SPDX-FileCopyrightText: 2005 Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>
 # ->just re-reading/editing to harmonize terminology with the GRASS6 french documentation project
 # Vincent Bain <bain toraval.fr>, 2012.
-# Sylvain Maillard <sylvain.maillard@gmail.com>, 2011, 2012, 2015, 2017.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
+# SPDX-FileCopyrightText: 2011, 2012, 2015, 2017 Sylvain Maillard <sylvain.maillard@gmail.com>
+# SPDX-FileCopyrightText: 2025, 2026 Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 18:18+0000\n"
-"PO-Revision-Date: 2026-10-17 18:52+0000\n"
+"POT-Creation-Date: 2026-10-24 18:21+0000\n"
+"PO-Revision-Date: 2026-10-25 21:39+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #, c-format
 msgid "Unknown algorithm '%s'"
@@ -256,19 +256,19 @@ msgstr ""
 "++ Test de copie de colonne terminé ++"
 
 msgid "Choose the unit tests to run"
-msgstr "Choisir les tests unitaires à éxécuter"
+msgstr "Choisir les tests unitaires à exécuter"
 
 msgid "Choose the integration tests to run"
-msgstr "Choisir les tests d'intégration à éxécuter"
+msgstr "Choisir les tests d'intégration à exécuter"
 
 msgid "Run all unit tests"
-msgstr "Éxécuter l'ensemble des tests unitaires"
+msgstr "Exécuter l'ensemble des tests unitaires"
 
 msgid "Run all integration tests"
-msgstr "Éxécuter tous les tests d'intégration"
+msgstr "Exécuter tous les tests d'intégration"
 
 msgid "Run all unit and integration tests"
-msgstr "Éxécuter tous les tests unitaires et d'intégration"
+msgstr "Exécuter tous les tests unitaires et d'intégration"
 
 msgid "Performs unit and integration tests for the dbmi base library"
 msgstr "Effectue les tests unitaires et d'intégration pour la librairie dbmi"
@@ -1798,15 +1798,13 @@ msgstr "Autre projection"
 msgid "Unknown projection"
 msgstr "Projection inconnue"
 
-#, fuzzy, c-format
-#| msgid "<required>"
+#, c-format
 msgid "%s= is required"
-msgstr "<obligatoire>"
+msgstr "%s= est requis"
 
-#, fuzzy, c-format
-#| msgid "Invalid value <%s> for parameter <%s>"
+#, c-format
 msgid "Invalid random seed <%s> for %s=: %s"
-msgstr "Valeur <%s> manquante pour le paramètre <%s>"
+msgstr "Graine aléatoire invalide <%s> pour %s= : %s"
 
 #, c-format
 msgid "Syntax error in cell header, line %d: %s"
@@ -3649,7 +3647,7 @@ msgstr "Nombre maximal de fichiers de données dépassé"
 
 #, c-format
 msgid "Unable to read range of 3D raster map <%s>"
-msgstr "Impossible de lire la plage de valeurs du raster 3D <%s>"
+msgstr "Impossible de lire la plage de valeurs de la carte raster 3D <%s>"
 
 #, c-format
 msgid "Unable to close 3D raster map <%s>"
@@ -4166,10 +4164,9 @@ msgstr "Erreur de lecture des données compressées nulles à la ligne %d de <%s
 msgid "Error reading compressed null data for row %d of <%s>"
 msgstr "Erreur de lecture des données null compressées à la ligne %d de <%s>"
 
-#, fuzzy, c-format
-#| msgid "Error writing compressed null data for row %d of <%s>: %s"
+#, c-format
 msgid "Compressed null data for row %d of <%s> is too large"
-msgstr "Erreur lors de l'écriture des données nulles compressées à la ligne %d de <%s> : %s"
+msgstr "Les données nulles compressées pour la ligne %d de <%s> sont trop volumineuses"
 
 #, c-format
 msgid "Error uncompressing null data for row %d of <%s>"
@@ -5699,7 +5696,7 @@ msgid "Unable to create database definition file for vector map <%s>"
 msgstr "Impossible de créer le fichier de définition de base de données pour la carte vecteur <%s>"
 
 msgid "Bug: attempt to update map which is not in current mapset"
-msgstr "Bug: tentative de mise à jour d'une couche qui n'est pas dans le jeu de cartes courant"
+msgstr "Bug : tentative de mise à jour d'une couche qui n'est pas dans le jeu de cartes courant"
 
 msgid "vector map is not opened"
 msgstr "La carte vecteur n'est pas ouverte"

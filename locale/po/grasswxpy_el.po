@@ -1,14 +1,14 @@
 # translation of grasswxpy_el.po to Greek
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2008 GRASS Development Team
-# Vasilios Antoniou <antoniou_v@yahoo.gr>, 2008
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# SPDX-FileCopyrightText: 2008 Vasilios Antoniou <antoniou_v@yahoo.gr>
+# SPDX-FileCopyrightText: 2025, 2026 Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 18:18+0000\n"
-"PO-Revision-Date: 2025-08-26 14:19+0000\n"
+"POT-Creation-Date: 2026-10-24 18:21+0000\n"
+"PO-Revision-Date: 2026-10-31 15:39+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/el/>\n"
 "Language: el\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #, python-format
 msgid "Maximum number of animations is %d."
@@ -42,11 +42,11 @@ msgstr "Προετοιμασία για εξαγωγή, παρακαλώ περ�
 
 #, python-format
 msgid "%(from)s %(dash)s %(to)s"
-msgstr "%(από) %(παύλα) %(σε) "
+msgstr "%(from)s %(dash)s %(to)s"
 
 #, python-format
 msgid "%(start)s %(unit)s"
-msgstr "%(αρχή) %(μονάδα)ες "
+msgstr "%(start)s %(unit)s"
 
 msgid "Exporting animation, please wait..."
 msgstr "Εξαγωγή κινούμενου σχεδίου, παρακαλώ περιμένετε..."
@@ -1755,7 +1755,7 @@ msgstr ""
 #, fuzzy, python-format
 #| msgid "Directory %s does not exist."
 msgid "Column '%(column)s' does not exist."
-msgstr "Ο φάκελος %s δεν υπάρχει,"
+msgstr "Η στήλη '%(column)s' δεν υπάρχει."
 
 #, python-format
 msgid ""

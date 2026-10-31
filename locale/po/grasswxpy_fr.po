@@ -2,17 +2,17 @@
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2006-2017 GRASS Development Team
 #
-# Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>, 2006.
+# SPDX-FileCopyrightText: 2006 Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>
 # Vincent Bain <bain toraval.fr>, 2007, 2012.
 # Sylvain Maillard <sylvain.maillard gmail.com>, 2011-2015, 2017.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
-# Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>, 2026.
+# SPDX-FileCopyrightText: 2025, 2026 Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>
+# SPDX-FileCopyrightText: 2026 Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 18:18+0000\n"
-"PO-Revision-Date: 2026-10-17 18:31+0000\n"
+"POT-Creation-Date: 2026-10-24 18:21+0000\n"
+"PO-Revision-Date: 2026-10-31 15:39+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.10.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #, python-format
@@ -518,7 +518,7 @@ msgstr "Il n'est pas permis d'afficher des données avec des types temporels dif
 
 #, python-format
 msgid "It is not allowed to display data with different units (%s)."
-msgstr "Il n'est pas permis d'afficher des donénes avec des unités différentes (%s)."
+msgstr "Il n'est pas permis d'afficher des données avec des unités différentes (%s)."
 
 msgid "You are going to display data with different temporal types of maps (interval and point). It is recommended to use data of one temporal type to avoid confusion."
 msgstr "Vous êtes sur le point d'afficher des données avec des types de cartes temporelles différents (intervalle et ponctuel). Il est recommandé d'utiliser un seul tye temporel pour éviter la confusion."
@@ -678,7 +678,7 @@ msgstr "Détails : %s\n"
 
 #, python-format
 msgid "Unsupported map layer type '%s'"
-msgstr "Type de couche '%s' non pris en charge"
+msgstr "Type de couche de carte '%s' non supporté"
 
 #, python-format
 msgid "Rendering failed: %s"
@@ -1653,10 +1653,8 @@ msgstr "Données attributaires - clic droit pour éditer/gérer les enregistreme
 msgid "Table"
 msgstr "Table"
 
-#, fuzzy
-#| msgid " (read-only)"
 msgid "Table (read-only)"
-msgstr " (lecture seule)"
+msgstr "Table (lecture seule)"
 
 msgid "SQL Query"
 msgstr "Requête SQL"
@@ -4171,10 +4169,8 @@ msgstr "Couleur de l'entité :"
 msgid "Area fill color:"
 msgstr "Couleur de remplissage :"
 
-#, fuzzy
-#| msgid "Random colors according to category number "
 msgid "Random colors according to category number"
-msgstr "Couleur aléatoire selon le numéro de catégorie "
+msgstr "Couleur aléatoire selon le numéro de catégorie"
 
 msgid "Symbol:"
 msgstr "Symbole :"
@@ -7413,10 +7409,8 @@ msgstr "Enregistrer sous"
 msgid "Save workspace to file"
 msgstr "Enregistrer l'espace de travail dans un fichier"
 
-#, fuzzy
-#| msgid "Choose workspace file"
 msgid "Close workspace file"
-msgstr "Choisir un fichier d'environnement de travail"
+msgstr "Fermer le fichier d'espace de travail"
 
 msgid "Map display"
 msgstr "Affichage des cartes"
@@ -7479,7 +7473,7 @@ msgid "ASCII x,y,z point import and gridding"
 msgstr "Importation et maillage de points ASCII x,y,z"
 
 msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
-msgstr "Créer une carte raster à partir de l'assemblage d'un lot de coordonnées en utilisant des statistiques univariées."
+msgstr "Créer une carte raster à partir d'un ensemble de plusieurs coordonnées à l'aide de statistiques univariées."
 
 msgid "ASCII grid import"
 msgstr "Importer une grille ASCII"
@@ -7538,34 +7532,26 @@ msgstr "Géoréférencer, rectifier et importer une image Terra-ASTER et ses MNT
 msgid "LAS LiDAR points import"
 msgstr "Importer des popints LiDAR LAS"
 
-#, fuzzy
-#| msgid "LAS LiDAR points import"
 msgid "Point cloud (LAS LiDAR) import"
-msgstr "Importer des popints LiDAR LAS"
+msgstr "Importer un nuage de points (LAS LiDAR)"
 
-#, fuzzy
-#| msgid "SRTM HGT import"
 msgid "WMS/WMTS import"
-msgstr "Importer un SRTM HGT"
+msgstr "Importer WMS/WMTS"
 
 msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
-msgstr ""
+msgstr "Télécharge et importe des données depuis des serveurs de cartographie web OGC WMS et OGC WMTS."
 
 msgid "Unpack raster map"
 msgstr "Dépaqueter une carte raster"
 
-#, fuzzy
-#| msgid "Imports a GRASS GIS specific raster archive file (packed with r.pack) as a raster map"
 msgid "Imports a GRASS specific raster archive file (packed with r.pack) as a raster map"
 msgstr "Importe un fichier d'archive raster GRASS (empaqueté avec r.pack) en tant que carte raster"
 
-#, fuzzy
 msgid "Reproject raster map from different GRASS project"
-msgstr "Reprojeter une carte raster depuis un secteur différent"
+msgstr "Reprojeter une carte raster provenant d'un autre projet GRASS"
 
-#, fuzzy
 msgid "Re-projects a raster map from given project to the current project."
-msgstr "Reprojeter une carte raster depuis un secteur donné vers le secteur courant."
+msgstr "Permet de reprojeter une carte raster d’un projet donné vers le projet actuel."
 
 msgid "Simplified vector import with reprojection"
 msgstr "Importation vecteur simplifié avec reprojection"
@@ -7621,18 +7607,14 @@ msgstr "Importer des cartes vectorielles Mapgen ou Matlab-ASCII."
 msgid "Unpack vector map"
 msgstr "Dépaqueter une carte vecteur"
 
-#, fuzzy
-#| msgid "Imports a GRASS GIS specific vector archive file (packed with v.pack) as a vector map"
 msgid "Imports a GRASS specific vector archive file (packed with v.pack) as a vector map"
 msgstr "Importe un fichier vecteur d'archive GRASS (empaqueté avec v.pack) en tant que carte vecteur"
 
-#, fuzzy
 msgid "Reproject vector map from different GRASS project"
-msgstr "Reprojeter une carte vecteur depuis un secteur différent"
+msgstr "Reprojeter une carte vecteur provenant d'un autre projet GRASS"
 
-#, fuzzy
 msgid "Re-projects a vector map from one project to the current project."
-msgstr "Re-projette une carte vecteur depuis un secteur dans le secteur courant."
+msgstr "Permet de reprojeter une carte vecteur d’un projet donné vers le projet actuel."
 
 msgid "Import 3D raster data"
 msgstr "Importer des données raster 3D"
@@ -7655,20 +7637,14 @@ msgstr "Importer en Vis5D"
 msgid "Import 3-dimensional Vis5D files."
 msgstr "Importer des fichiers Vis5D en 3-dimensions."
 
-#, fuzzy
-#| msgid "ASCII 3D import"
 msgid "LiDAR 3D import"
-msgstr "Importer un ASCII 3D"
+msgstr "Importation LiDAR 3D"
 
-#, fuzzy
-#| msgid "3D raster to raster series"
 msgid "XYZ to 3D raster series"
-msgstr "Raster 3D vers série de raster"
+msgstr "XYZ vers série de rasters 3D"
 
-#, fuzzy
-#| msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
 msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
-msgstr "Créer une carte raster à partir de l'assemblage d'un lot de coordonnées en utilisant des statistiques univariées."
+msgstr "Créer une carte raster 3D à partir d'un ensemble de plusieurs coordonnées à l'aide de statistiques univariées"
 
 msgid "Import database table"
 msgstr "Importer une table d'une base de données"
@@ -7763,10 +7739,8 @@ msgstr "Convertir des cartes raster vers le format VTK-ASCII."
 msgid "Pack raster map"
 msgstr "Empaqueter des cartes raster"
 
-#, fuzzy
-#| msgid "Exports a raster map as GRASS GIS specific archive file"
 msgid "Exports a raster map as GRASS specific archive file"
-msgstr "Exporter une carte raster vers un fichier d'archive GRASS GIS"
+msgstr "Exporter une carte raster vers un fichier d'archive spécifique à GRASS"
 
 msgid "Export vector map"
 msgstr "Exporter une carte vecteur"
@@ -7807,15 +7781,11 @@ msgstr "Convertir une carte vecteur vers un fichier VTK ASCII."
 msgid "Pack vector map"
 msgstr "Empaqueter une carte vecteur"
 
-#, fuzzy
-#| msgid "Exports a vector map as GRASS GIS specific archive file"
 msgid "Exports a vector map as GRASS specific archive file"
-msgstr "Exporter une carte vecteur vers un fichier d'archive GRASS GIS"
+msgstr "Exporter une carte vecteur vers un fichier d'archive spécifique à GRASS"
 
-#, fuzzy
-#| msgid "Export to image"
 msgid "Export to LiDAR format"
-msgstr "Exporter en image"
+msgstr "Exporter au format LiDAR"
 
 msgid "Export 3D raster maps"
 msgstr "Exporter des cartes raster 3D"
@@ -7841,15 +7811,11 @@ msgstr "Exporter une carte raster 3D en fichier Vis5D à 3 dimensions."
 msgid "Converts 3D raster maps into the VTK-ASCII format."
 msgstr "Convertit des cartes raster 3D au format VTK-ASCII."
 
-#, fuzzy
-#| msgid "DXF export"
 msgid "NetCDF export"
-msgstr "Exporter en DXF"
+msgstr "Exporter en netCDF"
 
-#, fuzzy
-#| msgid "Export 3D raster maps"
 msgid "Export a 3D raster map as netCDF file."
-msgstr "Exporter des cartes raster 3D"
+msgstr "Exporter une carte raster 3D en fichier netCDF"
 
 msgid "Export database table"
 msgstr "Exporter une table de la base de données"
@@ -7904,10 +7870,8 @@ msgstr "Supprimer"
 msgid "Removes data base element files from the user's current mapset using the search pattern."
 msgstr "Supprimer les fichiers éléments de base de données du jeu de données courant de l'utilisateur"
 
-#, fuzzy
-#| msgid "Downloaded project is not valid"
 msgid "Download project from web"
-msgstr "Le projet téléchargé n'est pas valide"
+msgstr "Télécharger un projet depuis le web"
 
 msgid "Download GRASS project from the web Get GRASS project from an URL or file path"
 msgstr ""
@@ -7933,7 +7897,7 @@ msgid "Raster series to 3D raster"
 msgstr "Série de raster vers raster 3D"
 
 msgid "Converts 2D raster map slices to one 3D raster volume map."
-msgstr "Convertir des tranches de cartes raster 2D en une carte volumique raster 3D. "
+msgstr "Convertit des tranches de cartes raster 2D en une seule carte volumique raster 3D."
 
 msgid "Raster 2.5D to 3D raster"
 msgstr "Raster 2.5D vers raster 3D"
@@ -8706,7 +8670,7 @@ msgid "Set up sampling and analysis framework"
 msgstr "Mise en place de l'échantillonage et de l'analyse"
 
 msgid "Configuration editor for r.li.'index'"
-msgstr "Editeur de configuration de \"l'index\" r.li "
+msgstr "Éditeur de configuration pour r.li.'index'"
 
 msgid "Edge density"
 msgstr "Densité du bord"
@@ -8796,7 +8760,7 @@ msgid "Generates rate of spread raster maps. Generates three, or four raster map
 msgstr "Génère trois ou quatre couches raster montrant 1) la la vitesse de propagation de base (ROS), 2) la propagation maximale, 3) la direction de la propagation maximale, et en option 4) la distance potentielle maximale de propagation."
 
 msgid "Least-cost spread paths"
-msgstr "Propagation par chemins de moindre coût "
+msgstr "Propagation par chemins de moindre coût"
 
 msgid "Recursively traces the least cost path backwards to cells from which the cumulative cost was determined."
 msgstr "Trace de façon récursive le plus court chemin vers les cellules pour lequelles le coût cumulé est déterminé."
@@ -9971,7 +9935,7 @@ msgid "Computes broad band albedo from surface reflectance."
 msgstr "Calculer l'albedo depuis la réflectance de surface."
 
 msgid "Emissivity"
-msgstr " Emissivité"
+msgstr "Émissivité"
 
 msgid "Computes emissivity from NDVI, generic method for sparse land."
 msgstr "Calcule l'émissivité depuis le NDVI, méthode générique pour les terres clairsemées."
@@ -10202,7 +10166,7 @@ msgid "Connect"
 msgstr "Se connecter"
 
 msgid "Prints/sets general DB connection for current mapset."
-msgstr "Afficher/définir la connecion DB générale pour le jeu de cartes courant."
+msgstr "Afficher/définir la connexion DB générale pour le jeu de cartes courant."
 
 msgid "Login"
 msgstr "S'identifier"
@@ -10331,7 +10295,7 @@ msgid "Connect temporal database"
 msgstr "Connexion à une base de données temporelle"
 
 msgid "Prints/sets general temporal GIS database connection for current mapset."
-msgstr "Afficher/définir la connecion DB générale pour le jeu de cartes courant."
+msgstr "Afficher/définir la connexion à la base de données SIG temporelle générale pour le jeu de cartes courant."
 
 msgid "Create"
 msgstr "Créer"
@@ -10566,7 +10530,7 @@ msgid "Performs a neighborhood analysis for each map in a space time raster data
 msgstr "Effectuer une analyse de voisinage pour chaque carte d'un jeu de données temporel."
 
 msgid "Aggregation in raster datasets"
-msgstr "Agrégation dans un jeu  de données raster"
+msgstr "Agrégation dans les jeux de données raster"
 
 msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
 msgstr "Applique différents algorithmes d'aggrégation de r.series sur tout ou partie des cartes raster d'un jeu de données raster temporel."

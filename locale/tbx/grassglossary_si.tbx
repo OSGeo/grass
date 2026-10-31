@@ -358,6 +358,18 @@
                 <langSet xml:lang="en"><tig><term>Raster</term></tig></langSet>
                 <langSet xml:lang="si"><tig><term/></tig></langSet>
             </termEntry>
+            <termEntry>
+                <descrip type="definition">Domain: terrain analysis, raster&#13;
+&#13;
+The compass direction that a sloping terrain surface faces, i.e. the direction of steepest downslope, usually measured in degrees clockwise from north (or counterclockwise from east, depending on the GRASS map type).&#13;
+&#13;
+Note:&#13;
+Not to be confused with the aspect of a map projection, nor with the slope (gradient), which is a separate value.&#13;
+&#13;
+https://en.wikipedia.org/wiki/Aspect_(geography)</descrip>
+                <langSet xml:lang="en"><tig><term>aspect</term></tig></langSet>
+                <langSet xml:lang="si"><note from="translator">domain: terrain analysis, raster</note><tig><term></term></tig></langSet>
+            </termEntry>
         </body>
     </text>
 </martif>
