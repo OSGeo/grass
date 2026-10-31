@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_es\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2026-10-21 22:39+0000\n"
+"PO-Revision-Date: 2026-10-31 16:26+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy-8-5/es/>\n"
 "Language: es\n"
@@ -607,7 +607,7 @@ msgid "Details:"
 msgstr "Detalles:"
 
 msgid "Error: "
-msgstr "Error:"
+msgstr "Error: "
 
 #, python-format
 msgid "Unable to execute command: '%s'"
@@ -1376,7 +1376,7 @@ msgstr "Cargando datos..."
 
 #, python-format
 msgid "Attribute table <%s> not found. For creating the table switch to 'Manage layers' tab."
-msgstr "Tabla de atributos <% s> no ha sido encontrada. Para crear la tabla cambie a la pestaña \"Administrar capas\"."
+msgstr "Tabla de atributos <%s> no ha sido encontrada. Para crear la tabla, cambie a la pestaña \"Administrar capas\"."
 
 #, python-format
 msgid "Column <%(column)s> not found in in the table <%(table)s>."
@@ -1553,10 +1553,9 @@ msgstr "En la tabla, ya existe un registro %d con ese número de categoría."
 msgid "Category number (column %s) is missing."
 msgstr "Falta el número de categoría (en la columna %s)."
 
-#, fuzzy, python-format
-#| msgid "Vector map '%s' does not exist."
+#, python-format
 msgid "Column '%(column)s' does not exist."
-msgstr "Mapa vectorial '%s' no existe."
+msgstr "La columna '%(column)s' no existe."
 
 #, python-format
 msgid ""
@@ -2299,7 +2298,7 @@ msgid "Source Display"
 msgstr "Visualización de origen"
 
 msgid "Target Display"
-msgstr "Visualización objetivo "
+msgstr "Visualización objetivo"
 
 msgid "Nothing to render (empty map). Operation canceled."
 msgstr "Nada a renderizar (mapa vacío). Operación cancelada."
@@ -3203,7 +3202,7 @@ msgid "SQL Query Utility"
 msgstr ""
 
 msgid " SQL statement "
-msgstr " Sentencia SQL"
+msgstr " Sentencia SQL "
 
 msgid "Symbols"
 msgstr "Símbolos"
@@ -4007,7 +4006,7 @@ msgstr "Imposible leer los códigos EPGS: {0}"
 
 #, python-format
 msgid "Unable to read EPSG codes: %s"
-msgstr "No se pueden leer los códigos EPSG: %s "
+msgstr "No se pueden leer los códigos EPSG: %s"
 
 #, python-format
 msgid "EPSG code %s not found"
@@ -4084,7 +4083,7 @@ msgid "Set parameters for the script"
 msgstr "Definir los parámetros para el script"
 
 msgid "Specify command line parameters for the script separated by spaces:"
-msgstr "Especifique, separando con espacios, los parámetros de la línea de comandos para el guión: "
+msgstr "Especifique, separando con espacios, los parámetros de la línea de comandos para el guión:"
 
 msgid "Open (Ctrl+O)"
 msgstr "Abrir (Ctrl+O)"
@@ -4303,7 +4302,7 @@ msgstr "No se ha seleccionado ninguna capa de mapa. Operación cancelada."
 
 #, python-format
 msgid "Failed to query vector map(s) <%s>."
-msgstr "Ha fallado la consulta a mapa(s) vectoriales <%s>. "
+msgstr "Ha fallado la consulta a mapa(s) vectoriales <%s>."
 
 msgid "No features selected"
 msgstr "No se seleccionaron elementos"
@@ -5014,7 +5013,7 @@ msgid ""
 "\n"
 "Enter new name:"
 msgstr ""
-"Nombre actual:% s\n"
+"Nombre actual: %s\n"
 "\n"
 "Introduzca un nombre nuevo:"
 
@@ -5520,7 +5519,7 @@ msgid "Workspace Toolbar"
 msgstr "Barra de herramientas del Entorno de trabajo"
 
 msgid "Tools Toolbar"
-msgstr "Barra de herramientas "
+msgstr "Barra de herramientas"
 
 msgid "3D view Toolbar"
 msgstr "Barra de herramientas de la vista 3D"
@@ -5718,7 +5717,7 @@ msgid "Add raster cell numbers"
 msgstr "Añadir números de celdas ráster"
 
 msgid "Add thematic (choropleth) vector map layer"
-msgstr "Agregar mapa vectorial temático (choropleth) "
+msgstr "Agregar mapa vectorial temático (choropleth)"
 
 msgid "Add thematic chart layer"
 msgstr "Añadir capa de carta temática"
@@ -6297,7 +6296,7 @@ msgstr "Tienes que entrar un valor para %s"
 
 #, python-format
 msgid " Enter parameters for %s projection "
-msgstr "Introduzca los parámetros para la proyección %s"
+msgstr " Introduzca los parámetros para la proyección %s "
 
 msgid "Specify geodetic datum"
 msgstr "Especificar datum geodésico"
@@ -6644,7 +6643,7 @@ msgid "Add scale bar"
 msgstr "Añadir barra de escala"
 
 msgid "Add raster legend"
-msgstr "Agregar leyenda ráster "
+msgstr "Agregar leyenda ráster"
 
 msgid "Add vector legend"
 msgstr "Agregar leyenda vectorial"
@@ -6749,7 +6748,7 @@ msgstr "Ventana de visualización móvil"
 
 #, python-format
 msgid "Map <%s> not found. "
-msgstr "Mapa <%s> no encontrado."
+msgstr "Mapa <%s> no encontrado. "
 
 #, fuzzy
 msgid "Map Swipe Tool - GRASS"
@@ -6914,10 +6913,9 @@ msgstr "Limpiar todo"
 msgid "Enter vector attribute values"
 msgstr "Ingrese valores de los atributos vectoriales"
 
-#, fuzzy, python-format
-#| msgid "Bad color format. Use color format '0:0:0'"
+#, python-format
 msgid "Bad color format '%s'. Use color format '0:0:0'"
-msgstr "Formato de color incorrecto. Use el formato de color '0:0:0'"
+msgstr "Formato de color incorrecto '%s'. Use el formato de color '0:0:0'"
 
 msgid "Select raster map:"
 msgstr "Seleccionar mapa ráster:"
@@ -7258,7 +7256,7 @@ msgid "Name for output GRASS map"
 msgstr "Nombre para el mapa GRASS de salida"
 
 msgid "Projection of following layers do not match with projection of current location. "
-msgstr "La proyección de las siguientes capas no coincide con la proyección de la localización actual."
+msgstr "La proyección de las siguientes capas no coincide con la proyección de la localización actual. "
 
 msgid "Layers to be reprojected"
 msgstr "Capas a ser reproyectadas"
@@ -7327,7 +7325,7 @@ msgid "greater than or equal to"
 msgstr "mayor o igual que"
 
 msgid "less than"
-msgstr "menos que "
+msgstr "menos que"
 
 msgid "less than or equal to"
 msgstr "menos que o igual a"
@@ -7693,7 +7691,7 @@ msgid "Frame rate (FPS):"
 msgstr "Velocidad de cuadro (FPS):"
 
 msgid "Frames are recorded with given frequency (FPS). "
-msgstr "Los cuadros son grabados con una frecuencia dada (FPS)."
+msgstr "Los cuadros son grabados con una frecuencia dada (FPS). "
 
 msgid "Save image sequence"
 msgstr "Guardar secuencia de imágenes"
@@ -8218,7 +8216,7 @@ msgid "Map frame options:"
 msgstr "Opciones del marco del mapa:"
 
 msgid "fit frame to match selected map"
-msgstr "ajustar marco para que coincida con el marco seleccionado "
+msgstr "ajustar marco para que coincida con el marco seleccionado"
 
 msgid "fit frame to match saved region"
 msgstr "ajustar marco para que coincida con la región guardada"
@@ -8651,10 +8649,9 @@ msgstr ""
 "PIL\n"
 "faltante"
 
-#, fuzzy, python-format
-#| msgid "Unable to read file %s"
+#, python-format
 msgid "Unable to read file %s: %s"
-msgstr "No se puede leer el archivo %s"
+msgstr "No se puede leer el archivo %s: %s"
 
 #, python-format
 msgid "size: %(width)s x %(height)s pts"
@@ -8758,15 +8755,14 @@ msgstr ""
 "\n"
 " %s"
 
-#, fuzzy
 msgid ""
 "Program {} is not available. Please install it to create PDF.\n"
 "\n"
 " "
 msgstr ""
-"El programa ps2pdf no está disponbile. Por favor instálelo para crear PDF.\n"
+"El programa {} no está disponible. Por favor, instálelo para crear PDF.\n"
 "\n"
-" %s"
+" "
 
 #, python-format
 msgid "%(prg)s exited with return code %(code)s"
@@ -9737,7 +9733,7 @@ msgstr "Descarga completa. Los datos de muestra descargados se listan en las pes
 
 #, fuzzy, python-brace-format
 msgid "Project named {name} already exists, rename it first"
-msgstr "Localización denominada <%s> ya existe, renombrarla "
+msgstr "Localización denominada {name} ya existe, renombrarla"
 
 #, fuzzy
 msgid "Dataset Download"
@@ -10115,7 +10111,7 @@ msgid "Select only features inside of selection bounding box"
 msgstr "Seleccione únicamente, los objetos espaciales localizados dentro del recuadro frontera."
 
 msgid "By default are selected all features overlapping selection bounding box "
-msgstr "De forma predeterminada, se han seleccionan todos los objetos espaciales que se superponen al cuadro delimitador de selección."
+msgstr "De forma predeterminada, se han seleccionan todos los objetos espaciales que se superponen al cuadro delimitador de selección. "
 
 msgid "Check for duplicates"
 msgstr "Revisar duplicados"
@@ -10441,7 +10437,7 @@ msgstr "¿Guardar los cambios?"
 
 #, python-format
 msgid "Please wait, closing and rebuilding topology of vector map <%s>..."
-msgstr "Por favor espere, cerrando y reconstruyendo la topología del mapa vectorial <% s> ..."
+msgstr "Por favor espere, cerrando y reconstruyendo la topología del mapa vectorial <%s>..."
 
 #, python-format
 msgid "Editing of vector map <%s> successfully finished"
@@ -10746,7 +10742,9 @@ msgstr "¿Realmente quiere activar el ajuste y sobrescribirlo?"
 msgid ""
 "Temporary map '%s' was changed outside vector analysis tool.\n"
 "Do you really want to activate snapping and overwrite it? "
-msgstr "El mapa temporal '1%s' se modificó fuera de la herramienta de análisis de vectores. ¿Realmente desea activar el ajuste y sobrescribirlo?"
+msgstr ""
+"El mapa temporal '%s' se modificó fuera de la herramienta de análisis de vectores.\n"
+"¿Realmente desea activar el ajuste y sobrescribirlo? "
 
 msgid "Overwrite map"
 msgstr "Sobreescribir mapa"
@@ -10869,7 +10867,7 @@ msgid "Edit point"
 msgstr "Editar punto"
 
 msgid " Server settings "
-msgstr "Configuraciones del servidor"
+msgstr " Configuraciones del servidor "
 
 msgid "Server:"
 msgstr "Servidor:"
@@ -10887,7 +10885,7 @@ msgid "Hide advanced connection settings"
 msgstr "Ocultar configuraciones avanzadas de conexión"
 
 msgid " Layer Manager Settings "
-msgstr "Configuración de Administrador de capas"
+msgstr " Configuración de Administrador de capas "
 
 msgid "Output layer name:"
 msgstr "Nombre de capa de salida:"
@@ -10979,13 +10977,13 @@ msgid "Unable to fetch data.\n"
 msgstr "No se pueden recuperar los datos.\n"
 
 msgid " Requested data settings "
-msgstr "Configuración de datos requerida"
+msgstr " Configuración de datos requerida "
 
 msgid "Request"
 msgstr "Requerido"
 
 msgid "List of layers "
-msgstr "Lista de capas"
+msgstr "Lista de capas "
 
 msgid "Source projection:"
 msgstr "Proyección de fuente:"

@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2026-03-05 11:44+0000\n"
-"Last-Translator: Abhimanyu  <abhimanyupg04@gmail.com>\n"
+"PO-Revision-Date: 2026-10-31 16:34+0000\n"
+"Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasswxpy-8-5/hi/>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.1\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #, python-format
 msgid "Maximum number of animations is %d."
@@ -42,11 +42,11 @@ msgstr "एक्सपोर्ट तैयार है, कृपया इ�
 
 #, python-format
 msgid "%(from)s %(dash)s %(to)s"
-msgstr "%(से)s %(डैश)s %(से)s"
+msgstr "%(from)s %(dash)s %(to)s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(start)s %(unit)s"
-msgstr "%(प्रारंभ)s %(इकाई)s"
+msgstr "%(start)s %(unit)s"
 
 msgid "Exporting animation, please wait..."
 msgstr "एनिमेशन निर्यात हो रहा है, कृपया प्रतीक्षा करें..।"
@@ -364,15 +364,15 @@ msgstr "वर्तमान फ्रेम दर: %.2f fps"
 
 #, python-format
 msgid "File %s not found."
-msgstr "फ़ाइल"
+msgstr "फ़ाइल %s नहीं मिली।"
 
 #, fuzzy
 msgid "Decoration image file is missing."
 msgstr "डेकोरेशन इमेज फ़ाइल गायब है।"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Directory %s not found."
-msgstr "निर्देशिका"
+msgstr "निर्देशिका %s नहीं मिली।"
 
 msgid "Export directory is missing."
 msgstr "निर्यात निर्देशिका गायब है।"
@@ -386,14 +386,14 @@ msgstr "पाठ"
 msgid "Time stamp"
 msgstr "समय स्टाम्प"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Exported file directory '{base_dir}' does not exist."
 msgstr "निर्यातित फ़ाइल निर्देशिका '"
 
 msgid "Export file is missing."
 msgstr "निर्यात फ़ाइल गायब है।"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Exported animation file <{file}> exists. Do you want to overwrite it?"
 msgstr "निर्यातित एनिमेशन फ़ाइल <"
 
@@ -494,7 +494,7 @@ msgstr " ({c} में से {p})"
 
 #, python-format
 msgid "to %(to)s"
-msgstr "तक"
+msgstr "तक %(to)s"
 
 #, fuzzy, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
@@ -504,13 +504,13 @@ msgstr "%s=, %s=, %s= और %s= परस्पर अनन्य हैं।
 msgid "Animation Tool - GRASS"
 msgstr "एनिमेशन टूल - GRASS"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Reading workspace file <%s> failed.\n"
 "Invalid file, unable to parse XML document."
 msgstr "कार्यक्षेत्र फ़ाइल पढ़ रहा है <"
 
-#, python-format
+#, fuzzy, python-format
 msgid "No 3d view information in workspace file <%s>."
 msgstr "कार्यक्षेत्र फ़ाइल < में कोई 3D दृश्य जानकारी नहीं है"
 
@@ -526,25 +526,25 @@ msgstr "मानचित्र परतों को रेंडर कि�
 msgid "Overlaying map layers"
 msgstr "मानचित्र परतों को ओवरले किया जा रहा है"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Directory {t} not removed."
 msgstr "निर्देशिका"
 
 msgid "It is not allowed to display data with different temporal types (absolute and relative)."
 msgstr "विभिन्न लौकिक प्रकारों (निरपेक्ष और सापेक्ष) वाले डेटा को प्रदर्शित करने की अनुमति नहीं है।"
 
-#, python-format
+#, fuzzy, python-format
 msgid "It is not allowed to display data with different units (%s)."
 msgstr "विभिन्न इकाइयों वाले डेटा को प्रदर्शित करने की अनुमति नहीं है ("
 
 msgid "You are going to display data with different temporal types of maps (interval and point). It is recommended to use data of one temporal type to avoid confusion."
 msgstr "आप मानचित्रों के विभिन्न लौकिक प्रकारों (अंतराल और बिंदु) के साथ डेटा प्रदर्शित करने जा रहे हैं। भ्रम से बचने के लिए एक ही लौकिक प्रकार के डेटा का उपयोग करने की अनुशंसा की जाती है।"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Space time dataset <%s> not found."
 msgstr "स्पेस टाइम डेटासेट <"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Topology of Space time dataset %s is invalid."
 msgstr "स्पेस टाइम डेटासेट की टोपोलॉजी"
 
@@ -582,7 +582,7 @@ msgstr "स्पेस-टाइम डेटासेट या मानच�
 msgid "Add space-time dataset or series of map layers for animation"
 msgstr "एनीमेशन के लिए स्पेस-टाइम डेटासेट या मानचित्र परतों की श्रृंखला जोड़ें"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Map <%s> not found."
 msgstr "मानचित्र <"
 
@@ -604,11 +604,11 @@ msgstr "एनिमेट करने के लिए मानचित्�
 msgid "The number of maps to animate has to be the same as the number of maps in temporal dataset."
 msgstr "to animateचाहिए।"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Wx debug level {0}."
 msgstr "Wx डिबग स्तर"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "WARNING: Ignoring unsupported wx debug level (must be >=0 and <=5). {0}\n"
 msgstr "चेतावनी: असमर्थित wx डिबग स्तर को अनदेखा किया जा रहा है (स्तर >=0 और <=5 होना चाहिए)।\n"
 
@@ -635,13 +635,13 @@ msgstr "त्रुटि: "
 
 #, python-format
 msgid "Unable to execute command: '%s'"
-msgstr "कमांड निष्पादित करने में असमर्थ: '"
+msgstr "कमांड निष्पादित करने में असमर्थ: '%s'"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Error in %s"
 msgstr "इसमें त्रुटि"
 
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Unable to run command:\n"
 "%(cmd)s\n"
@@ -649,7 +649,7 @@ msgid ""
 "Option <%(opt)s>: read from standard input is not supported by wxGUI"
 msgstr "कमांड चलाने में असमर्थ:"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Module <%s> not found."
 msgstr "मॉड्यूल <"
 
@@ -671,9 +671,9 @@ msgstr "कृपया ध्यान दें कि डेटा असं�
 msgid "Command aborted"
 msgstr "आदेश निरस्त कर दिया गया"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Command ended with non-zero return code {returncode}"
-msgstr "कमांड गैर-शून्य रिटर्न कोड {रिटर्नकोड} के साथ समाप्त हुआ"
+msgstr "कमांड गैर-शून्य रिटर्न कोड {returncode} के साथ समाप्त हुआ"
 
 #, fuzzy
 msgid "Command finished"
@@ -681,7 +681,7 @@ msgstr "कमांड समाप्त"
 
 #, python-format
 msgid "Unknown tag %s"
-msgstr "अज्ञात टैग"
+msgstr "अज्ञात टैग %s"
 
 #, fuzzy, python-format
 msgid "<%(name)s>: layer type <%(type)s> is not supported"
@@ -693,15 +693,15 @@ msgstr "कमांड '%s' विफल रहा\n"
 
 #, python-format
 msgid "Details: %s\n"
-msgstr "विवरण:\n"
+msgstr "विवरण: %s\n"
 
 #, python-format
 msgid "Unsupported map layer type '%s'"
-msgstr "असमर्थित मानचित्र परत प्रकार '"
+msgstr "असमर्थित मानचित्र परत प्रकार '%s'"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Rendering failed: %s"
-msgstr "रेंडरिंग विफल रही:"
+msgstr "रेंडरिंग विफल रही: %s"
 
 msgid "Rendering aborted"
 msgstr "रेंडरिंग रद्द कर दी गई"
@@ -1223,7 +1223,7 @@ msgstr ""
 msgid "Map in a different project"
 msgstr "<{n}> के लिए नया नाम"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{c} maps marked for moving."
 msgstr "नया नाम चुनें"
 
@@ -1231,7 +1231,7 @@ msgstr "नया नाम चुनें"
 msgid "Map <{layer}> marked for moving."
 msgstr "मानचित्र <{layer}> स्थानांतरित करने के लिए चिह्नित किया गया।"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{c} maps marked for copying."
 msgstr "<{name}> को स्थानांतरित किया जा रहा है..।"
 
@@ -1257,7 +1257,7 @@ msgstr "मैपसेट <{oldmapset}> का नाम बदलकर <{newm
 msgid "Cannot rename location"
 msgstr "स्थान का नाम नहीं बदला जा सकता"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Renaming project <{oldlocation}> to <{newlocation}> completed"
 msgstr "क्या आप वास्तव में मानचित्र <{m}> को हटाना चाहते हैं?"
 
@@ -1286,7 +1286,7 @@ msgstr "चचुुननेेंं  nneeww  nnaammee"
 msgid "Copying <{name}>..."
 msgstr "<{name}> को कॉपी किया जा रहा है..।"
 
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Moving <{name}>..."
 msgstr "Mस्oथाvनाiंतnरिgत  क<िय{ा nजaा mरeहा} >है. .<.{name}>..।"
 
@@ -1431,9 +1431,9 @@ msgstr "डेटा लोड हो रहा है..।"
 msgid "Attribute table <%s> not found. For creating the table switch to 'Manage layers' tab."
 msgstr "एट्रिब्यूट टेबल <%s> नहीं मिली। टेबल बनाने के लिए 'Manage layers' (परत प्रबंधित करें) टैब पर जाएं।"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Column <%(column)s> not found in in the table <%(table)s>."
-msgstr "कॉलम <%(कॉलम)s> तालिका <%(तालिका)s> में नहीं मिला।"
+msgstr "कॉलम <%(column)s> तालिका <%(table)s> में नहीं मिला।"
 
 #, fuzzy
 msgid "Can display only 256 columns."
@@ -1465,7 +1465,10 @@ msgid ""
 "Error loading attribute data. Record number: %(rec)d. Unable to convert value '%(val)s' in key column (%(key)s) to integer.\n"
 "\n"
 "Details: %(detail)s"
-msgstr "विशेषता डेटा लोड करने में त्रुटि. रिकॉर्ड संख्या: %(rec)d. कुंजी कॉलम (%(key)s) में मान '%(val)s' को पूर्णांक में परिवर्तित करने में असमर्थ।\\n\\nविवरण: %(detail)s"
+msgstr ""
+"विशेषता डेटा लोड करने में त्रुटि. रिकॉर्ड संख्या: %(rec)d. कुंजी कॉलम (%(key)s) में मान '%(val)s' को पूर्णांक में परिवर्तित करने में असमर्थ।\n"
+"\n"
+"विवरण: %(detail)s"
 
 msgid "Sort ascending"
 msgstr "छोटे से बड़े क्रम में क्रमबद्ध करें"
@@ -1523,9 +1526,9 @@ msgstr "तालिका <1%s> में कॉलम जोड़ें"
 msgid "Unable to add column to the table. No column name defined."
 msgstr "तालिका में कॉलम जोड़ने में असमर्थ. कोई स्तंभ नाम परिभाषित नहीं है।"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Column <%(column)s> already exists in table <%(table)s>."
-msgstr "कॉलम <%(कॉलम)s> पहले से ही तालिका <%(तालिका)s> में मौजूद है।"
+msgstr "कॉलम <%(column)s> पहले से ही तालिका <%(table)s> में मौजूद है।"
 
 #, fuzzy
 msgid "Attribute data - right-click to edit/manage records"
@@ -1603,15 +1606,17 @@ msgstr "मान '%(value)s' को %(type)s के रूप में दर�
 msgid ""
 "Unable to update existing record.\n"
 "%s"
-msgstr "मौजूदा रिकॉर्ड अपडेट करने में असमर्थ.\\n%s"
+msgstr ""
+"मौजूदा रिकॉर्ड अपडेट करने में असमर्थ।\n"
+"%s"
 
 #, python-format
 msgid "Record with category number %d already exists in the table."
 msgstr "श्रेणी संख्या %d वाला रिकॉर्ड पहले से ही तालिका में मौजूद है।"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Category number (column %s) is missing."
-msgstr "हिन्दी"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Column '%(column)s' does not exist."
@@ -1621,7 +1626,9 @@ msgstr "स्तंभ '%(column)s' मौजूद नहीं है।"
 msgid ""
 "Unable to insert new record.\n"
 "%s"
-msgstr "नया रिकॉर्ड सम्मिलित करने में असमर्थ.\\n%s"
+msgstr ""
+"नया रिकॉर्ड सम्मिलित करने में असमर्थ।\n"
+"%s"
 
 #, python-format
 msgid "Selected data records (%d) will be permanently deleted from table. Do you want to delete them?"
@@ -1633,7 +1640,7 @@ msgstr "रिकॉर्ड्स हटाएं"
 
 #, fuzzy, python-format
 msgid "All data records (%d) will be permanently deleted from table. Do you want to delete them?"
-msgstr "हिन्दी"
+msgstr "सभी डेटा रिकॉर्ड (%d) तालिका से स्थायी रूप से हटा दिए जाएंगे। क्या आप उन्हें हटाना चाहते हैं?"
 
 msgid "Nothing to extract."
 msgstr "निकालने को कुछ नहीं।"
@@ -1646,7 +1653,10 @@ msgid ""
 "Loading attribute data failed.\n"
 "\n"
 "%s"
-msgstr "विशेषता डेटा लोड करना विफल रहा.\\n\\n%s"
+msgstr ""
+"विशेषता डेटा लोड करना विफल रहा।\n"
+"\n"
+"%s"
 
 #, python-format
 msgid ""
@@ -1654,7 +1664,11 @@ msgid ""
 "Invalid SQL select statement.\n"
 "\n"
 "%s"
-msgstr "विशेषता डेटा लोड करना विफल रहा.\\nअमान्य SQL चयन कथन.\\n\\n%s"
+msgstr ""
+"विशेषता डेटा लोड करना विफल रहा।\n"
+"अमान्य SQL चयन कथन।\n"
+"\n"
+"%s"
 
 #, fuzzy
 msgid "Database connection"
@@ -1709,7 +1723,10 @@ msgid ""
 "Selected columns\n"
 "%s\n"
 "will PERMANENTLY removed from table. Do you want to drop the columns?"
-msgstr "चयनित कॉलम\\n%s\\nतालिका से स्थायी रूप से हटा दिए जाएंगे। क्या आप कॉलम हटाना चाहते हैं?"
+msgstr ""
+"चयनित कॉलम\n"
+"%s\n"
+"तालिका से स्थायी रूप से हटा दिए जाएंगे। क्या आप कॉलम हटाना चाहते हैं?"
 
 msgid "List of layers"
 msgstr "परतों की सूची"
@@ -1796,7 +1813,9 @@ msgstr "&लेयर संशोधित करें"
 msgid ""
 "Unable to get list of tables.\n"
 "Please use db.connect to set database parameters."
-msgstr "तालिकाओं की सूची प्राप्त करने में असमर्थ।\\nकृपया डेटाबेस पैरामीटर सेट करने के लिए db.connect का उपयोग करें।"
+msgstr ""
+"तालिकाओं की सूची प्राप्त करने में असमर्थ।\n"
+"कृपया डेटाबेस पैरामीटर सेट करने के लिए db.connect का उपयोग करें।"
 
 msgid "Unable to create new table. Table name or key column name is missing."
 msgstr "नई तालिका बनाने में असमर्थ. तालिका का नाम या कुंजी स्तंभ का नाम गुम है।"
@@ -3240,9 +3259,9 @@ msgstr "समूह <%s> को सफलतापूर्वक बदल द
 msgid "Creating of new group <%s> failed."
 msgstr "नया ग्रुप <%s> बनाना विफल रहा।"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Changing of group <%s> failed."
-msgstr "हिन्दी"
+msgstr ""
 
 msgid "No group selected."
 msgstr "कोई समूह चयनित नहीं।"
@@ -3403,9 +3422,9 @@ msgstr "डेटासेट की अस्थायी सीमा का �
 msgid "Transparent"
 msgstr "पारदर्शी"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Choose %s"
-msgstr "हिन्दी"
+msgstr ""
 
 #, fuzzy
 msgid "&Load"
@@ -5257,9 +5276,9 @@ msgstr "समूह चुनें:"
 msgid "Writing CONTROL_POINTS file failed"
 msgstr "CONTROL_POINTS फ़ाइल लिखना विफल रहा"
 
-#, fuzzy, python-format
+#, python-format
 msgid "CONTROL_POINTS file saved for group <%s>"
-msgstr "हिन्दी"
+msgstr ""
 
 msgid "Reading CONTROL_POINTS file failed"
 msgstr "CONTROL_POINTS फ़ाइल पढ़ना विफल रहा"
@@ -5468,9 +5487,9 @@ msgstr "श्रेणी को नीचे ले जाएँ"
 msgid "Export class raster"
 msgstr "निर्यात वर्ग रेखापुंज"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Change opacity of class <%s>"
-msgstr "हिन्दी"
+msgstr ""
 
 msgid "Empty name was inserted."
 msgstr "खाली नाम डाला गया।"
@@ -6238,9 +6257,9 @@ msgstr "पंक्तियाँ: %d"
 msgid "Cols: %d"
 msgstr "कॉलम: %d"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Cells: %d"
-msgstr "हिन्दी"
+msgstr ""
 
 #, python-format
 msgid "Depth: %d"
@@ -8846,9 +8865,9 @@ msgid ""
 "'Preview' functionality won't work."
 msgstr "पायथन इमेजिंग लाइब्रेरी उपलब्ध नहीं है।\\n'पूर्वावलोकन' कार्यक्षमता काम नहीं करेगी।"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Characters on position %s are not supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
-msgstr "हिन्दी"
+msgstr ""
 
 msgid "Not all characters are supported by ISO-8859-1 (Latin 1) encoding which is required by module ps.map."
 msgstr "सभी वर्ण ISO-8859-1 (लैटिन 1) एन्कोडिंग द्वारा समर्थित नहीं हैं जो मॉड्यूल ps.map के लिए आवश्यक है।"
@@ -9599,14 +9618,14 @@ msgstr "नया मैपसेट बनाने में असमर्�
 msgid "Do you want to import {} to the newly created project?"
 msgstr "क्या आप नव निर्मित प्रोजेक्ट में {} आयात करना चाहते हैं?"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Cannot rename mapset <{mapset}> for the following reason:\n"
 "\n"
 "{reason}\n"
 "\n"
 "No mapset will be renamed."
-msgstr "↵"
+msgstr ""
 
 msgid "Unable to rename selected mapset"
 msgstr "चयनित मैपसेट का नाम बदलने में असमर्थ"
@@ -9627,14 +9646,14 @@ msgid ""
 "{}"
 msgstr "मैपसेट का नाम बदलने में असमर्थ.\\n\\n{}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Cannot rename project <{location}> for the following reasons:\n"
 "\n"
 "{reasons}\n"
 "\n"
 "No project will be renamed."
-msgstr "↵"
+msgstr ""
 
 msgid "Unable to rename selected project"
 msgstr "चयनित प्रोजेक्ट का नाम बदलने में असमर्थ"
@@ -9658,7 +9677,7 @@ msgid ""
 msgstr ""
 "निम्नलिखित कारणों से एक या अधिक मानचित्र सेट नहीं हटाए जा सकते:\n"
 "\n"
-"{कारण}\n"
+"{reasons}\n"
 "\n"
 "कोई भी मानचित्र सेट नहीं हटाया जाएगा।"
 
@@ -9700,7 +9719,7 @@ msgid ""
 msgstr ""
 "निम्नलिखित कारणों से एक या अधिक प्रोजेक्ट हटाए नहीं जा सकते:\n"
 "\n"
-"{कारण}\n"
+"{reasons}\n"
 "\n"
 "कोई भी प्रोजेक्ट नहीं हटाया जाएगा।"
 
@@ -9742,7 +9761,7 @@ msgid ""
 msgstr ""
 "निम्नलिखित कारण से डिस्क से GRASS डेटाबेस को हटाया नहीं जा सकता:\n"
 "\n"
-"{कारण}\n"
+"{reasons}\n"
 "\n"
 "GRASS डेटाबेस को नहीं हटाया जाएगा।"
 
@@ -10049,9 +10068,9 @@ msgstr "क्या आप सीएसवी हेडर चाहते ह�
 msgid "Invalid input coordinates"
 msgstr "अमान्य इनपुट निर्देशांक"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Category {ca} is not on vector map {ma} and it will be not used"
-msgstr "हिन्दी"
+msgstr ""
 
 #, fuzzy
 msgid "Both coordinates and categories are set, coordinates will be used. The use categories remove text from coordinate form"
@@ -10232,9 +10251,9 @@ msgstr "स्क्रीन पिक्सेल"
 msgid "Snap also to vertex"
 msgstr "शीर्ष पर भी स्नैप करें"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Snapping threshold is %(value).1f %(units)s"
-msgstr "स्नैपिंग थ्रेशोल्ड %(मान) है.1f %(units)s"
+msgstr "स्नैपिंग थ्रेशोल्ड है %(value).1f %(units)s"
 
 msgid "Select vector features"
 msgstr "वेक्टर विशेषताएँ चुनें"
@@ -10245,9 +10264,8 @@ msgstr "सीमा का चयन करें"
 msgid "Select only features inside of selection bounding box"
 msgstr "चयन बाउंडिंग बॉक्स के अंदर केवल सुविधाओं का चयन करें"
 
-#, fuzzy
 msgid "By default are selected all features overlapping selection bounding box "
-msgstr "· "
+msgstr ""
 
 #, fuzzy
 msgid "Check for duplicates"
@@ -10400,7 +10418,7 @@ msgstr "दिशा"
 msgid "Snapping disabled"
 msgstr "स्नैपिंग अक्षम"
 
-#, python-format
+#, fuzzy, python-format
 msgid "Snapping threshold is %(value).1f %(units)s (based on comp. resolution)"
 msgstr "स्नैपिंग थ्रेशोल्ड %(मान) है.1f %(units)s (कॉम्प. रिज़ॉल्यूशन के आधार पर)"
 
@@ -10913,9 +10931,9 @@ msgstr "अद्वितीय श्रेणियां परत"
 msgid "Chosen %s '%s' does not exist in vector map '%s'.\n"
 msgstr "चुना गया %s '%s' वेक्टर मैप '%s' में मौजूद नहीं है।\n"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Choose existing %s.\n"
-msgstr "↵\n"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Chosen column '%s' does not exist in attribute table of layer '%s' of vector map '%s'.\n"
