@@ -238,6 +238,15 @@ jobs:
           cd "${MKDOCS_DIR}" || exit
           mkdocs build
 
+      - name: Generate manuals sitemap
+        # List every built page, not only those in the site navigation, so
+        # the tool pages stay in the sitemap regardless of the site generator.
+        # Runs before libpython is moved in; Sphinx provides that sitemap.
+        run: |
+          python grass/utils/generate_sitemap.py \
+            --site-dir "${MKDOCS_DIR}/site" \
+            --site-url https://grass.osgeo.org/grass-stable/manuals/
+
       - name: Build Sphinx documentation
         run: |
           pip install -r "grass/python/grass/docs/requirements.txt"
