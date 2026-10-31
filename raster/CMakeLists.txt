@@ -418,7 +418,7 @@ build_program_in_subdir(
 
 build_program_in_subdir(
     r.profile
-    DEPENDS ${LIBM} grass_gis grass_parson grass_raster
+    DEPENDS ${LIBM} grass_gis grass_parson grass_raster grass_vector
 )
 
 build_program_in_subdir(
