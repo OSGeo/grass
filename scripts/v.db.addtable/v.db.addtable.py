@@ -53,6 +53,7 @@
 
 import sys
 import os
+import re
 import grass.script as gs
 from grass.script.utils import decode
 from grass.exceptions import CalledModuleError
@@ -94,7 +95,8 @@ def main():
     driver = kv["driver"]
     schema = kv["schema"]
 
-    database2 = database.replace("$MAP/", map_name + "/")
+    # expand $MAP wherever it appears, as Vect_subst_var() does, but leave $MAPSET
+    database2 = re.sub(r"\$MAP(?!SET)", lambda match: map_name, database)
 
     # maybe there is already a table linked to the selected layer?
     with open(os.devnull, "w") as nuldev:
