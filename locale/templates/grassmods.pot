@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 18:21+0000\n"
+"POT-Creation-Date: 2026-10-31 19:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -814,7 +814,8 @@ msgstr ""
 msgid "You must provide one of these options: <%s>, <%s>, or <%s>"
 msgstr ""
 
-#: ../db/db.select/main.c:537 ../vector/v.db.select/main.c:202
+#: ../db/db.select/main.c:537 ../temporal/t.rast.list/t.rast.list.py:187
+#: ../temporal/t.vect.list/t.vect.list.py:168 ../vector/v.db.select/main.c:202
 msgid "Separator is part of the format"
 msgstr ""
 
@@ -826,7 +827,9 @@ msgstr ""
 msgid "Null value is part of the format"
 msgstr ""
 
-#: ../db/db.select/main.c:543 ../vector/v.db.select/main.c:200
+#: ../db/db.select/main.c:543 ../temporal/t.rast.list/t.rast.list.py:177
+#: ../temporal/t.rast3d.list/t.rast3d.list.py:177
+#: ../temporal/t.vect.list/t.vect.list.py:158 ../vector/v.db.select/main.c:200
 msgid "Column names are always included"
 msgstr ""
 
@@ -1920,7 +1923,7 @@ msgstr ""
 #: ../raster/r.li/r.li.pielou/pielou.c:46 ../raster/r.li/r.li.renyi/renyi.c:47
 #: ../raster/r.li/r.li.richness/richness.c:42
 #: ../raster/r.li/r.li.shannon/shannon.c:43 ../raster/r.li/r.li.shape/main.c:45
-#: ../raster/r.li/r.li.simpson/simpson.c:43 ../raster/r.mapcalc/main.c:105
+#: ../raster/r.li/r.li.simpson/simpson.c:43 ../raster/r.mapcalc/main.c:108
 #: ../raster/r.mask.status/main.c:33 ../raster/r.mfilter/main.c:62
 #: ../raster/r.mode/main.c:50 ../raster/r.neighbors/main.c:178
 #: ../raster/r.null/main.c:55 ../raster/r.object.geometry/main.c:73
@@ -2924,7 +2927,7 @@ msgstr ""
 #: ../display/d.where/main.c:154 ../general/g.cairocomp/main.c:44
 #: ../imagery/i.group/main.c:166 ../raster/r.buildvrt/main.c:122
 #: ../raster/r.in.mat/main.c:124 ../raster/r.in.xyz/main.c:585
-#: ../raster/r.mapcalc/main.c:49 ../raster/r.series.accumulate/main.c:219
+#: ../raster/r.mapcalc/main.c:50 ../raster/r.series.accumulate/main.c:219
 #: ../raster/r.series/main.c:249 ../raster/r.support/main.c:206
 #: ../raster/r.topmodel/file_io.c:28 ../raster/r.topmodel/file_io.c:136
 #: ../raster/r.topmodel/file_io.c:161 ../raster3d/r3.support/main.c:166
@@ -5349,8 +5352,8 @@ msgstr ""
 #: ../raster/r.flow/flow_io.c:67 ../raster/r.flow/flow_io.c:245
 #: ../raster/r.geomorphon/memory.c:44 ../raster/r.info/main.c:137
 #: ../raster/r.kappa/main.c:170 ../raster/r.kappa/stats.c:33
-#: ../raster/r.kappa/stats.c:40 ../raster/r.mapcalc/map.c:513
-#: ../raster/r.mapcalc/map.c:817 ../raster/r.mapcalc/map3.c:721
+#: ../raster/r.kappa/stats.c:40 ../raster/r.mapcalc/map.c:514
+#: ../raster/r.mapcalc/map.c:818 ../raster/r.mapcalc/map3.c:721
 #: ../raster/r.null/main.c:126 ../raster/r.reclass/main.c:77
 #: ../raster/r.report/parse.c:276 ../raster/r.ros/main.c:359
 #: ../raster/r.ros/main.c:370 ../raster/r.ros/main.c:374
@@ -5375,7 +5378,7 @@ msgstr ""
 #: ../scripts/r.buffer.lowmem/r.buffer.lowmem.py:83
 #: ../scripts/r.fillnulls/r.fillnulls.py:149 ../scripts/r.grow/r.grow.py:122
 #: ../scripts/r.mask/r.mask.py:148 ../scripts/r.pack/r.pack.py:71
-#: ../scripts/r.reclass.area/r.reclass.area.py:372 ../scripts/r.rgb/r.rgb.py:53
+#: ../scripts/r.reclass.area/r.reclass.area.py:405 ../scripts/r.rgb/r.rgb.py:53
 #: ../scripts/v.rast.stats/v.rast.stats.py:151 ../vector/v.colors/main.c:314
 #: ../vector/v.vol.rst/main.c:605
 #, c-format, python-format
@@ -14317,7 +14320,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast3d.algebra_to_translate.c:3
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:3
 #: ../locale/scriptstrings/t.vect.algebra_to_translate.c:3
-#: ../raster/r.mapcalc/main.c:106 ../raster/r.mfilter/main.c:63
+#: ../raster/r.mapcalc/main.c:109 ../raster/r.mfilter/main.c:63
 #: ../raster/r.mode/main.c:52 ../raster/r.neighbors/main.c:179
 #: ../raster/r.quantile/main.c:298 ../raster/r.texture/main.c:96
 #: ../raster3d/r3.neighbors/main.c:202 ../vector/v.neighbors/main.c:116
@@ -14588,7 +14591,7 @@ msgid "Generate clumps including diagonal neighbors"
 msgstr ""
 
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:17
-msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgid "Invert filter (remove clumps larger than lower and smaller than upper, only for method 'reclass')"
 msgstr ""
 
 #: ../locale/scriptstrings/r.reclass.area_to_translate.c:18
@@ -18400,11 +18403,12 @@ msgid "Name of input raster files"
 msgstr ""
 
 #: ../raster/r.buildvrt/main.c:105 ../raster/r.external/main.c:181
-#: ../raster/r.mapcalc/main.c:173 ../raster/r.series.accumulate/main.c:204
+#: ../raster/r.mapcalc/main.c:176 ../raster/r.series.accumulate/main.c:204
 #: ../raster/r.series.interp/main.c:129 ../raster/r.series.interp/main.c:133
 #: ../raster/r.series.interp/main.c:145 ../raster/r.series.interp/main.c:149
-#: ../vector/v.colors/main.c:219
-#, c-format
+#: ../temporal/t.remove/t.remove.py:77
+#: ../temporal/t.unregister/t.unregister.py:60 ../vector/v.colors/main.c:219
+#, c-format, python-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr ""
 
@@ -18600,7 +18604,7 @@ msgid "Raster map <%s> not found in current mapset"
 msgstr ""
 
 #: ../raster/r.category/main.c:211 ../raster/r.category/main.c:314
-#: ../raster/r.mapcalc/map.c:232 ../raster/r.mapcalc/map3.c:193
+#: ../raster/r.mapcalc/map.c:233 ../raster/r.mapcalc/map3.c:193
 #: ../raster/r.report/parse.c:297
 #, c-format
 msgid "Unable to read category file of raster map <%s@%s>"
@@ -23303,58 +23307,62 @@ msgstr ""
 msgid "Calculates Simpson's diversity index on a raster map"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:188 ../raster/r.mapcalc/evaluate.c:350
-#: ../raster/r.mapcalc/map.c:421 ../raster/r.mapcalc/map3.c:354
+#: ../raster/r.mapcalc/evaluate.c:189 ../raster/r.mapcalc/evaluate.c:351
+#: ../raster/r.mapcalc/map.c:422 ../raster/r.mapcalc/map3.c:354
 #, c-format
 msgid "Unknown type: %d"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:239
+#: ../raster/r.mapcalc/evaluate.c:240
 #, c-format
 msgid "Invalid type: %d"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:296
+#: ../raster/r.mapcalc/evaluate.c:297
 #, c-format
 msgid "Too few arguments for function '%s'"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:300
+#: ../raster/r.mapcalc/evaluate.c:301
 #, c-format
 msgid "Too many arguments for function '%s'"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:304
+#: ../raster/r.mapcalc/evaluate.c:305
 #, c-format
 msgid "Invalid argument type for function '%s'"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:308
+#: ../raster/r.mapcalc/evaluate.c:309
 #, c-format
 msgid "Invalid return type for function '%s'"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:312
+#: ../raster/r.mapcalc/evaluate.c:313
 #, c-format
 msgid "Unknown type for function '%s'"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:315
+#: ../raster/r.mapcalc/evaluate.c:316
 #, c-format
 msgid "Number of arguments for function '%s'"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:319
+#: ../raster/r.mapcalc/evaluate.c:320
 #, c-format
 msgid "Unknown error for function '%s'"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:400
+#: ../raster/r.mapcalc/evaluate.c:386
+msgid "rand() draws more than 2^46 random values. Later rows repeat the values of earlier rows plus a constant."
+msgstr ""
+
+#: ../raster/r.mapcalc/evaluate.c:431
 #, c-format
 msgid "output map <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
 
-#: ../raster/r.mapcalc/evaluate.c:452
+#: ../raster/r.mapcalc/evaluate.c:485
 #, c-format
 msgid "The number of rows is less than the number of threads. Set the number of threads to be the same as the rows = %d."
 msgstr ""
@@ -23394,9 +23402,9 @@ msgstr ""
 msgid "Internal error for function %s()"
 msgstr ""
 
-#: ../raster/r.mapcalc/expression.c:354 ../raster/r.mapcalc/map.c:283
-#: ../raster/r.mapcalc/map.c:489 ../raster/r.mapcalc/map.c:530
-#: ../raster/r.mapcalc/map.c:633 ../raster/r.mapcalc/map3.c:240
+#: ../raster/r.mapcalc/expression.c:354 ../raster/r.mapcalc/map.c:284
+#: ../raster/r.mapcalc/map.c:490 ../raster/r.mapcalc/map.c:531
+#: ../raster/r.mapcalc/map.c:634 ../raster/r.mapcalc/map3.c:240
 #: ../raster/r.mapcalc/map3.c:426 ../raster/r.mapcalc/map3.c:472
 #: ../raster/r.mapcalc/map3.c:568
 #, c-format
@@ -23418,74 +23426,70 @@ msgstr ""
 msgid "Known functions:"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:107
+#: ../raster/r.mapcalc/main.c:110
 msgid "Raster map calculator."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:114
+#: ../raster/r.mapcalc/main.c:117
 msgid "Expression to evaluate"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:115 ../raster/r.mapcalc/main.c:140
+#: ../raster/r.mapcalc/main.c:118 ../raster/r.mapcalc/main.c:143
 msgid "Expression"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:123
+#: ../raster/r.mapcalc/main.c:126
 msgid "The computational region that should be used."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:129
+#: ../raster/r.mapcalc/main.c:132
 msgid "current uses the current region of the mapset"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:130
+#: ../raster/r.mapcalc/main.c:133
 msgid "intersect computes the intersection region between all input maps and uses the smallest resolution"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:132
+#: ../raster/r.mapcalc/main.c:135
 msgid "union computes the union extent of all map regions and uses the smallest resolution"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:139
+#: ../raster/r.mapcalc/main.c:142
 msgid "File containing expression(s) to evaluate"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:147 ../raster/r.sim/r.sim.sediment/main.c:287
+#: ../raster/r.mapcalc/main.c:150 ../raster/r.sim/r.sim.sediment/main.c:287
 #: ../raster/r.sim/r.sim.water/main.c:322
 msgid "Generate random seed (result is non-deterministic) [deprecated]"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:149 ../raster/r.sim/r.sim.sediment/main.c:289
+#: ../raster/r.mapcalc/main.c:152 ../raster/r.sim/r.sim.sediment/main.c:289
 #: ../raster/r.sim/r.sim.water/main.c:324
 msgid "This flag is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:154
+#: ../raster/r.mapcalc/main.c:157
 msgid "List input and output maps"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:177 ../raster/r.sim/simlib/random.c:30
+#: ../raster/r.mapcalc/main.c:180 ../raster/r.sim/simlib/random.c:30
 #, c-format
 msgid "%s= and -%c are mutually exclusive"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:188
+#: ../raster/r.mapcalc/main.c:191
 msgid "parse error"
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:204
+#: ../raster/r.mapcalc/main.c:207
 msgid "Flag 's' is deprecated and will be removed in a future release. Seeding is automatic or use parameter seed."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:240
+#: ../raster/r.mapcalc/main.c:243
 msgid "r3.mapcalc does not support parallel execution."
 msgstr ""
 
-#: ../raster/r.mapcalc/main.c:246
-msgid "Parallel execution is not supported with rand() function"
-msgstr ""
-
-#: ../raster/r.mapcalc/main.c:254 ../raster/r.mfilter/main.c:124
+#: ../raster/r.mapcalc/main.c:251 ../raster/r.mfilter/main.c:124
 #: ../raster/r.neighbors/main.c:301 ../raster/r.patch/main.c:105
 #: ../raster/r.resamp.filter/main.c:486 ../raster/r.resamp.interp/main.c:123
 #: ../raster/r.resamp.stats/main.c:438 ../raster/r.series/main.c:222
@@ -23495,12 +23499,12 @@ msgstr ""
 msgid "<%d> is not valid number of nprocs."
 msgstr ""
 
-#: ../raster/r.mapcalc/map.c:223 ../raster/r.mapcalc/map3.c:184
+#: ../raster/r.mapcalc/map.c:224 ../raster/r.mapcalc/map3.c:184
 #, c-format
 msgid "Unable to read color file for raster map <%s@%s>"
 msgstr ""
 
-#: ../raster/r.mapcalc/map.c:236 ../raster/r.mapcalc/map3.c:197
+#: ../raster/r.mapcalc/map.c:237 ../raster/r.mapcalc/map3.c:197
 #, c-format
 msgid "Unable to create btree for raster map <%s@%s>"
 msgstr ""
@@ -24410,7 +24414,8 @@ msgid "Exporting raster map <%s> (band %d)..."
 msgstr ""
 
 #: ../raster/r.out.gdal/main.c:738
-#, c-format
+#: ../temporal/t.rast.out.vtk/t.rast.out.vtk.py:155
+#, c-format, python-format
 msgid "Unable to export raster map <%s>"
 msgstr ""
 
@@ -32128,7 +32133,7 @@ msgstr ""
 msgid "Turn on cache reporting"
 msgstr ""
 
-#: ../raster/r.what/main.c:212
+#: ../raster/r.what/main.c:212 ../temporal/t.rast.what/t.rast.what.py:146
 msgid "Flag 'v' required option 'points'"
 msgstr ""
 
@@ -32424,7 +32429,8 @@ msgstr ""
 #: ../raster3d/r3.in.lidar/main.c:494 ../raster3d/r3.in.lidar/main.c:502
 #: ../raster3d/r3.in.lidar/main.c:510 ../raster3d/r3.in.lidar/main.c:518
 #: ../raster3d/r3.in.lidar/main.c:527 ../raster3d/r3.in.lidar/main.c:535
-#, c-format
+#: ../temporal/t.rast.to.rast3/t.rast.to.rast3.py:156
+#, c-format, python-format
 msgid "Unable to create 3D raster map <%s>"
 msgstr ""
 
@@ -35023,82 +35029,116 @@ msgstr ""
 msgid "azimuth must be between 0 and 360"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:148
+#: ../scripts/r.reclass.area/r.reclass.area.py:149
 msgid ""
 "xy-locations are not supported\n"
 "Need projected data with grids in meters"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:154
+#: ../scripts/r.reclass.area/r.reclass.area.py:155
 msgid "Latitude-longitude locations are not supported"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:156
+#: ../scripts/r.reclass.area/r.reclass.area.py:157
 msgid "xy-locations are not supported"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:176
+#: ../scripts/r.reclass.area/r.reclass.area.py:177
 #, python-brace-format
 msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:180
+#: ../scripts/r.reclass.area/r.reclass.area.py:181
 msgid "Generating a clumped raster file including diagonal neighbors"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:183
+#: ../scripts/r.reclass.area/r.reclass.area.py:184
 #, python-brace-format
 msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:186
+#: ../scripts/r.reclass.area/r.reclass.area.py:187
 msgid "Generating a clumped raster file"
-msgstr ""
-
-#: ../scripts/r.reclass.area/r.reclass.area.py:214
-#, python-brace-format
-msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
 #: ../scripts/r.reclass.area/r.reclass.area.py:218
 #, python-brace-format
-msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
+msgid "Generating a reclass map with area size smaller than {lower} hectares or larger than {upper} hectares..."
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:223
+#: ../scripts/r.reclass.area/r.reclass.area.py:222
 #, python-brace-format
-msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
+msgid "No areas of size smaller than {lower} hectares or larger than {upper} hectares"
 msgstr ""
 
 #: ../scripts/r.reclass.area/r.reclass.area.py:227
 #, python-brace-format
-msgid "No areas of size larger than or equal to {lower} hectares"
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
 #: ../scripts/r.reclass.area/r.reclass.area.py:231
 #, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:237
+#, python-brace-format
+msgid "Generating a reclass map with area size smaller than {lower} hectares..."
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:240
+#, python-brace-format
+msgid "No areas of size smaller than {lower} hectares"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:245
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:249
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:254
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than {upper} hectares..."
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:257
+#, python-brace-format
+msgid "No areas of size larger than {upper} hectares"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:262
+#, python-brace-format
 msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:235
+#: ../scripts/r.reclass.area/r.reclass.area.py:266
 #, python-brace-format
 msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:239
+#: ../scripts/r.reclass.area/r.reclass.area.py:270
 msgid "Generating a reclass map without area size limits..."
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:240
+#: ../scripts/r.reclass.area/r.reclass.area.py:271
 msgid "No areas found"
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:300
+#: ../scripts/r.reclass.area/r.reclass.area.py:333
 #, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
 msgstr ""
 
-#: ../scripts/r.reclass.area/r.reclass.area.py:381
+#: ../scripts/r.reclass.area/r.reclass.area.py:408
+msgid "Flag -i is not supported with method='rmarea'"
+msgstr ""
+
+#: ../scripts/r.reclass.area/r.reclass.area.py:417
 msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
 msgstr ""
 
@@ -36024,11 +36064,19 @@ msgid "Attribute table of vector {name} will be updated..."
 msgstr ""
 
 #: ../scripts/v.what.strds/v.what.strds.py:147
+#: ../temporal/t.rast.aggregate.ds/t.rast.aggregate.ds.py:143
+#: ../temporal/t.rast.aggregate.ds/t.rast.aggregate.ds.py:151
+#: ../temporal/t.rast.aggregate/t.rast.aggregate.py:136
+#: ../temporal/t.rast.contour/t.rast.contour.py:147
+#: ../temporal/t.rast.to.vect/t.rast.to.vect.py:147
+#: ../temporal/t.rast.what/t.rast.what.py:169
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:125
 #, python-format
 msgid "Space time raster dataset <%s> is empty"
 msgstr ""
 
 #: ../scripts/v.what.strds/v.what.strds.py:165
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:143
 #, python-format
 msgid ""
 "Temporal type of space time raster datasets must be equal\n"
@@ -36041,11 +36089,13 @@ msgid "Unable to add table <%s> to vector map <%s>"
 msgstr ""
 
 #: ../scripts/v.what.strds/v.what.strds.py:263
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:182
 #, python-brace-format
 msgid "Unable to add column {column} to vector map <{vector}>"
 msgstr ""
 
 #: ../scripts/v.what.strds/v.what.strds.py:280
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:209
 #, python-format
 msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
 msgstr ""
@@ -36092,6 +36142,518 @@ msgstr ""
 
 #: ../temporal/t.connect/main.c:273
 msgid "Default TGIS database is not set"
+msgstr ""
+
+#: ../temporal/t.copy/t.copy.py:81
+#, python-format
+msgid "The output dataset <%s> must be in the current mapset<%s>."
+msgstr ""
+
+#: ../temporal/t.copy/t.copy.py:96
+#, python-format
+msgid "Empty space-time %s dataset <%s>, nothing to copy"
+msgstr ""
+
+#: ../temporal/t.copy/t.copy.py:107
+#, python-format
+msgid "Copying %s maps to the current mapset..."
+msgstr ""
+
+#: ../temporal/t.copy/t.copy.py:124
+#, python-format
+msgid "A %s map <%s> exists already in the current mapset <%s>."
+msgstr ""
+
+#: ../temporal/t.copy/t.copy.py:133
+#, python-format
+msgid "The %s map <%s> is already in the current mapset, not copying"
+msgstr ""
+
+#: ../temporal/t.info/t.info.py:95
+#, python-format
+msgid "Please specify %s="
+msgstr ""
+
+#: ../temporal/t.info/t.info.py:102
+#, python-brace-format
+msgid "Dataset <{n}> of type <{t}> not found in temporal database"
+msgstr ""
+
+#: ../temporal/t.list/t.list.py:127 ../temporal/t.rast.list/t.rast.list.py:165
+#: ../temporal/t.rast.univar/t.rast.univar.py:122
+#: ../temporal/t.rast3d.list/t.rast3d.list.py:165
+#: ../temporal/t.rast3d.univar/t.rast3d.univar.py:119
+#: ../temporal/t.vect.db.select/t.vect.db.select.py:83
+#: ../temporal/t.vect.list/t.vect.list.py:145
+msgid "A standard CSV separator (delimiter) is only one character long"
+msgstr ""
+
+#: ../temporal/t.list/t.list.py:132
+#: ../temporal/t.rast.univar/t.rast.univar.py:127
+#: ../temporal/t.rast3d.univar/t.rast3d.univar.py:124
+msgid "Column names are always included in JSON output"
+msgstr ""
+
+#: ../temporal/t.list/t.list.py:134
+#: ../temporal/t.rast.univar/t.rast.univar.py:129
+#: ../temporal/t.rast3d.univar/t.rast3d.univar.py:126
+#: ../temporal/t.vect.db.select/t.vect.db.select.py:88
+msgid "Separator option is not allowed with JSON format"
+msgstr ""
+
+#: ../temporal/t.list/t.list.py:138
+msgid "Column names are not allowed with line format"
+msgstr ""
+
+#: ../temporal/t.list/t.list.py:140
+msgid "Only one type is allowed for line format"
+msgstr ""
+
+#: ../temporal/t.list/t.list.py:145
+msgid "Only one column is allowed for line format"
+msgstr ""
+
+#: ../temporal/t.list/t.list.py:157
+msgid "Combinations across space time datasets and time stamped maps (e.g., raster and strds) are not allowed"
+msgstr ""
+
+#: ../temporal/t.list/t.list.py:164
+msgid "Column 'type' cannot be requested alone"
+msgstr ""
+
+#: ../temporal/t.list/t.list.py:186
+msgid "No temporal database found in the requested mapset(s). No datasets to list."
+msgstr ""
+
+#: ../temporal/t.list/t.list.py:247
+#, python-format
+msgid "Time stamped %s maps with %s available in mapset <%s>:\n"
+msgstr ""
+
+#: ../temporal/t.list/t.list.py:260
+#, python-format
+msgid "Space time %s datasets with %s available in mapset <%s>:\n"
+msgstr ""
+
+#: ../temporal/t.merge/t.merge.py:68
+#, python-format
+msgid "Output space time dataset <%s> must be located in this mapset"
+msgstr ""
+
+#: ../temporal/t.merge/t.merge.py:88
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr ""
+
+#: ../temporal/t.merge/t.merge.py:105
+#, python-format
+msgid "Unable to merge maps into space time %s dataset <%s> please use the overwrite flag."
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:166
+#: ../temporal/t.rename/t.rename.py:78
+#, python-format
+msgid "Space time %s dataset <%s> not found"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:180
+msgid "You need to set the range to compute the occurrence space time raster dataset"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:196
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:231
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:197
+#, python-format
+msgid "Space time raster dataset <%s> is already in the database, use overwrite flag to overwrite"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:208
+msgid "You need to set the occurrence to compute the indicator space time raster dataset"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:216
+msgid "You need to set the staend options to compute the indicator space time raster dataset"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:250
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:268
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:184
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:235
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:257
+#, python-format
+msgid "Space time raster dataset <%s> not found"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:257
+msgid "Temporal type of input strds and minimum strds must be equal"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:275
+msgid "Temporal type of input strds and maximum strds must be equal"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:284
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:216
+msgid "Invalid cycle"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:292
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:225
+msgid "Invalid offset"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:344
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:310
+#, python-format
+msgid "Processing cycle %s - %s"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:407
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:658
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:403
+#, python-format
+msgid "Map <%s> is already registered in the temporal database, use overwrite flag to overwrite."
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:209
+msgid "Invalid granularity"
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:242
+msgid "Temporal type of input strds and lower strds must be equal"
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:249
+msgid "The upper option works only in conjunction with the lower option"
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:264
+msgid "Temporal type of input strds and upper strds must be equal"
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:472
+msgid "Error running r.series.accumulate"
+msgstr ""
+
+#: ../temporal/t.rast.aggregate.ds/t.rast.aggregate.ds.py:125
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:94
+msgid "Input and aggregation dataset must have the same temporal type"
+msgstr ""
+
+#: ../temporal/t.rast.aggregate.ds/t.rast.aggregate.ds.py:131
+msgid "All registered maps of the aggregation dataset must have time intervals"
+msgstr ""
+
+#: ../temporal/t.rast.algebra/t.rast.algebra.py:105
+#: ../temporal/t.rast3d.algebra/t.rast3d.algebra.py:96
+msgid "Unable to process the expression in granularity algebra mode"
+msgstr ""
+
+#: ../temporal/t.rast.colors/t.rast.colors.py:174
+msgid "Error in r.colors call"
+msgstr ""
+
+#: ../temporal/t.rast.contour/t.rast.contour.py:188
+msgid "The number of parallel r.contour processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#: ../temporal/t.rast.export/t.rast.export.py:122
+msgid "Directory {} not found"
+msgstr ""
+
+#: ../temporal/t.rast.export/t.rast.export.py:125
+msgid "Directory {} is not writable"
+msgstr ""
+
+#: ../temporal/t.rast.export/t.rast.export.py:129
+msgid "Type options is not working with pack format, it will be skipped"
+msgstr ""
+
+#: ../temporal/t.rast.export/t.rast.export.py:134
+msgid "Createopt, metaopt and nodata options are not working with pack and AAIGrid formats, they will be skipped"
+msgstr ""
+
+#: ../temporal/t.rast.gapfill/t.rast.gapfill.py:119
+msgid "No gaps found"
+msgstr ""
+
+#: ../temporal/t.rast.gapfill/t.rast.gapfill.py:129
+msgid "Unable to determine successor and predecessor of a gap."
+msgstr ""
+
+#: ../temporal/t.rast.gapfill/t.rast.gapfill.py:133
+msgid "More than one successor of the gap found. Using the first found."
+msgstr ""
+
+#: ../temporal/t.rast.gapfill/t.rast.gapfill.py:138
+msgid "More than one predecessor of the gap found. Using the first found."
+msgstr ""
+
+#: ../temporal/t.rast.gapfill/t.rast.gapfill.py:191
+#, python-format
+msgid "Map with name <%s> already exists. Please use another base name."
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:98
+#: ../temporal/t.rast3d.list/t.rast3d.list.py:102
+#: ../temporal/t.vect.list/t.vect.list.py:92
+#, python-brace-format
+msgid "Combining {option_name}={option_value} and {excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:113
+#: ../temporal/t.rast3d.list/t.rast3d.list.py:117
+#, python-brace-format
+msgid "The option {excluded_option_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:125
+#: ../temporal/t.rast3d.list/t.rast3d.list.py:129
+#: ../temporal/t.vect.list/t.vect.list.py:105
+#, python-brace-format
+msgid "The flag -{flag_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:201
+#: ../temporal/t.rast3d.list/t.rast3d.list.py:202
+#: ../temporal/t.vect.list/t.vect.list.py:183
+#, python-brace-format
+msgid "Only one column is allowed (not {num_columns})"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:216
+#: ../temporal/t.rast3d.list/t.rast3d.list.py:220
+msgid "Values are always ordered by start_time"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:246
+#: ../temporal/t.rast.list/t.rast.list.py:262
+#: ../temporal/t.rast3d.list/t.rast3d.list.py:251
+#: ../temporal/t.rast3d.list/t.rast3d.list.py:267
+#, python-brace-format
+msgid "Column '{name}' is not available with the method '{method}'"
+msgstr ""
+
+#: ../temporal/t.rast.neighbors/t.rast.neighbors.py:185
+msgid "The method <quantile> requires input in the 'quantile' option."
+msgstr ""
+
+#: ../temporal/t.rast.neighbors/t.rast.neighbors.py:210
+msgid "Space time raster dataset <{}> is empty"
+msgstr ""
+
+#: ../temporal/t.rast.neighbors/t.rast.neighbors.py:306
+#, python-brace-format
+msgid ""
+"Error running module: {mod}\n"
+"    stderr: {error}"
+msgstr ""
+
+#: ../temporal/t.rast.neighbors/t.rast.neighbors.py:313
+msgid "Error running modules."
+msgstr ""
+
+#: ../temporal/t.rast.out.vtk/t.rast.out.vtk.py:93
+#, python-format
+msgid "Export directory <%s> not found."
+msgstr ""
+
+#: ../temporal/t.rast.series/t.rast.series.py:120
+msgid "Number requested methods and output maps do not match."
+msgstr ""
+
+#: ../temporal/t.rast.series/t.rast.series.py:138
+msgid "Processing over {} maps: activating -z flag of r.series which slows down processing."
+msgstr ""
+
+#: ../temporal/t.rast.series/t.rast.series.py:159
+#, python-format
+msgid "%s failed. Check above error messages."
+msgstr ""
+
+#: ../temporal/t.rast.to.rast3/t.rast.to.rast3.py:120
+msgid "Unable to set 3D region"
+msgstr ""
+
+#: ../temporal/t.rast.to.rast3/t.rast.to.rast3.py:160
+msgid "Space time voxel cube"
+msgstr ""
+
+#: ../temporal/t.rast.to.rast3/t.rast.to.rast3.py:161
+msgid "This space time voxel cube was created with t.rast.to.rast3"
+msgstr ""
+
+#: ../temporal/t.rast.to.rast3/t.rast.to.rast3.py:174
+#, python-format
+msgid "%s failed to set units."
+msgstr ""
+
+#: ../temporal/t.rast.to.vect/t.rast.to.vect.py:187
+msgid "The number of parallel r.to.vect processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#: ../temporal/t.rast.univar/t.rast.univar.py:143
+#: ../temporal/t.rast3d.univar/t.rast3d.univar.py:137
+msgid "<{}> is not valid input to the percentile option"
+msgstr ""
+
+#: ../temporal/t.rast.univar/t.rast.univar.py:156
+msgid "Zoning raster must be of type CELL"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:134
+msgid "Options coordinates and points are mutually exclusive"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:139
+msgid "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:225
+msgid "Please specify points or coordinates"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:365
+#: ../temporal/t.rast.what/t.rast.what.py:437
+#, python-format
+msgid "Transforming r.what output file %s"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:564
+#, python-format
+msgid "Writing the output file <%s>"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:618
+#, python-format
+msgid "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
+msgstr ""
+
+#: ../temporal/t.rast3d.list/t.rast3d.list.py:187
+msgid "Separator option is not allowed with this format"
+msgstr ""
+
+#: ../temporal/t.rast3d.list/t.rast3d.list.py:279
+msgid "All maps are always listed"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:112
+msgid "The following data base element files will be deleted:"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:119
+#, python-brace-format
+msgid "{stds}: {gid}"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:125
+#, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database:"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:130
+#, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database and removed from spatial database:"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:148
+#, python-format
+msgid "- %s"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:184
+#, python-brace-format
+msgid "Nothing removed. You must use the force flag (-{flag}) to actually remove them."
+msgstr ""
+
+#: ../temporal/t.rename/t.rename.py:68
+#, python-format
+msgid "Space time %s dataset <%s> can not be renamed. Mapset of the new identifier differs from the current mapset."
+msgstr ""
+
+#: ../temporal/t.rename/t.rename.py:89
+#, python-format
+msgid "Unable to rename Space time %s dataset <%s>. Name <%s> is in use, please use the overwrite flag."
+msgstr ""
+
+#: ../temporal/t.shift/t.shift.py:65
+#, python-format
+msgid "Unable to temporally shift the space time %s dataset <%s>"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:63
+#: ../vector/v.external.out/args.c:98
+#, c-format, python-format
+msgid "%s= or %s= must be specified"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:109
+msgid "Unregister maps"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:136
+#, python-format
+msgid "Unable to find %s map <%s> in temporal database"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:150
+#, python-format
+msgid "Unregister maps from space time dataset <%s>"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:152
+msgid "Unregister maps from the temporal database"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:98
+msgid "The number of columns must be equal to the number of space time raster datasets"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:222
+#, python-format
+msgid "Unable to create new layers for vector map <%s>"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:224
+#, python-format
+msgid "Observaion of space time raster dataset(s) <%s>"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:226
+#, python-format
+msgid "Observation of space time raster dataset(s) <%s> with vector map <%s>"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:252
+msgid "The number of raster maps in a granule must be equal to the number of column names"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:287
+#, python-format
+msgid "Unable to add column %s to vector map <%s> with layer %i"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:304
+#, python-format
+msgid "Unable to add table to vector map <%s> with layer %i"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:323
+#, python-format
+msgid "Unable to run v.what.rast for vector map <%s> with layer %i and raster map <%s>"
+msgstr ""
+
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:106
+msgid "All registered maps of the space time vector dataset must have time intervals"
+msgstr ""
+
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:117
+#, python-format
+msgid "Space time vector dataset <%s> is empty"
+msgstr ""
+
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:226
+#, python-format
+msgid "Unable to remove raster map <%s>"
 msgstr ""
 
 #: ../vector/v.buffer/geos.c:19 ../vector/v.profile/main.c:59
@@ -38512,11 +39074,6 @@ msgstr ""
 
 #: ../vector/v.external.out/args.c:80
 msgid "Print current status in shell script style"
-msgstr ""
-
-#: ../vector/v.external.out/args.c:98
-#, c-format
-msgid "%s= or %s= must be specified"
 msgstr ""
 
 #: ../vector/v.external.out/args.c:101
