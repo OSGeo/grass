@@ -9,6 +9,8 @@ int GPJ_transform(const struct pj_info *, const struct pj_info *,
 int GPJ_transform_array(const struct pj_info *, const struct pj_info *,
                         const struct pj_info *, int, double *, double *,
                         double *, int);
+void GPJ_clone_transform(const struct pj_info *, struct gpj_transform_clone *);
+void GPJ_free_transform_clone(struct gpj_transform_clone *);
 
 /* old API, to be removed */
 int pj_do_proj(double *, double *, const struct pj_info *,
