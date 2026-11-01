@@ -25,7 +25,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 #    not be modified as z.
 
 # %module
-# % description: Converts coordinates from one projection to another (cs2cs frontend).
+# % description: Converts coordinates from one coordinate reference system to another (cs2cs frontend).
 # % keyword: miscellaneous
 # % keyword: projection
 # % keyword: transformation
@@ -53,25 +53,27 @@ SPDX-License-Identifier: GPL-2.0-or-later
 # %option
 # % key: proj_in
 # % type: string
-# % description: Input projection parameters (PROJ.4 style)
+# % label: Input coordinate reference system
+# % description: PROJ string, WKT, PROJJSON, or authority code such as EPSG:4326 (default: current project)
 # % required : no
 # % guisection: Projections
 # %end
 # %option
 # % key: proj_out
 # % type: string
-# % description: Output projection parameters (PROJ.4 style)
+# % label: Output coordinate reference system
+# % description: PROJ string, WKT, PROJJSON, or authority code such as EPSG:4326
 # % required : no
 # % guisection: Projections
 # %end
 # %flag
 # % key: i
-# % description: Use LL WGS84 as input and current location as output projection
+# % description: Use LL WGS84 as input and current project as output CRS
 # % guisection: Projections
 # %end
 # %flag
 # % key: o
-# % description: Use current location as input and LL WGS84 as output projection
+# % description: Use current project as input and LL WGS84 as output CRS
 # % guisection: Projections
 # %end
 # %flag
@@ -97,11 +99,16 @@ SPDX-License-Identifier: GPL-2.0-or-later
 # % exclusive: -i, -o
 # %end
 
+import json
+import os
 import sys
 import threading
 from pathlib import Path
 from grass.script.utils import separator, parse_key_val, encode, decode
 from grass.script import core as gcore
+
+# Longitude/latitude on WGS 84 with longitude first.
+LL_WGS84 = "OGC:CRS84"
 
 
 class TrThread(threading.Thread):
@@ -122,6 +129,71 @@ class TrThread(threading.Thread):
             self.outf.flush()
 
         self.outf.close()
+
+
+def is_proj_string(crs):
+    """Return True when the CRS is given as a PROJ string (starts with +)"""
+    return crs.lstrip().startswith("+")
+
+
+def run_projinfo(args, crs):
+    """Run projinfo on a CRS definition and return its standard output"""
+    if not gcore.find_program("projinfo"):
+        gcore.fatal(
+            _("projinfo program not found, install PROJ first: https://proj.org")
+        )
+    env = os.environ.copy()
+    # Interpret +init=epsg:XXXX in PROJ strings the way PROJ 4 did.
+    env["PROJ_USE_PROJ4_INIT_RULES"] = "YES"
+    process = gcore.Popen(
+        ["projinfo", "-q", *args, crs],
+        stdout=gcore.PIPE,
+        stderr=gcore.PIPE,
+        env=env,
+    )
+    stdout, stderr = process.communicate()
+    stdout = decode(stdout).strip()
+    if process.returncode != 0 or not stdout:
+        gcore.fatal(
+            _("Unable to interpret coordinate reference system '{crs}': {msg}").format(
+                crs=crs, msg=decode(stderr).strip()
+            )
+        )
+    return stdout
+
+
+def proj_string_to_wkt(crs):
+    """Convert a PROJ string to a single-line WKT2 string"""
+    if "+type=crs" not in crs:
+        crs += " +type=crs"
+    return run_projinfo(["-o", "WKT2:2019", "--single-line"], crs)
+
+
+def first_axis_is_northing(crs):
+    """Return True when the first axis of the CRS is latitude or northing
+
+    cs2cs honors the axis order of a CRS given as WKT, PROJJSON, or
+    authority code, while m.proj always reads and writes x y, i.e.,
+    longitude latitude or easting northing.
+    """
+    definition = json.loads(run_projinfo(["-o", "PROJJSON"], crs))
+    # Compound and bound CRSs carry the coordinate system in a nested CRS.
+    while "coordinate_system" not in definition:
+        if "components" in definition:
+            definition = definition["components"][0]
+        elif "source_crs" in definition:
+            definition = definition["source_crs"]
+        elif "base_crs" in definition:
+            definition = definition["base_crs"]
+        else:
+            return False
+    axes = definition["coordinate_system"].get("axis", [])
+    return bool(axes) and axes[0].get("direction") in {"north", "south"}
+
+
+def current_project_crs():
+    """Return the CRS of the current project as a single-line WKT string"""
+    return gcore.read_command("g.proj", flags="pf", format="wkt").strip()
 
 
 def main():
@@ -165,47 +237,41 @@ def main():
     if "XY location" in kv:
         gcore.fatal(_("Unable to project to or from a XY location"))
 
-    in_proj = None
+    in_crs = None
 
     if ll_in:
-        in_proj = "+proj=longlat +datum=WGS84"
-        gcore.verbose("Assuming LL WGS84 as input, current projection as output ")
+        in_crs = LL_WGS84
+        gcore.verbose("Assuming LL WGS84 as input, current project CRS as output")
 
     if ll_out:
-        in_proj = gcore.read_command("g.proj", flags="fp", format="proj4")
+        in_crs = current_project_crs()
 
     if proj_in:
-        if "+" in proj_in:
-            in_proj = proj_in
-        else:
-            gcore.fatal(_("Invalid PROJ.4 input specification"))
+        in_crs = proj_in
 
-    if not in_proj:
-        gcore.verbose("Assuming current location as input")
-        in_proj = gcore.read_command("g.proj", flags="fp", format="proj4")
+    if not in_crs:
+        gcore.verbose("Assuming current project CRS as input")
+        in_crs = current_project_crs()
 
-    in_proj = in_proj.strip()
-    gcore.verbose("Input parameters: '%s'" % in_proj)
+    in_crs = in_crs.strip()
+    gcore.verbose("Input CRS: '%s'" % in_crs)
 
-    out_proj = None
+    out_crs = None
 
     if ll_out:
-        out_proj = "+proj=longlat +datum=WGS84"
-        gcore.verbose("Assuming current projection as input, LL WGS84 as output ")
+        out_crs = LL_WGS84
+        gcore.verbose("Assuming current project CRS as input, LL WGS84 as output")
 
     if ll_in:
-        out_proj = gcore.read_command("g.proj", flags="fp", format="proj4")
+        out_crs = current_project_crs()
 
     if proj_out:
-        if "+" in proj_out:
-            out_proj = proj_out
-        else:
-            gcore.fatal(_("Invalid PROJ.4 output specification"))
+        out_crs = proj_out
 
-    if not out_proj:
-        gcore.fatal(_("Missing output projection parameters"))
-    out_proj = out_proj.strip()
-    gcore.verbose("Output parameters: '%s'" % out_proj)
+    if not out_crs:
+        gcore.fatal(_("Missing output coordinate reference system"))
+    out_crs = out_crs.strip()
+    gcore.verbose("Output CRS: '%s'" % out_crs)
 
     # set up input file
     if coords:
@@ -242,8 +308,28 @@ def main():
     # Convert cs2cs DMS format to GRASS DMS format:
     #   cs2cs | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
 
-    cmd = ["cs2cs"] + copyinp + outfmt + in_proj.split() + ["+to"] + out_proj.split()
+    if is_proj_string(in_crs) and is_proj_string(out_crs):
+        # Two PROJ strings use the cs2cs "+to" syntax, which always reads
+        # and writes longitude latitude or easting northing.
+        cmd = ["cs2cs"] + copyinp + outfmt + in_crs.split() + ["+to"] + out_crs.split()
+    else:
+        # Anything else goes through the cs2cs "source_crs target_crs"
+        # syntax. cs2cs does not mix the two syntaxes, so a PROJ string
+        # is converted to WKT. The axis order of the CRS is honored by
+        # cs2cs, so swap input (-r) and output (-s) when needed to keep
+        # x y, i.e., longitude latitude or easting northing.
+        if is_proj_string(in_crs):
+            in_crs = proj_string_to_wkt(in_crs)
+        if is_proj_string(out_crs):
+            out_crs = proj_string_to_wkt(out_crs)
+        axis_order = []
+        if first_axis_is_northing(in_crs):
+            axis_order.append("-r")
+        if first_axis_is_northing(out_crs):
+            axis_order.append("-s")
+        cmd = ["cs2cs"] + copyinp + outfmt + axis_order + [in_crs, out_crs]
 
+    gcore.debug("cs2cs command: %s" % cmd)
     p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE, text=False)
 
     tr = TrThread(ifs, inf, p.stdin)
@@ -285,7 +371,11 @@ def main():
     p.wait()
 
     if p.returncode != 0:
-        gcore.warning(_("Projection transform probably failed, please investigate"))
+        gcore.fatal(
+            _("Coordinate transformation failed (cs2cs exit code {})").format(
+                p.returncode
+            )
+        )
 
 
 if __name__ == "__main__":
