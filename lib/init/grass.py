@@ -295,7 +295,7 @@ def help_message(default_gui) -> None:
             flags=_("Flags"),
             help_flag=_("print this help message"),
             version_flag=_("show version information and exit"),
-            create=_("create given database, project or mapset if it doesn't exist"),
+            create=_("create given project or mapset if it doesn't exist"),
             exit_after=_("exit after creation of project or mapset. Only with -c flag"),
             force_removal=_(
                 "force removal of .gislock if exists (use with care!)."
@@ -666,13 +666,20 @@ def create_location(gisdbase, location, geostring) -> None:
     :param geostring: path to a georeferenced file or EPSG code
     """
     import grass.script as gs  # pylint: disable=E0611
+    from grass.exceptions import ScriptError
 
     try:
         gs.create_project(gisdbase, location, crs=geostring)
-    except gs.ScriptError as err:
+    except ScriptError as err:
         fatal(
             _("Error creating project: {}").format(
                 err.value.strip('"').strip("'").replace("\\n", os.linesep)
+            )
+        )
+    except OSError as err:
+        fatal(
+            _("Cannot create project <{}>: {}: {}").format(
+                location, err.strerror, err.filename
             )
         )
 
