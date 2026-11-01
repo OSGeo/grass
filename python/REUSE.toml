@@ -1,0 +1,18 @@
+version = 1
+
+[[annotations]]
+path = ["libgrass_interface_generator/ctypesgen/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2007 Ctypesgen Developers"
+SPDX-License-Identifier = "BSD-2-Clause"
+
+[[annotations]]
+path = [
+  "libgrass_interface_generator/ctypesgen/parser/lex.py",
+  "libgrass_interface_generator/ctypesgen/parser/yacc.py",
+  "grass/temporal/ply/lex.py",
+  "grass/temporal/ply/yacc.py",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2001-2018 David M. Beazley (Dabeaz LLC)"
+SPDX-License-Identifier = "BSD-3-Clause"
