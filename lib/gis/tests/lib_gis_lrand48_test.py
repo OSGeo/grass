@@ -33,12 +33,15 @@ from grass.lib.gis import (
     G_random_init_layout,
     G_random_init_layout_bounded,
     G_random_init_layout_exact,
+    G_random_int,
+    G_random_int32,
     G_random_layout_batches,
     G_random_layout_length,
     G_random_parse_seed,
     G_random_state_for_batch,
     G_random_state_for_unit,
     G_random_state_from_seed,
+    G_random_uint32,
     G_srand48,
     struct_G_random_layout,
     struct_G_random_state,
@@ -499,6 +502,33 @@ def test_random_seed_matches_shared_generator(seed):
     assert [G_random_double(byref(state)) for _ in range(100)] == shared
     if seed in REFERENCE:
         assert shared[:10] == REFERENCE[seed]["drand48"]
+
+
+@pytest.mark.parametrize("seed", [0, 1, 42, 1337, 2147483647, -1, 4294967295])
+def test_random_integers_match_shared_generator(seed):
+    """The integer functions give G_mrand48() and G_lrand48() for the same draw.
+
+    G_random_int32() is G_mrand48(), G_random_uint32() its bits unsigned,
+    G_random_int() is G_lrand48(), and the unsigned value is the floor of
+    2^32 times G_random_double(). These are properties of the current
+    engine, so the test checks for them.
+    """
+    state = struct_G_random_state()
+
+    def draws(function):
+        G_random_state_from_seed(byref(state), seed)
+        return [function(byref(state)) for _ in range(100)]
+
+    G_srand48(seed)
+    mrand = [G_mrand48() for _ in range(100)]
+    assert draws(G_random_int32) == mrand
+    unsigned = draws(G_random_uint32)
+    assert unsigned == [value % 2**32 for value in mrand]
+
+    G_srand48(seed)
+    assert draws(G_random_int) == [G_lrand48() for _ in range(100)]
+
+    assert unsigned == [int(value * 2**32) for value in draws(G_random_double)]
 
 
 @pytest.mark.parametrize(
