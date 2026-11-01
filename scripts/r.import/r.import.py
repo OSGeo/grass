@@ -87,6 +87,12 @@
 # % description: Title for resultant raster map
 # % guisection: Metadata
 # %end
+# %option G_OPT_F_OUTPUT
+# % key: map_names_file
+# % required: no
+# % description: Name of the output file that contains the imported map names
+# % guisection: Metadata
+# %end
 # %flag
 # % key: e
 # % description: Estimate resolution only
@@ -199,6 +205,8 @@ def main():
         }
         if bands:
             parameters["band"] = bands
+        if options["map_names_file"]:
+            parameters["map_names_file"] = options["map_names_file"]
         try:
             gs.run_command("r.in.gdal", **parameters)
             gs.verbose(
@@ -246,6 +254,8 @@ def main():
     }
     if bands:
         parameters["band"] = bands
+    if options["map_names_file"]:
+        parameters["map_names_file"] = options["map_names_file"]
     try:
         gs.run_command("r.in.gdal", env=env, **parameters)
     except CalledModuleError:
@@ -281,6 +291,8 @@ def main():
     }
     if bands:
         parameters["band"] = bands
+    if options["map_names_file"]:
+        parameters["map_names_file"] = options["map_names_file"]
     if "r" in region_flag:
         gs.run_command(
             "v.proj",
