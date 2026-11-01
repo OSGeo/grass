@@ -209,8 +209,9 @@ int main(int argc, char *argv[])
               1)) {
         char lbuf[100], lbufa[100];
 
-        if (exist && (G_get_datumparams_from_projinfo(old_proj_keys, lbuf,
-                                                      lbufa) == 2)) {
+        if (exist &&
+            (G_get_datumparams_from_projinfo(old_proj_keys, lbuf, sizeof(lbuf),
+                                             lbufa, sizeof(lbufa)) == 2)) {
             G_strip(lbuf);
             if ((i = G_get_datum_by_name(lbuf)) > 0) {
                 G_message(_("The current datum is %s (%s)"), G_datum_name(i),
