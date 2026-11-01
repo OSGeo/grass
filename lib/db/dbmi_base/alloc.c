@@ -27,7 +27,7 @@ char *db_store(const char *s)
 {
     char *a;
 
-    a = db_malloc(strlen(s) + 1);
+    a = db_malloc((int)strlen(s) + 1);
     if (a)
         strcpy(a, s);
     return a;
