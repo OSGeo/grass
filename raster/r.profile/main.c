@@ -387,6 +387,7 @@ static void profile_vector_lines(const char *name, const char *layer_name,
     int select = where || cats;
     int layer, type, nlines = 0, nselected = 0, ncategorized = 0;
     char label[128];
+    const char *full_name;
 
     Vect_set_open_level(1); /* topology not required */
     if (Vect_open_old2(&Map, name, "", layer_name) < 0)
@@ -443,18 +444,17 @@ static void profile_vector_lines(const char *name, const char *layer_name,
                        Points->y[i + 1], res, &line_out);
         nselected++;
     }
+    full_name = Vect_get_full_name(&Map);
     if (type == -1)
-        G_fatal_error(_("Unable to read vector map <%s>"),
-                      Vect_get_full_name(&Map));
+        G_fatal_error(_("Unable to read vector map <%s>"), full_name);
     if (nlines == 0)
-        G_warning(_("No lines found in vector map <%s>"),
-                  Vect_get_full_name(&Map));
+        G_warning(_("No lines found in vector map <%s>"), full_name);
     else if (nselected == 0)
-        G_warning(_("No lines selected from vector map <%s>"),
-                  Vect_get_full_name(&Map));
+        G_warning(_("No lines selected from vector map <%s>"), full_name);
     else if (ncategorized == 0)
         G_warning(_("No selected line has a category in layer <%s>"),
                   layer_name);
+    G_free((void *)full_name);
 
     Vect_close(&Map);
     Vect_destroy_line_struct(Points);
