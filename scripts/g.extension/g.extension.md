@@ -333,7 +333,7 @@ installed.
 *[g.extension.all](g.extension.all.md)*
 
 [GRASS 8 Addons Manual
-pages](https://grass.osgeo.org/grass8/manuals/addons/)
+pages](https://grass.osgeo.org/grass8/manuals/addons/)  
 [GRASS Addons](https://grasswiki.osgeo.org/wiki/GRASS_AddOns) wiki page.
 
 ## AUTHORS
