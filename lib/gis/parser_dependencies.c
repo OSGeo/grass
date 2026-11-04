@@ -126,6 +126,8 @@ static int is_flag(const void *p)
     }
 
     G_fatal_error(_("Internal error: option or flag not found"));
+
+    return -1;
 }
 
 static int is_present(const void *p)
