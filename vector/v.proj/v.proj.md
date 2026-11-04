@@ -23,7 +23,7 @@ If **smax** is set to **0** the automated vertex densification is
 disabled (not recommended).
 
 *v.proj* supports general datum transformations, making use of the
-*PROJ* co-ordinate system translation library.
+*PROJ* coordinate system translation library.
 
 When projecting into a latlon project, east coordinates are wrapped by
 the proj4 library to fit into the range -180,180. This is in most cases

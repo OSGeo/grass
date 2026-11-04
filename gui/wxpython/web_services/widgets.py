@@ -60,7 +60,7 @@ from gui_core.wrap import (
 import grass.script as gs
 from grass.pydispatch.signal import Signal
 
-rinwms_path = os.path.join(os.getenv("GISBASE"), "etc", "r.in.wms")
+rinwms_path = os.path.join(os.getenv("GRASS_ETCBINDIR"), "r.in.wms")
 if rinwms_path not in sys.path:
     sys.path.append(rinwms_path)
 
@@ -1145,12 +1145,12 @@ class WSManageSettingsWidget(ManageSettingsWidget):
         self.settingsSizer.Add(self.btnAddDefaultServers, flag=wx.RIGHT, border=5)
 
     def OnAddDefaultServers(self, event):
-        setts = self.GetSettings()
+        current_settings = self.GetSettings()
         self.servers_to_add = {}
         for k, v in self.default_servers.items():
-            if k not in setts.keys():
+            if k not in current_settings.keys():
                 self.servers_to_add[k] = v
-            elif v != setts[k]:
+            elif v != current_settings[k]:
                 GMessage(
                     parent=self,
                     message=_(

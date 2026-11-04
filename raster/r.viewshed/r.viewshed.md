@@ -112,7 +112,7 @@ line-of-sight and its intersections with the cells in the terrain. For a
 (square) grid of *n* cells, there can be *O(n^1/2)* cells
 that intersect the LOS. If we test every single such cell for every
 point in the grid, this adds up to *O(n^3/2)* tests. We can do
-all these tests faster if we re-use information from one point to the
+all these tests faster if we reuse information from one point to the
 next (two grid points that are close to each other will be intersected
 by a lot of the same points) and organize the computation differently.
 

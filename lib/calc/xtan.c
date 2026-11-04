@@ -8,8 +8,7 @@
 /**********************************************************************
 tan(x)
 
-  if floating point exception occurs during the evaluation of tan(x)
-  the result is NULL
+  if x is infinite, the result is NULL
 
   note: x is in degrees.
 **********************************************************************/
@@ -36,12 +35,8 @@ int f_tan(int argc, const int *argt, void **args)
     for (i = 0; i < columns; i++)
         if (IS_NULL_D(&arg1[i]))
             SET_NULL_D(&res[i]);
-        else {
-            floating_point_exception = 0;
+        else
             res[i] = tan(arg1[i] * DEGREES_TO_RADIANS);
-            if (floating_point_exception)
-                SET_NULL_D(&res[i]);
-        }
 
     return 0;
 }

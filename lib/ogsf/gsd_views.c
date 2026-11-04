@@ -14,6 +14,11 @@
 
 #include <grass/config.h>
 
+#if defined(OPENGL_WINDOWS)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#undef WIN32_LEAN_AND_MEAN
+#endif
 #if defined(OPENGL_X11) || defined(OPENGL_WINDOWS)
 #include <GL/gl.h>
 #include <GL/glu.h>

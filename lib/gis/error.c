@@ -303,7 +303,7 @@ static void print_error(const char *msg, const int type)
                 int len, lead;
 
                 fprintf(stderr, "%s", prefix_std[type]);
-                len = lead = strlen(prefix_std[type]);
+                len = lead = (int)strlen(prefix_std[type]);
                 w = (char *)msg;
 
                 while (print_word(stderr, &w, &len, lead))

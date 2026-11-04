@@ -1381,7 +1381,6 @@ class SettingsDialog(wx.Dialog):
         gridSizer = wx.GridBagSizer(vgap=1, hgap=1)
 
         row = 0
-        setts = {**self.colorsSetts, **self.sizeSetts}
 
         settsOrder = [
             "selected",
@@ -1392,7 +1391,6 @@ class SettingsDialog(wx.Dialog):
             "point_width",
         ]
         for settKey in settsOrder:
-            sett = setts[settKey]
             gridSizer.Add(
                 settsLabels[settKey], flag=wx.ALIGN_CENTER_VERTICAL, pos=(row, 0)
             )

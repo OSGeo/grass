@@ -67,7 +67,7 @@ jobs:
           STEPS_CPR_OUTPUTS_PULL_REQUEST_URL: ${{ steps.cpr.outputs.pull-request-url }}
   update-i18n:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     permissions:
       contents: write
@@ -86,16 +86,36 @@ jobs:
           sudo apt update
           sudo apt install -y --no-install-recommends --no-install-suggests \
             gettext \
+            libcairo2-dev \
+            libfftw3-dev \
+            libfreetype-dev \
             libgdal-dev \
-            libproj-dev
-      - name: Configure grass with minimal packages
+            libgeos-dev \
+            libgl-dev \
+            libglu1-mesa-dev \
+            libnetcdf-dev \
+            libpq-dev \
+            libproj-dev \
+            libsvm-dev \
+            python3-wxgtk4.0
+      - name: Configure grass with the packages needed for the menu strings
+        # wxPython is needed to generate the menu strings, and the tools
+        # that are not built get a placeholder instead of their description.
+        # Ubuntu 24.04 does not package PDAL or libLAS, so the point cloud
+        # import and export tools still get the placeholder.
         run: |
           ./configure \
+            --with-cairo \
+            --with-fftw \
+            --with-freetype \
+            --with-freetype-includes=/usr/include/freetype2 \
+            --with-geos \
+            --with-libsvm \
+            --with-netcdf \
             --with-nls \
-            --without-cairo \
-            --without-fftw \
-            --without-freetype \
-            --without-opengl \
+            --with-opengl \
+            --with-postgres \
+            --with-postgres-includes=/usr/include/postgresql \
             --without-pdal
       - name: Build grass core
         run: make -j"$(nproc)"

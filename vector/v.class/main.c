@@ -313,8 +313,13 @@ int main(int argc, char *argv[])
                 fprintf(stdout, _("Stdev multiplied by %.4f to define step\n"),
                         finfo);
             fprintf(stdout, "\n");
-            fprintf(stdout, _("%15s%15s%15s\n\n"), "From (excl.)", "To (incl.)",
-                    "Frequency");
+            fprintf(stdout, "%15s%15s%15s\n\n",
+                    /* GTC Column header, lower class limit (exclusive) */
+                    _("From (excl.)"),
+                    /* GTC Column header, upper class limit (inclusive) */
+                    _("To (incl.)"),
+                    /* GTC Column header, number of values in the class */
+                    _("Frequency"));
             fprintf(stdout, "%15.5f%15.5f%15i\n", min, classbreaks[0],
                     frequencies[0]);
 
