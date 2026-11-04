@@ -579,12 +579,12 @@ class RasterAbstractBase:
     @must_be_open
     def read_cats(self):
         """Read category from the raster map file"""
-        self.cats.read(self)
+        self.cats.read()
 
     @must_be_open
     def write_cats(self):
         """Write category to the raster map file"""
-        self.cats.write(self)
+        self.cats.write()
 
     @must_be_open
     def read_cats_rules(self, filename, sep=":"):

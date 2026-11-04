@@ -214,14 +214,15 @@ class Category(list):
         libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
 
     def _read_cats(self):
-        """Copy from the C struct to the list"""
+        """Replace the list content with the categories from the C struct"""
+        self.clear()
         for i in range(self.c_cats.ncats):
             self.append(self._get_c_cat(i))
 
     def _write_cats(self):
         """Copy from the list data to the C struct"""
-        # reset only the C struct
-        libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
+        # Reset only the C struct, keeping its title, which is not in the list.
+        libraster.Rast_init_cats(self.title, ctypes.byref(self.c_cats))
         # write to the c struct
         for cat in iter(self):
             label, min_cat, max_cat = cat
@@ -340,7 +341,10 @@ class Category(list):
         Path(filename).write_text("\n".join(cats))
 
     def sort(self):
+        """Sort the categories by their range"""
+        self._write_cats()
         libraster.Rast_sort_cats(ctypes.byref(self.c_cats))
+        self._read_cats()
 
     def labels(self):
         return list(map(itemgetter(0), self))
