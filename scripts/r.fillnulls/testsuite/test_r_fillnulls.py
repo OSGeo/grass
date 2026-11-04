@@ -65,6 +65,26 @@ class TestRFillNulls(TestCase):
             precision=1e-6,
         )
 
+    def test_no_nulls(self):
+        """Test r.fillnulls when input raster has no NULL cells"""
+        # elevation has no NULL cells by default
+        module = SimpleModule(
+            self.module,
+            input=self.mapName,
+            output=self.mapComplete,
+            overwrite=True,
+        )
+
+        # Must succeed for rasters without NULLs
+        self.assertModule(module)
+
+        # Output should be identical in terms of NULL count
+        self.assertRasterFitsUnivar(
+            raster=self.mapComplete,
+            reference={"null_cells": float(0)},
+            precision=0,
+        )
+
     def test_bicubic(self):
         """Test using bicubic interpolation"""
         module = SimpleModule(
