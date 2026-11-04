@@ -286,6 +286,14 @@ int main(int argc, char *argv[])
         /* Add point to cache */
         row = Rast_northing_to_row(Points->y[0], &window);
         col = Rast_easting_to_col(Points->x[0], &window);
+
+        /* The southern and eastern edges convert to the first row or column
+         * outside the region, so bring points there into the last one. */
+        if (Points->y[0] == window.south)
+            row = window.rows - 1;
+        if (Points->x[0] == window.east)
+            col = window.cols - 1;
+
         if (col < 0 || col >= window.cols || row < 0 || row >= window.rows)
             continue;
 
