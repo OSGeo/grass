@@ -1186,7 +1186,9 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
         ret1 = 0
         new_modules_ext = None
         if sys.platform == "win32":
-            ret1, new_modules_ext, new_files_ext = install_extension_win(extension)
+            ret1, new_modules_ext, new_files_ext = install_extension_win(
+                extension, url=url
+            )
         else:
             (
                 ret1,
@@ -1590,21 +1592,62 @@ def install_module_xml(mlist, source=None):
     return mlist
 
 
-def install_extension_win(name):
-    """Install extension on MS Windows"""
+def get_addons_base_url_override():
+    """Return the user-configured addon server base URL, or None.
+
+    Precedence (highest first):
+      1. ``GRASS_ADDONS_BASE_URL`` shell environment variable. The more
+         specific, transient setting; wins so that CI jobs, system
+         administrators and one-off shell sessions can override a persistent
+         configuration without having to unset it first.
+      2. ``ADDONS_BASE_URL`` set via ``g.gisenv set="ADDONS_BASE_URL=..."``.
+         Persists across GRASS sessions and is settable from inside GRASS
+         (including the GUI variables panel).
+
+    Any trailing slash is removed. Returns None when neither is set.
+    """
+    value = os.environ.get("GRASS_ADDONS_BASE_URL") or gs.gisenv().get(
+        "ADDONS_BASE_URL"
+    )
+    return value.rstrip("/") if value else None
+
+
+def addons_server_url(base):
+    """Build the versioned addon directory URL under server root *base*.
+
+    *base* must have no trailing slash; the result has none either, so a file
+    name is appended with a single separator (e.g. ``f"{url}/{name}.zip"``).
+    """
+    return (
+        f"{base}/grass{VERSION[0]}{VERSION[1]}/addons/"
+        f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
+    )
+
+
+def install_extension_win(name, url=None):
+    """Install extension on MS Windows."""
     gs.message(
         _("Downloading precompiled GRASS Addons <{}>...").format(options["extension"])
     )
 
-    # build base URL
-    base_url = (
-        "http://wingrass.fsv.cvut.cz/"
-        f"grass{VERSION[0]}{VERSION[1]}/addons/"
-        f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
-    )
+    # Resolve the final ZIP URL.
+    if url:
+        if not url.lower().endswith(".zip"):
+            gs.fatal(
+                _(
+                    "On MS-Windows, the 'url' option must point to a ZIP file "
+                    "(URL ending in '.zip'). To use a different addon server, "
+                    "set the ADDONS_BASE_URL gisenv variable or the "
+                    "GRASS_ADDONS_BASE_URL environment variable instead."
+                )
+            )
+        zip_url = url
+    else:
+        base = get_addons_base_url_override() or "http://wingrass.fsv.cvut.cz"
+        zip_url = f"{addons_server_url(base)}/{name}.zip"
 
     # resolve ZIP URL
-    source, url = resolve_source_code(url="{0}/{1}.zip".format(base_url, name))
+    source, url = resolve_source_code(url=zip_url)
 
     # to hide non-error messages from subprocesses
     outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
@@ -2594,11 +2637,19 @@ def resolve_xmlurl_prefix(url, source=None):
     """
     gs.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
     if source in {"official", "official_fork"}:
-        # use pregenerated modules XML file
-        # Define branch to fetch from (latest or current version)
-        version_branch = get_version_branch(VERSION[0])
-
-        url = "https://grass.osgeo.org/addons/{}/".format(version_branch)
+        # On MS-Windows, the user can redirect both listing and install
+        # to a custom addon server via the ADDONS_BASE_URL gisenv setting or
+        # the GRASS_ADDONS_BASE_URL env var.
+        # This is only implemented for MS-Windows, so setting this env var
+        # or setting does do anything on other systems.
+        override = get_addons_base_url_override() if sys.platform == "win32" else None
+        if override:
+            url = addons_server_url(override) + "/"
+        else:
+            # use pregenerated modules XML file
+            # Define branch to fetch from (latest or current version)
+            version_branch = get_version_branch(VERSION[0])
+            url = "https://grass.osgeo.org/addons/{}/".format(version_branch)
     # else try to get extensions XMl from SVN repository (provided URL)
     # the exact action depends on subsequent code (somewhere)
 
@@ -2927,7 +2978,7 @@ def main():
     if options["operation"] == "add":
         check_dirs()
         if sys.platform == "win32":
-            install_extension()
+            install_extension(url=original_url)
         else:
             if original_url == "" or flags["o"]:
                 # Query GitHub API only if extension will be downloaded
