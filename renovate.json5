@@ -20,11 +20,9 @@
         // Renovate's pre-commit support is still opt-in
         ":enablePreCommit",
 
-        // weekly update of lock files (flake.lock)
+        // monthly update of lock files (flake.lock)
         ":maintainLockFilesMonthly",
         "group:githubArtifactActions",
-        "schedule:monthly",
-        ":prConcurrentLimitNone",
     ],
 
     "baseBranchPatterns" : [
@@ -38,26 +36,129 @@
         "enabled": true,
     },
 
+    // See doc/development/dependency_updates.md for the rationale of the
+    // settings below.
+
+    // Default window for everything not scheduled by a rule below. Times are
+    // in UTC so that the days below do not depend on the Renovate runner.
+    "timezone": "UTC",
+    "schedule": ["* 0-5 1 * *"],
+
+    // Do not create or update branches outside of the schedule. Each push to a
+    // Renovate branch restarts CI.
+    "updateNotScheduled": false,
+    // Rebase only when there are conflicts, not each time the base branch moves.
+    "rebaseWhen": "conflicted",
+
+    // Cap the open PRs so that unmerged PRs hold back new ones instead of
+    // piling up.
+    "prConcurrentLimit": 10,
+    "prHourlyLimit": 4,
+
+    // Supply chain cooldown: only offer releases at least 7 days old. With
+    // "strict", no branch is created until a release passes the check.
+    "minimumReleaseAge": "7 days",
+    "internalChecksFilter": "strict",
+
+    "labels": ["dependencies"],
+    "suppressNotifications": ["prIgnoreNotification", "prEditedNotification"],
+
+    // Security updates are not held back by the schedule or the cooldown.
+    "vulnerabilityAlerts": {
+        "schedule": ["at any time"],
+        "minimumReleaseAge": null,
+        "labels": ["dependencies", "security"],
+    },
+    "osvVulnerabilityAlerts": true,
+
     "packageRules": [
+        // Major updates, and Python minor versions, are only proposed once a
+        // maintainer approves them on the Dependency Dashboard.
         {
-            "groupName": "ruff",
-            "matchPackageNames": [
-                "astral-sh/ruff",
-                "astral-sh/ruff-pre-commit",
-                "ruff",
-            ],
+            "matchUpdateTypes": ["major"],
+            "dependencyDashboardApproval": true,
         },
         {
-            "groupName": "flake8",
-            "matchPackageNames": ["pycqa/flake8", "flake8"],
+            "matchDatasources": ["python-version"],
+            "matchUpdateTypes": ["minor"],
+            "dependencyDashboardApproval": true,
+        },
+
+        // Docker digests often have no release timestamp, so the cooldown
+        // would hold them back indefinitely.
+        {
+            "matchDatasources": ["docker"],
+            "matchUpdateTypes": ["digest", "pinDigest"],
+            "minimumReleaseAge": null,
+        },
+
+        // Groups on the default branch, on different days so that their CI
+        // runs do not queue together.
+        {
+            "groupName": "CI actions",
+            "matchManagers": ["github-actions"],
+            "matchUpdateTypes": ["minor", "patch", "digest", "pin", "pinDigest"],
+            "schedule": ["* 0-5 1 * *"],
         },
         {
-            "groupName": "black",
-            "matchPackageNames": [
-                "psf/black-pre-commit-mirror",
-                "psf/black",
-                "black",
-            ],
+            "groupName": "linters and pre-commit hooks",
+            "matchManagers": ["pre-commit"],
+            "schedule": ["* 0-5 8 * *"],
+        },
+        {
+            // Versions set in "# renovate:" commented environment variables of
+            // the workflows (ruff, flake8, pylint, bandit, prek, Python).
+            "groupName": "linters and pre-commit hooks",
+            "matchManagers": ["custom.regex"],
+            "matchFileNames": [".github/workflows/**"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "schedule": ["* 0-5 8 * *"],
+        },
+        {
+            "groupName": "Python docs and tooling requirements",
+            "matchManagers": ["pip_requirements", "pep621"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "schedule": ["* 0-5 8 * *"],
+        },
+
+        // The base image digests and the library versions built on top of
+        // them (GEOS, PROJ, GDAL, PDAL, gdal-grass, wxPython) are one PR, so
+        // that the Docker workflow tests them together. Base images are
+        // rebuilt about every two weeks, so this runs twice a month, just
+        // after the rebuilds of the Ubuntu images.
+        {
+            "groupName": "Docker base images and libraries",
+            "matchManagers": ["dockerfile", "custom.regex"],
+            "matchFileNames": ["Dockerfile", "docker/**"],
+            "matchUpdateTypes": ["minor", "patch", "digest", "pinDigest"],
+            "schedule": ["* 0-5 3,17 * *"],
+        },
+
+        // Release branches only get security updates (see
+        // "vulnerabilityAlerts") and one maintenance PR a month, without major
+        // updates. During the stabilization of a release, set
+        // "dependencyDashboardApproval" on the maintenance rules below.
+        // Keep these rules last: later rules take precedence.
+        {
+            "matchBaseBranches": ["/^releasebranch_/"],
+            "enabled": false,
+        },
+        {
+            "groupName": "release branch maintenance",
+            "matchBaseBranches": ["/^releasebranch_/"],
+            "matchManagers": ["github-actions"],
+            "matchUpdateTypes": ["minor", "patch", "digest"],
+            "enabled": true,
+            "schedule": ["* 0-5 22 * *"],
+        },
+        {
+            "groupName": "release branch maintenance",
+            "matchBaseBranches": ["/^releasebranch_/"],
+            "matchManagers": ["dockerfile", "custom.regex"],
+            "matchFileNames": ["Dockerfile", "docker/**"],
+            "matchUpdateTypes": ["patch", "digest"],
+            "enabled": true,
+            "schedule": ["* 0-5 22 * *"],
         },
     ],
 }

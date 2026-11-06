@@ -93,7 +93,7 @@ CI:
           - .pre-commit-config.yaml
           - .yamllint
           - binder/**
-          - renovate.json
+          - renovate.json5
 CMake:
   - changed-files:
       - any-glob-to-any-file:
