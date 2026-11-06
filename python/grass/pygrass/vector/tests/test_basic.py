@@ -2,7 +2,7 @@
 SPDX-FileCopyrightText: 2026 GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 
-Unit tests for grass.pygrass.vector.basic (Ilist, BoxList, Bbox)
+Unit tests for grass.pygrass.vector.basic (Ilist, BoxList, Bbox, Cats, CatsList)
 """
 
 from unittest.mock import patch
@@ -10,8 +10,9 @@ from unittest.mock import patch
 import pytest
 
 import grass.lib.vector as libvect
+import grass.script as gs
 from grass.pygrass.errors import GrassError
-from grass.pygrass.vector.basic import Bbox, BoxList, Ilist
+from grass.pygrass.vector.basic import Bbox, BoxList, Cats, CatsList, Ilist
 
 
 def test_init_empty():
@@ -499,3 +500,60 @@ def test_boxlist_repr():
     """Test BoxList __repr__."""
     boxlist = BoxList([Bbox(1, 2, 3, 4)])
     assert repr(boxlist) == "Boxlist([Bbox(1.0, 2.0, 3.0, 4.0)])"
+
+
+def test_cats_delete_cat_zero():
+    """Deleting category 0 removes only that category."""
+    cats = Cats()
+    for cat in (0, 1, 2):
+        cats.set(cat, layer=1)
+    cats.delete(0, layer=1)
+    assert cats.cat == [1, 2]
+    assert cats.n_del == 1
+
+
+def test_cats_delete_missing_cat_zero():
+    """Deleting a category 0 which is not present raises and keeps the others."""
+    cats = Cats()
+    cats.set(1, layer=1)
+    with pytest.raises(ValueError, match="category\\(0\\) number does not exist"):
+        cats.delete(0, layer=1)
+    assert cats.cat == [1]
+
+
+def test_cats_delete_layer():
+    """Deleting without a category removes all categories of the layer."""
+    cats = Cats()
+    cats.set(1, layer=1)
+    cats.set(2, layer=1)
+    cats.set(3, layer=2)
+    cats.delete(layer=1)
+    assert cats.cat == [3]
+    assert cats.layer == [2]
+
+
+@pytest.fixture
+def xy_session(tmp_path):
+    """Active session in an XY project (the C category list functions need one)"""
+    project = tmp_path / "xy_test"
+    gs.create_project(project)
+    with gs.setup.init(project) as session:
+        yield session
+
+
+def test_cats_list_from_array(xy_session):
+    """Ordered integers are converted into category ranges."""
+    cats_list = CatsList()
+    cats_list.from_array([1, 2, 3, 5, 7, 8])
+    assert cats_list.n_ranges == 3
+    assert cats_list.min == [1, 5, 7]
+    assert cats_list.max == [3, 5, 8]
+    assert 2 in cats_list
+    assert 6 not in cats_list
+
+
+def test_cats_list_from_array_empty(xy_session):
+    """An empty array gives an empty category list."""
+    cats_list = CatsList()
+    cats_list.from_array([])
+    assert cats_list.n_ranges == 0
