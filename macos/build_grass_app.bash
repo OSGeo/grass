@@ -38,7 +38,9 @@ conda_req_file="$conda_stable_file"
 conda_temp_dir=$(mktemp -d -t GRASS)
 conda_bin="${conda_temp_dir}/bin/conda"
 conda_update_stable=0
-miniconda_url="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-${arch}.sh"
+# renovate: datasource=github-tags depName=conda-forge/miniforge
+miniforge_version="26.9.4-2"
+miniconda_url="https://github.com/conda-forge/miniforge/releases/download/${miniforge_version}/Miniforge3-MacOSX-${arch}.sh"
 dmg_title=
 dmg_name=
 dmg_out_dir=

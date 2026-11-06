@@ -22,7 +22,7 @@ jobs:
   super-linter:
     name: GitHub Super Linter
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     permissions:
       contents: read

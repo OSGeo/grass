@@ -43,7 +43,7 @@ jobs:
   # For a release, e.g. 8.3.0, created tags are:
   #     8.3.0-alpine, 8.3.0-debian, 8.3.0-ubuntu and latest (with ubuntu)
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     concurrency:
       group: >-
         ${{ github.workflow }}-${{ matrix.name }}-${{ github.event_name }}-
