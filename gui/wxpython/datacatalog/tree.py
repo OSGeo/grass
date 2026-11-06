@@ -2263,7 +2263,6 @@ class DataCatalogTree(TreeView):
                     parent=self,
                 )
                 event.Veto()
-                return
 
     def SwitchMapset(self, grassdb, location, mapset, show_confirmation=False):
         """
