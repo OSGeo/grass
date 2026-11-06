@@ -9,6 +9,14 @@ on:
       - main
       - releasebranch_*
   pull_request:
+    paths-ignore:
+      - .pre-commit-config.yaml
+      - renovate.json5
+      - flake.lock
+      - flake.nix
+      - package.nix
+      - Dockerfile
+      - docker/**
   workflow_dispatch:
 
 permissions: {}
