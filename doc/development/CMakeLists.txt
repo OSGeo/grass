@@ -1,4 +1,5 @@
 set(web_only_doc_files
+    dependency_updates
     github_guide
     investigating_history
     style_guide
