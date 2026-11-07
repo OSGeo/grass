@@ -1,3 +1,7 @@
+# Author: Vaclav Petras
+# Copyright (C) 2026 by the GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 """Tests of compression into a destination smaller than the upper bound
 
 The compressors accept a destination buffer smaller than the bound from
