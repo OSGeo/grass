@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_sl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2026-03-22 08:14+0000\n"
+"PO-Revision-Date: 2026-10-31 18:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/sl/>\n"
 "Language: sl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #, fuzzy, c-format
 msgid "Unknown algorithm '%s'"
@@ -218,23 +218,20 @@ msgstr "Vektor '%s' že obstaja in bo prepisan."
 msgid "DB connection <%s/%s> already exists. Re-run '%s' with '--%s' flag to overwrite existing settings."
 msgstr "Vektor '%s' že obstaja in bo prepisan."
 
-#, fuzzy
 msgid ""
 "\n"
 "++ Running column unit tests ++"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- column unit tests failure --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- column unit tests finished successfully --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
 msgid ""
 "\n"
@@ -267,23 +264,20 @@ msgstr "Nepoznan \"location\""
 msgid "Performs unit and integration tests for the dbmi base library"
 msgstr "Nepoznan \"location\""
 
-#, fuzzy
 msgid ""
 "\n"
 "++ Running table unit tests ++"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- Table unit tests failure --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- Table unit tests finished successfully --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
 msgid "db_convert_Cstring_to_value(): unrecognized sqltype"
 msgstr ""
@@ -440,23 +434,20 @@ msgstr ""
 msgid "Performs unit tests for the gjson library"
 msgstr "Nepoznan \"location\""
 
-#, fuzzy
 msgid ""
 "\n"
 "++ Running gjson wrapper unit tests ++"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- gjson wrapper unit tests failure --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- gjson wrapper unit tests finished successfully --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
 #, fuzzy, c-format
 msgid "Illegal n-s resolution value: %g"
@@ -737,9 +728,7 @@ msgstr ""
 
 #, fuzzy
 msgid "no description"
-msgstr ""
-"\n"
-"Opis:\n"
+msgstr "Opis"
 
 #, fuzzy
 msgid "Unable to open color rule"
@@ -1138,54 +1127,41 @@ msgstr ""
 msgid ""
 "Illegal range syntax for parameter <%s>\n"
 "\tPresented as: %s"
-msgstr ""
-"\n"
-"Napaka: neveljaven razpon sintakse za parameter <%s>\n"
+msgstr "Napaka: neveljaven razpon sintakse za parameter <%s>"
 
 #, fuzzy, c-format
 msgid ""
 "Value <%s> out of range for parameter <%s>\n"
 "\tLegal range: %s"
-msgstr ""
-"\n"
-"Napaka: vrednost <%s> izven razpona za parameter <%s>\n"
+msgstr "Napaka: vrednost <%s> izven razpona za parameter <%s>"
 
 #, fuzzy, c-format
 msgid "Missing value for parameter <%s>"
-msgstr ""
-"\n"
-"Napaka: Manjkajoča vrednost za parameter <%s>\n"
+msgstr "Manjkajoča vrednost za parameter <%s>"
 
 #, fuzzy, c-format
 msgid "Invalid value <%s> for parameter <%s>"
-msgstr ""
-"\n"
-"Napaka: Manjkajoča vrednost za parameter <%s>\n"
+msgstr "Napaka: Manjkajoča vrednost za parameter <%s>"
 
 #, fuzzy, c-format
 msgid ""
 "Value <%s> ambiguous for parameter <%s>\n"
 "\tValid options: %s"
-msgstr ""
-"\n"
-"Napaka: vrednost <%s> izven razpona za parameter <%s>\n"
+msgstr "Napaka: vrednost <%s> izven razpona za parameter <%s>"
 
 #, fuzzy, c-format
 msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
-"\n"
 "NAPAKA: Zahtevani parameter <%s> ni nastavljen:\n"
-"    (%s).\n"
+"    (%s)."
 
 #, fuzzy, c-format
 msgid ""
 "Option <%s> must be provided in multiples of %d\n"
 "\tYou provided %d item(s): %s"
-msgstr ""
-"\n"
-"Napaka: možnost <%s> mora biti podana v večkratnikih %d\n"
+msgstr "Napaka: možnost <%s> mora biti podana v večkratnikih %d"
 
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
@@ -1261,30 +1237,21 @@ msgstr ""
 msgid "Internal error: the number of options is < 0"
 msgstr ""
 
-#, fuzzy
 msgid "Description:"
-msgstr ""
-"\n"
-"Opis:\n"
+msgstr "Opis:"
 
 msgid "Keywords:"
 msgstr ""
 
-#, fuzzy
 msgid "Usage:"
-msgstr ""
-"\n"
-"Uporaba:\n"
-" "
+msgstr "Uporaba:"
 
 msgid "ERROR: Option key not defined"
 msgstr ""
 
 #, fuzzy
 msgid "Flags:"
-msgstr ""
-"\n"
-"Izbire:\n"
+msgstr "Izbire:"
 
 msgid "Allow output files to overwrite existing files"
 msgstr ""
@@ -1304,11 +1271,8 @@ msgstr ""
 msgid "Force launching GUI dialog"
 msgstr ""
 
-#, fuzzy
 msgid "Parameters:"
-msgstr ""
-"\n"
-"Parametri:\n"
+msgstr "Parametri:"
 
 #, c-format
 msgid "  %*s   default: %s\n"
@@ -1329,15 +1293,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Flags"
-msgstr ""
-"\n"
-"Izbire:\n"
+msgstr "Izbire:"
 
-#, fuzzy
 msgid "Parameters"
-msgstr ""
-"\n"
-"Parametri:\n"
+msgstr "Parametri"
 
 #, fuzzy
 msgid "Options"
@@ -1667,9 +1626,7 @@ msgstr ""
 
 #, fuzzy
 msgid "GRASS database directory"
-msgstr ""
-"\n"
-"neveljavna projekcija\n"
+msgstr "neveljavna projekcija"
 
 msgid "Default: path to the current GRASS database"
 msgstr ""
@@ -2094,32 +2051,22 @@ msgid "unit"
 msgstr ""
 
 #. GTC: localized area units
-#, fuzzy
 msgid "square meters"
-msgstr ""
-"\n"
-"Parametri:\n"
+msgstr "kvadratni metri"
 
 #. GTC: localized area units
-#, fuzzy
 msgid "square meter"
-msgstr ""
-"\n"
-"Parametri:\n"
+msgstr "kvadratni metri"
 
 #. GTC: localized units
 #, fuzzy
 msgid "meters"
-msgstr ""
-"\n"
-"Parametri:\n"
+msgstr "Parametri"
 
 #. GTC: localized units
 #, fuzzy
 msgid "meter"
-msgstr ""
-"\n"
-"Parametri:\n"
+msgstr "meter"
 
 #. GTC: localized area units
 msgid "square kilometers"
@@ -2130,11 +2077,8 @@ msgid "square kilometer"
 msgstr ""
 
 #. GTC: localized units
-#, fuzzy
 msgid "kilometers"
-msgstr ""
-"\n"
-"Parametri:\n"
+msgstr "kilometri"
 
 #. GTC: localized units
 msgid "kilometer"
@@ -2191,16 +2135,12 @@ msgstr ""
 #. GTC: localized area units, do not confuse with feet
 #, fuzzy
 msgid "square US feet"
-msgstr ""
-"\n"
-"Parametri:\n"
+msgstr "Parametri"
 
 #. GTC: localized area units, do not confuse with foot
 #, fuzzy
 msgid "square US foot"
-msgstr ""
-"\n"
-"Parametri:\n"
+msgstr "Parametri:"
 
 #. GTC: localized units, do not confuse with feet
 msgid "US feet"
@@ -2526,74 +2466,65 @@ msgid ""
 "++ Running krylov solver benchmark ++"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "++ Running blas level 1 unit tests ++"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- blas level 1 unit tests failure --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
 msgid ""
 "\n"
 "-- blas level 1 unit tests finished successfully --"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "++ Running blas level 2 unit tests ++"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- blas level 2 unit tests failure --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
 msgid ""
 "\n"
 "-- blas level 2 unit tests finished successfully --"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "++ Running blas level 3 unit tests ++"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- blas level 3 unit tests failure --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
 msgid ""
 "\n"
 "-- blas level 3 unit tests finished successfully --"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "++ Running ccmath wrapper unit tests ++"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- ccmath wrapper unit tests failure --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- ccmath wrapper unit tests finished successfully --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
 msgid "The size of the matrices and vectors for benchmarking"
 msgstr ""
@@ -2607,23 +2538,20 @@ msgstr ""
 msgid "Performs benchmarks, unit and integration tests for the gmath library"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "++ Running matrix conversion unit tests ++"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- Matrix conversion unit tests failure --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- Matrix conversion unit tests finished successfully --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
 msgid ""
 "\n"
@@ -2936,12 +2864,8 @@ msgstr "OPOZORILO: "
 msgid "Exiting..."
 msgstr "Pripajanje centroidov: "
 
-#, fuzzy
 msgid "Usage"
-msgstr ""
-"\n"
-"Uporaba:\n"
-" "
+msgstr "Uporaba"
 
 msgid "print this help message"
 msgstr ""
@@ -2977,29 +2901,20 @@ msgstr ""
 msgid "options: arch,build,compiler,date,path,python_path,revision,svn_revision,version"
 msgstr ""
 
-#, fuzzy
 msgid "initial GRASS database directory"
 msgstr ""
-"\n"
-"neveljavna projekcija\n"
 
 msgid "directory containing GRASS projects"
 msgstr ""
 
-#, fuzzy
 msgid "initial GRASS project (location)"
 msgstr ""
-"\n"
-"neveljavna projekcija\n"
 
 msgid "directory containing mapsets with one common coordinate reference system"
 msgstr ""
 
-#, fuzzy
 msgid "initial GRASS mapset"
 msgstr ""
-"\n"
-"neveljavna projekcija\n"
 
 msgid "fully qualified initial mapset directory"
 msgstr ""
@@ -3368,11 +3283,9 @@ msgstr ""
 msgid "String for secondary color table has been truncated"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s: invalid index %d"
-msgstr ""
-"\n"
-"%s neveljaven; Poskusi znova > "
+msgstr "%s: neveljaven indeks %d"
 
 #, fuzzy, c-format
 msgid "Removing %s <%s>"
@@ -3871,11 +3784,9 @@ msgstr ""
 msgid "Operation %d:"
 msgstr "možnosti: %s\n"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Description: %s"
-msgstr ""
-"\n"
-"Opis:\n"
+msgstr "Opis: %s"
 
 #, fuzzy, c-format
 msgid "Area of use: %s"
@@ -4069,9 +3980,7 @@ msgstr ""
 
 #, fuzzy
 msgid "invalid value"
-msgstr ""
-"\n"
-"neveljavna fundamentalna točka\n"
+msgstr "neveljavna fundamentalna točka"
 
 #, fuzzy
 msgid "unknown error"
@@ -7149,23 +7058,20 @@ msgstr "Ne morem dodati povezave z bazo podatkov."
 msgid "Problem loading category values"
 msgstr "za obstoječe rastrske sloje %d\n"
 
-#, fuzzy
 msgid ""
 "\n"
 "++ Running basic unit tests ++"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- Basic rtree unit tests failure --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
-#, fuzzy
 msgid ""
 "\n"
 "-- Basic rtree unit tests finished successfully --"
-msgstr "Nepoznan \"location\""
+msgstr ""
 
 msgid "Unit tests for the vector rtree library"
 msgstr ""
