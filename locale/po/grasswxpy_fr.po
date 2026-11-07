@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 18:21+0000\n"
-"PO-Revision-Date: 2026-10-31 15:39+0000\n"
+"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"PO-Revision-Date: 2026-11-07 16:46+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/fr/>\n"
 "Language: fr\n"
@@ -999,13 +999,13 @@ msgid "Set raster output format  [r.external.out]"
 msgstr "Définir le format de sortie du raster  [r.external.out]"
 
 msgid "Set vector output format  [v.external.out]"
-msgstr ""
+msgstr "Définir le format de sortie vectoriel [v.external.out]"
 
 msgid "Unpack GRASS raster map  [r.unpack]"
 msgstr "Désempaqueter la carte raster GRASS  [r.unpack]"
 
 msgid "Unpack GRASS vector map  [v.unpack]"
-msgstr ""
+msgstr "Désempaqueter la carte vecteur GRASS  [v.unpack]"
 
 msgid "Create raster map from x,y,z data  [r.in.xyz]"
 msgstr "Créer une carte raster à partir de données x,y,z  [r.in.xyz]"
@@ -1099,7 +1099,7 @@ msgid "Loading of Data catalog content took rather long. To prevent delay, you c
 msgstr ""
 
 msgid "Enable loading current mapset only"
-msgstr ""
+msgstr "Activer le chargement du jeu de cartes courant uniquement"
 
 msgid "No change, don't ask me again"
 msgstr "Pas de changement, ne plus me demander"
@@ -1113,7 +1113,7 @@ msgstr "Basculer vers le dernier jeu de cartes utilisé"
 
 #, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' is currently in use. GRASS has started in a temporary project. To continue, use Data Catalog below to switch to a different project or remove lock file and switch to the last used mapset."
-msgstr ""
+msgstr "Le dernier jeu de cartes utilisé dans le chemin «{mapsetpath} » est actuellement en cours d'utilisation. GRASS a démarré dans un projet temporaire. Pour continuer, utilisez le catalogue de données ci-dessous pour passer à un autre projet ou supprimez le fichier de verrouillage et passez au dernier jeu de cartes utilisé."
 
 #, python-brace-format
 msgid "Last used mapset in path '{mapsetpath}' does not exist."
@@ -1214,6 +1214,9 @@ msgid ""
 "\n"
 "Do you want to switch anyway?"
 msgstr ""
+"La carte <{map_name}@{map_mapset}> ne fait pas partie du projet actuel. Pour pouvoir l'afficher, vous devez basculer vers le projet <{map_location}>. Notez que si vous effectuez cette opération, toutes les fenêtres d'affichage de carte actuellement ouvertes seront fermées.\n"
+"\n"
+"Souhaitez-vous tout de même effectuer cette opération ?"
 
 msgid "Map in a different project"
 msgstr "Carte dans un autre projet"
@@ -1392,6 +1395,9 @@ msgid ""
 "\n"
 "Do you really want to animate it?"
 msgstr ""
+"Le jeu de données <{n}> contient {c} cartes. Elles sont toutes générées avant le démarrage de l’animation, ce qui peut prendre beaucoup de temps et consommer beaucoup de mémoire.\n"
+"\n"
+"Voulez-vous vraiment l’animer ?"
 
 msgid "Display animation"
 msgstr "Afficher l'animation"
@@ -1566,7 +1572,7 @@ msgstr "Encodage incorrect {enc} utilisé. Définissez l'encodage dans les param
 
 #, python-brace-format
 msgid "Unable to read the table <{table}> from the database due to seemingly inconsistent number of columns in the data transfer. Check row: {row}... Likely, a newline character is present in the attribute value starting with: '{value}' Use the v.db.select module to investigate."
-msgstr ""
+msgstr "Impossible de lire la table <{table}> depuis la base de données en raison d'un nombre de colonnes apparemment incohérent lors du transfert de données. Vérifiez la ligne : {row}... Il est probable qu'un caractère de saut de ligne soit présent dans la valeur de l'attribut commençant par : «{value} ». Utilisez le module v.db.select pour examiner la situation."
 
 msgid "Viewing limit: 100000 records."
 msgstr "Limite d'affichage : 100000 enregistrements."
