@@ -59,7 +59,7 @@ def test_remove_semantic_label(session):
 
 @pytest.mark.parametrize("function", ["float", "double", "int"])
 def test_stats_keep_range(session, function):
-    """Updating the statistics with -s stores the range of the values"""
+    """r.support -s stores the same range as the one written by r.mapcalc."""
     tools = Tools(session=session)
     tools.g_region(n=3, s=0, e=4, w=0, res=1)
     tools.r_mapcalc(expression=f"values = {function}(row() * 10 + col() + 0.25)")
