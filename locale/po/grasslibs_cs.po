@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2026-10-11 11:28+0000\n"
+"PO-Revision-Date: 2026-11-07 16:46+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grasslibs-8-5/cs/>\n"
 "Language: cs\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #, c-format
 msgid "Unknown algorithm '%s'"
@@ -3817,7 +3817,7 @@ msgid "Unable to rename cell file '%s' to '%s': %s"
 msgstr ""
 
 msgid "unable to write f_format file for CELL maps"
-msgstr "neschopen zapsat soubor f_format pro mapy CELL "
+msgstr "neschopen zapsat soubor f_format pro mapy CELL"
 
 #, c-format
 msgid "Rast_make_random_colors: min (%d) > max (%d)"

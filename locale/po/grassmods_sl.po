@@ -3,21 +3,21 @@
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2005 GRASS Development Team
 # Miha Staut <mihastaut@yahoo.co.uk>, 2005.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-04 17:59+0000\n"
-"PO-Revision-Date: 2025-07-26 01:37+0000\n"
+"PO-Revision-Date: 2026-10-31 20:25+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
-"Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
+"Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/sl/>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #, fuzzy, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
@@ -69,9 +69,8 @@ msgstr "Izpiši etikete kategorij"
 msgid "List all columns for a given table."
 msgstr "naštej vse kolone (spremenljivke) za dano tabelo"
 
-#, fuzzy
 msgid "Separator is part of the format."
-msgstr "Vnesi pogoje v enem od naslednjih formatov:\n"
+msgstr ""
 
 #, fuzzy
 msgid "connection settings"
@@ -269,7 +268,7 @@ msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy, c-format
 msgid "Error while executing: '%s'"
-msgstr "Napaka med izvajanjem: \"%s\"\n"
+msgstr "Napaka med izvajanjem: \"%s\""
 
 msgid "Executes any SQL statement."
 msgstr ""
@@ -355,11 +354,8 @@ msgstr "Ne morem odpreti cellfile za [%s]"
 msgid "Test failed."
 msgstr "Vhodni sloj"
 
-#, fuzzy
 msgid "Test succeeded."
 msgstr ""
-"polje: %d\n"
-"kategorija: %d\n"
 
 #, fuzzy
 msgid "Query"
@@ -412,15 +408,13 @@ msgstr ""
 
 #, fuzzy
 msgid "Separator is part of the format"
-msgstr "Vnesi pogoje v enem od naslednjih formatov:\n"
+msgstr "Vnesi pogoje v enem od naslednjih formatov:"
 
-#, fuzzy
 msgid "Vertical separator is part of the format"
-msgstr "Vnesi pogoje v enem od naslednjih formatov:\n"
+msgstr ""
 
-#, fuzzy
 msgid "Null value is part of the format"
-msgstr "Vnesi pogoje v enem od naslednjih formatov:\n"
+msgstr ""
 
 #, fuzzy
 msgid "Column names are always included"
@@ -438,7 +432,7 @@ msgstr "Ne morem izbrati (select) podatkov iz tabele"
 
 #, fuzzy
 msgid "No tables found"
-msgstr "Ničesar nisem našel.\n"
+msgstr "Ničesar nisem našel."
 
 #, fuzzy
 msgid "Print tables and exit"
@@ -529,7 +523,7 @@ msgstr "Ne morem odpreti cellfile za [%s]"
 
 #, fuzzy
 msgid "Error in selecting rows"
-msgstr "Ne najdem vhodne datoteke %s\n"
+msgstr "Ne najdem vhodne datoteke %s"
 
 #, fuzzy
 msgid "Cannot load table."
@@ -1169,9 +1163,8 @@ msgstr "ime tabele"
 msgid "Path to font file"
 msgstr "Ime izhodnega vektorskega sloja"
 
-#, fuzzy
 msgid "Font settings"
-msgstr "Ne najdem vhodne datoteke %s\n"
+msgstr ""
 
 msgid "Text encoding (only applicable to TrueType fonts)"
 msgstr ""
@@ -1180,13 +1173,12 @@ msgstr ""
 msgid "%s does not work with a latitude-longitude location"
 msgstr ""
 
-#, fuzzy
 msgid "settings"
-msgstr "Ne najdem vhodne datoteke %s\n"
+msgstr ""
 
 #, fuzzy
 msgid "colors"
-msgstr " nv barva\n"
+msgstr "nv barva"
 
 msgid "Outputs a list of all available display colors."
 msgstr ""
@@ -1238,7 +1230,7 @@ msgstr "Rastrska(e) datoteka(e) za ogled %d"
 
 #, fuzzy
 msgid "Data range is empty"
-msgstr "Razpon podatkov je %ld do %ld\n"
+msgstr "Razpon podatkov je %ld do %ld"
 
 msgid "graphics"
 msgstr ""
@@ -1365,7 +1357,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Starting and ending coordinates"
-msgstr "Uporabljam koordinate središča sloja\n"
+msgstr "Uporabljam koordinate središča sloja"
 
 #, fuzzy
 msgid "Line color"
@@ -2943,7 +2935,7 @@ msgstr "navedena morata biti 2 sloja"
 
 #, fuzzy
 msgid "Database connection not defined"
-msgstr "Povezava z bazo podatkov ni definirana\n"
+msgstr "Povezava z bazo podatkov ni definirana"
 
 #, fuzzy, c-format
 msgid "Data (%s) not numeric. Column must be numeric."
@@ -2953,9 +2945,9 @@ msgstr "Ne najdem vhodnega vektorja <%s>"
 msgid "Cannot select data (%s) from table"
 msgstr "Ne morem izbrati (select) podatkov iz tabele"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown color: [%s]"
-msgstr "%s - nepoznana barva\n"
+msgstr "Neznana barva: [%s]"
 
 msgid "You gave both manual breaks and a classification algorithm or a number of classes. The manual breaks have precedence and will thus be used."
 msgstr ""
@@ -2979,13 +2971,15 @@ msgstr "Rišem ..."
 
 #, fuzzy
 msgid "The bounding box of the map is outside the current region, nothing drawn."
-msgstr "Obseg sloja je izven trenutne regije, ničesar ne bom prikazal.\n"
+msgstr "Obseg sloja je izven trenutne regije, ničesar ne bom prikazal."
 
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Total number of records: %.0f\n"
-msgstr "Ime datoteke z referenčnimi razredi"
+msgstr ""
+"\n"
+"Skupno število zapisov: %.0f\n"
 
 #, c-format
 msgid "Classification of %s into %i classes\n"
@@ -2995,9 +2989,9 @@ msgstr ""
 msgid "Using algorithm: *** %s ***\n"
 msgstr ""
 
-#, fuzzy, c-format
+#, c-format
 msgid "Mean: %f\tStandard deviation = %f\n"
-msgstr "Standardni odklon"
+msgstr "Povprečje: %f\tStandardni odklon = %f\n"
 
 #, c-format
 msgid "Last chi2 = %f\n"
@@ -3078,8 +3072,10 @@ msgstr "Rastrska(e) datoteka(e) za ogled %d"
 #, fuzzy, c-format
 msgid "%d invalid color rule for lines skipped"
 msgid_plural "%d invalid color rules for lines skipped"
-msgstr[0] "%-5d mrtvih linij preskočenih\n"
-msgstr[1] "%-5d mrtvih linij preskočenih\n"
+msgstr[0] "%-5d mrtvih linij preskočenih"
+msgstr[1] "%-5d mrtvih linij preskočenih"
+msgstr[2] ""
+msgstr[3] ""
 
 #, fuzzy
 msgid "level1"
@@ -3117,15 +3113,15 @@ msgstr "Faktor spremembe z-vrednosti (v metre)"
 
 #, fuzzy
 msgid "Feature color"
-msgstr " nv barva\n"
+msgstr "nv barva"
 
 #, fuzzy
 msgid "Area fill color"
-msgstr " vrednost barva\n"
+msgstr "vrednost barva"
 
 #, fuzzy
 msgid "Colorize features according to color definition column"
-msgstr " Število kolon\n"
+msgstr "Število kolon"
 
 #, fuzzy
 msgid "Color definition in R:G:B form"
@@ -3146,7 +3142,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Scale factor for width_column"
-msgstr "Uporabljam koordinate središča sloja\n"
+msgstr "Uporabljam koordinate središča sloja"
 
 msgid "When used with the size_column option this becomes the scale factor"
 msgstr ""
@@ -3183,7 +3179,7 @@ msgstr "Vhodni rastrski sloj"
 
 #, fuzzy
 msgid "Label color"
-msgstr " vrednost barva\n"
+msgstr "vrednost barva"
 
 msgid "Label background color"
 msgstr ""
@@ -3224,11 +3220,11 @@ msgstr ""
 
 #, fuzzy
 msgid "Region size is lower than minreg, nothing displayed"
-msgstr "Velikost regije je od najmanjše regije (minreg), ne morem prikazati ničesar.\n"
+msgstr "Velikost regije je od najmanjše regije (minreg), ne morem prikazati ničesar."
 
 #, fuzzy
 msgid "Region size is greater than maxreg, nothing displayed"
-msgstr "Velikost regije je večja od največje regije (maxreg), ne morem prikazati ničesar\n"
+msgstr "Velikost regije je večja od največje regije (maxreg), ne morem prikazati ničesar"
 
 #, c-format
 msgid "The -%c flag and <%s> option cannot be used together, the -%c flag will be ignored!"
@@ -3250,15 +3246,15 @@ msgstr "Rišem ..."
 
 #, fuzzy
 msgid "The bounding box of the map is outside the current region, nothing drawn"
-msgstr "Obseg sloja je izven trenutne regije, ničesar ne bom prikazal.\n"
+msgstr "Obseg sloja je izven trenutne regije, ničesar ne bom prikazal."
 
 #, fuzzy
 msgid "Rendering failed"
-msgstr "Berem dig datoteko...\n"
+msgstr "Berem dig datoteko..."
 
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown color: '%s'"
-msgstr "%s - nepoznana barva\n"
+msgstr "Neznana barva: '%s'"
 
 #, c-format
 msgid "Both color table and <%s> option detected. Color table will ignored."
@@ -3333,7 +3329,7 @@ msgstr "Ime rastrskega sloja, ki bo vseboval rezultate"
 
 #, fuzzy
 msgid "File from which to read coordinates (\"-\" to read from stdin)"
-msgstr "Ne najdem vhodne datoteke %s\n"
+msgstr "Ne najdem vhodne datoteke %s"
 
 msgid "Output lat/long in decimal degree"
 msgstr ""
@@ -3442,7 +3438,7 @@ msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy
 msgid "permission"
-msgstr "Ne najdem vhodne datoteke %s\n"
+msgstr "Ne najdem vhodne datoteke %s"
 
 msgid "Controls access to the current mapset for other users on the system."
 msgstr ""
@@ -3662,11 +3658,8 @@ msgstr ""
 msgid "In the next major release, g.findfile will no longer return exit code 1 when a file is not found. Please use the -t flag instead to get the error code."
 msgstr ""
 
-#, fuzzy
 msgid "variables"
-msgstr ""
-"polje: %d\n"
-"kategorija: %d\n"
+msgstr "spremenljivke"
 
 msgid "Outputs and modifies the user's current GRASS variable settings."
 msgstr ""
@@ -3909,11 +3902,8 @@ msgstr ""
 msgid "Name of mapset where to switch"
 msgstr "Ime izhodnega vektorskega sloja"
 
-#, fuzzy
 msgid "Mapset"
 msgstr ""
-"polje: %d\n"
-"kategorija: %d\n"
 
 #, fuzzy
 msgid "Create mapset if it doesn't exist"
@@ -3967,11 +3957,8 @@ msgstr "Vrednost, ki bo prirejena NULL vrednosti"
 msgid "Failed to remove old lock file <%s>: %s"
 msgstr "Vrednost, ki bo prirejena NULL vrednosti"
 
-#, fuzzy
 msgid "Mapset switched."
 msgstr ""
-"polje: %d\n"
-"kategorija: %d\n"
 
 msgid "Mapset switched. Your shell continues to use the history for the old mapset"
 msgstr ""
@@ -4114,7 +4101,7 @@ msgstr "\"Mapset\" vhodnega rastrskega sloja"
 
 #, fuzzy
 msgid "Unable to initialise Freetype"
-msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgstr "Ne morem najti vhodne datoteke <%s>"
 
 msgid "Generates the font configuration file by scanning various directories for fonts."
 msgstr ""
@@ -4140,7 +4127,7 @@ msgid "Cannot open %s for writing: %s"
 msgstr "Ne morem odpreti baze podatkov %s"
 
 msgid "Usage"
-msgstr ""
+msgstr "Uporaba"
 
 #, fuzzy
 msgid "Unable to open script file"
@@ -4160,7 +4147,7 @@ msgstr ""
 
 #, fuzzy, c-format
 msgid "Unknown command \"%s\" at line %d\n"
-msgstr "Nepoznan tip"
+msgstr "Nepoznan tip\n"
 
 #, c-format
 msgid "Unknown module parameter \"%s\" at line %d\n"
@@ -4172,7 +4159,7 @@ msgstr ""
 
 #, fuzzy, c-format
 msgid "Unknown type \"%s\" at line %d\n"
-msgstr "Nepoznan tip: %c"
+msgstr "Nepoznan tip: %c\n"
 
 #, c-format
 msgid "Unknown option parameter \"%s\" at line %d\n"
@@ -4192,19 +4179,19 @@ msgstr "Vhodni sloj"
 
 #, fuzzy, c-format
 msgid "Unknown flag \"-%c\" in rule\n"
-msgstr "Nepoznan tip"
+msgstr "Nepoznan tip\n"
 
 #, fuzzy, c-format
 msgid "Unknown option \"%s\" in rule\n"
-msgstr "Nepoznan tip"
+msgstr "Nepoznan tip\n"
 
 #, fuzzy, c-format
 msgid "Unknown rule type \"%s\" at line %d\n"
-msgstr "Nepoznan tip: %c"
+msgstr "Nepoznan tip: %c\n"
 
 #, fuzzy
 msgid "Error reading PPM file"
-msgstr "Ne najdem vhodne datoteke %s\n"
+msgstr "Napaka pri branju datoteke PPM"
 
 #, fuzzy
 msgid "Invalid PPM file"
@@ -4230,11 +4217,11 @@ msgstr "neveljavna regija: %s"
 
 #, fuzzy
 msgid "Error writing PPM file"
-msgstr "Napaka pri branju dbmscap datoteke\n"
+msgstr "Napaka pri branju dbmscap datoteke"
 
 #, fuzzy
 msgid "Error writing PGM file"
-msgstr "Napaka pri branju dbmscap datoteke\n"
+msgstr "Napaka pri branju dbmscap datoteke"
 
 #, fuzzy
 msgid "Overlays multiple PPM image files."
@@ -4262,7 +4249,7 @@ msgstr "Ne morem izračunati centroida območja."
 
 #, fuzzy
 msgid "Error writing PNG file"
-msgstr "Napaka pri branju dbmscap datoteke\n"
+msgstr "Napaka pri branju dbmscap datoteke"
 
 #, fuzzy, c-format
 msgid "Unable to open output file %s"
@@ -4322,7 +4309,7 @@ msgstr "Črta prereza"
 
 #, fuzzy
 msgid "Error reading WKT definition"
-msgstr "Ne najdem vhodne datoteke %s\n"
+msgstr "Napaka pri branju definicije WKT"
 
 #, fuzzy, c-format
 msgid "Unable to open file '%s' for reading"
@@ -4387,7 +4374,7 @@ msgstr ""
 
 #, fuzzy, c-format
 msgid "No codes found for authority %s"
-msgstr "Ne morem najti vhodne datoteke <%s>\n"
+msgstr "Ne morem najti vhodne datoteke <%s>"
 
 #, fuzzy
 msgid "projection"
@@ -5556,10 +5543,7 @@ msgstr "Ime izhodnega rastrskega sloja"
 
 #, fuzzy, c-format
 msgid "Illegal number of initial classes (%s)"
-msgstr ""
-"\n"
-"\n"
-" Število točk: %d\n"
+msgstr "Število točk: %d"
 
 #, fuzzy, c-format
 msgid "Illegal value(s) of sample intervals (%s)"
@@ -5647,10 +5631,7 @@ msgstr "Zglajeni koti"
 
 #, fuzzy, c-format
 msgid " Number of initial classes:    %d"
-msgstr ""
-"\n"
-"\n"
-" Število točk: %d\n"
+msgstr " Število točk: %d"
 
 #, c-format
 msgid " [from signature file %s]"
@@ -5899,7 +5880,7 @@ msgid "Value of the height independent friction velocity (u*) [m/s]"
 msgstr ""
 
 msgid "Parameters"
-msgstr ""
+msgstr "Parametri"
 
 #, fuzzy
 msgid "Row value of the wet pixel"
@@ -12897,12 +12878,12 @@ msgstr ""
 msgid "Reading PostScript include file <%s> ..."
 msgstr "Berem dig datoteko...\n"
 
-msgid "meters"
-msgstr ""
-
 #, fuzzy
+msgid "meters"
+msgstr "Parametri"
+
 msgid "kilometers"
-msgstr "Tip objektov"
+msgstr "kilometri"
 
 msgid "feet"
 msgstr ""
@@ -13010,7 +12991,9 @@ msgstr "Ne morem odpreti cellfile za [%s]"
 msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
-msgstr "ne najdem 3Dview datoteke <%s>"
+msgstr ""
+"NAPAKA: Zahtevani parameter <%s> ni nastavljen:\n"
+"    (%s)."
 
 msgid "illegal copies request"
 msgstr ""
@@ -27540,7 +27523,7 @@ msgstr ""
 
 #, fuzzy, python-format
 msgid "Missing value for parameter <%s>"
-msgstr "Uporabljam koordinate središča sloja\n"
+msgstr "Manjkajoča vrednost za parameter <%s>"
 
 #, fuzzy, python-format
 msgid "Unable to import <%s>"
