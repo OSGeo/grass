@@ -31,11 +31,6 @@ documentation.
 
 ## NOTES
 
-Some operations (copying, renaming, deleting) are by default enabled
-only within the current mapset. To allow changing data outside of your
-current mapset, you need to press *Unlock* button in Data Catalog
-toolbar.
-
 ### WARNING
 
 When renaming, copying or deleting maps outside of Data Catalog, you
