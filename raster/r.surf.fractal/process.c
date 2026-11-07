@@ -48,12 +48,12 @@ int process(void)
 
     /*------------------------------------------------------------------*/
 
-    if (nn * nn * sizeof(double) < 1)
+    if ((size_t)nn * nn * sizeof(double) < 1)
         G_fatal_error(_("Unable to allocate data buffer. "
                         "Check current region with g.region."));
 
-    data[0] = (double *)G_malloc(nn * nn * sizeof(double));
-    data[1] = (double *)G_malloc(nn * nn * sizeof(double));
+    data[0] = (double *)G_malloc((size_t)nn * nn * sizeof(double));
+    data[1] = (double *)G_malloc((size_t)nn * nn * sizeof(double));
 
     /*------------------------------------------------------------------*/
     /*                   Apply spectral synthesis algorithm.            */
