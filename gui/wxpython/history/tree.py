@@ -183,6 +183,9 @@ class HistoryBrowserTree(CTreeView):
         self.itemActivated.connect(self.OnDoubleClick)
         self.contextMenu.connect(self.OnRightClick)
 
+        self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
+        self.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
+
     def _resetSelectVariables(self):
         """Reset variables related to item selection."""
         self.selected_day = []
@@ -643,6 +646,54 @@ class HistoryBrowserTree(CTreeView):
             self._popupMenuCommand()
         else:
             self._popupMenuEmpty()
+
+    def OnKeyDown(self, event):
+        """Handle keyboard shortcuts for opening and copying history entries."""
+        keycode = event.GetKeyCode()
+        control_down = event.ControlDown()
+
+        # Check if anything is selected
+        selected = self.GetSelected()
+        if not selected:
+            event.Skip()
+            return
+
+        node = selected[0]
+
+        # Map Enter / Return key to the same action as double-clicking the item
+        if keycode in {wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER}:
+            self.OnDoubleClick(node)
+            return
+
+        # Check if a command node is selected (we don't want to allow copying/deleting day nodes)
+        if node.data.get("type") != COMMAND:
+            event.Skip()
+            return
+
+        # Ctrl+C -> Copy command to clipboard
+        if control_down and keycode == ord("C"):
+            self.OnCopyCmd(None)
+        else:
+            event.Skip()
+
+    def OnKeyUp(self, event):
+        """Handle the Delete key for removing history entries.
+
+        Removal is handled on key up rather than key down, so that holding
+        the key does not remove several commands in a row. This matches the
+        layer tree and the graphical modeler.
+        """
+        if event.GetKeyCode() != wx.WXK_DELETE:
+            event.Skip()
+            return
+
+        # Day nodes cannot be removed
+        selected = self.GetSelected()
+        if not selected or selected[0].data.get("type") != COMMAND:
+            event.Skip()
+            return
+
+        self.OnRemoveCmd(None)
 
     def OnDoubleClick(self, node):
         """Double click on item/node.
