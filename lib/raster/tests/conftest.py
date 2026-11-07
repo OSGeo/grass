@@ -23,6 +23,6 @@ def session_for_module(tmp_path_factory):
 
 @pytest.fixture
 def session(session_for_module):
-    """A session in a temporary mapset"""
+    """A session in a temporary mapset with the region of session_for_module"""
     with TemporaryMapsetSession(env=session_for_module.env) as session:
         yield session
