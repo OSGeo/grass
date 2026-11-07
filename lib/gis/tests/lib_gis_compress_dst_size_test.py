@@ -40,12 +40,10 @@ SMALL = 100
 CANARY_BYTE = 0xA5
 CANARY = bytes([CANARY_BYTE]) * len(DATA)
 
-# The call is made in a separate process in the session because the
-# compressors warn about dst smaller than the bound and warnings need the
-# session environment. The destination is the start of a larger buffer whose
-# tail is filled with a canary byte, and the whole buffer is returned. The
-# tail is as long as the input, so that an overflow stays inside the buffer:
-# the compressors write compressed data only when it is shorter than the input.
+# Compressors warn about dst smaller than the bound, and warnings need the
+# session, so the call runs in a separate process in the session. The tail
+# after dst holds canary bytes. It is as long as the input because the
+# compressors write only data shorter than the input.
 SCRIPT = """
 import ctypes
 import sys
@@ -90,7 +88,7 @@ def compress(session, name, dst_sz):
 @pytest.mark.parametrize("name", ALL)
 def test_dst_too_small(xy_session_for_module, name):
     """Data which does not fit is reported as -2 and nothing is written after dst"""
-    result, unused, tail = compress(xy_session_for_module, name, SMALL)
+    result, _, tail = compress(xy_session_for_module, name, SMALL)
     assert tail == CANARY
     assert result == -2
 
@@ -98,7 +96,7 @@ def test_dst_too_small(xy_session_for_module, name):
 @pytest.mark.parametrize("name", COMPRESSING)
 def test_dst_smaller_than_bound_fits(xy_session_for_module, name):
     """Data which fits into dst smaller than the bound is written there"""
-    size, stream, unused = compress(xy_session_for_module, name, len(DATA))
+    size, stream, _ = compress(xy_session_for_module, name, len(DATA))
     assert 0 < size < len(DATA)
     result, dst, tail = compress(xy_session_for_module, name, size)
     assert tail == CANARY
