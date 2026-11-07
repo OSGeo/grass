@@ -146,7 +146,6 @@ int G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
 
     if (buf != dst) {
         if (nbytes > dst_sz) {
-            /* The compressed data does not fit into dst. */
             G_free(buf);
             return -2;
         }
