@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-07 19:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -149,7 +149,7 @@ msgstr ""
 #: ../raster/r.external/main.c:95 ../raster/r.external/main.c:134
 #: ../raster/r.in.gdal/main.c:235 ../raster/r.in.gdal/main.c:269
 #: ../raster/r.info/main.c:112 ../raster/r.object.geometry/main.c:92
-#: ../raster/r.out.gdal/main.c:139 ../raster/r.profile/main.c:116
+#: ../raster/r.out.gdal/main.c:139 ../raster/r.profile/main.c:134
 #: ../raster/r.proj/main.c:203 ../raster/r.proj/main.c:214
 #: ../raster/r.proj/main.c:226 ../raster/r.proj/main.c:235
 #: ../raster/r.sim/r.sim.sediment/main.c:304
@@ -525,7 +525,7 @@ msgstr ""
 #: ../imagery/i.group/main.c:306 ../raster/r.category/main.c:419
 #: ../raster/r.describe/dumplist.c:68 ../raster/r.info/main.c:997
 #: ../raster/r.mask.status/main.c:109 ../raster/r.object.geometry/main.c:399
-#: ../raster/r.profile/main.c:318 ../raster/r.proj/main.c:363
+#: ../raster/r.profile/main.c:341 ../raster/r.proj/main.c:363
 #: ../raster/r.proj/main.c:536 ../raster/r.report/prt_json.c:203
 #: ../raster/r.stats/main.c:424 ../raster/r.univar/stats.c:490
 #: ../raster/r.what.color/main.c:287 ../raster/r.what/main.c:617
@@ -1934,7 +1934,7 @@ msgstr ""
 #: ../raster/r.out.ppm/main.c:49 ../raster/r.out.ppm3/main.c:54
 #: ../raster/r.out.vrml/main.c:41 ../raster/r.out.vtk/main.c:56
 #: ../raster/r.param.scale/interface.c:54 ../raster/r.patch/main.c:65
-#: ../raster/r.path/main.c:147 ../raster/r.profile/main.c:55
+#: ../raster/r.path/main.c:147 ../raster/r.profile/main.c:56
 #: ../raster/r.proj/main.c:146 ../raster/r.quant/main.c:45
 #: ../raster/r.quantile/main.c:297 ../raster/r.random.cells/main.c:46
 #: ../raster/r.random.surface/main.c:53 ../raster/r.random/main.c:50
@@ -2246,15 +2246,16 @@ msgstr ""
 #: ../general/manage/lister/vector.c:32 ../misc/m.nviz.image/vector.c:298
 #: ../raster/r.carve/main.c:154 ../raster/r.cost/main.c:596
 #: ../raster/r.cost/main.c:663 ../raster/r.drain/main.c:274
-#: ../raster/r.path/main.c:318 ../raster/r.random/support.c:66
-#: ../raster/r.region/main.c:170 ../raster/r.sim/simlib/observation_points.c:42
-#: ../raster/r.walk/main.c:757 ../raster/r.walk/main.c:824
-#: ../raster/r.what/main.c:262 ../raster3d/r3.flow/main.c:395
-#: ../vector/v.buffer/main.c:329 ../vector/v.build.polylines/main.c:149
-#: ../vector/v.build/main.c:117 ../vector/v.build/main.c:127
-#: ../vector/v.class/main.c:142 ../vector/v.clean/main.c:287
-#: ../vector/v.clean/test/topocheck.c:62 ../vector/v.clean/test/topocheck.c:82
-#: ../vector/v.cluster/main.c:136 ../vector/v.colors.out/make_colors.c:23
+#: ../raster/r.path/main.c:318 ../raster/r.profile/main.c:394
+#: ../raster/r.random/support.c:66 ../raster/r.region/main.c:170
+#: ../raster/r.sim/simlib/observation_points.c:42 ../raster/r.walk/main.c:757
+#: ../raster/r.walk/main.c:824 ../raster/r.what/main.c:262
+#: ../raster3d/r3.flow/main.c:395 ../vector/v.buffer/main.c:329
+#: ../vector/v.build.polylines/main.c:149 ../vector/v.build/main.c:117
+#: ../vector/v.build/main.c:127 ../vector/v.class/main.c:142
+#: ../vector/v.clean/main.c:287 ../vector/v.clean/test/topocheck.c:62
+#: ../vector/v.clean/test/topocheck.c:82 ../vector/v.cluster/main.c:136
+#: ../vector/v.colors.out/make_colors.c:23
 #: ../vector/v.colors.out/scan_cats.c:19 ../vector/v.colors/main.c:273
 #: ../vector/v.db.connect/main.c:214 ../vector/v.db.select/main.c:269
 #: ../vector/v.decimate/main.c:265 ../vector/v.delaunay/main.c:117
@@ -2579,7 +2580,7 @@ msgstr ""
 #: ../display/d.grid/main.c:90 ../display/d.grid/main.c:95
 #: ../display/d.grid/main.c:101 ../display/d.grid/main.c:107
 #: ../raster/r.colors.out/raster3d_main.c:61
-#: ../raster/r.colors.out/raster_main.c:60 ../raster/r.profile/main.c:121
+#: ../raster/r.colors.out/raster_main.c:60 ../raster/r.profile/main.c:139
 #: ../raster/r.what.color/main.c:215 ../vector/v.colors.out/main.c:71
 msgid "Color"
 msgstr ""
@@ -3745,7 +3746,7 @@ msgstr ""
 #: ../misc/m.nviz.script/main.c:195 ../misc/m.transform/main.c:270
 #: ../raster/r.category/main.c:237 ../raster/r.horizon/main.c:430
 #: ../raster/r.in.lidar/main.c:668 ../raster/r.out.ascii/main.c:156
-#: ../raster/r.out.ppm3/main.c:131 ../raster/r.profile/main.c:222
+#: ../raster/r.out.ppm3/main.c:131 ../raster/r.profile/main.c:242
 #: ../raster/r.recode/main.c:86 ../raster3d/r3.out.vtk/main.c:419
 #: ../vector/v.edit/main.c:79 ../vector/v.net/main.c:95
 #: ../vector/v.out.ascii/main.c:126 ../vector/v.out.vtk/main.c:169
@@ -4013,7 +4014,7 @@ msgstr ""
 msgid "Unable to read FP range for %s"
 msgstr ""
 
-#: ../display/d.profile/main.c:191 ../raster/r.profile/main.c:56
+#: ../display/d.profile/main.c:191 ../raster/r.profile/main.c:57
 #: ../raster/r.transect/main.c:100 ../raster3d/r3.cross.rast/main.c:227
 #: ../vector/v.profile/main.c:160
 msgid "profile"
@@ -4031,7 +4032,7 @@ msgstr ""
 msgid "Raster map to be profiled"
 msgstr ""
 
-#: ../display/d.profile/main.c:203 ../raster/r.profile/main.c:72
+#: ../display/d.profile/main.c:203 ../raster/r.profile/main.c:73
 msgid "Profile coordinate pairs"
 msgstr ""
 
@@ -4194,65 +4195,67 @@ msgstr ""
 #: ../raster/r.in.pdal/main.cpp:215 ../raster/r.in.pdal/main.cpp:235
 #: ../raster/r.in.pdal/main.cpp:311 ../raster/r.in.pdal/main.cpp:323
 #: ../raster/r.in.pdal/main.cpp:335 ../raster/r.in.pdal/main.cpp:369
-#: ../raster3d/r3.in.lidar/main.c:228 ../raster3d/r3.in.lidar/main.c:238
-#: ../raster3d/r3.in.lidar/main.c:267 ../raster3d/r3.in.lidar/main.c:283
-#: ../vector/v.buffer/main.c:228 ../vector/v.buffer/main.c:231
-#: ../vector/v.buffer/main.c:234 ../vector/v.buffer/main.c:239
-#: ../vector/v.category/main.c:104 ../vector/v.category/main.c:108
-#: ../vector/v.category/main.c:112 ../vector/v.clean/main.c:56
-#: ../vector/v.clean/main.c:59 ../vector/v.db.select/main.c:109
-#: ../vector/v.db.select/main.c:112 ../vector/v.db.select/main.c:115
-#: ../vector/v.db.select/main.c:122 ../vector/v.db.select/main.c:173
-#: ../vector/v.decimate/main.c:140 ../vector/v.decimate/main.c:143
-#: ../vector/v.drape/main.c:63 ../vector/v.drape/main.c:66
-#: ../vector/v.drape/main.c:69 ../vector/v.drape/main.c:74
-#: ../vector/v.edit/args.c:24 ../vector/v.edit/args.c:29
-#: ../vector/v.edit/args.c:117 ../vector/v.edit/args.c:121
-#: ../vector/v.edit/args.c:130 ../vector/v.edit/args.c:139
-#: ../vector/v.edit/args.c:148 ../vector/v.edit/args.c:151
-#: ../vector/v.edit/args.c:169 ../vector/v.edit/args.c:204
-#: ../vector/v.extract/main.c:96 ../vector/v.extract/main.c:102
-#: ../vector/v.extract/main.c:108 ../vector/v.extract/main.c:111
-#: ../vector/v.extract/main.c:114 ../vector/v.extract/main.c:124
-#: ../vector/v.extract/main.c:134 ../vector/v.extrude/main.c:80
-#: ../vector/v.extrude/main.c:83 ../vector/v.extrude/main.c:86
-#: ../vector/v.extrude/main.c:91 ../vector/v.generalize/main.c:91
-#: ../vector/v.generalize/main.c:228 ../vector/v.generalize/main.c:231
-#: ../vector/v.in.db/main.c:90 ../vector/v.in.lidar/main.c:184
-#: ../vector/v.in.lidar/main.c:193 ../vector/v.in.lidar/main.c:202
-#: ../vector/v.in.lidar/main.c:212 ../vector/v.in.lidar/main.c:220
-#: ../vector/v.in.lidar/main.c:225 ../vector/v.in.lidar/main.c:282
-#: ../vector/v.in.lidar/main.c:288 ../vector/v.in.lidar/main.c:296
-#: ../vector/v.in.ogr/main.c:266 ../vector/v.in.ogr/main.c:271
-#: ../vector/v.in.ogr/main.c:280 ../vector/v.in.ogr/main.c:296
-#: ../vector/v.in.ogr/main.c:343 ../vector/v.in.ogr/main.c:390
-#: ../vector/v.in.pdal/main.cpp:181 ../vector/v.in.pdal/main.cpp:189
-#: ../vector/v.in.pdal/main.cpp:198 ../vector/v.in.pdal/main.cpp:208
-#: ../vector/v.in.pdal/main.cpp:251 ../vector/v.net.allpairs/main.c:71
-#: ../vector/v.net.allpairs/main.c:77 ../vector/v.net.allpairs/main.c:80
-#: ../vector/v.net.allpairs/main.c:83 ../vector/v.net.centrality/main.c:117
-#: ../vector/v.net.centrality/main.c:119 ../vector/v.out.ascii/args.c:24
-#: ../vector/v.out.ascii/args.c:28 ../vector/v.out.ascii/args.c:44
-#: ../vector/v.out.ascii/args.c:47 ../vector/v.out.lidar/main.c:479
-#: ../vector/v.out.lidar/main.c:483 ../vector/v.out.lidar/main.c:583
-#: ../vector/v.out.ogr/args.c:12 ../vector/v.out.ogr/args.c:22
-#: ../vector/v.out.ogr/args.c:116 ../vector/v.out.postgis/args.c:15
-#: ../vector/v.out.postgis/args.c:19 ../vector/v.profile/main.c:171
-#: ../vector/v.profile/main.c:174 ../vector/v.profile/main.c:179
-#: ../vector/v.random/main.c:118 ../vector/v.random/main.c:122
-#: ../vector/v.random/main.c:125 ../vector/v.random/main.c:128
-#: ../vector/v.reclass/main.c:75 ../vector/v.reclass/main.c:80
-#: ../vector/v.select/args.c:19 ../vector/v.select/args.c:25
-#: ../vector/v.select/args.c:34 ../vector/v.select/args.c:40
-#: ../vector/v.select/args.c:110 ../vector/v.surf.rst/main.c:179
-#: ../vector/v.surf.rst/main.c:193 ../vector/v.to.3d/args.c:19
-#: ../vector/v.to.3d/args.c:25 ../vector/v.to.db/parse.c:43
-#: ../vector/v.to.points/main.c:63 ../vector/v.to.points/main.c:67
-#: ../vector/v.to.rast/main.c:56 ../vector/v.to.rast/main.c:59
-#: ../vector/v.to.rast/main.c:62 ../vector/v.vect.stats/main.c:156
-#: ../vector/v.vect.stats/main.c:161 ../vector/v.vect.stats/main.c:166
-#: ../vector/v.vect.stats/main.c:173 ../vector/v.vect.stats/main.c:178
-#: ../vector/v.vect.stats/main.c:183 ../vector/v.vect.stats/main.c:189
+#: ../raster/r.profile/main.c:92 ../raster/r.profile/main.c:95
+#: ../raster/r.profile/main.c:98 ../raster3d/r3.in.lidar/main.c:228
+#: ../raster3d/r3.in.lidar/main.c:238 ../raster3d/r3.in.lidar/main.c:267
+#: ../raster3d/r3.in.lidar/main.c:283 ../vector/v.buffer/main.c:228
+#: ../vector/v.buffer/main.c:231 ../vector/v.buffer/main.c:234
+#: ../vector/v.buffer/main.c:239 ../vector/v.category/main.c:104
+#: ../vector/v.category/main.c:108 ../vector/v.category/main.c:112
+#: ../vector/v.clean/main.c:56 ../vector/v.clean/main.c:59
+#: ../vector/v.db.select/main.c:109 ../vector/v.db.select/main.c:112
+#: ../vector/v.db.select/main.c:115 ../vector/v.db.select/main.c:122
+#: ../vector/v.db.select/main.c:173 ../vector/v.decimate/main.c:140
+#: ../vector/v.decimate/main.c:143 ../vector/v.drape/main.c:63
+#: ../vector/v.drape/main.c:66 ../vector/v.drape/main.c:69
+#: ../vector/v.drape/main.c:74 ../vector/v.edit/args.c:24
+#: ../vector/v.edit/args.c:29 ../vector/v.edit/args.c:117
+#: ../vector/v.edit/args.c:121 ../vector/v.edit/args.c:130
+#: ../vector/v.edit/args.c:139 ../vector/v.edit/args.c:148
+#: ../vector/v.edit/args.c:151 ../vector/v.edit/args.c:169
+#: ../vector/v.edit/args.c:204 ../vector/v.extract/main.c:96
+#: ../vector/v.extract/main.c:102 ../vector/v.extract/main.c:108
+#: ../vector/v.extract/main.c:111 ../vector/v.extract/main.c:114
+#: ../vector/v.extract/main.c:124 ../vector/v.extract/main.c:134
+#: ../vector/v.extrude/main.c:80 ../vector/v.extrude/main.c:83
+#: ../vector/v.extrude/main.c:86 ../vector/v.extrude/main.c:91
+#: ../vector/v.generalize/main.c:91 ../vector/v.generalize/main.c:228
+#: ../vector/v.generalize/main.c:231 ../vector/v.in.db/main.c:90
+#: ../vector/v.in.lidar/main.c:184 ../vector/v.in.lidar/main.c:193
+#: ../vector/v.in.lidar/main.c:202 ../vector/v.in.lidar/main.c:212
+#: ../vector/v.in.lidar/main.c:220 ../vector/v.in.lidar/main.c:225
+#: ../vector/v.in.lidar/main.c:282 ../vector/v.in.lidar/main.c:288
+#: ../vector/v.in.lidar/main.c:296 ../vector/v.in.ogr/main.c:266
+#: ../vector/v.in.ogr/main.c:271 ../vector/v.in.ogr/main.c:280
+#: ../vector/v.in.ogr/main.c:296 ../vector/v.in.ogr/main.c:343
+#: ../vector/v.in.ogr/main.c:390 ../vector/v.in.pdal/main.cpp:181
+#: ../vector/v.in.pdal/main.cpp:189 ../vector/v.in.pdal/main.cpp:198
+#: ../vector/v.in.pdal/main.cpp:208 ../vector/v.in.pdal/main.cpp:251
+#: ../vector/v.net.allpairs/main.c:71 ../vector/v.net.allpairs/main.c:77
+#: ../vector/v.net.allpairs/main.c:80 ../vector/v.net.allpairs/main.c:83
+#: ../vector/v.net.centrality/main.c:117 ../vector/v.net.centrality/main.c:119
+#: ../vector/v.out.ascii/args.c:24 ../vector/v.out.ascii/args.c:28
+#: ../vector/v.out.ascii/args.c:44 ../vector/v.out.ascii/args.c:47
+#: ../vector/v.out.lidar/main.c:479 ../vector/v.out.lidar/main.c:483
+#: ../vector/v.out.lidar/main.c:583 ../vector/v.out.ogr/args.c:12
+#: ../vector/v.out.ogr/args.c:22 ../vector/v.out.ogr/args.c:116
+#: ../vector/v.out.postgis/args.c:15 ../vector/v.out.postgis/args.c:19
+#: ../vector/v.profile/main.c:171 ../vector/v.profile/main.c:174
+#: ../vector/v.profile/main.c:179 ../vector/v.random/main.c:118
+#: ../vector/v.random/main.c:122 ../vector/v.random/main.c:125
+#: ../vector/v.random/main.c:128 ../vector/v.reclass/main.c:75
+#: ../vector/v.reclass/main.c:80 ../vector/v.select/args.c:19
+#: ../vector/v.select/args.c:25 ../vector/v.select/args.c:34
+#: ../vector/v.select/args.c:40 ../vector/v.select/args.c:110
+#: ../vector/v.surf.rst/main.c:179 ../vector/v.surf.rst/main.c:193
+#: ../vector/v.to.3d/args.c:19 ../vector/v.to.3d/args.c:25
+#: ../vector/v.to.db/parse.c:43 ../vector/v.to.points/main.c:63
+#: ../vector/v.to.points/main.c:67 ../vector/v.to.rast/main.c:56
+#: ../vector/v.to.rast/main.c:59 ../vector/v.to.rast/main.c:62
+#: ../vector/v.vect.stats/main.c:156 ../vector/v.vect.stats/main.c:161
+#: ../vector/v.vect.stats/main.c:166 ../vector/v.vect.stats/main.c:173
+#: ../vector/v.vect.stats/main.c:178 ../vector/v.vect.stats/main.c:183
+#: ../vector/v.vect.stats/main.c:189
 msgid "Selection"
 msgstr ""
 
@@ -15157,7 +15160,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:9
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:12
 #: ../raster/r.kappa/main.c:104 ../raster/r.kappa/main.c:109
-#: ../raster/r.profile/main.c:125 ../raster/r.report/parse.c:66
+#: ../raster/r.profile/main.c:143 ../raster/r.report/parse.c:66
 #: ../raster/r.report/parse.c:74 ../raster/r.report/parse.c:82
 #: ../raster/r.report/parse.c:105 ../raster/r.report/parse.c:108
 #: ../raster/r.report/parse.c:113 ../raster/r.report/parse.c:118
@@ -21135,7 +21138,7 @@ msgstr ""
 msgid "Sampling distance step coefficient (0.5-1.5)"
 msgstr ""
 
-#: ../raster/r.horizon/main.c:314 ../raster/r.profile/main.c:67
+#: ../raster/r.horizon/main.c:314 ../raster/r.profile/main.c:68
 msgid "Name of file for output (use output=- for stdout)"
 msgstr ""
 
@@ -25179,88 +25182,141 @@ msgstr ""
 msgid "One coordinate pair per line, please"
 msgstr ""
 
-#: ../raster/r.profile/main.c:57 ../raster/r.transect/main.c:101
+#: ../raster/r.profile/main.c:58 ../raster/r.transect/main.c:101
 #: ../vector/v.profile/main.c:161
 msgid "transect"
 msgstr ""
 
-#: ../raster/r.profile/main.c:59
+#: ../raster/r.profile/main.c:60
 msgid "Outputs the raster map layer values lying on user-defined line(s)."
 msgstr ""
 
-#: ../raster/r.profile/main.c:78
+#: ../raster/r.profile/main.c:79
 msgid "Name of input file containing coordinate pairs"
 msgstr ""
 
-#: ../raster/r.profile/main.c:79
+#: ../raster/r.profile/main.c:80
 msgid "Use instead of the 'coordinates' option. \"-\" reads from stdin."
 msgstr ""
 
-#: ../raster/r.profile/main.c:87
+#: ../raster/r.profile/main.c:86
+msgid "Name of input vector map with profile lines"
+msgstr ""
+
+#: ../raster/r.profile/main.c:88
+msgid "Each line is profiled separately. Use instead of the 'coordinates' option."
+msgstr ""
+
+#: ../raster/r.profile/main.c:105
 msgid "Resolution along profile (default = current region resolution)"
 msgstr ""
 
-#: ../raster/r.profile/main.c:94 ../raster/r.transect/main.c:121
+#: ../raster/r.profile/main.c:112 ../raster/r.transect/main.c:121
 msgid "Output easting and northing in first two columns of four column output"
 msgstr ""
 
-#: ../raster/r.profile/main.c:100
+#: ../raster/r.profile/main.c:118
 msgid "Output color values for each profile point (format controlled by color_format option; default is 'triplet' for plain output, 'hex' for JSON)"
 msgstr ""
 
-#: ../raster/r.profile/main.c:108
+#: ../raster/r.profile/main.c:126
 msgid "If units are not specified, current project units are used. Meters are used by default in geographic (latlon) projects."
-msgstr ""
-
-#: ../raster/r.profile/main.c:138
-msgid "Either use profile option or coordinate_file  option, but not both"
-msgstr ""
-
-#: ../raster/r.profile/main.c:165
-#, c-format
-msgid "Illegal resolution %g [%s]"
 msgstr ""
 
 #: ../raster/r.profile/main.c:183
 #, c-format
+msgid "Illegal resolution %g [%s]"
+msgstr ""
+
+#: ../raster/r.profile/main.c:205
+#, c-format
 msgid "Using resolution: %g [%s]"
 msgstr ""
 
-#: ../raster/r.profile/main.c:230
+#: ../raster/r.profile/main.c:252
 msgid "Output columns:"
 msgstr ""
 
-#: ../raster/r.profile/main.c:233
-#, c-format
-msgid "Easting, Northing, Along track dist. [%s], Elevation"
-msgstr ""
-
-#: ../raster/r.profile/main.c:237
+#: ../raster/r.profile/main.c:253
 #, c-format
 msgid "Along track dist. [%s], Elevation"
 msgstr ""
 
-#: ../raster/r.profile/main.c:239
+#: ../raster/r.profile/main.c:255
+msgid "Category, "
+msgstr ""
+
+#: ../raster/r.profile/main.c:256
+msgid "Easting, Northing, "
+msgstr ""
+
+#: ../raster/r.profile/main.c:257
 msgid " RGB color"
 msgstr ""
 
-#: ../raster/r.profile/main.c:260
+#: ../raster/r.profile/main.c:286
 #, c-format
 msgid "Could not open <%s>"
 msgstr ""
 
-#: ../raster/r.profile/main.c:266
+#: ../raster/r.profile/main.c:292
 #, c-format
 msgid "Invalid coordinates %s %s"
 msgstr ""
 
-#: ../raster/r.profile/main.c:349
+#: ../raster/r.profile/main.c:362
 #, c-format
 msgid "Approx. transect length: %f [%s]"
 msgstr ""
 
-#: ../raster/r.profile/main.c:353
+#: ../raster/r.profile/main.c:367
 msgid "Endpoint coordinates are outside of current region settings"
+msgstr ""
+
+#: ../raster/r.profile/main.c:400
+#, c-format
+msgid "Options <cats> and <where> require a valid layer, not <%s>"
+msgstr ""
+
+#: ../raster/r.profile/main.c:425
+#, c-format
+msgid "Line %d (no category)"
+msgstr ""
+
+#: ../raster/r.profile/main.c:427
+#, c-format
+msgid "Line %d (category %d)"
+msgstr ""
+
+#: ../raster/r.profile/main.c:430
+#, c-format
+msgid "%s: approx. length %f [%s]"
+msgstr ""
+
+#: ../raster/r.profile/main.c:436
+#, c-format
+msgid "%s is not fully inside the current region"
+msgstr ""
+
+#: ../raster/r.profile/main.c:449 ../raster/r.what/main.c:342
+#: ../vector/v.ppa/main.c:245
+#, c-format
+msgid "Unable to read vector map <%s>"
+msgstr ""
+
+#: ../raster/r.profile/main.c:451
+#, c-format
+msgid "No lines found in vector map <%s>"
+msgstr ""
+
+#: ../raster/r.profile/main.c:453
+#, c-format
+msgid "No lines selected from vector map <%s>"
+msgstr ""
+
+#: ../raster/r.profile/main.c:455
+#, c-format
+msgid "No selected line has a category in layer <%s>"
 msgstr ""
 
 #: ../raster/r.proj/bordwalk.c:79 ../raster/r.proj/bordwalk.c:130
@@ -32147,11 +32203,6 @@ msgstr ""
 msgid "Unable to read category file for <%s>"
 msgstr ""
 
-#: ../raster/r.what/main.c:342 ../vector/v.ppa/main.c:245
-#, c-format
-msgid "Unable to read vector map <%s>"
-msgstr ""
-
 #: ../raster/r.what/main.c:347
 #, c-format
 msgid "Line %d is not point or centroid, skipped"
@@ -33596,7 +33647,7 @@ msgid "Branch <{branch}> not found in repository <{url}>"
 msgstr ""
 
 #: ../scripts/g.extension/g.extension.py:385
-#: ../scripts/g.extension/g.extension.py:2865
+#: ../scripts/g.extension/g.extension.py:2916
 #, python-brace-format
 msgid ""
 "Failed to get addons files list from the Git repository <{repo_path}>.\n"
@@ -33704,235 +33755,239 @@ msgstr ""
 msgid "Nothing to install"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1211
+#: ../scripts/g.extension/g.extension.py:1213
 msgid "Installation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1214
+#: ../scripts/g.extension/g.extension.py:1216
 msgid "Updating extensions metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1218
+#: ../scripts/g.extension/g.extension.py:1220
 msgid "Updating extension modules metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1225
+#: ../scripts/g.extension/g.extension.py:1227
 #, python-format
 msgid "Installation of <%s> successfully finished"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1231
+#: ../scripts/g.extension/g.extension.py:1233
 msgid "This add-on module will not function until you set the GRASS_ADDON_BASE environment variable (see \"g.manual variables\")"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1266
+#: ../scripts/g.extension/g.extension.py:1268
 msgid "Unable to read addons metadata file from the remote server"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1276
+#: ../scripts/g.extension/g.extension.py:1278
 msgid "No addons metadata available"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1279
+#: ../scripts/g.extension/g.extension.py:1281
 #, python-format
 msgid "No addons metadata available for <%s>"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1336
+#: ../scripts/g.extension/g.extension.py:1338
 #, python-brace-format
 msgid "Unable to read addons metadata file from the remote server: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1342
+#: ../scripts/g.extension/g.extension.py:1344
 #, python-format, python-brace-format
 msgid "Unable to parse '%s': {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1527
+#: ../scripts/g.extension/g.extension.py:1529
 #, python-brace-format
 msgid "No metadata available for module '{name}': {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1596
+#: ../scripts/g.extension/g.extension.py:1630
 msgid "Downloading precompiled GRASS Addons <{}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1689
+#: ../scripts/g.extension/g.extension.py:1638
+msgid "On MS-Windows, the 'url' option must point to a ZIP file (URL ending in '.zip'). To use a different addon server, set the ADDONS_BASE_URL gisenv variable or the GRASS_ADDONS_BASE_URL environment variable instead."
+msgstr ""
+
+#: ../scripts/g.extension/g.extension.py:1732
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1696
-#: ../scripts/g.extension/g.extension.py:1730
+#: ../scripts/g.extension/g.extension.py:1739
+#: ../scripts/g.extension/g.extension.py:1773
 #, python-format
 msgid "GRASS Addons <%s> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1819
+#: ../scripts/g.extension/g.extension.py:1862
 #, python-brace-format
 msgid "ZIP file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1842
+#: ../scripts/g.extension/g.extension.py:1885
 #: ../scripts/r.unpack/r.unpack.py:110 ../scripts/v.unpack/v.unpack.py:122
 msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1848
+#: ../scripts/g.extension/g.extension.py:1891
 #, python-brace-format
 msgid "Archive file is unreadable: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1865
+#: ../scripts/g.extension/g.extension.py:1908
 #, python-brace-format
 msgid "Type of source identified as '{source}'."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1868
-#: ../scripts/g.extension/g.extension.py:1877
-#: ../scripts/g.extension/g.extension.py:1884
+#: ../scripts/g.extension/g.extension.py:1911
+#: ../scripts/g.extension/g.extension.py:1920
+#: ../scripts/g.extension/g.extension.py:1927
 #, python-brace-format
 msgid "Fetching <{name}> from <{url}> (be patient)..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1899
+#: ../scripts/g.extension/g.extension.py:1942
 #, python-brace-format
 msgid "Expected default branch not found. Trying again from <{url}>..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1907
+#: ../scripts/g.extension/g.extension.py:1950
 #, python-brace-format
 msgid "Extension <{name}> not found. Please check 'url' and 'branch' options"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1912
+#: ../scripts/g.extension/g.extension.py:1955
 msgid "Extension <{}> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1940
+#: ../scripts/g.extension/g.extension.py:1983
 #, python-brace-format
 msgid "Unknown extension (addon) source type '{0}'. Please report this to the grass-user mailing list."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1969
+#: ../scripts/g.extension/g.extension.py:2012
 msgid "Path to the source code:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:1991
+#: ../scripts/g.extension/g.extension.py:2034
 msgid "Module name not found. Check module Makefile syntax (PGM variable)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2143
+#: ../scripts/g.extension/g.extension.py:2186
 msgid "To compile run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2145
+#: ../scripts/g.extension/g.extension.py:2188
 msgid "To install run:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2153
+#: ../scripts/g.extension/g.extension.py:2196
 msgid "Compiling..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2155
+#: ../scripts/g.extension/g.extension.py:2198
 msgid "Please install GRASS development package"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2158
-#: ../scripts/g.extension/g.extension.py:2161
+#: ../scripts/g.extension/g.extension.py:2201
+#: ../scripts/g.extension/g.extension.py:2204
 msgid "Compilation failed, sorry. Please check above error messages."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2175
+#: ../scripts/g.extension/g.extension.py:2218
 msgid "Installing..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2266
+#: ../scripts/g.extension/g.extension.py:2309
 msgid "List of removed files:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2268
+#: ../scripts/g.extension/g.extension.py:2311
 msgid "Files to be removed:"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2274
+#: ../scripts/g.extension/g.extension.py:2317
 msgid "Updating addons metadata file..."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2278
+#: ../scripts/g.extension/g.extension.py:2321
 #, python-format
 msgid "Extension <%s> successfully uninstalled."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2281
+#: ../scripts/g.extension/g.extension.py:2324
 #, python-format
 msgid "Toolbox <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2286
+#: ../scripts/g.extension/g.extension.py:2329
 #, python-format
 msgid "Extension <%s> not removed. Re-run '%s' with '-f' flag to force removal"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2335
+#: ../scripts/g.extension/g.extension.py:2378
 #, python-format
 msgid "Extension <%s> not found"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2440
+#: ../scripts/g.extension/g.extension.py:2483
 #, python-brace-format
 msgid "Unable to create '{filename}': {error}. Is the GRASS documentation package installed? Installation continues, but documentation may not look right."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2459
+#: ../scripts/g.extension/g.extension.py:2502
 #, python-format
 msgid "Unable to create '%s': %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2488
+#: ../scripts/g.extension/g.extension.py:2531
 #, python-format
 msgid "Manual page for <%s> updated"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2495
+#: ../scripts/g.extension/g.extension.py:2538
 #, python-format
 msgid "Unable to read manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2542
+#: ../scripts/g.extension/g.extension.py:2585
 #, python-format
 msgid "Unable for write manual page: %s"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2562
+#: ../scripts/g.extension/g.extension.py:2605
 msgid "GRASS_ADDON_BASE is not defined, installing to {}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2569
+#: ../scripts/g.extension/g.extension.py:2612
 #, python-brace-format
 msgid "You don't have permission to install extension to <{0}>. Try to run {1} with administrator rights (su or sudo)."
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2661
+#: ../scripts/g.extension/g.extension.py:2712
 #, python-brace-format
 msgid "Identified {0} as known hosting service"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2666
+#: ../scripts/g.extension/g.extension.py:2717
 #, python-brace-format
 msgid "Not using {service} as known hosting service because the URL ends with '{suffix}'"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2683
+#: ../scripts/g.extension/g.extension.py:2734
 #, python-brace-format
 msgid "Will use the following URL for download: {0}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2714
+#: ../scripts/g.extension/g.extension.py:2765
 #, python-brace-format
 msgid "Cannot open URL <{url}>: {error}"
 msgstr ""
 
-#: ../scripts/g.extension/g.extension.py:2920
+#: ../scripts/g.extension/g.extension.py:2971
 msgid "Flag '{}' is relevant only to 'operation=add'. Ignoring this flag."
 msgstr ""
 
