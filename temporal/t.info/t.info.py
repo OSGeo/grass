@@ -100,7 +100,8 @@ def main():
         msg = _("No temporal database found in available mapsets.")
         if mapset:
             msg = _("No temporal database found in requested mapset <%s>.") % mapset
-        gs.fatal(msg)
+        gs.warning(msg)
+        return
 
     # Connect once here, otherwise helpers close the connection they open
     dbif.connect()
