@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
         struct Option *memory;
     } parm;
     struct {
-        struct Flag *align, *circle;
+        struct Flag *align, *circle, *nulls;
     } flag;
 
     DCELL **values;     /* list of neighborhood values */
@@ -285,8 +285,15 @@ int main(int argc, char *argv[])
     flag.circle->description = _("Use circular neighborhood");
     flag.circle->guisection = _("Neighborhood");
 
+    flag.nulls = G_define_flag();
+    flag.nulls->key = 'n';
+    flag.nulls->description =
+        _("Preserve NULL cells from the input raster map");
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
+
+    const int preserve_nulls = flag.nulls->answer;
 
     sscanf(parm.size->answer, "%d", &ncb.nsize);
     if (ncb.nsize <= 0)
@@ -529,7 +536,10 @@ int main(int argc, char *argv[])
 
                 for (col = 0; col < ncols; col++) {
 
-                    if (selection && selection[t][col]) {
+                    if ((selection && selection[t][col]) ||
+                        (preserve_nulls &&
+                         Rast_is_d_null_value(
+                             &ncb.buf[t][ncb.dist][col + ncb.dist]))) {
                         /* ncb.buf length is region row length + 2 * ncb.dist
                          * (eq. floor(neighborhood/2)) Thus original data start
                          * is shifted by ncb.dist! */

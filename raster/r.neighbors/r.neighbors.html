@@ -325,6 +325,13 @@ centered on the current cell.
                                         . . . . . X . . . . .
 </pre></div>
 
+<dt><b>-n</b>
+<dd>
+Preserve NULL cells from the input raster map. If the input center cell
+is NULL, the corresponding cell in every output map is NULL, regardless
+of the <b>method</b> or <b>selection</b> map. Non-NULL center cells are
+processed as usual.
+
 </dl>
 
 <h2>NOTES</h2>
@@ -337,8 +344,11 @@ these geographic region settings.  However, the user can select to keep
 original input and output resolutions which are not aligned by specifying
 this (e.g., using the <b>-a</b> option).
 <p>
-<em><b>r.neighbors</b></em> doesn't propagate NULLs, but computes the
-aggregate over the non-NULL cells in the neighborhood.
+By default, <em><b>r.neighbors</b></em> doesn't propagate NULLs, but computes
+the aggregate over the non-NULL cells in the neighborhood. Thus, a NULL input
+center cell can receive a non-NULL output value from the neighboring cells.
+With the <b>-n</b> flag, center cells that are NULL in the input map remain
+NULL in the output map.
 <p>
 The <b>-c</b> flag and the <b>weights</b> parameter are mutually exclusive.  Any
 use of the two together will produce an error. Differently-shaped neighborhood
