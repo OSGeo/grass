@@ -16,6 +16,7 @@ import getpass
 import subprocess
 import sys
 import time
+from contextlib import suppress
 from shutil import copytree, ignore_patterns
 from pathlib import Path
 
@@ -33,18 +34,17 @@ def get_possible_database_path():
     """
     home = os.path.expanduser("~")
 
-    # try some common directories for grassdata
     candidates = [
         home,
         os.path.join(home, "Documents"),
     ]
 
-    # find possible database path
     for candidate in candidates:
-        if Path(candidate).exists():
-            for subdir in next(os.walk(candidate))[1]:
-                if "grassdata" in subdir.lower():
-                    return os.path.join(candidate, subdir)
+        with suppress(OSError):
+            for entry in Path(candidate).iterdir():
+                with suppress(OSError):
+                    if "grassdata" in entry.name.lower() and entry.is_dir():
+                        return str(entry)
     return None
 
 
