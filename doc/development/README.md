@@ -9,7 +9,6 @@ maintaining GRASS.
 
 - [GRASS Programming Style Guide](style_guide.md)
 - [Guide to contributing on GitHub](github_guide.md)
-- [Dependency updates with Renovate](dependency_updates.md)
 
 ## Testing
 

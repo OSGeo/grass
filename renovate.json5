@@ -48,9 +48,6 @@
         "enabled": true,
     },
 
-    // See doc/development/dependency_updates.md for the rationale of the
-    // settings below.
-
     // Default window for everything not scheduled by a rule below. Times are
     // in UTC so that the days below do not depend on the Renovate runner.
     "timezone": "UTC",
