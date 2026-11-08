@@ -78,9 +78,7 @@ def message_server(lock: _LockLike, conn: Connection, env=None) -> NoReturn:
         os.environ.clear()
         os.environ.update(env)
         if "GISRC" in env:
-            # On Windows, the C library can have its own copy of the environment.
             libgis.G_putenv("GISRC", env["GISRC"])
-            # With fork (e.g. Linux), the C library may hold the parent's session.
             libgis.G__read_gisrc_path()
             libgis.G__read_gisrc_env()
     libgis.G_debug(1, "Start messenger server")
