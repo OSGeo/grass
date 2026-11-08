@@ -203,11 +203,15 @@ def main():
     if (
         tgis.check_granularity_string(granularity, input_strds.get_temporal_type())
         is False
+        or int(granularity.split()[0]) <= 0
     ):
         dbif.close()
         gs.fatal(_("Invalid granularity"))
 
-    if tgis.check_granularity_string(cycle, input_strds.get_temporal_type()) is False:
+    if (
+        tgis.check_granularity_string(cycle, input_strds.get_temporal_type()) is False
+        or int(cycle.split()[0]) <= 0
+    ):
         dbif.close()
         gs.fatal(_("Invalid cycle"))
 
@@ -215,6 +219,7 @@ def main():
         if (
             tgis.check_granularity_string(offset, input_strds.get_temporal_type())
             is False
+            or int(offset.split()[0]) < 0
         ):
             dbif.close()
             gs.fatal(_("Invalid offset"))
@@ -230,11 +235,11 @@ def main():
                 _("Space time raster dataset <%s> not found") % (lower_strds.get_id())
             )
 
+        lower_strds.select(dbif)
+
         if lower_strds.get_temporal_type() != input_strds.get_temporal_type():
             dbif.close()
             gs.fatal(_("Temporal type of input strds and lower strds must be equal"))
-
-        lower_strds.select(dbif)
 
     # The upper threshold space time raster dataset
     if upper:
@@ -252,11 +257,11 @@ def main():
                 _("Space time raster dataset <%s> not found") % (upper_strds.get_id())
             )
 
+        upper_strds.select(dbif)
+
         if upper_strds.get_temporal_type() != input_strds.get_temporal_type():
             dbif.close()
             gs.fatal(_("Temporal type of input strds and upper strds must be equal"))
-
-        upper_strds.select(dbif)
 
     input_strds_start, input_strds_end = input_strds.get_temporal_extent_as_tuple()
 
@@ -267,6 +272,9 @@ def main():
     else:
         start = int(start)
         stop = int(stop) if stop else input_strds_end
+        cycle = int(cycle)
+        offset = int(offset) if offset else 0
+        granularity = int(granularity)
 
     if input_strds.is_time_absolute():
         end = tgis.increment_datetime_by_string(start, cycle)
@@ -277,6 +285,19 @@ def main():
 
     count = 1
     output_maps = []
+
+    def next_cycle(end):
+        start = end
+        if input_strds.is_time_absolute():
+            if offset:
+                start = tgis.increment_datetime_by_string(end, offset)
+
+            end = tgis.increment_datetime_by_string(start, cycle)
+        else:
+            if offset:
+                start = end + offset
+            end = start + cycle
+        return start, end
 
     while input_strds_end > start and stop > start:
         # Make sure that the cyclic computation will stop at the correct time
@@ -289,6 +310,7 @@ def main():
         gs.message(_("Processing cycle %s - %s") % (str(start), str(end)))
 
         if len(input_maps) == 0:
+            start, end = next_cycle(end)
             continue
 
         # Lets create a dummy list of maps with granularity conform intervals
@@ -453,18 +475,7 @@ def main():
             old_map_name = output_map_name
             count += 1
 
-        # Increment the cycle
-        start = end
-        if input_strds.is_time_absolute():
-            start = end
-            if offset:
-                start = tgis.increment_datetime_by_string(end, offset)
-
-            end = tgis.increment_datetime_by_string(start, cycle)
-        else:
-            if offset:
-                start = end + offset
-            end = start + cycle
+        start, end = next_cycle(end)
 
     # Insert the maps into the output space time dataset
     if output_strds.is_in_db(dbif):

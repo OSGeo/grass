@@ -526,12 +526,12 @@ pr_winerr(int vis, /* % of saved window overlapping current window */
 {
     switch (vis) {
     case 0:
-        G_warning(_(" Window saved in \"%s\" is completely outside of current "
+        G_warning(_("Window saved in \"%s\" is completely outside of current "
                     "GRASS window."),
                   viewname);
         break;
     default:
-        G_warning(_(" Only %d%% of window saved in \"%s\" overlaps with "
+        G_warning(_("Only %d%% of window saved in \"%s\" overlaps with "
                     "current GRASS window."),
                   vis, viewname);
         break;

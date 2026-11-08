@@ -104,7 +104,7 @@ def write_gisrc(dbase, location, mapset):
 
 def set_gui_path():
     """Insert wxPython GRASS path to sys.path."""
-    gui_path = os.path.join(os.environ["GISBASE"], "gui", "wxpython")
+    gui_path = os.environ["GRASS_GUIWXDIR"]
     if gui_path and gui_path not in sys.path:
         sys.path.insert(0, gui_path)
 
@@ -227,7 +227,11 @@ def setup_runtime_env(gisbase=None, *, env=None):
     # Remove mapset-specific variables that should not leak into the
     # runtime environment being set up.
     sanitize_mapset_environment(env)
-    runtime_paths = RuntimePaths(env=env, prefix=gisbase)
+    # Derive the resource paths from an existing GISBASE rather than from
+    # the build-time prefix, which is wrong for a relocated installation
+    # (e.g., a copied distribution or a custom OSGeo4W root).
+    # TODO(FHS): remove need for gisbase, which is now decoupled from resource paths
+    runtime_paths = RuntimePaths(env=env, prefix=gisbase or env.get("GISBASE"))
     gisbase = runtime_paths.gisbase
     if not Path(gisbase).is_dir():
         gisbase = get_install_path(gisbase)
@@ -262,10 +266,16 @@ def runtime_env_is_active(env=None):
 
     If *env* is not provided, uses the global environment (os.environ).
     """
+    from grass.app.runtime import RuntimePaths
+
     if not env:
         env = os.environ
     gisbase = env.get("GISBASE")
     if not gisbase:
+        return False
+    # GISBASE alone (e.g., set by a wrapper script) is not enough because
+    # tools read the resource directories from their own variables.
+    if not all(env.get(name) for name in RuntimePaths.env_variable_names()):
         return False
     # Check also path to tools.
     return gisbase in env["PATH"]
@@ -303,10 +313,23 @@ def init(
     standard main executable grass. No GRASS modules shall be called before
     call of this function but any module or user script can be called
     afterwards because a GRASS session has been set up. GRASS Python
-    libraries are usable as well in general but the ones using C
-    libraries through ``ctypes`` are not (which is caused by library
-    path not being updated for the current process which is a common
-    operating system limitation).
+    libraries are usable as well, including the ones using C libraries
+    through ``ctypes`` (:mod:`grass.lib`). Importing :mod:`grass.lib`
+    depends on this function, and so does using it: the C libraries read
+    the session from the environment of the process, so :mod:`grass.lib`
+    sees the session only when it is set up in the global environment,
+    i.e., without *env*. The import works for an installation at the
+    prefix it was configured for, where the GRASS libraries find the
+    libraries they depend on through the search path recorded at build
+    time. For an installation moved elsewhere, the dynamic library search
+    path variable must be set before the process starts, because the
+    operating system does not apply a modified variable to an already
+    running process.
+
+    On Windows, the C libraries do not see environment variables set in
+    the running process, so :mod:`grass.lib` functions see a session set
+    up by this function only in processes started afterwards, such as
+    subprocesses.
 
     When the path or specified mapset does not exist, ValueError is raised.
 
@@ -590,9 +613,10 @@ def clean_temp(env=None):
         env = os.environ
 
     gs.verbose(_("Cleaning up temporary files..."), env=env)
-    gisbase = env["GISBASE"]
     call(
-        [os.path.join(gisbase, "etc", "clean_temp")], stdout=subprocess.DEVNULL, env=env
+        [os.path.join(env["GRASS_ETCBINDIR"], "clean_temp")],
+        stdout=subprocess.DEVNULL,
+        env=env,
     )
 
 

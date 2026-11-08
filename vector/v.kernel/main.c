@@ -205,6 +205,7 @@ int main(int argc, char **argv)
     flag_q->key = 'q';
     flag_q->description =
         _("Only calculate optimal radius and exit (no map is written)");
+    flag_q->suppress_overwrite = YES;
 
     flag_normalize = G_define_flag();
     flag_normalize->key = 'n';
@@ -220,7 +221,7 @@ int main(int argc, char **argv)
         _("In network mode, multiply the result by number of input points");
     flag_multiply->guisection = _("Network");
 
-    G_option_required(out_opt, net_out_opt, NULL);
+    G_option_required(out_opt, net_out_opt, flag_q, NULL);
     G_option_exclusive(out_opt, net_out_opt, NULL);
     /* TODO: this should be activated for GRASS 8
        G_option_requires(net_opt, net_out_opt, NULL);
@@ -269,6 +270,10 @@ int main(int argc, char **argv)
     else
         G_fatal_error(_("Unknown kernel function"));
 
+    if (flag_q->answer) {
+        flag_o->answer = 1;
+    }
+
     if (flag_o->answer) {
         if (net_opt->answer) {
             if (node_method != NODE_NONE ||
@@ -284,11 +289,7 @@ int main(int argc, char **argv)
         }
     }
 
-    if (flag_q->answer) {
-        flag_o->answer = 1;
-    }
-
-    if (net_opt->answer) {
+    if (net_opt->answer && net_out_opt->answer) {
         Vect_check_input_output_name(in_opt->answer, net_out_opt->answer,
                                      G_FATAL_EXIT);
         Vect_check_input_output_name(net_opt->answer, net_out_opt->answer,

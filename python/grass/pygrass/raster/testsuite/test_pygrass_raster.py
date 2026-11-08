@@ -1,4 +1,4 @@
-from grass.exceptions import OpenError
+from grass.exceptions import GrassError, OpenError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
@@ -86,6 +86,20 @@ class RasterRowTestCase(TestCase):
             # Index is out of range
             r.open()
             r[9999]
+        r.close()
+
+    def test_getitem_invalid_type(self):
+        r = RasterRow(self.name)
+        with self.assertRaises(TypeError):
+            r["invalid_key"]
+
+    def test_set_region_open_map(self):
+        r = RasterRow(self.name)
+        r.open(mode="r")
+        with self.assertRaises(GrassError):
+            r.set_region_from_rast()
+        with self.assertRaises(GrassError):
+            r.set_region(None)
         r.close()
 
 
