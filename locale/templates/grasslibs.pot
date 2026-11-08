@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-07 19:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9758,84 +9758,84 @@ msgid ""
 " {ret}"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:226
+#: ../python/grass/temporal/abstract_map_dataset.py:230
 #, python-brace-format
 msgid "Map <{map_name}> of element type '{element}' not found on                             search path"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:429
+#: ../python/grass/temporal/abstract_map_dataset.py:433
 #, python-format
 msgid "Start time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:440
+#: ../python/grass/temporal/abstract_map_dataset.py:444
 #, python-format
 msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:449
+#: ../python/grass/temporal/abstract_map_dataset.py:453
 #, python-format
 msgid "End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:460
+#: ../python/grass/temporal/abstract_map_dataset.py:464
 #, python-format
 msgid "End time must be of type datetime for %(type)s map <%(id)s>"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:470
+#: ../python/grass/temporal/abstract_map_dataset.py:474
 #, python-format
 msgid "End time must be greater than start time for %(type)s map <%(id)s> with layer: %(l)s"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:483
-#: ../python/grass/temporal/abstract_map_dataset.py:600
+#: ../python/grass/temporal/abstract_map_dataset.py:487
+#: ../python/grass/temporal/abstract_map_dataset.py:604
 #, python-format
 msgid "End time must be greater than start time for %(type)s map <%(id)s>"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:521
-#: ../python/grass/temporal/abstract_map_dataset.py:642
+#: ../python/grass/temporal/abstract_map_dataset.py:525
+#: ../python/grass/temporal/abstract_map_dataset.py:646
 #, python-format
 msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:561
+#: ../python/grass/temporal/abstract_map_dataset.py:565
 #, python-format
 msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:575
+#: ../python/grass/temporal/abstract_map_dataset.py:579
 #, python-format
 msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:587
+#: ../python/grass/temporal/abstract_map_dataset.py:591
 #, python-format
 msgid "End time must be greater than start time for %(typ)s map <%(id)s> with layer %(l)s"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:934
+#: ../python/grass/temporal/abstract_map_dataset.py:938
 #, python-format
 msgid "Map <%s> has incorrect start time"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:941
+#: ../python/grass/temporal/abstract_map_dataset.py:945
 #, python-format
 msgid "Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is greater than end time"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:950
+#: ../python/grass/temporal/abstract_map_dataset.py:954
 #, python-format
 msgid "Map <%s> has incorrect time interval, start time is greater than end time"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:1000
+#: ../python/grass/temporal/abstract_map_dataset.py:1004
 #, python-format
 msgid "Delete %s dataset <%s> from temporal database"
 msgstr ""
 
-#: ../python/grass/temporal/abstract_map_dataset.py:1226
+#: ../python/grass/temporal/abstract_map_dataset.py:1230
 msgid "semantic labels can only be assigned to raster maps"
 msgstr ""
 
@@ -10044,15 +10044,15 @@ msgstr ""
 msgid "The limit of open files (%i) was reached (%i). The module r.series will be run with flag z, to avoid open files limit exceeding."
 msgstr ""
 
-#: ../python/grass/temporal/base.py:414
+#: ../python/grass/temporal/base.py:415
 msgid "Object not found in the temporal database"
 msgstr ""
 
-#: ../python/grass/temporal/base.py:508 ../python/grass/temporal/base.py:564
+#: ../python/grass/temporal/base.py:509 ../python/grass/temporal/base.py:565
 msgid "Missing identifier"
 msgstr ""
 
-#: ../python/grass/temporal/base.py:690
+#: ../python/grass/temporal/base.py:693
 msgid "Wrong identifier, the mapset is missing"
 msgstr ""
 
@@ -10517,67 +10517,67 @@ msgstr ""
 msgid "Unable to read timestamp file for raster map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:318
+#: ../python/grass/temporal/space_time_datasets.py:321
 #, python-format
 msgid "Unable to create timestamp file for raster map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:325
+#: ../python/grass/temporal/space_time_datasets.py:328
 #, python-format
 msgid "Invalid datetime in timestamp for raster map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:331
-#: ../python/grass/temporal/space_time_datasets.py:767
+#: ../python/grass/temporal/space_time_datasets.py:334
+#: ../python/grass/temporal/space_time_datasets.py:781
 msgid "Internal error"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:348
+#: ../python/grass/temporal/space_time_datasets.py:354
 #, python-format
 msgid "Unable to remove timestamp for raster map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:388
+#: ../python/grass/temporal/space_time_datasets.py:398
 #, python-format
 msgid "Unable to write semantic label for raster map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:728
+#: ../python/grass/temporal/space_time_datasets.py:739
 #, python-format
 msgid "Unable to read timestamp file for 3D raster map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:754
+#: ../python/grass/temporal/space_time_datasets.py:768
 #, python-format
 msgid "Unable to create timestamp file for 3D raster map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:761
+#: ../python/grass/temporal/space_time_datasets.py:775
 #, python-format
 msgid "Invalid datetime in timestamp for 3D raster map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:783
+#: ../python/grass/temporal/space_time_datasets.py:800
 #, python-format
 msgid "Unable to remove timestamp for 3D raster map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:1069
+#: ../python/grass/temporal/space_time_datasets.py:1086
 #, python-format
 msgid "Unable to read timestamp file for vector map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:1096
+#: ../python/grass/temporal/space_time_datasets.py:1116
 #, python-format
 msgid "Unable to create timestamp file for vector map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:1103
+#: ../python/grass/temporal/space_time_datasets.py:1123
 #, python-format
 msgid "Invalid datetime in timestamp for vector map <%s>"
 msgstr ""
 
-#: ../python/grass/temporal/space_time_datasets.py:1120
+#: ../python/grass/temporal/space_time_datasets.py:1143
 #, python-format
 msgid "Unable to remove timestamp for vector map <%s>"
 msgstr ""

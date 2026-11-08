@@ -385,6 +385,18 @@ https://en.wikipedia.org/wiki/Aspect_(geography)</descrip>
                 <langSet xml:lang="en"><tig><term>aspect</term></tig></langSet>
                 <langSet xml:lang="fr"><note from="translator">Aussi aspect</note><tig><term>exposition</term></tig></langSet>
             </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>current</term></tig></langSet>
+                <langSet xml:lang="fr"><note from="translator">In the sense of “currently”, it is better than using “actuel”</note><tig><term>courant</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>temporal database</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>base de données temporelle</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>lock file</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>fichier de vérouillage</term></tig></langSet>
+            </termEntry>
         </body>
     </text>
 </martif>
