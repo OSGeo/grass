@@ -19,10 +19,6 @@
                 <langSet xml:lang="fr"><tig><term>GRASS</term></tig></langSet>
             </termEntry>
             <termEntry>
-                <langSet xml:lang="en"><tig><term>Raster</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term>Raster</term></tig></langSet>
-            </termEntry>
-            <termEntry>
                 <langSet xml:lang="en"><tig><term>Feature</term></tig></langSet>
                 <langSet xml:lang="fr"><tig><term>Entité</term></tig></langSet>
             </termEntry>
@@ -264,7 +260,7 @@
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>MySQL</term></tig></langSet>
-                <langSet xml:lang="fr"><tig><term/></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>MySQL</term></tig></langSet>
                 <note from="translator">Name of a relational database management system</note>
             </termEntry>
             <termEntry>
@@ -345,6 +341,61 @@ https://vitrinelinguistique.oqlf.gouv.qc.ca/fiche-gdt/fiche/26579673/machine-a-v
             <termEntry>
                 <langSet xml:lang="en"><tig><term>space time</term></tig></langSet>
                 <langSet xml:lang="fr"><tig><term>spatiotemporel</term></tig></langSet>
+            </termEntry>
+            <termEntry id="hydrology">
+                <langSet xml:lang="en"><tig><term>flow direction</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>direction d'écoulement</term></tig></langSet>
+            </termEntry>
+            <termEntry id="hydrology">
+                <langSet xml:lang="en"><tig><term>flow direction</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>direction d'écoulement</term></tig></langSet>
+            </termEntry>
+            <termEntry id="hydrology">
+                <langSet xml:lang="en"><tig><term>watershed</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>bassin versant</term></tig></langSet>
+                <descrip>hydrology</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>monitor</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>moniteur</term></tig></langSet>
+                <descrip>A graphics output target managed by d.mon, which can be started, selected, released, listed or stopped. A monitor is either an interactive display window (e.g., wx0 to wx7) or a file renderer (e.g., png, ps, html, cairo).</descrip>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>monitors</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>moniteurs</term></tig></langSet>
+                <descrip>A graphics output target managed by d.mon, which can be started, selected, released, listed or stopped. A monitor is either an interactive display window (e.g., wx0 to wx7) or a file renderer (e.g., png, ps, html, cairo).</descrip>
+            </termEntry>
+            <termEntry id="1">
+                <langSet xml:lang="en"><tig><term>Raster</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>Raster</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>display monitor</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>moniteur d’affichage</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <descrip type="definition">Domain: terrain analysis, raster&#13;
+&#13;
+The compass direction that a sloping terrain surface faces, i.e. the direction of steepest downslope, usually measured in degrees clockwise from north (or counterclockwise from east, depending on the GRASS map type).&#13;
+&#13;
+Note:&#13;
+Not to be confused with the aspect of a map projection, nor with the slope (gradient), which is a separate value.&#13;
+&#13;
+https://en.wikipedia.org/wiki/Aspect_(geography)</descrip>
+                <langSet xml:lang="en"><tig><term>aspect</term></tig></langSet>
+                <langSet xml:lang="fr"><note from="translator">Aussi aspect</note><tig><term>exposition</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>current</term></tig></langSet>
+                <langSet xml:lang="fr"><note from="translator">In the sense of “currently”, it is better than using “actuel”</note><tig><term>courant</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>temporal database</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>base de données temporelle</term></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>lock file</term></tig></langSet>
+                <langSet xml:lang="fr"><tig><term>fichier de vérouillage</term></tig></langSet>
             </termEntry>
         </body>
     </text>
