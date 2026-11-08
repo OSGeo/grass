@@ -106,7 +106,7 @@ def main():
     # Connect once here, otherwise helpers close the connection they open
     dbif.connect()
 
-    rows = tgis.get_tgis_metadata(dbif)
+    rows = tgis.get_tgis_metadata(dbif, mapset=mapset)
 
     if system and not history and format_ != "json":
         if shellstyle:
