@@ -151,7 +151,7 @@ build_library_in_subdir(
 
 build_library_in_subdir(
     cluster
-    DEPENDS ${LIBM} grass_imagery grass_gis grass_raster
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster
 )
 
 build_library_in_subdir(rowio DEPENDS grass_gis)
