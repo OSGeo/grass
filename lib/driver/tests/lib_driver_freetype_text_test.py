@@ -38,7 +38,7 @@ def render_tools(session, driver, output):
     env["GRASS_RENDER_FILE"] = str(output)
     env["GRASS_RENDER_WIDTH"] = str(WIDTH)
     env["GRASS_RENDER_HEIGHT"] = str(HEIGHT)
-    return Tools(env=env)
+    return Tools(env=env, consistent_return_value=True)
 
 
 @pytest.fixture(scope="module")
@@ -46,10 +46,11 @@ def freetype_font(session, tmp_path_factory):
     """Name of a FreeType font from the font configuration file
 
     DejaVu Sans is preferred, then any other sans font. The tests are skipped
-    when no FreeType font was found when GRASS was built.
+    when the font configuration file is missing or lists no FreeType font.
     """
     output = tmp_path_factory.mktemp("d_fontlist") / "fontlist.ppm"
-    fonts = render_tools(session, "png", output).d_fontlist(flags="v").text
+    # Without a font configuration file d.fontlist prints nothing.
+    fonts = render_tools(session, "png", output).d_fontlist(flags="v").text or ""
     # Each line is name|longname|type|path|index|encoding| and type 1 is
     # a FreeType font.
     names = [
@@ -58,7 +59,7 @@ def freetype_font(session, tmp_path_factory):
         if len(fields) > 2 and fields[2] == "1"
     ]
     if not names:
-        pytest.skip("No FreeType font available")
+        pytest.skip("No FreeType font in the font configuration file")
     if "DejaVuSans" in names:
         return "DejaVuSans"
     sans = [name for name in names if "sans" in name.lower()]
