@@ -8,10 +8,8 @@ Classes:
  - data::AnimationLayer
 
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
@@ -301,7 +299,7 @@ class AnimLayer(Layer):
                     name = validateTimeseriesName(name, self._mapType)
                     self._maps = getRegisteredMaps(name, self._mapType)
                 except (GException, ScriptError) as e:
-                    raise ValueError(str(e))
+                    raise ValueError(str(e)) from e
             else:
                 self._maps = validateMapNames(name.split(","), self._mapType)
         self._name = name

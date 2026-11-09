@@ -1,4 +1,4 @@
-# Copyright (C) 2026 by the GRASS Development Team
+# SPDX-FileCopyrightText: 2026 GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """Fixture for t.register tests"""

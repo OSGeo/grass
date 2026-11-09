@@ -6,11 +6,9 @@
 Classes:
  - datacatalog::DataCatalog
 
-(C) 2014-2018 by Tereza Fiedlerova, and the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014-2018 Tereza Fiedlerova
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Tereza Fiedlerova
 @author Linda Kladivova l.kladivova@seznam.cz
@@ -360,6 +358,20 @@ class DataCatalog(wx.Panel):
         )
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("v.in.ascii"), item)
+
+        menu.AppendSeparator()
+
+        item = wx.MenuItem(
+            menu, wx.ID_ANY, _("Import space time raster dataset  [t.rast.import]")
+        )
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("t.rast.import"), item)
+
+        item = wx.MenuItem(
+            menu, wx.ID_ANY, _("Import space time vector dataset  [t.vect.import]")
+        )
+        menu.AppendItem(item)
+        self.Bind(wx.EVT_MENU, lambda evt: self.GuiParseCommand("t.vect.import"), item)
 
         menu.AppendSeparator()
         menu.AppendMenu(wx.ID_ANY, _("Link external data"), subMenu)

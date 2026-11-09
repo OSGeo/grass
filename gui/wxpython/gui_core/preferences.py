@@ -14,10 +14,8 @@ Classes:
  - preferences::MapsetAccess
  - preferences::CheckListMapset
 
-(C) 2007-2017 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2017 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Martin Landa <landa.martin gmail.com>
@@ -1561,7 +1559,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         randomColors = wx.CheckBox(
             parent=panel,
             id=wx.ID_ANY,
-            label=_("Random colors according to category number "),
+            label=_("Random colors according to category number"),
         )
         randomColors.SetValue(
             self.settings.Get(group="vectorLayer", key="randomColors", subkey="enabled")

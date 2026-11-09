@@ -14,8 +14,6 @@ DOC_MD := $(wildcard $(MODULE_TOPDIR)/doc/*.md) \
 	$(wildcard $(MODULE_TOPDIR)/doc/development/*.md)
 WEB_ONLY_MD := index keywords development_intro command_line_intro \
 	$(filter-out grass_database projectionintro,$(basename $(notdir $(DOC_MD))))
-MANPAGES := $(filter-out $(patsubst %,$(MANDIR)/%.$(MANSECT),$(WEB_ONLY_MD)),\
-	$(patsubst $(MDDIR)/source/%.md,$(MANDIR)/%.$(MANSECT),$(wildcard $(MDDIR)/source/*.md)))
 
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
@@ -33,6 +31,7 @@ DSTFILES := \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
 	$(MDDIR)/source/index.md \
+	$(MDDIR)/overrides/main.html \
 	$(MDDIR)/overrides/partials/copyright.html \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
@@ -83,46 +82,51 @@ default: $(DSTFILES)
 	$(MAKE) manpages
 # $(MAKE) build-mkdocs
 
-# This must be a separate target so that evaluation of $(MANPAGES)
-# is delayed until the indices have been generated
-left := (
-right := )
+# The sweep script is shared with the CMake build, so both builds convert
+# the same set of pages. It skips pages whose man page is up to date, so
+# after the tool builds this effectively converts the index pages.
 manpages:
-	$(MAKE) $(subst $(left),\$(left),$(subst $(right),\$(right),$(MANPAGES)))
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(PYTHON) ./build_manpages.py \
+		$(MDDIR)/source $(MANDIR) $(GISBASE)/utils/g.md2man.py --exclude $(WEB_ONLY_MD)
 
 .PHONY: manpages
 
 define build
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_$(1).py $(2)
 endef
 
 define build_topics
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_topics.py
 endef
 
 define build_keywords
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_keywords.py
 endef
 
 define build_graphical_index
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_graphical_index.py
 endef
 
 define build_manual_gallery
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_manual_gallery.py
 endef
@@ -130,13 +134,15 @@ endef
 define build_pso
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	$(PYTHON) ./parser_standard_options.py -t "$(GRASS_HOME)/lib/gis/parser_standard_options.c" \
 	-f "grass" -o "$(HTMLDIR)/parser_standard_options.html" -p 'id="opts_table" class="scroolTable"'
 endef
 
 define build_pso_md
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./parser_standard_options.py -t "$(GRASS_HOME)/lib/gis/parser_standard_options.c" \
 	-f "grass" -o "$(MDDIR)/source/parser_standard_options.md"
@@ -149,11 +155,13 @@ $(MDDIR)/source/topics.md: $(ALL_MD)
 define build_class_graphical
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	$(PYTHON) ./build_class_graphical.py html $(HTMLDIR)
 endef
 
 define build_class_graphical_md
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_class_graphical.py md $(MDDIR)/source
 endef
@@ -286,6 +294,12 @@ $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(M
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/scripts:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/main.html: mkdocs/overrides/main.html | $(MDDIR)/overrides
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides:
 	$(MKDIR) $@
 
 $(MDDIR)/overrides/partials/copyright.html: mkdocs/overrides/partials/copyright.html | $(MDDIR)/overrides/partials

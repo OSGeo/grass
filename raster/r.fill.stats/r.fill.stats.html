@@ -222,50 +222,6 @@ that are not restricted to minimal kernel sizes. For example, aspect and other m
 using the <em><a href="r.param.scale.html">r.param.scale</a></em> module
 which operates with variable-size cell neighborhoods.)
 
-<!--
-wget http://fatra.cnr.ncsu.edu/uav-lidar-analytics-course/midpines_2015_spm.las -O points.las
-
-g.region n=220220 s=218690 e=637800 w=636270 res=1
-
-r.in.lidar input=points.las output=ground method=mean class_filter=2
-
-r.fill.stats input=ground output=ground_filled mode=wmean power=2.0 cells=8
-r.fill.stats -k input=ground output=ground_filled2 mode=wmean power=2.0 cells=8
-
-r.slope.aspect elevation=ground_filled slope=slope aspect=aspect pcurvature=pcur tcurvature=tcur
-r.slope.aspect elevation=ground_filled2 slope=slope2 aspect=aspect2 pcurvature=pcur2 tcurvature=tcur2
-
-g.region n=219537 s=219172 w=636852 e=637218 -k
-
-d.mon cairo output=r_fill_gaps_smoothing.png width=1464 height=730
-export GRASS_FONT=LiberationSans-Regular
-d.frame frame=u1 at=50,100,0,25 -c
-d.rast ground_filled
-d.text text="surf. (smoothed)" at=5,5 size=10 bgcolor=white color=black
-d.frame frame=u2 at=50,100,25,50 -c
-d.rast slope
-d.text text="slope" at=5,5 size=10 bgcolor=white color=black
-d.frame frame=u3 at=50,100,50,75 -c
-d.rast aspect
-d.text text="aspect" at=5,5 size=10 bgcolor=white color=black
-d.frame frame=u4 at=50,100,75,100 -c
-d.rast pcur
-d.text text="prof. curvature" at=5,5 size=10 bgcolor=white color=black
-d.frame frame=l1  at=0,50,0,25 -c
-d.rast ground_filled2
-d.text text="surf. (preserved)" at=5,5 size=10 bgcolor=white color=black
-d.frame frame=l2 at=0,50,25,50 -c
-d.rast slope2
-d.text text="slope" at=5,5 size=10 bgcolor=white color=black
-d.frame frame=l3 at=0,50,50,75 -c
-d.rast aspect2
-d.text text="aspect" at=5,5 size=10 bgcolor=white color=black
-d.frame frame=l4 at=0,50,75,100 -c
-d.rast pcur2
-d.text text="prof. curvature" at=5,5 size=10 bgcolor=white color=black
-d.mon stop=cairo
--->
-
 <h3>Spatial weighting scheme</h3>
 
 The key to getting good gap filling results is to understand the
@@ -388,11 +344,6 @@ r.fill.stats input=categories output=result dist=100 -m mode=mode -k
 </pre></div>
 
 <h3>Lidar point cloud example</h3>
-
-<!--
-Using:
-http://fatra.cnr.ncsu.edu/uav-lidar-analytics-course/midpines_2015_spm.las
--->
 
 Inspect the point density and determine the extent of the point cloud
 using the <em><a href="r.in.pdal.html">r.in.pdal</a></em> module:

@@ -251,7 +251,7 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, processes, region=None):
         set_region(region, gisrc_src, gisrc_dst, env)
 
     path_dst = os.path.join(*read_gisrc(gisrc_dst)[::-1])
-    nam = "copy%d__%s" % (id(gisrc_dst), "%s")
+    name_template = "copy%d__%s" % (id(gisrc_dst), "%s")
 
     # instantiate modules
     mpclc = Module("r.mapcalc")
@@ -263,7 +263,7 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, processes, region=None):
         rast_clean = rast.split("@")[0] if "@" in rast else rast
         # change gisdbase to src
         env["GISRC"] = gisrc_src
-        name = nam % rast_clean
+        name = name_template % rast_clean
         mpclc(
             expression="%s=%s" % (name, rast),
             nprocs=processes,
@@ -293,7 +293,7 @@ def copy_vectors(vectors, gisrc_src, gisrc_dst):
     """
     env = os.environ.copy()
     path_dst = os.path.join(*read_gisrc(gisrc_dst))
-    nam = "copy%d__%s" % (id(gisrc_dst), "%s")
+    name_template = "copy%d__%s" % (id(gisrc_dst), "%s")
 
     # instantiate modules
     vpck = Module("v.pack")
@@ -303,7 +303,7 @@ def copy_vectors(vectors, gisrc_src, gisrc_dst):
     for vect in vectors:
         # change gisdbase to src
         env["GISRC"] = gisrc_src
-        name = nam % vect
+        name = name_template % vect
         file_dst = "%s.pack" % os.path.join(path_dst, name)
         vpck(input=name, output=file_dst, overwrite=True, env_=env)
         remove(flags="f", type="vector", name=name, env_=env)

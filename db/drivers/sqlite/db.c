@@ -101,7 +101,7 @@ int db__driver_open_database(dbHandle *handle)
         if (access(path, 0) != 0) {
             if (G_mkdir(path) != 0)
                 G_fatal_error(
-                    _("Unable to create directory '%s' for sqlite database"),
+                    _("Unable to create directory '%s' for SQLite database"),
                     path);
         }
     }
@@ -116,7 +116,7 @@ int db__driver_open_database(dbHandle *handle)
             G_important_message(_("Disabling SQLite locking"));
         }
         else {
-            G_warning(_("The sqlite config option '%s' is not supported"),
+            G_warning(_("The SQLite config option '%s' is not supported"),
                       "SQLITE_CONFIG_URI");
             if (G_strlcpy(name3, name2, sizeof(name3)) >= sizeof(name3)) {
                 db_d_append_error(_("Database name <%s> is too long"), name2);
@@ -195,7 +195,7 @@ int db__driver_create_database(dbHandle *handle)
             G_important_message(_("Disabling SQLite locking"));
         }
         else {
-            G_warning(_("The sqlite config option '%s' is not supported"),
+            G_warning(_("The SQLite config option '%s' is not supported"),
                       "SQLITE_CONFIG_URI");
             if (G_strlcpy(name2, name, sizeof(name2)) >= sizeof(name2)) {
                 db_d_append_error(_("Database name <%s> is too long"), name);

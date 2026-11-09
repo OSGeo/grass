@@ -1,4 +1,7 @@
+import pytest
+
 import grass.script as gs
+from grass.exceptions import CalledModuleError
 
 
 def validate_r_coin_output(actual_results, expected_results):
@@ -61,3 +64,21 @@ def test_r_coin(setup_maps):
 
     # Validate results
     validate_r_coin_output(actual_results, expected_results)
+
+
+def test_r_coin_errors_without_data(setup_maps):
+    """r.coin reports an error when r.stats returns no data
+
+    Two maps holding only NULL cells make r.stats produce no output, since
+    r.coin runs it with the flag that skips the no data value. r.coin used to
+    print a normal looking report for a single category 0, whose value came
+    from a zero length allocation, and exit successfully.
+    """
+    session = setup_maps
+    gs.mapcalc("empty1 = null()", overwrite=True, env=session.env)
+    gs.mapcalc("empty2 = null()", overwrite=True, env=session.env)
+
+    with pytest.raises(CalledModuleError):
+        gs.run_command(
+            "r.coin", first="empty1", second="empty2", units="c", env=session.env
+        )

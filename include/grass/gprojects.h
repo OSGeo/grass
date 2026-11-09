@@ -5,11 +5,8 @@
  *               Paul Kelly
  * PURPOSE:      Include file for GRASS modules that use the PROJ
  *               wrapper functions
- * COPYRIGHT:    (C) 2003 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2003 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -31,11 +28,11 @@
 #endif
 
 /* Data Files */
-#define ELLIPSOIDTABLE      "/etc/proj/ellipse.table"
-#define DATUMTABLE          "/etc/proj/datum.table"
-#define DATUMTRANSFORMTABLE "/etc/proj/datumtransform.table"
+#define ELLIPSOIDTABLE      "/proj/ellipse.table"
+#define DATUMTABLE          "/proj/datum.table"
+#define DATUMTRANSFORMTABLE "/proj/datumtransform.table"
 /* GRASS relative location of datum conversion lookup tables */
-#define GRIDDIR             "/etc/proj/nad"
+#define GRIDDIR             "/proj/nad"
 
 /* TODO: rename pj_ to gpj_ to avoid symbol clash with PROJ lib */
 struct pj_info {

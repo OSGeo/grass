@@ -4,11 +4,9 @@
 #
 # PURPOSE:   Collection of various helper general (non-GRASS) utilities
 #
-# COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2021 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 """Download and extract various archives"""
 
@@ -37,7 +35,7 @@ supported_url_schemes = ("http", "https", "ftp", "file")
 def debug(*args, **kwargs):
     """Print a debug message (to be used in this module only)
 
-    Using the stanard grass.script debug function is nice, but it may create a circular
+    Using the standard grass.script debug function is nice, but it may create a circular
     dependency if this is used from grass.script, so this is a wrapper which lazy
     imports the standard function.
     """
@@ -113,7 +111,7 @@ def extract_zip(name, directory, tmpdir):
             extract_dir=extract_dir, target_dir=directory, files=files
         )
     except zipfile.BadZipfile as error:
-        raise DownloadError(_("ZIP file is unreadable: {0}").format(error))
+        raise DownloadError(_("ZIP file is unreadable: {0}").format(error)) from error
 
 
 # modified copy from g.extension

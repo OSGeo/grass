@@ -11,15 +11,15 @@ for vector maps, while VectorTopo opens vector maps with `GRASS
 topology <https://grass.osgeo.org/programming8/vlibTopology.html>`_.
 VectorTopo is an extension of the Vector class, so supports all the
 Vector class methods, with additions. The classes are part of the
-:mod:`~pygrass.vector` module.
+:mod:`~grass.pygrass.vector` module.
 
 .. _Vector-label:
 
 Vector
 ------
 
-The :class:`~pygrass.vector.Vector` class is based on the
-:class:`~pygrass.vector.abstract.Info` class, which provides methods
+The :class:`~grass.pygrass.vector.Vector` class is based on the
+:class:`~grass.pygrass.vector.abstract.Info` class, which provides methods
 for accessing basic information about the vector map: ::
 
     >>> from grass.pygrass.vector import Vector
@@ -40,7 +40,7 @@ for accessing basic information about the vector map: ::
 VectorTopo
 ----------
 
-The :class:`~pygrass.vector.VectorTopo` class allows vector maps to be loaded
+The :class:`~grass.pygrass.vector.VectorTopo` class allows vector maps to be loaded
 along with an accompanying topology. The VectorTopo class interface has all the
 same methods as the basic Vector class, but includes many more methods dependent
 on the topology rules. Consult each class's documentation for a list of the
@@ -72,7 +72,7 @@ To begin using a vector map, it must first be opened: ::
     >>> municip.open(mode='r')
 
 The ``open()`` method supports a number of option arguments (see the
-:class:`~pygrass.vector.abstract.Info` documentation for a complete
+:class:`~grass.pygrass.vector.abstract.Info` documentation for a complete
 list). In particular, the mode argument can take a value of:
 
 * 'r': read-only mode, vector features are read-only (attribute table
@@ -215,23 +215,23 @@ requesting the table from each of the returned links: ::
     Link(1, census, sqlite)
     >>> table = link.table()
 
-Here, :class:`~pygrass.vector.table.DBlinks` is a class that contains
+Here, :class:`~grass.pygrass.vector.table.DBlinks` is a class that contains
 all the links of a vector map. Each link is also a class
-(:class:`~pygrass.vector.table.Link`) that contains a specific link's
+(:class:`~grass.pygrass.vector.table.Link`) that contains a specific link's
 parameters. The ``table()`` method of the link class return the linked
-table as a table object (:class:`~pygrass.vector.table.Table`).
+table as a table object (:class:`~grass.pygrass.vector.table.Table`).
 
 Geometry Classes
 ----------------
 
 The vector package also includes a number of geometry classes,
-including :class:`~pygrass.vector.geometry.Area`,
-:class:`~pygrass.vector.geometry.Boundary`,
-:class:`~pygrass.vector.geometry.Centroid`,
-:class:`~pygrass.vector.geometry.Isle`,
-:class:`~pygrass.vector.geometry.Line`, and
-:class:`~pygrass.vector.geometry.Point` classes. Please consult the
-:mod:`~pygrass.vector.geometry` module for a complete list of methods
+including :class:`~grass.pygrass.vector.geometry.Area`,
+:class:`~grass.pygrass.vector.geometry.Boundary`,
+:class:`~grass.pygrass.vector.geometry.Centroid`,
+:class:`~grass.pygrass.vector.geometry.Isle`,
+:class:`~grass.pygrass.vector.geometry.Line`, and
+:class:`~grass.pygrass.vector.geometry.Point` classes. Please consult the
+:mod:`~grass.pygrass.vector.geometry` module for a complete list of methods
 for these classes, as there are many. Some basic examples are given
 below.
 

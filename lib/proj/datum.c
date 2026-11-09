@@ -7,11 +7,8 @@ location database
    \author Andreas Lange <andreas.lange rhein-main.de>, Paul Kelly <paul-grass
 stjohnspoint.co.uk>
 
-   (C) 2003-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 2003-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 **/
 
 #include <unistd.h>
@@ -270,7 +267,7 @@ GPJ_get_datum_transform_by_name(const char *inputname)
 
     /* Now check for additional parameters in datumtransform.table */
 
-    snprintf(file, sizeof(file), "%s%s", G_gisbase(), DATUMTRANSFORMTABLE);
+    snprintf(file, sizeof(file), "%s%s", G_etc_dir(), DATUMTRANSFORMTABLE);
 
     fd = fopen(file, "r");
     if (!fd) {
@@ -347,7 +344,7 @@ struct datum_list *read_datum_table(void)
     int line;
     struct datum_list *current = NULL, *outputlist = NULL;
 
-    snprintf(file, sizeof(file), "%s%s", G_gisbase(), DATUMTABLE);
+    snprintf(file, sizeof(file), "%s%s", G_etc_dir(), DATUMTABLE);
 
     fd = fopen(file, "r");
     if (!fd) {

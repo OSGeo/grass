@@ -13,10 +13,8 @@ Usage:
 
 ..
 
-(C) 2012-2024 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2024 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -62,6 +60,9 @@ def compute_univar_stats(
         if stats_module.name == "r3.univar" or not registered_map_info["semantic_label"]
         else registered_map_info["semantic_label"]
     )
+    # Only r.univar, not r3.univar has nprocs parameter
+    if stats_module.name == "r.univar":
+        stats_module.inputs.nprocs = 1
 
     stats_module.inputs.map = id
     if rast_region and (stats_module.inputs.zones or stats_module.name == "r3.univar"):
