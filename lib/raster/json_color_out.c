@@ -3,11 +3,8 @@
  *
  * \brief Raster Library - Print color table in json format
  *
- * (C) 2010-2024 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 2010-2024 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Nishant Bansal
  */
@@ -93,6 +90,8 @@ static void write_json_rule(DCELL *val, DCELL *min, DCELL *max, int r, int g,
    \param fp file where to print color table rules
    \param perc TRUE for percentage output
    \param clr_frmt color format to be used (RBG, HEX, HSV, TRIPLET).
+
+   \since version 8.5
  */
 void Rast_print_json_colors(struct Colors *colors, DCELL min, DCELL max,
                             FILE *fp, int perc, ColorFormat clr_frmt)

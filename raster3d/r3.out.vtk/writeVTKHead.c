@@ -7,11 +7,8 @@
  *                 27 Feb 2006 Berlin
  * PURPOSE:      Converts 3D raster maps (RASTER3D) into the VTK-Ascii format
  *
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -30,7 +27,7 @@
 /* Writes the structured points Header ************************************* */
 
 /* ************************************************************************* */
-void write_vtk_structured_point_header(FILE *fp, char *vtkFile UNUSED,
+void write_vtk_structured_point_header(FILE *fp, char *vtkFile G_UNUSED,
                                        RASTER3D_Region region, int dp,
                                        double scale)
 {
@@ -94,7 +91,7 @@ void write_vtk_structured_point_header(FILE *fp, char *vtkFile UNUSED,
 /* Writes the strcutured grid header **************************************** */
 
 /* ************************************************************************* */
-void write_vtk_structured_grid_header(FILE *fp, char *vtkFile UNUSED,
+void write_vtk_structured_grid_header(FILE *fp, char *vtkFile G_UNUSED,
                                       RASTER3D_Region region)
 {
     G_debug(
@@ -117,7 +114,7 @@ void write_vtk_structured_grid_header(FILE *fp, char *vtkFile UNUSED,
 /* Writes the unstrcutured grid header ************************************* */
 
 /* ************************************************************************* */
-void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile UNUSED,
+void write_vtk_unstructured_grid_header(FILE *fp, char *vtkFile G_UNUSED,
                                         RASTER3D_Region region)
 {
     G_debug(3, "write_vtk_unstructured_grid_header: Writing "

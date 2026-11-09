@@ -3,10 +3,8 @@
 
    \brief OGSF library - loading and manipulating point sets (lower level)
 
-   (C) 1999-2008, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 1999-2008, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL, GMSL/University of Illinois (December 1993)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -212,7 +210,7 @@ void gpd_obj(geosurf *gs, gvstyle *style, Point3 pt)
    \return 0 on failure
    \return 1 on success
  */
-int gpd_2dsite(geosite *gp, geosurf *gs, int do_fast UNUSED)
+int gpd_2dsite(geosite *gp, geosurf *gs, int do_fast G_UNUSED)
 {
     float site[4], konst;
     int src, check;
@@ -309,7 +307,7 @@ int gpd_2dsite(geosite *gp, geosurf *gs, int do_fast UNUSED)
    \return 0 on success
    \return 1 on failure
  */
-int gpd_3dsite(geosite *gp, float xo, float yo, int do_fast UNUSED)
+int gpd_3dsite(geosite *gp, float xo, float yo, int do_fast G_UNUSED)
 {
     float site[4], tz;
     int check;

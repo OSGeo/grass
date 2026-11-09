@@ -1,5 +1,6 @@
 #include <grass/config.h>
 
+#include <inttypes.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
@@ -597,7 +598,7 @@ void setup_maps(void)
         setup_map(&maps[i]);
 }
 
-void get_map_row(int idx, int mod, int depth UNUSED, int row, int col,
+void get_map_row(int idx, int mod, int depth G_UNUSED, int row, int col,
                  void *buf, int res_type)
 {
     CELL *ibuf;
@@ -770,7 +771,7 @@ void create_history(const char *dst, expression *e)
     if (seeded) {
         char buf[RECORD_LEN];
 
-        snprintf(buf, sizeof(buf), "random seed = %ld", seed_value);
+        snprintf(buf, sizeof(buf), "random seed = %" PRId64, seed_value);
         Rast_append_history(&hist, buf);
     }
 

@@ -1,6 +1,6 @@
 #define MAX_CHAR_SIZE 1000 /* replace by value from ODBC */
 #define DB_MSG        800  /* max length message for report_error() */
-#define OD_MSG        500 /* max length of message returned by SQLGetDiagRec() */
+#define OD_MSG 500 /* max length of message returned by SQLGetDiagRec() */
 
 /* cursors */
 typedef struct _cursor {

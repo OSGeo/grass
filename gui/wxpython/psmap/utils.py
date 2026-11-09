@@ -9,9 +9,9 @@ Classes:
  - utils::Rect2DPS
  - utils::UnitConversion
 
-(C) 2012 by Anna Kratochvilova, and the GRASS Development Team
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2012 Anna Kratochvilova
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
@@ -310,20 +310,20 @@ def ComputeSetRegion(self, mapDict, env):
         if not hasattr(self, "unitConv"):
             self.unitConv = UnitConversion(self)
 
-        fromM = 1
+        from_meters = 1
         if projInfo()["proj"] != "xy":
-            fromM = float(projInfo()["meters"])
+            from_meters = float(projInfo()["meters"])
         rectHalfInch = (mapDict["rect"].width / 2, mapDict["rect"].height / 2)
         rectHalfMeter = (
             self.unitConv.convert(
                 value=rectHalfInch[0], fromUnit="inch", toUnit="meter"
             )
-            / fromM
+            / from_meters
             / scale,
             self.unitConv.convert(
                 value=rectHalfInch[1], fromUnit="inch", toUnit="meter"
             )
-            / fromM
+            / from_meters
             / scale,
         )
 

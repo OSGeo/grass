@@ -85,7 +85,7 @@ int seg_address_slow(const SEGMENT *SEG, off_t row, off_t col, int *n,
     /* for simple arrays */
     else {
         *n = col / SEG->scols;
-        *index = col - *n * SEG->scols;
+        *index = col - (off_t)*n * SEG->scols;
     }
     *index *= SEG->len;
 

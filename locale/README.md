@@ -1,24 +1,14 @@
-# HOWTO translate GRASS GIS messages
+# Translation Technical Details
 
-## Where to translate user message
+For instructions on how to contribute translations, please see the
+[Translations section in CONTRIBUTING.md](../CONTRIBUTING.md#translations).
 
-Translators work in <https://weblate.osgeo.org/projects/grass-gis/>.
-Messages translated in Weblate then will be automatically submitted to the
-GRASS GIS source repo as pull requests.
+## Technical notes for developers
 
-If you have any difficulties please ask for help
-on the GRASS development mailing list `grass-dev lists.osgeo.org`
-(subscribe at <https://lists.osgeo.org/mailman/listinfo/grass-dev>). Your
-willingness, time, and effort translating are valuable.
+Translations from Weblate are automatically submitted to the GRASS source repository
+as pull requests.
 
-Note that GRASS must be configured with `--with-nls` and (re)compiled
-to make use of the translated messages.
+GRASS must be configured with `--with-nls` and recompiled to use translated messages.
+Updating message catalogs requires a Unix-like system with `gettext` installed.
 
-**Please help us translate all the GRASS messages!!**
-
-## Notes
-
-GRASS GIS translation portal: <https://weblate.osgeo.org/projects/grass-gis/>
-
-Updating the message catalogs currently only works on
-unix-like systems and requires "gettext".
+**Translation portal**: <https://weblate.osgeo.org/projects/grass-gis/>

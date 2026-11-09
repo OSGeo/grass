@@ -6,11 +6,8 @@
 
    \author Paul Kelly <paul-grass stjohnspoint.co.uk>
 
-   (C) 2003-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 2003-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <unistd.h>
@@ -232,7 +229,7 @@ struct ellps_list *read_ellipsoid_table(int fatal)
     struct ellps_list *current = NULL, *outputlist = NULL;
     double a, e2, rf;
 
-    snprintf(file, sizeof(file), "%s%s", G_gisbase(), ELLIPSOIDTABLE);
+    snprintf(file, sizeof(file), "%s%s", G_etc_dir(), ELLIPSOIDTABLE);
     fd = fopen(file, "r");
 
     if (!fd) {

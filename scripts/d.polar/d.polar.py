@@ -11,11 +11,8 @@
 #               all cells in the map. If one or many of them are NULL (no data),
 #               the figure will not reach the outer circle. The vector inside
 #               indicates the prevalent direction.
-# COPYRIGHT:    (C) 2006,2008 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2006,2008 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -237,7 +234,7 @@ def plot_eps(psout):
     ##########
     outf = open(psout, "w")
 
-    prolog = os.path.join(os.environ["GISBASE"], "etc", "d.polar", "ps_defs.eps")
+    prolog = os.path.join(os.environ["GRASS_ETCDIR"], "d.polar", "ps_defs.eps")
     inf = open(prolog)
     shutil.copyfileobj(inf, outf)
     inf.close()

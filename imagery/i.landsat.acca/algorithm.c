@@ -2,10 +2,9 @@
  *
  *  AUTHOR:    E. Jorge Tizado, Spain 2010
  *
- *  COPYRIGHT: (c) 2010 E. Jorge Tizado
- *             This program is free software under the GNU General Public
- *             License (>=v2). Read the file COPYING that comes with GRASS
- *             for details.
+ *  SPDX-FileCopyrightText: 2010 E. Jorge Tizado
+ *  SPDX-FileCopyrightText: GRASS Development Team
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdio.h>
@@ -37,7 +36,7 @@
 #define KMAX     3
 #define KMIN     4
 
-/* re-use value */
+/* reuse value */
 #define KLOWER   0
 #define KUPPER   1
 #define MEAN     2
@@ -132,7 +131,7 @@ void acca_algorithm(Gfile *out, Gfile band[], int single_pass, int with_shadow,
               signa[KMEAN]);
     G_message(_("** Minimum: %.2lf K"), signa[KMIN]);
 
-    /* WARNING: re-use of the variable 'value' with new meaning */
+    /* WARNING: reuse of the variable 'value' with new meaning */
 
     /* step 14 */
 

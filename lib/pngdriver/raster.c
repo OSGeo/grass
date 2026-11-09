@@ -3,10 +3,9 @@
 
    \brief GRASS png display driver - draw raster
 
-   (C) 2003-2014 by Per Henrik Johansen and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2003-2014 Per Henrik Johansen
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Per Henrik Johansen (original contributor)
    \author Glynn Clements
@@ -108,7 +107,7 @@ void PNG_begin_raster(int mask, int s[2][2], double fd[2][2])
 
    \return next row
  */
-int PNG_raster(UNUSED int n, int row, const unsigned char *red,
+int PNG_raster(G_UNUSED int n, int row, const unsigned char *red,
                const unsigned char *grn, const unsigned char *blu,
                const unsigned char *nul)
 {

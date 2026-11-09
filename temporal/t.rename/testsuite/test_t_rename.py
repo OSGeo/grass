@@ -1,8 +1,6 @@
 """Test t.register
-(C) 2014-2023 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014-2023 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 @author Soeren Gebbert
         Ported to Python by Stefan Blumentrath
 
@@ -140,7 +138,7 @@ class TestRenameSTDS(TestCase):
         print(gs.read_command("t.info", type="strds", input="precip_abs6"))
 
         self.assertEqual(strds.metadata.get_description(), "This is the 3 test strds")
-        self.assertTrue("t.rename" in strds.metadata.get_command())
+        self.assertIn("t.rename", strds.metadata.get_command())
 
     def test_rename_with_overwrite(self):
         """Test renaming a space time raster dataset while overwriting
@@ -159,7 +157,7 @@ class TestRenameSTDS(TestCase):
         print(gs.read_command("t.info", type="strds", input="precip_abs2"))
 
         self.assertEqual(strds.metadata.get_description(), "This is the 1 test strds")
-        self.assertTrue("t.rename" in strds.metadata.get_command())
+        self.assertIn("t.rename", strds.metadata.get_command())
 
     def test_fail_overwrite_without_flag(self):
         """Test that renaming a space time raster dataset fails if the

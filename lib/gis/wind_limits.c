@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Projection limit functions.
  *
- * (C) 2001-2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author GRASS Development Team
  *
@@ -29,7 +27,7 @@
  * \return 1 no change
  * \return 0 changed
  */
-int G_limit_east(double *east UNUSED, int proj UNUSED)
+int G_limit_east(double *east G_UNUSED, int proj G_UNUSED)
 {
     return 1;
 }
@@ -48,7 +46,7 @@ int G_limit_east(double *east UNUSED, int proj UNUSED)
  * \return 1 no change
  * \return 0 changed
  */
-int G_limit_west(double *west UNUSED, int proj UNUSED)
+int G_limit_west(double *west G_UNUSED, int proj G_UNUSED)
 {
     return 1;
 }

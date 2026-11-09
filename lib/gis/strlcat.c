@@ -53,6 +53,8 @@ static size_t G__strlcat(char *restrict dst, const char *restrict src,
  *         created (the initial length of dst plus the length of src, not
  *         including the terminating NUL character). If the return value
  *         is >= dsize, truncation occurred.
+ *
+ * \since version 8.5
  */
 size_t G_strlcat(char *dst, const char *src, size_t dsize)
 {

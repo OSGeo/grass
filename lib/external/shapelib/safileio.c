@@ -6,13 +6,14 @@
  *
  ******************************************************************************
  * Copyright (c) 2007, Frank Warmerdam
+ * Copyright (c) 2016-2024, Even Rouault <even dot rouault at spatialys.com>
  *
  * SPDX-License-Identifier: MIT OR LGPL-2.0-or-later
  ******************************************************************************
  *
  */
 
-#include "shapefil.h"
+#include "shapefil_private.h"
 
 #include <assert.h>
 #include <math.h>
@@ -100,7 +101,7 @@ void SASetupDefaultHooks(SAHooks *psHooks)
 
     psHooks->Error = SADError;
     psHooks->Atof = atof;
-    psHooks->pvUserData = NULL;
+    psHooks->pvUserData = SHPLIB_NULLPTR;
 }
 
 #ifdef SHPAPI_WINDOWS
@@ -176,5 +177,6 @@ void SASetupUtf8Hooks(SAHooks *psHooks)
 
     psHooks->Error = SADError;
     psHooks->Atof = atof;
+    psHooks->pvUserData = SHPLIB_NULLPTR;
 }
 #endif

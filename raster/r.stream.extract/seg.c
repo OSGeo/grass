@@ -5,7 +5,7 @@
 
 int seg_open(SSEG *sseg, GW_LARGE_INT nrows, GW_LARGE_INT ncols, int row_in_seg,
              int col_in_seg, int nsegs_in_memory, int size_struct,
-             int fill UNUSED)
+             int fill G_UNUSED)
 {
     char *filename;
     int errflag;

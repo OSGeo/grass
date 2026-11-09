@@ -458,24 +458,24 @@ char **I_sort_signatures_by_semantic_label(struct Signature *S,
 
     /* Clean up */
     for (unsigned int j = R->nfiles; j--;)
-        free(group_semantic_labels[j]);
-    free(group_semantic_labels);
-    free(new_order);
-    free(match1);
-    free(match2);
-    free(new_semantic_labels);
+        G_free(group_semantic_labels[j]);
+    G_free(group_semantic_labels);
+    G_free(new_order);
+    G_free(match1);
+    G_free(match2);
+    G_free(new_semantic_labels);
     for (unsigned int c = S->nsigs; c--;) {
-        free(new_means[c]);
+        G_free(new_means[c]);
         for (unsigned int i = S->nbands; i--;)
-            free(new_vars[c][i]);
-        free(new_vars[c]);
+            G_free(new_vars[c][i]);
+        G_free(new_vars[c]);
     }
-    free(new_means);
-    free(new_vars);
+    G_free(new_means);
+    G_free(new_vars);
 
     if (mc1 || mc2) {
         return mismatches;
     }
-    free(mismatches);
+    G_free(mismatches);
     return NULL;
 }

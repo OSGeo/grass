@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2011-2013 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2011-2013 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -57,7 +55,7 @@ static int remap_line(const struct Plus_head *, off_t, int);
 
 #define NOPG_UNUSED
 #else
-#define NOPG_UNUSED UNUSED
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 /*!
@@ -1759,7 +1757,7 @@ int Vect__load_map_lines_pg(struct Map_info *Map)
 
    Print out NOTICE message only on verbose level
  */
-void notice_processor(void *arg UNUSED, const char *message)
+void notice_processor(void *arg G_UNUSED, const char *message)
 {
     if (G_verbose() > G_verbose_std()) {
         fprintf(stderr, "%s", message);

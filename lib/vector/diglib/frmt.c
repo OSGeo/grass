@@ -6,11 +6,8 @@
  *
  * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
  *
- * COPYRIGHT:    (C) 2001, 2012 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001, 2012 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -151,8 +148,9 @@ int dig_read_frmt_ascii(FILE *dascii, struct Format_info *finfo)
  *  Returns: 0 OK
  *           -1 on error
  */
-int dig_write_frmt_ascii(FILE *dascii UNUSED, struct Format_info *finfo UNUSED,
-                         int format UNUSED)
+int dig_write_frmt_ascii(FILE *dascii G_UNUSED,
+                         struct Format_info *finfo G_UNUSED,
+                         int format G_UNUSED)
 {
     G_debug(3, "dig_write_frmt_ascii()");
 

@@ -14,9 +14,6 @@ to be analyzed.
 
 ## NOTES
 
-The *i.group* options are only available for imagery map layers in the
-current LOCATION_NAME.
-
 Subgroup names may not contain more than 12 characters.
 
 ## EXAMPLES

@@ -7,13 +7,9 @@
  * elev color) \author modified by Brown in September 1999 (fix for Timestamps)
  * \author modified by Mitasova in Nov. 1999 (write given tension into hist)
  *
- * \copyright
- * (C) 1992-2006 by Helena Mitasova and the GRASS Development Team
- *
- * \copyright
- * This program is free software under the
- * GNU General Public License (>=v2).
- * Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1992-2006 Helena Mitasova
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <stdio.h>
@@ -59,8 +55,8 @@ int IL_output_2d(struct interp_params *params,
                  double zmin, double zmax, /*!< min,max input z-values */
                  double zminac, double zmaxac, double c1min,
                  double c1max, /*!< min,max interpolated values */
-                 double c2min, double c2max, double gmin UNUSED,
-                 double gmax UNUSED,
+                 double c2min, double c2max, double gmin G_UNUSED,
+                 double gmax G_UNUSED,
                  double ertot, /*!< total interpolating func. error */
                  char *input,  /*!< input file name */
                  double dnorm, /*!< normalization factor */

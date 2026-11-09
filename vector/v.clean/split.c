@@ -6,12 +6,8 @@
  *
  * PURPOSE:      Split lines - helper tool for breaking lines
  *
- * COPYRIGHT:    (C) 2012 by the GRASS Development Team
- *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2012 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************/
 #include <stdlib.h>
@@ -91,7 +87,7 @@ int split_lines(struct Map_info *Map, int otype, struct Map_info *Err)
 /* split a line using split_distance
  * returns number of split points */
 int split_line(struct Map_info *Map, int otype, struct line_pnts *Points,
-               struct line_cats *Cats, struct Map_info *Err UNUSED,
+               struct line_cats *Cats, struct Map_info *Err G_UNUSED,
                double split_distance)
 {
     int i, n_segs = 0;

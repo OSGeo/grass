@@ -1,10 +1,8 @@
 """
 Map layer and space time dataset classes
 
-(C) 2012-2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -122,8 +120,8 @@ class RasterDataset(AbstractMapDataset):
         >>> rmap.metadata.print_info()
          +-------------------- Metadata information ----------------------------------+
          | Datatype:................... CELL
-         | Number of columns:.......... 8
-         | Number of rows:............. 12
+         | Number of columns:.......... 12
+         | Number of rows:............. 8
          | Number of cells:............ 96
          | North-South resolution:..... 10.0
          | East-west resolution:....... 10.0
@@ -311,6 +309,9 @@ class RasterDataset(AbstractMapDataset):
 
         :return: True if success, False on error
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.write_raster_timestamp(
             self.get_name(), self.get_mapset(), self._convert_timestamp()
         )
@@ -343,6 +344,9 @@ class RasterDataset(AbstractMapDataset):
 
         :return: True if success, False on error
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.remove_raster_timestamp(self.get_name(), self.get_mapset())
 
         if check == -1:
@@ -378,10 +382,14 @@ class RasterDataset(AbstractMapDataset):
         """Write the semantic label of this map into the map metadata in
         the GRASS file system based spatial database.
 
-        Internally the libgis API functions are used for writing
+        Internally the libgis API functions are used for writing. Writing is
+        only possible if the map is in the current mapset (not read-only).
 
         :return: True if success, False on error
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.write_raster_semantic_label(
             self.get_name(), self.get_mapset(), self.metadata.get_semantic_label()
         )
@@ -472,7 +480,8 @@ class RasterDataset(AbstractMapDataset):
         :param str semantic_label: semantic label (eg. S2_1)
         """
         self.metadata.set_semantic_label(semantic_label)
-        self.write_semantic_label_to_grass()
+        if not self.get_readonly():
+            self.write_semantic_label_to_grass()
 
 
 ###############################################################################
@@ -544,8 +553,8 @@ class Raster3DDataset(AbstractMapDataset):
         >>> r3map.metadata.print_info()
          +-------------------- Metadata information ----------------------------------+
          | Datatype:................... DCELL
-         | Number of columns:.......... 8
-         | Number of rows:............. 12
+         | Number of columns:.......... 12
+         | Number of rows:............. 8
          | Number of cells:............ 960
          | North-South resolution:..... 10.0
          | East-west resolution:....... 10.0
@@ -747,6 +756,9 @@ class Raster3DDataset(AbstractMapDataset):
 
            :return: True if success, False on error
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.write_raster3d_timestamp(
             self.get_name(), self.get_mapset(), self._convert_timestamp()
         )
@@ -776,13 +788,17 @@ class Raster3DDataset(AbstractMapDataset):
 
         :return: True if success, False on error
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.remove_raster3d_timestamp(
             self.get_name(), self.get_mapset()
         )
 
         if check == -1:
             self.msgr.error(
-                _("Unable to remove timestamp for raster map <%s>") % (self.get_name())
+                _("Unable to remove timestamp for 3D raster map <%s>")
+                % (self.get_name())
             )
             return False
 
@@ -1085,6 +1101,9 @@ class VectorDataset(AbstractMapDataset):
 
         Internally the libgis API functions are used for writing
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.write_vector_timestamp(
             self.get_name(),
             self.get_mapset(),
@@ -1114,13 +1133,14 @@ class VectorDataset(AbstractMapDataset):
 
         Internally the libgis API functions are used for removal
         """
+        if self.get_readonly():
+            return False
+
         check = self.ciface.remove_vector_timestamp(self.get_name(), self.get_mapset())
 
         if check == -1:
             self.msgr.error(
-                _("Unable to remove timestamp for vector map <%s>").format(
-                    self.get_name()
-                )
+                _("Unable to remove timestamp for vector map <%s>") % self.get_name()
             )
             return False
 

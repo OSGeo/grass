@@ -3,11 +3,8 @@
  * MODULE:       orthophoto rectification program
  * AUTHOR(S):    Mike Baba of DBA Systems, Fairfax, VA for CERL
  * PURPOSE:      ortho-rectification of aerial photographs
- * COPYRIGHT:    (C) 1999 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -612,7 +609,7 @@ int I_compute_ortho_equations(struct Ortho_Control_Points *cpz,
 /* given ground coordinates (e1,n1,z1) and the solution from above */
 /* compute the photo coordinate (e2,n2) position */
 int I_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
-                double *z2 UNUSED, struct Ortho_Camera_File_Ref *cam_info,
+                double *z2 G_UNUSED, struct Ortho_Camera_File_Ref *cam_info,
                 double XC, double YC, double ZC, MATRIX M)
 {
     MATRIX UVW, XYZ;
@@ -684,7 +681,7 @@ int I_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
 /* and the solution from I_compute_ortho_equation */
 /* compute ground position (e2,n2) */
 int I_inverse_ortho_ref(double e1, double n1, double z1, double *e2, double *n2,
-                        double *z2 UNUSED,
+                        double *z2 G_UNUSED,
                         struct Ortho_Camera_File_Ref *cam_info, double XC,
                         double YC, double ZC, MATRIX M)
 {

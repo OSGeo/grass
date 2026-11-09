@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 # utilities for generating HTML indices
-# (C) 2003-2025 Markus Neteler and the GRASS Development Team
+# SPDX-FileCopyrightText: 2003-2026 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Authors:
 #   Markus Neteler
 #   Glynn Clements
@@ -81,7 +83,7 @@ def replace_file(name):
             os.remove(name)
         except OSError:
             pass
-        os.rename(temp, name)
+        Path(temp).rename(name)
 
 
 def copy_file(src, dst):

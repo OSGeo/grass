@@ -76,8 +76,8 @@ elevation_type *fill_depression(AMI_STREAM<boundaryType> *boundaryStr,
 
 /************************************************************/
 elevation_type *
-ext_fill_depression(AMI_STREAM<boundaryType> *boundaryStr UNUSED,
-                    cclabel_type maxWatersheds UNUSED)
+ext_fill_depression(AMI_STREAM<boundaryType> *boundaryStr G_UNUSED,
+                    cclabel_type maxWatersheds G_UNUSED)
 {
     G_fatal_error(
         _("Fill_depressions do not fit in memory. Not implemented yet"));

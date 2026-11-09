@@ -8,11 +8,9 @@
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
 #
-# COPYRIGHT:    (C) 2009-2025 by Markus Neteler, and the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2009-2025 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # TODO:         - update temporary workaround of using grass7 subdir of addon-repo, see
 #                 https://github.com/OSGeo/grass-addons/issues/528
@@ -291,13 +289,13 @@ class GitAdapter:
         try:
             gs.call([self._git], stdout=PIPE)
         except OSError:
-            gs.fatal(_("Could not found Git. Please install it."))
+            gs.fatal(_("Could not find Git. Please install it."))
 
     def __check_permissions(self):
         """"""
         # Create working directory if it does not exist
         self.working_directory.mkdir(parents=True, exist_ok=True)
-        # Check pemissions in case he workdir existed
+        # Check permissions in case the workdir exists
         if not os.access(self.working_directory, os.W_OK):
             gs.fatal(
                 _("Cannot write to working directory {}.").format(
@@ -477,7 +475,7 @@ def replace_shebang_win(python_file):
             out_file.write(new_line)
 
     os.remove(python_file)  # remove original
-    os.rename(tmp_name, python_file)  # rename temp to original name
+    Path(tmp_name).rename(python_file)  # rename temp to original name
 
 
 def urlretrieve(url, filename, *args, **kwargs):
@@ -1188,7 +1186,9 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
         ret1 = 0
         new_modules_ext = None
         if sys.platform == "win32":
-            ret1, new_modules_ext, new_files_ext = install_extension_win(extension)
+            ret1, new_modules_ext, new_files_ext = install_extension_win(
+                extension, url=url
+            )
         else:
             (
                 ret1,
@@ -1218,10 +1218,10 @@ def install_extension(source=None, url=None, xmlurl=None, branch=None):
 
         # update modules metadata file
         gs.message(_("Updating extension modules metadata file..."))
-        install_module_xml(new_modules)
+        install_module_xml(new_modules, source=source)
 
         for module in new_modules:
-            update_manual_page(module)
+            update_manual_page(module, source=source)
 
         gs.message(
             _("Installation of <%s> successfully finished") % options["extension"]
@@ -1495,7 +1495,7 @@ def filter_multi_addon_addons(mlist):
     return mlist
 
 
-def install_module_xml(mlist):
+def install_module_xml(mlist, source=None):
     """Update XML files with metadata about installed modules and toolbox
     of an private addon
 
@@ -1509,7 +1509,9 @@ def install_module_xml(mlist):
     # read XML file
     tree = etree_fromfile(xml_file)
 
-    if sys.platform != "win32":
+    # Identifying multi-addon addons queries the official repository over
+    # the network, so skip it for other sources (e.g. a local directory).
+    if sys.platform != "win32" and source in {"official", "official_fork"}:
         # Filter multi-addon addons
         if len(mlist) > 1:
             mlist = filter_multi_addon_addons(
@@ -1590,21 +1592,62 @@ def install_module_xml(mlist):
     return mlist
 
 
-def install_extension_win(name):
-    """Install extension on MS Windows"""
+def get_addons_base_url_override():
+    """Return the user-configured addon server base URL, or None.
+
+    Precedence (highest first):
+      1. ``GRASS_ADDONS_BASE_URL`` shell environment variable. The more
+         specific, transient setting; wins so that CI jobs, system
+         administrators and one-off shell sessions can override a persistent
+         configuration without having to unset it first.
+      2. ``ADDONS_BASE_URL`` set via ``g.gisenv set="ADDONS_BASE_URL=..."``.
+         Persists across GRASS sessions and is settable from inside GRASS
+         (including the GUI variables panel).
+
+    Any trailing slash is removed. Returns None when neither is set.
+    """
+    value = os.environ.get("GRASS_ADDONS_BASE_URL") or gs.gisenv().get(
+        "ADDONS_BASE_URL"
+    )
+    return value.rstrip("/") if value else None
+
+
+def addons_server_url(base):
+    """Build the versioned addon directory URL under server root *base*.
+
+    *base* must have no trailing slash; the result has none either, so a file
+    name is appended with a single separator (e.g. ``f"{url}/{name}.zip"``).
+    """
+    return (
+        f"{base}/grass{VERSION[0]}{VERSION[1]}/addons/"
+        f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
+    )
+
+
+def install_extension_win(name, url=None):
+    """Install extension on MS Windows."""
     gs.message(
         _("Downloading precompiled GRASS Addons <{}>...").format(options["extension"])
     )
 
-    # build base URL
-    base_url = (
-        "http://wingrass.fsv.cvut.cz/"
-        f"grass{VERSION[0]}{VERSION[1]}/addons/"
-        f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
-    )
+    # Resolve the final ZIP URL.
+    if url:
+        if not url.lower().endswith(".zip"):
+            gs.fatal(
+                _(
+                    "On MS-Windows, the 'url' option must point to a ZIP file "
+                    "(URL ending in '.zip'). To use a different addon server, "
+                    "set the ADDONS_BASE_URL gisenv variable or the "
+                    "GRASS_ADDONS_BASE_URL environment variable instead."
+                )
+            )
+        zip_url = url
+    else:
+        base = get_addons_base_url_override() or "http://wingrass.fsv.cvut.cz"
+        zip_url = f"{addons_server_url(base)}/{name}.zip"
 
     # resolve ZIP URL
-    source, url = resolve_source_code(url="{0}/{1}.zip".format(base_url, name))
+    source, url = resolve_source_code(url=zip_url)
 
     # to hide non-error messages from subprocesses
     outdev = open(os.devnull, "w") if gs.verbosity() <= 2 else sys.stdout
@@ -1835,19 +1878,12 @@ def extract_tar(name, directory, tmpdir):
         extract_dir = os.path.join(tmpdir, "extract_dir")
         Path(extract_dir).mkdir()
 
-        # Extraction filters were added in Python 3.12,
-        # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
-        # See
-        # https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
-        # and https://peps.python.org/pep-0706/
-        # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
-        # and in Python 3.14, `filter='data'` will be the default
-        if hasattr(tarfile, "data_filter"):
-            tar.extractall(path=extract_dir, filter="data")
-        else:
-            # Remove this when no longer needed
-            gs.warning(_("Extracting may be unsafe; consider updating Python"))
-            tar.extractall(path=extract_dir)
+        # The 'data' extraction filter was added in Python 3.12 and backported
+        # to 3.11.4 (PEP 706). Refuse to extract without it rather
+        # than extracting unsafely.
+        if not hasattr(tarfile, "data_filter"):
+            gs.fatal(_("Extracting may be unsafe; upgrade Python to 3.11.4 or newer"))
+        tar.extractall(path=extract_dir, filter="data")
 
         files = os.listdir(extract_dir)
         move_extracted_files(extract_dir=extract_dir, target_dir=directory, files=files)
@@ -2007,7 +2043,7 @@ def install_extension_std_platforms(name, source, url, branch):
                     # get the module name: project(<module name>)
                     with open(os.path.join(r, "CMakeLists.txt")) as fp:
                         for line in fp:
-                            m = re.match(r"project\((.*)\)", line)
+                            m = re.match(r"project\(\s*(\S+).*\)", line)
                             if m:
                                 try:
                                     modulename = m.group(1)
@@ -2360,6 +2396,7 @@ def remove_extension_std(name, force=False):
         os.path.join(options["prefix"], "bin", name),
         os.path.join(options["prefix"], "scripts", name),
         os.path.join(options["prefix"], "docs", "html", name + ".html"),
+        os.path.join(options["prefix"], "docs", "mkdocs", "source", name + ".md"),
         os.path.join(options["prefix"], "docs", "rest", name + ".txt"),
         os.path.join(options["prefix"], "docs", "man", "man1", name + ".1"),
     ]:
@@ -2433,7 +2470,7 @@ def check_style_file(name):
 
     If the files are missing, a warning is issued.
     """
-    dist_file = os.path.join(os.getenv("GISBASE"), "docs", "html", name)
+    dist_file = os.path.join(os.getenv("GRASS_DOCDIR"), name)
     addons_file = os.path.join(options["prefix"], "docs", "html", name)
 
     try:
@@ -2471,6 +2508,7 @@ def check_dirs():
     """Ensure that the necessary directories in prefix path exist"""
     create_dir(os.path.join(options["prefix"], "bin"))
     create_dir(os.path.join(options["prefix"], "docs", "html"))
+    create_dir(os.path.join(options["prefix"], "docs", "mkdocs", "source"))
     create_dir(os.path.join(options["prefix"], "docs", "rest"))
     check_style_file("grass_logo.png")
     check_style_file("hamburger_menu.svg")
@@ -2484,7 +2522,7 @@ def check_dirs():
 # fix file URI in manual page
 
 
-def update_manual_page(module):
+def update_manual_page(module, source=None):
     """Fix manual page for addons which are at different directory
     than core modules"""
     if module.split(".", 1)[0] == "wx":
@@ -2513,7 +2551,9 @@ def update_manual_page(module):
     # find URIs
     pattern = r"""<a href="([^"]+)">([^>]+)</a>"""
     addons = get_installed_extensions(force=True)
-    if sys.platform != "win32":
+    # Identifying multi-addon addons queries the official repository over
+    # the network, so skip it for other sources (e.g. a local directory).
+    if sys.platform != "win32" and source in {"official", "official_fork"}:
         # Multi-addon
         if len(addons) > 1:
             for a in get_multi_addon_addons_which_install_only_html_man_page():
@@ -2597,11 +2637,19 @@ def resolve_xmlurl_prefix(url, source=None):
     """
     gs.debug("resolve_xmlurl_prefix(url={0}, source={1})".format(url, source))
     if source in {"official", "official_fork"}:
-        # use pregenerated modules XML file
-        # Define branch to fetch from (latest or current version)
-        version_branch = get_version_branch(VERSION[0])
-
-        url = "https://grass.osgeo.org/addons/{}/".format(version_branch)
+        # On MS-Windows, the user can redirect both listing and install
+        # to a custom addon server via the ADDONS_BASE_URL gisenv setting or
+        # the GRASS_ADDONS_BASE_URL env var.
+        # This is only implemented for MS-Windows, so setting this env var
+        # or setting does do anything on other systems.
+        override = get_addons_base_url_override() if sys.platform == "win32" else None
+        if override:
+            url = addons_server_url(override) + "/"
+        else:
+            # use pregenerated modules XML file
+            # Define branch to fetch from (latest or current version)
+            version_branch = get_version_branch(VERSION[0])
+            url = "https://grass.osgeo.org/addons/{}/".format(version_branch)
     # else try to get extensions XMl from SVN repository (provided URL)
     # the exact action depends on subsequent code (somewhere)
 
@@ -2930,7 +2978,7 @@ def main():
     if options["operation"] == "add":
         check_dirs()
         if sys.platform == "win32":
-            install_extension()
+            install_extension(url=original_url)
         else:
             if original_url == "" or flags["o"]:
                 # Query GitHub API only if extension will be downloaded

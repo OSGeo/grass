@@ -5,8 +5,8 @@
 
 #define PI M_PI
 
-double r_net(double bbalb, double ndvi UNUSED, double tempk, double dtair,
-             double e0, double tsw, double doy, double utc UNUSED,
+double r_net(double bbalb, double ndvi G_UNUSED, double tempk, double dtair,
+             double e0, double tsw, double doy, double utc G_UNUSED,
              double sunzangle)
 {
 

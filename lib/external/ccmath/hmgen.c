@@ -17,7 +17,7 @@ void hmgen(Cpx *h, double *ev, Cpx *u, int n)
 
     double e;
 
-    v = (Cpx *)calloc(n * n, sizeof(Cpx));
+    v = (Cpx *)calloc((size_t)n * n, sizeof(Cpx));
     cmcpy(v, u, n * n);
     hconj(v, n);
     for (i = 0, p = v; i < n; ++i) {

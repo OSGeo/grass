@@ -886,7 +886,8 @@ INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.h \
                          *.c \
                          *.cpp \
-                         *.dox
+                         *.dox \
+                         *.dox.md
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
@@ -2257,7 +2258,7 @@ PREDEFINED             = HAVE_GEOS \
                          HAVE_TIFFIO_H \
                          NOPG_UNUSED= \
                          NO_NLS_UNUSED= \
-                         UNUSED=
+                         G_UNUSED=
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The

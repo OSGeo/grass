@@ -18,11 +18,8 @@
  *               input raster map layer whose cell category values
  *               represent cost.
  *
- * COPYRIGHT:    (C) 2006-2015 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006-2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -839,13 +836,13 @@ int main(int argc, char *argv[])
         old_min_cost = costs.cost_out;
         if (!Rast_is_d_null_value(&old_min_cost)) {
             if (pres_cell->min_cost > old_min_cost) {
-                delete (pres_cell);
+                delete(pres_cell);
                 pres_cell = get_lowest();
                 continue;
             }
         }
         if (FLAG_GET(visited, pres_cell->row, pres_cell->col)) {
-            delete (pres_cell);
+            delete(pres_cell);
             pres_cell = get_lowest();
             continue;
         }
@@ -1227,7 +1224,7 @@ int main(int argc, char *argv[])
             break;
 
         ct = pres_cell;
-        delete (pres_cell);
+        delete(pres_cell);
         pres_cell = get_lowest();
 
         if (ct == pres_cell)

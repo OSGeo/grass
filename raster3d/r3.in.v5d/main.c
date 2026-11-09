@@ -83,7 +83,7 @@ static void getParams(char **input, char **output, int *convertNull,
 /*---------------------------------------------------------------------------*/
 
 void convert(char *openFile, RASTER3D_Region *region, int convertNull,
-             double nullValue UNUSED)
+             double nullValue G_UNUSED)
 {
     v5dstruct v5d;
     int time, var;
@@ -117,11 +117,11 @@ void convert(char *openFile, RASTER3D_Region *region, int convertNull,
             res_r = v5d.ProjArgs[2];
             res_c = v5d.ProjArgs[3];
             res_l = v5d.VertArgs[1];
-            region->south = region->north - region->rows * res_r;
+            region->south = region->north - (double)region->rows * res_r;
             region->west = v5d.ProjArgs[1];
-            region->east = region->west + region->cols * res_c;
+            region->east = region->west + (double)region->cols * res_c;
             region->bottom = v5d.VertArgs[0];
-            region->top = region->bottom + region->depths * res_l;
+            region->top = region->bottom + (double)region->depths * res_l;
 
             data1 = (float *)G_malloc(nrncnl * sizeof(float));
             if (!data1)

@@ -14,11 +14,8 @@
 #
 # PURPOSE:	Sharpening of 3 RGB channels using a high-resolution panchromatic channel
 #
-# COPYRIGHT:	(C) 2002-2019 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2002-2019 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # REFERENCES:
 #   Roller, N.E.G. and Cox, S., 1980. Comparison of Landsat MSS and merged MSS/RBV
@@ -779,7 +776,7 @@ def matchhist(original, target, matched):
             for j in arrays[target]:
                 # find the grey value in target that corresponds to the cdf
                 #   closest to the original cdf
-                if j[1] <= i[1] + min_difference and j[1] >= i[1] - min_difference:
+                if i[1] - min_difference <= j[1] <= i[1] + min_difference:
                     # build a reclass rules file from the original grey value and
                     #   corresponding grey value from target
                     out_line = "%d = %d\n" % (i[0], j[0])

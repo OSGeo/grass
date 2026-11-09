@@ -28,7 +28,7 @@ aggregation methods. The specific methods available depend on the
 backend used for aggregation. Two aggregate backends (specified with the
 **aggregate_backend** parameter) are available, *univar* and *sql*. The
 backend is determined automatically based on the requested methods. When
-the function is one of the *SQL* build-in aggregate functions, the *sql*
+the function is one of the *SQL* built-in aggregate functions, the *sql*
 backend is used. Otherwise, the *univar* backend is used.
 
 The default behavior is intended for interactive use and testing. For

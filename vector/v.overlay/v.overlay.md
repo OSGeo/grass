@@ -37,8 +37,16 @@ If the *third* number of the **olayer** option is greater than 0, then
 the categories of **binput** in layer *blayer* are transferred to the
 output layer with the third number.
 
-If **atype**=auto is given than *v.overlay* determines feature type for
-**ainput** from the first found feature.
+If **atype**=auto is given then *v.overlay* determines the feature type
+for **ainput** from the first found feature.
+
+When overlaying two vectors with areas, very small areas can occur in the
+output. This can happen when e.g. one vector is a slightly modified
+version of the other vector (buffered or simplified). These very small
+areas can be removed by setting **minsize** to some value larger 0.
+The value is interpreted as square meters. In order to remove only noise
+from slightly mismatching boundaries, the value of **minsize** should be
+small, e.g. in the range 0.0001 to 1.
 
 ## EXAMPLES
 

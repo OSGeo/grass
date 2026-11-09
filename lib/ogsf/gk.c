@@ -6,12 +6,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL, GMSL/University of Illinois
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -561,8 +557,8 @@ double lin_interp(float dt, float val1, float val2)
 
    \return interval value
  */
-double get_2key_neighbors(int nvk, float time, float range UNUSED,
-                          int loop UNUSED, Keylist *karray[], Keylist **km1,
+double get_2key_neighbors(int nvk, float time, float range G_UNUSED,
+                          int loop G_UNUSED, Keylist *karray[], Keylist **km1,
                           Keylist **kp1)
 {
     int i;

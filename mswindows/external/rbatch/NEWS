@@ -99,7 +99,7 @@ Changes in version 0.4-2
     Place rbatchfilesrc.bat in current directory or %userprofile% (so
     different directories can work off different versions of R, say)
     or same directory as the other batchfiles and it will run it first.
-    Typically rbatchfiles.bat would constain these two lines or similar:
+    Typically rbatchfiles.bat would contain these two lines or similar:
 		set R_HOME=C:\Program Files\R\R-2.7.0
 		set R_TOOLS=C:\Rtools
 

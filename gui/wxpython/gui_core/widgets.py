@@ -36,10 +36,8 @@ Classes:
 @todo:
  - move validators to a separate file gui_core/validators.py
 
-(C) 2008-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2008-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Enhancements by Michael Barton <michael.barton asu.edu>
@@ -781,7 +779,7 @@ class NTCValidator(Validator):
         if self.flag == "DIGIT_ONLY" and chr(key) in string.digits + ".-":
             event.Skip()
             return
-        if not wx.Validator_IsSilent():
+        if not wx.Validator.IsSilent():
             wx.Bell()
         # Returning without calling even.Skip eats the event before it
         # gets to the text control
@@ -1752,7 +1750,7 @@ class ColorTablesComboBox(PictureComboBox):
 
     def _getPath(self, name):
         return os.path.join(
-            os.getenv("GISBASE"), "docs", "html", "colortables", "%s.png" % name
+            os.getenv("GRASS_GRAPHICSDIR"), "colortables", "%s.png" % name
         )
 
 
@@ -1760,9 +1758,7 @@ class BarscalesComboBox(PictureComboBox):
     """ComboBox with barscales for d.barscale."""
 
     def _getPath(self, name):
-        return os.path.join(
-            os.getenv("GISBASE"), "docs", "html", "barscales", name + ".png"
-        )
+        return os.path.join(os.getenv("GRASS_GRAPHICSDIR"), "barscales", name + ".png")
 
 
 class NArrowsComboBox(PictureComboBox):
@@ -1770,7 +1766,7 @@ class NArrowsComboBox(PictureComboBox):
 
     def _getPath(self, name):
         return os.path.join(
-            os.getenv("GISBASE"), "docs", "html", "northarrows", "%s.png" % name
+            os.getenv("GRASS_GRAPHICSDIR"), "northarrows", "%s.png" % name
         )
 
 

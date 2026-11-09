@@ -6,11 +6,8 @@
  * PURPOSE:      Program to manage and print the boundary definitions for the
  *               geographic region.
  *
- * COPYRIGHT:    (C) 2000-2021 by the GRASS Development Team
- *
- *               This program is free software under the GPL (>=v2)
- *               Read the file COPYING that comes with GRASS for
- *               details.
+ * SPDX-FileCopyrightText: 2000-2021 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  ****************************************************************************/
 
 #include <string.h>
@@ -914,7 +911,7 @@ int main(int argc, char *argv[])
     /* grow by number of cells */
     if ((value = parm.grow->answer)) {
         update_file = true;
-        if (sscanf(value, "%i", &pix)) {
+        if (sscanf(value, "%i", &pix) == 1) {
             xs = window.ns_res * pix;
             if (window.north + xs > window.south - xs) {
                 if (G_projection() == PROJECTION_LL &&

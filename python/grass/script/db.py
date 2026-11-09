@@ -9,10 +9,8 @@ Database related functions to be used in Python scripts.
     grass.db_describe(table)
     ...
 
-(C) 2008-2015 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2008-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
@@ -55,8 +53,9 @@ def db_describe(table, env=None, **args):
         args.pop("database")
     if "driver" in args and args["driver"] == "":
         args.pop("driver")
-    s = read_command("db.describe", flags="c", table=table, env=env, **args)
-    if not s:
+    try:
+        s = read_command("db.describe", flags="c", table=table, env=env, **args)
+    except CalledModuleError:
         fatal(_("Unable to describe table <%s>") % table, env=env)
 
     cols = []
