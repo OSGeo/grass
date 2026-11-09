@@ -556,8 +556,9 @@ int main(int argc, char *argv[])
     found = FALSE;
     for (i = 0; i < GDALDatasetGetLayerCount(hDS); i++) {
         Ogr_layer = GDALDatasetGetLayer(hDS, i);
-        Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-        if (G_strcasecmp(OGR_FD_GetName(Ogr_field), options.layer->answer))
+        Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+        if (G_strcasecmp(OGR_FD_GetName(Ogr_featuredefn),
+                         options.layer->answer))
             continue;
 
         found = TRUE;
@@ -686,8 +687,8 @@ int main(int argc, char *argv[])
             }
 
             if (flags.append->answer) {
-                Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-                if (OGR_FD_GetFieldIndex(Ogr_field, GV_KEY_COLUMN) > -1)
+                Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+                if (OGR_FD_GetFieldIndex(Ogr_featuredefn, GV_KEY_COLUMN) > -1)
                     create_field = FALSE;
                 else
                     G_warning(_("New attribute column <%s> added to the table"),
@@ -758,8 +759,8 @@ int main(int argc, char *argv[])
                     continue;
 
                 if (flags.append->answer) {
-                    Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-                    if (OGR_FD_GetFieldIndex(Ogr_field, colname[i]) > -1)
+                    Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+                    if (OGR_FD_GetFieldIndex(Ogr_featuredefn, colname[i]) > -1)
                         /* skip existing fields */
                         continue;
                     else

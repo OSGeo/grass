@@ -19,7 +19,7 @@ int print_coin_hdr(int Conformat)
 {
     char unit_type[20];
     const char *mapset, *location;
-    char north[30], south[30], east[30], west[30];
+    char north[320], south[320], east[320], west[320];
 
     mapset = G_mapset();
     location = G_location();

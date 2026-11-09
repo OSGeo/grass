@@ -1151,7 +1151,7 @@ def set_language(grass_config_dir: StrPath) -> None:
                         os.environ["LC_MESSAGES"] = "C"
                         os.environ["LC_NUMERIC"] = "C"
                         os.environ["LC_TIME"] = "C"
-                        gettext.install("grasslibs", gpath("locale"))
+                        gettext.install("grasslibs", os.environ["GRASS_LOCALEDIR"])
                         sys.stderr.write(
                             "All attempts to enable English language have"
                             " failed. GRASS running with C locale.\n"
@@ -1232,7 +1232,7 @@ def set_language(grass_config_dir: StrPath) -> None:
         del os.environ["LC_ALL"]  # Remove LC_ALL to not override LC_NUMERIC
 
     # From now on enforce the new language
-    gettext.install("grasslibs", gpath("locale"))
+    gettext.install("grasslibs", os.environ["GRASS_LOCALEDIR"])
 
 
 # TODO: the gisrcrc here does not make sense, remove it from load_gisrc
@@ -2292,6 +2292,19 @@ def main() -> None:
             grass_gui = read_gui(gisrc, default_gui)
         # check that the GUI works but only if not doing a batch job
         grass_gui = check_gui(expected_gui=grass_gui)
+        if not use_shell and grass_gui == "text":
+            # Without a shell, the GUI is the only way to interact with the
+            # session, so there is nothing left to start. check_gui() has
+            # already reported why the GUI is not available.
+            fatal(
+                _(
+                    "Neither an interactive terminal nor a graphical user"
+                    " interface is available.\n"
+                    "Run {cmd_name} from a terminal, use --exec to run"
+                    " a command, or use --text to read commands from"
+                    " standard input."
+                ).format(cmd_name=CMD_NAME)
+            )
         # save GUI only if we are not doibg batch job
         save_gui(gisrc, grass_gui)
 
@@ -2480,7 +2493,7 @@ def main() -> None:
             exit_val = shell_process.wait()
             if exit_val != 0:
                 warning(_("Failed to start shell '%s'") % os.getenv("SHELL"))
-        else:
+        elif gui_process:
             gui_process.wait()
 
         # close GUI if running

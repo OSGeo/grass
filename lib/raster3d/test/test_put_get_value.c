@@ -19,6 +19,7 @@
 static int test_put_get_value_dcell(void);
 static int test_put_get_value_fcell(void);
 static int test_put_get_value_resampling(void);
+static int test_get_block_nocache_type(int map_type, int read_type);
 static int test_get_value_region(RASTER3D_Map *map, int cols, int rows,
                                  int depths);
 static int test_resampling_dcell(RASTER3D_Map *map, double north, double east,
@@ -40,6 +41,8 @@ int unit_test_put_get_value(void)
     sum += test_put_get_value_dcell();
     sum += test_put_get_value_fcell();
     sum += test_put_get_value_resampling();
+    sum += test_get_block_nocache_type(DCELL_TYPE, FCELL_TYPE);
+    sum += test_get_block_nocache_type(FCELL_TYPE, DCELL_TYPE);
 
     if (sum > 0)
         G_warning("\n-- raster3d put/get value unit tests failure --");
@@ -588,6 +591,86 @@ int test_get_value_region(RASTER3D_Map *map, int cols, int rows, int depths)
         G_message("Error in Rast3d_get_value_region");
         sum++;
     }
+
+    return sum;
+}
+
+/* *************************************************************** */
+
+/* Read a whole map through Rast3d_get_block() without a tile cache, in a
+ * cell type that differs from the map's own type. The no-cache path reads
+ * each tile in the map's internal type, so its scratch tile has to be
+ * allocated in that type rather than in the requested one. */
+int test_get_block_nocache_type(int map_type, int read_type)
+{
+    int sum = 0;
+    int x, y, z;
+    size_t n;
+    void *block;
+    RASTER3D_Region region;
+    RASTER3D_Map *map = NULL;
+    const char *name = "test_get_block_nocache_type";
+
+    G_message("Testing Rast3d_get_block without cache, %s map read as %s",
+              map_type == DCELL_TYPE ? "DCELL" : "FCELL",
+              read_type == DCELL_TYPE ? "DCELL" : "FCELL");
+
+    Rast3d_get_window(&region);
+    region.bottom = 0.0;
+    region.top = 1000;
+    region.south = 1000;
+    region.north = 8500;
+    region.west = 5000;
+    region.east = 10000;
+    region.rows = 15;
+    region.cols = 10;
+    region.depths = 5;
+    Rast3d_adjust_region(&region);
+
+    map = Rast3d_open_new_opt_tile_size(name, RASTER3D_USE_CACHE_XY, &region,
+                                        map_type, 32);
+    Rast3d_set_window_map(map, &region);
+    for (z = 0; z < region.depths; z++)
+        for (y = 0; y < region.rows; y++)
+            for (x = 0; x < region.cols; x++)
+                Rast3d_put_double(map, x, y, z, x + 10.0 * y + 100.0 * z);
+    if (!Rast3d_close(map)) {
+        G_warning("Unable to close <%s>", name);
+        return 1;
+    }
+
+    map = Rast3d_open_cell_old(name, G_mapset(), &region,
+                               RASTER3D_TILE_SAME_AS_FILE, RASTER3D_NO_CACHE);
+    if (map == NULL) {
+        G_warning("Unable to reopen <%s>", name);
+        return 1;
+    }
+
+    n = (size_t)region.rows * region.cols * region.depths;
+    block = G_malloc(n * Rast3d_length(read_type));
+    Rast3d_get_block(map, 0, 0, 0, region.cols, region.rows, region.depths,
+                     block, read_type);
+
+    for (z = 0; z < region.depths; z++)
+        for (y = 0; y < region.rows; y++)
+            for (x = 0; x < region.cols; x++) {
+                size_t i = ((size_t)z * region.rows + y) * region.cols + x;
+                double expected = x + 10.0 * y + 100.0 * z;
+                double got = read_type == DCELL_TYPE
+                                 ? ((DCELL *)block)[i]
+                                 : (double)((FCELL *)block)[i];
+
+                if (got != expected) {
+                    G_message("Error in Rast3d_get_block at %i %i %i: %g "
+                              "instead of %g",
+                              x, y, z, got, expected);
+                    sum++;
+                }
+            }
+
+    G_free(block);
+    Rast3d_close(map);
+    G_remove("grid3", name);
 
     return sum;
 }

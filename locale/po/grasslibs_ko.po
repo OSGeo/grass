@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-10-31 19:23+0000\n"
 "PO-Revision-Date: 2025-08-23 20:18+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ko/>\n"
@@ -295,7 +295,7 @@ msgstr ""
 msgid "send data: invalid C-type"
 msgstr "자료 보내기: 무효한 C-유형"
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to describe table <%s>"
 msgstr "테이블 <%s>를 설명할 수 없습니다"
 
@@ -687,6 +687,9 @@ msgstr ""
 msgid "Failed to parse string specifier: %s"
 msgstr ""
 
+msgid "String precision is too large"
+msgstr ""
+
 #, c-format
 msgid "Format specifier exceeds the buffer size (%d)"
 msgstr ""
@@ -737,8 +740,22 @@ msgstr ""
 msgid "GRASS needs to be compiled with ZSTD for ZSTD compression"
 msgstr ""
 
+#, fuzzy, c-format
+#| msgid "LZ4 compression error"
+msgid "ZSTD compression bound error %d: %s"
+msgstr "LZ4 압축 오류"
+
+msgid "ZSTD compression bound exceeds supported size"
+msgstr ""
+
 #, c-format
 msgid "ZSTD compression error %d: %s"
+msgstr ""
+
+msgid "ZSTD compressed size exceeds supported size"
+msgstr ""
+
+msgid "ZSTD uncompressed size exceeds supported size"
 msgstr ""
 
 msgid "no description"
@@ -957,6 +974,16 @@ msgstr "G_list: 알려지지 않은 요소 유형"
 msgid "LOCATION <%s> not available"
 msgstr ""
 
+msgid "must be an integer with nothing after it"
+msgstr ""
+
+msgid "must be between -2147483648 and 4294967295"
+msgstr ""
+
+#, c-format
+msgid "Invalid random seed <%s> from %s: %s"
+msgstr ""
+
 #, c-format
 msgid "gettimeofday failed: %s"
 msgstr ""
@@ -965,10 +992,63 @@ msgid "Pseudo-random number generator not seeded"
 msgstr ""
 
 #, c-format
-msgid "Unable to open directory %s"
+msgid "Random number seed %<PRId64> is outside the range from -2147483648 to 4294967295 the generator can use"
 msgstr ""
 
 #, c-format
+msgid "The number of units of a random number layout must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "The number of random numbers a unit draws must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of %<PRId64> units of %<PRId64> draws each is too large (the number of draws must not exceed %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "The most random numbers a unit draws must be positive, not %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of %<PRId64> units of at most %<PRId64> draws each is too large (the number of units times the bound rounded up to odd must not exceed %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "A random number layout of the whole span takes at most %<PRId64> units, not %<PRId64>; a bounded layout serves any number of units"
+msgstr ""
+
+#, c-format
+msgid "Random number unit %<PRId64> is out of range (must be between 0 and %<PRId64>)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (must not be negative)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (a layout of the whole span holds a single batch)"
+msgstr ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (%<PRId64> batch fits into the generator's span)"
+msgid_plural "Random number batch %<PRId64> is out of range (%<PRId64> batches fit into the generator's span)"
+msgstr[0] ""
+
+#, c-format
+msgid "Random number batch %<PRId64> is out of range (no batch fits into the generator's span, only batch 0 can be used)"
+msgstr ""
+
+#, c-format
+msgid "Cannot advance a random number generator by %<PRId64> draws (the number must not be negative)"
+msgstr ""
+
+#, c-format
+msgid "Unable to open directory %s"
+msgstr ""
+
+#, c-format, python-format
 msgid "Location <%s> doesn't exist"
 msgstr ""
 
@@ -1187,6 +1267,9 @@ msgstr ""
 
 #, c-format
 msgid "Unable to create %s file <%s>: %s"
+msgstr ""
+
+msgid "Too many options in rule"
 msgstr ""
 
 msgid "Internal error: option or flag not found"
@@ -1708,6 +1791,14 @@ msgid "Unknown projection"
 msgstr "알려지지 않은 투영"
 
 #, c-format
+msgid "%s= is required"
+msgstr ""
+
+#, c-format
+msgid "Invalid random seed <%s> for %s=: %s"
+msgstr ""
+
+#, c-format
 msgid "Syntax error in cell header, line %d: %s"
 msgstr "셀 헤더, 줄 %d 내에 구문 오류: %s"
 
@@ -2133,11 +2224,11 @@ msgid "GRASS window when view was saved:\n"
 msgstr ""
 
 #, c-format
-msgid " Window saved in \"%s\" is completely outside of current GRASS window."
+msgid "Window saved in \"%s\" is completely outside of current GRASS window."
 msgstr ""
 
 #, c-format
-msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgid "Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
 msgstr ""
 
 msgid "Task already has a worker"
@@ -2501,7 +2592,7 @@ msgstr ""
 msgid "3D raster map <%s> not found"
 msgstr "3차원 래스터 지도 <%s>를 찾을 수 없습니다"
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
 msgstr "3차원 래스터 지도 <%s>를 열 수 없습니다"
 
@@ -3079,11 +3170,6 @@ msgstr "완료."
 msgid "Goodbye from GRASS"
 msgstr "GRASS를 종료합니다"
 
-#, fuzzy
-#| msgid "Please install the GRASS GIS development package"
-msgid "Please install the GRASS development package"
-msgstr "GRASS 개발 패키지를 설치하세요"
-
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr "매개변수 <%s>를 지원하지 않습니다"
@@ -3153,6 +3239,12 @@ msgstr ""
 #| msgid "Starting GRASS GIS..."
 msgid "Starting GRASS..."
 msgstr "GRASS를 시작하는 중입니다..."
+
+#, python-brace-format
+msgid ""
+"Neither an interactive terminal nor a graphical user interface is available.\n"
+"Run {cmd_name} from a terminal, use --exec to run a command, or use --text to read commands from standard input."
+msgstr ""
 
 msgid "Failed to start GRASS, grassdata directory cannot be found or created."
 msgstr ""
@@ -3357,7 +3449,7 @@ msgstr ""
 msgid "Unknown icon marker, using \"sphere\""
 msgstr "알려지지 않은 아이콘 마커, \"sphere\"를 사용합니다"
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to open vector map <%s>"
 msgstr ""
 
@@ -3513,7 +3605,7 @@ msgstr ""
 msgid "Unable to read range of 3D raster map <%s>"
 msgstr ""
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to close 3D raster map <%s>"
 msgstr "3차원 래스터 지도 <%s>를 닫을 수 없습니다"
 
@@ -3977,7 +4069,19 @@ msgid "Error seeking fp raster data file for row %d of <%s>: %s"
 msgstr ""
 
 #, c-format
+msgid "Compressed fp raster row for <%s> is too large"
+msgstr ""
+
+#, c-format
 msgid "Error uncompressing fp raster data for row %d of <%s>: error code %d"
+msgstr ""
+
+#, c-format
+msgid "Invalid raster row offset for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Compressed raster row for <%s> is too large"
 msgstr ""
 
 #, c-format
@@ -3989,11 +4093,19 @@ msgid "Error reading raster data for row %d of <%s>: %s"
 msgstr ""
 
 #, c-format
+msgid "Error reading raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Invalid byte count in raster data for row %d of <%s>"
+msgstr ""
+
+#, c-format
 msgid "Error uncompressing raster data for row %d of <%s>"
 msgstr ""
 
 #, c-format
-msgid "Error reading raster data for row %d of <%s>"
+msgid "Raster row for <%s> is larger than expected"
 msgstr ""
 
 #, c-format
@@ -4006,6 +4118,10 @@ msgstr ""
 
 #, c-format
 msgid "Error reading compressed null data for row %d of <%s>"
+msgstr ""
+
+#, c-format
+msgid "Compressed null data for row %d of <%s> is too large"
 msgstr ""
 
 #, c-format
@@ -4211,6 +4327,9 @@ msgstr ""
 
 #, c-format
 msgid "No null file for <%s>"
+msgstr ""
+
+msgid "Null row is too large to compress"
 msgstr ""
 
 #, c-format
@@ -4800,6 +4919,10 @@ msgstr ""
 msgid "Error reading categories: [%s]"
 msgstr ""
 
+#, c-format
+msgid "Layer number or category number out of range: [%s]"
+msgstr ""
+
 msgid "Unable to copy points"
 msgstr ""
 
@@ -5119,7 +5242,7 @@ msgstr[0] ""
 
 #, c-format
 msgid "One vertex registered"
-msgid_plural "%d vertices registered"
+msgid_plural "%<PRId64> vertices registered"
 msgstr[0] ""
 
 msgid "Building areas..."
@@ -6842,6 +6965,1649 @@ msgstr ""
 msgid "Unknown query tool"
 msgstr "알려지지 않은 질의 도구"
 
+msgid "overwrite an existing mapset"
+msgstr ""
+
+msgid "process ID of the process locking the mapset (a mapset can be automatically unlocked if there is no process with this PID)"
+msgstr ""
+
+#, fuzzy
+msgid "Error creating mapset: {}"
+msgstr "새 GRASS 로케이션/지도세트를 생성하는 중입니다..."
+
+#, python-brace-format
+msgid "Mapset <{mapset}> locked (attempt {try_number}), but will retry in {sleep_time:.2f} seconds..."
+msgstr ""
+
+#, fuzzy
+#| msgid "Path '%s' doesn't exist"
+msgid "Path '{}' doesn't exist"
+msgstr "경로 '%s'가 존재하지 않습니다"
+
+#, fuzzy
+#| msgid "Path '%s' not accessible."
+msgid "Path '{}' not accessible."
+msgstr "경로 '%s'에 접근할 수 없습니다"
+
+#, fuzzy
+#| msgid "You are not the owner of '%s'."
+msgid "You are not the owner of '{}'."
+msgstr "당신은 '%s'의 소유자가 아닙니다"
+
+#, python-brace-format
+msgid "File {file} owned by {user} found."
+msgstr ""
+
+msgid "On the command line, you can force GRASS to start by using the -f flag."
+msgstr ""
+
+msgid "In Python, you can start a session with force_unlock=True."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Selected mapset is currently being used by another GRASS session. {lock_info} Concurrent access to a mapset is not allowed. However, you can either use another mapset within the same project or remove the lock if you are sure that no other session is active.\n"
+"{cli_solution}\n"
+"{python_solution}\n"
+"Make sure you have sufficient access permissions to remove the lock file. You may want to use a process manager to check that no other process is using the mapset."
+msgstr ""
+
+#, python-brace-format
+msgid "Removing lock in the selected mapset: {lock_info}"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Unable to properly access lock file '{name}' or run the lock program.\n"
+"Please resolve this with your system administrator. (Lock program return code: {returncode})"
+msgstr ""
+
+msgid "Provide only path or all three parameters, not two"
+msgstr ""
+
+#, python-brace-format
+msgid "Mapset <{mapset}> doesn't exist in GRASS project <{location}>"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a GRASS Mapset because it is not a directory"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
+msgid "Mapset <{mapset}> or project <{location}> is invalid for an unknown reason"
+msgstr "지도 세트 <{mapset}> 또는 로케이션 <{location}>이 알려지지 않은 이유로 무효합니다"
+
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT mapset is missing"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT is not a directory"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT mapset does not have a DEFAULT_WIND file (default computational region)"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Project <{location_path}> is invalid for an unknown reason"
+msgstr "지도 세트 <{mapset}> 또는 로케이션 <{location}>이 알려지지 않은 이유로 무효합니다"
+
+#, python-brace-format
+msgid "<{location}> looks like a mapset, not a project. Did you mean just <{one_dir_up}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "It looks like <{location}> contains projects. Did you mean to specify one of them?"
+msgstr ""
+
+msgid "Name '{}' is not a valid name for location or mapset. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+msgid "Name '{}' is reserved for direct read access to OGR layers. Please use another name for your mapset."
+msgstr ""
+
+#, python-brace-format
+msgid "Mapset  <{mapset}> already exists. Please consider using another name for your mapset."
+msgstr ""
+
+msgid "Name '{}' is not a valid name for project or mapset. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+#, python-brace-format
+msgid "Project <{location}> already exists. Please consider using another name for your project."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is required for a valid project."
+msgstr "지도 세트 <%s>는 현재 지도 세트가 아닙니다"
+
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is the current mapset."
+msgstr "지도 세트 <%s>는 현재 지도 세트가 아닙니다"
+
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is in use."
+msgstr "지도 세트 <%s>가 존재하지 않습니다."
+
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is owned by a different user."
+msgstr "지도 세트 <%s>가 존재하지 않습니다."
+
+#, fuzzy, python-brace-format
+msgid "Project <{location}> is the current project."
+msgstr "지도 세트 <%s>는 현재 지도 세트가 아닙니다"
+
+#, fuzzy, python-brace-format
+msgid "GRASS database <{grassdb}> is the current database."
+msgstr "지도 세트 <%s>는 현재 지도 세트가 아닙니다"
+
+#, fuzzy
+#| msgid "Unable to create segment file"
+msgid "Unable to create history file {}"
+msgstr "분절 파일을 생성할 수 없습니다"
+
+#, fuzzy
+#| msgid "Unable to find list file <%s>"
+msgid "Unable to read from plain text history file {}"
+msgstr "리스트 파일 <%s>를 찾을 수 없습니다"
+
+msgid "Error decoding content of JSON history file {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to read PNG file"
+msgid "Unable to read from JSON history file {}"
+msgstr "PNG 파일을 읽을 수 없습니다"
+
+#, fuzzy
+#| msgid "Unable to open output file <%s>: %s"
+msgid "Unable to remove entry from plain text history file {}"
+msgstr "출력 파일 <%s>를 열 수 없습니다: %s"
+
+#, fuzzy
+#| msgid "Unable to open output file <%s>: %s"
+msgid "Unable to remove entry from JSON history file {}"
+msgstr "출력 파일 <%s>를 열 수 없습니다: %s"
+
+msgid "Unable to convert plain text history file {} to JSON format"
+msgstr ""
+
+msgid "Unable to add entry to JSON history file {}"
+msgstr ""
+
+msgid "Unable to update entry in JSON history file {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to position file"
+msgid "Unable to copy history file {} to {}"
+msgstr "파일 포인터를 옮길 수 없습니다"
+
+msgid "Mapset PERMANENT cannot be deleted (a whole location can be)"
+msgstr ""
+
+msgid "Mapset PERMANENT cannot be renamed"
+msgstr ""
+
+msgid "Mapset path '{}' needs at least three components"
+msgstr ""
+
+msgid "Provide only path, or path and location, or path, location, and mapset, but not mapset without location"
+msgstr ""
+
+msgid "Parameter path needs to be 'path/to/location/mapset' or location and mapset need to be set"
+msgstr ""
+
+msgid "input='-' must be used when stdin is specified"
+msgstr ""
+
+msgid "stdin must be string or buffer, not PIPE"
+msgstr ""
+
+msgid "stdin must be used when input='-'"
+msgstr ""
+
+msgid "You cannot merge stdout and stderr and not capture them"
+msgstr "표준 출력과 표준 오류를 병합하고 안 잡을 수는 없습니다"
+
+msgid "stdout argument not allowed, it could be overridden"
+msgstr ""
+
+msgid "stderr argument not allowed, it could be overridden"
+msgstr ""
+
+msgid "Invalid duration parameter for writeAvi."
+msgstr ""
+
+#, fuzzy
+#| msgid "Could not write segment file"
+msgid "Could not write avi."
+msgstr "분절 파일을 쓸 수 없었습니다"
+
+msgid "Install PIL or Pillow to use this function"
+msgstr ""
+
+msgid "Install a newer version of PIL or Pillow to use this function (missing ImageOps module)"
+msgstr ""
+
+msgid "Module must begin with 'd_'"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cannot find the executable {0}"
+msgid "Cannot find GRASS module {}"
+msgstr "실행 파일 {0}를 찾을 수 없습니다"
+
+msgid "Neither ipyleaflet nor folium found."
+msgstr ""
+
+msgid "Invalid map backend, use 'folium' or 'ipyleaflet'"
+msgstr ""
+
+msgid "Tile provider <{}> requires an API key, provide it with the API_key parameter"
+msgstr ""
+
+msgid "Tile provider <{}> does not take an API key, ignoring it (if it should take one, update the xyzservices package)"
+msgstr ""
+
+msgid "Click to draw geometries"
+msgstr ""
+
+msgid "Click to show and edit computational region"
+msgstr ""
+
+msgid "Click to query raster and vector maps"
+msgstr ""
+
+#, python-brace-format
+msgid "Region changed to: n={north}, s={south}, e={east}, w={west} nsres={nsres} ewres={ewres}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Name of vector map"
+msgid "New vector map name:"
+msgstr "벡터 지도의 이름"
+
+msgid "Save"
+msgstr ""
+
+msgid "Could not find a raster named {}"
+msgstr ""
+
+msgid "Number of rasters in series must match"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cannot find the executable {0}"
+msgid "Could not find a vector named {}"
+msgstr "실행 파일 {0}를 찾을 수 없습니다"
+
+msgid "Number of vectors in series must match"
+msgstr ""
+
+msgid "Number of names must match number of added layers"
+msgstr ""
+
+#, python-brace-format
+msgid "Mapset {path} is not valid: {reason}"
+msgstr ""
+
+msgid "Dataset {} must be element type 'strds' or 'stvds'"
+msgstr ""
+
+msgid "Could not find space time dataset named {} of type {}"
+msgstr ""
+
+msgid "Date/Time"
+msgstr ""
+
+msgid "Encountered error while running m.proj: {}"
+msgstr ""
+
+msgid "filename must end in '.gif'"
+msgstr ""
+
+msgid "The map is close!"
+msgstr ""
+
+msgid "The self.c_mapinfo pointer must be correctly initiated"
+msgstr ""
+
+#, fuzzy
+msgid "Map <{}> not found in current mapset"
+msgstr "지도 <%s>는 현재 지도 세트 안에 있지 않습니다"
+
+msgid "Parameter patch_backend must be 'r.patch' or 'RasterRow'"
+msgstr ""
+
+msgid "Patching backend 'r.patch' doesn't work for overlap > 0"
+msgstr ""
+
+msgid "Execution of subprocesses was not successful"
+msgstr ""
+
+msgid "The map does not exist, I can't open in 'r' mode"
+msgstr "지도가 존재하지 않습니다, 'r' 모드에서 열 수 없습니다"
+
+#, python-brace-format
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map <%s> not found"
+msgid "Raster type not defined"
+msgstr "래스터 지도 <%s>를 찾을 수 없습니다"
+
+#, python-brace-format
+msgid "Mode type: {0} not supported ('r', 'w','rw')"
+msgstr ""
+
+#, python-format
+msgid "Index out of range: %r."
+msgstr ""
+
+#, python-brace-format
+msgid "Raster map <{0}> already exists. Use overwrite."
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Mapset <%s> does not exist."
+msgid "Raster map <{0}> does not exist"
+msgstr "지도 세트 <%s>가 존재하지 않습니다."
+
+#, fuzzy
+#| msgid "Invalid east field: %s"
+msgid "Invalid semantic label"
+msgstr "무효한 동쪽 필드: %s"
+
+#, python-brace-format
+msgid "Mode type: {0} not supported ('r', 'w')"
+msgstr ""
+
+#, python-brace-format
+msgid "Overwrite type: {0} not supported (True/False)"
+msgstr ""
+
+#, python-brace-format
+msgid "Map name {0} not valid"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Parameter <%s> not supported"
+msgid "Raster type: {0} not supported"
+msgstr "매개변수 <%s>를 지원하지 않습니다"
+
+msgid "Error executing: Rast_get_ith_cat"
+msgstr ""
+
+msgid "Null value detected"
+msgstr "널값이 감지되었습니다."
+
+msgid "Error executing: Rast_set_cat"
+msgstr ""
+
+msgid "Vector doesn't contain points"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to read range of raster <%s>"
+msgid "Unable to read line of feature %i"
+msgstr "래스터 <%s>의 범위를 읽을 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to rename %s"
+msgid "Unable to read area with id %i"
+msgstr "%s의 이름을 바꿀 수 없습니다"
+
+#, fuzzy
+#| msgid "No temp files available: %s"
+msgid "No links available."
+msgstr "유효한 임시 파일이 없습니다: %s"
+
+#, python-brace-format
+msgid "Index out of bounds. The maximum index allowed is {max_link_indx}, the queried index is {indx}"
+msgstr ""
+
+#, python-format
+msgid "Deleting table <%s> which is attached to following map(s):"
+msgstr ""
+
+msgid "You must use the force flag to actually remove it. Exiting."
+msgstr "실제로 제거하기 위해서는 강제 플래그를 사용해야 합니다. 종료합니다."
+
+#, python-format
+msgid "Invalid kind <%s>"
+msgstr "무효한 종류 <%s>"
+
+#, python-format
+msgid "Invalid size <%d>"
+msgstr "무효한 크기 <%d>"
+
+#, python-format
+msgid "Invalid FP size <%d>"
+msgstr "무효한 FP 크기 <%d>"
+
+#, python-format
+msgid "Invalid integer size <%d>"
+msgstr "무효한 정수 크기 <%d>"
+
+#, python-brace-format
+msgid "Cannot find the executable {0}"
+msgstr "실행 파일 {0}를 찾을 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is deprecated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is deprecated in GRASS 7.0 and has been removed in version 7.1."
+msgstr "모듈 <%s>를 실행하기 위해서는 옵션 <%s>의 끝에 언더스코어를 추가해서 파이썬 키위드와의 충돌을 방지해야 합니다. 앞부분의 언더스코어는 GRASS GIS 7.0에서는 추천하지 않으며 버전 7.1부터는 지원하지 않을 것입니다."
+
+#, python-brace-format
+msgid "Module {module} ({code}) failed with non-zero return code {returncode}"
+msgstr ""
+
+#, python-brace-format
+msgid "{message} (Additionally, there was an error: {additional_error})"
+msgstr ""
+
+msgid "Mixing value types. Will try to compare after integer conversion"
+msgstr ""
+
+#, python-format
+msgid "Element type should be \"raster\" and not \"%s\""
+msgstr ""
+
+#, python-format
+msgid "Invalid element '%s'"
+msgstr "무효한 요소 '%s'"
+
+msgid "Unable to list mapsets"
+msgstr "지도 세트를 나열할 수 없습니다"
+
+#, python-brace-format
+msgid "Debug level {0}"
+msgstr "디버그 단계 {0}"
+
+msgid "WARNING: Ignoring unsupported debug level (must be >=0 and <=5): {}\n"
+msgstr ""
+
+#, python-format
+msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
+msgstr "잘못된 파일 이름 <%s>. 'NULL'이거나 '.'로 시작할 수 없습니다."
+
+#, python-format
+msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
+msgid "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be                     provided"
+msgstr "프로그래머 오류: '%(sql)s', '%(filename)s', 또는 '%(table)s'가 반드시 주어져야 합니다"
+
+msgid "Fetching data failed"
+msgstr ""
+
+#, python-brace-format
+msgid "Empty result returned for subgroup <{sg}> in group <{g}>"
+msgstr ""
+
+#, python-brace-format
+msgid "Semantic label missing for raster map {m} in group <{g}>."
+msgstr ""
+
+#, python-brace-format
+msgid "Key {k} from raster map {m} already present in group dictionary.Overwriting existing entry..."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to write history for 3D raster map <%s>"
+msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
+msgstr "3차원 래스터 지도 <%s>의 히스토리를 쓸 수 없습니다"
+
+#, python-format
+msgid "An error occurred while running r.mapcalc with expression: %s"
+msgstr ""
+
+msgid "No data"
+msgstr ""
+
+msgid "color"
+msgstr ""
+
+msgid "label"
+msgstr ""
+
+msgid "value"
+msgstr ""
+
+#, python-format
+msgid "An error occurred while running r3.mapcalc with expression: %s"
+msgstr ""
+
+msgid "Parameter grass_path or GISBASE environmental variable must be set"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Path '%s' doesn't exist"
+msgid "Path '{path}' does not exist"
+msgstr "경로 '%s'가 존재하지 않습니다"
+
+#, python-brace-format
+msgid "Path '{path}' is a file, but a directory is needed"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cleaning up default sqlite database ..."
+msgid "Cleaning up SQLite attribute database..."
+msgstr "기본 sqlite 데이터베이스를 정리하는 중입니다..."
+
+msgid "Cleaning up temporary files..."
+msgstr "임시 파일을 정리하는 중입니다..."
+
+#, python-format
+msgid "Parameter element '%(element)s' not found: '%(value)s'"
+msgstr ""
+
+#, python-format
+msgid "Flag not found: %s"
+msgstr ""
+
+#, python-format
+msgid "Parameter '%(name)s' (%(desc)s) is missing."
+msgstr ""
+
+msgid "<required>"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Unable to fetch interface description for command '<{cmd}>'.\n"
+"\n"
+"Details: <{det}>"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Cannot parse interface description of<{name}> module: {error}"
+msgid "Cannot parse interface description of <{name}> module: {error}"
+msgstr "<{name}> 모듈의 인터페이스 설명을 해석할 수 없습니다: {error}"
+
+#, fuzzy, python-format
+#| msgid "Database connection not defined for layer %d"
+msgid "Database connection not defined for layer %s"
+msgstr "레이어 %d를 위한 데이터베이스 연결이 정의되지 않았습니다"
+
+#, python-format
+msgid "Missing layer %(layer)d in vector map <%(map)s>"
+msgstr ""
+
+msgid "vector_db_select() failed"
+msgstr ""
+
+#, python-brace-format
+msgid "Number of given vector maps ({m}) differs from number of layers ({l})"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"v.what output is not valid JSON format:\n"
+" {ret}"
+msgstr ""
+
+#, python-brace-format
+msgid "Map <{map_name}> of element type '{element}' not found on                             search path"
+msgstr ""
+
+#, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
+msgstr ""
+
+#, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s>"
+msgstr ""
+
+#, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s>"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr "시간 데이터베이스로부터 타입 %(type)s의 자료세트 <%(ds)s>를 삭제할 수 없습니다. 자료세트의 지도 세트가 현재 지도 세트와 일치하지 않습니다"
+
+#, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"
+msgstr ""
+
+#, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
+msgstr ""
+
+#, python-format
+msgid "End time must be greater than start time for %(typ)s map <%(id)s> with layer %(l)s"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Map <%s> has invalid time"
+msgid "Map <%s> has incorrect start time"
+msgstr "지도 <%s>가 무효한 시간을 갖고 있습니다"
+
+#, fuzzy, python-format
+#| msgid "Map <%(id)s> with layer %(l)s has invalid time"
+msgid "Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is greater than end time"
+msgstr "지도 <%(id)s>의 레이어 %(l)s가 무효한 시간을 가지고 있습니다"
+
+#, python-format
+msgid "Map <%s> has incorrect time interval, start time is greater than end time"
+msgstr ""
+
+#, python-format
+msgid "Delete %s dataset <%s> from temporal database"
+msgstr "시간 데이터베이스로부터 %s 자료세트 <%s>를 삭제합니다"
+
+msgid "semantic labels can only be assigned to raster maps"
+msgstr ""
+
+#, python-format
+msgid "Unknown temporal type \"%s\""
+msgstr "알려지지 않은 시간 유형 \"%s\""
+
+#, python-format
+msgid "Wrong granularity: \"%s\""
+msgstr "틀린 세분성: \"%s\""
+
+#, fuzzy, python-format
+#| msgid "Unsupported icon %d"
+msgid "Unsupported temporal unit: %s"
+msgstr "지원하지 않는 아이콘 %d"
+
+#, python-format
+msgid "Created register table <%s> for space time %s  dataset <%s>"
+msgstr ""
+
+#, fuzzy
+#| msgid "Delete space time %s  dataset <%s> from temporal database"
+msgid "The space time datasets must be of the same temporal type"
+msgstr "시간 데이터베이스로부터 시공간 %s 자료세트 <%s>를 삭제합니다"
+
+msgid "The temporal map type of the sample dataset must be interval"
+msgstr ""
+
+msgid "Invalid spatial relation <{}> requested. Only values 'overlaps', 'is_contained', and 'contains' are allowed."
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to describe table <%s>"
+msgid "Unable to get map ids from register table <{}>"
+msgstr "테이블 <%s>를 설명할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgid "Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr "시간 데이터베이스로부터 타입 %(type)s의 자료세트 <%(ds)s>를 삭제할 수 없습니다. 자료세트의 지도 세트가 현재 지도 세트와 일치하지 않습니다"
+
+#, fuzzy, python-format
+#| msgid "Wrong granularity: \"%s\""
+msgid "Wrong granularity format: %s"
+msgstr "틀린 세분성: \"%s\""
+
+#, fuzzy, python-format
+#| msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgid "Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr "시간 데이터베이스로부터 타입 %(type)s의 자료세트 <%(ds)s>를 삭제할 수 없습니다. 자료세트의 지도 세트가 현재 지도 세트와 일치하지 않습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgid "Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr "시간 데이터베이스로부터 타입 %(type)s의 자료세트 <%(ds)s>를 삭제할 수 없습니다. 자료세트의 지도 세트가 현재 지도 세트와 일치하지 않습니다"
+
+msgid "Renaming of space time datasets is not supported for PostgreSQL."
+msgstr ""
+
+#, python-format
+msgid "Delete space time %s  dataset <%s> from temporal database"
+msgstr "시간 데이터베이스로부터 시공간 %s 자료세트 <%s>를 삭제합니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the database does not match the current mapset"
+msgstr "시간 데이터베이스로부터 타입 %(type)s의 자료세트 <%(ds)s>를 삭제할 수 없습니다. 자료세트의 지도 세트가 현재 지도 세트와 일치하지 않습니다"
+
+#, python-format
+msgid "Drop map register table: %s"
+msgstr "지도 등록 테이블을 삭제합니다: %s"
+
+msgid "Error in register table request"
+msgstr "등록 테이블 요청 내에 오류"
+
+#, fuzzy, python-format
+#| msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgid "Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of the database does not match the current mapset"
+msgstr "시간 데이터베이스로부터 타입 %(type)s의 자료세트 <%(ds)s>를 삭제할 수 없습니다. 자료세트의 지도 세트가 현재 지도 세트와 일치하지 않습니다"
+
+msgid "Only a map that was inserted in the temporal database can be registered in a space time dataset"
+msgstr ""
+
+#, python-format
+msgid "Map <%(id)s> with layer %(l)s has invalid time"
+msgstr "지도 <%(id)s>의 레이어 %(l)s가 무효한 시간을 가지고 있습니다"
+
+#, python-format
+msgid "Map <%s> has invalid time"
+msgstr "지도 <%s>가 무효한 시간을 갖고 있습니다"
+
+#, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr ""
+
+#, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Delete space time %s  dataset <%s> from temporal database"
+msgid "Set temporal unit for space time %s dataset <%s> to %s"
+msgstr "시간 데이터베이스로부터 시공간 %s 자료세트 <%s>를 삭제합니다"
+
+#, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr ""
+
+#, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr ""
+
+#, fuzzy
+#| msgid "map <%s> is not in the current mapset"
+msgid "Maps can only registered in a database in the current mapset"
+msgstr "지도 <%s>는 현재 지도 세트 안에 있지 않습니다"
+
+#, fuzzy, python-format
+#| msgid "Map <%(id)s> with layer %(l)s has invalid time"
+msgid "Map <%(map)s> with layer %(l)s is already registered."
+msgstr "지도 <%(id)s>의 레이어 %(l)s가 무효한 시간을 가지고 있습니다"
+
+#, fuzzy, python-format
+#| msgid "Map <%s> has invalid time"
+msgid "Map <%s> is already registered."
+msgstr "지도 <%s>가 무효한 시간을 갖고 있습니다"
+
+#, fuzzy
+#| msgid "map <%s> is not in the current mapset"
+msgid "Maps can only unregistered in a database in the current mapset"
+msgstr "지도 <%s>는 현재 지도 세트 안에 있지 않습니다"
+
+#, python-format
+msgid "Map <%(map)s> with layer %(l)s is not registered in space time dataset <%(base)s>"
+msgstr ""
+
+#, python-format
+msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr "시간 데이터베이스로부터 타입 %(type)s의 자료세트 <%(ds)s>를 삭제할 수 없습니다. 자료세트의 지도 세트가 현재 지도 세트와 일치하지 않습니다"
+
+#, python-format
+msgid "Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgstr ""
+
+#, python-brace-format
+msgid "The temporal framework requires SQLite 3.33 or later to update a space time dataset, but the Python sqlite3 module uses SQLite {version}. Please update SQLite or switch the temporal database to the PostgreSQL backend with t.connect."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Aggregating %s raster maps"
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, python-format
+msgid "Raster map <%(name)s> is already in temporal database, use overwrite flag to overwrite"
+msgstr ""
+
+#, python-format
+msgid "Computing aggregation of maps between %(st)s - %(end)s"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error in computation process"
+msgid "Error occurred in r.series computation"
+msgstr "계산 과정 내에 오류"
+
+#, python-format
+msgid "Aggregating %(len)i raster maps from %(start)s to %(end)s"
+msgstr ""
+
+#, python-format
+msgid "Unable to perform aggregation. Output raster map <%(name)s> exists and overwrite flag was not set"
+msgstr ""
+
+#, python-format
+msgid "The limit of open files (%i) was reached (%i). The module r.series will be run with flag z, to avoid open files limit exceeding."
+msgstr ""
+
+msgid "Object not found in the temporal database"
+msgstr ""
+
+msgid "Missing identifier"
+msgstr "누락된 식별자"
+
+msgid "Wrong identifier, the mapset is missing"
+msgstr "틀린 식별자, 지도 세트가 없습니다"
+
+#, fuzzy
+#| msgid "Unable to read PNG file"
+msgid "Unable to read range file"
+msgstr "PNG 파일을 읽을 수 없습니다"
+
+msgid "Raster range file is empty"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to read range of raster <%s>"
+msgid "Unable to load range of 3D raster map <%s>"
+msgstr "래스터 <%s>의 범위를 읽을 수 없습니다"
+
+#, fuzzy
+#| msgid "Unable to read PNG file"
+msgid "Unable to read history file"
+msgstr "PNG 파일을 읽을 수 없습니다"
+
+#, python-format
+msgid ""
+"Temporal database connection for mapset <%s> defined as:\n"
+" %s\n"
+"But database file does not exist."
+msgstr ""
+
+msgid "Unable to initialize the temporal DBMI interface. Please use t.connect to specify the driver and the database string"
+msgstr ""
+
+msgid ""
+"Run t.upgrade command to upgrade your temporal database.\n"
+"Consider creating a backup of your temporal database to avoid losing data in case something goes wrong.\n"
+msgstr ""
+
+msgid "You need to export it by restoring the GRASS version used for creating this DB.Notes: Use t.rast.export and t.vect.export to make a backup of your existing space time datasets. To save the timestamps of your existing maps and space time datasets, use t.rast.list, t.vect.list and t.rast3d.list. You can register the existing time stamped maps easily if you export columns=id,start_time,end_time into text files and use t.register to register them again in new created space time datasets (t.create). After the backup remove the existing temporal database, a new one will be created automatically.\n"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to receive temporal database metadata.\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unsupported temporal database: version mismatch.\n"
+" %(backup)s Supported temporal API version is: %(api)i.\n"
+"Please update your GRASS installation.\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Temporal database version mismatch detected.\n"
+"{backup}Supported temporal database version is: {tdb}\n"
+"Your existing temporal database version: {ctdb}\n"
+"Current temporal database info: {info}"
+msgstr ""
+
+#, python-brace-format
+msgid "The format of your actual temporal database is not supported any more. {m}"
+msgstr ""
+
+#, python-format
+msgid "Creating temporal database: %s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to create SQLite temporal database\n"
+"Exception: %s\n"
+"Please use t.connect to set a read- and writable temporal database path"
+msgstr ""
+
+msgid "Temporal database is up-to-date. Operation canceled"
+msgstr ""
+
+#, python-format
+msgid "Unsupported TGIS DB upgrade scenario: from version %s to %s"
+msgstr ""
+
+#, python-format
+msgid "Upgrading temporal database <%s> from version %s to %s..."
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Unable to execute sql statement. "
+msgid "Unable to mogrify sql statement. {reason}"
+msgstr "SQL문을 실행할 수 없습니다."
+
+#, fuzzy, python-brace-format
+#| msgid "Unable to describe table <%s>"
+msgid "Unable to check table. {reason}"
+msgstr "테이블 <%s>를 설명할 수 없습니다"
+
+#, fuzzy, python-brace-format
+#| msgid "Unable to execute sql statement. "
+msgid "Unable to execute sql statement. {reason}"
+msgstr "SQL문을 실행할 수 없습니다."
+
+#, fuzzy, python-brace-format
+#| msgid "Unable to close GUI. {0}"
+msgid "Unable to fetch one. {reason}"
+msgstr "GUI를 닫을 수 없습니다. {0}"
+
+#, fuzzy, python-brace-format
+#| msgid "Unable to flush all tiles"
+msgid "Unable to fetch all. {reason}"
+msgstr "모든 타일을 플러시할 수 없습니다"
+
+#, fuzzy, python-brace-format
+#| msgid "Unable to execute sql statement. "
+msgid "Unable to execute transaction. {reason}"
+msgstr "SQL문을 실행할 수 없습니다."
+
+#, python-brace-format
+msgid "You have no permission to access mapset <{mapset}>, or mapset <{mapset}> has no temporal database. Accessible mapsets are: <{mapsets}>"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to connect to %(db)s database: %(string)s\n"
+"Exception: \"%(ex)s\"\n"
+"Please use t.connect to set a read- and writable temporal database backend"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to execute sql statement. "
+msgid ""
+"Unable to execute :\n"
+" %(sql)s"
+msgstr "SQL문을 실행할 수 없습니다."
+
+#, fuzzy, python-format
+#| msgid "Unable to execute sql statement. "
+msgid ""
+"Unable to execute transaction:\n"
+" %(sql)s"
+msgstr "SQL문을 실행할 수 없습니다."
+
+#, python-format
+msgid "Wrong increment format: %s"
+msgstr ""
+
+msgid "Time string seems to specify relative time"
+msgstr ""
+
+msgid "Dates Before Christ (BC) are not supported"
+msgstr ""
+
+#, fuzzy
+#| msgid "Parameter <%s> not supported"
+msgid "Time zones are not supported"
+msgstr "매개변수 <%s>를 지원하지 않습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to open PG file"
+msgid "Unable to parse time string: %s"
+msgstr "PG 파일을 열 수 없습니다"
+
+msgid "You need to specify the base name of new created maps"
+msgstr ""
+
+#, python-brace-format
+msgid "Nothing found in the database for space time dataset <{name}> (type: {element_type}): {detail}"
+msgstr ""
+
+msgid "Dataset is empty or where clause is too constrained or incorrect"
+msgstr ""
+
+msgid "Dataset is empty"
+msgstr ""
+
+#, python-format
+msgid "Map <%s> is already in temporal database, use overwrite flag to overwrite"
+msgstr ""
+
+#, python-format
+msgid "Applying r.mapcalc expression: \"%s\""
+msgstr ""
+
+#, python-format
+msgid "Applying r3.mapcalc expression: \"%s\""
+msgstr ""
+
+#, python-format
+msgid "Applying v.extract where statement: \"%s\""
+msgstr ""
+
+msgid "Error in computation process"
+msgstr "계산 과정 내에 오류"
+
+#, python-format
+msgid "Unknown dataset type: %s"
+msgstr "알려지지 않은 자료세트 유형: %s"
+
+#, python-format
+msgid "Column '%s' is not available for the requested dataset type"
+msgstr ""
+
+#, python-format
+msgid "Column '%s' is not available for the requested combination of dataset types"
+msgstr ""
+
+msgid "No valid database columns were requested"
+msgstr ""
+
+msgid "Empty map list"
+msgstr "빈 지도 리스트"
+
+msgid "Empty entry in map list, this should not happen"
+msgstr "지도 리스트 내에 빈 엔트리, 일어나서는 안 될 오류입니다"
+
+msgid "Starting spatio-temporal sampling..."
+msgstr ""
+
+msgid "Starting temporal sampling..."
+msgstr ""
+
+msgid "No samples found for map calculation"
+msgstr ""
+
+msgid "Found more than a single map in a sample granule. Only the first map is used for computation. Use t.rast.aggregate.ds to create synchronous raster datasets."
+msgstr ""
+
+msgid "No maps registered in input dataset <{}>"
+msgstr ""
+
+msgid "Starting mapcalc computation..."
+msgstr ""
+
+#, python-format
+msgid "Apply mapcalc expression: \"%s\""
+msgstr ""
+
+#, fuzzy
+#| msgid "Error in computation process"
+msgid "Error while mapcalc computation"
+msgstr "계산 과정 내에 오류"
+
+msgid "Starting map registration in temporal database..."
+msgstr ""
+
+msgid "Removing {}/{} ({}%) maps because empty..."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Invalid east field: %s"
+msgid "Invalid semantic_label <%s>"
+msgstr "무효한 동쪽 필드: %s"
+
+#, fuzzy, python-format
+#| msgid "Unknown dataset type: %s"
+msgid "Unknown type: %s"
+msgstr "알려지지 않은 자료세트 유형: %s"
+
+#, python-format
+msgid "Space time dataset <%(name)s> of type <%(sp)s> not found"
+msgstr ""
+
+msgid "Illegal dataset name <{}>. Character '.' not allowed."
+msgstr ""
+
+#, fuzzy
+#| msgid "map <%s> is not in the current mapset"
+msgid "Space time datasets can only be created in the current mapset"
+msgstr "지도 <%s>는 현재 지도 세트 안에 있지 않습니다"
+
+#, python-format
+msgid "Space time %(sp)s dataset <%(name)s> is already in the database. Use the overwrite flag."
+msgstr ""
+
+#, python-format
+msgid "Overwriting space time %(sp)s dataset <%(name)s> and unregistering all maps"
+msgstr ""
+
+#, python-format
+msgid "Creating a new space time %s dataset"
+msgstr ""
+
+msgid "maps and file are mutually exclusive"
+msgstr ""
+
+msgid "end and increment are mutually exclusive"
+msgstr ""
+
+msgid "end and the interval flag are mutually exclusive"
+msgstr ""
+
+msgid "The increment option requires the start option"
+msgstr ""
+
+msgid "The interval flag requires the start option"
+msgstr ""
+
+msgid "Please specify start_time and end_time"
+msgstr ""
+
+msgid "Please specify maps or file"
+msgstr ""
+
+msgid "The dbif argument is deprecated and will be removed in a future release."
+msgstr ""
+
+#, python-brace-format
+msgid "Space time {sp} dataset <{name}> with relative time found, but no relative unit set for {sp} maps"
+msgstr ""
+
+msgid "The increment option will be ignored because of time stamps in input file"
+msgstr ""
+
+msgid "The interval flag will be ignored because of time stamps in input file"
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to update {t} map <{mid}>. The map does not exist."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to register {t} map <{mid}> with layer {l}. The map has no timestamp and the start time is not set."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to register {t} map <{mid}>. The map has no timestamp and the start time is not set."
+msgstr ""
+
+msgid "unit can only be set for relative time"
+msgstr ""
+
+msgid "unit must be set in case of relative time stamps"
+msgstr ""
+
+#, python-brace-format
+msgid "Map is already registered in temporal database. Unable to update {t} map <{mid}> with layer {l}. Overwrite flag is not set."
+msgstr ""
+
+#, python-brace-format
+msgid "Map is already registered in temporal database. Unable to update {t} map <{mid}>. Overwrite flag is not set."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to update {t} map <{mid}> with layer {l}. The temporal types are different."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to update {t} map <{mid}>. The temporal types are different."
+msgstr ""
+
+msgid "Unable to convert string \"{}\" into a datetime object"
+msgstr ""
+
+msgid "Error occurred in increment computation"
+msgstr ""
+
+#, python-brace-format
+msgid "Set absolute valid time for map <{id}> with layer {layer} to {start} - {end}"
+msgstr ""
+
+#, python-brace-format
+msgid "Set absolute valid time for map <{mid}> to {start_time} - {end_time}"
+msgstr ""
+
+#, python-brace-format
+msgid "Set relative valid time for map <{mid}> with layer {layer} to {start} - {end} with unit {unit}"
+msgstr ""
+
+#, python-brace-format
+msgid "Set relative valid time for map <{mid}> to {start} - {end} with unit {unit}"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Delete %s dataset <%s> from temporal database"
+msgid "Dataset <%s> not found in temporal database"
+msgstr "시간 데이터베이스로부터 %s 자료세트 <%s>를 삭제합니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for raster map <%s>"
+msgid "Unable to read timestamp file for raster map <%s>"
+msgstr "래스터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for raster map <%s>"
+msgid "Unable to create timestamp file for raster map <%s>"
+msgstr "래스터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for raster map <%s>"
+msgid "Invalid datetime in timestamp for raster map <%s>"
+msgstr "래스터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+msgid "Internal error"
+msgstr ""
+
+#, python-format
+msgid "Unable to remove timestamp for raster map <%s>"
+msgstr "래스터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to write header for 3D raster map <%s>"
+msgid "Unable to write semantic label for raster map <%s>"
+msgstr "3차원 래스터 지도 <%s>의 헤더를 쓸 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for raster map <%s>"
+msgid "Unable to read timestamp file for 3D raster map <%s>"
+msgstr "래스터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for raster map <%s>"
+msgid "Unable to create timestamp file for 3D raster map <%s>"
+msgstr "래스터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for raster map <%s>"
+msgid "Invalid datetime in timestamp for 3D raster map <%s>"
+msgstr "래스터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for raster map <%s>"
+msgid "Unable to remove timestamp for 3D raster map <%s>"
+msgstr "래스터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for vector map <%s>"
+msgid "Unable to read timestamp file for vector map <%s>"
+msgstr "벡터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for vector map <%s>"
+msgid "Unable to create timestamp file for vector map <%s>"
+msgstr "벡터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for vector map <%s>"
+msgid "Invalid datetime in timestamp for vector map <%s>"
+msgstr "벡터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, python-format
+msgid "Unable to remove timestamp for vector map <%s>"
+msgstr "벡터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+msgid "Projections are different. Unable to compute overlapping_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute is_in_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute equivalent_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute cover_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute cover for spatial extents"
+msgstr ""
+
+msgid "Volume computation is not supported for LL projections"
+msgstr ""
+
+msgid "Area computation is not supported for LL projections"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to create 3D raster map <%s>"
+msgid "Unable to export raster map <%s>"
+msgstr "3차원 래스터 지도 <%s>를 생성할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for raster map <%s>"
+msgid "Unable to export color rules for raster map <%s> r.out.gdal"
+msgstr "래스터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to create 3D raster map <%s>"
+msgid "Unable to export raster map <%s> with r.pack"
+msgstr "3차원 래스터 지도 <%s>를 생성할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to delete vector map <%s>"
+msgid "Unable to export vector map <%s> as GML with v.out.ogr"
+msgstr "벡터 지도 <%s>를 삭제할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to delete vector map <%s>"
+msgid "Unable to export vector map <%s> as GPKG with v.out.ogr"
+msgstr "벡터 지도 <%s>를 삭제할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to delete vector map <%s>"
+msgid "Unable to export vector map <%s> with v.pack"
+msgstr "벡터 지도 <%s>를 삭제할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to create 3D raster map <%s>"
+msgid "Unable to export raster map <%s> with r3.pack"
+msgstr "3차원 래스터 지도 <%s>를 생성할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to move temp raster map <%s> to 3D raster map <%s>"
+msgid "Unable to import/link raster map <%s> from file %s."
+msgstr "임시 래스터 지도 <%s>를 3차원 래스터 지도 <%s>로 옮길 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to close 3D raster map <%s>"
+msgid "Unable to set the color rules for raster map <%s>."
+msgstr "3차원 래스터 지도 <%s>를 닫을 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to open 3D raster map <%s>"
+msgid "Unable to unpack raster map <%s> from file %s."
+msgstr "3차원 래스터 지도 <%s>를 열 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to rename vector map <%s> to <%s>"
+msgid "Unable to import vector map <%s> from file %s."
+msgstr "벡터 지도 <%s>를 <%s>로 이름을 바꿀 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to rename vector map <%s> to <%s>"
+msgid "Unable to unpack vector map <%s> from file %s."
+msgstr "벡터 지도 <%s>를 <%s>로 이름을 바꿀 수 없습니다"
+
+msgid "Re-projection on import is currently not supported for space time vector datasets. Ignoring projection information."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "3D raster map <%s> not found"
+msgid "Space time raster dataset archive <%s> not found"
+msgstr "3차원 래스터 지도 <%s>를 찾을 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Vector map <%s> not found"
+msgid "Extraction directory <%s> not found"
+msgstr "벡터 지도 <%s>를 찾을 수 없습니다"
+
+#, python-format
+msgid "Checking validity of input file (size: %0.1f MB). Make take a while..."
+msgstr ""
+
+#, python-format
+msgid "Unable to find init file <%s>"
+msgstr "초기화 파일 <%s>를 찾을 수 없습니다"
+
+#, python-format
+msgid "Unable to find list file <%s>"
+msgstr "리스트 파일 <%s>를 찾을 수 없습니다"
+
+#, python-format
+msgid "Unable to find projection file <%s>"
+msgstr "투영 파일 <%s>를 찾을 수 없습니다"
+
+msgid "Extracting data..."
+msgstr "자료를 추출하는 중입니다..."
+
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
+msgstr ""
+
+msgid "Projection information does not match. Proceeding..."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Difference between PROJ_INFO file of imported map and of current location:\n"
+"{diff}"
+msgstr ""
+
+msgid "Projection information does not match. Aborting."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to create location %(l)s. Reason: %(e)s"
+msgstr "<%s>를 위한 범위 파일을 열 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Attempt to create read-only temporary file"
+msgid "Unable to create environment for location %s. Reason: %s"
+msgstr "읽기 전용 임시 파일의 생성을 시도하세요"
+
+#, fuzzy, python-format
+#| msgid "Attempt to create read-only temporary file"
+msgid "Unable to create default temporal database in new location %s"
+msgstr "읽기 전용 임시 파일의 생성을 시도하세요"
+
+#, python-format
+msgid "Key words %(t)s, %(s)s or %(n)s not found in init file."
+msgstr ""
+
+msgid "Number of maps mismatch in init and list file."
+msgstr ""
+
+msgid "The archive file is of wrong space time dataset type"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to find list file <%s>"
+msgid "Unable to find GeoTIFF raster file <%s> in archive."
+msgstr "리스트 파일 <%s>를 찾을 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to find list file <%s>"
+msgid "Unable to find AAIGrid raster file <%s> in archive."
+msgstr "리스트 파일 <%s>를 찾을 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to find projection file <%s>"
+msgid "Unable to find GML vector file <%s> in archive."
+msgstr "투영 파일 <%s>를 찾을 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to find projection file <%s>"
+msgid "Unable to find GRASS package file <%s> in archive."
+msgstr "투영 파일 <%s>를 찾을 수 없습니다"
+
+#, fuzzy
+#| msgid "Unsupported icon %d"
+msgid "Unsupported input format"
+msgstr "지원하지 않는 아이콘 %d"
+
+#, python-format
+msgid "Space time %(t)s dataset <%(sp)s> is already in the database. Use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Delete space time %s  dataset <%s> from temporal database"
+msgid "Overwriting space time %(sp)s dataset <%(id)s> and unregister all maps."
+msgstr "시간 데이터베이스로부터 시공간 %s 자료세트 <%s>를 삭제합니다"
+
+#, python-format
+msgid "Key word %s not found in init file."
+msgstr ""
+
+#, python-format
+msgid "Create space time %s dataset."
+msgstr ""
+
+msgid "Spatio-temporal topological operators are not supported in granularity algebra mode"
+msgstr ""
+
+msgid "All input space time datasets must have a valid temporal topology."
+msgstr ""
+
+#, fuzzy
+#| msgid "Delete space time %s  dataset <%s> from temporal database"
+msgid "All input space time datasets must have the same temporal type."
+msgstr "시간 데이터베이스로부터 시공간 %s 자료세트 <%s>를 삭제합니다"
+
+#, fuzzy, python-format
+msgid "Removing un-needed or empty %s maps"
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Raster map <%s> not found"
+msgid "Space time %s dataset <%s> not found"
+msgstr "래스터 지도 <%s>를 찾을 수 없습니다"
+
+#, python-format
+msgid "Wrong temporal type of space time dataset <%s> <%s> time is required"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Wrong type of input "
+msgid "Wrong type of input {input}"
+msgstr "틀린 입력 유형"
+
+#, python-format
+msgid "The resulting space time dataset type <%(a)s> is different from the requested type <%(b)s>"
+msgstr ""
+
+msgid "Maps that should be registered in the resulting space time dataset have different types."
+msgstr ""
+
+#, python-format
+msgid "%s map <%s> not found in GRASS spatial database"
+msgstr ""
+
+msgid "Wrong map type. TMAP only supports single maps that are registered in the temporal GRASS database"
+msgstr ""
+
+msgid "Merging empty map lists"
+msgstr "빈 지도 리스트를 병합하는 중입니다"
+
+msgid "First Map list is empty, can't merge it. Return only last map list"
+msgstr "첫 번째 지도 목록이 비어 있습니다, 병합할 수 없습니다. 마지막 지도 목록만 반환합니다"
+
+msgid "Second Map list is empty, can't merge it. Return only first map list"
+msgstr "두 번째 지도 목록이 비어 있습니다, 병합할 수 없습니다. 첫 번째 지도 목록만 반환합니다"
+
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr ""
+
+#, python-brace-format
+msgid "Output granularity seems not to be valid. Please use one of the following values : {gr}"
+msgstr ""
+
+#, fuzzy
+msgid "Invalid absolute granularity"
+msgstr "무효한 남쪽 필드: %s"
+
+msgid "Probably you need to invert 'from_gran' and 'to_gran'"
+msgstr ""
+
+#, python-format
+msgid "Error computing map <%s>"
+msgstr "지도 <%s>를 계산하는데 오류"
+
+#, python-format
+msgid "Error vector maps with basename %s exist. Use --o flag to overwrite existing file"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Error writing file <%s>: %s"
+msgid ""
+"Error starting %s : \n"
+"%s"
+msgstr "파일 <%s>를 쓰는데 오류: %s"
+
+#, python-format
+msgid ""
+"Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
+"%s"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for raster map <%s>"
+msgid "Unable to get statistics for raster map <%s>"
+msgstr "래스터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to write history for 3D raster map <%s>"
+msgid "Unable to get statistics for 3d raster map <%s>"
+msgstr "3차원 래스터 지도 <%s>의 히스토리를 쓸 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to open %s file for map <%s>"
+msgid "Unable to parse JSON output for map <%s>"
+msgstr "지도 <%2$s>를 위한 %1$s 파일을 열 수 없습니다"
+
+#, python-brace-format
+msgid "No maps found to process. Space time {type} dataset <{id}> is either empty or the where condition (if used) does not return any maps or no maps with the requested spatial relation to the computational region exist in the dataset."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Delete space time %s  dataset <%s> from temporal database"
+msgid "Space time %(sp)s dataset <%(i)s> not found"
+msgstr "시간 데이터베이스로부터 시공간 %s 자료세트 <%s>를 삭제합니다"
+
+#, fuzzy, python-format
+#| msgid "Delete space time %s  dataset <%s> from temporal database"
+msgid "Space time %(sp)s dataset <%(i)s> is empty"
+msgstr "시간 데이터베이스로부터 시공간 %s 자료세트 <%s>를 삭제합니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to remove timestamp for vector map <%s>"
+msgid "Unable to get statistics for vector map <%s>"
+msgstr "벡터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
+
+#, python-brace-format
+msgid "Archive file is unreadable: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Archive file is incomplete: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "ZIP file is unreadable: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Unsupported URL <{url}>. Supported are only URLs with the following schemes: {schemes}."
+msgstr ""
+
+#, python-brace-format
+msgid "Download file from <{url}>, return status code {code}, {desc}"
+msgstr ""
+
+#, python-brace-format
+msgid "Download file from <{url}>, failed. Check internet connection."
+msgstr ""
+
+#, python-brace-format
+msgid "Download of <{url}> failed or file <{name}> is not a ZIP file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unknown format"
+msgid "Unknown format '{}'."
+msgstr "알려지지 않은 포맷"
+
+#, fuzzy
+#~| msgid "Please install the GRASS GIS development package"
+#~ msgid "Please install the GRASS development package"
+#~ msgstr "GRASS 개발 패키지를 설치하세요"
+
 #, c-format
 #~ msgid "<%s> and <%s>"
 #~ msgstr "<%s>와 <%s>"
@@ -6857,57 +8623,17 @@ msgstr "알려지지 않은 질의 도구"
 #~ msgid "Cannot fetch row"
 #~ msgstr "임시파일을 열 수 없습니다"
 
-#, python-brace-format
-#~ msgid "Cannot find the executable {0}"
-#~ msgstr "실행 파일 {0}를 찾을 수 없습니다"
-
-#, python-brace-format
-#~ msgid "Cannot parse interface description of<{name}> module: {error}"
-#~ msgstr "<{name}> 모듈의 인터페이스 설명을 해석할 수 없습니다: {error}"
-
 #~ msgid "Category must be integer"
 #~ msgstr "카테고리는 정수여야 합니다."
-
-#~ msgid "Cleaning up default sqlite database ..."
-#~ msgstr "기본 sqlite 데이터베이스를 정리하는 중입니다..."
-
-#~ msgid "Cleaning up temporary files..."
-#~ msgstr "임시 파일을 정리하는 중입니다..."
 
 #~ msgid "Copy %s <%s> to current mapset as <%s>"
 #~ msgstr "%s <%s>를 현재 지도 세트의 <%s>로 복사합니다"
 
-#, python-brace-format
-#~ msgid "Debug level {0}"
-#~ msgstr "디버그 단계 {0}"
-
-#, python-format
-#~ msgid "Delete %s dataset <%s> from temporal database"
-#~ msgstr "시간 데이터베이스로부터 %s 자료세트 <%s>를 삭제합니다"
-
-#, python-format
-#~ msgid "Delete space time %s  dataset <%s> from temporal database"
-#~ msgstr "시간 데이터베이스로부터 시공간 %s 자료세트 <%s>를 삭제합니다"
-
 #~ msgid "Dev note: Adapted sites library used for vector points. (module should be updated to GRASS 6 vector library)"
 #~ msgstr "개발자 노트: 벡터점 지원을 위해 변형된 사이트 라이브러리를 사용했습니다. (모듈을 GRASS 6 벡터 라이브러리로 업데이트해야 합니다.)"
 
-#, python-format
-#~ msgid "Drop map register table: %s"
-#~ msgstr "지도 등록 테이블을 삭제합니다: %s"
-
 #~ msgid "East must be larger than West"
 #~ msgstr "동쪽 경계는 서쪽 경계보다 값이 커야합니다"
-
-#~ msgid "Empty entry in map list, this should not happen"
-#~ msgstr "지도 리스트 내에 빈 엔트리, 일어나서는 안 될 오류입니다"
-
-#~ msgid "Empty map list"
-#~ msgstr "빈 지도 리스트"
-
-#, python-format
-#~ msgid "Error computing map <%s>"
-#~ msgstr "지도 <%s>를 계산하는데 오류"
 
 #~ msgid ""
 #~ "Error in GUI startup. See messages above (if any) and if necessary, please report this error to the GRASS developers.\n"
@@ -6924,24 +8650,12 @@ msgstr "알려지지 않은 질의 도구"
 #~ "{cmd_name} --help\n"
 #~ "다음 문서를 읽어 보세요: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
-#~ msgid "Error in computation process"
-#~ msgstr "계산 과정 내에 오류"
-
-#~ msgid "Error in register table request"
-#~ msgstr "등록 테이블 요청 내에 오류"
-
 #~ msgid ""
 #~ "Exit was requested in GUI.\n"
 #~ "GRASS GIS will not start. Bye."
 #~ msgstr ""
 #~ "GUI에서 종료를 요청했습니다.\n"
 #~ "GRASS GIS를 시작하지 않습니다. 안녕히 가세요."
-
-#~ msgid "Extracting data..."
-#~ msgstr "자료를 추출하는 중입니다..."
-
-#~ msgid "First Map list is empty, can't merge it. Return only last map list"
-#~ msgstr "첫 번째 지도 목록이 비어 있습니다, 병합할 수 없습니다. 마지막 지도 목록만 반환합니다"
 
 #~ msgid "G_oldsite_describe() must be called immediately after G_fopen_sites_old()."
 #~ msgstr "G_fopen_sites_old() 다음 즉시 G_oldsite_describe()를 호출해야 합니다."
@@ -6971,10 +8685,6 @@ msgstr "알려지지 않은 질의 도구"
 #~ msgid "Illegal e-w3 resolution value"
 #~ msgstr "잘못된 e-w3 해상도값"
 
-#, python-format
-#~ msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
-#~ msgstr "잘못된 파일 이름 <%s>. 'NULL'이거나 '.'로 시작할 수 없습니다."
-
 #~ msgid "Illegal latitude for North"
 #~ msgstr "북쪽 경계를 위한 잘못된 위도"
 
@@ -6996,24 +8706,8 @@ msgstr "알려지지 않은 질의 도구"
 #~ msgid "Illegal t-b3 resolution value"
 #~ msgstr "잘못된 t-b3 해상도값"
 
-#, python-format
-#~ msgid "Invalid FP size <%d>"
-#~ msgstr "무효한 FP 크기 <%d>"
-
 #~ msgid "Invalid coordinates"
 #~ msgstr "무효한 좌표"
-
-#, python-format
-#~ msgid "Invalid element '%s'"
-#~ msgstr "무효한 요소 '%s'"
-
-#, python-format
-#~ msgid "Invalid integer size <%d>"
-#~ msgstr "무효한 정수 크기 <%d>"
-
-#, python-format
-#~ msgid "Invalid kind <%s>"
-#~ msgstr "무효한 종류 <%s>"
 
 #~ msgid ""
 #~ "Invalid return code from GUI startup script.\n"
@@ -7021,10 +8715,6 @@ msgstr "알려지지 않은 질의 도구"
 #~ msgstr ""
 #~ "GUI 시작 스크립트로부터 무효한 반환 코드.\n"
 #~ "GRASS 개발자에게 이 오류를 알려 주세요."
-
-#, python-format
-#~ msgid "Invalid size <%d>"
-#~ msgstr "무효한 크기 <%d>"
 
 #, fuzzy
 #~ msgid "Invalid type {0}"
@@ -7045,74 +8735,11 @@ msgstr "알려지지 않은 질의 도구"
 #~ "\n"
 #~ "진행하려면 RETURN을 누르세요.\n"
 
-#, fuzzy, python-brace-format
-#~ msgid "Location <{location_path}> is invalid for an unknown reason"
-#~ msgstr "지도 세트 <{mapset}> 또는 로케이션 <{location}>이 알려지지 않은 이유로 무효합니다"
-
-#, python-format
-#~ msgid "Map <%(id)s> with layer %(l)s has invalid time"
-#~ msgstr "지도 <%(id)s>의 레이어 %(l)s가 무효한 시간을 가지고 있습니다"
-
-#, python-format
-#~ msgid "Map <%s> has invalid time"
-#~ msgstr "지도 <%s>가 무효한 시간을 갖고 있습니다"
-
-#, fuzzy
-#~ msgid "Map <{}> not found in current mapset"
-#~ msgstr "지도 <%s>는 현재 지도 세트 안에 있지 않습니다"
-
-#, fuzzy, python-brace-format
-#~ msgid "Mapset <{mapset}> is in use."
-#~ msgstr "지도 세트 <%s>가 존재하지 않습니다."
-
-#, fuzzy, python-brace-format
-#~ msgid "Mapset <{mapset}> is the current mapset."
-#~ msgstr "지도 세트 <%s>는 현재 지도 세트가 아닙니다"
-
-#, python-brace-format
-#~ msgid "Mapset <{mapset}> or Location <{location}> is invalid for an unknown reason"
-#~ msgstr "지도 세트 <{mapset}> 또는 로케이션 <{location}>이 알려지지 않은 이유로 무효합니다"
-
 #~ msgid "Memory error in writing timestamp"
 #~ msgstr "타임스탬프를 쓰는 중 메모리오류가 났습니다"
 
-#~ msgid "Merging empty map lists"
-#~ msgstr "빈 지도 리스트를 병합하는 중입니다"
-
-#~ msgid "Missing identifier"
-#~ msgstr "누락된 식별자"
-
 #~ msgid "North must be north of South"
 #~ msgstr "북쪽 경계는 남쪽 경계의 북쪽이어야합니다"
-
-#~ msgid "Null value detected"
-#~ msgstr "널값이 감지되었습니다."
-
-#, python-format
-#~ msgid "Path '%s' doesn't exist"
-#~ msgstr "경로 '%s'가 존재하지 않습니다"
-
-#, python-format
-#~ msgid "Path '%s' not accessible."
-#~ msgstr "경로 '%s'에 접근할 수 없습니다"
-
-#, python-format
-#~ msgid "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
-#~ msgstr "프로그래머 오류: '%(sql)s', '%(filename)s', 또는 '%(table)s'가 반드시 주어져야 합니다"
-
-#, fuzzy
-#~ msgid "Removing empty 3D raster maps"
-#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
-
-#~ msgid "Second Map list is empty, can't merge it. Return only first map list"
-#~ msgstr "두 번째 지도 목록이 비어 있습니다, 병합할 수 없습니다. 첫 번째 지도 목록만 반환합니다"
-
-#~ msgid "The map does not exist, I can't open in 'r' mode"
-#~ msgstr "지도가 존재하지 않습니다, 'r' 모드에서 열 수 없습니다"
-
-#, python-format
-#~ msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is deprecated in GRASS GIS 7.0 and will be removed in version 7.1."
-#~ msgstr "모듈 <%s>를 실행하기 위해서는 옵션 <%s>의 끝에 언더스코어를 추가해서 파이썬 키위드와의 충돌을 방지해야 합니다. 앞부분의 언더스코어는 GRASS GIS 7.0에서는 추천하지 않으며 버전 7.1부터는 지원하지 않을 것입니다."
 
 #~ msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
 #~ msgstr "모듈 <%s>를 실행하기 위해서는 옵션 <%s>의 끝에 언더스코어를 추가해서 파이썬 키위드와의 충돌을 방지해야 합니다. 앞부분의 언더스코어는 GRASS GIS 7.0에서는 추천하지 않으며 버전 7.1부터는 지원하지 않을 것입니다."
@@ -7127,17 +8754,6 @@ msgstr "알려지지 않은 질의 도구"
 #~ msgid "Unable to check table. There is no temporal database connection defined for mapset <%(mapset)s>"
 #~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#, fuzzy, c-format
-#~ msgid "Unable to create band file for <%s>"
-#~ msgstr "<%s>를 위한 범위 파일을 열 수 없습니다"
-
-#, python-format
-#~ msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
-#~ msgstr "시간 데이터베이스로부터 타입 %(type)s의 자료세트 <%(ds)s>를 삭제할 수 없습니다. 자료세트의 지도 세트가 현재 지도 세트와 일치하지 않습니다"
-
-#~ msgid "Unable to execute sql statement. "
-#~ msgstr "SQL문을 실행할 수 없습니다."
-
 #, fuzzy
 #~ msgid "Unable to fetch all. There is no temporal database connection defined for mapset <%(mapset)s>"
 #~ msgstr "'%s' 디버그파일을 열 수 없습니다"
@@ -7150,35 +8766,12 @@ msgstr "알려지지 않은 질의 도구"
 #~ msgid "Unable to find a temporary null file <%s>"
 #~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#, python-format
-#~ msgid "Unable to find init file <%s>"
-#~ msgstr "초기화 파일 <%s>를 찾을 수 없습니다"
-
-#, python-format
-#~ msgid "Unable to find list file <%s>"
-#~ msgstr "리스트 파일 <%s>를 찾을 수 없습니다"
-
-#, python-format
-#~ msgid "Unable to find projection file <%s>"
-#~ msgstr "투영 파일 <%s>를 찾을 수 없습니다"
-
-#~ msgid "Unable to list mapsets"
-#~ msgstr "지도 세트를 나열할 수 없습니다"
-
 #~ msgid "Unable to open OGR DBMI driver"
 #~ msgstr "OGR DBMI 드라이버를 열 수 없습니다"
 
 #, fuzzy, python-format
 #~ msgid "Unable to read band reference file for raster map <%s>"
 #~ msgstr "3차원 래스터 지도 <%s>의 헤더를 쓸 수 없습니다"
-
-#, python-format
-#~ msgid "Unable to remove timestamp for raster map <%s>"
-#~ msgstr "래스터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
-
-#, python-format
-#~ msgid "Unable to remove timestamp for vector map <%s>"
-#~ msgstr "벡터 지도 <%s>를 위한 타임스탬프를 제거할 수 없습니다"
 
 #, fuzzy, python-format
 #~ msgid "Unable to write band identifier for raster map <%s>"
@@ -7187,37 +8780,9 @@ msgstr "알려지지 않은 질의 도구"
 #~ msgid "Unknown compression method <%s>, using default ZLIB"
 #~ msgstr "알려지지 않은 압축 방법 <%s>, 기본 ZLIB를 사용합니다"
 
-#, python-format
-#~ msgid "Unknown dataset type: %s"
-#~ msgstr "알려지지 않은 자료세트 유형: %s"
-
-#, python-format
-#~ msgid "Unknown temporal type \"%s\""
-#~ msgstr "알려지지 않은 시간 유형 \"%s\""
-
 #, fuzzy
 #~ msgid "Vector map <%s> is not opened on topology level"
 #~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
-
-#, python-format
-#~ msgid "Wrong granularity: \"%s\""
-#~ msgstr "틀린 세분성: \"%s\""
-
-#~ msgid "Wrong identifier, the mapset is missing"
-#~ msgstr "틀린 식별자, 지도 세트가 없습니다"
-
-#~ msgid "Wrong type of input "
-#~ msgstr "틀린 입력 유형"
-
-#, python-format
-#~ msgid "You are not the owner of '%s'."
-#~ msgstr "당신은 '%s'의 소유자가 아닙니다"
-
-#~ msgid "You cannot merge stdout and stderr and not capture them"
-#~ msgstr "표준 출력과 표준 오류를 병합하고 안 잡을 수는 없습니다"
-
-#~ msgid "You must use the force flag to actually remove it. Exiting."
-#~ msgstr "실제로 제거하기 위해서는 강제 플래그를 사용해야 합니다. 종료합니다."
 
 #~ msgid "whose header file can't be opened."
 #~ msgstr "헤더 파일을 열 수 없습니다"

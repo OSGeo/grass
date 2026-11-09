@@ -11,10 +11,10 @@ SPDX-License-Identifier: GPL-2.0-or-later
 from __future__ import annotations
 
 import logging
+import math
 import sys
 from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
 from datetime import datetime
-from multiprocessing import Lock, Pipe, Process
 from typing import TYPE_CHECKING, Any, Literal
 
 import grass.lib.date as libdate
@@ -28,7 +28,7 @@ from grass.pygrass.raster import RasterRow
 from grass.pygrass.rpc.base import RPCServerBase
 from grass.pygrass.utils import decode
 from grass.pygrass.vector import VectorTopo
-from grass.script.utils import encode
+from grass.script.utils import _get_multiprocessing_context, encode
 import grass.script as gs
 
 if TYPE_CHECKING:
@@ -826,11 +826,11 @@ def _read_raster3d_info(name, mapset):
         return None
     libraster3d.Rast3d_range_min_max(g3map, byref(min), byref(max))
 
-    if min.value != min.value:
+    if math.isnan(min.value):
         kvp["min"] = None
     else:
         kvp["min"] = float(min.value)
-    if max.value != max.value:
+    if math.isnan(max.value):
         kvp["max"] = None
     else:
         kvp["max"] = float(max.value)
@@ -1177,7 +1177,6 @@ def _convert_timestamp_from_grass(ts):
 def _stop(lock: _LockLike, conn: Connection, data) -> None:
     libgis.G_debug(1, "Stop C-interface server")
     conn.close()
-    lock.release()
     sys.exit()
 
 
@@ -1197,11 +1196,9 @@ def c_library_server(lock: _LockLike, conn: Connection) -> None:
         """This function will be called in case of a fatal error in libgis"""
         # sys.stderr.write("Error handler was called\n")
         # We send an exception that will be handled in
-        # the parent process, then close the pipe
-        # and release any possible lock
+        # the parent process, then close the pipe.
         conn.send(FatalError())
         conn.close()
-        lock.release()
 
     CALLBACK = CFUNCTYPE(c_void_p, c_void_p)
     CALLBACK.restype = c_void_p
@@ -1469,9 +1466,10 @@ class CLibrariesInterface(RPCServerBase):
         RPCServerBase.__init__(self)
 
     def start_server(self) -> None:
-        self.client_conn, self.server_conn = Pipe(True)
-        self.lock = Lock()
-        self.server = Process(
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe(True)
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
             target=c_library_server, args=(self.lock, self.server_conn)
         )
         self.server.daemon = True

@@ -136,25 +136,25 @@ class DifficultValueTest(TestCase):
 
     def test_csv_loads(self):
         """Load CSV with difficult values with many separators"""
-        for delimeter, null_value in itertools.product(
+        for delimiter, null_value in itertools.product(
             [None, ",", ";", "\t", "|"], [None, "NULL"]
         ):
             text = gs.read_command(
                 "v.db.select",
                 map=self.vector_points,
                 format="csv",
-                separator=delimeter,
+                separator=delimiter,
                 null_value=null_value,
             )
             # This covers the defaults for v.db.select.
-            if delimeter is None:
-                delimeter = ","
+            if delimiter is None:
+                delimiter = ","
             if null_value is None:
                 null_value = ""
             io_string = io.StringIO(text)
             reader = csv.DictReader(
                 io_string,
-                delimiter=delimeter,
+                delimiter=delimiter,
                 quotechar='"',
                 doublequote=True,
                 lineterminator="\n",

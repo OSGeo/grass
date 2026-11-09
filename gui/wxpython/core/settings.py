@@ -104,7 +104,7 @@ class Settings:
     def _generateLocale(self):
         """Generate locales"""
         try:
-            locale_path = Path(os.environ["GISBASE"]) / "locale"
+            locale_path = Path(os.environ["GRASS_LOCALEDIR"])
             self.locs = [p.name for p in locale_path.iterdir() if p.is_dir()]
             self.locs.append("en")  # GRASS doesn't ship EN po files
             self.locs.sort()
@@ -940,6 +940,7 @@ class Settings:
                 _("Unable to read settings file <{path}>:\n{err}").format(
                     path=self.filePath, err=e
                 )
+                + "\n"
             )
 
     def _readLegacyFile(self, settings=None):
@@ -1110,7 +1111,9 @@ class Settings:
 
         except KeyError as e:
             raise GException(
-                "%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey)
+                _("Unable to set '{group}:{key}:{subkey}'").format(
+                    group=group, key=key, subkey=subkey
+                )
             ) from e
 
     def Append(self, dict, group, key, subkey, value, overwrite=True):

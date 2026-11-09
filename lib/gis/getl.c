@@ -66,7 +66,7 @@ int G_getl2(char *buf, int n, FILE *fd)
     }
 
     /* Remove newline characters (\n, \r\n, or \r) */
-    int len = strlen(buf);
+    size_t len = strlen(buf);
     if (len > 0 && buf[len - 1] == '\n') {
         buf[--len] = '\0';
     }

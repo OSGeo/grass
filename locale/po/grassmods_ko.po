@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-29 18:49+0000\n"
+"POT-Creation-Date: 2026-10-31 19:23+0000\n"
 "PO-Revision-Date: 2025-08-26 14:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grassmods/ko/>\n"
@@ -422,10 +422,12 @@ msgstr "DBF 데이터베이스 디렉토리를 열 수 없습니다: %s"
 msgid "Unable to open DBF database: %s"
 msgstr "DBF 데이터베이스를 열 수 없습니다: %s"
 
-msgid "SQL parser error"
+#, c-format
+msgid "SQL parser error: %s\n"
 msgstr ""
 
-msgid "in statement:"
+#, c-format
+msgid "Statement: %s\n"
 msgstr ""
 
 #, c-format
@@ -804,15 +806,16 @@ msgstr "커서를 할당할 수 없습니다."
 msgid "Database name <%s> is too long"
 msgstr "데이터베이스 <%s>를 찾을 수 없습니다"
 
-#, c-format
-msgid "Unable to create directory '%s' for sqlite database"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Unable to open directory '%s'"
+msgid "Unable to create directory '%s' for SQLite database"
+msgstr "디렉토리 '%s'를 열 수 없습니다"
 
 msgid "Disabling SQLite locking"
 msgstr ""
 
 #, c-format
-msgid "The sqlite config option '%s' is not supported"
+msgid "The SQLite config option '%s' is not supported"
 msgstr ""
 
 msgid "Unable to open database:"
@@ -963,7 +966,10 @@ msgstr ""
 msgid "(0,0) is lower-left of the display frame"
 msgstr ""
 
-msgid "Length of barscale in map units"
+msgid "Length of barscale in units set by the units option"
+msgstr ""
+
+msgid "Map units if units is not given; 0 picks a length automatically"
 msgstr ""
 
 msgid "Barscale units to display"
@@ -1596,11 +1602,11 @@ msgid "Color range exceeds upper limit of actual data"
 msgstr ""
 
 #, c-format
-msgid "Range [%.3f, %.3f] out of the logarithm domain."
+msgid "use=%s out of range [%.3f, %.3f] (extend with range= ?)"
 msgstr ""
 
 #, c-format
-msgid "use=%s out of range [%.3f, %.3f] (extend with range= ?)"
+msgid "Range [%.3f, %.3f] has no extent for a logarithmic scale"
 msgstr ""
 
 #, c-format
@@ -1962,6 +1968,10 @@ msgid "Output file: %s"
 msgstr ""
 
 #, c-format
+msgid "Incomplete GRASS session: Variable '%s' not set"
+msgstr ""
+
+#, c-format
 msgid "Monitor <%s> already running"
 msgstr ""
 
@@ -2234,7 +2244,6 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr "셀 색상값으로부터 문자 색상 얻기"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -4655,6 +4664,9 @@ msgstr "위성"
 msgid "Landsat"
 msgstr ""
 
+msgid "Sentinel"
+msgstr ""
+
 msgid "ASTER"
 msgstr "ASTER"
 
@@ -4677,6 +4689,9 @@ msgid "Landsat 5+7 (6 input bands:1,2,3,4,5,7)"
 msgstr "Landsat 5+7 (6 개의 입력 영상 밴드: 1,2,3,4,5,7)"
 
 msgid "Landsat 8 (7 input bands:1,2,3,4,5,6,7)"
+msgstr ""
+
+msgid "Sentinel-2 (6 input bands: B2,B3,B4,B8,B11,B12 surface reflectance in [0,1]; Bonafoni & Sekertekin 2020 coefficients)"
 msgstr ""
 
 msgid "ASTER (6 input bands:1,3,5,6,8,9)"
@@ -8849,9 +8864,6 @@ msgstr ""
 msgid "Worldview"
 msgstr ""
 
-msgid "Sentinel"
-msgstr ""
-
 msgid "Tasseled Cap transformation"
 msgstr ""
 
@@ -9422,7 +9434,7 @@ msgstr ""
 msgid "Generate clumps including diagonal neighbors"
 msgstr ""
 
-msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgid "Invert filter (remove clumps larger than lower and smaller than upper, only for method 'reclass')"
 msgstr ""
 
 msgid "Apply lower area threshold as \"minsize\" during clumping"
@@ -11884,7 +11896,7 @@ msgstr ""
 msgid "Name of input raster files"
 msgstr ""
 
-#, c-format
+#, c-format, python-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr "%s=와 %s=를 같이 지정할 수 없습니다"
 
@@ -12099,6 +12111,10 @@ msgid "%d initial clumps"
 msgstr ""
 
 msgid "Pass 1 of 2..."
+msgstr ""
+
+#, c-format
+msgid "Too many clumps: the maximum supported number of clumps is %d. Reduce the extent or the resolution of the computational region, or use a threshold to merge similar cells."
 msgstr ""
 
 #, c-format
@@ -13104,6 +13120,15 @@ msgstr ""
 msgid "Imagery group <%s> created"
 msgstr ""
 
+#, c-format
+msgid "Vertical CRS <%s> of the dataset is ignored"
+msgstr ""
+
+#, fuzzy
+#| msgid "The vertical unit of the map"
+msgid "The vertical component of the dataset CRS is ignored"
+msgstr "지도의 수직 단위"
+
 msgid "Can't get WKT parameter string"
 msgstr "WKT 매개변수 문자열을 얻을 수 없습니다"
 
@@ -13904,21 +13929,25 @@ msgstr ""
 msgid "Could not read bufferzone size. Aborting."
 msgstr "bufferzone 크기를 읽을 수 없었습니다. 취소합니다."
 
-#, c-format
-msgid "Could not read %s bufferzone size. Aborting."
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read east bufferzone size. Aborting."
 msgstr "%s bufferzone 크기를 읽을 수 없었습니다. 취소합니다."
 
-msgid "east"
-msgstr ""
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read west bufferzone size. Aborting."
+msgstr "%s bufferzone 크기를 읽을 수 없었습니다. 취소합니다."
 
-msgid "west"
-msgstr ""
+#, fuzzy
+#| msgid "Could not read %s bufferzone size. Aborting."
+msgid "Could not read south bufferzone size. Aborting."
+msgstr "%s bufferzone 크기를 읽을 수 없었습니다. 취소합니다."
 
-msgid "south"
-msgstr ""
-
-msgid "north"
-msgstr ""
+#, fuzzy
+#| msgid "Could not read bufferzone size. Aborting."
+msgid "Could not read north bufferzone size. Aborting."
+msgstr "bufferzone 크기를 읽을 수 없었습니다. 취소합니다."
 
 msgid "Could not read maximum distance. Aborting."
 msgstr "최대 거리를 읽을 수 없었습니다. 취소합니다."
@@ -14875,6 +14904,16 @@ msgid "PDAL dimension name"
 msgstr ""
 
 #, fuzzy
+msgid "Number of points buffered at once during processing"
+msgstr "함수 '%s'를 위한 인수의 개수"
+
+msgid "Larger values may improve performance for large datasets at the cost of memory"
+msgstr ""
+
+msgid "Performance"
+msgstr ""
+
+#, fuzzy
 msgid "Print data file extent in shell script style and then exit"
 msgstr "지역정보를 셸 스크립트 형식으로 출력합니다"
 
@@ -14928,13 +14967,18 @@ msgstr ""
 msgid "Dataset doesn't have requested dimension '%s' (possibly a programming error)"
 msgstr ""
 
-#, fuzzy
-msgid " points found in input file(s)"
+#, fuzzy, c-format
+msgid "%<PRIu64> points found in input file(s)"
 msgstr "입력 파일 <%2$s> 안에 지도 이름 %1$s를 찾을 수 없습니다"
 
 #, fuzzy, c-format
-msgid "Raster map <%s> created. "
-msgstr "래스터 지도 <%s>를 생성했습니다."
+msgid "%<PRIu64> points found in region."
+msgstr "지정하지 않으면 기본 데이터베이스를 씁니다"
+
+#, fuzzy, c-format
+#| msgid "Number of lines:"
+msgid "Number of input files: %d"
+msgstr "선의 개수:"
 
 msgid "Overriding projection check"
 msgstr ""
@@ -15466,6 +15510,9 @@ msgstr "함수 '%s'를 위한 인수의 개수"
 msgid "Unknown error for function '%s'"
 msgstr "함수 '%s'를 위한 알려지지 않은 오류"
 
+msgid "rand() draws more than 2^46 random values. Later rows repeat the values of earlier rows plus a constant."
+msgstr ""
+
 #, c-format
 msgid "output map <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
@@ -15567,15 +15614,9 @@ msgstr ""
 msgid "r3.mapcalc does not support parallel execution."
 msgstr ""
 
-msgid "Parallel execution is not supported with rand() function"
-msgstr ""
-
 #, fuzzy, c-format
 msgid "<%d> is not valid number of nprocs."
 msgstr "<%s=%s> 점의 무효한 개수"
-
-msgid "Floating point error(s) occurred in the calculation"
-msgstr ""
 
 #, c-format
 msgid "Unable to read color file for raster map <%s@%s>"
@@ -16254,12 +16295,14 @@ msgstr ""
 msgid "Exporting raster map <%s> (band %d)..."
 msgstr ""
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to export raster map <%s>"
 msgstr ""
 
-msgid "Number of overviews must be between 0 and 5"
-msgstr ""
+#, fuzzy
+#| msgid "Number of points to be created"
+msgid "Number of overviews must be between 0 and 30"
+msgstr "생성될 점의 개수"
 
 msgid "Building overviews ..."
 msgstr ""
@@ -16655,6 +16698,10 @@ msgstr ""
 
 msgid "Constrain model through central window cell"
 msgstr ""
+
+#, fuzzy, c-format
+msgid "<%d> is not a valid number of nprocs."
+msgstr "<%s=%s> 점의 무효한 개수"
 
 msgid "Morphometric parameter not recognised. Assuming 'Elevation'"
 msgstr ""
@@ -17386,14 +17433,11 @@ msgid "CELL: Data range is %ld to %ld\n"
 msgstr ""
 
 #, c-format
-msgid "Illegal reclass rule -"
+msgid "Illegal reclass rule - ignored\n"
 msgstr ""
 
 #, c-format
-msgid " ignored\n"
-msgstr ""
-
-msgid " - invalid reclass rule"
+msgid "%s - invalid reclass rule"
 msgstr ""
 
 #, c-format
@@ -18505,28 +18549,17 @@ msgstr ""
 msgid "Water diffusion constant"
 msgstr ""
 
-msgid "Seed for random number generator"
-msgstr ""
-
-msgid "The same seed can be used to obtain same results or random seed can be generated by other means."
-msgstr ""
-
-msgid "Generate random seed"
-msgstr ""
-
-msgid "Automatically generates random seed for random number generator (use when you don't want to provide the seed option)"
-msgstr ""
-
 #, fuzzy
 msgid "Number of threads which will be used for parallel computation."
 msgstr "출력할 격자지도"
 
-#, c-format
-msgid "Generated random seed (-s): %ld"
-msgstr ""
+#, fuzzy
+#| msgid "If not given or '-' then standard output"
+msgid "Print run summary to standard output"
+msgstr "지정하지 않거나 '-'이면 표준출력"
 
 #, c-format
-msgid "Read random seed from %s option: %ld"
+msgid "Lat/Long project is not supported by %s. Please reproject the data to a projected coordinate system."
 msgstr ""
 
 #, c-format
@@ -18578,7 +18611,7 @@ msgstr ""
 msgid "Runoff infiltration rate unique value [mm/hr]"
 msgstr ""
 
-msgid "Name of flow controls raster map (permeability ratio 0-1)"
+msgid "Name of flow controls raster map (trapping probability 0-1)"
 msgstr ""
 
 msgid "Name for output water depth raster map [m]"
@@ -18615,6 +18648,10 @@ msgid "You are not outputting any raster maps"
 msgstr ""
 
 #, c-format
+msgid "%d walkers over %d time steps may draw more random numbers than one seed provides; the random numbers of some walkers then repeat those of others shifted by a constant"
+msgstr ""
+
+#, c-format
 msgid "Processing block %d of %d"
 msgstr ""
 
@@ -18635,6 +18672,10 @@ msgstr ""
 #| msgid "Could not open elevation raster"
 msgid "No values in the elevation raster."
 msgstr "표고 래스터를 열 수 없었습니다"
+
+#, c-format
+msgid "Time step of %.2f s is longer than output_step of %d s, some output steps may be skipped"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -18689,6 +18730,18 @@ msgstr "관측 일지 파일 %s를 쓰기 위해 열 수 없습니다"
 
 #, c-format
 msgid "FP raster map <%s> not found"
+msgstr ""
+
+#, c-format
+msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
+msgstr ""
+
+#, c-format
+msgid "Read random seed from %s option: %<PRId64>"
+msgstr ""
+
+#, c-format
+msgid "Generated random seed: %<PRId64>"
 msgstr ""
 
 msgid "aspect"
@@ -20214,6 +20267,10 @@ msgid "Number of intermediate images to produce"
 msgstr ""
 
 #, c-format
+msgid "Read random seed from %s option: %ld"
+msgstr ""
+
+#, c-format
 msgid "Autogenerated random seed set to: %ld"
 msgstr ""
 
@@ -20275,6 +20332,13 @@ msgid "Maximum random value"
 msgstr ""
 
 msgid "Create an integer raster map"
+msgstr ""
+
+#, c-format
+msgid "Autogenerated random seed set to: %<PRId64>"
+msgstr ""
+
+msgid "The region has more cells than random values one seed holds. Later rows repeat the values of earlier rows plus a constant."
 msgstr ""
 
 #, c-format
@@ -20464,7 +20528,6 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -22250,7 +22313,7 @@ msgstr ""
 msgid "No sink map provided. Initializing zero sink..."
 msgstr ""
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to create 3D raster map <%s>"
 msgstr "3차원 래스터 지도 <%s>를 생성할 수 없습니다"
 
@@ -22867,9 +22930,10 @@ msgstr ""
 msgid "At least 2 maps are required"
 msgstr ""
 
-#, python-format
-msgid "Unable to get monitor info. %s"
-msgstr ""
+#, fuzzy
+#| msgid "Unable to set geo transform"
+msgid "Unable to get monitor info. {}"
+msgstr "지형 변환을 설정할 수 없습니다"
 
 msgid "Unable to get monitor info"
 msgstr ""
@@ -23140,8 +23204,10 @@ msgstr ""
 msgid "Failed to get Git version."
 msgstr ""
 
-msgid "Could not found Git. Please install it."
-msgstr ""
+#, fuzzy
+#| msgid "Could not initialize the timetables"
+msgid "Could not find Git. Please install it."
+msgstr "시간 테이블을 초기화할 수 없었습니다"
 
 #, fuzzy
 msgid "Cannot write to working directory {}."
@@ -23662,8 +23728,10 @@ msgstr ""
 msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
-msgid "Missing output projection parameters "
-msgstr ""
+#, fuzzy
+#| msgid "Output projection parameters (PROJ.4 style)"
+msgid "Missing output projection parameters"
+msgstr "출력 재투영 매개변수(PROJ.4 스타일)"
 
 msgid "Unable to read input data"
 msgstr ""
@@ -23893,7 +23961,8 @@ msgstr ""
 msgid "Unable to import data"
 msgstr ""
 
-msgid "Done: generated map "
+#, python-brace-format
+msgid "Done: generated map {map_name}"
 msgstr ""
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
@@ -23955,7 +24024,7 @@ msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
 #, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr ""
 
 #, python-format
@@ -24096,9 +24165,10 @@ msgstr ""
 msgid "Driver %s does not supports Create() method"
 msgstr ""
 
-#, python-format
-msgid "Unable to open %s "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to open tempfile"
+msgid "Unable to open {filename}"
+msgstr "임시 파일을 열 수 없습니다"
 
 msgid "Region is out of server data extend."
 msgstr ""
@@ -24277,36 +24347,84 @@ msgstr ""
 msgid "xy-locations are not supported"
 msgstr ""
 
+#, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr ""
+
+#, fuzzy
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr "설정 파일을 읽을 수 없습니다"
+
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr "설정 파일을 읽을 수 없습니다"
+
 #, fuzzy
 msgid "Generating a clumped raster file"
 msgstr "설정 파일을 읽을 수 없습니다"
 
-msgid " including diagonal neighbors"
-msgstr ""
-
-#, python-format
-msgid " with minimum %s pixels"
-msgstr ""
-
-#, fuzzy
-msgid "Generating a reclass map with area size"
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than {lower} hectares or larger than {upper} hectares..."
 msgstr "출력할 격자지도"
 
-#, python-format
-msgid " larger than or equal to %f hectares..."
+#, fuzzy, python-brace-format
+msgid "No areas of size smaller than {lower} hectares or larger than {upper} hectares"
+msgstr "출력할 격자지도"
+
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, python-format
-msgid " smaller than or equal to %f hectares..."
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than {lower} hectares..."
+msgstr "출력할 격자지도"
+
+#, fuzzy, python-brace-format
+msgid "No areas of size smaller than {lower} hectares"
+msgstr "출력할 격자지도"
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
+msgstr "출력할 격자지도"
+
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size larger than {upper} hectares..."
+msgstr "출력할 격자지도"
+
+#, python-brace-format
+msgid "No areas of size larger than {upper} hectares"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "출력할 격자지도"
+
+#, python-brace-format
+msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr ""
 
 #, fuzzy
-#| msgid "No table for layer %d"
-msgid "No areas of size "
-msgstr "레이어 %d를 위한 테이블이 존재하지 않습니다"
+msgid "Generating a reclass map without area size limits..."
+msgstr "출력할 격자지도"
+
+#, fuzzy
+#| msgid "No RGB values found"
+msgid "No areas found"
+msgstr "RGB 값을 찾을 수 없습니다"
 
 #, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
+msgstr ""
+
+msgid "Flag -i is not supported with method='rmarea'"
 msgstr ""
 
 msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
@@ -24924,12 +25042,10 @@ msgstr ""
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
+#, fuzzy, python-brace-format
+#| msgid "Cannot create column <%s> (already present). "
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr "열 <%s>를 생성할 수 없습니다 (이미 존재)."
-
-msgid "Use -c flag to update values in this column."
-msgstr ""
 
 #, python-format
 msgid "Adding columns '%s'"
@@ -25045,9 +25161,10 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr ""
 
-#, python-format
-msgid "Unable to add column %s to vector map <%s> "
-msgstr ""
+#, fuzzy, python-brace-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to add column {column} to vector map <{vector}>"
+msgstr "벡터 지도 <%s>를 위한 데이터베이스 연결을 추가할 수 없습니다"
 
 #, python-format
 msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
@@ -25090,6 +25207,427 @@ msgstr ""
 
 msgid "Default TGIS database is not set"
 msgstr "기본 TGIS 데이터베이스가 설정되지 않았습니다"
+
+#, fuzzy, python-format
+msgid "The output dataset <%s> must be in the current mapset<%s>."
+msgstr "사용자의 현재 지도 세트 안에 있는 데이터베이스 요소파일들의 이름을 바꿉니다."
+
+#, python-format
+msgid "Empty space-time %s dataset <%s>, nothing to copy"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Copying %s maps to the current mapset..."
+msgstr "사용자의 현재 지도 세트 안에 있는 데이터베이스 요소파일들의 이름을 바꿉니다."
+
+#, fuzzy, python-format
+#| msgid "<%s> already exists in mapset <%s>"
+msgid "A %s map <%s> exists already in the current mapset <%s>."
+msgstr "<%s>가 지도 세트 <%s> 안에 이미 존재합니다."
+
+#, python-format
+msgid "The %s map <%s> is already in the current mapset, not copying"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Please specify %s="
+msgstr "출력할 래스터맵"
+
+#, python-brace-format
+msgid "Dataset <{n}> of type <{t}> not found in temporal database"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long"
+msgstr ""
+
+msgid "Column names are always included in JSON output"
+msgstr ""
+
+msgid "Separator option is not allowed with JSON format"
+msgstr ""
+
+#, fuzzy
+#| msgid "Column parameter cannot be combined with use of z coordinate"
+msgid "Column names are not allowed with line format"
+msgstr "열 매개변수는 z 좌표와 함께 사용할 수 없습니다"
+
+msgid "Only one type is allowed for line format"
+msgstr ""
+
+msgid "Only one column is allowed for line format"
+msgstr ""
+
+msgid "Combinations across space time datasets and time stamped maps (e.g., raster and strds) are not allowed"
+msgstr ""
+
+msgid "Column 'type' cannot be requested alone"
+msgstr ""
+
+msgid "No temporal database found in the requested mapset(s). No datasets to list."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "%s available in mapset <%s>:"
+msgid "Time stamped %s maps with %s available in mapset <%s>:\n"
+msgstr "지도세트 <%2$s> 안에 유효한 %1$s:"
+
+#, fuzzy, python-format
+#| msgid "%s available in mapset <%s>:"
+msgid "Space time %s datasets with %s available in mapset <%s>:\n"
+msgstr "지도세트 <%2$s> 안에 유효한 %1$s:"
+
+#, python-format
+msgid "Output space time dataset <%s> must be located in this mapset"
+msgstr ""
+
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr ""
+
+#, python-format
+msgid "Unable to merge maps into space time %s dataset <%s> please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Database <%s> not found"
+msgid "Space time %s dataset <%s> not found"
+msgstr "데이터베이스 <%s>를 찾을 수 없습니다"
+
+#, fuzzy
+msgid "You need to set the range to compute the occurrence space time raster dataset"
+msgstr "출력할 격자지도"
+
+#, python-format
+msgid "Space time raster dataset <%s> is already in the database, use overwrite flag to overwrite"
+msgstr ""
+
+#, fuzzy
+msgid "You need to set the occurrence to compute the indicator space time raster dataset"
+msgstr "출력할 격자지도"
+
+#, fuzzy
+msgid "You need to set the staend options to compute the indicator space time raster dataset"
+msgstr "출력할 격자지도"
+
+#, fuzzy, python-format
+#| msgid "3D raster map <%s> not found"
+msgid "Space time raster dataset <%s> not found"
+msgstr "3차원 래스터 지도 <%s>를 찾을 수 없습니다"
+
+msgid "Temporal type of input strds and minimum strds must be equal"
+msgstr ""
+
+msgid "Temporal type of input strds and maximum strds must be equal"
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid %s"
+msgid "Invalid cycle"
+msgstr "무효한 %s"
+
+#, fuzzy
+#| msgid "Invalid %s"
+msgid "Invalid offset"
+msgstr "무효한 %s"
+
+#, python-format
+msgid "Processing cycle %s - %s"
+msgstr ""
+
+#, python-format
+msgid "Map <%s> is already registered in the temporal database, use overwrite flag to overwrite."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid array name"
+msgid "Invalid granularity"
+msgstr "무효한 배열 이름"
+
+msgid "Temporal type of input strds and lower strds must be equal"
+msgstr ""
+
+msgid "The upper option works only in conjunction with the lower option"
+msgstr ""
+
+msgid "Temporal type of input strds and upper strds must be equal"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to run r.stats"
+msgid "Error running r.series.accumulate"
+msgstr "r.stats를 실행할 수 없습니다"
+
+msgid "Input and aggregation dataset must have the same temporal type"
+msgstr ""
+
+msgid "All registered maps of the aggregation dataset must have time intervals"
+msgstr ""
+
+msgid "Unable to process the expression in granularity algebra mode"
+msgstr ""
+
+#, fuzzy
+msgid "Error in r.colors call"
+msgstr "분절을 생성하는데 오류"
+
+msgid "The number of parallel r.contour processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#, fuzzy
+msgid "Directory {} not found"
+msgstr "%s <%s>를 찾을 수 없습니다"
+
+msgid "Directory {} is not writable"
+msgstr ""
+
+msgid "Type options is not working with pack format, it will be skipped"
+msgstr ""
+
+msgid "Createopt, metaopt and nodata options are not working with pack and AAIGrid formats, they will be skipped"
+msgstr ""
+
+#, fuzzy
+#| msgid "No RGB values found"
+msgid "No gaps found"
+msgstr "RGB 값을 찾을 수 없습니다"
+
+#, fuzzy
+#| msgid "Unable to determine input map's vector feature type(s)."
+msgid "Unable to determine successor and predecessor of a gap."
+msgstr "입력 지도의 벡터 피처 유형을 결정할 수 없습니다"
+
+msgid "More than one successor of the gap found. Using the first found."
+msgstr ""
+
+msgid "More than one predecessor of the gap found. Using the first found."
+msgstr ""
+
+#, python-format
+msgid "Map with name <%s> already exists. Please use another base name."
+msgstr ""
+
+#, python-brace-format
+msgid "Combining {option_name}={option_value} and {excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The option {excluded_option_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The flag -{flag_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "Only one column is allowed (not {num_columns})"
+msgstr ""
+
+msgid "Values are always ordered by start_time"
+msgstr ""
+
+#, python-brace-format
+msgid "Column '{name}' is not available with the method '{method}'"
+msgstr ""
+
+msgid "The method <quantile> requires input in the 'quantile' option."
+msgstr ""
+
+#, fuzzy
+msgid "Space time raster dataset <{}> is empty"
+msgstr "출력할 격자지도"
+
+#, python-brace-format
+msgid ""
+"Error running module: {mod}\n"
+"    stderr: {error}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to run r.stats"
+msgid "Error running modules."
+msgstr "r.stats를 실행할 수 없습니다"
+
+#, fuzzy, python-format
+msgid "Export directory <%s> not found."
+msgstr "지도 세트 <%s>를 찾을 수 없습니다"
+
+msgid "Number requested methods and output maps do not match."
+msgstr ""
+
+msgid "Processing over {} maps: activating -z flag of r.series which slows down processing."
+msgstr ""
+
+#, python-format
+msgid "%s failed. Check above error messages."
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to set region <%s>"
+msgid "Unable to set 3D region"
+msgstr "영역 <%s>를 설정할 수 없습니다"
+
+msgid "Space time voxel cube"
+msgstr ""
+
+msgid "This space time voxel cube was created with t.rast.to.rast3"
+msgstr ""
+
+#, python-format
+msgid "%s failed to set units."
+msgstr ""
+
+msgid "The number of parallel r.to.vect processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+msgid "<{}> is not valid input to the percentile option"
+msgstr ""
+
+msgid "Zoning raster must be of type CELL"
+msgstr ""
+
+#, fuzzy
+#| msgid "%s= and %s= are mutually exclusive"
+msgid "Options coordinates and points are mutually exclusive"
+msgstr "%s=와 %s=를 같이 지정할 수 없습니다"
+
+msgid "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+msgstr ""
+
+#, fuzzy
+msgid "Please specify points or coordinates"
+msgstr "출력할 래스터맵"
+
+#, fuzzy, python-format
+#| msgid "Error writing into UNITS output file <%s>"
+msgid "Transforming r.what output file %s"
+msgstr "UNITS 출력 파일 <%s>로 쓰는데 오류"
+
+#, fuzzy, python-format
+#| msgid "Error writing into UNITS output file <%s>"
+msgid "Writing the output file <%s>"
+msgstr "UNITS 출력 파일 <%s>로 쓰는데 오류"
+
+#, python-format
+msgid "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
+msgstr ""
+
+msgid "Separator option is not allowed with this format"
+msgstr ""
+
+msgid "All maps are always listed"
+msgstr ""
+
+#, fuzzy
+#| msgid "The following data base element files would be deleted:"
+msgid "The following data base element files will be deleted:"
+msgstr "다음의 데이터베이스 요소 파일들이 삭제될 것입니다:"
+
+#, python-brace-format
+msgid "{stds}: {gid}"
+msgstr ""
+
+#, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database:"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Remove all registered maps from the temporal and also from the spatial database"
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database and removed from spatial database:"
+msgstr "시간과 공간 데이터베이스로부터 모든 등록된 지도를 제거합니다"
+
+#, python-format
+msgid "- %s"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Nothing removed. You must use the force flag (-%c) to actually remove them. Exiting."
+msgid "Nothing removed. You must use the force flag (-{flag}) to actually remove them."
+msgstr "아무것도 제거되지 않았습니다. 실제로 제거하기 위해서는 강제 플래그(-%c)를 사용해야 합니다. 종료합니다."
+
+#, python-format
+msgid "Space time %s dataset <%s> can not be renamed. Mapset of the new identifier differs from the current mapset."
+msgstr ""
+
+#, python-format
+msgid "Unable to rename Space time %s dataset <%s>. Name <%s> is in use, please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to create database <%s>"
+msgid "Unable to temporally shift the space time %s dataset <%s>"
+msgstr "데이터베이스 <%s>를 생성할 수 없습니다"
+
+#, c-format, python-format
+msgid "%s= or %s= must be specified"
+msgstr ""
+
+#, fuzzy
+msgid "Unregister maps"
+msgstr "래스터"
+
+#, fuzzy, python-format
+#| msgid "Unable to open default database"
+msgid "Unable to find %s map <%s> in temporal database"
+msgstr "기본 데이터베이스를 열 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Renames a space time dataset"
+msgid "Unregister maps from space time dataset <%s>"
+msgstr "시공간 자료세트의 이름을 바꿉니다"
+
+#, fuzzy
+#| msgid "Remove all registered maps from the temporal and also from the spatial database"
+msgid "Unregister maps from the temporal database"
+msgstr "시간과 공간 데이터베이스로부터 모든 등록된 지도를 제거합니다"
+
+#, fuzzy
+msgid "The number of columns must be equal to the number of space time raster datasets"
+msgstr "출력할 격자지도"
+
+#, fuzzy, python-format
+#| msgid "Unable to create error vector map <%s>"
+msgid "Unable to create new layers for vector map <%s>"
+msgstr "오류 벡터 지도 <%s>를 생성할 수 없습니다"
+
+#, fuzzy, python-format
+msgid "Observaion of space time raster dataset(s) <%s>"
+msgstr "출력할 격자지도"
+
+#, fuzzy, python-format
+#| msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
+msgid "Observation of space time raster dataset(s) <%s> with vector map <%s>"
+msgstr "시공간 래스터 자료세트 내의 빈 공간을 보간된 래스터 지도로 대체합니다."
+
+msgid "The number of raster maps in a granule must be equal to the number of column names"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to add column %s to vector map <%s> with layer %i"
+msgstr "벡터 지도 <%s>를 위한 데이터베이스 연결을 추가할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to add table to vector map <%s> with layer %i"
+msgstr "벡터 지도 <%s>를 위한 데이터베이스 연결을 추가할 수 없습니다"
+
+#, fuzzy, python-format
+#| msgid "Unable to read color file of raster map <%s>"
+msgid "Unable to run v.what.rast for vector map <%s> with layer %i and raster map <%s>"
+msgstr "래스터 지도 <%s>의 색상 파일을 읽을 수 없습니다"
+
+#, fuzzy
+#| msgid "Register empty maps in the output space time raster dataset, otherwise they will be deleted"
+msgid "All registered maps of the space time vector dataset must have time intervals"
+msgstr "출력 시공간 래스터 자료세트 안의 빈 지도를 등록하세요, 그렇지 않으면 그 지도들은 삭제됩니다"
+
+#, python-format
+msgid "Space time vector dataset <%s> is empty"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to create raster map <%s>"
+msgid "Unable to remove raster map <%s>"
+msgstr "래스터 지도 <%s>를 생성할 수 없습니다"
 
 msgid "Invalid GEOS geometry!"
 msgstr ""
@@ -25525,10 +26063,16 @@ msgstr ""
 msgid "Lowest chi2 = %f\n"
 msgstr ""
 
-#, c-format
-msgid ""
-"%15s%15s%15s\n"
-"\n"
+#. GTC Column header, lower class limit (exclusive)
+msgid "From (excl.)"
+msgstr ""
+
+#. GTC Column header, upper class limit (inclusive)
+msgid "To (incl.)"
+msgstr ""
+
+#. GTC Column header, number of values in the class
+msgid "Frequency"
 msgstr ""
 
 #, c-format
@@ -26864,10 +27408,6 @@ msgid "Native"
 msgstr "고유"
 
 msgid "Print current status in shell script style"
-msgstr ""
-
-#, c-format
-msgid "%s= or %s= must be specified"
 msgstr ""
 
 #, c-format
@@ -28333,7 +28873,7 @@ msgid "%d input polygons got lost during import."
 msgstr ""
 
 #, c-format
-msgid "%d additional areas where created during import."
+msgid "%d additional areas were created during import."
 msgstr ""
 
 #, c-format
@@ -28375,10 +28915,12 @@ msgstr ""
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with PDAL."
 msgstr "DWG/DXF를 GRASS 벡터 지도로 변환합니다"
 
-msgid "Reproject to projects's coordinate system if needed"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Invalid input file %s"
+msgid "Invalid input_srs: %s"
+msgstr "무효한 입력 파일 %s"
 
-msgid "Reprojects input dataset to the coordinate system of the GRASS project (by default only datasets with the matching coordinate system can be imported"
+msgid "Unable to reproject the input because the current project has no CRS defined. Use the -o flag to import the data without reprojection."
 msgstr ""
 
 msgid "Cannot store return information because the input does not have a return dimensions"
@@ -31733,8 +32275,10 @@ msgstr ""
 msgid "No database connection defined for map <%s> layer %d, but WHERE condition is provided"
 msgstr ""
 
-msgid "No features match Your query"
-msgstr ""
+#, fuzzy
+#| msgid "Name of vector points map for query"
+msgid "No features match your query"
+msgstr "질의를 위한 벡터 점 지도의 이름"
 
 msgid "Your query matches more than one record in input profiling map. Currently it's not supported. Enhance WHERE conditions to get only one line."
 msgstr ""
@@ -32040,13 +32584,18 @@ msgstr ""
 msgid "A file with 3D control points is needed for 3D transformation"
 msgstr ""
 
-#, c-format
-msgid "The vector map <%s> already exists in"
-msgstr ""
+#, fuzzy, c-format
+#| msgid "Raster map <%s> already exists"
+msgid "The vector map <%s> already exists."
+msgstr "래스터 지도 <%s>가 이미 존재합니다"
 
-#, c-format
-msgid "target project %s, mapset %s:"
-msgstr ""
+#, fuzzy, c-format
+msgid "Target project: <%s>"
+msgstr "지도 세트 <%s>를 찾을 수 없습니다"
+
+#, fuzzy, c-format
+msgid "Target mapset: <%s>"
+msgstr "지도 세트 <%s>를 찾을 수 없습니다"
 
 msgid "Rectification cancelled."
 msgstr ""
@@ -34033,6 +34582,20 @@ msgstr ""
 msgid "Image file"
 msgstr ""
 
+#, fuzzy, c-format
+#~| msgid "Invalid grid size <%s>"
+#~ msgid "Invalid random seed <%s>"
+#~ msgstr "무효한 격자 크기 <%s>"
+
+#, fuzzy
+#~| msgid "No table for layer %d"
+#~ msgid "No areas of size "
+#~ msgstr "레이어 %d를 위한 테이블이 존재하지 않습니다"
+
+#, fuzzy, c-format
+#~ msgid "Raster map <%s> created. "
+#~ msgstr "래스터 지도 <%s>를 생성했습니다."
+
 #, fuzzy
 #~ msgid "Unable to convert input map coordinate reference system to GRASS format; cannot create new project."
 #~ msgstr "입력 지도의 투영을 GRASS 포맷으로 변환할 수 없습니다; 새 로케이션을 생성할 수 없습니다."
@@ -34085,9 +34648,6 @@ msgstr ""
 #, c-format
 #~ msgid "%s Cannot open %s"
 #~ msgstr "%s %s를 열 수 없습니다"
-
-#~ msgid "%s available in mapset <%s>:"
-#~ msgstr "지도세트 <%2$s> 안에 유효한 %1$s:"
 
 #~ msgid "%s=%s,%s: files are the same, no copy required"
 #~ msgstr "%s=%s,%s: 파일이 똑같아서 복사할 필요가 없습니다"
@@ -36375,10 +36935,6 @@ msgstr ""
 #~ msgstr "최종 보고서를 포함할 출력 파일을 위한 이름"
 
 #, fuzzy
-#~ msgid "Name of the output space time raster dataset"
-#~ msgstr "출력할 격자지도"
-
-#, fuzzy
 #~ msgid "Name of the raster map with the average age [year]"
 #~ msgstr "변경할 래스터 지도의 이름"
 
@@ -36790,10 +37346,6 @@ msgstr ""
 #~ msgstr "입력 표고 래스터 지도의 이름 [미터]"
 
 #, fuzzy
-#~ msgid "Number of threads for multiprocessing"
-#~ msgstr "함수 '%s'를 위한 인수의 개수"
-
-#, fuzzy
 #~ msgid "Number of tile border lines in each direction"
 #~ msgstr "새 영역 내 열의 개수"
 
@@ -37068,14 +37620,6 @@ msgstr ""
 #~ msgstr "출력할 격자지도"
 
 #, fuzzy
-#~ msgid "Please specify input= and datapos="
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
-#~ msgid "Please specify input= or infile="
-#~ msgstr "출력할 래스터맵"
-
-#, fuzzy
 #~ msgid "Please specify output= and samplingpos="
 #~ msgstr "출력할 래스터맵"
 
@@ -37325,10 +37869,6 @@ msgstr ""
 #~ msgstr "보고에 쓰일 래스터 지도의 이름"
 
 #, fuzzy
-#~ msgid "Raster maps"
-#~ msgstr "래스터"
-
-#, fuzzy
 #~ msgid "Raster names of equally spaced time series"
 #~ msgstr "시공간 자료세트의 이름을 바꿉니다"
 
@@ -37376,9 +37916,6 @@ msgstr ""
 #~ msgid "Remove all operational maps"
 #~ msgstr "기반 래스터 지도를 제거합니다"
 
-#~ msgid "Remove all registered maps from the temporal and also from the spatial database"
-#~ msgstr "시간과 공간 데이터베이스로부터 모든 등록된 지도를 제거합니다"
-
 #, fuzzy
 #~ msgid "Remove gaps"
 #~ msgstr "댕글을 제거합니다"
@@ -37390,10 +37927,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Removes signature file in a group/subgroup."
 #~ msgstr "지정된 그룹 또는 부그룹으로부터 선택된 파일을 제거합니다"
-
-#, fuzzy
-#~ msgid "Renames multiple maps in the current mapset."
-#~ msgstr "사용자의 현재 지도 세트 안에 있는 데이터베이스 요소파일들의 이름을 바꿉니다."
 
 #, fuzzy
 #~ msgid "Rendered output file"

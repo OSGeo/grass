@@ -199,7 +199,7 @@ class TestDbColumns(TestCase):
         )
         self.assertEqual(cols, output_list_more_info)
 
-        # with semicolumn as separator:
+        # with semicolon as separator:
         cols = read_command(
             "db.columns",
             table=self.invect,
