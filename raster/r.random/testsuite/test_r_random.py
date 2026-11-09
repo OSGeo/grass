@@ -83,11 +83,11 @@ class TestRasterTile(TestCase):
         topology = {"points": 20, "primitives": 20}
         self.assertVectorFitsTopoInfo(vector=self.vector, reference=topology)
 
-    def test_random_raster_flag_z(self):
+    def test_random_raster_flag_n(self):
         """Testing r.random  runs successfully"""
         self.assertModule(
             "r.random",
-            flags="z",
+            flags="n",
             input=self.input,
             npoints=self.npoints,
             raster=self.raster + "_null",
@@ -98,11 +98,11 @@ class TestRasterTile(TestCase):
             self.raster, msg="landcover_1m_raster_random_null was not created"
         )
 
-    def test_vector_random_flag_z(self):
+    def test_vector_random_flag_n(self):
         """Testing r.random  runs successfully"""
         self.assertModule(
             "r.random",
-            flags="z",
+            flags="n",
             input=self.input,
             npoints=self.npoints,
             vector=self.vector + "_null",

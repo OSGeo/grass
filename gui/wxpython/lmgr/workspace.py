@@ -535,7 +535,7 @@ class WorkspaceManager:
     def AddFileToHistory(self, file_path=None):
         """Add file to history (recent files)
 
-        :param str file_path: file path wit default arg None
+        :param str file_path: file path with default arg None
 
         :return None
         """

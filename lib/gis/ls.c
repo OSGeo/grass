@@ -180,16 +180,18 @@ void G_ls_format(char **list, int num_items, int perline, FILE *stream)
 #endif
 
     if (perline == 0) {
-        unsigned int max_len = 0;
+        size_t max_len = 0;
 
         for (i = 0; i < num_items; i++) {
+            const size_t len = strlen(list[i]);
+
             /* Find maximum filename length */
-            if (strlen(list[i]) > max_len)
-                max_len = strlen(list[i]);
+            if (len > max_len)
+                max_len = len;
         }
         /* Auto-fit the number of items that will
          * fit per line (+1 because of space after item) */
-        perline = screen_width / (max_len + 1);
+        perline = (int)((size_t)screen_width / (max_len + 1));
         if (perline < 1)
             perline = 1;
     }

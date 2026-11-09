@@ -139,7 +139,7 @@ static void usage(FILE *fp, int markers)
                 fprintf(stderr, "\n%s\n", _("ERROR: Option key not defined"));
                 exit(EXIT_FAILURE);
             }
-            n = strlen(opt->key);
+            n = (int)strlen(opt->key);
             if (n > maxlen)
                 maxlen = n;
 
@@ -277,7 +277,8 @@ static void show_options(FILE *fp, int maxlen, const char *str)
 {
     char *buff = G_store(str);
     char *p1, *p2;
-    int totlen, len;
+    int totlen;
+    size_t len;
 
     fprintf(fp, _("  %*s   options: "), maxlen, " ");
     totlen = maxlen + 13;
@@ -305,7 +306,7 @@ static int show(FILE *fp, const char *item, int len)
 {
     int n;
 
-    n = strlen(item) + (len > 0);
+    n = (int)strlen(item) + (len > 0);
     if (n + len > 76) {
         if (len)
             fprintf(fp, "\n  ");

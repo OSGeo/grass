@@ -298,7 +298,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
         self.assertModule(rast_list)
         self.assertLooksLike(text, rast_list.outputs.stdout)
 
-    def test_simple_gran(self):
+    def test_simple_gran_time_suffix(self):
         self.assertModule(
             "t.rast.gapfill",
             input="A",

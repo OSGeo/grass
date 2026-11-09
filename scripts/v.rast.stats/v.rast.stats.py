@@ -411,8 +411,10 @@ def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver, c)
         if currcolumn in gs.vector_columns(vector, layer).keys():
             if not c:
                 gs.fatal(
-                    (_("Cannot create column <%s> (already present). ") % currcolumn)
-                    + _("Use -c flag to update values in this column.")
+                    _(
+                        "Cannot create column <{column}> (already present)."
+                        " Use -c flag to update values in this column."
+                    ).format(column=currcolumn)
                 )
         else:
             coltype = "INTEGER" if i == "n" else "DOUBLE PRECISION"

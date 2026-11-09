@@ -44,6 +44,7 @@ build_library_in_subdir(
     vedit
     NAME grass_vedit
     DEPENDS
+        ${LIBM}
         GDAL::GDAL
         grass_dbmibase
         grass_dbmiclient

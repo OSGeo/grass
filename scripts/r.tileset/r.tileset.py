@@ -9,11 +9,10 @@
 #
 # PURPOSE:      To produce tilings of regions in other projections.
 #
-# COPYRIGHT:    (C) 2006-2009 by Cedric Shoc, Martin Landa, and GRASS development team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2006-2009 Cedric Shoc
+# SPDX-FileCopyrightText: 2006-2009 Martin Landa
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -226,9 +225,9 @@ def bboxesIntersect(bbox_1, bbox_2) -> bool:
     cin = [False, False]
     for i in (0, 1):
         if (
-            (bi_a1[i] <= bi_b1[i] and bi_a2[i] >= bi_b1[i])
+            (bi_a1[i] <= bi_b1[i] <= bi_a2[i])
             or (bi_a1[i] <= bi_b1[i] and bi_a2[i] >= bi_b2[i])
-            or (bi_b1[i] <= bi_a1[i] and bi_b2[i] >= bi_a1[i])
+            or (bi_b1[i] <= bi_a1[i] <= bi_b2[i])
             or (bi_b1[i] <= bi_a1[i] and bi_b2[i] >= bi_a2[i])
         ):
             cin[i] = True

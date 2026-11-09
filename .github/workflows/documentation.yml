@@ -54,14 +54,14 @@ jobs:
 
       - name: Set up Python (with cache)
         if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip # zizmor: ignore[cache-poisoning] Assuming push event is not used for tags
 
       - name: Set up Python (no cache, use for release artifacts)
         if: ${{ !contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
@@ -102,7 +102,7 @@ jobs:
           pip install -r grass/.github/workflows/python_requirements.txt
           pip install -r grass-addons/.github/workflows/requirements.txt
 
-      - uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
+      - uses: rui314/setup-mold@339e96b4ff1f3bd865856ba4cbbe8818a7acb038 # v1
         if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
 
       - name: Create installation directory

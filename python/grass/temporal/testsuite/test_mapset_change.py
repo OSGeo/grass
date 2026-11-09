@@ -1,4 +1,4 @@
-"""Test wether a switch of mapset is taken into account
+"""Test whether a switch of mapset is taken into account
 
 SPDX-FileCopyrightText: 2025 GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later

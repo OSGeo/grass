@@ -201,7 +201,7 @@ class MapPanel(SingleMapPanel):
         # do not init zoom history here, that happens when zooming to map(s)
 
         #
-        # Re-use dialogs
+        # Reuse dialogs
         #
         self.dialogs = {}
         self.dialogs["attributes"] = None
