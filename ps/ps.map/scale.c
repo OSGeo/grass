@@ -17,9 +17,9 @@
 static double do_scale(char *);
 
 #ifdef __GNUC_MINOR__
-static int OOPS(void) __attribute__((__noreturn__));
+static void OOPS(void) __attribute__((__noreturn__));
 #else
-static int OOPS();
+static void OOPS();
 #endif
 
 double scale(char *text)
@@ -131,9 +131,10 @@ static double do_scale(char *text)
         return METERS_TO_INCHES * distance(PS.w.east, PS.w.west) * u1 / u2;
     }
     OOPS();
+    return 0;
 }
 
-static int OOPS(void)
+static void OOPS(void)
 {
     G_fatal_error(_("PSmap: do_scale(): shouldn't happen"));
 }
