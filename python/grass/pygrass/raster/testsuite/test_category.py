@@ -132,6 +132,13 @@ class RasterCategoryTestCase(TestCase):
         cats.sort()
         self.assertEqual(list(cats), [("A", 11, None), ("B", 21, None)])
 
+    def test_sort_empty_label(self):
+        cats = Category(self.name)
+        cats.append(("B", 21, None))
+        cats.append(("", 11, None))
+        cats.sort()
+        self.assertEqual(list(cats), [("", 11, None), ("B", 21, None)])
+
     @xfail_windows
     def testWrite(self):
         tmpfile = tempfile(False)

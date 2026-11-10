@@ -341,10 +341,10 @@ class Category(list):
         Path(filename).write_text("\n".join(cats))
 
     def sort(self):
-        """Sort the categories by their range"""
-        self._write_cats()
-        libraster.Rast_sort_cats(ctypes.byref(self.c_cats))
-        self._read_cats()
+        """Sort the categories by their minimum value, like Rast_sort_cats()"""
+        # Sort the list directly: write() rebuilds the C struct from it, and
+        # reading the C struct back would fail on empty labels.
+        super().sort(key=itemgetter(1))
 
     def labels(self):
         return list(map(itemgetter(0), self))
