@@ -69,9 +69,16 @@ take precedence over the automatic ccache.
 
 To link with a faster linker such as `lld` or `mold`, use
 `-DCMAKE_LINKER_TYPE=LLD` (CMake 3.29 or later). With older CMake versions,
-pass the compiler flag instead:
-`-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld -DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld
--DCMAKE_MODULE_LINKER_FLAGS=-fuse-ld=lld`.
+set the `LDFLAGS` environment variable on the first configure, which
+initializes the linker flags for executables, shared libraries and modules:
+
+```bash
+LDFLAGS=-fuse-ld=lld cmake -B build
+```
+
+Using `mold` with GCC requires GCC 12.1 or later. Setting the
+`CMAKE_*_LINKER_FLAGS` variables yourself replaces any value that `LDFLAGS`
+would have provided.
 
 ## Compiling
 
