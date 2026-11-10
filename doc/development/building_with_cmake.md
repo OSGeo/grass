@@ -63,7 +63,15 @@ directory.
 If `ccache` is installed, the build uses it automatically to cache
 compiler output, so recompiling files that have not changed (e.g. after
 deleting the build directory or in a second build directory) is nearly
-instant. Pass `-DUSE_CCACHE=OFF` to opt out.
+instant. Pass `-DUSE_CCACHE=OFF` to opt out. To use a different launcher,
+set `CMAKE_C_COMPILER_LAUNCHER` and `CMAKE_CXX_COMPILER_LAUNCHER`; these
+take precedence over the automatic ccache.
+
+To link with a faster linker such as `lld` or `mold`, use
+`-DCMAKE_LINKER_TYPE=LLD` (CMake 3.29 or later). With older CMake versions,
+pass the compiler flag instead:
+`-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld -DCMAKE_SHARED_LINKER_FLAGS=-fuse-ld=lld
+-DCMAKE_MODULE_LINKER_FLAGS=-fuse-ld=lld`.
 
 ## Compiling
 
