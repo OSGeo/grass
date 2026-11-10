@@ -12,11 +12,8 @@
  *               Vaclav Petras <wenzeslaus gmail com> (various features)
  *
  * PURPOSE:
- * COPYRIGHT:    (C) 1999-2016 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2016 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 /* Chris Rewerts
@@ -89,7 +86,7 @@ static char *icon_files(void)
 
     list = NULL;
     len = 0;
-    snprintf(path, sizeof(path), "%s/etc/symbol", G_gisbase());
+    snprintf(path, sizeof(path), "%s/symbol", G_etc_dir());
 
     dir = opendir(path);
     if (!dir)
@@ -102,7 +99,7 @@ static char *icon_files(void)
         if (d->d_name[0] == '.')
             continue;
 
-        snprintf(path_i, sizeof(path_i), "%s/etc/symbol/%s", G_gisbase(),
+        snprintf(path_i, sizeof(path_i), "%s/symbol/%s", G_etc_dir(),
                  d->d_name);
         dir_i = opendir(path_i);
 

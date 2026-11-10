@@ -68,7 +68,9 @@ Consume metrics from Python:
     ```python
     import grass.script as gs
 
-    data = gs.parse_command("v.geometry", map="geology", metric="compactness", format="json")
+    data = gs.parse_command(
+        "v.geometry", map="geology", metric="compactness", format="json"
+    )
     for record in data["records"]:
         print(record["category"], record["compactness"])
     ```

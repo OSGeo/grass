@@ -5,11 +5,9 @@
 # MODULE:    build_class_graphical
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:   Build page with modules per family/class/category with images
-# COPYRIGHT: (C) 2015 by Vaclav Petras and the GRASS Development Team
-#
-#        This program is free software under the GNU General Public
-#        License (>=v2). Read the file COPYING that comes with GRASS
-#        for details.
+# SPDX-FileCopyrightText: 2015 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -146,7 +144,7 @@ def generate_page_for_category(
 
         if module_family.lower() not in {"general", "postscript"}:
             if module_family == "raster3d":
-                # covert keyword to nice form
+                # convert keyword to nice form
                 module_family = "3D raster"
             output.write(
                 modclass_intro_tmpl.substitute(
@@ -205,7 +203,7 @@ def generate_page_for_category_md(
 
         if module_family.lower() not in {"general", "postscript"}:
             if module_family == "raster3d":
-                # covert keyword to nice form
+                # convert keyword to nice form
                 module_family = "3D raster"
             output.write(
                 modclass_intro_tmpl.substitute(

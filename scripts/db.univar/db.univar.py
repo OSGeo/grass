@@ -8,11 +8,8 @@
 #               Sync'ed to r.univar by Markus Metz
 # PURPOSE:	Calculates univariate statistics from a GRASS vector map attribute column.
 #               Based on r.univar.sh by Markus Neteler
-# COPYRIGHT:	(C) 2005, 2007, 2008 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2005, 2007, 2008 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -80,9 +77,7 @@ def sortfile(infile, outfile):
         else:
             # FIXME: we need a large-file sorting function
             gs.warning(_("'sort' not found: sorting in memory"))
-            lines = inf.readlines()
-            for i in range(len(lines)):
-                lines[i] = float(lines[i].rstrip("\r\n"))
+            lines = [float(line) for line in (line.strip() for line in inf) if line]
             lines.sort()
             outf.writelines(str(line) + "\n" for line in lines)
 

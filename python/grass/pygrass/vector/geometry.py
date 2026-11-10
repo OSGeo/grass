@@ -1269,11 +1269,11 @@ class Node:
     """
 
     def __init__(self, v_id, c_mapinfo, **kwords):
-        """Construct a Node object
+        r"""Construct a Node object
 
-        param v_id: The unique node id
-        param c_mapinfo: A valid pointer to the mapinfo object
-        param **kwords: Ignored
+        :param v_id: The unique node id
+        :param c_mapinfo: A valid pointer to the mapinfo object
+        :param \*\*kwords: Ignored
         """
         self.id = v_id  # vector id
         self.c_mapinfo = c_mapinfo
@@ -1829,10 +1829,13 @@ class Area(Geo):
         :type bbox: a Bbox object
         """
         bbox = bbox or self.bbox()
+        try:
+            x, y = (float(coord) for coord in get_xyz(point)[:2])
+        except (TypeError, ValueError) as error:
+            str_error = "The coordinates of the point must be numbers: {0!r}"
+            raise ValueError(str_error.format(point)) from error
         return bool(
-            libvect.Vect_point_in_area(
-                point.x, point.y, self.c_mapinfo, self.id, bbox.c_bbox
-            )
+            libvect.Vect_point_in_area(x, y, self.c_mapinfo, self.id, bbox.c_bbox)
         )
 
     @mapinfo_must_be_set

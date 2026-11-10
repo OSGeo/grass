@@ -8,10 +8,8 @@ Classes:
  - workspace::WriteWorkspaceFile
  - workspace::ProcessGrcFile
 
-(C) 2007-2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 """
@@ -518,8 +516,8 @@ class ProcessWorkspaceFile:
             if node_res is not None:
                 nvizData["volume"]["draw"]["resolution"] = {}
                 for vol_type in ("isosurface", "slice"):
-                    nd = node_res.find(vol_type)
-                    value = int(self.__getNodeText(nd, "value"))
+                    node_el = node_res.find(vol_type)
+                    value = int(self.__getNodeText(node_el, "value"))
                     nvizData["volume"]["draw"]["resolution"][vol_type] = {
                         "value": value
                     }
@@ -527,9 +525,9 @@ class ProcessWorkspaceFile:
             if node_shading is not None:
                 nvizData["volume"]["draw"]["shading"] = {}
                 for vol_type in ("isosurface", "slice"):
-                    nd = node_shading.find(vol_type)
-                    value = int(self.__getNodeText(nd, "value"))
-                    desc = self.__getNodeText(nd, "desc")
+                    node_el = node_shading.find(vol_type)
+                    value = int(self.__getNodeText(node_el, "value"))
+                    desc = self.__getNodeText(node_el, "desc")
                     nvizData["volume"]["draw"]["shading"][vol_type] = {
                         "value": value,
                         "desc": desc,

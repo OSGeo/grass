@@ -202,8 +202,7 @@ Vitter](http://www.science.purdue.edu/jsv/), Rajiv Wickremesinghe.
 
 Porting to GRASS GIS, 2002:
 
-[Lars Arge](http://www.daimi.au.dk/~large/), [Helena
-Mitasova,](http://fatra.cnr.ncsu.edu/~hmitaso/index.html) [Laura
+[Lars Arge](http://www.daimi.au.dk/~large/), Helena Mitasova, [Laura
 Toma](http://www.bowdoin.edu/~ltoma/).
 
 Contact: [Laura Toma](mailto:ltoma@bowdoin.edu-)

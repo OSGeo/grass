@@ -27,7 +27,7 @@ int f_mod(int argc, const int *argt, void **args)
         CELL *arg2 = args[2];
 
         for (i = 0; i < columns; i++) {
-            if (IS_NULL_C(&arg1[i]) || IS_NULL_C(&arg2[i]))
+            if (IS_NULL_C(&arg1[i]) || IS_NULL_C(&arg2[i]) || arg2[i] == 0)
                 SET_NULL_C(&res[i]);
             else
                 res[i] = arg1[i] % arg2[i];
@@ -42,12 +42,8 @@ int f_mod(int argc, const int *argt, void **args)
         for (i = 0; i < columns; i++) {
             if (IS_NULL_F(&arg1[i]) || IS_NULL_F(&arg2[i]))
                 SET_NULL_F(&res[i]);
-            else {
-                floating_point_exception = 0;
+            else
                 res[i] = (FCELL)fmod(arg1[i], arg2[i]);
-                if (floating_point_exception)
-                    SET_NULL_F(&res[i]);
-            }
         }
         return 0;
     }
@@ -59,12 +55,8 @@ int f_mod(int argc, const int *argt, void **args)
         for (i = 0; i < columns; i++) {
             if (IS_NULL_D(&arg1[i]) || IS_NULL_D(&arg2[i]))
                 SET_NULL_D(&res[i]);
-            else {
-                floating_point_exception = 0;
+            else
                 res[i] = (DCELL)fmod(arg1[i], arg2[i]);
-                if (floating_point_exception)
-                    SET_NULL_D(&res[i]);
-            }
         }
         return 0;
     }

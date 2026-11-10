@@ -9,10 +9,8 @@ Usage:
 
     grass.vector_db(map)
 
-(C) 2008-2010 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2008-2010 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
@@ -437,7 +435,7 @@ def vector_what(
     try:
         ret = read_command("v.what", env=env, **cmdParams).strip()
     except CalledModuleError as e:
-        raise ScriptError(e.msg)
+        raise ScriptError(e.msg) from e
 
     data = []
     if not ret:
@@ -460,10 +458,10 @@ def vector_what(
 
     try:
         result = json.loads(ret, **kwargs)
-    except ValueError:
+    except ValueError as err:
         raise ScriptError(
             _("v.what output is not valid JSON format:\n {ret}").format(ret=ret)
-        )
+        ) from err
 
     if multiple:
         for vmap in result["Maps"]:

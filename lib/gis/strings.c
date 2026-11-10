@@ -5,10 +5,8 @@
 
    \todo merge interesting functions from ../datetime/scan.c here
 
-   (C) 1999-2008, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 1999-2008, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Dave Gerdes (USACERL)
    \author Michael Shapiro (USACERL)
@@ -19,6 +17,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <limits.h>
 #include <sys/types.h>
 #include <grass/gis.h>
 
@@ -192,7 +191,7 @@ char *G_str_replace(const char *buffer, const char *old_str,
     char *R;
     const char *N, *B;
     char *replace;
-    int count, len;
+    size_t count, len;
 
     /* Make sure old_str and new_str are not NULL */
     if (old_str == NULL || new_str == NULL)
@@ -446,7 +445,6 @@ int G_str_to_sql(char *str)
 void G_squeeze(char *line)
 {
     char *f = line, *t = line;
-    int l;
 
     /* skip over space at the beginning of the line. */
     while (isspace(*f))
@@ -459,9 +457,9 @@ void G_squeeze(char *line)
             if (!isspace(*f))
                 *t++ = ' ';
     *t = '\0';
-    l = strlen(line) - 1;
-    if (*(line + l) == '\n')
-        *(line + l) = '\0';
+    size_t length = strlen(line);
+    if (length > 0 && line[length - 1] == '\n')
+        line[length - 1] = '\0';
 }
 
 /*!
@@ -482,7 +480,10 @@ char *G_strcasestr(const char *str, const char *substr)
 
     p = substr;
     q = str;
-    length = strlen(substr);
+    size_t substr_length = strlen(substr);
+    if (substr_length > INT_MAX)
+        return NULL;
+    length = (int)substr_length;
 
     do {
         /* match 1st substr char */

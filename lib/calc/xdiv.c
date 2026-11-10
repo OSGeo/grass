@@ -40,12 +40,8 @@ int f_div(int argc, const int *argt, void **args)
         for (i = 0; i < columns; i++) {
             if (IS_NULL_F(&arg1[i]) || IS_NULL_F(&arg2[i]) || arg2[i] == 0.0f)
                 SET_NULL_F(&res[i]);
-            else {
-                floating_point_exception = 0;
+            else
                 res[i] = arg1[i] / arg2[i];
-                if (floating_point_exception)
-                    SET_NULL_F(&res[i]);
-            }
         }
         return 0;
     }
@@ -57,12 +53,8 @@ int f_div(int argc, const int *argt, void **args)
         for (i = 0; i < columns; i++) {
             if (IS_NULL_D(&arg1[i]) || IS_NULL_D(&arg2[i]) || arg2[i] == 0.0)
                 SET_NULL_D(&res[i]);
-            else {
-                floating_point_exception = 0;
+            else
                 res[i] = arg1[i] / arg2[i];
-                if (floating_point_exception)
-                    SET_NULL_D(&res[i]);
-            }
         }
         return 0;
     }

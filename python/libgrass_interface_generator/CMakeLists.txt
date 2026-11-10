@@ -1,5 +1,5 @@
 #[[
-COPYRIGHT: (c) 2020-2025 by the GRASS Development Team
+SPDX-FileCopyrightText: 2020-2025 GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 ]]
 
@@ -69,7 +69,6 @@ if(MSVC)
     string(APPEND _c_flags " -I${CMAKE_SOURCE_DIR}/msvc")
 elseif(APPLE AND CMAKE_OSX_SYSROOT)
     string(APPEND _c_flags " --sysroot ${CMAKE_OSX_SYSROOT}")
-    message("_c_flags")
 endif()
 
 foreach(module ${MODULES})

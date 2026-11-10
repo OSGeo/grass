@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Functions to handle locale.
  *
- * (C) 2001-2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author GRASS Development Team
  *
@@ -39,14 +37,11 @@ void G_init_locale(void)
 #ifdef LC_MESSAGES
     setlocale(LC_MESSAGES, "");
 #endif
-    const char *gisbase = getenv("GISBASE");
+    /* Not using G_locale_dir(): its G_fatal_error() would translate the
+       message and re-enter G_init_locale(), recursing without bound. */
+    const char *localedir = getenv("GRASS_LOCALEDIR");
 
-    if (gisbase && *gisbase) {
-        char localedir[GPATH_MAX];
-
-        strcpy(localedir, gisbase);
-        strcat(localedir, "/locale");
-
+    if (localedir && *localedir) {
         bindtextdomain("grasslibs", localedir);
         bindtextdomain("grassmods", localedir);
     }

@@ -1,11 +1,10 @@
 /*
  * i.svm.train Functions filling svm_problem struct
  *
- *   Copyright 2023 by Maris Nartiss, and the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2023 Maris Nartiss
+ *   SPDX-FileCopyrightText: GRASS Development Team
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author: Maris Nartiss
- *
- *   This program is free software licensed under the GPL (>=v2).
- *   Read the COPYING file that comes with GRASS for details.
  *
  */
 #include <grass/raster.h>

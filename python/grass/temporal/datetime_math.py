@@ -1,10 +1,8 @@
 """
 Functions for mathematical datetime operations
 
-(C) 2011-2025 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2011-2025 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -461,10 +459,11 @@ def adjust_datetime_to_granularity(mydate: datetime, granularity):
             seconds = 0
             minutes = 0
             hours = 0
-            if days > weekday:
-                days -= weekday  # this needs to be fixed
-            else:
-                days += weekday  # this needs to be fixed
+            # The Monday can be in the previous month or year.
+            monday = mydate - timedelta(days=weekday)
+            years = monday.year
+            months = monday.month
+            days = monday.day
         elif has_months:  # Start at the first day of the month at 00:00:00
             seconds = 0
             minutes = 0

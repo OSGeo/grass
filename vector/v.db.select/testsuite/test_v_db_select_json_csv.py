@@ -3,11 +3,9 @@
 # MODULE:       Test of v.db.select
 # AUTHOR(S):    Vaclav Petras <wenzeslaus gmail com>
 # PURPOSE:      Test parsing and structure of CSV and JSON outputs
-# COPYRIGHT:    (C) 2021-2023 by Vaclav Petras the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2021-2023 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -138,25 +136,25 @@ class DifficultValueTest(TestCase):
 
     def test_csv_loads(self):
         """Load CSV with difficult values with many separators"""
-        for delimeter, null_value in itertools.product(
+        for delimiter, null_value in itertools.product(
             [None, ",", ";", "\t", "|"], [None, "NULL"]
         ):
             text = gs.read_command(
                 "v.db.select",
                 map=self.vector_points,
                 format="csv",
-                separator=delimeter,
+                separator=delimiter,
                 null_value=null_value,
             )
             # This covers the defaults for v.db.select.
-            if delimeter is None:
-                delimeter = ","
+            if delimiter is None:
+                delimiter = ","
             if null_value is None:
                 null_value = ""
             io_string = io.StringIO(text)
             reader = csv.DictReader(
                 io_string,
-                delimiter=delimeter,
+                delimiter=delimiter,
                 quotechar='"',
                 doublequote=True,
                 lineterminator="\n",

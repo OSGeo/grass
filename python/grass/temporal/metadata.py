@@ -14,10 +14,8 @@ Usage:
     >>> meta = tgis.STR3DSMetadata()
     >>> meta = tgis.STVDSMetadata()
 
-(C) 2012-2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -1163,7 +1161,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     class for strds and str3ds datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new maps are added. Therefor only some set- an many
+    new maps are added. Therefore only some set- and many
     get-functions are available.
 
     Usage:
@@ -1390,7 +1388,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
     space time raster datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new raster maps are added. Therefor only some set- an many
+    new raster maps are added. Therefore only some set- and many
     get-functions are available.
 
     Usage:
@@ -1585,7 +1583,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
     space time 3D raster datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new 3D raster maps are added. Therefor only some set- an many
+    new 3D raster maps are added. Therefore only some set- and many
     get-functions are available.
 
     Usage:
@@ -1741,7 +1739,7 @@ class STVDSMetadata(STDSMetadataBase):
     space time vector datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new vector maps are added. Therefor only some set- an many get-functions
+    new vector maps are added. Therefore only some set- and many get-functions
     are available.
 
     Usage:

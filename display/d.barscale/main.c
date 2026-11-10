@@ -17,11 +17,8 @@
  *
  * PURPOSE:      Displays a barscale on graphics monitor
  *
- * COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2013 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -120,7 +117,10 @@ int main(int argc, char **argv)
     length_opt->type = TYPE_INTEGER;
     length_opt->answer = "0";
     length_opt->options = "0-";
-    length_opt->label = _("Length of barscale in map units");
+    length_opt->label =
+        _("Length of barscale in units set by the units option");
+    length_opt->description =
+        _("Map units if units is not given; 0 picks a length automatically");
 
     units_opt = G_define_option();
     units_opt->key = "units";

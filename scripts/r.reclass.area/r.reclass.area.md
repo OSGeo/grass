@@ -15,11 +15,22 @@ then reclassified using the clump size. With the **-m** flag,
 using the *minsize* option there. If the **-c** flag is used,
 *r.reclass.area* will skip the creation of a clumped raster and
 assume that the input raster map is already clumped.
+With the **-i** flag, the area size filter is inverted: clumps between
+the **lower** and **upper** thresholds are removed, while clumps smaller
+than **lower** or greater than **upper** are preserved. This flag is only
+supported with the *reclass* method and does not work with the *rmarea* method.
 
 The *rmarea* method converts the raster map to vector and removes
 areas outside the given thresholds using [v.clean](v.clean.md) and
 [v.edit](v.edit.md). With the **-v** flag the **output** is the
 filtered vector map instead of a raster.
+
+An important difference between the two methods with regard to the
+**lower** area size threshold is that **method=reclass** deletes
+these areas, whereas **method=rmarea** tries to merge these small
+areas with a neighbouring larger area if existing. Details are
+explained in [v.clean](v.clean.md) describing the behaviour of
+**tool=rmarea**.
 
 ## EXAMPLES
 
@@ -34,7 +45,7 @@ r.report zipcodes unit=h
 Extract only areas greater than 2000 ha, NULL otherwise:
 
 ```sh
-r.reclass.area input=zipcodes output=zipcodes_larger2000ha greater=2000
+r.reclass.area input=zipcodes output=zipcodes_larger2000ha lower=2000
 
 r.report zipcodes_larger2000ha unit=h
 ```

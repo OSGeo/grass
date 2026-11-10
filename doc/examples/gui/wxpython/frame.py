@@ -8,10 +8,8 @@ Classes:
  - frame::ExampleMapDisplay
  - frame::ExampleInfoTextManager
 
-(C) 2011-2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2011-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
@@ -22,7 +20,7 @@ import wx
 
 # this enables to run application standalone (> python example/frame.py )
 if __name__ == "__main__":
-    sys.path.append(os.path.join(os.environ["GISBASE"], "etc", "gui", "wxpython"))
+    sys.path.append(os.environ["GRASS_GUIWXDIR"])
 
 # i18n is taken care of in the grass library code.
 # So we need to import it before any of the GUI code.

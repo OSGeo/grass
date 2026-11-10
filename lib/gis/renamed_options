@@ -333,6 +333,7 @@ r.sim.sediment|nwalk:nwalkers
 r.sim.sediment|niterations:duration
 r.sim.sediment|outiter:output_step
 r.sim.sediment|outwalk:walkers_output
+r.sim.sediment|random_seed:seed
 r.sim.sediment|tauin:shear_stress
 r.sim.sediment|tc:transport_capacity
 r.sim.sediment|tranin:transport_coeff
@@ -353,6 +354,7 @@ r.sim.water|nwalk:nwalkers
 r.sim.water|outiter:output_step
 r.sim.water|outwalk:walkers_output
 r.sim.water|rain_val:rain_value
+r.sim.water|random_seed:seed
 r.sim.water|traps:flow_control
 # r.slope.aspect
 r.slope.aspect|min_slp_allowed:min_slope

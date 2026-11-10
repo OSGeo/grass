@@ -27,6 +27,13 @@ foreach(gui_lib_DIR ${gui_lib_DIRS})
         DIRECTORY "${OUTDIR}/${WXPYTHON_DIR}/${gui_lib_DIR}"
         DESTINATION "${WXPYTHON_DIR}"
     )
+    if(gui_lib_DIR MATCHES "jupyter_notebook")
+        install(
+            DIRECTORY
+                "${CMAKE_CURRENT_SOURCE_DIR}/${gui_lib_DIR}/template_notebooks"
+            DESTINATION "${WXPYTHON_DIR}/${gui_lib_DIR}"
+        )
+    endif()
 endforeach()
 add_custom_target(
     GUI_WXPYTHON
@@ -172,7 +179,7 @@ if(NOT WITH_FHS)
             ${grass_env_command} ${PYTHON_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "psmap" >>
             ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
-        DEPENDS build_module_tree_menudata gui_images
+        DEPENDS build_module_tree_menudata
     )
 
     set_target_properties(build_menustrings PROPERTIES FOLDER GUI)

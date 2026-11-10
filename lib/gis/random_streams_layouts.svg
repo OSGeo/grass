@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" font-family="sans-serif" font-size="13" fill="#222">
+  <title>A single sequence and the whole-span, exact and bounded layouts of six units along the span</title>
+  <!-- The end of the span, 2^46 draws after the seed, for all the bars. -->
+  <line x1="600" y1="42" x2="600" y2="366" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <!-- A single sequence: one unit which owns the whole span and draws the
+       seed's sequence from its start, the values which the units of batch 0
+       of the exact layout below draw together. -->
+  <text x="80.0" y="22.0">a single sequence: G_random_state_from_seed()</text>
+  <text x="80.0" y="38.0">one unit, which owns the whole span and draws the seed's sequence</text>
+  <rect x="80" y="48" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
+  <rect x="80" y="48" width="216" height="24" fill="#222"/>
+  <text x="188.0" y="64.5" text-anchor="middle" fill="#fff">the values drawn so far</text>
+  <circle cx="80" cy="60" r="5" fill="#c33"/>
+  <text x="70.0" y="64.5" text-anchor="end">seed</text>
+  <!-- The whole span divided into an odd number of equal parts, seven for
+       six units, and a stride of a part rounded down to odd; the six units
+       take six parts, the last part stays unused, and there is one batch
+       only. -->
+  <text x="80.0" y="100.0">whole-span layout: G_random_init_layout()</text>
+  <text x="80.0" y="116.0">stride: a part rounded down to odd, seven parts for six units; one batch only</text>
+  <rect x="80" y="126" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
+  <rect x="80.0" y="126" width="14" height="24" fill="#222"/>
+  <text x="132.0" y="142.5" text-anchor="middle">0</text>
+  <line x1="154.3" y1="126" x2="154.3" y2="150" stroke="#222" stroke-width="1.5"/>
+  <rect x="154.3" y="126" width="22" height="24" fill="#222"/>
+  <text x="206.3" y="142.5" text-anchor="middle">1</text>
+  <line x1="228.6" y1="126" x2="228.6" y2="150" stroke="#222" stroke-width="1.5"/>
+  <rect x="228.6" y="126" width="9" height="24" fill="#222"/>
+  <text x="280.6" y="142.5" text-anchor="middle">2</text>
+  <line x1="302.9" y1="126" x2="302.9" y2="150" stroke="#222" stroke-width="1.5"/>
+  <rect x="302.9" y="126" width="27" height="24" fill="#222"/>
+  <text x="354.9" y="142.5" text-anchor="middle">3</text>
+  <line x1="377.1" y1="126" x2="377.1" y2="150" stroke="#222" stroke-width="1.5"/>
+  <rect x="377.1" y="126" width="19" height="24" fill="#222"/>
+  <text x="429.1" y="142.5" text-anchor="middle">4</text>
+  <line x1="451.4" y1="126" x2="451.4" y2="150" stroke="#222" stroke-width="1.5"/>
+  <rect x="451.4" y="126" width="12" height="24" fill="#222"/>
+  <text x="503.4" y="142.5" text-anchor="middle">5</text>
+  <line x1="525.7" y1="126" x2="525.7" y2="150" stroke="#222" stroke-width="1.5"/>
+  <text x="562.9" y="142.5" text-anchor="middle" fill="#888">unused</text>
+  <circle cx="80" cy="138" r="5" fill="#c33"/>
+  <text x="70.0" y="142.5" text-anchor="end">seed</text>
+  <path d="M 80.0 154 L 80.0 158 L 525.7 158 L 525.7 154" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="302.9" y="174.0" text-anchor="middle">batch 0, the only batch</text>
+  <!-- Exact: a stride of exactly the values a unit draws; the units of batch
+       0 draw the start of the seed's sequence and those of batch 1 what
+       follows. -->
+  <text x="80.0" y="198.0">exact layout: G_random_init_layout_exact()</text>
+  <text x="80.0" y="214.0">stride: the values each unit draws; the units draw the seed's sequence in order</text>
+  <rect x="80" y="224" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
+  <rect x="80" y="224" width="216" height="24" fill="#222"/>
+  <text x="98.0" y="240.5" text-anchor="middle" fill="#fff">0</text>
+  <line x1="116" y1="224" x2="116" y2="248" stroke="#fff" stroke-width="1.5"/>
+  <text x="134.0" y="240.5" text-anchor="middle" fill="#fff">1</text>
+  <line x1="152" y1="224" x2="152" y2="248" stroke="#fff" stroke-width="1.5"/>
+  <text x="170.0" y="240.5" text-anchor="middle" fill="#fff">2</text>
+  <line x1="188" y1="224" x2="188" y2="248" stroke="#fff" stroke-width="1.5"/>
+  <text x="206.0" y="240.5" text-anchor="middle" fill="#fff">3</text>
+  <line x1="224" y1="224" x2="224" y2="248" stroke="#fff" stroke-width="1.5"/>
+  <text x="242.0" y="240.5" text-anchor="middle" fill="#fff">4</text>
+  <line x1="260" y1="224" x2="260" y2="248" stroke="#fff" stroke-width="1.5"/>
+  <text x="278.0" y="240.5" text-anchor="middle" fill="#fff">5</text>
+  <text x="314.0" y="240.5" text-anchor="middle">0</text>
+  <line x1="332.0" y1="224" x2="332.0" y2="248" stroke="#222" stroke-width="1.5"/>
+  <text x="350.0" y="240.5" text-anchor="middle">1</text>
+  <line x1="368.0" y1="224" x2="368.0" y2="248" stroke="#222" stroke-width="1.5"/>
+  <text x="386.0" y="240.5" text-anchor="middle">2</text>
+  <line x1="404.0" y1="224" x2="404.0" y2="248" stroke="#222" stroke-width="1.5"/>
+  <text x="422.0" y="240.5" text-anchor="middle">3</text>
+  <line x1="440.0" y1="224" x2="440.0" y2="248" stroke="#222" stroke-width="1.5"/>
+  <text x="458.0" y="240.5" text-anchor="middle">4</text>
+  <line x1="476.0" y1="224" x2="476.0" y2="248" stroke="#222" stroke-width="1.5"/>
+  <text x="494.0" y="240.5" text-anchor="middle">5</text>
+  <line x1="512.0" y1="224" x2="512.0" y2="248" stroke="#222" stroke-width="1.5"/>
+  <circle cx="80" cy="236" r="5" fill="#c33"/>
+  <text x="70.0" y="240.5" text-anchor="end">seed</text>
+  <path d="M 80.0 252 L 80.0 256 L 296.0 256 L 296.0 252" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="188.0" y="272.0" text-anchor="middle">batch 0: the same values as above</text>
+  <path d="M 296.0 252 L 296.0 256 L 512.0 256 L 512.0 252" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="404.0" y="272.0" text-anchor="middle">batch 1: the values which follow</text>
+  <!-- Bounded: a stride of the bound rounded up to odd, with the added draw
+       in light grey, much wider than one draw is. -->
+  <text x="80.0" y="296.0">bounded layout: G_random_init_layout_bounded()</text>
+  <text x="80.0" y="312.0">stride: the bound rounded up to odd; light grey: the draw added to an even bound</text>
+  <rect x="80" y="322" width="520" height="24" fill="none" stroke="#222" stroke-width="1.5"/>
+  <rect x="80.0" y="322" width="8" height="24" fill="#222"/>
+  <rect x="116.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="106.0" y="338.5" text-anchor="middle">0</text>
+  <line x1="120.0" y1="322" x2="120.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <rect x="120.0" y="322" width="13" height="24" fill="#222"/>
+  <rect x="156.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="146.0" y="338.5" text-anchor="middle">1</text>
+  <line x1="160.0" y1="322" x2="160.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <rect x="160.0" y="322" width="5" height="24" fill="#222"/>
+  <rect x="196.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="186.0" y="338.5" text-anchor="middle">2</text>
+  <line x1="200.0" y1="322" x2="200.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <rect x="200.0" y="322" width="16" height="24" fill="#222"/>
+  <rect x="236.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="226.0" y="338.5" text-anchor="middle">3</text>
+  <line x1="240.0" y1="322" x2="240.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <rect x="240.0" y="322" width="11" height="24" fill="#222"/>
+  <rect x="276.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="266.0" y="338.5" text-anchor="middle">4</text>
+  <line x1="280.0" y1="322" x2="280.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <rect x="280.0" y="322" width="7" height="24" fill="#222"/>
+  <rect x="316.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="306.0" y="338.5" text-anchor="middle">5</text>
+  <line x1="320.0" y1="322" x2="320.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <rect x="356.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="346.0" y="338.5" text-anchor="middle">0</text>
+  <line x1="360.0" y1="322" x2="360.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <rect x="396.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="386.0" y="338.5" text-anchor="middle">1</text>
+  <line x1="400.0" y1="322" x2="400.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <rect x="436.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="426.0" y="338.5" text-anchor="middle">2</text>
+  <line x1="440.0" y1="322" x2="440.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <rect x="476.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="466.0" y="338.5" text-anchor="middle">3</text>
+  <line x1="480.0" y1="322" x2="480.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <rect x="516.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="506.0" y="338.5" text-anchor="middle">4</text>
+  <line x1="520.0" y1="322" x2="520.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <rect x="556.0" y="323" width="4" height="22" fill="#ccc"/>
+  <text x="546.0" y="338.5" text-anchor="middle">5</text>
+  <line x1="560.0" y1="322" x2="560.0" y2="346" stroke="#222" stroke-width="1.5"/>
+  <circle cx="80" cy="334" r="5" fill="#c33"/>
+  <text x="70.0" y="338.5" text-anchor="end">seed</text>
+  <path d="M 80.0 350 L 80.0 354 L 320.0 354 L 320.0 350" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="200.0" y="370.0" text-anchor="middle">batch 0</text>
+  <path d="M 320.0 350 L 320.0 354 L 560.0 354 L 560.0 350" fill="none" stroke="#222" stroke-width="1.5"/>
+  <text x="440.0" y="370.0" text-anchor="middle">batch 1</text>
+  <text x="600.0" y="390.0" text-anchor="end">red dot: the seed; dashed line: the end of the span, 2^46 draws after the seed</text>
+  <text x="600.0" y="408.0" text-anchor="end">dark: what the units of batch 0 draw</text>
+</svg>

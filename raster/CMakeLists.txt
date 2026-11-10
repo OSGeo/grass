@@ -244,6 +244,7 @@ build_program_in_subdir(
 build_program_in_subdir(
     r.geomorphon
     DEPENDS ${LIBM} grass_gis grass_gmath grass_parson grass_raster
+    OPTIONAL_DEPENDS OpenMP::OpenMP_C
 )
 
 build_program_in_subdir(r.grow.distance DEPENDS grass_gis grass_raster ${LIBM})
@@ -258,6 +259,7 @@ build_program_in_subdir(r.his DEPENDS grass_gis grass_raster grass_gproj)
 build_program_in_subdir(
     r.horizon
     DEPENDS ${LIBM} grass_gis grass_gproj grass_parson grass_raster
+    OPTIONAL_DEPENDS OpenMP::OpenMP_C
 )
 
 build_program_in_subdir(r.in.ascii DEPENDS grass_gis grass_raster)
@@ -317,7 +319,7 @@ build_program_in_subdir(
 
 build_program_in_subdir(r.latlong DEPENDS grass_gis grass_raster grass_gproj)
 
-build_program_in_subdir(r.lake DEPENDS grass_gis grass_raster)
+build_program_in_subdir(r.lake DEPENDS grass_gis grass_raster ${LIBM})
 
 build_program_in_subdir(
     r.mask.status
@@ -416,7 +418,7 @@ build_program_in_subdir(
 
 build_program_in_subdir(
     r.profile
-    DEPENDS ${LIBM} grass_gis grass_parson grass_raster
+    DEPENDS ${LIBM} grass_gis grass_parson grass_raster grass_vector
 )
 
 build_program_in_subdir(
@@ -501,6 +503,7 @@ build_program_in_subdir(
 build_program_in_subdir(
     r.resamp.stats
     DEPENDS ${LIBM} grass_gis grass_raster grass_stats
+    OPTIONAL_DEPENDS OpenMP::OpenMP_C
 )
 
 build_program_in_subdir(r.resample DEPENDS grass_gis grass_raster)
@@ -631,7 +634,11 @@ else()
     set(USER_NAME $ENV{USER})
 endif()
 
-build_program_in_subdir(r.texture DEPENDS grass_gis grass_raster ${LIBM})
+build_program_in_subdir(
+    r.texture
+    DEPENDS ${LIBM} grass_gis grass_raster
+    OPTIONAL_DEPENDS OpenMP::OpenMP_C
+)
 
 build_program_in_subdir(r.thin DEPENDS grass_gis grass_raster grass_rowio)
 
