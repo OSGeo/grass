@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2026 by the GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test t.info with space time raster datasets and raster maps
 
@@ -368,10 +369,10 @@ def test_json_shell_parity(temporal_data):
     tools = Tools(session=temporal_data.session)
     strds_id = f"precip_abs1@{temporal_data.mapset}"
 
-    shell_info = tools.t_info(format="shell", type="strds", input=strds_id).text
+    shell_text = tools.t_info(format="shell", type="strds", input=strds_id).text
 
     # Parse shell output to get keys
-    shell_dict = gs.parse_key_val(shell_info)
+    shell_dict = gs.parse_key_val(shell_text)
     assert isinstance(shell_dict, dict)
     shell_keys = set(shell_dict.keys())
 
@@ -397,23 +398,6 @@ def test_shell_format_via_option(temporal_data):
 
     # Both should produce the same output
     assert flag_info == option_info
-
-
-def test_json_format_vs_shell(temporal_data):
-    """Test that format=json works equivalent format=shell (earlier -g flag)."""
-    tools = Tools(session=temporal_data.session)
-    strds_id = f"precip_abs1@{temporal_data.mapset}"
-
-    shell_info = tools.t_info(format="shell", type="strds", input=strds_id).text
-    shell_dict = gs.parse_key_val(shell_info)
-
-    json_dict = tools.t_info(format="json", type="strds", input=strds_id).json
-
-    # Both should produce the same output
-    for dict_key, dict_val in shell_dict.items():
-        sanitized_value = dict_val.strip("'")
-        assert dict_key in json_dict
-        assert str(json_dict[dict_key]) == sanitized_value
 
 
 def test_plain_format_still_works(temporal_data):

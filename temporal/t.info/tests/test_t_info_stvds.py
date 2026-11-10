@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2026 by the GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 """Test t.info with space time vector datasets and vector maps
 
@@ -252,27 +253,6 @@ def test_json_format_returns_valid_json(temporal_data):
     assert expected_tgis_info_keys <= set(info["tgis_db"].keys())
 
 
-def test_json_shell_parity(temporal_data):
-    """JSON output contains all keys present in shell format output."""
-    tools = Tools(session=temporal_data.session)
-    stvds_id = f"vect_abs1@{temporal_data.mapset}"
-
-    shell_info = tools.t_info(format="shell", type="stvds", input=stvds_id).text
-
-    # Parse shell output to get keys
-    shell_dict = gs.parse_key_val(shell_info)
-    assert isinstance(shell_dict, dict)
-    shell_keys = set(shell_dict.keys())
-
-    # Get JSON output
-    json_info = tools.t_info(format="json", type="stvds", input=stvds_id).json
-    assert isinstance(json_info, dict)
-    json_keys = set(json_info.keys())
-
-    # JSON should have all the keys that shell has
-    assert shell_keys <= json_keys
-
-
 def test_shell_format_via_option(temporal_data):
     """format=shell works as equivalent to -g flag."""
     tools = Tools(session=temporal_data.session)
@@ -285,17 +265,16 @@ def test_shell_format_via_option(temporal_data):
     assert flag_info == option_info
 
 
-def test_json_format_vs_shell(temporal_data):
-    """Test that format=json works equivalent format=shell (earlier -g flag)."""
+def test_json_shell_parity(temporal_data):
+    """JSON output contains all keys of the shell output with matching values."""
     tools = Tools(session=temporal_data.session)
     stvds_id = f"vect_abs1@{temporal_data.mapset}"
 
-    shell_info = tools.t_info(format="shell", type="stvds", input=stvds_id).text
-    shell_dict = gs.parse_key_val(shell_info)
+    shell_text = tools.t_info(format="shell", type="stvds", input=stvds_id).text
+    shell_dict = gs.parse_key_val(shell_text)
 
     json_dict = tools.t_info(format="json", type="stvds", input=stvds_id).json
 
-    # Both should produce the same output
     for dict_key, dict_val in shell_dict.items():
         sanitized_value = dict_val.strip("'")
         assert dict_key in json_dict
