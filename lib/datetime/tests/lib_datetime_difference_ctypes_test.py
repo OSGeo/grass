@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the datetime_difference() ctypes binding
 
 datetime_difference() only reads two DateTime structs and writes a third, so

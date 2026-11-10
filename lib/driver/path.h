@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef DRIVERLIB_PATH_H
 #define DRIVERLIB_PATH_H
 

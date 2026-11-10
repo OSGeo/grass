@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 # #for i18N support
 
 add_custom_target(ADD_INIT_DOCS ALL COMMENT "Generate init docs.")

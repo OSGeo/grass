@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef Segment_LOCAL_H
 #define Segment_LOCAL_H
 

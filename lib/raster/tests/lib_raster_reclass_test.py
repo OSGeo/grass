@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 import os
 from io import StringIO
 from pathlib import Path

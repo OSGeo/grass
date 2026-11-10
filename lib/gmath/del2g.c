@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*      Name:   del2g
 
    Created:        Tue Mar  5 09:22:27 1985

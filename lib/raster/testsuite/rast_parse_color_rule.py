@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# SPDX-FileCopyrightText: 2016 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
 """Test of raster library string color rule to value and color conversions
 
 @author Vaclav Petras

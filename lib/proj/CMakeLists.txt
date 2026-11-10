@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 install(
     FILES desc.table parms.table units.table
     DESTINATION ${GRASS_INSTALL_ETCDIR}/proj

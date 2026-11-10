@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 file(GLOB SQLFILES "SQL/*.sql")
 foreach(sqlfile ${SQLFILES})
     install(FILES "${sqlfile}" DESTINATION ${GRASS_INSTALL_ETCDIR}/sql)

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2007 Laura Toma
+// SPDX-License-Identifier: GPL-2.0-or-later
 /****************************************************************************
  *
  *  MODULE:     iostream

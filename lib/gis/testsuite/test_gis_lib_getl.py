@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Test of gis library line reading functions
 
 @author Vaclav Petras

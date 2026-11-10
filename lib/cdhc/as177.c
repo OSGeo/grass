@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2002-2014 GRASS Development Team
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*-Algorithm AS 177
  * Expected Normal Order Statistics (Exact and Approximate),
  * by J.P. Royston, 1982.

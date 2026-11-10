@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef _ROWCOL_H
 #define _ROWCOL_H
 

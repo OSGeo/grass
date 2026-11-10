@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Test of gis library string to color conversions
 
 @author Vaclav Petras

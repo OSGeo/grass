@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* text draw truetypefont
  *
  * 2004/01/30

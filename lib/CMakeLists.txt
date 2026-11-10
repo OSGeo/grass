@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 set(use_math_DEFS "")
 if(MSVC)
     set(use_math_DEFS "-D_USE_MATH_DEFINES=1")

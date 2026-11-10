@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef DISPLAYLIB_CLIP_H
 #define DISPLAYLIB_CLIP_H
 

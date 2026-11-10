@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #define DB_RETURN_ERR return (db_get_error_code());
 #define DB_START_PROCEDURE_CALL(x)                \
     {                                             \

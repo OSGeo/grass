@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the row cache (rowio) ctypes bindings
 
 ROWIO caches rows in memory on top of a caller-supplied pair of read/write

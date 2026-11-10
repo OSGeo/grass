@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 set(font_files
     cyrilc.hmp
     fonts.table

@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2002-2014 GRASS Development Team
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*-Algorithm AS 66
  * The Normal Integral, by I. D. Hill, 1973.
  * Applied Statistics 22(3):424-427.

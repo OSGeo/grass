@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* Text.c - save text string into last_text buffer */
 
 #include <stdlib.h>

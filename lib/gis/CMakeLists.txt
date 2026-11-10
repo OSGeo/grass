@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 file(GLOB gislib_SRCS "*.c")
 
 if(NOT WIN32)
