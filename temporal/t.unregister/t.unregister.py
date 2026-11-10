@@ -67,13 +67,12 @@ def main() -> None:
 
     dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=mapset)
     if mapset not in dbif.tgis_mapsets:
-        gs.warning(
+        gs.fatal(
             _(
                 "Unable to connect to a temporal database in the current mapset."
                 " Nothing to unregister"
             )
         )
-        return
     dbif.connect()
 
     # In case a space time dataset is specified
