@@ -76,12 +76,13 @@ def main() -> None:
 
     dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=mapset)
     if mapset not in dbif.tgis_mapsets:
-        gs.fatal(
+        gs.warning(
             _(
                 "Unable to connect to a temporal database in the current mapset."
                 " Nothing to unregister"
             )
         )
+        return
     dbif.connect()
 
     # In case a space time dataset is specified
@@ -103,17 +104,18 @@ def main() -> None:
             if mapname.strip()
         ]
 
-    # Read the map list from file
+    # Read the map list from file (the parser checks existence)
     if file:
-        file = Path(file)
-        if not file.exists() and not file.is_file():
-            gs.fatal(_("Unable to read map list from file <%s>") % file)
-        with file.open("r", encoding="utf-8") as fd:
-            for line in fd:
-                mapname = line.strip()
-                if not mapname:
-                    continue
-                maplist.append(dummy.build_id(mapname, mapset))
+        try:
+            file = Path(file)
+            with file.open("r", encoding="utf-8") as fd:
+                for line in fd:
+                    mapname = line.strip()
+                    if not mapname:
+                        continue
+                    maplist.append(dummy.build_id(mapname, mapset))
+        except Exception as e:
+            gs.fatal(_("Unable to read map list from file <%s>: %s") % (file, e))
 
     num_maps = len(maplist)
     update_dict = {}
