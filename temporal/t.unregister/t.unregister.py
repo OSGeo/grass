@@ -39,7 +39,7 @@
 # %end
 
 # %rules
-# % exclusive: input, file
+# % exclusive: maps, file
 # % required: input, file, maps
 # %end
 
@@ -132,7 +132,7 @@ def main() -> None:
                 datasets = tmap.get_registered_stds(dbif)
                 # Store all unique dataset ids in a dictionary
                 if datasets:
-                    update_dict = {dataset: dataset for dataset in datasets}
+                    update_dict.update({dataset: dataset for dataset in datasets})
                 # Collect SQL statements
                 statement += tmap.delete(dbif=dbif, update=False, execute=False)
         else:
