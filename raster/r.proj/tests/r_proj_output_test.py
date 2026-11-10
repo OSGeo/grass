@@ -1,26 +1,15 @@
-"""Pytest for r.proj output flags, with two list tests and three print tests."""
+# SPDX-License-Identifier: GPL-2.0-or-later
+"""Tests for r.proj output flags."""
 
 import math
-import os
 
 import pytest
 
-import grass.script as gs
 from grass.tools import Tools
 
 SRC_PROJECT = "src4326"
 INPUT_MID = "input_mid"
 INPUT_POLAR = "input_polar"
-
-
-@pytest.fixture(scope="module")
-def session_3413(gisdbase_with_source):
-    """Active session in an EPSG:3413 (north polar stereographic) project."""
-    gs.create_project(gisdbase_with_source / "dst3413", epsg="3413")
-    with gs.setup.init(
-        gisdbase_with_source / "dst3413", env=os.environ.copy()
-    ) as session:
-        yield session
 
 
 def test_list_plain(session_3857):
@@ -77,12 +66,8 @@ def test_print_json(session_3857):
     assert bounds["east"] == pytest.approx(-11020629.588534083)
 
 
-# The expected bounds were taken from r.proj -p and match independent cs2cs
-# projections of the same edge points that bordwalk_edge() samples (every 7.2
-# degrees of longitude here). They are not the exact extent: the 50N circle
-# reaches about 2.2 km further out, so finer edge sampling would legitimately
-# change these values. The default relative tolerance (about 4.5 m here) is far
-# smaller than that difference.
+# Bounds reflect r.proj's sampled edge points, not the exact geographic extent.
+# Verified independently with cs2cs; finer sampling may change these values.
 def test_print_json_polar(session_3413):
     """r.proj -p prints bounds found along the edges for a polar CRS."""
     tools = Tools(session=session_3413)
