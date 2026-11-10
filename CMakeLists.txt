@@ -77,18 +77,23 @@ elseif(APPLE)
 endif()
 set(lfs_default_option_enabled ON)
 
-# Use ccache when available, unless the user already chose a compiler launcher.
+# Opt-in ccache, unless the user already chose a compiler launcher.
 if(NOT MSVC)
-    option(USE_CCACHE "Use ccache if it is installed" ON)
+    option(USE_CCACHE "Use ccache to cache compiler output" OFF)
     if(USE_CCACHE)
         find_program(CCACHE_PROGRAM ccache)
         if(CCACHE_PROGRAM)
-            message(STATUS "ccache found: ${CCACHE_PROGRAM}")
             foreach(lang C CXX)
                 if(NOT CMAKE_${lang}_COMPILER_LAUNCHER)
                     set(CMAKE_${lang}_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
                 endif()
+                message(
+                    STATUS
+                    "${lang} compiler launcher: ${CMAKE_${lang}_COMPILER_LAUNCHER}"
+                )
             endforeach()
+        else()
+            message(WARNING "USE_CCACHE is ON, but ccache was not found")
         endif()
     endif()
 endif()
