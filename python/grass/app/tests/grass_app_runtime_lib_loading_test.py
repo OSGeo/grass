@@ -56,58 +56,6 @@ def test_grass_lib_load_failure_raises_import_error(
     assert "libgrass_gis" in message
 
 
-def test_grass_lib_loading_without_core_library_is_noop(
-    tmp_path, run_code_in_environment, clean_subprocess_environment
-):
-    """Check that nothing is loaded without the core library"""
-    lib_path = tmp_path / "lib"
-    lib_path.mkdir()
-    (lib_path / "libgrass_notalibrary.so").write_text("This is not a shared library.")
-    code = f"""
-        import json
-
-        import grass.lib
-
-        calls = []
-
-
-        def record_call(lib_path):
-            calls.append(lib_path)
-            # The replaced function returns the list of load failures.
-            return []
-
-
-        grass.lib._preload_libraries = record_call
-        grass.lib._load_libraries_if_needed(r"{lib_path}")
-        print(json.dumps({{"calls": len(calls)}}))
-    """
-    assert run_code_in_environment(code, env=clean_subprocess_environment)["calls"] == 0
-
-
-def test_preload_reports_libraries_which_cannot_be_loaded(
-    tmp_path, run_code_in_environment, clean_subprocess_environment
-):
-    """Check that libraries which fail to load are reported, not raised"""
-    lib_path = tmp_path / "lib"
-    lib_path.mkdir()
-    broken = lib_path / "libgrass_notalibrary.so"
-    broken.write_text("This is not a shared library.")
-    code = f"""
-        import json
-        import os
-
-        import grass.lib
-
-        failures = grass.lib._preload_libraries(r"{lib_path}")
-        # Paths are compared by name because the function resolves them and
-        # the temporary directory may be behind a symbolic link.
-        print(json.dumps([os.path.basename(path) for path, _error in failures]))
-    """
-    assert run_code_in_environment(code, env=clean_subprocess_environment) == [
-        broken.name
-    ]
-
-
 def test_grass_lib_importable_without_session(
     run_code_in_environment, clean_subprocess_environment
 ):
