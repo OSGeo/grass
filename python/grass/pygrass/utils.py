@@ -277,10 +277,10 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     Sample the raster layer at the given points, return a list of values
 
     >>> l = get_raster_for_points(vect, ele, region=region)
-    >>> l[0]  # doctest: +ELLIPSIS
-    (1, 10.0, 6.0, 1)
-    >>> l[1]  # doctest: +ELLIPSIS
-    (2, 12.0, 6.0, 1)
+    >>> l[0] == (1, 10.0, 6.0, 1)
+    True
+    >>> l[1] == (2, 12.0, 6.0, 1)
+    True
 
     Add a new column and sample again
 
