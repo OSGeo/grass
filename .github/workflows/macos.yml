@@ -9,19 +9,6 @@ on:
       - main
       - releasebranch_*
   pull_request:
-    paths-ignore:
-      - .pre-commit-config.yaml
-      - renovate.json5
-      - flake.lock
-      - flake.nix
-      - package.nix
-      - Dockerfile
-      - docker/**
-      - .github/workflows/python-code-quality.yml
-      - .github/workflows/additional_checks.yml
-      - .github/workflows/documentation.yml
-      - man/mkdocs/requirements.txt
-      - python/grass/docs/requirements.txt
 env:
   CACHE_NUMBER: 0
 concurrency:
