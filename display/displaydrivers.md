@@ -35,14 +35,14 @@ import sys
 import grass.script as gs
 from grass.script import task as gtask
 
-os.environ['GRASS_RENDER_IMMEDIATE'] = 'default'
-os.environ['GRASS_RENDER_FILE'] = 'output.png'
+os.environ["GRASS_RENDER_IMMEDIATE"] = "default"
+os.environ["GRASS_RENDER_FILE"] = "output.png"
 
 cmd, dcmd = gtask.cmdstring_to_tuple(sys.argv[1])
 
-gs.run_command('d.text', text="Test of GRASS_RENDER_COMMAND redirection")
+gs.run_command("d.text", text="Test of GRASS_RENDER_COMMAND redirection")
 
-os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
+os.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
 gs.run_command(cmd, **dcmd)
 ```
 

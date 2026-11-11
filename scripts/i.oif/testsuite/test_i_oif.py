@@ -156,11 +156,11 @@ class TestOIF(TestCase):
         expected_output = (
             f"{self.band1}, {self.band2}, {self.band4}:  3.5301\n"
             f"{self.band1}, {self.band2}, {self.band3}:  2.6992\n"
-            f"{self.band1}, {self.band2}, {self.const_band}:  nan\n"
+            f"{self.band2}, {self.band3}, {self.band4}:  2.4723\n"
             f"{self.band1}, {self.band3}, {self.band4}:  2.0387\n"
+            f"{self.band1}, {self.band2}, {self.const_band}:  nan\n"
             f"{self.band1}, {self.band3}, {self.const_band}:  nan\n"
             f"{self.band1}, {self.band4}, {self.const_band}:  nan\n"
-            f"{self.band2}, {self.band3}, {self.band4}:  2.4723\n"
             f"{self.band2}, {self.band3}, {self.const_band}:  nan\n"
             f"{self.band2}, {self.band4}, {self.const_band}:  nan\n"
             f"{self.band3}, {self.band4}, {self.const_band}:  nan\n"

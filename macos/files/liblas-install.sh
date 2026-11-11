@@ -29,7 +29,6 @@ export CXX="${PREFIX}/bin/clang++"
 export MACOSX_DEPLOYMENT_TARGET="$deployment_target"
 export CFLAGS="-O2 -pipe -arch ${arch}"
 export CXXFLAGS="-O2 -pipe -arch ${arch} -stdlib=libc++"
-export LDFLAGS="-fuse-ld=lld"
 
 cmake="${PREFIX}/bin/cmake"
 

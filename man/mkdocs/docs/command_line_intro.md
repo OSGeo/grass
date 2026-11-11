@@ -115,10 +115,10 @@ to export the aspect map as a PNG.
 ```python
 import grass.script as gs
 
-gs.run_command('g.region', raster='elevation')
-gs.run_command('r.slope.aspect', elevation='elevation', slope='slope', aspect='aspect')
-gs.run_command('r.colors', map='aspect', color='aspect')
-gs.run_command('r.out.png', input='aspect', output='aspect', overwrite=True)
+gs.run_command("g.region", raster="elevation")
+gs.run_command("r.slope.aspect", elevation="elevation", slope="slope", aspect="aspect")
+gs.run_command("r.colors", map="aspect", color="aspect")
+gs.run_command("r.out.png", input="aspect", output="aspect", overwrite=True)
 ```
 
 Now execute the Python script.
