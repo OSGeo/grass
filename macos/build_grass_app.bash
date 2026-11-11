@@ -262,7 +262,7 @@ function set_up_conda () {
     fi
 
     # download miniconda if not already existing
-    local miniconda="${cache_dir}/miniconda3-${arch}.sh"
+    local miniconda="${cache_dir}/miniforge3-${miniforge_version}-${arch}.sh"
     if [ ! -f "$miniconda" ]; then
         curl -L "$miniconda_url" --output "$miniconda" || exit_nice 1 cleanup
     fi

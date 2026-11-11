@@ -75,7 +75,14 @@
     "labels": ["dependencies"],
     "suppressNotifications": ["prIgnoreNotification", "prEditedNotification"],
 
+    // The preset above only allows the first hours of the day.
+    "lockFileMaintenance": {
+        "schedule": ["* * 1 * *"],
+    },
+
     // Security updates are not held back by the schedule or the cooldown.
+    // Renovate finds them with its own vulnerability database (only PyPI) and
+    // with the alerts of GitHub, which follow the default branch.
     "vulnerabilityAlerts": {
         // Explicit, so that the rule disabling the release branches below
         // does not apply to them.
@@ -126,11 +133,13 @@
         {
             "groupName": "linters and pre-commit hooks",
             "matchManagers": ["pre-commit"],
+            "matchUpdateTypes": ["minor", "patch", "digest"],
             "schedule": ["* * 8 * *"],
         },
         {
             // Versions set in "# renovate:" commented environment variables of
-            // the workflows (ruff, flake8, pylint, bandit, prek, Python).
+            // the workflows (ruff, flake8, pylint, bandit, prek). The Python
+            // version is excluded, as its minor updates wait for approval.
             "groupName": "linters and pre-commit hooks",
             "matchManagers": ["custom.regex"],
             "matchFileNames": [".github/workflows/**"],
@@ -193,7 +202,22 @@
         // "dependencyDashboardApproval" on the maintenance rules below.
         // Keep these rules last: later rules take precedence.
         {
+            // The update types are listed because Renovate applies the rules
+            // before it knows the update type of a dependency, and a rule
+            // without them would disable the dependencies for good.
             "matchBaseBranches": ["/^releasebranch_/"],
+            "matchUpdateTypes": [
+                "major",
+                "minor",
+                "patch",
+                "pin",
+                "pinDigest",
+                "digest",
+                "lockFileMaintenance",
+                "rollback",
+                "bump",
+                "replacement",
+            ],
             "enabled": false,
         },
         {

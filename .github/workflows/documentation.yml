@@ -17,6 +17,8 @@ on:
       - package.nix
       - Dockerfile
       - docker/**
+      - .github/workflows/python-code-quality.yml
+      - .github/workflows/additional_checks.yml
   workflow_dispatch:
 
 permissions: {}
