@@ -146,10 +146,10 @@ jobs:
         run: |
           # The installation is moved away from the prefix it was configured
           # with, so that the libraries cannot find each other through the
-          # install names recorded at configure time and the loading done on
-          # the grass.lib import is the only mechanism left. The Python
-          # package moves with the installation, so its path is taken
-          # beforehand.
+          # install names recorded at configure time. The tests pass only
+          # through the loading done on the grass.lib import or through a
+          # search path variable they set themselves. The Python package
+          # moves with the installation, so its path is taken beforehand.
           python_path="$(grass --config python_path)"
           mv "${HOME}/install" "${HOME}/install-relocated"
           trap 'mv "${HOME}/install-relocated" "${HOME}/install"' EXIT

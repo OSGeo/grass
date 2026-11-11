@@ -44,13 +44,12 @@ def _find_lib_path():
     return None
 
 
-# Every other GRASS library needs libgrass_gis and libgrass_gis needs
-# libgrass_datetime, so these two are loaded before the rest. A library loaded
-# before the GRASS libraries it needs makes the dynamic linker resolve those
-# through the process-startup search path, which may find another GRASS
-# installation and leave the process with two copies of the same library.
-# Only these two are ordered: a second copy of libgrass_gis breaks every other
-# library because they all rely on the session state it holds.
+# Most GRASS libraries need libgrass_gis and libgrass_gis needs
+# libgrass_datetime, so these two are loaded first. A library loaded before
+# the GRASS libraries it needs makes the dynamic linker find them through the
+# process-startup search path, which may point to another GRASS installation.
+# A second copy of libgrass_gis breaks the libraries using it because they
+# rely on the session state it holds.
 _BASE_LIBRARY_NAMES = ("datetime", "gis")
 
 
@@ -59,7 +58,7 @@ def _preload_libraries(lib_path):
 
     Libraries can be loaded only after the libraries they depend on, so
     loading is repeated until it makes no progress. Windows DLLs are not
-    matched because dependent DLLs resolve from the registered directories.
+    matched because Windows finds dependent DLLs without it.
 
     Returns a list of (path, error) pairs for libraries which failed to load.
     """
@@ -94,7 +93,7 @@ def _preload_libraries(lib_path):
     return []
 
 
-def _load_libraries(lib_path):
+def _load_libraries_if_needed(lib_path):
     """Load the GRASS libraries unless they already find each other.
 
     Loading the libraries into the process by their full paths makes them
@@ -107,10 +106,8 @@ def _load_libraries(lib_path):
     if not core_library:
         return
     try:
-        # The core library loads by its full path when the GRASS libraries it
-        # depends on resolve through the search path recorded at build time,
-        # the search path variable, or a registration with the linker, and
-        # then all the libraries find each other without any loading here.
+        # Nothing more is needed when the core library finds the GRASS
+        # libraries it depends on by itself.
         ctypes.CDLL(core_library)
     except OSError:
         pass
@@ -118,7 +115,10 @@ def _load_libraries(lib_path):
         return
     for library, error in _preload_libraries(lib_path):
         if os.path.basename(library).startswith("libgrass_gis."):
-            msg = f"The GRASS core library failed to load ({library}: {error})"
+            msg = (
+                f"Cannot load the GRASS core library {library}: {error}. Check"
+                " that the GRASS installation and its dependencies are complete."
+            )
             raise ImportError(msg)
 
 
@@ -128,7 +128,7 @@ if _lib_path:
     # libraries by absolute path, skipping the expensive
     # ctypes.util.find_library() fallback.
     add_library_search_dirs([_lib_path])
-    _load_libraries(_lib_path)
+    _load_libraries_if_needed(_lib_path)
 
 __all__ = [
     'arraystats',
