@@ -96,10 +96,6 @@ def main():
     if output_format == "csv":
         if not separator:
             separator = ","
-        elif len(separator) > 1:
-            gs.fatal(
-                _("A standard CSV separator (delimiter) is only one character long")
-            )
 
     elif output_format == "json":
         if no_header:

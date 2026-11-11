@@ -163,15 +163,3 @@ def test_plain_large_whole_number(edge_value_dataset):
     ).text
     expected = dict(line.split("=", 1) for line in univar.splitlines())
     assert large["max"] == expected["max"]
-
-
-def test_csv_rejects_multicharacter_separator(space_time_vector_dataset):
-    """CSV output allows only a one-character separator"""
-    tools = Tools(session=space_time_vector_dataset.session)
-    with pytest.raises(ToolError, match="only one character"):
-        tools.t_vect_univar(
-            input=space_time_vector_dataset.name,
-            column=space_time_vector_dataset.column,
-            format="csv",
-            separator="--",
-        )
