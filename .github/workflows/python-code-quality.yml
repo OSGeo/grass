@@ -36,7 +36,7 @@ jobs:
       # renovate: datasource=pypi depName=bandit
       BANDIT_VERSION: "1.9.4"
       # renovate: datasource=pypi depName=ruff
-      RUFF_VERSION: "0.15.17"
+      RUFF_VERSION: "0.17.3"
 
     runs-on: ${{ matrix.os }}
     permissions:
@@ -70,10 +70,10 @@ jobs:
       - name: Install Ruff
         run: pip install --break-system-packages "ruff==${RUFF_VERSION}"
       - name: Run Ruff (output annotations on fixable errors)
-        run: ruff check --output-format=github . --preview --unsafe-fixes
+        run: ruff check --output-format=github . --unsafe-fixes
         continue-on-error: true
       - name: Run Ruff (apply fixes for suggestions)
-        run: ruff check . --preview --fix --unsafe-fixes
+        run: ruff check . --fix --unsafe-fixes
       - name: Run `ruff format` showing diff without failing
         continue-on-error: true
         if: ${{ !cancelled() }}
@@ -144,7 +144,7 @@ jobs:
         run: |
           echo "MAKEFLAGS=-j$(nproc)" >> "${GITHUB_ENV}"
 
-      - uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
+      - uses: rui314/setup-mold@339e96b4ff1f3bd865856ba4cbbe8818a7acb038 # v1
       - name: Build
         run: |
           ".github/workflows/build_${MATRIX_OS}.sh" "${HOME}/install"

@@ -44,7 +44,6 @@ gs.create_project(path="path/to/my_project", epsg="3358")
 
 # Initialize the GRASS session
 with gs.setup.init("path/to/my_project") as session:
-
     # Run GRASS tools
     tools = Tools(session=session)
     tools.r_import(input="/path/to/elevation.tif", output="elevation")
@@ -112,10 +111,7 @@ color_scheme = """
 80% #d95f0e
 100% #993404
 """
-tools.r_colors(
-    map="elevation",
-    rules=StringIO(color_scheme)
-)
+tools.r_colors(map="elevation", rules=StringIO(color_scheme))
 ```
 
 The methods will raise *CalledModuleError* if a tool fails.
@@ -344,7 +340,7 @@ from grass.pygrass.gis import Mapset
 mapset = Mapset()
 
 # List all rasters in the mapset
-rasters = mapset.glist(type='raster')
+rasters = mapset.glist(type="raster")
 ```
 
 For more details about the `gis` module, see the Full Documentation:
@@ -385,7 +381,7 @@ from grass.pygrass.gis.region import Region
 region = Region()
 
 # Set the region from the elevation raster
-region.from_rast('elevation')
+region.from_rast("elevation")
 
 # Adjust the region by adding 100 map units
 # to the east and north
@@ -445,8 +441,7 @@ To read all rows of the `elevation` raster:
 ```python
 from grass.pygrass import raster
 
-with raster.RasterRow('elevation') as elev:
-
+with raster.RasterRow("elevation") as elev:
     # Get the total number of rows
     nrows = elev.info.rows
     print(f"Total Rows: {nrows}")
@@ -462,13 +457,12 @@ raster, double it, and write the value back to a new raster `elevation_new`.
 from grass.pygrass import raster
 
 # Open the elevation raster in read mode
-with raster.RasterRow('elevation') as elev:
-
+with raster.RasterRow("elevation") as elev:
     # Read a random row and column
     value = elev[5][10]
 
     # Open the new elevation raster in write mode
-    with raster.RasterRow('elevation_new', mode='w', mtype="FCELL") as new_elev:
+    with raster.RasterRow("elevation_new", mode="w", mtype="FCELL") as new_elev:
         # Sequentially iterate over the rows and columns
         for row_id, row in enumerate(elev, start=0):
             # When we reach the row and column we want to change
@@ -510,12 +504,11 @@ to check if a vector map exists and print the mapset it is in.
 from grass.pygrass.vector import Vector
 
 # Check if the roads vector map exists
-roads = Vector('roadsmajor')
+roads = Vector("roadsmajor")
 
 if roads.exist():
     mapset = roads.mapset
     print(f"The roads vector map exists in the {mapset} mapset")
-
 ```
 
 With the [VectorTopo](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_vector.html#vectortopo-label)
@@ -527,14 +520,13 @@ class in addition to read and write access.
 from grass.pygrass.vector import VectorTopo
 
 # Open the roads vector map as a VectorTopo object
-with VectorTopo('roadsmajor') as roads:
-
+with VectorTopo("roadsmajor") as roads:
     # Get the first feature
     first_feature = roads.next()
     print(first_feature)
 
     # Get the number of nodes
-    roads.number_of('nodes')
+    roads.number_of("nodes")
 ```
 
 #### Geometry and Attributes
@@ -579,7 +571,7 @@ the attributes of the current feature.
 from grass.pygrass.vector import VectorTopo
 
 # Open the roads vector map in read mode
-with VectorTopo('roadsmajor') as roads:
+with VectorTopo("roadsmajor") as roads:
     # Read attribute the first feature
     read_feature = roads.read(1)
     # Prints the LINESTRING geometry
@@ -597,23 +589,22 @@ Here is an example of how to write a new feature to the `roads` vector map.
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.geometry import Line
 
-with VectorTopo('roadsmajor', mode='rw') as roads:
-
+with VectorTopo("roadsmajor", mode="rw") as roads:
     # Create a new feature
     # The tuple is shorthand for a list of Point(x, y)
     new_geom = Line([(636981.33, 256517.60), (636983.10, 256526.59)])
-    
+
     # Get the last cat value (primary key)
     last_record = roads.read(-1)
     last_cat = last_record.cat
 
     # Create an empty feature from the last record
     new_dict = {key: None for key in last_record.attrs}
-    new_dict['cat'] = last_cat + 1
-    new_dict['MAJORRDS_'] = 2.0
-    new_dict['ROAD_NAME'] = 'New Road'
-    new_dict['MULTILINE'] = 'No'
-    new_dict['PROPYEAR'] = 2025
+    new_dict["cat"] = last_cat + 1
+    new_dict["MAJORRDS_"] = 2.0
+    new_dict["ROAD_NAME"] = "New Road"
+    new_dict["MULTILINE"] = "No"
+    new_dict["PROPYEAR"] = 2025
 
     # Write the new feature to the vector map
     roads.write(new_geom, new_dict)
@@ -640,12 +631,12 @@ the line segment length is greater than 1000.
 from grass.pygrass.vector import VectorTopo
 
 # Open the roads vector map as a VectorTopo object
-with VectorTopo('roadsmajor') as roads:
+with VectorTopo("roadsmajor") as roads:
     # Iterate over each feature in the vector map
-    for feature in roads.viter('lines'):
+    for feature in roads.viter("lines"):
         # Check if the feature is a line and the length is greater than 1000
         # And the ROAD_NAME attribute is 'NC-50'
-        if feature.length() > 1000 and feature.attrs['ROAD_NAME'] == 'NC-50':
+        if feature.length() > 1000 and feature.attrs["ROAD_NAME"] == "NC-50":
             print(feature)
 ```
 
@@ -665,7 +656,7 @@ import random
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.geometry import Point
 
-with VectorTopo('roadsmajor') as roads:
+with VectorTopo("roadsmajor") as roads:
     # Get the extent of the roads vector map
     extent = roads.bbox()
 
@@ -675,7 +666,7 @@ with VectorTopo('roadsmajor') as roads:
     random_point = Point(x, y)
 
     # Iterate over each feature in the vector map
-    for feature in roads.viter('lines'):
+    for feature in roads.viter("lines"):
         # Check if the random point is within a 5000 meters of the line
         line_distance = feature.distance(random_point)
         if line_distance.dist < 5000:
@@ -694,7 +685,7 @@ class for more advanced operations.
 from grass.pygrass.vector import VectorTopo
 
 # Open the roads vector map as a VectorTopo object
-roads = VectorTopo('roadsmajor')
+roads = VectorTopo("roadsmajor")
 roads.open("r")
 
 # Query the vector map for all features where the
@@ -702,7 +693,7 @@ roads.open("r")
 roads.table_to_dict(where="ROAD_NAME = 'NC-50'")
 sql_1 = roads.table.filters.get_sql()
 
-# Query the vector map for the first 5 features where the 
+# Query the vector map for the first 5 features where the
 # ROAD_NAME attribute is 'NC-70'
 roads.table.filters.where("ROAD_NAME = 'NC-70'").limit(5)
 sql_2 = roads.table.filters.get_sql()
@@ -789,11 +780,12 @@ color_scheme = """
 80% #d95f0e
 100% #993404
 """
-gs.write_command("r.colors",
-                 map="elevation",
-                 rules="-",  # Read from stdin
-                 stdin=color_scheme
-                )
+gs.write_command(
+    "r.colors",
+    map="elevation",
+    rules="-",  # Read from stdin
+    stdin=color_scheme,
+)
 ```
 
 ### Tools as objects
@@ -809,10 +801,7 @@ tool.
 from grass.pygrass.modules import Module
 
 slope_aspect_tool = Module(
-    "r.slope.aspect", 
-    elevation='elevation',
-    slope='slope',
-    aspect='aspect'
+    "r.slope.aspect", elevation="elevation", slope="slope", aspect="aspect"
 )
 ```
 
