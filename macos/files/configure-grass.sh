@@ -20,7 +20,7 @@ export CC=${PREFIX}/bin/clang
 export CXX=${PREFIX}/bin/clang++
 export MACOSX_DEPLOYMENT_TARGET=$deployment_target
 
-export LDFLAGS="-fuse-ld=lld -Wl,-rpath,${PREFIX}/lib"
+export LDFLAGS="-Wl,-rpath,${PREFIX}/lib"
 export CFLAGS="-O2 -pipe -arch ${arch} -DGL_SILENCE_DEPRECATION"
 export CXXFLAGS="-O2 -pipe -stdlib=libc++ -arch ${arch}"
 
