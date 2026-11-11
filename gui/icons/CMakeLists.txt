@@ -16,9 +16,6 @@ add_custom_target(
     COMMAND
         ${CMAKE_COMMAND} -E make_directory
         ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/source/icons
-    COMMAND
-        ${CMAKE_COMMAND} -E make_directory
-        ${OUTDIR}/${GRASS_INSTALL_GUIDIR}/images/symbols
 )
 set_target_properties(make_gui_icons_dirs PROPERTIES FOLDER GUI)
 

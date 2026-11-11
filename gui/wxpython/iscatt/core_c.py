@@ -37,7 +37,7 @@ try:
     )
     from grass.lib.raster import struct_Range
 except ImportError as e:
-    sys.stderr.write(_("Loading ctypes libs failed: %s") % e)
+    sys.stderr.write(_("Loading ctypes libs failed: %s") % e + "\n")
 
 from core.gcmd import GException
 from grass.script import encode
