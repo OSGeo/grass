@@ -40,7 +40,7 @@
 
 # %rules
 # % exclusive: maps, file
-# % required: input, file, maps
+# % required: file, maps
 # %end
 
 from pathlib import Path
