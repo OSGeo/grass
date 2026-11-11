@@ -63,3 +63,50 @@ def space_time_vector_dataset(tmp_path_factory):
             column="height",
             values=values,
         )
+
+
+@pytest.fixture(scope="module")
+def edge_value_dataset(tmp_path_factory):
+    """Start a session and create a vector time series with edge case values.
+
+    zero_sum holds -3 and 3, so the coefficient of variation is infinite, and
+    large holds 0 and 12345678, so some statistics are large whole numbers.
+    """
+    tmp_path = tmp_path_factory.mktemp("t_vect_univar_edge")
+    project = tmp_path / "test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        tools = Tools(session=session)
+        tools.g_region(s=0, n=80, w=0, e=120, res=10)
+        values = {"zero_sum": [-3.0, 3.0], "large": [0.0, 12345678.0]}
+        for name, map_values in values.items():
+            rows = "\n".join(
+                f"{(i + 1) * 10}|{(i + 1) * 10}|{value}"
+                for i, value in enumerate(map_values)
+            )
+            tools.v_in_ascii(
+                input=io.StringIO(rows),
+                output=name,
+                separator="pipe",
+                columns="x double precision, y double precision, height double precision",
+                x=1,
+                y=2,
+                cat=0,
+            )
+        dataset_name = "edges"
+        tools.t_create(
+            type="stvds",
+            temporaltype="absolute",
+            output=dataset_name,
+            title="Edge values",
+            description="Point series with values that need special formatting",
+        )
+        tools.t_register(
+            type="vector",
+            flags="i",
+            input=dataset_name,
+            maps=",".join(values),
+            start="2001-01-01",
+            increment="1 month",
+        )
+        yield SimpleNamespace(session=session, name=dataset_name, column="height")

@@ -110,3 +110,60 @@ def test_json_rejects_no_header_flag(space_time_vector_dataset):
             format="json",
             flags="u",
         )
+
+
+def plain_rows(result):
+    """Return plain output rows as dictionaries keyed by the header"""
+    lines = result.text_split("\n")
+    header = lines[0].split("|")
+    return [dict(zip(header, line.split("|"), strict=True)) for line in lines[1:]]
+
+
+def test_plain_infinite_statistic(edge_value_dataset):
+    """An infinite statistic is printed as inf, as v.univar prints it"""
+    tools = Tools(session=edge_value_dataset.session)
+    result = tools.t_vect_univar(
+        input=edge_value_dataset.name, column=edge_value_dataset.column
+    )
+    zero_sum = plain_rows(result)[0]
+    assert zero_sum["id"].startswith("zero_sum@")
+    assert zero_sum["population_coeff_variation"] == "inf"
+
+
+def test_plain_single_feature_extended(edge_value_dataset):
+    """With one feature per map, the undefined statistics are printed as nan"""
+    tools = Tools(session=edge_value_dataset.session)
+    result = tools.t_vect_univar(
+        input=edge_value_dataset.name,
+        column=edge_value_dataset.column,
+        where="cat = 1",
+        flags="e",
+    )
+    for row in plain_rows(result):
+        assert row["n"] == "1"
+        assert row["sample_stddev"] == "nan"
+
+
+def test_plain_large_whole_number(edge_value_dataset):
+    """Large whole numbers keep the %g format of v.univar"""
+    tools = Tools(session=edge_value_dataset.session)
+    result = tools.t_vect_univar(
+        input=edge_value_dataset.name,
+        column=edge_value_dataset.column,
+        twhere="start_time >= '2001-02-01'",
+    )
+    (large,) = plain_rows(result)
+    assert large["id"].startswith("large@")
+    assert large["max"] == "1.23457e+07"
+
+
+def test_csv_rejects_multicharacter_separator(space_time_vector_dataset):
+    """CSV output allows only a one-character separator"""
+    tools = Tools(session=space_time_vector_dataset.session)
+    with pytest.raises(ToolError, match="only one character"):
+        tools.t_vect_univar(
+            input=space_time_vector_dataset.name,
+            column=space_time_vector_dataset.column,
+            format="csv",
+            separator="||",
+        )

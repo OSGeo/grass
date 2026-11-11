@@ -435,6 +435,14 @@ def print_vector_dataset_univar_statistics(
         if not mylayer:
             mylayer = layer
 
+        # JSON output comes from the JSON of v.univar. The plain and CSV
+        # output keep using its shell format, as t.rast.univar does, because
+        # the JSON leaves out NaN and infinite values and writes whole floats
+        # as integers.
+        if format == "json":
+            univar_options = {"flags": "e" if extended else "", "format": "json"}
+        else:
+            univar_options = {"flags": "ge" if extended else "g"}
         stats = gs.parse_command(
             "v.univar",
             map=id,
@@ -442,8 +450,7 @@ def print_vector_dataset_univar_statistics(
             column=column,
             layer=mylayer,
             type=type,
-            flags="e" if extended else "",
-            format="json",
+            **univar_options,
         )
 
         if not stats:
@@ -459,19 +466,6 @@ def print_vector_dataset_univar_statistics(
             record.update(stats)
             json_records.append(record)
             continue
-
-        # The plain and CSV output used the shell format of v.univar, which
-        # names two of the keys differently and prints floats with %g.
-        stats = dict(stats)
-        stats["nmissing"] = stats.pop("missing", None)
-        percentiles = stats.pop("percentiles", None)
-        if percentiles:
-            stats["percentile_90"] = percentiles[0]["value"]
-        stats = {
-            key: f"{value:g}" if isinstance(value, float) else value
-            for key, value in stats.items()
-            if value is not None
-        }
 
         string = ""
 
