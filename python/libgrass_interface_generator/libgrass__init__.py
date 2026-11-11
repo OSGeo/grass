@@ -49,10 +49,6 @@ if _lib_path:
     # libraries by absolute path, skipping the expensive
     # ctypes.util.find_library() fallback.
     add_library_search_dirs([_lib_path])
-    if hasattr(os, "add_dll_directory"):
-        # On Windows, dependent DLLs resolve from the directories registered
-        # here and from the directory of the loaded DLL itself.
-        os.add_dll_directory(_lib_path)
 
 __all__ = [
     'arraystats',
