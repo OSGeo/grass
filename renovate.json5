@@ -37,6 +37,9 @@
         {
             "customType": "regex",
             "managerFilePatterns": ["/^macos/.*\\.bash$/"],
+            // Miniforge tags look like 26.9.4-2, which semver parses as a
+            // pre-release.
+            "versioningTemplate": "loose",
             "matchStrings": [
                 "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+\\w+_version=\"(?<currentValue>[^\"]+)\"",
             ],
@@ -51,7 +54,7 @@
     // Default window for everything not scheduled by a rule below. Times are
     // in UTC so that the days below do not depend on the Renovate runner.
     "timezone": "UTC",
-    "schedule": ["* 0-5 1 * *"],
+    "schedule": ["* * 1 * *"],
 
     // Do not create or update branches outside of the schedule. Each push to a
     // Renovate branch restarts CI.
@@ -74,6 +77,9 @@
 
     // Security updates are not held back by the schedule or the cooldown.
     "vulnerabilityAlerts": {
+        // Explicit, so that the rule disabling the release branches below
+        // does not apply to them.
+        "enabled": true,
         "schedule": ["at any time"],
         "minimumReleaseAge": null,
         "labels": ["dependencies", "security"],
@@ -107,7 +113,7 @@
             "groupName": "CI actions",
             "matchManagers": ["github-actions"],
             "matchUpdateTypes": ["minor", "patch", "digest", "pin", "pinDigest"],
-            "schedule": ["* 0-5 1 * *"],
+            "schedule": ["* * 1 * *"],
         },
         {
             // Miniforge version of the macOS application bundle.
@@ -115,12 +121,12 @@
             "matchManagers": ["custom.regex"],
             "matchFileNames": ["macos/**"],
             "matchUpdateTypes": ["minor", "patch"],
-            "schedule": ["* 0-5 1 * *"],
+            "schedule": ["* * 1 * *"],
         },
         {
             "groupName": "linters and pre-commit hooks",
             "matchManagers": ["pre-commit"],
-            "schedule": ["* 0-5 8 * *"],
+            "schedule": ["* * 8 * *"],
         },
         {
             // Versions set in "# renovate:" commented environment variables of
@@ -128,14 +134,44 @@
             "groupName": "linters and pre-commit hooks",
             "matchManagers": ["custom.regex"],
             "matchFileNames": [".github/workflows/**"],
+            "matchDatasources": ["!python-version"],
             "matchUpdateTypes": ["minor", "patch"],
-            "schedule": ["* 0-5 8 * *"],
+            "schedule": ["* * 8 * *"],
+        },
+        {
+            // Keep the major updates of the tools that are set both in
+            // .pre-commit-config.yaml and in the workflows in one PR, so that
+            // the two never end up on different majors.
+            "groupName": "ruff",
+            "matchUpdateTypes": ["major"],
+            "schedule": ["* * 8 * *"],
+            "matchPackageNames": [
+                "astral-sh/ruff",
+                "astral-sh/ruff-pre-commit",
+                "ruff",
+            ],
+        },
+        {
+            "groupName": "flake8",
+            "matchUpdateTypes": ["major"],
+            "schedule": ["* * 8 * *"],
+            "matchPackageNames": ["pycqa/flake8", "flake8"],
+        },
+        {
+            "groupName": "black",
+            "matchUpdateTypes": ["major"],
+            "schedule": ["* * 8 * *"],
+            "matchPackageNames": [
+                "psf/black-pre-commit-mirror",
+                "psf/black",
+                "black",
+            ],
         },
         {
             "groupName": "Python docs and tooling requirements",
             "matchManagers": ["pip_requirements", "pep621"],
             "matchUpdateTypes": ["minor", "patch"],
-            "schedule": ["* 0-5 8 * *"],
+            "schedule": ["* * 10 * *"],
         },
 
         // The base image digests and the library versions built on top of
@@ -148,7 +184,7 @@
             "matchManagers": ["dockerfile", "custom.regex"],
             "matchFileNames": ["Dockerfile", "docker/**"],
             "matchUpdateTypes": ["minor", "patch", "digest", "pinDigest"],
-            "schedule": ["* 0-5 3,17 * *"],
+            "schedule": ["* * 3,17 * *"],
         },
 
         // Release branches only get security updates (see
@@ -166,7 +202,7 @@
             "matchManagers": ["github-actions"],
             "matchUpdateTypes": ["minor", "patch", "digest"],
             "enabled": true,
-            "schedule": ["* 0-5 22 * *"],
+            "schedule": ["* * 22 * *"],
         },
         {
             "groupName": "release branch maintenance",
@@ -175,7 +211,7 @@
             "matchFileNames": ["Dockerfile", "docker/**"],
             "matchUpdateTypes": ["patch", "digest"],
             "enabled": true,
-            "schedule": ["* 0-5 22 * *"],
+            "schedule": ["* * 22 * *"],
         },
     ],
 }
