@@ -58,7 +58,7 @@ def _preload_libraries(lib_path):
 
     Libraries can be loaded only after the libraries they depend on, so
     loading is repeated until it makes no progress. Windows DLLs are not
-    matched because Windows finds dependent DLLs without it.
+    matched because Windows finds dependent DLLs without this loading.
 
     Returns a list of (path, error) pairs for libraries which failed to load.
     """
