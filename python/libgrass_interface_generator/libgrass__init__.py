@@ -3,20 +3,18 @@ import os
 from .ctypes_loader import add_library_search_dirs
 
 
-def _core_libraries(lib_path):
-    """Get the real paths of the core shared library files in a directory"""
+def _core_library_path(lib_path):
+    """Get the path of the core shared library in a directory, or None"""
     try:
-        names = os.listdir(lib_path)
+        names = sorted(os.listdir(lib_path))
     except OSError:
-        return []
-    return sorted(
-        {
-            os.path.realpath(os.path.join(lib_path, name))
-            for name in names
-            if name.startswith(("libgrass_gis.", "grass_gis."))
-            and (name.endswith((".so", ".dylib", ".dll")) or ".so." in name)
-        }
-    )
+        return None
+    for name in names:
+        if name.startswith(("libgrass_gis.", "grass_gis.")) and (
+            name.endswith((".so", ".dylib", ".dll")) or ".so." in name
+        ):
+            return os.path.join(lib_path, name)
+    return None
 
 
 def _find_lib_path():
@@ -30,10 +28,9 @@ def _find_lib_path():
     GISBASE is used as a fallback for other layouts.
     """
     path = os.path.dirname(os.path.realpath(__file__))
-    # Four levels up from grass/lib is the installation in the traditional
-    # layout (lib, grass, python, etc) and the library directory in the FHS
-    # layout (lib, grass, site-packages, python3.X). For a shallower path, the
-    # climb stops at the filesystem root, where no candidate matches.
+    # Four levels up from grass/lib (through lib, grass, python, and etc) is
+    # the installation in the traditional layout, and (through lib, grass,
+    # site-packages, and python3.X) the library directory in the FHS layout.
     for _ in range(4):
         path = os.path.dirname(path)
     candidates = [os.path.join(path, "lib"), path]
@@ -41,7 +38,7 @@ def _find_lib_path():
     if gisbase:
         candidates.append(os.path.join(gisbase, "lib"))
     for candidate in candidates:
-        if _core_libraries(candidate):
+        if _core_library_path(candidate):
             return candidate
     return None
 
