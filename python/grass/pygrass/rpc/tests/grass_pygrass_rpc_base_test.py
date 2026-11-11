@@ -3,7 +3,6 @@
 
 """Test the RPC server base class"""
 
-import sys
 import threading
 import time
 
@@ -54,14 +53,14 @@ def test_crashed_idle_server_is_restarted(provider):
     """The checker thread replaces a server which died while nobody waits"""
     crashed = provider.server
     crashed.kill()
-    assert wait_for(lambda: provider.server is not crashed)
-    assert provider.is_server_alive()
+    # The replacement is assigned before it is started, and a process which is
+    # not started yet is not alive. Starting takes long with the spawn start
+    # method, so wait for both.
+    assert wait_for(
+        lambda: provider.server is not crashed and provider.is_server_alive()
+    )
 
 
-@pytest.mark.xfail(
-    sys.platform.startswith("win"),
-    reason="Closing a Windows pipe handle which has a pending receive is untested",
-)
 def test_client_waiting_for_reply_gets_error_when_server_crashes(provider):
     """A client blocked in safe_receive() is woken up when the server dies
 
