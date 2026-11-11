@@ -146,10 +146,13 @@ add_subdirectory(vector)
 
 build_library_in_subdir(
     imagery
-    DEPENDS GDAL::GDAL grass_gis grass_raster grass_vector
+    DEPENDS ${LIBM} GDAL::GDAL grass_gis grass_raster grass_vector
 )
 
-build_library_in_subdir(cluster DEPENDS grass_imagery grass_gis grass_raster)
+build_library_in_subdir(
+    cluster
+    DEPENDS ${LIBM} grass_gis grass_imagery grass_raster
+)
 
 build_library_in_subdir(rowio DEPENDS grass_gis)
 

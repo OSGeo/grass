@@ -2,20 +2,20 @@
 # French translation of grassmods.pot
 # This file is distributed under the same license as the GRASS package.
 # Copyright (C) 2005-2019 GRASS Development Team
-# Emmanuel Saracco <esaracco@users.labs.libre-entreprise.org>, 2004.
+# SPDX-FileCopyrightText: 2004 Emmanuel Saracco <esaracco@users.labs.libre-entreprise.org>
 # Laurent Courty, 2005.
-# Daniel Calvelo Aros <dca@users.sf.net>, 2005
-# Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>, 2005, 2006
+# SPDX-FileCopyrightText: 2005 Daniel Calvelo Aros <dca@users.sf.net>
+# SPDX-FileCopyrightText: 2005, 2006 Eve (alias 'phyto') <dendrosociology[a]yahoo.co.uk>
 # Vincent Bain <bain toraval.fr>, 2012.
-# Sylvain Maillard <sylvain.maillard@gmail.com>, 2012, 2013.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025, 2026.
-# Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>, 2026.
+# SPDX-FileCopyrightText: 2012, 2013 Sylvain Maillard <sylvain.maillard@gmail.com>
+# SPDX-FileCopyrightText: 2025, 2026 Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>
+# SPDX-FileCopyrightText: 2026 Edouard Choinière <echoix@users.noreply.weblate.osgeo.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 18:18+0000\n"
-"PO-Revision-Date: 2026-10-18 04:54+0000\n"
+"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"PO-Revision-Date: 2026-11-01 02:33+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #, c-format
 msgid "Table <%s> not found in database <%s> using driver <%s>"
@@ -75,7 +75,7 @@ msgid "connection settings"
 msgstr "paramètres de connexion"
 
 msgid "Prints/sets general DB connection for current mapset."
-msgstr "Afficher/définir la connecion DB générale pour le jeu de cartes courant."
+msgstr "Afficher/définir la connexion DB générale pour le jeu de cartes courant."
 
 msgid "Print current connection parameters and exit"
 msgstr "Afficher les paramètres de connexion courants et quitter"
@@ -349,7 +349,7 @@ msgid "Use format=vertical instead."
 msgstr ""
 
 msgid "Only test query, do not execute"
-msgstr "Tester uniquement les requêtes, ne pas les éxécuter"
+msgstr "Tester uniquement la requête, ne pas l'exécuter"
 
 msgid "Selects data from attribute table."
 msgstr ""
@@ -1225,7 +1225,7 @@ msgid "Program for generating and displaying simple graphics on the display moni
 msgstr "Programme pour générer et afficher de simples graphiques dans le moniteur actif."
 
 msgid "Name of file containing graphics commands, if not given reads from standard input"
-msgstr "Nom du fichier contenant les commandes graphiques, s'il n'y en a pas, les prendre à partirde la ligne de commande"
+msgstr "Nom du fichier contenant les commandes graphiques ; s'il n'est pas spécifié, la lecture s'effectue à partir de l'entrée standard"
 
 msgid "Color to draw with, either a standard GRASS color or R:G:B triplet"
 msgstr "Couleur pour le traçage, soit une couleur GRASS standard, soit un triplet R:G:B"
@@ -1247,7 +1247,7 @@ msgid "grid"
 msgstr "grille"
 
 msgid "Overlays a user-specified grid in the active display frame on the graphics monitor."
-msgstr "Superpose une grille dont le pas est spécifié par l'utilisateur dans le moniteuractif."
+msgstr "Superpose une grille définie par l'utilisateur dans le cadre d'affichage actif sur le moniteur graphique."
 
 msgid "Size of grid to be drawn (in map units)"
 msgstr ""
@@ -1608,11 +1608,11 @@ msgid "Color range exceeds upper limit of actual data"
 msgstr "Les valeurs de couleurs dépassent la limite plafond des données actuelles"
 
 #, c-format
-msgid "Range [%.3f, %.3f] out of the logarithm domain."
+msgid "use=%s out of range [%.3f, %.3f] (extend with range= ?)"
 msgstr ""
 
 #, c-format
-msgid "use=%s out of range [%.3f, %.3f] (extend with range= ?)"
+msgid "Range [%.3f, %.3f] has no extent for a logarithmic scale"
 msgstr ""
 
 #, c-format
@@ -1975,6 +1975,10 @@ msgid "Output file: %s"
 msgstr ""
 
 #, c-format
+msgid "Incomplete GRASS session: Variable '%s' not set"
+msgstr ""
+
+#, c-format
 msgid "Monitor <%s> already running"
 msgstr ""
 
@@ -2193,7 +2197,7 @@ msgid "At least two points are required"
 msgstr ""
 
 msgid "Draws arrows representing cell aspect direction for a raster map containing aspect data."
-msgstr "Tracer des flèches représentant la direction d'aspect des cellules pour une couche rastercontenant des données d'aspect."
+msgstr "Trace des flèches représentant la direction d'aspect des cellules pour une carte raster contenant des données d’exposition."
 
 msgid "Name of raster aspect map to be displayed"
 msgstr "Nom de la couche raster d'aspect à afficher"
@@ -9098,7 +9102,7 @@ msgid "Input is a 1-arcsec tile (default: 3-arcsec)"
 msgstr "La tuile en entrée est une 1-arsec (par défaut : 3-arsec)"
 
 msgid "Downloads and imports data from OGC WMS and OGC WMTS web mapping servers."
-msgstr ""
+msgstr "Télécharge et importe des données depuis des serveurs de cartographie web OGC WMS et OGC WMTS."
 
 msgid "OGC web services"
 msgstr "services web OGC"
@@ -9364,7 +9368,7 @@ msgstr ""
 msgid "Generate clumps including diagonal neighbors"
 msgstr ""
 
-msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgid "Invert filter (remove clumps larger than lower and smaller than upper, only for method 'reclass')"
 msgstr ""
 
 msgid "Apply lower area threshold as \"minsize\" during clumping"
@@ -9469,7 +9473,7 @@ msgid "Print projection information of input pack file and exit"
 msgstr "Afficher les informations de projection du fichier empaqueté d'entrée et quitter"
 
 msgid "Create a 3D raster map from an assemblage of many coordinates using univariate statistics"
-msgstr "Créer une carte raster 3D depuis un assemblage de plusieurs coordonnées à l'aide de statistiques univarées"
+msgstr "Créer une carte raster 3D à partir d'un ensemble de plusieurs coordonnées à l'aide de statistiques univariées"
 
 msgid "raster3d"
 msgstr "raster3d"
@@ -10745,7 +10749,7 @@ msgid "Restrict fetch to features which touch the current region"
 msgstr "Restreindre le téléchargement aux entités qui touchent la région courante"
 
 msgid "Exports a vector map as GRASS specific archive file"
-msgstr "Exporter une carte vecteur vers un fichier d'archive GRASS"
+msgstr "Exporter une carte vecteur vers un fichier d'archive spécifique à GRASS"
 
 msgid "Name of vector map to pack up"
 msgstr "Nom de la carte vecteur empaquetée"
@@ -11818,7 +11822,7 @@ msgstr "Construire un VRT (raster virtuel) à partir de la liste de cartes raste
 msgid "Name of input raster files"
 msgstr ""
 
-#, c-format
+#, c-format, python-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr "%s= et %s= sont mutuellement exclusifs"
 
@@ -14850,10 +14854,9 @@ msgstr ""
 msgid "%<PRIu64> points found in input file(s)"
 msgstr "%<PRIu64> points trouvés dans le(s) fichier(s) d'entrée"
 
-#, fuzzy, c-format
-#| msgid "%lu points found in region."
+#, c-format
 msgid "%<PRIu64> points found in region."
-msgstr "%lu points trouvés dans la région."
+msgstr "%<PRIu64> points trouvés dans la région."
 
 #, fuzzy, c-format
 #| msgid "Number of input points: %d."
@@ -14931,7 +14934,7 @@ msgid "Pass #%d (of %d) ..."
 msgstr "Passe #%d (sur %d) ..."
 
 msgid "Creates a raster map from an assemblage of many coordinates using univariate statistics."
-msgstr "Créer une carte raster à partir de l'assemblage d'un lot de coordonnées en utilisant des statistiques univariées."
+msgstr "Créer une carte raster à partir d'un ensemble de plusieurs coordonnées à l'aide de statistiques univariées."
 
 msgid "ASCII file containing input data (or \"-\" to read from stdin)"
 msgstr "Fichier ASCII contenant les données d'entrée (ou \"-\" pour lire depuis stdin)"
@@ -15387,6 +15390,9 @@ msgstr ""
 msgid "Unknown error for function '%s'"
 msgstr ""
 
+msgid "rand() draws more than 2^46 random values. Later rows repeat the values of earlier rows plus a constant."
+msgstr ""
+
 #, c-format
 msgid "output map <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
@@ -15491,9 +15497,6 @@ msgstr "L'option 't' est obsolète et sera retirée dans une prochaine version. 
 
 msgid "r3.mapcalc does not support parallel execution."
 msgstr "r3.mapcalc ne supporte pas l'exécution parallèle."
-
-msgid "Parallel execution is not supported with rand() function"
-msgstr "L'exécution parallèle n'est pas prise en charge avec la fonction rand()"
 
 #, c-format
 msgid "<%d> is not valid number of nprocs."
@@ -16170,7 +16173,7 @@ msgstr ""
 msgid "Exporting raster map <%s> (band %d)..."
 msgstr ""
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to export raster map <%s>"
 msgstr ""
 
@@ -16823,9 +16826,8 @@ msgstr "La carte raster d'entrée est en dehors de la région cuorante"
 msgid "Unable to reproject map center %g, %g"
 msgstr ""
 
-#, fuzzy
 msgid "Re-projects a raster map from given project to the current project."
-msgstr "Reprojeter une carte raster depuis un secteur donné vers le secteur courant."
+msgstr "Permet de reprojeter une carte raster d’un projet donné vers le projet actuel."
 
 #, fuzzy
 msgid "Project (location) containing input raster map"
@@ -18610,10 +18612,9 @@ msgstr ""
 msgid "FP raster map <%s> not found"
 msgstr ""
 
-#, fuzzy, c-format
-#| msgid "Flag 't' is deprecated and will be removed in a future release. Please use format=csv instead."
+#, c-format
 msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
-msgstr "L'option 't' est obsolète et sera retirée dans une prochaine version. Utiliser plutôt format=csv."
+msgstr "L'option '%c' est obsolète et sera retirée dans une prochaine version. L'initialisation est automatique ; vous pouvez également utiliser le paramètre %s."
 
 #, c-format
 msgid "Read random seed from %s option: %<PRId64>"
@@ -20205,6 +20206,13 @@ msgid "Create an integer raster map"
 msgstr ""
 
 #, c-format
+msgid "Autogenerated random seed set to: %<PRId64>"
+msgstr ""
+
+msgid "The region has more cells than random values one seed holds. Later rows repeat the values of earlier rows plus a constant."
+msgstr ""
+
+#, c-format
 msgid "Minimum %s should be higher than maximum %s, but %s > %s"
 msgstr ""
 
@@ -20500,7 +20508,7 @@ msgid "Use 3D raster mask (if exists) with output map"
 msgstr "Utiliser le masque raster 3D (s'il existe) pour la carte en sortie"
 
 msgid "Converts 2D raster map slices to one 3D raster volume map."
-msgstr "Convertir des tranches de cartes raster 2D en une carte volumique raster 3D."
+msgstr "Convertit des tranches de cartes raster 2D en une seule carte volumique raster 3D."
 
 msgid "No output map"
 msgstr "Aucune couche créée en sortie"
@@ -22220,7 +22228,7 @@ msgstr ""
 msgid "No sink map provided. Initializing zero sink..."
 msgstr ""
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to create 3D raster map <%s>"
 msgstr "Impossible de créer la carte raster 3D <%s>"
 
@@ -22424,7 +22432,7 @@ msgstr "Le format de sortie par défaut des options -g et -r est actuellement «
 
 #, c-format
 msgid "Unable to read range of 3D raster map <%s>"
-msgstr "Impossible de lire la plage de la carte raster 3D <%s>"
+msgstr "Impossible de lire la plage de valeurs de la carte raster 3D <%s>"
 
 msgid "Error while reading history file"
 msgstr "Erreur à la lecture du fichier d'historique"
@@ -24249,6 +24257,17 @@ msgstr "Génération d'un fichier raster groupé avec un minimum de {pixel_count
 msgid "Generating a clumped raster file"
 msgstr "Génération d'un fichier raster groupé"
 
+# c-format
+#, fuzzy, python-brace-format
+#| msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgid "Generating a reclass map with area size smaller than {lower} hectares or larger than {upper} hectares..."
+msgstr "Génération d'une carte de reclassification avec des surfaces d'une taille inférieure ou égale à {upper} hectares..."
+
+# c-format
+#, python-brace-format
+msgid "No areas of size smaller than {lower} hectares or larger than {upper} hectares"
+msgstr "Aucune surface de superficie inférieure à {lower} hectares ou supérieure à {upper} hectares"
+
 #, python-brace-format
 msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
@@ -24258,12 +24277,34 @@ msgid "No areas of size larger than or equal to {lower} hectares and smaller tha
 msgstr ""
 
 # c-format
+#, fuzzy, python-brace-format
+#| msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgid "Generating a reclass map with area size smaller than {lower} hectares..."
+msgstr "Génération d'une carte de reclassification avec des surfaces d'une taille inférieure ou égale à {upper} hectares..."
+
+# c-format
+#, fuzzy, python-brace-format
+#| msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgid "No areas of size smaller than {lower} hectares"
+msgstr "Génération d'une carte de reclassification avec des surfaces d'une taille inférieure ou égale à {upper} hectares..."
+
+# c-format
 #, python-brace-format
 msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
 msgstr "Génération d'une carte de reclassification avec des surfaces d'une taille supérieure ou égale à {lower} hectares..."
 
 #, python-brace-format
 msgid "No areas of size larger than or equal to {lower} hectares"
+msgstr ""
+
+# c-format
+#, fuzzy, python-brace-format
+#| msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
+msgid "Generating a reclass map with area size larger than {upper} hectares..."
+msgstr "Génération d'une carte de reclassification avec des surfaces d'une taille supérieure ou égale à {lower} hectares..."
+
+#, python-brace-format
+msgid "No areas of size larger than {upper} hectares"
 msgstr ""
 
 # c-format
@@ -24285,6 +24326,9 @@ msgstr "Aucune surface trouvée"
 #, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
 msgstr "La carte raster <%s> n'est pas de type « CELL ». Les résultats peuvent ne pas être ceux attendus."
+
+msgid "Flag -i is not supported with method='rmarea'"
+msgstr ""
 
 msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
 msgstr "Les options <mode> et <value> sont obsolètes. Utilisez 'lower' et/ou 'upper'."
@@ -25027,7 +25071,7 @@ msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
 msgstr ""
 
 msgid "Prints/sets general temporal GIS database connection for current mapset."
-msgstr "Afficher/définir la connecion DB générale pour le jeu de cartes courant."
+msgstr "Afficher/définir la connexion à la base de données SIG temporelle générale pour le jeu de cartes courant."
 
 msgid "plain;Plain text output;shell;Shell script style output;json;JSON (JavaScript Object Notation)"
 msgstr ""
@@ -25068,6 +25112,457 @@ msgstr "Le pilote SIGT par défaut n'est pas défini"
 
 msgid "Default TGIS database is not set"
 msgstr "La base de données SIGT par défaut n'est pas définie"
+
+#, fuzzy, python-format
+#| msgid "Group <%s> not found in the current mapset"
+msgid "The output dataset <%s> must be in the current mapset<%s>."
+msgstr "Groupe <%s> non trouvé dans le jeu de cartes courant"
+
+#, python-format
+msgid "Empty space-time %s dataset <%s>, nothing to copy"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Copying %s maps to the current mapset..."
+msgstr "La carte raster <%s> n'est pas dans le jeu de cartes courant"
+
+#, fuzzy, python-format
+#| msgid "Raster map <%s> is not in the current mapset"
+msgid "A %s map <%s> exists already in the current mapset <%s>."
+msgstr "La carte raster <%s> n'est pas dans le jeu de cartes courant"
+
+#, fuzzy, python-format
+#| msgid "Raster map <%s> is not in the current mapset"
+msgid "The %s map <%s> is already in the current mapset, not copying"
+msgstr "La carte raster <%s> n'est pas dans le jeu de cartes courant"
+
+#, fuzzy, python-format
+#| msgid "Please specify %s= or %s="
+msgid "Please specify %s="
+msgstr "Merci de spécifier %s= ou %s="
+
+#, python-brace-format
+msgid "Dataset <{n}> of type <{t}> not found in temporal database"
+msgstr ""
+
+#, fuzzy
+#| msgid "A standard CSV separator (delimiter) is only one character long, got: {}"
+msgid "A standard CSV separator (delimiter) is only one character long"
+msgstr "Un séparateur (délimiteur) CSV standard ne comporte qu'un seul caractère, celui fourni est : {}"
+
+#, fuzzy
+#| msgid "Column names are always included"
+msgid "Column names are always included in JSON output"
+msgstr "Les noms des colonnes sont toujours inclus"
+
+#, fuzzy
+#| msgid "Separator is part of the format."
+msgid "Separator option is not allowed with JSON format"
+msgstr "Le séparateur fait partie du format."
+
+#, fuzzy
+#| msgid "Column names are always included"
+msgid "Column names are not allowed with line format"
+msgstr "Les noms des colonnes sont toujours inclus"
+
+msgid "Only one type is allowed for line format"
+msgstr ""
+
+msgid "Only one column is allowed for line format"
+msgstr ""
+
+msgid "Combinations across space time datasets and time stamped maps (e.g., raster and strds) are not allowed"
+msgstr ""
+
+#, fuzzy
+#| msgid "Column type not supported"
+msgid "Column 'type' cannot be requested alone"
+msgstr "Type de colonne non géré"
+
+msgid "No temporal database found in the requested mapset(s). No datasets to list."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Time stamped %s maps with %s available in mapset <%s>:\n"
+msgstr "Lister les formats disponibles et quitter"
+
+#, fuzzy, python-format
+msgid "Space time %s datasets with %s available in mapset <%s>:\n"
+msgstr "Lister les formats disponibles et quitter"
+
+#, fuzzy, python-format
+#| msgid "Lists space time datasets and maps registered in the temporal database."
+msgid "Output space time dataset <%s> must be located in this mapset"
+msgstr "Lister les jeux de données temporels et cartes enregistrées dans la base de données temporelle."
+
+#, fuzzy
+#| msgid "Lists space time datasets and maps registered in the temporal database."
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr "Lister les jeux de données temporels et cartes enregistrées dans la base de données temporelle."
+
+#, python-format
+msgid "Unable to merge maps into space time %s dataset <%s> please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Mapset <%s> not found"
+msgid "Space time %s dataset <%s> not found"
+msgstr "Jeu de cartes <%s> non trouvé"
+
+#, fuzzy
+msgid "You need to set the range to compute the occurrence space time raster dataset"
+msgstr "Importer un jeu de données raster temporel."
+
+#, fuzzy, python-format
+#| msgid "Fontcap file %s already exists; use --overwrite flag if you wish to overwrite it"
+msgid "Space time raster dataset <%s> is already in the database, use overwrite flag to overwrite"
+msgstr "Le fichier fontcap %s existe déjà ; utilisez l'option --overwrite si vous voulez l'écraser"
+
+#, fuzzy
+msgid "You need to set the occurrence to compute the indicator space time raster dataset"
+msgstr "Importer un jeu de données raster temporel."
+
+#, fuzzy
+msgid "You need to set the staend options to compute the indicator space time raster dataset"
+msgstr "Importer un jeu de données raster temporel."
+
+#, fuzzy, python-format
+#| msgid "3D raster map <%s> not found"
+msgid "Space time raster dataset <%s> not found"
+msgstr "carte raster 3D <%s> non trouvée"
+
+msgid "Temporal type of input strds and minimum strds must be equal"
+msgstr ""
+
+msgid "Temporal type of input strds and maximum strds must be equal"
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid PPM file"
+msgid "Invalid cycle"
+msgstr "Fichier PPM invalide"
+
+#, fuzzy
+#| msgid "Invalid height"
+msgid "Invalid offset"
+msgstr "Hauteur invalide"
+
+#, fuzzy, python-format
+#| msgid "Processing block %d of %d"
+msgid "Processing cycle %s - %s"
+msgstr "Traitement du bloc %d de %d"
+
+#, fuzzy, python-format
+#| msgid "Fontcap file %s already exists; use --overwrite flag if you wish to overwrite it"
+msgid "Map <%s> is already registered in the temporal database, use overwrite flag to overwrite."
+msgstr "Le fichier fontcap %s existe déjà ; utilisez l'option --overwrite si vous voulez l'écraser"
+
+#, fuzzy
+#| msgid "Invalid zrange"
+msgid "Invalid granularity"
+msgstr "zrange invalide"
+
+msgid "Temporal type of input strds and lower strds must be equal"
+msgstr ""
+
+msgid "The upper option works only in conjunction with the lower option"
+msgstr ""
+
+msgid "Temporal type of input strds and upper strds must be equal"
+msgstr ""
+
+#, fuzzy
+#| msgid "error running r.stats"
+msgid "Error running r.series.accumulate"
+msgstr "erreur lors de l'exécution de r.stats"
+
+#, fuzzy
+#| msgid "input= and weights= must have the same number of values"
+msgid "Input and aggregation dataset must have the same temporal type"
+msgstr "input= et weights= doivent avoir le même nombre de valeurs"
+
+msgid "All registered maps of the aggregation dataset must have time intervals"
+msgstr ""
+
+msgid "Unable to process the expression in granularity algebra mode"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error adding columns {}"
+msgid "Error in r.colors call"
+msgstr "Erreur d'ajout de colonnes {}"
+
+msgid "The number of parallel r.contour processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cursor not found"
+msgid "Directory {} not found"
+msgstr "Curseur non trouvé"
+
+#, fuzzy
+#| msgid "Directory '{path}' is not writable"
+msgid "Directory {} is not writable"
+msgstr "Le répertoire '{path}' n'est pas accessible en écriture"
+
+msgid "Type options is not working with pack format, it will be skipped"
+msgstr ""
+
+msgid "Createopt, metaopt and nodata options are not working with pack and AAIGrid formats, they will be skipped"
+msgstr ""
+
+#, fuzzy
+#| msgid "No areas found"
+msgid "No gaps found"
+msgstr "Aucune surface trouvée"
+
+#, fuzzy
+#| msgid "Unable to determine region, %s failed"
+msgid "Unable to determine successor and predecessor of a gap."
+msgstr "Impossible de déterminer la région, %s a échoué"
+
+msgid "More than one successor of the gap found. Using the first found."
+msgstr ""
+
+msgid "More than one predecessor of the gap found. Using the first found."
+msgstr ""
+
+#, python-format
+msgid "Map with name <%s> already exists. Please use another base name."
+msgstr ""
+
+#, python-brace-format
+msgid "Combining {option_name}={option_value} and {excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The option {excluded_option_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The flag -{flag_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "Only one column is allowed (not {num_columns})"
+msgstr ""
+
+msgid "Values are always ordered by start_time"
+msgstr ""
+
+#, python-brace-format
+msgid "Column '{name}' is not available with the method '{method}'"
+msgstr ""
+
+#, fuzzy
+#| msgid "The -p flag is required when using the format option."
+msgid "The method <quantile> requires input in the 'quantile' option."
+msgstr "L'option -p est requise lors de l'utilisation de l'option format."
+
+#, fuzzy
+#| msgid "Exports space time raster dataset."
+msgid "Space time raster dataset <{}> is empty"
+msgstr "Exporter un jeux de données raster temporel."
+
+#, python-brace-format
+msgid ""
+"Error running module: {mod}\n"
+"    stderr: {error}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error flushing tiles"
+msgid "Error running modules."
+msgstr "Erreur au vidage des tuiles"
+
+#, fuzzy, python-format
+#| msgid "Target project <%s> not found"
+msgid "Export directory <%s> not found."
+msgstr "Projet cible <%s> non trouvé"
+
+msgid "Number requested methods and output maps do not match."
+msgstr ""
+
+msgid "Processing over {} maps: activating -z flag of r.series which slows down processing."
+msgstr ""
+
+#, python-format
+msgid "%s failed. Check above error messages."
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to set region <%s>"
+msgid "Unable to set 3D region"
+msgstr "Impossible de définir la région <%s>"
+
+msgid "Space time voxel cube"
+msgstr ""
+
+msgid "This space time voxel cube was created with t.rast.to.rast3"
+msgstr ""
+
+#, python-format
+msgid "%s failed to set units."
+msgstr ""
+
+msgid "The number of parallel r.to.vect processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+msgid "<{}> is not valid input to the percentile option"
+msgstr ""
+
+#, fuzzy
+#| msgid "Input raster must be of type CELL."
+msgid "Zoning raster must be of type CELL"
+msgstr "Le raster d'entrée doit être de type CELL."
+
+#, fuzzy
+msgid "Options coordinates and points are mutually exclusive"
+msgstr "les drapeaux -B & - C sont mutuellement exclusifs. Veuillez n'en choisir qu'un seul."
+
+msgid "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+msgstr ""
+
+#, fuzzy
+msgid "Please specify points or coordinates"
+msgstr "Veuillez spécifier une colonne z"
+
+#, fuzzy, python-format
+#| msgid "Error closing output file %s"
+msgid "Transforming r.what output file %s"
+msgstr "Erreur lors de la fermeture du fichier de sortie %s"
+
+#, fuzzy, python-format
+#| msgid "Unable to open output file <%s>"
+msgid "Writing the output file <%s>"
+msgstr "Impossible d'ouvrir le fichier de sortie <%s>"
+
+#, python-format
+msgid "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Separator is part of the format."
+msgid "Separator option is not allowed with this format"
+msgstr "Le séparateur fait partie du format."
+
+#, fuzzy
+#| msgid "Column names are always included"
+msgid "All maps are always listed"
+msgstr "Les noms des colonnes sont toujours inclus"
+
+#, fuzzy
+#| msgid "The following data base element files would be deleted:"
+msgid "The following data base element files will be deleted:"
+msgstr "Les fichiers élémentaires de base suivant seront supprimés :"
+
+#, python-brace-format
+msgid "{stds}: {gid}"
+msgstr ""
+
+#, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database:"
+msgstr ""
+
+#, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database and removed from spatial database:"
+msgstr ""
+
+#, python-format
+msgid "- %s"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Nothing removed. You must use the force flag (-%c) to actually remove them. Exiting."
+msgid "Nothing removed. You must use the force flag (-{flag}) to actually remove them."
+msgstr "Rien de supprimé. Vous devez utiliser l'option forcer (-%c) pour les supprimer réellement."
+
+#, python-format
+msgid "Space time %s dataset <%s> can not be renamed. Mapset of the new identifier differs from the current mapset."
+msgstr ""
+
+#, python-format
+msgid "Unable to rename Space time %s dataset <%s>. Name <%s> is in use, please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Shifts temporally the maps of a space time dataset."
+msgid "Unable to temporally shift the space time %s dataset <%s>"
+msgstr "Déplacer temporellement les cartes d'un jeu de données temporel."
+
+#, c-format, python-format
+msgid "%s= or %s= must be specified"
+msgstr ""
+
+#, fuzzy
+msgid "Unregister maps"
+msgstr "Raster"
+
+#, fuzzy, python-format
+#| msgid "Unable to open vector map <%s> on topological level"
+msgid "Unable to find %s map <%s> in temporal database"
+msgstr "Impossible d'ouvrir la carte vecteur <%s> au niveau topologique"
+
+#, fuzzy, python-format
+#| msgid "Lists registered maps of a space time raster dataset."
+msgid "Unregister maps from space time dataset <%s>"
+msgstr "Lister les cartes enregistrées dans le jeu de données raster temporel."
+
+#, fuzzy
+#| msgid "Upgrades the version of the temporal database."
+msgid "Unregister maps from the temporal database"
+msgstr "Met à jour la version de la base de données temporelle."
+
+#, fuzzy
+msgid "The number of columns must be equal to the number of space time raster datasets"
+msgstr "Importer un jeu de données raster temporel."
+
+#, fuzzy, python-format
+#| msgid "Unable to create vector map <%s>"
+msgid "Unable to create new layers for vector map <%s>"
+msgstr "Impossible de créer la carte vecteur <%s>"
+
+#, fuzzy, python-format
+msgid "Observaion of space time raster dataset(s) <%s>"
+msgstr "Exporter un jeux de données raster temporel."
+
+#, fuzzy, python-format
+#| msgid "Converts a space time raster dataset into a space time vector dataset"
+msgid "Observation of space time raster dataset(s) <%s> with vector map <%s>"
+msgstr "Converti un jeunde données raster temporel vers un jeu de données vecteur temporel"
+
+msgid "The number of raster maps in a granule must be equal to the number of column names"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to add column {column} to vector map <{vector}>"
+msgid "Unable to add column %s to vector map <%s> with layer %i"
+msgstr "Impossible d'ajouter la colonne {column} à la carte vecteur <{vector}>"
+
+#, fuzzy, python-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to add table to vector map <%s> with layer %i"
+msgstr "Impossible d'ajouter un lien vers la base de données pour la carte vectorielle <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to find reclass information for <%s> in base map <%s@%s>"
+msgid "Unable to run v.what.rast for vector map <%s> with layer %i and raster map <%s>"
+msgstr "Impossible de trouver les informations de reclassement pour <%s> dans la carte de base <%s@%s>"
+
+#, fuzzy
+#| msgid "Lists registered maps of a space time vector dataset."
+msgid "All registered maps of the space time vector dataset must have time intervals"
+msgstr "Lister les cartes enregistrées dans le jeux de données vecteur temporel."
+
+#, fuzzy, python-format
+#| msgid "Input vector map <%s> is empty"
+msgid "Space time vector dataset <%s> is empty"
+msgstr "La carte vectorielle d'entrée <%s> est vide"
+
+#, fuzzy, python-format
+#| msgid "Unable to create raster map <%s>"
+msgid "Unable to remove raster map <%s>"
+msgstr "Impossible de créer la couche raster <%s>"
 
 msgid "Invalid GEOS geometry!"
 msgstr ""
@@ -26874,10 +27369,6 @@ msgid "Native"
 msgstr "Natif"
 
 msgid "Print current status in shell script style"
-msgstr ""
-
-#, c-format
-msgid "%s= or %s= must be specified"
 msgstr ""
 
 #, c-format
@@ -31792,7 +32283,7 @@ msgid "Can not write data portion to provided output"
 msgstr ""
 
 msgid "Re-projects a vector map from one project to the current project."
-msgstr "Re-projette une carte vecteur depuis un projet vers le projet courant."
+msgstr "Permet de reprojeter une carte vecteur d’un projet donné vers le projet actuel."
 
 msgid "Project (location) containing input vector map"
 msgstr "Projet (secteur) contenant la carte vectorielle d’entrée"
@@ -34078,6 +34569,9 @@ msgstr "Visionner des images BMP avec le pilote PNG."
 msgid "Image file"
 msgstr ""
 
+#~ msgid "Parallel execution is not supported with rand() function"
+#~ msgstr "L'exécution parallèle n'est pas prise en charge avec la fonction rand()"
+
 #, fuzzy, c-format
 #~| msgid "Invalid grid size <%s>"
 #~ msgid "Invalid random seed <%s>"
@@ -34236,10 +34730,6 @@ msgstr ""
 
 #~ msgid "%ld categories"
 #~ msgstr "%ld catégories"
-
-#, fuzzy
-#~ msgid "%s available in mapset <%s>:"
-#~ msgstr "Lister les formats disponibles et quitter"
 
 #~ msgid "%s=%s - illegal number of interpolation points"
 #~ msgstr "%s=%s - nombre illégal de points d'interpolation"
@@ -37578,10 +38068,6 @@ msgstr ""
 #~ msgstr "Nom du fichier SRTM en entrée (fichier sans l'extention .hgt.zip)"
 
 #, fuzzy
-#~ msgid "Name of the output space time raster dataset"
-#~ msgstr "Importer un jeu de données raster temporel."
-
-#, fuzzy
 #~ msgid "Name of the points vector map that defines the water outlets of the stream networks"
 #~ msgstr "Nom de la nouvelle carte vecteur qui stocke les valeurs échantillonnées dans diférentes couches"
 
@@ -38194,10 +38680,6 @@ msgstr ""
 #~ msgstr "Nom de la base de données source"
 
 #, fuzzy
-#~ msgid "Option <%s> and <%s> are mutually exclusive"
-#~ msgstr "les drapeaux -B & - C sont mutuellement exclusifs. Veuillez n'en choisir qu'un seul."
-
-#, fuzzy
 #~ msgid "Optional aspect raster map"
 #~ msgstr "Nom de la carte raster de sortie d'orientation"
 
@@ -38537,10 +39019,6 @@ msgstr ""
 #~ msgstr "Veuillez spécifier une colonne z"
 
 #, fuzzy
-#~ msgid "Please specify input= or infile="
-#~ msgstr "Veuillez spécifier une colonne z"
-
-#, fuzzy
 #~ msgid "Please specify output= and samplingpos="
 #~ msgstr "Veuillez spécifier une colonne z"
 
@@ -38863,10 +39341,6 @@ msgstr ""
 #~ msgstr "Nom de la carte raster à partir de laquelle calculer les statistiques"
 
 #, fuzzy
-#~ msgid "Raster maps"
-#~ msgstr "Raster"
-
-#, fuzzy
 #~ msgid "Raster names of equally spaced time series"
 #~ msgstr "Renommer un jeu de données temporel"
 
@@ -38972,10 +39446,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Remove gaps"
 #~ msgstr "Supprimer"
-
-#, fuzzy
-#~ msgid "Renames multiple maps in the current mapset."
-#~ msgstr "La carte raster <%s> n'est pas dans le jeu de cartes courant"
 
 #, fuzzy
 #~ msgid "Rendered output file"
@@ -40446,10 +40916,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "input raster"
 #~ msgstr "Fichier source"
-
-#, fuzzy
-#~ msgid "input space-time raster dataset"
-#~ msgstr "Exporter un jeux de données raster temporel."
 
 #, fuzzy
 #~ msgid "input vector layer"

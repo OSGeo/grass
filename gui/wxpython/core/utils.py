@@ -56,7 +56,7 @@ def split(s):
             return shlex.split(s.replace("\\", r"\\"))
         return shlex.split(s)
     except ValueError as e:
-        sys.stderr.write(_("Syntax error: %s") % e)
+        sys.stderr.write(_("Syntax error: %s") % e + "\n")
 
     return []
 
