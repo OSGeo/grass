@@ -2,6 +2,7 @@
 
 import csv
 import io
+import math
 
 import pytest
 
@@ -131,7 +132,7 @@ def test_plain_infinite_statistic(edge_value_dataset):
 
 
 def test_plain_single_feature_extended(edge_value_dataset):
-    """With one feature per map, the undefined statistics are printed as nan"""
+    """With one feature per map, the undefined statistics are printed as NaN"""
     tools = Tools(session=edge_value_dataset.session)
     result = tools.t_vect_univar(
         input=edge_value_dataset.name,
@@ -141,7 +142,8 @@ def test_plain_single_feature_extended(edge_value_dataset):
     )
     for row in plain_rows(result):
         assert row["n"] == "1"
-        assert row["sample_stddev"] == "nan"
+        # printf writes NaN as nan or -nan depending on the platform.
+        assert math.isnan(float(row["sample_stddev"]))
 
 
 def test_plain_large_whole_number(edge_value_dataset):
