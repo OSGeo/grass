@@ -1924,7 +1924,7 @@ int main(int argc, char *argv[])
             }
             if (ncentr > n_polygons) {
                 G_important_message(
-                    _("%d additional areas where created during import."),
+                    _("%d additional areas were created during import."),
                     ncentr - n_polygons);
             }
             if (snap > 0) {

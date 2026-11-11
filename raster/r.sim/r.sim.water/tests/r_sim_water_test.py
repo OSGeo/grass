@@ -32,7 +32,7 @@ RAIN = 100  # mm/hr; generous signal-to-noise ratio on a small domain
 NO_DIFFUSION = {"diffusion_coeff": 0.001}
 
 
-def run_sim(session, *, random_seed=SEED, **kwargs):
+def run_sim(session, *, seed=SEED, **kwargs):
     """Run r.sim.water on the session's terrain; return depth as ndarray.
 
     Assumes the session already contains rasters named elevation, dx, and dy
@@ -57,7 +57,7 @@ def run_sim(session, *, random_seed=SEED, **kwargs):
         dx="dx",
         dy="dy",
         depth=np.array,
-        random_seed=random_seed,
+        seed=seed,
         **defaults,
     )
 
@@ -336,7 +336,7 @@ def test_discharge_within_mass_balance_bracket(east_slope_session):
         discharge=np.array,
         rain_value=RAIN,
         duration=DURATION,
-        random_seed=SEED,
+        seed=SEED,
         nprocs=NPROCS,
     )
     total = float(np.sum(discharge))
@@ -354,8 +354,7 @@ def test_results_consistent_across_seeds(east_slope_session):
     """
     seeds = [1, 7, 42, 99, 123]
     sums = [
-        float(np.sum(run_sim(east_slope_session, nwalkers=1000, random_seed=s)))
-        for s in seeds
+        float(np.sum(run_sim(east_slope_session, nwalkers=1000, seed=s))) for s in seeds
     ]
     mean_sum = np.mean(sums)
     for seed, total in zip(seeds, sums, strict=True):
@@ -423,7 +422,7 @@ def test_error_output_is_zero(east_slope_session):
         rain_value=RAIN,
         man_value=0.1,
         duration=DURATION,
-        random_seed=SEED,
+        seed=SEED,
         nprocs=NPROCS,
     )
     assert error.shape == (1, 5), f"Expected one error value per cell:\n{error}"
@@ -548,7 +547,7 @@ def test_duration_affects_time_series_progression(long_slope_session):
         nwalkers=10000,
         duration=10,
         output_step=5,
-        random_seed=SEED,
+        seed=SEED,
         nprocs=NPROCS,
         flags="t",
     )
@@ -563,7 +562,7 @@ def test_duration_affects_time_series_progression(long_slope_session):
         nwalkers=10000,
         duration=20,
         output_step=5,
-        random_seed=SEED,
+        seed=SEED,
         nprocs=NPROCS,
         flags="t",
     )
@@ -735,7 +734,7 @@ def test_dx_dy_optional(tmp_path):
             rain_value=RAIN,
             man_value=0.1,
             duration=DURATION,
-            random_seed=SEED,
+            seed=SEED,
             nprocs=NPROCS,
         )
         assert np.sum(depth) > 0, "Expected positive depth when dx/dy are omitted"
@@ -750,14 +749,18 @@ def test_flow_control_increases_depth(east_slope_session):
     Higher trapping probability means more accumulation.
     """
     tools = Tools(session=east_slope_session)
-    sum_no_control = float(np.sum(run_sim(east_slope_session)))
+    # The ten default walkers leave the total with trapping at 0.3 within
+    # noise of the total without trapping for about a quarter of the seeds;
+    # a thousand separate no trapping, 0.3 and 0.8 for every seed tried.
+    walkers = {"nwalkers": 1000}
+    sum_no_control = float(np.sum(run_sim(east_slope_session, **walkers)))
     tools.r_mapcalc(expression="flow_ctrl_low = 0.3")
     tools.r_mapcalc(expression="flow_ctrl_high = 0.8")
     sum_low_trap = float(
-        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_low"))
+        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_low", **walkers))
     )
     sum_high_trap = float(
-        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_high"))
+        np.sum(run_sim(east_slope_session, flow_control="flow_ctrl_high", **walkers))
     )
     assert sum_low_trap > sum_no_control, (
         f"Trapping should increase depth: "
@@ -792,7 +795,7 @@ def test_time_series_outputs(long_slope_session):
         man_value=0.3,
         duration=10,
         output_step=5,
-        random_seed=SEED,
+        seed=SEED,
         nprocs=NPROCS,
         walkers_output="walkers",
         flags="t",
@@ -835,7 +838,7 @@ def test_observation_logfile(east_slope_session, tmp_path):
         man_value=0.1,
         nwalkers=1000,
         duration=DURATION,
-        random_seed=SEED,
+        seed=SEED,
         nprocs=NPROCS,
         observation="points",
         logfile=logfile,
@@ -888,7 +891,7 @@ def test_walkers_output(long_slope_session):
         man_value=0.3,
         nwalkers=nwalkers,
         duration=DURATION,
-        random_seed=SEED,
+        seed=SEED,
         nprocs=NPROCS,
         walkers_output="walkers",
     )
@@ -907,8 +910,10 @@ def test_walkers_output(long_slope_session):
 def test_nprocs_gives_result_within_noise(east_slope_session):
     """Multiple threads produce a result close to a single thread.
 
-    Threads share the random number generator state, so multi-threaded
-    results vary between runs even with a fixed seed. Total depth should
+    Each walker draws the same random numbers with any number of threads,
+    but threads add to the water depth without synchronization, so
+    multi-threaded results vary between runs even with a fixed seed. Total
+    depth should
     still agree with the single-threaded result within Monte Carlo noise,
     using the same tolerance as test_results_consistent_across_seeds.
     """
@@ -1004,7 +1009,7 @@ def test_north_slope_observation_logfile(tmp_path):
             man_value=0.1,
             nwalkers=1000,
             duration=DURATION,
-            random_seed=SEED,
+            seed=SEED,
             nprocs=NPROCS,
             observation="points",
             logfile=logfile,

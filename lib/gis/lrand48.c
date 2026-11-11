@@ -136,35 +136,53 @@ static int seed_in_range(int64_t seed)
     return seed >= -(INT64_C(1) << 31) && seed <= (INT64_C(1) << 32) - 1;
 }
 
+/*!
+ * \brief Read a random number seed from a text
+ *
+ * The text must be a decimal integer with nothing after it; leading white
+ * space and a sign are allowed. The integer must be in the range from
+ * -2^31 to 2^32 - 1, which names every seed the generator tells apart
+ * once, as a signed or an unsigned 32-bit value.
+ *
+ * When the text is not a seed, the result says what a seed must be, as a
+ * phrase to put after a colon in a message which names the text and
+ * where it came from.
+ *
+ * \param[in] text the text to read
+ * \param[out] seed the seed, set only when the text is one
+ *
+ * \return NULL when the text is a seed, otherwise what a seed must be
+ */
+const char *G_random_parse_seed(const char *text, int64_t *seed)
+{
+    long long value;
+    char *end;
+
+    errno = 0;
+    value = strtoll(text, &end, 10);
+    if (end == text || *end != '\0')
+        return _("must be an integer with nothing after it");
+    /* The range is checked on the value strtoll() returns, so the
+     * conversion to the seed type is exact. */
+    if (errno == ERANGE || !seed_in_range(value))
+        return _("must be between -2147483648 and 4294967295");
+    *seed = value;
+    return NULL;
+}
+
 /* Read a seed from an environment variable. An unset or empty variable
  * gives no seed, so that the caller can try the next source. */
 static int seed_from_environment(const char *name, int64_t *seed)
 {
     const char *text = getenv(name);
-    char *end;
-    int64_t value;
+    const char *problem;
 
     if (!text || !*text)
         return 0;
-    errno = 0;
-    value = strtoll(text, &end, 10);
-    if (errno == ERANGE)
-        G_fatal_error(
-            _("Random number seed %s from %s is too large in magnitude "
-              "to be read"),
-            text, name);
-    if (end == text || *end != '\0')
-        G_fatal_error(_("Random number seed %s from %s is not an integer"),
-                      text, name);
-    if (!seed_in_range(value)) {
-        int64_t reduced = (int64_t)((uint64_t)value & 0xFFFFFFFF);
-
-        G_warning(_("Random number seed %s from %s is used as %" PRId64 ", "
-                    "its low 32 bits"),
-                  text, name, reduced);
-        value = reduced;
-    }
-    *seed = value;
+    problem = G_random_parse_seed(text, seed);
+    if (problem)
+        G_fatal_error(_("Invalid random seed <%s> from %s: %s"), text, name,
+                      problem);
     return 1;
 }
 
@@ -174,14 +192,11 @@ static int seed_from_environment(const char *name, int64_t *seed)
  * The seed is the value of the environment variable GRASS_RANDOM_SEED, or
  * of SOURCE_DATE_EPOCH when GRASS_RANDOM_SEED is not set or empty, and
  * otherwise a weak hash of the current time and process ID. A value from
- * the environment must be a decimal integer within the range of int64_t,
- * with nothing after it (leading white space and a sign are allowed);
- * anything else is a fatal error naming the variable. A value from -2^31
- * to 2^32 - 1 is returned as it is, and a value outside that range is
- * reduced to its low 32 bits, between 0 and 2^32 - 1, with a warning. The
- * result is therefore a seed G_random_state_from_seed(), the layout
- * functions and G_srand48() accept. Record it, for example in the history of
- * the output map, so that the run can be repeated with it as the seed.
+ * the environment is read with G_random_parse_seed(); a text which is not
+ * a seed is a fatal error naming the variable. The result is a seed
+ * G_random_state_from_seed(), the layout functions and G_srand48()
+ * accept. Record it, for example in the history of the output map, so
+ * that the run can be repeated with it as the seed.
  *
  * The hash of the time and process ID lies between 0 and 2^32 - 1. Two
  * calls in one process within the same microsecond, or within the same
@@ -189,7 +204,7 @@ static int seed_from_environment(const char *name, int64_t *seed)
  * two processes can get the same value too.
  *
  * The function reads the environment and the clock and changes no
- * generator; it may issue a warning or end with a fatal error.
+ * generator; it may end with a fatal error.
  *
  * \return the seed
  */
@@ -367,12 +382,22 @@ double G_drand48(void)
 #endif
 }
 
-/* Advance a generator of the program's own by one step. The
- * multiplication may wrap around at 2^64; that does not change the result
- * modulo 2^48. */
+/* Multiply two values modulo 2^48. The unsigned multiplication may wrap
+ * around modulo 2^64. This is intentional and does not change the result:
+ * since 2^48 divides 2^64, masking the wrapped product to 48 bits gives
+ * the same result as computing the full product modulo 2^48. */
+static uint64_t mul48(uint64_t a, uint64_t b)
+{
+    /* coverity[integer_overflow] */
+    return (a * b) & MASK48;
+}
+
+/* Advance a generator of the program's own by one step. All generator
+ * arithmetic is modulo 2^48; mul48() performs multiplication with
+ * intentional unsigned wraparound as described above. */
 static uint64_t lcg_step(uint64_t x)
 {
-    return (LCG_A * x + LCG_B) & MASK48;
+    return (mul48(LCG_A, x) + LCG_B) & MASK48;
 }
 
 /* Turn a seed into a generator state the way G_srand48() does: only the
@@ -386,7 +411,8 @@ static uint64_t lcg_seed(int64_t seed)
 /* Advance the generator by an arbitrary number of steps without taking
  * them one at a time. One step is the affine map x -> a * x + c, and
  * composing two such maps gives another, so the map for `steps` steps is
- * built by repeated squaring, as an integer power would be. */
+ * built by repeated squaring, as an integer power would be. All
+ * multiplication is modulo 2^48; see mul48(). */
 static uint64_t lcg_jump(uint64_t x, uint64_t steps)
 {
     uint64_t a_total = 1, c_total = 0; /* the identity map */
@@ -394,16 +420,16 @@ static uint64_t lcg_jump(uint64_t x, uint64_t steps)
 
     while (steps) {
         if (steps & 1) {
-            c_total = (a * c_total + c) & MASK48;
-            a_total = (a * a_total) & MASK48;
+            c_total = (mul48(a, c_total) + c) & MASK48;
+            a_total = mul48(a, a_total);
         }
         /* Square the map, so a and c then describe twice as many steps. */
-        c = (a * c + c) & MASK48;
-        a = (a * a) & MASK48;
+        c = (mul48(a, c) + c) & MASK48;
+        a = mul48(a, a);
         steps >>= 1;
     }
 
-    return (a_total * x + c_total) & MASK48;
+    return (mul48(a_total, x) + c_total) & MASK48;
 }
 
 /* The generator tells seeds apart by their low 32 bits only. Seeds read
@@ -773,6 +799,56 @@ double G_random_double(struct G_random_state *state)
     state->state = lcg_step(state->state);
     /* The state is below 2^53, so the conversion to double is exact. */
     return (double)state->state / 281474976710656.0; /* 2^48 */
+}
+
+/*!
+ * \brief Generate an integer in the range [0, 2^32)
+ *
+ * The high 32 bits of the state after the draw.
+ *
+ * Thread-safe as long as no two threads share a state.
+ *
+ * \param[in,out] state a seeded generator state
+ *
+ * \return the generated value
+ */
+uint32_t G_random_uint32(struct G_random_state *state)
+{
+    state->state = lcg_step(state->state);
+    return (uint32_t)(state->state >> 16);
+}
+
+/*!
+ * \brief Generate an integer in the range [-2^31, 2^31)
+ *
+ * The bits of G_random_uint32() read as a signed value.
+ *
+ * Thread-safe as long as no two threads share a state.
+ *
+ * \param[in,out] state a seeded generator state
+ *
+ * \return the generated value
+ */
+int32_t G_random_int32(struct G_random_state *state)
+{
+    return (int32_t)G_random_uint32(state);
+}
+
+/*!
+ * \brief Generate a non-negative integer in the range [0, 2^31)
+ *
+ * The top 31 bits of G_random_uint32(), for uses such as an index or a
+ * modulo operation.
+ *
+ * Thread-safe as long as no two threads share a state.
+ *
+ * \param[in,out] state a seeded generator state
+ *
+ * \return the generated value
+ */
+int G_random_int(struct G_random_state *state)
+{
+    return (int)(G_random_uint32(state) >> 1);
 }
 
 /*

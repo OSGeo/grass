@@ -290,15 +290,15 @@ class VDigitSettingsDialog(wx.Dialog):
             border=10,
         )
 
-        self.selectIn = CheckBox(
+        self.selectInside = CheckBox(
             parent=panel,
             id=wx.ID_ANY,
             label=_("Select only features inside of selection bounding box"),
         )
-        self.selectIn.SetValue(
+        self.selectInside.SetValue(
             UserSettings.Get(group="vdigit", key="selectInside", subkey="enabled")
         )
-        self.selectIn.SetToolTip(
+        self.selectInside.SetToolTip(
             _(
                 "By default are selected all features overlapping selection bounding "
                 "box "
@@ -313,7 +313,7 @@ class VDigitSettingsDialog(wx.Dialog):
         )
 
         sizer.Add(flexSizer, proportion=0, flag=wx.EXPAND)
-        sizer.Add(self.selectIn, proportion=0, flag=wx.EXPAND | wx.ALL, border=1)
+        sizer.Add(self.selectInside, proportion=0, flag=wx.EXPAND | wx.ALL, border=1)
         sizer.Add(self.checkForDupl, proportion=0, flag=wx.EXPAND | wx.ALL, border=1)
         border.Add(
             sizer,
@@ -1057,7 +1057,7 @@ class VDigitSettingsDialog(wx.Dialog):
             group="vdigit",
             key="selectInside",
             subkey="enabled",
-            value=self.selectIn.IsChecked(),
+            value=self.selectInside.IsChecked(),
         )
 
         # on-exit

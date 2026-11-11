@@ -85,7 +85,7 @@ class TestRSimSediment(TestCase):
             shear_stress=self.tauin,
             sediment_flux=self.sedflux,
             erosion_deposition=self.erdep,
-            random_seed=1,
+            seed=1,
         )
 
         # Assert that the output rasters exist

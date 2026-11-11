@@ -199,10 +199,10 @@ int main(int argc, char *argv[])
         select_target_env();
 
         if (G_find_vector2(out_opt->answer, G_mapset())) {
-            G_warning(_("The vector map <%s> already exists in"),
+            G_warning(_("The vector map <%s> already exists."),
                       out_opt->answer);
-            G_warning(_("target project %s, mapset %s:"), G_location(),
-                      G_mapset());
+            G_warning(_("Target project: <%s>"), G_location());
+            G_warning(_("Target mapset: <%s>"), G_mapset());
             G_fatal_error(_("Rectification cancelled."));
         }
         select_current_env();

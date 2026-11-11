@@ -360,7 +360,7 @@ def main():
     output_strds.update_from_registered_maps(dbif)
     gs.percent(1, 1, 1)
 
-    if output_exists:
+    if output_exists and flags["e"]:
         output_strds.update_command_string(dbif=dbif)
 
     # Remove empty maps

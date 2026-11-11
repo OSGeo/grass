@@ -74,7 +74,7 @@ def replace_stds_names(expression: str, simple_name: str, full_name: str) -> str
     """Safely replace simple with full STDS names.
 
      When users provide inconsistent input for STDS in the expression
-     (with and without mapset componenet) or if the STDS name is part
+     (with and without mapset component) or if the STDS name is part
      of the name of other raster maps in the expression, the final
      mapcalc expression may become invalid when the STDS name later is
      replaced with the name of the individual maps in the time series.

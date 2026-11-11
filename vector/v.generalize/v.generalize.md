@@ -236,7 +236,7 @@ the following parameters:
   This means that this parameter can be used for selecting the centre(s)
   of a network. Note that if closeness_thresh=0 then everything is
   selected.
-- **betweeness_thresh** - Again, only the lines with a betweeness
+- **betweeness_thresh** - Again, only the lines with a betweenness
   centrality measure at least **betweeness_thresh** are selected. This
   value is always positive and is larger for large networks. It denotes
   to what extent a line is in between the other lines in the network.

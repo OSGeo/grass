@@ -71,7 +71,7 @@
 	integer		: a numeric integer parameter.
 	float		: a numeric float parameter.
 	If multiple is "yes", then many values for the
-	parameter may be given in a comma-seperated list
+	parameter may be given in a comma-separated list
 -->
 <!ELEMENT parameter     (description?, keydesc?, gisprompt?, default?, values?, guisection?)>
 <!ATTLIST parameter	name		CDATA #REQUIRED
