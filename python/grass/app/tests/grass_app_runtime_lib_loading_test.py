@@ -12,7 +12,9 @@ loaded in the test process.
 This file is meant to be executed also standalone (pytest with this file as
 the only argument), including against an installation moved away from the
 prefix it was configured with: the tests provide any needed environment
-themselves instead of relying on the environment of the test process.
+themselves instead of relying on the environment of the test process. The
+test with the manual search path is the only one meant to pass against a
+moved installation.
 """
 
 import os
@@ -23,6 +25,15 @@ import pytest
 
 from grass.app.runtime import RuntimePaths
 from grass.script.setup import get_install_path
+
+IMPORT_CODE = """
+    import json
+
+    import grass.lib.gis
+    import grass.lib.raster
+
+    print(json.dumps({"imported": True}))
+"""
 
 
 @pytest.mark.skipif(
@@ -107,16 +118,10 @@ def test_preload_reports_libraries_which_cannot_be_loaded(
 def test_grass_lib_importable_without_session(
     run_code_in_environment, clean_subprocess_environment
 ):
-    """Check that grass.lib can be imported without any session or variable"""
-    code = """
-        import json
-
-        import grass.lib.gis
-        import grass.lib.raster
-
-        print(json.dumps({"imported": True}))
-    """
-    assert run_code_in_environment(code, env=clean_subprocess_environment)["imported"]
+    """Check the import without a session and the search path variable"""
+    assert run_code_in_environment(IMPORT_CODE, env=clean_subprocess_environment)[
+        "imported"
+    ]
 
 
 def test_grass_lib_importable_with_manual_search_path(
@@ -135,12 +140,4 @@ def test_grass_lib_importable_with_manual_search_path(
             env[variable] = lib_path + os.pathsep + env[variable]
         else:
             env[variable] = lib_path
-    code = """
-        import json
-
-        import grass.lib.gis
-        import grass.lib.raster
-
-        print(json.dumps({"imported": True}))
-    """
-    assert run_code_in_environment(code, env=env)["imported"]
+    assert run_code_in_environment(IMPORT_CODE, env=env)["imported"]
