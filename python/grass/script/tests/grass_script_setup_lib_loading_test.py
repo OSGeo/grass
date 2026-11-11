@@ -6,8 +6,8 @@
 This file is meant to be executed also standalone (pytest with this file as
 the only argument). The tests run their code in a subprocess without the
 dynamic library search path variable, so the libraries which a loaded
-library depends on resolve only through the search path recorded in the
-libraries at build time.
+library depends on must resolve without it, for example, through the search
+path recorded in the libraries at build time.
 """
 
 import sys

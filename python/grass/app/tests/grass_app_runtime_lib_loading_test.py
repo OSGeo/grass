@@ -31,7 +31,7 @@ IMPORT_CODE = """
 def test_grass_lib_importable_without_session(
     run_code_in_environment, clean_subprocess_environment
 ):
-    """Check the import without a session and the search path variable"""
+    """Check the import with neither a session nor the search path variable"""
     assert run_code_in_environment(IMPORT_CODE, env=clean_subprocess_environment)[
         "imported"
     ]
