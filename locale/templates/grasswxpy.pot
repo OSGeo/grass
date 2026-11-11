@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 18:21+0000\n"
+"POT-Creation-Date: 2026-11-07 19:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,9 +198,9 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:413
 #: ../gui/wxpython/gmodeler/preferences.py:728
-#: ../gui/wxpython/gui_core/gselect.py:1631
-#: ../gui/wxpython/gui_core/gselect.py:1648
+#: ../gui/wxpython/gui_core/gselect.py:1632
 #: ../gui/wxpython/gui_core/gselect.py:1649
+#: ../gui/wxpython/gui_core/gselect.py:1650
 #: ../gui/wxpython/gui_core/widgets.py:1460
 #: ../gui/wxpython/vnet/dialogs.py:1675
 msgid "Name:"
@@ -250,11 +250,11 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1276
 #: ../gui/wxpython/gui_core/forms.py:2398
 #: ../gui/wxpython/gui_core/forms.py:2505
-#: ../gui/wxpython/gui_core/gselect.py:1247
-#: ../gui/wxpython/gui_core/gselect.py:1563
-#: ../gui/wxpython/gui_core/gselect.py:1580
-#: ../gui/wxpython/gui_core/gselect.py:1633
-#: ../gui/wxpython/gui_core/gselect.py:1668
+#: ../gui/wxpython/gui_core/gselect.py:1248
+#: ../gui/wxpython/gui_core/gselect.py:1564
+#: ../gui/wxpython/gui_core/gselect.py:1581
+#: ../gui/wxpython/gui_core/gselect.py:1634
+#: ../gui/wxpython/gui_core/gselect.py:1669
 #: ../gui/wxpython/location_wizard/wizard.py:1449
 #: ../gui/wxpython/location_wizard/wizard.py:1804
 #: ../gui/wxpython/modules/import_export.py:860
@@ -455,8 +455,8 @@ msgid "File format:"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1192
-#: ../gui/wxpython/gui_core/gselect.py:1578
-#: ../gui/wxpython/gui_core/gselect.py:1666
+#: ../gui/wxpython/gui_core/gselect.py:1579
+#: ../gui/wxpython/gui_core/gselect.py:1667
 msgid "Directory:"
 msgstr ""
 
@@ -908,12 +908,12 @@ msgstr ""
 msgid "Unable to execute command: '%s'"
 msgstr ""
 
-#: ../gui/wxpython/core/gcmd.py:778 ../gui/wxpython/gui_core/forms.py:3368
+#: ../gui/wxpython/core/gcmd.py:780 ../gui/wxpython/gui_core/forms.py:3368
 #, python-format
 msgid "Error in %s"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:583
+#: ../gui/wxpython/core/gconsole.py:590
 #, python-format
 msgid ""
 "Unable to run command:\n"
@@ -922,22 +922,22 @@ msgid ""
 "Option <%(opt)s>: read from standard input is not supported by wxGUI"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:620
+#: ../gui/wxpython/core/gconsole.py:627
 #, python-format
 msgid "Module <%s> not found."
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:779 ../gui/wxpython/gmodeler/panels.py:314
+#: ../gui/wxpython/core/gconsole.py:786 ../gui/wxpython/gmodeler/panels.py:314
 #, python-format
 msgid "%d sec"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:782 ../gui/wxpython/gmodeler/panels.py:317
+#: ../gui/wxpython/core/gconsole.py:789 ../gui/wxpython/gmodeler/panels.py:317
 #, python-format
 msgid "%(min)d min %(sec)d sec"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:788
+#: ../gui/wxpython/core/gconsole.py:795
 #: ../gui/wxpython/gmodeler/model_items.py:280
 #: ../gui/wxpython/gmodeler/model_items.py:386
 #: ../gui/wxpython/gmodeler/panels.py:323 ../gui/wxpython/gui_core/ghelp.py:257
@@ -945,20 +945,20 @@ msgstr ""
 msgid "unknown"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:794
+#: ../gui/wxpython/core/gconsole.py:801
 msgid "Please note that the data are left in inconsistent state and may be corrupted"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:798
+#: ../gui/wxpython/core/gconsole.py:805
 msgid "Command aborted"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:801
+#: ../gui/wxpython/core/gconsole.py:808
 #, python-brace-format
 msgid "Command ended with non-zero return code {returncode}"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:806 ../gui/wxpython/gmodeler/panels.py:330
+#: ../gui/wxpython/core/gconsole.py:813 ../gui/wxpython/gmodeler/panels.py:330
 msgid "Command finished"
 msgstr ""
 
@@ -1201,12 +1201,12 @@ msgid ""
 "{err}"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:974
+#: ../gui/wxpython/core/settings.py:975
 #, python-format
 msgid "Unable to read settings file <%s>\n"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:980
+#: ../gui/wxpython/core/settings.py:981
 #, python-format
 msgid ""
 "Error: Reading settings from file <%(file)s> failed.\n"
@@ -1214,11 +1214,11 @@ msgid ""
 "\t\tLine: '%(line)s'\n"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:998
+#: ../gui/wxpython/core/settings.py:999
 msgid "Unable to create settings directory"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:1007
+#: ../gui/wxpython/core/settings.py:1008
 #, python-format
 msgid ""
 "Writing settings to file <%(file)s> failed.\n"
@@ -1226,12 +1226,12 @@ msgid ""
 "Details: %(detail)s"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:1113
+#: ../gui/wxpython/core/settings.py:1114
 #, python-brace-format
 msgid "Unable to set '{group}:{key}:{subkey}'"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:1153 ../gui/wxpython/core/settings.py:1174
+#: ../gui/wxpython/core/settings.py:1154 ../gui/wxpython/core/settings.py:1175
 #, python-format
 msgid "Unable to parse settings '%s'"
 msgstr ""
@@ -2502,7 +2502,7 @@ msgid "Data type"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:3045 ../gui/wxpython/dbmgr/base.py:3197
-#: ../gui/wxpython/dbmgr/base.py:3465 ../gui/wxpython/gui_core/gselect.py:1481
+#: ../gui/wxpython/dbmgr/base.py:3465 ../gui/wxpython/gui_core/gselect.py:1482
 msgid "Database"
 msgstr ""
 
@@ -3876,13 +3876,13 @@ msgid "Delete all"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:981
-#: ../gui/wxpython/gui_core/gselect.py:2296
+#: ../gui/wxpython/gui_core/gselect.py:2297
 #: ../gui/wxpython/location_wizard/wizard.py:984
 msgid "No"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:981
-#: ../gui/wxpython/gui_core/gselect.py:2296
+#: ../gui/wxpython/gui_core/gselect.py:2297
 #: ../gui/wxpython/location_wizard/wizard.py:984
 msgid "Yes"
 msgstr ""
@@ -5076,7 +5076,7 @@ msgid "Enter file content directly instead of specifying a file. Temporary file 
 msgstr ""
 
 #: ../gui/wxpython/gui_core/forms.py:2504
-#: ../gui/wxpython/gui_core/gselect.py:1477
+#: ../gui/wxpython/gui_core/gselect.py:1478
 msgid "Directory"
 msgstr ""
 
@@ -5368,186 +5368,186 @@ msgid ""
 "Some functionality will be not accessible"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:924
+#: ../gui/wxpython/gui_core/gselect.py:925
 msgid "No table linked to layer <{}>."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1246
+#: ../gui/wxpython/gui_core/gselect.py:1247
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1011
 msgid "Choose GIS Data Directory"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1458
+#: ../gui/wxpython/gui_core/gselect.py:1459
 msgid "Output settings"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1460
+#: ../gui/wxpython/gui_core/gselect.py:1461
 msgid "Source input"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1467
+#: ../gui/wxpython/gui_core/gselect.py:1468
 msgid "Native"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1473
+#: ../gui/wxpython/gui_core/gselect.py:1474
 #: ../gui/wxpython/lmgr/workspace.py:514
 msgid "File"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1485
+#: ../gui/wxpython/gui_core/gselect.py:1486
 msgid "Protocol"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1496
+#: ../gui/wxpython/gui_core/gselect.py:1497
 msgid "Output type"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1498
+#: ../gui/wxpython/gui_core/gselect.py:1499
 msgid "Source type"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1516
+#: ../gui/wxpython/gui_core/gselect.py:1517
 msgid "All files"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1546
+#: ../gui/wxpython/gui_core/gselect.py:1547
 msgid "ZIP files"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1547
+#: ../gui/wxpython/gui_core/gselect.py:1548
 msgid "GZIP files"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1548
+#: ../gui/wxpython/gui_core/gselect.py:1549
 msgid "TAR files"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1552
+#: ../gui/wxpython/gui_core/gselect.py:1553
 msgid "TARGZ files"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1561
+#: ../gui/wxpython/gui_core/gselect.py:1562
 msgid "File:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1562
+#: ../gui/wxpython/gui_core/gselect.py:1563
 msgid "Choose file to import"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1579
-#: ../gui/wxpython/gui_core/gselect.py:1667
+#: ../gui/wxpython/gui_core/gselect.py:1580
+#: ../gui/wxpython/gui_core/gselect.py:1668
 msgid "Choose input directory"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1600
+#: ../gui/wxpython/gui_core/gselect.py:1601
 msgid "Extension:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1632
+#: ../gui/wxpython/gui_core/gselect.py:1633
 msgid "Choose file"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1653
-#: ../gui/wxpython/gui_core/gselect.py:2779
+#: ../gui/wxpython/gui_core/gselect.py:1654
+#: ../gui/wxpython/gui_core/gselect.py:2780
 msgid "Feature type:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1654
+#: ../gui/wxpython/gui_core/gselect.py:1655
 msgid "simple features"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1654
+#: ../gui/wxpython/gui_core/gselect.py:1655
 msgid "topological"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1771
-#: ../gui/wxpython/gui_core/gselect.py:1811
-#: ../gui/wxpython/gui_core/gselect.py:1873
-#: ../gui/wxpython/gui_core/gselect.py:1918
+#: ../gui/wxpython/gui_core/gselect.py:1772
+#: ../gui/wxpython/gui_core/gselect.py:1812
+#: ../gui/wxpython/gui_core/gselect.py:1874
+#: ../gui/wxpython/gui_core/gselect.py:1919
 msgid "Creation options:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1788
-#: ../gui/wxpython/gui_core/gselect.py:1834
-#: ../gui/wxpython/gui_core/gselect.py:1899
+#: ../gui/wxpython/gui_core/gselect.py:1789
+#: ../gui/wxpython/gui_core/gselect.py:1835
+#: ../gui/wxpython/gui_core/gselect.py:1900
 msgid "Format:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1907
+#: ../gui/wxpython/gui_core/gselect.py:1908
 msgid "Protocol:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1936
+#: ../gui/wxpython/gui_core/gselect.py:1937
 msgid "No settings available"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2068
+#: ../gui/wxpython/gui_core/gselect.py:2069
 #: ../gui/wxpython/web_services/dialogs.py:300
 msgid "No data source defined, settings are not saved."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2100
+#: ../gui/wxpython/gui_core/gselect.py:2101
 msgid "PostgreSQL/PostGIS login was not set. Set it via <db.login> module, please."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2255
+#: ../gui/wxpython/gui_core/gselect.py:2256
 #, python-brace-format
 msgid "Getting raster <{table}> SRID from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2510
+#: ../gui/wxpython/gui_core/gselect.py:2511
 #, python-brace-format
 msgid "Getting list of tables from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2599
+#: ../gui/wxpython/gui_core/gselect.py:2600
 #, python-brace-format
 msgid "Getting list of tables columns data types from PostGIS DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2630
+#: ../gui/wxpython/gui_core/gselect.py:2631
 #, python-brace-format
 msgid "PostgreSQL DB <{psql}> program was not found. Please, install it."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2650
+#: ../gui/wxpython/gui_core/gselect.py:2651
 #: ../gui/wxpython/modules/import_export.py:504
 msgid "The Python GDAL package is missing. Please install it."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2771
+#: ../gui/wxpython/gui_core/gselect.py:2772
 msgid "LineString"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2771
+#: ../gui/wxpython/gui_core/gselect.py:2772
 #: ../gui/wxpython/psmap/dialogs.py:6220 ../gui/wxpython/psmap/toolbars.py:101
 #: ../gui/wxpython/vdigit/preferences.py:727
 msgid "Point"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2771
+#: ../gui/wxpython/gui_core/gselect.py:2772
 msgid "Polygon"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2984
+#: ../gui/wxpython/gui_core/gselect.py:2985
 msgid "No vector map selected in layer manager. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3003
+#: ../gui/wxpython/gui_core/gselect.py:3004
 msgid "Input vector map is not selected"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3007
+#: ../gui/wxpython/gui_core/gselect.py:3008
 #, python-format
 msgid "Input vector map <%s> and selected map <%s> in layer manager are different. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3123
+#: ../gui/wxpython/gui_core/gselect.py:3124
 #, python-format
 msgid "Unable to import C imagery library functions: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3201
+#: ../gui/wxpython/gui_core/gselect.py:3202
 msgid "No vector map selected"
 msgstr ""
 
@@ -19175,12 +19175,12 @@ msgstr ""
 msgid "WARNING: Zero-length line or boundary drawing skipped. Use v.clean to remove it."
 msgstr ""
 
-#: ../gui/wxpython/vdigit/wxdisplay.py:1084
+#: ../gui/wxpython/vdigit/wxdisplay.py:1085
 #, python-format
 msgid "Topology for vector map <%s> is not available. Topology is required by digitizer. Do you want to rebuild topology (takes some time) and open the vector map for editing?"
 msgstr ""
 
-#: ../gui/wxpython/vdigit/wxdisplay.py:1090
+#: ../gui/wxpython/vdigit/wxdisplay.py:1091
 msgid "Topology missing"
 msgstr ""
 

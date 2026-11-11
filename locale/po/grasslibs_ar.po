@@ -3,13 +3,13 @@
 # Copyright (C) 2005, GRASS Development Team
 #
 # Dr. Alaa Masoud <alaamasoud@hotmail.com>
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2025.
+# SPDX-FileCopyrightText: 2025, 2026 Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 18:18+0000\n"
-"PO-Revision-Date: 2025-08-23 20:17+0000\n"
+"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"PO-Revision-Date: 2026-10-25 21:39+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ar/>\n"
 "Language: ar\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #, fuzzy, c-format
 msgid "Unknown algorithm '%s'"
@@ -291,7 +291,7 @@ msgstr ""
 msgid "send data: invalid C-type"
 msgstr ""
 
-#, fuzzy, c-format
+#, fuzzy, c-format, python-format
 msgid "Unable to describe table <%s>"
 msgstr "لم يمكن فتحه %s فى %s"
 
@@ -743,9 +743,7 @@ msgstr ""
 
 #, fuzzy
 msgid "no description"
-msgstr ""
-"\n"
-"وصف:\n"
+msgstr "وصف:"
 
 #, fuzzy
 msgid "Unable to open color rule"
@@ -1045,7 +1043,7 @@ msgstr ""
 msgid "Unable to open directory %s"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#, fuzzy, c-format
+#, fuzzy, c-format, python-format
 msgid "Location <%s> doesn't exist"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
@@ -1325,9 +1323,7 @@ msgstr ""
 
 #, fuzzy
 msgid "Description:"
-msgstr ""
-"\n"
-"وصف:\n"
+msgstr "وصف:"
 
 msgid "Keywords:"
 msgstr ""
@@ -2705,7 +2701,7 @@ msgstr ""
 msgid "3D raster map <%s> not found"
 msgstr "غير موجود'%s' الفيكتور"
 
-#, fuzzy, c-format
+#, fuzzy, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
@@ -3576,7 +3572,7 @@ msgstr ""
 msgid "Unknown icon marker, using \"sphere\""
 msgstr ""
 
-#, fuzzy, c-format
+#, fuzzy, c-format, python-format
 msgid "Unable to open vector map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
@@ -3738,7 +3734,7 @@ msgstr ""
 msgid "Unable to read range of 3D raster map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#, fuzzy, c-format
+#, fuzzy, c-format, python-format
 msgid "Unable to close 3D raster map <%s>"
 msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
@@ -7267,6 +7263,1567 @@ msgstr "غير موجود'%s' الفيكتور"
 msgid "Unknown query tool"
 msgstr "مسقط غير معروف"
 
+msgid "overwrite an existing mapset"
+msgstr ""
+
+msgid "process ID of the process locking the mapset (a mapset can be automatically unlocked if there is no process with this PID)"
+msgstr ""
+
+#, fuzzy
+msgid "Error creating mapset: {}"
+msgstr "لم يمكن قراءة ملف النطاف [%s فى %s]"
+
+#, python-brace-format
+msgid "Mapset <{mapset}> locked (attempt {try_number}), but will retry in {sleep_time:.2f} seconds..."
+msgstr ""
+
+#, fuzzy
+msgid "Path '{}' doesn't exist"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+msgid "Path '{}' not accessible."
+msgstr ""
+
+msgid "You are not the owner of '{}'."
+msgstr ""
+
+#, python-brace-format
+msgid "File {file} owned by {user} found."
+msgstr ""
+
+msgid "On the command line, you can force GRASS to start by using the -f flag."
+msgstr ""
+
+msgid "In Python, you can start a session with force_unlock=True."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Selected mapset is currently being used by another GRASS session. {lock_info} Concurrent access to a mapset is not allowed. However, you can either use another mapset within the same project or remove the lock if you are sure that no other session is active.\n"
+"{cli_solution}\n"
+"{python_solution}\n"
+"Make sure you have sufficient access permissions to remove the lock file. You may want to use a process manager to check that no other process is using the mapset."
+msgstr ""
+
+#, python-brace-format
+msgid "Removing lock in the selected mapset: {lock_info}"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Unable to properly access lock file '{name}' or run the lock program.\n"
+"Please resolve this with your system administrator. (Lock program return code: {returncode})"
+msgstr ""
+
+msgid "Provide only path or all three parameters, not two"
+msgstr ""
+
+#, python-brace-format
+msgid "Mapset <{mapset}> doesn't exist in GRASS project <{location}>"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "<%s> is not a GRASS Mapset because it is not a directory"
+msgstr "أسفا<%s> ليس إختيار صحيح\n"
+
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
+msgstr ""
+
+#, python-brace-format
+msgid "Mapset <{mapset}> or project <{location}> is invalid for an unknown reason"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT mapset is missing"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT is not a directory"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT mapset does not have a DEFAULT_WIND file (default computational region)"
+msgstr ""
+
+#, python-brace-format
+msgid "Project <{location_path}> is invalid for an unknown reason"
+msgstr ""
+
+#, python-brace-format
+msgid "<{location}> looks like a mapset, not a project. Did you mean just <{one_dir_up}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "It looks like <{location}> contains projects. Did you mean to specify one of them?"
+msgstr ""
+
+msgid "Name '{}' is not a valid name for location or mapset. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+msgid "Name '{}' is reserved for direct read access to OGR layers. Please use another name for your mapset."
+msgstr ""
+
+#, python-brace-format
+msgid "Mapset  <{mapset}> already exists. Please consider using another name for your mapset."
+msgstr ""
+
+msgid "Name '{}' is not a valid name for project or mapset. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+#, python-brace-format
+msgid "Project <{location}> already exists. Please consider using another name for your project."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is required for a valid project."
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is the current mapset."
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is in use."
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Mapset <{mapset}> is owned by a different user."
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Project <{location}> is the current project."
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy, python-brace-format
+msgid "GRASS database <{grassdb}> is the current database."
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy
+msgid "Unable to create history file {}"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+msgid "Unable to read from plain text history file {}"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+msgid "Error decoding content of JSON history file {}"
+msgstr ""
+
+#, fuzzy
+msgid "Unable to read from JSON history file {}"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy
+msgid "Unable to remove entry from plain text history file {}"
+msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#, fuzzy
+msgid "Unable to remove entry from JSON history file {}"
+msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#, fuzzy
+msgid "Unable to convert plain text history file {} to JSON format"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy
+msgid "Unable to add entry to JSON history file {}"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy
+msgid "Unable to update entry in JSON history file {}"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy
+msgid "Unable to copy history file {} to {}"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+msgid "Mapset PERMANENT cannot be deleted (a whole location can be)"
+msgstr ""
+
+msgid "Mapset PERMANENT cannot be renamed"
+msgstr ""
+
+msgid "Mapset path '{}' needs at least three components"
+msgstr ""
+
+msgid "Provide only path, or path and location, or path, location, and mapset, but not mapset without location"
+msgstr ""
+
+msgid "Parameter path needs to be 'path/to/location/mapset' or location and mapset need to be set"
+msgstr ""
+
+msgid "input='-' must be used when stdin is specified"
+msgstr ""
+
+msgid "stdin must be string or buffer, not PIPE"
+msgstr ""
+
+msgid "stdin must be used when input='-'"
+msgstr ""
+
+msgid "You cannot merge stdout and stderr and not capture them"
+msgstr ""
+
+msgid "stdout argument not allowed, it could be overridden"
+msgstr ""
+
+msgid "stderr argument not allowed, it could be overridden"
+msgstr ""
+
+msgid "Invalid duration parameter for writeAvi."
+msgstr ""
+
+#, fuzzy
+msgid "Could not write avi."
+msgstr "لم يتم انشاء عملية جديدة"
+
+msgid "Install PIL or Pillow to use this function"
+msgstr ""
+
+msgid "Install a newer version of PIL or Pillow to use this function (missing ImageOps module)"
+msgstr ""
+
+msgid "Module must begin with 'd_'"
+msgstr ""
+
+msgid "Cannot find GRASS module {}"
+msgstr ""
+
+msgid "Neither ipyleaflet nor folium found."
+msgstr ""
+
+msgid "Invalid map backend, use 'folium' or 'ipyleaflet'"
+msgstr ""
+
+msgid "Tile provider <{}> requires an API key, provide it with the API_key parameter"
+msgstr ""
+
+msgid "Tile provider <{}> does not take an API key, ignoring it (if it should take one, update the xyzservices package)"
+msgstr ""
+
+msgid "Click to draw geometries"
+msgstr ""
+
+msgid "Click to show and edit computational region"
+msgstr ""
+
+#, fuzzy
+msgid "Click to query raster and vector maps"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, python-brace-format
+msgid "Region changed to: n={north}, s={south}, e={east}, w={west} nsres={nsres} ewres={ewres}"
+msgstr ""
+
+#, fuzzy
+msgid "New vector map name:"
+msgstr "إسم الفيكتور المدخلة"
+
+msgid "Save"
+msgstr ""
+
+msgid "Could not find a raster named {}"
+msgstr ""
+
+msgid "Number of rasters in series must match"
+msgstr ""
+
+msgid "Could not find a vector named {}"
+msgstr ""
+
+msgid "Number of vectors in series must match"
+msgstr ""
+
+msgid "Number of names must match number of added layers"
+msgstr ""
+
+#, python-brace-format
+msgid "Mapset {path} is not valid: {reason}"
+msgstr ""
+
+msgid "Dataset {} must be element type 'strds' or 'stvds'"
+msgstr ""
+
+msgid "Could not find space time dataset named {} of type {}"
+msgstr ""
+
+msgid "Date/Time"
+msgstr ""
+
+msgid "Encountered error while running m.proj: {}"
+msgstr ""
+
+msgid "filename must end in '.gif'"
+msgstr ""
+
+msgid "The map is close!"
+msgstr ""
+
+msgid "The self.c_mapinfo pointer must be correctly initiated"
+msgstr ""
+
+#, fuzzy
+msgid "Map <{}> not found in current mapset"
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+msgid "Parameter patch_backend must be 'r.patch' or 'RasterRow'"
+msgstr ""
+
+msgid "Patching backend 'r.patch' doesn't work for overlap > 0"
+msgstr ""
+
+msgid "Execution of subprocesses was not successful"
+msgstr ""
+
+#, fuzzy
+msgid "The map does not exist, I can't open in 'r' mode"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
+
+#, fuzzy
+msgid "Raster type not defined"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Mode type: {0} not supported ('r', 'w','rw')"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Index out of range: %r."
+msgstr "دليل الخواص المضاعفة القيمة خارج النطاق"
+
+#, fuzzy, python-brace-format
+msgid "Raster map <{0}> already exists. Use overwrite."
+msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Raster map <{0}> does not exist"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy
+msgid "Invalid semantic label"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-brace-format
+msgid "Mode type: {0} not supported ('r', 'w')"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Overwrite type: {0} not supported (True/False)"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, python-brace-format
+msgid "Map name {0} not valid"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Raster type: {0} not supported"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy
+msgid "Error executing: Rast_get_ith_cat"
+msgstr "للخرائط الراسترية الموجودة %d\n"
+
+#, fuzzy
+msgid "Null value detected"
+msgstr "إسم الفيكتور المدخلة"
+
+#, fuzzy
+msgid "Error executing: Rast_set_cat"
+msgstr "للخرائط الراسترية الموجودة %d\n"
+
+msgid "Vector doesn't contain points"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to read line of feature %i"
+msgstr "لم يمكن فتح ملف مؤقت"
+
+#, fuzzy, python-format
+msgid "Unable to read area with id %i"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy
+msgid "No links available."
+msgstr "غير متاح << %s >> الموقع"
+
+#, python-brace-format
+msgid "Index out of bounds. The maximum index allowed is {max_link_indx}, the queried index is {indx}"
+msgstr ""
+
+#, python-format
+msgid "Deleting table <%s> which is attached to following map(s):"
+msgstr ""
+
+msgid "You must use the force flag to actually remove it. Exiting."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Invalid kind <%s>"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Invalid size <%d>"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Invalid FP size <%d>"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Invalid integer size <%d>"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, python-brace-format
+msgid "Cannot find the executable {0}"
+msgstr ""
+
+#, python-format
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is deprecated in GRASS 7.0 and has been removed in version 7.1."
+msgstr ""
+
+#, python-brace-format
+msgid "Module {module} ({code}) failed with non-zero return code {returncode}"
+msgstr ""
+
+#, python-brace-format
+msgid "{message} (Additionally, there was an error: {additional_error})"
+msgstr ""
+
+msgid "Mixing value types. Will try to compare after integer conversion"
+msgstr ""
+
+#, python-format
+msgid "Element type should be \"raster\" and not \"%s\""
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Invalid element '%s'"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+msgid "Unable to list mapsets"
+msgstr " %s لم يمكن فتح"
+
+#, python-brace-format
+msgid "Debug level {0}"
+msgstr ""
+
+msgid "WARNING: Ignoring unsupported debug level (must be >=0 and <=5): {}\n"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
+msgstr "يجب أن لا يحوى نقطة أو قيمة معدومة <%s> اسم ماف فيكتورى غير سليم\n"
+
+#, fuzzy, python-format
+msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
+msgstr " غير مسموح به والاسم غير صحيح <%c> الحرف"
+
+#, python-format
+msgid "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be                     provided"
+msgstr ""
+
+#, fuzzy
+msgid "Fetching data failed"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, python-brace-format
+msgid "Empty result returned for subgroup <{sg}> in group <{g}>"
+msgstr ""
+
+#, python-brace-format
+msgid "Semantic label missing for raster map {m} in group <{g}>."
+msgstr ""
+
+#, python-brace-format
+msgid "Key {k} from raster map {m} already present in group dictionary.Overwriting existing entry..."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
+msgstr " لم يمكن محو الخط,الخريطة  غير مفتوحة بوضع مهيأ للكتابة"
+
+#, python-format
+msgid "An error occurred while running r.mapcalc with expression: %s"
+msgstr ""
+
+#, fuzzy
+msgid "No data"
+msgstr "إسم الفيكتور المدخلة"
+
+msgid "color"
+msgstr ""
+
+msgid "label"
+msgstr ""
+
+msgid "value"
+msgstr ""
+
+#, python-format
+msgid "An error occurred while running r3.mapcalc with expression: %s"
+msgstr ""
+
+msgid "Parameter grass_path or GISBASE environmental variable must be set"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Path '{path}' does not exist"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, python-brace-format
+msgid "Path '{path}' is a file, but a directory is needed"
+msgstr ""
+
+#, fuzzy
+msgid "Cleaning up SQLite attribute database..."
+msgstr "لم يمكن فتح ملف مؤقت"
+
+#, fuzzy
+msgid "Cleaning up temporary files..."
+msgstr "لم يمكن فتح ملف مؤقت"
+
+#, python-format
+msgid "Parameter element '%(element)s' not found: '%(value)s'"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Flag not found: %s"
+msgstr "MAPSET %s غير موجودة"
+
+#, python-format
+msgid "Parameter '%(name)s' (%(desc)s) is missing."
+msgstr ""
+
+msgid "<required>"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Unable to fetch interface description for command '<{cmd}>'.\n"
+"\n"
+"Details: <{det}>"
+msgstr ""
+
+#, python-brace-format
+msgid "Cannot parse interface description of <{name}> module: {error}"
+msgstr ""
+
+#, python-format
+msgid "Database connection not defined for layer %s"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Missing layer %(layer)d in vector map <%(map)s>"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+msgid "vector_db_select() failed"
+msgstr ""
+
+#, python-brace-format
+msgid "Number of given vector maps ({m}) differs from number of layers ({l})"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"v.what output is not valid JSON format:\n"
+" {ret}"
+msgstr ""
+
+#, python-brace-format
+msgid "Map <{map_name}> of element type '{element}' not found on                             search path"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s>"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr "الشرق يجب أن يكون أكبر من الغرب"
+
+#, fuzzy, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s>"
+msgstr "الشرق يجب أن يكون أكبر من الغرب"
+
+#, fuzzy, python-format
+msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "End time must be greater than start time for %(typ)s map <%(id)s> with layer %(l)s"
+msgstr "الشرق يجب أن يكون أكبر من الغرب"
+
+#, python-format
+msgid "Map <%s> has incorrect start time"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is greater than end time"
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, python-format
+msgid "Map <%s> has incorrect time interval, start time is greater than end time"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Delete %s dataset <%s> from temporal database"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+msgid "semantic labels can only be assigned to raster maps"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unknown temporal type \"%s\""
+msgstr "مسقط غير معروف"
+
+#, python-format
+msgid "Wrong granularity: \"%s\""
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unsupported temporal unit: %s"
+msgstr "مسقط غير معروف"
+
+#, fuzzy, python-format
+msgid "Created register table <%s> for space time %s  dataset <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy
+msgid "The space time datasets must be of the same temporal type"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy
+msgid "The temporal map type of the sample dataset must be interval"
+msgstr "غير موجود'%s' الفيكتور"
+
+msgid "Invalid spatial relation <{}> requested. Only values 'overlaps', 'is_contained', and 'contains' are allowed."
+msgstr ""
+
+#, fuzzy
+msgid "Unable to get map ids from register table <{}>"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy, python-format
+msgid "Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, python-format
+msgid "Wrong granularity format: %s"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr "غير موجود'%s' الفيكتور"
+
+msgid "Renaming of space time datasets is not supported for PostgreSQL."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Delete space time %s  dataset <%s> from temporal database"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the database does not match the current mapset"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Drop map register table: %s"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy
+msgid "Error in register table request"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy, python-format
+msgid "Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of the database does not match the current mapset"
+msgstr "غير موجود'%s' الفيكتور"
+
+msgid "Only a map that was inserted in the temporal database can be registered in a space time dataset"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Map <%(id)s> with layer %(l)s has invalid time"
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, python-format
+msgid "Map <%s> has invalid time"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Set temporal unit for space time %s dataset <%s> to %s"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy
+msgid "Maps can only registered in a database in the current mapset"
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy, python-format
+msgid "Map <%(map)s> with layer %(l)s is already registered."
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy, python-format
+msgid "Map <%s> is already registered."
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy
+msgid "Maps can only unregistered in a database in the current mapset"
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy, python-format
+msgid "Map <%(map)s> with layer %(l)s is not registered in space time dataset <%(base)s>"
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy, python-format
+msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy, python-format
+msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, python-format
+msgid "Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgstr ""
+
+#, python-brace-format
+msgid "The temporal framework requires SQLite 3.33 or later to update a space time dataset, but the Python sqlite3 module uses SQLite {version}. Please update SQLite or switch the temporal database to the PostgreSQL backend with t.connect."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Aggregating %s raster maps"
+msgstr "إسم الراستر المدخلة"
+
+#, fuzzy, python-format
+msgid "Raster map <%(name)s> is already in temporal database, use overwrite flag to overwrite"
+msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
+
+#, python-format
+msgid "Computing aggregation of maps between %(st)s - %(end)s"
+msgstr ""
+
+#, fuzzy
+msgid "Error occurred in r.series computation"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Aggregating %(len)i raster maps from %(start)s to %(end)s"
+msgstr "إسم الراستر المدخلة"
+
+#, python-format
+msgid "Unable to perform aggregation. Output raster map <%(name)s> exists and overwrite flag was not set"
+msgstr ""
+
+#, python-format
+msgid "The limit of open files (%i) was reached (%i). The module r.series will be run with flag z, to avoid open files limit exceeding."
+msgstr ""
+
+#, fuzzy
+msgid "Object not found in the temporal database"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+msgid "Missing identifier"
+msgstr ""
+
+#, fuzzy
+msgid "Wrong identifier, the mapset is missing"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy
+msgid "Unable to read range file"
+msgstr "لم يمكن فتح ملف مؤقت"
+
+#, fuzzy
+msgid "Raster range file is empty"
+msgstr " فارغة %s@%s الخريطة الراسترية"
+
+#, fuzzy, python-format
+msgid "Unable to load range of 3D raster map <%s>"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+msgid "Unable to read history file"
+msgstr "لم يمكن فتح ملف مؤقت"
+
+#, python-format
+msgid ""
+"Temporal database connection for mapset <%s> defined as:\n"
+" %s\n"
+"But database file does not exist."
+msgstr ""
+
+msgid "Unable to initialize the temporal DBMI interface. Please use t.connect to specify the driver and the database string"
+msgstr ""
+
+msgid ""
+"Run t.upgrade command to upgrade your temporal database.\n"
+"Consider creating a backup of your temporal database to avoid losing data in case something goes wrong.\n"
+msgstr ""
+
+msgid "You need to export it by restoring the GRASS version used for creating this DB.Notes: Use t.rast.export and t.vect.export to make a backup of your existing space time datasets. To save the timestamps of your existing maps and space time datasets, use t.rast.list, t.vect.list and t.rast3d.list. You can register the existing time stamped maps easily if you export columns=id,start_time,end_time into text files and use t.register to register them again in new created space time datasets (t.create). After the backup remove the existing temporal database, a new one will be created automatically.\n"
+msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"Unable to receive temporal database metadata.\n"
+"Current temporal database info:%(info)s"
+msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#, fuzzy, python-format
+msgid ""
+"Unsupported temporal database: version mismatch.\n"
+" %(backup)s Supported temporal API version is: %(api)i.\n"
+"Please update your GRASS installation.\n"
+"Current temporal database info:%(info)s"
+msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#, fuzzy, python-brace-format
+msgid ""
+"Temporal database version mismatch detected.\n"
+"{backup}Supported temporal database version is: {tdb}\n"
+"Your existing temporal database version: {ctdb}\n"
+"Current temporal database info: {info}"
+msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#, python-brace-format
+msgid "The format of your actual temporal database is not supported any more. {m}"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Creating temporal database: %s"
+msgstr "لم يتم كتابة روابط قاعدة البيانات"
+
+#, python-format
+msgid ""
+"Unable to create SQLite temporal database\n"
+"Exception: %s\n"
+"Please use t.connect to set a read- and writable temporal database path"
+msgstr ""
+
+msgid "Temporal database is up-to-date. Operation canceled"
+msgstr ""
+
+#, python-format
+msgid "Unsupported TGIS DB upgrade scenario: from version %s to %s"
+msgstr ""
+
+#, python-format
+msgid "Upgrading temporal database <%s> from version %s to %s..."
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Unable to mogrify sql statement. {reason}"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-brace-format
+msgid "Unable to check table. {reason}"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy, python-brace-format
+msgid "Unable to execute sql statement. {reason}"
+msgstr "لم يتم تنفيذ الأمر"
+
+#, fuzzy, python-brace-format
+msgid "Unable to fetch one. {reason}"
+msgstr "[%s] لم يتم ايجاد"
+
+#, fuzzy, python-brace-format
+msgid "Unable to fetch all. {reason}"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy, python-brace-format
+msgid "Unable to execute transaction. {reason}"
+msgstr "لم يتم تنفيذ الأمر"
+
+#, python-brace-format
+msgid "You have no permission to access mapset <{mapset}>, or mapset <{mapset}> has no temporal database. Accessible mapsets are: <{mapsets}>"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to connect to %(db)s database: %(string)s\n"
+"Exception: \"%(ex)s\"\n"
+"Please use t.connect to set a read- and writable temporal database backend"
+msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"Unable to execute :\n"
+" %(sql)s"
+msgstr "لم يتم تنفيذ الأمر"
+
+#, fuzzy, python-format
+msgid ""
+"Unable to execute transaction:\n"
+" %(sql)s"
+msgstr "لم يتم تنفيذ الأمر"
+
+#, python-format
+msgid "Wrong increment format: %s"
+msgstr ""
+
+msgid "Time string seems to specify relative time"
+msgstr ""
+
+#, fuzzy
+msgid "Dates Before Christ (BC) are not supported"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy
+msgid "Time zones are not supported"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to parse time string: %s"
+msgstr "لم يمكن فتحه %s فى %s"
+
+msgid "You need to specify the base name of new created maps"
+msgstr ""
+
+#, python-brace-format
+msgid "Nothing found in the database for space time dataset <{name}> (type: {element_type}): {detail}"
+msgstr ""
+
+msgid "Dataset is empty or where clause is too constrained or incorrect"
+msgstr ""
+
+#, fuzzy
+msgid "Dataset is empty"
+msgstr " فارغة %s@%s الخريطة الراسترية"
+
+#, fuzzy, python-format
+msgid "Map <%s> is already in temporal database, use overwrite flag to overwrite"
+msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
+
+#, python-format
+msgid "Applying r.mapcalc expression: \"%s\""
+msgstr ""
+
+#, python-format
+msgid "Applying r3.mapcalc expression: \"%s\""
+msgstr ""
+
+#, python-format
+msgid "Applying v.extract where statement: \"%s\""
+msgstr ""
+
+#, fuzzy
+msgid "Error in computation process"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unknown dataset type: %s"
+msgstr "مسقط غير معروف"
+
+#, python-format
+msgid "Column '%s' is not available for the requested dataset type"
+msgstr ""
+
+#, python-format
+msgid "Column '%s' is not available for the requested combination of dataset types"
+msgstr ""
+
+msgid "No valid database columns were requested"
+msgstr ""
+
+msgid "Empty map list"
+msgstr ""
+
+msgid "Empty entry in map list, this should not happen"
+msgstr ""
+
+#, fuzzy
+msgid "Starting spatio-temporal sampling..."
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+msgid "Starting temporal sampling..."
+msgstr ""
+
+msgid "No samples found for map calculation"
+msgstr ""
+
+msgid "Found more than a single map in a sample granule. Only the first map is used for computation. Use t.rast.aggregate.ds to create synchronous raster datasets."
+msgstr ""
+
+#, fuzzy
+msgid "No maps registered in input dataset <{}>"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+msgid "Starting mapcalc computation..."
+msgstr ""
+
+#, python-format
+msgid "Apply mapcalc expression: \"%s\""
+msgstr ""
+
+#, fuzzy
+msgid "Error while mapcalc computation"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy
+msgid "Starting map registration in temporal database..."
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+msgid "Removing {}/{} ({}%) maps because empty..."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Invalid semantic_label <%s>"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unknown type: %s"
+msgstr "مسقط غير معروف"
+
+#, fuzzy, python-format
+msgid "Space time dataset <%(name)s> of type <%(sp)s> not found"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy
+msgid "Illegal dataset name <{}>. Character '.' not allowed."
+msgstr "غير صالح <%s>  غير مسموح بها و بالتالى اسم الفيكتور المعطى <%c> حروف ك\n"
+
+#, fuzzy
+msgid "Space time datasets can only be created in the current mapset"
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy, python-format
+msgid "Space time %(sp)s dataset <%(name)s> is already in the database. Use the overwrite flag."
+msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Overwriting space time %(sp)s dataset <%(name)s> and unregistering all maps"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Creating a new space time %s dataset"
+msgstr "غير موجود'%s' الفيكتور"
+
+msgid "maps and file are mutually exclusive"
+msgstr ""
+
+msgid "end and increment are mutually exclusive"
+msgstr ""
+
+msgid "end and the interval flag are mutually exclusive"
+msgstr ""
+
+msgid "The increment option requires the start option"
+msgstr ""
+
+msgid "The interval flag requires the start option"
+msgstr ""
+
+#, fuzzy
+msgid "Please specify start_time and end_time"
+msgstr ""
+"\n"
+"datum تحديد اسم ال \n"
+
+#, fuzzy
+msgid "Please specify maps or file"
+msgstr ""
+"\n"
+"datum تحديد اسم ال \n"
+
+msgid "The dbif argument is deprecated and will be removed in a future release."
+msgstr ""
+
+#, python-brace-format
+msgid "Space time {sp} dataset <{name}> with relative time found, but no relative unit set for {sp} maps"
+msgstr ""
+
+msgid "The increment option will be ignored because of time stamps in input file"
+msgstr ""
+
+msgid "The interval flag will be ignored because of time stamps in input file"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Unable to update {t} map <{mid}>. The map does not exist."
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Unable to register {t} map <{mid}> with layer {l}. The map has no timestamp and the start time is not set."
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Unable to register {t} map <{mid}>. The map has no timestamp and the start time is not set."
+msgstr "غير موجود'%s' الفيكتور"
+
+msgid "unit can only be set for relative time"
+msgstr ""
+
+msgid "unit must be set in case of relative time stamps"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Map is already registered in temporal database. Unable to update {t} map <{mid}> with layer {l}. Overwrite flag is not set."
+msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Map is already registered in temporal database. Unable to update {t} map <{mid}>. Overwrite flag is not set."
+msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Unable to update {t} map <{mid}> with layer {l}. The temporal types are different."
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Unable to update {t} map <{mid}>. The temporal types are different."
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+msgid "Unable to convert string \"{}\" into a datetime object"
+msgstr ""
+
+#, fuzzy
+msgid "Error occurred in increment computation"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-brace-format
+msgid "Set absolute valid time for map <{id}> with layer {layer} to {start} - {end}"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Set absolute valid time for map <{mid}> to {start_time} - {end_time}"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Set relative valid time for map <{mid}> with layer {layer} to {start} - {end} with unit {unit}"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Set relative valid time for map <{mid}> to {start} - {end} with unit {unit}"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-format
+msgid "Dataset <%s> not found in temporal database"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to read timestamp file for raster map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "Unable to create timestamp file for raster map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "Invalid datetime in timestamp for raster map <%s>"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+msgid "Internal error"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to remove timestamp for raster map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "Unable to write semantic label for raster map <%s>"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unable to read timestamp file for 3D raster map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "Unable to create timestamp file for 3D raster map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "Invalid datetime in timestamp for 3D raster map <%s>"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to remove timestamp for 3D raster map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "Unable to read timestamp file for vector map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "Unable to create timestamp file for vector map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "Invalid datetime in timestamp for vector map <%s>"
+msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to remove timestamp for vector map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+msgid "Projections are different. Unable to compute overlapping_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute is_in_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute equivalent_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute cover_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute cover for spatial extents"
+msgstr ""
+
+msgid "Volume computation is not supported for LL projections"
+msgstr ""
+
+#, fuzzy
+msgid "Area computation is not supported for LL projections"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to export raster map <%s>"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unable to export color rules for raster map <%s> r.out.gdal"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "Unable to export raster map <%s> with r.pack"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unable to export vector map <%s> as GML with v.out.ogr"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to export vector map <%s> as GPKG with v.out.ogr"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to export vector map <%s> with v.pack"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unable to export raster map <%s> with r3.pack"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unable to import/link raster map <%s> from file %s."
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unable to set the color rules for raster map <%s>."
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "Unable to unpack raster map <%s> from file %s."
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unable to import vector map <%s> from file %s."
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unable to unpack vector map <%s> from file %s."
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+msgid "Re-projection on import is currently not supported for space time vector datasets. Ignoring projection information."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Space time raster dataset archive <%s> not found"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Extraction directory <%s> not found"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, python-format
+msgid "Checking validity of input file (size: %0.1f MB). Make take a while..."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to find init file <%s>"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy, python-format
+msgid "Unable to find list file <%s>"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy, python-format
+msgid "Unable to find projection file <%s>"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy
+msgid "Extracting data..."
+msgstr "يتم الان بناء الطبولوجى ...\n"
+
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
+msgstr ""
+
+msgid "Projection information does not match. Proceeding..."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Difference between PROJ_INFO file of imported map and of current location:\n"
+"{diff}"
+msgstr ""
+
+msgid "Projection information does not match. Aborting."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to create location %(l)s. Reason: %(e)s"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unable to create environment for location %s. Reason: %s"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unable to create default temporal database in new location %s"
+msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#, fuzzy, python-format
+msgid "Key words %(t)s, %(s)s or %(n)s not found in init file."
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+msgid "Number of maps mismatch in init and list file."
+msgstr ""
+
+#, fuzzy
+msgid "The archive file is of wrong space time dataset type"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to find GeoTIFF raster file <%s> in archive."
+msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#, fuzzy, python-format
+msgid "Unable to find AAIGrid raster file <%s> in archive."
+msgstr "datum لم يمكن فتح ملف جدول : %s"
+
+#, fuzzy, python-format
+msgid "Unable to find GML vector file <%s> in archive."
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to find GRASS package file <%s> in archive."
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, fuzzy
+msgid "Unsupported input format"
+msgstr "مسقط غير معروف"
+
+#, fuzzy, python-format
+msgid "Space time %(t)s dataset <%(sp)s> is already in the database. Use the overwrite flag."
+msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Overwriting space time %(sp)s dataset <%(id)s> and unregister all maps."
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Key word %s not found in init file."
+msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
+
+#, fuzzy, python-format
+msgid "Create space time %s dataset."
+msgstr "غير موجود'%s' الفيكتور"
+
+msgid "Spatio-temporal topological operators are not supported in granularity algebra mode"
+msgstr ""
+
+#, fuzzy
+msgid "All input space time datasets must have a valid temporal topology."
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy
+msgid "All input space time datasets must have the same temporal type."
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, fuzzy, python-format
+msgid "Removing un-needed or empty %s maps"
+msgstr "إسم الراستر المدخلة"
+
+#, fuzzy, python-format
+msgid "Space time %s dataset <%s> not found"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Wrong temporal type of space time dataset <%s> <%s> time is required"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-brace-format
+msgid "Wrong type of input {input}"
+msgstr " %s لم يمكن فتح"
+
+#, python-format
+msgid "The resulting space time dataset type <%(a)s> is different from the requested type <%(b)s>"
+msgstr ""
+
+msgid "Maps that should be registered in the resulting space time dataset have different types."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "%s map <%s> not found in GRASS spatial database"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+msgid "Wrong map type. TMAP only supports single maps that are registered in the temporal GRASS database"
+msgstr ""
+
+msgid "Merging empty map lists"
+msgstr ""
+
+msgid "First Map list is empty, can't merge it. Return only last map list"
+msgstr ""
+
+msgid "Second Map list is empty, can't merge it. Return only first map list"
+msgstr ""
+
+#, fuzzy
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
+
+#, python-brace-format
+msgid "Output granularity seems not to be valid. Please use one of the following values : {gr}"
+msgstr ""
+
+#, fuzzy
+msgid "Invalid absolute granularity"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+msgid "Probably you need to invert 'from_gran' and 'to_gran'"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Error computing map <%s>"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, python-format
+msgid "Error vector maps with basename %s exist. Use --o flag to overwrite existing file"
+msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"Error starting %s : \n"
+"%s"
+msgstr "خطا فى كتابة ملف الطبوغرافية\n"
+
+#, fuzzy, python-format
+msgid ""
+"Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
+"%s"
+msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to get statistics for raster map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, fuzzy, python-format
+msgid "Unable to get statistics for 3d raster map <%s>"
+msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
+
+#, fuzzy, python-format
+msgid "Unable to parse JSON output for map <%s>"
+msgstr "لم يمكن فتحه %s فى %s"
+
+#, python-brace-format
+msgid "No maps found to process. Space time {type} dataset <{id}> is either empty or the where condition (if used) does not return any maps or no maps with the requested spatial relation to the computational region exist in the dataset."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Space time %(sp)s dataset <%(i)s> not found"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Space time %(sp)s dataset <%(i)s> is empty"
+msgstr "غير موجود'%s' الفيكتور"
+
+#, fuzzy, python-format
+msgid "Unable to get statistics for vector map <%s>"
+msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
+
+#, python-brace-format
+msgid "Archive file is unreadable: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Archive file is incomplete: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "ZIP file is unreadable: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Unsupported URL <{url}>. Supported are only URLs with the following schemes: {schemes}."
+msgstr ""
+
+#, python-brace-format
+msgid "Download file from <{url}>, return status code {code}, {desc}"
+msgstr ""
+
+#, python-brace-format
+msgid "Download file from <{url}>, failed. Check internet connection."
+msgstr ""
+
+#, python-brace-format
+msgid "Download of <{url}> failed or file <{name}> is not a ZIP file"
+msgstr ""
+
+#, fuzzy
+msgid "Unknown format '{}'."
+msgstr "مسقط غير معروف"
+
 #, fuzzy, c-format
 #~ msgid "Unable to create latlong equivalent for '%s'"
 #~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
@@ -7279,121 +8836,9 @@ msgstr "مسقط غير معروف"
 #~ msgid "Unable to seek: %s"
 #~ msgstr " %s لم يمكن فتح"
 
-#, fuzzy, python-format
-#~ msgid "%s map <%s> not found in GRASS spatial database"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Aggregating %(len)i raster maps from %(start)s to %(end)s"
-#~ msgstr "إسم الراستر المدخلة"
-
-#, fuzzy, python-format
-#~ msgid "Aggregating %s raster maps"
-#~ msgstr "إسم الراستر المدخلة"
-
-#, fuzzy
-#~ msgid "All input space time datasets must have the same temporal type."
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
 #, fuzzy
 #~ msgid "Attempt to access feature with invalid id (%"
 #~ msgstr "%s: لم يمكن فتح ملف  الطبوغرافية للكتابة\n"
-
-#, fuzzy
-#~ msgid "Cleaning up default sqlite database ..."
-#~ msgstr "لم يمكن فتح ملف مؤقت"
-
-#, fuzzy
-#~ msgid "Cleaning up temporary files..."
-#~ msgstr "لم يمكن فتح ملف مؤقت"
-
-#, fuzzy, python-format
-#~ msgid "Create space time %s dataset."
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Created register table <%s> for space time %s  dataset <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid "Creating a new space time %s dataset"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Creating temporal database: %s"
-#~ msgstr "لم يتم كتابة روابط قاعدة البيانات"
-
-#, fuzzy, python-format
-#~ msgid "Dataset <%s> not found in temporal database"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy
-#~ msgid "Dates Before Christ (BC) are not supported"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Delete %s dataset <%s> from temporal database"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Delete space time %s  dataset <%s> from temporal database"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Drop map register table: %s"
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy, python-format
-#~ msgid "End time must be greater than start time for %(typ)s map <%(id)s> with layer %(l)s"
-#~ msgstr "الشرق يجب أن يكون أكبر من الغرب"
-
-#, fuzzy, python-format
-#~ msgid "End time must be greater than start time for %(type)s map <%(id)s>"
-#~ msgstr "الشرق يجب أن يكون أكبر من الغرب"
-
-#, fuzzy, python-format
-#~ msgid "End time must be greater than start time for %(type)s map <%(id)s> with layer: %(l)s"
-#~ msgstr "الشرق يجب أن يكون أكبر من الغرب"
-
-#, fuzzy, python-format
-#~ msgid "End time must be of type datetime for %(type)s map <%(id)s>"
-#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
-#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Error computing map <%s>"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy
-#~ msgid "Error executing: Rast_set_cat"
-#~ msgstr "للخرائط الراسترية الموجودة %d\n"
-
-#, fuzzy
-#~ msgid "Error in computation process"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy
-#~ msgid "Error in register table request"
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy
-#~ msgid "Error occurred in r.series computation"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid ""
-#~ "Error starting %s : \n"
-#~ "%s"
-#~ msgstr "خطا فى كتابة ملف الطبوغرافية\n"
-
-#, fuzzy, python-format
-#~ msgid ""
-#~ "Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
-#~ "%s"
-#~ msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
 
 #, fuzzy, c-format
 #~ msgid "Error writing compressed data for row %d of <%s>"
@@ -7403,32 +8848,8 @@ msgstr "مسقط غير معروف"
 #~ msgid "Error writing uncompressed data for row %d of <%s>"
 #~ msgstr "دعم الفئة [%s] فى مجموعة الخرائط [%s] %s"
 
-#, fuzzy
-#~ msgid "Extracting data..."
-#~ msgstr "يتم الان بناء الطبولوجى ...\n"
-
-#, fuzzy, python-format
-#~ msgid "Extraction directory <%s> not found"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy
-#~ msgid "Fetching data failed"
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
 #~ msgid "GISRC - variable not set"
 #~ msgstr "GISRC - المتغير لم يحدد بشكل صحيح"
-
-#, fuzzy
-#~ msgid "Illegal dataset name <{}>. Character '.' not allowed."
-#~ msgstr "غير صالح <%s>  غير مسموح بها و بالتالى اسم الفيكتور المعطى <%c> حروف ك\n"
-
-#, fuzzy, python-format
-#~ msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
-#~ msgstr " غير مسموح به والاسم غير صحيح <%c> الحرف"
-
-#, fuzzy, python-format
-#~ msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
-#~ msgstr "يجب أن لا يحوى نقطة أو قيمة معدومة <%s> اسم ماف فيكتورى غير سليم\n"
 
 #~ msgid "Illegal latitude for North"
 #~ msgstr "أحداثيات الشمال غير صحيحة"
@@ -7437,152 +8858,8 @@ msgstr "مسقط غير معروف"
 #~ msgstr "أحداثيات الجنوب غير صحيحة"
 
 #, fuzzy, python-format
-#~ msgid "Index out of range: %r."
-#~ msgstr "دليل الخواص المضاعفة القيمة خارج النطاق"
-
-#, fuzzy, python-format
-#~ msgid "Invalid FP size <%d>"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Invalid datetime in timestamp for 3D raster map <%s>"
-#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Invalid datetime in timestamp for raster map <%s>"
-#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Invalid datetime in timestamp for vector map <%s>"
-#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Invalid integer size <%d>"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Invalid kind <%s>"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Invalid size <%d>"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Key word %s not found in init file."
-#~ msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
-
-#, fuzzy, python-format
 #~ msgid "Location <%s> already exists and will be overwritten"
 #~ msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
-#~ msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
-
-#, fuzzy, python-format
-#~ msgid "Map <%(map)s> with layer %(l)s is already registered."
-#~ msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
-
-#, fuzzy, python-format
-#~ msgid "Map <%(map)s> with layer %(l)s is not registered in space time dataset <%(base)s>"
-#~ msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
-
-#, fuzzy, python-format
-#~ msgid "Map <%s> is already in temporal database, use overwrite flag to overwrite"
-#~ msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
-
-#, fuzzy
-#~ msgid "Map <{}> not found in current mapset"
-#~ msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
-
-#, fuzzy, python-format
-#~ msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s> with layer %(l)s. Overwrite flag is not set."
-#~ msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s>. Overwrite flag is not set."
-#~ msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
-
-#, fuzzy, python-brace-format
-#~ msgid "Mapset <{mapset}> is in use."
-#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
-
-#, fuzzy, python-brace-format
-#~ msgid "Mapset <{mapset}> is the current mapset."
-#~ msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
-
-#, fuzzy, python-format
-#~ msgid "Missing layer %(layer)d in vector map <%(map)s>"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-brace-format
-#~ msgid "Mode type: {0} not supported ('r', 'w')"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy
-#~ msgid "No data"
-#~ msgstr "إسم الفيكتور المدخلة"
-
-#, fuzzy
-#~ msgid "No maps registered in input dataset"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy
-#~ msgid "Null value detected"
-#~ msgstr "إسم الفيكتور المدخلة"
-
-#, fuzzy
-#~ msgid "Object not found in the temporal database"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Overwrite space time %(sp)s dataset <%(id)s> and unregister all maps."
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-brace-format
-#~ msgid "Overwrite type: {0} not supported (True/False)"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Overwriting space time %(sp)s dataset <%(name)s> and unregistering all maps"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Please specify %s= and %s="
-#~ msgstr ""
-#~ "\n"
-#~ "datum تحديد اسم ال \n"
-
-#, fuzzy, python-format
-#~ msgid "Please specify %s= or %s="
-#~ msgstr ""
-#~ "\n"
-#~ "datum تحديد اسم ال \n"
-
-#, fuzzy, python-format
-#~ msgid "Raster map <%(name)s> is already in temporal database, use overwrite flag to overwrite"
-#~ msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
-
-#, fuzzy, python-brace-format
-#~ msgid "Raster map <{0}> already exists and will be not overwritten"
-#~ msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
-
-#, fuzzy, python-brace-format
-#~ msgid "Raster map <{0}> already exists. Use overwrite."
-#~ msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
-
-#, fuzzy, python-brace-format
-#~ msgid "Raster map <{0}> does not exist"
-#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
-
-#, fuzzy
-#~ msgid "Raster type not defined"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-brace-format
-#~ msgid "Raster type: {0} not supported"
-#~ msgstr "غير موجود'%s' الفيكتور"
 
 #, fuzzy
 #~ msgid "Registering maps in the space time dataset..."
@@ -7592,104 +8869,8 @@ msgstr "مسقط غير معروف"
 #~ msgid "Registering maps in the temporal database..."
 #~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
 
-#, fuzzy, python-format
-#~ msgid "Removing un-needed or empty %s maps"
-#~ msgstr "إسم الراستر المدخلة"
-
-#, fuzzy, python-format
-#~ msgid "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - %(end)s"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Set absolute valid time for map <%s> to %s - %s"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Set relative valid time for map <%s> to %i - %s with unit %s"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Set temporal unit for space time %s dataset <%s> to %s"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Space time %(sp)s dataset <%(i)s> is empty"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Space time %(sp)s dataset <%(i)s> not found"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Space time %(sp)s dataset <%(name)s> is already in the database. Use the overwrite flag."
-#~ msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Space time %(sp)s dataset <%(name)s> not found"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Space time %(t)s dataset <%(sp)s> is already in the database. Use the overwrite flag."
-#~ msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Space time %s dataset <%s> not found"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy
-#~ msgid "Space time datasets can only be created in the current mapset"
-#~ msgstr "خطأ: محاولة لتحديث خريطة ليست ضمن مجموعة الخرائط الحالية"
-
-#, fuzzy
-#~ msgid "Space time datasets to merge must have the same temporal type"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Space time raster dataset archive <%s> not found"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
-#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Start time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
-#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
-
-#, fuzzy
-#~ msgid "Starting map registration in temporal database..."
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> are different"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy
-#~ msgid "Time zones are not supported"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy
-#~ msgid "Unable to check table. "
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
 #, fuzzy, c-format
 #~ msgid "Unable to create band file for <%s>"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Unable to create default temporal database in new location %s"
-#~ msgstr "datum لم يمكن فتح ملف جدول : %s"
-
-#, fuzzy, python-format
-#~ msgid "Unable to create location %(l)s. Reason: %(e)s"
 #~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
 #, fuzzy, c-format
@@ -7700,149 +8881,17 @@ msgstr "مسقط غير معروف"
 #~ msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> is not current mapset"
 #~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
 
-#, fuzzy, python-format
-#~ msgid "Unable to create timestamp file for 3D raster map <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid "Unable to create timestamp file for raster map <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid "Unable to create timestamp file for vector map <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
 #, fuzzy
 #~ msgid "Unable to delete feature/offset %"
 #~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy, python-format
-#~ msgid ""
-#~ "Unable to execute :\n"
-#~ " %(sql)s"
-#~ msgstr "لم يتم تنفيذ الأمر"
-
-#, fuzzy
-#~ msgid "Unable to execute sql statement. "
-#~ msgstr "لم يتم تنفيذ الأمر"
-
-#, fuzzy
-#~ msgid "Unable to execute transaction. "
-#~ msgstr "لم يتم تنفيذ الأمر"
-
-#, fuzzy, python-format
-#~ msgid ""
-#~ "Unable to execute transaction:\n"
-#~ " %(sql)s"
-#~ msgstr "لم يتم تنفيذ الأمر"
-
-#, fuzzy, python-format
-#~ msgid "Unable to export color rules for raster map <%s> r.out.gdal"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid "Unable to export raster map <%s>"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Unable to export raster map <%s> with r.pack"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Unable to export raster map <%s> with r3.pack"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Unable to export vector map <%s> as GML with v.out.ogr"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Unable to export vector map <%s> as GPKG with v.out.ogr"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Unable to export vector map <%s> with v.pack"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy
-#~ msgid "Unable to fetch all. "
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy
-#~ msgid "Unable to fetch one. "
-#~ msgstr "[%s] لم يتم ايجاد"
-
-#, fuzzy, python-format
-#~ msgid "Unable to find AAIGrid raster file <%s> in archive."
-#~ msgstr "datum لم يمكن فتح ملف جدول : %s"
-
-#, fuzzy, python-format
-#~ msgid "Unable to find GML vector file <%s> in archive."
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Unable to find GRASS package file <%s> in archive."
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy, python-format
-#~ msgid "Unable to find GeoTIFF raster file <%s> in archive."
-#~ msgstr "datum لم يمكن فتح ملف جدول : %s"
-
-#, fuzzy, python-format
-#~ msgid "Unable to find init file <%s>"
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy, python-format
-#~ msgid "Unable to find list file <%s>"
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy, python-format
-#~ msgid "Unable to find projection file <%s>"
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy, python-format
-#~ msgid "Unable to get map ids from register table <%s>"
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy, python-format
-#~ msgid "Unable to get statistics for 3d raster map <%s>"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Unable to get statistics for raster map <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid "Unable to get statistics for vector map <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid "Unable to import vector map <%s> from file %s."
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Unable to import/link raster map <%s> from file %s."
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy
-#~ msgid "Unable to list mapsets"
-#~ msgstr " %s لم يمكن فتح"
 
 #, fuzzy
 #~ msgid "Unable to load GDAL library"
 #~ msgstr "%s: لم يمكن فتح ملف  الطبوغرافية للكتابة\n"
 
-#, fuzzy, python-format
-#~ msgid "Unable to load range of 3D raster map <%s>"
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
 #, fuzzy, c-format
 #~ msgid "Unable to locate symbol <%s>"
 #~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy
-#~ msgid "Unable to mogrify sql statement. "
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
 #, fuzzy
 #~ msgid "Unable to open OGR DBMI driver"
@@ -7852,61 +8901,7 @@ msgstr "مسقط غير معروف"
 #~ msgstr "لم يمكن فتح ملف القناع الأتوماتيكى"
 
 #, fuzzy, python-format
-#~ msgid "Unable to parse time string: %s"
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy, python-format
-#~ msgid "Unable to read area with id %i"
-#~ msgstr "لم يمكن فتحه %s فى %s"
-
-#, fuzzy, python-format
 #~ msgid "Unable to read band reference file for raster map <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid "Unable to read line of feature %i"
-#~ msgstr "لم يمكن فتح ملف مؤقت"
-
-#, fuzzy
-#~ msgid "Unable to read range file"
-#~ msgstr "لم يمكن فتح ملف مؤقت"
-
-#, fuzzy, python-format
-#~ msgid "Unable to read timestamp file for 3D raster map <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid "Unable to read timestamp file for raster map <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid "Unable to read timestamp file for vector map <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid ""
-#~ "Unable to receive temporal database metadata.\n"
-#~ "Current temporal database info:%(info)s"
-#~ msgstr "datum لم يمكن فتح ملف جدول : %s"
-
-#, fuzzy, python-format
-#~ msgid "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has timestamp and the start time is not set."
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Unable to register %(t)s map <%(id)s>. The map has no timestamp and the start time is not set."
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of the dataset does not match the current mapset"
-#~ msgstr "غير موجود'%s' الفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Unable to remove timestamp for raster map <%s>"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid "Unable to remove timestamp for vector map <%s>"
 #~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
 
 #, fuzzy
@@ -7918,84 +8913,13 @@ msgstr "مسقط غير معروف"
 #~ msgstr "لم يمكن فتحه %s فى %s"
 
 #, fuzzy, python-format
-#~ msgid "Unable to set the color rules for raster map <%s>."
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
 #~ msgid "Unable to switch to location %s"
 #~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Unable to unpack raster map <%s> from file %s."
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Unable to unpack vector map <%s> from file %s."
-#~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
-
-#, fuzzy, python-format
-#~ msgid "Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are different."
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Unable to update %(t)s map <%(id)s>. The map does not exist."
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Unable to update %(t)s map <%(id)s>. The temporal types are different."
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
 
 #, fuzzy, python-format
 #~ msgid "Unable to write band identifier for raster map <%s>"
 #~ msgstr " [%s] غير قادر على أنشاء ملف عنوان رئيسى ل"
 
-#, fuzzy, python-format
-#~ msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
-#~ msgstr " لم يمكن محو الخط,الخريطة  غير مفتوحة بوضع مهيأ للكتابة"
-
-#, fuzzy, python-format
-#~ msgid "Unknown dataset type: %s"
-#~ msgstr "مسقط غير معروف"
-
-#, fuzzy, python-format
-#~ msgid "Unknown temporal type \"%s\""
-#~ msgstr "مسقط غير معروف"
-
-#, fuzzy, python-format
-#~ msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"
-#~ msgstr "'%s'الى '%s'لم يمكن نسخ فيكتور"
-
-#, fuzzy, python-format
-#~ msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
-#~ msgstr "[%s فى %s]لم يمكن انشاء ملف العنوان الرئيسى"
-
-#, fuzzy, python-format
-#~ msgid ""
-#~ "Unsupported temporal database: version mismatch.\n"
-#~ " %(backup)s Supported temporal API version is: %(api)i.\n"
-#~ "Please update your GRASS GIS installation.\n"
-#~ "Current temporal database info:%(info)s"
-#~ msgstr "datum لم يمكن فتح ملف جدول : %s"
-
-#, fuzzy, python-format
-#~ msgid ""
-#~ "Unsupported temporal database: version mismatch.\n"
-#~ " %(backup)sSupported temporal database version is: %(tdb)i\n"
-#~ "Current temporal database info:%(info)s"
-#~ msgstr "datum لم يمكن فتح ملف جدول : %s"
-
-#, fuzzy, python-format
-#~ msgid "Unsupported temporal unit: %s"
-#~ msgstr "مسقط غير معروف"
-
 #, fuzzy
 #~ msgid "Updating space time dataset..."
 #~ msgstr "إسم الراستر المدخلة"
-
-#, fuzzy
-#~ msgid "Wrong identifier, the mapset is missing"
-#~ msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
-
-#, fuzzy
-#~ msgid "Wrong type of input "
-#~ msgstr " %s لم يمكن فتح"
