@@ -147,7 +147,7 @@ def test_plain_single_feature_extended(edge_value_dataset):
 
 
 def test_plain_large_whole_number(edge_value_dataset):
-    """Large whole numbers keep the %g format of v.univar"""
+    """Large whole numbers are printed as v.univar prints them"""
     tools = Tools(session=edge_value_dataset.session)
     result = tools.t_vect_univar(
         input=edge_value_dataset.name,
@@ -156,7 +156,13 @@ def test_plain_large_whole_number(edge_value_dataset):
     )
     (large,) = plain_rows(result)
     assert large["id"].startswith("large@")
-    assert large["max"] == "1.23457e+07"
+    # The text of the shell output, since the number of exponent digits
+    # printed by %g depends on the platform.
+    univar = tools.v_univar(
+        map="large", column=edge_value_dataset.column, flags="g"
+    ).text
+    expected = dict(line.split("=", 1) for line in univar.splitlines())
+    assert large["max"] == expected["max"]
 
 
 def test_csv_rejects_multicharacter_separator(space_time_vector_dataset):
@@ -167,5 +173,5 @@ def test_csv_rejects_multicharacter_separator(space_time_vector_dataset):
             input=space_time_vector_dataset.name,
             column=space_time_vector_dataset.column,
             format="csv",
-            separator="||",
+            separator="--",
         )
