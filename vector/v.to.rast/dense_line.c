@@ -183,31 +183,31 @@ void dense_line(double x1, double y1, double x2, double y2,
         }
     }
     else if (dx >= dy) {
-        double m, a, yi;
+        double m, yi;
         int xnext;
 
-        m = (y2 - y1) / (x2 - x1);
-        a = y1 - m * x1;
-
-        /* find x for y = iy1 or y = iy1 + 1 */
+        /* find x for y = iy1 or y = iy1 + 1, measured from the start, so
+         * that a start on a cell corner gives back its own column rather
+         * than one rounded down past it */
         m = (x2 - x1) / (y2 - y1);
-        a = x1 - m * y1;
         yi = iy1;
         if (iy1 < iy2)
             yi += 1;
-        xnext = a + m * yi;
+        xnext = x1 + m * (yi - y1);
 
         while (ix1 != ix2) {
             point(ix1, iy1);
 
-            if (ix1 == xnext) {
+            /* x only grows here: a crossing computed a column short is
+             * still taken */
+            if (ix1 >= xnext) {
                 iy1 += yinc;
                 point(ix1, iy1);
                 if (iy1 != iy2) {
                     yi = iy1;
                     if (iy1 < iy2)
                         yi += 1;
-                    xnext = a + m * yi;
+                    xnext = x1 + m * (yi - y1);
                 }
                 else
                     xnext = ix2;
@@ -215,11 +215,14 @@ void dense_line(double x1, double y1, double x2, double y2,
 
             ix1 += xinc;
         }
-        if (iy1 != iy2)
+        /* the rows left, so that a missed step leaves no gap */
+        while (iy1 != iy2) {
             point(ix1, iy1);
+            iy1 += yinc;
+        }
     }
     else if (dx < dy) {
-        double m, a, xi;
+        double m, xi;
         int ynext;
 
         if (y2 < y1) {
@@ -244,33 +247,39 @@ void dense_line(double x1, double y1, double x2, double y2,
                 xinc = -1;
         }
 
-        /* find y for x = ix1 or x = ix1 + 1 */
+        /* find y for x = ix1 or x = ix1 + 1, measured from the start, so
+         * that a start on a cell corner gives back its own row rather than
+         * one rounded down past it */
         m = (y2 - y1) / (x2 - x1);
-        a = y1 - m * x1;
         xi = ix1;
         if (ix1 < ix2)
             xi += 1;
-        ynext = a + m * xi;
+        ynext = y1 + m * (xi - x1);
 
         while (iy1 != iy2) {
             point(ix1, iy1);
 
-            if (iy1 == ynext) {
+            /* y only grows here: a crossing computed a row short is still
+             * taken */
+            if (iy1 >= ynext) {
                 ix1 += xinc;
                 point(ix1, iy1);
                 if (ix1 != ix2) {
                     xi = ix1;
                     if (ix1 < ix2)
                         xi += 1;
-                    ynext = a + m * xi;
+                    ynext = y1 + m * (xi - x1);
                 }
                 else
                     ynext = iy2;
             }
             iy1 += yinc;
         }
-        if (ix1 != ix2)
+        /* the columns left, so that a missed step leaves no gap */
+        while (ix1 != ix2) {
             point(ix1, iy1);
+            ix1 += xinc;
+        }
     }
     point(ix2, iy2);
 }
