@@ -1,20 +1,23 @@
 import ctypes
 import os
 
-from .ctypes_loader import add_library_search_dirs
+from .ctypes_loader import add_library_search_dirs, load_library
+
+# The name under which the wrapper modules load the core library, set by the
+# build.
+_CORE_LIBRARY_NAME = "@GRASS_CORE_LIBRARY_NAME@"
 
 
 def _core_library_path(lib_path):
-    """Get the path of the core shared library in a directory, or None"""
-    try:
-        names = sorted(os.listdir(lib_path))
-    except OSError:
-        return None
-    for name in names:
-        if name.startswith(("libgrass_gis.", "grass_gis.")) and (
-            name.endswith((".so", ".dylib", ".dll")) or ".so." in name
-        ):
-            return os.path.join(lib_path, name)
+    """Get the path of the core library in a directory, or None
+
+    The file names are those under which the wrapper modules load the core
+    library.
+    """
+    for name_format in load_library.name_formats:
+        path = os.path.join(lib_path, name_format % _CORE_LIBRARY_NAME)
+        if os.path.isfile(path):
+            return path
     return None
 
 
