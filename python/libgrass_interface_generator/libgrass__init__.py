@@ -2,16 +2,16 @@ import os
 
 from .ctypes_loader import add_library_search_dirs, load_library
 
-# The name under which the wrapper modules load the core library, set when
-# this file is installed.
+# The name under which the wrapper modules load the core library, set by the
+# build.
 _CORE_LIBRARY_NAME = "@GRASS_CORE_LIBRARY_NAME@"
 
 
 def _core_library_path(lib_path):
     """Get the path of the core library in a directory, or None
 
-    The file names are those the wrapper modules look for, so a directory
-    with the core library of another GRASS version does not match.
+    The file names are those under which the wrapper modules load the core
+    library.
     """
     for name_format in load_library.name_formats:
         path = os.path.join(lib_path, name_format % _CORE_LIBRARY_NAME)
