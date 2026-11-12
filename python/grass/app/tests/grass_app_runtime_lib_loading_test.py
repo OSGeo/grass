@@ -19,6 +19,8 @@ import os
 import sys
 from pathlib import Path
 
+import pytest
+
 from grass.app.runtime import RuntimePaths
 from grass.script.setup import get_install_path
 
@@ -32,18 +34,25 @@ IMPORT_CODE = """
 """
 
 
+@pytest.mark.skipif(
+    sys.platform.startswith("win"),
+    reason="Windows does not load the libraries in advance",
+)
 def test_grass_lib_load_failure_raises_import_error(
     tmp_path, run_code_in_environment, clean_subprocess_environment
 ):
     """Check that a failure to load the core library is an import error"""
     lib_path = tmp_path / "lib"
     lib_path.mkdir()
-    (lib_path / "libgrass_gis.so").write_text("This is not a shared library.")
     code = f"""
         import json
+        from pathlib import Path
 
         import grass.lib
 
+        # The file has the name under which the wrapper modules load the library.
+        name = grass.lib.load_library.name_formats[0] % grass.lib._CORE_LIBRARY_NAME
+        (Path(r"{lib_path}") / name).write_text("This is not a shared library.")
         try:
             grass.lib._load_libraries_if_needed(r"{lib_path}")
         except ImportError as error:

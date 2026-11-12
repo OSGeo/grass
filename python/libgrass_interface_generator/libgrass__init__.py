@@ -117,7 +117,7 @@ def _load_libraries_if_needed(lib_path):
     else:
         return
     for library, error in _preload_libraries(lib_path):
-        if os.path.basename(library).startswith("libgrass_gis."):
+        if library == os.path.realpath(core_library):
             msg = (
                 f"Cannot load the GRASS core library {library}: {error}. Check"
                 " that the GRASS installation and its dependencies are complete."
