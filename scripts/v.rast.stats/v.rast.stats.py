@@ -71,7 +71,6 @@
 # %end
 
 import sys
-import os
 import atexit
 import grass.script as gs
 from grass.script.utils import decode
@@ -88,15 +87,13 @@ def cleanup():
 
 
 def main():
-    global tmp, sqltmp, tmpname, nuldev, vector, rastertmp
+    global tmp, sqltmp, tmpname, vector, rastertmp
     rastertmp = False
     # setup temporary files
     tmp = gs.tempfile()
     sqltmp = tmp + ".sql"
     # we need a random name
     tmpname = gs.basename(tmp)
-
-    nuldev = open(os.devnull, "w")
 
     rasters = options["raster"].split(",")
     colprefixes = options["column_prefix"].split(",")
@@ -290,13 +287,11 @@ def get_nr_of_categories(
     :return: number of raster categories or exit (if no categories found)
     """
     # dump cats to file to avoid "too many argument" problem:
-    p = gs.pipe_command("r.category", map=rastertmp, sep=";", quiet=True)
     cats = []
-
-    for line in p.stdout:
-        line = decode(line)
-        cats.append(line.rstrip("\r\n").split(";")[0])
-    p.wait()
+    with gs.pipe_command("r.category", map=rastertmp, sep=";", quiet=True) as p:
+        for line in p.stdout:
+            line = decode(line)
+            cats.append(line.rstrip("\r\n").split(";")[0])
 
     number = len(cats)
     if number < 1:
@@ -441,17 +436,18 @@ def perform_stats(
     colnames,
     extstat,
 ):
-    with open(sqltmp, "w") as f:
+    with (
+        open(sqltmp, "w") as f,
         # do the stats
-        p = gs.pipe_command(
+        gs.pipe_command(
             "r.univar",
             flags="t" + extstat,
             map=raster,
             zones=rastertmp,
             percentile=percentile,
             sep=";",
-        )
-
+        ) as p,
+    ):
         first_line = 1
 
         f.write("{0}\n".format(gs.db_begin_transaction(fi["driver"])))
@@ -482,7 +478,6 @@ def perform_stats(
 
             f.write(" WHERE %s=%s;\n" % (fi["key"], vars[0]))
         f.write("{0}\n".format(gs.db_commit_transaction(fi["driver"])))
-        p.wait()
 
 
 if __name__ == "__main__":
