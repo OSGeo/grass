@@ -31,21 +31,6 @@
       "releasebranch_8_5",
     ],
 
-    // allows using comments starting with "# renovate: " to update
-    // *_version shell variables in the macOS packaging scripts.
-    "customManagers": [
-        {
-            "customType": "regex",
-            "managerFilePatterns": ["/^macos/.*\\.bash$/"],
-            // Miniforge tags look like 26.9.4-2, which semver parses as a
-            // pre-release.
-            "versioningTemplate": "loose",
-            "matchStrings": [
-                "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+\\w+_version=\"(?<currentValue>[^\"]+)\"",
-            ],
-        },
-    ],
-
     // enable Nix lock file update (flake.lock)
     "nix": {
         "enabled": true,
@@ -120,14 +105,6 @@
             "groupName": "CI actions",
             "matchManagers": ["github-actions"],
             "matchUpdateTypes": ["minor", "patch", "digest", "pin", "pinDigest"],
-            "schedule": ["* * 1 * *"],
-        },
-        {
-            // Miniforge version of the macOS application bundle.
-            "groupName": "CI actions",
-            "matchManagers": ["custom.regex"],
-            "matchFileNames": ["macos/**"],
-            "matchUpdateTypes": ["minor", "patch"],
             "schedule": ["* * 1 * *"],
         },
         {

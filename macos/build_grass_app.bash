@@ -38,8 +38,7 @@ conda_req_file="$conda_stable_file"
 conda_temp_dir=$(mktemp -d -t GRASS)
 conda_bin="${conda_temp_dir}/bin/conda"
 conda_update_stable=0
-# renovate: datasource=github-tags depName=conda-forge/miniforge
-miniforge_version="26.9.4-2"
+miniconda_url="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-${arch}.sh"
 miniconda_url="https://github.com/conda-forge/miniforge/releases/download/${miniforge_version}/Miniforge3-MacOSX-${arch}.sh"
 dmg_title=
 dmg_name=
@@ -262,7 +261,7 @@ function set_up_conda () {
     fi
 
     # download miniconda if not already existing
-    local miniconda="${cache_dir}/miniforge3-${miniforge_version}-${arch}.sh"
+    local miniconda="${cache_dir}/miniconda3-${arch}.sh"
     if [ ! -f "$miniconda" ]; then
         curl -L "$miniconda_url" --output "$miniconda" || exit_nice 1 cleanup
     fi
