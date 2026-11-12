@@ -772,18 +772,16 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Tune the temporal relations
         if "start" in relations:
-            if "overlapped" not in relations:
-                relations.append("overlapped")
             if "starts" not in relations:
                 relations.append("starts")
             if "started" not in relations:
                 relations.append("started")
-            if "finishes" not in relations:
-                relations.append("finishes")
             if "contains" not in relations:
                 relations.append("contains")
-            if "equals" not in relations:
-                relations.append("equals")
+            if "equal" not in relations:
+                relations.append("equal")
+            if "overlaps" not in relations:
+                relations.append("overlaps")
 
         if "overlap" in relations or "over" in relations:
             if "overlapped" not in relations:
