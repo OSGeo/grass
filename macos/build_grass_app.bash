@@ -39,7 +39,6 @@ conda_temp_dir=$(mktemp -d -t GRASS)
 conda_bin="${conda_temp_dir}/bin/conda"
 conda_update_stable=0
 miniconda_url="https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-${arch}.sh"
-miniconda_url="https://github.com/conda-forge/miniforge/releases/download/${miniforge_version}/Miniforge3-MacOSX-${arch}.sh"
 dmg_title=
 dmg_name=
 dmg_out_dir=
