@@ -154,16 +154,13 @@ NumPy arrays can be passed to tools and requested back from them through
 _grass.tools_.
 
 When the test needs specific data which cannot be generated, put the files in
-a `data` directory next to the test and read them relative to the test file,
-as `temporal/t.rast.import/tests` does:
+a `data` directory next to the test and read them relative to the test file:
 
 ```python
 DATA = pathlib.Path(__file__).parent / "data"
 ```
 
-Pass the path to the tool rather than the contents, so the bytes on disk are
-what it reads. `pyproject.toml` already keeps `*/tests/data/*` out of test
-collection.
+`pyproject.toml` already keeps `*/tests/data/*` out of test collection.
 
 ### Tests which use vector attributes
 
@@ -182,10 +179,10 @@ Test against the default backend unless the test is about a backend.
 ### Tests which use temporal data
 
 The temporal database is created on demand, so a fixture which creates a
-mapset does not have to set one up. It belongs to the mapset in the same way
-attribute tables do, so a module-scoped session shares one across its tests
-and a dataset registered by one test is visible to the next, with the same
-two ways out.
+mapset does not have to set one up. By default it is stored in the mapset, like
+the attribute tables, so a module-scoped session shares it across its tests and
+a dataset registered by one test is visible to the next. The same two options
+apply: give the session function scope, or use `TemporaryMapsetSession`.
 
 _grass.temporal_ still reads the session from `os.environ` rather than taking
 an `env`, so a test which uses it has to make the session visible there.
