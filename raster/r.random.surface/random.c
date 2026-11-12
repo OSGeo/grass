@@ -7,5 +7,5 @@ double ran1(void)
 {
     G_debug(2, "ran1()");
 
-    return G_drand48();
+    return G_random_double(&RandomState);
 }

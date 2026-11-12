@@ -1,4 +1,5 @@
 /* init.c                                                               */
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,8 +15,9 @@
 void Init(void)
 {
     struct Cell_head Region;
-    int row, col, i, j, NumWeight, NumDist, NumExp;
-    char *Name, *Number, String[80];
+    int row, col, i, j, NumWeight, NumDist, NumExp, NumSeeds;
+    char *Name, String[80];
+    const char *Problem;
     double MinRes;
 
     G_debug(2, "Init");
@@ -91,19 +93,39 @@ void Init(void)
         G_fatal_error(_("Output raster map required"));
 
     Theory = 0;
+    /* Either one seed for all maps or one seed for each map. One seed gives
+     * each map a stream of its own from one layout, and the first map draws
+     * what the seed itself draws, as a single map always did. */
     NumSeeds = 0;
-    Seeds = (int *)G_malloc(NumMaps * sizeof(int));
-    Seed = -1;
-    if (!SeedStuff->answers) {
-        for (i = 0; i < NumMaps; i++) {
-            Seeds[i] = -1;
-        }
+    while (SeedStuff->answers && SeedStuff->answers[NumSeeds])
+        NumSeeds++;
+    if (NumSeeds > 1 && NumSeeds != NumMaps)
+        G_fatal_error(
+            _("%d seeds given for %d maps, give one seed for all maps "
+              "or one for each map"),
+            NumSeeds, NumMaps);
+    Seeds = (int64_t *)G_malloc(NumMaps * sizeof(int64_t));
+    MapStates = G_malloc(NumMaps * sizeof(struct G_random_state));
+    for (i = 0; i < NumSeeds; i++) {
+        Problem = G_random_parse_seed(SeedStuff->answers[i], &Seeds[i]);
+        if (Problem)
+            G_fatal_error(_("Invalid random seed <%s> for %s=: %s"),
+                          SeedStuff->answers[i], SeedStuff->key, Problem);
+    }
+    if (NumSeeds == NumMaps) {
+        for (i = 0; i < NumMaps; i++)
+            G_random_state_from_seed(&MapStates[i], Seeds[i]);
     }
     else {
-        for (i = 0; (Number = SeedStuff->answers[i]) && i < NumMaps; i++) {
-            sscanf(Number, "%d", &(Seeds[i]));
-        } /* /for */
-    } /* /else */
+        struct G_random_layout layout;
+        int64_t seed = NumSeeds ? Seeds[0] : G_random_generate_seed();
+
+        G_random_init_layout(&layout, seed, NumMaps);
+        for (i = 0; i < NumMaps; i++) {
+            Seeds[i] = seed;
+            G_random_state_for_unit(&MapStates[i], &layout, i);
+        }
+    }
 
     CellBuffer = Rast_allocate_c_buf();
     CatInfo.NumValue = (int *)G_malloc(CatInfo.NumCat * sizeof(int));
