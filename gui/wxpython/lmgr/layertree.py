@@ -452,6 +452,33 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Skip event, otherwise causing error when layertree is empty"""
         event.Skip()
 
+    def _createLayerButton(self):
+        """Create the options button shown on a layer item.
+
+        The button is a child of the tree, and key events do not propagate from
+        a child to its parent, so the Delete shortcut has to be bound here too
+        in order to work while the button holds the keyboard focus.
+        """
+        btnbmp = LMIcons["layerOptions"].GetBitmap((16, 16))
+        button = GenBitmapButton(self, id=wx.ID_ANY, bitmap=btnbmp, size=(24, 24))
+        button.SetToolTip(_("Click to edit layer settings"))
+        self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenuButton, button)
+        button.Bind(wx.EVT_KEY_UP, self.OnLayerButtonKeyUp)
+        return button
+
+    def OnLayerButtonKeyUp(self, event):
+        """Key pressed while the options button of a layer has the focus.
+
+        Removing the layer destroys the button which is dispatching the event,
+        so the removal is deferred until the event has been passed on.
+        """
+        key = event.GetKeyCode()
+
+        if key == wx.WXK_DELETE and self.lmgr and not self.GetEditControl():
+            wx.CallAfter(self.lmgr.OnDeleteLayer, None)
+
+        event.Skip()
+
     def OnLayerContextMenuButton(self, event):
         """Contextual menu for item/layer when button pressed"""
         # determine which tree item has the button
@@ -1559,10 +1586,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             grouptext = _("Layer group: {number}").format(number=self.groupnode)
             self.groupnode += 1
         else:
-            btnbmp = LMIcons["layerOptions"].GetBitmap((16, 16))
-            ctrl = GenBitmapButton(self, id=wx.ID_ANY, bitmap=btnbmp, size=(24, 24))
-            ctrl.SetToolTip(_("Click to edit layer settings"))
-            self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenuButton, ctrl)
+            ctrl = self._createLayerButton()
         # add layer to the layer tree
         if loadWorkspace:
             # when loading workspace, we always append
@@ -2109,10 +2133,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         elif self.GetLayerInfo(dragItem, key="ctrl"):
             # recreate data layer
-            btnbmp = LMIcons["layerOptions"].GetBitmap((16, 16))
-            newctrl = GenBitmapButton(self, id=wx.ID_ANY, bitmap=btnbmp, size=(24, 24))
-            newctrl.SetToolTip(_("Click to edit layer settings"))
-            self.Bind(wx.EVT_BUTTON, self.OnLayerContextMenuButton, newctrl)
+            newctrl = self._createLayerButton()
             data = self.GetPyData(dragItem)
 
         elif self.GetLayerInfo(dragItem, key="type") == "group":
