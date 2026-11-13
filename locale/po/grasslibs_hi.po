@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>, 2026.
-# Abhimanyu <abhimanyupg04@gmail.com>, 2026.
+# SPDX-FileCopyrightText: 2026 Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>
+# SPDX-FileCopyrightText: 2026 Abhimanyu <abhimanyupg04@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 18:18+0000\n"
-"PO-Revision-Date: 2026-03-22 08:14+0000\n"
+"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"PO-Revision-Date: 2026-10-31 18:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grasslibs/hi/>\n"
 "Language: hi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.16.2\n"
+"X-Generator: Weblate 2026.10.1\n"
 
 #, c-format
 msgid "Unknown algorithm '%s'"
@@ -302,7 +302,7 @@ msgstr "प्राप्त करें: तालिका में स्�
 msgid "send data: invalid C-type"
 msgstr "डेटा भेजें: अमान्य सी-प्रकार"
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to describe table <%s>"
 msgstr "तालिका <%s> का वर्णन करने में असमर्थ"
 
@@ -1050,7 +1050,7 @@ msgstr ""
 msgid "Unable to open directory %s"
 msgstr "निर्देशिका %s खोलने में असमर्थ"
 
-#, c-format
+#, c-format, python-format
 msgid "Location <%s> doesn't exist"
 msgstr "स्थान <%s> मौजूद नहीं है"
 
@@ -1210,7 +1210,9 @@ msgstr "विकल्प <%s> एकाधिक उत्तरों को 
 msgid ""
 "Illegal range syntax for parameter <%s>\n"
 "\tPresented as: %s"
-msgstr "पैरामीटर <%s>\\n\\tके लिए अवैध श्रेणी वाक्यविन्यास इस प्रकार प्रस्तुत किया गया है: %s"
+msgstr ""
+"पैरामीटर <%s>\n"
+"\tके लिए अवैध श्रेणी वाक्यविन्यास इस प्रकार प्रस्तुत किया गया है: %s"
 
 #, fuzzy, c-format
 msgid ""
@@ -2622,7 +2624,7 @@ msgstr "रेखापुंज मानचित्र पर 2d सारण
 msgid "3D raster map <%s> not found"
 msgstr "3D रेखापुंज मानचित्र <%s> नहीं मिला"
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
 msgstr "3D रेखापुंज मानचित्र खोलने में असमर्थ <%s>"
 
@@ -3265,7 +3267,19 @@ msgid ""
 " - Use '--help' for further options\n"
 "     {cmd_name} --help\n"
 "See also: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
-msgstr "GRASS प्रारंभ करने में असमर्थ. आपके पास यह विकल्प है:\\n - '--gui' स्विच के साथ ग्राफिकल यूजर इंटरफेस लॉन्च करें\\n {cmd_name} --gui\\n - तर्क के रूप में प्रोजेक्ट/मैपसेट के पथ के साथ लॉन्च करें\\n {cmd_name} /path/to/project/mapset`\\n - '-c' के साथ एक प्रोजेक्ट बनाएं और उसके स्थायी मैपसेट में लॉन्च करें\\n {cmd_name} -c EPSG:number /path/to/project\\n {cmd_name} -c जियोफाइल /path/to/project\\n - मैन्युअल रूप से GISRC फ़ाइल बनाएं ({gisrcrc})\\n - आगे के विकल्पों के लिए '--help' का उपयोग करें\\n {cmd_name} --help\\nयह भी देखें: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
+msgstr ""
+"GRASS प्रारंभ करने में असमर्थ. आपके पास यह विकल्प है:\n"
+" - '--gui' स्विच के साथ ग्राफिकल यूजर इंटरफेस लॉन्च करें\n"
+" {cmd_name} --gui\n"
+" - तर्क के रूप में प्रोजेक्ट/मैपसेट के पथ के साथ लॉन्च करें\n"
+" {cmd_name} /path/to/project/mapset`\n"
+" - '-c' के साथ एक प्रोजेक्ट बनाएं और उसके स्थायी मैपसेट में लॉन्च करें\n"
+" {cmd_name} -c EPSG:number /path/to/project\n"
+" {cmd_name} -c जियोफाइल /path/to/project\n"
+" - मैन्युअल रूप से GISRC फ़ाइल बनाएं ({gisrcrc})\n"
+" - आगे के विकल्पों के लिए '--help' का उपयोग करें\n"
+"{cmd_name} --help\n"
+"यह भी देखें: https://grass.osgeo.org/{cmd_name}/manuals/helptext.html"
 
 msgid "Starting GRASS..."
 msgstr "घास प्रारंभ करना..।"
@@ -3479,7 +3493,7 @@ msgstr "चेक नं. अनुरोधित फ़्रेमों क�
 msgid "Unknown icon marker, using \"sphere\""
 msgstr "अज्ञात आइकन मार्कर, \\\"स्फीयर\\\" का उपयोग करते हुए"
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to open vector map <%s>"
 msgstr "वेक्टर मानचित्र खोलने में असमर्थ <%s>"
 
@@ -3635,7 +3649,7 @@ msgstr "डेटाफ़ाइलों की अधिकतम संख्
 msgid "Unable to read range of 3D raster map <%s>"
 msgstr "3D रेखापुंज मानचित्र की सीमा को पढ़ने में असमर्थ <%s>"
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to close 3D raster map <%s>"
 msgstr "3D रेखापुंज मानचित्र बंद करने में असमर्थ <%s>"
 
@@ -7015,6 +7029,1711 @@ msgstr "क्षेत्र %d की कोई सीमा नहीं ह�
 
 msgid "Unknown query tool"
 msgstr "अज्ञात क्वेरी उपकरण"
+
+msgid "overwrite an existing mapset"
+msgstr ""
+
+msgid "process ID of the process locking the mapset (a mapset can be automatically unlocked if there is no process with this PID)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error creating project: {}"
+msgid "Error creating mapset: {}"
+msgstr "प्रोजेक्ट बनाने में त्रुटि: {}"
+
+#, python-brace-format
+msgid "Mapset <{mapset}> locked (attempt {try_number}), but will retry in {sleep_time:.2f} seconds..."
+msgstr ""
+
+#, fuzzy
+#| msgid "Location <%s> doesn't exist"
+msgid "Path '{}' doesn't exist"
+msgstr "स्थान <%s> मौजूद नहीं है"
+
+msgid "Path '{}' not accessible."
+msgstr ""
+
+msgid "You are not the owner of '{}'."
+msgstr ""
+
+#, python-brace-format
+msgid "File {file} owned by {user} found."
+msgstr ""
+
+msgid "On the command line, you can force GRASS to start by using the -f flag."
+msgstr ""
+
+msgid "In Python, you can start a session with force_unlock=True."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Selected mapset is currently being used by another GRASS session. {lock_info} Concurrent access to a mapset is not allowed. However, you can either use another mapset within the same project or remove the lock if you are sure that no other session is active.\n"
+"{cli_solution}\n"
+"{python_solution}\n"
+"Make sure you have sufficient access permissions to remove the lock file. You may want to use a process manager to check that no other process is using the mapset."
+msgstr ""
+
+#, python-brace-format
+msgid "Removing lock in the selected mapset: {lock_info}"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Unable to properly access lock file '{name}' or run the lock program.\n"
+"Please resolve this with your system administrator. (Lock program return code: {returncode})"
+msgstr ""
+
+msgid "Provide only path or all three parameters, not two"
+msgstr ""
+
+#, python-brace-format
+msgid "Mapset <{mapset}> doesn't exist in GRASS project <{location}>"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "initial GRASS database directory"
+msgid "<%s> is not a GRASS Mapset because it is not a directory"
+msgstr "प्रारंभिक GRASS डेटाबेस निर्देशिका"
+
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
+msgstr ""
+
+#, python-brace-format
+msgid "Mapset <{mapset}> or project <{location}> is invalid for an unknown reason"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT mapset is missing"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT is not a directory"
+msgstr ""
+
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT mapset does not have a DEFAULT_WIND file (default computational region)"
+msgstr ""
+
+#, python-brace-format
+msgid "Project <{location_path}> is invalid for an unknown reason"
+msgstr ""
+
+#, python-brace-format
+msgid "<{location}> looks like a mapset, not a project. Did you mean just <{one_dir_up}>?"
+msgstr ""
+
+#, python-brace-format
+msgid "It looks like <{location}> contains projects. Did you mean to specify one of them?"
+msgstr ""
+
+msgid "Name '{}' is not a valid name for location or mapset. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+msgid "Name '{}' is reserved for direct read access to OGR layers. Please use another name for your mapset."
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Mapset <{}> already exists. Unable to create a new temporary mapset of that name."
+msgid "Mapset  <{mapset}> already exists. Please consider using another name for your mapset."
+msgstr "मैपसेट <{}> पहले से मौजूद है। उस नाम का नया अस्थायी मैपसेट बनाने में असमर्थ।"
+
+msgid "Name '{}' is not a valid name for project or mapset. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+#, python-brace-format
+msgid "Project <{location}> already exists. Please consider using another name for your project."
+msgstr ""
+
+#, python-brace-format
+msgid "Mapset <{mapset}> is required for a valid project."
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "mapset <%s> is not the current mapset"
+msgid "Mapset <{mapset}> is the current mapset."
+msgstr "मैपसेट <%s> वर्तमान मैपसेट नहीं है"
+
+#, fuzzy, python-brace-format
+#| msgid "Mapset <%s> does not exist."
+msgid "Mapset <{mapset}> is in use."
+msgstr "मैपसेट <%s> मौजूद नहीं है।"
+
+#, python-brace-format
+msgid "Mapset <{mapset}> is owned by a different user."
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "location was renamed to project"
+msgid "Project <{location}> is the current project."
+msgstr "स्थान का नाम बदलकर प्रोजेक्ट कर दिया गया"
+
+#, python-brace-format
+msgid "GRASS database <{grassdb}> is the current database."
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to create histogram file for <%s>"
+msgid "Unable to create history file {}"
+msgstr "<%s> के लिए हिस्टोग्राम फ़ाइल बनाने में असमर्थ"
+
+#, fuzzy
+#| msgid "Unable to read from category raster condition file."
+msgid "Unable to read from plain text history file {}"
+msgstr "श्रेणी रेखापुंज स्थिति फ़ाइल से पढ़ने में असमर्थ।"
+
+msgid "Error decoding content of JSON history file {}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to read PNG file"
+msgid "Unable to read from JSON history file {}"
+msgstr "पीएनजी फ़ाइल पढ़ने में असमर्थ"
+
+#, fuzzy
+#| msgid "Unable to remove temporary file <%s>: %s"
+msgid "Unable to remove entry from plain text history file {}"
+msgstr "अस्थायी फ़ाइल को हटाने में असमर्थ <%s>: %s"
+
+#, fuzzy
+#| msgid "Unable to remove temporary file <%s>: %s"
+msgid "Unable to remove entry from JSON history file {}"
+msgstr "अस्थायी फ़ाइल को हटाने में असमर्थ <%s>: %s"
+
+#, fuzzy
+#| msgid "Unable to open history file of vector map <%s>"
+msgid "Unable to convert plain text history file {} to JSON format"
+msgstr "वेक्टर मानचित्र <%s> की इतिहास फ़ाइल खोलने में असमर्थ"
+
+#, fuzzy
+#| msgid "Unable to load file to memory, file not open"
+msgid "Unable to add entry to JSON history file {}"
+msgstr "फ़ाइल को मेमोरी में लोड करने में असमर्थ, फ़ाइल नहीं खुली"
+
+#, fuzzy
+#| msgid "Unable to determine bbox for isle %d"
+msgid "Unable to update entry in JSON history file {}"
+msgstr "द्वीप %d के लिए बॉक्स निर्धारित करने में असमर्थ"
+
+#, fuzzy
+#| msgid "Unable to open history file of vector map <%s>"
+msgid "Unable to copy history file {} to {}"
+msgstr "वेक्टर मानचित्र <%s> की इतिहास फ़ाइल खोलने में असमर्थ"
+
+msgid "Mapset PERMANENT cannot be deleted (a whole location can be)"
+msgstr ""
+
+msgid "Mapset PERMANENT cannot be renamed"
+msgstr ""
+
+msgid "Mapset path '{}' needs at least three components"
+msgstr ""
+
+msgid "Provide only path, or path and location, or path, location, and mapset, but not mapset without location"
+msgstr ""
+
+msgid "Parameter path needs to be 'path/to/location/mapset' or location and mapset need to be set"
+msgstr ""
+
+msgid "input='-' must be used when stdin is specified"
+msgstr ""
+
+msgid "stdin must be string or buffer, not PIPE"
+msgstr ""
+
+msgid "stdin must be used when input='-'"
+msgstr ""
+
+msgid "You cannot merge stdout and stderr and not capture them"
+msgstr ""
+
+msgid "stdout argument not allowed, it could be overridden"
+msgstr ""
+
+msgid "stderr argument not allowed, it could be overridden"
+msgstr ""
+
+msgid "Invalid duration parameter for writeAvi."
+msgstr ""
+
+#, fuzzy
+#| msgid "Could not write segment file"
+msgid "Could not write avi."
+msgstr "खंड फ़ाइल नहीं लिख सका"
+
+msgid "Install PIL or Pillow to use this function"
+msgstr ""
+
+msgid "Install a newer version of PIL or Pillow to use this function (missing ImageOps module)"
+msgstr ""
+
+msgid "Module must begin with 'd_'"
+msgstr ""
+
+msgid "Cannot find GRASS module {}"
+msgstr ""
+
+msgid "Neither ipyleaflet nor folium found."
+msgstr ""
+
+msgid "Invalid map backend, use 'folium' or 'ipyleaflet'"
+msgstr ""
+
+msgid "Tile provider <{}> requires an API key, provide it with the API_key parameter"
+msgstr ""
+
+msgid "Tile provider <{}> does not take an API key, ignoring it (if it should take one, update the xyzservices package)"
+msgstr ""
+
+msgid "Click to draw geometries"
+msgstr ""
+
+msgid "Click to show and edit computational region"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to read vector map"
+msgid "Click to query raster and vector maps"
+msgstr "वेक्टर मानचित्र पढ़ने में असमर्थ"
+
+#, python-brace-format
+msgid "Region changed to: n={north}, s={south}, e={east}, w={west} nsres={nsres} ewres={ewres}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Name of vector map"
+msgid "New vector map name:"
+msgstr "सदिश मानचित्र का नाम"
+
+msgid "Save"
+msgstr ""
+
+msgid "Could not find a raster named {}"
+msgstr ""
+
+msgid "Number of rasters in series must match"
+msgstr ""
+
+msgid "Could not find a vector named {}"
+msgstr ""
+
+msgid "Number of vectors in series must match"
+msgstr ""
+
+msgid "Number of names must match number of added layers"
+msgstr ""
+
+#, python-brace-format
+msgid "Mapset {path} is not valid: {reason}"
+msgstr ""
+
+msgid "Dataset {} must be element type 'strds' or 'stvds'"
+msgstr ""
+
+msgid "Could not find space time dataset named {} of type {}"
+msgstr ""
+
+msgid "Date/Time"
+msgstr ""
+
+msgid "Encountered error while running m.proj: {}"
+msgstr ""
+
+msgid "filename must end in '.gif'"
+msgstr ""
+
+msgid "The map is close!"
+msgstr ""
+
+msgid "The self.c_mapinfo pointer must be correctly initiated"
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector map <%s> not found in current mapset"
+msgid "Map <{}> not found in current mapset"
+msgstr "वेक्टर मानचित्र <%s> वर्तमान मानचित्रसेट में नहीं मिला"
+
+msgid "Parameter patch_backend must be 'r.patch' or 'RasterRow'"
+msgstr ""
+
+msgid "Patching backend 'r.patch' doesn't work for overlap > 0"
+msgstr ""
+
+msgid "Execution of subprocesses was not successful"
+msgstr ""
+
+#, fuzzy
+#| msgid "Vector map <%s> is not opened in write mode"
+msgid "The map does not exist, I can't open in 'r' mode"
+msgstr "वेक्टर मानचित्र <%s> लेखन मोड में नहीं खोला गया है"
+
+#, fuzzy, python-brace-format
+#| msgid "Vector map <%s> already exists and will be overwritten"
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr "वेक्टर मानचित्र <%s> पहले से मौजूद है और इसे अधिलेखित कर दिया जाएगा"
+
+#, fuzzy
+#| msgid "OGR layer not defined"
+msgid "Raster type not defined"
+msgstr "OGR परत परिभाषित नहीं है"
+
+#, python-brace-format
+msgid "Mode type: {0} not supported ('r', 'w','rw')"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Index out of range in"
+msgid "Index out of range: %r."
+msgstr "सूचकांक सीमा से बाहर है"
+
+#, fuzzy, python-brace-format
+#| msgid "Vector map <%s> already exists and will be overwritten"
+msgid "Raster map <{0}> already exists. Use overwrite."
+msgstr "वेक्टर मानचित्र <%s> पहले से मौजूद है और इसे अधिलेखित कर दिया जाएगा"
+
+#, fuzzy, python-brace-format
+#| msgid "Mapset <%s> does not exist."
+msgid "Raster map <{0}> does not exist"
+msgstr "मैपसेट <%s> मौजूद नहीं है।"
+
+#, fuzzy
+#| msgid "Invalid signature file"
+msgid "Invalid semantic label"
+msgstr "अमान्य हस्ताक्षर फ़ाइल"
+
+#, fuzzy, python-brace-format
+#| msgid "Feature type %d not supported"
+msgid "Mode type: {0} not supported ('r', 'w')"
+msgstr "सुविधा प्रकार %d समर्थित नहीं है"
+
+#, fuzzy, python-brace-format
+#| msgid "Feature type %d not supported"
+msgid "Overwrite type: {0} not supported (True/False)"
+msgstr "सुविधा प्रकार %d समर्थित नहीं है"
+
+#, python-brace-format
+msgid "Map name {0} not valid"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Feature type %d not supported"
+msgid "Raster type: {0} not supported"
+msgstr "सुविधा प्रकार %d समर्थित नहीं है"
+
+msgid "Error executing: Rast_get_ith_cat"
+msgstr ""
+
+#, fuzzy
+#| msgid "No key column detected."
+msgid "Null value detected"
+msgstr "कोई कुंजी स्तंभ नहीं मिला।"
+
+msgid "Error executing: Rast_set_cat"
+msgstr ""
+
+#, fuzzy
+#| msgid "Signature file does not contain bands"
+msgid "Vector doesn't contain points"
+msgstr "हस्ताक्षर फ़ाइल में बैंड नहीं हैं"
+
+#, fuzzy, python-format
+#| msgid "Unable to read line offset %ld"
+msgid "Unable to read line of feature %i"
+msgstr "लाइन ऑफ़सेट %ld पढ़ने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to read feature id %d"
+msgid "Unable to read area with id %i"
+msgstr "फीचर आईडी %d पढ़ने में असमर्थ"
+
+#, fuzzy
+#| msgid "No temp files available: %s"
+msgid "No links available."
+msgstr "कोई अस्थायी फ़ाइल उपलब्ध नहीं: %s"
+
+#, python-brace-format
+msgid "Index out of bounds. The maximum index allowed is {max_link_indx}, the queried index is {indx}"
+msgstr ""
+
+#, python-format
+msgid "Deleting table <%s> which is attached to following map(s):"
+msgstr ""
+
+msgid "You must use the force flag to actually remove it. Exiting."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Invalid top field: %s"
+msgid "Invalid kind <%s>"
+msgstr "अमान्य शीर्ष फ़ील्ड: %s"
+
+#, fuzzy, python-format
+#| msgid "Invalid read size %d"
+msgid "Invalid size <%d>"
+msgstr "अमान्य पढ़ने का आकार %d"
+
+#, fuzzy, python-format
+#| msgid "Invalid read size %d"
+msgid "Invalid FP size <%d>"
+msgstr "अमान्य पढ़ने का आकार %d"
+
+#, fuzzy, python-format
+#| msgid "Invalid read size %d"
+msgid "Invalid integer size <%d>"
+msgstr "अमान्य पढ़ने का आकार %d"
+
+#, fuzzy, python-brace-format
+#| msgid "parameters of the executable"
+msgid "Cannot find the executable {0}"
+msgstr "निष्पादन योग्य के पैरामीटर"
+
+#, python-format
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is deprecated in GRASS 7.0 and has been removed in version 7.1."
+msgstr ""
+
+#, python-brace-format
+msgid "Module {module} ({code}) failed with non-zero return code {returncode}"
+msgstr ""
+
+#, python-brace-format
+msgid "{message} (Additionally, there was an error: {additional_error})"
+msgstr ""
+
+msgid "Mixing value types. Will try to compare after integer conversion"
+msgstr ""
+
+#, python-format
+msgid "Element type should be \"raster\" and not \"%s\""
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Invalid top field: %s"
+msgid "Invalid element '%s'"
+msgstr "अमान्य शीर्ष फ़ील्ड: %s"
+
+#, fuzzy
+#| msgid "Unable to write nodes"
+msgid "Unable to list mapsets"
+msgstr "नोड्स लिखने में असमर्थ"
+
+#, python-brace-format
+msgid "Debug level {0}"
+msgstr ""
+
+msgid "WARNING: Ignoring unsupported debug level (must be >=0 and <=5): {}\n"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Illegal filename <%s>. Cannot start with '.' or be 'NULL'."
+msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
+msgstr "अवैध फ़ाइल नाम <%s>. '.' से प्रारंभ नहीं किया जा सकता या 'शून्य' हो।"
+
+#, fuzzy, python-format
+#| msgid "Illegal filename <%s>. Character <%c> not allowed.\n"
+msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
+msgstr "अवैध फ़ाइल नाम <%s>. वर्ण <%c> की अनुमति नहीं है.\n"
+
+#, python-format
+msgid "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be                     provided"
+msgstr ""
+
+#, fuzzy
+#| msgid "Writing area %d failed"
+msgid "Fetching data failed"
+msgstr "लेखन क्षेत्र %d विफल रहा"
+
+#, python-brace-format
+msgid "Empty result returned for subgroup <{sg}> in group <{g}>"
+msgstr ""
+
+#, python-brace-format
+msgid "Semantic label missing for raster map {m} in group <{g}>."
+msgstr ""
+
+#, python-brace-format
+msgid "Key {k} from raster map {m} already present in group dictionary.Overwriting existing entry..."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to write history for 3D raster map <%s>"
+msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
+msgstr "3D रेखापुंज मानचित्र <%s> के लिए इतिहास लिखने में असमर्थ"
+
+#, python-format
+msgid "An error occurred while running r.mapcalc with expression: %s"
+msgstr ""
+
+#, fuzzy
+#| msgid "no data"
+msgid "No data"
+msgstr "कोई डेटा नहीं"
+
+#, fuzzy
+#| msgid "Color"
+msgid "color"
+msgstr "रंग"
+
+msgid "label"
+msgstr ""
+
+msgid "value"
+msgstr ""
+
+#, python-format
+msgid "An error occurred while running r3.mapcalc with expression: %s"
+msgstr ""
+
+#, fuzzy
+#| msgid "No active GRASS session: GISRC environment variable not set"
+msgid "Parameter grass_path or GISBASE environmental variable must be set"
+msgstr "कोई सक्रिय GRASS सत्र नहीं: GISRC पर्यावरण चर सेट नहीं है"
+
+#, fuzzy, python-brace-format
+#| msgid "Mapset <%s> does not exist."
+msgid "Path '{path}' does not exist"
+msgstr "मैपसेट <%s> मौजूद नहीं है।"
+
+#, python-brace-format
+msgid "Path '{path}' is a file, but a directory is needed"
+msgstr ""
+
+#, fuzzy
+#| msgid "Loading data from attribute table ..."
+msgid "Cleaning up SQLite attribute database..."
+msgstr "विशेषता तालिका से डेटा लोड हो रहा है..।"
+
+#, fuzzy
+#| msgid "Cleaning-up topology schema..."
+msgid "Cleaning up temporary files..."
+msgstr "सफ़ाई-अप टोपोलॉजी स्कीम..।"
+
+#, python-format
+msgid "Parameter element '%(element)s' not found: '%(value)s'"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "MAPSET %s not found at %s"
+msgid "Flag not found: %s"
+msgstr "MAPSET %s %s पर नहीं मिला"
+
+#, python-format
+msgid "Parameter '%(name)s' (%(desc)s) is missing."
+msgstr ""
+
+msgid "<required>"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Unable to fetch interface description for command '<{cmd}>'.\n"
+"\n"
+"Details: <{det}>"
+msgstr ""
+
+#, python-brace-format
+msgid "Cannot parse interface description of <{name}> module: {error}"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Database connection not defined for layer %d"
+msgid "Database connection not defined for layer %s"
+msgstr "परत %d के लिए डेटाबेस कनेक्शन परिभाषित नहीं है"
+
+#, fuzzy, python-format
+#| msgid "Error loading vector map <%s>"
+msgid "Missing layer %(layer)d in vector map <%(map)s>"
+msgstr "वेक्टर मानचित्र लोड करने में त्रुटि <%s>"
+
+msgid "vector_db_select() failed"
+msgstr ""
+
+#, python-brace-format
+msgid "Number of given vector maps ({m}) differs from number of layers ({l})"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"v.what output is not valid JSON format:\n"
+" {ret}"
+msgstr ""
+
+#, python-brace-format
+msgid "Map <{map_name}> of element type '{element}' not found on                             search path"
+msgstr ""
+
+#, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
+msgstr ""
+
+#, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s>"
+msgstr ""
+
+#, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s>"
+msgstr ""
+
+#, python-format
+msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"
+msgstr ""
+
+#, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
+msgstr ""
+
+#, python-format
+msgid "End time must be greater than start time for %(typ)s map <%(id)s> with layer %(l)s"
+msgstr ""
+
+#, python-format
+msgid "Map <%s> has incorrect start time"
+msgstr ""
+
+#, python-format
+msgid "Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is greater than end time"
+msgstr ""
+
+#, python-format
+msgid "Map <%s> has incorrect time interval, start time is greater than end time"
+msgstr ""
+
+#, python-format
+msgid "Delete %s dataset <%s> from temporal database"
+msgstr ""
+
+msgid "semantic labels can only be assigned to raster maps"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unknown vector type."
+msgid "Unknown temporal type \"%s\""
+msgstr "अज्ञात वेक्टर प्रकार।"
+
+#, python-format
+msgid "Wrong granularity: \"%s\""
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unsupported column type %d"
+msgid "Unsupported temporal unit: %s"
+msgstr "असमर्थित स्तंभ प्रकार %d"
+
+#, python-format
+msgid "Created register table <%s> for space time %s  dataset <%s>"
+msgstr ""
+
+msgid "The space time datasets must be of the same temporal type"
+msgstr ""
+
+#, fuzzy
+#| msgid "The temporal type of the space time dataset"
+msgid "The temporal map type of the sample dataset must be interval"
+msgstr "स्पेस टाइम डेटासेट का अस्थायी प्रकार"
+
+msgid "Invalid spatial relation <{}> requested. Only values 'overlaps', 'is_contained', and 'contains' are allowed."
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to fetch data from table <%s>"
+msgid "Unable to get map ids from register table <{}>"
+msgstr "तालिका <%s> से डेटा लाने में असमर्थ"
+
+#, python-format
+msgid "Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr ""
+
+#, python-format
+msgid "Wrong granularity format: %s"
+msgstr ""
+
+#, python-format
+msgid "Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr ""
+
+#, python-format
+msgid "Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr ""
+
+msgid "Renaming of space time datasets is not supported for PostgreSQL."
+msgstr ""
+
+#, python-format
+msgid "Delete space time %s  dataset <%s> from temporal database"
+msgstr ""
+
+#, python-format
+msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the database does not match the current mapset"
+msgstr ""
+
+#, python-format
+msgid "Drop map register table: %s"
+msgstr ""
+
+msgid "Error in register table request"
+msgstr ""
+
+#, python-format
+msgid "Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of the database does not match the current mapset"
+msgstr ""
+
+msgid "Only a map that was inserted in the temporal database can be registered in a space time dataset"
+msgstr ""
+
+#, python-format
+msgid "Map <%(id)s> with layer %(l)s has invalid time"
+msgstr ""
+
+#, python-format
+msgid "Map <%s> has invalid time"
+msgstr ""
+
+#, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr ""
+
+#, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "The temporal type of the space time dataset"
+msgid "Set temporal unit for space time %s dataset <%s> to %s"
+msgstr "स्पेस टाइम डेटासेट का अस्थायी प्रकार"
+
+#, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr ""
+
+#, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr ""
+
+#, fuzzy
+#| msgid "map <%s> is not in the current mapset"
+msgid "Maps can only registered in a database in the current mapset"
+msgstr "map <%s> is not in the current mapset"
+
+#, python-format
+msgid "Map <%(map)s> with layer %(l)s is already registered."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Mapset <{}> already exists."
+msgid "Map <%s> is already registered."
+msgstr "मैपसेट <{}> पहले से मौजूद है।"
+
+#, fuzzy
+#| msgid "map <%s> is not in the current mapset"
+msgid "Maps can only unregistered in a database in the current mapset"
+msgstr "map <%s> is not in the current mapset"
+
+#, python-format
+msgid "Map <%(map)s> with layer %(l)s is not registered in space time dataset <%(base)s>"
+msgstr ""
+
+#, python-format
+msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
+msgstr ""
+
+#, python-format
+msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr ""
+
+#, python-format
+msgid "Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgstr ""
+
+#, python-brace-format
+msgid "The temporal framework requires SQLite 3.33 or later to update a space time dataset, but the Python sqlite3 module uses SQLite {version}. Please update SQLite or switch the temporal database to the PostgreSQL backend with t.connect."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Error loading 3d raster map <%s>"
+msgid "Aggregating %s raster maps"
+msgstr "3डी रेखापुंज मानचित्र लोड करने में त्रुटि <%s>"
+
+#, python-format
+msgid "Raster map <%(name)s> is already in temporal database, use overwrite flag to overwrite"
+msgstr ""
+
+#, python-format
+msgid "Computing aggregation of maps between %(st)s - %(end)s"
+msgstr ""
+
+msgid "Error occurred in r.series computation"
+msgstr ""
+
+#, python-format
+msgid "Aggregating %(len)i raster maps from %(start)s to %(end)s"
+msgstr ""
+
+#, python-format
+msgid "Unable to perform aggregation. Output raster map <%(name)s> exists and overwrite flag was not set"
+msgstr ""
+
+#, python-format
+msgid "The limit of open files (%i) was reached (%i). The module r.series will be run with flag z, to avoid open files limit exceeding."
+msgstr ""
+
+msgid "Object not found in the temporal database"
+msgstr ""
+
+msgid "Missing identifier"
+msgstr ""
+
+#, fuzzy
+#| msgid "Quantization file for raster map <%s> is missing"
+msgid "Wrong identifier, the mapset is missing"
+msgstr "रेखापुंज मानचित्र <%s> के लिए परिमाणीकरण फ़ाइल गुम है"
+
+#, fuzzy
+#| msgid "Unable to read range file for <%s>"
+msgid "Unable to read range file"
+msgstr "<%s> के लिए रेंज फ़ाइल पढ़ने में असमर्थ"
+
+#, fuzzy
+#| msgid "Raster map <%s> is empty"
+msgid "Raster range file is empty"
+msgstr "रेखापुंज मानचित्र <%s> खाली है"
+
+#, fuzzy, python-format
+#| msgid "Unable to read range of 3D raster map <%s>"
+msgid "Unable to load range of 3D raster map <%s>"
+msgstr "3D रेखापुंज मानचित्र की सीमा को पढ़ने में असमर्थ <%s>"
+
+#, fuzzy
+#| msgid "Unable to read PNG file"
+msgid "Unable to read history file"
+msgstr "पीएनजी फ़ाइल पढ़ने में असमर्थ"
+
+#, python-format
+msgid ""
+"Temporal database connection for mapset <%s> defined as:\n"
+" %s\n"
+"But database file does not exist."
+msgstr ""
+
+msgid "Unable to initialize the temporal DBMI interface. Please use t.connect to specify the driver and the database string"
+msgstr ""
+
+msgid ""
+"Run t.upgrade command to upgrade your temporal database.\n"
+"Consider creating a backup of your temporal database to avoid losing data in case something goes wrong.\n"
+msgstr ""
+
+msgid "You need to export it by restoring the GRASS version used for creating this DB.Notes: Use t.rast.export and t.vect.export to make a backup of your existing space time datasets. To save the timestamps of your existing maps and space time datasets, use t.rast.list, t.vect.list and t.rast3d.list. You can register the existing time stamped maps easily if you export columns=id,start_time,end_time into text files and use t.register to register them again in new created space time datasets (t.create). After the backup remove the existing temporal database, a new one will be created automatically.\n"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to receive temporal database metadata.\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unsupported temporal database: version mismatch.\n"
+" %(backup)s Supported temporal API version is: %(api)i.\n"
+"Please update your GRASS installation.\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Temporal database version mismatch detected.\n"
+"{backup}Supported temporal database version is: {tdb}\n"
+"Your existing temporal database version: {ctdb}\n"
+"Current temporal database info: {info}"
+msgstr ""
+
+#, python-brace-format
+msgid "The format of your actual temporal database is not supported any more. {m}"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Creating topology schema <%s>..."
+msgid "Creating temporal database: %s"
+msgstr "टोपोलॉजी स्कीमा बनाया जा रहा है <%s>..।"
+
+#, python-format
+msgid ""
+"Unable to create SQLite temporal database\n"
+"Exception: %s\n"
+"Please use t.connect to set a read- and writable temporal database path"
+msgstr ""
+
+msgid "Temporal database is up-to-date. Operation canceled"
+msgstr ""
+
+#, python-format
+msgid "Unsupported TGIS DB upgrade scenario: from version %s to %s"
+msgstr ""
+
+#, python-format
+msgid "Upgrading temporal database <%s> from version %s to %s..."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to mogrify sql statement. {reason}"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Unable to create table <%s>"
+msgid "Unable to check table. {reason}"
+msgstr "तालिका <%s> बनाने में असमर्थ"
+
+#, fuzzy, python-brace-format
+#| msgid "Unable to create segment file"
+msgid "Unable to execute sql statement. {reason}"
+msgstr "खंड फ़ाइल बनाने में असमर्थ"
+
+#, fuzzy, python-brace-format
+#| msgid "Unable to set geo transform"
+msgid "Unable to fetch one. {reason}"
+msgstr "भौगोलिक परिवर्तन सेट करने में असमर्थ"
+
+#, fuzzy, python-brace-format
+#| msgid "Unable to flush all tiles"
+msgid "Unable to fetch all. {reason}"
+msgstr "सभी टाइल्स फ्लश करने में असमर्थ"
+
+#, fuzzy, python-brace-format
+#| msgid "Unable to set geo transform"
+msgid "Unable to execute transaction. {reason}"
+msgstr "भौगोलिक परिवर्तन सेट करने में असमर्थ"
+
+#, python-brace-format
+msgid "You have no permission to access mapset <{mapset}>, or mapset <{mapset}> has no temporal database. Accessible mapsets are: <{mapsets}>"
+msgstr ""
+
+#, python-format
+msgid ""
+"Unable to connect to %(db)s database: %(string)s\n"
+"Exception: \"%(ex)s\"\n"
+"Please use t.connect to set a read- and writable temporal database backend"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to execute command '%s': %s"
+msgid ""
+"Unable to execute :\n"
+" %(sql)s"
+msgstr "कमांड '%s' निष्पादित करने में असमर्थ: %s"
+
+#, fuzzy, python-format
+#| msgid "Unable to execute command '%s': %s"
+msgid ""
+"Unable to execute transaction:\n"
+" %(sql)s"
+msgstr "कमांड '%s' निष्पादित करने में असमर्थ: %s"
+
+#, python-format
+msgid "Wrong increment format: %s"
+msgstr ""
+
+msgid "Time string seems to specify relative time"
+msgstr ""
+
+#, fuzzy
+#| msgid "for this format/level not supported"
+msgid "Dates Before Christ (BC) are not supported"
+msgstr "इस प्रारूप/स्तर के लिए समर्थित नहीं है"
+
+#, fuzzy
+#| msgid "Parameter <%s> not supported"
+msgid "Time zones are not supported"
+msgstr "पैरामीटर <%s> समर्थित नहीं है"
+
+#, fuzzy, python-format
+#| msgid ""
+#| "Unable to parse map bounding box:\n"
+#| "%s"
+msgid "Unable to parse time string: %s"
+msgstr ""
+"मानचित्र बाउंडिंग बॉक्स को पार्स करने में असमर्थ:\n"
+"%s"
+
+msgid "You need to specify the base name of new created maps"
+msgstr ""
+
+#, python-brace-format
+msgid "Nothing found in the database for space time dataset <{name}> (type: {element_type}): {detail}"
+msgstr ""
+
+msgid "Dataset is empty or where clause is too constrained or incorrect"
+msgstr ""
+
+#, fuzzy
+#| msgid "Raster map <%s> is empty"
+msgid "Dataset is empty"
+msgstr "रेखापुंज मानचित्र <%s> खाली है"
+
+#, fuzzy, python-format
+#| msgid "Table <%s> already exists in database and will be overwritten"
+msgid "Map <%s> is already in temporal database, use overwrite flag to overwrite"
+msgstr "तालिका <%s> पहले से ही डेटाबेस में मौजूद है और इसे अधिलेखित कर दिया जाएगा"
+
+#, python-format
+msgid "Applying r.mapcalc expression: \"%s\""
+msgstr ""
+
+#, python-format
+msgid "Applying r3.mapcalc expression: \"%s\""
+msgstr ""
+
+#, python-format
+msgid "Applying v.extract where statement: \"%s\""
+msgstr ""
+
+#, fuzzy
+#| msgid "Error in cache"
+msgid "Error in computation process"
+msgstr "कैश में त्रुटि"
+
+#, fuzzy, python-format
+#| msgid "Unknown feature type %d"
+msgid "Unknown dataset type: %s"
+msgstr "अज्ञात सुविधा प्रकार %d"
+
+#, fuzzy, python-format
+#| msgid "Procedure not yet available for selected matrix type"
+msgid "Column '%s' is not available for the requested dataset type"
+msgstr "चयनित मैट्रिक्स प्रकार के लिए प्रक्रिया अभी तक उपलब्ध नहीं है"
+
+#, python-format
+msgid "Column '%s' is not available for the requested combination of dataset types"
+msgstr ""
+
+msgid "No valid database columns were requested"
+msgstr ""
+
+msgid "Empty map list"
+msgstr ""
+
+msgid "Empty entry in map list, this should not happen"
+msgstr ""
+
+msgid "Starting spatio-temporal sampling..."
+msgstr ""
+
+msgid "Starting temporal sampling..."
+msgstr ""
+
+msgid "No samples found for map calculation"
+msgstr ""
+
+msgid "Found more than a single map in a sample granule. Only the first map is used for computation. Use t.rast.aggregate.ds to create synchronous raster datasets."
+msgstr ""
+
+msgid "No maps registered in input dataset <{}>"
+msgstr ""
+
+msgid "Starting mapcalc computation..."
+msgstr ""
+
+#, python-format
+msgid "Apply mapcalc expression: \"%s\""
+msgstr ""
+
+msgid "Error while mapcalc computation"
+msgstr ""
+
+msgid "Starting map registration in temporal database..."
+msgstr ""
+
+msgid "Removing {}/{} ({}%) maps because empty..."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Invalid east field: %s"
+msgid "Invalid semantic_label <%s>"
+msgstr "अमान्य पूर्वी फ़ील्ड: %s"
+
+#, fuzzy, python-format
+#| msgid "Unknown key at line: %s"
+msgid "Unknown type: %s"
+msgstr "लाइन पर अज्ञात कुंजी: %s"
+
+#, python-format
+msgid "Space time dataset <%(name)s> of type <%(sp)s> not found"
+msgstr ""
+
+#, fuzzy
+#| msgid "Illegal vector map name <%s>. Character '%c' not allowed."
+msgid "Illegal dataset name <{}>. Character '.' not allowed."
+msgstr "अवैध वेक्टर मानचित्र नाम <%s>. अक्षर '%c' की अनुमति नहीं है।"
+
+#, fuzzy
+#| msgid "Temporary vector maps can be accessed only in the current mapset"
+msgid "Space time datasets can only be created in the current mapset"
+msgstr "अस्थायी वेक्टर मानचित्रों को केवल वर्तमान मैपसेट में ही एक्सेस किया जा सकता है"
+
+#, python-format
+msgid "Space time %(sp)s dataset <%(name)s> is already in the database. Use the overwrite flag."
+msgstr ""
+
+#, python-format
+msgid "Overwriting space time %(sp)s dataset <%(name)s> and unregistering all maps"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Name of the input space time dataset"
+msgid "Creating a new space time %s dataset"
+msgstr "इनपुट स्पेस टाइम डेटासेट का नाम"
+
+#, fuzzy
+#| msgid "Options %s are mutually exclusive"
+msgid "maps and file are mutually exclusive"
+msgstr "विकल्प %s परस्पर अनन्य हैं"
+
+#, fuzzy
+#| msgid "Options %s are mutually exclusive"
+msgid "end and increment are mutually exclusive"
+msgstr "विकल्प %s परस्पर अनन्य हैं"
+
+#, fuzzy
+#| msgid "Options %s are mutually exclusive"
+msgid "end and the interval flag are mutually exclusive"
+msgstr "विकल्प %s परस्पर अनन्य हैं"
+
+msgid "The increment option requires the start option"
+msgstr ""
+
+msgid "The interval flag requires the start option"
+msgstr ""
+
+msgid "Please specify start_time and end_time"
+msgstr ""
+
+msgid "Please specify maps or file"
+msgstr ""
+
+msgid "The dbif argument is deprecated and will be removed in a future release."
+msgstr ""
+
+#, python-brace-format
+msgid "Space time {sp} dataset <{name}> with relative time found, but no relative unit set for {sp} maps"
+msgstr ""
+
+msgid "The increment option will be ignored because of time stamps in input file"
+msgstr ""
+
+msgid "The interval flag will be ignored because of time stamps in input file"
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to update {t} map <{mid}>. The map does not exist."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to register {t} map <{mid}> with layer {l}. The map has no timestamp and the start time is not set."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to register {t} map <{mid}>. The map has no timestamp and the start time is not set."
+msgstr ""
+
+msgid "unit can only be set for relative time"
+msgstr ""
+
+msgid "unit must be set in case of relative time stamps"
+msgstr ""
+
+#, python-brace-format
+msgid "Map is already registered in temporal database. Unable to update {t} map <{mid}> with layer {l}. Overwrite flag is not set."
+msgstr ""
+
+#, python-brace-format
+msgid "Map is already registered in temporal database. Unable to update {t} map <{mid}>. Overwrite flag is not set."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to update {t} map <{mid}> with layer {l}. The temporal types are different."
+msgstr ""
+
+#, python-brace-format
+msgid "Unable to update {t} map <{mid}>. The temporal types are different."
+msgstr ""
+
+msgid "Unable to convert string \"{}\" into a datetime object"
+msgstr ""
+
+msgid "Error occurred in increment computation"
+msgstr ""
+
+#, python-brace-format
+msgid "Set absolute valid time for map <{id}> with layer {layer} to {start} - {end}"
+msgstr ""
+
+#, python-brace-format
+msgid "Set absolute valid time for map <{mid}> to {start_time} - {end_time}"
+msgstr ""
+
+#, python-brace-format
+msgid "Set relative valid time for map <{mid}> with layer {layer} to {start} - {end} with unit {unit}"
+msgstr ""
+
+#, python-brace-format
+msgid "Set relative valid time for map <{mid}> to {start} - {end} with unit {unit}"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Raster map <%s> not found in mapset <%s>"
+msgid "Dataset <%s> not found in temporal database"
+msgstr "रैस्टर मानचित्र <%s> मैपसेट <%s> में नहीं मिला"
+
+#, fuzzy, python-format
+#| msgid "Unable to create timestamp file for %s map <%s@%s>"
+msgid "Unable to read timestamp file for raster map <%s>"
+msgstr "%s मानचित्र <%s@%s> के लिए टाइमस्टैम्प फ़ाइल बनाने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to create timestamp file for %s map <%s@%s>"
+msgid "Unable to create timestamp file for raster map <%s>"
+msgstr "%s मानचित्र <%s@%s> के लिए टाइमस्टैम्प फ़ाइल बनाने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Invalid timestamp file for %s map <%s@%s>"
+msgid "Invalid datetime in timestamp for raster map <%s>"
+msgstr "%s मानचित्र <%s@%s> के लिए अमान्य टाइमस्टैम्प फ़ाइल"
+
+#, fuzzy
+#| msgid "Input format error"
+msgid "Internal error"
+msgstr "इनपुट प्रारूप त्रुटि"
+
+#, fuzzy, python-format
+#| msgid "Unable to create timestamp file for %s map <%s@%s>"
+msgid "Unable to remove timestamp for raster map <%s>"
+msgstr "%s मानचित्र <%s@%s> के लिए टाइमस्टैम्प फ़ाइल बनाने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to write quant rules for raster map <%s>"
+msgid "Unable to write semantic label for raster map <%s>"
+msgstr "रेखापुंज मानचित्र <%s> के लिए मात्रा नियम लिखने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to create timestamp file for %s map <%s@%s>"
+msgid "Unable to read timestamp file for 3D raster map <%s>"
+msgstr "%s मानचित्र <%s@%s> के लिए टाइमस्टैम्प फ़ाइल बनाने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to create timestamp file for %s map <%s@%s>"
+msgid "Unable to create timestamp file for 3D raster map <%s>"
+msgstr "%s मानचित्र <%s@%s> के लिए टाइमस्टैम्प फ़ाइल बनाने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to write history for 3D raster map <%s>"
+msgid "Invalid datetime in timestamp for 3D raster map <%s>"
+msgstr "3D रेखापुंज मानचित्र <%s> के लिए इतिहास लिखने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to write history for 3D raster map <%s>"
+msgid "Unable to remove timestamp for 3D raster map <%s>"
+msgstr "3D रेखापुंज मानचित्र <%s> के लिए इतिहास लिखने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to create timestamp file for vector map <%s@%s>"
+msgid "Unable to read timestamp file for vector map <%s>"
+msgstr "वेक्टर मानचित्र <%s@%s> के लिए टाइमस्टैम्प फ़ाइल बनाने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to create timestamp file for vector map <%s@%s>"
+msgid "Unable to create timestamp file for vector map <%s>"
+msgstr "वेक्टर मानचित्र <%s@%s> के लिए टाइमस्टैम्प फ़ाइल बनाने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Invalid timestamp file for vector map <%s@%s>"
+msgid "Invalid datetime in timestamp for vector map <%s>"
+msgstr "वेक्टर मानचित्र के लिए अमान्य टाइमस्टैम्प फ़ाइल <%s@%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to create timestamp file for vector map <%s@%s>"
+msgid "Unable to remove timestamp for vector map <%s>"
+msgstr "वेक्टर मानचित्र <%s@%s> के लिए टाइमस्टैम्प फ़ाइल बनाने में असमर्थ"
+
+msgid "Projections are different. Unable to compute overlapping_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute is_in_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute equivalent_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute cover_2d for spatial extents"
+msgstr ""
+
+msgid "Projections are different. Unable to compute cover for spatial extents"
+msgstr ""
+
+msgid "Volume computation is not supported for LL projections"
+msgstr ""
+
+#, fuzzy
+#| msgid "Opening multiple files not supported for %s="
+msgid "Area computation is not supported for LL projections"
+msgstr "%s= के लिए एकाधिक फ़ाइलें खोलना समर्थित नहीं है"
+
+#, fuzzy, python-format
+#| msgid "Unable to create 3D raster map <%s>"
+msgid "Unable to export raster map <%s>"
+msgstr "3D रेखापुंज मानचित्र बनाने में असमर्थ <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to read color file of raster map <%s>"
+msgid "Unable to export color rules for raster map <%s> r.out.gdal"
+msgstr "रेखापुंज मानचित्र की रंग फ़ाइल को पढ़ने में असमर्थ <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to create 3D raster map <%s>"
+msgid "Unable to export raster map <%s> with r.pack"
+msgstr "3D रेखापुंज मानचित्र बनाने में असमर्थ <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to copy vector map <%s> to <%s>"
+msgid "Unable to export vector map <%s> as GML with v.out.ogr"
+msgstr "वेक्टर मानचित्र <%s> से <%s> तक कॉपी करने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to copy vector map <%s> to <%s>"
+msgid "Unable to export vector map <%s> as GPKG with v.out.ogr"
+msgstr "वेक्टर मानचित्र <%s> से <%s> तक कॉपी करने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to create vector map <%s>"
+msgid "Unable to export vector map <%s> with v.pack"
+msgstr "वेक्टर मानचित्र बनाने में असमर्थ <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to create 3D raster map <%s>"
+msgid "Unable to export raster map <%s> with r3.pack"
+msgstr "3D रेखापुंज मानचित्र बनाने में असमर्थ <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to move temp raster map <%s> to 3D raster map <%s>"
+msgid "Unable to import/link raster map <%s> from file %s."
+msgstr "अस्थायी रेखापुंज मानचित्र <%s> को 3D रेखापुंज मानचित्र <%s> में ले जाने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to read quant rules for raster map <%s>"
+msgid "Unable to set the color rules for raster map <%s>."
+msgstr "रेखापुंज मानचित्र <%s> के लिए मात्रा नियम पढ़ने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to open 3D raster map <%s>"
+msgid "Unable to unpack raster map <%s> from file %s."
+msgstr "3D रेखापुंज मानचित्र खोलने में असमर्थ <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to open vector map <%s> on level %d"
+msgid "Unable to import vector map <%s> from file %s."
+msgstr "स्तर %d पर वेक्टर मानचित्र <%s> खोलने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to open vector map <%s> on level %d"
+msgid "Unable to unpack vector map <%s> from file %s."
+msgstr "स्तर %d पर वेक्टर मानचित्र <%s> खोलने में असमर्थ"
+
+msgid "Re-projection on import is currently not supported for space time vector datasets. Ignoring projection information."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Tile raster map <%s> not found"
+msgid "Space time raster dataset archive <%s> not found"
+msgstr "टाइल रेखापुंज मानचित्र <%s> नहीं मिला"
+
+#, fuzzy, python-format
+#| msgid "Vector map <%s> not found"
+msgid "Extraction directory <%s> not found"
+msgstr "वेक्टर मानचित्र <%s> नहीं मिला"
+
+#, python-format
+msgid "Checking validity of input file (size: %0.1f MB). Make take a while..."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to read input file <%s>"
+msgid "Unable to find init file <%s>"
+msgstr "इनपुट फ़ाइल <%s> पढ़ने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to find raster <%s>"
+msgid "Unable to find list file <%s>"
+msgstr "रैस्टर ढूंढने में असमर्थ <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to parse input file <%s>"
+msgid "Unable to find projection file <%s>"
+msgstr "इनपुट फ़ाइल <%s> को पार्स करने में असमर्थ"
+
+#, fuzzy
+#| msgid "Exporting areas..."
+msgid "Extracting data..."
+msgstr "निर्यात क्षेत्र..।"
+
+msgid "Extracting may be unsafe; upgrade Python to 3.11.4 or newer"
+msgstr ""
+
+msgid "Projection information does not match. Proceeding..."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"Difference between PROJ_INFO file of imported map and of current location:\n"
+"{diff}"
+msgstr ""
+
+msgid "Projection information does not match. Aborting."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid ""
+#| "Unable to read features. Reason:\n"
+#| "%s"
+msgid "Unable to create location %(l)s. Reason: %(e)s"
+msgstr ""
+"विशेषताएँ पढ़ने में असमर्थ. कारण:\n"
+"%s"
+
+#, fuzzy, python-format
+#| msgid "Unable to create index for table <%s>, key <%s>"
+msgid "Unable to create environment for location %s. Reason: %s"
+msgstr "तालिका <%s>, कुंजी <%s> के लिए अनुक्रमणिका बनाने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to create database definition file for vector map <%s>"
+msgid "Unable to create default temporal database in new location %s"
+msgstr "वेक्टर मानचित्र <%s> के लिए डेटाबेस परिभाषा फ़ाइल बनाने में असमर्थ"
+
+#, python-format
+msgid "Key words %(t)s, %(s)s or %(n)s not found in init file."
+msgstr ""
+
+msgid "Number of maps mismatch in init and list file."
+msgstr ""
+
+#, fuzzy
+#| msgid "The temporal type of the space time dataset"
+msgid "The archive file is of wrong space time dataset type"
+msgstr "स्पेस टाइम डेटासेट का अस्थायी प्रकार"
+
+#, fuzzy, python-format
+#| msgid "Unable to find raster <%s>"
+msgid "Unable to find GeoTIFF raster file <%s> in archive."
+msgstr "रैस्टर ढूंढने में असमर्थ <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to find raster <%s>"
+msgid "Unable to find AAIGrid raster file <%s> in archive."
+msgstr "रैस्टर ढूंढने में असमर्थ <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to find vector map <%s> in <%s>"
+msgid "Unable to find GML vector file <%s> in archive."
+msgstr "<%s> में वेक्टर मानचित्र <%s> ढूंढने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to find patch raster <%s>."
+msgid "Unable to find GRASS package file <%s> in archive."
+msgstr "पैच रैस्टर <%s> ढूंढने में असमर्थ।"
+
+#, fuzzy
+#| msgid "Unsupported icon %d"
+msgid "Unsupported input format"
+msgstr "असमर्थित आइकन %d"
+
+#, python-format
+msgid "Space time %(t)s dataset <%(sp)s> is already in the database. Use the overwrite flag."
+msgstr ""
+
+#, python-format
+msgid "Overwriting space time %(sp)s dataset <%(id)s> and unregister all maps."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Vector map <%s> not found in current mapset"
+msgid "Key word %s not found in init file."
+msgstr "वेक्टर मानचित्र <%s> वर्तमान मानचित्रसेट में नहीं मिला"
+
+#, fuzzy, python-format
+#| msgid "Name of the input space time dataset"
+msgid "Create space time %s dataset."
+msgstr "इनपुट स्पेस टाइम डेटासेट का नाम"
+
+msgid "Spatio-temporal topological operators are not supported in granularity algebra mode"
+msgstr ""
+
+msgid "All input space time datasets must have a valid temporal topology."
+msgstr ""
+
+msgid "All input space time datasets must have the same temporal type."
+msgstr ""
+
+#, python-format
+msgid "Removing un-needed or empty %s maps"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Raster map <%s> not found"
+msgid "Space time %s dataset <%s> not found"
+msgstr "रास्टर मानचित्र <%s> नहीं मिला"
+
+#, fuzzy, python-format
+#| msgid "The temporal type of the space time dataset"
+msgid "Wrong temporal type of space time dataset <%s> <%s> time is required"
+msgstr "स्पेस टाइम डेटासेट का अस्थायी प्रकार"
+
+#, python-brace-format
+msgid "Wrong type of input {input}"
+msgstr ""
+
+#, python-format
+msgid "The resulting space time dataset type <%(a)s> is different from the requested type <%(b)s>"
+msgstr ""
+
+msgid "Maps that should be registered in the resulting space time dataset have different types."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Raster map <%s> not found in mapset <%s>"
+msgid "%s map <%s> not found in GRASS spatial database"
+msgstr "रैस्टर मानचित्र <%s> मैपसेट <%s> में नहीं मिला"
+
+msgid "Wrong map type. TMAP only supports single maps that are registered in the temporal GRASS database"
+msgstr ""
+
+msgid "Merging empty map lists"
+msgstr ""
+
+msgid "First Map list is empty, can't merge it. Return only last map list"
+msgstr ""
+
+msgid "Second Map list is empty, can't merge it. Return only first map list"
+msgstr ""
+
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr ""
+
+#, python-brace-format
+msgid "Output granularity seems not to be valid. Please use one of the following values : {gr}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid south latitude %g"
+msgid "Invalid absolute granularity"
+msgstr "अमान्य दक्षिणी अक्षांश %g"
+
+msgid "Probably you need to invert 'from_gran' and 'to_gran'"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Error opening g3d map <%s>"
+msgid "Error computing map <%s>"
+msgstr "G3D मानचित्र खोलने में त्रुटि <%s>"
+
+#, python-format
+msgid "Error vector maps with basename %s exist. Use --o flag to overwrite existing file"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Error writing file <%s>: %s"
+msgid ""
+"Error starting %s : \n"
+"%s"
+msgstr "Error writing file <%s>: %s"
+
+#, python-format
+msgid ""
+"Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
+"%s"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to read quant rules for raster map <%s>"
+msgid "Unable to get statistics for raster map <%s>"
+msgstr "रेखापुंज मानचित्र <%s> के लिए मात्रा नियम पढ़ने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to write history for 3D raster map <%s>"
+msgid "Unable to get statistics for 3d raster map <%s>"
+msgstr "3D रेखापुंज मानचित्र <%s> के लिए इतिहास लिखने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to parse input file <%s>"
+msgid "Unable to parse JSON output for map <%s>"
+msgstr "इनपुट फ़ाइल <%s> को पार्स करने में असमर्थ"
+
+#, python-brace-format
+msgid "No maps found to process. Space time {type} dataset <{id}> is either empty or the where condition (if used) does not return any maps or no maps with the requested spatial relation to the computational region exist in the dataset."
+msgstr ""
+
+#, python-format
+msgid "Space time %(sp)s dataset <%(i)s> not found"
+msgstr ""
+
+#, python-format
+msgid "Space time %(sp)s dataset <%(i)s> is empty"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to open history file for vector map <%s>"
+msgid "Unable to get statistics for vector map <%s>"
+msgstr "वेक्टर मानचित्र <%s> के लिए इतिहास फ़ाइल खोलने में असमर्थ"
+
+#, python-brace-format
+msgid "Archive file is unreadable: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Archive file is incomplete: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "ZIP file is unreadable: {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "Unsupported URL <{url}>. Supported are only URLs with the following schemes: {schemes}."
+msgstr ""
+
+#, python-brace-format
+msgid "Download file from <{url}>, return status code {code}, {desc}"
+msgstr ""
+
+#, python-brace-format
+msgid "Download file from <{url}>, failed. Check internet connection."
+msgstr ""
+
+#, python-brace-format
+msgid "Download of <{url}> failed or file <{name}> is not a ZIP file"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unknown format"
+msgid "Unknown format '{}'."
+msgstr "अज्ञात स्वरूप"
 
 #~ msgid "Please install the GRASS development package"
 #~ msgstr "कृपया GRASS डेवलपमेंट पैकेज स्थापित करें"
