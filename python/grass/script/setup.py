@@ -137,12 +137,27 @@ def get_install_path(path: str | Path | None = None) -> str:
     If an existing executable is called as a subprocess is called during the search
     and it fails, the CalledProcessError exception is propagated from the subprocess
     call.
+
+    The executable is not queried when this function itself runs in a process
+    started by such a query. The *grass* command calls this function when the
+    installation path it was compiled with does not exist, so without this rule
+    the command and this function would keep starting each other.
     """
+    # Set in the environment of the queried executable to mark the process
+    # which answers the query (see the docstring).
+    query_variable = "GRASS_INSTALL_PATH_QUERY"
+    can_query_executable = query_variable not in os.environ
 
     def ask_executable(arg):
         """Query the GRASS executable for the path"""
+        env = os.environ.copy()
+        env[query_variable] = "1"
         return subprocess.run(
-            [arg, "--config", "path"], text=True, check=True, capture_output=True
+            [arg, "--config", "path"],
+            text=True,
+            check=True,
+            capture_output=True,
+            env=env,
         ).stdout.strip()
 
     # Directory was provided as a parameter.
@@ -150,7 +165,7 @@ def get_install_path(path: str | Path | None = None) -> str:
         return os.fspath(path)
 
     # Executable was provided as parameter.
-    if path and shutil.which(path):
+    if path and can_query_executable and shutil.which(path):
         # The path was provided by the user and it is an executable
         # (on path or provided with full path), so raise exception on failure.
         path_from_executable = ask_executable(path)
@@ -166,7 +181,7 @@ def get_install_path(path: str | Path | None = None) -> str:
     # The variable is supported (here), documented, but not widely promoted
     # at this point (to be re-evaluated).
     grass_bin = os.environ.get("GRASSBIN")
-    if grass_bin and shutil.which(grass_bin):
+    if grass_bin and can_query_executable and shutil.which(grass_bin):
         path_from_executable = ask_executable(grass_bin)
         if Path(path_from_executable).is_dir():
             return path_from_executable
@@ -187,7 +202,7 @@ def get_install_path(path: str | Path | None = None) -> str:
     # with multiple installations (where an explicit setup is likely required).
     # However, it allows for non-standard installations with standard command.
     grass_bin = "grass"
-    if grass_bin and shutil.which(grass_bin):
+    if can_query_executable and shutil.which(grass_bin):
         path_from_executable = ask_executable(grass_bin)
         if Path(path_from_executable).is_dir():
             return path_from_executable
