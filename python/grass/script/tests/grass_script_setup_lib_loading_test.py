@@ -4,10 +4,12 @@
 """Tests of using grass.lib in a session set up by grass.script.setup.init
 
 This file is meant to be executed also standalone (pytest with this file as
-the only argument). The tests run their code in a subprocess without the
-dynamic library search path variable, so the libraries which a loaded
-library depends on must resolve without it, for example, through the search
-path recorded in the libraries at build time.
+the only argument), including against an installation moved away from the
+prefix it was configured with. The tests run their code in a subprocess
+without the dynamic library search path variable, so the libraries which a
+loaded library depends on must resolve without it, for example, through the
+search path recorded in the libraries at build time or through the loading
+done on the grass.lib import.
 """
 
 import sys
