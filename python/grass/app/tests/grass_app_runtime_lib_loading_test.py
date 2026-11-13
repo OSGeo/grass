@@ -5,9 +5,9 @@
 
 The loading done by the grass.lib package on import is tested here through
 its private functions because grass.lib is generated and has no tests
-directory of its own. Like the other tests, these run in a subprocess:
-importing grass.lib loads the GRASS C libraries, which would otherwise stay
-loaded in the test process.
+directory of its own. Like the other tests, the test of the loading runs in
+a subprocess because importing grass.lib loads the GRASS C libraries, which
+would otherwise stay loaded in the test process.
 
 This file is meant to be executed also standalone (pytest with this file as
 the only argument), including against an installation moved away from the
