@@ -429,7 +429,7 @@ def get_tgis_db_version_from_metadata(metadata=None):
 ###############################################################################
 
 
-def get_tgis_metadata(dbif=None):
+def get_tgis_metadata(dbif=None, mapset: str | None = None):
     """Return the tgis metadata table as a list of rows (dicts) or None if not
     present
 
@@ -442,8 +442,8 @@ def get_tgis_metadata(dbif=None):
     # Select metadata if the table is present
     try:
         statement = "SELECT * FROM tgis_metadata;\n"
-        dbif.execute(statement)
-        rows = dbif.fetchall()
+        dbif.execute(statement, mapset=mapset)
+        rows = dbif.fetchall(mapset=mapset)
     except Exception:
         rows = None
 
