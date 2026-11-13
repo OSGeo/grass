@@ -137,9 +137,11 @@ foreach(module ${MODULES})
     install(FILES ${output_file} DESTINATION ${GRASS_INSTALL_PYDIR}/grass/lib)
 endforeach()
 
-file(
-    COPY_FILE libgrass__init__.py
+list(GET gis_LIBS 0 GRASS_CORE_LIBRARY_NAME)
+configure_file(
+    libgrass__init__.py
     ${OUTDIR}/${GRASS_INSTALL_PYDIR}/grass/lib/__init__.py
+    @ONLY
 )
 install(
     FILES ${OUTDIR}/${GRASS_INSTALL_PYDIR}/grass/lib/__init__.py
