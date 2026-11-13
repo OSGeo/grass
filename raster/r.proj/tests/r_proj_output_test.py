@@ -1,4 +1,7 @@
-"""Pytest for r.proj output flags, with two list tests and two print tests."""
+# SPDX-License-Identifier: GPL-2.0-or-later
+"""Tests for r.proj output flags."""
+
+import math
 
 import pytest
 
@@ -6,6 +9,7 @@ from grass.tools import Tools
 
 SRC_PROJECT = "src4326"
 INPUT_MID = "input_mid"
+INPUT_POLAR = "input_polar"
 
 
 def test_list_plain(session_3857):
@@ -60,3 +64,27 @@ def test_print_json(session_3857):
     assert bounds["south"] == pytest.approx(4865942.279503176)
     assert bounds["west"] == pytest.approx(-11131949.079327356)
     assert bounds["east"] == pytest.approx(-11020629.588534083)
+
+
+# Bounds reflect r.proj's sampled edge points, not the exact geographic extent.
+# Verified independently with cs2cs; finer sampling may change these values.
+def test_print_json_polar(session_3413):
+    """r.proj -p prints bounds found along the edges for a polar CRS."""
+    tools = Tools(session=session_3413)
+    result = tools.r_proj(
+        project=SRC_PROJECT,
+        mapset="PERMANENT",
+        input=INPUT_POLAR,
+        flags="p",
+        format="json",
+    )
+    bounds = result.json
+    assert bounds["cols"] == 50
+    assert bounds["rows"] == 50
+    assert all(math.isfinite(bounds[key]) for key in ("north", "south", "east", "west"))
+    assert bounds["north"] > bounds["south"]
+    assert bounds["east"] > bounds["west"]
+    assert bounds["north"] == pytest.approx(4508772.99950119)
+    assert bounds["south"] == pytest.approx(-4508772.99950119)
+    assert bounds["east"] == pytest.approx(4508772.99950119)
+    assert bounds["west"] == pytest.approx(-4508772.99950119)
