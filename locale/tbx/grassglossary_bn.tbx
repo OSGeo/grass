@@ -368,7 +368,15 @@ Not to be confused with the aspect of a map projection, nor with the slope (grad
 &#13;
 https://en.wikipedia.org/wiki/Aspect_(geography)</descrip>
                 <langSet xml:lang="en"><tig><term>aspect</term></tig></langSet>
-                <langSet xml:lang="bn"><note from="translator">domain: terrain analysis, raster</note><tig><term></term></tig></langSet>
+                <langSet xml:lang="bn"><note from="translator">domain: terrain analysis, raster</note><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>temporal database</term></tig></langSet>
+                <langSet xml:lang="bn"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>lock file</term></tig></langSet>
+                <langSet xml:lang="bn"><tig><term></term></tig></langSet>
             </termEntry>
         </body>
     </text>

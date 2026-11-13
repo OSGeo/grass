@@ -9,6 +9,16 @@ on:
       - main
       - releasebranch_*
   pull_request:
+    paths-ignore:
+      - .pre-commit-config.yaml
+      - renovate.json5
+      - flake.lock
+      - flake.nix
+      - package.nix
+      - Dockerfile
+      - docker/**
+      - .github/workflows/python-code-quality.yml
+      - .github/workflows/additional_checks.yml
   workflow_dispatch:
 
 permissions: {}
@@ -102,7 +112,7 @@ jobs:
           pip install -r grass/.github/workflows/python_requirements.txt
           pip install -r grass-addons/.github/workflows/requirements.txt
 
-      - uses: rui314/setup-mold@7e4f20ad28a2e8ca6fd0892ccf72e2abb706b9c3 # v1
+      - uses: rui314/setup-mold@339e96b4ff1f3bd865856ba4cbbe8818a7acb038 # v1
         if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
 
       - name: Create installation directory

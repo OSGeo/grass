@@ -93,7 +93,7 @@ endif
 
 $(PY_COPY_FILES): | $(DSTDIR)
 $(DSTDIR)/__init__.py: libgrass__init__.py
-	$(INSTALL_DATA) $< $@
+	sed 's/@GRASS_CORE_LIBRARY_NAME@/$(GIS_LIBNAME)/' $< > $@
 $(DSTDIR)/ctypes_loader.py: $(OBJDIR)/ctypes_loader.py
 	$(INSTALL_DATA) $< $@
 $(DSTDIR)/ctypes_preamble.py: $(OBJDIR)/ctypes_preamble.py
