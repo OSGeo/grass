@@ -314,8 +314,8 @@ def init(
     call of this function but any module or user script can be called
     afterwards because a GRASS session has been set up. GRASS Python
     libraries are usable as well, including the ones using C libraries
-    through ``ctypes`` (:mod:`grass.lib`). Importing :mod:`grass.lib`
-    depends on this function, and so does using it: the C libraries read
+    through ``ctypes`` (:mod:`grass.lib`). Importing :mod:`grass.lib` does
+    not depend on this function, but using it does: the C libraries read
     the session from the environment of the process, so :mod:`grass.lib`
     sees the session only when it is set up in the global environment,
     i.e., without *env*. The import works for an installation at the
