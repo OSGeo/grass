@@ -38,6 +38,9 @@
  *        -1 -- Compression failed.                                 *
  *        -2 -- dst is too small.                                   *
  *                                                                  *
+ * A dst smaller than the compression bound gives a warning, but    *
+ * the call succeeds when the compressed data fit into dst.         *
+ *                                                                  *
  * ================================================================ *
  * int                                                              *
  * G_zstd_expand (src, src_sz, dst, dst_sz)                         *
@@ -169,6 +172,10 @@ int G_zstd_compress(unsigned char *src, int src_sz, unsigned char *dst,
     nbytes = err;
 
     if (buf != dst) {
+        if (nbytes > dst_sz) {
+            G_free(buf);
+            return -2;
+        }
         /* Copy the data from buf to dst */
         for (err = 0; err < nbytes; err++)
             dst[err] = buf[err];

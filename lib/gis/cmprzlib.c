@@ -37,6 +37,9 @@
  *        -1 -- Compression failed.                                 *
  *        -2 -- dst is too small.                                   *
  *                                                                  *
+ * A dst smaller than the compression bound gives a warning, but    *
+ * the call succeeds when the compressed data fit into dst.         *
+ *                                                                  *
  * ================================================================ *
  * int                                                              *
  * G_zlib_expand (src, src_sz, dst, dst_sz)                         *
@@ -159,6 +162,10 @@ int G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
     }
 
     if (buf != dst) {
+        if (nbytes > (uLong)dst_sz) {
+            G_free(buf);
+            return -2;
+        }
         /* Copy the data from buf to dst */
         for (i = 0; i < nbytes; i++)
             dst[i] = buf[i];
