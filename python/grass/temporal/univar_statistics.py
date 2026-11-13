@@ -318,6 +318,7 @@ def print_vector_dataset_univar_statistics(
     extended,
     no_header: bool = False,
     fs: str = "|",
+    format: str = "plain",
 ) -> None:
     """Print univariate statistics for a space time vector dataset
 
@@ -332,6 +333,7 @@ def print_vector_dataset_univar_statistics(
     :param extended: If True compute extended statistics
     :param no_header: Suppress the printing of column names
     :param fs: Field separator
+    :param format: Output format ("plain", "csv", or "json"). Default is "plain".
     """
 
     # We need a database interface
@@ -368,7 +370,7 @@ def print_vector_dataset_univar_statistics(
         )
 
     string = ""
-    if no_header is False:
+    if no_header is False and format != "json":
         string += (
             "id"
             + fs
@@ -422,20 +424,25 @@ def print_vector_dataset_univar_statistics(
         else:
             out_file.write(string + "\n")
 
+    json_records = []
+
     for row in rows:
         id = row["name"] + "@" + row["mapset"]
         start = row["start_time"]
         end = row["end_time"]
         mylayer = row["layer"]
 
-        flags = "g"
-
-        if extended is True:
-            flags += "e"
-
         if not mylayer:
             mylayer = layer
 
+        # JSON output comes from the JSON of v.univar. The plain and CSV
+        # output keep using its shell format, as t.rast.univar does, because
+        # the JSON leaves out NaN and infinite values and writes whole floats
+        # as integers.
+        if format == "json":
+            univar_options = {"flags": "e" if extended else "", "format": "json"}
+        else:
+            univar_options = {"flags": "ge" if extended else "g"}
         stats = gs.parse_command(
             "v.univar",
             map=id,
@@ -443,14 +450,24 @@ def print_vector_dataset_univar_statistics(
             column=column,
             layer=mylayer,
             type=type,
-            flags=flags,
+            **univar_options,
         )
-
-        string = ""
 
         if not stats:
             gs.warning(_("Unable to get statistics for vector map <%s>") % id)
             continue
+
+        if format == "json":
+            record = {
+                "id": id,
+                "start": str(start) if start else None,
+                "end": str(end) if end else None,
+            }
+            record.update(stats)
+            json_records.append(record)
+            continue
+
+        string = ""
 
         string += str(id) + fs + str(start) + fs + str(end)
         string += (
@@ -517,6 +534,13 @@ def print_vector_dataset_univar_statistics(
             print(string)
         else:
             out_file.write(string + "\n")
+
+    if format == "json":
+        output_str = json.dumps(json_records, indent=4)
+        if output is None:
+            print(output_str)
+        else:
+            out_file.write(output_str + "\n")
 
     dbif.close()
 
