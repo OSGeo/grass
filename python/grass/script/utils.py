@@ -671,7 +671,7 @@ def legalize_vector_name(name, fallback_prefix: str | None = "x") -> str:
         name = "{fallback_prefix}{name}".format(**locals())
     name = re.sub(r"[^A-Za-z0-9_]", "_", name, flags=re.ASCII)
     keywords = ["and", "or", "not"]
-    if name in keywords:
+    if name.lower() in keywords:
         name = "{name}_".format(**locals())
     return name
 
