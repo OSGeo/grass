@@ -32,6 +32,7 @@ In Python, use:
 
 ```python
 import grass.script as gs
+
 gs.parse_command("r.mask.status", format="json")
 ```
 

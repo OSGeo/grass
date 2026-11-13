@@ -247,7 +247,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.printopt = PrintOptions(self, self.MapWindow)
 
         #
-        # Re-use dialogs
+        # Reuse dialogs
         #
         self.dialogs = {}
         self.dialogs["attributes"] = None
@@ -537,7 +537,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def Disable3dMode(self):
         """Disables 3D mode (NVIZ) in user interface."""
-        # TODO: this is broken since item is removed but switch is drived by
+        # TODO: this is broken since item is removed but switch is driven by
         # index
         if "3D" in self.toolbars["map"].combo.GetString(1):
             self.toolbars["map"].combo.Delete(1)

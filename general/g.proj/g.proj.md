@@ -41,18 +41,18 @@ given for *description*, the PROJ description will be read from stdin
 rather than as a directly-supplied command-line parameter.
 
 epsg=*number*  
-*number* should correspond to the index number of a valid co-ordinate
+*number* should correspond to the index number of a valid coordinate
 system in the [EPSG database](https://epsg.org/search/by-name). EPSG
-code support is based upon a local copy of the GDAL CSV co-ordinate
+code support is based upon a local copy of the GDAL CSV coordinate
 system and datum information files, stored in the directory
 `$GISBASE/etc/proj/ogr_csv`. These can be updated if necessary to
 support future revisions of the EPSG database.
 
-If datum information is incorrect or missing in the input co-ordinate
+If datum information is incorrect or missing in the input coordinate
 system definition (e.g. PROJ descriptions have very limited support for
 specifying datum names), a GRASS datum abbreviation can instead be
 supplied using the *datum* parameter. This will override any datum
-contained in the input co-ordinate system, and discard any datum
+contained in the input coordinate system, and discard any datum
 transformation parameters. Enter datum=*list* to return a list of all
 the datums supported by GRASS. Since any existing datum transformation
 parameters will have been discarded, the *datumtrans* parameter should
@@ -72,12 +72,12 @@ be overwritten. The program will **not** warn before doing this.
 
 The final mode of operation of *g.proj* is to report on the datum
 information and datum transformation parameters associated with the
-co-ordinate system. The **-d** flag will report a human-readable summary
+coordinate system. The **-d** flag will report a human-readable summary
 of this.
 
 ## NOTES
 
-If the input co-ordinate system contains a datum name but no
+If the input coordinate system contains a datum name but no
 transformation parameters, and there is more than one suitable parameter
 set available (according to the files datum.table and
 datumtransform.table in `$GISBASE/etc/proj`), *g.proj* will check the
@@ -90,16 +90,16 @@ value of the *datumtrans* option and act according to the following:
   non-optimum) parameters for this datum if necessary in the future.
 - **Any other number less than or equal to the number of parameter sets
   available for this datum:** Choose this parameter set and add it to
-  the co-ordinate system description.
+  the coordinate system description.
 
 If the **-t** flag is specified, the module will attempt to change the
 datum transformation parameters using one of the above two methods
 **even if** a valid parameter set is already specified in the input
-co-ordinate system. This can be useful to change the datum information
+coordinate system. This can be useful to change the datum information
 for an existing project.
 
 Output is simply based on the input CRS information. g.proj does **not**
-attempt to verify that the co-ordinate system thus described matches a
+attempt to verify that the coordinate system thus described matches a
 pre-defined existing system in use in the world. In particular, this
 means there may be no authority names and codes in the WKT output.
 

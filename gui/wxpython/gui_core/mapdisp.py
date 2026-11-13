@@ -156,6 +156,7 @@ class MapPanelBase(wx.Panel):
 
         # update statusbar
         self.StatusbarUpdate()
+        event.Skip()
 
     def OnCloseWindow(self, event):
         self.Destroy()

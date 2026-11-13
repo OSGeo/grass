@@ -225,9 +225,9 @@ def bboxesIntersect(bbox_1, bbox_2) -> bool:
     cin = [False, False]
     for i in (0, 1):
         if (
-            (bi_a1[i] <= bi_b1[i] and bi_a2[i] >= bi_b1[i])
+            (bi_a1[i] <= bi_b1[i] <= bi_a2[i])
             or (bi_a1[i] <= bi_b1[i] and bi_a2[i] >= bi_b2[i])
-            or (bi_b1[i] <= bi_a1[i] and bi_b2[i] >= bi_a1[i])
+            or (bi_b1[i] <= bi_a1[i] <= bi_b2[i])
             or (bi_b1[i] <= bi_a1[i] and bi_b2[i] >= bi_a2[i])
         ):
             cin[i] = True

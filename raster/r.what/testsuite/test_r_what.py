@@ -19,7 +19,7 @@ class TestRasterWhat(TestCase):
     map2 = "landuse96_28m,aspect"
     coordinates = (633614.08, 224125.12, 632972.36, 225382.87)
     points = "comm_colleges"
-    refrence_points = """145096.8591495|154534.264883875||39
+    reference_points = """145096.8591495|154534.264883875||39
 616341.4371495|146049.750883875||51
 410595.7191495|174301.828883875||71
 734153.6871495|169168.437883875||107
@@ -78,10 +78,10 @@ class TestRasterWhat(TestCase):
 511235.1561495|135372.358883875||7
 332533.5941495|242831.139883875||121
 """
-    refrence_coordinates = """633614.08|224125.12||2|209.5939
+    reference_coordinates = """633614.08|224125.12||2|209.5939
 632972.36|225382.87||15|140.7571
 """
-    refrence_cats = """1|145096.8591495|154534.264883875||39
+    reference_cats = """1|145096.8591495|154534.264883875||39
 2|616341.4371495|146049.750883875||51
 3|410595.7191495|174301.828883875||71
 4|734153.6871495|169168.437883875||107
@@ -140,7 +140,7 @@ class TestRasterWhat(TestCase):
 57|511235.1561495|135372.358883875||7
 58|332533.5941495|242831.139883875||121
 """
-    refrence_csv = """easting,northing,site_name,boundary_county_500m
+    reference_csv = """easting,northing,site_name,boundary_county_500m
 145096.8591495,154534.264883875,,39
 616341.4371495,146049.750883875,,51
 410595.7191495,174301.828883875,,71
@@ -200,7 +200,7 @@ class TestRasterWhat(TestCase):
 511235.1561495,135372.358883875,,7
 332533.5941495,242831.139883875,,121"""
 
-    refrence_flag_i = """145096.8591495|154534.264883875||39
+    reference_flag_i = """145096.8591495|154534.264883875||39
 616341.4371495|146049.750883875||51
 410595.7191495|174301.828883875||71
 734153.6871495|169168.437883875||107
@@ -259,7 +259,7 @@ class TestRasterWhat(TestCase):
 511235.1561495|135372.358883875||7
 332533.5941495|242831.139883875||121
 """
-    refrence_flag_f = """145096.8591495|154534.264883875||39|
+    reference_flag_f = """145096.8591495|154534.264883875||39|
 616341.4371495|146049.750883875||51|
 410595.7191495|174301.828883875||71|
 734153.6871495|169168.437883875||107|
@@ -318,7 +318,7 @@ class TestRasterWhat(TestCase):
 511235.1561495|135372.358883875||7|
 332533.5941495|242831.139883875||121|
 """
-    refrence_flag_r = """145096.8591495|154534.264883875||39|006:255:000
+    reference_flag_r = """145096.8591495|154534.264883875||39|006:255:000
 616341.4371495|146049.750883875||51|000:255:071
 410595.7191495|174301.828883875||71|000:255:199
 734153.6871495|169168.437883875||107|000:080:255
@@ -377,7 +377,7 @@ class TestRasterWhat(TestCase):
 511235.1561495|135372.358883875||7|211:255:000
 332533.5941495|242831.139883875||121|010:000:255
 """
-    refrence_cache = """145096.8591495|154534.264883875||39
+    reference_cache = """145096.8591495|154534.264883875||39
 616341.4371495|146049.750883875||51
 410595.7191495|174301.828883875||71
 734153.6871495|169168.437883875||107
@@ -472,7 +472,7 @@ class TestRasterWhat(TestCase):
         module.run()
         self.assertLooksLike(
             actual=str(module.outputs.stdout),
-            reference=self.refrence_points,
+            reference=self.reference_points,
             msg="test_raster_what_points did't run successfully",
         )
 
@@ -482,7 +482,7 @@ class TestRasterWhat(TestCase):
         module.run()
         self.assertLooksLike(
             actual=str(module.outputs.stdout),
-            reference=self.refrence_coordinates,
+            reference=self.reference_coordinates,
             msg="test_raster_what_coordinates did't run successfully",
         )
 
@@ -492,7 +492,7 @@ class TestRasterWhat(TestCase):
         module.run()
         self.assertLooksLike(
             actual=str(module.outputs.stdout),
-            reference=self.refrence_cats,
+            reference=self.reference_cats,
             msg="test_raster_what_cats did't run successfully",
         )
 
@@ -511,7 +511,7 @@ class TestRasterWhat(TestCase):
             fileData = result_path.read_text()
             self.assertLooksLike(
                 actual=fileData,
-                reference=self.refrence_csv,
+                reference=self.reference_csv,
                 msg="test_raster_what_csv did't run successfully",
             )
 
@@ -521,7 +521,7 @@ class TestRasterWhat(TestCase):
         module.run()
         self.assertLooksLike(
             actual=str(module.outputs.stdout),
-            reference=self.refrence_flag_i,
+            reference=self.reference_flag_i,
             msg="test_raster_what_cats did't run successfully",
         )
 
@@ -531,7 +531,7 @@ class TestRasterWhat(TestCase):
         module.run()
         self.assertLooksLike(
             actual=str(module.outputs.stdout),
-            reference=self.refrence_flag_f,
+            reference=self.reference_flag_f,
             msg="test_raster_what_cats did't run successfully",
         )
 
@@ -541,7 +541,7 @@ class TestRasterWhat(TestCase):
         module.run()
         self.assertLooksLike(
             actual=str(module.outputs.stdout),
-            reference=self.refrence_flag_r,
+            reference=self.reference_flag_r,
             msg="test_raster_what_cats did't run successfully",
         )
 
@@ -553,13 +553,13 @@ class TestRasterWhat(TestCase):
         module.run()
         self.assertLooksLike(
             actual=str(module.outputs.stdout),
-            reference=self.refrence_cache,
+            reference=self.reference_cache,
             msg="test_raster_what_cats did't run successfully",
         )
 
     def test_raster_what_json(self):
         """Testing r.what runs successfully with input coordinates given as a vector points map and JSON output"""
-        reference = self.convert_plain_to_json(self.refrence_points)
+        reference = self.convert_plain_to_json(self.reference_points)
         module = SimpleModule(
             "r.what", map=self.map1, points=self.points, format="json"
         )
@@ -572,7 +572,7 @@ class TestRasterWhat(TestCase):
 
     def test_raster_what_points_flag_r_json(self):
         """Testing r.what runs successfully with flag r and json output"""
-        reference = self.convert_plain_to_json(self.refrence_flag_r)
+        reference = self.convert_plain_to_json(self.reference_flag_r)
         module = SimpleModule(
             "r.what", map=self.map1, points=self.points, flags="r", format="json"
         )

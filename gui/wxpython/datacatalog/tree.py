@@ -377,7 +377,6 @@ class DataCatalogTree(TreeView):
         super().__init__(parent=parent, model=self._model, id=wx.ID_ANY, style=style)
 
         self._giface = giface
-        self._restricted = False
         self.tools = Tools()
 
         self.showNotification = Signal("Tree.showNotification")
@@ -1342,9 +1341,6 @@ class DataCatalogTree(TreeView):
             self.Select(self.current_mapset_node, select=True)
             self.ExpandNode(self.current_mapset_node, recursive=recursive)
 
-    def SetRestriction(self, restrict):
-        self._restricted = restrict
-
     def _runCommand(self, prog, **kwargs):
         cmdString = " ".join(gs.make_command(prog, **kwargs))
         ret = RunCommand(prog, parent=self, **kwargs)
@@ -1546,7 +1542,7 @@ class DataCatalogTree(TreeView):
 
         # Check selected mapset
         if node.data["type"] == "mapset":
-            if self._restricted or get_reason_mapset_not_removable(
+            if get_reason_mapset_not_removable(
                 self.selected_grassdb[0].data["name"],
                 self.selected_location[0].data["name"],
                 self.selected_mapset[0].data["name"],
@@ -1555,14 +1551,10 @@ class DataCatalogTree(TreeView):
                 event.Veto()
         # Check selected location
         elif node.data["type"] == "location":
-            if self._restricted or get_reasons_location_not_removable(
+            if get_reasons_location_not_removable(
                 self.selected_grassdb[0].data["name"],
                 self.selected_location[0].data["name"],
             ):
-                event.Veto()
-        elif node.data["type"] in {"raster", "raster_3d", "vector"}:
-            currentGrassDb, currentLocation, currentMapset = self._isCurrent(gisenv())
-            if not currentMapset:
                 event.Veto()
 
     def OnEditLabel(self, node, event):
@@ -1804,6 +1796,7 @@ class DataCatalogTree(TreeView):
                         continue
 
                 def callback(
+                    env2=env2,
                     gisrc2=gisrc2,
                     gisrc=gisrc,
                     cLayer=self.copy_layer[i],
@@ -2244,10 +2237,7 @@ class DataCatalogTree(TreeView):
     def OnBeginDrag(self, node, event):
         """Just copy necessary data"""
         self.DefineItems(self.GetSelected())
-        if None not in self.selected_layer and not (
-            self._restricted
-            and gisenv()["LOCATION_NAME"] != self.selected_location[0].data["name"]
-        ):
+        if None not in self.selected_layer:
             event.Allow()
             self.OnCopyMap(event)
             Debug.msg(1, "DRAG")
@@ -2260,20 +2250,6 @@ class DataCatalogTree(TreeView):
         if node:
             self.DefineItems([node])
             if None not in self.selected_mapset:
-                if (
-                    self._restricted
-                    and gisenv()["MAPSET"] != self.selected_mapset[0].data["name"]
-                ):
-                    GMessage(
-                        _(
-                            "To move or copy maps to other mapsets, unlock editing of "
-                            "other mapsets"
-                        ),
-                        parent=self,
-                    )
-                    event.Veto()
-                    return
-
                 event.Allow()
                 Debug.msg(1, "DROP DONE")
                 self.OnPasteMap(event)
@@ -2287,7 +2263,6 @@ class DataCatalogTree(TreeView):
                     parent=self,
                 )
                 event.Veto()
-                return
 
     def SwitchMapset(self, grassdb, location, mapset, show_confirmation=False):
         """
@@ -2860,33 +2835,10 @@ class DataCatalogTree(TreeView):
 
     def _confirmDialog(self, question, title):
         """Confirm dialog"""
-        dlg = wx.MessageDialog(self, question, title, wx.YES_NO)
+        dlg = wx.MessageDialog(self, question, title, wx.YES_NO | wx.NO_DEFAULT)
         res = dlg.ShowModal()
         dlg.Destroy()
         return res
-
-    def _isCurrent(self, genv):
-        if self._restricted:
-            currentMapset = currentLocation = currentGrassDb = True
-            for i in range(len(self.selected_grassdb)):
-                if self.selected_grassdb[i].data["name"] != genv["GISDBASE"]:
-                    currentGrassDb = False
-                    currentLocation = False
-                    currentMapset = False
-                    break
-            if currentLocation and self.selected_location[0]:
-                for i in range(len(self.selected_location)):
-                    if self.selected_location[i].data["name"] != genv["LOCATION_NAME"]:
-                        currentLocation = False
-                        currentMapset = False
-                        break
-            if currentMapset and self.selected_mapset[0]:
-                for i in range(len(self.selected_mapset)):
-                    if self.selected_mapset[i].data["name"] != genv["MAPSET"]:
-                        currentMapset = False
-                        break
-            return currentGrassDb, currentLocation, currentMapset
-        return True, True, True
 
     def _getMapsetsInSearchPath(self):
         """Names of the mapsets in the current search path
@@ -2991,7 +2943,6 @@ class DataCatalogTree(TreeView):
         """Create popup menu for maps inside a temporal dataset"""
         menu = Menu()
         genv = gisenv()
-        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy"))
         menu.AppendItem(item)
@@ -3025,8 +2976,6 @@ class DataCatalogTree(TreeView):
             item = wx.MenuItem(menu, wx.ID_ANY, _("&Unregister map"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnUnregisterStdsMap, item)
-        if not currentMapset:
-            item.Enable(False)
 
         self.PopupMenu(menu)
         menu.Destroy()
@@ -3035,13 +2984,10 @@ class DataCatalogTree(TreeView):
         """Create popup menu for layers"""
         menu = Menu()
         genv = gisenv()
-        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Cut"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnMoveMap, item)
-        if not currentMapset:
-            item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy"))
         menu.AppendItem(item)
@@ -3054,18 +3000,17 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
-        if not (currentMapset and self.copy_layer):
+        if not self.copy_layer:
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteMap, item)
-        item.Enable(currentMapset)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameMap, item)
-        item.Enable(currentMapset and len(self.selected_layer) == 1)
+        item.Enable(len(self.selected_layer) == 1)
 
         menu.AppendSeparator()
 
@@ -3092,7 +3037,6 @@ class DataCatalogTree(TreeView):
         """Create popup menu for mapsets"""
         menu = Menu()
         genv = gisenv()
-        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Create &temporal dataset"))
         menu.AppendItem(item)
@@ -3103,7 +3047,7 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
-        if not (currentMapset and self.copy_layer):
+        if not self.copy_layer:
             item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Switch mapset"))
@@ -3119,14 +3063,10 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
-        if self._restricted:
-            item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename mapset"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameMapset, item)
-        if self._restricted:
-            item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load mapset"))
         menu.AppendItem(item)
@@ -3155,14 +3095,10 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete project"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
-        if self._restricted:
-            item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Rename project"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRenameLocation, item)
-        if self._restricted:
-            item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load project"))
         menu.AppendItem(item)
@@ -3184,7 +3120,6 @@ class DataCatalogTree(TreeView):
         """Create popup menu for grass db"""
         menu = Menu()
         genv = gisenv()
-        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
 
         node = self.selected_grassdb[0]
         db_path = node.data["name"]
@@ -3230,8 +3165,6 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete GRASS database from disk"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteGrassDb, item)
-        if self._restricted:
-            item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Re&load database"))
         menu.AppendItem(item)
@@ -3246,9 +3179,7 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPasteMap, item)
-        genv = gisenv()
-        currentGrassDb, currentLocation, currentMapset = self._isCurrent(genv)
-        if not (currentMapset and self.copy_layer):
+        if not self.copy_layer:
             item.Enable(False)
 
         self.PopupMenu(menu)
@@ -3260,8 +3191,6 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete projects (locations)"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteLocation, item)
-        if self._restricted:
-            item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("Copy paths"))
         menu.AppendItem(item)
@@ -3285,8 +3214,6 @@ class DataCatalogTree(TreeView):
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Delete mapsets"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDeleteMapset, item)
-        if self._restricted:
-            item.Enable(False)
 
         item = wx.MenuItem(menu, wx.ID_ANY, _("&Copy paths"))
         menu.AppendItem(item)

@@ -248,7 +248,9 @@ class MeasureDistanceController(AnalysisControllerBase):
         )
         if self._projInfo["proj"] != "xy":
             mapunits = self._projInfo["units"]
-            self._giface.WriteCmdLog(_("Measuring distance") + " (" + mapunits + "):")
+            self._giface.WriteCmdLog(
+                _("Measuring distance ({units}):").format(units=mapunits)
+            )
         else:
             self._giface.WriteCmdLog(_("Measuring distance:"))
 

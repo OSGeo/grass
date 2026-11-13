@@ -480,6 +480,7 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
     } break;
     case USE_CAT: {
         RASTER_MAP_TYPE map_type;
+        CELL max_cat;
 
         map_type = Rast_map_type(rast_name, G_mapset());
 
@@ -570,6 +571,12 @@ int update_labels(const char *rast_name, const char *vector_map, int field,
         else {
             Rast_set_cats_title("Rasterized vector map from categories",
                                 &rast_cats);
+
+            /* without labels the number of categories would stay 0;
+             * set it to the highest category as r.null and r.compress do */
+            max_cat = Rast_get_max_c_cat(rast_name, G_mapset());
+            if (max_cat > 0)
+                rast_cats.num = max_cat;
 
             /* Rast_set_cat() is terribly slow for many categories,
              * and the added labels are not really informative:
