@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-07 19:34+0000\n"
 "PO-Revision-Date: 2026-10-25 21:39+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grassmods/es/>\n"
@@ -17111,6 +17111,16 @@ msgstr "Nombre de archivo de entrada que contiene pares de coordenadas"
 msgid "Use instead of the 'coordinates' option. \"-\" reads from stdin."
 msgstr "Usar en vez de la opción 'coordinates'. \"-\" lee desde entrada estándar."
 
+#, fuzzy
+#| msgid "Name of input vector map with sparse points"
+msgid "Name of input vector map with profile lines"
+msgstr "Nombre del mapa vectorial de entrada con puntos esparcidos"
+
+#, fuzzy
+#| msgid "Can't read the coordinates from the \"coordinate\" option."
+msgid "Each line is profiled separately. Use instead of the 'coordinates' option."
+msgstr "No puede leer las coordenadas de la opción \"coordinate\"."
+
 msgid "Resolution along profile (default = current region resolution)"
 msgstr "Resolución a lo largo del perfil (por omisión = resolución de la región actual)"
 
@@ -17124,9 +17134,6 @@ msgstr ""
 msgid "If units are not specified, current project units are used. Meters are used by default in geographic (latlon) projects."
 msgstr "Si no se especifican las unidades, se usarán uidades de Localización. De manera predeterminada se usarán metros en Localizaciones geográficas (latlon)."
 
-msgid "Either use profile option or coordinate_file  option, but not both"
-msgstr "Usar ya sea la opción profile o coordinate_file, pero no ambas"
-
 #, c-format
 msgid "Illegal resolution %g [%s]"
 msgstr "¡Resolución no admitida! %g [%s]"
@@ -17139,12 +17146,16 @@ msgid "Output columns:"
 msgstr "Columnas de salida:"
 
 #, c-format
-msgid "Easting, Northing, Along track dist. [%s], Elevation"
-msgstr ""
-
-#, c-format
 msgid "Along track dist. [%s], Elevation"
 msgstr "Distancia a lo largo de la ruta [%s]. Elevación"
+
+#, fuzzy
+#| msgid "category"
+msgid "Category, "
+msgstr "categoría"
+
+msgid "Easting, Northing, "
+msgstr ""
 
 msgid " RGB color"
 msgstr "Color RGB"
@@ -17163,6 +17174,48 @@ msgstr "Longitud aproximada de transecto: %f [%s]"
 
 msgid "Endpoint coordinates are outside of current region settings"
 msgstr "Las coordenadas del punto final están fuera de la configuración de la región actual"
+
+#, c-format
+msgid "Options <cats> and <where> require a valid layer, not <%s>"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Line %d has no category"
+msgid "Line %d (no category)"
+msgstr "La línea %d no tiene categoría"
+
+#, fuzzy, c-format
+#| msgid "Line %d has no category"
+msgid "Line %d (category %d)"
+msgstr "La línea %d no tiene categoría"
+
+#, fuzzy, c-format
+#| msgid "Approx. transect length: %f [%s]"
+msgid "%s: approx. length %f [%s]"
+msgstr "Longitud aproximada de transecto: %f [%s]"
+
+#, fuzzy, c-format
+#| msgid "Seed point outside the current region"
+msgid "%s is not fully inside the current region"
+msgstr "Punto seed fuera de la región actual"
+
+#, c-format
+msgid "Unable to read vector map <%s>"
+msgstr "No ha sido posible leer mapa vectorial <%s>"
+
+#, fuzzy, c-format
+#| msgid "No lines found in input map <%s>"
+msgid "No lines found in vector map <%s>"
+msgstr "No se encontraron líneas en el mapa de entrada <%s>"
+
+#, fuzzy, c-format
+msgid "No lines selected from vector map <%s>"
+msgstr "No hay áreas seleccionadas del mapa vectorial <%s>"
+
+#, fuzzy, c-format
+#| msgid "No record for category %d in table <%s>"
+msgid "No selected line has a category in layer <%s>"
+msgstr "No hay registro para la categoría %d en la tabla <%s>"
 
 #, c-format
 msgid "unable to transform coordinates %g, %g"
@@ -22455,10 +22508,6 @@ msgid "Unable to read category file for <%s>"
 msgstr "No ha sido posible leer archivo de categorías para <%s>"
 
 #, c-format
-msgid "Unable to read vector map <%s>"
-msgstr "No ha sido posible leer mapa vectorial <%s>"
-
-#, c-format
 msgid "Line %d is not point or centroid, skipped"
 msgstr "La línea %d no es un punto o centroide, fue omitido"
 
@@ -23685,6 +23734,9 @@ msgid "No metadata available for module '{name}': {error}"
 msgstr ""
 
 msgid "Downloading precompiled GRASS Addons <{}>..."
+msgstr ""
+
+msgid "On MS-Windows, the 'url' option must point to a ZIP file (URL ending in '.zip'). To use a different addon server, set the ADDONS_BASE_URL gisenv variable or the GRASS_ADDONS_BASE_URL environment variable instead."
 msgstr ""
 
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
@@ -35180,6 +35232,9 @@ msgstr "Ver imágenes BMP desde el controlador PNG."
 
 msgid "Image file"
 msgstr "Archivo de imagen"
+
+#~ msgid "Either use profile option or coordinate_file  option, but not both"
+#~ msgstr "Usar ya sea la opción profile o coordinate_file, pero no ambas"
 
 #, fuzzy, c-format
 #~| msgid "Invalid zrange <%s>"

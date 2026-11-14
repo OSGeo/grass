@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-07 19:34+0000\n"
 "PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Italian <https://weblate.osgeo.org/projects/grass-gis/grassmods/it/>\n"
@@ -16982,6 +16982,13 @@ msgstr ""
 msgid "Use instead of the 'coordinates' option. \"-\" reads from stdin."
 msgstr ""
 
+#, fuzzy
+msgid "Name of input vector map with profile lines"
+msgstr "Nome della mappa vettoriale delle direzioni di flusso"
+
+msgid "Each line is profiled separately. Use instead of the 'coordinates' option."
+msgstr ""
+
 msgid "Resolution along profile (default = current region resolution)"
 msgstr "Risoluzione lungo profilo (default = risoluzione della regione attuale)"
 
@@ -16992,9 +16999,6 @@ msgid "Output color values for each profile point (format controlled by color_fo
 msgstr ""
 
 msgid "If units are not specified, current project units are used. Meters are used by default in geographic (latlon) projects."
-msgstr ""
-
-msgid "Either use profile option or coordinate_file  option, but not both"
 msgstr ""
 
 #, c-format
@@ -17009,11 +17013,15 @@ msgid "Output columns:"
 msgstr ""
 
 #, c-format
-msgid "Easting, Northing, Along track dist. [%s], Elevation"
+msgid "Along track dist. [%s], Elevation"
 msgstr ""
 
-#, c-format
-msgid "Along track dist. [%s], Elevation"
+#, fuzzy
+#| msgid "category"
+msgid "Category, "
+msgstr "categoria"
+
+msgid "Easting, Northing, "
 msgstr ""
 
 msgid " RGB color"
@@ -17033,6 +17041,47 @@ msgstr ""
 
 msgid "Endpoint coordinates are outside of current region settings"
 msgstr "Le coordinate del punto finale sono al di fuori della regione corrente"
+
+#, c-format
+msgid "Options <cats> and <where> require a valid layer, not <%s>"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Line %d has no category"
+msgid "Line %d (no category)"
+msgstr "La linea %d non ha categorie"
+
+#, fuzzy, c-format
+#| msgid "Line %d has no category"
+msgid "Line %d (category %d)"
+msgstr "La linea %d non ha categorie"
+
+#, c-format
+msgid "%s: approx. length %f [%s]"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Seed point outside the current region"
+msgid "%s is not fully inside the current region"
+msgstr "Il punto seed è fuori dalla regione corrente"
+
+#, c-format
+msgid "Unable to read vector map <%s>"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Unable to open vector map <%s>"
+msgid "No lines found in vector map <%s>"
+msgstr "Impossibile aprire la mappa vettoriale <%s>"
+
+#, fuzzy, c-format
+msgid "No lines selected from vector map <%s>"
+msgstr "Non riesco a leggere la linea id %d dalla mappa vettore <%s>"
+
+#, fuzzy, c-format
+#| msgid "No record for category %d in table <%s>"
+msgid "No selected line has a category in layer <%s>"
+msgstr "Nessun record per la categoria %d nella tabella <%s>"
 
 #, c-format
 msgid "unable to transform coordinates %g, %g"
@@ -22282,10 +22331,6 @@ msgid "Unable to read category file for <%s>"
 msgstr ""
 
 #, c-format
-msgid "Unable to read vector map <%s>"
-msgstr ""
-
-#, c-format
 msgid "Line %d is not point or centroid, skipped"
 msgstr ""
 
@@ -23509,6 +23554,9 @@ msgid "No metadata available for module '{name}': {error}"
 msgstr ""
 
 msgid "Downloading precompiled GRASS Addons <{}>..."
+msgstr ""
+
+msgid "On MS-Windows, the 'url' option must point to a ZIP file (URL ending in '.zip'). To use a different addon server, set the ADDONS_BASE_URL gisenv variable or the GRASS_ADDONS_BASE_URL environment variable instead."
 msgstr ""
 
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
@@ -38894,10 +38942,6 @@ msgstr "File immagine"
 #, fuzzy
 #~ msgid "Output map with curved lines"
 #~ msgstr "Raster di output con l'angolo dell'altezza solare"
-
-#, fuzzy
-#~ msgid "Output name of the vector map with power lines"
-#~ msgstr "Nome della mappa vettoriale delle direzioni di flusso"
 
 #, fuzzy
 #~ msgid "Output options"

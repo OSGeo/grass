@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-07 19:34+0000\n"
 "PO-Revision-Date: 2026-10-31 19:27+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods/sl/>\n"
@@ -18932,6 +18932,14 @@ msgstr "Vhodni sloj vsebuje linije."
 msgid "Use instead of the 'coordinates' option. \"-\" reads from stdin."
 msgstr "Ne najdem vhodne datoteke %s\n"
 
+#, fuzzy
+msgid "Name of input vector map with profile lines"
+msgstr "Ime izhodnega vektorskega točkovnega sloja"
+
+#, fuzzy
+msgid "Each line is profiled separately. Use instead of the 'coordinates' option."
+msgstr "EASTING in NORTHING koordinate začetne točke"
+
 msgid "Resolution along profile (default = current region resolution)"
 msgstr "Resolucija vzdolž linije (privzeta = trenutna resolucija regije)"
 
@@ -18942,9 +18950,6 @@ msgid "Output color values for each profile point (format controlled by color_fo
 msgstr ""
 
 msgid "If units are not specified, current project units are used. Meters are used by default in geographic (latlon) projects."
-msgstr ""
-
-msgid "Either use profile option or coordinate_file  option, but not both"
 msgstr ""
 
 #, fuzzy, c-format
@@ -18960,11 +18965,16 @@ msgid "Output columns:"
 msgstr "Izhodni sloj"
 
 #, c-format
-msgid "Easting, Northing, Along track dist. [%s], Elevation"
+msgid "Along track dist. [%s], Elevation"
 msgstr ""
 
-#, c-format
-msgid "Along track dist. [%s], Elevation"
+#, fuzzy
+msgid "Category, "
+msgstr ""
+"polje: %d\n"
+"kategorija: %d\n"
+
+msgid "Easting, Northing, "
 msgstr ""
 
 #, fuzzy
@@ -18986,6 +18996,44 @@ msgstr ""
 #, fuzzy
 msgid "Endpoint coordinates are outside of current region settings"
 msgstr "Uporabi trenutno regijo"
+
+#, c-format
+msgid "Options <cats> and <where> require a valid layer, not <%s>"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Line %d (no category)"
+msgstr "%-5d mrtvih kategorij točk preskočenih\n"
+
+#, fuzzy, c-format
+msgid "Line %d (category %d)"
+msgstr ""
+"polje: %d\n"
+"kategorija: %d\n"
+
+#, c-format
+msgid "%s: approx. length %f [%s]"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "%s is not fully inside the current region"
+msgstr "Uporabi trenutno regijo"
+
+#, fuzzy, c-format
+msgid "Unable to read vector map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
+
+#, fuzzy, c-format
+msgid "No lines found in vector map <%s>"
+msgstr "ne najdem regije <%s>"
+
+#, fuzzy, c-format
+msgid "No lines selected from vector map <%s>"
+msgstr "%d točk je bilo zapisanih na izhodno datoteko\n"
+
+#, fuzzy, c-format
+msgid "No selected line has a category in layer <%s>"
+msgstr "Za vrstico (cat = %d) ni zapisa (record)<"
 
 #, fuzzy, c-format
 msgid "unable to transform coordinates %g, %g"
@@ -24729,10 +24777,6 @@ msgstr "Ime izhodnega vektorskega sloja"
 msgid "Unable to read category file for <%s>"
 msgstr "ne morem prebrati regije <%s> v <%s>"
 
-#, fuzzy, c-format
-msgid "Unable to read vector map <%s>"
-msgstr "Ime izhodnega rastrskega sloja"
-
 #, c-format
 msgid "Line %d is not point or centroid, skipped"
 msgstr ""
@@ -26105,6 +26149,9 @@ msgid "No metadata available for module '{name}': {error}"
 msgstr "Izpiše vrednosti v stilu lupinskega skripta"
 
 msgid "Downloading precompiled GRASS Addons <{}>..."
+msgstr ""
+
+msgid "On MS-Windows, the 'url' option must point to a ZIP file (URL ending in '.zip'). To use a different addon server, set the ADDONS_BASE_URL gisenv variable or the GRASS_ADDONS_BASE_URL environment variable instead."
 msgstr ""
 
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
