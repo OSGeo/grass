@@ -145,6 +145,10 @@ class Category(list):
                          RASTER_MAP_TYPE 	data_type
                          )
         """
+        # Rast_get_ith_cat() returns "" both for an invalid index and for an
+        # empty label, so check the index here to allow empty labels.
+        if not 0 <= index < self.c_cats.ncats:
+            raise GrassError(_("Error executing: Rast_get_ith_cat"))
         min_cat = ctypes.pointer(RTYPE[self.mtype]["grass def"]())
         max_cat = ctypes.pointer(RTYPE[self.mtype]["grass def"]())
         lab = decode(
@@ -156,9 +160,6 @@ class Category(list):
                 self._gtype,
             )
         )
-        # Manage C function Errors
-        if lab == "":
-            raise GrassError(_("Error executing: Rast_get_ith_cat"))
         if max_cat.contents.value == min_cat.contents.value:
             max_cat = None
         else:
@@ -271,6 +272,9 @@ class Category(list):
         :param category: Category class to be copied
         :type category: Category object
         """
+        # The C struct of the source is only rebuilt from its list on write,
+        # so refresh it to copy list edits which were not written yet.
+        category._write_cats()
         libraster.Rast_copy_cats(
             ctypes.byref(self.c_cats),  # to
             ctypes.byref(category.c_cats),  # from

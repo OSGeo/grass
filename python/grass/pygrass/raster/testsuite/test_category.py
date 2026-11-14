@@ -85,22 +85,18 @@ class RasterCategoryTestCase(TestCase):
         return name
 
     def test_read_cats(self):
-        r = RasterRow(self.name)
-        r.open()
-        r.cats.clear()
-        r.read_cats()
-        cats = Category(self.name)
-        cats.read()
-        self.assertEqual(r.cats, cats)
-        r.close()
+        with RasterRow(self.name) as r:
+            r.cats.clear()
+            r.read_cats()
+            cats = Category(self.name)
+            cats.read()
+            self.assertEqual(r.cats, cats)
 
     def test_write_cats(self):
         name = self.copy_test_map("test_write_cats_map")
-        r = RasterRow(name)
-        r.open()
-        r.cats[0] = ("Z", 11, None)
-        r.write_cats()
-        r.close()
+        with RasterRow(name) as r:
+            r.cats[0] = ("Z", 11, None)
+            r.write_cats()
         cats = Category(name)
         cats.read()
         self.assertEqual(cats[0], ("Z", 11, None))
@@ -108,22 +104,40 @@ class RasterCategoryTestCase(TestCase):
 
     def test_write_keeps_title(self):
         name = self.copy_test_map("test_write_keeps_title_map")
-        # The title set in setUpClass is cleared by r.category, so set it here.
-        self.runModule("r.support", map=name, title="A test map")
         cats = Category(name)
         cats.read()
+        self.assertEqual(decode(cats.title), "A test map")
         cats.write()
         cats = Category(name)
         cats.read()
         self.assertEqual(decode(cats.title), "A test map")
 
+    def test_copy_empty_label(self):
+        source = Category(self.name)
+        source.read()
+        source[0] = ("", 11, None)
+        cats = Category(self.name)
+        cats.copy(source)
+        self.assertEqual(cats[0], ("", 11, None))
+        self.assertEqual(len(cats), 16)
+
     def test_copy_replaces_categories(self):
         cats = Category(self.name)
-        cats.read()
+        cats.append(("X", 1, None))
         other = Category(self.name)
         other.read()
         cats.copy(other)
+        self.assertEqual(len(cats), 16)
         self.assertEqual(cats, other)
+
+    def test_copy_unwritten_edit(self):
+        source = Category(self.name)
+        source.read()
+        source[0] = ("Z", 11, None)
+        cats = Category(self.name)
+        cats.copy(source)
+        self.assertEqual(cats[0], ("Z", 11, None))
+        self.assertEqual(len(cats), 16)
 
     def test_sort(self):
         cats = Category(self.name)
