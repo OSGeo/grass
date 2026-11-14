@@ -10,6 +10,7 @@ from grass.gunittest.utils import xfail_windows
 
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.raster.category import Category
+from grass.pygrass.utils import decode
 from grass.script.core import tempfile
 
 
@@ -76,6 +77,81 @@ class RasterCategoryTestCase(TestCase):
         self.assertEqual(cats[0], cat0)
         self.assertEqual(cats[7], cat7)
         self.assertEqual(cats[15], cat15)
+
+    def copy_test_map(self, name):
+        """Copy the test map so that a test can modify it"""
+        self.runModule("g.copy", raster=[self.name, name])
+        self.addCleanup(self.runModule, "g.remove", flags="f", type="raster", name=name)
+        return name
+
+    def test_read_cats(self):
+        with RasterRow(self.name) as r:
+            r.cats.clear()
+            r.read_cats()
+            cats = Category(self.name)
+            cats.read()
+            self.assertEqual(r.cats, cats)
+
+    def test_write_cats(self):
+        name = self.copy_test_map("test_write_cats_map")
+        with RasterRow(name) as r:
+            r.cats[0] = ("Z", 11, None)
+            r.write_cats()
+        cats = Category(name)
+        cats.read()
+        self.assertEqual(cats[0], ("Z", 11, None))
+        self.assertEqual(len(cats), 16)
+
+    def test_write_keeps_title(self):
+        name = self.copy_test_map("test_write_keeps_title_map")
+        cats = Category(name)
+        cats.read()
+        self.assertEqual(decode(cats.title), "A test map")
+        cats.write()
+        cats = Category(name)
+        cats.read()
+        self.assertEqual(decode(cats.title), "A test map")
+
+    def test_copy_empty_label(self):
+        source = Category(self.name)
+        source.read()
+        source[0] = ("", 11, None)
+        cats = Category(self.name)
+        cats.copy(source)
+        self.assertEqual(cats[0], ("", 11, None))
+        self.assertEqual(len(cats), 16)
+
+    def test_copy_replaces_categories(self):
+        cats = Category(self.name)
+        cats.append(("X", 1, None))
+        other = Category(self.name)
+        other.read()
+        cats.copy(other)
+        self.assertEqual(len(cats), 16)
+        self.assertEqual(cats, other)
+
+    def test_copy_unwritten_edit(self):
+        source = Category(self.name)
+        source.read()
+        source[0] = ("Z", 11, None)
+        cats = Category(self.name)
+        cats.copy(source)
+        self.assertEqual(cats[0], ("Z", 11, None))
+        self.assertEqual(len(cats), 16)
+
+    def test_sort(self):
+        cats = Category(self.name)
+        cats.append(("B", 21, None))
+        cats.append(("A", 11, None))
+        cats.sort()
+        self.assertEqual(list(cats), [("A", 11, None), ("B", 21, None)])
+
+    def test_sort_empty_label(self):
+        cats = Category(self.name)
+        cats.append(("B", 21, None))
+        cats.append(("", 11, None))
+        cats.sort()
+        self.assertEqual(list(cats), [("", 11, None), ("B", 21, None)])
 
     @xfail_windows
     def testWrite(self):
