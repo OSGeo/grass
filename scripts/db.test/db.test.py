@@ -43,46 +43,48 @@ def main():
     gcore.message(_("Using DB driver: %s") % dbconn["driver"])
 
     infile = os.path.join(os.environ["GRASS_ETCDIR"], "db.test", test_file)
-    inf = open(infile)
-
-    while True:
-        type = inf.readline()
-        if not type:
-            break
-        type = type.rstrip("\r\n")
-
-        sql = inf.readline().rstrip("\r\n")
-        sys.stdout.write(sql + "\n")
-
-        # Copy expected result to temp file
-        try:
-            if type == "X":
-                gcore.write_command("db.execute", input="-", stdin=sql + "\n")
-            else:
-                resf = open(result, "w")
-                gcore.write_command(
-                    "db.select", input="-", flags="c", stdin=sql + "\n", stdout=resf
-                )
-                resf.close()
-
-        except CalledModuleError:
-            gcore.error("EXECUTE: ******** ERROR ********")
-        else:
-            gcore.message(_("EXECUTE: OK"))
-
-        expf = open(expected, "w")
+    with open(infile) as inf:
         while True:
-            res = inf.readline().rstrip("\r\n")
-            if not res:
+            line_type = inf.readline()
+            if not line_type:
                 break
-            expf.write(res + "\n")
-        expf.close()
+            line_type = line_type.rstrip("\r\n")
 
-        if type == "S":
-            if gcore.call(["diff", result, expected]) != 0:
-                gcore.error("RESULT: ******** ERROR ********")
+            sql = inf.readline().rstrip("\r\n")
+            sys.stdout.write(sql + "\n")
+
+            # Copy expected result to temp file
+            try:
+                if line_type == "X":
+                    gcore.write_command("db.execute", input="-", stdin=sql + "\n")
+                else:
+                    with open(result, "w") as resf:
+                        gcore.write_command(
+                            "db.select",
+                            input="-",
+                            flags="c",
+                            stdin=sql + "\n",
+                            stdout=resf,
+                        )
+
+            except CalledModuleError:
+                gcore.error("EXECUTE: ******** ERROR ********")
             else:
-                gcore.message(_("RESULT: OK"))
+                gcore.message(_("EXECUTE: OK"))
+
+            expf = open(expected, "w")
+            while True:
+                res = inf.readline().rstrip("\r\n")
+                if not res:
+                    break
+                expf.write(res + "\n")
+            expf.close()
+
+            if line_type == "S":
+                if gcore.call(["diff", result, expected]) != 0:
+                    gcore.error("RESULT: ******** ERROR ********")
+                else:
+                    gcore.message(_("RESULT: OK"))
 
 
 if __name__ == "__main__":
