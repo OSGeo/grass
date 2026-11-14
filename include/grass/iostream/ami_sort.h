@@ -130,7 +130,7 @@ AMI_err AMI_sort(AMI_STREAM<T> *instream, AMI_STREAM<T> **outstream,
         runList->dequeue(&name);
         // printf("SORT: %s\n", name); fflush(stdout);
         *outstream = new AMI_STREAM<T>(name);
-        delete name; // should be safe, stream makes its own copy
+        delete[] name; // The stream makes its own copy.
     }
     else {
         /* many runs */
