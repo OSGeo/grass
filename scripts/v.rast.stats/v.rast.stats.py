@@ -286,12 +286,10 @@ def get_nr_of_categories(
     :param rastertmp: name of temporary raster map
     :return: number of raster categories or exit (if no categories found)
     """
-    # dump cats to file to avoid "too many argument" problem:
-    cats = []
-    with gs.pipe_command("r.category", map=rastertmp, sep=";", quiet=True) as p:
-        for line in p.stdout:
-            line = decode(line)
-            cats.append(line.rstrip("\r\n").split(";")[0])
+    categories = gs.parse_command(
+        "r.category", map=rastertmp, format="json", quiet=True
+    )
+    cats = [str(item["category"]) for item in categories]
 
     number = len(cats)
     if number < 1:
