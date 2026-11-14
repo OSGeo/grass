@@ -304,21 +304,23 @@ class Category(list):
 
         """
         self.reset()
+        value_type = int if self.mtype == "CELL" else float
         with open(filename) as f:
             for row in f:
                 cat = row.strip().split(sep)
                 if len(cat) == 2:
-                    label, min_cat = cat
+                    min_cat, label = cat
                     max_cat = None
                 elif len(cat) == 3:
-                    label, min_cat, max_cat = cat
+                    min_cat, max_cat, label = cat
+                    max_cat = value_type(max_cat)
                 else:
                     msg = "Row length is greater than 3"
                     raise TypeError(msg)
-                self.append((label, min_cat, max_cat))
+                self.append((label, value_type(min_cat), max_cat))
 
     def write_rules(self, filename, sep=":"):
-        """Copy categories from a rules file, default separator is ':', the
+        """Copy categories to a rules file, default separator is ':', the
         columns must be: min and/or max and label. ::
 
             1:forest
@@ -333,10 +335,9 @@ class Category(list):
         :param str sep: the separator used to divide values and category
         """
         cats = []
-        for cat in iter(self):
-            if cat[-1] is None:
-                cat = cat[:-1]
-            cats.append(sep.join([str(i) for i in cat]))
+        for label, min_cat, max_cat in iter(self):
+            values = [min_cat] if max_cat is None else [min_cat, max_cat]
+            cats.append(sep.join([str(i) for i in [*values, label]]))
         Path(filename).write_text("\n".join(cats))
 
     def sort(self):
