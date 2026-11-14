@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-07 19:34+0000\n"
 "PO-Revision-Date: 2026-10-05 10:33+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods/sv/>\n"
@@ -16745,6 +16745,16 @@ msgstr "Namn på indatafil som innehåller koordinatpar"
 msgid "Use instead of the 'coordinates' option. \"-\" reads from stdin."
 msgstr "Används istället för alternativet \"coordinates\". \"-\" läser från stdin."
 
+#, fuzzy
+#| msgid "Name of input vector map with sparse points"
+msgid "Name of input vector map with profile lines"
+msgstr "Namn på inmatningsvektorkarta med glesa punkter"
+
+#, fuzzy
+#| msgid "Can't read the coordinates from the \"coordinate\" option."
+msgid "Each line is profiled separately. Use instead of the 'coordinates' option."
+msgstr "Det går inte att läsa koordinaterna från alternativet \"koordinat\"."
+
 msgid "Resolution along profile (default = current region resolution)"
 msgstr "Upplösning längs profil (standard = aktuell regionupplösning)"
 
@@ -16756,9 +16766,6 @@ msgstr "Utmatning av färgvärden för varje profilpunkt (format styrs av altern
 
 msgid "If units are not specified, current project units are used. Meters are used by default in geographic (latlon) projects."
 msgstr "Om enheter inte anges används aktuella projektenheter. Metrar används som standard i geografiska projekt (latlon)."
-
-msgid "Either use profile option or coordinate_file  option, but not both"
-msgstr "Använd antingen profile-alternativet eller coordinate_file-alternativet, men inte båda"
 
 #, c-format
 msgid "Illegal resolution %g [%s]"
@@ -16772,12 +16779,16 @@ msgid "Output columns:"
 msgstr "Kolumner för utdata:"
 
 #, c-format
-msgid "Easting, Northing, Along track dist. [%s], Elevation"
-msgstr "Ostlig riktning, Nordlig riktning, Längs spåret dist. [%s], Höjd över havet"
-
-#, c-format
 msgid "Along track dist. [%s], Elevation"
 msgstr "Längs spåret dist. [%s], Höjd över havet"
+
+#, fuzzy
+#| msgid "category"
+msgid "Category, "
+msgstr "kategori"
+
+msgid "Easting, Northing, "
+msgstr ""
 
 msgid " RGB color"
 msgstr " RGB-färg"
@@ -16796,6 +16807,49 @@ msgstr "Ungefärlig transektlängd: %f [%s]"
 
 msgid "Endpoint coordinates are outside of current region settings"
 msgstr "Koordinaterna för slutpunkten ligger utanför inställningarna för den aktuella regionen"
+
+#, c-format
+msgid "Options <cats> and <where> require a valid layer, not <%s>"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Line %d has no category"
+msgid "Line %d (no category)"
+msgstr "Linje %d har ingen kategori"
+
+#, fuzzy, c-format
+#| msgid "Line %d has no category"
+msgid "Line %d (category %d)"
+msgstr "Linje %d har ingen kategori"
+
+#, fuzzy, c-format
+#| msgid "Approx. transect length: %f [%s]"
+msgid "%s: approx. length %f [%s]"
+msgstr "Ungefärlig transektlängd: %f [%s]"
+
+#, fuzzy, c-format
+#| msgid "Seed point outside the current region"
+msgid "%s is not fully inside the current region"
+msgstr "Seed-punkt utanför den aktuella regionen"
+
+#, c-format
+msgid "Unable to read vector map <%s>"
+msgstr "Det går inte att läsa vektorkarta <%s>"
+
+#, fuzzy, c-format
+#| msgid "No lines found in input map <%s>"
+msgid "No lines found in vector map <%s>"
+msgstr "Inga rader hittades i input map <%s>"
+
+#, fuzzy, c-format
+#| msgid "Number of lines selected from vector map <%s>: %d"
+msgid "No lines selected from vector map <%s>"
+msgstr "Antal linjer som valts från vektorkartan <%s>: %d"
+
+#, fuzzy, c-format
+#| msgid "No record for category %d in table <%s>"
+msgid "No selected line has a category in layer <%s>"
+msgstr "Ingen post för kategori %d i tabell <%s>"
 
 #, c-format
 msgid "unable to transform coordinates %g, %g"
@@ -22009,10 +22063,6 @@ msgid "Unable to read category file for <%s>"
 msgstr "Det går inte att läsa kategorifilen för <%s>"
 
 #, c-format
-msgid "Unable to read vector map <%s>"
-msgstr "Det går inte att läsa vektorkarta <%s>"
-
-#, c-format
 msgid "Line %d is not point or centroid, skipped"
 msgstr "Linje %d är inte punkt eller centroid, överhoppad"
 
@@ -23233,6 +23283,9 @@ msgstr "Inga metadata tillgängliga för modul '{name}': {error}"
 
 msgid "Downloading precompiled GRASS Addons <{}>..."
 msgstr "Nedladdning av förkompilerade GRASS Addons <{}>..."
+
+msgid "On MS-Windows, the 'url' option must point to a ZIP file (URL ending in '.zip'). To use a different addon server, set the ADDONS_BASE_URL gisenv variable or the GRASS_ADDONS_BASE_URL environment variable instead."
+msgstr ""
 
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
 msgstr "svn hittades inte men behövdes för att hämta AddOns från ett SVN-repository"
@@ -34686,6 +34739,13 @@ msgstr "Visa BMP-bilder från PNG-drivrutinen."
 
 msgid "Image file"
 msgstr "Bildfil"
+
+#~ msgid "Either use profile option or coordinate_file  option, but not both"
+#~ msgstr "Använd antingen profile-alternativet eller coordinate_file-alternativet, men inte båda"
+
+#, c-format
+#~ msgid "Easting, Northing, Along track dist. [%s], Elevation"
+#~ msgstr "Ostlig riktning, Nordlig riktning, Längs spåret dist. [%s], Höjd över havet"
 
 #~ msgid "Parallel execution is not supported with rand() function"
 #~ msgstr "Parallell körning stöds inte med funktionen rand()"

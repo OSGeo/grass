@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-07 19:34+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grassmods/de/>\n"
@@ -17008,6 +17008,14 @@ msgstr ""
 msgid "Use instead of the 'coordinates' option. \"-\" reads from stdin."
 msgstr ""
 
+#, fuzzy
+#| msgid "Name of existing vector map with points"
+msgid "Name of input vector map with profile lines"
+msgstr "Name existierender Vektorkarte mit Punkten"
+
+msgid "Each line is profiled separately. Use instead of the 'coordinates' option."
+msgstr ""
+
 msgid "Resolution along profile (default = current region resolution)"
 msgstr "Auflösung entlang des Profils (Standard: derzeitige Auflösung)"
 
@@ -17018,9 +17026,6 @@ msgid "Output color values for each profile point (format controlled by color_fo
 msgstr ""
 
 msgid "If units are not specified, current project units are used. Meters are used by default in geographic (latlon) projects."
-msgstr ""
-
-msgid "Either use profile option or coordinate_file  option, but not both"
 msgstr ""
 
 #, c-format
@@ -17035,11 +17040,14 @@ msgid "Output columns:"
 msgstr ""
 
 #, c-format
-msgid "Easting, Northing, Along track dist. [%s], Elevation"
+msgid "Along track dist. [%s], Elevation"
 msgstr ""
 
-#, c-format
-msgid "Along track dist. [%s], Elevation"
+#, fuzzy
+msgid "Category, "
+msgstr "Ziel-Kategoriewerte"
+
+msgid "Easting, Northing, "
 msgstr ""
 
 msgid " RGB color"
@@ -17059,6 +17067,47 @@ msgstr ""
 
 msgid "Endpoint coordinates are outside of current region settings"
 msgstr "Koordinaten des Endpunkts sind außerhalb der aktuellen Region."
+
+#, c-format
+msgid "Options <cats> and <where> require a valid layer, not <%s>"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Line %d has no category"
+msgid "Line %d (no category)"
+msgstr "Linie %d hat keine Kategorie."
+
+#, fuzzy, c-format
+#| msgid "Line %d has no category"
+msgid "Line %d (category %d)"
+msgstr "Linie %d hat keine Kategorie."
+
+#, c-format
+msgid "%s: approx. length %f [%s]"
+msgstr ""
+
+#, fuzzy, c-format
+#| msgid "Seed point outside the current region"
+msgid "%s is not fully inside the current region"
+msgstr "Startpunkt außerhalb der aktuellen Region."
+
+#, c-format
+msgid "Unable to read vector map <%s>"
+msgstr "Kann die Vektorkarte <%s> nicht lesen."
+
+#, fuzzy, c-format
+#| msgid "No areas in vector map <%s>"
+msgid "No lines found in vector map <%s>"
+msgstr "Keine Flächen in Vektorkarte <%s>"
+
+#, fuzzy, c-format
+msgid "No lines selected from vector map <%s>"
+msgstr "Kann die Linien ID %d der Vektorkarte <%s> nicht lesen."
+
+#, fuzzy, c-format
+#| msgid "No record for category %d in table <%s>"
+msgid "No selected line has a category in layer <%s>"
+msgstr "Kein Eintrag für die Kategorie %d in der Tabelle <%s>."
 
 #, c-format
 msgid "unable to transform coordinates %g, %g"
@@ -22329,10 +22378,6 @@ msgid "Unable to read category file for <%s>"
 msgstr ""
 
 #, c-format
-msgid "Unable to read vector map <%s>"
-msgstr "Kann die Vektorkarte <%s> nicht lesen."
-
-#, c-format
 msgid "Line %d is not point or centroid, skipped"
 msgstr ""
 
@@ -23556,6 +23601,9 @@ msgid "No metadata available for module '{name}': {error}"
 msgstr ""
 
 msgid "Downloading precompiled GRASS Addons <{}>..."
+msgstr ""
+
+msgid "On MS-Windows, the 'url' option must point to a ZIP file (URL ending in '.zip'). To use a different addon server, set the ADDONS_BASE_URL gisenv variable or the GRASS_ADDONS_BASE_URL environment variable instead."
 msgstr ""
 
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
@@ -35661,10 +35709,6 @@ msgstr "Bild-Datei"
 #, fuzzy
 #~ msgid "Category to replace"
 #~ msgstr "Inkrement für die Kategorienummern"
-
-#, fuzzy
-#~ msgid "Category values"
-#~ msgstr "Ziel-Kategoriewerte"
 
 #, fuzzy
 #~ msgid "Center cell value"

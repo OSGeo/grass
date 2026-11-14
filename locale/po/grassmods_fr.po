@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
-"PO-Revision-Date: 2026-11-01 02:33+0000\n"
+"POT-Creation-Date: 2026-11-07 19:34+0000\n"
+"PO-Revision-Date: 2026-11-14 00:18+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -16762,6 +16762,14 @@ msgstr "Nom du fichier d'entrée contenant les paires de coordonnées"
 msgid "Use instead of the 'coordinates' option. \"-\" reads from stdin."
 msgstr "Utiliser à la place de l'option 'coordonnées'. \"-\" lit depuis l'entrée standard."
 
+#, fuzzy
+#| msgid "Name of input vector map to re-project"
+msgid "Name of input vector map with profile lines"
+msgstr "Nom de la carte vectorielle d'entrée à reprojeter"
+
+msgid "Each line is profiled separately. Use instead of the 'coordinates' option."
+msgstr ""
+
 msgid "Resolution along profile (default = current region resolution)"
 msgstr "Résolution utilisée pour le profil (par défaut = résolution de la région courante)"
 
@@ -16775,9 +16783,6 @@ msgstr "Sortir des valeurs de couleur pour chaque point du profil (format contr�
 msgid "If units are not specified, current project units are used. Meters are used by default in geographic (latlon) projects."
 msgstr "Si les unités ne sont pas spécifiées, les unités du Secteur courant sont utilisées. Les mètres sont utilisés par défaut pour les Secteurs en coordonnées géographiques (lat/lon)."
 
-msgid "Either use profile option or coordinate_file  option, but not both"
-msgstr "Utiliser soit l'option profil soit l'option fichier de coordonnées, mais pas les deux"
-
 #, c-format
 msgid "Illegal resolution %g [%s]"
 msgstr "Résolution %g [%s] non autorisée"
@@ -16790,11 +16795,15 @@ msgid "Output columns:"
 msgstr "Colonnes en sortie :"
 
 #, c-format
-msgid "Easting, Northing, Along track dist. [%s], Elevation"
+msgid "Along track dist. [%s], Elevation"
 msgstr ""
 
-#, c-format
-msgid "Along track dist. [%s], Elevation"
+#, fuzzy
+#| msgid "category"
+msgid "Category, "
+msgstr "catégorie"
+
+msgid "Easting, Northing, "
 msgstr ""
 
 msgid " RGB color"
@@ -16814,6 +16823,43 @@ msgstr "Longueur approximative du transect : %f [%s]"
 
 msgid "Endpoint coordinates are outside of current region settings"
 msgstr "Les points des extrémités sont en dehors des paramètres de la région courante"
+
+#, c-format
+msgid "Options <cats> and <where> require a valid layer, not <%s>"
+msgstr ""
+
+#, c-format
+msgid "Line %d (no category)"
+msgstr ""
+
+#, c-format
+msgid "Line %d (category %d)"
+msgstr "Ligne %d (catégorie %d)"
+
+#, c-format
+msgid "%s: approx. length %f [%s]"
+msgstr "%s : longueur approximative %f [%s]"
+
+#, c-format
+msgid "%s is not fully inside the current region"
+msgstr "%s ne se trouve pas entièrement à l'intérieur de la région actuelle"
+
+#, c-format
+msgid "Unable to read vector map <%s>"
+msgstr "Impossible de lire la carte vecteur <%s>"
+
+#, fuzzy, c-format
+#| msgid "Unable to open vector map <%s>"
+msgid "No lines found in vector map <%s>"
+msgstr "Impossible d'ouvrir la carte vecteur <%s>"
+
+#, c-format
+msgid "No lines selected from vector map <%s>"
+msgstr "Aucune ligne sélectionnée dans la carte vecteur <%s>"
+
+#, c-format
+msgid "No selected line has a category in layer <%s>"
+msgstr "Aucune ligne sélectionnée n’a de catégorie dans la couche <%s>"
 
 #, c-format
 msgid "unable to transform coordinates %g, %g"
@@ -22026,10 +22072,6 @@ msgid "Unable to read category file for <%s>"
 msgstr "Impossible de lire le fichier de catégories pour <%s>"
 
 #, c-format
-msgid "Unable to read vector map <%s>"
-msgstr "Impossible de lire la carte vecteur <%s>"
-
-#, c-format
 msgid "Line %d is not point or centroid, skipped"
 msgstr "La ligne %d n'est ni un point ni un centroïde, sauté"
 
@@ -23243,6 +23285,9 @@ msgid "No metadata available for module '{name}': {error}"
 msgstr ""
 
 msgid "Downloading precompiled GRASS Addons <{}>..."
+msgstr ""
+
+msgid "On MS-Windows, the 'url' option must point to a ZIP file (URL ending in '.zip'). To use a different addon server, set the ADDONS_BASE_URL gisenv variable or the GRASS_ADDONS_BASE_URL environment variable instead."
 msgstr ""
 
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
@@ -34569,6 +34614,9 @@ msgstr "Visionner des images BMP avec le pilote PNG."
 msgid "Image file"
 msgstr ""
 
+#~ msgid "Either use profile option or coordinate_file  option, but not both"
+#~ msgstr "Utiliser soit l'option profil soit l'option fichier de coordonnées, mais pas les deux"
+
 #~ msgid "Parallel execution is not supported with rand() function"
 #~ msgstr "L'exécution parallèle n'est pas prise en charge avec la fonction rand()"
 
@@ -36648,10 +36696,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Location ID"
 #~ msgstr "Secteur : %s\n"
-
-#, fuzzy
-#~ msgid "Location category ID"
-#~ msgstr "Secteur <%s> créé"
 
 #~ msgid "Location containing input raster map"
 #~ msgstr "Secteur contenant les cartes raster d'entrée"
