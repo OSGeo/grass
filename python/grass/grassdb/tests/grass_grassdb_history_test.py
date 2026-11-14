@@ -373,9 +373,19 @@ def test_add_entry_appends(json_history):
 
 
 def test_add_entry_unserializable(json_history):
-    """Entry which is not JSON serializable raises TypeError"""
+    """Entry which is not JSON serializable raises TypeError, history is kept"""
+    before = json_history.read_text(encoding="utf-8")
     with pytest.raises(TypeError):
         history.add_entry(json_history, {"command": "x", "command_info": {1, 2}})
+    assert json_history.read_text(encoding="utf-8") == before
+
+
+def test_update_entry_unserializable(json_history):
+    """Command info which is not JSON serializable raises TypeError, history is kept"""
+    before = json_history.read_text(encoding="utf-8")
+    with pytest.raises(TypeError):
+        history.update_entry(json_history, {"status": {1, 2}})
+    assert json_history.read_text(encoding="utf-8") == before
 
 
 def test_add_entry_requires_json(text_history):
@@ -599,3 +609,16 @@ def test_add_entry_unwritable_path(tmp_path):
     ) as info:
         history.add_entry(path, make_entry("g.region -p"))
     assert str(path) in str(info.value)
+
+
+def test_add_entry_circular_reference(json_history):
+    """An entry which JSON cannot encode is reported as ValueError and file is kept"""
+    entry = make_entry("g.region -p")
+    entry["self"] = entry
+    content = json_history.read_text(encoding="utf-8")
+    with pytest.raises(
+        ValueError, match=r"^Error decoding content of JSON history file"
+    ) as info:
+        history.add_entry(json_history, entry)
+    assert str(json_history) in str(info.value)
+    assert json_history.read_text(encoding="utf-8") == content

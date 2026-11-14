@@ -294,8 +294,11 @@ def _add_entry_to_JSON(history_path, entry):
 
     existing_data.append(entry)
     try:
+        # Encode before opening the file for writing, so that an entry which
+        # cannot be encoded does not leave the history file truncated.
+        content = json.dumps(existing_data, indent=2)
         with open(history_path, encoding="utf-8", mode="w") as file_history:
-            json.dump(existing_data, file_history, indent=2)
+            file_history.write(content)
     except ValueError as ve:
         raise ValueError(
             _("Error decoding content of JSON history file {}").format(history_path)
@@ -336,10 +339,13 @@ def _update_entry_in_JSON(history_path, command_info, index=None):
                 if 0 <= index < len(history_entries):
                     # Update entry
                     history_entries[index]["command_info"].update(command_info)
+                    # Encode before truncating the file, so that command info
+                    # which cannot be encoded does not leave the file truncated.
+                    content = json.dumps(history_entries, indent=2)
                     # Write the modified history back to the file
                     file_history.seek(0)
                     file_history.truncate()
-                    json.dump(history_entries, file_history, indent=2)
+                    file_history.write(content)
             except ValueError as ve:
                 raise ValueError(
                     _("Error decoding content of JSON history file {}").format(
