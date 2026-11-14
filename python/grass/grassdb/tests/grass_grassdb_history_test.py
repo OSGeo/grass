@@ -184,6 +184,13 @@ def test_read_json_invalid_content(tmp_path):
     assert isinstance(info.value.__cause__, ValueError)
 
 
+def test_read_json_invalid_utf8(tmp_path):
+    """Undecodable bytes are replaced instead of raising"""
+    path = tmp_path / ".wxgui_history.json"
+    path.write_bytes(b'[{"command": "g.region \xff", "command_info": null}]')
+    assert history.read(path) == [{"command": "g.region �", "command_info": None}]
+
+
 def test_read_json_missing_file(tmp_path):
     """Missing file is reported as OSError mentioning the path"""
     path = tmp_path / ".wxgui_history.json"
@@ -372,10 +379,61 @@ def test_add_entry_appends(json_history):
     assert history.read(json_history) == [*before, entry]
 
 
-def test_add_entry_unserializable(json_history):
-    """Entry which is not JSON serializable raises TypeError"""
-    with pytest.raises(TypeError):
-        history.add_entry(json_history, {"command": "x", "command_info": {1, 2}})
+def test_add_entry_uses_indentation(tmp_path):
+    """The file is written as JSON indented by two spaces"""
+    path = tmp_path / ".wxgui_history.json"
+    history.add_entry(path, {"command": "g.region -p", "command_info": None})
+    assert path.read_text(encoding="utf-8") == (
+        '[\n  {\n    "command": "g.region -p",\n    "command_info": null\n  }\n]'
+    )
+
+
+def test_add_entry_unwritable_path(tmp_path):
+    """A path which cannot be written is reported as OSError mentioning the path"""
+    path = tmp_path / ".wxgui_history.json"
+    path.mkdir()
+    with pytest.raises(
+        OSError, match=r"^Unable to add entry to JSON history file"
+    ) as info:
+        history.add_entry(path, make_entry("g.region -p"))
+    assert str(path) in str(info.value)
+
+
+def make_circular_entry():
+    """Return an entry which json cannot encode because it contains itself"""
+    entry = make_entry("g.region -p")
+    entry["self"] = entry
+    return entry
+
+
+@pytest.mark.parametrize(
+    "entry",
+    [
+        {"command": "x", "command_info": {1, 2}},
+        make_circular_entry(),
+    ],
+    ids=["set", "circular"],
+)
+def test_add_entry_unencodable(json_history, entry):
+    """Entry which cannot be encoded is reported as ValueError and file is kept"""
+    before = json_history.read_text(encoding="utf-8")
+    with pytest.raises(
+        ValueError, match=r"^Unable to encode content for JSON history file"
+    ) as info:
+        history.add_entry(json_history, entry)
+    assert str(json_history) in str(info.value)
+    assert json_history.read_text(encoding="utf-8") == before
+
+
+def test_update_entry_unencodable(json_history):
+    """Command info which cannot be encoded is reported as ValueError, file is kept"""
+    before = json_history.read_text(encoding="utf-8")
+    with pytest.raises(
+        ValueError, match=r"^Unable to encode content for JSON history file"
+    ) as info:
+        history.update_entry(json_history, {"status": {1, 2}})
+    assert str(json_history) in str(info.value)
+    assert json_history.read_text(encoding="utf-8") == before
 
 
 def test_add_entry_requires_json(text_history):
@@ -389,12 +447,15 @@ def test_add_entry_requires_json(text_history):
 
 
 def test_add_entry_to_corrupted_file(tmp_path):
-    """Content which is not valid JSON is replaced by the new entry"""
+    """Content which is not valid JSON is kept and reported as ValueError"""
     path = tmp_path / ".wxgui_history.json"
     path.write_text("[{", encoding="utf-8")
-    entry = make_entry("g.region -p")
-    history.add_entry(path, entry)
-    assert history.read(path) == [entry]
+    with pytest.raises(
+        ValueError, match=r"^Error decoding content of JSON history file"
+    ) as info:
+        history.add_entry(path, make_entry("g.region -p"))
+    assert str(path) in str(info.value)
+    assert path.read_text(encoding="utf-8") == "[{"
 
 
 def test_update_last_entry_by_default(json_history):
@@ -466,6 +527,20 @@ def test_update_entry_invalid_content(tmp_path):
     ) as info:
         history.update_entry(path, {"status": "failed"})
     assert str(path) in str(info.value)
+
+
+def test_update_entry_uses_indentation(tmp_path):
+    """The file is rewritten as JSON indented by two spaces"""
+    path = tmp_path / ".wxgui_history.json"
+    path.write_text(
+        '[{"command": "g.region -p", "command_info": {"status": "running"}}]',
+        encoding="utf-8",
+    )
+    history.update_entry(path, {"status": "success"})
+    assert path.read_text(encoding="utf-8") == (
+        '[\n  {\n    "command": "g.region -p",\n'
+        '    "command_info": {\n      "status": "success"\n    }\n  }\n]'
+    )
 
 
 def test_update_entry_missing_file(tmp_path):
@@ -558,44 +633,3 @@ def test_initial_command_info_masks(session):
     info = history.get_initial_command_info(session.env)
     assert info["mask3d"] is True
     assert info["mask3d_name"] == "RASTER3D_MASK@PERMANENT"
-
-
-def test_read_json_invalid_utf8(tmp_path):
-    """Undecodable bytes are replaced instead of raising"""
-    path = tmp_path / ".wxgui_history.json"
-    path.write_bytes(b'[{"command": "g.region \xff", "command_info": null}]')
-    assert history.read(path) == [{"command": "g.region �", "command_info": None}]
-
-
-def test_add_entry_uses_indentation(tmp_path):
-    """The file is written as JSON indented by two spaces"""
-    path = tmp_path / ".wxgui_history.json"
-    history.add_entry(path, {"command": "g.region -p", "command_info": None})
-    assert path.read_text(encoding="utf-8") == (
-        '[\n  {\n    "command": "g.region -p",\n    "command_info": null\n  }\n]'
-    )
-
-
-def test_update_entry_uses_indentation(tmp_path):
-    """The file is rewritten as JSON indented by two spaces"""
-    path = tmp_path / ".wxgui_history.json"
-    path.write_text(
-        '[{"command": "g.region -p", "command_info": {"status": "running"}}]',
-        encoding="utf-8",
-    )
-    history.update_entry(path, {"status": "success"})
-    assert path.read_text(encoding="utf-8") == (
-        '[\n  {\n    "command": "g.region -p",\n'
-        '    "command_info": {\n      "status": "success"\n    }\n  }\n]'
-    )
-
-
-def test_add_entry_unwritable_path(tmp_path):
-    """A path which cannot be written is reported as OSError mentioning the path"""
-    path = tmp_path / ".wxgui_history.json"
-    path.mkdir()
-    with pytest.raises(
-        OSError, match=r"^Unable to add entry to JSON history file"
-    ) as info:
-        history.add_entry(path, make_entry("g.region -p"))
-    assert str(path) in str(info.value)
