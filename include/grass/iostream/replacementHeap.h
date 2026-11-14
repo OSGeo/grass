@@ -151,7 +151,7 @@ ReplacementHeap<T, Compare>::ReplacementHeap(size_t g_arity,
         runList->dequeue(&name);
         AMI_STREAM<T> *str = new AMI_STREAM<T>(name);
         assert(str);
-        delete name; // str makes its own copy
+        delete[] name; // The stream makes its own copy.
         addRun(str);
     }
     init();
