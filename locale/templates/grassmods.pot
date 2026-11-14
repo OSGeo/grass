@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 19:34+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1936,7 +1936,7 @@ msgstr ""
 #: ../raster/r.param.scale/interface.c:54 ../raster/r.patch/main.c:65
 #: ../raster/r.path/main.c:147 ../raster/r.profile/main.c:56
 #: ../raster/r.proj/main.c:146 ../raster/r.quant/main.c:45
-#: ../raster/r.quantile/main.c:297 ../raster/r.random.cells/main.c:46
+#: ../raster/r.quantile/main.c:297 ../raster/r.random.cells/main.c:47
 #: ../raster/r.random.surface/main.c:53 ../raster/r.random/main.c:50
 #: ../raster/r.reclass/main.c:48 ../raster/r.recode/main.c:44
 #: ../raster/r.region/main.c:43 ../raster/r.regression.line/main.c:48
@@ -2305,7 +2305,7 @@ msgstr ""
 #: ../vector/v.surf.rst/main.c:694 ../vector/v.to.3d/main.c:68
 #: ../vector/v.to.db/main.c:72 ../vector/v.to.points/main.c:149
 #: ../vector/v.to.rast/support.c:97 ../vector/v.to.rast/support.c:267
-#: ../vector/v.to.rast/support.c:495 ../vector/v.to.rast/vect2rast.c:39
+#: ../vector/v.to.rast/support.c:496 ../vector/v.to.rast/vect2rast.c:39
 #: ../vector/v.to.rast3/main.c:71 ../vector/v.transform/main.c:204
 #: ../vector/v.type/main.c:125 ../vector/v.univar/main.c:190
 #: ../vector/v.vect.stats/main.c:319 ../vector/v.vect.stats/main.c:331
@@ -4546,7 +4546,7 @@ msgstr ""
 #: ../vector/v.extrude/main.c:220 ../vector/v.generalize/misc.c:164
 #: ../vector/v.neighbors/main.c:216 ../vector/v.overlay/main.c:427
 #: ../vector/v.surf.bspline/crosscorr.c:119 ../vector/v.to.rast/support.c:101
-#: ../vector/v.to.rast/support.c:271 ../vector/v.to.rast/support.c:499
+#: ../vector/v.to.rast/support.c:271 ../vector/v.to.rast/support.c:500
 #: ../vector/v.univar/main.c:268 ../vector/v.vect.stats/main.c:380
 #: ../vector/v.vect.stats/main.c:457 ../vector/v.what.rast/main.c:175
 #: ../vector/v.what.rast3/main.c:118
@@ -4597,7 +4597,7 @@ msgstr ""
 #: ../vector/v.to.3d/trans2.c:55 ../vector/v.to.3d/trans3.c:58
 #: ../vector/v.to.db/query.c:91 ../vector/v.to.db/update.c:53
 #: ../vector/v.to.points/main.c:195 ../vector/v.to.rast/support.c:105
-#: ../vector/v.to.rast/support.c:277 ../vector/v.to.rast/support.c:506
+#: ../vector/v.to.rast/support.c:277 ../vector/v.to.rast/support.c:507
 #: ../vector/v.to.rast/vect2rast.c:58 ../vector/v.to.rast3/main.c:83
 #: ../vector/v.transform/trans_digit.c:41 ../vector/v.vol.rst/main.c:589
 #: ../vector/v.vol.rst/user1.c:96 ../vector/v.what.rast/main.c:181
@@ -5248,7 +5248,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:7
 #: ../locale/scriptstrings/v.what.strds_to_translate.c:4
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:3
-#: ../raster/r.random.cells/main.c:47 ../raster/r.random/main.c:51
+#: ../raster/r.random.cells/main.c:48 ../raster/r.random/main.c:51
 #: ../vector/v.drape/main.c:54 ../vector/v.extrude/main.c:65
 #: ../vector/v.kcv/main.c:54 ../vector/v.random/main.c:97
 #: ../vector/v.sample/main.c:71 ../vector/v.what.rast/main.c:75
@@ -25716,35 +25716,35 @@ msgstr ""
 msgid "Reducing number of bins from %d to %d"
 msgstr ""
 
-#: ../raster/r.random.cells/init.c:81
+#: ../raster/r.random.cells/init.c:83
 msgid "Distance must be > 0.0"
 msgstr ""
 
-#: ../raster/r.random.cells/init.c:97 ../raster/r.random.surface/main.c:119
+#: ../raster/r.random.cells/init.c:93 ../raster/r.random.surface/main.c:119
 #, c-format
 msgid "Generating raster map <%s>..."
 msgstr ""
 
-#: ../raster/r.random.cells/main.c:48 ../raster/r.random.surface/main.c:55
+#: ../raster/r.random.cells/main.c:49 ../raster/r.random.surface/main.c:55
 #: ../raster/r.random/main.c:53 ../raster/r.surf.gauss/main.c:37
 #: ../raster/r.surf.random/main.c:83 ../vector/v.extract/main.c:78
 #: ../vector/v.perturb/main.c:62 ../vector/v.random/main.c:99
 msgid "random"
 msgstr ""
 
-#: ../raster/r.random.cells/main.c:49
+#: ../raster/r.random.cells/main.c:50
 msgid "autocorrelation"
 msgstr ""
 
-#: ../raster/r.random.cells/main.c:51
+#: ../raster/r.random.cells/main.c:52
 msgid "Generates random cell values with spatial dependence."
 msgstr ""
 
-#: ../raster/r.random.cells/main.c:61 ../raster/r.random.surface/main.c:73
+#: ../raster/r.random.cells/main.c:62 ../raster/r.random.surface/main.c:73
 msgid "Maximum distance of spatial correlation (value >= 0.0)"
 msgstr ""
 
-#: ../raster/r.random.cells/main.c:68
+#: ../raster/r.random.cells/main.c:69
 msgid "Maximum number of cells to be created"
 msgstr ""
 
@@ -33471,11 +33471,11 @@ msgstr ""
 msgid "Using DB driver: %s"
 msgstr ""
 
-#: ../scripts/db.test/db.test.py:71
+#: ../scripts/db.test/db.test.py:73
 msgid "EXECUTE: OK"
 msgstr ""
 
-#: ../scripts/db.test/db.test.py:85
+#: ../scripts/db.test/db.test.py:87
 msgid "RESULT: OK"
 msgstr ""
 
@@ -34125,7 +34125,7 @@ msgstr ""
 msgid "Calculating OIF for all band combinations..."
 msgstr ""
 
-#: ../scripts/i.oif/i.oif.py:136
+#: ../scripts/i.oif/i.oif.py:140
 msgid "The Optimum Index Factor analysis result (best combination shown first):"
 msgstr ""
 
@@ -35663,7 +35663,7 @@ msgstr ""
 
 #: ../scripts/v.db.update/v.db.update.py:100
 #: ../scripts/v.dissolve/v.dissolve.py:606 ../vector/v.to.rast/support.c:297
-#: ../vector/v.to.rast/support.c:528 ../vector/v.to.rast/vect2rast.c:67
+#: ../vector/v.to.rast/support.c:529 ../vector/v.to.rast/vect2rast.c:67
 #: ../vector/v.what.rast3/main.c:140
 #, c-format, python-format
 msgid "Column <%s> not found"
@@ -37281,7 +37281,7 @@ msgstr ""
 
 #: ../vector/v.class/main.c:175 ../vector/v.reclass/main.c:236
 #: ../vector/v.to.rast/support.c:118 ../vector/v.to.rast/support.c:287
-#: ../vector/v.to.rast/support.c:517 ../vector/v.to.rast/vect2rast.c:77
+#: ../vector/v.to.rast/support.c:518 ../vector/v.to.rast/vect2rast.c:77
 #, c-format
 msgid "No records selected from table <%s>"
 msgstr ""
@@ -47424,7 +47424,7 @@ msgid "Unknown option '%s'"
 msgstr ""
 
 #: ../vector/v.to.rast/support.c:114 ../vector/v.to.rast/support.c:283
-#: ../vector/v.to.rast/support.c:513
+#: ../vector/v.to.rast/support.c:514
 #, c-format
 msgid "Unknown column <%s> in table <%s>"
 msgstr ""
@@ -47451,7 +47451,7 @@ msgstr ""
 msgid "Label column was not specified, no labels will be written"
 msgstr ""
 
-#: ../vector/v.to.rast/support.c:331 ../vector/v.to.rast/support.c:558
+#: ../vector/v.to.rast/support.c:331 ../vector/v.to.rast/support.c:559
 #, c-format
 msgid "Column type (%s) not supported"
 msgstr ""
@@ -47460,7 +47460,7 @@ msgstr ""
 msgid "Different labels for the same value are not supported"
 msgstr ""
 
-#: ../vector/v.to.rast/support.c:645 ../vector/v.to.rast/vect2rast.c:133
+#: ../vector/v.to.rast/support.c:652 ../vector/v.to.rast/vect2rast.c:133
 #, c-format
 msgid "Unknown use type: %d"
 msgstr ""
