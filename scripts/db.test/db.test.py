@@ -45,17 +45,17 @@ def main():
     infile = os.path.join(os.environ["GRASS_ETCDIR"], "db.test", test_file)
     with open(infile) as inf:
         while True:
-            type = inf.readline()
-            if not type:
+            line_type = inf.readline()
+            if not line_type:
                 break
-            type = type.rstrip("\r\n")
+            line_type = line_type.rstrip("\r\n")
 
             sql = inf.readline().rstrip("\r\n")
             sys.stdout.write(sql + "\n")
 
             # Copy expected result to temp file
             try:
-                if type == "X":
+                if line_type == "X":
                     gcore.write_command("db.execute", input="-", stdin=sql + "\n")
                 else:
                     with open(result, "w") as resf:
@@ -80,7 +80,7 @@ def main():
                 expf.write(res + "\n")
             expf.close()
 
-            if type == "S":
+            if line_type == "S":
                 if gcore.call(["diff", result, expected]) != 0:
                     gcore.error("RESULT: ******** ERROR ********")
                 else:
