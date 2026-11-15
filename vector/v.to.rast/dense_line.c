@@ -143,10 +143,10 @@ void dense_line(double x1, double y1, double x2, double y2,
         y2 = tmp;
     }
 
-    ix1 = (int)x1;
-    ix2 = (int)x2;
-    iy1 = (int)y1;
-    iy2 = (int)y2;
+    ix1 = ifloor(x1);
+    ix2 = ifloor(x2);
+    iy1 = ifloor(y1);
+    iy2 = ifloor(y2);
 
     idx = ix2 - ix1;
     idy = iy2 - iy1;
@@ -193,7 +193,7 @@ void dense_line(double x1, double y1, double x2, double y2,
         yi = iy1;
         if (iy1 < iy2)
             yi += 1;
-        xnext = x1 + m * (yi - y1);
+        xnext = ifloor(x1 + m * (yi - y1));
 
         while (ix1 != ix2) {
             point(ix1, iy1);
@@ -207,7 +207,7 @@ void dense_line(double x1, double y1, double x2, double y2,
                     yi = iy1;
                     if (iy1 < iy2)
                         yi += 1;
-                    xnext = x1 + m * (yi - y1);
+                    xnext = ifloor(x1 + m * (yi - y1));
                 }
                 else
                     xnext = ix2;
@@ -236,10 +236,10 @@ void dense_line(double x1, double y1, double x2, double y2,
             y1 = y2;
             y2 = tmp;
 
-            ix1 = (int)x1;
-            ix2 = (int)x2;
-            iy1 = (int)y1;
-            iy2 = (int)y2;
+            ix1 = ifloor(x1);
+            ix2 = ifloor(x2);
+            iy1 = ifloor(y1);
+            iy2 = ifloor(y2);
 
             yinc = 1;
             xinc = 1;
@@ -254,7 +254,7 @@ void dense_line(double x1, double y1, double x2, double y2,
         xi = ix1;
         if (ix1 < ix2)
             xi += 1;
-        ynext = y1 + m * (xi - x1);
+        ynext = ifloor(y1 + m * (xi - x1));
 
         while (iy1 != iy2) {
             point(ix1, iy1);
@@ -268,7 +268,7 @@ void dense_line(double x1, double y1, double x2, double y2,
                     xi = ix1;
                     if (ix1 < ix2)
                         xi += 1;
-                    ynext = y1 + m * (xi - x1);
+                    ynext = ifloor(y1 + m * (xi - x1));
                 }
                 else
                     ynext = iy2;
