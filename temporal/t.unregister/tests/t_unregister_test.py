@@ -90,6 +90,7 @@ def test_maps_remain_in_db_after_strds_removal(session_with_strds):
     tools.t_unregister(type="raster", maps=",".join(FIRST_MAPS))
     tools.t_remove(type="strds", inputs="A,B")
 
+    assert db_map_ids(tools, FIRST_MAPS) == []
     assert db_map_ids(tools, LAST_MAPS) == LAST_MAPS
 
     tools.t_unregister(type="raster", maps=",".join(LAST_MAPS))
@@ -97,31 +98,46 @@ def test_maps_remain_in_db_after_strds_removal(session_with_strds):
     assert db_map_ids(tools, LAST_MAPS) == []
 
 
-def test_cannot_unregister_from_foreign_mapset_strds(session_with_strds):
-    """Unregistering from a STRDS in another mapset's temporal DB fails.
+def test_unregister_maps_listed_in_file(session_with_strds, tmp_path):
+    """Maps listed in a file, ignoring blank lines, are unregistered."""
+    tools = Tools(session=session_with_strds)
+    map_file = tmp_path / "maps.txt"
+    map_file.write_text("\n".join([FIRST_MAPS[0], "", f"  {FIRST_MAPS[1]}  ", ""]))
 
-    The tool connects to the current mapset's temporal DB. A STRDS that
-    lives in a different mapset is not found there, so the tool exits
-    with an error and leaves the foreign STRDS unchanged.
-    """
+    tools.t_unregister(type="raster", file=map_file)
+
+    assert db_map_ids(tools, FIRST_MAPS[:2]) == []
+    assert db_map_ids(tools, FIRST_MAPS[2:]) == FIRST_MAPS[2:]
+    assert strds_map_ids(tools, "A") == ALL_MAPS[2:]
+
+
+def test_unregister_missing_file_fails(session_with_strds, tmp_path):
+    """A non-existent map list file is a fatal error."""
+    tools = Tools(session=session_with_strds)
+
+    with pytest.raises(ToolError):
+        tools.t_unregister(type="raster", file=tmp_path / "missing.txt")
+
+    assert db_map_ids(tools, ALL_MAPS) == ALL_MAPS
+
+
+def test_nothing_unregistered_in_mapset_without_temporal_db(session_with_strds):
+    """In a mapset without a temporal DB the tool only warns and changes nothing."""
     tools = Tools(session=session_with_strds)
     tools.g_mapset(mapset="other", flags="c")
 
-    with pytest.raises(ToolError):
-        tools.t_unregister(input="A@PERMANENT", type="raster", maps="a1")
+    tools.t_unregister(input="A@PERMANENT", type="raster", maps="a1")
 
     tools.g_mapset(mapset="PERMANENT")
     assert strds_map_ids(tools, "A") == ALL_MAPS
 
 
-def test_cannot_unregister_from_foreign_mapset_strds_when_local_db_exists(
-    session_with_strds,
-):
-    """Unregistering from a foreign STRDS fails even when the current mapset has its own DB.
+def test_cannot_unregister_from_foreign_mapset_strds(session_with_strds):
+    """Unregistering from a foreign STRDS fails when the current mapset has a DB.
 
     Creates an empty STRDS in a second mapset to ensure its temporal DB is
-    initialised, then confirms that a STRDS owned by PERMANENT is still not
-    accessible from there.
+    initialised. The STRDS owned by PERMANENT is found through its fully
+    qualified name and must be rejected before any map is looked up.
     """
     tools = Tools(session=session_with_strds)
     tools.g_mapset(mapset="other", flags="c")
@@ -133,7 +149,7 @@ def test_cannot_unregister_from_foreign_mapset_strds_when_local_db_exists(
         description="local",
     )
 
-    with pytest.raises(ToolError):
+    with pytest.raises(ToolError, match="current mapset"):
         tools.t_unregister(input="A@PERMANENT", type="raster", maps="a1")
 
     tools.g_mapset(mapset="PERMANENT")

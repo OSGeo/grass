@@ -60,24 +60,34 @@ def main() -> None:
     maps = options["maps"]
     stds_type = options["type"]
 
-    # Make sure the temporal database exists
+    # Do not create a temporal database just to try to unregister maps
     tgis.init(skip_db_init=True)
 
     mapset = tgis.get_current_mapset()
 
     dbif = tgis.SQLDatabaseInterfaceConnection(mapsets=mapset)
     if mapset not in dbif.tgis_mapsets:
-        gs.fatal(
+        gs.warning(
             _(
                 "Unable to connect to a temporal database in the current mapset."
                 " Nothing to unregister"
             )
         )
+        dbif.close()
+        return
     dbif.connect()
 
     # In case a space time dataset is specified
     if input_stds:
         sp = tgis.open_old_stds(input_stds, stds_type, dbif)
+        if sp.get_mapset() != mapset:
+            dbif.close()
+            gs.fatal(
+                _(
+                    "Maps can only be unregistered from a space time dataset in the"
+                    " current mapset, but <{mapid}> is in mapset <{mapset}>"
+                ).format(mapid=sp.get_id(), mapset=sp.get_mapset())
+            )
 
     maplist = []
 
@@ -85,7 +95,7 @@ def main() -> None:
 
     # Map names as single string or comma separated list of string
     if maps:
-        maplist = maps.split(",") if "," in maps else [maps]
+        maplist = maps.split(",")
 
         # Build the maplist
         maplist = [
@@ -94,7 +104,7 @@ def main() -> None:
             if mapname.strip()
         ]
 
-    # Read the map list from file (the parser checks existence)
+    # Read the map list from file
     if file:
         try:
             file = Path(file)
@@ -105,13 +115,17 @@ def main() -> None:
                         continue
                     maplist.append(dummy.build_id(mapname, mapset))
         except Exception as e:
-            gs.fatal(_("Unable to read map list from file <%s>: %s") % (file, e))
+            gs.fatal(
+                _("Unable to read map list from file <{filename}>: {error}").format(
+                    filename=file, error=e
+                )
+            )
 
     num_maps = len(maplist)
-    update_dict = {}
+    update_stds_ids = set()
     statement = ""
     # Unregister already registered maps
-    gs.verbose(_("Collecting SQL statements to unregister %d maps") % num_maps)
+    gs.verbose(_("Collecting SQL statements to unregister {} maps").format(num_maps))
     for count, mapid in enumerate(maplist, 1):
         if count % 10 == 0:
             gs.percent(count, num_maps, 1)
@@ -128,17 +142,18 @@ def main() -> None:
             # Unregister from temporal database
             else:
                 # We need to update all datasets after the removement of maps
-                tmap.metadata.select(dbif)
-                datasets = tmap.get_registered_stds(dbif)
+                tmap.metadata.select(dbif, mapset=mapset)
+                datasets = tmap.get_registered_stds(dbif, mapset=mapset)
                 # Store all unique dataset ids in a dictionary
                 if datasets:
-                    update_dict.update({dataset: dataset for dataset in datasets})
+                    update_stds_ids.update(datasets)
                 # Collect SQL statements
                 statement += tmap.delete(dbif=dbif, update=False, execute=False)
         else:
             gs.warning(
-                _("Unable to find %s map <%s> in temporal database")
-                % (tmap.get_type(), tmap.get_id()),
+                _(
+                    "Unable to find {map_type} map <{map_id}> in temporal database"
+                ).format(map_type=tmap.get_type(), map_id=tmap.get_id()),
             )
 
     # Execute the collected SQL statements
@@ -149,15 +164,17 @@ def main() -> None:
 
     # Update space time datasets
     if input_stds:
-        gs.message(_("Unregistering maps from space time dataset <%s>") % (input_stds))
+        gs.message(
+            _("Unregistering maps from space time dataset <{}>").format(input_stds)
+        )
         sp.update_from_registered_maps(dbif)
         sp.update_command_string(dbif=dbif)
-    elif len(update_dict) > 0:
+    elif update_stds_ids:
         gs.message(_("Unregistering maps from the temporal database"))
-        for count, mapid in enumerate(update_dict.values(), 1):
+        for count, mapid in enumerate(update_stds_ids, 1):
             sp = tgis.open_old_stds(mapid, stds_type, dbif)
             sp.update_from_registered_maps(dbif)
-            gs.percent(count, len(update_dict), 1)
+            gs.percent(count, len(update_stds_ids), 1)
 
     dbif.close()
 
