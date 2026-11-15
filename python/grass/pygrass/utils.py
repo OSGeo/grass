@@ -282,12 +282,13 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     >>> l[1] == (2, 12.0, 6.0, 1)
     True
 
-    The function opens the vector map if it is not open, so close it before
-    opening it again. A map which is still open cannot be removed on Windows.
+    The function opened the vector map because it was not open. Close it
+    again, since a map which is still open cannot be removed on Windows.
+
+    >>> vect.close()
 
     Add a new column and sample again
 
-    >>> vect.close()
     >>> vect.open("r")
     >>> vect.table.columns.add(test_raster_name, "double precision")
     >>> vect.table.conn.commit()

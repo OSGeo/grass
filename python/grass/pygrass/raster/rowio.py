@@ -13,9 +13,11 @@ from grass.pygrass.errors import GrassError
 from grass.pygrass.raster.raster_type import TYPE as RTYPE
 
 
-# The callback type must be the one the generated binding declares for
-# Rowio_setup(). It takes the row length as a fourth argument, and an equivalent
-# type created with ctypes.CFUNCTYPE() is rejected by ctypes.
+# Rowio_setup() takes a callback which reads one row into a buffer. The
+# generated binding declares the type of that callback (a ctypes function
+# prototype with the arguments fd, buffer, row and length). The functions below
+# have to be wrapped with this exact type: a prototype made here with
+# ctypes.CFUNCTYPE() is a different class, and ctypes rejects it as an argument.
 CMPFUNC = librowio.Rowio_setup.argtypes[4]
 
 

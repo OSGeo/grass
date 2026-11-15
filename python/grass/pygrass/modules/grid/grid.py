@@ -650,18 +650,27 @@ class GridModule:
     def define_mapset_inputs(self):
         """Add the mapset information to the input maps"""
         for inmap in self.module.inputs:
-            inm = self.module.inputs[inmap]
-            if inm.typedesc not in {"raster", "vector"} or not inm.value:
+            param = self.module.inputs[inmap]
+            if param.typedesc == "raster":
+                get_mapset = get_mapset_raster
+            elif param.typedesc == "vector":
+                get_mapset = get_mapset_vector
+            else:
                 continue
-            find_mapset = (
-                get_mapset_raster if inm.typedesc == "raster" else get_mapset_vector
-            )
-            names = inm.value if isinstance(inm.value, list) else [inm.value]
-            qualified = [
-                name if "@" in name else "%s@%s" % (name, find_mapset(name))
-                for name in names
-            ]
-            inm.value = qualified if isinstance(inm.value, list) else qualified[0]
+            if not param.value:
+                continue
+
+            if isinstance(param.value, list):
+                param.value = [self._with_mapset(n, get_mapset) for n in param.value]
+            else:
+                param.value = self._with_mapset(param.value, get_mapset)
+
+    @staticmethod
+    def _with_mapset(name, get_mapset):
+        """Return the map name qualified with its mapset, e.g. ``name@mapset``"""
+        if "@" in name:
+            return name
+        return "%s@%s" % (name, get_mapset(name))
 
     def run(self, patch=True, clean=True):
         """Run the GRASS command
