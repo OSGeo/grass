@@ -15,8 +15,6 @@ import pytest
     sys.platform.startswith("win"),
     reason="The grass launcher can't be run through subprocess on Windows",
 )
-
-
 def test_missing_database_directory(tmp_path):
     """Missing parent directories give a clear error"""
     project = tmp_path / "missing" / "deeper" / "myproject"
