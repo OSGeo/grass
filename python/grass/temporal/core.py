@@ -1443,8 +1443,12 @@ class DBConnection:
         close all temporal databases that have been opened. Use a dictionary
         to manage different connections.
         """
+        if not self.connected:
+            return
+
         self.connection.commit()
         self.cursor.close()
+        self.connection.close()
         self.connected = False
 
     def mogrify_sql_statement(self, content):
