@@ -12,7 +12,7 @@ from grass.script import Popen, append_node_pid, available_cpus, legalize_vector
 from grass.pygrass.gis import Mapset, Location
 from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
-from grass.pygrass.utils import get_mapset_raster, findmaps
+from grass.pygrass.utils import findmaps, get_mapset_raster, get_mapset_vector
 
 from grass.pygrass.modules.grid.split import (
     split_region_tiles,
@@ -651,10 +651,17 @@ class GridModule:
         """Add the mapset information to the input maps"""
         for inmap in self.module.inputs:
             inm = self.module.inputs[inmap]
-            if inm.type in {"raster", "vector"} and inm.value:
-                if "@" not in inm.value:
-                    mset = get_mapset_raster(inm.value)
-                    inm.value += "@%s" % mset
+            if inm.typedesc not in {"raster", "vector"} or not inm.value:
+                continue
+            find_mapset = (
+                get_mapset_raster if inm.typedesc == "raster" else get_mapset_vector
+            )
+            names = inm.value if isinstance(inm.value, list) else [inm.value]
+            qualified = [
+                name if "@" in name else "%s@%s" % (name, find_mapset(name))
+                for name in names
+            ]
+            inm.value = qualified if isinstance(inm.value, list) else qualified[0]
 
     def run(self, patch=True, clean=True):
         """Run the GRASS command

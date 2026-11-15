@@ -207,6 +207,27 @@ class Columns:
         self.odict = None
         self.update_odict()
 
+    def __getstate__(self):
+        """Return the state for pickling without the database connection
+
+        The connection cannot be pickled, so an unpickled object is a snapshot
+        of the columns which can be read but not updated.
+
+        >>> import pickle
+        >>> import sqlite3
+        >>> from grass.pygrass.vector.table import get_path
+        >>> path = "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db"
+        >>> cols = Columns(test_vector_name, sqlite3.connect(get_path(path)))
+        >>> copy = pickle.loads(pickle.dumps(cols))
+        >>> copy == cols
+        True
+        >>> copy.conn is None
+        True
+        """
+        state = self.__dict__.copy()
+        state["conn"] = None
+        return state
+
     def __contains__(self, item):
         return item in self.names()
 
