@@ -667,7 +667,7 @@ class GridModule:
 
     @staticmethod
     def _with_mapset(name, get_mapset):
-        """Return the map name qualified with its mapset, e.g. ``name@mapset``"""
+        """Return the map name as ``name@mapset``, adding the mapset if missing"""
         if "@" in name:
             return name
         return "%s@%s" % (name, get_mapset(name))

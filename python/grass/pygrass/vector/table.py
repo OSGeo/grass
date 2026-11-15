@@ -210,8 +210,7 @@ class Columns:
     def __getstate__(self):
         """Return the state for pickling without the database connection
 
-        The connection cannot be pickled, so an unpickled object is a snapshot
-        of the columns which can be read but not updated.
+        The connection cannot be pickled, so it is set to None.
 
         >>> import pickle
         >>> import sqlite3
