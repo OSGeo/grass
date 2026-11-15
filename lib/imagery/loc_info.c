@@ -9,15 +9,15 @@ char *I_location_info(const char *middle)
     char left[80];
     char right[80];
     char *buf;
-    int len, buf_len;
+    size_t len, buf_len;
 
     snprintf(left, 80, "LOCATION: %s", G_location());
     snprintf(right, 80, "MAPSET: %s", G_mapset());
     len = 79 - strlen(left) - strlen(middle) - strlen(right);
     buf_len = len + strlen(left) + strlen(middle) + strlen(right);
     buf = (char *)G_calloc(buf_len, sizeof(char));
-    snprintf(buf, buf_len, "%s%*s%s%*s%s", left, len / 2, "", middle, len / 2,
-             "", right);
+    snprintf(buf, buf_len, "%s%*s%s%*s%s", left, (int)(len / 2), "", middle,
+             (int)(len / 2), "", right);
 
     return buf;
 }

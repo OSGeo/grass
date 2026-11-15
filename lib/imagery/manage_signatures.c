@@ -294,7 +294,7 @@ static int list_by_type(I_SIGFILE_TYPE type, const char *mapset, int base,
     }
 
     /* Make items fully qualified names */
-    int mapset_len = strlen(mapset);
+    size_t mapset_len = strlen(mapset);
 
     *out_list = (char **)G_realloc(*out_list, (base + count) * sizeof(char *));
     for (int i = 0; i < count; i++) {
