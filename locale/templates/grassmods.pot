@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-04 17:59+0000\n"
+"POT-Creation-Date: 2026-11-15 02:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -816,7 +816,8 @@ msgstr ""
 msgid "Null value is part of the format"
 msgstr ""
 
-#: ../db/db.select/main.c:546 ../vector/v.db.select/main.c:199
+#: ../db/db.select/main.c:546 ../temporal/t.rast.list/t.rast.list.py:188
+#: ../temporal/t.vect.list/t.vect.list.py:169 ../vector/v.db.select/main.c:199
 msgid "Column names are always included"
 msgstr ""
 
@@ -4097,7 +4098,6 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #: ../display/d.rast.num/main.c:211 ../raster/r.thin/io.c:110
@@ -12039,8 +12039,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 #: ../imagery/i.svm.predict/main.c:60 ../imagery/i.svm.train/main.c:62
 msgid "Maps with feature values (attributes)"
 msgstr ""
@@ -18301,8 +18301,9 @@ msgstr ""
 #: ../raster/r.mapcalc/main.c:177 ../raster/r.series.accumulate/main.c:207
 #: ../raster/r.series.interp/main.c:132 ../raster/r.series.interp/main.c:136
 #: ../raster/r.series.interp/main.c:148 ../raster/r.series.interp/main.c:152
-#: ../vector/v.colors/main.c:222
-#, c-format
+#: ../temporal/t.remove/t.remove.py:86
+#: ../temporal/t.unregister/t.unregister.py:69 ../vector/v.colors/main.c:222
+#, c-format, python-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr ""
 
@@ -24255,7 +24256,8 @@ msgid "Exporting raster map <%s> (band %d)..."
 msgstr ""
 
 #: ../raster/r.out.gdal/main.c:741
-#, c-format
+#: ../temporal/t.rast.out.vtk/t.rast.out.vtk.py:164
+#, c-format, python-format
 msgid "Unable to export raster map <%s>"
 msgstr ""
 
@@ -29889,7 +29891,6 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #: ../raster/r.thin/io.c:112 ../raster/r.thin/io.c:188
@@ -31955,7 +31956,7 @@ msgstr ""
 msgid "Turn on cache reporting"
 msgstr ""
 
-#: ../raster/r.what/main.c:215
+#: ../raster/r.what/main.c:215 ../temporal/t.rast.what/t.rast.what.py:155
 msgid "Flag 'v' required option 'points'"
 msgstr ""
 
@@ -32251,7 +32252,8 @@ msgstr ""
 #: ../raster3d/r3.in.lidar/main.c:496 ../raster3d/r3.in.lidar/main.c:504
 #: ../raster3d/r3.in.lidar/main.c:512 ../raster3d/r3.in.lidar/main.c:520
 #: ../raster3d/r3.in.lidar/main.c:529 ../raster3d/r3.in.lidar/main.c:537
-#, c-format
+#: ../temporal/t.rast.to.rast3/t.rast.to.rast3.py:165
+#, c-format, python-format
 msgid "Unable to create 3D raster map <%s>"
 msgstr ""
 
@@ -32910,7 +32912,7 @@ msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk
 msgstr ""
 
 #: ../raster3d/r3.out.vtk/writeVTKData.c:453
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
 msgstr ""
 
 #: ../raster3d/r3.retile/main.c:51
@@ -35823,11 +35825,19 @@ msgid "Attribute table of vector {name} will be updated..."
 msgstr ""
 
 #: ../scripts/v.what.strds/v.what.strds.py:150
+#: ../temporal/t.rast.aggregate.ds/t.rast.aggregate.ds.py:152
+#: ../temporal/t.rast.aggregate.ds/t.rast.aggregate.ds.py:160
+#: ../temporal/t.rast.aggregate/t.rast.aggregate.py:145
+#: ../temporal/t.rast.contour/t.rast.contour.py:156
+#: ../temporal/t.rast.to.vect/t.rast.to.vect.py:156
+#: ../temporal/t.rast.what/t.rast.what.py:178
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:134
 #, python-format
 msgid "Space time raster dataset <%s> is empty"
 msgstr ""
 
 #: ../scripts/v.what.strds/v.what.strds.py:168
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:152
 #, python-format
 msgid ""
 "Temporal type of space time raster datasets must be equal\n"
@@ -35845,6 +35855,7 @@ msgid "Unable to add column %s to vector map <%s> "
 msgstr ""
 
 #: ../scripts/v.what.strds/v.what.strds.py:282
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:217
 #, python-format
 msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
 msgstr ""
@@ -35879,6 +35890,463 @@ msgstr ""
 
 #: ../temporal/t.connect/main.c:122
 msgid "Default TGIS database is not set"
+msgstr ""
+
+#: ../temporal/t.copy/t.copy.py:90
+#, python-format
+msgid "The output dataset <%s> must be in the current mapset<%s>."
+msgstr ""
+
+#: ../temporal/t.copy/t.copy.py:105
+#, python-format
+msgid "Empty space-time %s dataset <%s>, nothing to copy"
+msgstr ""
+
+#: ../temporal/t.copy/t.copy.py:116
+#, python-format
+msgid "Copying %s maps to the current mapset..."
+msgstr ""
+
+#: ../temporal/t.copy/t.copy.py:133
+#, python-format
+msgid "A %s map <%s> exists already in the current mapset <%s>."
+msgstr ""
+
+#: ../temporal/t.copy/t.copy.py:142
+#, python-format
+msgid "The %s map <%s> is already in the current mapset, not copying"
+msgstr ""
+
+#: ../temporal/t.info/t.info.py:104
+#, python-format
+msgid "Please specify %s="
+msgstr ""
+
+#: ../temporal/t.info/t.info.py:111
+#, python-brace-format
+msgid "Dataset <{n}> of type <{t}> not found in temporal database"
+msgstr ""
+
+#: ../temporal/t.merge/t.merge.py:77
+#, python-format
+msgid "Output space time dataset <%s> must be located in this mapset"
+msgstr ""
+
+#: ../temporal/t.merge/t.merge.py:96
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr ""
+
+#: ../temporal/t.merge/t.merge.py:113
+#, python-format
+msgid "Unable to merge maps into space time %s dataset <%s> please use the overwrite flag."
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:175
+#: ../temporal/t.rename/t.rename.py:87
+#, python-format
+msgid "Space time %s dataset <%s> not found"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:189
+msgid "You need to set the range to compute the occurrence space time raster dataset"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:205
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:240
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:206
+#, python-format
+msgid "Space time raster dataset <%s> is already in the database, use overwrite flag to overwrite"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:217
+msgid "You need to set the occurrence to compute the indicator space time raster dataset"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:225
+msgid "You need to set the staend options to compute the indicator space time raster dataset"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:259
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:277
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:193
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:239
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:261
+#, python-format
+msgid "Space time raster dataset <%s> not found"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:264
+msgid "Temporal type of input strds and minimum strds must be equal"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:282
+msgid "Temporal type of input strds and maximum strds must be equal"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:321
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:298
+#, python-format
+msgid "Processing cycle %s - %s"
+msgstr ""
+
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:384
+#: ../temporal/t.rast.accdetect/t.rast.accdetect.py:645
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:390
+#, python-format
+msgid "Map <%s> is already registered in the temporal database, use overwrite flag to overwrite."
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:217
+msgid "Invalid granularity"
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:221
+msgid "Invalid cycle"
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:229
+msgid "Invalid offset"
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:244
+msgid "Temporal type of input strds and lower strds must be equal"
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:253
+msgid "The upper option works only in conjunction with the lower option"
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:266
+msgid "Temporal type of input strds and upper strds must be equal"
+msgstr ""
+
+#: ../temporal/t.rast.accumulate/t.rast.accumulate.py:459
+msgid "Error running r.series.accumulate"
+msgstr ""
+
+#: ../temporal/t.rast.aggregate.ds/t.rast.aggregate.ds.py:134
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:103
+msgid "Input and aggregation dataset must have the same temporal type"
+msgstr ""
+
+#: ../temporal/t.rast.aggregate.ds/t.rast.aggregate.ds.py:140
+msgid "All registered maps of the aggregation dataset must have time intervals"
+msgstr ""
+
+#: ../temporal/t.rast.algebra/t.rast.algebra.py:114
+#: ../temporal/t.rast3d.algebra/t.rast3d.algebra.py:105
+msgid "Unable to process the expression in granularity algebra mode"
+msgstr ""
+
+#: ../temporal/t.rast.colors/t.rast.colors.py:183
+msgid "Error in r.colors call"
+msgstr ""
+
+#: ../temporal/t.rast.contour/t.rast.contour.py:197
+msgid "The number of parallel r.contour processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#: ../temporal/t.rast.export/t.rast.export.py:131
+msgid "Directory {} not found"
+msgstr ""
+
+#: ../temporal/t.rast.export/t.rast.export.py:134
+msgid "Directory {} is not writable"
+msgstr ""
+
+#: ../temporal/t.rast.export/t.rast.export.py:138
+msgid "Type options is not working with pack format, it will be skipped"
+msgstr ""
+
+#: ../temporal/t.rast.export/t.rast.export.py:143
+msgid "Createopt, metaopt and nodata options are not working with pack and AAIGrid formats, they will be skipped"
+msgstr ""
+
+#: ../temporal/t.rast.gapfill/t.rast.gapfill.py:128
+msgid "No gaps found"
+msgstr ""
+
+#: ../temporal/t.rast.gapfill/t.rast.gapfill.py:138
+msgid "Unable to determine successor and predecessor of a gap."
+msgstr ""
+
+#: ../temporal/t.rast.gapfill/t.rast.gapfill.py:142
+msgid "More than one successor of the gap found. Using the first found."
+msgstr ""
+
+#: ../temporal/t.rast.gapfill/t.rast.gapfill.py:147
+msgid "More than one predecessor of the gap found. Using the first found."
+msgstr ""
+
+#: ../temporal/t.rast.gapfill/t.rast.gapfill.py:200
+#, python-format
+msgid "Map with name <%s> already exists. Please use another base name."
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:105
+#: ../temporal/t.vect.list/t.vect.list.py:99
+#, python-brace-format
+msgid "Combining {option_name}={option_value} and {excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:120
+#, python-brace-format
+msgid "The option {excluded_option_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:132
+#: ../temporal/t.vect.list/t.vect.list.py:112
+#, python-brace-format
+msgid "The flag -{flag_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:170
+#: ../temporal/t.vect.list/t.vect.list.py:150
+msgid "A standard CSV separator (delimiter) is only one character long"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:207
+msgid "Values are always ordered by start_time"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:237
+#: ../temporal/t.rast.list/t.rast.list.py:253
+#, python-brace-format
+msgid "Column '{name}' is not available with the method '{method}'"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:267
+#: ../temporal/t.vect.list/t.vect.list.py:190
+#, python-brace-format
+msgid "Only one column is allowed (not {num_columns})"
+msgstr ""
+
+#: ../temporal/t.rast.list/t.rast.list.py:278
+msgid "All maps are always listed"
+msgstr ""
+
+#: ../temporal/t.rast.neighbors/t.rast.neighbors.py:194
+msgid "The method <quantile> requires input in the 'quantile' option."
+msgstr ""
+
+#: ../temporal/t.rast.neighbors/t.rast.neighbors.py:219
+msgid "Space time raster dataset <{}> is empty"
+msgstr ""
+
+#: ../temporal/t.rast.neighbors/t.rast.neighbors.py:315
+#, python-brace-format
+msgid ""
+"Error running module: {mod}\n"
+"    stderr: {error}"
+msgstr ""
+
+#: ../temporal/t.rast.neighbors/t.rast.neighbors.py:322
+msgid "Error running modules."
+msgstr ""
+
+#: ../temporal/t.rast.out.vtk/t.rast.out.vtk.py:102
+#, python-format
+msgid "Export directory <%s> not found."
+msgstr ""
+
+#: ../temporal/t.rast.series/t.rast.series.py:129
+msgid "Number requested methods and output maps do not match."
+msgstr ""
+
+#: ../temporal/t.rast.series/t.rast.series.py:147
+msgid "Processing over {} maps: activating -z flag of r.series which slows down processing."
+msgstr ""
+
+#: ../temporal/t.rast.series/t.rast.series.py:168
+#, python-format
+msgid "%s failed. Check above error messages."
+msgstr ""
+
+#: ../temporal/t.rast.to.rast3/t.rast.to.rast3.py:129
+msgid "Unable to set 3D region"
+msgstr ""
+
+#: ../temporal/t.rast.to.rast3/t.rast.to.rast3.py:169
+msgid "Space time voxel cube"
+msgstr ""
+
+#: ../temporal/t.rast.to.rast3/t.rast.to.rast3.py:170
+msgid "This space time voxel cube was created with t.rast.to.rast3"
+msgstr ""
+
+#: ../temporal/t.rast.to.rast3/t.rast.to.rast3.py:183
+#, python-format
+msgid "%s failed to set units."
+msgstr ""
+
+#: ../temporal/t.rast.to.vect/t.rast.to.vect.py:196
+msgid "The number of parallel r.to.vect processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#: ../temporal/t.rast.univar/t.rast.univar.py:125
+msgid "<{}> is not valid input to the percentile option"
+msgstr ""
+
+#: ../temporal/t.rast.univar/t.rast.univar.py:138
+msgid "Zoning raster must be of type CELL"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:143
+msgid "Options coordinates and points are mutually exclusive"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:148
+msgid "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:234
+msgid "Please specify points or coordinates"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:374
+#: ../temporal/t.rast.what/t.rast.what.py:446
+#, python-format
+msgid "Transforming r.what output file %s"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:573
+#, python-format
+msgid "Writing the output file <%s>"
+msgstr ""
+
+#: ../temporal/t.rast.what/t.rast.what.py:627
+#, python-format
+msgid "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:121
+msgid "The following data base element files will be deleted:"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:128
+#, python-brace-format
+msgid "{stds}: {gid}"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:134
+#, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database:"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:139
+#, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database and removed from spatial database:"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:157
+#, python-format
+msgid "- %s"
+msgstr ""
+
+#: ../temporal/t.remove/t.remove.py:193
+#, python-brace-format
+msgid "Nothing removed. You must use the force flag (-{flag}) to actually remove them."
+msgstr ""
+
+#: ../temporal/t.rename/t.rename.py:77
+#, python-format
+msgid "Space time %s dataset <%s> can not be renamed. Mapset of the new identifier differs from the current mapset."
+msgstr ""
+
+#: ../temporal/t.rename/t.rename.py:98
+#, python-format
+msgid "Unable to rename Space time %s dataset <%s>. Name <%s> is in use, please use the overwrite flag."
+msgstr ""
+
+#: ../temporal/t.shift/t.shift.py:74
+#, python-format
+msgid "Unable to temporally shift the space time %s dataset <%s>"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:72
+#: ../vector/v.external.out/args.c:98
+#, c-format, python-format
+msgid "%s= or %s= must be specified"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:124
+msgid "Unregister maps"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:151
+#, python-format
+msgid "Unable to find %s map <%s> in temporal database"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:165
+#, python-format
+msgid "Unregister maps from space time dataset <%s>"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:167
+msgid "Unregister maps from the temporal database"
+msgstr ""
+
+#: ../temporal/t.vect.db.select/t.vect.db.select.py:105
+#, python-format
+msgid "Unable to run v.db.select for vector map <%s> with layer %s"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:107
+msgid "The number of columns must be equal to the number of space time raster datasets"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:231
+#, python-format
+msgid "Unable to create new layers for vector map <%s>"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:233
+#, python-format
+msgid "Observaion of space time raster dataset(s) <%s>"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:235
+#, python-format
+msgid "Observation of space time raster dataset(s) <%s> with vector map <%s>"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:261
+msgid "The number of raster maps in a granule must be equal to the number of column names"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:296
+#, python-format
+msgid "Unable to add column %s to vector map <%s> with layer %i"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:313
+#, python-format
+msgid "Unable to add table to vector map <%s> with layer %i"
+msgstr ""
+
+#: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:332
+#, python-format
+msgid "Unable to run v.what.rast for vector map <%s> with layer %i and raster map <%s>"
+msgstr ""
+
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:115
+msgid "All registered maps of the space time vector dataset must have time intervals"
+msgstr ""
+
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:126
+#, python-format
+msgid "Space time vector dataset <%s> is empty"
+msgstr ""
+
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:190
+#, python-format
+msgid "Unable to add column %s to vector map <%s>"
+msgstr ""
+
+#: ../temporal/t.vect.what.strds/t.vect.what.strds.py:234
+#, python-format
+msgid "Unable to remove raster map <%s>"
 msgstr ""
 
 #: ../vector/v.buffer/geos.c:19 ../vector/v.profile/main.c:63
@@ -38284,11 +38752,6 @@ msgstr ""
 
 #: ../vector/v.external.out/args.c:80
 msgid "Print current status in shell script style"
-msgstr ""
-
-#: ../vector/v.external.out/args.c:98
-#, c-format
-msgid "%s= or %s= must be specified"
 msgstr ""
 
 #: ../vector/v.external.out/args.c:101

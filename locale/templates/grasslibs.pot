@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-04 17:59+0000\n"
+"POT-Creation-Date: 2026-11-15 02:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -354,8 +354,8 @@ msgid "send data: invalid C-type"
 msgstr ""
 
 #: ../lib/db/dbmi_client/column.c:136 ../lib/vector/Vlib/ascii.c:451
-#: ../lib/vector/Vlib/write_pg.c:685
-#, c-format
+#: ../lib/vector/Vlib/write_pg.c:685 ../python/grass/script/db.py:61
+#, c-format, python-format
 msgid "Unable to describe table <%s>"
 msgstr ""
 
@@ -1024,7 +1024,7 @@ msgstr ""
 msgid "Incomplete GRASS session: Variable '%s' not set"
 msgstr ""
 
-#: ../lib/gis/error.c:348
+#: ../lib/gis/error.c:348 ../python/grass/script/task.py:53
 msgid "unknown"
 msgstr ""
 
@@ -1238,8 +1238,8 @@ msgstr ""
 msgid "Unable to open directory %s"
 msgstr ""
 
-#: ../lib/gis/make_mapset.c:67
-#, c-format
+#: ../lib/gis/make_mapset.c:67 ../python/grass/grassdb/checks.py:328
+#, c-format, python-format
 msgid "Location <%s> doesn't exist"
 msgstr ""
 
@@ -3216,7 +3216,8 @@ msgid "3D raster map <%s> not found"
 msgstr ""
 
 #: ../lib/gpde/n_arrays_io.c:278 ../lib/ogsf/gvl_file.c:435
-#, c-format
+#: ../python/grass/temporal/c_libraries_interface.py:812
+#, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
 msgstr ""
 
@@ -3781,7 +3782,7 @@ msgid ""
 "Switching to text based interface mode."
 msgstr ""
 
-#: ../lib/init/grass.py:681
+#: ../lib/init/grass.py:681 ../python/grass/app/cli.py:90
 msgid "Error creating project: {}"
 msgstr ""
 
@@ -3987,11 +3988,11 @@ msgstr ""
 msgid "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
 msgstr ""
 
-#: ../lib/init/grass.py:1929
+#: ../lib/init/grass.py:1929 ../python/grass/app/cli.py:120
 msgid "mapset locking timeout in seconds"
 msgstr ""
 
-#: ../lib/init/grass.py:1935
+#: ../lib/init/grass.py:1935 ../python/grass/app/cli.py:126
 msgid "remove lock if present"
 msgstr ""
 
@@ -4317,7 +4318,8 @@ msgstr ""
 #: ../lib/ogsf/gv3.c:344 ../lib/vector/Vlib/map.c:191
 #: ../lib/vector/Vlib/map.c:201 ../lib/vector/Vlib/map.c:274
 #: ../lib/vector/Vlib/open.c:300 ../lib/vector/Vlib/open.c:441
-#, c-format
+#: ../python/grass/temporal/c_libraries_interface.py:884
+#, c-format, python-format
 msgid "Unable to open vector map <%s>"
 msgstr ""
 
@@ -4529,7 +4531,8 @@ msgstr ""
 
 #: ../lib/ogsf/gvl_file.c:469 ../lib/raster3d/close.c:124
 #: ../lib/raster3d/close.c:134 ../lib/raster3d/close.c:163
-#, c-format
+#: ../python/grass/temporal/c_libraries_interface.py:841
+#, c-format, python-format
 msgid "Unable to close 3D raster map <%s>"
 msgstr ""
 
@@ -6135,7 +6138,7 @@ msgid "Attempt to read points of nonexistent isle"
 msgstr ""
 
 #: ../lib/vector/Vlib/area.c:94 ../lib/vector/Vlib/area.c:495
-#: ../lib/vector/Vlib/build_pg.c:126 ../lib/vector/Vlib/build_sfa.c:719
+#: ../lib/vector/Vlib/build_pg.c:126 ../lib/vector/Vlib/build_sfa.c:722
 #: ../lib/vector/Vlib/close.c:262 ../lib/vector/Vlib/close_pg.c:102
 #: ../lib/vector/Vlib/close_pg.c:150 ../lib/vector/Vlib/copy.c:451
 #: ../lib/vector/Vlib/header_finfo.c:44 ../lib/vector/Vlib/header_finfo.c:81
@@ -6637,21 +6640,21 @@ msgstr ""
 msgid "Error writing out spatial index file"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:76 ../lib/vector/Vlib/build_sfa.c:331
-#: ../lib/vector/Vlib/build_sfa.c:630
+#: ../lib/vector/Vlib/build_nat.c:76 ../lib/vector/Vlib/build_sfa.c:332
+#: ../lib/vector/Vlib/build_sfa.c:632
 msgid "Registering primitives..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_nat.c:119 ../lib/vector/Vlib/build_sfa.c:376
-#: ../lib/vector/Vlib/build_sfa.c:662
+#: ../lib/vector/Vlib/build_nat.c:119 ../lib/vector/Vlib/build_sfa.c:377
+#: ../lib/vector/Vlib/build_sfa.c:664
 #, c-format
 msgid "One primitive registered"
 msgid_plural "%d primitives registered"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../lib/vector/Vlib/build_nat.c:122 ../lib/vector/Vlib/build_sfa.c:379
-#: ../lib/vector/Vlib/build_sfa.c:665
+#: ../lib/vector/Vlib/build_nat.c:122 ../lib/vector/Vlib/build_sfa.c:380
+#: ../lib/vector/Vlib/build_sfa.c:667
 #, c-format
 msgid "One vertex registered"
 msgid_plural "%<PRId64> vertices registered"
@@ -6795,41 +6798,41 @@ msgstr ""
 msgid "Unable to build simple features from topogeometry data. Unsupported type %d."
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:271 ../lib/vector/Vlib/build_sfa.c:542
+#: ../lib/vector/Vlib/build_sfa.c:272 ../lib/vector/Vlib/build_sfa.c:544
 #, c-format
 msgid "Unable to calculate centroid for area %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:297
+#: ../lib/vector/Vlib/build_sfa.c:298
 #, c-format
 msgid "Feature type %d not supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:346 ../lib/vector/Vlib/build_sfa.c:355
+#: ../lib/vector/Vlib/build_sfa.c:347 ../lib/vector/Vlib/build_sfa.c:356
 #: ../lib/vector/Vlib/read_pg.c:389
 #, c-format
 msgid "Feature %d without geometry skipped"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:601 ../lib/vector/Vlib/read_ogr.c:323
+#: ../lib/vector/Vlib/build_sfa.c:603 ../lib/vector/Vlib/read_ogr.c:323
 #: ../lib/vector/Vlib/read_ogr.c:558
 #, c-format
 msgid "OGR feature type %d not supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:669
+#: ../lib/vector/Vlib/build_sfa.c:672
 #, c-format
 msgid "One feature without geometry skipped"
 msgid_plural "%d features without geometry skipped"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../lib/vector/Vlib/build_sfa.c:723
+#: ../lib/vector/Vlib/build_sfa.c:726
 #, c-format
 msgid "%s: Native format unsupported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build_sfa.c:748
+#: ../lib/vector/Vlib/build_sfa.c:751
 msgid "Feature index is built only for non-native formats. Nothing to dump."
 msgstr ""
 
@@ -8878,4 +8881,1871 @@ msgstr ""
 
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
+msgstr ""
+
+#: ../python/grass/app/cli.py:111
+msgid "process ID of the process locking the mapset (a mapset can be automatically unlocked if there is no process with this PID)"
+msgstr ""
+
+#: ../python/grass/app/cli.py:139
+msgid "Error creating mapset: {}"
+msgstr ""
+
+#: ../python/grass/app/data.py:239
+#, python-brace-format
+msgid "Mapset <{mapset}> locked (attempt {try_number}), but will retry in {sleep_time:.2f} seconds..."
+msgstr ""
+
+#: ../python/grass/app/data.py:296
+msgid "Path '{}' doesn't exist"
+msgstr ""
+
+#: ../python/grass/app/data.py:298
+msgid "Path '{}' not accessible."
+msgstr ""
+
+#: ../python/grass/app/data.py:304
+msgid "You are not the owner of '{}'."
+msgstr ""
+
+#: ../python/grass/app/data.py:319
+#, python-brace-format
+msgid "File {file} owned by {user} found."
+msgstr ""
+
+#: ../python/grass/app/data.py:324
+msgid "On the command line, you can force GRASS to start by using the -f flag."
+msgstr ""
+
+#: ../python/grass/app/data.py:327
+msgid "In Python, you can start a session with force_unlock=True."
+msgstr ""
+
+#: ../python/grass/app/data.py:330
+#, python-brace-format
+msgid ""
+"Selected mapset is currently being used by another GRASS session. {lock_info} Concurrent access to a mapset is not allowed. However, you can either use another mapset within the same project or remove the lock if you are sure that no other session is active.\n"
+"{cli_solution}\n"
+"{python_solution}\n"
+"Make sure you have sufficient access permissions to remove the lock file. You may want to use a process manager to check that no other process is using the mapset."
+msgstr ""
+
+#: ../python/grass/app/data.py:347
+#, python-brace-format
+msgid "Removing lock in the selected mapset: {lock_info}"
+msgstr ""
+
+#: ../python/grass/app/data.py:354
+#, python-brace-format
+msgid ""
+"Unable to properly access lock file '{name}' or run the lock program.\n"
+"Please resolve this with your system administrator. (Lock program return code: {returncode})"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:37 ../python/grass/grassdb/checks.py:71
+msgid "Provide only path or all three parameters, not two"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:280
+#, python-brace-format
+msgid "Mapset <{mapset}> doesn't exist in GRASS project <{location}>"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:283
+#, python-format
+msgid "<%s> is not a GRASS Mapset because it is not a directory"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:286
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because it does not have a WIND file"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:292
+#, python-format
+msgid "<%s> is not a valid GRASS Mapset because its WIND file is not readable"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:299
+#, python-brace-format
+msgid "Mapset <{mapset}> or project <{location}> is invalid for an unknown reason"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:332
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT mapset is missing"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:337
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT is not a directory"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:344
+#, python-format
+msgid "<%s> is not a valid GRASS project because PERMANENT mapset does not have a DEFAULT_WIND file (default computational region)"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:353
+#, python-brace-format
+msgid "Project <{location_path}> is invalid for an unknown reason"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:370
+#, python-brace-format
+msgid "<{location}> looks like a mapset, not a project. Did you mean just <{one_dir_up}>?"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:376
+#, python-brace-format
+msgid "It looks like <{location}> contains projects. Did you mean to specify one of them?"
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:398
+msgid "Name '{}' is not a valid name for location or mapset. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:405
+msgid "Name '{}' is reserved for direct read access to OGR layers. Please use another name for your mapset."
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:412
+#, python-brace-format
+msgid "Mapset  <{mapset}> already exists. Please consider using another name for your mapset."
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:434
+msgid "Name '{}' is not a valid name for project or mapset. Please use only ASCII characters excluding characters {} and space."
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:441
+#, python-brace-format
+msgid "Project <{location}> already exists. Please consider using another name for your project."
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:500
+#, python-brace-format
+msgid "Mapset <{mapset}> is required for a valid project."
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:505
+#, python-brace-format
+msgid "Mapset <{mapset}> is the current mapset."
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:510
+#, python-brace-format
+msgid "Mapset <{mapset}> is in use."
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:513
+#, python-brace-format
+msgid "Mapset <{mapset}> is owned by a different user."
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:544
+#, python-brace-format
+msgid "Project <{location}> is the current project."
+msgstr ""
+
+#: ../python/grass/grassdb/checks.py:583
+#, python-brace-format
+msgid "GRASS database <{grassdb}> is the current database."
+msgstr ""
+
+#: ../python/grass/grassdb/history.py:70
+msgid "Unable to create history file {}"
+msgstr ""
+
+#: ../python/grass/grassdb/history.py:90
+msgid "Unable to read from plain text history file {}"
+msgstr ""
+
+#: ../python/grass/grassdb/history.py:110
+#: ../python/grass/grassdb/history.py:201
+#: ../python/grass/grassdb/history.py:301
+#: ../python/grass/grassdb/history.py:345
+msgid "Error decoding content of JSON history file {}"
+msgstr ""
+
+#: ../python/grass/grassdb/history.py:124
+msgid "Unable to read from JSON history file {}"
+msgstr ""
+
+#: ../python/grass/grassdb/history.py:175
+msgid "Unable to remove entry from plain text history file {}"
+msgstr ""
+
+#: ../python/grass/grassdb/history.py:207
+msgid "Unable to remove entry from JSON history file {}"
+msgstr ""
+
+#: ../python/grass/grassdb/history.py:244
+msgid "Unable to convert plain text history file {} to JSON format"
+msgstr ""
+
+#: ../python/grass/grassdb/history.py:305
+msgid "Unable to add entry to JSON history file {}"
+msgstr ""
+
+#: ../python/grass/grassdb/history.py:351
+msgid "Unable to update entry in JSON history file {}"
+msgstr ""
+
+#: ../python/grass/grassdb/history.py:379
+msgid "Unable to copy history file {} to {}"
+msgstr ""
+
+#: ../python/grass/grassdb/manage.py:25
+msgid "Mapset PERMANENT cannot be deleted (a whole location can be)"
+msgstr ""
+
+#: ../python/grass/grassdb/manage.py:43
+msgid "Mapset PERMANENT cannot be renamed"
+msgstr ""
+
+#: ../python/grass/grassdb/manage.py:112
+msgid "Mapset path '{}' needs at least three components"
+msgstr ""
+
+#: ../python/grass/grassdb/manage.py:168
+msgid "Provide only path, or path and location, or path, location, and mapset, but not mapset without location"
+msgstr ""
+
+#: ../python/grass/grassdb/manage.py:181
+msgid "Parameter path needs to be 'path/to/location/mapset' or location and mapset need to be set"
+msgstr ""
+
+#: ../python/grass/gunittest/gmodules.py:114
+msgid "input='-' must be used when stdin is specified"
+msgstr ""
+
+#: ../python/grass/gunittest/gmodules.py:116
+msgid "stdin must be string or buffer, not PIPE"
+msgstr ""
+
+#: ../python/grass/gunittest/gmodules.py:119
+msgid "stdin must be used when input='-'"
+msgstr ""
+
+#: ../python/grass/gunittest/gmodules.py:121
+msgid "You cannot merge stdout and stderr and not capture them"
+msgstr ""
+
+#: ../python/grass/gunittest/gmodules.py:123
+msgid "stdout argument not allowed, it could be overridden"
+msgstr ""
+
+#: ../python/grass/gunittest/gmodules.py:125
+msgid "stderr argument not allowed, it could be overridden"
+msgstr ""
+
+#: ../python/grass/imaging/images2avi.py:101
+msgid "Invalid duration parameter for writeAvi."
+msgstr ""
+
+#: ../python/grass/imaging/images2avi.py:140
+#: ../python/grass/imaging/images2avi.py:145
+msgid "Could not write avi."
+msgstr ""
+
+#: ../python/grass/imaging/operations.py:77
+#: ../python/grass/imaging/operations.py:98
+#: ../python/grass/imaging/operations.py:123
+#: ../python/grass/imaging/operations.py:155
+msgid "Install PIL or Pillow to use this function"
+msgstr ""
+
+#: ../python/grass/imaging/operations.py:159
+msgid "Install a newer version of PIL or Pillow to use this function (missing ImageOps module)"
+msgstr ""
+
+#: ../python/grass/jupyter/baseseriesmap.py:81
+msgid "Module must begin with 'd_'"
+msgstr ""
+
+#: ../python/grass/jupyter/baseseriesmap.py:86
+msgid "Cannot find GRASS module {}"
+msgstr ""
+
+#: ../python/grass/jupyter/interactivemap.py:288
+msgid "Neither ipyleaflet nor folium found."
+msgstr ""
+
+#: ../python/grass/jupyter/interactivemap.py:295
+msgid "Invalid map backend, use 'folium' or 'ipyleaflet'"
+msgstr ""
+
+#: ../python/grass/jupyter/interactivemap.py:393
+msgid "Click to draw geometries"
+msgstr ""
+
+#: ../python/grass/jupyter/interactivemap.py:407
+msgid "Click to show and edit computational region"
+msgstr ""
+
+#: ../python/grass/jupyter/interactivemap.py:420
+msgid "Click to query raster and vector maps"
+msgstr ""
+
+#: ../python/grass/jupyter/interactivemap.py:557
+#, python-brace-format
+msgid "Region changed to: n={north}, s={south}, e={east}, w={west} nsres={nsres} ewres={ewres}"
+msgstr ""
+
+#: ../python/grass/jupyter/interactivemap.py:662
+msgid "New vector map name:"
+msgstr ""
+
+#: ../python/grass/jupyter/interactivemap.py:668
+msgid "Save"
+msgstr ""
+
+#: ../python/grass/jupyter/seriesmap.py:80
+msgid "Could not find a raster named {}"
+msgstr ""
+
+#: ../python/grass/jupyter/seriesmap.py:85
+msgid "Number of rasters in series must match"
+msgstr ""
+
+#: ../python/grass/jupyter/seriesmap.py:107
+msgid "Could not find a vector named {}"
+msgstr ""
+
+#: ../python/grass/jupyter/seriesmap.py:112
+msgid "Number of vectors in series must match"
+msgstr ""
+
+#: ../python/grass/jupyter/seriesmap.py:132
+msgid "Number of names must match number of added layers"
+msgstr ""
+
+#: ../python/grass/jupyter/setup.py:102 ../python/grass/script/setup.py:389
+#, python-brace-format
+msgid "Mapset {path} is not valid: {reason}"
+msgstr ""
+
+#: ../python/grass/jupyter/timeseriesmap.py:50
+msgid "Dataset {} must be element type 'strds' or 'stvds'"
+msgstr ""
+
+#: ../python/grass/jupyter/timeseriesmap.py:69
+msgid "Could not find space time dataset named {} of type {}"
+msgstr ""
+
+#: ../python/grass/jupyter/timeseriesmap.py:120
+msgid "Date/Time"
+msgstr ""
+
+#: ../python/grass/jupyter/utils.py:72
+msgid "Encountered error while running m.proj: {}"
+msgstr ""
+
+#: ../python/grass/jupyter/utils.py:513
+msgid "filename must end in '.gif'"
+msgstr ""
+
+#: ../python/grass/pygrass/errors.py:15
+msgid "The map is close!"
+msgstr ""
+
+#: ../python/grass/pygrass/errors.py:25
+msgid "The self.c_mapinfo pointer must be correctly initiated"
+msgstr ""
+
+#: ../python/grass/pygrass/errors.py:35
+msgid "Map <{}> not found in current mapset"
+msgstr ""
+
+#: ../python/grass/pygrass/modules/grid/grid.py:489
+msgid "Parameter patch_backend must be 'r.patch' or 'RasterRow'"
+msgstr ""
+
+#: ../python/grass/pygrass/modules/grid/grid.py:493
+msgid "Patching backend 'r.patch' doesn't work for overlap > 0"
+msgstr ""
+
+#: ../python/grass/pygrass/modules/grid/grid.py:692
+msgid "Execution of subprocesses was not successful"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/__init__.py:196
+msgid "The map does not exist, I can't open in 'r' mode"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/__init__.py:209
+#, python-brace-format
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/__init__.py:213
+msgid "Raster type not defined"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/__init__.py:317
+#, python-brace-format
+msgid "Mode type: {0} not supported ('r', 'w','rw')"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/__init__.py:337
+#, python-format
+msgid "Index out of range: %r."
+msgstr ""
+
+#: ../python/grass/pygrass/raster/__init__.py:522
+#, python-brace-format
+msgid "Raster map <{0}> already exists. Use overwrite."
+msgstr ""
+
+#: ../python/grass/pygrass/raster/__init__.py:552
+#, python-brace-format
+msgid "Raster map <{0}> does not exist"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/abstract.py:176
+#: ../python/grass/temporal/c_libraries_interface.py:569
+msgid "Invalid semantic label"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/abstract.py:339
+#: ../python/grass/pygrass/vector/abstract.py:98
+#, python-brace-format
+msgid "Mode type: {0} not supported ('r', 'w')"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/abstract.py:350
+#, python-brace-format
+msgid "Overwrite type: {0} not supported (True/False)"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/abstract.py:363
+#: ../python/grass/pygrass/vector/abstract.py:111
+#, python-brace-format
+msgid "Map name {0} not valid"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/category.py:71
+#, python-brace-format
+msgid "Raster type: {0} not supported"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/category.py:161
+msgid "Error executing: Rast_get_ith_cat"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/category.py:192
+msgid "Null value detected"
+msgstr ""
+
+#: ../python/grass/pygrass/raster/category.py:194
+msgid "Error executing: Rast_set_cat"
+msgstr ""
+
+#: ../python/grass/pygrass/utils.py:329
+msgid "Vector doesn't contain points"
+msgstr ""
+
+#: ../python/grass/pygrass/vector/__init__.py:844
+#, python-format
+msgid "Unable to read line of feature %i"
+msgstr ""
+
+#: ../python/grass/pygrass/vector/__init__.py:928
+#, python-format
+msgid "Unable to read area with id %i"
+msgstr ""
+
+#: ../python/grass/pygrass/vector/table.py:958
+msgid "No links available."
+msgstr ""
+
+#: ../python/grass/pygrass/vector/table.py:964
+#, python-brace-format
+msgid "Index out of bounds. The maximum index allowed is {max_link_indx}, the queried index is {indx}"
+msgstr ""
+
+#: ../python/grass/pygrass/vector/table.py:1147
+#, python-format
+msgid "Deleting table <%s> which is attached to following map(s):"
+msgstr ""
+
+#: ../python/grass/pygrass/vector/table.py:1152
+msgid "You must use the force flag to actually remove it. Exiting."
+msgstr ""
+
+#: ../python/grass/script/array.py:174 ../python/grass/script/array.py:239
+#: ../python/grass/script/array.py:310 ../python/grass/script/array.py:363
+#, python-format
+msgid "Invalid kind <%s>"
+msgstr ""
+
+#: ../python/grass/script/array.py:177 ../python/grass/script/array.py:313
+#, python-format
+msgid "Invalid size <%d>"
+msgstr ""
+
+#: ../python/grass/script/array.py:224 ../python/grass/script/array.py:357
+#, python-format
+msgid "Invalid FP size <%d>"
+msgstr ""
+
+#: ../python/grass/script/array.py:236 ../python/grass/script/array.py:360
+#, python-format
+msgid "Invalid integer size <%d>"
+msgstr ""
+
+#: ../python/grass/script/core.py:100
+#, python-brace-format
+msgid "Cannot find the executable {0}"
+msgstr ""
+
+#: ../python/grass/script/core.py:355
+#, python-format
+msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is deprecated in GRASS 7.0 and has been removed in version 7.1."
+msgstr ""
+
+#: ../python/grass/script/core.py:458
+#, python-brace-format
+msgid "Module {module} ({code}) failed with non-zero return code {returncode}"
+msgstr ""
+
+#: ../python/grass/script/core.py:845
+#, python-brace-format
+msgid "{message} (Additionally, there was an error: {additional_error})"
+msgstr ""
+
+#: ../python/grass/script/core.py:1344
+msgid "Mixing value types. Will try to compare after integer conversion"
+msgstr ""
+
+#: ../python/grass/script/core.py:1654 ../python/grass/script/core.py:1734
+#, python-format
+msgid "Element type should be \"raster\" and not \"%s\""
+msgstr ""
+
+#: ../python/grass/script/core.py:1758
+#: ../python/grass/temporal/gui_support.py:58
+#, python-format
+msgid "Invalid element '%s'"
+msgstr ""
+
+#: ../python/grass/script/core.py:1926
+msgid "Unable to list mapsets"
+msgstr ""
+
+#: ../python/grass/script/core.py:2196
+#, python-brace-format
+msgid "Debug level {0}"
+msgstr ""
+
+#: ../python/grass/script/core.py:2203
+msgid "WARNING: Ignoring unsupported debug level (must be >=0 and <=5): {}\n"
+msgstr ""
+
+#: ../python/grass/script/core.py:2226
+#, python-format
+msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
+msgstr ""
+
+#: ../python/grass/script/core.py:2233
+#, python-format
+msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
+msgstr ""
+
+#: ../python/grass/script/db.py:184
+#, python-format
+msgid "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be                     provided"
+msgstr ""
+
+#: ../python/grass/script/db.py:197
+msgid "Fetching data failed"
+msgstr ""
+
+#: ../python/grass/script/imagery.py:105
+#, python-brace-format
+msgid "Empty result returned for subgroup <{sg}> in group <{g}>"
+msgstr ""
+
+#: ../python/grass/script/imagery.py:132
+#, python-brace-format
+msgid "Semantic label missing for raster map {m} in group <{g}>."
+msgstr ""
+
+#: ../python/grass/script/imagery.py:147
+#, python-brace-format
+msgid "Key {k} from raster map {m} already present in group dictionary.Overwriting existing entry..."
+msgstr ""
+
+#: ../python/grass/script/raster.py:65
+#, python-format
+msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
+msgstr ""
+
+#: ../python/grass/script/raster.py:170
+#, python-format
+msgid "An error occurred while running r.mapcalc with expression: %s"
+msgstr ""
+
+#: ../python/grass/script/raster.py:276
+msgid "No data"
+msgstr ""
+
+#: ../python/grass/script/raster.py:285
+msgid "color"
+msgstr ""
+
+#: ../python/grass/script/raster.py:285
+msgid "label"
+msgstr ""
+
+#: ../python/grass/script/raster.py:285
+#: ../python/grass/script/testsuite/test_script_raster.py:33
+msgid "value"
+msgstr ""
+
+#: ../python/grass/script/raster3d.py:114
+#, python-format
+msgid "An error occurred while running r3.mapcalc with expression: %s"
+msgstr ""
+
+#: ../python/grass/script/setup.py:369
+msgid "Parameter grass_path or GISBASE environmental variable must be set"
+msgstr ""
+
+#: ../python/grass/script/setup.py:380
+#, python-brace-format
+msgid "Path '{path}' does not exist"
+msgstr ""
+
+#: ../python/grass/script/setup.py:384
+#, python-brace-format
+msgid "Path '{path}' is a file, but a directory is needed"
+msgstr ""
+
+#: ../python/grass/script/setup.py:570
+msgid "Cleaning up SQLite attribute database..."
+msgstr ""
+
+#: ../python/grass/script/setup.py:590
+msgid "Cleaning up temporary files..."
+msgstr ""
+
+#: ../python/grass/script/task.py:148
+#, python-format
+msgid "Parameter element '%(element)s' not found: '%(value)s'"
+msgstr ""
+
+#: ../python/grass/script/task.py:164
+#, python-format
+msgid "Flag not found: %s"
+msgstr ""
+
+#: ../python/grass/script/task.py:184
+#, python-format
+msgid "Parameter '%(name)s' (%(desc)s) is missing."
+msgstr ""
+
+#: ../python/grass/script/task.py:219
+msgid "<required>"
+msgstr ""
+
+#: ../python/grass/script/task.py:479 ../python/grass/script/task.py:487
+#, python-brace-format
+msgid ""
+"Unable to fetch interface description for command '<{cmd}>'.\n"
+"\n"
+"Details: <{det}>"
+msgstr ""
+
+#: ../python/grass/script/task.py:518
+#, python-brace-format
+msgid "Cannot parse interface description of <{name}> module: {error}"
+msgstr ""
+
+#: ../python/grass/script/vector.py:95
+#, python-format
+msgid "Database connection not defined for layer %s"
+msgstr ""
+
+#: ../python/grass/script/vector.py:265
+#, python-format
+msgid "Missing layer %(layer)d in vector map <%(map)s>"
+msgstr ""
+
+#: ../python/grass/script/vector.py:288
+msgid "vector_db_select() failed"
+msgstr ""
+
+#: ../python/grass/script/vector.py:407
+#, python-brace-format
+msgid "Number of given vector maps ({m}) differs from number of layers ({l})"
+msgstr ""
+
+#: ../python/grass/script/vector.py:465
+#, python-brace-format
+msgid ""
+"v.what output is not valid JSON format:\n"
+" {ret}"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:228
+#, python-brace-format
+msgid "Map <{map_name}> of element type '{element}' not found on                             search path"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:431
+#, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:442
+#, python-format
+msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:451
+#, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:462
+#, python-format
+msgid "End time must be of type datetime for %(type)s map <%(id)s>"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:472
+#, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s> with layer: %(l)s"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:485
+#: ../python/grass/temporal/abstract_map_dataset.py:602
+#, python-format
+msgid "End time must be greater than start time for %(type)s map <%(id)s>"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:523
+#: ../python/grass/temporal/abstract_map_dataset.py:644
+#, python-format
+msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:563
+#, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:577
+#, python-format
+msgid "Unsupported relative time unit type for %(type)s map <%(id)s>: %(u)s"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:589
+#, python-format
+msgid "End time must be greater than start time for %(typ)s map <%(id)s> with layer %(l)s"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:936
+#, python-format
+msgid "Map <%s> has incorrect start time"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:943
+#, python-format
+msgid "Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is greater than end time"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:952
+#, python-format
+msgid "Map <%s> has incorrect time interval, start time is greater than end time"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:1002
+#, python-format
+msgid "Delete %s dataset <%s> from temporal database"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_map_dataset.py:1228
+msgid "semantic labels can only be assigned to raster maps"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:217
+#: ../python/grass/temporal/abstract_space_time_dataset.py:351
+#, python-format
+msgid "Unknown temporal type \"%s\""
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:344
+#: ../python/grass/temporal/abstract_space_time_dataset.py:1159
+#, python-format
+msgid "Wrong granularity: \"%s\""
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:372
+#, python-format
+msgid "Unsupported temporal unit: %s"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:425
+#, python-format
+msgid "Created register table <%s> for space time %s  dataset <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:762
+#: ../python/grass/temporal/abstract_space_time_dataset.py:1022
+msgid "The space time datasets must be of the same temporal type"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:768
+#: ../python/grass/temporal/abstract_space_time_dataset.py:1028
+msgid "The temporal map type of the sample dataset must be interval"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:1765
+msgid "Invalid spatial relation <{}> requested.Only values 'overlaps', 'is_contained', and 'contains' are                         allowed."
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:1934
+msgid "Unable to get map ids from register table <{}>"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2047
+#, python-format
+msgid "Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2056
+#: ../python/grass/temporal/datetime_math.py:446
+#, python-format
+msgid "Wrong granularity format: %s"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2222
+#, python-format
+msgid "Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2329
+#, python-format
+msgid "Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2341
+msgid "Renaming of space time datasets is not supported for PostgreSQL."
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2411
+#, python-format
+msgid "Delete space time %s  dataset <%s> from temporal database"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2418
+#, python-format
+msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the database does not match the current mapset"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2434
+#, python-format
+msgid "Drop map register table: %s"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2492
+msgid "Error in register table request"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2527
+#, python-format
+msgid "Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of the database does not match the current mapset"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2540
+msgid "Only a map that was inserted in the temporal database can be registered in a space time dataset"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2573
+#, python-format
+msgid "Map <%(id)s> with layer %(l)s has invalid time"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2577
+#, python-format
+msgid "Map <%s> has invalid time"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2596
+#, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2609
+#, python-format
+msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2630
+#, python-format
+msgid "Set temporal unit for space time %s dataset <%s> to %s"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2641
+#, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2654
+#, python-format
+msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> are different"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2663
+msgid "Maps can only registered in a database in the current mapset"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2670
+#, python-format
+msgid "Map <%(map)s> with layer %(l)s is already registered."
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2675
+#, python-format
+msgid "Map <%s> is already registered."
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2728
+msgid "Maps can only unregistered in a database in the current mapset"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2740
+#, python-format
+msgid "Map <%(map)s> with layer %(l)s is not registered in space time dataset <%(base)s>"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2753
+#, python-format
+msgid "Map <%(map)s> is not registered in space time dataset <%(base)s>"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2808
+#, python-format
+msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the database does not match the current mapset"
+msgstr ""
+
+#: ../python/grass/temporal/abstract_space_time_dataset.py:2818
+#, python-format
+msgid "Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/aggregation.py:139
+#, python-format
+msgid "Aggregating %s raster maps"
+msgstr ""
+
+#: ../python/grass/temporal/aggregation.py:155
+#, python-format
+msgid "Raster map <%(name)s> is already in temporal database, use overwrite flag to overwrite"
+msgstr ""
+
+#: ../python/grass/temporal/aggregation.py:163
+#, python-format
+msgid "Computing aggregation of maps between %(st)s - %(end)s"
+msgstr ""
+
+#: ../python/grass/temporal/aggregation.py:196
+msgid "Error occurred in r.series computation"
+msgstr ""
+
+#: ../python/grass/temporal/aggregation.py:324
+#, python-format
+msgid "Aggregating %(len)i raster maps from %(start)s to %(end)s"
+msgstr ""
+
+#: ../python/grass/temporal/aggregation.py:353
+#, python-format
+msgid "Unable to perform aggregation. Output raster map <%(name)s> exists and overwrite flag was not set"
+msgstr ""
+
+#: ../python/grass/temporal/aggregation.py:375
+#, python-format
+msgid "The limit of open files (%i) was reached (%i). The module r.series will be run with flag z, to avoid open files limit exceeding."
+msgstr ""
+
+#: ../python/grass/temporal/base.py:416
+msgid "Object not found in the temporal database"
+msgstr ""
+
+#: ../python/grass/temporal/base.py:510 ../python/grass/temporal/base.py:566
+msgid "Missing identifier"
+msgstr ""
+
+#: ../python/grass/temporal/base.py:692
+msgid "Wrong identifier, the mapset is missing"
+msgstr ""
+
+#: ../python/grass/temporal/c_libraries_interface.py:724
+#: ../python/grass/temporal/c_libraries_interface.py:742
+msgid "Unable to read range file"
+msgstr ""
+
+#: ../python/grass/temporal/c_libraries_interface.py:728
+#: ../python/grass/temporal/c_libraries_interface.py:746
+msgid "Raster range file is empty"
+msgstr ""
+
+#: ../python/grass/temporal/c_libraries_interface.py:827
+#, python-format
+msgid "Unable to load range of 3D raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/c_libraries_interface.py:1007
+#: ../python/grass/temporal/c_libraries_interface.py:1044
+msgid "Unable to read history file"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:681
+msgid "Unable to initialize the temporal DBMI interface. Please use t.connect to specify the driver and the database string"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:738
+msgid ""
+"Run t.upgrade command to upgrade your temporal database.\n"
+"Consider creating a backup of your temporal database to avoid losing data in case something goes wrong.\n"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:744
+msgid "You need to export it by restoring the GRASS version used for creating this DB.Notes: Use t.rast.export and t.vect.export to make a backup of your existing space time datasets. To save the timestamps of your existing maps and space time datasets, use t.rast.list, t.vect.list and t.rast3d.list. You can register the existing time stamped maps easily if you export columns=id,start_time,end_time into text files and use t.register to register them again in new created space time datasets (t.create). After the backup remove the existing temporal database, a new one will be created automatically.\n"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:771 ../python/grass/temporal/core.py:985
+#, python-format
+msgid ""
+"Unable to receive temporal database metadata.\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:782
+#, python-format
+msgid ""
+"Unsupported temporal database: version mismatch.\n"
+" %(backup)s Supported temporal API version is: %(api)i.\n"
+"Please update your GRASS installation.\n"
+"Current temporal database info:%(info)s"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:801
+#, python-brace-format
+msgid ""
+"Temporal database version mismatch detected.\n"
+"{backup}Supported temporal database version is: {tdb}\n"
+"Your existing temporal database version: {ctdb}\n"
+"Current temporal database info: {info}"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:818
+#, python-brace-format
+msgid "The format of your actual temporal database is not supported any more. {m}"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:896
+#, python-format
+msgid "Creating temporal database: %s"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:907
+#, python-format
+msgid ""
+"Unable to create SQLite temporal database\n"
+"Exception: %s\n"
+"Please use t.connect to set a read- and writable temporal database path"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:997
+msgid "Temporal database is up-to-date. Operation canceled"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:1009
+#, python-format
+msgid "Unsupported TGIS DB upgrade scenario: from version %s to %s"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:1016
+#, python-format
+msgid "Upgrading temporal database <%s> from version %s to %s..."
+msgstr ""
+
+#: ../python/grass/temporal/core.py:1141
+msgid "Unable to mogrify sql statement. "
+msgstr ""
+
+#: ../python/grass/temporal/core.py:1167
+msgid "Unable to check table. "
+msgstr ""
+
+#: ../python/grass/temporal/core.py:1186
+msgid "Unable to execute sql statement. "
+msgstr ""
+
+#: ../python/grass/temporal/core.py:1200
+msgid "Unable to fetch one. "
+msgstr ""
+
+#: ../python/grass/temporal/core.py:1212
+msgid "Unable to fetch all. "
+msgstr ""
+
+#: ../python/grass/temporal/core.py:1232
+msgid "Unable to execute transaction. "
+msgstr ""
+
+#: ../python/grass/temporal/core.py:1348
+#, python-format
+msgid ""
+"Unable to connect to %(db)s database: %(string)s\n"
+"Exception: \"%(ex)s\"\n"
+"Please use t.connect to set a read- and writable temporal database backend"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:1533
+#, python-format
+msgid ""
+"Unable to execute :\n"
+" %(sql)s"
+msgstr ""
+
+#: ../python/grass/temporal/core.py:1577
+#, python-format
+msgid ""
+"Unable to execute transaction:\n"
+" %(sql)s"
+msgstr ""
+
+#: ../python/grass/temporal/datetime_math.py:245
+#: ../python/grass/temporal/datetime_math.py:262
+#, python-format
+msgid "Wrong increment format: %s"
+msgstr ""
+
+#: ../python/grass/temporal/datetime_math.py:781
+msgid "Time string seems to specify relative time"
+msgstr ""
+
+#: ../python/grass/temporal/datetime_math.py:793
+msgid "Dates Before Christ (BC) are not supported"
+msgstr ""
+
+#: ../python/grass/temporal/datetime_math.py:797
+msgid "Time zones are not supported"
+msgstr ""
+
+#: ../python/grass/temporal/datetime_math.py:817
+#, python-format
+msgid "Unable to parse time string: %s"
+msgstr ""
+
+#: ../python/grass/temporal/extract.py:158
+msgid "You need to specify the base name of new created maps"
+msgstr ""
+
+#: ../python/grass/temporal/extract.py:188
+#: ../python/grass/temporal/list_stds.py:449
+#, python-brace-format
+msgid "Nothing found in the database for space time dataset <{name}> (type: {element_type}): {detail}"
+msgstr ""
+
+#: ../python/grass/temporal/extract.py:195
+#: ../python/grass/temporal/list_stds.py:456
+msgid "Dataset is empty or where clause is too constrained or incorrect"
+msgstr ""
+
+#: ../python/grass/temporal/extract.py:199
+#: ../python/grass/temporal/list_stds.py:460
+msgid "Dataset is empty"
+msgstr ""
+
+#: ../python/grass/temporal/extract.py:257
+#: ../python/grass/temporal/mapcalc.py:284
+#: ../python/grass/temporal/open_stds.py:243
+#, python-format
+msgid "Map <%s> is already in temporal database, use overwrite flag to overwrite"
+msgstr ""
+
+#: ../python/grass/temporal/extract.py:266
+#, python-format
+msgid "Applying r.mapcalc expression: \"%s\""
+msgstr ""
+
+#: ../python/grass/temporal/extract.py:269
+#, python-format
+msgid "Applying r3.mapcalc expression: \"%s\""
+msgstr ""
+
+#: ../python/grass/temporal/extract.py:272
+#, python-format
+msgid "Applying v.extract where statement: \"%s\""
+msgstr ""
+
+#: ../python/grass/temporal/extract.py:313
+msgid "Error in computation process"
+msgstr ""
+
+#: ../python/grass/temporal/factory.py:108
+#, python-format
+msgid "Unknown dataset type: %s"
+msgstr ""
+
+#: ../python/grass/temporal/list_stds.py:307
+msgid "Empty map list"
+msgstr ""
+
+#: ../python/grass/temporal/list_stds.py:319
+msgid "Empty entry in map list, this should not happen"
+msgstr ""
+
+#: ../python/grass/temporal/mapcalc.py:139
+msgid "Starting spatio-temporal sampling..."
+msgstr ""
+
+#: ../python/grass/temporal/mapcalc.py:141
+msgid "Starting temporal sampling..."
+msgstr ""
+
+#: ../python/grass/temporal/mapcalc.py:159
+msgid "No samples found for map calculation"
+msgstr ""
+
+#: ../python/grass/temporal/mapcalc.py:188
+msgid "Found more than a single map in a sample granule. Only the first map is used for computation. Use t.rast.aggregate.ds to create synchronous raster datasets."
+msgstr ""
+
+#: ../python/grass/temporal/mapcalc.py:212
+msgid "No maps registered in input dataset <{}>"
+msgstr ""
+
+#: ../python/grass/temporal/mapcalc.py:232
+msgid "Starting mapcalc computation..."
+msgstr ""
+
+#: ../python/grass/temporal/mapcalc.py:310
+#, python-format
+msgid "Apply mapcalc expression: \"%s\""
+msgstr ""
+
+#: ../python/grass/temporal/mapcalc.py:330
+msgid "Error while mapcalc computation"
+msgstr ""
+
+#: ../python/grass/temporal/mapcalc.py:336
+msgid "Starting map registration in temporal database..."
+msgstr ""
+
+#: ../python/grass/temporal/mapcalc.py:390
+msgid "Removing {}/{} ({}%) maps because empty..."
+msgstr ""
+
+#: ../python/grass/temporal/open_stds.py:70
+#: ../python/grass/temporal/open_stds.py:133
+#, python-format
+msgid "Unknown type: %s"
+msgstr ""
+
+#: ../python/grass/temporal/open_stds.py:77
+#, python-format
+msgid "Space time %(sp)s dataset <%(id)s> not found"
+msgstr ""
+
+#: ../python/grass/temporal/open_stds.py:117
+msgid "Space time datasets can only be created in the current mapset"
+msgstr ""
+
+#: ../python/grass/temporal/open_stds.py:125
+msgid "Illegal dataset name <{}>. Character '.' not allowed."
+msgstr ""
+
+#: ../python/grass/temporal/open_stds.py:141
+#, python-format
+msgid "Space time %(sp)s dataset <%(name)s> is already in the database. Use the overwrite flag."
+msgstr ""
+
+#: ../python/grass/temporal/open_stds.py:181
+#, python-format
+msgid "Overwriting space time %(sp)s dataset <%(name)s> and unregistering all maps"
+msgstr ""
+
+#: ../python/grass/temporal/open_stds.py:191
+#, python-format
+msgid "Creating a new space time %s dataset"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:102
+msgid "maps and file are mutually exclusive"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:105
+msgid "end and increment are mutually exclusive"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:108
+msgid "end and the interval flag are mutually exclusive"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:111
+msgid "The increment option requires the start option"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:114
+msgid "The interval flag requires the start option"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:117
+msgid "Please specify start_time and end_time"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:120
+msgid "Please specify maps or file"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:140
+#, python-brace-format
+msgid "Space time {sp} dataset <{name}> with relative time found, but no relative unit set for {sp} maps"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:216
+msgid "The increment option will be ignored because of time stamps in input file"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:225
+msgid "The interval flag will be ignored because of time stamps in input file"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:251
+#, python-brace-format
+msgid "Unable to update {t} map <{mid}>. The map does not exist."
+msgstr ""
+
+#: ../python/grass/temporal/register.py:275
+#, python-brace-format
+msgid "Unable to register {t} map <{mid}> with layer {l}. The map has timestamp and the start time is not set."
+msgstr ""
+
+#: ../python/grass/temporal/register.py:287
+#, python-brace-format
+msgid "Unable to register {t} map <{mid}>. The map has no timestamp and the start time is not set."
+msgstr ""
+
+#: ../python/grass/temporal/register.py:296
+msgid "unit can only be set for relative time"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:298
+msgid "unit must be set in case of relative time stamps"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:311
+#, python-brace-format
+msgid "Map is already registered in temporal database. Unable to update {t} map <{mid}> with layer {l}. Overwrite flag is not set."
+msgstr ""
+
+#: ../python/grass/temporal/register.py:324
+#, python-brace-format
+msgid "Map is already registered in temporal database. Unable to update {t} map <{mid}>. Overwrite flag is not set."
+msgstr ""
+
+#: ../python/grass/temporal/register.py:351
+#, python-brace-format
+msgid "Unable to update {t} map <{id}> with layer {l}. The temporal types are different."
+msgstr ""
+
+#: ../python/grass/temporal/register.py:363
+#, python-brace-format
+msgid "Unable to update {t} map <{mid}>. The temporal types are different."
+msgstr ""
+
+#: ../python/grass/temporal/register.py:495
+#: ../python/grass/temporal/register.py:503
+msgid "Unable to convert string \"{}\" into a datetime object"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:512
+#: ../python/grass/temporal/register.py:516
+msgid "Error occurred in increment computation"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:522
+#, python-brace-format
+msgid "Set absolute valid time for map <{id}> with layer {layer} to {start} - {end}"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:535
+#, python-brace-format
+msgid "Set absolute valid time for map <{mid}> to {start_time} - {end_time}"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:561
+#, python-brace-format
+msgid "Set relative valid time for map <{mid}> with layer {layer} to {start} - {end} with unit {unit}"
+msgstr ""
+
+#: ../python/grass/temporal/register.py:575
+#, python-brace-format
+msgid "Set relative valid time for map <{mid}> to {start} - {end} with unit {unit}"
+msgstr ""
+
+#: ../python/grass/temporal/sampling.py:95
+#: ../python/grass/temporal/sampling.py:99
+#, python-format
+msgid "Dataset <%s> not found in temporal database"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:294
+#, python-format
+msgid "Unable to read timestamp file for raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:320
+#, python-format
+msgid "Unable to create timestamp file for raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:327
+#, python-format
+msgid "Invalid datetime in timestamp for raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:333
+#: ../python/grass/temporal/space_time_datasets.py:769
+msgid "Internal error"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:350
+#: ../python/grass/temporal/space_time_datasets.py:785
+#, python-format
+msgid "Unable to remove timestamp for raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:390
+#, python-format
+msgid "Unable to write semantic label for raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:730
+#, python-format
+msgid "Unable to read timestamp file for 3D raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:756
+#, python-format
+msgid "Unable to create timestamp file for 3D raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:763
+#, python-format
+msgid "Invalid datetime in timestamp for 3D raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:1070
+#, python-format
+msgid "Unable to read timestamp file for vector map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:1097
+#, python-format
+msgid "Unable to create timestamp file for vector map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:1104
+#, python-format
+msgid "Invalid datetime in timestamp for vector map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/space_time_datasets.py:1121
+#, python-format
+msgid "Unable to remove timestamp for vector map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/spatial_extent.py:175
+msgid "Projections are different. Unable to compute overlapping_2d for spatial extents"
+msgstr ""
+
+#: ../python/grass/temporal/spatial_extent.py:602
+msgid "Projections are different. Unable to compute is_in_2d for spatial extents"
+msgstr ""
+
+#: ../python/grass/temporal/spatial_extent.py:728
+msgid "Projections are different. Unable to compute equivalent_2d for spatial extents"
+msgstr ""
+
+#: ../python/grass/temporal/spatial_extent.py:825
+msgid "Projections are different. Unable to compute cover_2d for spatial extents"
+msgstr ""
+
+#: ../python/grass/temporal/spatial_extent.py:898
+msgid "Projections are different. Unable to compute cover for spatial extents"
+msgstr ""
+
+#: ../python/grass/temporal/spatial_extent.py:1828
+msgid "Volume computation is not supported for LL projections"
+msgstr ""
+
+#: ../python/grass/temporal/spatial_extent.py:1845
+msgid "Area computation is not supported for LL projections"
+msgstr ""
+
+#: ../python/grass/temporal/stds_export.py:130
+#, python-format
+msgid "Unable to export raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/stds_export.py:142
+#, python-format
+msgid "Unable to export color rules for raster map <%s> r.out.gdal"
+msgstr ""
+
+#: ../python/grass/temporal/stds_export.py:168
+#, python-format
+msgid "Unable to export raster map <%s> with r.pack"
+msgstr ""
+
+#: ../python/grass/temporal/stds_export.py:201
+#, python-format
+msgid "Unable to export vector map <%s> as GML with v.out.ogr"
+msgstr ""
+
+#: ../python/grass/temporal/stds_export.py:236
+#, python-format
+msgid "Unable to export vector map <%s> as GPKG with v.out.ogr"
+msgstr ""
+
+#: ../python/grass/temporal/stds_export.py:269
+#, python-format
+msgid "Unable to export vector map <%s> with v.pack"
+msgstr ""
+
+#: ../python/grass/temporal/stds_export.py:295
+#, python-format
+msgid "Unable to export raster map <%s> with r3.pack"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:112
+#, python-format
+msgid "Unable to import/link raster map <%s> from file %s."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:124
+#, python-format
+msgid "Unable to set the color rules for raster map <%s>."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:153
+#, python-format
+msgid "Unable to unpack raster map <%s> from file %s."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:183
+#, python-format
+msgid "Unable to import vector map <%s> from file %s."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:213
+#, python-format
+msgid "Unable to unpack vector map <%s> from file %s."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:264
+#, python-format
+msgid "Space time raster dataset archive <%s> not found"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:266
+#, python-format
+msgid "Extraction directory <%s> not found"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:273
+#, python-format
+msgid "Checking validity of input file (size: %0.1f MB). Make take a while..."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:281
+#, python-format
+msgid "Unable to find init file <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:283
+#, python-format
+msgid "Unable to find list file <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:285
+#, python-format
+msgid "Unable to find projection file <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:287
+msgid "Extracting data..."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:298
+#: ../python/grass/utils/download.py:74
+msgid "Extracting may be unsafe; consider updating Python"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:332
+msgid "Projection information does not match. Proceeding..."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:337
+#, python-brace-format
+msgid ""
+"Difference between PROJ_INFO file of imported map and of current location:\n"
+"{diff}"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:342
+msgid "Projection information does not match. Aborting."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:359
+#, python-format
+msgid "Unable to create location %(l)s. Reason: %(e)s"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:371
+#, python-format
+msgid "Unable to switch to location %s"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:377
+#, python-format
+msgid "Unable to create default temporal database in new location %s"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:462
+#, python-format
+msgid "Key words %(t)s, %(s)s or %(n)s not found in init file."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:467
+msgid "Number of maps mismatch in init and list file."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:478
+msgid "The archive file is of wrong space time dataset type"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:486
+#, python-format
+msgid "Unable to find GeoTIFF raster file <%s> in archive."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:494
+#, python-format
+msgid "Unable to find AAIGrid raster file <%s> in archive."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:502
+#, python-format
+msgid "Unable to find GML vector file <%s> in archive."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:512
+#, python-format
+msgid "Unable to find GRASS package file <%s> in archive."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:516
+msgid "Unsupported input format"
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:524
+#, python-format
+msgid "Space time %(t)s dataset <%(sp)s> is already in the database. Use the overwrite flag."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:555
+#, python-format
+msgid "Overwrite space time %(sp)s dataset <%(id)s> and unregister all maps."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:569
+#, python-format
+msgid "Key word %s not found in init file."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:575
+#, python-format
+msgid "Create space time %s dataset."
+msgstr ""
+
+#: ../python/grass/temporal/stds_import.py:614
+msgid "Switching to original location failed"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:884
+msgid "Spatio-temporal topological operators are not supported in granularity algebra mode"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:927
+msgid "All input space time datasets must have a valid temporal topology."
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:940
+msgid "All input space time datasets must have the same temporal type."
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:1200
+#, python-format
+msgid "Removing un-needed or empty %s maps"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:1250
+#, python-format
+msgid "Space time %s dataset <%s> not found"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:1283
+#, python-format
+msgid "Wrong temporal type of space time dataset <%s> <%s> time is required"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:1301
+msgid "Wrong type of input "
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:2361
+#, python-format
+msgid "The resulting space time dataset type <%(a)s> is different from the requested type <%(b)s>"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:2371
+msgid "Maps that should be registered in the resulting space time dataset have different types."
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:2630
+#: ../python/grass/temporal/temporal_raster_base_algebra.py:972
+#, python-format
+msgid "%s map <%s> not found in GRASS spatial database"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:2639
+msgid "Wrong map type. TMAP only supports single maps that are registered in the temporal GRASS database"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:2669
+msgid "Merging empty map lists"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:2674
+msgid "First Map list is empty, can't merge it. Return only last map list"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:2682
+msgid "Second Map list is empty, can't merge it. Return only first map list"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_algebra.py:2695
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_granularity.py:1111
+#: ../python/grass/temporal/temporal_granularity.py:1154
+#, python-brace-format
+msgid "Output granularity seems not to be valid. Please use one of the following values : {gr}"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_granularity.py:1116
+#: ../python/grass/temporal/temporal_granularity.py:1159
+#: ../python/grass/temporal/temporal_granularity.py:1233
+msgid "Invalid absolute granularity"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_granularity.py:1231
+msgid "Probably you need to invert 'from_gran' and 'to_gran'"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_raster_base_algebra.py:879
+#, python-format
+msgid "Error computing map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_vector_algebra.py:427
+#, python-format
+msgid "Error vector maps with basename %s exist. Use --o flag to overwrite existing file"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_vector_algebra.py:467
+#, python-format
+msgid ""
+"Error starting %s : \n"
+"%s"
+msgstr ""
+
+#: ../python/grass/temporal/temporal_vector_algebra.py:557
+#, python-format
+msgid ""
+"Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
+"%s"
+msgstr ""
+
+#: ../python/grass/temporal/univar_statistics.py:70
+#, python-format
+msgid "Unable to get statistics for raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/univar_statistics.py:72
+#, python-format
+msgid "Unable to get statistics for 3d raster map <%s>"
+msgstr ""
+
+#: ../python/grass/temporal/univar_statistics.py:182
+#, python-brace-format
+msgid "No maps found to process. Space time {type} dataset <{id}> is either empty or the where condition (if used) does not return any maps or no maps with the requested spatial relation to the computational region exist in the dataset."
+msgstr ""
+
+#: ../python/grass/temporal/univar_statistics.py:325
+#, python-format
+msgid "Space time %(sp)s dataset <%(i)s> not found"
+msgstr ""
+
+#: ../python/grass/temporal/univar_statistics.py:338
+#, python-format
+msgid "Space time %(sp)s dataset <%(i)s> is empty"
+msgstr ""
+
+#: ../python/grass/temporal/univar_statistics.py:424
+#, python-format
+msgid "Unable to get statistics for vector map <%s>"
+msgstr ""
+
+#: ../python/grass/utils/download.py:83
+#, python-brace-format
+msgid "Archive file is unreadable: {0}"
+msgstr ""
+
+#: ../python/grass/utils/download.py:87
+#, python-brace-format
+msgid "Archive file is incomplete: {0}"
+msgstr ""
+
+#: ../python/grass/utils/download.py:117
+#, python-brace-format
+msgid "ZIP file is unreadable: {0}"
+msgstr ""
+
+#: ../python/grass/utils/download.py:162
+#, python-brace-format
+msgid "Download file from <{url}>, return status code {code}, "
+msgstr ""
+
+#: ../python/grass/utils/download.py:164
+#, python-brace-format
+msgid "Download file from <{url}>, failed. Check internet connection."
+msgstr ""
+
+#: ../python/grass/utils/download.py:188
+#, python-brace-format
+msgid "Download of <{url}> failed or file <{name}> is not a ZIP file"
+msgstr ""
+
+#: ../python/grass/utils/download.py:209
+msgid "Unknown format '{}'."
 msgstr ""
