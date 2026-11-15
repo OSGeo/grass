@@ -19,6 +19,7 @@ libzstd-dev
 pdal
 proj-bin
 python3-dateutil
+python3-gdal
 python3-matplotlib
 python3-numpy
 python3-pil

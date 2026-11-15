@@ -9,7 +9,8 @@ import ctypes
 #
 # import GRASS modules
 #
-from grass.script import fatal, gisenv
+from grass.exceptions import GrassError, OpenError
+from grass.script import gisenv
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 
@@ -18,7 +19,7 @@ import grass.lib.raster as libraster
 #
 from grass.pygrass import utils
 from grass.pygrass.gis.region import Region
-from grass.pygrass.errors import must_be_open, must_be_in_current_mapset
+from grass.pygrass.errors import must_be_in_current_mapset, must_be_open
 from grass.pygrass.shell.conversion import dict2html
 from grass.pygrass.shell.show import raw_figure
 
@@ -408,7 +409,7 @@ class RasterAbstractBase:
                 )
                 raise IndexError(msg)
             return self.get_row(key)
-        fatal("Invalid argument type.")
+        raise TypeError("Invalid argument type: %r." % key)
 
     def __iter__(self):
         """Return a constructor of the class"""
@@ -434,6 +435,12 @@ class RasterAbstractBase:
             self.mapset = mapset or ""
             return bool(mapset)
         return bool(utils.get_mapset_raster(self.name, self.mapset))
+
+    def _check_overwrite(self):
+        """Raise OpenError if the map exists and overwrite is not set."""
+        if self.exist() and not self.overwrite:
+            str_err = _("Raster map <{0}> already exists and will be not overwritten")
+            raise OpenError(str_err.format(self))
 
     def is_open(self):
         """Return True if the map is open False otherwise.
@@ -503,8 +510,8 @@ class RasterAbstractBase:
 
         """
         if self.is_open():
-            fatal("You cannot change the region if map is open")
-            raise
+            msg = "You cannot change the region if map is open"
+            raise GrassError(msg)
         region = Region()
         if rastname == "":
             rastname = self.name
@@ -522,8 +529,8 @@ class RasterAbstractBase:
         The GRASS region settings will not be modified.
         """
         if self.is_open():
-            fatal("You cannot change the region if map is open")
-            raise
+            msg = "You cannot change the region if map is open"
+            raise GrassError(msg)
         self._set_raster_window(region)
 
     def _set_raster_window(self, region):

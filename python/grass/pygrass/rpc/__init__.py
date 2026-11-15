@@ -2,17 +2,14 @@
 Fast and exit-safe interface to PyGRASS Raster and Vector layer
 using multiprocessing
 
-(C) 2015 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
 
 import sys
 from ctypes import CFUNCTYPE, c_void_p
-from multiprocessing import Lock, Pipe, Process
 
 import grass.lib.gis as libgis
 from grass.exceptions import FatalError
@@ -21,6 +18,7 @@ from grass.pygrass.gis.region import Region
 from grass.pygrass.raster import RasterRow, raster2numpy_img
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.basic import Bbox
+from grass.script.utils import _get_multiprocessing_context
 
 from .base import RPCServerBase
 
@@ -187,7 +185,6 @@ def _fatal_error(lock, conn, data):
 
 def _stop(lock, conn, data):
     conn.close()
-    lock.release()
     sys.exit()
 
 
@@ -207,11 +204,9 @@ def data_provider_server(lock, conn):
         """This function will be called in case of a fatal error in libgis"""
         # sys.stderr.write("Error handler was called\n")
         # We send an exception that will be handled in
-        # the parent process, then close the pipe
-        # and release any possible lock
+        # the parent process, then close the pipe.
         conn.send(FatalError("G_fatal_error() was called in the server process"))
         conn.close()
-        lock.release()
 
     CALLBACK = CFUNCTYPE(c_void_p, c_void_p)
     CALLBACK.restype = c_void_p
@@ -249,9 +244,10 @@ class DataProvider(RPCServerBase):
 
     def start_server(self):
         """This function must be re-implemented in the subclasses"""
-        self.client_conn, self.server_conn = Pipe(True)
-        self.lock = Lock()
-        self.server = Process(
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe(True)
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
             target=data_provider_server, args=(self.lock, self.server_conn)
         )
         self.server.daemon = True

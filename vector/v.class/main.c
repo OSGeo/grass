@@ -7,11 +7,8 @@
  *
  * PURPOSE:      Create data classes, mainly for thematic mapping
  *
- * COPYRIGHT:    (C) 2004-2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2004-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************/
 #include <stdlib.h>
@@ -316,8 +313,13 @@ int main(int argc, char *argv[])
                 fprintf(stdout, _("Stdev multiplied by %.4f to define step\n"),
                         finfo);
             fprintf(stdout, "\n");
-            fprintf(stdout, _("%15s%15s%15s\n\n"), "From (excl.)", "To (incl.)",
-                    "Frequency");
+            fprintf(stdout, "%15s%15s%15s\n\n",
+                    /* GTC Column header, lower class limit (exclusive) */
+                    _("From (excl.)"),
+                    /* GTC Column header, upper class limit (inclusive) */
+                    _("To (incl.)"),
+                    /* GTC Column header, number of values in the class */
+                    _("Frequency"));
             fprintf(stdout, "%15.5f%15.5f%15i\n", min, classbreaks[0],
                     frequencies[0]);
 

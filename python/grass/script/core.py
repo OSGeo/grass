@@ -8,10 +8,8 @@ Core functions to be used in Python scripts.
 
     grass.parser()
 
-(C) 2008-2026 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2008-2026 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
@@ -2106,8 +2104,15 @@ def create_project(
         try_remove(tmp_gisrc)
         tmp_gisrc = None
 
-        if ps.returncode != 0 and error:
-            raise ScriptError(repr(error))
+        if ps.returncode != 0:
+            raise ScriptError(
+                repr(error)
+                if error
+                else (
+                    f"g.proj failed with return code {ps.returncode}, "
+                    "but no error message was produced"
+                )
+            )
 
     # If a session was created for messages, but not used for subprocesses,
     # we still need to clean it up.

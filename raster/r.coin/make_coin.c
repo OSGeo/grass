@@ -7,11 +7,8 @@
  *
  * PURPOSE:      Calculates the coincidence of two raster map layers.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -73,6 +70,12 @@ int make_coin(void)
     }
 
     G_popen_close(&child);
+
+    /* Without this, an empty result reaches collapse(), which counts from one
+       and reports a single category, and that category is then read from a
+       zero length allocation. */
+    if (count == 0)
+        G_fatal_error(_("No data returned from r.stats"));
 
     fclose(stat_fp);
 

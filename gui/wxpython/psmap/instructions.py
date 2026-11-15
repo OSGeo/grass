@@ -23,10 +23,9 @@ Classes:
  - dialogs::Vector
  - dialogs::VProperties
 
-(C) 2011-2012 by Anna Kratochvilova, and the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2011-2012 Anna Kratochvilova
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Kratochvilova <kratochanna gmail.com> (bachelor's project)
 @author Martin Landa <landa.martin gmail.com> (mentor)
@@ -106,11 +105,11 @@ class Instruction:
                 continue
             if each.type == "map":
                 # must remove raster, vector layers, labels too
-                vektor = self.FindInstructionByType("vector", list=True)
+                vector_list = self.FindInstructionByType("vector", list=True)
                 vProperties = self.FindInstructionByType("vProperties", list=True)
                 raster = self.FindInstructionByType("raster", list=True)
                 labels = self.FindInstructionByType("labels", list=True)
-                for item in vektor + vProperties + raster + labels:
+                for item in vector_list + vProperties + raster + labels:
                     if item in self.instruction:
                         self.instruction.remove(item)
 

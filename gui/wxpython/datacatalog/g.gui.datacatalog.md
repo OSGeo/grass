@@ -13,6 +13,7 @@ Data Catalog allows you to:
 
 - browse GRASS projects and mapsets in the current GIS directory
 - browse GRASS 2D/3D raster and vector maps
+- browse and manage space-time datasets
 - rename, copy, move and delete GRASS maps including reprojection
   between different projects
 - set labels for a GRASS database (directory with GRASS projects) with
@@ -29,11 +30,6 @@ documentation.
 *Figure: Data Catalog integrated in wxGUI.*
 
 ## NOTES
-
-Some operations (copying, renaming, deleting) are by default enabled
-only within the current mapset. To allow changing data outside of your
-current mapset, you need to press *Unlock* button in Data Catalog
-toolbar.
 
 ### WARNING
 

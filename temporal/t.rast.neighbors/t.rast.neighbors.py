@@ -7,17 +7,8 @@
 #
 # PURPOSE:      Performs a neighborhood analysis for each map in a space time
 #               raster dataset.
-# COPYRIGHT:    (C) 2013 by the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2013 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -369,7 +360,7 @@ def main():
     output_strds.update_from_registered_maps(dbif)
     gs.percent(1, 1, 1)
 
-    if output_exists:
+    if output_exists and flags["e"]:
         output_strds.update_command_string(dbif=dbif)
 
     # Remove empty maps

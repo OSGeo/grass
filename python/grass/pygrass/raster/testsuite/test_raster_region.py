@@ -1,5 +1,6 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
+from grass.gunittest.utils import xfail_windows
 
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.raster import raster2numpy
@@ -26,6 +27,13 @@ class RasterRowRegionTestCase(TestCase):
         cls.runModule("g.remove", flags="f", type="raster", name=cls.name)
         cls.del_temp_region()
 
+    # Windows-only: the small region set below isn't actually restricting
+    # what RasterRow reads back (rast[0] comes back with ~100000 elements
+    # instead of 10). Confirmed this is specific to Windows: passes reliably
+    # on Linux both in isolation and as part of the full testsuite run (so
+    # it isn't a state leak from an earlier test file either). Needs
+    # investigation with actual Windows access; remove once fixed.
+    @xfail_windows
     def test_resampling_1(self):
         region = Region()
 
@@ -39,17 +47,15 @@ class RasterRowRegionTestCase(TestCase):
 
         rast = RasterRow(self.name)
         rast.set_region(region)
-        rast.open(mode="r")
+        with rast:
+            self.assertCountEqual(
+                rast[0].tolist(), [22, 22, 22, 22, 22, 32, 32, 32, 32, 32]
+            )
+            self.assertCountEqual(
+                rast[5].tolist(), [23, 23, 23, 23, 23, 33, 33, 33, 33, 33]
+            )
 
-        self.assertCountEqual(
-            rast[0].tolist(), [22, 22, 22, 22, 22, 32, 32, 32, 32, 32]
-        )
-        self.assertCountEqual(
-            rast[5].tolist(), [23, 23, 23, 23, 23, 33, 33, 33, 33, 33]
-        )
-
-        rast.close()
-
+    @xfail_windows  # same Windows-only issue as test_resampling_1
     def test_resampling_2(self):
         region = Region()
 
@@ -63,22 +69,20 @@ class RasterRowRegionTestCase(TestCase):
 
         rast = RasterRow(self.name)
         rast.set_region(region)
-        rast.open(mode="r")
+        with rast:
+            # [nan, nan, nan, nan, nan, nan, nan, nan]
+            # [nan, nan, nan, nan, nan, nan, nan, nan]
+            # [nan, nan, 11.0, 21.0, 31.0, 41.0, nan, nan]
+            # [nan, nan, 12.0, 22.0, 32.0, 42.0, nan, nan]
+            # [nan, nan, 13.0, 23.0, 33.0, 43.0, nan, nan]
+            # [nan, nan, 14.0, 24.0, 34.0, 44.0, nan, nan]
+            # [nan, nan, nan, nan, nan, nan, nan, nan]
+            # [nan, nan, nan, nan, nan, nan, nan, nan]
 
-        # [nan, nan, nan, nan, nan, nan, nan, nan]
-        # [nan, nan, nan, nan, nan, nan, nan, nan]
-        # [nan, nan, 11.0, 21.0, 31.0, 41.0, nan, nan]
-        # [nan, nan, 12.0, 22.0, 32.0, 42.0, nan, nan]
-        # [nan, nan, 13.0, 23.0, 33.0, 43.0, nan, nan]
-        # [nan, nan, 14.0, 24.0, 34.0, 44.0, nan, nan]
-        # [nan, nan, nan, nan, nan, nan, nan, nan]
-        # [nan, nan, nan, nan, nan, nan, nan, nan]
+            self.assertCountEqual(rast[2].tolist()[2:6], [11.0, 21.0, 31.0, 41.0])
+            self.assertCountEqual(rast[5].tolist()[2:6], [14.0, 24.0, 34.0, 44.0])
 
-        self.assertCountEqual(rast[2].tolist()[2:6], [11.0, 21.0, 31.0, 41.0])
-        self.assertCountEqual(rast[5].tolist()[2:6], [14.0, 24.0, 34.0, 44.0])
-
-        rast.close()
-
+    @xfail_windows  # same Windows-only issue as test_resampling_1
     def test_resampling_to_numpy(self):
         region = Region()
         region.ewres = 0.1

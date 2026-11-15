@@ -6,11 +6,9 @@
 # AUTHOR(S):    Markus Neteler, converted to Python by Glynn Clements
 #               Bug fixes, sort for coor by Huidae Cho <grass4u gmail.com>
 # PURPOSE:      Reports geometry statistics for vector maps
-# COPYRIGHT:    (C) 2005-2021 by MN and the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2005-2021 MN
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -86,9 +84,9 @@ def main():
 
     if int(layer) in gs.vector_db(mapname):
         colnames = gs.vector_columns(mapname, layer, getDict=False, stderr=nuldev)
-        isConnection = True
+        has_table = True
     else:
-        isConnection = False
+        has_table = False
         colnames = ["cat"]
 
     extracolnames = ["x", "y", "z"] if option == "coor" else [option]
@@ -101,7 +99,7 @@ def main():
         unitsp = None
 
     # NOTE: we suppress -1 cat and 0 cat
-    if isConnection:
+    if has_table:
         f = gs.vector_db(map=mapname)[int(layer)]
         p = gs.pipe_command(
             "v.db.select", flags="e", quiet=True, map=mapname, layer=layer

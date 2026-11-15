@@ -4,14 +4,11 @@
  *  Calculates univariate statistics from the non-null cells of a GRASS raster
  *  map
  *
- *   Copyright (C) 2004-2006, 2012 by the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2004-2006, 2012 GRASS Development Team
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author(s): Hamish Bowman, University of Otago, New Zealand
  *              Extended stats: Martin Landa
  *              Zonal stats: Markus Metz
- *
- *      This program is free software under the GNU General Public
- *      License (>=v2). Read the file COPYING that comes with GRASS
- *      for details.
  *
  *   This program is a replacement for the r.univar shell script
  */
@@ -22,7 +19,6 @@
 
 #include <assert.h>
 #include <string.h>
-#include <float.h>
 #include "globals.h"
 
 param_type param;
@@ -416,8 +412,8 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
             zd->sumsq = 0;
             zd->sum_abs = 0;
             zd->size = 0;
-            zd->min = DBL_MAX;
-            zd->max = -DBL_MAX;
+            zd->min = INFINITY;
+            zd->max = -INFINITY;
             zd->bucket.n = 0;
             zd->bucket.n_alloc = 0;
             zd->bucket.nextp = NULL;
@@ -636,20 +632,19 @@ static void process_raster(univar_stat *stats, thread_workspace *tw,
                     G_fatal_error(_("Unknown map type"));
             }
 
+            if (zd->bucket.n != 0) {
 #if defined(_OPENMP)
-            omp_set_lock(&minmax[z]);
+                omp_set_lock(&minmax[z]);
 #endif
-            if (stats[z].max < zd->max ||
-                (stats[z].max != stats[z].max && zd->max != DBL_MIN)) {
-                stats[z].max = zd->max;
-            }
-            if (stats[z].min > zd->min ||
-                (stats[z].min != stats[z].min && zd->min != DBL_MAX)) {
-                stats[z].min = zd->min;
-            }
+                /* The max and min are tested for NaN, their initial value. */
+                if (stats[z].max < zd->max || stats[z].max != stats[z].max)
+                    stats[z].max = zd->max;
+                if (stats[z].min > zd->min || stats[z].min != stats[z].min)
+                    stats[z].min = zd->min;
 #if defined(_OPENMP)
-            omp_unset_lock(&minmax[z]);
+                omp_unset_lock(&minmax[z]);
 #endif
+            }
         }
 
         /* Free per-thread variables */

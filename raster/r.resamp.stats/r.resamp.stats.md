@@ -21,6 +21,16 @@ aggregates. However, the *-w* flag still has significance in that, when
 multiple destination cells overlap a source cell, the source cell is
 included in the calculation of all of the destination cells.
 
+### PERFORMANCE
+
+By specifying the number of parallel processes with **nprocs** option,
+*r.resamp.stats* can run faster. See the benchmark script in the source
+code.
+
+To reduce the memory requirements to minimum, set option **memory** to
+zero. To take advantage of the parallelization, GRASS needs to be
+compiled with OpenMP enabled.
+
 ## EXAMPLE
 
 Resample elevation raster map to a lower resolution (from 6m to 20m;

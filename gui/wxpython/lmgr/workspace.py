@@ -6,11 +6,8 @@
 Class:
  - lmgr::WorkspaceManager
 
-(C) 2021 by the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2021 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import os
@@ -538,7 +535,7 @@ class WorkspaceManager:
     def AddFileToHistory(self, file_path=None):
         """Add file to history (recent files)
 
-        :param str file_path: file path wit default arg None
+        :param str file_path: file path with default arg None
 
         :return None
         """

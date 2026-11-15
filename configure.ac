@@ -9,11 +9,8 @@
 # PURPOSE:	This configure runs all the tests to determine what components
 #		are installed on the current system. It also defines certain
 #		configuration variables for compilation and installation.
-# COPYRIGHT:    (C) 2000-2026 by the GRASS Development Team
-#
-#		This program is free software under the GNU General
-#		Public License (>=v2). Read the file COPYING that
-#		comes with GRASS for details.
+# SPDX-FileCopyrightText: 2000-2026 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # MANUAL:       https://www.gnu.org/software/autoconf/manual/autoconf.html
 #               http://savannah.gnu.org/projects/autoconf/
@@ -48,6 +45,8 @@ LOC_CHECK_USE(cxx,C++,USE_CXX)
 
 if test -n "$USE_CXX"; then
 	AC_PROG_CXX
+	m4_include([m4/ax_cxx_compile_stdcxx.m4])
+	AX_CXX_COMPILE_STDCXX([17], [ext], [mandatory])
 else
 	CXX=
 	CXXFLAGS=

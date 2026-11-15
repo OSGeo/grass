@@ -5,7 +5,8 @@ an ASCII file. The default two column output consists of cumulative
 profile length and raster value. The optional four column output
 consists of easting, northing, cumulative profile length, and raster
 value. Profile end or "turning" points can be set manually with the
-**coordinates** argument. The profile resolution, or distance between
+**coordinates** argument or taken from lines of a vector map with the
+**lines** argument. The profile resolution, or distance between
 profile points, is obtained from the current region resolution, or can
 be manually set with the **resolution** argument.
 
@@ -14,6 +15,17 @@ coordinates for profile line endpoints. Alternatively the coordinate
 pairs can be piped from the text file specified by **file** option, or
 if set to "-", from `stdin`. In these cases the coordinate pairs should
 be given one comma separated pair per line.
+
+The **lines** parameter takes a vector map and profiles each of its
+lines separately, with the vertices of a line as its turning points.
+Every profile starts at distance zero and the category of the line is
+added as the first output column (`cat` in CSV and JSON output), so that
+the profiles can be told apart. Lines can be selected by category with
+**cats** or by attributes with **where**, both referring to **layer**.
+Points, centroids and boundaries in the vector map are ignored. A
+feature made of several lines, such as a road split at junctions, gives
+one profile per line; join the lines first with *v.build.polylines* to
+get a single continuous profile.
 
 The **resolution** parameter sets the distance between each profile
 point (resolution). The resolution must be provided in GRASS database
@@ -34,7 +46,11 @@ for JSON output.
 The profile resolution is measured exactly from the supplied end or
 "turning" point along the profile. The end of a profile segment will be
 an exact multiple of the profile resolution and will therefore not
-always match the end point coordinates entered for the segmanet.
+always match the end point coordinates entered for the segment. This
+also applies to the vertices of vector lines: a line with vertices
+closer together than the profile resolution is sampled at each vertex.
+Simplify such lines, e.g. with *v.generalize*, to get evenly spaced
+profile points.
 
 To extract the numbers in scripts, following parameters can be used:
 
@@ -105,6 +121,56 @@ Approx. transect length: 2090.000000 [meters]
  3964.027749 78.497757
 Approx. transect length: 995.014070 [meters]
  4054.027749 73.988029
+```
+
+### Extraction of values along vector lines
+
+Lines of a vector map can be used instead of coordinates. Here the
+profile follows a road segment of the Raleigh dataset, selected by its
+category (Main Campus Drive). The vertices of the road are turning
+points of the profile, so where they are closer than the resolution the
+profile points follow the vertices, and where they are further apart the
+resolution applies (see NOTES):
+
+```sh
+g.region raster=elevation -p
+r.profile input=elevation lines=roads cats=21903 resolution=100 format=csv
+```
+
+The first column is the category of the line:
+
+```text
+cat,distance,value
+21903,0.000000,89.999725
+21903,16.519123,89.482239
+21903,27.771102,88.642357
+...
+21903,790.810589,109.396729
+21903,890.810589,110.812485
+21903,906.702315,111.440796
+...
+```
+
+Profiles along several lines are extracted in one run and told apart by
+the category. Here transects across the same road are generated with
+the
+*[v.transects](https://grass.osgeo.org/grass-stable/manuals/addons/v.transects.html)*
+addon and profiled every 20 meters:
+
+```sh
+v.extract input=roads cats=21903 output=road
+v.transects input=road output=transects transect_spacing=500 dleft=100 dright=100
+r.profile input=elevation lines=transects resolution=20 format=csv
+```
+
+```text
+cat,distance,value
+1,0.000000,97.808243
+1,20.000000,97.098083
+1,40.000000,96.140938
+...
+4,180.000000,123.778564
+4,200.000000,124.010223
 ```
 
 ### JSON Output
@@ -212,8 +278,11 @@ r.profile -g input=elevation coordinates=... | v.in.ascii output=elevation_profi
 
 ## SEE ALSO
 
-*[v.in.ascii](v.in.ascii.md), [r.what](r.what.md),
-[r.transect](r.transect.md), [wxGUI profile tool](wxGUI.md)*
+*[r.transect](r.transect.md), [r.what](r.what.md),
+[v.build.polylines](v.build.polylines.md), [v.generalize](v.generalize.md),
+[v.in.ascii](v.in.ascii.md),
+[v.transects](https://grass.osgeo.org/grass-stable/manuals/addons/v.transects.html),
+[wxGUI profile tool](wxGUI.md)*
 
 ## AUTHOR
 

@@ -8,12 +8,8 @@
  *
  * PURPOSE:    Output vector point/line values along sampling line
  *
- * COPYRIGHT:  (C) 2008, 2017 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ * SPDX-FileCopyrightText: 2008, 2017 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * TODO:       Attach a centroid to buffer with tolerance value;
  *             Ability to have "interrupted" profiling line - with holes,
@@ -488,7 +484,7 @@ int main(int argc, char *argv[])
             if (ncats < 1) {
                 Vect_close(&In);
                 Vect_close(&Pro);
-                G_fatal_error(_("No features match Your query"));
+                G_fatal_error(_("No features match your query"));
             }
             if (ncats > 1) {
                 Vect_close(&In);
@@ -653,7 +649,7 @@ int main(int argc, char *argv[])
             ncats = db_select_int(driver, Fi->table, Fi->key, where_opt->answer,
                                   &cats);
             if (ncats < 1)
-                G_fatal_error(_("No features match Your query"));
+                G_fatal_error(_("No features match your query"));
             for (i = 0; i < ncats; i++) {
                 c = Vect_cidx_find_next(&In, field_index, cats[i], otype, 0,
                                         &type, &id);

@@ -5,8 +5,8 @@
 # TOOL:         liblas-install.sh
 # AUTHOR(s):    Nicklas Larsson
 # PURPOSE:      Downloads, compiles and installs libLAS.
-# COPYRIGHT:    (c) 2021-2025 Nicklas Larsson and the GRASS Development Team
-#
+# SPDX-FileCopyrightText: 2021-2025 Nicklas Larsson
+# SPDX-FileCopyrightText: GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
@@ -29,7 +29,6 @@ export CXX="${PREFIX}/bin/clang++"
 export MACOSX_DEPLOYMENT_TARGET="$deployment_target"
 export CFLAGS="-O2 -pipe -arch ${arch}"
 export CXXFLAGS="-O2 -pipe -arch ${arch} -stdlib=libc++"
-export LDFLAGS="-fuse-ld=lld"
 
 cmake="${PREFIX}/bin/cmake"
 

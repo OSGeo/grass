@@ -4,17 +4,8 @@
 # MODULE:    g.gui.iclass
 # AUTHOR(S): Anna Petrasova
 # PURPOSE:   Example GUI application
-# COPYRIGHT: (C) 2012-2014 by the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2012-2014 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 ############################################################################
 
@@ -38,7 +29,7 @@ import sys
 import grass.script.core as gcore
 
 if __name__ == "__main__":
-    wxbase = os.path.join(os.getenv("GISBASE"), "etc", "gui", "wxpython")
+    wxbase = os.environ["GRASS_GUIWXDIR"]
     if wxbase not in sys.path:
         sys.path.append(wxbase)
 

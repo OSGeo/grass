@@ -21,7 +21,7 @@ r.d2 reproduces most of the behavior of r.drain.  It does not use the
 all of the flags defined for r.drain.  My first draft of the model
 didn't correctly handle the ew,ns and diagonal resolutions (as
 r.fill.dir does not).  I believe that I fixed that problem.  There are
-also some other minor behaviors that differ a little from r.drain.
+also some other minor behaviors that differ a little from r.drain.
 
 r.d2 runs pretty quickly on a small, clean dem, but it can take quite a
 while  to run on a large cell map - particularly one with very many

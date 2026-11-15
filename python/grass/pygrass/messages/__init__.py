@@ -6,10 +6,8 @@
 Fast and exit-safe interface to GRASS C-library message functions
 
 
-(C) 2013-2024 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2013-2024 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Soeren Gebbert, Edouard Choinière
 """
@@ -17,15 +15,16 @@ for details.
 from __future__ import annotations
 
 import sys
-from multiprocessing import Lock, Pipe, Process
 from typing import TYPE_CHECKING, Literal, NoReturn
 
 import grass.lib.gis as libgis
 from grass.exceptions import FatalError
+from grass.script.utils import _get_multiprocessing_context
 
 if TYPE_CHECKING:
     from multiprocessing.connection import Connection
     from multiprocessing.context import _LockLike
+    from multiprocessing.process import BaseProcess
 
     _MessagesLiteral = Literal[
         "INFO", "IMPORTANT", "VERBOSE", "WARNING", "ERROR", "FATAL"
@@ -177,21 +176,27 @@ class Messenger:
 
     client_conn: Connection
     server_conn: Connection
-    server: Process
+    server: BaseProcess
 
     def __init__(self, raise_on_error: bool = False) -> None:
         self.raise_on_error = raise_on_error
-        self.client_conn, self.server_conn = Pipe()
-        self.lock = Lock()
-        self.server = Process(target=message_server, args=(self.lock, self.server_conn))
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe()
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
+            target=message_server, args=(self.lock, self.server_conn)
+        )
         self.server.daemon = True
         self.server.start()
 
     def start_server(self) -> None:
         """Start the messenger server and open the pipe"""
-        self.client_conn, self.server_conn = Pipe()
-        self.lock = Lock()
-        self.server = Process(target=message_server, args=(self.lock, self.server_conn))
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe()
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
+            target=message_server, args=(self.lock, self.server_conn)
+        )
         self.server.daemon = True
         self.server.start()
 

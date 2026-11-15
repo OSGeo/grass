@@ -19,10 +19,8 @@ List of classes:
 .. todo::
     Implement giface class
 
-(C) 2007-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Jachym Cepicky <jachym.cepicky gmail.com>
 @author Martin Landa <landa.martin gmail.com>
@@ -1186,9 +1184,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
 
         self.layerPage[layer] = {"browsePage": panel.GetId()}
 
-        label = _("Table")
-        if not self.dbMgrData["editable"]:
-            label += _(" (read-only)")
+        label = _("Table") if self.dbMgrData["editable"] else _("Table (read-only)")
 
         if pos == -1:
             pos = self.GetPageCount()
@@ -2331,9 +2327,7 @@ class DbMgrTablesPage(DbMgrNotebookBase):
         self.layerPage[layer] = {}
         panel = wx.Panel(parent=self, id=wx.ID_ANY)
         self.layerPage[layer]["tablePage"] = panel.GetId()
-        label = _("Table")
-        if not self.dbMgrData["editable"]:
-            label += _(" (read-only)")
+        label = _("Table") if self.dbMgrData["editable"] else _("Table (read-only)")
 
         if pos == -1:
             pos = self.GetPageCount()

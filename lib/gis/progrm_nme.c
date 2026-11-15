@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Program name
  *
- * (C) 2001-2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -60,15 +58,13 @@ const char *G_original_program_name(void)
  */
 void G_set_program_name(const char *s)
 {
-    int i;
     char *temp;
 
     original_name = G_store(s);
 
-    i = strlen(s);
-    while (--i >= 0) {
-        if (G_is_dirsep(s[i])) {
-            s += i + 1;
+    for (size_t i = strlen(s); i > 0; i--) {
+        if (G_is_dirsep(s[i - 1])) {
+            s += i;
             break;
         }
     }

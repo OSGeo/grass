@@ -1,10 +1,8 @@
 """
 Raster and 3d raster mapcalculation functions
 
-(C) 2012-2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -12,10 +10,10 @@ for details.
 import copy
 import sys
 from datetime import datetime
-from multiprocessing import Process
 
 import grass.script as gs
 from grass.exceptions import CalledModuleError
+from grass.script.utils import _get_multiprocessing_context
 
 from .core import (
     SQLDatabaseInterfaceConnection,
@@ -236,6 +234,7 @@ def dataset_mapcalculator(
         num = len(map_matrix[0])
 
         # Parallel processing
+        ctx = _get_multiprocessing_context()
         proc_list = []
         proc_count = 0
 
@@ -311,9 +310,9 @@ def dataset_mapcalculator(
 
             # Start the parallel r.mapcalc computation
             if type == "raster":
-                proc_list.append(Process(target=_run_mapcalc2d, args=(expr,)))
+                proc_list.append(ctx.Process(target=_run_mapcalc2d, args=(expr,)))
             else:
-                proc_list.append(Process(target=_run_mapcalc3d, args=(expr,)))
+                proc_list.append(ctx.Process(target=_run_mapcalc3d, args=(expr,)))
             proc_list[proc_count].start()
             proc_count += 1
 

@@ -5,7 +5,10 @@
  * \brief This is the interface for the simlib (SIMWE) library.
  */
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
+
+#include <grass/gis.h>
 
 #define EPS         1.e-7
 #define UNDEF       -9999
@@ -33,22 +36,25 @@ typedef struct {
     double hbeta;       // Weighting factor for water flow velocity vector
     double hhmax;       // Threshold water depth [m]
     double frac;        // Water diffusion constant
-    int iterout;        // Time interval for creating output maps [minutes]
-    int timesec;        // Time how long the simulation runs [minutes]
+    int iterout;        // Time interval for creating output maps [seconds]
+    int timesec;        // Time how long the simulation runs [seconds]
     bool ts;            // Time series output
     double mintimestep; // Minimum time step for the simulation [seconds]
+    int64_t seed;       // Seed of the walkers' random numbers
 } Settings;
 
 typedef struct {
-    int iterout;    // Number of iterations for creating output maps
     int miter;      // Total number of iterations
     double chmean;  // Mean Manning's n
     double si0;     // Mean rainfall excess (or sediment concentration?)
     double sisum;   // Sum of rainfall excess (or sediment concentration?)
     double vmean;   // Mean velocity
+    double vmax;    // Maximum velocity
     double infmean; // Mean infiltration
     double timec;   // Time coefficient
     double deltap;  // Time step for water
+    double deltaw;  // Time step for sediment (sediment only)
+    double sigmax;  // Maximum first order reaction coefficient (sediment only)
 } Setup;
 
 typedef struct {
@@ -57,10 +63,10 @@ typedef struct {
     int nstack;            // Number of output walkers
     struct point3D *stack; // Output 3D walkers
     int maxwa;             // Number of total walkers
-    double rwalk;      // Number of input walkers per block as double precision
-    struct point3D *w; // Weight of walkers
+    double rwalk; // Number of input walkers per block as double precision
+    struct walker *w;
     struct point2D *vavg; // Average velocity of walkers
-
+    int max_walkers; // Number of allocated walkers, maxwa plus one per cell
 } Simulation;
 
 typedef struct {
@@ -120,8 +126,34 @@ typedef struct {
     float **er;      // Erosion [output]
     float **ct;      // Transport capacity coefficient [input]
     float **trap;    // Traps [input]
-    float **dif;     // Diffusion coefficient [internal]
 } Grids;
+
+// Maps written by one call of output_data and the state of the simulation at
+// that moment. Names are copies owned by the record; NULL when not written.
+typedef struct {
+    double simulated_time; // Simulated time when the maps were written [s]
+    int walkers_remaining; // Walkers still in the domain at that time
+    char *timestamp;       // Timestamp written to the maps, e.g. "10 minutes"
+    char *depth;           // Water depth raster name (water flow only)
+    char *disch;           // Discharge raster name (water flow only)
+    char *err;             // Error raster name (water flow only)
+    char *outwalk;         // Output walker vector map name
+    char *conc;            // Sediment concentration raster name (sediment only)
+    char *flux;            // Sediment flux raster name (sediment only)
+    char *erdep;           // Erosion/deposition raster name (sediment only)
+} OutputStep;
+
+// Run summary collected by main_loop and output_data for the -p flag
+typedef struct {
+    int threads;              // Threads used for the computation
+    int iterations_completed; // Iterations run before the loop ended
+    bool stopped_early;       // All walkers left the domain before duration
+    int nsteps;               // Number of recorded output steps
+    int nsteps_alloc;         // Allocated output steps
+    OutputStep *steps;        // One record per call of output_data
+} Summary;
+
+typedef enum { SUMMARY_NONE, SUMMARY_PLAIN, SUMMARY_JSON } SummaryFormat;
 
 struct point2D {
     double x;
@@ -131,6 +163,14 @@ struct point3D {
     double x;
     double y;
     double m;
+};
+
+// A walker with its weight m and its own random number state
+struct walker {
+    double x;
+    double y;
+    double m;
+    struct G_random_state state;
 };
 
 void alloc_grids_water(const Geometry *geometry, const Outputs *outputs,
@@ -147,23 +187,30 @@ int grad_check(Setup *setup, const Geometry *geometry, const Settings *settings,
 void main_loop(const Setup *setup, const Geometry *geometry,
                const Settings *settings, Simulation *sim,
                ObservationPoints *points, const Inputs *inputs,
-               const Outputs *outputs, Grids *grids);
-int output_data(int, double conn, const Setup *setup, const Geometry *geometry,
-                const Settings *settings, const Simulation *sim,
-                const Inputs *inputs, const Outputs *outputs,
-                const Grids *grids);
+               const Outputs *outputs, Grids *grids, Summary *summary);
+int output_data(double tt, double name_time, double conn, const Setup *setup,
+                const Geometry *geometry, const Settings *settings,
+                const Simulation *sim, const Inputs *inputs,
+                const Outputs *outputs, const Grids *grids, Summary *summary);
 int output_et(const Geometry *geometry, const Outputs *outputs,
               const Grids *grids);
 void free_walkers(Simulation *sim, const char *outwalk);
+void add_output_step(Summary *summary, const OutputStep *step);
+double time_step_seconds(const Setup *setup);
+double simulated_seconds(const Setup *setup, int iterations);
+void print_summary(SummaryFormat format, const Setup *setup,
+                   const Settings *settings, const Simulation *sim,
+                   const Inputs *inputs, const Outputs *outputs,
+                   const Summary *summary);
+void free_summary(Summary *summary);
 void erod(double **, const Setup *setup, const Geometry *geometry,
           Grids *grids);
 void create_observation_points(ObservationPoints *points);
 void derivatives(const Geometry *geometry, float **elevation, double **dx,
                  double **dy);
 
-double simwe_rand(void);
-double gasdev(void);
-void gasdev_for_paralel(double *, double *);
+int64_t simwe_seed(const struct Option *seed, const struct Flag *generate);
+void gasdev(struct G_random_state *state, double *x, double *y);
 double amax1(double, double);
 double amin1(double, double);
 int min(int, int);
@@ -174,11 +221,11 @@ struct options {
         *observation, *depth, *disch, *err, *outwalk, *nwalk, *niter,
         *mintimestep, *outiter, *density, *diffc, *hmax, *halpha, *hbeta,
         *wdepth, *detin, *tranin, *tauin, *tc, *et, *conc, *flux, *erdep,
-        *rainval, *maninval, *infilval, *logfile, *seed, *threads;
+        *rainval, *maninval, *infilval, *logfile, *seed, *threads, *format;
 };
 
 struct flags {
-    struct Flag *tserie, *generateSeed;
+    struct Flag *tserie, *generateSeed, *print;
 };
 
 #endif /* __SIMLIB_H__ */

@@ -3,11 +3,9 @@
 #
 # PURPOSE:   API to call GRASS tools (modules) as Python functions
 #
-# COPYRIGHT: (C) 2023-2025 Vaclav Petras and the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2023-2025 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 ##############################################################################
 
 """The module provides an API to use GRASS tools (modules) as Python functions"""
@@ -606,7 +604,7 @@ class Tools:
         """Get a function representing a GRASS tool.
 
         Attribute should be in the form 'r_example_name'. For example, 'r.slope.aspect'
-        is used trough attribute 'r_slope_aspect'.
+        is used through attribute 'r_slope_aspect'.
         """
         if not self._name_resolver:
             self._name_resolver = ToolFunctionResolver(

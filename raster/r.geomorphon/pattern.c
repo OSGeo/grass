@@ -68,7 +68,8 @@ static int compare_multi(const double nadir_angle, const double zenith_angle,
 }
 
 int calc_pattern(PATTERN *pattern, int row, int cur_row, int col,
-                 const int oneoff)
+                 const int oneoff, double search_distance, double flat_distance,
+                 FCELL **rows)
 {
     /* calculate parameters of geomorphons and store it in the struct pattern */
     int i, j, pattern_size = 0;
@@ -83,7 +84,7 @@ int calc_pattern(PATTERN *pattern, int row, int cur_row, int col,
     /* use distance calculation */
     cur_northing = Rast_row_to_northing(row + 0.5, &window);
     cur_easting = Rast_col_to_easting(col + 0.5, &window);
-    center_height = elevation.elev[cur_row][col];
+    center_height = rows[cur_row][col];
     pattern->num_positives = 0;
     pattern->num_negatives = 0;
     pattern->positives = 0;
@@ -108,8 +109,7 @@ int calc_pattern(PATTERN *pattern, int row, int cur_row, int col,
             cur_row + j * nextr[i] > row_buffer_size - 1 ||
             col + j * nextc[i] < 0 || col + j * nextc[i] > ncols - 1)
             continue; /* border: current cell is on the end of DEM */
-        if (Rast_is_f_null_value(
-                &elevation.elev[cur_row + nextr[i]][col + nextc[i]]))
+        if (Rast_is_f_null_value(&rows[cur_row + nextr[i]][col + nextc[i]]))
             continue;   /* border: next value is null, line-of-sight does not
                            exists */
         pattern_size++; /* line-of-sight exists, continue calculate visibility
@@ -134,9 +134,8 @@ int calc_pattern(PATTERN *pattern, int row, int cur_row, int col,
                 col + j * nextc[i] < 0 || col + j * nextc[i] > ncols - 1)
                 break; /* reached end of DEM (cols) or buffer (rows) */
 
-            height =
-                elevation.elev[cur_row + j * nextr[i]][col + j * nextc[i]] -
-                center_height;
+            height = rows[cur_row + j * nextr[i]][col + j * nextc[i]] -
+                     center_height;
             angle = atan2(height, cur_distance);
 
             if (angle > zenith_angle) {

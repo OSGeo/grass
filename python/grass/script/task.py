@@ -11,10 +11,8 @@ Usage:
 
     gtask.command_info("r.info")
 
-(C) 2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
@@ -462,7 +460,7 @@ def get_interface_description(cmd):
                 cmd = os.path.splitext(cmd)[0]
 
             if cmd == "d.rast3d":
-                sys.path.insert(0, os.path.join(os.getenv("GISBASE"), "gui", "scripts"))
+                sys.path.insert(0, os.getenv("GRASS_GUISCRIPTDIR"))
 
             p = Popen(
                 [sys.executable, get_real_command(cmd), "--interface-description"],
@@ -494,7 +492,7 @@ def get_interface_description(cmd):
     desc = convert_xml_to_utf8(cmdout)
     return desc.replace(
         b"grass-interface.dtd",
-        os.path.join(os.getenv("GISBASE"), "gui", "xml", "grass-interface.dtd").encode(
+        os.path.join(os.getenv("GRASS_GUIRESDIR"), "xml", "grass-interface.dtd").encode(
             "utf-8"
         ),
     )

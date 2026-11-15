@@ -4,11 +4,9 @@
 #
 # PURPOSE:   Top level file of the grass package and its initialization
 #
-# COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
-#
-#           This program is free software under the GNU General Public
-#           License (>=v2). Read the file COPYING that comes with GRASS
-#           for details.
+# SPDX-FileCopyrightText: 2021 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 """Top-level GRASS Python package
 
@@ -68,8 +66,7 @@ def _translate(text):
         try:
             import gettext  # pylint: disable=import-outside-toplevel
 
-            gisbase = os.environ["GISBASE"]
-            locale_dir = os.path.join(gisbase, "locale")
+            locale_dir = os.environ["GRASS_LOCALEDIR"]
             # With fallback set to True, not finding the translations files for
             # a language or domain results in a use of null translation, so this
             # does not raise an exception even if the locale settings is broken
