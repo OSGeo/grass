@@ -293,7 +293,7 @@ The exact masks for the first few neighborhood sizes are as follows:
                                         . . . . . X . . . . .
 ```
 
-**-n**
+**-n**  
 Preserve NULL cells from the input raster map. If the input center cell
 is NULL, the corresponding cell in every output map is NULL, regardless
 of the **method** or **selection** map. Non-NULL center cells are
