@@ -203,7 +203,7 @@ text file. For example, to calculate the focal mean with a matrix
 **size** of 3,
 
 ```sh
-r.neigbors in=input.map out=output.map size=3 weighting_function=file \
+r.neighbors in=input.map out=output.map size=3 weighting_function=file \
 weight=weights.txt
 ```
 

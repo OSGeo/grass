@@ -50,8 +50,8 @@ Optional dependencies are controlled by `WITH_*` options (see
 `CMakeLists.txt`). Those enabled by default (PDAL, GEOS, etc.) are *required*:
 on a system missing one, configure fails with a "Could not find ..." error.
 Disable it (e.g. `cmake -B build -DWITH_PDAL=OFF`) or install the dependency.
-If `ccache` is installed it is used automatically; set `CCACHE_DIR` to a
-writable path if the default cache location is read-only (e.g. in a sandbox).
+To use `ccache`, pass `-DUSE_CCACHE=ON`; set `CCACHE_DIR` to a writable path
+if the default cache location is read-only (e.g. in a sandbox).
 GRASS uses `~/.grass8` for user config and installed addons by default; set
 `GRASS_CONFIG_DIR` to a writable directory for a sandbox, or to isolate a
 run from existing user settings. For a rootless install (e.g. a sandbox,

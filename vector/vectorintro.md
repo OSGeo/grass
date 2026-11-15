@@ -284,7 +284,7 @@ algorithms are implemented:
 - Iso-distances (from centers): [v.net.iso](v.net.iso.md)
 - Computes bridges and articulation points:
   [v.net.bridge](v.net.bridge.md)
-- Computes degree, centrality, betweeness, closeness and eigenvector
+- Computes degree, centrality, betweenness, closeness and eigenvector
   centrality measures: [v.net.centrality](v.net.centrality.md)
 - Computes strongly and weakly connected components:
   [v.net.components](v.net.components.md)

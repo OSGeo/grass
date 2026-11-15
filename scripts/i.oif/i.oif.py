@@ -47,15 +47,15 @@ def oifcalc(sdev, corr, k1, k2, k3):
     grass.debug(_("Calculating OIF for combination: %s, %s, %s") % (k1, k2, k3), 1)
     # calculate SUM of Stddeviations:
     ssdev = [sdev[k1], sdev[k2], sdev[k3]]
-    numer = sum(ssdev)
+    numerator = sum(ssdev)
 
     # calculate SUM of absolute(Correlation values):
     scorr = [corr[k1, k2], corr[k1, k3], corr[k2, k3]]
-    denom = sum(map(abs, scorr))
+    denominator = sum(map(abs, scorr))
 
     # Calculate OIF index:
     #     Divide (SUM of Stddeviations) and (SUM of Correlation)
-    return numer / denom
+    return numerator / denominator
 
 
 def perms(bands):
@@ -130,7 +130,11 @@ def main():
     oif = []
     for p in perms(bands):
         oif.append((oifcalc(stddev, correlation, *p), p))
-    oif.sort(reverse=True)
+    # NaN does not compare, so sorting the raw tuples gives an order which
+    # depends on the sort algorithm. Place NaN last, in input order.
+    oif.sort(
+        key=lambda item: (item[0] != item[0], -item[0] if item[0] == item[0] else 0)
+    )
 
     grass.verbose(
         _("The Optimum Index Factor analysis result (best combination shown first):")

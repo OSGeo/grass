@@ -133,10 +133,7 @@ class ScatterFrame(BasePlotFrame):
     def SetupScatterplot(self):
         """Build data list for plotting each raster"""
 
-        #
-        # initialize title string
-        #
-        self.ptitle = _("Bivariate Scatterplot of ")
+        pair_labels = []
 
         #
         # create a datalist for plotting for each raster pair
@@ -148,26 +145,35 @@ class ScatterFrame(BasePlotFrame):
             self.raster[rpair]["datalist"] = self.CreateDatalist(rpair)
 
             # update title
-            self.ptitle += "%s vs %s, " % (
-                rpair[0].split("@")[0],
-                rpair[1].split("@")[0],
+            pair_labels.append(
+                _("{first} vs {second}").format(
+                    first=rpair[0].split("@")[0],
+                    second=rpair[1].split("@")[0],
+                )
             )
 
-        self.ptitle = self.ptitle.strip(", ")
+        self.ptitle = _("Bivariate Scatterplot of {pairs}").format(
+            pairs=", ".join(pair_labels)
+        )
 
         #
         # set xlabel & ylabel based on raster maps of first pair to be plotted
         #
-        self.xlabel = _("Raster <%s> cell values") % rpair[0].split("@")[0]
-        self.ylabel = _("Raster <%s> cell values") % rpair[1].split("@")[0]
+        self.xlabel = self._cell_values_label(
+            rpair[0].split("@")[0], self.raster[self.rasterList[0]][0]["units"]
+        )
+        self.ylabel = self._cell_values_label(
+            rpair[1].split("@")[0], self.raster[self.rasterList[0]][1]["units"]
+        )
 
-        units = self.raster[self.rasterList[0]][0]["units"]
+    @staticmethod
+    def _cell_values_label(raster, units):
+        """Return the axis label for the cell values of a raster map"""
         if units != "":
-            self.xlabel += _(": %s") % units
-
-        units = self.raster[self.rasterList[0]][1]["units"]
-        if units != "":
-            self.ylabel += _(": %s") % units
+            return _("Raster <{raster}> cell values: {units}").format(
+                raster=raster, units=units
+            )
+        return _("Raster <{raster}> cell values").format(raster=raster)
 
     def CreateDatalist(self, rpair):
         """Build a list of cell value, frequency pairs for histogram

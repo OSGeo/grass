@@ -163,7 +163,7 @@ public:
     inline void delete_min_and_insert(const T &x);
 
     // this function is a dirty way to allow building faster the heap
-    // in case we build it from a sorted array; in that case we dont need
+    // in case we build it from a sorted array; in that case we don't need
     // to 'insert' and then 'heapify', but it is enough to 'set'
     void set(long i, T &elt);
 
@@ -342,7 +342,7 @@ T pqheap_t1<T>::min()
 
 //************************************************************/
 // this function is a dirty hack to allow building faster the heap
-// in case we build it from a sorted array; in thiat case we dont need
+// in case we build it from a sorted array; in that case we don't need
 // to 'insert' and then 'heapify', but it is enough to 'set'
 template <class T>
 inline void pqheap_t1<T>::set(long i, T &elt)
@@ -472,7 +472,7 @@ inline void pqheap_t1<T>::heapify(unsigned int root)
     unsigned int rc = heap_rchild(root);
 
 #ifdef HEAPSTATUS
-    // already did the root, so dont do it again
+    // already did the root, so don't do it again
     if (lc < cur_elts) {
         heaptouch(lc);
     }

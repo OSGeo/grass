@@ -15,13 +15,12 @@ build_program_in_subdir(
 )
 add_dependencies(g.mkfontcap fonts)
 
-# TODO(FHS): revert GRASS_INSTALL_ETCBINDIR to GRASS_INSTALL_ETCDIR
-set(fontcap_file ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR}/fontcap)
+# TODO(FHS): rewire ${OUTDIR} path to ${PREFIX} in installed version of fontcap
+set(fontcap_file ${OUTDIR}/${GRASS_INSTALL_ETCDIR}/fontcap)
 
 add_custom_command(
     OUTPUT ${fontcap_file}
-    COMMAND
-        ${CMAKE_COMMAND} -E make_directory ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${OUTDIR}/${GRASS_INSTALL_ETCDIR}
     COMMAND ${grass_env_command} $<TARGET_FILE:g.mkfontcap> -s > ${fontcap_file}
     DEPENDS g.mkfontcap fonts
     VERBATIM
@@ -29,7 +28,7 @@ add_custom_command(
 
 add_custom_target(generate_fontcap ALL DEPENDS ${fontcap_file})
 
-install(FILES ${fontcap_file} DESTINATION ${GRASS_INSTALL_ETCBINDIR})
+install(FILES ${fontcap_file} DESTINATION ${GRASS_INSTALL_ETCDIR})
 
 build_program_in_subdir(g.parser DEPENDS grass_gis)
 build_program_in_subdir(g.pnmcomp DEPENDS grass_gis)

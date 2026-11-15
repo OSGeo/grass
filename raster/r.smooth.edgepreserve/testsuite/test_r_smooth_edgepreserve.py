@@ -1,6 +1,6 @@
 """
 Name:      r.smooth.edgepreserve tests
-Purpose:   Test corectness of outputs
+Purpose:   Test correctness of outputs
 
 Author:    Maris Nartiss
 SPDX-FileCopyrightText: 2025 Maris Nartiss

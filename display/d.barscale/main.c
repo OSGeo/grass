@@ -117,7 +117,10 @@ int main(int argc, char **argv)
     length_opt->type = TYPE_INTEGER;
     length_opt->answer = "0";
     length_opt->options = "0-";
-    length_opt->label = _("Length of barscale in map units");
+    length_opt->label =
+        _("Length of barscale in units set by the units option");
+    length_opt->description =
+        _("Map units if units is not given; 0 picks a length automatically");
 
     units_opt = G_define_option();
     units_opt->key = "units";
