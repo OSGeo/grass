@@ -6,6 +6,15 @@ SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import subprocess
+import sys
+
+import pytest
+
+
+@pytest.mark.skipif(
+    sys.platform.startswith("win"),
+    reason="The grass launcher can't be run through subprocess on Windows",
+)
 
 
 def test_missing_database_directory(tmp_path):
