@@ -386,7 +386,7 @@ ver | findstr XP >NUL
 if not errorlevel 1 goto:Rtouch_next
 if not exist "%ProgramFiles%\R" goto:Rtouch_next
 reg query "HKU\S-1-5-19" >NUL 2>&1 && ( goto Rtouch_next ) || (
-        echo Please run this as Administator.
+        echo Please run this as Administrator.
         goto :eof
 )
 :Rtouch_next

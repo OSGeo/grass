@@ -84,7 +84,7 @@ following code:
 ```python
 import grass.script as gs
 
-gs.find_file('elevation', element = 'cell')
+gs.find_file("elevation", element="cell")
 ```
 
 Parsing JSON output:

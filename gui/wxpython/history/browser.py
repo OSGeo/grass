@@ -7,17 +7,16 @@ Classes:
  - browser::HistoryInfoPanel
  - browser::HistoryBrowser
 
-(C) 2023-2024 by Linda Karlovska, and the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2023-2024 Linda Karlovska
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Linda Karlovska (Kladivova) linda.karlovska@seznam.cz
 @author Anna Petrasova (kratochanna gmail com)
 @author Tomas Zigo
 """
 
+import math
 from datetime import datetime
 
 import wx
@@ -27,7 +26,7 @@ from gui_core.wrap import SearchCtrl, StaticText, StaticBox, Button
 from history.tree import HistoryBrowserTree
 from icons.icon import MetaIcon
 
-import grass.script as gs
+from grass.tools import Tools
 
 from grass.grassdb import history
 
@@ -42,10 +41,10 @@ TRANSLATION_KEYS = {
     "status": _("Status:"),
     "mask2d": _("Mask 2D:"),
     "mask3d": _("Mask 3D:"),
-    "n": _("North:"),
-    "s": _("South:"),
-    "w": _("West:"),
-    "e": _("East:"),
+    "north": _("North:"),
+    "south": _("South:"),
+    "west": _("West:"),
+    "east": _("East:"),
     "nsres": _("North-south resolution:"),
     "ewres": _("East-west resolution:"),
     "rows": _("Number of rows:"),
@@ -71,6 +70,18 @@ def make_label(key):
     return TRANSLATION_KEYS.get(key, "")
 
 
+# Region keys in the shell format of g.region, which are also the names of the g.region parameters
+REGION_KEYS = {"n": "north", "s": "south", "w": "west", "e": "east"}
+
+
+def normalize_region(region):
+    """Return region settings with the keys used by g.region format=json.
+
+    History entries recorded by older versions use the keys of the shell format.
+    """
+    return {REGION_KEYS.get(key, key): value for key, value in region.items()}
+
+
 class HistoryInfoPanel(SP.ScrolledPanel):
     def __init__(self, parent, giface, title=("Command Info"), style=wx.TAB_TRAVERSAL):
         super().__init__(parent=parent, id=wx.ID_ANY, style=style)
@@ -78,6 +89,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.parent = parent
         self.giface = giface
         self.title = title
+        self.tools = Tools()
 
         self.region_settings = None
 
@@ -168,7 +180,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         return key in filter_keys or ((key in {"mask2d", "mask3d"}) and value is True)
 
     def _region_settings_filter(self, key):
-        return key not in {"projection", "zone", "cells"}
+        return key not in {"crs", "projection", "zone", "cells"}
 
     def _updateGeneralInfoBox(self, command_info):
         """Update a static box for displaying general info about the command.
@@ -215,7 +227,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         """
         self.sizer_region_settings_grid.Clear(True)
 
-        self.region_settings = command_info["region"]
+        self.region_settings = normalize_region(command_info["region"])
         idx = 0
         for key, value in self.region_settings.items():
             if self._region_settings_filter(key):
@@ -250,9 +262,12 @@ class HistoryInfoPanel(SP.ScrolledPanel):
         self.sizer_region_settings_match.Clear(True)
 
         # Region condition
-        history_region = self.region_settings
+        history_region = self._get_history_region()
         current_region = self._get_current_region()
-        region_matches = history_region == current_region
+        region_matches = all(
+            math.isclose(value, current_region[key], rel_tol=0, abs_tol=1e-8)
+            for key, value in history_region.items()
+        )
 
         # Icon and button according to the condition
         if region_matches:
@@ -322,7 +337,7 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
     def _get_current_region(self):
         """Get current computational region settings."""
-        return gs.region()
+        return self.tools.g_region(flags="p", format="json").json
 
     def _get_history_region(self):
         """Get computational region settings of executed command."""
@@ -334,8 +349,11 @@ class HistoryInfoPanel(SP.ScrolledPanel):
 
     def OnUpdateRegion(self, event):
         """Set current region to the region of executed command."""
+        parameters = {value: key for key, value in REGION_KEYS.items()}
         history_region = self._get_history_region()
-        gs.run_command("g.region", **history_region)
+        self.tools.g_region(
+            **{parameters.get(key, key): value for key, value in history_region.items()}
+        )
         self.giface.updateMap.emit(render=False, renderVector=False)
         self._updateRegionSettingsMatch()
         self.Layout()

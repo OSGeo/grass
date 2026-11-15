@@ -6,10 +6,8 @@
 Classes:
  - toolbars::BaseToolbar
 
-(C) 2007-2011 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton
 @author Jachym Cepicky
@@ -19,6 +17,7 @@ This program is free software under the GNU General Public License
 import platform
 import os
 from itertools import starmap
+from pathlib import Path
 
 import wx
 from wx.lib.agw import aui
@@ -224,11 +223,10 @@ class ToolbarController:
                 id = getattr(self.widget, tool[0])
             else:
                 id = getattr(self.widget, tool)
-        except AttributeError:
+        except AttributeError as e:
             # TODO: test everything that this is not raised
             # this error was ignored for a long time
-            raise AttributeError("Toolbar does not have a tool %s." % tool)
-            return
+            raise AttributeError("Toolbar does not have a tool %s." % tool) from e
 
         self.classObject.EnableTool(self.widget, id, enable)
 
@@ -281,7 +279,7 @@ class ToolbarController:
         Button must be custom (not toolbar tool) to set smaller width.
         """
         arrowPath = os.path.join(IMGDIR, "small_down_arrow.png")
-        if os.path.isfile(arrowPath) and os.path.getsize(arrowPath):
+        if Path(arrowPath).is_file() and Path(arrowPath).stat().st_size:
             bitmap = wx.Bitmap(name=arrowPath)
         else:
             bitmap = wx.ArtProvider.GetBitmap(

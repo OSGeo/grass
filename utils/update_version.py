@@ -2,12 +2,11 @@
 
 """Update VERSION file to release and development versions"""
 
-import sys
-import datetime
-from types import SimpleNamespace
-from pathlib import Path
-
 import argparse
+import datetime
+import sys
+from pathlib import Path
+from types import SimpleNamespace
 
 
 def read_version_file():
@@ -236,7 +235,7 @@ def status(args):
 def suggest_message(args):
     """Print suggestion for a commit message
 
-    Assumes that the version file was changed, but not commited yet,
+    Assumes that the version file was changed, but not committed yet,
     but it does not check that assumption.
 
     This shows a wrong commit message if going back from RCs,

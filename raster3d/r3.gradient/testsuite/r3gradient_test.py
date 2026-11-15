@@ -7,7 +7,6 @@ Test of r3.gradient
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
-
 r3univar_test_grad_x = """
 n=600
 null_cells=0

@@ -1,6 +1,5 @@
 --ignore-glob=**/tests/**
 --ignore=gui/
---ignore=python/grass/temporal/unit_tests.py
 lib/gis/testsuite/test_gis_lib_getl.py
 lib/init/testsuite/test_grass_tmp_mapset.py
 lib/vector/Vlib/testsuite/test_vlib_box.py

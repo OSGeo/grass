@@ -11,10 +11,9 @@
    \todo function to delete corresponding entry in fidx
    \todo PostGIS version of V2__add_area_cats_to_cidx_nat
 
-   (C) 2012-2014 by Martin Landa, and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2012-2014 Martin Landa
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -82,7 +81,7 @@ static struct line_pnts *Points;
 
 #define NOPG_UNUSED
 #else
-#define NOPG_UNUSED UNUSED
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 /*!
@@ -228,7 +227,7 @@ off_t V1_rewrite_line_pg(struct Map_info *Map NOPG_UNUSED, off_t offset,
  */
 off_t V2_rewrite_line_pg(struct Map_info *Map NOPG_UNUSED, off_t line, int type,
                          const struct line_pnts *points NOPG_UNUSED,
-                         const struct line_cats *cats UNUSED)
+                         const struct line_cats *cats G_UNUSED)
 {
     G_debug(3, "V2_rewrite_line_pg(): line=%d type=%d", (int)line, type);
 #ifdef HAVE_POSTGRES

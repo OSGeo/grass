@@ -1,7 +1,9 @@
 """Fixture for r.category test"""
 
 import os
+
 import pytest
+
 import grass.script as gs
 
 

@@ -27,10 +27,8 @@
  * paper: "Computing Visibility on * Terrains in External Memory" by
  * Herman Haverkort, Laura Toma and Yi Zhuang.
  *
- * COPYRIGHT: (C) 2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -59,7 +57,7 @@ extern "C" {
    If doCurv is set we need to consider the curvature of the
    earth */
 float get_vertical_angle(Viewpoint vp, StatusNode sn, surface_type elev,
-                         int doCurv UNUSED)
+                         int doCurv G_UNUSED)
 {
 
     /*determine the difference in elevation, based on the curvature */

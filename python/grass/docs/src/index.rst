@@ -23,16 +23,16 @@ at various levels:
 * `grass.jupyter package <grass.jupyter.html>`_ offers classes and setup functions for
   running GRASS in Jupyter Notebooks
 * `Testing GRASS source code and modules <gunittest_testing.html>`_ using gunittest package
-* `exceptions package <exceptions.html>`_ contains exceptions used by other packages
-* `imaging package <imaging.html>`_ is a library to create animated images and films
-* `pydispatch package <pydispatch.html>`_ is a library for signal-dispatching
+* `grass.exceptions package <grass.exceptions.html>`_ contains exceptions used by other packages
+* `grass.imaging package <grass.imaging.html>`_ is a library to create animated images and films
+* `grass.pydispatch package <grass.pydispatch.html>`_ is a library for signal-dispatching
 
 --------------------
 Additional Resources
 --------------------
-* `GRASS Python introduction <manuals/python_intro.html>`_ provides a general overview of
+* `GRASS Python introduction <../python_intro.html>`_ provides a general overview of
   the Python interface to GRASS.
-* `GRASS Jupyter notebooks introduction <manuals/jupyter_intro.html>`_ provides an overview of how to use the **grass.jupyter** module.
+* `GRASS Jupyter notebooks introduction <../jupyter_intro.html>`_ provides an overview of how to use the **grass.jupyter** module.
 
 .. _GRASS: https://grass.osgeo.org/
 
@@ -42,12 +42,13 @@ Modules and Packages
 .. toctree::
    :maxdepth: 1
 
-   index
+   grass
    grass.tools
    script_intro
    pygrass_index
    grass.jupyter
-   exceptions
-   imaging
-   pydispatch
+   grass.exceptions
+   grass.imaging
+   grass.pydispatch
+   temporal_framework
    gunittest_testing

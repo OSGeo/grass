@@ -273,6 +273,17 @@ set to override Python executable.
 On Mac OS X this should be the `pythonw` executable for the wxGUI to
 work.
 
+GRASS_RANDOM_SEED  
+\[libgis\]  
+seed for the random number generator of tools which let the user omit
+the seed, such as *[r.mapcalc](r.mapcalc.md)* and
+*[r.sim.water](r.sim.water.md)*; the same value gives the same result
+in every run. The value must be an integer from -2147483648 to
+4294967295; anything else is an error. When
+the variable is not set or empty, SOURCE_DATE_EPOCH is read the same
+way if set, and otherwise the seed comes from the time and the process
+ID.
+
 GRASS_VECTOR_LOWMEM  
 \[vectorlib\]  
 If the environment variable GRASS_VECTOR_LOWMEM exists, memory

@@ -52,7 +52,7 @@ segment_HDRS    = segment.h defs/segment.h
 rowio_HDRS      = rowio.h defs/rowio.h
 temporal_HDRS   = temporal.h
 
-proj_INC        = $(PROJINC)
+proj_INC        = $(PROJINC) $(GDALCFLAGS)
 vector_INC      = $(VECT_INC) $(VECT_CFLAGS)
 vedit_INC       = $(VECT_INC) $(VECT_CFLAGS)
 
@@ -93,7 +93,7 @@ endif
 
 $(PY_COPY_FILES): | $(DSTDIR)
 $(DSTDIR)/__init__.py: libgrass__init__.py
-	$(INSTALL_DATA) $< $@
+	sed 's/@GRASS_CORE_LIBRARY_NAME@/$(GIS_LIBNAME)/' $< > $@
 $(DSTDIR)/ctypes_loader.py: $(OBJDIR)/ctypes_loader.py
 	$(INSTALL_DATA) $< $@
 $(DSTDIR)/ctypes_preamble.py: $(OBJDIR)/ctypes_preamble.py

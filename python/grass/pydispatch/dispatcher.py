@@ -4,14 +4,15 @@ dispatcher is the core of the PyDispatcher system,
 providing the primary API and the core logic for the
 system.
 
-Module attributes of note:
+Module attributes of note::
 
     Any -- Singleton used to signal either "Any Sender" or
         "Any Signal".  See documentation of the _Any class.
     Anonymous -- Singleton used to signal "Anonymous Sender"
         See documentation of the _Anonymous class.
 
-Internal attributes:
+Internal attributes::
+
     WEAKREF_TYPES -- tuple of types/classes which represent
         weak references to receivers, and thus must be de-
         referenced on retrieval to retrieve the callable
@@ -213,18 +214,18 @@ def disconnect(receiver, signal=Any, sender=Any, weak=True):
     try:
         signals = connections[senderkey]
         receivers = signals[signal]
-    except KeyError:
+    except KeyError as e:
         raise errors.DispatcherKeyError(
             """No receivers found for signal %r from sender %r""" % (signal, sender)
-        )
+        ) from e
     try:
         # also removes from receivers
         _removeOldBackRefs(senderkey, signal, receiver, receivers)
-    except ValueError:
+    except ValueError as e:
         raise errors.DispatcherKeyError(
             """No connection to receiver %s for signal %s from sender %s"""
             % (receiver, signal, sender)
-        )
+        ) from e
     _cleanupConnections(senderkey, signal)
 
 

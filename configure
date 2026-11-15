@@ -718,8 +718,6 @@ LIBLAS_INC
 LIBLAS_CFLAGS
 LIBLAS_LIBS
 LIBLAS_CONFIG
-USE_OGR
-USE_GDAL
 GDAL_CFLAGS
 GDAL_LIBS
 GDAL_CONFIG
@@ -818,6 +816,7 @@ pwd
 BINDIR
 WINDRES
 MINGW32
+HAVE_CXX17
 ac_ct_CXX
 CXXFLAGS
 CXX
@@ -1713,9 +1712,9 @@ Optional Packages:
   --with-freetype-libs=DIRS
                           FreeType library files are in DIRS
   --with-proj-includes=DIRS
-                          External PROJ.4 include files are in DIRS
-  --with-proj-libs=DIRS   External PROJ.4 library files are in DIRS
-  --with-proj-share=DIR   External PROJ.4 data files are in DIR
+                          PROJ include files are in DIRS
+  --with-proj-libs=DIRS   PROJ library files are in DIRS
+  --with-proj-share=DIR   PROJ data files are in DIR
   --with-regex-includes=DIRS
                           regex include files are in DIRS
   --with-regex-libs=DIRS  regex library files are in DIRS
@@ -4709,6 +4708,963 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+	# ===========================================================================
+#  https://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx.html
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   AX_CXX_COMPILE_STDCXX(VERSION, [ext|noext], [mandatory|optional])
+#
+# DESCRIPTION
+#
+#   Check for baseline language coverage in the compiler for the specified
+#   version of the C++ standard.  If necessary, add switches to CXX and
+#   CXXCPP to enable support.  VERSION may be '11', '14', '17', '20', or
+#   '23' for the respective C++ standard version.
+#
+#   The second argument, if specified, indicates whether you insist on an
+#   extended mode (e.g. -std=gnu++11) or a strict conformance mode (e.g.
+#   -std=c++11).  If neither is specified, you get whatever works, with
+#   preference for no added switch, and then for an extended mode.
+#
+#   The third argument, if specified 'mandatory' or if left unspecified,
+#   indicates that baseline support for the specified C++ standard is
+#   required and that the macro should error out if no mode with that
+#   support is found.  If specified 'optional', then configuration proceeds
+#   regardless, after defining HAVE_CXX${VERSION} if and only if a
+#   supporting mode is found.
+#
+# LICENSE
+#
+#   Copyright (c) 2008 Benjamin Kosnik <bkoz@redhat.com>
+#   Copyright (c) 2012 Zack Weinberg <zackw@panix.com>
+#   Copyright (c) 2013 Roy Stogner <roystgnr@ices.utexas.edu>
+#   Copyright (c) 2014, 2015 Google Inc.; contributed by Alexey Sokolov <sokolov@google.com>
+#   Copyright (c) 2015 Paul Norman <penorman@mac.com>
+#   Copyright (c) 2015 Moritz Klammler <moritz@klammler.eu>
+#   Copyright (c) 2016, 2018 Krzesimir Nowak <qdlacz@gmail.com>
+#   Copyright (c) 2019 Enji Cooper <yaneurabeya@gmail.com>
+#   Copyright (c) 2020 Jason Merrill <jason@redhat.com>
+#   Copyright (c) 2021, 2024 Jörn Heusipp <osmanx@problemloesungsmaschine.de>
+#   Copyright (c) 2015, 2022, 2023, 2024 Olly Betts
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved.  This file is offered as-is, without any
+#   warranty.
+
+#serial 25
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ax_cxx_compile_alternatives="17 1z"    ax_cxx_compile_cxx17_required=true
+  ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+  ac_success=no
+
+
+
+    if test x$ac_success = xno; then
+    for alternative in ${ax_cxx_compile_alternatives}; do
+      switch="-std=gnu++${alternative}"
+      cachevar=`printf "%s\n" "ax_cv_cxx_compile_cxx17_$switch" | sed "$as_sed_sh"`
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether $CXX supports C++17 features with $switch" >&5
+printf %s "checking whether $CXX supports C++17 features with $switch... " >&6; }
+
+ac_save_CXX="$CXX"
+         CXX="$CXX $switch"
+         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+
+// If the compiler admits that it is not ready for C++11, why torture it?
+// Hopefully, this will speed up the test.
+
+#ifndef __cplusplus
+
+#error "This is not a C++ compiler"
+
+// MSVC always sets __cplusplus to 199711L in older versions; newer versions
+// only set it correctly if /Zc:__cplusplus is specified as well as a
+// /std:c++NN switch:
+//
+// https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
+//
+// The value __cplusplus ought to have is available in _MSVC_LANG since
+// Visual Studio 2015 Update 3:
+//
+// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros
+//
+// This was also the first MSVC version to support C++14 so we can't use the
+// value of either __cplusplus or _MSVC_LANG to quickly rule out MSVC having
+// C++11 or C++14 support, but we can check _MSVC_LANG for C++17 and later.
+#elif __cplusplus < 201103L && !defined _MSC_VER
+
+#error "This is not a C++11 compiler"
+
+#else
+
+namespace cxx11
+{
+
+  namespace test_static_assert
+  {
+
+    template <typename T>
+    struct check
+    {
+      static_assert(sizeof(int) <= sizeof(T), "not big enough");
+    };
+
+  }
+
+  namespace test_final_override
+  {
+
+    struct Base
+    {
+      virtual ~Base() {}
+      virtual void f() {}
+    };
+
+    struct Derived : public Base
+    {
+      virtual ~Derived() override {}
+      virtual void f() override {}
+    };
+
+  }
+
+  namespace test_double_right_angle_brackets
+  {
+
+    template < typename T >
+    struct check {};
+
+    typedef check<void> single_type;
+    typedef check<check<void>> double_type;
+    typedef check<check<check<void>>> triple_type;
+    typedef check<check<check<check<void>>>> quadruple_type;
+
+  }
+
+  namespace test_decltype
+  {
+
+    int
+    f()
+    {
+      int a = 1;
+      decltype(a) b = 2;
+      return a + b;
+    }
+
+  }
+
+  namespace test_type_deduction
+  {
+
+    template < typename T1, typename T2 >
+    struct is_same
+    {
+      static const bool value = false;
+    };
+
+    template < typename T >
+    struct is_same<T, T>
+    {
+      static const bool value = true;
+    };
+
+    template < typename T1, typename T2 >
+    auto
+    add(T1 a1, T2 a2) -> decltype(a1 + a2)
+    {
+      return a1 + a2;
+    }
+
+    int
+    test(const int c, volatile int v)
+    {
+      static_assert(is_same<int, decltype(0)>::value == true, "");
+      static_assert(is_same<int, decltype(c)>::value == false, "");
+      static_assert(is_same<int, decltype(v)>::value == false, "");
+      auto ac = c;
+      auto av = v;
+      auto sumi = ac + av + 'x';
+      auto sumf = ac + av + 1.0;
+      static_assert(is_same<int, decltype(ac)>::value == true, "");
+      static_assert(is_same<int, decltype(av)>::value == true, "");
+      static_assert(is_same<int, decltype(sumi)>::value == true, "");
+      static_assert(is_same<int, decltype(sumf)>::value == false, "");
+      static_assert(is_same<int, decltype(add(c, v))>::value == true, "");
+      return (sumf > 0.0) ? sumi : add(c, v);
+    }
+
+  }
+
+  namespace test_noexcept
+  {
+
+    int f() { return 0; }
+    int g() noexcept { return 0; }
+
+    static_assert(noexcept(f()) == false, "");
+    static_assert(noexcept(g()) == true, "");
+
+  }
+
+  namespace test_constexpr
+  {
+
+    template < typename CharT >
+    unsigned long constexpr
+    strlen_c_r(const CharT *const s, const unsigned long acc) noexcept
+    {
+      return *s ? strlen_c_r(s + 1, acc + 1) : acc;
+    }
+
+    template < typename CharT >
+    unsigned long constexpr
+    strlen_c(const CharT *const s) noexcept
+    {
+      return strlen_c_r(s, 0UL);
+    }
+
+    static_assert(strlen_c("") == 0UL, "");
+    static_assert(strlen_c("1") == 1UL, "");
+    static_assert(strlen_c("example") == 7UL, "");
+    static_assert(strlen_c("another\0example") == 7UL, "");
+
+  }
+
+  namespace test_rvalue_references
+  {
+
+    template < int N >
+    struct answer
+    {
+      static constexpr int value = N;
+    };
+
+    answer<1> f(int&)       { return answer<1>(); }
+    answer<2> f(const int&) { return answer<2>(); }
+    answer<3> f(int&&)      { return answer<3>(); }
+
+    void
+    test()
+    {
+      int i = 0;
+      const int c = 0;
+      static_assert(decltype(f(i))::value == 1, "");
+      static_assert(decltype(f(c))::value == 2, "");
+      static_assert(decltype(f(0))::value == 3, "");
+    }
+
+  }
+
+  namespace test_uniform_initialization
+  {
+
+    struct test
+    {
+      static const int zero {};
+      static const int one {1};
+    };
+
+    static_assert(test::zero == 0, "");
+    static_assert(test::one == 1, "");
+
+  }
+
+  namespace test_lambdas
+  {
+
+    void
+    test1()
+    {
+      auto lambda1 = [](){};
+      auto lambda2 = lambda1;
+      lambda1();
+      lambda2();
+    }
+
+    int
+    test2()
+    {
+      auto a = [](int i, int j){ return i + j; }(1, 2);
+      auto b = []() -> int { return '0'; }();
+      auto c = [=](){ return a + b; }();
+      auto d = [&](){ return c; }();
+      auto e = [a, &b](int x) mutable {
+        const auto identity = [](int y){ return y; };
+        for (auto i = 0; i < a; ++i)
+          a += b--;
+        return x + identity(a + b);
+      }(0);
+      return a + b + c + d + e;
+    }
+
+    int
+    test3()
+    {
+      const auto nullary = [](){ return 0; };
+      const auto unary = [](int x){ return x; };
+      using nullary_t = decltype(nullary);
+      using unary_t = decltype(unary);
+      const auto higher1st = [](nullary_t f){ return f(); };
+      const auto higher2nd = [unary](nullary_t f1){
+        return [unary, f1](unary_t f2){ return f2(unary(f1())); };
+      };
+      return higher1st(nullary) + higher2nd(nullary)(unary);
+    }
+
+  }
+
+  namespace test_variadic_templates
+  {
+
+    template <int...>
+    struct sum;
+
+    template <int N0, int... N1toN>
+    struct sum<N0, N1toN...>
+    {
+      static constexpr auto value = N0 + sum<N1toN...>::value;
+    };
+
+    template <>
+    struct sum<>
+    {
+      static constexpr auto value = 0;
+    };
+
+    static_assert(sum<>::value == 0, "");
+    static_assert(sum<1>::value == 1, "");
+    static_assert(sum<23>::value == 23, "");
+    static_assert(sum<1, 2>::value == 3, "");
+    static_assert(sum<5, 5, 11>::value == 21, "");
+    static_assert(sum<2, 3, 5, 7, 11, 13>::value == 41, "");
+
+  }
+
+  // http://stackoverflow.com/questions/13728184/template-aliases-and-sfinae
+  // Clang 3.1 fails with headers of libstd++ 4.8.3 when using std::function
+  // because of this.
+  namespace test_template_alias_sfinae
+  {
+
+    struct foo {};
+
+    template<typename T>
+    using member = typename T::member_type;
+
+    template<typename T>
+    void func(...) {}
+
+    template<typename T>
+    void func(member<T>*) {}
+
+    void test();
+
+    void test() { func<foo>(0); }
+
+  }
+
+}  // namespace cxx11
+
+#endif  // __cplusplus >= 201103L
+
+
+
+
+// If the compiler admits that it is not ready for C++14, why torture it?
+// Hopefully, this will speed up the test.
+
+#ifndef __cplusplus
+
+#error "This is not a C++ compiler"
+
+#elif __cplusplus < 201402L && !defined _MSC_VER
+
+#error "This is not a C++14 compiler"
+
+#else
+
+namespace cxx14
+{
+
+  namespace test_polymorphic_lambdas
+  {
+
+    int
+    test()
+    {
+      const auto lambda = [](auto&&... args){
+        const auto istiny = [](auto x){
+          return (sizeof(x) == 1UL) ? 1 : 0;
+        };
+        const int aretiny[] = { istiny(args)... };
+        return aretiny[0];
+      };
+      return lambda(1, 1L, 1.0f, '1');
+    }
+
+  }
+
+  namespace test_binary_literals
+  {
+
+    constexpr auto ivii = 0b0000000000101010;
+    static_assert(ivii == 42, "wrong value");
+
+  }
+
+  namespace test_generalized_constexpr
+  {
+
+    template < typename CharT >
+    constexpr unsigned long
+    strlen_c(const CharT *const s) noexcept
+    {
+      auto length = 0UL;
+      for (auto p = s; *p; ++p)
+        ++length;
+      return length;
+    }
+
+    static_assert(strlen_c("") == 0UL, "");
+    static_assert(strlen_c("x") == 1UL, "");
+    static_assert(strlen_c("test") == 4UL, "");
+    static_assert(strlen_c("another\0test") == 7UL, "");
+
+  }
+
+  namespace test_lambda_init_capture
+  {
+
+    int
+    test()
+    {
+      auto x = 0;
+      const auto lambda1 = [a = x](int b){ return a + b; };
+      const auto lambda2 = [a = lambda1(x)](){ return a; };
+      return lambda2();
+    }
+
+  }
+
+  namespace test_digit_separators
+  {
+
+    constexpr auto ten_million = 100'000'000;
+    static_assert(ten_million == 100000000, "");
+
+  }
+
+  namespace test_return_type_deduction
+  {
+
+    auto f(int& x) { return x; }
+    decltype(auto) g(int& x) { return x; }
+
+    template < typename T1, typename T2 >
+    struct is_same
+    {
+      static constexpr auto value = false;
+    };
+
+    template < typename T >
+    struct is_same<T, T>
+    {
+      static constexpr auto value = true;
+    };
+
+    int
+    test()
+    {
+      auto x = 0;
+      static_assert(is_same<int, decltype(f(x))>::value, "");
+      static_assert(is_same<int&, decltype(g(x))>::value, "");
+      return x;
+    }
+
+  }
+
+}  // namespace cxx14
+
+#endif  // __cplusplus >= 201402L
+
+
+
+
+// If the compiler admits that it is not ready for C++17, why torture it?
+// Hopefully, this will speed up the test.
+
+#ifndef __cplusplus
+
+#error "This is not a C++ compiler"
+
+#elif (defined _MSVC_LANG ? _MSVC_LANG : __cplusplus) < 201703L
+
+#error "This is not a C++17 compiler"
+
+#else
+
+#include <initializer_list>
+#include <utility>
+#include <type_traits>
+
+namespace cxx17
+{
+
+  namespace test_constexpr_lambdas
+  {
+
+    constexpr int foo = [](){return 42;}();
+
+  }
+
+  namespace test::nested_namespace::definitions
+  {
+
+  }
+
+  namespace test_fold_expression
+  {
+
+    template<typename... Args>
+    int multiply(Args... args)
+    {
+      return (args * ... * 1);
+    }
+
+    template<typename... Args>
+    bool all(Args... args)
+    {
+      return (args && ...);
+    }
+
+  }
+
+  namespace test_extended_static_assert
+  {
+
+    static_assert (true);
+
+  }
+
+  namespace test_auto_brace_init_list
+  {
+
+    auto foo = {5};
+    auto bar {5};
+
+    static_assert(std::is_same<std::initializer_list<int>, decltype(foo)>::value);
+    static_assert(std::is_same<int, decltype(bar)>::value);
+  }
+
+  namespace test_typename_in_template_template_parameter
+  {
+
+    template<template<typename> typename X> struct D;
+
+  }
+
+  namespace test_fallthrough_nodiscard_maybe_unused_attributes
+  {
+
+    int f1()
+    {
+      return 42;
+    }
+
+    [[nodiscard]] int f2()
+    {
+      [[maybe_unused]] auto unused = f1();
+
+      switch (f1())
+      {
+      case 17:
+        f1();
+        [[fallthrough]];
+      case 42:
+        f1();
+      }
+      return f1();
+    }
+
+  }
+
+  namespace test_extended_aggregate_initialization
+  {
+
+    struct base1
+    {
+      int b1, b2 = 42;
+    };
+
+    struct base2
+    {
+      base2() {
+        b3 = 42;
+      }
+      int b3;
+    };
+
+    struct derived : base1, base2
+    {
+        int d;
+    };
+
+    derived d1 {{1, 2}, {}, 4};  // full initialization
+    derived d2 {{}, {}, 4};      // value-initialized bases
+
+  }
+
+  namespace test_general_range_based_for_loop
+  {
+
+    struct iter
+    {
+      int i;
+
+      int& operator* ()
+      {
+        return i;
+      }
+
+      const int& operator* () const
+      {
+        return i;
+      }
+
+      iter& operator++()
+      {
+        ++i;
+        return *this;
+      }
+    };
+
+    struct sentinel
+    {
+      int i;
+    };
+
+    bool operator== (const iter& i, const sentinel& s)
+    {
+      return i.i == s.i;
+    }
+
+    bool operator!= (const iter& i, const sentinel& s)
+    {
+      return !(i == s);
+    }
+
+    struct range
+    {
+      iter begin() const
+      {
+        return {0};
+      }
+
+      sentinel end() const
+      {
+        return {5};
+      }
+    };
+
+    void f()
+    {
+      range r {};
+
+      for (auto i : r)
+      {
+        [[maybe_unused]] auto v = i;
+      }
+    }
+
+  }
+
+  namespace test_lambda_capture_asterisk_this_by_value
+  {
+
+    struct t
+    {
+      int i;
+      int foo()
+      {
+        return [*this]()
+        {
+          return i;
+        }();
+      }
+    };
+
+  }
+
+  namespace test_enum_class_construction
+  {
+
+    enum class byte : unsigned char
+    {};
+
+    byte foo {42};
+
+  }
+
+  namespace test_constexpr_if
+  {
+
+    template <bool cond>
+    int f ()
+    {
+      if constexpr(cond)
+      {
+        return 13;
+      }
+      else
+      {
+        return 42;
+      }
+    }
+
+  }
+
+  namespace test_selection_statement_with_initializer
+  {
+
+    int f()
+    {
+      return 13;
+    }
+
+    int f2()
+    {
+      if (auto i = f(); i > 0)
+      {
+        return 3;
+      }
+
+      switch (auto i = f(); i + 4)
+      {
+      case 17:
+        return 2;
+
+      default:
+        return 1;
+      }
+    }
+
+  }
+
+  namespace test_template_argument_deduction_for_class_templates
+  {
+
+    template <typename T1, typename T2>
+    struct pair
+    {
+      pair (T1 p1, T2 p2)
+        : m1 {p1},
+          m2 {p2}
+      {}
+
+      T1 m1;
+      T2 m2;
+    };
+
+    void f()
+    {
+      [[maybe_unused]] auto p = pair{13, 42u};
+    }
+
+  }
+
+  namespace test_non_type_auto_template_parameters
+  {
+
+    template <auto n>
+    struct B
+    {};
+
+    B<5> b1;
+    B<'a'> b2;
+
+  }
+
+  namespace test_structured_bindings
+  {
+
+    int arr[2] = { 1, 2 };
+    std::pair<int, int> pr = { 1, 2 };
+
+    auto f1() -> int(&)[2]
+    {
+      return arr;
+    }
+
+    auto f2() -> std::pair<int, int>&
+    {
+      return pr;
+    }
+
+    struct S
+    {
+      int x1 : 2;
+      volatile double y1;
+    };
+
+    S f3()
+    {
+      return {};
+    }
+
+    auto [ x1, y1 ] = f1();
+    auto& [ xr1, yr1 ] = f1();
+    auto [ x2, y2 ] = f2();
+    auto& [ xr2, yr2 ] = f2();
+    const auto [ x3, y3 ] = f3();
+
+  }
+
+  namespace test_exception_spec_type_system
+  {
+
+    struct Good {};
+    struct Bad {};
+
+    void g1() noexcept;
+    void g2();
+
+    template<typename T>
+    Bad
+    f(T*, T*);
+
+    template<typename T1, typename T2>
+    Good
+    f(T1*, T2*);
+
+    static_assert (std::is_same_v<Good, decltype(f(g1, g2))>);
+
+  }
+
+  namespace test_inline_variables
+  {
+
+    template<class T> void f(T)
+    {}
+
+    template<class T> inline T g(T)
+    {
+      return T{};
+    }
+
+    template<> inline void f<>(int)
+    {}
+
+    template<> int g<>(int)
+    {
+      return 5;
+    }
+
+  }
+
+}  // namespace cxx17
+
+#endif  // (defined _MSVC_LANG ? _MSVC_LANG : __cplusplus) < 201703L
+
+
+
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"
+then :
+  eval $cachevar=yes
+else case e in #(
+  e) eval $cachevar=no ;;
+esac
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+         CXX="$ac_save_CXX"
+eval ac_res=\$$cachevar
+	       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+printf "%s\n" "$ac_res" >&6; }
+      if eval test x\$$cachevar = xyes; then
+        CXX="$CXX $switch"
+        if test -n "$CXXCPP" ; then
+          CXXCPP="$CXXCPP $switch"
+        fi
+        ac_success=yes
+        break
+      fi
+    done
+  fi
+
+
+  ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+  if test x$ax_cxx_compile_cxx17_required = xtrue; then
+    if test x$ac_success = xno; then
+      as_fn_error $? "*** A compiler with support for C++17 language features is required." "$LINENO" 5
+    fi
+  fi
+  if test x$ac_success = xno; then
+    HAVE_CXX17=0
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: No compiler with C++17 support was found" >&5
+printf "%s\n" "$as_me: No compiler with C++17 support was found" >&6;}
+  else
+    HAVE_CXX17=1
+
+printf "%s\n" "#define HAVE_CXX17 1" >>confdefs.h
+
+  fi
+
+
 else
 	CXX=
 	CXXFLAGS=
@@ -4983,10 +5939,10 @@ GRASS_BIN="${DSTDIR}/bin.${ARCH}"
 
 GRASS_VERSION_FILE=include/VERSION
 GRASS_VERSION_GIT_FILE=include/VERSION_GIT
-GRASS_VERSION_MAJOR=`sed -n 1p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_MINOR=`sed -n 2p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_RELEASE=`sed -n 3p "${GRASS_VERSION_FILE}"`
-GRASS_VERSION_DATE=`sed -n 4p "${GRASS_VERSION_FILE}"`
+GRASS_VERSION_MAJOR=`sed -n 1p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_MINOR=`sed -n 2p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_RELEASE=`sed -n 3p "${SRCDIR}/${GRASS_VERSION_FILE}"`
+GRASS_VERSION_DATE=`sed -n 4p "${SRCDIR}/${GRASS_VERSION_FILE}"`
 GRASS_VERSION_NUMBER=`echo ${GRASS_VERSION_MAJOR}.${GRASS_VERSION_MINOR}.${GRASS_VERSION_RELEASE}`
 NAME_VER=`echo ${GRASS_VERSION_NUMBER} | sed 's/\..*//'`
 
@@ -5040,25 +5996,13 @@ printf "%s\n" "no" >&6; }
 fi
 
 
-as_ac_File=`printf "%s\n" "ac_cv_file_$GRASS_VERSION_GIT_FILE" | sed "$as_sed_sh"`
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $GRASS_VERSION_GIT_FILE" >&5
-printf %s "checking for $GRASS_VERSION_GIT_FILE... " >&6; }
-
-test "$cross_compiling" = yes &&
-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-if test -r "$GRASS_VERSION_GIT_FILE"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-eval ac_res=\$$as_ac_File
-	       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-printf "%s\n" "$ac_res" >&6; }
-if eval test \"x\$"$as_ac_File"\" = x"yes"
+if test -f "${SRCDIR}/${GRASS_VERSION_GIT_FILE}"
 then :
-
+  ac_cv_file_include_VERSION_GIT=yes
+else case e in #(
+  e) ac_cv_file_include_VERSION_GIT=no ;;
+esac
 fi
-
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for GRASS headers commit date" >&5
 printf %s "checking for GRASS headers commit date... " >&6; }
 if test "$GIT" != "no" ; then
@@ -5078,9 +6022,9 @@ if test "$GIT" != "no" ; then
 fi
 if test $GRASS_VERSION_GIT == "exported" && \
    test "$ac_cv_file_include_VERSION_GIT" == "yes"; then
-      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_HEADERS_GIT_HASH=$(sed -n 1p "${SRCDIR}/${GRASS_VERSION_GIT_FILE}")
       GRASS_VERSION_GIT=$GRASS_HEADERS_GIT_HASH
-      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${GRASS_VERSION_GIT_FILE}")
+      GRASS_HEADERS_GIT_DATE=$(sed -n 2p "${SRCDIR}/${GRASS_VERSION_GIT_FILE}")
 fi
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $GRASS_HEADERS_GIT_DATE" >&5
 printf "%s\n" "$GRASS_HEADERS_GIT_DATE" >&6; }
@@ -5162,30 +6106,13 @@ if test -z "$with_macosx_sdk" ; then
   { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
 else
-  as_ac_File=`printf "%s\n" "ac_cv_file_$with_macosx_sdk/SDKSettings.plist" | sed "$as_sed_sh"`
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $with_macosx_sdk/SDKSettings.plist" >&5
-printf %s "checking for $with_macosx_sdk/SDKSettings.plist... " >&6; }
-
-test "$cross_compiling" = yes &&
-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-if test -r "$with_macosx_sdk/SDKSettings.plist"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-eval ac_res=\$$as_ac_File
-	       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-printf "%s\n" "$ac_res" >&6; }
-if eval test \"x\$"$as_ac_File"\" = x"yes"
+  if test -f "$with_macosx_sdk/SDKSettings.plist"
 then :
-
-    MACOSX_SDK="-isysroot $with_macosx_sdk"
+  MACOSX_SDK="-isysroot $with_macosx_sdk"
 else case e in #(
-  e)
-    as_fn_error $? "*** specified SDK does not exist or is not a SDK" "$LINENO" 5 ;;
+  e) as_fn_error $? "*** specified SDK does not exist or is not a SDK" "$LINENO" 5 ;;
 esac
 fi
-
   LDFLAGS="$LDFLAGS $MACOSX_SDK"
   CFLAGS="$CFLAGS $MACOSX_SDK"
   CXXFLAGS="$CXXFLAGS $MACOSX_SDK"
@@ -9170,14 +10097,12 @@ fi # $USE_ZSTD
 PROJINC=
 PROJLIB=
 PROJSHARE=
-PROJ4API=0
-PROJMAJOR=4
 
 # With PROJ includes directory
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of External PROJ includes" >&5
-printf %s "checking for location of External PROJ includes... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of PROJ includes" >&5
+printf %s "checking for location of PROJ includes... " >&6; }
 case "$with_proj_includes" in
 y | ye | yes | n | no)
 	as_fn_error $? "*** You must supply a directory to --with-proj-includes." "$LINENO" 5
@@ -9191,36 +10116,28 @@ if test -n "$with_proj_includes" ; then
         if test -d "$dir"; then
             PROJINC="$PROJINC -I$dir"
         else
-            as_fn_error $? "*** External PROJ includes directory $dir does not exist." "$LINENO" 5
+            as_fn_error $? "*** PROJ includes directory $dir does not exist." "$LINENO" 5
         fi
     done
 fi
 
 
-# PROJ version check: if proj.h exists, it must be proj 5+
-
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$PROJINC $CPPFLAGS"
-       for ac_header in proj.h
-do :
-  ac_fn_c_check_header_compile "$LINENO" "proj.h" "ac_cv_header_proj_h" "$ac_includes_default"
+ac_fn_c_check_header_compile "$LINENO" "proj.h" "ac_cv_header_proj_h" "$ac_includes_default"
 if test "x$ac_cv_header_proj_h" = xyes
 then :
-  printf "%s\n" "#define HAVE_PROJ_H 1" >>confdefs.h
 
 else case e in #(
-  e) PROJ4API=1 ;;
+  e) as_fn_error $? "*** Unable to locate <proj.h>." "$LINENO" 5 ;;
 esac
 fi
 
-done
 CPPFLAGS=$ac_save_cppflags
 
 
-if test $PROJ4API = 0 ; then
-
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking External PROJ major version" >&5
-printf %s "checking External PROJ major version... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking PROJ major version" >&5
+printf %s "checking PROJ major version... " >&6; }
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$PROJINC $CPPFLAGS"
 if test "$cross_compiling" = yes
@@ -9247,7 +10164,7 @@ then :
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $proj_ver_major" >&5
 printf "%s\n" "$proj_ver_major" >&6; }
 else case e in #(
-  e)    as_fn_error $? "*** Could not determine External PROJ major version." "$LINENO" 5  ;;
+  e)    as_fn_error $? "*** Could not determine PROJ major version." "$LINENO" 5  ;;
 esac
 fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
@@ -9258,8 +10175,8 @@ fi
 CPPFLAGS=$ac_save_cppflags
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking External PROJ minor version" >&5
-printf %s "checking External PROJ minor version... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking PROJ minor version" >&5
+printf %s "checking PROJ minor version... " >&6; }
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$PROJINC $CPPFLAGS"
 if test "$cross_compiling" = yes
@@ -9286,7 +10203,7 @@ then :
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $proj_ver_minor" >&5
 printf "%s\n" "$proj_ver_minor" >&6; }
 else case e in #(
-  e)    as_fn_error $? "*** Could not determine External PROJ minor version." "$LINENO" 5  ;;
+  e)    as_fn_error $? "*** Could not determine PROJ minor version." "$LINENO" 5  ;;
 esac
 fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
@@ -9297,8 +10214,8 @@ fi
 CPPFLAGS=$ac_save_cppflags
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking External PROJ patch version" >&5
-printf %s "checking External PROJ patch version... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking PROJ patch version" >&5
+printf %s "checking PROJ patch version... " >&6; }
 ac_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$PROJINC $CPPFLAGS"
 if test "$cross_compiling" = yes
@@ -9325,7 +10242,7 @@ then :
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $proj_ver_patch" >&5
 printf "%s\n" "$proj_ver_patch" >&6; }
 else case e in #(
-  e)    as_fn_error $? "*** Could not determine External PROJ patch version." "$LINENO" 5  ;;
+  e)    as_fn_error $? "*** Could not determine PROJ patch version." "$LINENO" 5  ;;
 esac
 fi
 rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
@@ -9335,75 +10252,20 @@ fi
 
 CPPFLAGS=$ac_save_cppflags
 
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: found PROJ version \"${proj_ver_major}.${proj_ver_minor}.${proj_ver_patch}\"" >&5
-printf "%s\n" "found PROJ version \"${proj_ver_major}.${proj_ver_minor}.${proj_ver_patch}\"" >&6; }
-    PROJMAJOR=${proj_ver_major}
-    # minimum required PROJ 5+ version to use the new PROJ API: 5.1.0
-    if test ${proj_ver_major} = 5 && test `expr ${proj_ver_minor} \< 1` = 1 ; then
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: At least PROJ version \"5.1.0\" is required for the new API " >&5
-printf "%s\n" "$as_me: WARNING: At least PROJ version \"5.1.0\" is required for the new API " >&2;}
-	PROJ4API=1
-    fi
-else
+proj_version="$proj_ver_major.$proj_ver_minor.$proj_ver_patch"
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking External PROJ.4 version" >&5
-printf %s "checking External PROJ.4 version... " >&6; }
-ac_save_cppflags="$CPPFLAGS"
-CPPFLAGS="$PROJINC $CPPFLAGS"
-if test "$cross_compiling" = yes
-then :
-     proj_ver=0
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unknown (cross-compiling)" >&5
-printf "%s\n" "unknown (cross-compiling)" >&6; }
-else case e in #(
-  e) cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#include <stdio.h>
-#include <proj_api.h>
-int main(void) {
- FILE *fp = fopen("conftestdata","w");
- fprintf(fp, "%d", PJ_VERSION);
- return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_run "$LINENO"
-then :
-     proj_ver=`cat conftestdata`
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $proj_ver" >&5
-printf "%s\n" "$proj_ver" >&6; }
-else case e in #(
-  e)    as_fn_error $? "*** Could not determine External PROJ.4 version." "$LINENO" 5  ;;
-esac
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest.beam conftest.$ac_ext ;;
-esac
+if test "$(expr "$proj_ver_major" \>= 9)" = 1; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using PROJ version \"${proj_version}\"" >&5
+printf "%s\n" "using PROJ version \"${proj_version}\"" >&6; }
+elif test "$cross_compiling" != "yes" ; then
+  as_fn_error $? "*** PROJ version 9.0.0 or newer is required (found version \"${proj_version}\")" "$LINENO" 5
 fi
 
-CPPFLAGS=$ac_save_cppflags
-
-    if test `expr ${proj_ver} \>= 600` = 1 ; then
-	PROJMAJOR=6
-    elif test `expr ${proj_ver} \>= 500` = 1 ; then
-	PROJMAJOR=5
-    elif test `expr ${proj_ver} \>= 400` = 1 ; then
-	PROJMAJOR=4
-    fi
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: found PROJ version \"${proj_ver}\"" >&5
-printf "%s\n" "found PROJ version \"${proj_ver}\"" >&6; }
-fi
-
-if test $PROJ4API = 0 ; then
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using new PROJ version 5+ API" >&5
-printf "%s\n" "using new PROJ version 5+ API" >&6; }
-
-    # With PROJ library directory
+# With PROJ library directory
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of External PROJ library" >&5
-printf %s "checking for location of External PROJ library... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of PROJ library" >&5
+printf %s "checking for location of PROJ library... " >&6; }
 case "$with_proj_libs" in
 y | ye | yes | n | no)
 	as_fn_error $? "*** You must supply a directory to --with-proj-libs." "$LINENO" 5
@@ -9417,7 +10279,7 @@ if test -n "$with_proj_libs"; then
         if test -d "$dir"; then
             PROJLIB="$PROJLIB -L$dir"
         else
-            as_fn_error $? "*** External PROJ library directory $dir does not exist." "$LINENO" 5
+            as_fn_error $? "*** PROJ library directory $dir does not exist." "$LINENO" 5
         fi
     done
 fi
@@ -9472,7 +10334,7 @@ else case e in #(
   e)
 LDFLAGS=${ac_save_ldflags}
 
-    as_fn_error $? "*** Unable to locate External PROJ library." "$LINENO" 5
+    as_fn_error $? "*** Unable to locate PROJ library." "$LINENO" 5
 
  ;;
 esac
@@ -9482,174 +10344,12 @@ fi
 
 LDFLAGS=${ac_save_ldflags}
 
-else
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using old PROJ version 4 API" >&5
-printf "%s\n" "using old PROJ version 4 API" >&6; }
-
-printf "%s\n" "#define USE_PROJ4API 1" >>confdefs.h
-
-
-
-ac_save_cppflags="$CPPFLAGS"
-CPPFLAGS="$PROJINC $CPPFLAGS"
-       for ac_header in proj_api.h
-do :
-  ac_fn_c_check_header_compile "$LINENO" "proj_api.h" "ac_cv_header_proj_api_h" "$ac_includes_default"
-if test "x$ac_cv_header_proj_api_h" = xyes
-then :
-  printf "%s\n" "#define HAVE_PROJ_API_H 1" >>confdefs.h
-
-else case e in #(
-  e)
-    as_fn_error $? "*** Unable to locate External PROJ includes." "$LINENO" 5
- ;;
-esac
-fi
-
-done
-CPPFLAGS=$ac_save_cppflags
-
-    # PROJ version check for v4.x
-
-    if test "$cross_compiling" = yes; then
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: *** Cannot check PROJ.4 version (cross-compiling)." >&5
-printf "%s\n" "$as_me: WARNING: *** Cannot check PROJ.4 version (cross-compiling)." >&2;}
-    else
-
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking External PROJ.4 version" >&5
-printf %s "checking External PROJ.4 version... " >&6; }
-ac_save_cppflags="$CPPFLAGS"
-CPPFLAGS="$PROJINC $CPPFLAGS"
-if test "$cross_compiling" = yes
-then :
-     proj_ver=0
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unknown (cross-compiling)" >&5
-printf "%s\n" "unknown (cross-compiling)" >&6; }
-else case e in #(
-  e) cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-#include <stdio.h>
-#include <proj_api.h>
-int main(void) {
- FILE *fp = fopen("conftestdata","w");
- fprintf(fp, "%d", PJ_VERSION);
- return 0;
-}
-
-_ACEOF
-if ac_fn_c_try_run "$LINENO"
-then :
-     proj_ver=`cat conftestdata`
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $proj_ver" >&5
-printf "%s\n" "$proj_ver" >&6; }
-else case e in #(
-  e)    as_fn_error $? "*** Could not determine External PROJ.4 version." "$LINENO" 5  ;;
-esac
-fi
-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
-  conftest.$ac_objext conftest.beam conftest.$ac_ext ;;
-esac
-fi
-
-CPPFLAGS=$ac_save_cppflags
-
-
-	if test `expr ${proj_ver} \< 446` = 1 ; then
-	    as_fn_error $? "*** PROJ.4.4.6 or later is required." "$LINENO" 5
-	fi
-    fi
-
-    # With PROJ library directory
-
-
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of External PROJ.4 library" >&5
-printf %s "checking for location of External PROJ.4 library... " >&6; }
-case "$with_proj_libs" in
-y | ye | yes | n | no)
-	as_fn_error $? "*** You must supply a directory to --with-proj-libs." "$LINENO" 5
-	;;
-esac
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_proj_libs" >&5
-printf "%s\n" "$with_proj_libs" >&6; }
-
-if test -n "$with_proj_libs"; then
-    for dir in $with_proj_libs; do
-        if test -d "$dir"; then
-            PROJLIB="$PROJLIB -L$dir"
-        else
-            as_fn_error $? "*** External PROJ.4 library directory $dir does not exist." "$LINENO" 5
-        fi
-    done
-fi
-
-
-ac_save_ldflags="$LDFLAGS"
-LDFLAGS="$PROJLIB $LDFLAGS"
-
-
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for pj_get_def in -lproj" >&5
-printf %s "checking for pj_get_def in -lproj... " >&6; }
-
-ac_check_lib_save_LIBS=$LIBS
-LIBS="-lproj  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.
-   The 'extern "C"' is for builds by C++ compilers;
-   although this is not generally supported in C code supporting it here
-   has little cost and some practical benefit (sr 110532).  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char pj_get_def (void);
-int
-main (void)
-{
-return pj_get_def ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"
-then :
-  ac_cv_lib_proj_pj_get_def=yes
-else case e in #(
-  e) ac_cv_lib_proj_pj_get_def=no ;;
-esac
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.beam \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_proj_pj_get_def" >&5
-printf "%s\n" "$ac_cv_lib_proj_pj_get_def" >&6; }
-if test "x$ac_cv_lib_proj_pj_get_def" = xyes
-then :
-  PROJLIB="$PROJLIB -lproj "
-else case e in #(
-  e)
-LDFLAGS=${ac_save_ldflags}
-
-    as_fn_error $? "*** Unable to locate External PROJ.4 library." "$LINENO" 5
-
- ;;
-esac
-fi
-
-
-
-LDFLAGS=${ac_save_ldflags}
-
-fi
 
 # With PROJ share directory
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of External PROJ data files" >&5
-printf %s "checking for location of External PROJ data files... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for location of PROJ data files" >&5
+printf %s "checking for location of PROJ data files... " >&6; }
 case "$with_proj_share" in
 y | ye | yes | n | no)
         as_fn_error $? "*** You must supply a directory to --with-proj-share." "$LINENO" 5
@@ -9662,52 +10362,20 @@ if test -n "$with_proj_share" ; then
     if test -d "$with_proj_share"; then
         PROJSHARE="$with_proj_share"
     else
-        as_fn_error $? "*** External PROJ data directory $dir does not exist." "$LINENO" 5
+        as_fn_error $? "*** PROJ data directory $dir does not exist." "$LINENO" 5
     fi
 fi
 
 if test -z "$PROJSHARE" ; then
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: *** External PROJ directory not specified; default will be used" >&5
-printf "%s\n" "$as_me: WARNING: *** External PROJ directory not specified; default will be used" >&2;}
+  if test "$($PKG_CONFIG --exists proj && echo 0)" = "0"; then
+    PROJSHARE=$($PKG_CONFIG --variable=datadir proj)
+  else
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: *** PROJ data directory not specified; default will be used" >&5
+printf "%s\n" "$as_me: WARNING: *** PROJ data directory not specified; default will be used" >&2;}
     PROJSHARE=/usr/share/proj
-fi
-
-# check if share/proj/epsg exists only for PROJ < 6
-if test `expr ${PROJMAJOR} \< 6` = 1 ; then
-    # LOC_CHECK_SHARE does not work when cross compiling
-    if test "$cross_compiling" = "yes" ; then
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for epsg" >&5
-printf %s "checking for epsg... " >&6; }
-	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unknown (cross-compiling)" >&5
-printf "%s\n" "unknown (cross-compiling)" >&6; }
-    else
-
-as_ac_File=`printf "%s\n" "ac_cv_file_$PROJSHARE/epsg" | sed "$as_sed_sh"`
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $PROJSHARE/epsg" >&5
-printf %s "checking for $PROJSHARE/epsg... " >&6; }
-
-test "$cross_compiling" = yes &&
-  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
-if test -r "$PROJSHARE/epsg"; then
-  eval "$as_ac_File=yes"
-else
-  eval "$as_ac_File=no"
-fi
-eval ac_res=\$$as_ac_File
-	       { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-printf "%s\n" "$ac_res" >&6; }
-if eval test \"x\$"$as_ac_File"\" = x"yes"
-then :
-
-else case e in #(
-  e) { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: *** Unable to locate PROJ data files." >&5
-printf "%s\n" "$as_me: WARNING: *** Unable to locate PROJ data files." >&2;}
-	 ;;
-esac
-fi
-
-
-    fi
+  fi
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using PROJ data directory \"${PROJSHARE}\"" >&5
+printf "%s\n" "using PROJ data directory \"${PROJSHARE}\"" >&6; }
 fi
 
 
@@ -10449,8 +11117,6 @@ printf %s "checking whether to use GDAL... " >&6; }
 
 GDAL_LIBS=
 GDAL_CFLAGS=
-USE_GDAL=
-USE_OGR=
 
 if test "`basename xx/$with_gdal`" = "gdal-config" ; then
   GDAL_CONFIG="$with_gdal"
@@ -10513,13 +11179,132 @@ fi
     GDAL_LIBS=`"$GDAL_CONFIG" --libs`
     GDAL_DEP_LIBS=`"$GDAL_CONFIG" --dep-libs`
     GDAL_CFLAGS=`"$GDAL_CONFIG" --cflags`
-    USE_GDAL=1
-    if test `"$GDAL_CONFIG" --ogr-enabled` = "yes" ; then
+  fi
 
-printf "%s\n" "#define HAVE_OGR 1" >>confdefs.h
 
-      USE_OGR=1
-    fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking GDAL major version version" >&5
+printf %s "checking GDAL major version version... " >&6; }
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$GDAL_CFLAGS $CPPFLAGS"
+if test "$cross_compiling" = yes
+then :
+     gdal_version_major=0
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unknown (cross-compiling)" >&5
+printf "%s\n" "unknown (cross-compiling)" >&6; }
+else case e in #(
+  e) cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <gdal_version.h>
+int main(void) {
+ FILE *fp = fopen("conftestdata","w");
+ fprintf(fp, "%d", GDAL_VERSION_MAJOR);
+ return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"
+then :
+     gdal_version_major=`cat conftestdata`
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $gdal_version_major" >&5
+printf "%s\n" "$gdal_version_major" >&6; }
+else case e in #(
+  e)    as_fn_error $? "*** Could not determine GDAL major version version." "$LINENO" 5  ;;
+esac
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext ;;
+esac
+fi
+
+CPPFLAGS=$ac_save_cppflags
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking GDAL minor version version" >&5
+printf %s "checking GDAL minor version version... " >&6; }
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$GDAL_CFLAGS $CPPFLAGS"
+if test "$cross_compiling" = yes
+then :
+     gdal_version_minor=0
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unknown (cross-compiling)" >&5
+printf "%s\n" "unknown (cross-compiling)" >&6; }
+else case e in #(
+  e) cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <gdal_version.h>
+int main(void) {
+ FILE *fp = fopen("conftestdata","w");
+ fprintf(fp, "%d", GDAL_VERSION_MINOR);
+ return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"
+then :
+     gdal_version_minor=`cat conftestdata`
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $gdal_version_minor" >&5
+printf "%s\n" "$gdal_version_minor" >&6; }
+else case e in #(
+  e)    as_fn_error $? "*** Could not determine GDAL minor version version." "$LINENO" 5  ;;
+esac
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext ;;
+esac
+fi
+
+CPPFLAGS=$ac_save_cppflags
+
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking GDAL revision version version" >&5
+printf %s "checking GDAL revision version version... " >&6; }
+ac_save_cppflags="$CPPFLAGS"
+CPPFLAGS="$GDAL_CFLAGS $CPPFLAGS"
+if test "$cross_compiling" = yes
+then :
+     gdal_version_rev=0
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: unknown (cross-compiling)" >&5
+printf "%s\n" "unknown (cross-compiling)" >&6; }
+else case e in #(
+  e) cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <stdio.h>
+#include <gdal_version.h>
+int main(void) {
+ FILE *fp = fopen("conftestdata","w");
+ fprintf(fp, "%d", GDAL_VERSION_REV);
+ return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"
+then :
+     gdal_version_rev=`cat conftestdata`
+        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $gdal_version_rev" >&5
+printf "%s\n" "$gdal_version_rev" >&6; }
+else case e in #(
+  e)    as_fn_error $? "*** Could not determine GDAL revision version version." "$LINENO" 5  ;;
+esac
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext ;;
+esac
+fi
+
+CPPFLAGS=$ac_save_cppflags
+
+  gdal_version="$gdal_version_major.$gdal_version_minor.$gdal_version_rev"
+  if test "$(expr "$gdal_version_major" \>= 3)" = 1 && \
+      test "$(expr "$gdal_version_minor" \>= 7)" = 1; then
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: using GDAL version \"${gdal_version}\"" >&5
+printf "%s\n" "using GDAL version \"${gdal_version}\"" >&6; }
+  elif test "$cross_compiling" != "yes" ; then
+      as_fn_error $? "*** GDAL version 3.7 or newer is required (found version \"${gdal_version}\")" "$LINENO" 5
   fi
 
   GDAL=
@@ -10574,12 +11359,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
   LIBS=${ac_save_libs}
   CFLAGS=${ac_save_cflags}
 
-
-printf "%s\n" "#define HAVE_GDAL 1" >>confdefs.h
-
 fi
-
-
 
 
 
@@ -10765,8 +11545,7 @@ printf "%s\n" "yes" >&6; }
   ac_save_cflags="$CFLAGS"
   LIBS="$LIBS $PDAL_LIBS"
   CFLAGS="$CFLAGS $PDAL_CFLAGS"
-
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <pdal/PointTable.hpp>
   #include <pdal/Streamable.hpp>
@@ -13037,7 +13816,7 @@ case "$with_opengl" in
 		USE_OPENGL=1
 		OPENGL_X11=1
 		;;
-	aqua|mac|osx|macosx|agl)
+	aqua|mac|osx|macosx)
 		OPENGL_TYPE=Aqua
 		USE_OPENGL=1
 		OPENGL_AQUA=1
@@ -13580,14 +14359,14 @@ CPPFLAGS=$ac_save_cppflags
 
 ac_save_libs="$LIBS"
 ac_save_ldflags="$LDFLAGS"
-LIBS="-framework OpenGL -framework AGL -framework ApplicationServices  $LIBS"
+LIBS="-framework OpenGL -framework ApplicationServices  $LIBS"
 LDFLAGS="$OPENGLPATH $LDFLAGS"
 ac_fn_c_check_func "$LINENO" "glBegin" "ac_cv_func_glBegin"
 if test "x$ac_cv_func_glBegin" = xyes
 then :
 
 
-    OPENGLLIB="$OPENGLLIB -framework OpenGL -framework AGL -framework ApplicationServices"
+    OPENGLLIB="$OPENGLLIB -framework OpenGL -framework ApplicationServices"
 
 
 else case e in #(
@@ -13596,6 +14375,31 @@ else case e in #(
 as_fn_error $? "*** Unable to locate OpenGL library." "$LINENO" 5
 
 
+ ;;
+esac
+fi
+
+LIBS=${ac_save_libs}
+LDFLAGS=${ac_save_ldflags}
+
+
+ac_save_libs="$LIBS"
+ac_save_ldflags="$LDFLAGS"
+LIBS="-framework AGL  $LIBS"
+LDFLAGS="$OPENGLPATH $LDFLAGS"
+ac_fn_c_check_func "$LINENO" "aglDestroyPixelFormat" "ac_cv_func_aglDestroyPixelFormat"
+if test "x$ac_cv_func_aglDestroyPixelFormat" = xyes
+then :
+
+OPENGLLIB="$OPENGLLIB -framework AGL"
+
+printf "%s\n" "#define OPENGL_AGL 1" >>confdefs.h
+
+
+
+else case e in #(
+  e)
+:
  ;;
 esac
 fi
@@ -13635,9 +14439,6 @@ OPENGLLIBPATH="$OPENGLPATH"
 
 
 printf "%s\n" "#define OPENGL_AQUA 1" >>confdefs.h
-
-
-printf "%s\n" "#define OPENGL_AGL 1" >>confdefs.h
 
 
 fi # $OPENGL_AQUA
@@ -17524,8 +18325,6 @@ echo "  FFTW support:               `if test -n "${USE_FFTW}" ; then echo yes ; 
 
 echo "  FreeType support:           `if test -n "${USE_FREETYPE}" ; then echo yes ; else echo no ; fi`"
 
-echo "  GDAL support:               `if test -n "${USE_GDAL}" ; then echo yes ; else echo no ; fi`"
-
 echo "  GEOS support:               `if test -n "${USE_GEOS}" ; then echo yes ; else echo no ; fi`"
 
 echo "  LAPACK support:             `if test -n "${USE_LAPACK}" ; then echo yes ; else echo no ; fi`"
@@ -17543,8 +18342,6 @@ echo "  NetCDF support:             `if test -n "${USE_NETCDF}" ; then echo yes 
 echo "  NLS support:                `if test -n "${USE_NLS}" ; then echo yes ; else echo no ; fi`"
 
 echo "  ODBC support:               `if test -n "${USE_ODBC}" ; then echo yes ; else echo no ; fi`"
-
-echo "  OGR support:                `if test -n "${USE_OGR}" ; then echo yes ; else echo no ; fi`"
 
 echo "  OpenCL support:             `if test -n "${USE_OPENCL}" ; then echo yes ; else echo no ; fi`"
 
@@ -17573,17 +18370,6 @@ echo "  TIFF support:               `if test -n "${USE_TIFF}" ; then echo yes ; 
 echo "  X11 support:                `if test -n "${USE_X11}" ; then echo yes ; else echo no ; fi`"
 
 echo "  Zstandard support:          `if test -n "${USE_ZSTD}" ; then echo yes ; else echo no ; fi`"
-
-echo ""
-
-# remove when the new PROJ API is stable
-if test $PROJ4API = 0 ; then
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result:   using new PROJ 5+ API" >&5
-printf "%s\n" "  using new PROJ 5+ API" >&6; }
-else
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result:   using old PROJ 4 API" >&5
-printf "%s\n" "  using old PROJ 4 API" >&6; }
-fi
 
 echo ""
 

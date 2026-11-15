@@ -8,12 +8,8 @@
  *
  * PURPOSE:      Import LiDAR LAS points
  *
- * COPYRIGHT:    (C) 2011-2015 by the GRASS Development Team
- *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2011-2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  **************************************************************/
 
 #include <stdlib.h>
@@ -616,7 +612,7 @@ int main(int argc, char *argv[])
                                    limit_opt->answer);
     if (!count_decimation_is_valid(&count_decimation_control))
         G_fatal_error(_("Settings for count-based decimation are not valid"));
-        /* we don't check if the decimation is noop */
+    /* we don't check if the decimation is noop */
 
 #ifdef HAVE_LONG_LONG_INT
     G_important_message(_("Scanning %llu points..."), n_features);

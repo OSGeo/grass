@@ -1,10 +1,8 @@
 """
 Test t.rast.export
 
-(C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author: lucadelu
 """
@@ -39,7 +37,6 @@ class TestRasterExport(TestCase):
             cls.runModule(
                 "r.mapcalc",
                 expression="a_{id_} = rand(0.1,1.0)".format(id_=i),
-                flags="s",
                 overwrite=True,
             )
             maps.append("a_{id_}".format(id_=i))

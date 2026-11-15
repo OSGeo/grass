@@ -11,11 +11,9 @@ log(x,b)
   first form computes the natural log of x = ln(x)
   second form computes log of x base b = ln(x)/ln(b)
 
-  if x is non-positive, or floating point exception occurs while
-  computing ln(x), the result is NULL
+  if x is non-positive, the result is NULL
 
-  if b is non-positive, or 1.0, or floating point exception occurs while
-  computing ln(b), the result is NULL
+  if b is non-positive, or 1.0, the result is NULL
 **********************************************************************/
 
 int f_log(int argc, const int *argt, void **args)
@@ -45,12 +43,8 @@ int f_log(int argc, const int *argt, void **args)
             SET_NULL_D(&res[i]);
         else if (argc > 1 && (IS_NULL_D(&arg2[i]) || (arg2[i] <= 0.0)))
             SET_NULL_D(&res[i]);
-        else {
-            floating_point_exception = 0;
+        else
             res[i] = (argc > 1) ? log(arg1[i]) / log(arg2[i]) : log(arg1[i]);
-            if (floating_point_exception)
-                SET_NULL_D(&res[i]);
-        }
 
     return 0;
 }

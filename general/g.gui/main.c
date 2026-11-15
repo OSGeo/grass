@@ -7,11 +7,8 @@
  *
  * PURPOSE:      Start GRASS GUI from command line.
  *
- * COPYRIGHT:    (C) 2008-2015 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2008-2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -104,8 +101,12 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    snprintf(progname, sizeof(progname), "%s/gui/wxpython/wxgui.py",
-             G_gisbase());
+    const char *wxdir = getenv("GRASS_GUIWXDIR");
+    if (!wxdir)
+        G_fatal_error(_("Incomplete GRASS session: Variable '%s' not set"),
+                      "GRASS_GUIWXDIR");
+
+    snprintf(progname, sizeof(progname), "%s/wxgui.py", wxdir);
     if (access(progname, F_OK) == -1)
         G_fatal_error(_("Your installation doesn't include GUI, exiting."));
 

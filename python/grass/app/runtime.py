@@ -1,10 +1,8 @@
 """Provides functions for the main GRASS executable
 
-(C) 2024-2025 by Vaclav Petras and the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2024-2025 Vaclav Petras
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 
@@ -44,6 +42,18 @@ class RuntimePaths:
     # Mapping of attribute names to environment variable name except the prefix.
     _env_vars = {
         "gisbase": "GISBASE",
+        "colors_dir": "GRASS_COLORSDIR",
+        "doc_dir": "GRASS_DOCDIR",
+        "etc_dir": "GRASS_ETCDIR",
+        "etcbin_dir": "GRASS_ETCBINDIR",
+        "fonts_dir": "GRASS_FONTSDIR",
+        "graphics_dir": "GRASS_GRAPHICSDIR",
+        "guires_dir": "GRASS_GUIRESDIR",
+        "guiscript_dir": "GRASS_GUISCRIPTDIR",
+        "guiwx_dir": "GRASS_GUIWXDIR",
+        "locale_dir": "GRASS_LOCALEDIR",
+        "misc_dir": "GRASS_MISCDIR",
+        "mkdocs_dir": "GRASS_MKDOCSDIR",
     }
 
     def __init__(self, *, env=None, set_env_variables=False, prefix=None):
@@ -65,6 +75,11 @@ class RuntimePaths:
         self.env["GRASS_PREFIX"] = self.prefix
         for env_var in self._env_vars.values():
             self.env[env_var] = self.__get_dir(env_var, use_env_values=False)
+
+    @classmethod
+    def env_variable_names(cls):
+        """Return names of the environment variables holding the resource paths."""
+        return list(cls._env_vars.values())
 
     @property
     def version(self):
@@ -91,8 +106,62 @@ class RuntimePaths:
         return resource_paths.GRASS_VERSION_GIT
 
     @property
+    def grass_headers_version(self):
+        return resource_paths.GRASS_HEADERS_VERSION
+
+    @property
+    def grass_headers_date(self):
+        return resource_paths.GRASS_HEADERS_DATE
+
+    @property
+    def grass_arch(self):
+        return resource_paths.GRASS_ARCH
+
+    @property
     def config_projshare(self):
         return self.env.get("GRASS_PROJSHARE", resource_paths.CONFIG_PROJSHARE)
+
+    @property
+    def grass_cmake_config_dir(self):
+        return (
+            str(Path(self.prefix, resource_paths.GRASS_CMAKE_CONFIG))
+            if self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def grass_cmake_module_dir(self):
+        return (
+            str(Path(self.prefix, resource_paths.GRASS_CMAKE_MODULES))
+            if self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def grass_cmake_prefix_path(self):
+        return resource_paths.GRASS_CMAKE_PREFIX_PATH
+
+    @property
+    def grass_cmake_c_compiler(self):
+        return (
+            str(Path(resource_paths.GRASS_CMAKE_C_COMPILER))
+            if Path(resource_paths.GRASS_CMAKE_C_COMPILER).exists()
+            and self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def grass_cmake_cxx_compiler(self):
+        return (
+            str(Path(resource_paths.GRASS_CMAKE_CXX_COMPILER))
+            if Path(resource_paths.GRASS_CMAKE_CXX_COMPILER).exists()
+            and self.is_cmake_build
+            else ""
+        )
+
+    @property
+    def is_cmake_build(self):
+        return resource_paths.GRASS_CMAKE_MODULES != ""
 
     @property
     def prefix(self):
@@ -157,7 +226,7 @@ def get_grass_config_dir_for_version(major_version, minor_version, *, env):
         )
         raise RuntimeError(msg)
 
-    if not os.path.isdir(config_dir):
+    if not Path(config_dir).is_dir():
         msg = (
             f"The {env_dirname} variable points to directory which does"
             " not exist, ask your operating system support"
@@ -167,9 +236,7 @@ def get_grass_config_dir_for_version(major_version, minor_version, *, env):
     if WINDOWS:
         config_dirname = f"GRASS{major_version}"
     elif MACOS:
-        config_dirname = os.path.join(
-            "Library", "GRASS", f"{major_version}.{minor_version}"
-        )
+        config_dirname = os.path.join("Library", "GRASS", f"GRASS{major_version}")
     else:
         config_dirname = f".grass{major_version}"
 
@@ -196,14 +263,20 @@ def append_left_addon_paths(paths, config_dir, env):
     # addons (base)
     addon_base = env.get("GRASS_ADDON_BASE")
     if not addon_base:
-        name = "addons" if not MACOS else "Addons"
+        name = (
+            "addons"
+            if not MACOS
+            else f"Addons{resource_paths.GRASS_VERSION_MAJOR}.{resource_paths.GRASS_VERSION_MINOR}"
+        )
         addon_base = os.path.join(config_dir, name)
         env["GRASS_ADDON_BASE"] = addon_base
 
+    # Adding the paths is platform-dependent, but we add them regardless of their
+    # existence, because they might be created later after the setup is done
+    # when installing addons.
     if not WINDOWS:
         script_path = os.path.join(addon_base, "scripts")
-        if Path(script_path).exists():
-            paths.appendleft(script_path)
+        paths.appendleft(script_path)
     paths.appendleft(os.path.join(addon_base, "bin"))
 
     # addons (path)

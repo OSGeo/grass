@@ -9,7 +9,7 @@
  *
  ******************************************************************************
  * Copyright (c) 1999, Frank Warmerdam
- * Copyright (c) 2012-2016, Even Rouault <even dot rouault at spatialys.com>
+ * Copyright (c) 2012-2024, Even Rouault <even dot rouault at spatialys.com>
  *
  * SPDX-License-Identifier: MIT OR LGPL-2.0-or-later
  ******************************************************************************
@@ -32,7 +32,7 @@ extern "C" {
 
 #define SHAPELIB_VERSION_MAJOR 1
 #define SHAPELIB_VERSION_MINOR 6
-#define SHAPELIB_VERSION_MICRO 0
+#define SHAPELIB_VERSION_MICRO 2
 
 #define SHAPELIB_MAKE_VERSION_NUMBER(major, minor, micro) \
     ((major) * 10000 + (minor) * 100 + (micro))
@@ -226,7 +226,7 @@ typedef struct {
 #define SHPP_RING        5
 
 /* -------------------------------------------------------------------- */
-/*      SHPObject - represents on shape (without attributes) read       */
+/*      SHPObject - represents one shape (without attributes) read      */
 /*      from the .shp file.                                             */
 /* -------------------------------------------------------------------- */
 struct tagSHPObject {
@@ -408,7 +408,7 @@ void SHPAPI_CALL SBNSearchFreeIds(int *panShapeId);
 /************************************************************************/
 /*                             DBF Support.                             */
 /************************************************************************/
-typedef struct {
+typedef struct DBFInfo {
     SAHooks sHooks;
 
     SAFile fp;
@@ -454,7 +454,7 @@ typedef struct {
     int bRequireNextWriteSeek;
 } DBFInfo;
 
-typedef DBFInfo *DBFHandle;
+typedef struct DBFInfo *DBFHandle;
 
 typedef enum {
     FTString,

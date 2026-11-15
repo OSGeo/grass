@@ -7,11 +7,8 @@
 #               point support added by Markus Neteler
 #
 # PURPOSE:      Converts polygons and points to lines
-# COPYRIGHT:    (C) 2013-2014 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (version 2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2013-2014 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 # TODO
 #    support centroids (treat as points)?
 #############################################################################
@@ -177,19 +174,13 @@ def main():
             gs.fatal(_("Error removing centroids"))
 
     try:
-        try:
-            # TODO: fix magic numbers for layer here and there
-            gs.run_command(
-                "v.db.droptable", map=out_type, layer=1, flags="f", quiet=True
-            )
-        except CalledModuleError:
-            gs.run_command(
-                "g.remove", flags="f", type="vector", name=remove_names, quiet=quiet
-            )
-            gs.fatal(_("Error removing table from layer 1"))
-    # TODO: when this except is happening, it seems that never, so it seems wrong
-    except Exception:
-        gs.warning(_("No table for layer %d") % 1)
+        # TODO: fix magic numbers for layer here and there
+        gs.run_command("v.db.droptable", map=out_type, layer=2, flags="f", quiet=True)
+    except CalledModuleError:
+        gs.run_command(
+            "g.remove", flags="f", type="vector", name=remove_names, quiet=quiet
+        )
+        gs.fatal(_("Error removing table from layer 2"))
     try:
         gs.run_command(
             "v.category",

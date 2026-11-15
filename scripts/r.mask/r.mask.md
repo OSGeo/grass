@@ -98,7 +98,7 @@ are part of the mask, i.e., nothing is blocked out from analysis and/or
 display.
 
 ```sh
-r.mapcalc -s "map3 = rand(0.0,1.0)"
+r.mapcalc "map3 = rand(0.0,1.0)"
 r.mask raster=map3
 ```
 
@@ -109,7 +109,7 @@ map's quantisation rules (this defaults to round-to-nearest, but can be
 changed with r.quant).
 
 ```sh
-r.mapcalc -s "map4 = rand(0.0,1.0)"
+r.mapcalc "map4 = rand(0.0,1.0)"
 g.copy raster=map4,MASK
 ```
 

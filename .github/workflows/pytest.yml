@@ -23,7 +23,7 @@ jobs:
         os:
           - ubuntu-24.04
         python-version:
-          - "3.10"
+          - "3.11"
           - "3.13"
       fail-fast: true
 
@@ -34,12 +34,12 @@ jobs:
       PYTHONWARNINGS: always
 
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip # zizmor: ignore[cache-poisoning] This pytest workflow not used for release artifacts
@@ -54,13 +54,14 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - uses: rui314/setup-mold@725a8794d15fc7563f59595bd9556495c0564878 # v1
+      - uses: rui314/setup-mold@339e96b4ff1f3bd865856ba4cbbe8818a7acb038 # v1
 
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install --break-system-packages -r .github/workflows/python_requirements.txt
           pip install --break-system-packages -r .github/workflows/optional_requirements.txt
+          pip install --break-system-packages GDAL=="$(gdal-config --version)"
           pip install --break-system-packages pytest pytest-timeout \
               pytest-github-actions-annotate-failures pytest-xdist pytest-cov
 
@@ -105,6 +106,8 @@ jobs:
             @.github/workflows/pytest_args_parallel.txt \
             --junitxml=pytest.xdist.junit.xml \
             -k 'not testsuite'
+        env:
+          OMP_NUM_THREADS: 1
 
       - name: Run pytest with a single worker (for tests marked with needs_solo_run)
         run: |
@@ -136,6 +139,33 @@ jobs:
             @.github/workflows/pytest_args_cov.txt \
             @.github/workflows/pytest_args_gunittest.txt \
             --junitxml=pytest.gunittest.junit.xml
+      - name: Run pytest for the grass.lib loading tests standalone
+        run: |
+          # No library search path variable is exported here: the tests
+          # provide their own environment, so this pins what works without
+          # the setup done by the other steps.
+          PYTHONPATH="$(grass --config python_path)"
+          export PYTHONPATH
+          pytest \
+            python/grass/script/tests/grass_script_setup_lib_loading_test.py \
+            python/grass/app/tests/grass_app_runtime_lib_loading_test.py \
+            --junitxml=pytest.lib_loading.junit.xml
+      - name: Run pytest for the grass.lib loading tests with a relocated installation
+        run: |
+          # The installation is moved away from the prefix it was configured
+          # with, so that the libraries cannot find each other through their
+          # RUNPATH. Only the tests which provide the search path variable
+          # themselves can pass here. The Python package moves with the
+          # installation, so its path is taken beforehand.
+          python_path="$(grass --config python_path)"
+          mv "${HOME}/install" "${HOME}/install-relocated"
+          trap 'mv "${HOME}/install-relocated" "${HOME}/install"' EXIT
+          PYTHONPATH="${HOME}/install-relocated${python_path#"${HOME}/install"}"
+          export PYTHONPATH
+          pytest \
+            python/grass/app/tests/grass_app_runtime_lib_loading_test.py \
+            -k manual \
+            --junitxml=pytest.lib_loading_relocated.junit.xml
       - name: Fix non-standard installed script paths in coverage data
         run: |
           PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
@@ -152,13 +182,15 @@ jobs:
 
       - name: Upload test results to Codecov
         if: ${{ !cancelled() }}
-        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1.1.1
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           exclude: gui
           flags: pytest-python-${{ matrix.python-version }}
           token: ${{ secrets.CODECOV_TOKEN }}
+          report_type: test_results
+
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           verbose: true
           flags: pytest-python-${{ matrix.python-version }}
@@ -166,7 +198,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Make python-only code coverage test report available
         if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: python-codecoverage-report-${{ matrix.os }}-${{ matrix.python-version }}
           path: coverage_html_report
@@ -177,6 +209,6 @@ jobs:
     needs:
       - pytest
     if: ${{ always() }}
-    uses: ./.github/workflows/verify-success.yml
+    uses: $/.github/workflows/verify-success.yml
     with:
       needs_context: ${{ toJson(needs) }}

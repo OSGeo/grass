@@ -3,10 +3,9 @@
 
    \brief GRASS cairo display driver - driver settings
 
-   (C) 2007-2008, 2011 by Lars Ahlzen and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2007-2008, 2011 Lars Ahlzen
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Lars Ahlzen <lars ahlzen.com> (original contributor)
    \author Glynn Clements
@@ -390,7 +389,8 @@ static int ends_with(const char *string, const char *suffix)
 static void map_file(void)
 {
 #ifndef _WIN32
-    size_t size = HEADER_SIZE + ca.width * ca.height * sizeof(unsigned int);
+    size_t size =
+        HEADER_SIZE + (size_t)ca.width * ca.height * sizeof(unsigned int);
     void *ptr;
     int fd;
 

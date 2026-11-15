@@ -3,11 +3,8 @@
 
    \brief Volume subroutines
 
-   (C) 2008, 2010 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 2008, 2010 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
  */
@@ -76,7 +73,7 @@ int load_rasters3d(const struct GParams *params, nv_data *data)
 
    \return number of defined isosurfaces
  */
-int add_isosurfs(const struct GParams *params, nv_data *data UNUSED)
+int add_isosurfs(const struct GParams *params, nv_data *data G_UNUSED)
 {
     int i;
     float level;
@@ -247,7 +244,7 @@ int add_isosurfs(const struct GParams *params, nv_data *data UNUSED)
     return 1;
 }
 
-int add_slices(const struct GParams *params, nv_data *data UNUSED)
+int add_slices(const struct GParams *params, nv_data *data G_UNUSED)
 {
     int i;
     int num, nvols, *vol_list, id, nslices, axis;

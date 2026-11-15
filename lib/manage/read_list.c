@@ -3,10 +3,8 @@
 
    \brief Manage Library - Read list of elements
 
-   (C) 2001-2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -66,7 +64,7 @@ int M_read_list(int check_if_empty, int *num)
     if (env)
         strcpy(element_list, env);
     else
-        snprintf(element_list, GPATH_MAX, "%s/etc/element_list", G_gisbase());
+        snprintf(element_list, GPATH_MAX, "%s/element_list", G_etc_dir());
     fd = fopen(element_list, "r");
 
     if (!fd)

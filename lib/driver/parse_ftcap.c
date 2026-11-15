@@ -3,10 +3,8 @@
 
   \brief Display Driver - fontcaps
 
-  (C) 2006-2011 by the GRASS Development Team
-
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
+  SPDX-FileCopyrightText: 2006-2011 GRASS Development Team
+  SPDX-License-Identifier: GPL-2.0-or-later
 
   \author Glynn Clements <glynn gclements.plus.com> (original contributor)
   \author Huidae Cho <grass4u gmail.com>
@@ -86,7 +84,7 @@ struct GFONT_CAP *parse_fontcap(void)
                 capfile);
     }
     if (fp == NULL) {
-        snprintf(file, sizeof(file), "%s/etc/fontcap", G_gisbase());
+        snprintf(file, sizeof(file), "%s/fontcap", G_etc_dir());
         if ((fp = fopen(file, "r")) == NULL)
             G_warning(_("%s: No font definition file"), file);
     }

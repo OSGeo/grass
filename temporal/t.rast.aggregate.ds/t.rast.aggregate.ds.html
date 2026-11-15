@@ -254,7 +254,7 @@ This "eight-day week" is used in some MODIS satellite sensor products.
 # create maps every 8 days as seed maps
 for year in `seq 2000 2001` ; do
    for doy in `seq -w 1 8 365` ; do
-      r.mapcalc -s expression="8day_${year}_${doy} = rand(0.0,40.0)"
+      r.mapcalc expression="8day_${year}_${doy} = rand(0.0,40.0)"
    done
 done
 

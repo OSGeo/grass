@@ -1,4 +1,11 @@
 import grass.script as gs
+from grass.tools import Tools
+
+
+def region_exists(name, env):
+    """Return True if a saved region with the name is found"""
+    found = Tools(env=env).g_findfile(element="windows", file=name, format="json")
+    return found["name"] is not None
 
 
 def test_region_manager_with_g_region(session_2x2):
@@ -163,3 +170,48 @@ def test_region_manager_env_activate_deactivate(session_2x2):
     # Deactivate twice is harmless
     manager.deactivate()
     assert "GRASS_REGION" not in session_2x2.env
+
+
+def test_region_manager_save(session_2x2):
+    """Test RegionManager can persist the temporarily modified region explicitly."""
+
+    with gs.RegionManager(n=6, s=0, e=6, w=0, res=1, env=session_2x2.env) as manager:
+        manager.save("saved_region")
+
+    with gs.RegionManager(region="saved_region", env=session_2x2.env):
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 6
+        assert region["cols"] == 6
+
+
+def test_region_manager_env_save(session_2x2):
+    """Test RegionManagerEnv can persist the temporarily modified region explicitly."""
+
+    with gs.RegionManagerEnv(n=6, s=0, e=6, w=0, res=1, env=session_2x2.env) as manager:
+        manager.save("saved_region_env")
+
+    with gs.RegionManagerEnv(region="saved_region_env", env=session_2x2.env):
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 6
+        assert region["cols"] == 6
+
+
+def test_region_manager_removes_temporary_region(session_2x2):
+    """Test RegionManager does not leave the region it saved in the mapset."""
+    env = session_2x2.env
+    with gs.RegionManager(env=env) as manager:
+        assert region_exists(manager.region_name, env=env)
+    assert not region_exists(manager.region_name, env=env)
+
+
+def test_region_manager_nested_removes_temporary_regions(session_2x2):
+    """Test a nested RegionManager does not leave its saved region in the mapset."""
+    env = session_2x2.env
+    with (
+        gs.RegionManager(env=env) as outer,
+        gs.RegionManager(env=env) as inner,
+    ):
+        assert region_exists(outer.region_name, env=env)
+        assert region_exists(inner.region_name, env=env)
+    assert not region_exists(outer.region_name, env=env)
+    assert not region_exists(inner.region_name, env=env)

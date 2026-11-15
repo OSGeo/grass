@@ -136,7 +136,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-blas \
 		--with-bzlib \
 		--with-cairo \
-		--with-cairo-includes=${OSGEO4W_ROOT_MSYS}/include \
+		--with-cairo-includes=${OSGEO4W_ROOT_MSYS}/include/cairo \
 		--with-cairo-ldflags="-L${SRC}/mswindows/osgeo4w/lib -lcairo" \
 		--with-cairo-libs=${OSGEO4W_ROOT_MSYS}/lib \
 		--with-cxx \

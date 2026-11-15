@@ -13,7 +13,7 @@
 static int nlines = 50;
 
 #define WDTH 5
-#define SEP  "------------------------------------------------------------------"
+#define SEP "------------------------------------------------------------------"
 
 static void F_generate(const char *drvname, const char *dbname,
                        const char *tblname, const char *key, int keyval,

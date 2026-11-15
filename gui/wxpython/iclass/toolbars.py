@@ -9,10 +9,8 @@ Classes:
  - toolbars::IClassMapManagerToolbar
  - toolbars::IClassMiscToolbar
 
-(C) 2006-2011 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2006-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Vaclav Petras <wenzeslaus gmail.com>
 @author Anna Kratochvilova <kratochanna gmail.com>
@@ -66,11 +64,8 @@ class IClassMapToolbar(BaseToolbar):
 
         self.SetToolShortHelp(
             self.togglemap.GetId(),
-            "%s %s %s"
-            % (
-                _("Set map canvas for "),
-                BaseIcons["zoomBack"].GetLabel(),
-                _("/ Zoom to map"),
+            _("Set map canvas for {zoom_back} / Zoom to map").format(
+                zoom_back=BaseIcons["zoomBack"].GetLabel()
             ),
         )
 

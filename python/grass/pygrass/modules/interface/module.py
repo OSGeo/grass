@@ -1,10 +1,10 @@
-from multiprocessing import cpu_count, Process, Queue
+from multiprocessing import Process, Queue
 import time
 from xml.etree.ElementTree import fromstring
 
 from grass.exceptions import CalledModuleError, GrassError, ParameterError
 from grass.script.core import Popen, PIPE, use_temp_region, del_temp_region
-from grass.script.utils import decode
+from grass.script.utils import available_cpus, decode, resolve_nprocs
 from .docstring import docstring_property
 from .parameter import Parameter
 from .flag import Flag
@@ -50,11 +50,15 @@ class ParallelModuleQueue:
         >>> from grass.pygrass.modules import Module, MultiModule, ParallelModuleQueue
         >>> mapcalc_list = []
 
-      Setting ``run_`` to False is important, otherwise a parallel processing is not possible
+      Since r.mapcalc can itself run multithreaded, setting ``nprocs`` for the
+      *r.mapcalc* call (and not just the *ParallelModuleQueue*) is needed to determine
+      the number of threads each *r.mapcalc* will use. With 3 processes for the
+      *ParallelModuleQueue*, the computation will use 6 core total (``3 * 2 = 6``).
+      Setting ``run_`` to False is important, otherwise a parallel processing is not possible.
 
       .. code-block:: pycon
 
-        >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
+        >>> mapcalc = Module("r.mapcalc", nprocs=2, overwrite=True, run_=False)
         >>> queue = ParallelModuleQueue(nprocs=3)
         >>> for i in range(5):
         ...     new_mapcalc = copy.deepcopy(mapcalc)
@@ -227,12 +231,14 @@ class ParallelModuleQueue:
     def __init__(self, nprocs=1):
         """Constructor
 
-        :param nprocs: The maximum number of Module processes that
-                       can be run in parallel, default is 1, if None
-                       then use all the available CPUs.
+        :param nprocs: The maximum number of Module processes that can be
+                       run in parallel. A positive value is used as-is,
+                       ``0`` or ``None`` means use all available CPUs, and
+                       a negative value reserves that many CPUs (clamped
+                       to at least 1).
         :type nprocs: int
         """
-        nprocs = int(nprocs) if nprocs else cpu_count()
+        nprocs = resolve_nprocs(nprocs) if nprocs else available_cpus()
         self._num_procs = nprocs
         self._list = nprocs * [None]
         self._proc_count = 0
@@ -581,7 +587,9 @@ class Module:
         #
         # extract parameters from the xml
         #
-        self.params_list = [Parameter(p) for p in tree.findall("parameter")]
+        self.params_list: list[Parameter] = [
+            Parameter(xparameter=p) for p in tree.findall("parameter")
+        ]
         self.inputs = TypeDict(Parameter)
         self.outputs = TypeDict(Parameter)
         self.required = []
@@ -598,7 +606,7 @@ class Module:
         #
         # extract flags from the xml
         #
-        flags_list = [Flag(f) for f in tree.findall("flag")]
+        flags_list = [Flag(xflag=f) for f in tree.findall("flag")]
         self.flags = TypeDict(Flag)
         for flag in flags_list:
             self.flags[flag.name] = flag
@@ -614,7 +622,7 @@ class Module:
         self.stdin = None
         self.stdout_ = None
         self.stderr_ = None
-        diz = {
+        diz: dict[str, str | bool | list | tuple | None] = {
             "name": "stdin",
             "required": False,
             "multiple": False,

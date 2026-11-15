@@ -3,10 +3,8 @@
 
    \brief GIS Library - Argument parsing functions (Markdown output - Python)
 
-   (C) 2025 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2025 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Vaclav Petras
  */
@@ -36,21 +34,21 @@ void print_python_short_flag(FILE *file, const char *key, const char *label,
                              const char *description, const char *indent)
 {
     fprintf(file, "%s", indent);
-    G__md_print_escaped(file, "\t");
+    G__md_print_escaped(file, "\t", indent);
     fprintf(file, "**%s**", key);
     fprintf(file, MD_NEWLINE);
     fprintf(file, "\n");
     if (label != NULL) {
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t\t");
-        G__md_print_escaped(file, label);
+        G__md_print_escaped(file, "\t\t", indent);
+        G__md_print_escaped(file, label, indent);
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
     }
     if (description != NULL) {
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t\t");
-        G__md_print_escaped(file, description);
+        G__md_print_escaped(file, "\t\t", indent);
+        G__md_print_escaped(file, description, indent);
     }
 }
 
@@ -62,20 +60,20 @@ void print_python_long_flag(FILE *file, const char *key, const char *label,
     fprintf(file, "\n");
     if (label != NULL) {
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, label);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, label, indent);
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
     }
     if (description != NULL) {
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, description);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, description, indent);
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
     }
     fprintf(file, "%s", indent);
-    G__md_print_escaped(file, "\t");
+    G__md_print_escaped(file, "\t", indent);
     const char *flag_default = "*None*";
     fprintf(file, "Default: %s", flag_default);
 }
@@ -172,8 +170,8 @@ void print_python_option(FILE *file, const struct Option *opt,
     fprintf(file, "\n");
     if (opt->label) {
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, opt->label);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, opt->label, indent);
     }
     if (opt->description) {
         if (opt->label) {
@@ -181,14 +179,14 @@ void print_python_option(FILE *file, const struct Option *opt,
             fprintf(file, "\n");
         }
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
-        G__md_print_escaped(file, opt->description);
+        G__md_print_escaped(file, "\t", indent);
+        G__md_print_escaped(file, opt->description, indent);
     }
     if (opt->gisprompt || opt->key_desc) {
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
+        G__md_print_escaped(file, "\t", indent);
         fprintf(file, "%s: ", _("Used as"));
     }
     if (opt->gisprompt) {
@@ -213,7 +211,7 @@ void print_python_option(FILE *file, const struct Option *opt,
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
+        G__md_print_escaped(file, "\t", indent);
         fprintf(file, "%s: *", _("Allowed values"));
         G__md_print_escaped_for_options(file, opt->options);
         fprintf(file, "*");
@@ -240,19 +238,19 @@ void print_python_option(FILE *file, const struct Option *opt,
                         thumbnails = "northarrows";
 
                     if (thumbnails) {
-                        G__md_print_escaped(file, "\t\t");
+                        G__md_print_escaped(file, "\t\t", indent);
                         fprintf(file, "![%s](%s/%s.png) ", opt->opts[i],
                                 thumbnails, opt->opts[i]);
                     }
                     else {
-                        G__md_print_escaped(file, "\t\t");
+                        G__md_print_escaped(file, "\t\t", indent);
                     }
                 }
-                G__md_print_escaped(file, "\t");
+                G__md_print_escaped(file, "\t", indent);
                 fprintf(file, "**");
-                G__md_print_escaped(file, opt->opts[i]);
+                G__md_print_escaped(file, opt->opts[i], indent);
                 fprintf(file, "**: ");
-                G__md_print_escaped(file, opt->descs[i]);
+                G__md_print_escaped(file, opt->descs[i], indent);
             }
             i++;
         }
@@ -262,10 +260,10 @@ void print_python_option(FILE *file, const struct Option *opt,
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
+        G__md_print_escaped(file, "\t", indent);
         fprintf(file, "%s:", _("Default"));
         fprintf(file, " *");
-        G__md_print_escaped(file, opt->def);
+        G__md_print_escaped(file, opt->def, indent);
         fprintf(file, "*");
     }
 }
@@ -465,12 +463,12 @@ void G__md_print_python_short_version(FILE *file, const char *indent,
                 if (!tuple_items &&
                     (opt->type == TYPE_INTEGER || opt->type == TYPE_DOUBLE)) {
                     fprintf(file, "*");
-                    G__md_print_escaped(file, opt->answer);
+                    G__md_print_escaped(file, opt->answer, indent);
                     fprintf(file, "*");
                 }
                 else {
                     fprintf(file, "*\"");
-                    G__md_print_escaped(file, opt->answer);
+                    G__md_print_escaped(file, opt->answer, indent);
                     fprintf(file, "\"*");
                 }
             }
@@ -529,7 +527,7 @@ void G__md_print_python_long_version(FILE *file, const char *indent,
         fprintf(file, MD_NEWLINE);
         fprintf(file, "\n");
         fprintf(file, "%s", indent);
-        G__md_print_escaped(file, "\t");
+        G__md_print_escaped(file, "\t", indent);
         fprintf(file, "Allowed values: ");
         flag = &st->first_flag;
         while (st->n_flags && flag != NULL) {

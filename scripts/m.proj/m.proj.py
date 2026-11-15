@@ -10,10 +10,9 @@ AUTHOR(S): M. Hamish Bowman, Dept. Marine Science, Otago University,
 PURPOSE:   cs2cs reprojection frontend for a list of coordinates.
            Replacement for m.proj2 from GRASS 5
 
-COPYRIGHT: (c) 2006-2019 Hamish Bowman, and the GRASS Development Team
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2006-2019 Hamish Bowman
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 # notes:
@@ -204,7 +203,7 @@ def main():
             gcore.fatal(_("Invalid PROJ.4 output specification"))
 
     if not out_proj:
-        gcore.fatal(_("Missing output projection parameters "))
+        gcore.fatal(_("Missing output projection parameters"))
     out_proj = out_proj.strip()
     gcore.verbose("Output parameters: '%s'" % out_proj)
 

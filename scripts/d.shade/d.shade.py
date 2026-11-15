@@ -6,11 +6,8 @@
 # AUTHOR(S):        Unknown; updated to GRASS 5.7 by Michael Barton
 #                Converted to Python by Glynn Clements
 # PURPOSE:        Uses d.his to drape a color raster over a shaded relief map
-# COPYRIGHT:     (C) 2004-2013 by the GRASS Development Team
-#
-#                This program is free software under the GNU General Public
-#                License (>=v2). Read the file COPYING that comes with GRASS
-#                for details.
+# SPDX-FileCopyrightText: 2004-2013 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -38,6 +35,10 @@
 # % options: -99-99
 # % answer: 0
 # %end
+# %flag
+# % key: n
+# % description: Respect NULL values while drawing
+# %end
 
 
 from grass.script import core as gcore
@@ -45,15 +46,20 @@ from grass.exceptions import CalledModuleError
 
 
 def main():
-    options, unused = gcore.parser()
+    options, flags = gcore.parser()
 
     drape_map = options["color"]
     relief_map = options["shade"]
     brighten = options["brighten"]
+    d_his_flags = "n" if flags["n"] else ""
 
     try:
         gcore.run_command(
-            "d.his", hue=drape_map, intensity=relief_map, brighten=brighten
+            "d.his",
+            hue=drape_map,
+            intensity=relief_map,
+            brighten=brighten,
+            flags=d_his_flags,
         )
     except CalledModuleError:
         gcore.fatal(_("Module %s failed. Check the above error messages.") % "d.his")

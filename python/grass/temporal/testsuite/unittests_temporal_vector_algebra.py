@@ -1,8 +1,6 @@
 """
-(C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert and Thomas Leppelt
 """
@@ -185,7 +183,7 @@ class TestTemporalVectorAlgebra(TestCase):
         self.assertTrue(D.is_in_db())
         D.select()
         D.print_info()
-        maplist = D.get_registered_maps_as_objects()
+        D.get_registered_maps_as_objects()
         self.assertEqual(D.metadata.get_number_of_maps(), 2)
         start, end = D.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 2))

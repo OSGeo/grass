@@ -1,9 +1,7 @@
 """Test t.register
 
-(C) 2014-2023 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014-2023 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Soeren Gebbert
         Ported to Python by Stefan Blumentrath
@@ -42,24 +40,12 @@ class TestRegister(TestCase):
         )
 
         # Generate data
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_1 = rand(0, 550)", overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_2 = rand(0, 450)", overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_3 = rand(0, 320)", overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_4 = rand(0, 510)", overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_5 = rand(0, 300)", overwrite=True
-        )
-        cls.runModule(
-            "r.mapcalc", flags="s", expression="prec_6 = rand(0, 650)", overwrite=True
-        )
+        cls.runModule("r.mapcalc", expression="prec_1 = rand(0, 550)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_2 = rand(0, 450)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_3 = rand(0, 320)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_4 = rand(0, 510)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_5 = rand(0, 300)", overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_6 = rand(0, 650)", overwrite=True)
 
         for strds_id in range(1, 9):
             cls.runModule(

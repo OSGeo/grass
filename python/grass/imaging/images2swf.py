@@ -37,7 +37,7 @@ sometimes not adequate. Besides I'd like to be independent of yet another
 package. I tried writing animated gif using PIL (which is widely available),
 but the quality is so poor because it only allows for 256 different colors.
 [EDIT: thanks to Ant1, now the quality of animated gif isn't so bad!]
-I also looked into MNG and APNG, two standards similar to the PNG stanard.
+I also looked into MNG and APNG, two standards similar to the PNG standard.
 Both standards promise exactly what I need. However, hardly any application
 can read those formats, and I cannot import them in flash.
 
@@ -68,7 +68,6 @@ sources and tools:
 
 from __future__ import annotations
 
-import os
 import zlib
 from pathlib import Path
 
@@ -904,7 +903,7 @@ def readSwf(filename, asNumpy=True):
     """
 
     # Check whether it exists
-    if not os.path.isfile(filename):
+    if not Path(filename).is_file():
         raise OSError("File not found: " + str(filename))
 
     # Check PIL

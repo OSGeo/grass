@@ -1,10 +1,8 @@
 """
 Create objects in a GRASS project
 
-(C) 2020-2025 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2020-2025 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Vaclav Petras <wenzeslaus gmail com>
 """
@@ -111,7 +109,7 @@ def create_mapset(database, location=None, mapset=None):
         mapset,
     )
     # create an empty directory
-    os.mkdir(path)
+    Path(path).mkdir()
     _directory_to_mapset(path)
     # set permissions to u+rw,go+r (disabled; why?)
     # os.chmod(os.path.join(database,location,mapset,'WIND'), 0644)

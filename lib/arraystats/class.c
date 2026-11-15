@@ -27,6 +27,9 @@ double AS_class_apply_algorithm(int algo, const double data[], int nrec,
 {
     double finfo = 0.0;
 
+    if (nrec < 1)
+        G_fatal_error(_("Cannot classify an empty set of values"));
+
     switch (algo) {
     case CLASS_INTERVAL:
         finfo = AS_class_interval(data, nrec, *nbreaks, classbreaks);

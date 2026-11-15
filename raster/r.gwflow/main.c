@@ -8,11 +8,8 @@
  * PURPOSE:      Calculates confiend and unconfined transient two dimensional
  *               groundwater flow
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -442,7 +439,7 @@ int main(int argc, char *argv[])
         } while (max_norm > 0.01 && inner_count < innerit);
 
         if (tmp_vect)
-            free(tmp_vect);
+            G_free(tmp_vect);
     }
 
     /*release the memory */

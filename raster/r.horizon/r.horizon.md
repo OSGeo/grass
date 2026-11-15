@@ -196,12 +196,11 @@ We can plot horizon in polar coordinates using Matplotlib in Python:
 import numpy as np
 import matplotlib.pyplot as plt
 
-horizon = np.genfromtxt('horizon.csv', delimiter=',')
+horizon = np.genfromtxt("horizon.csv", delimiter=",")
 horizon = horizon[1:, :]
 
 ax = plt.subplot(111, polar=True)
-bars = ax.plot(horizon[:, 0] / 180 * np.pi,
-               (90 - horizon[:, 1]) / 180 * np.pi)
+bars = ax.plot(horizon[:, 0] / 180 * np.pi, (90 - horizon[:, 1]) / 180 * np.pi)
 # uncomment the 2 following lines when using -c flag
 # ax.set_theta_direction(-1)
 # ax.set_theta_zero_location('N')

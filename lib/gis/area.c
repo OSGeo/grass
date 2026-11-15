@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Area calculation functions.
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -48,8 +46,7 @@ int G_begin_cell_area_calculations(void)
     double factor;
 
     G_get_set_window(&st->window);
-    switch (st->projection = st->window.proj) {
-    case PROJECTION_LL:
+    if ((st->projection = st->window.proj) == PROJECTION_LL) {
         G_get_ellipsoid_parameters(&a, &e2);
         if (e2) {
             G_begin_zone_area_on_ellipsoid(a, e2, st->window.ew_res / 360.0);
@@ -62,12 +59,15 @@ int G_begin_cell_area_calculations(void)
         st->next_row = 0;
         st->north = st->window.north;
         st->north_value = st->darea0(st->north);
+
         return 2;
-    default:
+    }
+    else {
         st->square_meters = st->window.ns_res * st->window.ew_res;
         factor = G_database_units_to_meters_factor();
         if (factor > 0.0)
             st->square_meters *= (factor * factor);
+
         return (factor > 0.0);
     }
 }
@@ -124,14 +124,18 @@ int G_begin_polygon_area_calculations(void)
     if ((st->projection = G_projection()) == PROJECTION_LL) {
         G_get_ellipsoid_parameters(&a, &e2);
         G_begin_ellipsoid_polygon_area(a, e2);
+
         return 2;
     }
+
     factor = G_database_units_to_meters_factor();
     if (factor > 0.0) {
         st->units_to_meters_squared = factor * factor;
+
         return 1;
     }
     st->units_to_meters_squared = 1.0;
+
     return 0;
 }
 
@@ -157,13 +161,15 @@ int G_begin_polygon_area_calculations(void)
  */
 double G_area_of_polygon(const double *x, const double *y, int n)
 {
-    double area;
+    double area = 0;
 
-    if (st->projection == PROJECTION_LL)
+    if (st->projection == PROJECTION_LL) {
         area = G_ellipsoid_polygon_area(x, y, n);
-    else
+    }
+    else {
         area =
             G_planimetric_polygon_area(x, y, n) * st->units_to_meters_squared;
+    }
 
     return area;
 }

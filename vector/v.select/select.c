@@ -8,7 +8,7 @@
 
 int select_lines(struct Map_info *aIn, int atype, int afield,
                  struct Map_info *bIn, int btype, int bfield, int cat_flag,
-                 int operator, const char * relate, int *ALines, int *AAreas,
+                 int operator, const char *relate, int *ALines, int *AAreas,
                  int *nskipped)
 {
     int i, ai;
@@ -96,7 +96,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                         continue;
                     }
 
-                    if (operator!= OP_OVERLAP) {
+                    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
                         if (!BGeom)
                             BGeom = Vect_read_line_geos(bIn, bline, &ltype);
@@ -148,7 +148,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                         continue;
                     }
 
-                    if (operator!= OP_OVERLAP) {
+                    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
                         if (!BGeom)
                             BGeom = Vect_read_line_geos(bIn, bline, &ltype);
@@ -249,7 +249,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                         continue;
                     }
 
-                    if (operator!= OP_OVERLAP) {
+                    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
                         if (!BGeom)
                             BGeom = Vect_read_area_geos(bIn, barea);
@@ -319,7 +319,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
                         continue;
                     }
 
-                    if (operator!= OP_OVERLAP) {
+                    if (operator != OP_OVERLAP) {
 #ifdef HAVE_GEOS
                         if (!BGeom)
                             BGeom = Vect_read_area_geos(bIn, barea);

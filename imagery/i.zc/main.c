@@ -10,11 +10,8 @@
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      edge detection for imagery using zero crossings method
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -128,7 +125,7 @@ int main(int argc, char *argv[])
     /* get the rows and columns in the current window */
     or = Rast_window_rows();
     oc = Rast_window_cols();
-    rows = G_math_max_pow2((long) or);
+    rows = G_math_max_pow2((long)or);
     cols = G_math_max_pow2((long)oc);
     size = (rows > cols) ? rows : cols;
     totsize = size * size;
@@ -162,7 +159,7 @@ int main(int argc, char *argv[])
 
     /* Read in cell map values */
     G_message(_("Reading raster map..."));
-    for (i = 0; i < or ; i++) {
+    for (i = 0; i < or; i++) {
         Rast_get_c_row(inputfd, cell_row, i);
 
         for (j = 0; j < oc; j++)
@@ -187,7 +184,7 @@ int main(int argc, char *argv[])
     cell_row = Rast_allocate_c_buf();
 
     /* Write out result to a new cell map */
-    for (i = 0; i < or ; i++) {
+    for (i = 0; i < or; i++) {
         for (j = 0; j < oc; j++) {
             *(cell_row + j) = (CELL)(*(data[1] + i * cols + j));
         }

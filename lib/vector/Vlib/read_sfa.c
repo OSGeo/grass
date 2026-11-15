@@ -8,10 +8,8 @@
    See read_ogr.c (OGR interface) and read_pg.c (PostGIS interface)
    for implementation issues.
 
-   (C) 2011-2012 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2011-2012 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -40,7 +38,6 @@
 int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
                      struct line_cats *line_c, int line)
 {
-#if defined HAVE_OGR || defined HAVE_POSTGRES
     int type;
     struct P_line *Line;
 
@@ -122,8 +119,4 @@ int V2_read_line_sfa(struct Map_info *Map, struct line_pnts *line_p,
     }
 
     return type;
-#else
-    G_fatal_error(_("GRASS is not compiled with OGR/PostgreSQL support"));
-    return -1;
-#endif
 }

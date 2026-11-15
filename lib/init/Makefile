@@ -69,22 +69,13 @@ $(ARCH_BINDIR)/$(START_UP): grass.py
 endif
 	rm -f $@
 	sed \
-	-e 's#@GRASS_PYDIR@#$(RUN_GISBASE)/etc/python#' \
+	-e 's#@GRASS_PYDIR@#$(RUN_GISBASE)/etc/python#g' \
 	$< > $@
 	chmod +x $@
 
 $(ARCH_DISTDIR)/$(START_UP).tmp: grass.py
 	rm -f $@
-	sed \
-	-e 's#@GRASS_VERSION_NUMBER@#$(GRASS_VERSION_NUMBER)#' \
-	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
-	-e 's#@GRASS_VERSION_MINOR@#$(GRASS_VERSION_MINOR)#' \
-	-e 's#@GRASS_VERSION_GIT@#$(GRASS_VERSION_GIT)#' \
-	-e 's#@START_UP@#$(START_UP)#' \
-	-e 's#@GRASS_CONFIG_DIR@#$(GRASS_CONFIG_DIR)#' \
-	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
-	-e 's#@CONFIG_PROJSHARE@#$(PROJSHARE)#' \
-	$< > $@
+	cp $< $@
 
 $(ETC)/echo$(EXE) $(ETC)/run$(EXE): $(ETC)/%$(EXE): $(OBJDIR)/%.o
 	$(call linker_base,$(LINK),$(LDFLAGS),$(MANIFEST_OBJ))
@@ -106,7 +97,7 @@ $(ETC)/VERSIONNUMBER:
 
 $(ETC)/license: $(ETC)/%: %.txt version.sed
 	rm -f $@
-	sh ./version.sed "$(GRASS_VERSION_NUMBER)" "$(GRASS_VERSION_DATE)" "$(GRASS_VERSION_UPDATE_PKG)" $< > $@
+	sh ./version.sed "$(GRASS_VERSION_NUMBER)" "$(GRASS_VERSION_DATE)" $< > $@
 	chmod +r $@
 
 $(ETC)/%: %

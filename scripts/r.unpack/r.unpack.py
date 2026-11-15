@@ -5,11 +5,8 @@
 # AUTHOR(S):	Hamish Bowman, Otago University, New Zealand
 #               Converted to Python by Martin Landa <landa.martin gmail.com>
 # PURPOSE:	Unpack up a raster map packed with r.pack
-# COPYRIGHT:	(C) 2010-2017 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General
-# 		Public License (>=v2). Read the file COPYING that
-# 		comes with GRASS for details.
+# SPDX-FileCopyrightText: 2010-2017 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -106,18 +103,12 @@ def main():
             )
 
     # extract data
-    # Extraction filters were added in Python 3.12,
-    # and backported to 3.8.17, 3.9.17, 3.10.12, and 3.11.4
-    # See https://docs.python.org/3.12/library/tarfile.html#tarfile-extraction-filter
-    # and https://peps.python.org/pep-0706/
-    # In Python 3.12, using `filter=None` triggers a DepreciationWarning,
-    # and in Python 3.14, `filter='data'` will be the default
-    if hasattr(tarfile, "data_filter"):
-        tar.extractall(filter="data")
-    else:
-        # Remove this when no longer needed
-        grass.warning(_("Extracting may be unsafe; consider updating Python"))
-        tar.extractall()
+    # The 'data' extraction filter was added in Python 3.12 and backported to
+    # 3.11.4 (PEP 706). Refuse to extract without it rather than
+    # extracting unsafely.
+    if not hasattr(tarfile, "data_filter"):
+        grass.fatal(_("Extracting may be unsafe; upgrade Python to 3.11.4 or newer"))
+    tar.extractall(filter="data")
     tar.close()
     os.chdir(data_names[0])
 
@@ -207,8 +198,7 @@ def main():
                 continue
 
             path = os.path.join(mset_dir, element)
-            if not Path(path).exists():
-                os.mkdir(path)
+            Path(path).mkdir(exist_ok=True)
 
             if element == "cell_misc":
                 if index > 0:

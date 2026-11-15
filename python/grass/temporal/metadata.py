@@ -14,16 +14,19 @@ Usage:
     >>> meta = tgis.STR3DSMetadata()
     >>> meta = tgis.STVDSMetadata()
 
-(C) 2012-2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
 
 from .base import SQLDatabaseInterface
-from .core import SQLDatabaseInterfaceConnection, get_tgis_db_version_from_metadata
+from .core import (
+    SQLDatabaseInterfaceConnection,
+    get_tgis_database_string,
+    get_tgis_db_version,
+    get_tgis_db_version_from_metadata,
+)
 
 ###############################################################################
 
@@ -1158,7 +1161,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     class for strds and str3ds datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new maps are added. Therefor only some set- an many
+    new maps are added. Therefore only some set- and many
     get-functions are available.
 
     Usage:
@@ -1385,7 +1388,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
     space time raster datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new raster maps are added. Therefor only some set- an many
+    new raster maps are added. Therefore only some set- and many
     get-functions are available.
 
     Usage:
@@ -1457,7 +1460,15 @@ class STRDSMetadata(STDSRasterMetadataBase):
             self, "strds_metadata", ident, title, description
         )
 
-        if get_tgis_db_version_from_metadata() > 2:
+        # TGIS metadata is only available with an accessible temporal database
+        # initialized with tgis.init(). Initialization with tgis.init(skip_db_init=True)
+        # will result in an empty tgis_database_string is empty, fall back to a global
+        # tgis_db_version if tgis is not fully initialized.
+        if get_tgis_database_string() is not None:
+            tgis_db_version_ = get_tgis_db_version_from_metadata()
+        else:
+            tgis_db_version_ = get_tgis_db_version()
+        if tgis_db_version_ > 2:
             self.D["number_of_semantic_labels"] = None
 
         self.set_raster_register(raster_register)
@@ -1572,7 +1583,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
     space time 3D raster datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new 3D raster maps are added. Therefor only some set- an many
+    new 3D raster maps are added. Therefore only some set- and many
     get-functions are available.
 
     Usage:
@@ -1728,7 +1739,7 @@ class STVDSMetadata(STDSMetadataBase):
     space time vector datasets
 
     Most of the metadata values are set by SQL scripts in the database when
-    new vector maps are added. Therefor only some set- an many get-functions
+    new vector maps are added. Therefore only some set- and many get-functions
     are available.
 
     Usage:

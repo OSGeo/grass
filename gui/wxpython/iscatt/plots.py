@@ -8,10 +8,8 @@ Classes:
  - plots::PolygonDrawer
  - plots::ModestImage
 
-(C) 2013-2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Stepan Turek <stepan.turek seznam.cz> (mentor: Martin Landa)
 """
@@ -39,13 +37,14 @@ try:
     from matplotlib.patches import Polygon, Ellipse
     import matplotlib.image as mi
     import matplotlib.colors as mcolors
-except ImportError as e:
-    raise ImportError(
+except ImportError as error:
+    error.add_note(
         _(
             'The Scatterplot Tool needs the "matplotlib" '
-            "(python-matplotlib) package to be installed. {0}"
-        ).format(e)
+            "(python-matplotlib) package to be installed."
+        )
     )
+    raise
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal

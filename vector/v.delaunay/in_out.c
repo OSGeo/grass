@@ -8,12 +8,9 @@
  *
  * PURPOSE:      Creates a Delaunay triangulation vector map
  *
- * COPYRIGHT:    (C) RMIT 1993
- *               (C) 2008-2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1993 RMIT
+ * SPDX-FileCopyrightText: 2008-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * The following notices apply to portions of the code originally
  * derived from work by Geoff Leach of RMIT:
@@ -74,7 +71,7 @@ int cmp(const void *a, const void *b)
     return 0;
 }
 
-void output_edges(unsigned int n, int mode3d UNUSED, int type,
+void output_edges(unsigned int n, int mode3d G_UNUSED, int type,
                   struct Map_info *Out)
 {
     struct edge *e_start, *e;
@@ -119,7 +116,7 @@ void output_edges(unsigned int n, int mode3d UNUSED, int type,
 
 /* Print the ring of triangles about each vertex. */
 
-void output_triangles(unsigned int n, int mode3d UNUSED, int type,
+void output_triangles(unsigned int n, int mode3d G_UNUSED, int type,
                       struct Map_info *Out)
 {
     struct edge *e_start, *e, *next;

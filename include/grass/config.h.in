@@ -42,9 +42,6 @@
 /* Define to 1 if you have the 'ftime' function. */
 #undef HAVE_FTIME
 
-/* Define to 1 if GDAL is to be used. */
-#undef HAVE_GDAL
-
 /* Define to 1 if GEOS is to be used. */
 #undef HAVE_GEOS
 
@@ -123,9 +120,6 @@
 /* Define to 1 if you have the 'nice' function. */
 #undef HAVE_NICE
 
-/* Define to 1 if OGR is to be used. */
-#undef HAVE_OGR
-
 /* Define to 1 if you have the <omp.h> header file. */
 #undef HAVE_OMP_H
 
@@ -158,12 +152,6 @@
 
 /* Define to 1 if PQcmdTuples in lpq. */
 #undef HAVE_PQCMDTUPLES
-
-/* Define to 1 if you have the <proj_api.h> header file. */
-#undef HAVE_PROJ_API_H
-
-/* Define to 1 if you have the <proj.h> header file. */
-#undef HAVE_PROJ_H
 
 /* Define to 1 if POSIX threads are available. */
 #undef HAVE_PTHREAD
@@ -339,9 +327,6 @@
 
 /* Define to 1 if NLS requested. */
 #undef USE_NLS
-
-/* Define to 1 if using old PROJ version 4 API. */
-#undef USE_PROJ4API
 
 /* Define to 1 if the X Window System is missing or not being used. */
 #undef X_DISPLAY_MISSING

@@ -7,10 +7,8 @@ Classes:
  - notebook::MainPageFrame
  - notebook::MainNotebook
 
-(C) 2022 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2022 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Linda Kladivova <lindakladivova gmail.com>
 @author Anna Petrasova <kratochanna gmail.com>
@@ -146,11 +144,16 @@ class MainNotebook(aui.AuiNotebook):
             frame.SetMenuBar(None)
         frame.Destroy()
 
-    def AddPage(self, *args, **kwargs):
+    def AddPage(self, page, *args, **kwargs):
         """Overrides Aui.Notebook AddPage method.
-        Adds page to notebook and makes it current"""
-        super().AddPage(*args, **kwargs)
-        self.SetSelection(self.GetPageCount() - 1)
+        Adds page to notebook, makes it current, and restores tooltip if available."""
+        super().AddPage(page, *args, **kwargs)
+        page_idx = self.GetPageCount() - 1
+        self.SetSelection(page_idx)
+
+        # Restore tooltip if page has one stored
+        if hasattr(page, "page_tooltip"):
+            self.SetPageTooltip(page_idx, page.page_tooltip)
 
     def SetSelectionToMainPage(self, page):
         """Decides whether to set selection to a MainNotebook page

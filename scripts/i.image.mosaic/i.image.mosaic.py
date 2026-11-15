@@ -6,11 +6,8 @@
 # updated for GRASS 5.7 by Michael Barton 2004/04/05
 # converted to Python by Glynn Clements
 #
-# COPYRIGHT:    (C) 1999,2007,2008 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 1999,2007,2008 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # TODO: - implement g.findfile for 3 and 4 maps (currently only current mapset
 #           supported)
@@ -32,6 +29,8 @@
 # %option G_OPT_R_INPUTS
 # %end
 # %option G_OPT_R_OUTPUT
+# %end
+# %option G_OPT_M_NPROCS
 # %end
 
 import grass.script as gs
@@ -63,6 +62,7 @@ def make_expression(i, count):
 def main():
     images = options["input"].split(",")
     output = options["output"]
+    nprocs = options["nprocs"]
 
     count = len(images)
     msg = _("Do not forget to set region properly to cover all images.")
@@ -79,7 +79,9 @@ def main():
 
     gs.message(_("Mosaicing %d images...") % count)
 
-    gs.mapcalc("$output = " + make_expression(1, count), output=output, **parms)
+    gs.mapcalc(
+        "$output = " + make_expression(1, count), nprocs=nprocs, output=output, **parms
+    )
 
     # modify the color table:
     p = gs.feed_command("r.colors", map=output, rules="-")

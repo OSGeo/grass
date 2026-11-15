@@ -8,11 +8,8 @@
  * PURPOSE:      Lists available GRASS data base files of the
  *               user-specified data type to standard output
  *
- * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -366,7 +363,7 @@ int main(int argc, char *argv[])
         if (flag.full->answer) {
             char lister[GPATH_MAX];
 
-            snprintf(lister, sizeof(lister), "%s/etc/lister/%s", G_gisbase(),
+            snprintf(lister, sizeof(lister), "%s/lister/%s", G_etcbin_dir(),
                      elem->element[0]);
 
             G_debug(3, "lister CMD: %s", lister);

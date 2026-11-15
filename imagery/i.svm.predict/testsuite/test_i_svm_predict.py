@@ -3,10 +3,9 @@ Name:      i.svm.predict input & output tests
 Purpose:   Validates user input validation code and output generation
 
 Author:    Maris Nartiss
-Copyright: (C) 2023 by Maris Nartiss and the GRASS Development Team
-Licence:   This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2023 Maris Nartiss
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import unittest
@@ -167,9 +166,9 @@ class IOValidationTest(TestCase):
         self.tmp_rasts.append(rast)
         self.assertModuleFail(isvm)
         self.assertTrue(isvm.outputs.stderr)
-        self.assertTrue(
-            "Signature band count: 2, imagery group band count: 3"
-            in isvm.outputs.stderr
+        self.assertIn(
+            "Signature band count: 2, imagery group band count: 3",
+            isvm.outputs.stderr,
         )
 
     @unittest.skipIf(shutil.which("i.svm.predict") is None, "i.svm.predict not found.")

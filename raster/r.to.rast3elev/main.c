@@ -8,11 +8,8 @@
  * PURPOSE:      Creates a 3D volume map based on 2D elevation and value raster
  *               maps
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -408,7 +405,7 @@ int main(int argc, char *argv[])
 
     /*Set the upper value */
     if (param.upper->answer) {
-        if (sscanf(param.upper->answer, "%lf", &db.upper))
+        if (sscanf(param.upper->answer, "%lf", &db.upper) == 1)
             db.useUpperVal = 2;
         else
             G_fatal_error(_("The upper value is not valid"));
@@ -419,7 +416,7 @@ int main(int argc, char *argv[])
 
     /*Set the lower value */
     if (param.lower->answer) {
-        if (sscanf(param.lower->answer, "%lf", &db.lower))
+        if (sscanf(param.lower->answer, "%lf", &db.lower) == 1)
             db.useLowerVal = 2;
         else
             G_fatal_error(_("The lower value is not valid"));

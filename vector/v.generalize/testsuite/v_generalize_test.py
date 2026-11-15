@@ -264,6 +264,7 @@ class TestVGeneralize(TestCase):
                 tolerance,
                 f"Midpoint {midpoint} of segment {i} is not close to any point in the generalized line.",
             )
+            self.assertIsNotNone(closest_point)
         # Testing the number of vertices after smoothing
         input_vertices = self.count_vertices("test_chaiken")
         output_vertices = self.count_vertices("chaiken_line")

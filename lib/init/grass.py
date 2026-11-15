@@ -18,11 +18,8 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2025 by the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2000-2026 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -57,7 +54,6 @@ import sys
 import tempfile
 import unicodedata
 import uuid
-
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, NoReturn
 
@@ -73,11 +69,7 @@ _WXPYTHON_BASE = None
 
 GISBASE = None
 
-try:
-    # Python >= 3.11
-    ENCODING = locale.getencoding()
-except AttributeError:
-    ENCODING = locale.getdefaultlocale()[1]
+ENCODING = locale.getencoding()
 if ENCODING is None:
     ENCODING = "UTF-8"
     print("Default locale not found, using UTF-8")  # intentionally not translatable
@@ -382,17 +374,30 @@ def create_grass_config_dir() -> str:
     except (RuntimeError, NotADirectoryError) as e:
         fatal(f"{e}")
 
-    if not os.path.isdir(directory):
+    if not Path(directory).is_dir():
         try:
-            os.makedirs(directory)
+            Path(directory).mkdir(parents=True)
         except OSError as e:
             # Can happen as a race condition
-            if e.errno != errno.EEXIST or not os.path.isdir(directory):
+            if e.errno != errno.EEXIST or not Path(directory).is_dir():
                 fatal(
                     _(
                         "Failed to create configuration directory '{}' with error: {}"
                     ).format(directory, e.strerror)
                 )
+        # TODO: remove with next major or minor release after GRASS 8.5 (8.6 or 9.0)
+        if MACOS:
+            old_mac_dir = os.path.join(
+                os.getenv("HOME"), f".grass{GRASS_VERSION_MAJOR}"
+            )
+            if Path(old_mac_dir).is_dir():
+                try:
+                    shutil.copy(os.path.join(old_mac_dir, "rc"), directory)
+                    shutil.copy(os.path.join(old_mac_dir, "wx.json"), directory)
+                    shutil.copytree(os.path.join(old_mac_dir, "toolboxes"), directory)
+                except Exception:
+                    pass
+
     return directory
 
 
@@ -415,7 +420,7 @@ def create_tmp(user, gis_lock) -> str:
     if tmp:
         tmpdir = os.path.join(tmp, tmpdir_name)
         try:
-            os.mkdir(tmpdir, 0o700)
+            Path(tmpdir).mkdir(mode=0o700)
         except:  # noqa: E722
             tmp = None
 
@@ -424,7 +429,7 @@ def create_tmp(user, gis_lock) -> str:
             tmp = ttmp
             tmpdir = os.path.join(tmp, tmpdir_name)
             try:
-                os.mkdir(tmpdir, 0o700)
+                Path(tmpdir).mkdir(mode=0o700)
             except:  # noqa: E722
                 tmp = None
             if tmp:
@@ -697,11 +702,11 @@ def cannot_create_location_reason(gisdbase: StrPath, location: str) -> str:
             " the project <{location}>"
             " already exists."
         ).format(**locals())
-    if os.path.isfile(path):
+    if Path(path).is_file():
         return _(
             "Unable to create new project <{location}> because <{path}> is a file."
         ).format(**locals())
-    if os.path.isdir(path):
+    if Path(path).is_dir():
         return _(
             "Unable to create new project <{location}> because"
             " the directory <{path}>"
@@ -843,7 +848,7 @@ def set_mapset(
             else:
                 # 'location_name' is a valid GRASS location,
                 # create new mapset
-                if os.path.isfile(path):
+                if Path(path).is_file():
                     # not a valid mapset, but dir exists, assuming
                     # broken/incomplete mapset
                     fatal(
@@ -852,7 +857,7 @@ def set_mapset(
                             " because <{path}> is a file."
                         ).format(mapset=mapset, path=path)
                     )
-                elif os.path.isdir(path):
+                elif Path(path).is_dir():
                     # not a valid mapset, but dir exists, assuming
                     # broken/incomplete mapset
                     warning(
@@ -875,7 +880,7 @@ def set_mapset(
                     if not tmp_mapset:
                         message(_("Creating new GRASS mapset <{}>...").format(mapset))
                     # create mapset directory
-                    os.mkdir(path)
+                    Path(path).mkdir()
                     if tmp_mapset:
                         # The tmp location is handled by (re-)using the
                         # tmpdir, but we need to take care of the tmp
@@ -1085,11 +1090,7 @@ def set_language(grass_config_dir: StrPath) -> None:
                 "Default locale settings are missing. GRASS running with C locale.\n"
             )
 
-        try:
-            # Python >= 3.11
-            language, encoding = locale.getlocale()
-        except AttributeError:
-            language, encoding = locale.getdefaultlocale()
+        language, encoding = locale.getlocale()
         if not language:
             sys.stderr.write(
                 "Default locale settings are missing. GRASS running with C locale.\n"
@@ -1150,7 +1151,7 @@ def set_language(grass_config_dir: StrPath) -> None:
                         os.environ["LC_MESSAGES"] = "C"
                         os.environ["LC_NUMERIC"] = "C"
                         os.environ["LC_TIME"] = "C"
-                        gettext.install("grasslibs", gpath("locale"))
+                        gettext.install("grasslibs", os.environ["GRASS_LOCALEDIR"])
                         sys.stderr.write(
                             "All attempts to enable English language have"
                             " failed. GRASS running with C locale.\n"
@@ -1231,7 +1232,7 @@ def set_language(grass_config_dir: StrPath) -> None:
         del os.environ["LC_ALL"]  # Remove LC_ALL to not override LC_NUMERIC
 
     # From now on enforce the new language
-    gettext.install("grasslibs", gpath("locale"))
+    gettext.install("grasslibs", os.environ["GRASS_LOCALEDIR"])
 
 
 # TODO: the gisrcrc here does not make sense, remove it from load_gisrc
@@ -1776,56 +1777,34 @@ def print_params(params) -> None:
             "date",
         ]
 
-    # check if we are dealing with parameters which require dev files
-    dev_params = ["arch", "compiler", "build", "date"]
-    if any(param in dev_params for param in params):
-        plat = gpath("include", "Make", "Platform.make")
-        if not Path(plat).exists():
-            fatal(_("Please install the GRASS development package"))
-        with open(plat) as fileplat:
-            # this is in fact require only for some, but prepare it anyway
-            linesplat = fileplat.readlines()
+    from grass.app.runtime import RuntimePaths
+
+    runtime_paths = RuntimePaths()
 
     for arg in params:
         if arg == "path":
-            sys.stdout.write("%s\n" % GISBASE)
+            sys.stdout.write(f"{GISBASE}\n")
         elif arg in {"python_path", "python-path"}:
-            sys.stdout.write("%s\n" % gpath("etc", "python"))
+            sys.stdout.write("%s\n" % r"@GRASS_PYDIR@")
         elif arg == "arch":
-            val = grep("ARCH", linesplat)
-            sys.stdout.write("%s\n" % val[0].split("=")[1].strip())
+            sys.stdout.write("%s\n" % runtime_paths.grass_arch)
         elif arg == "build":
-            build = gpath("include", "grass", "confparms.h")
-            with open(build) as filebuild:
-                val = filebuild.readline()
-            sys.stdout.write("%s\n" % val.strip().strip('"').strip())
+            if runtime_paths.is_cmake_build:
+                val = "CMake build (configuration info not available)"
+            else:
+                build = gpath("include", "grass", "confparms.h")
+                with open(build) as filebuild:
+                    val = filebuild.readline()
+                val = val.strip().strip('"').strip()
+            sys.stdout.write(f"{val}\n")
         elif arg == "compiler":
-            val = grep("CC", linesplat)
-            sys.stdout.write("%s\n" % val[0].split("=")[1].strip())
-        elif arg == "revision":
+            sys.stdout.write("%s\n" % runtime_paths.grass_cmake_c_compiler)
+        elif arg in {"revision", "svn_revision"}:
             sys.stdout.write(f"{GRASS_VERSION_GIT}\n")
-        elif arg == "svn_revision":
-            with open(gpath("etc", "VERSIONNUMBER")) as filerev:
-                linerev = filerev.readline().rstrip("\n")
-            try:
-                revision = linerev.split(" ")[1]
-                sys.stdout.write("%s\n" % revision[1:])
-            except Exception:
-                sys.stdout.write("No SVN revision defined\n")
         elif arg == "version":
-            sys.stdout.write("%s\n" % GRASS_VERSION)
+            sys.stdout.write(f"{GRASS_VERSION}\n")
         elif arg == "date":
-            date_str = "#define GRASS_HEADERS_DATE "
-            gdate = gpath("include", "grass", "version.h")
-            with open(gdate) as filegdate:
-                for line in filegdate:
-                    if line.startswith(date_str):
-                        sys.stdout.write(
-                            "{}\n".format(
-                                line.replace(date_str, "").lstrip()[1:-2]
-                            )  # remove quotes
-                        )
-                        break
+            sys.stdout.write("%s\n" % runtime_paths.grass_headers_date)
         else:
             message(_("Parameter <%s> not supported") % arg)
 
@@ -2182,7 +2161,7 @@ def main() -> None:
     GRASS_VERSION_MAJOR = runtime_paths.version_major
     GRASS_VERSION_GIT = runtime_paths.grass_version_git
     gisbase = runtime_paths.gisbase
-    if not os.path.isdir(gisbase):
+    if not Path(gisbase).is_dir():
         gisbase = get_install_path(gisbase)
         # Set the main prefix again.
         # See also grass.script.setup.setup_runtime_env.
@@ -2313,6 +2292,19 @@ def main() -> None:
             grass_gui = read_gui(gisrc, default_gui)
         # check that the GUI works but only if not doing a batch job
         grass_gui = check_gui(expected_gui=grass_gui)
+        if not use_shell and grass_gui == "text":
+            # Without a shell, the GUI is the only way to interact with the
+            # session, so there is nothing left to start. check_gui() has
+            # already reported why the GUI is not available.
+            fatal(
+                _(
+                    "Neither an interactive terminal nor a graphical user"
+                    " interface is available.\n"
+                    "Run {cmd_name} from a terminal, use --exec to run"
+                    " a command, or use --text to read commands from"
+                    " standard input."
+                ).format(cmd_name=CMD_NAME)
+            )
         # save GUI only if we are not doibg batch job
         save_gui(gisrc, grass_gui)
 
@@ -2427,7 +2419,7 @@ def main() -> None:
         fatal(e.args[0])
         sys.exit(_("Exiting..."))
 
-    start_time = datetime.datetime.now(datetime.timezone.utc)
+    start_time = datetime.datetime.now(datetime.UTC)
 
     # unlock the mapset which is current at the time of turning off
     # in case mapset was changed
@@ -2501,7 +2493,7 @@ def main() -> None:
             exit_val = shell_process.wait()
             if exit_val != 0:
                 warning(_("Failed to start shell '%s'") % os.getenv("SHELL"))
-        else:
+        elif gui_process:
             gui_process.wait()
 
         # close GUI if running

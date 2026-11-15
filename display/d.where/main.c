@@ -11,11 +11,8 @@
  *               Jan-Oliver Wagner <jan intevation.de>,
  *               Paul Kelly <paul-grass stjohnspoint.co.uk>
  * PURPOSE:      interactive query of location in active display
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -124,18 +121,7 @@ int main(int argc, char **argv)
             /* Check that datumparams are defined for this location (otherwise
              * the WGS84 values would be meaningless), and if they are set the
              * output datum to WGS84 */
-#if PROJ_VERSION_MAJOR < 6
-            char buff[100], dum[100];
-
-            /* PROJ6+ has its own datum transformation parameters */
-            if (G_get_datumparams_from_projinfo(in_proj_info, buff, dum) < 0)
-                G_fatal_error(_(
-                    "WGS84 output not possible as this location does not "
-                    "contain\n"
-                    "datum transformation parameters. Try running g.setproj."));
-            else
-#endif
-                G_set_key_value("datum", "wgs84", out_proj_info);
+            G_set_key_value("datum", "wgs84", out_proj_info);
 
             G_set_key_value("unit", "degree", out_unit_info);
             G_set_key_value("units", "degrees", out_unit_info);

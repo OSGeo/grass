@@ -1,19 +1,7 @@
 /*
- * Copyright (C) 2002 Roberto Micarelli
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * SPDX-FileCopyrightText: 2002 Roberto Micarelli
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 /*
@@ -56,28 +44,28 @@
 /*
  * Node Status bitmask - returned by dglNodeGet_Status()
  */
-#define DGL_NS_HEAD                0x1 /* node exists as at least one edge's head (static) */
-#define DGL_NS_TAIL                0x2 /* node exists as at least one edge's tail (static) */
-#define DGL_NS_ALONE               0x4 /* node is a component */
+#define DGL_NS_HEAD  0x1 /* node exists as at least one edge's head (static) */
+#define DGL_NS_TAIL  0x2 /* node exists as at least one edge's tail (static) */
+#define DGL_NS_ALONE 0x4 /* node is a component */
 
 /*
  * Edge Status bitmask - returned by dglEdgeGet_Status()
  */
-#define DGL_ES_DIRECTED            0x1 /* force edge to be directed */
+#define DGL_ES_DIRECTED   0x1 /* force edge to be directed */
 
 /*
  * Endianness Values - returned by dglGet_Endianess() function
  */
-#define DGL_ENDIAN_BIG             1
-#define DGL_ENDIAN_LITTLE          2
+#define DGL_ENDIAN_BIG    1
+#define DGL_ENDIAN_LITTLE 2
 
 /*
  * miscellaneous
  */
 /* add-edge/add-node flags */
-#define DGL_STRONGCONNECT          0x1
-#define DGL_ALONE                  0x2
-#define DGL_MERGE_EDGE             0x4
+#define DGL_STRONGCONNECT 0x1
+#define DGL_ALONE         0x2
+#define DGL_MERGE_EDGE    0x4
 /* */
 
 /*

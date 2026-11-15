@@ -6,11 +6,8 @@
  *              Justin Hickey - Thailand - jhickey@hpcc.nectec.or.th
  * PURPOSE:     This file contains the prototypes for all the functions in the
  *              gis library (src/libes/gis).
- * COPYRIGHT:   (C) 2000 by the GRASS Development Team
- *
- *              This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ * SPDX-FileCopyrightText: 2000 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -81,10 +78,55 @@ int G_adjust_window_ll(struct Cell_head *cellhd);
 #define G_incr_void_ptr(ptr, size) \
     ((void *)((const unsigned char *)(ptr) + (size)))
 
-void *G__malloc(const char *, int, size_t);
-void *G__calloc(const char *, int, size_t, size_t);
-void *G__realloc(const char *, int, void *, size_t);
-void G_free(void *);
+// Improve diagnostic capabilities for compilers and/or static analyzers
+
+#ifndef __has_attribute
+#define __has_attribute(x) 0
+#endif
+
+#if __has_attribute(malloc) && defined(__GNUC__) && (__GNUC__ >= 11)
+#define G_ATTR_MALLOC __attribute__((malloc, malloc(G_free, 1)))
+#elif __has_attribute(malloc)
+#define G_ATTR_MALLOC __attribute__((malloc))
+#else
+#define G_ATTR_MALLOC
+#endif
+
+#if __has_attribute(returns_nonnull)
+#define G_ATTR_RET_NONNULL __attribute__((returns_nonnull))
+#else
+#define G_ATTR_RET_NONNULL
+#endif
+
+#if __has_attribute(alloc_size)
+#define G_ATTR_ALLOC_SIZE1(N)    __attribute__((alloc_size(N)))
+#define G_ATTR_ALLOC_SIZE2(N, M) __attribute__((alloc_size(N, M)))
+#else
+#define G_ATTR_ALLOC_SIZE1(N)
+#define G_ATTR_ALLOC_SIZE2(N, M)
+#endif
+
+// Clang Static Analyzer ownership annotations
+#if defined(__clang__) && __has_attribute(ownership_returns) && \
+    __has_attribute(ownership_takes)
+#define G_ATTR_OWNSHIP_RET  __attribute__((ownership_returns(malloc)))
+#define G_ATTR_OWNSHIP_TAKE __attribute__((ownership_takes(malloc, 1)))
+#else
+#define G_ATTR_OWNSHIP_RET
+#define G_ATTR_OWNSHIP_TAKE
+#endif
+
+#define G_MALLOC_ATTR \
+    G_ATTR_MALLOC G_ATTR_ALLOC_SIZE1(3) G_ATTR_OWNSHIP_RET G_ATTR_RET_NONNULL
+#define G_CALLOC_ATTR \
+    G_ATTR_MALLOC G_ATTR_ALLOC_SIZE2(3, 4) G_ATTR_OWNSHIP_RET G_ATTR_RET_NONNULL
+#define G_REALLOC_ATTR G_ATTR_ALLOC_SIZE1(4) G_ATTR_RET_NONNULL
+#define G_FREE_ATTR    G_ATTR_OWNSHIP_TAKE
+
+void G_free(void *) G_FREE_ATTR;
+void *G__malloc(const char *, int, size_t) G_MALLOC_ATTR;
+void *G__calloc(const char *, int, size_t, size_t) G_CALLOC_ATTR;
+void *G__realloc(const char *, int, void *, size_t) G_REALLOC_ATTR;
 
 #ifndef G_incr_void_ptr
 void *G_incr_void_ptr(const void *, size_t);
@@ -394,6 +436,13 @@ void G__gisinit(const char *, const char *);
 void G__no_gisinit(const char *);
 void G_init_all(void);
 
+/* resource_dirs.c */
+const char *G_colors_dir(void);
+const char *G_etcbin_dir(void);
+const char *G_etc_dir(void);
+const char *G_fonts_dir(void);
+const char *G_locale_dir(void);
+
 /* handler.c */
 void G_add_error_handler(void (*)(void *), void *);
 void G_remove_error_handler(void (*)(void *), void *);
@@ -476,6 +525,28 @@ long G_srand48_auto(void);
 long G_lrand48(void);
 long G_mrand48(void);
 double G_drand48(void);
+void G_random_state_from_seed(struct G_random_state *, int64_t);
+void G_random_init_layout_exact(struct G_random_layout *, int64_t, int64_t,
+                                int64_t);
+void G_random_init_layout_bounded(struct G_random_layout *, int64_t, int64_t,
+                                  int64_t);
+void G_random_init_layout(struct G_random_layout *, int64_t, int64_t);
+int64_t G_random_layout_batches(const struct G_random_layout *);
+int64_t G_random_layout_length(const struct G_random_layout *);
+void G_random_state_for_unit(struct G_random_state *,
+                             const struct G_random_layout *, int64_t);
+void G_random_state_for_batch(struct G_random_state *,
+                              const struct G_random_layout *, int64_t, int64_t);
+void G_random_advance(struct G_random_state *, int64_t);
+double G_random_double(struct G_random_state *);
+int G_random_int(struct G_random_state *);
+int32_t G_random_int32(struct G_random_state *);
+uint32_t G_random_uint32(struct G_random_state *);
+int64_t G_random_generate_seed(void);
+const char *G_random_parse_seed(const char *, int64_t *);
+
+/* random_options.c */
+int64_t G_random_seed_from_option(const struct Option *);
 
 /* ls.c */
 void G_set_ls_filter(int (*)(const char *, void *), void *);
@@ -628,7 +699,7 @@ void G_unset_percent_routine(void);
 void G_popen_clear(struct Popen *);
 FILE *G_popen_write(struct Popen *, const char *, const char **);
 FILE *G_popen_read(struct Popen *, const char *, const char **);
-void G_popen_close(struct Popen *);
+int G_popen_close(struct Popen *);
 
 /* plot.c */
 void G_setup_plot(double, double, double, double, int (*)(int, int),

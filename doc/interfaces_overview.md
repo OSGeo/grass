@@ -38,11 +38,11 @@ r.slope.aspect elevation=elevation slope=slope aspect=aspect
 GRASS Python interface provides libraries to use GRASS tools, create scripts,
 and access the GRASS data structures. The Python interface consists of
 three main libraries:
-*[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/tools_index.html)*
+*[grass.tools](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.tools.html)*
 provides a Python interface to GRASS tools,
-*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script_intro.html)*
+*[grass.script](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.script.html)*
 handles GRASS projects and sessions in Python,
-and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/pygrass_index.html)*
+and *[grass.pygrass](https://grass.osgeo.org/grass-stable/manuals/libpython/grass.pygrass.html)*
 enables a fine-grained access to the GRASS data structures.
 
 To get started with scripting, create a new project with `gs.create_project` and
@@ -66,10 +66,9 @@ gs.create_project(path="path/to/my_project", epsg="3358")
 
 # Initialize the GRASS session
 with gs.setup.init("path/to/my_project") as session:
-
     # Run GRASS tools
     tools = Tools(session=session)
-    tools.r_import_(input="/path/to/elevation.tif", output="elevation")
+    tools.r_import(input="/path/to/elevation.tif", output="elevation")
     tools.g_region(raster="elevation")
     tools.r_slope_aspect(elevation="elevation", slope="slope")
 ```
@@ -114,7 +113,7 @@ m.d_vect(map="streets", color="black")
 m.show()
 ```
 
-![Elevation map overlayed with streets with gj.Map](jupyter_map.png)
+![Elevation map overlaid with streets with gj.Map](jupyter_map.png)
 
 [Learn more :material-arrow-right-bold:](jupyter_intro.md){ .md-button }
 

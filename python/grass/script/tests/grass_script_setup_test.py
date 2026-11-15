@@ -467,3 +467,19 @@ def test_grass_path_types_in_setup(tmp_path, path_type):
     gs.setup.setup_runtime_env(grass_path, env=env)
     # At least before FHS, GISBASE is the way to detect an active runtime.
     assert "GISBASE" in env
+
+
+@pytest.mark.parametrize("variable", ["GRASS_REGION", "WIND_OVERRIDE", "GRASS_MASK"])
+@pytest.mark.usefixtures("mock_no_session")
+def test_init_removes_mapset_variables(tmp_path, variable):
+    """Check that init removes mapset-specific variables from the environment.
+
+    Variables tied to a specific mapset (such as region overrides) must not
+    leak from the provided environment into the initialized session.
+    """
+    project = tmp_path / "test"
+    gs.create_project(project)
+    env = os.environ.copy()
+    env[variable] = "value"
+    with gs.setup.init(project, env=env) as session:
+        assert variable not in session.env

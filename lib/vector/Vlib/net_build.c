@@ -5,10 +5,8 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2009, 2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2).  Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009, 2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Radim Blazek
  * \author Stepan Turek stepan.turek seznam.cz (turns support)
@@ -48,7 +46,7 @@
 int Vect_net_ttb_build_graph(struct Map_info *Map, int ltype, int afield,
                              int nfield, int tfield, int tucfield,
                              const char *afcol, const char *abcol,
-                             const char *ncol, int geo, int algorithm UNUSED)
+                             const char *ncol, int geo, int algorithm G_UNUSED)
 {
     /* TODO very long function, split into smaller ones */
     int i, j, from, to, line, nlines, nnodes, ret, type, cat, skipped, cfound;

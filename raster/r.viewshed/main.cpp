@@ -27,10 +27,8 @@
  * paper: "Computing Visibility on * Terrains in External Memory" by
  * Herman Haverkort, Laura Toma and Yi Zhuang.
  *
- * COPYRIGHT: (C) 2008-2011 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2008-2011 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -299,9 +297,9 @@ int main(int argc, char *argv[])
         if (get_active_str_size_bytes(hd) < memSizeBytes)
             BASE_CASE = 1;
 
-            /*if the user set the FORCE_DISTRIBUTION flag, then the
-               algorithm runs in the fully recursive mode (even if this is
-               not necessary). This is used solely for debugging purposes */
+        /*if the user set the FORCE_DISTRIBUTION flag, then the
+           algorithm runs in the fully recursive mode (even if this is
+           not necessary). This is used solely for debugging purposes */
 #ifdef FORCE_DISTRIBUTION
         BASE_CASE = 0;
 #endif

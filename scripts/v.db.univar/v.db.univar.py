@@ -8,11 +8,8 @@
 #               Sync'ed to r.univar by Markus Metz
 # PURPOSE:	Calculates univariate statistics from a GRASS vector map attribute column.
 #               Based on r.univar.sh by Markus Neteler
-# COPYRIGHT:	(C) 2005, 2007, 2008 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2005, 2007, 2008 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -42,12 +39,8 @@
 # % options: 0-100
 # % multiple: yes
 # %end
-# %option
-# % key: format
-# % type: string
-# % multiple: no
+# %option G_OPT_F_FORMAT
 # % options: plain,json,shell
-# % label: Output format
 # % descriptions: plain;Plain text output;json;JSON (JavaScript Object Notation);shell;Shell script style for Bash eval
 # %end
 # %flag

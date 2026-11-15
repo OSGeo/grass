@@ -10,11 +10,10 @@ Read the file COPYING that comes with GRASS
 for details
 """
 
-from ctypes import byref, c_int, c_double
+from ctypes import byref, c_double, c_int
 
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
-
 from grass.lib.raster import Rast_parse_color_rule, Rast_parse_color_rule_error
 
 

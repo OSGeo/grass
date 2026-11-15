@@ -8,11 +8,8 @@
  * PURPOSE:      Prints category values and labels associated with
  *                 user-specified raster map layers.
  *
- * COPYRIGHT:    (C) 2006-2019 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006-2019 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -228,6 +225,7 @@ int main(int argc, char *argv[])
             int ntokens;
             char *e1;
             char *e2;
+            struct Categories existing_cats;
 
             if (strcmp("-", parm.file->answer) == 0) {
                 from_stdin = TRUE;
@@ -240,7 +238,16 @@ int main(int argc, char *argv[])
                                   parm.file->answer);
             }
 
-            Rast_init_cats("", &cats);
+            /* Preserve the existing title from the destination map so that
+             * setting categories does not silently erase a title set earlier
+             * (e.g. via r.support title=...). */
+            if (Rast_read_cats(name, G_mapset(), &existing_cats) >= 0) {
+                Rast_init_cats(Rast_get_cats_title(&existing_cats), &cats);
+                Rast_free_cats(&existing_cats);
+            }
+            else {
+                Rast_init_cats("", &cats);
+            }
 
             for (;;) {
                 char buf[1024];

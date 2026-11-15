@@ -4,9 +4,8 @@
 for various display management functions, one for manipulating GCPs.
 Classes:
 - mapdisplay::MapPanel
-(C) 2006-2011 by the GRASS Development Team
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 @author Markus Metz
 """
 
@@ -200,7 +199,7 @@ class MapPanel(SingleMapPanel):
         # do not init zoom history here, that happens when zooming to map(s)
 
         #
-        # Re-use dialogs
+        # Reuse dialogs
         #
         self.dialogs = {}
         self.dialogs["attributes"] = None

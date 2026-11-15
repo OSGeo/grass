@@ -128,8 +128,8 @@ int write_boundary(struct COOR *seed)
 /* writes binary and ASCII digit files and supplemental file */
 static int
 write_bnd(struct COOR *line_begin,
-          struct COOR *line_end UNUSED, /* start and end point of line */
-          int n                         /* number of points to write */
+          struct COOR *line_end G_UNUSED, /* start and end point of line */
+          int n                           /* number of points to write */
 )
 {
     static struct line_pnts *points = NULL;
@@ -173,10 +173,10 @@ write_bnd(struct COOR *line_begin,
 /* writes binary and ASCII digit files and supplemental file */
 #define SNAP_THRESH 0.00001
 
-static int
-write_smooth_bnd(struct COOR *line_begin,
-                 struct COOR *line_end UNUSED, /* start and end point of line */
-                 int n                         /* number of points to write */
+static int write_smooth_bnd(
+    struct COOR *line_begin,
+    struct COOR *line_end G_UNUSED, /* start and end point of line */
+    int n                           /* number of points to write */
 )
 {
     static struct line_pnts *points = NULL;

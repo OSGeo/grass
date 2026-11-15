@@ -101,7 +101,7 @@ are thus part of the mask. In the example below, all raster cells are part of
 the mask, i.e., nothing is blocked out from analysis and/or display.
 
 <div class="code"><pre>
-r.mapcalc -s "map3 = rand(0.0,1.0)"
+r.mapcalc "map3 = rand(0.0,1.0)"
 r.mask raster=map3
 </pre></div>
 
@@ -112,7 +112,7 @@ the map's quantisation rules (this defaults to round-to-nearest, but can be
 changed with r.quant).
 
 <div class="code"><pre>
-r.mapcalc -s "map4 = rand(0.0,1.0)"
+r.mapcalc "map4 = rand(0.0,1.0)"
 g.copy raster=map4,MASK
 </pre></div>
 

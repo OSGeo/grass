@@ -38,60 +38,79 @@ set(_include_dirs)
 set(_link_libraries)
 set(_library_dirs)
 if(PkgConfig_FOUND)
-  set(_modules ft fc pdf ps svg)
-  if(WITH_X11)
-    list(APPEND _modules xlib xlib-xrender)
-  endif()
-  foreach(_module ${_modules})
-    pkg_check_modules(PC_cairo-${_module} cairo-${_module} QUIET)
-    list(APPEND _include_dirs ${PC_cairo-${_module}_INCLUDE_DIRS})
-    list(APPEND _link_libraries ${PC_cairo-${_module}_LIBRARIES})
-    list(APPEND _library_dirs ${PC_cairo-${_module}_LIBRARY_DIRS})
-  endforeach()
+    set(_modules
+        ft
+        fc
+        pdf
+        ps
+        svg
+    )
+    if(WITH_X11)
+        list(APPEND _modules xlib xlib-xrender)
+    endif()
+    foreach(_module ${_modules})
+        pkg_check_modules(PC_cairo-${_module} cairo-${_module} QUIET)
+        list(APPEND _include_dirs ${PC_cairo-${_module}_INCLUDE_DIRS})
+        list(APPEND _link_libraries ${PC_cairo-${_module}_LIBRARIES})
+        list(APPEND _library_dirs ${PC_cairo-${_module}_LIBRARY_DIRS})
+    endforeach()
 endif()
 
 find_path(
-  Cairo_INCLUDE_DIR
-  NAMES cairo.h
-  HINTS ${PC_CAIRO_INCLUDEDIR} ${PC_CAIRO_INCLUDE_DIRS}
-  PATH_SUFFIXES cairo)
+    Cairo_INCLUDE_DIR
+    NAMES cairo.h
+    HINTS ${PC_CAIRO_INCLUDEDIR} ${PC_CAIRO_INCLUDE_DIRS}
+    PATH_SUFFIXES cairo
+)
 
 find_library(
-  Cairo_LIBRARY_RELEASE
-  NAMES cairo
-  HINTS ${PC_CAIRO_LIBDIR} ${PC_CAIRO_LIBRARY_DIRS})
+    Cairo_LIBRARY_RELEASE
+    NAMES cairo
+    HINTS ${PC_CAIRO_LIBDIR} ${PC_CAIRO_LIBRARY_DIRS}
+)
 
 find_library(
-  Cairo_LIBRARY_DEBUG
-  NAMES cairod
-  HINTS ${PC_CAIRO_LIBDIR} ${PC_CAIRO_LIBRARY_DIRS})
+    Cairo_LIBRARY_DEBUG
+    NAMES cairod
+    HINTS ${PC_CAIRO_LIBDIR} ${PC_CAIRO_LIBRARY_DIRS}
+)
 
 set(Cairo_LIBRARY)
 if(Cairo_LIBRARY_DEBUG)
-  set(Cairo_LIBRARY ${Cairo_LIBRARY_DEBUG})
+    set(Cairo_LIBRARY ${Cairo_LIBRARY_DEBUG})
 elseif(Cairo_LIBRARY_RELEASE)
-  set(Cairo_LIBRARY ${Cairo_LIBRARY_RELEASE})
+    set(Cairo_LIBRARY ${Cairo_LIBRARY_RELEASE})
 endif()
 
 if(Cairo_INCLUDE_DIR)
-  if(EXISTS "${Cairo_INCLUDE_DIR}/cairo-version.h")
-    file(READ "${Cairo_INCLUDE_DIR}/cairo-version.h" Cairo_VERSION_CONTENT)
+    if(EXISTS "${Cairo_INCLUDE_DIR}/cairo-version.h")
+        file(READ "${Cairo_INCLUDE_DIR}/cairo-version.h" Cairo_VERSION_CONTENT)
 
-    string(REGEX MATCH "#define +CAIRO_VERSION_MAJOR +([0-9]+)" _dummy
-                 "${Cairo_VERSION_CONTENT}")
-    set(Cairo_VERSION_MAJOR "${CMAKE_MATCH_1}")
+        string(
+            REGEX MATCH "#define +CAIRO_VERSION_MAJOR +([0-9]+)"
+            _dummy
+            "${Cairo_VERSION_CONTENT}"
+        )
+        set(Cairo_VERSION_MAJOR "${CMAKE_MATCH_1}")
 
-    string(REGEX MATCH "#define +CAIRO_VERSION_MINOR +([0-9]+)" _dummy
-                 "${Cairo_VERSION_CONTENT}")
-    set(Cairo_VERSION_MINOR "${CMAKE_MATCH_1}")
+        string(
+            REGEX MATCH "#define +CAIRO_VERSION_MINOR +([0-9]+)"
+            _dummy
+            "${Cairo_VERSION_CONTENT}"
+        )
+        set(Cairo_VERSION_MINOR "${CMAKE_MATCH_1}")
 
-    string(REGEX MATCH "#define +CAIRO_VERSION_MICRO +([0-9]+)" _dummy
-                 "${Cairo_VERSION_CONTENT}")
-    set(Cairo_VERSION_MICRO "${CMAKE_MATCH_1}")
+        string(
+            REGEX MATCH "#define +CAIRO_VERSION_MICRO +([0-9]+)"
+            _dummy
+            "${Cairo_VERSION_CONTENT}"
+        )
+        set(Cairo_VERSION_MICRO "${CMAKE_MATCH_1}")
 
-    set(Cairo_VERSION
-        "${Cairo_VERSION_MAJOR}.${Cairo_VERSION_MINOR}.${Cairo_VERSION_MICRO}")
-  endif()
+        set(Cairo_VERSION
+            "${Cairo_VERSION_MAJOR}.${Cairo_VERSION_MINOR}.${Cairo_VERSION_MICRO}"
+        )
+    endif()
 endif()
 
 list(REMOVE_DUPLICATES _library_dirs)
@@ -100,23 +119,30 @@ list(REMOVE_DUPLICATES Cairo_INCLUDE_DIRS)
 set(Cairo_LIBRARIES ${Cairo_LIBRARY} ${_link_libraries})
 list(REMOVE_DUPLICATES Cairo_LIBRARIES)
 
-mark_as_advanced(Cairo_INCLUDE_DIRS Cairo_LIBRARY Cairo_LIBRARY_RELEASE
-                 Cairo_LIBRARY_DEBUG)
+mark_as_advanced(
+    Cairo_INCLUDE_DIRS
+    Cairo_LIBRARY
+    Cairo_LIBRARY_RELEASE
+    Cairo_LIBRARY_DEBUG
+)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
-  Cairo
-  REQUIRED_VARS Cairo_INCLUDE_DIR Cairo_LIBRARY
-  VERSION_VAR Cairo_VERSION)
+    Cairo
+    REQUIRED_VARS Cairo_INCLUDE_DIR Cairo_LIBRARY
+    VERSION_VAR Cairo_VERSION
+)
 
 if(Cairo_FOUND AND NOT TARGET Cairo::Cairo)
-  add_library(Cairo::Cairo UNKNOWN IMPORTED)
-  set_target_properties(
-    Cairo::Cairo
-    PROPERTIES IMPORTED_LOCATION "${Cairo_LIBRARY}"
-               INTERFACE_INCLUDE_DIRECTORIES "${Cairo_INCLUDE_DIR}"
-               INTERFACE_LINK_LIBRARIES "${Cairo_LIBRARIES}"
-               INTERFACE_LINK_DIRECTORIES "${_library_dirs}")
+    add_library(Cairo::Cairo UNKNOWN IMPORTED)
+    set_target_properties(
+        Cairo::Cairo
+        PROPERTIES
+            IMPORTED_LOCATION "${Cairo_LIBRARY}"
+            INTERFACE_INCLUDE_DIRECTORIES "${Cairo_INCLUDE_DIR}"
+            INTERFACE_LINK_LIBRARIES "${Cairo_LIBRARIES}"
+            INTERFACE_LINK_DIRECTORIES "${_library_dirs}"
+    )
 endif()
 
 unset(_include_dirs)
@@ -125,6 +151,10 @@ unset(_library_dirs)
 
 set(CMAKE_REQUIRED_INCLUDES ${Cairo_INCLUDE_DIRS})
 include(CheckSymbolExists)
-check_symbol_exists(CAIRO_HAS_XLIB_XRENDER_SURFACE "cairo.h" CAIRO_HAS_XLIB_XRENDER_SURFACE)
+check_symbol_exists(
+    CAIRO_HAS_XLIB_XRENDER_SURFACE
+    "cairo.h"
+    CAIRO_HAS_XLIB_XRENDER_SURFACE
+)
 mark_as_advanced(CAIRO_HAS_XLIB_XRENDER_SURFACE)
 unset(CMAKE_REQUIRED_INCLUDES)

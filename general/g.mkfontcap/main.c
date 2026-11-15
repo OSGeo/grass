@@ -5,11 +5,8 @@
  * PURPOSE:      Generates the font configuration file by scanning various
  *               directories for GRASS stroke and Freetype-compatible fonts.
  *
- * COPYRIGHT:    (C) 2007-2024 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2007-2024 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -86,13 +83,12 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
 
     if (!tostdout->answer) {
-        const char *gisbase = G_gisbase();
         const char *alt_file = getenv("GRASS_FONT_CAP");
 
         if (alt_file)
             fontcapfile = G_store(alt_file);
         else
-            G_asprintf(&fontcapfile, "%s/etc/fontcap", gisbase);
+            G_asprintf(&fontcapfile, "%s/fontcap", G_etc_dir());
 
         if (!access(fontcapfile, F_OK)) { /* File exists? */
             if (!G_get_overwrite())

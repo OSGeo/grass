@@ -8,11 +8,9 @@
 #               Converted to Python by Glynn Clements
 #               German ALKIS support added by Veronica Köß
 # PURPOSE:	WFS support
-# COPYRIGHT:	(C) 2006-2024 Markus Neteler and the GRASS Development Team
-#
-# 		This program is free software under the GNU General
-# 		Public License (>=v2). Read the file COPYING that
-# 		comes with GRASS for details.
+# SPDX-FileCopyrightText: 2006-2024 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # GetFeature example:
 # http://mapserver.gdf-hannover.de/cgi-bin/grassuserwfs?REQUEST=GetFeature&SERVICE=WFS&VERSION=1.0.0
@@ -162,14 +160,14 @@ def main():
     # Set user and password if given
     if options["username"] and options["password"]:
         grass.message(_("Setting username and password..."))
-        if os.path.isfile(options["username"]):
+        if Path(options["username"]).is_file():
             filecontent = Path(options["username"]).read_text()
             user = filecontent.strip()
         elif options["username"] in os.environ:
             user = os.environ[options["username"]]
         else:
             user = options["username"]
-        if os.path.isfile(options["password"]):
+        if Path(options["password"]).is_file():
             filecontent = Path(options["password"]).read_text()
             pw = filecontent.strip()
         elif options["password"] in os.environ:

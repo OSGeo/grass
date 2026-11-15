@@ -12,11 +12,8 @@
  *               Vaclav Petras <wenzeslaus gmail com> (various features)
  *
  * PURPOSE:
- * COPYRIGHT:    (C) 1999-2016 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2016 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 /* Chris Rewerts
@@ -62,7 +59,7 @@ static void set_optimal_text_size(double text_width, double text_height,
 {
     D_text_size(text_width, text_height);
     D_get_text_box(text, tt, tb, tl, tr);
-    while ((tt - tb) > YTIC_DIST) {
+    while ((*tt - *tb) > YTIC_DIST) {
         text_width *= 0.75;
         text_height *= 0.75;
         D_text_size(text_width, text_height);
@@ -89,7 +86,7 @@ static char *icon_files(void)
 
     list = NULL;
     len = 0;
-    snprintf(path, sizeof(path), "%s/etc/symbol", G_gisbase());
+    snprintf(path, sizeof(path), "%s/symbol", G_etc_dir());
 
     dir = opendir(path);
     if (!dir)
@@ -102,7 +99,7 @@ static char *icon_files(void)
         if (d->d_name[0] == '.')
             continue;
 
-        snprintf(path_i, sizeof(path_i), "%s/etc/symbol/%s", G_gisbase(),
+        snprintf(path_i, sizeof(path_i), "%s/symbol/%s", G_etc_dir(),
                  d->d_name);
         dir_i = opendir(path_i);
 
@@ -191,8 +188,8 @@ int main(int argc, char **argv)
     float max_y;
     float min_y;
     float height, width;
-    float xscale;
-    float yscale;
+    double xscale;
+    double yscale;
 
     char txt[1024];
     char tic_name[1024];
@@ -501,7 +498,7 @@ int main(int argc, char **argv)
                                      &rgb_b);
 
             if (ret == 0)
-                G_fatal_error(_("Color <%s> cannot for option %s be parsed"),
+                G_fatal_error(_("Color <%s> for option <%s> cannot be parsed"),
                               point_color2_opt->answer, point_color2_opt->key);
             else if (ret == 2)
                 secondary_color.a = RGBA_COLOR_TRANSPARENT;
@@ -595,7 +592,7 @@ int main(int argc, char **argv)
             }
         }
         else if (num_y_files != i)
-            G_fatal_error(_("Number of widths (%d) is lower then"
+            G_fatal_error(_("Number of widths (%d) is lower than"
                             " the number of files (%d)"),
                           i, num_y_files);
     }
@@ -982,7 +979,7 @@ int main(int argc, char **argv)
                 /* draw a tic-mark number */
 
                 if (scale_y_labels)
-                    snprintf(txt, sizeof(txt), "%f.0",
+                    snprintf(txt, sizeof(txt), "%.0f",
                              (i / tic_unit * y_scale));
                 else
                     snprintf(txt, sizeof(txt), "%d", (i / tic_unit));

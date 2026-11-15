@@ -4,12 +4,8 @@
  * AUTHOR(S):  Maximilian Maldacker
  *
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ * SPDX-FileCopyrightText: 2002-2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************/
 #include "data_structures.h"
@@ -52,7 +48,7 @@ void init_stack(int size)
 
 /** compare the points along the x axis
  */
-int cmp_points(const void *v1, const void *v2, void *param UNUSED)
+int cmp_points(const void *v1, const void *v2, void *param G_UNUSED)
 {
     struct Point *p1 = (struct Point *)v1;
     struct Point *p2 = (struct Point *)v2;

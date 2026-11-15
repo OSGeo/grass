@@ -19,10 +19,6 @@
 
 void open_files(void)
 {
-    /* Open existing file and set the input file descriptor. */
-
-    fd_in = Rast_open_old(rast_in_name, "");
-
     /* Open new file and set the output file descriptor. */
 
     if (mparam != FEATURE)

@@ -8,11 +8,8 @@
  *
  * PURPOSE:      Converts GRASS vector to one of supported OGR vector formats.
  *
- * COPYRIGHT:    (C) 2001-2017 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2017 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************/
 
@@ -271,7 +268,6 @@ int main(int argc, char *argv[])
         projunits = G_get_projunits();
         projepsg = G_get_projepsg();
 
-#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
         char *indef = NULL, *inwkt = NULL;
 
         if ((indef = G_get_projsrid())) {
@@ -292,11 +288,9 @@ int main(int argc, char *argv[])
         if (inwkt && *inwkt) {
             Ogr_projection = OSRNewSpatialReference(inwkt);
         }
-#endif
         if (!Ogr_projection)
             Ogr_projection = GPJ_grass_to_osr2(projinfo, projunits, projepsg);
 
-#if GDAL_VERSION_MAJOR >= 3 && PROJ_VERSION_MAJOR >= 6
         if (Ogr_projection) {
             /* convert bound CRS */
             PJ *obj = NULL;
@@ -337,7 +331,6 @@ int main(int argc, char *argv[])
             if (inwkt)
                 CPLFree(inwkt);
         }
-#endif
 
         if (Ogr_projection == NULL)
             G_fatal_error(_("Unable to create OGR spatial reference"));
@@ -563,8 +556,9 @@ int main(int argc, char *argv[])
     found = FALSE;
     for (i = 0; i < GDALDatasetGetLayerCount(hDS); i++) {
         Ogr_layer = GDALDatasetGetLayer(hDS, i);
-        Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-        if (G_strcasecmp(OGR_FD_GetName(Ogr_field), options.layer->answer))
+        Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+        if (G_strcasecmp(OGR_FD_GetName(Ogr_featuredefn),
+                         options.layer->answer))
             continue;
 
         found = TRUE;
@@ -693,8 +687,8 @@ int main(int argc, char *argv[])
             }
 
             if (flags.append->answer) {
-                Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-                if (OGR_FD_GetFieldIndex(Ogr_field, GV_KEY_COLUMN) > -1)
+                Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+                if (OGR_FD_GetFieldIndex(Ogr_featuredefn, GV_KEY_COLUMN) > -1)
                     create_field = FALSE;
                 else
                     G_warning(_("New attribute column <%s> added to the table"),
@@ -765,8 +759,8 @@ int main(int argc, char *argv[])
                     continue;
 
                 if (flags.append->answer) {
-                    Ogr_field = OGR_L_GetLayerDefn(Ogr_layer);
-                    if (OGR_FD_GetFieldIndex(Ogr_field, colname[i]) > -1)
+                    Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+                    if (OGR_FD_GetFieldIndex(Ogr_featuredefn, colname[i]) > -1)
                         /* skip existing fields */
                         continue;
                     else

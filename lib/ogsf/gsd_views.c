@@ -5,12 +5,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL (January 1993)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -18,6 +14,11 @@
 
 #include <grass/config.h>
 
+#if defined(OPENGL_WINDOWS)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#undef WIN32_LEAN_AND_MEAN
+#endif
 #if defined(OPENGL_X11) || defined(OPENGL_WINDOWS)
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -447,11 +448,11 @@ void gsd_surf2model(Point3 point)
     GS_get_scale(&sx, &sy, &sz, 1);
     GS_get_zrange(&min, &max, 0);
 
-    point[Z] = (sz ? (point[Z] - min) * sz : 0.0);
+    point[Z] = (sz ? (point[Z] - min) * sz : 0.0f);
 
     /* need to unscale x & y */
-    point[X] = (sx ? point[X] * sx : 0.0);
-    point[Y] = (sy ? point[Y] * sy : 0.0);
+    point[X] = (sx ? point[X] * sx : 0.0f);
+    point[Y] = (sy ? point[Y] * sy : 0.0f);
 
     return;
 }

@@ -9,8 +9,8 @@ might be assigned a value equal to the average of the values appearing
 in its 3 x 3 cell "neighborhood" in the input layer. Note that the
 centre cell is also included in the calculation.
 
-![Illustration for an 3x3 average neighborhood](r_neighbors.png)  
-*Figure: Illustration for an 3x3 average neighborhood*
+![Illustration for an 3x3 sum neighborhood](r_neighbors.png)  
+*Figure: Illustration for an 3x3 sum neighborhood*
 
 ### OPTIONS
 
@@ -203,7 +203,7 @@ text file. For example, to calculate the focal mean with a matrix
 **size** of 3,
 
 ```sh
-r.neigbors in=input.map out=output.map size=3 weighting_function=file \
+r.neighbors in=input.map out=output.map size=3 weighting_function=file \
 weight=weights.txt
 ```
 

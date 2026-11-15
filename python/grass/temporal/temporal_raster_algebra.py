@@ -2,10 +2,8 @@
 
 Temporal raster algebra
 
-(C) 2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Thomas Leppelt and Soeren Gebbert
 
@@ -91,9 +89,11 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         )
 
         if spatial is True:
-            self.m_mapcalc = pymod.Module("r.mapcalc", region="union", run_=False)
+            self.m_mapcalc = pymod.Module(
+                "r.mapcalc", region="union", nprocs=1, run_=False
+            )
         else:
-            self.m_mapcalc = pymod.Module("r.mapcalc")
+            self.m_mapcalc = pymod.Module("r.mapcalc", nprocs=1, run_=False)
         self.m_mremove = pymod.Module("g.remove")
 
     def parse(self, expression, basename=None, overwrite: bool = False):
