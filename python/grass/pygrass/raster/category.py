@@ -145,6 +145,10 @@ class Category(list):
                          RASTER_MAP_TYPE 	data_type
                          )
         """
+        # Rast_get_ith_cat() returns "" both for an invalid index and for an
+        # empty label, so check the index here to allow empty labels.
+        if not 0 <= index < self.c_cats.ncats:
+            raise GrassError(_("Error executing: Rast_get_ith_cat"))
         min_cat = ctypes.pointer(RTYPE[self.mtype]["grass def"]())
         max_cat = ctypes.pointer(RTYPE[self.mtype]["grass def"]())
         lab = decode(
@@ -156,9 +160,6 @@ class Category(list):
                 self._gtype,
             )
         )
-        # Manage C function Errors
-        if lab == "":
-            raise GrassError(_("Error executing: Rast_get_ith_cat"))
         if max_cat.contents.value == min_cat.contents.value:
             max_cat = None
         else:
@@ -214,14 +215,15 @@ class Category(list):
         libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
 
     def _read_cats(self):
-        """Copy from the C struct to the list"""
+        """Replace the list content with the categories from the C struct"""
+        self.clear()
         for i in range(self.c_cats.ncats):
             self.append(self._get_c_cat(i))
 
     def _write_cats(self):
         """Copy from the list data to the C struct"""
-        # reset only the C struct
-        libraster.Rast_init_cats("", ctypes.byref(self.c_cats))
+        # Reset only the C struct, keeping its title, which is not in the list.
+        libraster.Rast_init_cats(self.title, ctypes.byref(self.c_cats))
         # write to the c struct
         for cat in iter(self):
             label, min_cat, max_cat = cat
@@ -270,6 +272,9 @@ class Category(list):
         :param category: Category class to be copied
         :type category: Category object
         """
+        # The C struct of the source is only rebuilt from its list on write,
+        # so refresh it to copy list edits which were not written yet.
+        category._write_cats()
         libraster.Rast_copy_cats(
             ctypes.byref(self.c_cats),  # to
             ctypes.byref(category.c_cats),  # from
@@ -340,7 +345,10 @@ class Category(list):
         Path(filename).write_text("\n".join(cats))
 
     def sort(self):
-        libraster.Rast_sort_cats(ctypes.byref(self.c_cats))
+        """Sort the categories by their minimum value, like Rast_sort_cats()"""
+        # Sort the list directly: write() rebuilds the C struct from it, and
+        # reading the C struct back would fail on empty labels.
+        super().sort(key=itemgetter(1))
 
     def labels(self):
         return list(map(itemgetter(0), self))
