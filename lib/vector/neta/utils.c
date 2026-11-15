@@ -5,10 +5,9 @@
 
    Utils subroutines.
 
-   (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2009-2010 Daniel Bundala
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Daniel Bundala (Google Summer of Code 2009)
  */
@@ -172,8 +171,8 @@ int NetA_get_node_costs(struct Map_info *In, int layer, char *column,
    nodes_to_features contains the index of a feature adjacent to each
    node or -1 if no such feature specified by varray
    exists. Nodes_to_features might be NULL, in which case it is left
-   unitialised. Nodes_to_features will be wrong if several lines connect
-   to the same node.
+   uninitialised. Nodes_to_features will be wrong if several lines
+   connect to the same node.
 
    \param map pointer to Map_info structure
    \param varray pointer to varray structure

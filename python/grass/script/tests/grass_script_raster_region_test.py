@@ -1,0 +1,217 @@
+import grass.script as gs
+from grass.tools import Tools
+
+
+def region_exists(name, env):
+    """Return True if a saved region with the name is found"""
+    found = Tools(env=env).g_findfile(element="windows", file=name, format="json")
+    return found["name"] is not None
+
+
+def test_region_manager_with_g_region(session_2x2):
+    """Test RegionManager with g.region call."""
+    assert "WIND_OVERRIDE" not in session_2x2.env
+
+    with gs.RegionManager(env=session_2x2.env) as manager:
+        assert "WIND_OVERRIDE" in session_2x2.env
+        assert session_2x2.env["WIND_OVERRIDE"] == manager.region_name
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 2
+        assert region["cols"] == 2
+
+        gs.run_command("g.region", n=10, s=0, e=10, w=0, res=1, env=session_2x2.env)
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 10
+        assert region["cols"] == 10
+
+        manager.set_region(n=6, s=0, e=6, w=0, res=1)
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 6
+        assert region["cols"] == 6
+
+    assert "WIND_OVERRIDE" not in session_2x2.env
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+
+
+def test_region_manager_with_region_parameters(session_2x2):
+    """Test RegionManager with input region parameters."""
+    assert "WIND_OVERRIDE" not in session_2x2.env
+
+    with gs.RegionManager(n=10, s=0, e=10, w=0, res=1, env=session_2x2.env) as manager:
+        assert "WIND_OVERRIDE" in session_2x2.env
+        assert session_2x2.env["WIND_OVERRIDE"] == manager.region_name
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 10
+        assert region["cols"] == 10
+
+        gs.run_command("g.region", n=5, s=0, e=5, w=0, res=1, env=session_2x2.env)
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 5
+        assert region["cols"] == 5
+
+        manager.set_region(n=6, s=0, e=6, w=0, res=1)
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 6
+        assert region["cols"] == 6
+
+    assert "WIND_OVERRIDE" not in session_2x2.env
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+
+
+def test_region_manager_env(session_2x2):
+    """Test RegionManagerEnv simple use case."""
+    assert "GRASS_REGION" not in session_2x2.env
+
+    with gs.RegionManagerEnv(env=session_2x2.env) as manager:
+        assert "GRASS_REGION" in session_2x2.env
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 2
+        assert region["cols"] == 2
+
+        manager.set_region(n=5, s=0, e=5, w=0, res=1)
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 5
+        assert region["cols"] == 5
+
+    assert "GRASS_REGION" not in session_2x2.env
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+
+
+def test_region_manager_env_problem_with_g_region(session_2x2):
+    """Test RegionManagerEnv with region parameters and g.region call."""
+    assert "GRASS_REGION" not in session_2x2.env
+
+    with gs.RegionManagerEnv(
+        n=10, s=0, e=10, w=0, res=1, env=session_2x2.env
+    ) as manager:
+        assert "GRASS_REGION" in session_2x2.env
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 10
+        assert region["cols"] == 10
+
+        # g.region will not change GRASS_REGION (but reads from it)
+        gs.run_command("g.region", res=2, env=session_2x2.env)
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 10
+        assert region["cols"] == 10
+
+        manager.set_region(n=2, s=0, e=2, w=0, res=1)
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 2
+        assert region["cols"] == 2
+
+    assert "GRASS_REGION" not in session_2x2.env
+    # region changed by g.region
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 5
+    assert region["cols"] == 5
+
+
+def test_region_manager_activate_deactivate(session_2x2):
+    """Test RegionManager with explicit activate/deactivate."""
+    assert "WIND_OVERRIDE" not in session_2x2.env
+
+    manager = gs.RegionManager(env=session_2x2.env)
+    manager.activate()
+    assert "WIND_OVERRIDE" in session_2x2.env
+    assert session_2x2.env["WIND_OVERRIDE"] == manager.region_name
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+
+    # Change region inside manager
+    manager.set_region(n=4, s=0, e=4, w=0, res=1)
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 4
+    assert region["cols"] == 4
+
+    # Deactivate restores original
+    manager.deactivate()
+    assert "WIND_OVERRIDE" not in session_2x2.env
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+
+    # Deactivate twice is harmless
+    manager.deactivate()
+    assert "WIND_OVERRIDE" not in session_2x2.env
+
+
+def test_region_manager_env_activate_deactivate(session_2x2):
+    """Test RegionManagerEnv with explicit activate/deactivate."""
+    assert "GRASS_REGION" not in session_2x2.env
+
+    manager = gs.RegionManagerEnv(env=session_2x2.env)
+    manager.activate()
+    assert "GRASS_REGION" in session_2x2.env
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+
+    # Change region inside manager
+    manager.set_region(n=5, s=0, e=5, w=0, res=1)
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 5
+    assert region["cols"] == 5
+
+    # Deactivate restores original
+    manager.deactivate()
+    assert "GRASS_REGION" not in session_2x2.env
+    region = gs.region(env=session_2x2.env)
+    assert region["rows"] == 2
+    assert region["cols"] == 2
+
+    # Deactivate twice is harmless
+    manager.deactivate()
+    assert "GRASS_REGION" not in session_2x2.env
+
+
+def test_region_manager_save(session_2x2):
+    """Test RegionManager can persist the temporarily modified region explicitly."""
+
+    with gs.RegionManager(n=6, s=0, e=6, w=0, res=1, env=session_2x2.env) as manager:
+        manager.save("saved_region")
+
+    with gs.RegionManager(region="saved_region", env=session_2x2.env):
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 6
+        assert region["cols"] == 6
+
+
+def test_region_manager_env_save(session_2x2):
+    """Test RegionManagerEnv can persist the temporarily modified region explicitly."""
+
+    with gs.RegionManagerEnv(n=6, s=0, e=6, w=0, res=1, env=session_2x2.env) as manager:
+        manager.save("saved_region_env")
+
+    with gs.RegionManagerEnv(region="saved_region_env", env=session_2x2.env):
+        region = gs.region(env=session_2x2.env)
+        assert region["rows"] == 6
+        assert region["cols"] == 6
+
+
+def test_region_manager_removes_temporary_region(session_2x2):
+    """Test RegionManager does not leave the region it saved in the mapset."""
+    env = session_2x2.env
+    with gs.RegionManager(env=env) as manager:
+        assert region_exists(manager.region_name, env=env)
+    assert not region_exists(manager.region_name, env=env)
+
+
+def test_region_manager_nested_removes_temporary_regions(session_2x2):
+    """Test a nested RegionManager does not leave its saved region in the mapset."""
+    env = session_2x2.env
+    with (
+        gs.RegionManager(env=env) as outer,
+        gs.RegionManager(env=env) as inner,
+    ):
+        assert region_exists(outer.region_name, env=env)
+        assert region_exists(inner.region_name, env=env)
+    assert not region_exists(outer.region_name, env=env)
+    assert not region_exists(inner.region_name, env=env)

@@ -8,10 +8,8 @@ Classes:
  - goutput::GStc
  - goutput::GConsoleFrame
 
-(C) 2007-2012 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2012 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton (Arizona State University)
 @author Martin Landa <landa.martin gmail.com>
@@ -26,6 +24,7 @@ import wx
 from wx import stc
 
 from grass.pydispatch.signal import Signal
+from pathlib import Path
 
 # needed just for testing
 if __name__ == "__main__":
@@ -352,15 +351,12 @@ class GConsoleWindow(wx.SplitterWindow):
             path = dlg.GetPath()
 
             try:
-                output = open(path, "w")
-                output.write(text)
+                Path(path).write_text(text)
             except OSError as e:
                 GError(
                     _("Unable to write file '%(path)s'.\n\nDetails: %(error)s")
                     % {"path": path, "error": e}
                 )
-            finally:
-                output.close()
             message = _("Command output saved into '%s'") % path
             self.showNotification.emit(message=message)
 
@@ -619,12 +615,13 @@ class GStc(stc.StyledTextCtrl):
             for c in message:
                 if c == "\b":
                     self.linePos -= 1
-                else:
-                    self.SetCurrentPos(self.linePos)
-                    self.ReplaceSelection(c)
-                    self.linePos = self.GetCurrentPos()
-                    if c != " ":
-                        last_c = c
+                    continue
+
+                self.SetCurrentPos(self.linePos)
+                self.ReplaceSelection(c)
+                self.linePos = self.GetCurrentPos()
+                if c != " ":
+                    last_c = c
             if last_c not in (digits):
                 self.AddTextWrapped("\n", wrap=None)
                 self.linePos = -1

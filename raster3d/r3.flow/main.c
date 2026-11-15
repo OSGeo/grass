@@ -4,11 +4,8 @@
  * AUTHOR(S):    Anna Petrasova kratochanna <at> gmail <dot> com
  * PURPOSE:      Computes 3D flow lines and flow accumulation based on 3D
  *               raster map(s)
- * COPYRIGHT:    (C) 2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -49,8 +46,9 @@ static void create_table(struct Map_info *flowline_vec,
     db_set_error_handler_driver(drvr);
 
     *driver = drvr;
-    sprintf(buf, "create table %s (cat integer, velocity double precision",
-            fi->table);
+    snprintf(buf, sizeof(buf),
+             "create table %s (cat integer, velocity double precision",
+             fi->table);
     db_set_string(&sql, buf);
     if (write_scalar)
         db_append_string(&sql, ", input double precision");

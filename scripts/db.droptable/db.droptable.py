@@ -6,11 +6,9 @@
 # AUTHOR(S):    Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Interface to db.execute to drop an attribute table
-# COPYRIGHT:    (C) 2007, 2012 by Markus Neteler and the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2007, 2012 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -79,7 +77,6 @@ def main():
 
     if not force:
         gs.message(_("The table <%s> would be deleted.") % table)
-        gs.message("")
         gs.message(_("You must use the force flag to actually remove it. Exiting."))
         sys.exit(0)
 

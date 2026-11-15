@@ -110,7 +110,8 @@ int listdb(dbString *path, int npaths, dbHandle **handles, int *count)
         if (len > 0 && G_strcasecmp(dp->d_name + len, ".db") == 0) {
             char fpath[GPATH_MAX];
 
-            sprintf(fpath, "%s/%s", db_get_string(path), dp->d_name);
+            snprintf(fpath, sizeof(fpath), "%s/%s", db_get_string(path),
+                     dp->d_name);
             if (sqlite3_open(fpath, &sqlite) == SQLITE_OK) {
                 if (sqlite3_close(sqlite) == SQLITE_BUSY) {
                     db_d_append_error(

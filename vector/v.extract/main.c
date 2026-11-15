@@ -10,11 +10,8 @@
  *             creates a new vector map containing only the selected
  *             features.
  *
- * COPYRIGHT:  (C) 2002-2009, 2011 by the GRASS Development Team
- *
- *             This program is free software under the GNU General
- *             Public License (>=v2). Read the file COPYING that
- *             comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2002-2009, 2011 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * TODO:       - fix white space problems for file= option
  ****************************************************************/
@@ -257,7 +254,7 @@ int main(int argc, char **argv)
     else
         dissolve = FALSE;
 
-    /* Read categoy list */
+    /* Read category list */
     cat_count = 0;
     if (opt.list->answer != NULL) {
         /* no file of categories to read, process cat list */

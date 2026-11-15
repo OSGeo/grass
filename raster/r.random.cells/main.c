@@ -10,11 +10,8 @@
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      generates a random sets of cells that are at least
  *               some distance apart
- * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -31,7 +28,8 @@ double MaxDist, MaxDistSq;
 FLAG *Cells;
 CELLSORTER *DoNext;
 CELL **Out, *CellBuffer;
-int Seed, OutFD;
+int OutFD;
+struct G_random_state RandomState;
 int MaxCellsNum;
 struct Flag *Verbose;
 struct Option *Distance;
@@ -70,11 +68,7 @@ int main(int argc, char *argv[])
     MaxCells->options = "1-";
     MaxCells->description = _("Maximum number of cells to be created");
 
-    SeedStuff = G_define_option();
-    SeedStuff->key = "seed";
-    SeedStuff->type = TYPE_INTEGER;
-    SeedStuff->required = NO;
-    SeedStuff->description = _("Random seed, default [random]");
+    SeedStuff = G_define_standard_option(G_OPT_M_SEED);
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);

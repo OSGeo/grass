@@ -6,10 +6,8 @@
 Classes:
  - toolbars::ModelerToolbar
 
-(C) 2010-2023 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2010-2023 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 """
@@ -18,6 +16,7 @@ import sys
 
 import wx
 
+from core.globalvar import CheckWxVersion
 from gui_core.toolbars import BaseToolbar, BaseIcons
 
 from icons.icon import MetaIcon
@@ -30,7 +29,7 @@ class ModelerToolbar(BaseToolbar):
         BaseToolbar.__init__(self, parent)
 
         # workaround for http://trac.wxwidgets.org/ticket/13888
-        if sys.platform == "darwin":
+        if sys.platform == "darwin" and not CheckWxVersion([4, 2, 1]):
             parent.SetToolBar(self)
 
         self.InitToolbar(self._toolbarData())

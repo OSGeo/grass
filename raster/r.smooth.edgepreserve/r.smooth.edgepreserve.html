@@ -1,0 +1,130 @@
+<h2>DESCRIPTION</h2>
+
+<p>This module performs adaptive, edge-preserving raster smoothing
+using anisotropic diffusion. The result is a denoised raster that
+retains important features, especially edges. Unlike traditional
+smoothing methods (such as a uniform average filter, like the one available
+in <em>r.neighbors</em>), this module smooths only areas with similar values
+and works to preserve sharp transitions between different regions.
+An example is provided in the picture below: "A" is the original and
+"B" is the smoothed version.</p>
+
+<center>
+<img src="r_smooth_edgepreserve.jpg" border="1" alt="An example of smoothed image">
+</center>
+
+<p>The module supports three types of diffusivity (conductance) functions:
+<ul>
+    <li>Exponential</li>
+    <li>Quadratic <em>(both as proposed by Perona & Malik, 1990)</em></li>
+    <li>Tukey’s biweight <em>(as proposed by Black et al., 1998)</em></li>
+</ul>
+
+<p>The Tukey’s biweight function is more aggressive than the others and
+tends to produce large, smoothly blended areas. This makes it
+particularly useful for raster segmentation. If you prefer a gentler
+effect that preserves smaller features, you can use the <em>-p</em> flag,
+which switches to a softer variant of the Tukey function — ideal for
+applications like visualization.</p>
+
+<h3>PARAMETERS</h3>
+
+<ul>
+    <li><em>threshold</em>
+    Defines how small a difference in raster values should be treated as
+    noise. The unit depends on the raster (e.g., digital numbers, meters,
+    etc.), and should be adjusted individually for each map.</li>
+    <li><em>lambda</em>
+    Controls the smoothing rate.
+    <ul>
+        <li>For <em>exponential</em> and <em>quadratic</em> functions,
+        the value is automatically clamped between <em>0</em> and
+        <em>0.25</em> for numeric stability.</li>
+        <li>For <em>Tukey</em>, the full range is used.</li>
+    </ul></li>
+    <li><em>steps</em>
+    Specifies the number of smoothing iterations. Higher values result
+    in stronger smoothing. Note that:
+    <ul>
+        <li>Excessive iterations can cause loss of fine detail.</li>
+        <li>Detail preservation improves in this order:
+        <em>quadratic</em> → <em>exponential</em> → <em>Tukey</em> →
+        <em>Tukey</em> with <em>-p</em> flag.</li>
+    </ul></li>
+</ul>
+
+<h2>NOTES</h2>
+
+<p>Internally calculations are performed in double precision and only at the end
+converted to the same type as the input map.</p>
+
+<p>The module will try to keep all temporary data in RAM. Thus it is important
+to set the <em>memory</em> parameter as high as possible. If the map does
+not fit into RAM, a temporary file will be used instead.</p>
+
+<p>The original Perona & Malik paper uses von Neumann (4-connected) neighbourhood for
+value calculation, but this module uses Moore (8-connected) neighbourhood.
+Computed gradients of neighbouring cells are adjusted to equalise distances for
+diagonals and non-square cells.</p>
+
+<h2>EXAMPLES</h2>
+
+<div><pre class="code">
+# Set computational region to orthophoto map
+g.region raster=ortho_2001_t792_1m -p
+
+# Smooth with average in a 3x3 window. Note how all edges have became blurry
+# but at the same time streets and roofs are still noisy
+r.neighbors input=ortho_2001_t792_1m output=ortho_smoothed_avg \
+ size=3 method=average
+
+# Smooth with median in a 3x3 window. Although better than average smoothing,
+# thin lines still are lost and noise on streets and roofs is still present.
+r.neighbors input=ortho_2001_t792_1m output=ortho_smoothed_med \
+ size=3 method=median
+
+# Smooth with quadratic diffusivity function. Note better preservation of
+# small details and reduction of noise on streets and roofs.
+r.smooth.edgepreserve function=quadratic input=ortho_2001_t792_1m \
+ output=ortho_smoothed_qa threshold=15 lambda=0.4 steps=20
+
+# Smooth with exponential diffusivity function. Even better edge delineation
+# but at the same time increase of noise in really noisy areas.
+r.smooth.edgepreserve function=exponential input=ortho_2001_t792_1m \
+ output=ortho_smoothed_ex threshold=15 lambda=0.4 steps=20
+
+# Smooth with aggressive Tukey's diffusivity function. Better preservation of
+# minor details e.g. as road markings but little smoothing in areas with
+# fine, well expressed texture.
+r.smooth.edgepreserve function=tukey input=ortho_2001_t792_1m \
+ output=ortho_smoothed_ta threshold=15 lambda=0.4 steps=20
+
+# Smooth with preserving Tukey's diffusivity function. Only low noise areas
+# have been smoothed.
+r.smooth.edgepreserve function=tukey input=ortho_2001_t792_1m \
+ output=ortho_smoothed_tp threshold=15 lambda=0.4 steps=20 -p
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+Smooth with statistics: <em><a href="r.neghbours.html">r.neighbours</a></em><br>
+The Mumford-Shah variational model for image segmentation (an add-on):
+<em><a href="https://grass.osgeo.org/grass-stable/manuals/addons/r.smooth.seg.html">r.smooth.seg</a></em><br>
+
+<h2>REFERENCES</h2>
+
+<ul>
+<li>
+Perona P. and Malik J. 1990. Scale-space and edge detection using anisotropic
+diffusion. <em>IEEE transactions on pattern analysis and machine intelligence</em>,
+12(7).
+</li>
+<li>
+Black M.J., Sapiro G., Marimont D.H. and Heeger D. 1998. Robust anisotropic
+diffusion. <em>IEEE transactions on image processing</em>, 7(3).
+</li>
+</ul>
+
+<h2>AUTHORS</h2>
+
+Maris Nartiss, University of Latvia.

@@ -9,10 +9,8 @@ Classes:
  - extensions::ManageExtensionWindow
  - extensions::CheckListExtension
 
-(C) 2008-2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2008-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Anna Petrasova <kratochanna gmail.com>
@@ -185,7 +183,7 @@ class InstallExtensionWindow(wx.Frame):
         item = self.tree.GetSelected()
         if not item or "command" not in item[0].data:
             GError(_("Extension not defined"), parent=self)
-            return
+            return None
 
         name = item[0].data["command"]
 
@@ -383,23 +381,25 @@ class ExtensionTreeModelBuilder:
                     currentNode.data = {"command": value}
                 elif currentNode is not None:
                     currentNode.data[key] = value
-            else:
-                try:
-                    prefix, name = line.strip().split(".", 1)
-                except ValueError:
-                    prefix = ""
-                    name = line.strip()
 
-                if self._expandPrefix(prefix) == prefix:
-                    prefix = ""
-                module = prefix + "." + name
-                mainNode = self.mainNodes[self._expandPrefix(prefix)]
-                currentNode = self.model.AppendNode(parent=mainNode, label=module)
-                currentNode.data = {
-                    "command": module,
-                    "keywords": "",
-                    "description": "",
-                }
+                continue
+
+            try:
+                prefix, name = line.strip().split(".", 1)
+            except ValueError:
+                prefix = ""
+                name = line.strip()
+
+            if self._expandPrefix(prefix) == prefix:
+                prefix = ""
+            module = prefix + "." + name
+            mainNode = self.mainNodes[self._expandPrefix(prefix)]
+            currentNode = self.model.AppendNode(parent=mainNode, label=module)
+            currentNode.data = {
+                "command": module,
+                "keywords": "",
+                "description": "",
+            }
 
 
 class ManageExtensionWindow(wx.Frame):

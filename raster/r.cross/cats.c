@@ -7,11 +7,8 @@
  * PURPOSE:      Creates a cross product of the category values from
  *               multiple raster map layers.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -53,12 +50,12 @@ static char *get_label(CELL cat, struct Categories *lbls)
     static char temp[256];
 
     if (Rast_is_c_null_value(&cat)) {
-        sprintf(lbl = temp, "NULL");
+        snprintf(lbl = temp, sizeof(temp), "NULL");
     }
     else {
         lbl = Rast_get_c_cat(&cat, lbls);
         if (*lbl == 0)
-            sprintf(lbl = temp, "category %d", cat);
+            snprintf(lbl = temp, sizeof(temp), "category %d", cat);
     }
 
     return lbl;

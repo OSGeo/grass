@@ -12,15 +12,16 @@ include $(MODULE_TOPDIR)/include/Make/Multi.make
 
 default: multi thumbnails
 
-thumbnails: $(BIN)/r.mapcalc$(EXE) $(BIN)/r.colors$(EXE) $(HTMLDIR)/colortables
+thumbnails: $(BIN)/r.mapcalc$(EXE) $(BIN)/r.colors$(EXE) $(HTMLDIR)/colortables $(MDDIR)/source/colortables
 ifndef CROSS_COMPILING
-	-$(call run_grass, $(GRASS_HOME)/utils/thumbnails.py)
+	$(call run_grass, $(GRASS_HOME)/utils/thumbnails.py $(MDDIR)/source/colortables)
+	$(call run_grass, $(GRASS_HOME)/utils/thumbnails.py $(HTMLDIR)/colortables)
 endif
 
 $(HTMLDIR)/colortables: $(HTMLDIR)
 	$(MKDIR) $@
 
-$(BIN)/r.mapcalc$(EXE):
-	$(MAKE) -C ../r.mapcalc
+$(MDDIR)/source/colortables: $(MDDIR)
+	$(MKDIR) $@
 
 .PHONY: thumbnails

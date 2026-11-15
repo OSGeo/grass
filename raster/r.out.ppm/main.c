@@ -8,11 +8,8 @@
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      converts a GRASS raster map into a PPM image (obeying REGION)
- * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2007 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -77,8 +74,12 @@ int main(int argc, char *argv[])
         rast->answer++;
 
     if (strcmp(ppm_file->answer, "<rasterfilename>.ppm")) {
-        if (strcmp(ppm_file->answer, "-"))
-            strcpy(ofile, ppm_file->answer);
+        if (strcmp(ppm_file->answer, "-")) {
+            if (G_strlcpy(ofile, ppm_file->answer, sizeof(ofile)) >=
+                sizeof(ofile))
+                G_fatal_error(_("Output file name <%s> is too long"),
+                              ppm_file->answer);
+        }
         else
             do_stdout = 1;
     }
@@ -89,8 +90,10 @@ int main(int argc, char *argv[])
             if (p != map)
                 *p = '\0';
         }
-        strcpy(ofile, map);
-        strcat(ofile, ".ppm");
+        if (G_strlcpy(ofile, map, sizeof(ofile)) >= sizeof(ofile))
+            G_fatal_error(_("File name <%s> is too long"), map);
+        if (G_strlcat(ofile, ".ppm", sizeof(ofile)) >= sizeof(ofile))
+            G_fatal_error(_("File name <%s> is too long"), map);
     }
 
     /*G_get_set_window (&w); */ /* 10/99 MN: check for current region */

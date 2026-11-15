@@ -4,11 +4,8 @@
  * AUTHOR(S):    Raghavan Srinivasan, Agricultural Engineering, Purdue
  *                 University
  * PURPOSE:      Print numbers of category for raster cells
- * COPYRIGHT:    (C) 2000, 2012 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2000, 2012 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -304,15 +301,15 @@ int draw_number(int row, int col, double number, int prec,
     /* maybe ugly, but works */
     if (map_type == CELL_TYPE) {
         if (!Rast_is_c_null_value(&cell))
-            sprintf(no, "%d", (int)number);
+            snprintf(no, sizeof(no), "%d", (int)number);
         else
-            sprintf(no, "Null");
+            snprintf(no, sizeof(no), "Null");
     }
     else {
         if (!Rast_is_d_null_value(&dcell))
-            sprintf(no, "%.*f", prec, number);
+            snprintf(no, sizeof(no), "%.*f", prec, number);
         else
-            sprintf(no, "Null");
+            snprintf(no, sizeof(no), "Null");
     }
     len = strlen(no);
 

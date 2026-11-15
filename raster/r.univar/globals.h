@@ -1,14 +1,11 @@
 /*
  *  Calculates univariate statistics from the non-null cells
  *
- *   Copyright (C) 2004-2010 by the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2004-2010 GRASS Development Team
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author(s): Soeren Gebbert
  *              Based on r.univar from Hamish Bowman, University of Otago, New
  *              Zealand and Martin Landa zonal loop by Markus Metz
- *
- *      This program is free software under the GNU General Public
- *      License (>=v2). Read the file COPYING that comes with GRASS
- *      for details.
  *
  */
 
@@ -59,7 +56,7 @@ typedef struct {
 extern param_type param;
 extern zone_type zone_info;
 
-enum OutputFormat { PLAIN, JSON };
+enum OutputFormat { PLAIN, JSON, SHELL, CSV };
 
 /* fn prototypes */
 void heapsort_double(double *data, size_t n);
@@ -69,5 +66,6 @@ int print_stats(univar_stat *stats, enum OutputFormat format);
 int print_stats_table(univar_stat *stats);
 univar_stat *create_univar_stat_struct(int map_type, int n_perc);
 void free_univar_stat_struct(univar_stat *stats);
+univar_stat *univar_stat_with_percentiles(int map_type);
 
 #endif

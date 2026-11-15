@@ -7,6 +7,7 @@
 
 ## Last update
 
+* taken from GDAL 3.12.3 and SHAPELIB 1.6.2 (Apr 2026)
 * taken from GDAL 3.9.2 and SHAPELIB 1.6.0 (Sep 2024)
 * taken from GDAL 3.5.3 and SHAPELIB 1.5.0 (Dec 2022)
 * taken from GDAL 2.1.2 and SHAPELIB 1.3.0 (Thu Nov 24 10:45:41 CET 2016)

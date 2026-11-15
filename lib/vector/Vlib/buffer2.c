@@ -5,12 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author Radim Blazek (see buffer.c)
    \author Rewritten by Rosen Matev (Google Summer of Code 2008)
@@ -189,6 +185,11 @@ static void parallel_line(struct line_pnts *Points, double da, double db,
     double phi1, phi2, delta_phi;
     double nsegments, angular_tol, angular_step;
     int inner_corner, turns360;
+    vx = 0.0;
+    c1 = 0.0;
+    vy = 0.0;
+    b1 = 0.0;
+    a1 = 0.0;
 
     G_debug(3, "parallel_line()");
 
@@ -948,7 +949,7 @@ static void buffer_lines(struct line_pnts *area_outer,
                 }
 
                 /* we need to check if the area is in the buffer.
-                   I've simplfied convolution_line(), so that it runs faster,
+                   I've simplified convolution_line(), so that it runs faster,
                    however that leads to occasional problems */
                 if (check_poly &&
                     Vect_point_in_poly(cPoints->x[0], cPoints->y[0],

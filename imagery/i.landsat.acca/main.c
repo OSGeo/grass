@@ -7,11 +7,8 @@
  * PURPOSE:      Landsat TM/ETM+ Automatic Cloud Cover Assessment
  *               Adopted for GRASS 7 by Martin Landa <landa.martin gmail.com>
  *
- * COPYRIGHT:    (C) 2008, 2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2008, 2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -177,15 +174,15 @@ int main(int argc, char *argv[])
 
     for (i = BAND2; i <= BAND6; i++) {
         band[i].name[0] = '\0';
-        sprintf(band[i].name, "%s%d%c", in_name, i + 2,
-                (i == BAND6 && !sat5->answer ? '1' : '\0'));
+        snprintf(band[i].name, sizeof(band[i].name), "%s%d%c", in_name, i + 2,
+                 (i == BAND6 && !sat5->answer ? '1' : '\0'));
         band[i].fd = check_raster(band[i].name);
         band[i].rast = Rast_allocate_buf(DCELL_TYPE);
     }
 
     out_name = output->answer;
 
-    sprintf(out.name, "%s", out_name);
+    snprintf(out.name, sizeof(out.name), "%s", out_name);
     if (G_legal_filename(out_name) < 0)
         G_fatal_error(_("<%s> is an illegal file name"), out.name);
 
@@ -205,8 +202,9 @@ int main(int argc, char *argv[])
 
     /* write out map title and category labels */
     Rast_init_cats("", &cats);
-    sprintf(title, "LANDSAT-%s Automatic Cloud Cover Assessment",
-            sat5->answer ? "5 TM" : "7 ETM+");
+    snprintf(title, sizeof(title),
+             "LANDSAT-%s Automatic Cloud Cover Assessment",
+             sat5->answer ? "5 TM" : "7 ETM+");
     Rast_set_cats_title(title, &cats);
 
     Rast_set_c_cat(&cell_shadow, &cell_shadow, "Shadow", &cats);

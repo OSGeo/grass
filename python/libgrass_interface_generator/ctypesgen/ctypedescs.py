@@ -58,6 +58,7 @@ ctypes_type_map = {
     ("__uint64", False, 0): "c_uint64",
     ("__uint64_t", False, 0): "c_uint64",
     ("_Bool", True, 0): "c_bool",
+    ("bool", True, 0): "c_bool",
 }
 
 ctypes_type_map_python_builtin = {

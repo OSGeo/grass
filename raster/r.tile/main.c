@@ -4,11 +4,9 @@
  * AUTHOR(S):    Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      Retiles an existing raster map with user defined x and y tile
  *               size
- * COPYRIGHT:    (C) 2013 by Glynn Clements and the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2013 Glynn Clements
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -132,7 +130,8 @@ int main(int argc, char *argv[])
         for (xtile = 0; xtile < xtiles; xtile++) {
             char name[GNAME_MAX];
 
-            sprintf(name, "%s-%03d-%03d", parm.rastout->answer, ytile, xtile);
+            snprintf(name, sizeof(name), "%s-%03d-%03d", parm.rastout->answer,
+                     ytile, xtile);
             outfiles[xtile] = Rast_open_new(name, map_type);
         }
 
@@ -170,7 +169,8 @@ static void write_support_files(int xtile, int ytile, int overlap)
     struct Colors colors;
     struct Categories cats;
 
-    sprintf(name, "%s-%03d-%03d", parm.rastout->answer, ytile, xtile);
+    snprintf(name, sizeof(name), "%s-%03d-%03d", parm.rastout->answer, ytile,
+             xtile);
 
     Rast_get_cellhd(name, G_mapset(), &cellhd);
 
@@ -192,7 +192,8 @@ static void write_support_files(int xtile, int ytile, int overlap)
     /* record map metadata/history info */
     G_debug(1, "Tile %d,%d of %s: writing %s", xtile, ytile,
             parm.rastin->answer, name);
-    sprintf(title, "Tile %d,%d of %s", xtile, ytile, parm.rastin->answer);
+    snprintf(title, sizeof(title), "Tile %d,%d of %s", xtile, ytile,
+             parm.rastin->answer);
     Rast_put_cell_title(name, title);
 
     Rast_short_history(name, "raster", &history);

@@ -7,9 +7,9 @@ Classes:
  - frame::PsMapFrame
  - frame::PsMapBufferedWindow
 
-(C) 2011-2012 by Anna Kratochvilova, and the GRASS Development Team
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2011-2012 Anna Kratochvilova
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Kratochvilova <kratochanna gmail.com> (bachelor's project)
 @author Martin Landa <landa.martin gmail.com> (mentor)
@@ -519,7 +519,6 @@ class PsMapFrame(wx.Frame):
                         im = PILImage.fromarray(np.rot90(im_array, 3))
                     im.save(self.imgName, format="PNG")
                 except OSError:
-                    del busy
                     program = self._getGhostscriptProgramName()
                     dlg = HyperlinkDialog(
                         self,
@@ -1298,26 +1297,26 @@ class PsMapFrame(wx.Frame):
                 else:
                     self.deleteObject(id)
 
-            if itype == "vectorLegend":
-                if not self.instruction.FindInstructionByType("vector"):
-                    self.deleteObject(id)
-                elif self.instruction[id]["vLegend"]:
-                    self.canvas.UpdateLabel(itype=itype, id=id)
-                    drawRectangle = self.canvas.CanvasPaperCoordinates(
-                        rect=self.instruction[id]["rect"], canvasToPaper=False
-                    )
-                    self.canvas.Draw(
-                        pen=self.pen[itype],
-                        brush=self.brush[itype],
-                        pdc=self.canvas.pdcObj,
-                        drawid=id,
-                        pdctype="rectText",
-                        bb=drawRectangle,
-                    )
-                    self.canvas.RedrawSelectBox(id)
-
-                else:
-                    self.deleteObject(id)
+            if itype != "vectorLegend":
+                continue
+            if not self.instruction.FindInstructionByType("vector"):
+                self.deleteObject(id)
+            elif self.instruction[id]["vLegend"]:
+                self.canvas.UpdateLabel(itype=itype, id=id)
+                drawRectangle = self.canvas.CanvasPaperCoordinates(
+                    rect=self.instruction[id]["rect"], canvasToPaper=False
+                )
+                self.canvas.Draw(
+                    pen=self.pen[itype],
+                    brush=self.brush[itype],
+                    pdc=self.canvas.pdcObj,
+                    drawid=id,
+                    pdctype="rectText",
+                    bb=drawRectangle,
+                )
+                self.canvas.RedrawSelectBox(id)
+            else:
+                self.deleteObject(id)
 
     def OnPageChanged(self, event):
         """GNotebook page has changed"""
@@ -2685,7 +2684,9 @@ class PsMapBufferedWindow(wx.Window):
             if not labelFiles:
                 return
             labelFiles = [lFile.split("@")[0] for lFile in labelFiles]
-            self.itemLabels[mapId].append(_("labels: ") + ", ".join(labelFiles))
+            self.itemLabels[mapId].append(
+                _("labels: {files}").format(files=", ".join(labelFiles))
+            )
 
     def UpdateLabel(self, itype, id):
         self.itemLabels[id] = []

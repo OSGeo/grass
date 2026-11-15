@@ -8,11 +8,8 @@
  * PURPOSE:      Allows creation and/or modification of the color table
  *               for a raster map layer.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -44,8 +41,8 @@ int read_color_rules(FILE *fp, struct Colors *colors, DCELL min, DCELL max,
         if (is_fp) {
             char minstr[64], maxstr[64];
 
-            sprintf(minstr, "%.15g", (double)min);
-            sprintf(maxstr, "%.15g", (double)max);
+            snprintf(minstr, sizeof(minstr), "%.15g", (double)min);
+            snprintf(maxstr, sizeof(maxstr), "%.15g", (double)max);
             G_trim_decimal(minstr);
             G_trim_decimal(maxstr);
             fprintf(stderr, _("fp: Data range is %s to %s\n"), minstr, maxstr);

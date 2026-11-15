@@ -10,11 +10,8 @@
 #               Customised by Luca Delucchi Vienna Code Sprint 2014
 # PURPOSE:      calculates the Optimum Index factor of all band combinations
 #               for LANDSAT TM 1,2,3,4,5,7
-# COPYRIGHT:    (C) 1999,2008 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 1999,2008 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # Ref.: Jensen: Introductory digital image processing 1996, p.98
 #############################################################################
@@ -50,15 +47,15 @@ def oifcalc(sdev, corr, k1, k2, k3):
     grass.debug(_("Calculating OIF for combination: %s, %s, %s") % (k1, k2, k3), 1)
     # calculate SUM of Stddeviations:
     ssdev = [sdev[k1], sdev[k2], sdev[k3]]
-    numer = sum(ssdev)
+    numerator = sum(ssdev)
 
     # calculate SUM of absolute(Correlation values):
     scorr = [corr[k1, k2], corr[k1, k3], corr[k2, k3]]
-    denom = sum(map(abs, scorr))
+    denominator = sum(map(abs, scorr))
 
     # Calculate OIF index:
     #     Divide (SUM of Stddeviations) and (SUM of Correlation)
-    return numer / denom
+    return numerator / denominator
 
 
 def perms(bands):
@@ -84,7 +81,7 @@ def main():
 
     if serial:
         for band in bands:
-            grass.verbose("band %d" % band)
+            grass.verbose("band %s" % band)
             s = grass.read_command("r.univar", flags="g", map=band)
             kv = parse_key_val(s)
             stddev[band] = float(kv["stddev"])
@@ -123,8 +120,8 @@ def main():
 
     # We need to skip the first line, since r.covar prints the number of values
     lines = s.splitlines()
-    for i, row in zip(bands, lines[1:]):
-        for j, cell in zip(bands, row.split(" ")):
+    for i, row in zip(bands, lines[1:], strict=False):
+        for j, cell in zip(bands, row.split(" "), strict=False):
             correlation[i, j] = float(cell)
 
     # Calculate all combinations
@@ -133,7 +130,11 @@ def main():
     oif = []
     for p in perms(bands):
         oif.append((oifcalc(stddev, correlation, *p), p))
-    oif.sort(reverse=True)
+    # NaN does not compare, so sorting the raw tuples gives an order which
+    # depends on the sort algorithm. Place NaN last, in input order.
+    oif.sort(
+        key=lambda item: (item[0] != item[0], -item[0] if item[0] == item[0] else 0)
+    )
 
     grass.verbose(
         _("The Optimum Index Factor analysis result (best combination shown first):")

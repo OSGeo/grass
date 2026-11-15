@@ -161,7 +161,7 @@ int do_plt(int after_masking)
                     width = 0.05 * size;
 
                 /* Read symbol */
-                sprintf(sname, "POINTSYMBOL%d", snum);
+                snprintf(sname, sizeof(sname), "POINTSYMBOL%d", snum);
                 Symb = S_read(symb);
                 if (Symb == NULL)
                     G_warning(_("Cannot read symbol, using default icon"));

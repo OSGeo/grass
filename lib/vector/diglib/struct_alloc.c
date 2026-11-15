@@ -172,7 +172,7 @@ void *dig_alloc_topo(char type)
 /*!
    \brief Free line structure
 
-   \param pointer to P_line struct to be freed
+   \param Line pointer to P_line struct to be freed
  */
 void dig_free_line(struct P_line *Line)
 {

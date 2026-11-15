@@ -5,9 +5,8 @@
 
    Based on visualization/nviz/src/exag.c
 
-   (C) 2008, 2010 by the GRASS Development Team
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2008, 2010 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Updated/modified by Martin Landa <landa.martin gmail.com> (Google SoC
            2008/2010)
@@ -29,7 +28,8 @@
 int Nviz_get_exag_height(double *val, double *min, double *max)
 {
     float longdim, exag, texag, hmin, hmax, fmin, fmax;
-    int nsurfs, i, *surf_list;
+    int nsurfs, i;
+    int *surf_list = NULL;
 
     surf_list = GS_get_surf_list(&nsurfs);
     if (nsurfs) {
@@ -63,6 +63,7 @@ int Nviz_get_exag_height(double *val, double *min, double *max)
 
     G_debug(1, "Nviz_get_exag_height(): value = %f min = %f max = %f", *val,
             min ? *min : 0.0, max ? *max : 0.0);
+    G_free(surf_list);
 
     return 1;
 }
@@ -77,7 +78,8 @@ int Nviz_get_exag_height(double *val, double *min, double *max)
 double Nviz_get_exag(void)
 {
     float exag, texag;
-    int nsurfs, i, *surf_list;
+    int nsurfs, i;
+    int *surf_list = NULL;
 
     surf_list = GS_get_surf_list(&nsurfs);
 
@@ -91,9 +93,7 @@ double Nviz_get_exag(void)
 
     if (exag == 0.0)
         exag = 1.0;
-
-    if (nsurfs > 0)
-        G_free(surf_list);
+    G_free(surf_list);
 
     G_debug(1, "Nviz_get_exag(): value = %f", exag);
     return exag;

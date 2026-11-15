@@ -19,7 +19,6 @@
  *  \return void * : a pointer to the vector ... if successful,
  *                   NULL ... otherwise.
  */
-
 void *Rast3d_alloc_tiles_type(RASTER3D_Map *map, int nofTiles, int type)
 {
     void *tiles;
@@ -45,7 +44,6 @@ void *Rast3d_alloc_tiles_type(RASTER3D_Map *map, int nofTiles, int type)
  *  \param nofTiles
  *  \return void *
  */
-
 void *Rast3d_alloc_tiles(RASTER3D_Map *map, int nofTiles)
 {
     void *tiles;
@@ -69,7 +67,6 @@ void *Rast3d_alloc_tiles(RASTER3D_Map *map, int nofTiles)
  *  \param tiles
  *  \return void
  */
-
 void Rast3d_free_tiles(void *tiles)
 {
     Rast3d_free(tiles);

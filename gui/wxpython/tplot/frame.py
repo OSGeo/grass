@@ -10,16 +10,13 @@ Classes:
  - frame::TplotFrame
  - frame::LookUp
 
-(C) 2012-2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2012-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Luca Delucchi
 @author start stvds support Matej Krejci
 """
 
-import os
 from itertools import cycle
 from pathlib import Path
 import numpy as np
@@ -42,13 +39,14 @@ try:
         NavigationToolbar2WxAgg as NavigationToolbar,
     )
     import matplotlib.dates as mdates
-except ImportError as e:
-    raise ImportError(
+except ImportError as error:
+    error.add_note(
         _(
             'The Temporal Plot Tool needs the "matplotlib" '
-            "(python-matplotlib) package to be installed. {0}"
-        ).format(e)
+            "(python-matplotlib) package to be installed."
+        )
     )
+    raise
 
 
 import grass.temporal as tgis
@@ -179,6 +177,10 @@ class TplotFrame(wx.Frame):
         self.vbox.Add(self.toolbar, 0, wx.EXPAND)
         # self.vbox.AddSpacer(10)
 
+        # Spacing used by control panel below.
+        headFlag = wx.EXPAND | wx.ALL
+        itemFlag = wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM
+
         # ------------ADD NOTEBOOK------------
         self.ntb = GNotebook(parent=self.mainPanel, style=FN.FNB_NODRAG)
 
@@ -190,7 +192,7 @@ class TplotFrame(wx.Frame):
             id=wx.ID_ANY,
             label=_(
                 "Raster temporal "
-                "dataset (strds)\n"
+                "dataset (strds)\n\n"
                 "Press ENTER after"
                 " typing the name or select"
                 " with the combobox"
@@ -237,15 +239,13 @@ class TplotFrame(wx.Frame):
         # self.controlPanelSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
         # label=_("Select space time raster dataset(s):")),
         # pos=(0, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
-        self.controlPanelSizerRaster.Add(self.datasetSelectLabelR, flag=wx.EXPAND)
-        self.controlPanelSizerRaster.Add(self.datasetSelectR, flag=wx.EXPAND)
-
-        self.controlPanelSizerRaster.Add(self.coor, flag=wx.EXPAND)
-        self.controlPanelSizerRaster.Add(self.coorval, flag=wx.EXPAND)
-        self.controlPanelSizerRaster.Add(self.linRegRaster, flag=wx.EXPAND)
+        self.controlPanelSizerRaster.Add(self.datasetSelectLabelR, 0, headFlag, 4)
+        self.controlPanelSizerRaster.Add(self.datasetSelectR, 0, itemFlag, 4)
+        self.controlPanelSizerRaster.Add(self.coor, 0, headFlag, 4)
+        self.controlPanelSizerRaster.Add(self.coorval, 0, itemFlag, 4)
+        self.controlPanelSizerRaster.Add(self.linRegRaster, 0, headFlag, 4)
 
         self.controlPanelRaster.SetSizer(self.controlPanelSizerRaster)
-        self.controlPanelSizerRaster.Fit(self)
         self.ntb.AddPage(page=self.controlPanelRaster, text=_("STRDS"), name="STRDS")
 
         # ------------ITEMS IN NOTEBOOK PAGE (VECTOR)------------------------
@@ -255,7 +255,7 @@ class TplotFrame(wx.Frame):
             id=wx.ID_ANY,
             label=_(
                 "Vector temporal "
-                "dataset (stvds)\n"
+                "dataset (stvds)\n\n"
                 "Press ENTER after"
                 " typing the name or select"
                 " with the combobox"
@@ -303,18 +303,15 @@ class TplotFrame(wx.Frame):
         # self.controlPanelSizer.Add(wx.StaticText(self.panel, id=wx.ID_ANY,
         # label=_("Select space time raster dataset(s):")),
         # pos=(0, 0), flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL)
-        self.controlPanelSizerVector.Add(self.datasetSelectLabelV, flag=wx.EXPAND)
-        self.controlPanelSizerVector.Add(self.datasetSelectV, flag=wx.EXPAND)
-
-        self.controlPanelSizerVector.Add(self.attributeLabel, flag=wx.EXPAND)
-        self.controlPanelSizerVector.Add(self.attribute, flag=wx.EXPAND)
-
-        self.controlPanelSizerVector.Add(self.catsLabel, flag=wx.EXPAND)
-        self.controlPanelSizerVector.Add(self.cats, flag=wx.EXPAND)
-        self.controlPanelSizerVector.Add(self.linRegVector, flag=wx.EXPAND)
+        self.controlPanelSizerVector.Add(self.datasetSelectLabelV, 0, headFlag, 4)
+        self.controlPanelSizerVector.Add(self.datasetSelectV, 0, itemFlag, 4)
+        self.controlPanelSizerVector.Add(self.attributeLabel, 0, headFlag, 4)
+        self.controlPanelSizerVector.Add(self.attribute, 0, itemFlag, 4)
+        self.controlPanelSizerVector.Add(self.catsLabel, 0, headFlag, 4)
+        self.controlPanelSizerVector.Add(self.cats, 0, itemFlag, 4)
+        self.controlPanelSizerVector.Add(self.linRegVector, 0, headFlag, 4)
 
         self.controlPanelVector.SetSizer(self.controlPanelSizerVector)
-        self.controlPanelSizerVector.Fit(self)
         self.ntb.AddPage(page=self.controlPanelVector, text=_("STVDS"), name="STVDS")
 
         # ------------ITEMS IN NOTEBOOK PAGE (LABELS)------------------------
@@ -350,14 +347,13 @@ class TplotFrame(wx.Frame):
             size=globalvar.DIALOG_TEXTCTRL_SIZE,
         )
         self.controlPanelSizerLabels = wx.BoxSizer(wx.VERTICAL)
-        self.controlPanelSizerLabels.Add(self.titleLabel, flag=wx.EXPAND)
-        self.controlPanelSizerLabels.Add(self.title, flag=wx.EXPAND)
-        self.controlPanelSizerLabels.Add(self.xLabel, flag=wx.EXPAND)
-        self.controlPanelSizerLabels.Add(self.x, flag=wx.EXPAND)
-        self.controlPanelSizerLabels.Add(self.yLabel, flag=wx.EXPAND)
-        self.controlPanelSizerLabels.Add(self.y, flag=wx.EXPAND)
+        self.controlPanelSizerLabels.Add(self.titleLabel, 0, headFlag, 4)
+        self.controlPanelSizerLabels.Add(self.title, 0, itemFlag, 4)
+        self.controlPanelSizerLabels.Add(self.xLabel, 0, headFlag, 4)
+        self.controlPanelSizerLabels.Add(self.x, 0, itemFlag, 4)
+        self.controlPanelSizerLabels.Add(self.yLabel, 0, headFlag, 4)
+        self.controlPanelSizerLabels.Add(self.y, 0, itemFlag, 4)
         self.controlPanelLabels.SetSizer(self.controlPanelSizerLabels)
-        self.controlPanelSizerLabels.Fit(self)
         self.ntb.AddPage(page=self.controlPanelLabels, text=_("Labels"), name="Labels")
 
         # ------------ITEMS IN NOTEBOOK PAGE (EXPORT)------------------------
@@ -384,15 +380,15 @@ class TplotFrame(wx.Frame):
         )
         self.headerCheck = wx.CheckBox(parent=self.controlPanelExport, id=wx.ID_ANY)
         self.controlPanelSizerCheck = wx.BoxSizer(wx.HORIZONTAL)
-        self.controlPanelSizerCheck.Add(self.headerCheck)
-        self.controlPanelSizerCheck.Add(self.headerLabel)
+        self.controlPanelSizerCheck.Add(self.headerCheck, 0, wx.ALIGN_CENTER_VERTICAL)
+        self.controlPanelSizerCheck.Add(
+            self.headerLabel, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 4
+        )
         self.controlPanelSizerExport = wx.BoxSizer(wx.VERTICAL)
-        self.controlPanelSizerExport.Add(self.csvLabel)
-        self.controlPanelSizerExport.Add(self.csvButton)
-        self.controlPanelSizerExport.Add(self.controlPanelSizerCheck)
+        self.controlPanelSizerExport.Add(self.csvLabel, 0, headFlag, 4)
+        self.controlPanelSizerExport.Add(self.csvButton, 0, itemFlag, 4)
+        self.controlPanelSizerExport.Add(self.controlPanelSizerCheck, 0, headFlag, 4)
         self.controlPanelExport.SetSizer(self.controlPanelSizerExport)
-        self.controlPanelSizerCheck.Fit(self)
-        self.controlPanelSizerExport.Fit(self)
         self.ntb.AddPage(page=self.controlPanelExport, text=_("Export"), name="Export")
 
         # ------------Buttons on the bottom(draw,help)------------
@@ -403,15 +399,21 @@ class TplotFrame(wx.Frame):
         self.drawButton.Bind(wx.EVT_BUTTON, self.OnRedraw)
         self.helpButton = Button(self.vButtPanel, id=wx.ID_ANY, label=_("Help"))
         self.helpButton.Bind(wx.EVT_BUTTON, self.OnHelp)
-        self.vButtSizer.Add(self.drawButton)
-        self.vButtSizer.Add(self.helpButton)
+        self.vButtSizer.Add(self.drawButton, 0, wx.ALL, 4)
+        self.vButtSizer.Add(self.helpButton, 0, wx.ALL, 4)
         self.vButtPanel.SetSizer(self.vButtSizer)
 
-        self.mainPanel.SetSizer(self.vbox)
         self.vbox.Add(self.ntb, flag=wx.EXPAND)
         self.vbox.Add(self.vButtPanel, flag=wx.EXPAND)
-        self.vbox.Fit(self)
-        self.mainPanel.Fit()
+        self.mainPanel.SetSizer(self.vbox)
+
+        # Lay the panel out through a frame sizer so that resizing the window
+        # reaches the canvas, the only item in vbox allowed to grow.
+        frameSizer = wx.BoxSizer(wx.VERTICAL)
+        frameSizer.Add(self.mainPanel, proportion=1, flag=wx.EXPAND)
+        self.SetSizer(frameSizer)
+        frameSizer.Fit(self)
+        self.SetMinSize(wx.Size(400, 400))
 
     def _getSTRDdata(self, timeseries):
         """Load data and read properties
@@ -424,7 +426,7 @@ class TplotFrame(wx.Frame):
             return
         mode = None
         unit = None
-        columns = ",".join(["name", "start_time", "end_time"])
+        columns = "name,start_time,end_time"
         for series in timeseries:
             name = series[0]
             fullname = name + "@" + series[1]
@@ -491,7 +493,7 @@ class TplotFrame(wx.Frame):
                 r.open()
                 val = r.get_value(self.poi)
                 r.close()
-                if val == -2147483648 and val < minmin:
+                if -2147483648 == val < minmin:
                     self.timeDataR[name][row[0]]["value"] = None
                 else:
                     self.timeDataR[name][row[0]]["value"] = val
@@ -500,9 +502,9 @@ class TplotFrame(wx.Frame):
         self.temporalType = mode
         return
 
-    def _parseVDbConn(self, mapp, layerInp):
+    def _parseVDbConn(self, map_name, layerInp):
         """find attribute key according to layer of input map"""
-        vdb = Module("v.db.connect", map=mapp, flags="g", stdout_=PIPE)
+        vdb = Module("v.db.connect", map=map_name, flags="g", stdout_=PIPE)
 
         vdb = vdb.outputs.stdout
         for line in vdb.splitlines():
@@ -512,9 +514,9 @@ class TplotFrame(wx.Frame):
                 return lsplit[2]
         return None
 
-    def _getExistingCategories(self, mapp, cats):
+    def _getExistingCategories(self, map_name, cats):
         """Get a list of categories for a vector map"""
-        vdb = gs.read_command("v.category", input=mapp, option="print")
+        vdb = gs.read_command("v.category", input=map_name, option="print")
         categories = vdb.splitlines()
         if not cats:
             return categories
@@ -524,7 +526,7 @@ class TplotFrame(wx.Frame):
                     message=_(
                         "Category {ca} is not on vector map"
                         " {ma} and it will be not used"
-                    ).format(ma=mapp, ca=cat),
+                    ).format(ma=map_name, ca=cat),
                     parent=self,
                 )
                 cats.remove(cat)
@@ -559,7 +561,7 @@ class TplotFrame(wx.Frame):
                 ),
             )
             return
-        columns = ",".join(["name", "start_time", "end_time", "id", "layer"])
+        columns = "name,start_time,end_time,id,layer"
         for series in timeseries:
             name = series[0]
             fullname = name + "@" + series[1]
@@ -632,67 +634,64 @@ class TplotFrame(wx.Frame):
                 for i in range(len(rows)):
                     row = rows[i]
                     values = out[i]
-                    if str(row["layer"]) == str(values["Layer"]):
-                        lay = "{map}_{layer}".format(
-                            map=row["name"], layer=values["Layer"]
-                        )
-                        self.timeDataV[name][lay] = {}
-                        self.timeDataV[name][lay]["start_datetime"] = row["start_time"]
-                        self.timeDataV[name][lay]["end_datetime"] = row["start_time"]
-                        self.timeDataV[name][lay]["value"] = values["Attributes"][
-                            attribute
-                        ]
-            else:
-                wherequery = ""
-                cats = self._getExistingCategories(rows[0]["name"], cats)
-                totcat = len(cats)
-                ncat = 1
-                for cat in cats:
-                    if ncat == 1 and totcat != 1:
-                        wherequery += "{k}={c} or".format(c=cat, k="{key}")
-                    elif ncat == 1 and totcat == 1:
-                        wherequery += "{k}={c}".format(c=cat, k="{key}")
-                    elif ncat == totcat:
-                        wherequery += " {k}={c}".format(c=cat, k="{key}")
-                    else:
-                        wherequery += " {k}={c} or".format(c=cat, k="{key}")
+                    if str(row["layer"]) != str(values["Layer"]):
+                        continue
+                    lay = "{map}_{layer}".format(map=row["name"], layer=values["Layer"])
+                    self.timeDataV[name][lay] = {}
+                    self.timeDataV[name][lay]["start_datetime"] = row["start_time"]
+                    self.timeDataV[name][lay]["end_datetime"] = row["start_time"]
+                    self.timeDataV[name][lay]["value"] = values["Attributes"][attribute]
 
-                    catn = "cat{num}".format(num=cat)
-                    self.plotNameListV.append("{na}+{cat}".format(na=name, cat=catn))
-                    self.timeDataV[name][catn] = OrderedDict()
-                    ncat += 1
-                for row in rows:
-                    lay = int(row["layer"])
-                    catkey = self._parseVDbConn(row["name"], lay)
-                    if not catkey:
-                        GError(
-                            parent=self,
-                            showTraceback=False,
-                            message=_(
-                                "No connection between vector map {vmap} and layer {la}"
-                            ).format(vmap=row["name"], la=lay),
-                        )
-                        return
-                    vals = gs.vector_db_select(
-                        map=row["name"],
-                        layer=lay,
-                        where=wherequery.format(key=catkey),
-                        columns=attribute,
+                continue
+
+            wherequery = ""
+            cats = self._getExistingCategories(rows[0]["name"], cats)
+            totcat = len(cats)
+            ncat = 1
+            for cat in cats:
+                if ncat == 1 and totcat != 1:
+                    wherequery += "{k}={c} or".format(c=cat, k="{key}")
+                elif ncat == 1 and totcat == 1:
+                    wherequery += "{k}={c}".format(c=cat, k="{key}")
+                elif ncat == totcat:
+                    wherequery += " {k}={c}".format(c=cat, k="{key}")
+                else:
+                    wherequery += " {k}={c} or".format(c=cat, k="{key}")
+
+                catn = "cat{num}".format(num=cat)
+                self.plotNameListV.append("{na}+{cat}".format(na=name, cat=catn))
+                self.timeDataV[name][catn] = OrderedDict()
+                ncat += 1
+            for row in rows:
+                lay = int(row["layer"])
+                catkey = self._parseVDbConn(row["name"], lay)
+                if not catkey:
+                    GError(
+                        parent=self,
+                        showTraceback=False,
+                        message=_(
+                            "No connection between vector map {vmap} and layer {la}"
+                        ).format(vmap=row["name"], la=lay),
                     )
-                    layn = "lay{num}".format(num=lay)
-                    for cat in cats:
-                        catn = "cat{num}".format(num=cat)
-                        if layn not in self.timeDataV[name][catn].keys():
-                            self.timeDataV[name][catn][layn] = {}
-                        self.timeDataV[name][catn][layn]["start_datetime"] = row[
-                            "start_time"
-                        ]
-                        self.timeDataV[name][catn][layn]["end_datetime"] = row[
-                            "end_time"
-                        ]
-                        self.timeDataV[name][catn][layn]["value"] = vals["values"][
-                            int(cat)
-                        ][0]
+                    return
+                vals = gs.vector_db_select(
+                    map=row["name"],
+                    layer=lay,
+                    where=wherequery.format(key=catkey),
+                    columns=attribute,
+                )
+                layn = "lay{num}".format(num=lay)
+                for cat in cats:
+                    catn = "cat{num}".format(num=cat)
+                    if layn not in self.timeDataV[name][catn].keys():
+                        self.timeDataV[name][catn][layn] = {}
+                    self.timeDataV[name][catn][layn]["start_datetime"] = row[
+                        "start_time"
+                    ]
+                    self.timeDataV[name][catn][layn]["end_datetime"] = row["end_time"]
+                    self.timeDataV[name][catn][layn]["value"] = vals["values"][
+                        int(cat)
+                    ][0]
         self.unit = unit
         self.temporalType = mode
         return
@@ -754,7 +753,11 @@ class TplotFrame(wx.Frame):
         """Used to write CSV file of plotted data"""
         import csv
 
-        zipped = list(zip(x, *y)) if isinstance(y[0], list) else list(zip(x, y))
+        zipped = (
+            list(zip(x, *y, strict=False))
+            if isinstance(y[0], list)
+            else list(zip(x, y, strict=False))
+        )
         with open(self.csvpath, "w", newline="") as fi:
             writer = csv.writer(fi)
             if self.header:
@@ -1000,7 +1003,7 @@ class TplotFrame(wx.Frame):
         self.init()
         self.csvpath = self.csvButton.GetValue()
         self.header = self.headerCheck.IsChecked()
-        if os.path.exists(self.csvpath) and not self.overwrite:
+        if Path(self.csvpath).exists() and not self.overwrite:
             dlg = wx.MessageDialog(
                 self,
                 _("{pa} already exists, do you want to overwrite?").format(
@@ -1014,7 +1017,9 @@ class TplotFrame(wx.Frame):
                 GError(
                     parent=self,
                     showTraceback=False,
-                    message=_("Please change name of output CSV file or "),
+                    message=_(
+                        "Please change name of output CSV file or enable overwriting."
+                    ),
                 )
                 return
             dlg.Destroy()
@@ -1224,7 +1229,7 @@ class TplotFrame(wx.Frame):
         :param list vectors: a list of temporal vector dataset's name
         :param list coors: a list with x/y coordinates
         :param list cats: a list with incld. categories of vector
-        :param str attr:  name of attribute of vectror data
+        :param str attr:  name of attribute of vector data
         """
         if not (rasters or vectors) or not (coors or cats):
             return
@@ -1463,7 +1468,7 @@ class DataCursor:
                 x = xData[np.argmin(abs(xData - x))]
 
             info = self.lookUp.GetInformation(x)
-            ys = list(zip(*info[1].values()))[1]
+            ys = list(zip(*info[1].values(), strict=False))[1]
             if not info:
                 return
             # Update the annotation in the current axis..

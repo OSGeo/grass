@@ -3,10 +3,8 @@
  *
  * \brief Raster Library - Set window (map region)
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -94,7 +92,6 @@ void Rast_set_output_window(struct Cell_head *window)
  *
  * \param window window to become operative window
  */
-
 void Rast_set_input_window(struct Cell_head *window)
 {
     Rast__init();
@@ -118,8 +115,8 @@ static void update_window_mappings(void)
        window = &twindow;
      */
 
-    /* except for MASK, cell files open for read must have same projection
-     * and zone as new window
+    /* except for mask raster, cell files open for read must have same
+     * projection and zone as new window
      */
     maskfd = R__.auto_mask > 0 ? R__.mask_fd : -1;
     for (i = 0; i < R__.fileinfo_count; i++) {

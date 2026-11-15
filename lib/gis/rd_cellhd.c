@@ -3,10 +3,8 @@
 
    \brief GIS Library - Read cell header or window
 
-   (C) 1999-2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 1999-2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author USACERL and others
  */
@@ -50,7 +48,7 @@ static double scan_double(const char *, double *);
 /*!
    \brief Read cell header (for internal use only)
 
-   \param fp file descriptor
+   \param fd file descriptor
    \param[out] cellhd pointer to Cell_head structure
  */
 void G__read_Cell_head(FILE *fd, struct Cell_head *cellhd)
@@ -113,7 +111,7 @@ void G__read_Cell_head_array(char **array, struct Cell_head *cellhd)
     cellhd->cols3 = 0;
     cellhd->depths = 1;
     cellhd->proj = -1;
-    cellhd->zone = -1;
+    cellhd->zone = 0;
     cellhd->compressed = -1;
     cellhd->ew_res = 0.0;
     cellhd->ew_res3 = 1.0;

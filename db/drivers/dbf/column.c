@@ -6,11 +6,8 @@
  *
  * PURPOSE:      Simple driver for reading and writing dbf files
  *
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2000 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 #include <stdlib.h>
@@ -37,7 +34,7 @@ int add_column(int tab, int type, char *name, int width, int decimals)
     if (strlen(name) > DBF_COL_NAME - 1) {
         char buf[2000];
 
-        sprintf(buf, "DBMI-DBF driver: column name '%s'", name);
+        snprintf(buf, sizeof(buf), "DBMI-DBF driver: column name '%s'", name);
         name[DBF_COL_NAME - 1] = '\0';
         sprintf(buf + strlen(buf), " truncated to '%s'", name);
         G_warning("%s", buf);

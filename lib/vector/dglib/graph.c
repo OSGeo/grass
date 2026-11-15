@@ -1,19 +1,7 @@
 /* LIBDGL -- a Directed Graph Library implementation
- * Copyright (C) 2002 Roberto Micarelli
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * SPDX-FileCopyrightText: 2002 Roberto Micarelli
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 /*
@@ -40,7 +28,7 @@
 #endif
 #include "helpers.h"
 
-void dglResetStats(dglGraph_s *pgraph UNUSED)
+void dglResetStats(dglGraph_s *pgraph G_UNUSED)
 {
 #ifdef DGL_STATS
     pgraph->clkAddEdge = 0;
@@ -1046,7 +1034,7 @@ int dglMinimumSpanning(dglGraph_s *pgraphInput, dglGraph_s *pgraphOutput,
     return nRet;
 }
 
-void dglFreeSPReport(dglGraph_s *pgraph UNUSED, dglSPReport_s *pSPReport)
+void dglFreeSPReport(dglGraph_s *pgraph G_UNUSED, dglSPReport_s *pSPReport)
 {
     int iArc;
 
@@ -1450,7 +1438,7 @@ int dglEdgeset_T_Initialize(dglEdgesetTraverser_s *pT, dglGraph_s *pGraph,
     return -pGraph->iErrno;
 }
 
-void dglEdgeset_T_Release(dglEdgesetTraverser_s *pT UNUSED)
+void dglEdgeset_T_Release(dglEdgesetTraverser_s *pT G_UNUSED)
 {
 }
 
@@ -1507,7 +1495,7 @@ int dglIOContextInitialize(dglGraph_s *pG, dglIOContext_s *pIO)
     return 0;
 }
 
-void dglIOContextRelease(dglIOContext_s *pIO UNUSED)
+void dglIOContextRelease(dglIOContext_s *pIO G_UNUSED)
 {
 }
 

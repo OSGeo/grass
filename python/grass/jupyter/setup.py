@@ -6,13 +6,11 @@
 # PURPOSE:   This module contains functions for launching a GRASS session
 #            in Jupyter Notebooks
 #
-# COPYRIGHT: (C) 2021-2022 Caitlin Haedrich, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2021-2022 Caitlin Haedrich
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Initialization GRASS GIS session and its finalization"""
+"""Initialization GRASS session and its finalization"""
 
 import os
 import weakref
@@ -67,8 +65,8 @@ class _JupyterGlobalSession:
         When location and mapset are provided using the additional parameters,
         the *path* parameter is path to a database.
 
-        Raises ValueError if the mapset does not exist (e.g., when the name is
-        misspelled or the mapset is invalid).
+        :raises ValueError: if the mapset does not exist (e.g., when the name is
+            misspelled or the mapset is invalid).
         """
         # The method could be a function, but this is more general (would work even for
         # a non-global session).
@@ -116,7 +114,7 @@ class _JupyterGlobalSession:
     def finish(self):
         """Close the session, i.e., close the open mapset.
 
-        Subsequent calls to GRASS GIS modules will fail because there will be
+        Subsequent calls to GRASS modules will fail because there will be
         no current (open) mapset anymore.
 
         The finish procedure is done automatically when process finishes or the object

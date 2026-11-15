@@ -11,9 +11,8 @@ Usage:
 from core.settings import UserSettings
 @endcode
 
-(C) 2007-2017 by the GRASS Development Team
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2017 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Luca Delucchi <lucadeluge gmail.com> (language choice)
@@ -29,6 +28,7 @@ import collections.abc
 from core import globalvar
 from core.gcmd import GException, GError
 from core.utils import GetSettingsPath, PathJoin, rgb2str
+from pathlib import Path
 
 
 class SettingsJSONEncoder(json.JSONEncoder):
@@ -104,7 +104,8 @@ class Settings:
     def _generateLocale(self):
         """Generate locales"""
         try:
-            self.locs = os.listdir(os.path.join(os.environ["GISBASE"], "locale"))
+            locale_path = Path(os.environ["GRASS_LOCALEDIR"])
+            self.locs = [p.name for p in locale_path.iterdir() if p.is_dir()]
             self.locs.append("en")  # GRASS doesn't ship EN po files
             self.locs.sort()
             # Add a default choice to not override system locale
@@ -269,6 +270,9 @@ class Settings:
                 },
                 "interactiveInput": {
                     "enabled": True,
+                },
+                "pythonAPI": {
+                    "selection": 0,
                 },
             },
             #
@@ -800,6 +804,12 @@ class Settings:
             "quiet",
         )
 
+        self.internalSettings["cmd"]["pythonAPI"]["choices"] = (
+            _("Tools API"),
+            _("Script API"),
+            _("PyGRASS API"),
+        )
+
         self.internalSettings["appearance"]["iconTheme"]["choices"] = ("grass",)
         self.internalSettings["appearance"]["menustyle"]["choices"] = (
             _("Classic (labels only)"),
@@ -882,6 +892,7 @@ class Settings:
         self.internalSettings["modeler"]["grassAPI"]["choices"] = (
             _("Script package"),
             _("PyGRASS"),
+            _("GRASS Tools"),
         )
 
     def ReadSettingsFile(self, settings=None):
@@ -889,9 +900,9 @@ class Settings:
         if settings is None:
             settings = self.userSettings
 
-        if os.path.exists(self.filePath):
+        if Path(self.filePath).exists():
             self._readFile(settings)
-        elif os.path.exists(self.legacyFilePath):
+        elif Path(self.legacyFilePath).exists():
             self._readLegacyFile(settings)
 
         # set environment variables
@@ -929,6 +940,7 @@ class Settings:
                 _("Unable to read settings file <{path}>:\n{err}").format(
                     path=self.filePath, err=e
                 )
+                + "\n"
             )
 
     def _readLegacyFile(self, settings=None):
@@ -941,30 +953,28 @@ class Settings:
             settings = self.userSettings
 
         try:
-            fd = open(self.legacyFilePath)
+            with open(self.legacyFilePath) as fd:
+                line = ""
+                for line in fd:
+                    line = line.rstrip("%s" % os.linesep)
+                    group, key = line.split(self.sep)[0:2]
+                    kv = line.split(self.sep)[2:]
+                    subkeyMaster = None
+                    if len(kv) % 2 != 0:  # multiple (e.g. nviz)
+                        subkeyMaster = kv[0]
+                        del kv[0]
+                    idx = 0
+                    while idx < len(kv):
+                        subkey = [subkeyMaster, kv[idx]] if subkeyMaster else kv[idx]
+                        value = kv[idx + 1]
+                        value = self._parseValue(value, read=True)
+                        self.Append(settings, group, key, subkey, value)
+                        idx += 2
         except OSError:
             sys.stderr.write(
                 _("Unable to read settings file <%s>\n") % self.legacyFilePath
             )
             return
-
-        try:
-            line = ""
-            for line in fd:
-                line = line.rstrip("%s" % os.linesep)
-                group, key = line.split(self.sep)[0:2]
-                kv = line.split(self.sep)[2:]
-                subkeyMaster = None
-                if len(kv) % 2 != 0:  # multiple (e.g. nviz)
-                    subkeyMaster = kv[0]
-                    del kv[0]
-                idx = 0
-                while idx < len(kv):
-                    subkey = [subkeyMaster, kv[idx]] if subkeyMaster else kv[idx]
-                    value = kv[idx + 1]
-                    value = self._parseValue(value, read=True)
-                    self.Append(settings, group, key, subkey, value)
-                    idx += 2
         except ValueError as e:
             print(
                 _(
@@ -975,9 +985,6 @@ class Settings:
                 % {"file": self.legacyFilePath, "detail": e, "line": line},
                 file=sys.stderr,
             )
-            fd.close()
-
-        fd.close()
 
     def SaveToFile(self, settings=None):
         """Save settings to the file"""
@@ -985,22 +992,22 @@ class Settings:
             settings = self.userSettings
 
         dirPath = GetSettingsPath()
-        if not os.path.exists(dirPath):
+        if not Path(dirPath).exists():
             try:
-                os.mkdir(dirPath)
+                Path(dirPath).mkdir()
             except OSError:
                 GError(_("Unable to create settings directory"))
-                return
+                return None
         try:
             with open(self.filePath, "w") as f:
                 json.dump(settings, f, indent=2, cls=SettingsJSONEncoder)
         except OSError as e:
-            raise GException(e)
+            raise GException(e) from e
         except Exception as e:
             raise GException(
                 _("Writing settings to file <%(file)s> failed.\n\nDetails: %(detail)s")
                 % {"file": self.filePath, "detail": e}
-            )
+            ) from e
         return self.filePath
 
     def _parseValue(self, value, read=False):
@@ -1102,10 +1109,12 @@ class Settings:
             settings[group][key][subkey] = value
             return
 
-        except KeyError:
+        except KeyError as e:
             raise GException(
-                "%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey)
-            )
+                _("Unable to set '{group}:{key}:{subkey}'").format(
+                    group=group, key=key, subkey=subkey
+                )
+            ) from e
 
     def Append(self, dict, group, key, subkey, value, overwrite=True):
         """Set value of key/subkey

@@ -145,7 +145,7 @@ static int open_segment_file(const char *name, layer l, int new)
     if (new == TEMP)
         G_temp_element(string);
     else
-        sprintf(string, "cell_misc/%s", parm.elevin);
+        snprintf(string, sizeof(string), "cell_misc/%s", parm.elevin);
 
     if (new || !(mapset = G_find_file2(string, name, ""))) {
         if ((fd = G_open_new(string, name)) < 0)

@@ -7,17 +7,8 @@
 #
 # PURPOSE:    Perform different aggregation algorithms from r.series on all or a
 #           selected subset of raster maps in a space time raster dataset
-# COPYRIGHT:    (C) 2011-2017 by the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2011-2017 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -92,6 +83,8 @@
 # % description: Propagate NULLs
 # %end
 
+from pathlib import Path
+
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
@@ -136,13 +129,7 @@ def main():
     if rows:
         # Create the r.series input file
         filename = gs.tempfile(True)
-        file = open(filename, "w")
-
-        for row in rows:
-            string = "%s\n" % (row["id"])
-            file.write(string)
-
-        file.close()
+        Path(filename).write_text("\n".join(str(row["id"]) for row in rows))
 
         flag = ""
         if len(rows) > max_files_open:

@@ -1,8 +1,8 @@
 /*
- * Copyright (C) 1995.  Bill Brown <brown@gis.uiuc.edu> & Michael Shapiro
- *
- * This program is free software under the GPL (>=v2)
- * Read the file GPL.TXT coming with GRASS for details.
+ * SPDX-FileCopyrightText: 1995 Bill Brown <brown@gis.uiuc.edu>
+ * SPDX-FileCopyrightText: 1995 Michael Shapiro
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <string.h>
 #include <grass/datetime.h>
@@ -16,7 +16,6 @@
  *  \param src
  *  \return void
  */
-
 void datetime_copy(DateTime *dst, const DateTime *src)
 {
     memcpy(dst, src, sizeof(DateTime));

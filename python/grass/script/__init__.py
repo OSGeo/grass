@@ -1,4 +1,4 @@
-"""Python interface to launch GRASS GIS modules in scripts"""
+"""Python interface to launch GRASS modules in scripts"""
 
 from . import setup
 from .core import (
@@ -8,6 +8,7 @@ from .core import (
     compare_key_value_text_files,
     create_environment,
     create_location,
+    create_mapset,
     create_project,
     debug,
     debug_level,
@@ -40,6 +41,7 @@ from .core import (
     parser,
     percent,
     pipe_command,
+    popen_args_command,
     read_command,
     region,
     region_env,
@@ -68,13 +70,23 @@ from .db import (
     db_table_in_vector,
 )
 from .imagery import group_to_dict
-from .raster import mapcalc, mapcalc_start, raster_history, raster_info, raster_what
+from .raster import (
+    mapcalc,
+    mapcalc_start,
+    raster_history,
+    raster_info,
+    raster_what,
+    MaskManager,
+    RegionManager,
+    RegionManagerEnv,
+)
 from .raster3d import mapcalc3d, raster3d_info
 from .utils import (
     KeyValue,
     append_node_pid,
     append_random,
     append_uuid,
+    available_cpus,
     basename,
     clock,
     decode,
@@ -87,6 +99,7 @@ from .utils import (
     natural_sort,
     naturally_sorted,
     parse_key_val,
+    resolve_nprocs,
     separator,
     set_path,
     split,
@@ -108,16 +121,21 @@ from .vector import (
 __all__ = [
     "PIPE",
     "KeyValue",
+    "MaskManager",
     "Popen",
+    "RegionManager",
+    "RegionManagerEnv",
     "append_node_pid",
     "append_random",
     "append_uuid",
+    "available_cpus",
     "basename",
     "call",
     "clock",
     "compare_key_value_text_files",
     "create_environment",
     "create_location",
+    "create_mapset",
     "create_project",
     "db_begin_transaction",
     "db_commit_transaction",
@@ -171,6 +189,7 @@ __all__ = [
     "parser",
     "percent",
     "pipe_command",
+    "popen_args_command",
     "raster3d_info",
     "raster_history",
     "raster_info",
@@ -178,6 +197,7 @@ __all__ = [
     "read_command",
     "region",
     "region_env",
+    "resolve_nprocs",
     "run_command",
     "sanitize_mapset_environment",
     "separator",

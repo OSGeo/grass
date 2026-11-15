@@ -8,10 +8,8 @@
  *
  * Copyright and license:
  *
- * (C) 2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2).  Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Markus Metz
  *
@@ -97,7 +95,7 @@ struct kdtrav {
     int first;                /*!< little helper flag */
 };
 
-/*! creae a new k-d tree */
+/*! create a new k-d tree */
 struct kdtree *kdtree_create(char ndims, /*!< number of dimensions */
                              int *btol   /*!< optional balancing tolerance */
 );

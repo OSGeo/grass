@@ -18,7 +18,6 @@
  *  \param mapset
  *  \return int
  */
-
 int I_get_target(const char *group, char *location, char *mapset)
 {
     FILE *fd;
@@ -57,7 +56,6 @@ int I_get_target(const char *group, char *location, char *mapset)
  *  \param mapset
  *  \return int
  */
-
 int I_put_target(const char *group, const char *location, const char *mapset)
 {
     FILE *fd;

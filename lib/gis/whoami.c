@@ -3,18 +3,15 @@
  *
  * \brief GIS Library - Login name functions.
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
-
 #include <unistd.h>
 #include <stdlib.h>
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <pwd.h>
 #endif
 
@@ -40,7 +37,7 @@ const char *G_whoami(void)
     if (G_is_initialized(&initialized))
         return name;
 
-#ifdef __MINGW32__
+#ifdef _WIN32
     name = getenv("USERNAME");
 #endif
     if (!name || !*name)
@@ -49,7 +46,7 @@ const char *G_whoami(void)
     if (!name || !*name)
         name = getenv("USER");
 
-#ifndef __MINGW32__
+#ifndef _WIN32
     if (!name || !*name) {
         struct passwd *p = getpwuid(getuid());
 

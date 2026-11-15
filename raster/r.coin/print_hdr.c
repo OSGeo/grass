@@ -7,11 +7,8 @@
  *
  * PURPOSE:      Calculates the coincidence of two raster map layers.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -22,35 +19,35 @@ int print_coin_hdr(int Conformat)
 {
     char unit_type[20];
     const char *mapset, *location;
-    char north[30], south[30], east[30], west[30];
+    char north[320], south[320], east[320], west[320];
 
     mapset = G_mapset();
     location = G_location();
 
     switch (Conformat) {
     case 'a':
-        sprintf(unit_type, "acres");
+        snprintf(unit_type, sizeof(unit_type), "acres");
         break;
     case 'h':
-        sprintf(unit_type, "hectares");
+        snprintf(unit_type, sizeof(unit_type), "hectares");
         break;
     case 'k':
-        sprintf(unit_type, "square kilometers");
+        snprintf(unit_type, sizeof(unit_type), "square kilometers");
         break;
     case 'm':
-        sprintf(unit_type, "square miles");
+        snprintf(unit_type, sizeof(unit_type), "square miles");
         break;
     case 'p':
-        sprintf(unit_type, "percent cover");
+        snprintf(unit_type, sizeof(unit_type), "percent cover");
         break;
     case 'x':
-        sprintf(unit_type, "percent of cols");
+        snprintf(unit_type, sizeof(unit_type), "percent of cols");
         break;
     case 'y':
-        sprintf(unit_type, "percent of rows");
+        snprintf(unit_type, sizeof(unit_type), "percent of rows");
         break;
     default:
-        sprintf(unit_type, "cells");
+        snprintf(unit_type, sizeof(unit_type), "cells");
         break;
     }
 

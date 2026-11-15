@@ -7,11 +7,8 @@
  * PURPOSE:      Creates a cross product of the category values from
  *               multiple raster map layers.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -73,7 +70,7 @@ int main(int argc, char *argv[])
     parm.input->required = YES;
     parm.input->multiple = YES;
     parm.input->gisprompt = "old,cell,raster";
-    sprintf(buf, _("Names of 2-%d input raster maps"), NFILES);
+    snprintf(buf, sizeof(buf), _("Names of 2-%d input raster maps"), NFILES);
     parm.input->description = G_store(buf);
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
@@ -108,7 +105,7 @@ int main(int argc, char *argv[])
     output = parm.output->answer;
     outfd = Rast_open_c_new(output);
 
-    sprintf(buf, "Cross of %s", names[0]);
+    snprintf(buf, sizeof(buf), "Cross of %s", names[0]);
     for (i = 1; i < nfiles - 1; i++) {
         strcat(buf, ", ");
         strcat(buf, names[i]);

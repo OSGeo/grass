@@ -15,11 +15,8 @@
  * PURPOSE:      Generate a vector or raster map of random points
  *               selected from an input map
  *
- * COPYRIGHT:    (C) 2003-2020 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2003-2020 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -91,11 +88,7 @@ int main(int argc, char *argv[])
     parm.sites->key = "vector";
     parm.sites->guisection = _("Output");
 
-    parm.seed = G_define_option();
-    parm.seed->key = "seed";
-    parm.seed->type = TYPE_INTEGER;
-    parm.seed->required = NO;
-    parm.seed->description = _("Seed for rand() function");
+    parm.seed = G_define_standard_option(G_OPT_M_SEED);
     parm.seed->guisection = _("Input");
 
     flag.gen_seed = G_define_flag();

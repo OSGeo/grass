@@ -3,8 +3,8 @@
 
 #define NO_RESAMPLE
 
-int r3read_level(void *g3map, RASTER3D_Region *g3reg UNUSED, file_info *Headfax,
-                 float *data, int n_lev)
+int r3read_level(void *g3map, RASTER3D_Region *g3reg G_UNUSED,
+                 file_info *Headfax, float *data, int n_lev)
 {
 #ifdef NO_RESAMPLE
     Rast3d_get_block(g3map, 0, 0, n_lev, Headfax->xdim, Headfax->ydim, 1,

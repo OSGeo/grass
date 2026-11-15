@@ -3,10 +3,8 @@
 
 @brief Misc utilities for wxGUI
 
-(C) 2007-2024 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2024 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Jachym Cepicky
@@ -22,13 +20,14 @@ import shlex
 import re
 import inspect
 import operator
+from pathlib import Path
 from string import digits
 from typing import TYPE_CHECKING
 
 
 from grass.script import core as grass
 from grass.script import task as gtask
-from grass.app.runtime import get_grass_config_dir
+from grass.app.runtime import get_grass_config_dir_for_version
 
 from core.gcmd import RunCommand
 from core.debug import Debug
@@ -57,7 +56,7 @@ def split(s):
             return shlex.split(s.replace("\\", r"\\"))
         return shlex.split(s)
     except ValueError as e:
-        sys.stderr.write(_("Syntax error: %s") % e)
+        sys.stderr.write(_("Syntax error: %s") % e + "\n")
 
     return []
 
@@ -146,18 +145,18 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
                 params.append((idx, p, v))
 
         if len(params) < 1:
-            if len(dcmd) > 1:
-                i = 1
-                while i < len(dcmd):
-                    if "=" not in dcmd[i] and not dcmd[i].startswith("-"):
-                        task = gtask.parse_interface(dcmd[0])
-                        # this expects the first parameter to be the right one
-                        p = task.get_options()["params"][0].get("name", "")
-                        params.append((i, p, dcmd[i]))
-                        break
-                    i += 1
-            else:
-                return mapname, False
+            if len(dcmd) <= 1:
+                return (mapname, False)
+
+            i = 1
+            while i < len(dcmd):
+                if "=" not in dcmd[i] and (not dcmd[i].startswith("-")):
+                    task = gtask.parse_interface(dcmd[0])
+                    # this expects the first parameter to be the right one
+                    p = task.get_options()["params"][0].get("name", "")
+                    params.append((i, p, dcmd[i]))
+                    break
+                i += 1
 
         if len(params) < 1:
             return mapname, False
@@ -192,7 +191,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified=False, param=None, layerType=None):
             if p == "layer":
                 continue
             dcmd[i] = p + "=" + v
-            if i in mapsets and mapsets[i]:
+            if mapsets.get(i):
                 dcmd[i] += "@" + mapsets[i]
 
         maps = []
@@ -231,11 +230,7 @@ def GetValidLayerName(name):
         cIdx += 1
     retName = "".join(retNameList)
 
-    if (
-        retName
-        and not (retName[0] >= "A" and retName[0] <= "Z")
-        and not (retName[0] >= "a" and retName[0] <= "z")
-    ):
+    if retName and not ("A" <= retName[0] <= "Z") and not ("a" <= retName[0] <= "z"):
         retName = "x" + retName[1:]
 
     if mapset:
@@ -267,10 +262,9 @@ def ListOfCatsToRange(cats):
         next = 0
         j = i + 1
         while j < len(cats):
-            if cats[i + next] == cats[j] - 1:
-                next += 1
-            else:
+            if cats[i + next] != cats[j] - 1:
                 break
+            next += 1
             j += 1
 
         if next > 1:
@@ -286,7 +280,7 @@ def ListOfCatsToRange(cats):
 def ListOfMapsets(get="ordered"):
     """Get list of available/accessible mapsets.
     Option 'ordered' returns list of all mapsets, first accessible
-    then not accessible. Raises ValueError for wrong paramater value.
+    then not accessible. Raises ValueError for wrong parameter values.
 
     :param str get: method ('all', 'accessible', 'ordered')
 
@@ -302,22 +296,21 @@ def ListOfMapsets(get="ordered"):
         if get == "all":
             return mapsets_all
 
-    if get in {"accessible", "ordered"}:
-        ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
-        if not ret:
-            return []
-        mapsets_accessible = ret.splitlines()
-        if get == "accessible":
-            return mapsets_accessible
+    if get not in {"accessible", "ordered"}:
+        msg = "Invalid value for 'get' parameter of ListOfMapsets()"
+        raise ValueError(msg)
+    ret = RunCommand("g.mapsets", read=True, quiet=True, flags="p", sep="newline")
+    if not ret:
+        return []
+    mapsets_accessible = ret.splitlines()
+    if get == "accessible":
+        return mapsets_accessible
 
-        mapsets_ordered = mapsets_accessible.copy()
-        for mapset in mapsets_all:
-            if mapset not in mapsets_accessible:
-                mapsets_ordered.append(mapset)
-        return mapsets_ordered
-
-    msg = "Invalid value for 'get' parameter of ListOfMapsets()"
-    raise ValueError(msg)
+    mapsets_ordered = mapsets_accessible.copy()
+    for mapset in mapsets_all:
+        if mapset not in mapsets_accessible:
+            mapsets_ordered.append(mapset)
+    return mapsets_ordered
 
 
 def ListSortLower(list):
@@ -472,14 +465,13 @@ def __ll_parts(value, reverse=False, precision=3):
             m = m[:-1]
             s = "0.0"
         except ValueError:
-            try:
-                d = value
-                hs = d[-1]
-                d = d[:-1]
-                m = "0"
-                s = "0.0"
-            except ValueError:
-                raise ValueError
+            # Value without minutes and seconds. Errors are passed to the caller
+            # as they are.
+            d = value
+            hs = d[-1]
+            d = d[:-1]
+            m = "0"
+            s = "0.0"
 
     if hs not in {"N", "S", "E", "W"}:
         raise ValueError
@@ -612,8 +604,9 @@ def GetListOfMapsets(dbase, location, selectable=False):
             listOfMapsets += line.split(" ")
     else:
         for mapset in glob.glob(os.path.join(dbase, location, "*")):
-            if os.path.isdir(mapset) and os.path.isfile(
-                os.path.join(dbase, location, mapset, "WIND")
+            if (
+                Path(mapset).is_dir()
+                and Path(dbase, location, mapset, "WIND").is_file()
             ):
                 listOfMapsets.append(os.path.basename(mapset))
 
@@ -800,7 +793,9 @@ vectorFormatExtension = {
 def GetSettingsPath():
     """Get full path to the settings directory"""
     version_major, version_minor, _ = grass.version()["version"].split(".")
-    return get_grass_config_dir(version_major, version_minor, os.environ)
+    return get_grass_config_dir_for_version(
+        version_major, version_minor, env=os.environ
+    )
 
 
 def StoreEnvVariable(key, value=None, envFile=None):
@@ -826,9 +821,23 @@ def StoreEnvVariable(key, value=None, envFile=None):
     # read env file
     environ = {}
     lineSkipped = []
-    if os.path.exists(envFile):
+    if Path(envFile).exists():
         try:
-            fd = open(envFile)
+            with open(envFile) as fd:
+                for line in fd:
+                    line = line.rstrip(os.linesep)
+                    try:
+                        k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
+                    except Exception as e:
+                        sys.stderr.write(
+                            _("%s: line skipped - unable to parse '%s'\nReason: %s\n")
+                            % (envFile, line, e)
+                        )
+                        lineSkipped.append(line)
+                        continue
+                    if k in environ:
+                        sys.stderr.write(_("Duplicated key: %s\n") % k)
+                    environ[k] = v
         except OSError as error:
             sys.stderr.write(
                 _("Unable to open file '{name}': {error}\n").format(
@@ -836,22 +845,6 @@ def StoreEnvVariable(key, value=None, envFile=None):
                 )
             )
             return
-        for line in fd:
-            line = line.rstrip(os.linesep)
-            try:
-                k, v = (x.strip() for x in line.split(" ", 1)[1].split("=", 1))
-            except Exception as e:
-                sys.stderr.write(
-                    _("%s: line skipped - unable to parse '%s'\nReason: %s\n")
-                    % (envFile, line, e)
-                )
-                lineSkipped.append(line)
-                continue
-            if k in environ:
-                sys.stderr.write(_("Duplicated key: %s\n") % k)
-            environ[k] = v
-
-        fd.close()
 
     # update environmental variables
     if value is None:
@@ -861,7 +854,15 @@ def StoreEnvVariable(key, value=None, envFile=None):
 
     # write update env file
     try:
-        fd = open(envFile, "w")
+        with open(envFile, "w") as fd:
+            expCmd = "set" if windows else "export"
+
+            fd.writelines(
+                "%s %s=%s\n" % (expCmd, key, value) for key, value in environ.items()
+            )
+
+            # write also skipped lines
+            fd.writelines(line + os.linesep for line in lineSkipped)
     except OSError as error:
         sys.stderr.write(
             _("Unable to create file '{name}': {error}\n").format(
@@ -869,14 +870,6 @@ def StoreEnvVariable(key, value=None, envFile=None):
             )
         )
         return
-    expCmd = "set" if windows else "export"
-
-    fd.writelines("%s %s=%s\n" % (expCmd, key, value) for key, value in environ.items())
-
-    # write also skipped lines
-    fd.writelines(line + os.linesep for line in lineSkipped)
-
-    fd.close()
 
 
 def SetAddOnPath(addonPath=None, key="PATH"):
@@ -1074,11 +1067,11 @@ def isInRegion(regionA, regionB) -> bool:
     For example, region A is a display region and region B is some reference
     region, e.g., a computational region.
 
-    >>> displayRegion = {'n': 223900, 's': 217190, 'w': 630780, 'e': 640690}
-    >>> compRegion = {'n': 228500, 's': 215000, 'w': 630000, 'e': 645000}
+    >>> displayRegion = {"n": 223900, "s": 217190, "w": 630780, "e": 640690}
+    >>> compRegion = {"n": 228500, "s": 215000, "w": 630000, "e": 645000}
     >>> isInRegion(displayRegion, compRegion)
     True
-    >>> displayRegion = {'n':226020, 's': 212610, 'w': 626510, 'e': 646330}
+    >>> displayRegion = {"n": 226020, "s": 212610, "w": 626510, "e": 646330}
     >>> isInRegion(displayRegion, compRegion)
     False
 

@@ -2,8 +2,11 @@
  * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Summer 1993
  * University of Illinois
  * US Army Construction Engineering Research Lab
- * Copyright 1993, H. Mitasova (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)
+ * SPDX-FileCopyrightText: 1993 H. Mitasova (University of Illinois)
+ * SPDX-FileCopyrightText: 1993 I. Kosinovsky (USA-CERL)
+ * SPDX-FileCopyrightText: 1993 D.Gerdes (USA-CERL)
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * modified by McCauley in August 1995
  * modified by Mitasova in August 1995
@@ -46,8 +49,9 @@ int IL_resample_output_2d(
     struct interp_params *params, double zmin,
     double zmax,                  /* min,max input z-values */
     double zminac, double zmaxac, /* min,max interpolated values */
-    double c1min, double c1max, double c2min, double c2max, double gmin UNUSED,
-    double gmax UNUSED, double ertot,       /* total interplating func. error */
+    double c1min, double c1max, double c2min, double c2max,
+    double gmin G_UNUSED, double gmax G_UNUSED,
+    double ertot,                           /* total interplating func. error */
     char *input,                            /* input file name */
     double *dnorm, struct Cell_head *outhd, /* Region with desired resolution */
     struct Cell_head *winhd,                /* Current region */

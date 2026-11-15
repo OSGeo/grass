@@ -2,10 +2,8 @@
 The abstract_map_dataset module provides the AbstractMapDataset class
 that is the base class for all map layer.
 
-(C) 2011-2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2011-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -66,7 +64,7 @@ class AbstractMapDataset(AbstractDataset):
         """Return a new space time dataset instance that store maps with the
         type of this map object (raster, raster_3d or vector)
 
-        :param ident The identifier of the space time dataset
+        :param ident: The identifier of the space time dataset
         :return: The new space time dataset instance
         """
 
@@ -166,6 +164,10 @@ class AbstractMapDataset(AbstractDataset):
         :return: The map id "name@mapset"
         """
         return self.base.get_map_id()
+
+    def get_readonly(self) -> bool:
+        """Return True if this map is read-only (belongs to a foreign mapset)"""
+        return self.base.get_readonly()
 
     @staticmethod
     def split_name(name: str, layer=None, mapset=None):
@@ -358,7 +360,7 @@ class AbstractMapDataset(AbstractDataset):
         :return: The SQL insert statement in case execute=False, or an
                  empty string otherwise
         """
-        if get_enable_timestamp_write():
+        if get_enable_timestamp_write() and not self.get_readonly():
             self.write_timestamp_to_grass()
         return AbstractDataset.insert(self, dbif=dbif, execute=execute)
 
@@ -377,7 +379,7 @@ class AbstractMapDataset(AbstractDataset):
         :return: The SQL insert statement in case execute=False, or an
                  empty string otherwise
         """
-        if get_enable_timestamp_write():
+        if get_enable_timestamp_write() and not self.get_readonly():
             self.write_timestamp_to_grass()
         return AbstractDataset.update(self, dbif, execute)
 
@@ -397,7 +399,7 @@ class AbstractMapDataset(AbstractDataset):
                  empty string otherwise
 
         """
-        if get_enable_timestamp_write():
+        if get_enable_timestamp_write() and not self.get_readonly():
             self.write_timestamp_to_grass()
         return AbstractDataset.update_all(self, dbif, execute)
 
@@ -536,7 +538,7 @@ class AbstractMapDataset(AbstractDataset):
             if connection_state_changed:
                 dbif.close()
 
-            if get_enable_timestamp_write():
+            if get_enable_timestamp_write() and not self.get_readonly():
                 self.write_timestamp_to_grass()
 
     def set_relative_time(self, start_time, end_time, unit) -> bool:
@@ -657,7 +659,7 @@ class AbstractMapDataset(AbstractDataset):
             if connection_state_changed:
                 dbif.close()
 
-            if get_enable_timestamp_write():
+            if get_enable_timestamp_write() and not self.get_readonly():
                 self.write_timestamp_to_grass()
 
     def set_temporal_extent(self, extent) -> None:
@@ -666,7 +668,7 @@ class AbstractMapDataset(AbstractDataset):
 
         :param extent: The temporal extent that should be set for this object
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import datetime
             >>> import grass.temporal as tgis
@@ -733,7 +735,7 @@ class AbstractMapDataset(AbstractDataset):
 
         Usage:
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> maps = []
@@ -745,10 +747,8 @@ class AbstractMapDataset(AbstractDataset):
             ...         check = map.set_relative_time(i, None, "years")
             ...     map.temporal_buffer(3)
             ...     maps.append(map)
-            ...
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Relative time -----------------------------------------+
              | Start time:................. -3
              | End time:................... 4
@@ -780,10 +780,8 @@ class AbstractMapDataset(AbstractDataset):
             ...         check = map.set_absolute_time(datetime(2001, i, 1), None)
             ...     map.temporal_buffer("7 days")
             ...     maps.append(map)
-            ...
             >>> for map in maps:
             ...     map.temporal_extent.print_info()
-            ...
              +-------------------- Absolute time -----------------------------------------+
              | Start time:................. 2000-12-25 00:00:00
              | End time:................... 2001-01-08 00:00:00
@@ -849,7 +847,7 @@ class AbstractMapDataset(AbstractDataset):
 
          :param spatial_extent: An object of type SpatialExtent or its subclasses
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import datetime
             >>> import grass.temporal as tgis
@@ -873,7 +871,7 @@ class AbstractMapDataset(AbstractDataset):
                        internal variables are set
         :param dbif: The database interface to be used
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> map = tgis.RasterDataset(None)
@@ -905,7 +903,7 @@ class AbstractMapDataset(AbstractDataset):
                        internal variables are set
         :param dbif: The database interface to be used
 
-        .. code-block: : python
+        .. code-block:: pycon
 
             >>> import grass.temporal as tgis
             >>> map = tgis.RasterDataset(None)

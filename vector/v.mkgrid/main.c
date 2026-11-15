@@ -14,11 +14,8 @@
  *               Luca Delucchi: lines support -l, vertical breaks
  *               Markus Metz: rewrite, hexagon creation
  * PURPOSE:
- * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1999-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -353,7 +350,8 @@ int main(int argc, char *argv[])
                 _("The number of columns has been adjusted from %d to %d"),
                 grid_info.num_cols, grid_info.num_vect_cols);
 
-        sprintf(buf, "create table %s ( %s integer)", Fi->table, Fi->key);
+        snprintf(buf, sizeof(buf), "create table %s ( %s integer)", Fi->table,
+                 Fi->key);
 
         db_set_string(&sql, buf);
 
@@ -377,7 +375,8 @@ int main(int argc, char *argv[])
 
         for (i = 1; i <= attCount; ++i) {
 
-            sprintf(buf, "insert into %s values ( %d )", Fi->table, i);
+            snprintf(buf, sizeof(buf), "insert into %s values ( %d )",
+                     Fi->table, i);
             if (db_set_string(&sql, buf) != DB_OK)
                 G_fatal_error(_("Unable to fill attribute table"));
 
@@ -405,15 +404,15 @@ int main(int argc, char *argv[])
         Cats = Vect_new_cats_struct();
 
         if (grid_info.num_rows < 27 && grid_info.num_cols < 27) {
-            sprintf(buf,
-                    "create table %s ( cat integer, row integer, col integer, "
-                    "rown varchar(1), coln varchar(1))",
-                    Fi->table);
+            snprintf(buf, sizeof(buf),
+                     "create table %s ( cat integer, row integer, col integer, "
+                     "rown varchar(1), coln varchar(1))",
+                     Fi->table);
         }
         else {
-            sprintf(buf,
-                    "create table %s ( cat integer, row integer, col integer)",
-                    Fi->table);
+            snprintf(buf, sizeof(buf),
+                     "create table %s ( cat integer, row integer, col integer)",
+                     Fi->table);
         }
         db_set_string(&sql, buf);
 
@@ -463,18 +462,19 @@ int main(int argc, char *argv[])
                     Vect_cat_set(Cats, 1, attCount + 1);
                     Vect_write_line(&Map, ptype, Points, Cats);
 
-                    sprintf(buf, "insert into %s values ", Fi->table);
+                    snprintf(buf, sizeof(buf), "insert into %s values ",
+                             Fi->table);
                     if (db_set_string(&sql, buf) != DB_OK)
                         G_fatal_error(_("Unable to fill attribute table"));
 
                     if (grid_info.num_rows < 27 && grid_info.num_cols < 27) {
-                        sprintf(buf, "( %d, %d, %d, '%c', '%c' )", attCount + 1,
-                                grid_info.num_rows - i, j + 1,
-                                'A' + grid_info.num_rows - i - 1, 'A' + j);
+                        snprintf(buf, sizeof(buf), "( %d, %d, %d, '%c', '%c' )",
+                                 attCount + 1, grid_info.num_rows - i, j + 1,
+                                 'A' + grid_info.num_rows - i - 1, 'A' + j);
                     }
                     else {
-                        sprintf(buf, "( %d, %d, %d )", attCount + 1,
-                                grid_info.num_rows - i, j + 1);
+                        snprintf(buf, sizeof(buf), "( %d, %d, %d )",
+                                 attCount + 1, grid_info.num_rows - i, j + 1);
                     }
                     if (db_append_string(&sql, buf) != DB_OK)
                         G_fatal_error(_("Unable to fill attribute table"));

@@ -4,14 +4,13 @@
  *   Calculates univariate statistics from the non-null cells of a GRASS
  *   raster map
  *
- *   Copyright 2006-2014 by M. Hamish Bowman, and The GRASS Development Team
+ *   SPDX-FileCopyrightText: 2006-2014 M. Hamish Bowman
+ *   SPDX-FileCopyrightText: GRASS Development Team
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author: M. Hamish Bowman, University of Otago, Dunedin, New Zealand
  *
  *   Extended 2007 by Volker Wichmann to support the aggregate functions
  *   median, percentile, skewness and trimmed mean
- *
- *   This program is free software licensed under the GPL (>=v2).
- *   Read the COPYING file that comes with GRASS for details.
  *
  *   This program is intended as a replacement for the GRASS 5 s.cellstats
  *   module.
@@ -1193,8 +1192,9 @@ int main(int argc, char *argv[])
     /* close raster file & write history */
     Rast_close(out_fd);
 
-    sprintf(title, "Raw x,y,z data binned into a raster grid by cell %s",
-            method_opt->answer);
+    snprintf(title, sizeof(title),
+             "Raw x,y,z data binned into a raster grid by cell %s",
+             method_opt->answer);
     Rast_put_cell_title(outmap, title);
 
     Rast_short_history(outmap, "raster", &history);

@@ -1,9 +1,7 @@
 """test distributed temporal databases with str3ds
 
-(C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -19,12 +17,12 @@ from grass.gunittest.utils import silent_rmtree
 class testRaster3dExtraction(TestCase):
     mapsets_to_remove = []
     outfile = "rast3dlist.txt"
-    gisenv = SimpleModule("g.gisenv", get="MAPSET")
-    TestCase.runModule(gisenv, expecting_stdout=True)
-    old_mapset = gisenv.outputs.stdout.strip()
 
     @classmethod
     def setUpClass(cls):
+        gisenv = SimpleModule("g.gisenv", get="MAPSET")
+        TestCase.runModule(gisenv, expecting_stdout=True)
+        cls.old_mapset = gisenv.outputs.stdout.strip()
         os.putenv("GRASS_OVERWRITE", "1")
         for i in range(1, 5):
             mapset_name = "test3d%i" % i
@@ -95,7 +93,7 @@ class testRaster3dExtraction(TestCase):
 
         out = t_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         t_list = SimpleModule(
@@ -108,12 +106,12 @@ class testRaster3dExtraction(TestCase):
         )
         self.assertModule(t_list)
         self.assertFileExists(self.outfile)
-        read_data = Path(self.outfile).read_text()
-        for a, b in zip(list_string.split("\n"), read_data.split("\n")):
+        outfile_path = Path(self.outfile)
+        read_data = outfile_path.read_text()
+        for a, b in zip(list_string.split("\n"), read_data.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
         # self.assertLooksLike(reference=read_data, actual=list_string)
-        if os.path.isfile(self.outfile):
-            os.remove(self.outfile)
+        outfile_path.unlink(missing_ok=True)
 
     def test_trast_list(self):
         self.runModule("g.mapset", mapset="test3d1")
@@ -129,7 +127,7 @@ class testRaster3dExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         list_string = """a1|test3d2|2001-01-01 00:00:00|2001-03-01 00:00:00
@@ -143,7 +141,7 @@ class testRaster3dExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         list_string = """a1|test3d3|2001-01-01 00:00:00|2001-04-01 00:00:00
@@ -157,7 +155,7 @@ class testRaster3dExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         list_string = """a1|test3d4|2001-01-01 00:00:00|2001-05-01 00:00:00
@@ -171,7 +169,7 @@ class testRaster3dExtraction(TestCase):
 
         out = trast_list.outputs["stdout"].value
 
-        for a, b in zip(list_string.split("\n"), out.split("\n")):
+        for a, b in zip(list_string.split("\n"), out.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
 
         trast_list = SimpleModule(
@@ -183,11 +181,11 @@ class testRaster3dExtraction(TestCase):
         )
         self.assertModule(trast_list)
         self.assertFileExists(self.outfile)
-        read_data = Path(self.outfile).read_text()
-        for a, b in zip(list_string.split("\n"), read_data.split("\n")):
+        outfile_path = Path(self.outfile)
+        read_data = outfile_path.read_text()
+        for a, b in zip(list_string.split("\n"), read_data.split("\n"), strict=False):
             self.assertEqual(a.strip(), b.strip())
-        if os.path.isfile(self.outfile):
-            os.remove(self.outfile)
+        outfile_path.unlink(missing_ok=True)
 
     def test_strds_info(self):
         self.runModule("g.mapset", mapset="test3d4")

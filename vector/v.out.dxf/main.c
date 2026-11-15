@@ -8,11 +8,8 @@
  *
  * PURPOSE:     Convert vector maps into DXF files.
  *
- * COPYRIGHT:   (C) 1989-2006 by the GRASS Development Team
- *
- *              This program is free software under the GNU General
- *              Public License (>=v2). Read the file COPYING that
- *              comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1989-2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************************/
 
@@ -160,7 +157,7 @@ int add_plines(struct Map_info *Map, int field, double textsize)
         if (field != -1 && cat < 0)
             continue;
 
-        sprintf(cat_num, "%d", cat);
+        snprintf(cat_num, sizeof(cat_num), "%d", cat);
 
         if (ltype == GV_POINT) {
             layer = "point";

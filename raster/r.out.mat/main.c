@@ -3,11 +3,9 @@
  *
  * Output a GRASS raster map to a MAT-File (version 4).
  *
- *   Copyright (C) 2004 by the GRASS Development Team
+ *   SPDX-FileCopyrightText: 2004 GRASS Development Team
+ *   SPDX-License-Identifier: GPL-2.0-or-later
  *   Author: Hamish Bowman, University of Otago, New Zealand
- *
- *   This program is free software under the GPL (>=v2)
- *   Read the COPYING file that comes with GRASS for details.
  *
  *   Code follows r.out.bin to a certain extent, which in turn
  *   follows r.out.ascii.
@@ -80,7 +78,7 @@ int main(int argc, char *argv[])
     basename = G_store(outputfile->answer);
     G_basename(basename, "mat");
     outfile = G_malloc(strlen(basename) + 5);
-    sprintf(outfile, "%s.mat", basename);
+    snprintf(outfile, (strlen(basename) + 5), "%s.mat", basename);
 
     fd = Rast_open_old(infile, "");
 

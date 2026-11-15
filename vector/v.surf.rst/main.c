@@ -15,17 +15,15 @@
  *               Anna Petrasova (OpenMP version GRASS integration)
  *
  * PURPOSE:      Surface interpolation from vector point data by splines
- * COPYRIGHT:    (C) 2003-2009, 2013 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2003-2009, 2013 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -286,7 +284,7 @@ int main(int argc, char *argv[])
     parm.rsm->required = NO;
     parm.rsm->label = _("Smoothing parameter");
     parm.rsm->description =
-        _("Smoothing is by default 0.5 unless smooth_column is specified");
+        _("Smoothing is by default 0.1 unless smooth_column is specified");
     parm.rsm->guisection = _("Parameters");
 
     parm.scol = G_define_option();
@@ -318,8 +316,10 @@ int main(int argc, char *argv[])
     parm.dmin->key = "dmin";
     parm.dmin->type = TYPE_DOUBLE;
     parm.dmin->required = NO;
-    parm.dmin->description = _(
-        "Minimum distance between points (to remove almost identical points)");
+    parm.dmin->description =
+        _("Minimum distance between points (to remove almost identical "
+          "points). Default value is half of "
+          " the smaller resolution of the current region");
     parm.dmin->guisection = _("Parameters");
 
     parm.dmax = G_define_option();
@@ -373,8 +373,8 @@ int main(int argc, char *argv[])
         dmin = ns_res / 2;
     disk = n_rows * n_cols * sizeof(int);
     sdisk = n_rows * n_cols * sizeof(short int);
-    sprintf(dmaxchar, "%f", dmin * 5);
-    sprintf(dminchar, "%f", dmin);
+    snprintf(dmaxchar, sizeof(dmaxchar), "%f", dmin * 5);
+    snprintf(dminchar, sizeof(dminchar), "%f", dmin);
 
     if (!parm.dmin->answer) {
         parm.dmin->answer = G_store(dminchar);
@@ -417,7 +417,7 @@ int main(int argc, char *argv[])
     omp_set_num_threads(threads);
 #else
     if (threads > 1)
-        G_warning(_("GRASS GIS is not compiled with OpenMP support, parallel "
+        G_warning(_("GRASS is not compiled with OpenMP support, parallel "
                     "computation is disabled."));
 #endif
     if (threads > 1 && Rast_mask_is_present()) {
@@ -626,7 +626,7 @@ int main(int argc, char *argv[])
 
         /* Create new table */
         db_zero_string(&sql2);
-        sprintf(buf, "create table %s ( ", ff->table);
+        snprintf(buf, sizeof(buf), "create table %s ( ", ff->table);
         db_append_string(&sql2, buf);
         db_append_string(&sql2, "cat integer");
         db_append_string(&sql2, ", flt1 double precision");

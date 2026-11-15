@@ -13,7 +13,7 @@ int read_labels(char *name, char *mapset)
     char buf[1024];
     char *key, *data;
 
-    sprintf(fullname, "%s in %s", name, mapset);
+    snprintf(fullname, sizeof(fullname), "%s in %s", name, mapset);
 
     if (labels.count >= MAXLABELS) {
         error(fullname, "", "no more label files allowed");

@@ -71,6 +71,7 @@ SUBDIRS = \
 	v.parallel \
 	v.patch \
 	v.perturb \
+	v.ppa \
 	v.split \
 	v.qcount \
 	v.profile \

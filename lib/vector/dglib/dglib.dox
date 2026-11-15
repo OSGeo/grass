@@ -138,7 +138,7 @@ Directed graph library is responsible for network analysis operations
 done on vector maps. For this purpose directed graph library converts
 the vector attributes into form of a graph. This graph structure and
 related structures are defined in dglib/graph.h This header file
-contains definition of all structers required for storing components
+contains definition of all structures required for storing components
 of graph, transversing, accessing and modifying it.
 
 Map Structure Map_info contains a instance of dglGraph_s as one of its
@@ -155,13 +155,13 @@ typedef struct _dglGraph
 
 	dglByte_t			Version;	//graph version 1 2 or 3
 	dglByte_t			Endian;		// big or small
-	dglInt32_t			NodeAttrSize;	 //node attr sze
+	dglInt32_t			NodeAttrSize; //node attribute size
 	dglInt32_t			EdgeAttrSize; //edge attribute size
 	dglInt32_t			aOpaqueSet[ 16 ];
 
 	dglInt32_t			cNode;	// count of nodes
-	dglInt32_t			cHead;	// count of head nodes ( nodes from those edge orignates)
-	dglInt32_t			cTail;	// count of tail nodes (nodes at whom edge terimate )
+	dglInt32_t			cHead;	// count of head nodes ( nodes from those edge originate )
+	dglInt32_t			cTail;	// count of tail nodes ( nodes at whom edge terminate )
 	dglInt32_t			cAlone;	// component nodes ( which are not connected to anyone )
 	dglInt32_t			cEdge;	//count of edges
 	dglInt64_t			nnCost;	//total cost of edges
@@ -172,9 +172,9 @@ typedef struct _dglGraph
 
 	void *				pNodeTree;	// pointer to tree of nodes
 	void *				pEdgeTree;	//pointer to tree of edges
-	dglByte_t * 			pNodeBuffer;	//pointer to node buffer. this points contiguous memory location containing pointers to nodes of  graph.
+	dglByte_t *			pNodeBuffer; //pointer to node buffer. this points contiguous memory location containing pointers to nodes of graph.
 	dglInt32_t			iNodeBuffer; //current index of node being accessed. This is used as offset index from pNodeBuffer
-	dglByte_t * 			pEdgeBuffer; //pointer to edge buffer. this points to contiguous memory ,containing pointer to edgesets passing through each node. Here as per i remember means orignating.
+	dglByte_t *			pEdgeBuffer; //pointer to edge buffer. this points to contiguous memory, containing pointer to edgesets passing through each node. Here as per i remember means originating.
 	dglInt32_t			iEdgeBuffer; // offset index counter for edge buffer.
 
 			//rest i have not studied yet (NKD).

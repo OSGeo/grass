@@ -8,10 +8,8 @@ Classes:
  - mapwindow::GraphicsSet
  - mapwindow::GraphicsSetItem
 
-(C) 2006-2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Michael Barton
@@ -25,6 +23,7 @@ import os
 import time
 import math
 import sys
+from pathlib import Path
 
 import wx
 
@@ -169,7 +168,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         # Emitted after double-click
         self.mouseDClick = Signal("BufferedWindow.mouseDClick")
         # Emitted when mouse us moving (mouse motion event)
-        # Parametres are x and y of the mouse position in map (cell) units
+        # Parameters are x and y of the mouse position in map (cell) units
         self.mouseMoving = Signal("BufferedWindow.mouseMoving")
 
         # event bindings
@@ -378,7 +377,7 @@ class BufferedMapWindow(MapWindowBase, Window):
             pdc.EndDrawing()
 
             self.Refresh()
-            return
+            return None
 
         if pdctype == "image":  # draw selected image
             bitmap = BitmapFromImage(img)
@@ -421,7 +420,7 @@ class BufferedMapWindow(MapWindowBase, Window):
                 pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
                 pdc.SetPen(pen)
                 if len(coords) < 2:
-                    return
+                    return None
                 if pdctype == "polyline":
                     i = 1
                     while i < len(coords):
@@ -497,7 +496,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
         elif pdctype == "text":  # draw text on top of map
             if not img["active"]:
-                return  # only draw active text
+                return None  # only draw active text
             rotation = float(img["rotation"]) if "rotation" in img else 0.0
             w, h = self.GetFullTextExtent(img["text"])[0:2]
             pdc.SetFont(img["font"])
@@ -797,18 +796,19 @@ class BufferedMapWindow(MapWindowBase, Window):
         imgs = []
         for overlay in self.Map.GetListOfLayers(ltype="overlay", active=True):
             if (
-                overlay.mapfile is not None
-                and os.path.isfile(overlay.mapfile)
-                and os.path.getsize(overlay.mapfile)
+                overlay.mapfile is None
+                or not Path(overlay.mapfile).is_file()
+                or (not Path(overlay.mapfile).stat().st_size)
             ):
-                img = utils.autoCropImageFromFile(overlay.mapfile)
+                continue
+            img = utils.autoCropImageFromFile(overlay.mapfile)
 
-                for key in list(self.imagedict.keys()):
-                    if self.imagedict[key]["id"] == overlay.id:
-                        del self.imagedict[key]
+            for key in list(self.imagedict.keys()):
+                if self.imagedict[key]["id"] == overlay.id:
+                    del self.imagedict[key]
 
-                self.imagedict[img] = {"id": overlay.id, "layer": overlay}
-                imgs.append(img)
+            self.imagedict[img] = {"id": overlay.id, "layer": overlay}
+            imgs.append(img)
 
         return imgs
 
@@ -822,8 +822,8 @@ class BufferedMapWindow(MapWindowBase, Window):
         imgId = 99
         if (
             self.Map.mapfile
-            and os.path.isfile(self.Map.mapfile)
-            and os.path.getsize(self.Map.mapfile)
+            and Path(self.Map.mapfile).is_file()
+            and Path(self.Map.mapfile).stat().st_size
         ):
             img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
         else:
@@ -1116,7 +1116,7 @@ class BufferedMapWindow(MapWindowBase, Window):
 
     def DragItem(self, id, coords):
         """Drag an overlay decoration item"""
-        if id in (99, "") or id is None:
+        if id in {99, ""} or id is None:
             return
         Debug.msg(5, "BufferedWindow.DragItem(): id=%d" % id)
         x, y = self.lastpos
@@ -1214,23 +1214,17 @@ class BufferedMapWindow(MapWindowBase, Window):
         if not polycoords:
             polycoords = self.polycoords
 
-        if len(polycoords) > 0:
-            self.plineid = wx.ID_NEW + 1
-            # convert from EN to XY
-            coords = []
-            for p in polycoords:
-                coords.append(self.Cell2Pixel(p))
-
-            self.Draw(pdc, drawid=self.plineid, pdctype="polyline", coords=coords)
-
-            Debug.msg(
-                4,
-                "BufferedWindow.DrawLines(): coords=%s, id=%s" % (coords, self.plineid),
-            )
-
-            return self.plineid
-
-        return -1
+        if len(polycoords) <= 0:
+            return -1
+        self.plineid = wx.ID_NEW + 1
+        # convert from EN to XY
+        coords = [self.Cell2Pixel(p) for p in polycoords]
+        self.Draw(pdc, drawid=self.plineid, pdctype="polyline", coords=coords)
+        Debug.msg(
+            4,
+            "BufferedWindow.DrawLines(): coords=%s, id=%s" % (coords, self.plineid),
+        )
+        return self.plineid
 
     def DrawPolylines(self, pdc, coords, pen, drawid=None):
         """Draw polyline in PseudoDC.
@@ -1713,7 +1707,7 @@ class BufferedMapWindow(MapWindowBase, Window):
         event.Skip()
 
     def OnCopyCoordinates(self, event):
-        """Copy coordinates to cliboard"""
+        """Copy coordinates to clipboard"""
         e, n = self.GetLastEN()
         if wx.TheClipboard.Open():
             do = wx.TextDataObject()
@@ -2031,7 +2025,7 @@ class BufferedMapWindow(MapWindowBase, Window):
     def ZoomToDefault(self):
         """Set display geometry to match default region settings"""
         self.Map.region = self.Map.GetRegion(default=True)
-        self.Map.AdjustRegion()  # aling region extent to the display
+        self.Map.AdjustRegion()  # align region extent to the display
 
         self.ZoomHistory(
             self.Map.region["n"],

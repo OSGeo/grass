@@ -1,8 +1,8 @@
 /*
- * Copyright (C) 1995.  Bill Brown <brown@gis.uiuc.edu> & Michael Shapiro
- *
- * This program is free software under the GPL (>=v2)
- * Read the file GPL.TXT coming with GRASS for details.
+ * SPDX-FileCopyrightText: 1995 Bill Brown <brown@gis.uiuc.edu>
+ * SPDX-FileCopyrightText: 1995 Michael Shapiro
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <grass/datetime.h>
 
@@ -16,7 +16,6 @@
  *  \param incr
  *  \return int
  */
-
 int datetime_is_valid_increment(const DateTime *src, const DateTime *incr)
 {
     return datetime_check_increment(src, incr) == 0;
@@ -54,7 +53,6 @@ int datetime_is_valid_increment(const DateTime *src, const DateTime *incr)
  *  \param incr
  *  \return int
  */
-
 int datetime_check_increment(const DateTime *src, const DateTime *incr)
 {
     if (!datetime_is_valid_type(src))

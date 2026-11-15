@@ -58,8 +58,8 @@ static void font_list(char ***list, int *count, int verbose)
         if (verbose) {
             char buf[GPATH_MAX];
 
-            sprintf(buf, "%s|%s|%d|%s|%d|%s|", p->name, p->longname, p->type,
-                    p->path, p->index, p->encoding);
+            snprintf(buf, sizeof(buf), "%s|%s|%d|%s|%d|%s|", p->name,
+                     p->longname, p->type, p->path, p->index, p->encoding);
 
             fonts[i] = G_store(buf);
         }

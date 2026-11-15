@@ -8,10 +8,8 @@
    Initialize Head structure. To make sure that we are not writing out
    garbage to a file.
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -39,14 +37,14 @@ void Vect__init_head(struct Map_info *Map)
     Vect_set_date(Map, "");
 
     /* user name */
-    sprintf(buf, "%s", G_whoami());
+    snprintf(buf, sizeof(buf), "%s", G_whoami());
     Vect_set_person(Map, buf);
 
     /* map name */
     Vect_set_map_name(Map, "");
 
     /* source date */
-    sprintf(buf, "%s", G_date());
+    snprintf(buf, sizeof(buf), "%s", G_date());
     Vect_set_map_date(Map, buf);
 
     /* comments */

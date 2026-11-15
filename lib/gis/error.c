@@ -3,11 +3,8 @@
  *
  * \brief GIS Library - Error messages functions
  *
- * (C) 1999-2011 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1999-2011 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author USACERL and many others
  */
@@ -306,7 +303,7 @@ static void print_error(const char *msg, const int type)
                 int len, lead;
 
                 fprintf(stderr, "%s", prefix_std[type]);
-                len = lead = strlen(prefix_std[type]);
+                len = lead = (int)strlen(prefix_std[type]);
                 w = (char *)msg;
 
                 while (print_word(stderr, &w, &len, lead))
@@ -345,7 +342,7 @@ static void log_error(const char *msg, int fatal)
 
     /* get current working directory */
     if (getcwd(cwd, sizeof(cwd)) == NULL)
-        sprintf(cwd, "%s", _("unknown"));
+        snprintf(cwd, sizeof(cwd), "%s", _("unknown"));
 
     /* write the error log file */
     if ((gisbase = G_gisbase()))
@@ -487,19 +484,22 @@ static int print_word(FILE *fd, char **word, int *len, const int lead)
 /* Print one message, prefix inserted before each new line */
 static void print_sentence(FILE *fd, const int type, const char *msg)
 {
-    char prefix[100];
+    char prefix[100] = "";
     const char *start;
     int id = G_counter_next(&message_id);
 
     switch (type) {
     case MSG:
-        sprintf(prefix, "GRASS_INFO_MESSAGE(%d,%d): ", getpid(), id);
+        snprintf(prefix, sizeof(prefix),
+                 "GRASS_INFO_MESSAGE(%d,%d): ", getpid(), id);
         break;
     case WARN:
-        sprintf(prefix, "GRASS_INFO_WARNING(%d,%d): ", getpid(), id);
+        snprintf(prefix, sizeof(prefix),
+                 "GRASS_INFO_WARNING(%d,%d): ", getpid(), id);
         break;
     case ERR:
-        sprintf(prefix, "GRASS_INFO_ERROR(%d,%d): ", getpid(), id);
+        snprintf(prefix, sizeof(prefix), "GRASS_INFO_ERROR(%d,%d): ", getpid(),
+                 id);
         break;
     }
 

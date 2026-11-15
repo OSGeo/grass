@@ -3,10 +3,8 @@
 
   \brief Display Driver - draw raster data
 
-  (C) 2006-2011 by the GRASS Development Team
-
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
+  SPDX-FileCopyrightText: 2006-2011 GRASS Development Team
+  SPDX-License-Identifier: GPL-2.0-or-later
 
   \author Glynn Clements <glynn gclements.plus.com> (original contributor)
   \author Huidae Cho <grass4u gmail.com>
@@ -179,9 +177,9 @@ int D_draw_raster_RGB(int A_row, const void *r_raster, const void *g_raster,
     static unsigned char *r_buf, *g_buf, *b_buf, *n_buf;
     static int nalloc;
 
-    int r_size = Rast_cell_size(r_type);
-    int g_size = Rast_cell_size(g_type);
-    int b_size = Rast_cell_size(b_type);
+    int r_size = (int)Rast_cell_size(r_type);
+    int g_size = (int)Rast_cell_size(g_type);
+    int b_size = (int)Rast_cell_size(b_type);
     int ncols = src[0][1] - src[0][0];
     int i;
 

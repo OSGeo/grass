@@ -42,9 +42,9 @@ int do_text(char *text, const long first, const long last)
         strcat(text, " ");
 
     if (first == last)
-        sprintf(work, "%ld", first);
+        snprintf(work, sizeof(work), "%ld", first);
     else
-        sprintf(work, "%ld-%ld", first, last);
+        snprintf(work, sizeof(work), "%ld-%ld", first, last);
 
     strcat(text, work);
 

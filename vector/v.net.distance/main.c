@@ -8,13 +8,9 @@
  * PURPOSE:    Computes shortest distance via the network between
  *             two given sets of features.
  *
- * COPYRIGHT:  (C) 2009-2010, 2012 by Daniel Bundala, and the GRASS
- *             Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ * SPDX-FileCopyrightText: 2009-2010, 2012 Daniel Bundala
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************/
 
@@ -281,8 +277,8 @@ int main(int argc, char *argv[])
                       Fi->database, Fi->driver);
     db_set_error_handler_driver(driver);
 
-    sprintf(
-        buf,
+    snprintf(
+        buf, sizeof(buf),
         "create table %s ( cat integer, tcat integer, dist double precision)",
         Fi->table);
 
@@ -359,8 +355,8 @@ int main(int argc, char *argv[])
                 continue;
 
             Vect_write_line(&Out, type, Points, Cats);
-            sprintf(buf, "insert into %s values (%d, %d, %f)", Fi->table, cat,
-                    tcat, cost);
+            snprintf(buf, sizeof(buf), "insert into %s values (%d, %d, %f)",
+                     Fi->table, cat, tcat, cost);
             db_set_string(&sql, buf);
             G_debug(3, "%s", db_get_string(&sql));
             if (db_execute_immediate(driver, &sql) != DB_OK) {

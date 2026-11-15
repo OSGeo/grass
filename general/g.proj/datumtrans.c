@@ -5,11 +5,8 @@
  * PURPOSE:      Provides a means of reporting the contents of GRASS
  *               projection information files and creating
  *               new projection information files.
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2007 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -78,6 +75,9 @@ int set_datum(char *datum)
     /* Destroy original key/value structure and replace with new one */
     G_free_key_value(projinfo);
     projinfo = temp_projinfo;
+    G_free(dstruct.ellps);
+    G_free(dstruct.longname);
+    G_free(dstruct.name);
 
     return 1;
 }
@@ -188,8 +188,10 @@ int set_datumtrans(int datumtrans, int force)
                     do {
                         struct gpj_datum_transform_list *old = list;
 
-                        if (list->count == datumtrans)
+                        if (list->count == datumtrans) {
+                            G_free(chosenparams);
                             chosenparams = G_store(list->params);
+                        }
                         list = list->next;
                         GPJ_free_datum_transform(old);
                     } while (list != NULL);

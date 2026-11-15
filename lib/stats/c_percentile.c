@@ -26,21 +26,21 @@ void c_quant(DCELL *result, DCELL *values, int n, const void *closure)
         (i0 == i1) ? values[i0] : values[i0] * (i1 - k) + values[i1] * (k - i0);
 }
 
-void c_quart1(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+void c_quart1(DCELL *result, DCELL *values, int n, const void *closure G_UNUSED)
 {
     static const double q = 0.25;
 
     c_quant(result, values, n, &q);
 }
 
-void c_quart3(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+void c_quart3(DCELL *result, DCELL *values, int n, const void *closure G_UNUSED)
 {
     static const double q = 0.75;
 
     c_quant(result, values, n, &q);
 }
 
-void c_perc90(DCELL *result, DCELL *values, int n, const void *closure UNUSED)
+void c_perc90(DCELL *result, DCELL *values, int n, const void *closure G_UNUSED)
 {
     static const double q = 0.90;
 
@@ -76,7 +76,7 @@ void w_quant(DCELL *result, DCELL (*values)[2], int n, const void *closure)
 }
 
 void w_quart1(DCELL *result, DCELL (*values)[2], int n,
-              const void *closure UNUSED)
+              const void *closure G_UNUSED)
 {
     static const double q = 0.25;
 
@@ -84,7 +84,7 @@ void w_quart1(DCELL *result, DCELL (*values)[2], int n,
 }
 
 void w_quart3(DCELL *result, DCELL (*values)[2], int n,
-              const void *closure UNUSED)
+              const void *closure G_UNUSED)
 {
     static const double q = 0.75;
 
@@ -92,7 +92,7 @@ void w_quart3(DCELL *result, DCELL (*values)[2], int n,
 }
 
 void w_perc90(DCELL *result, DCELL (*values)[2], int n,
-              const void *closure UNUSED)
+              const void *closure G_UNUSED)
 {
     static const double q = 0.90;
 

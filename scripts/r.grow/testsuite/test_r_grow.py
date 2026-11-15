@@ -17,6 +17,7 @@ class TestRGrow(TestCase):
     mapShrunkOutput = "lakes_shrunk_100m"
     mapNoNULL = "elevation"
     mapShrunkNoNULL = "elevation_shrunk"
+    mapGrownSmallRadius = "lakes_grown_small_radius"
 
     @classmethod
     def setUpClass(cls):
@@ -31,7 +32,12 @@ class TestRGrow(TestCase):
             "g.remove",
             flags="f",
             type="raster",
-            name=(cls.mapGrownOutput, cls.mapShrunkOutput, cls.mapShrunkNoNULL),
+            name=(
+                cls.mapGrownOutput,
+                cls.mapShrunkOutput,
+                cls.mapShrunkNoNULL,
+                cls.mapGrownSmallRadius,
+            ),
         )
         cls.del_temp_region()
 
@@ -52,15 +58,27 @@ class TestRGrow(TestCase):
     def test_shrink_null(self):
         """Shrinking of map without NULL values
         Based on https://github.com/OSGeo/grass/pull/343"""
-        shrinked_string = "56-156"
-        shrinked = SimpleModule(
+        expected_range = "56-156"
+        module = SimpleModule(
             "r.grow", input=self.mapNoNULL, output=self.mapShrunkNoNULL, radius=-10
         )
-        self.assertModule(shrinked)
+        self.assertModule(module)
 
-        shrined_range = SimpleModule("r.describe", flags="i", _map=self.mapShrunkNoNULL)
-        self.runModule(shrined_range)
-        self.assertLooksLike(shrinked_string, str(shrined_range.outputs.stdout).strip())
+        describe = SimpleModule("r.describe", flags="i", _map=self.mapShrunkNoNULL)
+        self.runModule(describe)
+        self.assertLooksLike(expected_range, str(describe.outputs.stdout).strip())
+
+    def test_grow_small_radius(self):
+        """Grow test for small radius involving scientific notation
+        Based on https://github.com/OSGeo/grass/pull/6737"""
+        module = SimpleModule(
+            "r.grow",
+            input=self.mapName,
+            output=self.mapGrownSmallRadius,
+            radius=0.00000002,
+        )
+        self.assertModule(module)
+        self.assertRasterExists(self.mapGrownSmallRadius)
 
 
 if __name__ == "__main__":

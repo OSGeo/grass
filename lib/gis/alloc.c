@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Memory allocation routines.
  *
- * (C) 1999-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1999-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -28,7 +26,6 @@
  * \param line line number
  * \param n number of elements
  */
-
 void *G__malloc(const char *file, int line, size_t n)
 {
     void *buf;
@@ -69,7 +66,6 @@ void *G__malloc(const char *file, int line, size_t n)
  * \param m element size
  * \param n number of elements
  */
-
 void *G__calloc(const char *file, int line, size_t m, size_t n)
 {
     void *buf;
@@ -146,7 +142,6 @@ void *G__realloc(const char *file, int line, void *buf, size_t n)
  *
  * \param[in,out] buf buffer holding original data
  */
-
 void G_free(void *buf)
 {
     free(buf);

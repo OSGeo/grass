@@ -8,19 +8,18 @@ Classes:
  - data::AnimationLayer
 
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
 
-import os
 import copy
+from pathlib import Path
 
 from grass.script.utils import parse_key_val
 from grass.script import core as gcore
+from grass.exceptions import ScriptError
 
 from core.gcmd import GException
 from animation.nviztask import NvizTask
@@ -133,7 +132,7 @@ class AnimationData:
         if fileName == "":
             raise ValueError(_("No workspace file selected."))
 
-        if not os.path.exists(fileName):
+        if not Path(fileName).exists():
             raise OSError(_("File %s not found") % fileName)
         self._workspaceFile = fileName
 
@@ -258,7 +257,7 @@ class AnimationData:
                 values = interpolate(
                     startRegionDict[key], endRegionDict[key], self._mapCount
                 )
-                for value, region in zip(values, regions):
+                for value, region in zip(values, regions, strict=False):
                     region[key] = value
 
         elif zoomValue:
@@ -299,8 +298,8 @@ class AnimLayer(Layer):
                 try:
                     name = validateTimeseriesName(name, self._mapType)
                     self._maps = getRegisteredMaps(name, self._mapType)
-                except (GException, gcore.ScriptError) as e:
-                    raise ValueError(str(e))
+                except (GException, ScriptError) as e:
+                    raise ValueError(str(e)) from e
             else:
                 self._maps = validateMapNames(name.split(","), self._mapType)
         self._name = name

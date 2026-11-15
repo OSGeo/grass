@@ -3,10 +3,8 @@
 
    \brief Vector library - topology level functions
 
-   (C) 2001-2009, 2011-2012 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009, 2011-2012 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -296,7 +294,8 @@ int Vect_get_node_coor(struct Map_info *Map, int num, double *x, double *y,
 
    \param Map pointer to Map_info struct
    \param line line id
-   \param n1 (start node), n2 (end node) ids of line nodes (or NULL)
+   \param n1 (start node), ids of line nodes (or NULL)
+   \param n2 (end node) ids of line nodes (or NULL)
 
    \return 1
  */

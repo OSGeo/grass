@@ -6,7 +6,7 @@
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
-# Lets gerenate a test map
+# Lets generate a test map
 r3.mapcalc --o expr="map3d = 1"
 
 # The first @test uses several different absolute datum formats

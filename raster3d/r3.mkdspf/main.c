@@ -9,11 +9,8 @@
  *               Radim Blazek <radim.blazek gmail.com>,
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:
- * COPYRIGHT:    (C) 2000-2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2000-2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 /* This program implements the marching cubes surface tiler described by
@@ -196,7 +193,7 @@ int main(int argc, char *argv[])
         Headfax.linefax.litmodel = 2; /* gradient */
 
     /* open display file for writing */
-    sprintf(element, "grid3/%s/dsp", name->answer);
+    snprintf(element, sizeof(element), "grid3/%s/dsp", name->answer);
     if ((Headfax.dspfoutfp = G_fopen_new(element, dspout)) == NULL)
         G_fatal_error(_("Unable to open display file <%s>"), dspout);
 

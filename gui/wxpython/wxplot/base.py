@@ -7,10 +7,8 @@ Classes:
  - base::PlotIcons
  - base::BasePlotFrame
 
-(C) 2011 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton, Arizona State University
 """
@@ -247,11 +245,12 @@ class BasePlotFrame(wx.Frame):
                         rdict[r]["pcolor"] = self.colorDict[self.colorList[idx]]
                 else:
                     rdict[r]["pcolor"] = self.colorDict[self.colorList[idx]]
-            else:
-                r = randint(0, 255)
-                b = randint(0, 255)
-                g = randint(0, 255)
-                rdict[r]["pcolor"] = (r, g, b, 255)
+                continue
+
+            r = randint(0, 255)
+            b = randint(0, 255)
+            g = randint(0, 255)
+            rdict[r]["pcolor"] = (r, g, b, 255)
 
         return rdict
 
@@ -261,7 +260,7 @@ class BasePlotFrame(wx.Frame):
         """
 
         if len(rasterList) == 0:
-            return
+            return None
 
         rdict = {}  # initialize a dictionary
         for rpair in rasterList:
@@ -322,11 +321,12 @@ class BasePlotFrame(wx.Frame):
 
             if idx <= len(self.colorList):
                 rdict[rpair]["pcolor"] = self.colorDict[self.colorList[idx]]
-            else:
-                r = randint(0, 255)
-                b = randint(0, 255)
-                g = randint(0, 255)
-                rdict[rpair]["pcolor"] = (r, g, b, 255)
+                continue
+
+            r = randint(0, 255)
+            b = randint(0, 255)
+            g = randint(0, 255)
+            rdict[rpair]["pcolor"] = (r, g, b, 255)
 
         return rdict
 

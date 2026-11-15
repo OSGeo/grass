@@ -3,10 +3,8 @@
  *
  * \brief GIS Library -  Handles process spawning.
  *
- * (C) 2001-2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Glynn Clements
  *
@@ -23,7 +21,7 @@
 #include <errno.h>
 #include <sys/types.h>
 
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <sys/wait.h>
 #else
 #include <windows.h>
@@ -68,7 +66,7 @@ struct signal {
     int action;
     int signum;
     int valid;
-#ifndef __MINGW32__
+#ifndef _WIN32
     struct sigaction old_act;
     sigset_t old_mask;
 #endif
@@ -95,7 +93,7 @@ struct spawn {
 static void parse_arglist(struct spawn *sp, va_list va);
 static void parse_argvec(struct spawn *sp, const char **va);
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 
 struct buffer {
     char *str;
@@ -212,7 +210,8 @@ static char *check_program(const char *pgm, const char *dir, const char *ext)
 {
     char pathname[GPATH_MAX];
 
-    sprintf(pathname, "%s%s%s%s", dir, *dir ? "\\" : "", pgm, ext);
+    snprintf(pathname, sizeof(pathname), "%s%s%s%s", dir, *dir ? "\\" : "", pgm,
+             ext);
     return access(pathname, 0) == 0 ? G_store(pathname) : NULL;
 }
 
@@ -445,11 +444,12 @@ static void do_redirects(struct redirect *redirects, int num_redirects,
 
 static void add_binding(const char **env, int *pnum, const struct binding *b)
 {
-    char *str = G_malloc(strlen(b->var) + strlen(b->val) + 2);
+    size_t bufsize = strlen(b->var) + strlen(b->val) + 2;
+    char *str = G_malloc(bufsize);
     int n = *pnum;
     int i;
 
-    sprintf(str, "%s=%s", b->var, b->val);
+    snprintf(str, bufsize, "%s=%s", b->var, b->val);
 
     for (i = 0; i < n; i++)
         if (G_strcasecmp(env[i], b->var) == 0) {
@@ -640,9 +640,10 @@ static void do_bindings(const struct binding *bindings, int num_bindings)
 
     for (i = 0; i < num_bindings; i++) {
         const struct binding *b = &bindings[i];
-        char *str = G_malloc(strlen(b->var) + strlen(b->val) + 2);
+        size_t bufsize = strlen(b->var) + strlen(b->val) + 2;
+        char *str = G_malloc(bufsize);
 
-        sprintf(str, "%s=%s", b->var, b->val);
+        snprintf(str, bufsize, "%s=%s", b->var, b->val);
         putenv(str);
     }
 }
@@ -727,7 +728,7 @@ static void begin_spawn(struct spawn *sp)
 }
 
 #define NEXT_ARG(var, type) ((type) * (var)++)
-#define NEXT_ARG_INT(var)   (int)((intptr_t) * (var)++)
+#define NEXT_ARG_INT(var)   (int)((intptr_t)*(var)++)
 
 static void parse_argvec(struct spawn *sp, const char **va)
 {
@@ -893,7 +894,6 @@ int G_vspawn_ex(const char *command, const char **args)
  * \return -1 on error
  * \return process status on success
  */
-
 int G_spawn_ex(const char *command, ...)
 {
     struct spawn sp;
@@ -915,7 +915,6 @@ int G_spawn_ex(const char *command, ...)
  * \return -1 on error
  * \return process status on success
  */
-
 int G_spawn(const char *command, ...)
 {
     const char *args[MAX_ARGS];
@@ -937,7 +936,7 @@ int G_spawn(const char *command, ...)
 
     status =
         G_spawn_ex(command,
-#ifndef __MINGW32__
+#ifndef _WIN32
                    SF_SIGNAL, SST_PRE, SSA_IGNORE, SIGINT, SF_SIGNAL, SST_PRE,
                    SSA_IGNORE, SIGQUIT, SF_SIGNAL, SST_PRE, SSA_BLOCK, SIGCHLD,
 #endif
@@ -946,9 +945,24 @@ int G_spawn(const char *command, ...)
     return status;
 }
 
+/**
+ * \brief Wait for a spawned process to finish.
+ *
+ * Blocks until the process identified by \p i_pid exits, then returns the
+ * process exit code. On non-Windows platforms, if the process terminates due
+ * to a signal, the signal number is returned instead.
+ *
+ * \param[in] i_pid Process identifier returned by a spawn function.
+ * \return Process exit code on normal termination.
+ * \return Signal number if the process was terminated by a signal on
+ *   non-Windows platforms.
+ * \return -1 if the process cannot be opened, waited for, or queried.
+ * \return -0x100 (-256) if the process ended with an unsupported wait
+ *   status on non-Windows platforms.
+ */
 int G_wait(int i_pid)
 {
-#ifdef __MINGW32__
+#ifdef _WIN32
     DWORD rights = PROCESS_QUERY_INFORMATION | SYNCHRONIZE;
     HANDLE hProcess = OpenProcess(rights, FALSE, (DWORD)i_pid);
     DWORD exitcode;

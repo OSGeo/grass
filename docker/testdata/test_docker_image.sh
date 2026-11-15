@@ -11,29 +11,23 @@ printenv
 # run simple LAZ test
 cp docker/testdata/simple.laz /tmp/
 cp docker/testdata/test_grass_session.py /tmp/
-cp docker/testdata/test_grass_python.py /tmp/
 cp -r demolocation /tmp/
 
 # Test gdal-grass-plugin
 printf "\n############\nTesting the gdal_grass plugin:\n############\n"
 gdalinfo --formats | grep "GRASS -raster-"
 
-# Test grass-session
-printf "\n############\nTesting grass_session:\n############\n"
+# Test grass Python package
+printf "\n############\nTesting grass Python package:\n############\n"
 /usr/bin/python3 /tmp/test_grass_session.py
-
-# Test grass-setup
-printf "\n############\nTesting grass script setup:\n############\n"
-export DEMOLOCATION=/tmp/demolocation/PERMANENT
-/usr/bin/python3 /tmp/test_grass_python.py
 
 # Test PDAL
 printf "\n############\nTesting PDAL with laz:\n############\n"
 grass --tmp-project EPSG:25832 --exec r.in.pdal input="/tmp/simple.laz" output="count_1" method="n" resolution=1 -g
 
-# Test GRASS GIS Python-addon installation
+# Test GRASS Python-addon installation
 # add dependency
-printf "\n############\nTesting GRASS GIS Python-addon installation:\n############\n"
+printf "\n############\nTesting GRASS Python-addon installation:\n############\n"
 /usr/bin/python3 -m pip install --no-cache-dir scikit-learn
 
 grass --tmp-project XY --exec g.extension extension=r.learn.ml2 operation=add && \
@@ -42,14 +36,14 @@ grass --tmp-project XY --exec g.extension extension=r.learn.ml2 operation=add &&
 # cleanup dependency
 /usr/bin/python3 -m pip uninstall -y scikit-learn
 
-# Test GRASS GIS C-addon installation: raster and vector
-printf "\n############\nTesting GRASS GIS C-addon installation:\n############\n"
+# Test GRASS C-addon installation: raster and vector
+printf "\n############\nTesting GRASS C-addon installation:\n############\n"
 grass --tmp-project XY --exec g.extension extension=r.gwr operation=add && \
 	   grass --tmp-project XY --exec g.extension extension=r.gwr operation=remove -f
 grass --tmp-project XY --exec g.extension extension=v.centerpoint operation=add && \
 	   grass --tmp-project XY --exec g.extension extension=v.centerpoint operation=remove -f
 
-# show GRASS GIS, PROJ, GDAL etc versions
+# show GRASS, PROJ, GDAL etc versions
 printf "\n############\nPrinting GRASS, PDAL and Python versions:\n############\n"
 grass --tmp-project EPSG:4326 --exec g.version -rge && \
     pdal --version && \

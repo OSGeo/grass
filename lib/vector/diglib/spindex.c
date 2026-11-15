@@ -5,10 +5,8 @@
 
    Lower level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL, probably Dave Gerdes
    \author Update to GRASS 5.7 Radim Blazek
@@ -391,7 +389,6 @@ int dig_spidx_add_area(struct Plus_head *Plus, int area,
 
    \return 0
  */
-
 int dig_spidx_add_isle(struct Plus_head *Plus, int isle,
                        const struct bound_box *box)
 {
@@ -606,7 +603,7 @@ int dig_spidx_del_isle(struct Plus_head *Plus, int isle)
 
 /* This function is called by RTreeSearch() to add selected node/line/area/isle
  * to the list */
-static int _add_item(int id, const struct RTree_Rect *rect UNUSED,
+static int _add_item(int id, const struct RTree_Rect *rect G_UNUSED,
                      struct ilist *list)
 {
     G_ilist_add(list, id);
@@ -700,7 +697,7 @@ int dig_select_nodes(struct Plus_head *Plus, const struct bound_box *box,
 }
 
 /* This function is called by RTreeSearch() for nodes to find the node id */
-static int _add_node(int id, const struct RTree_Rect *rect UNUSED, int *node)
+static int _add_node(int id, const struct RTree_Rect *rect G_UNUSED, int *node)
 {
     *node = id;
     return 0;

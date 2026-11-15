@@ -1,7 +1,5 @@
 /* output.c (simlib), 20.nov.2002, JH */
 
-#include <grass/waterglobs.h>
-
 double amax1(double arg1, double arg2)
 {
     double res;

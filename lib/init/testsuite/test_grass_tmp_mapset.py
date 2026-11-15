@@ -7,21 +7,17 @@ AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 
 PURPOSE:   Test that --tmp-mapset option of grass command works
 
-COPYRIGHT: (C) 2020 Vaclav Petras and the GRASS Development Team
-
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2020 Vaclav Petras
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
-import unittest
 import os
 import shutil
 import subprocess
-from grass.gunittest.utils import xfail_windows
+import unittest
 
-
-# Note that unlike rest of GRASS GIS, here we are using unittest package
+# Note that unlike rest of GRASS, here we are using unittest package
 # directly. The grass.gunittest machinery for mapsets is not needed here.
 # How this plays out together with the rest of testing framework is yet to be
 # determined.
@@ -30,8 +26,21 @@ from grass.gunittest.utils import xfail_windows
 class TestTmpMapset(unittest.TestCase):
     """Tests --tmp-mapset option of grass command"""
 
-    # TODO: here we need a name of or path to the main GRASS GIS executable
-    executable = "grass"
+    # On Windows, GISBASE itself (where the grass.bat launcher lives) is
+    # never added to PATH, only GISBASE\bin is, so a bare "grass.bat" is
+    # not found when this test runs inside an existing GRASS session (e.g.
+    # under grass.gunittest.main). Resolve the full path via GISBASE when
+    # available and fall back to the bare name otherwise.
+    # Note: on an OSGeo4W package install, the launcher name is versioned
+    # (e.g. grass86.bat instead of grass.bat), so this resolution does not
+    # apply there; it only covers a from-source build's layout.
+    _gisbase = os.environ.get("GISBASE")
+    if os.name != "nt":
+        executable = "grass"
+    elif _gisbase:
+        executable = os.path.join(_gisbase, "grass.bat")
+    else:
+        executable = "grass.bat"
     # an arbitrary, but identifiable and fairly unique name
     location = "test_tmp_mapset_xy"
 
@@ -44,7 +53,6 @@ class TestTmpMapset(unittest.TestCase):
         """Deletes the location"""
         shutil.rmtree(self.location, ignore_errors=True)
 
-    @xfail_windows
     def test_command_runs(self):
         """Check that correct parameters are accepted"""
         return_code = subprocess.call(
@@ -59,7 +67,6 @@ class TestTmpMapset(unittest.TestCase):
             ),
         )
 
-    @xfail_windows
     def test_command_fails_without_location(self):
         """Check that the command fails with a nonexistent location"""
         return_code = subprocess.call(
@@ -81,7 +88,6 @@ class TestTmpMapset(unittest.TestCase):
             ),
         )
 
-    @xfail_windows
     def test_mapset_metadata_correct(self):
         """Check that metadata is readable and have expected value (XY CRS)"""
         output = subprocess.check_output(
@@ -95,15 +101,15 @@ class TestTmpMapset(unittest.TestCase):
             ),
         )
 
-    @xfail_windows
     def test_mapset_deleted(self):
         """Check that mapset is deleted at the end of execution"""
         subprocess.check_call(
             [self.executable, "--tmp-mapset", self.location, "--exec", "g.proj", "-p"]
         )
         for directory in os.listdir(self.location):
-            self.assertTrue(
-                directory in self.subdirs,
+            self.assertIn(
+                directory,
+                self.subdirs,
                 msg="Directory {directory} should have been deleted".format(**locals()),
             )
 

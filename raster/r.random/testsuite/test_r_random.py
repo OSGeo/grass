@@ -3,10 +3,9 @@ Name:        r.random test
 Purpose:    Tests r.random module and some of its options.
 
 Author:     Shubham Sharma, Google Code-in 2018
-Copyright:  (C) 2018 by Shubham Sharma and the GRASS Development Team
-Licence:    This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
+SPDX-FileCopyrightText: 2018 Shubham Sharma
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 from grass.gunittest.case import TestCase
@@ -84,11 +83,11 @@ class TestRasterTile(TestCase):
         topology = {"points": 20, "primitives": 20}
         self.assertVectorFitsTopoInfo(vector=self.vector, reference=topology)
 
-    def test_random_raster_flag_z(self):
+    def test_random_raster_flag_n(self):
         """Testing r.random  runs successfully"""
         self.assertModule(
             "r.random",
-            flags="z",
+            flags="n",
             input=self.input,
             npoints=self.npoints,
             raster=self.raster + "_null",
@@ -99,11 +98,11 @@ class TestRasterTile(TestCase):
             self.raster, msg="landcover_1m_raster_random_null was not created"
         )
 
-    def test_vector_random_flag_z(self):
+    def test_vector_random_flag_n(self):
         """Testing r.random  runs successfully"""
         self.assertModule(
             "r.random",
-            flags="z",
+            flags="n",
             input=self.input,
             npoints=self.npoints,
             vector=self.vector + "_null",

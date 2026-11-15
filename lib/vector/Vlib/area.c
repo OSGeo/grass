@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009, 2011-2013 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009, 2011-2013 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -286,7 +284,6 @@ int Vect_get_isle_area(struct Map_info *Map, int isle)
 
    \return perimeter of area with perimeters of isles in meters
  */
-
 double Vect_get_area_perimeter(struct Map_info *Map, int area)
 {
     const struct Plus_head *Plus;
@@ -479,7 +476,7 @@ int Vect_get_area_cat(struct Map_info *Map, int area, int field)
    \param Map pointer to Map_info struct
    \param lines array of boundary lines
    \param n_lines number of lines in array
-   \param[out] APoints pointer to output line_pnts struct
+   \param[out] BPoints pointer to output line_pnts struct
 
    \return number of points
    \return -1 on error
@@ -508,7 +505,7 @@ int Vect__get_area_points(struct Map_info *Map, const plus_t *lines,
    \param Map pointer to Map_info struct
    \param lines array of boundary lines
    \param n_lines number of lines in array
-   \param[out] APoints pointer to output line_pnts struct
+   \param[out] BPoints pointer to output line_pnts struct
 
    \return number of points
    \return -1 on error

@@ -3,11 +3,8 @@
  *
  * \brief DBMI Library (client) - select records from table
  *
- * (C) 1999-2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Joel Jones (CERL/UIUC), Radim Blazek
  */
@@ -122,7 +119,6 @@ int db_select_int(dbDriver *driver, const char *tab, const char *col,
 
     /* allocate */
     alloc = 1000;
-    val = (int *)G_malloc(alloc * sizeof(int));
 
     if (where == NULL || strlen(where) == 0)
         G_asprintf(&buf, "SELECT %s FROM %s", col, tab);
@@ -147,11 +143,14 @@ int db_select_int(dbDriver *driver, const char *tab, const char *col,
     type = db_get_column_sqltype(column);
     type = db_sqltype_to_Ctype(type);
 
+    val = (int *)G_malloc(alloc * sizeof(int));
     /* fetch the data */
     count = 0;
     while (1) {
-        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
+        if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
+            G_free(val);
             return (-1);
+        }
 
         if (!more)
             break;
@@ -173,6 +172,7 @@ int db_select_int(dbDriver *driver, const char *tab, const char *col,
             val[count] = (int)db_get_value_double(value);
             break;
         default:
+            G_free(val);
             return (-1);
         }
         count++;
@@ -261,6 +261,7 @@ int db_select_value(dbDriver *driver, const char *tab, const char *key, int id,
    \param tab table name
    \param key key column name
    \param col value column name
+   \param where where statement
    \param[out] cvarr dbCatValArray to store within
 
    \return number of selected values

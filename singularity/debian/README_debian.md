@@ -1,7 +1,7 @@
-# Singularity GRASS GIS (Debian Linux)
+# Singularity GRASS (Debian Linux)
 
 Singularityfile with an [Debian Linux](https://www.debian.org/) image with
-[GRASS GIS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support.
+[GRASS](https://grass.osgeo.org/), [PDAL](https://pdal.io) support.
 
 Download size of this image is of approximately 560 MB.
 

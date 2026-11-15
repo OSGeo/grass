@@ -90,8 +90,9 @@ int I_get_ref_points(char *groupname, struct Ortho_Photo_Points *cp)
     /*fprintf (stderr, "Try to f_open_group_file_old \n"); */
     fd = I_fopen_group_file_old(groupname, REF_POINT_FILE);
     if (fd == NULL) {
-        sprintf(msg, "unable to open reference point file for group [%s in %s]",
-                groupname, G_mapset());
+        snprintf(msg, sizeof(msg),
+                 "unable to open reference point file for group [%s in %s]",
+                 groupname, G_mapset());
         G_warning("%s", msg);
         return 0;
     }
@@ -100,8 +101,9 @@ int I_get_ref_points(char *groupname, struct Ortho_Photo_Points *cp)
     stat = I_read_ref_points(fd, cp);
     fclose(fd);
     if (stat < 0) {
-        sprintf(msg, "bad format in reference point file for group [%s in %s]",
-                groupname, G_mapset());
+        snprintf(msg, sizeof(msg),
+                 "bad format in reference point file for group [%s in %s]",
+                 groupname, G_mapset());
         G_warning("%s", msg);
         return 0;
     }
@@ -115,9 +117,9 @@ int I_put_ref_points(char *groupname, struct Ortho_Photo_Points *cp)
 
     fd = I_fopen_group_file_new(groupname, REF_POINT_FILE);
     if (fd == NULL) {
-        sprintf(msg,
-                "unable to create reference point file for group [%s in %s]",
-                groupname, G_mapset());
+        snprintf(msg, sizeof(msg),
+                 "unable to create reference point file for group [%s in %s]",
+                 groupname, G_mapset());
         G_warning("%s", msg);
         return 0;
     }

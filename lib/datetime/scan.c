@@ -1,8 +1,8 @@
 /*
- * Copyright (C) 1995.  Bill Brown <brown@gis.uiuc.edu> & Michael Shapiro
- *
- * This program is free software under the GPL (>=v2)
- * Read the file GPL.TXT coming with GRASS for details.
+ * SPDX-FileCopyrightText: 1995 Bill Brown <brown@gis.uiuc.edu>
+ * SPDX-FileCopyrightText: 1995 Michael Shapiro
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <stdio.h>
 #include <string.h>
@@ -37,7 +37,6 @@ static int get_double(const char **, double *, int *, int *);
  *  \param buf
  *  \return int
  */
-
 int datetime_scan(DateTime *dt, const char *buf)
 {
     if (is_relative(buf)) {

@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -25,7 +23,7 @@
 #include "pg_local_proto.h"
 #define NOPG_UNUSED
 #else
-#define NOPG_UNUSED UNUSED
+#define NOPG_UNUSED G_UNUSED
 #endif
 
 /*!
@@ -64,7 +62,7 @@ int V1_close_pg(struct Map_info *Map NOPG_UNUSED)
     if (pg_info->cursor_name) {
         char stmt[DB_SQL_MAX];
 
-        sprintf(stmt, "CLOSE %s", pg_info->cursor_name);
+        snprintf(stmt, sizeof(stmt), "CLOSE %s", pg_info->cursor_name);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             G_warning(_("Unable to close cursor %s"), pg_info->cursor_name);
             return -1;
@@ -130,7 +128,7 @@ int V2_close_pg(struct Map_info *Map NOPG_UNUSED)
         char file_path[GPATH_MAX];
 
         /* delete old support files if available */
-        sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
+        snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, Map->name);
         Vect__get_element_path(file_path, Map, GV_TOPO_ELEMENT);
         if (access(file_path, F_OK) == 0) /* file exists? */
             unlink(file_path);

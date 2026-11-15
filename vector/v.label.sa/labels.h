@@ -149,7 +149,7 @@ void label_candidate_overlap(label_t *labels, int n_labels);
  * more information on simulated Annealing.
  * @param labels The labels to perform annealing on
  * @param n_labels The size of the labels array
- * @param p The program parametrs.
+ * @param p The program parameters.
  */
 void simulate_annealing(label_t *labels, int n_labels, struct params *p);
 

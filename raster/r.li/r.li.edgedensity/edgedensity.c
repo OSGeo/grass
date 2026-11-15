@@ -6,11 +6,8 @@
  *               Rewrite: Markus Metz
  *
  * PURPOSE:      calculates edge density index
- * COPYRIGHT:    (C) 2006-2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -106,7 +103,6 @@ int edgedensity(int fd, char **par, struct area_entry *ad, double *result)
     }
     default: {
         G_fatal_error("data type unknown");
-        return RLI_ERRORE;
     }
     }
     if (ris != RLI_OK) {
@@ -139,13 +135,13 @@ int calculate(int fd, struct area_entry *ad, char **par, double *result)
             return RLI_ERRORE;
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         mask_sup = G_malloc(ad->cl * sizeof(int));
         if (mask_sup == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         for (j = 0; j < ad->cl; j++)
             mask_buf[j] = 0;
@@ -155,8 +151,9 @@ int calculate(int fd, struct area_entry *ad, char **par, double *result)
 
     buf_null = Rast_allocate_c_buf();
     if (buf_null == NULL) {
+        if (masked)
+            close(mask_fd);
         G_fatal_error("malloc buf_null failed");
-        return RLI_ERRORE;
     }
 
     /* the first time buf_sup is all null */
@@ -189,8 +186,13 @@ int calculate(int fd, struct area_entry *ad, char **par, double *result)
             mask_tmp = mask_sup;
             mask_sup = mask_buf;
             mask_buf = mask_tmp;
-            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
+            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
+                G_free(mask_buf);
+                G_free(mask_sup);
+                G_free(buf_null);
                 return RLI_ERRORE;
+            }
         }
 
         Rast_set_c_null_value(&precCell, 1);
@@ -333,13 +335,13 @@ int calculateD(int fd, struct area_entry *ad, char **par, double *result)
             return RLI_ERRORE;
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         mask_sup = G_malloc(ad->cl * sizeof(int));
         if (mask_sup == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         for (j = 0; j < ad->cl; j++)
             mask_buf[j] = 0;
@@ -349,8 +351,9 @@ int calculateD(int fd, struct area_entry *ad, char **par, double *result)
 
     buf_null = Rast_allocate_d_buf();
     if (buf_null == NULL) {
+        if (masked)
+            close(mask_fd);
         G_fatal_error("malloc buf_null failed");
-        return RLI_ERRORE;
     }
 
     /* the first time buf_sup is all null */
@@ -383,8 +386,13 @@ int calculateD(int fd, struct area_entry *ad, char **par, double *result)
             mask_tmp = mask_sup;
             mask_sup = mask_buf;
             mask_buf = mask_tmp;
-            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
+            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
+                G_free(mask_buf);
+                G_free(mask_sup);
+                G_free(buf_null);
                 return RLI_ERRORE;
+            }
         }
 
         Rast_set_d_null_value(&precCell, 1);
@@ -527,13 +535,13 @@ int calculateF(int fd, struct area_entry *ad, char **par, double *result)
             return RLI_ERRORE;
         mask_buf = G_malloc(ad->cl * sizeof(int));
         if (mask_buf == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         mask_sup = G_malloc(ad->cl * sizeof(int));
         if (mask_sup == NULL) {
+            close(mask_fd);
             G_fatal_error("malloc mask_buf failed");
-            return RLI_ERRORE;
         }
         for (j = 0; j < ad->cl; j++)
             mask_buf[j] = 0;
@@ -543,8 +551,9 @@ int calculateF(int fd, struct area_entry *ad, char **par, double *result)
 
     buf_null = Rast_allocate_f_buf();
     if (buf_null == NULL) {
+        if (masked)
+            close(mask_fd);
         G_fatal_error("malloc buf_null failed");
-        return RLI_ERRORE;
     }
 
     /* the first time buf_sup is all null */
@@ -577,8 +586,13 @@ int calculateF(int fd, struct area_entry *ad, char **par, double *result)
             mask_tmp = mask_sup;
             mask_sup = mask_buf;
             mask_buf = mask_tmp;
-            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0)
+            if (read(mask_fd, mask_buf, (ad->cl * sizeof(int))) < 0) {
+                close(mask_fd);
+                G_free(mask_buf);
+                G_free(mask_sup);
+                G_free(buf_null);
                 return RLI_ERRORE;
+            }
         }
 
         Rast_set_f_null_value(&precCell, 1);

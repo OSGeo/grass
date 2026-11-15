@@ -141,7 +141,7 @@ void extract(DCELL ***img,          /* multispectral image, img[band][i][j] */
                         ll[i][j][m] = subll[0];
                     }
                     /* compute mixture likelihood */
-                    else {
+                    else if (C->nsubclasses > 1) {
                         /* find the most likely subclass */
                         for (k = 0; k < C->nsubclasses; k++) {
                             if (k == 0)
@@ -156,6 +156,9 @@ void extract(DCELL ***img,          /* multispectral image, img[band][i][j] */
                             subsum += exp(subll[k] - maxlike) * C->SubSig[k].pi;
 
                         ll[i][j][m] = log(subsum) + maxlike;
+                    }
+                    else {
+                        ll[i][j][m] = 0.0;
                     }
                 }
             }

@@ -6,10 +6,8 @@ Usage:
 >>> import grass.temporal as tgis
 >>> tmr = tgis.SpatialTopologyDatasetConnector()
 
-(C) 2012-2013 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2012-2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -34,43 +32,42 @@ class SpatialTopologyDatasetConnector:
     - cover
     - covered
 
-     Usage:
+    Usage:
 
-     .. code-block:: python
+    .. code-block:: pycon
 
-         >>> import grass.temporal as tgis
-         >>> tgis.init()
-         >>> map = tgis.RasterDataset("a@P")
-         >>> tmr = tgis.SpatialTopologyDatasetConnector()
-         >>> tmr.append_equivalent(map)
-         >>> tmr.append_overlap(map)
-         >>> tmr.append_in(map)
-         >>> tmr.append_contain(map)
-         >>> tmr.append_meet(map)
-         >>> tmr.append_cover(map)
-         >>> tmr.append_covered(map)
-         >>> tmr.print_spatial_topology_info()
-          +-------------------- Spatial Topology --------------------------------------+
-          | Equivalent: ................ a@P
-          | Cover: ..................... a@P
-          | Covered: ................... a@P
-          | Overlap: ................... a@P
-          | In: ........................ a@P
-          | Contain: ................... a@P
-          | Meet: ...................... a@P
-         >>> tmr.print_spatial_topology_shell_info()
-         equivalent=a@P
-         cover=a@P
-         covered=a@P
-         overlap=a@P
-         in=a@P
-         contain=a@P
-         meet=a@P
-         >>> rlist = tmr.get_spatial_relations()
-         >>> if "COVER" in rlist.keys():
-         ...     print(rlist["COVER"][0].get_id())
-         ...
-         a@P
+        >>> import grass.temporal as tgis
+        >>> tgis.init()
+        >>> map = tgis.RasterDataset("a@P")
+        >>> tmr = tgis.SpatialTopologyDatasetConnector()
+        >>> tmr.append_equivalent(map)
+        >>> tmr.append_overlap(map)
+        >>> tmr.append_in(map)
+        >>> tmr.append_contain(map)
+        >>> tmr.append_meet(map)
+        >>> tmr.append_cover(map)
+        >>> tmr.append_covered(map)
+        >>> tmr.print_spatial_topology_info()
+         +-------------------- Spatial Topology --------------------------------------+
+         | Equivalent: ................ a@P
+         | Cover: ..................... a@P
+         | Covered: ................... a@P
+         | Overlap: ................... a@P
+         | In: ........................ a@P
+         | Contain: ................... a@P
+         | Meet: ...................... a@P
+        >>> tmr.print_spatial_topology_shell_info()
+        equivalent=a@P
+        cover=a@P
+        covered=a@P
+        overlap=a@P
+        in=a@P
+        contain=a@P
+        meet=a@P
+        >>> rlist = tmr.get_spatial_relations()
+        >>> if "COVER" in rlist.keys():
+        ...     print(rlist["COVER"][0].get_id())
+        a@P
 
     """
 

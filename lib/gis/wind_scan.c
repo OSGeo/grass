@@ -3,10 +3,8 @@
 
    \brief GIS Library - Coordinate scanning functions.
 
-   (C) 2001-2009, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -91,7 +89,7 @@ int G_scan_easting(const char *buf, double *easting, int projection)
    - PROJECTION_OTHER
 
    \param buf buffer containing string resolution
-   \param[out] resolution resolution value
+   \param[out] res resolution value
    \param projection projection code
 
    \return 0 on error

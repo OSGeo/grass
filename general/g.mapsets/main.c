@@ -12,11 +12,8 @@
  *               Huidae Cho <grass4u gmail.com>,
  *               Corey White <smortopahri gmail.com>
  * PURPOSE:      set current mapset path
- * COPYRIGHT:    (C) 1994-2009, 2012-2024 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1994-2009, 2012-2024 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -85,8 +82,10 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
+    G_add_keyword(_("project"));
     G_add_keyword(_("search path"));
-    module->label = _("Modifies/prints the user's current mapset search path.");
+    module->label =
+        _("Modifies or reports the user's current mapset search path.");
     module->description = _("Affects the user's access to data existing "
                             "under the other mapsets in the current project.");
 
@@ -215,8 +214,14 @@ int main(int argc, char *argv[])
     if (opt.dialog->answer) {
         if (opt.mapset->answer)
             G_warning(_("Option <%s> ignored"), opt.mapset->key);
-        sprintf(path_buf, "%s/gui/wxpython/modules/mapsets_picker.py",
-                G_gisbase());
+
+        const char *wxdir = getenv("GRASS_GUIWXDIR");
+        if (!wxdir)
+            G_fatal_error(_("Incomplete GRASS session: Variable '%s' not set"),
+                          "GRASS_GUIWXDIR");
+
+        snprintf(path_buf, sizeof(path_buf), "%s/modules/mapsets_picker.py",
+                 wxdir);
         G_spawn(getenv("GRASS_PYTHON"), "mapsets_picker.py", path_buf, NULL);
         exit(EXIT_SUCCESS);
     }

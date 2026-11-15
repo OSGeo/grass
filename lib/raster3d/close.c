@@ -3,16 +3,13 @@
 
    \brief 3D Raster Library - Close 3D raster file
 
-   (C) 1999-2009, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2009, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author USACERL and many others
  */
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #endif
 #include <stdio.h>
@@ -54,7 +51,7 @@ static int close_new(RASTER3D_Map *map)
 
     /* finally move tempfile to data file */
     Rast3d_filename(path, RASTER3D_CELL_ELEMENT, map->fileName, map->mapset);
-#ifdef __MINGW32__
+#ifdef _WIN32
     if (CopyFile(map->tempName, path, FALSE) == 0) {
 #else
     if (link(map->tempName, path) < 0) {

@@ -4,17 +4,9 @@
 #
 # MODULE:       wxpyimgview
 # AUTHOR(S):    Glynn Clements <glynn@gclements.plus.com>
-# COPYRIGHT:    (C) 2010 Glynn Clements
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2010 Glynn Clements
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 # /
 
@@ -164,12 +156,13 @@ class Application(wx.App):
             raise SyntaxError(msg)
 
     def map_file(self):
-        f = open(self.image, "rb")
-
-        header = f.read(self.HEADER_SIZE)
+        with open(self.image, "rb") as f:
+            header = f.read(self.HEADER_SIZE)
         self.read_bmp_header(header)
 
-        self.imgbuf = np.memmap(f, mode="r", offset=self.HEADER_SIZE)
+        self.imgbuf = np.memmap(
+            self.image, mode="r", offset=self.HEADER_SIZE, dtype=np.uint8
+        )
 
     def signal_handler(self, sig, frame):
         wx.CallAfter(self.mainwin.Refresh)

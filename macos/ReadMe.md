@@ -1,11 +1,11 @@
-# Build GRASS GIS with Anaconda
+# Build GRASS with Anaconda
 
-This is a script package for automated build of GRASS GIS as a macOS
+This is a script package for automated build of GRASS as a macOS
 application bundle (GRASS-x.x.app).
 
 The building script `build_grass_app.bash` will do all the steps – creating App
 bundle, installing Conda dependencies (using the package manager Miniforge),
-to patching, compiling and installing GRASS GIS – to end up with an
+to patching, compiling and installing GRASS – to end up with an
 installed GRASS.app in `/Applications`. It can also create a compressed dmg
 file if so wished.
 

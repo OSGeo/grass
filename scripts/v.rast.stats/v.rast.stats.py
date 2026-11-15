@@ -9,11 +9,8 @@
 #               add column choose by Luca Delucchi
 # PURPOSE:      Calculates univariate statistics from a GRASS raster map
 #               only for areas covered by vector objects on a per-category base
-# COPYRIGHT:    (C) 2005-2016 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2005-2016 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -414,8 +411,10 @@ def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver, c)
         if currcolumn in gs.vector_columns(vector, layer).keys():
             if not c:
                 gs.fatal(
-                    (_("Cannot create column <%s> (already present). ") % currcolumn)
-                    + _("Use -c flag to update values in this column.")
+                    _(
+                        "Cannot create column <{column}> (already present)."
+                        " Use -c flag to update values in this column."
+                    ).format(column=currcolumn)
                 )
         else:
             coltype = "INTEGER" if i == "n" else "DOUBLE PRECISION"

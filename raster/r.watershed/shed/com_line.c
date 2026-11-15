@@ -53,8 +53,8 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
         input->fast = 1;
         input->com_line_ram = (char *)G_calloc(400, sizeof(char));
         prog_name = G_store(RAM_NAME);
-        snprintf(input->com_line_ram, (400 * sizeof(char)),
-                 "\"%s/etc/water/%s\"", G_gisbase(), RAM_NAME);
+        snprintf(input->com_line_ram, (400 * sizeof(char)), "\"%s/water/%s\"",
+                 G_etc_dir(), RAM_NAME);
         fprintf(stderr,
                 "\nIf there is not enough ram for the fast mode (%s) to run,\n",
                 RAM_NAME);
@@ -64,15 +64,15 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
             input->slow = 1;
             input->com_line_seg = (char *)G_calloc(400, sizeof(char));
             snprintf(input->com_line_seg, (400, sizeof(char)),
-                     "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
+                     "\"%s/water/%s\"", G_etc_dir(), SEG_NAME);
         }
     }
     else {
         input->slow = 1;
         prog_name = G_store(SEG_NAME);
         input->com_line_seg = (char *)G_calloc(400, sizeof(char));
-        snprintf(input->com_line_seg, (400, sizeof(char)),
-                 "\"%s/etc/water/%s\"", G_gisbase(), SEG_NAME);
+        snprintf(input->com_line_seg, (400, sizeof(char)), "\"%s/water/%s\"",
+                 G_etc_dir(), SEG_NAME);
     }
 
     G_message(_("\nIf you hit <return> by itself for the next question, this"));
@@ -237,11 +237,11 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
     if (input->slow)
         com_line_add(&(input->com_line_seg), " ba=", input->haf_name, NULL);
 
-        /*
-           This section queries the user about the armsed file input. If
-           you want to make this an option,  the code below "COMMENT2" needs to
-           be modified.
-         */
+    /*
+       This section queries the user about the armsed file input. If
+       you want to make this an option,  the code below "COMMENT2" needs to
+       be modified.
+     */
 
 #ifdef ARMSED
     G_message(_("\n%s must create a file of watershed basin relationships"),
@@ -274,8 +274,8 @@ int com_line_Gwater(INPUT *input, OUTPUT *output)
        r.stats), but the format is supposed to be "user-friendly" to
        hydrologists. For the stats to be created, the armsed file output needs
        to exist. For the stats to be an option in this program: 1) it should be
-       querried before the armsed file query, and 2) make the armsed file query
-       manditory if this option is invoked.
+       queried before the armsed file query, and 2) make the armsed file query
+       mandatory if this option is invoked.
      */
 
     G_message(_("\n%s will generate a lot of output.  Indicate a file"),

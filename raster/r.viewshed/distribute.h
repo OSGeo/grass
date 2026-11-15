@@ -27,10 +27,8 @@
  * paper: "Computing Visibility on * Terrains in External Memory" by
  * Herman Haverkort, Laura Toma and Yi Zhuang.
  *
- * COPYRIGHT: (C) 2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -127,8 +125,7 @@ void insert_event_in_sector_no_drop(AEvent *e, int s, AMI_STREAM<AEvent> *str,
 /* returns 1 if the center of event is occluded by the gradient, which
    is assumed to be in line with the event  */
 int is_center_gradient_occluded(AEvent *e, double gradient, Viewpoint *vp);
-
-/* called when dropping an event e, high is the highest gradiant value
+/* called when dropping an event e, high is the highest gradient value
    in its sector */
 void print_dropped(AEvent *e, Viewpoint *vp, double high);
 

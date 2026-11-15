@@ -8,11 +8,8 @@
  *
  * PURPOSE:      Multidimensional index
  *
- * COPYRIGHT:    (C) 2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *****************************************************************************/
 
 #include <stdio.h>
@@ -350,7 +347,7 @@ RectReal RTreeRectVolume(struct RTree_Rect *R, struct RTree *t)
 #ifdef gamma
 
 /* computes the volume of an N-dimensional sphere. */
-/* derived from formule in "Regular Polytopes" by H.S.M Coxeter */
+/* derived from formula in "Regular Polytopes" by H.S.M Coxeter */
 static double sphere_volume(double dimension)
 {
     double log_gamma, log_volume;

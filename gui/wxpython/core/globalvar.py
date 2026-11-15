@@ -3,10 +3,8 @@
 
 @brief Global variables used by wxGUI
 
-(C) 2007-2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 """
@@ -23,13 +21,13 @@ if not os.getenv("GISBASE"):
 from grass.script.core import get_commands
 
 from core.debug import Debug
+from pathlib import Path
 
 # path to python scripts
-ETCDIR = os.path.join(os.getenv("GISBASE"), "etc")
-GUIDIR = os.path.join(os.getenv("GISBASE"), "gui")
-WXGUIDIR = os.path.join(GUIDIR, "wxpython")
-ICONDIR = os.path.join(GUIDIR, "icons")
-IMGDIR = os.path.join(GUIDIR, "images")
+ETCDIR = os.getenv("GRASS_ETCDIR")
+WXGUIDIR = os.getenv("GRASS_GUIWXDIR")
+ICONDIR = os.path.join(os.getenv("GRASS_GUIRESDIR"), "icons")
+IMGDIR = os.path.join(os.getenv("GRASS_GUIRESDIR"), "images")
 SYMBDIR = os.path.join(IMGDIR, "symbols")
 
 WXPY3_MIN_VERSION = [4, 0, 0, 0]
@@ -101,7 +99,7 @@ def CheckForWx():
     except ImportError as e:
         print("ERROR: wxGUI requires wxPython. {}".format(e), file=sys.stderr)
         print(
-            "You can still use GRASS GIS modules in the command line or in Python.",
+            "You can still use GRASS modules in the command line or in Python.",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -199,14 +197,15 @@ def UpdateGRASSAddOnCommands(eList=None):
     nCmd = 0
     pathList = os.getenv("PATH", "").split(os.pathsep)
     for path in addonPath.split(os.pathsep):
-        if not os.path.exists(path) or not os.path.isdir(path):
+        if not Path(path).exists() or not Path(path).is_dir():
             continue
 
         # check if addon is in the path
         if pathList and path not in pathList:
             os.environ["PATH"] = path + os.pathsep + os.environ["PATH"]
 
-        for fname in os.listdir(path):
+        for file_path in Path(path).iterdir():
+            fname = file_path.name
             if fname in {"docs", "modules.xml"}:
                 continue
             if grassScripts:  # win32
@@ -247,7 +246,7 @@ wxPythonPhoenix: bool = CheckWxPhoenix()
 gtk3 = "gtk3" in wx.PlatformInfo
 
 # Add GUIDIR/scripts into path
-os.environ["PATH"] = os.path.join(GUIDIR, "scripts") + os.pathsep + os.environ["PATH"]
+os.environ["PATH"] = os.environ["GRASS_GUISCRIPTDIR"] + os.pathsep + os.environ["PATH"]
 
 ignoredCmdPattern = (
     r"^d\..*|^r[3]?\.mapcalc$|^i.group$|^r.import$|"

@@ -7,6 +7,7 @@ Created on Mon Nov 26 11:48:03 2012
 import wx
 import os
 import sys
+from pathlib import Path
 from grass.script import core as grass
 from core.gcmd import GError
 
@@ -58,9 +59,9 @@ def retRLiPath():
         grass_config_dir = os.path.join(os.getenv("HOME"), grass_config_dirname)
 
     rlipath = os.path.join(grass_config_dir, "r.li")
-    if os.path.exists(rlipath):
+    if Path(rlipath).exists():
         return rlipath
-    os.mkdir(rlipath)
+    Path(rlipath).mkdir()
     return rlipath
 
 
@@ -68,8 +69,8 @@ def checkMapExists(name, typ="raster") -> bool:
     """Check if a map already exist in the working mapset"""
     env = grass.gisenv()
     mapset = env["MAPSET"]
-    mapp = grass.find_file(name, typ, mapset)
-    return bool(mapp.name != "")
+    found_map = grass.find_file(name, typ, mapset)
+    return bool(found_map.name != "")
 
 
 def convertFeature(vect, outrast, cat, origrast, layer="1", overwrite=False):

@@ -67,7 +67,7 @@ class TestNeighbors(TestCase):
                 "stddev": 20.302357806975,
                 "variance": 412.18573252244,
                 "coeff_var": 18.3939006094541,
-                "sum": 223510365.91985,
+                "sum": 223510365.919864,
             },
             "maximum": {
                 "n": 2025000,
@@ -153,7 +153,7 @@ class TestNeighbors(TestCase):
                 "stddev": 20.3000320258108,
                 "variance": 412.091300248942,
                 "coeff_var": 18.2617209334619,
-                "sum": 225102360.298055,
+                "sum": 225102360.298065,
             },
         },
         "test_standard_options_circular": {

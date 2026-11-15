@@ -6,18 +6,20 @@
 # PURPOSE:   This module contains functions for interactive visualizations
 #            in Jupyter Notebooks.
 #
-# COPYRIGHT: (C) 2021-2024 Caitlin Haedrich, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2021-2024 Caitlin Haedrich
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 """Interactive visualizations map with folium or ipyleaflet"""
 
 import os
 import base64
+import functools
 import json
 from pathlib import Path
+
+import grass.script as gs
+
 from .reprojection_renderer import ReprojectionRenderer
 
 from .utils import (
@@ -31,6 +33,27 @@ from .utils import (
     query_vector,
     reproject_latlon,
 )
+
+# Without a referrer policy, the browser may omit the Referer header which
+# OpenStreetMap requires, e.g., in the output frame of Google Colab. This is
+# the default for tile layers in Leaflet 2.0 which neither backend bundles yet.
+BASEMAP_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+
+@functools.cache
+def _ipyleaflet_tile_layer():
+    """Return ipyleaflet TileLayer class with the Leaflet referrerPolicy option
+
+    ipyleaflet does not expose the option, but its JavaScript side passes
+    every trait tagged with o=True to Leaflet as an option.
+    """
+    import ipyleaflet  # pylint: disable=import-outside-toplevel
+    from traitlets import Unicode  # pylint: disable=import-outside-toplevel
+
+    class TileLayerWithReferrerPolicy(ipyleaflet.TileLayer):
+        referrer_policy = Unicode(BASEMAP_REFERRER_POLICY).tag(sync=True, o=True)
+
+    return TileLayerWithReferrerPolicy
 
 
 def get_backend(interactive_map):
@@ -63,12 +86,12 @@ class Layer:  # pylint: disable=too-few-public-methods
     ):
         """Reproject GRASS raster, export to PNG, and compute bounding box.
 
-        param str name: layer name
-        param str title: title of layer to display in layer control legend
-        param bool use_region: use computational region of current mapset
-        param str saved_region: name of saved computation region
-        param renderer: instance of ReprojectionRenderer
-        **kwargs: keyword arguments passed to folium/ipyleaflet layer instance
+        :param str name: layer name
+        :param str title: title of layer to display in layer control legend
+        :param bool use_region: use computational region of current mapset
+        :param str saved_region: name of saved computation region
+        :param renderer: instance of ReprojectionRenderer
+        :param kwargs: keyword arguments passed to folium/ipyleaflet layer instance
         """
         self._name = name
         self._layer_kwargs = kwargs
@@ -87,14 +110,16 @@ class Layer:  # pylint: disable=too-few-public-methods
 class Raster(Layer):
     """Overlays rasters on a folium or ipyleaflet map.
 
-    Basic Usage:
-    >>> m = folium.Map()
-    >>> gj.Raster("elevation", opacity=0.5).add_to(m)
-    >>> m
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> m = ipyleaflet.Map()
-    >>> gj.Raster("elevation", opacity=0.5).add_to(m)
-    >>> m
+        >>> m = folium.Map()
+        >>> gj.Raster("elevation", opacity=0.5).add_to(m)
+        >>> m
+
+        >>> m = ipyleaflet.Map()
+        >>> gj.Raster("elevation", opacity=0.5).add_to(m)
+        >>> m
     """
 
     def __init__(
@@ -145,14 +170,16 @@ class Raster(Layer):
 class Vector(Layer):
     """Adds vectors to a folium or ipyleaflet map.
 
-    Basic Usage:
-    >>> m = folium.Map()
-    >>> gj.Vector("roadsmajor").add_to(m)
-    >>> m
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> m = ipyleaflet.Map()
-    >>> gj.Vector("roadsmajor").add_to(m)
-    >>> m
+        >>> m = folium.Map()
+        >>> gj.Vector("roadsmajor").add_to(m)
+        >>> m
+
+        >>> m = ipyleaflet.Map()
+        >>> gj.Vector("roadsmajor").add_to(m)
+        >>> m
     """
 
     def __init__(
@@ -198,19 +225,28 @@ class Vector(Layer):
 class InteractiveMap:
     """This class creates interactive GRASS maps with folium or ipyleaflet.
 
-    Basic Usage:
+    :Basic usage:
+      .. code-block:: pycon
 
-    >>> m = InteractiveMap()
-    >>> m.add_vector("streams")
-    >>> m.add_raster("elevation")
-    >>> m.show()
+        >>> m = InteractiveMap()
+        >>> m.add_vector("streams")
+        >>> m.add_raster("elevation")
+        >>> m.show()
+
+    :Different basemap:
+      .. code-block:: pycon
+
+        >>> m = InteractiveMap(tiles="Esri.WorldImagery")
+
+      The basemap is any tile provider from the xyzservices package, see
+      https://xyzservices.readthedocs.io/en/stable/gallery.html for the list.
     """
 
     def __init__(
         self,
         width=400,
         height=400,
-        tiles="CartoDB positron",
+        tiles="Esri.WorldGrayCanvas",
         API_key=None,  # pylint: disable=invalid-name
         use_region=False,
         saved_region=None,
@@ -220,18 +256,16 @@ class InteractiveMap:
 
         If map_backend is not specified, InteractiveMap tries to import
         ipyleaflet first, then folium if it fails. The backend can be
-        specified explicitely with valid values "folium" and "ipyleaflet" .
+        specified explicitly with valid values "folium" and "ipyleaflet" .
 
-        In case of folium backend, tiles parameter is passed directly
-        to folium.Map() which supports several built-in tilesets
-        (including "OpenStreetMap", "Stamen Toner", "Stamen Terrain",
-        "Stamen Watercolor", "Mapbox Bright", "Mapbox Control Room", "CartoDB positron",
-        "CartoDB dark_matter") as well as custom tileset URL (i.e.
-        "http://{s}.yourtiles.com/{z}/{x}/{y}.png"). For more information, visit
-        folium documentation:
-        https://python-visualization.github.io/folium/modules.html
-        In case of ipyleaflet, only the tileset name and not the URL is
-        currently supported.
+        The basemap is given by the tiles parameter as a name of a tile
+        provider from the xyzservices package (e.g., "Esri.WorldGrayCanvas",
+        "Esri.WorldImagery", "OpenStreetMap.Mapnik") or as an
+        xyzservices.TileProvider object. The names work the same with both
+        backends. See https://xyzservices.readthedocs.io/en/stable/gallery.html
+        for the available providers. Providers which require an API key
+        (e.g., "CartoDB.Positron") get it from the API_key parameter.
+        With tiles=None, the map has no basemap.
 
         Raster and vector data are always reprojected to Pseudo-Mercator.
         With use_region=True or saved_region=myregion, the region extent
@@ -245,8 +279,9 @@ class InteractiveMap:
 
         :param int height: height in pixels of figure (default 400)
         :param int width: width in pixels of figure (default 400)
-        :param str tiles: map tileset to use
-        :param str API_key: API key for Mapbox or Cloudmade tiles
+        :param tiles: name of a tile provider, xyzservices.TileProvider object,
+                      or None for no basemap
+        :param str API_key: API key for tile providers which require one
         :param bool use_region: use computational region of current mapset
         :param str saved_region: name of saved computation region
         :param str map_backend: "ipyleaflet" or "folium" or None
@@ -260,9 +295,9 @@ class InteractiveMap:
                 import folium  # pylint: disable=import-outside-toplevel
 
                 return folium
-            except ImportError as err:
+            except ImportError:
                 if error:
-                    raise err
+                    raise
                 return None
 
         def _import_ipyleaflet(error):
@@ -270,9 +305,9 @@ class InteractiveMap:
                 import ipyleaflet  # pylint: disable=import-outside-toplevel
 
                 return ipyleaflet
-            except ImportError as err:
+            except ImportError:
                 if error:
-                    raise err
+                    raise
                 return None
 
         if not map_backend:
@@ -293,7 +328,6 @@ class InteractiveMap:
             import ipywidgets as widgets  # pylint: disable=import-outside-toplevel
 
             self._ipywidgets = widgets
-            import xyzservices  # pylint: disable=import-outside-toplevel
 
         # Store height and width
         self.width = int(width)
@@ -307,21 +341,19 @@ class InteractiveMap:
         # Store Region
         self.region = None
 
-        if self._ipyleaflet:
-            basemap = xyzservices.providers.query_name(tiles)
-            if API_key and basemap.get("accessToken"):
-                basemap["accessToken"] = API_key
-            layout = self._ipywidgets.Layout(width=f"{width}px", height=f"{height}px")
-            self.map = self._ipyleaflet.Map(
-                basemap=basemap, layout=layout, scroll_wheel_zoom=True
-            )
+        basemap = None if tiles is None else self._basemap_layer(tiles, API_key)
 
+        if self._ipyleaflet:
+            layout = self._ipywidgets.Layout(width=f"{width}px", height=f"{height}px")
+            # Without a basemap, the layers are given explicitly, otherwise the
+            # map adds its default basemap.
+            map_layers = {"layers": ()} if basemap is None else {"basemap": basemap}
+            self.map = self._ipyleaflet.Map(
+                layout=layout, scroll_wheel_zoom=True, **map_layers
+            )
         else:
             self.map = self._folium.Map(
-                width=self.width,
-                height=self.height,
-                tiles=tiles,
-                API_key=API_key,  # pylint: disable=invalid-name
+                width=self.width, height=self.height, tiles=basemap
             )
         # Set LayerControl default
         self.layer_control_object = None
@@ -331,6 +363,66 @@ class InteractiveMap:
             use_region=use_region, saved_region=saved_region
         )
 
+    def _basemap_layer(self, tiles, api_key):
+        """Create the tile layer of the current backend from a tile provider
+
+        :param tiles: name of a tile provider or xyzservices.TileProvider object
+        :param api_key: API key for the provider or None
+        """
+        import xyzservices  # pylint: disable=import-outside-toplevel
+
+        if isinstance(tiles, str):
+            if tiles.lower() == "openstreetmap":
+                # Short name accepted by folium, so it may be in use.
+                tiles = "OpenStreetMap.Mapnik"
+            tiles = xyzservices.providers.query_name(tiles)
+        if tiles.requires_token():
+            if not api_key:
+                raise ValueError(
+                    _(
+                        "Tile provider <{}> requires an API key,"
+                        " provide it with the API_key parameter"
+                    ).format(tiles.name)
+                )
+            # The name of the key attribute differs between providers
+            # (apikey, accessToken, ...); xyzservices marks it with a placeholder.
+            key_attributes = [
+                attribute
+                for attribute, value in tiles.items()
+                if isinstance(value, str) and "<insert your" in value
+            ]
+            tiles = tiles(**dict.fromkeys(key_attributes, api_key))
+        elif api_key:
+            gs.warning(
+                _(
+                    "Tile provider <{}> does not take an API key, ignoring it"
+                    " (if it should take one, update the xyzservices package)"
+                ).format(tiles.name)
+            )
+        # Providers stop at different zoom levels (Esri.WorldGrayCanvas at 16,
+        # Leaflet assumes 18 when not specified) while GRASS data often needs
+        # a closer look, so let the map zoom to level 20 and upscale the tiles
+        # beyond the provider's own maximum.
+        native_max_zoom = tiles.get("max_zoom", 18)
+        max_zoom = max(native_max_zoom, 20)
+
+        if self._ipyleaflet:
+            return _ipyleaflet_tile_layer()(
+                url=tiles.build_url(scale_factor="{r}"),
+                attribution=tiles.get("html_attribution") or tiles.get("attribution"),
+                name=tiles.name,
+                min_zoom=tiles.get("min_zoom", 1),
+                max_native_zoom=native_max_zoom,
+                max_zoom=max_zoom,
+            )
+        return self._folium.TileLayer(
+            # folium 0.15 takes max_zoom from the provider, not the parameter.
+            tiles=tiles(max_zoom=max_zoom),
+            max_native_zoom=native_max_zoom,
+            max_zoom=max_zoom,
+            referrer_policy=BASEMAP_REFERRER_POLICY,
+        )
+
     def add_vector(self, name, title=None, **kwargs):
         """Imports vector into temporary WGS84 location, re-formats to a GeoJSON and
         adds to map.
@@ -338,7 +430,7 @@ class InteractiveMap:
         :param str name: name of vector to be added to map;
                          positional-only parameter
         :param str title: vector name for layer control
-        :**kwargs: keyword arguments passed to GeoJSON overlay
+        :param kwargs: keyword arguments passed to GeoJSON overlay
         """
         self.vector_name.append(name)
         Vector(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
@@ -350,14 +442,15 @@ class InteractiveMap:
         Color table for the raster can be modified with `r.colors` before calling
         this function.
 
-        .. note:: This will only work if the raster is located in the current mapset.
-        To change the color table of a raster located outside the current mapset,
-        switch to that mapset with `g.mapset`, modify the color table with `r.color`
-        then switch back to the initial mapset and run this function.
+        .. note::
+            This will only work if the raster is located in the current mapset.
+            To change the color table of a raster located outside the current mapset,
+            switch to that mapset with ``g.mapset``, modify the color table with ``r.color``
+            then switch back to the initial mapset and run this function.
 
         :param str name: name of raster to add to display; positional-only parameter
         :param str title: raster name for layer control
-        :**kwargs: keyword arguments passed to image overlay
+        :param kwargs: keyword arguments passed to image overlay
         """
         self.raster_name.append(name)
         Raster(name, title=title, renderer=self._renderer, **kwargs).add_to(self.map)
@@ -367,7 +460,8 @@ class InteractiveMap:
 
         A Layer Control is added by default. Call this function to customize
         layer control object. Accepts keyword arguments to be passed to leaflet
-        layer control object"""
+        layer control object
+        """
 
         if self._folium:
             self.layer_control_object = self._folium.LayerControl(**kwargs)
@@ -547,7 +641,7 @@ class InteractiveRegionController:
             self.bottom_output_widget.clear_output()
             print(
                 _(
-                    "Region changed to: n={n}, s={s}, e={e}, w={w} "
+                    "Region changed to: n={north}, s={south}, e={east}, w={west} "
                     "nsres={nsres} ewres={ewres}"
                 ).format(**region)
             )

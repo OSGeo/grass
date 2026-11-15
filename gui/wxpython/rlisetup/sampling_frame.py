@@ -8,10 +8,8 @@ Classes:
  - sampling_frame::RLiSetupToolbar
  - sampling_frame::GraphicsSetItem
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
@@ -216,27 +214,25 @@ class RLiSetupMapPanel(wx.Panel):
         )
         ret = dlg.ShowModal()
         while True:
-            if ret == wx.ID_OK:
-                raster = dlg.GetValue()
-                if checkMapExists(raster):
-                    GMessage(
-                        parent=self,
-                        message=_(
-                            "The raster file %s already exists, please change name"
-                        )
-                        % raster,
-                    )
-                    ret = dlg.ShowModal()
-                else:
-                    dlg.Destroy()
-                    marea = self.writeArea(
-                        self._registeredGraphics.GetItem(0).GetCoords(), raster
-                    )
-                    self.nextRegion(next=True, area=marea)
-                    break
-            else:
+            if ret != wx.ID_OK:
                 self.nextRegion(next=False)
                 break
+
+            raster = dlg.GetValue()
+            if not checkMapExists(raster):
+                dlg.Destroy()
+                marea = self.writeArea(
+                    self._registeredGraphics.GetItem(0).GetCoords(), raster
+                )
+                self.nextRegion(next=True, area=marea)
+                break
+
+            GMessage(
+                parent=self,
+                message=_("The raster file %s already exists, please change name")
+                % raster,
+            )
+            ret = dlg.ShowModal()
 
     def nextRegion(self, next=True, area=None):
         self.mapWindow.ClearLines()
@@ -336,25 +332,23 @@ class RLiSetupMapPanel(wx.Panel):
         )
         ret = dlg.ShowModal()
         while True:
-            if ret == wx.ID_OK:
-                raster = dlg.GetValue()
-                if checkMapExists(raster):
-                    GMessage(
-                        parent=self,
-                        message=_(
-                            "The raster file %s already exists, please change name"
-                        )
-                        % raster,
-                    )
-                    ret = dlg.ShowModal()
-                else:
-                    dlg.Destroy()
-                    circle = self.writeCircle(c, raster)
-                    self.nextCircle(next=True, circle=circle)
-                    break
-            else:
+            if ret != wx.ID_OK:
                 self.nextCircle(next=False)
                 break
+
+            raster = dlg.GetValue()
+            if not checkMapExists(raster):
+                dlg.Destroy()
+                circle = self.writeCircle(c, raster)
+                self.nextCircle(next=True, circle=circle)
+                break
+
+            GMessage(
+                parent=self,
+                message=_("The raster file %s already exists, please change name")
+                % raster,
+            )
+            ret = dlg.ShowModal()
 
     def nextCircle(self, next=True, circle=None):
         self.mapWindow.ClearLines()

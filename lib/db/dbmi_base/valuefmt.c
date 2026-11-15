@@ -3,10 +3,8 @@
 
    \brief DBMI Library (base) - value formatting
 
-   (C) 1999-2009, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 1999-2009, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Joel Jones (CERL/UIUC), Radim Blazek
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (2011)
@@ -76,10 +74,10 @@ int db_convert_value_to_string(dbValue *value, int sqltype, dbString *string)
     else {
         switch (db_sqltype_to_Ctype(sqltype)) {
         case DB_C_TYPE_INT:
-            sprintf(buf, "%d", db_get_value_int(value));
+            snprintf(buf, sizeof(buf), "%d", db_get_value_int(value));
             break;
         case DB_C_TYPE_DOUBLE:
-            sprintf(buf, "%.15g", db_get_value_double(value));
+            snprintf(buf, sizeof(buf), "%.15g", db_get_value_double(value));
             G_trim_decimal(buf);
             break;
         case DB_C_TYPE_STRING:

@@ -3,11 +3,8 @@
  * MODULE:       v.label
  * AUTHOR(S):    Philip Verhagen (original s.label), Radim Blazek, Hamish Bowman
  * PURPOSE:      Create paint labels
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2000 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 #include <stdio.h>
@@ -302,12 +299,12 @@ int main(int argc, char **argv)
         /* Read label from database */
 
         if (whereopt->answer) {
-            sprintf(buf, "select %s from %s where %s = %d and %s",
-                    Colopt->answer, fi->table, fi->key, cat, whereopt->answer);
+            snprintf(buf, sizeof(buf), "select %s from %s where %s = %d and %s",
+                     Colopt->answer, fi->table, fi->key, cat, whereopt->answer);
         }
         else {
-            sprintf(buf, "select %s from %s where %s = %d", Colopt->answer,
-                    fi->table, fi->key, cat);
+            snprintf(buf, sizeof(buf), "select %s from %s where %s = %d",
+                     Colopt->answer, fi->table, fi->key, cat);
         }
         G_debug(3, "SQL: %s", buf);
         db_set_string(&stmt, buf);
@@ -398,10 +395,11 @@ int main(int argc, char **argv)
                     rotate = rotate * 180 / PI;
 
                     if (direction == 0) {
-                        sprintf(buf, "%c", txt[i]);
+                        snprintf(buf, sizeof(buf), "%c", txt[i]);
                     }
                     else {
-                        sprintf(buf, "%c", txt[txtlength - i - 1]);
+                        snprintf(buf, sizeof(buf), "%c",
+                                 txt[txtlength - i - 1]);
                         rotate += 180;
                     }
                     print_label(labels, x, y, rotate, buf);

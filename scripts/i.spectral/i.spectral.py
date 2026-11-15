@@ -7,11 +7,8 @@
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Displays spectral response at user specified locations in
 #               group or raster images
-# COPYRIGHT:    (C) 1999-2013 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 1999-2013 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 #
@@ -89,12 +86,8 @@ def cleanup():
 
 
 def write2textf(what, output):
-    outf = open(output, "w")
-    i = 0
-    for row in enumerate(what):
-        i += 1
-        outf.write("%d, %s\n" % (i, row))
-    outf.close()
+    with open(output, "w", encoding="utf-8") as outf:
+        outf.writelines("%d, %s\n" % (i + 1, row[3:]) for i, row in enumerate(what))
 
 
 def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
@@ -102,10 +95,9 @@ def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
 
     for i, row in enumerate(what):
         outfile = os.path.join(tmp_dir, "data_%d" % i)
-        outf = open(outfile, "w")
         xrange = max(xrange, len(row) - 2)
-        outf.writelines("%d %s\n" % (j + 1, val) for j, val in enumerate(row[3:]))
-        outf.close()
+        with open(outfile, "w") as outf:
+            outf.writelines("%d %s\n" % (j + 1, val) for j, val in enumerate(row[3:]))
 
     # build gnuplot script
     lines = []
@@ -141,13 +133,12 @@ def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
         cmd.append(" '%s' title '%s'" % (x_datafile, title))
 
     cmd = ",".join(cmd)
-    cmd = " ".join(["plot", cmd, "with linespoints pt 779"])
+    cmd = f"plot {cmd} with linespoints pt 779"
     lines.append(cmd)
 
     plotfile = os.path.join(tmp_dir, "spectrum.gnuplot")
-    plotf = open(plotfile, "w")
-    plotf.writelines(line + "\n" for line in lines)
-    plotf.close()
+    with open(plotfile, "w") as plotf:
+        plotf.writelines(line + "\n" for line in lines)
 
     if output:
         gcore.call(["gnuplot", plotfile])
@@ -160,15 +151,13 @@ def draw_linegraph(what):
 
     xfile = os.path.join(tmp_dir, "data_x")
 
-    xf = open(xfile, "w")
-    xf.writelines("%d\n" % (j + 1) for j, val in enumerate(what[0][3:]))
-    xf.close()
+    with open(xfile, "w") as xf:
+        xf.writelines("%d\n" % (j + 1) for j, val in enumerate(what[0][3:]))
 
     for i, row in enumerate(what):
         yfile = os.path.join(tmp_dir, "data_y_%d" % i)
-        yf = open(yfile, "w")
-        yf.writelines("%s\n" % val for j, val in enumerate(row[3:]))
-        yf.close()
+        with open(yfile, "w") as yf:
+            yf.writelines("%s\n" % val for j, val in enumerate(row[3:]))
         yfiles.append(yfile)
 
     sienna = "#%02x%02x%02x" % (160, 82, 45)

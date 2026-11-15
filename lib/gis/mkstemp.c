@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Temporary file functions.
  *
- * (C) 2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Glynn Clements
  */
@@ -124,7 +122,6 @@ char *G_mktemp(char *template)
  *
  * \return file descriptor
  */
-
 int G_mkstemp(char *template, int flags, int mode)
 {
 
@@ -159,7 +156,6 @@ int G_mkstemp(char *template, int flags, int mode)
  *
  * \return FILE*
  */
-
 FILE *G_mkstemp_fp(char *template, int flags, int mode)
 {
     const char *fmode = ((flags & O_ACCMODE) == O_RDWR)

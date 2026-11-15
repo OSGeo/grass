@@ -3,10 +3,8 @@
 
    \brief Cluster library - Begin clusterring
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -54,7 +52,7 @@ int I_cluster_begin(struct Cluster *C, int nbands)
     /* prepare the signatures for nbands */
 
     I_init_signatures(&C->S, nbands);
-    sprintf(C->S.title, _("produced by i.cluster"));
+    snprintf(C->S.title, sizeof(C->S.title), _("produced by i.cluster"));
 
     /* allocate the data (points) arrays */
     C->points = (DCELL **)malloc(C->nbands * sizeof(DCELL *));

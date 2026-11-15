@@ -6,11 +6,8 @@
  *
  * PURPOSE:      Unit and Integration tests
  *
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2000 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -19,6 +16,9 @@
 #include <string.h>
 #include <math.h>
 #include "test_raster3d_lib.h"
+#ifdef _MSC_VER
+#include <winsock.h>
+#endif
 
 /* *************************************************************** */
 /* Compute the difference between two time steps ***************** */

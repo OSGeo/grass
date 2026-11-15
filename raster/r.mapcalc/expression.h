@@ -27,7 +27,7 @@ typedef struct expr_data_map {
     const char *name;
     int mod;
     int row, col, depth;
-    int idx;
+    int *idx; /* array to store fds for multi-threads*/
 } expr_data_map;
 
 typedef struct expr_data_func {
@@ -35,10 +35,10 @@ typedef struct expr_data_func {
     const char *oper;
     int prec;
     func_t *func;
-    int argc;
-    struct expression **args;
-    int *argt;
-    void **argv;
+    int argc;                 /* number of args in the whole expression */
+    struct expression **args; /* array of expressions */
+    int *argt;                /* type of expressions */
+    void ***argv;             /* values in e->buf for each expression */
 } expr_data_func;
 
 typedef struct expr_data_bind {
@@ -50,7 +50,7 @@ typedef struct expr_data_bind {
 typedef struct expression {
     int type;
     int res_type;
-    void *buf;
+    void **buf;
     union {
         expr_data_const con;
         expr_data_var var;

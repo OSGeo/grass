@@ -6,7 +6,6 @@
 /*
  * m_add: matrix addition (returns c = a + b)
  */
-
 int m_add(MATRIX *a, MATRIX *b, MATRIX *c)
 {
     register int nr, nc;
@@ -21,8 +20,9 @@ int m_add(MATRIX *a, MATRIX *b, MATRIX *c)
 
     /* check for conformity */
     if ((a->nrows != b->nrows) || (a->ncols != b->ncols)) {
-        sprintf(message, "+: matrices not conformable, %d x %d + %d x %d\n",
-                a->nrows, a->ncols, b->nrows, b->ncols);
+        snprintf(message, sizeof(message),
+                 "+: matrices not conformable, %d x %d + %d x %d\n", a->nrows,
+                 a->ncols, b->nrows, b->ncols);
         return error(message);
     }
 

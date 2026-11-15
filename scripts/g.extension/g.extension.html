@@ -4,8 +4,8 @@
 
 <em>g.extension</em> downloads and installs, removes or updates
 extensions (addons) from the official
-<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS GIS Addons repository</a>
-or from user-specified source code repositories into the local GRASS GIS
+<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS Addons repository</a>
+or from user-specified source code repositories into the local GRASS
 installation.
 <p>
 Two types of extensions are supported:
@@ -14,7 +14,7 @@ Two types of extensions are supported:
     the need of special dependencies.</li>
 <li>Source code (mostly written in C programming language; may also be written
     in C++, Fortran or other languages): while on MS-Windows systems the requested
-    GRASS GIS extension is downloaded pre-compiled from the GRASS GIS site, on Unix
+    GRASS extension is downloaded pre-compiled from the GRASS site, on Unix
     based systems the installation is preceded by the automated download of the
     extension's source code along with subsequent compilation and installation.
     This requires a compiler environment to be present on the user's computer.</li>
@@ -22,17 +22,17 @@ Two types of extensions are supported:
 
 <h3>Managing installed extensions</h3>
 
-<p>Re-running <em>g.extension</em> on an installed GRASS GIS Addon
+<p>Re-running <em>g.extension</em> on an installed GRASS Addon
 extension re-installs the requested extension which may include
 updates.
 <p>
-To bulk-update all locally installed GRASS GIS extensions,
+To bulk-update all locally installed GRASS extensions,
 <em><a href="g.extension.all.html">g.extension.all</a></em> module
 is available.
 
 <h3>Where the extensions are installed</h3>
 
-GRASS GIS extensions are installed by <em>g.extension</em> into a dedicated
+GRASS extensions are installed by <em>g.extension</em> into a dedicated
 directory.
 The default is a directory for application data and settings inside
 the user's home directory.
@@ -42,7 +42,7 @@ The name of the directory is stored in the <code>GRASS_ADDON_BASE</code>
 environmental variable.
 
 <p>
-The flag <b>-s</b> changes this install target directory to the GRASS GIS
+The flag <b>-s</b> changes this install target directory to the GRASS
 installation directory
 (determined by <code>GISBASE</code> environmental variable, e.g. <code>/usr/</code>)
 rather than the default directory defined as per  <code>GRASS_ADDON_BASE</code>
@@ -53,13 +53,13 @@ rather than the default directory defined as per  <code>GRASS_ADDON_BASE</code>
 <p>
 The place where the extensions are installed can be customized by
 the option <b>prefix</b>. Ensuring that these extensions will be accessible
-in GRASS GIS is in this case in the responsibility of the user.
+in GRASS is in this case in the responsibility of the user.
 
 <h3>Source code sources and repositories</h3>
 
-<h4>GRASS GIS Addons repository on GitHub</h4>
+<h4>GRASS Addons repository on GitHub</h4>
 By default, <em>g.extension</em> installs extensions from the official
-GRASS GIS Addons GitHub repository. However, different sources can be specified
+GRASS Addons GitHub repository. However, different sources can be specified
 using the <b>url</b> option.
 
 <p>
@@ -117,7 +117,7 @@ MS-Windows.
 
 On MS-Windows systems, where compilation tools are typically not readily
 locally installed, <em>g.extension</em> downloads a precompiled executable
-from the GRASS GIS project server. On all other operating systems
+from the GRASS project server. On all other operating systems
 where it is not difficult to install compilation tools,
 <em>g.extension</em> downloads the source code of the requested
 extension (addon) and compiles it locally.
@@ -125,6 +125,59 @@ This applies for both C and Python modules
 as well as any other extensions. The reason is that more things such
 as manual page are compiled, not only the source code (which is really
 necessary to compile just in case of C).
+
+<h3>Using an alternative addon server (MS-Windows)</h3>
+
+On MS-Windows, <em>g.extension</em> downloads precompiled addon ZIPs from the
+official WinGRASS server (<code>http://wingrass.fsv.cvut.cz</code>) by default.
+The base URL of the server can be redirected to a mirror or a private addon
+server by setting <code>ADDONS_BASE_URL</code>. The setting affects both the
+addon listing (<code>g.extension -l</code>, <code>-c</code>, <code>-g</code>)
+and the install download URL, so listing and install always come from the same
+place.
+
+<p> The alternative server must host the precompiled addon ZIPs in the directory
+layout <code>{base}/grass{MM}/addons/grass-{M.M.P}/</code> (for example
+<code>.../grass85/addons/grass-8.5.0/</code>), one ZIP per extension, together
+with a <code>modules.xml</code> file listing them in that same directory (and a
+<code>toolboxes.xml</code> file if toolbox operations with <code>-t</code> are
+to be used). Note that this setup differs from the official WinGRASS server,
+where the addon listing is served separately from <code>grass.osgeo.org</code>,
+so an exact mirror of the official server would install addons but fail on
+<code>g.extension -l</code>.
+
+<p>
+The setting can be applied in two ways:
+
+<ul>
+<li>From inside GRASS (persists across sessions, settable from the GUI's
+    variables panel as well):
+<div class="code"><pre>
+g.gisenv set="ADDONS_BASE_URL=https://your.server.example"
+</pre></div>
+</li>
+<li>As a shell environment variable named <code>GRASS_ADDONS_BASE_URL</code> (useful
+    for one-off shell sessions or CI jobs). The environment variable takes
+    precedence over the gisenv setting; if neither is set, the default
+    WinGRASS server is used.</li>
+</ul>
+
+<p>
+To revert to the default server, unset the value:
+
+<div class="code"><pre>
+g.gisenv unset=ADDONS_BASE_URL
+</pre></div>
+
+<p>
+Alternative servers are:
+<ul>
+<li><a href="https://ecodiv.earth/share/AddonServer">https://ecodiv.earth/share/AddonServer</a> (Python extensions only)</li>
+</ul>
+
+<p>
+Note that the settings explained in this section are honoured on MS-Windows
+only; on Linux/macOS they have no effect.
 
 <h2>EXAMPLES</h2>
 
@@ -141,6 +194,35 @@ For convenience, a shorter syntax can be used:
 
 <div class="code"><pre>
 g.extension r.stream.distance
+</pre></div>
+
+<h3>Installing from an alternative addon server (MS-Windows)</h3>
+
+On MS-Windows, redirect the addon server to a mirror or private host,
+then use <em>g.extension</em> the usual way. Listing and install both go through the
+configured server.
+
+<div class="code"><pre>
+# Point at the alternative server (persists across GRASS sessions)
+g.gisenv set="ADDONS_BASE_URL=https://ecodiv.earth/share/AddonServer"
+
+# List what the alternative server provides
+g.extension -l
+
+# Install an extension from it
+g.extension extension=r.tpi
+
+# Revert to the default WinGRASS server
+g.gisenv unset=ADDONS_BASE_URL
+</pre></div>
+
+<p>
+For a one-off shell session, set the environment variable instead:
+
+<div class="code"><pre>
+# cmd.exe
+set GRASS_ADDONS_BASE_URL=https://ecodiv.earth/share/AddonServer
+g.extension extension=r.tpi
 </pre></div>
 
 <h3>Download and install of an extension when behind a proxy</h3>
@@ -160,7 +242,7 @@ g.extension extension=r.stream.distance proxy="http=http://username:password@pro
 
 <h3>Managing the extensions</h3>
 
-List all available extensions in the official GRASS GIS Addons repository:
+List all available extensions in the official GRASS Addons repository:
 
 <div class="code"><pre>
 g.extension -l
@@ -204,12 +286,16 @@ In general, when a ZIP file or other archive is provided, the full URL can be us
 g.extension r.example url=http://example.com/.../r.example?format=zip
 </pre></div>
 
-Note that because of MS-Windows operating system architecture,
-only official repository is supported on this platform.
+On MS-Windows, addons are not compiled locally, so <code>url</code> must point
+directly at a ZIP file of a single precompiled addon (the URL has to end in
+<code>.zip</code>). A source archive such as the one in the example above will
+not work. To install from a different addon server instead, redirect the server
+with <code>ADDONS_BASE_URL</code> (see <em>Using an alternative addon
+server</em> above).
 
 <h3>Install a specific version from Addons</h3>
 
-To install a specific version from GRASS GIS Addons, specify the full
+To install a specific version from GRASS Addons, specify the full
 URL pointing to Trac code browser and include Subversion revision
 number. For example, this installs the version number 57854 of
 r.local.relief module:
@@ -243,10 +329,16 @@ build environment is needed.
 
 Toolboxes in the official repository cannot be downloaded.
 <p>
-On MS-Windows, only the official repository is working
-because there is no way of compiling the modules
+On MS-Windows, modules cannot be compiled locally
 <!-- what does it mean?? -->
-(a Python replacement for Python scripts should be implemented).
+(a Python replacement for Python scripts should be implemented), so
+<em>g.extension</em> installs precompiled binaries. These come from the
+official WinGRASS server by default, but the server can be redirected to an
+alternative host that provides precompiled addon ZIPs together with a
+<code>modules.xml</code> listing (and a <code>toolboxes.xml</code> for
+<code>-t</code>) in the layout
+<code>{base}/grass{MM}/addons/grass-{M.M.P}/</code>. See <em>Using an
+alternative addon server</em> for details.
 
 <h2>TROUBLESHOOTING</h2>
 
@@ -256,7 +348,7 @@ present on the user's computer.
 
 <h3>ERROR: Please install GRASS development package</h3>
 
-While GRASS GIS is available on the user's computer, the respective development
+While GRASS is available on the user's computer, the respective development
 package is lacking. If GRASS was installed from a (Linux) repository, also the
 grass-dev* package (commonly named "grass-dev" or "grass-devel", sometimes along
 with the version number) must be installed.
@@ -268,7 +360,7 @@ with the version number) must be installed.
 </em>
 
 <p>
-<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS GIS 8 Addons Manual pages</a>
+<a href="https://grass.osgeo.org/grass8/manuals/addons/">GRASS 8 Addons Manual pages</a>
 <br>
 <a href="https://grasswiki.osgeo.org/wiki/GRASS_AddOns">GRASS Addons</a> wiki page.
 
@@ -276,4 +368,5 @@ with the version number) must be installed.
 
 Markus Neteler (original shell script)<br>
 Martin Landa, Czech Technical University in Prague, Czech Republic (Python rewrite)<br>
-Vaclav Petras, <a href="https://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a> (support for general sources, partial refactoring)
+Vaclav Petras, <a href="https://geospatial.ncsu.edu/geoforall/">NCSU GeoForAll Lab</a> (support for general sources, partial refactoring)<br>
+Paulo van Breugel, HAS green academy (add option for Windows users to point at alternative repositories)

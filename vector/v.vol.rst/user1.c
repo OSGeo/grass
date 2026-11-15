@@ -16,12 +16,13 @@
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
- * COPYRIGHT:    (C) 1989, 1993, 2000 L. Mitas,  H. Mitasova,
- *               I. Kosinovsky, D. Gerdes, J. Hofierka
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 L. Mitas
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 H. Mitasova
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 I. Kosinovsky
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 D. Gerdes
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 J. Hofierka
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -59,11 +60,10 @@
    INPUT now reads site files using the new, multi-attribute format
    (mca 2/12/96)
  */
-
 int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 {
     struct quadruple *point;
-    double x, y, z, w, nz = 0., sm;
+    double x, y, z, w, nz = 0., sm = 0.;
     double c1, c2, c3, c4, c5, c6, nsg;
     int i, j, k = 0, a, irev, cfmask;
     int ddisk = 0;
@@ -221,6 +221,8 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
                 G_warning(_("Can't insert %lf,%lf,%lf,%lf,%lf a=%d"), x, y, z,
                           w, sm, a);
                 Vect_destroy_field_info(Fi);
+                db_close_database_shutdown_driver(Driver);
+                db_CatValArray_free(&cvarr);
                 return -1;
             }
 
@@ -324,6 +326,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         else {
             fprintf(stderr, "ERROR: zero points in the given region!\n");
             Vect_destroy_field_info(Fi);
+            db_close_database_shutdown_driver(Driver);
             return -1;
         }
     }
@@ -335,6 +338,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         fprintf(stderr, "for smooth connection of segments, npmin > segmax "
                         "(see manual) \n");
         Vect_destroy_field_info(Fi);
+        db_close_database_shutdown_driver(Driver);
         return -1;
     }
 
@@ -386,6 +390,7 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
         G_message(_("Bitmap mask created"));
     }
     Vect_destroy_field_info(Fi);
+    db_close_database_shutdown_driver(Driver);
 
     return 1;
 }
@@ -393,7 +398,6 @@ int INPUT(struct Map_info *In, char *column, char *scol, char *wheresql)
 /*
  * OUTGR now writes 3d raster maps (mca 2/15/96)
  */
-
 int OUTGR(void)
 {
     void *cf1, *cf2, *cf3, *cf4, *cf5, *cf6, *cf7;

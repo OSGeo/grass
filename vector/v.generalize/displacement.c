@@ -6,12 +6,8 @@
  *
  * PURPOSE:    Methods for displacement
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ * SPDX-FileCopyrightText: 2002-2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************/
 
@@ -91,7 +87,7 @@ int snakes_displacement(struct Map_info *In, struct Map_info *Out,
             POINT cur;
 
             point_assign(Points, j, with_z, &cur, 0);
-            /* check whether we alerady have point with the same
+            /* check whether we already have point with the same
              * coordinates */
             findex = pindex;
             for (q = 0; q < pindex; q++)

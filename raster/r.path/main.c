@@ -7,11 +7,8 @@
  *
  * PURPOSE:      Tracing paths from starting points following
  *               input directions.
- * COPYRIGHT:    (C) 2017 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2017 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -21,6 +18,7 @@
 #include <string.h>
 #include <math.h>
 #include <float.h>
+#include <errno.h>
 
 /* for using the "open" statement */
 #include <sys/types.h>
@@ -341,6 +339,9 @@ int main(int argc, char **argv)
                 else if (type == -2) {
                     break;
                 }
+                else if (!(type & GV_POINT)) {
+                    continue;
+                }
                 if (!Vect_point_in_box(Points->x[0], Points->y[0], 0, &box))
                     continue;
 
@@ -394,6 +395,10 @@ int main(int argc, char **argv)
 
         tempfile1 = G_tempfile();
         val_fd = open(tempfile1, O_RDWR | O_CREAT, 0666);
+        if (val_fd < 0) {
+            G_fatal_error(_("Unable to open temporary file <%s>: %s"),
+                          tempfile1, strerror(errno));
+        }
 
         map_buf = Rast_allocate_d_buf();
 
@@ -773,8 +778,14 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
             /* read input raster */
             val_buf = Rast_allocate_d_buf();
             if (val_row != stackp->row) {
-                lseek(val_fd, (off_t)stackp->row * window->cols * sizeof(DCELL),
-                      SEEK_SET);
+                if (lseek(val_fd,
+                          (off_t)stackp->row * window->cols * sizeof(DCELL),
+                          SEEK_SET) == -1) {
+                    int err = errno;
+                    G_fatal_error(
+                        _("File read/write operation failed: %s (%d)"),
+                        strerror(err), err);
+                }
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
                     window->cols * (int)sizeof(DCELL)) {
                     G_fatal_error(_("Unable to read from temp file"));
@@ -804,8 +815,13 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
 
             /* find direction from this point */
             if (dir_row != next_row) {
-                lseek(dir_fd, (off_t)next_row * window->cols * sizeof(CELL),
-                      SEEK_SET);
+                if (lseek(dir_fd, (off_t)next_row * window->cols * sizeof(CELL),
+                          SEEK_SET) == -1) {
+                    int err = errno;
+                    G_fatal_error(
+                        _("File read/write operation failed: %s (%d)"),
+                        strerror(err), err);
+                }
                 if (read(dir_fd, dir_buf, window->cols * sizeof(CELL)) !=
                     window->cols * (int)sizeof(CELL)) {
                     G_fatal_error(_("Unable to read from temp file"));
@@ -930,10 +946,15 @@ int dir_bitmask(int dir_fd, int val_fd, struct point *startp,
                     else if (out_mode == OUT_CPY || out_mode == OUT_ACC) {
                         /* read input raster */
                         if (val_row != next_row) {
-                            lseek(val_fd,
-                                  (off_t)next_row * window->cols *
-                                      sizeof(DCELL),
-                                  SEEK_SET);
+                            if (lseek(val_fd,
+                                      (off_t)next_row * window->cols *
+                                          sizeof(DCELL),
+                                      SEEK_SET) == -1) {
+                                int err = errno;
+                                G_fatal_error(_("File read/write operation "
+                                                "failed: %s (%d)"),
+                                              strerror(err), err);
+                            }
                             if (read(val_fd, val_buf,
                                      window->cols * sizeof(DCELL)) !=
                                 window->cols * (int)sizeof(DCELL)) {
@@ -1044,8 +1065,14 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
             /* read input raster */
             val_buf = Rast_allocate_d_buf();
             if (val_row != next_row) {
-                lseek(val_fd, (off_t)next_row * window->cols * sizeof(DCELL),
-                      SEEK_SET);
+                if (lseek(val_fd,
+                          (off_t)next_row * window->cols * sizeof(DCELL),
+                          SEEK_SET) == -1) {
+                    int err = errno;
+                    G_fatal_error(
+                        _("File read/write operation failed: %s (%d)"),
+                        strerror(err), err);
+                }
                 if (read(val_fd, val_buf, window->cols * sizeof(DCELL)) !=
                     window->cols * (int)sizeof(DCELL)) {
                     G_fatal_error(_("Unable to read from temp file"));
@@ -1070,8 +1097,12 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
          */
         /* find the direction recorded at row,col */
         if (dir_row != next_row) {
-            lseek(dir_fd, (off_t)next_row * window->cols * sizeof(DCELL),
-                  SEEK_SET);
+            if (lseek(dir_fd, (off_t)next_row * window->cols * sizeof(DCELL),
+                      SEEK_SET) == -1) {
+                int err = errno;
+                G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                              strerror(err), err);
+            }
             if (read(dir_fd, dir_buf, window->cols * sizeof(DCELL)) !=
                 window->cols * (int)sizeof(DCELL)) {
                 G_fatal_error(_("Unable to read from temp file"));
@@ -1167,9 +1198,15 @@ int dir_degree(int dir_fd, int val_fd, struct point *startp,
                 else if (out_mode == OUT_CPY || out_mode == OUT_ACC) {
                     /* read input raster */
                     if (val_row != next_row) {
-                        lseek(val_fd,
-                              (off_t)next_row * window->cols * sizeof(DCELL),
-                              SEEK_SET);
+                        if (lseek(val_fd,
+                                  (off_t)next_row * window->cols *
+                                      sizeof(DCELL),
+                                  SEEK_SET) == -1) {
+                            int err = errno;
+                            G_fatal_error(
+                                _("File read/write operation failed: %s (%d)"),
+                                strerror(err), err);
+                        }
                         if (read(val_fd, val_buf,
                                  window->cols * sizeof(DCELL)) !=
                             window->cols * (int)sizeof(DCELL)) {

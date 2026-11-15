@@ -8,11 +8,8 @@
  * PURPOSE:      To transform a vector map's coordinates via a set of tie
  *               points.
  *
- * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with
- *               GRASS for details.
+ * SPDX-FileCopyrightText: 2002-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 /*
@@ -280,14 +277,14 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&Old, &New);
     Vect_hist_command(&New);
 
-    sprintf(date, "%s", G_date());
+    snprintf(date, sizeof(date), "%s", G_date());
     sscanf(date, "%*s%s%d%*s%d", mon, &day, &yr);
-    sprintf(date, "%s %d %d", mon, day, yr);
+    snprintf(date, sizeof(date), "%s %d %d", mon, day, yr);
     Vect_set_date(&New, date);
 
     Vect_set_person(&New, G_whoami());
 
-    sprintf(buf, "transformed from %s", vold->answer);
+    snprintf(buf, sizeof(buf), "transformed from %s", vold->answer);
     Vect_set_map_name(&New, buf);
 
     Vect_set_scale(&New, 1);

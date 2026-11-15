@@ -3,10 +3,8 @@
 
    \brief Vector Library - write color table for vector map
 
-   (C) 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -80,11 +78,11 @@ void Vect_write_colors(const char *name, const char *mapset,
      */
     if (strcmp(mapset, G_mapset()) == 0) {
         cname = GV_COLR_ELEMENT;
-        sprintf(element, "%s/%s", GV_DIRECTORY, name);
+        snprintf(element, sizeof(element), "%s/%s", GV_DIRECTORY, name);
     }
     else {
         cname = name;
-        sprintf(element, "%s/%s", GV_COLR2_DIRECTORY, mapset);
+        snprintf(element, sizeof(element), "%s/%s", GV_COLR2_DIRECTORY, mapset);
     }
 
     if (!(fd = G_fopen_new(element, cname)))

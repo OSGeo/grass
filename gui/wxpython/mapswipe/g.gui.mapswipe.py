@@ -5,17 +5,9 @@
 # AUTHOR(S): Anna Kratochvilova
 # PURPOSE:   The Map Swipe is a wxGUI component which allows the user to
 #            interactively compare two maps
-# COPYRIGHT: (C) 2012 by Anna Kratochvilova, and the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2012 Anna Kratochvilova
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 ############################################################################
 
@@ -84,7 +76,7 @@ def main():
     frame = wx.Frame(
         parent=None,
         size=globalvar.MAP_WINDOW_SIZE,
-        title=_("Map Swipe Tool - GRASS GIS"),
+        title=_("Map Swipe Tool - GRASS"),
     )
     frame = SwipeMapDisplay(
         parent=frame,

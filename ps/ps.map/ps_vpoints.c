@@ -78,7 +78,7 @@ int PS_vpoints_plot(struct Map_info *P_map, int vec)
 
     /* Read symbol */
     if (vector.layer[vec].symbol != NULL) {
-        sprintf(sname, "SITESYMBOL%d", vec);
+        snprintf(sname, sizeof(sname), "SITESYMBOL%d", vec);
         Symb = S_read(vector.layer[vec].symbol);
         if (Symb == NULL) {
             G_warning(_("Cannot read symbol, using default icon"));
@@ -95,7 +95,7 @@ int PS_vpoints_plot(struct Map_info *P_map, int vec)
             vector.layer[vec].epstype = 0; /* eps file can't be read */
         }
         else { /* save to PS */
-            sprintf(eps, "SITEEPSF%d", vec);
+            snprintf(eps, sizeof(eps), "SITEEPSF%d", vec);
             eps_save(PS.fp, vector.layer[vec].epspre, eps);
         }
     }
@@ -204,7 +204,7 @@ int PS_vpoints_plot(struct Map_info *P_map, int vec)
                 G_debug(3, "    dynamic symbol rgb color = %s", rgbstring);
                 set_color(&color, red, grn, blu);
 
-                sprintf(sname, "SITESYMBOL%d_%d", vec, line);
+                snprintf(sname, sizeof(sname), "SITESYMBOL%d_%d", vec, line);
 
                 symbol_save(Symb, &(vector.layer[vec].color), &color, sname);
             }
@@ -213,7 +213,7 @@ int PS_vpoints_plot(struct Map_info *P_map, int vec)
                         vector.layer[vec].color.r, vector.layer[vec].color.g,
                         vector.layer[vec].color.b);
 
-                sprintf(sname, "SITESYMBOL%d", vec);
+                snprintf(sname, sizeof(sname), "SITESYMBOL%d", vec);
             }
         }
 
@@ -249,8 +249,8 @@ int PS_vpoints_plot(struct Map_info *P_map, int vec)
             eps_draw_saved(eps, xt, yt, size, rotate);
         }
         else if (vector.layer[vec].epstype == 2) { /* draw epses */
-            sprintf(epsfile, "%s%d%s", vector.layer[vec].epspre, cat,
-                    vector.layer[vec].epssuf);
+            snprintf(epsfile, sizeof(epsfile), "%s%d%s",
+                     vector.layer[vec].epspre, cat, vector.layer[vec].epssuf);
             if ((eps_exist = eps_bbox(epsfile, &llx, &lly, &urx, &ury))) {
                 eps_trans(llx, lly, urx, ury, x, y, size, rotate, &xt, &yt);
 

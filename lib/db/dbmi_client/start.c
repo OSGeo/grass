@@ -3,11 +3,8 @@
  *
  * \brief DBMI Library (client) - open database connection
  *
- * (C) 1999-2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Joel Jones (CERL/UIUC), Radim Blazek
  */
@@ -16,7 +13,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #include <process.h>
 #include <fcntl.h>
@@ -30,7 +27,7 @@
 
 static void close_on_exec(int fd)
 {
-#ifndef __MINGW32__
+#ifndef _WIN32
     int flags = fcntl(fd, F_GETFD);
 
     fcntl(fd, F_SETFD, flags | FD_CLOEXEC);
@@ -71,7 +68,7 @@ dbDriver *db_start_driver(const char *name)
      * makes a copy of string */
     if (G_get_gisrc_mode() == G_GISRC_MODE_MEMORY) {
         G_debug(3, "G_GISRC_MODE_MEMORY\n");
-        sprintf(ebuf, "%d", G_GISRC_MODE_MEMORY);
+        snprintf(ebuf, sizeof(ebuf), "%d", G_GISRC_MODE_MEMORY);
         G_putenv("GRASS_DB_DRIVER_GISRC_MODE",
                  ebuf); /* to tell driver that it must read variables */
 
@@ -90,7 +87,7 @@ dbDriver *db_start_driver(const char *name)
         /* Warning: GISRC_MODE_MEMORY _must_ be set to G_GISRC_MODE_FILE,
          * because the module can be run from an application which previously
          * set environment variable to G_GISRC_MODE_MEMORY */
-        sprintf(ebuf, "%d", G_GISRC_MODE_FILE);
+        snprintf(ebuf, sizeof(ebuf), "%d", G_GISRC_MODE_FILE);
         G_putenv("GRASS_DB_DRIVER_GISRC_MODE", ebuf);
     }
 
@@ -113,7 +110,7 @@ dbDriver *db_start_driver(const char *name)
         char msg[256];
 
         db_free_dbmscap(list);
-        sprintf(msg, "%s: no such driver available", name);
+        snprintf(msg, sizeof(msg), "%s: no such driver available", name);
         db_error(msg);
         return (dbDriver *)NULL;
     }
@@ -136,7 +133,7 @@ dbDriver *db_start_driver(const char *name)
     /* run the driver as a child process and create pipes to its stdin, stdout
      */
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #define pipe(fds) _pipe(fds, 250000, _O_BINARY | _O_NOINHERIT)
 #endif
 

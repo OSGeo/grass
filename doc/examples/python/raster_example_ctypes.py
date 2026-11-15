@@ -37,7 +37,7 @@ from grass.lib.raster import (
 
 # check if GRASS is running or not
 if "GISBASE" not in os.environ:
-    sys.exit("You must be in GRASS GIS to run this program")
+    sys.exit("You must be in GRASS to run this program")
 
 # parse command line arguments, prompt user for a raster map name if one wasn't given
 input = sys.argv[1] if len(sys.argv) == 2 else input("Name of raster map? ")

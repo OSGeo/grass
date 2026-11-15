@@ -23,8 +23,8 @@ int report_range(void)
         if (Rast_is_d_null_value(&old_dmin) || Rast_is_d_null_value(&old_dmax))
             G_message(_("Data range is empty"));
         else {
-            sprintf(buff, "%.10f", old_dmin);
-            sprintf(buff2, "%.10f", old_dmax);
+            snprintf(buff, sizeof(buff), "%.10f", old_dmin);
+            snprintf(buff2, sizeof(buff2), "%.10f", old_dmax);
             G_trim_decimal(buff);
             G_trim_decimal(buff2);
             G_message(_("Data range of %s is %s to %s (entire map)"), name,

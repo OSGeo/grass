@@ -3,10 +3,8 @@
 
    \brief GIS Library - Projection support (database)
 
-   (C) 2001-2014 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -219,7 +217,7 @@ const char *G_database_ellipse_name(void)
         double a, es;
 
         G_get_ellipsoid_parameters(&a, &es);
-        sprintf(buf, "a=%.16g es=%.16g", a, es);
+        snprintf(buf, sizeof(buf), "a=%.16g es=%.16g", a, es);
         name = G_store(buf);
     }
 

@@ -7,11 +7,8 @@
  * PURPOSE:      functions to assemble a linear equation system
  *                 part of the gpde library
  *
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2000 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -424,9 +421,9 @@ N_les_callback_2d *N_alloc_les_callback_2d(void)
  * \return N_data_star *
  *
  * */
-N_data_star *N_callback_template_3d(void *data UNUSED, N_geom_data *geom,
-                                    int col UNUSED, int row UNUSED,
-                                    int depth UNUSED)
+N_data_star *N_callback_template_3d(void *data G_UNUSED, N_geom_data *geom,
+                                    int col G_UNUSED, int row G_UNUSED,
+                                    int depth G_UNUSED)
 {
     N_data_star *star = N_alloc_7star();
 
@@ -457,13 +454,13 @@ N_data_star *N_callback_template_3d(void *data UNUSED, N_geom_data *geom,
  *
  * \param data void * (unused)
  * \param geom N_geom_data *
- * \param row int (unused)
  * \param col int (unused)
+ * \param row int (unused)
  * \return N_data_star *
  *
  * */
-N_data_star *N_callback_template_2d(void *data UNUSED, N_geom_data *geom,
-                                    int col UNUSED, int row UNUSED)
+N_data_star *N_callback_template_2d(void *data G_UNUSED, N_geom_data *geom,
+                                    int col G_UNUSED, int row G_UNUSED)
 {
     N_data_star *star = N_alloc_9star();
 
@@ -1341,7 +1338,8 @@ int N_les_integrate_dirichlet_3d(N_les *les, N_geom_data *geom,
             }
         }
     }
-
+    G_free(dvect2);
+    G_free(dvect1);
     return 0;
 }
 

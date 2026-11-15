@@ -14,10 +14,8 @@
  * subdirectories. There may be more functionality desired (such as
  * deletion routines, directory globs).<br>
  *
- * (C) 2001-2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Eric G Miller - egm2 at jps net
  *
@@ -32,7 +30,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stddef.h>
-#ifndef __MINGW32__
+#ifndef _WIN32
 #include <pwd.h>
 #endif
 #include <sys/types.h>
@@ -46,7 +44,7 @@
  * path [caller must G_free ()] on success, or NULL on failure
  *************************************************************************/
 
-#ifndef __MINGW32__ /* TODO */
+#ifndef _WIN32 /* TODO */
 static char *_make_toplevel(void)
 {
     size_t len;
@@ -74,7 +72,7 @@ static char *_make_toplevel(void)
     if (NULL == (path = G_calloc(1, len))) {
         return NULL;
     }
-    sprintf(path, "%s%s", homedir, "/.grass");
+    snprintf(path, len, "%s%s", homedir, "/.grass");
 #else
     me = getuid();
     my_passwd = getpwuid(me);
@@ -85,7 +83,7 @@ static char *_make_toplevel(void)
     if (NULL == (path = G_calloc(1, len)))
         return NULL;
 
-    sprintf(path, "%s%s", my_passwd->pw_dir, "/.grass");
+    snprintf(path, len, "%s%s", my_passwd->pw_dir, "/.grass");
 #endif
 
     status = G_lstat(path, &buf);
@@ -213,7 +211,8 @@ static char *_make_sublevels(const char *elems)
     }
 
     /* Allocate our path to be large enough */
-    if ((path = G_calloc(1, strlen(top) + strlen(elems) + 2)) == NULL) {
+    size_t bufsize = strlen(top) + strlen(elems) + 2;
+    if ((path = G_calloc(1, bufsize)) == NULL) {
         G_free(top);
         G_free(cp);
         return NULL;
@@ -225,7 +224,7 @@ static char *_make_sublevels(const char *elems)
      * make it into the returned path.
      */
     for (; i > 0; i--) {
-        sprintf(path, "%s/%s", top, cp);
+        snprintf(path, bufsize, "%s/%s", top, cp);
         errno = 0;
         status = G_lstat(path, &buf);
         if (status != 0) {
@@ -284,7 +283,6 @@ static char *_make_sublevels(const char *elems)
  * \param[in] item
  * \return Pointer to string path
  */
-
 char *G_rc_path(const char *element, const char *item)
 {
     size_t len;
@@ -314,7 +312,7 @@ char *G_rc_path(const char *element, const char *item)
     }
     path = ptr;
     ptr = strchr(path, '\0');
-    sprintf(ptr, "/%s", item);
+    snprintf(ptr, len, "/%s", item);
 
     return path;
 } /* G_rc_path */

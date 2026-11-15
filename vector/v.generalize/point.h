@@ -7,12 +7,8 @@
  * PURPOSE:    Definition of a point in 3D and basic operations
  *             with points
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ * SPDX-FileCopyrightText: 2002-2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************/
 
@@ -79,7 +75,7 @@ extern void point_list_add(POINT_LIST *l, POINT p);
  * return 0 on success, -1 on out of memory
  */
 extern int point_list_copy_to_line_pnts(POINT_LIST l, struct line_pnts *Points);
-/*free the momory occupied by the list at l.next */
+/*free the memory occupied by the list at l.next */
 extern void point_list_free(POINT_LIST l);
 
 /*delete the p->next element and set the pointers appropriatelly */

@@ -3,10 +3,9 @@ Name:       v.univar test
 Purpose:    Tests v.univar and its flags/options.
 
 Author:     Sunveer Singh, Google Code-in 2017
-Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
-Licence:    This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
+SPDX-FileCopyrightText: 2017 Sunveer Singh
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 import json
@@ -135,7 +134,7 @@ skewness: 0.801646"""
         )
 
     def test_json(self):
-        """Testing output in JSON fomrat"""
+        """Testing output in JSON format"""
         module = SimpleModule(
             "v.univar", map="geology", column="PERIMETER", flags="e", format="json"
         )

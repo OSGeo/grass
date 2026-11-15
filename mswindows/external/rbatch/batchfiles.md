@@ -226,7 +226,7 @@ and then enter the same set command into the new window.  Now any use of R in
 the original window will use the default version whereas in the new `cmd` line
 window it will use the specified version.
 
-One can change the registry entry permanently to refer to a particlar version
+One can change the registry entry permanently to refer to a particular version
 like this:
 
 ```bash
@@ -426,9 +426,9 @@ in the future.)
 ## make-batchfiles-pdf.bat ##
 
 This batch file creates a pdf of this documentation from the markdown file
-`batchfiles.md` .  `pandoc` must be installed for this to run.  `pandoc` can be
-found [here](https://code.google.com/p/pandoc/downloads/list).  It is run
-without arguments:
+`batchfiles.md`. `pandoc` must be installed for this to run ([download pandoc here](https://pandoc.org/)).
+
+It is run without arguments:
 
 ```bash
 make-batchfiles-pdf

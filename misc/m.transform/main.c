@@ -6,11 +6,8 @@
  *               Hamish Bowman
  * PURPOSE:      Utility to compute transformation based upon GCPs and
  *               output error measurements
- * COPYRIGHT:    (C) 2006-2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006-2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -95,9 +92,9 @@ static void compute_transformation(void)
     count = 0;
 
     for (n = 0; n < points.count; n++) {
-        double e1, n1, e2, n2;
-        double fx, fy, fd, fd2;
-        double rx, ry, rd, rd2;
+        double e1 = 0.0, n1 = 0.0, e2 = 0.0, n2 = 0.0;
+        double fx = 0.0, fy = 0.0, fd = 0.0, fd2 = 0.0;
+        double rx = 0.0, ry = 0.0, rd = 0.0, rd2 = 0.0;
 
         if (points.status[n] <= 0)
             continue;

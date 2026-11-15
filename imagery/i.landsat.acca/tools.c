@@ -129,7 +129,7 @@ void filter_holes(Gfile *out)
     crast = Rast_allocate_buf(CELL_TYPE);
 
     /* Open to write */
-    sprintf(tmp.name, "_%d.BBB", getpid());
+    snprintf(tmp.name, sizeof(tmp.name), "_%d.BBB", getpid());
     tmp.rast = Rast_allocate_buf(CELL_TYPE);
     if ((tmp.fd = Rast_open_new(tmp.name, CELL_TYPE)) < 0)
         G_fatal_error(_("Unable to create raster map <%s>"), tmp.name);

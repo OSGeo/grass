@@ -1,9 +1,7 @@
 """Test t.unregister
 
-(C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -114,7 +112,7 @@ class TestUnregister(TestCase):
             "t.list",
             type="raster",
             columns="name",
-            where='mapset = "%s" AND (name = "a1" OR name = "a2" OR name = "a3")'
+            where="mapset = '%s' AND (name = 'a1' OR name = 'a2' OR name = 'a3')"
             % (tgis.get_current_mapset()),
         )
         self.runModule(lister)
@@ -127,7 +125,7 @@ class TestUnregister(TestCase):
             "t.list",
             type="raster",
             columns="name",
-            where='mapset = "%s" AND (name = "a1" OR name = "a2" OR name = "a3")'
+            where="mapset = '%s' AND (name = 'a1' OR name = 'a2' OR name = 'a3')"
             % (tgis.get_current_mapset()),
         )
         self.runModule(lister)
@@ -145,7 +143,7 @@ class TestUnregister(TestCase):
             "t.list",
             type="raster",
             columns="name",
-            where='mapset = "%s" AND (name = "a4" OR name = "a5" OR name = "a6")'
+            where="mapset = '%s' AND (name = 'a4' OR name = 'a5' OR name = 'a6')"
             % (tgis.get_current_mapset()),
         )
         self.runModule(lister)
@@ -158,7 +156,7 @@ class TestUnregister(TestCase):
             "t.list",
             type="raster",
             columns="name",
-            where='mapset = "%s" AND (name = "a4" OR name = "a5" OR name = "a6")'
+            where="mapset = '%s' AND (name = 'a4' OR name = 'a5' OR name = 'a6')"
             % (tgis.get_current_mapset()),
         )
         self.runModule(lister)

@@ -5,10 +5,8 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2012 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2).  Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2012 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL, probably Dave Gerdes or Mike Higgins
  * \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -479,7 +477,7 @@ int Vect_array_to_cat_list(const int *vals, int nvals, struct cat_list *list)
 
    Allocated array should be freed by G_free().
 
-   \param cat_list pointer to cat_list struct
+   \param list pointer to cat_list struct
    \param[out] vals array of integers
    \param[out] nvals number of values
 
@@ -497,8 +495,10 @@ int Vect_cat_list_to_array(const struct cat_list *list, int **vals, int *nvals)
     cats = NULL;
     for (i = 0; i < list->n_ranges; i++) {
         n = list->max[i] - list->min[i] + 1;
-        if (n < 1)
+        if (n < 1) {
+            G_free(cats);
             return -1;
+        }
 
         /* realloc array */
         cats = (int *)G_realloc(cats, sizeof(int) * (n_cats + n));

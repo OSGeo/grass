@@ -10,13 +10,15 @@ int get_target(char *group)
     int stat;
 
     if (!I_get_target(group, location, mapset)) {
-        sprintf(buf, _("Target information for group <%s> missing"), group);
+        snprintf(buf, sizeof(buf),
+                 _("Target information for group <%s> missing"), group);
         goto error;
     }
 
-    sprintf(buf, "%s/%s", G_gisdbase(), location);
+    snprintf(buf, sizeof(buf), "%s/%s", G_gisdbase(), location);
     if (access(buf, 0) != 0) {
-        sprintf(buf, _("Target project (location) <%s> not found"), location);
+        snprintf(buf, sizeof(buf),
+                 _("Target project (location) <%s> not found"), location);
         goto error;
     }
     select_target_env();
@@ -28,13 +30,16 @@ int get_target(char *group)
         select_current_env();
         return 1;
     }
-    sprintf(buf, _("Mapset <%s> in target project (location) <%s> - "), mapset,
-            location);
-    strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
+    snprintf(buf, sizeof(buf),
+             _("Mapset <%s> in target project (location) <%s> - "), mapset,
+             location);
+    (void)G_strlcat(buf, stat == 0 ? _("permission denied") : _("not found"),
+                    sizeof(buf));
 error:
-    strcat(buf, "\n");
-    strcat(buf, _("Please run i.target for group "));
-    strcat(buf, group);
+    (void)G_strlcat(buf, "\n", sizeof(buf));
+    (void)G_strlcat(buf, _("Please run i.target for group "), sizeof(buf));
+    if (G_strlcat(buf, group, sizeof(buf)) >= sizeof(buf))
+        G_fatal_error(_("Internal error: error message too long"));
     G_fatal_error("%s", buf);
     return 1; /* never reached */
 }

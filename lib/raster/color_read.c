@@ -3,11 +3,8 @@
 
    \brief Raster Library - Read color table of raster map
 
-   (C) 1999-2009, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2009, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author USACERL and many others
  */
@@ -74,7 +71,7 @@ int Rast_read_colors(const char *name, const char *mapset,
         Rast_mark_colors_as_fp(colors);
 
     /* first look for secondary color table in current mapset */
-    sprintf(buf, "colr2/%s", mapset);
+    snprintf(buf, sizeof(buf), "colr2/%s", mapset);
     if (Rast__read_colors(buf, name, G_mapset(), colors) >= 0)
         return 1;
 

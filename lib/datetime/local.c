@@ -1,8 +1,8 @@
 /*
- * Copyright (C) 1995.  Bill Brown <brown@gis.uiuc.edu> & Michael Shapiro
- *
- * This program is free software under the GPL (>=v2)
- * Read the file GPL.TXT coming with GRASS for details.
+ * SPDX-FileCopyrightText: 1995 Bill Brown <brown@gis.uiuc.edu>
+ * SPDX-FileCopyrightText: 1995 Michael Shapiro
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <time.h>
 #include <grass/datetime.h>
@@ -25,7 +25,6 @@
  *  \param minutes
  *  \return int
  */
-
 int datetime_get_local_timezone(int *minutes)
 {
     struct tm *local, *gm;
@@ -78,7 +77,6 @@ int datetime_get_local_timezone(int *minutes)
  *  \param dt
  *  \return void
  */
-
 void datetime_get_local_time(DateTime *dt)
 {
     time_t clock;

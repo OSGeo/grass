@@ -6,10 +6,8 @@
 Classes:
  - page::MainPageBase
 
-(C) 2023 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2023 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Linda Kladivova <lindakladivova gmail.com>
 @author Anna Petrasova <kratochanna gmail.com>
@@ -30,7 +28,7 @@ class MainPageBase:
 
         self.canCloseCallback = None
 
-        # distinquishes whether map panel is dockable (Single-Window)
+        # distinguishes whether map panel is dockable (Single-Window)
         self._dockable = dockable
 
         # distinguishes whether map panel is docked or not
@@ -48,8 +46,11 @@ class MainPageBase:
         # Emitted when renaming page.
         self.renamingPage = Signal("MainPage.renamingPage")
 
+    def OnCloseWindow(self, event=None):
+        raise NotImplementedError
+
     def _pgnumDict(self):
-        """Get dictionary containg page index"""
+        """Get dictionary containing page index"""
         return {"mainnotebook": self._mainnotebook.GetPageIndex(self)}
 
     def SetUpPage(
@@ -88,7 +89,7 @@ class MainPageBase:
             self._docked = not self._docked
             self._docking_callback(self)
 
-    def _onCloseWindow(self, event):
+    def _onCloseWindow(self, event=None):
         """Close window"""
         if self.canCloseCallback:
             pgnum_dict = self.canCloseCallback()

@@ -30,10 +30,8 @@ Classes:
  - :class:`SeparatorSelect`
  - :class:`SqlWhereSelect`
 
-(C) 2007-2023 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2023 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton
 @author Martin Landa <landa.martin gmail.com>
@@ -556,7 +554,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         first_mapset = None
         for mapset in mapsets:
             mapset_node = self.AddItem(
-                _("Mapset") + ": " + mapset, node=True, mapset=mapset
+                _("Mapset: {mapset}").format(mapset=mapset), node=True, mapset=mapset
             )
             node = mapset_node
             if not first_mapset:
@@ -569,7 +567,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 if isinstance(filesdict[mapset], dict):
                     for elementType in filesdict[mapset].keys():
                         node = self.AddItem(
-                            _("Type: ") + elementType,
+                            _("Type: {element_type}").format(element_type=elementType),
                             mapset=mapset,
                             node=True,
                             parent=mapset_node,
@@ -593,33 +591,35 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                         node=node,
                     )
             except Exception as e:
-                sys.stderr.write(_("GSelect: invalid item: %s") % e)
+                sys.stderr.write(_("GSelect: invalid item: %s") % e + "\n")
                 continue
 
-            if self.seltree.ItemHasChildren(mapset_node):
-                sel = UserSettings.Get(
-                    group="appearance", key="elementListExpand", subkey="selection"
-                )
-                collapse = True
+            if not self.seltree.ItemHasChildren(mapset_node):
+                continue
 
-                if sel == 0:  # collapse all except PERMANENT and current
-                    if mapset in {"PERMANENT", curr_mapset}:
-                        collapse = False
-                elif sel == 1:  # collapse all except PERMANENT
-                    if mapset == "PERMANENT":
-                        collapse = False
-                elif sel == 2:  # collapse all except current
-                    if mapset == curr_mapset:
-                        collapse = False
-                elif sel == 3:  # collapse all
-                    pass
-                elif sel == 4:  # expand all
+            sel = UserSettings.Get(
+                group="appearance", key="elementListExpand", subkey="selection"
+            )
+            collapse = True
+
+            if sel == 0:  # collapse all except PERMANENT and current
+                if mapset in {"PERMANENT", curr_mapset}:
                     collapse = False
+            elif sel == 1:  # collapse all except PERMANENT
+                if mapset == "PERMANENT":
+                    collapse = False
+            elif sel == 2:  # collapse all except current
+                if mapset == curr_mapset:
+                    collapse = False
+            elif sel == 3:  # collapse all
+                pass
+            elif sel == 4:  # expand all
+                collapse = False
 
-                if collapse:
-                    self.seltree.CollapseAllChildren(mapset_node)
-                else:
-                    self.seltree.ExpandAllChildren(mapset_node)
+            if collapse:
+                self.seltree.CollapseAllChildren(mapset_node)
+            else:
+                self.seltree.ExpandAllChildren(mapset_node)
 
         if first_mapset:
             # select first mapset (MSW hack)
@@ -637,22 +637,24 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         """
         elist = gs.naturally_sorted(elist)
         for elem in elist:
-            if elem != "":
-                fullqElem = elem + "@" + mapset
-                if self.filterItems and fullqElem not in self.filterItems:
-                    continue  # skip items missed in self.filterItems
+            if elem == "":
+                continue
 
-                if elements is not None:
-                    if (exclude and fullqElem in elements) or (
-                        not exclude and fullqElem not in elements
-                    ):
-                        continue
+            fullqElem = elem + "@" + mapset
+            if self.filterItems and fullqElem not in self.filterItems:
+                continue  # skip items missed in self.filterItems
 
-                if self.filterElements:
-                    if self.filterElements(fullqElem):
-                        self.AddItem(elem, mapset=mapset, node=False, parent=node)
-                else:
+            if elements is not None:
+                if (exclude and fullqElem in elements) or (
+                    not exclude and fullqElem not in elements
+                ):
+                    continue
+
+            if self.filterElements:
+                if self.filterElements(fullqElem):
                     self.AddItem(elem, mapset=mapset, node=False, parent=node)
+            else:
+                self.AddItem(elem, mapset=mapset, node=False, parent=node)
 
     def AddItem(self, value, mapset=None, node=True, parent=None):
         if not parent:
@@ -784,7 +786,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                     try:
                         tgis.init(True)
                     except messages.FatalError as e:
-                        sys.stderr.write(_("Temporal GIS error:\n%s") % e)
+                        sys.stderr.write(_("Temporal GIS error:\n%s") % e + "\n")
                         self.tgis_error = True
                 except ImportError as e:
                     # PyGRASS (ctypes) is the likely cause
@@ -794,6 +796,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                             "Some functionality will be not accessible"
                         )
                         % e
+                        + "\n"
                     )
                     self.tgis_error = True
         if "mapsets" in kargs:
@@ -1137,7 +1140,14 @@ class ColumnSelect(ComboCtrl):
         self.SetValue("")
 
     def InsertColumns(
-        self, vector, layer, excludeKey=False, excludeCols=None, type=None, dbInfo=None
+        self,
+        vector,
+        layer,
+        excludeKey=False,
+        excludeCols=None,
+        type=None,
+        dbInfo=None,
+        setDefaultValue=True,
     ):
         """Insert columns for a vector attribute table into the columns combobox
 
@@ -1146,6 +1156,8 @@ class ColumnSelect(ComboCtrl):
         :param excludeKey: exclude key column from the list?
         :param excludeCols: list of columns to be removed from the list
         :param type: only columns of given type (given as list)
+        :param dbInfo: dbInfo object
+        :param bool setDefaultValue: True to set default value
         """
         if not dbInfo:
             dbInfo = VectorDBInfo(vector)
@@ -1183,19 +1195,23 @@ class ColumnSelect(ComboCtrl):
         for col in self.columns:
             self.tcp.AddItem(col)
 
-        self.SetValue(self.defaultValue)
+        if setDefaultValue:
+            self.SetValue(self.defaultValue)
 
         if self.param:
             value = self.param.get("value", "")
             if value != "" and value in self.columns:
                 self.SetValue(value)
 
-    def InsertTableColumns(self, table, driver=None, database=None):
+    def InsertTableColumns(
+        self, table, driver=None, database=None, setDefaultValue=True
+    ):
         """Insert table columns
 
         :param str table: table name
         :param str driver: driver name
         :param str database: database name
+        :param bool setDefaultValue: True to set default value
         """
         self.columns[:] = []
 
@@ -1208,7 +1224,8 @@ class ColumnSelect(ComboCtrl):
 
         # update list
         self.tcp.DeleteAllItems()
-        self.SetValue(self.defaultValue)
+        if setDefaultValue:
+            self.SetValue(self.defaultValue)
 
         for col in self.columns:
             self.tcp.AddItem(col)
@@ -2086,28 +2103,29 @@ class GdalSelect(wx.Panel):
                 )
                 if not ret:
                     GError(parent=self, message=message)
-                    return
+                    return None
 
                 connection_string = None
                 for conn in ret.splitlines():
                     db_login = conn.split("|")
-                    if db_login[0] == "pg":
-                        user, password, host, port = db_login[2:]
-                        connection_string = (
-                            f"PG:dbname={self.dbWidgets['choice'].GetStringSelection()}"
-                        )
-                        if user:
-                            connection_string += f" user={user}"
-                        if password:
-                            connection_string += f" password={password}"
-                        if host:
-                            connection_string += f" host={host}"
-                        if port:
-                            connection_string += f" port={port}"
-                        return connection_string
+                    if db_login[0] != "pg":
+                        continue
+                    user, password, host, port = db_login[2:]
+                    connection_string = (
+                        f"PG:dbname={self.dbWidgets['choice'].GetStringSelection()}"
+                    )
+                    if user:
+                        connection_string += f" user={user}"
+                    if password:
+                        connection_string += f" password={password}"
+                    if host:
+                        connection_string += f" host={host}"
+                    if port:
+                        connection_string += f" port={port}"
+                    return connection_string
                 if not connection_string:
                     GError(parent=self, message=message)
-                    return
+                    return None
             else:
                 name = self._getCurrentDbWidgetName()
                 if name == "choice":
@@ -2253,7 +2271,9 @@ class GdalSelect(wx.Panel):
                     )
                 if ret:
                     raster_srid = gs.utils.decode(ret).replace(os.linesep, "")
-                    location_srid = gs.parse_command("g.proj", flags="g")
+                    location_srid = gs.parse_command(
+                        "g.proj", flags="p", format="shell"
+                    )
                     if raster_srid == location_srid["srid"].split(":")[-1]:
                         projectionMatch = "1"
             else:
@@ -2623,6 +2643,8 @@ class GdalSelect(wx.Panel):
         """
         try:
             from osgeo import gdal
+
+            gdal.DontUseExceptions()
         except ImportError:
             GError(
                 parent=self,
@@ -2968,26 +2990,26 @@ class VectorCategorySelect(wx.Panel):
     def _chckMap(self):
         """Check if selected map in 'input' widget is the same as selected map in
         lmgr"""
-        if self._isMapSelected():
-            layerList = self.giface.GetLayerList()
-            layerSelected = layerList.GetSelectedLayer()
-            # d.vect module
-            inputName = self.task.get_param(value="map", raiseError=False)
-            if not inputName:
-                inputName = self.task.get_param("input")
-            if inputName["value"] != str(layerSelected):
-                if inputName["value"] == "" or inputName["value"] is None:
-                    GWarning(_("Input vector map is not selected"))
-                    return False
-                GWarning(
-                    _(
-                        "Input vector map <%s> and selected map <%s> in layer manager "
-                        "are different. Operation canceled."
-                    )
-                    % (inputName["value"], str(layerSelected))
-                )
-                return False
+        if not self._isMapSelected():
+            return False
+        layerList = self.giface.GetLayerList()
+        layerSelected = layerList.GetSelectedLayer()
+        # d.vect module
+        inputName = self.task.get_param(value="map", raiseError=False)
+        if not inputName:
+            inputName = self.task.get_param("input")
+        if inputName["value"] == str(layerSelected):
             return True
+        if inputName["value"] == "" or inputName["value"] is None:
+            GWarning(_("Input vector map is not selected"))
+            return False
+        GWarning(
+            _(
+                "Input vector map <%s> and selected map <%s> in layer manager "
+                "are different. Operation canceled."
+            )
+            % (inputName["value"], str(layerSelected))
+        )
         return False
 
     def _onClick(self, evt=None):

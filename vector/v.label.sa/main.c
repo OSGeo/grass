@@ -7,11 +7,8 @@
  *               This file contains the command line parsing and main function.
  *               The paint label file writing function (print_label()) is also
  *               part of this file.
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2007 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -67,7 +64,6 @@ int main(int argc, char *argv[])
     p.font->required = YES;
     p.font->description = _("Name of TrueType font (as listed in the fontcap)");
     p.font->guisection = _("Font");
-    p.font->gisprompt = "font";
 
     p.size = G_define_option();
     p.size->key = "size";

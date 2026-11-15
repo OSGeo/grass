@@ -6,12 +6,8 @@
  *
  * PURPOSE:    Max flow and min cut between two sets of nodes
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ * SPDX-FileCopyrightText: 2002-2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************/
 
@@ -168,8 +164,8 @@ int main(int argc, char *argv[])
                       Fi->database, Fi->driver);
     db_set_error_handler_driver(driver);
 
-    sprintf(buf, "create table %s (cat integer, flow double precision)",
-            Fi->table);
+    snprintf(buf, sizeof(buf),
+             "create table %s (cat integer, flow double precision)", Fi->table);
 
     db_set_string(&sql, buf);
     G_debug(2, "%s", db_get_string(&sql));
@@ -249,8 +245,8 @@ int main(int argc, char *argv[])
             Vect_cat_get(Cats, afield, &cat);
             if (cat == -1)
                 continue; /*TODO: warning? */
-            sprintf(buf, "insert into %s values (%d, %f)", Fi->table, cat,
-                    flow[i] / (double)In.dgraph.cost_multip);
+            snprintf(buf, sizeof(buf), "insert into %s values (%d, %f)",
+                     Fi->table, cat, flow[i] / (double)In.dgraph.cost_multip);
             db_set_string(&sql, buf);
             G_debug(3, "%s", db_get_string(&sql));
 

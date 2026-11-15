@@ -4,17 +4,18 @@ Created on Thu Jun 19 14:13:53 2014
 @author: pietro
 """
 
-import sys
 import unittest
+from unittest.mock import MagicMock, patch
 
 import numpy as np
 
 import grass.lib.vector as libvect
+from grass.exceptions import GrassError
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.basic import Bbox
-from grass.pygrass.vector.geometry import Area, Line, Node, Point
+from grass.pygrass.vector.geometry import Area, Line, Node, Point, c_read_next_line
 
 
 class PointTestCase(TestCase):
@@ -82,9 +83,9 @@ class PointTestCase(TestCase):
         point0 = Point(0, 0)
         point1 = Point(1, 0)
         self.assertFalse(point0 == point1)
-        self.assertFalse(point0 == (1, 0))
+        self.assertNotEqual(point0, (1, 0))
         self.assertTrue(point0 == point0)  # noqa: PLR0124 # pylint: disable=R0124
-        self.assertTrue(point0 == (0, 0))
+        self.assertEqual(point0, (0, 0))
 
     def test_repr(self):
         """Test __eq__"""
@@ -125,7 +126,6 @@ class LineTestCase(TestCase):
         self.assertEqual(len(Line()), 0)
         self.assertEqual(len(Line([(0, 0), (1, 1)])), 2)
 
-    @unittest.skipIf(sys.version_info[:2] < (2, 7), "Require Python >= 2.7")
     def test_getitem(self):
         """Test __getitem__ magic method"""
         line = Line([(0, 0), (1, 1), (2, 2), (3, 3), (4, 4)])
@@ -138,7 +138,6 @@ class LineTestCase(TestCase):
         with self.assertRaises(IndexError):
             line[5]
 
-    @unittest.skipIf(sys.version_info[:2] < (2, 7), "Require Python >= 2.7")
     def test_setitem(self):
         """Test __setitem__ magic method"""
         line = Line([(0, 0), (1, 1)])
@@ -146,7 +145,6 @@ class LineTestCase(TestCase):
         line[0] = (10, 10)
         self.assertTupleEqual(line[0].coords(), (10.0, 10.0))
 
-    @unittest.skipIf(sys.version_info[:2] < (2, 7), "Require Python >= 2.7")
     def test_get_pnt(self):
         """Test get_pnt method"""
         line = Line([(0, 0), (1, 1)])
@@ -308,6 +306,11 @@ class AreaTestCase(TestCase):
         bbox = Bbox(4.0, 0.0, 4.0, 0.0)
         self.assertTrue(area.contains_point(p, bbox))
         self.assertTrue(area.contains_point(p))
+        self.assertTrue(area.contains_point((0.5, 0.5), bbox))
+        self.assertTrue(area.contains_point((0.5, 0.5)))
+        self.assertFalse(area.contains_point((10.0, 10.0)))
+        with self.assertRaises(ValueError):
+            area.contains_point(("a", "b"))
 
     def test_bbox(self):
         """Test contain_point method"""
@@ -341,7 +344,7 @@ class AreaTestCase(TestCase):
             )
         )
 
-        for boundary, i in zip(boundaries, range(4)):
+        for boundary, i in zip(boundaries, range(4), strict=True):
             self.assertEqual(len(boundary.to_wkb()), 41)
             self.assertEqual(boundary.to_wkt(), string_list[i])
 
@@ -392,6 +395,53 @@ class AreaTestCase(TestCase):
         self.assertTrue(isle.alive())
 
         self.assertEqual(str(isle.bbox()), "Bbox(3.0, 1.0, 3.0, 1.0)")
+
+
+class ReadNextLineTestCase(TestCase):
+    def test_c_read_next_line_error(self):
+        """Test c_read_next_line raises GrassError when Vect_read_next_line returns -1"""
+        mock_mapinfo = MagicMock()
+        mock_mapinfo.contents.next_line = 1
+        with (
+            patch(
+                "grass.pygrass.vector.geometry.libvect.Vect_read_next_line",
+                return_value=-1,
+            ),
+            self.assertRaises(GrassError),
+        ):
+            c_read_next_line(mock_mapinfo, None, None)
+
+    def test_c_read_next_line_stop_iteration(self):
+        """Test c_read_next_line raises StopIteration when Vect_read_next_line returns -2"""
+        mock_mapinfo = MagicMock()
+        mock_mapinfo.contents.next_line = 1
+        with (
+            patch(
+                "grass.pygrass.vector.geometry.libvect.Vect_read_next_line",
+                return_value=-2,
+            ),
+            self.assertRaises(StopIteration),
+        ):
+            c_read_next_line(mock_mapinfo, None, None)
+
+
+class BboxTestCase(TestCase):
+    def test_contains(self):
+        bbox = Bbox(north=10, south=0, east=10, west=0)
+        p = Point(5, 5)
+        self.assertTrue(bbox.contains(p))
+        self.assertTrue(bbox.contains((5, 5)))
+        self.assertTrue(bbox.contains((5, 5, 0)))
+        self.assertFalse(bbox.contains((15, 15)))
+        self.assertFalse(bbox.contains(Point(15, 15)))
+        with self.assertRaises(ValueError):
+            bbox.contains((1, 2, 3, 4))
+        with self.assertRaises(ValueError):
+            bbox.contains("invalid")
+        with self.assertRaises(ValueError):
+            bbox.contains(("a", "b"))
+        with self.assertRaises(ValueError):
+            bbox.contains((None, 5))
 
 
 if __name__ == "__main__":

@@ -6,12 +6,8 @@
  *
  * PURPOSE:    updates metadata of vector map
  *
- * COPYRIGHT:  (C) 2007, 2017 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ * SPDX-FileCopyrightText: 2007, 2017 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************/
 
@@ -180,7 +176,7 @@ int main(int argc, char *argv[])
         char buf[2000]; /* derived from Vect_hist_command() */
 
         /* Open history file for modification */
-        sprintf(buf, "%s/%s", GV_DIRECTORY, Map.name);
+        snprintf(buf, sizeof(buf), "%s/%s", GV_DIRECTORY, Map.name);
         if (h_flag->answer)
             Map.hist_fp = G_fopen_new(buf, GV_HIST_ELEMENT);
         else
@@ -199,10 +195,11 @@ int main(int argc, char *argv[])
         Vect_hist_write(&Map, "COMMAND: ");
         Vect_hist_write(&Map, cmdhist->answer);
         Vect_hist_write(&Map, "\n");
-        sprintf(buf, "GISDBASE: %s\n", G_gisdbase());
+        snprintf(buf, sizeof(buf), "GISDBASE: %s\n", G_gisdbase());
         Vect_hist_write(&Map, buf);
-        sprintf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n",
-                G_location(), G_mapset(), G_whoami(), G_date());
+        snprintf(buf, sizeof(buf),
+                 "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n", G_location(),
+                 G_mapset(), G_whoami(), G_date());
         Vect_hist_write(&Map, buf);
     }
 

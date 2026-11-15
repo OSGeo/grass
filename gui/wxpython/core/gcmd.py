@@ -16,10 +16,8 @@ Functions:
  - RunCommand
  - GetDefaultEncoding
 
-(C) 2007-2008, 2010-2011 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2008, 2010-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Jachym Cepicky
 @author Martin Landa <landa.martin gmail.com>
@@ -180,25 +178,25 @@ class Popen(subprocess.Popen):
                 # "^" must be the first character in the list to avoid double
                 # escaping.
                 for c in ("^", "|", "&", "<", ">"):
-                    if c in args[i]:
-                        if "=" in args[i]:
-                            a = args[i].split("=")
-                            k = a[0] + "="
-                            v = "=".join(a[1 : len(a)])
-                        else:
-                            k = ""
-                            v = args[i]
+                    if c not in args[i]:
+                        continue
+                    if "=" in args[i]:
+                        a = args[i].split("=")
+                        k = a[0] + "="
+                        v = "=".join(a[1 : len(a)])
+                    else:
+                        k = ""
+                        v = args[i]
 
-                        # If there are spaces, the argument was already
-                        # esscaped with double quotes, so don't escape it
-                        # again.
-                        if c in v and " " not in v:
-                            # Here, we escape each ^ in ^^^ with ^^ and a
-                            # <special character> with ^ + <special character>,
-                            # so we need 7 carets.
-
-                            v = v.replace(c, "^^^^^^^" + c)
-                            args[i] = k + v
+                    # If there are spaces, the argument was already
+                    # escaped with double quotes, so don't escape it
+                    # again.
+                    if c in v and " " not in v:
+                        # Here, we escape each ^ in ^^^ with ^^ and a
+                        # <special character> with ^ + <special character>,
+                        # so we need 7 carets.
+                        v = v.replace(c, "^^^^^^^" + c)
+                        args[i] = k + v
 
         subprocess.Popen.__init__(self, args, **kwargs)
 
@@ -581,7 +579,7 @@ class CommandThread(Thread):
     def run(self):
         """Run command"""
         if len(self.cmd) == 0:
-            return
+            return None
 
         Debug.msg(1, "gcmd.CommandThread(): %s" % " ".join(self.cmd))
 
@@ -624,6 +622,10 @@ class CommandThread(Thread):
 
         # redirect standard outputs...
         self._redirect_stream()
+        if self.stdout:
+            self.stdout.flush()
+        if self.stderr:
+            self.stderr.flush()
 
     def _redirect_stream(self):
         """Redirect stream"""
@@ -806,11 +808,7 @@ def GetDefaultEncoding(forceUTF8: bool = False) -> str:
 
     :return: system encoding (can be None)
     """
-    try:
-        # Python >= 3.11
-        enc = locale.getencoding()
-    except AttributeError:
-        enc = locale.getdefaultlocale()[1]
+    enc = locale.getencoding()
     if forceUTF8 and (enc is None or enc == "UTF8"):
         return "UTF-8"
 

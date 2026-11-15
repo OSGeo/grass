@@ -12,11 +12,8 @@
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      generates a spatially dependent random surface
- * COPYRIGHT:    (C) 2000-2008 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2000-2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 /* main.c */
@@ -93,11 +90,7 @@ int main(int argc, char **argv)
         _("Distance filter remains flat before beginning exponent");
     Weight->answer = "0.0";
 
-    SeedStuff = G_define_option();
-    SeedStuff->key = "seed";
-    SeedStuff->type = TYPE_INTEGER;
-    SeedStuff->required = NO;
-    SeedStuff->description = _("Random seed, default [random]");
+    SeedStuff = G_define_standard_option(G_OPT_M_SEED);
 
     range_high_stuff = G_define_option();
     range_high_stuff->key = "high";

@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Radim Blazek
  */
@@ -41,12 +39,12 @@ int Vect_hist_command(struct Map_info *Map)
     if (0 > Vect_hist_write(Map, "\n"))
         return -1;
 
-    sprintf(buf, "GISDBASE: %s\n", G_gisdbase()); /* Needed ? */
+    snprintf(buf, sizeof(buf), "GISDBASE: %s\n", G_gisdbase()); /* Needed ? */
     if (0 > Vect_hist_write(Map, buf))
         return -1;
 
-    sprintf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n", G_location(),
-            G_mapset(), G_whoami(), G_date()); /* Needed ? */
+    snprintf(buf, sizeof(buf), "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n",
+             G_location(), G_mapset(), G_whoami(), G_date()); /* Needed ? */
     if (0 > Vect_hist_write(Map, buf))
         return -1;
 

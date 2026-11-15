@@ -10,11 +10,8 @@
  *               Markus Metz
  *
  * PURPOSE:      Select the elevation model
- * COPYRIGHT:    (C) 1999-2012 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2012 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -136,7 +133,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Please select a target for group [%s] first"), group);
     }
 
-    sprintf(buf, "%s/%s", G_gisdbase(), location);
+    snprintf(buf, sizeof(buf), "%s/%s", G_gisdbase(), location);
     if (access(buf, 0) != 0) {
         G_fatal_error(_("Target project (location) [%s] not found\n"),
                       location);

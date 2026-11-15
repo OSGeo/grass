@@ -7,12 +7,10 @@
  *
  * PURPOSE:      Category or object oriented statistics
  *
- * COPYRIGHT:    (C) 2007,2008 Martin Schroeder, Glynn Clements
- *                   and the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2007,2008 Martin Schroeder
+ * SPDX-FileCopyrightText: 2007,2008 Glynn Clements
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -483,9 +481,9 @@ int main(int argc, char **argv)
 
         G_message(_("Generating reclass map"));
 
-        sprintf(input_arg, "input=%s", basemap);
-        sprintf(output_arg, "output=%s", output);
-        sprintf(rules_arg, "rules=%s", tempfile);
+        snprintf(input_arg, (strlen(basemap) + 7), "input=%s", basemap);
+        snprintf(output_arg, (strlen(output) + 8), "output=%s", output);
+        snprintf(rules_arg, (strlen(tempfile) + 7), "rules=%s", tempfile);
 
         fp = fopen(tempfile, "w");
         if (!fp)

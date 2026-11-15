@@ -3,10 +3,8 @@
 
    \brief GIS Library - Get projection info
 
-   (C) 1999-2014 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 1999-2014 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <string.h>
@@ -78,7 +76,7 @@ struct Key_Value *G_get_projinfo(void)
         const char *epsgstr = G_find_key_value("epsg", in_epsg_keys);
         char buf[4096];
 
-        sprintf(buf, "EPSG:%s", epsgstr);
+        snprintf(buf, sizeof(buf), "EPSG:%s", epsgstr);
         G_set_key_value("init", buf, in_proj_keys);
         G_free_key_value(in_epsg_keys);
     }
@@ -123,7 +121,6 @@ struct Key_Value *G_get_projepsg(void)
    \return pointer to WKT string
    \return NULL when WKT is not available for the current location
  */
-
 char *G_get_projwkt(void)
 {
     char *wktstring = NULL;
@@ -233,7 +230,6 @@ char *G_get_projwkt(void)
    \return pointer to srid string
    \return NULL when srid is not available for the current location
  */
-
 char *G_get_projsrid(void)
 {
     char *sridstring = NULL;

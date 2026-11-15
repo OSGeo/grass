@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2013 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2013 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Radim Blazek
    \author Some contribution by Martin Landa <landa.martin gmail.com>
@@ -501,6 +499,7 @@ int Vect_cidx_save(struct Map_info *Map)
 
     if (0 > dig_write_cidx(&fp, plus)) {
         G_warning(_("Error writing out category index file"));
+        fclose(fp.file);
         return 1;
     }
 
@@ -542,8 +541,10 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
     fp.file = G_fopen_old(path, GV_CIDX_ELEMENT, Map->mapset);
 
     if (fp.file == NULL) { /* category index file is not available */
+        const char *map_name = Vect_get_full_name(Map);
         G_warning(_("Unable to open category index file for vector map <%s>"),
-                  Vect_get_full_name(Map));
+                  map_name);
+        G_free((void *)map_name);
         return -1;
     }
 

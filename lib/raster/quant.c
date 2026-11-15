@@ -9,10 +9,8 @@
  * "infinite" rules. Support is provided to reverse the order of the
  * rules.
  *
- * (C) 1999-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1999-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author USACERL and many others
  */
@@ -263,11 +261,11 @@ static void quant_update_limits(struct Quant *q, DCELL dLow, DCELL dHigh,
  * from all the rules (except the "infinite" rules) in <i>q</i> into
  * <i>dmin</i>, <i>dmax</i>, <i>cmin</i>, and <i>cmax</i>.
  *
- * \param quant pointer to Quant structure which holds quant rules info
- * \param[out] dmin minimum fp value
- * \param[out] dmax maximum fp value
- * \param[out] cmin minimum value
- * \param[out] cmax maximum value
+ * \param q pointer to Quant structure which holds quant rules info
+ * \param[out] dMin minimum fp value
+ * \param[out] dMax maximum fp value
+ * \param[out] cMin minimum value
+ * \param[out] cMax maximum value
  *
  * \return -1 if q->truncate or q->round are true or after
  * Rast_quant_init (), or any call to Rast_quant_clear () or Rast_quant_free()

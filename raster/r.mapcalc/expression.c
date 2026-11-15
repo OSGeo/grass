@@ -314,9 +314,9 @@ static char *format_constant(const expression *e)
     char buff[64];
 
     if (e->res_type == CELL_TYPE)
-        sprintf(buff, "%d", e->data.con.ival);
+        snprintf(buff, sizeof(buff), "%d", e->data.con.ival);
     else
-        sprintf(buff, "%.8g", e->data.con.fval);
+        snprintf(buff, sizeof(buff), "%.8g", e->data.con.fval);
 
     return strdup(buff);
 }
@@ -357,13 +357,13 @@ static char *format_map(const expression *e)
     }
 
     if (e->data.map.depth)
-        sprintf(buff, "%s%s[%d,%d,%d]", mod, e->data.map.name, e->data.map.row,
-                e->data.map.col, e->data.map.depth);
+        snprintf(buff, sizeof(buff), "%s%s[%d,%d,%d]", mod, e->data.map.name,
+                 e->data.map.row, e->data.map.col, e->data.map.depth);
     else if (e->data.map.row || e->data.map.col)
-        sprintf(buff, "%s%s[%d,%d]", mod, e->data.map.name, e->data.map.row,
-                e->data.map.col);
+        snprintf(buff, sizeof(buff), "%s%s[%d,%d]", mod, e->data.map.name,
+                 e->data.map.row, e->data.map.col);
     else
-        sprintf(buff, "%s%s", mod, e->data.map.name);
+        snprintf(buff, sizeof(buff), "%s%s", mod, e->data.map.name);
 
     return strdup(buff);
 }
@@ -413,22 +413,24 @@ static char *format_operator(const expression *e, int prec)
     int prec2 = e->data.func.prec;
     char *arg1, *arg2, *arg3;
     char *result;
+    size_t len;
 
     switch (e->data.func.argc) {
     case 1:
         arg1 = format_expression_prec(e->data.func.args[1], prec2);
-        result = G_malloc(strlen(e->data.func.oper) + strlen(arg1) + 3);
-        sprintf(result, "%s%s%s%s", prec <= prec2 ? "(" : "", e->data.func.oper,
-                arg1, prec <= prec2 ? ")" : "");
+        len = strlen(e->data.func.oper) + strlen(arg1) + 3;
+        result = G_malloc(len);
+        snprintf(result, len, "%s%s%s%s", prec <= prec2 ? "(" : "",
+                 e->data.func.oper, arg1, prec <= prec2 ? ")" : "");
         G_free(arg1);
         return result;
     case 2:
         arg1 = format_expression_prec(e->data.func.args[1], (prec2 + 1));
         arg2 = format_expression_prec(e->data.func.args[2], prec2);
-        result = G_malloc(strlen(e->data.func.oper) + strlen(arg1) +
-                          strlen(arg2) + 5);
-        sprintf(result, "%s%s %s %s%s", prec <= prec2 ? "(" : "", arg1,
-                e->data.func.oper, arg2, prec <= prec2 ? ")" : "");
+        len = strlen(e->data.func.oper) + strlen(arg1) + strlen(arg2) + 5;
+        result = G_malloc(len);
+        snprintf(result, len, "%s%s %s %s%s", prec <= prec2 ? "(" : "", arg1,
+                 e->data.func.oper, arg2, prec <= prec2 ? ")" : "");
         G_free(arg1);
         G_free(arg2);
         return result;
@@ -436,9 +438,10 @@ static char *format_operator(const expression *e, int prec)
         arg1 = format_expression_prec(e->data.func.args[1], prec2);
         arg2 = format_expression_prec(e->data.func.args[2], prec2);
         arg3 = format_expression_prec(e->data.func.args[3], (prec2 + 1));
-        result = G_malloc(strlen(arg1) + strlen(arg2) + strlen(arg3) + 9);
-        sprintf(result, "%s%s ? %s : %s%s", prec <= prec2 ? "(" : "", arg1,
-                arg2, arg3, prec <= prec2 ? ")" : "");
+        len = strlen(arg1) + strlen(arg2) + strlen(arg3) + 9;
+        result = G_malloc(len);
+        snprintf(result, len, "%s%s ? %s : %s%s", prec <= prec2 ? "(" : "",
+                 arg1, arg2, arg3, prec <= prec2 ? ")" : "");
         G_free(arg1);
         G_free(arg2);
         G_free(arg3);
@@ -459,11 +462,12 @@ static char *format_binding(const expression *e, int prec)
 {
     char *result;
     char *expr = format_expression_prec(e->data.bind.val, 8);
+    size_t len = strlen(e->data.bind.var) + strlen(expr) + 6;
 
-    result = G_malloc(strlen(e->data.bind.var) + strlen(expr) + 6);
+    result = G_malloc(len);
 
-    sprintf(result, "%s%s = %s%s", prec < 8 ? "(" : "", e->data.bind.var, expr,
-            prec < 8 ? ")" : "");
+    snprintf(result, len, "%s%s = %s%s", prec < 8 ? "(" : "", e->data.bind.var,
+             expr, prec < 8 ? ")" : "");
 
     G_free(expr);
 

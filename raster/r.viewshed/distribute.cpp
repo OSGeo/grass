@@ -27,10 +27,8 @@
  * paper: "Computing Visibility on * Terrains in External Memory" by
  * Herman Haverkort, Laura Toma and Yi Zhuang.
  *
- * COPYRIGHT: (C) 2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -502,8 +500,8 @@ void distribute_bnd_events(AMI_STREAM<AEvent> *bndEvents,
    solved by switching to radial sweep.  */
 unsigned long solve_in_memory(AMI_STREAM<AEvent> *eventList,
                               AMI_STREAM<AEvent> *enterBndEvents,
-                              double start_angle UNUSED,
-                              double end_angle UNUSED,
+                              double start_angle G_UNUSED,
+                              double end_angle G_UNUSED,
                               IOVisibilityGrid *visgrid, GridHeader *hd,
                               Viewpoint *vp, const ViewOptions &viewOptions)
 {
@@ -1089,7 +1087,7 @@ int is_center_gradient_occluded(AEvent *e, double gradient, Viewpoint *vp)
 }
 
 /***********************************************************************
-called when dropping an event e, high is the highest gradiant value
+called when dropping an event e, high is the highest gradient value
 //in its sector*/
 void print_dropped(AEvent *e, Viewpoint *vp, double high)
 {

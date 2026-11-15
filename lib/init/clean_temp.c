@@ -36,7 +36,6 @@
 #define SLEEP 30 /* 30 seconds */
 
 /* Recursively scan the directory pathname, removing directory and files */
-
 void clean_dir(const char *pathname, uid_t uid, pid_t pid, time_t now,
                int max_age)
 {
@@ -140,7 +139,7 @@ int main(int argc, char *argv[])
     G_file_name(tmppath, element, "", mapset = G_mapset());
 
     /* get user id and current time in seconds */
-#ifdef __MINGW32__
+#ifdef _WIN32
     /* TODO */
     uid = -1;
 #else
@@ -172,7 +171,7 @@ int main(int argc, char *argv[])
 
 int find_process(int pid)
 {
-#ifdef __MINGW32__
+#ifdef _WIN32
     /* TODO */
     return -1;
 #else

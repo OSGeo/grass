@@ -3,10 +3,8 @@
 
    \brief Imagery Library - List group
 
-   (C) 2001-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author USA CERL
  */
@@ -64,7 +62,7 @@ int I_list_group(const char *group, const struct Ref *ref, FILE *fd)
  * \brief Prints maps in a group (simple version)
  *
  * Same as I_list_group(), but without all the fancy stuff.
- * Prints one map per line in map@mapset form.
+ * Prints one map per line in map\@mapset form.
  *
  * \param ref group reference (set with I_get_group_ref())
  * \param fd where to print (typically stdout)
@@ -108,11 +106,11 @@ void I__list_group_name_fit(char *buf, const char *name, const char *mapset)
         frmt = "<%.33s...@%.32s...>";
     }
     else if (name_length > 35) {
-        sprintf(fr, "<%%.%ds...@%%s>", 68 - mapset_length);
+        snprintf(fr, sizeof(fr), "<%%.%ds...@%%s>", 68 - mapset_length);
         frmt = fr;
     }
     else {
-        sprintf(fr, "<%%s@%%.%ds...>", 68 - name_length);
+        snprintf(fr, sizeof(fr), "<%%s@%%.%ds...>", 68 - name_length);
         frmt = fr;
     }
     snprintf(buf, 75, frmt, name, mapset);

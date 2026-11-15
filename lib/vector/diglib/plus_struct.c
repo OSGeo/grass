@@ -7,11 +7,8 @@
  *
  * PURPOSE:      Lower level functions for reading/writing/manipulating vectors.
  *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2001 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -48,7 +45,6 @@
  *    store an int.  The mapdev code is not guaranteed to work if
  *    plus_t is changed to a type that is larger than an int.
  */
-
 int dig_Rd_P_node(struct Plus_head *Plus, int n, struct gvfile *fp)
 {
     int cnt, n_edges;

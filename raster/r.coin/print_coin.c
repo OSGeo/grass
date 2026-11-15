@@ -7,11 +7,8 @@
  *
  * PURPOSE:      Calculates the coincidence of two raster map layers.
  *
- * COPYRIGHT:    (C) 2006 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -60,13 +57,14 @@ int print_coin(int Conformat, int out_cols, int tofile)
         num_panels++;
 
     width = out_cols * 12 + 32;
-    sprintf(topformat, "+%%%d.%ds+", width, width);
-    sprintf(midformat, "|%%%d.%ds|", width, width);
+    snprintf(topformat, sizeof(topformat), "+%%%d.%ds+", width, width);
+    snprintf(midformat, sizeof(midformat), "|%%%d.%ds|", width, width);
     if (Conformat != 'x')
-        sprintf(namformat, "|        | %%-%ds|    Panel Row Total    |",
-                width - 34);
+        snprintf(namformat, sizeof(namformat),
+                 "|        | %%-%ds|    Panel Row Total    |", width - 34);
     else
-        sprintf(namformat, "|        | %%-%ds|", width - 34);
+        snprintf(namformat, sizeof(namformat), "|        | %%-%ds|",
+                 width - 34);
 
     for (at_panel = 0; at_panel < num_panels; at_panel++) {
         first_col = at_panel * out_cols;
@@ -76,13 +74,15 @@ int print_coin(int Conformat, int out_cols, int tofile)
             width = (last_col - first_col) * 12 + 32;
             if (Conformat == 'x')
                 width -= 24;
-            sprintf(topformat, "+%%%d.%ds+", width, width);
-            sprintf(midformat, "|%%%d.%ds|", width, width);
+            snprintf(topformat, sizeof(topformat), "+%%%d.%ds+", width, width);
+            snprintf(midformat, sizeof(midformat), "|%%%d.%ds|", width, width);
             if (Conformat != 'x')
-                sprintf(namformat, "|        | %%-%ds|    Panel Row Total    |",
-                        width - 34);
+                snprintf(namformat, sizeof(namformat),
+                         "|        | %%-%ds|    Panel Row Total    |",
+                         width - 34);
             else
-                sprintf(namformat, "|        | %%-%ds|", width - 10);
+                snprintf(namformat, sizeof(namformat), "|        | %%-%ds|",
+                         width - 10);
         }
 
         /* Determine if room enough for Table Row Total at end of last panel */
@@ -90,8 +90,8 @@ int print_coin(int Conformat, int out_cols, int tofile)
         if (at_panel == (num_panels - 1) &&
             (last_col - first_col) < (out_cols - 2)) {
             addflag = 1;
-            sprintf(fillformat, "%%1.%ds%%s",
-                    (out_cols - (last_col - first_col)) * 12 - 25);
+            snprintf(fillformat, sizeof(fillformat), "%%1.%ds%%s",
+                     (out_cols - (last_col - first_col)) * 12 - 25);
         }
         if (Conformat == 'x')
             addflag = 0;

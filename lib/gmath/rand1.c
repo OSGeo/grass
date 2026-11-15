@@ -12,7 +12,6 @@
  * \param[in] seed
  * \return float
  */
-
 float G_math_rand(void)
 {
     return G_drand48();
@@ -21,9 +20,8 @@ float G_math_rand(void)
 /*!
  * \brief Seed the pseudo-random number generator
  *
- * \param seedval 32-bit integer used to seed the PRNG
+ * \param[in] seed 32-bit integer used to seed the PRNG
  */
-
 void G_math_srand(int seed)
 {
     G_srand48(seed);
@@ -34,7 +32,6 @@ void G_math_srand(int seed)
  *
  * \return generated seed value passed to G_srand48()
  */
-
 int G_math_srand_auto(void)
 {
     return (int)G_srand48_auto();

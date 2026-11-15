@@ -3,10 +3,9 @@ Name:       v.select test
 Purpose:    Tests v.select and its flags/options.
 
 Author:     Sunveer Singh, Google Code-in 2017
-Copyright:  (C) 2017 by Sunveer Singh and the GRASS Development Team
-Licence:    This program is free software under the GNU General Public
-            License (>=v2). Read the file COPYING that comes with GRASS
-            for details.
+SPDX-FileCopyrightText: 2017 Sunveer Singh
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 from grass.gunittest.case import TestCase
@@ -53,7 +52,8 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="equals",
         )
-        self.assertVectorDoesNotExist(self.output)
+        topology = {"areas": 0}
+        self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_opt(self):
         """Testing operator touches"""
@@ -64,7 +64,8 @@ class TestRasterReport(TestCase):
             output=self.output,
             operator="touches",
         )
-        self.assertVectorDoesNotExist(self.output)
+        topology = {"areas": 0}
+        self.assertVectorFitsTopoInfo(self.output, topology)
 
     def test_opw(self):
         """Testing operator within"""

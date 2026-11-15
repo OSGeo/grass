@@ -3,10 +3,9 @@
 
    \brief GRASS png display driver - header file
 
-   (C) 2007-2014 by Glynn Clements and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2007-2014 Glynn Clements
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Glynn Clements
  */
@@ -16,7 +15,7 @@
 
 #include <stdio.h>
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -34,7 +33,7 @@ struct png_state {
     int true_color;
     int has_alpha;
     int mapped;
-#ifdef __MINGW32__
+#ifdef _WIN32
     HANDLE handle;
 #endif
 

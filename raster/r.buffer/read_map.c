@@ -10,11 +10,8 @@
  *               have square cells. Works both for planimetric
  *               (UTM, State Plane) and lat-long.
  *
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************************/
 
@@ -48,8 +45,9 @@ int read_input_map(char *input, char *mapset, int ZEROFLAG)
     mincol = window.cols;
     maxcol = 0;
 
-    G_message(_("Reading input raster map <%s>..."),
-              G_fully_qualified_name(input, mapset));
+    char *mname = G_fully_qualified_name(input, mapset);
+    G_message(_("Reading input raster map <%s>..."), mname);
+    G_free(mname);
 
     count_rows_with_data = 0;
 

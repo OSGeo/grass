@@ -6,11 +6,8 @@
  *               layer using a quantisation of the RGB color space.
  *               Using Floyd-Steinberg dithering
  *
- * COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2001-2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -79,13 +76,13 @@ int main(int argc, char **argv)
 
         B[i].opt_name = opt = G_define_standard_option(G_OPT_R_INPUT);
 
-        sprintf(buff, "%s", color_names[i]);
+        snprintf(buff, sizeof(buff), "%s", color_names[i]);
         opt->key = G_store(buff);
 
         opt->answer = NULL;
 
-        sprintf(buff, _("Name of raster map to be used for <%s>"),
-                color_names[i]);
+        snprintf(buff, sizeof(buff),
+                 _("Name of raster map to be used for <%s>"), color_names[i]);
         opt->description = G_store(buff);
     }
 
@@ -104,15 +101,15 @@ int main(int argc, char **argv)
 
         B[i].opt_levels = opt = G_define_option();
 
-        sprintf(buff, "level_%s", color_names[i]);
+        snprintf(buff, sizeof(buff), "level_%s", color_names[i]);
         opt->key = G_store(buff);
 
         opt->type = TYPE_INTEGER;
         opt->required = NO;
         opt->options = "1-256";
 
-        sprintf(buff, _("Number of levels to be used for <%s>"),
-                color_names[i]);
+        snprintf(buff, sizeof(buff), _("Number of levels to be used for <%s>"),
+                 color_names[i]);
         opt->description = G_store(buff);
         opt->guisection = _("Levels");
     }

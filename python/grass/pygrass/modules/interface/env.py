@@ -9,7 +9,7 @@ import sys
 
 
 def get_env():
-    """Parse the GISRC file and return the GRASS variales"""
+    """Parse the GISRC file and return the GRASS variables"""
     gisrc = os.environ.get("GISRC")
     if gisrc is None:
         msg = "You are not in a GRASS session, GISRC not found."

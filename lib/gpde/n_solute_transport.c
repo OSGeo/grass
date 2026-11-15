@@ -7,11 +7,8 @@
  * PURPOSE:      solute transport in porous media
  *                 part of the gpde library
  *
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2007 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -549,7 +546,7 @@ void N_free_solute_transport_data2d(N_solute_transport_data2d *data)
  *
  * This function calculates the transmission boundary condition
  * for each cell with status N_CELL_TRANSMISSION. The surrounding
- * gradient field is used to verfiy the flow direction. If a flow
+ * gradient field is used to verify the flow direction. If a flow
  * goes into a cell, the concentration (data->c) from the neighbour cell is
  * added to the transmission cell. If the flow from several neighbour
  * cells goes into the cell, the concentration mean is calculated.

@@ -2,17 +2,14 @@
 #
 # AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 #
-# PURPOSE:   Benchmarking for GRASS GIS modules
+# PURPOSE:   Benchmarking for GRASS modules
 #
-# COPYRIGHT: (C) 2021 Vaclav Petras, and by the GRASS Development Team
-#
-#            This program is free software under the GNU General Public
-#            License (>=v2). Read the file COPYING that comes with GRASS
-#            for details.
+# SPDX-FileCopyrightText: 2021 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 """Tests of grass.benchmark CLI"""
 
-import sys
 from pathlib import Path
 from subprocess import DEVNULL
 
@@ -30,13 +27,7 @@ from grass.pygrass.modules import Module
 
 def remove_file(path):
     """Remove filename if exists"""
-    if sys.version_info < (3, 8):
-        try:
-            Path(path).unlink()
-        except FileNotFoundError:
-            pass
-    else:
-        Path(path).unlink(missing_ok=True)
+    Path(path).unlink(missing_ok=True)
 
 
 class TestBenchmarkCLI(TestCase):
@@ -69,7 +60,7 @@ class TestBenchmarkCLI(TestCase):
 
         metrics = ["time", "speedup", "efficiency"]
         benchmark_main(["plot", "nprocs", self.json_filename, self.png_filenames[0]])
-        for png_fname, metric in zip(self.png_filenames[1:4], metrics):
+        for png_fname, metric in zip(self.png_filenames[1:4], metrics, strict=True):
             benchmark_main(
                 ["plot", "nprocs", "--metric", metric, self.json_filename, png_fname]
             )

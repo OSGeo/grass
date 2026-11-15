@@ -3,12 +3,10 @@
  *
  * \brief GIS Library - Window box functions.
  *
- * (C) 2001-2014 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2001-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author GRASS GIS Development Team
+ * \author GRASS Development Team
  *
  * \date 1999-2014
  */
@@ -27,7 +25,6 @@
  * \param[in] cols number of columns in box
  * \return
  */
-
 void G_adjust_window_to_box(const struct Cell_head *src, struct Cell_head *dst,
                             int rows, int cols)
 {

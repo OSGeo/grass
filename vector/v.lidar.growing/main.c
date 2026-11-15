@@ -8,13 +8,9 @@
  *               Growing algorithm for determining the building
  *               inside
  *
- * COPYRIGHT:    (C) 2006 by Politecnico di Milano -
- *                            Polo Regionale di Como
- *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 Politecnico di Milano - Polo Regionale di Como
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************/
 
@@ -123,10 +119,12 @@ int main(int argc, char *argv[])
 
     /* Setting auxiliary table's name */
     if (G_name_is_fully_qualified(in_opt->answer, xname, xmapset)) {
-        sprintf(table_name, "%s_edge_Interpolation", xname);
+        snprintf(table_name, sizeof(table_name), "%s_edge_Interpolation",
+                 xname);
     }
     else
-        sprintf(table_name, "%s_edge_Interpolation", in_opt->answer);
+        snprintf(table_name, sizeof(table_name), "%s_edge_Interpolation",
+                 in_opt->answer);
 
     Vect_set_open_level(1); /* WITHOUT TOPOLOGY */
     if (Vect_open_old(&In, in_opt->answer, mapset) < 1)
@@ -164,7 +162,7 @@ int main(int argc, char *argv[])
     db_init_string(&sql);
     db_zero_string(&sql);
 
-    sprintf(buf, "SELECT Interp,ID FROM %s", table_name);
+    snprintf(buf, sizeof(buf), "SELECT Interp,ID FROM %s", table_name);
     G_debug(1, "buf: %s", buf);
     db_append_string(&sql, buf);
 

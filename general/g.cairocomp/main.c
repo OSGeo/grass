@@ -4,11 +4,9 @@
  * PURPOSE:      g.cairocomp isn't meant for end users. It's an internal tool
  *               for use by a wx GUI. g.cairocomp composites a series of
  *               X pixmaps.
- * COPYRIGHT:    (C) 2008 by Glynn Clements and the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2008 Glynn Clements
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  */
 
@@ -65,7 +63,7 @@ static void write_xid(const char *filename, XID xid)
     if (!fp)
         G_fatal_error(_("Unable to open output file <%s>"), filename);
 
-    sprintf(buf, "0x%08lx\n", (unsigned long)xid);
+    snprintf(buf, sizeof(buf), "0x%08lx\n", (unsigned long)xid);
 
     if (fputs(buf, fp) < 0)
         G_fatal_error(_("Unable to write output file <%s>"), filename);

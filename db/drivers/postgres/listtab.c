@@ -27,10 +27,10 @@ int db__driver_list_tables(dbString **tlist, int *tcount, int system)
     *tcount = 0;
 
     /* Get table names */
-    sprintf(buf,
-            "SELECT * FROM pg_tables WHERE schemaname %s "
-            " ('pg_catalog', 'information_schema') ORDER BY tablename",
-            system ? "IN" : "NOT IN");
+    snprintf(buf, sizeof(buf),
+             "SELECT * FROM pg_tables WHERE schemaname %s "
+             " ('pg_catalog', 'information_schema') ORDER BY tablename",
+             system ? "IN" : "NOT IN");
     G_debug(2, "SQL: %s", buf);
 
     rest = PQexec(pg_conn, buf);
@@ -54,10 +54,10 @@ int db__driver_list_tables(dbString **tlist, int *tcount, int system)
     }
 
     /* Get view names */
-    sprintf(buf,
-            "SELECT * FROM pg_views WHERE schemaname %s "
-            " ('pg_catalog', 'information_schema') ORDER BY viewname",
-            system ? "IN" : "NOT IN");
+    snprintf(buf, sizeof(buf),
+             "SELECT * FROM pg_views WHERE schemaname %s "
+             " ('pg_catalog', 'information_schema') ORDER BY viewname",
+             system ? "IN" : "NOT IN");
     G_debug(2, "SQL: %s", buf);
 
     resv = PQexec(pg_conn, buf);
@@ -94,11 +94,13 @@ int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 
     for (i = 0; i < trows; i++) {
         if (tschemacol >= 0) {
-            sprintf(buf, "%s.%s", (char *)PQgetvalue(rest, i, tschemacol),
-                    (char *)PQgetvalue(rest, i, tablecol));
+            snprintf(buf, sizeof(buf), "%s.%s",
+                     (char *)PQgetvalue(rest, i, tschemacol),
+                     (char *)PQgetvalue(rest, i, tablecol));
         }
         else {
-            sprintf(buf, "%s", (char *)PQgetvalue(rest, i, tablecol));
+            snprintf(buf, sizeof(buf), "%s",
+                     (char *)PQgetvalue(rest, i, tablecol));
         }
         db_set_string(&list[i], buf);
     }
@@ -107,11 +109,13 @@ int db__driver_list_tables(dbString **tlist, int *tcount, int system)
 
     for (j = 0; j < vrows; j++) {
         if (vschemacol >= 0) {
-            sprintf(buf, "%s.%s", (char *)PQgetvalue(resv, j, vschemacol),
-                    (char *)PQgetvalue(resv, j, viewcol));
+            snprintf(buf, sizeof(buf), "%s.%s",
+                     (char *)PQgetvalue(resv, j, vschemacol),
+                     (char *)PQgetvalue(resv, j, viewcol));
         }
         else {
-            sprintf(buf, "%s", (char *)PQgetvalue(resv, j, viewcol));
+            snprintf(buf, sizeof(buf), "%s",
+                     (char *)PQgetvalue(resv, j, viewcol));
         }
         db_set_string(&list[i], buf);
         i++;

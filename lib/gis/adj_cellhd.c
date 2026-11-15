@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - CELL header adjustment.
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -597,32 +595,32 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
     cellhds = *cellhd;
 
     old = cellhds.ns_res * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.ns_res = new;
 
     old = cellhds.ew_res * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.ew_res = new;
 
     old = cellhds.north * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.north = new;
 
     old = cellhds.south * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.south = new;
 
     old = cellhds.west * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.west = new;
 
     old = cellhds.east * 3600;
-    sprintf(buf, "%f", old);
+    snprintf(buf, sizeof(buf), "%f", old);
     sscanf(buf, "%lf", &new);
     cellhds.east = new;
 
@@ -682,7 +680,7 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
             }
 
             old = cellhds.south;
-            new = cellhds.north - cellhds.ns_res *cellhds.rows;
+            new = cellhds.north - cellhds.ns_res * cellhds.rows;
             diff = fabs(new - old) / cellhds.ns_res;
             if (diff > 0) {
                 G_lat_format(old / 3600, buf);
@@ -709,7 +707,7 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
             }
 
             old = cellhds.north;
-            new = cellhds.south + cellhds.ns_res *cellhds.rows;
+            new = cellhds.south + cellhds.ns_res * cellhds.rows;
             diff = fabs(new - old) / cellhds.ns_res;
             if (diff > 0) {
                 G_lat_format(old / 3600, buf);
@@ -806,7 +804,7 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
             }
 
             old = cellhds.east;
-            new = cellhds.west + cellhds.ew_res *cellhds.cols;
+            new = cellhds.west + cellhds.ew_res * cellhds.cols;
             diff = fabs(new - old) / cellhds.ew_res;
             if (diff > 0) {
                 G_lon_format(old / 3600, buf);
@@ -833,7 +831,7 @@ int G_adjust_window_ll(struct Cell_head *cellhd)
             }
 
             old = cellhds.west;
-            new = cellhds.east - cellhds.ew_res *cellhds.cols;
+            new = cellhds.east - cellhds.ew_res * cellhds.cols;
             diff = fabs(new - cellhds.west) / cellhds.ew_res;
             if (diff > 0) {
                 G_lon_format(old / 3600, buf);

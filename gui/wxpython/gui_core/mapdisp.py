@@ -9,10 +9,8 @@ Classes:
  - mapdisp::DoubleMapPanel
  - mapdisp::FrameMixin
 
-(C) 2009-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2009-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Michael Barton <michael.barton@asu.edu>
@@ -158,6 +156,7 @@ class MapPanelBase(wx.Panel):
 
         # update statusbar
         self.StatusbarUpdate()
+        event.Skip()
 
     def OnCloseWindow(self, event):
         self.Destroy()
@@ -319,7 +318,7 @@ class MapPanelBase(wx.Panel):
     def CoordinatesChanged(self):
         """Shows current coordinates on statusbar."""
         # assuming that the first mode is coordinates
-        # probably shold not be here but good solution is not available now
+        # probably shouldn't be here but a better solution isn't available now
         if self.statusbarManager:
             if self.statusbarManager.GetMode() == 0:
                 self.statusbarManager.ShowItem("coordinates")

@@ -6,10 +6,8 @@
 List of classes:
  - toolbars::VDigitToolbar
 
-(C) 2007-2015 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Stepan Turek <stepan.turek seznam.cz> (handlers support)
@@ -995,31 +993,32 @@ class VDigitToolbar(BaseToolbar):
                 disableAdd=True,
             )
 
-            if dlg and dlg.GetName():
-                # add layer to map layer tree/map display
-                mapName = dlg.GetName() + "@" + gs.gisenv()["MAPSET"]
-                self._giface.GetLayerList().AddLayer(
-                    ltype="vector",
-                    name=mapName,
-                    checked=True,
-                    cmd=["d.vect", "map=%s" % mapName],
-                )
-
-                vectLayers = self.UpdateListOfLayers(updateTool=True)
-                selection = vectLayers.index(mapName)
-
-                # create table ?
-                if dlg.IsChecked("table"):
-                    # TODO: starting of tools such as atm, iclass,
-                    # plots etc. should be handled in some better way
-                    # than starting randomly from mapdisp and lmgr
-                    self.openATM.emit(selection="table")
-                dlg.Destroy()
-            else:
+            if not dlg or not dlg.GetName():
                 self.combo.SetValue(_("Select vector map"))
                 if dlg:
                     dlg.Destroy()
                 return
+
+            # add layer to map layer tree/map display
+            mapName = dlg.GetName() + "@" + gs.gisenv()["MAPSET"]
+            self._giface.GetLayerList().AddLayer(
+                ltype="vector",
+                name=mapName,
+                checked=True,
+                cmd=["d.vect", "map=%s" % mapName],
+            )
+
+            vectLayers = self.UpdateListOfLayers(updateTool=True)
+            selection = vectLayers.index(mapName)
+
+            # create table ?
+            if dlg.IsChecked("table"):
+                # TODO: starting of tools such as atm, iclass,
+                # plots etc. should be handled in some better way
+                # than starting randomly from mapdisp and lmgr
+                self.openATM.emit(selection="table")
+            dlg.Destroy()
+
         else:
             selection = event.GetSelection() - 1  # first option is 'New vector map'
 
@@ -1058,10 +1057,9 @@ class VDigitToolbar(BaseToolbar):
                 caption=_("Digitizer error"),
                 style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION | wx.CENTRE,
             )
-            if dlg.ShowModal() == wx.ID_YES:
-                RunCommand("v.build", map=mapLayer.GetName())
-            else:
-                return
+            if dlg.ShowModal() != wx.ID_YES:
+                return None
+            RunCommand("v.build", map=mapLayer.GetName())
 
         # deactivate layer
         self.Map.ChangeLayerActive(mapLayer, False)

@@ -5,11 +5,8 @@
  * PURPOSE:      Generates the font configuration file by scanning various
  *               directories for GRASS stroke and Freetype-compatible fonts.
  *
- * COPYRIGHT:    (C) 2007-215 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2007-215 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -93,7 +90,8 @@ static void find_fonts(const char *dirpath)
         if (cur_entry->d_name[0] == '.')
             continue; /* Skip hidden files */
 
-        sprintf(filepath, "%s%c%s", dirpath, HOST_DIRSEP, cur_entry->d_name);
+        snprintf(filepath, sizeof(filepath), "%s%c%s", dirpath, HOST_DIRSEP,
+                 cur_entry->d_name);
 
         if (stat(filepath, &info))
             continue; /* File is unreadable */

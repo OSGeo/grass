@@ -56,7 +56,7 @@ static int out(FILE *fp, long cat, double sum1, double sum2)
     if (cat == 0)
         *buf = 0;
     else {
-        sprintf(buf, "%.10f", sum1 / sum2);
+        snprintf(buf, sizeof(buf), "%.10f", sum1 / sum2);
         G_trim_decimal(buf);
     }
     fprintf(fp, "%ld = %ld %s\n", cat, cat, buf);

@@ -6,11 +6,8 @@
  *
  * PURPOSE:      Spline Interpolation
  *
- * COPYRIGHT:    (C) 2010, 2012 by GRASS development team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2010, 2012 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **********************************************************************/
 
@@ -764,8 +761,9 @@ int main(int argc, char *argv[])
     Rast_close(outrastfd);
 
     /* set map title */
-    sprintf(title, "%s interpolation with Tykhonov regularization",
-            method_opt->answer);
+    snprintf(title, sizeof(title),
+             "%s interpolation with Tykhonov regularization",
+             method_opt->answer);
     Rast_put_cell_title(out_opt->answer, title);
     /* write map history */
     Rast_short_history(out_opt->answer, "raster", &history);

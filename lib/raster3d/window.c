@@ -19,7 +19,6 @@ RASTER3D_Region g3d_window;
  *  \param window
  *  \return void
  */
-
 void Rast3d_set_window_map(RASTER3D_Map *map, RASTER3D_Region *window)
 {
     Rast3d_region_copy(&(map->window), window);
@@ -37,7 +36,6 @@ void Rast3d_set_window_map(RASTER3D_Map *map, RASTER3D_Region *window)
  *  \param window
  *  \return void
  */
-
 void Rast3d_set_window(RASTER3D_Region *window)
 {
     Rast3d_region_copy(&g3d_window, window);
@@ -54,7 +52,6 @@ void Rast3d_set_window(RASTER3D_Region *window)
  *  \param window
  *  \return void
  */
-
 void Rast3d_get_window(RASTER3D_Region *window)
 {
     Rast3d_region_copy(window, &g3d_window);
@@ -81,7 +78,6 @@ RASTER3D_Region *Rast3d_window_ptr(void)
  *  \param top
  *  \return int
  */
-
 int Rast3d_isValidLocationWindow(RASTER3D_Map *map, double north, double east,
                                  double top)
 {

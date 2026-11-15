@@ -44,6 +44,7 @@ CONFIGURE_FLAGS="\
   --with-proj-includes=${CONDA_PREFIX}/include \
   --with-proj-libs=${CONDA_PREFIX}/lib \
   --with-proj-share=${CONDA_PREFIX}/share/proj \
+  --with-pthread \
   --with-readline \
   --with-readline-includes=${CONDA_PREFIX}/include/readline \
   --with-readline-libs=${CONDA_PREFIX}/lib
@@ -59,8 +60,8 @@ CONFIGURE_FLAGS="\
   --without-x \
 "
 
-export CFLAGS="-O2 -pipe -arch ${CONDA_ARCH} -DGL_SILENCE_DEPRECATION -Wall -Wextra -Wpedantic -Wvla"
-export CXXFLAGS="-O2 -pipe -stdlib=libc++ -arch ${CONDA_ARCH} -Wall -Wextra -Wpedantic"
+export CFLAGS="-O2 -pipe -ffp-contract=off -arch ${CONDA_ARCH} -DGL_SILENCE_DEPRECATION -Wall -Wextra -Wpedantic -Wvla"
+export CXXFLAGS="-O2 -pipe -ffp-contract=off -stdlib=libc++ -arch ${CONDA_ARCH} -Wall -Wextra -Wpedantic"
 export CPPFLAGS="-isystem${CONDA_PREFIX}/include"
 
 ./configure $CONFIGURE_FLAGS

@@ -48,6 +48,8 @@ static size_t G__strlcpy(char *restrict dst, const char *restrict src,
  *
  * \warning The src string must be a valid NUL-terminated C string. Passing an
  *          unterminated string may result in buffer overrun.
+ *
+ * \since version 8.5
  */
 size_t G_strlcpy(char *dst, const char *src, size_t dsize)
 {

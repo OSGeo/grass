@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009, 2012 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009, 2012 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 Radim Blazek and David D. Gray.
@@ -167,9 +165,9 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 
     i = 0;
     while (files[i]) {
-        sprintf(buf, "%s/%s", in, files[i]);
+        snprintf(buf, sizeof(buf), "%s/%s", in, files[i]);
         G_file_name(old_path, GV_DIRECTORY, buf, mapset);
-        sprintf(buf, "%s/%s", out, files[i]);
+        snprintf(buf, sizeof(buf), "%s/%s", out, files[i]);
         G_file_name(new_path, GV_DIRECTORY, buf, G_mapset());
 
         if (access(old_path, F_OK) == 0) { /* file exists? */
@@ -349,7 +347,7 @@ int Vect_rename(const char *in, const char *out)
     }
 
     Vect_close(&Map);
-    free(fields);
+    G_free(fields);
 
     return 0;
 }

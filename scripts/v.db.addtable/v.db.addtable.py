@@ -8,11 +8,9 @@
 #               Key column added by Martin Landa <landa.martin gmail.com>
 #               Table index added by Markus Metz
 # PURPOSE:      interface to db.execute to creates and add a new table to given vector map
-# COPYRIGHT:    (C) 2005, 2007, 2008, 2011  by Markus Neteler & the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2005, 2007, 2008, 2011 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -99,17 +97,17 @@ def main():
     database2 = database.replace("$MAP/", map_name + "/")
 
     # maybe there is already a table linked to the selected layer?
-    nuldev = open(os.devnull, "w")
-    try:
-        gs.vector_db(map_name, stderr=nuldev)[int(layer)]
-        gs.fatal(_("There is already a table linked to layer <%s>") % layer)
-    except KeyError:
-        pass
+    with open(os.devnull, "w") as nuldev:
+        try:
+            gs.vector_db(map_name, stderr=nuldev)[int(layer)]
+            gs.fatal(_("There is already a table linked to layer <%s>") % layer)
+        except KeyError:
+            pass
 
-    # maybe there is already a table with that name?
-    tables = gs.read_command(
-        "db.tables", flags="p", database=database2, driver=driver, stderr=nuldev
-    )
+        # maybe there is already a table with that name?
+        tables = gs.read_command(
+            "db.tables", flags="p", database=database2, driver=driver, stderr=nuldev
+        )
     tables = decode(tables)
 
     if table not in tables.splitlines():

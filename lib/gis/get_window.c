@@ -3,10 +3,8 @@
 
    \brief GIS Library - Get window (i.e. GRASS region)
 
-   (C) 2001-2009, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -65,8 +63,12 @@ void G_get_window(struct Cell_head *window)
     else {
         char *wind = getenv("WIND_OVERRIDE");
 
-        if (wind)
-            G_get_element_window(&st->dbwindow, "windows", wind, G_mapset());
+        if (wind) {
+            char wind_env[GNAME_MAX] = {0};
+            snprintf(wind_env, GNAME_MAX, "%s", wind);
+            G_get_element_window(&st->dbwindow, "windows", wind_env,
+                                 G_mapset());
+        }
         else
             G_get_element_window(&st->dbwindow, "", "WIND", G_mapset());
     }

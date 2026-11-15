@@ -5,11 +5,8 @@
  * PURPOSE:      Calculate TOA Reflectance for Aster from DN.
  *               Input 9 bands (VNIR and SWIR).
  *
- * COPYRIGHT:    (C) 2002-2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU Lesser General
- *               Public License. Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2002-2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -112,14 +109,12 @@ int main(int argc, char *argv[])
     input1->key = "dayofyear";
     input1->type = TYPE_DOUBLE;
     input1->required = YES;
-    input1->gisprompt = "value";
     input1->description = _("Day of Year of satellite overpass [0-366]");
 
     input2 = G_define_option();
     input2->key = "sun_elevation";
     input2->type = TYPE_DOUBLE;
     input2->required = YES;
-    input2->gisprompt = "value";
     input2->description = _("Sun elevation angle (degrees, < 90.0)");
 
     output = G_define_standard_option(G_OPT_R_OUTPUT);

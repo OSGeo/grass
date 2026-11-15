@@ -7,11 +7,8 @@
  *
  * PURPOSE:      Create points along lines
  *
- * COPYRIGHT:    (C) 2002-2019 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2002-2019 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************/
 #include <stdlib.h>
@@ -200,11 +197,12 @@ int main(int argc, char **argv)
         db_set_error_handler_driver(driver);
 
         if (field == -1)
-            sprintf(buf, "create table %s ( cat int, along double precision )",
-                    Fi->table);
+            snprintf(buf, sizeof(buf),
+                     "create table %s ( cat int, along double precision )",
+                     Fi->table);
         else
-            sprintf(
-                buf,
+            snprintf(
+                buf, sizeof(buf),
                 "create table %s ( cat int, lcat int, along double precision )",
                 Fi->table);
         db_append_string(&stmt, buf);

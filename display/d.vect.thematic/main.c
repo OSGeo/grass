@@ -5,11 +5,8 @@
  * PURPOSE:      Display a thematic vector map
  * TODO:         Common part of code merge with d.vect (similarly as r.colors
  *               and r3.colors)
- * COPYRIGHT:    (C) 2007-2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2007-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -119,11 +116,10 @@ int main(int argc, char **argv)
     algo_opt->options = "int,std,qua,equ,dis";
     algo_opt->description = _("Algorithm to use for classification");
     desc = NULL;
-    G_asprintf(&desc, "int;%s;std;%s;qua;%s;equ;%s", _("simple intervals"),
-               _("standard deviations"), _("quantiles"),
-               _("equiprobable (normal distribution)"));
+    G_asprintf(&desc, "int;%s;std;%s;qua;%s;equ;%s;dis;%s",
+               _("simple intervals"), _("standard deviations"), _("quantiles"),
+               _("equiprobable (normal distribution)"), _("discontinuities"));
     algo_opt->descriptions = desc;
-    /*currently disabled because of bugs       "dis;discontinuities"); */
     algo_opt->guisection = _("Classes");
 
     nbclass_opt = G_define_option();
@@ -646,7 +642,7 @@ static char *icon_files(void)
 
     list = NULL;
     len = 0;
-    sprintf(path, "%s/etc/symbol", G_gisbase());
+    snprintf(path, sizeof(path), "%s/symbol", G_etc_dir());
 
     dir = opendir(path);
     if (!dir)
@@ -659,7 +655,8 @@ static char *icon_files(void)
         if (d->d_name[0] == '.')
             continue;
 
-        sprintf(path_i, "%s/etc/symbol/%s", G_gisbase(), d->d_name);
+        snprintf(path_i, sizeof(path_i), "%s/symbol/%s", G_etc_dir(),
+                 d->d_name);
         dir_i = opendir(path_i);
 
         if (!dir_i)
@@ -672,7 +669,7 @@ static char *icon_files(void)
 
             list = G_realloc(list, (count + 1) * sizeof(char *));
 
-            sprintf(buf, "%s/%s", d->d_name, d_i->d_name);
+            snprintf(buf, sizeof(buf), "%s/%s", d->d_name, d_i->d_name);
             list[count++] = G_store(buf);
 
             len += strlen(d->d_name) + strlen(d_i->d_name) + 2; /* '/' + ',' */

@@ -4,10 +4,8 @@
    \brief OGSF library - loading and manipulating vector sets (higher level
    functions)
 
-   (C) 1999-2008, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 1999-2008, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL, GMSL/University of Illinois
    \author Updated by Martin landa <landa.martin gmail.com>
@@ -279,7 +277,7 @@ int GV_get_style(int id, int *mem, int *color, int *width, int *use_z)
    \param layer layer number for thematic mapping
    \param color color column name
    \param width width column name
-   \param colors pointer to Colors structure or NULL
+   \param color_rules pointer to Colors structure or NULL
 
    \return 1 on success
    \return -1 on error (point set not found)

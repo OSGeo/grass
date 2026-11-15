@@ -6,7 +6,7 @@
 #include <grass/gis.h>
 #include <grass/spawn.h>
 
-#ifdef __MINGW32__
+#ifdef _WIN32
 #include <io.h>
 #include <fcntl.h>
 #define pipe(fds) _pipe(fds, 4096, O_BINARY | O_NOINHERIT)
@@ -69,11 +69,29 @@ FILE *G_popen_read(struct Popen *state, const char *program, const char **args)
     return do_popen(state, 0, program, args);
 }
 
-void G_popen_close(struct Popen *state)
+/*!
+ * \brief Closes a pipe opened with G_popen_read() or G_popen_write().
+ *
+ * Closes the associated stream, waits for the spawned process to finish,
+ * clears the popen state, and returns the process status reported by
+ * G_wait(). If the state has no open stream or process, it is cleared
+ * and `0` is returned.
+ *
+ * \param state Pointer to the popen state to close and reset.
+ * \return The status returned by G_wait(), or `0` when no process is
+ *   associated with the state.
+ */
+int G_popen_close(struct Popen *state)
 {
+    int status = 0;
+
     if (state->fp)
         fclose(state->fp);
 
     if (state->pid != -1)
-        G_wait(state->pid);
+        status = G_wait(state->pid);
+
+    G_popen_clear(state);
+
+    return status;
 }

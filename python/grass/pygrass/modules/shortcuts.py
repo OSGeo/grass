@@ -23,28 +23,28 @@ _get_commands.list_of_commands = None
 class MetaModule:
     """Example how to use MetaModule
 
-    >>> g = MetaModule('g')
+    >>> g = MetaModule("g")
     >>> g_list = g.list
     >>> g_list.name
     'g.list'
     >>> g_list.required
     ['type']
-    >>> g_list.inputs.type = 'raster'
-    >>> g_list.inputs.mapset = 'PERMANENT'
+    >>> g_list.inputs.type = "raster"
+    >>> g_list.inputs.mapset = "PERMANENT"
     >>> g_list.stdout_ = -1
     >>> g_list.run()
     Module('g.list')
-    >>> g_list.outputs.stdout                         # doctest: +ELLIPSIS
+    >>> g_list.outputs.stdout  # doctest: +ELLIPSIS
     '...basin...elevation...'
 
-    >>> r = MetaModule('r')
+    >>> r = MetaModule("r")
     >>> what = r.what
     >>> what.description
     'Queries raster maps on their category values and category labels.'
-    >>> what.inputs.map = 'elevation'
-    >>> what.inputs.coordinates = [640000,220500]          # doctest: +SKIP
-    >>> what.run()                                         # doctest: +SKIP
-    >>> v = MetaModule('v')
+    >>> what.inputs.map = "elevation"
+    >>> what.inputs.coordinates = [640000, 220500]  # doctest: +SKIP
+    >>> what.run()  # doctest: +SKIP
+    >>> v = MetaModule("v")
     >>> v.import                                      # doctest: +ELLIPSIS
     Traceback (most recent call last):
       File ".../doctest.py", line 1315, in __run

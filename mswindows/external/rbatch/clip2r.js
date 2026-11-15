@@ -1,3 +1,4 @@
+/* global ActiveXObject */
 // (c) 2009.  Gabor Grothendieck.
 // This is free software licensed under GPL.
 //

@@ -27,11 +27,12 @@ void trans3d(struct Map_info *In, struct Map_info *Out, int type,
     struct line_pnts *Points;
     struct line_cats *Cats;
 
-    struct field_info *Fi;
+    struct field_info *Fi = NULL;
     dbDriver *driver;
     dbString stmt;
-    char buf[2000];
-    int ncats, *cats, cat, *cex;
+    char buf[2000] = {0};
+    int *cats, *cex;
+    int ncats = -1, cat = -1;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -106,17 +107,20 @@ void trans3d(struct Map_info *In, struct Map_info *Out, int type,
                       line, cat);
         }
 
-        if (zcolumn && ltype & (GV_POINT | GV_LINE) && cat > -1) {
+        if (zcolumn && ltype & (GV_POINT | GV_LINE) && cat > -1 && ncats > -1) {
             /* category exist in table ? */
-            cex = (int *)bsearch((void *)&cat, cats, ncats, sizeof(int), srch);
+            cex = (int *)bsearch((void *)&cat, cats, (size_t)ncats, sizeof(int),
+                                 srch);
 
             /* store height to the attribute table */
             if (ctype == DB_C_TYPE_INT)
-                sprintf(buf, "update %s set %s = %d where cat = %d", Fi->table,
-                        zcolumn, (int)Points->z[0], cat);
+                snprintf(buf, sizeof(buf),
+                         "update %s set %s = %d where cat = %d", Fi->table,
+                         zcolumn, (int)Points->z[0], cat);
             else /* double */
-                sprintf(buf, "update %s set %s = %.8f where cat = %d",
-                        Fi->table, zcolumn, Points->z[0], cat);
+                snprintf(buf, sizeof(buf),
+                         "update %s set %s = %.8f where cat = %d", Fi->table,
+                         zcolumn, Points->z[0], cat);
 
             G_debug(3, "SQL: %s", buf);
             db_set_string(&stmt, buf);
@@ -148,9 +152,10 @@ void trans3d(struct Map_info *In, struct Map_info *Out, int type,
 
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);
+    Vect_destroy_field_info(Fi);
 }
 
-int srch(const void *pa, const void *pb)
+static int srch(const void *pa, const void *pb)
 {
     int *p1 = (int *)pa;
 

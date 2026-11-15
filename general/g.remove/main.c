@@ -15,11 +15,8 @@
  *
  * PURPOSE:      Lets users remove GRASS database files
  *
- * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1999-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -58,6 +55,8 @@ int main(int argc, char *argv[])
     int result;
     int i, all, num_types, nlist, num_removed;
     void *filter, *exclude_filter;
+    const char **processed_aliases = NULL;
+    int alias_count = 0;
 
     G_gisinit(argv[0]);
 
@@ -164,7 +163,7 @@ int main(int argc, char *argv[])
             char *buf;
 
             buf = (char *)G_malloc(strlen(pattern) + 3);
-            sprintf(buf, "{%s}", pattern);
+            snprintf(buf, (strlen(pattern) + 3), "{%s}", pattern);
 
             filter = G_ls_glob_filter(buf, 0, (int)flag.ignorecase->answer);
         }
@@ -186,7 +185,7 @@ int main(int argc, char *argv[])
                 char *buf;
 
                 buf = (char *)G_malloc(strlen(exclude) + 3);
-                sprintf(buf, "{%s}", exclude);
+                snprintf(buf, (strlen(exclude) + 3), "{%s}", exclude);
 
                 exclude_filter =
                     G_ls_glob_filter(buf, 1, (int)flag.ignorecase->answer);
@@ -220,6 +219,8 @@ int main(int argc, char *argv[])
     }
 
     num_removed = 0;
+    processed_aliases = (const char **)G_malloc(num_types * sizeof(char *));
+
     for (i = 0; i < num_types; i++) {
         int n, rast, num_files, j;
         const struct list *elem;
@@ -232,6 +233,7 @@ int main(int argc, char *argv[])
         G_file_name(path, elem->element[0], "", mapset);
         if (access(path, 0) != 0)
             continue;
+        processed_aliases[alias_count++] = (char *)elem->alias;
 
         rast = !G_strcasecmp(elem->alias, "raster");
         files = G_ls2(path, &num_files);
@@ -252,8 +254,12 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (num_removed < 1)
-        G_warning(_("No data base element files found"));
+    if (num_removed < 1) {
+        char *aliases_str = G_str_concat(processed_aliases, alias_count, ", ",
+                                         alias_count * 100);
+        G_message(_("No file(s) found for type(s): %s"), aliases_str);
+        G_free(aliases_str);
+    }
 
     G_free_ls_filter(filter);
 
@@ -265,6 +271,8 @@ int main(int argc, char *argv[])
             _("Nothing removed. You must use the force flag (-%c) to actually "
               "remove them. Exiting."),
             flag.force->key);
+
+    G_free(processed_aliases);
 
     exit(result);
 }

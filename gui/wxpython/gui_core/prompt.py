@@ -7,10 +7,8 @@ Classes:
  - prompt::GPrompt
  - prompt::GPromptSTC
 
-(C) 2009-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2009-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com>
 @author Michael Barton <michael.barton@asu.edu>
@@ -368,10 +366,10 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             return toComplete
 
         try:
-            splitted = utils.split(str(entry))
+            split_items = utils.split(str(entry))
         except ValueError:  # No closing quotation error
             return toComplete
-        if len(splitted) > 0 and cmd in globalvar.grassCmd:
+        if len(split_items) > 0 and cmd in globalvar.grassCmd:
             toComplete["cmd"] = cmd
             if entry[-1] == " ":
                 words = entry.split(" ")
@@ -458,13 +456,13 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             self.CallTipSetForeground("BLACK")
             self.CallTipShow(pos, info["usage"] + "\n\n" + info["description"])
         elif (
-            event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER)
+            event.GetKeyCode() in {wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER}
             and not self.AutoCompActive()
         ):
             # run command on line when <return> is pressed
             self._runCmd(self.GetCurLine()[0].strip())
         elif (
-            event.GetKeyCode() in [wx.WXK_UP, wx.WXK_DOWN] and not self.AutoCompActive()
+            event.GetKeyCode() in {wx.WXK_UP, wx.WXK_DOWN} and not self.AutoCompActive()
         ):
             # Command history using up and down
             if len(self.cmdbuffer) < 1:
@@ -521,7 +519,9 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                                     command.split(".", dotNumber)[-1]
                                 )
                         except UnicodeDecodeError as error:
-                            sys.stderr.write(DecodeString(command) + ": " + str(error))
+                            sys.stderr.write(
+                                DecodeString(command) + ": " + str(error) + "\n"
+                            )
 
             except (KeyError, TypeError):
                 return

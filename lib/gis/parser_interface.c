@@ -3,10 +3,8 @@
  *
  * \brief GIS Library - Argument parsing functions (interface)
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  * \author Soeren Gebbert added Dec. 2009 WPS process_description document
@@ -114,9 +112,11 @@ void G__usage_xml(void)
 
     /* gettext converts strings to encoding returned by nl_langinfo(CODESET) */
 
+/* check if local_charset() comes from iconv. If so check for iconv library
+ * before using it */
 #if defined(HAVE_LANGINFO_H)
     encoding = nl_langinfo(CODESET);
-#elif defined(__MINGW32__) && defined(USE_NLS)
+#elif defined(_WIN32) && defined(USE_NLS)
     encoding = locale_charset();
 #endif
 

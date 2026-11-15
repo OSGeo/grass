@@ -5,10 +5,8 @@
  *
  * Higher level functions for reading/writing/manipulating vectors.
  *
- * (C) 2001-2009, 2014 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2).  Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009, 2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Radim Blazek
  * \author Stepan Turek stepan.turek seznam.cz (turns support)
@@ -22,7 +20,7 @@ static int
     From_node; /* from node set in SP and used by clipper for first arc */
 
 static int clipper(dglGraph_s *pgraph, dglSPClipInput_s *pargIn,
-                   dglSPClipOutput_s *pargOut, void *pvarg UNUSED)
+                   dglSPClipOutput_s *pargOut, void *pvarg G_UNUSED)
 { /* caller's pointer */
     dglInt32_t cost;
     dglInt32_t from;
@@ -256,7 +254,6 @@ static int find_shortest_path(struct Map_info *Map, int from, int to,
    return value, \return -1 : destination unreachable
 
  */
-
 int Vect_net_ttb_shortest_path(struct Map_info *Map, int from, int from_type,
                                int to, int to_type, int tucfield,
                                struct ilist *List, double *cost)
@@ -480,19 +477,24 @@ int Vect_net_get_node_cost(struct Map_info *Map, int node, double *cost)
    \brief Find nearest node(s) on network.
 
    \param Map vector map with build graph (see Vect_net_ttb_build_graph and
-   Vect_net_build_graph) \param x,y,z point coordinates (z coordinate NOT USED
-   !) \param direction (GV_FORWARD - from point to net, GV_BACKWARD - from net
-   to point) \param maxdist maximum distance to the network \param[out] node1
-   pointer where to store the node number (or NULL) \param[out] node2 pointer
-   where to store the node number (or NULL) \param[out] ln    pointer where to
-   store the nearest line number (or NULL) \param[out] costs1 pointer where to
-   store costs on nearest line to node1 (not costs from x,y,z to the line) (or
-   NULL) \param[out] costs2 pointer where to store costs on nearest line to
-   node2 (not costs from x,y,z to the line) (or NULL) \param[out] Points1
-   pointer to structure where to store vertices on nearest line to node1 (or
-   NULL) \param[out] Points2 pointer to structure where to store vertices on
-   nearest line to node2 (or NULL) \param[out] pointer where to distance to the
-   line (or NULL) \param[out] distance
+              Vect_net_build_graph)
+   \param x,y,z point coordinates (z coordinate NOT USED!)
+   \param direction (GV_FORWARD - from point to net, GV_BACKWARD - from net
+                    to point)
+   \param maxdist maximum distance to the network
+   \param[out] node1 pointer where to store the node number (or NULL)
+   \param[out] node2 pointer where to store the node number (or NULL)
+   \param[out] ln    pointer where to store the nearest line number (or NULL)
+   \param[out] costs1 pointer where to store costs on nearest line to node1 (not
+                      costs from x,y,z to the line) (or NULL)
+   \param[out] costs2 pointer where to store costs on nearest line to node2
+                      (not costs from x,y,z to the line) (or NULL)
+   \param[out] Points1 pointer to structure where to store vertices on nearest
+                       line to node1 (or NULL)
+   \param[out] Points2 pointer to structure where to store vertices on nearest
+                       line to node2 (or NULL)
+  \param[out] pointer where to distance to the line (or NULL)
+  \param[out] distance
 
    \return number of nodes found (0,1,2)
  */

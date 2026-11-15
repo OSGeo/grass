@@ -5,10 +5,8 @@
  *
  * Extracted from general/manage/lib/do_copy.c
  *
- * (C) 2008-2015 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2008-2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Huidae Cho
  */
@@ -66,7 +64,6 @@
  *
  * \return 0 if successful, otherwise 1
  */
-
 int G_recursive_copy(const char *src, const char *dst)
 {
     DIR *dirp;
@@ -86,7 +83,7 @@ int G_recursive_copy(const char *src, const char *dst)
             const char *p = strrchr(src, '/');
 
             /* src => dst/src */
-            sprintf(path, "%s/%s", dst, (p ? p + 1 : src));
+            snprintf(path, sizeof(path), "%s/%s", dst, (p ? p + 1 : src));
             return G_recursive_copy(src, path);
         }
 
@@ -101,7 +98,7 @@ int G_recursive_copy(const char *src, const char *dst)
         }
 
         while ((len = read(fd, buf, sizeof(buf))) > 0) {
-            while (len && (len2 = write(fd2, buf, len)) >= 0)
+            while ((len > 0) && (len2 = write(fd2, buf, (size_t)len)) >= 0)
                 len -= len2;
         }
 
@@ -138,8 +135,8 @@ int G_recursive_copy(const char *src, const char *dst)
         if (dp->d_name[0] == '.')
             continue;
 
-        sprintf(path, "%s/%s", src, dp->d_name);
-        sprintf(path2, "%s/%s", dst, dp->d_name);
+        snprintf(path, sizeof(path), "%s/%s", src, dp->d_name);
+        snprintf(path2, sizeof(path2), "%s/%s", dst, dp->d_name);
 
         if (G_recursive_copy(path, path2) != 0) {
             closedir(dirp);

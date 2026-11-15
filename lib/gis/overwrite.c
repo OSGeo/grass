@@ -3,12 +3,10 @@
  *
  * \brief GIS Library - Check for overwrite.
  *
- * (C) 2001-2008, 2010 by the GRASS Development Team
+ * SPDX-FileCopyrightText: 2001-2008, 2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
- *
- * \author GRASS GIS Development Team, Martin Landa <landa.martin gmail.com>
+ * \author GRASS Development Team, Martin Landa <landa.martin gmail.com>
  */
 
 #include <stdlib.h>
@@ -30,7 +28,6 @@
  * \return 1 if overwrite
  * \return 0 if not overwrite
  */
-
 int G_check_overwrite(int argc, char **argv)
 {
     const char *overstr;

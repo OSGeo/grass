@@ -5,11 +5,9 @@ AUTHOR(S): Vaclav Petras <wenzeslaus gmail com>
 
 PURPOSE:   Test for g.extension individual modules/extensions handling
 
-COPYRIGHT: (C) 2015 Vaclav Petras, and by the GRASS Development Team
-
-           This program is free software under the GNU General Public
-           License (>=v2). Read the file COPYING that comes with GRASS
-           for details.
+SPDX-FileCopyrightText: 2015 Vaclav Petras
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 """
 
 from grass.gunittest.case import TestCase
@@ -17,8 +15,8 @@ from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.utils import silent_rmtree, xfail_windows
 from grass.script.utils import decode
-
 import os
+from pathlib import Path
 
 
 MODULES_OUTPUT = """\
@@ -67,6 +65,7 @@ class TestModulesFromDifferentSources(TestCase):
     files = [
         os.path.join(install_prefix, "scripts", "r.plus.example"),
         os.path.join(install_prefix, "docs", "html", "r.plus.example.html"),
+        os.path.join(install_prefix, "docs", "mkdocs", "source", "r.plus.example.md"),
     ]
     # to create archives from the source, the following was used:
     # zip r.plus.example.zip r.plus.example/*
@@ -76,8 +75,8 @@ class TestModulesFromDifferentSources(TestCase):
 
     def setUp(self):
         """Make sure we are not dealing with some old files"""
-        if os.path.exists(self.install_prefix):
-            files = os.listdir(self.install_prefix)
+        if Path(self.install_prefix).exists():
+            files = [p.name for p in Path(self.install_prefix).iterdir()]
             if files:
                 msg = "Install prefix path '{}' contains files {}".format(
                     self.install_prefix, files

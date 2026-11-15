@@ -33,7 +33,7 @@ class Segment:
         )
 
     def segments_in_mem(self):
-        if self.maxmem > 0 and self.maxmem < 100:
+        if 0 < self.maxmem < 100:
             seg_in_mem = (self.maxmem * self.nseg()) / 100
         else:
             seg_in_mem = 4 * (self.rows() / self.srows + self.cols() / self.scols + 2)
@@ -131,6 +131,8 @@ class Segment:
     def release(self):
         """Free memory allocated to segment.
         Releases the allocated memory associated with the segment file seg.
-        Note: Does not close the file. Does not flush the data which may be
-        pending from previous Segment_put() calls."""
+
+        .. note:: Does not close the file. Does not flush the data which may be
+                  pending from previous Segment_put() calls.
+        """
         libseg.Segment_release(self.c_seg)

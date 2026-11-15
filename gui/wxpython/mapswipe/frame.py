@@ -8,10 +8,8 @@ Classes:
  - frame::SwipeMapDisplay
  - frame::MapSplitter
 
-(C) 2012 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2012 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
@@ -829,9 +827,7 @@ class SwipeMapDisplay(FrameMixin, SwipeMapPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         # bindings

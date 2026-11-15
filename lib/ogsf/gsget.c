@@ -5,12 +5,8 @@
 
    GRASS OpenGL gsurf OGSF Library
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL (January 1993)
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -22,7 +18,7 @@
    \brief Get map attributes
 
    \param buff
-   \param offset
+   \param[in] offset
    \param[out] att
 
    \return 0 on failure

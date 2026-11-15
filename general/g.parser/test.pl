@@ -26,7 +26,7 @@ use strict;
 # %end
 
 if ( !$ENV{'GISBASE'} ) {
-    printf(STDERR  "You must be in GRASS GIS to run this program.\n");
+    printf(STDERR  "You must be in GRASS to run this program.\n");
     exit 1;
 }
 

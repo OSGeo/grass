@@ -96,12 +96,12 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename, int nfield,
                       Fi->database, Fi->driver);
     db_set_error_handler_driver(driver);
 
-    sprintf(buf,
-            "create table %s ( cat integer, id integer, fcat integer, tcat "
-            "integer, "
-            "sp integer, cost double precision, fdist double precision, tdist "
-            "double precision )",
-            Fi->table);
+    snprintf(buf, sizeof(buf),
+             "create table %s ( cat integer, id integer, fcat integer, tcat "
+             "integer, "
+             "sp integer, cost double precision, fdist double precision, tdist "
+             "double precision )",
+             Fi->table);
 
     db_set_string(&sql, buf);
     G_debug(2, "%s", db_get_string(&sql));
@@ -327,8 +327,9 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename, int nfield,
             }
         }
 
-        sprintf(buf, "insert into %s values ( %d, %d, %d, %d, %d, %f, %f, %f)",
-                Fi->table, cat, id, fcat, tcat, sp, cost, fdist, tdist);
+        snprintf(buf, sizeof(buf),
+                 "insert into %s values ( %d, %d, %d, %d, %d, %f, %f, %f)",
+                 Fi->table, cat, id, fcat, tcat, sp, cost, fdist, tdist);
         db_set_string(&sql, buf);
         G_debug(3, "%s", db_get_string(&sql));
 

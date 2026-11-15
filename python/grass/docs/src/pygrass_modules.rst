@@ -1,8 +1,8 @@
-Interface to GRASS GIS modules
+Interface to GRASS modules
 ==============================
 
-In :mod:`~pygrass.modules` module, GRASS GIS modules are represented
-by :class:`~pygrass.modules.interface.module.Module` class
+In :mod:`~grass.pygrass.modules` module, GRASS modules are represented
+by :class:`~grass.pygrass.modules.interface.module.Module` class
 objects. These objects are generated based on the XML module
 description that is used also for the generation of the graphical user
 interface (GUI). ::
@@ -14,7 +14,7 @@ interface (GUI). ::
 
 
 It is possible to create a run-able module object and run it later (this
-is also needed for registering GRASS GIS commands with more than one dot
+is also needed for registering GRASS commands with more than one dot
 in their name, e.g. r.slope.aspect):
 
     >>> slope_aspect = Module("r.slope.aspect", elevation='elevation',
@@ -136,7 +136,7 @@ and get the module documentation with: ::
 
 
 
-For each input and output parameter it is possible to obtain specific
+For each input and output parameter, it is possible to obtain specific
 information. To see all module inputs, just type: ::
 
     >>> slope_aspect.inputs #doctest: +NORMALIZE_WHITESPACE
@@ -188,16 +188,16 @@ Another example of use: ::
     {'max': '156.3299', 'min': '55.57879'}
 
 
-Launching GRASS GIS modules in parallel
+Launching GRASS modules in parallel
 ---------------------------------------
 
 PyGRASS implements simple mechanism for launching GRASS modules in
 parallel. See
-:class:`~pygrass.modules.interface.module.ParallelModuleQueue` class
+:class:`~grass.pygrass.modules.interface.module.ParallelModuleQueue` class
 for details.
 
 Multiple GRASS modules can be joined into one object by
-:class:`~pygrass.modules.interface.module.MultiModule`.
+:class:`~grass.pygrass.modules.interface.module.MultiModule`.
 
 
 .. _Popen: https://docs.python.org/library/subprocess.html#Popen

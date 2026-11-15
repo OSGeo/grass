@@ -42,8 +42,8 @@ int mk_att(int cat, struct field_info *Fi, dbDriver *driver, int ncol,
             /* opening and closing the cursor is slow,
              * but the cursor really needs to be opened for each cat separately
              */
-            sprintf(buf, "SELECT * FROM %s WHERE %s = %d", Fi->table, Fi->key,
-                    cat);
+            snprintf(buf, sizeof(buf), "SELECT * FROM %s WHERE %s = %d",
+                     Fi->table, Fi->key, cat);
             G_debug(2, "SQL: %s", buf);
             db_set_string(&dbstring, buf);
             if (db_open_select_cursor(driver, &dbstring, &cursor,

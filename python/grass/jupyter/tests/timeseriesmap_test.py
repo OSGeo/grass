@@ -15,7 +15,7 @@ ipywidgets = pytest.importorskip(
 
 def test_fill_none_values():
     """Test that fill_none_values replaces None with previous value in list"""
-    names = ["r1", "None", "r3"]
+    names = ["r1", None, "r3"]
     fill_names = fill_none_values(names)
     assert fill_names == ["r1", "r1", "r3"]
 
@@ -27,7 +27,7 @@ def test_collect_layers(space_time_raster_dataset):
         space_time_raster_dataset.name, fill_gaps=False, element_type="strds"
     )
     # Test fill_gaps=False at empty time step
-    assert names[1] == "None"
+    assert names[1] is None
     assert dates[1] == "2001-02-01 00:00:00"
     # Remove the empty time step - see space_time_raster_dataset creation
     names.pop(1)
@@ -42,7 +42,7 @@ def test_default_init(space_time_raster_dataset):
     """Check that TimeSeriesMap init runs with default parameters"""
     img = gj.TimeSeriesMap()
     img.add_raster_series(space_time_raster_dataset.name)
-    assert img.baseseries == space_time_raster_dataset.name
+    assert img._baseseries == space_time_raster_dataset.name
 
 
 @pytest.mark.needs_solo_run

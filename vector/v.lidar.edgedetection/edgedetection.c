@@ -11,13 +11,9 @@
  *
  * PURPOSE:      Detection of object's edges on a LIDAR data set
  *
- * COPYRIGHT:    (C) 2006 by Politecnico di Milano -
- *                             Polo Regionale di Como
- *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006 Politecnico di Milano - Polo Regionale di Como
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************/
 
@@ -393,10 +389,10 @@ int Insert(double partialX, double partialY, double Interp, int line_num,
     int ret;
 
     db_init_string(&sql);
-    sprintf(buf, "INSERT INTO %s (ID, Interp, X, Y)", tab_name);
+    snprintf(buf, sizeof(buf), "INSERT INTO %s (ID, Interp, X, Y)", tab_name);
     db_append_string(&sql, buf);
-    sprintf(buf, " VALUES (%d, %lf, %lf, %lf)", line_num, Interp, partialX,
-            partialY);
+    snprintf(buf, sizeof(buf), " VALUES (%d, %lf, %lf, %lf)", line_num, Interp,
+             partialX, partialY);
     db_append_string(&sql, buf);
 
     ret = db_execute_immediate(driver, &sql);
@@ -413,9 +409,9 @@ int Insert_Interpolation(double Interp, int line_num, dbDriver *driver,
     int ret;
 
     db_init_string(&sql);
-    sprintf(buf, "INSERT INTO %s (ID, Interp)", tab_name);
+    snprintf(buf, sizeof(buf), "INSERT INTO %s (ID, Interp)", tab_name);
     db_append_string(&sql, buf);
-    sprintf(buf, " VALUES (%d, %lf)", line_num, Interp);
+    snprintf(buf, sizeof(buf), " VALUES (%d, %lf)", line_num, Interp);
     db_append_string(&sql, buf);
 
     ret = db_execute_immediate(driver, &sql);
@@ -432,8 +428,9 @@ int UpDate(double partialX, double partialY, double Interp, int line_num,
     int ret;
 
     db_init_string(&sql);
-    sprintf(buf, "UPDATE %s SET Interp=%lf, X=%lf, Y=%lf WHERE ID=%d", tab_name,
-            Interp, partialX, partialY, line_num);
+    snprintf(buf, sizeof(buf),
+             "UPDATE %s SET Interp=%lf, X=%lf, Y=%lf WHERE ID=%d", tab_name,
+             Interp, partialX, partialY, line_num);
     db_append_string(&sql, buf);
 
     ret = db_execute_immediate(driver, &sql);
@@ -454,8 +451,8 @@ int Select(double *PartialX, double *PartialY, double *Interp, int line_num,
     dbValue *PartialX_value, *PartialY_value, *Interp_value;
 
     db_init_string(&sql);
-    sprintf(buf, "SELECT ID, Interp, X, Y FROM %s WHERE ID=%d", tab_name,
-            line_num);
+    snprintf(buf, sizeof(buf), "SELECT ID, Interp, X, Y FROM %s WHERE ID=%d",
+             tab_name, line_num);
     db_append_string(&sql, buf);
 
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)

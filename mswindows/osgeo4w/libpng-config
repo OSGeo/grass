@@ -10,7 +10,7 @@
 # and license in png.h
 
 # Modeled after libxml-config.
-# Adopted for GRASS GIS by Huidae Cho
+# Adopted for GRASS by Huidae Cho
 
 prefix="${OSGEO4W_ROOT_MSYS}"
 version="$(sed '/^#define PNG_LIBPNG_VER_STRING/!d; s/^[^"]*"\|"//g' ${prefix}/include/libpng*/png.h)"

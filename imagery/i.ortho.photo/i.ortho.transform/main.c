@@ -7,11 +7,8 @@
  *               Markus Metz
  * PURPOSE:      Utility to compute transformation based upon GCPs and
  *               output error measurements
- * COPYRIGHT:    (C) 2006-2013 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006-2013 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -92,14 +89,15 @@ static int get_target(void)
     int stat;
 
     if (!I_get_target(group.name, location, mapset)) {
-        sprintf(buf, _("Target information for group <%s> missing"),
-                group.name);
+        snprintf(buf, sizeof(buf),
+                 _("Target information for group <%s> missing"), group.name);
         goto error;
     }
 
-    sprintf(buf, "%s/%s", G_gisdbase(), location);
+    snprintf(buf, sizeof(buf), "%s/%s", G_gisdbase(), location);
     if (access(buf, 0) != 0) {
-        sprintf(buf, _("Target project (location) <%s> not found"), location);
+        snprintf(buf, sizeof(buf),
+                 _("Target project (location) <%s> not found"), location);
         goto error;
     }
     select_target_env();
@@ -110,8 +108,9 @@ static int get_target(void)
         select_current_env();
         return 1;
     }
-    sprintf(buf, _("Mapset <%s> in target project (location) <%s> - "), mapset,
-            location);
+    snprintf(buf, sizeof(buf),
+             _("Mapset <%s> in target project (location) <%s> - "), mapset,
+             location);
     strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
 error:
     strcat(buf, "\n");
@@ -423,7 +422,7 @@ static void do_pt_xforms(void)
         /* ? sscanf(buf, "%s %s", &east_str, &north_str)
            ? G_scan_easting(,,-1)
            ? G_scan_northing(,,-1) */
-        /* ? muliple delims with sscanf(buf, "%[ ,|\t]", &dummy) ? */
+        /* ? multiple delims with sscanf(buf, "%[ ,|\t]", &dummy) ? */
 
         ret = sscanf(buf, "%lf %lf %lf", &easting, &northing, &height);
         if (ret != 3)

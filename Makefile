@@ -9,11 +9,8 @@
 # PURPOSE:  	It provides the commands necessary to compile, install,
 #   	    	clean, and uninstall GRASS
 #   	    	See INSTALL.md file for usage.
-# COPYRIGHT:    (C) 2002-2025 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#   	    	License (>=v2). Read the file COPYING that comes with GRASS
-#   	    	for details.
+# SPDX-FileCopyrightText: 2002-2026 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -54,7 +51,7 @@ FILES = AUTHORS CITING COPYING GPL.TXT INSTALL.md REQUIREMENTS.md contributors.c
 FILES_DST = $(patsubst %,$(ARCH_DISTDIR)/%,$(FILES))
 
 default:
-	@echo "GRASS GIS $(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR).$(GRASS_VERSION_RELEASE) $(GRASS_VERSION_GIT) compilation log" \
+	@echo "GRASS $(GRASS_VERSION_MAJOR).$(GRASS_VERSION_MINOR).$(GRASS_VERSION_RELEASE) $(GRASS_VERSION_GIT) compilation log" \
 		> $(ERRORLOG)
 	@echo "--------------------------------------------------" >> $(ERRORLOG)
 	@echo "Started compilation: `date`"                        >> $(ERRORLOG)

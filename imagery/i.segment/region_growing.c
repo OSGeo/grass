@@ -886,7 +886,7 @@ double calculate_shape(struct reg_stats *rsi, struct reg_stats *rsk,
 
     /* here we calculate a shape index for the new object to be created
      * the radiometric index ranges from 0 to 1, 0 = identical
-     * with the shape index we want to favour compact and smooth opjects
+     * with the shape index we want to favour compact and smooth objects
      * thus the shape index should range from 0 to 1,
      * 0 = maximum compactness and smoothness */
 
@@ -1382,8 +1382,8 @@ static int set_candidate_flag(struct ngbr_stats *head, int value,
     G_debug(4, "set_candidate_flag");
 
     if ((!(FLAG_GET(globals->candidate_flag, head->row, head->col))) != value) {
-        G_warning(_("Candidate flag is already %s"),
-                  value ? _("set") : _("unset"));
+        G_warning(value ? _("Candidate flag is already set")
+                        : _("Candidate flag is already unset"));
         return FALSE;
     }
 

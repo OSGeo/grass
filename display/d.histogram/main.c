@@ -11,11 +11,8 @@
  *               Jan-Oliver Wagner <jan intevation.de>
  * PURPOSE:      draw a bar-chart or a pie-chart representing the
  *               histogram statistics of a cell-file
- * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2007 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -188,7 +185,7 @@ int main(int argc, char **argv)
         D_erase(bg_opt->answer);
 
     /* draw a title for */
-    sprintf(title, "%s", map_name);
+    snprintf(title, sizeof(title), "%s", map_name);
     text_height = (b - t) * 0.05;
     text_width = (r - l) * 0.05 * 0.50;
     D_text_size(text_width, text_height);

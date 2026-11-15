@@ -22,11 +22,8 @@
  *                 0.8B (jdm)
  * <13 Sep 2000> - released under GPL
  *
- * COPYRIGHT:    (C) 2003-2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2).  Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2003-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  **************************************************************/
 
@@ -177,11 +174,12 @@ int main(int argc, char **argv)
     db_set_error_handler_driver(Driver);
 
     db_begin_transaction(Driver);
-    sprintf(buf,
-            "create table %s ( cat integer, pnt_val double precision, rast_val "
-            "double precision, "
-            "diff double precision)",
-            Fi->table);
+    snprintf(
+        buf, sizeof(buf),
+        "create table %s ( cat integer, pnt_val double precision, rast_val "
+        "double precision, "
+        "diff double precision)",
+        Fi->table);
     db_set_string(&sql, buf);
 
     if (db_execute_immediate(Driver, &sql) != DB_OK)
@@ -252,8 +250,8 @@ int main(int argc, char **argv)
         Vect_reset_cats(Cats);
         Vect_cat_set(Cats, 1, cat);
 
-        sprintf(buf, "insert into %s values ( %d, %e, %e, %e )", Fi->table, cat,
-                actual, predicted, predicted - actual);
+        snprintf(buf, sizeof(buf), "insert into %s values ( %d, %e, %e, %e )",
+                 Fi->table, cat, actual, predicted, predicted - actual);
         db_set_string(&sql, buf);
 
         if (db_execute_immediate(Driver, &sql) != DB_OK)

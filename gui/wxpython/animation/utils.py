@@ -10,10 +10,8 @@ Classes:
  - utils::ReplayMode
 
 
-(C) 2013 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
@@ -21,7 +19,6 @@ This program is free software under the GNU General Public License
 import os
 import wx
 import hashlib
-from multiprocessing import cpu_count
 
 try:
     from PIL import Image
@@ -92,18 +89,18 @@ def validateMapNames(names, etype):
     for name in names:
         if name.find("@") >= 0:
             nameShort, mapset = name.split("@", 1)
-            if nameShort in mapDict[mapset]:
-                newNames.append(name)
-            else:
+            if nameShort not in mapDict[mapset]:
                 raise GException(_("Map <%s> not found.") % name)
-        else:
-            found = False
-            for mapset, mapNames in mapDict.items():
-                if name in mapNames:
-                    found = True
-                    newNames.append(name + "@" + mapset)
-            if not found:
-                raise GException(_("Map <%s> not found.") % name)
+            newNames.append(name)
+
+            continue
+        found = False
+        for mapset, mapNames in mapDict.items():
+            if name in mapNames:
+                found = True
+                newNames.append(name + "@" + mapset)
+        if not found:
+            raise GException(_("Map <%s> not found.") % name)
     return newNames
 
 
@@ -127,11 +124,11 @@ def getNameAndLayer(name):
     and returns map name with mapset (when there was mapset)
     and layer (can be None).
 
-    >>> getNameAndLayer('name:2@mapset')
+    >>> getNameAndLayer("name:2@mapset")
     ('name@mapset', '2')
-    >>> getNameAndLayer('name@mapset')
+    >>> getNameAndLayer("name@mapset")
     ('name@mapset', None)
-    >>> getNameAndLayer('name:2')
+    >>> getNameAndLayer("name:2")
     ('name', '2')
     """
     mapset = layer = None
@@ -239,7 +236,7 @@ def ComputeScaledRect(sourceSize, destSize):
     """Fits source rectangle into destination rectangle
     by scaling and centering.
 
-        >>> ComputeScaledRect(sourceSize = (10, 40), destSize = (100, 50))
+        >>> ComputeScaledRect(sourceSize=(10, 40), destSize=(100, 50))
         {'height': 50, 'scale': 1.25, 'width': 13, 'x': 44, 'y': 0}
 
     :param sourceSize: size of source rectangle
@@ -331,25 +328,26 @@ def layerListToCmdsMatrix(layerList):
             continue
         if hasattr(layer, "maps"):
             for i, part in enumerate(layer.cmd):
-                if part.startswith("map="):
-                    cmd = layer.cmd[:]
-                    cmds = []
-                    for map_ in layer.maps:
-                        # check if dataset uses layers instead of maps
-                        mapName, mapLayer = getNameAndLayer(map_)
-                        cmd[i] = "map={name}".format(name=mapName)
-                        if mapLayer:
-                            try:
-                                idx = cmd.index("layer")
-                                cmd[idx] = "layer={layer}".format(layer=mapLayer)
-                            except ValueError:
-                                cmd.append("layer={layer}".format(layer=mapLayer))
-                        cmds.append(cmd[:])
-                    cmdsForComposition.append(cmds)
+                if not part.startswith("map="):
+                    continue
+                cmd = layer.cmd[:]
+                cmds = []
+                for map_ in layer.maps:
+                    # check if dataset uses layers instead of maps
+                    mapName, mapLayer = getNameAndLayer(map_)
+                    cmd[i] = "map={name}".format(name=mapName)
+                    if mapLayer:
+                        try:
+                            idx = cmd.index("layer")
+                            cmd[idx] = "layer={layer}".format(layer=mapLayer)
+                        except ValueError:
+                            cmd.append("layer={layer}".format(layer=mapLayer))
+                    cmds.append(cmd[:])
+                cmdsForComposition.append(cmds)
         else:
             cmdsForComposition.append([layer.cmd] * count)
 
-    return list(zip(*cmdsForComposition))
+    return list(zip(*cmdsForComposition, strict=False))
 
 
 def sampleCmdMatrixAndCreateNames(cmdMatrix, sampledSeries, regions):
@@ -371,13 +369,8 @@ def sampleCmdMatrixAndCreateNames(cmdMatrix, sampledSeries, regions):
 
 
 def getCpuCount():
-    """Returns number of available cpus.
-    If fails, default (4) is returned.
-    """
-    try:
-        return cpu_count()
-    except NotImplementedError:
-        return 4
+    """Returns number of available cpus."""
+    return gs.available_cpus()
 
 
 def interpolate(start, end, count):

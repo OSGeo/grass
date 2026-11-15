@@ -8,11 +8,8 @@
  * PURPOSE:      Generates a raster map layer with contiguous areas
  *               grown by one cell.
  *
- * COPYRIGHT:    (C) 2006-2021 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006-2021 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -387,7 +384,11 @@ int main(int argc, char **argv)
 
         G_percent(row, nrows, 2);
 
-        lseek(temp_fd, offset, SEEK_SET);
+        if (lseek(temp_fd, offset, SEEK_SET) == -1) {
+            int err = errno;
+            G_fatal_error(_("File read/write operation failed: %s (%d)"),
+                          strerror(err), err);
+        }
 
         if (read(temp_fd, new_x_row, ncols * sizeof(CELL)) < 0)
             G_fatal_error(_("File reading error in %s() %d:%s"), __func__,

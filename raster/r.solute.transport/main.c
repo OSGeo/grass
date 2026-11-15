@@ -8,11 +8,9 @@
  * PURPOSE:      Calculates transient two dimensional solute transport
  *                 in porous media
  *
- * COPYRIGHT:    (C) 2006-2009 by Soeren Gebbert, and the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2006-2009 Soeren Gebbert
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -423,7 +421,7 @@ int main(int argc, char *argv[])
     /*write the result to the output file */
     N_write_array_2d_to_rast(data->c, param.output->answer);
 
-    /*Compute the the velocity field if required and write the result into three
+    /*Compute the velocity field if required and write the result into three
      * rast maps */
     if (param.vector_x->answer || param.vector_y->answer) {
         xcomp = N_alloc_array_2d(geom->cols, geom->rows, 1, DCELL_TYPE);

@@ -3,10 +3,8 @@
 
   \brief Display Driver - initialization
 
-  (C) 2006-2011 by the GRASS Development Team
-
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
+  SPDX-FileCopyrightText: 2006-2011 GRASS Development Team
+  SPDX-License-Identifier: GPL-2.0-or-later
 
   \author Glynn Clements <glynn gclements.plus.com> (original contributor)
   \author Huidae Cho <grass4u gmail.com>
@@ -26,18 +24,18 @@ const struct driver *driver;
 
 struct GFONT_CAP *ftcap;
 
-int screen_width;
-int screen_height;
+GRASS_DRIVER_EXPORT int screen_width;
+GRASS_DRIVER_EXPORT int screen_height;
 
-double cur_x;
-double cur_y;
+GRASS_DRIVER_EXPORT double cur_x;
+GRASS_DRIVER_EXPORT double cur_y;
 
-double text_size_x;
-double text_size_y;
-double text_rotation;
+GRASS_DRIVER_EXPORT double text_size_x;
+GRASS_DRIVER_EXPORT double text_size_y;
+GRASS_DRIVER_EXPORT double text_rotation;
 double text_sinrot;
 double text_cosrot;
-int matrix_valid;
+GRASS_DRIVER_EXPORT int matrix_valid;
 
 /*!
   \brief Initialize display driver

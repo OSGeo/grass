@@ -6,10 +6,8 @@
    Computation based on training areas for supervised classification.
    Based on i.class module (GRASS 6).
 
-   Copyright (C) 1999-2007, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 1999-2007, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author David Satnik, Central Washington University (original author)
    \author Markus Neteler <neteler itc.it> (i.class module)
@@ -67,7 +65,7 @@ int I_iclass_analysis(IClass_statistics *statistics, struct Ref *refer,
 
     category = statistics->cat;
 
-    /* region set to current workin region */
+    /* region set to current working region */
     G_get_set_window(&band_region);
 
     /* find perimeter points from vector map */

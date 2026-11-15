@@ -631,8 +631,8 @@ LZ4_FORCE_INLINE void LZ4_memcpy_using_offset(BYTE *dstPtr, const BYTE *srcPtr,
 #if defined(_MSC_VER) && (_MSC_VER <= 1937) /* MSVC 2022 ver 17.7 or earlier \
                                              */
 #pragma warning(push)
-#pragma warning( \
-    disable : 6385) /* warning C6385: Reading invalid data from 'v'. */
+#pragma warning(disable \
+                : 6385) /* warning C6385: Reading invalid data from 'v'. */
 #endif
         LZ4_memcpy(&v[4], v, 4);
 #if defined(_MSC_VER) && (_MSC_VER <= 1937) /* MSVC 2022 ver 17.7 or earlier \

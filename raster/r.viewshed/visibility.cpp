@@ -27,10 +27,8 @@
  * paper: "Computing Visibility on * Terrains in External Memory" by
  * Herman Haverkort, Laura Toma and Yi Zhuang.
  *
- * COPYRIGHT: (C) 2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 #include <stdio.h>
@@ -238,7 +236,7 @@ float angleVisibilityOutput(float x)
 /* ------------------------------------------------------------ */
 /* visgrid is the structure that records the visibility information
    after the sweep is done.  Use it to write the visibility output
-   grid and then distroy it.
+   grid and then destroy it.
  */
 void save_inmem_visibilitygrid(MemoryVisibilityGrid *visgrid,
                                ViewOptions viewOptions, Viewpoint vp)

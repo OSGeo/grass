@@ -12,10 +12,8 @@ List of classes:
  - wxnviz::ImageTexture
  - wxnviz::TextTexture
 
-(C) 2008-2011 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2008-2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Martin Landa <landa.martin gmail.com> (Google SoC 2008/2010)
 @author Pythonized by Glynn Clements
@@ -296,7 +294,7 @@ def print_error(msg, type):
     global log
     if log:
         msg = DecodeString(msg.data)
-        log.write(msg)
+        log.write(msg + "\n")
     else:
         print(msg)
 
@@ -422,7 +420,7 @@ class Nviz:
         """Change view settings
         :param x,y: position
         :param height:
-        :param persp: perpective
+        :param persp: perspective
         :param twist:
         """
         Nviz_set_viewpoint_height(height)
@@ -467,13 +465,13 @@ class Nviz:
     ) -> tuple[float, float, float] | tuple[Literal[-1], Literal[-1], Literal[-1]]:
         """Get focus"""
         Debug.msg(3, "Nviz::GetFocus()")
-        if Nviz_has_focus(self.data):
-            x = c_float()
-            y = c_float()
-            z = c_float()
-            Nviz_get_focus(self.data, byref(x), byref(y), byref(z))
-            return x.value, y.value, z.value
-        return (-1, -1, -1)
+        if not Nviz_has_focus(self.data):
+            return (-1, -1, -1)
+        x = c_float()
+        y = c_float()
+        z = c_float()
+        Nviz_get_focus(self.data, byref(x), byref(y), byref(z))
+        return (x.value, y.value, z.value)
 
     def SetFocus(self, x: float, y: float, z: float) -> None:
         """Set focus"""
@@ -940,7 +938,7 @@ class Nviz:
     ) -> Literal[1, -1, -2]:
         """Set surface mask
 
-        ..todo::
+        .. todo::
             invert
 
         :param id: surface id

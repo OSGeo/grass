@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 # generates docs/rest/full_index.txt
-# (C) 2003-2009 Markus Neteler and the GRASS Development Team
+# SPDX-FileCopyrightText: 2003-2009 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Authors:
 #   Markus Neteler
 #   Glynn Clements
@@ -9,18 +11,18 @@
 import os
 
 from build_rest import (
+    check_for_desc_override,
+    cmd2_tmpl,
+    desc1_tmpl,
+    full_index_header,
+    get_desc,
+    grass_version,
+    replace_file,
     rest_dir,
     rest_files,
-    write_rest_header,
-    grass_version,
-    full_index_header,
     sections,
-    cmd2_tmpl,
-    check_for_desc_override,
-    get_desc,
-    desc1_tmpl,
     write_rest_footer,
-    replace_file,
+    write_rest_header,
 )
 
 os.chdir(rest_dir)
@@ -35,7 +37,7 @@ classes.sort()
 # begin full index:
 filename = "full_index.txt"
 with open(filename + ".tmp", "wb") as f:
-    write_rest_header(f, "GRASS GIS %s Reference Manual: Full index" % grass_version)
+    write_rest_header(f, "GRASS %s Reference Manual: Full index" % grass_version)
 
     # generate main index of all modules:
     f.write(full_index_header)

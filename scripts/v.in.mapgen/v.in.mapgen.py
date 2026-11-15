@@ -50,6 +50,7 @@ import atexit
 import string
 import time
 import shutil
+from pathlib import Path
 from grass.script.utils import try_remove
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
@@ -70,7 +71,7 @@ def main():
 
     prog = "v.in.mapgen"
 
-    if not os.path.isfile(infile):
+    if not Path(infile).is_file():
         grass.fatal(_("Input file <%s> not found") % infile)
 
     name = output or ""

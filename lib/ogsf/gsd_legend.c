@@ -8,12 +8,8 @@
    Converted code from legend.c in SG3d
    routines to set viewport, close viewport, and make legend
 
-   (C) 1999-2008 by the GRASS Development Team
-
-   This program is free software under the
-   GNU General Public License (>=v2).
-   Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Bill Brown USACERL
    \author Doxygenized by Martin Landa <landa.martin gmail.com> (May 2008)
@@ -23,6 +19,11 @@
 
 #include <grass/config.h>
 
+#if defined(OPENGL_WINDOWS)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#undef WIN32_LEAN_AND_MEAN
+#endif
 #if defined(OPENGL_X11) || defined(OPENGL_WINDOWS)
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -404,34 +405,39 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
                         cstr = Rast_get_d_cat(&tdcell, &cats);
                     }
                     if (cat_labs && !cat_vals) {
-                        sprintf(buff, "%s", cstr);
+                        snprintf(buff, sizeof(buff), "%s", cstr);
                     }
                     else {
                         if (cat_labs && cat_vals) {
                             if (cstr)
-                                sprintf(buff, "%.*lf) %s", fprec, tdcell, cstr);
+                                snprintf(buff, sizeof(buff), "%.*lf) %s", fprec,
+                                         tdcell, cstr);
                             else
-                                sprintf(buff, "%.*lf", fprec, tdcell);
+                                snprintf(buff, sizeof(buff), "%.*lf", fprec,
+                                         tdcell);
                         }
                         else if (cat_vals)
-                            sprintf(buff, "%.*lf", fprec, tdcell);
+                            snprintf(buff, sizeof(buff), "%.*lf", fprec,
+                                     tdcell);
                     }
                 }
                 else {
                     tcell =
                         discrete ? Listnum ? Listcats[k] : min + k : labvals[k];
                     if (cat_labs && !cat_vals)
-                        sprintf(buff, "%s", Rast_get_c_cat(&tcell, &cats));
+                        snprintf(buff, sizeof(buff), "%s",
+                                 Rast_get_c_cat(&tcell, &cats));
                     else {
                         if (cat_labs && cat_vals) {
                             cstr = Rast_get_c_cat(&tcell, &cats);
                             if (cstr[0])
-                                sprintf(buff, "%*d) %s", iprec, tcell, cstr);
+                                snprintf(buff, sizeof(buff), "%*d) %s", iprec,
+                                         tcell, cstr);
                             else
-                                sprintf(buff, "%d", tcell);
+                                snprintf(buff, sizeof(buff), "%d", tcell);
                         }
                         else if (cat_vals)
-                            sprintf(buff, "%d", tcell);
+                            snprintf(buff, sizeof(buff), "%d", tcell);
                     }
                 }
                 labw = gsd_get_txtwidth(buff, size);
@@ -636,24 +642,28 @@ GLuint gsd_put_legend(const char *name, GLuint fontbase, int size, int *flags,
                         cstr = Rast_get_d_cat(&tdcell, &cats);
                 }
                 if (cat_labs && !cat_vals)
-                    sprintf(buff, "%s", cstr);
+                    snprintf(buff, sizeof(buff), "%s", cstr);
                 else {
                     if (cat_labs && cat_vals) {
                         if (cstr)
                             if (is_fp)
-                                sprintf(buff, "%.*lf) %s", fprec, tdcell, cstr);
+                                snprintf(buff, sizeof(buff), "%.*lf) %s", fprec,
+                                         tdcell, cstr);
                             else
-                                sprintf(buff, "%*d) %s", iprec, tcell, cstr);
+                                snprintf(buff, sizeof(buff), "%*d) %s", iprec,
+                                         tcell, cstr);
                         else if (is_fp)
-                            sprintf(buff, "%.*lf", fprec, tdcell);
+                            snprintf(buff, sizeof(buff), "%.*lf", fprec,
+                                     tdcell);
                         else
-                            sprintf(buff, "%d", tcell);
+                            snprintf(buff, sizeof(buff), "%d", tcell);
                     }
                     else if (cat_vals) {
                         if (is_fp)
-                            sprintf(buff, "%.*lf", fprec, tdcell);
+                            snprintf(buff, sizeof(buff), "%.*lf", fprec,
+                                     tdcell);
                         else
-                            sprintf(buff, "%d", tcell);
+                            snprintf(buff, sizeof(buff), "%d", tcell);
                     }
                 }
                 if (horiz) {

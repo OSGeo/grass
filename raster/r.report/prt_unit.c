@@ -7,7 +7,7 @@ int print_unit(int i, int ns, int nl)
     double area;
 
     if (unit[i].type == CELL_COUNTS) {
-        sprintf(num, "%*ld", unit[i].len, count_sum(&ns, nl));
+        snprintf(num, sizeof(num), "%*ld", unit[i].len, count_sum(&ns, nl));
     }
     else if (unit[i].type == PERCENT_COVER) {
         k = ns - 1;

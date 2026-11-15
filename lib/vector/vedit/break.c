@@ -3,10 +3,8 @@
 
    \brief Vedit library - split, break, connect lines
 
-   (C) 2007-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2007-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -225,7 +223,7 @@ int Vedit_connect_lines(struct Map_info *Map, struct ilist *List, double thresh)
 }
 
 int connect_lines(struct Map_info *Map, int first, int line_from, int line_to,
-                  double thresh, struct ilist *List UNUSED)
+                  double thresh, struct ilist *List G_UNUSED)
 {
     int line_new;
     int type_from, type_to;

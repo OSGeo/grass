@@ -16,13 +16,13 @@ char *print_time(time_t t)
     S = t - M * 60;
 
     if (H) {
-        sprintf(outstr, "%dh%02dm%02ds", H, M, S);
+        snprintf(outstr, sizeof(outstr), "%dh%02dm%02ds", H, M, S);
     }
     else if (M) {
-        sprintf(outstr, "%dm%02ds", M, S);
+        snprintf(outstr, sizeof(outstr), "%dm%02ds", M, S);
     }
     else {
-        sprintf(outstr, "%ds", S);
+        snprintf(outstr, sizeof(outstr), "%ds", S);
     }
 
     return outstr;

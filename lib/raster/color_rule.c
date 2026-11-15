@@ -3,10 +3,8 @@
 
    \brief Raster Library - Color rules.
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -290,10 +288,14 @@ static void add_color_rule(const void *pt1, int r1, int g1, int b1,
     }
 
     /* keep track of the overall min and max, excluding null */
-    if (Rast_is_d_null_value(&(rule->low.value)))
+    if (Rast_is_d_null_value(&(rule->low.value))) {
+        G_free(rule);
         return;
-    if (Rast_is_d_null_value(&(rule->high.value)))
+    }
+    if (Rast_is_d_null_value(&(rule->high.value))) {
+        G_free(rule);
         return;
+    }
     min = rule->low.value;
     max = rule->high.value;
     if (min <= max) {

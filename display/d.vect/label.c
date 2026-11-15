@@ -126,13 +126,13 @@ int process_line(int ltype, const struct line_pnts *Points,
                     Cats->cat[i]);
             if (Cats->field[i] == lattr->field) { /* all cats of given lfield */
                 if (!text) {
-                    sprintf(buf, "%d", Cats->cat[i]);
+                    snprintf(buf, sizeof(buf), "%d", Cats->cat[i]);
                     text = G_calloc(strlen(buf), sizeof(char));
                     text[0] = '\0';
                     strcpy(text, buf);
                 }
                 else {
-                    sprintf(buf, "/%d", Cats->cat[i]);
+                    snprintf(buf, sizeof(buf), "/%d", Cats->cat[i]);
                     len = strlen(text) + strlen(buf) + 1;
                     text = G_realloc(text, len * sizeof(char));
                     strcat(text, buf);

@@ -8,10 +8,8 @@ Classes:
  - treemodel::DictNode
  - treemodel::ModuleNode
 
-(C) 2013-2020 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2013-2020 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Petrasova <kratochanna gmail.com>
 """
@@ -36,13 +34,13 @@ class TreeModel:
     >>> n111 = tree.AppendNode(parent=n11, data={"label": "node111", "xxx": 4})
     >>> n12 = tree.AppendNode(parent=n1, data={"label": "node12", "xxx": 2})
     >>> n21 = tree.AppendNode(parent=n2, data={"label": "node21", "xxx": 1})
-    >>> [node.label for node in tree.SearchNodes(key='xxx', value=1)]
+    >>> [node.label for node in tree.SearchNodes(key="xxx", value=1)]
     ['node11', 'node21']
-    >>> [node.label for node in tree.SearchNodes(key='xxx', value=5)]
+    >>> [node.label for node in tree.SearchNodes(key="xxx", value=5)]
     []
     >>> tree.GetIndexOfNode(n111)
     [0, 0, 0]
-    >>> tree.GetNodeByIndex((0,1)).label
+    >>> tree.GetNodeByIndex((0, 1)).label
     'node12'
     >>> print(tree)
     node1

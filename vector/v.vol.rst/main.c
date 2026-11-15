@@ -16,12 +16,13 @@
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
- * COPYRIGHT:    (C) 1989, 1993, 2000 L. Mitas,  H. Mitasova,
- *               I. Kosinovsky, D. Gerdes, J. Hofierka
- *
- *               This program is free software under the GNU General Public
- *              License (>=v2). Read the file COPYING that comes with GRASS
- *              for details.
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 L. Mitas
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 H. Mitasova
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 I. Kosinovsky
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 D. Gerdes
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 J. Hofierka
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -415,7 +416,7 @@ int main(int argc, char *argv[])
 
     dmin = amin1(ew_res, ns_res) / 2;
     disk = n_rows * n_cols * sizeof(float);
-    sprintf(dminchar, "%lf", dmin);
+    snprintf(dminchar, sizeof(dminchar), "%lf", dmin);
 
     nsizr = n_rows;
     nsizc = n_cols;
@@ -576,7 +577,7 @@ int main(int argc, char *argv[])
                             f->driver);
         /* Create new table */
         db_zero_string(&sql);
-        sprintf(buf, "create table %s ( ", f->table);
+        snprintf(buf, sizeof(buf), "create table %s ( ", f->table);
         db_append_string(&sql, buf);
         db_append_string(&sql, GV_KEY_COLUMN);
         db_append_string(&sql, " integer");

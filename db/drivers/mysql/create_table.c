@@ -2,11 +2,8 @@
  * MODULE:    mysql
  * AUTHOR(S): Radim Blazek (radim.blazek@gmail.com)
  * PURPOSE:   MySQL database driver
- * COPYRIGHT: (C) 2001 by the GRASS Development Team
- *            This program is free software under the
- *            GNU General Public License (>=v2).
- *            Read the file COPYING that comes with GRASS
- *            for details.
+ * SPDX-FileCopyrightText: 2001 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  **********************************************************/
 #include <grass/gis.h>
 #include <grass/dbmi.h>
@@ -86,7 +83,8 @@ int db__driver_create_table(dbTable *table)
             break;
 
         case DB_SQL_TYPE_CHARACTER:
-            sprintf(buf, "VARCHAR(%d)", db_get_column_length(column));
+            snprintf(buf, sizeof(buf), "VARCHAR(%d)",
+                     db_get_column_length(column));
             db_append_string(&sql, buf);
             break;
         case DB_SQL_TYPE_TEXT:

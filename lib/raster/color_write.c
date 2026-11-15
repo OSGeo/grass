@@ -3,11 +3,8 @@
  *
  * \brief Raster Library - Write color table of raster map
  *
- * (C) 1999-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1999-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author USACERL and many others
  */
@@ -25,6 +22,8 @@ static void write_old_colors(FILE *, struct Colors *);
 static void forced_write_old_colors(FILE *, struct Colors *);
 static void format_min(char *, double);
 static void format_max(char *, double);
+
+#define FORMAT_STR_SZ 100
 
 /*!
  * \brief Write map layer color table
@@ -87,7 +86,7 @@ void Rast_write_colors(const char *name, const char *mapset,
      *    and then write original color table
      * else write secondary color table
      */
-    sprintf(element, "colr2/%s", mapset);
+    snprintf(element, sizeof(element), "colr2/%s", mapset);
     if (strcmp(mapset, G_mapset()) == 0) {
         G_remove(element, name); /* get rid of existing colr2, if any */
         strcpy(element, "colr");
@@ -125,7 +124,7 @@ static void write_new_colors(FILE *fd, struct Colors *colors)
     fprintf(fd, "%% %s %s\n", str1, str2);
 
     if (colors->shift) {
-        sprintf(str2, "%.17g", (double)colors->shift);
+        snprintf(str2, sizeof(str2), "%.17g", (double)colors->shift);
         G_trim_decimal(str2);
         fprintf(fd, "shift:%s\n", str2);
     }
@@ -160,7 +159,7 @@ static void write_rules(FILE *fd, struct _Color_Rule_ *crules, DCELL dmin,
                         DCELL dmax)
 {
     struct _Color_Rule_ *rule;
-    char str[100];
+    char str[FORMAT_STR_SZ];
 
     /* find the end of the rules list */
     rule = crules;
@@ -172,7 +171,7 @@ static void write_rules(FILE *fd, struct _Color_Rule_ *crules, DCELL dmin,
         if (rule->low.value == dmin)
             format_min(str, (double)rule->low.value);
         else {
-            sprintf(str, "%.17g", (double)rule->low.value);
+            snprintf(str, FORMAT_STR_SZ, "%.17g", (double)rule->low.value);
             G_trim_decimal(str);
         }
         fprintf(fd, "%s:%d", str, (int)rule->low.red);
@@ -183,7 +182,7 @@ static void write_rules(FILE *fd, struct _Color_Rule_ *crules, DCELL dmin,
             if (rule->high.value == dmax)
                 format_max(str, (double)rule->high.value);
             else {
-                sprintf(str, "%.17g", (double)rule->high.value);
+                snprintf(str, FORMAT_STR_SZ, "%.17g", (double)rule->high.value);
                 G_trim_decimal(str);
             }
             fprintf(fd, " %s:%d", str, (int)rule->high.red);
@@ -242,16 +241,16 @@ static void format_min(char *str, double dval)
 {
     double dtmp;
 
-    sprintf(str, "%.17g", dval);
+    snprintf(str, FORMAT_STR_SZ, "%.17g", dval);
     /* Note that G_trim_decimal() does not trim e.g. 1.0000000e-20 */
     G_trim_decimal(str);
     sscanf(str, "%lf", &dtmp);
     if (dtmp != dval) { /* if no zeros after decimal point were trimmed */
         /* lower dval by GRASS_EPSILON fraction */
         if (dval > 0)
-            sprintf(str, "%.17g", dval * (1 - GRASS_EPSILON));
+            snprintf(str, FORMAT_STR_SZ, "%.17g", dval * (1 - GRASS_EPSILON));
         else
-            sprintf(str, "%.17g", dval * (1 + GRASS_EPSILON));
+            snprintf(str, FORMAT_STR_SZ, "%.17g", dval * (1 + GRASS_EPSILON));
     }
 }
 
@@ -259,15 +258,15 @@ static void format_max(char *str, double dval)
 {
     double dtmp;
 
-    sprintf(str, "%.17g", dval);
+    snprintf(str, FORMAT_STR_SZ, "%.17g", dval);
     /* Note that G_trim_decimal() does not trim e.g. 1.0000000e-20 */
     G_trim_decimal(str);
     sscanf(str, "%lf", &dtmp);
     if (dtmp != dval) { /* if  no zeros after decimal point were trimmed */
         /* increase dval by by GRASS_EPSILON fraction */
         if (dval > 0)
-            sprintf(str, "%.17g", dval * (1 + GRASS_EPSILON));
+            snprintf(str, FORMAT_STR_SZ, "%.17g", dval * (1 + GRASS_EPSILON));
         else
-            sprintf(str, "%.17g", dval * (1 - GRASS_EPSILON));
+            snprintf(str, FORMAT_STR_SZ, "%.17g", dval * (1 - GRASS_EPSILON));
     }
 }

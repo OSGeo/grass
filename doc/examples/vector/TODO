@@ -97,7 +97,7 @@ Remove bounding box from support structures (?)
 The vector structures (P_line, P_area, P_isle) store bounding box in
 N,S,E,W,T,B (doubles). Especially in case of element type GV_POINT the
 bounding box occupies a lot of space (2-3 times more than the point
-itself). I am not sure if this is really good idea, it is necesssary to
+itself). I am not sure if this is really good idea, it is necessary to
 valutate also how often Vect_line_box() is called and the impact of
 the necessity to calculate always the box on the fly (when it is not
 stored in the structure) which can be time consuming for example for

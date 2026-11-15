@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2013 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2013 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -92,7 +90,7 @@ PGresult *build_stmt(const struct Plus_head *plus,
         BLine = plus->Line[line];
         if (i > 0)
             strcat(stmt_id, ",");
-        sprintf(buf_id, "%d", (int)BLine->offset);
+        snprintf(buf_id, sizeof(buf_id), "%d", (int)BLine->offset);
         strcat(stmt_id, buf_id);
     }
     /* Not really working - why?

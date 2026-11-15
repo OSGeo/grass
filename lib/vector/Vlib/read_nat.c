@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009, 2011-2012 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009, 2011-2012 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL, probably Dave Gerdes or Mike Higgins.
    \author Update to GRASS 5.7 by Radim Blazek and David D. Gray.
@@ -124,10 +122,11 @@ int V1_read_next_line_nat(struct Map_info *Map, struct line_pnts *line_p,
    Note: Topology must be built at level >= GV_BUILD_BASE
 
    \param Map pointer to Map_info struct
-   \param[out] Points container used to store line points within (pointer to
-   line_pnts struct) \param[out] Cats container used to store line categories
-   within (pointer to line_cats struct) \param line feature id to read (starts
-   at 1)
+   \param[out] line_p container used to store line points within (pointer to
+                      line_pnts struct)
+   \param[out] line_c container used to store line categories
+                      within (pointer to line_cats struct)
+   \param line feature id to read (starts at 1)
 
    \return feature type (GV_POINT, GV_LINE, ...)
    \return -2 nothing to read

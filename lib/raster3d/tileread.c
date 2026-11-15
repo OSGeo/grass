@@ -147,7 +147,6 @@ static int Rast3d_readTileCompressed(RASTER3D_Map *map, int tileIndex,
  *  \return 1 ... if successful,
  *          0 ... otherwise
  */
-
 int Rast3d_read_tile(RASTER3D_Map *map, int tileIndex, void *tile, int type)
 {
     int nofNum, rows, cols, depths, xRedundant, yRedundant, zRedundant;
@@ -206,7 +205,6 @@ int Rast3d_read_tile(RASTER3D_Map *map, int tileIndex, void *tile, int type)
  *  \param tile
  *  \return int
  */
-
 int Rast3d_read_tile_float(RASTER3D_Map *map, int tileIndex, void *tile)
 {
     if (!Rast3d_read_tile(map, tileIndex, tile, FCELL_TYPE)) {
@@ -229,7 +227,6 @@ int Rast3d_read_tile_float(RASTER3D_Map *map, int tileIndex, void *tile)
  *  \param tile
  *  \return int
  */
-
 int Rast3d_read_tile_double(RASTER3D_Map *map, int tileIndex, void *tile)
 {
     if (!Rast3d_read_tile(map, tileIndex, tile, DCELL_TYPE)) {
@@ -258,7 +255,6 @@ int Rast3d_read_tile_double(RASTER3D_Map *map, int tileIndex, void *tile)
  *          -1 ... if request is ignored,
  *          0 ... otherwise.
  */
-
 int Rast3d_lock_tile(RASTER3D_Map *map, int tileIndex)
 {
     if (!map->useCache)
@@ -285,7 +281,6 @@ int Rast3d_lock_tile(RASTER3D_Map *map, int tileIndex)
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_unlock_tile(RASTER3D_Map *map, int tileIndex)
 {
     if (!map->useCache)
@@ -311,7 +306,6 @@ int Rast3d_unlock_tile(RASTER3D_Map *map, int tileIndex)
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_unlock_all(RASTER3D_Map *map)
 {
     if (!map->useCache)
@@ -336,7 +330,6 @@ int Rast3d_unlock_all(RASTER3D_Map *map)
  *  \param map
  *  \return void
  */
-
 void Rast3d_autolock_on(RASTER3D_Map *map)
 {
     if (!map->useCache)
@@ -356,7 +349,6 @@ void Rast3d_autolock_on(RASTER3D_Map *map)
  *  \param map
  *  \return void
  */
-
 void Rast3d_autolock_off(RASTER3D_Map *map)
 {
     if (!map->useCache)
@@ -385,7 +377,6 @@ void Rast3d_autolock_off(RASTER3D_Map *map)
  *  \param minUnlocked
  *  \return void
  */
-
 void Rast3d_min_unlocked(RASTER3D_Map *map, int minUnlocked)
 {
     if (!map->useCache)
@@ -407,7 +398,6 @@ void Rast3d_min_unlocked(RASTER3D_Map *map, int minUnlocked)
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_begin_cycle(RASTER3D_Map *map)
 {
     if (!Rast3d_unlock_all(map)) {
@@ -430,7 +420,6 @@ int Rast3d_begin_cycle(RASTER3D_Map *map)
  *  \return 1 ... if successful,
  *          0 ... otherwise.
  */
-
 int Rast3d_end_cycle(RASTER3D_Map *map)
 {
     Rast3d_autolock_off(map);

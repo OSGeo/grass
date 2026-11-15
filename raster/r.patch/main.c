@@ -10,11 +10,8 @@
  *               Huidae Cho <grass4u gmail.com>,
  *               Aaron Saw Min Sern (OpenMP parallelization)
  * PURPOSE:
- * COPYRIGHT:    (C) 1999-2022 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2022 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -102,21 +99,10 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
-    sscanf(threads->answer, "%d", &nprocs);
+    nprocs = G_set_omp_num_threads(threads);
+    nprocs = Rast_disable_omp_on_mask(nprocs);
     if (nprocs < 1)
         G_fatal_error(_("<%d> is not valid number of nprocs."), nprocs);
-#if defined(_OPENMP)
-    omp_set_num_threads(nprocs);
-#else
-    if (nprocs != 1)
-        G_warning(_("GRASS is compiled without OpenMP support. Ignoring "
-                    "threads setting."));
-    nprocs = 1;
-#endif
-    if (nprocs > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        nprocs = 1;
-    }
 
     use_zero = (zeroflag->answer);
     no_support = (nosupportflag->answer);

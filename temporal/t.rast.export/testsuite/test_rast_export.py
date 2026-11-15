@@ -1,10 +1,8 @@
 """
 Test t.rast.export
 
-(C) 2014 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author: lucadelu
 """
@@ -16,11 +14,17 @@ from grass.gunittest.case import TestCase
 
 
 class TestRasterExport(TestCase):
-    tmp = gs.tempdir()
-    float_ = os.path.join(tmp, "geotiffloat")
-    int_ = os.path.join(tmp, "geotifint")
-    grid = os.path.join(tmp, "grid")
-    pack = os.path.join(tmp, "pack")
+    def setUp(self):
+        tmp = gs.tempdir()
+        self.addCleanup(gs.try_rmdir, tmp)
+        self.float_ = os.path.join(tmp, "geotiffloat")
+        self.addCleanup(gs.try_remove, self.float_)
+        self.int_ = os.path.join(tmp, "geotifint")
+        self.addCleanup(gs.try_remove, self.int_)
+        self.grid = os.path.join(tmp, "grid")
+        self.addCleanup(gs.try_remove, self.grid)
+        self.pack = os.path.join(tmp, "pack")
+        self.addCleanup(gs.try_remove, self.pack)
 
     @classmethod
     def setUpClass(cls):
@@ -33,7 +37,6 @@ class TestRasterExport(TestCase):
             cls.runModule(
                 "r.mapcalc",
                 expression="a_{id_} = rand(0.1,1.0)".format(id_=i),
-                flags="s",
                 overwrite=True,
             )
             maps.append("a_{id_}".format(id_=i))

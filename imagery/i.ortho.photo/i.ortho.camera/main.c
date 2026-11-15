@@ -9,11 +9,8 @@
  *               Hamish Bowman
  *
  * PURPOSE:      Creates or modifies entries in a camera reference file
- * COPYRIGHT:    (C) 1999-2008 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -191,7 +188,8 @@ int main(int argc, char *argv[])
             sscanf(fid_opt->answers[i + 1], "%lf", &Yf);
             cam_info.fiducials[fid_no].Yf = Yf;
 
-            sprintf(cam_info.fiducials[fid_no].fid_id, "%d", fid_no);
+            snprintf(cam_info.fiducials[fid_no].fid_id,
+                     sizeof(cam_info.fiducials[fid_no].fid_id), "%d", fid_no);
         }
         cam_info.num_fid = fid_no;
     }

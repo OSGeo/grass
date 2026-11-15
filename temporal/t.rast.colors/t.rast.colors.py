@@ -6,17 +6,8 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:  Creates/modifies the color table associated with each raster map of the space time raster dataset.
-# COPYRIGHT:	(C) 2011-2017 by the GRASS Development Team
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
+# SPDX-FileCopyrightText: 2011-2017 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -102,6 +93,8 @@
 # % guisection: Define
 # %end
 
+from pathlib import Path
+
 import grass.script as gs
 from grass.exceptions import CalledModuleError
 
@@ -146,16 +139,6 @@ def main():
     rows = sp.get_registered_maps("id", None, None, None)
 
     if rows:
-        # Create the r.colors input file
-        filename = gs.tempfile(True)
-        file = open(filename, "w")
-
-        for row in rows:
-            string = "%s\n" % (row["id"])
-            file.write(string)
-
-        file.close()
-
         flags_ = ""
         if remove:
             flags_ += "r"
@@ -171,6 +154,10 @@ def main():
             flags_ += "a"
         if equi:
             flags_ += "e"
+
+        # Create the r.colors input file
+        filename = gs.tempfile(True)
+        Path(filename).write_text("\n".join(str(row["id"]) for row in rows))
 
         try:
             gs.run_command(

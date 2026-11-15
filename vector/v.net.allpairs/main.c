@@ -7,12 +7,8 @@
  *
  * PURPOSE:    Shortest paths between all nodes
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ * SPDX-FileCopyrightText: 2002-2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************/
 
@@ -166,10 +162,10 @@ int main(int argc, char *argv[])
                       Fi->database, Fi->driver);
     db_set_error_handler_driver(driver);
 
-    sprintf(buf,
-            "create table %s ( cat integer, from_cat integer, to_cat integer, "
-            "cost double precision)",
-            Fi->table);
+    snprintf(buf, sizeof(buf),
+             "create table %s ( cat integer, from_cat integer, to_cat integer, "
+             "cost double precision)",
+             Fi->table);
 
     db_set_string(&sql, buf);
     G_debug(2, "%s", db_get_string(&sql));
@@ -261,8 +257,8 @@ int main(int argc, char *argv[])
                 continue;
             }
 
-            sprintf(buf, "insert into %s values (%d, %d, %d, %f)", Fi->table,
-                    cat, spnode[i].cat, spnode[j].cat, cost);
+            snprintf(buf, sizeof(buf), "insert into %s values (%d, %d, %d, %f)",
+                     Fi->table, cat, spnode[i].cat, spnode[j].cat, cost);
             db_set_string(&sql, buf);
             G_debug(3, "%s", db_get_string(&sql));
 

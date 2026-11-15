@@ -3,11 +3,8 @@
 
    \brief Generates flowlines as vector lines
 
-   (C) 2014 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2).  Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 2014 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Anna Petrasova
  */
@@ -44,14 +41,15 @@ static void write_segment_db(struct field_info *finfo, dbDriver *driver,
 {
     char buf[200];
 
-    sprintf(buf, "insert into %s values (%d, %e", finfo->table, cat, velocity);
+    snprintf(buf, sizeof(buf), "insert into %s values (%d, %e", finfo->table,
+             cat, velocity);
     db_set_string(sql, buf);
     if (write_scalar) {
-        sprintf(buf, ", %e", scalar_value);
+        snprintf(buf, sizeof(buf), ", %e", scalar_value);
         db_append_string(sql, buf);
     }
     if (use_sampled_map) {
-        sprintf(buf, ", %e", sampled_map_value);
+        snprintf(buf, sizeof(buf), ", %e", sampled_map_value);
         db_append_string(sql, buf);
     }
     db_append_string(sql, ")");

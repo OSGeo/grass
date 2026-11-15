@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2008-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2008-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Rewritten by Rosen Matev (Google Summer of Code 2008)
  */
@@ -61,7 +59,7 @@ void initialize_mpf_vars()
 }
 
 /*
-   Caclulates:
+   Calculates:
    |a11-b11  a12-b12|
    |a21-b21  a22-b22|
  */

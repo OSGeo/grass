@@ -1,22 +1,22 @@
 """
 Imagery related functions to be used in Python scripts.
 
-Usage:
-
-::
+:Usage:
+  .. code-block:: python
 
     import grass.script as gs
 
     gs.imagery.group_to_dict(imagery_group)
     ...
 
-(C) 2024 by Stefan Blumentrath and the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2024 Stefan Blumentrath
+SPDX-FileCopyrightText: GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 .. sectionauthor:: Stefan Blumentrath
 """
+
+import json
 
 from .core import read_command, warning, fatal
 from .raster import raster_info
@@ -45,21 +45,22 @@ def group_to_dict(
     non-existing (or empty sub-group) is requested a warning is printed
     and an empty dictionary is returned (following the behavior of i.group).
 
-    Example::
+    :Example:
+      .. code-block:: pycon
 
-    >>> run_command("g.copy", raster="lsat7_2000_10,lsat7_2000_10")
-    >>> run_command("r.support", raster="lsat7_2000_10", semantic_label="L8_1")
-    >>> run_command("g.copy", raster="lsat7_2000_20,lsat7_2000_20")
-    >>> run_command("r.support", raster="lsat7_2000_20", semantic_label="L8_2")
-    >>> run_command("g.copy", raster="lsat7_2000_30,lsat7_2000_30")
-    >>> run_command("r.support", raster="lsat7_2000_30", semantic_label="L8_3")
-    >>> run_command("i.group", group="L8_group",
-    >>>             input="lsat7_2000_10,lsat7_2000_20,lsat7_2000_30")
-    >>> group_to_dict("L8_group")  # doctest: +ELLIPSIS
-    {"L8_1": "lsat7_2000_10", ... "L8_3": "lsat7_2000_30"}
-    >>> run_command("g.remove", flags="f", type="group", name="L8_group")
-    >>> run_command("g.remove", flags="f", type="raster",
-    >>>             name="lsat7_2000_10,lsat7_2000_20,lsat7_2000_30")
+        >>> run_command("g.copy", raster="lsat7_2000_10,lsat7_2000_10")
+        >>> run_command("r.support", raster="lsat7_2000_10", semantic_label="L8_1")
+        >>> run_command("g.copy", raster="lsat7_2000_20,lsat7_2000_20")
+        >>> run_command("r.support", raster="lsat7_2000_20", semantic_label="L8_2")
+        >>> run_command("g.copy", raster="lsat7_2000_30,lsat7_2000_30")
+        >>> run_command("r.support", raster="lsat7_2000_30", semantic_label="L8_3")
+        >>> run_command("i.group", group="L8_group",
+        >>>             input="lsat7_2000_10,lsat7_2000_20,lsat7_2000_30")
+        >>> group_to_dict("L8_group")  # doctest: +ELLIPSIS
+        {"L8_1": "lsat7_2000_10", ... "L8_3": "lsat7_2000_30"}
+        >>> run_command("g.remove", flags="f", type="group", name="L8_group")
+        >>> run_command("g.remove", flags="f", type="raster",
+        >>>             name="lsat7_2000_10,lsat7_2000_20,lsat7_2000_30")
 
     :param str imagery_group_name: Name of the imagery group to process (or None)
     :param str subgroup: Name of the imagery sub-group to process (or None)
@@ -79,17 +80,15 @@ def group_to_dict(
     :rtype: dict
     """
     group_dict = {}
-    maps_in_group = (
+    maps_in_group = json.loads(
         read_command(
             "i.group",
             group=imagery_group_name,
             subgroup=subgroup,
-            flags="g",
+            format="json",
             quiet=True,
             env=env,
         )
-        .strip()
-        .split()
     )
 
     if dict_keys not in {"indices", "map_names", "semantic_labels"}:
@@ -104,7 +103,8 @@ def group_to_dict(
         warning(
             _("Empty result returned for subgroup <{sg}> in group <{g}>").format(
                 sg=subgroup, g=imagery_group_name
-            )
+            ),
+            env=env,
         )
 
     for idx, raster_map in enumerate(maps_in_group):
@@ -130,7 +130,8 @@ def group_to_dict(
                     fatal(
                         _(
                             "Semantic label missing for raster map {m} in group <{g}>."
-                        ).format(m=raster_map, g=imagery_group_name)
+                        ).format(m=raster_map, g=imagery_group_name),
+                        env=env,
                     )
 
         if dict_values == "indices":
@@ -146,7 +147,8 @@ def group_to_dict(
                 _(
                     "Key {k} from raster map {m} already present in group dictionary."
                     "Overwriting existing entry..."
-                ).format(k=key, r=raster_map)
+                ).format(k=key, m=raster_map),
+                env=env,
             )
         group_dict[key] = val
     return group_dict

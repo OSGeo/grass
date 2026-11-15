@@ -6,6 +6,7 @@ Created on Mon Nov 26 11:57:54 2012
 
 import wx
 import os
+from pathlib import Path
 
 from core import globalvar, gcmd
 from grass.script.utils import try_remove
@@ -56,11 +57,7 @@ class ViewFrame(wx.Frame):
         self.btn_close.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btn_ok.Bind(wx.EVT_BUTTON, self.OnOk)
         self._layout()
-        try:
-            # Python >= 3.11
-            self.enc = locale.getencoding()
-        except AttributeError:
-            self.enc = locale.getdefaultlocale()[1]
+        self.enc = locale.getencoding()
 
     def _layout(self):
         """Set the layout"""
@@ -214,9 +211,9 @@ class RLiSetupFrame(wx.Frame):
         # return all the configuration files in self.rlipath, check if there are
         # link or directory and doesn't add them
         listfiles = [
-            rli_conf
-            for rli_conf in os.listdir(self.rlipath)
-            if os.path.isfile(os.path.join(self.rlipath, rli_conf))
+            rli_conf.name
+            for rli_conf in Path(self.rlipath).iterdir()
+            if rli_conf.is_file()
         ]
         return sorted(listfiles)
 
@@ -279,7 +276,7 @@ class RLiSetupFrame(wx.Frame):
         if dlg.ShowModal() == wx.ID_OK:
             res = dlg.GetValue()
             newname = "%s%s%s" % (self.rlipath, os.sep, res)
-            os.rename(os.path.join(self.rlipath, confile), newname)
+            Path(self.rlipath, confile).rename(newname)
             self.listfiles = self.ListFiles()
             self.listfileBox.Clear()
             self.listfileBox.Set(self.listfiles)

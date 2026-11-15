@@ -38,8 +38,8 @@ int do_vectors(int after_masking)
             Vect_open_old(&Map, vector.layer[n].name, vector.layer[n].mapset)) {
             char name[100];
 
-            sprintf(name, "%s in %s", vector.layer[n].name,
-                    vector.layer[n].mapset);
+            snprintf(name, sizeof(name), "%s in %s", vector.layer[n].name,
+                     vector.layer[n].mapset);
             error("vector map", name, "can't open");
             continue;
         }
@@ -78,7 +78,7 @@ int do_vectors(int after_masking)
                     ptr++;
                 }
                 if (lz) {
-                    sprintf(buf, "%d ", lz);
+                    snprintf(buf, sizeof(buf), "%d ", lz);
                     strcat(dashes, buf);
                 }
                 while (*ptr) {
@@ -88,7 +88,7 @@ int do_vectors(int after_masking)
                         ptr++;
                     }
                     if (dig) {
-                        sprintf(buf, "%d ", dig);
+                        snprintf(buf, sizeof(buf), "%d ", dig);
                         strcat(dashes, buf);
                     }
                     z = 0;
@@ -97,12 +97,12 @@ int do_vectors(int after_masking)
                         ptr++;
                     }
                     if (z) {
-                        sprintf(buf, "%d ", z);
+                        snprintf(buf, sizeof(buf), "%d ", z);
                         strcat(dashes, buf);
                     }
                 }
             }
-            sprintf(buf, "] %d", lz);
+            snprintf(buf, sizeof(buf), "] %d", lz);
             strcat(dashes, buf);
             fprintf(PS.fp, "%s setdash\n", dashes);
             vector.layer[n].setdash = G_store(dashes);
@@ -140,8 +140,8 @@ int do_vpoints(int after_masking)
             Vect_open_old(&Map, vector.layer[n].name, vector.layer[n].mapset)) {
             char name[100];
 
-            sprintf(name, "%s in %s", vector.layer[n].name,
-                    vector.layer[n].mapset);
+            snprintf(name, sizeof(name), "%s in %s", vector.layer[n].name,
+                     vector.layer[n].mapset);
             error("vector map", name, "can't open");
             continue;
         }

@@ -3,14 +3,16 @@
 
    \brief GRASS cairo display driver - text subroutines
 
-   (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2007-2008 Lars Ahlzen
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Lars Ahlzen <lars ahlzen.com> (original contributor)
    \author Glynn Clements
  */
+#if defined(_MSC_VER)
+#include <math.h>
+#endif
 
 #include <grass/glocale.h>
 #include "cairodriver.h"
@@ -235,10 +237,10 @@ static void font_list_fc(char ***list, int *count, int verbose)
         FcPatternGetString(pat, FC_STYLE, 0, &style);
 
         if (verbose)
-            sprintf(buf, "%s:%s|%s:%s|%d|%s|%d|%s|", family, style, family,
-                    style, GFONT_DRIVER, "", 0, "utf-8");
+            snprintf(buf, sizeof(buf), "%s:%s|%s:%s|%d|%s|%d|%s|", family,
+                     style, family, style, GFONT_DRIVER, "", 0, "utf-8");
         else
-            sprintf(buf, "%s:%s", family, style);
+            snprintf(buf, sizeof(buf), "%s:%s", family, style);
 
         fonts[num_fonts++] = G_store(buf);
     }
@@ -301,8 +303,8 @@ static void font_list_toy(char ***list, int *count, int verbose)
         char buf[256];
 
         if (verbose)
-            sprintf(buf, "%s|%s|%d|%s|%d|%s|", toy_fonts[i], toy_fonts[i],
-                    GFONT_DRIVER, "", 0, "utf-8");
+            snprintf(buf, sizeof(buf), "%s|%s|%d|%s|%d|%s|", toy_fonts[i],
+                     toy_fonts[i], GFONT_DRIVER, "", 0, "utf-8");
         else
             strcpy(buf, toy_fonts[i]);
         fonts[num_fonts++] = G_store(buf);

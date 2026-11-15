@@ -6,12 +6,9 @@
  *
  * PURPOSE:      Export LiDAR LAS points
  *
- * COPYRIGHT:    (C) 2015 by Vaclav Petras and the GRASS Development Team
- *
- *               This program is free software under the
- *               GNU General Public License (>=v2).
- *               Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2015 Vaclav Petras
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***********************************************************************/
 
@@ -210,7 +207,8 @@ static void get_color_column_value(dbCatValArray *cvarr, int cat, int *red,
 
     /* read RGB colors from db for current area # */
     if (cvarr && db_CatValArray_get_value(cvarr, cat, &value) == DB_OK) {
-        sprintf(colorstring, "%s", db_get_string(value->val.s));
+        snprintf(colorstring, sizeof(colorstring), "%s",
+                 db_get_string(value->val.s));
         if (*colorstring != '\0') {
             G_debug(5, "element: colorstring: %s", colorstring);
             if (G_str_to_color(colorstring, red, green, blue) == 1) {

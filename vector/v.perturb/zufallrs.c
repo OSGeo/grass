@@ -7,7 +7,6 @@
  * in seed block. IMPORTANT: svblk must be dimensioned at least 608 in
  * driver. The entire contents of klotz0 must be restored.
  */
-
 int zufallrs(double *svblk)
 {
     int i;

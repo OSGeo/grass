@@ -6,10 +6,8 @@
 Fast and exit-safe interface to GRASS C-library message functions
 
 
-(C) 2013-2024 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2013-2024 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Soeren Gebbert, Edouard Choinière
 """
@@ -17,15 +15,16 @@ for details.
 from __future__ import annotations
 
 import sys
-from multiprocessing import Lock, Pipe, Process
 from typing import TYPE_CHECKING, Literal, NoReturn
 
 import grass.lib.gis as libgis
 from grass.exceptions import FatalError
+from grass.script.utils import _get_multiprocessing_context
 
 if TYPE_CHECKING:
     from multiprocessing.connection import Connection
     from multiprocessing.context import _LockLike
+    from multiprocessing.process import BaseProcess
 
     _MessagesLiteral = Literal[
         "INFO", "IMPORTANT", "VERBOSE", "WARNING", "ERROR", "FATAL"
@@ -121,76 +120,83 @@ class Messenger:
     C-library message functions like: G_message(), G_warning(),
     G_important_message(), G_verbose_message(), G_percent() and G_debug().
 
-    Note:
+    .. note::
 
-    The C-library message functions a called via ctypes in a subprocess
-    using a pipe (multiprocessing.Pipe) to transfer the text messages.
-    Hence, the process that uses the Messenger interface will not be
-    exited, if a G_fatal_error() was invoked in the subprocess.
-    In this case the Messenger object will simply start a new subprocess
-    and restarts the pipeline.
+        The C-library message functions a called via ctypes in a subprocess
+        using a pipe (multiprocessing.Pipe) to transfer the text messages.
+        Hence, the process that uses the Messenger interface will not be
+        exited, if a G_fatal_error() was invoked in the subprocess.
+        In this case the Messenger object will simply start a new subprocess
+        and restarts the pipeline.
 
 
-    Usage:
+    :Usage:
+      .. code-block:: pycon
 
-    >>> msgr = Messenger()
-    >>> msgr.debug(0, "debug 0")
-    >>> msgr.verbose("verbose message")
-    >>> msgr.message("message")
-    >>> msgr.important("important message")
-    >>> msgr.percent(1, 1, 1)
-    >>> msgr.warning("Ohh")
-    >>> msgr.error("Ohh no")
+        >>> msgr = Messenger()
+        >>> msgr.debug(0, "debug 0")
+        >>> msgr.verbose("verbose message")
+        >>> msgr.message("message")
+        >>> msgr.important("important message")
+        >>> msgr.percent(1, 1, 1)
+        >>> msgr.warning("Ohh")
+        >>> msgr.error("Ohh no")
 
-    >>> msgr = Messenger()
-    >>> msgr.fatal("Ohh no no no!")
-    Traceback (most recent call last):
-      File "__init__.py", line 239, in fatal
-        sys.exit(1)
-    SystemExit: 1
+        >>> msgr = Messenger()
+        >>> msgr.fatal("Ohh no no no!")
+        Traceback (most recent call last):
+          File "__init__.py", line 239, in fatal
+            sys.exit(1)
+        SystemExit: 1
 
-    >>> msgr = Messenger(raise_on_error=True)
-    >>> msgr.fatal("Ohh no no no!")
-    Traceback (most recent call last):
-      File "__init__.py", line 241, in fatal
-        raise FatalError(message)
-    grass.exceptions.FatalError: Ohh no no no!
+        >>> msgr = Messenger(raise_on_error=True)
+        >>> msgr.fatal("Ohh no no no!")
+        Traceback (most recent call last):
+          File "__init__.py", line 241, in fatal
+            raise FatalError(message)
+        grass.exceptions.FatalError: Ohh no no no!
 
-    >>> msgr = Messenger(raise_on_error=True)
-    >>> msgr.set_raise_on_error(False)
-    >>> msgr.fatal("Ohh no no no!")
-    Traceback (most recent call last):
-      File "__init__.py", line 239, in fatal
-        sys.exit(1)
-    SystemExit: 1
+        >>> msgr = Messenger(raise_on_error=True)
+        >>> msgr.set_raise_on_error(False)
+        >>> msgr.fatal("Ohh no no no!")
+        Traceback (most recent call last):
+          File "__init__.py", line 239, in fatal
+            sys.exit(1)
+        SystemExit: 1
 
-    >>> msgr = Messenger(raise_on_error=False)
-    >>> msgr.set_raise_on_error(True)
-    >>> msgr.fatal("Ohh no no no!")
-    Traceback (most recent call last):
-      File "__init__.py", line 241, in fatal
-        raise FatalError(message)
-    grass.exceptions.FatalError: Ohh no no no!
+        >>> msgr = Messenger(raise_on_error=False)
+        >>> msgr.set_raise_on_error(True)
+        >>> msgr.fatal("Ohh no no no!")
+        Traceback (most recent call last):
+          File "__init__.py", line 241, in fatal
+            raise FatalError(message)
+        grass.exceptions.FatalError: Ohh no no no!
 
     """
 
     client_conn: Connection
     server_conn: Connection
-    server: Process
+    server: BaseProcess
 
     def __init__(self, raise_on_error: bool = False) -> None:
         self.raise_on_error = raise_on_error
-        self.client_conn, self.server_conn = Pipe()
-        self.lock = Lock()
-        self.server = Process(target=message_server, args=(self.lock, self.server_conn))
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe()
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
+            target=message_server, args=(self.lock, self.server_conn)
+        )
         self.server.daemon = True
         self.server.start()
 
     def start_server(self) -> None:
         """Start the messenger server and open the pipe"""
-        self.client_conn, self.server_conn = Pipe()
-        self.lock = Lock()
-        self.server = Process(target=message_server, args=(self.lock, self.server_conn))
+        ctx = _get_multiprocessing_context()
+        self.client_conn, self.server_conn = ctx.Pipe()
+        self.lock = ctx.Lock()
+        self.server = ctx.Process(
+            target=message_server, args=(self.lock, self.server_conn)
+        )
         self.server.daemon = True
         self.server.start()
 

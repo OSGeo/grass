@@ -9,10 +9,8 @@ Can be used either from Layer Manager or as d.mon backend.
 Classes:
  - mapdisp::MapPanel
 
-(C) 2006-2016 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2006-2016 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Michael Barton
 @author Jachym Cepicky
@@ -64,6 +62,7 @@ from mapwin.decorations import (
 
 import grass.script as gs
 from grass.pydispatch.signal import Signal
+from grass.exceptions import ScriptError
 
 if TYPE_CHECKING:
     import lmgr.frame
@@ -248,7 +247,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
         self.printopt = PrintOptions(self, self.MapWindow)
 
         #
-        # Re-use dialogs
+        # Reuse dialogs
         #
         self.dialogs = {}
         self.dialogs["attributes"] = None
@@ -538,7 +537,7 @@ class MapPanel(SingleMapPanel, MainPageBase):
 
     def Disable3dMode(self):
         """Disables 3D mode (NVIZ) in user interface."""
-        # TODO: this is broken since item is removed but switch is drived by
+        # TODO: this is broken since item is removed but switch is driven by
         # index
         if "3D" in self.toolbars["map"].combo.GetString(1):
             self.toolbars["map"].combo.Delete(1)
@@ -783,6 +782,10 @@ class MapPanel(SingleMapPanel, MainPageBase):
         if not ltype:
             return
         width, height = self.MapWindow.GetClientSize()
+
+        name = ""
+        extType = "png"
+
         for param in command[1:]:
             try:
                 p, val = param.split("=")
@@ -1094,16 +1097,14 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 map=raster, coord=(east, north), localized=True, env=env
             )
         if vect:
-            encoding = UserSettings.Get(group="atm", key="encoding", subkey="value")
             try:
                 vectQuery = gs.vector_what(
                     map=vect,
                     coord=(east, north),
                     distance=qdist,
-                    encoding=encoding,
                     multiple=True,
                 )
-            except gs.ScriptError:
+            except ScriptError:
                 GError(
                     parent=self,
                     message=_(
@@ -1216,23 +1217,23 @@ class MapPanel(SingleMapPanel, MainPageBase):
                 cmd[-1].append("layer=%d" % layer)
                 cmd[-1].append("cats=%s" % ListOfCatsToRange(lcats))
 
-        if addLayer:
-            args = {}
-            if useId:
-                args["ltype"] = "vector"
-            else:
-                args["ltype"] = "command"
+        if not addLayer:
+            return cmd
 
-            return self.Map.AddLayer(
-                name=globalvar.QUERYLAYER,
-                command=cmd,
-                active=True,
-                hidden=True,
-                opacity=1.0,
-                render=True,
-                **args,
-            )
-        return cmd
+        args = {}
+        if useId:
+            args["ltype"] = "vector"
+        else:
+            args["ltype"] = "command"
+        return self.Map.AddLayer(
+            name=globalvar.QUERYLAYER,
+            command=cmd,
+            active=True,
+            hidden=True,
+            opacity=1.0,
+            render=True,
+            **args,
+        )
 
     def OnMeasureDistance(self, event):
         self._onMeasure(MeasureDistanceController)
@@ -1711,9 +1712,7 @@ class MapDisplay(FrameMixin, MapPanel):
         )
         # set system icon
         parent.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_map.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
         # use default frame window layout
         client_disp = wx.ClientDisplayRect()

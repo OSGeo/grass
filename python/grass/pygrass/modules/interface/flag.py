@@ -1,5 +1,13 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from grass.pygrass.modules.interface.docstring import docstring_property
 from grass.pygrass.modules.interface import read
+
+
+if TYPE_CHECKING:
+    from xml.etree.ElementTree import Element
 
 
 class Flag:
@@ -7,22 +15,25 @@ class Flag:
 
     It is possible to set flags of command using this object.
 
-    >>> flag = Flag(diz=dict(name='a', description='Flag description',
-    ...                      default=True))
+    >>> flag = Flag(diz=dict(name="a", description="Flag description", default=True))
     >>> flag.name
     'a'
     >>> flag.special
     False
     >>> flag.description
     'Flag description'
-    >>> flag = Flag(diz=dict(name='overwrite'))
+    >>> flag = Flag(diz=dict(name="overwrite"))
     >>> flag.name
     'overwrite'
     >>> flag.special
     True
     """
 
-    def __init__(self, xflag=None, diz=None):
+    def __init__(
+        self,
+        xflag: Element[str] | None = None,
+        diz: dict[str, str | bool | None] | None = None,
+    ):
         self.value = False
         diz = read.element2dict(xflag) if xflag is not None else diz
         self.name = diz["name"]
@@ -35,14 +46,15 @@ class Flag:
     def get_bash(self):
         """Return the BASH representation of a flag.
 
-        >>> flag = Flag(diz=dict(name='a', description='Flag description',
-        ...                      default=True))
+        >>> flag = Flag(
+        ...     diz=dict(name="a", description="Flag description", default=True)
+        ... )
         >>> flag.get_bash()
         ''
         >>> flag.value = True
         >>> flag.get_bash()
         '-a'
-        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> flag = Flag(diz=dict(name="overwrite"))
         >>> flag.get_bash()
         ''
         >>> flag.value = True
@@ -58,14 +70,15 @@ class Flag:
     def get_python(self):
         """Return the python representation of a flag.
 
-        >>> flag = Flag(diz=dict(name='a', description='Flag description',
-        ...                      default=True))
+        >>> flag = Flag(
+        ...     diz=dict(name="a", description="Flag description", default=True)
+        ... )
         >>> flag.get_python()
         ''
         >>> flag.value = True
         >>> flag.get_python()
         'a'
-        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> flag = Flag(diz=dict(name="overwrite"))
         >>> flag.get_python()
         ''
         >>> flag.value = True
@@ -95,7 +108,7 @@ class Flag:
     def __doc__(self):
         """Return a documentation string, something like:
 
-        {name}: {default}, suppress required {supress}
+        {name}: {default}, suppress required {suppress}
             {description}
 
         >>>  flag = Flag(diz=dict(name='a', description='Flag description',
@@ -104,7 +117,7 @@ class Flag:
         a: True
             Flag description
 
-        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> flag = Flag(diz=dict(name="overwrite"))
         >>> print(flag.__doc__)
         overwrite: None
             None
@@ -114,5 +127,5 @@ class Flag:
             name=self.name,
             default=repr(self.default),
             description=self.description,
-            supress=("suppress required" if self.suppress_required else ""),
+            suppress=("suppress required" if self.suppress_required else ""),
         )

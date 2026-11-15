@@ -1,9 +1,7 @@
 """Test t.shift
 
-(C) 2015 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2015 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -526,9 +524,11 @@ class TestShiftAbsoluteError(TestCase):
         cls.del_temp_region()
         cls.runModule("t.remove", flags="df", type="strds", inputs="A")
 
-    def test_1(self):
-        pass
-        # self.assterModuleFail()
+    def test_invalid_granularity(self):
+        """shift() returns False for invalid granularity (regression for #7228)."""
+        A = tgis.open_old_stds("A", type="strds")
+        A.select()
+        self.assertIs(A.shift(gran="invalid"), False)
 
 
 if __name__ == "__main__":

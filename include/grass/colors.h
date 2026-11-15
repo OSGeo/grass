@@ -7,23 +7,25 @@
    display. If support for named colors is needed it should go in
    G_str_to_color. */
 
-#define BLACK   1
-#define RED     2
-#define GREEN   3
-#define BLUE    4
-#define YELLOW  5
-#define CYAN    6
-#define MAGENTA 7
-#define WHITE   8
-#define GRAY    9
-#define ORANGE  10
-#define AQUA    11
-#define INDIGO  12
-#define VIOLET  13
-#define BROWN   14
+#define BLACK               1
+#define RED                 2
+#define GREEN               3
+#define BLUE                4
+#define YELLOW              5
+#define CYAN                6
+#define MAGENTA             7
+#define WHITE               8
+#define GRAY                9
+#define ORANGE              10
+#define AQUA                11
+#define INDIGO              12
+#define VIOLET              13
+#define BROWN               14
 
-#define GREY    GRAY
-#define PURPLE  VIOLET
+#define GREY                GRAY
+#define PURPLE              VIOLET
+
+#define COLOR_STRING_LENGTH 30
 
 /* These can be in any order. They must match the lookup strings in the table
  * below. */
@@ -42,6 +44,15 @@ struct color_name {
     const char *name;
     int number;
 };
+
+/*!
+   \typedef ColorFormat
+   \brief  Color format identifiers (enum)
+
+   Identifiers of all recognized color formats.
+
+ */
+typedef enum { RGB, HEX, HSV, TRIPLET } ColorFormat;
 
 #include <grass/defs/colors.h>
 

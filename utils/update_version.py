@@ -2,12 +2,11 @@
 
 """Update VERSION file to release and development versions"""
 
-import sys
-import datetime
-from types import SimpleNamespace
-from pathlib import Path
-
 import argparse
+import datetime
+import sys
+from pathlib import Path
+from types import SimpleNamespace
 
 
 def read_version_file():
@@ -63,7 +62,7 @@ def suggest_commit(action, version, tag):
     print("use:")
     print(f"  commit_message: 'version: {action} {version}'")
     if tag:
-        print(f"  tag_message: 'GRASS GIS {version}'")
+        print(f"  tag_message: 'GRASS {version}'")
 
 
 def release_candidate(args):
@@ -86,7 +85,7 @@ def release_candidate(args):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS", tag=True)
+    suggest_commit_from_version_file("GRASS", tag=True)
 
 
 def release(_unused):
@@ -106,7 +105,7 @@ def release(_unused):
         micro=micro,
         year=this_year(),
     )
-    suggest_commit_from_version_file("GRASS GIS", tag=True)
+    suggest_commit_from_version_file("GRASS", tag=True)
 
 
 def update_micro(_unused):
@@ -236,7 +235,7 @@ def status(args):
 def suggest_message(args):
     """Print suggestion for a commit message
 
-    Assumes that the version file was changed, but not commited yet,
+    Assumes that the version file was changed, but not committed yet,
     but it does not check that assumption.
 
     This shows a wrong commit message if going back from RCs,
@@ -248,7 +247,7 @@ def suggest_message(args):
     version_info = read_version_file()
     if not version_info.micro.endswith("dev"):
         tag = construct_version(version_info)
-        action = "GRASS GIS"
+        action = "GRASS"
     else:
         tag = None
         action = "Start"

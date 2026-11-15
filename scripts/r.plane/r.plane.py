@@ -9,11 +9,8 @@
 #               Modified to produce floating and double values maps
 #               Converted to Python by Glynn Clements
 # PURPOSE:	Creates a raster plane map from user specified inclination and azimuth
-# COPYRIGHT:	(C) 2004-2012 by the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2004-2012 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -27,7 +24,7 @@
 # %option
 # % key: dip
 # % type: double
-# % gisprompt: -90-90
+# % options: -90-90
 # % answer: 0.0
 # % description: Dip of plane in degrees
 # % required : yes
@@ -35,7 +32,7 @@
 # %option
 # % key: azimuth
 # % type: double
-# % gisprompt: 0-360
+# % options: 0-360
 # % answer: 0.0
 # % description: Azimuth of the plane in degrees
 # % required : yes

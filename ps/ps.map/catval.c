@@ -6,11 +6,8 @@
  *               Hamish Bowman
  * PURPOSE:      Support functions for loading dynamic symbol attributes
  *               Used in PS_vpoints_plot()
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2007 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -32,7 +29,6 @@
  *
  * \return number of records or -1 if it fails
  */
-
 int load_catval_array_rgb(struct Map_info *map, int vec,
                           dbCatValArray *cvarr_rgb)
 {
@@ -94,7 +90,6 @@ int load_catval_array_rgb(struct Map_info *map, int vec,
  *
  * \return number of records or -1 if it fails
  */
-
 int load_catval_array_size(struct Map_info *map, int vec,
                            dbCatValArray *cvarr_size)
 {
@@ -161,7 +156,6 @@ int load_catval_array_size(struct Map_info *map, int vec,
  *
  * \return number of records or -1 if it fails
  */
-
 int load_catval_array_rot(struct Map_info *map, int vec,
                           dbCatValArray *cvarr_rot)
 {

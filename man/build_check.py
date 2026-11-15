@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 
 # checks for HTML files missing DESCRIPTION section
-# (C) 2003-2009 Markus Neteler and the GRASS Development Team
+# SPDX-FileCopyrightText: 2003-2009 Markus Neteler
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 # Authors:
 #   Markus Neteler
 #   Glynn Clements
 
-import sys
 import os
+import sys
 
-from build import message_tmpl, get_files, read_file
+from build import get_files, message_tmpl, read_file
 from build_html import man_dir
 
 os.chdir(man_dir)

@@ -3,11 +3,8 @@
  * MODULE:       v.decimate
  * AUTHOR(S):    Vaclav Petras
  * PURPOSE:      Reduce the number of points in a vector map
- * COPYRIGHT:    (C) 2015 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the COPYING file that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2015 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -79,7 +76,7 @@ void grid_decimation_set_region(struct GridDecimation *grid_decimation,
 
 void grid_decimation_create_list_with_point(
     struct GridDecimation *grid_decimation, size_t index,
-    struct DecimationPoint *point, size_t npoints UNUSED)
+    struct DecimationPoint *point, size_t npoints G_UNUSED)
 {
     struct DecimationPoint **point_list =
         G_malloc(1 * sizeof(struct DecimationPoint *));

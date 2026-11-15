@@ -27,7 +27,7 @@ int db__driver_describe_table(dbString *table_name, dbTable **table)
 
     SQLSetStmtAttr(c->stmt, SQL_MAX_ROWS, (SQLPOINTER *)1, 0);
 
-    sprintf(s, "select * from %s", name);
+    snprintf(s, sizeof(s), "select * from %s", name);
 
     ret = SQLExecDirect(c->stmt, (SQLCHAR *)s, SQL_NTS);
     if ((ret != SQL_SUCCESS) && (ret != SQL_SUCCESS_WITH_INFO)) {

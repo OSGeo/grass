@@ -7,12 +7,8 @@
  * PURPOSE:    copies vector data from source map to destination map
  *             prints out all point coordinates and attributes
  *
- * COPYRIGHT:  (C) 2002-2009 by the GRASS Development Team
- *
- *             This program is free software under the
- *             GNU General Public License (>=v2).
- *             Read the file COPYING that comes with GRASS
- *             for details.
+ * SPDX-FileCopyrightText: 2002-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ****************************************************************/
 
@@ -166,8 +162,8 @@ int main(int argc, char *argv[])
                    *Points->y, *Points->z, cat);
 
             /* Prepeare SQL query to get point attribute data */
-            sprintf(sql, "select * from %s where %s=%d", Fi->table, Fi->key,
-                    cat);
+            snprintf(sql, sizeof(sql), "select * from %s where %s=%d",
+                     Fi->table, Fi->key, cat);
             G_debug(1, "SQL: \"%s\"", sql);
             db_set_string(&dbsql, sql);
             /* Now execute query */

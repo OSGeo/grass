@@ -8,11 +8,8 @@
  *               Markus Neteler <neteler itc.it>
  *               OGR support by Martin Landa <landa.martin gmail.com>
  * PURPOSE:
- * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General
- *               Public License (>=v2). Read the file COPYING that
- *               comes with GRASS for details.
+ * SPDX-FileCopyrightText: 1999-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -207,8 +204,9 @@ int main(int argc, char *argv[])
             db_free_table(table);
 
             /* Create table */
-            sprintf(buf, "create table %s (cat integer, %s varchar(%d))",
-                    NewFi->table, col_opt->answer, len);
+            snprintf(buf, sizeof(buf),
+                     "create table %s (cat integer, %s varchar(%d))",
+                     NewFi->table, col_opt->answer, len);
 
             db_set_string(&stmt2, buf);
 
@@ -220,8 +218,8 @@ int main(int argc, char *argv[])
             db_begin_transaction(Driver2);
 
             /* select values */
-            sprintf(buf, "SELECT %s, %s FROM %s ORDER BY %s", Fi->key,
-                    col_opt->answer, Fi->table, col_opt->answer);
+            snprintf(buf, sizeof(buf), "SELECT %s, %s FROM %s ORDER BY %s",
+                     Fi->key, col_opt->answer, Fi->table, col_opt->answer);
             db_set_string(&stmt, buf);
 
             G_debug(3, "  SQL: %s", db_get_string(&stmt));
@@ -286,8 +284,9 @@ int main(int argc, char *argv[])
 
                     db_set_string(&stmt2, db_get_value_string(value));
                     db_double_quote_string(&stmt2);
-                    sprintf(buf, "insert into %s values (%d, '%s')",
-                            NewFi->table, newval, db_get_string(&stmt2));
+                    snprintf(buf, sizeof(buf),
+                             "insert into %s values (%d, '%s')", NewFi->table,
+                             newval, db_get_string(&stmt2));
 
                     db_set_string(&stmt2, buf);
 

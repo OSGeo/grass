@@ -66,8 +66,8 @@ int draw_scale(double east, double north, int length, int seg, int units,
     int i, incr;
     double x_pos, y_pos;
     double t, b, l, r;
-    double pt, pb, pl, pr; /* background box */
-    double tt, tb, tl, tr; /* text box */
+    double pt = 0.0, pb = 0.0, pl = 0.0, pr = 0.0; /* background box */
+    double tt, tb, tl, tr;                         /* text box */
     double xarr[5], yarr[5];
     double seg_len;
     const struct scale *scales = all_scales[use_feet];
@@ -117,7 +117,7 @@ int draw_scale(double east, double north, int length, int seg, int units,
     else {
         label = G_malloc(GNAME_MAX);
         size = length / G_meters_to_units_factor(units);
-        sprintf(label, "%d %s", length, label_cstm);
+        snprintf(label, GNAME_MAX, "%d %s", length, label_cstm);
     }
 
     line_len =

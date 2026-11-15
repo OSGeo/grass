@@ -5,10 +5,8 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Radim Blazek, Markus Metz
  */
@@ -37,7 +35,6 @@ int Vect_remove_small_areas_ext(struct Map_info *, double, struct Map_info *,
 
    \return number of removed areas
  */
-
 int Vect_remove_small_areas(struct Map_info *Map, double thresh,
                             struct Map_info *Err, double *removed_area)
 {
@@ -192,6 +189,10 @@ int Vect_remove_small_areas_ext(struct Map_info *Map, double thresh,
         *removed_area = size_removed;
 
     G_message(_("%d areas of total size %g removed"), nremoved, size_removed);
+    Vect_destroy_list(AList);
+    Vect_destroy_list(List);
+    Vect_destroy_line_struct(Points);
+    Vect_destroy_cats_struct(Cats);
 
     return (nremoved);
 }

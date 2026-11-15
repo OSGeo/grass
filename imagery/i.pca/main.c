@@ -8,11 +8,8 @@
  *
  * PURPOSE:      Principal Component Analysis transform of raster data.
  *
- * COPYRIGHT:    (C) 2004-2011 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2004-2011 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  ***************************************************************************/
 
@@ -179,7 +176,7 @@ int main(int argc, char *argv[])
     for (i = 0; i < bands; i++) {
         char tmpbuf[GNAME_MAX];
 
-        sprintf(tmpbuf, "%s.%d", opt_out->answer, i + 1);
+        snprintf(tmpbuf, sizeof(tmpbuf), "%s.%d", opt_out->answer, i + 1);
         G_check_input_output_name(ref.file[i].name, tmpbuf, G_FATAL_EXIT);
 
         inp_fd[i] = Rast_open_old(ref.file[i].name, ref.file[i].mapset);
@@ -241,7 +238,7 @@ int main(int argc, char *argv[])
         /* close input files */
         Rast_unopen(inp_fd[i]);
 
-        sprintf(outname, "%s.%d", opt_out->answer, i + 1);
+        snprintf(outname, sizeof(outname), "%s.%d", opt_out->answer, i + 1);
 
         /* write colors and history to file */
         if (flag_filt->answer)
@@ -431,7 +428,7 @@ static int write_pca(double **eigmat, double *mu, double *stddev, int *inp_fd,
         char name[GNAME_MAX];
 
         /* open output raster maps */
-        sprintf(name, "%s.%d", out_basename, i + 1);
+        snprintf(name, sizeof(name), "%s.%d", out_basename, i + 1);
         out_fd[i] = Rast_open_new(name, outmap_type);
 
         inbuf[i] = Rast_allocate_d_buf();

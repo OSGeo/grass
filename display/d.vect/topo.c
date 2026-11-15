@@ -57,7 +57,7 @@ int display_topo(struct Map_info *Map, int type, LATTR *lattr, double dsize)
         if (!(type & ltype))
             continue; /* used for both lines and labels */
 
-        sprintf(text, "%d", el);
+        snprintf(text, sizeof(text), "%d", el);
         show_label_line(Points, ltype, lattr, text);
     }
 
@@ -71,7 +71,7 @@ int display_topo(struct Map_info *Map, int type, LATTR *lattr, double dsize)
             continue;
         Vect_get_node_coor(Map, el, &X, &Y, NULL);
         G_debug(3, "node = %d", el);
-        sprintf(text, "n%d", el);
+        snprintf(text, sizeof(text), "n%d", el);
 
         show_label(&X, &Y, &lattr2, text);
 

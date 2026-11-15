@@ -3,10 +3,9 @@
 
    \brief GRASS cairo display driver - read PPM image (lower level functions)
 
-   (C) 2007-2008, 2011 by Lars Ahlzen and the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2007-2008, 2011 Lars Ahlzen
+   SPDX-FileCopyrightText: GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Lars Ahlzen <lars ahlzen.com> (original contributor)
    \author Glynn Clements
@@ -30,7 +29,8 @@ void cairo_read_ppm(void)
     if (fscanf(input, "P6 %d %d %d", &i_width, &i_height, &maxval) != 3)
         G_fatal_error(_("Cairo: invalid input file <%s>"), ca.file_name);
 
-    fgetc(input);
+    if (fgetc(input) == EOF)
+        G_fatal_error(_("Cairo: unexpected EOF reading <%s>"), ca.file_name);
 
     if (i_width != ca.width || i_height != ca.height)
         G_fatal_error(_("Cairo: input file has incorrect dimensions: "
@@ -47,7 +47,8 @@ void cairo_read_ppm(void)
     if (fscanf(mask, "P5 %d %d %d", &i_width, &i_height, &maxval) != 3)
         G_fatal_error(_("Cairo: invalid input mask file <%s>"), mask_name);
 
-    fgetc(mask);
+    if (fgetc(mask) == EOF)
+        G_fatal_error(_("Cairo: unexpected EOF reading mask <%s>"), mask_name);
 
     if (i_width != ca.width || i_height != ca.height)
         G_fatal_error(_("Cairo: input mask file has incorrect dimensions: "

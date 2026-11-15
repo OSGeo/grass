@@ -16,12 +16,13 @@
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
- * COPYRIGHT:    (C) 1989, 1993, 2000 L. Mitas,  H. Mitasova,
- *               I. Kosinovsky, D. Gerdes, J. Hofierka
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 L. Mitas
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 H. Mitasova
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 I. Kosinovsky
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 D. Gerdes
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 J. Hofierka
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -61,10 +62,10 @@ int point_save(double xmm, double ymm, double zmm, double err)
     Vect_write_line(&Map, GV_POINT, Pnts, Cats);
 
     db_zero_string(&sql);
-    sprintf(buf, "insert into %s values ( %d ", f->table, cat);
+    snprintf(buf, sizeof(buf), "insert into %s values ( %d ", f->table, cat);
     db_append_string(&sql, buf);
 
-    sprintf(buf, ", %f", err);
+    snprintf(buf, sizeof(buf), ", %f", err);
     db_append_string(&sql, buf);
     db_append_string(&sql, ")");
     G_debug(3, "%s", db_get_string(&sql));

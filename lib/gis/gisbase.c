@@ -30,7 +30,7 @@
  \code
  char command[200];
 
- sprintf(command, "%s/etc/sroff", G_gisbase());
+ snprintf(command, sizeof(command), "%s/etc/sroff", G_gisbase());
  G_spawn(command, "sroff", NULL);
  \endcode
  *

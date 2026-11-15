@@ -9,11 +9,8 @@
  *               Martin Landa <landa.martin gmail.com>,
  *               Huidae Cho <grass4u gmail.com>
  * PURPOSE:      Rename map names
- * COPYRIGHT:    (C) 1994-2007, 2011-2014 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1994-2007, 2011-2014 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -122,13 +119,13 @@ void update_reclass_maps(const char *name, const char *mapset)
         off_t ptr, l;
 
         G_message(" %s", *rmaps);
-        sprintf(buf3, "%s", *rmaps);
+        snprintf(buf3, sizeof(buf3), "%s", *rmaps);
         if ((str = strchr(buf3, '@'))) {
             *str = 0;
-            sprintf(buf2, "%s", str + 1);
+            snprintf(buf2, sizeof(buf2), "%s", str + 1);
         }
         else {
-            sprintf(buf2, "%s", mapset);
+            snprintf(buf2, sizeof(buf2), "%s", mapset);
         }
         G_file_name(buf1, "cellhd", buf3, buf2);
 

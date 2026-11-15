@@ -3,10 +3,8 @@
  *
  * \brief Raster Library - Raster allocation routines.
  *
- * (C) 2001-2009 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public License
- * (>=v2). Read the file COPYING that comes with GRASS for details.
+ * SPDX-FileCopyrightText: 2001-2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Original author CERL
  */
@@ -34,7 +32,6 @@ static const int type_size[3] = {sizeof(CELL), sizeof(FCELL), sizeof(DCELL)};
  *
  * \return raster type size
  */
-
 size_t Rast_cell_size(RASTER_MAP_TYPE data_type)
 {
     return (type_size[F2I(data_type)]);

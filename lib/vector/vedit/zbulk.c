@@ -4,10 +4,8 @@
    \brief Vedit library - Bulk labeling (automated labeling of vector
    features)
 
-   (C) 2007-2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2007-2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Martin Landa <landa.martin gmail.com>
  */
@@ -22,7 +20,7 @@
 
    \param Map pointer to Map_info
    \param List list of selected lines
-   \param point_start_end staring and ending point
+   \param x1,y1,x2,y2 staring and ending point
    \param start starting value
    \param step step value
 

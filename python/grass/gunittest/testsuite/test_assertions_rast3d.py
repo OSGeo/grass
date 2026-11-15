@@ -31,7 +31,7 @@ class TestRaster3dMapAssertions(TestCase):
             "g.remove",
             flags="f",
             type="raster_3d",
-            name=",".join([cls.constant_map, cls.rcd_increasing_map]),
+            name=f"{cls.constant_map},{cls.rcd_increasing_map}",
         )
 
     def test_assertRaster3dFitsUnivar(self):

@@ -3,10 +3,8 @@
 
   \brief Display Driver - setup
 
-  (C) 2006-2011 by the GRASS Development Team
-
-  This program is free software under the GNU General Public License
-  (>=v2). Read the file COPYING that comes with GRASS for details.
+  SPDX-FileCopyrightText: 2006-2011 GRASS Development Team
+  SPDX-License-Identifier: GPL-2.0-or-later
 
   \author Glynn Clements <glynn gclements.plus.com> (original contributor)
   \author Huidae Cho <grass4u gmail.com>
@@ -106,10 +104,10 @@ void D_setup_unity(int clear)
 
   \param clear non-zero code to clear the frame
   \param fit non-zero code to adjust destination coordinate system
-  \param s_top
-  \param s_bottom
-  \param s_left
-  \param s_right
+  \param st top
+  \param sb bottom
+  \param sl left
+  \param sr right
 */
 void D_setup2(int clear, int fit, double st, double sb, double sl, double sr)
 {

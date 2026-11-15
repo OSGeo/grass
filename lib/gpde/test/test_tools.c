@@ -6,11 +6,8 @@
  *
  * PURPOSE:      Unit tests of math tools
  *
- * COPYRIGHT:    (C) 2000 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2000 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -157,7 +154,7 @@ int test_mean_calc(void)
     weight = N_exp_upwinding(vector, distance, D);
     G_message("N_exp_upwinding: vector %g distance %g D %g weight %g\n", vector,
               distance, D, weight);
-    sprintf(buff1, "%1.2lf", weight);
+    snprintf(buff1, sizeof(buff1), "%1.2lf", weight);
     sscanf(buff1, "%lf", &weight);
 
     if (weight != 0.05) {
@@ -170,7 +167,7 @@ int test_mean_calc(void)
     weight = N_exp_upwinding(vector, distance, D);
     G_message("N_exp_upwinding: vector %g distance %g D %g weight %g\n", vector,
               distance, D, weight);
-    sprintf(buff1, "%1.2lf", weight);
+    snprintf(buff1, sizeof(buff1), "%1.2lf", weight);
     sscanf(buff1, "%lf", &weight);
 
     if (weight != 0.95) {

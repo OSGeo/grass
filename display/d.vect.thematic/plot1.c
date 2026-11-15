@@ -38,10 +38,10 @@ struct rgb_color palette[16] = {
 /* *************************************************************** */
 /* *************************************************************** */
 /* *************************************************************** */
-int plot1(struct Map_info *Map, int type, int area UNUSED,
+int plot1(struct Map_info *Map, int type, int area G_UNUSED,
           struct cat_list *Clist, const struct color_rgb *color,
           const struct color_rgb *fcolor, int chcat, SYMBOL *Symb,
-          int size UNUSED, int id_flag, int table_colors_flag,
+          int size G_UNUSED, int id_flag, int table_colors_flag,
           int cats_color_flag, char *rgb_column, int default_width,
           char *width_column, double width_scale)
 {
@@ -49,6 +49,7 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
     double *x, *y;
     struct line_pnts *Points /* , *PPoints */;
     struct line_cats *Cats;
+    int ret = 0;
 
     /* double msize; */
     int x0, y0;
@@ -193,8 +194,10 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
     while (1) {
         if (Vect_level(Map) >= 2) {
             line++;
-            if (line > nlines)
-                return 0;
+            if (line > nlines) {
+                ret = 0;
+                goto cleanup_and_exit;
+            }
             if (!Vect_line_alive(Map, line))
                 continue;
             ltype = Vect_read_line(Map, Points, Cats, line);
@@ -204,9 +207,11 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
             switch (ltype) {
             case -1:
                 fprintf(stderr, _("\nERROR: vector map - can't read\n"));
-                return -1;
+                ret = -1;
+                goto cleanup_and_exit;
             case -2: /* EOF */
-                return 0;
+                ret = 0;
+                goto cleanup_and_exit;
             }
         }
 
@@ -263,7 +268,8 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
                     custom_rgb = FALSE;
                 }
                 else {
-                    sprintf(colorstring, "%s", db_get_string(cv_rgb->val.s));
+                    snprintf(colorstring, sizeof(colorstring), "%s",
+                             db_get_string(cv_rgb->val.s));
 
                     if (*colorstring != '\0') {
                         G_debug(3, "element %d: colorstring: %s", line,
@@ -415,8 +421,11 @@ int plot1(struct Map_info *Map, int type, int area UNUSED,
         }
     }
 
-    Vect_destroy_line_struct(Points);
+cleanup_and_exit:
+    G_free(primary_color);
+    G_free(fill_color);
+    G_free(line_color);
     Vect_destroy_cats_struct(Cats);
-
-    return 0; /* not reached */
+    Vect_destroy_line_struct(Points);
+    return ret;
 }

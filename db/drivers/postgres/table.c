@@ -28,7 +28,7 @@ int db__driver_drop_table(dbString *name)
     PGresult *res;
     char cmd[DB_SQL_MAX];
 
-    sprintf(cmd, "DROP TABLE %s", db_get_string(name));
+    snprintf(cmd, sizeof(cmd), "DROP TABLE %s", db_get_string(name));
 
     res = PQexec(pg_conn, cmd);
 

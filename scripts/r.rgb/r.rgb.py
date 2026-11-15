@@ -5,11 +5,9 @@
 # MODULE:       r.rgb
 # AUTHOR(S):	Glynn Clements
 # PURPOSE:	Split a raster map into red, green and blue maps
-# COPYRIGHT:	(C) 2009 Glynn Clements and the GRASS Development Team
-#
-# 		This program is free software under the GNU General Public
-# 		License (>=v2). Read the file COPYING that comes with GRASS
-# 		for details.
+# SPDX-FileCopyrightText: 2009 Glynn Clements
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -57,13 +55,13 @@ def main():
     expressions = []
     maps = []
     if red:
-        expressions.append("%s = r#${input}" % red)
+        expressions.append("%s = r#${input}" % red)  # noqa: RUF027
         maps.append(red)
     if green:
-        expressions.append("%s = g#${input}" % green)
+        expressions.append("%s = g#${input}" % green)  # noqa: RUF027
         maps.append(green)
     if blue:
-        expressions.append("%s = b#${input}" % blue)
+        expressions.append("%s = b#${input}" % blue)  # noqa: RUF027
         maps.append(blue)
     expr = ";".join(expressions)
     gs.mapcalc(expr, input=input)

@@ -6,11 +6,8 @@
  *
  * PURPOSE:      print out title for raster on stdout
  *
- * COPYRIGHT:    (C) 2001 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2001 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -124,7 +121,7 @@ int main(int argc, char **argv)
         char inarg[GPATH_MAX];
 
         fclose(fp);
-        sprintf(inarg, "input=%s", tmpfile);
+        snprintf(inarg, sizeof(inarg), "input=%s", tmpfile);
         /* note this tmp file will remain so it can survive d.redraw */
         G_spawn("d.text", "d.text", inarg, NULL);
     }

@@ -9,11 +9,8 @@
  *               Eric G. Miller <egm2 jps.net>,
  *               Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:      user chooses transects path, and profile of raster data drawn
- * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2007 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -101,13 +98,13 @@ static void plot_axes(void)
     D_text_size(scale * 0.04, scale * 0.05);
 
     /* plot y-axis label (bottom) */
-    sprintf(str, "%.1f", min);
+    snprintf(str, sizeof(str), "%.1f", min);
     D_get_text_box(str, &t, &b, &l, &r);
     D_pos_abs(-0.02 - (r - l), 0 - (t - b) / 2);
     D_text(str);
 
     /* plot y-axis label (top) */
-    sprintf(str, "%.1f", max);
+    snprintf(str, sizeof(str), "%.1f", max);
     D_get_text_box(str, &t, &b, &l, &r);
     D_pos_abs(-0.02 - (r - l), 1 - (t - b) / 2);
     D_text(str);

@@ -3,7 +3,6 @@
 /*
  * error: print error message and return 0
  */
-
 FILE *Bugs2;
 
 int error(char *s)

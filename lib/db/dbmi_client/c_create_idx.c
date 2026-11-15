@@ -3,11 +3,8 @@
  *
  * \brief DBMI Library (client) - create index
  *
- * (C) 1999-2008 by the GRASS Development Team
- *
- * This program is free software under the GNU General Public
- * License (>=v2). Read the file COPYING that comes with GRASS
- * for details.
+ * SPDX-FileCopyrightText: 1999-2008 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  * \author Joel Jones (CERL/UIUC), Radim Blazek
  */
@@ -75,7 +72,7 @@ int db_create_index2(dbDriver *driver, const char *table_name,
     else
         tbl++;
 
-    sprintf(buf, "%s_%s", tbl, column_name);
+    snprintf(buf, sizeof(buf), "%s_%s", tbl, column_name);
     db_set_index_name(&index, buf);
 
     db_set_index_table_name(&index, table_name);

@@ -3,10 +3,8 @@
 
    \brief Manage Library - Copy element
 
-   (C) 2001-2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2). Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 2001-2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author Original author CERL
  */
@@ -37,18 +35,19 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
     int i, ret;
     char path[GPATH_MAX], path2[GPATH_MAX];
     int result = 0;
+    char *mname = G_fully_qualified_name(old, mapset);
 
     G_debug(3, "Copy %s", list[n].alias);
 
     G_message(_("Copying %s <%s> to current mapset as <%s>"), list[n].maindesc,
-              G_fully_qualified_name(old, mapset), new);
+              mname, new);
 
     M__hold_signals(1);
     if (G_strcasecmp(list[n].alias, "vector") == 0) {
         ret = Vect_copy(old, mapset, new);
         if (ret == -1) {
-            G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
-                      G_fully_qualified_name(old, mapset), new);
+            G_warning(_("Unable to copy <%s> to current mapset as <%s>"), mname,
+                      new);
             result = 1;
         }
     }
@@ -65,7 +64,7 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
             G_file_name(path2, list[n].element[i], new, G_mapset());
             if (G_recursive_copy(path, path2) == 1) {
                 G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
-                          G_fully_qualified_name(old, mapset), new);
+                          mname, new);
                 result = 1;
             }
             else {
@@ -85,6 +84,7 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
         G_remove(colr2, new);
     }
     M__hold_signals(0);
+    G_free(mname);
 
     return result;
 }

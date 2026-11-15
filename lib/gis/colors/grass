@@ -1,4 +1,4 @@
-# Generic green color rule for GRASS GIS
+# Generic green color rule for GRASS
 # designed with the help of matplotlib/viscm utility;
 # interpolated to a 0-100% proportional rule file with the help of interpln()
 # function in SciLab; aimed at providing a basic color ramp complying with

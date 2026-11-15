@@ -5,11 +5,8 @@
 
    \author Paul Kelly
 
-   (C) 2007, 2008 by the GRASS Development Team
-
-   This program is free software under the GNU General Public
-   License (>=v2). Read the file COPYING that comes with GRASS
-   for details.
+   SPDX-FileCopyrightText: 2007, 2008 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 */
 
 #include <stdio.h>
@@ -183,16 +180,18 @@ void G_ls_format(char **list, int num_items, int perline, FILE *stream)
 #endif
 
     if (perline == 0) {
-        unsigned int max_len = 0;
+        size_t max_len = 0;
 
         for (i = 0; i < num_items; i++) {
+            const size_t len = strlen(list[i]);
+
             /* Find maximum filename length */
-            if (strlen(list[i]) > max_len)
-                max_len = strlen(list[i]);
+            if (len > max_len)
+                max_len = len;
         }
         /* Auto-fit the number of items that will
          * fit per line (+1 because of space after item) */
-        perline = screen_width / (max_len + 1);
+        perline = (int)((size_t)screen_width / (max_len + 1));
         if (perline < 1)
             perline = 1;
     }

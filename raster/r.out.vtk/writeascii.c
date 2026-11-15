@@ -7,11 +7,8 @@
  *                 08 23 2005 Berlin
  * PURPOSE:      Converts raster maps into the VTK-Ascii format
  *
- * COPYRIGHT:    (C) 2005 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2005 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -74,7 +71,7 @@ void write_vtk_normal_header(FILE *fp, struct Cell_head region,
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
     /* The header line describes the data. */
-    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_POINTS\n"); /*We are using the structured
                                                    point dataset. */
@@ -105,7 +102,7 @@ void write_vtk_structured_elevation_header(FILE *fp, struct Cell_head region)
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET STRUCTURED_GRID\n"); /*We are using the structured grid
                                                  dataset. */
@@ -123,7 +120,7 @@ void write_vtk_polygonal_elevation_header(FILE *fp, struct Cell_head region)
 
     /*Simple vtk ASCII header */
     fprintf(fp, "# vtk DataFile Version 3.0\n");
-    fprintf(fp, "GRASS GIS %i Export\n", GRASS_VERSION_MAJOR);
+    fprintf(fp, "GRASS %i Export\n", GRASS_VERSION_MAJOR);
     fprintf(fp, "ASCII\n");
     fprintf(fp, "DATASET POLYDATA\n"); /*We are using polydataset. */
     fprintf(fp, "POINTS %i float\n", region.cols * region.rows);
@@ -150,7 +147,7 @@ void write_vtk_pointdata_header(FILE *fp, struct Cell_head region)
 /* ************************************************************************* */
 /* Write the VTK Structured Coordinates ************************************ */
 /* ************************************************************************* */
-void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname UNUSED,
+void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname G_UNUSED,
                                       struct Cell_head region, int out_type,
                                       char *null_value, double scale, int dp)
 {
@@ -165,7 +162,7 @@ void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname UNUSED,
     G_debug(3, _("write_vtk_structured_coordinates: Writing Coordinates"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -195,13 +192,14 @@ void write_vtk_structured_coordinates(int fd, FILE *fp, char *varname UNUSED,
         }
         rowcount++;
     }
+    G_free(raster);
     return;
 }
 
 /* ************************************************************************* */
 /* Write Polygonal Coordinates ********************************************* */
 /* ************************************************************************* */
-void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
+void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname G_UNUSED,
                                      struct Cell_head region, int out_type,
                                      char *null_value, double scale,
                                      int polytype, int dp)
@@ -219,7 +217,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
             _("write_vtk_polygonal_coordinates: Writing VTK Polygonal data"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -310,7 +308,7 @@ void write_vtk_polygonal_coordinates(int fd, FILE *fp, char *varname UNUSED,
             fprintf(fp, "\n");
         }
     }
-
+    G_free(raster);
     return;
 }
 
@@ -329,7 +327,7 @@ void write_vtk_data(int fd, FILE *fp, char *varname, struct Cell_head region,
     G_debug(3, _("write_vtk_data: Writing VTK-Data"));
 
     /*the nullvalue */
-    if (!sscanf(null_value, "%lf", &nullvalue)) {
+    if (sscanf(null_value, "%lf", &nullvalue) != 1) {
         G_warning("Null value is not valid, using 0 instead.");
         nullvalue = 0;
     }
@@ -352,6 +350,7 @@ void write_vtk_data(int fd, FILE *fp, char *varname, struct Cell_head region,
         }
         fprintf(fp, "\n");
     }
+    G_free(raster);
     return;
 }
 
@@ -408,6 +407,9 @@ void write_vtk_rgb_image_data(int redfd, int greenfd, int bluefd, FILE *fp,
             }
         }
     }
+    G_free(redraster);
+    G_free(greenraster);
+    G_free(blueraster);
     return;
 }
 
@@ -454,5 +456,8 @@ void write_vtk_vector_data(int xfd, int yfd, int zfd, FILE *fp,
             fprintf(fp, "%.*f %.*f %.*f \n", dp, x, dp, y, dp, z);
         }
     }
+    G_free(xraster);
+    G_free(yraster);
+    G_free(zraster);
     return;
 }

@@ -11,11 +11,9 @@
 #                 is measured along the geodesic.
 #               Demonstrates GRASS Python Ctypes interface
 #
-# COPYRIGHT:    (c) 2008-2011 Hamish Bowman, and the GRASS Development Team
-#
-#               This program is free software under the GNU General
-#               Public License (>=v2). Read the file COPYING that
-#               comes with GRASS for details.
+# SPDX-FileCopyrightText: 2008-2011 Hamish Bowman
+# SPDX-FileCopyrightText: GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 ############################################################################
 #
@@ -68,7 +66,7 @@ def main():
     # calc distance
 
     proj_type = G_begin_distance_calculations()
-    # returns 0 if projection has no metrix (ie. imagery)
+    # returns 0 if projection is not metric (ie. imagery)
     # returns 1 if projection is planimetric
     # returns 2 if projection is latitude-longitude
 

@@ -6,11 +6,8 @@
  *
  * PURPOSE:      Unit tests for the gjson library
  *
- * COPYRIGHT:    (C) 2024 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with
- *               GRASS for details.
+ * SPDX-FileCopyrightText: 2024 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -53,7 +50,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    G_add_keyword(_("gjson"));
+    G_add_keyword(_("general"));
+    G_add_keyword(_("json"));
     G_add_keyword(_("unit test"));
     module->description = _("Performs unit tests "
                             "for the gjson library");

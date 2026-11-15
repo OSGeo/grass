@@ -6,10 +6,8 @@
 Classes:
  - animation::Animation
 
-(C) 2011 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2011 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
@@ -196,26 +194,25 @@ class Animation:
         self.currentFrame = 0
         self.mode = "save"
         for params in self.animationList:
-            if not self.stopSaving:
-                self.UpdateView(params)
-                number = ("{frame" + formatter + "}").format(frame=self.currentFrame)
-                filename = "{prefix}_{number}.{ext}".format(
-                    prefix=prefix, number=number, ext=self.formats[format]
-                )
-                filepath = os.path.join(path, filename)
-                self.mapWindow.SaveToFile(
-                    FileName=filepath,
-                    FileType=self.formats[format],
-                    width=size[0],
-                    height=size[1],
-                )
-                self.currentFrame += 1
-
-                wx.GetApp().Yield()
-                toolWin.UpdateFrameIndex(index=self.currentFrame, goToFrame=False)
-            else:
+            if self.stopSaving:
                 self.stopSaving = False
                 break
+            self.UpdateView(params)
+            number = ("{frame" + formatter + "}").format(frame=self.currentFrame)
+            filename = "{prefix}_{number}.{ext}".format(
+                prefix=prefix, number=number, ext=self.formats[format]
+            )
+            filepath = os.path.join(path, filename)
+            self.mapWindow.SaveToFile(
+                FileName=filepath,
+                FileType=self.formats[format],
+                width=size[0],
+                height=size[1],
+            )
+            self.currentFrame += 1
+
+            wx.GetApp().Yield()
+            toolWin.UpdateFrameIndex(index=self.currentFrame, goToFrame=False)
         self.animationSaved = True
         self.PostFinishedEvent()
 

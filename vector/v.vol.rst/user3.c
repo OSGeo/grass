@@ -16,12 +16,13 @@
  *               Regularized spline with tension is used for the
  *               interpolation.
  *
- * COPYRIGHT:    (C) 1989, 1993, 2000 L. Mitas,  H. Mitasova,
- *               I. Kosinovsky, D. Gerdes, J. Hofierka
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 L. Mitas
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 H. Mitasova
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 I. Kosinovsky
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 D. Gerdes
+ * SPDX-FileCopyrightText: 1989, 1993, 2000 J. Hofierka
+ * SPDX-FileCopyrightText: GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 #include <stdio.h>
@@ -51,7 +52,7 @@
 #undef hz
 #endif
 
-int secpar_loop(int ngstc UNUSED, int nszc UNUSED, int i)
+int secpar_loop(int ngstc G_UNUSED, int nszc G_UNUSED, int i)
 {
     double dnorm1, ro, dx2, dy2, dz2, grad1, grad2, slp, grad, oor1, oor2, curn,
         curm, curg, dxy2, dxz2, dyz2;
@@ -60,6 +61,7 @@ int secpar_loop(int ngstc UNUSED, int nszc UNUSED, int i)
     double gradmin;
     int bmask = 1;
     static int first_t = 1;
+    curn = 0.0;
 
     ro = M_R2D;
     gradmin = 0.0;
@@ -211,7 +213,7 @@ int secpar_loop(int ngstc UNUSED, int nszc UNUSED, int i)
             adyy[i] = curg; /* Gaussian curvature */
         if (mcurv != NULL)
             adxy[i] = curm; /* Mean curvature */
-        /*printf(" parametre grad %lf\n", slp); */
+        /*printf(" parameter grad %lf\n", slp); */
     }
     /*      } secapr loop */
 
@@ -252,7 +254,7 @@ int COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
        c normalization
        c
      */
-    offset1 = nsizr * nsizc;
+    offset1 = (off_t)nsizr * nsizc;
 
     stepix = ew_res / dnorm;
     stepiy = ns_res / dnorm;

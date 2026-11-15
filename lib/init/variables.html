@@ -5,7 +5,7 @@ used and modified during script execution. Variables allow scripts to
 store and manipulate values dynamically, making them more flexible and
 reusable.
 
-In GRASS GIS, there are two types of variables:
+In GRASS, there are two types of variables:
 <ul>
 <li><a href="#setting-shell-environment-variables">shell
 environment</a> variables,</li>
@@ -281,6 +281,16 @@ PERMANENT
     On Mac OS X this should be the <code>pythonw</code> executable for the
     wxGUI to work.</dd>
 
+  <dt>GRASS_RANDOM_SEED</dt>
+  <dd>[libgis]<br>
+    seed for the random number generator of tools which let the user omit
+    the seed, such as <em><a href="r.mapcalc.html">r.mapcalc</a></em> and
+    <em><a href="r.sim.water.html">r.sim.water</a></em>; the same value
+    gives the same result in every run. The value must be an integer from -2147483648 to
+    4294967295; anything else is an error. When the variable is not set or empty,
+    SOURCE_DATE_EPOCH is read the same way if set, and otherwise the seed
+    comes from the time and the process ID.</dd>
+
   <dt>GRASS_VECTOR_LOWMEM</dt>
   <dd>[vectorlib]<br>
     If the environment variable GRASS_VECTOR_LOWMEM exists, memory
@@ -396,7 +406,7 @@ PERMANENT
     Setting to '1' effectively disables parallel processing.</dd>
 
   <dt>TMPDIR, TEMP, TMP</dt>
-  <dd>[Various GRASS GIS commands and wxGUI]<br>
+  <dd>[Various GRASS commands and wxGUI]<br>
   <!-- what about Windows %TEMP% and https://trac.osgeo.org/grass/ticket/560#comment:21 ? -->
       The default wxGUI temporary directory is chosen from a
       platform-dependent list, but the user can control the selection of
@@ -512,6 +522,11 @@ For specific driver-related variables see:
     This allows programs such as the GUI to run external commands on an
     alternate region without having to modify the WIND file then change it
     back afterwards.</dd>
+
+  <dt>GRASS_MASK</dt>
+  <dd>[libgis]<br>
+    use the raster map specified by name as mask, instead of a raster called
+    MASK in the current mapset.</dd>
 </dl>
 
 <h2>List of selected GRASS gisenv variables</h2>

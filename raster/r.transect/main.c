@@ -11,11 +11,8 @@
  *               which lie along one or more user-defined transect lines.
  *               The transects are described by their starting coordinates,
  *               azimuth, and distance.
- * COPYRIGHT:    (C) 1999-2006,2009 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2006,2009 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -42,12 +39,12 @@ static int profile(int coords, const char *map, const char *nulls, char **line)
     if (coords)
         argv[argc++] = "-g";
 
-    sprintf(buf, "input=%s", map);
+    snprintf(buf, sizeof(buf), "input=%s", map);
     argv[argc++] = G_store(buf);
 
     argv[argc++] = "output=-";
 
-    sprintf(buf, "null_value=%s", nulls);
+    snprintf(buf, sizeof(buf), "null_value=%s", nulls);
     argv[argc++] = G_store(buf);
 
     strcpy(profile, "coordinates=");

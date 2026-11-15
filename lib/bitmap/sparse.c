@@ -38,7 +38,6 @@ static int depth;
  *  \param y
  *  \return struct BM
  */
-
 struct BM *BM_create_sparse(int x, int y)
 {
     struct BM *map;
@@ -84,7 +83,6 @@ struct BM *BM_create_sparse(int x, int y)
  *  \param map
  *  \return int
  */
-
 int BM_destroy_sparse(struct BM *map)
 {
     int i;
@@ -121,7 +119,6 @@ int BM_destroy_sparse(struct BM *map)
  *  \param val
  *  \return int
  */
-
 int BM_set_sparse(struct BM *map, int x, int y, int val)
 {
     struct BMlink *p, *p2, *prev;
@@ -236,7 +233,6 @@ int BM_set_sparse(struct BM *map, int x, int y, int val)
  *  \param y
  *  \return int
  */
-
 int BM_get_sparse(struct BM *map, int x, int y)
 {
     struct BMlink *p;
@@ -261,7 +257,6 @@ int BM_get_sparse(struct BM *map, int x, int y)
  *  \param map
  *  \return int
  */
-
 size_t BM_get_map_size_sparse(struct BM *map)
 {
     int i;
@@ -290,7 +285,6 @@ size_t BM_get_map_size_sparse(struct BM *map)
  *  \param map
  *  \return int
  */
-
 int BM_dump_map_sparse(struct BM *map)
 {
     int i;
@@ -319,7 +313,6 @@ int BM_dump_map_sparse(struct BM *map)
  *  \param y
  *  \return int
  */
-
 int BM_dump_map_row_sparse(struct BM *map, int y)
 {
     int i;
@@ -350,7 +343,6 @@ int BM_dump_map_row_sparse(struct BM *map, int y)
  *  \param map
  *  \return int
  */
-
 int BM_file_write_sparse(FILE *fp, struct BM *map)
 {
     char c;

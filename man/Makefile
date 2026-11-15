@@ -2,7 +2,18 @@ MODULE_TOPDIR = ..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
-MANPAGES := $(patsubst $(HTMLDIR)/%.html,$(MANDIR)/%.$(MANSECT),$(wildcard $(HTMLDIR)/*.html))
+# Some source/*.md files exist only for the MkDocs website and have no man
+# page equivalent. index.md is the site landing page, keywords.md is a stub
+# for the tags plugin (the keyword index is rendered by MkDocs), and the
+# *_intro.md pages are navigation-only introductions. The remaining ones are
+# the developer and user guides installed from doc/ and doc/development/;
+# they are derived from those directories so a newly added guide is excluded
+# automatically. grass_database and projectionintro are the exception: they
+# are reference pages that also ship as man pages.
+DOC_MD := $(wildcard $(MODULE_TOPDIR)/doc/*.md) \
+	$(wildcard $(MODULE_TOPDIR)/doc/development/*.md)
+WEB_ONLY_MD := index keywords development_intro command_line_intro \
+	$(filter-out grass_database projectionintro,$(basename $(notdir $(DOC_MD))))
 
 DSTFILES := \
 	$(HTMLDIR)/grassdocs.css \
@@ -14,9 +25,21 @@ DSTFILES := \
 	$(HTMLDIR)/parser_standard_options.css \
 	$(HTMLDIR)/parser_standard_options.js \
 	$(MDDIR)/mkdocs.yml \
-	$(MDDIR)/source/grass_logo.png \
+	$(MDDIR)/source/grass_logo.svg \
+	$(MDDIR)/source/grass_icon.png \
+	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
-	$(MDDIR)/overrides/partials/footer.html
+	$(MDDIR)/scripts/hook_list_scripts.py \
+	$(MDDIR)/source/index.md \
+	$(MDDIR)/overrides/main.html \
+	$(MDDIR)/overrides/partials/copyright.html \
+	$(MDDIR)/overrides/partials/footer.html \
+	$(MDDIR)/overrides/partials/actions.html \
+	$(MDDIR)/overrides/partials/source.html \
+	$(MDDIR)/overrides/fragments/tags/default/listing.html \
+	$(MDDIR)/source/keywords.md \
+	$(MDDIR)/source/development_intro.md \
+	$(MDDIR)/source/command_line_intro.md
 
 categories = \
 	d:display \
@@ -38,11 +61,11 @@ IDXSRC = full_index index topics keywords graphical_index manual_gallery class_g
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
-IDXSRC_MD = full_index index topics keywords graphical_index manual_gallery parser_standard_options $(IDXCATS)
+IDXSRC_MD = full_index index topics graphical_index manual_gallery class_graphical parser_standard_options $(IDXCATS)
 INDICES_MD := $(patsubst %,$(MDDIR)/source/%.md,$(IDXSRC_MD))
 
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
-ALL_MD := $(wildcard $(MDDIR)/source/*.*.html)
+ALL_MD := $(wildcard $(MDDIR)/source/*.*.md)
 
 ifneq (@(type sphinx-build2 > /dev/null),)
 SPHINXBUILD   = sphinx-build2
@@ -55,50 +78,55 @@ default: $(DSTFILES)
 	@echo "Generating manual pages index (help system)..."
 	$(MAKE) $(INDICES)
 	$(call build,check)
-	$(MAKE) manpages
 	$(MAKE) $(INDICES_MD)
+	$(MAKE) manpages
 # $(MAKE) build-mkdocs
 
-# This must be a separate target so that evaluation of $(MANPAGES)
-# is delayed until the indices have been generated
-left := (
-right := )
+# The sweep script is shared with the CMake build, so both builds convert
+# the same set of pages. It skips pages whose man page is up to date, so
+# after the tool builds this effectively converts the index pages.
 manpages:
-	$(MAKE) $(subst $(left),\$(left),$(subst $(right),\$(right),$(MANPAGES)))
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) $(PYTHON) ./build_manpages.py \
+		$(MDDIR)/source $(MANDIR) $(GISBASE)/utils/g.md2man.py --exclude $(WEB_ONLY_MD)
 
 .PHONY: manpages
 
 define build
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_$(1).py $(2)
 endef
 
 define build_topics
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_topics.py
 endef
 
 define build_keywords
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_keywords.py
 endef
 
 define build_graphical_index
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_graphical_index.py
 endef
 
 define build_manual_gallery
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_manual_gallery.py
 endef
@@ -106,13 +134,15 @@ endef
 define build_pso
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	$(PYTHON) ./parser_standard_options.py -t "$(GRASS_HOME)/lib/gis/parser_standard_options.c" \
 	-f "grass" -o "$(HTMLDIR)/parser_standard_options.html" -p 'id="opts_table" class="scroolTable"'
 endef
 
 define build_pso_md
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./parser_standard_options.py -t "$(GRASS_HOME)/lib/gis/parser_standard_options.c" \
 	-f "grass" -o "$(MDDIR)/source/parser_standard_options.md"
@@ -125,7 +155,15 @@ $(MDDIR)/source/topics.md: $(ALL_MD)
 define build_class_graphical
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
-	$(PYTHON) ./build_class_graphical.py $(HTMLDIR)
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
+	$(PYTHON) ./build_class_graphical.py html $(HTMLDIR)
+endef
+
+define build_class_graphical_md
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	$(PYTHON) ./build_class_graphical.py md $(MDDIR)/source
 endef
 
 $(HTMLDIR)/topics.html: $(ALL_HTML) build_topics.py
@@ -140,7 +178,7 @@ $(HTMLDIR)/full_index.html: $(ALL_HTML) build_full_index.py build_html.py
 	$(call build,full_index)
 	touch $@
 
-$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_html.py
+$(MDDIR)/source/full_index.md: $(ALL_MD) build_full_index.py build_md.py
 	$(call build,full_index)
 	touch $@
 
@@ -148,15 +186,7 @@ $(HTMLDIR)/index.html: build_index.py build_html.py
 	$(call build,index)
 	touch $@
 
-$(MDDIR)/source/index.md: build_index.py build_md.py
-	$(call build,index)
-	touch $@
-
 $(HTMLDIR)/keywords.html: $(ALL_HTML)
-	$(call build_keywords)
-	touch $@
-
-$(MDDIR)/source/keywords.md: $(ALL_MD)
 	$(call build_keywords)
 	touch $@
 
@@ -187,6 +217,11 @@ $(HTMLDIR)/class_graphical.html: $(ALL_HTML)
 	$(call build_class_graphical)
 	touch $@
 
+# TODO: this should be done in the same way as category_rule
+$(MDDIR)/source/class_graphical.md: $(ALL_MD)
+	$(call build_class_graphical_md)
+	touch $@
+
 define category_rule
 $$(HTMLDIR)/$(2).html: $$(wildcard $$(HTMLDIR)/$(1).*.html) build_class.py build_html.py
 	$$(call build,class,$(1) $(2))
@@ -210,9 +245,6 @@ $(HTMLDIR)/grassdocs.css: grassdocs.css
 $(HTMLDIR)/grass_logo.png: grass_logo.png
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/source/grass_logo.png: grass_logo.png
-	$(INSTALL_DATA) $< $@
-
 $(HTMLDIR)/hamburger_menu.svg: hamburger_menu.svg
 	$(INSTALL_DATA) $< $@
 
@@ -234,16 +266,69 @@ $(HTMLDIR)/parser_standard_options.css: parser_standard_options.css
 $(MDDIR)/mkdocs.yml: mkdocs/mkdocs.yml
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/source/index.md: mkdocs/index.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/grass_logo.svg: grass_logo.svg
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/grass_icon.png: grass_icon.png
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/favicon.ico: favicon.ico
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/source/grassdocs.css: mkdocs/grassdocs.css
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/keywords.md: mkdocs/keywords.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/scripts:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/main.html: mkdocs/overrides/main.html | $(MDDIR)/overrides
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/partials/copyright.html: mkdocs/overrides/partials/copyright.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/overrides/partials/footer.html: mkdocs/overrides/partials/footer.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
+$(MDDIR)/overrides/partials/source.html: mkdocs/overrides/partials/source.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/overrides/partials:
 	$(MKDIR) $@
 
+$(MDDIR)/overrides/fragments/tags/default:
+	$(MKDIR) $@
+
+$(MDDIR)/overrides/fragments/tags/default/listing.html: mkdocs/overrides/fragments/tags/default/listing.html | $(MDDIR)/overrides/fragments/tags/default
+	$(INSTALL_DATA) $< $@
+
 build-mkdocs:
-	@cd $(MDDIR) ; SITE_NAME="GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
-	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS GIS $(GRASS_VERSION_NUMBER) Reference Manual" \
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	mkdocs build
+
+serve-mkdocs:
+	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	mkdocs serve

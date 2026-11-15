@@ -4,14 +4,15 @@
  * AUTHOR(S):    Michael Shapiro, CERL (original contributor)
  *               rewritten 2002: Glynn Clements <glynn gclements.plus.com>
  * PURPOSE:
- * COPYRIGHT:    (C) 1999-2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 1999-2007 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
+#include <inttypes.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,8 +26,9 @@
 
 int overwrite_flag;
 
-long seed_value;
+int64_t seed_value;
 long seeded;
+int rand_calls;
 int region_approach;
 
 /****************************************************************************/
@@ -54,15 +56,51 @@ static expr_list *parse_file(const char *filename)
     return res;
 }
 
-/****************************************************************************/
+/* Count the rand() calls of an expression. A variable is not followed,
+ * since the rand() calls of its value are counted where the variable is
+ * defined, and they draw once per cell however often the variable is
+ * used. */
+static int count_rand_calls(const expression *e)
+{
+    int count = 0;
+
+    if (!e)
+        return 0;
+
+    switch (e->type) {
+    case expr_type_function:
+        if (strcmp(e->data.func.name, "rand") == 0)
+            count++;
+        // args is 1-indexed (likely from yacc parser conventions)
+        for (int i = 1; i <= e->data.func.argc; i++)
+            count += count_rand_calls(e->data.func.args[i]);
+        return count;
+
+    case expr_type_binding:
+        return count_rand_calls(e->data.bind.val);
+
+    default:
+        return 0;
+    }
+}
+
+/* Count the rand() calls of all expressions, which every row evaluates. */
+static int expr_list_count_rand_calls(const expr_list *list)
+{
+    int count = 0;
+
+    for (; list; list = list->next)
+        count += count_rand_calls(list->exp);
+    return count;
+}
 
 int main(int argc, char **argv)
 {
     struct GModule *module;
-    struct Option *expr, *file, *seed, *region;
+    struct Option *expr, *file, *seed, *region, *nprocs;
     struct Flag *random, *describe;
-    int all_ok;
     char *desc;
+    int threads = 1;
 
     G_gisinit(argv[0]);
 
@@ -104,24 +142,24 @@ int main(int argc, char **argv)
     file->description = _("File containing expression(s) to evaluate");
     file->guisection = _("Expression");
 
-    seed = G_define_option();
-    seed->key = "seed";
-    seed->type = TYPE_INTEGER;
-    seed->required = NO;
-    seed->description = _("Seed for rand() function");
+    seed = G_define_standard_option(G_OPT_M_SEED);
 
     random = G_define_flag();
     random->key = 's';
+    random->label =
+        _("Generate random seed (result is non-deterministic) [deprecated]");
     random->description =
-        _("Generate random seed (result is non-deterministic)");
+        _("This flag is deprecated and will be removed in a future release. "
+          "Seeding is automatic or use parameter seed.");
 
     describe = G_define_flag();
     describe->key = 'l';
     describe->description = _("List input and output maps");
 
-    if (argc == 1) {
-        char **p = G_malloc(3 * sizeof(char *));
+    nprocs = G_define_standard_option(G_OPT_M_NPROCS);
 
+    char **p = G_malloc(3 * sizeof(char *));
+    if (argc == 1) {
         p[0] = argv[0];
         p[1] = G_store("file=-");
         p[2] = NULL;
@@ -152,17 +190,24 @@ int main(int argc, char **argv)
     if (!result)
         G_fatal_error(_("parse error"));
 
+    rand_calls = expr_list_count_rand_calls(result);
     if (seed->answer) {
-        seed_value = atol(seed->answer);
-        G_srand48(seed_value);
+        seed_value = G_random_seed_from_option(seed);
         seeded = 1;
-        G_debug(3, "Read random seed from seed=: %ld", seed_value);
+        G_debug(3, "Read random seed from seed=: %" PRId64, seed_value);
     }
-
-    if (random->answer) {
-        seed_value = G_srand48_auto();
-        seeded = 1;
-        G_debug(3, "Generated random seed (-s): %ld", seed_value);
+    else {
+        if (rand_calls > 0) {
+            seed_value = G_random_generate_seed();
+            seeded = 1;
+            G_debug(3, "Automatically generated random seed: %" PRId64,
+                    seed_value);
+        }
+        if (random->answer) {
+            G_verbose_message(_("Flag 's' is deprecated and will be removed in "
+                                "a future release. "
+                                "Seeding is automatic or use parameter seed."));
+        }
     }
 
     /* Set the global variable of the region setup approach */
@@ -182,18 +227,36 @@ int main(int argc, char **argv)
         return EXIT_SUCCESS;
     }
 
-    pre_exec();
-    execute(result);
-    post_exec();
+    /* Determine the number of threads */
+    threads = atoi(nprocs->answer);
 
-    all_ok = 1;
+    /* Check if the program name is r3.mapcalc */
+    /* Handle both Unix and Windows path separators */
+    const char *progname = strrchr(argv[0], '/');
+    if (!progname)
+        progname = strrchr(argv[0], '\\');
+    progname = progname ? progname + 1 : argv[0];
 
-    if (floating_point_exception_occurred) {
-        G_warning(_("Floating point error(s) occurred in the calculation"));
-        all_ok = 0;
+    if ((strncmp(progname, "r3.mapcalc", 10) == 0) && (threads != 1)) {
+        threads = 1;
+        nprocs->answer = "1";
+        G_verbose_message(_("r3.mapcalc does not support parallel execution."));
     }
 
-    return all_ok ? EXIT_SUCCESS : EXIT_FAILURE;
+    /* Ensure the proper number of threads is assigned */
+    threads = G_set_omp_num_threads(nprocs);
+    if (threads > 1)
+        threads = Rast_disable_omp_on_mask(threads);
+    if (threads < 1)
+        G_fatal_error(_("<%d> is not valid number of nprocs."), threads);
+
+    /* Execute calculations */
+    execute(result);
+
+    G_free(p);
+    p = NULL;
+
+    return EXIT_SUCCESS;
 }
 
 /****************************************************************************/

@@ -4,11 +4,8 @@
  * AUTHOR(S):    Wolf Bergenheim
  * PURPOSE:      This file contains functions which have to do with the
  *               annealing part of the algorithm.
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2007 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -40,15 +37,16 @@ static unsigned int overlaps_created = 0;
 static unsigned int overlaps_removed = 0;
 
 /**
- * This funxtion does the actual sumulated annealing process. Each round 30 x
+ * This function does the actual simulated annealing process. Each round 30 x
  * n (the number of labels) a label is picked at random, and placed in a random
  * new position. Then the dE is calculated, and if dE is > 0 the new position is
- * reversed with the probablility 1 - e^(-dE / T).
+ * reversed with the probability 1 - e^(-dE / T).
  @param labels The array of all labels.
  @param n_labels The size of the labels array.
  @params The commandline parameters.
  */
-void simulate_annealing(label_t *labels, int n_labels, struct params *p UNUSED)
+void simulate_annealing(label_t *labels, int n_labels,
+                        struct params *p G_UNUSED)
 {
     /* The temperature of the system */
     double T;

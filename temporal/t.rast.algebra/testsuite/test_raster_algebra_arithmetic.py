@@ -1,8 +1,6 @@
 """
-(C) 2013-2023 by the GRASS Development Team
-This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
-for details.
+SPDX-FileCopyrightText: 2013-2023 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 :authors: Soeren Gebbert
 """
@@ -252,15 +250,7 @@ class TestTRastAlgebra(TestCase):
         print_module_run.run()
 
         # Check expressions
-        ref_str = "...".join(
-            [
-                "r_2001_01_01=if(a1@...>=3,1,0)",
-                "r_2001_01_02=if(a2@...>=3,2,0)",
-                "r_2001_01_03=if(a3@...>=3,3,0)",
-                "r_2001_01_04=if(a4@...>=3,4,0)",
-            ]
-        )
-        ref_str = f"...{ref_str}..."
+        ref_str = "...r_2001_01_01=if(a1@...>=3,1,0)...r_2001_01_02=if(a2@...>=3,2,0)...r_2001_01_03=if(a3@...>=3,3,0)...r_2001_01_04=if(a4@...>=3,4,0)..."
         print(str(print_module_run.outputs.stdout.replace("\n", "").replace(" ", "")))
         self.assertLooksLike(
             str(print_module_run.outputs.stdout.replace("\n", "").replace(" ", "")),

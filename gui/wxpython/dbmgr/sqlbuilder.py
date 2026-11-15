@@ -13,10 +13,8 @@ Usage:
 python sqlbuilder.py select|update vector_map
 @endcode
 
-(C) 2007-2014 by the GRASS Development Team
-
-This program is free software under the GNU General Public License
-(>=v2). Read the file COPYING that comes with GRASS for details.
+SPDX-FileCopyrightText: 2007-2014 GRASS Development Team
+SPDX-License-Identifier: GPL-2.0-or-later
 
 @author Jachym Cepicky <jachym.cepicky gmail.com> (original author)
 @author Martin Landa <landa.martin gmail.com>
@@ -57,9 +55,7 @@ class SQLBuilder(wx.Frame):
         wx.Frame.__init__(self, parent, id, title)
 
         self.SetIcon(
-            wx.Icon(
-                os.path.join(globalvar.ICONDIR, "grass_sql.ico"), wx.BITMAP_TYPE_ICO
-            )
+            wx.Icon(os.path.join(globalvar.ICONDIR, "grass.ico"), wx.BITMAP_TYPE_ICO)
         )
 
         self.parent = parent

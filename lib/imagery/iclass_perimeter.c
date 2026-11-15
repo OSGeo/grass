@@ -9,10 +9,8 @@
    Vector map with training areas is used to determine corresponding
    cells by computing cells on area perimeter.
 
-   Copyright (C) 1999-2007, 2011 by the GRASS Development Team
-
-   This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   SPDX-FileCopyrightText: 1999-2007, 2011 GRASS Development Team
+   SPDX-License-Identifier: GPL-2.0-or-later
 
    \author David Satnik, Central Washington University (original author)
    \author Markus Neteler <neteler itc.it> (i.class module)
@@ -198,7 +196,7 @@ int make_perimeter(struct line_pnts *points, IClass_perimeter *perimeter,
     first = -1;
     prev = count - 1;
     for (i = 0; i < count; prev = i++) {
-        /* non absurd polygon has vertexes with different y coordinate */
+        /* non absurd polygon has vertices with different y coordinates */
         if (tmp_points[i].y != tmp_points[prev].y) {
             first = i;
             break;

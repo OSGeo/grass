@@ -11,11 +11,8 @@
  *               Martin Landa <landa.martin gmail.com> (nulls opaque)
  * PURPOSE:      Combine three rasters to form a colour image using
  *               red, green, and blue display channels
- * COPYRIGHT:    (C) 2001-2007, 2010 by the GRASS Development Team
- *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * SPDX-FileCopyrightText: 2001-2007, 2010 GRASS Development Team
+ * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/
 
@@ -67,8 +64,8 @@ int main(int argc, char **argv)
     for (i = 0; i < 3; i++) {
         char buff[80];
 
-        sprintf(buff, _("Name of raster map to be used for <%s>"),
-                color_names[i]);
+        snprintf(buff, sizeof(buff),
+                 _("Name of raster map to be used for <%s>"), color_names[i]);
 
         B[i].opt = G_define_standard_option(G_OPT_R_MAP);
         B[i].opt->key = G_store(color_names[i]);

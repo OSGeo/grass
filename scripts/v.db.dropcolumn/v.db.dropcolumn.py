@@ -9,11 +9,8 @@
 #               attribute table connected to a given vector map
 #               - Based on v.db.addcolumn
 #               - with special trick for SQLite
-# COPYRIGHT:    (C) 2007 by the GRASS Development Team
-#
-#               This program is free software under the GNU General Public
-#               License (>=v2). Read the file COPYING that comes with GRASS
-#               for details.
+# SPDX-FileCopyrightText: 2007 GRASS Development Team
+# SPDX-License-Identifier: GPL-2.0-or-later
 #
 #############################################################################
 
@@ -106,12 +103,12 @@ def main():
             cmds = [
                 "BEGIN TRANSACTION",
                 "CREATE TEMPORARY TABLE ${table}_backup (${coldef})",
-                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",
-                "DROP TABLE ${table}",
+                "INSERT INTO ${table}_backup SELECT ${colnames} FROM ${table}",  # noqa: RUF027
+                "DROP TABLE ${table}",  # noqa: RUF027
                 "CREATE TABLE ${table}(${coldef})",
-                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",
-                "CREATE UNIQUE INDEX ${table}_cat ON ${table} (${keycol} )",
-                "DROP TABLE ${table}_backup",
+                "INSERT INTO ${table} SELECT ${colnames} FROM ${table}_backup",  # noqa: RUF027
+                "CREATE UNIQUE INDEX ${table}_cat ON ${table} (${keycol} )",  # noqa: RUF027
+                "DROP TABLE ${table}_backup",  # noqa: RUF027
                 "COMMIT",
             ]
             tmpl = string.Template(";\n".join(cmds))
