@@ -8,6 +8,7 @@ required files are created or not created accordingly.
 
 import pytest
 
+from contextlib import closing
 from pathlib import Path
 
 import sqlite3
@@ -62,14 +63,11 @@ def test_init_creates_tgis_db_if_not_skipped(simple_mapset):
         # Test if the TGIS DB is created with content
         assert tgis_db.parent.exists()
         assert tgis_db.exists()
-        assert (
-            sqlite3.connect(tgis_db)
-            .execute(
+        with closing(sqlite3.connect(tgis_db)) as connection:
+            strds_tables = connection.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%strds%';",
-            )
-            .fetchall()
-            != []
-        )
+            ).fetchall()
+        assert strds_tables != []
 
 
 def test_init_succeeds_without_db_creation(simple_mapset):
