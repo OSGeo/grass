@@ -96,14 +96,24 @@ build_program(
     NO_DOCS
 )
 
-build_program(
-    NAME lock
-    SOURCES lock.c
-    DEPENDS grass_datetime grass_gis
-    PACKAGE "grasslibs"
-    RUNTIME_OUTPUT_DIR ${GRASS_INSTALL_ETCBINDIR}
-    NO_DOCS
-)
+if(WIN32)
+    build_program(
+        NAME lock
+        SOURCES lock.c
+        PACKAGE "grasslibs"
+        RUNTIME_OUTPUT_DIR ${GRASS_INSTALL_ETCBINDIR}
+        NO_DOCS
+    )
+else()
+    build_program(
+        NAME lock
+        SOURCES lock.c
+        DEPENDS grass_datetime grass_gis
+        PACKAGE "grasslibs"
+        RUNTIME_OUTPUT_DIR ${GRASS_INSTALL_ETCBINDIR}
+        NO_DOCS
+    )
+endif()
 
 if(MINGW)
     build_program(
