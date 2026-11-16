@@ -634,10 +634,15 @@ int main(int argc, char *argv[])
                     south = Rast_row_to_northing((row + 1 + 0.5), &window);
                     east = Rast_col_to_easting(2.5, &window);
                     west = Rast_col_to_easting(0.5, &window);
-                    V = G_distance(east, north, east, south) * 4 /
-                        (factor * zfactor);
-                    H = G_distance(east, ns_med, west, ns_med) * 4 /
-                        (factor * zfactor);
+                    /* For lat/lon, G_distance() keeps the latitudes in static
+                       variables, so only one thread may call it at a time. */
+#pragma omp critical
+                    {
+                        V = G_distance(east, north, east, south) * 4 /
+                            (factor * zfactor);
+                        H = G_distance(east, ns_med, west, ns_med) * 4 /
+                            (factor * zfactor);
+                    }
                     /* ____________________________
                        |c1      |c2      |c3      |
                        |        |        |        |
