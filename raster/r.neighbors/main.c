@@ -287,8 +287,7 @@ int main(int argc, char *argv[])
 
     flag.nulls = G_define_flag();
     flag.nulls->key = 'n';
-    flag.nulls->description =
-        _("Keep null values in output raster map");
+    flag.nulls->description = _("Keep null values in output raster map");
 
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
