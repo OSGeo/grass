@@ -18,10 +18,7 @@ static struct state {
 
     double units_to_meters_squared;
 
-    /* these next are for lat-long only */
-    int next_row;
-    double north_value;
-    double north;
+    /* this is for lat-long only */
     double (*darea0)(double);
 } state;
 
@@ -56,9 +53,6 @@ int G_begin_cell_area_calculations(void)
             G_begin_zone_area_on_sphere(a, st->window.ew_res / 360.0);
             st->darea0 = G_darea0_on_sphere;
         }
-        st->next_row = 0;
-        st->north = st->window.north;
-        st->north_value = st->darea0(st->north);
 
         return 2;
     }
@@ -79,31 +73,22 @@ int G_begin_cell_area_calculations(void)
  * specified <i>row</i>. This value is constant for planimetric grids
  * and varies with the row if the projection is latitude-longitude.
  *
+ * It can be called from multiple threads at the same time once
+ * G_begin_cell_area_calculations() has returned.
+ *
  * \param row row number
  *
  * \return cell area
  */
 double G_area_of_cell_at_row(int row)
 {
-    double south_value;
-    double cell_area;
-
     if (st->projection != PROJECTION_LL)
         return st->square_meters;
 
-    if (row != st->next_row) {
-        st->north = st->window.north - row * st->window.ns_res;
-        st->north_value = st->darea0(st->north);
-    }
+    double north = st->window.north - row * st->window.ns_res;
+    double south = st->window.north - (row + 1) * st->window.ns_res;
 
-    st->north -= st->window.ns_res;
-    south_value = st->darea0(st->north);
-    cell_area = st->north_value - south_value;
-
-    st->next_row = row + 1;
-    st->north_value = south_value;
-
-    return cell_area;
+    return st->darea0(north) - st->darea0(south);
 }
 
 /*!
