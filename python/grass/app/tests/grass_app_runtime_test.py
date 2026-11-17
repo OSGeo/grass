@@ -10,11 +10,7 @@ from pathlib import Path
 import pytest
 
 from grass.app import resource_paths
-from grass.app.runtime import (
-    RuntimePaths,
-    find_conda_prefix,
-    set_proj_data_for_conda,
-)
+from grass.app.runtime import RuntimePaths, set_proj_data_for_conda
 from grass.script.setup import get_install_path, setup_runtime_env
 
 
@@ -207,8 +203,9 @@ def test_passing_non_existent_path(path_type):
     assert get_install_path(path_type("/does/not/exist")) == get_install_path()
 
 
-# Fixed because the build-time value can be empty (autotools build)
-CONDA_GISBASE = os.path.join("lib", "grass86")
+# GRASS installation path relative to the environment prefix.
+# resource_paths.GISBASE cannot be used because it is empty in autotools builds.
+CONDA_GISBASE = os.path.join("lib", "grass")
 
 
 def make_conda_env(path, windows=False, proj_db=True):
@@ -230,38 +227,12 @@ def make_conda_env(path, windows=False, proj_db=True):
     return install_path, proj_data
 
 
-def test_find_conda_prefix(tmp_path):
-    """The environment prefix is found above the installation path"""
-    install_path, _ = make_conda_env(tmp_path / "env")
-    assert find_conda_prefix(install_path) == (tmp_path / "env").resolve()
-
-
-def test_find_conda_prefix_at_install_path(tmp_path):
-    """The installation path itself can be the environment prefix"""
-    (tmp_path / "conda-meta").mkdir()
-    assert find_conda_prefix(tmp_path) == tmp_path.resolve()
-
-
-def test_find_conda_prefix_outside_conda(tmp_path):
-    """An installation outside of conda has no prefix"""
-    install_path = tmp_path / CONDA_GISBASE
-    install_path.mkdir(parents=True)
-    assert find_conda_prefix(install_path) is None
-
-
 @pytest.mark.parametrize("windows", [False, True])
 def test_proj_data_set_in_conda(tmp_path, windows):
     """PROJ_DATA is set to the PROJ directory of the environment"""
     install_path, proj_data = make_conda_env(tmp_path / "env", windows=windows)
     env = {}
-    set_proj_data_for_conda(install_path, env=env)
-    assert env == {"PROJ_DATA": str(proj_data.resolve())}
-
-
-def test_proj_data_set_in_conda_str(tmp_path):
-    """The installation path is accepted as a string, too"""
-    install_path, proj_data = make_conda_env(tmp_path / "env")
-    env = {}
+    # GISBASE is a string in the callers.
     set_proj_data_for_conda(str(install_path), env=env)
     assert env == {"PROJ_DATA": str(proj_data.resolve())}
 
