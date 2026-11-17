@@ -501,8 +501,8 @@ def get_lib_path(modname, libname=None):
     from os import getenv
     from os.path import join, sep
 
-    if Path(getenv("GISBASE"), "etc", modname).is_dir():
-        path = join(os.getenv("GISBASE"), "etc", modname)
+    if Path(getenv("GRASS_ETCDIR"), modname).is_dir():
+        path = join(os.getenv("GRASS_ETCDIR"), modname)
     elif (
         getenv("GRASS_ADDON_BASE")
         and libname
@@ -671,7 +671,7 @@ def legalize_vector_name(name, fallback_prefix: str | None = "x") -> str:
         name = "{fallback_prefix}{name}".format(**locals())
     name = re.sub(r"[^A-Za-z0-9_]", "_", name, flags=re.ASCII)
     keywords = ["and", "or", "not"]
-    if name in keywords:
+    if name.lower() in keywords:
         name = "{name}_".format(**locals())
     return name
 

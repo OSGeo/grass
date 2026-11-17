@@ -270,16 +270,14 @@ class WMSBase:
                     % options["url"]
                 )
             else:
-                msg = _("Unable to fetch capabilities from <{0}>. Reason: ").format(
-                    options["url"]
+                gs.fatal(
+                    _(
+                        "Unable to fetch capabilities from <{url}>. Reason: {reason}"
+                    ).format(
+                        url=options["url"],
+                        reason=e.reason if hasattr(e, "reason") else e,
+                    )
                 )
-
-                if hasattr(e, "reason"):
-                    msg += "{0}".format(e.reason)
-                else:
-                    msg += "{0}".format(e)
-
-                gs.fatal(msg)
 
         gs.debug("Fetching capabilities OK")
         return gs.decode(cap.read())

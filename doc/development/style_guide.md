@@ -217,14 +217,14 @@ def func(arg1, arg2):
 
     Example:
 
-    >>> a=1
-    >>> b=2
-    >>> func(a,b)
+    >>> a = 1
+    >>> b = 2
+    >>> func(a, b)
     True
     """
 
     if arg1 == arg2:
-        raise ValueError('arg1 must not be equal to arg2')
+        raise ValueError("arg1 must not be equal to arg2")
 
     return True
 ```
@@ -575,7 +575,9 @@ If different subprocesses need different regions, use different environments:
 
 ```python
 with gs.RegionManager(raster=input_raster, env=os.environ.copy()) as manager:
-    gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope, env=manager.env)
+    gs.run_command(
+        "r.slope.aspect", elevation=input_raster, slope=slope, env=manager.env
+    )
 ```
 
 This approach makes the computational region completely safe for parallel
@@ -587,7 +589,7 @@ If you can't use a context manager, you can use `gs.use_temp_region()` and
 ```python
 gs.use_temp_region()  # From now on, use a separate region in the script.
 # Set the computational region with g.region as needed.
-grass.run_command('g.region', raster='input')
+grass.run_command("g.region", raster="input")
 gs.del_temp_region()
 # Original region applies now.
 ```
@@ -689,7 +691,6 @@ def remove(name):
     )
 
 
-
 def main():
     temporary = gs.append_node_pid("tmp_mapcalc")
     atexit.register(remove, temporary)
@@ -707,13 +708,13 @@ Use gs.findfile() when there is a need to test if a map exists.
 
 ```python
 # test for input raster map
-result = gs.find_file(map_name, element='raster')
-if not result['file']:
+result = gs.find_file(map_name, element="raster")
+if not result["file"]:
     gs.fatal(_("Raster map <{}> not found").format(map_name))
 
 # test for input vector map
-result = gs.find_file(map_name, element='vector')
-if not result['file']:
+result = gs.find_file(map_name, element="vector")
+if not result["file"]:
     gs.fatal(_("Vector map <{}> not found").format(map_name))
 ```
 
@@ -922,7 +923,7 @@ def main():
     try:
         import pandas as pd  # noqa: E402
     except ModuleNotFoundError:
-      gs.fatal(_("Pandas library not installed"))
+        gs.fatal(_("Pandas library not installed"))
 ```
 
 #### Tool name
@@ -1011,9 +1012,9 @@ instead of constructing string from several parts (bad example):
 ```python
 # don't do this
 if ...:
-    maplabel = 'raster map'
+    maplabel = "raster map"
 else:
-    maplabel = '3D raster map'
+    maplabel = "3D raster map"
 win.SetLabel(_("Name for new {} to create").format(maplabel))
 ```
 
@@ -1024,9 +1025,11 @@ string. The comment must start with GTC keyword and must be on a line before
 string:
 
 ```python
-self.bwizard = wx.Button(...,
+self.bwizard = wx.Button(
+    ...,
     # GTC New location
-    label = _("N&ew"))
+    label=_("N&ew"),
+)
 
 # GTC %s will be replaced with name of current shell
 gs.message(_("Running through {}").format(shellname))

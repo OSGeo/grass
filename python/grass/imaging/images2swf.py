@@ -37,7 +37,7 @@ sometimes not adequate. Besides I'd like to be independent of yet another
 package. I tried writing animated gif using PIL (which is widely available),
 but the quality is so poor because it only allows for 256 different colors.
 [EDIT: thanks to Ant1, now the quality of animated gif isn't so bad!]
-I also looked into MNG and APNG, two standards similar to the PNG stanard.
+I also looked into MNG and APNG, two standards similar to the PNG standard.
 Both standards promise exactly what I need. However, hardly any application
 can read those formats, and I cannot import them in flash.
 

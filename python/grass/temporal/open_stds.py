@@ -49,7 +49,12 @@ def _parse_id(
         name, mapset = ident.split("@", 1)
 
     semantic_label = None
-    if "." in name and stds_type == "strds":
+    # Semantic labels apply to raster STRDS. Accept the raster map element types
+    # ("raster"/"rast") as well as "strds": callers such as t.rast.mapcalc reach
+    # open_old_stds() with the map element type rather than "strds", and without
+    # this the ".label" band reference stays attached to the name and the dataset
+    # lookup fails. 3D-raster and vector STDS have no semantic labels.
+    if "." in name and stds_type in {"strds", "raster", "rast"}:
         name, semantic_label = name.split(".", 1)
         if "." in semantic_label:
             msgr.fatal(_("Invalid semantic_label <%s>") % semantic_label)
@@ -181,7 +186,14 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 
     msgr = get_tgis_message_interface()
 
-    name, mapset, _semantic_label = _parse_id(name, stds_type=stds_type)
+    original_name = name
+    name, mapset, semantic_label = _parse_id(name, stds_type=stds_type)
+    if semantic_label:
+        msgr.fatal(
+            _("Illegal dataset name <{}>. Character '.' not allowed.").format(
+                original_name
+            )
+        )
     if mapset:
         if mapset != get_current_mapset():
             msgr.fatal(
@@ -193,7 +205,7 @@ def check_new_stds(name, type, dbif=None, overwrite: bool = False):
 
     if stds_type in {"strds", "rast", "raster"}:
         sp = dataset_factory("strds", id)
-    elif stds_type in {"str3ds", "raster3d", "rast3d ", "raster_3d"}:
+    elif stds_type in {"str3ds", "raster3d", "rast3d", "raster_3d"}:
         sp = dataset_factory("str3ds", id)
     elif stds_type in {"stvds", "vect", "vector"}:
         sp = dataset_factory("stvds", id)

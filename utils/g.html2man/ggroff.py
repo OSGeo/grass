@@ -201,7 +201,7 @@ class Formatter:
         self.show("\n.TS\nexpand;\n")
         self.show(" lw1 ".join(["lw60" for i in range(cols)]) + ".\n")
         self.pp_tbody(content)
-        self.show("\n.TE\n")  # codespell:ignore: TE
+        self.show("\n.TE\n")  # codespell:ignore te
 
     def pp_tag(self, tag, content):
         if self.get("in_tr") and tag not in styles:

@@ -88,7 +88,7 @@
 
 # %flag
 # % key: i
-# % description: Invert filter (remove clumps larger than lower and smaller than upper)
+# % description: Invert filter (remove clumps larger than lower and smaller than upper, only for method 'reclass')
 # %end
 
 # %flag
@@ -106,6 +106,7 @@
 # % requires: mode, value
 # % requires: -m, lower
 # % excludes: -c, -d, -m
+# % excludes: -m, -i
 # %end
 
 
@@ -171,11 +172,19 @@ def get_clumpfile(
     if minsize:
         minsize = ceil((minsize * 10000.0) / prod(resolution))
 
-    msg = _("Generating a clumped raster file")
-    if clump_flags:
-        msg += _(" including diagonal neighbors")
-    if minsize:
-        msg += _(" with minimum %s pixels") % minsize
+    if clump_flags and minsize:
+        msg = _(
+            "Generating a clumped raster file including diagonal neighbors"
+            " with minimum {pixel_count} pixels"
+        ).format(pixel_count=minsize)
+    elif clump_flags:
+        msg = _("Generating a clumped raster file including diagonal neighbors")
+    elif minsize:
+        msg = _(
+            "Generating a clumped raster file with minimum {pixel_count} pixels"
+        ).format(pixel_count=minsize)
+    else:
+        msg = _("Generating a clumped raster file")
     gs.verbose(msg)
     tools.r_clump(
         flags=clump_flags,
@@ -193,28 +202,79 @@ def reclass(
     lower: float | None = None,
     upper: float | None = None,
     input_map: str | None = None,
+    *,
+    invert: bool = False,
 ) -> None:
     """Perform raster-based filtering."""
     tools = Tools(capture_output=True)
     stats_input = clump_map
     expected_fields_number = 4
-    verbose_message = _("Generating a reclass map with area size")
-    range_filter_message = ""
 
-    # Define lower threshold
-    if lower:
-        range_filter_message += _(" larger than or equal to %f hectares...") % lower
+    # Each combination of thresholds gets complete messages, so that
+    # translators can reorder the words and numbers freely.
+    if lower and upper:
+        if invert:
+            verbose_message = _(
+                "Generating a reclass map with area size smaller than {lower} hectares"
+                " or larger than {upper} hectares..."
+            ).format(lower=lower, upper=upper)
+            fatal_message = _(
+                "No areas of size smaller than {lower} hectares"
+                " or larger than {upper} hectares"
+            ).format(lower=lower, upper=upper)
+        else:
+            verbose_message = _(
+                "Generating a reclass map with area size larger than or equal to"
+                " {lower} hectares and smaller than or equal to {upper} hectares..."
+            ).format(lower=lower, upper=upper)
+            fatal_message = _(
+                "No areas of size larger than or equal to {lower} hectares"
+                " and smaller than or equal to {upper} hectares"
+            ).format(lower=lower, upper=upper)
+    elif lower:
+        if invert:
+            verbose_message = _(
+                "Generating a reclass map with area size"
+                " smaller than {lower} hectares..."
+            ).format(lower=lower)
+            fatal_message = _("No areas of size smaller than {lower} hectares").format(
+                lower=lower
+            )
+        else:
+            verbose_message = _(
+                "Generating a reclass map with area size"
+                " larger than or equal to {lower} hectares..."
+            ).format(lower=lower)
+            fatal_message = _(
+                "No areas of size larger than or equal to {lower} hectares"
+            ).format(lower=lower)
+    elif upper:
+        if invert:
+            verbose_message = _(
+                "Generating a reclass map with area size"
+                " larger than {upper} hectares..."
+            ).format(upper=upper)
+            fatal_message = _("No areas of size larger than {upper} hectares").format(
+                upper=upper
+            )
+        else:
+            verbose_message = _(
+                "Generating a reclass map with area size"
+                " smaller than or equal to {upper} hectares..."
+            ).format(upper=upper)
+            fatal_message = _(
+                "No areas of size smaller than or equal to {upper} hectares"
+            ).format(upper=upper)
     else:
+        # A zero lower limit and no upper limit filter nothing.
+        verbose_message = _("Generating a reclass map without area size limits...")
+        fatal_message = _("No areas found")
+    gs.verbose(verbose_message)
+
+    if not lower:
         lower = -inf
-
-    # Define upper threshold
-    if upper:
-        if range_filter_message:
-            range_filter_message += " and"
-        range_filter_message += _(" smaller than or equal to %f hectares...") % upper
-    else:
+    if not upper:
         upper = inf
-    gs.verbose(verbose_message + range_filter_message)
 
     recfile = f"{TEMP_PREFIX}_recl"
     sflags = "aln"
@@ -241,7 +301,9 @@ def reclass(
         if len(f) < expected_fields_number:
             continue
         hectares = float(f[-1]) * 0.0001
-        if lower <= hectares <= upper:
+        in_range = lower <= hectares <= upper
+        keep = not in_range if invert else in_range
+        if keep:
             rules += "{} = {} {}\n".format(*[f[i] for i in [0, 2, -2]])
     if rules:
         tools.r_reclass(
@@ -251,8 +313,7 @@ def reclass(
             quiet=True,
         )
     else:
-        fatal_message = _("No areas of size ")
-        gs.fatal(fatal_message + range_filter_message)
+        gs.fatal(fatal_message)
     tools.r_mapcalc(expression=f"{output_map} = {recfile}")
 
 
@@ -343,6 +404,9 @@ def main() -> None:
     if not gs.find_file(options["input"])["name"]:
         gs.fatal(_("Raster map <%s> not found") % options["input"])
 
+    if flags["i"] and options["method"] == "rmarea":
+        gs.fatal(_("Flag -i is not supported with method='rmarea'"))
+
     # Check for unsupported locations
     resolution = check_projection()
 
@@ -383,7 +447,7 @@ def main() -> None:
 
     # Filter clumped map
     filter_method = (
-        partial(reclass, input_map=options["input"])
+        partial(reclass, input_map=options["input"], invert=flags["i"])
         if options["method"] == "reclass"
         else partial(rmarea, return_vector=flags["v"])
     )
