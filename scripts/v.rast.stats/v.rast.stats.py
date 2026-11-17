@@ -289,9 +289,8 @@ def get_nr_of_categories(
     categories = gs.parse_command(
         "r.category", map=rastertmp, format="json", quiet=True
     )
-    cats = [str(item["category"]) for item in categories]
 
-    number = len(cats)
+    number = len(categories)
     if number < 1:
         # create columns and exit
         gs.warning(_("No categories found in raster map"))
