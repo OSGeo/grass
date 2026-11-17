@@ -13,16 +13,16 @@ char *get_authority_names(void)
     PROJ_STRING_LIST authlist;
     PJ_LOG_LEVEL log_level;
 
-    /* This runs on every g.proj call, so keep PROJ quiet here. Operations
-     * which need the database report the failure later. */
+    // This runs on every g.proj call, so keep PROJ quiet here. Operations
+    // which need the database report the failure later.
     log_level = proj_log_level(NULL, PJ_LOG_NONE);
     authlist = proj_get_authorities_from_database(NULL);
     proj_log_level(NULL, log_level);
 
     if (!authlist) {
-        /* PROJ cannot open its database. Leave the option values
-         * unrestricted so that operations which do not need the list
-         * still work. */
+        // PROJ cannot open its database. Leave the option values
+        // unrestricted so that operations which do not need the list
+        // still work.
         return NULL;
     }
 
