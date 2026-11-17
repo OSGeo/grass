@@ -271,7 +271,7 @@ static void slowline(double x1, double y1, double x2, double y2)
     }
     else {
         if (dx == dy) /* they both might be 0 */
-            m = 1.;
+            m = 0.;
         else
             m = dx / dy;
 
