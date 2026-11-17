@@ -47,5 +47,5 @@ def env_without_proj_db(session, tmp_path):
 
 @pytest.fixture
 def tools_without_proj_db(env_without_proj_db):
-    """Tools which run without proj.db and return errors as return codes"""
+    """Tools which run without proj.db and do not raise on errors"""
     return Tools(env=env_without_proj_db, errors="ignore", consistent_return_value=True)
