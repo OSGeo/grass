@@ -246,17 +246,37 @@ static void slowline(double x1, double y1, double x2, double y2)
     dx = x2 - x1;
     dy = y2 - y1;
 
-    if (fabs(dx) > fabs(dy)) {
-        m = dy / dx;
+    /* Zero-length segment: plot only one point. */
+    if (dx == 0.0 && dy == 0.0) {
+        xstart = iceil(x1 - 0.5);
+        ystart = iceil(y1 - 0.5);
 
+        st->move(xstart, ystart);
+        st->cont(xstart, ystart);
+        return;
+    }
+
+    if (fabs(dx) > fabs(dy)) {
+        /* Always go from smaller x to larger x for identical results
+         * independent of the direction. */
         if (x1 > x2) {
-            xstart = iceil(x2 - 0.5);
-            xstop = ifloor(x1 + 0.5);
+            double tmp;
+
+            tmp = x1;
+            x1 = x2;
+            x2 = tmp;
+
+            tmp = y1;
+            y1 = y2;
+            y2 = tmp;
+
+            dx = x2 - x1;
+            dy = y2 - y1;
         }
-        else {
-            xstart = iceil(x1 - 0.5);
-            xstop = ifloor(x2 + 0.5);
-        }
+        m = dy / dx;
+        xstart = iceil(x1 - 0.5);
+        xstop = ifloor(x2 + 0.5);
+
         if (xstart <= xstop) {
             /* Subtract the start/end point coordinate before multiplying
              * to avoid numerical cancellation.
@@ -270,19 +290,26 @@ static void slowline(double x1, double y1, double x2, double y2)
         }
     }
     else {
-        if (dx == dy) /* they both might be 0 */
-            m = 0.;
-        else
-            m = dx / dy;
-
+        /* Always go from smaller y to larger y for identical results
+         * independent of the direction. */
         if (y1 > y2) {
-            ystart = iceil(y2 - 0.5);
-            ystop = ifloor(y1 + 0.5);
+            double tmp;
+
+            tmp = x1;
+            x1 = x2;
+            x2 = tmp;
+
+            tmp = y1;
+            y1 = y2;
+            y2 = tmp;
+
+            dx = x2 - x1;
+            dy = y2 - y1;
         }
-        else {
-            ystart = iceil(y1 - 0.5);
-            ystop = ifloor(y2 + 0.5);
-        }
+        m = dx / dy;
+        ystart = iceil(y1 - 0.5);
+        ystop = ifloor(y2 + 0.5);
+
         if (ystart <= ystop) {
             /* Subtract the start/end point coordinate before multiplying
              * to avoid numerical cancellation.
