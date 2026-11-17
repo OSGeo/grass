@@ -204,16 +204,16 @@ def test_passing_non_existent_path(path_type):
 
 
 # GISBASE relative to the prefix of the fake environment.
-# resource_paths.GISBASE cannot be used because it is empty in autotools builds.
+# resource_paths.GISBASE cannot be used because it is empty in Autotools builds.
 FAKE_GISBASE = os.path.join("lib", "grass")
 
 
 def make_fake_conda_env(path, windows=False, proj_db=True):
     """Create a fake conda environment for set_proj_data_for_conda()
 
-    Only what the function looks at is created: the conda-meta directory,
-    the GRASS installation directory, and the PROJ data directory with an
-    empty proj.db (unless proj_db is false).
+    Only what the tested function looks at is created: the conda-meta
+    directory, the GRASS installation directory, and the PROJ data directory
+    with an empty proj.db (unless proj_db is false).
 
     Returns the GRASS installation path and the PROJ data directory.
     """
@@ -243,7 +243,7 @@ def test_proj_data_set_in_conda(tmp_path, windows):
 
 @pytest.mark.parametrize("variable", ["PROJ_DATA", "PROJ_LIB"])
 def test_proj_data_existing_value_is_respected(tmp_path, variable):
-    """A PROJ variable set by the user or the activation script is kept"""
+    """A PROJ variable set by the user or the conda activation script is kept"""
     install_path, _ = make_fake_conda_env(tmp_path / "env")
     env = {variable: "/elsewhere"}
     set_proj_data_for_conda(install_path, env=env)

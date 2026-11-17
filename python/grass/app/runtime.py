@@ -314,14 +314,14 @@ def _find_conda_prefix(install_path):
 def set_proj_data_for_conda(install_path, env):
     """Set PROJ_DATA as activation of the conda environment would
 
-    Without activation, PROJ may not find its database (proj.db) in a conda
-    environment. This sets PROJ_DATA to the PROJ directory of the conda
+    Without that activation, PROJ may not find its database (proj.db) in a
+    conda environment. This sets PROJ_DATA to the PROJ directory of the conda
     environment GRASS is installed in. Nothing is changed when PROJ_DATA or
     PROJ_LIB is set, when GRASS is not in a conda environment, or when the
     directory has no proj.db.
 
-    Like activation, this affects all PROJ users in the process when *env*
-    is os.environ.
+    Like activation of the conda environment, this affects all PROJ users in
+    the process when *env* is os.environ.
 
     :param install_path: GRASS installation path (GISBASE)
     :param env: environment to modify (e.g., os.environ)
