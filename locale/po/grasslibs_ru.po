@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 19:34+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ru/>\n"
@@ -7512,10 +7512,6 @@ msgstr "Неудачное выполнение подпроцессов"
 msgid "The map does not exist, I can't open in 'r' mode"
 msgstr "Карта не существует, не удалось открыть в режиме «r»"
 
-#, python-brace-format
-msgid "Raster map <{0}> already exists and will be not overwritten"
-msgstr "Растровая карта <{0}> уже существует и не будет перезаписана"
-
 msgid "Raster type not defined"
 msgstr "Тип растра не определён"
 
@@ -7526,10 +7522,6 @@ msgstr "Тип режима: {0} не поддерживается («r», «w»
 #, python-format
 msgid "Index out of range: %r."
 msgstr "Индекс вне диапазона: %r."
-
-#, python-brace-format
-msgid "Raster map <{0}> already exists. Use overwrite."
-msgstr "Растровая карта <{0}> уже существует. Воспользуйтесь перезаписью."
 
 #, python-brace-format
 msgid "Raster map <{0}> does not exist"
@@ -7551,6 +7543,10 @@ msgstr "Тип перезаписи: {0} не поддерживается (Ис
 #, python-brace-format
 msgid "Map name {0} not valid"
 msgstr "Недопустимое имя карты {0}"
+
+#, python-brace-format
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr "Растровая карта <{0}> уже существует и не будет перезаписана"
 
 #, python-brace-format
 msgid "Raster type: {0} not supported"
@@ -8843,6 +8839,10 @@ msgstr ""
 #| msgid "Unknown format"
 msgid "Unknown format '{}'."
 msgstr "Неизвестный формат"
+
+#, python-brace-format
+#~ msgid "Raster map <{0}> already exists. Use overwrite."
+#~ msgstr "Растровая карта <{0}> уже существует. Воспользуйтесь перезаписью."
 
 #, fuzzy
 #~| msgid "Please install the GRASS GIS development package"
