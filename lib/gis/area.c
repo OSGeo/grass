@@ -74,7 +74,9 @@ int G_begin_cell_area_calculations(void)
  * and varies with the row if the projection is latitude-longitude.
  *
  * It can be called from multiple threads at the same time once
- * G_begin_cell_area_calculations() has returned.
+ * G_begin_cell_area_calculations() has returned, as long as no thread
+ * calls G_begin_cell_area_calculations(),
+ * G_begin_polygon_area_calculations(), or G_begin_zone_area_on_*().
  *
  * \param row row number
  *

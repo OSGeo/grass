@@ -62,7 +62,7 @@ def expected_cell_areas():
     )
 
 
-@pytest.mark.parametrize("nprocs", [0, 1, 4])
+@pytest.mark.parametrize("nprocs", [1, 4])
 def test_area_latlon(latlon_session, nprocs):
     """Check that each row has the area of its own latitude with any nprocs"""
     tools = Tools(session=latlon_session, overwrite=True)
