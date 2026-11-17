@@ -103,3 +103,19 @@ def test_get_multiprocessing_context():
         assert ctx.get_start_method() == "fork"
     else:
         assert ctx.get_start_method() == multiprocessing.get_start_method()
+
+
+@pytest.mark.parametrize(
+    "name", ["and", "AND", "aNd", "or", "OR", "Or", "not", "NOT", "nOt"]
+)
+def test_legalize_vector_name_keywords(name):
+    """Escape SQL keywords regardless of case, preserving the original case."""
+    assert gs.legalize_vector_name(name) == f"{name}_"
+
+
+@pytest.mark.parametrize(
+    "name", ["my_map", "My_Map", "AND_", "border", "NOTable", "sand"]
+)
+def test_legalize_vector_name_valid(name):
+    """Preserve valid names, including names containing SQL keywords."""
+    assert gs.legalize_vector_name(name) == name
