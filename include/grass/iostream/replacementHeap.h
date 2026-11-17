@@ -124,7 +124,7 @@ public:
             mergeHeap[i].run->name(&runname);
             runlen = mergeHeap[i].run->stream_len();
             s << ", " << runname << ", len=" << runlen;
-            delete runname; // this should be safe
+            delete[] runname;
         }
         s << endl;
         return s;

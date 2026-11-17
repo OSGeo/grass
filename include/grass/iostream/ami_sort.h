@@ -104,7 +104,7 @@ AMI_err AMI_sort(AMI_STREAM<T> *instream, AMI_STREAM<T> **outstream,
         instream->name(&name);
         cout << "AMI_sort: sorting stream" << name << ", len=" << instreamLength
              << endl;
-        delete name;
+        delete[] name;
         MM_manager.print();
     }
 
