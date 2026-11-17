@@ -86,7 +86,7 @@ def read_monitor_file(monitor, ftype="env"):
     try:
         fd = open(mfile)
     except OSError as e:
-        fatal(_("Unable to get monitor info. %s"), e)
+        fatal(_("Unable to get monitor info. {}").format(e))
 
     lines = []
     for line in fd:
@@ -117,7 +117,7 @@ def write_monitor_file(monitor, lines, ftype="env"):
     try:
         fd = open(mfile, "w")
     except OSError as e:
-        fatal(_("Unable to get monitor info. %s"), e)
+        fatal(_("Unable to get monitor info. {}").format(e))
 
     fd.writelines(lines)
     fd.close()

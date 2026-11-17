@@ -1,17 +1,17 @@
-# syntax=docker/dockerfile:1.25@sha256:0adf442eae370b6087e08edc7c50b552d80ddf261576f4ebd6421006b2461f12
+# syntax=docker/dockerfile:1.28@sha256:bb22d9815c728170f72750f4e5b0d672e06176142e1d602c7e66c050100b7e5b
 
 # Note: This file must be kept in sync in ./Dockerfile and ./docker/ubuntu/Dockerfile.
 #       Changes to this file must be copied over to the other file.
 ARG GUI=without
 
-FROM ubuntu:26.04@sha256:61ebaa5cc23ca45450db85eac015435199ec569e28ec222ea13f2aed2110b8a6 AS common_start
+FROM ubuntu:26.04@sha256:0d5255be560e2d2ddcfbfda88549e9e815ef29e7cd7fc62183d5709e6e2963c6 AS common_start
 
 ARG BASE_NAME="ubuntu:26.04"
 ARG PYTHON_VERSION=3.14
 # renovate: datasource=github-tags depName=libgeos/geos
 ARG GEOS_VERSION=3.15.0
 # renovate: datasource=github-tags depName=OSGeo/PROJ
-ARG PROJ_VERSION=9.8.1
+ARG PROJ_VERSION=9.9.0
 # renovate: datasource=github-tags depName=OSGeo/gdal
 ARG GDAL_VERSION=3.13.3
 # renovate: datasource=github-tags depName=PDAL/PDAL
@@ -19,7 +19,7 @@ ARG PDAL_VERSION=2.10.2
 # renovate: datasource=github-tags depName=OSGeo/gdal-grass
 ARG GDAL_GRASS_VERSION=2.0.0
 # renovate: datasource=pypi depName=wxPython
-ARG WXPYTHON_VERSION=4.3.1
+ARG WXPYTHON_VERSION=4.3.2
 
 # Have build parameters as build arguments?
 # ARG LDFLAGS="-s -Wl,--no-undefined -lblas"

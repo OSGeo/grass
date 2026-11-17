@@ -6,6 +6,7 @@ build_library_in_subdir(
         grass_datetime
         grass_gis
         grass_gmath
+        grass_parson
         grass_raster
         grass_vector
     OPTIONAL_DEPENDS OpenMP::OpenMP_C

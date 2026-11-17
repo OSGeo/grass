@@ -226,7 +226,7 @@ and then enter the same set command into the new window.  Now any use of R in
 the original window will use the default version whereas in the new `cmd` line
 window it will use the specified version.
 
-One can change the registry entry permanently to refer to a particlar version
+One can change the registry entry permanently to refer to a particular version
 like this:
 
 ```bash

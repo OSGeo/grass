@@ -1212,7 +1212,8 @@ int dig_Wr_spidx(struct gvfile *fp, struct Plus_head *Plus)
    \param fp pointer to struct gvfile
    \param[in,out] Plus pointer to Plus_head structure
 
-   \return 0
+   \return 0 on success
+   \return -1 on error
  */
 int dig_Rd_spidx(struct gvfile *fp, struct Plus_head *Plus)
 {
@@ -1223,7 +1224,8 @@ int dig_Rd_spidx(struct gvfile *fp, struct Plus_head *Plus)
     dig_spidx_init(Plus);
 
     dig_rewind(fp);
-    dig_Rd_spidx_head(fp, Plus);
+    if (dig_Rd_spidx_head(fp, Plus) == -1)
+        return -1;
     dig_set_cur_port(&(Plus->spidx_port));
 
     /* Nodes */

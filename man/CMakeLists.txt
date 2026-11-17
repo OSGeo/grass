@@ -131,7 +131,8 @@ if(NOT WITH_FHS)
     add_custom_target(
         copy_mkdocs_files
         COMMAND
-            ${CMAKE_COMMAND} -E make_directory ${mkdocs_dir}/overrides/partials
+            ${CMAKE_COMMAND} -E make_directory ${mkdocs_dir}/scripts
+            ${mkdocs_dir}/overrides/partials
             ${mkdocs_dir}/overrides/fragments/tags/default
         COMMAND
             ${CMAKE_COMMAND} -E copy_if_different
@@ -146,6 +147,10 @@ if(NOT WITH_FHS)
             ${CMAKE_CURRENT_SOURCE_DIR}/grass_logo.svg
             ${CMAKE_CURRENT_SOURCE_DIR}/grass_icon.png
             ${CMAKE_CURRENT_SOURCE_DIR}/favicon.ico ${mkdocs_dir}/source
+        COMMAND
+            ${CMAKE_COMMAND} -E copy_if_different
+            ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/grass_markdown.py
+            ${mkdocs_dir}/scripts
         COMMAND
             ${CMAKE_COMMAND} -E copy_if_different
             ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/copyright.html
@@ -223,6 +228,7 @@ if(NOT WITH_FHS)
         env
         "SITE_NAME=GRASS ${GRASS_VERSION_NUMBER} Documentation"
         "COPYRIGHT=&copy$<SEMICOLON> 2003-${GRASS_VERSION_DATE} GRASS Development Team, GRASS ${GRASS_VERSION_NUMBER} Documentation"
+        "PYTHONPATH=${mkdocs_dir}/scripts"
     )
     add_custom_target(
         build-mkdocs

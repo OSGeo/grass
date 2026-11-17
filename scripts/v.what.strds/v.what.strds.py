@@ -260,8 +260,9 @@ def main():
             except CalledModuleError:
                 dbif.close()
                 gs.fatal(
-                    _("Unable to add column %s to vector map <%s> ")
-                    % (column_string, output)
+                    _("Unable to add column {column} to vector map <{vector}>").format(
+                        column=column_string, vector=output
+                    )
                 )
             try:
                 gs.run_command(

@@ -117,6 +117,41 @@ int cmp_layer_srs(GDALDatasetH Ogr_ds, int nlayers, int *layers,
     return 0;
 }
 
+// GRASS has no vertical CRS, so let the user know when one is dropped.
+static void message_ignored_vertical_crs(OGRSpatialReferenceH hSRS)
+{
+    if (OSRGetAxesCount(hSRS) != 3)
+        return;
+
+    const char *name = OSRGetAttrValue(hSRS, "VERT_CS", 0);
+    if (name)
+        G_message(_("Vertical CRS <%s> of the dataset is ignored"), name);
+    else
+        G_message(_("The vertical component of the dataset CRS is ignored"));
+}
+
+// GRASS projects have no vertical CRS, so only the horizontal component
+// of a compound or geographic 3D CRS can be compared. Data axis mapping
+// is handled separately and is ignored here.
+static int is_same_horizontal_srs(OGRSpatialReferenceH hSRS1,
+                                  OGRSpatialReferenceH hSRS2)
+{
+    if (!hSRS1 || !hSRS2)
+        return 0;
+
+    OGRSpatialReferenceH hSRS1_2d = OSRClone(hSRS1);
+    OGRSpatialReferenceH hSRS2_2d = OSRClone(hSRS2);
+    OSRDemoteTo2D(hSRS1_2d, NULL);
+    OSRDemoteTo2D(hSRS2_2d, NULL);
+
+    const char *options[] = {"IGNORE_DATA_AXIS_TO_SRS_AXIS_MAPPING=YES", NULL};
+    int same = OSRIsSameEx(hSRS1_2d, hSRS2_2d, options);
+    OSRDestroySpatialReference(hSRS1_2d);
+    OSRDestroySpatialReference(hSRS2_2d);
+
+    return same;
+}
+
 /* keep in sync with r.in.gdal, r.external, v.external */
 void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                       char *geom_col, char *outloc, int create_only,
@@ -184,6 +219,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                     G_asprintf(&srid, "%s:%s", authname, authcode);
                 }
             }
+            message_ignored_vertical_crs(hSRS);
         }
 
         GPJ_osr_to_grass(cellhd, &proj_info, &proj_units, hSRS, 0);
@@ -236,7 +272,6 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
         char *loc_wkt = NULL, *loc_srid = NULL;
         void (*msg_fn)(const char *, ...);
         OGRSpatialReferenceH hSRS_loc = NULL;
-        char *papszOptions[2];
 
         if (check_only && override) {
             /* can't check when over-riding check */
@@ -315,17 +350,13 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int layer,
                 GPJ_grass_to_osr2(loc_proj_info, loc_proj_units, loc_epsg);
         }
 
-        /* ignore data axis mapping, this is handled separately */
-        papszOptions[0] = G_store("IGNORE_DATA_AXIS_TO_SRS_AXIS_MAPPING=YES");
-        papszOptions[1] = NULL;
-
         if (override) {
             cellhd->proj = loc_wind.proj;
             cellhd->zone = loc_wind.zone;
             G_message(_("Over-riding projection check"));
         }
         else if (loc_wind.proj != cellhd->proj ||
-                 !OSRIsSameEx(hSRS, hSRS_loc, (const char **)papszOptions)) {
+                 !is_same_horizontal_srs(hSRS, hSRS_loc)) {
 
             strcpy(error_msg,
                    _("Coordinate reference system of dataset does not"

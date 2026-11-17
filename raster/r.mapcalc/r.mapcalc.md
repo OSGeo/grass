@@ -775,6 +775,9 @@ be seen using *r.info*.
 If you want other people to be able to verify your results, it's
 preferable to use the **seed** parameter.
 
+The values for a given seed depend on the computational region and on
+the number of rand() calls (not on the number of threads, **nprocs**).
+
 ## EXAMPLES
 
 To compute the average of two raster map layers *a* and *b*:
@@ -863,13 +866,12 @@ r.mapcalc is parallelized using OpenMP. The number of threads can be controlled
 with the **nprocs** parameter. Note that more complex expressions can benefit
 from more threads. By default (**nprocs=0**), r.mapcalc uses all available threads.
 Use the **--verbose** flag to display the number of threads in use.
-If you observe reduced performance when using many threads, try lowering ther number.
+If you observe reduced performance when using many threads, try lowering the number.
 
 Note: r.mapcalc may disable parallelization in certain cases, even when requested:
 
 - When a mask is active, because the current parallel implementation
  does not support it.
-- When the rand() function is used, to ensure reproducible results.
 
 ![Benchmark of r.mapcalc](r_mapcalc_benchmark_time.png)  
 *Figure: Benchmark shows execution time for different number of cells

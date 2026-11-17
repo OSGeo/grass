@@ -68,6 +68,7 @@ def main():
                 _("Output space time dataset <%s> must be located in this mapset")
                 % (output)
             )
+        output_id = output
     else:
         output_id = output + "@" + mapset
 

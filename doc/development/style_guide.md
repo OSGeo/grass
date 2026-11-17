@@ -194,6 +194,8 @@ We
 [use doxygen and document the functions](https://grass.osgeo.org/programming8/)
 directly in the source code. See `lib/gis/open.c` and `lib/gis/gislib.dox` for
 examples.
+Library pages may also be written in Markdown as `*.dox.md` files, which
+Doxygen renders, such as `lib/gis/random_streams.dox.md`.
 
 #### Python API documentation
 
@@ -215,14 +217,14 @@ def func(arg1, arg2):
 
     Example:
 
-    >>> a=1
-    >>> b=2
-    >>> func(a,b)
+    >>> a = 1
+    >>> b = 2
+    >>> func(a, b)
     True
     """
 
     if arg1 == arg2:
-        raise ValueError('arg1 must not be equal to arg2')
+        raise ValueError("arg1 must not be equal to arg2")
 
     return True
 ```
@@ -414,7 +416,7 @@ See [Changing computational region](#changing-computational-region) for more det
 #### Mapsets
 
 **Output data should be always written to the current mapset**. This is ensured
-by build-in GRASS mechanisms, so there is nothing which needs to be done in the
+by built-in GRASS mechanisms, so there is nothing which needs to be done in the
 tool. If a tool modifies inputs, the input must be in the current mapset.
 
 The tool should accept inputs from any mapset in the current project. The
@@ -573,7 +575,9 @@ If different subprocesses need different regions, use different environments:
 
 ```python
 with gs.RegionManager(raster=input_raster, env=os.environ.copy()) as manager:
-    gs.run_command("r.slope.aspect", elevation=input_raster, slope=slope, env=manager.env)
+    gs.run_command(
+        "r.slope.aspect", elevation=input_raster, slope=slope, env=manager.env
+    )
 ```
 
 This approach makes the computational region completely safe for parallel
@@ -585,7 +589,7 @@ If you can't use a context manager, you can use `gs.use_temp_region()` and
 ```python
 gs.use_temp_region()  # From now on, use a separate region in the script.
 # Set the computational region with g.region as needed.
-grass.run_command('g.region', raster='input')
+grass.run_command("g.region", raster="input")
 gs.del_temp_region()
 # Original region applies now.
 ```
@@ -687,7 +691,6 @@ def remove(name):
     )
 
 
-
 def main():
     temporary = gs.append_node_pid("tmp_mapcalc")
     atexit.register(remove, temporary)
@@ -705,13 +708,13 @@ Use gs.findfile() when there is a need to test if a map exists.
 
 ```python
 # test for input raster map
-result = gs.find_file(map_name, element='raster')
-if not result['file']:
+result = gs.find_file(map_name, element="raster")
+if not result["file"]:
     gs.fatal(_("Raster map <{}> not found").format(map_name))
 
 # test for input vector map
-result = gs.find_file(map_name, element='vector')
-if not result['file']:
+result = gs.find_file(map_name, element="vector")
+if not result["file"]:
     gs.fatal(_("Vector map <{}> not found").format(map_name))
 ```
 
@@ -783,11 +786,19 @@ Use the following header in your source code.
 #
 # PURPOSE:   Provide short description of module here...
 #
-# COPYRIGHT: (C) 2024 by John Doe and the GRASS Development Team
-#
+# SPDX-FileCopyrightText: 2024 John Doe
+# SPDX-FileCopyrightText: GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 ##############################################################################
 ```
+
+Each `SPDX-FileCopyrightText` line names one copyright holder with the years
+of their contributions. The line with `GRASS Development Team` is present
+in every file and stands for the project, as `COPYING` states.
+It carries years only when it is the sole copyright line. Add a line
+for yourself when you make a substantial contribution (the same threshold as
+an `AUTHOR(S)` entry), and leave other people's lines alone.
+The `SPDX-License-Identifier` line follows all copyright lines.
 
 #### Use Standard Options in Interface
 
@@ -912,7 +923,7 @@ def main():
     try:
         import pandas as pd  # noqa: E402
     except ModuleNotFoundError:
-      gs.fatal(_("Pandas library not installed"))
+        gs.fatal(_("Pandas library not installed"))
 ```
 
 #### Tool name
@@ -975,8 +986,7 @@ Please use the following docstring template:
 Classes:
  - example::ExampleClass
 
-(C) 2024 by the GRASS Development Team
-
+SPDX-FileCopyrightText: 2024 GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 
 @author First Author <first somewhere.com>
@@ -1002,9 +1012,9 @@ instead of constructing string from several parts (bad example):
 ```python
 # don't do this
 if ...:
-    maplabel = 'raster map'
+    maplabel = "raster map"
 else:
-    maplabel = '3D raster map'
+    maplabel = "3D raster map"
 win.SetLabel(_("Name for new {} to create").format(maplabel))
 ```
 
@@ -1015,9 +1025,11 @@ string. The comment must start with GTC keyword and must be on a line before
 string:
 
 ```python
-self.bwizard = wx.Button(...,
+self.bwizard = wx.Button(
+    ...,
     # GTC New location
-    label = _("N&ew"))
+    label=_("N&ew"),
+)
 
 # GTC %s will be replaced with name of current shell
 gs.message(_("Running through {}").format(shellname))
@@ -1093,8 +1105,8 @@ original work remains, it must be properly cited.
  * MODULE:       g.foo
  * AUTHOR(S):    John Doe <jdoe at somewhere org>
  * PURPOSE:      Provide short description of module here...
- * COPYRIGHT:    (C) 2010 by John Doe, and the GRASS Development Team
- *
+ * SPDX-FileCopyrightText: 2010 John Doe
+ * SPDX-FileCopyrightText: GRASS Development Team
  * SPDX-License-Identifier: GPL-2.0-or-later
  *
  *****************************************************************************/

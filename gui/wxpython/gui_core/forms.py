@@ -557,7 +557,7 @@ class TaskFrame(wx.Frame):
         guisizer.Add(self.notebookpanel, proportion=1, flag=wx.EXPAND)
 
         # status bar
-        status_text = _("Enter parameters for '") + self.task.name + "'"
+        status_text = _("Enter parameters for '{tool}'").format(tool=self.task.name)
         try:
             self.task.get_cmd()
             self.updateValuesHook()
@@ -3115,7 +3115,7 @@ class CmdPanel(wx.Panel):
     def OnPageChange(self, event):
         sel = self.notebook.GetSelection() if not event else event.GetSelection()
         idx = self.notebook.GetPageIndexByName("manual")
-        if idx > -1 and sel == idx:
+        if -1 < idx == sel:
             # calling LoadPage() is strangely time-consuming (only first call)
             # FIXME: move to helpPage.__init__()
             if not self.manualTab.IsLoaded():

@@ -519,7 +519,6 @@ class PsMapFrame(wx.Frame):
                         im = PILImage.fromarray(np.rot90(im_array, 3))
                     im.save(self.imgName, format="PNG")
                 except OSError:
-                    del busy
                     program = self._getGhostscriptProgramName()
                     dlg = HyperlinkDialog(
                         self,
@@ -2685,7 +2684,9 @@ class PsMapBufferedWindow(wx.Window):
             if not labelFiles:
                 return
             labelFiles = [lFile.split("@")[0] for lFile in labelFiles]
-            self.itemLabels[mapId].append(_("labels: ") + ", ".join(labelFiles))
+            self.itemLabels[mapId].append(
+                _("labels: {files}").format(files=", ".join(labelFiles))
+            )
 
     def UpdateLabel(self, itype, id):
         self.itemLabels[id] = []

@@ -29,6 +29,9 @@ double bb_alb_landsat8(double shortbluechan, double bluechan, double greenchan,
                        double redchan, double nirchan, double chan5,
                        double chan7);
 
+double bb_alb_sentinel2(double b2chan, double b3chan, double b4chan,
+                        double b8chan, double b11chan, double b12chan);
+
 double bb_alb_noaa(double redchan, double nirchan);
 
 double bb_alb_modis(double redchan, double nirchan, double chan3, double chan4,
@@ -43,7 +46,7 @@ int main(int argc, char *argv[])
     struct Option *input, *output;
     struct Flag *flag1, *flag2, *flag3;
     struct Flag *flag4, *flag5, *flag6;
-    struct Flag *flag7;
+    struct Flag *flag7, *flag8;
     struct History history; /*metadata */
     struct Colors colors;   /*Color rules */
 
@@ -58,7 +61,7 @@ int main(int argc, char *argv[])
     char **ptr;
     int i = 0;
     int modis = 0, aster = 0, avhrr = 0;
-    int landsat = 0, landsat8 = 0;
+    int landsat = 0, landsat8 = 0, sentinel2 = 0;
     void *inrast[MAXFILES];
     unsigned char *outrast;
 
@@ -94,6 +97,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("reflectance"));
     G_add_keyword(_("satellite"));
     G_add_keyword(_("Landsat"));
+    G_add_keyword(_("Sentinel"));
     G_add_keyword(_("ASTER"));
     G_add_keyword(_("AVHRR"));
     G_add_keyword(_("MODIS"));
@@ -124,6 +128,12 @@ int main(int argc, char *argv[])
     flag4 = G_define_flag();
     flag4->key = '8';
     flag4->description = _("Landsat 8 (7 input bands:1,2,3,4,5,6,7)");
+
+    flag8 = G_define_flag();
+    flag8->key = 's';
+    flag8->description =
+        _("Sentinel-2 (6 input bands: B2,B3,B4,B8,B11,B12 surface "
+          "reflectance in [0,1]; Bonafoni & Sekertekin 2020 coefficients)");
 
     flag5 = G_define_flag();
     flag5->key = 'a';
@@ -158,6 +168,7 @@ int main(int argc, char *argv[])
     landsat = (flag3->answer);
     landsat8 = (flag4->answer);
     aster = (flag5->answer);
+    sentinel2 = (flag8->answer);
 
     for (; *ptr != NULL; ptr++) {
         if (nfiles >= MAXFILES)
@@ -232,6 +243,9 @@ int main(int argc, char *argv[])
                 }
                 else if (aster) {
                     de = bb_alb_aster(d[1], d[2], d[3], d[4], d[5], d[6]);
+                }
+                else if (sentinel2) {
+                    de = bb_alb_sentinel2(d[1], d[2], d[3], d[4], d[5], d[6]);
                 }
                 if (Rast_is_d_null_value(&de)) {
                     /*Do nothing */
@@ -389,6 +403,9 @@ int main(int argc, char *argv[])
             }
             else if (aster) {
                 de = bb_alb_aster(d[1], d[2], d[3], d[4], d[5], d[6]);
+            }
+            else if (sentinel2) {
+                de = bb_alb_sentinel2(d[1], d[2], d[3], d[4], d[5], d[6]);
             }
             if (flag6->answer || flag7->answer) {
                 /* Post-Process Albedo */

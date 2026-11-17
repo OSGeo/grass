@@ -167,8 +167,7 @@ environment. Mark such a test so it is run on its own:
 
 ```python
 @pytest.mark.needs_solo_run
-def test_something_which_changes_the_environment(xy_dataset_session):
-    ...
+def test_something_which_changes_the_environment(xy_dataset_session): ...
 ```
 
 ## More information

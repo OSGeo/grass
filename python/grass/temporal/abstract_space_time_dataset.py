@@ -772,18 +772,16 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Tune the temporal relations
         if "start" in relations:
-            if "overlapped" not in relations:
-                relations.append("overlapped")
             if "starts" not in relations:
                 relations.append("starts")
             if "started" not in relations:
                 relations.append("started")
-            if "finishes" not in relations:
-                relations.append("finishes")
             if "contains" not in relations:
                 relations.append("contains")
-            if "equals" not in relations:
-                relations.append("equals")
+            if "equal" not in relations:
+                relations.append("equal")
+            if "overlaps" not in relations:
+                relations.append("overlaps")
 
         if "overlap" in relations or "over" in relations:
             if "overlapped" not in relations:
@@ -1703,9 +1701,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             shortcut_identifier = leading_zero(self.semantic_label)
             if shortcut_identifier:
                 where += (
-                    "{br} LIKE '{si}\\_%' {esc} OR {br} LIKE '%\\_{si}' {esc} OR "
+                    "({br} LIKE '{si}\\_%' {esc} OR {br} LIKE '%\\_{si}' {esc} OR "
                     "{br} LIKE '{orig}\\_%' {esc} OR "
-                    "{br} LIKE '%\\_{orig}' {esc}".format(
+                    "{br} LIKE '%\\_{orig}' {esc})".format(
                         br="semantic_label",
                         si=shortcut_identifier,
                         orig=self.semantic_label.upper(),
@@ -1765,14 +1763,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         if not spatial_relation:
             spatial_relation = "overlaps"
         elif spatial_relation not in {"overlaps", "is_contained", "contains"}:
-            self.msgr.error(
-                _(
-                    "Invalid spatial relation <{}> requested."
-                    "Only values 'overlaps', 'is_contained', and 'contains' are \
-                        allowed."
-                ).format(spatial_relation)
-            )
-            raise
+            msg = _(
+                "Invalid spatial relation <{}> requested. "
+                "Only values 'overlaps', 'is_contained', and 'contains' are allowed."
+            ).format(spatial_relation)
+            self.msgr.error(msg)
+            raise ValueError(msg)
         # SQL implementation of overlap, is_contained, and contains
         where += ""
 

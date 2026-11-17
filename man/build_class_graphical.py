@@ -144,7 +144,7 @@ def generate_page_for_category(
 
         if module_family.lower() not in {"general", "postscript"}:
             if module_family == "raster3d":
-                # covert keyword to nice form
+                # convert keyword to nice form
                 module_family = "3D raster"
             output.write(
                 modclass_intro_tmpl.substitute(
@@ -203,7 +203,7 @@ def generate_page_for_category_md(
 
         if module_family.lower() not in {"general", "postscript"}:
             if module_family == "raster3d":
-                # covert keyword to nice form
+                # convert keyword to nice form
                 module_family = "3D raster"
             output.write(
                 modclass_intro_tmpl.substitute(

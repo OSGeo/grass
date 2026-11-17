@@ -56,7 +56,7 @@ def split(s):
             return shlex.split(s.replace("\\", r"\\"))
         return shlex.split(s)
     except ValueError as e:
-        sys.stderr.write(_("Syntax error: %s") % e)
+        sys.stderr.write(_("Syntax error: %s") % e + "\n")
 
     return []
 
@@ -230,11 +230,7 @@ def GetValidLayerName(name):
         cIdx += 1
     retName = "".join(retNameList)
 
-    if (
-        retName
-        and not (retName[0] >= "A" and retName[0] <= "Z")
-        and not (retName[0] >= "a" and retName[0] <= "z")
-    ):
+    if retName and not ("A" <= retName[0] <= "Z") and not ("a" <= retName[0] <= "z"):
         retName = "x" + retName[1:]
 
     if mapset:
