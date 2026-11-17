@@ -673,7 +673,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                In case of mixed of interval data the user can chose
                between:
 
-               - Example ["start", "during", "equals"]
+               - Example ["start", "during", "equal"]
 
                - start: Select maps of which the start time is
                  located in the selection granule:
@@ -717,7 +717,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :  s-----------------e
                      granule:     s-----------e
 
-               - equals: Select maps which temporally equal
+               - equal: Select maps which temporally equal
                  to the selection granule:
 
                  .. code-block:: output
@@ -725,7 +725,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :  s-----------e
                      granule:  s-----------e
 
-               - follows: Select maps which temporally follow
+               - precedes: Select maps which temporally follow
                  the selection granule:
 
                  .. code-block:: output
@@ -733,7 +733,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :              s-----------e
                      granule:  s-----------e
 
-               - precedes: Select maps which temporally precedes
+               - follows: Select maps which temporally precedes
                  the selection granule:
 
                  .. code-block:: output
@@ -741,8 +741,11 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :  s-----------e
                      granule:              s-----------e
 
+               A map with the start and end time of the selection granule
+               is selected only by start and equal.
+
                All these methods can be combined. Method must be of
-               type tuple including the identification strings.
+               type list including the identification strings.
 
         :param spatial: If set True additional the 2d spatial overlapping
                        is used for selection -> spatio-temporal relation.
@@ -793,7 +796,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if "contains" not in relations:
                 relations.append("contains")
 
-        # Remove start, equal, contain and overlap
+        # Remove start, contain and overlap
         relations = [
             relation.upper().strip()
             for relation in relations
@@ -871,7 +874,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         .. code-block:: python
 
-            list = self.sample_by_dataset(
+            list = self.sample_by_dataset_sql(
                 stds=sampler, method=["during", "overlap", "contain", "equal"]
             )
             for entry in list:
@@ -917,7 +920,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :        s--------e
                      granule:  s-----------------e
 
-               - contains: Select maps which are temporal
+               - during: Select maps which are temporal
                  during the selection granule:
 
                  .. code-block:: output
@@ -937,7 +940,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :     s-----------e
                      granule:  s----------e
 
-               - during: Select maps which temporally contains
+               - contains: Select maps which temporally contains
                  the selection granule:
 
                  .. code-block:: output
@@ -968,6 +971,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
                      map    :  s-----------e
                      granule:              s-----------e
+
+               A map with the start and end time of the selection granule
+               is selected only by start and equals (also accepted as
+               equal).
 
                All these methods can be combined. Method must be of
                type tuple including the identification strings.
