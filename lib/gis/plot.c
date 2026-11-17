@@ -240,7 +240,7 @@ static void fastline(double x1, double y1, double x2, double y2)
 static void slowline(double x1, double y1, double x2, double y2)
 {
     double dx, dy;
-    double m, b;
+    double m;
     int xstart, xstop, ystart, ystop;
 
     dx = x2 - x1;
@@ -248,7 +248,6 @@ static void slowline(double x1, double y1, double x2, double y2)
 
     if (fabs(dx) > fabs(dy)) {
         m = dy / dx;
-        b = y1 - m * x1;
 
         if (x1 > x2) {
             xstart = iceil(x2 - 0.5);
@@ -259,11 +258,14 @@ static void slowline(double x1, double y1, double x2, double y2)
             xstop = ifloor(x2 + 0.5);
         }
         if (xstart <= xstop) {
-            ystart = ifloor(m * xstart + b + 0.5);
+            /* Subtract the start/end point coordinate before multiplying
+             * to avoid numerical cancellation.
+             */
+            ystart = ifloor(y1 + m * (xstart - x1) + 0.5);
             st->move(xstart, ystart);
             while (xstart <= xstop) {
                 st->cont(xstart++, ystart);
-                ystart = ifloor(m * xstart + b + 0.5);
+                ystart = ifloor(y1 + m * (xstart - x1) + 0.5);
             }
         }
     }
@@ -272,7 +274,6 @@ static void slowline(double x1, double y1, double x2, double y2)
             m = 1.;
         else
             m = dx / dy;
-        b = x1 - m * y1;
 
         if (y1 > y2) {
             ystart = iceil(y2 - 0.5);
@@ -283,11 +284,14 @@ static void slowline(double x1, double y1, double x2, double y2)
             ystop = ifloor(y2 + 0.5);
         }
         if (ystart <= ystop) {
-            xstart = ifloor(m * ystart + b + 0.5);
+            /* Subtract the start/end point coordinate before multiplying
+             * to avoid numerical cancellation.
+             */
+            xstart = ifloor(x1 + m * (ystart - y1) + 0.5);
             st->move(xstart, ystart);
             while (ystart <= ystop) {
                 st->cont(xstart, ystart++);
-                xstart = ifloor(m * ystart + b + 0.5);
+                xstart = ifloor(x1 + m * (ystart - y1) + 0.5);
             }
         }
     }
