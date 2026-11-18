@@ -54,6 +54,7 @@
 
 # %rules
 # % required: -d, input
+# % requires: -h, input
 # %end
 
 import json
@@ -109,10 +110,11 @@ def main():
     rows = tgis.get_tgis_metadata(dbif, mapset=mapset)
 
     if system and not history and format_ != "json":
+        used_mapset = mapset or next(iter(dbif.tgis_mapsets))
         if shellstyle:
             print(
-                f"dbmi_python_interface='{dbif.get_dbmi().__name__}'\n"
-                f"dbmi_string='{next(iter(dbif.tgis_mapsets.values()))[1]}'\n"
+                f"dbmi_python_interface='{dbif.get_dbmi(mapset=used_mapset).__name__}'\n"
+                f"dbmi_string='{dbif.tgis_mapsets[used_mapset][1]}'\n"
                 f"sql_template_path='{tgis.get_sql_template_path()}'",
             )
             if rows:
@@ -123,8 +125,8 @@ def main():
         print(
             " +------------------- Temporal DBMI backend information"
             " ----------------------+\n"
-            f" | DBMI Python interface:...... {dbif.get_dbmi().__name__}\n"
-            f" | Temporal database string:... {next(iter(dbif.tgis_mapsets.values()))[1]}\n"
+            f" | DBMI Python interface:...... {dbif.get_dbmi(mapset=used_mapset).__name__}\n"
+            f" | Temporal database string:... {dbif.tgis_mapsets[used_mapset][1]}\n"
             f" | SQL template path:.......... {tgis.get_sql_template_path()}",
         )
         if rows:
@@ -146,6 +148,7 @@ def main():
                 ),
             )
     else:
+        # Go through all TGIS mapsets in the search path
         datasets = {}
         for tgis_mapset in dbif.tgis_mapsets:
             tgis_dataset = tgis.dataset_factory(stds_type, f"{name}@{tgis_mapset}")
@@ -172,6 +175,7 @@ def main():
                     m=used_mapset,
                 )
             )
+        mapset = used_mapset
     dataset.select(dbif)
 
     if history and stds_type in {"strds", "stvds", "str3ds"} and format_ != "json":
@@ -181,10 +185,11 @@ def main():
     if format_ == "json":
         metadata = dataset.get_metadata_dict()
         metadata["tgis_db"] = {}
+
         metadata["tgis_db"].update(
             {
-                "dbmi_python_interface": dbif.get_dbmi().__name__,
-                "dbmi_string": dbif.tgis_mapsets[dataset.get_mapset()][1],
+                "dbmi_python_interface": dbif.get_dbmi(mapset=mapset).__name__,
+                "dbmi_string": dbif.tgis_mapsets[mapset][1],
                 "sql_template_path": tgis.get_sql_template_path(),
             }
         )
