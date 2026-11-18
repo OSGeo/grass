@@ -1438,6 +1438,9 @@ class DBConnection:
 
     def close(self) -> None:
         """Close the DBMI connection
+
+        A transaction that is still open is rolled back, not committed.
+
         TODO:
         There may be several temporal databases in a location, hence
         close all temporal databases that have been opened. Use a dictionary
@@ -1446,7 +1449,6 @@ class DBConnection:
         if not self.connected:
             return
 
-        self.connection.commit()
         self.cursor.close()
         self.connection.close()
         self.connected = False
@@ -1608,6 +1610,10 @@ class DBConnection:
                 self.cursor.execute(statement, args)
             else:
                 self.cursor.execute(statement)
+            # psycopg2 runs every statement in a transaction which it does not
+            # commit by itself. The SQLite connection is in autocommit mode.
+            if self.dbmi.__name__ == "psycopg2":
+                self.connection.commit()
         except db_errors:
             self.msgr.error(_("Unable to execute :\n %(sql)s") % {"sql": statement})
             raise
@@ -1629,7 +1635,8 @@ class DBConnection:
         """Execute a transactional SQL statement
 
         The BEGIN and END TRANSACTION statements will be added automatically
-        to the sql statement
+        to the sql statement. If the transaction fails, none of its statements
+        are saved.
 
         :param statement: The executable SQL statement or SQL script
         """
@@ -1652,6 +1659,9 @@ class DBConnection:
             )
             raise
         finally:
+            # Discard what is left of a transaction that an error stopped.
+            # After a successful commit(), there is nothing to roll back.
+            self.connection.rollback()
             if connected:
                 self.close()
 
