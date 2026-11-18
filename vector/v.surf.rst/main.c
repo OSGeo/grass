@@ -20,9 +20,6 @@
  *
  *****************************************************************************/
 
-#if defined(_OPENMP)
-#include <omp.h>
-#endif
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -256,12 +253,11 @@ int main(int argc, char *argv[])
         _("Name for output vector map showing overlapping windows");
     parm.overfile->guisection = _("Outputs");
 
-    parm.threads = G_define_option();
-    parm.threads->key = "nprocs";
-    parm.threads->type = TYPE_INTEGER;
-    parm.threads->answer = NUM_THREADS;
-    parm.threads->required = NO;
-    parm.threads->description = _("Number of threads for parallel computing");
+    parm.threads = G_define_standard_option(G_OPT_M_NPROCS);
+    /* With more threads, deviations and cvdev points come out in a varying
+       order, so use one thread unless NPROCS is set. */
+    if (!G_getenv_nofatal("NPROCS"))
+        parm.threads->answer = NUM_THREADS;
     parm.threads->guisection = _("Parameters");
 
     parm.maskmap = G_define_standard_option(G_OPT_R_INPUT);
@@ -405,21 +401,7 @@ int main(int argc, char *argv[])
     treefile = parm.treefile->answer;
     overfile = parm.overfile->answer;
 
-    sscanf(parm.threads->answer, "%d", &threads);
-    if (threads < 1) {
-        G_warning(_("<%d> is not valid number of threads. Number of threads "
-                    "will be set on <%d>"),
-                  threads, abs(threads));
-        threads = abs(threads);
-    }
-
-#if defined(_OPENMP)
-    omp_set_num_threads(threads);
-#else
-    if (threads > 1)
-        G_warning(_("GRASS is not compiled with OpenMP support, parallel "
-                    "computation is disabled."));
-#endif
+    threads = G_set_omp_num_threads(parm.threads);
     if (threads > 1 && Rast_mask_is_present()) {
         G_warning(_("Parallel processing disabled due to active mask."));
         threads = 1;
