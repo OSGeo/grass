@@ -283,6 +283,13 @@ def main():
             )
 
     p.wait()
+    p.stdout.close()
+    # The thread reads from inf, so wait for it before closing inf.
+    tr.join()
+    if inf is not sys.stdin:
+        inf.close()
+    if outf is not sys.stdout:
+        outf.close()
 
     if p.returncode != 0:
         gcore.warning(_("Projection transform probably failed, please investigate"))
