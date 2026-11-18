@@ -3,20 +3,30 @@
 
 """Tests for the Markdown page assembly in mkmarkdown.py."""
 
-import os
+import importlib
 import sys
 from pathlib import Path
 
 import pytest
 
 UTILS_DIR = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(UTILS_DIR))
-# The shared helpers resolve the repository root from the build environment
-# at import time, so they need it set even when the functions under test
-# never use it.
-os.environ.setdefault("MODULE_TOPDIR", str(UTILS_DIR.parent))
 
-import mkmarkdown  # noqa: E402
+
+@pytest.fixture(scope="module")
+def mkmarkdown():
+    """Import mkmarkdown the way the build runs it and clean up afterwards"""
+    with pytest.MonkeyPatch.context() as patch:
+        patch.syspath_prepend(str(UTILS_DIR))
+        # The shared helpers resolve the repository root from the build
+        # environment at import time, so they need it set even when
+        # the functions under test never use it.
+        patch.setenv("MODULE_TOPDIR", str(UTILS_DIR.parent))
+        # The helpers are in utils/mkdocs.py, which must not stay imported
+        # under the name of the MkDocs package for the rest of the session.
+        patch.delitem(sys.modules, "mkdocs", raising=False)
+        yield importlib.import_module("mkmarkdown")
+        for name in ("mkmarkdown", "mkdocs"):
+            sys.modules.pop(name, None)
 
 
 @pytest.mark.parametrize(
@@ -39,15 +49,18 @@ import mkmarkdown  # noqa: E402
         ),
     ],
 )
-def test_source_edit_url(url_source, pgm, expected):
+def test_source_edit_url(mkmarkdown, url_source, pgm, expected):
     assert mkmarkdown.source_edit_url(url_source, pgm) == expected
 
 
-def test_source_edit_url_unknown_source():
-    assert mkmarkdown.source_edit_url("", "r.slope.aspect") is None
+@pytest.mark.parametrize(
+    "url_source", ["", "raster/r.slope.aspect", "https://example.com/user/repo/r.tool"]
+)
+def test_source_edit_url_not_repository_tree(mkmarkdown, url_source):
+    assert mkmarkdown.source_edit_url(url_source, "r.tool") is None
 
 
-def test_merge_md_files_appends_extra_yaml():
+def test_merge_md_files_appends_extra_yaml(mkmarkdown):
     generated = "---\nname: r.tool\n---\n\n# r.tool\n"
     source = "---\ndescription: Tool\n---\n\nBody\n"
     result = "".join(
@@ -61,7 +74,7 @@ def test_merge_md_files_appends_extra_yaml():
     assert "Body" in result
 
 
-def test_merge_md_files_extra_yaml_creates_header():
+def test_merge_md_files_extra_yaml_creates_header(mkmarkdown):
     result = "".join(
         mkmarkdown.merge_md_files("", "# Page\n", None, None, extra_yaml="key: value")
     )
