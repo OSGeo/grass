@@ -76,6 +76,9 @@ def main():
     qualified = "@" in name
     mapset = name.split("@", 1)[1] if qualified else None
 
+    if mapset and mapset not in gs.mapsets():
+        gs.fatal(_("Mapset <%s> not found") % mapset)
+
     if flags["g"]:
         gs.warning(
             _(
@@ -101,6 +104,8 @@ def main():
         msg = _("No temporal database found in available mapsets.")
         if mapset:
             msg = _("No temporal database found in requested mapset <%s>.") % mapset
+        if name:
+            gs.fatal(msg)
         gs.warning(msg)
         return
 
