@@ -14,6 +14,10 @@ SPDX-License-Identifier: GPL-2.0-or-later
  * JH */
 /*v. 4.0 December 2016, OpenMP support Stanislav Zubal, Michal Lacko */
 
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -465,11 +469,14 @@ int main(int argc, char *argv[])
     parm.ltime->options = "0-24";
     parm.ltime->guisection = _("Time");
 
-    parm.threads = G_define_standard_option(G_OPT_M_NPROCS);
-    /* Scripts may run several r.sun processes at once, so use one thread
-       unless NPROCS is set. */
-    if (!G_getenv_nofatal("NPROCS"))
-        parm.threads->answer = "1";
+    parm.threads = G_define_option();
+    parm.threads->key = "nprocs";
+    parm.threads->type = TYPE_INTEGER;
+    parm.threads->answer = "1";
+    parm.threads->options = "1-1000";
+    parm.threads->required = NO;
+    parm.threads->description =
+        _("Number of threads which will be used for parallel computing");
 
     /*
      * parm.startTime = G_define_option();
@@ -552,7 +559,18 @@ int main(int argc, char *argv[])
 
     civiltime = parm.civilTime->answer;
 
-    threads = G_set_omp_num_threads(parm.threads);
+    sscanf(parm.threads->answer, "%d", &threads);
+    if (threads < 1) {
+        G_warning(_("<%d> is not valid number of threads. Number of threads "
+                    "will be set to <%d>"),
+                  threads, abs(threads));
+        threads = abs(threads);
+    }
+#if defined(_OPENMP)
+    omp_set_num_threads(threads);
+#else
+    threads = 1;
+#endif
     if (threads > 1 && Rast_mask_is_present()) {
         G_warning(_("Parallel processing disabled due to active mask."));
         threads = 1;
