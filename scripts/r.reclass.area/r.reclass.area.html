@@ -20,6 +20,11 @@ clumping, using the <em>minsize</em> option there. If the
 <strong>-c</strong> flag is used, <em>r.reclass.area</em> will skip the
 creation of a clumped raster and assume that the input raster map is
 already clumped.
+With the <strong>-i</strong> flag, the area size filter is inverted: clumps
+between the <strong>lower</strong> and <strong>upper</strong> thresholds
+are removed, while clumps smaller than <strong>lower</strong> or greater
+than <strong>upper</strong> are preserved. This flag is only supported with
+the <em>reclass</em> method and does not work with the <em>rmarea</em> method.
 The <em>rmarea</em> method converts the raster map to vector and
 removes areas outside the given thresholds using <a
 href="v.clean.md">v.clean</a> and <a href="v.edit.md">v.edit</a>. With

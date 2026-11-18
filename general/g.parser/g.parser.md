@@ -635,10 +635,12 @@ import sys
 
 import grass.script as gs
 
+
 def main():
     # put code here
 
     return 0
+
 
 if __name__ == "__main__":
     options, flags = gs.parser()

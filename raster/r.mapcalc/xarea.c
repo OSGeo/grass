@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #if defined(_OPENMP)
 #include <omp.h>
 #endif
@@ -21,8 +22,7 @@ int f_area(int argc, const int *argt, void **args)
 
     DCELL *res = args[0];
     int i;
-    static int row = -1;
-    static double cell_area = 0;
+    static bool initialized = false;
 
     if (argc > 0)
         return E_ARG_HI;
@@ -30,13 +30,16 @@ int f_area(int argc, const int *argt, void **args)
     if (argt[0] != DCELL_TYPE)
         return E_RES_TYPE;
 
-    if (row != current_row[tid]) {
-        if (row == -1)
-            G_begin_cell_area_calculations();
-
-        row = current_row[tid];
-        cell_area = G_area_of_cell_at_row(row);
+    // The initialization writes library state which the threads then read
+    // without locking, so it must be finished before any thread asks for
+    // an area.
+#pragma omp critical(area_initialization)
+    if (!initialized) {
+        G_begin_cell_area_calculations();
+        initialized = true;
     }
+
+    double cell_area = G_area_of_cell_at_row(current_row[tid]);
 
     for (i = 0; i < columns; i++)
         res[i] = cell_area;

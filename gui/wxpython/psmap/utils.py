@@ -310,20 +310,20 @@ def ComputeSetRegion(self, mapDict, env):
         if not hasattr(self, "unitConv"):
             self.unitConv = UnitConversion(self)
 
-        fromM = 1
+        from_meters = 1
         if projInfo()["proj"] != "xy":
-            fromM = float(projInfo()["meters"])
+            from_meters = float(projInfo()["meters"])
         rectHalfInch = (mapDict["rect"].width / 2, mapDict["rect"].height / 2)
         rectHalfMeter = (
             self.unitConv.convert(
                 value=rectHalfInch[0], fromUnit="inch", toUnit="meter"
             )
-            / fromM
+            / from_meters
             / scale,
             self.unitConv.convert(
                 value=rectHalfInch[1], fromUnit="inch", toUnit="meter"
             )
-            / fromM
+            / from_meters
             / scale,
         )
 

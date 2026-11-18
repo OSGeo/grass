@@ -28,7 +28,7 @@ doctest.SkipDocTestCase = type(
 
 def load_tests(loader, tests, ignore):
     # TODO: this must be somewhere when doctest is called, not here
-    # TODO: ultimate solution is not to use _ as a buildin in lib/python
+    # TODO: ultimate solution is not to use _ as a built-in in lib/python
     from grass.script.core import run_command
 
     gutils.create_test_vector_map(gutils.test_vector_name)

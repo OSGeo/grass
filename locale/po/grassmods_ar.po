@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-10 19:31+0000\n"
+"POT-Creation-Date: 2026-11-07 19:34+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Arabic <https://weblate.osgeo.org/projects/grass-gis/grassmods/ar/>\n"
@@ -1114,8 +1114,11 @@ msgid "(0,0) is lower-left of the display frame"
 msgstr ""
 
 #, fuzzy
-msgid "Length of barscale in map units"
+msgid "Length of barscale in units set by the units option"
 msgstr "%s:خط %d:%s\n"
+
+msgid "Map units if units is not given; 0 picks a length automatically"
+msgstr ""
 
 #, fuzzy
 msgid "Barscale units to display"
@@ -1816,11 +1819,11 @@ msgid "Color range exceeds upper limit of actual data"
 msgstr ""
 
 #, c-format
-msgid "Range [%.3f, %.3f] out of the logarithm domain."
+msgid "use=%s out of range [%.3f, %.3f] (extend with range= ?)"
 msgstr ""
 
 #, c-format
-msgid "use=%s out of range [%.3f, %.3f] (extend with range= ?)"
+msgid "Range [%.3f, %.3f] has no extent for a logarithmic scale"
 msgstr ""
 
 #, c-format
@@ -2213,6 +2216,10 @@ msgstr "لم يتم تحديث الحدود"
 #, fuzzy, c-format
 msgid "Output file: %s"
 msgstr "الخريطة المخرجة"
+
+#, c-format
+msgid "Incomplete GRASS session: Variable '%s' not set"
+msgstr ""
 
 #, fuzzy, c-format
 msgid "Monitor <%s> already running"
@@ -10448,7 +10455,7 @@ msgstr "ملف المدخل"
 msgid "Generate clumps including diagonal neighbors"
 msgstr "ترشيح كل الخلايا بدون قيمة"
 
-msgid "Invert filter (remove clumps larger than lower and smaller than upper)"
+msgid "Invert filter (remove clumps larger than lower and smaller than upper, only for method 'reclass')"
 msgstr ""
 
 msgid "Apply lower area threshold as \"minsize\" during clumping"
@@ -13334,7 +13341,7 @@ msgstr ""
 msgid "Name of input raster files"
 msgstr "اسم الملف المخرج"
 
-#, c-format
+#, c-format, python-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr ""
 
@@ -17319,6 +17326,9 @@ msgstr "عدد الصفوف"
 msgid "Unknown error for function '%s'"
 msgstr "نوع غير معروف"
 
+msgid "rand() draws more than 2^46 random values. Later rows repeat the values of earlier rows plus a constant."
+msgstr ""
+
 #, c-format
 msgid "output map <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
@@ -17424,9 +17434,6 @@ msgstr ""
 #, fuzzy
 msgid "r3.mapcalc does not support parallel execution."
 msgstr "غير موجودة <%s> الخريطة الراسترية "
-
-msgid "Parallel execution is not supported with rand() function"
-msgstr ""
 
 #, fuzzy, c-format
 msgid "<%d> is not valid number of nprocs."
@@ -18169,7 +18176,7 @@ msgstr "خريطة الراستر االناتجة"
 msgid "Exporting raster map <%s> (band %d)..."
 msgstr "خريطة الراستر االناتجة"
 
-#, fuzzy, c-format
+#, fuzzy, c-format, python-format
 msgid "Unable to export raster map <%s>"
 msgstr "اسم الخريطة الراسترية الناتجة"
 
@@ -18826,6 +18833,14 @@ msgstr "اسم الخريطة الراسترية الحاوية على درجا�
 msgid "Use instead of the 'coordinates' option. \"-\" reads from stdin."
 msgstr "الملف  الأسكى الراسترى المطلوب ادخاله"
 
+#, fuzzy
+msgid "Name of input vector map with profile lines"
+msgstr "اسم خريطة النقط الفيكتورية المخرجة"
+
+#, fuzzy
+msgid "Each line is profiled separately. Use instead of the 'coordinates' option."
+msgstr "إحداثيات الشرق والشمال لنقطة البدء"
+
 msgid "Resolution along profile (default = current region resolution)"
 msgstr "(دقة الوضوح عبر التضاريس (الأساس : دقة وضوح المنطقة الحالية"
 
@@ -18836,9 +18851,6 @@ msgid "Output color values for each profile point (format controlled by color_fo
 msgstr ""
 
 msgid "If units are not specified, current project units are used. Meters are used by default in geographic (latlon) projects."
-msgstr ""
-
-msgid "Either use profile option or coordinate_file  option, but not both"
 msgstr ""
 
 #, fuzzy, c-format
@@ -18854,11 +18866,14 @@ msgid "Output columns:"
 msgstr "الخريطة المخرجة"
 
 #, c-format
-msgid "Easting, Northing, Along track dist. [%s], Elevation"
+msgid "Along track dist. [%s], Elevation"
 msgstr ""
 
-#, c-format
-msgid "Along track dist. [%s], Elevation"
+#, fuzzy
+msgid "Category, "
+msgstr "عدد نقاط الإستيفاء"
+
+msgid "Easting, Northing, "
 msgstr ""
 
 #, fuzzy
@@ -18880,6 +18895,42 @@ msgstr ""
 #, fuzzy
 msgid "Endpoint coordinates are outside of current region settings"
 msgstr "استخدام المنطقة الحالية"
+
+#, c-format
+msgid "Options <cats> and <where> require a valid layer, not <%s>"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Line %d (no category)"
+msgstr "%-5d تم تخطى فئات النقط الميت\n"
+
+#, fuzzy, c-format
+msgid "Line %d (category %d)"
+msgstr "%d فئات محملة من الجدول\n"
+
+#, c-format
+msgid "%s: approx. length %f [%s]"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "%s is not fully inside the current region"
+msgstr "استخدام المنطقة الحالية"
+
+#, fuzzy, c-format
+msgid "Unable to read vector map <%s>"
+msgstr "اسم الخريطة الراسترية الناتجة"
+
+#, fuzzy, c-format
+msgid "No lines found in vector map <%s>"
+msgstr "غير موجودة <%s> المنطقة"
+
+#, fuzzy, c-format
+msgid "No lines selected from vector map <%s>"
+msgstr "%d نقطة كتبت للمخرج\n"
+
+#, fuzzy, c-format
+msgid "No selected line has a category in layer <%s>"
+msgstr "cat = %d لا يوجد تسجيل للخط"
 
 #, fuzzy, c-format
 msgid "unable to transform coordinates %g, %g"
@@ -20901,10 +20952,6 @@ msgstr "غير موجودة <%s> الخريطة الراسترية "
 msgid "Flag '%c' is deprecated and will be removed in a future release. Seeding is automatic or use parameter %s."
 msgstr ""
 
-#, fuzzy, c-format
-msgid "Invalid random seed <%s>"
-msgstr "%s:منطقة غير صالحة"
-
 #, c-format
 msgid "Read random seed from %s option: %<PRId64>"
 msgstr ""
@@ -22672,6 +22719,13 @@ msgstr "القيمة العشوائية الكبري"
 #, fuzzy
 msgid "Create an integer raster map"
 msgstr "خريطة الراستر االناتجة"
+
+#, c-format
+msgid "Autogenerated random seed set to: %<PRId64>"
+msgstr ""
+
+msgid "The region has more cells than random values one seed holds. Later rows repeat the values of earlier rows plus a constant."
+msgstr ""
 
 #, c-format
 msgid "Minimum %s should be higher than maximum %s, but %s > %s"
@@ -24571,10 +24625,6 @@ msgstr "اسم الملف الفيكتورى المخرج"
 msgid "Unable to read category file for <%s>"
 msgstr "%s لم يمكن فتح ملف المدى ل"
 
-#, fuzzy, c-format
-msgid "Unable to read vector map <%s>"
-msgstr "اسم الخريطة الراسترية الناتجة"
-
 #, c-format
 msgid "Line %d is not point or centroid, skipped"
 msgstr ""
@@ -24814,7 +24864,7 @@ msgstr ""
 msgid "No sink map provided. Initializing zero sink..."
 msgstr ""
 
-#, fuzzy, c-format
+#, fuzzy, c-format, python-format
 msgid "Unable to create 3D raster map <%s>"
 msgstr "اسم الخريطة الراسترية الناتجة"
 
@@ -25941,6 +25991,9 @@ msgstr "طباعة الأحصاء فى صورة شل سكربت"
 msgid "Downloading precompiled GRASS Addons <{}>..."
 msgstr ""
 
+msgid "On MS-Windows, the 'url' option must point to a ZIP file (URL ending in '.zip'). To use a different addon server, set the ADDONS_BASE_URL gisenv variable or the GRASS_ADDONS_BASE_URL environment variable instead."
+msgstr ""
+
 msgid "svn not found but needed to fetch AddOns from an SVN repository"
 msgstr ""
 
@@ -26357,7 +26410,7 @@ msgid "Invalid PROJ.4 output specification"
 msgstr ""
 
 #, fuzzy
-msgid "Missing output projection parameters "
+msgid "Missing output projection parameters"
 msgstr "خريطة الإتجاه المخرجة"
 
 #, fuzzy
@@ -26603,8 +26656,9 @@ msgstr ""
 msgid "Unable to import data"
 msgstr "<%s> لم يمكن فتح"
 
-msgid "Done: generated map "
-msgstr ""
+#, fuzzy, python-brace-format
+msgid "Done: generated map {map_name}"
+msgstr "قيمة الحافة الغربية"
 
 msgid "(Note: Holes in the data can be closed with 'r.fillnulls' using splines)"
 msgstr ""
@@ -26670,7 +26724,7 @@ msgid "Authorization failed to <%s> when fetching capabilities"
 msgstr ""
 
 #, fuzzy, python-brace-format
-msgid "Unable to fetch capabilities from <{0}>. Reason: "
+msgid "Unable to fetch capabilities from <{url}>. Reason: {reason}"
 msgstr "لم يمكن اختيار البيانات من الجدول"
 
 #, fuzzy, python-format
@@ -26814,9 +26868,9 @@ msgstr ""
 msgid "Driver %s does not supports Create() method"
 msgstr "غير موجودة <%s> الخريطة الراسترية "
 
-#, fuzzy, python-format
-msgid "Unable to open %s "
-msgstr "[%s]لم يتم فتح ملف الخلية ل "
+#, fuzzy, python-brace-format
+msgid "Unable to open {filename}"
+msgstr "<%s> لم يمكن فتح"
 
 msgid "Region is out of server data extend."
 msgstr ""
@@ -26999,37 +27053,84 @@ msgstr "نوع العمود غير مدعم"
 msgid "xy-locations are not supported"
 msgstr "نوع العمود غير مدعم"
 
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file including diagonal neighbors with minimum {pixel_count} pixels"
+msgstr "ترشيح كل الخلايا بدون قيمة"
+
+#, fuzzy
+msgid "Generating a clumped raster file including diagonal neighbors"
+msgstr "ترشيح كل الخلايا بدون قيمة"
+
+#, fuzzy, python-brace-format
+msgid "Generating a clumped raster file with minimum {pixel_count} pixels"
+msgstr "ترشيح كل الخلايا بدون قيمة"
+
 #, fuzzy
 msgid "Generating a clumped raster file"
 msgstr "%-5d dig_att قراءة ملف...\n"
 
-#, fuzzy
-msgid " including diagonal neighbors"
-msgstr "ترشيح كل الخلايا بدون قيمة"
-
-#, python-format
-msgid " with minimum %s pixels"
-msgstr ""
-
-#, fuzzy
-msgid "Generating a reclass map with area size"
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than {lower} hectares or larger than {upper} hectares..."
 msgstr "خريطة الراستر االناتجة"
 
-#, python-format
-msgid " larger than or equal to %f hectares..."
+#, fuzzy, python-brace-format
+msgid "No areas of size smaller than {lower} hectares or larger than {upper} hectares"
+msgstr "خريطة الراستر االناتجة"
+
+#, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares..."
 msgstr ""
 
-#, python-format
-msgid " smaller than or equal to %f hectares..."
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares and smaller than or equal to {upper} hectares"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than {lower} hectares..."
+msgstr "خريطة الراستر االناتجة"
+
+#, fuzzy, python-brace-format
+msgid "No areas of size smaller than {lower} hectares"
+msgstr "خريطة الراستر االناتجة"
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size larger than or equal to {lower} hectares..."
+msgstr "خريطة الراستر االناتجة"
+
+#, python-brace-format
+msgid "No areas of size larger than or equal to {lower} hectares"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size larger than {upper} hectares..."
+msgstr "خريطة الراستر االناتجة"
+
+#, python-brace-format
+msgid "No areas of size larger than {upper} hectares"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Generating a reclass map with area size smaller than or equal to {upper} hectares..."
+msgstr "خريطة الراستر االناتجة"
+
+#, python-brace-format
+msgid "No areas of size smaller than or equal to {upper} hectares"
 msgstr ""
 
 #, fuzzy
-msgid "No areas of size "
-msgstr "المساحة\n"
+msgid "Generating a reclass map without area size limits..."
+msgstr "خريطة الراستر االناتجة"
+
+#, fuzzy
+msgid "No areas found"
+msgstr "إدخال خريطة راسترية بينرية "
 
 #, fuzzy, python-format
 msgid "Raster map <%s> is not of type 'CELL'. Results may not be as expected."
 msgstr "لم توجد<%s>الخريطة الفيكتورية"
+
+msgid "Flag -i is not supported with method='rmarea'"
+msgstr ""
 
 msgid "Options <mode> and <value> are deprecated. Use 'lower' and/or 'upper'."
 msgstr ""
@@ -27675,12 +27776,8 @@ msgstr "إدخال خريطة راسترية بينرية "
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#, python-format
-msgid "Cannot create column <%s> (already present). "
-msgstr ""
-
-#, fuzzy
-msgid "Use -c flag to update values in this column."
+#, fuzzy, python-brace-format
+msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr "[%s]لم يتم فتح ملف الخلية ل "
 
 #, python-format
@@ -27806,8 +27903,8 @@ msgstr ""
 msgid "Unable to add table <%s> to vector map <%s>"
 msgstr "[%s]لم يتم فتح ملف الخلية ل "
 
-#, fuzzy, python-format
-msgid "Unable to add column %s to vector map <%s> "
+#, fuzzy, python-brace-format
+msgid "Unable to add column {column} to vector map <{vector}>"
 msgstr "[%s]لم يتم فتح ملف الخلية ل "
 
 #, fuzzy, python-format
@@ -27852,6 +27949,405 @@ msgstr "اسم قاعدة بيانات المدخل"
 #, fuzzy
 msgid "Default TGIS database is not set"
 msgstr "اسم قاعدة بيانات المدخل"
+
+#, fuzzy, python-format
+msgid "The output dataset <%s> must be in the current mapset<%s>."
+msgstr "<%s>فى<%s>لم يمكن فتح الملف الفيكتورى"
+
+#, fuzzy, python-format
+msgid "Empty space-time %s dataset <%s>, nothing to copy"
+msgstr "اسم الخريطة الراسترية"
+
+#, fuzzy, python-format
+msgid "Copying %s maps to the current mapset..."
+msgstr "لم توجد<%s>الخريطة الفيكتورية"
+
+#, fuzzy, python-format
+msgid "A %s map <%s> exists already in the current mapset <%s>."
+msgstr "<%s>فى<%s>لم يمكن فتح الملف الفيكتورى"
+
+#, fuzzy, python-format
+msgid "The %s map <%s> is already in the current mapset, not copying"
+msgstr "<%s>فى<%s>لم يمكن فتح الملف الفيكتورى"
+
+#, fuzzy, python-format
+msgid "Please specify %s="
+msgstr "اسم الملف المخرج"
+
+#, python-brace-format
+msgid "Dataset <{n}> of type <{t}> not found in temporal database"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long"
+msgstr ""
+
+#, fuzzy
+msgid "Column names are always included in JSON output"
+msgstr "غير موجودة <%s> المنطقة"
+
+#, fuzzy
+msgid "Separator option is not allowed with JSON format"
+msgstr "ادخال القواعد فى هيئة من الهيئات التالية:\n"
+
+#, fuzzy
+msgid "Column names are not allowed with line format"
+msgstr "غير موجودة <%s> المنطقة"
+
+msgid "Only one type is allowed for line format"
+msgstr ""
+
+msgid "Only one column is allowed for line format"
+msgstr ""
+
+msgid "Combinations across space time datasets and time stamped maps (e.g., raster and strds) are not allowed"
+msgstr ""
+
+#, fuzzy
+#| msgid "Column type not supported"
+msgid "Column 'type' cannot be requested alone"
+msgstr "نوع العمود غير مدعم"
+
+msgid "No temporal database found in the requested mapset(s). No datasets to list."
+msgstr ""
+
+#, python-format
+msgid "Time stamped %s maps with %s available in mapset <%s>:\n"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Space time %s datasets with %s available in mapset <%s>:\n"
+msgstr "اسم الخريطة الراسترية"
+
+#, fuzzy, python-format
+msgid "Output space time dataset <%s> must be located in this mapset"
+msgstr "اسم الخريطة الراسترية المطلوب استفهامها"
+
+#, fuzzy
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr "اسم الخريطة الراسترية المطلوب استفهامها"
+
+#, python-format
+msgid "Unable to merge maps into space time %s dataset <%s> please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Space time %s dataset <%s> not found"
+msgstr "اسم الخريطة الراسترية"
+
+#, fuzzy
+msgid "You need to set the range to compute the occurrence space time raster dataset"
+msgstr "اسم الخريطة الراسترية الجديدة"
+
+#, fuzzy, python-format
+msgid "Space time raster dataset <%s> is already in the database, use overwrite flag to overwrite"
+msgstr "خريطة مخرجة حيث ستكتب النقاط"
+
+#, fuzzy
+msgid "You need to set the occurrence to compute the indicator space time raster dataset"
+msgstr "اسم الخريطة الراسترية الجديدة"
+
+#, fuzzy
+msgid "You need to set the staend options to compute the indicator space time raster dataset"
+msgstr "اسم الخريطة الراسترية الجديدة"
+
+#, fuzzy, python-format
+msgid "Space time raster dataset <%s> not found"
+msgstr "اسم الخريطة الراسترية"
+
+msgid "Temporal type of input strds and minimum strds must be equal"
+msgstr ""
+
+msgid "Temporal type of input strds and maximum strds must be equal"
+msgstr ""
+
+#, fuzzy
+msgid "Invalid cycle"
+msgstr "%s:منطقة غير صالحة"
+
+#, fuzzy
+msgid "Invalid offset"
+msgstr "%s:منطقة غير صالحة"
+
+#, fuzzy, python-format
+msgid "Processing cycle %s - %s"
+msgstr "التوقيع ..."
+
+#, fuzzy, python-format
+msgid "Map <%s> is already registered in the temporal database, use overwrite flag to overwrite."
+msgstr "خريطة مخرجة حيث ستكتب النقاط"
+
+#, fuzzy
+msgid "Invalid granularity"
+msgstr "%s:منطقة غير صالحة"
+
+msgid "Temporal type of input strds and lower strds must be equal"
+msgstr ""
+
+msgid "The upper option works only in conjunction with the lower option"
+msgstr ""
+
+msgid "Temporal type of input strds and upper strds must be equal"
+msgstr ""
+
+#, fuzzy
+msgid "Error running r.series.accumulate"
+msgstr "اسم الخريطة الراسترية المخرجة"
+
+msgid "Input and aggregation dataset must have the same temporal type"
+msgstr ""
+
+msgid "All registered maps of the aggregation dataset must have time intervals"
+msgstr ""
+
+msgid "Unable to process the expression in granularity algebra mode"
+msgstr ""
+
+#, fuzzy
+msgid "Error in r.colors call"
+msgstr "%s لم يتم العثور على الخريطة الراسترية"
+
+msgid "The number of parallel r.contour processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#, fuzzy
+msgid "Directory {} not found"
+msgstr "غير موجود <%s> الراستر"
+
+#, fuzzy
+msgid "Directory {} is not writable"
+msgstr "غير موجودة <%s> الخريطة الراسترية "
+
+msgid "Type options is not working with pack format, it will be skipped"
+msgstr ""
+
+msgid "Createopt, metaopt and nodata options are not working with pack and AAIGrid formats, they will be skipped"
+msgstr ""
+
+#, fuzzy
+msgid "No gaps found"
+msgstr "إدخال خريطة راسترية بينرية "
+
+#, fuzzy
+msgid "Unable to determine successor and predecessor of a gap."
+msgstr "اسم الخريطة الراسترية الموجودة"
+
+msgid "More than one successor of the gap found. Using the first found."
+msgstr ""
+
+msgid "More than one predecessor of the gap found. Using the first found."
+msgstr ""
+
+#, python-format
+msgid "Map with name <%s> already exists. Please use another base name."
+msgstr ""
+
+#, python-brace-format
+msgid "Combining {option_name}={option_value} and {excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The option {excluded_option_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The flag -{flag_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "Only one column is allowed (not {num_columns})"
+msgstr ""
+
+msgid "Values are always ordered by start_time"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Column '{name}' is not available with the method '{method}'"
+msgstr "اسم الخريطة الراسترية"
+
+msgid "The method <quantile> requires input in the 'quantile' option."
+msgstr ""
+
+#, fuzzy
+msgid "Space time raster dataset <{}> is empty"
+msgstr "اسم الخريطة الراسترية"
+
+#, python-brace-format
+msgid ""
+"Error running module: {mod}\n"
+"    stderr: {error}"
+msgstr ""
+
+#, fuzzy
+msgid "Error running modules."
+msgstr "خطا فى محاولة قراءة ملف قاعدة البيانات dbmscap\n"
+
+#, fuzzy, python-format
+msgid "Export directory <%s> not found."
+msgstr "غير موجودة <%s> المنطقة"
+
+msgid "Number requested methods and output maps do not match."
+msgstr ""
+
+msgid "Processing over {} maps: activating -z flag of r.series which slows down processing."
+msgstr ""
+
+#, python-format
+msgid "%s failed. Check above error messages."
+msgstr ""
+
+#, fuzzy
+msgid "Unable to set 3D region"
+msgstr "لم يمكن حشر صف جديد: %s"
+
+msgid "Space time voxel cube"
+msgstr ""
+
+msgid "This space time voxel cube was created with t.rast.to.rast3"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "%s failed to set units."
+msgstr "لم يتم تحديث الحدود"
+
+msgid "The number of parallel r.to.vect processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+msgid "<{}> is not valid input to the percentile option"
+msgstr ""
+
+#, fuzzy
+msgid "Zoning raster must be of type CELL"
+msgstr "وصف مبسط للملف الراسترى المخرج"
+
+#, fuzzy
+msgid "Options coordinates and points are mutually exclusive"
+msgstr "طبقتين يجب تحديدهم"
+
+msgid "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+msgstr ""
+
+#, fuzzy
+msgid "Please specify points or coordinates"
+msgstr "الإحداثى الشمالى للخريطة\n"
+
+#, fuzzy, python-format
+msgid "Transforming r.what output file %s"
+msgstr "خطا فى محاولة قراءة ملف قاعدة البيانات dbmscap\n"
+
+#, fuzzy, python-format
+msgid "Writing the output file <%s>"
+msgstr "كتابة ملف جديد...\n"
+
+#, python-format
+msgid "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
+msgstr ""
+
+#, fuzzy
+msgid "Separator option is not allowed with this format"
+msgstr "ادخال القواعد فى هيئة من الهيئات التالية:\n"
+
+#, fuzzy
+msgid "All maps are always listed"
+msgstr "غير موجودة <%s> المنطقة"
+
+#, fuzzy
+msgid "The following data base element files will be deleted:"
+msgstr "إدخال خريطة راسترية بينرية "
+
+#, python-brace-format
+msgid "{stds}: {gid}"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database:"
+msgstr "اختر البيانات من قاعدة البيانات"
+
+#, fuzzy, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database and removed from spatial database:"
+msgstr "اختر البيانات من قاعدة البيانات"
+
+#, python-format
+msgid "- %s"
+msgstr ""
+
+#, python-brace-format
+msgid "Nothing removed. You must use the force flag (-{flag}) to actually remove them."
+msgstr ""
+
+#, python-format
+msgid "Space time %s dataset <%s> can not be renamed. Mapset of the new identifier differs from the current mapset."
+msgstr ""
+
+#, python-format
+msgid "Unable to rename Space time %s dataset <%s>. Name <%s> is in use, please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to temporally shift the space time %s dataset <%s>"
+msgstr "اسم الخريطة الراسترية الجديدة"
+
+#, fuzzy, c-format, python-format
+msgid "%s= or %s= must be specified"
+msgstr "طبقتين يجب تحديدهم"
+
+#, fuzzy
+msgid "Unregister maps"
+msgstr "اسم الراستر المدخل"
+
+#, fuzzy, python-format
+msgid "Unable to find %s map <%s> in temporal database"
+msgstr "%s لم يتم فتح قاعدة البيانات"
+
+#, fuzzy, python-format
+msgid "Unregister maps from space time dataset <%s>"
+msgstr "عرض ملفات الراستر للموقع والخروج"
+
+#, fuzzy
+msgid "Unregister maps from the temporal database"
+msgstr "اختر البيانات من قاعدة البيانات"
+
+#, fuzzy
+msgid "The number of columns must be equal to the number of space time raster datasets"
+msgstr "اسم الخريطة الراسترية الجديدة"
+
+#, fuzzy, python-format
+msgid "Unable to create new layers for vector map <%s>"
+msgstr "اسم الخريطة الراسترية الناتجة"
+
+#, fuzzy, python-format
+msgid "Observaion of space time raster dataset(s) <%s>"
+msgstr "اسم الخريطة الراسترية الناتجة"
+
+#, fuzzy, python-format
+msgid "Observation of space time raster dataset(s) <%s> with vector map <%s>"
+msgstr "اسم الخريطة الراسترية"
+
+msgid "The number of raster maps in a granule must be equal to the number of column names"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to add column %s to vector map <%s> with layer %i"
+msgstr "[%s]لم يتم فتح ملف الخلية ل "
+
+#, fuzzy, python-format
+msgid "Unable to add table to vector map <%s> with layer %i"
+msgstr "[%s]لم يتم فتح ملف الخلية ل "
+
+#, fuzzy, python-format
+msgid "Unable to run v.what.rast for vector map <%s> with layer %i and raster map <%s>"
+msgstr "<%s>فى<%s>لم يمكن فتح الملف الفيكتورى"
+
+#, fuzzy
+msgid "All registered maps of the space time vector dataset must have time intervals"
+msgstr "عرض ملفات الراستر للموقع والخروج"
+
+#, fuzzy, python-format
+msgid "Space time vector dataset <%s> is empty"
+msgstr "اسم الخريطة الراسترية"
+
+#, fuzzy, python-format
+msgid "Unable to remove raster map <%s>"
+msgstr "اسم الخريطة الراسترية الناتجة"
 
 #, fuzzy
 msgid "Invalid GEOS geometry!"
@@ -29859,10 +30355,6 @@ msgstr ""
 #, fuzzy
 msgid "Print current status in shell script style"
 msgstr "طباعة الأحصاء فى صورة شل سكربت"
-
-#, fuzzy, c-format
-msgid "%s= or %s= must be specified"
-msgstr "طبقتين يجب تحديدهم"
 
 #, fuzzy, c-format
 msgid "%s= must be specified"
@@ -37848,6 +38340,22 @@ msgstr ""
 msgid "Image file"
 msgstr "ملف المدخل"
 
+#, fuzzy, c-format
+#~ msgid "Invalid random seed <%s>"
+#~ msgstr "%s:منطقة غير صالحة"
+
+#, fuzzy, python-format
+#~ msgid "Unable to open %s "
+#~ msgstr "[%s]لم يتم فتح ملف الخلية ل "
+
+#, fuzzy
+#~ msgid " including diagonal neighbors"
+#~ msgstr "ترشيح كل الخلايا بدون قيمة"
+
+#, fuzzy
+#~ msgid "No areas of size "
+#~ msgstr "المساحة\n"
+
 #, fuzzy
 #~ msgid "east"
 #~ msgstr "اسم الخريطة الراسترية"
@@ -37868,17 +38376,9 @@ msgstr "ملف المدخل"
 #~ msgid "target project %s, mapset %s:"
 #~ msgstr "غير موجود <%s>الملف للمنظر ثلاثى الأبعاد "
 
-#, fuzzy
-#~ msgid "flags c and d are mutually exclusive"
-#~ msgstr "طبقتين يجب تحديدهم"
-
 #, fuzzy, python-format
 #~ msgid "Temporary raster map <%s> exists"
 #~ msgstr "dig_att لم يمكن العثور على ملف"
-
-#, fuzzy
-#~ msgid "Generating a clumped raster file including diagonal neighbors..."
-#~ msgstr "ترشيح كل الخلايا بدون قيمة"
 
 #, fuzzy, python-format
 #~ msgid "Generating output raster map <%s>..."
@@ -38718,10 +39218,6 @@ msgstr "ملف المدخل"
 #, fuzzy
 #~ msgid "D niche similarity"
 #~ msgstr "%s:منطقة غير صالحة"
-
-#, fuzzy
-#~ msgid "DPI for the generated page"
-#~ msgstr "قيمة الحافة الغربية"
 
 #, fuzzy
 #~ msgid "DXF conversion"
@@ -41460,10 +41956,6 @@ msgstr "ملف المدخل"
 #~ msgstr "اسم ملف التقرير"
 
 #, fuzzy
-#~ msgid "Name of the output space time raster dataset"
-#~ msgstr "اسم الخريطة الراسترية الجديدة"
-
-#, fuzzy
 #~ msgid "Name of the output vector map: plants' structure including the main costs in the table"
 #~ msgstr "ادخال ملف راسترى ثنائى كطبقة خريطة راسترية جراسية"
 
@@ -41694,10 +42186,6 @@ msgstr "ملف المدخل"
 #, fuzzy
 #~ msgid "Neighborhood size used when smoothing the elevation model"
 #~ msgstr "حجم التجاور"
-
-#, fuzzy
-#~ msgid "No data base element files found"
-#~ msgstr "إدخال خريطة راسترية بينرية "
 
 #, fuzzy
 #~ msgid "No features found !"
@@ -42953,10 +43441,6 @@ msgstr "ملف المدخل"
 #, fuzzy
 #~ msgid "Removes signature file in a group/subgroup."
 #~ msgstr "طباعة مكان الشمس فى صورة شل سكربت"
-
-#, fuzzy
-#~ msgid "Renames multiple maps in the current mapset."
-#~ msgstr "لم توجد<%s>الخريطة الفيكتورية"
 
 #, fuzzy
 #~ msgid "Rendered output file"
@@ -44387,10 +44871,6 @@ msgstr "ملف المدخل"
 #, fuzzy
 #~ msgid "input raster"
 #~ msgstr "اسم الطبقة المدخلة"
-
-#, fuzzy
-#~ msgid "input space-time raster dataset"
-#~ msgstr "اسم الخريطة الراسترية الناتجة"
 
 #, fuzzy
 #~ msgid "input vector layer"

@@ -96,9 +96,16 @@ The flag **-b** will show the background. Options **bgcolor** and
 **border_color** can be used to choose the color of border and
 background fill.
 
-The flag **-l** will switch to logarithmic scale. In case this flag is
-used, the provided step in **label_step** is interpreted in the
-logarithmic space.
+The flag **-l** will switch to logarithmic scale: the color gradient
+and the positions of the labels follow the logarithm of the values,
+while the labels show the values of the raster unchanged. In this case,
+**label_step** is interpreted in the logarithmic space: labels are
+placed at powers of ten, **label_step** orders of magnitude apart. A
+range which contains no power of ten is labeled at its minimum and
+maximum. Since the logarithm is not defined for zero and negative
+values, a range which includes them is placed on the scale with its
+values shifted so that the minimum becomes 1. This is the same shift
+*r.colors* uses for its **-g** flag.
 
 ## EXAMPLE
 

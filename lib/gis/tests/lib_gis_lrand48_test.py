@@ -20,7 +20,7 @@ the reference values.
 import subprocess
 import sys
 import threading
-from ctypes import byref
+from ctypes import byref, c_int64
 
 import pytest
 
@@ -33,11 +33,15 @@ from grass.lib.gis import (
     G_random_init_layout,
     G_random_init_layout_bounded,
     G_random_init_layout_exact,
+    G_random_int,
+    G_random_int32,
     G_random_layout_batches,
     G_random_layout_length,
+    G_random_parse_seed,
     G_random_state_for_batch,
     G_random_state_for_unit,
     G_random_state_from_seed,
+    G_random_uint32,
     G_srand48,
     struct_G_random_layout,
     struct_G_random_state,
@@ -419,7 +423,7 @@ def constant_shift(first, second, max_lag=4):
 # layout, so that a test can check which call ends in a fatal error.
 CALLS_SCRIPT = """
 import sys
-from ctypes import byref
+from ctypes import byref, c_int64
 
 from grass.lib import gis
 
@@ -498,6 +502,33 @@ def test_random_seed_matches_shared_generator(seed):
     assert [G_random_double(byref(state)) for _ in range(100)] == shared
     if seed in REFERENCE:
         assert shared[:10] == REFERENCE[seed]["drand48"]
+
+
+@pytest.mark.parametrize("seed", [0, 1, 42, 1337, 2147483647, -1, 4294967295])
+def test_random_integers_match_shared_generator(seed):
+    """The integer functions give G_mrand48() and G_lrand48() for the same draw.
+
+    G_random_int32() is G_mrand48(), G_random_uint32() its bits unsigned,
+    G_random_int() is G_lrand48(), and the unsigned value is the floor of
+    2^32 times G_random_double(). These are properties of the current
+    engine, so the test checks for them.
+    """
+    state = struct_G_random_state()
+
+    def draws(function):
+        G_random_state_from_seed(byref(state), seed)
+        return [function(byref(state)) for _ in range(100)]
+
+    G_srand48(seed)
+    mrand = [G_mrand48() for _ in range(100)]
+    assert draws(G_random_int32) == mrand
+    unsigned = draws(G_random_uint32)
+    assert unsigned == [value % 2**32 for value in mrand]
+
+    G_srand48(seed)
+    assert draws(G_random_int) == [G_lrand48() for _ in range(100)]
+
+    assert unsigned == [int(value * 2**32) for value in draws(G_random_double)]
 
 
 @pytest.mark.parametrize(
@@ -1060,21 +1091,48 @@ def test_srand48_auto_uses_the_generated_seed(xy_session_for_module, tmp_path):
 
 
 @pytest.mark.parametrize("name", ["GRASS_RANDOM_SEED", "SOURCE_DATE_EPOCH"])
-def test_random_generate_seed_reduces_large_environment_value_with_a_warning(
+def test_random_generate_seed_refuses_environment_value_outside_range(
     xy_session_for_module, tmp_path, name
 ):
-    """A value past 32 bits is reduced to its low 32 bits with a warning.
-
-    Both the generated seed and the shared generator's automatic seed are
-    the reduced value.
-    """
+    """A value past 32 bits is an error naming the variable, not reduced."""
     result = generate_seed(xy_session_for_module, tmp_path, **{name: "5000000000"})
-    assert result.returncode == 0, result.stderr
-    reduced = str(5000000000 % 2**32)
-    assert result.stdout.split()[:2] == [reduced, reduced]
+    assert result.returncode != 0
     message = " ".join(result.stderr.split())
-    assert f"5000000000 from {name}" in message
-    assert "low 32 bits" in message
+    assert f"<5000000000> from {name}: must be between" in message
+
+
+@pytest.mark.parametrize(
+    ("text", "value"),
+    [
+        ("42", 42),
+        (" -7", -7),
+        ("+4294967295", 4294967295),
+        ("-2147483648", -2147483648),
+    ],
+)
+def test_random_parse_seed_reads_a_seed(text, value):
+    """A seed in the range is read, with white space and a sign allowed."""
+    seed = c_int64(-1)
+    assert G_random_parse_seed(text.encode(), byref(seed)) is None
+    assert seed.value == value
+
+
+@pytest.mark.parametrize(
+    ("text", "problem"),
+    [
+        ("4294967296", "must be between"),
+        ("-2147483649", "must be between"),
+        ("99999999999999999999", "must be between"),
+        ("12abc", "must be an integer"),
+        ("1.5", "must be an integer"),
+        ("", "must be an integer"),
+    ],
+)
+def test_random_parse_seed_says_what_a_seed_must_be(text, problem):
+    """A text which is not a seed gives the requirement and leaves the seed alone."""
+    seed = c_int64(-1)
+    assert G_random_parse_seed(text.encode(), byref(seed)).decode().startswith(problem)
+    assert seed.value == -1
 
 
 @pytest.mark.parametrize("value", ["-5", "-2147483648", "4294967295"])
@@ -1100,11 +1158,11 @@ def test_random_generate_seed_skips_empty_variable(xy_session_for_module, tmp_pa
 @pytest.mark.parametrize(
     ("value", "message"),
     [
-        ("abc", "is not an integer"),
-        ("1e9", "is not an integer"),
-        ("12abc", "is not an integer"),
-        ("99999999999999999999", "is too large in magnitude"),
-        ("-99999999999999999999", "is too large in magnitude"),
+        ("abc", "must be an integer"),
+        ("1e9", "must be an integer"),
+        ("12abc", "must be an integer"),
+        ("99999999999999999999", "must be between"),
+        ("-99999999999999999999", "must be between"),
     ],
 )
 def test_random_generate_seed_rejects_invalid_value(
@@ -1115,7 +1173,7 @@ def test_random_generate_seed_rejects_invalid_value(
     assert result.returncode != 0
     assert result.stdout == ""
     stderr = " ".join(result.stderr.split())
-    assert f"{value} from GRASS_RANDOM_SEED {message}" in stderr
+    assert f"<{value}> from GRASS_RANDOM_SEED: {message}" in stderr
 
 
 def test_random_state_is_independent_of_shared_generator():

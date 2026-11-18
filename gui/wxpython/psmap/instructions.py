@@ -105,11 +105,11 @@ class Instruction:
                 continue
             if each.type == "map":
                 # must remove raster, vector layers, labels too
-                vektor = self.FindInstructionByType("vector", list=True)
+                vector_list = self.FindInstructionByType("vector", list=True)
                 vProperties = self.FindInstructionByType("vProperties", list=True)
                 raster = self.FindInstructionByType("raster", list=True)
                 labels = self.FindInstructionByType("labels", list=True)
-                for item in vektor + vProperties + raster + labels:
+                for item in vector_list + vProperties + raster + labels:
                     if item in self.instruction:
                         self.instruction.remove(item)
 
