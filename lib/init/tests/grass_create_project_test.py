@@ -5,21 +5,25 @@ SPDX-FileCopyrightText: GRASS Development Team
 SPDX-License-Identifier: GPL-2.0-or-later
 """
 
+import os
 import subprocess
-import sys
-
-import pytest
 
 
-@pytest.mark.skipif(
-    sys.platform.startswith("win"),
-    reason="The grass launcher can't be run through subprocess on Windows",
-)
+def get_grass_executable():
+    """Return the command that starts GRASS on this operating system"""
+    if os.name != "nt":
+        return "grass"
+    gisbase = os.environ.get("GISBASE")
+    if gisbase:
+        return os.path.join(gisbase, "grass.bat")
+    return "grass.bat"
+
+
 def test_missing_database_directory(tmp_path):
     """Missing parent directories give a clear error"""
     project = tmp_path / "missing" / "deeper" / "myproject"
     result = subprocess.run(
-        ["grass", "-c", "EPSG:4326", str(project), "-e"],
+        [get_grass_executable(), "-c", "EPSG:4326", str(project), "-e"],
         capture_output=True,
         text=True,
     )
