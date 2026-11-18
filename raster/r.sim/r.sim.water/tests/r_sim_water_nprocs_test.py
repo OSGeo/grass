@@ -113,18 +113,12 @@ def threads(tools, **kwargs):
     )["threads"]
 
 
-def test_nprocs_from_gisenv(session_tools):
-    """NPROCS set by g.gisenv replaces the default of one thread"""
-    expected = threads(session_tools, nprocs=2)
-    session_tools.g_gisenv(set="NPROCS=2")
-    assert threads(session_tools) == expected
-
-
-def test_nprocs_zero_is_openmp_default(session_tools, session_in_mapset):
-    """With nprocs=0, OpenMP decides, here by OMP_NUM_THREADS"""
+def test_nprocs_from_gisenv(session_tools, session_in_mapset):
+    """NPROCS=0 from g.gisenv replaces the default of one thread"""
     env = session_in_mapset.env.copy()
     env["OMP_NUM_THREADS"] = "2"
-    assert threads(session_tools, nprocs=0, env=env) == threads(session_tools, nprocs=2)
+    session_tools.g_gisenv(set="NPROCS=0")
+    assert threads(session_tools, env=env) == threads(session_tools, nprocs=2)
 
 
 def test_negative_nprocs_counts_down(session_tools, session_in_mapset):

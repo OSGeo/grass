@@ -1,4 +1,5 @@
-# SPDX-FileCopyrightText: 2026 GRASS Development Team
+# SPDX-FileCopyrightText: 2026 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """Tests of the number of threads r.sun uses"""

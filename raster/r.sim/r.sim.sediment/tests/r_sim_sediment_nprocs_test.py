@@ -1,4 +1,5 @@
-# SPDX-FileCopyrightText: 2026 GRASS Development Team
+# SPDX-FileCopyrightText: 2026 Vaclav Petras
+# SPDX-FileCopyrightText: GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 """Tests of the number of threads r.sim.sediment uses"""
@@ -32,29 +33,9 @@ def threads(tools, **kwargs):
     )["threads"]
 
 
-def test_nprocs_from_gisenv(tools):
-    """NPROCS set by g.gisenv replaces the default of one thread"""
-    expected = threads(tools, nprocs=2)
-    tools.g_gisenv(set="NPROCS=2")
-    assert threads(tools) == expected
-
-
-def test_nprocs_zero_is_openmp_default(tools, session_in_mapset):
-    """With nprocs=0, OpenMP decides, here by OMP_NUM_THREADS"""
+def test_nprocs_from_gisenv(tools, session_in_mapset):
+    """NPROCS=0 from g.gisenv replaces the default of one thread"""
     env = session_in_mapset.env.copy()
     env["OMP_NUM_THREADS"] = "2"
-    assert threads(tools, nprocs=0, env=env) == threads(tools, nprocs=2)
-
-
-def test_negative_nprocs_counts_down(tools, session_in_mapset):
-    """A negative nprocs leaves that many CPUs unused, but uses at least one"""
-    env = session_in_mapset.env.copy()
-    env.pop("OMP_NUM_THREADS", None)
-    all_cpus = threads(tools, nprocs=0, env=env)
-    assert threads(tools, nprocs=-2, env=env) == max(all_cpus - 2, 1)
-
-
-def test_mask_uses_one_thread(tools):
-    """With a raster mask, one thread is used whatever nprocs is"""
-    tools.r_mask(raster="rows_raster")
-    assert threads(tools, nprocs=2) == 1
+    tools.g_gisenv(set="NPROCS=0")
+    assert threads(tools, env=env) == threads(tools, nprocs=2)

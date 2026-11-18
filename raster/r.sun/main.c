@@ -466,8 +466,8 @@ int main(int argc, char *argv[])
     parm.ltime->guisection = _("Time");
 
     parm.threads = G_define_standard_option(G_OPT_M_NPROCS);
-    /* Scripts such as r.sun.daily run several r.sun processes at once,
-       so use one thread unless NPROCS is set. */
+    /* Scripts may run several r.sun processes at once, so use one thread
+       unless NPROCS is set. */
     if (!G_getenv_nofatal("NPROCS"))
         parm.threads->answer = "1";
 
