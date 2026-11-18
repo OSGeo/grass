@@ -30,6 +30,7 @@ DSTFILES := \
 	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
 	$(MDDIR)/scripts/hook_list_scripts.py \
+	$(MDDIR)/scripts/grass_markdown.py \
 	$(MDDIR)/source/index.md \
 	$(MDDIR)/overrides/main.html \
 	$(MDDIR)/overrides/partials/copyright.html \
@@ -293,6 +294,9 @@ $(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
 $(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/scripts/grass_markdown.py: mkdocs/scripts/grass_markdown.py | $(MDDIR)/scripts
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/scripts:
 	$(MKDIR) $@
 
@@ -326,9 +330,11 @@ $(MDDIR)/overrides/fragments/tags/default/listing.html: mkdocs/overrides/fragmen
 build-mkdocs:
 	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	PYTHONPATH="scripts$${PYTHONPATH:+:$$PYTHONPATH}" \
 	mkdocs build
 
 serve-mkdocs:
 	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
+	PYTHONPATH="scripts$${PYTHONPATH:+:$$PYTHONPATH}" \
 	mkdocs serve
