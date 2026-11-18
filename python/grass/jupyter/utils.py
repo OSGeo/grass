@@ -418,7 +418,7 @@ def get_number_of_cores(requested, env=None):
     """
     nprocs = gs.gisenv(env).get("NPROCS")
     if nprocs is not None:
-        return int(nprocs)
+        return gs.resolve_nprocs(nprocs)
 
     return min(requested, max(1, gs.available_cpus() - 1))
 
