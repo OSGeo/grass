@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_de\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-04 17:59+0000\n"
+"POT-Creation-Date: 2026-11-15 02:39+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: German <https://weblate.osgeo.org/projects/grass-gis/grassmods/de/>\n"
@@ -2246,7 +2246,6 @@ msgstr "Anzahl der signifikanten Stellen (nur Fließkommazahlen)"
 msgid "Get text color from cell color value"
 msgstr "Hole Textfarbe von der Farbtabelle der Zelle."
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -7784,8 +7783,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 #, fuzzy
 msgid "Maps with feature values (attributes)"
 msgstr "Anzahl der Quantile"
@@ -11896,7 +11895,7 @@ msgstr ""
 msgid "Name of input raster files"
 msgstr ""
 
-#, c-format
+#, c-format, python-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr "%s= und %s= schließen sich gegenseitig aus."
 
@@ -16286,7 +16285,7 @@ msgstr ""
 msgid "Exporting raster map <%s> (band %d)..."
 msgstr "Exportiere Rasterkarte <%s> (Kanal %d)..."
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to export raster map <%s>"
 msgstr "Kann die Rasterkarte <%s> nicht exportieren."
 
@@ -20522,7 +20521,6 @@ msgstr "Zu viele Kategorien (gefunden %i, Max: %i). Versuchen Sie die Karte zu r
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -22378,7 +22376,7 @@ msgstr ""
 msgid "No sink map provided. Initializing zero sink..."
 msgstr ""
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to create 3D raster map <%s>"
 msgstr "Kann die 3D-Rasterkarte <%s> nicht erzeugen."
 
@@ -22882,8 +22880,10 @@ msgstr "write_vtk_unstructured_grid_cells: Schreibe die Zellen"
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr "write_vtk_data: Schreibe Zelldaten %s mit %i Zeilen, %i Spalten und einer Tiefe von %i in eine VTK-ASCII-Datei."
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
-msgstr ""
+#, fuzzy
+#| msgid "Wrong map values! Values should in between 0 and 255!\n"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
+msgstr "Falsche Kartenwerte! Die Werte sollten zwischen 0 und 255 sein!\n"
 
 msgid "Unable to close the 3D raster map"
 msgstr ""
@@ -25198,6 +25198,401 @@ msgstr ""
 msgid "Default TGIS database is not set"
 msgstr ""
 
+#, fuzzy, python-format
+#| msgid "Group must exist in the current mapset"
+msgid "The output dataset <%s> must be in the current mapset<%s>."
+msgstr "Gruppe existiert im aktuellen Mapset."
+
+#, python-format
+msgid "Empty space-time %s dataset <%s>, nothing to copy"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Copying %s maps to the current mapset..."
+msgstr "Benennt Karten im aktuellen Mapset um."
+
+#, fuzzy, python-format
+#| msgid "<%s> is already the current mapset"
+msgid "A %s map <%s> exists already in the current mapset <%s>."
+msgstr "<%s> ist bereits das aktuelle Mapset."
+
+#, fuzzy, python-format
+#| msgid "<%s> is already the current mapset"
+msgid "The %s map <%s> is already in the current mapset, not copying"
+msgstr "<%s> ist bereits das aktuelle Mapset."
+
+#, fuzzy, python-format
+#| msgid "Please specify z column"
+msgid "Please specify %s="
+msgstr "Bitte geben Sie Z-Spalte an."
+
+#, python-brace-format
+msgid "Dataset <{n}> of type <{t}> not found in temporal database"
+msgstr ""
+
+#, python-format
+msgid "Output space time dataset <%s> must be located in this mapset"
+msgstr ""
+
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr ""
+
+#, python-format
+msgid "Unable to merge maps into space time %s dataset <%s> please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Metadata file <%s> not found"
+msgid "Space time %s dataset <%s> not found"
+msgstr "Metadaten-Datei <%s> nicht gefunden"
+
+#, fuzzy
+msgid "You need to set the range to compute the occurrence space time raster dataset"
+msgstr "Name der Ausgabe-Rasterkarte(n)."
+
+#, python-format
+msgid "Space time raster dataset <%s> is already in the database, use overwrite flag to overwrite"
+msgstr ""
+
+#, fuzzy
+msgid "You need to set the occurrence to compute the indicator space time raster dataset"
+msgstr "Name der Ausgabe-Rasterkarte(n)."
+
+#, fuzzy
+msgid "You need to set the staend options to compute the indicator space time raster dataset"
+msgstr "Name der Ausgabe-Rasterkarte(n)."
+
+#, fuzzy, python-format
+#| msgid "3D raster map <%s> not found"
+msgid "Space time raster dataset <%s> not found"
+msgstr "3D-Rasterkarte <%s> nicht gefunden."
+
+msgid "Temporal type of input strds and minimum strds must be equal"
+msgstr ""
+
+msgid "Temporal type of input strds and maximum strds must be equal"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Processing rows %d-%d (of %d)..."
+msgid "Processing cycle %s - %s"
+msgstr "Verarbeite Zeilen %d-%d (von %d)..."
+
+#, python-format
+msgid "Map <%s> is already registered in the temporal database, use overwrite flag to overwrite."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid zrange"
+msgid "Invalid granularity"
+msgstr "Ungültige z-Spanne."
+
+#, fuzzy
+#| msgid "Invalid order"
+msgid "Invalid cycle"
+msgstr "Ungültiger Grad."
+
+#, fuzzy
+#| msgid "Invalid order"
+msgid "Invalid offset"
+msgstr "Ungültiger Grad."
+
+msgid "Temporal type of input strds and lower strds must be equal"
+msgstr ""
+
+msgid "The upper option works only in conjunction with the lower option"
+msgstr ""
+
+msgid "Temporal type of input strds and upper strds must be equal"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to run r.stats"
+msgid "Error running r.series.accumulate"
+msgstr "Kann r.stats nicht auszuführen."
+
+#, fuzzy
+#| msgid "output= and method= must have the same number of values"
+msgid "Input and aggregation dataset must have the same temporal type"
+msgstr "output= und method= müssen die selbe Anzahl von Werten haben."
+
+msgid "All registered maps of the aggregation dataset must have time intervals"
+msgstr ""
+
+msgid "Unable to process the expression in granularity algebra mode"
+msgstr ""
+
+#, fuzzy
+msgid "Error in r.colors call"
+msgstr "Fehler beim Scannen der Argumente."
+
+msgid "The number of parallel r.contour processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cursor not found"
+msgid "Directory {} not found"
+msgstr "Cursor nicht gefunden."
+
+#, fuzzy
+#| msgid "Selected band (%d) does not exist"
+msgid "Directory {} is not writable"
+msgstr "Der ausgewählte Kanal (%d) existiert nicht."
+
+msgid "Type options is not working with pack format, it will be skipped"
+msgstr ""
+
+msgid "Createopt, metaopt and nodata options are not working with pack and AAIGrid formats, they will be skipped"
+msgstr ""
+
+#, fuzzy
+#| msgid "No points found"
+msgid "No gaps found"
+msgstr "Keine Punkte gefunden"
+
+#, fuzzy
+#| msgid "Unable to determine mapset permissions"
+msgid "Unable to determine successor and predecessor of a gap."
+msgstr "Kann die Zugriffsrechte des Mapsets nicht ermitteln."
+
+msgid "More than one successor of the gap found. Using the first found."
+msgstr ""
+
+msgid "More than one predecessor of the gap found. Using the first found."
+msgstr ""
+
+#, python-format
+msgid "Map with name <%s> already exists. Please use another base name."
+msgstr ""
+
+#, python-brace-format
+msgid "Combining {option_name}={option_value} and {excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The option {excluded_option_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The flag -{flag_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long"
+msgstr ""
+
+msgid "Values are always ordered by start_time"
+msgstr ""
+
+#, python-brace-format
+msgid "Column '{name}' is not available with the method '{method}'"
+msgstr ""
+
+#, python-brace-format
+msgid "Only one column is allowed (not {num_columns})"
+msgstr ""
+
+msgid "All maps are always listed"
+msgstr ""
+
+msgid "The method <quantile> requires input in the 'quantile' option."
+msgstr ""
+
+#, fuzzy
+msgid "Space time raster dataset <{}> is empty"
+msgstr "Name der Ausgabe-Rasterkarte(n)."
+
+#, python-brace-format
+msgid ""
+"Error running module: {mod}\n"
+"    stderr: {error}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error scanning arguments"
+msgid "Error running modules."
+msgstr "Fehler beim Scannen der Argumente."
+
+#, fuzzy, python-format
+msgid "Export directory <%s> not found."
+msgstr "Ziel-Location <%s> nicht gefunden."
+
+msgid "Number requested methods and output maps do not match."
+msgstr ""
+
+msgid "Processing over {} maps: activating -z flag of r.series which slows down processing."
+msgstr ""
+
+#, python-format
+msgid "%s failed. Check above error messages."
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to set region <%s>"
+msgid "Unable to set 3D region"
+msgstr "Kann die Region <%s> einrichten."
+
+msgid "Space time voxel cube"
+msgstr ""
+
+msgid "This space time voxel cube was created with t.rast.to.rast3"
+msgstr ""
+
+#, python-format
+msgid "%s failed to set units."
+msgstr ""
+
+msgid "The number of parallel r.to.vect processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+msgid "<{}> is not valid input to the percentile option"
+msgstr ""
+
+#, fuzzy
+#| msgid "3D Raster map used for zoning, must be of type CELL"
+msgid "Zoning raster must be of type CELL"
+msgstr "3D-Rasterkarte für Zonenbildung, muss vom Typ CELL sein."
+
+#, fuzzy
+msgid "Options coordinates and points are mutually exclusive"
+msgstr "-s und -n schließen sich gegenseitig aus."
+
+msgid "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+msgstr ""
+
+#, fuzzy
+msgid "Please specify points or coordinates"
+msgstr "Bitte geben Sie Z-Spalte an."
+
+#, fuzzy, python-format
+#| msgid "Format of output files"
+msgid "Transforming r.what output file %s"
+msgstr "Format des Ausgabedateien"
+
+#, fuzzy, python-format
+#| msgid "Writing the output..."
+msgid "Writing the output file <%s>"
+msgstr "Schreibe Ausgabe..."
+
+#, python-format
+msgid "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
+msgstr ""
+
+#, fuzzy
+#| msgid "Renames data base element files in the user's current mapset."
+msgid "The following data base element files will be deleted:"
+msgstr "Benennt Karten im aktuellen Mapset um."
+
+#, python-brace-format
+msgid "{stds}: {gid}"
+msgstr ""
+
+#, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database:"
+msgstr ""
+
+#, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database and removed from spatial database:"
+msgstr ""
+
+#, python-format
+msgid "- %s"
+msgstr ""
+
+#, python-brace-format
+msgid "Nothing removed. You must use the force flag (-{flag}) to actually remove them."
+msgstr ""
+
+#, python-format
+msgid "Space time %s dataset <%s> can not be renamed. Mapset of the new identifier differs from the current mapset."
+msgstr ""
+
+#, python-format
+msgid "Unable to rename Space time %s dataset <%s>. Name <%s> is in use, please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to temporally shift the space time %s dataset <%s>"
+msgstr "Name der neuen Datenbank."
+
+#, c-format, python-format
+msgid "%s= or %s= must be specified"
+msgstr ""
+
+#, fuzzy
+msgid "Unregister maps"
+msgstr "Raster"
+
+#, fuzzy, python-format
+#| msgid "Unable to open default database"
+msgid "Unable to find %s map <%s> in temporal database"
+msgstr "Kann die Standard-Datenbank nicht öffnen."
+
+#, fuzzy, python-format
+msgid "Unregister maps from space time dataset <%s>"
+msgstr "Verwaltet NULL-Werte einer Rasterkarte."
+
+msgid "Unregister maps from the temporal database"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to run v.db.select for vector map <%s> with layer %s"
+msgstr "Kann den Link zur Datenbank der Vektorkarte <%s> nicht hinzufügen."
+
+#, fuzzy
+msgid "The number of columns must be equal to the number of space time raster datasets"
+msgstr "Name der Ausgabe-Rasterkarte(n)."
+
+#, fuzzy, python-format
+#| msgid "Unable to get layer info for vector map <%s>"
+msgid "Unable to create new layers for vector map <%s>"
+msgstr "Kann die Layer-Informationen der Vektorkarte <%s> nicht bekommen"
+
+#, fuzzy, python-format
+msgid "Observaion of space time raster dataset(s) <%s>"
+msgstr "Verwaltet NULL-Werte einer Rasterkarte."
+
+#, fuzzy, python-format
+#| msgid "Writing raster map <%s> and vector map <%s> ..."
+msgid "Observation of space time raster dataset(s) <%s> with vector map <%s>"
+msgstr "Schreibe Rasterkarte <%s> und Vektorkarte <%s> ..."
+
+msgid "The number of raster maps in a granule must be equal to the number of column names"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to read line id %d from vector map <%s>"
+msgid "Unable to add column %s to vector map <%s> with layer %i"
+msgstr "Kann die Linien ID %d der Vektorkarte <%s> nicht lesen."
+
+#, fuzzy, python-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to add table to vector map <%s> with layer %i"
+msgstr "Kann den Link zur Datenbank der Vektorkarte <%s> nicht hinzufügen."
+
+#, fuzzy, python-format
+#| msgid "Unable to create raster map <%s> using driver <%s>"
+msgid "Unable to run v.what.rast for vector map <%s> with layer %i and raster map <%s>"
+msgstr "Kann Rasterkarte <%s> mit dem Treiber <%s> nicht erzeugen."
+
+msgid "All registered maps of the space time vector dataset must have time intervals"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Input vector map <%s> is 3D"
+msgid "Space time vector dataset <%s> is empty"
+msgstr "Eingabe-Vektorkarte <%s> ist 3D"
+
+#, fuzzy, python-format
+#| msgid "Unable to read line id %d from vector map <%s>"
+msgid "Unable to add column %s to vector map <%s>"
+msgstr "Kann die Linien ID %d der Vektorkarte <%s> nicht lesen."
+
+#, fuzzy, python-format
+#| msgid "Unable to create raster map <%s>"
+msgid "Unable to remove raster map <%s>"
+msgstr "Kann die Rasterkarte <%s> nicht erzeugen."
+
 msgid "Invalid GEOS geometry!"
 msgstr "Ungültige GEOS Geometrie!"
 
@@ -26997,10 +27392,6 @@ msgid "Native"
 msgstr ""
 
 msgid "Print current status in shell script style"
-msgstr ""
-
-#, c-format
-msgid "%s= or %s= must be specified"
 msgstr ""
 
 #, c-format
@@ -38047,10 +38438,6 @@ msgstr "Bild-Datei"
 #~ msgstr "Name der Ausgabedatei (ohne Dateiendung)."
 
 #, fuzzy
-#~ msgid "Name of the output space time raster dataset"
-#~ msgstr "Name der Ausgabe-Rasterkarte(n)."
-
-#, fuzzy
 #~ msgid "Name of the raster map with the average age [year]"
 #~ msgstr "Name der Rasterkarte, die reskaliert werden soll."
 
@@ -38748,10 +39135,6 @@ msgstr "Bild-Datei"
 #~ msgstr "Eingabe-Datei"
 
 #, fuzzy
-#~ msgid "Option <%s> and <%s> are mutually exclusive"
-#~ msgstr "-s und -n schließen sich gegenseitig aus."
-
-#, fuzzy
 #~ msgid "Option <%s> must be specified"
 #~ msgstr "Entweder \"-i\" oder \"-r\" oder eine der Optionen \"color\", \"rast\" oder \"rules\" muss angegeben werden!"
 
@@ -39103,10 +39486,6 @@ msgstr "Bild-Datei"
 #~ msgstr "Bitte geben Sie Z-Spalte an."
 
 #, fuzzy
-#~ msgid "Please specify input= or infile="
-#~ msgstr "Bitte geben Sie Z-Spalte an."
-
-#, fuzzy
 #~ msgid "Please specify output= and samplingpos="
 #~ msgstr "Bitte geben Sie Z-Spalte an."
 
@@ -39455,10 +39834,6 @@ msgstr "Bild-Datei"
 #~ msgstr "Rasterkarte(n) die quantisiert werden soll(en)."
 
 #, fuzzy
-#~ msgid "Raster maps"
-#~ msgstr "Raster"
-
-#, fuzzy
 #~ msgid "Raster percentile to use"
 #~ msgstr "Perzentil der Werte"
 
@@ -39561,10 +39936,6 @@ msgstr "Bild-Datei"
 #, fuzzy
 #~ msgid "Removes signature file in a group/subgroup."
 #~ msgstr "Kann die Signaturdatei <%s> für die Gruppe <%s> Untergruppe <%s> nicht erzeugen."
-
-#, fuzzy
-#~ msgid "Renames multiple maps in the current mapset."
-#~ msgstr "Benennt Karten im aktuellen Mapset um."
 
 #~ msgid "Renaming reclass maps"
 #~ msgstr "Benenne reclass-Karten um."

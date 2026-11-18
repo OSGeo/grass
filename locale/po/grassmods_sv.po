@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-04 17:59+0000\n"
+"POT-Creation-Date: 2026-11-15 02:39+0000\n"
 "PO-Revision-Date: 2026-10-05 10:32+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/sv/>\n"
@@ -2231,7 +2231,6 @@ msgstr "Antal signifikanta siffror (endast flyttal)"
 msgid "Get text color from cell color value"
 msgstr "Hämta textfärg från cellens färgvärde"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -7675,8 +7674,8 @@ msgstr "Förutsägelser med SVM"
 msgid "Predict with a Support Vector Machine"
 msgstr "Förutsägelser med en stödvektormaskin"
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 msgid "Maps with feature values (attributes)"
 msgstr "Kartor med funktionsvärden (attribut)"
 
@@ -11738,7 +11737,7 @@ msgstr "Skapa en VRT (Virtual Raster) från listan med inmatade rasterkartor."
 msgid "Name of input raster files"
 msgstr "Namn på ingående rasterfiler"
 
-#, c-format
+#, c-format, python-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr "%s= och %s= är ömsesidigt uteslutande"
 
@@ -16043,7 +16042,7 @@ msgstr "Exportera rasterdata till %s-format..."
 msgid "Exporting raster map <%s> (band %d)..."
 msgstr "Exporterar rasterkarta <%s> (band %d)..."
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to export raster map <%s>"
 msgstr "Det går inte att exportera en rasterkarta <%s>"
 
@@ -20225,7 +20224,6 @@ msgstr "För många kategorier (hittades: %i, max: %i). Försök att skala om el
 msgid "Input raster must be of type CELL."
 msgstr "Inmatningsrastret måste vara av typen CELL."
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -22070,7 +22068,7 @@ msgstr ""
 msgid "No sink map provided. Initializing zero sink..."
 msgstr "Ingen sänkningskarta tillhandahölls, Initierar noll sänkning..."
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to create 3D raster map <%s>"
 msgstr "Det går inte att skapa en 3D-rasterkarta <%s>"
 
@@ -22569,7 +22567,9 @@ msgstr "write_vtk_unstructured_grid_cells: Skriva cellerna"
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr "skriva_vtk_data: Skriver Celldata %s med rader %i kol %i djup %i till vtk-ascii-fil"
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+#, fuzzy
+#| msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
 msgstr "Fel värden för 3D-rasterkarta! Värdena ska ligga mellan 0 och 255!"
 
 msgid "Unable to close the 3D raster map"
@@ -24921,6 +24921,439 @@ msgstr "Standard TGIS-drivrutin är inte inställd"
 msgid "Default TGIS database is not set"
 msgstr "Standard TGIS-databas är inte inställd"
 
+#, fuzzy, python-format
+#| msgid "Group must exist in the current mapset"
+msgid "The output dataset <%s> must be in the current mapset<%s>."
+msgstr "Gruppen måste finnas i den aktuella kartuppsättningen"
+
+#, fuzzy, python-format
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Empty space-time %s dataset <%s>, nothing to copy"
+msgstr "Rasterdatasetet <%s> för rymdtid är tomt"
+
+#, fuzzy, python-format
+#| msgid "Group must exist in the current mapset"
+msgid "Copying %s maps to the current mapset..."
+msgstr "Gruppen måste finnas i den aktuella kartuppsättningen"
+
+#, fuzzy, python-format
+#| msgid "<%s> is already the current mapset"
+msgid "A %s map <%s> exists already in the current mapset <%s>."
+msgstr "<%s> är redan den aktuella kartuppsättningen"
+
+#, fuzzy, python-format
+#| msgid "<%s> is already the current mapset"
+msgid "The %s map <%s> is already in the current mapset, not copying"
+msgstr "<%s> är redan den aktuella kartuppsättningen"
+
+#, fuzzy, python-format
+#| msgid "Please specify %s= or %s="
+msgid "Please specify %s="
+msgstr "Ange %s= eller %s="
+
+#, python-brace-format
+msgid "Dataset <{n}> of type <{t}> not found in temporal database"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Lists space time datasets and maps registered in the temporal database."
+msgid "Output space time dataset <%s> must be located in this mapset"
+msgstr "Visar dataset och kartor för rymdtid som registrerats i den temporala databasen."
+
+#, fuzzy
+#| msgid "Lists space time datasets and maps registered in the temporal database."
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr "Visar dataset och kartor för rymdtid som registrerats i den temporala databasen."
+
+#, python-format
+msgid "Unable to merge maps into space time %s dataset <%s> please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Space time %s dataset <%s> not found"
+msgstr "Rasterdatasetet <%s> för rymdtid är tomt"
+
+#, fuzzy
+#| msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgid "You need to set the range to compute the occurrence space time raster dataset"
+msgstr "Producerar ett vektordataset i rymdtid med specificerade konturer från ett rasterdataset i rymdtid."
+
+#, fuzzy, python-format
+#| msgid "Fontcap file %s already exists; use --overwrite flag if you wish to overwrite it"
+msgid "Space time raster dataset <%s> is already in the database, use overwrite flag to overwrite"
+msgstr "Fontcap-filen %s finns redan; använd --overwrite-flaggan om du vill skriva över den"
+
+#, fuzzy
+#| msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgid "You need to set the occurrence to compute the indicator space time raster dataset"
+msgstr "Producerar ett vektordataset i rymdtid med specificerade konturer från ett rasterdataset i rymdtid."
+
+#, fuzzy
+#| msgid "The user defined values that indicate start, intermediate and end status in the indicator output space time raster dataset"
+msgid "You need to set the staend options to compute the indicator space time raster dataset"
+msgstr "De användardefinierade värden som anger start-, mellan- och slutstatus i rasterdatasetet för indikatorutdata för rymdtid"
+
+#, fuzzy, python-format
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Space time raster dataset <%s> not found"
+msgstr "Rasterdatasetet <%s> för rymdtid är tomt"
+
+msgid "Temporal type of input strds and minimum strds must be equal"
+msgstr ""
+
+msgid "Temporal type of input strds and maximum strds must be equal"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Processing block %d of %d"
+msgid "Processing cycle %s - %s"
+msgstr "Bearbetning av block %d av %d"
+
+#, fuzzy, python-format
+#| msgid "Fontcap file %s already exists; use --overwrite flag if you wish to overwrite it"
+msgid "Map <%s> is already registered in the temporal database, use overwrite flag to overwrite."
+msgstr "Fontcap-filen %s finns redan; använd --overwrite-flaggan om du vill skriva över den"
+
+#, fuzzy
+#| msgid "Shift granularity"
+msgid "Invalid granularity"
+msgstr "Skifta granularitet"
+
+#, fuzzy
+#| msgid "Invalid %s"
+msgid "Invalid cycle"
+msgstr "Ogiltig %s"
+
+#, fuzzy
+#| msgid "Invalid %s"
+msgid "Invalid offset"
+msgstr "Ogiltig %s"
+
+msgid "Temporal type of input strds and lower strds must be equal"
+msgstr ""
+
+#, fuzzy
+#| msgid "Time increment, works only in conjunction with start option"
+msgid "The upper option works only in conjunction with the lower option"
+msgstr "Tidsinkrement, fungerar endast i kombination med startalternativet"
+
+msgid "Temporal type of input strds and upper strds must be equal"
+msgstr ""
+
+#, fuzzy
+#| msgid "error running r.stats"
+msgid "Error running r.series.accumulate"
+msgstr "fel vid körning av r.stats"
+
+#, fuzzy
+#| msgid "input= and weights= must have the same number of values"
+msgid "Input and aggregation dataset must have the same temporal type"
+msgstr "input= och weights= måste ha samma antal värden"
+
+msgid "All registered maps of the aggregation dataset must have time intervals"
+msgstr ""
+
+msgid "Unable to process the expression in granularity algebra mode"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error adding columns {}"
+msgid "Error in r.colors call"
+msgstr "Fel vid tillägg av kolumner {}"
+
+msgid "The number of parallel r.contour processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cursor not found"
+msgid "Directory {} not found"
+msgstr "Markören hittades inte"
+
+#, fuzzy
+#| msgid "Directory '{path}' is not writable"
+msgid "Directory {} is not writable"
+msgstr "Katalogen '{path}' är inte skrivbar"
+
+msgid "Type options is not working with pack format, it will be skipped"
+msgstr ""
+
+msgid "Createopt, metaopt and nodata options are not working with pack and AAIGrid formats, they will be skipped"
+msgstr ""
+
+#, fuzzy
+#| msgid "No tables found"
+msgid "No gaps found"
+msgstr "Inga tabeller hittades"
+
+#, fuzzy
+#| msgid "Unable to determine input map's vector feature type(s)."
+msgid "Unable to determine successor and predecessor of a gap."
+msgstr "Det gick inte att fastställa indatakartans vektorfunktionstyp(er)."
+
+msgid "More than one successor of the gap found. Using the first found."
+msgstr ""
+
+msgid "More than one predecessor of the gap found. Using the first found."
+msgstr ""
+
+#, python-format
+msgid "Map with name <%s> already exists. Please use another base name."
+msgstr ""
+
+#, python-brace-format
+msgid "Combining {option_name}={option_value} and {excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The option {excluded_option_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The flag -{flag_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long"
+msgstr ""
+
+msgid "Values are always ordered by start_time"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Layer '%s' is not available with %s code."
+msgid "Column '{name}' is not available with the method '{method}'"
+msgstr "Lager '%s' är inte tillgängligt med %s-koden."
+
+#, python-brace-format
+msgid "Only one column is allowed (not {num_columns})"
+msgstr ""
+
+#, fuzzy
+#| msgid "Column names are always included"
+msgid "All maps are always listed"
+msgstr "Kolumnnamn inkluderas alltid"
+
+#, fuzzy
+#| msgid "The -p flag is required when using the format option."
+msgid "The method <quantile> requires input in the 'quantile' option."
+msgstr "Flaggan -p krävs när formatalternativet används."
+
+#, fuzzy
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Space time raster dataset <{}> is empty"
+msgstr "Rasterdatasetet <%s> för rymdtid är tomt"
+
+#, python-brace-format
+msgid ""
+"Error running module: {mod}\n"
+"    stderr: {error}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error flushing tiles"
+msgid "Error running modules."
+msgstr "Fel vid spolning av plattor"
+
+#, fuzzy, python-format
+#| msgid "Target project <%s> not found"
+msgid "Export directory <%s> not found."
+msgstr "Målprojekt <%s> hittades inte"
+
+msgid "Number requested methods and output maps do not match."
+msgstr ""
+
+msgid "Processing over {} maps: activating -z flag of r.series which slows down processing."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Module %s failed. Check the above error messages."
+msgid "%s failed. Check above error messages."
+msgstr "Modul %s misslyckades. Kontrollera ovanstående felmeddelanden."
+
+#, fuzzy
+#| msgid "Unable to set region <%s>"
+msgid "Unable to set 3D region"
+msgstr "Det går inte att ställa in region <%s>"
+
+msgid "Space time voxel cube"
+msgstr ""
+
+msgid "This space time voxel cube was created with t.rast.to.rast3"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Failed to get Git version."
+msgid "%s failed to set units."
+msgstr "Misslyckades med att hämta Git-versionen."
+
+msgid "The number of parallel r.to.vect processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+msgid "<{}> is not valid input to the percentile option"
+msgstr ""
+
+#, fuzzy
+#| msgid "Input raster must be of type CELL"
+msgid "Zoning raster must be of type CELL"
+msgstr "Inmatningsrastret måste vara av typen CELL"
+
+#, fuzzy
+#| msgid "flags c and d are mutually exclusive"
+msgid "Options coordinates and points are mutually exclusive"
+msgstr "flaggorna c och d utesluter varandra"
+
+msgid "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+msgstr ""
+
+#, fuzzy
+#| msgid "Seed point coordinates"
+msgid "Please specify points or coordinates"
+msgstr "Koordinater för utsädespunkt"
+
+#, fuzzy, python-format
+#| msgid "Error closing output file %s"
+msgid "Transforming r.what output file %s"
+msgstr "Fel vid stängning av utdatafil %s"
+
+#, fuzzy, python-format
+#| msgid "Writing the output map  -%s-..."
+msgid "Writing the output file <%s>"
+msgstr "Skrivning av utmatningskartan -%s-..."
+
+#, python-format
+msgid "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
+msgstr ""
+
+#, fuzzy
+#| msgid "The following data base element files would be deleted:"
+msgid "The following data base element files will be deleted:"
+msgstr "Följande filer med databaselement skulle raderas:"
+
+#, python-brace-format
+msgid "{stds}: {gid}"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Remove stds and unregister maps from temporal database"
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database:"
+msgstr "Ta bort stds och avregistrera kartor från temporal databas"
+
+#, fuzzy, python-brace-format
+#| msgid "Remove stds, unregister maps from temporal database and delete them from mapset"
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database and removed from spatial database:"
+msgstr "Ta bort stds, avregistrera kartor från temporal databas och ta bort dem från mapset"
+
+#, python-format
+msgid "- %s"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Nothing removed. You must use the force flag (-%c) to actually remove them. Exiting."
+msgid "Nothing removed. You must use the force flag (-{flag}) to actually remove them."
+msgstr "Inget borttaget. Du måste använda flaggan force (-%c) för att faktiskt ta bort dem. Avslutar."
+
+#, python-format
+msgid "Space time %s dataset <%s> can not be renamed. Mapset of the new identifier differs from the current mapset."
+msgstr ""
+
+#, python-format
+msgid "Unable to rename Space time %s dataset <%s>. Name <%s> is in use, please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Snaps temporally the maps of a space time dataset."
+msgid "Unable to temporally shift the space time %s dataset <%s>"
+msgstr "Snaps temporalt kartorna i en rumtid dataset."
+
+#, c-format, python-format
+msgid "%s= or %s= must be specified"
+msgstr "%s= eller %s= måste anges"
+
+#, fuzzy
+#| msgid "Register Null maps"
+msgid "Unregister maps"
+msgstr "Registrera nollkartor"
+
+#, fuzzy, python-format
+#| msgid "Unable to open default database"
+msgid "Unable to find %s map <%s> in temporal database"
+msgstr "Det går inte att öppna standarddatabasen"
+
+#, fuzzy, python-format
+#| msgid "Lists registered maps of a space time raster dataset."
+msgid "Unregister maps from space time dataset <%s>"
+msgstr "Visar en lista över registrerade kartor för en rasterdatauppsättning för rymdtid."
+
+#, fuzzy
+#| msgid "Remove stds and unregister maps from temporal database"
+msgid "Unregister maps from the temporal database"
+msgstr "Ta bort stds och avregistrera kartor från temporal databas"
+
+#, fuzzy, python-format
+#| msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
+msgid "Unable to run v.db.select for vector map <%s> with layer %s"
+msgstr "Det går inte att köra v.what.rast för vektorkarta <%s> och rasterkarta <%s>"
+
+#, fuzzy
+#| msgid "Extracts a subset of a space time raster datasets."
+msgid "The number of columns must be equal to the number of space time raster datasets"
+msgstr "Extraherar en delmängd av en rasterdatauppsättning för rum och tid."
+
+#, fuzzy, python-format
+#| msgid "Unable to create error vector map <%s>"
+msgid "Unable to create new layers for vector map <%s>"
+msgstr "Det gick inte att skapa en felvektorkarta <%s>"
+
+#, fuzzy, python-format
+#| msgid "Name of a space time raster dataset archive"
+msgid "Observaion of space time raster dataset(s) <%s>"
+msgstr "Namn på ett arkiv för rasterdataset för rymdtid"
+
+#, fuzzy, python-format
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Observation of space time raster dataset(s) <%s> with vector map <%s>"
+msgstr "Rasterdatasetet <%s> för rymdtid är tomt"
+
+#, fuzzy
+#| msgid "The number of digits for band numbering must be equal or greater than 0"
+msgid "The number of raster maps in a granule must be equal to the number of column names"
+msgstr "Antalet siffror för bandnumrering måste vara lika med eller större än 0"
+
+#, fuzzy, python-format
+#| msgid "Unable to add column %s to vector map <%s> "
+msgid "Unable to add column %s to vector map <%s> with layer %i"
+msgstr "Det går inte att lägga till kolumn %s i vektorkartan <%s> "
+
+#, fuzzy, python-format
+#| msgid "Unable to add table <%s> to vector map <%s>"
+msgid "Unable to add table to vector map <%s> with layer %i"
+msgstr "Det går inte att lägga till tabell <%s> i vektorkarta <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
+msgid "Unable to run v.what.rast for vector map <%s> with layer %i and raster map <%s>"
+msgstr "Det går inte att köra v.what.rast för vektorkarta <%s> och rasterkarta <%s>"
+
+#, fuzzy
+#| msgid "Lists registered maps of a space time vector dataset."
+msgid "All registered maps of the space time vector dataset must have time intervals"
+msgstr "Listar registrerade kartor över en vektoruppsättning för rymdtid."
+
+#, fuzzy, python-format
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Space time vector dataset <%s> is empty"
+msgstr "Rasterdatasetet <%s> för rymdtid är tomt"
+
+#, fuzzy, python-format
+#| msgid "Unable to add column %s to vector map <%s> "
+msgid "Unable to add column %s to vector map <%s>"
+msgstr "Det går inte att lägga till kolumn %s i vektorkartan <%s> "
+
+#, fuzzy, python-format
+#| msgid "Unable to create raster map <%s>"
+msgid "Unable to remove raster map <%s>"
+msgstr "Det går inte att skapa en rasterkarta <%s>"
+
 msgid "Invalid GEOS geometry!"
 msgstr "Ogiltig GEOS-geometri!"
 
@@ -26721,10 +27154,6 @@ msgstr "Inbyggd"
 
 msgid "Print current status in shell script style"
 msgstr "Skriv ut aktuell status i skal-skriptformat"
-
-#, c-format
-msgid "%s= or %s= must be specified"
-msgstr "%s= eller %s= måste anges"
 
 #, c-format
 msgid "%s= must be specified"

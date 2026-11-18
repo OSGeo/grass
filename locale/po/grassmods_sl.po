@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-04 17:59+0000\n"
+"POT-Creation-Date: 2026-11-15 02:39+0000\n"
 "PO-Revision-Date: 2026-10-31 20:25+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/sl/>\n"
@@ -2528,7 +2528,6 @@ msgstr "Število decimalk (le za \"floating point\" podatke)"
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -8526,8 +8525,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 #, fuzzy
 msgid "Maps with feature values (attributes)"
 msgstr " Število vrstic\n"
@@ -13324,7 +13323,7 @@ msgstr ""
 msgid "Name of input raster files"
 msgstr "Vhodni rastrski sloj"
 
-#, c-format
+#, c-format, python-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr ""
 
@@ -18155,7 +18154,7 @@ msgstr "izhodni rastrski sloj"
 msgid "Exporting raster map <%s> (band %d)..."
 msgstr "izhodni rastrski sloj"
 
-#, fuzzy, c-format
+#, fuzzy, c-format, python-format
 msgid "Unable to export raster map <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
@@ -22877,7 +22876,6 @@ msgstr ""
 msgid "Input raster must be of type CELL."
 msgstr "Naslov izhodnega rastrskega sloja"
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, fuzzy, c-format
@@ -24844,7 +24842,7 @@ msgstr ""
 msgid "No sink map provided. Initializing zero sink..."
 msgstr ""
 
-#, fuzzy, c-format
+#, fuzzy, c-format, python-format
 msgid "Unable to create 3D raster map <%s>"
 msgstr "Ime izhodnega rastrskega sloja"
 
@@ -25419,7 +25417,7 @@ msgstr ""
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr ""
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
 msgstr ""
 
 #, fuzzy
@@ -27878,6 +27876,372 @@ msgstr "Vpiši ime baze podatkov"
 msgid "Default TGIS database is not set"
 msgstr "Vpiši ime baze podatkov"
 
+#, fuzzy, python-format
+msgid "The output dataset <%s> must be in the current mapset<%s>."
+msgstr "Ime izhodnega rastrskega sloja"
+
+#, fuzzy, python-format
+msgid "Empty space-time %s dataset <%s>, nothing to copy"
+msgstr "Ime rastrskega sloja"
+
+#, fuzzy, python-format
+msgid "Copying %s maps to the current mapset..."
+msgstr "Ne najdem vhodnega vektorja <%s>"
+
+#, fuzzy, python-format
+msgid "A %s map <%s> exists already in the current mapset <%s>."
+msgstr "Ime izhodnega rastrskega sloja"
+
+#, fuzzy, python-format
+msgid "The %s map <%s> is already in the current mapset, not copying"
+msgstr "Ime izhodnega rastrskega sloja"
+
+#, fuzzy, python-format
+msgid "Please specify %s="
+msgstr "Vhodni rastrski sloj"
+
+#, python-brace-format
+msgid "Dataset <{n}> of type <{t}> not found in temporal database"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Output space time dataset <%s> must be located in this mapset"
+msgstr "Ime obstoječega rastrskega sloja(ev) za poizvedovanje"
+
+#, fuzzy
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr "Ime obstoječega rastrskega sloja(ev) za poizvedovanje"
+
+#, python-format
+msgid "Unable to merge maps into space time %s dataset <%s> please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Space time %s dataset <%s> not found"
+msgstr "Ime rastrskega sloja"
+
+#, fuzzy
+msgid "You need to set the range to compute the occurrence space time raster dataset"
+msgstr "Ime novega rastrskega sloja."
+
+#, fuzzy, python-format
+msgid "Space time raster dataset <%s> is already in the database, use overwrite flag to overwrite"
+msgstr "Ime izhodnega vektorskega sloja"
+
+#, fuzzy
+msgid "You need to set the occurrence to compute the indicator space time raster dataset"
+msgstr "Ime novega rastrskega sloja."
+
+#, fuzzy
+msgid "You need to set the staend options to compute the indicator space time raster dataset"
+msgstr "Ime novega rastrskega sloja."
+
+#, fuzzy, python-format
+msgid "Space time raster dataset <%s> not found"
+msgstr "Ime rastrskega sloja"
+
+msgid "Temporal type of input strds and minimum strds must be equal"
+msgstr ""
+
+msgid "Temporal type of input strds and maximum strds must be equal"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Processing cycle %s - %s"
+msgstr "Ustvari točke vzdolž vhodnih linij."
+
+#, fuzzy, python-format
+msgid "Map <%s> is already registered in the temporal database, use overwrite flag to overwrite."
+msgstr "Ime izhodnega vektorskega sloja"
+
+#, fuzzy
+msgid "Invalid granularity"
+msgstr "neveljavna regija: %s"
+
+#, fuzzy
+msgid "Invalid cycle"
+msgstr "neveljavna regija: %s"
+
+#, fuzzy
+msgid "Invalid offset"
+msgstr "neveljavna regija: %s"
+
+msgid "Temporal type of input strds and lower strds must be equal"
+msgstr ""
+
+msgid "The upper option works only in conjunction with the lower option"
+msgstr ""
+
+msgid "Temporal type of input strds and upper strds must be equal"
+msgstr ""
+
+#, fuzzy
+msgid "Error running r.series.accumulate"
+msgstr "ne morem odpreti <%s>"
+
+msgid "Input and aggregation dataset must have the same temporal type"
+msgstr ""
+
+msgid "All registered maps of the aggregation dataset must have time intervals"
+msgstr ""
+
+msgid "Unable to process the expression in granularity algebra mode"
+msgstr ""
+
+#, fuzzy
+msgid "Error in r.colors call"
+msgstr "ne morem odpreti razpona za datoteko %s"
+
+msgid "The number of parallel r.contour processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#, fuzzy
+msgid "Directory {} not found"
+msgstr "Ne najdem rastrskega sloja <%s>"
+
+#, fuzzy
+msgid "Directory {} is not writable"
+msgstr "Ne najdem vhodnega rastrskega sloja <%s>."
+
+msgid "Type options is not working with pack format, it will be skipped"
+msgstr ""
+
+msgid "Createopt, metaopt and nodata options are not working with pack and AAIGrid formats, they will be skipped"
+msgstr ""
+
+#, fuzzy
+msgid "No gaps found"
+msgstr "Ničesar nisem našel."
+
+#, fuzzy
+msgid "Unable to determine successor and predecessor of a gap."
+msgstr "Ime obstoječega rastrskega sloja."
+
+msgid "More than one successor of the gap found. Using the first found."
+msgstr ""
+
+msgid "More than one predecessor of the gap found. Using the first found."
+msgstr ""
+
+#, python-format
+msgid "Map with name <%s> already exists. Please use another base name."
+msgstr ""
+
+#, python-brace-format
+msgid "Combining {option_name}={option_value} and {excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The option {excluded_option_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The flag -{flag_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long"
+msgstr ""
+
+msgid "Values are always ordered by start_time"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "Column '{name}' is not available with the method '{method}'"
+msgstr "Ime rastrskega sloja"
+
+#, python-brace-format
+msgid "Only one column is allowed (not {num_columns})"
+msgstr ""
+
+#, fuzzy
+msgid "All maps are always listed"
+msgstr "ne najdem regije <%s>"
+
+msgid "The method <quantile> requires input in the 'quantile' option."
+msgstr ""
+
+#, fuzzy
+msgid "Space time raster dataset <{}> is empty"
+msgstr "Ime rastrskega sloja"
+
+#, python-brace-format
+msgid ""
+"Error running module: {mod}\n"
+"    stderr: {error}"
+msgstr ""
+
+#, fuzzy
+msgid "Error running modules."
+msgstr "Nisem uspel odpreti vhodne datoteke."
+
+#, fuzzy, python-format
+msgid "Export directory <%s> not found."
+msgstr "ne najdem regije <%s>"
+
+msgid "Number requested methods and output maps do not match."
+msgstr ""
+
+msgid "Processing over {} maps: activating -z flag of r.series which slows down processing."
+msgstr ""
+
+#, python-format
+msgid "%s failed. Check above error messages."
+msgstr ""
+
+#, fuzzy
+msgid "Unable to set 3D region"
+msgstr "Ne morem vstaviti nove vrstice: %s"
+
+msgid "Space time voxel cube"
+msgstr ""
+
+msgid "This space time voxel cube was created with t.rast.to.rast3"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "%s failed to set units."
+msgstr "ne morem posodobiti meja"
+
+msgid "The number of parallel r.to.vect processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+msgid "<{}> is not valid input to the percentile option"
+msgstr ""
+
+#, fuzzy
+msgid "Zoning raster must be of type CELL"
+msgstr "Naslov izhodnega rastrskega sloja"
+
+#, fuzzy
+msgid "Options coordinates and points are mutually exclusive"
+msgstr "Uporabiš lahko ali 'from_table' ali 'select'"
+
+msgid "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+msgstr ""
+
+#, fuzzy
+msgid "Please specify points or coordinates"
+msgstr "Y koordinata oziroma geografska širina"
+
+#, fuzzy, python-format
+msgid "Transforming r.what output file %s"
+msgstr "Nisem uspel odpreti vhodne datoteke."
+
+#, fuzzy, python-format
+msgid "Writing the output file <%s>"
+msgstr "Zapisujem novo datoteko...\n"
+
+#, python-format
+msgid "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
+msgstr ""
+
+#, fuzzy
+msgid "The following data base element files will be deleted:"
+msgstr "Binarna rastrska datoteka, ki jo nameravate uvoziti"
+
+#, python-brace-format
+msgid "{stds}: {gid}"
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database:"
+msgstr "Izberi podatke iz baze podatkov."
+
+#, fuzzy, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database and removed from spatial database:"
+msgstr "Izberi podatke iz baze podatkov."
+
+#, python-format
+msgid "- %s"
+msgstr ""
+
+#, python-brace-format
+msgid "Nothing removed. You must use the force flag (-{flag}) to actually remove them."
+msgstr ""
+
+#, python-format
+msgid "Space time %s dataset <%s> can not be renamed. Mapset of the new identifier differs from the current mapset."
+msgstr ""
+
+#, python-format
+msgid "Unable to rename Space time %s dataset <%s>. Name <%s> is in use, please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to temporally shift the space time %s dataset <%s>"
+msgstr "Ime novega rastrskega sloja."
+
+#, fuzzy, c-format, python-format
+msgid "%s= or %s= must be specified"
+msgstr "Uporabiš lahko ali 'from_table' ali 'select'"
+
+#, fuzzy
+msgid "Unregister maps"
+msgstr "Vhodni rastrski sloj"
+
+#, fuzzy, python-format
+msgid "Unable to find %s map <%s> in temporal database"
+msgstr "Ne morem odpreti baze podatkov %s"
+
+#, fuzzy, python-format
+msgid "Unregister maps from space time dataset <%s>"
+msgstr "Izpiši rastrske sloje v vhodni \"location\" in končaj"
+
+#, fuzzy
+msgid "Unregister maps from the temporal database"
+msgstr "Izberi podatke iz baze podatkov."
+
+#, fuzzy, python-format
+msgid "Unable to run v.db.select for vector map <%s> with layer %s"
+msgstr "Ime izhodnega rastrskega sloja"
+
+#, fuzzy
+msgid "The number of columns must be equal to the number of space time raster datasets"
+msgstr "Ime novega rastrskega sloja."
+
+#, fuzzy, python-format
+msgid "Unable to create new layers for vector map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
+
+#, fuzzy, python-format
+msgid "Observaion of space time raster dataset(s) <%s>"
+msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
+
+#, fuzzy, python-format
+msgid "Observation of space time raster dataset(s) <%s> with vector map <%s>"
+msgstr "Ime rastrskega sloja"
+
+msgid "The number of raster maps in a granule must be equal to the number of column names"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to add column %s to vector map <%s> with layer %i"
+msgstr "Ne morem odpreti cellfile za [%s]"
+
+#, fuzzy, python-format
+msgid "Unable to add table to vector map <%s> with layer %i"
+msgstr "Ime izhodnega rastrskega sloja"
+
+#, fuzzy, python-format
+msgid "Unable to run v.what.rast for vector map <%s> with layer %i and raster map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
+
+#, fuzzy
+msgid "All registered maps of the space time vector dataset must have time intervals"
+msgstr "Izpiši rastrske sloje v vhodni \"location\" in končaj"
+
+#, fuzzy, python-format
+msgid "Space time vector dataset <%s> is empty"
+msgstr "Ime rastrskega sloja"
+
+#, fuzzy, python-format
+msgid "Unable to add column %s to vector map <%s>"
+msgstr "Ne morem odpreti cellfile za [%s]"
+
+#, fuzzy, python-format
+msgid "Unable to remove raster map <%s>"
+msgstr "Ime izhodnega rastrskega sloja"
+
 #, fuzzy
 msgid "Invalid GEOS geometry!"
 msgstr "neveljavna regija: %s"
@@ -29884,10 +30248,6 @@ msgstr ""
 #, fuzzy
 msgid "Print current status in shell script style"
 msgstr "Izpiše vrednosti v stilu lupinskega skripta"
-
-#, fuzzy, c-format
-msgid "%s= or %s= must be specified"
-msgstr "Uporabiš lahko ali 'from_table' ali 'select'"
 
 #, fuzzy, c-format
 msgid "%s= must be specified"
@@ -41398,10 +41758,6 @@ msgstr "Vhodni sloj"
 #~ msgstr "Ime izhodne datoteke, ki bo vsebovala poročilo"
 
 #, fuzzy
-#~ msgid "Name of the output space time raster dataset"
-#~ msgstr "Ime novega rastrskega sloja."
-
-#, fuzzy
 #~ msgid "Name of the output vector map: plants' structure including the main costs in the table"
 #~ msgstr "Uvozi binarno rastrsko datoteko v GRASS-ov rastrski sloj."
 
@@ -41628,10 +41984,6 @@ msgstr "Vhodni sloj"
 #, fuzzy
 #~ msgid "Neighborhood size used when smoothing the elevation model"
 #~ msgstr "Velikost okolice (neighbourhood)"
-
-#, fuzzy
-#~ msgid "No data base element files found"
-#~ msgstr "Binarna rastrska datoteka, ki jo nameravate uvoziti"
 
 #, fuzzy
 #~ msgid "No features found !"
@@ -42887,10 +43239,6 @@ msgstr "Vhodni sloj"
 #, fuzzy
 #~ msgid "Removes signature file in a group/subgroup."
 #~ msgstr "Izpiši pozicijo sonca v stilu lupinskega skripta"
-
-#, fuzzy
-#~ msgid "Renames multiple maps in the current mapset."
-#~ msgstr "Ne najdem vhodnega vektorja <%s>"
 
 #, fuzzy
 #~ msgid "Rendered output file"
@@ -44347,10 +44695,6 @@ msgstr "Vhodni sloj"
 #, fuzzy
 #~ msgid "input raster"
 #~ msgstr "Vpiši ime sloja"
-
-#, fuzzy
-#~ msgid "input space-time raster dataset"
-#~ msgstr "Ime rastrskega sloja, ki bo uporabljen za <%s>"
 
 #, fuzzy
 #~ msgid "input vector layer"

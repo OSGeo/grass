@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-04 17:59+0000\n"
+"POT-Creation-Date: 2026-11-15 02:39+0000\n"
 "PO-Revision-Date: 2026-10-31 18:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Hindi <https://weblate.osgeo.org/projects/grass-gis/grassmods-8-5/hi/>\n"
@@ -2231,7 +2231,6 @@ msgstr "महत्वपूर्ण अंकों की संख्या
 msgid "Get text color from cell color value"
 msgstr "सेल रंग मान से टेक्स्ट का रंग प्राप्त करें"
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -3707,7 +3706,7 @@ msgstr ""
 msgid "Error closing script file"
 msgstr "स्क्रिप्ट फ़ाइल बंद करने में त्रुटि"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Unknown boolean value \"%s\" at line %d\n"
 msgstr "लाइन %d पर अज्ञात बूलियन मान \"%s\"।\n"
 
@@ -7678,8 +7677,8 @@ msgstr "एक एसवीएम के साथ भविष्यवाण�
 msgid "Predict with a Support Vector Machine"
 msgstr "एक सपोर्ट वेक्टर मशीन से भविष्यवाणी करें"
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 msgid "Maps with feature values (attributes)"
 msgstr "फ़ीचर मान (विशेषताएँ) वाले मानचित्र"
 
@@ -11741,7 +11740,7 @@ msgstr "इनपुट रैस्टर मानचित्रों की
 msgid "Name of input raster files"
 msgstr "इनपुट रैस्टर फ़ाइलों का नाम"
 
-#, c-format
+#, c-format, python-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr "%s= और %s= परस्पर अनन्य हैं"
 
@@ -13778,7 +13777,7 @@ msgstr "उफ़: पंक्तियाँ %d से %d में बदल 
 msgid "OOPS: cols changed from %d to %d"
 msgstr "उफ़: कॉलम %d से %d में बदल गए"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid "Error in %s"
 msgstr "इसमें त्रुटि"
 
@@ -16044,7 +16043,7 @@ msgstr "रैस्टर डेटा को %s प्रारूप मे�
 msgid "Exporting raster map <%s> (band %d)..."
 msgstr "रेखापुंज मानचित्र <%s> (बैंड %d) निर्यात किया जा रहा है..।"
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to export raster map <%s>"
 msgstr "रेखापुंज मानचित्र निर्यात करने में असमर्थ <%s>"
 
@@ -20228,7 +20227,6 @@ msgstr "बहुत सारी श्रेणियाँ (मिलीं: 
 msgid "Input raster must be of type CELL."
 msgstr "इनपुट रैस्टर सेल प्रकार का होना चाहिए।"
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -21294,7 +21292,7 @@ msgstr "अनुभाग %d: जलसंभर निर्धारण।"
 msgid "SECTION 4: RUSLE LS and/or S factor determination."
 msgstr "धारा 4: रुसल एलएस और/या एस कारक निर्धारण।"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "USAGE for basin delineation:\n"
 "%s -4 elevation=elevation_map threshold=swale_threshold [flow=overland_flow_map] [drainage=drain_direction_map] [depression=depression_map] [accumulation=accumulation_map] [basin=watershed_basin_map] [retention=retention_map] [stream=stream_segment_map]\n"
@@ -21368,7 +21366,7 @@ msgstr "खंड 1बी: ऑफमैप प्रवाह का निर�
 msgid "SECTION 5: RUSLE LS and/or S factor determination."
 msgstr "धारा 5: रुसल एलएस और/या एस कारक निर्धारण।"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "USAGE for basin delineation:\n"
 "%s -4 elevation=elevation_map threshold=swale_threshold [flow=overland_flow_map] [drainage=drain_direction_map] [depression=depression_map] [accumulation=accumulation_map] [basin=watershed_basin_map] [stream=stream_segment_map]\n"
@@ -22074,7 +22072,7 @@ msgstr ""
 msgid "No sink map provided. Initializing zero sink..."
 msgstr "कोई सिंक मानचित्र उपलब्ध नहीं कराया गया. शून्य सिंक प्रारंभ किया जा रहा है..।"
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to create 3D raster map <%s>"
 msgstr "3D रेखापुंज मानचित्र बनाने में असमर्थ <%s>"
 
@@ -22574,7 +22572,9 @@ msgstr "राइट_वीटीके_अनस्ट्रक्चर्ड_
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr "write_vtk_data: सेलडेटा %s को पंक्तियों %i cols %i गहराई %i से vtk-ascii फ़ाइल में लिखना"
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+#, fuzzy
+#| msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
 msgstr "ग़लत 3D रेखापुंज मानचित्र मान! मान 0 और 255 के बीच होना चाहिए!"
 
 msgid "Unable to close the 3D raster map"
@@ -24920,6 +24920,439 @@ msgstr "डिफ़ॉल्ट TGIS ड्राइवर सेट नही�
 msgid "Default TGIS database is not set"
 msgstr "डिफ़ॉल्ट TGIS डेटाबेस सेट नहीं है"
 
+#, fuzzy, python-format
+#| msgid "Group must exist in the current mapset"
+msgid "The output dataset <%s> must be in the current mapset<%s>."
+msgstr "समूह वर्तमान मैपसेट में मौजूद होना चाहिए"
+
+#, fuzzy, python-format
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Empty space-time %s dataset <%s>, nothing to copy"
+msgstr "स्पेस टाइम रैस्टर डेटासेट <%s> खाली है"
+
+#, fuzzy, python-format
+#| msgid "Group must exist in the current mapset"
+msgid "Copying %s maps to the current mapset..."
+msgstr "समूह वर्तमान मैपसेट में मौजूद होना चाहिए"
+
+#, fuzzy, python-format
+#| msgid "<%s> is already the current mapset"
+msgid "A %s map <%s> exists already in the current mapset <%s>."
+msgstr "<%s> पहले से ही वर्तमान मैपसेट है"
+
+#, fuzzy, python-format
+#| msgid "<%s> is already the current mapset"
+msgid "The %s map <%s> is already in the current mapset, not copying"
+msgstr "<%s> पहले से ही वर्तमान मैपसेट है"
+
+#, fuzzy, python-format
+#| msgid "Please specify %s= or %s="
+msgid "Please specify %s="
+msgstr "कृपया %s= या %s= निर्दिष्ट करें"
+
+#, python-brace-format
+msgid "Dataset <{n}> of type <{t}> not found in temporal database"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Lists space time datasets and maps registered in the temporal database."
+msgid "Output space time dataset <%s> must be located in this mapset"
+msgstr "अस्थायी डेटाबेस में पंजीकृत अंतरिक्ष समय डेटासेट और मानचित्रों को सूचीबद्ध करता है।"
+
+#, fuzzy
+#| msgid "Lists space time datasets and maps registered in the temporal database."
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr "अस्थायी डेटाबेस में पंजीकृत अंतरिक्ष समय डेटासेट और मानचित्रों को सूचीबद्ध करता है।"
+
+#, python-format
+msgid "Unable to merge maps into space time %s dataset <%s> please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Space time %s dataset <%s> not found"
+msgstr "स्पेस टाइम रैस्टर डेटासेट <%s> खाली है"
+
+#, fuzzy
+#| msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgid "You need to set the range to compute the occurrence space time raster dataset"
+msgstr "स्पेस टाइम रैस्टर डेटासेट से निर्दिष्ट आकृति का स्पेस टाइम वेक्टर डेटासेट तैयार करता है।"
+
+#, fuzzy, python-format
+#| msgid "Fontcap file %s already exists; use --overwrite flag if you wish to overwrite it"
+msgid "Space time raster dataset <%s> is already in the database, use overwrite flag to overwrite"
+msgstr "फॉन्टकैप फ़ाइल %s पहले से मौजूद है; यदि आप इसे अधिलेखित करना चाहते हैं तो --overwrite ध्वज का उपयोग करें"
+
+#, fuzzy
+#| msgid "Produces a space time vector dataset of specified contours from a space time raster dataset."
+msgid "You need to set the occurrence to compute the indicator space time raster dataset"
+msgstr "स्पेस टाइम रैस्टर डेटासेट से निर्दिष्ट आकृति का स्पेस टाइम वेक्टर डेटासेट तैयार करता है।"
+
+#, fuzzy
+#| msgid "The user defined values that indicate start, intermediate and end status in the indicator output space time raster dataset"
+msgid "You need to set the staend options to compute the indicator space time raster dataset"
+msgstr "उपयोगकर्ता द्वारा परिभाषित मान जो संकेतक आउटपुट स्पेस टाइम रैस्टर डेटासेट में प्रारंभ, मध्यवर्ती और अंत स्थिति को दर्शाते हैं"
+
+#, fuzzy, python-format
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Space time raster dataset <%s> not found"
+msgstr "स्पेस टाइम रैस्टर डेटासेट <%s> खाली है"
+
+msgid "Temporal type of input strds and minimum strds must be equal"
+msgstr ""
+
+msgid "Temporal type of input strds and maximum strds must be equal"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Processing block %d of %d"
+msgid "Processing cycle %s - %s"
+msgstr "%d का प्रसंस्करण ब्लॉक %d"
+
+#, fuzzy, python-format
+#| msgid "Fontcap file %s already exists; use --overwrite flag if you wish to overwrite it"
+msgid "Map <%s> is already registered in the temporal database, use overwrite flag to overwrite."
+msgstr "फॉन्टकैप फ़ाइल %s पहले से मौजूद है; यदि आप इसे अधिलेखित करना चाहते हैं तो --overwrite ध्वज का उपयोग करें"
+
+#, fuzzy
+#| msgid "Shift granularity"
+msgid "Invalid granularity"
+msgstr "ग्रैन्युलैरिटी शिफ्ट करें"
+
+#, fuzzy
+#| msgid "Invalid %s"
+msgid "Invalid cycle"
+msgstr "अमान्य %s"
+
+#, fuzzy
+#| msgid "Invalid %s"
+msgid "Invalid offset"
+msgstr "अमान्य %s"
+
+msgid "Temporal type of input strds and lower strds must be equal"
+msgstr ""
+
+#, fuzzy
+#| msgid "Time increment, works only in conjunction with start option"
+msgid "The upper option works only in conjunction with the lower option"
+msgstr "समय वृद्धि, केवल प्रारंभ विकल्प के संयोजन में काम करती है"
+
+msgid "Temporal type of input strds and upper strds must be equal"
+msgstr ""
+
+#, fuzzy
+#| msgid "error running r.stats"
+msgid "Error running r.series.accumulate"
+msgstr "r.stats चलाने में त्रुटि"
+
+#, fuzzy
+#| msgid "input= and weights= must have the same number of values"
+msgid "Input and aggregation dataset must have the same temporal type"
+msgstr "इनपुट= और वज़न= में मानों की संख्या समान होनी चाहिए"
+
+msgid "All registered maps of the aggregation dataset must have time intervals"
+msgstr ""
+
+msgid "Unable to process the expression in granularity algebra mode"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error adding columns {}"
+msgid "Error in r.colors call"
+msgstr "कॉलम जोड़ने में त्रुटि {}"
+
+msgid "The number of parallel r.contour processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cursor not found"
+msgid "Directory {} not found"
+msgstr "कर्सर नहीं मिला"
+
+#, fuzzy
+#| msgid "Directory '{path}' is not writable"
+msgid "Directory {} is not writable"
+msgstr "निर्देशिका '{path}' लिखने योग्य नहीं है"
+
+msgid "Type options is not working with pack format, it will be skipped"
+msgstr ""
+
+msgid "Createopt, metaopt and nodata options are not working with pack and AAIGrid formats, they will be skipped"
+msgstr ""
+
+#, fuzzy
+#| msgid "No tables found"
+msgid "No gaps found"
+msgstr "कोई टेबल नहीं मिली"
+
+#, fuzzy
+#| msgid "Unable to determine input map's vector feature type(s)."
+msgid "Unable to determine successor and predecessor of a gap."
+msgstr "इनपुट मानचित्र के वेक्टर सुविधा प्रकार(प्रकारों) को निर्धारित करने में असमर्थ।"
+
+msgid "More than one successor of the gap found. Using the first found."
+msgstr ""
+
+msgid "More than one predecessor of the gap found. Using the first found."
+msgstr ""
+
+#, python-format
+msgid "Map with name <%s> already exists. Please use another base name."
+msgstr ""
+
+#, python-brace-format
+msgid "Combining {option_name}={option_value} and {excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The option {excluded_option_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The flag -{flag_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long"
+msgstr ""
+
+msgid "Values are always ordered by start_time"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Layer '%s' is not available with %s code."
+msgid "Column '{name}' is not available with the method '{method}'"
+msgstr "परत '%s' %s कोड के साथ उपलब्ध नहीं है।"
+
+#, python-brace-format
+msgid "Only one column is allowed (not {num_columns})"
+msgstr ""
+
+#, fuzzy
+#| msgid "Column names are always included"
+msgid "All maps are always listed"
+msgstr "कॉलम नाम हमेशा शामिल किए जाते हैं"
+
+#, fuzzy
+#| msgid "The -p flag is required when using the format option."
+msgid "The method <quantile> requires input in the 'quantile' option."
+msgstr "प्रारूप विकल्प का उपयोग करते समय -p ध्वज की आवश्यकता होती है।"
+
+#, fuzzy
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Space time raster dataset <{}> is empty"
+msgstr "स्पेस टाइम रैस्टर डेटासेट <%s> खाली है"
+
+#, python-brace-format
+msgid ""
+"Error running module: {mod}\n"
+"    stderr: {error}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error flushing tiles"
+msgid "Error running modules."
+msgstr "टाइल्स फ्लश करने में त्रुटि"
+
+#, fuzzy, python-format
+#| msgid "Target project <%s> not found"
+msgid "Export directory <%s> not found."
+msgstr "लक्ष्य प्रोजेक्ट <%s> नहीं मिला"
+
+msgid "Number requested methods and output maps do not match."
+msgstr ""
+
+msgid "Processing over {} maps: activating -z flag of r.series which slows down processing."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Module %s failed. Check the above error messages."
+msgid "%s failed. Check above error messages."
+msgstr "मॉड्यूल %s विफल. उपरोक्त त्रुटि संदेशों की जाँच करें।"
+
+#, fuzzy
+#| msgid "Unable to set region <%s>"
+msgid "Unable to set 3D region"
+msgstr "क्षेत्र <%s> सेट करने में असमर्थ"
+
+msgid "Space time voxel cube"
+msgstr ""
+
+msgid "This space time voxel cube was created with t.rast.to.rast3"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Failed to get Git version."
+msgid "%s failed to set units."
+msgstr "Git संस्करण प्राप्त करने में विफल।"
+
+msgid "The number of parallel r.to.vect processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+msgid "<{}> is not valid input to the percentile option"
+msgstr ""
+
+#, fuzzy
+#| msgid "Input raster must be of type CELL"
+msgid "Zoning raster must be of type CELL"
+msgstr "इनपुट रैस्टर सेल प्रकार का होना चाहिए"
+
+#, fuzzy
+#| msgid "flags c and d are mutually exclusive"
+msgid "Options coordinates and points are mutually exclusive"
+msgstr "झंडे सी और डी परस्पर अनन्य हैं"
+
+msgid "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+msgstr ""
+
+#, fuzzy
+#| msgid "Seed point coordinates"
+msgid "Please specify points or coordinates"
+msgstr "बीज बिंदु निर्देशांक"
+
+#, fuzzy, python-format
+#| msgid "Error closing output file %s"
+msgid "Transforming r.what output file %s"
+msgstr "आउटपुट फ़ाइल %s बंद करने में त्रुटि"
+
+#, fuzzy, python-format
+#| msgid "Writing the output map  -%s-..."
+msgid "Writing the output file <%s>"
+msgstr "आउटपुट मैप लिखना -%s-..।"
+
+#, python-format
+msgid "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
+msgstr ""
+
+#, fuzzy
+#| msgid "The following data base element files would be deleted:"
+msgid "The following data base element files will be deleted:"
+msgstr "निम्नलिखित डेटा बेस तत्व फ़ाइलें हटा दी जाएंगी:"
+
+#, python-brace-format
+msgid "{stds}: {gid}"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Remove stds and unregister maps from temporal database"
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database:"
+msgstr "अस्थायी डेटाबेस से एसटीडी हटाएं और मानचित्र अपंजीकृत करें"
+
+#, fuzzy, python-brace-format
+#| msgid "Remove stds, unregister maps from temporal database and delete them from mapset"
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database and removed from spatial database:"
+msgstr "एसटीडी हटाएं, अस्थायी डेटाबेस से मानचित्रों को अपंजीकृत करें और उन्हें मैपसेट से हटा दें"
+
+#, python-format
+msgid "- %s"
+msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Nothing removed. You must use the force flag (-%c) to actually remove them. Exiting."
+msgid "Nothing removed. You must use the force flag (-{flag}) to actually remove them."
+msgstr "कुछ भी नहीं हटाया गया. वास्तव में उन्हें हटाने के लिए आपको बल ध्वज (-%c) का उपयोग करना होगा। बाहर निकलना।"
+
+#, python-format
+msgid "Space time %s dataset <%s> can not be renamed. Mapset of the new identifier differs from the current mapset."
+msgstr ""
+
+#, python-format
+msgid "Unable to rename Space time %s dataset <%s>. Name <%s> is in use, please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Snaps temporally the maps of a space time dataset."
+msgid "Unable to temporally shift the space time %s dataset <%s>"
+msgstr "अंतरिक्ष समय डेटासेट के मानचित्रों को अस्थायी रूप से स्नैप करता है।"
+
+#, c-format, python-format
+msgid "%s= or %s= must be specified"
+msgstr "%s= या %s= निर्दिष्ट किया जाना चाहिए"
+
+#, fuzzy
+#| msgid "Register Null maps"
+msgid "Unregister maps"
+msgstr "शून्य मानचित्र पंजीकृत करें"
+
+#, fuzzy, python-format
+#| msgid "Unable to open default database"
+msgid "Unable to find %s map <%s> in temporal database"
+msgstr "डिफ़ॉल्ट डेटाबेस खोलने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Lists registered maps of a space time raster dataset."
+msgid "Unregister maps from space time dataset <%s>"
+msgstr "स्पेस टाइम रैस्टर डेटासेट के पंजीकृत मानचित्रों को सूचीबद्ध करता है।"
+
+#, fuzzy
+#| msgid "Remove stds and unregister maps from temporal database"
+msgid "Unregister maps from the temporal database"
+msgstr "अस्थायी डेटाबेस से एसटीडी हटाएं और मानचित्र अपंजीकृत करें"
+
+#, fuzzy, python-format
+#| msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
+msgid "Unable to run v.db.select for vector map <%s> with layer %s"
+msgstr "वेक्टर मानचित्र <%s> और रेखापुंज मानचित्र <%s> के लिए v.what.rast चलाने में असमर्थ"
+
+#, fuzzy
+#| msgid "Extracts a subset of a space time raster datasets."
+msgid "The number of columns must be equal to the number of space time raster datasets"
+msgstr "स्पेस टाइम रैस्टर डेटासेट का एक सबसेट निकालता है।"
+
+#, fuzzy, python-format
+#| msgid "Unable to create error vector map <%s>"
+msgid "Unable to create new layers for vector map <%s>"
+msgstr "त्रुटि वेक्टर मानचित्र बनाने में असमर्थ <%s>"
+
+#, fuzzy, python-format
+#| msgid "Name of a space time raster dataset archive"
+msgid "Observaion of space time raster dataset(s) <%s>"
+msgstr "स्पेस टाइम रैस्टर डेटासेट संग्रह का नाम"
+
+#, fuzzy, python-format
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Observation of space time raster dataset(s) <%s> with vector map <%s>"
+msgstr "स्पेस टाइम रैस्टर डेटासेट <%s> खाली है"
+
+#, fuzzy
+#| msgid "The number of digits for band numbering must be equal or greater than 0"
+msgid "The number of raster maps in a granule must be equal to the number of column names"
+msgstr "बैंड नंबरिंग के लिए अंकों की संख्या 0 के बराबर या उससे अधिक होनी चाहिए"
+
+#, fuzzy, python-format
+#| msgid "Unable to add column %s to vector map <%s> "
+msgid "Unable to add column %s to vector map <%s> with layer %i"
+msgstr "वेक्टर मानचित्र <%s> में कॉलम %s जोड़ने में असमर्थ "
+
+#, fuzzy, python-format
+#| msgid "Unable to add table <%s> to vector map <%s>"
+msgid "Unable to add table to vector map <%s> with layer %i"
+msgstr "वेक्टर मानचित्र <%s> में तालिका <%s> जोड़ने में असमर्थ"
+
+#, fuzzy, python-format
+#| msgid "Unable to run v.what.rast for vector map <%s> and raster map <%s>"
+msgid "Unable to run v.what.rast for vector map <%s> with layer %i and raster map <%s>"
+msgstr "वेक्टर मानचित्र <%s> और रेखापुंज मानचित्र <%s> के लिए v.what.rast चलाने में असमर्थ"
+
+#, fuzzy
+#| msgid "Lists registered maps of a space time vector dataset."
+msgid "All registered maps of the space time vector dataset must have time intervals"
+msgstr "स्पेस टाइम वेक्टर डेटासेट के पंजीकृत मानचित्रों को सूचीबद्ध करता है।"
+
+#, fuzzy, python-format
+#| msgid "Space time raster dataset <%s> is empty"
+msgid "Space time vector dataset <%s> is empty"
+msgstr "स्पेस टाइम रैस्टर डेटासेट <%s> खाली है"
+
+#, fuzzy, python-format
+#| msgid "Unable to add column %s to vector map <%s> "
+msgid "Unable to add column %s to vector map <%s>"
+msgstr "वेक्टर मानचित्र <%s> में कॉलम %s जोड़ने में असमर्थ "
+
+#, fuzzy, python-format
+#| msgid "Unable to create raster map <%s>"
+msgid "Unable to remove raster map <%s>"
+msgstr "रेखापुंज मानचित्र बनाने में असमर्थ <%s>"
+
 msgid "Invalid GEOS geometry!"
 msgstr "अमान्य GEOS ज्यामिति!"
 
@@ -26722,10 +27155,6 @@ msgstr "देशी"
 
 msgid "Print current status in shell script style"
 msgstr "वर्तमान स्थिति को शेल स्क्रिप्ट शैली में प्रिंट करें"
-
-#, c-format
-msgid "%s= or %s= must be specified"
-msgstr "%s= या %s= निर्दिष्ट किया जाना चाहिए"
 
 #, c-format
 msgid "%s= must be specified"
@@ -31922,7 +32351,7 @@ msgstr "इनपुट पढ़ने में असमर्थ: %s"
 msgid "Unable to find line of cat %d"
 msgstr "बिल्ली की पंक्ति ढूंढने में असमर्थ %d"
 
-#, c-format, fuzzy
+#, fuzzy, c-format
 msgid ""
 "Unable to get point on line: cat = %d offset = %f (line length = %.15g)\n"
 "%s"
