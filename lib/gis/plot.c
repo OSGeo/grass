@@ -248,8 +248,8 @@ static void slowline(double x1, double y1, double x2, double y2)
 
     /* Zero-length segment: plot only one point. */
     if (dx == 0.0 && dy == 0.0) {
-        xstart = iceil(x1 - 0.5);
-        ystart = iceil(y1 - 0.5);
+        xstart = ifloor(x1 + 0.5);
+        ystart = ifloor(y1 + 0.5);
 
         st->move(xstart, ystart);
         st->cont(xstart, ystart);
@@ -274,7 +274,7 @@ static void slowline(double x1, double y1, double x2, double y2)
             dy = y2 - y1;
         }
         m = dy / dx;
-        xstart = iceil(x1 - 0.5);
+        xstart = ifloor(x1 + 0.5);
         xstop = ifloor(x2 + 0.5);
 
         if (xstart <= xstop) {
@@ -307,7 +307,7 @@ static void slowline(double x1, double y1, double x2, double y2)
             dy = y2 - y1;
         }
         m = dx / dy;
-        ystart = iceil(y1 - 0.5);
+        ystart = ifloor(y1 + 0.5);
         ystop = ifloor(y2 + 0.5);
 
         if (ystart <= ystop) {
