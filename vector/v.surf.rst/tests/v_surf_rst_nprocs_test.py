@@ -49,6 +49,15 @@ def test_nprocs_gives_result_of_one_thread(tools, nprocs):
     )
 
 
+def test_mask_with_threads(tools):
+    """With a raster mask, more threads give the result of one thread"""
+    tools.r_mapcalc(expression="ones = 1")
+    tools.r_mask(raster="ones")
+    np.testing.assert_array_equal(
+        elevation(tools, nprocs=2), elevation(tools, nprocs=1)
+    )
+
+
 def nprocs_default(tools):
     """Return the default of nprocs from the interface description"""
     xml = tools.run_cmd(["v.surf.rst", "--interface-description"]).text

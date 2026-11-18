@@ -402,10 +402,7 @@ int main(int argc, char *argv[])
     overfile = parm.overfile->answer;
 
     threads = G_set_omp_num_threads(parm.threads);
-    if (threads > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        threads = 1;
-    }
+    threads = Rast_disable_omp_on_mask(threads);
     if (devi) {
         create_devi = true;
         if (Vect_legal_filename(devi) == -1)
