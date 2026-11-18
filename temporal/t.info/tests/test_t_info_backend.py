@@ -8,7 +8,10 @@ changes to the interface can be checked against the established behavior.
 
 import re
 
+import pytest
+
 import grass.script as gs
+from grass.exceptions import CalledModuleError
 from grass.tools import Tools
 
 BACKEND_SHELL_KEYS = [
@@ -68,3 +71,21 @@ def test_backend_ignores_input(temporal_data):
 
     assert with_input == without_input
     assert "precip_abs1" not in with_input
+
+
+def test_nonexisting_input_fails(temporal_data):
+    """t.info fails if input is not found."""
+    tools = Tools(session=temporal_data.session)
+    with pytest.raises(CalledModuleError) as error_msg:
+        tools.t_info(type="str3ds", input="non_existing_volume")
+
+    assert "ERROR: Dataset" in str(error_msg.value)
+
+
+def test_nonexisting_mapset_fails(temporal_data):
+    """t.info fails if input is not found."""
+    tools = Tools(session=temporal_data.session)
+    with pytest.raises(CalledModuleError) as error_msg:
+        tools.t_info(type="str3ds", input="volume_abs1@non_existing_mapset")
+
+    assert "Mapset <non_existing_mapset> not found" in str(error_msg.value)
