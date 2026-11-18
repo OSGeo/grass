@@ -1502,7 +1502,7 @@ class STRDSMetadata(STDSRasterMetadataBase):
 
         :return: None if not found
         """
-        if get_tgis_db_version_from_metadata() <= 2:
+        if get_tgis_db_version_from_metadata(self.__dict__.items()) <= 2:
             # band names supported from TGIS DB version 3
             return None
 
