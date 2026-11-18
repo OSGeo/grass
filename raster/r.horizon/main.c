@@ -1152,22 +1152,12 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
                 horizon_raster[j][i] = 0.;
         }
     }
-    double dfr_rad;
-    int arrayNumInt;
     /* definition of horizon angle in loop */
-    char *shad_filename = NULL;
-    if (settings->step == 0.0) {
-        dfr_rad = 0;
-        arrayNumInt = 1;
-        sprintf(shad_filename, "%s", settings->horizon_basename);
-    }
-    else {
-        dfr_rad = settings->step * deg2rad;
-        arrayNumInt = 0;
-        for (double tmp = 0; tmp < settings->end - settings->start;
-             tmp += fabs(settings->step))
-            ++arrayNumInt;
-    }
+    double dfr_rad = settings->step * deg2rad;
+    int arrayNumInt = 0;
+    for (double tmp = 0; tmp < settings->end - settings->start;
+         tmp += fabs(settings->step))
+        ++arrayNumInt;
 
     size_t decimals = G_get_num_decimals(settings->str_step);
 
@@ -1179,9 +1169,8 @@ void calculate_raster_mode(const Settings *settings, const Geometry *geometry,
             (dfr_rad * k);
         double angle_deg = angle * rad2deg + 0.0001;
 
-        if (settings->step != 0.0)
-            shad_filename = G_generate_basename(settings->horizon_basename,
-                                                angle_deg, 3, decimals);
+        char *shad_filename = G_generate_basename(settings->horizon_basename,
+                                                  angle_deg, 3, decimals);
         G_message(
             _("Calculating map %01d of %01d (angle %.2f, raster map <%s>)"),
             (k + 1), arrayNumInt, angle_deg, shad_filename);
