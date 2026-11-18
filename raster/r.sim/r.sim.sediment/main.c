@@ -290,9 +290,6 @@ int main(int argc, char *argv[])
           "Seeding is automatic or use parameter seed.");
 
     parm.threads = G_define_standard_option(G_OPT_M_NPROCS);
-    /* Results differ with more threads, so use one unless NPROCS is set. */
-    if (!G_getenv_nofatal("NPROCS"))
-        parm.threads->answer = NUM_THREADS;
     parm.threads->guisection = _("Parameters");
 
     flag.print = G_define_flag();

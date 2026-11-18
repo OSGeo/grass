@@ -326,7 +326,7 @@ threads. Use **nprocs=1** when results must be reproducible.
 ### Performance
 
 To enable parallel processing, the user can specify the number of
-threads to be used with the **nprocs** parameter (default 1). Figures
+threads to be used with the **nprocs** parameter. Figures
 below show benchmark results for the `elevation` raster map of the
 SECREF North Carolina dataset at 4 m, 2 m and 1 m resolution with the
 default number of walkers, as the mean of 3 runs on Intel® Xeon® W-2295
@@ -427,7 +427,7 @@ common land cover classifications.
 buildings and roads and high values for fields and forest.*
 
 Simulate 30 minutes of overland flow with a uniform rainfall excess of
-20 mm/hr. The random seed makes the run reproducible.
+20 mm/hr. The random seed makes the run reproducible with nprocs=1.
 
 <!-- markdownlint-disable MD046 -->
 === "Command line"
