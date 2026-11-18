@@ -28,6 +28,8 @@ class TestRSimWater(TestCase):
     def setUpClass(cls):
         """Set up region, create necessary data"""
         cls.runModule("g.region", n=224000, s=223000, e=637000, w=636000, res=10)
+        # The references were computed with one thread.
+        cls.runModule("g.gisenv", set="NPROCS=1")
         cls.runModule(
             "r.slope.aspect", elevation=cls.elevation, dx=cls.dx, dy=cls.dy, flags="e"
         )
@@ -71,6 +73,7 @@ class TestRSimWater(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Clean up test environment"""
+        cls.runModule("g.gisenv", unset="NPROCS")
         cls.runModule(
             "g.remove",
             flags="f",
