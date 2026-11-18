@@ -278,7 +278,7 @@ static void slowline(double x1, double y1, double x2, double y2)
         xstop = ifloor(x2 + 0.5);
 
         if (xstart <= xstop) {
-            /* Subtract the start/end point coordinate before multiplying
+            /* Subtract the start point coordinate before multiplying
              * to avoid numerical cancellation.
              */
             ystart = ifloor(y1 + m * (xstart - x1) + 0.5);
@@ -311,7 +311,7 @@ static void slowline(double x1, double y1, double x2, double y2)
         ystop = ifloor(y2 + 0.5);
 
         if (ystart <= ystop) {
-            /* Subtract the start/end point coordinate before multiplying
+            /* Subtract the start point coordinate before multiplying
              * to avoid numerical cancellation.
              */
             xstart = ifloor(x1 + m * (ystart - y1) + 0.5);
