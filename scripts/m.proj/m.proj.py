@@ -97,8 +97,10 @@ SPDX-License-Identifier: GPL-2.0-or-later
 # % exclusive: -i, -o
 # %end
 
+import io
 import sys
 import threading
+from contextlib import ExitStack, closing, suppress
 from pathlib import Path
 from grass.script.utils import separator, parse_key_val, encode, decode
 from grass.script import core as gcore
@@ -106,22 +108,26 @@ from grass.script import core as gcore
 
 class TrThread(threading.Thread):
     def __init__(self, ifs, inf, outf):
-        threading.Thread.__init__(self)
+        # As a daemon, the thread does not keep m.proj running when main()
+        # stops while the thread still waits for input from stdin.
+        threading.Thread.__init__(self, daemon=True)
         self.ifs = ifs
         self.inf = inf
         self.outf = outf
 
     def run(self):
-        while True:
-            line = self.inf.readline()
-            if not line:
-                break
-            line = line.replace(self.ifs, " ")
-            line = encode(line)
-            self.outf.write(line)
-            self.outf.flush()
-
-        self.outf.close()
+        # cs2cs can exit before it reads all input, for example with invalid
+        # parameters or when main() stops it. main() reports a failed cs2cs
+        # from its exit status, so the broken pipe is not an error here.
+        with suppress(BrokenPipeError), closing(self.outf):
+            while True:
+                line = self.inf.readline()
+                if not line:
+                    break
+                line = line.replace(self.ifs, " ")
+                line = encode(line)
+                self.outf.write(line)
+                self.outf.flush()
 
 
 def main():
@@ -207,89 +213,91 @@ def main():
     out_proj = out_proj.strip()
     gcore.verbose("Output parameters: '%s'" % out_proj)
 
-    # set up input file
-    if coords:
-        x, y = coords.split(",")
-        tmpfile = gcore.tempfile()
-        fd = open(tmpfile, "w")
-        fd.write("%s%s%s\n" % (x, ifs, y))
-        fd.close()
-        inf = open(tmpfile)
-    elif input == "-":
-        infile = None
-        inf = sys.stdin
-    else:
-        infile = input
-        if not Path(infile).exists():
-            gcore.fatal(_("Unable to read input data"))
-        inf = open(infile)
-        gcore.debug("input file=[%s]" % infile)
+    with ExitStack() as stack:
+        # set up input file
+        if coords:
+            x, y = coords.split(",")
+            inf = io.StringIO("%s%s%s\n" % (x, ifs, y))
+        elif input == "-":
+            inf = sys.stdin
+        else:
+            if not Path(input).exists():
+                gcore.fatal(_("Unable to read input data"))
+            inf = stack.enter_context(open(input))
+            gcore.debug("input file=[%s]" % input)
 
-    # set up output file
-    if not output:
-        outfile = None
-        outf = sys.stdout
-    else:
-        outfile = output
-        outf = open(outfile, "w")
-        gcore.debug("output file=[%s]" % outfile)
+        # set up output file
+        if not output:
+            outf = sys.stdout
+        else:
+            outf = stack.enter_context(open(output, "w"))
+            gcore.debug("output file=[%s]" % output)
 
-    # set up output style
-    outfmt = ["-w5"] if not decimal else ["-f", "%.8f"]
-    copyinp = [] if not copy_input else ["-E"]
+        # set up output style
+        outfmt = ["-w5"] if not decimal else ["-f", "%.8f"]
+        copyinp = [] if not copy_input else ["-E"]
 
-    # do the conversion
-    # Convert cs2cs DMS format to GRASS DMS format:
-    #   cs2cs | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
+        # do the conversion
+        # Convert cs2cs DMS format to GRASS DMS format:
+        #   cs2cs | sed -e 's/d/:/g' -e "s/'/:/g"  -e 's/"//g'
 
-    cmd = ["cs2cs"] + copyinp + outfmt + in_proj.split() + ["+to"] + out_proj.split()
+        cmd = (
+            ["cs2cs"] + copyinp + outfmt + in_proj.split() + ["+to"] + out_proj.split()
+        )
 
-    p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE, text=False)
+        p = gcore.Popen(cmd, stdin=gcore.PIPE, stdout=gcore.PIPE, text=False)
 
-    tr = TrThread(ifs, inf, p.stdin)
-    tr.start()
+        tr = TrThread(ifs, inf, p.stdin)
+        tr.start()
 
-    if not copy_input:
-        if include_header:
-            outf.write("x%sy%sz\n" % (ofs, ofs))
-        for line in p.stdout:
-            try:
-                xy, z = decode(line).split(" ", 1)
-                x, y = xy.split("\t")
-            except ValueError:
-                gcore.fatal(line)
+        try:
+            if not copy_input:
+                if include_header:
+                    outf.write("x%sy%sz\n" % (ofs, ofs))
+                for line in p.stdout:
+                    try:
+                        xy, z = decode(line).split(" ", 1)
+                        x, y = xy.split("\t")
+                    except ValueError:
+                        gcore.fatal(line)
 
-            outf.write("%s%s%s%s%s\n" % (x.strip(), ofs, y.strip(), ofs, z.strip()))
-    else:
-        if include_header:
-            outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
-        for line in p.stdout:
-            inXYZ, x, rest = decode(line).split("\t")
-            inX, inY = inXYZ.split(" ")[:2]
-            y, z = rest.split(" ", 1)
-            outf.write(
-                "%s%s%s%s%s%s%s%s%s\n"
-                % (
-                    inX.strip(),
-                    ofs,
-                    inY.strip(),
-                    ofs,
-                    x.strip(),
-                    ofs,
-                    y.strip(),
-                    ofs,
-                    z.strip(),
-                )
-            )
-
-    p.wait()
-    p.stdout.close()
-    # The thread reads from inf, so wait for it before closing inf.
-    tr.join()
-    if inf is not sys.stdin:
-        inf.close()
-    if outf is not sys.stdout:
-        outf.close()
+                    outf.write(
+                        "%s%s%s%s%s\n" % (x.strip(), ofs, y.strip(), ofs, z.strip())
+                    )
+            else:
+                if include_header:
+                    outf.write("input_x%sinput_y%sx%sy%sz\n" % (ofs, ofs, ofs, ofs))
+                for line in p.stdout:
+                    inXYZ, x, rest = decode(line).split("\t")
+                    inX, inY = inXYZ.split(" ")[:2]
+                    y, z = rest.split(" ", 1)
+                    outf.write(
+                        "%s%s%s%s%s%s%s%s%s\n"
+                        % (
+                            inX.strip(),
+                            ofs,
+                            inY.strip(),
+                            ofs,
+                            x.strip(),
+                            ofs,
+                            y.strip(),
+                            ofs,
+                            z.strip(),
+                        )
+                    )
+        except BaseException:
+            # Nothing reads the output of cs2cs anymore, so stop it. This
+            # also ends the thread writing to it with a broken pipe.
+            p.kill()
+            raise
+        finally:
+            p.stdout.close()
+            p.wait()
+            # The thread reads from inf, so let it finish before inf is
+            # closed. It can block indefinitely while reading from stdin, so
+            # do not wait for it then.
+            if inf is not sys.stdin:
+                tr.join()
 
     if p.returncode != 0:
         gcore.warning(_("Projection transform probably failed, please investigate"))
