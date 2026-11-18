@@ -242,7 +242,9 @@ cross-validation procedure.
 ### Performance
 
 To enable parallel processing, the user can specify the number of
-threads to be used with the **nprocs** parameter (default 1). Figures 1
+threads to be used with the **nprocs** parameter. With more than one
+thread, the points of **deviations** and **cvdev** come out in a varying
+order and with varying categories. Figures 1
 and 2 show benchmark results running on Intel® Core™ i5-10210U CPU @
 1.60GHz × 8. See benchmark scripts in the source code for more details.
 
