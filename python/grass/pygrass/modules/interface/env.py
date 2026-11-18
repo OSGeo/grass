@@ -6,6 +6,7 @@ Created on Thu May 28 17:41:32 2015
 
 import os
 import sys
+from contextlib import nullcontext
 
 
 def get_env():
@@ -32,8 +33,9 @@ def G_debug(level, *msg):
     debug_level = get_debug_level()
     if debug_level >= level:
         dfile = os.environ.get("GRASS_DEBUG_FILE")
-        if dfile is None:
-            print("D%d/%d: " % (level, debug_level), *msg, end="\n", file=sys.stderr)
-        else:
-            with open(dfile, mode="a") as fd:
-                print("D%d/%d: " % (level, debug_level), *msg, end="\n", file=fd)
+        with (
+            nullcontext(sys.stderr)
+            if dfile is None
+            else open(dfile, mode="a", encoding="utf-8")
+        ) as fd:
+            print("D%d/%d: " % (level, debug_level), *msg, file=fd)
