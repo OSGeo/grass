@@ -1,4 +1,4 @@
-"""Tests of r.sim.water results with more than one thread."""
+"""Tests of r.sim.water with more than one thread."""
 
 import os
 
@@ -97,3 +97,45 @@ def test_infiltration_takes_exactly_the_capacity(session):
             depth(session, nprocs=nprocs, infil=INFILTRATION, diffusion_coeff=0)
         )
         assert actual == pytest.approx(expected, rel=1e-6)
+
+
+def threads(tools, **kwargs):
+    """Return the number of threads from the run summary"""
+    return tools.r_sim_water(
+        elevation="rows_raster",
+        depth="depth",
+        nwalkers=10,
+        duration=1,
+        flags="p",
+        format="json",
+        overwrite=True,
+        **kwargs,
+    )["threads"]
+
+
+def test_nprocs_from_gisenv(session_tools):
+    """NPROCS set by g.gisenv replaces the default of one thread"""
+    expected = threads(session_tools, nprocs=2)
+    session_tools.g_gisenv(set="NPROCS=2")
+    assert threads(session_tools) == expected
+
+
+def test_nprocs_zero_is_openmp_default(session_tools, session_in_mapset):
+    """With nprocs=0, OpenMP decides, here by OMP_NUM_THREADS"""
+    env = session_in_mapset.env.copy()
+    env["OMP_NUM_THREADS"] = "2"
+    assert threads(session_tools, nprocs=0, env=env) == threads(session_tools, nprocs=2)
+
+
+def test_negative_nprocs_counts_down(session_tools, session_in_mapset):
+    """A negative nprocs leaves that many CPUs unused, but uses at least one"""
+    env = session_in_mapset.env.copy()
+    env.pop("OMP_NUM_THREADS", None)
+    all_cpus = threads(session_tools, nprocs=0, env=env)
+    assert threads(session_tools, nprocs=-2, env=env) == max(all_cpus - 2, 1)
+
+
+def test_mask_uses_one_thread(session_tools):
+    """With a raster mask, one thread is used whatever nprocs is"""
+    session_tools.r_mask(raster="rows_raster")
+    assert threads(session_tools, nprocs=2) == 1

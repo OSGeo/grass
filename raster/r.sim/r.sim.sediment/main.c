@@ -289,13 +289,10 @@ int main(int argc, char *argv[])
         _("This flag is deprecated and will be removed in a future release. "
           "Seeding is automatic or use parameter seed.");
 
-    parm.threads = G_define_option();
-    parm.threads->key = "nprocs";
-    parm.threads->type = TYPE_INTEGER;
-    parm.threads->answer = NUM_THREADS;
-    parm.threads->required = NO;
-    parm.threads->description =
-        _("Number of threads which will be used for parallel computation.");
+    parm.threads = G_define_standard_option(G_OPT_M_NPROCS);
+    /* Results differ with more threads, so use one unless NPROCS is set. */
+    if (!G_getenv_nofatal("NPROCS"))
+        parm.threads->answer = NUM_THREADS;
     parm.threads->guisection = _("Parameters");
 
     flag.print = G_define_flag();
@@ -373,22 +370,8 @@ int main(int argc, char *argv[])
     outputs.erdep = parm.erdep->answer;
     outputs.outwalk = parm.outwalk->answer;
 
-    sscanf(parm.threads->answer, "%d", &threads);
-    if (threads < 1) {
-        G_warning(_("<%d> is not valid number of threads. Number of threads "
-                    "will be set on <%d>"),
-                  threads, abs(threads));
-        threads = abs(threads);
-    }
-    if (threads > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        threads = 1;
-    }
-#if defined(_OPENMP)
-    omp_set_num_threads(threads);
-#else
-    threads = 1;
-#endif
+    threads = G_set_omp_num_threads(parm.threads);
+    threads = Rast_disable_omp_on_mask(threads);
     G_message(_("Number of threads: %d"), threads);
     summary.threads = threads;
 
