@@ -233,7 +233,7 @@ Summary of a time series run with two output steps in JSON:
 <div class="code"><pre>
 r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
     man_value=0.05 nwalkers=100000 duration=20 output_step=10 seed=3 \
-    nprocs=1 -t -p format=json
+    -t -p format=json
 </pre></div>
 
 In Python with grass.script:
@@ -252,7 +252,6 @@ summary = gs.parse_command(
     duration=20,
     output_step=10,
     seed=3,
-    nprocs=1,
     flags="tp",
     format="json",
 )
@@ -275,7 +274,6 @@ summary = tools.r_sim_water(
     duration=20,
     output_step=10,
     seed=3,
-    nprocs=1,
     flags="tp",
     format="json",
 )
@@ -455,7 +453,7 @@ Simulate 30 minutes of overland flow with a uniform rainfall excess of
 
 <div class="code"><pre>
 r.sim.water elevation=elevation man=mannings rain_value=20 depth=depth \
-    duration=30 seed=1 nprocs=1
+    duration=30 seed=1
 </pre></div>
 
 In Python with grass.script:
@@ -469,7 +467,6 @@ gs.run_command(
     depth="depth",
     duration=30,
     seed=1,
-    nprocs=1,
 )
 </pre></div>
 
@@ -483,7 +480,6 @@ tools.r_sim_water(
     depth="depth",
     duration=30,
     seed=1,
-    nprocs=1,
 )
 </pre></div>
 

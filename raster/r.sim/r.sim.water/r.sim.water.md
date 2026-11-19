@@ -223,7 +223,7 @@ Summary of a time series run with two output steps in JSON:
     ```sh
     r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
         man_value=0.05 nwalkers=100000 duration=20 output_step=10 seed=3 \
-        nprocs=1 -t -p format=json
+        -t -p format=json
     ```
 
 === "Python (grass.script)"
@@ -242,7 +242,6 @@ Summary of a time series run with two output steps in JSON:
         duration=20,
         output_step=10,
         seed=3,
-        nprocs=1,
         flags="tp",
         format="json",
     )
@@ -265,7 +264,6 @@ Summary of a time series run with two output steps in JSON:
         duration=20,
         output_step=10,
         seed=3,
-        nprocs=1,
         flags="tp",
         format="json",
     )
@@ -436,7 +434,7 @@ Simulate 30 minutes of overland flow with a uniform rainfall excess of
 
     ```sh
     r.sim.water elevation=elevation man=mannings rain_value=20 depth=depth \
-        duration=30 seed=1 nprocs=1
+        duration=30 seed=1
     ```
 
 === "Python (grass.script)"
@@ -450,7 +448,6 @@ Simulate 30 minutes of overland flow with a uniform rainfall excess of
         depth="depth",
         duration=30,
         seed=1,
-        nprocs=1,
     )
     ```
 
@@ -464,7 +461,6 @@ Simulate 30 minutes of overland flow with a uniform rainfall excess of
         depth="depth",
         duration=30,
         seed=1,
-        nprocs=1,
     )
     ```
 <!-- markdownlint-enable MD046 -->
