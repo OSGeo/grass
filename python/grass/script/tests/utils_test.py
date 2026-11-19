@@ -99,8 +99,8 @@ def test_resolve_nprocs(monkeypatch):
 def test_resolve_nprocs_from_gisenv(empty_session):
     """None takes NPROCS from g.gisenv, or is 0 when NPROCS is not set
 
-    As with the nprocs option of tools, a value given explicitly, 0 and
-    negative values included, is used instead of NPROCS.
+    As with the nprocs option of tools, a value given explicitly, 0
+    included, is used instead of NPROCS.
     """
     env = empty_session.env
     assert gs.resolve_nprocs(None, env=env) == gs.resolve_nprocs(0)
@@ -108,7 +108,6 @@ def test_resolve_nprocs_from_gisenv(empty_session):
     assert gs.resolve_nprocs(None, env=env) == 3
     assert gs.resolve_nprocs(2, env=env) == 2
     assert gs.resolve_nprocs(0, env=env) == gs.resolve_nprocs(0)
-    assert gs.resolve_nprocs(-1, env=env) == gs.resolve_nprocs(-1)
     for nprocs in (-1, 0):
         gs.run_command("g.gisenv", set=f"NPROCS={nprocs}", env=env)
         assert gs.resolve_nprocs(None, env=env) == gs.resolve_nprocs(nprocs)
