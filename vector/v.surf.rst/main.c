@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
     struct multtree *tree;
     int open_check, with_z;
     char buf[1024];
-    int threads;
+    int threads G_UNUSED;
 
     struct GModule *module;
     struct {
