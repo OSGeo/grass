@@ -91,7 +91,7 @@ class TestRowAboveAndBelowBug(TestCase):
         self.assertRasterFitsUnivar(
             raster=self.output, reference=ref_univar, precision=0
         )
-        self.assertRastersNoDifference(
+        self.assertRastersEqual(
             actual=self.output, reference=self.output_ref, precision=0
         )  # it's CELL type
 
