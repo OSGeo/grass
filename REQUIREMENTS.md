@@ -36,8 +36,10 @@ for other platforms you may have to install some of them.
   GDAL: [https://gdal.org](https://gdal.org)
 - **Python >= 3.11** (for temporal framework, scripts, wxGUI, and ctypes interface)
   [https://www.python.org](https://www.python.org)
-- **MkDocs** with "Material" theme Python packages for the manual pages:
-  See `man/mkdocs/requirements.txt`.
+- **MkDocs** with "Material" theme Python packages for the documentation
+  site installed with GRASS: See `man/mkdocs/requirements.txt`. When MkDocs
+  is not available at install time, the installation proceeds without the
+  documentation site.
 
 ## Optional packages
 
