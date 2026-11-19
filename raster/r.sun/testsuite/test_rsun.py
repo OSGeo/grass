@@ -160,6 +160,7 @@ class TestRSunMode2(TestCase):
         )
 
     def test_more_threads(self):
+        self.rsun.inputs["nprocs"].value = 1
         self.assertModule(self.rsun)
         self.rsun.inputs["nprocs"].value = 4
         self.rsun.outputs.beam_rad = self.beam_rad_threads
@@ -256,6 +257,7 @@ class TestRSunMode1(TestCase):
         )
 
     def test_more_threads(self):
+        self.rsun.inputs["nprocs"].value = 1
         self.assertModule(self.rsun)
         self.rsun.inputs["nprocs"].value = 4
         self.rsun.outputs.beam_rad = self.beam_rad_threads
