@@ -234,11 +234,11 @@ jobs:
             cp -rv "${name}" addons
           done
 
-      - name: Get mkdocs
+      - name: Get Zensical
         run: |
           pip install -r "grass/man/mkdocs/requirements.txt"
 
-      - name: Run mkdocs
+      - name: Run Zensical
         run: |
           cd grass || exit
           eval "$(./utils/update_version.py status --bash)"
@@ -247,7 +247,7 @@ jobs:
           export COPYRIGHT="&copy; 2003-$YEAR GRASS Development Team, GRASS $VERSION Documentation"
           cd "${MKDOCS_DIR}" || exit
           export PYTHONPATH="scripts${PYTHONPATH:+:$PYTHONPATH}"
-          mkdocs build
+          zensical build
 
       - name: Build Sphinx documentation
         run: |
@@ -257,7 +257,7 @@ jobs:
           ARCH="$(grass --config arch)"
           mv -v dist."${ARCH}/docs/html/libpython" "${MKDOCS_DIR}/site"
 
-      - name: Merge Sphinx and MkDocs Sitemaps
+      - name: Merge Sphinx and Zensical Sitemaps
         run: |
           cd grass || exit
           python utils/merge_sitemaps.py \

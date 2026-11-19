@@ -376,9 +376,11 @@ if(WITH_DOCS)
         DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/
         DESTINATION ${GRASS_INSTALL_DOCDIR}
     )
+    # The build-mkdocs target leaves a cache of the site generator there.
     install(
         DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/
         DESTINATION ${GRASS_INSTALL_MKDOCSDIR}
+        PATTERN ".cache" EXCLUDE
     )
     install(
         DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MANDIR}/
