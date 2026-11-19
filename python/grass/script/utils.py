@@ -121,7 +121,7 @@ def available_cpus() -> int:
     return os.cpu_count() or 1
 
 
-def resolve_nprocs(nprocs: int | str) -> int:
+def resolve_nprocs(nprocs: int | str | None = None, env=None) -> int:
     """Resolve G_OPT_M_NPROCS into a worker count.
 
     Mirrors the semantics of ``G_set_omp_num_threads()`` in
@@ -129,8 +129,16 @@ def resolve_nprocs(nprocs: int | str) -> int:
     number is used as-is, a negative number means cpu_count + nprocs
     (clamped to at least 1).
 
+    When *nprocs* is None, it is NPROCS set with g.gisenv, which tools take
+    as the default of their nprocs option, or 0 when NPROCS is not set. This
+    needs a session, the current one or the one of *env*.
+
     .. versionadded:: 8.6
     """
+    if nprocs is None:
+        from .core import gisenv  # core imports this module
+
+        nprocs = gisenv(env=env).get("NPROCS") or 0
     n = int(nprocs)
     if n > 0:
         return n
