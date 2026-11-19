@@ -24,7 +24,13 @@ endif()
 
 find_package(PROJ 9.0.0 REQUIRED)
 
-find_package(GDAL 3.7.0 REQUIRED)
+find_package(GDAL 3.7.0 REQUIRED CONFIG)
+if(GDAL_FOUND)
+    message(
+        STATUS
+        "Found GDAL: ${GDAL_DIR} (found version \"${GDAL_VERSION})\""
+    )
+endif()
 
 find_package(ZLIB REQUIRED)
 
