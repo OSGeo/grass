@@ -143,24 +143,31 @@ t.connect -p format=json mapset=*
 
 ### SQLite
 
-The SQLite database is created automatically when used the first time.
+The SQLite database is created automatically during the first write attempt.
 
 ```sh
 # use single quotes here
 t.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/PERMANENT/tgis/sqlite.db'
 t.connect -p
-t.info -s
+t.create type=strds temporaltype=absolute \
+    output=precipitation_monthly \
+    title="Monthly precipitation" \
+    description="Dataset with monthly precipitation"
 ```
 
 ### PostgreSQL
 
 When using a PostgreSQL database, the user will need to specify the TGIS
-database connection for each mapset.
+database connection for each mapset. The TGIS database will be created
+during the first write attempt.
 
 ```sh
 t.connect driver=pg database="dbname=grass_test user=soeren password=abcdefgh"
 t.connect -p
-t.info -s
+t.create type=strds temporaltype=absolute \
+    output=precipitation_monthly \
+    title="Monthly precipitation" \
+    description="Dataset with monthly precipitation"
 ```
 
 ## AUTHOR
