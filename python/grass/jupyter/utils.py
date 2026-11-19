@@ -414,10 +414,10 @@ def get_number_of_cores(requested, env=None):
     :param int requested: Largest useful number, such as the number of tasks.
     :param dict env: Optional process environment.
 
-    :return int: NPROCS resolved like nprocs, or like nprocs=-1 when NPROCS
-        is not set, but at most the requested number.
+    :return int: NPROCS resolved like nprocs, or the default number when
+        NPROCS is not set, but at most the requested number.
     """
-    return min(requested, gs.resolve_nprocs(gs.gisenv(env).get("NPROCS", -1)))
+    return min(requested, gs.resolve_nprocs(env=env))
 
 
 def get_region_bounds_latlon():
