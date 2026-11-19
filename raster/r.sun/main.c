@@ -195,8 +195,6 @@ int main(int argc, char *argv[])
     double singleAlbedo = 0.0;
     double singleLinke = 0.0;
 
-    int threads;
-
     struct GModule *module;
     struct {
         struct Option *elevin, *aspin, *aspect, *slopein, *slope, *linkein,
@@ -548,8 +546,7 @@ int main(int argc, char *argv[])
 
     civiltime = parm.civilTime->answer;
 
-    threads = G_set_omp_num_threads(parm.threads);
-    G_message(_("Number of threads <%d>"), threads);
+    G_set_omp_num_threads(parm.threads);
 
     if (civiltime != NULL) {
         setUseCivilTime(TRUE);
