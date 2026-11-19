@@ -109,8 +109,9 @@ def test_resolve_nprocs_from_gisenv(empty_session):
     assert gs.resolve_nprocs(2, env=env) == 2
     assert gs.resolve_nprocs(0, env=env) == gs.resolve_nprocs(0)
     assert gs.resolve_nprocs(-1, env=env) == gs.resolve_nprocs(-1)
-    gs.run_command("g.gisenv", set="NPROCS=-1", env=env)
-    assert gs.resolve_nprocs(None, env=env) == gs.resolve_nprocs(-1)
+    for nprocs in (-1, 0):
+        gs.run_command("g.gisenv", set=f"NPROCS={nprocs}", env=env)
+        assert gs.resolve_nprocs(None, env=env) == gs.resolve_nprocs(nprocs)
 
 
 def test_get_multiprocessing_context():
