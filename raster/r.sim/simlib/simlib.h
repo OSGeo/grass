@@ -13,9 +13,6 @@
 #define EPS   1.e-7
 #define UNDEF -9999
 
-#if defined(_OPENMP)
-#include <omp.h>
-#endif
 #ifdef _MSC_VER
 #undef min
 #undef max
