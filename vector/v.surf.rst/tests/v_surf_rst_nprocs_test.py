@@ -41,7 +41,11 @@ def elevation(tools, **kwargs):
 
 
 def test_mask_with_threads(tools):
-    """With a raster mask, more threads give the result of one thread"""
+    """With a raster mask, 4 threads give the result of one thread.
+
+    The mask is read into a bitmask before the parallel part, so the mask,
+    which is not safe to use from several threads, does not limit the threads.
+    """
     tools.r_mapcalc(expression="ones = 1")
     tools.r_mask(raster="ones")
     np.testing.assert_array_equal(

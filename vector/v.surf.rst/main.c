@@ -398,7 +398,6 @@ int main(int argc, char *argv[])
     overfile = parm.overfile->answer;
 
     threads = G_set_omp_num_threads(parm.threads);
-    threads = Rast_disable_omp_on_mask(threads);
     if (devi) {
         create_devi = true;
         if (Vect_legal_filename(devi) == -1)
