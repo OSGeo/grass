@@ -241,7 +241,7 @@ cross-validation procedure.
 
 ### Performance
 
-To enable parallel processing, the user can specify the number of
+The user can specify the number of
 threads to be used with the **nprocs** parameter. With more than one
 thread, the points of **deviations** and **cvdev** come out in a varying
 order and with varying categories. Figures 1
