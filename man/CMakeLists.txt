@@ -149,7 +149,6 @@ if(NOT WITH_FHS)
             ${CMAKE_CURRENT_SOURCE_DIR}/favicon.ico ${mkdocs_dir}/source
         COMMAND
             ${CMAKE_COMMAND} -E copy_if_different
-            ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/hook_list_scripts.py
             ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/grass_markdown.py
             ${mkdocs_dir}/scripts
         COMMAND

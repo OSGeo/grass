@@ -96,6 +96,14 @@ def test_resolve_nprocs(monkeypatch):
         gs.resolve_nprocs("not-a-number")
 
 
+def test_resolve_nprocs_from_gisenv(empty_session):
+    """None takes NPROCS from g.gisenv, or is 0 when NPROCS is not set"""
+    env = empty_session.env
+    assert gs.resolve_nprocs(None, env=env) == gs.resolve_nprocs(0)
+    gs.run_command("g.gisenv", set="NPROCS=3", env=env)
+    assert gs.resolve_nprocs(None, env=env) == 3
+
+
 def test_get_multiprocessing_context():
     """Fork is used where available and safe, the platform default elsewhere."""
     ctx = gutils._get_multiprocessing_context()

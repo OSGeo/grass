@@ -29,7 +29,6 @@ DSTFILES := \
 	$(MDDIR)/source/grass_icon.png \
 	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
-	$(MDDIR)/scripts/hook_list_scripts.py \
 	$(MDDIR)/scripts/grass_markdown.py \
 	$(MDDIR)/source/index.md \
 	$(MDDIR)/overrides/main.html \
@@ -289,9 +288,6 @@ $(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
-	$(INSTALL_DATA) $< $@
-
-$(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/scripts/grass_markdown.py: mkdocs/scripts/grass_markdown.py | $(MDDIR)/scripts
