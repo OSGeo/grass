@@ -411,16 +411,13 @@ def save_vector(name, geo_json):
 def get_number_of_cores(requested, env=None):
     """Get the number of cores to use for multiprocessing.
 
-    :param int requested: Desired number of cores.
+    :param int requested: Largest useful number, such as the number of tasks.
     :param dict env: Optional process environment.
 
-    :return int: Number of cores to use, constrained by system availability.
+    :return int: NPROCS resolved like nprocs, or one fewer than the default
+        when NPROCS is not set, but at most the requested number.
     """
-    nprocs = gs.gisenv(env).get("NPROCS")
-    if nprocs is not None:
-        return gs.resolve_nprocs(nprocs)
-
-    return min(requested, max(1, gs.available_cpus() - 1))
+    return min(requested, gs.resolve_nprocs(gs.gisenv(env).get("NPROCS", -1)))
 
 
 def get_region_bounds_latlon():

@@ -79,8 +79,9 @@ def test_get_map_name_from_d_command_non_string_returns_none(value):
     assert get_map_name_from_d_command("d.rast", map=value) is None
 
 
-@pytest.mark.parametrize("nprocs", ["0", "-1", "3"])
-def test_get_number_of_cores_resolves_nprocs(session, nprocs):
-    """NPROCS from g.gisenv is resolved like nprocs"""
+@pytest.mark.parametrize(("nprocs", "requested"), [("0", 10), ("-1", 10), ("3", 2)])
+def test_get_number_of_cores_resolves_nprocs(session, nprocs, requested):
+    """NPROCS from g.gisenv is resolved like nprocs, up to the requested number"""
     gs.run_command("g.gisenv", set=f"NPROCS={nprocs}", env=session.env)
-    assert get_number_of_cores(10, env=session.env) == gs.resolve_nprocs(nprocs)
+    expected = min(requested, gs.resolve_nprocs(nprocs))
+    assert get_number_of_cores(requested, env=session.env) == expected
