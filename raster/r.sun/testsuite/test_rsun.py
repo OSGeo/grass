@@ -184,10 +184,10 @@ class TestRSunMode2(TestCase):
         safe to use from several threads, does not limit the threads.
         """
         self.runModule("r.mapcalc", expression="rsun_mask = if(row() < 150, 1, null())")
-        self.runModule("r.mask", raster="rsun_mask")
         self.addCleanup(
             self.runModule, "g.remove", type="raster", name="rsun_mask", flags="f"
         )
+        self.runModule("r.mask", raster="rsun_mask")
         self.addCleanup(self.runModule, "r.mask", flags="r")
         self.test_more_threads()
 
