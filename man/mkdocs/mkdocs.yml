@@ -7,7 +7,6 @@ site_url: https://grass.osgeo.org/grass-stable/manuals/
 # Repository information
 repo_name: OSGeo/grass
 repo_url: https://github.com/OSGeo # Set to OSGeo so we can added grass and grass-addons
-edit_uri_template: edit/main/{path!q}
 
 # Project Configuration
 docs_dir: source
@@ -75,10 +74,6 @@ extra:
       grass: grass
       grass_addons: grass-addons
 
-# Hooks
-hooks:
-  - scripts/hook_list_scripts.py
-
 # Custom CSS
 extra_css:
   - grassdocs.css
@@ -125,6 +120,8 @@ markdown_extensions:
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.tabbed:
       alternate_style: true
+  # From scripts/grass_markdown.py, needs scripts on PYTHONPATH
+  - grass_markdown
 
 # Navigation
 nav:
