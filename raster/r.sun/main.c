@@ -464,6 +464,7 @@ int main(int argc, char *argv[])
     parm.ltime->guisection = _("Time");
 
     parm.threads = G_define_standard_option(G_OPT_M_NPROCS);
+    parm.threads->answer = "1";
 
     /*
      * parm.startTime = G_define_option();

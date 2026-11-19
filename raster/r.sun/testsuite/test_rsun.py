@@ -90,7 +90,6 @@ o_value=0.2 incidout="incidout" day=172 step=0.5 solar_constant=1367\\\
 
     def test_run_outputs(self):
         """Checks metadata correctness in non-threaded cases."""
-        self.rsun.inputs["nprocs"].value = 1
         self.assertModule(self.rsun)
         self.assertRasterExists(name=self.incidout)
         self.assertModuleKeyValue(
@@ -160,7 +159,6 @@ class TestRSunMode2(TestCase):
         )
 
     def test_more_threads(self):
-        self.rsun.inputs["nprocs"].value = 1
         self.assertModule(self.rsun)
         self.rsun.inputs["nprocs"].value = 4
         self.rsun.outputs.beam_rad = self.beam_rad_threads
@@ -271,7 +269,6 @@ class TestRSunMode1(TestCase):
         )
 
     def test_more_threads(self):
-        self.rsun.inputs["nprocs"].value = 1
         self.assertModule(self.rsun)
         self.rsun.inputs["nprocs"].value = 4
         self.rsun.outputs.beam_rad = self.beam_rad_threads
