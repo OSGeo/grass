@@ -177,6 +177,20 @@ class TestRSunMode2(TestCase):
             self.insol_time, self.insol_time_threads, precision=1e-8
         )
 
+    def test_mask_with_threads(self):
+        """With a raster mask, 4 threads give the results of 1 thread.
+
+        The rows are read before the parallel part, so the mask, which is not
+        safe to use from several threads, does not limit the threads.
+        """
+        self.runModule("r.mapcalc", expression="rsun_mask = if(row() < 150, 1, null())")
+        self.runModule("r.mask", raster="rsun_mask")
+        self.addCleanup(
+            self.runModule, "g.remove", type="raster", name="rsun_mask", flags="f"
+        )
+        self.addCleanup(self.runModule, "r.mask", flags="r")
+        self.test_more_threads()
+
     def test_run_outputs(self):
         self.assertModule(self.rsun)
         self.assertRasterExists(name=self.beam_rad)
