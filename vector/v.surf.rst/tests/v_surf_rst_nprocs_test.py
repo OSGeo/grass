@@ -45,5 +45,5 @@ def test_mask_with_threads(tools):
     tools.r_mapcalc(expression="ones = 1")
     tools.r_mask(raster="ones")
     np.testing.assert_array_equal(
-        elevation(tools, nprocs=2), elevation(tools, nprocs=1)
+        elevation(tools, nprocs=4), elevation(tools, nprocs=1)
     )
