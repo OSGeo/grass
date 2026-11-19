@@ -158,6 +158,29 @@ def test_walkers_do_not_depend_on_nprocs(session, nprocs):
     assert np.array_equal(parallel, serial)
 
 
+def test_walkers_do_not_depend_on_nprocs_with_mask(session):
+    """With a raster mask, walkers end at the same positions with 4 threads.
+
+    The rows are read before the parallel part and written after it, so the
+    mask, which is not safe to use from several threads, does not limit the
+    threads.
+    """
+    tools = Tools(session=session)
+    tools.r_mapcalc(expression="half = if(col() < 25, 1, null())")
+    tools.r_mask(raster="half")
+    try:
+        serial = simulate_walkers(
+            session, "walkers_mask_serial", seed=5, nprocs=1, **NO_DEPTH_FEEDBACK
+        )
+        parallel = simulate_walkers(
+            session, "walkers_mask_parallel", seed=5, nprocs=4, **NO_DEPTH_FEEDBACK
+        )
+    finally:
+        tools.r_mask(flags="r")
+    assert serial.size
+    assert np.array_equal(parallel, serial)
+
+
 def test_walkers_depend_on_seed(session):
     """The walker comparison above can detect a difference."""
     first = simulate_walkers(session, "walkers_seed_5", seed=5, **NO_DEPTH_FEEDBACK)

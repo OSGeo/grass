@@ -419,7 +419,6 @@ int main(int argc, char *argv[])
     G_debug(3, "Parsing rain parameters");
 
     threads = G_set_omp_num_threads(parm.threads);
-    threads = Rast_disable_omp_on_mask(threads);
     G_message(_("Number of threads: %d"), threads);
     summary.threads = threads;
 

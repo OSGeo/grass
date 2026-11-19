@@ -368,7 +368,6 @@ int main(int argc, char *argv[])
     outputs.outwalk = parm.outwalk->answer;
 
     threads = G_set_omp_num_threads(parm.threads);
-    threads = Rast_disable_omp_on_mask(threads);
     G_message(_("Number of threads: %d"), threads);
     summary.threads = threads;
 
