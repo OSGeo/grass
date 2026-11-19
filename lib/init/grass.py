@@ -295,7 +295,10 @@ def help_message(default_gui) -> None:
             flags=_("Flags"),
             help_flag=_("print this help message"),
             version_flag=_("show version information and exit"),
-            create=_("create given project or mapset if it doesn't exist"),
+            create=_(
+                "create given database (its parent directory must exist),"
+                " project or mapset if it doesn't exist"
+            ),
             exit_after=_("exit after creation of project or mapset. Only with -c flag"),
             force_removal=_(
                 "force removal of .gislock if exists (use with care!)."
@@ -677,9 +680,16 @@ def create_location(gisdbase, location, geostring) -> None:
             )
         )
     except OSError as err:
+        reason = err.strerror or str(err)
+        if err.filename:
+            fatal(
+                _("Cannot create project <{location}>: {reason}: <{path}>").format(
+                    location=location, reason=reason, path=err.filename
+                )
+            )
         fatal(
-            _("Cannot create project <{}>: {}: {}").format(
-                location, err.strerror, err.filename
+            _("Cannot create project <{location}>: {reason}").format(
+                location=location, reason=reason
             )
         )
 
