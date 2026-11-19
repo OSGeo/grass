@@ -138,7 +138,7 @@ def resolve_nprocs(nprocs: int | str | None = None, env=None) -> int:
     if nprocs is None:
         from .core import gisenv  # core imports this module
 
-        nprocs = gisenv(env=env).get("NPROCS", 0)
+        nprocs = gisenv(env=env).get("NPROCS") or 0
     n = int(nprocs)
     if n > 0:
         return n
