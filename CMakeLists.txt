@@ -329,11 +329,6 @@ add_subdirectory(demolocation)
 
 add_subdirectory(include)
 
-include_directories("${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}")
-if(MSVC)
-    include_directories("${CMAKE_SOURCE_DIR}/msvc")
-endif()
-
 set(modules_list "" CACHE INTERNAL "list of modules")
 
 add_subdirectory(lib)
