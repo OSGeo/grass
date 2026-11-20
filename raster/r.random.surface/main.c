@@ -32,7 +32,9 @@ int MapCount, FDM, Rs, Cs, Theory;
 CELL *CellBuffer;
 FILTER *AllFilters, Filter;
 CATINFO CatInfo;
-int *Seeds, Seed, NumSeeds, Low, High, NumMaps, NumFilters, OutFD;
+int64_t *Seeds;
+int Low, High, NumMaps, NumFilters, OutFD;
+struct G_random_state RandomState, *MapStates;
 char Buf[240], **OutNames, *TheoryName, *Mapset;
 
 struct Flag *Uniform;
@@ -45,7 +47,7 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
 
-    int DoMap, DoFilter, MapSeed;
+    int DoMap, DoFilter;
 
     G_gisinit(argv[0]);
 
@@ -118,12 +120,7 @@ int main(int argc, char **argv)
 
         G_message(_("Generating raster map <%s>..."), OutNames[DoMap]);
 
-        if (Seeds[DoMap] < 0)
-            G_srand48_auto();
-        else
-            G_srand48(Seeds[DoMap]);
-
-        MapSeed = Seed = Seeds[DoMap];
+        RandomState = MapStates[DoMap];
         ZeroMapCells();
 
         for (DoFilter = 0; DoFilter < NumFilters; DoFilter++) {
@@ -139,7 +136,7 @@ int main(int argc, char **argv)
             CalcSurface();
         }
 
-        SaveMap(DoMap, MapSeed);
+        SaveMap(DoMap, Seeds[DoMap]);
     }
 
     G_done_msg(" ");
