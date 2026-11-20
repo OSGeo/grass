@@ -24,6 +24,9 @@ def get_grass_executable():
 def test_missing_database_directory(tmp_path):
     """Missing parent directories give a clear error"""
     project = tmp_path / "missing" / "deeper" / "myproject"
+    # GRASS refuses to start if GRASS_CONFIG_DIR does not exist
+    config_dir = tmp_path / "config"
+    config_dir.mkdir()
     result = subprocess.run(
         [get_grass_executable(), "-c", "EPSG:4326", str(project), "-e"],
         capture_output=True,
@@ -33,7 +36,7 @@ def test_missing_database_directory(tmp_path):
             **os.environ,
             "LC_ALL": "C",
             "LANGUAGE": "C",
-            "GRASS_CONFIG_DIR": str(tmp_path / "config"),
+            "GRASS_CONFIG_DIR": str(config_dir),
         },
     )
     assert result.returncode != 0
