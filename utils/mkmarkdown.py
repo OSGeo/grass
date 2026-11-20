@@ -226,6 +226,10 @@ def source_edit_url(url_source, pgm):
 def main():
     pgm = sys.argv[1]
 
+    # The page is redirected to a file which is UTF-8 as the sources are,
+    # regardless of the encoding of the locale.
+    sys.stdout.reconfigure(encoding="utf-8")
+
     set_proxy()
 
     src_file = f"{pgm}.md"
