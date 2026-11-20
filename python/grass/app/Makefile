@@ -28,7 +28,7 @@ $(DSTDIR)/resource_paths.py: resource_paths.py | $(DSTDIR)
 	-e 's#@CMAKE_PREFIX_PATH@##' \
 	-e 's#@CMAKE_C_COMPILER@##' \
 	-e 's#@CMAKE_CXX_COMPILER@##' \
-	-e 's#@GRASS_PREFIX@#$(RUN_GISBASE)#' \
+	-e 's#@GRASS_PREFIX_RELATIVE@#$(GRASS_PY_PREFIX_RELATIVE)#' \
 	-e 's#@GRASS_VERSION_GIT@#$(GRASS_VERSION_GIT)#' \
 	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
 	-e 's#@GRASS_VERSION_MINOR@#$(GRASS_VERSION_MINOR)#' \
@@ -44,9 +44,9 @@ $(DSTDIR)/resource_paths.py: resource_paths.py | $(DSTDIR)
 	-e 's#@GRASS_ETCDIR@#etc#' \
 	-e 's#@GRASS_FONTSDIR@#fonts#' \
 	-e 's#@GRASS_GRAPHICSDIR@#docs/html#' \
-	-e 's#@GRASS_GUIRESDIR@#gui#' \
+	-e 's#@GRASS_GUIRESDIR_RELATIVE@#$(GRASS_GUIRESDIR_RELATIVE)#' \
 	-e 's#@GRASS_GUISCRIPTDIR@#gui/scripts#' \
-	-e 's#@GRASS_GUIWXDIR@#gui/wxpython#' \
+	-e 's#@GRASS_GUIWXDIR_RELATIVE@#$(GRASS_GUIWXDIR_RELATIVE)#' \
 	-e 's#@GRASS_LOCALEDIR@#locale#' \
 	-e 's#@GRASS_MISCDIR@##' \
 	-e 's#@GRASS_MKDOCSDIR@#docs/mkdocs#' \

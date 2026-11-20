@@ -795,6 +795,11 @@ INSTDIR
 MACOSX_SDK
 MACOSX_ARCHS
 MACOSX_APP
+GRASS_GUIWXDIR_RELATIVE
+GRASS_GUIRESDIR_RELATIVE
+GRASS_PY_PREFIX_RELATIVE
+GRASS_PREFIX_RELATIVE
+PYTHON
 LIB_VER
 NAME_VER
 GRASS_HEADERS_GIT_DATE
@@ -6041,6 +6046,81 @@ printf "%s\n" "$GRASS_HEADERS_GIT_DATE" >&6; }
 
 
 
+
+# Calculate relative paths to GISBASE from lib and location of resource_paths.py
+# and to GUI resource and wxpython dir from location of resource_paths.py.
+
+# Extract the first word of "python3", so it can be a program name with args.
+set dummy python3; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+
+case $PYTHON in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PYTHON="$PYTHON" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_path_PYTHON="$as_dir$ac_word$ac_exec_ext"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  ;;
+esac
+PYTHON=$ac_cv_path_PYTHON
+if test -n "$PYTHON"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $PYTHON" >&5
+printf "%s\n" "$PYTHON" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
+
+if test -z "$PYTHON"
+then :
+
+    as_fn_error $? "Python 3 is required" "$LINENO" 5
+
+fi
+
+GRASS_PREFIX_RELATIVE=`"$PYTHON" -c \
+    'import os, sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))' \
+    "$GISBASE" "$GISBASE/lib/grass"`
+
+GRASS_PY_PREFIX_RELATIVE=`"$PYTHON" -c \
+    'import os, sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))' \
+    "$GISBASE" "$GISBASE/etc/python/grass/app"`
+
+GRASS_GUIRESDIR_RELATIVE=`"$PYTHON" -c \
+    'import os, sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))' \
+    "$GISBASE/gui" "$GISBASE/etc/python/grass/app"`
+
+GRASS_GUIWXDIR_RELATIVE=`"$PYTHON" -c \
+    'import os, sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))' \
+    "$GISBASE/gui/wxpython" "$GISBASE/etc/python/grass/app"`
+
+
+
+
+
+
+
 # Check for MacOSX App
 
 # Check whether --enable-macosx-app was given.
@@ -9288,14 +9368,21 @@ fi
 
 
 
-ac_fn_c_check_func "$LINENO" "dlsym" "ac_cv_func_dlsym"
-if test "x$ac_cv_func_dlsym" = xyes
+
+  for ac_func in dladdr dlsym
+do :
+  as_ac_var=`printf "%s\n" "ac_cv_func_$ac_func" | sed "$as_sed_sh"`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"
 then :
-  DLLIB=
+  cat >>confdefs.h <<_ACEOF
+#define `printf "%s\n" "HAVE_$ac_func" | sed "$as_sed_cpp"` 1
+_ACEOF
+ DLLIB=
 else case e in #(
   e)
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for dlsym in -ldl" >&5
-printf %s "checking for dlsym in -ldl... " >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for dladdr in -ldl" >&5
+printf %s "checking for dladdr in -ldl... " >&6; }
 
 ac_check_lib_save_LIBS=$LIBS
 LIBS="-ldl  $LIBS"
@@ -9311,33 +9398,34 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char dlsym (void);
+char dladdr (void);
 int
 main (void)
 {
-return dlsym ();
+return dladdr ();
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"
 then :
-  ac_cv_lib_dl_dlsym=yes
+  ac_cv_lib_dl_dladdr=yes
 else case e in #(
-  e) ac_cv_lib_dl_dlsym=no ;;
+  e) ac_cv_lib_dl_dladdr=no ;;
 esac
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_dl_dlsym" >&5
-printf "%s\n" "$ac_cv_lib_dl_dlsym" >&6; }
-if test "x$ac_cv_lib_dl_dlsym" = xyes
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_dl_dladdr" >&5
+printf "%s\n" "$ac_cv_lib_dl_dladdr" >&6; }
+if test "x$ac_cv_lib_dl_dladdr" = xyes
 then :
   DLLIB=-ldl
 else case e in #(
   e)
-    DLLIB=
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: *** Unable to locate dl library." >&5
+printf "%s\n" "$as_me: WARNING: *** Unable to locate dl library." >&2;}
  ;;
 esac
 fi
@@ -9345,6 +9433,7 @@ fi
 esac
 fi
 
+done
 
 
 ac_fn_c_check_func "$LINENO" "iconv" "ac_cv_func_iconv"

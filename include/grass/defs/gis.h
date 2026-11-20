@@ -437,11 +437,19 @@ void G__no_gisinit(const char *);
 void G_init_all(void);
 
 /* resource_dirs.c */
+const char *G_config_get(const char *key);
 const char *G_colors_dir(void);
-const char *G_etcbin_dir(void);
+const char *G_doc_dir(void);
 const char *G_etc_dir(void);
+const char *G_etcbin_dir(void);
 const char *G_fonts_dir(void);
+const char *G_graphics_dir(void);
+const char *G_gui_resource_dir(void);
+const char *G_gui_script_dir(void);
+const char *G_gui_wx_dir(void);
 const char *G_locale_dir(void);
+const char *G_misc_dir(void);
+const char *G_mkdoc_dir(void);
 
 /* handler.c */
 void G_add_error_handler(void (*)(void *), void *);

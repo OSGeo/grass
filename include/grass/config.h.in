@@ -24,8 +24,26 @@
 /* Define to 1 if you have the <CL/cl.h> header file. */
 #undef HAVE_CL_CL_H
 
+/* define if the compiler supports basic C++17 syntax */
+#undef HAVE_CXX17
+
+/* define if the compiler supports basic C++17 syntax */
+#undef HAVE_CXX17
+
 /* Define to 1 if you have the <dfftw.h> header file. */
 #undef HAVE_DFFTW_H
+
+/* Define to 1 if you have the 'dladdr' function. */
+#undef HAVE_DLADDR
+
+/* Define to 1 if you have the 'dlsym' function. */
+#undef HAVE_DLSYM
+
+/* Define to 1 if you have the 'dladdr' function. */
+#undef HAVE_DLADDR
+
+/* Define to 1 if you have the 'dlsym' function. */
+#undef HAVE_DLSYM
 
 /* Define to 1 if you have the 'drand48' function. */
 #undef HAVE_DRAND48

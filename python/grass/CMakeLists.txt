@@ -54,24 +54,54 @@ file(TO_NATIVE_PATH "${PROJ_INSTALL_PREFIX}/share/proj" PROJ_LIB)
 file(TO_NATIVE_PATH ${CONFIG_PROJSHARE} GRASS_PROJSHARE)
 
 # configure and install resource_paths.py
-set(GRASS_PREFIX ${OUTDIR})
+
 set(GISBASE_INSTALL_PATH ${GISBASE_DIR})
 set(START_UP ${PROJECT_NAME_LOWER})
+
+set(grass_app_path "${OUTDIR}/${PYDIR_GRASS}/app")
+cmake_path(NORMAL_PATH grass_app_path)
+
+set(_base_dir "${RUNTIME_GRASS_GUIRESDIR}")
+cmake_path(NORMAL_PATH _base_dir)
+cmake_path(
+    RELATIVE_PATH _base_dir
+    BASE_DIRECTORY ${grass_app_path}
+    OUTPUT_VARIABLE GRASS_GUIRESDIR_RELATIVE
+)
+
+set(_base_dir "${OUTDIR}/${GRASS_GUIWXDIR}")
+cmake_path(NORMAL_PATH _base_dir)
+cmake_path(
+    RELATIVE_PATH _base_dir
+    BASE_DIRECTORY "${grass_app_path}"
+    OUTPUT_VARIABLE GRASS_GUIWXDIR_RELATIVE
+)
+
+set(_base_dir "${OUTDIR}/${PYDIR_GRASS}/app")
+cmake_path(NORMAL_PATH _base_dir)
+
+# the relative path will be the same in both build and install tree
+cmake_path(
+    RELATIVE_PATH OUTDIR
+    BASE_DIRECTORY "${_base_dir}"
+    OUTPUT_VARIABLE GRASS_PREFIX_RELATIVE
+)
+
 configure_file(
     app/resource_paths.py
     ${OUTDIR}/${PYDIR_GRASS}/app/resource_paths.py
     @ONLY
 )
 
-set(GRASS_PREFIX ${CMAKE_INSTALL_PREFIX})
 configure_file(
     app/resource_paths.py
     ${CMAKE_CURRENT_BINARY_DIR}/resource_paths.py
     @ONLY
 )
 unset(GISBASE_INSTALL_PATH)
-unset(GRASS_PREFIX)
+unset(GRASS_PREFIX_RELATIVE)
 unset(START_UP)
+unset(_base_dir)
 
 set(pydir_targets ${PYDIRS} app)
 list(TRANSFORM pydir_targets REPLACE "/" "_")
