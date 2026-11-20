@@ -25,7 +25,7 @@ GUI, tests). Tools follow a `<type>.<name>` naming convention: `r.*` (raster),
 ## Build
 
 On the `main` branch, Autotools and CMake are equivalent. Older release
-branches support Autotools only, and full documentation builds (MkDocs) also
+branches support Autotools only, and full documentation builds (Zensical) also
 require Autotools. See `INSTALL.md` for full build instructions including
 dependencies and configuration options.
 
@@ -230,7 +230,7 @@ Each tool (e.g., `raster/r.slope.aspect/`) contains:
 - `CMakeLists.txt` — CMake build definition; see
   `raster/r.colors.out/CMakeLists.txt` for an example
 - `<name>.md` — documentation source (no header/footer; Markdown rendered by
-  MkDocs)
+  Zensical)
 - `<name>.html` — supports a legacy documentation system; uses HTML markup
   for formatting but is not a complete HTML document (only the translated
   Markdown into corresponding HTML tags). Must be committed alongside the
