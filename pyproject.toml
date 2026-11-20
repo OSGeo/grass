@@ -192,10 +192,7 @@ ignore = [
     "B007",    # unused-loop-control-variable
     "B008",    # function-call-in-default-argument
     "B015",    # useless-comparison
-    "B023",    # function-uses-loop-variable
     "B026",    # star-arg-unpacking-after-keyword-arg
-    "B028",    # no-explicit-stacklevel
-    "B034",    # re-sub-positional-args
     "B909",    # loop-iterator-mutation
     "BLE001",  # blind-except
     "C414",    # unnecessary-double-cast-or-process
@@ -252,14 +249,12 @@ ignore = [
     "N816",    # mixed-case-variable-in-global-scope
     "N818",    # error-suffix-on-exception-name
     "N999",    # invalid-module-name
-    "PERF203", # try-except-in-loop
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
     "PERF403", # manual-dict-comprehension
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
-    "PLE0704", # misplaced-bare-raise
     "PLR0904", # too-many-public-methods
     "PLR0911", # too-many-return-statements
     "PLR0912", # too-many-branches
@@ -307,7 +302,6 @@ ignore = [
     "S108",    # hardcoded-temp-file
     "S110",    # try-except-pass
     "S112",    # try-except-continue
-    "S202",    # tarfile-unsafe-members
     "S307",    # suspicious-eval-usage
     "S310",    # suspicious-url-open-usage
     "S311",    # suspicious-non-cryptographic-random-usage
@@ -333,7 +327,6 @@ ignore = [
     "TD003",   # missing-todo-link
     "TD004",   # missing-todo-colon
     "TD005",   # missing-todo-description
-    "TD007",   # missing-space-after-todo-colon
     "TRY002",  # raise-vanilla-class
     "TRY004",  # type-check-without-type-error
     "TRY300",  # try-consider-else
