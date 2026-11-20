@@ -576,9 +576,10 @@ g.gisenv set="MEMORYMB=6000"
 </pre></div>
 
   <dt>NPROCS</dt>
-  <dd>sets the number of threads for parallel computing
+  <dd>sets the default of the <b>nprocs</b> option of tools, i.e., the number of
+    threads for parallel computing
 <div class="code"><pre>
-# set to use 12 threads (default: 1)
+# set to use 12 threads (when not set, tools use all available threads)
 g.gisenv set="NPROCS=12"
 </pre></div></dd>
 
