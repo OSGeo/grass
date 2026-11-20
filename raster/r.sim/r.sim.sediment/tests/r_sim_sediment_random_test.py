@@ -94,7 +94,9 @@ def test_results_do_not_depend_on_nprocs(session, nprocs):
     The water depth is an input here, so nothing a walker reacts to is
     changed by the other walkers of the same step.
     """
-    serial_flux, serial = simulate(session, f"walkers_{nprocs}_serial", seed=5)
+    serial_flux, serial = simulate(
+        session, f"walkers_{nprocs}_serial", seed=5, nprocs=1
+    )
     parallel_flux, parallel = simulate(
         session, f"walkers_{nprocs}_parallel", seed=5, nprocs=nprocs
     )
