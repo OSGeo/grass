@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 19:34+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2025-08-23 20:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Turkish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/tr/>\n"
@@ -7220,11 +7220,6 @@ msgstr ""
 msgid "The map does not exist, I can't open in 'r' mode"
 msgstr ""
 
-#, fuzzy, python-brace-format
-#| msgid "Vector map <%s> already exists and will be overwritten"
-msgid "Raster map <{0}> already exists and will be not overwritten"
-msgstr "<%s> vektör haritası zaten mevcut ve üzerine yazılacak"
-
 #, fuzzy
 #| msgid "Raster map <%s> not found"
 msgid "Raster type not defined"
@@ -7238,11 +7233,6 @@ msgstr "%d OGR obje tipi desteklenmiyor"
 #| msgid "Index out of range in"
 msgid "Index out of range: %r."
 msgstr "İndeks aralık dışında"
-
-#, fuzzy, python-brace-format
-#| msgid "Vector map <%s> already exists and will be overwritten"
-msgid "Raster map <{0}> already exists. Use overwrite."
-msgstr "<%s> vektör haritası zaten mevcut ve üzerine yazılacak"
 
 #, fuzzy, python-brace-format
 #| msgid "Raster map <%s> is empty"
@@ -7263,6 +7253,11 @@ msgstr "%d OGR obje tipi desteklenmiyor"
 #, python-brace-format
 msgid "Map name {0} not valid"
 msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Vector map <%s> already exists and will be overwritten"
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr "<%s> vektör haritası zaten mevcut ve üzerine yazılacak"
 
 #, fuzzy, python-brace-format
 msgid "Raster type: {0} not supported"
@@ -8497,6 +8492,11 @@ msgstr ""
 #| msgid "unknown operator"
 msgid "Unknown format '{}'."
 msgstr "bilinmeyen işletmen"
+
+#, fuzzy, python-brace-format
+#~| msgid "Vector map <%s> already exists and will be overwritten"
+#~ msgid "Raster map <{0}> already exists. Use overwrite."
+#~ msgstr "<%s> vektör haritası zaten mevcut ve üzerine yazılacak"
 
 #, fuzzy
 #~ msgid "Attributes for category %d not found"

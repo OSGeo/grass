@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 19:34+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2026-10-04 16:57+0000\n"
 "Last-Translator: Daniel Nylander <daniel@danielnylander.se>\n"
 "Language-Team: Swedish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sv/>\n"
@@ -1353,9 +1353,6 @@ msgstr "Tar bort datauppsättningar…"
 
 msgid "t.remove completed"
 msgstr "t.remove slutförd"
-
-msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
-msgstr "För att flytta eller kopiera kartor till andra kartuppsättningar, låsa upp redigering av andra kartuppsättningar"
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr "Om du vill flytta eller kopiera kartor till ett annat projekt drar du dem till ett mapset i destinationsprojektet"
@@ -16162,6 +16159,9 @@ msgid ""
 msgstr ""
 "Regressionsekvation för rasterkartan <%(rast1)s> vs. <%(rast2)s>:\n"
 "\n"
+
+#~ msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
+#~ msgstr "För att flytta eller kopiera kartor till andra kartuppsättningar, låsa upp redigering av andra kartuppsättningar"
 
 #~ msgid "Downloading data "
 #~ msgstr "Hämtar ner data "
