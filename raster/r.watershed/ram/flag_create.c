@@ -14,7 +14,7 @@ FLAG *flag_create(int nrows, int ncols)
     new_flag->array =
         (unsigned char **)G_malloc(nrows * sizeof(unsigned char *));
 
-    temp = (unsigned char *)G_malloc(nrows * new_flag->leng *
+    temp = (unsigned char *)G_malloc((size_t)nrows * new_flag->leng *
                                      sizeof(unsigned char));
 
     for (i = 0; i < nrows; i++) {
