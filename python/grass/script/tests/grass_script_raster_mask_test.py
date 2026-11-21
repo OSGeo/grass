@@ -258,3 +258,12 @@ def test_mask_manager_activate_deactivate(session_2x2):
     manager.activate()
     assert "GRASS_MASK" in session_2x2.env
     manager.deactivate()
+
+
+def test_mask_manager_restores_previous_mask_name(session_2x2):
+    """Test MaskManager restores the value of GRASS_MASK set before it started."""
+    env = session_2x2.env
+    env["GRASS_MASK"] = "previous_mask"
+    with gs.MaskManager(mask_name="temporary_mask", remove=False, env=env):
+        assert env["GRASS_MASK"] == "temporary_mask"
+    assert env["GRASS_MASK"] == "previous_mask"

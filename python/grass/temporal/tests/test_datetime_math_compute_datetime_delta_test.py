@@ -1,4 +1,7 @@
 from datetime import datetime
+
+import pytest
+
 from grass.temporal.datetime_math import compute_datetime_delta, datetime_delta
 
 
@@ -287,3 +290,44 @@ def test_compute_datetime_delta_month_full() -> None:
     assert comp == datetime_delta(
         year=0, month=0, day=30, hour=0, minute=0, second=0, max_days=30
     )
+
+
+@pytest.mark.parametrize(
+    ("start", "end", "expected"),
+    [
+        # The interval is 28 hours, and the hour of the end is before the start.
+        (
+            datetime(2001, 1, 1, 22, 0),
+            datetime(2001, 1, 3, 2, 0),
+            datetime_delta(
+                year=0, month=0, day=1, hour=28, minute=0, second=0, max_days=1
+            ),
+        ),
+        # The interval is 26.5 hours, so the minutes are counted over the hours.
+        (
+            datetime(2001, 1, 1, 10, 0),
+            datetime(2001, 1, 2, 12, 30),
+            datetime_delta(
+                year=0, month=0, day=1, hour=26, minute=1590, second=0, max_days=1
+            ),
+        ),
+        # Two days with the same minute: the minutes are counted over the days.
+        (
+            datetime(2001, 1, 1, 0, 15),
+            datetime(2001, 1, 3, 0, 15),
+            datetime_delta(
+                year=0, month=0, day=2, hour=0, minute=2880, second=0, max_days=2
+            ),
+        ),
+        # The interval is 26 hours, with the same minute at the start and end.
+        (
+            datetime(2001, 1, 1, 1, 15),
+            datetime(2001, 1, 2, 3, 15),
+            datetime_delta(
+                year=0, month=0, day=1, hour=26, minute=1560, second=0, max_days=1
+            ),
+        ),
+    ],
+)
+def test_compute_datetime_delta_spanning_days(start, end, expected) -> None:
+    assert compute_datetime_delta(start, end) == expected

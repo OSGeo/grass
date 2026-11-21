@@ -6,6 +6,10 @@ import pytest
 
 from grass.app.cli import main
 
+locking_enabled = pytest.mark.skipif(
+    sys.platform.startswith("win"), reason="Locking is disabled on Windows"
+)
+
 
 def test_cli_help_runs():
     """Check help of the main command"""
@@ -154,6 +158,60 @@ def test_create_mapset_lock_unlock(tmp_path):
     assert main(["mapset", "unlock", str(project / "data_1")]) == 0
 
 
+@locking_enabled
+@pytest.mark.parametrize("mapset", ["PERMANENT", "data_1"])
+def test_lock_creates_and_unlock_removes_lock_file(tmp_path, mapset):
+    """Check that locking creates the lock file and unlocking removes it"""
+    project = tmp_path / "test_1"
+    lock_file = project / mapset / ".gislock"
+    assert main(["project", "create", str(project)]) == 0
+    if mapset != "PERMANENT":
+        assert main(["mapset", "create", str(project / mapset)]) == 0
+    assert not lock_file.exists()
+    assert main(["mapset", "lock", str(project / mapset)]) == 0
+    assert lock_file.exists()
+    assert main(["mapset", "unlock", str(project / mapset)]) == 0
+    assert not lock_file.exists()
+
+
+@locking_enabled
+def test_lock_mapset_already_locked(tmp_path, capsys):
+    """Check that locking a locked mapset fails and keeps the existing lock"""
+    project = tmp_path / "test_1"
+    mapset = project / "PERMANENT"
+    assert main(["project", "create", str(project)]) == 0
+    assert main(["mapset", "lock", str(mapset)]) == 0
+    capsys.readouterr()
+    assert main(["mapset", "lock", str(mapset), "--timeout", "0"]) == 1
+    assert "currently being used by another GRASS session" in capsys.readouterr().err
+    assert (mapset / ".gislock").exists()
+
+
+@locking_enabled
+def test_lock_mapset_force_remove_lock(tmp_path, capsys):
+    """Check that an existing lock can be forced to be removed and is reported"""
+    project = tmp_path / "test_1"
+    mapset = project / "PERMANENT"
+    assert main(["project", "create", str(project)]) == 0
+    assert main(["mapset", "lock", str(mapset)]) == 0
+    capsys.readouterr()
+    assert main(["mapset", "lock", str(mapset), "--force-remove-lock"]) == 0
+    assert "Removing lock in the selected mapset" in capsys.readouterr().out
+
+
+def test_lock_mapset_missing_mapset(tmp_path, capsys):
+    """Check that locking a mapset which does not exist is reported"""
+    assert main(["mapset", "lock", str(tmp_path / "missing")]) == 1
+    assert "doesn't exist" in capsys.readouterr().err
+
+
+def test_unlock_mapset_without_lock(tmp_path):
+    """Check that unlocking a mapset which is not locked is not an error"""
+    project = tmp_path / "test_1"
+    assert main(["project", "create", str(project)]) == 0
+    assert main(["mapset", "unlock", str(project / "PERMANENT")]) == 0
+
+
 def test_create_mapset(tmp_path):
     """Check that we can create mapset and we can set its computational region"""
     project = tmp_path / "test_1"
@@ -239,21 +297,25 @@ def test_create_mapset(tmp_path):
     assert region["cols"] == 1
 
 
-def test_mapset_create_exists(tmp_path):
+def test_mapset_create_exists(tmp_path, capsys):
     """Check that creating mapset fails unless --overwrite is used"""
     project = tmp_path / "test_1"
     mapset = project / "data_1"
     assert main(["project", "create", str(project)]) == 0
     assert main(["mapset", "create", str(mapset)]) == 0
+    capsys.readouterr()
     assert main(["mapset", "create", str(mapset)]) == 1
+    assert "Error creating mapset" in capsys.readouterr().err
     assert main(["mapset", "create", "--overwrite", str(mapset)]) == 0
 
 
-def test_create_overwrite(tmp_path):
+def test_create_overwrite(tmp_path, capsys):
     """Check that creating when project exists fails unless overwrite is True"""
     project = tmp_path / "test_1"
     assert main(["project", "create", str(project)]) == 0
+    capsys.readouterr()
     assert main(["project", "create", str(project)]) == 1
+    assert "Error creating project" in capsys.readouterr().err
     assert main(["project", "create", "--overwrite", str(project)]) == 0
 
 
