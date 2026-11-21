@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-04 17:59+0000\n"
+"POT-Creation-Date: 2026-11-15 02:39+0000\n"
 "PO-Revision-Date: 2025-07-26 01:36+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Czech <https://weblate.osgeo.org/projects/grass-gis/grassmods/cs/>\n"
@@ -2251,7 +2251,6 @@ msgstr "Počet míst za desetinnou čárkou (pouze pro mapy s plovoucí desetinn
 msgid "Get text color from cell color value"
 msgstr ""
 
-#. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
 #, c-format
@@ -7774,8 +7773,8 @@ msgstr ""
 msgid "Predict with a Support Vector Machine"
 msgstr ""
 
-#. GTC: SVM training input
 #. GTC: SVM prediction input
+#. GTC: SVM training input
 #, fuzzy
 msgid "Maps with feature values (attributes)"
 msgstr "POčet kvantilů"
@@ -11880,7 +11879,7 @@ msgstr ""
 msgid "Name of input raster files"
 msgstr ""
 
-#, c-format
+#, c-format, python-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr ""
 
@@ -16270,7 +16269,7 @@ msgstr ""
 msgid "Exporting raster map <%s> (band %d)..."
 msgstr "Exportuji rastrovou mapu <%s> (část %d)... "
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to export raster map <%s>"
 msgstr "Nelze exportovat rastrovou mapu <%s>"
 
@@ -20515,7 +20514,6 @@ msgstr "Příliš mnoho kategorií (nalezeno: %i, max: %i). Zkuste změnit měř
 msgid "Input raster must be of type CELL."
 msgstr ""
 
-#. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
 #, c-format
@@ -22371,7 +22369,7 @@ msgstr ""
 msgid "No sink map provided. Initializing zero sink..."
 msgstr ""
 
-#, c-format
+#, c-format, python-format
 msgid "Unable to create 3D raster map <%s>"
 msgstr ""
 
@@ -22875,8 +22873,10 @@ msgstr "write_vtk_unstructured_grid_cells: Zapisuji buňky"
 msgid "write_vtk_data: Writing Celldata %s with rows %i cols %i depths %i to vtk-ascii file"
 msgstr "write_vtk_data: Zapisuji Celldata %s o %i řádků %i sloupců %i hloubky do souboru vtk-ascii."
 
-msgid "Wrong 3D raster map values! Values should in between 0 and 255!"
-msgstr ""
+#, fuzzy
+#| msgid "Wrong map values! Values should in between 0 and 255!\n"
+msgid "Wrong 3D raster map values! Values should be in between 0 and 255!"
+msgstr "Chybné hodnoty mapy! Hodnoty by měly být v rozmezí 0 a 255!\n"
 
 msgid "Unable to close the 3D raster map"
 msgstr ""
@@ -25187,6 +25187,396 @@ msgstr ""
 msgid "Default TGIS database is not set"
 msgstr ""
 
+#, fuzzy, python-format
+#| msgid "Group must exist in the current mapset"
+msgid "The output dataset <%s> must be in the current mapset<%s>."
+msgstr "Skupina musí existovat v současném mapsetu"
+
+#, python-format
+msgid "Empty space-time %s dataset <%s>, nothing to copy"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Copying %s maps to the current mapset..."
+msgstr "Skupina musí existovat v současném mapsetu"
+
+#, fuzzy, python-format
+#| msgid "Group must exist in the current mapset"
+msgid "A %s map <%s> exists already in the current mapset <%s>."
+msgstr "Skupina musí existovat v současném mapsetu"
+
+#, python-format
+msgid "The %s map <%s> is already in the current mapset, not copying"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Please specify z column"
+msgid "Please specify %s="
+msgstr "Prosím, zadejte sloupec z"
+
+#, python-brace-format
+msgid "Dataset <{n}> of type <{t}> not found in temporal database"
+msgstr ""
+
+#, python-format
+msgid "Output space time dataset <%s> must be located in this mapset"
+msgstr ""
+
+msgid "Space time datasets to merge must have the same temporal type"
+msgstr ""
+
+#, python-format
+msgid "Unable to merge maps into space time %s dataset <%s> please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "%s map <%s> not found"
+msgid "Space time %s dataset <%s> not found"
+msgstr "%s mapa <%s> nebyla nalezena"
+
+#, fuzzy
+msgid "You need to set the range to compute the occurrence space time raster dataset"
+msgstr "Název výstupní rastrové mapy"
+
+#, python-format
+msgid "Space time raster dataset <%s> is already in the database, use overwrite flag to overwrite"
+msgstr ""
+
+#, fuzzy
+msgid "You need to set the occurrence to compute the indicator space time raster dataset"
+msgstr "Název výstupní rastrové mapy"
+
+#, fuzzy
+#| msgid "The user defined values that indicate start, intermediate and end status in the indicator output space time raster dataset"
+msgid "You need to set the staend options to compute the indicator space time raster dataset"
+msgstr "Hodnoty definované uživatelem, které udávají stav startu, meziprocesu a konce v datovém rastru časového výstupu"
+
+#, fuzzy, python-format
+#| msgid "3d raster map <%s> not found"
+msgid "Space time raster dataset <%s> not found"
+msgstr "3D rastrová mapa <%s> nebyla nalezena"
+
+msgid "Temporal type of input strds and minimum strds must be equal"
+msgstr ""
+
+msgid "Temporal type of input strds and maximum strds must be equal"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Processing rows %d-%d (of %d)..."
+msgid "Processing cycle %s - %s"
+msgstr "Zpracovávám řádky %d-%d (z %d)"
+
+#, python-format
+msgid "Map <%s> is already registered in the temporal database, use overwrite flag to overwrite."
+msgstr ""
+
+#, fuzzy
+#| msgid "Invalid zrange"
+msgid "Invalid granularity"
+msgstr "Neplatné zrange"
+
+#, fuzzy
+#| msgid "Invalid order"
+msgid "Invalid cycle"
+msgstr "Neplatný řád rektifikace"
+
+#, fuzzy
+#| msgid "Invalid order"
+msgid "Invalid offset"
+msgstr "Neplatný řád rektifikace"
+
+msgid "Temporal type of input strds and lower strds must be equal"
+msgstr ""
+
+msgid "The upper option works only in conjunction with the lower option"
+msgstr ""
+
+msgid "Temporal type of input strds and upper strds must be equal"
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to run r.stats"
+msgid "Error running r.series.accumulate"
+msgstr "Nelze spustit r.stats"
+
+#, fuzzy
+#| msgid "output= and method= must have the same number of values"
+msgid "Input and aggregation dataset must have the same temporal type"
+msgstr "output= a method= musí mít stejný počet hodnot"
+
+msgid "All registered maps of the aggregation dataset must have time intervals"
+msgstr ""
+
+msgid "Unable to process the expression in granularity algebra mode"
+msgstr ""
+
+#, fuzzy
+msgid "Error in r.colors call"
+msgstr "Chyba atributů skenování"
+
+msgid "The number of parallel r.contour processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cursor not found"
+msgid "Directory {} not found"
+msgstr "Kurzor nenalezen"
+
+#, fuzzy
+#| msgid "Selected band (%d) does not exist"
+msgid "Directory {} is not writable"
+msgstr "Vybraný kanál (%d) neexistuje"
+
+msgid "Type options is not working with pack format, it will be skipped"
+msgstr ""
+
+msgid "Createopt, metaopt and nodata options are not working with pack and AAIGrid formats, they will be skipped"
+msgstr ""
+
+#, fuzzy
+#| msgid "No tables found"
+msgid "No gaps found"
+msgstr "Nenalezeny žádné tabulky"
+
+msgid "Unable to determine successor and predecessor of a gap."
+msgstr ""
+
+msgid "More than one successor of the gap found. Using the first found."
+msgstr ""
+
+msgid "More than one predecessor of the gap found. Using the first found."
+msgstr ""
+
+#, python-format
+msgid "Map with name <%s> already exists. Please use another base name."
+msgstr ""
+
+#, python-brace-format
+msgid "Combining {option_name}={option_value} and {excluded_option_name}={excluded_option_value} is not allowed. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The option {excluded_option_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+#, python-brace-format
+msgid "The flag -{flag_name} is not allowed with {option_name}={option_value}. {reason}"
+msgstr ""
+
+msgid "A standard CSV separator (delimiter) is only one character long"
+msgstr ""
+
+msgid "Values are always ordered by start_time"
+msgstr ""
+
+#, python-brace-format
+msgid "Column '{name}' is not available with the method '{method}'"
+msgstr ""
+
+#, python-brace-format
+msgid "Only one column is allowed (not {num_columns})"
+msgstr ""
+
+msgid "All maps are always listed"
+msgstr ""
+
+msgid "The method <quantile> requires input in the 'quantile' option."
+msgstr ""
+
+#, fuzzy
+msgid "Space time raster dataset <{}> is empty"
+msgstr "Název výstupní rastrové mapy"
+
+#, python-brace-format
+msgid ""
+"Error running module: {mod}\n"
+"    stderr: {error}"
+msgstr ""
+
+#, fuzzy
+#| msgid "Error scanning arguments"
+msgid "Error running modules."
+msgstr "Chyba atributů skenování"
+
+#, fuzzy, python-format
+msgid "Export directory <%s> not found."
+msgstr "Cílová lokace <%s> nebyla nalezena"
+
+msgid "Number requested methods and output maps do not match."
+msgstr ""
+
+msgid "Processing over {} maps: activating -z flag of r.series which slows down processing."
+msgstr ""
+
+#, python-format
+msgid "%s failed. Check above error messages."
+msgstr ""
+
+#, fuzzy
+#| msgid "Unable to set projection"
+msgid "Unable to set 3D region"
+msgstr "Nelze nastavit projekci"
+
+msgid "Space time voxel cube"
+msgstr ""
+
+msgid "This space time voxel cube was created with t.rast.to.rast3"
+msgstr ""
+
+#, python-format
+msgid "%s failed to set units."
+msgstr ""
+
+msgid "The number of parallel r.to.vect processes was reduced to 1 because of the table attribute creation"
+msgstr ""
+
+msgid "<{}> is not valid input to the percentile option"
+msgstr ""
+
+msgid "Zoning raster must be of type CELL"
+msgstr ""
+
+#, fuzzy
+msgid "Options coordinates and points are mutually exclusive"
+msgstr "-s a -n se navzájem vylučují"
+
+msgid "Please specify the coordinates, the points option or use the 'i' flag to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"
+msgstr ""
+
+#, fuzzy
+msgid "Please specify points or coordinates"
+msgstr "Prosím, zadejte sloupec z"
+
+#, fuzzy, python-format
+#| msgid "Format of output files"
+msgid "Transforming r.what output file %s"
+msgstr "Formát výstupních souborů"
+
+#, fuzzy, python-format
+#| msgid "Writing the output..."
+msgid "Writing the output file <%s>"
+msgstr "Zapisování výstupu ..."
+
+#, python-format
+msgid "Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"
+msgstr ""
+
+#, fuzzy
+#| msgid "The following data base element files would be deleted:"
+msgid "The following data base element files will be deleted:"
+msgstr "Z adresáře s databází by byly smazány následující soubory:"
+
+#, python-brace-format
+msgid "{stds}: {gid}"
+msgstr ""
+
+#, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database:"
+msgstr ""
+
+#, python-brace-format
+msgid "The following maps of {stds} {gid} will be unregistered from temporal database and removed from spatial database:"
+msgstr ""
+
+#, python-format
+msgid "- %s"
+msgstr ""
+
+#, python-brace-format
+msgid "Nothing removed. You must use the force flag (-{flag}) to actually remove them."
+msgstr ""
+
+#, python-format
+msgid "Space time %s dataset <%s> can not be renamed. Mapset of the new identifier differs from the current mapset."
+msgstr ""
+
+#, python-format
+msgid "Unable to rename Space time %s dataset <%s>. Name <%s> is in use, please use the overwrite flag."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Unable to temporally shift the space time %s dataset <%s>"
+msgstr "Název souboru s filtrem"
+
+#, c-format, python-format
+msgid "%s= or %s= must be specified"
+msgstr ""
+
+#, fuzzy
+msgid "Unregister maps"
+msgstr "Rastrový režim"
+
+#, fuzzy, python-format
+#| msgid "Unable to open default database"
+msgid "Unable to find %s map <%s> in temporal database"
+msgstr "Nelze otevřít výchozí databázi"
+
+#, fuzzy, python-format
+msgid "Unregister maps from space time dataset <%s>"
+msgstr "Spravuje NULLové hodnoty zadané rastrové mapy."
+
+msgid "Unregister maps from the temporal database"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to run v.db.select for vector map <%s> with layer %s"
+msgstr "Nelze přidat spojení s databází pro vektorovou mapu <%s>"
+
+#, fuzzy
+msgid "The number of columns must be equal to the number of space time raster datasets"
+msgstr "Název výstupní rastrové mapy"
+
+#, fuzzy, python-format
+#| msgid "Unable to get layer info for vector map <%s>"
+msgid "Unable to create new layers for vector map <%s>"
+msgstr "Nelze získat informace o vrstvě pro vektorovou mapu <%s>"
+
+#, fuzzy, python-format
+msgid "Observaion of space time raster dataset(s) <%s>"
+msgstr "Spravuje NULLové hodnoty zadané rastrové mapy."
+
+#, fuzzy, python-format
+#| msgid "Writing raster map <%s> and vector map <%s> ..."
+msgid "Observation of space time raster dataset(s) <%s> with vector map <%s>"
+msgstr "Zapisuji rastrovou mapu <%s>  a vektorovou mapu <%s>..."
+
+msgid "The number of raster maps in a granule must be equal to the number of column names"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to copy elements from vector map <%s>"
+msgid "Unable to add column %s to vector map <%s> with layer %i"
+msgstr "Nelze kopírovat prvky z vektorové mapy <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to add database link for vector map <%s>"
+msgid "Unable to add table to vector map <%s> with layer %i"
+msgstr "Nelze přidat spojení s databází pro vektorovou mapu <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to create raster map <%s> using driver <%s>"
+msgid "Unable to run v.what.rast for vector map <%s> with layer %i and raster map <%s>"
+msgstr "Nelze vytvořit rastrovou mapu <%s> ovladačem <%s>"
+
+msgid "All registered maps of the space time vector dataset must have time intervals"
+msgstr ""
+
+#, python-format
+msgid "Space time vector dataset <%s> is empty"
+msgstr ""
+
+#, fuzzy, python-format
+#| msgid "Unable to copy elements from vector map <%s>"
+msgid "Unable to add column %s to vector map <%s>"
+msgstr "Nelze kopírovat prvky z vektorové mapy <%s>"
+
+#, fuzzy, python-format
+#| msgid "Unable to create raster map <%s>"
+msgid "Unable to remove raster map <%s>"
+msgstr "Nejsem schopen vytvořit rastrovou mapu <%s>"
+
 msgid "Invalid GEOS geometry!"
 msgstr ""
 
@@ -27031,10 +27421,6 @@ msgid "Native"
 msgstr "Nativní"
 
 msgid "Print current status in shell script style"
-msgstr ""
-
-#, c-format
-msgid "%s= or %s= must be specified"
 msgstr ""
 
 #, c-format
@@ -37644,10 +38030,6 @@ msgstr "Soubory obrazové skupiny"
 #~ msgstr "Název výstupního souboru obsahující závěrečnou zprávu"
 
 #, fuzzy
-#~ msgid "Name of the output space time raster dataset"
-#~ msgstr "Název výstupní rastrové mapy"
-
-#, fuzzy
 #~ msgid "Name of the raster map with the average age [year]"
 #~ msgstr "Název vstupu rastrové mapy s reálnými poklesy"
 
@@ -38325,10 +38707,6 @@ msgstr "Soubory obrazové skupiny"
 #~ msgstr "Vstup selhal"
 
 #, fuzzy
-#~ msgid "Option <%s> and <%s> are mutually exclusive"
-#~ msgstr "-s a -n se navzájem vylučují"
-
-#, fuzzy
 #~ msgid "Option <%s> must be specified"
 #~ msgstr "Jeden z přepínačů \"-i\" nebo \"-r\" nebo voleb \"color\", \"rast\" nebo \"rules\" MUSÍ být zadána!"
 
@@ -38663,10 +39041,6 @@ msgstr "Soubory obrazové skupiny"
 #~ msgstr "Prosím, zadejte sloupec z"
 
 #, fuzzy
-#~ msgid "Please specify input= or infile="
-#~ msgstr "Prosím, zadejte sloupec z"
-
-#, fuzzy
 #~ msgid "Please specify output= and samplingpos="
 #~ msgstr "Prosím, zadejte sloupec z"
 
@@ -38984,10 +39358,6 @@ msgstr "Soubory obrazové skupiny"
 #~ msgstr "Rastry pro kvantizaci"
 
 #, fuzzy
-#~ msgid "Raster maps"
-#~ msgstr "Rastrový režim"
-
-#, fuzzy
 #~ msgid "Raster percentile to use"
 #~ msgstr "pth percentil hodnot"
 
@@ -39082,10 +39452,6 @@ msgstr "Soubory obrazové skupiny"
 #, fuzzy
 #~ msgid "Removes signature file in a group/subgroup."
 #~ msgstr "Nelze zapsat soubor s příznaky <%s> pro skupinu <%s>, podskupinu <%s>"
-
-#, fuzzy
-#~ msgid "Renames multiple maps in the current mapset."
-#~ msgstr "Skupina musí existovat v současném mapsetu"
 
 #, fuzzy
 #~ msgid "Renaming reclass maps"
