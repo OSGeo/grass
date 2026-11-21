@@ -381,7 +381,7 @@ void print_projjson(void)
         outwkt = GPJ_grass_to_wkt(projinfo, projunits, 0, 0);
         /* datum info might be incomplete or incorrect */
         if (outwkt) {
-            obj = proj_create_from_wkt(NULL, projwkt, NULL, NULL, NULL);
+            obj = proj_create_from_wkt(NULL, outwkt, NULL, NULL, NULL);
             G_free(outwkt);
         }
     }
