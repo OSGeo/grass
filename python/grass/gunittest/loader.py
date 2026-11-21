@@ -57,6 +57,16 @@ class GrassTestPythonModule(NamedTuple):
     abs_file_path: str
 
 
+def discovery_sort_key(module: GrassTestPythonModule) -> tuple[tuple[str, ...], str]:
+    """Return a key which sorts test files in the order of discovery
+
+    Sorting by this key gives the order in which :func:`discover_modules`
+    returns the test files, so reports can keep that order even when
+    the test files run in a different one.
+    """
+    return PurePath(module.tested_dir).parts, os.path.basename(module.file_path)
+
+
 # TODO: implement loading without the import
 def discover_modules(
     start_dir,
