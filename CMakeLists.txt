@@ -329,11 +329,6 @@ add_subdirectory(demolocation)
 
 add_subdirectory(include)
 
-include_directories("${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}")
-if(MSVC)
-    include_directories("${CMAKE_SOURCE_DIR}/msvc")
-endif()
-
 set(modules_list "" CACHE INTERNAL "list of modules")
 
 add_subdirectory(lib)
@@ -376,9 +371,11 @@ if(WITH_DOCS)
         DIRECTORY ${OUTDIR}/${GRASS_INSTALL_DOCDIR}/
         DESTINATION ${GRASS_INSTALL_DOCDIR}
     )
+    # The build-mkdocs target leaves a cache of the site generator there.
     install(
         DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MKDOCSDIR}/
         DESTINATION ${GRASS_INSTALL_MKDOCSDIR}
+        PATTERN ".cache" EXCLUDE
     )
     install(
         DIRECTORY ${OUTDIR}/${GRASS_INSTALL_MANDIR}/

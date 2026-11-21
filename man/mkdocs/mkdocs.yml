@@ -7,7 +7,6 @@ site_url: https://grass.osgeo.org/grass-stable/manuals/
 # Repository information
 repo_name: OSGeo/grass
 repo_url: https://github.com/OSGeo # Set to OSGeo so we can added grass and grass-addons
-edit_uri_template: edit/main/{path!q}
 
 # Project Configuration
 docs_dir: source
@@ -19,6 +18,7 @@ copyright: !ENV COPYRIGHT
 # Theme configuration
 theme:
   name: material
+  variant: classic
   custom_dir: overrides
   language: en
   logo: grass_logo.svg
@@ -75,10 +75,6 @@ extra:
       grass: grass
       grass_addons: grass-addons
 
-# Hooks
-hooks:
-  - scripts/hook_list_scripts.py
-
 # Custom CSS
 extra_css:
   - grassdocs.css
@@ -89,7 +85,11 @@ extra_javascript:
 # Plugins
 plugins:
   - search
-  - glightbox
+  - glightbox:
+      # Images in the graphical indexes are links to the tool pages.
+      skip_classes:
+        - linkimg
+        - default-img
   - tags:
       tags_name_property: keywords
       tags_slugify_format: "{slug}"
@@ -114,8 +114,8 @@ markdown_extensions:
   - attr_list
   - md_in_html
   - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:zensical.extensions.emoji.twemoji
+      emoji_generator: !!python/name:zensical.extensions.emoji.to_svg
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.superfences:

@@ -2,9 +2,9 @@ MODULE_TOPDIR = ..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
-# Some source/*.md files exist only for the MkDocs website and have no man
+# Some source/*.md files exist only for the documentation site and have no man
 # page equivalent. index.md is the site landing page, keywords.md is a stub
-# for the tags plugin (the keyword index is rendered by MkDocs), and the
+# for the tags plugin (the keyword index is rendered by Zensical), and the
 # *_intro.md pages are navigation-only introductions. The remaining ones are
 # the developer and user guides installed from doc/ and doc/development/;
 # they are derived from those directories so a newly added guide is excluded
@@ -29,13 +29,13 @@ DSTFILES := \
 	$(MDDIR)/source/grass_icon.png \
 	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
-	$(MDDIR)/scripts/hook_list_scripts.py \
 	$(MDDIR)/scripts/grass_markdown.py \
 	$(MDDIR)/source/index.md \
 	$(MDDIR)/overrides/main.html \
 	$(MDDIR)/overrides/partials/copyright.html \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
+	$(MDDIR)/overrides/partials/content.html \
 	$(MDDIR)/overrides/partials/source.html \
 	$(MDDIR)/overrides/fragments/tags/default/listing.html \
 	$(MDDIR)/source/keywords.md \
@@ -291,9 +291,6 @@ $(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
 $(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
-	$(INSTALL_DATA) $< $@
-
 $(MDDIR)/scripts/grass_markdown.py: mkdocs/scripts/grass_markdown.py | $(MDDIR)/scripts
 	$(INSTALL_DATA) $< $@
 
@@ -315,6 +312,9 @@ $(MDDIR)/overrides/partials/footer.html: mkdocs/overrides/partials/footer.html |
 $(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/overrides/partials/content.html: mkdocs/overrides/partials/content.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/overrides/partials/source.html: mkdocs/overrides/partials/source.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
@@ -331,10 +331,10 @@ build-mkdocs:
 	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	PYTHONPATH="scripts$${PYTHONPATH:+:$$PYTHONPATH}" \
-	mkdocs build
+	zensical build
 
 serve-mkdocs:
 	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	PYTHONPATH="scripts$${PYTHONPATH:+:$$PYTHONPATH}" \
-	mkdocs serve
+	zensical serve
