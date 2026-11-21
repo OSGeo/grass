@@ -104,7 +104,7 @@ int dopolys(int fd, int fm, int nl, int ns)
     for (i = 0; i < nl; i += 1) {
         for (j = 0; j < ns; j += 1)
             dir[j] = -1;
-        while (cells[cnt] == i) {
+        while (cnt < found && cells[cnt] == i) {
             dir[cells[cnt + 1]] = cells[cnt + 2];
             cnt += 3;
         }
