@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -72,14 +73,13 @@ char *start(const char *name, const char *output, int width, int height,
                           output_name);
         G_free(dir_name);
 
-        /* check if file exists */
-        if (!update && access(output_name, F_OK) == 0) {
-            if (G_get_overwrite()) {
+        /* delete existing file if overwrite is enabled */
+        if (!update && G_get_overwrite()) {
+            if (unlink(output_name) == 0)
                 G_warning(_("File <%s> already exists and will be overwritten"),
                           output_name);
-                if (0 != unlink(output_name))
-                    G_fatal_error(_("Unable to delete <%s>"), output_name);
-            }
+            else if (errno != ENOENT)
+                G_fatal_error(_("Unable to delete <%s>"), output_name);
         }
     }
 

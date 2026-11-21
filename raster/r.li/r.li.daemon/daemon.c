@@ -207,15 +207,17 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
     int sa_x, sa_y, sa_rl, sa_cl;
     int size;
 
-    if (stat(path, &s) != 0)
+    setup = open(path, O_RDONLY, 0755);
+    if (setup == -1)
         G_fatal_error(_("Cannot find configuration file <%s>"), path);
+
+    if (fstat(setup, &s) != 0) {
+        close(setup);
+        G_fatal_error(_("Cannot read setup file"));
+    }
 
     size = s.st_size * sizeof(char);
     buf = G_malloc(size);
-
-    setup = open(path, O_RDONLY, 0755);
-    if (setup == -1)
-        G_fatal_error(_("Cannot read setup file"));
 
     letti = read(setup, buf, s.st_size);
     if (letti < s.st_size) {
