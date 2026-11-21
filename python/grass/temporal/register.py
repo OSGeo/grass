@@ -249,6 +249,9 @@ def register_maps_in_space_time_dataset(
 
     msgr.debug(2, "Gathering map information...")
 
+    option_start = start
+    option_end = end
+
     for count, row in enumerate(maplist):
         if count % 50 == 0:
             msgr.percent(count, num_maps, 1)
@@ -267,11 +270,10 @@ def register_maps_in_space_time_dataset(
                 )
             )
 
-        # Use the time data from file
-        if "start" in row:
-            start = row["start"]
-        if "end" in row:
-            end = row["end"]
+        # Use the time data from file. A row without it takes the start and
+        # end options, not the times of the row before it.
+        start = row.get("start", option_start)
+        end = row.get("end", option_end)
 
         # Use the semantic label from file
         semantic_label = row.get("semantic_label", None)

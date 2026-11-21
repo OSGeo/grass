@@ -151,3 +151,44 @@ def test_absolute_semantic_label_from_file(session_with_rasters, tmp_path):
         ("2001-01-02 00:00:00", None),
     ]
     assert [row["semantic_label"] for row in rows] == ["S2_1", "S2_2"]
+
+
+def test_lines_do_not_take_time_of_previous_line(session_with_rasters, tmp_path):
+    """Lines without end time or without time keep their own times."""
+    tools = Tools(session=session_with_rasters)
+    create_dataset(tools, "own_times", "absolute")
+    tools.r_timestamp(map="c", date="15 mar 2005")
+    map_file = tmp_path / "maps.txt"
+    map_file.write_text("a|2001-01-01|2001-01-05\nb|2001-01-02\nc\n")
+    tools.t_register(type="raster", input="own_times", file=map_file)
+    rows = registered_maps(tools, "own_times")
+    assert [(row["name"], row["start_time"], row["end_time"]) for row in rows] == [
+        ("a", "2001-01-01 00:00:00", "2001-01-05 00:00:00"),
+        ("b", "2001-01-02 00:00:00", None),
+        ("c", "2005-03-15 00:00:00", None),
+    ]
+
+
+def test_vector_layer_gets_timestamp_of_its_layer(session_with_rasters, tmp_path):
+    """A vector layer without time in the file gets the timestamp of its layer."""
+    tools = Tools(session=session_with_rasters)
+    tools.v_random(output="points", npoints=1)
+    tools.v_category(input="points", output="layers", option="add", layer=2)
+    tools.v_timestamp(map="layers", layer=1, date="1 jan 2001")
+    tools.v_timestamp(map="layers", layer=2, date="7 jul 2007")
+    tools.t_create(
+        type="stvds",
+        temporaltype="absolute",
+        output="vectors",
+        title="Test",
+        description="Test dataset",
+    )
+    map_file = tmp_path / "maps.txt"
+    map_file.write_text("layers:2\n")
+    tools.t_register(type="vector", input="vectors", file=map_file)
+    rows = tools.t_vect_list(
+        input="vectors", columns="layer,start_time", format="json"
+    ).json["data"]
+    assert [(row["layer"], row["start_time"]) for row in rows] == [
+        ("2", "2007-07-07 00:00:00")
+    ]
