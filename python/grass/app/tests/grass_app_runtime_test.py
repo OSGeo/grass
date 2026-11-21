@@ -10,8 +10,8 @@ from pathlib import Path
 import pytest
 
 from grass.app import resource_paths
-from grass.app.runtime import RuntimePaths
-from grass.script.setup import get_install_path
+from grass.app.runtime import RuntimePaths, set_proj_data_for_conda
+from grass.script.setup import get_install_path, setup_runtime_env
 
 
 def return_as_is(x):
@@ -255,3 +255,84 @@ def test_passing_non_existent_path(path_type):
     This is a non-FHS oriented test.
     """
     assert get_install_path(path_type("/does/not/exist")) == get_install_path()
+
+
+# GISBASE relative to the prefix of the fake environment.
+# resource_paths.GISBASE cannot be used because it is empty in Autotools builds.
+FAKE_GISBASE = os.path.join("lib", "grass")
+
+
+def make_fake_conda_env(path, windows=False, proj_db=True):
+    """Create a fake conda environment for set_proj_data_for_conda()
+
+    Only what the tested function looks at is created: the conda-meta
+    directory, the GRASS installation directory, and the PROJ data directory
+    with an empty proj.db (unless proj_db is false).
+
+    Returns the GRASS installation path and the PROJ data directory.
+    """
+    (path / "conda-meta").mkdir(parents=True)
+    if windows:
+        install_path = path / "Library" / FAKE_GISBASE
+        proj_data = path / "Library" / "share" / "proj"
+    else:
+        install_path = path / FAKE_GISBASE
+        proj_data = path / "share" / "proj"
+    install_path.mkdir(parents=True, exist_ok=True)
+    proj_data.mkdir(parents=True)
+    if proj_db:
+        (proj_data / "proj.db").write_bytes(b"")
+    return install_path, proj_data
+
+
+@pytest.mark.parametrize("windows", [False, True])
+def test_proj_data_set_in_conda(tmp_path, windows):
+    """PROJ_DATA is set to the PROJ directory of the environment"""
+    install_path, proj_data = make_fake_conda_env(tmp_path / "env", windows=windows)
+    env = {}
+    # GISBASE is a string in the callers.
+    set_proj_data_for_conda(str(install_path), env=env)
+    assert env == {"PROJ_DATA": str(proj_data.resolve())}
+
+
+@pytest.mark.parametrize("variable", ["PROJ_DATA", "PROJ_LIB"])
+def test_proj_data_existing_value_is_respected(tmp_path, variable):
+    """A PROJ variable set by the user or the conda activation script is kept"""
+    install_path, _ = make_fake_conda_env(tmp_path / "env")
+    env = {variable: "/elsewhere"}
+    set_proj_data_for_conda(install_path, env=env)
+    assert env == {variable: "/elsewhere"}
+
+
+def test_proj_data_not_set_without_proj_db(tmp_path):
+    """A PROJ directory without proj.db is not used"""
+    install_path, _ = make_fake_conda_env(tmp_path / "env", proj_db=False)
+    env = {}
+    set_proj_data_for_conda(install_path, env=env)
+    assert env == {}
+
+
+def test_proj_data_not_set_outside_conda(tmp_path):
+    """Installations outside of conda are not affected"""
+    install_path = tmp_path / FAKE_GISBASE
+    install_path.mkdir(parents=True)
+    proj_data = tmp_path / "share" / "proj"
+    proj_data.mkdir(parents=True)
+    (proj_data / "proj.db").write_bytes(b"")
+    env = {}
+    set_proj_data_for_conda(install_path, env=env)
+    assert env == {}
+
+
+def test_setup_runtime_env_sets_proj_data_in_conda(tmp_path, monkeypatch):
+    """Runtime setup for a GRASS in conda sets PROJ_DATA"""
+    # The runtime setup derives the prefix by removing the build-time
+    # GISBASE from the end of the given path.
+    monkeypatch.setattr(resource_paths, "GISBASE", FAKE_GISBASE)
+    install_path, proj_data = make_fake_conda_env(tmp_path / "env")
+    env = os.environ.copy()
+    # GISBASE from the environment would take precedence over the path.
+    for variable in ("GISBASE", "PROJ_DATA", "PROJ_LIB"):
+        env.pop(variable, None)
+    setup_runtime_env(install_path, env=env)
+    assert env["PROJ_DATA"] == str(proj_data.resolve())
