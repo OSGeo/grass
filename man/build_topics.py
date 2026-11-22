@@ -15,7 +15,7 @@ min_num_modules_for_topic = 3
 
 keywords = {}
 
-htmlfiles = glob.glob1(path, "*.html")
+htmlfiles = [os.path.basename(f) for f in glob.glob(os.path.join(path, "*.html"))]
 
 for fname in htmlfiles:
     fil = open(os.path.join(path, fname))
