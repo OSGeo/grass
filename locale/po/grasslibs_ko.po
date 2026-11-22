@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 19:34+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2025-08-23 20:18+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Korean <https://weblate.osgeo.org/projects/grass-gis/grasslibs/ko/>\n"
@@ -7299,10 +7299,6 @@ msgstr ""
 msgid "The map does not exist, I can't open in 'r' mode"
 msgstr "지도가 존재하지 않습니다, 'r' 모드에서 열 수 없습니다"
 
-#, python-brace-format
-msgid "Raster map <{0}> already exists and will be not overwritten"
-msgstr ""
-
 #, fuzzy
 #| msgid "Raster map <%s> not found"
 msgid "Raster type not defined"
@@ -7314,10 +7310,6 @@ msgstr ""
 
 #, python-format
 msgid "Index out of range: %r."
-msgstr ""
-
-#, python-brace-format
-msgid "Raster map <{0}> already exists. Use overwrite."
 msgstr ""
 
 #, fuzzy, python-brace-format
@@ -7340,6 +7332,10 @@ msgstr ""
 
 #, python-brace-format
 msgid "Map name {0} not valid"
+msgstr ""
+
+#, python-brace-format
+msgid "Raster map <{0}> already exists and will be not overwritten"
 msgstr ""
 
 #, fuzzy, python-brace-format

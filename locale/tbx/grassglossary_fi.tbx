@@ -376,6 +376,37 @@ https://en.wikipedia.org/wiki/Aspect_(geography)</descrip>
             </termEntry>
             <termEntry>
                 <langSet xml:lang="en"><tig><term>lock file</term></tig></langSet>
+                <langSet xml:lang="fi"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <descrip type="definition">Temporal; A temporal granule is a single, indivisible unit or time slice (such as a day, month, second, or custom interval) within a specific time scale or temporal granularity.</descrip>
+                <langSet xml:lang="en"><tig><term>granule</term></tig></langSet>
+                <langSet xml:lang="fi"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <descrip type="definition">temporal</descrip>
+                <langSet xml:lang="en"><tig><term>space time raster dataset</term></tig></langSet>
+                <langSet xml:lang="fi"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <descrip type="definition">Temporal</descrip>
+                <langSet xml:lang="en"><tig><term>space time vector dataset</term></tig></langSet>
+                <langSet xml:lang="fi"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>SQL statement</term></tig></langSet>
+                <langSet xml:lang="fi"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>albedo</term></tig></langSet>
+                <langSet xml:lang="fi"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>access right</term></tig></langSet>
+                <langSet xml:lang="fi"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>timestamp</term></tig></langSet>
                 <langSet xml:lang="fi"><tig><term></term></tig></langSet>
             </termEntry>
         </body>

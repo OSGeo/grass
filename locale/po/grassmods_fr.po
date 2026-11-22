@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 19:34+0000\n"
-"PO-Revision-Date: 2026-11-14 00:18+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
+"PO-Revision-Date: 2026-11-17 23:35+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grassmods/fr/>\n"
 "Language: fr\n"
@@ -25227,13 +25227,13 @@ msgstr "Type de colonne non géré"
 msgid "No temporal database found in the requested mapset(s). No datasets to list."
 msgstr ""
 
-#, fuzzy, python-format
+#, python-format
 msgid "Time stamped %s maps with %s available in mapset <%s>:\n"
-msgstr "Lister les formats disponibles et quitter"
+msgstr "Cartes %s dotées d'une estampille temporelle (%s) disponibles dans le jeu de cartes <%s> :\n"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Space time %s datasets with %s available in mapset <%s>:\n"
-msgstr "Lister les formats disponibles et quitter"
+msgstr "Jeux de données spatiotemporels %s (%s) disponibles dans le jeu de cartes <%s> :\n"
 
 #, fuzzy, python-format
 #| msgid "Lists space time datasets and maps registered in the temporal database."
@@ -25539,9 +25539,8 @@ msgstr "Déplacer temporellement les cartes d'un jeu de données temporel."
 msgid "%s= or %s= must be specified"
 msgstr ""
 
-#, fuzzy
 msgid "Unregister maps"
-msgstr "Raster"
+msgstr "Unregister Cartes"
 
 #, fuzzy, python-format
 #| msgid "Unable to open vector map <%s> on topological level"
@@ -25562,19 +25561,17 @@ msgstr "Met à jour la version de la base de données temporelle."
 msgid "The number of columns must be equal to the number of space time raster datasets"
 msgstr "Importer un jeu de données raster temporel."
 
-#, fuzzy, python-format
-#| msgid "Unable to create vector map <%s>"
+#, python-format
 msgid "Unable to create new layers for vector map <%s>"
-msgstr "Impossible de créer la carte vecteur <%s>"
+msgstr "Impossible de créer de nouvelles couches pour la carte vecteur <%s>"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Observaion of space time raster dataset(s) <%s>"
-msgstr "Exporter un jeux de données raster temporel."
+msgstr "Observation du ou des jeux de données raster spatiotemporels <%s>"
 
-#, fuzzy, python-format
-#| msgid "Converts a space time raster dataset into a space time vector dataset"
+#, python-format
 msgid "Observation of space time raster dataset(s) <%s> with vector map <%s>"
-msgstr "Converti un jeunde données raster temporel vers un jeu de données vecteur temporel"
+msgstr "Observation d'un ou plusieurs jeux de données raster spatiotemporels <%s> à l'aide d'une carte vecteur <%s>"
 
 msgid "The number of raster maps in a granule must be equal to the number of column names"
 msgstr ""
@@ -25584,30 +25581,25 @@ msgstr ""
 msgid "Unable to add column %s to vector map <%s> with layer %i"
 msgstr "Impossible d'ajouter la colonne {column} à la carte vecteur <{vector}>"
 
-#, fuzzy, python-format
-#| msgid "Unable to add database link for vector map <%s>"
+#, python-format
 msgid "Unable to add table to vector map <%s> with layer %i"
-msgstr "Impossible d'ajouter un lien vers la base de données pour la carte vectorielle <%s>"
+msgstr "Impossible d’ajouter une table à la carte vecteur <%s> avec la couche %i"
 
 #, fuzzy, python-format
 #| msgid "Unable to find reclass information for <%s> in base map <%s@%s>"
 msgid "Unable to run v.what.rast for vector map <%s> with layer %i and raster map <%s>"
 msgstr "Impossible de trouver les informations de reclassement pour <%s> dans la carte de base <%s@%s>"
 
-#, fuzzy
-#| msgid "Lists registered maps of a space time vector dataset."
 msgid "All registered maps of the space time vector dataset must have time intervals"
-msgstr "Lister les cartes enregistrées dans le jeux de données vecteur temporel."
+msgstr "Toutes les cartes enregistrées du jeu de données vecteur spatiotemporel doivent avoir des intervalles de temps"
 
-#, fuzzy, python-format
-#| msgid "Input vector map <%s> is empty"
+#, python-format
 msgid "Space time vector dataset <%s> is empty"
-msgstr "La carte vectorielle d'entrée <%s> est vide"
+msgstr "Le jeu de données vecteur spatiotemporel <%s> est vide"
 
-#, fuzzy, python-format
-#| msgid "Unable to create raster map <%s>"
+#, python-format
 msgid "Unable to remove raster map <%s>"
-msgstr "Impossible de créer la couche raster <%s>"
+msgstr "Impossible de supprimer la carte raster <%s>"
 
 msgid "Invalid GEOS geometry!"
 msgstr ""

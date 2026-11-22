@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 19:34+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/es/>\n"
@@ -7402,10 +7402,6 @@ msgstr "La ejecución del subproceso no fue exitosa"
 msgid "The map does not exist, I can't open in 'r' mode"
 msgstr "El mapa no existe, no puedo abrir modo en 'r'"
 
-#, python-brace-format
-msgid "Raster map <{0}> already exists and will be not overwritten"
-msgstr "Mapa ráster <{0}> ya existe y no será sobreescrito"
-
 msgid "Raster type not defined"
 msgstr "Tipo de ráster no definido"
 
@@ -7416,10 +7412,6 @@ msgstr "Tipo de modo: {0} no soportado ('r', 'w','rw')"
 #, python-format
 msgid "Index out of range: %r."
 msgstr "Índice fuera de rango: %r."
-
-#, python-brace-format
-msgid "Raster map <{0}> already exists. Use overwrite."
-msgstr "Mapa ráster <{0}> ya existe. Use overwrite."
 
 #, python-brace-format
 msgid "Raster map <{0}> does not exist"
@@ -7441,6 +7433,10 @@ msgstr "Tipo de sobreescritura: {0} no soportado (Verdadero/Falso)"
 #, python-brace-format
 msgid "Map name {0} not valid"
 msgstr "Nombre de mapa {0} no válido"
+
+#, python-brace-format
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr "Mapa ráster <{0}> ya existe y no será sobreescrito"
 
 #, python-brace-format
 msgid "Raster type: {0} not supported"
@@ -8724,6 +8720,10 @@ msgstr ""
 #| msgid "Unknown format"
 msgid "Unknown format '{}'."
 msgstr "Formato desconocido"
+
+#, python-brace-format
+#~ msgid "Raster map <{0}> already exists. Use overwrite."
+#~ msgstr "Mapa ráster <{0}> ya existe. Use overwrite."
 
 #, fuzzy
 #~| msgid "Please install the GRASS GIS development package"

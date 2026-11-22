@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 19:34+0000\n"
-"PO-Revision-Date: 2026-11-14 00:18+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
+"PO-Revision-Date: 2026-11-17 23:35+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: French <https://weblate.osgeo.org/projects/grass-gis/grasslibs/fr/>\n"
 "Language: fr\n"
@@ -979,15 +979,14 @@ msgid "LOCATION <%s> not available"
 msgstr "SECTEUR <%s> non disponible"
 
 msgid "must be an integer with nothing after it"
-msgstr ""
+msgstr "doit être un nombre entier sans rien après"
 
 msgid "must be between -2147483648 and 4294967295"
-msgstr ""
+msgstr "doit être compris entre -2147483648 et 4294967295"
 
-#, fuzzy, c-format
-#| msgid "Invalid timestamp specified for %s map <%s@%s>"
+#, c-format
 msgid "Invalid random seed <%s> from %s: %s"
-msgstr "Horodatage invalide pour la carte %s <%s@%s>"
+msgstr "Graine aléatoire <%s> non valide de %s : %s"
 
 #, c-format
 msgid "gettimeofday failed: %s"
@@ -7379,10 +7378,6 @@ msgstr "L'exécution du sous-module a échoué"
 msgid "The map does not exist, I can't open in 'r' mode"
 msgstr "La carte n'existe pas, impossible de l'ouvrir en mode 'r'"
 
-#, python-brace-format
-msgid "Raster map <{0}> already exists and will be not overwritten"
-msgstr "La carte raster <{0}> existe déjà et ne sera pas écrasé"
-
 msgid "Raster type not defined"
 msgstr "Type de raster non défini"
 
@@ -7393,10 +7388,6 @@ msgstr "Type de mode {0} non supporté ('r', 'w','rw')"
 #, python-format
 msgid "Index out of range: %r."
 msgstr "Index hors limites : %r."
-
-#, python-brace-format
-msgid "Raster map <{0}> already exists. Use overwrite."
-msgstr "La carte raster <{0}> existe déjà. Utilisez l'écrasement."
 
 #, python-brace-format
 msgid "Raster map <{0}> does not exist"
@@ -7418,6 +7409,10 @@ msgstr "Écrasement : {0} non supporté (True/False)"
 #, python-brace-format
 msgid "Map name {0} not valid"
 msgstr "Nom de carte {0} non valide"
+
+#, python-brace-format
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr "La carte raster <{0}> existe déjà et ne sera pas écrasé"
 
 #, python-brace-format
 msgid "Raster type: {0} not supported"
@@ -7649,7 +7644,7 @@ msgstr ""
 
 #, python-format
 msgid "Start time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
-msgstr "L'heure de début doit être de type « datetime » pour la carte « %(type)s » <%(id)s> avec la couche : %(l)s"
+msgstr "L’heure de début doit être de type datetime pour la carte %(type)s <%(id)s> avec la couche : %(l)s"
 
 #, python-format
 msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
@@ -7990,34 +7985,29 @@ msgstr ""
 msgid "Unable to mogrify sql statement. {reason}"
 msgstr "Impossible de composer (mogrify) l'instruction SQL. {reason}"
 
-#, fuzzy, python-brace-format
-#| msgid "Unable to check table. "
+#, python-brace-format
 msgid "Unable to check table. {reason}"
-msgstr "Impossible de vérifier la table. "
+msgstr "Impossible de vérifier la table. {reason}"
 
-#, fuzzy, python-brace-format
-#| msgid "Unable to execute sql statement. "
+#, python-brace-format
 msgid "Unable to execute sql statement. {reason}"
-msgstr "Impossible d'exécuter la requête sql. "
+msgstr "Impossible d'exécuter l'énoncé SQL. {reason}"
 
-#, fuzzy, python-brace-format
-#| msgid "Unable to fetch one. "
+#, python-brace-format
 msgid "Unable to fetch one. {reason}"
-msgstr "\"fetch one\" impossible. "
+msgstr "Impossible d'extraire un enregistrement. {reason}"
 
-#, fuzzy, python-brace-format
-#| msgid "Unable to fetch all. "
+#, python-brace-format
 msgid "Unable to fetch all. {reason}"
-msgstr "\"fetch all\" impossible. "
+msgstr "Impossible d'extraire tous les enregistrements. {reason}"
 
-#, fuzzy, python-brace-format
-#| msgid "Unable to execute transaction. "
+#, python-brace-format
 msgid "Unable to execute transaction. {reason}"
-msgstr "Impossible d'exécuter la transaction. "
+msgstr "Impossible d'exécuter la transaction. {reason}"
 
 #, python-brace-format
 msgid "You have no permission to access mapset <{mapset}>, or mapset <{mapset}> has no temporal database. Accessible mapsets are: <{mapsets}>"
-msgstr ""
+msgstr "Vous n'avez pas l'autorisation d'accéder au jeu de cartes <{mapset}>, ou le jeu de cartes <{mapset}> n'a pas de base de données temporelle. Les jeux de cartes accessibles sont : <{mapsets}>"
 
 #, python-format
 msgid ""
@@ -8219,10 +8209,9 @@ msgstr "Veuillez spécifier %s= ou %s="
 msgid "The dbif argument is deprecated and will be removed in a future release."
 msgstr ""
 
-#, fuzzy, python-brace-format
-#| msgid "Space time %(sp)s dataset <%(name)s> with relative time found, but no relative unit set for %(sp)s maps"
+#, python-brace-format
 msgid "Space time {sp} dataset <{name}> with relative time found, but no relative unit set for {sp} maps"
-msgstr "Jeu de données <%(name)s> temporel %(sp)s  avec temps relatif trouvé, mais pas d'unité relative définie pour les cartes %(sp)s"
+msgstr "Jeu de données spatiotemporel {sp} <{name}> avec temps relatif trouvé, mais aucune unité relative définie pour les cartes {sp}"
 
 msgid "The increment option will be ignored because of time stamps in input file"
 msgstr "L'option incrément sera ignorée car il y a un horodatage dans le fichier d'entrée"
@@ -8230,10 +8219,9 @@ msgstr "L'option incrément sera ignorée car il y a un horodatage dans le fichi
 msgid "The interval flag will be ignored because of time stamps in input file"
 msgstr "L'option intervalle sera ignorée car il y a un horodatage dans le fichier d'entrée"
 
-#, fuzzy, python-brace-format
-#| msgid "Unable to update %(t)s map <%(id)s>. The map does not exist."
+#, python-brace-format
 msgid "Unable to update {t} map <{mid}>. The map does not exist."
-msgstr "Impossible de mettre à jour %(t)s carte <%(id)s>. La carte n'existe pas."
+msgstr "Impossible de mettre à jour la carte {t} <{mid}>. La carte n'existe pas."
 
 #, fuzzy, python-brace-format
 #| msgid "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has timestamp and the start time is not set."
@@ -8684,6 +8672,10 @@ msgstr ""
 #| msgid "Unknown format"
 msgid "Unknown format '{}'."
 msgstr "Format inconnu"
+
+#, python-brace-format
+#~ msgid "Raster map <{0}> already exists. Use overwrite."
+#~ msgstr "La carte raster <{0}> existe déjà. Utilisez l'écrasement."
 
 #~ msgid "Please install the GRASS development package"
 #~ msgstr "Veuillez installer le paquet développement de GRASS"

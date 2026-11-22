@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_vi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 19:34+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2025-08-23 20:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Vietnamese <https://weblate.osgeo.org/projects/grass-gis/grasslibs/vi/>\n"
@@ -7244,11 +7244,6 @@ msgstr ""
 msgid "The map does not exist, I can't open in 'r' mode"
 msgstr ""
 
-#, fuzzy, python-brace-format
-#| msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
-msgid "Raster map <{0}> already exists and will be not overwritten"
-msgstr "Lớp PostGIS <%s.%s> đã có và sẽ bị ghi đè"
-
 #, fuzzy
 #| msgid "PostGIS feature table not defined"
 msgid "Raster type not defined"
@@ -7261,11 +7256,6 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #, python-format
 msgid "Index out of range: %r."
 msgstr ""
-
-#, fuzzy, python-brace-format
-#| msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
-msgid "Raster map <{0}> already exists. Use overwrite."
-msgstr "Lớp PostGIS <%s.%s> đã có và sẽ bị ghi đè"
 
 #, fuzzy, python-brace-format
 #| msgid "Raster map <%s> not found"
@@ -7286,6 +7276,11 @@ msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 #, python-brace-format
 msgid "Map name {0} not valid"
 msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr "Lớp PostGIS <%s.%s> đã có và sẽ bị ghi đè"
 
 #, fuzzy, python-brace-format
 msgid "Raster type: {0} not supported"
@@ -8506,6 +8501,11 @@ msgstr ""
 
 msgid "Unknown format '{}'."
 msgstr ""
+
+#, fuzzy, python-brace-format
+#~| msgid "PostGIS layer <%s.%s> already exists and will be overwritten"
+#~ msgid "Raster map <{0}> already exists. Use overwrite."
+#~ msgstr "Lớp PostGIS <%s.%s> đã có và sẽ bị ghi đè"
 
 #~ msgid "Attributes for category %d not found"
 #~ msgstr "Không tìm thấy các thuộc tính cho phạm trù %d"
