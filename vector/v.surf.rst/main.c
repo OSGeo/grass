@@ -48,7 +48,7 @@
 #define SCIK3 1 /*100000 */
 
 static double /* pargr */ ns_res, ew_res;
-static double dmin, dmax, ertre;
+static double dmin, dmax;
 static int KMAX2, KMIN, KMAX, totsegm, deriv, dtens, cv;
 static struct Map_info Map;
 static struct Map_info TreeMap, OverMap;
@@ -61,7 +61,7 @@ static void clean(void);
 
 static double *az = NULL, *adx = NULL, *ady = NULL, *adxx = NULL, *adyy = NULL,
               *adxy = NULL;
-static double /* error */ ertot, ertre, zminac, zmaxac, zmult;
+static double /* error */ ertot, zminac, zmaxac, zmult;
 struct multtree *root;
 
 static int NPOINT = 0;
@@ -77,7 +77,6 @@ static char *input;
 static int field;
 static char *zcol;
 static char *scol;
-static char *wheresql;
 static char *elev = NULL;
 static char *slope = NULL;
 static char *aspect = NULL;
@@ -392,7 +391,6 @@ int main(int argc, char *argv[])
     input = parm.input->answer;
     zcol = parm.zcol->answer;
     scol = parm.scol->answer;
-    wheresql = parm.wheresql->answer;
     maskmap = parm.maskmap->answer;
     elev = parm.elev->answer;
     devi = parm.devi->answer;
@@ -472,7 +470,6 @@ int main(int argc, char *argv[])
         G_fatal_error(_("The cross-validation cannot be computed "
                         "simultaneously with output raster or devi file"));
 
-    ertre = 0.1;
     sscanf(parm.dmax->answer, "%lf", &dmax);
     sscanf(parm.dmin->answer, "%lf", &dmin);
     sscanf(parm.fi->answer, "%lf", &fi);
