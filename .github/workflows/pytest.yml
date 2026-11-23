@@ -33,12 +33,12 @@ jobs:
       CLICOLOR_FORCE: 1 # for other software including ninja: https://bixense.com/clicolors/
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip # zizmor: ignore[cache-poisoning] This pytest workflow not used for release artifacts
@@ -50,7 +50,7 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - uses: rui314/setup-mold@9c9c13bf4c3f1adef0cc596abc155580bcb04444 # v1
+      - uses: rui314/setup-mold@339e96b4ff1f3bd865856ba4cbbe8818a7acb038 # v1
 
       - name: Install Python dependencies
         run: |
