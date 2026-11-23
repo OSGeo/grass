@@ -25,15 +25,15 @@ jobs:
       contents: write
     steps:
       - name: Checks-out repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           ref: ${{ github.ref }}
           fetch-depth: 0
           persist-credentials: false
       - name: Set up Python
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
-          python-version: '3.11'
+          python-version: '3.15'
       - name: Create output directory
         run: |
           mkdir "${OUT_DIR}"
@@ -70,7 +70,7 @@ jobs:
           sha256sum "${GRASS}.tar.xz" > "${GRASS}.tar.xz.sha256"
       - name: Publish draft distribution to GitHub (for tags only)
         if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2.5.0
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
         with:
           name: GRASS GIS ${{ github.ref_name }}
           body: |
