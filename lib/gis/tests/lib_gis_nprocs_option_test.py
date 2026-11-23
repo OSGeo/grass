@@ -9,7 +9,7 @@ import sys
 
 import pytest
 
-from grass.tools import ToolError, Tools
+from grass.tools import ToolError
 
 # Prints G_nprocs_from_option() and G_set_omp_num_threads() for the answer
 # in argv[1] (empty: an option without an answer).
@@ -47,14 +47,7 @@ def nprocs_from_option(session, answer, omp_num_threads=None):
     return result.returncode, numbers, result.stderr
 
 
-@pytest.fixture(scope="module")
-def has_openmp(xy_session_for_module):
-    """Whether G_set_omp_num_threads() sets up more than one thread"""
-    _, numbers, _ = nprocs_from_option(xy_session_for_module, "2")
-    return numbers == [2, 2]
-
-
-@pytest.mark.parametrize("answer", ["99999999999", "", "2x"])
+@pytest.mark.parametrize("answer", ["99999999999", "", " ", "2x"])
 def test_not_an_int(xy_session_for_module, answer):
     """An answer which is not an int is an error naming the option"""
     returncode, _, stderr = nprocs_from_option(xy_session_for_module, answer)
@@ -62,9 +55,8 @@ def test_not_an_int(xy_session_for_module, answer):
     assert f"Invalid value <{answer}> for option <nprocs>" in stderr
 
 
-def test_tool_refuses_percent(xy_session_for_module):
+def test_tool_refuses_percent(tools):
     """A tool refuses 50% although the parser lets it through as 50"""
-    tools = Tools(session=xy_session_for_module)
     with pytest.raises(ToolError) as error:
         tools.r_univar(map="doesnotexist", flags="g", nprocs="50%")
     assert "Invalid value <50%> for option <nprocs>" in error.value.stderr
@@ -78,14 +70,17 @@ def test_positive_as_given(xy_session_for_module, answer, expected):
     assert numbers[0] == expected
 
 
-def test_omp_num_threads_sets_only_the_default(xy_session_for_module, has_openmp):
-    """OMP_NUM_THREADS changes what 0 gives, but not what negative values give"""
-    if not has_openmp:
-        pytest.skip("GRASS is built without OpenMP")
+def test_omp_num_threads_sets_only_the_default(xy_session_for_module):
+    """OMP_NUM_THREADS changes what 0 gives, but not what negative values give,
+    which give at least one thread
+    """
     session = xy_session_for_module
+    returncode, numbers, stderr = nprocs_from_option(session, "2")
+    assert returncode == 0, stderr
+    if numbers[1] != 2:
+        pytest.skip("GRASS is built without OpenMP")
     assert nprocs_from_option(session, "0", "6")[1] == [6, 6]
-    assert (
-        nprocs_from_option(session, "-1", "1000")[1]
-        == nprocs_from_option(session, "-1")[1]
-    )
-    assert nprocs_from_option(session, "-100000", "6")[1] == [1, 1]
+    default = nprocs_from_option(session, "-1")[1]
+    assert default
+    assert nprocs_from_option(session, "-1", "1000")[1] == default
+    assert nprocs_from_option(session, "-100000")[1] == [1, 1]

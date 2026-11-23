@@ -1,4 +1,3 @@
-#include <ctype.h>
 #include <errno.h>
 #include <limits.h>
 #include <stdio.h>
@@ -22,8 +21,6 @@
  * not depend on OMP_NUM_THREADS. Without OpenMP, 0 and negative values
  * give one thread.
  *
- * The result can be passed to any library, not only to OpenMP.
- *
  * \param nprocs value of an nprocs option
  *
  * \return the number of threads, at least 1
@@ -32,25 +29,22 @@
  */
 int G_resolve_nprocs(int nprocs)
 {
-    if (nprocs > 0)
-        return nprocs;
 #if defined(_OPENMP)
     if (nprocs == 0)
         return omp_get_max_threads();
-    nprocs += omp_get_num_procs();
-    return nprocs < 1 ? 1 : nprocs;
-#else
-    return 1;
+    if (nprocs < 0)
+        nprocs += omp_get_num_procs();
 #endif
+    return nprocs < 1 ? 1 : nprocs;
 }
 
 /*!
  * \brief Read the number of threads from an nprocs option
  *
- * Call after G_parser(). The answer must be an integer, with optional
- * white space around it, and is resolved with G_resolve_nprocs().
- * Anything else is a fatal error naming the option, including answers
- * such as 2x which the parser accepts for an integer option.
+ * Call after G_parser(). The answer must be an integer, optionally with
+ * white space around it. Otherwise, the function ends with a fatal error
+ * naming the option, also for answers such as 2x which the parser accepts
+ * for an integer option. The integer is resolved with G_resolve_nprocs().
  *
  * The function does not set up OpenMP threads.
  *
@@ -62,21 +56,16 @@ int G_resolve_nprocs(int nprocs)
  */
 int G_nprocs_from_option(const struct Option *nprocs)
 {
-    const char *answer;
-    long value;
-    char *end;
-
     if (nprocs == NULL)
         G_fatal_error(_("Option is NULL."));
-    else if (nprocs->key == NULL)
+    if (nprocs->key == NULL)
         G_fatal_error(_("Option key is NULL."));
-    answer = nprocs->answer ? nprocs->answer : "";
+    const char *answer = nprocs->answer ? nprocs->answer : "";
+    char *end;
     errno = 0;
-    value = strtol(answer, &end, 10);
-    while (isspace((unsigned char)*end))
-        end++;
-    if (errno || end == answer || *end != '\0' || value > INT_MAX ||
-        value < INT_MIN)
+    long value = strtol(answer, &end, 10);
+    if (errno || end == answer || end[strspn(end, " \t\n\v\f\r")] != '\0' ||
+        value > INT_MAX || value < INT_MIN)
         G_fatal_error(
             _("Invalid value <%s> for option <%s>. Use an integer number of "
               "threads."),
@@ -88,7 +77,7 @@ int G_nprocs_from_option(const struct Option *nprocs)
     The intended usage is at the beginning of a C tool when parameters are
     processed, namely the G_OPT_M_NPROCS standard option.
 
-    The number of threads is read with G_nprocs_from_option(), see
+    The number of threads is read with G_nprocs_from_option(). See
     G_resolve_nprocs() for what 0 and negative values mean. Without
     OpenMP, the function warns when more than one thread is requested.
 
@@ -107,10 +96,9 @@ int G_set_omp_num_threads(struct Option *opt)
                          threads),
                       threads);
 #else
-    if (threads > 1) {
+    if (threads > 1)
         G_warning(_("GRASS is not compiled with OpenMP support, parallel "
                     "computation is disabled. Only one thread will be used."));
-    }
     threads = 1;
 #endif
     return threads;
