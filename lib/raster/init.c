@@ -101,17 +101,9 @@ static int init(void)
     if (cname && *cname) {
         /* ask gislib */
         R__.compression_type = G_compressor_number(cname);
-        if (R__.compression_type < 1) {
-            if (R__.compression_type < 0) {
-                G_warning(
-                    _("Unknown compression method <%s>, using default %s"),
-                    cname, G_compressor_name(G_default_compressor()));
-            }
-            if (R__.compression_type == 0) {
-                G_warning(_("No compression is not supported for GRASS raster "
-                            "maps, using default %s"),
-                          G_compressor_name(G_default_compressor()));
-            }
+        if (R__.compression_type < 0) {
+            G_warning(_("Unknown compression method <%s>, using default %s"),
+                      cname, G_compressor_name(G_default_compressor()));
             /* use default */
             R__.compression_type = G_default_compressor();
         }
