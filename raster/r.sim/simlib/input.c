@@ -62,8 +62,9 @@ void alloc_walkers(int max_walkers, Simulation *sim, const Outputs *outputs)
 {
     G_debug(1, "beginning memory allocation for walkers");
 
-    sim->w = (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));
+    sim->w = (struct walker *)G_calloc(max_walkers, sizeof(struct walker));
     sim->vavg = (struct point2D *)G_calloc(max_walkers, sizeof(struct point2D));
+    sim->max_walkers = max_walkers;
     if (outputs->outwalk != NULL)
         sim->stack =
             (struct point3D *)G_calloc(max_walkers, sizeof(struct point3D));

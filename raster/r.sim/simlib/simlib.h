@@ -5,7 +5,10 @@
  * \brief This is the interface for the simlib (SIMWE) library.
  */
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
+
+#include <grass/gis.h>
 
 #define EPS         1.e-7
 #define UNDEF       -9999
@@ -37,6 +40,7 @@ typedef struct {
     int timesec;        // Time how long the simulation runs [seconds]
     bool ts;            // Time series output
     double mintimestep; // Minimum time step for the simulation [seconds]
+    int64_t seed;       // Seed of the walkers' random numbers
 } Settings;
 
 typedef struct {
@@ -59,10 +63,10 @@ typedef struct {
     int nstack;            // Number of output walkers
     struct point3D *stack; // Output 3D walkers
     int maxwa;             // Number of total walkers
-    double rwalk;      // Number of input walkers per block as double precision
-    struct point3D *w; // Weight of walkers
+    double rwalk; // Number of input walkers per block as double precision
+    struct walker *w;
     struct point2D *vavg; // Average velocity of walkers
-
+    int max_walkers; // Number of allocated walkers, maxwa plus one per cell
 } Simulation;
 
 typedef struct {
@@ -161,6 +165,14 @@ struct point3D {
     double m;
 };
 
+// A walker with its weight m and its own random number state
+struct walker {
+    double x;
+    double y;
+    double m;
+    struct G_random_state state;
+};
+
 void alloc_grids_water(const Geometry *geometry, const Outputs *outputs,
                        Grids *grids);
 void alloc_grids_sediment(const Geometry *geometry, const Outputs *outputs,
@@ -197,9 +209,8 @@ void create_observation_points(ObservationPoints *points);
 void derivatives(const Geometry *geometry, float **elevation, double **dx,
                  double **dy);
 
-double simwe_rand(void);
-double gasdev(void);
-void gasdev_for_paralel(double *, double *);
+int64_t simwe_seed(const struct Option *seed, const struct Flag *generate);
+void gasdev(struct G_random_state *state, double *x, double *y);
 double amax1(double, double);
 double amin1(double, double);
 int min(int, int);

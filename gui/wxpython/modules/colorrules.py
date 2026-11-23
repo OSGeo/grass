@@ -1391,9 +1391,9 @@ class VectorColorTable(ColorTable):
             idx += 1
             self.properties["tmpColumn"] = name + "_" + str(idx)
 
-        modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
+        module_name = "v.db.addcolumn" if self.version7 else "v.db.addcol"
         RunCommand(
-            modul,
+            module_name,
             parent=self,
             map=self.inmap,
             layer=self.properties["layer"],
@@ -1406,9 +1406,9 @@ class VectorColorTable(ColorTable):
             return
 
         if self.inmap:
-            modul = "v.db.dropcolumn" if self.version7 else "v.db.dropcol"
+            module_name = "v.db.dropcolumn" if self.version7 else "v.db.dropcol"
             RunCommand(
-                modul,
+                module_name,
                 map=self.inmap,
                 layer=self.properties["layer"],
                 column=self.properties["tmpColumn"],
@@ -1475,9 +1475,9 @@ class VectorColorTable(ColorTable):
             self.columnsProp[self.attributeType]["name"]
             not in self.fromColumn.GetColumns()
         ):
-            modul = "v.db.addcolumn" if self.version7 else "v.db.addcol"
+            module_name = "v.db.addcolumn" if self.version7 else "v.db.addcol"
             RunCommand(
-                modul,
+                module_name,
                 map=self.inmap,
                 layer=self.properties["layer"],
                 columns="%s %s"

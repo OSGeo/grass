@@ -235,7 +235,7 @@ def status(args):
 def suggest_message(args):
     """Print suggestion for a commit message
 
-    Assumes that the version file was changed, but not commited yet,
+    Assumes that the version file was changed, but not committed yet,
     but it does not check that assumption.
 
     This shows a wrong commit message if going back from RCs,

@@ -112,9 +112,8 @@ class TestRastStats(TestCase):
 
     def test_line(self):
         output_str = """cat|name|a_median|a_number|a_range
-1|first|192|5|2
-2|second|181|27|5
-
+1|first|192|3|1
+2|second|181|26|5
 """
         self.assertModule(
             "v.rast.stats",

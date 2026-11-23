@@ -121,7 +121,7 @@ def available_cpus() -> int:
     return os.cpu_count() or 1
 
 
-def resolve_nprocs(nprocs: int | str) -> int:
+def resolve_nprocs(nprocs: int | str | None = None, env=None) -> int:
     """Resolve G_OPT_M_NPROCS into a worker count.
 
     Mirrors the semantics of ``G_set_omp_num_threads()`` in
@@ -129,8 +129,16 @@ def resolve_nprocs(nprocs: int | str) -> int:
     number is used as-is, a negative number means cpu_count + nprocs
     (clamped to at least 1).
 
+    When *nprocs* is None, it is NPROCS set with g.gisenv, which tools take
+    as the default of their nprocs option, or 0 when NPROCS is not set. This
+    needs a session, the current one or the one of *env*.
+
     .. versionadded:: 8.6
     """
+    if nprocs is None:
+        from .core import gisenv  # core imports this module
+
+        nprocs = gisenv(env=env).get("NPROCS") or 0
     n = int(nprocs)
     if n > 0:
         return n
@@ -501,8 +509,8 @@ def get_lib_path(modname, libname=None):
     from os import getenv
     from os.path import join, sep
 
-    if Path(getenv("GISBASE"), "etc", modname).is_dir():
-        path = join(os.getenv("GISBASE"), "etc", modname)
+    if Path(getenv("GRASS_ETCDIR"), modname).is_dir():
+        path = join(os.getenv("GRASS_ETCDIR"), modname)
     elif (
         getenv("GRASS_ADDON_BASE")
         and libname
@@ -671,7 +679,7 @@ def legalize_vector_name(name, fallback_prefix: str | None = "x") -> str:
         name = "{fallback_prefix}{name}".format(**locals())
     name = re.sub(r"[^A-Za-z0-9_]", "_", name, flags=re.ASCII)
     keywords = ["and", "or", "not"]
-    if name in keywords:
+    if name.lower() in keywords:
         name = "{name}_".format(**locals())
     return name
 

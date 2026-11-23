@@ -18,7 +18,7 @@ SLOPE = {
     "elevation": "elevation",
     "man_value": 0.1,
     "duration": 10,
-    "random_seed": 1,
+    "seed": 1,
     "nprocs": 1,
 }
 

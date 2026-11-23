@@ -17,13 +17,14 @@ SLOW_FLOW = {
     "elevation": ELEVATION,
     "man_value": 8,
     "diffusion_coeff": 0.05,
-    "random_seed": 1,
+    "seed": 1,
 }
 
 COMMON_KEYS = {
     "walkers_requested",
     "walkers_generated",
     "walkers_remaining",
+    "seed",
     "duration",
     "simulated_time",
     "time_step",
@@ -91,6 +92,7 @@ def test_json_summary(session_tools):
     assert summary["mean_source_rate"] > 0
     assert summary["mean_infiltration"] == 0
     assert summary["threads"] == 1
+    assert summary["seed"] == 1
 
     assert len(summary["outputs"]) == 1
     output = summary["outputs"][0]
@@ -132,7 +134,7 @@ def test_json_summary_stopped_early(session_tools):
         elevation=ELEVATION,
         depth="depth",
         duration=1,
-        random_seed=1,
+        seed=1,
         flags="p",
         format="json",
     ).json
@@ -195,6 +197,7 @@ def test_history(session_tools):
             "walkers_requested",
             "walkers_generated",
             "walkers_remaining",
+            "seed",
             "duration",
         ):
             assert history_value(history, key) == summary[key]

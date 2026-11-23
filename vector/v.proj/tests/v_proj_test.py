@@ -34,4 +34,4 @@ def test_smax_zero_matches_per_vertex_path(reprojection_session):
     batch = read_line_coords(tools, "batch")
     per_vertex = read_line_coords(tools, "per_vertex")
     assert len(batch) == 3
-    assert batch == pytest.approx(per_vertex)
+    assert batch == [pytest.approx(xy) for xy in per_vertex]

@@ -2,9 +2,9 @@ MODULE_TOPDIR = ..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 
-# Some source/*.md files exist only for the MkDocs website and have no man
+# Some source/*.md files exist only for the documentation site and have no man
 # page equivalent. index.md is the site landing page, keywords.md is a stub
-# for the tags plugin (the keyword index is rendered by MkDocs), and the
+# for the tags plugin (the keyword index is rendered by Zensical), and the
 # *_intro.md pages are navigation-only introductions. The remaining ones are
 # the developer and user guides installed from doc/ and doc/development/;
 # they are derived from those directories so a newly added guide is excluded
@@ -29,12 +29,13 @@ DSTFILES := \
 	$(MDDIR)/source/grass_icon.png \
 	$(MDDIR)/source/favicon.ico \
 	$(MDDIR)/source/grassdocs.css \
-	$(MDDIR)/scripts/hook_list_scripts.py \
+	$(MDDIR)/scripts/grass_markdown.py \
 	$(MDDIR)/source/index.md \
 	$(MDDIR)/overrides/main.html \
 	$(MDDIR)/overrides/partials/copyright.html \
 	$(MDDIR)/overrides/partials/footer.html \
 	$(MDDIR)/overrides/partials/actions.html \
+	$(MDDIR)/overrides/partials/content.html \
 	$(MDDIR)/overrides/partials/source.html \
 	$(MDDIR)/overrides/fragments/tags/default/listing.html \
 	$(MDDIR)/source/keywords.md \
@@ -93,35 +94,40 @@ manpages:
 
 define build
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_$(1).py $(2)
 endef
 
 define build_topics
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_topics.py
 endef
 
 define build_keywords
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_keywords.py
 endef
 
 define build_graphical_index
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_graphical_index.py
 endef
 
 define build_manual_gallery
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_manual_gallery.py
 endef
@@ -129,13 +135,15 @@ endef
 define build_pso
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	$(PYTHON) ./parser_standard_options.py -t "$(GRASS_HOME)/lib/gis/parser_standard_options.c" \
 	-f "grass" -o "$(HTMLDIR)/parser_standard_options.html" -p 'id="opts_table" class="scroolTable"'
 endef
 
 define build_pso_md
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
-	MDDIR="${MDDIR}" \
+	MDDIR="${MDDIR}" GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" \
+	GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./parser_standard_options.py -t "$(GRASS_HOME)/lib/gis/parser_standard_options.c" \
 	-f "grass" -o "$(MDDIR)/source/parser_standard_options.md"
@@ -148,11 +156,13 @@ $(MDDIR)/source/topics.md: $(ALL_MD)
 define build_class_graphical
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	$(PYTHON) ./build_class_graphical.py html $(HTMLDIR)
 endef
 
 define build_class_graphical_md
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	GRASS_DOCDIR="$(ARCH_DISTDIR)/docs/html" GRASS_MKDOCSDIR="$(ARCH_DISTDIR)/docs/mkdocs" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
 	$(PYTHON) ./build_class_graphical.py md $(MDDIR)/source
 endef
@@ -281,7 +291,7 @@ $(MDDIR)/source/development_intro.md: mkdocs/docs/development_intro.md
 $(MDDIR)/source/command_line_intro.md: mkdocs/docs/command_line_intro.md
 	$(INSTALL_DATA) $< $@
 
-$(MDDIR)/scripts/hook_list_scripts.py: mkdocs/scripts/hook_list_scripts.py | $(MDDIR)/scripts
+$(MDDIR)/scripts/grass_markdown.py: mkdocs/scripts/grass_markdown.py | $(MDDIR)/scripts
 	$(INSTALL_DATA) $< $@
 
 $(MDDIR)/scripts:
@@ -302,6 +312,9 @@ $(MDDIR)/overrides/partials/footer.html: mkdocs/overrides/partials/footer.html |
 $(MDDIR)/overrides/partials/actions.html: mkdocs/overrides/partials/actions.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
+$(MDDIR)/overrides/partials/content.html: mkdocs/overrides/partials/content.html | $(MDDIR)/overrides/partials
+	$(INSTALL_DATA) $< $@
+
 $(MDDIR)/overrides/partials/source.html: mkdocs/overrides/partials/source.html | $(MDDIR)/overrides/partials
 	$(INSTALL_DATA) $< $@
 
@@ -317,9 +330,11 @@ $(MDDIR)/overrides/fragments/tags/default/listing.html: mkdocs/overrides/fragmen
 build-mkdocs:
 	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
-	mkdocs build
+	PYTHONPATH="scripts$${PYTHONPATH:+:$$PYTHONPATH}" \
+	zensical build
 
 serve-mkdocs:
 	@cd $(MDDIR) ; SITE_NAME="GRASS $(GRASS_VERSION_NUMBER) Documentation" \
 	COPYRIGHT="&copy; 2003-$(GRASS_VERSION_DATE) GRASS Development Team, GRASS $(GRASS_VERSION_NUMBER) Documentation" \
-	mkdocs serve
+	PYTHONPATH="scripts$${PYTHONPATH:+:$$PYTHONPATH}" \
+	zensical serve

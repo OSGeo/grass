@@ -1912,7 +1912,11 @@ class VectorAreasPage(TitledPage):
             GError(parent=self, message=_("The polygon seems to have 0 areas"))
             self.parent.wizard.ShowPage(self.parent.samplingareapage)
             return
-        self.title.SetLabel(_("Select sample area 1 of " + str(self.areanum)))
+        self.title.SetLabel(
+            _("Select sample area {areas_count} of {area_num}").format(
+                areas_count=1, area_num=self.areanum
+            )
+        )
         grass.use_temp_region()
         if self._raster != self.rast:
             self.map_ = self.mapPanel.GetMap()

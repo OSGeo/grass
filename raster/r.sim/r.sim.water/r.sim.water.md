@@ -196,6 +196,7 @@ stored in the history of the output raster maps under the same keys (see
 | `walkers_requested` | Number of walkers from **nwalkers**, by default twice the number of cells | count |
 | `walkers_generated` | Walkers created, at least one per cell and more where the source rate is higher | count |
 | `walkers_remaining` | Walkers still in the domain at the end of the run | count |
+| `seed` | Seed of the random numbers, given or generated | |
 | `duration` | Requested simulation length (**duration**) | s |
 | `simulated_time` | Simulated time reached at the end of the run | s |
 | `time_step` | Simulated time per iteration | s |
@@ -221,7 +222,7 @@ Summary of a time series run with two output steps in JSON:
 
     ```sh
     r.sim.water elevation=elevation depth=depth discharge=discharge rain_value=50 \
-        man_value=0.05 nwalkers=100000 duration=20 output_step=10 random_seed=3 \
+        man_value=0.05 nwalkers=100000 duration=20 output_step=10 seed=3 \
         -t -p format=json
     ```
 
@@ -240,7 +241,7 @@ Summary of a time series run with two output steps in JSON:
         nwalkers=100000,
         duration=20,
         output_step=10,
-        random_seed=3,
+        seed=3,
         flags="tp",
         format="json",
     )
@@ -262,7 +263,7 @@ Summary of a time series run with two output steps in JSON:
         nwalkers=100000,
         duration=20,
         output_step=10,
-        random_seed=3,
+        seed=3,
         flags="tp",
         format="json",
     )
@@ -277,6 +278,7 @@ The printed summary:
     "walkers_requested": 100000,
     "walkers_generated": 120000,
     "walkers_remaining": 112724,
+    "seed": 3,
     "duration": 1200,
     "simulated_time": 1199.2085202681737,
     "time_step": 1.0631281208051186,
@@ -310,6 +312,38 @@ The printed summary:
     ]
 }
 ```
+
+### Random numbers and parallel processing
+
+The walkers are placed and moved using pseudo-random numbers. The seed
+is given by **seed**; without it, a seed is generated and
+recorded in the history of the output maps and in the run summary as
+`seed`, so that the run can be repeated. With more than one thread, the
+results differ slightly between thread counts and between repeated runs,
+since the order in which the walkers reach a cell depends on the
+threads. Use **nprocs=1** when results must be reproducible.
+
+### Performance
+
+To enable parallel processing, the user can specify the number of
+threads to be used with the **nprocs** parameter (default 1). Figures
+below show benchmark results for the `elevation` raster map of the
+SECREF North Carolina dataset at 4 m, 2 m and 1 m resolution with the
+default number of walkers, as the mean of 3 runs on Intel® Xeon® W-2295
+CPU @ 3.00GHz × 18. See the benchmark script in the source code for
+more details.
+
+The time step is derived from the cell size and the mean flow velocity,
+so the number of iterations, and with it the run time, depends on the
+terrain as well as on the number of cells. As a result, the benchmark
+results may vary depending on the study area.
+
+![time for r.sim.water with different numbers of cells](r_sim_water_benchmark_time.png)
+![speedup for r.sim.water with different numbers of cells](r_sim_water_benchmark_speedup.png)
+![efficiency for r.sim.water with different numbers of cells](r_sim_water_benchmark_efficiency.png)  
+*Figure: Benchmark shows execution time, parallel speedup and efficiency
+for different numbers of cells (33k, 131k and 525k); shading shows the
+range of the 3 runs.*
 
 ## EXAMPLE
 
@@ -400,7 +434,7 @@ Simulate 30 minutes of overland flow with a uniform rainfall excess of
 
     ```sh
     r.sim.water elevation=elevation man=mannings rain_value=20 depth=depth \
-        duration=30 random_seed=1
+        duration=30 seed=1
     ```
 
 === "Python (grass.script)"
@@ -413,7 +447,7 @@ Simulate 30 minutes of overland flow with a uniform rainfall excess of
         rain_value=20,
         depth="depth",
         duration=30,
-        random_seed=1,
+        seed=1,
     )
     ```
 
@@ -426,7 +460,7 @@ Simulate 30 minutes of overland flow with a uniform rainfall excess of
         rain_value=20,
         depth="depth",
         duration=30,
-        random_seed=1,
+        seed=1,
     )
     ```
 <!-- markdownlint-enable MD046 -->

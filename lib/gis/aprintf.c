@@ -14,10 +14,12 @@
  * \date 2020
  */
 
+#include <limits.h>
+#include <stdarg.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -35,7 +37,7 @@ struct options {
 };
 
 static int count_wide_chars(const char *);
-static int count_wide_chars_in_cols(const char *, int, int *);
+static int count_wide_chars_in_cols(const char *, int, ptrdiff_t *);
 static int ovprintf(struct options *, const char *, va_list);
 static int oprintf(struct options *, const char *, ...);
 static int oaprintf(struct options *, const char *, va_list);
@@ -73,7 +75,8 @@ static int count_wide_chars(const char *str)
  * \param[out] nbytes number of bytes (NULL for not counting)
  * \return number of wide characters in str
  */
-static int count_wide_chars_in_cols(const char *str, int ncols, int *nbytes)
+static int count_wide_chars_in_cols(const char *str, int ncols,
+                                    ptrdiff_t *nbytes)
 {
     const char *p = str - 1;
     int lead = 0, nwchars = 0;
@@ -266,9 +269,16 @@ static int oaprintf(struct options *opts, const char *format, va_list ap)
 
                             if (wcount) {
                                 /* if there are wide characters */
-                                if (prec > 0)
+                                if (prec > 0) {
+                                    ptrdiff_t nbytes;
+
                                     width += count_wide_chars_in_cols(s, prec,
-                                                                      &prec);
+                                                                      &nbytes);
+                                    if (nbytes > INT_MAX)
+                                        G_fatal_error(
+                                            _("String precision is too large"));
+                                    prec = (int)nbytes;
+                                }
                                 else if (prec < 0)
                                     width += wcount;
                                 p_spec = spec;

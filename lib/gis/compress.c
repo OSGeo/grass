@@ -242,6 +242,7 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
                       int number)
 {
     int bsize, nread, err;
+    ssize_t read_result;
     unsigned char *b;
 
     if (dst == NULL || nbytes <= 0) {
@@ -266,13 +267,13 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
     /* Read from the file until we get our bsize or an error */
     nread = 0;
     do {
-        err = read(fd, b + nread, bsize - nread);
-        if (err >= 0)
-            nread += err;
-    } while (err > 0 && nread < bsize);
+        read_result = read(fd, b + nread, bsize - nread);
+        if (read_result >= 0)
+            nread += read_result;
+    } while (read_result > 0 && nread < bsize);
 
-    if (err <= 0) {
-        if (err == 0)
+    if (read_result <= 0) {
+        if (read_result == 0)
             G_warning(_("Unable to read %d bytes: end of file"), rbytes);
         else
             G_warning(_("Unable to read %d bytes: %s"), rbytes,
@@ -345,7 +346,7 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
      * if dst is too small (i.e. compressed data is larger)
      */
     if (err > 0 && err < nbytes) {
-        dst_sz = err;
+        dst_sz = (int)err;
         /* Write the compression flag */
         compressed = G_COMPRESSED_YES;
         if (write(fd, &compressed, 1) != 1) {
