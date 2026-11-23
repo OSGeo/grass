@@ -114,20 +114,30 @@ class TrThread(threading.Thread):
         self.ifs = ifs
         self.inf = inf
         self.outf = outf
+        self.error = None
 
     def run(self):
         # cs2cs can exit before it reads all input, for example with invalid
         # parameters or when main() stops it. main() reports a failed cs2cs
         # from its exit status, so the broken pipe is not an error here.
         with suppress(BrokenPipeError), closing(self.outf):
-            while True:
-                line = self.inf.readline()
-                if not line:
-                    break
-                line = line.replace(self.ifs, " ")
-                line = encode(line)
-                self.outf.write(line)
-                self.outf.flush()
+            try:
+                while True:
+                    line = self.inf.readline()
+                    if not line:
+                        break
+                    line = line.replace(self.ifs, " ")
+                    line = encode(line)
+                    self.outf.write(line)
+                    self.outf.flush()
+            except BrokenPipeError:
+                raise
+            except Exception as error:
+                # Closing the pipe lets cs2cs exit successfully with only part
+                # of the input converted, so main() fails on this error. It is
+                # stored before the pipe is closed, so main() sees it once
+                # cs2cs exits, even when it does not wait for the thread.
+                self.error = error
 
 
 def main():
@@ -299,6 +309,8 @@ def main():
             if inf is not sys.stdin:
                 tr.join()
 
+    if tr.error:
+        gcore.fatal(_("Unable to process input data: {}").format(tr.error))
     if p.returncode != 0:
         gcore.warning(_("Projection transform probably failed, please investigate"))
 
