@@ -2532,7 +2532,7 @@ def update_manual_page(module, source=None):
     # read original html file
     htmlfile = os.path.join(options["prefix"], "docs", "html", module + ".html")
     try:
-        oldfile = open(htmlfile)
+        oldfile = open(htmlfile, encoding="utf-8")
         shtml = oldfile.read()
     except OSError as error:
         gs.fatal(_("Unable to read manual page: %s") % error)
@@ -2579,7 +2579,7 @@ def update_manual_page(module, source=None):
 
     # write updated html file
     try:
-        newfile = open(htmlfile, "w")
+        newfile = open(htmlfile, "w", encoding="utf-8")
         newfile.write(ohtml)
     except OSError as error:
         gs.fatal(_("Unable for write manual page: %s") % error)
