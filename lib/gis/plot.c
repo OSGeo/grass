@@ -401,7 +401,7 @@ static double wrap_east(double e0, double e1)
 int G_plot_polygon(const double *x, const double *y, int n)
 {
     int i;
-    int pole;
+    // int pole;
     double x0, x1;
     double y0, y1;
     double shift, E, W = 0L;
@@ -533,7 +533,7 @@ int G_plot_polygon(const double *x, const double *y, int n)
 int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
 {
     int i, j, n;
-    int pole;
+    // int pole;
     double x0, x1, *x;
     double y0, y1, *y;
     double shift, E, W = 0L;
