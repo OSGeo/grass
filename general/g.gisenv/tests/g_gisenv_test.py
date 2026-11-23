@@ -117,9 +117,10 @@ def nprocs_tools(tools):
     return tools
 
 
-def test_nprocs_can_be_read_back(nprocs_tools):
+def test_nprocs_can_be_read_back(tools):
     """NPROCS set with g.gisenv can be read back"""
-    assert nprocs_tools.g_gisenv(get="NPROCS").text == "3"
+    tools.g_gisenv(set="NPROCS=3")
+    assert tools.g_gisenv(get="NPROCS").text == "3"
 
 
 def test_nprocs_is_default_of_tools(nprocs_tools):
