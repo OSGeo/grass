@@ -108,6 +108,12 @@ def test_set_store_mapset_stores_variable_in_var_file(tools):
     assert "TESTVAR: hello" in var_file.read_text(encoding="utf-8")
 
 
+def test_nprocs_can_be_read_back(tools):
+    """NPROCS set with g.gisenv can be read back"""
+    tools.g_gisenv(set="NPROCS=3")
+    assert tools.g_gisenv(get="NPROCS").text == "3"
+
+
 @pytest.fixture
 def nprocs_tools(tools):
     """Tools in a session with NPROCS set to 3 and a raster map named ones"""
@@ -115,12 +121,6 @@ def nprocs_tools(tools):
     tools.g_region(rows=2, cols=2)
     tools.r_mapcalc(expression="ones = 1")
     return tools
-
-
-def test_nprocs_can_be_read_back(tools):
-    """NPROCS set with g.gisenv can be read back"""
-    tools.g_gisenv(set="NPROCS=3")
-    assert tools.g_gisenv(get="NPROCS").text == "3"
 
 
 def test_nprocs_is_default_of_tools(nprocs_tools):
