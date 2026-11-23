@@ -3,3 +3,7 @@
 default: true
 
 MD041: false # first-line-h1
+
+# Long URLs in shell commands cannot be wrapped
+MD013:
+  code_blocks: false
