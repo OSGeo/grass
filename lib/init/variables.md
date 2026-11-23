@@ -547,7 +547,8 @@ g.gisenv set="MEMORYMB=6000"
 NPROCS  
 sets the number of threads for parallel computing
 (the default of the **nprocs** option of tools). When it is not set,
-tools use all available threads.
+tools use all available threads unless their documentation says
+otherwise.
 
 ```sh
 # set to use 12 threads
