@@ -270,8 +270,8 @@ static void slowline(double x1, double y1, double x2, double y2)
             y1 = y2;
             y2 = tmp;
 
-            dx = x2 - x1;
-            dy = y2 - y1;
+            dx = -dx;
+            dy = -dy;
         }
         m = dy / dx;
         xstart = ifloor(x1 + 0.5);
@@ -303,8 +303,8 @@ static void slowline(double x1, double y1, double x2, double y2)
             y1 = y2;
             y2 = tmp;
 
-            dx = x2 - x1;
-            dy = y2 - y1;
+            dx = -dx;
+            dy = -dy;
         }
         m = dx / dy;
         ystart = ifloor(y1 + 0.5);
@@ -424,7 +424,7 @@ int G_plot_polygon(const double *x, const double *y, int n)
         /*
            pole = G_pole_in_polygon(x,y,n);
          */
-        pole = 0;
+        // pole = 0;
 
         e0 = x[n - 1];
         E = W = e0;
@@ -432,8 +432,9 @@ int G_plot_polygon(const double *x, const double *y, int n)
         x0 = X(e0);
         y0 = Y(y[n - 1]);
 
+        /* dead code since version 4.1
         if (pole && !edge(x0, y0, x0, Y(90.0 * pole)))
-            return NO_MEMORY;
+            return NO_MEMORY; */
 
         for (i = 0; i < n; i++) {
             e1 = wrap_east(e0, x[i]);
@@ -452,8 +453,9 @@ int G_plot_polygon(const double *x, const double *y, int n)
             y0 = y1;
             e0 = e1;
         }
+        /* dead code since version 4.1
         if (pole && !edge(x0, y0, x0, Y(90.0 * pole)))
-            return NO_MEMORY;
+            return NO_MEMORY; */
 
         shift = 0; /* shift into window */
         while (E + shift > st->window.east)
@@ -560,7 +562,7 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
             /*
                pole = G_pole_in_polygon(x,y,n);
              */
-            pole = 0;
+            // pole = 0;
 
             e0 = x[n - 1];
             E = W = e0;
@@ -568,8 +570,9 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
             x0 = X(e0);
             y0 = Y(y[n - 1]);
 
+            /* dead code since version 4.1
             if (pole && !edge(x0, y0, x0, Y(90.0 * pole)))
-                return NO_MEMORY;
+                return NO_MEMORY; */
 
             for (i = 0; i < n; i++) {
                 e1 = wrap_east(e0, x[i]);
@@ -588,8 +591,9 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
                 y0 = y1;
                 e0 = e1;
             }
+            /* dead code since version 4.1
             if (pole && !edge(x0, y0, x0, Y(90.0 * pole)))
-                return NO_MEMORY;
+                return NO_MEMORY; */
 
             shift = 0; /* shift into window */
             while (E + shift > st->window.east)
@@ -662,18 +666,19 @@ static int edge(double x0, double y0, double x1, double y1)
     int ystart, ystop;
     int exp;
 
-    /* tolerance to avoid FPE */
-    d = GRASS_EPSILON;
-    if (y0 != y1) {
-        if (fabs(y0) > fabs(y1))
-            d = fabs(y0);
-        else
-            d = fabs(y1);
+    /* Ignore horizontal edges */
+    if (y0 == y1)
+        return 1;
 
-        d = frexp(d, &exp);
-        exp -= 53;
-        d = ldexp(d, exp);
-    }
+    /* tolerance to avoid FPE */
+    if (fabs(y0) > fabs(y1))
+        d = fabs(y0);
+    else
+        d = fabs(y1);
+
+    d = frexp(d, &exp);
+    exp -= 53;
+    d = ldexp(d, exp);
 
     if (fabs(y0 - y1) < d)
         return 1;
