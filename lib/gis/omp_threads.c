@@ -1,3 +1,6 @@
+#include <ctype.h>
+#include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,14 +12,85 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+/*!
+ * \brief Resolve a value of nprocs into a number of threads
+ *
+ * A positive value is the number of threads. With OpenMP, 0 means the
+ * OpenMP default (omp_get_max_threads()), which follows the
+ * OMP_NUM_THREADS environment variable when it is set, and a negative
+ * value is that many threads fewer than the number of processors
+ * available to the process (omp_get_num_procs()), at least one, whatever
+ * OMP_NUM_THREADS is. Without OpenMP, 0 and negative values give one
+ * thread.
+ *
+ * The result can be passed to any library, not only to OpenMP.
+ *
+ * \param nprocs value of an nprocs option
+ *
+ * \return the number of threads, at least 1
+ *
+ * \since version 8.6
+ */
+int G_resolve_nprocs(int nprocs)
+{
+    if (nprocs > 0)
+        return nprocs;
+#if defined(_OPENMP)
+    if (nprocs == 0)
+        return omp_get_max_threads();
+    nprocs += omp_get_num_procs();
+    return nprocs < 1 ? 1 : nprocs;
+#else
+    return 1;
+#endif
+}
+
+/*!
+ * \brief Read the number of threads from an nprocs option
+ *
+ * Call after G_parser(). The answer must be an integer, with optional
+ * white space around it, and is resolved with G_resolve_nprocs().
+ * Anything else is a fatal error naming the option, including answers
+ * such as 2x which the parser accepts for an integer option.
+ *
+ * The function only reads the number and does not set up OpenMP threads,
+ * so the number can be passed to any library.
+ *
+ * \param nprocs an nprocs option, usually G_OPT_M_NPROCS
+ *
+ * \return the number of threads, at least 1
+ *
+ * \since version 8.6
+ */
+int G_nprocs_from_option(const struct Option *nprocs)
+{
+    const char *answer;
+    long value;
+    char *end;
+
+    if (nprocs == NULL)
+        G_fatal_error(_("Option is NULL."));
+    else if (nprocs->key == NULL)
+        G_fatal_error(_("Option key is NULL."));
+    answer = nprocs->answer ? nprocs->answer : "";
+    errno = 0;
+    value = strtol(answer, &end, 10);
+    while (isspace((unsigned char)*end))
+        end++;
+    if (errno || end == answer || *end != '\0' || value > INT_MAX ||
+        value < INT_MIN)
+        G_fatal_error(_("Invalid number of threads <%s> for %s="), answer,
+                      nprocs->key);
+    return G_resolve_nprocs((int)value);
+}
+
 /*! \brief Set the number of threads for OpenMP
     The intended usage is at the beginning of a C tool when parameters are
     processed, namely the G_OPT_M_NPROCS standard option.
 
-    If \em nprocs is set to 0, default OpenMP internal logic is used.
-    If \em nprocs is a positive number, specified number of threads is used.
-    If \em nprocs is a negative number, then <em>maximum threads - number</em>
-    is used instead (e.g. to keep \em number of cores free for other use.
+    The number of threads is read with G_nprocs_from_option(), see
+    G_resolve_nprocs() for what 0 and negative values mean. Without
+    OpenMP, the function warns when more than one thread is requested.
 
     \param opt A nprocs Option struct to specify the number of threads
     \return the number of threads set up for OpenMP parallel computing
@@ -25,31 +99,15 @@
 */
 int G_set_omp_num_threads(struct Option *opt)
 {
-    /* make sure Option is not null */
-    if (opt == NULL)
-        G_fatal_error(_("Option is NULL."));
-    else if (opt->key == NULL)
-        G_fatal_error(_("Option key is NULL."));
-
-    int threads = atoi(opt->answer);
+    int threads = G_nprocs_from_option(opt);
 #if defined(_OPENMP)
-    if (threads == 0) {
-        threads = omp_get_max_threads();
-    }
-    else {
-        int num_logic_procs = omp_get_num_procs();
-        if (threads < 1) {
-            threads += num_logic_procs;
-            threads = (threads < 1) ? 1 : threads;
-        }
-        omp_set_num_threads(threads);
-    }
+    omp_set_num_threads(threads);
     G_verbose_message(n_("One thread is set up for parallel computing.",
                          "%d threads are set up for parallel computing.",
                          threads),
                       threads);
 #else
-    if (!(threads == 0 || threads == 1)) {
+    if (threads > 1) {
         G_warning(_("GRASS is not compiled with OpenMP support, parallel "
                     "computation is disabled. Only one thread will be used."));
     }
