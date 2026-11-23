@@ -15,13 +15,12 @@
 /*!
  * \brief Resolve a value of nprocs into a number of threads
  *
- * A positive value is the number of threads. With OpenMP, 0 means the
- * OpenMP default (omp_get_max_threads()), which follows the
- * OMP_NUM_THREADS environment variable when it is set, and a negative
- * value is that many threads fewer than the number of processors
- * available to the process (omp_get_num_procs()), at least one, whatever
- * OMP_NUM_THREADS is. Without OpenMP, 0 and negative values give one
- * thread.
+ * A positive value is the number of threads. With OpenMP, 0 is the
+ * OpenMP default (omp_get_max_threads()), which follows OMP_NUM_THREADS.
+ * A negative value is that many threads fewer than the processors
+ * available to the process (omp_get_num_procs()), at least one, and does
+ * not depend on OMP_NUM_THREADS. Without OpenMP, 0 and negative values
+ * give one thread.
  *
  * The result can be passed to any library, not only to OpenMP.
  *
@@ -53,8 +52,7 @@ int G_resolve_nprocs(int nprocs)
  * Anything else is a fatal error naming the option, including answers
  * such as 2x which the parser accepts for an integer option.
  *
- * The function only reads the number and does not set up OpenMP threads,
- * so the number can be passed to any library.
+ * The function does not set up OpenMP threads.
  *
  * \param nprocs an nprocs option, usually G_OPT_M_NPROCS
  *
@@ -79,8 +77,10 @@ int G_nprocs_from_option(const struct Option *nprocs)
         end++;
     if (errno || end == answer || *end != '\0' || value > INT_MAX ||
         value < INT_MIN)
-        G_fatal_error(_("Invalid number of threads <%s> for %s="), answer,
-                      nprocs->key);
+        G_fatal_error(
+            _("Invalid value <%s> for option <%s>. Use an integer number of "
+              "threads."),
+            answer, nprocs->key);
     return G_resolve_nprocs((int)value);
 }
 

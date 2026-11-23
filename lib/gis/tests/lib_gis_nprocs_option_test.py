@@ -54,12 +54,12 @@ def has_openmp(xy_session_for_module):
     return numbers == [2, 2]
 
 
-@pytest.mark.parametrize("answer", ["99999999999", "", "2x", "50%"])
+@pytest.mark.parametrize("answer", ["99999999999", "", "2x"])
 def test_not_an_int(xy_session_for_module, answer):
     """An answer which is not an int is an error naming the option"""
     returncode, _, stderr = nprocs_from_option(xy_session_for_module, answer)
     assert returncode != 0
-    assert f"Invalid number of threads <{answer}> for nprocs=" in stderr
+    assert f"Invalid value <{answer}> for option <nprocs>" in stderr
 
 
 def test_tool_refuses_percent(xy_session_for_module):
@@ -67,7 +67,7 @@ def test_tool_refuses_percent(xy_session_for_module):
     tools = Tools(session=xy_session_for_module)
     with pytest.raises(ToolError) as error:
         tools.r_univar(map="doesnotexist", flags="g", nprocs="50%")
-    assert "Invalid number of threads <50%> for nprocs=" in error.value.stderr
+    assert "Invalid value <50%> for option <nprocs>" in error.value.stderr
 
 
 @pytest.mark.parametrize(("answer", "expected"), [(" 3 \n", 3), ("100", 100)])
@@ -85,7 +85,7 @@ def test_omp_num_threads_sets_only_the_default(xy_session_for_module, has_openmp
     session = xy_session_for_module
     assert nprocs_from_option(session, "0", "6")[1] == [6, 6]
     assert (
-        nprocs_from_option(session, "-1", "1")[1]
+        nprocs_from_option(session, "-1", "1000")[1]
         == nprocs_from_option(session, "-1")[1]
     )
     assert nprocs_from_option(session, "-100000", "6")[1] == [1, 1]
