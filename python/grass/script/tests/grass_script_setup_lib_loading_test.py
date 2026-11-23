@@ -5,9 +5,9 @@
 
 This file is meant to be executed also standalone (pytest with this file as
 the only argument). The tests run their code in a subprocess without the
-dynamic library search path variable, so finding the libraries depends only
-on the variables init sets in the environment of the running process and on
-the search path recorded in the libraries at build time.
+dynamic library search path variable, so the libraries which a loaded
+library depends on must resolve without it, for example, through the search
+path recorded in the libraries at build time.
 """
 
 import sys
@@ -52,13 +52,13 @@ def test_grass_lib_usable_after_init(
     project = tmp_path / "test"
     code = f"""
         import json
+
+        import grass.lib.gis as libgis
+        import grass.lib.raster as libraster
         import grass.script as gs
 
         gs.create_project(r"{project}")
         with gs.setup.init(r"{project}"):
-            import grass.lib.gis as libgis
-            import grass.lib.raster as libraster
-
             libgis.G_gisinit(b"test")
             gs.run_command("g.region", rows=2, cols=2)
             gs.mapcalc("ones = 1")

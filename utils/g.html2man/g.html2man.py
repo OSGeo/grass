@@ -26,7 +26,7 @@ def fix(content):
 def main():
     # parse HTML
     infile = sys.argv[1]
-    with open(infile) as inf:
+    with open(infile, encoding="utf-8") as inf:
         p = HTMLParser(entities)
         for n, line in enumerate(inf):
             try:

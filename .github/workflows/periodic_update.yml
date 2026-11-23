@@ -134,11 +134,18 @@ jobs:
       - name: Preview changed files, except for the POT-Creation-Date
         run: |
           git diff --ignore-matching-lines=^\"POT-Creation-Date:  | head -n2000
+      - name: Revert files with only a POT-Creation-Date change
+        run: |
+          git diff --name-only -z | while IFS= read -r -d '' file; do
+            if git diff --exit-code --quiet --ignore-matching-lines=^\"POT-Creation-Date: -- "${file}"; then
+              echo "Reverting ${file}, only the POT-Creation-Date changed"
+              git restore -- "${file}"
+            fi
+          done
       - name: Get if files were updated
         id: changed-files
         continue-on-error: true
-        run: |
-          git diff --exit-code --quiet --ignore-matching-lines=^\"POT-Creation-Date:
+        run: git diff --exit-code --quiet
       - name: Translation files were changed
         if: ${{ steps.changed-files.outcome == 'failure' }}
         run: echo "Translation files were changed"
