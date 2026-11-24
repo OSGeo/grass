@@ -58,18 +58,18 @@ def extract_tar(name, directory, tmpdir):
         3,
     )
     try:
-        tar = tarfile.open(name)
-        extract_dir = os.path.join(tmpdir, "extract_dir")
-        Path(extract_dir).mkdir()
+        with tarfile.open(name) as tar:
+            extract_dir = os.path.join(tmpdir, "extract_dir")
+            Path(extract_dir).mkdir()
 
-        # The 'data' extraction filter was added in Python 3.12 and backported
-        # to 3.11.4 (PEP 706). Refuse to extract without it rather
-        # than extracting unsafely.
-        if not hasattr(tarfile, "data_filter"):
-            raise DownloadError(
-                _("Extracting may be unsafe; upgrade Python to 3.11.4 or newer")
-            )
-        tar.extractall(path=extract_dir, filter="data")
+            # The 'data' extraction filter was added in Python 3.12 and backported
+            # to 3.11.4 (PEP 706). Refuse to extract without it rather
+            # than extracting unsafely.
+            if not hasattr(tarfile, "data_filter"):
+                raise DownloadError(
+                    _("Extracting may be unsafe; upgrade Python to 3.11.4 or newer")
+                )
+            tar.extractall(path=extract_dir, filter="data")
 
         files = os.listdir(extract_dir)
         _move_extracted_files(
@@ -97,15 +97,15 @@ def extract_zip(name, directory, tmpdir):
         3,
     )
     try:
-        zip_file = zipfile.ZipFile(name, mode="r")
-        file_list = zip_file.namelist()
-        # we suppose we can write to parent of the given dir
-        # (supposing a tmp dir)
-        extract_dir = os.path.join(tmpdir, "extract_dir")
-        Path(extract_dir).mkdir()
-        for subfile in file_list:
-            # this should be safe in Python 2.7.4
-            zip_file.extract(subfile, extract_dir)
+        with zipfile.ZipFile(name, mode="r") as zip_file:
+            file_list = zip_file.namelist()
+            # we suppose we can write to parent of the given dir
+            # (supposing a tmp dir)
+            extract_dir = os.path.join(tmpdir, "extract_dir")
+            Path(extract_dir).mkdir()
+            for subfile in file_list:
+                # this should be safe in Python 2.7.4
+                zip_file.extract(subfile, extract_dir)
         files = os.listdir(extract_dir)
         _move_extracted_files(
             extract_dir=extract_dir, target_dir=directory, files=files
