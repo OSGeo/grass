@@ -273,8 +273,8 @@ between 32bit and 64bit machines.
 
 All GRASS raster map types are by default ZSTD compressed if
 available, otherwise ZLIB compressed. Through the environment variable
-`GRASS_COMPRESSOR` the compression method can be set to RLE, ZLIB, LZ4,
-BZIP2, or ZSTD.
+`GRASS_COMPRESSOR` the compression method can be set to NONE (no
+compression), RLE, ZLIB, LZ4, BZIP2, or ZSTD.
 
 Important: the NULL file compression can be turned off with
 `export GRASS_COMPRESS_NULLS=0`. Raster maps with NULL file compression
@@ -288,6 +288,16 @@ However, this is not recommended.
 Floating point (FCELL, DCELL) raster maps never use RLE compression;
 they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are
 uncompressed.
+
+**NONE**  
+No compression. Uncompressed raster maps are faster to write and read
+but larger, which suits short-lived or temporary maps such as
+intermediate results. In measurements with large synthetic maps on local
+disks, tools writing floating-point maps took 0.5 to 0.95 times as long
+as with ZSTD for 1.2 to 2.3 times larger files, while integer (CELL)
+maps, which compress well, gained little or no time at low thread counts
+and were 2.8 times larger. The NULL file is still compressed unless
+`GRASS_COMPRESS_NULLS=0` is set.
 
 **RLE**  
 **DEPRECATED** Run-Length Encoding, poor compression ratio but fast. It
@@ -325,8 +335,9 @@ than BZIP2 (for large data). ZSTD compresses up to 4x faster than ZLIB,
 and usually decompresses 6x faster than ZLIB. ZSTD is the default
 compression method if available.
 
-In the internal cellhd file, the value for "compressed" is 1 for RLE, 2
-for ZLIB, 3 for LZ4,4 for BZIP2, and 5 for ZSTD.
+In the internal cellhd file, the value for "compressed" is 0 for
+uncompressed maps (NONE), 1 for RLE, 2 for ZLIB, 3 for LZ4, 4 for
+BZIP2, and 5 for ZSTD.
 
 Obviously, decompression is controlled by the raster map's compression,
 not the environment variable.
