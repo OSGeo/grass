@@ -107,10 +107,11 @@ def separator(sep: str) -> str:
 
 
 def available_cpus() -> int:
-    """Number of CPUs this process may actually use.
+    """Number of CPUs this process may use, from its affinity mask if available.
 
-    Prefers affinity-aware sources over ``os.cpu_count()``, which reports
-    the host total and overcounts in containers and cgroup-limited jobs.
+    This follows CPU pinning and cpusets (taskset, Slurm, docker
+    --cpuset-cpus), but not a CPU quota (docker --cpus, Kubernetes CPU
+    limits).
 
     .. versionadded:: 8.6
     """
