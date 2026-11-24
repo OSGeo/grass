@@ -1796,7 +1796,9 @@ class DataCatalogTree(TreeView):
                         continue
 
                 def callback(
+                    event,
                     env2=env2,
+                    env=env,
                     gisrc2=gisrc2,
                     gisrc=gisrc,
                     cLayer=self.copy_layer[i],
@@ -1806,7 +1808,16 @@ class DataCatalogTree(TreeView):
                     name=new_name,
                 ):
                     self._onDoneReprojection(
-                        env2, gisrc2, gisrc, cLayer, cMapset, cMode, sMapset, name
+                        event,
+                        env2,
+                        env,
+                        gisrc2,
+                        gisrc,
+                        cLayer,
+                        cMapset,
+                        cMode,
+                        sMapset,
+                        name,
                     )
 
                 dlg = CatalogReprojectionDialog(
@@ -1831,21 +1842,45 @@ class DataCatalogTree(TreeView):
         self._resetCopyVariables()
 
     def _onDoneReprojection(
-        self, iEnv, iGisrc, oGisrc, cLayer, cMapset, cMode, sMapset, name
+        self, event, iEnv, oEnv, iGisrc, oGisrc, cLayer, cMapset, cMode, sMapset, name
     ):
-        self._giface.grassdbChanged.emit(
-            grassdb=sMapset.parent.parent.data["name"],
-            location=sMapset.parent.data["name"],
-            mapset=sMapset.data["name"],
-            element=cLayer.data["type"],
-            map=name,
-            action="new",
-        )
-        if not cMode:
-            self._removeMapAfterCopy(cLayer, cMapset, iEnv)
+        if (
+            event.returncode == 0
+            and not event.aborted
+            and map_exists(
+                name, element=cLayer.data["type"], env=oEnv, mapset=sMapset.data["name"]
+            )
+        ):
+            self._giface.grassdbChanged.emit(
+                grassdb=sMapset.parent.parent.data["name"],
+                location=sMapset.parent.data["name"],
+                mapset=sMapset.data["name"],
+                element=cLayer.data["type"],
+                map=name,
+                action="new",
+            )
+            if not cMode and self._canRemoveMap(cLayer, cMapset, iEnv):
+                self._removeMapAfterCopy(cLayer, cMapset, iEnv)
         gs.try_remove(iGisrc)
         gs.try_remove(oGisrc)
         self.ExpandNode(sMapset, recursive=False)
+
+    def _canRemoveMap(self, cLayer, cMapset, env):
+        """Check that the source map can be removed after its reprojection"""
+        if cLayer.data["type"] != "vector":
+            return True
+        # v.proj exits successfully without creating the map for an empty
+        # input, so a map of the same name in the target is not its output.
+        source = f"{cLayer.data['name']}@{cMapset.data['name']}"
+        try:
+            return bool(gs.vector_info_topo(source, env=env)["primitives"])
+        except CalledModuleError:
+            self._giface.WriteWarning(
+                _("Unable to read vector map <{}>, so it was not removed.").format(
+                    source
+                )
+            )
+            return False
 
     def _removeMapAfterCopy(self, cLayer, cMapset, env):
         removed, cmd = self._runCommand(

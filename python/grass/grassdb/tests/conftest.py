@@ -6,6 +6,16 @@ import grass.script as gs
 
 
 @pytest.fixture(scope="module")
+def session_with_raster(tmp_path_factory):
+    """Session in an XY project with raster r1 in PERMANENT"""
+    project = tmp_path_factory.mktemp("map_exists") / "xy_test"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        gs.mapcalc("r1 = 1", env=session.env)
+        yield session
+
+
+@pytest.fixture(scope="module")
 def pack_raster_file4x5_rows(tmp_path_factory):
     """Native raster in pack format in EPSG:3358"""
     tmp_path = tmp_path_factory.mktemp("pack_raster")

@@ -254,4 +254,4 @@ class CatalogReprojectionDialog(wx.Dialog):
         event.Skip()
 
     def _onDone(self, event):
-        self.callback()
+        self.callback(event)
