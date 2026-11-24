@@ -242,7 +242,7 @@ cross-validation procedure.
 ### Performance
 
 The user can specify the number of
-threads to be used with the **nprocs** parameter. With more than one
+threads to be used with the **nprocs** parameter (default 1). With more than one
 thread, the results are the same, but the points of **deviations** and
 **cvdev** come out in a varying order and with varying categories. Figures 1
 and 2 show benchmark results running on Intel® Core™ i5-10210U CPU @
