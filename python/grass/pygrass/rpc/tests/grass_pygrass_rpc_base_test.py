@@ -69,6 +69,20 @@ def test_client_waiting_for_reply_gets_error_when_server_crashes(provider):
     what wakes the client.
     """
     raised = []
+    receiving = threading.Event()
+
+    class SignalingConnection:
+        """Connection which sets receiving when recv() is called on it"""
+
+        def __init__(self, conn):
+            self.conn = conn
+
+        def recv(self):
+            receiving.set()
+            return self.conn.recv()
+
+        def __getattr__(self, name):
+            return getattr(self.conn, name)
 
     def wait_for_reply():
         try:
@@ -78,10 +92,13 @@ def test_client_waiting_for_reply_gets_error_when_server_crashes(provider):
 
     # The server ignores this request and does not send a reply.
     provider.client_conn.send([2])
+    # The checker thread replaces client_conn when it restarts the server. The
+    # server is crashed only once the client called recv() on the original
+    # connection, so the client cannot pick up the new one and block on it.
+    provider.client_conn = SignalingConnection(provider.client_conn)
     client = threading.Thread(target=wait_for_reply, daemon=True)
     client.start()
-    # Give the client time to start waiting, then crash the server.
-    time.sleep(0.2)
+    assert receiving.wait(timeout=10), "The client did not start waiting"
     provider.server.kill()
     client.join(timeout=10)
     assert not client.is_alive(), "The client is still blocked"
