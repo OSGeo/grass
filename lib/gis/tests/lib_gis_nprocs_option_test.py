@@ -88,8 +88,8 @@ def test_omp_num_threads_sets_only_the_default(xy_session_for_module):
     # 0 is the OpenMP default, which OMP_NUM_THREADS sets.
     assert nprocs_from_option(session, "0", omp_num_threads="6")[1] == [6, 6]
     # -1 counts from the processors, so OMP_NUM_THREADS does not change it.
-    default = nprocs_from_option(session, "-1")[1]
-    assert default  # An empty list means that the helper process failed.
-    assert nprocs_from_option(session, "-1", omp_num_threads="1000")[1] == default
+    returncode, minus_one, stderr = nprocs_from_option(session, "-1")
+    assert returncode == 0, stderr
+    assert nprocs_from_option(session, "-1", omp_num_threads="1000")[1] == minus_one
     # Subtracting more than the number of processors still gives one thread.
     assert nprocs_from_option(session, "-100000")[1] == [1, 1]

@@ -17,9 +17,8 @@
  * A positive value is the number of threads. With OpenMP, 0 is the
  * OpenMP default (omp_get_max_threads()), which follows OMP_NUM_THREADS.
  * A negative value is that many threads fewer than the processors
- * available to the process (omp_get_num_procs()), at least one, and does
- * not depend on OMP_NUM_THREADS. Without OpenMP, 0 and negative values
- * give one thread.
+ * available to the process, at least one, and does not depend on
+ * OMP_NUM_THREADS. Without OpenMP, 0 and negative values give one thread.
  *
  * \param nprocs value of an nprocs option
  *
