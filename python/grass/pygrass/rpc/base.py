@@ -14,7 +14,6 @@ import logging
 import multiprocessing.util
 import sys
 import threading
-import time
 from typing import TYPE_CHECKING, NoReturn
 
 from grass.exceptions import FatalError
@@ -98,16 +97,21 @@ class RPCServerBase:
 
     """
 
+    #: Seconds between checks of the server process by the checker thread. It
+    #: bounds how long a crashed server goes unnoticed. It does not delay stop().
+    check_interval: float = 0.2
+
     def __init__(self) -> None:
         self.client_conn: Connection | None = None
         self.server_conn: Connection | None = None
         self.queue = None
         self.server = None
         self.checkThread: threading.Thread | None = None
+        # Set to ask the current checker thread to return.
+        self._checker_stop = threading.Event()
         self.threadLock = threading.Lock()
         self.start_server()
         self.start_checker_thread()
-        self.stopThread = False
         self.stopped = True
         # logging.basicConfig(level=logging.DEBUG)
 
@@ -121,26 +125,32 @@ class RPCServerBase:
         if self.checkThread is not None and self.checkThread.is_alive():
             self.stop_checker_thread()
 
-        self.checkThread = threading.Thread(target=self.thread_checker)
+        # Each thread gets its own event. A replaced thread keeps the event
+        # that was set for it and does not see the new one.
+        self._checker_stop = threading.Event()
+        self.checkThread = threading.Thread(
+            target=self.thread_checker, args=(self._checker_stop,)
+        )
         self.checkThread.daemon = True
-        self.stopThread = False
         self.checkThread.start()
 
     def stop_checker_thread(self):
-        with self.threadLock:
-            self.stopThread = True
+        self._checker_stop.set()
         if self.checkThread is not None:
             self.checkThread.join(None)
 
-    def thread_checker(self):
-        """Check every 200 micro seconds if the server process is alive"""
-        while True:
-            time.sleep(0.2)
-            # Check before restarting so that a server is not restarted
-            # once stop was requested.
-            with self.threadLock:
-                if self.stopThread is True:
-                    return
+    def thread_checker(self, stop: threading.Event):
+        """Restart the server whenever it is found dead, until stop is set
+
+        The server is checked every check_interval seconds. Waiting on the
+        event, and not sleeping, lets stop_checker_thread() end the thread at
+        once instead of after the remainder of the interval.
+
+        :param stop: Event which is set to ask this thread to return
+        """
+        # wait() returns True as soon as the event is set, so no restart is
+        # attempted once stop was requested.
+        while not stop.wait(self.check_interval):
             try:
                 self._check_restart_server(caller="Server check thread")
             except FatalError:
