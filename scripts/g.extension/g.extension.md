@@ -110,21 +110,21 @@ necessary to compile just in case of C).
 
 ### Using an alternative addon server (MS-Windows)
 
-On MS-Windows, *g.extension* downloads precompiled addon ZIPs from the official
-WinGRASS server (`http://wingrass.fsv.cvut.cz`) by default. The base URL of the
-server can be redirected to a mirror or a private addon server by setting
-`ADDONS_BASE_URL`. The setting affects both the addon listing (`g.extension -l`,
-`-c`, `-g`) and the install download URL, so listing and install always come
-from the same place.
+On MS-Windows, *g.extension* downloads precompiled addon ZIPs from the GRASS
+project server (`https://grass.osgeo.org/addons/`) by default. The ZIPs for the
+GRASS version and the CPU architecture in use are taken from there, for example
+from `.../addons/grass8/binaries/osgeo4w-x86_64/8.6.0/`. A private addon server
+can be used instead by setting `ADDONS_BASE_URL`. The setting affects both the
+addon listing (`g.extension -l`, `-c`, `-g`) and the install download URL, so
+listing and install always come from the same place.
 
 The alternative server must host the precompiled addon ZIPs in the directory
 layout `{base}/grass{MM}/addons/grass-{M.M.P}/` (for example
 `.../grass85/addons/grass-8.5.0/`), one ZIP per extension, together with a
 `modules.xml` file listing them in that same directory (and a `toolboxes.xml`
-file if toolbox operations with `-t` are to be used). Note that this setup
-differs from the official WinGRASS server, where the addon listing is served
-separately from `grass.osgeo.org`, so an exact mirror of the official server
-would install addons but fail on `g.extension -l`.
+file if toolbox operations with `-t` are to be used). Note that this layout
+differs from the one of the GRASS project server, so a copy of that server
+cannot be used as an alternative server as it is.
 
 The setting can be applied in two ways:
 
@@ -137,7 +137,7 @@ The setting can be applied in two ways:
 
 - As a shell environment variable named `GRASS_ADDONS_BASE_URL` (useful for
   one-off shell sessions or CI jobs). The environment variable takes precedence
-  over the gisenv setting; if neither is set, the default WinGRASS server is
+  over the gisenv setting; if neither is set, the GRASS project server is
   used.
 
 To revert to the default server, unset the value:
@@ -186,7 +186,7 @@ g.extension -l
 # Install an extension from it
 g.extension extension=r.tpi
 
-# Revert to the default WinGRASS server
+# Revert to the GRASS project server
 g.gisenv unset=ADDONS_BASE_URL
 ```
 
@@ -307,7 +307,7 @@ Toolboxes in the official repository cannot be downloaded.
 
 On MS-Windows, modules cannot be compiled locally (a Python replacement
 for Python scripts should be implemented), so *g.extension* installs
-precompiled binaries. These come from the official WinGRASS server by
+precompiled binaries. These come from the GRASS project server by
 default, but the server can be redirected to an alternative host that
 provides precompiled addon ZIPs together with a `modules.xml` listing
 (and a `toolboxes.xml` for `-t`) in the layout

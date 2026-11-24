@@ -198,13 +198,17 @@ The redirect to the latest `grassX` directory is defined on grass.osgeo.org:
 
 Procedure building of binaries (Windows):
 
-- Addons module are compiled on winGRASS build server, at the CTU in Prague) and
-  publishing their manual pages on publishing server, i.e. grass.osgeo.org.
-- A new compilation is triggered every time a commit is done in the Addons repo.
+- Addons are compiled every night by the CI of the Addons repo
+  (`.github/workflows/ci-windows.yml`) for the GRASS versions listed there and
+  published as pre-releases of the Addons repo.
+- A cronjob on grass.osgeo.org unpacks the newest ones to
+  `https://grass.osgeo.org/addons/grass8/binaries/`, where *g.extension*
+  downloads them from.
 - Logs:
   - Linux log files: <https://grass.osgeo.org/addons/grass8/logs> (compiled on
     `grasslxd` on `osgeo8`)
-  - Windows log files: <https://wingrass.fsv.cvut.cz/grass8X/addons/grass-XXXdev/logs/>
+  - Windows log files: `logs` subdirectory next to the addons, e.g.,
+    `https://grass.osgeo.org/addons/grass8/binaries/osgeo4w-x86_64/X.Y.Z/logs/`
 
 Procedure of granting write access to Addons repo:
 

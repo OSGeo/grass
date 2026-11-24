@@ -1615,12 +1615,33 @@ def get_addons_base_url_override():
 def addons_server_url(base):
     """Build the versioned addon directory URL under server root *base*.
 
+    This is the layout of an alternative addon server. For the official
+    server, see :func:`official_windows_addons_url`.
+
     *base* must have no trailing slash; the result has none either, so a file
     name is appended with a single separator (e.g. ``f"{url}/{name}.zip"``).
     """
     return (
         f"{base}/grass{VERSION[0]}{VERSION[1]}/addons/"
         f"grass-{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
+    )
+
+
+def official_windows_addons_url():
+    """Return URL of the directory with the official addons for MS-Windows.
+
+    The addons are compiled for each GRASS version and platform, which is
+    the distribution and the CPU architecture GRASS is compiled for, e.g.
+    ``https://grass.osgeo.org/addons/grass8/binaries/osgeo4w-x86_64/8.6.0``.
+    The result has no trailing slash.
+    """
+    # All GRASS builds for MS-Windows are OSGeo4W builds, the standalone
+    # installer contains one. The architecture is the first part of
+    # the build platform (x86_64-w64-mingw32).
+    arch = BUILD_PLATFORM.split("-")[0]
+    return (
+        f"https://grass.osgeo.org/addons/grass{VERSION[0]}/binaries/"
+        f"osgeo4w-{arch}/{VERSION[0]}.{VERSION[1]}.{VERSION[2]}"
     )
 
 
@@ -1643,8 +1664,9 @@ def install_extension_win(name, url=None):
             )
         zip_url = url
     else:
-        base = get_addons_base_url_override() or "http://wingrass.fsv.cvut.cz"
-        zip_url = f"{addons_server_url(base)}/{name}.zip"
+        base = get_addons_base_url_override()
+        directory = addons_server_url(base) if base else official_windows_addons_url()
+        zip_url = f"{directory}/{name}.zip"
 
     # resolve ZIP URL
     source, url = resolve_source_code(url=zip_url)
@@ -3010,5 +3032,6 @@ if __name__ == "__main__":
 
     grass_version = gs.version()
     VERSION = grass_version["version"].split(".")
+    BUILD_PLATFORM = grass_version["build_platform"]
 
     sys.exit(main())
