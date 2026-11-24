@@ -32,8 +32,7 @@ variable `GRASS_ZLIB_LEVEL`.
 Compressed raster maps may be decompressed using *r.compress* with the
 **-u** flag. If a raster map was already decompressed and the **-u**
 flag is set, the module simply informs the user that the map is already
-decompressed and exits. With `GRASS_COMPRESSOR=NONE`, *r.compress*
-without **-u** also writes the map uncompressed.
+decompressed and exits.
 
 Information about the compression method and data type of the input
 raster map(s) can be printed in shell style with the **-g** flag. In
@@ -58,8 +57,7 @@ compression is indicated with "YES" or "NO".
 The following compression methods are available (set by
 `export GRASS_COMPRESSOR=`*`method`*):
 
-- `NONE` (uncompressed; faster to write and read, larger files; for
-  temporary maps)
+- `NONE` (uncompressed)
 - `RLE` (generic Run-Length Encoding of single bytes; deprecated)
 - `ZLIB` (DEFLATE, good speed and compression)
   - with zlib compression levels (`export GRASS_ZLIB_LEVEL=X`): -1..9
@@ -94,13 +92,10 @@ they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are
 uncompressed.
 
 **NONE**  
-No compression. Uncompressed raster maps are faster to write and read
-but larger, which suits short-lived or temporary maps such as
-intermediate results. In measurements with large synthetic maps on local
-disks, tools writing floating-point maps took 0.5 to 0.95 times as long
-as with ZSTD for 1.2 to 2.3 times larger files, while integer (CELL)
-maps, which compress well, gained little or no time at low thread counts
-and were 2.8 times larger. The NULL file is still compressed unless
+No compression. Uncompressed raster maps are larger but faster
+to write and read, which suits temporary maps (the gain is small for
+integer maps, which compress well). *r.compress* then writes the map
+uncompressed, as with **-u**. The NULL file is still compressed unless
 `GRASS_COMPRESS_NULLS=0` is set.
 
 **RLE**  

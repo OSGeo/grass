@@ -290,14 +290,10 @@ they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are
 uncompressed.
 
 **NONE**  
-No compression. Uncompressed raster maps are faster to write and read
-but larger, which suits short-lived or temporary maps such as
-intermediate results. In measurements with large synthetic maps on local
-disks, tools writing floating-point maps took 0.5 to 0.95 times as long
-as with ZSTD for 1.2 to 2.3 times larger files, while integer (CELL)
-maps, which compress well, gained little or no time at low thread counts
-and were 2.8 times larger. The NULL file is still compressed unless
-`GRASS_COMPRESS_NULLS=0` is set.
+No compression. Uncompressed raster maps are larger but faster
+to write and read, which suits temporary maps (the gain is small for
+integer maps, which compress well). The NULL file is still compressed
+unless `GRASS_COMPRESS_NULLS=0` is set.
 
 **RLE**  
 **DEPRECATED** Run-Length Encoding, poor compression ratio but fast. It

@@ -120,11 +120,11 @@ GRASS_COMPRESSOR
 the compression method for new raster maps can be set with the
 environment variable GRASS_COMPRESSOR. Supported methods are NONE, RLE,
 ZLIB, LZ4, BZIP2, and ZSTD. NONE writes uncompressed maps, which are
-faster to write and read but larger, for example for temporary maps.
-The default is ZSTD if available, otherwise ZLIB, which can be changed
-with e.g. `GRASS_COMPRESSOR=ZSTD`, granted that GRASS has been compiled
-with the requested compressor. Compressors that are always available are
-RLE, ZLIB, and LZ4. The compressors BZIP2 and ZSTD must be enabled when
+larger but faster to write and read (useful for temporary maps). The
+default is ZSTD if available, otherwise ZLIB, which can be changed with
+e.g. `GRASS_COMPRESSOR=ZSTD`, granted that GRASS has been compiled with
+the requested compressor. Compressors that are always available are RLE,
+ZLIB, and LZ4. The compressors BZIP2 and ZSTD must be enabled when
 configuring GRASS for compilation.
 
 GRASS_CONFIG_DIR  

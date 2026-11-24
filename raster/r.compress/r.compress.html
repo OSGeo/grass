@@ -46,9 +46,7 @@ environment variable <code>GRASS_ZLIB_LEVEL</code>.
 Compressed raster maps may be decompressed using <em>r.compress</em>
 with the <b>-u</b> flag. If a raster map was already decompressed and
 the <b>-u</b> flag is set, the module simply informs the user that the
-map is already decompressed and exits. With
-<code>GRASS_COMPRESSOR=NONE</code>, <em>r.compress</em> without <b>-u</b>
-also writes the map uncompressed.
+map is already decompressed and exits.
 
 <p>
 Information about the compression method and data type of the input
@@ -78,8 +76,7 @@ The following compression methods are available (set by
 <code>export GRASS_COMPRESSOR=<em>method</em></code>):
 
 <ul>
-<li><code>NONE</code> (uncompressed; faster to write and read, larger files;
-  for temporary maps)</li>
+<li><code>NONE</code> (uncompressed)</li>
 <li><code>RLE</code>  (generic Run-Length Encoding of single bytes; deprecated)</li>
 <li><code>ZLIB</code> (DEFLATE, good speed and compression)
 <ul>
@@ -125,14 +122,11 @@ they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are uncompressed.
 -->
 <dl>
 <dt><strong>NONE</strong></dt>
-<dd>No compression. Uncompressed raster maps are faster to write and read
-but larger, which suits short-lived or temporary maps such as
-intermediate results. In measurements with large synthetic maps on local
-disks, tools writing floating-point maps took 0.5 to 0.95 times as long
-as with ZSTD for 1.2 to 2.3 times larger files, while integer (CELL)
-maps, which compress well, gained little or no time at low thread counts
-and were 2.8 times larger. The NULL file is still compressed unless
-<code>GRASS_COMPRESS_NULLS=0</code> is set.</dd>
+<dd>No compression. Uncompressed raster maps are larger but faster
+to write and read, which suits temporary maps (the gain is small for
+integer maps, which compress well). <em>r.compress</em> then writes the
+map uncompressed, as with <b>-u</b>. The NULL file is still compressed
+unless <code>GRASS_COMPRESS_NULLS=0</code> is set.</dd>
 <dt><strong>RLE</strong></dt>
 <dd><b>DEPRECATED</b> Run-Length Encoding, poor compression ratio but
 fast. It is kept for backwards compatibility to read raster maps
