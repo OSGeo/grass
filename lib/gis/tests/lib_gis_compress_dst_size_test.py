@@ -11,6 +11,7 @@ after dst untouched. A dst of the bound size holds the compressed data of any
 input.
 """
 
+import ctypes
 import math
 import struct
 import subprocess
@@ -20,7 +21,9 @@ import pytest
 
 from grass.lib.gis import G_check_compressor, G_compress_bound, G_compressor_number
 
-C_INT_MAX = 2**31 - 1  # INT_MAX of C, the limit of the int sizes in the API
+# INT_MAX of C, the limit of the int sizes in the API, for the int which ctypes
+# uses to call the library (two's complement assumed)
+C_INT_MAX = 2 ** (8 * ctypes.sizeof(ctypes.c_int) - 1) - 1
 
 
 def number(name):
