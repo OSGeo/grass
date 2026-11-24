@@ -2055,7 +2055,7 @@ class TemporalAlgebraParser:
         }
 
         # Compute temporal function only for maps with absolute time reference.
-        if map.is_time_absolute:
+        if map.is_time_absolute():
             # Get datetime of map.
             start, end = map.get_absolute_time()
             # Compute DOY via time deltas.
@@ -2090,15 +2090,6 @@ class TemporalAlgebraParser:
             tvardict["END_DATETIME"] = end
             tvardict["END_TIME"] = end.time()
 
-        if not map.is_time_absolute:
-            tvardict["START_DATE"] = start.date()
-            tvardict["START_DATETIME"] = start
-            tvardict["START_TIME"] = start.time()
-            tvardict["END_DATE"] = end.date()
-            tvardict["END_DATETIME"] = end
-            tvardict["END_TIME"] = end.time()
-            # core.fatal(_("The temporal functions for map <%s> only "
-            #              "supported for absolute time." % (str(map.get_id()))))
         return tvardict
 
     def compare_values(self, left, comp, right):
@@ -2472,7 +2463,7 @@ class TemporalAlgebraParser:
                         resultstds = open_new_stds(
                             t[1],
                             maps_stds_type,
-                            "absolute",
+                            self.temporaltype or "absolute",
                             t[1],
                             t[1],
                             "mean",
@@ -2534,7 +2525,9 @@ class TemporalAlgebraParser:
 
                     self.process_chain_dict["STDS"]["name"] = t[1]
                     self.process_chain_dict["STDS"]["stdstype"] = self.stdstype
-                    self.process_chain_dict["STDS"]["temporal_type"] = "absolute"
+                    self.process_chain_dict["STDS"]["temporal_type"] = (
+                        self.temporaltype or "absolute"
+                    )
 
                 elif num == 0:
                     self.msgr.warning(
@@ -2547,7 +2540,7 @@ class TemporalAlgebraParser:
                         resultstds = open_new_stds(
                             t[1],
                             self.stdstype,
-                            "absolute",
+                            self.temporaltype or "absolute",
                             t[1],
                             t[1],
                             "mean",
@@ -2769,7 +2762,7 @@ class TemporalAlgebraParser:
         if self.run:
             maplist = self.check_stds(t[3])
             for map_i in maplist:
-                if map_i.is_time_absolute:
+                if map_i.is_time_absolute():
                     start, end = map_i.get_absolute_time()
                     if end is not None:
                         td = time_delta_to_relative_time(end - start)

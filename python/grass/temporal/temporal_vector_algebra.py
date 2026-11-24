@@ -532,7 +532,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     resultstds = open_new_stds(
                         t[1],
                         self.stdstype,
-                        "absolute",
+                        self.temporaltype or "absolute",
                         t[1],
                         t[1],
                         "temporal vector algebra",
