@@ -73,15 +73,12 @@
 
 int G_bz2_compress_bound(int src_sz)
 {
-    /* from the documentation:
-     * To guarantee that the compressed data will fit in its buffer,
-     * allocate an output buffer of size 1% larger than the uncompressed data,
-     * plus six hundred extra bytes.
-     * bzip2 does not provide a compressbound fn
-     * and apparently does not have a fast version if destLen is
-     * large enough to hold a worst case result
+    /* bzip2 does not provide a function for the bound. From its
+     * documentation: To guarantee that the compressed data will fit in
+     * its buffer, allocate an output buffer of size 1% larger than the
+     * uncompressed data, plus six hundred extra bytes.
      */
-    /* Same as G_zlib_compress_bound(), the bound is limited to INT_MAX. */
+    /* Avoid overflow of int for large input. */
     if (src_sz > INT_MAX - 600 - src_sz / 100)
         return INT_MAX;
 

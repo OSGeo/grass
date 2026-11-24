@@ -2,12 +2,13 @@
 # SPDX-FileCopyrightText: GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Tests of compression into a destination smaller than the upper bound
+"""Tests of compression into destinations of the bound size and smaller
 
 The compressors accept a destination buffer smaller than the bound from
 G_compress_bound(). The compressed data must then be written only when it
 fits, otherwise the functions return -2 (dst too small) and leave the memory
-after dst untouched.
+after dst untouched. A dst of the bound size holds the compressed data of any
+input.
 """
 
 import math
@@ -17,7 +18,9 @@ import sys
 
 import pytest
 
-from grass.lib.gis import G_check_compressor, G_compressor_number
+from grass.lib.gis import G_check_compressor, G_compress_bound, G_compressor_number
+
+INT_MAX = 2**31 - 1
 
 
 def number(name):
@@ -102,3 +105,60 @@ def test_dst_smaller_than_bound_fits(xy_session_for_module, name):
     assert tail == CANARY
     assert result == size
     assert dst == stream[:size]
+
+
+# One byte, typical row sizes, and more than one bzip2 block (900 kB)
+SIZES = [1, 100, 10_000, 1_000_000]
+
+# The compressors report problems with G_warning(), which needs a session, so
+# the calls run in a separate process in the session. The input is random
+# bytes, which do not compress.
+BOUND_SCRIPT = """
+import ctypes
+import random
+import sys
+
+from grass.lib.gis import G_compress, G_compress_bound, G_gisinit
+
+G_gisinit("lib_gis_compress_dst_size_test")
+number = int(sys.argv[1])
+for size in (int(arg) for arg in sys.argv[2:]):
+    data = random.Random(size).randbytes(size)
+    src = (ctypes.c_ubyte * size).from_buffer_copy(data)
+    bound = G_compress_bound(size, number)
+    dst = (ctypes.c_ubyte * bound)()
+    print(G_compress(src, size, dst, bound, number))
+"""
+
+
+@pytest.mark.parametrize("name", COMPRESSING)
+def test_incompressible_data_fit_bound(xy_session_for_module, name):
+    """Incompressible data are reported as not compressible, without warnings"""
+    output = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            BOUND_SCRIPT,
+            str(G_compressor_number(name.encode())),
+            *(str(size) for size in SIZES),
+        ],
+        capture_output=True,
+        text=True,
+        env=xy_session_for_module.env,
+        check=True,
+    )
+    assert not output.stderr
+    # -2 means that the compressed data are not smaller than the input.
+    assert [int(result) for result in output.stdout.split()] == [-2] * len(SIZES)
+
+
+@pytest.mark.parametrize("size", [0, 1000, 2_000_000_000, INT_MAX])
+def test_bzip2_bound_documented(size):
+    """BZIP2 bound is at least the size the bzip2 documentation asks for
+
+    The documentation asks for 1% + 600 bytes over the input. The bound is
+    limited to INT_MAX.
+    """
+    number = G_compressor_number(b"BZIP2")
+    expected = min(size + size // 100 + 600, INT_MAX)
+    assert G_compress_bound(size, number) >= expected
