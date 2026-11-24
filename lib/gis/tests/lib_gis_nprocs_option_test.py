@@ -82,10 +82,14 @@ def test_omp_num_threads_sets_only_the_default(xy_session_for_module):
     session = xy_session_for_module
     returncode, numbers, stderr = nprocs_from_option(session, "2")
     assert returncode == 0, stderr
+    # Without OpenMP, G_set_omp_num_threads() sets up one thread for any answer.
     if numbers[1] != 2:
-        pytest.skip("GRASS is built without OpenMP")
+        pytest.skip("Two threads were not set up, assuming GRASS without OpenMP")
+    # 0 is the OpenMP default, which OMP_NUM_THREADS sets.
     assert nprocs_from_option(session, "0", omp_num_threads="6")[1] == [6, 6]
+    # -1 counts from the processors, so OMP_NUM_THREADS does not change it.
     default = nprocs_from_option(session, "-1")[1]
-    assert default
+    assert default  # An empty list means that the helper process failed.
     assert nprocs_from_option(session, "-1", omp_num_threads="1000")[1] == default
+    # More threads fewer than there are processors still give one thread.
     assert nprocs_from_option(session, "-100000")[1] == [1, 1]
