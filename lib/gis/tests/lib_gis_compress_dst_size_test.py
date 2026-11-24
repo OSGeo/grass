@@ -112,7 +112,7 @@ SIZES = [1, 100, 10_000, 1_000_000]
 
 # The compressors report problems with G_warning(), which needs a session, so
 # the calls run in a separate process in the session. The input is random
-# bytes, which do not compress.
+# bytes, which practically never compress (the output is not smaller).
 BOUND_SCRIPT = """
 import ctypes
 import random
@@ -133,7 +133,7 @@ for size in (int(arg) for arg in sys.argv[2:]):
 
 @pytest.mark.parametrize("name", COMPRESSING)
 def test_incompressible_data_fit_bound(xy_session_for_module, name):
-    """Incompressible data are reported as not compressible, without warnings"""
+    """Random data are reported as not compressible (-2), without warnings"""
     output = subprocess.run(
         [
             sys.executable,
