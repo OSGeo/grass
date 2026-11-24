@@ -12,7 +12,12 @@
 #include <grass/glocale.h>
 
 /*!
- * \brief Resolve a value of nprocs into a number of threads
+ * \brief Read the number of threads from an nprocs option
+ *
+ * Call after G_parser(). The answer must be an integer, optionally with
+ * white space around it. Otherwise, the function ends with a fatal error
+ * naming the option, also for answers such as 2x which the parser accepts
+ * for an integer option.
  *
  * A positive value is the number of threads. With OpenMP, 0 is the
  * OpenMP default (omp_get_max_threads()), which follows OMP_NUM_THREADS.
@@ -20,31 +25,6 @@
  * except n, but at least one thread. OMP_NUM_THREADS does not change this.
  * Without OpenMP, 0 and negative values give one thread, while a positive
  * value is still the number of threads.
- *
- * \param nprocs value of an nprocs option
- *
- * \return the number of threads, at least 1
- *
- * \since version 8.6
- */
-int G_resolve_nprocs(int nprocs)
-{
-#if defined(_OPENMP)
-    if (nprocs == 0)
-        return omp_get_max_threads();
-    if (nprocs < 0)
-        nprocs += omp_get_num_procs();
-#endif
-    return nprocs < 1 ? 1 : nprocs;
-}
-
-/*!
- * \brief Read the number of threads from an nprocs option
- *
- * Call after G_parser(). The answer must be an integer, optionally with
- * white space around it. Otherwise, the function ends with a fatal error
- * naming the option, also for answers such as 2x which the parser accepts
- * for an integer option. The integer is resolved with G_resolve_nprocs().
  *
  * The function does not set up OpenMP threads.
  *
@@ -70,16 +50,23 @@ int G_nprocs_from_option(const struct Option *nprocs)
             _("Invalid value <%s> for option <%s>. Use an integer number of "
               "threads."),
             answer, nprocs->key);
-    return G_resolve_nprocs((int)value);
+    int threads = (int)value;
+#if defined(_OPENMP)
+    if (threads == 0)
+        return omp_get_max_threads();
+    if (threads < 0)
+        threads += omp_get_num_procs();
+#endif
+    return threads < 1 ? 1 : threads;
 }
 
 /*! \brief Set the number of threads for OpenMP
     The intended usage is at the beginning of a C tool when parameters are
     processed, namely the G_OPT_M_NPROCS standard option.
 
-    The number of threads is read with G_nprocs_from_option(). See
-    G_resolve_nprocs() for what 0 and negative values mean. Without
-    OpenMP, the function warns when more than one thread is requested.
+    The number of threads is read with G_nprocs_from_option(), which also
+    says what 0 and negative values mean. Without OpenMP, the function
+    warns when more than one thread is requested.
 
     \param opt A nprocs Option struct to specify the number of threads
     \return the number of threads set up for OpenMP parallel computing

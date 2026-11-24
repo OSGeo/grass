@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: GRASS Development Team
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-"""Tests of G_nprocs_from_option() and G_resolve_nprocs()"""
+"""Tests of G_nprocs_from_option() and G_set_omp_num_threads()"""
 
 import subprocess
 import sys
