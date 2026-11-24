@@ -36,7 +36,7 @@ for other platforms you may have to install some of them.
   GDAL: [https://gdal.org](https://gdal.org)
 - **Python >= 3.11** (for temporal framework, scripts, wxGUI, and ctypes interface)
   [https://www.python.org](https://www.python.org)
-- **MkDocs** with "Material" theme Python packages for the manual pages:
+- **Zensical** Python package for the manual pages:
   See `man/mkdocs/requirements.txt`.
 
 ## Optional packages

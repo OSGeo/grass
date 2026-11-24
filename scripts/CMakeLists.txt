@@ -175,4 +175,18 @@ add_custom_target(
 )
 add_dependencies(r.in.wms r.in.wms_files)
 
+install(
+    FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_base.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_cap_parsers.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_drv.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/wms_gdal_drv.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/r.in.wms/srs.py
+    DESTINATION ${GRASS_INSTALL_ETCBINDIR}/r.in.wms
+)
+install(
+    FILES ${OUTDIR}/${GRASS_INSTALL_ETCBINDIR}/wxpyimgview_gui.py
+    DESTINATION ${GRASS_INSTALL_ETCBINDIR}
+)
+
 set_target_properties(r.in.wms_files PROPERTIES FOLDER "Tools/Raster")

@@ -149,13 +149,14 @@ if(NOT WITH_FHS)
             ${CMAKE_CURRENT_SOURCE_DIR}/favicon.ico ${mkdocs_dir}/source
         COMMAND
             ${CMAKE_COMMAND} -E copy_if_different
-            ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/hook_list_scripts.py
+            ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/scripts/grass_markdown.py
             ${mkdocs_dir}/scripts
         COMMAND
             ${CMAKE_COMMAND} -E copy_if_different
             ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/copyright.html
             ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/footer.html
             ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/actions.html
+            ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/content.html
             ${CMAKE_CURRENT_SOURCE_DIR}/mkdocs/overrides/partials/source.html
             ${mkdocs_dir}/overrides/partials
         COMMAND
@@ -217,10 +218,10 @@ if(NOT WITH_FHS)
     )
     set_target_properties(build_check PROPERTIES FOLDER Man)
 
-    # The MkDocs site is built on demand (requires mkdocs installed), matching
-    # the Autotools build-mkdocs and serve-mkdocs targets. Unlike Autotools,
-    # the targets depend on build_check so that the markdown tree is generated
-    # before the site is rendered.
+    # The documentation site is built on demand (requires zensical installed),
+    # matching the Autotools build-mkdocs and serve-mkdocs targets. Unlike
+    # Autotools, the targets depend on build_check so that the markdown tree is
+    # generated before the site is rendered.
     # $<SEMICOLON> keeps the ; of &copy; from being parsed as a list separator.
     set(mkdocs_env
         ${CMAKE_COMMAND}
@@ -228,25 +229,26 @@ if(NOT WITH_FHS)
         env
         "SITE_NAME=GRASS ${GRASS_VERSION_NUMBER} Documentation"
         "COPYRIGHT=&copy$<SEMICOLON> 2003-${GRASS_VERSION_DATE} GRASS Development Team, GRASS ${GRASS_VERSION_NUMBER} Documentation"
+        "PYTHONPATH=${mkdocs_dir}/scripts"
     )
     add_custom_target(
         build-mkdocs
-        COMMAND ${mkdocs_env} mkdocs build
+        COMMAND ${mkdocs_env} zensical build
         WORKING_DIRECTORY ${mkdocs_dir}
         DEPENDS copy_mkdocs_files build_check
         VERBATIM
-        COMMENT "Building the MkDocs documentation site"
+        COMMENT "Building the documentation site"
     )
     set_target_properties(build-mkdocs PROPERTIES FOLDER Man)
 
     add_custom_target(
         serve-mkdocs
-        COMMAND ${mkdocs_env} mkdocs serve
+        COMMAND ${mkdocs_env} zensical serve
         WORKING_DIRECTORY ${mkdocs_dir}
         DEPENDS copy_mkdocs_files build_check
         USES_TERMINAL
         VERBATIM
-        COMMENT "Serving the MkDocs documentation site"
+        COMMENT "Serving the documentation site"
     )
     set_target_properties(serve-mkdocs PROPERTIES FOLDER Man)
 endif() # NOT WITH_FHS

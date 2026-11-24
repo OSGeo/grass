@@ -248,6 +248,14 @@ function(build_module)
         )
     endforeach()
 
+    target_include_directories(
+        ${G_NAME}
+        PRIVATE "${OUTDIR}/${GRASS_INSTALL_INCLUDEDIR}"
+    )
+    if(MSVC)
+        target_include_directories(${G_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/msvc")
+    endif()
+
     foreach(G_DEF ${G_DEFS})
         target_compile_definitions(${G_NAME} PUBLIC "${G_DEF}")
     endforeach()

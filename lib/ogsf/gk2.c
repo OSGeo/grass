@@ -24,8 +24,6 @@ static void _remove_key(Keylist *);
 static Keylist *Keys = NULL;
 static Keylist *Keytail = NULL;
 static Viewnode *Views = NULL;
-static float Keystartpos = 0.0;
-static float Keyendpos = 1.0;
 static float Tension = 0.8;
 static int Viewsteps = 0;
 static int Numkeys = 0;
@@ -246,16 +244,12 @@ void GK_update_frames(void)
     if (Keys) {
         if (Numkeys > 1) {
             k = Keytail;
-            Keyendpos = k->pos;
-
             if (k->fields[KF_FROMX] == Keys->fields[KF_FROMX] &&
                 k->fields[KF_FROMY] == Keys->fields[KF_FROMY] &&
                 k->fields[KF_FROMZ] == Keys->fields[KF_FROMZ]) {
                 loop = 1;
             }
         }
-
-        Keystartpos = Keys->pos;
     }
 
     if (Interpmode == KF_LINEAR && Numkeys > 1) {
@@ -312,9 +306,6 @@ void GK_clear_keys(void)
     Numkeys = 0;
     free(Views);
     Views = NULL;
-
-    Keystartpos = 0.0;
-    Keyendpos = 1.0;
 
     return;
 }

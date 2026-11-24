@@ -18,6 +18,18 @@ on:
     paths:
       - "**"
       - "!doc/**"
+      - "!.pre-commit-config.yaml"
+      - "!renovate.json5"
+      - "!flake.lock"
+      - "!flake.nix"
+      - "!package.nix"
+      - "!Dockerfile"
+      - "!docker/**"
+      - "!.github/workflows/python-code-quality.yml"
+      - "!.github/workflows/additional_checks.yml"
+      - "!.github/workflows/documentation.yml"
+      - "!man/mkdocs/requirements.txt"
+      - "!python/grass/docs/requirements.txt"
       - "doc/CMakeLists.txt"
       - "doc/**/CMakeLists.txt"
 

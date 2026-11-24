@@ -41,7 +41,6 @@
 #define BM_col_to_bit(x)  ((x) & 7)  /* x % 8 */
 
 static int Mode = BM_FLAT;
-static int Size = 1;
 
 /*!
  * \brief Create bitmap of dimension x/y and return structure token.
@@ -160,8 +159,6 @@ int BM_set_mode(int mode, int size)
         fprintf(stderr, "BM_set_mode:  Bad size: %d\n", size);
         ret--;
     }
-    else
-        Size = size;
 
     return ret;
 }

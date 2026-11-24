@@ -70,8 +70,10 @@ class CurrentMapsetWatch(FileSystemEventHandler):
             with open(event.src_path) as f:
                 gisrc = {}
                 for line in f:
-                    key, val = line.split(":")
-                    gisrc[key.strip()] = val.strip()
+                    # a value can hold a colon (C:\ on Windows), so split once
+                    key, sep, val = line.partition(":")
+                    if sep:
+                        gisrc[key.strip()] = val.strip()
                 new = os.path.join(
                     gisrc["GISDBASE"], gisrc["LOCATION_NAME"], gisrc["MAPSET"]
                 )

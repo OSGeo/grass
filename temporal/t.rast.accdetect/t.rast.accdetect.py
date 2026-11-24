@@ -126,7 +126,7 @@ import grass.script as gs
 
 ############################################################################
 
-range_relations = ["EQUALS", "DURING", "OVERLAPS", "OVERLAPPING", "CONTAINS"]
+range_relations = ["EQUAL", "DURING", "OVERLAPS", "OVERLAPPED", "CONTAINS"]
 
 
 def main():
@@ -623,8 +623,8 @@ def compute_occurrence(
 
     # Aggregate
     num_maps = len(input_maps)
-    for i in range(num_maps):
-        map = input_maps[num_maps - i - 1] if reverse else input_maps[i]
+    for i in reversed(range(num_maps)) if reverse else range(num_maps):
+        map = input_maps[i]
 
         # Compute the days since start
         input_start, input_end = map.get_temporal_extent_as_tuple()

@@ -67,6 +67,7 @@ def test_json_summary(session_tools):
         discharge="discharge",
         nwalkers=100,
         duration=1,
+        nprocs=1,
         flags="p",
         format="json",
     )

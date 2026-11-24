@@ -103,7 +103,7 @@ in a single raster map:
     gs.run_command("g.region", raster="geology_30m")
     data = gs.parse_command("r.stats", flags="a", input="geology_30m", format="json")
     for record in data:
-        cat = record['categories'][0]['category']
+        cat = record["categories"][0]["category"]
         print(f"Category {cat}: {record['count']} cells and {record['area'] / 1e6} km2")
     ```
 
@@ -180,7 +180,9 @@ category in multiple raster maps (suppress NULL data):
     import grass.script as gs
 
     gs.run_command("g.region", raster="towns")
-    data = gs.parse_command("r.stats", flags="nacp", input=["towns", "urban"], format="json")
+    data = gs.parse_command(
+        "r.stats", flags="nacp", input=["towns", "urban"], format="json"
+    )
     for record in data:
         categories = [str(cat["category"]) for cat in record["categories"]]
         print(f"Categories {' and '.join(categories)}: {record['percent']:.2f} %")
@@ -259,11 +261,14 @@ Number of intervals are given by **nsteps** option.
     import grass.script as gs
 
     gs.run_command("g.region", raster="elevation")
-    data = gs.parse_command("r.stats", flags="an", input="elevation", nsteps=5, sort="desc", format="json")
+    data = gs.parse_command(
+        "r.stats", flags="an", input="elevation", nsteps=5, sort="desc", format="json"
+    )
     for record in data:
-        from_to = record['categories'][0]['range']
-        print(f"Elevation {from_to['from']:.2f}-{from_to['to']:.2f}: {record['area'] / 1e6:.2f} km2")
-
+        from_to = record["categories"][0]["range"]
+        print(
+            f"Elevation {from_to['from']:.2f}-{from_to['to']:.2f}: {record['area'] / 1e6:.2f} km2"
+        )
     ```
 
     Output: 
@@ -411,7 +416,12 @@ zipcode areas:
 
     gs.run_command("g.region", raster="zipcodes")
     # landuse/landcover, geology and zipcodes with category labels
-    data = gs.parse_command("r.stats", flags="c", input=["landclass96", "zipcodes", "geology_30m"], format="json")
+    data = gs.parse_command(
+        "r.stats",
+        flags="c",
+        input=["landclass96", "zipcodes", "geology_30m"],
+        format="json",
+    )
     print(data[0])
     ```
 
