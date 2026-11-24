@@ -4,7 +4,6 @@
 Each map lists the methods which select it. Interval maps are named after
 their relation to the granule as defined by TemporalExtent. The code reads the
 relations of the granule, so its "overlaps" selects the map "overlapped".
-"follows" and "precedes" match the t.sample manual examples, not the docstring.
 """
 
 import os
