@@ -62,6 +62,8 @@
 
 #include <grass/config.h>
 
+#include <limits.h>
+
 #ifdef HAVE_BZLIB_H
 #include <bzlib.h>
 #endif
@@ -79,7 +81,11 @@ int G_bz2_compress_bound(int src_sz)
      * and apparently does not have a fast version if destLen is
      * large enough to hold a worst case result
      */
-    return src_sz;
+    /* Same as G_zlib_compress_bound(), the bound is limited to INT_MAX. */
+    if (src_sz > INT_MAX - 600 - src_sz / 100)
+        return INT_MAX;
+
+    return src_sz + src_sz / 100 + 600;
 }
 
 int G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
