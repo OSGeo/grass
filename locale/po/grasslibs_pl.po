@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Polish <https://weblate.osgeo.org/projects/grass-gis/grasslibs/pl/>\n"
@@ -7309,11 +7309,6 @@ msgstr ""
 msgid "The map does not exist, I can't open in 'r' mode"
 msgstr ""
 
-#, fuzzy, python-brace-format
-#| msgid "Vector map <%s> already exists and will be overwritten"
-msgid "Raster map <{0}> already exists and will be not overwritten"
-msgstr "Mapa wektorowa <%s> już istnieje i zostanie nadpisana"
-
 #, fuzzy
 #| msgid "Raster map <%s> not found"
 msgid "Raster type not defined"
@@ -7327,11 +7322,6 @@ msgstr "Obiekty OGR typu %d nie są obsługiwane"
 #| msgid "Index out of range in"
 msgid "Index out of range: %r."
 msgstr "Indeks poza zakresem w"
-
-#, fuzzy, python-brace-format
-#| msgid "Vector map <%s> already exists and will be overwritten"
-msgid "Raster map <{0}> already exists. Use overwrite."
-msgstr "Mapa wektorowa <%s> już istnieje i zostanie nadpisana"
 
 #, fuzzy, python-brace-format
 #| msgid "%s: Area %d does not exist"
@@ -7352,6 +7342,11 @@ msgstr "Obiekty OGR typu %d nie są obsługiwane"
 #, python-brace-format
 msgid "Map name {0} not valid"
 msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Vector map <%s> already exists and will be overwritten"
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr "Mapa wektorowa <%s> już istnieje i zostanie nadpisana"
 
 #, fuzzy, python-brace-format
 msgid "Raster type: {0} not supported"
@@ -8605,6 +8600,11 @@ msgstr ""
 #| msgid "unknown operator"
 msgid "Unknown format '{}'."
 msgstr "nieznany operator"
+
+#, fuzzy, python-brace-format
+#~| msgid "Vector map <%s> already exists and will be overwritten"
+#~ msgid "Raster map <{0}> already exists. Use overwrite."
+#~ msgstr "Mapa wektorowa <%s> już istnieje i zostanie nadpisana"
 
 #, c-format
 #~ msgid "pj_transform() failed: %s"

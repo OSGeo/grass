@@ -32,7 +32,7 @@ top_dir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
 
 def read_file(name):
     try:
-        return Path(name).read_text()
+        return Path(name).read_text(encoding="utf-8")
     except OSError:
         return ""
 

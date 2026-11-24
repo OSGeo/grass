@@ -9,9 +9,6 @@
 #include <grass/glocale.h>
 #include "what.h"
 
-/* TODO: remove leftover from interactive querying */
-static int nlines = 50;
-
 #define WDTH 5
 #define SEP "------------------------------------------------------------------"
 
@@ -431,7 +428,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                     break;
                 }
             }
-            nlines++;
         }
 
         if (nfeats > 0 && format == JSON) {
@@ -480,8 +476,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
             break;
         }
 
-        nlines++;
-
         if (nfeats == 0) {
             switch (format) {
             case SHELL:
@@ -495,7 +489,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                 fprintf(stdout, _("Nothing found.\n"));
                 break;
             }
-            nlines++;
             continue;
         }
 
@@ -1147,7 +1140,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east,
                             sq_miles);
                     break;
                 }
-                nlines += 3;
             }
             centroid = Vect_get_area_centroid(&Map[i], area);
             if (centroid > 0)

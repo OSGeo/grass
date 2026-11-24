@@ -72,9 +72,11 @@ void swap_rows(void)
     old_y_row = new_y_row;
     new_y_row = temp;
 
-    dtemp = old_val_row;
-    old_val_row = new_val_row;
-    new_val_row = dtemp;
+    if (new_val_row) {
+        dtemp = old_val_row;
+        old_val_row = new_val_row;
+        new_val_row = dtemp;
+    }
 }
 
 static void check(int row, int col, int dx, int dy)
@@ -83,7 +85,7 @@ static void check(int row, int col, int dx, int dy)
     const CELL *yrow = dy ? old_y_row : new_y_row;
     const DCELL *vrow = dy ? old_val_row : new_val_row;
     int x, y;
-    double d, v;
+    double d;
 
     if (dist_row[col] == 0)
         return;
@@ -99,7 +101,6 @@ static void check(int row, int col, int dx, int dy)
 
     x = xrow[col + dx] + dx;
     y = yrow[col + dx] + dy;
-    v = vrow[col + dx];
     d = distance ? (*distance)(xres * x, yres * y)
                  : geodesic_distance(col, row, col + x, row + y);
 
@@ -107,7 +108,8 @@ static void check(int row, int col, int dx, int dy)
         return;
 
     dist_row[col] = d;
-    new_val_row[col] = v;
+    if (new_val_row)
+        new_val_row[col] = vrow[col + dx];
     new_x_row[col] = x;
     new_y_row[col] = y;
 }
@@ -125,9 +127,10 @@ int main(int argc, char **argv)
     const char *dist_name;
     const char *val_name;
     int in_fd;
-    int dist_fd, val_fd;
+    int dist_fd, val_fd = -1;
     char *temp_name;
     int temp_fd;
+    off_t row_size;
     int row, col;
     struct Colors colors;
     struct History hist;
@@ -223,11 +226,6 @@ int main(int argc, char **argv)
                       opt.max->key);
     }
 
-    if (mindist > 0 || maxdist > 0) {
-        dist_row_max = Rast_allocate_d_buf();
-        val_row_max = Rast_allocate_d_buf();
-    }
-
     invert = flag.n->answer;
     if (mindist <= 0 && maxdist <= 0 && invert) {
         /* value output for distance to NULL cells makes sense
@@ -244,6 +242,12 @@ int main(int argc, char **argv)
 
     if (!dist_name && !val_name)
         G_fatal_error(_("At least one of distance= and value= must be given"));
+
+    if (mindist > 0 || maxdist > 0) {
+        dist_row_max = Rast_allocate_d_buf();
+        if (val_name)
+            val_row_max = Rast_allocate_d_buf();
+    }
 
     G_get_window(&window);
 
@@ -295,13 +299,17 @@ int main(int argc, char **argv)
 
     nrows = window.rows;
     ncols = window.cols;
+    row_size =
+        (off_t)ncols * (2 * sizeof(CELL) + (val_name ? 2 : 1) * sizeof(DCELL));
     xres = window.ew_res;
     yres = window.ns_res;
 
     in_row = Rast_allocate_d_buf();
 
-    old_val_row = Rast_allocate_d_buf();
-    new_val_row = Rast_allocate_d_buf();
+    if (val_name) {
+        old_val_row = Rast_allocate_d_buf();
+        new_val_row = Rast_allocate_d_buf();
+    }
 
     old_x_row = Rast_allocate_c_buf();
     old_y_row = Rast_allocate_c_buf();
@@ -337,7 +345,8 @@ int main(int argc, char **argv)
                 new_x_row[col] = 0;
                 new_y_row[col] = 0;
                 dist_row[col] = 0;
-                new_val_row[col] = in_row[col];
+                if (val_name)
+                    new_val_row[col] = in_row[col];
             }
         }
 
@@ -362,7 +371,7 @@ int main(int argc, char **argv)
         if (write(temp_fd, dist_row, ncols * sizeof(DCELL)) < 0)
             G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
                           errno, strerror(errno));
-        if (write(temp_fd, new_val_row, ncols * sizeof(DCELL)) < 0)
+        if (val_name && write(temp_fd, new_val_row, ncols * sizeof(DCELL)) < 0)
             G_fatal_error(_("File writing error in %s() %d:%s"), __func__,
                           errno, strerror(errno));
 
@@ -379,8 +388,7 @@ int main(int argc, char **argv)
     G_message(_("Writing output raster maps..."));
     for (row = 0; row < nrows; row++) {
         int irow = nrows - 1 - row;
-        off_t offset =
-            (off_t)irow * ncols * (2 * sizeof(CELL) + 2 * sizeof(DCELL));
+        off_t offset = (off_t)irow * row_size;
 
         G_percent(row, nrows, 2);
 
@@ -399,7 +407,7 @@ int main(int argc, char **argv)
         if (read(temp_fd, dist_row, ncols * sizeof(DCELL)) < 0)
             G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
                           errno, strerror(errno));
-        if (read(temp_fd, new_val_row, ncols * sizeof(DCELL)) < 0)
+        if (val_name && read(temp_fd, new_val_row, ncols * sizeof(DCELL)) < 0)
             G_fatal_error(_("File reading error in %s() %d:%s"), __func__,
                           errno, strerror(errno));
 
@@ -432,15 +440,18 @@ int main(int argc, char **argv)
                 if (scale != 1.0)
                     dist_row_max[col] *= scale;
 
-                val_row_max[col] = new_val_row[col];
+                if (val_name)
+                    val_row_max[col] = new_val_row[col];
 
                 if (mindist > 0 && dist_row_max[col] < mindist) {
                     Rast_set_d_null_value(&dist_row_max[col], 1);
-                    Rast_set_d_null_value(&val_row_max[col], 1);
+                    if (val_name)
+                        Rast_set_d_null_value(&val_row_max[col], 1);
                 }
                 if (maxdist > 0 && dist_row_max[col] > maxdist) {
                     Rast_set_d_null_value(&dist_row_max[col], 1);
-                    Rast_set_d_null_value(&val_row_max[col], 1);
+                    if (val_name)
+                        Rast_set_d_null_value(&val_row_max[col], 1);
                 }
             }
             if (dist_name)

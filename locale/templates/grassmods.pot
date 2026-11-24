@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-07 19:34+0000\n"
+"POT-Creation-Date: 2026-11-21 21:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1902,7 +1902,7 @@ msgstr ""
 #: ../raster/r.drain/main.c:107 ../raster/r.external.out/main.c:232
 #: ../raster/r.external/main.c:56 ../raster/r.fill.dir/main.c:84
 #: ../raster/r.fill.stats/main.c:764 ../raster/r.flow/main.c:414
-#: ../raster/r.geomorphon/main.c:122 ../raster/r.grow.distance/main.c:142
+#: ../raster/r.geomorphon/main.c:122 ../raster/r.grow.distance/main.c:145
 #: ../raster/r.gwflow/main.c:218 ../raster/r.his/main.c:63
 #: ../raster/r.horizon/main.c:179 ../raster/r.in.ascii/main.c:66
 #: ../raster/r.in.bin/main.c:281 ../raster/r.in.gdal/main.c:111
@@ -1936,7 +1936,7 @@ msgstr ""
 #: ../raster/r.param.scale/interface.c:54 ../raster/r.patch/main.c:65
 #: ../raster/r.path/main.c:147 ../raster/r.profile/main.c:56
 #: ../raster/r.proj/main.c:146 ../raster/r.quant/main.c:45
-#: ../raster/r.quantile/main.c:297 ../raster/r.random.cells/main.c:46
+#: ../raster/r.quantile/main.c:297 ../raster/r.random.cells/main.c:47
 #: ../raster/r.random.surface/main.c:53 ../raster/r.random/main.c:50
 #: ../raster/r.reclass/main.c:48 ../raster/r.recode/main.c:44
 #: ../raster/r.region/main.c:43 ../raster/r.regression.line/main.c:48
@@ -2305,7 +2305,7 @@ msgstr ""
 #: ../vector/v.surf.rst/main.c:694 ../vector/v.to.3d/main.c:68
 #: ../vector/v.to.db/main.c:72 ../vector/v.to.points/main.c:149
 #: ../vector/v.to.rast/support.c:97 ../vector/v.to.rast/support.c:267
-#: ../vector/v.to.rast/support.c:495 ../vector/v.to.rast/vect2rast.c:39
+#: ../vector/v.to.rast/support.c:496 ../vector/v.to.rast/vect2rast.c:39
 #: ../vector/v.to.rast3/main.c:71 ../vector/v.transform/main.c:204
 #: ../vector/v.type/main.c:125 ../vector/v.univar/main.c:190
 #: ../vector/v.vect.stats/main.c:319 ../vector/v.vect.stats/main.c:331
@@ -2427,7 +2427,7 @@ msgstr ""
 #: ../display/d.geodesic/main.c:43 ../display/d.rhumbline/main.c:40
 #: ../locale/scriptstrings/r.grow_to_translate.c:3 ../misc/m.cogo/main.c:213
 #: ../misc/m.measure/main.c:51 ../raster/r.distance/main.c:32
-#: ../raster/r.grow.distance/main.c:143 ../vector/v.distance/main.c:122
+#: ../raster/r.grow.distance/main.c:146 ../vector/v.distance/main.c:122
 msgid "distance"
 msgstr ""
 
@@ -4546,7 +4546,7 @@ msgstr ""
 #: ../vector/v.extrude/main.c:220 ../vector/v.generalize/misc.c:164
 #: ../vector/v.neighbors/main.c:216 ../vector/v.overlay/main.c:427
 #: ../vector/v.surf.bspline/crosscorr.c:119 ../vector/v.to.rast/support.c:101
-#: ../vector/v.to.rast/support.c:271 ../vector/v.to.rast/support.c:499
+#: ../vector/v.to.rast/support.c:271 ../vector/v.to.rast/support.c:500
 #: ../vector/v.univar/main.c:268 ../vector/v.vect.stats/main.c:380
 #: ../vector/v.vect.stats/main.c:457 ../vector/v.what.rast/main.c:175
 #: ../vector/v.what.rast3/main.c:118
@@ -4597,7 +4597,7 @@ msgstr ""
 #: ../vector/v.to.3d/trans2.c:55 ../vector/v.to.3d/trans3.c:58
 #: ../vector/v.to.db/query.c:91 ../vector/v.to.db/update.c:53
 #: ../vector/v.to.points/main.c:195 ../vector/v.to.rast/support.c:105
-#: ../vector/v.to.rast/support.c:277 ../vector/v.to.rast/support.c:506
+#: ../vector/v.to.rast/support.c:277 ../vector/v.to.rast/support.c:507
 #: ../vector/v.to.rast/vect2rast.c:58 ../vector/v.to.rast3/main.c:83
 #: ../vector/v.transform/trans_digit.c:41 ../vector/v.vol.rst/main.c:589
 #: ../vector/v.vol.rst/user1.c:96 ../vector/v.what.rast/main.c:181
@@ -5248,7 +5248,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:7
 #: ../locale/scriptstrings/v.what.strds_to_translate.c:4
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:3
-#: ../raster/r.random.cells/main.c:47 ../raster/r.random/main.c:51
+#: ../raster/r.random.cells/main.c:48 ../raster/r.random/main.c:51
 #: ../vector/v.drape/main.c:54 ../vector/v.extrude/main.c:65
 #: ../vector/v.kcv/main.c:54 ../vector/v.random/main.c:97
 #: ../vector/v.sample/main.c:71 ../vector/v.what.rast/main.c:75
@@ -5382,7 +5382,7 @@ msgstr ""
 #: ../scripts/r.fillnulls/r.fillnulls.py:149 ../scripts/r.grow/r.grow.py:122
 #: ../scripts/r.mask/r.mask.py:148 ../scripts/r.pack/r.pack.py:71
 #: ../scripts/r.reclass.area/r.reclass.area.py:405 ../scripts/r.rgb/r.rgb.py:53
-#: ../scripts/v.rast.stats/v.rast.stats.py:151 ../vector/v.colors/main.c:314
+#: ../scripts/v.rast.stats/v.rast.stats.py:148 ../vector/v.colors/main.c:314
 #: ../vector/v.vol.rst/main.c:605
 #, c-format, python-format
 msgid "Raster map <%s> not found"
@@ -7959,7 +7959,7 @@ msgstr ""
 #: ../locale/scriptstrings/v.import_to_translate.c:16
 #: ../locale/scriptstrings/v.import_to_translate.c:19
 #: ../raster/r.buildvrt/main.c:91 ../raster/r.buildvrt/main.c:99
-#: ../raster/r.grow.distance/main.c:155 ../raster/r.grow.distance/main.c:161
+#: ../raster/r.grow.distance/main.c:158 ../raster/r.grow.distance/main.c:164
 #: ../raster/r.in.lidar/main.c:127 ../raster/r.in.lidar/main.c:255
 #: ../raster/r.in.lidar/main.c:287 ../raster/r.in.lidar/main.c:296
 #: ../raster/r.in.pdal/main.cpp:109 ../raster/r.in.pdal/main.cpp:300
@@ -11455,7 +11455,7 @@ msgstr ""
 #: ../raster/r.fill.dir/wtrshed.c:176 ../raster/r.fill.dir/wtrshed.c:201
 #: ../raster/r.fill.dir/wtrshed.c:210 ../raster/r.fill.dir/wtrshed.c:234
 #: ../raster/r.fill.dir/wtrshed.c:259 ../raster/r.fill.dir/wtrshed.c:269
-#: ../raster/r.grow.distance/main.c:389 ../raster/r.li/r.li.daemon/daemon.c:743
+#: ../raster/r.grow.distance/main.c:397 ../raster/r.li/r.li.daemon/daemon.c:743
 #: ../raster/r.mfilter/execute.c:82 ../raster/r.mfilter/execute.c:114
 #: ../raster/r.mfilter/execute.c:165 ../raster/r.mfilter/getrow.c:24
 #: ../raster/r.mfilter/getrow.c:31 ../raster/r.path/main.c:786
@@ -14020,7 +14020,7 @@ msgid "Generates a raster map layer with contiguous areas grown by one cell."
 msgstr ""
 
 #: ../locale/scriptstrings/r.grow_to_translate.c:4
-#: ../raster/r.grow.distance/main.c:144
+#: ../raster/r.grow.distance/main.c:147
 msgid "proximity"
 msgstr ""
 
@@ -14033,7 +14033,7 @@ msgid "Radius of buffer in raster cells"
 msgstr ""
 
 #: ../locale/scriptstrings/r.grow_to_translate.c:7
-#: ../raster/r.grow.distance/main.c:167
+#: ../raster/r.grow.distance/main.c:170
 msgid "Metric"
 msgstr ""
 
@@ -18085,7 +18085,7 @@ msgstr ""
 msgid "Can't create temporary PostScript mask file."
 msgstr ""
 
-#: ../ps/ps.map/ps_raster.c:102 ../raster/r.grow.distance/main.c:322
+#: ../ps/ps.map/ps_raster.c:102 ../raster/r.grow.distance/main.c:330
 #: ../raster/r.out.mpeg/main.c:292 ../raster/r.series.accumulate/main.c:246
 #: ../raster/r.series.accumulate/main.c:271
 #: ../raster/r.series.accumulate/main.c:282
@@ -18409,8 +18409,7 @@ msgstr ""
 #: ../raster/r.mapcalc/main.c:176 ../raster/r.series.accumulate/main.c:204
 #: ../raster/r.series.interp/main.c:129 ../raster/r.series.interp/main.c:133
 #: ../raster/r.series.interp/main.c:145 ../raster/r.series.interp/main.c:149
-#: ../temporal/t.remove/t.remove.py:77
-#: ../temporal/t.unregister/t.unregister.py:60 ../vector/v.colors/main.c:219
+#: ../temporal/t.remove/t.remove.py:77 ../vector/v.colors/main.c:219
 #, c-format, python-format
 msgid "%s= and %s= are mutually exclusive"
 msgstr ""
@@ -18883,7 +18882,7 @@ msgid "Exports the color table associated with a raster map."
 msgstr ""
 
 #: ../raster/r.colors.out/raster_main.c:72 ../raster/r.colors/edit_colors.c:507
-#: ../raster/r.fill.dir/main.c:168 ../raster/r.grow.distance/main.c:482
+#: ../raster/r.fill.dir/main.c:168 ../raster/r.grow.distance/main.c:493
 #: ../vector/v.colors/main.c:318
 #, c-format
 msgid "Unable to read color table for raster map <%s>"
@@ -19458,7 +19457,8 @@ msgstr ""
 msgid "Use the 'Knight's move'; slower, but more accurate"
 msgstr ""
 
-#: ../raster/r.cost/main.c:254 ../raster/r.walk/main.c:340
+#: ../raster/r.cost/main.c:254 ../raster/r.neighbors/main.c:290
+#: ../raster/r.walk/main.c:340
 msgid "Keep null values in output raster map"
 msgstr ""
 
@@ -20231,9 +20231,9 @@ msgstr ""
 #: ../raster/r.fill.dir/wtrshed.c:121 ../raster/r.fill.dir/wtrshed.c:170
 #: ../raster/r.fill.dir/wtrshed.c:180 ../raster/r.fill.dir/wtrshed.c:205
 #: ../raster/r.fill.dir/wtrshed.c:214 ../raster/r.fill.dir/wtrshed.c:263
-#: ../raster/r.fill.dir/wtrshed.c:273 ../raster/r.grow.distance/main.c:394
-#: ../raster/r.grow.distance/main.c:397 ../raster/r.grow.distance/main.c:400
-#: ../raster/r.grow.distance/main.c:403
+#: ../raster/r.fill.dir/wtrshed.c:273 ../raster/r.grow.distance/main.c:402
+#: ../raster/r.grow.distance/main.c:405 ../raster/r.grow.distance/main.c:408
+#: ../raster/r.grow.distance/main.c:411
 #, c-format
 msgid "File reading error in %s() %d:%s"
 msgstr ""
@@ -20250,8 +20250,8 @@ msgstr[1] ""
 #: ../raster/r.fill.dir/ppupdate.c:235 ../raster/r.fill.dir/resolve.c:134
 #: ../raster/r.fill.dir/resolve.c:187 ../raster/r.fill.dir/resolve.c:237
 #: ../raster/r.fill.dir/wtrshed.c:144 ../raster/r.fill.dir/wtrshed.c:238
-#: ../raster/r.grow.distance/main.c:357 ../raster/r.grow.distance/main.c:360
-#: ../raster/r.grow.distance/main.c:363 ../raster/r.grow.distance/main.c:366
+#: ../raster/r.grow.distance/main.c:366 ../raster/r.grow.distance/main.c:369
+#: ../raster/r.grow.distance/main.c:372 ../raster/r.grow.distance/main.c:375
 #, c-format
 msgid "File writing error in %s() %d:%s"
 msgstr ""
@@ -20337,7 +20337,7 @@ msgstr ""
 msgid "Repeat to get the final directions..."
 msgstr ""
 
-#: ../raster/r.fill.dir/main.c:285 ../raster/r.grow.distance/main.c:379
+#: ../raster/r.fill.dir/main.c:285 ../raster/r.grow.distance/main.c:388
 #: ../raster/r.stream.extract/close.c:254
 msgid "Writing output raster maps..."
 msgstr ""
@@ -20820,73 +20820,73 @@ msgstr ""
 msgid "JSON nesting exceeds maximum depth"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:146
+#: ../raster/r.grow.distance/main.c:149
 msgid "Generates a raster map containing distances to nearest raster features and/or the value of the nearest non-null cell."
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:154
+#: ../raster/r.grow.distance/main.c:157
 msgid "Name for distance output raster map"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:160
+#: ../raster/r.grow.distance/main.c:163
 msgid "Name for value output raster map"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:175
+#: ../raster/r.grow.distance/main.c:178
 msgid "Minimum distance threshold"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:181
+#: ../raster/r.grow.distance/main.c:184
 msgid "Maximum distance threshold"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:185
+#: ../raster/r.grow.distance/main.c:188
 msgid "Output distances in meters instead of map units"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:189
+#: ../raster/r.grow.distance/main.c:192
 msgid "Calculate distance to nearest NULL cell"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:202 ../raster/r.grow.distance/main.c:212
+#: ../raster/r.grow.distance/main.c:205 ../raster/r.grow.distance/main.c:215
 #, c-format
 msgid "Invalid %s value '%s', ignoring."
 msgstr ""
 
 #. GTC error because given minimum_distance is not smaller than
 #. * given maximum_distance
-#: ../raster/r.grow.distance/main.c:222
+#: ../raster/r.grow.distance/main.c:225
 #, c-format
 msgid "'%s' must be smaller than '%s'."
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:237
+#: ../raster/r.grow.distance/main.c:235
 msgid "Distance output is required for distance to NULL cells"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:240
+#: ../raster/r.grow.distance/main.c:238
 msgid "Value output is meaningless for distance to NULL cells"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:246
+#: ../raster/r.grow.distance/main.c:244
 msgid "At least one of distance= and value= must be given"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:262
+#: ../raster/r.grow.distance/main.c:266
 msgid "metric=geodesic is only valid for lat/lon"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:268
+#: ../raster/r.grow.distance/main.c:272
 #, c-format
 msgid "Unknown metric: '%s'"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:273
+#: ../raster/r.grow.distance/main.c:277
 #, c-format
 msgid "Output distance in meters for lat/lon is only possible with '%s=%s'"
 msgstr ""
 
-#: ../raster/r.grow.distance/main.c:294 ../raster/r.thin/io.c:127
+#: ../raster/r.grow.distance/main.c:298 ../raster/r.thin/io.c:127
 #, c-format
 msgid "Unable to create temporary file <%s>"
 msgstr ""
@@ -21494,7 +21494,7 @@ msgid "Option %s must be >= 0"
 msgstr ""
 
 #: ../raster/r.in.bin/main.c:448 ../raster/r.in.bin/main.c:454
-#: ../raster/r.neighbors/main.c:304 ../raster/r.out.bin/main.c:388
+#: ../raster/r.neighbors/main.c:310 ../raster/r.out.bin/main.c:388
 #: ../raster/r.stats.quantile/main.c:734
 #, c-format
 msgid "-%c and %s= are mutually exclusive"
@@ -23493,7 +23493,7 @@ msgid "r3.mapcalc does not support parallel execution."
 msgstr ""
 
 #: ../raster/r.mapcalc/main.c:251 ../raster/r.mfilter/main.c:124
-#: ../raster/r.neighbors/main.c:301 ../raster/r.patch/main.c:105
+#: ../raster/r.neighbors/main.c:307 ../raster/r.patch/main.c:105
 #: ../raster/r.resamp.filter/main.c:486 ../raster/r.resamp.interp/main.c:123
 #: ../raster/r.resamp.stats/main.c:438 ../raster/r.series/main.c:222
 #: ../raster/r.slope.aspect/main.c:300 ../raster/r.texture/main.c:316
@@ -23751,39 +23751,39 @@ msgstr ""
 msgid "Do not align output with the input"
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:293
+#: ../raster/r.neighbors/main.c:299
 msgid "Neighborhood size must be positive"
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:295
+#: ../raster/r.neighbors/main.c:301
 msgid "Neighborhood size must be odd"
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:309
+#: ../raster/r.neighbors/main.c:315
 msgid "File with weighting matrix is missing."
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:315
+#: ../raster/r.neighbors/main.c:321
 #, c-format
 msgid "Weighting function '%s' requires a %s."
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:346
+#: ../raster/r.neighbors/main.c:352
 #, c-format
 msgid "%s= and %s= must have the same number of values"
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:381
+#: ../raster/r.neighbors/main.c:387
 #, c-format
 msgid "Computing %s weights..."
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:407
+#: ../raster/r.neighbors/main.c:413
 #, c-format
 msgid "Method %s not compatible with weighing window, using weight mask instead"
 msgstr ""
 
-#: ../raster/r.neighbors/main.c:456
+#: ../raster/r.neighbors/main.c:462
 #, c-format
 msgid "Opening selection map <%s>"
 msgstr ""
@@ -25716,35 +25716,35 @@ msgstr ""
 msgid "Reducing number of bins from %d to %d"
 msgstr ""
 
-#: ../raster/r.random.cells/init.c:81
+#: ../raster/r.random.cells/init.c:83
 msgid "Distance must be > 0.0"
 msgstr ""
 
-#: ../raster/r.random.cells/init.c:97 ../raster/r.random.surface/main.c:119
+#: ../raster/r.random.cells/init.c:93 ../raster/r.random.surface/main.c:119
 #, c-format
 msgid "Generating raster map <%s>..."
 msgstr ""
 
-#: ../raster/r.random.cells/main.c:48 ../raster/r.random.surface/main.c:55
+#: ../raster/r.random.cells/main.c:49 ../raster/r.random.surface/main.c:55
 #: ../raster/r.random/main.c:53 ../raster/r.surf.gauss/main.c:37
 #: ../raster/r.surf.random/main.c:83 ../vector/v.extract/main.c:78
 #: ../vector/v.perturb/main.c:62 ../vector/v.random/main.c:99
 msgid "random"
 msgstr ""
 
-#: ../raster/r.random.cells/main.c:49
+#: ../raster/r.random.cells/main.c:50
 msgid "autocorrelation"
 msgstr ""
 
-#: ../raster/r.random.cells/main.c:51
+#: ../raster/r.random.cells/main.c:52
 msgid "Generates random cell values with spatial dependence."
 msgstr ""
 
-#: ../raster/r.random.cells/main.c:61 ../raster/r.random.surface/main.c:73
+#: ../raster/r.random.cells/main.c:62 ../raster/r.random.surface/main.c:73
 msgid "Maximum distance of spatial correlation (value >= 0.0)"
 msgstr ""
 
-#: ../raster/r.random.cells/main.c:68
+#: ../raster/r.random.cells/main.c:69
 msgid "Maximum number of cells to be created"
 msgstr ""
 
@@ -33471,11 +33471,11 @@ msgstr ""
 msgid "Using DB driver: %s"
 msgstr ""
 
-#: ../scripts/db.test/db.test.py:71
+#: ../scripts/db.test/db.test.py:73
 msgid "EXECUTE: OK"
 msgstr ""
 
-#: ../scripts/db.test/db.test.py:85
+#: ../scripts/db.test/db.test.py:87
 msgid "RESULT: OK"
 msgstr ""
 
@@ -34125,7 +34125,7 @@ msgstr ""
 msgid "Calculating OIF for all band combinations..."
 msgstr ""
 
-#: ../scripts/i.oif/i.oif.py:136
+#: ../scripts/i.oif/i.oif.py:140
 msgid "The Optimum Index Factor analysis result (best combination shown first):"
 msgstr ""
 
@@ -35418,7 +35418,7 @@ msgstr ""
 #: ../scripts/v.db.dropcolumn/v.db.dropcolumn.py:51
 #: ../scripts/v.db.renamecolumn/v.db.renamecolumn.py:51
 #: ../scripts/v.db.update/v.db.update.py:70
-#: ../scripts/v.rast.stats/v.rast.stats.py:120
+#: ../scripts/v.rast.stats/v.rast.stats.py:117
 #, python-format
 msgid "Vector map <%s> not found in current mapset"
 msgstr ""
@@ -35651,9 +35651,9 @@ msgid "No attribute table linked to layer <%s>"
 msgstr ""
 
 #: ../scripts/v.db.update/v.db.update.py:77
-#: ../scripts/v.rast.stats/v.rast.stats.py:128
-#: ../scripts/v.rast.stats/v.rast.stats.py:166
-#: ../scripts/v.rast.stats/v.rast.stats.py:177
+#: ../scripts/v.rast.stats/v.rast.stats.py:125
+#: ../scripts/v.rast.stats/v.rast.stats.py:163
+#: ../scripts/v.rast.stats/v.rast.stats.py:174
 msgid "There is no table connected to this map. Run v.db.connect or v.db.addtable first."
 msgstr ""
 
@@ -35663,7 +35663,7 @@ msgstr ""
 
 #: ../scripts/v.db.update/v.db.update.py:100
 #: ../scripts/v.dissolve/v.dissolve.py:606 ../vector/v.to.rast/support.c:297
-#: ../vector/v.to.rast/support.c:528 ../vector/v.to.rast/vect2rast.c:67
+#: ../vector/v.to.rast/support.c:529 ../vector/v.to.rast/vect2rast.c:67
 #: ../vector/v.what.rast3/main.c:140
 #, c-format, python-format
 msgid "Column <%s> not found"
@@ -35949,54 +35949,54 @@ msgstr ""
 msgid "Pack file <%s> created"
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:139
+#: ../scripts/v.rast.stats/v.rast.stats.py:136
 #, python-brace-format
 msgid "Number of raster maps ({0}) different from                       number of column prefixes ({1})"
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:199
+#: ../scripts/v.rast.stats/v.rast.stats.py:196
 #, python-format
 msgid "Processing input data (%d categories)..."
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:224
+#: ../scripts/v.rast.stats/v.rast.stats.py:221
 msgid "Updating the database ..."
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:232
+#: ../scripts/v.rast.stats/v.rast.stats.py:229
 #, python-brace-format
 msgid "Statistics calculated from raster map <{raster}> and uploaded to attribute table of vector map <{vector}>."
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:239
+#: ../scripts/v.rast.stats/v.rast.stats.py:236
 #, python-format
 msgid "Failed to upload statistics to attribute table of vector map <%s>."
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:276
+#: ../scripts/v.rast.stats/v.rast.stats.py:273
 msgid "An error occurred while converting vector to raster"
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:304
+#: ../scripts/v.rast.stats/v.rast.stats.py:296
 msgid "No categories found in raster map"
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:334
+#: ../scripts/v.rast.stats/v.rast.stats.py:326
 #, python-brace-format
 msgid "Not all vector categories converted to raster.                         Converted {0} of {1}."
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:415
+#: ../scripts/v.rast.stats/v.rast.stats.py:407
 #, python-brace-format
 msgid "Cannot create column <{column}> (already present). Use -c flag to update values in this column."
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:424
+#: ../scripts/v.rast.stats/v.rast.stats.py:416
 #, python-format
 msgid "Adding columns '%s'"
 msgstr ""
 
-#: ../scripts/v.rast.stats/v.rast.stats.py:428
+#: ../scripts/v.rast.stats/v.rast.stats.py:420
 msgid "Adding columns failed. Exiting."
 msgstr ""
 
@@ -36635,28 +36635,35 @@ msgstr ""
 msgid "Unable to temporally shift the space time %s dataset <%s>"
 msgstr ""
 
-#: ../temporal/t.unregister/t.unregister.py:63
-#: ../vector/v.external.out/args.c:98
-#, c-format, python-format
-msgid "%s= or %s= must be specified"
+#: ../temporal/t.unregister/t.unregister.py:72
+msgid "Unable to connect to a temporal database in the current mapset. Nothing to unregister"
 msgstr ""
 
-#: ../temporal/t.unregister/t.unregister.py:109
-msgid "Unregister maps"
+#: ../temporal/t.unregister/t.unregister.py:87
+#, python-brace-format
+msgid "Maps can only be unregistered from a space time dataset in the current mapset, but <{mapid}> is in mapset <{mapset}>"
 msgstr ""
 
-#: ../temporal/t.unregister/t.unregister.py:136
-#, python-format
-msgid "Unable to find %s map <%s> in temporal database"
+#: ../temporal/t.unregister/t.unregister.py:119
+#, python-brace-format
+msgid "Unable to read map list from file <{filename}>: {error}"
 msgstr ""
 
-#: ../temporal/t.unregister/t.unregister.py:150
-#, python-format
-msgid "Unregister maps from space time dataset <%s>"
+#: ../temporal/t.unregister/t.unregister.py:128
+msgid "Collecting SQL statements to unregister {} maps"
 msgstr ""
 
-#: ../temporal/t.unregister/t.unregister.py:152
-msgid "Unregister maps from the temporal database"
+#: ../temporal/t.unregister/t.unregister.py:155
+#, python-brace-format
+msgid "Unable to find {map_type} map <{map_id}> in temporal database"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:168
+msgid "Unregistering maps from space time dataset <{}>"
+msgstr ""
+
+#: ../temporal/t.unregister/t.unregister.py:173
+msgid "Unregistering maps from the temporal database"
 msgstr ""
 
 #: ../temporal/t.vect.observe.strds/t.vect.observe.strds.py:98
@@ -37281,7 +37288,7 @@ msgstr ""
 
 #: ../vector/v.class/main.c:175 ../vector/v.reclass/main.c:236
 #: ../vector/v.to.rast/support.c:118 ../vector/v.to.rast/support.c:287
-#: ../vector/v.to.rast/support.c:517 ../vector/v.to.rast/vect2rast.c:77
+#: ../vector/v.to.rast/support.c:518 ../vector/v.to.rast/vect2rast.c:77
 #, c-format
 msgid "No records selected from table <%s>"
 msgstr ""
@@ -39129,6 +39136,11 @@ msgstr ""
 
 #: ../vector/v.external.out/args.c:80
 msgid "Print current status in shell script style"
+msgstr ""
+
+#: ../vector/v.external.out/args.c:98
+#, c-format
+msgid "%s= or %s= must be specified"
 msgstr ""
 
 #: ../vector/v.external.out/args.c:101
@@ -47424,7 +47436,7 @@ msgid "Unknown option '%s'"
 msgstr ""
 
 #: ../vector/v.to.rast/support.c:114 ../vector/v.to.rast/support.c:283
-#: ../vector/v.to.rast/support.c:513
+#: ../vector/v.to.rast/support.c:514
 #, c-format
 msgid "Unknown column <%s> in table <%s>"
 msgstr ""
@@ -47451,7 +47463,7 @@ msgstr ""
 msgid "Label column was not specified, no labels will be written"
 msgstr ""
 
-#: ../vector/v.to.rast/support.c:331 ../vector/v.to.rast/support.c:558
+#: ../vector/v.to.rast/support.c:331 ../vector/v.to.rast/support.c:559
 #, c-format
 msgid "Column type (%s) not supported"
 msgstr ""
@@ -47460,7 +47472,7 @@ msgstr ""
 msgid "Different labels for the same value are not supported"
 msgstr ""
 
-#: ../vector/v.to.rast/support.c:645 ../vector/v.to.rast/vect2rast.c:133
+#: ../vector/v.to.rast/support.c:652 ../vector/v.to.rast/vect2rast.c:133
 #, c-format
 msgid "Unknown use type: %d"
 msgstr ""

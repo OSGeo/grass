@@ -324,13 +324,7 @@ int main(int argc, char *argv[])
         _("This flag is deprecated and will be removed in a future release. "
           "Seeding is automatic or use parameter seed.");
 
-    parm.threads = G_define_option();
-    parm.threads->key = "nprocs";
-    parm.threads->type = TYPE_INTEGER;
-    parm.threads->answer = NUM_THREADS;
-    parm.threads->required = NO;
-    parm.threads->description =
-        _("Number of threads which will be used for parallel computation.");
+    parm.threads = G_define_standard_option(G_OPT_M_NPROCS);
     parm.threads->guisection = _("Parameters");
 
     flag.print = G_define_flag();
@@ -424,23 +418,7 @@ int main(int argc, char *argv[])
 
     G_debug(3, "Parsing rain parameters");
 
-    sscanf(parm.threads->answer, "%d", &threads);
-    if (threads < 1) {
-        G_warning(_("<%d> is not valid number of threads. Number of threads "
-                    "will be set on <%d>"),
-                  threads, abs(threads));
-        threads = abs(threads);
-    }
-    if (threads > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        threads = 1;
-    }
-#if defined(_OPENMP)
-    omp_set_num_threads(threads);
-#else
-    threads = 1;
-#endif
-    G_message(_("Number of threads: %d"), threads);
+    threads = G_set_omp_num_threads(parm.threads);
     summary.threads = threads;
 
     /* if no rain map input, then: */

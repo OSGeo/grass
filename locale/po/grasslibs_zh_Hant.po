@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -7176,10 +7176,6 @@ msgstr ""
 msgid "The map does not exist, I can't open in 'r' mode"
 msgstr ""
 
-#, python-brace-format
-msgid "Raster map <{0}> already exists and will be not overwritten"
-msgstr ""
-
 msgid "Raster type not defined"
 msgstr ""
 
@@ -7189,10 +7185,6 @@ msgstr ""
 
 #, python-format
 msgid "Index out of range: %r."
-msgstr ""
-
-#, python-brace-format
-msgid "Raster map <{0}> already exists. Use overwrite."
 msgstr ""
 
 #, python-brace-format
@@ -7212,6 +7204,10 @@ msgstr ""
 
 #, python-brace-format
 msgid "Map name {0} not valid"
+msgstr ""
+
+#, python-brace-format
+msgid "Raster map <{0}> already exists and will be not overwritten"
 msgstr ""
 
 #, python-brace-format

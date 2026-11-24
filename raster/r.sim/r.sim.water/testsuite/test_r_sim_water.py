@@ -111,6 +111,7 @@ class TestRSimWater(TestCase):
             depth=self.depth,
             discharge=self.discharge,
             seed=1,
+            nprocs=1,
         )
         self.assertRasterExists(self.depth)
         self.assertRasterExists(self.discharge)
@@ -179,6 +180,7 @@ class TestRSimWater(TestCase):
             halpha=3.9,
             hbeta=0.6,
             seed=1,
+            nprocs=1,
         )
         self.assertRasterExists(f"{self.depth}.05")
         self.assertRasterExists(f"{self.depth}.10")
@@ -207,6 +209,7 @@ class TestRSimWater(TestCase):
             depth=self.depth,
             duration=30,
             seed=1,
+            nprocs=1,
         )
         self.assertRasterExists(self.depth)
         self.assertRastersEqual(
