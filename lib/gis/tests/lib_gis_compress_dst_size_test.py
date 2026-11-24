@@ -120,8 +120,9 @@ from grass.lib.gis import G_compress, G_compress_bound, G_gisinit
 
 G_gisinit("lib_gis_compress_dst_size_test")
 number = int(sys.argv[1])
+generator = random.Random(42)
 for size in (int(arg) for arg in sys.argv[2:]):
-    data = random.Random(size).randbytes(size)
+    data = generator.randbytes(size)
     src = (ctypes.c_ubyte * size).from_buffer_copy(data)
     bound = G_compress_bound(size, number)
     dst = (ctypes.c_ubyte * bound)()
