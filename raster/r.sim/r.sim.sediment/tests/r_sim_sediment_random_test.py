@@ -32,6 +32,7 @@ def session(tmp_path_factory):
         Tools(session=session) as tools,
     ):
         tools.g_region(s=0, n=40, w=0, e=40, res=1)
+        tools.g_gisenv(set="NPROCS=1")  # Same flux for the same seed
         tools.r_mapcalc(
             expression="elevation = 0.01 * ((col() - 20.5)^2 + (row() - 20.5)^2)"
         )
@@ -94,9 +95,7 @@ def test_results_do_not_depend_on_nprocs(session, nprocs):
     The water depth is an input here, so nothing a walker reacts to is
     changed by the other walkers of the same step.
     """
-    serial_flux, serial = simulate(
-        session, f"walkers_{nprocs}_serial", seed=5, nprocs=1
-    )
+    serial_flux, serial = simulate(session, f"walkers_{nprocs}_serial", seed=5)
     parallel_flux, parallel = simulate(
         session, f"walkers_{nprocs}_parallel", seed=5, nprocs=nprocs
     )
