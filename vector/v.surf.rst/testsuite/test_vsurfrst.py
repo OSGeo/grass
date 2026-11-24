@@ -77,6 +77,7 @@ class TestVsurfrst(TestCase):
         )
 
     def test_more_threads(self):
+        self.vsurfrst.inputs["nprocs"].value = 1
         self.assertModule(self.vsurfrst)
         try:
             self.vsurfrst.inputs["nprocs"].value = 4

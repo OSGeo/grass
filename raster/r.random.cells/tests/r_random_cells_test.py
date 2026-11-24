@@ -3,10 +3,11 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 import os
 
+import numpy as np
 import pytest
 
 import grass.script as gs
-from grass.tools import Tools
+from grass.tools import ToolError, Tools
 
 # (20-10) / 2 * (60-40) / 2 = 50 cells
 N_CELLS = 50
@@ -62,3 +63,58 @@ def test_fill_count(session_with_region):
     assert univar["null_cells"] == N_CELLS - count
     assert univar["min"] == 1
     assert univar["max"] == count
+
+
+@pytest.fixture
+def session_small_region(tmp_path):
+    """A session with a region of 4 rows and 5 columns."""
+    project = tmp_path / "r_random_cells_small"
+    gs.create_project(project)
+    with gs.setup.init(project, env=os.environ.copy()) as session:
+        Tools(session=session).g_region(n=4, s=0, e=5, w=0, res=1)
+        yield session
+
+
+# The maps are integer, so unfilled cells come back from the array conversion
+# as 0 rather than as a null. Categories start at 1, so the two do not overlap.
+def test_cells_of_a_seed(session_small_region):
+    """The cells a seed fills are the pinned ones."""
+    tools = Tools(session=session_small_region)
+    result = tools.r_random_cells(output=np.array, distance=2, seed=100)
+    expected = [
+        [4, 0, 2, 0, 0],
+        [0, 0, 0, 0, 5],
+        [0, 0, 0, 0, 0],
+        [3, 0, 0, 1, 0],
+    ]
+    np.testing.assert_array_equal(result, expected)
+
+
+def test_cells_of_a_seed_with_count(session_small_region):
+    """ncells= keeps the first cells of the same seed."""
+    tools = Tools(session=session_small_region)
+    result = tools.r_random_cells(output=np.array, distance=2, seed=100, ncells=3)
+    expected = [
+        [0, 0, 2, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [3, 0, 0, 1, 0],
+    ]
+    np.testing.assert_array_equal(result, expected)
+
+
+def test_negative_seed_is_reproducible(session_with_region):
+    """A negative seed is a seed, so two runs fill the same cells."""
+    tools = Tools(session=session_with_region)
+    first = tools.r_random_cells(output=np.array, distance=2, seed=-5)
+    second = tools.r_random_cells(output=np.array, distance=2, seed=-5)
+    np.testing.assert_array_equal(first, second)
+
+
+@pytest.mark.parametrize("seed", ["5000000000", "-2147483649", "12abc"])
+def test_invalid_seed_refused(session_with_region, seed):
+    """A seed out of range or not wholly an integer is an error."""
+    tools = Tools(session=session_with_region)
+    with pytest.raises(ToolError):
+        tools.r_random_cells(output="cells", distance=2, seed=seed)
+    assert not tools.g_list(type="raster", pattern="cells", format="json")

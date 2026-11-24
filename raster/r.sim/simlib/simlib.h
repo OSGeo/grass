@@ -10,10 +10,9 @@
 
 #include <grass/gis.h>
 
-#define EPS         1.e-7
-#define UNDEF       -9999
+#define EPS   1.e-7
+#define UNDEF -9999
 
-#define NUM_THREADS "1"
 #if defined(_OPENMP)
 #include <omp.h>
 #endif

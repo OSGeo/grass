@@ -130,7 +130,11 @@ def main():
     oif = []
     for p in perms(bands):
         oif.append((oifcalc(stddev, correlation, *p), p))
-    oif.sort(reverse=True)
+    # NaN does not compare, so sorting the raw tuples gives an order which
+    # depends on the sort algorithm. Place NaN last, in input order.
+    oif.sort(
+        key=lambda item: (item[0] != item[0], -item[0] if item[0] == item[0] else 0)
+    )
 
     grass.verbose(
         _("The Optimum Index Factor analysis result (best combination shown first):")

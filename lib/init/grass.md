@@ -392,15 +392,15 @@ A very simple Python script ("test.py") may look like this:
 # import GRASS Python bindings (see also pygrass)
 import grass.script as gs
 
-gs.message('Current GRASS environment:')
+gs.message("Current GRASS environment:")
 print(gs.gisenv())
 
-gs.message('Available raster maps:')
-for raster in gs.list_strings(type='raster'):
+gs.message("Available raster maps:")
+for raster in gs.list_strings(type="raster"):
     print(raster)
 
-gs.message('Available vector maps:')
-for vector in gs.list_strings(type='vector'):
+gs.message("Available vector maps:")
+for vector in gs.list_strings(type="vector"):
     print(vector)
 ```
 

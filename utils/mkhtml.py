@@ -13,7 +13,6 @@
 #
 #############################################################################
 
-import locale
 import os
 import re
 import string
@@ -67,12 +66,9 @@ if grass_version != "unknown":
     )
 
 
-def _get_encoding():
-    encoding = locale.getencoding()
-    if not encoding:
-        encoding = "UTF-8"
-    return encoding
-
+# The page is redirected to a file which is UTF-8 as the sources are,
+# regardless of the encoding of the locale.
+sys.stdout.reconfigure(encoding="utf-8")
 
 set_proxy()
 

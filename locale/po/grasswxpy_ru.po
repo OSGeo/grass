@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-17 18:18+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2023-06-28 19:08+0000\n"
 "Last-Translator: Sergey Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/ru/>\n"
@@ -1410,9 +1410,6 @@ msgstr "Удаление {name}…"
 #| msgid "g.remove completed"
 msgid "t.remove completed"
 msgstr "Работа g.remove завершена"
-
-msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
-msgstr "Для перемещения или копирования карт в другие наборы, необходимо разблокировать возможность изменения других наборов"
 
 #, fuzzy
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
@@ -15743,6 +15740,9 @@ msgid ""
 msgstr ""
 "Уравнение регрессии для растровых карт <%(rast1)s> и <%(rast2)s>:\n"
 "\n"
+
+#~ msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
+#~ msgstr "Для перемещения или копирования карт в другие наборы, необходимо разблокировать возможность изменения других наборов"
 
 #~ msgid "Downloading data "
 #~ msgstr "Загрузка данных "

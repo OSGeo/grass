@@ -14,7 +14,7 @@
 #include "local_proto.h"
 
 static int k, col, row, top, bottom;
-static void *tl, *tr, *bl, *br;
+static void *tr, *bl, *br;
 static void *buffer[2];
 static int scan_length;
 static int draw_boundaries(void);
@@ -127,8 +127,6 @@ int draw_outline(void)
             e1 = Rast_col_to_easting((double)col - 1., &(PS.w));
             e2 = Rast_col_to_easting((double)col, &(PS.w));
             e3 = Rast_col_to_easting((double)col + 1., &(PS.w));
-            tl = G_incr_void_ptr(buffer[top], col * raster_size);
-            /* top left in window */
             tr = G_incr_void_ptr(buffer[top], (col + 1) * raster_size);
             /* top right in window */
             bl = G_incr_void_ptr(buffer[bottom], col * raster_size);

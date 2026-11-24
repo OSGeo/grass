@@ -106,3 +106,35 @@ def test_set_store_mapset_stores_variable_in_var_file(tools):
 
     assert var_file.exists()
     assert "TESTVAR: hello" in var_file.read_text(encoding="utf-8")
+
+
+def test_nprocs_can_be_read_back(tools):
+    """NPROCS set with g.gisenv can be read back"""
+    tools.g_gisenv(set="NPROCS=3")
+    assert tools.g_gisenv(get="NPROCS").text == "3"
+
+
+@pytest.fixture
+def nprocs_tools(tools):
+    """Tools in a session with NPROCS set to 3 and a raster map named ones"""
+    tools.g_gisenv(set="NPROCS=3")
+    tools.g_region(rows=2, cols=2)
+    tools.r_mapcalc(expression="ones = 1")
+    return tools
+
+
+def test_nprocs_is_default_of_tools(nprocs_tools):
+    """Tools take NPROCS as the default of their nprocs option
+
+    r.series records its options, including nprocs, in the history of its
+    output.
+    """
+    nprocs_tools.r_series(input="ones", output="sum", method="sum")
+    assert "nprocs=3" in nprocs_tools.r_info(map="sum", flags="h").text
+
+
+def test_unset_nprocs_gives_option_default(nprocs_tools):
+    """Without NPROCS, the nprocs option of tools has its default of 0"""
+    nprocs_tools.g_gisenv(unset="NPROCS")
+    nprocs_tools.r_series(input="ones", output="sum", method="sum")
+    assert "nprocs=0" in nprocs_tools.r_info(map="sum", flags="h").text

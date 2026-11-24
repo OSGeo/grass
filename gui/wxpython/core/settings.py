@@ -940,6 +940,7 @@ class Settings:
                 _("Unable to read settings file <{path}>:\n{err}").format(
                     path=self.filePath, err=e
                 )
+                + "\n"
             )
 
     def _readLegacyFile(self, settings=None):
