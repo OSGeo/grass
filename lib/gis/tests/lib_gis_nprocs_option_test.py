@@ -75,9 +75,9 @@ def test_positive_as_given(xy_session_for_module, answer, expected):
     assert numbers[0] == expected
 
 
-def test_omp_num_threads_sets_only_the_default(xy_session_for_module):
-    """OMP_NUM_THREADS changes what 0 gives, but not what negative values give,
-    which give at least one thread
+def test_zero_and_negative_with_openmp(xy_session_for_module):
+    """With OpenMP, 0 follows OMP_NUM_THREADS, while negative values count from
+    the processors and give at least one thread
     """
     session = xy_session_for_module
     returncode, numbers, stderr = nprocs_from_option(session, "2")
@@ -90,6 +90,8 @@ def test_omp_num_threads_sets_only_the_default(xy_session_for_module):
     # -1 counts from the processors, so OMP_NUM_THREADS does not change it.
     returncode, minus_one, stderr = nprocs_from_option(session, "-1")
     assert returncode == 0, stderr
+    assert minus_one[0] >= 1
     assert nprocs_from_option(session, "-1", omp_num_threads="1000")[1] == minus_one
-    # Subtracting more than the number of processors still gives one thread.
-    assert nprocs_from_option(session, "-100000")[1] == [1, 1]
+    # There are at most minus_one + 1 processors, so subtracting that many
+    # leaves none, which still gives one thread.
+    assert nprocs_from_option(session, str(-minus_one[0] - 1))[1] == [1, 1]
