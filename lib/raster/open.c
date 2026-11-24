@@ -662,7 +662,7 @@ static int open_raster_new(const char *name, int open_mode,
      */
     fcb->cellhd = R__.wr_window;
 
-    /* GRASS_COMPRESSOR=NONE gives compression type 0. */
+    /* Compression type 0 (NONE) means an uncompressed map. */
     if (open_mode == OPEN_NEW_COMPRESSED && R__.compression_type == 0)
         open_mode = OPEN_NEW_UNCOMPRESSED;
 
