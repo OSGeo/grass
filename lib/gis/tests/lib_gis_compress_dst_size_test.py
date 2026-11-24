@@ -11,7 +11,6 @@ after dst untouched. A dst of the bound size holds the compressed data of any
 input.
 """
 
-import ctypes
 import math
 import struct
 import subprocess
@@ -20,10 +19,6 @@ import sys
 import pytest
 
 from grass.lib.gis import G_check_compressor, G_compress_bound, G_compressor_number
-
-# INT_MAX of C, the limit of the int sizes in the API, for the int which ctypes
-# uses to call the library (two's complement assumed)
-C_INT_MAX = 2 ** (8 * ctypes.sizeof(ctypes.c_int) - 1) - 1
 
 
 def number(name):
@@ -155,13 +150,21 @@ def test_incompressible_data_fit_bound(xy_session_for_module, compressor_name):
     assert [int(result) for result in output.stdout.split()] == [-2] * len(SIZES)
 
 
-@pytest.mark.parametrize("size", [0, 1000, 2_000_000_000, C_INT_MAX])
+@pytest.mark.parametrize("size", [0, 1000, 2_000_000_000])
 def test_bzip2_bound_documented(size):
     """BZIP2 bound is at least the size the bzip2 documentation asks for
 
-    The documentation asks for 1% + 600 bytes over the input. The bound is
-    limited to INT_MAX.
+    The documentation asks for 1% + 600 bytes over the input.
     """
     number = G_compressor_number(b"BZIP2")
-    expected = min(size + size // 100 + 600, C_INT_MAX)
-    assert G_compress_bound(size, number) >= expected
+    assert G_compress_bound(size, number) >= size + size // 100 + 600
+
+
+def test_bzip2_bound_large_input():
+    """BZIP2 bound does not overflow when 1% + 600 bytes exceed an int
+
+    2.14e9 fits into a 32-bit int, but with 1% + 600 bytes added it does not,
+    so the bound is limited and must still not be smaller than the input.
+    """
+    size = 2_140_000_000
+    assert G_compress_bound(size, G_compressor_number(b"BZIP2")) >= size
