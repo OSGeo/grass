@@ -65,7 +65,7 @@ sys.stdout.buffer.write(b"%d\\n" % result + bytes(buffer))
 """
 
 
-def compress(session, name, dst_sz):
+def compress(session, compressor_name, dst_sz):
     """Compress DATA into dst_sz bytes, return result, dst, and the tail"""
     env = session.env.copy()
     # Level 0 does not compress, so the data would never be copied to dst.
@@ -75,7 +75,7 @@ def compress(session, name, dst_sz):
             sys.executable,
             "-c",
             SCRIPT,
-            str(G_compressor_number(name.encode())),
+            str(G_compressor_number(compressor_name.encode())),
             str(dst_sz),
             str(CANARY_BYTE),
         ],
@@ -88,20 +88,20 @@ def compress(session, name, dst_sz):
     return int(result), buffer[:dst_sz], buffer[dst_sz:]
 
 
-@pytest.mark.parametrize("name", ALL)
-def test_dst_too_small(xy_session_for_module, name):
+@pytest.mark.parametrize("compressor_name", ALL)
+def test_dst_too_small(xy_session_for_module, compressor_name):
     """Data which does not fit is reported as -2 and nothing is written after dst"""
-    result, _, tail = compress(xy_session_for_module, name, SMALL)
+    result, _, tail = compress(xy_session_for_module, compressor_name, SMALL)
     assert tail == CANARY
     assert result == -2
 
 
-@pytest.mark.parametrize("name", COMPRESSING)
-def test_dst_smaller_than_bound_fits(xy_session_for_module, name):
+@pytest.mark.parametrize("compressor_name", COMPRESSING)
+def test_dst_smaller_than_bound_fits(xy_session_for_module, compressor_name):
     """Data which fits into dst smaller than the bound is written there"""
-    size, stream, _ = compress(xy_session_for_module, name, len(DATA))
+    size, stream, _ = compress(xy_session_for_module, compressor_name, len(DATA))
     assert 0 < size < len(DATA)
-    result, dst, tail = compress(xy_session_for_module, name, size)
+    result, dst, tail = compress(xy_session_for_module, compressor_name, size)
     assert tail == CANARY
     assert result == size
     assert dst == stream[:size]
@@ -131,15 +131,15 @@ for size in (int(arg) for arg in sys.argv[2:]):
 """
 
 
-@pytest.mark.parametrize("name", COMPRESSING)
-def test_incompressible_data_fit_bound(xy_session_for_module, name):
+@pytest.mark.parametrize("compressor_name", COMPRESSING)
+def test_incompressible_data_fit_bound(xy_session_for_module, compressor_name):
     """Random data are reported as not compressible (-2), without warnings"""
     output = subprocess.run(
         [
             sys.executable,
             "-c",
             BOUND_SCRIPT,
-            str(G_compressor_number(name.encode())),
+            str(G_compressor_number(compressor_name.encode())),
             *(str(size) for size in SIZES),
         ],
         capture_output=True,
