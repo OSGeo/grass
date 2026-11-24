@@ -84,8 +84,8 @@ def test_omp_num_threads_sets_only_the_default(xy_session_for_module):
     assert returncode == 0, stderr
     if numbers[1] != 2:
         pytest.skip("GRASS is built without OpenMP")
-    assert nprocs_from_option(session, "0", "6")[1] == [6, 6]
+    assert nprocs_from_option(session, "0", omp_num_threads="6")[1] == [6, 6]
     default = nprocs_from_option(session, "-1")[1]
     assert default
-    assert nprocs_from_option(session, "-1", "1000")[1] == default
+    assert nprocs_from_option(session, "-1", omp_num_threads="1000")[1] == default
     assert nprocs_from_option(session, "-100000")[1] == [1, 1]
