@@ -281,7 +281,7 @@ def main():
     else:
         end = start + cycle
 
-    limit_relations = ["EQUALS", "DURING", "OVERLAPS", "OVERLAPPING", "CONTAINS"]
+    limit_relations = ["EQUAL", "DURING", "OVERLAPS", "OVERLAPPED", "CONTAINS"]
 
     count = 1
     output_maps = []
@@ -355,8 +355,8 @@ def main():
         # Aggregate
         num_maps = len(gran_list)
 
-        for i in range(num_maps):
-            map = gran_list[num_maps - i - 1] if reverse else gran_list[i]
+        for i in reversed(range(num_maps)) if reverse else range(num_maps):
+            map = gran_list[i]
             # Select input maps based on temporal topology relations
             input_maps = []
             if map.get_equal():

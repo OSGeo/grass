@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2026-10-31 18:56+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Slovenian <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/sl/>\n"
@@ -1312,9 +1312,6 @@ msgid "Deleting datasets..."
 msgstr ""
 
 msgid "t.remove completed"
-msgstr ""
-
-msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
 msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"

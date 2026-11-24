@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_lv\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2026-10-10 21:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Latvian <https://weblate.osgeo.org/projects/grass-gis/grasslibs/lv/>\n"
@@ -7257,10 +7257,6 @@ msgstr ""
 msgid "The map does not exist, I can't open in 'r' mode"
 msgstr ""
 
-#, python-brace-format
-msgid "Raster map <{0}> already exists and will be not overwritten"
-msgstr ""
-
 #, fuzzy
 #| msgid "OGR layer not defined"
 msgid "Raster type not defined"
@@ -7274,10 +7270,6 @@ msgstr ""
 #| msgid "Layer index out of range"
 msgid "Index out of range: %r."
 msgstr "Slāņa indekss ārpus robežām"
-
-#, python-brace-format
-msgid "Raster map <{0}> already exists. Use overwrite."
-msgstr ""
 
 #, fuzzy, python-brace-format
 #| msgid "Raster map <%s> not found"
@@ -7300,6 +7292,10 @@ msgstr "Objekta tips %d nav atbalstīts"
 
 #, python-brace-format
 msgid "Map name {0} not valid"
+msgstr ""
+
+#, python-brace-format
+msgid "Raster map <{0}> already exists and will be not overwritten"
 msgstr ""
 
 #, fuzzy, python-brace-format

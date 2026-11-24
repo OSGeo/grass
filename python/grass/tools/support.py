@@ -19,6 +19,7 @@ change between releases.
 
 from __future__ import annotations
 
+import itertools
 import json
 import shutil
 from io import StringIO
@@ -152,10 +153,10 @@ class ToolFunctionResolver:
         # We first try to find the tool on path which is much faster than getting
         # and checking the names, but if the tool is not found, likely because runtime
         # is not set up, we check the names.
-        if (
-            not shutil.which(tool_name, path=self._env["PATH"])
-            and name not in self.names()
-        ):
+        tool_on_path = self._find_tool_on_path(name)
+        if tool_on_path:
+            tool_name = tool_on_path
+        elif name not in self.names():
             suggestions = self.suggest_tools(tool_name)
             if suggestions:
                 # While Python may automatically suggest the closest match,
@@ -178,6 +179,39 @@ class ToolFunctionResolver:
             )
             raise exception_type(msg)
         return tool_name
+
+    def _find_tool_on_path(self, name):
+        """Find a tool on path for an attribute name and return its name
+
+        Underscores in attribute names stand for dots in tool names, but some
+        tool names contain underscores, too (e.g., r.colors.out_sld).
+        If the name with all dots is not found, each underscore except the one
+        after the prefix (e.g., r, v, or r3) is tried as a dot and as an underscore.
+
+        Returns None if no tool is found.
+        """
+        path = self._env["PATH"]
+        dotted_name = name.replace("_", ".")
+        if shutil.which(dotted_name, path=path):
+            return dotted_name
+        parts = name.split("_")
+        if not all(parts):
+            # Names with leading, trailing, or double underscores are not tool names
+            # (e.g., _repr_html_ which IPython looks for).
+            return None
+        head = ".".join(parts[:2])
+        tail = parts[2:]
+        # The first combination is all dots which was already tried.
+        for separators in itertools.islice(
+            itertools.product("._", repeat=len(tail)), 1, None
+        ):
+            candidate = head + "".join(
+                separator + part
+                for separator, part in zip(separators, tail, strict=True)
+            )
+            if shutil.which(candidate, path=path):
+                return candidate
+        return None
 
     def get_function(self, name, exception_type):
         tool_name = self.get_tool_name(name, exception_type)

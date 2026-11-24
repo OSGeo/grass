@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_th\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2025-08-23 20:19+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Thai <https://weblate.osgeo.org/projects/grass-gis/grasslibs/th/>\n"
@@ -7232,11 +7232,6 @@ msgstr ""
 msgid "The map does not exist, I can't open in 'r' mode"
 msgstr ""
 
-#, fuzzy, python-brace-format
-#| msgid "Vector map <%s> already exists and will be overwritten"
-msgid "Raster map <{0}> already exists and will be not overwritten"
-msgstr "แผนที่เชิงเส้น <%s> มีอยู่แล้วและจะถูกเขียนทับ"
-
 #, fuzzy
 #| msgid "Raster map <%s> not found"
 msgid "Raster type not defined"
@@ -7250,11 +7245,6 @@ msgstr "ไม่รองรับ ชนิด Column นี้"
 #| msgid "Layer index out of range"
 msgid "Index out of range: %r."
 msgstr "ดัชนี ชั้นข้อมูล ไม่อยู่ในช่วง"
-
-#, fuzzy, python-brace-format
-#| msgid "Vector map <%s> already exists and will be overwritten"
-msgid "Raster map <{0}> already exists. Use overwrite."
-msgstr "แผนที่เชิงเส้น <%s> มีอยู่แล้วและจะถูกเขียนทับ"
 
 #, fuzzy, python-brace-format
 #| msgid "Raster map <%s> not found"
@@ -7275,6 +7265,11 @@ msgstr "ไม่รองรับ ชนิด Column นี้"
 #, python-brace-format
 msgid "Map name {0} not valid"
 msgstr ""
+
+#, fuzzy, python-brace-format
+#| msgid "Vector map <%s> already exists and will be overwritten"
+msgid "Raster map <{0}> already exists and will be not overwritten"
+msgstr "แผนที่เชิงเส้น <%s> มีอยู่แล้วและจะถูกเขียนทับ"
 
 #, fuzzy, python-brace-format
 msgid "Raster type: {0} not supported"
@@ -8490,6 +8485,11 @@ msgstr ""
 #| msgid "Unknown vector type."
 msgid "Unknown format '{}'."
 msgstr "ไม่ทราบชนิดของข้อมูลเชิงเส้น"
+
+#, fuzzy, python-brace-format
+#~| msgid "Vector map <%s> already exists and will be overwritten"
+#~ msgid "Raster map <{0}> already exists. Use overwrite."
+#~ msgstr "แผนที่เชิงเส้น <%s> มีอยู่แล้วและจะถูกเขียนทับ"
 
 #, fuzzy
 #~ msgid "Attributes for category %d not found"

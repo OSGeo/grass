@@ -2,7 +2,12 @@
 
 import pytest
 
-from grass.jupyter.utils import get_map_name_from_d_command, get_rendering_size
+import grass.script as gs
+from grass.jupyter.utils import (
+    get_map_name_from_d_command,
+    get_number_of_cores,
+    get_rendering_size,
+)
 
 
 @pytest.mark.parametrize(
@@ -72,3 +77,13 @@ def test_get_map_name_from_d_command(module, kwargs, expected):
 def test_get_map_name_from_d_command_non_string_returns_none(value):
     """A non-string value (including None) yields None rather than the raw object."""
     assert get_map_name_from_d_command("d.rast", map=value) is None
+
+
+@pytest.mark.parametrize(
+    ("nprocs", "requested", "expected"),
+    [("3", 10, 3), ("3", 2, 2), ("-10000", 10, 1)],
+)
+def test_get_number_of_cores_resolves_nprocs(session, nprocs, requested, expected):
+    """NPROCS from g.gisenv is resolved like nprocs, up to the requested number."""
+    gs.run_command("g.gisenv", set=f"NPROCS={nprocs}", env=session.env)
+    assert get_number_of_cores(requested, env=session.env) == expected

@@ -96,6 +96,23 @@ def test_resolve_nprocs(monkeypatch):
         gs.resolve_nprocs("not-a-number")
 
 
+def test_resolve_nprocs_from_gisenv(empty_session):
+    """None takes NPROCS from g.gisenv, or is 0 when NPROCS is not set
+
+    As with the nprocs option of tools, a value given explicitly, 0
+    included, is used instead of NPROCS.
+    """
+    env = empty_session.env
+    assert gs.resolve_nprocs(None, env=env) == gs.resolve_nprocs(0)
+    gs.run_command("g.gisenv", set="NPROCS=3", env=env)
+    assert gs.resolve_nprocs(None, env=env) == 3
+    assert gs.resolve_nprocs(2, env=env) == 2
+    assert gs.resolve_nprocs(0, env=env) == gs.resolve_nprocs(0)
+    for nprocs in (-1, 0):
+        gs.run_command("g.gisenv", set=f"NPROCS={nprocs}", env=env)
+        assert gs.resolve_nprocs(None, env=env) == gs.resolve_nprocs(nprocs)
+
+
 def test_get_multiprocessing_context():
     """Fork is used where available and safe, the platform default elsewhere."""
     ctx = gutils._get_multiprocessing_context()
@@ -103,3 +120,19 @@ def test_get_multiprocessing_context():
         assert ctx.get_start_method() == "fork"
     else:
         assert ctx.get_start_method() == multiprocessing.get_start_method()
+
+
+@pytest.mark.parametrize(
+    "name", ["and", "AND", "aNd", "or", "OR", "Or", "not", "NOT", "nOt"]
+)
+def test_legalize_vector_name_keywords(name):
+    """Escape SQL keywords regardless of case, preserving the original case."""
+    assert gs.legalize_vector_name(name) == f"{name}_"
+
+
+@pytest.mark.parametrize(
+    "name", ["my_map", "My_Map", "AND_", "border", "NOTable", "sand"]
+)
+def test_legalize_vector_name_valid(name):
+    """Preserve valid names, including names containing SQL keywords."""
+    assert gs.legalize_vector_name(name) == name

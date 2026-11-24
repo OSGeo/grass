@@ -60,10 +60,24 @@ incremental builds and compiles in parallel by default. The build tool
 is chosen at configure time and cannot be changed in an existing build
 directory.
 
-If `ccache` is installed, the build uses it automatically to cache
-compiler output, so recompiling files that have not changed (e.g. after
-deleting the build directory or in a second build directory) is nearly
-instant. Pass `-DUSE_CCACHE=OFF` to opt out.
+To cache compiler output with `ccache`, pass `-DUSE_CCACHE=ON`. Recompiling
+files that have not changed (e.g. after deleting the build directory or in a
+second build directory) is then nearly instant. It is off by default. To use a
+different launcher, set `CMAKE_C_COMPILER_LAUNCHER` and
+`CMAKE_CXX_COMPILER_LAUNCHER`; these take precedence over `USE_CCACHE`.
+
+To link with a faster linker such as `lld` or `mold`, use
+`-DCMAKE_LINKER_TYPE=LLD` (CMake 3.29 or later). With older CMake versions,
+set the `LDFLAGS` environment variable on the first configure, which
+initializes the linker flags for executables, shared libraries and modules:
+
+```bash
+LDFLAGS=-fuse-ld=lld cmake -B build
+```
+
+Using `mold` with GCC requires GCC 12.1 or later. Setting the
+`CMAKE_*_LINKER_FLAGS` variables yourself replaces any value that `LDFLAGS`
+would have provided.
 
 ## Compiling
 
@@ -181,4 +195,4 @@ For developers used to the Autotools build (`./configure && make`):
 | Recompile one tool | `cd raster/r.slope.aspect && make` | `cmake --build build --target r.slope.aspect` |
 | Clean compiled files | `make clean` | `cmake --build build --target clean` |
 | Clean everything incl. configuration | `make distclean` | `rm -rf build` |
-| Use ccache | `CC="ccache gcc" ./configure` | automatic if installed |
+| Use ccache | `CC="ccache gcc" ./configure` | `-DUSE_CCACHE=ON` |

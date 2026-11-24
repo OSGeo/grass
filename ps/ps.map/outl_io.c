@@ -6,7 +6,6 @@
 
 static int blank_line(void *);
 
-static char *error_prefix;
 static int first_read, last_read;
 static char cell_name[256];
 static int in_file_d;
@@ -15,7 +14,6 @@ static RASTER_MAP_TYPE map_type;
 
 int o_io_init(void)
 {
-    error_prefix = "ps.map";
     n_rows = PS.w.rows;
     row_length = PS.w.cols;
 

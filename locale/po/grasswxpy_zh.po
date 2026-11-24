@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GRASS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2026-07-27 14:40+0000\n"
 "Last-Translator: Liuxs <liuxspro@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/zh_Hans/>\n"
@@ -1345,9 +1345,6 @@ msgstr "数据集管理"
 #, fuzzy
 msgid "t.remove completed"
 msgstr "添加命令"
-
-msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
-msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
