@@ -1745,13 +1745,20 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         .. code-block:: pycon
 
-            >>> import grass.script as gs
-            >>> where = None
-            >>> spatial_extent = gs.parse_command("g.region", flags="ug3")
-            >>> _update_where_statement_by_spatial_extent(
-            ...     where, spatial_extent, "overlaps"
+            >>> strds = SpaceTimeRasterDataset("test@PERMANENT")
+            >>> spatial_extent = {
+            ...     "n": "80",
+            ...     "s": "20",
+            ...     "e": "60",
+            ...     "w": "10",
+            ...     "b": "-50",
+            ...     "t": "50",
+            ...     "projection": "1",
+            ... }
+            >>> strds._update_where_statement_by_spatial_extent(
+            ...     None, spatial_extent, "overlaps"
             ... )
-            ((north > 0 AND south < 1 AND east > 0 AND west < 1))
+            '((north > 20 AND south < 80 AND east > 10 AND west < 60))'
         """
 
         # initialized WHERE statement

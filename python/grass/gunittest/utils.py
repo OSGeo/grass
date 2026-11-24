@@ -67,6 +67,8 @@ def do_doctest_gettext_workaround() -> None:
         return string
 
     sys.displayhook = new_displayhook
+    # Doctest on Python 3 runs examples with sys.__displayhook__, so replace it too.
+    sys.__displayhook__ = new_displayhook
 
     import builtins
 

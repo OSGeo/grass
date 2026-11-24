@@ -1505,6 +1505,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
         if get_tgis_db_version_from_metadata() <= 2:
             # band names supported from TGIS DB version 3
             return None
+        if self.get_raster_register() is None:
+            return None
 
         sql = "SELECT distinct semantic_label FROM %s WHERE %s.id " % (
             "raster_metadata",

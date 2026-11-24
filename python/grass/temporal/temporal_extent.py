@@ -38,6 +38,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
     .. code-block:: pycon
 
+        >>> from datetime import datetime
         >>> init()
         >>> A = TemporalExtent(
         ...     table="raster_absolute_time",
@@ -1084,6 +1085,7 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
 
     .. code-block:: pycon
 
+        >>> from datetime import datetime
         >>> init()
         >>> A = STDSAbsoluteTime(
         ...     table="strds_absolute_time",

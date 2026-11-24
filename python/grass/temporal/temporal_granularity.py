@@ -121,7 +121,7 @@ def get_time_tuple_function(maps):
     .. code-block:: pycon
 
         >>> from grass.temporal.abstract_map_dataset import AbstractMapDataset
-        >>> maps = AbstractMapDataset()
+        >>> maps = [AbstractMapDataset()]
         >>> get_time_tuple_function(maps).__name__
         '_get_map_time_tuple'
 
@@ -1182,10 +1182,10 @@ def gran_to_gran(from_gran, to_gran="days", shell: bool = False):
         30.436875
 
         >>> tgis.gran_to_gran("10 year", "1 hour")
-        '87658.2 hours'
+        '87658.20000000001 hours'
 
         >>> tgis.gran_to_gran("10 year", "1 minute")
-        '5259492.0 minutes'
+        '5259492.000000001 minutes'
 
         >>> tgis.gran_to_gran("6 months", "1 day")
         '182.62125 days'
