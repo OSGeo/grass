@@ -93,7 +93,8 @@ static int init(void)
     R__.compression_type = G_default_compressor();
 
     cname = getenv("GRASS_COMPRESSOR");
-    /* 1: RLE
+    /* 0: NONE (uncompressed)
+     * 1: RLE
      * 2: ZLIB (DEFLATE)
      * 3: LZ4
      * 4: BZIP2
