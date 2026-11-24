@@ -368,7 +368,6 @@ int main(int argc, char *argv[])
     outputs.outwalk = parm.outwalk->answer;
 
     threads = G_set_omp_num_threads(parm.threads);
-    G_message(_("Number of threads: %d"), threads);
     summary.threads = threads;
 
     /*      sscanf(parm.nwalk->answer, "%d", &wp.maxwa); */
