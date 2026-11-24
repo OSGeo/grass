@@ -818,14 +818,14 @@ class TemporalExtent(SQLDatabaseInterface):
         )
 
     def overlaps(self, extent) -> bool:
-        """Return True if this temporal extent (A) overlapped the provided
+        """Return True if this temporal extent (A) overlaps the provided
         temporal extent (B)
         ::
 
             A  |---------|
             B    |---------|
 
-        :param extent: The temporal extent object that is overlaps
+        :param extent: The temporal extent object that is overlapped by
                        this extent
 
         Usage:
@@ -858,15 +858,15 @@ class TemporalExtent(SQLDatabaseInterface):
         )
 
     def overlapped(self, extent) -> bool:
-        """Return True if this temporal extent (A) overlaps the provided
-        temporal extent (B)
+        """Return True if this temporal extent (A) is overlapped by the
+        provided temporal extent (B)
         ::
 
             A    |---------|
             B  |---------|
 
 
-        :param extent: The temporal extent object that is overlapped
+        :param extent: The temporal extent object that overlaps
                        this extent
 
         Usage:
