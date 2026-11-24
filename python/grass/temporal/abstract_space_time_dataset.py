@@ -689,8 +689,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :        s--------e
                      granule:  s-----------------e
 
-               - contains: Select maps which are temporal
-                 during the selection granule:
+               - contains: Select maps which the selection granule
+                 temporally contains:
 
                  .. code-block:: output
 
@@ -709,8 +709,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :     s-----------e
                      granule:  s----------e
 
-               - during: Select maps which temporally contains
-                 the selection granule:
+               - during: Select maps during which the selection granule
+                 temporally lies:
 
                  .. code-block:: output
 
@@ -725,16 +725,16 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :  s-----------e
                      granule:  s-----------e
 
-               - precedes: Select maps which temporally follow
-                 the selection granule:
+               - precedes: Select maps which the selection granule
+                 temporally precedes:
 
                  .. code-block:: output
 
                      map    :              s-----------e
                      granule:  s-----------e
 
-               - follows: Select maps which temporally precedes
-                 the selection granule:
+               - follows: Select maps which the selection granule
+                 temporally follows:
 
                  .. code-block:: output
 
