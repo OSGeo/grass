@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 18:21+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2026-10-31 15:39+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Greek <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/el/>\n"
@@ -1337,9 +1337,6 @@ msgstr "Φόρτωση δεδομένων..."
 #, fuzzy
 msgid "t.remove completed"
 msgstr "Μετονομασία στήλης"
-
-msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
-msgstr ""
 
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""

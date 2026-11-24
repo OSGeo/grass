@@ -77,7 +77,7 @@ grass_version = core.version()["version"]
 # stable and release builds stay indexable.
 # Consumed by _templates/layout.html.template (see #5935).
 grass_noindex = os.environ.get("GRASS_DOCS_NOINDEX", "false") == "true"
-# Canonical doc URLs point to the stable manuals tree, matching the MkDocs core
+# Canonical doc URLs point to the stable manuals tree, matching the core
 # manuals (man/mkdocs/mkdocs.yml site_url = .../grass-stable/manuals/). Keeping an
 # absolute stable base here keeps every libpython canonical + sitemap <loc> on the
 # always-published grass-stable tree; CI rewrites it for dev builds (see #5935).
@@ -563,8 +563,7 @@ sitemap_filename = "sitemap.xml"
 sitemap_url_scheme = "{link}"
 # Emit <lastmod> for each page, taken from the git commit date via the
 # sphinx_last_updated_by_git extension (sphinx-sitemap sets it up when this is
-# True). Without it sphinx-sitemap defaults to no lastmod, so libpython entries
-# in the merged manuals sitemap had none while the MkDocs entries did.
+# True). Without it sphinx-sitemap defaults to no lastmod.
 sitemap_show_lastmod = True
 
 sitemap_excludes = [

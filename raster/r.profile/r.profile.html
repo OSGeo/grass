@@ -5,6 +5,7 @@ an ASCII file. The default two column output consists of cumulative profile
 length and raster value. The optional four column output consists
 of easting, northing, cumulative profile length, and raster value. Profile
 end or "turning" points can be set manually with the <b>coordinates</b>
+argument or taken from lines of a vector map with the <b>lines</b>
 argument. The profile resolution, or distance between profile
 points, is obtained from the current region resolution, or can be manually
 set with the <b>resolution</b> argument.
@@ -16,6 +17,18 @@ Alternatively the coordinate pairs can be piped from the text file specified
 by <b>file</b> option, or if set to "-", from <code>stdin</code>.
 In these cases the coordinate pairs should be given one comma separated pair
 per line.
+
+<p>
+The <b>lines</b> parameter takes a vector map and profiles each of its
+lines separately, with the vertices of a line as its turning points.
+Every profile starts at distance zero and the category of the line is
+added as the first output column (<code>cat</code> in CSV and JSON output),
+so that the profiles can be told apart. Lines can be selected by category
+with <b>cats</b> or by attributes with <b>where</b>, both referring to
+<b>layer</b>. Points, centroids and boundaries in the vector map are ignored.
+A feature made of several lines, such as a road split at junctions, gives
+one profile per line; join the lines first with <em>v.build.polylines</em>
+to get a single continuous profile.
 
 <p>
 The <b>resolution</b> parameter sets the distance between each profile point
@@ -55,7 +68,10 @@ Finally, the output from <em>r.info</em> can be output in JSON by passing the <b
 The profile resolution is measured exactly from the supplied end or
 "turning" point along the profile. The end of a profile segment will be an
 exact multiple of the profile resolution and will therefore not always match
-the end point coordinates entered for the segmanet.
+the end point coordinates entered for the segment. This also applies to the
+vertices of vector lines: a line with vertices closer together than the
+profile resolution is sampled at each vertex. Simplify such lines, e.g. with
+<em>v.generalize</em>, to get evenly spaced profile points.
 
 <p>To extract the numbers in scripts, following parameters can be used:
 <div class="code"><pre>
@@ -151,6 +167,55 @@ Approx. transect length: 2090.000000 [meters]
  3964.027749 78.497757
 Approx. transect length: 995.014070 [meters]
  4054.027749 73.988029
+</pre></div>
+
+<h3>Extraction of values along vector lines</h3>
+
+Lines of a vector map can be used instead of coordinates. Here the
+profile follows a road segment of the Raleigh dataset, selected by its
+category (Main Campus Drive). The vertices of the road are turning
+points of the profile, so where they are closer than the resolution the
+profile points follow the vertices, and where they are further apart the
+resolution applies (see NOTES):
+
+<div class="code"><pre>
+g.region raster=elevation -p
+r.profile input=elevation lines=roads cats=21903 resolution=100 format=csv
+</pre></div>
+
+The first column is the category of the line:
+
+<div class="code"><pre>
+cat,distance,value
+21903,0.000000,89.999725
+21903,16.519123,89.482239
+21903,27.771102,88.642357
+...
+21903,790.810589,109.396729
+21903,890.810589,110.812485
+21903,906.702315,111.440796
+...
+</pre></div>
+
+Profiles along several lines are extracted in one run and told apart by
+the category. Here transects across the same road are generated with the
+<em><a href="https://grass.osgeo.org/grass-stable/manuals/addons/v.transects.html">v.transects</a></em>
+addon and profiled every 20 meters:
+
+<div class="code"><pre>
+v.extract input=roads cats=21903 output=road
+v.transects input=road output=transects transect_spacing=500 dleft=100 dright=100
+r.profile input=elevation lines=transects resolution=20 format=csv
+</pre></div>
+
+<div class="code"><pre>
+cat,distance,value
+1,0.000000,97.808243
+1,20.000000,97.098083
+1,40.000000,96.140938
+...
+4,180.000000,123.778564
+4,200.000000,124.010223
 </pre></div>
 
 <h3>JSON Output</h3>
@@ -257,9 +322,12 @@ plt.show()
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="v.in.ascii.html">v.in.ascii</a>,
-<a href="r.what.html">r.what</a>,
 <a href="r.transect.html">r.transect</a>,
+<a href="r.what.html">r.what</a>,
+<a href="v.build.polylines.html">v.build.polylines</a>,
+<a href="v.generalize.html">v.generalize</a>,
+<a href="v.in.ascii.html">v.in.ascii</a>,
+<a href="https://grass.osgeo.org/grass-stable/manuals/addons/v.transects.html">v.transects</a>,
 <a href="wxGUI.html">wxGUI profile tool</a>
 </em>
 

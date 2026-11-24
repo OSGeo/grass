@@ -694,7 +694,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                In case of mixed of interval data the user can chose
                between:
 
-               - Example ["start", "during", "equals"]
+               - Example ["start", "during", "equal"]
 
                - start: Select maps of which the start time is
                  located in the selection granule:
@@ -710,8 +710,8 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :        s--------e
                      granule:  s-----------------e
 
-               - contains: Select maps which are temporal
-                 during the selection granule:
+               - contains: Select maps which the selection granule
+                 temporally contains:
 
                  .. code-block:: output
 
@@ -730,15 +730,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :     s-----------e
                      granule:  s----------e
 
-               - during: Select maps which temporally contains
-                 the selection granule:
+               - during: Select maps during which the selection granule
+                 temporally lies:
 
                  .. code-block:: output
 
                      map    :  s-----------------e
                      granule:     s-----------e
 
-               - equals: Select maps which temporally equal
+               - equal: Select maps which temporally equal
                  to the selection granule:
 
                  .. code-block:: output
@@ -746,24 +746,27 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :  s-----------e
                      granule:  s-----------e
 
-               - follows: Select maps which temporally follow
-                 the selection granule:
+               - precedes: Select maps which the selection granule
+                 temporally precedes:
 
                  .. code-block:: output
 
                      map    :              s-----------e
                      granule:  s-----------e
 
-               - precedes: Select maps which temporally precedes
-                 the selection granule:
+               - follows: Select maps which the selection granule
+                 temporally follows:
 
                  .. code-block:: output
 
                      map    :  s-----------e
                      granule:              s-----------e
 
+               A map with the start and end time of the selection granule
+               is selected only by start and equal.
+
                All these methods can be combined. Method must be of
-               type tuple including the identification strings.
+               type list including the identification strings.
 
         :param spatial: If set True additional the 2d spatial overlapping
                        is used for selection -> spatio-temporal relation.
@@ -793,18 +796,16 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Tune the temporal relations
         if "start" in relations:
-            if "overlapped" not in relations:
-                relations.append("overlapped")
             if "starts" not in relations:
                 relations.append("starts")
             if "started" not in relations:
                 relations.append("started")
-            if "finishes" not in relations:
-                relations.append("finishes")
             if "contains" not in relations:
                 relations.append("contains")
-            if "equals" not in relations:
-                relations.append("equals")
+            if "equal" not in relations:
+                relations.append("equal")
+            if "overlaps" not in relations:
+                relations.append("overlaps")
 
         if "overlap" in relations or "over" in relations:
             if "overlapped" not in relations:
@@ -816,7 +817,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             if "contains" not in relations:
                 relations.append("contains")
 
-        # Remove start, equal, contain and overlap
+        # Remove start, contain and overlap
         relations = [
             relation.upper().strip()
             for relation in relations
@@ -894,7 +895,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         .. code-block:: python
 
-            list = self.sample_by_dataset(
+            list = self.sample_by_dataset_sql(
                 stds=sampler, method=["during", "overlap", "contain", "equal"]
             )
             for entry in list:
@@ -940,7 +941,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :        s--------e
                      granule:  s-----------------e
 
-               - contains: Select maps which are temporal
+               - during: Select maps which are temporal
                  during the selection granule:
 
                  .. code-block:: output
@@ -960,7 +961,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                      map    :     s-----------e
                      granule:  s----------e
 
-               - during: Select maps which temporally contains
+               - contains: Select maps which temporally contains
                  the selection granule:
 
                  .. code-block:: output
@@ -991,6 +992,10 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
                      map    :  s-----------e
                      granule:              s-----------e
+
+               A map with the start and end time of the selection granule
+               is selected only by start and equals (also accepted as
+               equal).
 
                All these methods can be combined. Method must be of
                type tuple including the identification strings.

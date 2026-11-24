@@ -368,7 +368,46 @@ Not to be confused with the aspect of a map projection, nor with the slope (grad
 &#13;
 https://en.wikipedia.org/wiki/Aspect_(geography)</descrip>
                 <langSet xml:lang="en"><tig><term>aspect</term></tig></langSet>
-                <langSet xml:lang="ko"><note from="translator">domain: terrain analysis, raster</note><tig><term></term></tig></langSet>
+                <langSet xml:lang="ko"><note from="translator">domain: terrain analysis, raster</note><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>temporal database</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>lock file</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <descrip type="definition">Temporal; A temporal granule is a single, indivisible unit or time slice (such as a day, month, second, or custom interval) within a specific time scale or temporal granularity.</descrip>
+                <langSet xml:lang="en"><tig><term>granule</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <descrip type="definition">temporal</descrip>
+                <langSet xml:lang="en"><tig><term>space time raster dataset</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <descrip type="definition">Temporal</descrip>
+                <langSet xml:lang="en"><tig><term>space time vector dataset</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>SQL statement</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>albedo</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>access right</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term/></tig></langSet>
+            </termEntry>
+            <termEntry>
+                <langSet xml:lang="en"><tig><term>timestamp</term></tig></langSet>
+                <langSet xml:lang="ko"><tig><term></term></tig></langSet>
             </termEntry>
         </body>
     </text>

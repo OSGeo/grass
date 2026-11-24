@@ -240,54 +240,85 @@ static void fastline(double x1, double y1, double x2, double y2)
 static void slowline(double x1, double y1, double x2, double y2)
 {
     double dx, dy;
-    double m, b;
+    double m;
     int xstart, xstop, ystart, ystop;
 
     dx = x2 - x1;
     dy = y2 - y1;
 
-    if (fabs(dx) > fabs(dy)) {
-        m = dy / dx;
-        b = y1 - m * x1;
+    /* Zero-length segment: plot only one point. */
+    if (dx == 0.0 && dy == 0.0) {
+        xstart = ifloor(x1 + 0.5);
+        ystart = ifloor(y1 + 0.5);
 
+        st->move(xstart, ystart);
+        st->cont(xstart, ystart);
+        return;
+    }
+
+    if (fabs(dx) > fabs(dy)) {
+        /* Always go from smaller x to larger x for identical results
+         * independent of the direction. */
         if (x1 > x2) {
-            xstart = iceil(x2 - 0.5);
-            xstop = ifloor(x1 + 0.5);
+            double tmp;
+
+            tmp = x1;
+            x1 = x2;
+            x2 = tmp;
+
+            tmp = y1;
+            y1 = y2;
+            y2 = tmp;
+
+            dx = -dx;
+            dy = -dy;
         }
-        else {
-            xstart = iceil(x1 - 0.5);
-            xstop = ifloor(x2 + 0.5);
-        }
+        m = dy / dx;
+        xstart = ifloor(x1 + 0.5);
+        xstop = ifloor(x2 + 0.5);
+
         if (xstart <= xstop) {
-            ystart = ifloor(m * xstart + b + 0.5);
+            /* Subtract the start point coordinate before multiplying
+             * to avoid numerical cancellation.
+             */
+            ystart = ifloor(y1 + m * (xstart - x1) + 0.5);
             st->move(xstart, ystart);
             while (xstart <= xstop) {
                 st->cont(xstart++, ystart);
-                ystart = ifloor(m * xstart + b + 0.5);
+                ystart = ifloor(y1 + m * (xstart - x1) + 0.5);
             }
         }
     }
     else {
-        if (dx == dy) /* they both might be 0 */
-            m = 1.;
-        else
-            m = dx / dy;
-        b = x1 - m * y1;
-
+        /* Always go from smaller y to larger y for identical results
+         * independent of the direction. */
         if (y1 > y2) {
-            ystart = iceil(y2 - 0.5);
-            ystop = ifloor(y1 + 0.5);
+            double tmp;
+
+            tmp = x1;
+            x1 = x2;
+            x2 = tmp;
+
+            tmp = y1;
+            y1 = y2;
+            y2 = tmp;
+
+            dx = -dx;
+            dy = -dy;
         }
-        else {
-            ystart = iceil(y1 - 0.5);
-            ystop = ifloor(y2 + 0.5);
-        }
+        m = dx / dy;
+        ystart = ifloor(y1 + 0.5);
+        ystop = ifloor(y2 + 0.5);
+
         if (ystart <= ystop) {
-            xstart = ifloor(m * ystart + b + 0.5);
+            /* Subtract the start point coordinate before multiplying
+             * to avoid numerical cancellation.
+             */
+            xstart = ifloor(x1 + m * (ystart - y1) + 0.5);
             st->move(xstart, ystart);
             while (ystart <= ystop) {
                 st->cont(xstart, ystart++);
-                xstart = ifloor(m * ystart + b + 0.5);
+                xstart = ifloor(x1 + m * (ystart - y1) + 0.5);
             }
         }
     }
@@ -370,7 +401,7 @@ static double wrap_east(double e0, double e1)
 int G_plot_polygon(const double *x, const double *y, int n)
 {
     int i;
-    int pole;
+    // int pole;
     double x0, x1;
     double y0, y1;
     double shift, E, W = 0L;
@@ -393,7 +424,7 @@ int G_plot_polygon(const double *x, const double *y, int n)
         /*
            pole = G_pole_in_polygon(x,y,n);
          */
-        pole = 0;
+        // pole = 0;
 
         e0 = x[n - 1];
         E = W = e0;
@@ -401,8 +432,9 @@ int G_plot_polygon(const double *x, const double *y, int n)
         x0 = X(e0);
         y0 = Y(y[n - 1]);
 
+        /* dead code since version 4.1
         if (pole && !edge(x0, y0, x0, Y(90.0 * pole)))
-            return NO_MEMORY;
+            return NO_MEMORY; */
 
         for (i = 0; i < n; i++) {
             e1 = wrap_east(e0, x[i]);
@@ -421,8 +453,9 @@ int G_plot_polygon(const double *x, const double *y, int n)
             y0 = y1;
             e0 = e1;
         }
+        /* dead code since version 4.1
         if (pole && !edge(x0, y0, x0, Y(90.0 * pole)))
-            return NO_MEMORY;
+            return NO_MEMORY; */
 
         shift = 0; /* shift into window */
         while (E + shift > st->window.east)
@@ -500,7 +533,7 @@ int G_plot_polygon(const double *x, const double *y, int n)
 int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
 {
     int i, j, n;
-    int pole;
+    // int pole;
     double x0, x1, *x;
     double y0, y1, *y;
     double shift, E, W = 0L;
@@ -529,7 +562,7 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
             /*
                pole = G_pole_in_polygon(x,y,n);
              */
-            pole = 0;
+            // pole = 0;
 
             e0 = x[n - 1];
             E = W = e0;
@@ -537,8 +570,9 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
             x0 = X(e0);
             y0 = Y(y[n - 1]);
 
+            /* dead code since version 4.1
             if (pole && !edge(x0, y0, x0, Y(90.0 * pole)))
-                return NO_MEMORY;
+                return NO_MEMORY; */
 
             for (i = 0; i < n; i++) {
                 e1 = wrap_east(e0, x[i]);
@@ -557,8 +591,9 @@ int G_plot_area(double *const *xs, double *const *ys, int *rpnts, int rings)
                 y0 = y1;
                 e0 = e1;
             }
+            /* dead code since version 4.1
             if (pole && !edge(x0, y0, x0, Y(90.0 * pole)))
-                return NO_MEMORY;
+                return NO_MEMORY; */
 
             shift = 0; /* shift into window */
             while (E + shift > st->window.east)
@@ -631,18 +666,19 @@ static int edge(double x0, double y0, double x1, double y1)
     int ystart, ystop;
     int exp;
 
-    /* tolerance to avoid FPE */
-    d = GRASS_EPSILON;
-    if (y0 != y1) {
-        if (fabs(y0) > fabs(y1))
-            d = fabs(y0);
-        else
-            d = fabs(y1);
+    /* Ignore horizontal edges */
+    if (y0 == y1)
+        return 1;
 
-        d = frexp(d, &exp);
-        exp -= 53;
-        d = ldexp(d, exp);
-    }
+    /* tolerance to avoid FPE */
+    if (fabs(y0) > fabs(y1))
+        d = fabs(y0);
+    else
+        d = fabs(y1);
+
+    d = frexp(d, &exp);
+    exp -= 53;
+    d = ldexp(d, exp);
 
     if (fabs(y0 - y1) < d)
         return 1;
