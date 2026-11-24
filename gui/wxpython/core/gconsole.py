@@ -104,7 +104,6 @@ class CmdThread(threading.Thread):
         """
         CmdThread.requestId += 1
 
-        self.requestCmd = None
         self.requestQ.put((CmdThread.requestId, args, kwargs))
 
         return CmdThread.requestId
@@ -177,7 +176,9 @@ class CmdThread(threading.Thread):
             try:
                 returncode = self.requestCmd.module.returncode
             except AttributeError:
-                returncode = 0  # being optimistic
+                # CommandThread has no module when its process could not start;
+                # other callables are assumed to succeed.
+                returncode = 1 if isinstance(self.requestCmd, CommandThread) else 0
 
             try:
                 aborted = self.requestCmd.aborted
