@@ -3,7 +3,7 @@
 <h2>SYNOPSIS</h2>
 
 <b>grass</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>] |
-[<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code[:datum_trans]</b>] | <b>-e</b> | <b>-f</b> |
+[<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code[:datum_trans]</b> | <b>-c AUTHORITY:code</b>] | <b>-e</b> | <b>-f</b> |
 [<b>--text</b> | <b>--gtext</b> | <b>--gui</b>] | <b>--config</b> |
 [<b>--tmp-project</b> | <b>--tmp-mapset</b>]
     [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;PROJECT&gt;/</b>]
@@ -31,6 +31,10 @@
 
 <dt><b>-c EPSG:code:datum_trans</b>
 <dd> Creates new GRASS project in specified GISDBASE with coordinate reference system defined by EPSG code and datum transform parameters
+
+<dt><b>-c AUTHORITY:code</b>
+<dd> Creates new GRASS project in specified GISDBASE with coordinate reference system defined by a
+spatial reference ID consisting of an authority name and code (e.g., <code>ESRI:102022</code>)
 
 <dt><b>-e</b>
 <dd> Exit after creation of project or mapset. Only with <b>-c</b> flag
@@ -279,6 +283,10 @@ examples below) otherwise taken from the last GRASS session.</dd>
 <dd> Creates a new GRASS project with EPSG code 5514 (S-JTSK / Krovak
     East North - SJTSK) with datum transformation parameters used in
     Czech Republic in the specified GISDBASE
+
+<dt><b>grass -c ESRI:102022 $HOME/grassdata/myproject</b>
+<dd> Creates a new GRASS project with ESRI code 102022 (Africa Albers Equal
+    Area Conic) in the specified GISDBASE
 
 <dt><b>grass -c XY $HOME/grassdata/gnomonic --exec g.proj -c proj4='+proj=gnom +lat_0=90 +lon_0=-50'</b>
 <dd>  Creates a new GRASS project from PROJ definition string

@@ -7,8 +7,9 @@ description: GRASS startup program
 ## SYNOPSIS
 
 **grass** \[**-h** \| **-help** \| **--help**\] \[**-v** \|
-**--version**\] \| \[**-c** \| **-c geofile** \| **-c
-EPSG:code\[:datum_trans\]**\] \| **-e** \| **-f** \| \[**--text** \|
+**--version**\] \| \[**-c** \| **-c geofile** \|
+**-c EPSG:code\[:datum_trans\]** \|
+**-c AUTHORITY:code**\] \| **-e** \| **-f** \| \[**--text** \|
 **--gtext** \| **--gui**\] \| **--config** \| \[**--tmp-project** \|
 **--tmp-mapset**\] \[\[\[**\<GISDBASE\>/**\]**\<PROJECT\>/**\]
 **\<MAPSET\>**\] \[**--exec EXECUTABLE**\]
@@ -36,6 +37,11 @@ reference system defined by EPSG code
 **-c EPSG:code:datum_trans**  
 Creates new GRASS project in specified GISDBASE with coordinate
 reference system defined by EPSG code and datum transform parameters
+
+**-c AUTHORITY:code**
+Creates new GRASS project in specified GISDBASE with coordinate
+reference system defined by a spatial reference ID consisting of an
+authority name and code (e.g., `ESRI:102022`)
 
 **-e**  
 Exit after creation of project or mapset. Only with **-c** flag
@@ -305,6 +311,13 @@ Republic in the specified GISDBASE:
 
 ```sh
 grass -c EPSG:5514:3 $HOME/grassdata/myproject
+```
+
+Creates a new GRASS project with ESRI code 102022 (Africa Albers Equal
+Area Conic) in the specified GISDBASE:
+
+```sh
+grass -c ESRI:102022 $HOME/grassdata/myproject
 ```
 
 Creates a new GRASS project from PROJ definition string (here:
