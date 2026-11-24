@@ -47,7 +47,11 @@ def nprocs_from_option(session, answer, omp_num_threads=None):
     return result.returncode, numbers, result.stderr
 
 
-@pytest.mark.parametrize("answer", ["99999999999", "", " ", "2x"])
+# Answers which the parser lets through for an integer option
+PASS_THE_PARSER = ["2x", "50%"]
+
+
+@pytest.mark.parametrize("answer", ["99999999999", "", " ", *PASS_THE_PARSER])
 def test_not_an_int(xy_session_for_module, answer):
     """An answer which is not an int is an error naming the option"""
     returncode, _, stderr = nprocs_from_option(xy_session_for_module, answer)
@@ -55,11 +59,12 @@ def test_not_an_int(xy_session_for_module, answer):
     assert f"Invalid value <{answer}> for option <nprocs>" in stderr
 
 
-def test_tool_refuses_percent(tools):
-    """A tool refuses 50% although the parser lets it through as 50"""
+@pytest.mark.parametrize("answer", PASS_THE_PARSER)
+def test_tool_refuses_not_an_int(tools, answer):
+    """A tool refuses the answers of test_not_an_int which pass the parser"""
     with pytest.raises(ToolError) as error:
-        tools.r_univar(map="doesnotexist", flags="g", nprocs="50%")
-    assert "Invalid value <50%> for option <nprocs>" in error.value.stderr
+        tools.r_univar(map="doesnotexist", flags="g", nprocs=answer)
+    assert f"Invalid value <{answer}> for option <nprocs>" in error.value.stderr
 
 
 @pytest.mark.parametrize(("answer", "expected"), [(" 3 \n", 3), ("100", 100)])
