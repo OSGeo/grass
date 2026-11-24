@@ -20,7 +20,7 @@ import pytest
 
 from grass.lib.gis import G_check_compressor, G_compress_bound, G_compressor_number
 
-INT_MAX = 2**31 - 1
+C_INT_MAX = 2**31 - 1  # INT_MAX of C, the limit of the int sizes in the API
 
 
 def number(name):
@@ -152,7 +152,7 @@ def test_incompressible_data_fit_bound(xy_session_for_module, name):
     assert [int(result) for result in output.stdout.split()] == [-2] * len(SIZES)
 
 
-@pytest.mark.parametrize("size", [0, 1000, 2_000_000_000, INT_MAX])
+@pytest.mark.parametrize("size", [0, 1000, 2_000_000_000, C_INT_MAX])
 def test_bzip2_bound_documented(size):
     """BZIP2 bound is at least the size the bzip2 documentation asks for
 
@@ -160,5 +160,5 @@ def test_bzip2_bound_documented(size):
     limited to INT_MAX.
     """
     number = G_compressor_number(b"BZIP2")
-    expected = min(size + size // 100 + 600, INT_MAX)
+    expected = min(size + size // 100 + 600, C_INT_MAX)
     assert G_compress_bound(size, number) >= expected
