@@ -25,7 +25,6 @@ import subprocess
 import shutil
 import string
 import random
-import re
 import shlex
 import json
 import csv
@@ -1940,10 +1939,6 @@ def create_location(*args, **kwargs):
     return create_project(*args, **kwargs)
 
 
-# Spatial reference ID with an authority name and code, e.g. ESRI:102022.
-_AUTHORITY_CODE = re.compile(r"^[A-Za-z][A-Za-z0-9_-]+:[A-Za-z0-9_.-]+$")
-
-
 def create_project(
     path,
     name=None,
@@ -2034,7 +2029,7 @@ def create_project(
                 datum_trans = None
         elif any(str(crs).endswith(ext) for ext in [".grass_raster", ".grr", ".rpack"]):
             pack = crs
-        elif _AUTHORITY_CODE.match(str(crs)) and not Path(str(crs)).exists():
+        elif not Path(crs).exists():
             srid = str(crs)
         else:
             filename = crs
