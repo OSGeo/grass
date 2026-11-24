@@ -151,14 +151,15 @@ def test_incompressible_data_fit_bound(xy_session_for_module, compressor_name):
     assert [int(result) for result in output.stdout.split()] == [-2] * len(SIZES)
 
 
-@pytest.mark.parametrize("size", [0, 1000, 2_000_000_000])
+@pytest.mark.parametrize("size", [0, 1, 1001, 2_000_000_001])
 def test_bzip2_bound_documented(size):
     """BZIP2 bound is at least the size the bzip2 documentation asks for
 
     The documentation asks for 1% + 600 bytes over the input.
     """
     number = G_compressor_number(b"BZIP2")
-    assert G_compress_bound(size, number) >= size + size // 100 + 600
+    # 1% rounded up
+    assert G_compress_bound(size, number) >= size + (size + 99) // 100 + 600
 
 
 def test_bzip2_bound_large_input():
