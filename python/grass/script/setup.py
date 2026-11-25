@@ -215,6 +215,7 @@ def setup_runtime_env(gisbase=None, *, env=None):
         set_dynamic_library_path,
         set_executable_paths,
         set_path_to_python_executable,
+        set_proj_data_for_conda,
         set_python_path_variable,
         RuntimePaths,
     )
@@ -256,6 +257,7 @@ def setup_runtime_env(gisbase=None, *, env=None):
     )
     set_python_path_variable(install_path=gisbase, env=env)
     set_path_to_python_executable(env=env)
+    set_proj_data_for_conda(install_path=gisbase, env=env)
 
 
 def runtime_env_is_active(env=None):
