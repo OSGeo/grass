@@ -195,6 +195,11 @@ int G_no_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
  * some compressors are a bit faster if the size of the destination
  * is at least the upper bound (no need to test for buffer overflow)
  * read comments on the specific compressor interfaces
+ *
+ * For input of more than about 2.1 GB, the bound does not fit into int.
+ * ZLIB and BZIP2 then return INT_MAX, which is not an upper bound, LZ4
+ * returns 0, and ZSTD returns -1. Data of that size cannot be compressed
+ * reliably with these functions.
  */
 int G_compress_bound(int src_sz, int number)
 {

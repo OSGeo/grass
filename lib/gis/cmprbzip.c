@@ -62,6 +62,8 @@
 
 #include <grass/config.h>
 
+#include <limits.h>
+
 #ifdef HAVE_BZLIB_H
 #include <bzlib.h>
 #endif
@@ -71,15 +73,19 @@
 
 int G_bz2_compress_bound(int src_sz)
 {
-    /* from the documentation:
-     * To guarantee that the compressed data will fit in its buffer,
-     * allocate an output buffer of size 1% larger than the uncompressed data,
-     * plus six hundred extra bytes.
-     * bzip2 does not provide a compressbound fn
-     * and apparently does not have a fast version if destLen is
-     * large enough to hold a worst case result
+    /* bzip2 does not provide a function for the bound. From its
+     * documentation: To guarantee that the compressed data will fit in
+     * its buffer, allocate an output buffer of size 1% larger than the
+     * uncompressed data, plus six hundred extra bytes.
      */
-    return src_sz;
+    /* 1% rounded up, computed without overflow of src_sz + 99 */
+    int one_percent = src_sz / 100 + (src_sz % 100 != 0);
+
+    /* Avoid overflow of int for large input. */
+    if (src_sz > INT_MAX - 600 - one_percent)
+        return INT_MAX;
+
+    return src_sz + one_percent + 600;
 }
 
 int G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
