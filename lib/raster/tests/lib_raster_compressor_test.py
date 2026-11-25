@@ -27,6 +27,8 @@ EXPRESSIONS = {
 def tools_with_compressor(session, compressor, compress_nulls=None):
     """Tools with GRASS_COMPRESSOR set, or unset for None"""
     env = session.env.copy()
+    # Without the variables, the tools use the defaults, whatever the
+    # environment of the test run sets.
     env.pop("GRASS_COMPRESSOR", None)
     env.pop("GRASS_COMPRESS_NULLS", None)
     if compressor is not None:
