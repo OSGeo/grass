@@ -60,6 +60,11 @@
 # %end
 
 # %flag
+# % key: e
+# % description: Extend existing space time vector dataset
+# %end
+
+# %flag
 # % key: n
 # % description: Register empty maps
 # %end
@@ -83,6 +88,7 @@ def main():
     base = options["basename"]
     nprocs = int(options["nprocs"])
     register_null = flags["n"]
+    extend = flags["e"]
     time_suffix = options["suffix"]
 
     # Make sure the temporal database exists
@@ -100,6 +106,7 @@ def main():
         register_null,
         layer,
         type,
+        extend=extend,
     )
 
 

@@ -196,3 +196,57 @@ def test_selection_and_expression_simple_name(session):
         assert strds_info[k] == v, (
             f"Expected value for key '{k}' is {v}. Got: {strds_info[k]}"
         )
+
+
+def test_extend_selection(session):
+    """Extend an existing STRDS without an expression."""
+    result = "perc_extend_sel"
+    tools = Tools(session=session)
+    tools.t_rast_extract(
+        input="perc",
+        output=result,
+        where="start_time == '2025-08-01'",
+        overwrite=True,
+    )
+    tools.t_rast_extract(
+        input="perc",
+        output=result,
+        where="start_time == '2025-08-03'",
+        flags="e",
+        overwrite=True,
+    )
+    strds_info = tools.t_info(input=result, flags="g").keyval
+    assert strds_info["start_time"] == "'2025-08-01 00:00:00'"
+    assert strds_info["end_time"] == "'2025-08-03 00:00:00'"
+    assert strds_info["number_of_maps"] == 4
+
+
+def test_extend_expression_numeric_suffix(session):
+    """Extend an existing STRDS using an expression and numeric suffix."""
+    result = "perc_extend_expr"
+    tools = Tools(session=session)
+    tools.t_rast_extract(
+        input="perc",
+        output=result,
+        where="start_time == '2025-08-01'",
+        expression="perc * 1",
+        basename=result,
+        suffix="num%03",
+        overwrite=True,
+    )
+    tools.t_rast_extract(
+        input="perc",
+        output=result,
+        where="start_time == '2025-08-03'",
+        expression="perc * 1",
+        basename=result,
+        suffix="num%03",
+        flags="e",
+        overwrite=True,
+    )
+    strds_info = tools.t_info(input=result, flags="g").keyval
+    assert strds_info["start_time"] == "'2025-08-01 00:00:00'"
+    assert strds_info["end_time"] == "'2025-08-03 00:00:00'"
+    assert strds_info["number_of_maps"] == 4
+    assert strds_info["min_min"] == 100.0
+    assert strds_info["max_max"] == 300.0

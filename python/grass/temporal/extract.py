@@ -122,6 +122,7 @@ def extract_dataset(
     register_null: bool = False,
     layer: int = 1,
     vtype: str = "point,line,boundary,centroid,area,face",
+    extend: bool = False,
 ) -> None:
     """Extract a subset of a space time raster, raster3d or vector dataset.
 
@@ -148,6 +149,8 @@ def extract_dataset(
            layer is present, default is 1
     :param vtype: The feature type to be extracted for vector maps, default
            is point,line,boundary,centroid,area and face
+    :param extend: Set True to append extracted maps to an existing space time
+           dataset instead of overwriting it
     """
     # Check the parameters
     msgr = get_tgis_message_interface()
@@ -167,8 +170,28 @@ def extract_dataset(
         tgis_version > 2 and type == "raster" and sp.metadata.semantic_labels,
     )
 
+    overwrite = gs.overwrite()
     # Check the new stds
-    new_sp = check_new_stds(output, type, dbif, gs.overwrite())
+    new_sp = check_new_stds(output, type, dbif, overwrite)
+    output_exists = new_sp.is_in_db(dbif)
+    existing_count = 0
+    if output_exists and extend:
+        existing_sp = open_old_stds(output, type, dbif)
+        if existing_sp.get_temporal_type() != sp.get_temporal_type():
+            dbif.close()
+            msgr.fatal(
+                _(
+                    "Temporal type of existing dataset <{out}> ({out_type}) "
+                    "does not match input dataset <{inp}> ({in_type})"
+                ).format(
+                    out=output,
+                    out_type=existing_sp.get_temporal_type(),
+                    inp=input,
+                    in_type=sp.get_temporal_type(),
+                )
+            )
+        existing_maps = existing_sp.get_registered_maps("id", None, None, dbif)
+        existing_count = len(existing_maps) if existing_maps else 0
     if type == "vector":
         rows = sp.get_registered_maps("id,name,mapset,layer", where, "start_time", dbif)
     else:
@@ -224,7 +247,7 @@ def extract_dataset(
             map_name = compile_new_map_name(
                 sp,
                 base,
-                count,
+                count + existing_count,
                 row["id"],
                 row["semantic_label"] if has_semantic_labels else None,
                 time_suffix,
@@ -319,17 +342,20 @@ def extract_dataset(
 
     msgr.percent(0, num_rows, 1)
 
-    _temporal_type, semantic_type, title, description = sp.get_initial_values()
-    new_sp = open_new_stds(
-        output,
-        type,
-        sp.get_temporal_type(),
-        title,
-        description,
-        semantic_type,
-        dbif,
-        gs.overwrite(),
-    )
+    if not output_exists or (overwrite and not extend):
+        _temporal_type, semantic_type, title, description = sp.get_initial_values()
+        new_sp = open_new_stds(
+            output,
+            type,
+            sp.get_temporal_type(),
+            title,
+            description,
+            semantic_type,
+            dbif,
+            overwrite,
+        )
+    elif output_exists and extend:
+        new_sp = open_old_stds(output, type, dbif)
 
     # collect empty maps to remove them
     empty_maps = []
@@ -387,6 +413,9 @@ def extract_dataset(
 
     # Update the spatio-temporal extent and the metadata table entries
     new_sp.update_from_registered_maps(dbif)
+
+    if output_exists and extend:
+        new_sp.update_command_string(dbif=dbif)
 
     msgr.percent(num_rows, num_rows, 1)
 
