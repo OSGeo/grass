@@ -104,8 +104,8 @@ between speed and compression rate.
 
 All GRASS raster map types are by default ZSTD compressed if
 available, otherwise ZLIB compressed. Through the environment variable
-<code>GRASS_COMPRESSOR</code> the compression method can be set to NONE
-(no compression), RLE, ZLIB, LZ4, BZIP2, or ZSTD.
+<code>GRASS_COMPRESSOR</code> the compression method can be set to ZLIB,
+LZ4, BZIP2, ZSTD, RLE (deprecated), or NONE (no compression).
 <p>
 Integer (CELL type) raster maps can be compressed with RLE if
 the environment variable <code>GRASS_COMPRESSOR</code> exists and is set to
