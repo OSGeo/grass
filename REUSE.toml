@@ -1,0 +1,73 @@
+version = 1
+
+[[annotations]]
+path = [
+  ".clang-format",
+  ".coveragerc",
+  ".cppcheck-suppressions",
+  ".dockerignore",
+  ".editorconfig",
+  ".flake8",
+  ".git-blame-ignore-revs",
+  ".gitignore",
+  ".gunittest.cfg",
+  ".markdownlint.yml",
+  ".pre-commit-config.yaml",
+  ".yamllint",
+  "aclocal.m4",
+  "AGENTS.md",
+  "AUTHORS",
+  "binaryInstall.src",
+  "CITATION.cff",
+  "CITING",
+  "CODE_OF_CONDUCT.md",
+  "codecov.yml",
+  "configure.ac",
+  "CONTRIBUTING.md",
+  "contributors_extra.csv",
+  "contributors.csv",
+  "COPYING",
+  "Dockerfile",
+  "flake.lock",
+  "flake.nix",
+  "GOVERNANCE.md",
+  "GPL.TXT",
+  "grass.pc.in",
+  "grass.pc",
+  "GRASSConfig.cmake.in",
+  "grasslib.dox",
+  "install-sh",
+  "INSTALL.md",
+  "Makefile",
+  "package.nix",
+  "pyproject.toml",
+  "README.md",
+  "renovate.json5",
+  "REQUIREMENTS.md",
+  "SECURITY.md",
+  "TODO",
+  "translators.csv",
+  "Vagrantfile",
+]
+SPDX-License-Identifier = "GPL-2.0-or-later"
+SPDX-FileCopyrightText = "GRASS Development Team"
+
+[[annotations]]
+path = [
+  "config.guess",
+  "config.sub",
+]
+SPDX-License-Identifier = "GPL-3.0-or-later"
+SPDX-FileCopyrightText = "1992-2026 Free Software Foundation, Inc."
+
+[[annotations]]
+path = ["locale/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "GRASS Development Team"
+SPDX-License-Identifier = "GPL-2.0-or-later"
+
+[[annotations]]
+path = ["demolocation/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "GRASS Development Team"
+SPDX-License-Identifier = "GPL-2.0-or-later"
