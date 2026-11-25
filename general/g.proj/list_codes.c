@@ -10,7 +10,21 @@ char *get_authority_names(void)
 {
     char *authnames;
     int i, len;
-    PROJ_STRING_LIST authlist = proj_get_authorities_from_database(NULL);
+    PROJ_STRING_LIST authlist;
+    PJ_LOG_LEVEL log_level;
+
+    // This runs on every g.proj call, so keep PROJ quiet here. Operations
+    // which need the database report the failure later.
+    log_level = proj_log_level(NULL, PJ_LOG_NONE);
+    authlist = proj_get_authorities_from_database(NULL);
+    proj_log_level(NULL, log_level);
+
+    if (!authlist) {
+        // PROJ cannot open its database. Leave the option values
+        // unrestricted so that operations which do not need the list
+        // still work.
+        return NULL;
+    }
 
     len = 0;
     for (i = 0; authlist[i]; i++) {
@@ -28,6 +42,7 @@ char *get_authority_names(void)
     else {
         authnames = G_store("");
     }
+    proj_string_list_destroy(authlist);
 
     return authnames;
 }
