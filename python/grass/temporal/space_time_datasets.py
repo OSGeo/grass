@@ -1079,6 +1079,7 @@ class VectorDataset(AbstractMapDataset):
         check, dates = self.ciface.read_vector_timestamp(
             self.get_name(),
             self.get_mapset(),
+            self.get_layer(),
         )
 
         if check < 1:
