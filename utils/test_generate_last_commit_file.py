@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 """
-Script for testing an core_modules_with_last_commit.json file contains
-all core modules with their last commit. Used by GitHub "Additional Checks"
-action workflow.
+Script for testing that the core_modules_with_last_commit.json file
+contains every documentation page with its last commit. Used by GitHub
+"Additional Checks" action workflow.
 
 Python lib dependencies:
 
@@ -47,33 +47,36 @@ def test_json_file_is_not_empty(read_json_file):
     assert len(read_json_file) > 0
 
 
+# Pairs of documentation page name and the directory its source lives in.
+# Besides plain tools, they cover pages whose name differs from their
+# directory name and pages which only exist as Markdown, which both rely
+# on entries being keyed by page name.
+PAGES = [
+    ("v.surf.rst", os.path.join("vector", "v.surf.rst")),
+    ("r.info", os.path.join("raster", "r.info")),
+    ("r3.mapcalc", os.path.join("raster", "r.mapcalc")),
+    ("r.watershed", os.path.join("raster", "r.watershed", "front")),
+    ("wxGUI.components", os.path.join("gui", "wxpython", "docs")),
+    ("databaseintro", "db"),
+    ("style_guide", os.path.join("doc", "development")),
+    ("python_intro", "doc"),
+]
+
+
 @pytest.mark.depends(on=["test_json_file_is_not_empty"])
-@pytest.mark.parametrize(
-    "core_module_path",
-    [
-        os.path.join("vector", "v.surf.rst"),
-        os.path.join("raster", "r.info"),
-    ],
-)
-def test_core_modules_in_json_file(read_json_file, core_module_path):
-    core_module = os.path.basename(core_module_path)
-    assert core_module in read_json_file
+@pytest.mark.parametrize(("page", "page_path"), PAGES)
+def test_pages_in_json_file(read_json_file, page, page_path):
+    assert page in read_json_file
 
 
 @pytest.mark.depends(
     on=[
         "test_json_file_is_not_empty",
-        "test_core_modules_in_json_file",
+        "test_pages_in_json_file",
     ]
 )
-@pytest.mark.parametrize(
-    "core_module_path",
-    [
-        os.path.join("vector", "v.surf.rst"),
-        os.path.join("raster", "r.info"),
-    ],
-)
-def test_compare_json_file_data(read_json_file, core_module_path):
+@pytest.mark.parametrize(("page", "page_path"), PAGES)
+def test_compare_json_file_data(read_json_file, page, page_path):
     # Get Git commit and commit date from local Git
     process_result = subprocess.run(
         [
@@ -81,13 +84,12 @@ def test_compare_json_file_data(read_json_file, core_module_path):
             "log",
             "-1",
             f"--format=%H,{COMMIT_DATE_FORMAT}",
-            core_module_path,
+            page_path,
         ],
         capture_output=True,
         check=True,
     )  # --format=%H,COMMIT_DATE_FORMAT commit hash,author date
     commit, date = process_result.stdout.decode().strip().split(",")
-    core_module = os.path.basename(core_module_path)
     # Compare commit and commit date
-    assert read_json_file[core_module]["commit"] == commit
-    assert read_json_file[core_module]["date"] == date
+    assert read_json_file[page]["commit"] == commit
+    assert read_json_file[page]["date"] == date
