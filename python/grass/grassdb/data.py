@@ -41,7 +41,8 @@ def map_exists(name, element, mapset=None, env=None) -> bool:
     info = gs.parse_key_val(output, sep="=")
     # file is the key questioned in grass.script.core find_file()
     # return code should be equivalent to checking the output
-    return bool(info["file"])
+    # g.findfile prints nothing when it fails, e.g., for a non-existent mapset
+    return bool(info.get("file"))
 
 
 def stds_exists(name, element, mapset, env=None) -> bool:
