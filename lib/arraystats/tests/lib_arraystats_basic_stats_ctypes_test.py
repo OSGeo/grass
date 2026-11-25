@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the basic statistics ctypes bindings
 
 AS_basic_stats() and AS_eqdrt() only read a plain array of doubles and write

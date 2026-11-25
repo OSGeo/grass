@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #ifndef __GIS_LOCAL_PROTO_H__
 #define __GIS_LOCAL_PROTO_H__
 

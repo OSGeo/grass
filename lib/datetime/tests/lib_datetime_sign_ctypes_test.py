@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the sign, copy, equality and range ctypes bindings
 
 datetime_set_negative(), datetime_copy(), datetime_is_same() and

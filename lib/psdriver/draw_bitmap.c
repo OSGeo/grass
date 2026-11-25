@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include "psdriver.h"
 
 void PS_Bitmap(int ncols, int nrows, int threshold, const unsigned char *buf)

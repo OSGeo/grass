@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #define DEF_WIDTH  640
 #define DEF_HEIGHT 480
 

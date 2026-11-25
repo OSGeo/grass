@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2001-2009, 2011 GRASS Development Team
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*!
    \file lib/gis/parser_script.c
 

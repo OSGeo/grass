@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the calendar arithmetic ctypes bindings
 
 datetime_is_leap_year(), datetime_days_in_year() and datetime_days_in_month()

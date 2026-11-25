@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 build_library_in_subdir(
     data
     NAME grass_interpdata

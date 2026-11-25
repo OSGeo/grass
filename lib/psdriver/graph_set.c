@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Start up graphics processing.  Anything that needs to be assigned, set up,
  * started-up, or otherwise initialized happens here.  This is called only at

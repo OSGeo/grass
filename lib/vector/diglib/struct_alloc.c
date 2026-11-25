@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*!
    \file lib/vector/diglib/struct_alloc.c
 

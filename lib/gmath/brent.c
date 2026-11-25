@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 1996, 1997, 1998, 1999, 2000 Brian Gough
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* min/brent.c
  *
  * Copyright (C) 1996, 1997, 1998, 1999, 2000 Brian Gough

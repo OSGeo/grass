@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*      Name:   getg.c
  *
  * Created:        Thu May 29 00:37:44 1986

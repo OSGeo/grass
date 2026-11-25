@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /***************************************************************
 G_lat_format (lat, buf)
     double lat;

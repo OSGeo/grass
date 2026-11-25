@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <grass/btree.h>
 
 int btree_next(BTREE *B, void **key, void **data)

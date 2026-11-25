@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /*
  * Close down the graphics processing.  This gets called only at driver
  * termination time.

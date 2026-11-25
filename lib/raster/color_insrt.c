@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 /* This routine is public only because source is in different files.
  * It should NEVER be called directly.
  * It is used by Rast_add_c_color_rule() and G__read_old_colors().

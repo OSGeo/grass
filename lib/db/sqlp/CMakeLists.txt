@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 flex_target(sqlp.yy.c sqlp.l ${CMAKE_CURRENT_BINARY_DIR}/sqlp.yy.c)
 
 bison_target(sqlp.tab.c sqlp.y ${CMAKE_CURRENT_BINARY_DIR}/sqlp.tab.c)

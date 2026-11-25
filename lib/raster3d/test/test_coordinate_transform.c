@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <stdlib.h>
 #include <string.h>
 #include "test_raster3d_lib.h"

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>

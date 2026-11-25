@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the DateTime type (mode/from/to/fracsec) ctypes bindings
 
 datetime_set_type() and datetime_check_type() only validate and write the

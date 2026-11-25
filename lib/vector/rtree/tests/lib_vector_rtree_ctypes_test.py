@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
 """Tests for the R-tree search through the ctypes bindings
 
 The R-tree supports one to four dimensions. Each case below inserts the ten
