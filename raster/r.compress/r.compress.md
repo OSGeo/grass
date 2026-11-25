@@ -140,8 +140,8 @@ compression method if available.
 ### Compression method number scheme
 
 The used compression method is encoded with numbers. In the internal
-`cellhd` file, the value for "compressed" is 0 for uncompressed maps
-(NONE), 1 for RLE, 2 for ZLIB, 3 for LZ4, 4 for BZIP2, and 5 for ZSTD.
+`cellhd` file, the value for "compressed" is 0 for NONE (uncompressed),
+1 for RLE, 2 for ZLIB, 3 for LZ4, 4 for BZIP2, and 5 for ZSTD.
 
 Obviously, decompression is controlled by the raster map's compression,
 not by the environment variable.
