@@ -85,6 +85,35 @@ class RasterCategoryTestCase(TestCase):
         cats.write_rules(tmpfile)
         self.assertFilesEqualMd5(tmpfile, "data/geology_cats")
 
+    def test_read_rules(self):
+        cats = Category(self.name)
+        cats.read_rules("data/geology_cats")
+        expected = Category(self.name)
+        expected.read()
+        self.assertEqual(cats, expected)
+
+    def test_read_rules_range(self):
+        tmpfile = tempfile(False)
+        with open(tmpfile, "w") as f:
+            f.write("0:0.5:low\n0.5:1:high\n")
+        cats = Category(self.name, mtype="DCELL")
+        cats.read_rules(tmpfile)
+        self.assertEqual(list(cats), [("low", 0.0, 0.5), ("high", 0.5, 1.0)])
+
+    def test_read_rules_write(self):
+        name = "test_read_rules_write_map"
+        self.runModule("g.copy", raster=[self.name, name])
+        self.addCleanup(self.runModule, "g.remove", flags="f", type="raster", name=name)
+        tmpfile = tempfile(False)
+        with open(tmpfile, "w") as f:
+            f.write("11:forest\n12:road\n")
+        cats = Category(name)
+        cats.read_rules(tmpfile)
+        cats.write()
+        cats = Category(name)
+        cats.read()
+        self.assertEqual(list(cats), [("forest", 11, None), ("road", 12, None)])
+
 
 if __name__ == "__main__":
     test()
