@@ -90,10 +90,7 @@ def test_none_keeps_null_file_compression(session, tools, compress_nulls, expect
 
 
 def test_unknown_compressor(session, tools):
-    """An unknown name gives a warning and the default compressor
-
-    This behavior is not changed by NONE support; the test pins it.
-    """
+    """An unknown name gives a warning and the default compressor"""
     tools.r_mapcalc(expression="default = 1")
     result = tools_with_compressor(session, "NOSUCHMETHOD").r_mapcalc(
         expression="unknown = 1"
