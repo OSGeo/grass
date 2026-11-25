@@ -184,7 +184,7 @@ Applying ZLIB compression to a copy of the uncompressed map from above:
 # compression of map using ZLIB compression
 g.copy raster=compressed_no,compressed_ZLIB
 
-export GRASS_COMPRESSOR=ZLIB # ZLIB
+export GRASS_COMPRESSOR=ZLIB
 r.compress compressed_ZLIB
 r.compress compressed_ZLIB -p
   <compressed_ZLIB> is compressed (method 2: ZLIB). Data type: CELL
@@ -201,7 +201,7 @@ above:
 # compression of map using BZIP2 compression
 g.copy raster=compressed_ZLIB,compressed_BZIP2
 
-export GRASS_COMPRESSOR=BZIP2 # BZIP2
+export GRASS_COMPRESSOR=BZIP2
 r.compress compressed_BZIP2
 r.compress compressed_BZIP2 -p
   <compressed_BZIP2> is compressed (method 4: BZIP2). Data type: CELL
@@ -218,7 +218,7 @@ above:
 # compression of map using ZSTD compression
 g.copy raster=compressed_BZIP2,compressed_ZSTD
 
-export GRASS_COMPRESSOR=ZSTD # ZSTD
+export GRASS_COMPRESSOR=ZSTD
 r.compress compressed_ZSTD
 r.compress compressed_ZSTD -p
   <compressed_ZSTD> is compressed (method 5: ZSTD). Data type: CELL
