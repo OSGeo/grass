@@ -72,7 +72,9 @@ def test_none_writes_uncompressed(session, tools, map_type):
     )
 
 
-@pytest.mark.parametrize(("compress_nulls", "expected"), [(None, "YES"), ("0", "NO")])
+@pytest.mark.parametrize(
+    ("compress_nulls", "expected"), [(None, "YES"), ("1", "YES"), ("0", "NO")]
+)
 def test_none_null_file_compression(session, tools, compress_nulls, expected):
     """NONE leaves the compression of the null file to GRASS_COMPRESS_NULLS"""
     none_tools = tools_with_compressor(session, "NONE", compress_nulls=compress_nulls)
