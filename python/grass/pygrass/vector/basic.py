@@ -600,7 +600,7 @@ class Cats:
         :param layer: the number of layer
         :type layer: int
         """
-        if cat:
+        if cat is not None:
             self.n_del = libvect.Vect_field_cat_del(self.c_cats, layer, cat)
             err_msg = "Layer(%d)/category(%d) number does not exist" % (layer, cat)
         else:
@@ -698,9 +698,8 @@ class CatsList:
         :param array: the input array containing the cats
         :type array: ~grass.script.array.array
         """
-        # Vect_array_to_cat_list(const int *vals, int nvals, ***)
-        # TODO: it's not working
-        libvect.Vect_array_to_cat_list(array, len(array), self.c_cat_list)
+        values = (ctypes.c_int * len(array))(*array)
+        libvect.Vect_array_to_cat_list(values, len(values), self.c_cat_list)
 
     def __contains__(self, cat):
         """Check if category number is in list.
