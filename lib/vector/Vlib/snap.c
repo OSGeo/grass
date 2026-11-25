@@ -185,10 +185,15 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
     int line, ltype, line_idx;
     double thresh2;
 
-    int point;              /* index in points array */
+    int point;              /* index of a point */
     int nsnapped, ncreated; /* number of snapped verices, number of new vertices
                                (on segments) */
-    int apoints, npoints;   /* number of allocated points, registered points */
+    int npoints;            /* number of registered points */
+    int ncoords;            /* number of collected coordinates */
+    int acoords;            /* number of allocated coordinates */
+    double *coords;         /* coordinates of the vertices */
+    int *uids;              /* uid of the vertices */
+    int *uid2idx;           /* index of a point for its uid */
     XPNT *XPnts;            /* Array of points */
     NEW *New = NULL;        /* Array of new points */
     int anew = 0, nnew;     /* allocated new points, number of new points */
@@ -209,15 +214,14 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
     Cats = Vect_new_cats_struct();
     List = Vect_new_list();
 
-    KDTree = kdtree_create(2, NULL);
-
     thresh2 = thresh * thresh;
 
-    /* Go through all lines in vector, and add each point to structure of points
-     */
-    apoints = 0;
-    point = 1; /* index starts from 1 ! */
-    XPnts = NULL;
+    /* Go through all lines in vector, and collect the coordinates of the
+     * vertices */
+    acoords = 0;
+    ncoords = 0;
+    coords = NULL;
+    uids = NULL;
 
     G_important_message(_("Snap vertices Pass 1: select points"));
     for (line_idx = 0; line_idx < List_lines->n_values; line_idx++) {
@@ -237,39 +241,65 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
 
             G_debug(3, "  vertex v = %d", v);
 
-            /* coords */
-            c[0] = Points->x[v];
-            c[1] = Points->y[v];
-
-            if (kdtree_insert(KDTree, c, point, 0)) {
-                /* Add to structure */
-                if ((point - 1) == apoints) {
-                    apoints += 10000;
-                    XPnts =
-                        (XPNT *)G_realloc(XPnts, (apoints + 1) * sizeof(XPNT));
-                }
-                XPnts[point].x = Points->x[v];
-                XPnts[point].y = Points->y[v];
-                XPnts[point].anchor = -1;
-                point++;
+            if (ncoords == acoords) {
+                acoords += 10000;
+                coords = G_realloc(coords, acoords * 2 * sizeof(double));
+                uids = G_realloc(uids, acoords * sizeof(int));
             }
+
+            /* coords */
+            coords[ncoords * 2] = Points->x[v];
+            coords[ncoords * 2 + 1] = Points->y[v];
+            /* the uid of a point is the number of the vertex, it starts
+             * from 1 ! */
+            uids[ncoords] = ncoords + 1;
+            ncoords++;
         }
     }
     G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
-    npoints = point - 1;
+    /* build the tree of the points, points with identical coordinates are
+     * only registered once, the uids of the registered points are returned
+     * in the uids array */
+    KDTree = kdtree_create_from_points(2, coords, uids, ncoords, 0);
+    npoints = KDTree->count;
+
+    if (KDTree->root)
+        G_debug(2, "kd-tree depth: %d", KDTree->root->depth);
+
+    /* the coordinates of the points are in the pool of the tree, they are not
+     * needed here anymore */
+    G_free(coords);
+
+    /* Add the points to the structure. The points are indexed by their index
+     * in the tree, the index starts from 1, the index 0 is not used. The uids
+     * are the numbers of the vertices, they start from 1 as well, the map from
+     * a uid to the index of the point translates the uids which are returned
+     * by the tree searches. */
+    XPnts = G_malloc((npoints + 1) * sizeof(XPNT));
+    uid2idx = G_malloc((ncoords + 1) * sizeof(int));
+    for (point = 0; point < npoints; point++) {
+        int uid = uids[point];
+
+        uid2idx[uid] = point + 1;
+        XPnts[point + 1].x = KDTree->pool[point * 2];
+        XPnts[point + 1].y = KDTree->pool[point * 2 + 1];
+        XPnts[point + 1].anchor = -1;
+    }
 
     /* Go through all registered points and if not yet marked mark it as anchor
      * and assign this anchor to all not yet marked points in threshold */
 
     G_important_message(_("Snap vertices Pass 2: assign anchor vertices"));
 
+    /* the points are processed in the order of the input array, point is the
+     * index of the point in the tree and uids[point - 1] is its uid */
     for (point = 1; point <= npoints; point++) {
-        int i;
+        int i, uid = uids[point - 1];
 
         G_percent(point, npoints, 4);
 
-        G_debug(3, "  point = %d", point);
+        G_debug(3, "  point = %d", uid);
 
         if (XPnts[point].anchor >= 0)
             continue;
@@ -281,14 +311,14 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
         c[1] = XPnts[point].y;
 
         Vect_reset_list(List);
-        kd_found = kdtree_dnn(KDTree, c, &kduid, &kdd, thresh, &point);
+        kd_found = kdtree_dnn(KDTree, c, &kduid, &kdd, thresh, &uid);
         G_debug(4, "  %d points in threshold box", kd_found);
 
         for (i = 0; i < kd_found; i++) {
             int pointb;
             double dx, dy, dist2;
 
-            pointb = kduid[i];
+            pointb = uid2idx[kduid[i]];
             if (pointb == point)
                 continue;
 
@@ -367,6 +397,7 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
             if (spoint == -1)
                 G_fatal_error("Point not in KD Tree");
 
+            spoint = uid2idx[spoint];
             anchor = XPnts[spoint].anchor;
 
             if (anchor > 0) { /* to be snapped */
@@ -443,7 +474,7 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
                 double dist2, along;
                 int status;
 
-                spoint = kduid[i];
+                spoint = uid2idx[kduid[i]];
                 G_debug(4, "    spoint = %d anchor = %d", spoint,
                         XPnts[spoint].anchor);
 
@@ -517,6 +548,8 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
     G_free(XPnts);
     G_free(Index);
     G_free(New);
+    G_free(uids);
+    G_free(uid2idx);
     kdtree_destroy(KDTree);
 
     G_verbose_message(_("Snapped vertices: %d"), nsnapped);

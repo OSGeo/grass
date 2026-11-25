@@ -141,6 +141,23 @@ Destroy the tree:
     kdtree_destroy(t);
 
 
+Creating a tree from an array of points
+---------------------------------------
+
+If all points are known in advance, the tree can be created from an array of
+points. This is much faster than inserting the points one by one and needs
+less memory. The tree is built by splitting the points at their median, it is
+therefore perfectly balanced and does not need to be optimized afterwards:
+
+    struct kdtree *t = kdtree_create_from_points(2, coords, uids, npoints, 0);
+
+The coordinates are an array of npoints * ndims values, the uids are the
+unique ids of the points. Points with identical coordinates are only added
+once, the first one wins, just like kdtree_insert() does. The uids array is
+modified in place, it contains the uids of the points which are in the tree
+when the function returns.
+
+
 Example usages
 --------------
 
