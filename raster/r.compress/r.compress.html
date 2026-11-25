@@ -123,10 +123,11 @@ they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are uncompressed.
 <dl>
 <dt><strong>NONE</strong></dt>
 <dd>No compression. Uncompressed raster maps are larger but may be faster to
-write and read, which suits temporary maps (the gain is small for
-integer maps, which compress well). <em>r.compress</em> then writes the
-map uncompressed, as with <b>-u</b>. The NULL file is still compressed
-unless <code>GRASS_COMPRESS_NULLS=0</code> is set.</dd>
+write and read, which suits floating-point maps, for example temporary
+floating-point maps (the gain is small for integer maps, which compress
+well). <em>r.compress</em> then writes the map uncompressed, as with
+<b>-u</b>. The NULL file is still compressed unless
+<code>GRASS_COMPRESS_NULLS=0</code> is set.</dd>
 <dt><strong>RLE</strong></dt>
 <dd><b>DEPRECATED</b> Run-Length Encoding, poor compression ratio but
 fast. It is kept for backwards compatibility to read raster maps
