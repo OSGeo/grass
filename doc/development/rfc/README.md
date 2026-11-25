@@ -11,7 +11,7 @@ A list of all GRASS GIS RFC documents, with status:
   (Adopted)
 - [RFC 3: PSC Voting Procedures](PSC_voting_procedures.md) (Adopted)
 - [RFC 4: Release Procedure](https://github.com/OSGeo/grass/pull/2815) (Draft)
-- [RFC 5: GRASS GIS Errata](https://github.com/OSGeo/grass/pull/2813) (Draft)
+- [RFC 5: Errata](errata.md) (Draft)
 - [RFC 6: Migration from SVN to GitHub](migration_github.md) (Adopted)
 - [RFC 7: Language Standards Support](language_standards_support.md) (Adopted)
 - [RFC 8: Python Language Support](python_language_support.md) (Adopted)
