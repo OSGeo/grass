@@ -94,10 +94,10 @@ uncompressed.
 **NONE**  
 No compression. Uncompressed raster maps are larger but may be faster to
 write and read, which suits floating-point maps, for example temporary
-floating-point maps (the gain is small for integer maps, which compress
-well). *r.compress* then writes the map uncompressed, as with **-u**.
-The NULL file is still compressed unless `GRASS_COMPRESS_NULLS=0` is
-set.
+floating-point maps (the gain is small for integer maps, which usually
+reach a much higher compression ratio). *r.compress* then writes the map
+uncompressed, as with **-u**. The NULL file is still compressed unless
+`GRASS_COMPRESS_NULLS=0` is set.
 
 **RLE**  
 **DEPRECATED** Run-Length Encoding, poor compression ratio but fast. It
