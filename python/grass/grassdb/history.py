@@ -280,26 +280,47 @@ def get_initial_command_info(env_run):
     }
 
 
+def _encode_JSON(data, history_path):
+    """Encode data as JSON text for the history file.
+
+    :param data: data to encode
+    :param str history_path: path to the history log file, used in the error message
+    :raises ValueError: if the data cannot be encoded
+    """
+    try:
+        return json.dumps(data, indent=2)
+    except (TypeError, ValueError) as e:
+        raise ValueError(
+            _("Unable to encode content for JSON history file {}").format(history_path)
+        ) from e
+
+
 def _add_entry_to_JSON(history_path, entry):
     """Add entry to JSON history file.
 
     :param str history_path: path to the history log file
     :param dict entry: entry consisting of 'command' and 'command_info' keys
     """
+    path = Path(history_path)
     try:
-        with open(history_path, encoding="utf-8") as file_history:
-            existing_data = json.load(file_history)
-    except (OSError, ValueError):
-        existing_data = []
-
-    existing_data.append(entry)
-    try:
-        with open(history_path, encoding="utf-8", mode="w") as file_history:
-            json.dump(existing_data, file_history, indent=2)
-    except ValueError as ve:
-        raise ValueError(
-            _("Error decoding content of JSON history file {}").format(history_path)
-        ) from ve
+        try:
+            content = path.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            content = ""
+        if content:
+            try:
+                existing_data = json.loads(content)
+            except ValueError as ve:
+                # Keep content which cannot be parsed instead of replacing it.
+                raise ValueError(
+                    _("Error decoding content of JSON history file {}").format(
+                        history_path
+                    )
+                ) from ve
+        else:
+            existing_data = []
+        existing_data.append(entry)
+        path.write_text(_encode_JSON(existing_data, history_path), encoding="utf-8")
     except OSError as e:
         raise OSError(
             _("Unable to add entry to JSON history file {}").format(history_path)
@@ -329,23 +350,24 @@ def _update_entry_in_JSON(history_path, command_info, index=None):
         with open(history_path, encoding="utf-8", mode="r+") as file_history:
             try:
                 history_entries = json.load(file_history)
-                if index is None:
-                    # Find index of last entry
-                    index = len(history_entries) - 1
-                # Check if the index is valid
-                if 0 <= index < len(history_entries):
-                    # Update entry
-                    history_entries[index]["command_info"].update(command_info)
-                    # Write the modified history back to the file
-                    file_history.seek(0)
-                    file_history.truncate()
-                    json.dump(history_entries, file_history, indent=2)
             except ValueError as ve:
                 raise ValueError(
                     _("Error decoding content of JSON history file {}").format(
                         history_path
                     )
                 ) from ve
+            if index is None:
+                # Find index of last entry
+                index = len(history_entries) - 1
+            # Check if the index is valid
+            if 0 <= index < len(history_entries):
+                # Update entry
+                history_entries[index]["command_info"].update(command_info)
+                content = _encode_JSON(history_entries, history_path)
+                # Write the modified history back to the file
+                file_history.seek(0)
+                file_history.truncate()
+                file_history.write(content)
     except OSError as e:
         raise OSError(
             _("Unable to update entry in JSON history file {}").format(history_path)
