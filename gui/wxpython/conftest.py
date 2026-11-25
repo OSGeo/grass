@@ -57,6 +57,9 @@ def wx_app():
     """
     wx = pytest.importorskip("wx")
     if not wx.App.IsDisplayAvailable():
+        # In CI, skipping would hide the tests: the step runs only these.
+        if os.environ.get("CI"):
+            pytest.fail("No display available for the GUI tests")
         pytest.skip("No display available for the GUI tests")
     app = wx.App()
     yield app
