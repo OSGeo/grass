@@ -20,6 +20,7 @@ import pytest
 
 import grass.script as gs
 from grass.tools import Tools
+from grass.tools.session_tools import ToolError
 
 
 @pytest.fixture(scope="module")
@@ -205,13 +206,13 @@ def test_extend_selection(session):
     tools.t_rast_extract(
         input="perc",
         output=result,
-        where="start_time == '2025-08-01'",
+        where="start_time < '2025-08-02'",
         overwrite=True,
     )
     tools.t_rast_extract(
         input="perc",
         output=result,
-        where="start_time == '2025-08-03'",
+        where="start_time > '2025-08-02'",
         flags="e",
         overwrite=True,
     )
@@ -228,7 +229,7 @@ def test_extend_expression_numeric_suffix(session):
     tools.t_rast_extract(
         input="perc",
         output=result,
-        where="start_time == '2025-08-01'",
+        where="start_time < '2025-08-02'",
         expression="perc * 1",
         basename=result,
         suffix="num%03",
@@ -237,7 +238,7 @@ def test_extend_expression_numeric_suffix(session):
     tools.t_rast_extract(
         input="perc",
         output=result,
-        where="start_time == '2025-08-03'",
+        where="start_time > '2025-08-02'",
         expression="perc * 1",
         basename=result,
         suffix="num%03",
@@ -250,3 +251,40 @@ def test_extend_expression_numeric_suffix(session):
     assert strds_info["number_of_maps"] == 4
     assert strds_info["min_min"] == 100.0
     assert strds_info["max_max"] == 300.0
+
+
+def test_extend_nonexistent_stds(session):
+    """Passing -e when output STDS does not exist creates a new STDS."""
+    result = "perc_extend_new"
+    tools = Tools(session=session)
+    tools.t_rast_extract(
+        input="perc",
+        output=result,
+        where="start_time > '2025-08-02'",
+        flags="e",
+    )
+    strds_info = tools.t_info(input=result, flags="g").keyval
+    assert strds_info["start_time"] == "'2025-08-03 00:00:00'"
+    assert strds_info["number_of_maps"] == 2
+
+
+def test_extend_incompatible_temporal_type(session):
+    """Extending an STDS with an incompatible temporal type fails."""
+    result = "perc_rel_target"
+    tools = Tools(session=session)
+    tools.t_create(
+        type="strds",
+        temporaltype="relative",
+        output=result,
+        title="Relative target",
+        description="Relative target",
+        overwrite=True,
+    )
+    with pytest.raises(ToolError):
+        tools.t_rast_extract(
+            input="perc",
+            output=result,
+            where="start_time > '2025-08-02'",
+            flags="e",
+            overwrite=True,
+        )
