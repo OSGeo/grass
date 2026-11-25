@@ -122,8 +122,8 @@ they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are uncompressed.
 -->
 <dl>
 <dt><strong>NONE</strong></dt>
-<dd>No compression. Uncompressed raster maps are larger but faster
-to write and read, which suits temporary maps (the gain is small for
+<dd>No compression. Uncompressed raster maps are larger but may be faster to
+write and read, which suits temporary maps (the gain is small for
 integer maps, which compress well). <em>r.compress</em> then writes the
 map uncompressed, as with <b>-u</b>. The NULL file is still compressed
 unless <code>GRASS_COMPRESS_NULLS=0</code> is set.</dd>
