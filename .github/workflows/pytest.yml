@@ -70,8 +70,9 @@ jobs:
           # lack the local version, which pip rejects, so uv is used.
           pip install --break-system-packages uv
           ubuntu="ubuntu$(. /etc/os-release && echo "${VERSION_ID//./}")"
+          releases="https://github.com/wxWidgets/Phoenix/releases/expanded_assets"
           uv pip install --system --break-system-packages \
-              --find-links "https://github.com/wxWidgets/Phoenix/releases/expanded_assets/wxPython-${WXPYTHON_VERSION}" \
+              --find-links "${releases}/wxPython-${WXPYTHON_VERSION}" \
               "wxPython==${WXPYTHON_VERSION}+${ubuntu}"
           pip install --break-system-packages pytest pytest-timeout \
               pytest-github-actions-annotate-failures pytest-xdist pytest-cov \
@@ -137,6 +138,22 @@ jobs:
             @.github/workflows/pytest_args_not_parallel.txt \
             --junitxml=pytest.needs_solo_run.junit.xml \
             -k 'not testsuite'
+      - name: Run pytest for the tests which need the wx.App
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          INITIAL_GISBASE="$(grass --config path)"
+          INITIAL_PWD="${PWD}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          export INITIAL_GISBASE
+          export INITIAL_PWD
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_cov.txt \
+            -m needs_wx_app \
+            --junitxml=pytest.needs_wx_app.junit.xml \
+            gui/wxpython
       - name: Run pytest with a single worker (for gunittest-based tests)
         run: |
           PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"

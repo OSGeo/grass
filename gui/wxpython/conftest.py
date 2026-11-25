@@ -14,6 +14,13 @@ import pytest
 import grass.script as gs
 
 
+def pytest_collection_modifyitems(items):
+    """Mark the tests which use the wx.App to run them in their own process"""
+    for item in items:
+        if "wx_app" in getattr(item, "fixturenames", ()):
+            item.add_marker(pytest.mark.needs_wx_app)
+
+
 @pytest.fixture(scope="module")
 def gui_session(tmp_path_factory):
     """Session mirrored to os.environ with the GUI directory in sys.path
@@ -53,8 +60,6 @@ def wx_app():
         pytest.skip("No display available for the GUI tests")
     app = wx.App()
     yield app
+    # The destroyed windows are deleted by the wx cleanup at exit.
     for window in wx.GetTopLevelWindows():
         window.Destroy()
-    wx.SafeYield()
-    # Windows are deleted when idle, which the tests never reach.
-    app.ProcessIdle()

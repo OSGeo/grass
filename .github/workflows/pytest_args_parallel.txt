@@ -1,2 +1,3 @@
 --numprocesses=auto
 -m not needs_solo_run
+-p no:xvfb

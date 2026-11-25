@@ -119,6 +119,18 @@ jobs:
             @.github/workflows/pytest_args_not_parallel.txt \
             --junitxml=pytest.needs_solo_run.junit.xml \
             -k 'not testsuite'
+      - name: Run pytest for the tests which need the wx.App
+        shell: micromamba-shell {0}
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            -m needs_wx_app \
+            --junitxml=pytest.needs_wx_app.junit.xml \
+            gui/wxpython
       - name: Run pytest with a single worker (for gunittest-based tests)
         shell: micromamba-shell {0}
         run: |
