@@ -196,11 +196,8 @@ current mapset first:
 
 ### Printing of current compression state
 
-Print the compression method and the data type of the map with **-p**.
-The output goes to standard error, which *grass.tools* captures, so the
-Python examples use **-g** instead. It prints the map name, data type,
-compression method, and whether the NULL file is compressed to standard
-output:
+Print the compression method and the data type of the map, with **-p**
+on the command line and with **-g** in Python:
 
 === "Command line"
 
@@ -220,7 +217,7 @@ output:
     print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
     ```
 
-Command line output:
+Command line output (**-p**):
 
 ```text
 <elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
@@ -258,7 +255,7 @@ Uncompress the map with **-u** and print its state again:
     print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
     ```
 
-Command line output:
+Command line output (**-p**):
 
 ```text
 <elevation_copy> is uncompressed (method 0: NONE). Data type: FCELL
@@ -298,7 +295,7 @@ if available):
     print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
     ```
 
-Command line output:
+Command line output (**-p**):
 
 ```text
 <elevation_copy> is compressed (method 5: ZSTD). Data type: FCELL
@@ -345,7 +342,7 @@ command:
     print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
     ```
 
-Command line output:
+Command line output (**-p**):
 
 ```text
 <elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
