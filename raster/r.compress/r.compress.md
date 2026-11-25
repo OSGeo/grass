@@ -92,12 +92,13 @@ they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are
 uncompressed.
 
 **NONE**  
-No compression. Uncompressed raster maps are larger but may be faster to
-write and read, which suits floating-point maps, for example temporary
-floating-point maps. For integer maps, which usually reach a much higher
-compression ratio, the time saved is often small. *r.compress* then
-writes the map uncompressed, as with **-u**. The NULL file is still
-compressed unless `GRASS_COMPRESS_NULLS=0` is set.
+No compression. Uncompressed raster maps are larger, integer maps
+usually much larger, but may be faster to write and read on some
+hardware configurations, which suits floating-point maps, for example
+temporary floating-point maps. For integer maps, which usually reach a
+much higher compression ratio, the time saved is often small.
+*r.compress* then writes the map uncompressed, as with **-u**. The NULL
+file is still compressed unless `GRASS_COMPRESS_NULLS=0` is set.
 
 **RLE**  
 **DEPRECATED** Run-Length Encoding, poor compression ratio but fast. It
