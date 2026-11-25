@@ -153,7 +153,7 @@ def test_crs_parameter_epsg(tmp_path, crs):
         assert tools.g_proj(flags="p", format="shell").keyval["srid"] == crs.upper()
 
 
-def test_crs_parameter_authority_code(tmp_path):
+def test_crs_parameter_authority_code_syntax(tmp_path):
     project = tmp_path / "test"
     gs.create_project(project, crs="ESRI:102022")
     with (
@@ -163,7 +163,7 @@ def test_crs_parameter_authority_code(tmp_path):
         assert tools.g_proj(flags="p", format="shell").keyval["srid"] == "ESRI:102022"
 
 
-def test_crs_parameter_invalid_authority_code(tmp_path):
+def test_crs_parameter_invalid_id(tmp_path):
     with pytest.raises(ScriptError, match="not recognized"):
         gs.create_project(tmp_path / "test", crs="ESRI:999999")
 

@@ -3,7 +3,7 @@
 <h2>SYNOPSIS</h2>
 
 <b>grass</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>] |
-[<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code[:datum_trans]</b> | <b>-c AUTHORITY:code</b>] | <b>-e</b> | <b>-f</b> |
+[<b>-c</b> | <b>-c geofile</b> | <b>-c spatial_reference_id</b> | <b>-c EPSG:code[:datum_trans]</b>] | <b>-e</b> | <b>-f</b> |
 [<b>--text</b> | <b>--gtext</b> | <b>--gui</b>] | <b>--config</b> |
 [<b>--tmp-project</b> | <b>--tmp-mapset</b>]
     [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;PROJECT&gt;/</b>]
@@ -26,15 +26,13 @@
 <dt><b>-c geofile</b>
 <dd> Creates new GRASS project in specified GISDBASE with coordinate reference system based on georeferenced file
 
-<dt><b>-c EPSG:code</b>
-<dd> Creates new GRASS project in specified GISDBASE with coordinate reference system defined by EPSG code
+<dt><b>-c spatial_reference_id</b>
+<dd> Creates new GRASS project in specified GISDBASE with coordinate reference system defined by a
+PROJ spatial reference ID (authority name and code), e.g. <code>EPSG:4326</code> or <code>ESRI:102022</code>.
+See <a href="https://proj.org/en/stable/apps/projinfo.html">projinfo</a> for supported definitions.
 
 <dt><b>-c EPSG:code:datum_trans</b>
-<dd> Creates new GRASS project in specified GISDBASE with coordinate reference system defined by EPSG code and datum transform parameters
-
-<dt><b>-c AUTHORITY:code</b>
-<dd> Creates new GRASS project in specified GISDBASE with coordinate reference system defined by a
-spatial reference ID consisting of an authority name and code (e.g., <code>ESRI:102022</code>)
+<dd> Creates new GRASS project in specified GISDBASE with coordinate reference system defined by EPSG code and datum transform parameters (GRASS custom syntax)
 
 <dt><b>-e</b>
 <dd> Exit after creation of project or mapset. Only with <b>-c</b> flag
@@ -286,7 +284,10 @@ examples below) otherwise taken from the last GRASS session.</dd>
 
 <dt><b>grass -c ESRI:102022 $HOME/grassdata/myproject</b>
 <dd> Creates a new GRASS project with ESRI code 102022 (Africa Albers Equal
-    Area Conic) in the specified GISDBASE
+    Area Conic, a PROJ spatial reference ID) in the specified GISDBASE.
+    Any PROJ spatial reference ID is accepted; see
+    <a href="https://proj.org/en/stable/apps/projinfo.html">projinfo</a>
+    for supported definitions.
 
 <dt><b>grass -c XY $HOME/grassdata/gnomonic --exec g.proj -c proj4='+proj=gnom +lat_0=90 +lon_0=-50'</b>
 <dd>  Creates a new GRASS project from PROJ definition string

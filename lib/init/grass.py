@@ -237,7 +237,7 @@ Geographic Resources Analysis Support System (GRASS).
           [-e] [-f] [--text | --gtext | --gui] [--config param]
           [[[GISDBASE/]PROJECT/]MAPSET]
   $CMD_NAME [FLAG]... GISDBASE/PROJECT/MAPSET --exec EXECUTABLE [EPARAM]...
-  $CMD_NAME --tmp-project [geofile | EPSG | XY] --exec EXECUTABLE [EPARAM]...
+  $CMD_NAME --tmp-project [geofile | spatial_reference_id | XY] --exec EXECUTABLE [EPARAM]...
   $CMD_NAME --tmp-mapset GISDBASE/PROJECT/ --exec EXECUTABLE [EPARAM]...
 
 {flags}:
@@ -1880,7 +1880,7 @@ def add_mapset_arguments(
         metavar="CRS",
         type=str,
         help=_(
-            "use temporary project with %(metavar)s (EPSG, georeferenced file, ...)"
+            "use temporary project with %(metavar)s (PROJ spatial reference ID, georeferenced file, ...)"
         ),
     )
     parser.add_argument(
