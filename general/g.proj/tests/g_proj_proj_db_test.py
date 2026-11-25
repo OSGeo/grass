@@ -23,3 +23,5 @@ def test_list_codes_fails_without_proj_db(tools_without_proj_db):
     """Listing codes ends with an error, not a crash, without proj.db"""
     result = tools_without_proj_db.g_proj(list_codes="EPSG")
     assert result.returncode == 1, result.stderr
+    # The reason comes from PROJ, whose messages are not translated.
+    assert "proj.db" in result.stderr
