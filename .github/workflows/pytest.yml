@@ -30,7 +30,7 @@ jobs:
         # Build without optional features using one Python version
         include:
           - os: ubuntu-24.04
-            python-version: "3.13"
+            python-version: "3.11"
             config: ubuntu-24.04_without_x
       fail-fast: true
 
