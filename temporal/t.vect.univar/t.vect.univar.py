@@ -50,6 +50,13 @@
 
 # %option G_OPT_F_SEP
 # % label: Field separator character between the output columns
+# % answer:
+# % guisection: Formatting
+# %end
+
+# %option G_OPT_F_FORMAT
+# % options: plain,json,csv
+# % descriptions: plain;Plain text output;json;JSON (JavaScript Object Notation);csv;CSV (Comma Separated Values)
 # % guisection: Formatting
 # %end
 
@@ -82,8 +89,22 @@ def main():
     column = options["column"]
     where = options["where"]
     extended = flags["e"]
-    header = flags["u"]
+    no_header = flags["u"]
     separator = gs.separator(options["separator"])
+    output_format = options.get("format", "plain")
+
+    if output_format == "csv":
+        if not separator:
+            separator = ","
+
+    elif output_format == "json":
+        if no_header:
+            gs.fatal(_("Column names are always included in JSON output"))
+        if separator:
+            gs.fatal(_("Separator option is not allowed with JSON format"))
+
+    elif not separator:
+        separator = "|"
 
     # Make sure the temporal database exists
     tgis.init()
@@ -94,7 +115,17 @@ def main():
         output = None
 
     tgis.print_vector_dataset_univar_statistics(
-        input, output, twhere, layer, type, column, where, extended, header, separator
+        input=input,
+        output=output,
+        twhere=twhere,
+        layer=layer,
+        type=type,
+        column=column,
+        where=where,
+        extended=extended,
+        no_header=no_header,
+        fs=separator,
+        format=output_format,
     )
 
 
