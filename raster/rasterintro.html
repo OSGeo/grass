@@ -305,8 +305,8 @@ The GRASS raster format is architecture independent and portable between
 
 All GRASS raster map types are by default ZSTD compressed if
 available, otherwise ZLIB compressed. Through the environment variable
-<code>GRASS_COMPRESSOR</code> the compression method can be set to NONE
-(no compression), RLE, ZLIB, LZ4, BZIP2, or ZSTD.
+<code>GRASS_COMPRESSOR</code> the compression method can be set to ZLIB,
+LZ4, BZIP2, ZSTD, RLE (deprecated), or NONE (no compression).
 <p>
 Important: the NULL file compression can be turned off with
 <code>export GRASS_COMPRESS_NULLS=0</code>. Raster maps with NULL file
@@ -322,10 +322,11 @@ they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are uncompressed.
 
 <dl>
 <dt><strong>NONE</strong></dt>
-<dd>No compression. Uncompressed raster maps are larger but faster
-to write and read, which suits temporary maps (the gain is small for
-integer maps, which compress well). The NULL file is still compressed
-unless <code>GRASS_COMPRESS_NULLS=0</code> is set.</dd>
+<dd>No compression. Uncompressed raster maps are larger but may be faster to
+write and read, which suits floating-point maps, for example temporary
+floating-point maps. For integer maps, which usually reach a much higher
+compression ratio, the time saved is often small. The NULL file is still
+compressed unless <code>GRASS_COMPRESS_NULLS=0</code> is set.</dd>
 <dt><strong>RLE</strong></dt>
 <dd><b>DEPRECATED</b> Run-Length Encoding, poor compression ratio but
 fast. It is kept for backwards compatibility to read raster maps
@@ -361,9 +362,9 @@ default compression method if available.</dd>
 </dl>
 
 <p>
-In the internal cellhd file, the value for "compressed" is 0 for
-uncompressed maps (NONE), 1 for RLE, 2 for ZLIB, 3 for LZ4, 4 for
-BZIP2, and 5 for ZSTD.
+In the internal cellhd file, the value for "compressed" is 0 for NONE
+(uncompressed), 1 for RLE, 2 for ZLIB, 3 for LZ4, 4 for BZIP2, and 5
+for ZSTD.
 <p>
 Obviously, decompression is controlled by the raster map's compression,
 not the environment variable.
