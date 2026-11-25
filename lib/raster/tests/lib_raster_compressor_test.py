@@ -5,12 +5,9 @@
 """Tests of the GRASS_COMPRESSOR variable for new raster maps
 
 GRASS_COMPRESSOR=NONE makes Rast_open_new() and the other functions
-opening new maps write uncompressed data. The value of the "compressed"
-field in the cell header is 0 for uncompressed maps. r.info does not
-report compression, so the tests read the cell header.
+opening new maps write uncompressed data. The tests get the compression
+method of a map from r.compress -g.
 """
-
-from pathlib import Path
 
 import numpy as np
 import pytest
@@ -40,15 +37,9 @@ def tools_with_compressor(session, compressor, compress_nulls=None):
     return Tools(env=env, consistent_return_value=True)
 
 
-def cellhd_compressed(tools, name):
-    """Value of the compressed field in the cell header of a raster map"""
-    path = Path(tools.g_findfile(element="cellhd", file=name, format="json")["file"])
-    for line in path.read_text(encoding="utf-8").splitlines():
-        key, value = line.split(":", maxsplit=1)
-        if key.strip() == "compressed":
-            return int(value)
-    msg = f"No compressed field in {path}"
-    raise ValueError(msg)
+def compression_method(tools, name):
+    """Name of the compression method of a raster map, NONE if uncompressed"""
+    return tools.r_compress(map=name, flags="g").text.split("|")[2]
 
 
 def read_array(session, name):
@@ -72,8 +63,8 @@ def test_none_writes_uncompressed(session, tools, map_type):
 
     assert tools.r_info(map="default", format="json")["datatype"] == map_type
     assert tools.r_info(map="none", format="json")["datatype"] == map_type
-    assert cellhd_compressed(tools, "default") > 0
-    assert cellhd_compressed(tools, "none") == 0
+    assert compression_method(tools, "default") != "NONE"
+    assert compression_method(tools, "none") == "NONE"
     np.testing.assert_array_equal(
         read_array(session, "none"), read_array(session, "default")
     )
@@ -101,5 +92,5 @@ def test_unknown_compressor(session, tools):
         expression="unknown = 1"
     )
     assert "Unknown compression method <NOSUCHMETHOD>" in result.stderr
-    assert cellhd_compressed(tools, "unknown") == cellhd_compressed(tools, "default")
-    assert cellhd_compressed(tools, "unknown") > 0
+    assert compression_method(tools, "unknown") == compression_method(tools, "default")
+    assert compression_method(tools, "unknown") != "NONE"
