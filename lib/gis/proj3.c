@@ -193,7 +193,8 @@ const char *G_database_datum_name(void)
     else if (!proj_info)
         return NULL;
     else
-        datumstatus = G_get_datumparams_from_projinfo(proj_info, buf, params);
+        datumstatus = G_get_datumparams_from_projinfo(
+            proj_info, buf, sizeof(buf), params, sizeof(params));
 
     if (datumstatus == 2)
         return G_store(params);
