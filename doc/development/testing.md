@@ -170,6 +170,31 @@ environment. Mark such a test so it is run on its own:
 def test_something_which_changes_the_environment(xy_dataset_session): ...
 ```
 
+### Tests of the wxPython GUI
+
+The GUI modules can be imported only with a GRASS session in the global
+environment and the GUI directory in `sys.path`. The `gui_session` fixture
+from `gui/wxpython/conftest.py` sets up both, so a test using it must be
+marked with `needs_solo_run`. Import the GUI modules inside the test. Tests
+which create windows also need the `wx_app` fixture:
+
+```python
+@pytest.mark.needs_solo_run
+def test_dialog(gui_session, wx_app):
+    from gui_core.forms import GUI
+
+    ...
+```
+
+Tests using `wx_app` are marked with `needs_wx_app` automatically and run in
+their own pytest process in CI. Without a display, they are skipped, except in
+CI, where they fail. To run them on Linux without showing the windows, use
+a virtual display:
+
+```sh
+xvfb-run -a pytest -m needs_wx_app gui/wxpython
+```
+
 ## More information
 
 - [grass.gunittest documentation](https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html)
