@@ -1,6 +1,8 @@
 #ifndef __LOCAL_PROTO_H__
 #define __LOCAL_PROTO_H__
 
+#include <stdint.h>
+
 #include "ransurf.h"
 
 /* calcsd.c */
@@ -40,7 +42,7 @@ double MakePP(int Row, int Col, int OutRows, int OutCols, double **Randoms,
 double ran1(void);
 
 /* save.c */
-void SaveMap(int NumMap, int MapSeed);
+void SaveMap(int NumMap, int64_t MapSeed);
 
 /* zero.c */
 void ZeroMapCells(void);

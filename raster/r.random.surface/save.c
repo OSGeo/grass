@@ -1,11 +1,13 @@
 /* save.c                                                               */
+#include <inttypes.h>
+#include <stdint.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 #include "ransurf.h"
 
-void SaveMap(int NumMap, int MapSeed)
+void SaveMap(int NumMap, int64_t MapSeed)
 {
     int Index, Row, Col, NormIndex;
     int LowColor, HighColor;
@@ -176,7 +178,7 @@ void SaveMap(int NumMap, int MapSeed)
     Rast_write_history(OutNames[NumMap], &history);
 
     strcpy(Label, Buf);
-    snprintf(String, sizeof(String), " seed=%d", MapSeed);
+    snprintf(String, sizeof(String), " seed=%" PRId64, MapSeed);
     strcat(Label, String);
 
     /*
