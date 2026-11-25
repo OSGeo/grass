@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 import grass.script.core as gcore
+from grass.script import append_uuid
 from grass.pygrass.modules import Module
 
 from grass.gunittest.case import TestCase
@@ -179,6 +180,18 @@ class TestRasterMapAssertions(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
+
+    def test_assertRasterMinMaxNulls(self):
+        test_map = append_uuid("tmp")
+        self.runModule("r.mapcalc", expression=f"{test_map} = null()")
+        with self.assertRaises(AssertionError) as context:
+            self.assertRasterMinMax(test_map, refmin=1, refmax=10)
+        self.assertEqual(
+            str(context.exception),
+            f"The actual limits for raster map {test_map}, are not within the specified limits.\n"
+            f"Actual: minimum=None, maximum=None\n"
+            f"Reference: minimum=1, maximum=10\n",
+        )
 
     def test_assertRasterFitsUnivar(self):
         self.assertRasterFitsUnivar(
