@@ -212,7 +212,7 @@ def test_extend_selection(session):
     tools.t_rast_extract(
         input="perc",
         output=result,
-        where="start_time > '2025-08-02'",
+        where="start_time >= '2025-08-03'",
         flags="e",
         overwrite=True,
     )
@@ -238,7 +238,7 @@ def test_extend_expression_numeric_suffix(session):
     tools.t_rast_extract(
         input="perc",
         output=result,
-        where="start_time > '2025-08-02'",
+        where="start_time >= '2025-08-03'",
         expression="perc * 1",
         basename=result,
         suffix="num%03",
@@ -260,7 +260,7 @@ def test_extend_nonexistent_stds(session):
     tools.t_rast_extract(
         input="perc",
         output=result,
-        where="start_time > '2025-08-02'",
+        where="start_time >= '2025-08-03'",
         flags="e",
     )
     strds_info = tools.t_info(input=result, flags="g").keyval
@@ -284,7 +284,7 @@ def test_extend_incompatible_temporal_type(session):
         tools.t_rast_extract(
             input="perc",
             output=result,
-            where="start_time > '2025-08-02'",
+            where="start_time >= '2025-08-03'",
             flags="e",
             overwrite=True,
         )
