@@ -263,8 +263,9 @@ r.compress -p map=elevation_copy
 &lt;elevation_copy&gt; has a compressed NULL file
 </pre></div>
 
-With <code>export GRASS_COMPRESSOR=ZLIB</code>, the method is used for
-raster maps created by the following commands.
+When <code>GRASS_COMPRESSOR</code> is set in the environment of the
+tools, they write raster maps with that method, for example after
+<code>export GRASS_COMPRESSOR=ZLIB</code>.
 
 <h2>SEE ALSO</h2>
 

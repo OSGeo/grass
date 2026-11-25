@@ -355,8 +355,10 @@ Python output (**-g**):
 elevation_copy|FCELL|ZLIB|YES
 ```
 
-With `export GRASS_COMPRESSOR=ZLIB`, the method is used for raster maps
-created by the following commands.
+When `GRASS_COMPRESSOR` is set in the environment of the tools, they
+write raster maps with that method, for example after
+`export GRASS_COMPRESSOR=ZLIB` on the command line or
+`os.environ["GRASS_COMPRESSOR"] = "ZLIB"` in Python.
 
 ## SEE ALSO
 
