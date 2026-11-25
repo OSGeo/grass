@@ -195,6 +195,10 @@ a virtual display:
 xvfb-run -a pytest -m needs_wx_app gui/wxpython
 ```
 
+The `wx.App` and some global settings changed by the GUI modules, such as
+`grass.script.set_raise_on_error()`, stay for the rest of the process. Run the
+other tests separately with `-m "not needs_wx_app"`.
+
 ## More information
 
 - [grass.gunittest documentation](https://grass.osgeo.org/grass-devel/manuals/libpython/gunittest_testing.html)
