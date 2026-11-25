@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "Gwater.h"
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -30,6 +31,7 @@ int init_vars(int argc, char *argv[])
     G_gisinit(argv[0]);
     /* input */
     ele_flag = pit_flag = run_flag = ril_flag = rtn_flag = 0;
+    wat_input_flag = asp_input_flag = 0;
     /* output */
     wat_flag = asp_flag = tci_flag = spi_flag = atanb_flag = 0;
     bas_flag = seg_flag = haf_flag = 0;
@@ -56,6 +58,10 @@ int init_vars(int argc, char *argv[])
             ele_flag++;
         else if (sscanf(argv[r], "accumulation=%s", wat_name) == 1)
             wat_flag++;
+        else if (sscanf(argv[r], "accumulation_input=%s", wat_input_name) == 1)
+            wat_input_flag++;
+        else if (sscanf(argv[r], "drainage_input=%s", asp_input_name) == 1)
+            asp_input_flag++;
         else if (sscanf(argv[r], "tci=%s", tci_name) == 1)
             tci_flag++;
         else if (sscanf(argv[r], "spi=%s", spi_name) == 1)
@@ -112,6 +118,19 @@ int init_vars(int argc, char *argv[])
         else
             usage(argv[0]);
     }
+    if (wat_input_flag && asp_input_flag) {
+        if (wat_input_flag != 1 || asp_input_flag != 1) {
+            G_fatal_error(_("Both accumulation_input and drainage_input must "
+                            "be specified together"));
+        }
+        /* Cannot use certain options with input maps */
+        if (pit_flag || run_flag || rtn_flag) {
+            G_fatal_error(_("Cannot use depression, flow, or retention maps "
+                            "with accumulation_input and drainage_input"));
+        }
+        G_message(_("Using existing accumulation and drainage maps - skipping "
+                    "flow calculation"));
+    }
     /* check options */
     if (mfd == 1 && (c_fac < 1 || c_fac > 10)) {
         G_fatal_error("Convergence factor must be between 1 and 10.");
@@ -135,6 +154,10 @@ int init_vars(int argc, char *argv[])
 
     if (tci_flag || spi_flag)
         atanb_flag = 1;
+
+    if (wat_input_flag && asp_input_flag) {
+        tot_parts -= 2; /* Skip A* and accumulation */
+    }
 
     G_message(
         n_("SECTION 1 beginning: Initiating Variables. %d section total.",
@@ -190,6 +213,14 @@ int init_vars(int argc, char *argv[])
     /* heap points: / 4 */
     memory_divisor += sizeof(HEAP_PNT) / 4.;
     disk_space += sizeof(HEAP_PNT);
+
+    if (!wat_input_flag || !asp_input_flag) {
+        memory_divisor += sizeof(POINT) / 16.;
+        disk_space += sizeof(POINT);
+        memory_divisor += sizeof(HEAP_PNT) / 4.;
+        disk_space += sizeof(HEAP_PNT);
+    }
+
     /* TCI: as is */
     if (atanb_flag) {
         memory_divisor += sizeof(A_TANB);
@@ -277,6 +308,188 @@ int init_vars(int argc, char *argv[])
                  sizeof(A_TANB));
         Rast_set_d_null_value(&sca_tanb.sca, 1);
         Rast_set_d_null_value(&sca_tanb.tanb, 1);
+    }
+
+    /* If using input maps skip flow calculation*/
+    if (wat_input_flag && asp_input_flag) {
+        int input_fd;
+        DCELL *wat_input_buf;
+        CELL *asp_input_buf;
+
+        G_message(_("SECTION 1a: Reading existing accumulation map: %s"),
+                  wat_input_name);
+        input_fd = Rast_open_old(wat_input_name, "");
+        wat_input_buf = Rast_allocate_d_buf();
+        wabuf = G_malloc(ncols * sizeof(WAT_ALT));
+        afbuf = G_malloc(ncols * sizeof(ASP_FLAG));
+
+        for (r = 0; r < nrows; r++) {
+            G_percent(r, nrows, 2);
+            Rast_get_d_row(input_fd, wat_input_buf, r);
+            for (c = 0; c < ncols; c++) {
+                afbuf[c].flag = 0;
+                afbuf[c].asp = 0;
+
+                if (Rast_is_d_null_value(&wat_input_buf[c])) {
+                    Rast_set_d_null_value(&wabuf[c].wat, 1);
+                    Rast_set_c_null_value(&wabuf[c].ele, 1);
+                    FLAG_SET(afbuf[c].flag, NULLFLAG);
+                    FLAG_SET(afbuf[c].flag, WORKEDFLAG);
+                }
+                else {
+                    wabuf[c].wat = wat_input_buf[c];
+                    wabuf[c].ele = 0; /* Will be filled from elevation */
+                }
+            }
+            seg_put_row(&watalt, (char *)wabuf, r);
+            seg_put_row(&aspflag, (char *)afbuf, r);
+        }
+        G_percent(nrows, nrows, 2);
+        Rast_close(input_fd);
+        G_free(wat_input_buf);
+
+        G_message(_("SECTION 1b: Reading existing drainage direction map: %s"),
+                  asp_input_name);
+        input_fd = Rast_open_old(asp_input_name, "");
+        asp_input_buf = Rast_allocate_c_buf();
+
+        for (r = 0; r < nrows; r++) {
+            G_percent(r, nrows, 2);
+            Rast_get_c_row(input_fd, asp_input_buf, r);
+            for (c = 0; c < ncols; c++) {
+                seg_get(&aspflag, (char *)&af, r, c);
+                if (!Rast_is_c_null_value(&asp_input_buf[c])) {
+                    af.asp = (char)asp_input_buf[c];
+                }
+                else {
+                    af.asp = 0;
+                }
+                seg_put(&aspflag, (char *)&af, r, c);
+            }
+        }
+        G_percent(nrows, nrows, 2);
+        Rast_close(input_fd);
+        G_free(asp_input_buf);
+
+        /* Read elevation for other calculations */
+        G_message(_("SECTION 1c: Reading elevation map"));
+        ele_fd = Rast_open_old(ele_name, "");
+        ele_map_type = Rast_get_map_type(ele_fd);
+        ele_size = Rast_cell_size(ele_map_type);
+        elebuf = Rast_allocate_buf(ele_map_type);
+        alt_value_buf = Rast_allocate_buf(CELL_TYPE);
+
+        if (ele_map_type == FCELL_TYPE || ele_map_type == DCELL_TYPE)
+            ele_scale = 1000;
+
+        do_points = 0; /* No A* processing needed */
+        for (r = 0; r < nrows; r++) {
+            G_percent(r, nrows, 2);
+            Rast_get_row(ele_fd, elebuf, r, ele_map_type);
+            ptr = elebuf;
+
+            for (c = 0; c < ncols; c++) {
+                seg_get(&watalt, (char *)&wa, r, c);
+                seg_get(&aspflag, (char *)&af, r, c);
+
+                if (!Rast_is_null_value(ptr, ele_map_type)) {
+                    if (ele_map_type == CELL_TYPE) {
+                        alt_value = *((CELL *)ptr);
+                    }
+                    else if (ele_map_type == FCELL_TYPE) {
+                        dvalue = *((FCELL *)ptr);
+                        dvalue *= ele_scale;
+                        alt_value = ele_round(dvalue);
+                    }
+                    else if (ele_map_type == DCELL_TYPE) {
+                        dvalue = *((DCELL *)ptr);
+                        dvalue *= ele_scale;
+                        alt_value = ele_round(dvalue);
+                    }
+
+                    wa.ele = alt_value;
+                    seg_put(&watalt, (char *)&wa, r, c);
+                    alt_value_buf[c] = alt_value;
+                }
+                else {
+                    Rast_set_c_null_value(&alt_value, 1);
+                    wa.ele = alt_value;
+                    seg_put(&watalt, (char *)&wa, r, c);
+                    alt_value_buf[c] = alt_value;
+                }
+
+                if (atanb_flag) {
+                    seg_put(&atanb, (char *)&sca_tanb, r, c);
+                }
+
+                ptr = G_incr_void_ptr(ptr, ele_size);
+            }
+
+            if (er_flag) {
+                cseg_put_row(&r_h, alt_value_buf, r);
+            }
+        }
+        G_percent(nrows, nrows, 2);
+        Rast_close(ele_fd);
+        G_free(elebuf);
+        G_free(wabuf);
+        G_free(afbuf);
+        G_free(alt_value_buf);
+
+        /* Mark swales based on accumulation threshold for basin
+         * delineation */
+        if (bas_thres > 0) {
+            G_message(
+                _("Marking stream cells based on accumulation threshold"));
+            for (r = 0; r < nrows; r++) {
+                G_percent(r, nrows, 2);
+                for (c = 0; c < ncols; c++) {
+                    seg_get(&watalt, (char *)&wa, r, c);
+                    seg_get(&aspflag, (char *)&af, r, c);
+                    if (!FLAG_GET(af.flag, NULLFLAG) &&
+                        fabs(wa.wat) >= bas_thres) {
+                        FLAG_SET(af.flag, SWALEFLAG);
+                        seg_put(&aspflag, (char *)&af, r, c);
+                    }
+                }
+            }
+            G_percent(nrows, nrows, 2);
+        }
+
+        /* Skip RUSLE slope length initialization and A* setup */
+        /* Initialize RUSLE slope length and other segments when using
+         * input maps */
+        if (er_flag) {
+            double init_val;
+
+            dseg_open(&s_l, seg_rows, seg_cols, num_open_segs);
+
+            /* Initialize s_l with half_res for all non-NULL cells */
+            init_val = half_res;
+            for (r = 0; r < nrows; r++) {
+                for (c = 0; c < ncols; c++) {
+                    seg_get(&aspflag, (char *)&af, r, c);
+                    if (!FLAG_GET(af.flag, NULLFLAG)) {
+                        dseg_put(&s_l, &init_val, r, c);
+                    }
+                }
+            }
+
+            if (sg_flag)
+                dseg_open(&s_g, seg_rows, seg_cols, num_open_segs);
+            if (ls_flag)
+                dseg_open(&l_s, seg_rows, seg_cols, num_open_segs);
+            if (ril_flag) {
+                dseg_open(&ril, seg_rows, seg_cols, num_open_segs);
+                dseg_read_cell(&ril, ril_name, "");
+            }
+        }
+
+        G_message(_("Skipping flow calculation - using existing maps"));
+        first_astar = first_cum = -1;
+        heap_size = 0;
+
+        return 0;
     }
 
     /* open elevation input */
