@@ -75,8 +75,11 @@ def test_none_writes_uncompressed(session, tools, map_type):
 @pytest.mark.parametrize(
     ("compress_nulls", "expected"), [(None, "YES"), ("1", "YES"), ("0", "NO")]
 )
-def test_none_null_file_compression(session, tools, compress_nulls, expected):
-    """NONE leaves the compression of the null file to GRASS_COMPRESS_NULLS"""
+def test_none_keeps_null_file_compression(session, tools, compress_nulls, expected):
+    """With NONE, the raster values are uncompressed and the null file is not
+
+    The compression of the null file still follows GRASS_COMPRESS_NULLS.
+    """
     none_tools = tools_with_compressor(session, "NONE", compress_nulls=compress_nulls)
     tools.r_mapcalc(expression=f"default = {EXPRESSIONS['CELL']}")
     none_tools.r_mapcalc(expression=f"none = {EXPRESSIONS['CELL']}")
