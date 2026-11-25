@@ -243,7 +243,7 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
 
             if (ncoords == acoords) {
                 acoords += 10000;
-                coords = G_realloc(coords, acoords * 2 * sizeof(double));
+                coords = G_realloc(coords, sizeof(double) * acoords * 2);
                 uids = G_realloc(uids, acoords * sizeof(int));
             }
 
@@ -276,8 +276,8 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
      * are the numbers of the vertices, they start from 1 as well, the map from
      * a uid to the index of the point translates the uids which are returned
      * by the tree searches. */
-    XPnts = G_malloc((npoints + 1) * sizeof(XPNT));
-    uid2idx = G_malloc((ncoords + 1) * sizeof(int));
+    XPnts = G_malloc(sizeof(XPNT) * (npoints + 1));
+    uid2idx = G_malloc(sizeof(int) * (ncoords + 1));
     for (point = 0; point < npoints; point++) {
         int uid = uids[point];
 

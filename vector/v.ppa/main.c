@@ -258,7 +258,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("At least 2 points are required, %d found"), n);
 
     /* build the tree of the points, the uid of a point is its number */
-    coords = G_malloc(n * 2 * sizeof(double));
+    coords = G_malloc(sizeof(double) * n * 2);
     uids = G_malloc(n * sizeof(int));
     for (i = 0; i < n; i++) {
         coords[i * 2] = points[i].x;

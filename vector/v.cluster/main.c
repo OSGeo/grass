@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     G_message(_("Creating search index ..."));
     cid = G_malloc((nlines + 1) * sizeof(int));
     idx = G_malloc((nlines + 1) * sizeof(int));
-    coords = G_malloc(npoints * ndims * sizeof(double));
+    coords = G_malloc(sizeof(double) * npoints * ndims);
     uids = G_malloc(npoints * sizeof(int));
     Vect_rewind(&In);
     i = 0;

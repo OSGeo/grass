@@ -272,7 +272,7 @@ struct kdtree *kdtree_create_from_points(char ndims, const double *coords,
     if (n == 0)
         return t;
 
-    idx = G_malloc((size_t)n * sizeof(int));
+    idx = G_malloc(sizeof(int) * (size_t)n);
     for (i = 0; i < n; i++)
         idx[i] = i;
 
@@ -298,8 +298,8 @@ struct kdtree *kdtree_create_from_points(char ndims, const double *coords,
     kd_sort(&b, idx, 0, m, KD_CMP_IDX, 0);
 
     /* allocate the coordinates and the nodes of the tree */
-    t->pool = G_malloc((size_t)m * ndims * sizeof(double));
-    t->nodes = G_malloc((size_t)m * sizeof(struct kdnode));
+    t->pool = G_malloc(sizeof(double) * (size_t)m * ndims);
+    t->nodes = G_malloc(sizeof(struct kdnode) * (size_t)m);
     t->nnodes = m;
 
     /* copy the coordinates of the points and remove the uids of the
