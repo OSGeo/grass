@@ -164,6 +164,7 @@ applies to all raster map types (CELL, FCELL, DCELL).
 If the variable does not exist, or the value cannot be parsed as an
 integer, ZLIB's compression level 1 will be used.
 
+<!-- markdownlint-disable MD046 -->
 ## EXAMPLES
 
 *r.compress* works only on raster maps in the current mapset. With the
@@ -181,7 +182,7 @@ current mapset first:
     ```python
     from grass.tools import Tools
 
-    tools = Tools(capture_output=False)
+    tools = Tools()
     tools.g_copy(raster="elevation,elevation_copy")
     ```
 
@@ -196,8 +197,10 @@ current mapset first:
 ### Printing of current compression state
 
 Print the compression method and the data type of the map with **-p**.
-The output goes to standard error, so in Python, *grass.tools* shows it
-only when its output is not captured (`capture_output=False` above):
+The output goes to standard error, which *grass.tools* captures, so the
+*grass.tools* example uses **-g** instead. It prints the map name, data
+type, compression method, and whether the NULL file is compressed to
+standard output:
 
 === "Command line"
 
@@ -205,24 +208,10 @@ only when its output is not captured (`capture_output=False` above):
     r.compress -p map=elevation_copy
     ```
 
-    Output:
-
-    ```text
-    <elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
-    <elevation_copy> has an uncompressed NULL file
-    ```
-
 === "Python (grass.tools)"
 
     ```python
-    tools.r_compress(map="elevation_copy", flags="p")
-    ```
-
-    Output:
-
-    ```text
-    <elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
-    <elevation_copy> has an uncompressed NULL file
+    print(tools.r_compress(map="elevation_copy", flags="g").text)
     ```
 
 === "Python (grass.script)"
@@ -231,12 +220,18 @@ only when its output is not captured (`capture_output=False` above):
     gs.run_command("r.compress", map="elevation_copy", flags="p")
     ```
 
-    Output:
+Output:
 
-    ```text
-    <elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
-    <elevation_copy> has an uncompressed NULL file
-    ```
+```text
+<elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
+<elevation_copy> has an uncompressed NULL file
+```
+
+With *grass.tools* (**-g**):
+
+```text
+elevation_copy|FCELL|ZLIB|NO
+```
 
 ### Uncompressing and compressing
 
@@ -249,25 +244,11 @@ Uncompress the map with **-u** and print its state again:
     r.compress -p map=elevation_copy
     ```
 
-    Output:
-
-    ```text
-    <elevation_copy> is uncompressed (method 0: NONE). Data type: FCELL
-    <elevation_copy> has a compressed NULL file
-    ```
-
 === "Python (grass.tools)"
 
     ```python
     tools.r_compress(map="elevation_copy", flags="u")
-    tools.r_compress(map="elevation_copy", flags="p")
-    ```
-
-    Output:
-
-    ```text
-    <elevation_copy> is uncompressed (method 0: NONE). Data type: FCELL
-    <elevation_copy> has a compressed NULL file
+    print(tools.r_compress(map="elevation_copy", flags="g").text)
     ```
 
 === "Python (grass.script)"
@@ -277,12 +258,18 @@ Uncompress the map with **-u** and print its state again:
     gs.run_command("r.compress", map="elevation_copy", flags="p")
     ```
 
-    Output:
+Output:
 
-    ```text
-    <elevation_copy> is uncompressed (method 0: NONE). Data type: FCELL
-    <elevation_copy> has a compressed NULL file
-    ```
+```text
+<elevation_copy> is uncompressed (method 0: NONE). Data type: FCELL
+<elevation_copy> has a compressed NULL file
+```
+
+With *grass.tools* (**-g**):
+
+```text
+elevation_copy|FCELL|NONE|YES
+```
 
 The NULL file is written again with the map and is compressed unless
 `GRASS_COMPRESS_NULLS=0` is set.
@@ -297,25 +284,11 @@ if available):
     r.compress -p map=elevation_copy
     ```
 
-    Output:
-
-    ```text
-    <elevation_copy> is compressed (method 5: ZSTD). Data type: FCELL
-    <elevation_copy> has a compressed NULL file
-    ```
-
 === "Python (grass.tools)"
 
     ```python
     tools.r_compress(map="elevation_copy")
-    tools.r_compress(map="elevation_copy", flags="p")
-    ```
-
-    Output:
-
-    ```text
-    <elevation_copy> is compressed (method 5: ZSTD). Data type: FCELL
-    <elevation_copy> has a compressed NULL file
+    print(tools.r_compress(map="elevation_copy", flags="g").text)
     ```
 
 === "Python (grass.script)"
@@ -325,12 +298,18 @@ if available):
     gs.run_command("r.compress", map="elevation_copy", flags="p")
     ```
 
-    Output:
+Output:
 
-    ```text
-    <elevation_copy> is compressed (method 5: ZSTD). Data type: FCELL
-    <elevation_copy> has a compressed NULL file
-    ```
+```text
+<elevation_copy> is compressed (method 5: ZSTD). Data type: FCELL
+<elevation_copy> has a compressed NULL file
+```
+
+With *grass.tools* (**-g**):
+
+```text
+elevation_copy|FCELL|ZSTD|YES
+```
 
 ### Selecting the compression method
 
@@ -344,13 +323,6 @@ command:
     r.compress -p map=elevation_copy
     ```
 
-    Output:
-
-    ```text
-    <elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
-    <elevation_copy> has a compressed NULL file
-    ```
-
 === "Python (grass.tools)"
 
     ```python
@@ -358,15 +330,8 @@ command:
 
     env = os.environ.copy()
     env["GRASS_COMPRESSOR"] = "ZLIB"
-    Tools(env=env, capture_output=False).r_compress(map="elevation_copy")
-    tools.r_compress(map="elevation_copy", flags="p")
-    ```
-
-    Output:
-
-    ```text
-    <elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
-    <elevation_copy> has a compressed NULL file
+    Tools(env=env).r_compress(map="elevation_copy")
+    print(tools.r_compress(map="elevation_copy", flags="g").text)
     ```
 
 === "Python (grass.script)"
@@ -380,12 +345,18 @@ command:
     gs.run_command("r.compress", map="elevation_copy", flags="p")
     ```
 
-    Output:
+Output:
 
-    ```text
-    <elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
-    <elevation_copy> has a compressed NULL file
-    ```
+```text
+<elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
+<elevation_copy> has a compressed NULL file
+```
+
+With *grass.tools* (**-g**):
+
+```text
+elevation_copy|FCELL|ZLIB|YES
+```
 
 With `export GRASS_COMPRESSOR=ZLIB`, the method is used for raster maps
 created by the following commands.
