@@ -196,77 +196,75 @@ integer, ZLIB's compression level 1 will be used.
 
 <h2>EXAMPLES</h2>
 
+<em>r.compress</em> works only on raster maps in the current mapset.
+With the North Carolina sample dataset, make a copy of the
+<code>elevation</code> map in the current mapset first:
+
+<div class="code"><pre>
+g.copy raster=elevation,elevation_copy
+</pre></div>
+
 <h3>Printing of current compression state</h3>
 
-Example for an uncompressed raster map:
+Print the compression method and the data type of the map with
+<b>-p</b>:
 
 <div class="code"><pre>
-r.compress compressed_no -p
-  &lt;compressed_no&gt; is uncompressed (method 0: NONE). Data type: CELL
-  &lt;compressed_no&gt; has a compressed NULL file
+r.compress -p map=elevation_copy
 </pre></div>
-
-<!-- do no advertise not recommended and deprecated compressions!
-
-<h3>Applying RLE compression to a copy of the uncompressed map (not recommended!)</h3>
 
 <div class="code"><pre>
-# compression of map using the deprecated RLE compression
-g.copy raster=compressed_no,compressed_RLE
-
-export GRASS_COMPRESSOR=RLE
-r.compress compressed_RLE
-r.compress compressed_RLE -p
-  &lt;compressed_RLE&gt; is compressed (method 1: RLE). Data type: CELL
-  &lt;compressed_RLE&gt; has a compressed NULL file
-unset GRASS_COMPRESSOR # switch back to default
+&lt;elevation_copy&gt; is compressed (method 2: ZLIB). Data type: FCELL
+&lt;elevation_copy&gt; has an uncompressed NULL file
 </pre></div>
--->
 
-<h3>Applying ZLIB compression</h3>
+<h3>Uncompressing and compressing</h3>
 
-Applying ZLIB compression to a copy of the uncompressed map from above:
+Uncompress the map with <b>-u</b> and print its state again:
+
 <div class="code"><pre>
-# compression of map using ZLIB compression
-g.copy raster=compressed_no,compressed_ZLIB
-
-export GRASS_COMPRESSOR=ZLIB
-r.compress compressed_ZLIB
-r.compress compressed_ZLIB -p
-  &lt;compressed_ZLIB&gt; is compressed (method 2: ZLIB). Data type: CELL
-  &lt;compressed_ZLIB&gt; has a compressed NULL file
-unset GRASS_COMPRESSOR # switch back to default
+r.compress -u map=elevation_copy
+r.compress -p map=elevation_copy
 </pre></div>
 
-<h3>Applying BZIP2 compression</h3>
-
-Applying BZIP2 compression to a copy of the ZLIB-compressed map from above:
 <div class="code"><pre>
-# compression of map using BZIP2 compression
-g.copy raster=compressed_ZLIB,compressed_BZIP2
-
-export GRASS_COMPRESSOR=BZIP2
-r.compress compressed_BZIP2
-r.compress compressed_BZIP2 -p
-  &lt;compressed_BZIP2&gt; is compressed (method 4: BZIP2). Data type: CELL
-  &lt;compressed_BZIP2&gt; has a compressed NULL file
-unset GRASS_COMPRESSOR # switch back to default
+&lt;elevation_copy&gt; is uncompressed (method 0: NONE). Data type: FCELL
+&lt;elevation_copy&gt; has a compressed NULL file
 </pre></div>
 
-<h3>Applying ZSTD compression</h3>
+The NULL file is written again with the map and is compressed unless
+<code>GRASS_COMPRESS_NULLS=0</code> is set.
 
-Applying ZSTD compression to a copy of the BZIP2-compressed map from above:
+Without <code>GRASS_COMPRESSOR</code>, <em>r.compress</em> uses the
+default method (ZSTD if available):
+
 <div class="code"><pre>
-# compression of map using ZSTD compression
-g.copy raster=compressed_BZIP2,compressed_ZSTD
-
-export GRASS_COMPRESSOR=ZSTD
-r.compress compressed_ZSTD
-r.compress compressed_ZSTD -p
-  &lt;compressed_ZSTD&gt; is compressed (method 5: ZSTD). Data type: CELL
-  &lt;compressed_ZSTD&gt; has a compressed NULL file
-unset GRASS_COMPRESSOR
+r.compress map=elevation_copy
+r.compress -p map=elevation_copy
 </pre></div>
+
+<div class="code"><pre>
+&lt;elevation_copy&gt; is compressed (method 5: ZSTD). Data type: FCELL
+&lt;elevation_copy&gt; has a compressed NULL file
+</pre></div>
+
+<h3>Selecting the compression method</h3>
+
+Set <code>GRASS_COMPRESSOR</code> to use another method, here only for
+one command:
+
+<div class="code"><pre>
+GRASS_COMPRESSOR=ZLIB r.compress map=elevation_copy
+r.compress -p map=elevation_copy
+</pre></div>
+
+<div class="code"><pre>
+&lt;elevation_copy&gt; is compressed (method 2: ZLIB). Data type: FCELL
+&lt;elevation_copy&gt; has a compressed NULL file
+</pre></div>
+
+With <code>export GRASS_COMPRESSOR=ZLIB</code>, the method is used for
+raster maps created by the following commands.
 
 <h2>SEE ALSO</h2>
 

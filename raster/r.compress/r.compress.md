@@ -166,65 +166,74 @@ integer, ZLIB's compression level 1 will be used.
 
 ## EXAMPLES
 
+*r.compress* works only on raster maps in the current mapset. With the
+North Carolina sample dataset, make a copy of the `elevation` map in the
+current mapset first:
+
+```sh
+g.copy raster=elevation,elevation_copy
+```
+
 ### Printing of current compression state
 
-Example for an uncompressed raster map:
+Print the compression method and the data type of the map with **-p**:
 
 ```sh
-r.compress compressed_no -p
-  <compressed_no> is uncompressed (method 0: NONE). Data type: CELL
-  <compressed_no> has a compressed NULL file
+r.compress -p map=elevation_copy
 ```
 
-### Applying ZLIB compression
+```text
+<elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
+<elevation_copy> has an uncompressed NULL file
+```
 
-Applying ZLIB compression to a copy of the uncompressed map from above:
+### Uncompressing and compressing
+
+Uncompress the map with **-u** and print its state again:
 
 ```sh
-# compression of map using ZLIB compression
-g.copy raster=compressed_no,compressed_ZLIB
-
-export GRASS_COMPRESSOR=ZLIB
-r.compress compressed_ZLIB
-r.compress compressed_ZLIB -p
-  <compressed_ZLIB> is compressed (method 2: ZLIB). Data type: CELL
-  <compressed_ZLIB> has a compressed NULL file
-unset GRASS_COMPRESSOR # switch back to default
+r.compress -u map=elevation_copy
+r.compress -p map=elevation_copy
 ```
 
-### Applying BZIP2 compression
+```text
+<elevation_copy> is uncompressed (method 0: NONE). Data type: FCELL
+<elevation_copy> has a compressed NULL file
+```
 
-Applying BZIP2 compression to a copy of the ZLIB-compressed map from
-above:
+The NULL file is written again with the map and is compressed unless
+`GRASS_COMPRESS_NULLS=0` is set.
+
+Without `GRASS_COMPRESSOR`, *r.compress* uses the default method (ZSTD
+if available):
 
 ```sh
-# compression of map using BZIP2 compression
-g.copy raster=compressed_ZLIB,compressed_BZIP2
-
-export GRASS_COMPRESSOR=BZIP2
-r.compress compressed_BZIP2
-r.compress compressed_BZIP2 -p
-  <compressed_BZIP2> is compressed (method 4: BZIP2). Data type: CELL
-  <compressed_BZIP2> has a compressed NULL file
-unset GRASS_COMPRESSOR # switch back to default
+r.compress map=elevation_copy
+r.compress -p map=elevation_copy
 ```
 
-### Applying ZSTD compression
+```text
+<elevation_copy> is compressed (method 5: ZSTD). Data type: FCELL
+<elevation_copy> has a compressed NULL file
+```
 
-Applying ZSTD compression to a copy of the BZIP2-compressed map from
-above:
+### Selecting the compression method
+
+Set `GRASS_COMPRESSOR` to use another method, here only for one
+command:
 
 ```sh
-# compression of map using ZSTD compression
-g.copy raster=compressed_BZIP2,compressed_ZSTD
-
-export GRASS_COMPRESSOR=ZSTD
-r.compress compressed_ZSTD
-r.compress compressed_ZSTD -p
-  <compressed_ZSTD> is compressed (method 5: ZSTD). Data type: CELL
-  <compressed_ZSTD> has a compressed NULL file
-unset GRASS_COMPRESSOR
+GRASS_COMPRESSOR=ZLIB r.compress map=elevation_copy
+r.compress -p map=elevation_copy
 ```
+
+```text
+<elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
+<elevation_copy> has a compressed NULL file
+```
+
+With `export GRASS_COMPRESSOR=ZLIB`, the method is used for raster maps
+created by the following commands.
 
 ## SEE ALSO
 
