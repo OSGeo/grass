@@ -97,8 +97,9 @@ usually much larger, but may be faster to write and read on some
 hardware configurations. This suits floating-point maps, which usually
 compress much less than integer maps, for example temporary
 floating-point maps. For integer maps, the time saved is often small.
-*r.compress* then writes the map uncompressed, as with **-u**. The NULL
-file is still compressed unless `GRASS_COMPRESS_NULLS=0` is set.
+The NULL file is still compressed unless `GRASS_COMPRESS_NULLS=0` is
+set. With NONE, *r.compress* writes the map uncompressed, as with
+**-u**.
 
 **RLE**  
 **DEPRECATED** Run-Length Encoding, poor compression ratio but fast. It
