@@ -253,6 +253,7 @@ int main(int argc, char *argv[])
     parm.overfile->guisection = _("Outputs");
 
     parm.threads = G_define_standard_option(G_OPT_M_NPROCS);
+    parm.threads->answer = "1";
     parm.threads->guisection = _("Parameters");
 
     parm.maskmap = G_define_standard_option(G_OPT_R_INPUT);
