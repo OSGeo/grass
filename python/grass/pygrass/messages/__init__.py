@@ -344,10 +344,10 @@ class Messenger:
         time.sleep(1)
 
 
+_MSGR_INSTANCE: Messenger | None = None
+
+
 def get_msgr(
-    instance=[
-        None,
-    ],
     *args,
     **kwargs,
 ) -> Messenger:
@@ -363,9 +363,10 @@ def get_msgr(
     >>> msgr0 is msgr2
     False
     """
-    if not instance[0]:
-        instance[0] = Messenger(*args, **kwargs)
-    return instance[0]
+    global _MSGR_INSTANCE
+    if _MSGR_INSTANCE is None:
+        _MSGR_INSTANCE = Messenger(*args, **kwargs)
+    return _MSGR_INSTANCE
 
 
 if __name__ == "__main__":
