@@ -198,9 +198,9 @@ current mapset first:
 
 Print the compression method and the data type of the map with **-p**.
 The output goes to standard error, which *grass.tools* captures, so the
-*grass.tools* example uses **-g** instead. It prints the map name, data
-type, compression method, and whether the NULL file is compressed to
-standard output:
+Python examples use **-g** instead. It prints the map name, data type,
+compression method, and whether the NULL file is compressed to standard
+output:
 
 === "Command line"
 
@@ -217,17 +217,17 @@ standard output:
 === "Python (grass.script)"
 
     ```python
-    gs.run_command("r.compress", map="elevation_copy", flags="p")
+    print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
     ```
 
-Output:
+Command line output:
 
 ```text
 <elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
 <elevation_copy> has an uncompressed NULL file
 ```
 
-With *grass.tools* (**-g**):
+Python output (**-g**):
 
 ```text
 elevation_copy|FCELL|ZLIB|NO
@@ -255,17 +255,17 @@ Uncompress the map with **-u** and print its state again:
 
     ```python
     gs.run_command("r.compress", map="elevation_copy", flags="u")
-    gs.run_command("r.compress", map="elevation_copy", flags="p")
+    print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
     ```
 
-Output:
+Command line output:
 
 ```text
 <elevation_copy> is uncompressed (method 0: NONE). Data type: FCELL
 <elevation_copy> has a compressed NULL file
 ```
 
-With *grass.tools* (**-g**):
+Python output (**-g**):
 
 ```text
 elevation_copy|FCELL|NONE|YES
@@ -295,17 +295,17 @@ if available):
 
     ```python
     gs.run_command("r.compress", map="elevation_copy")
-    gs.run_command("r.compress", map="elevation_copy", flags="p")
+    print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
     ```
 
-Output:
+Command line output:
 
 ```text
 <elevation_copy> is compressed (method 5: ZSTD). Data type: FCELL
 <elevation_copy> has a compressed NULL file
 ```
 
-With *grass.tools* (**-g**):
+Python output (**-g**):
 
 ```text
 elevation_copy|FCELL|ZSTD|YES
@@ -342,17 +342,17 @@ command:
     env = os.environ.copy()
     env["GRASS_COMPRESSOR"] = "ZLIB"
     gs.run_command("r.compress", map="elevation_copy", env=env)
-    gs.run_command("r.compress", map="elevation_copy", flags="p")
+    print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
     ```
 
-Output:
+Command line output:
 
 ```text
 <elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
 <elevation_copy> has a compressed NULL file
 ```
 
-With *grass.tools* (**-g**):
+Python output (**-g**):
 
 ```text
 elevation_copy|FCELL|ZLIB|YES
