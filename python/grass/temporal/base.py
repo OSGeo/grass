@@ -60,13 +60,13 @@ class DictSQLSerializer:
             >>> t.D["creation_time"] = datetime(2001, 1, 1)
             >>> t.D["modification_time"] = datetime(2001, 1, 1)
             >>> t.serialize(type="SELECT", table="raster_base")
-            ('SELECT  name  , creator  , creation_time  , modification_time  , mapset  , id  FROM raster_base ;\\n', ())
+            ('SELECT  id  , name  , mapset  , creator  , creation_time  , modification_time  FROM raster_base ;\\n', ())
             >>> t.serialize(type="INSERT", table="raster_base")
-            ('INSERT INTO raster_base ( name  ,creator  ,creation_time  ,modification_time  ,mapset  ,id ) VALUES (? ,? ,? ,? ,? ,?) ;\\n', ('soil', 'soeren', datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil@PERMANENT'))
+            ('INSERT INTO raster_base ( id  ,name  ,mapset  ,creator  ,creation_time  ,modification_time ) VALUES (? ,? ,? ,? ,? ,?) ;\\n', ('soil@PERMANENT', 'soil', 'PERMANENT', 'soeren', datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0)))
             >>> t.serialize(type="UPDATE", table="raster_base")
-            ('UPDATE raster_base SET  name = ?  ,creator = ?  ,creation_time = ?  ,modification_time = ?  ,mapset = ?  ,id = ? ;\\n', ('soil', 'soeren', datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil@PERMANENT'))
+            ('UPDATE raster_base SET  id = ?  ,name = ?  ,mapset = ?  ,creator = ?  ,creation_time = ?  ,modification_time = ? ;\\n', ('soil@PERMANENT', 'soil', 'PERMANENT', 'soeren', datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0)))
             >>> t.serialize(type="UPDATE ALL", table="raster_base")
-            ('UPDATE raster_base SET  name = ?  ,creator = ?  ,creation_time = ?  ,modification_time = ?  ,mapset = ?  ,id = ? ;\\n', ('soil', 'soeren', datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil@PERMANENT'))
+            ('UPDATE raster_base SET  id = ?  ,name = ?  ,mapset = ?  ,creator = ?  ,creation_time = ?  ,modification_time = ? ;\\n', ('soil@PERMANENT', 'soil', 'PERMANENT', 'soeren', datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0)))
 
         :param type: must be SELECT. INSERT, UPDATE
         :param table: The name of the table to select, insert or update
@@ -225,21 +225,21 @@ class SQLDatabaseInterface(DictSQLSerializer):
         >>> t.get_is_in_db_statement()
         "SELECT id FROM raster WHERE id = 'soil@PERMANENT';\\n"
         >>> t.get_select_statement()
-        ("SELECT  creation_time  , mapset  , name  , creator  FROM raster WHERE id = 'soil@PERMANENT';\\n", ())
+        ("SELECT  name  , mapset  , creator  , creation_time  FROM raster WHERE id = 'soil@PERMANENT';\\n", ())
         >>> t.get_select_statement_mogrified()
-        "SELECT  creation_time  , mapset  , name  , creator  FROM raster WHERE id = 'soil@PERMANENT';\\n"
+        "SELECT  name  , mapset  , creator  , creation_time  FROM raster WHERE id = 'soil@PERMANENT';\\n"
         >>> t.get_insert_statement()
-        ('INSERT INTO raster ( creation_time  ,mapset  ,name  ,creator ) VALUES (? ,? ,? ,?) ;\\n', (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
+        ('INSERT INTO raster ( name  ,mapset  ,creator  ,creation_time ) VALUES (? ,? ,? ,?) ;\\n', ('soil', 'PERMANENT', 'soeren', datetime.datetime(2001, 1, 1, 0, 0)))
         >>> t.get_insert_statement_mogrified()
-        "INSERT INTO raster ( creation_time  ,mapset  ,name  ,creator ) VALUES ('2001-01-01 00:00:00' ,'PERMANENT' ,'soil' ,'soeren') ;\\n"
+        "INSERT INTO raster ( name  ,mapset  ,creator  ,creation_time ) VALUES ('soil' ,'PERMANENT' ,'soeren' ,'2001-01-01 00:00:00') ;\\n"
         >>> t.get_update_statement()
-        ("UPDATE raster SET  creation_time = ?  ,mapset = ?  ,name = ?  ,creator = ? WHERE id = 'soil@PERMANENT';\\n", (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
+        ("UPDATE raster SET  name = ?  ,mapset = ?  ,creator = ?  ,creation_time = ? WHERE id = 'soil@PERMANENT';\\n", ('soil', 'PERMANENT', 'soeren', datetime.datetime(2001, 1, 1, 0, 0)))
         >>> t.get_update_statement_mogrified()
-        "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
+        "UPDATE raster SET  name = 'soil'  ,mapset = 'PERMANENT'  ,creator = 'soeren'  ,creation_time = '2001-01-01 00:00:00' WHERE id = 'soil@PERMANENT';\\n"
         >>> t.get_update_all_statement()
-        ("UPDATE raster SET  creation_time = ?  ,mapset = ?  ,name = ?  ,creator = ? WHERE id = 'soil@PERMANENT';\\n", (datetime.datetime(2001, 1, 1, 0, 0), 'PERMANENT', 'soil', 'soeren'))
+        ("UPDATE raster SET  name = ?  ,mapset = ?  ,creator = ?  ,creation_time = ? WHERE id = 'soil@PERMANENT';\\n", ('soil', 'PERMANENT', 'soeren', datetime.datetime(2001, 1, 1, 0, 0)))
         >>> t.get_update_all_statement_mogrified()
-        "UPDATE raster SET  creation_time = '2001-01-01 00:00:00'  ,mapset = 'PERMANENT'  ,name = 'soil'  ,creator = 'soeren' WHERE id = 'soil@PERMANENT';\\n"
+        "UPDATE raster SET  name = 'soil'  ,mapset = 'PERMANENT'  ,creator = 'soeren'  ,creation_time = '2001-01-01 00:00:00' WHERE id = 'soil@PERMANENT';\\n"
 
     """  # noqa: E501
 

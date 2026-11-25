@@ -1894,16 +1894,16 @@ class TemporalAlgebraParser:
             ...     print(
             ...         map.get_id() + " - start: " + str(start) + " end: " + str(end)
             ...     )
-            a1@B - start: 0 end: 2
             a0@B - start: 0 end: 2
-            a3@B - start: 2 end: 4
+            a1@B - start: 0 end: 2
             a2@B - start: 2 end: 4
-            a5@B - start: 4 end: 6
+            a3@B - start: 2 end: 4
             a4@B - start: 4 end: 6
-            a7@B - start: 6 end: 8
+            a5@B - start: 4 end: 6
             a6@B - start: 6 end: 8
-            a9@B - start: 8 end: 10
+            a7@B - start: 6 end: 8
             a8@B - start: 8 end: 10
+            a9@B - start: 8 end: 10
 
         :raises SyntaxError: If an unpermitted temporal relation name is used in ``topolist``
         """

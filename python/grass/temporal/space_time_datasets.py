@@ -81,18 +81,15 @@ class RasterDataset(AbstractMapDataset):
         >>> gs.run_command(
         ...     "g.region", n=80.0, s=0.0, e=120.0, w=0.0, t=1.0, b=0.0, res=10.0
         ... )
-        0
         >>> gs.run_command(
         ...     "r.mapcalc",
         ...     overwrite=True,
         ...     quiet=True,
         ...     expression="strds_map_test_case = 1",
         ... )
-        0
         >>> gs.run_command(
         ...     "r.timestamp", map="strds_map_test_case", date="15 jan 1999", quiet=True
         ... )
-        0
         >>> mapset = tgis.get_current_mapset()
         >>> name = "strds_map_test_case"
         >>> identifier = "%s@%s" % (name, mapset)
@@ -127,11 +124,11 @@ class RasterDataset(AbstractMapDataset):
          | East-west resolution:....... 10.0
          | Minimum value:.............. 1.0
          | Maximum value:.............. 1.0
+         | Semantic label:............. None
 
         >>> gs.run_command(
         ...     "r.timestamp", map="strds_map_test_case", date="2 years", quiet=True
         ... )
-        0
         >>> rmap.read_timestamp_from_grass()
         True
         >>> rmap.get_temporal_extent_as_tuple()
@@ -173,7 +170,6 @@ class RasterDataset(AbstractMapDataset):
         False
 
         >>> gs.run_command("g.remove", flags="f", type="raster", name=name, quiet=True)
-        0
         >>> gs.del_temp_region()
 
     """
@@ -511,21 +507,18 @@ class Raster3DDataset(AbstractMapDataset):
         ...     res=10.0,
         ...     res3=10.0,
         ... )
-        0
         >>> gs.run_command(
         ...     "r3.mapcalc",
         ...     overwrite=True,
         ...     quiet=True,
         ...     expression="str3ds_map_test_case = 1",
         ... )
-        0
         >>> gs.run_command(
         ...     "r3.timestamp",
         ...     map="str3ds_map_test_case",
         ...     date="15 jan 1999",
         ...     quiet=True,
         ... )
-        0
         >>> mapset = get_current_mapset()
         >>> name = "str3ds_map_test_case"
         >>> identifier = "%s@%s" % (name, mapset)
@@ -566,7 +559,6 @@ class Raster3DDataset(AbstractMapDataset):
         >>> gs.run_command(
         ...     "r3.timestamp", map="str3ds_map_test_case", date="2 years", quiet=True
         ... )
-        0
         >>> r3map.read_timestamp_from_grass()
         True
         >>> r3map.get_temporal_extent_as_tuple()
@@ -609,7 +601,6 @@ class Raster3DDataset(AbstractMapDataset):
         >>> gs.run_command(
         ...     "g.remove", flags="f", type="raster_3d", name=name, quiet=True
         ... )
-        0
         >>> gs.del_temp_region()
 
     """
@@ -892,7 +883,6 @@ class VectorDataset(AbstractMapDataset):
         >>> gs.run_command(
         ...     "g.region", n=80.0, s=0.0, e=120.0, w=0.0, t=1.0, b=0.0, res=10.0
         ... )
-        0
         >>> gs.run_command(
         ...     "v.random",
         ...     overwrite=True,
@@ -904,11 +894,9 @@ class VectorDataset(AbstractMapDataset):
         ...     column="elevation",
         ...     quiet=True,
         ... )
-        0
         >>> gs.run_command(
         ...     "v.timestamp", map="stvds_map_test_case", date="15 jan 1999", quiet=True
         ... )
-        0
         >>> mapset = get_current_mapset()
         >>> name = "stvds_map_test_case"
         >>> identifier = "%s@%s" % (name, mapset)
@@ -944,7 +932,6 @@ class VectorDataset(AbstractMapDataset):
         >>> gs.run_command(
         ...     "v.timestamp", map="stvds_map_test_case", date="2 years", quiet=True
         ... )
-        0
         >>> vmap.read_timestamp_from_grass()
         True
         >>> vmap.get_temporal_extent_as_tuple()
@@ -983,7 +970,6 @@ class VectorDataset(AbstractMapDataset):
         >>> vmap.is_time_relative()
         False
         >>> gs.run_command("g.remove", flags="f", type="vector", name=name, quiet=True)
-        0
         >>> gs.del_temp_region()
 
     """
