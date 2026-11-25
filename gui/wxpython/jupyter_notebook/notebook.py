@@ -12,6 +12,8 @@ SPDX-License-Identifier: GPL-2.0-or-later
 @author Linda Karlovska <linda.karlovska seznam.cz>
 """
 
+from __future__ import annotations
+
 import wx
 from wx.lib.agw import aui
 
