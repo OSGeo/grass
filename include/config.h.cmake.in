@@ -32,6 +32,9 @@
 /* Define to 1 if you have the <dfftw.h> header file. */
 #cmakedefine HAVE_DFFTW_H ${HAVE_DFFTW_H}
 
+/* Define to 1 if you have the `dladdr' function. */
+#cmakedefine HAVE_DLADDR ${HAVE_DLADDR}
+
 /* Define to 1 if you have the `drand48' function. */
 #cmakedefine HAVE_DRAND48 ${HAVE_DRAND48}
 

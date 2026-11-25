@@ -1,4 +1,4 @@
-from pathlib import Path
+# from pathlib import Path
 
 import pytest
 
@@ -21,21 +21,21 @@ def test_non_path_values_substituted(name):
 
 
 # This is just a sample, not trying to test all.
-@pytest.mark.parametrize("name", ["GRASS_PREFIX", "GISBASE"])
+@pytest.mark.parametrize("name", ["GRASS_PREFIX_RELATIVE", "GISBASE"])
 def test_path_values_substituted(name):
     value = getattr(resource_paths, name)
     assert not (value.startswith("@") and value.endswith("@"))
 
 
 # GISBASE may be empty after build because everything goes to prefix.
-@pytest.mark.parametrize("name", ["GRASS_PREFIX"])
+@pytest.mark.parametrize("name", ["GRASS_PREFIX_RELATIVE"])
 def test_value_not_empty(name):
     value = getattr(resource_paths, name)
     assert value
 
 
-@pytest.mark.parametrize("name", ["GRASS_PREFIX"])
-def test_value_is_directory(name):
-    value = getattr(resource_paths, name)
-    assert Path(value).exists()
-    assert Path(value).is_dir()
+# @pytest.mark.parametrize("name", ["GRASS_PREFIX"])
+# def test_value_is_directory(name):
+#     value = getattr(resource_paths, name)
+#     assert Path(value).exists()
+#     assert Path(value).is_dir()

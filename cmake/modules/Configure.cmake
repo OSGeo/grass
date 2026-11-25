@@ -42,6 +42,16 @@ else()
     check_include_file(langinfo.h HAVE_LANGINFO_H)
     check_include_file(dbm.h HAVE_DBM_H)
 endif()
+
+# set HAVE_DLADDR for dladdr()
+set(CMAKE_REQUIRED_DEFINITIONS -D_GNU_SOURCE)
+set(CMAKE_REQUIRED_LIBRARIES "${CMAKE_DL_LIBS}")
+
+check_symbol_exists(dladdr "dlfcn.h" HAVE_DLADDR)
+
+unset(CMAKE_REQUIRED_DEFINITIONS)
+unset(CMAKE_REQUIRED_LIBRARIES)
+
 #
 # # set(CMAKE_REQUIRED_INCLUDES "${FFTW_INCLUDE_DIR}") check_target(ICONV
 # HAVE_ICONV_H) check_target(BZIP2 HAVE_BZLIB_H) check_target(ZLIB HAVE_ZLIB_H)

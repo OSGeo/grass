@@ -44,11 +44,14 @@ get_filename_component(GDAL_DIR "${GDAL_DIR}" PATH)
 file(TO_NATIVE_PATH ${GDAL_DIR}/bin DEPS_DLL_PATH)
 list(APPEND DLL_PATH_LIST ${DEPS_DLL_PATH})
 
-# configure and install grass.py
 set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_RUNTIME_PATH})
+# configure and install grass.py
 configure_file(grass.py ${OUTDIR}/${CMAKE_INSTALL_BINDIR}/${START_UP} @ONLY)
 
-set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_PATH})
+set(GRASS_PYDIR "")
+if(NOT WITH_FHS)
+    set(GRASS_PYDIR ${GRASS_INSTALL_PYDIR_PATH})
+endif()
 configure_file(grass.py ${CMAKE_CURRENT_BINARY_DIR}/${START_UP} @ONLY)
 unset(GRASS_PYDIR)
 

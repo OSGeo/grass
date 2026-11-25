@@ -99,3 +99,44 @@ endif()
 if(MSVC)
     target_link_libraries(grass_gis PRIVATE PCRE)
 endif()
+
+target_link_libraries(grass_gis PRIVATE ${CMAKE_DL_LIBS})
+
+# configure and install grass.conf
+set(GISBASE_INSTALL_PATH ${GISBASE_DIR})
+set(START_UP ${PROJECT_NAME_LOWER})
+set(GRASS_PREFIX_RELATIVE
+    "$<PATH:RELATIVE_PATH,${OUTDIR},$<TARGET_FILE_DIR:grass_gis>/grass>"
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/resource_dirs.conf.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/resource_dirs.conf.gen"
+    @ONLY
+)
+
+file(
+    GENERATE OUTPUT "$<TARGET_FILE_DIR:grass_gis>/grass/grass.conf"
+    INPUT "${CMAKE_CURRENT_BINARY_DIR}/resource_dirs.conf.gen"
+)
+
+cmake_path(
+    RELATIVE_PATH OUTDIR
+    BASE_DIRECTORY "${OUTDIR}/${GRASS_INSTALL_LIBDIR}/grass"
+    OUTPUT_VARIABLE GRASS_PREFIX_RELATIVE
+)
+
+configure_file(
+    resource_dirs.conf.in
+    ${CMAKE_CURRENT_BINARY_DIR}/grass.conf
+    @ONLY
+)
+
+unset(GISBASE_INSTALL_PATH)
+unset(START_UP)
+unset(GRASS_PREFIX_RELATIVE)
+
+install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/grass.conf
+    DESTINATION ${GRASS_INSTALL_LIBDIR}/grass
+)
