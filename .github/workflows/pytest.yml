@@ -27,8 +27,7 @@ jobs:
           - "3.13"
         config:
           - ubuntu-24.04
-        # One more job with a build without optional features such as OpenMP
-        # and BZIP2. One Python version is enough to limit the CI time.
+        # Build without optional features using one Python version
         include:
           - os: ubuntu-24.04
             python-version: "3.13"
