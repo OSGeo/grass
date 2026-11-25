@@ -75,8 +75,7 @@ jobs:
               --find-links "${releases}/wxPython-${WXPYTHON_VERSION}" \
               "wxPython==${WXPYTHON_VERSION}+${ubuntu}"
           pip install --break-system-packages pytest pytest-timeout \
-              pytest-github-actions-annotate-failures pytest-xdist pytest-cov \
-              pytest-xvfb
+              pytest-github-actions-annotate-failures pytest-xdist pytest-cov
 
       - name: Create installation directory
         run: |
@@ -148,7 +147,7 @@ jobs:
           export LD_LIBRARY_PATH
           export INITIAL_GISBASE
           export INITIAL_PWD
-          pytest \
+          xvfb-run -a pytest \
             @.github/workflows/pytest_args_ci.txt \
             @.github/workflows/pytest_args_cov.txt \
             -m needs_wx_app \

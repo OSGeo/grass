@@ -3,7 +3,7 @@
 """pytest fixtures for the wxPython GUI tests
 
 The GUI modules need a GRASS session in the process environment when imported.
-The tests need a display, which pytest-xvfb provides on Linux.
+The tests need a display, which xvfb-run provides on Linux in CI.
 """
 
 import os

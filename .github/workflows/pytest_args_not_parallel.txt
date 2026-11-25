@@ -1,2 +1,1 @@
 -m needs_solo_run and not needs_wx_app
--p no:xvfb
