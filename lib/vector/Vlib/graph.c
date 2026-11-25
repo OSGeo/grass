@@ -226,7 +226,7 @@ int Vect_graph_shortest_path(dglGraph_s *graph, int from, int to,
     if (List != NULL) {
         for (i = 0; i < pSPReport->cArc; i++) {
             line = dglEdgeGet_Id(graph, pSPReport->pArc[i].pnEdge);
-            G_debug(2, "From %ld to %ld - cost %ld user %d distance %ld",
+            G_debug(2, "From %d to %d - cost %d user %d distance %d",
                     pSPReport->pArc[i].nFrom, pSPReport->pArc[i].nTo,
                     /* this is the cost from clip() */
                     dglEdgeGet_Cost(graph, pSPReport->pArc[i].pnEdge) / 1000,

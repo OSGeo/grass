@@ -71,7 +71,7 @@ static int convert_dgl_shortest_path_result(struct Map_info *Map,
     for (i = 0; i < pSPReport->cArc; i++) {
         line = dglEdgeGet_Id(&(Map->dgraph.graph_s), pSPReport->pArc[i].pnEdge);
         G_debug(
-            2, "From %ld to %ld - cost %ld user %d distance %ld",
+            2, "From %d to %d - cost %d user %d distance %d",
             pSPReport->pArc[i].nFrom, pSPReport->pArc[i].nTo,
             dglEdgeGet_Cost(&(Map->dgraph.graph_s), pSPReport->pArc[i].pnEdge) /
                 Map->dgraph.cost_multip, /* this is the cost from clip() */
@@ -121,7 +121,7 @@ static int ttb_convert_dgl_shortest_path_result(struct Map_info *Map,
             line_id *= -1;
 
         G_debug(
-            2, "From %ld to %ld - cost %ld user %d distance %ld",
+            2, "From %d to %d - cost %d user %d distance %d",
             pSPReport->pArc[i].nFrom, pSPReport->pArc[i].nTo,
             dglEdgeGet_Cost(&(Map->dgraph.graph_s), pSPReport->pArc[i].pnEdge) /
                 Map->dgraph.cost_multip, /* this is the cost from clip() */
