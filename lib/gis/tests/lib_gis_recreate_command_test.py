@@ -16,8 +16,8 @@ from ctypes import POINTER, c_char_p
 
 from grass.lib.ctypes_preamble import String
 from grass.lib.gis import (
-    G_define_module, G_define_option, G_gisinit, G_parser, G_recreate_command, G_set_program_name,
-    TYPE_STRING,
+    G_define_flag, G_define_module, G_define_option, G_gisinit, G_parser,
+    G_recreate_command, G_set_program_name, TYPE_STRING,
 )
 
 G_gisinit(sys.argv[1].encode())
@@ -26,12 +26,21 @@ G_set_program_name(sys.argv[1].encode())
 # The fields hold pointers, so the bytes must stay alive as long as the parser.
 DESCRIPTION = b"test"
 KEY = b"text"
+OTHER_KEY = b"other"
 G_define_module().contents.description = String(DESCRIPTION)
 option = G_define_option().contents
 option.key = String(KEY)
 option.type = TYPE_STRING
 option.multiple = 1
 option.description = String(DESCRIPTION)
+other = G_define_option().contents
+other.key = String(OTHER_KEY)
+other.type = TYPE_STRING
+other.description = String(DESCRIPTION)
+for key in (b"a", b"b"):
+    flag = G_define_flag().contents
+    flag.key = key
+    flag.description = String(DESCRIPTION)
 args = [sys.argv[1], *sys.argv[2:]]
 argv = (c_char_p * len(args))(*[a.encode() for a in args])
 assert G_parser(len(args), argv) == 0
@@ -55,12 +64,34 @@ QUOTES_NOT_ESCAPED = pytest.mark.xfail(
 )
 
 
-def test_plain_value(xy_session_for_module):
-    assert recreate(xy_session_for_module, "text=abc") == 'testmod text="abc"'
+@pytest.mark.parametrize(
+    ("arguments", "expected"),
+    [
+        (["text=abc"], 'testmod text="abc"'),
+        (["text=a,b"], 'testmod text="a,b"'),
+        (["text=abc", "other=def"], 'testmod text="abc" other="def"'),
+        (["-a"], "testmod -a"),
+        (["-a", "-b"], "testmod -a -b"),
+        (["-a", "text=abc"], 'testmod -a text="abc"'),
+        (["--overwrite"], "testmod --overwrite"),
+        (["--quiet"], "testmod --quiet"),
+        (["--verbose"], "testmod --verbose"),
+        (
+            ["--overwrite", "--quiet", "-a", "-b", "text=a,b", "other=c"],
+            'testmod --overwrite --quiet -a -b text="a,b" other="c"',
+        ),
+    ],
+)
+def test_recreated_command(xy_session_for_module, arguments, expected):
+    assert recreate(xy_session_for_module, *arguments) == expected
 
 
-def test_several_values(xy_session_for_module):
-    assert recreate(xy_session_for_module, "text=a,b") == 'testmod text="a,b"'
+def test_long_value_is_kept(xy_session_for_module):
+    """A value much longer than the initial buffer is not cut or overrun"""
+    value = "x" * 3000
+    assert recreate(xy_session_for_module, f"text={value}") == (
+        f'testmod text="{value}"'
+    )
 
 
 @QUOTES_NOT_ESCAPED
@@ -77,7 +108,8 @@ def test_quote_in_later_value_is_escaped(xy_session_for_module):
 
 
 @QUOTES_NOT_ESCAPED
-def test_long_value_is_not_truncated(xy_session_for_module):
+def test_many_quotes_in_long_value_are_escaped(xy_session_for_module):
+    """Escaping doubles the length of the value, which the buffer must hold"""
     value = '"' * 3000
     result = recreate(xy_session_for_module, f"text={value}")
     assert result == f'testmod text="{value.replace(chr(34), chr(92) + chr(34))}"'
