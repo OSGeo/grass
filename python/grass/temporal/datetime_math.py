@@ -304,27 +304,9 @@ def modify_datetime(
 
         tdelta_months = dt1 - mydate
     elif months < 0:
-        # Compute the actual number of days in the month to add as timedelta
-        year = mydate.year
-        month = mydate.month
-        years_to_remove = 0
-
-        all_months = int(months) + int(month)
-        if all_months <= 0:
-            years_to_remove = abs(int(all_months / 12.001))
-            residual_months = all_months + (years_to_remove * 12)
-            years_to_remove += 1
-        else:
-            residual_months = all_months
-
-        # Make a deep copy of the datetime object
-        dt1 = copy.copy(mydate)
-
-        # Correct the months
-        if residual_months <= 0:
-            residual_months += 12
-
-        dt1 = dt1.replace(year=year - years_to_remove, month=residual_months)
+        # Use zero-based months so December remains month 12 when crossing years.
+        year_delta, month_index = divmod(mydate.month - 1 + int(months), 12)
+        dt1 = mydate.replace(year=mydate.year + year_delta, month=month_index + 1)
 
         tdelta_months = dt1 - mydate
 
