@@ -36,19 +36,18 @@ static double /* pargr */ ns_res, ew_res, inp_ew_res, inp_ns_res;
 static int inp_rows, inp_cols;
 
 static double inp_x_orig, inp_y_orig;
-static double dmin, ertre, deltx, delty;
+static double dmin, deltx, delty;
 static int nsizr, nsizc;
 
 static double /* datgr */ *az, *adx, *ady, *adxx, *adyy, *adxy;
-static double /* error */ ertot, ertre, zminac, zmaxac, zmult;
+static double /* error */ ertot, zminac, zmaxac, zmult;
 
 static int NPOINT;
-static int deriv, overlap, cursegm, dtens;
+static int deriv, overlap, dtens;
 static double fi;
 
 static int cond1, cond2;
-static double fstar2, tfsta2, xmin, xmax, ymin, ymax, zmin, zmax, gmin, gmax,
-    c1min, c1max, c2min, c2max;
+static double zmin, zmax, gmin, gmax, c1min, c1max, c2min, c2max;
 static double dnorm;
 static double smc;
 static double theta, scalex;
@@ -282,8 +281,6 @@ int main(int argc, char *argv[])
     deriv = flag.deriv->answer;
     dtens = flag.cprght->answer;
 
-    ertre = 0.1;
-
     if (!G_scan_resolution(parm.res_ew->answer, &ew_res, winhd.proj))
         G_fatal_error(_("Unable to read ew_res value"));
 
@@ -397,14 +394,8 @@ int main(int argc, char *argv[])
                      "%d bytes of disk space for temp files.", (int)sdisk),
                   (int)sdisk);
 
-    fstar2 = fi * fi / 4.;
-    tfsta2 = fstar2 + fstar2;
     deltx = winhd.east - winhd.west;
     delty = winhd.north - winhd.south;
-    xmin = winhd.west;
-    xmax = winhd.east;
-    ymin = winhd.south;
-    ymax = winhd.north;
     if (smooth != NULL)
         smc = -9999;
     else
@@ -468,7 +459,6 @@ int main(int argc, char *argv[])
         fdsmooth = Rast_open_old(smooth, "");
 
     ertot = 0.;
-    cursegm = 0;
     G_message(_("Percent complete: "));
 
     NPOINT = IL_resample_interp_segments_2d(

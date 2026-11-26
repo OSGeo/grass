@@ -16,7 +16,7 @@ endif()
 
 build_module(
     NAME grass_gproj
-    DEPENDS GDAL::GDAL PROJ::proj grass_driver grass_gis
+    DEPENDS ${LIBM} GDAL::GDAL PROJ::proj grass_driver grass_gis
     SOURCES "${grass_gproj_SOURCES}"
     INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/../driver"
 )

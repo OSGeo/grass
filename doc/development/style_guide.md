@@ -280,8 +280,8 @@ The structure consists of several required and optional sections:
 Sections _Notes_, _Examples_, _References_, and _Authors_ can be also in
 singular form (e.g., _Note_).
 
-Note that Markdown is converted to html using [MkDocs](https://www.mkdocs.org/).
-See also [supported Markdown elements by MkDocs](https://www.markdownguide.org/tools/mkdocs/)
+Note that Markdown is converted to HTML using [Zensical](https://zensical.org/).
+See also [Markdown in Zensical](https://zensical.org/docs/authoring/markdown/)
 and CI-enforced [linter rules](https://github.com/markdownlint/markdownlint/blob/main/docs/RULES.md).
 
 More notes on markup:

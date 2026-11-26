@@ -89,6 +89,9 @@ jobs:
       - name: Install prek
         run: uv tool install "prek@${PREK_VERSION}"
       - name: "Run pre-commit/prek for fixes"
+        env:
+          # Enables the online audits of zizmor, which runs offline without a token
+          ZIZMOR_GITHUB_TOKEN: ${{ github.token }}
         run: |
           echo '```console' > "$GITHUB_STEP_SUMMARY"
           # Enable color output for pre-commit and remove it for the summary
@@ -116,6 +119,9 @@ jobs:
           # To keep repo's file structure in formatted changes artifact
           extra-upload-changes: pyproject.toml
       - name: "Run pre-commit/prek"
+        env:
+          # Enables the online audits of zizmor, which runs offline without a token
+          ZIZMOR_GITHUB_TOKEN: ${{ github.token }}
         run: |
           echo '```console' > "$GITHUB_STEP_SUMMARY"
           # Enable color output for pre-commit and remove it for the summary

@@ -20,9 +20,6 @@
  *
  *****************************************************************************/
 
-#if defined(_OPENMP)
-#include <omp.h>
-#endif
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,7 +45,7 @@
 #define SCIK3 1 /*100000 */
 
 static double /* pargr */ ns_res, ew_res;
-static double dmin, dmax, ertre;
+static double dmin, dmax;
 static int KMAX2, KMIN, KMAX, totsegm, deriv, dtens, cv;
 static struct Map_info Map;
 static struct Map_info TreeMap, OverMap;
@@ -61,7 +58,7 @@ static void clean(void);
 
 static double *az = NULL, *adx = NULL, *ady = NULL, *adxx = NULL, *adyy = NULL,
               *adxy = NULL;
-static double /* error */ ertot, ertre, zminac, zmaxac, zmult;
+static double /* error */ ertot, zminac, zmaxac, zmult;
 struct multtree *root;
 
 static int NPOINT = 0;
@@ -77,7 +74,6 @@ static char *input;
 static int field;
 static char *zcol;
 static char *scol;
-static char *wheresql;
 static char *elev = NULL;
 static char *slope = NULL;
 static char *aspect = NULL;
@@ -124,7 +120,7 @@ int main(int argc, char *argv[])
     struct multtree *tree;
     int open_check, with_z;
     char buf[1024];
-    int threads;
+    int threads G_UNUSED;
 
     struct GModule *module;
     struct {
@@ -256,12 +252,7 @@ int main(int argc, char *argv[])
         _("Name for output vector map showing overlapping windows");
     parm.overfile->guisection = _("Outputs");
 
-    parm.threads = G_define_option();
-    parm.threads->key = "nprocs";
-    parm.threads->type = TYPE_INTEGER;
-    parm.threads->answer = NUM_THREADS;
-    parm.threads->required = NO;
-    parm.threads->description = _("Number of threads for parallel computing");
+    parm.threads = G_define_standard_option(G_OPT_M_NPROCS);
     parm.threads->guisection = _("Parameters");
 
     parm.maskmap = G_define_standard_option(G_OPT_R_INPUT);
@@ -392,7 +383,6 @@ int main(int argc, char *argv[])
     input = parm.input->answer;
     zcol = parm.zcol->answer;
     scol = parm.scol->answer;
-    wheresql = parm.wheresql->answer;
     maskmap = parm.maskmap->answer;
     elev = parm.elev->answer;
     devi = parm.devi->answer;
@@ -405,25 +395,7 @@ int main(int argc, char *argv[])
     treefile = parm.treefile->answer;
     overfile = parm.overfile->answer;
 
-    sscanf(parm.threads->answer, "%d", &threads);
-    if (threads < 1) {
-        G_warning(_("<%d> is not valid number of threads. Number of threads "
-                    "will be set on <%d>"),
-                  threads, abs(threads));
-        threads = abs(threads);
-    }
-
-#if defined(_OPENMP)
-    omp_set_num_threads(threads);
-#else
-    if (threads > 1)
-        G_warning(_("GRASS is not compiled with OpenMP support, parallel "
-                    "computation is disabled."));
-#endif
-    if (threads > 1 && Rast_mask_is_present()) {
-        G_warning(_("Parallel processing disabled due to active mask."));
-        threads = 1;
-    }
+    threads = G_set_omp_num_threads(parm.threads);
     if (devi) {
         create_devi = true;
         if (Vect_legal_filename(devi) == -1)
@@ -472,7 +444,6 @@ int main(int argc, char *argv[])
         G_fatal_error(_("The cross-validation cannot be computed "
                         "simultaneously with output raster or devi file"));
 
-    ertre = 0.1;
     sscanf(parm.dmax->answer, "%lf", &dmax);
     sscanf(parm.dmin->answer, "%lf", &dmin);
     sscanf(parm.fi->answer, "%lf", &fi);

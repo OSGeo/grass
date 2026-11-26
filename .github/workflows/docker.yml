@@ -25,6 +25,7 @@ on:
       - Dockerfile
       - docker/**
       - "!docker/**.md"
+      - utils/build_ubuntu_dependencies.sh
   workflow_dispatch:
   release:
     types: [published]

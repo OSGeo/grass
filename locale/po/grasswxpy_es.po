@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-24 18:21+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: 2026-10-31 16:26+0000\n"
 "Last-Translator: Edouard Choiniere <echoix@users.noreply.weblate.osgeo.org>\n"
 "Language-Team: Spanish <https://weblate.osgeo.org/projects/grass-gis/grasswxpy/es/>\n"
@@ -1393,9 +1393,6 @@ msgstr "Eliminando {name}..."
 #| msgid "g.remove completed"
 msgid "t.remove completed"
 msgstr "g.remove ha finalizado"
-
-msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
-msgstr "Para mover o copiar mapas a otros directorios de mapas, desbloquear la edición de dichos directorios"
 
 #, fuzzy
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
@@ -15650,6 +15647,9 @@ msgid ""
 msgstr ""
 "Ecuación de regresión de mapa ráster <%(rast1)s> vs. <%(rast2)s>:\n"
 "\n"
+
+#~ msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
+#~ msgstr "Para mover o copiar mapas a otros directorios de mapas, desbloquear la edición de dichos directorios"
 
 #~ msgid "Downloading data "
 #~ msgstr "Descargando datos"

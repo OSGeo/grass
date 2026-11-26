@@ -32,6 +32,7 @@ def session(tmp_path_factory):
         Tools(session=session) as tools,
     ):
         tools.g_region(s=0, n=40, w=0, e=40, res=1)
+        tools.g_gisenv(set="NPROCS=1")  # Same flux for the same seed
         tools.r_mapcalc(
             expression="elevation = 0.01 * ((col() - 20.5)^2 + (row() - 20.5)^2)"
         )

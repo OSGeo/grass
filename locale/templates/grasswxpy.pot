@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 19:23+0000\n"
+"POT-Creation-Date: 2026-11-14 20:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -198,9 +198,9 @@ msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:413
 #: ../gui/wxpython/gmodeler/preferences.py:728
-#: ../gui/wxpython/gui_core/gselect.py:1631
-#: ../gui/wxpython/gui_core/gselect.py:1648
+#: ../gui/wxpython/gui_core/gselect.py:1632
 #: ../gui/wxpython/gui_core/gselect.py:1649
+#: ../gui/wxpython/gui_core/gselect.py:1650
 #: ../gui/wxpython/gui_core/widgets.py:1460
 #: ../gui/wxpython/vnet/dialogs.py:1675
 msgid "Name:"
@@ -250,11 +250,11 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:1276
 #: ../gui/wxpython/gui_core/forms.py:2398
 #: ../gui/wxpython/gui_core/forms.py:2505
-#: ../gui/wxpython/gui_core/gselect.py:1247
-#: ../gui/wxpython/gui_core/gselect.py:1563
-#: ../gui/wxpython/gui_core/gselect.py:1580
-#: ../gui/wxpython/gui_core/gselect.py:1633
-#: ../gui/wxpython/gui_core/gselect.py:1668
+#: ../gui/wxpython/gui_core/gselect.py:1248
+#: ../gui/wxpython/gui_core/gselect.py:1564
+#: ../gui/wxpython/gui_core/gselect.py:1581
+#: ../gui/wxpython/gui_core/gselect.py:1634
+#: ../gui/wxpython/gui_core/gselect.py:1669
 #: ../gui/wxpython/location_wizard/wizard.py:1449
 #: ../gui/wxpython/location_wizard/wizard.py:1804
 #: ../gui/wxpython/modules/import_export.py:860
@@ -455,8 +455,8 @@ msgid "File format:"
 msgstr ""
 
 #: ../gui/wxpython/animation/dialogs.py:1192
-#: ../gui/wxpython/gui_core/gselect.py:1578
-#: ../gui/wxpython/gui_core/gselect.py:1666
+#: ../gui/wxpython/gui_core/gselect.py:1579
+#: ../gui/wxpython/gui_core/gselect.py:1667
 msgid "Directory:"
 msgstr ""
 
@@ -908,12 +908,12 @@ msgstr ""
 msgid "Unable to execute command: '%s'"
 msgstr ""
 
-#: ../gui/wxpython/core/gcmd.py:778 ../gui/wxpython/gui_core/forms.py:3368
+#: ../gui/wxpython/core/gcmd.py:780 ../gui/wxpython/gui_core/forms.py:3368
 #, python-format
 msgid "Error in %s"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:583
+#: ../gui/wxpython/core/gconsole.py:590
 #, python-format
 msgid ""
 "Unable to run command:\n"
@@ -922,22 +922,22 @@ msgid ""
 "Option <%(opt)s>: read from standard input is not supported by wxGUI"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:620
+#: ../gui/wxpython/core/gconsole.py:627
 #, python-format
 msgid "Module <%s> not found."
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:779 ../gui/wxpython/gmodeler/panels.py:314
+#: ../gui/wxpython/core/gconsole.py:786 ../gui/wxpython/gmodeler/panels.py:314
 #, python-format
 msgid "%d sec"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:782 ../gui/wxpython/gmodeler/panels.py:317
+#: ../gui/wxpython/core/gconsole.py:789 ../gui/wxpython/gmodeler/panels.py:317
 #, python-format
 msgid "%(min)d min %(sec)d sec"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:788
+#: ../gui/wxpython/core/gconsole.py:795
 #: ../gui/wxpython/gmodeler/model_items.py:280
 #: ../gui/wxpython/gmodeler/model_items.py:386
 #: ../gui/wxpython/gmodeler/panels.py:323 ../gui/wxpython/gui_core/ghelp.py:257
@@ -945,20 +945,20 @@ msgstr ""
 msgid "unknown"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:794
+#: ../gui/wxpython/core/gconsole.py:801
 msgid "Please note that the data are left in inconsistent state and may be corrupted"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:798
+#: ../gui/wxpython/core/gconsole.py:805
 msgid "Command aborted"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:801
+#: ../gui/wxpython/core/gconsole.py:808
 #, python-brace-format
 msgid "Command ended with non-zero return code {returncode}"
 msgstr ""
 
-#: ../gui/wxpython/core/gconsole.py:806 ../gui/wxpython/gmodeler/panels.py:330
+#: ../gui/wxpython/core/gconsole.py:813 ../gui/wxpython/gmodeler/panels.py:330
 msgid "Command finished"
 msgstr ""
 
@@ -1201,12 +1201,12 @@ msgid ""
 "{err}"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:974
+#: ../gui/wxpython/core/settings.py:975
 #, python-format
 msgid "Unable to read settings file <%s>\n"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:980
+#: ../gui/wxpython/core/settings.py:981
 #, python-format
 msgid ""
 "Error: Reading settings from file <%(file)s> failed.\n"
@@ -1214,11 +1214,11 @@ msgid ""
 "\t\tLine: '%(line)s'\n"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:998
+#: ../gui/wxpython/core/settings.py:999
 msgid "Unable to create settings directory"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:1007
+#: ../gui/wxpython/core/settings.py:1008
 #, python-format
 msgid ""
 "Writing settings to file <%(file)s> failed.\n"
@@ -1226,12 +1226,12 @@ msgid ""
 "Details: %(detail)s"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:1113
+#: ../gui/wxpython/core/settings.py:1114
 #, python-brace-format
 msgid "Unable to set '{group}:{key}:{subkey}'"
 msgstr ""
 
-#: ../gui/wxpython/core/settings.py:1153 ../gui/wxpython/core/settings.py:1174
+#: ../gui/wxpython/core/settings.py:1154 ../gui/wxpython/core/settings.py:1175
 #, python-format
 msgid "Unable to parse settings '%s'"
 msgstr ""
@@ -1649,7 +1649,7 @@ msgstr ""
 msgid "{name}"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1196
+#: ../gui/wxpython/datacatalog/tree.py:1195
 #, python-brace-format
 msgid ""
 "Map <{map_name}@{map_mapset}> is not in the current project. To be able to display it you need to switch to <{map_location}> project. Note that if you switch there all current Map Displays will be closed.\n"
@@ -1657,235 +1657,231 @@ msgid ""
 "Do you want to switch anyway?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1206
+#: ../gui/wxpython/datacatalog/tree.py:1205
 msgid "Map in a different project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1362
+#: ../gui/wxpython/datacatalog/tree.py:1358
 #, python-brace-format
 msgid "{c} maps marked for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1364
+#: ../gui/wxpython/datacatalog/tree.py:1360
 #, python-brace-format
 msgid "Map <{layer}> marked for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1377
+#: ../gui/wxpython/datacatalog/tree.py:1373
 #, python-brace-format
 msgid "{c} maps marked for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1379
+#: ../gui/wxpython/datacatalog/tree.py:1375
 #, python-brace-format
 msgid "Map <{layer}> marked for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1394
-#: ../gui/wxpython/datacatalog/tree.py:1492
-#: ../gui/wxpython/datacatalog/tree.py:1796
+#: ../gui/wxpython/datacatalog/tree.py:1390
+#: ../gui/wxpython/datacatalog/tree.py:1488
+#: ../gui/wxpython/datacatalog/tree.py:1788
 msgid "New name"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1395
+#: ../gui/wxpython/datacatalog/tree.py:1391
 msgid "Rename map"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1493
+#: ../gui/wxpython/datacatalog/tree.py:1489
 msgid "Rename dataset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1501
+#: ../gui/wxpython/datacatalog/tree.py:1497
 #, python-brace-format
 msgid "Renaming dataset <{old}> to <{new}>..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1512
-#: ../gui/wxpython/datacatalog/tree.py:1668
+#: ../gui/wxpython/datacatalog/tree.py:1508
+#: ../gui/wxpython/datacatalog/tree.py:1660
 #, python-brace-format
 msgid "{cmd} -- completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1609
+#: ../gui/wxpython/datacatalog/tree.py:1601
 msgid "Cannot rename mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1622
+#: ../gui/wxpython/datacatalog/tree.py:1614
 #, python-brace-format
 msgid "Renaming mapset <{oldmapset}> to <{newmapset}> completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1634
+#: ../gui/wxpython/datacatalog/tree.py:1626
 msgid "Cannot rename location"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1646
+#: ../gui/wxpython/datacatalog/tree.py:1638
 #, python-brace-format
 msgid "Renaming project <{oldlocation}> to <{newlocation}> completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1658
+#: ../gui/wxpython/datacatalog/tree.py:1650
 #, python-brace-format
 msgid "Renaming map <{name}>..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1684
+#: ../gui/wxpython/datacatalog/tree.py:1676
 msgid "No map selected for copying."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1686
+#: ../gui/wxpython/datacatalog/tree.py:1678
 msgid "No map selected for moving."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1708
-#: ../gui/wxpython/datacatalog/tree.py:1727
+#: ../gui/wxpython/datacatalog/tree.py:1700
+#: ../gui/wxpython/datacatalog/tree.py:1719
 #, python-brace-format
 msgid "New name for <{n}>"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1711
-#: ../gui/wxpython/datacatalog/tree.py:1730
-#: ../gui/wxpython/datacatalog/tree.py:1797
+#: ../gui/wxpython/datacatalog/tree.py:1703
+#: ../gui/wxpython/datacatalog/tree.py:1722
+#: ../gui/wxpython/datacatalog/tree.py:1789
 msgid "Select new name"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1748
+#: ../gui/wxpython/datacatalog/tree.py:1740
 #, python-brace-format
 msgid "Copying <{name}>..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1750
+#: ../gui/wxpython/datacatalog/tree.py:1742
 #, python-brace-format
 msgid "Moving <{name}>..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1764
+#: ../gui/wxpython/datacatalog/tree.py:1756
 msgid "Copying completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1770
+#: ../gui/wxpython/datacatalog/tree.py:1762
 msgid "Moving completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1786
+#: ../gui/wxpython/datacatalog/tree.py:1778
 msgid "Reprojection is not implemented for 3D rasters"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1868
-#: ../gui/wxpython/datacatalog/tree.py:2000
+#: ../gui/wxpython/datacatalog/tree.py:1860
+#: ../gui/wxpython/datacatalog/tree.py:1992
 msgid "g.remove completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1954
+#: ../gui/wxpython/datacatalog/tree.py:1946
 #, python-brace-format
 msgid "Do you really want to delete map <{m}>?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1956
+#: ../gui/wxpython/datacatalog/tree.py:1948
 #, python-brace-format
 msgid "Do you really want to delete maps <{m}>?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1960
+#: ../gui/wxpython/datacatalog/tree.py:1952
 #, python-brace-format
 msgid "Do you really want to delete {n} maps?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1962
+#: ../gui/wxpython/datacatalog/tree.py:1954
 msgid "Delete map"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1966
+#: ../gui/wxpython/datacatalog/tree.py:1958
 #, python-brace-format
 msgid "Deleting {name}..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:1968
+#: ../gui/wxpython/datacatalog/tree.py:1960
 #, python-brace-format
 msgid "Deleting {n} maps..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2020
+#: ../gui/wxpython/datacatalog/tree.py:2012
 #, python-brace-format
 msgid "Do you really want to delete dataset <{m}>?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2024
+#: ../gui/wxpython/datacatalog/tree.py:2016
 #, python-brace-format
 msgid "Do you really want to delete datasets <{m}>?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2028
+#: ../gui/wxpython/datacatalog/tree.py:2020
 #, python-brace-format
 msgid "Do you really want to delete {n} datasets?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2033
-#: ../gui/wxpython/datacatalog/tree.py:2973
+#: ../gui/wxpython/datacatalog/tree.py:2025
+#: ../gui/wxpython/datacatalog/tree.py:2924
 msgid "Delete dataset and maps"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2035
+#: ../gui/wxpython/datacatalog/tree.py:2027
 msgid "All maps registered in the dataset will be deleted as well."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2037
+#: ../gui/wxpython/datacatalog/tree.py:2029
 msgid "All maps registered in the datasets will be deleted as well."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2040
+#: ../gui/wxpython/datacatalog/tree.py:2032
 msgid "Delete dataset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2045
+#: ../gui/wxpython/datacatalog/tree.py:2037
 msgid "Deleting datasets..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2092
+#: ../gui/wxpython/datacatalog/tree.py:2084
 msgid "t.remove completed"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2270
-msgid "To move or copy maps to other mapsets, unlock editing of other mapsets"
-msgstr ""
-
-#: ../gui/wxpython/datacatalog/tree.py:2284
+#: ../gui/wxpython/datacatalog/tree.py:2259
 msgid "To move or copy maps to other project, please drag them to a mapset in the destination project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2682
+#: ../gui/wxpython/datacatalog/tree.py:2656
 #, python-brace-format
 msgid "Do you really want to unregister map <{m}>?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2686
+#: ../gui/wxpython/datacatalog/tree.py:2660
 #, python-brace-format
 msgid "Do you really want to unregister {n} maps?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2690
+#: ../gui/wxpython/datacatalog/tree.py:2664
 msgid "Unregister map"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2694
+#: ../gui/wxpython/datacatalog/tree.py:2668
 msgid "Unregistering map..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2696
+#: ../gui/wxpython/datacatalog/tree.py:2670
 #, python-brace-format
 msgid "Unregistering {c} maps..."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2751
+#: ../gui/wxpython/datacatalog/tree.py:2725
 msgid "Successfully unregistered map"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2753
+#: ../gui/wxpython/datacatalog/tree.py:2727
 #, python-brace-format
 msgid "Successfully unregistered {c} maps"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2773
+#: ../gui/wxpython/datacatalog/tree.py:2747
 #, python-brace-format
 msgid ""
 "Dataset <{n}> has {c} maps. All of them are rendered before the animation starts, which can take a long time and a lot of memory.\n"
@@ -1893,222 +1889,222 @@ msgid ""
 "Do you really want to animate it?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2777
+#: ../gui/wxpython/datacatalog/tree.py:2751
 msgid "Display animation"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2815
+#: ../gui/wxpython/datacatalog/tree.py:2789
 msgid "Cannot merge temporal datasets of different types."
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2936
+#: ../gui/wxpython/datacatalog/tree.py:2887
 msgid "&Register maps"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2941
-#: ../gui/wxpython/datacatalog/tree.py:3024
+#: ../gui/wxpython/datacatalog/tree.py:2892
+#: ../gui/wxpython/datacatalog/tree.py:2974
 msgid "&Unregister maps"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2946 ../gui/wxpython/menustrings.py:1054
+#: ../gui/wxpython/datacatalog/tree.py:2897 ../gui/wxpython/menustrings.py:1054
 #: ../gui/wxpython/menustrings.py:2115
 msgid "Update metadata"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2951
-#: ../gui/wxpython/datacatalog/tree.py:3305
+#: ../gui/wxpython/datacatalog/tree.py:2902
+#: ../gui/wxpython/datacatalog/tree.py:3231
 msgid "Display &temporal extent"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2956
+#: ../gui/wxpython/datacatalog/tree.py:2907
 msgid "Display &animation"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2965
+#: ../gui/wxpython/datacatalog/tree.py:2916
 msgid "&Rename dataset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2969
+#: ../gui/wxpython/datacatalog/tree.py:2920
 msgid "&Delete dataset only"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2977
+#: ../gui/wxpython/datacatalog/tree.py:2928
 msgid "&Export dataset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2984
-#: ../gui/wxpython/datacatalog/tree.py:3017
-#: ../gui/wxpython/datacatalog/tree.py:3085
+#: ../gui/wxpython/datacatalog/tree.py:2935
+#: ../gui/wxpython/datacatalog/tree.py:2967
+#: ../gui/wxpython/datacatalog/tree.py:3029
 msgid "Show &metadata"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:2997
-#: ../gui/wxpython/datacatalog/tree.py:3047 ../gui/wxpython/history/tree.py:217
+#: ../gui/wxpython/datacatalog/tree.py:2947
+#: ../gui/wxpython/datacatalog/tree.py:2992 ../gui/wxpython/history/tree.py:217
 msgid "&Copy"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3001
-#: ../gui/wxpython/datacatalog/tree.py:3051
+#: ../gui/wxpython/datacatalog/tree.py:2951
+#: ../gui/wxpython/datacatalog/tree.py:2996
 msgid "Copy &name"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3011
-#: ../gui/wxpython/datacatalog/tree.py:3079
+#: ../gui/wxpython/datacatalog/tree.py:2961
+#: ../gui/wxpython/datacatalog/tree.py:3023
 msgid "&Display layers"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3013
-#: ../gui/wxpython/datacatalog/tree.py:3081
+#: ../gui/wxpython/datacatalog/tree.py:2963
+#: ../gui/wxpython/datacatalog/tree.py:3025
 msgid "&Display layer"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3026
+#: ../gui/wxpython/datacatalog/tree.py:2976
 msgid "&Unregister map"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3041
+#: ../gui/wxpython/datacatalog/tree.py:2988
 msgid "&Cut"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3055
-#: ../gui/wxpython/datacatalog/tree.py:3104
-#: ../gui/wxpython/datacatalog/tree.py:3247
+#: ../gui/wxpython/datacatalog/tree.py:3000
+#: ../gui/wxpython/datacatalog/tree.py:3047
+#: ../gui/wxpython/datacatalog/tree.py:3179
 msgid "&Paste"
 msgstr ""
 
 #. GTC Delete mapset
-#: ../gui/wxpython/datacatalog/tree.py:3061
+#: ../gui/wxpython/datacatalog/tree.py:3006
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:238
 msgid "&Delete"
 msgstr ""
 
 #. GTC Rename mapset
-#: ../gui/wxpython/datacatalog/tree.py:3066 ../gui/wxpython/dbmgr/base.py:2484
+#: ../gui/wxpython/datacatalog/tree.py:3010 ../gui/wxpython/dbmgr/base.py:2484
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:231
 msgid "&Rename"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3098
+#: ../gui/wxpython/datacatalog/tree.py:3041
 msgid "Create &temporal dataset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3110
+#: ../gui/wxpython/datacatalog/tree.py:3053
 msgid "&Switch mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3120
+#: ../gui/wxpython/datacatalog/tree.py:3063
 msgid "&Delete mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3126
+#: ../gui/wxpython/datacatalog/tree.py:3067
 msgid "&Rename mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3132
+#: ../gui/wxpython/datacatalog/tree.py:3071
 msgid "Re&load mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3137
+#: ../gui/wxpython/datacatalog/tree.py:3076
 msgid "Show computational region"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3141
+#: ../gui/wxpython/datacatalog/tree.py:3080
 msgid "&Copy path"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3152
+#: ../gui/wxpython/datacatalog/tree.py:3091
 msgid "&Create mapset"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3156
+#: ../gui/wxpython/datacatalog/tree.py:3095
 msgid "&Delete project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3162
+#: ../gui/wxpython/datacatalog/tree.py:3099
 msgid "&Rename project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3168
+#: ../gui/wxpython/datacatalog/tree.py:3103
 msgid "Re&load project"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3173
+#: ../gui/wxpython/datacatalog/tree.py:3108
 msgid "Show projection info"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3177
-#: ../gui/wxpython/datacatalog/tree.py:3203
+#: ../gui/wxpython/datacatalog/tree.py:3112
+#: ../gui/wxpython/datacatalog/tree.py:3137
 msgid "Copy path"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3196
+#: ../gui/wxpython/datacatalog/tree.py:3130
 msgid "Change Label"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3196
+#: ../gui/wxpython/datacatalog/tree.py:3130
 msgid "Set Label"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3209
-#: ../gui/wxpython/datacatalog/tree.py:3340
+#: ../gui/wxpython/datacatalog/tree.py:3143
+#: ../gui/wxpython/datacatalog/tree.py:3266
 msgid "Remove Label"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3215
+#: ../gui/wxpython/datacatalog/tree.py:3149
 msgid "&Create new project (location)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3219
+#: ../gui/wxpython/datacatalog/tree.py:3153
 msgid "&Download sample project (location)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3224
+#: ../gui/wxpython/datacatalog/tree.py:3158
 msgid "&Remove GRASS database from data catalog"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3231
+#: ../gui/wxpython/datacatalog/tree.py:3165
 msgid "&Delete GRASS database from disk"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3237
+#: ../gui/wxpython/datacatalog/tree.py:3169
 msgid "Re&load database"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3261
+#: ../gui/wxpython/datacatalog/tree.py:3191
 msgid "&Delete projects (locations)"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3267
-#: ../gui/wxpython/datacatalog/tree.py:3277
+#: ../gui/wxpython/datacatalog/tree.py:3195
+#: ../gui/wxpython/datacatalog/tree.py:3205
 msgid "Copy paths"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3286
+#: ../gui/wxpython/datacatalog/tree.py:3214
 msgid "&Delete mapsets"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3292
+#: ../gui/wxpython/datacatalog/tree.py:3218
 msgid "&Copy paths"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3310
+#: ../gui/wxpython/datacatalog/tree.py:3236
 msgid "&Merge datasets"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3315
+#: ../gui/wxpython/datacatalog/tree.py:3241
 msgid "&Delete datasets only"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3319
+#: ../gui/wxpython/datacatalog/tree.py:3245
 msgid "Delete datasets and maps"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3337
+#: ../gui/wxpython/datacatalog/tree.py:3263
 #, python-brace-format
 msgid "Remove label '{label}' for this database?"
 msgstr ""
 
-#: ../gui/wxpython/datacatalog/tree.py:3359 ../gui/wxpython/history/tree.py:231
+#: ../gui/wxpython/datacatalog/tree.py:3285 ../gui/wxpython/history/tree.py:231
 msgid "No available options"
 msgstr ""
 
@@ -2502,7 +2498,7 @@ msgid "Data type"
 msgstr ""
 
 #: ../gui/wxpython/dbmgr/base.py:3045 ../gui/wxpython/dbmgr/base.py:3197
-#: ../gui/wxpython/dbmgr/base.py:3465 ../gui/wxpython/gui_core/gselect.py:1481
+#: ../gui/wxpython/dbmgr/base.py:3465 ../gui/wxpython/gui_core/gselect.py:1482
 msgid "Database"
 msgstr ""
 
@@ -3876,13 +3872,13 @@ msgid "Delete all"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:981
-#: ../gui/wxpython/gui_core/gselect.py:2296
+#: ../gui/wxpython/gui_core/gselect.py:2297
 #: ../gui/wxpython/location_wizard/wizard.py:984
 msgid "No"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:981
-#: ../gui/wxpython/gui_core/gselect.py:2296
+#: ../gui/wxpython/gui_core/gselect.py:2297
 #: ../gui/wxpython/location_wizard/wizard.py:984
 msgid "Yes"
 msgstr ""
@@ -5076,7 +5072,7 @@ msgid "Enter file content directly instead of specifying a file. Temporary file 
 msgstr ""
 
 #: ../gui/wxpython/gui_core/forms.py:2504
-#: ../gui/wxpython/gui_core/gselect.py:1477
+#: ../gui/wxpython/gui_core/gselect.py:1478
 msgid "Directory"
 msgstr ""
 
@@ -5368,186 +5364,186 @@ msgid ""
 "Some functionality will be not accessible"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:924
+#: ../gui/wxpython/gui_core/gselect.py:925
 msgid "No table linked to layer <{}>."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1246
+#: ../gui/wxpython/gui_core/gselect.py:1247
 #: ../gui/wxpython/image2target/ii2t_gis_set.py:1011
 msgid "Choose GIS Data Directory"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1458
+#: ../gui/wxpython/gui_core/gselect.py:1459
 msgid "Output settings"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1460
+#: ../gui/wxpython/gui_core/gselect.py:1461
 msgid "Source input"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1467
+#: ../gui/wxpython/gui_core/gselect.py:1468
 msgid "Native"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1473
+#: ../gui/wxpython/gui_core/gselect.py:1474
 #: ../gui/wxpython/lmgr/workspace.py:514
 msgid "File"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1485
+#: ../gui/wxpython/gui_core/gselect.py:1486
 msgid "Protocol"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1496
+#: ../gui/wxpython/gui_core/gselect.py:1497
 msgid "Output type"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1498
+#: ../gui/wxpython/gui_core/gselect.py:1499
 msgid "Source type"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1516
+#: ../gui/wxpython/gui_core/gselect.py:1517
 msgid "All files"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1546
+#: ../gui/wxpython/gui_core/gselect.py:1547
 msgid "ZIP files"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1547
+#: ../gui/wxpython/gui_core/gselect.py:1548
 msgid "GZIP files"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1548
+#: ../gui/wxpython/gui_core/gselect.py:1549
 msgid "TAR files"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1552
+#: ../gui/wxpython/gui_core/gselect.py:1553
 msgid "TARGZ files"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1561
+#: ../gui/wxpython/gui_core/gselect.py:1562
 msgid "File:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1562
+#: ../gui/wxpython/gui_core/gselect.py:1563
 msgid "Choose file to import"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1579
-#: ../gui/wxpython/gui_core/gselect.py:1667
+#: ../gui/wxpython/gui_core/gselect.py:1580
+#: ../gui/wxpython/gui_core/gselect.py:1668
 msgid "Choose input directory"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1600
+#: ../gui/wxpython/gui_core/gselect.py:1601
 msgid "Extension:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1632
+#: ../gui/wxpython/gui_core/gselect.py:1633
 msgid "Choose file"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1653
-#: ../gui/wxpython/gui_core/gselect.py:2779
+#: ../gui/wxpython/gui_core/gselect.py:1654
+#: ../gui/wxpython/gui_core/gselect.py:2780
 msgid "Feature type:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1654
+#: ../gui/wxpython/gui_core/gselect.py:1655
 msgid "simple features"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1654
+#: ../gui/wxpython/gui_core/gselect.py:1655
 msgid "topological"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1771
-#: ../gui/wxpython/gui_core/gselect.py:1811
-#: ../gui/wxpython/gui_core/gselect.py:1873
-#: ../gui/wxpython/gui_core/gselect.py:1918
+#: ../gui/wxpython/gui_core/gselect.py:1772
+#: ../gui/wxpython/gui_core/gselect.py:1812
+#: ../gui/wxpython/gui_core/gselect.py:1874
+#: ../gui/wxpython/gui_core/gselect.py:1919
 msgid "Creation options:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1788
-#: ../gui/wxpython/gui_core/gselect.py:1834
-#: ../gui/wxpython/gui_core/gselect.py:1899
+#: ../gui/wxpython/gui_core/gselect.py:1789
+#: ../gui/wxpython/gui_core/gselect.py:1835
+#: ../gui/wxpython/gui_core/gselect.py:1900
 msgid "Format:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1907
+#: ../gui/wxpython/gui_core/gselect.py:1908
 msgid "Protocol:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1936
+#: ../gui/wxpython/gui_core/gselect.py:1937
 msgid "No settings available"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2068
+#: ../gui/wxpython/gui_core/gselect.py:2069
 #: ../gui/wxpython/web_services/dialogs.py:300
 msgid "No data source defined, settings are not saved."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2100
+#: ../gui/wxpython/gui_core/gselect.py:2101
 msgid "PostgreSQL/PostGIS login was not set. Set it via <db.login> module, please."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2255
+#: ../gui/wxpython/gui_core/gselect.py:2256
 #, python-brace-format
 msgid "Getting raster <{table}> SRID from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2510
+#: ../gui/wxpython/gui_core/gselect.py:2511
 #, python-brace-format
 msgid "Getting list of tables from PostgreSQL DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2599
+#: ../gui/wxpython/gui_core/gselect.py:2600
 #, python-brace-format
 msgid "Getting list of tables columns data types from PostGIS DB <{db}>, host <{host}> failed. {error}."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2630
+#: ../gui/wxpython/gui_core/gselect.py:2631
 #, python-brace-format
 msgid "PostgreSQL DB <{psql}> program was not found. Please, install it."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2650
+#: ../gui/wxpython/gui_core/gselect.py:2651
 #: ../gui/wxpython/modules/import_export.py:504
 msgid "The Python GDAL package is missing. Please install it."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2771
+#: ../gui/wxpython/gui_core/gselect.py:2772
 msgid "LineString"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2771
+#: ../gui/wxpython/gui_core/gselect.py:2772
 #: ../gui/wxpython/psmap/dialogs.py:6220 ../gui/wxpython/psmap/toolbars.py:101
 #: ../gui/wxpython/vdigit/preferences.py:727
 msgid "Point"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2771
+#: ../gui/wxpython/gui_core/gselect.py:2772
 msgid "Polygon"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:2984
+#: ../gui/wxpython/gui_core/gselect.py:2985
 msgid "No vector map selected in layer manager. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3003
+#: ../gui/wxpython/gui_core/gselect.py:3004
 msgid "Input vector map is not selected"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3007
+#: ../gui/wxpython/gui_core/gselect.py:3008
 #, python-format
 msgid "Input vector map <%s> and selected map <%s> in layer manager are different. Operation canceled."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3123
+#: ../gui/wxpython/gui_core/gselect.py:3124
 #, python-format
 msgid "Unable to import C imagery library functions: %s\n"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:3201
+#: ../gui/wxpython/gui_core/gselect.py:3202
 msgid "No vector map selected"
 msgstr ""
 
@@ -19175,12 +19171,12 @@ msgstr ""
 msgid "WARNING: Zero-length line or boundary drawing skipped. Use v.clean to remove it."
 msgstr ""
 
-#: ../gui/wxpython/vdigit/wxdisplay.py:1084
+#: ../gui/wxpython/vdigit/wxdisplay.py:1085
 #, python-format
 msgid "Topology for vector map <%s> is not available. Topology is required by digitizer. Do you want to rebuild topology (takes some time) and open the vector map for editing?"
 msgstr ""
 
-#: ../gui/wxpython/vdigit/wxdisplay.py:1090
+#: ../gui/wxpython/vdigit/wxdisplay.py:1091
 msgid "Topology missing"
 msgstr ""
 
