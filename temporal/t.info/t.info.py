@@ -21,6 +21,7 @@
 
 # %option G_OPT_STDS_INPUT
 # % description: Name of an existing space time dataset or map
+# % required: no
 # %end
 
 # %option G_OPT_STDS_TYPE
@@ -53,7 +54,7 @@
 # %end
 
 # %rules
-# % required: -d, input
+# % required: -d, input, format
 # % requires: -h, input
 # %end
 
@@ -112,10 +113,10 @@ def main():
     # Connect once here, otherwise helpers close the connection they open
     dbif.connect()
 
-    rows = tgis.get_tgis_metadata(dbif, mapset=mapset)
+    used_mapset = mapset or next(iter(dbif.tgis_mapsets))
 
     if system and not history and format_ != "json":
-        used_mapset = mapset or next(iter(dbif.tgis_mapsets))
+        rows = tgis.get_tgis_metadata(dbif, mapset=used_mapset)
         if shellstyle:
             print(
                 f"dbmi_python_interface='{dbif.get_dbmi(mapset=used_mapset).__name__}'\n"
@@ -143,7 +144,8 @@ def main():
         )
         return
 
-    if qualified:
+    dataset = None
+    if qualified and name:
         dataset = tgis.dataset_factory(stds_type, name)
         if not dataset.is_in_db(dbif):
             gs.fatal(
@@ -152,7 +154,8 @@ def main():
                     t=stds_type,
                 ),
             )
-    else:
+        dataset.select(dbif)
+    elif name:
         # Go through all TGIS mapsets in the search path
         datasets = {}
         for tgis_mapset in dbif.tgis_mapsets:
@@ -181,20 +184,29 @@ def main():
                 )
             )
         mapset = used_mapset
-    dataset.select(dbif)
+        dataset.select(dbif)
 
-    if history and stds_type in {"strds", "stvds", "str3ds"} and format_ != "json":
+    rows = tgis.get_tgis_metadata(dbif, mapset=used_mapset)
+
+    if (
+        history
+        and stds_type in {"strds", "stvds", "str3ds"}
+        and format_ != "json"
+        and dataset
+    ):
         dataset.print_history()
         return
 
     if format_ == "json":
-        metadata = dataset.get_metadata_dict()
+        metadata = {}
+        if dataset:
+            metadata = dataset.get_metadata_dict()
         metadata["tgis_db"] = {}
 
         metadata["tgis_db"].update(
             {
-                "dbmi_python_interface": dbif.get_dbmi(mapset=mapset).__name__,
-                "dbmi_string": dbif.tgis_mapsets[mapset][1],
+                "dbmi_python_interface": dbif.get_dbmi(mapset=used_mapset).__name__,
+                "dbmi_string": dbif.tgis_mapsets[used_mapset][1],
                 "sql_template_path": tgis.get_sql_template_path(),
             }
         )
@@ -204,10 +216,10 @@ def main():
             )
         print(json.dumps(metadata, cls=TemporalJSONEncoder, indent=4))
 
-    elif format_ == "shell" or shellstyle:
+    elif dataset and (format_ == "shell" or shellstyle):
         dataset.print_shell_info()
 
-    else:
+    elif dataset:
         dataset.print_info()
 
 

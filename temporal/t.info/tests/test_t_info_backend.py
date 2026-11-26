@@ -54,6 +54,30 @@ def test_backend_shell(temporal_data):
     assert info["tgis_db_version"] == "'3'"
 
 
+def test_backend_d_json(temporal_data):
+    """The -d flag with JSON format reports the backend as dict."""
+    tools = Tools(session=temporal_data.session)
+    info = tools.t_info(flags="d", format="json").json
+
+    assert list(info["tgis_db"].keys()) == BACKEND_SHELL_KEYS
+    assert info["tgis_db"]["dbmi_python_interface"] == "sqlite3"
+    assert info["tgis_db"]["dbmi_string"].endswith("sqlite.db")
+    assert info["tgis_db"]["tgis_version"] == 2
+    assert info["tgis_db"]["tgis_db_version"] == 3
+
+
+def test_backend_no_d_json(temporal_data):
+    """Without the -d flag, JSON format still reports the backend as dict."""
+    tools = Tools(session=temporal_data.session)
+    info = tools.t_info(format="json").json
+
+    assert list(info["tgis_db"].keys()) == BACKEND_SHELL_KEYS
+    assert info["tgis_db"]["dbmi_python_interface"] == "sqlite3"
+    assert info["tgis_db"]["dbmi_string"].endswith("sqlite.db")
+    assert info["tgis_db"]["tgis_version"] == 2
+    assert info["tgis_db"]["tgis_db_version"] == 3
+
+
 def test_backend_shell_values_are_quoted(temporal_data):
     """All values of the backend information are quoted in the shell output"""
     tools = Tools(session=temporal_data.session)
