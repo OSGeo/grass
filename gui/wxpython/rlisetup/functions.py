@@ -6,7 +6,6 @@ Created on Mon Nov 26 11:48:03 2012
 
 import wx
 import os
-import sys
 from pathlib import Path
 from grass.script import core as grass
 from core.gcmd import GError
@@ -51,18 +50,12 @@ def checkValue(value):
 
 def retRLiPath():
     """Return the directory of configuration files for r.li"""
-    if sys.platform == "win32":
-        grass_config_dirname = "GRASS8"
-        grass_config_dir = os.path.join(os.getenv("APPDATA"), grass_config_dirname)
-    else:
-        grass_config_dirname = ".grass8"
-        grass_config_dir = os.path.join(os.getenv("HOME"), grass_config_dirname)
+    from grass.lib.gis import G_config_path
 
-    rlipath = os.path.join(grass_config_dir, "r.li")
-    if Path(rlipath).exists():
-        return rlipath
-    Path(rlipath).mkdir()
-    return rlipath
+    # Use the same configuration directory as the native r.li modules.
+    rlipath = Path(os.fsdecode(G_config_path())) / "r.li"
+    rlipath.mkdir(parents=True, exist_ok=True)
+    return str(rlipath)
 
 
 def checkMapExists(name, typ="raster") -> bool:
