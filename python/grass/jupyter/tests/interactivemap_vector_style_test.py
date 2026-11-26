@@ -21,9 +21,8 @@ def ipyleaflet_layer(m):
 def ipyleaflet_feature_style(layer, feature):
     """Return the style ipyleaflet draws a feature with
 
-    The JavaScript side of ipyleaflet's GeoJSON layer draws each feature with
-    the style style_callback stored in the feature, overridden by the layer
-    style.
+    ipyleaflet's JavaScript lets the layer style override what style_callback
+    stored in the feature.
     """
     return {**feature["properties"].get("style", {}), **layer.style}
 
@@ -41,39 +40,26 @@ def test_translates_every_option():
     """Each option becomes the Leaflet name for it"""
     options = {
         "color": "black",
-        "fill_color": "#ffff00",
+        "fill_color": "0:0:255",
         "width": 2,
         "opacity": 0.8,
         "fill_opacity": 0.4,
     }
     assert vector_style(options) == {
         "color": "#000000",
-        "fillColor": "#ffff00",
+        "fillColor": "#0000ff",
         "weight": 2,
         "opacity": 0.8,
         "fillOpacity": 0.4,
     }
 
 
-def test_takes_the_options_it_used():
-    """The translated options are removed, the rest are left alone"""
-    options = {"color": "red", "name": "roads", "style_function": None}
-    vector_style(options)
-    assert options == {"name": "roads", "style_function": None}
-
-
-def test_option_none_is_not_given():
-    """An option given as None is taken out and ignored, but 0 is kept"""
+def test_takes_out_only_style_options():
+    """Style options are taken out, None counts as not given, 0 is kept"""
     options = {"color": None, "width": 2, "opacity": 0, "name": "roads"}
     assert vector_style(options) == {"weight": 2, "opacity": 0}
     assert options == {"name": "roads"}
-
-
-def test_without_style_options():
-    """Options which are not about style give an empty style"""
-    options = {"name": "roads"}
     assert vector_style(options) == {}
-    assert options == {"name": "roads"}
 
 
 @pytest.mark.parametrize(
@@ -90,11 +76,6 @@ def test_grass_colors(color, expected):
     assert leaflet_color(color) == expected
 
 
-def test_fill_color_is_translated():
-    """The fill color takes the same color formats as the line color"""
-    assert vector_style({"fill_color": "0:0:255"}) == {"fillColor": "#0000ff"}
-
-
 @pytest.mark.parametrize("color", ["300:0:0", "a:b:c"])
 def test_invalid_grass_color(color):
     """A triplet which is not a color is an error"""
@@ -103,23 +84,18 @@ def test_invalid_grass_color(color):
 
 
 def test_named_option_wins_over_style(simple_dataset):
-    """A named option overrides the same key in a style given directly
+    """A named option overrides the same key in a style, other keys stay
 
     This is what the opacity shim did before the named options existed.
     """
     pytest.importorskip("ipyleaflet")
 
     m = interactivemap.InteractiveMap(use_region=True, map_backend="ipyleaflet")
-    m.add_vector(simple_dataset.vector_name, opacity=0.4, style={"opacity": 0.9})
-    assert ipyleaflet_layer(m).style["opacity"] == 0.4
-
-
-def test_style_keeps_keys_the_options_do_not_set(simple_dataset):
-    """Keys only present in a style given directly survive"""
-    pytest.importorskip("ipyleaflet")
-
-    m = interactivemap.InteractiveMap(use_region=True, map_backend="ipyleaflet")
-    m.add_vector(simple_dataset.vector_name, opacity=0.4, style={"dashArray": "5"})
+    m.add_vector(
+        simple_dataset.vector_name,
+        opacity=0.4,
+        style={"opacity": 0.9, "dashArray": "5"},
+    )
     assert ipyleaflet_layer(m).style == {"opacity": 0.4, "dashArray": "5"}
 
 
@@ -137,10 +113,7 @@ def test_style_none_is_the_backend_default(simple_dataset, options, expected):
 
 
 def test_style_callback_wins_over_named_options(simple_dataset):
-    """style_callback decides per feature on top of the named options
-
-    A style given directly is still overridden by the named options.
-    """
+    """style_callback decides on top of the named options"""
     pytest.importorskip("ipyleaflet")
 
     m = interactivemap.InteractiveMap(use_region=True, map_backend="ipyleaflet")
@@ -176,12 +149,7 @@ def test_style_callback_wins_over_named_options(simple_dataset):
 def test_style_or_callback_does_not_depend_on_other_options(
     simple_dataset, with_style, with_option, with_callback, expected
 ):
-    """Whether style or style_callback wins does not change with an option
-
-    A named option for another key, here width, must not change which of the
-    two decides the color. Without named options, ipyleaflet itself lets the
-    style win over style_callback.
-    """
+    """An option for another key, here width, does not change which one wins"""
     pytest.importorskip("ipyleaflet")
 
     kwargs = {}
@@ -198,12 +166,33 @@ def test_style_or_callback_does_not_depend_on_other_options(
         assert ipyleaflet_feature_style(layer, feature).get("color") == expected
 
 
-def test_folium_merges_a_style_given_directly(simple_dataset):
-    """On folium a style is merged too instead of replacing the named options
+def test_style_function_adds_to_named_options(simple_dataset):
+    """A style_function decides per feature on top of the named options"""
+    pytest.importorskip("folium")
 
-    folium puts a style keyword after its styler, so unmerged it would drop
-    the named options. The caller's dictionary is left as it was.
-    """
+    m = interactivemap.InteractiveMap(use_region=True, map_backend="folium")
+    m.add_vector(
+        simple_dataset.vector_name,
+        color="black",
+        style_function=lambda f: (
+            {"dashArray": "6 4", "color": "red"}
+            if f["properties"].get("major")
+            else {"dashArray": "6 4"}
+        ),
+    )
+    style_function = folium_layer(m).style_function
+    assert style_function({"properties": {"major": True}}) == {
+        "color": "red",
+        "dashArray": "6 4",
+    }
+    assert style_function({"properties": {}}) == {
+        "color": "#000000",
+        "dashArray": "6 4",
+    }
+
+
+def test_folium_merges_a_style_given_directly(simple_dataset):
+    """A style does not replace the named options on folium, nor is it changed"""
     pytest.importorskip("folium")
 
     given = {"weight": 5, "color": "blue"}
@@ -215,8 +204,8 @@ def test_folium_merges_a_style_given_directly(simple_dataset):
     assert given == {"weight": 5, "color": "blue"}
 
 
-def test_folium_style_wins_over_style_function_as_on_ipyleaflet(simple_dataset):
-    """Other keys of a style win over style_function, as over style_callback"""
+def test_folium_style_wins_over_style_function(simple_dataset):
+    """Other keys of a style win over style_function, as on ipyleaflet"""
     pytest.importorskip("folium")
 
     m = interactivemap.InteractiveMap(use_region=True, map_backend="folium")
@@ -229,41 +218,8 @@ def test_folium_style_wins_over_style_function_as_on_ipyleaflet(simple_dataset):
     assert folium_layer(m).style_function(None) == {"weight": 2, "color": "blue"}
 
 
-def test_named_option_applies_under_a_style_function(simple_dataset):
-    """On folium a style_function adds to the named options"""
-    pytest.importorskip("folium")
-
-    m = interactivemap.InteractiveMap(use_region=True, map_backend="folium")
-    m.add_vector(
-        simple_dataset.vector_name,
-        color="red",
-        style_function=lambda _feature: {"dashArray": "6 4"},
-    )
-    assert folium_layer(m).style_function(None) == {
-        "color": "#ff0000",
-        "dashArray": "6 4",
-    }
-
-
-def test_style_function_wins_over_named_options(simple_dataset):
-    """A style_function decides per feature on top of the named options"""
-    pytest.importorskip("folium")
-
-    m = interactivemap.InteractiveMap(use_region=True, map_backend="folium")
-    m.add_vector(
-        simple_dataset.vector_name,
-        color="black",
-        style_function=lambda f: (
-            {"color": "red"} if f["properties"].get("major") else {}
-        ),
-    )
-    style_function = folium_layer(m).style_function
-    assert style_function({"properties": {"major": True}}) == {"color": "red"}
-    assert style_function({"properties": {"major": False}}) == {"color": "#000000"}
-
-
 def test_style_function_none_is_the_backend_default(simple_dataset):
-    """style_function=None means the default, so the named options still apply"""
+    """style_function=None means the default, so the named options apply"""
     pytest.importorskip("folium")
 
     m = interactivemap.InteractiveMap(use_region=True, map_backend="folium")

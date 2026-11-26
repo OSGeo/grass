@@ -277,10 +277,9 @@ class Vector(Layer):
             import folium  # pylint: disable=import-outside-toplevel
 
             if style:
-                # A style given to folium replaces its styler, so it is merged
-                # here in the same order ipyleaflet draws a feature in: the
-                # named options, then what style_function returns, then the
-                # rest of the given style.
+                # A style keyword would replace folium's styler, so it is
+                # merged here in ipyleaflet's order: named options, then
+                # style_function, then the rest of the style.
                 given = self._layer_kwargs.get("style_function")
                 if given is None:
                     self._layer_kwargs["style_function"] = lambda _feature: {
@@ -306,11 +305,8 @@ class Vector(Layer):
                 if given is None:
                     self._layer_kwargs["style"] = {**given_style, **style}
                 else:
-                    # ipyleaflet lets the layer style override what
-                    # style_callback returns. Only the named options go into
-                    # the base of the callback, so the callback decides on top
-                    # of them, and the rest of a given style still wins over
-                    # the callback, as it does without named options.
+                    # The layer style overrides style_callback in ipyleaflet,
+                    # so the named options go under the callback instead.
                     self._layer_kwargs["style"] = given_style
                     self._layer_kwargs["style_callback"] = lambda feature: {
                         **style,
