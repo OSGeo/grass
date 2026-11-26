@@ -43,23 +43,23 @@ struct kdbuild {
 };
 
 /* forward declarations of the internal functions */
-static struct kdnode *kd_insert2(struct kdtree *, struct kdnode *,
-                                 struct kdnode *, int, int);
-static struct kdnode *kd_newnode(struct kdtree *t);
-static void kd_free_node(struct kdtree *t, struct kdnode *n);
-static void kd_update_node(struct kdtree *t, struct kdnode *n);
-static void kd_swap(int *a, int *b);
-static int kd_same_point(const struct kdbuild *b, int i, int j);
-static void kd_sort(struct kdbuild *b, int *idx, int lo, int hi, int mode,
-                    int dim);
-static int kd_select(struct kdbuild *b, int *idx, int lo, int hi, int k,
-                     int dim);
-static struct kdnode *kd_build(struct kdtree *t, struct kdbuild *b, int *idx,
-                               int lo, int hi, int dim);
-static int kd_replace(struct kdtree *, struct kdnode *);
-static int kd_balance(struct kdtree *, struct kdnode *, int);
-static int kd_first(struct kdtrav *, double *, int *);
-static int kd_next(struct kdtrav *, double *, int *);
+static struct kdnode *kdtree_insert2(struct kdtree *, struct kdnode *,
+                                     struct kdnode *, int, int);
+static struct kdnode *kdtree_newnode(struct kdtree *t);
+static void kdtree_free_node(struct kdtree *t, struct kdnode *n);
+static void kdtree_update_node(struct kdtree *t, struct kdnode *n);
+static void kdtree_swap(int *a, int *b);
+static int kdtree_same_point(const struct kdbuild *b, int i, int j);
+static void kdtree_sort(struct kdbuild *b, int *idx, int lo, int hi, int mode,
+                        int dim);
+static int kdtree_select(struct kdbuild *b, int *idx, int lo, int hi, int k,
+                         int dim);
+static struct kdnode *kdtree_build(struct kdtree *t, struct kdbuild *b,
+                                   int *idx, int lo, int hi, int dim);
+static int kdtree_replace(struct kdtree *, struct kdnode *);
+static int kdtree_balance(struct kdtree *, struct kdnode *, int);
+static int kdtree_first(struct kdtrav *, double *, int *);
+static int kdtree_next(struct kdtrav *, double *, int *);
 
 static int cmp(struct kdnode *a, struct kdnode *b, int p)
 {
@@ -189,7 +189,7 @@ void kdtree_clear(struct kdtree *t)
         if (it->child[0] == NULL) {
             /* No left links, just kill the node and move on */
             save = it->child[1];
-            kd_free_node(t, it);
+            kdtree_free_node(t, it);
             it = NULL;
         }
         else {
@@ -231,12 +231,12 @@ int kdtree_insert(struct kdtree *t, double *c, int uid, int dc)
     struct kdnode *nnew;
     size_t count = t->count;
 
-    nnew = kd_newnode(t);
+    nnew = kdtree_newnode(t);
     memcpy(nnew->c, c, t->csize);
     nnew->uid = uid;
 
-    /* insert the item into the tree, kd_insert2() is recursive */
-    t->root = kd_insert2(t, t->root, nnew, 1, dc);
+    /* insert the item into the tree, kdtree_insert2() is recursive */
+    t->root = kdtree_insert2(t, t->root, nnew, 1, dc);
 
     /* print depth of recursion
      * recursively called fns are insert2, balance, and replace */
@@ -282,20 +282,20 @@ struct kdtree *kdtree_create_from_points(char ndims, const double *coords,
     b.dc = dc;
 
     /* sort the points to find the duplicates */
-    kd_sort(&b, idx, 0, n, KD_CMP_KEY, 0);
+    kdtree_sort(&b, idx, 0, n, KD_CMP_KEY, 0);
 
     /* remove the duplicates, the first point of a set of identical points is
      * kept, just like kdtree_insert() does */
     m = 0;
     for (i = 0; i < n;) {
-        for (j = i + 1; j < n && kd_same_point(&b, idx[i], idx[j]); j++)
+        for (j = i + 1; j < n && kdtree_same_point(&b, idx[i], idx[j]); j++)
             ;
         idx[m++] = idx[i];
         i = j;
     }
 
     /* restore the order of the input array */
-    kd_sort(&b, idx, 0, m, KD_CMP_IDX, 0);
+    kdtree_sort(&b, idx, 0, m, KD_CMP_IDX, 0);
 
     /* allocate the coordinates and the nodes of the tree */
     t->pool = G_malloc(sizeof(double) * (size_t)m * ndims);
@@ -326,13 +326,13 @@ struct kdtree *kdtree_create_from_points(char ndims, const double *coords,
     }
 
     /* build the tree, the index array is the permutation of the nodes
-     * kd_build() is recursive, its depth is the depth of the tree */
+     * kdtree_build() is recursive, its depth is the depth of the tree */
     b.coords = t->pool;
     b.uids = uids;
     for (i = 0; i < m; i++)
         idx[i] = i;
 
-    t->root = kd_build(t, &b, idx, 0, m, 0);
+    t->root = kdtree_build(t, &b, idx, 0, m, 0);
     t->count = m;
 
     G_free(idx);
@@ -379,7 +379,7 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
     }
 
     if (s[top].n->depth == 0) {
-        kd_free_node(t, s[top].n);
+        kdtree_free_node(t, s[top].n);
         s[top].n = NULL;
         t->count--;
         if (top) {
@@ -389,7 +389,7 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
             n->child[dir] = NULL;
 
             /* update node */
-            kd_update_node(t, n);
+            kdtree_update_node(t, n);
         }
         else {
             t->root = NULL;
@@ -398,9 +398,9 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
         }
     }
     else {
-        /* replace the node with a point of its subtree, kd_replace() is
-         * called by the recursive kd_balance() */
-        kd_replace(t, s[top].n);
+        /* replace the node with a point of its subtree, kdtree_replace() is
+         * called by the recursive kdtree_balance() */
+        kdtree_replace(t, s[top].n);
     }
 
     while (top) {
@@ -408,7 +408,7 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
         n = s[top].n;
 
         /* update node */
-        kd_update_node(t, n);
+        kdtree_update_node(t, n);
     }
 
     balance = 1;
@@ -429,10 +429,10 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
 
             /* top-down balancing
              * slower but more compact
-             * kd_balance() is recursive, it calls kd_insert2() again to
+             * kdtree_balance() is recursive, it calls kdtree_insert2() again to
              * insert the replaced item */
             if (!bmode2) {
-                while (kd_balance(t, n, bmode))
+                while (kdtree_balance(t, n, bmode))
                     ;
             }
 
@@ -452,14 +452,14 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
 
                 /* bottom-up balancing
                  * faster but less compact */
-                kd_update_node(t, n);
+                kdtree_update_node(t, n);
                 if (bmode2) {
-                    while (kd_balance(t, n, bmode))
+                    while (kdtree_balance(t, n, bmode))
                         ;
                 }
                 top--;
                 if (top >= 0) {
-                    kd_update_node(t, s[top].n);
+                    kdtree_update_node(t, s[top].n);
                 }
                 if (!bmode2 && top == 0) {
                     iter++;
@@ -480,8 +480,8 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
 /* k-d tree optimization, only useful if the tree will be used heavily
  * (more searches than items in the tree)
  * level 0 = a bit, 1 = more, 2 = a lot
- * the balancing below is recursive, kd_balance() calls kd_insert2() which
- * calls kd_balance() again
+ * the balancing below is recursive, kdtree_balance() calls kdtree_insert2()
+ * which calls kdtree_balance() again
  */
 void kdtree_optimize(struct kdtree *t, int level)
 {
@@ -521,10 +521,10 @@ void kdtree_optimize(struct kdtree *t, int level)
         rd = (!n->child[1] ? -1 : n->child[1]->depth);
 
         if (ld < rd)
-            while (kd_balance(t, n->child[0], level))
+            while (kdtree_balance(t, n->child[0], level))
                 ;
         else if (ld > rd)
-            while (kd_balance(t, n->child[1], level))
+            while (kdtree_balance(t, n->child[1], level))
                 ;
 
         ld = (!n->child[0] ? -1 : n->child[0]->depth);
@@ -542,19 +542,19 @@ void kdtree_optimize(struct kdtree *t, int level)
         n = s[top].n;
 
         /* balance node */
-        while (kd_balance(t, n, level)) {
+        while (kdtree_balance(t, n, level)) {
             nbal++;
         }
-        while (kd_balance(t, n->child[0], level))
+        while (kdtree_balance(t, n->child[0], level))
             ;
-        while (kd_balance(t, n->child[1], level))
+        while (kdtree_balance(t, n->child[1], level))
             ;
 
         ld = (!n->child[0] ? -1 : n->child[0]->depth);
         rd = (!n->child[1] ? -1 : n->child[1]->depth);
         n->depth = MAX(ld, rd) + 1;
 
-        while (kd_balance(t, n, level)) {
+        while (kdtree_balance(t, n, level)) {
             nbal++;
         }
     }
@@ -563,19 +563,19 @@ void kdtree_optimize(struct kdtree *t, int level)
         n = s[top].n;
 
         /* balance node */
-        while (kd_balance(t, n, level)) {
+        while (kdtree_balance(t, n, level)) {
             nbal++;
         }
-        while (kd_balance(t, n->child[0], level))
+        while (kdtree_balance(t, n->child[0], level))
             ;
-        while (kd_balance(t, n->child[1], level))
+        while (kdtree_balance(t, n->child[1], level))
             ;
 
         ld = (!n->child[0] ? -1 : n->child[0]->depth);
         rd = (!n->child[1] ? -1 : n->child[1]->depth);
         n->depth = MAX(ld, rd) + 1;
 
-        while (kd_balance(t, n, level)) {
+        while (kdtree_balance(t, n, level)) {
             nbal++;
         }
 
@@ -605,19 +605,19 @@ void kdtree_optimize(struct kdtree *t, int level)
             n = s[top].n;
 
             /* balance node */
-            while (kd_balance(t, n, level)) {
+            while (kdtree_balance(t, n, level)) {
                 nbal++;
             }
-            while (kd_balance(t, n->child[0], level))
+            while (kdtree_balance(t, n->child[0], level))
                 ;
-            while (kd_balance(t, n->child[1], level))
+            while (kdtree_balance(t, n->child[1], level))
                 ;
 
             ld = (!n->child[0] ? -1 : n->child[0]->depth);
             rd = (!n->child[1] ? -1 : n->child[1]->depth);
             n->depth = MAX(ld, rd) + 1;
 
-            while (kd_balance(t, n, level)) {
+            while (kdtree_balance(t, n, level)) {
                 nbal++;
             }
 
@@ -1032,18 +1032,17 @@ int kdtree_traverse(struct kdtrav *trav, double *c, int *uid)
 
     if (trav->first) {
         trav->first = 0;
-        return kd_first(trav, c, uid);
+        return kdtree_first(trav, c, uid);
     }
 
-    return kd_next(trav, c, uid);
+    return kdtree_next(trav, c, uid);
 }
 
-/**********************************************/
-/*            internal functions              */
+/**********************************************
+ *            internal functions              *
+ **********************************************/
 
-/**********************************************/
-
-static struct kdnode *kd_newnode(struct kdtree *t)
+static struct kdnode *kdtree_newnode(struct kdtree *t)
 {
     struct kdnode *n = G_malloc(sizeof(struct kdnode));
 
@@ -1058,7 +1057,7 @@ static struct kdnode *kd_newnode(struct kdtree *t)
     return n;
 }
 
-static void kd_free_node(struct kdtree *t, struct kdnode *n)
+static void kdtree_free_node(struct kdtree *t, struct kdnode *n)
 {
     /* the nodes of a tree created by kdtree_create_from_points() are stored
      * in one contiguous array which is freed when the tree is cleared, so
@@ -1078,7 +1077,7 @@ static void kd_free_node(struct kdtree *t, struct kdnode *n)
     G_free(n);
 }
 
-static void kd_update_node(struct kdtree *t, struct kdnode *n)
+static void kdtree_update_node(struct kdtree *t, struct kdnode *n)
 {
     int ld, rd, btol;
 
@@ -1106,7 +1105,7 @@ static void kd_update_node(struct kdtree *t, struct kdnode *n)
 
 /* check if two points are identical, i.e. they have the same coordinates
  * and, if duplicate coordinates are not allowed, the same uid */
-static int kd_same_point(const struct kdbuild *b, int i, int j)
+static int kdtree_same_point(const struct kdbuild *b, int i, int j)
 {
     if (cmp_point_coords(b, i, j))
         return 0;
@@ -1116,7 +1115,7 @@ static int kd_same_point(const struct kdbuild *b, int i, int j)
     return 1;
 }
 
-static void kd_swap(int *a, int *b)
+static void kdtree_swap(int *a, int *b)
 {
     int tmp = *a;
 
@@ -1129,8 +1128,8 @@ static void kd_swap(int *a, int *b)
  * recursively, so the recursion depth is limited by the logarithm of the
  * range size
  */
-static void kd_sort(struct kdbuild *b, int *idx, int lo, int hi, int mode,
-                    int dim)
+static void kdtree_sort(struct kdbuild *b, int *idx, int lo, int hi, int mode,
+                        int dim)
 {
     int i;
 
@@ -1141,11 +1140,11 @@ static void kd_sort(struct kdbuild *b, int *idx, int lo, int hi, int mode,
 
         /* median of three */
         if (cmp_points(b, idx[mid], idx[lo], mode, dim) < 0)
-            kd_swap(&idx[mid], &idx[lo]);
+            kdtree_swap(&idx[mid], &idx[lo]);
         if (cmp_points(b, idx[last], idx[mid], mode, dim) < 0) {
-            kd_swap(&idx[last], &idx[mid]);
+            kdtree_swap(&idx[last], &idx[mid]);
             if (cmp_points(b, idx[mid], idx[lo], mode, dim) < 0)
-                kd_swap(&idx[mid], &idx[lo]);
+                kdtree_swap(&idx[mid], &idx[lo]);
         }
         pivot = idx[mid];
 
@@ -1159,9 +1158,9 @@ static void kd_sort(struct kdbuild *b, int *idx, int lo, int hi, int mode,
             int c = cmp_points(b, idx[i], pivot, mode, dim);
 
             if (c < 0)
-                kd_swap(&idx[lt++], &idx[i++]);
+                kdtree_swap(&idx[lt++], &idx[i++]);
             else if (c > 0)
-                kd_swap(&idx[i], &idx[--gt]);
+                kdtree_swap(&idx[i], &idx[--gt]);
             else
                 i++;
         }
@@ -1169,11 +1168,11 @@ static void kd_sort(struct kdbuild *b, int *idx, int lo, int hi, int mode,
         /* continue with the larger part and recurse into the smaller one to
          * limit the recursion depth */
         if (lt - lo < hi - gt) {
-            kd_sort(b, idx, lo, lt, mode, dim);
+            kdtree_sort(b, idx, lo, lt, mode, dim);
             lo = gt;
         }
         else {
-            kd_sort(b, idx, gt, hi, mode, dim);
+            kdtree_sort(b, idx, gt, hi, mode, dim);
             hi = lt;
         }
     }
@@ -1193,10 +1192,11 @@ static void kd_sort(struct kdbuild *b, int *idx, int lo, int hi, int mode,
 
 /* find the position of the point with the rank k (starting from 0) in the
  * range [lo, hi)
- * not recursive itself, but it can fall back to kd_sort() which is recursive
+ * not recursive itself, but it can fall back to kdtree_sort() which is
+ * recursive
  */
-static int kd_select(struct kdbuild *b, int *idx, int lo, int hi, int k,
-                     int dim)
+static int kdtree_select(struct kdbuild *b, int *idx, int lo, int hi, int k,
+                         int dim)
 {
     int bad = 0;
 
@@ -1207,25 +1207,25 @@ static int kd_select(struct kdbuild *b, int *idx, int lo, int hi, int k,
 
         /* median of three, the pivot ends up at the position mid */
         if (cmp_points(b, idx[mid], idx[lo], KD_CMP_DIM, dim) < 0)
-            kd_swap(&idx[mid], &idx[lo]);
+            kdtree_swap(&idx[mid], &idx[lo]);
         if (cmp_points(b, idx[last], idx[mid], KD_CMP_DIM, dim) < 0) {
-            kd_swap(&idx[last], &idx[mid]);
+            kdtree_swap(&idx[last], &idx[mid]);
             if (cmp_points(b, idx[mid], idx[lo], KD_CMP_DIM, dim) < 0)
-                kd_swap(&idx[mid], &idx[lo]);
+                kdtree_swap(&idx[mid], &idx[lo]);
         }
         pivot = idx[mid];
 
         /* partition the range, the pivot is moved to the end of the range
          * and then to its final position */
-        kd_swap(&idx[mid], &idx[last]);
+        kdtree_swap(&idx[mid], &idx[last]);
         i = lo;
         for (j = lo; j < last; j++) {
             if (cmp_points(b, idx[j], pivot, KD_CMP_DIM, dim) < 0) {
-                kd_swap(&idx[i], &idx[j]);
+                kdtree_swap(&idx[i], &idx[j]);
                 i++;
             }
         }
-        kd_swap(&idx[i], &idx[last]);
+        kdtree_swap(&idx[i], &idx[last]);
         pos = i;
 
         /* the pivot is at its final position */
@@ -1240,13 +1240,13 @@ static int kd_select(struct kdbuild *b, int *idx, int lo, int hi, int k,
             return pos;
 
         /* sort the remaining range if the partition is too unbalanced
-         * kd_sort() is recursive */
+         * kdtree_sort() is recursive */
         if (oldsize - (hi - lo) < oldsize / 8)
             bad++;
         else
             bad = 0;
         if (bad > 3) {
-            kd_sort(b, idx, lo, hi, KD_CMP_DIM, dim);
+            kdtree_sort(b, idx, lo, hi, KD_CMP_DIM, dim);
 
             return lo + k;
         }
@@ -1260,8 +1260,8 @@ static int kd_select(struct kdbuild *b, int *idx, int lo, int hi, int k,
  * recursive: the two halves of the range are built recursively, so the
  * recursion depth is the depth of the tree
  */
-static struct kdnode *kd_build(struct kdtree *t, struct kdbuild *b, int *idx,
-                               int lo, int hi, int dim)
+static struct kdnode *kdtree_build(struct kdtree *t, struct kdbuild *b,
+                                   int *idx, int lo, int hi, int dim)
 {
     struct kdnode *node;
     int n = hi - lo;
@@ -1282,12 +1282,12 @@ static struct kdnode *kd_build(struct kdtree *t, struct kdbuild *b, int *idx,
     }
 
     /* find the median of the points */
-    mid = kd_select(b, idx, lo, hi, (n - 1) / 2, dim);
+    mid = kdtree_select(b, idx, lo, hi, (n - 1) / 2, dim);
     pivot = idx[mid];
 
     /* points which compare equal to the pivot must not be separated by the
      * split because the tree search uses the same order to find a point
-     * kd_select() orders the range by (c[dim], uid, index), so the points
+     * kdtree_select() orders the range by (c[dim], uid, index), so the points
      * which compare equal to the pivot differ only in the index and they form
      * a block around the pivot, checking its two neighbours is enough to
      * detect that block */
@@ -1303,9 +1303,9 @@ static struct kdnode *kd_build(struct kdtree *t, struct kdbuild *b, int *idx,
             int c = cmp_point_order(b, idx[i], pivot, dim);
 
             if (c < 0)
-                kd_swap(&idx[lt++], &idx[i++]);
+                kdtree_swap(&idx[lt++], &idx[i++]);
             else if (c > 0)
-                kd_swap(&idx[i], &idx[--gt]);
+                kdtree_swap(&idx[i], &idx[--gt]);
             else
                 i++;
         }
@@ -1313,7 +1313,7 @@ static struct kdnode *kd_build(struct kdtree *t, struct kdbuild *b, int *idx,
         /* the pivot is the last point of the group of equal points */
         for (i = lt; i < gt; i++) {
             if (idx[i] == pivot) {
-                kd_swap(&idx[i], &idx[gt - 1]);
+                kdtree_swap(&idx[i], &idx[gt - 1]);
                 break;
             }
         }
@@ -1323,9 +1323,9 @@ static struct kdnode *kd_build(struct kdtree *t, struct kdbuild *b, int *idx,
     node = &t->nodes[pivot];
     node->dim = (unsigned char)dim;
     node->balance = 0;
-    /* build the two halves of the range, kd_build() is recursive */
-    node->child[0] = kd_build(t, b, idx, lo, mid, t->nextdim[dim]);
-    node->child[1] = kd_build(t, b, idx, mid + 1, hi, t->nextdim[dim]);
+    /* build the two halves of the range, kdtree_build() is recursive */
+    node->child[0] = kdtree_build(t, b, idx, lo, mid, t->nextdim[dim]);
+    node->child[1] = kdtree_build(t, b, idx, mid + 1, hi, t->nextdim[dim]);
 
     ld = node->child[0] ? node->child[0]->depth : -1;
     rd = node->child[1] ? node->child[1]->depth : -1;
@@ -1335,9 +1335,9 @@ static struct kdnode *kd_build(struct kdtree *t, struct kdbuild *b, int *idx,
 }
 
 /* find a replacement for the node r and replace r with it
- * not recursive itself, but it is called by kd_balance() which is recursive
+ * not recursive itself, but it is called by kdtree_balance() which is recursive
  */
-static int kd_replace(struct kdtree *t, struct kdnode *r)
+static int kdtree_replace(struct kdtree *t, struct kdnode *r)
 {
     double mindist;
     int rdir, ordir, dir;
@@ -1357,7 +1357,7 @@ static int kd_replace(struct kdtree *t, struct kdnode *r)
     if (!r->child[0] && !r->child[1])
         return 0;
 
-    /* do not call kd_balance in this fn, this can cause
+    /* do not call kdtree_balance in this fn, this can cause
      * stack overflow due to too many recursive calls */
 
     /* find replacement for r
@@ -1549,11 +1549,11 @@ static int kd_replace(struct kdtree *t, struct kdnode *r)
     if (n->child[dir] != rn) {
         G_fatal_error("Last replacement disappeared");
     }
-    kd_free_node(t, rn);
+    kdtree_free_node(t, rn);
     n->child[dir] = NULL;
     t->count--;
 
-    kd_update_node(t, n);
+    kdtree_update_node(t, n);
     top++;
 
     /* go back up */
@@ -1574,18 +1574,18 @@ static int kd_replace(struct kdtree *t, struct kdnode *r)
 #endif
 
         /* update node */
-        kd_update_node(t, n);
+        kdtree_update_node(t, n);
     }
 
     return nr;
 }
 
 /* balance the (sub-)tree of the node r
- * recursive: kd_balance() calls kd_insert2() to insert the replaced item and
- * kd_insert2() calls kd_balance() again, so the recursion depth grows with
- * the depth of the tree
+ * recursive: kdtree_balance() calls kdtree_insert2() to insert the replaced
+ * item and kdtree_insert2() calls kdtree_balance() again, so the recursion
+ * depth grows with the depth of the tree
  */
-static int kd_balance(struct kdtree *t, struct kdnode *r, int bmode)
+static int kdtree_balance(struct kdtree *t, struct kdnode *r, int bmode)
 {
     struct kdnode *or;
     int dir;
@@ -1603,7 +1603,7 @@ static int kd_balance(struct kdtree *t, struct kdnode *r, int bmode)
 
     if (old_depth != r->depth) {
         G_warning("balancing: depth is wrong: %d != %d", r->depth, old_depth);
-        kd_update_node(t, r);
+        kdtree_update_node(t, r);
     }
 
     /* subtree difference */
@@ -1623,28 +1623,29 @@ static int kd_balance(struct kdtree *t, struct kdnode *r, int bmode)
         return 0;
     }
 
-    or = kd_newnode(t);
+    or = kdtree_newnode(t);
     memcpy(or->c, r->c, t->csize);
     or->uid = r->uid;
     or->dim = t->nextdim[r->dim];
 
-    if (!kd_replace(t, r))
-        G_fatal_error("kd_balance: nothing replaced");
+    if (!kdtree_replace(t, r))
+        G_fatal_error("kdtree_balance: nothing replaced");
 
 #ifdef KD_DEBUG
     if (!cmp(r, or, r->dim)) {
-        G_warning("kd_balance: replacement failed");
-        kd_free_node(t, or);
+        G_warning("kdtree_balance: replacement failed");
+        kdtree_free_node(t, or);
 
         return 0;
     }
 #endif
 
-    /* insert the replaced item again, kd_insert2() is recursive */
-    r->child[!dir] = kd_insert2(t, r->child[!dir], or, bmode, 1); /* bmode */
+    /* insert the replaced item again, kdtree_insert2() is recursive */
+    r->child[!dir] =
+        kdtree_insert2(t, r->child[!dir], or, bmode, 1); /* bmode */
 
     /* update node */
-    kd_update_node(t, r);
+    kdtree_update_node(t, r);
 
     if (r->depth == old_depth) {
         G_debug(4, "balancing had no effect");
@@ -1658,12 +1659,12 @@ static int kd_balance(struct kdtree *t, struct kdnode *r, int bmode)
 }
 
 /* insert an item into the (sub-)tree
- * recursive: the balancing calls kd_balance() which calls kd_insert2() again
- * to insert the replaced item, so the recursion depth grows with the depth of
- * the tree
+ * recursive: the balancing calls kdtree_balance() which calls kdtree_insert2()
+ * again to insert the replaced item, so the recursion depth grows with the
+ * depth of the tree
  */
-static struct kdnode *kd_insert2(struct kdtree *t, struct kdnode *r,
-                                 struct kdnode *nnew, int balance, int dc)
+static struct kdnode *kdtree_insert2(struct kdtree *t, struct kdnode *r,
+                                     struct kdnode *nnew, int balance, int dc)
 {
     struct kdnode *n;
     struct kdstack {
@@ -1704,7 +1705,7 @@ static struct kdnode *kd_insert2(struct kdtree *t, struct kdnode *r,
         if (!cmpc(nnew, n, t) && (!dc || nnew->uid == n->uid)) {
 
             G_debug(1, "KD node exists already, nothing to do");
-            kd_free_node(t, nnew);
+            kdtree_free_node(t, nnew);
 
             if (!balance) {
                 rcalls--;
@@ -1740,7 +1741,7 @@ static struct kdnode *kd_insert2(struct kdtree *t, struct kdnode *r,
         n = s[top].n;
 
         /* update node */
-        kd_update_node(t, n);
+        kdtree_update_node(t, n);
 
         /* do not balance on the way back up */
 
@@ -1771,10 +1772,10 @@ static struct kdnode *kd_insert2(struct kdtree *t, struct kdnode *r,
 
             /* top-down balancing
              * slower but more compact
-             * kd_balance() is recursive, it calls kd_insert2() again to
+             * kdtree_balance() is recursive, it calls kdtree_insert2() again to
              * insert the replaced item */
             if (!bmode2) {
-                while (kd_balance(t, n, bmode))
+                while (kdtree_balance(t, n, bmode))
                     ;
             }
 
@@ -1794,15 +1795,15 @@ static struct kdnode *kd_insert2(struct kdtree *t, struct kdnode *r,
 
                 /* bottom-up balancing
                  * faster but less compact
-                 * kd_balance() is recursive, it calls kd_insert2() again to
-                 * insert the replaced item */
+                 * kdtree_balance() is recursive, it calls kdtree_insert2()
+                 * again to insert the replaced item */
                 if (bmode2) {
-                    while (kd_balance(t, n, bmode))
+                    while (kdtree_balance(t, n, bmode))
                         ;
                 }
                 top--;
                 if (top >= 0) {
-                    kd_update_node(t, s[top].n);
+                    kdtree_update_node(t, s[top].n);
                 }
                 if (!bmode2 && top == 0) {
                     iter++;
@@ -1825,7 +1826,7 @@ static struct kdnode *kd_insert2(struct kdtree *t, struct kdnode *r,
 /* start traversing the tree
  * returns pointer to first item
  */
-static int kd_first(struct kdtrav *trav, double *c, int *uid)
+static int kdtree_first(struct kdtrav *trav, double *c, int *uid)
 {
     /* get smallest item */
     while (trav->curr_node->child[0] != NULL) {
@@ -1842,7 +1843,7 @@ static int kd_first(struct kdtrav *trav, double *c, int *uid)
 /* continue traversing the tree in ascending order
  * returns pointer to data item, NULL when finished
  */
-static int kd_next(struct kdtrav *trav, double *c, int *uid)
+static int kdtree_next(struct kdtrav *trav, double *c, int *uid)
 {
     if (trav->curr_node->child[1] != NULL) {
         /* something on the right side: larger item */

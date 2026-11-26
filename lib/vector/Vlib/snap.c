@@ -227,7 +227,7 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
     for (line_idx = 0; line_idx < List_lines->n_values; line_idx++) {
         int v;
 
-        G_percent(line_idx, List_lines->n_values, 2);
+        G_percent(line_idx, List_lines->n_values, 10);
 
         line = List_lines->value[line_idx];
 
@@ -256,13 +256,14 @@ static void Vect_snap_lines_list_kdtree(struct Map_info *Map,
             ncoords++;
         }
     }
-    G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
     /* build the tree of the points, points with identical coordinates are
      * only registered once, the uids of the registered points are returned
      * in the uids array */
     KDTree = kdtree_create_from_points(2, coords, uids, ncoords, 0);
     npoints = KDTree->count;
+    /* points selection is only finished after the k-d tree has been built */
+    G_percent(line_idx, List_lines->n_values, 10);
 
     if (KDTree->root)
         G_debug(2, "kd-tree depth: %d", KDTree->root->depth);

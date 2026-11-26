@@ -108,6 +108,9 @@ improve search performance. It provides k nearest neighbor search
 search (find all neighbors within radius, i.e. not farther away than
 radius to a given coordinate).
 
+Using the same uid for different points is not supported, uids must be
+unique.
+
 
 Include and linking
 -------------------

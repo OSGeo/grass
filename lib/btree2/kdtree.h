@@ -140,6 +140,9 @@ int kdtree_insert(struct kdtree *t, /*!< k-d tree */
  * which are in the tree, in the order of the input array. The remaining
  * entries of the uids array are undefined.
  *
+ * Using the same uid for different points is not supported, uids must be
+ * unique.
+ *
  * The nodes of the tree are stored in one contiguous array in the nodes
  * array, one node per point, in the order of the uids array. The coordinates
  * of the points are stored in one contiguous array in the pool, ndims values
