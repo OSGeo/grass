@@ -167,9 +167,9 @@ class Raster(Layer):
             interactive_map.add(image)
 
 
-# Leaflet path options for the styling d.vect exposes. The names on the left
-# are the ones a GRASS user already knows from d.vect, the ones on the right
-# are what both backends pass to Leaflet.
+# Vector style options and the Leaflet path options they become, which both
+# backends pass to Leaflet. color, fill_color and width are named as in
+# d.vect.
 VECTOR_STYLE_OPTIONS = {
     "color": "color",
     "fill_color": "fillColor",
@@ -182,9 +182,9 @@ VECTOR_STYLE_OPTIONS = {
 def leaflet_color(value):
     """Convert a GRASS color to a color Leaflet understands
 
-    GRASS color names and R:G:B triplets become hex colors, so a name means
-    the same color as in d.vect. Other values, such as hex colors or CSS
-    color names, are returned unchanged.
+    GRASS color names and R:G:B triplets, as gs.parse_color reads them,
+    become hex colors. Other values, such as hex colors or CSS color names,
+    are returned unchanged.
 
     :param value: color as given by the user
     :return: hex color, or *value* unchanged
@@ -213,11 +213,13 @@ def vector_style(options):
     :param dict options: keyword arguments given to a vector layer
     :return dict: Leaflet path options, empty if none were given
     """
-    style = {
-        leaflet_name: options.pop(name)
-        for name, leaflet_name in VECTOR_STYLE_OPTIONS.items()
-        if name in options
-    }
+    style = {}
+    for name, leaflet_name in VECTOR_STYLE_OPTIONS.items():
+        value = options.pop(name, None)
+        # An option given as None counts as not given, as style=None and
+        # style_function=None do.
+        if value is not None:
+            style[leaflet_name] = value
     for key in ("color", "fillColor"):
         if key in style:
             style[key] = leaflet_color(style[key])
@@ -258,20 +260,38 @@ class Vector(Layer):
         # callable and ipyleaflet through a dictionary, so the same options
         # are translated once here and handed to each in its own form.
         style = vector_style(self._layer_kwargs)
+        # Passing style=None is how a caller asks for the backend default,
+        # but ipyleaflet only accepts a dictionary.
+        if self._layer_kwargs.get("style", {}) is None:
+            del self._layer_kwargs["style"]
+        given_style = {}
+        if style:
+            # The named options override the same keys of a style given
+            # directly, as the opacity shim did before them.
+            given_style = {
+                key: value
+                for key, value in self._layer_kwargs.pop("style", {}).items()
+                if key not in style
+            }
         if get_backend(interactive_map) == "folium":
             import folium  # pylint: disable=import-outside-toplevel
 
             if style:
-                # The named options are the base and a style_function decides
-                # per feature on top of them, the same order as with
-                # style_callback on ipyleaflet.
+                # A style given to folium replaces its styler, so it is merged
+                # here in the same order ipyleaflet draws a feature in: the
+                # named options, then what style_function returns, then the
+                # rest of the given style.
                 given = self._layer_kwargs.get("style_function")
                 if given is None:
-                    self._layer_kwargs["style_function"] = lambda _feature: style
+                    self._layer_kwargs["style_function"] = lambda _feature: {
+                        **given_style,
+                        **style,
+                    }
                 else:
                     self._layer_kwargs["style_function"] = lambda feature: {
                         **style,
                         **given(feature),
+                        **given_style,
                     }
             folium.GeoJson(
                 str(self._filename), name=self._title, **self._layer_kwargs
@@ -281,23 +301,17 @@ class Vector(Layer):
 
             with open(self._filename, encoding="utf-8") as file:
                 data = json.load(file)
-            # Passing style=None is how a caller asks for the backend default,
-            # but ipyleaflet only accepts a dictionary.
-            if self._layer_kwargs.get("style", {}) is None:
-                del self._layer_kwargs["style"]
             if style:
-                # The named options override a style given directly, as the
-                # opacity shim did before them.
-                style = {**self._layer_kwargs.pop("style", {}), **style}
                 given = self._layer_kwargs.get("style_callback")
                 if given is None:
-                    self._layer_kwargs["style"] = style
+                    self._layer_kwargs["style"] = {**given_style, **style}
                 else:
                     # ipyleaflet lets the layer style override what
-                    # style_callback returns, so the merged style becomes the
-                    # base of the callback instead, and the callback decides
-                    # per feature on top of it as a style_function does on
-                    # folium.
+                    # style_callback returns. Only the named options go into
+                    # the base of the callback, so the callback decides on top
+                    # of them, and the rest of a given style still wins over
+                    # the callback, as it does without named options.
+                    self._layer_kwargs["style"] = given_style
                     self._layer_kwargs["style_callback"] = lambda feature: {
                         **style,
                         **given(feature),
@@ -513,21 +527,23 @@ class InteractiveMap:
         """Imports vector into temporary WGS84 location, re-formats to a GeoJSON and
         adds to map.
 
-        The style can be set with options named as in d.vect, which work the
-        same with both backends:
+        The style can be set with these options, which work the same with both
+        backends:
 
         ``color``, ``fill_color``
-            GRASS color name or R:G:B triplet as in d.vect, or any other
-            color Leaflet understands, such as a hex color
+            GRASS color name or R:G:B triplet, or any other color Leaflet
+            understands, such as a hex color
         ``width``
             line width in pixels
         ``opacity``, ``fill_opacity``
             opacity between 0 and 1
 
-        These options override the same keys in a ``style`` dictionary
-        (ipyleaflet). A ``style_function`` (folium) or ``style_callback``
-        (ipyleaflet) is applied on top of them, so it can still change the
-        style of single features.
+        An option given as None is ignored. The options override the same
+        keys in a ``style`` dictionary. A ``style_function`` (folium) or
+        ``style_callback`` (ipyleaflet) is applied on top of them, so it can
+        still change the style of single features. Other keys of a ``style``
+        dictionary still win over those, as in ipyleaflet itself. Points are
+        drawn as markers, which these options do not change.
 
         :Example:
           .. code-block:: pycon
@@ -535,7 +551,7 @@ class InteractiveMap:
             >>> m = InteractiveMap()
             >>> m.add_vector("roadsmajor", color="red", width=2)
             >>> m.add_vector(
-            ...     "lakes", color="0:0:255", fill_color="aqua", fill_opacity=0.5
+            ...     "lakes", color="0:0:255", fill_color="cyan", fill_opacity=0.5
             ... )
 
         :param str name: name of vector to be added to map;

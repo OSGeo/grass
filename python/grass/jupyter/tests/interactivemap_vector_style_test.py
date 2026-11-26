@@ -62,6 +62,13 @@ def test_takes_the_options_it_used():
     assert options == {"name": "roads", "style_function": None}
 
 
+def test_option_none_is_not_given():
+    """An option given as None is taken out and ignored, but 0 is kept"""
+    options = {"color": None, "width": 2, "opacity": 0, "name": "roads"}
+    assert vector_style(options) == {"weight": 2, "opacity": 0}
+    assert options == {"name": "roads"}
+
+
 def test_without_style_options():
     """Options which are not about style give an empty style"""
     options = {"name": "roads"}
@@ -73,18 +80,13 @@ def test_without_style_options():
     ("color", "expected"),
     [
         ("red", "#ff0000"),
-        ("gray", "#bfbfbf"),
         ("255:128:0", "#ff8000"),
         ("#123456", "#123456"),
         ("steelblue", "steelblue"),
     ],
 )
 def test_grass_colors(color, expected):
-    """GRASS color names and triplets become hex, other colors stay as given
-
-    GRASS gray is 191:191:191, while CSS gray is 128:128:128, so the GRASS
-    names have to be translated to mean the same as in d.vect.
-    """
+    """GRASS color names and triplets become hex, other colors stay as given"""
     assert leaflet_color(color) == expected
 
 
@@ -144,7 +146,7 @@ def test_style_callback_wins_over_named_options(simple_dataset):
     m = interactivemap.InteractiveMap(use_region=True, map_backend="ipyleaflet")
     m.add_vector(
         simple_dataset.vector_name,
-        color="gray",
+        color="black",
         opacity=0.4,
         style={"opacity": 0.9, "dashArray": "5"},
         style_callback=lambda _feature: {"color": "red"},
@@ -156,6 +158,75 @@ def test_style_callback_wins_over_named_options(simple_dataset):
             "opacity": 0.4,
             "dashArray": "5",
         }
+
+
+@pytest.mark.parametrize(
+    ("with_style", "with_option", "with_callback", "expected"),
+    [
+        (False, False, False, None),
+        (False, False, True, "red"),
+        (False, True, False, None),
+        (False, True, True, "red"),
+        (True, False, False, "blue"),
+        (True, False, True, "blue"),
+        (True, True, False, "blue"),
+        (True, True, True, "blue"),
+    ],
+)
+def test_style_or_callback_does_not_depend_on_other_options(
+    simple_dataset, with_style, with_option, with_callback, expected
+):
+    """Whether style or style_callback wins does not change with an option
+
+    A named option for another key, here width, must not change which of the
+    two decides the color. Without named options, ipyleaflet itself lets the
+    style win over style_callback.
+    """
+    pytest.importorskip("ipyleaflet")
+
+    kwargs = {}
+    if with_style:
+        kwargs["style"] = {"color": "blue"}
+    if with_option:
+        kwargs["width"] = 2
+    if with_callback:
+        kwargs["style_callback"] = lambda _feature: {"color": "red"}
+    m = interactivemap.InteractiveMap(use_region=True, map_backend="ipyleaflet")
+    m.add_vector(simple_dataset.vector_name, **kwargs)
+    layer = ipyleaflet_layer(m)
+    for feature in layer.data["features"]:
+        assert ipyleaflet_feature_style(layer, feature).get("color") == expected
+
+
+def test_folium_merges_a_style_given_directly(simple_dataset):
+    """On folium a style is merged too instead of replacing the named options
+
+    folium puts a style keyword after its styler, so unmerged it would drop
+    the named options. The caller's dictionary is left as it was.
+    """
+    pytest.importorskip("folium")
+
+    given = {"weight": 5, "color": "blue"}
+    m = interactivemap.InteractiveMap(use_region=True, map_backend="folium")
+    m.add_vector(simple_dataset.vector_name, color="red", style=given)
+    layer = folium_layer(m)
+    assert "style" not in layer.options
+    assert layer.style_function(None) == {"color": "#ff0000", "weight": 5}
+    assert given == {"weight": 5, "color": "blue"}
+
+
+def test_folium_style_wins_over_style_function_as_on_ipyleaflet(simple_dataset):
+    """Other keys of a style win over style_function, as over style_callback"""
+    pytest.importorskip("folium")
+
+    m = interactivemap.InteractiveMap(use_region=True, map_backend="folium")
+    m.add_vector(
+        simple_dataset.vector_name,
+        width=2,
+        style={"color": "blue"},
+        style_function=lambda _feature: {"color": "red"},
+    )
+    assert folium_layer(m).style_function(None) == {"weight": 2, "color": "blue"}
 
 
 def test_named_option_applies_under_a_style_function(simple_dataset):
@@ -181,14 +252,14 @@ def test_style_function_wins_over_named_options(simple_dataset):
     m = interactivemap.InteractiveMap(use_region=True, map_backend="folium")
     m.add_vector(
         simple_dataset.vector_name,
-        color="gray",
+        color="black",
         style_function=lambda f: (
             {"color": "red"} if f["properties"].get("major") else {}
         ),
     )
     style_function = folium_layer(m).style_function
     assert style_function({"properties": {"major": True}}) == {"color": "red"}
-    assert style_function({"properties": {"major": False}}) == {"color": "#bfbfbf"}
+    assert style_function({"properties": {"major": False}}) == {"color": "#000000"}
 
 
 def test_style_function_none_is_the_backend_default(simple_dataset):
