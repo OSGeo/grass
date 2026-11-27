@@ -18,7 +18,6 @@ from build import (
     get_files,
     grass_version,
     grass_version_major,
-    grass_version_minor,
     replace_file,
     write_footer,
     write_header,
@@ -138,7 +137,7 @@ def build_full_index(ext, index_name, source_dir, year, text_type):
             f.write(CORE_TEXT)
         elif text_type == "addons":
             linux = f"https://grass.osgeo.org/addons/grass{grass_version_major}/logs"
-            windows = f"https://wingrass.fsv.cvut.cz/grass{grass_version_major}{grass_version_minor}/addons/grass-{grass_version}/logs/"
+            windows = f"https://grass.osgeo.org/addons/grass{grass_version_major}/binaries/osgeo4w-x86_64/{grass_version}/logs/"
             f.write(
                 ADDONS_TEXT.format(
                     date=date.today(), linux_logs=linux, windows_logs=windows

@@ -419,8 +419,37 @@ Add the new version to repos which build or test addons:
 
 - <https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci.yml>
   (currently, for new branches only)
-- <https://github.com/landam/wingrass-maintenance-scripts/blob/master/grass_addons.sh>
-  (add new release related line for new branches and final releases)
+
+### Addons for Windows
+
+On Windows, _g.extension_ downloads addons compiled for exactly the GRASS
+version in use, so a release has no addons on Windows until the CI of the
+addons repo builds them for its tag. Do the following for each release which
+has binaries for Windows (for a release candidate only if its binaries are
+distributed):
+
+1. After the tag is created, add it to the `grass-ref` list in
+   [ci-windows.yml](https://github.com/OSGeo/grass-addons/blob/grass8/.github/workflows/ci-windows.yml)
+   in the addons repo, e.g., `"8.5.1"` next to `"8.5.0"`.
+2. After that change is merged, start the _Build and test on Windows_ workflow
+   manually on the `grass8` branch, or wait for the nightly build. Only these
+   two publish the addons, builds for pushes and pull requests do not.
+3. Check that the addons are on the server. The cronjob there takes a new
+   build within a few hours:
+
+   ```bash
+   curl -I "https://grass.osgeo.org/addons/grass8/binaries/osgeo4w-x86_64/$VERSION/build-info.txt"
+   ```
+
+Keep the previous release in the list and remove the ones before it, e.g.,
+when adding 8.5.2, keep 8.5.1 and remove 8.5.0. Each version in the list adds
+a Windows build to every pull request in the addons repo. Addons of a removed
+version stay on the server, but are no longer updated.
+
+Nothing needs to be done for a new release branch: `main` is always built and
+its addons are published under the new development version (e.g., 8.7.0dev).
+On a major version change, review the workflow, which publishes only from the
+`grass8` branch.
 
 ## Close milestone
 
