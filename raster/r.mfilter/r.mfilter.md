@@ -11,13 +11,12 @@ The filter is applied *repeat* times (default *value* is 1). The
 *output* raster map layer can be given a *TITLE* if desired. (This TITLE
 should be put in quotes if it contains more than one word.)
 
-With **-z** flag the filter is applied only to null values in the input
-raster map layer. The non-null category values are not changed. Note
-that if there is more than one filter step, this rule is applied to the
-intermediate raster map layer -- only null category values which result
-from the first filter will be changed. In most cases this will NOT be
-the desired result. Hence -z should be used only with single step
-filters.
+With the **-z** flag, each filtering stage evaluates only NULL-valued
+centers with a complete neighborhood. Non-NULL centers retain their values.
+When a filter is repeated or the filter file contains multiple matrices,
+each later stage uses the preceding stage's output as input. Cells filled
+by an earlier stage can influence later results. Use a single filtering
+stage if this is undesirable.
 
 The **filter** parameter defines the name of an existing, user-created
 UNIX ASCII file whose contents is a matrix defining the way in which the
@@ -98,13 +97,21 @@ describes two filters:
 
 ### HOW THE FILTER WORKS
 
-The filter process produces a new category value for each cell in the
-input raster map layer by multiplying the category values of the cells
-in the n x n neighborhood around the center cell by the corresponding
-matrix value and adding them together. If a divisor is specified, the
-sum is divided by this divisor. (If a zero divisor was specified, then
-the divisor is computed for each cell as the sum of the MATRIX values
-where the corresponding input cell is non-null.)
+For an *n* by *n* filter, each filtering stage copies a band of cells
+along all four sides of the computational region from that stage's input.
+The band is *n*/2 cells wide, rounded down. For example, a 3x3 filter
+copies a one-cell band. The filter matrix and divisor are applied only
+where the full neighborhood fits inside the region. The same rule applies
+every time a filter is repeated.
+
+A complete neighborhood can still contain NULL samples. With a nonzero
+`DIVISOR`, any NULL sample makes the result NULL. If all samples are
+present, the filter multiplies them by their corresponding matrix
+weights, sums the products, and divides by the specified divisor.
+
+With `DIVISOR 0`, the filter skips NULL samples and divides the weighted
+sum by the sum of the matrix weights for the remaining samples. If all
+samples are NULL, the result is NULL.
 
 If more than one filter step is specified, either because the repeat
 value was greater than one or because the filter file contained more
