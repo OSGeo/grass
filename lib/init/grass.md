@@ -7,9 +7,10 @@ description: GRASS startup program
 ## SYNOPSIS
 
 **grass** \[**-h** \| **-help** \| **--help**\] \[**-v** \|
-**--version**\] \| \[**-c** \| **-c geofile** \| **-c
-EPSG:code\[:datum_trans\]**\] \| **-e** \| **-f** \| \[**--text** \|
-**--gtext** \| **--gui**\] \| **--config** \| \[**--tmp-project** \|
+**--version**\] \| \[**-c** \| **-c geofile** \|
+**-c spatial_reference_id** \| **-c EPSG:code\[:datum_trans\]**\] \|
+**-e** \| **-f** \| \[**--text** \| **--gtext** \| **--gui**\] \|
+**--config** \| \[**--tmp-project** \|
 **--tmp-mapset**\] \[\[\[**\<GISDBASE\>/**\]**\<PROJECT\>/**\]
 **\<MAPSET\>**\] \[**--exec EXECUTABLE**\]
 
@@ -29,13 +30,16 @@ in specified GISDBASE
 Creates new GRASS project in specified GISDBASE with coordinate
 reference system based on georeferenced file
 
-**-c EPSG:code**  
+**-c spatial_reference_id**
 Creates new GRASS project in specified GISDBASE with coordinate
-reference system defined by EPSG code
+reference system defined by a PROJ spatial reference ID (authority name
+and code), e.g. `EPSG:4326` or `ESRI:102022`. See
+<https://proj.org/en/stable/apps/projinfo.html> for supported definitions.
 
 **-c EPSG:code:datum_trans**  
 Creates new GRASS project in specified GISDBASE with coordinate
 reference system defined by EPSG code and datum transform parameters
+(GRASS custom syntax)
 
 **-e**  
 Exit after creation of project or mapset. Only with **-c** flag
@@ -306,6 +310,17 @@ Republic in the specified GISDBASE:
 ```sh
 grass -c EPSG:5514:3 $HOME/grassdata/myproject
 ```
+
+Creates a new GRASS project with ESRI code 102022 (Africa Albers Equal
+Area Conic, a PROJ spatial reference ID) in the specified GISDBASE:
+
+```sh
+grass -c ESRI:102022 $HOME/grassdata/myproject
+```
+
+Any PROJ spatial reference ID (authority name and code) is accepted;
+see <https://proj.org/en/stable/apps/projinfo.html> for supported
+definitions.
 
 Creates a new GRASS project from PROJ definition string (here:
 [gnomonic](https://proj4.org/operations/projections/gnom.html)) in the

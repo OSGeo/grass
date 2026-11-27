@@ -1960,7 +1960,8 @@ def create_project(
     :param str path: path to GRASS database or project; if path to database, project
                      name must be specified with name parameter
     :param str name: project name to create
-    :param crs: CRS of the new project EPSG or filename (defaults to 'XY')
+    :param crs: CRS of the new project as an EPSG code, an authority name and code
+                (e.g., ``ESRI:102022``), or a filename (defaults to 'XY')
     :param epsg: if given create new project based on EPSG code
     :param proj4: if given create new project based on Proj4 definition
     :param str filename: if given create new project based on georeferenced file
@@ -2016,6 +2017,7 @@ def create_project(
         shutil.rmtree(os.path.join(mapset_path.directory, mapset_path.location))
 
     # translate crs to specific case
+    srid = None
     if crs:
         if str(crs).upper() == "XY":
             epsg = proj4 = filename = wkt = pack = None
@@ -2027,6 +2029,8 @@ def create_project(
                 datum_trans = None
         elif any(str(crs).endswith(ext) for ext in [".grass_raster", ".grr", ".rpack"]):
             pack = crs
+        elif not Path(crs).exists():
+            srid = str(crs)
         else:
             filename = crs
 
@@ -2044,6 +2048,17 @@ def create_project(
             quiet=True,
             flags="t",
             epsg=epsg,
+            project=mapset_path.location,
+            stderr=PIPE,
+            env=local_env(),
+            **kwargs,
+        )
+    elif srid:
+        ps = pipe_command(
+            "g.proj",
+            quiet=True,
+            flags="t",
+            srid=srid,
             project=mapset_path.location,
             stderr=PIPE,
             env=local_env(),
@@ -2099,7 +2114,7 @@ def create_project(
     else:
         _create_location_xy(mapset_path.directory, mapset_path.location)
 
-    if ps is not None and (epsg or proj4 or filename or wkt):
+    if ps is not None and (epsg or srid or proj4 or filename or wkt):
         error = ps.communicate(stdin)[1]
         try_remove(tmp_gisrc)
         tmp_gisrc = None

@@ -153,6 +153,21 @@ def test_crs_parameter_epsg(tmp_path, crs):
         assert tools.g_proj(flags="p", format="shell").keyval["srid"] == crs.upper()
 
 
+def test_crs_parameter_authority_code_syntax(tmp_path):
+    project = tmp_path / "test"
+    gs.create_project(project, crs="ESRI:102022")
+    with (
+        gs.setup.init(project, env=os.environ.copy()) as session,
+        Tools(session=session) as tools,
+    ):
+        assert tools.g_proj(flags="p", format="shell").keyval["srid"] == "ESRI:102022"
+
+
+def test_crs_parameter_invalid_id(tmp_path):
+    with pytest.raises(ScriptError, match="not recognized"):
+        gs.create_project(tmp_path / "test", crs="ESRI:999999")
+
+
 def test_files(tmp_path):
     """Check expected files are created with bootstrap and session"""
     bootstrap = "bootstrap"
