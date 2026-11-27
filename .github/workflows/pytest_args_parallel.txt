@@ -1,2 +1,2 @@
 --numprocesses=auto
--m not needs_solo_run
+-m not needs_solo_run and not needs_wx_app

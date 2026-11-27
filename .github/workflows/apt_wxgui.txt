@@ -1,0 +1,6 @@
+# Run-time libraries of the wxPython wheels and a virtual display for
+# testing the GUI. Package names are for Ubuntu 24.04.
+libgtk-3-0t64
+libnotify4
+libsdl2-2.0-0
+xvfb

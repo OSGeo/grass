@@ -1,1 +1,1 @@
--m needs_solo_run
+-m needs_solo_run and not needs_wx_app

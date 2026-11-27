@@ -32,6 +32,8 @@ jobs:
       FORCE_COLOR: 1 # for software including pip: https://force-color.org/
       CLICOLOR_FORCE: 1 # for other software including ninja: https://bixense.com/clicolors/
       PYTHONWARNINGS: always
+      # renovate: datasource=pypi depName=wxPython
+      WXPYTHON_VERSION: "4.3.2"
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -51,7 +53,7 @@ jobs:
           sudo apt-get install -y wget git gawk findutils
           LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
           sudo apt-get update -y
-          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt" ".github/workflows/apt_wxgui.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
       - uses: rui314/setup-mold@339e96b4ff1f3bd865856ba4cbbe8818a7acb038 # v1
@@ -62,6 +64,16 @@ jobs:
           pip install --break-system-packages -r .github/workflows/python_requirements.txt
           pip install --break-system-packages -r .github/workflows/optional_requirements.txt
           pip install --break-system-packages GDAL=="$(gdal-config --version)"
+          # PyPI has only the source distribution of wxPython for Linux.
+          # Ubuntu wheels are attached to the GitHub releases, with the Ubuntu
+          # version as local version, e.g., 4.3.2+ubuntu2404. Their metadata
+          # lack the local version, which pip rejects, so uv is used.
+          pip install --break-system-packages uv
+          ubuntu="ubuntu$(. /etc/os-release && echo "${VERSION_ID//./}")"
+          releases="https://github.com/wxWidgets/Phoenix/releases/expanded_assets"
+          uv pip install --system --break-system-packages \
+              --find-links "${releases}/wxPython-${WXPYTHON_VERSION}" \
+              "wxPython==${WXPYTHON_VERSION}+${ubuntu}"
           pip install --break-system-packages pytest pytest-timeout \
               pytest-github-actions-annotate-failures pytest-xdist pytest-cov
 
@@ -125,6 +137,22 @@ jobs:
             @.github/workflows/pytest_args_not_parallel.txt \
             --junitxml=pytest.needs_solo_run.junit.xml \
             -k 'not testsuite'
+      - name: Run pytest for the tests which need the wx.App
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          INITIAL_GISBASE="$(grass --config path)"
+          INITIAL_PWD="${PWD}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          export INITIAL_GISBASE
+          export INITIAL_PWD
+          xvfb-run -a pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_cov.txt \
+            -m needs_wx_app \
+            --junitxml=pytest.needs_wx_app.junit.xml \
+            gui/wxpython
       - name: Run pytest with a single worker (for gunittest-based tests)
         run: |
           PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"

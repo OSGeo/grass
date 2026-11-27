@@ -541,6 +541,7 @@ addopts = """
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
     "needs_solo_run: marks tests that must be run without any other tests running in parallel",
+    "needs_wx_app: marks tests that create the wx.App, which must be run in their own process",
 ]
 minversion = "8.2"
 python_files = """
