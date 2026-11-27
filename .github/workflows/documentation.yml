@@ -92,25 +92,19 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Set up Python (with cache)
-        id: setup_python_cache
+      - name: Set up Python
+        id: setup_python
         background: true
-        if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
         uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip # zizmor: ignore[cache-poisoning] Assuming push event is not used for tags
+          # No cache for release artifacts. Pushes and pull requests are assumed
+          # not to be used for tags.
+          # yamllint disable-line rule:line-length
+          cache: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) && 'pip' || '' }} # zizmor: ignore[cache-poisoning] Assuming push event is not used for tags
           # Restrict the hashed files to the core checkout, so that the cache
           # key does not depend on the addons checkout running at the same time.
           cache-dependency-path: grass/**/requirements.txt
-
-      - name: Set up Python (no cache, use for release artifacts)
-        id: setup_python_nocache
-        background: true
-        if: ${{ !contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
-        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
 
       # apt cannot run two installs at once, so the packages listed in the core
       # checkout are installed after the base ones.
@@ -123,7 +117,7 @@ jobs:
           xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - wait: [setup_python_cache, setup_python_nocache, checkout_addons]
+      - wait: [setup_python, checkout_addons]
 
       - name: Install Python dependencies
         background: true
