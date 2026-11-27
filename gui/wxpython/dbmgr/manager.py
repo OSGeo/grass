@@ -34,6 +34,7 @@ if globalvar.wxPythonPhoenix:
 else:
     import wx.lib.flatnotebook as FN
 
+from core.settings import UserSettings
 from core.gcmd import GMessage
 from dbmgr.base import DbMgrBase
 from gui_core.widgets import GNotebook
@@ -146,6 +147,16 @@ class AttributeManager(wx.Frame, DbMgrBase):
         else:
             wx.CallAfter(self.notebook.SetSelection, 0)  # select browse tab
 
+        # checkbox
+        self.checkHiddenCols = wx.CheckBox(
+            parent=self.panel,
+            label=_("Enable hide / show columns"),
+        )
+        self.checkHiddenCols.SetValue(
+            UserSettings.Get(group="atm", key="enableHiddenCols", subkey="enabled")
+        )
+        self.Bind(wx.EVT_CHECKBOX, self.OnCheckHiddenCols, self.checkHiddenCols)
+
         # buttons
         self.btnClose = CloseButton(parent=self.panel)
         self.btnClose.SetToolTip(_("Close Attribute Table Manager"))
@@ -188,6 +199,7 @@ class AttributeManager(wx.Frame, DbMgrBase):
         btnSizer.Add(self.btnClose, proportion=1, flag=wx.ALL, border=5)
 
         mainSizer.Add(self.notebook, proportion=1, flag=wx.EXPAND)
+        mainSizer.Add(self.checkHiddenCols, flag=wx.ALL, border=5)
         mainSizer.Add(btnSizer, flag=wx.ALIGN_RIGHT | wx.ALL, border=5)
 
         self.panel.SetAutoLayout(True)
@@ -207,6 +219,21 @@ class AttributeManager(wx.Frame, DbMgrBase):
             self.Destroy()
 
         event.Skip()
+
+    def OnCheckHiddenCols(self, event):
+        checkbox = event.GetEventObject()
+        isChecked = checkbox.GetValue()
+        UserSettings.Set(
+            group="atm",
+            key="enableHiddenCols",
+            subkey="enabled",
+            value=checkbox.GetValue(),
+        )
+        UserSettings.SaveToFile()
+        if isChecked:
+            self.OnReloadData(event=None)
+        else:
+            self.pages["browse"].virtualAttributeListWin.ShowAllCols()
 
     def OnReloadData(self, event):
         """Reload data"""
