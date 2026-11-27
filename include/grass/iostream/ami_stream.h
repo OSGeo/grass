@@ -503,7 +503,7 @@ AMI_STREAM<T>::~AMI_STREAM(void)
     DEBUG_DELETE cerr << "~AMI_STREAM: " << path << "(" << this << ")\n";
     assert(fp);
     fclose(fp);
-    delete buf;
+    delete[] buf;
 
     // Get rid of the file if not persistent and if not substream.
     if ((per != PERSIST_PERSISTENT) && (substream_level == 0)) {

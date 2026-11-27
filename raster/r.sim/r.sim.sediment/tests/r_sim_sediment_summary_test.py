@@ -85,6 +85,7 @@ def test_json_summary(session_tools, sediment_inputs):
         erosion_deposition="erdep",
         nwalkers=100,
         duration=1,
+        nprocs=1,
         flags="p",
         format="json",
     ).json

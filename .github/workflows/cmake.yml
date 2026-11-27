@@ -18,6 +18,18 @@ on:
     paths:
       - "**"
       - "!doc/**"
+      - "!.pre-commit-config.yaml"
+      - "!renovate.json5"
+      - "!flake.lock"
+      - "!flake.nix"
+      - "!package.nix"
+      - "!Dockerfile"
+      - "!docker/**"
+      - "!.github/workflows/python-code-quality.yml"
+      - "!.github/workflows/additional_checks.yml"
+      - "!.github/workflows/documentation.yml"
+      - "!man/mkdocs/requirements.txt"
+      - "!python/grass/docs/requirements.txt"
       - "doc/CMakeLists.txt"
       - "doc/**/CMakeLists.txt"
 
@@ -36,6 +48,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       CMAKE_VERSION: "3.22.0"
+      PYTHONWARNINGS: always
     steps:
       - name: Checkout GRASS
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -93,6 +106,53 @@ jobs:
         run: .github/workflows/print_versions.sh
       - name: Test executing of the grass command
         run: .github/workflows/test_simple.sh
+      - name: Install Python test dependencies
+        run: |
+          pip install --break-system-packages -r .github/workflows/python_requirements.txt
+          pip install --break-system-packages -r .github/workflows/optional_requirements.txt
+          pip install --break-system-packages pytest pytest-timeout \
+              pytest-github-actions-annotate-failures pytest-xdist
+      - name: Run pytest with multiple workers in parallel
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_parallel.txt \
+            --junitxml=pytest.xdist.junit.xml \
+            -k 'not testsuite'
+        env:
+          OMP_NUM_THREADS: 1
+      - name: Run pytest with a single worker (for tests marked with needs_solo_run)
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            @.github/workflows/pytest_args_not_parallel.txt \
+            --junitxml=pytest.needs_solo_run.junit.xml \
+            -k 'not testsuite'
+      - name: Run pytest with a single worker (for gunittest-based tests)
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          pytest \
+            @.github/workflows/pytest_args_gunittest.txt \
+            --junitxml=pytest.gunittest.junit.xml
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          exclude: gui
+          flags: cmake-pytest-python
+          token: ${{ secrets.CODECOV_TOKEN }}
+          report_type: test_results
       - name: Run tests
         run: .github/workflows/test_thorough.sh --config .gunittest.cfg --min-success 100
       - name: Make HTML test report available

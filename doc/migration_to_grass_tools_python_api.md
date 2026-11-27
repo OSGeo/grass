@@ -386,10 +386,7 @@ result = gs.list_strings("raster")
 Extract the *fullname* field from the JSON output:
 
 ```python
-result = [
-    item["fullname"] 
-    for item in tools.g_list(type="raster", format="json")
-]
+result = [item["fullname"] for item in tools.g_list(type="raster", format="json")]
 ```
 
 The *list_pairs* returns tuples:
@@ -456,11 +453,7 @@ configure the *Tools* object accordingly.
 The *run_command* approach uses *errors="status"*:
 
 ```python
-returncode = gs.run_command(
-    "r.mask.status", 
-    flags="t", 
-    errors="status"
-)
+returncode = gs.run_command("r.mask.status", flags="t", errors="status")
 # Returns: 1 (if no mask exists)
 ```
 
@@ -468,8 +461,8 @@ Configure the *Tools* object to ignore errors and always return result objects:
 
 ```python
 tools_with_returncode = Tools(
-    errors="ignore", 
-    consistent_return_value=True, 
+    errors="ignore",
+    consistent_return_value=True,
 )
 result = tools_with_returncode.r_mask_status(flags="t")
 returncode = result.returncode
@@ -630,27 +623,21 @@ import grass.script as gs
 with gs.setup.init("path/to/project") as session:
     # Import raster
     gs.run_command(
-        "r.import", 
-        input="/path/to/elevation.tif", 
-        output="elevation",
-        env=session.env
+        "r.import", input="/path/to/elevation.tif", output="elevation", env=session.env
     )
-    
+
     # Set region
     gs.run_command("g.region", raster="elevation", env=session.env)
-    
+
     # Calculate slope
     gs.run_command(
-        "r.slope.aspect",
-        elevation="elevation",
-        slope="slope",
-        env=session.env
+        "r.slope.aspect", elevation="elevation", slope="slope", env=session.env
     )
-    
+
     # Get region info
     region_info = gs.region(env=session.env)
     print(f"Rows: {region_info['rows']}")
-    
+
     # List rasters
     rasters = gs.list_strings("raster", env=session.env)
     print(f"Rasters: {rasters}")
@@ -664,25 +651,22 @@ from grass.tools import Tools
 
 with gs.setup.init("path/to/project") as session:
     tools = Tools(session=session)
-    
+
     # Import raster
     tools.r_import(input="/path/to/elevation.tif", output="elevation")
-    
+
     # Set region
     tools.g_region(raster="elevation")
-    
+
     # Calculate slope
     tools.r_slope_aspect(elevation="elevation", slope="slope")
-    
+
     # Get region info
     region_info = tools.g_region(flags="p", format="json")
     print(f"Rows: {region_info['rows']}")
-    
+
     # List rasters
-    rasters = [
-        item["fullname"] 
-        for item in tools.g_list(type="raster", format="json")
-    ]
+    rasters = [item["fullname"] for item in tools.g_list(type="raster", format="json")]
     print(f"Rasters: {rasters}")
 ```
 

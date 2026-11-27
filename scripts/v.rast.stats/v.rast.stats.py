@@ -71,7 +71,6 @@
 # %end
 
 import sys
-import os
 import atexit
 import grass.script as gs
 from grass.script.utils import decode
@@ -88,15 +87,13 @@ def cleanup():
 
 
 def main():
-    global tmp, sqltmp, tmpname, nuldev, vector, rastertmp
+    global tmp, sqltmp, tmpname, vector, rastertmp
     rastertmp = False
     # setup temporary files
     tmp = gs.tempfile()
     sqltmp = tmp + ".sql"
     # we need a random name
     tmpname = gs.basename(tmp)
-
-    nuldev = open(os.devnull, "w")
 
     rasters = options["raster"].split(",")
     colprefixes = options["column_prefix"].split(",")
@@ -289,16 +286,11 @@ def get_nr_of_categories(
     :param rastertmp: name of temporary raster map
     :return: number of raster categories or exit (if no categories found)
     """
-    # dump cats to file to avoid "too many argument" problem:
-    p = gs.pipe_command("r.category", map=rastertmp, sep=";", quiet=True)
-    cats = []
+    categories = gs.parse_command(
+        "r.category", map=rastertmp, format="json", quiet=True
+    )
 
-    for line in p.stdout:
-        line = decode(line)
-        cats.append(line.rstrip("\r\n").split(";")[0])
-    p.wait()
-
-    number = len(cats)
+    number = len(categories)
     if number < 1:
         # create columns and exit
         gs.warning(_("No categories found in raster map"))
@@ -411,8 +403,10 @@ def set_up_columns(vector, layer, percentile, colprefix, basecols, dbfdriver, c)
         if currcolumn in gs.vector_columns(vector, layer).keys():
             if not c:
                 gs.fatal(
-                    (_("Cannot create column <%s> (already present). ") % currcolumn)
-                    + _("Use -c flag to update values in this column.")
+                    _(
+                        "Cannot create column <{column}> (already present)."
+                        " Use -c flag to update values in this column."
+                    ).format(column=currcolumn)
                 )
         else:
             coltype = "INTEGER" if i == "n" else "DOUBLE PRECISION"
@@ -439,17 +433,18 @@ def perform_stats(
     colnames,
     extstat,
 ):
-    with open(sqltmp, "w") as f:
+    with (
+        open(sqltmp, "w") as f,
         # do the stats
-        p = gs.pipe_command(
+        gs.pipe_command(
             "r.univar",
             flags="t" + extstat,
             map=raster,
             zones=rastertmp,
             percentile=percentile,
             sep=";",
-        )
-
+        ) as p,
+    ):
         first_line = 1
 
         f.write("{0}\n".format(gs.db_begin_transaction(fi["driver"])))
@@ -480,7 +475,6 @@ def perform_stats(
 
             f.write(" WHERE %s=%s;\n" % (fi["key"], vars[0]))
         f.write("{0}\n".format(gs.db_commit_transaction(fi["driver"])))
-        p.wait()
 
 
 if __name__ == "__main__":

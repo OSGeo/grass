@@ -475,7 +475,7 @@ def get_tgis_database_string() -> str | None:
 
 
 def get_sql_template_path() -> str:
-    return str(Path(os.getenv("GISBASE"), "etc", "sql"))
+    return str(Path(os.getenv("GRASS_ETCDIR"), "sql"))
 
 
 ###############################################################################
@@ -545,6 +545,28 @@ def get_available_temporal_mapsets(mapsets: str | None = None) -> dict:
 ###############################################################################
 
 
+def _get_dbmi(driver_string, msgr):
+    """Return the Python DBMI module for a temporal database driver name."""
+    if driver_string == "sqlite":
+        return sqlite3
+    if driver_string == "pg":
+        try:
+            import psycopg2
+        except ImportError:
+            msgr.error(
+                "Unable to locate the Postgresql SQL Python interface module psycopg2."
+            )
+            raise
+        return psycopg2
+    msgr.fatal(
+        _(
+            "Unable to initialize the temporal DBMI interface. "
+            "Please use t.connect to specify the driver and the"
+            " database string"
+        )
+    )
+
+
 def init(
     raise_fatal_error: bool = False,
     skip_db_version_check: bool = False,
@@ -603,9 +625,10 @@ def init(
                          a temporal database in the current mapset.
                          Use this when the calling process only needs the
                          global TGIS state (backend, mapset, interfaces)
-                         but does not require a temporal database in the
-                         current mapset for operations (like listing
-                         datasets, getting metainformation, ...).
+                         but should not create a temporal database in the
+                         current mapset if none exists.
+                         The backend and SQL parameter style are taken from
+                         an existing temporal database connection, or the default.
     """
     # We need to set the correct database backend and several global variables
     # from the GRASS mapset specific environment variables of g.gisenv and t.connect
@@ -691,6 +714,11 @@ def init(
             msgr.warning("TGIS_DISABLE_TIMESTAMP_WRITE is True")
 
     if skip_db_init:
+        # Use an existing connection definition, but never create one
+        driver_string = ciface.get_driver_name(current_mapset)
+        if driver_string:
+            tgis_backend = decode(driver_string)
+            tgis_dbmi_paramstyle = _get_dbmi(tgis_backend, msgr).paramstyle
         return
 
     msgr.debug(1, "Initiate the temporal database")
@@ -703,35 +731,8 @@ def init(
 
     if driver_string is not None and driver_string != "":
         driver_string = decode(driver_string)
-        if driver_string == "sqlite":
-            tgis_backend = driver_string
-            try:
-                import sqlite3
-            except ImportError:
-                msgr.error(
-                    "Unable to locate the sqlite SQL Python interface module sqlite3."
-                )
-                raise
-            dbmi = sqlite3
-        elif driver_string == "pg":
-            tgis_backend = driver_string
-            try:
-                import psycopg2
-            except ImportError:
-                msgr.error(
-                    "Unable to locate the Postgresql SQL Python "
-                    "interface module psycopg2."
-                )
-                raise
-            dbmi = psycopg2
-        else:
-            msgr.fatal(
-                _(
-                    "Unable to initialize the temporal DBMI interface. "
-                    "Please use t.connect to specify the driver and the"
-                    " database string"
-                )
-            )
+        dbmi = _get_dbmi(driver_string, msgr)
+        tgis_backend = driver_string
     else:
         # Set the default sqlite3 connection in case nothing was defined
         gs.run_command("t.connect", flags="d", superquiet=True)
@@ -739,13 +740,6 @@ def init(
         driver_string = ciface.get_driver_name(current_mapset)
         database_string = ciface.get_database_name(current_mapset)
         tgis_backend = driver_string
-        try:
-            import sqlite3
-        except ImportError:
-            msgr.error(
-                "Unable to locate the sqlite SQL Python interface module sqlite3."
-            )
-            raise
         dbmi = sqlite3
 
     tgis_database_string = database_string
@@ -1215,9 +1209,8 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
-                _(
-                    "Unable to mogrify sql statement. "
-                    + self._create_mapset_error_message(mapset)
+                _("Unable to mogrify sql statement. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
                 )
             )
 
@@ -1242,7 +1235,9 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
-                _("Unable to check table. " + self._create_mapset_error_message(mapset))
+                _("Unable to check table. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
+                )
             )
 
         return self.connections[mapset].check_table(table_name)
@@ -1260,9 +1255,8 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
-                _(
-                    "Unable to execute sql statement. "
-                    + self._create_mapset_error_message(mapset)
+                _("Unable to execute sql statement. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
                 )
             )
 
@@ -1275,7 +1269,9 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
-                _("Unable to fetch one. " + self._create_mapset_error_message(mapset))
+                _("Unable to fetch one. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
+                )
             )
 
         return self.connections[mapset].fetchone()
@@ -1287,7 +1283,9 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
-                _("Unable to fetch all. " + self._create_mapset_error_message(mapset))
+                _("Unable to fetch all. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
+                )
             )
 
         return self.connections[mapset].fetchall()
@@ -1306,22 +1304,19 @@ class SQLDatabaseInterfaceConnection:
         mapset = decode(mapset)
         if mapset not in self.tgis_mapsets:
             self.msgr.fatal(
-                _(
-                    "Unable to execute transaction. "
-                    + self._create_mapset_error_message(mapset)
+                _("Unable to execute transaction. {reason}").format(
+                    reason=self._create_mapset_error_message(mapset)
                 )
             )
 
         return self.connections[mapset].execute_transaction(statement)
 
     def _create_mapset_error_message(self, mapset) -> str:
-        return (
-            "You have no permission to "
-            "access mapset <%(mapset)s>, or "
-            "mapset <%(mapset)s> has no temporal database. "
-            "Accessible mapsets are: <%(mapsets)s>"
-            % {"mapset": decode(mapset), "mapsets": ",".join(self.tgis_mapsets.keys())}
-        )
+        return _(
+            "You have no permission to access mapset <{mapset}>, or mapset"
+            " <{mapset}> has no temporal database."
+            " Accessible mapsets are: <{mapsets}>"
+        ).format(mapset=decode(mapset), mapsets=",".join(self.tgis_mapsets.keys()))
 
 
 ###############################################################################

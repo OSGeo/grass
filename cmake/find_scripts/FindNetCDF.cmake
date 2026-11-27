@@ -54,7 +54,7 @@ find_library(
     DOC "path netcdf library"
 )
 
-if(NetCDF_INCLUDE_DIR AND NetCDF_LIBRARY)
+if(NetCDF_INCLUDEDIR AND NetCDF_LIBRARY)
     set(NetCDF_FOUND TRUE)
 endif()
 

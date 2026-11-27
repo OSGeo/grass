@@ -17,9 +17,44 @@ import string
 from shutil import copy
 import pathlib
 
-# The grass package is imported from GISBASE, which the build puts on PYTHONPATH.
-if not os.getenv("GISBASE"):
-    sys.exit("GISBASE not defined")
+# If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+if not os.getenv("GRASS_PYDIR"):
+    sys.exit("GRASS_PYDIR not defined")
+sys.path.insert(0, os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass")))
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "ctypes")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "exceptions")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "gunittest")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "imaging")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "pydispatch")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "pygrass")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "script")),
+)
+sys.path.insert(
+    0,
+    os.path.abspath(os.path.join(os.environ["GRASS_PYDIR"], "grass", "temporal")),
+)
 
 from grass.script import core  # noqa: E402
 
@@ -42,7 +77,7 @@ grass_version = core.version()["version"]
 # stable and release builds stay indexable.
 # Consumed by _templates/layout.html.template (see #5935).
 grass_noindex = os.environ.get("GRASS_DOCS_NOINDEX", "false") == "true"
-# Canonical doc URLs point to the stable manuals tree, matching the MkDocs core
+# Canonical doc URLs point to the stable manuals tree, matching the core
 # manuals (man/mkdocs/mkdocs.yml site_url = .../grass-stable/manuals/). Keeping an
 # absolute stable base here keeps every libpython canonical + sitemap <loc> on the
 # always-published grass-stable tree; CI rewrites it for dev builds (see #5935).
@@ -528,8 +563,7 @@ sitemap_filename = "sitemap.xml"
 sitemap_url_scheme = "{link}"
 # Emit <lastmod> for each page, taken from the git commit date via the
 # sphinx_last_updated_by_git extension (sphinx-sitemap sets it up when this is
-# True). Without it sphinx-sitemap defaults to no lastmod, so libpython entries
-# in the merged manuals sitemap had none while the MkDocs entries did.
+# True). Without it sphinx-sitemap defaults to no lastmod.
 sitemap_show_lastmod = True
 
 sitemap_excludes = [

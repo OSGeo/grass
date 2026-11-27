@@ -40,6 +40,7 @@ def session(tmp_path_factory):
         Tools(session=session) as tools,
     ):
         tools.g_region(s=0, n=40, w=0, e=40, res=1)
+        tools.g_gisenv(set="NPROCS=1")  # Same depth for the same seed
         tools.r_mapcalc(
             expression="elevation = 0.01 * ((col() - 20.5)^2 + (row() - 20.5)^2)"
         )
@@ -157,6 +158,29 @@ def test_walkers_do_not_depend_on_nprocs(session, nprocs):
     assert np.array_equal(parallel, serial)
 
 
+def test_walkers_do_not_depend_on_nprocs_with_mask(session):
+    """With a raster mask, walkers end at the same positions with 4 threads.
+
+    The rows are read before the parallel part and written after it, so the
+    mask, which is not safe to use from several threads, does not limit the
+    threads.
+    """
+    tools = Tools(session=session)
+    tools.r_mapcalc(expression="half = if(col() < 25, 1, null())")
+    tools.r_mask(raster="half")
+    try:
+        serial = simulate_walkers(
+            session, "walkers_mask_serial", seed=5, nprocs=1, **NO_DEPTH_FEEDBACK
+        )
+        parallel = simulate_walkers(
+            session, "walkers_mask_parallel", seed=5, nprocs=4, **NO_DEPTH_FEEDBACK
+        )
+    finally:
+        tools.r_mask(flags="r")
+    assert serial.size
+    assert np.array_equal(parallel, serial)
+
+
 def test_walkers_depend_on_seed(session):
     """The walker comparison above can detect a difference."""
     first = simulate_walkers(session, "walkers_seed_5", seed=5, **NO_DEPTH_FEEDBACK)
@@ -167,12 +191,18 @@ def test_walkers_depend_on_seed(session):
 @pytest.mark.parametrize("seed", [-(2**31) - 1, 2**32])
 def test_seed_outside_range_is_an_error(session, seed):
     """A seed the generator cannot use is refused, not silently wrapped."""
-    with pytest.raises(CalledModuleError, match="outside the range"):
+    with pytest.raises(CalledModuleError, match=r"must\s+be\s+between"):
         simulate_depth(session, seed=seed)
 
 
-@pytest.mark.parametrize("seed", ["12abc", "1.5", "-", "99999999999999999999"])
+@pytest.mark.parametrize("seed", ["12abc", "1.5", "1e9", "-", "99999999999999999999"])
 def test_seed_which_is_not_an_integer_is_an_error(session, seed):
     """A seed which the parser lets through but which is not an integer is refused."""
     with pytest.raises(CalledModuleError, match="Invalid random seed"):
         simulate_depth(session, seed=seed)
+
+
+@pytest.mark.parametrize("seed", [-(2**31), 2**32 - 1])
+def test_seed_at_range_limit_is_accepted(session, seed):
+    """The lowest and the highest seed the generator can use are accepted."""
+    simulate_depth(session, seed=seed)

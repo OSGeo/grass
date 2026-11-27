@@ -26,7 +26,7 @@ static int *trans;
 
 static cairo_surface_t *src_surf;
 static unsigned char *src_data;
-static int src_stride, ca_row;
+static int src_stride;
 
 static int masked;
 
@@ -109,7 +109,6 @@ void Cairo_begin_raster(int mask, int s[2][2], double d[2][2])
 
     src_data = cairo_image_surface_get_data(src_surf);
     src_stride = cairo_image_surface_get_stride(src_surf);
-    ca_row = 0;
 
     /* allocate buffer for down-sampling data */
     trans = G_malloc(dst_w * sizeof(int));
@@ -168,7 +167,6 @@ int Cairo_raster(int n, int row, const unsigned char *red,
     }
 
     ca.modified = 1;
-    ca_row++;
 
     return next_row(row, d_y1);
 }

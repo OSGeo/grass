@@ -1,6 +1,7 @@
 """Tests of grass.tools.support.ToolFunctionResolver"""
 
 import os
+import sys
 
 import pytest
 
@@ -9,6 +10,16 @@ from grass.tools.support import ToolFunctionResolver
 
 class CustomException(Exception):
     pass
+
+
+def create_executable(directory, name):
+    """Create an empty file which is found on path as an executable"""
+    if sys.platform == "win32":
+        # Without an extension from PATHEXT, the file is not found.
+        name = f"{name}.bat"
+    path = directory / name
+    path.touch()
+    path.chmod(0o755)
 
 
 def test_get_tool_name(echoing_resolver):
@@ -52,6 +63,27 @@ def test_attribute_exception(echoing_resolver):
     """Check that attribute error is raised with attribute access"""
     with pytest.raises(AttributeError, match="does_not_exist"):
         assert echoing_resolver.does_not_exist
+
+
+def test_attribute_with_underscores_in_tool_name(tmp_path):
+    """Check that underscores which are part of the tool name are kept"""
+    create_executable(tmp_path, "r.example.name_with_underscores")
+    resolver = ToolFunctionResolver(
+        run_function=lambda x: x, env={"PATH": str(tmp_path)}
+    )
+    assert (
+        resolver.r_example_name_with_underscores() == "r.example.name_with_underscores"
+    )
+
+
+def test_attribute_prefers_dots_in_tool_name(tmp_path):
+    """Check that dots are used when both tool names exist"""
+    create_executable(tmp_path, "r.example.name")
+    create_executable(tmp_path, "r.example_name")
+    resolver = ToolFunctionResolver(
+        run_function=lambda x: x, env={"PATH": str(tmp_path)}
+    )
+    assert resolver.r_example_name() == "r.example.name"
 
 
 def test_names(echoing_resolver):

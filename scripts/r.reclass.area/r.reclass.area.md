@@ -15,6 +15,10 @@ then reclassified using the clump size. With the **-m** flag,
 using the *minsize* option there. If the **-c** flag is used,
 *r.reclass.area* will skip the creation of a clumped raster and
 assume that the input raster map is already clumped.
+With the **-i** flag, the area size filter is inverted: clumps between
+the **lower** and **upper** thresholds are removed, while clumps smaller
+than **lower** or greater than **upper** are preserved. This flag is only
+supported with the *reclass* method and does not work with the *rmarea* method.
 
 The *rmarea* method converts the raster map to vector and removes
 areas outside the given thresholds using [v.clean](v.clean.md) and
