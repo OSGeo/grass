@@ -92,7 +92,7 @@ class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
     t_XOR = r"\^"
     t_NOT = r"\~"
     # t_T_OVERLAY_OPERATOR = r'\{([a-zA-Z\|]+[,])?([\|&+=]?[\|&+=\^\~])\}'
-    t_T_OVERLAY_OPERATOR = r"\{[\|&+\^\~][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
+    t_T_OVERLAY_OPERATOR = r"\{[\|&+\^\~][,]?[a-zA-Z\| ]*([,])?[ \t]*([lrudi]|left|right|union|disjoint|intersect)?[ \t]*\}"  # noqa: E501
 
     # Parse symbols
     def temporal_symbol(self, t):
