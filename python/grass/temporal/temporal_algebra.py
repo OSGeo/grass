@@ -587,7 +587,8 @@ class TemporalAlgebraLexer:
     # Regular expression rules for simple tokens
     t_T_SELECT_OPERATOR = r"\{[!]?[:][,]?[a-zA-Z\| ]*([,])?[ \t]*([lrudi]|left|right|union|disjoint|intersect)?[ \t]*\}"  # noqa: E501
     t_T_HASH_OPERATOR = (
-        r"\{[#][,]?[a-zA-Z\| ]*([,])?[ \t]*([lrudi]|left|right|union|disjoint|intersect)?[ \t]*\}"  # noqa: E501
+        r"\{[#][,]?[a-zA-Z\| ]*([,])?[ \t]*"
+        r"([lrudi]|left|right|union|disjoint|intersect)?[ \t]*\}"
     )
     t_T_COMP_OPERATOR = r"\{(\|\||&&)[,][a-zA-Z\| ]*[,]?[\|&]?([,])?[ \t]*([lrudi]|left|right|union|disjoint|intersect)?[ \t]*\}"  # noqa: E501
     t_T_REL_OPERATOR = r"\{([a-zA-Z\| ])+\}"
