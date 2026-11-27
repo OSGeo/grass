@@ -22,6 +22,8 @@ paths:
       - 'unexpected key "background" for step to execute action. expected one of' # [syntax-check]
       - 'unexpected key "background" for step to run shell command. expected one of' # [syntax-check]
       - 'step must run script with "run" section or run action with "uses" section' # [syntax-check]
+      - 'reusable workflow call "\$/.+" at "uses" is not following the format' # [workflow-call]
+      - 'specifying action "\$/.+" in invalid format because ref is missing' # [action]
 
   .github/workflows/python-code-quality.yml:
     ignore:

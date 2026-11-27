@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="340" viewBox="0 30 640 340" font-family="sans-serif" font-size="13" fill="#222">
+  <title>The ring of generator states with the seed, the span and the strides and draws of three units</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#222"/>
+    </marker>
+  </defs>
+  <!-- The three quarters of the ring outside the span, drawn light. -->
+  <path d="M 281.0 101.0 A 140 140 0 1 1 281.0 299.0" fill="none" stroke="#bbb" stroke-width="3" stroke-dasharray="6 5"/>
+  <!-- The span: the quarter of the ring after the seed, clockwise. -->
+  <path d="M 281.0 299.0 A 140 140 0 0 1 281.0 101.0" fill="none" stroke="#ddd" stroke-width="14"/>
+  <!-- What units 0, 1 and 2 have drawn, each from the start of its stride. -->
+  <path d="M 281.0 299.0 A 140 140 0 0 1 253.1 259.2" fill="none" stroke="#222" stroke-width="3"/>
+  <path d="M 248.4 247.9 A 140 140 0 0 1 240.8 214.6" fill="none" stroke="#222" stroke-width="3"/>
+  <path d="M 240.5 187.8 A 140 140 0 0 1 251.1 145.3" fill="none" stroke="#222" stroke-width="3"/>
+  <!-- Ticks one stride apart from the seed, where the units start, and the
+       end of the span. -->
+  <line x1="287.4" y1="292.6" x2="274.6" y2="305.4" stroke="#222" stroke-width="2"/>
+  <line x1="256.9" y1="244.8" x2="240.0" y2="251.0" stroke="#222" stroke-width="2"/>
+  <line x1="249.5" y1="188.6" x2="231.6" y2="187.0" stroke="#222" stroke-width="2"/>
+  <line x1="266.6" y1="134.5" x2="251.0" y2="125.5" stroke="#222" stroke-width="2"/>
+  <line x1="287.4" y1="107.4" x2="274.6" y2="94.6" stroke="#222" stroke-width="2"/>
+  <!-- The units, named inside the ring at the middle of their strides. -->
+  <text x="275.4" y="271.1">unit 0</text>
+  <text x="257.1" y="220.7">unit 1</text>
+  <text x="261.7" y="167.2">unit 2</text>
+  <!-- One stride, from the start of unit 2 to the start of the next unit. -->
+  <path d="M 221.0 181.9 A 160 160 0 0 1 239.4 123.7" fill="none" stroke="#222" stroke-width="1.5" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text x="219.8" y="154.0" text-anchor="end">stride</text>
+  <!-- The draws of unit 0: the part of its stride it has drawn. -->
+  <text x="253.9" y="292.8" text-anchor="end">draws</text>
+  <!-- The span with the direction of drawing. -->
+  <path d="M 220.2 343.9 A 215 215 0 0 1 220.2 56.1" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="152.0" y="196.0" text-anchor="end">span:</text>
+  <text x="152.0" y="212.0" text-anchor="end">2^46 draws</text>
+  <text x="420.0" y="196.0" text-anchor="middle">ring of</text>
+  <text x="420.0" y="214.0" text-anchor="middle">2^48 states</text>
+  <circle cx="281.0" cy="299.0" r="5" fill="#c33"/>
+  <text x="281.0" y="327.0" text-anchor="middle">seed</text>
+  <!-- The state of unit 1: the position at which it draws next. -->
+  <circle cx="240.8" cy="214.6" r="5" fill="#222"/>
+  <text x="226.8" y="219.1" text-anchor="end">state</text>
+</svg>
