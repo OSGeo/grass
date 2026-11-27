@@ -72,7 +72,7 @@ jobs:
             gettext unixodbc-dev libnetcdf-dev python3-wxgtk4.0
           LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
           sudo apt-get update -y
-          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt") -r -- \
+          xargs -a <(awk '! /^ *(#|$)/' ".github/workflows/apt.txt" ".github/workflows/apt_wxgui.txt") -r -- \
               sudo apt-get install -y --no-install-recommends --no-install-suggests
       - name: Print build environment variables
         shell: bash -el {0}
@@ -136,6 +136,17 @@ jobs:
             @.github/workflows/pytest_args_not_parallel.txt \
             --junitxml=pytest.needs_solo_run.junit.xml \
             -k 'not testsuite'
+      - name: Run pytest for the tests which need the wx.App
+        run: |
+          PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
+          LD_LIBRARY_PATH="$(grass --config path)/lib:${LD_LIBRARY_PATH}"
+          export PYTHONPATH
+          export LD_LIBRARY_PATH
+          xvfb-run -a pytest \
+            @.github/workflows/pytest_args_ci.txt \
+            -m needs_wx_app \
+            --junitxml=pytest.needs_wx_app.junit.xml \
+            gui/wxpython
       - name: Run pytest with a single worker (for gunittest-based tests)
         run: |
           PYTHONPATH="$(grass --config python_path):${PYTHONPATH}"
