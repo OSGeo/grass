@@ -179,6 +179,12 @@ class KDTreeLib:
         ]
         self.lib.kdtree_traverse.restype = ctypes.c_int
 
+        self.lib.kdtree_optimize.argtypes = [
+            ctypes.POINTER(KDTree),
+            ctypes.c_int,
+        ]
+        self.lib.kdtree_optimize.restype = None
+
     def create(self, ndims):
         """Create an empty tree"""
         return self.lib.kdtree_create(ndims, None)
@@ -253,6 +259,10 @@ class KDTreeLib:
     def depth(self, tree):
         """Depth of the tree"""
         return tree.contents.root.contents.depth
+
+    def optimize(self, tree, level=2):
+        """Optimize the tree"""
+        self.lib.kdtree_optimize(tree, level)
 
 
 @pytest.fixture(scope="module")
@@ -507,6 +517,36 @@ def test_insert_point_into_bulk_tree(kdtree):
         assert {uid for uid, _ in kdtree.traverse(bulk)} == set(uids) | {100}
 
         # the new point is found by the searches
+        found_uids, found_dists = kdtree.knn(bulk, new_point, 1)
+        assert found_uids == [100]
+        assert found_dists == pytest.approx([0.0])
+    finally:
+        kdtree.destroy(bulk)
+
+
+def test_optimize_bulk_tree_after_modification(kdtree):
+    """A tree which was built from an array of points can be optimized after
+    points have been inserted or removed"""
+    points = random_points(100, seed=6)
+    uids = list(range(100))
+
+    bulk, _ = kdtree.create_from_points(2, points, uids)
+    try:
+        new_point = np.array([500.0, 500.0])
+        assert kdtree.insert(bulk, new_point, 100)
+        assert kdtree.remove(bulk, points[7], 7)
+
+        kdtree.optimize(bulk, 2)
+
+        assert bulk.contents.count == 100
+        assert {uid for uid, _ in kdtree.traverse(bulk)} == set(uids) - {7} | {100}
+
+        # the points are still found by the searches
+        for uid in (0, 50, 99):
+            found_uids, found_dists = kdtree.knn(bulk, points[uid], 1)
+            assert found_uids == [uid]
+            assert found_dists == pytest.approx([0.0])
+
         found_uids, found_dists = kdtree.knn(bulk, new_point, 1)
         assert found_uids == [100]
         assert found_dists == pytest.approx([0.0])

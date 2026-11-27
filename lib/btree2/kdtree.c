@@ -302,19 +302,16 @@ struct kdtree *kdtree_create_from_points(char ndims, const double *coords,
     t->nodes = G_malloc(sizeof(struct kdnode) * (size_t)m);
     t->nnodes = m;
 
-    /* copy the coordinates of the points and remove the uids of the
-     * duplicates from the uids array */
+    /* copy the coordinates of the points,
+     * remove the uids of the duplicates from the uids array,
+     * initialize the nodes */
     for (i = 0; i < m; i++) {
+        struct kdnode *node = &t->nodes[i];
         int p = idx[i];
 
         memcpy(t->pool + (size_t)i * ndims, coords + (size_t)p * ndims,
                (size_t)ndims * sizeof(double));
         uids[i] = uids[p];
-    }
-
-    /* initialize the nodes */
-    for (i = 0; i < m; i++) {
-        struct kdnode *node = &t->nodes[i];
 
         node->c = t->pool + (size_t)i * ndims;
         node->uid = uids[i];
@@ -478,7 +475,7 @@ int kdtree_remove(struct kdtree *t, double *c, int uid)
 }
 
 /* k-d tree optimization, only useful if the tree will be used heavily
- * (more searches than items in the tree)
+ * (substantially more searches than items in the tree)
  * level 0 = a bit, 1 = more, 2 = a lot
  * the balancing below is recursive, kdtree_balance() calls kdtree_insert2()
  * which calls kdtree_balance() again
@@ -499,14 +496,6 @@ void kdtree_optimize(struct kdtree *t, int level)
 
     if (!t->root)
         return;
-
-    if (t->nodes) {
-        /* the tree was created by kdtree_create_from_points() and is already
-         * perfectly balanced */
-        G_debug(1, "k-d tree is already balanced");
-
-        return;
-    }
 
     G_debug(1, "k-d tree optimization for %zd items, tree depth %d", t->count,
             t->root->depth);
