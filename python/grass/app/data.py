@@ -40,11 +40,14 @@ def get_possible_database_path():
     ]
 
     for candidate in candidates:
-        with suppress(OSError):
-            for entry in Path(candidate).iterdir():
-                with suppress(OSError):
-                    if "grassdata" in entry.name.lower() and entry.is_dir():
-                        return str(entry)
+        try:
+            with os.scandir(candidate) as entries:
+                for entry in entries:
+                    with suppress(OSError):
+                        if "grassdata" in entry.name.lower() and entry.is_dir():
+                            return entry.path
+        except OSError:
+            continue
     return None
 
 

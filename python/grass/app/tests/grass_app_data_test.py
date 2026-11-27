@@ -1,4 +1,6 @@
+import os
 import sys
+from contextlib import contextmanager
 from pathlib import Path
 
 import pytest
@@ -16,14 +18,14 @@ def home(tmp_path, monkeypatch):
 
 
 def deny_listing(monkeypatch, directory):
-    original_iterdir = Path.iterdir
+    original_scandir = os.scandir
 
-    def iterdir(path):
-        if path == directory:
+    def scandir(path):
+        if Path(path) == directory:
             raise PermissionError(path)
-        return original_iterdir(path)
+        return original_scandir(path)
 
-    monkeypatch.setattr(Path, "iterdir", iterdir)
+    monkeypatch.setattr(os, "scandir", scandir)
 
 
 @pytest.mark.parametrize("parent", [".", "Documents"])
@@ -101,21 +103,21 @@ def test_skip_unreadable_child(home, monkeypatch):
     blocked.mkdir()
     database = home / "grassdata"
     database.mkdir()
-    original_iterdir = Path.iterdir
-    original_is_dir = Path.is_dir
+    original_scandir = os.scandir
+    original_is_dir = os.DirEntry.is_dir
 
-    def iterdir(path):
-        if path == home:
-            return iter([blocked, database])
-        return original_iterdir(path)
+    @contextmanager
+    def scandir(path):
+        with original_scandir(path) as entries:
+            yield sorted(entries, key=lambda entry: entry.name, reverse=True)
 
-    def is_dir(path):
-        if path == blocked:
-            raise PermissionError(path)
-        return original_is_dir(path)
+    def is_dir(entry, *, follow_symlinks=True):
+        if entry.path == str(blocked):
+            raise PermissionError(entry.path)
+        return original_is_dir(entry, follow_symlinks=follow_symlinks)
 
-    monkeypatch.setattr(Path, "iterdir", iterdir)
-    monkeypatch.setattr(Path, "is_dir", is_dir)
+    monkeypatch.setattr(os, "scandir", scandir)
+    monkeypatch.setattr(os.DirEntry, "is_dir", is_dir)
 
     assert data.get_possible_database_path() == str(database)
 
@@ -123,14 +125,19 @@ def test_skip_unreadable_child(home, monkeypatch):
 def test_error_while_advancing_iterator(home, monkeypatch):
     database = home / "Documents" / "grassdata"
     database.mkdir(parents=True)
-    original_iterdir = Path.iterdir
+    original_scandir = os.scandir
 
-    def iterdir(path):
-        if path == home:
+    def entries(path):
+        if Path(path) == home:
             raise PermissionError(path)
-        yield from original_iterdir(path)
+        with original_scandir(path) as iterator:
+            yield from iterator
 
-    monkeypatch.setattr(Path, "iterdir", iterdir)
+    @contextmanager
+    def scandir(path):
+        yield entries(path)
+
+    monkeypatch.setattr(os, "scandir", scandir)
 
     assert data.get_possible_database_path() == str(database)
 
