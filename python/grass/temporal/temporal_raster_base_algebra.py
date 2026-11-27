@@ -121,9 +121,10 @@ class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
     t_MULT = r"[\*]"
     t_ADD = r"[\+]"
     t_SUB = r"[-]"
-    t_T_ARITH1_OPERATOR = r"\{[\%\*\/][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"  # noqa: E501
+    t_T_ARITH1_OPERATOR = r"\{[\%\*\/][,]?[a-zA-Z\| ]*([,])?[ \t]*([lrudi]|left|right|union|disjoint|intersect)?[ \t]*\}"  # noqa: E501
     t_T_ARITH2_OPERATOR = (
-        r"\{[+-][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}"
+        r"\{[+-][,]?[a-zA-Z\| ]*([,])?[ \t]*"
+        r"([lrudi]|left|right|union|disjoint|intersect)?[ \t]*\}"
     )
     t_L_SPAREN = r"\["
     t_R_SPAREN = r"\]"
