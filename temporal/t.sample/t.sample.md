@@ -16,6 +16,20 @@ layers of space time datasets are considered in the analysis.
 The temporal relation *start* means that the start time of an input map
 layer is temporally located in an interval of a sample map layer.
 
+The other methods name the temporal relation of a sample map layer to an
+input map layer. They select the input map layers that:
+
+- *contain*: lie in the sample map layer
+- *during*: cover the sample map layer
+- *overlap*: have one end inside the sample map layer, not at its start or
+  end, and the other end outside it
+- *equal*: have the start and end time of the sample map layer
+- *follows*: end at the start of the sample map layer
+- *precedes*: start at the end of the sample map layer
+
+Only *start* and *equal* select an input map layer with the start and end
+time of the sample map layer.
+
 The textual output at the command line shows the names of the maps,
 start and end time as well as the *interval length* in days and the
 temporal *distance from begin* in days.

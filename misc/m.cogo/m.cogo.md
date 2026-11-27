@@ -43,7 +43,7 @@ Unless specified with the **coord** option, calculations begin from
 ## NOTES
 
 For those unfamiliar with the notation for bearings: Picture yourself in
-the center of a circle. The first hemispere notation tell you whether
+the center of a circle. The first hemisphere notation tell you whether
 you should face north or south. Then you read the angle and either turn
 that many degrees to the east or west, depending on the second
 hemisphere notation. Finally, you move \<distance\> units in that

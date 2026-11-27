@@ -11,6 +11,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 from __future__ import annotations
 
 import logging
+import math
 import sys
 from ctypes import CFUNCTYPE, POINTER, byref, c_int, c_void_p, cast
 from datetime import datetime
@@ -825,11 +826,11 @@ def _read_raster3d_info(name, mapset):
         return None
     libraster3d.Rast3d_range_min_max(g3map, byref(min), byref(max))
 
-    if min.value != min.value:
+    if math.isnan(min.value):
         kvp["min"] = None
     else:
         kvp["min"] = float(min.value)
-    if max.value != max.value:
+    if math.isnan(max.value):
         kvp["max"] = None
     else:
         kvp["max"] = float(max.value)
@@ -1176,7 +1177,6 @@ def _convert_timestamp_from_grass(ts):
 def _stop(lock: _LockLike, conn: Connection, data) -> None:
     libgis.G_debug(1, "Stop C-interface server")
     conn.close()
-    lock.release()
     sys.exit()
 
 
@@ -1196,11 +1196,9 @@ def c_library_server(lock: _LockLike, conn: Connection) -> None:
         """This function will be called in case of a fatal error in libgis"""
         # sys.stderr.write("Error handler was called\n")
         # We send an exception that will be handled in
-        # the parent process, then close the pipe
-        # and release any possible lock
+        # the parent process, then close the pipe.
         conn.send(FatalError())
         conn.close()
-        lock.release()
 
     CALLBACK = CFUNCTYPE(c_void_p, c_void_p)
     CALLBACK.restype = c_void_p

@@ -195,6 +195,11 @@ int G_no_expand(unsigned char *src, int src_sz, unsigned char *dst, int dst_sz)
  * some compressors are a bit faster if the size of the destination
  * is at least the upper bound (no need to test for buffer overflow)
  * read comments on the specific compressor interfaces
+ *
+ * For input of more than about 2.1 GB, the bound does not fit into int.
+ * ZLIB and BZIP2 then return INT_MAX, which is not an upper bound, LZ4
+ * returns 0, and ZSTD returns -1. Data of that size cannot be compressed
+ * reliably with these functions.
  */
 int G_compress_bound(int src_sz, int number)
 {
@@ -242,6 +247,7 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
                       int number)
 {
     int bsize, nread, err;
+    ssize_t read_result;
     unsigned char *b;
 
     if (dst == NULL || nbytes <= 0) {
@@ -266,13 +272,13 @@ int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
     /* Read from the file until we get our bsize or an error */
     nread = 0;
     do {
-        err = read(fd, b + nread, bsize - nread);
-        if (err >= 0)
-            nread += err;
-    } while (err > 0 && nread < bsize);
+        read_result = read(fd, b + nread, bsize - nread);
+        if (read_result >= 0)
+            nread += read_result;
+    } while (read_result > 0 && nread < bsize);
 
-    if (err <= 0) {
-        if (err == 0)
+    if (read_result <= 0) {
+        if (read_result == 0)
             G_warning(_("Unable to read %d bytes: end of file"), rbytes);
         else
             G_warning(_("Unable to read %d bytes: %s"), rbytes,
@@ -345,7 +351,7 @@ int G_write_compressed(int fd, unsigned char *src, int nbytes, int number)
      * if dst is too small (i.e. compressed data is larger)
      */
     if (err > 0 && err < nbytes) {
-        dst_sz = err;
+        dst_sz = (int)err;
         /* Write the compression flag */
         compressed = G_COMPRESSED_YES;
         if (write(fd, &compressed, 1) != 1) {

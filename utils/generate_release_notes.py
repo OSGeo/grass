@@ -188,7 +188,7 @@ def print_notes(
     print("* _Put handcrafted list of 2-15 items here._\n")
     print_section_heading_2("New Addon Tools", file=file)
     print(
-        "* _Put here a list of new addos since last release "
+        "* _Put here a list of new addons since last release "
         "or delete the section if there are none._\n"
     )
     print_support(file=file)

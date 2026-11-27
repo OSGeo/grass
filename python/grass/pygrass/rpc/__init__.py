@@ -185,7 +185,6 @@ def _fatal_error(lock, conn, data):
 
 def _stop(lock, conn, data):
     conn.close()
-    lock.release()
     sys.exit()
 
 
@@ -205,11 +204,9 @@ def data_provider_server(lock, conn):
         """This function will be called in case of a fatal error in libgis"""
         # sys.stderr.write("Error handler was called\n")
         # We send an exception that will be handled in
-        # the parent process, then close the pipe
-        # and release any possible lock
+        # the parent process, then close the pipe.
         conn.send(FatalError("G_fatal_error() was called in the server process"))
         conn.close()
-        lock.release()
 
     CALLBACK = CFUNCTYPE(c_void_p, c_void_p)
     CALLBACK.restype = c_void_p

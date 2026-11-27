@@ -11,13 +11,27 @@
 <li>class filter</li>
 </ul>
 
+<h2>NOTES</h2>
+
+The coordinate reference system (CRS) of the input is read from the file
+metadata and compared with the CRS of the current project (previously called
+location). When the two differ, the points are reprojected to the project's
+CRS during the import. The <b>-w</b> flag, which used to be required to allow
+the reprojection, is deprecated and has no effect.
+
+<p>
+The <b>-o</b> flag skips the CRS check and assumes that the input is already
+in the project's CRS. Use it when the file has no CRS metadata or when the
+metadata is known to be wrong; without it, the import of a file without CRS
+metadata fails.
+
 <h2>EXAMPLES</h2>
 
-Import only XYZ coordinates of points, limit the import to the current
-computational region and reproject to the current project's coordinate reference
-system during the import:
+Import only XYZ coordinates of points, limit the import to the
+current computational region. The points are reprojected to the
+project's CRS if the CRS of the input differs:
 <div class="code"><pre>
-v.in.pdal input=points.las output=points -c -r -w
+v.in.pdal input=points.las output=points -c -r
 </pre></div>
 
 <h2>REFERENCES</h2>

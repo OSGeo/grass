@@ -24,7 +24,17 @@ endif()
 
 find_package(PROJ 9.0.0 REQUIRED)
 
-find_package(GDAL 3.7.0 REQUIRED)
+# GDAL up to 3.10 only accepts a request for the same minor version
+find_package(GDAL REQUIRED CONFIG)
+if(GDAL_VERSION VERSION_LESS "3.7")
+    message(
+        FATAL_ERROR
+        "GDAL 3.7 or newer is required, but found ${GDAL_VERSION}."
+    )
+endif()
+message(STATUS "Found GDAL: ${GDAL_DIR} (found version \"${GDAL_VERSION}\")")
+get_target_property(GDAL_INCLUDE_DIRS GDAL::GDAL INTERFACE_INCLUDE_DIRECTORIES)
+set(GDAL_INCLUDE_DIR "${GDAL_INCLUDE_DIRS}")
 
 find_package(ZLIB REQUIRED)
 
@@ -367,7 +377,7 @@ check_target(ATLAS HAVE_LIBATLAS)
 check_target(CBLAS::CBLAS HAVE_LIBBLAS)
 check_target(LAPACKE::LAPACKE HAVE_LIBLAPACK)
 check_target(TIFF::TIFF HAVE_TIFFIO_H)
-check_target(NETCDF HAVE_NETCDF)
+check_target(NetCDF::NetCDF HAVE_NETCDF)
 check_target(GEOS::geos_c HAVE_GEOS)
 check_target(LibSVM::LibSVM HAVE_SVM_H)
 

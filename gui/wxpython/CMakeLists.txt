@@ -179,7 +179,7 @@ if(NOT WITH_FHS)
             ${grass_env_command} ${PYTHON_EXECUTABLE}
             ${CMAKE_CURRENT_SOURCE_DIR}/core/menutree.py "psmap" >>
             ${CMAKE_CURRENT_SOURCE_DIR}/menustrings.py
-        DEPENDS build_module_tree_menudata gui_images
+        DEPENDS build_module_tree_menudata
     )
 
     set_target_properties(build_menustrings PROPERTIES FOLDER GUI)

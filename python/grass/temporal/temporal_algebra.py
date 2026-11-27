@@ -1296,7 +1296,7 @@ class TemporalAlgebraParser:
                 if ("condition_value" not in dir(map_i)) or clear:
                     map_i.condition_value = []
         else:
-            self.msgr.fatal(_("Wrong type of input " + str(input)))
+            self.msgr.fatal(_("Wrong type of input {input}").format(input=input))
 
         # We generate a unique map id that will be used
         # in the topology analysis, since the maplist can

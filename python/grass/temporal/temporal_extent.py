@@ -737,8 +737,7 @@ class TemporalExtent(SQLDatabaseInterface):
         # Check single point of time in interval
         if self.D["end_time"] is None:
             return bool(
-                self.D["start_time"] >= extent.D["start_time"]
-                and self.D["start_time"] < extent.D["end_time"]
+                extent.D["start_time"] <= self.D["start_time"] < extent.D["end_time"]
             )
 
         return bool(
@@ -776,8 +775,7 @@ class TemporalExtent(SQLDatabaseInterface):
         # Check single point of time in interval
         if extent.D["end_time"] is None:
             return bool(
-                self.D["start_time"] <= extent.D["start_time"]
-                and self.D["end_time"] > extent.D["start_time"]
+                self.D["start_time"] <= extent.D["start_time"] < self.D["end_time"]
             )
 
         return bool(
@@ -820,14 +818,14 @@ class TemporalExtent(SQLDatabaseInterface):
         )
 
     def overlaps(self, extent) -> bool:
-        """Return True if this temporal extent (A) overlapped the provided
+        """Return True if this temporal extent (A) overlaps the provided
         temporal extent (B)
         ::
 
             A  |---------|
             B    |---------|
 
-        :param extent: The temporal extent object that is overlaps
+        :param extent: The temporal extent object that is overlapped by
                        this extent
 
         Usage:
@@ -853,21 +851,22 @@ class TemporalExtent(SQLDatabaseInterface):
         return bool(
             self.D["end_time"] is not None
             and extent.D["end_time"] is not None
-            and self.D["start_time"] < extent.D["start_time"]
-            and self.D["end_time"] < extent.D["end_time"]
-            and self.D["end_time"] > extent.D["start_time"]
+            and self.D["start_time"]
+            < extent.D["start_time"]
+            < self.D["end_time"]
+            < extent.D["end_time"]
         )
 
     def overlapped(self, extent) -> bool:
-        """Return True if this temporal extent (A) overlaps the provided
-        temporal extent (B)
+        """Return True if this temporal extent (A) is overlapped by the
+        provided temporal extent (B)
         ::
 
             A    |---------|
             B  |---------|
 
 
-        :param extent: The temporal extent object that is overlapped
+        :param extent: The temporal extent object that overlaps
                        this extent
 
         Usage:
@@ -893,9 +892,10 @@ class TemporalExtent(SQLDatabaseInterface):
         return bool(
             self.D["end_time"] is not None
             and extent.D["end_time"] is not None
-            and self.D["start_time"] > extent.D["start_time"]
-            and self.D["end_time"] > extent.D["end_time"]
-            and self.D["start_time"] < extent.D["end_time"]
+            and extent.D["start_time"]
+            < self.D["start_time"]
+            < extent.D["end_time"]
+            < self.D["end_time"]
         )
 
     def temporal_relation(self, extent):

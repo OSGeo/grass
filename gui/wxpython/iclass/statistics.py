@@ -38,7 +38,7 @@ try:
         I_iclass_statistics_get_stddev,
     )
 except ImportError:
-    sys.stderr.write(_("Loading imagery lib failed"))
+    sys.stderr.write(_("Loading imagery lib failed") + "\n")
 
 from grass.pydispatch.signal import Signal
 

@@ -42,10 +42,32 @@ ignore-words-list = [
     "parms",
     "siz",
     "vizual",
+    "ETo",    # Evapotranspiration technical term
+    "Eto",    # Evapotranspiration technical term
+    "eto",    # Evapotranspiration technical term
+    "ist",    # Part of acronyms (IST-SUPSI, etc.)
+    "IHS",    # Color model: Intensity-Hue-Saturation
+    "ihs",    # Color model: Intensity-Hue-Saturation
+    "ALOG",   # Function name
+    "Redner", # Person's name in citation
+    "NED",    # Acronym/proper name
+    "linke",  # Linke turbidity factor parameter
+    "infex",  # Infiltration excess parameter
+    "alle",   # Italian word in references
+    "mapp",   # Keyword argument name in the public create_time_suffix() API
+    "asnd",        # Email address username in lib/cdhc/doc/index.sty
+    "APoints",     # Variable name, pairs with BPoints
+    "cnA",         # r.stats flag
+    "doubleClick", # Event argument name in wxPython code
+    "expres",      # Abbreviated option names tested in parse_mapcalc_cmd doctests
+    "expressio",   # Abbreviated option names tested in parse_mapcalc_cmd doctests
+    "loner",       # Name of a raster map that is not in any dataset in a test
 ]
 quiet-level = 3
 skip = [
     "config.guess",
+    "python/grass/temporal/ply/*",              # Vendored PLY parser
+    "python/libgrass_interface_generator/*",    # Vendored ctypesgen
     "gui/icons/grass.desktop",
     "gui/wxpython/xml/grass-gxw.dtd",     # TODO
     "lib/cdhc/doc/goodness.ps",
@@ -101,7 +123,6 @@ select = [
     "D209",   # pydocstyle (D) new-line-after-last-paragraph
     "D211",   # pydocstyle (D) blank-line-before-class
     "D212",   # pydocstyle (D) multi-line-summary-first-line
-    "DOC",    # pydoclint (DOC)
     "DTZ",    # flake8-datetimez (DTZ)
     "E",      # pycodestyle (E, W)
     "EM",     # flake8-errmsg (EM)
@@ -171,10 +192,7 @@ ignore = [
     "B007",    # unused-loop-control-variable
     "B008",    # function-call-in-default-argument
     "B015",    # useless-comparison
-    "B023",    # function-uses-loop-variable
     "B026",    # star-arg-unpacking-after-keyword-arg
-    "B028",    # no-explicit-stacklevel
-    "B034",    # re-sub-positional-args
     "B909",    # loop-iterator-mutation
     "BLE001",  # blind-except
     "C414",    # unnecessary-double-cast-or-process
@@ -201,9 +219,6 @@ ignore = [
     "D415",    # missing-terminal-punctuation
     "D416",    # missing-section-name-colon
     "D419",    # empty-docstring
-    "DOC201",  # docstring-missing-returns
-    "DOC402",  # docstring-missing-yields
-    "DOC501",  # docstring-missing-exception
     "DTZ001",  # call-datetime-without-tzinfo
     "DTZ002",  # call-datetime-today
     "DTZ005",  # call-datetime-now-without-tzinfo
@@ -234,14 +249,12 @@ ignore = [
     "N816",    # mixed-case-variable-in-global-scope
     "N818",    # error-suffix-on-exception-name
     "N999",    # invalid-module-name
-    "PERF203", # try-except-in-loop
     "PERF401", # manual-list-comprehension
     "PERF402", # manual-list-copy
     "PERF403", # manual-dict-comprehension
     "PLC0415", # import-outside-top-level
     "PLC1901", # compare-to-empty-string
     "PLC2701", # import-private-name
-    "PLE0704", # misplaced-bare-raise
     "PLR0904", # too-many-public-methods
     "PLR0911", # too-many-return-statements
     "PLR0912", # too-many-branches
@@ -289,7 +302,6 @@ ignore = [
     "S108",    # hardcoded-temp-file
     "S110",    # try-except-pass
     "S112",    # try-except-continue
-    "S202",    # tarfile-unsafe-members
     "S307",    # suspicious-eval-usage
     "S310",    # suspicious-url-open-usage
     "S311",    # suspicious-non-cryptographic-random-usage
@@ -315,7 +327,6 @@ ignore = [
     "TD003",   # missing-todo-link
     "TD004",   # missing-todo-colon
     "TD005",   # missing-todo-description
-    "TD007",   # missing-space-after-todo-colon
     "TRY002",  # raise-vanilla-class
     "TRY004",  # type-check-without-type-error
     "TRY300",  # try-consider-else
@@ -337,7 +348,6 @@ known-first-party = ["grass"]
 "gui/**" = ["PLW0108"] # See https://github.com/OSGeo/grass/issues/4124
 # Other ignores:
 "**.ipynb" = ["I001"]
-"**.py" = ["PYI066"]
 "**/tests/*.py" = ["RUF069"]
 "*/testsuite/**.py" = ["PT009", "PT027", "PLW1514"]
 "display/d.mon/render_cmd.py" = ["PLW1514"]
@@ -365,7 +375,6 @@ known-first-party = ["grass"]
 "gui/wxpython/gui_core/pyedit.py" = ["PLW1514"]
 "gui/wxpython/gui_core/widgets.py" = ["PLW1514"]
 "gui/wxpython/iclass/frame.py" = ["PLW1514"]
-"gui/wxpython/iclass/statistics.py" = ["A005"]
 "gui/wxpython/image2target/ii2t_gis_set.py" = ["PLW1514"]
 "gui/wxpython/image2target/ii2t_manager.py" = ["PLR6201", "PLW1514"]
 "gui/wxpython/iscatt/plots.py" = ["PLR6201", "RUF069"]
@@ -385,13 +394,12 @@ known-first-party = ["grass"]
 "gui/wxpython/vnet/vnet_core.py" = ["PLW1514"]
 "gui/wxpython/vnet/vnet_data.py" = ["PLW1514"]
 "gui/wxpython/web_services/dialogs.py" = ["PLW1514"]
-"gui/wxpython/wxplot/profile.py" = ["A005", "PLW1514", "SIM115"]
+"gui/wxpython/wxplot/profile.py" = ["PLW1514"]
 "imagery/**.py" = ["I001"]
 "imagery/i.atcorr/create_iwave.py" = ["PLW1514"]
 "lib/imagery/testsuite/test_imagery_sigsetfile.py" = ["FURB152"]
 "lib/init/grass.py" = ["PLW1514", "SIM115"]
 "lib/init/testsuite/test_grass_tmp_mapset.py" = ["PTH208"]
-"locale/grass_po_stats.py" = ["SIM115"]
 "man/build.py" = ["PLW1514", "PTH208"]
 "man/build_class.py" = ["PLW1514"]
 "man/build_class_graphical.py" = ["PLW1514", "PTH208"]
@@ -421,7 +429,6 @@ known-first-party = ["grass"]
 "python/grass/jupyter/testsuite/map_test.py" = ["PGH004"]
 "python/grass/jupyter/utils.py" = ["PLW1514"]
 "python/grass/pydispatch/dispatcher.py" = ["PLR6201"]
-"python/grass/pydispatch/signal.py" = ["A005"]
 "python/grass/pygrass/gis/__init__.py" = ["PLW1514", "PTH208"]
 "python/grass/pygrass/modules/grid/grid.py" = ["PLW1514", "PTH208", "SIM115"]
 "python/grass/pygrass/modules/grid/testsuite/test_*_modules_grid_doctests.py" = ["F401"]
@@ -435,7 +442,6 @@ known-first-party = ["grass"]
 "python/grass/pygrass/utils.py" = ["PTH208"]
 "python/grass/pygrass/vector/geometry.py" = ["PYI024"]
 "python/grass/pygrass/vector/testsuite/test_table.py" = ["PLW0108"]
-"python/grass/script/array.py" = ["A005"]
 "python/grass/script/core.py" = ["PLW1514", "PTH208"]
 "python/grass/script/db.py" = ["PLW1514"]
 "python/grass/script/raster.py" = ["PLW1514"]
@@ -443,17 +449,17 @@ known-first-party = ["grass"]
 "python/grass/script/utils.py" = ["FURB189", "PLW1514"]
 "python/grass/semantic_label/reader.py" = ["PLW1514"]
 "python/grass/temporal/abstract_space_time_dataset.py" = ["PLW1514"]
-"python/grass/temporal/aggregation.py" = ["PLW1514", "SIM115"]
+"python/grass/temporal/aggregation.py" = ["PLW1514"]
 "python/grass/temporal/c_libraries_interface.py" = ["PIE794"]
 "python/grass/temporal/register.py" = ["PLW1514", "SIM115"]
 "python/grass/temporal/stds_export.py" = ["PLW1514", "SIM115"]
-"python/grass/temporal/stds_import.py" = ["PLW1514", "SIM115"]
+"python/grass/temporal/stds_import.py" = ["PLW1514"]
 "python/grass/temporal/temporal_algebra.py" = ["D300"]
 "python/grass/temporal/temporal_operator.py" = ["D300"]
 "python/grass/temporal/testsuite/test_temporal_doctests.py" = ["UP036"]
 "python/grass/temporal/univar_statistics.py" = ["PLW1514", "SIM115"]
 "python/grass/tools/support.py" = ["PLR6201"]
-"python/grass/utils/download.py" = ["PTH208", "SIM115"]
+"python/grass/utils/download.py" = ["PTH208"]
 "raster/**.py" = ["I001"]
 "raster/r.*/testsuite/*.py" = ["SIM115"]
 "raster/r.mfilter/benchmark/benchmark_r_mfilter_nprocs.py" = ["PLW1514"]
@@ -508,7 +514,6 @@ known-first-party = ["grass"]
 "temporal/t.rast.series/t.rast.series.py" = ["PLW1514"]
 "temporal/t.rast.what/t.rast.what.py" = ["PLW1514"]
 "temporal/t.remove/t.remove.py" = ["PLW1514"]
-"temporal/t.unregister/t.unregister.py" = ["PLW1514"]
 "utils/*.py" = ["PLW1514"]
 "vector/**.py" = ["I001"]
 
@@ -516,6 +521,8 @@ known-first-party = ["grass"]
 # Declare a custom aliases, checked with rule ICN001
 "grass.script" = "gs"
 "grass.temporal" = "tgis"
+# Ruff 0.17 added a default alias of dt for datetime; keep the existing import style.
+datetime = "datetime"
 
 [tool.ruff.format]
 docstring-code-format = true

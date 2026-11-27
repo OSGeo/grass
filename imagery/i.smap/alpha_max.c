@@ -8,7 +8,6 @@
  * variables root finding                                       */
 static double ***N_glb; /* N_glb[2][3][2] rate statistics */
 static double *b_glb;   /* line search direction */
-static double eps_glb;  /* precision */
 static int M_glb;       /* number of classes */
 
 void alpha_max(double ***N, /* Transition probability statistics; N2[2][3][2] */
@@ -55,7 +54,6 @@ void line_search(
     /* set global variables for solve routine */
     N_glb = N;
     b_glb = b;
-    eps_glb = eps;
     M_glb = M;
 
     /* minimize on line. Avoid singular boundary */
