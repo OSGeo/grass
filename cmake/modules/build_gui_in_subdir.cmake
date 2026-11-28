@@ -12,7 +12,7 @@ function(build_gui_in_subdir dir_name)
 
     set(HTML_FILE_NAME ${G_TARGET_NAME})
 
-    file(GLOB PYTHON_FILES "${G_SRC_DIR}/*.py")
+    file(GLOB PYTHON_FILES CONFIGURE_DEPENDS "${G_SRC_DIR}/*.py")
     if(NOT PYTHON_FILES)
         message(FATAL_ERROR "[${G_TARGET_NAME}]: No PYTHON_FILES found.")
     endif()

@@ -16,7 +16,11 @@ function(copy_python_files_in_subdir dir_name dst_prefix)
         ${ARGN}
     )
 
-    file(GLOB PY_FILES "${CMAKE_CURRENT_SOURCE_DIR}/${dir_name}/*.py")
+    file(
+        GLOB PY_FILES
+        CONFIGURE_DEPENDS
+        "${CMAKE_CURRENT_SOURCE_DIR}/${dir_name}/*.py"
+    )
     foreach(exclude_file ${G_EXCLUDE})
         list(FILTER PY_FILES EXCLUDE REGEX ".*/${exclude_file}")
     endforeach()

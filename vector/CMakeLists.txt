@@ -341,7 +341,12 @@ build_program_in_subdir(
 )
 
 if(WITH_PDAL)
-    file(GLOB v_in_pdal_SOURCES "v.in.pdal/*.c" "v.in.pdal/main.cpp")
+    file(
+        GLOB v_in_pdal_SOURCES
+        CONFIGURE_DEPENDS
+        "v.in.pdal/*.c"
+        "v.in.pdal/main.cpp"
+    )
     build_program_in_subdir(
         v.in.pdal
         SOURCES "${v_in_pdal_SOURCES}"
