@@ -57,7 +57,7 @@ build_library_in_subdir(
 
 build_library_in_subdir(linkm)
 
-file(GLOB pngdriver_SRCS "./pngdriver/*.c")
+file(GLOB pngdriver_SRCS CONFIGURE_DEPENDS "./pngdriver/*.c")
 if(NOT WITH_LIBPNG)
     list(FILTER pngdriver_SRCS EXCLUDE REGEX [[./pngdriver/.*_png\.c$]])
 endif()

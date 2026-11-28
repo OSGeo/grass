@@ -1,4 +1,4 @@
-file(GLOB gislib_SRCS "*.c")
+file(GLOB gislib_SRCS CONFIGURE_DEPENDS "*.c")
 
 if(NOT WIN32)
     list(FILTER gislib_SRCS EXCLUDE REGEX [[.*/fmode\.c$]])

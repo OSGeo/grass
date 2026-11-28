@@ -99,7 +99,11 @@ function(build_module)
     endforeach()
 
     if(NOT G_SOURCES)
-        file(GLOB ${G_NAME}_SRCS "${G_SRC_DIR}/${G_SRC_REGEX}")
+        file(
+            GLOB ${G_NAME}_SRCS
+            CONFIGURE_DEPENDS
+            "${G_SRC_DIR}/${G_SRC_REGEX}"
+        )
     else()
         set(${G_NAME}_SRCS ${G_SOURCES})
     endif()

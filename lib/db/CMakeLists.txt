@@ -1,4 +1,8 @@
-file(GLOB dbmibase_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/dbmi_base/*.c")
+file(
+    GLOB dbmibase_SRCS
+    CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/dbmi_base/*.c"
+)
 if(MSVC)
     set(dbmibase_INCLUDES
         "${CMAKE_CURRENT_SOURCE_DIR}/dbmi_base"
