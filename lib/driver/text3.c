@@ -177,14 +177,24 @@ static void draw_text(FT_Face face, FT_Vector *pen, FT_Matrix *matrix,
     FT_ULong ch;
     FT_Error ans;
     FT_GlyphSlot slot = face->glyph;
+    FT_Vector subpixel;
+    FT_Int pen_x, pen_y;
     int i;
 
     for (i = 0; i < len; i += 2) {
         ch = (out[i] << 8) | out[i + 1];
         if (ch == 10)
             continue;
+        /* FreeType 2.14.2 refuses to render a glyph lying more than 10 ppem
+         * from the origin, so only the subpixel part of the pen position goes
+         * to FreeType and the bitmap is moved by the whole pixels afterwards.
+         * The mask rounds down for negative positions too. */
+        subpixel.x = pen->x & 63;
+        subpixel.y = pen->y & 63;
+        pen_x = (pen->x - subpixel.x) / 64;
+        pen_y = (pen->y - subpixel.y) / 64;
         /* transform */
-        FT_Set_Transform(face, matrix, pen);
+        FT_Set_Transform(face, matrix, &subpixel);
         /* get glyph image */
         ans = FT_Load_Char(face, ch, FT_LOAD_NO_BITMAP);
         if (ans)
@@ -194,11 +204,11 @@ static void draw_text(FT_Face face, FT_Vector *pen, FT_Matrix *matrix,
             continue;
         /* draw bitmap */
         if (!box)
-            draw_bitmap(&slot->bitmap, slot->bitmap_left,
-                        screen_height - slot->bitmap_top);
+            draw_bitmap(&slot->bitmap, pen_x + slot->bitmap_left,
+                        screen_height - (pen_y + slot->bitmap_top));
         else
-            set_text_box(&slot->bitmap, slot->bitmap_left,
-                         screen_height - slot->bitmap_top, box);
+            set_text_box(&slot->bitmap, pen_x + slot->bitmap_left,
+                         screen_height - (pen_y + slot->bitmap_top), box);
 
         /* increment pen position */
         pen->x += slot->advance.x;
