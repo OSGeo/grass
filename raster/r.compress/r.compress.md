@@ -164,63 +164,201 @@ applies to all raster map types (CELL, FCELL, DCELL).
 If the variable does not exist, or the value cannot be parsed as an
 integer, ZLIB's compression level 1 will be used.
 
+<!-- markdownlint-disable MD046 -->
 ## EXAMPLES
+
+*r.compress* works only on raster maps in the current mapset. With the
+North Carolina sample dataset, make a copy of the `elevation` map in the
+current mapset first:
+
+=== "Command line"
+
+    ```sh
+    g.copy raster=elevation,elevation_copy
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    from grass.tools import Tools
+
+    tools = Tools()
+    tools.g_copy(raster="elevation,elevation_copy")
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import grass.script as gs
+
+    gs.run_command("g.copy", raster="elevation,elevation_copy")
+    ```
 
 ### Printing of current compression state
 
-Example for an uncompressed raster map:
+Print the compression method and the data type of the map, with **-p**
+on the command line and with **-g** in Python:
 
-```sh
-r.compress compressed_no -p
-  <compressed_no> (method 0: NONE). Data type: <CELL>
+=== "Command line"
+
+    ```sh
+    r.compress -p map=elevation_copy
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    print(tools.r_compress(map="elevation_copy", flags="g").text)
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
+    ```
+
+Command line output (**-p**):
+
+```text
+<elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
+<elevation_copy> has an uncompressed NULL file
 ```
 
-### Applying ZLIB compression
+Python output (**-g**):
 
-Applying ZLIB compression to a copy of the uncompressed map from above:
-
-```sh
-# compression of map using ZLIB compression
-g.copy raster=compressed_no,compressed_ZLIB
-
-export GRASS_COMPRESSOR=ZLIB # ZLIB
-r.compress compressed_ZLIB
-r.compress compressed_ZLIB -p
-  <compressed_ZLIB> is compressed (method 2: ZLIB). Data type: <CELL>
-unset GRASS_COMPRESSOR # switch back to default
+```text
+elevation_copy|FCELL|ZLIB|NO
 ```
 
-### Applying BZIP2 compression
+### Uncompressing and compressing
 
-Applying BZIP2 compression to a copy of the ZLIB-compressed map from
-above:
+Uncompress the map with **-u** and print its state again:
 
-```sh
-# compression of map using BZIP2 compression
-g.copy raster=compressed_ZLIB,compressed_BZIP2
+=== "Command line"
 
-export GRASS_COMPRESSOR=BZIP2 # BZIP2
-r.compress compressed_BZIP2
-r.compress compressed_BZIP2 -p
-  <compressed_BZIP2> is compressed (method 4: BZIP2). Data type: <CELL>
-unset GRASS_COMPRESSOR # switch back to default
+    ```sh
+    r.compress -u map=elevation_copy
+    r.compress -p map=elevation_copy
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    tools.r_compress(map="elevation_copy", flags="u")
+    print(tools.r_compress(map="elevation_copy", flags="g").text)
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    gs.run_command("r.compress", map="elevation_copy", flags="u")
+    print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
+    ```
+
+Command line output (**-p**):
+
+```text
+<elevation_copy> is uncompressed (method 0: NONE). Data type: FCELL
+<elevation_copy> has a compressed NULL file
 ```
 
-### Applying ZSTD compression
+Python output (**-g**):
 
-Applying ZSTD compression to a copy of the BZIP2-compressed map from
-above:
-
-```sh
-# compression of map using ZSTD compression
-g.copy raster=compressed_BZIP2,compressed_ZSTD
-
-export GRASS_COMPRESSOR=ZSTD # ZSTD
-r.compress compressed_ZSTD
-r.compress compressed_ZSTD -p
-  <compressed_ZSTD> is compressed (method 5: ZSTD). Data type: <CELL>
-unset GRASS_COMPRESSOR
+```text
+elevation_copy|FCELL|NONE|YES
 ```
+
+The NULL file is written again with the map and is compressed unless
+`GRASS_COMPRESS_NULLS=0` is set.
+
+Without `GRASS_COMPRESSOR`, *r.compress* uses the default method (ZSTD
+if available):
+
+=== "Command line"
+
+    ```sh
+    r.compress map=elevation_copy
+    r.compress -p map=elevation_copy
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    tools.r_compress(map="elevation_copy")
+    print(tools.r_compress(map="elevation_copy", flags="g").text)
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    gs.run_command("r.compress", map="elevation_copy")
+    print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
+    ```
+
+Command line output (**-p**):
+
+```text
+<elevation_copy> is compressed (method 5: ZSTD). Data type: FCELL
+<elevation_copy> has a compressed NULL file
+```
+
+Python output (**-g**):
+
+```text
+elevation_copy|FCELL|ZSTD|YES
+```
+
+### Selecting the compression method
+
+Set `GRASS_COMPRESSOR` to use another method, here only for one
+command:
+
+=== "Command line"
+
+    ```sh
+    GRASS_COMPRESSOR=ZLIB r.compress map=elevation_copy
+    r.compress -p map=elevation_copy
+    ```
+
+=== "Python (grass.tools)"
+
+    ```python
+    import os
+
+    env = os.environ.copy()
+    env["GRASS_COMPRESSOR"] = "ZLIB"
+    Tools(env=env).r_compress(map="elevation_copy")
+    print(tools.r_compress(map="elevation_copy", flags="g").text)
+    ```
+
+=== "Python (grass.script)"
+
+    ```python
+    import os
+
+    env = os.environ.copy()
+    env["GRASS_COMPRESSOR"] = "ZLIB"
+    gs.run_command("r.compress", map="elevation_copy", env=env)
+    print(gs.read_command("r.compress", map="elevation_copy", flags="g"))
+    ```
+
+Command line output (**-p**):
+
+```text
+<elevation_copy> is compressed (method 2: ZLIB). Data type: FCELL
+<elevation_copy> has a compressed NULL file
+```
+
+Python output (**-g**):
+
+```text
+elevation_copy|FCELL|ZLIB|YES
+```
+
+When `GRASS_COMPRESSOR` is set in the environment of the tools, they
+write raster maps with that method, for example after
+`export GRASS_COMPRESSOR=ZLIB` on the command line or
+`os.environ["GRASS_COMPRESSOR"] = "ZLIB"` in Python.
 
 ## SEE ALSO
 
