@@ -15,7 +15,7 @@ jobs:
     concurrency:
       group: >-
         ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}-${{
-        matrix.os }}-${{ matrix.python-version }}
+        matrix.os }}-${{ matrix.config }}-${{ matrix.python-version }}
       cancel-in-progress: true
 
     strategy:
@@ -25,6 +25,13 @@ jobs:
         python-version:
           - "3.11"
           - "3.13"
+        config:
+          - ubuntu-24.04
+        # Build without optional features using one Python version
+        include:
+          - os: ubuntu-24.04
+            python-version: "3.11"
+            config: ubuntu-24.04_without_x
       fail-fast: true
 
     runs-on: ${{ matrix.os }}
@@ -86,9 +93,9 @@ jobs:
 
       - name: Build
         run: |
-          ".github/workflows/build_${MATRIX_OS}.sh" "${HOME}/install"
+          ".github/workflows/build_${MATRIX_CONFIG}.sh" "${HOME}/install"
         env:
-          MATRIX_OS: ${{ matrix.os }}
+          MATRIX_CONFIG: ${{ matrix.config }}
 
       - name: Add the bin directory to PATH
         run: |
@@ -196,7 +203,7 @@ jobs:
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           exclude: gui
-          flags: pytest-python-${{ matrix.python-version }}
+          flags: pytest-python-${{ matrix.python-version }}${{ matrix.config != matrix.os && '-minimum' || '' }}
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: test_results
 
@@ -204,14 +211,14 @@ jobs:
         uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           verbose: true
-          flags: pytest-python-${{ matrix.python-version }}
-          name: pytest-python-${{ matrix.python-version }}
+          flags: pytest-python-${{ matrix.python-version }}${{ matrix.config != matrix.os && '-minimum' || '' }}
+          name: pytest-python-${{ matrix.python-version }}${{ matrix.config != matrix.os && '-minimum' || '' }}
           token: ${{ secrets.CODECOV_TOKEN }}
       - name: Make python-only code coverage test report available
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: python-codecoverage-report-${{ matrix.os }}-${{ matrix.python-version }}
+          name: python-codecoverage-report-${{ matrix.os }}-${{ matrix.config }}-${{ matrix.python-version }}
           path: coverage_html_report
           retention-days: 1
 
