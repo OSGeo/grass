@@ -35,6 +35,11 @@
  *
  *     kdtree_insert(...);
  *
+ * Alternatively create a new k-d tree from an array of points, which is much
+ * faster than inserting the points one by one:
+ *
+ *     kdtree_create_from_points(...);
+ *
  * Optionally optimize the tree:
  *
  *     kdtree_optimize(...);
@@ -82,6 +87,13 @@ struct kdtree {
     int btol;               /*!< balancing tolerance */
     size_t count;           /*!< number of items in the tree */
     struct kdnode *root;    /*!< tree root */
+    struct kdnode
+        *nodes;    /*!< nodes of a tree built by kdtree_create_from_points(),
+                        NULL for a tree built by inserting items */
+    double *pool;  /*!< coordinates of a tree built by
+                        kdtree_create_from_points(), NULL for a tree built by
+                        inserting items */
+    size_t nnodes; /*!< number of nodes in the nodes array */
 };
 
 /*!
@@ -111,6 +123,37 @@ int kdtree_insert(struct kdtree *t, /*!< k-d tree */
                   double *c,        /*!< coordinates */
                   int uid,          /*!< the point's unique id */
                   int dc            /*!< allow duplicate coordinates */
+);
+
+/*! create a new k-d tree from an array of points
+ *
+ * The tree is built in O(n log n) time by splitting the points at their
+ * median, so it is perfectly balanced and does not need to be optimized
+ * afterwards. Compared to inserting the points one by one, this is much
+ * faster and needs less memory.
+ *
+ * Points with identical coordinates are handled like kdtree_insert() does:
+ * with dc = 0 only the first point of a set of points with identical
+ * coordinates is added to the tree, with dc = 1 only the first point of a set
+ * of points with identical coordinates and identical uid is added. The uids
+ * array is modified in place: on return it contains the uids of the points
+ * which are in the tree, in the order of the input array. The remaining
+ * entries of the uids array are undefined.
+ *
+ * Using the same uid for different points is not supported, uids must be
+ * unique.
+ *
+ * The nodes of the tree are stored in one contiguous array in the nodes
+ * array, one node per point, in the order of the uids array. The coordinates
+ * of the points are stored in one contiguous array in the pool, ndims values
+ * per point, in the same order.
+ */
+struct kdtree *
+kdtree_create_from_points(char ndims,           /*!< number of dimensions */
+                          const double *coords, /*!< coordinates */
+                          int *uids,            /*!< unique ids of the points */
+                          int n,                /*!< number of points */
+                          int dc /*!< allow duplicate coordinates */
 );
 
 /*! remove an item from the k-d tree

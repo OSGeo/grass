@@ -55,9 +55,11 @@ int main(int argc, char *argv[])
     const char *method, *correction_name = NULL;
     FILE *fp = stdout;
     double area, intensity, max_distance, shorter_side;
+    double *coords;
+    int *uids;
     long seed_value;
     int num_distances, num_random_points;
-    int line_type, n, n_alloc, n_outside;
+    int line_type, n, n_alloc, n_outside, i;
 
     G_gisinit(argv[0]);
 
@@ -210,7 +212,6 @@ int main(int argc, char *argv[])
 
     line_points = Vect_new_line_struct();
     line_cats = Vect_new_cats_struct();
-    tree = kdtree_create(2, NULL);
 
     n = 0;
     n_outside = 0;
@@ -219,7 +220,7 @@ int main(int argc, char *argv[])
 
     while ((line_type = Vect_read_next_line(&map, line_points, line_cats)) >
            0) {
-        double x, y, coords[2];
+        double x, y;
 
         if (line_type != GV_POINT)
             continue;
@@ -236,9 +237,6 @@ int main(int argc, char *argv[])
         }
         points[n].x = x;
         points[n].y = y;
-        coords[0] = x;
-        coords[1] = y;
-        kdtree_insert(tree, coords, n, 1);
         n++;
     }
     if (line_type == -1)
@@ -258,6 +256,18 @@ int main(int argc, char *argv[])
         G_fatal_error(_("No points found in the computational region"));
     if (n < 2 && strcmp(method, "f") != 0)
         G_fatal_error(_("At least 2 points are required, %d found"), n);
+
+    /* build the tree of the points, the uid of a point is its number */
+    coords = G_malloc(sizeof(double) * n * 2);
+    uids = G_malloc(n * sizeof(int));
+    for (i = 0; i < n; i++) {
+        coords[i * 2] = points[i].x;
+        coords[i * 2 + 1] = points[i].y;
+        uids[i] = i;
+    }
+    tree = kdtree_create_from_points(2, coords, uids, n, 1);
+    G_free(coords);
+    G_free(uids);
 
     intensity = n / area;
     G_verbose_message(_("Number of points: %d"), n);

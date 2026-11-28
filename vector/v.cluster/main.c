@@ -62,6 +62,8 @@ int main(int argc, char *argv[])
     struct kdtree *kdt;
     struct kdtrav trav;
     double c[3];
+    double *coords;
+    int *uids;
     int uid;
     double eps;
     int ndims, minpnts;
@@ -203,11 +205,13 @@ int main(int argc, char *argv[])
 
     /* create k-d tree */
     G_message(_("Creating search index ..."));
-    kdt = kdtree_create(ndims, NULL);
     cid = G_malloc((nlines + 1) * sizeof(int));
     idx = G_malloc((nlines + 1) * sizeof(int));
+    coords = G_malloc(sizeof(double) * npoints * ndims);
+    uids = G_malloc(npoints * sizeof(int));
     Vect_rewind(&In);
     i = 0;
+    j = 0;
     cid[0] = 0;
     idx[0] = 0;
     while ((type = Vect_read_next_line(&In, Points, Cats)) > 0) {
@@ -215,16 +219,23 @@ int main(int argc, char *argv[])
         cid[i] = 0;
         if (type == GV_POINT) {
 
-            c[0] = Points->x[0];
-            c[1] = Points->y[0];
-            c[2] = Points->z[0];
+            coords[j * ndims] = Points->x[0];
+            coords[j * ndims + 1] = Points->y[0];
+            if (ndims == 3)
+                coords[j * ndims + 2] = Points->z[0];
 
-            kdtree_insert(kdt, c, i, 0);
+            /* the uid of a point is the number of the line it comes from */
+            uids[j] = i;
+            j++;
         }
     }
     G_percent(nlines, nlines, 4);
 
-    kdtree_optimize(kdt, 2);
+    /* build the tree of the points, points with identical coordinates are
+     * only registered once */
+    kdt = kdtree_create_from_points(ndims, coords, uids, j, 0);
+    G_free(coords);
+    G_free(uids);
 
     noutliers = nclusters = 0;
     if (clmethod == CL_DBSCAN) {
@@ -718,7 +729,7 @@ int main(int argc, char *argv[])
         }
         G_percent(npoints, npoints, 4);
         kdpnts = i;
-        G_debug(0, "%d points in k-d tree", kdpnts);
+        G_debug(2, "%d points in k-d tree", kdpnts);
 
         /* reachability network */
         G_message(_("Reachability network ..."));
@@ -791,7 +802,7 @@ int main(int argc, char *argv[])
             }
         }
         G_percent(kdpnts, kdpnts, 4);
-        G_debug(0, "nout: %d", nout);
+        G_debug(2, "nout: %d", nout);
         if (nout != kdpnts)
             G_fatal_error("nout != kdpnts");
 
