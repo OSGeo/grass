@@ -14,10 +14,6 @@ function(
     var_suffix
     var_date
 )
-    set(version_major 0)
-    set(version_minor 0)
-    set(version_release 0)
-    set(version_suffix "")
     set(version_date 00000000)
     file(STRINGS "${file_path}" grass_version_strings)
     list(LENGTH grass_version_strings grass_version_file_length)
@@ -29,16 +25,14 @@ function(
     list(GET grass_version_strings 0 version_major)
     list(GET grass_version_strings 1 version_minor)
 
-    if(grass_version_file_length GREATER 2)
-        list(GET grass_version_strings 2 version_release)
-        string(
-            REGEX REPLACE "(^[0-9]+)(.*)"
-            "\\2"
-            version_suffix
-            ${version_release}
-        )
-        string(REGEX MATCH "^[0-9]+" version_release ${version_release})
-    endif()
+    list(GET grass_version_strings 2 version_release)
+    string(
+        REGEX REPLACE "(^[0-9]+)(.*)"
+        "\\2"
+        version_suffix
+        ${version_release}
+    )
+    string(REGEX MATCH "^[0-9]+" version_release ${version_release})
 
     if(grass_version_file_length GREATER 3)
         list(GET grass_version_strings 3 version_date)

@@ -18,8 +18,10 @@ if(DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
 set(VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "")
 endif()
 ]]
-set(CMAKE_MODULE_PATH
-    "${CMAKE_SOURCE_DIR}/cmake/find_scripts;${CMAKE_SOURCE_DIR}/cmake/modules;${CMAKE_MODULE_PATH}"
+list(
+    PREPEND CMAKE_MODULE_PATH
+    "${CMAKE_SOURCE_DIR}/cmake/find_scripts"
+    "${CMAKE_SOURCE_DIR}/cmake/modules"
 )
 
 include(get_versions)
@@ -200,9 +202,6 @@ elseif(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
 endif()
 
 if(APPLE)
-    if(POLICY CMP0042)
-        cmake_policy(SET CMP0042 NEW)
-    endif()
     set(CMAKE_MACOSX_RPATH TRUE)
 endif()
 
