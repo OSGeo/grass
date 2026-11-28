@@ -253,7 +253,7 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     Rast_get_cellhd(name, G_mapset(), &cellhd);
     cname = getenv("GRASS_COMPRESSOR");
     if (cname && *cname) {
-        if (G_compressor_number(cname) < 1)
+        if (G_compressor_number(cname) < 0)
             cname = G_compressor_name(G_default_compressor());
         else
             cname = G_compressor_name(G_compressor_number(cname));

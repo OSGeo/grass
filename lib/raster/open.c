@@ -662,8 +662,9 @@ static int open_raster_new(const char *name, int open_mode,
      */
     fcb->cellhd = R__.wr_window;
 
-    /* change open_mode to OPEN_NEW_UNCOMPRESSED if R__.compression_type == 0 ?
-     */
+    /* Compression type 0 (NONE) means an uncompressed map. */
+    if (open_mode == OPEN_NEW_COMPRESSED && R__.compression_type == 0)
+        open_mode = OPEN_NEW_UNCOMPRESSED;
 
     if (open_mode == OPEN_NEW_COMPRESSED && fcb->map_type == CELL_TYPE) {
         fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));

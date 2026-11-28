@@ -80,8 +80,8 @@ between speed and compression rate.
 
 All GRASS raster map types are by default ZSTD compressed if
 available, otherwise ZLIB compressed. Through the environment variable
-`GRASS_COMPRESSOR` the compression method can be set to RLE, ZLIB, LZ4,
-BZIP2, or ZSTD.
+`GRASS_COMPRESSOR` the compression method can be set to ZLIB, LZ4,
+BZIP2, ZSTD, RLE (deprecated), or NONE (no compression).
 
 Integer (CELL type) raster maps can be compressed with RLE if the
 environment variable `GRASS_COMPRESSOR` exists and is set to RLE.
@@ -90,6 +90,14 @@ However, this is not recommended.
 Floating point (FCELL, DCELL) raster maps never use RLE compression;
 they are either compressed with ZLIB, LZ4, BZIP2, ZSTD or are
 uncompressed.
+
+**NONE**  
+No compression. Uncompressed raster maps are larger, integer maps
+usually much larger, but may be faster to write and read on some
+hardware configurations. This suits floating-point maps, for example
+temporary ones. For integer maps, the time saved is often small. The
+NULL file is still compressed unless `GRASS_COMPRESS_NULLS=0` is set.
+With NONE, *r.compress* writes the map uncompressed, as with **-u**.
 
 **RLE**  
 **DEPRECATED** Run-Length Encoding, poor compression ratio but fast. It
@@ -132,8 +140,8 @@ compression method if available.
 ### Compression method number scheme
 
 The used compression method is encoded with numbers. In the internal
-`cellhd` file, the value for "compressed" is 1 for RLE, 2 for ZLIB, 3
-for LZ4, 4 for BZIP2, and 5 for ZSTD.
+`cellhd` file, the value for "compressed" is 0 for NONE (uncompressed),
+1 for RLE, 2 for ZLIB, 3 for LZ4, 4 for BZIP2, and 5 for ZSTD.
 
 Obviously, decompression is controlled by the raster map's compression,
 not by the environment variable.
