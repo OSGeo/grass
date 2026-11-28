@@ -16,12 +16,21 @@ config-variables: null
 # "ignore" is an array of regular expression patterns. Matched error messages
 # are ignored. This is similar to the "-ignore" command line option.
 paths:
-  # .github/workflows/**/*.yml:
-  #   ignore: []
   .github/workflows/**/*.yml:
     ignore:
+      # Remove these ignored errors when actionlint supports `parallel:`, `background:`, `wait:` and `wait-all:`
+      - 'unexpected key "background" for step to execute action. expected one of' # [syntax-check]
+      - 'unexpected key "background" for step to run shell command. expected one of' # [syntax-check]
+      - 'step must run script with "run" section or run action with "uses" section' # [syntax-check]
       - 'reusable workflow call "\$/.+" at "uses" is not following the format' # [workflow-call]
       - 'specifying action "\$/.+" in invalid format because ref is missing' # [action]
+
   .github/workflows/python-code-quality.yml:
     ignore:
       - 'condition "false" is always evaluated to false. remove the if: section' # [if-cond]
+
+  .github/workflows/osgeo4w.yml:
+    ignore:
+      # Remove these ignored errors when actionlint supports `parallel:`, `background:`, `wait:` and `wait-all:`
+      - 'property "msys2" is not defined in object type {}' # [expression]
+      - 'property "osgeo4w" is not defined in object type {}' # [expression]

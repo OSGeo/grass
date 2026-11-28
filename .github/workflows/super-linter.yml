@@ -62,5 +62,6 @@ jobs:
           VALIDATE_POWERSHELL: true
           # VALIDATE_XML: true
           VALIDATE_YAML: true
+          GITHUB_ACTIONS_CONFIG_FILE: .github/actionlint.yaml
           MARKDOWN_CONFIG_FILE: .markdownlint.yml
           YAML_CONFIG_FILE: .yamllint

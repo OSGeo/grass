@@ -37,8 +37,9 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-
       - name: Set up Python
+        id: setup_python
+        background: true
         uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: ${{ matrix.python-version }}
@@ -46,6 +47,7 @@ jobs:
           allow-prereleases: true
 
       - name: Install non-Python dependencies
+        background: true
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils
@@ -55,15 +57,24 @@ jobs:
               sudo apt-get install -y --no-install-recommends --no-install-suggests
 
       - uses: rui314/setup-mold@339e96b4ff1f3bd865856ba4cbbe8818a7acb038 # v1
+        background: true
+
+      - wait: [setup_python]
 
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install --break-system-packages -r .github/workflows/python_requirements.txt
           pip install --break-system-packages -r .github/workflows/optional_requirements.txt
-          pip install --break-system-packages GDAL=="$(gdal-config --version)"
           pip install --break-system-packages pytest pytest-timeout \
               pytest-github-actions-annotate-failures pytest-xdist pytest-cov
+
+      - wait-all:
+
+      # Needs gdal-config, installed by the apt step.
+      - name: Install GDAL Python bindings
+        run: |
+          pip install --break-system-packages GDAL=="$(gdal-config --version)"
 
       - name: Create installation directory
         run: |

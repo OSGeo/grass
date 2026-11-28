@@ -42,13 +42,17 @@ jobs:
 
     steps:
       - name: Checkout core
+        id: checkout_core
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        background: true
         with:
           path: grass
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Get dependencies
+      - name: Get base dependencies
+        id: apt_base
+        background: true
         run: |
           sudo apt-get update -y
           sudo apt-get install -y wget git gawk findutils \
@@ -59,21 +63,12 @@ jobs:
             unixodbc-dev
           LC_ALL=C.UTF-8 sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
           sudo apt-get update -y
-          xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
-              sudo apt-get install -y --no-install-recommends --no-install-suggests
 
-      - name: Set up Python (with cache)
-        if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
-        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-          cache: pip # zizmor: ignore[cache-poisoning] Assuming push event is not used for tags
-
-      - name: Set up Python (no cache, use for release artifacts)
-        if: ${{ !contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
-        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
+      # The version variables are needed to select the addons branch, and the
+      # core checkout is needed to compute them. Environment changes are only
+      # visible to later steps once the steps that made them are waited on, so
+      # this step stays in the foreground.
+      - wait: [checkout_core]
 
       - name: Set version variables
         run: |
@@ -87,6 +82,8 @@ jobs:
           } >> "${GITHUB_ENV}"
 
       - name: Checkout addons
+        id: checkout_addons
+        background: true
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: OSGeo/grass-addons
@@ -94,6 +91,44 @@ jobs:
           path: grass-addons
           fetch-depth: 0
           persist-credentials: false
+
+      - name: Set up Python
+        id: setup_python
+        background: true
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          # No cache for release artifacts. Pushes and pull requests are assumed
+          # not to be used for tags.
+          # yamllint disable-line rule:line-length
+          cache: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) && 'pip' || '' }} # zizmor: ignore[cache-poisoning] Assuming push event is not used for tags
+          # Restrict the hashed files to the core checkout, so that the cache
+          # key does not depend on the addons checkout running at the same time.
+          cache-dependency-path: grass/**/requirements.txt
+
+      # apt cannot run two installs at once, so the packages listed in the core
+      # checkout are installed after the base ones.
+      - wait: [apt_base]
+
+      - name: Get dependencies listed in the core checkout
+        id: apt_core
+        background: true
+        run: |
+          xargs -a <(awk '! /^ *(#|$)/' "grass/.github/workflows/apt.txt") -r -- \
+              sudo apt-get install -y --no-install-recommends --no-install-suggests
+
+      - wait: [setup_python, checkout_addons]
+
+      - name: Install Python dependencies
+        background: true
+        # We install both core and addon dependencies, but we don't install any
+        # dependencies from the extra list in addons because we don't actually
+        # run them (and they should be lazy-imported).
+        run: |
+          pip install -r grass/.github/workflows/python_requirements.txt
+          pip install -r grass-addons/.github/workflows/requirements.txt
+
+      - wait-all:
 
       - name: ccache (do not use for release artifacts)
         uses: hendrikmuhs/ccache-action@d62db5f07c26379fc4b4e0916f098a92573c3b03 # v1.2.23
@@ -103,14 +138,6 @@ jobs:
           verbose: 2
           evict-old-files: 7d
           key: ${{ github.workflow }}-${{ github.job }}-grass${{ env.MAJOR }}-${{ env.PYTHON_VERSION }}
-
-      - name: Install Python dependencies
-        # We install both core and addon dependencies, but we don't install any
-        # dependencies from the extra list in addons because we don't actually
-        # run them (and they should be lazy-imported).
-        run: |
-          pip install -r grass/.github/workflows/python_requirements.txt
-          pip install -r grass-addons/.github/workflows/requirements.txt
 
       - uses: rui314/setup-mold@339e96b4ff1f3bd865856ba4cbbe8818a7acb038 # v1
         if: ${{ contains(fromJSON('["push", "pull_request"]'), github.event_name) }}
@@ -170,9 +197,25 @@ jobs:
         run: ./grass/.github/workflows/test_simple.sh
 
       - name: Build Programmer's Manual with doxygen
+        id: build_doxygen
+        background: true
         run: |
           cd grass
           make htmldocs
+
+      - name: Compile addons
+        id: build_addons
+        background: true
+        run: |
+          ./grass-addons/utils/cronjobs_osgeo_lxd/compile_addons_git.sh \
+            "${MAJOR}" \
+            "${MINOR}" \
+            "$(pwd)/grass-addons/src" \
+            "$(grass --config path)" \
+            "$(pwd)/addons-build-dir" \
+            grass
+
+      - wait: [build_doxygen]
 
       - name: Make the doxygen results available (html)
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -195,19 +238,12 @@ jobs:
             !grass/latex/**.map
             !grass/latex/**.md5
           retention-days: 15
-      - name: Compile addons
-        run: |
-          ./grass-addons/utils/cronjobs_osgeo_lxd/compile_addons_git.sh \
-            "${MAJOR}" \
-            "${MINOR}" \
-            "$(pwd)/grass-addons/src" \
-            "$(grass --config path)" \
-            "$(pwd)/addons-build-dir" \
-            grass
 
       - name: Get target path for Markdown files
         run: |
           echo MKDOCS_DIR="$(grass --config path)/docs/mkdocs" >> "$GITHUB_ENV"
+
+      - wait: [build_addons]
 
       - name: Move from build to target directory
         run: |
@@ -234,11 +270,15 @@ jobs:
             cp -rv "${name}" addons
           done
 
-      - name: Get Zensical
+      # Installed before the documentation builds start, so that pip does not
+      # change packages used by a build that is already running.
+      - name: Get Zensical and Sphinx
         run: |
           pip install -r "grass/man/mkdocs/requirements.txt"
+          pip install -r "grass/python/grass/docs/requirements.txt"
 
       - name: Run Zensical
+        background: true
         run: |
           cd grass || exit
           eval "$(./utils/update_version.py status --bash)"
@@ -250,12 +290,19 @@ jobs:
           zensical build
 
       - name: Build Sphinx documentation
+        background: true
         run: |
-          pip install -r "grass/python/grass/docs/requirements.txt"
           cd grass || exit
           make sphinxdoclib
+
+      - wait-all:
+
+      # Moved only after Zensical has finished, as it writes to the same site
+      # directory.
+      - name: Add Sphinx documentation to the site
+        run: |
           ARCH="$(grass --config arch)"
-          mv -v dist."${ARCH}/docs/html/libpython" "${MKDOCS_DIR}/site"
+          mv -v grass/dist."${ARCH}/docs/html/libpython" "${MKDOCS_DIR}/site"
 
       - name: Merge Sphinx and Zensical Sitemaps
         run: |

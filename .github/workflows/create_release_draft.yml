@@ -42,23 +42,24 @@ jobs:
       - name: Create output directory
         run: |
           mkdir "${OUT_DIR}"
-      - name: Generate ChangeLog file
-        run: |
-          python utils/gitlog2changelog.py
-          mv ChangeLog "${OUT_DIR}/ChangeLog"
-          gzip "${OUT_DIR}/ChangeLog"
-      - name: Generate Git derived data files
-        run: |
-          echo "Generate VERSION_GIT file:"
-          ./utils/generate_version_git_file.sh
-          cat include/VERSION_GIT
-          echo "Generate GENERATE_LAST_COMMIT_FILE:"
-          python utils/generate_last_commit_file.py .
-          cat core_modules_with_last_commit.json
-          echo "Create core modules patch file:"
-          git add core_modules_with_last_commit.json
-          git diff --cached > \
-            "${OUT_DIR}/core_modules_with_last_commit.patch"
+      - parallel:
+          - name: Generate ChangeLog file
+            run: |
+              python utils/gitlog2changelog.py
+              mv ChangeLog "${OUT_DIR}/ChangeLog"
+              gzip "${OUT_DIR}/ChangeLog"
+          - name: Generate Git derived data files
+            run: |
+              echo "Generate VERSION_GIT file:"
+              ./utils/generate_version_git_file.sh
+              cat include/VERSION_GIT
+              echo "Generate GENERATE_LAST_COMMIT_FILE:"
+              python utils/generate_last_commit_file.py .
+              cat core_modules_with_last_commit.json
+              echo "Create core modules patch file:"
+              git add core_modules_with_last_commit.json
+              git diff --cached > \
+                "${OUT_DIR}/core_modules_with_last_commit.patch"
       - name: Create tarballs (for tags only)
         if: startsWith(github.ref, 'refs/tags/')
         run: |
