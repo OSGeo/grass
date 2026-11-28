@@ -143,6 +143,19 @@ def test_region_manager_activate_deactivate(session_2x2):
     assert "WIND_OVERRIDE" not in session_2x2.env
 
 
+def test_region_manager_nested(session_2x2):
+    """Test the outer region is active again after a nested RegionManager ends."""
+    env = session_2x2.env
+    with gs.RegionManager(n=4, s=0, e=4, w=0, res=1, env=env) as outer:
+        with gs.RegionManager(n=6, s=0, e=6, w=0, res=1, env=env) as inner:
+            assert env["WIND_OVERRIDE"] == inner.region_name
+            assert gs.region(env=env)["rows"] == 6
+        assert env["WIND_OVERRIDE"] == outer.region_name
+        assert gs.region(env=env)["rows"] == 4
+    assert "WIND_OVERRIDE" not in env
+    assert gs.region(env=env)["rows"] == 2
+
+
 def test_region_manager_env_activate_deactivate(session_2x2):
     """Test RegionManagerEnv with explicit activate/deactivate."""
     assert "GRASS_REGION" not in session_2x2.env
@@ -170,6 +183,20 @@ def test_region_manager_env_activate_deactivate(session_2x2):
     # Deactivate twice is harmless
     manager.deactivate()
     assert "GRASS_REGION" not in session_2x2.env
+
+
+def test_region_manager_env_nested(session_2x2):
+    """Test the outer region is active again after a nested RegionManagerEnv ends."""
+    env = session_2x2.env
+    with gs.RegionManagerEnv(n=4, s=0, e=4, w=0, res=1, env=env):
+        outer_region = env["GRASS_REGION"]
+        with gs.RegionManagerEnv(n=6, s=0, e=6, w=0, res=1, env=env):
+            assert env["GRASS_REGION"] != outer_region
+            assert gs.region(env=env)["rows"] == 6
+        assert env["GRASS_REGION"] == outer_region
+        assert gs.region(env=env)["rows"] == 4
+    assert "GRASS_REGION" not in env
+    assert gs.region(env=env)["rows"] == 2
 
 
 def test_region_manager_save(session_2x2):
