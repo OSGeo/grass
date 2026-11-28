@@ -97,10 +97,10 @@ def test_names(echoing_resolver):
 def test_levenshtein_distance_empty_text():
     empty_text = ""
     non_empty_text = "abc"
-    ToolFunctionResolver.levenshtein_distance(empty_text, non_empty_text) == len(
+    assert ToolFunctionResolver.levenshtein_distance(empty_text, non_empty_text) == len(
         non_empty_text
     )
-    ToolFunctionResolver.levenshtein_distance(non_empty_text, empty_text) == len(
+    assert ToolFunctionResolver.levenshtein_distance(non_empty_text, empty_text) == len(
         non_empty_text
     )
 
