@@ -249,79 +249,56 @@ set(MKMARKDOWN_PY ${CMAKE_BINARY_DIR}/utils/mkmarkdown.py)
 set(THUMBNAILS_PY ${CMAKE_BINARY_DIR}/utils/thumbnails.py)
 set(MD2MAN ${CMAKE_BINARY_DIR}/utils/g.md2man.py)
 
+set(sep ":")
 set(env_path "$ENV{PATH}")
-
+set(env_pythonpath "$ENV{PYTHONPATH}")
 if(WIN32)
     set(sep "\\\;")
     string(REPLACE ";" "${sep}" env_path "${env_path}")
-    set(env_pythonpath "$ENV{PYTHONPATH}")
     string(REPLACE ";" "${sep}" env_pythonpath "${env_pythonpath}")
-    set(grass_env_command
-        ${CMAKE_COMMAND}
-        -E
-        env
-        "PATH=${BIN_DIR}/$<CONFIG>${sep}${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}${sep}${LIB_DIR}"
-        "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}${env_pythonpath}"
-        "GRASS_PYTHON=${PYTHON_EXECUTABLE}"
-        "GISBASE=${RUN_GISBASE_NATIVE}"
-        "GISRC=${GISRC}"
-        "LC_ALL=C"
-        "LANG=C"
-        "GRASS_COLORSDIR=${RUNTIME_GRASS_COLORSDIR}"
-        "GRASS_DOCDIR=${RUNTIME_GRASS_DOCDIR}"
-        "GRASS_ETCDIR=${RUNTIME_GRASS_ETCDIR}"
-        "GRASS_FONTSDIR=${RUNTIME_GRASS_FONTSDIR}"
-        "GRASS_GRAPHICSDIR=${RUNTIME_GRASS_GRAPHICSDIR}"
-        "GRASS_GUIRESDIR=${RUNTIME_GRASS_GUIRESDIR}"
-        "GRASS_GUISCRIPTDIR=${RUNTIME_GRASS_GUISCRIPTDIR}"
-        "GRASS_GUIWXDIR=${GUI_WXPYTHON_DIR}"
-        "GRASS_LOCALEDIR=${RUNTIME_GRASS_LOCALEDIR}"
-        "GRASS_MISCDIR=${RUNTIME_GRASS_MISCDIR}"
-        "GRASS_MKDOCSDIR=${RUNTIME_GRASS_MKDOCSDIR}"
-        "ARCH=${BUILD_ARCH}"
-        "ARCH_DISTDIR=${RUN_GISBASE_NATIVE}"
-        "LANGUAGE=C"
-        "MODULE_TOPDIR=${MODULE_TOPDIR}"
-        "HTMLDIR=${DOC_DIR}"
-        "LC_ALL=C"
-        "LANG=C"
-        "LANGUAGE=C"
-        "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
-        "VERSION_DATE=\"${GRASS_VERSION_DATE}\""
+    set(path_env
+        "${BIN_DIR}/$<CONFIG>${sep}${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}${sep}${LIB_DIR}"
     )
+    set(platform_env "GRASS_PYTHON=${PYTHON_EXECUTABLE}")
 else()
-    set(sep ":")
-    set(grass_env_command
-        ${CMAKE_COMMAND}
-        -E
-        env
-        "PATH=${BIN_DIR}/$<CONFIG>${sep}${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}"
-        "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}$ENV{PYTHONPATH}"
+    set(path_env
+        "${BIN_DIR}/$<CONFIG>${sep}${BIN_DIR}${sep}${SCRIPTS_DIR}${sep}${env_path}"
+    )
+    set(platform_env
         "LD_LIBRARY_PATH=${LIB_DIR}/$<CONFIG>${sep}${LIB_DIR}${sep}$ENV{LD_LIBRARY_PATH}"
-        "GISBASE=${RUN_GISBASE_NATIVE}"
-        "GISRC=${GISRC}"
-        "LC_ALL=C"
-        "LANG=C"
-        "GRASS_COLORSDIR=${RUNTIME_GRASS_COLORSDIR}"
-        "GRASS_DOCDIR=${RUNTIME_GRASS_DOCDIR}"
-        "GRASS_ETCDIR=${RUNTIME_GRASS_ETCDIR}"
-        "GRASS_FONTSDIR=${RUNTIME_GRASS_FONTSDIR}"
-        "GRASS_GRAPHICSDIR=${RUNTIME_GRASS_GRAPHICSDIR}"
-        "GRASS_GUIRESDIR=${RUNTIME_GRASS_GUIRESDIR}"
-        "GRASS_GUISCRIPTDIR=${RUNTIME_GRASS_GUISCRIPTDIR}"
-        "GRASS_GUIWXDIR=${GUI_WXPYTHON_DIR}"
-        "GRASS_LOCALEDIR=${RUNTIME_GRASS_LOCALEDIR}"
-        "GRASS_MISCDIR=${RUNTIME_GRASS_MISCDIR}"
-        "GRASS_MKDOCSDIR=${RUNTIME_GRASS_MKDOCSDIR}"
-        "ARCH=${BUILD_ARCH}"
-        "ARCH_DISTDIR=${RUN_GISBASE_NATIVE}"
-        "LANGUAGE=C"
-        "MODULE_TOPDIR=${MODULE_TOPDIR}"
-        "HTMLDIR=${DOC_DIR}"
-        "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
-        "VERSION_DATE=\"${GRASS_VERSION_DATE}\""
     )
 endif()
+
+set(grass_env_command
+    ${CMAKE_COMMAND}
+    -E
+    env
+    "PATH=${path_env}"
+    ${platform_env}
+    "PYTHONPATH=${ETC_PYTHON_DIR}${sep}${GUI_WXPYTHON_DIR}${sep}${env_pythonpath}"
+    "GISBASE=${RUN_GISBASE_NATIVE}"
+    "GISRC=${GISRC}"
+    "LC_ALL=C"
+    "LANG=C"
+    "GRASS_COLORSDIR=${RUNTIME_GRASS_COLORSDIR}"
+    "GRASS_DOCDIR=${RUNTIME_GRASS_DOCDIR}"
+    "GRASS_ETCDIR=${RUNTIME_GRASS_ETCDIR}"
+    "GRASS_FONTSDIR=${RUNTIME_GRASS_FONTSDIR}"
+    "GRASS_GRAPHICSDIR=${RUNTIME_GRASS_GRAPHICSDIR}"
+    "GRASS_GUIRESDIR=${RUNTIME_GRASS_GUIRESDIR}"
+    "GRASS_GUISCRIPTDIR=${RUNTIME_GRASS_GUISCRIPTDIR}"
+    "GRASS_GUIWXDIR=${GUI_WXPYTHON_DIR}"
+    "GRASS_LOCALEDIR=${RUNTIME_GRASS_LOCALEDIR}"
+    "GRASS_MISCDIR=${RUNTIME_GRASS_MISCDIR}"
+    "GRASS_MKDOCSDIR=${RUNTIME_GRASS_MKDOCSDIR}"
+    "ARCH=${BUILD_ARCH}"
+    "ARCH_DISTDIR=${RUN_GISBASE_NATIVE}"
+    "LANGUAGE=C"
+    "MODULE_TOPDIR=${MODULE_TOPDIR}"
+    "HTMLDIR=${DOC_DIR}"
+    "VERSION_NUMBER=\"${GRASS_VERSION_NUMBER}\""
+    "VERSION_DATE=\"${GRASS_VERSION_DATE}\""
+)
 
 set(NO_HTML_DESCR_TARGETS "g.parser;ximgview;test.raster3d.lib")
 
