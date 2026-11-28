@@ -33,8 +33,8 @@ export INSTALL_PREFIX=$1
     --enable-largefile \
     --prefix="$INSTALL_PREFIX/" \
     --without-blas \
+    --without-bzlib \
     --without-lapack \
-    --with-bzlib \
     --with-cxx \
     --with-fftw \
     --with-freetype \

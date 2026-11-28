@@ -249,17 +249,20 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     int new, old, nrows, row;
     void *rast;
     char *cname;
+    int compressor;
 
     Rast_get_cellhd(name, G_mapset(), &cellhd);
+    /* Name the method the raster library will write the map with. The
+     * library has no function which returns it, so this repeats its rules
+     * from Rast__init() and open_raster_new(). */
     cname = getenv("GRASS_COMPRESSOR");
-    if (cname && *cname) {
-        if (G_compressor_number(cname) < 1)
-            cname = G_compressor_name(G_default_compressor());
-        else
-            cname = G_compressor_name(G_compressor_number(cname));
-    }
-    else
-        cname = G_compressor_name(G_default_compressor());
+    compressor = cname && *cname ? G_compressor_number(cname) : -1;
+    if (compressor < 1 || G_check_compressor(compressor) != 1)
+        compressor = G_default_compressor();
+    /* The library writes floating-point maps with ZLIB when RLE is set. */
+    if (compressor == 1 && map_type != CELL_TYPE)
+        compressor = 2;
+    cname = G_compressor_name(compressor);
 
     /* check if already compressed/decompressed */
     if (uncompress) {
