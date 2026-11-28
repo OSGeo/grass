@@ -410,7 +410,7 @@ int main(int argc, char *argv[])
         cellrow = Rast_allocate_f_buf();
         for (m1 = 0; m1 < inp_rows; m1++) {
             Rast_get_f_row(fdinp, cellrow, m1);
-            Rast_row_update_fp_range(cellrow, m1, &range, FCELL_TYPE);
+            Rast_row_update_fp_range(cellrow, inp_cols, &range, FCELL_TYPE);
         }
         Rast_get_fp_range_min_max(&range, &cellmin, &cellmax);
 
