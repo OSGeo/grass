@@ -43,12 +43,16 @@ class Buffer(np.ndarray):
         self.pointer_type = getattr(obj, "pointer_type", None)
         self.p = getattr(obj, "p", None)
 
-    def __array_wrap__(self, out_arr, context=None):
+    def __array_wrap__(self, out_arr, context=None, *args):
         """See:
         https://numpy.org/doc/stable/user/basics.subclassing.html#array-wrap-for-ufuncs-and-other-functions
         """
         if out_arr.dtype == bool:
             # there is not support for boolean maps, so convert into integer
             out_arr = out_arr.astype(np.int32)
-        out_arr.p = out_arr.ctypes.data_as(out_arr.pointer_type)
-        return np.ndarray.__array_wrap__(self, out_arr, context)
+        # NumPy 2 passes a plain ndarray (and an additional return_scalar
+        # argument), so the pointer can be set only after wrapping into Buffer.
+        wrapped = np.ndarray.__array_wrap__(self, out_arr, context, *args)
+        if isinstance(wrapped, Buffer):
+            wrapped.p = wrapped.ctypes.data_as(wrapped.pointer_type)
+        return wrapped

@@ -282,6 +282,11 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     >>> l[1] == (2, 12.0, 6.0, 1)
     True
 
+    The function opened the vector map. Close it so it can be removed on
+    Windows.
+
+    >>> vect.close()
+
     Add a new column and sample again
 
     >>> vect.open("r")

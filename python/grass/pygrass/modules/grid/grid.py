@@ -12,7 +12,7 @@ from grass.script import Popen, append_node_pid, available_cpus, legalize_vector
 from grass.pygrass.gis import Mapset, Location
 from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
-from grass.pygrass.utils import get_mapset_raster, findmaps
+from grass.pygrass.utils import findmaps, get_mapset_raster, get_mapset_vector
 
 from grass.pygrass.modules.grid.split import (
     split_region_tiles,
@@ -650,11 +650,27 @@ class GridModule:
     def define_mapset_inputs(self):
         """Add the mapset information to the input maps"""
         for inmap in self.module.inputs:
-            inm = self.module.inputs[inmap]
-            if inm.type in {"raster", "vector"} and inm.value:
-                if "@" not in inm.value:
-                    mset = get_mapset_raster(inm.value)
-                    inm.value += "@%s" % mset
+            param = self.module.inputs[inmap]
+            if param.typedesc == "raster":
+                get_mapset = get_mapset_raster
+            elif param.typedesc == "vector":
+                get_mapset = get_mapset_vector
+            else:
+                continue
+            if not param.value:
+                continue
+
+            if isinstance(param.value, list):
+                param.value = [self._with_mapset(n, get_mapset) for n in param.value]
+            else:
+                param.value = self._with_mapset(param.value, get_mapset)
+
+    @staticmethod
+    def _with_mapset(name, get_mapset):
+        """Return the map name as ``name@mapset``, adding the mapset if missing"""
+        if "@" in name:
+            return name
+        return "%s@%s" % (name, get_mapset(name))
 
     def run(self, patch=True, clean=True):
         """Run the GRASS command
