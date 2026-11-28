@@ -15,8 +15,10 @@ def test_reclass_as_mask_correct_state(session):
     tools = Tools(session=session)
     with MaskManager(env=session.env):
         tools.r_mask(raster="raster_mask")
-        tools.r_univar(map="data")
+        stats = tools.r_univar(map="data", format="json")
         tools.r_mask(flags="r")
+    # The mask covers rows 1 to 9 of the 20 by 20 region.
+    assert stats["n"] == 9 * 20
 
 
 @pytest.mark.parametrize("bad_value", ["bad value", "nan", "inf", "#1", "name: bad"])
