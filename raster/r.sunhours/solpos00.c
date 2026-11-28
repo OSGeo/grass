@@ -701,7 +701,7 @@ static void sbcf(struct posdata *pdat, struct trigdata *tdat)
     localtrig(pdat, tdat);
     p = 0.6366198 * pdat->sbwid / pdat->sbrad * pow(tdat->cd, 3);
     t1 = tdat->sl * tdat->sd * pdat->ssha * DEG2RAD;
-    t2 = tdat->cl * tdat->cd * sin(pdat->ssha * DEG2RAD);
+    t2 = (double)tdat->cl * tdat->cd * sin(pdat->ssha * DEG2RAD);
     pdat->sbcf = pdat->sbsky + 1.0 / (1.0 - p * (t1 + t2));
 }
 
